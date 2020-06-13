@@ -1,4 +1,6 @@
+import 'package:FEhViewer/model/favorite.dart';
 import 'package:FEhViewer/utils/icon.dart';
+import 'package:FEhViewer/values/theme_colors.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
@@ -23,4 +25,18 @@ class EHConst {
     "api": "https://exhentai.org/api.php",
     "gallerypopups": "https://exhentai.org/gallerypopups.php"
   };
+
+  static const List favList = [
+    {'name': 'fav0', 'desc': 'Favorites 0'},
+    {'name': 'fav1', 'desc': 'Favorites 1'},
+    {'name': 'fav2', 'desc': 'Favorites 2'},
+    {'name': 'fav3', 'desc': 'Favorites 3'},
+    {'name': 'fav4', 'desc': 'Favorites 4'},
+    {'name': 'fav5', 'desc': 'Favorites 5'},
+    {'name': 'fav6', 'desc': 'Favorites 6'},
+    {'name': 'fav7', 'desc': 'Favorites 7'},
+    {'name': 'fav8', 'desc': 'Favorites 8'},
+    {'name': 'fav9', 'desc': 'Favorites 9'},
+    {'name': 'fava', 'desc': 'Favorites All'},
+  ];
 }

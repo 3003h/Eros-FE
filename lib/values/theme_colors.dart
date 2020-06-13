@@ -37,18 +37,17 @@ class ThemeColors {
 
   /// fav 颜色
   static const Map favColor = {
-    "fav0": {"color": Color(0xff777777)},
-    "fav1": {"color": Color(0xff9E2720)},
-    "fav2": {"color": Color(0xffDB6C24)},
-    "fav3": {"color": Color(0xffD38F1D)},
-    "fav4": {"color": Color(0xff617C63)},
-    "fav5": {"color": Color(0xff325CA2)},
-    "fav6": {"color": Color(0xff6A32A2)},
-    "fav7": {"color": Color(0xffA23282)},
-    "fav8": {"color": Color(0xff5FA9CF)},
-    "fav9": {"color": Color(0xffAB9F60)},
-    "fava": {"color": Color(0xff000000)},
-
+    "fav0": Color(0xff777777),
+    "fav1": Color(0xff9E2720),
+    "fav2": Color(0xffDB6C24),
+    "fav3": Color(0xffD38F1D),
+    "fav4": Color(0xff617C63),
+    "fav5": Color(0xff325CA2),
+    "fav6": Color(0xff6A32A2),
+    "fav7": Color(0xffA23282),
+    "fav8": Color(0xff5FA9CF),
+    "fav9": Color(0xffAB9F60),
+    "fava": Color(0xff000000),
   };
 
   static const Map themeColor = {
