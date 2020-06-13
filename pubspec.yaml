@@ -47,6 +47,9 @@ dependencies:
   provider: ^4.1.1
   shrine_images: ^1.0.0
 
+  # 下拉刷新
+  flutter_easyrefresh: ^2.1.1
+
 dev_dependencies:
   flutter_test:
     sdk: flutter

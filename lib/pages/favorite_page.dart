@@ -33,7 +33,8 @@ class _FavoriteTab extends State<FavoriteTab> {
           previousPageTitle: _title,
           trailing: GestureDetector(
             onTap: () {
-              debugPrint('add icon tapped');
+              debugPrint('sel icon tapped');
+              // 跳转收藏夹选择页
               NavigatorUtil.jump(context, EHRoutes.selFavorie).then((result) {
                 debugPrint('${result.runtimeType}');
                 if (result.runtimeType == FavcatItemBean) {
@@ -43,7 +44,6 @@ class _FavoriteTab extends State<FavoriteTab> {
                 } else {
                   debugPrint('$result');
                 }
-
               });
             },
             child: Icon(
@@ -57,9 +57,9 @@ class _FavoriteTab extends State<FavoriteTab> {
             delegate: SliverChildBuilderDelegate(
               (context, index) {
                 if (index < 100) {
-                  return GestureDetector(
-                    child: Text("$index"),
-                    onTap: () {},
+                  return Text(
+                    "$index",
+                    style: TextStyle(fontSize: 50),
                   );
                 }
                 return null;
