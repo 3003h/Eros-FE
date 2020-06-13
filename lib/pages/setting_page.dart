@@ -39,7 +39,7 @@ class _SettingTab extends State<SettingTab> {
                   default:
                     {
                       if (index < _settingItemList.length + 1)
-                        return SettingItem(
+                        return SettingItems(
                           index: index,
                           text: _settingItemList[index - 1]["title"],
                           icon: _settingItemList[index - 1]["icon"],
@@ -92,13 +92,13 @@ class UserItem extends StatefulWidget {
   State<StatefulWidget> createState() => _UserItem();
 }
 
-class SettingItem extends StatefulWidget {
+class SettingItems extends StatefulWidget {
   final int index;
   final String text;
   final IconData icon;
   final bool isLast;
 
-  SettingItem({
+  SettingItems({
     this.index,
     this.text,
     this.icon,
@@ -106,17 +106,17 @@ class SettingItem extends StatefulWidget {
   });
 
   @override
-  _SettingItem createState() => _SettingItem();
+  _SettingItems createState() => _SettingItems();
 }
 
 /// 设置项
-class _SettingItem extends State<SettingItem> {
+class _SettingItems extends State<SettingItems> {
   Color _color;
 
   @override
   void initState() {
     super.initState();
-    _color = Colors.white;
+    _color = CupertinoColors.systemBackground;
   }
 
   @override
@@ -130,7 +130,7 @@ class _SettingItem extends State<SettingItem> {
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
-//            _settingItemDivider(),
+            _settingItemDivider(),
             Row(
               children: <Widget>[
                 Padding(
@@ -156,15 +156,16 @@ class _SettingItem extends State<SettingItem> {
                 ),
               ],
             ),
-//            widget.isLast ? _settingItemDivider() : new Container(), // 末尾分隔线
+            widget.isLast ? _settingItemDivider() : new Container(), // 末尾分隔线
           ],
         ));
 
     return GestureDetector(
       child: container,
+      // 不可见区域有效
+      behavior: HitTestBehavior.opaque,
       onTap: () {
         debugPrint("set tap ${widget.index}  ${widget.isLast}");
-//          widget.listener(widget.index);
       },
       onTapDown: (_) => _updatePressedColor(),
       onTapUp: (_) {
@@ -178,13 +179,15 @@ class _SettingItem extends State<SettingItem> {
 
   void _updateNormalColor() {
     setState(() {
-      _color = Colors.white;
+//      _color = Colors.white;
+      _color = CupertinoColors.systemBackground;
     });
   }
 
   void _updatePressedColor() {
     setState(() {
-      _color = Color(0xFFF0F1F2);
+//      _color = Color(0xFFF0F1F2);
+    _color = CupertinoColors.systemGrey4;
     });
   }
 

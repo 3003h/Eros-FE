@@ -15,24 +15,6 @@ class _PopularListTab extends State<PopularListTab> {
 
   @override
   Widget build(BuildContext context) {
-//    return CupertinoPageScaffold(
-//        navigationBar: CupertinoNavigationBar(
-//          middle: Text(_title),
-//          previousPageTitle: _title,
-//        ),
-//        child: Center(
-//            child: SingleChildScrollView(
-//          child: Column(children: <Widget>[
-//            CupertinoButton(
-////              color: CupertinoColors.activeBlue,
-//              child: Text('TAG更新'),
-//              onPressed: () {
-//                NavigatorUtil.goHttpTestPage(context);
-//              },
-//            )
-//          ]),
-//        )));
-
     return CustomScrollView(
       slivers: <Widget>[
         CupertinoSliverNavigationBar(largeTitle: Text(_title)),

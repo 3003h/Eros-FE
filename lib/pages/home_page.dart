@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:FEhViewer/utils/icon.dart';
+import 'package:flutter/material.dart';
 import 'popular_page.dart';
 import 'setting_page.dart';
 import 'favorite_page.dart';
@@ -7,9 +8,8 @@ import 'favorite_page.dart';
 class FEhHome extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return CupertinoApp(
-//      title: 'FEhViewer Demo',
-      home: CupertinoHomePage(),
+    return Container(
+      child: CupertinoHomePage(),
     );
   }
 }
@@ -26,7 +26,7 @@ class CupertinoHomePage extends StatefulWidget {
 class _CupertinoHomePage extends State<CupertinoHomePage> {
   @override
   Widget build(BuildContext context) {
-    return CupertinoTabScaffold(
+    CupertinoTabScaffold cupertinoTabScaffold = CupertinoTabScaffold(
       tabBar: CupertinoTabBar(
         items: <BottomNavigationBarItem>[
           BottomNavigationBarItem(
@@ -77,5 +77,7 @@ class _CupertinoHomePage extends State<CupertinoHomePage> {
         }
       },
     );
+
+    return cupertinoTabScaffold;
   }
 }

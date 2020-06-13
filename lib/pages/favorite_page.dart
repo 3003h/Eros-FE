@@ -18,16 +18,33 @@ class FavoriteTab extends StatefulWidget {
 class _FavoriteTab extends State<FavoriteTab> {
   String _title = "All Favorites";
 
+  void _setTitle(String title) {
+    setState(() {
+      _title = title;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return CustomScrollView(
       slivers: <Widget>[
         CupertinoSliverNavigationBar(
           largeTitle: Text(_title),
+          previousPageTitle: _title,
           trailing: GestureDetector(
             onTap: () {
               debugPrint('add icon tapped');
-              NavigatorUtil.jump(context, EHRoutes.selFavorie);
+              NavigatorUtil.jump(context, EHRoutes.selFavorie).then((result) {
+                debugPrint('${result.runtimeType}');
+                if (result.runtimeType == FavcatItemBean) {
+                  FavcatItemBean fav = result;
+                  debugPrint('${fav.title}');
+                  _setTitle(fav.title);
+                } else {
+                  debugPrint('$result');
+                }
+
+              });
             },
             child: Icon(
               EHCupertinoIcons.menu,
@@ -62,9 +79,8 @@ class SelFavorite extends StatefulWidget {
   SelFavorite({this.favcatItemBean});
 
   @override
-  State<StatefulWidget> createState() => _SelFavorite();
+  _SelFavorite createState() => _SelFavorite();
 }
-
 
 /// 收藏夹选择页面 列表
 class _SelFavorite extends State<SelFavorite> {
@@ -79,6 +95,7 @@ class _SelFavorite extends State<SelFavorite> {
     _initData();
   }
 
+  /// 初始化收藏夹选择数据
   void _initData() {
     EHConst.favList.forEach((fav) {
       var name = fav['name'];
@@ -113,7 +130,6 @@ class ListViewFavorite extends StatelessWidget {
 
       //列表项构造器
       itemBuilder: (BuildContext context, int index) {
-//        return Text("fav $index");
         return FavSelItemWidget(
           favcatItemBean: favItemBeans[index],
           index: index,
@@ -152,8 +168,8 @@ class _FavSelItemWidgetState extends State<FavSelItemWidget> {
               color: widget.favcatItemBean.color,
             ),
             Container(
-              width: 18,
-            ),
+              width: 8,
+            ), // 占位 宽度8
             Text(
               widget?.favcatItemBean?.title ?? '',
             ),
@@ -179,9 +195,12 @@ class _FavSelItemWidgetState extends State<FavSelItemWidget> {
           _settingItemDivider(),
         ],
       ),
+      // 不可见区域点击有效
+      behavior: HitTestBehavior.opaque,
       onTap: () {
         debugPrint("fav tap ${widget.index}");
-//        NavigatorUtil.goBack(context);
+        // 返回 并带上参数
+        NavigatorUtil.goBackWithParams(context, widget.favcatItemBean);
       },
       onTapDown: (_) => _updatePressedColor(),
       onTapUp: (_) {
@@ -195,13 +214,13 @@ class _FavSelItemWidgetState extends State<FavSelItemWidget> {
 
   void _updateNormalColor() {
     setState(() {
-      _colorTap = Colors.white;
+      _colorTap = CupertinoColors.systemBackground;
     });
   }
 
   void _updatePressedColor() {
     setState(() {
-      _colorTap = Color(0xFFF0F1F2);
+      _colorTap = CupertinoColors.systemGrey4;
     });
   }
 
