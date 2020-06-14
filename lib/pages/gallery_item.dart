@@ -1,6 +1,7 @@
 import 'package:FEhViewer/model/gallery.dart';
 import 'package:FEhViewer/route/navigator_util.dart';
 import 'package:FEhViewer/values/theme_colors.dart';
+import 'package:FEhViewer/widget/rating_bar.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:cached_network_image/cached_network_image.dart';
@@ -26,6 +27,13 @@ class _GalleryItemWidgetState extends State<GalleryItemWidget> {
                 ["color"] ??
             CupertinoColors.white;
 
+    // 封面图片
+    Widget gaImage = widget?.galleryItemBean?.imgUrl != null
+        ? CachedNetworkImage(
+            imageUrl: widget.galleryItemBean.imgUrl,
+          )
+        : Container();
+
     Widget container = Container(
       color: _colorTap,
       padding: EdgeInsets.fromLTRB(8, 8, 8, 8),
@@ -37,22 +45,18 @@ class _GalleryItemWidgetState extends State<GalleryItemWidget> {
             ConstrainedBox(
               constraints: BoxConstraints(
 //                minWidth: double.infinity, //宽度尽可能大
-                minHeight: 150.0, //最小高度为150
+                minHeight: 70.0, //最小高度
+//                maxHeight: 180,
+//                maxWidth: 140,
               ),
               // 图片容器
               child: Container(
                 width: 140,
-//              height: 180,
-//              color: CupertinoColors.systemGrey6,
                 padding: const EdgeInsets.all(8),
                 child: ClipRRect(
                   // 圆角
                   borderRadius: BorderRadius.circular(8),
-                  child: widget?.galleryItemBean?.imgUrl != null
-                      ? CachedNetworkImage(
-                          imageUrl: widget.galleryItemBean.imgUrl,
-                        )
-                      : Container(),
+                  child: gaImage,
                 ),
               ),
             ),
@@ -90,6 +94,10 @@ class _GalleryItemWidgetState extends State<GalleryItemWidget> {
                   // 评分和页数
                   Row(
                     children: <Widget>[
+                      StaticRatingBar(
+                        size: 20.0,
+                        rate: widget.galleryItemBean.rating,
+                      ),
                       Expanded(
                         child: Align(
                           alignment: Alignment.centerRight,
@@ -103,6 +111,7 @@ class _GalleryItemWidgetState extends State<GalleryItemWidget> {
                       )
                     ],
                   ),
+                  Container(height: 4,),
                   // 类型和时间
                   Row(
                     children: <Widget>[

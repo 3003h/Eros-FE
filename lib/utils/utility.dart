@@ -111,6 +111,19 @@ class API {
       final postTime =
           tr.querySelector('td.gl2c > div:nth-child(2) > div').text.trim();
 
+      final ratPx = tr
+          .querySelector('td.gl2c > div:nth-child(2) > div.ir')
+          .attributes['style'];
+      debugPrint('ratPx $ratPx');
+      RegExp pxA = new RegExp(r"-?(\d+)px\s+-?(\d+)px");
+      var px = pxA.firstMatch(ratPx);
+      debugPrint('pxa ${px.group(1)}  pxb ${px.group(2)}');
+
+      final rating = (80.0 - double.parse(px.group(1))) / 16.0 -
+          (px.group(2) == '21' ? 0.5 : 0.0);
+
+      debugPrint('rating $rating');
+
       final uploader = tr.querySelector('td.gl4c.glhide > div > a').text.trim();
 
       final length =
@@ -126,6 +139,7 @@ class API {
         simpleTags: simpleTags,
         postTime: postTime,
         uploader: uploader,
+        rating: rating,
       );
 
       gallaryItems.add(galleryItemBean);

@@ -10,7 +10,7 @@ class GalleryItemBean {
   final String posted;
   final String language;
   final String length;
-  final String rating;
+  final double rating;
   final String numberOfReviews;
   final String postTime;
   final List<String> simpleTags;
