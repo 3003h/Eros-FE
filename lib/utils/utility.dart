@@ -1,6 +1,9 @@
 import 'package:FEhViewer/http/dio_util.dart';
+import 'package:FEhViewer/model/gallery.dart';
 import 'package:FEhViewer/utils/storage.dart';
 import 'package:FEhViewer/values/storages.dart';
+import 'package:html/parser.dart';
+import 'package:html/dom.dart' as dom;
 
 import 'dart:convert';
 
@@ -40,6 +43,98 @@ getNameAndColor(name) {
 }
 
 class API {
+  static Future<List<GalleryItemBean>> getPopular() async {
+    HttpManager httpManager = HttpManager.getInstance("https://e-hentai.org/");
+    const url = "/popular";
+
+    var response = await httpManager.get(url);
+    print(response);
+
+    List<GalleryItemBean> list = getGalleryList(response);
+
+    return list;
+  }
+
+  static Future<List<GalleryItemBean>> getGallery() async {
+    HttpManager httpManager = HttpManager.getInstance("https://e-hentai.org/");
+    const url = "";
+
+    var response = await httpManager.get(url);
+    print(response);
+
+    List<GalleryItemBean> list = getGalleryList(response);
+
+    return list;
+  }
+
+  static List<GalleryItemBean> getGalleryList(String response) {
+    var document = parse(response);
+
+    // 画廊列表
+    List<dom.Element> gallerys = document.querySelectorAll(
+        'body > div.ido > div:nth-child(2) > table > tbody > tr');
+
+    debugPrint('len ${gallerys.length}');
+
+    List<GalleryItemBean> gallaryItems = [];
+
+    for (int i = 1; i < gallerys.length; i++) {
+      debugPrint('index $i');
+
+      var tr = gallerys[i];
+
+      final category = tr.querySelector('td.gl1c.glcat > div')?.text?.trim();
+
+      // 表头或者广告
+      if (category == null || category.isEmpty) {
+        continue;
+      }
+
+      final title =
+          tr.querySelector('td.gl3c.glname > a > div.glink')?.text?.trim();
+
+      final url =
+          tr.querySelector('td.gl3c.glname > a')?.attributes['href'] ?? '';
+
+      final img = tr.querySelector('td.gl2c > div > div > img');
+      final img_data_src = img.attributes['data-src'];
+      final img_src = img.attributes['src'];
+
+      final imgUrl = img_data_src ?? img_src ?? '';
+
+      final List<String> simpleTags = [];
+      var tag = tr.querySelectorAll('div.gt');
+      tag.forEach((tag) {
+        simpleTags.add(tag.text.trim());
+      });
+
+      final postTime =
+          tr.querySelector('td.gl2c > div:nth-child(2) > div').text.trim();
+
+      final uploader = tr.querySelector('td.gl4c.glhide > div > a').text.trim();
+
+      final length =
+          tr.querySelector('td.gl4c.glhide > div:nth-child(1)')?.text?.trim() ??
+              '';
+
+      GalleryItemBean galleryItemBean = new GalleryItemBean(
+        japanese_title: title,
+        imgUrl: imgUrl ?? '',
+        url: url,
+        length: length,
+        category: category,
+        simpleTags: simpleTags,
+        postTime: postTime,
+        uploader: uploader,
+      );
+
+      gallaryItems.add(galleryItemBean);
+      print(galleryItemBean.toString());
+    }
+
+    return gallaryItems;
+  }
+
   /*
    * tag翻译
    */

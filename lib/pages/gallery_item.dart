@@ -34,22 +34,29 @@ class _GalleryItemWidgetState extends State<GalleryItemWidget> {
 //        crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
           Row(children: <Widget>[
-            // 图片容器
-            Container(
-              width: 140,
+            ConstrainedBox(
+              constraints: BoxConstraints(
+//                minWidth: double.infinity, //宽度尽可能大
+                minHeight: 150.0, //最小高度为150
+              ),
+              // 图片容器
+              child: Container(
+                width: 140,
 //              height: 180,
 //              color: CupertinoColors.systemGrey6,
-              padding: const EdgeInsets.all(8),
-              child: ClipRRect(
-                // 圆角
-                borderRadius: BorderRadius.circular(8),
-                child: widget?.galleryItemBean?.imgUrl != null
-                    ? CachedNetworkImage(
-                        imageUrl: widget.galleryItemBean.imgUrl,
-                      )
-                    : Container(),
+                padding: const EdgeInsets.all(8),
+                child: ClipRRect(
+                  // 圆角
+                  borderRadius: BorderRadius.circular(8),
+                  child: widget?.galleryItemBean?.imgUrl != null
+                      ? CachedNetworkImage(
+                          imageUrl: widget.galleryItemBean.imgUrl,
+                        )
+                      : Container(),
+                ),
               ),
             ),
+
             // 右侧信息
             Expanded(
               child: Column(
@@ -71,7 +78,7 @@ class _GalleryItemWidgetState extends State<GalleryItemWidget> {
                   ),
                   // tags
                   Container(
-                    padding: const EdgeInsets.fromLTRB(0, 8, 0, 8),
+                    padding: const EdgeInsets.fromLTRB(0, 6, 0, 8),
                     child: Wrap(
                       spacing: 4, //主轴上子控件的间距
                       runSpacing: 4, //交叉轴上子控件之间的间距
@@ -79,8 +86,23 @@ class _GalleryItemWidgetState extends State<GalleryItemWidget> {
                           _getTagItems(widget.galleryItemBean), //要显示的子控件集合
                     ),
                   ),
+
                   // 评分和页数
-                  Row(),
+                  Row(
+                    children: <Widget>[
+                      Expanded(
+                        child: Align(
+                          alignment: Alignment.centerRight,
+                          child: Text(
+                            widget?.galleryItemBean?.length ?? "",
+                            style: TextStyle(
+                                fontSize: 12,
+                                color: CupertinoColors.systemGrey),
+                          ),
+                        ),
+                      )
+                    ],
+                  ),
                   // 类型和时间
                   Row(
                     children: <Widget>[
@@ -162,7 +184,7 @@ class _GalleryItemWidgetState extends State<GalleryItemWidget> {
   Widget _galleryItemDivider() {
     return Divider(
       height: 1.0,
-      indent: 148,
+      indent: 18,
       color: CupertinoColors.systemGrey,
     );
   }
@@ -192,8 +214,8 @@ class _GalleryItemWidgetState extends State<GalleryItemWidget> {
 
   List<Widget> _getTagItems(GalleryItemBean galleryItemBean) {
     List<Widget> tags = [];
-    if (galleryItemBean.tags != null) {
-      galleryItemBean.tags.forEach((tagText) {
+    if (galleryItemBean.simpleTags != null) {
+      galleryItemBean.simpleTags.forEach((tagText) {
         tags.add(_tagItem(tagText));
       });
     }

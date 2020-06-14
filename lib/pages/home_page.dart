@@ -1,3 +1,4 @@
+import 'package:FEhViewer/pages/gallery_page.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:FEhViewer/utils/icon.dart';
 import 'package:flutter/material.dart';
@@ -59,7 +60,7 @@ class _CupertinoHomePage extends State<CupertinoHomePage> {
           case 1:
             return CupertinoTabView(builder: (context) {
               return CupertinoPageScaffold(
-                child: PopularListTab(),
+                child: GalleryListTab(),
               );
             });
           case 2:

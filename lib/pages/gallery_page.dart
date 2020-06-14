@@ -8,15 +8,15 @@ import 'package:flutter_easyrefresh/easy_refresh.dart';
 
 import 'gallery_item.dart';
 
-class PopularListTab extends StatefulWidget {
+class GalleryListTab extends StatefulWidget {
   @override
   State<StatefulWidget> createState() {
-    return _PopularListTab();
+    return _GalleryListTab();
   }
 }
 
-class _PopularListTab extends State<PopularListTab> {
-  String _title = "当前热门";
+class _GalleryListTab extends State<GalleryListTab> {
+  String _title = "画廊";
   final List<GalleryItemBean> gallerItemBeans = [];
 
   @override
@@ -27,37 +27,8 @@ class _PopularListTab extends State<PopularListTab> {
 
   void _loadData() async {
     gallerItemBeans.clear();
-    var rult = await API.getPopular(); // 网络请求
+    var rult = await API.getGallery(); // 网络请求
     gallerItemBeans.addAll(rult);
-
-//    gallerItemBeans.clear();
-//    gallerItemBeans.add(GalleryItemBean(
-//        japanese_title:
-//            "[いーむす・アキ] 異世界エロスとブタ野郎 後編 (COMIC快楽天 2020年5月号) [中国翻訳] [DL版]",
-//        uploader: "真實爽粉",
-//        category: "Manga",
-//        postTime: "2020-06-13 13:28",
-//        imgUrl:
-//            "https://ul.ehgt.org/d0/2e/d02e75d58d2055faf137fee545082bd6eadb4686-1231285-1200-1600-jpg_250.jpg"));
-//    gallerItemBeans.add(GalleryItemBean(
-//        category: "Artist CG",
-//        uploader: "xxxhentaii",
-//        postTime: "2020-06-14 09:34",
-//        japanese_title: "[Hasosa] Komorojo-chan. (Oshiro Project)",
-//        tags: [
-//          "oshiro project",
-//          "f:ahegao",
-//          "f:big penis",
-//          "f:futanari",
-//          "f:huge penis",
-//          "variant set"
-//        ],
-//        imgUrl:
-//            "https://ul.ehgt.org/d0/2e/d02e75d58d2055faf137fee545082bd6eadb4686-1231285-1200-1600-jpg_250.jpg"));
-//    gallerItemBeans.add(GalleryItemBean(japanese_title: "测试标题"));
-//    gallerItemBeans.add(GalleryItemBean(japanese_title: "测试标题"));
-//    gallerItemBeans.add(GalleryItemBean(japanese_title: "测试标题"));
-//    gallerItemBeans.add(GalleryItemBean(japanese_title: "测试标题22222222"));
   }
 
   void _reload() {

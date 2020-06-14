@@ -52,6 +52,8 @@ dependencies:
 
   cached_network_image: ^2.2.0+1
 
+  html: ^0.14.0+3
+
 dev_dependencies:
   flutter_test:
     sdk: flutter

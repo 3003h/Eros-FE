@@ -13,7 +13,7 @@ class GalleryItemBean {
   final String rating;
   final String numberOfReviews;
   final String postTime;
-  final List<String> tags;
+  final List<String> simpleTags;
 
   GalleryItemBean(
       {this.url,
@@ -28,5 +28,10 @@ class GalleryItemBean {
       this.rating,
       this.numberOfReviews,
       this.postTime,
-      this.tags});
+      this.simpleTags});
+
+  @override
+  String toString() {
+    return 'GalleryItemBean{url: $url, imgUrl: $imgUrl, japanese_title: $japanese_title, english_title: $english_title, category: $category, uploader: $uploader, posted: $posted, language: $language, length: $length, rating: $rating, numberOfReviews: $numberOfReviews, postTime: $postTime, simpleTags: $simpleTags}';
+  }
 }
