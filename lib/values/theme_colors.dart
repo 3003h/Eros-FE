@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class ThemeColors {
@@ -23,16 +24,17 @@ class ThemeColors {
 
   // tap 颜色
   static const Map nameColor = {
-    "misc": {"string": "Misc", "color": Color(0xff777777)},
-    "doujinshi": {"string": "Doujinshi", "color": Color(0xff9E2720)},
-    "manga": {"string": "Manga", "color": Color(0xffDB6C24)},
-    "artist cg": {"string": "Artist CG", "color": Color(0xffD38F1D)},
-    "game cg": {"string": "Game CG", "color": Color(0xff617C63)},
-    "image set": {"string": "Image Set", "color": Color(0xff325CA2)},
-    "cosplay": {"string": "Cosplay", "color": Color(0xff6A32A2)},
-    "asian porn": {"string": "Asian Porn", "color": Color(0xffA23282)},
-    "non-h": {"string": "Non-H", "color": Color(0xff5FA9CF)},
-    "western": {"string": "Western", "color": Color(0xffAB9F60)},
+    "Misc": {"string": "Misc", "color": Color(0xff777777)},
+    "Doujinshi": {"string": "Doujinshi", "color": Color(0xff9E2720)},
+    "Manga": {"string": "Manga", "color": Color(0xffDB6C24)},
+    "Artist CG": {"string": "Artist CG", "color": Color(0xffD38F1D)},
+    "Game CG": {"string": "Game CG", "color": Color(0xff617C63)},
+    "Image Set": {"string": "Image Set", "color": Color(0xff325CA2)},
+    "Cosplay": {"string": "Cosplay", "color": Color(0xff6A32A2)},
+    "Asian Porn": {"string": "Asian Porn", "color": Color(0xffA23282)},
+    "Non-H": {"string": "Non-H", "color": Color(0xff5FA9CF)},
+    "Western": {"string": "Western", "color": Color(0xffAB9F60)},
+    "defaule": {"color": CupertinoColors.systemBackground}
   };
 
   /// fav 颜色

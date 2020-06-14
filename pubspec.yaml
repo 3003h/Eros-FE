@@ -50,6 +50,8 @@ dependencies:
   # 下拉刷新
   flutter_easyrefresh: ^2.1.1
 
+  cached_network_image: ^2.2.0+1
+
 dev_dependencies:
   flutter_test:
     sdk: flutter

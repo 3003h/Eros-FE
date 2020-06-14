@@ -26,8 +26,29 @@ class _PopularListTab extends State<PopularListTab> {
 
   void _loadData() {
     gallerItemBeans.clear();
-    gallerItemBeans.add(GalleryItemBean(japanese_title: "测试标题"));
-    gallerItemBeans.add(GalleryItemBean(japanese_title: "测试标题"));
+    gallerItemBeans.add(GalleryItemBean(
+        japanese_title:
+            "[いーむす・アキ] 異世界エロスとブタ野郎 後編 (COMIC快楽天 2020年5月号) [中国翻訳] [DL版]",
+        uploader: "真實爽粉",
+        category: "Manga",
+        postTime: "2020-06-13 13:28",
+        imgUrl:
+            "https://ul.ehgt.org/d0/2e/d02e75d58d2055faf137fee545082bd6eadb4686-1231285-1200-1600-jpg_250.jpg"));
+    gallerItemBeans.add(GalleryItemBean(
+        category: "Artist CG",
+        uploader: "xxxhentaii",
+        postTime: "2020-06-14 09:34",
+        japanese_title: "[Hasosa] Komorojo-chan. (Oshiro Project)",
+        tags: [
+          "oshiro project",
+          "f:ahegao",
+          "f:big penis",
+          "f:futanari",
+          "f:huge penis",
+          "variant set"
+        ],
+        imgUrl:
+            "https://ul.ehgt.org/d0/2e/d02e75d58d2055faf137fee545082bd6eadb4686-1231285-1200-1600-jpg_250.jpg"));
     gallerItemBeans.add(GalleryItemBean(japanese_title: "测试标题"));
     gallerItemBeans.add(GalleryItemBean(japanese_title: "测试标题"));
     gallerItemBeans.add(GalleryItemBean(japanese_title: "测试标题"));
@@ -48,7 +69,7 @@ class _PopularListTab extends State<PopularListTab> {
           largeTitle: Text(_title),
           trailing: GestureDetector(
             child: Icon(CupertinoIcons.refresh),
-            onTap: () => _reload() ,
+            onTap: () => _reload(),
           ),
         ),
         SliverSafeArea(
