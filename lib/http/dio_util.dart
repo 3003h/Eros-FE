@@ -1,5 +1,6 @@
 import 'package:FEhViewer/utils/toast.dart';
 import 'package:dio/dio.dart';
+import 'package:flutter/cupertino.dart';
 
 class HttpManager {
   final int connectTimeout = 10000;
@@ -70,7 +71,7 @@ class HttpManager {
     try {
       response = await _dio.post(url,
           queryParameters: params, options: options, cancelToken: cancelToken);
-      print('postHttp response: $response');
+      debugPrint('postHttp response: $response');
     } on DioError catch (e) {
       print('postHttp exception: $e');
       formatError(e);
@@ -84,7 +85,7 @@ class HttpManager {
     try {
       response = await _dio.post(url,
           options: options, cancelToken: cancelToken, data: data);
-      print('postHttp response: $response');
+//      debugPrint('postHttp response: $response');
     } on DioError catch (e) {
       print('postHttp exception: $e');
       formatError(e);

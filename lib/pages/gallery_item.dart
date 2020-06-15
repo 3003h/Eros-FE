@@ -1,11 +1,12 @@
 import 'package:FEhViewer/model/gallery.dart';
+import 'package:FEhViewer/utils/storage.dart';
+import 'package:FEhViewer/values/storages.dart';
 import 'package:FEhViewer/values/theme_colors.dart';
 import 'package:FEhViewer/widget/rating_bar.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 
-/// 收藏夹选择单项
 class GalleryItemWidget extends StatefulWidget {
   final int index;
   final GalleryItemBean galleryItemBean;
@@ -21,6 +22,15 @@ class _GalleryItemWidgetState extends State<GalleryItemWidget> {
 
   @override
   Widget build(BuildContext context) {
+    var _title_en = widget?.galleryItemBean?.english_title ?? '';
+    var _title_jpn = widget?.galleryItemBean?.japanese_title ?? '';
+    var _ena_jpn = StorageUtil().getBool(ENABLE_JPN_TITLE);
+
+    // 日语标题判断
+    var _title = _ena_jpn && _title_jpn != null && _title_jpn.isNotEmpty
+        ? _title_jpn
+        : _title_en;
+
     Color _colorCategory =
         ThemeColors.nameColor[widget?.galleryItemBean?.category ?? "defaule"]
                 ["color"] ??
@@ -67,7 +77,7 @@ class _GalleryItemWidgetState extends State<GalleryItemWidget> {
                 children: <Widget>[
                   // 标题
                   Text(
-                    widget?.galleryItemBean?.japanese_title ?? '',
+                    _title,
                     maxLines: 3,
                     textAlign: TextAlign.left, // 对齐方式
                     overflow: TextOverflow.ellipsis, // 超出部分省略号
@@ -93,11 +103,19 @@ class _GalleryItemWidgetState extends State<GalleryItemWidget> {
                   // 评分和页数
                   Row(
                     children: <Widget>[
-                      StaticRatingBar(
-                        size: 22.0,
-                        rate: widget.galleryItemBean.rating,
-                        radiusRatio: 1.5,
+                      Padding(
+                        padding: const EdgeInsets.fromLTRB(0, 0, 4, 0),
+                        child: StaticRatingBar(
+                          size: 22.0,
+                          rate: widget.galleryItemBean.rating,
+                          radiusRatio: 1.5,
+                        ),
                       ),
+                      Text(widget?.galleryItemBean?.rating.toString(),
+                      style: TextStyle(
+                        fontSize: 14,
+                        color: CupertinoColors.systemGrey,
+                      ),),
                       Expanded(
                         child: Align(
                           alignment: Alignment.centerRight,
@@ -111,7 +129,9 @@ class _GalleryItemWidgetState extends State<GalleryItemWidget> {
                       )
                     ],
                   ),
-                  Container(height: 4,),
+                  Container(
+                    height: 4,
+                  ),
                   // 类型和时间
                   Row(
                     children: <Widget>[

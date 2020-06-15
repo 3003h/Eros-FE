@@ -1,22 +1,27 @@
 class GalleryItemBean {
-  final String url;
-  final String imgUrl;
-  final String japanese_title;
-  final String english_title;
+  final String gid;
+  final String token;
+
+  String url;
+  String imgUrl;
+  String japanese_title;
+  String english_title;
 
   // 类型
-  final String category;
-  final String uploader;
-  final String posted;
-  final String language;
-  final String length;
-  final double rating;
-  final String numberOfReviews;
-  final String postTime;
-  final List<String> simpleTags;
+  String category;
+  String uploader;
+  String posted;
+  String language;
+  String length;
+  double rating;
+  String numberOfReviews;
+  String postTime;
+  List<String> simpleTags;
 
   GalleryItemBean(
-      {this.url,
+      {this.gid,
+      this.token,
+      this.url,
       this.imgUrl,
       this.japanese_title,
       this.english_title,
@@ -32,6 +37,6 @@ class GalleryItemBean {
 
   @override
   String toString() {
-    return 'GalleryItemBean{url: $url, imgUrl: $imgUrl, japanese_title: $japanese_title, english_title: $english_title, category: $category, uploader: $uploader, posted: $posted, language: $language, length: $length, rating: $rating, numberOfReviews: $numberOfReviews, postTime: $postTime, simpleTags: $simpleTags}';
+    return 'GalleryItemBean{gid: $gid, token: $token, url: $url, imgUrl: $imgUrl, japanese_title: $japanese_title, english_title: $english_title, category: $category, uploader: $uploader, posted: $posted, language: $language, length: $length, rating: $rating, numberOfReviews: $numberOfReviews, postTime: $postTime, simpleTags: $simpleTags}';
   }
 }

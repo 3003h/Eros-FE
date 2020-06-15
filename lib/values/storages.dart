@@ -9,3 +9,6 @@ const String TAG_TRANSLAT_VER = "tag_translat_ver";
 
 // 启用tag翻译
 const String ENABLE_TAG_TRANSLAT = 'enable_tag_tanslat';
+
+// 启用日语标题
+const String ENABLE_JPN_TITLE = 'enable_jpn_title';

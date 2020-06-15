@@ -33,6 +33,9 @@ class Global {
     // 开启tag翻译
     StorageUtil().setBool(ENABLE_TAG_TRANSLAT, true);
 
+    // 日语标题
+    StorageUtil().setBool(ENABLE_JPN_TITLE, true);
+
     // 读取设备第一次打开
     isFirstOpen = !StorageUtil().getBool(STORAGE_DEVICE_ALREADY_OPEN_KEY);
     if (isFirstOpen) {
