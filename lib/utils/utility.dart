@@ -43,31 +43,32 @@ getNameAndColor(name) {
 }
 
 class API {
+  /// 获取热门画廊列表
   static Future<List<GalleryItemBean>> getPopular() async {
     HttpManager httpManager = HttpManager.getInstance("https://e-hentai.org/");
     const url = "/popular";
 
     var response = await httpManager.get(url);
-    print(response);
 
-    List<GalleryItemBean> list = getGalleryList(response);
+    List<GalleryItemBean> list = parseGalleryList(response);
 
     return list;
   }
 
+  /// 获取默认画廊列表
   static Future<List<GalleryItemBean>> getGallery() async {
     HttpManager httpManager = HttpManager.getInstance("https://e-hentai.org/");
     const url = "";
 
     var response = await httpManager.get(url);
-    print(response);
 
-    List<GalleryItemBean> list = getGalleryList(response);
+    List<GalleryItemBean> list = parseGalleryList(response);
 
     return list;
   }
 
-  static List<GalleryItemBean> getGalleryList(String response) {
+  /// 列表数据处理
+  static List<GalleryItemBean> parseGalleryList(String response) {
     var document = parse(response);
 
     // 画廊列表
@@ -111,6 +112,7 @@ class API {
       final postTime =
           tr.querySelector('td.gl2c > div:nth-child(2) > div').text.trim();
 
+      // 评分星级计算
       final ratPx = tr
           .querySelector('td.gl2c > div:nth-child(2) > div.ir')
           .attributes['style'];
@@ -119,6 +121,7 @@ class API {
       var px = pxA.firstMatch(ratPx);
       debugPrint('pxa ${px.group(1)}  pxb ${px.group(2)}');
 
+      //
       final rating = (80.0 - double.parse(px.group(1))) / 16.0 -
           (px.group(2) == '21' ? 0.5 : 0.0);
 
@@ -132,7 +135,8 @@ class API {
 
       GalleryItemBean galleryItemBean = new GalleryItemBean(
         japanese_title: title,
-        imgUrl: imgUrl ?? '',
+//        imgUrl: imgUrl ?? '',
+        imgUrl: '',
         url: url,
         length: length,
         category: category,
@@ -143,15 +147,13 @@ class API {
       );
 
       gallaryItems.add(galleryItemBean);
-      print(galleryItemBean.toString());
+      debugPrint(galleryItemBean.toString());
     }
 
     return gallaryItems;
   }
 
-  /*
-   * tag翻译
-   */
+  ///tag翻译
   static Future<String> generateTagTranslat() async {
     HttpManager httpManager = HttpManager.getInstance("https://api.github.com");
 
@@ -162,10 +164,10 @@ class API {
     // 获取发布时间 作为版本号
     var curVer = "";
     curVer = urlJson["published_at"];
-    print(curVer);
+    debugPrint(curVer);
 
     var oriVer = StorageUtil().getString(TAG_TRANSLAT_VER);
-    print(oriVer);
+    debugPrint(oriVer);
 
     StorageUtil().setString(TAG_TRANSLAT_VER, curVer);
 
@@ -175,7 +177,7 @@ class API {
         dbJson.isEmpty ||
         dbJson == "null" ||
         curVer != oriVer) {
-      print("TagTranslat更新");
+      debugPrint("TagTranslat更新");
       List assList = urlJson["assets"];
 
       Map assMap = new Map();
@@ -184,7 +186,7 @@ class API {
       });
       var dbUrl = assMap["db.text.json"];
 
-      print(dbUrl);
+      debugPrint(dbUrl);
 
       HttpManager httpDB = HttpManager.getInstance();
       dbJson = await httpDB.get(dbUrl);
@@ -193,7 +195,7 @@ class API {
         data = data["data"];
         StorageUtil().setJSON(TAG_TRANSLAT, jsonEncode(data));
       }
-      print("更新完成");
+      debugPrint("更新完成");
     } else {
       debugPrint("不需更新");
     }

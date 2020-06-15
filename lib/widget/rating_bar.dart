@@ -6,15 +6,18 @@ const int kNumberOfStarts = 5;
 const double kSpacing = 3.0;
 const double kSize = 50.0;
 
+/// 静态控件
 class StaticRatingBar extends StatelessWidget {
-  /// number of stars
+  /// 星星数量
   final int count;
 
-  /// init rate
+  /// 分数
   final double rate;
 
-  /// size of the starts
+  /// 星星大小
   final double size;
+
+  final double radiusRatio;
 
   final Color colorLight;
 
@@ -26,6 +29,7 @@ class StaticRatingBar extends StatelessWidget {
     Color colorDark,
     int count,
     this.size: kSize,
+    this.radiusRatio: 1.1,
   })  : rate = rate ?? kMaxRate,
         count = count ?? kNumberOfStarts,
         colorDark = colorDark ?? new Color(0xffeeeeee),
@@ -39,6 +43,7 @@ class StaticRatingBar extends StatelessWidget {
           painter: new _PainterStars(
               size: this.size / 2,
               color: colorLight,
+              radiusRatio: radiusRatio,
               style: PaintingStyle.fill,
               strokeWidth: 0.0),
         ));
@@ -52,6 +57,7 @@ class StaticRatingBar extends StatelessWidget {
           painter: new _PainterStars(
               size: this.size / 2,
               color: colorDark,
+              radiusRatio: radiusRatio,
               style: PaintingStyle.fill,
               strokeWidth: 0.0),
         ));
@@ -93,32 +99,79 @@ double degree2Radian(int degree) {
 }
 
 Path createStarPath(double radius, double radiusRatio, Path path) {
-  double radian = degree2Radian(36); // 36为五角星的角度
-  double radius_in = (radius * Math.sin(radian / 2) / Math.cos(radian)) *
-      radiusRatio; // 中间五边形的半径,太正不是很好看，扩大一点点
+  // radius 半径 决定大小
 
-  path.moveTo((radius * Math.cos(radian / 2)), 0.0); // 此点为多边形的起点
-  path.lineTo((radius * Math.cos(radian / 2) + radius_in * Math.sin(radian)),
-      (radius - radius * Math.sin(radian / 2)));
-  path.lineTo((radius * Math.cos(radian / 2) * 2),
-      (radius - radius * Math.sin(radian / 2)));
-  path.lineTo(
-      (radius * Math.cos(radian / 2) + radius_in * Math.cos(radian / 2)),
-      (radius + radius_in * Math.sin(radian / 2)));
-  path.lineTo((radius * Math.cos(radian / 2) + radius * Math.sin(radian)),
-      (radius + radius * Math.cos(radian)));
-  path.lineTo((radius * Math.cos(radian / 2)), (radius + radius_in));
-  path.lineTo((radius * Math.cos(radian / 2) - radius * Math.sin(radian)),
-      (radius + radius * Math.cos(radian)));
-  path.lineTo(
-      (radius * Math.cos(radian / 2) - radius_in * Math.cos(radian / 2)),
-      (radius + radius_in * Math.sin(radian / 2)));
-  path.lineTo(0.0, (radius - radius * Math.sin(radian / 2)));
-  path.lineTo((radius * Math.cos(radian / 2) - radius_in * Math.sin(radian)),
-      (radius - radius * Math.sin(radian / 2)));
+  // 36为五角星的角度
+  double radian = degree2Radian(36);
 
-  path.lineTo((radius * Math.cos(radian / 2)), 0.0);
+  // 正五角星情况下 中间五边形的半径
+  double radius_in_def = radius * Math.sin(radian / 2) / Math.cos(radian);
+
+  // 实际中间五边形的半径,太正不是很好看，扩大一点点
+  double radius_in = radius_in_def * radiusRatio;
+//  debugPrint('radius_in $radius_in');
+
+  // 计算外部五边形5个顶点坐标
+  _Point _pointA = _Point((radius * Math.cos(radian / 2)), 0.0);
+  _Point _pointB = _Point((radius * Math.cos(radian / 2) * 2),
+      (radius - radius * Math.sin(radian / 2)));
+  _Point _pointC = _Point(
+      (radius * Math.cos(radian / 2) + radius * Math.sin(radian)),
+      (radius + radius * Math.cos(radian)));
+  _Point _pointD = _Point(
+      (radius * Math.cos(radian / 2) - radius * Math.sin(radian)),
+      (radius + radius * Math.cos(radian)));
+  _Point _pointE = _Point(0.0, (radius - radius * Math.sin(radian / 2)));
+
+  // 中心坐标
+  _Point _pointO = _Point((radius * Math.cos(radian / 2)), radius);
+//  _Point _pointO = _Point(0.0, 0.0);
+//  debugPrint(_pointO.toString());
+
+//  radius_in = 10.0;
+  // 计算内部五边形5个顶点坐标
+  _Point _pointAi = _Point(
+      _pointO.px + radius_in * Math.sin(radian),
+      _pointO.py - radius_in * Math.cos(radian));
+  _Point _pointBi = _Point(
+      _pointO.px + radius_in * Math.cos(radian/2),
+      _pointO.py + radius_in * Math.sin(radian/2));
+  _Point _pointCi =
+      _Point(_pointO.px, _pointO.py + radius_in);
+  _Point _pointDi = _Point(
+      _pointO.px - radius_in * Math.cos(radian/2),
+      _pointO.py + radius_in * Math.sin(radian/2));
+  _Point _pointEi = _Point(
+      _pointO.px - radius_in * Math.sin(radian),
+      _pointO.py - radius_in * Math.cos(radian));
+
+  // 绘制
+  path.moveTo(_pointA.px, _pointA.py);
+  path.lineTo(_pointAi.px, _pointAi.py);
+  path.lineTo(_pointB.px, _pointB.py);
+  path.lineTo(_pointBi.px, _pointBi.py);
+  path.lineTo(_pointC.px, _pointC.py);
+  path.lineTo(_pointCi.px, _pointCi.py);
+  path.lineTo(_pointD.px, _pointD.py);
+  path.lineTo(_pointDi.px, _pointDi.py);
+  path.lineTo(_pointE.px, _pointE.py);
+  path.lineTo(_pointEi.px, _pointEi.py);
+  path.lineTo(_pointA.px, _pointA.py);
+
   return path;
+}
+
+// 坐标点类
+class _Point {
+  final double px;
+  final double py;
+
+  _Point(this.px, this.py);
+
+  @override
+  String toString() {
+    return '_Point{px: $px, py: $py}';
+  }
 }
 
 class _PainterStars extends CustomPainter {
@@ -126,8 +179,10 @@ class _PainterStars extends CustomPainter {
   final Color color;
   final PaintingStyle style;
   final double strokeWidth;
+  final double radiusRatio;
 
-  _PainterStars({this.size, this.color, this.strokeWidth, this.style});
+  _PainterStars(
+      {this.size, this.color, this.strokeWidth, this.style, this.radiusRatio});
 
   @override
   void paint(Canvas canvas, Size size) {
@@ -141,15 +196,15 @@ class _PainterStars extends CustomPainter {
 
     double offset = strokeWidth > 0 ? strokeWidth + 2 : 0.0;
 
-    path = createStarPath(this.size - offset, 1.0, path);
+    path = createStarPath(this.size - offset, radiusRatio ?? 1.0, path);
     path = path.shift(new Offset(this.size * 2, 0.0));
-    path = createStarPath(this.size - offset, 1.0, path);
+    path = createStarPath(this.size - offset, radiusRatio ?? 1.0, path);
     path = path.shift(new Offset(this.size * 2, 0.0));
-    path = createStarPath(this.size - offset, 1.0, path);
+    path = createStarPath(this.size - offset, radiusRatio ?? 1.0, path);
     path = path.shift(new Offset(this.size * 2, 0.0));
-    path = createStarPath(this.size - offset, 1.0, path);
+    path = createStarPath(this.size - offset, radiusRatio ?? 1.0, path);
     path = path.shift(new Offset(this.size * 2, 0.0));
-    path = createStarPath(this.size - offset, 1.0, path);
+    path = createStarPath(this.size - offset, radiusRatio ?? 1.0, path);
 
     if (offset > 0) {
       path = path.shift(new Offset(offset, offset));

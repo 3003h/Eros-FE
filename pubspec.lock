@@ -315,6 +315,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "1.7.0"
+  spon_rating_bar:
+    dependency: "direct main"
+    description:
+      name: spon_rating_bar
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "0.0.1"
   sqflite:
     dependency: transitive
     description:

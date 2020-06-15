@@ -54,6 +54,8 @@ dependencies:
 
   html: ^0.14.0+3
 
+  spon_rating_bar: ^0.0.1
+
 dev_dependencies:
   flutter_test:
     sdk: flutter
