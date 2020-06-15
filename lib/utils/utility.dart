@@ -135,8 +135,7 @@ class API {
 
       GalleryItemBean galleryItemBean = new GalleryItemBean(
         japanese_title: title,
-//        imgUrl: imgUrl ?? '',
-        imgUrl: '',
+        imgUrl: imgUrl ?? '',
         url: url,
         length: length,
         category: category,
@@ -147,7 +146,7 @@ class API {
       );
 
       gallaryItems.add(galleryItemBean);
-      debugPrint(galleryItemBean.toString());
+//      debugPrint(galleryItemBean.toString());
     }
 
     return gallaryItems;

@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 
 class EHCupertinoIcons {
   EHCupertinoIcons._();
+
   static const IconData fire = const IconData(0xf42e,
       fontFamily: CupertinoIcons.iconFont,
       fontPackage: CupertinoIcons.iconFontPackage);
@@ -38,4 +39,11 @@ class EHCupertinoIcons {
       fontFamily: CupertinoIcons.iconFont,
       fontPackage: CupertinoIcons.iconFontPackage);
 
+  static const IconData heart = IconData(0xf387,
+      fontFamily: CupertinoIcons.iconFont,
+      fontPackage: CupertinoIcons.iconFontPackage);
+
+  static const IconData heart_solid = IconData(0xf388,
+      fontFamily: CupertinoIcons.iconFont,
+      fontPackage: CupertinoIcons.iconFontPackage);
 }

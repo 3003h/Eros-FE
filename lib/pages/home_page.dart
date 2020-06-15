@@ -39,7 +39,7 @@ class _CupertinoHomePage extends State<CupertinoHomePage> {
             title: Text('画廊'),
           ),
           BottomNavigationBarItem(
-            icon: Icon(EHCupertinoIcons.star_solid),
+            icon: Icon(EHCupertinoIcons.heart_solid),
             title: Text('收藏'),
           ),
           BottomNavigationBarItem(

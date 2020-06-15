@@ -1,23 +1,19 @@
 import 'package:FEhViewer/model/gallery.dart';
-import 'package:FEhViewer/route/navigator_util.dart';
-import 'package:FEhViewer/utils/icon.dart';
 import 'package:FEhViewer/utils/utility.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_easyrefresh/delivery_header.dart';
 import 'package:flutter_easyrefresh/easy_refresh.dart';
-
 import 'gallery_item.dart';
 
 class PopularListTab extends StatefulWidget {
   @override
-  State<StatefulWidget> createState() {
-    return _PopularListTab();
-  }
+  State<StatefulWidget> createState() => _PopularListTab();
 }
 
 class _PopularListTab extends State<PopularListTab> {
   String _title = "当前热门";
-  final List<GalleryItemBean> gallerItemBeans = [];
+  List<GalleryItemBean> _gallerItemBeans = [];
 
   @override
   void initState() {
@@ -25,45 +21,25 @@ class _PopularListTab extends State<PopularListTab> {
     _loadData();
   }
 
-  void _loadData() async {
-    gallerItemBeans.clear();
-    var rult = await API.getPopular(); // 网络请求
-    gallerItemBeans.addAll(rult);
-
-//    gallerItemBeans.clear();
-//    gallerItemBeans.add(GalleryItemBean(
-//        japanese_title:
-//            "[いーむす・アキ] 異世界エロスとブタ野郎 後編 (COMIC快楽天 2020年5月号) [中国翻訳] [DL版]",
-//        uploader: "真實爽粉",
-//        category: "Manga",
-//        postTime: "2020-06-13 13:28",
-//        imgUrl:
-//            "https://ul.ehgt.org/d0/2e/d02e75d58d2055faf137fee545082bd6eadb4686-1231285-1200-1600-jpg_250.jpg"));
-//    gallerItemBeans.add(GalleryItemBean(
-//        category: "Artist CG",
-//        uploader: "xxxhentaii",
-//        postTime: "2020-06-14 09:34",
-//        japanese_title: "[Hasosa] Komorojo-chan. (Oshiro Project)",
-//        tags: [
-//          "oshiro project",
-//          "f:ahegao",
-//          "f:big penis",
-//          "f:futanari",
-//          "f:huge penis",
-//          "variant set"
-//        ],
-//        imgUrl:
-//            "https://ul.ehgt.org/d0/2e/d02e75d58d2055faf137fee545082bd6eadb4686-1231285-1200-1600-jpg_250.jpg"));
-//    gallerItemBeans.add(GalleryItemBean(japanese_title: "测试标题"));
-//    gallerItemBeans.add(GalleryItemBean(japanese_title: "测试标题"));
-//    gallerItemBeans.add(GalleryItemBean(japanese_title: "测试标题"));
-//    gallerItemBeans.add(GalleryItemBean(japanese_title: "测试标题22222222"));
+  _loadData() async {
+    var gallerItemBeans = await API.getPopular();
+    setState(() {
+      _gallerItemBeans.clear();
+      _gallerItemBeans.addAll(gallerItemBeans);
+    });
   }
 
-  void _reload() {
-    setState(() {
-      _loadData();
-    });
+  SliverList gallerySliverListView(gallerItemBeans) {
+    return SliverList(
+      delegate: SliverChildBuilderDelegate(
+            (context, index) {
+          if (index < gallerItemBeans.length) {
+            return GalleryItemWidget(galleryItemBean: gallerItemBeans[index]);
+          }
+          return null;
+        },
+      ),
+    );
   }
 
   @override
@@ -72,33 +48,25 @@ class _PopularListTab extends State<PopularListTab> {
       slivers: <Widget>[
         CupertinoSliverNavigationBar(
           largeTitle: Text(_title),
-          trailing: GestureDetector(
-            child: Icon(CupertinoIcons.refresh),
-            onTap: () => _reload(),
-          ),
         ),
         SliverSafeArea(
           top: false,
-          sliver: SliverList(
-            delegate: SliverChildBuilderDelegate(
-              (context, index) {
-                if (index < gallerItemBeans.length) {
-                  return GalleryItemWidget(
-                      galleryItemBean: gallerItemBeans[index]);
-                }
-              },
-            ),
-          ),
+          sliver: gallerySliverListView(_gallerItemBeans),
         )
       ],
     );
 
-    return customScrollView;
-
-    return EasyRefresh(
+    EasyRefresh re = EasyRefresh(
+      header: DeliveryHeader(enableHapticFeedback: true),
       child: customScrollView,
-      onRefresh: () async {},
-      onLoad: () async {},
+      onRefresh: () async {
+        _loadData();
+      },
+      onLoad: () async {
+        _loadData();
+      },
     );
+
+    return re;
   }
 }

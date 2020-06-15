@@ -23,17 +23,32 @@ class ThemeColors {
   static const Color color_fff = Color(0xffffffff);
 
   // tap 颜色
-  static const Map nameColor = {
-    "Misc": {"string": "Misc", "color": Color(0xff777777)},
+  static const Map nameColor2 = {
     "Doujinshi": {"string": "Doujinshi", "color": Color(0xff9E2720)},
     "Manga": {"string": "Manga", "color": Color(0xffDB6C24)},
     "Artist CG": {"string": "Artist CG", "color": Color(0xffD38F1D)},
     "Game CG": {"string": "Game CG", "color": Color(0xff617C63)},
+    "Western": {"string": "Western", "color": Color(0xffAB9F60)},
+    "Non-H": {"string": "Non-H", "color": Color(0xff5FA9CF)},
     "Image Set": {"string": "Image Set", "color": Color(0xff325CA2)},
     "Cosplay": {"string": "Cosplay", "color": Color(0xff6A32A2)},
     "Asian Porn": {"string": "Asian Porn", "color": Color(0xffA23282)},
-    "Non-H": {"string": "Non-H", "color": Color(0xff5FA9CF)},
-    "Western": {"string": "Western", "color": Color(0xffAB9F60)},
+    "Misc": {"string": "Misc", "color": Color(0xff777777)},
+    "defaule": {"color": CupertinoColors.systemBackground}
+  };
+
+  // tap 颜色
+  static const Map nameColor = {
+    "Doujinshi": {"string": "Doujinshi", "color": Color(0xfff44336)},
+    "Manga": {"string": "Manga", "color": Color(0xffff9800)},
+    "Artist CG": {"string": "Artist CG", "color": Color(0xfffbc02d)},
+    "Game CG": {"string": "Game CG", "color": Color(0xff4caf50)},
+    "Western": {"string": "Western", "color": Color(0xff8bc34a)},
+    "Non-H": {"string": "Non-H", "color": Color(0xff2196f3)},
+    "Image Set": {"string": "Image Set", "color": Color(0xff3f51b5)},
+    "Cosplay": {"string": "Cosplay", "color": Color(0xff9c27b0)},
+    "Asian Porn": {"string": "Asian Porn", "color": Color(0xff9575cd)},
+    "Misc": {"string": "Misc", "color": Color(0xfff06292)},
     "defaule": {"color": CupertinoColors.systemBackground}
   };
 

@@ -1,11 +1,9 @@
 import 'package:FEhViewer/model/gallery.dart';
-import 'package:FEhViewer/route/navigator_util.dart';
 import 'package:FEhViewer/values/theme_colors.dart';
 import 'package:FEhViewer/widget/rating_bar.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:spon_rating_bar/spon_rating_bar.dart';
 
 /// 收藏夹选择单项
 class GalleryItemWidget extends StatefulWidget {

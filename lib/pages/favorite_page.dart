@@ -163,8 +163,9 @@ class _FavSelItemWidgetState extends State<FavSelItemWidget> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
           Row(children: <Widget>[
+            // 图标
             Icon(
-              CupertinoIcons.heart_solid,
+              EHCupertinoIcons.heart_solid,
               color: widget.favcatItemBean.color,
             ),
             Container(

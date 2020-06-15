@@ -17,7 +17,7 @@ class GalleryListTab extends StatefulWidget {
 
 class _GalleryListTab extends State<GalleryListTab> {
   String _title = "画廊";
-  final List<GalleryItemBean> gallerItemBeans = [];
+  final List<GalleryItemBean> _gallerItemBeans = [];
 
   @override
   void initState() {
@@ -25,16 +25,25 @@ class _GalleryListTab extends State<GalleryListTab> {
     _loadData();
   }
 
-  void _loadData() async {
-    gallerItemBeans.clear();
-    var rult = await API.getGallery(); // 网络请求
-    gallerItemBeans.addAll(rult);
+  _loadData() async {
+    var gallerItemBeans = await API.getGallery();
+    setState(() {
+      _gallerItemBeans.clear();
+      _gallerItemBeans.addAll(gallerItemBeans);
+    });
   }
 
-  void _reload() {
-    setState(() {
-      _loadData();
-    });
+  SliverList gallerySliverListView(gallerItemBeans) {
+    return SliverList(
+      delegate: SliverChildBuilderDelegate(
+        (context, index) {
+          if (index < gallerItemBeans.length) {
+            return GalleryItemWidget(galleryItemBean: gallerItemBeans[index]);
+          }
+          return null;
+        },
+      ),
+    );
   }
 
   @override
@@ -43,33 +52,24 @@ class _GalleryListTab extends State<GalleryListTab> {
       slivers: <Widget>[
         CupertinoSliverNavigationBar(
           largeTitle: Text(_title),
-          trailing: GestureDetector(
-            child: Icon(CupertinoIcons.refresh),
-            onTap: () => _reload(),
-          ),
         ),
         SliverSafeArea(
           top: false,
-          sliver: SliverList(
-            delegate: SliverChildBuilderDelegate(
-              (context, index) {
-                if (index < gallerItemBeans.length) {
-                  return GalleryItemWidget(
-                      galleryItemBean: gallerItemBeans[index]);
-                }
-              },
-            ),
-          ),
+          sliver: gallerySliverListView(_gallerItemBeans),
         )
       ],
     );
 
-    return customScrollView;
-
-    return EasyRefresh(
+    EasyRefresh re = EasyRefresh(
       child: customScrollView,
-      onRefresh: () async {},
-      onLoad: () async {},
+      onRefresh: () async {
+        _loadData();
+      },
+      onLoad: () async {
+        _loadData();
+      },
     );
+
+    return re;
   }
 }
