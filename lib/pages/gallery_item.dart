@@ -126,10 +126,11 @@ class _GalleryItemWidgetState extends State<GalleryItemWidget> {
                       Row(
                         children: <Widget>[
                           Padding(
-                            padding: const EdgeInsets.only(bottom: 2),
+                            padding: const EdgeInsets.only(bottom: 1),
                             child: Icon(
-                              EHCupertinoIcons.paper_solid,
-                              size: 12,
+//                              EHCupertinoIcons.paper_solid,
+                              Icons.panorama,
+                              size: 13,
                               color: CupertinoColors.systemGrey,
                             ),
                           ),
@@ -175,7 +176,7 @@ class _GalleryItemWidgetState extends State<GalleryItemWidget> {
                           child: Text(
                             widget?.galleryItemBean?.postTime ?? "",
                             style: TextStyle(
-                                fontSize: 14,
+                                fontSize: 12,
                                 color: CupertinoColors.systemGrey),
                           ),
                         ),
@@ -231,7 +232,7 @@ class _GalleryItemWidgetState extends State<GalleryItemWidget> {
     return Divider(
       height: 0.5,
       indent: 18,
-      color: CupertinoColors.systemGrey,
+      color: CupertinoColors.systemGrey4,
     );
   }
 

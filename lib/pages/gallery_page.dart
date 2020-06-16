@@ -33,11 +33,11 @@ class _GalleryListTab extends State<GalleryListTab> {
     });
   }
 
-  SliverList gallerySliverListView(gallerItemBeans) {
+  SliverList gallerySliverListView(List gallerItemBeans) {
     return SliverList(
       delegate: SliverChildBuilderDelegate(
         (context, index) {
-          if (index < gallerItemBeans.filecount) {
+          if (index < gallerItemBeans.length) {
             return GalleryItemWidget(galleryItemBean: gallerItemBeans[index]);
           }
           return null;

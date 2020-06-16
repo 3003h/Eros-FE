@@ -37,12 +37,12 @@ class _SplashPageState extends State<SplashPage> {
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
               Icon(
-                Icons.live_tv,
+                Icons.local_cafe,
                 size: 150.0,
                 color: Colors.grey,
               ),
               Text(
-                "今天你的操作下饭了吗？",
+                "小撸怡情大撸伤身,强撸灰飞烟灭",
                 style: TextStyle(color: Colors.grey),
               ),
               Text(

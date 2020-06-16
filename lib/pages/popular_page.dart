@@ -57,7 +57,7 @@ class _PopularListTab extends State<PopularListTab> {
     );
 
     EasyRefresh re = EasyRefresh(
-      header: DeliveryHeader(enableHapticFeedback: true),
+//      header: DeliveryHeader(enableHapticFeedback: true),
       child: customScrollView,
       onRefresh: () async {
         _loadData();
