@@ -1,7 +1,7 @@
+import 'package:FEhViewer/fehviewer/client/EhTagDatabase.dart';
 import 'package:FEhViewer/utils/storage.dart';
 import 'package:FEhViewer/fehviewer/route/routes.dart';
 import 'package:FEhViewer/fehviewer/route/Application.dart';
-import 'package:FEhViewer/utils/utility.dart';
 import 'package:FEhViewer/values/storages.dart';
 import 'package:fluro/fluro.dart';
 import 'package:flutter/material.dart';
@@ -20,7 +20,7 @@ class Global {
     await StorageUtil.init();
 
     try {
-      EHUtils.generateTagTranslat();
+      EhTagDatabase.generateTagTranslat();
     } catch (e) {
       debugPrint('更新翻译异常 $e');
     }

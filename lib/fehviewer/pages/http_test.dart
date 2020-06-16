@@ -1,3 +1,4 @@
+import 'package:FEhViewer/fehviewer/client/EhTagDatabase.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart'; // 导入了Material UI组件库
 import 'package:FEhViewer/utils/utility.dart';
@@ -32,7 +33,7 @@ class _HttpTestRouteState extends State<HttpTestRoute> {
                         });
 
                         try {
-                          _text = await EHUtils.generateTagTranslat();
+                          _text = await EhTagDatabase.generateTagTranslat();
                         } catch (e) {
                           _text = "请求失败：$e";
                           throw e;

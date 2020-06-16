@@ -23,6 +23,8 @@ class _GalleryItemWidgetState extends State<GalleryItemWidget> {
 
   @override
   Widget build(BuildContext context) {
+    var _isBlur = false;
+
     var _title_en = widget?.galleryItemBean?.english_title ?? '';
     var _title_jpn = widget?.galleryItemBean?.japanese_title ?? '';
     var _ena_jpn = StorageUtil().getBool(ENABLE_JPN_TITLE);
@@ -39,10 +41,14 @@ class _GalleryItemWidgetState extends State<GalleryItemWidget> {
 
     // 封面图片
     Widget _gaImage = widget?.galleryItemBean?.imgUrl != null
-        ? BlurImage(
-            widget: CachedNetworkImage(
-            imageUrl: widget.galleryItemBean.imgUrl,
-          ))
+        ? (_isBlur
+            ? BlurImage(
+                widget: CachedNetworkImage(
+                imageUrl: widget.galleryItemBean.imgUrl,
+              ))
+            : CachedNetworkImage(
+                imageUrl: widget.galleryItemBean.imgUrl,
+              ))
         : Container();
 
     Widget container = Container(
@@ -91,7 +97,8 @@ class _GalleryItemWidgetState extends State<GalleryItemWidget> {
                     style: TextStyle(
                         fontSize: 12, color: CupertinoColors.systemGrey),
                   ),
-                  // tags
+
+                  // 标签
                   Container(
                     padding: const EdgeInsets.fromLTRB(0, 6, 0, 8),
                     child: Wrap(
@@ -101,6 +108,8 @@ class _GalleryItemWidgetState extends State<GalleryItemWidget> {
                           _getTagItems(widget.galleryItemBean), //要显示的子控件集合
                     ),
                   ),
+
+//                  Expanded(child: Container(),),
 
                   // 评分和页数
                   Row(
@@ -202,7 +211,7 @@ class _GalleryItemWidgetState extends State<GalleryItemWidget> {
       // 不可见区域点击有效
       behavior: HitTestBehavior.opaque,
       onTap: () {
-        debugPrint("fav tap ${widget.index}");
+        debugPrint("title: ${_title}");
         // 返回 并带上参数
 //        NavigatorUtil.goBackWithParams(context, widget.galleryItemBean);
       },

@@ -1,3 +1,4 @@
+import 'package:FEhViewer/fehviewer/client/parser/GalleryListParser.dart';
 import 'package:FEhViewer/fehviewer/model/gallery.dart';
 import 'package:FEhViewer/utils/utility.dart';
 import 'package:flutter/cupertino.dart';
@@ -21,7 +22,7 @@ class _PopularListTab extends State<PopularListTab> {
   }
 
   _loadData() async {
-    var gallerItemBeans = await EHUtils.getPopular();
+    var gallerItemBeans = await GalleryListParser.getPopular();
     setState(() {
       _gallerItemBeans.clear();
       _gallerItemBeans.addAll(gallerItemBeans);
