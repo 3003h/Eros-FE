@@ -1,4 +1,4 @@
-import 'package:FEhViewer/model/favorite.dart';
+import 'package:FEhViewer/fehviewer/model/favorite.dart';
 import 'package:FEhViewer/utils/icon.dart';
 import 'package:FEhViewer/values/theme_colors.dart';
 import 'package:flutter/cupertino.dart';

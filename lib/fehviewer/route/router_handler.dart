@@ -1,8 +1,8 @@
-import 'package:FEhViewer/pages/favorite_page.dart';
-import 'package:FEhViewer/pages/splash_page.dart';
+import 'package:FEhViewer/fehviewer/pages/favorite_page.dart';
+import 'package:FEhViewer/fehviewer/pages/splash_page.dart';
 
-import 'package:FEhViewer/pages/home_page.dart';
-import 'package:FEhViewer/pages/http_test.dart';
+import 'package:FEhViewer/fehviewer/pages/home_page.dart';
+import 'package:FEhViewer/fehviewer/pages/http_test.dart';
 import 'package:flutter/material.dart';
 import 'package:fluro/fluro.dart';
 

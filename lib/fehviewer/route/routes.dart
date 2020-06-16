@@ -1,4 +1,4 @@
-import 'package:FEhViewer/route/router_handler.dart';
+import 'router_handler.dart';
 import 'package:fluro/fluro.dart';
 
 class EHRoutes {

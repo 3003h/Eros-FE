@@ -1,6 +1,6 @@
 import 'package:FEhViewer/http/dio_util.dart';
-import 'package:FEhViewer/model/gallery.dart';
-import 'package:FEhViewer/model/tagTranslat.dart';
+import 'package:FEhViewer/fehviewer/model/gallery.dart';
+import 'package:FEhViewer/fehviewer/model/tagTranslat.dart';
 import 'package:FEhViewer/utils/storage.dart';
 import 'package:FEhViewer/values/const.dart';
 import 'package:FEhViewer/values/storages.dart';
@@ -78,7 +78,7 @@ class EHUtils {
       galleryItems[i].english_title = rultList[i]['title'];
       galleryItems[i].japanese_title = rultList[i]['title_jpn'];
       galleryItems[i].rating = double.parse(rultList[i]['rating']);
-      galleryItems[i].imgUrl_l = rultList[i]['thumb'];
+      galleryItems[i].imgUrl = rultList[i]['thumb'];
       galleryItems[i].filecount = rultList[i]['filecount'];
     }
   }
@@ -338,7 +338,8 @@ class EHUtils {
   static Future<String> getTranTag(String tag) async {
 
     if (tag.contains(':')) {
-      RegExp rpfx = new RegExp(r"(\w:)(\w+)");
+//      debugPrint('$tag');
+      RegExp rpfx = new RegExp(r"(\w:)(.+)");
       final rult = rpfx.firstMatch(tag);
       final pfx = rult.group(1) ?? '';
       final _nameSpase = EHConst.prefixToNameSpaceMap[pfx];

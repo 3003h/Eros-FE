@@ -1,4 +1,4 @@
-import 'package:FEhViewer/route/navigator_util.dart';
+import 'package:FEhViewer/fehviewer/route/navigator_util.dart';
 import 'package:flutter/material.dart';
 
 /// 闪屏页

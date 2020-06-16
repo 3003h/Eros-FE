@@ -1,12 +1,12 @@
-import 'package:FEhViewer/model/favorite.dart';
+import 'package:FEhViewer/fehviewer/model/favorite.dart';
 import 'package:FEhViewer/values/const.dart';
 import 'package:FEhViewer/values/theme_colors.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
-import 'package:FEhViewer/route/navigator_util.dart';
+import 'package:FEhViewer/fehviewer/route/navigator_util.dart';
 import 'package:FEhViewer/utils/icon.dart';
-import 'package:FEhViewer/route/routes.dart';
+import 'package:FEhViewer/fehviewer/route/routes.dart';
 
 class FavoriteTab extends StatefulWidget {
   @override

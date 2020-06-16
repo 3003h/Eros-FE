@@ -1,6 +1,4 @@
-import 'package:FEhViewer/model/gallery.dart';
-import 'package:FEhViewer/route/navigator_util.dart';
-import 'package:FEhViewer/utils/icon.dart';
+import 'package:FEhViewer/fehviewer/model/gallery.dart';
 import 'package:FEhViewer/utils/utility.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';

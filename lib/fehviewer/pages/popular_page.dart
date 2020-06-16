@@ -1,8 +1,7 @@
-import 'package:FEhViewer/model/gallery.dart';
+import 'package:FEhViewer/fehviewer/model/gallery.dart';
 import 'package:FEhViewer/utils/utility.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_easyrefresh/delivery_header.dart';
 import 'package:flutter_easyrefresh/easy_refresh.dart';
 import 'gallery_item.dart';
 

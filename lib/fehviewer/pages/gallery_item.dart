@@ -1,8 +1,8 @@
-import 'package:FEhViewer/model/gallery.dart';
-import 'package:FEhViewer/utils/icon.dart';
+import 'package:FEhViewer/fehviewer/model/gallery.dart';
 import 'package:FEhViewer/utils/storage.dart';
 import 'package:FEhViewer/values/storages.dart';
 import 'package:FEhViewer/values/theme_colors.dart';
+import 'package:FEhViewer/widget/blur_image.dart';
 import 'package:FEhViewer/widget/rating_bar.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -38,10 +38,11 @@ class _GalleryItemWidgetState extends State<GalleryItemWidget> {
             CupertinoColors.white;
 
     // 封面图片
-    Widget gaImage = widget?.galleryItemBean?.imgUrl != null
-        ? CachedNetworkImage(
+    Widget _gaImage = widget?.galleryItemBean?.imgUrl != null
+        ? BlurImage(
+            widget: CachedNetworkImage(
             imageUrl: widget.galleryItemBean.imgUrl,
-          )
+          ))
         : Container();
 
     Widget container = Container(
@@ -66,7 +67,7 @@ class _GalleryItemWidgetState extends State<GalleryItemWidget> {
                 child: ClipRRect(
                   // 圆角
                   borderRadius: BorderRadius.circular(8),
-                  child: gaImage,
+                  child: _gaImage,
                 ),
               ),
             ),

@@ -1,8 +1,8 @@
-import 'package:FEhViewer/pages/splash_page.dart';
+import 'package:FEhViewer/fehviewer/pages/splash_page.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'config/global.dart';
-import 'route/Application.dart';
+import 'fehviewer/route/Application.dart';
 
 void main() => Global.init().then((e) => runApp(MyApp()));
 

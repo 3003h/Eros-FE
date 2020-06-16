@@ -1,14 +1,10 @@
 import 'package:FEhViewer/utils/storage.dart';
-import 'package:FEhViewer/route/routes.dart';
-import 'package:FEhViewer/route/Application.dart';
+import 'package:FEhViewer/fehviewer/route/routes.dart';
+import 'package:FEhViewer/fehviewer/route/Application.dart';
 import 'package:FEhViewer/utils/utility.dart';
 import 'package:FEhViewer/values/storages.dart';
 import 'package:fluro/fluro.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_easyrefresh/easy_refresh.dart';
-import 'package:sqflite/sqflite.dart';
-import 'package:path/path.dart';
-import 'package:FEhViewer/utils/dataBase.dart';
 
 // 全局配置
 class Global {
@@ -33,6 +29,7 @@ class Global {
 //    var database = await DataBaseUtil.getDataBase();
 //    var count = await database.rawDelete('DELETE FROM tag_translat ');
 //    debugPrint('$count');
+
 
     // 路由
     Router router = Router();

@@ -1,6 +1,5 @@
-import 'package:FEhViewer/route/Application.dart';
-import 'package:FEhViewer/route/routes.dart';
-import 'package:FEhViewer/utils/fluro_convert_util.dart';
+import 'Application.dart';
+import 'routes.dart';
 import 'package:flutter/material.dart';
 import 'package:fluro/fluro.dart';
 
