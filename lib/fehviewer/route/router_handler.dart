@@ -1,4 +1,5 @@
 import 'package:FEhViewer/fehviewer/pages/favorite_page.dart';
+import 'package:FEhViewer/fehviewer/pages/setting/eh_setting_page.dart';
 import 'package:FEhViewer/fehviewer/pages/splash_page.dart';
 
 import 'package:FEhViewer/fehviewer/pages/home_page.dart';
@@ -29,4 +30,9 @@ Handler selFavoriteHanderl = Handler(
     handlerFunc: (BuildContext context, Map<String, List<String>> params) {
   return SelFavorite();
 });
+
+Handler ehSettingHanderl = Handler(
+    handlerFunc: (BuildContext context, Map<String, List<String>> params) {
+      return EhSettingPage();
+    });
 

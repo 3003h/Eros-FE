@@ -1,4 +1,5 @@
 import 'package:FEhViewer/fehviewer/model/favorite.dart';
+import 'package:FEhViewer/fehviewer/route/routes.dart';
 import 'package:FEhViewer/utils/icon.dart';
 import 'package:FEhViewer/values/theme_colors.dart';
 import 'package:flutter/cupertino.dart';
@@ -6,11 +7,36 @@ import 'package:flutter/material.dart';
 
 class EHConst {
   static const List settingList = [
-    {"name": "eh", "title": "EH设置", "icon": CupertinoIcons.book_solid},
-    {"name": "myTag", "title": "我的标签", "icon": CupertinoIcons.tags_solid},
-    {"name": "download", "title": "下载设置", "icon": EHCupertinoIcons.download},
-    {"name": "advans", "title": "高级设置", "icon": CupertinoIcons.gear_big},
-    {"name": "about", "title": "关于", "icon": EHCupertinoIcons.info_solid},
+    {
+      "name": "eh",
+      "title": "EH设置",
+      "icon": CupertinoIcons.book_solid,
+      "route": EHRoutes.ehSetting
+    },
+    {
+      "name": "myTag",
+      "title": "我的标签",
+      "icon": CupertinoIcons.tags_solid,
+      "route": EHRoutes.ehSetting
+    },
+    {
+      "name": "download",
+      "title": "下载设置",
+      "icon": EHCupertinoIcons.download,
+      "route": EHRoutes.ehSetting
+    },
+    {
+      "name": "advans",
+      "title": "高级设置",
+      "icon": CupertinoIcons.gear_big,
+      "route": EHRoutes.ehSetting
+    },
+    {
+      "name": "about",
+      "title": "关于",
+      "icon": EHCupertinoIcons.info_solid,
+      "route": EHRoutes.ehSetting
+    },
   ];
 
   static const urls = {

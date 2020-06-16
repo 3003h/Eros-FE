@@ -1,3 +1,5 @@
+import 'package:FEhViewer/fehviewer/route/navigator_util.dart';
+import 'package:FEhViewer/fehviewer/route/routes.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:FEhViewer/values/const.dart';
@@ -42,6 +44,7 @@ class _SettingTab extends State<SettingTab> {
                           text: _settingItemList[index - 1]["title"],
                           icon: _settingItemList[index - 1]["icon"],
                           isLast: _settingItemList.length == index,
+                          route: _settingItemList[index - 1]["route"],
                         );
                     }
                 }
@@ -95,12 +98,14 @@ class SettingItems extends StatefulWidget {
   final String text;
   final IconData icon;
   final bool isLast;
+  final String route;
 
   SettingItems({
     this.index,
     this.text,
     this.icon,
     this.isLast,
+    this.route,
   });
 
   @override
@@ -164,6 +169,7 @@ class _SettingItems extends State<SettingItems> {
       behavior: HitTestBehavior.opaque,
       onTap: () {
         debugPrint("set tap ${widget.index}  ${widget.isLast}");
+        NavigatorUtil.jump(context, widget.route);
       },
       onTapDown: (_) => _updatePressedColor(),
       onTapUp: (_) {
@@ -185,7 +191,7 @@ class _SettingItems extends State<SettingItems> {
   void _updatePressedColor() {
     setState(() {
 //      _color = Color(0xFFF0F1F2);
-    _color = CupertinoColors.systemGrey4;
+      _color = CupertinoColors.systemGrey4;
     });
   }
 

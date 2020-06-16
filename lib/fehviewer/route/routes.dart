@@ -2,13 +2,14 @@ import 'router_handler.dart';
 import 'package:fluro/fluro.dart';
 
 class EHRoutes {
-  static String root = "/";
-  static String home = "/home";
-  static String selFavorie = "/favoriePage/selFavoriePage";
-  static String themeSetting = "/themeSetting";
-  static String chanelDetail = '/chanelDetail';
+  static const String root = "/";
+  static const String home = "/home";
+  static const String selFavorie = "/favoriePage/selFavoriePage";
+  static const String ehSetting = "/ehSetting";
 
-  static String httpPage = "/httpPage";
+  static const String chanelDetail = '/chanelDetail';
+
+  static const String httpPage = "/httpPage";
 
   static void configureRoutes(Router router) {
     // router.notFoundHandler = new Handler(
@@ -24,6 +25,8 @@ class EHRoutes {
     router.define(home, handler: homePageHanderl);
 
     router.define(selFavorie, handler: selFavoriteHanderl);
+
+    router.define(ehSetting, handler: ehSettingHanderl);
 
     router.define(httpPage, handler: httpPageHanderl);
   }
