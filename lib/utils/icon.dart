@@ -46,4 +46,12 @@ class EHCupertinoIcons {
   static const IconData heart_solid = IconData(0xf388,
       fontFamily: CupertinoIcons.iconFont,
       fontPackage: CupertinoIcons.iconFontPackage);
+
+  static const IconData paper = IconData(0xf481,
+      fontFamily: CupertinoIcons.iconFont,
+      fontPackage: CupertinoIcons.iconFontPackage);
+
+  static const IconData paper_solid = IconData(0xf482,
+      fontFamily: CupertinoIcons.iconFont,
+      fontPackage: CupertinoIcons.iconFontPackage);
 }

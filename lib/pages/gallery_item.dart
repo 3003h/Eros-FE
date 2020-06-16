@@ -1,4 +1,5 @@
 import 'package:FEhViewer/model/gallery.dart';
+import 'package:FEhViewer/utils/icon.dart';
 import 'package:FEhViewer/utils/storage.dart';
 import 'package:FEhViewer/values/storages.dart';
 import 'package:FEhViewer/values/theme_colors.dart';
@@ -81,7 +82,7 @@ class _GalleryItemWidgetState extends State<GalleryItemWidget> {
                     maxLines: 3,
                     textAlign: TextAlign.left, // 对齐方式
                     overflow: TextOverflow.ellipsis, // 超出部分省略号
-                    style: TextStyle(fontSize: 13, fontWeight: FontWeight.bold),
+                    style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold),
                   ),
                   // 上传者
                   Text(
@@ -111,21 +112,37 @@ class _GalleryItemWidgetState extends State<GalleryItemWidget> {
                           radiusRatio: 1.5,
                         ),
                       ),
-                      Text(widget?.galleryItemBean?.rating.toString(),
-                      style: TextStyle(
-                        fontSize: 14,
-                        color: CupertinoColors.systemGrey,
-                      ),),
-                      Expanded(
-                        child: Align(
-                          alignment: Alignment.centerRight,
-                          child: Text(
-                            widget?.galleryItemBean?.length ?? "",
-                            style: TextStyle(
-                                fontSize: 12,
-                                color: CupertinoColors.systemGrey),
-                          ),
+                      Text(
+                        widget?.galleryItemBean?.rating.toString(),
+                        style: TextStyle(
+                          fontSize: 13.5,
+                          color: CupertinoColors.systemGrey,
                         ),
+                      ),
+                      // 占位
+                      Expanded(
+                        child: Container(),
+                      ),
+                      Row(
+                        children: <Widget>[
+                          Padding(
+                            padding: const EdgeInsets.only(bottom: 2),
+                            child: Icon(
+                              EHCupertinoIcons.paper_solid,
+                              size: 12,
+                              color: CupertinoColors.systemGrey,
+                            ),
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.only(left: 2),
+                            child: Text(
+                              widget?.galleryItemBean?.filecount ?? "",
+                              style: TextStyle(
+                                  fontSize: 12,
+                                  color: CupertinoColors.systemGrey),
+                            ),
+                          ),
+                        ],
                       )
                     ],
                   ),
@@ -212,7 +229,7 @@ class _GalleryItemWidgetState extends State<GalleryItemWidget> {
   /// 设置项分隔线
   Widget _galleryItemDivider() {
     return Divider(
-      height: 1.0,
+      height: 0.5,
       indent: 18,
       color: CupertinoColors.systemGrey,
     );

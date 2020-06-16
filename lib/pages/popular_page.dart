@@ -29,7 +29,7 @@ class _PopularListTab extends State<PopularListTab> {
     });
   }
 
-  SliverList gallerySliverListView(gallerItemBeans) {
+  SliverList gallerySliverListView(List gallerItemBeans) {
     return SliverList(
       delegate: SliverChildBuilderDelegate(
             (context, index) {

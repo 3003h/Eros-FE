@@ -128,21 +128,22 @@ class API {
 //      debugPrint('rult $rult');
 
       var jsonObj = jsonDecode(rult.toString());
-      var ll = jsonObj['gmetadata'];
-//      debugPrint(ll.toString());
-      rultList.addAll(ll);
+      var tempList = jsonObj['gmetadata'];
+//      debugPrint(tempList.toString());
+      rultList.addAll(tempList);
     }
 
 //    debugPrint('${rultList}');
 
     for (int i = 0; i < galleryItems.length; i++) {
-      print('${galleryItems[i].simpleTags.length}    ${rultList[i]['tags'].length}');
+//      print('${galleryItems[i].simpleTags.length}    ${rultList[i]['tags'].length}');
 //      print('${galleryItems[i].simpleTags}    ${rultList[i]['tags']}');
 
       galleryItems[i].english_title = rultList[i]['title'];
       galleryItems[i].japanese_title = rultList[i]['title_jpn'];
       galleryItems[i].rating = double.parse(rultList[i]['rating']);
-
+      galleryItems[i].imgUrl_l = rultList[i]['thumb'];
+      galleryItems[i].filecount = rultList[i]['filecount'];
     }
   }
 
@@ -217,9 +218,9 @@ class API {
 
       final uploader = tr.querySelector('td.gl4c.glhide > div > a').text.trim();
 
-      final length =
-          tr.querySelector('td.gl4c.glhide > div:nth-child(1)')?.text?.trim() ??
-              '';
+//      final filecount =
+//          tr.querySelector('td.gl4c.glhide > div:nth-child(1)')?.text?.trim() ??
+//              '';
 
       /// old end
 
@@ -227,9 +228,9 @@ class API {
         gid: gid,
         token: token,
         english_title: title,
-        imgUrl: imgUrl ?? '',
-        url: url,
-        length: length,
+//        imgUrl: imgUrl ?? '',
+        url: imgUrl,
+//        filecount: filecount,
         category: category,
         simpleTags: simpleTags,
         postTime: postTime,
@@ -317,7 +318,7 @@ class API {
         japanese_title: title,
         imgUrl: imgUrl ?? '',
         url: url,
-        length: length,
+        filecount: length,
         category: category,
         simpleTags: simpleTags,
         postTime: postTime,

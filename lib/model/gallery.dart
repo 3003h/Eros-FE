@@ -4,6 +4,7 @@ class GalleryItemBean {
 
   String url;
   String imgUrl;
+  String imgUrl_l;
   String japanese_title;
   String english_title;
 
@@ -12,7 +13,7 @@ class GalleryItemBean {
   String uploader;
   String posted;
   String language;
-  String length;
+  String filecount;
   double rating;
   String numberOfReviews;
   String postTime;
@@ -23,20 +24,17 @@ class GalleryItemBean {
       this.token,
       this.url,
       this.imgUrl,
+      this.imgUrl_l,
       this.japanese_title,
       this.english_title,
       this.category,
       this.uploader,
       this.posted,
       this.language,
-      this.length,
+      this.filecount,
       this.rating,
       this.numberOfReviews,
       this.postTime,
       this.simpleTags});
 
-  @override
-  String toString() {
-    return 'GalleryItemBean{gid: $gid, token: $token, url: $url, imgUrl: $imgUrl, japanese_title: $japanese_title, english_title: $english_title, category: $category, uploader: $uploader, posted: $posted, language: $language, length: $length, rating: $rating, numberOfReviews: $numberOfReviews, postTime: $postTime, simpleTags: $simpleTags}';
-  }
 }
