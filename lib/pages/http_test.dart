@@ -33,7 +33,7 @@ class _HttpTestRouteState extends State<HttpTestRoute> {
                         });
 
                         try {
-                          _text = await API.generateTagTranslat();
+                          _text = await EHUtils.generateTagTranslat();
                         } catch (e) {
                           _text = "请求失败：$e";
                           throw e;

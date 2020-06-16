@@ -22,7 +22,7 @@ class _PopularListTab extends State<PopularListTab> {
   }
 
   _loadData() async {
-    var gallerItemBeans = await API.getPopular();
+    var gallerItemBeans = await EHUtils.getPopular();
     setState(() {
       _gallerItemBeans.clear();
       _gallerItemBeans.addAll(gallerItemBeans);

@@ -1,73 +1,16 @@
 import 'package:FEhViewer/http/dio_util.dart';
 import 'package:FEhViewer/model/gallery.dart';
+import 'package:FEhViewer/model/tagTranslat.dart';
 import 'package:FEhViewer/utils/storage.dart';
+import 'package:FEhViewer/values/const.dart';
 import 'package:FEhViewer/values/storages.dart';
 import 'package:html/parser.dart';
 import 'package:html/dom.dart' as dom;
-
-import 'dart:convert';
-
 import 'package:flutter/cupertino.dart';
-import 'package:intl/intl.dart';
-
-// 翻译
-String translateTagType(eng) {
-  const d = {
-    'artist': "作者",
-    'female': "女性",
-    'male': "男性",
-    'parody': "原作",
-    'character': "角色",
-    'group': "团队",
-    'language': "语言",
-    'reclass': "归类",
-    'misc': "杂项"
-  };
-  return d[eng];
-}
-
-// 标签颜色
-getNameAndColor(name) {
-  const d = {
-    "misc": {"string": "Misc", "color": "#777777"},
-    "doujinshi": {"string": "Doujinshi", "color": "#9E2720"},
-    "manga": {"string": "Manga", "color": "#DB6C24"},
-    "artist cg": {"string": "Artist CG", "color": "#D38F1D"},
-    "game cg": {"string": "Game CG", "color": "#617C63"},
-    "image set": {"string": "Image Set", "color": "#325CA2"},
-    "cosplay": {"string": "Cosplay", "color": "#6A32A2"},
-    "asian porn": {"string": "Asian Porn", "color": "#A23282"},
-    "non-h": {"string": "Non-H", "color": "#5FA9CF"},
-    "western": {"string": "Western", "color": "#AB9F60"}
-  };
-  return d[name.toLowerCase()];
-}
+import 'dart:convert';
+import 'dataBase.dart';
 
 class EHUtils {
-  static List<List<T>> splitList<T>(List<T> list, int len) {
-    if (len <= 1) {
-      return [list];
-    }
-
-    List<List<T>> result = List();
-    int index = 1;
-
-    while (true) {
-      if (index * len < list.length) {
-        List<T> temp = list.skip((index - 1) * len).take(len).toList();
-        result.add(temp);
-        index++;
-        continue;
-      }
-      List<T> temp = list.skip((index - 1) * len).toList();
-      result.add(temp);
-      break;
-    }
-    return result;
-  }
-}
-
-class API {
   /// 获取热门画廊列表
   static Future<List<GalleryItemBean>> getPopular() async {
     HttpManager httpManager = HttpManager.getInstance("https://e-hentai.org/");
@@ -113,30 +56,23 @@ class API {
     });
 
     // 25个一组分割
-    List _group = EHUtils.splitList(_gidlist, 25);
-//    debugPrint(group.toString());
+    List _group = splitList(_gidlist, 25);
 
     List rultList = [];
 
     // 查询 合并结果
     for (int i = 0; i < _group.length; i++) {
       Map reqMap = {'gidlist': _group[i], 'method': 'gdata'};
-//      debugPrint(reqMap.toString());
       String reqJsonStr = jsonEncode(reqMap);
-//      debugPrint(reqJsonStr);
       var rult = await getGalleryApi(reqJsonStr);
-//      debugPrint('rult $rult');
 
       var jsonObj = jsonDecode(rult.toString());
       var tempList = jsonObj['gmetadata'];
-//      debugPrint(tempList.toString());
       rultList.addAll(tempList);
     }
-
 //    debugPrint('${rultList}');
 
     for (int i = 0; i < galleryItems.length; i++) {
-//      print('${galleryItems[i].simpleTags.length}    ${rultList[i]['tags'].length}');
 //      print('${galleryItems[i].simpleTags}    ${rultList[i]['tags']}');
 
       galleryItems[i].english_title = rultList[i]['title'];
@@ -160,8 +96,6 @@ class API {
     List<GalleryItemBean> gallaryItems = [];
 
     for (int i = 1; i < gallerys.length; i++) {
-//      debugPrint('index $i');
-
       var tr = gallerys[i];
 
       final category = tr.querySelector('td.gl1c.glcat > div')?.text?.trim();
@@ -185,42 +119,30 @@ class API {
       final gid = urlRult.group(1);
       final token = urlRult.group(2);
 
-      /// old
+      // tags
+      // todo 是否翻译tag
+      final bool _enableTagTran = StorageUtil().getBool(ENABLE_TAG_TRANSLAT);
+      final List<String> simpleTags = [];
+      List tags = tr.querySelectorAll('div.gt');
+//      tags.forEach((tag) async {
+//        var tagText = tag.text.trim();
+//        simpleTags.add(_enableTagTran ? await getTranTag(tagText) : tagText);
+//      });
+      for (var tag in tags) {
+        var tagText = tag.text.trim();
+        simpleTags.add(_enableTagTran ? await getTranTag(tagText) ?? tagText : tagText);
+      }
+
       final img = tr.querySelector('td.gl2c > div > div > img');
       final img_data_src = img.attributes['data-src'];
       final img_src = img.attributes['src'];
-
       final imgUrl = img_data_src ?? img_src ?? '';
 
-      final List<String> simpleTags = [];
-      var tag = tr.querySelectorAll('div.gt');
-      tag.forEach((tag) {
-        simpleTags.add(tag.text.trim());
-      });
-
+      // old
       final postTime =
           tr.querySelector('td.gl2c > div:nth-child(2) > div').text.trim();
 
-      // 评分星级计算
-      final ratPx = tr
-          .querySelector('td.gl2c > div:nth-child(2) > div.ir')
-          .attributes['style'];
-//      debugPrint('ratPx $ratPx');
-      RegExp pxA = new RegExp(r"-?(\d+)px\s+-?(\d+)px");
-      var px = pxA.firstMatch(ratPx);
-//      debugPrint('pxa ${px.group(1)}  pxb ${px.group(2)}');
-
-      //
-      final rating = (80.0 - double.parse(px.group(1))) / 16.0 -
-          (px.group(2) == '21' ? 0.5 : 0.0);
-
-//      debugPrint('rating $rating');
-
       final uploader = tr.querySelector('td.gl4c.glhide > div > a').text.trim();
-
-//      final filecount =
-//          tr.querySelector('td.gl4c.glhide > div:nth-child(1)')?.text?.trim() ??
-//              '';
 
       /// old end
 
@@ -229,13 +151,11 @@ class API {
         token: token,
         english_title: title,
 //        imgUrl: imgUrl ?? '',
-        url: imgUrl,
-//        filecount: filecount,
+        url: url,
         category: category,
         simpleTags: simpleTags,
         postTime: postTime,
         uploader: uploader,
-        rating: rating,
       );
 
       gallaryItems.add(galleryItemBean);
@@ -249,89 +169,88 @@ class API {
   }
 
   /// 列表数据处理
-  static List<GalleryItemBean> parseGalleryList_old(String response) {
-    var document = parse(response);
-
-    // 画廊列表
-    List<dom.Element> gallerys = document.querySelectorAll(
-        'body > div.ido > div:nth-child(2) > table > tbody > tr');
-
-    debugPrint('len ${gallerys.length}');
-
-    List<GalleryItemBean> gallaryItems = [];
-
-    for (int i = 1; i < gallerys.length; i++) {
-      debugPrint('index $i');
-
-      var tr = gallerys[i];
-
-      final category = tr.querySelector('td.gl1c.glcat > div')?.text?.trim();
-
-      // 表头或者广告
-      if (category == null || category.isEmpty) {
-        continue;
-      }
-
-      final title =
-          tr.querySelector('td.gl3c.glname > a > div.glink')?.text?.trim();
-
-      final url =
-          tr.querySelector('td.gl3c.glname > a')?.attributes['href'] ?? '';
-
-      final img = tr.querySelector('td.gl2c > div > div > img');
-      final img_data_src = img.attributes['data-src'];
-      final img_src = img.attributes['src'];
-
-      final imgUrl = img_data_src ?? img_src ?? '';
-
-      final List<String> simpleTags = [];
-      var tag = tr.querySelectorAll('div.gt');
-      tag.forEach((tag) {
-        simpleTags.add(tag.text.trim());
-      });
-
-      final postTime =
-          tr.querySelector('td.gl2c > div:nth-child(2) > div').text.trim();
-
-      // 评分星级计算
-      final ratPx = tr
-          .querySelector('td.gl2c > div:nth-child(2) > div.ir')
-          .attributes['style'];
-      debugPrint('ratPx $ratPx');
-      RegExp pxA = new RegExp(r"-?(\d+)px\s+-?(\d+)px");
-      var px = pxA.firstMatch(ratPx);
-      debugPrint('pxa ${px.group(1)}  pxb ${px.group(2)}');
-
-      //
-      final rating = (80.0 - double.parse(px.group(1))) / 16.0 -
-          (px.group(2) == '21' ? 0.5 : 0.0);
-
-      debugPrint('rating $rating');
-
-      final uploader = tr.querySelector('td.gl4c.glhide > div > a').text.trim();
-
-      final length =
-          tr.querySelector('td.gl4c.glhide > div:nth-child(1)')?.text?.trim() ??
-              '';
-
-      GalleryItemBean galleryItemBean = new GalleryItemBean(
-        japanese_title: title,
-        imgUrl: imgUrl ?? '',
-        url: url,
-        filecount: length,
-        category: category,
-        simpleTags: simpleTags,
-        postTime: postTime,
-        uploader: uploader,
-        rating: rating,
-      );
-
-      gallaryItems.add(galleryItemBean);
-//      debugPrint(galleryItemBean.toString());
-    }
-
-    return gallaryItems;
-  }
+//  static List<GalleryItemBean> parseGalleryList_old(String response) {
+//    var document = parse(response);
+//
+//    // 画廊列表
+//    List<dom.Element> gallerys = document.querySelectorAll(
+//        'body > div.ido > div:nth-child(2) > table > tbody > tr');
+//
+//    debugPrint('len ${gallerys.length}');
+//
+//    List<GalleryItemBean> gallaryItems = [];
+//
+//    for (int i = 1; i < gallerys.length; i++) {
+//      debugPrint('index $i');
+//
+//      var tr = gallerys[i];
+//
+//      final category = tr.querySelector('td.gl1c.glcat > div')?.text?.trim();
+//
+//      // 表头或者广告
+//      if (category == null || category.isEmpty) {
+//        continue;
+//      }
+//
+//      final title =
+//          tr.querySelector('td.gl3c.glname > a > div.glink')?.text?.trim();
+//
+//      final url =
+//          tr.querySelector('td.gl3c.glname > a')?.attributes['href'] ?? '';
+//
+//      final img = tr.querySelector('td.gl2c > div > div > img');
+//      final img_data_src = img.attributes['data-src'];
+//      final img_src = img.attributes['src'];
+//
+//      final imgUrl = img_data_src ?? img_src ?? '';
+//
+//      final List<String> simpleTags = [];
+//      var tag = tr.querySelectorAll('div.gt');
+//      tag.forEach((tag) {
+//        simpleTags.add(tag.text.trim());
+//      });
+//
+//      final postTime =
+//          tr.querySelector('td.gl2c > div:nth-child(2) > div').text.trim();
+//
+//      // 评分星级计算
+//      final ratPx = tr
+//          .querySelector('td.gl2c > div:nth-child(2) > div.ir')
+//          .attributes['style'];
+//      debugPrint('ratPx $ratPx');
+//      RegExp pxA = new RegExp(r"-?(\d+)px\s+-?(\d+)px");
+//      var px = pxA.firstMatch(ratPx);
+//      debugPrint('pxa ${px.group(1)}  pxb ${px.group(2)}');
+//
+//      //
+//      final rating = (80.0 - double.parse(px.group(1))) / 16.0 -
+//          (px.group(2) == '21' ? 0.5 : 0.0);
+//
+//      debugPrint('rating $rating');
+//
+//      final uploader = tr.querySelector('td.gl4c.glhide > div > a').text.trim();
+//
+//      final length =
+//          tr.querySelector('td.gl4c.glhide > div:nth-child(1)')?.text?.trim() ??
+//              '';
+//
+//      GalleryItemBean galleryItemBean = new GalleryItemBean(
+//        japanese_title: title,
+//        imgUrl: imgUrl ?? '',
+//        url: url,
+//        filecount: length,
+//        category: category,
+//        simpleTags: simpleTags,
+//        postTime: postTime,
+//        uploader: uploader,
+//        rating: rating,
+//      );
+//
+//      gallaryItems.add(galleryItemBean);
+//    }
+//
+//    return gallaryItems;
+//  }
 
   ///tag翻译
   static Future<String> generateTagTranslat() async {
@@ -342,21 +261,24 @@ class API {
     var urlJson = await httpManager.get(url);
 
     // 获取发布时间 作为版本号
-    var curVer = "";
-    curVer = urlJson["published_at"];
-    debugPrint(curVer);
+    var remoteVer = "";
+    remoteVer = urlJson["published_at"];
+    debugPrint(remoteVer);
 
-    var oriVer = StorageUtil().getString(TAG_TRANSLAT_VER);
-    debugPrint(oriVer);
+    var localVer = StorageUtil().getString(TAG_TRANSLAT_VER);
+    debugPrint(localVer);
 
-    StorageUtil().setString(TAG_TRANSLAT_VER, curVer);
+    // 测试
+//    localVer = 'aaaaaaa';
+
+    StorageUtil().setString(TAG_TRANSLAT_VER, remoteVer);
 
     var dbJson = jsonEncode(StorageUtil().getJSON(TAG_TRANSLAT));
 
     if (dbJson == null ||
         dbJson.isEmpty ||
         dbJson == "null" ||
-        curVer != oriVer) {
+        remoteVer != localVer) {
       debugPrint("TagTranslat更新");
       List assList = urlJson["assets"];
 
@@ -371,15 +293,85 @@ class API {
       HttpManager httpDB = HttpManager.getInstance();
       dbJson = await httpDB.get(dbUrl);
       if (dbJson != null) {
-        var data = jsonDecode(dbJson.toString());
-        data = data["data"];
-        StorageUtil().setJSON(TAG_TRANSLAT, jsonEncode(data));
+        var dataAll = jsonDecode(dbJson.toString());
+        var listDataP = dataAll["data"];
+        StorageUtil().setJSON(TAG_TRANSLAT, jsonEncode(listDataP));
+
+        await saveToDB(listDataP);
       }
       debugPrint("更新完成");
     } else {
       debugPrint("不需更新");
     }
 
-    return curVer;
+    return remoteVer;
+  }
+
+  /// 保存到数据库
+  ///
+  static Future<void> saveToDB(List listDataP) async {
+//    debugPrint('len p ${listDataP.length}');
+
+    List<TagTranslat> tags = [];
+
+    listDataP.forEach((objC) {
+      debugPrint('${objC['namespace']}  ${objC['count']}');
+      final _namespace = objC['namespace'];
+      Map mapC = objC['data'];
+      mapC.forEach((key, value) {
+        final _key = key;
+        final _name = value['name'] ?? '';
+        final _intro = value['intro'] ?? '';
+        final _links = value['links'] ?? '';
+//        debugPrint('$_namespace $_key $_name $_intro $_links');
+
+        tags.add(
+            TagTranslat(_namespace, _key, _name, intro: _intro, links: _links));
+      });
+    });
+
+    await DataBaseUtil.insertTagAll(tags);
+
+    debugPrint('${tags.length}');
+  }
+
+  static Future<String> getTranTag(String tag) async {
+
+    if (tag.contains(':')) {
+      RegExp rpfx = new RegExp(r"(\w:)(\w+)");
+      final rult = rpfx.firstMatch(tag);
+      final pfx = rult.group(1) ?? '';
+      final _nameSpase = EHConst.prefixToNameSpaceMap[pfx];
+      final _tag = rult.group(2) ?? '';
+      final _transTag = await DataBaseUtil.getTagTransStr(_tag, namespace: _nameSpase);
+
+      return _transTag != null ? '$pfx$_transTag' : tag;
+    } else {
+      return await DataBaseUtil.getTagTransStr(tag);
+    }
+
+  }
+
+  /// list 分割
+  static List<List<T>> splitList<T>(List<T> list, int len) {
+    if (len <= 1) {
+      return [list];
+    }
+
+    List<List<T>> result = List();
+    int index = 1;
+
+    while (true) {
+      if (index * len < list.length) {
+        List<T> temp = list.skip((index - 1) * len).take(len).toList();
+        result.add(temp);
+        index++;
+        continue;
+      }
+      List<T> temp = list.skip((index - 1) * len).toList();
+      result.add(temp);
+      break;
+    }
+    return result;
   }
 }

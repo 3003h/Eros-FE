@@ -5,6 +5,10 @@ import 'package:FEhViewer/utils/utility.dart';
 import 'package:FEhViewer/values/storages.dart';
 import 'package:fluro/fluro.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_easyrefresh/easy_refresh.dart';
+import 'package:sqflite/sqflite.dart';
+import 'package:path/path.dart';
+import 'package:FEhViewer/utils/dataBase.dart';
 
 // 全局配置
 class Global {
@@ -20,10 +24,15 @@ class Global {
     await StorageUtil.init();
 
     try {
-      API.generateTagTranslat();
+      EHUtils.generateTagTranslat();
     } catch (e) {
       debugPrint('更新翻译异常 $e');
     }
+
+    /// 测试
+//    var database = await DataBaseUtil.getDataBase();
+//    var count = await database.rawDelete('DELETE FROM tag_translat ');
+//    debugPrint('$count');
 
     // 路由
     Router router = Router();

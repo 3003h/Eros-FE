@@ -39,4 +39,15 @@ class EHConst {
     {'name': 'fav9', 'desc': 'Favorites 9'},
     {'name': 'fava', 'desc': 'Favorites All'},
   ];
+
+  static const Map prefixToNameSpaceMap = {
+    'a:': 'artist',
+    'c:': 'character',
+    'f:': 'female',
+    'g:': 'group',
+    'l:': 'language',
+    'm:': 'male',
+    'p:': 'parody',
+    'r:': 'reclass',
+  };
 }

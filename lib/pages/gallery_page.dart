@@ -26,7 +26,7 @@ class _GalleryListTab extends State<GalleryListTab> {
   }
 
   _loadData() async {
-    var gallerItemBeans = await API.getGallery();
+    var gallerItemBeans = await EHUtils.getGallery();
     setState(() {
       _gallerItemBeans.clear();
       _gallerItemBeans.addAll(gallerItemBeans);
