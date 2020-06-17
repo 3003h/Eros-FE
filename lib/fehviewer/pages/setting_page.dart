@@ -55,8 +55,14 @@ class _SettingTab extends State<SettingTab> {
   }
 }
 
+class UserItem extends StatefulWidget {
+  @override
+  State<StatefulWidget> createState() => _UserItem();
+}
+
 class _UserItem extends State<UserItem> {
   String _userName = "未登录";
+  Color _color;
 
   @override
   Widget build(BuildContext context) {
@@ -70,6 +76,7 @@ class _UserItem extends State<UserItem> {
         // right: 16,
       ),
       child: Container(
+        color: _color,
         child: Row(children: <Widget>[
           Icon(
             CupertinoIcons.profile_circled,
@@ -84,13 +91,38 @@ class _UserItem extends State<UserItem> {
         ]),
       ),
     );
-    return row;
-  }
-}
 
-class UserItem extends StatefulWidget {
-  @override
-  State<StatefulWidget> createState() => _UserItem();
+//    return row;
+
+  return GestureDetector(
+    child: row,
+    behavior: HitTestBehavior.opaque,
+    onTap: () {
+      debugPrint("user tap ");
+      NavigatorUtil.jump(context, EHRoutes.login);
+    },
+    onTapDown: (_) => _updatePressedColor(),
+    onTapUp: (_) {
+      Future.delayed(const Duration(milliseconds: 100), () {
+        _updateNormalColor();
+      });
+    },
+    onTapCancel: () => _updateNormalColor(),
+  );
+  }
+
+
+  void _updateNormalColor() {
+    setState(() {
+      _color = CupertinoColors.systemBackground;
+    });
+  }
+
+  void _updatePressedColor() {
+    setState(() {
+      _color = CupertinoColors.systemGrey4;
+    });
+  }
 }
 
 class SettingItems extends StatefulWidget {
@@ -183,14 +215,12 @@ class _SettingItems extends State<SettingItems> {
 
   void _updateNormalColor() {
     setState(() {
-//      _color = Colors.white;
       _color = CupertinoColors.systemBackground;
     });
   }
 
   void _updatePressedColor() {
     setState(() {
-//      _color = Color(0xFFF0F1F2);
       _color = CupertinoColors.systemGrey4;
     });
   }

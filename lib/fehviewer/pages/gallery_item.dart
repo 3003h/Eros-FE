@@ -53,7 +53,7 @@ class _GalleryItemWidgetState extends State<GalleryItemWidget> {
 
     Widget container = Container(
       color: _colorTap,
-      padding: EdgeInsets.fromLTRB(8, 8, 8, 8),
+      padding: EdgeInsets.fromLTRB(8, 4, 8, 8),
       child: Column(
 //        mainAxisAlignment: MainAxisAlignment.start,
 //        crossAxisAlignment: CrossAxisAlignment.start,
@@ -68,7 +68,7 @@ class _GalleryItemWidgetState extends State<GalleryItemWidget> {
               ),
               // 图片容器
               child: Container(
-                width: 140,
+                width: 120,
                 padding: const EdgeInsets.all(8),
                 child: ClipRRect(
                   // 圆角
@@ -89,7 +89,7 @@ class _GalleryItemWidgetState extends State<GalleryItemWidget> {
                     maxLines: 3,
                     textAlign: TextAlign.left, // 对齐方式
                     overflow: TextOverflow.ellipsis, // 超出部分省略号
-                    style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold),
+                    style: TextStyle(fontSize: 13, fontWeight: FontWeight.bold),
                   ),
                   // 上传者
                   Text(
@@ -113,11 +113,12 @@ class _GalleryItemWidgetState extends State<GalleryItemWidget> {
 
                   // 评分和页数
                   Row(
+                    crossAxisAlignment: CrossAxisAlignment.end,
                     children: <Widget>[
                       Padding(
                         padding: const EdgeInsets.fromLTRB(0, 0, 4, 0),
                         child: StaticRatingBar(
-                          size: 22.0,
+                          size: 20.0,
                           rate: widget.galleryItemBean.rating,
                           radiusRatio: 1.5,
                         ),
@@ -125,7 +126,7 @@ class _GalleryItemWidgetState extends State<GalleryItemWidget> {
                       Text(
                         widget?.galleryItemBean?.rating.toString(),
                         style: TextStyle(
-                          fontSize: 13.5,
+                          fontSize: 13,
                           color: CupertinoColors.systemGrey,
                         ),
                       ),
@@ -134,6 +135,7 @@ class _GalleryItemWidgetState extends State<GalleryItemWidget> {
                         child: Container(),
                       ),
                       Row(
+                        crossAxisAlignment: CrossAxisAlignment.end,
                         children: <Widget>[
                           Padding(
                             padding: const EdgeInsets.only(bottom: 1),
@@ -162,6 +164,7 @@ class _GalleryItemWidgetState extends State<GalleryItemWidget> {
                   ),
                   // 类型和时间
                   Row(
+                    crossAxisAlignment: CrossAxisAlignment.end,
                     children: <Widget>[
                       ClipRRect(
                         borderRadius: BorderRadius.circular(4),
@@ -256,9 +259,9 @@ class _GalleryItemWidgetState extends State<GalleryItemWidget> {
         child: Text(
           text ?? "",
           style: TextStyle(
-            fontSize: 11,
-//            color: CupertinoColors.white,
-          ),
+              fontSize: 11,
+//              fontWeight: FontWeight.w500,
+              color: Color(0xcc000000)),
         ),
       ),
     );
