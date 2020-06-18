@@ -261,7 +261,7 @@ class _GalleryItemWidgetState extends State<GalleryItemWidget> {
           text ?? "",
           textAlign: TextAlign.center,
           style: TextStyle(
-              fontSize: 11,
+              fontSize: 10,
 //              fontWeight: FontWeight.w500,
               color: Color(0xcc000000),
 //              fontFamily: 'NotoSansTC',

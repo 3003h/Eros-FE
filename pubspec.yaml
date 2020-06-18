@@ -59,6 +59,9 @@ dependencies:
 
   flutter_statusbarcolor: ^0.2.3
 
+  # html反转义
+  html_unescape: ^1.0.1+3
+
 dev_dependencies:
   flutter_test:
     sdk: flutter

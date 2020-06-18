@@ -5,6 +5,7 @@ import 'package:FEhViewer/http/dio_util.dart';
 import 'package:FEhViewer/utils/storage.dart';
 import 'package:FEhViewer/values/storages.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:html_unescape/html_unescape.dart';
 import 'package:html/parser.dart';
 import 'package:html/dom.dart' as dom;
 
@@ -73,11 +74,13 @@ class GalleryListParser {
     }
 //    debugPrint('${rultList}');
 
+    var unescape = new HtmlUnescape();
+
     for (int i = 0; i < galleryItems.length; i++) {
 //      print('${galleryItems[i].simpleTags}    ${rultList[i]['tags']}');
 
-      galleryItems[i].english_title = rultList[i]['title'];
-      galleryItems[i].japanese_title = rultList[i]['title_jpn'];
+      galleryItems[i].english_title = unescape.convert(rultList[i]['title']);
+      galleryItems[i].japanese_title = unescape.convert(rultList[i]['title_jpn']);
       galleryItems[i].rating = double.parse(rultList[i]['rating']);
       galleryItems[i].imgUrl = rultList[i]['thumb'];
       galleryItems[i].filecount = rultList[i]['filecount'];
