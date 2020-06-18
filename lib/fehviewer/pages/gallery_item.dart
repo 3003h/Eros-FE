@@ -23,7 +23,7 @@ class _GalleryItemWidgetState extends State<GalleryItemWidget> {
 
   @override
   Widget build(BuildContext context) {
-    var _isBlur = false;
+    var _isBlur = StorageUtil().getBool(ENABLE_IMG_BLUR);
 
     var _title_en = widget?.galleryItemBean?.english_title ?? '';
     var _title_jpn = widget?.galleryItemBean?.japanese_title ?? '';
@@ -254,14 +254,19 @@ class _GalleryItemWidgetState extends State<GalleryItemWidget> {
     ClipRRect clipRRect = ClipRRect(
       borderRadius: BorderRadius.circular(4),
       child: Container(
+//        height: 18,
         padding: const EdgeInsets.fromLTRB(4, 1, 4, 1),
         color: Color(0xffeeeeee),
         child: Text(
           text ?? "",
+          textAlign: TextAlign.center,
           style: TextStyle(
               fontSize: 11,
 //              fontWeight: FontWeight.w500,
-              color: Color(0xcc000000)),
+              color: Color(0xcc000000),
+//              fontFamily: 'NotoSansTC',
+              fontFamilyFallback: ['PingFang','NotoSansSC']
+              ),
         ),
       ),
     );

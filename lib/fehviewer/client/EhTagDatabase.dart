@@ -19,7 +19,7 @@ class EhTagDatabase {
 
     // 获取发布时间 作为版本号
     var remoteVer = "";
-    remoteVer = urlJson["published_at"];
+    remoteVer = urlJson != null ? urlJson["published_at"] : '';
     debugPrint(remoteVer);
 
     var localVer = StorageUtil().getString(TAG_TRANSLAT_VER);
