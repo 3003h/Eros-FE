@@ -6,6 +6,12 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class EHConst {
+  // 网页登陆页面
+  static final String URL_SIGN_IN = "https://forums.e-hentai.org/index.php?act=Login";
+
+  // 参数登陆url
+  static final String API_SIGN_IN = "https://forums.e-hentai.org/index.php?act=Login&CODE=01";
+
   static const List settingList = [
     {
       "name": "eh",
