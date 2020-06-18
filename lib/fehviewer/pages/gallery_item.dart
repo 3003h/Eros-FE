@@ -252,21 +252,20 @@ class _GalleryItemWidgetState extends State<GalleryItemWidget> {
   // tag Item
   Widget _tagItem(String text) {
     ClipRRect clipRRect = ClipRRect(
-      borderRadius: BorderRadius.circular(4),
+      borderRadius: BorderRadius.circular(8),
       child: Container(
-//        height: 18,
-        padding: const EdgeInsets.fromLTRB(4, 1, 4, 1),
+        height: 18,
+        padding: const EdgeInsets.fromLTRB(4, 2, 4, 2),
         color: Color(0xffeeeeee),
         child: Text(
           text ?? "",
           textAlign: TextAlign.center,
           style: TextStyle(
-              fontSize: 10,
-//              fontWeight: FontWeight.w500,
-              color: Color(0xcc000000),
-//              fontFamily: 'NotoSansTC',
-              fontFamilyFallback: ['PingFang','NotoSansSC']
-              ),
+            fontSize: 10,
+            fontWeight: FontWeight.w500,
+            color: Color(0xff666666),
+//              fontFamilyFallback: ['PingFang','NotoSansSC']
+          ),
         ),
       ),
     );
