@@ -7,7 +7,6 @@ import 'package:fluro/fluro.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
-
 // 全局配置
 class Global {
   // 是否第一次打开

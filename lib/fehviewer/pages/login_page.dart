@@ -1,3 +1,4 @@
+import 'package:FEhViewer/fehviewer/client/EhLogin.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
@@ -7,6 +8,16 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPage extends State<LoginPage> {
+  FocusNode _nodePwd = FocusNode();
+  String _userName;
+  String _passwd;
+
+  //账号的控制器
+  TextEditingController _usernameController = TextEditingController();
+
+  //密码的控制器
+  TextEditingController _passwdController = TextEditingController();
+
   @override
   Widget build(BuildContext context) {
     return CupertinoPageScaffold(
@@ -21,9 +32,16 @@ class _LoginPage extends State<LoginPage> {
                 Container(
                   height: 38,
                   child: CupertinoTextField(
+                    controller: _usernameController,
                     placeholder: '请输入账号',
                     prefix: Container(width: 50, child: Text('账号')),
                     decoration: null,
+                    // autofocus 自动获得焦点
+//                    autofocus: true,
+                    onEditingComplete: () {
+                      // 点击键盘完成 焦点跳转密码输入框
+                      FocusScope.of(context).requestFocus(_nodePwd);
+                    },
                   ),
                 ),
                 Container(
@@ -34,19 +52,32 @@ class _LoginPage extends State<LoginPage> {
                   height: 48,
                   padding: const EdgeInsets.only(top: 10, bottom: 0),
                   child: CupertinoTextField(
+                    controller: _passwdController,
                     placeholder: '请输入密码',
                     prefix: Container(width: 50, child: Text('密码')),
                     decoration: null,
                     obscureText: true,
+                    focusNode: _nodePwd,
                   ),
                 ),
                 Container(
                   height: 1,
                   color: CupertinoColors.systemGrey4,
                 ),
+                CupertinoButton(
+                  child: Text('Login'),
+                  onPressed: () {
+                    _login();
+                  },
+                )
               ],
             ),
           ),
         ));
+  }
+
+  void _login() async {
+    print({'username': _usernameController.text, 'password': _passwdController.text});
+    await EhUserManager.signIn(_usernameController.text, _passwdController.text);
   }
 }
