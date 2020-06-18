@@ -70,8 +70,11 @@ flutter:
 
   uses-material-design: true
 
-  fonts:
-    - family: NotoSansSC
-      fonts:
-        - asset: assets/fonts/NotoSansSC-Regular.otf
+#  fonts:
+#    - family: NotoSansSC
+#      fonts:
+#        - asset: fonts/NotoSansSC-Medium.otf
+#    - family: ZCOOLXiaoWei
+#      fonts:
+#        - asset: fonts/ZCOOLXiaoWei-Regular.ttf
 
