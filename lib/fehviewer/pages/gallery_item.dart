@@ -19,10 +19,13 @@ class GalleryItemWidget extends StatefulWidget {
 }
 
 class _GalleryItemWidgetState extends State<GalleryItemWidget> {
-  Color _colorTap;
+  Color _colorTap; // 按下时颜色反馈
+  double _padL;
 
   @override
   Widget build(BuildContext context) {
+    _padL = 8.0;
+
     var _isBlur = StorageUtil().getBool(ENABLE_IMG_BLUR);
 
     var _title_en = widget?.galleryItemBean?.english_title ?? '';
@@ -53,7 +56,8 @@ class _GalleryItemWidgetState extends State<GalleryItemWidget> {
 
     Widget container = Container(
       color: _colorTap,
-      padding: EdgeInsets.fromLTRB(8, 4, 8, 8),
+//      height: 200,
+      padding: EdgeInsets.fromLTRB(_padL, 8, 8, 8),
       child: Column(
 //        mainAxisAlignment: MainAxisAlignment.start,
 //        crossAxisAlignment: CrossAxisAlignment.start,
@@ -63,13 +67,14 @@ class _GalleryItemWidgetState extends State<GalleryItemWidget> {
               constraints: BoxConstraints(
 //                minWidth: double.infinity, //宽度尽可能大
                 minHeight: 70.0, //最小高度
-//                maxHeight: 180,
+                maxHeight: 180,
 //                maxWidth: 140,
               ),
               // 图片容器
               child: Container(
                 width: 120,
-                padding: const EdgeInsets.all(8),
+//                height: 180,
+                padding: const EdgeInsets.only(right: 8),
                 child: ClipRRect(
                   // 圆角
                   borderRadius: BorderRadius.circular(8),
@@ -244,7 +249,7 @@ class _GalleryItemWidgetState extends State<GalleryItemWidget> {
   Widget _galleryItemDivider() {
     return Divider(
       height: 0.5,
-      indent: 18,
+      indent: _padL,
       color: CupertinoColors.systemGrey4,
     );
   }
