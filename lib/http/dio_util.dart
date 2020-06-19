@@ -85,7 +85,7 @@ class HttpManager {
     try {
       response = await _dio.post(url,
           options: options, cancelToken: cancelToken, data: data);
-      debugPrint('postHttp response: $response');
+//      debugPrint('postHttp response: $response');
     } on DioError catch (e) {
 //      print('postHttp exception: $e');
       formatError(e);

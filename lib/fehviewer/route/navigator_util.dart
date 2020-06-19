@@ -1,3 +1,5 @@
+import 'package:FEhViewer/utils/fluro_convert_util.dart';
+
 import 'Application.dart';
 import 'routes.dart';
 import 'package:flutter/material.dart';
@@ -74,12 +76,13 @@ class NavigatorUtil {
     /// 时间
   }
 
-   /// 使用 IOS 的 Cupertino 的转场动画，这个是修改了源码的 转场动画
-   /// Fluro本身不带，但是 Flutter自带
-   static Future gotransitionCupertinoDemoPage(
-       BuildContext context, String title) {
-       return Application.router.navigateTo(context, title, transition: TransitionType.cupertino);
-   }
+  /// 使用 IOS 的 Cupertino 的转场动画，这个是修改了源码的 转场动画
+  /// Fluro本身不带，但是 Flutter自带
+  static Future gotransitionCupertinoDemoPage(
+      BuildContext context, String title) {
+    return Application.router
+        .navigateTo(context, title, transition: TransitionType.cupertino);
+  }
 
   // // 跳转到主页面IndexPage并删除当前路由
   // static void goToHomeRemovePage(BuildContext context) {
@@ -99,11 +102,21 @@ class NavigatorUtil {
 
   // 跳转到http测试
   static void goHttpTestPage(BuildContext context) {
-    Application.router.navigateTo(context, EHRoutes.httpPage, transition: TransitionType.cupertino);
+    Application.router.navigateTo(context, EHRoutes.httpPage,
+        transition: TransitionType.cupertino);
   }
 
   // 跳转到selfav
   static void goSelFavPage(BuildContext context) {
-    Application.router.navigateTo(context, EHRoutes.selFavorie, transition: TransitionType.cupertino);
+    Application.router.navigateTo(context, EHRoutes.selFavorie,
+        transition: TransitionType.cupertino);
+  }
+
+  // goBrowser
+  static void goWebLogin(BuildContext context, String title, String url) {
+    final encodeUrl = Uri.encodeComponent(url);
+    final cnTitle = FluroConvertUtils.fluroCnParamsEncode(title);
+    Application.router
+        .navigateTo(context, EHRoutes.webLogin + "?title=$cnTitle&url=$encodeUrl");
   }
 }

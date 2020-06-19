@@ -31,6 +31,13 @@ class Global {
       debugPrint('更新翻译异常 $e');
     }
 
+//    try {
+//      List<DisplayMode> modes = await FlutterDisplayMode.supported;
+//      modes.forEach(print);
+//    } on PlatformException catch (e) {
+//      print(e);
+//    }
+
     /// 测试
 //    var database = await DataBaseUtil.getDataBase();
 //    var count = await database.rawDelete('DELETE FROM tag_translat ');
@@ -49,7 +56,7 @@ class Global {
     StorageUtil().setBool(ENABLE_JPN_TITLE, true);
 
     // 封面blur
-    StorageUtil().setBool(ENABLE_IMG_BLUR, false);
+    StorageUtil().setBool(ENABLE_IMG_BLUR, true);
 
     // 读取设备第一次打开
     isFirstOpen = !StorageUtil().getBool(STORAGE_DEVICE_ALREADY_OPEN_KEY);

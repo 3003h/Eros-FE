@@ -1,4 +1,6 @@
 import 'package:FEhViewer/fehviewer/client/EhLogin.dart';
+import 'package:FEhViewer/fehviewer/route/navigator_util.dart';
+import 'package:FEhViewer/values/const.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
@@ -65,9 +67,17 @@ class _LoginPage extends State<LoginPage> {
                   color: CupertinoColors.systemGrey4,
                 ),
                 CupertinoButton(
-                  child: Text('Login'),
+                  child: Text('登录'),
+//                  color: CupertinoColors.activeBlue,
                   onPressed: () {
                     _login();
+                  },
+                ),
+                CupertinoButton(
+                  child: Text('通过网页登录'),
+                  onPressed: () {
+                    debugPrint('通过网页登录');
+                    NavigatorUtil.goWebLogin(context, "网页登录", EHConst.URL_SIGN_IN);
                   },
                 )
               ],
@@ -77,7 +87,11 @@ class _LoginPage extends State<LoginPage> {
   }
 
   void _login() async {
-    print({'username': _usernameController.text, 'password': _passwdController.text});
-    await EhUserManager.signIn(_usernameController.text, _passwdController.text);
+    print({
+      'username': _usernameController.text,
+      'password': _passwdController.text
+    });
+    await EhUserManager.signIn(
+        _usernameController.text, _passwdController.text);
   }
 }

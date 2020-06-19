@@ -7,6 +7,7 @@ class EHRoutes {
   static const String selFavorie = "/favoriePage/selFavoriePage";
   static const String ehSetting = "/ehSetting";
   static const String login = "/login";
+  static const String webLogin = "/webLogin";
 
   static const String chanelDetail = '/chanelDetail';
 
@@ -28,6 +29,7 @@ class EHRoutes {
     router.define(selFavorie, handler: selFavoriteHanderl);
     router.define(ehSetting, handler: ehSettingHanderl);
     router.define(login, handler: loginHanderl);
+    router.define(webLogin, handler: webLoginHanderl);
 
 
     router.define(httpPage, handler: httpPageHanderl);
