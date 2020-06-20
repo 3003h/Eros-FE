@@ -262,7 +262,7 @@ class _GalleryItemWidgetState extends State<GalleryItemWidget> {
   // tag Item
   Widget _tagItem(String text) {
     ClipRRect clipRRect = ClipRRect(
-      borderRadius: BorderRadius.circular(8),
+      borderRadius: BorderRadius.circular(4),
       child: Container(
         height: 18,
         padding: const EdgeInsets.fromLTRB(4, 2, 4, 2),

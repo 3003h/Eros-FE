@@ -13,16 +13,14 @@ final String columnIntro = 'intro';
 final String columnLinks = 'links';
 
 class DataBaseUtil {
-  static DataBaseUtil _instance = new DataBaseUtil._();
+  static DataBaseUtil _instance = DataBaseUtil._();
 
   factory DataBaseUtil() => _instance;
 
   DataBaseUtil._();
 
-  // 数据库初始化
-  static Future<void> init() async {}
 
-  static Future<Database> getDataBase() async {
+  Future<Database> _getDataBase() async {
     // 获取数据库文件的存储路径
     var databasesPath = await getDatabasesPath();
     String path = join(databasesPath, dbname);
@@ -50,8 +48,8 @@ class DataBaseUtil {
   }
 
   // 单条插入
-  static void insertTag(TagTranslat translat) async {
-    final Database db = await getDataBase();
+  Future<void> insertTag(TagTranslat translat) async {
+    final Database db = await this._getDataBase();
     await db.insert(
       tableTag,
       translat.toMap(),
@@ -60,8 +58,8 @@ class DataBaseUtil {
   }
 
   // 批量插入
-  static Future<void> insertTagAll(List<TagTranslat> translats) async {
-    final Database db = await getDataBase();
+  Future<void> insertTagAll(List<TagTranslat> translats) async {
+    final Database db = await this._getDataBase();
     var batch = db.batch();
     translats.forEach((translat) {
       batch.insert(
@@ -75,8 +73,9 @@ class DataBaseUtil {
 //    debugPrint('rult $rult');
   }
 
-  static Future<TagTranslat> getTagTrans(String key, {String namespace}) async {
-    final Database db = await getDataBase();
+  /// 获取翻译对象
+  Future<TagTranslat> getTagTrans(String key, {String namespace}) async {
+    final Database db = await this._getDataBase();
 
     bool _isNameSpace = namespace != null && namespace.isNotEmpty;
     var _where = _isNameSpace
@@ -103,7 +102,8 @@ class DataBaseUtil {
     return null;
   }
 
-  static Future<String> getTagTransStr(String key, {String namespace}) async {
+  /// 获取翻译结果
+  Future<String> getTagTransStr(String key, {String namespace}) async {
     var tr = await getTagTrans(key, namespace: namespace);
     return tr?.name;
   }

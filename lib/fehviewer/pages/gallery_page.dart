@@ -35,7 +35,7 @@ class _GalleryListTab extends State<GalleryListTab> {
 
   _loadDataMore() async {
     _isLoadMore = true;
-    debugPrint('last item   ===>  ${_gallerItemBeans.last.toString()}');
+    debugPrint('last gid   ===>  ${_gallerItemBeans.last.gid}');
     _curPage += 1;
     var fromGid = _gallerItemBeans.last.gid;
     var gallerItemBeans =

@@ -26,7 +26,7 @@ class EhTagDatabase {
     debugPrint(localVer);
 
     // 测试
-//    localVer = 'aaaaaaa';
+    localVer = 'aaaaaaa';
 
     StorageUtil().setString(TAG_TRANSLAT_VER, remoteVer);
 
@@ -65,10 +65,7 @@ class EhTagDatabase {
   }
 
   /// 保存到数据库
-  ///
   static Future<void> saveToDB(List listDataP) async {
-//    debugPrint('len p ${listDataP.length}');
-
     List<TagTranslat> tags = [];
 
     listDataP.forEach((objC) {
@@ -80,16 +77,15 @@ class EhTagDatabase {
         final _name = value['name'] ?? '';
         final _intro = value['intro'] ?? '';
         final _links = value['links'] ?? '';
-//        debugPrint('$_namespace $_key $_name $_intro $_links');
 
         tags.add(
             TagTranslat(_namespace, _key, _name, intro: _intro, links: _links));
       });
     });
 
-    await DataBaseUtil.insertTagAll(tags);
+    await DataBaseUtil().insertTagAll(tags);
 
-    debugPrint('${tags.length}');
+    debugPrint('tag中文翻译数量 ${tags.length}');
   }
 
   static Future<String> getTranTag(String tag) async {
@@ -101,11 +97,11 @@ class EhTagDatabase {
       final _nameSpase = EHConst.prefixToNameSpaceMap[pfx];
       final _tag = rult.group(2) ?? '';
       final _transTag =
-          await DataBaseUtil.getTagTransStr(_tag, namespace: _nameSpase);
+          await DataBaseUtil().getTagTransStr(_tag, namespace: _nameSpase);
 
       return _transTag != null ? '$pfx$_transTag' : tag;
     } else {
-      return await DataBaseUtil.getTagTransStr(tag);
+      return await DataBaseUtil().getTagTransStr(tag);
     }
   }
 }

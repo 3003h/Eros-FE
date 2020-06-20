@@ -19,8 +19,12 @@ class EhUserManager {
       "CookieDate": "1",
     });
 
+    Options options = Options(headers: {
+      "Referer": referer,
+      "Origin": origin
+    });
 
-    var rult = await httpManager.postForm(url, data: formData);
+    var rult = await httpManager.postForm(url, data: formData, options: options);
 
     debugPrint('$rult');
 
