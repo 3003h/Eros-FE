@@ -1,6 +1,5 @@
 import 'package:FEhViewer/fehviewer/client/parser/GalleryListParser.dart';
 import 'package:FEhViewer/fehviewer/model/gallery.dart';
-import 'package:FEhViewer/utils/utility.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_easyrefresh/easy_refresh.dart';
@@ -16,6 +15,8 @@ class GalleryListTab extends StatefulWidget {
 
 class _GalleryListTab extends State<GalleryListTab> {
   String _title = "画廊";
+  int _curPage = 0;
+  bool _isLoadMore = false;
   final List<GalleryItemBean> _gallerItemBeans = [];
 
   @override
@@ -28,6 +29,19 @@ class _GalleryListTab extends State<GalleryListTab> {
     var gallerItemBeans = await GalleryListParser.getGallery();
     setState(() {
       _gallerItemBeans.clear();
+      _gallerItemBeans.addAll(gallerItemBeans);
+    });
+  }
+
+  _loadDataMore() async {
+    _isLoadMore = true;
+    debugPrint('last item   ===>  ${_gallerItemBeans.last.toString()}');
+    _curPage += 1;
+    var fromGid = _gallerItemBeans.last.gid;
+    var gallerItemBeans =
+        await GalleryListParser.getGallery(page: _curPage, fromGid: fromGid);
+    _isLoadMore = false;
+    setState(() {
       _gallerItemBeans.addAll(gallerItemBeans);
     });
   }
@@ -55,7 +69,7 @@ class _GalleryListTab extends State<GalleryListTab> {
         SliverSafeArea(
           top: false,
           sliver: gallerySliverListView(_gallerItemBeans),
-        )
+        ),
       ],
     );
 
@@ -65,7 +79,8 @@ class _GalleryListTab extends State<GalleryListTab> {
         _loadData();
       },
       onLoad: () async {
-        _loadData();
+        // 上拉加载更多
+        _isLoadMore ? null : _loadDataMore();
       },
     );
 

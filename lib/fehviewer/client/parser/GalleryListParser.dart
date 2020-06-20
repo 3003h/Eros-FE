@@ -15,7 +15,7 @@ import '../../../utils/utility.dart';
 class GalleryListParser {
   /// 获取热门画廊列表
   static Future<List<GalleryItemBean>> getPopular() async {
-    HttpManager httpManager = HttpManager.getInstance("https://e-hentai.org/");
+    HttpManager httpManager = HttpManager.getInstance("https://e-hentai.org");
     const url = "/popular";
 
     var response = await httpManager.get(url);
@@ -26,9 +26,16 @@ class GalleryListParser {
   }
 
   /// 获取默认画廊列表
-  static Future<List<GalleryItemBean>> getGallery() async {
-    HttpManager httpManager = HttpManager.getInstance("https://e-hentai.org/");
-    const url = "";
+  static Future<List<GalleryItemBean>> getGallery(
+      {int page, String fromGid}) async {
+    HttpManager httpManager = HttpManager.getInstance("https://e-hentai.org");
+
+    var url = "";
+    if (page != null && fromGid != null) {
+      url = "/?page=$page&from=$fromGid";
+    } else if (page != null) {
+      url = "/?page=$page";
+    }
 
     var response = await httpManager.get(url);
 
@@ -39,7 +46,7 @@ class GalleryListParser {
 
   /// 获取api
   static Future getGalleryApi(String req) async {
-    HttpManager httpManager = HttpManager.getInstance("https://e-hentai.org/");
+    HttpManager httpManager = HttpManager.getInstance("https://e-hentai.org");
     const url = "/api.php";
 
     var response = await httpManager.postForm(url, data: req);
@@ -80,7 +87,8 @@ class GalleryListParser {
 //      print('${galleryItems[i].simpleTags}    ${rultList[i]['tags']}');
 
       galleryItems[i].english_title = unescape.convert(rultList[i]['title']);
-      galleryItems[i].japanese_title = unescape.convert(rultList[i]['title_jpn']);
+      galleryItems[i].japanese_title =
+          unescape.convert(rultList[i]['title_jpn']);
       galleryItems[i].rating = double.parse(rultList[i]['rating']);
       galleryItems[i].imgUrl = rultList[i]['thumb'];
       galleryItems[i].filecount = rultList[i]['filecount'];

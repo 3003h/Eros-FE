@@ -28,14 +28,19 @@ class _GalleryItemWidgetState extends State<GalleryItemWidget> {
 
     var _isBlur = StorageUtil().getBool(ENABLE_IMG_BLUR);
 
-    var _title_en = widget?.galleryItemBean?.english_title ?? '';
-    var _title_jpn = widget?.galleryItemBean?.japanese_title ?? '';
-    var _ena_jpn = StorageUtil().getBool(ENABLE_JPN_TITLE);
 
-    // 日语标题判断
-    var _title = _ena_jpn && _title_jpn != null && _title_jpn.isNotEmpty
-        ? _title_jpn
-        : _title_en;
+    String _getTitle() {
+      var _title_en = widget?.galleryItemBean?.english_title ?? '';
+      var _title_jpn = widget?.galleryItemBean?.japanese_title ?? '';
+      var _ena_jpn = StorageUtil().getBool(ENABLE_JPN_TITLE);
+
+      // 日语标题判断
+      var _title = _ena_jpn && _title_jpn != null && _title_jpn.isNotEmpty
+          ? _title_jpn
+          : _title_en;
+
+      return _title;
+    }
 
     Color _colorCategory =
         ThemeColors.nameColor[widget?.galleryItemBean?.category ?? "defaule"]
@@ -90,7 +95,7 @@ class _GalleryItemWidgetState extends State<GalleryItemWidget> {
                 children: <Widget>[
                   // 标题
                   Text(
-                    _title,
+                    _getTitle(),
                     maxLines: 3,
                     textAlign: TextAlign.left, // 对齐方式
                     overflow: TextOverflow.ellipsis, // 超出部分省略号
@@ -219,7 +224,7 @@ class _GalleryItemWidgetState extends State<GalleryItemWidget> {
       // 不可见区域点击有效
       behavior: HitTestBehavior.opaque,
       onTap: () {
-        debugPrint("title: ${_title}");
+        debugPrint("title: ${_getTitle()}");
         // 返回 并带上参数
 //        NavigatorUtil.goBackWithParams(context, widget.galleryItemBean);
       },
