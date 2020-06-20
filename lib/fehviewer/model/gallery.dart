@@ -37,4 +37,8 @@ class GalleryItemBean {
       this.postTime,
       this.simpleTags});
 
+  @override
+  String toString() {
+    return 'GalleryItemBean{gid: $gid, token: $token, url: $url, imgUrl: $imgUrl, imgUrl_l: $imgUrl_l, japanese_title: $japanese_title, english_title: $english_title, category: $category, uploader: $uploader, posted: $posted, language: $language, filecount: $filecount, rating: $rating, numberOfReviews: $numberOfReviews, postTime: $postTime, simpleTags: $simpleTags}';
+  }
 }

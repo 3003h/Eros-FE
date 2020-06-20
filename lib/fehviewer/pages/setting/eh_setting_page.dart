@@ -1,6 +1,5 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:FEhViewer/values/const.dart';
 
 class EhSettingPage extends StatefulWidget {
   @override
