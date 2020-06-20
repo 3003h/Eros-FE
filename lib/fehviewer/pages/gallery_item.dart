@@ -1,4 +1,4 @@
-import 'package:FEhViewer/fehviewer/model/gallery.dart';
+import 'package:FEhViewer/models/entity/gallery.dart';
 import 'package:FEhViewer/utils/storage.dart';
 import 'package:FEhViewer/values/storages.dart';
 import 'package:FEhViewer/values/theme_colors.dart';

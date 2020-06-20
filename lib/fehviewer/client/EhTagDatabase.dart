@@ -1,12 +1,15 @@
 import 'dart:convert';
-
-import 'package:FEhViewer/fehviewer/model/tagTranslat.dart';
+import 'package:dio/dio.dart';
+import 'package:FEhViewer/models/entity/tagTranslat.dart';
 import 'package:FEhViewer/http/dio_util.dart';
 import 'package:FEhViewer/utils/dataBase.dart';
 import 'package:FEhViewer/utils/storage.dart';
 import 'package:FEhViewer/values/const.dart';
 import 'package:FEhViewer/values/storages.dart';
 import 'package:flutter/cupertino.dart';
+
+final int connectTimeout = 10000;
+final int receiveTimeout = 30000;
 
 class EhTagDatabase {
   ///tag翻译
@@ -26,7 +29,7 @@ class EhTagDatabase {
     debugPrint(localVer);
 
     // 测试
-    localVer = 'aaaaaaa';
+//    localVer = 'aaaaaaa';
 
     StorageUtil().setString(TAG_TRANSLAT_VER, remoteVer);
 
@@ -48,13 +51,16 @@ class EhTagDatabase {
       debugPrint(dbUrl);
 
       HttpManager httpDB = HttpManager.getInstance();
-      dbJson = await httpDB.get(dbUrl);
+
+      Options options = Options(receiveTimeout: receiveTimeout);
+
+      dbJson = await httpDB.get(dbUrl,options: options);
       if (dbJson != null) {
         var dataAll = jsonDecode(dbJson.toString());
         var listDataP = dataAll["data"];
         StorageUtil().setJSON(TAG_TRANSLAT, jsonEncode(listDataP));
 
-        await saveToDB(listDataP);
+        await tagSaveToDB(listDataP);
       }
       debugPrint("tag翻译更新完成");
     } else {
@@ -65,7 +71,7 @@ class EhTagDatabase {
   }
 
   /// 保存到数据库
-  static Future<void> saveToDB(List listDataP) async {
+  static Future<void> tagSaveToDB(List listDataP) async {
     List<TagTranslat> tags = [];
 
     listDataP.forEach((objC) {
