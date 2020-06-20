@@ -38,7 +38,7 @@ class HttpManager {
         responseType: ResponseType.json);
     _dio = new Dio(_options);
     //设置Cookie
-    // _dio.interceptors.add(CookieManager(CookieJar()));
+//    _dio.interceptors.add(CookieManager(CookieJar()));
 
     //添加拦截器
     _dio.interceptors

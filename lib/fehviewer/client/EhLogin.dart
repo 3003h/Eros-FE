@@ -1,5 +1,6 @@
+import 'package:FEhViewer/utils/storage.dart';
+import 'package:FEhViewer/values/storages.dart';
 import 'package:dio/dio.dart';
-
 import 'package:FEhViewer/http/dio_util.dart';
 import 'package:flutter/cupertino.dart';
 
@@ -19,15 +20,52 @@ class EhUserManager {
       "CookieDate": "1",
     });
 
-    Options options = Options(headers: {
-      "Referer": referer,
-      "Origin": origin
-    });
+    Options options = Options(headers: {"Referer": referer, "Origin": origin});
 
-    var rult = await httpManager.postForm(url, data: formData, options: options);
+    Response rult =
+        await httpManager.postForm(url, data: formData, options: options);
 
-    debugPrint('$rult');
+    // TODO 登录异常处理
+
+    var setcookie = rult.headers['set-cookie'];
+
+    var cookieMap = parseSetCookieString(setcookie);
+
+    var cookie = {
+      "ipb_member_id": cookieMap["ipb_member_id"],
+      "ipb_pass_hash": cookieMap["ipb_pass_hash"],
+      "yay": "louder"
+    };
+
+    var cookieStr = getCookieStringFromMap(cookie);
+    debugPrint(cookieStr);
+
+    StorageUtil().setString(COOKIE, cookieStr);
+
+    debugPrint('${StorageUtil().getString(COOKIE)}');
 
     return rult;
+  }
+
+  /// 处理SetCookie 转为map
+  static parseSetCookieString(List setCookieStrings) {
+    var cookie = {};
+    RegExp regExp = new RegExp(r"^([^;=]+)=([^;]+);");
+    setCookieStrings.forEach((setCookieString) {
+      var found = regExp.firstMatch(setCookieString);
+//      debugPrint('${found.group(1)}   ${found.group(2)}');
+      cookie[found.group(1)] = found.group(2);
+    });
+
+//    debugPrint('in   $cookie');
+    return cookie;
+  }
+
+  static getCookieStringFromMap(Map cookie) {
+    var texts = [];
+    cookie.forEach((key, value) {
+      texts.add('$key=$value');
+    });
+    return texts.join("; ");
   }
 }

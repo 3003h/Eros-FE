@@ -1,5 +1,5 @@
 import 'package:FEhViewer/fehviewer/client/parser/GalleryListParser.dart';
-import 'package:FEhViewer/fehviewer/model/gallery.dart';
+import 'package:FEhViewer/models/entity/gallery.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_easyrefresh/easy_refresh.dart';

@@ -1,4 +1,7 @@
+import 'dart:convert';
+
 import 'package:FEhViewer/fehviewer/client/EhTagDatabase.dart';
+import 'package:FEhViewer/models/profile.dart';
 import 'package:FEhViewer/utils/storage.dart';
 import 'package:FEhViewer/fehviewer/route/routes.dart';
 import 'package:FEhViewer/fehviewer/route/Application.dart';
@@ -11,6 +14,7 @@ import 'package:flutter/services.dart';
 class Global {
   // 是否第一次打开
   static bool isFirstOpen = false;
+  static Profile profile = Profile();
 
   // init
   static Future init() async {
@@ -29,6 +33,15 @@ class Global {
       EhTagDatabase.generateTagTranslat();
     } catch (e) {
       debugPrint('更新翻译异常 $e');
+    }
+
+    var _profile = StorageUtil().getJSON(PROFILE);
+    if (_profile != null) {
+      try {
+        profile = Profile.fromJson(jsonDecode(_profile));
+      } catch (e) {
+        print(e);
+      }
     }
 
 //    try {
@@ -64,4 +77,9 @@ class Global {
       StorageUtil().setBool(STORAGE_DEVICE_ALREADY_OPEN_KEY, true);
     }
   }
+
+
+  // 持久化Profile信息
+  static saveProfile() => StorageUtil().setJSON(PROFILE, profile);
+
 }

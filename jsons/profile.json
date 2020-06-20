@@ -1,0 +1,8 @@
+{
+  "user":"$user",
+  "token":"",
+  "cache":"$cacheConfig",
+  "ehConfig": "$ehConfig",
+  "lastLogin":"",
+  "locale":""
+}

@@ -15,3 +15,9 @@ const String ENABLE_JPN_TITLE = 'enable_jpn_title';
 
 // 封面模糊
 const String ENABLE_IMG_BLUR = 'enable_img_blur';
+
+// cookie
+const String COOKIE = 'cookie';
+
+//
+const String PROFILE = 'profile';

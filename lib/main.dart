@@ -2,7 +2,7 @@ import 'package:FEhViewer/fehviewer/pages/splash_page.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'config/global.dart';
+import 'common/global.dart';
 import 'fehviewer/route/Application.dart';
 
 void main() => Global.init().then((e) => runApp(MyApp()));

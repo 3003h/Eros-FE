@@ -1,9 +1,9 @@
 import 'package:FEhViewer/fehviewer/client/parser/GalleryListParser.dart';
-import 'package:FEhViewer/fehviewer/model/gallery.dart';
-import 'package:FEhViewer/utils/utility.dart';
+import 'package:FEhViewer/models/entity/gallery.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_easyrefresh/easy_refresh.dart';
+
 import 'gallery_item.dart';
 
 class PopularListTab extends StatefulWidget {
@@ -32,7 +32,7 @@ class _PopularListTab extends State<PopularListTab> {
   SliverList gallerySliverListView(List gallerItemBeans) {
     return SliverList(
       delegate: SliverChildBuilderDelegate(
-            (context, index) {
+        (context, index) {
           if (index < gallerItemBeans.length) {
             return GalleryItemWidget(galleryItemBean: gallerItemBeans[index]);
           }

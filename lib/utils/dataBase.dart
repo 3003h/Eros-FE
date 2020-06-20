@@ -1,4 +1,4 @@
-import 'package:FEhViewer/fehviewer/model/tagTranslat.dart';
+import 'package:FEhViewer/models/entity/tagTranslat.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:path/path.dart';
