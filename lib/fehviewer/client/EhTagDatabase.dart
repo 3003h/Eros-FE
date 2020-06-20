@@ -56,9 +56,9 @@ class EhTagDatabase {
 
         await saveToDB(listDataP);
       }
-      debugPrint("更新完成");
+      debugPrint("tag翻译更新完成");
     } else {
-      debugPrint("不需更新");
+      debugPrint("tag为最新数据 不需更新");
     }
 
     return remoteVer;

@@ -31,8 +31,9 @@ class _FavoriteTab extends State<FavoriteTab> {
         CupertinoSliverNavigationBar(
           largeTitle: Text(_title),
           previousPageTitle: _title,
-          trailing: GestureDetector(
-            onTap: () {
+          trailing: CupertinoButton(
+            padding: const EdgeInsets.all(0),
+            onPressed: () {
               debugPrint('sel icon tapped');
               // 跳转收藏夹选择页
               NavigatorUtil.jump(context, EHRoutes.selFavorie).then((result) {

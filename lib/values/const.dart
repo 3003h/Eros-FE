@@ -7,10 +7,13 @@ import 'package:flutter/material.dart';
 
 class EHConst {
   // 网页登陆页面
-  static final String URL_SIGN_IN = "https://forums.e-hentai.org/index.php?act=Login";
+  static const String URL_SIGN_IN = "https://forums.e-hentai.org/index.php?act=Login";
 
   // 参数登陆url
-  static final String API_SIGN_IN = "https://forums.e-hentai.org/index.php?act=Login&CODE=01";
+  static const String API_SIGN_IN = "https://forums.e-hentai.org/index.php?act=Login&CODE=01";
+
+  static const String userAgent =
+      "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_2) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/79.0.3945.130 Safari/537.36";
 
   static const List settingList = [
     {

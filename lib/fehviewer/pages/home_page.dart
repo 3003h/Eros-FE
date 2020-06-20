@@ -16,66 +16,77 @@ class FEhHome extends StatelessWidget {
 }
 
 class CupertinoHomePage extends StatefulWidget {
-//  CupertinoHomePage({Key key, this.title}) : super(key: key);
-//
-//  final String title;
-
   @override
   _CupertinoHomePage createState() => _CupertinoHomePage();
 }
 
 class _CupertinoHomePage extends State<CupertinoHomePage> {
+  // 底部菜单栏图标数组
+  var tabIcon;
+
+  // 页面内容
+  var _pages = [];
+
+  // 菜单文案
+  var tabTitles = ['热门', '画廊', '收藏', '设置'];
+
+  void initData() {
+    if (tabIcon == null) {
+      tabIcon = [
+        Icon(EHCupertinoIcons.fire_solid),
+        Icon(EHCupertinoIcons.gallery_solid),
+        Icon(EHCupertinoIcons.heart_solid),
+        Icon(CupertinoIcons.settings_solid),
+      ];
+    }
+
+    _pages = [
+      new PopularListTab(),
+      new GalleryListTab(),
+      new FavoriteTab(),
+      new SettingTab()
+    ];
+  }
+
+  // 获取图标
+  Icon getTabIcon(int curIndex) {
+    return tabIcon[curIndex];
+  }
+
+  // 获取标题文本
+  Text getTabTitle(int curIndex) {
+    return new Text(
+      tabTitles[curIndex],
+//      style: getTabTextStyle(curIndex),
+    );
+  }
+
+  // 获取BottomNavigationBarItem
+  List<BottomNavigationBarItem> getBottomNavigationBarItem() {
+    List<BottomNavigationBarItem> list = new List();
+    for (int index = 0; index < 4; index++) {
+      list.add(new BottomNavigationBarItem(
+          icon: getTabIcon(index), title: getTabTitle(index)));
+    }
+    return list;
+  }
+
   @override
   Widget build(BuildContext context) {
+    initData();
+
     CupertinoTabScaffold cupertinoTabScaffold = CupertinoTabScaffold(
       tabBar: CupertinoTabBar(
-        items: <BottomNavigationBarItem>[
-          BottomNavigationBarItem(
-            icon: Icon(EHCupertinoIcons.fire_solid),
-            title: Text('热门'),
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(EHCupertinoIcons.gallery_solid),
-            title: Text('画廊'),
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(EHCupertinoIcons.heart_solid),
-            title: Text('收藏'),
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(CupertinoIcons.settings_solid),
-            title: Text('设置'),
-          ),
-        ],
+        items: getBottomNavigationBarItem(),
       ),
       tabBuilder: (context, index) {
-        switch (index) {
-          case 0:
-            return CupertinoTabView(builder: (context) {
-              return CupertinoPageScaffold(
-                // ignore: missing_return
-                child: PopularListTab(),
-              );
-            });
-          case 1:
-            return CupertinoTabView(builder: (context) {
-              return CupertinoPageScaffold(
-                child: GalleryListTab(),
-              );
-            });
-          case 2:
-            return CupertinoTabView(builder: (context) {
-              return CupertinoPageScaffold(
-                child: FavoriteTab(),
-              );
-            });
-          case 3:
-            return CupertinoTabView(builder: (context) {
-              return CupertinoPageScaffold(
-                child: SettingTab(),
-              );
-            });
-        }
+        return CupertinoTabView(
+          builder: (BuildContext context) {
+            return CupertinoPageScaffold(
+              child: _pages[index],
+            );
+          },
+        );
       },
     );
 

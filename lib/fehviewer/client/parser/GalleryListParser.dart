@@ -48,7 +48,7 @@ class GalleryListParser {
   }
 
   static void getMoreGalleryInfo(List<GalleryItemBean> galleryItems) async {
-    debugPrint('qry items ${galleryItems.length}');
+    debugPrint('api qry items ${galleryItems.length}');
 
     // 通过api获取画廊详细信息
     List _gidlist = [];
@@ -94,8 +94,6 @@ class GalleryListParser {
     // 画廊列表
     List<dom.Element> gallerys = document.querySelectorAll(
         'body > div.ido > div:nth-child(2) > table > tbody > tr');
-
-    debugPrint('len ${gallerys.length}');
 
     List<GalleryItemBean> gallaryItems = [];
 
