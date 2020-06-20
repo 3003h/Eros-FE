@@ -9,7 +9,7 @@ class NavigatorUtil {
   // 返回
   static void goBack(BuildContext context) {
     /// 其实这边调用的是
-    Navigator.pop(context);
+//    Navigator.pop(context);
     Application.router.pop(context);
   }
 
@@ -116,7 +116,8 @@ class NavigatorUtil {
   static void goWebLogin(BuildContext context, String title, String url) {
     final encodeUrl = Uri.encodeComponent(url);
     final cnTitle = FluroConvertUtils.fluroCnParamsEncode(title);
-    Application.router
-        .navigateTo(context, EHRoutes.webLogin + "?title=$cnTitle&url=$encodeUrl");
+    Application.router.navigateTo(
+        context, EHRoutes.webLogin + "?title=$cnTitle&url=$encodeUrl",
+        transition: TransitionType.native);
   }
 }

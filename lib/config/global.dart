@@ -56,7 +56,7 @@ class Global {
     StorageUtil().setBool(ENABLE_JPN_TITLE, true);
 
     // 封面blur
-    StorageUtil().setBool(ENABLE_IMG_BLUR, true);
+    StorageUtil().setBool(ENABLE_IMG_BLUR, false);
 
     // 读取设备第一次打开
     isFirstOpen = !StorageUtil().getBool(STORAGE_DEVICE_ALREADY_OPEN_KEY);
