@@ -32,7 +32,7 @@ class WebLogin extends StatelessWidget {
 
 
       if (_uri.path == "/index.php" && _uri.query == '') {
-        debugPrint("登陆成功");
+        debugPrint("登录成功");
         flutterWebviewPlugin.getCookies().then((Map<String, String> _cookies) {
           debugPrint('$_cookies');
         });

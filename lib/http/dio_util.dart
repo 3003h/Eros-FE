@@ -60,7 +60,7 @@ class HttpManager {
     } on DioError catch (e) {
       print('getHttp exception: $e');
       formatError(e);
-      return response;
+//      return response;
     }
     return response.data;
   }
