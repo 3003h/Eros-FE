@@ -8,6 +8,7 @@ class EhConfig {
 
     bool jpnTitle;
     bool tagTranslat;
+    String favoritesOrder;
     
     factory EhConfig.fromJson(Map<String,dynamic> json) => _$EhConfigFromJson(json);
     Map<String, dynamic> toJson() => _$EhConfigToJson(this);

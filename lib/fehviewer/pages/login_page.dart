@@ -1,6 +1,6 @@
 import 'package:FEhViewer/fehviewer/client/EhLogin.dart';
 import 'package:FEhViewer/fehviewer/route/navigator_util.dart';
-import 'package:FEhViewer/models/provider/userModel.dart';
+import 'package:FEhViewer/models/states/userModel.dart';
 import 'package:FEhViewer/models/user.dart';
 import 'package:FEhViewer/utils/toast.dart';
 import 'package:FEhViewer/values/const.dart';

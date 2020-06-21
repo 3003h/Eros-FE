@@ -1,12 +1,16 @@
+import 'package:FEhViewer/fehviewer/client/parser/GalleryListParser.dart';
+import 'package:FEhViewer/fehviewer/route/navigator_util.dart';
+import 'package:FEhViewer/fehviewer/route/routes.dart';
 import 'package:FEhViewer/models/entity/favorite.dart';
+import 'package:FEhViewer/models/entity/gallery.dart';
+import 'package:FEhViewer/utils/icon.dart';
 import 'package:FEhViewer/values/const.dart';
 import 'package:FEhViewer/values/theme_colors.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_easyrefresh/easy_refresh.dart';
 
-import 'package:FEhViewer/fehviewer/route/navigator_util.dart';
-import 'package:FEhViewer/utils/icon.dart';
-import 'package:FEhViewer/fehviewer/route/routes.dart';
+import 'item/gallery_item.dart';
 
 class FavoriteTab extends StatefulWidget {
   @override
@@ -17,6 +21,8 @@ class FavoriteTab extends StatefulWidget {
 
 class _FavoriteTab extends State<FavoriteTab> {
   String _title = "All Favorites";
+  final List<GalleryItemBean> _gallerItemBeans = [];
+  String _curFavcat = '';
 
   void _setTitle(String title) {
     setState(() {
@@ -25,8 +31,36 @@ class _FavoriteTab extends State<FavoriteTab> {
   }
 
   @override
+  void initState() {
+    super.initState();
+    _loadData();
+  }
+
+  _loadData() async {
+    var gallerItemBeans =
+        await GalleryListParser.getFavorite(favcat: _curFavcat);
+    setState(() {
+      _gallerItemBeans.clear();
+      _gallerItemBeans.addAll(gallerItemBeans);
+    });
+  }
+
+  SliverList gallerySliverListView(List gallerItemBeans) {
+    return SliverList(
+      delegate: SliverChildBuilderDelegate(
+        (context, index) {
+          if (index < gallerItemBeans.length) {
+            return GalleryItemWidget(galleryItemBean: gallerItemBeans[index]);
+          }
+          return null;
+        },
+      ),
+    );
+  }
+
+  @override
   Widget build(BuildContext context) {
-    return CustomScrollView(
+    CustomScrollView customScrollView = CustomScrollView(
       slivers: <Widget>[
         CupertinoSliverNavigationBar(
           largeTitle: Text(_title),
@@ -42,6 +76,8 @@ class _FavoriteTab extends State<FavoriteTab> {
                   FavcatItemBean fav = result;
                   debugPrint('${fav.title}');
                   _setTitle(fav.title);
+                  _curFavcat = fav.key;
+                  _loadData();
                 } else {
                   debugPrint('$result');
                 }
@@ -54,22 +90,22 @@ class _FavoriteTab extends State<FavoriteTab> {
         ),
         SliverSafeArea(
           top: false,
-          sliver: SliverList(
-            delegate: SliverChildBuilderDelegate(
-              (context, index) {
-                if (index < 100) {
-                  return Text(
-                    "$index",
-                    style: TextStyle(fontSize: 50),
-                  );
-                }
-                return null;
-              },
-            ),
-          ),
+          sliver: gallerySliverListView(_gallerItemBeans),
         )
       ],
     );
+
+    EasyRefresh re = EasyRefresh(
+      child: customScrollView,
+      onRefresh: () async {
+        _loadData();
+      },
+      onLoad: () async {
+        // 上拉加载更多
+      },
+    );
+
+    return re;
   }
 }
 
@@ -99,9 +135,10 @@ class _SelFavorite extends State<SelFavorite> {
   /// 初始化收藏夹选择数据
   void _initData() {
     EHConst.favList.forEach((fav) {
-      var name = fav['name'];
+      var key = fav['key'];
       var desc = fav['desc'];
-      favItemBeans.add(FavcatItemBean(desc, ThemeColors.favColor[name]));
+      favItemBeans
+          .add(FavcatItemBean(desc, ThemeColors.favColor[key], key: key));
     });
   }
 

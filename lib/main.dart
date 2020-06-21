@@ -3,17 +3,18 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
+
 import 'common/global.dart';
 import 'fehviewer/route/Application.dart';
-import 'models/provider/localeModel.dart';
-import 'models/provider/userModel.dart';
+import 'models/states/localeModel.dart';
+import 'models/states/userModel.dart';
 
 void main() => Global.init().then((e) => runApp(MyApp()));
 
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    CupertinoApp ca = CupertinoApp(
+    CupertinoApp cApp = CupertinoApp(
       onGenerateRoute: Application.router.generator,
       theme: CupertinoThemeData(brightness: Brightness.light),
       home: SplashPage(),
@@ -24,7 +25,7 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider.value(value: UserModel()),
         ChangeNotifierProvider.value(value: LocaleModel()),
       ],
-      child: ca,
+      child: cApp,
     );
 
     return multiProvider;

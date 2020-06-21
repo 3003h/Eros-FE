@@ -19,6 +19,9 @@ class EHConst {
 
   static const String CHROME_ACCEPT_LANGUAGE = "en-US,en;q=0.5";
 
+  static const FAV_ORDER_FAV = 'fs_f';
+  static const FAV_ORDER_PUB = 'fs_p';
+
   static const List settingList = [
     {
       "name": "eh",
@@ -66,17 +69,17 @@ class EHConst {
   };
 
   static const List favList = [
-    {'name': 'fav0', 'desc': 'Favorites 0'},
-    {'name': 'fav1', 'desc': 'Favorites 1'},
-    {'name': 'fav2', 'desc': 'Favorites 2'},
-    {'name': 'fav3', 'desc': 'Favorites 3'},
-    {'name': 'fav4', 'desc': 'Favorites 4'},
-    {'name': 'fav5', 'desc': 'Favorites 5'},
-    {'name': 'fav6', 'desc': 'Favorites 6'},
-    {'name': 'fav7', 'desc': 'Favorites 7'},
-    {'name': 'fav8', 'desc': 'Favorites 8'},
-    {'name': 'fav9', 'desc': 'Favorites 9'},
-    {'name': 'fava', 'desc': 'Favorites All'},
+    {'key': '0', 'desc': 'Favorites 0'},
+    {'key': '1', 'desc': 'Favorites 1'},
+    {'key': '2', 'desc': 'Favorites 2'},
+    {'key': '3', 'desc': 'Favorites 3'},
+    {'key': '4', 'desc': 'Favorites 4'},
+    {'key': '5', 'desc': 'Favorites 5'},
+    {'key': '6', 'desc': 'Favorites 6'},
+    {'key': '7', 'desc': 'Favorites 7'},
+    {'key': '8', 'desc': 'Favorites 8'},
+    {'key': '9', 'desc': 'Favorites 9'},
+    {'key': 'a', 'desc': 'Favorites All'},
   ];
 
   static const Map prefixToNameSpaceMap = {
