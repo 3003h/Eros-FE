@@ -2,19 +2,31 @@ import 'package:FEhViewer/fehviewer/pages/splash_page.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:provider/provider.dart';
 import 'common/global.dart';
 import 'fehviewer/route/Application.dart';
+import 'models/provider/localeModel.dart';
+import 'models/provider/userModel.dart';
 
 void main() => Global.init().then((e) => runApp(MyApp()));
 
 class MyApp extends StatelessWidget {
-
   @override
   Widget build(BuildContext context) {
-    return CupertinoApp(
+    CupertinoApp ca = CupertinoApp(
       onGenerateRoute: Application.router.generator,
       theme: CupertinoThemeData(brightness: Brightness.light),
       home: SplashPage(),
     );
+
+    MultiProvider multiProvider = MultiProvider(
+      providers: [
+        ChangeNotifierProvider.value(value: UserModel()),
+        ChangeNotifierProvider.value(value: LocaleModel()),
+      ],
+      child: ca,
+    );
+
+    return multiProvider;
   }
 }

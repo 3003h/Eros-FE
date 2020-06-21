@@ -1,8 +1,10 @@
-import 'package:FEhViewer/utils/storage.dart';
-import 'package:FEhViewer/values/storages.dart';
-import 'package:dio/dio.dart';
+import 'package:FEhViewer/common/global.dart';
 import 'package:FEhViewer/http/dio_util.dart';
+import 'package:dio/dio.dart';
 import 'package:flutter/cupertino.dart';
+
+import '../../models/user.dart';
+import '../../models/profile.dart';
 
 class EhUserManager {
   static Future<dynamic> signIn(String username, String passwd) async {
@@ -40,9 +42,8 @@ class EhUserManager {
     var cookieStr = getCookieStringFromMap(cookie);
     debugPrint(cookieStr);
 
-    StorageUtil().setString(COOKIE, cookieStr);
-
-    debugPrint('${StorageUtil().getString(COOKIE)}');
+    Global.profile.token = cookieStr;
+    Global.profile.user.username = username;
 
     return rult;
   }
