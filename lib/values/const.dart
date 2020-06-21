@@ -1,19 +1,23 @@
-import 'package:FEhViewer/models/entity/favorite.dart';
 import 'package:FEhViewer/fehviewer/route/routes.dart';
 import 'package:FEhViewer/utils/icon.dart';
-import 'package:FEhViewer/values/theme_colors.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:flutter/material.dart';
 
 class EHConst {
   // 网页登陆页面
-  static const String URL_SIGN_IN = "https://forums.e-hentai.org/index.php?act=Login";
+  static const String URL_SIGN_IN =
+      "https://forums.e-hentai.org/index.php?act=Login";
 
   // 参数登陆url
-  static const String API_SIGN_IN = "https://forums.e-hentai.org/index.php?act=Login&CODE=01";
+  static const String API_SIGN_IN =
+      "https://forums.e-hentai.org/index.php?act=Login&CODE=01";
 
-  static const String userAgent =
-      "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_2) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/79.0.3945.130 Safari/537.36";
+  static const String CHROME_USER_AGENT =
+      "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/71.0.3578.98 Safari/537.36";
+
+  static const String CHROME_ACCEPT =
+      "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8";
+
+  static const String CHROME_ACCEPT_LANGUAGE = "en-US,en;q=0.5";
 
   static const List settingList = [
     {

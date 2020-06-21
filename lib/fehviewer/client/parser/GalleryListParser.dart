@@ -1,16 +1,18 @@
 import 'dart:convert';
 
-import 'package:FEhViewer/models/entity/gallery.dart';
+import 'package:FEhViewer/common/global.dart';
 import 'package:FEhViewer/http/dio_util.dart';
+import 'package:FEhViewer/models/entity/gallery.dart';
 import 'package:FEhViewer/utils/storage.dart';
 import 'package:FEhViewer/values/storages.dart';
+import 'package:dio/dio.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:html_unescape/html_unescape.dart';
-import 'package:html/parser.dart';
 import 'package:html/dom.dart' as dom;
+import 'package:html/parser.dart';
+import 'package:html_unescape/html_unescape.dart';
 
-import '../EhTagDatabase.dart';
 import '../../../utils/utility.dart';
+import '../EhTagDatabase.dart';
 
 class GalleryListParser {
   /// 获取热门画廊列表
@@ -18,7 +20,13 @@ class GalleryListParser {
     HttpManager httpManager = HttpManager.getInstance("https://e-hentai.org");
     const url = "/popular";
 
-    var response = await httpManager.get(url);
+    var cookie = Global.profile?.token ?? "";
+
+    Options options = Options(headers: {
+      "Cookie": cookie,
+    });
+
+    var response = await httpManager.get(url, options: options);
 
     List<GalleryItemBean> list = await parseGalleryList(response);
 
@@ -37,7 +45,36 @@ class GalleryListParser {
       url = "/?page=$page";
     }
 
-    var response = await httpManager.get(url);
+    debugPrint('$url');
+
+    var cookie = Global.profile?.token ?? "";
+
+    Options options =
+        Options(headers: {"Cookie": cookie, "Referer": "https://e-hentai.org"});
+
+    var response = await httpManager.get(url, options: options);
+
+    List<GalleryItemBean> list = await parseGalleryList(response);
+
+    return list;
+  }
+
+  /// 获取收藏
+  static Future<List<GalleryItemBean>> getFavorite({int favcat}) async {
+    HttpManager httpManager = HttpManager.getInstance("https://e-hentai.org");
+
+    var url = "/favorites.php";
+    if (favcat != null) {
+      url = "/favorites.php/?favcat=$favcat";
+    }
+
+    var cookie = Global.profile?.token ?? "";
+
+    Options options = Options(headers: {
+      "Cookie": cookie,
+    });
+
+    var response = await httpManager.get(url, options: options);
 
     List<GalleryItemBean> list = await parseGalleryList(response);
 
@@ -90,7 +127,7 @@ class GalleryListParser {
       galleryItems[i].japanese_title =
           unescape.convert(rultList[i]['title_jpn']);
       galleryItems[i].rating = double.parse(rultList[i]['rating']);
-      galleryItems[i].imgUrl = rultList[i]['thumb'];
+//      galleryItems[i].imgUrl = rultList[i]['thumb'];
       galleryItems[i].filecount = rultList[i]['filecount'];
     }
   }
@@ -162,7 +199,7 @@ class GalleryListParser {
         gid: gid,
         token: token,
         english_title: title,
-//        imgUrl: imgUrl ?? '',
+        imgUrl: imgUrl ?? '',
         url: url,
         category: category,
         simpleTags: simpleTags,

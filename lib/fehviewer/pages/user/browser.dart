@@ -1,8 +1,7 @@
-import 'package:FEhViewer/fehviewer/route/navigator_util.dart';
+import 'package:FEhViewer/utils/fluro_convert_util.dart';
 import 'package:FEhViewer/values/const.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:FEhViewer/utils/fluro_convert_util.dart';
 import 'package:flutter_webview_plugin/flutter_webview_plugin.dart';
 
 class WebLogin extends StatelessWidget {
@@ -30,13 +29,12 @@ class WebLogin extends StatelessWidget {
       var _uri = Uri.parse(url);
       debugPrint('url $_uri path ${_uri.path}  ${_uri.query}');
 
-
       if (_uri.path == "/index.php" && _uri.query == '') {
         debugPrint("登录成功");
         flutterWebviewPlugin.getCookies().then((Map<String, String> _cookies) {
           debugPrint('$_cookies');
         });
-      } 
+      }
     });
 
     CupertinoPageScaffold cpf = CupertinoPageScaffold(
@@ -54,7 +52,7 @@ class WebLogin extends StatelessWidget {
         ),
         child: SafeArea(
           child: WebviewScaffold(
-            userAgent: EHConst.userAgent,
+            userAgent: EHConst.CHROME_USER_AGENT,
             url: url,
             javascriptChannels: jsChannels,
             mediaPlaybackRequiresUserGesture: false,
