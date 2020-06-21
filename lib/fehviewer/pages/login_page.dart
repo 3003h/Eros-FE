@@ -1,8 +1,11 @@
 import 'package:FEhViewer/fehviewer/client/EhLogin.dart';
 import 'package:FEhViewer/fehviewer/route/navigator_util.dart';
+import 'package:FEhViewer/models/provider/userModel.dart';
+import 'package:FEhViewer/models/user.dart';
 import 'package:FEhViewer/values/const.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class LoginPage extends StatefulWidget {
   @override
@@ -77,7 +80,8 @@ class _LoginPage extends State<LoginPage> {
                   child: Text('通过网页登录'),
                   onPressed: () {
                     debugPrint('通过网页登录');
-                    NavigatorUtil.goWebLogin(context, "网页登录", EHConst.URL_SIGN_IN);
+                    NavigatorUtil.goWebLogin(
+                        context, "网页登录", EHConst.URL_SIGN_IN);
                   },
                 )
               ],
@@ -91,7 +95,9 @@ class _LoginPage extends State<LoginPage> {
       'username': _usernameController.text,
       'password': _passwdController.text
     });
-    await EhUserManager.signIn(
-        _usernameController.text, _passwdController.text);
+    User user = await EhUserManager()
+        .signIn(_usernameController.text, _passwdController.text);
+    debugPrint('user  $user');
+    Provider.of<UserModel>(context).user = user;
   }
 }
