@@ -60,13 +60,21 @@ class GalleryListParser {
   }
 
   /// 获取收藏
-  static Future<List<GalleryItemBean>> getFavorite({int favcat}) async {
+  static Future<List<GalleryItemBean>> getFavorite({String favcat}) async {
     HttpManager httpManager = HttpManager.getInstance("https://e-hentai.org");
 
+    //收藏时间排序
+    var _order = Global?.profile?.ehConfig?.favoritesOrder;
+
     var url = "/favorites.php";
-    if (favcat != null) {
-      url = "/favorites.php/?favcat=$favcat";
+    if (favcat != null && favcat != "a") {
+      url = "${url}?favcat=$favcat";
     }
+
+    if (_order != null) {
+      url = "${url}?inline_set=$_order";
+    }
+    debugPrint('$url');
 
     var cookie = Global.profile?.token ?? "";
 
@@ -76,7 +84,10 @@ class GalleryListParser {
 
     var response = await httpManager.get(url, options: options);
 
-    List<GalleryItemBean> list = await parseGalleryList(response);
+//    debugPrint(response.toString());
+
+    List<GalleryItemBean> list =
+        await parseGalleryList(response, isFavorite: true);
 
     return list;
   }
@@ -93,6 +104,9 @@ class GalleryListParser {
 
   static void getMoreGalleryInfo(List<GalleryItemBean> galleryItems) async {
     debugPrint('api qry items ${galleryItems.length}');
+    if (galleryItems.length == 0) {
+      return;
+    }
 
     // 通过api获取画廊详细信息
     List _gidlist = [];
@@ -133,16 +147,29 @@ class GalleryListParser {
   }
 
   /// 列表数据处理
-  static Future<List<GalleryItemBean>> parseGalleryList(String response) async {
+  static Future<List<GalleryItemBean>> parseGalleryList(String response,
+      {isFavorite = false}) async {
     var document = parse(response);
 
+    const GALLERY_SELECT =
+        "body > div.ido > div:nth-child(2) > table > tbody > tr";
+    const FAVORITE_SELECT =
+        "body > div.ido > form > table.itg.gltc > tbody > tr";
+
+    final select = isFavorite ? FAVORITE_SELECT : GALLERY_SELECT;
+
+    final fav =
+        document.querySelector("body > div.ido > form > p")?.text?.trim() ?? "";
+    debugPrint("num  $fav");
+
     // 画廊列表
-    List<dom.Element> gallerys = document.querySelectorAll(
-        'body > div.ido > div:nth-child(2) > table > tbody > tr');
+    List<dom.Element> gallerys = document.querySelectorAll(select);
+
+    debugPrint("gallerys.len  ${gallerys.length}");
 
     List<GalleryItemBean> gallaryItems = [];
 
-    for (int i = 1; i < gallerys.length; i++) {
+    for (int i = 0; i < gallerys.length; i++) {
       var tr = gallerys[i];
 
       final category = tr.querySelector('td.gl1c.glcat > div')?.text?.trim();
@@ -171,10 +198,6 @@ class GalleryListParser {
       final bool _enableTagTran = StorageUtil().getBool(ENABLE_TAG_TRANSLAT);
       final List<String> simpleTags = [];
       List tags = tr.querySelectorAll('div.gt');
-//      tags.forEach((tag) async {
-//        var tagText = tag.text.trim();
-//        simpleTags.add(_enableTagTran ? await getTranTag(tagText) : tagText);
-//      });
       for (var tag in tags) {
         var tagText = tag.text.trim();
         simpleTags.add(_enableTagTran
@@ -189,12 +212,10 @@ class GalleryListParser {
 
       // old
       final postTime =
-          tr.querySelector('td.gl2c > div:nth-child(2) > div').text.trim();
-
-      final uploader = tr.querySelector('td.gl4c.glhide > div > a').text.trim();
+          tr.querySelector('td.gl2c > div:nth-child(2) > div')?.text?.trim() ??
+              '';
 
       /// old end
-
       GalleryItemBean galleryItemBean = new GalleryItemBean(
         gid: gid,
         token: token,
@@ -204,7 +225,6 @@ class GalleryListParser {
         category: category,
         simpleTags: simpleTags,
         postTime: postTime,
-        uploader: uploader,
       );
 
       gallaryItems.add(galleryItemBean);
@@ -212,7 +232,7 @@ class GalleryListParser {
     }
 
     // 通过api请求获取更多信息
-    await getMoreGalleryInfo(gallaryItems);
+    gallaryItems.length > 0 ? await getMoreGalleryInfo(gallaryItems) : null;
 
     return gallaryItems;
   }

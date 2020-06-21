@@ -4,9 +4,9 @@ import 'package:FEhViewer/values/storages.dart';
 import 'package:FEhViewer/values/theme_colors.dart';
 import 'package:FEhViewer/widget/blur_image.dart';
 import 'package:FEhViewer/widget/rating_bar.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:cached_network_image/cached_network_image.dart';
 
 class GalleryItemWidget extends StatefulWidget {
   final int index;
@@ -27,7 +27,6 @@ class _GalleryItemWidgetState extends State<GalleryItemWidget> {
     _padL = 8.0;
 
     var _isBlur = StorageUtil().getBool(ENABLE_IMG_BLUR);
-
 
     String _getTitle() {
       var _title_en = widget?.galleryItemBean?.english_title ?? '';
@@ -71,7 +70,7 @@ class _GalleryItemWidgetState extends State<GalleryItemWidget> {
             ConstrainedBox(
               constraints: BoxConstraints(
 //                minWidth: double.infinity, //宽度尽可能大
-                minHeight: 70.0, //最小高度
+                minHeight: 50.0, //最小高度
                 maxHeight: 180,
 //                maxWidth: 140,
               ),
@@ -110,7 +109,7 @@ class _GalleryItemWidgetState extends State<GalleryItemWidget> {
 
                   // 标签
                   Container(
-                    padding: const EdgeInsets.fromLTRB(0, 6, 0, 8),
+                    padding: const EdgeInsets.fromLTRB(0, 0, 0, 8),
                     child: Wrap(
                       spacing: 4, //主轴上子控件的间距
                       runSpacing: 4, //交叉轴上子控件之间的间距
