@@ -3,7 +3,7 @@ import 'package:flutter/cupertino.dart';
 
 import '../profile.dart';
 
-class ProfileChangeNotifier extends ChangeNotifier {
+class ProfileChangeNotifier with ChangeNotifier {
   Profile get profile => Global.profile;
 
   @override

@@ -1,8 +1,11 @@
+import 'package:FEhViewer/common/global.dart';
 import 'package:FEhViewer/fehviewer/route/navigator_util.dart';
 import 'package:FEhViewer/fehviewer/route/routes.dart';
+import 'package:FEhViewer/models/provider/userModel.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:FEhViewer/values/const.dart';
+import 'package:provider/provider.dart';
 
 /// 定义一个回调接口
 typedef OnItemClickListener = void Function(int position);
@@ -61,11 +64,32 @@ class UserItem extends StatefulWidget {
 }
 
 class _UserItem extends State<UserItem> {
-  String _userName = "未登录";
+  final _normalText = "未登录";
   Color _color;
 
   @override
   Widget build(BuildContext context) {
+    void _tapItem() {
+      if (Global.profile.user != null) {
+        debugPrint(Global.profile.user.username);
+      } else {
+        NavigatorUtil.jump(context, EHRoutes.login);
+      }
+    }
+
+    Widget _buildText() {
+      return Consumer<UserModel>(
+        builder: (BuildContext context, UserModel value, Widget child) {
+          if (value.isLogin) {
+            final _userName = value.user.username;
+            return Text(_userName);
+          } else {
+            return Text(_normalText);
+          }
+        },
+      );
+    }
+
     final row = SafeArea(
       top: false,
       bottom: false,
@@ -86,7 +110,7 @@ class _UserItem extends State<UserItem> {
           // 头像右侧信息
           Padding(
             padding: const EdgeInsets.only(left: 8),
-            child: Text(_userName),
+            child: _buildText(),
           )
         ]),
       ),
@@ -94,23 +118,22 @@ class _UserItem extends State<UserItem> {
 
 //    return row;
 
-  return GestureDetector(
-    child: row,
-    behavior: HitTestBehavior.opaque,
-    onTap: () {
-      debugPrint("user tap ");
-      NavigatorUtil.jump(context, EHRoutes.login);
-    },
-    onTapDown: (_) => _updatePressedColor(),
-    onTapUp: (_) {
-      Future.delayed(const Duration(milliseconds: 100), () {
-        _updateNormalColor();
-      });
-    },
-    onTapCancel: () => _updateNormalColor(),
-  );
+    return GestureDetector(
+      child: row,
+      behavior: HitTestBehavior.opaque,
+      onTap: () {
+        _tapItem();
+//        NavigatorUtil.jump(context, EHRoutes.login);
+      },
+      onTapDown: (_) => _updatePressedColor(),
+      onTapUp: (_) {
+        Future.delayed(const Duration(milliseconds: 100), () {
+          _updateNormalColor();
+        });
+      },
+      onTapCancel: () => _updateNormalColor(),
+    );
   }
-
 
   void _updateNormalColor() {
     setState(() {
