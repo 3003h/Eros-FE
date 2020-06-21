@@ -2,6 +2,7 @@ import 'package:FEhViewer/fehviewer/client/EhLogin.dart';
 import 'package:FEhViewer/fehviewer/route/navigator_util.dart';
 import 'package:FEhViewer/models/provider/userModel.dart';
 import 'package:FEhViewer/models/user.dart';
+import 'package:FEhViewer/utils/toast.dart';
 import 'package:FEhViewer/values/const.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -95,9 +96,17 @@ class _LoginPage extends State<LoginPage> {
       'username': _usernameController.text,
       'password': _passwdController.text
     });
-    User user = await EhUserManager()
-        .signIn(_usernameController.text, _passwdController.text);
-    debugPrint('user  $user');
-    Provider.of<UserModel>(context).user = user;
+    User user;
+    try {
+      user = await EhUserManager()
+          .signIn(_usernameController.text, _passwdController.text);
+      Provider.of<UserModel>(context, listen: false).user = user;
+    } catch (e) {
+      showToast(e.toString());
+    }
+
+    if (user != null) {
+      NavigatorUtil.goBack(context);
+    }
   }
 }

@@ -12,7 +12,7 @@ class EhUserManager {
   EhUserManager._();
 
   Future<User> signIn(String username, String passwd) async {
-    User user;
+    User user = User();
     HttpManager httpManager =
         HttpManager.getInstance("https://forums.e-hentai.org");
     const url = "/index.php?act=Login&CODE=01";
@@ -47,14 +47,15 @@ class EhUserManager {
     var cookieStr = _getCookieStringFromMap(cookie);
     debugPrint(cookieStr);
 
-    Map userMap = {"username": username, "cookie": cookieStr};
-
     Global.profile.token = cookieStr;
-    debugPrint('$userMap');
+
     debugPrint('${Global.profile.token}');
 
-    user = User(username: username, cookie: cookieStr);
-    debugPrint('$user');
+    user.username = username;
+    user.cookie = cookieStr;
+
+//    user = User(username: username, cookie: cookieStr);
+    debugPrint('signIn ${user.toJson()}');
 
     return user;
   }

@@ -9,6 +9,11 @@ class User {
   String username;
   String cookie;
 
+  @override
+  String toString() {
+    return 'User{username: $username, cookie: $cookie}';
+  }
+
   factory User.fromJson(Map<String, dynamic> json) => _$UserFromJson(json);
   Map<String, dynamic> toJson() => _$UserToJson(this);
 }
