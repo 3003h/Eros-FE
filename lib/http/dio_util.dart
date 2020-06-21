@@ -1,4 +1,5 @@
 import 'package:FEhViewer/utils/toast.dart';
+import 'package:FEhViewer/values/const.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/cupertino.dart';
 
@@ -29,9 +30,12 @@ class HttpManager {
         //响应时间为3秒
         receiveTimeout: receiveTimeout,
         //设置请求头
-        // headers: {
-        //   "resource":"android"
-        // },
+        headers: {
+//           "resource":"android"
+          "User-Agent": EHConst.CHROME_USER_AGENT,
+          "Accept": EHConst.CHROME_ACCEPT,
+          "Accept-Language": EHConst.CHROME_ACCEPT_LANGUAGE,
+        },
         //默认值是"application/json; charset=utf-8",Headers.formUrlEncodedContentType会自动编码请求体.
         contentType: Headers.formUrlEncodedContentType,
         //共有三种方式json,bytes(响应字节),stream（响应流）,plain
@@ -63,6 +67,19 @@ class HttpManager {
 //      return response;
     }
     return response.data;
+  }
+
+  getAll(url, {params, options, cancelToken}) async {
+    Response response;
+    try {
+      response = await _dio.get(url,
+          queryParameters: params, options: options, cancelToken: cancelToken);
+    } on DioError catch (e) {
+      print('getHttp exception: $e');
+      formatError(e);
+//      return response;
+    }
+    return response;
   }
 
   //post请求

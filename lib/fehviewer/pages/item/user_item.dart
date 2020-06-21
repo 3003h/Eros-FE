@@ -18,7 +18,7 @@ class _UserItem extends State<UserItem> {
   @override
   Widget build(BuildContext context) {
     void _tapItem() {
-      if (Global.profile.user.username != null) {
+      if (Global.profile.user?.username != null) {
         debugPrint(Global.profile.user.username);
         User user = User();
         Provider.of<UserModel>(context, listen: false).user = user;
@@ -73,7 +73,6 @@ class _UserItem extends State<UserItem> {
       behavior: HitTestBehavior.opaque,
       onTap: () {
         _tapItem();
-//        NavigatorUtil.jump(context, EHRoutes.login);
       },
       onTapDown: (_) => _updatePressedColor(),
       onTapUp: (_) {

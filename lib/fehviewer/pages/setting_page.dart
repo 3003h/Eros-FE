@@ -4,9 +4,6 @@ import 'package:FEhViewer/values/const.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
-/// 定义一个回调接口
-typedef OnItemClickListener = void Function(int position);
-
 class SettingTab extends StatefulWidget {
   @override
   State<StatefulWidget> createState() => _SettingTab();
@@ -15,6 +12,24 @@ class SettingTab extends StatefulWidget {
 class _SettingTab extends State<SettingTab> {
   String _title = "设置";
   List _settingItemList = EHConst.settingList;
+
+  List _getItemList() {
+    List _slivers = [];
+    for (int _index = 0; _index < _settingItemList.length + 1; _index++) {
+      if (_index == 0) {
+        _slivers.add(UserItem());
+      } else {
+        _slivers.add(SettingItems(
+          index: _index,
+          text: _settingItemList[_index - 1]["title"],
+          icon: _settingItemList[_index - 1]["icon"],
+          isLast: _settingItemList.length == _index,
+          route: _settingItemList[_index - 1]["route"],
+        ));
+      }
+    }
+    return _slivers;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -25,31 +40,14 @@ class _SettingTab extends State<SettingTab> {
         ),
         SliverSafeArea(
             top: false,
-            minimum: const EdgeInsets.only(
-              left: 8,
-              top: 8,
-              bottom: 8,
-              right: 8,
-            ),
+            minimum: const EdgeInsets.all(8),
             sliver: SliverList(
               delegate: SliverChildBuilderDelegate((context, index) {
-                switch (index) {
-                  case 0:
-                    return UserItem();
-                  default:
-                    {
-                      if (index < _settingItemList.length + 1) {
-                        return SettingItems(
-                          index: index,
-                          text: _settingItemList[index - 1]["title"],
-                          icon: _settingItemList[index - 1]["icon"],
-                          isLast: _settingItemList.length == index,
-                          route: _settingItemList[index - 1]["route"],
-                        );
-                      } else {
-                        return null;
-                      }
-                    }
+                List _itemList = _getItemList();
+                if (index < _itemList.length) {
+                  return _itemList[index];
+                } else {
+                  return null;
                 }
               }),
             ))

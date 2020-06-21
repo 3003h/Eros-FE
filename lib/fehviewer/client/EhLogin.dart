@@ -2,7 +2,6 @@ import 'package:FEhViewer/common/global.dart';
 import 'package:FEhViewer/http/dio_util.dart';
 import 'package:FEhViewer/models/user.dart';
 import 'package:dio/dio.dart';
-import 'package:flutter/cupertino.dart';
 
 class EhUserManager {
   static EhUserManager _instance = EhUserManager._();
@@ -41,23 +40,43 @@ class EhUserManager {
     var cookie = {
       "ipb_member_id": cookieMap["ipb_member_id"],
       "ipb_pass_hash": cookieMap["ipb_pass_hash"],
-      "yay": "louder"
     };
 
+    var tmpCookie = _getCookieStringFromMap(cookie);
+
+    Map morCookie = await _getHome(tmpCookie);
+
+    morCookie.forEach((key, value) {
+      cookie.putIfAbsent(key, () => value);
+    });
+
     var cookieStr = _getCookieStringFromMap(cookie);
-    debugPrint(cookieStr);
 
     Global.profile.token = cookieStr;
-
-    debugPrint('${Global.profile.token}');
 
     user.username = username;
     user.cookie = cookieStr;
 
-//    user = User(username: username, cookie: cookieStr);
-    debugPrint('signIn ${user.toJson()}');
-
     return user;
+  }
+
+  Future<Map> _getHome(String tmpCookie) async {
+    HttpManager httpManager = HttpManager.getInstance("https://e-hentai.org");
+    const url = "/home.php";
+
+    Options options = Options(headers: {
+      "Cookie": tmpCookie,
+    });
+
+    Response rult = await httpManager.getAll(url, options: options);
+
+    var setcookie = rult.headers['set-cookie'];
+
+    var cookieMap = _parseSetCookieString(setcookie);
+
+//    debugPrint('$cookieMap');
+
+    return cookieMap;
   }
 
   /// 处理SetCookie 转为map
@@ -65,12 +84,11 @@ class EhUserManager {
     var cookie = {};
     RegExp regExp = new RegExp(r"^([^;=]+)=([^;]+);");
     setCookieStrings.forEach((setCookieString) {
+//      debugPrint(setCookieString);
       var found = regExp.firstMatch(setCookieString);
-//      debugPrint('${found.group(1)}   ${found.group(2)}');
       cookie[found.group(1)] = found.group(2);
     });
 
-//    debugPrint('in   $cookie');
     return cookie;
   }
 
