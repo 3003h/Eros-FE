@@ -4,7 +4,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_easyrefresh/easy_refresh.dart';
 
-import 'gallery_item.dart';
+import 'item/gallery_item.dart';
 
 class GalleryListTab extends StatefulWidget {
   @override
