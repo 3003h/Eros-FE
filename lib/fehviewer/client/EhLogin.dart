@@ -1,13 +1,18 @@
 import 'package:FEhViewer/common/global.dart';
 import 'package:FEhViewer/http/dio_util.dart';
+import 'package:FEhViewer/models/user.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/cupertino.dart';
 
-import '../../models/user.dart';
-import '../../models/profile.dart';
-
 class EhUserManager {
-  static Future<dynamic> signIn(String username, String passwd) async {
+  static EhUserManager _instance = EhUserManager._();
+
+  factory EhUserManager() => _instance;
+
+  EhUserManager._();
+
+  Future<User> signIn(String username, String passwd) async {
+    User user;
     HttpManager httpManager =
         HttpManager.getInstance("https://forums.e-hentai.org");
     const url = "/index.php?act=Login&CODE=01";
@@ -31,7 +36,7 @@ class EhUserManager {
 
     var setcookie = rult.headers['set-cookie'];
 
-    var cookieMap = parseSetCookieString(setcookie);
+    var cookieMap = _parseSetCookieString(setcookie);
 
     var cookie = {
       "ipb_member_id": cookieMap["ipb_member_id"],
@@ -39,17 +44,23 @@ class EhUserManager {
       "yay": "louder"
     };
 
-    var cookieStr = getCookieStringFromMap(cookie);
+    var cookieStr = _getCookieStringFromMap(cookie);
     debugPrint(cookieStr);
 
-    Global.profile.token = cookieStr;
-    Global.profile.user.username = username;
+    Map userMap = {"username": username, "cookie": cookieStr};
 
-    return rult;
+    Global.profile.token = cookieStr;
+    debugPrint('$userMap');
+    debugPrint('${Global.profile.token}');
+
+    user = User(username: username, cookie: cookieStr);
+    debugPrint('$user');
+
+    return user;
   }
 
   /// 处理SetCookie 转为map
-  static parseSetCookieString(List setCookieStrings) {
+  _parseSetCookieString(List setCookieStrings) {
     var cookie = {};
     RegExp regExp = new RegExp(r"^([^;=]+)=([^;]+);");
     setCookieStrings.forEach((setCookieString) {
@@ -62,7 +73,7 @@ class EhUserManager {
     return cookie;
   }
 
-  static getCookieStringFromMap(Map cookie) {
+  _getCookieStringFromMap(Map cookie) {
     var texts = [];
     cookie.forEach((key, value) {
       texts.add('$key=$value');
