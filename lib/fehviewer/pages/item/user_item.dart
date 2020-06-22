@@ -4,6 +4,7 @@ import 'package:FEhViewer/fehviewer/route/routes.dart';
 import 'package:FEhViewer/models/states/userModel.dart';
 import 'package:FEhViewer/models/user.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 class UserItem extends StatefulWidget {
@@ -15,13 +16,41 @@ class _UserItem extends State<UserItem> {
   final _normalText = "未登录";
   Color _color;
 
+  Future<void> _logOut(BuildContext context) async {
+    return showCupertinoDialog<void>(
+      context: context,
+      barrierDismissible: false, // user must tap button!
+      builder: (BuildContext context) {
+        return CupertinoAlertDialog(
+          title: Text('注销用户'),
+          content: Text('确定注销?'),
+          actions: <Widget>[
+            CupertinoDialogAction(
+              child: Text('取消'),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+            CupertinoDialogAction(
+              child: Text('确定'),
+              onPressed: () {
+                User user = User();
+                Provider.of<UserModel>(context, listen: false).user = user;
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     void _tapItem() {
       if (Global.profile.user?.username != null) {
         debugPrint(Global.profile.user.username);
-        User user = User();
-        Provider.of<UserModel>(context, listen: false).user = user;
+        _logOut(context);
       } else {
         NavigatorUtil.jump(context, EHRoutes.login);
       }
