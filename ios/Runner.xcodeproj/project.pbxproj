@@ -90,6 +90,7 @@
 				8E17D831CCF214C421795E99 /* Frameworks */,
 			);
 			sourceTree = "<group>";
+			wrapsLines = 0;
 		};
 		97C146EF1CF9000F007C117D /* Products */ = {
 			isa = PBXGroup;

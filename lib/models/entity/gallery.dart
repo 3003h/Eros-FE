@@ -4,9 +4,9 @@ class GalleryItemBean {
 
   String url;
   String imgUrl;
-  String imgUrl_l;
-  String japanese_title;
-  String english_title;
+  String imgUrlL;
+  String japaneseTitle;
+  String englishTitle;
 
   // 类型
   String category;
@@ -24,9 +24,9 @@ class GalleryItemBean {
       this.token,
       this.url,
       this.imgUrl,
-      this.imgUrl_l,
-      this.japanese_title,
-      this.english_title,
+      this.imgUrlL,
+      this.japaneseTitle,
+      this.englishTitle,
       this.category,
       this.uploader,
       this.posted,
@@ -39,6 +39,6 @@ class GalleryItemBean {
 
   @override
   String toString() {
-    return 'GalleryItemBean{gid: $gid, token: $token, url: $url, imgUrl: $imgUrl, imgUrl_l: $imgUrl_l, japanese_title: $japanese_title, english_title: $english_title, category: $category, uploader: $uploader, posted: $posted, language: $language, filecount: $filecount, rating: $rating, numberOfReviews: $numberOfReviews, postTime: $postTime, simpleTags: $simpleTags}';
+    return 'GalleryItemBean{gid: $gid, token: $token, url: $url, imgUrl: $imgUrl, imgUrl_l: $imgUrlL, japanese_title: $japaneseTitle, english_title: $englishTitle, category: $category, uploader: $uploader, posted: $posted, language: $language, filecount: $filecount, rating: $rating, numberOfReviews: $numberOfReviews, postTime: $postTime, simpleTags: $simpleTags}';
   }
 }

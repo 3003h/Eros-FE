@@ -1,4 +1,4 @@
-import 'package:FEhViewer/fehviewer/client/parser/GalleryListParser.dart';
+import 'package:FEhViewer/fehviewer/client/parser/gallery_list_parser.dart';
 import 'package:FEhViewer/models/entity/gallery.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';

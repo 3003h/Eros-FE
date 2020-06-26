@@ -1,6 +1,6 @@
-import 'package:FEhViewer/fehviewer/client/EhLogin.dart';
+import 'package:FEhViewer/fehviewer/client/eh_login.dart';
 import 'package:FEhViewer/fehviewer/route/navigator_util.dart';
-import 'package:FEhViewer/models/states/userModel.dart';
+import 'package:FEhViewer/models/states/user_model.dart';
 import 'package:FEhViewer/models/user.dart';
 import 'package:FEhViewer/utils/toast.dart';
 import 'package:FEhViewer/values/const.dart';
@@ -15,8 +15,6 @@ class LoginPage extends StatefulWidget {
 
 class _LoginPage extends State<LoginPage> {
   FocusNode _nodePwd = FocusNode();
-  String _userName;
-  String _passwd;
 
   //账号的控制器
   TextEditingController _usernameController = TextEditingController();
@@ -39,7 +37,7 @@ class _LoginPage extends State<LoginPage> {
                   height: 38,
                   child: CupertinoTextField(
                     controller: _usernameController,
-                    placeholder: '请输入账号',
+                    placeholder: "请输入账号",
                     prefix: Container(width: 50, child: Text('账号')),
                     decoration: null,
                     // autofocus 自动获得焦点
@@ -91,6 +89,7 @@ class _LoginPage extends State<LoginPage> {
         ));
   }
 
+  /// 用户登录
   void _login() async {
     print({
       'username': _usernameController.text,

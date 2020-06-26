@@ -12,11 +12,12 @@ import 'package:html/parser.dart';
 import 'package:html_unescape/html_unescape.dart';
 
 import '../../../utils/utility.dart';
-import '../EhTagDatabase.dart';
+import '../tag_database.dart';
 
 class GalleryListParser {
   /// 获取热门画廊列表
   static Future<List<GalleryItemBean>> getPopular() async {
+    Global.logger.w("获取热门");
     HttpManager httpManager = HttpManager.getInstance("https://e-hentai.org");
     const url = "/popular";
 
@@ -68,11 +69,11 @@ class GalleryListParser {
 
     var url = "/favorites.php";
     if (favcat != null && favcat != "a") {
-      url = "${url}?favcat=$favcat";
+      url = "$url?favcat=$favcat";
     }
 
     if (_order != null) {
-      url = "${url}?inline_set=$_order";
+      url = "$url?inline_set=$_order";
     }
     debugPrint('$url');
 
@@ -137,8 +138,8 @@ class GalleryListParser {
     for (int i = 0; i < galleryItems.length; i++) {
 //      print('${galleryItems[i].simpleTags}    ${rultList[i]['tags']}');
 
-      galleryItems[i].english_title = unescape.convert(rultList[i]['title']);
-      galleryItems[i].japanese_title =
+      galleryItems[i].englishTitle = unescape.convert(rultList[i]['title']);
+      galleryItems[i].japaneseTitle =
           unescape.convert(rultList[i]['title_jpn']);
       galleryItems[i].rating = double.parse(rultList[i]['rating']);
 //      galleryItems[i].imgUrl = rultList[i]['thumb'];
@@ -206,9 +207,9 @@ class GalleryListParser {
       }
 
       final img = tr.querySelector('td.gl2c > div > div > img');
-      final img_data_src = img.attributes['data-src'];
-      final img_src = img.attributes['src'];
-      final imgUrl = img_data_src ?? img_src ?? '';
+      final imgDataSrc = img.attributes['data-src'];
+      final imgSrc = img.attributes['src'];
+      final imgUrl = imgDataSrc ?? imgSrc ?? '';
 
       // old
       final postTime =
@@ -219,7 +220,7 @@ class GalleryListParser {
       GalleryItemBean galleryItemBean = new GalleryItemBean(
         gid: gid,
         token: token,
-        english_title: title,
+        englishTitle: title,
         imgUrl: imgUrl ?? '',
         url: url,
         category: category,
@@ -232,7 +233,9 @@ class GalleryListParser {
     }
 
     // 通过api请求获取更多信息
-    gallaryItems.length > 0 ? await getMoreGalleryInfo(gallaryItems) : null;
+    if (gallaryItems.length > 0) {
+      getMoreGalleryInfo(gallaryItems);
+    }
 
     return gallaryItems;
   }
