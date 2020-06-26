@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:FEhViewer/client/tag_database.dart';
+import 'package:FEhViewer/models/index.dart';
 import 'package:FEhViewer/models/profile.dart';
 import 'package:FEhViewer/utils/storage.dart';
 import 'package:FEhViewer/route/routes.dart';
@@ -58,17 +59,13 @@ class Global {
       }
     }
 
-//    try {
-//      List<DisplayMode> modes = await FlutterDisplayMode.supported;
-//      modes.forEach(print);
-//    } on PlatformException catch (e) {
-//      print(e);
-//    }
-
-    /// 测试
-//    var database = await DataBaseUtil.getDataBase();
-//    var count = await database.rawDelete('DELETE FROM tag_translat ');
-//    debugPrint('$count');
+    if (profile.ehConfig == null) {
+      EhConfig ehConfig = new EhConfig();
+      ehConfig.tagTranslat = false;
+      ehConfig.jpnTitle = false;
+      profile.ehConfig = ehConfig;
+      saveProfile();
+    }
 
     // 路由
     Router router = Router();
@@ -76,13 +73,17 @@ class Global {
     Application.router = router;
 
     // 开启tag翻译
-    StorageUtil().setBool(ENABLE_TAG_TRANSLAT, true);
+    // StorageUtil().setBool(ENABLE_TAG_TRANSLAT, true);
 
     // 日语标题
-    StorageUtil().setBool(ENABLE_JPN_TITLE, true);
+    // StorageUtil().setBool(ENABLE_JPN_TITLE, true);
 
     // 封面blur
     StorageUtil().setBool(ENABLE_IMG_BLUR, false);
+
+    // Global.profile.ehConfig.tagTranslat = true;
+    // Global.profile.ehConfig.jpnTitle = true;
+    // saveProfile();
 
     // 读取设备第一次打开
     isFirstOpen = !StorageUtil().getBool(STORAGE_DEVICE_ALREADY_OPEN_KEY);
@@ -92,5 +93,8 @@ class Global {
   }
 
   // 持久化Profile信息
-  static saveProfile() => StorageUtil().setJSON(PROFILE, profile);
+  static saveProfile() {
+    // logger.v(profile.toJson());
+    return StorageUtil().setJSON(PROFILE, profile);
+  }
 }

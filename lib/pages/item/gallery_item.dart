@@ -1,3 +1,4 @@
+import 'package:FEhViewer/common/global.dart';
 import 'package:FEhViewer/models/entity/gallery.dart';
 import 'package:FEhViewer/utils/storage.dart';
 import 'package:FEhViewer/values/storages.dart';
@@ -31,7 +32,7 @@ class _GalleryItemWidgetState extends State<GalleryItemWidget> {
     String _getTitle() {
       var _titleEn = widget?.galleryItemBean?.englishTitle ?? '';
       var _titleJpn = widget?.galleryItemBean?.japaneseTitle ?? '';
-      var _enaJpn = StorageUtil().getBool(ENABLE_JPN_TITLE);
+      var _enaJpn = Global.profile.ehConfig.jpnTitle;
 
       // 日语标题判断
       var _title = _enaJpn && _titleJpn != null && _titleJpn.isNotEmpty
