@@ -31,7 +31,6 @@ class HttpManager {
         receiveTimeout: receiveTimeout,
         //设置请求头
         headers: {
-//           "resource":"android"
           "User-Agent": EHConst.CHROME_USER_AGENT,
           "Accept": EHConst.CHROME_ACCEPT,
           "Accept-Language": EHConst.CHROME_ACCEPT_LANGUAGE,

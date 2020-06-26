@@ -17,7 +17,7 @@ import '../tag_database.dart';
 class GalleryListParser {
   /// 获取热门画廊列表
   static Future<List<GalleryItemBean>> getPopular() async {
-    Global.logger.w("获取热门");
+    Global.logger.v("获取热门");
     HttpManager httpManager = HttpManager.getInstance("https://e-hentai.org");
     const url = "/popular";
 
@@ -196,7 +196,8 @@ class GalleryListParser {
 
       // tags
       // todo 是否翻译tag
-      final bool _enableTagTran = StorageUtil().getBool(ENABLE_TAG_TRANSLAT);
+      // final bool _enableTagTran = StorageUtil().getBool(ENABLE_TAG_TRANSLAT);
+      final bool _enableTagTran = Global.profile.ehConfig.tagTranslat;
       final List<String> simpleTags = [];
       List tags = tr.querySelectorAll('div.gt');
       for (var tag in tags) {
