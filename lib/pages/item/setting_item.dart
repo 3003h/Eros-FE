@@ -1,4 +1,4 @@
-import 'package:FEhViewer/fehviewer/route/navigator_util.dart';
+import 'package:FEhViewer/route/navigator_util.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 

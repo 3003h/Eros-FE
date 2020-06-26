@@ -1,10 +1,10 @@
 import 'dart:convert';
 
-import 'package:FEhViewer/fehviewer/client/tag_database.dart';
+import 'package:FEhViewer/client/tag_database.dart';
 import 'package:FEhViewer/models/profile.dart';
 import 'package:FEhViewer/utils/storage.dart';
-import 'package:FEhViewer/fehviewer/route/routes.dart';
-import 'package:FEhViewer/fehviewer/route/application.dart';
+import 'package:FEhViewer/route/routes.dart';
+import 'package:FEhViewer/route/application.dart';
 import 'package:FEhViewer/values/storages.dart';
 import 'package:fluro/fluro.dart';
 import 'package:flutter/material.dart';
