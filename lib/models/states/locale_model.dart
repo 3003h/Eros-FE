@@ -1,6 +1,6 @@
 import 'dart:ui';
 
-import 'profileChangeNotifier.dart';
+import 'base.dart';
 
 class LocaleModel extends ProfileChangeNotifier {
   // 获取当前用户的APP语言配置Locale类，如果为null，则语言跟随系统语言

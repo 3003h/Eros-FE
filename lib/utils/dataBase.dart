@@ -1,5 +1,4 @@
-import 'package:FEhViewer/models/entity/tagTranslat.dart';
-import 'package:flutter/cupertino.dart';
+import 'package:FEhViewer/models/entity/tag_translat.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:path/path.dart';
 import 'dart:async';
@@ -18,7 +17,6 @@ class DataBaseUtil {
   factory DataBaseUtil() => _instance;
 
   DataBaseUtil._();
-
 
   Future<Database> _getDataBase() async {
     // 获取数据库文件的存储路径
@@ -107,5 +105,4 @@ class DataBaseUtil {
     var tr = await getTagTrans(key, namespace: namespace);
     return tr?.name;
   }
-
 }

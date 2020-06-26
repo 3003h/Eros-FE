@@ -29,14 +29,14 @@ class _GalleryItemWidgetState extends State<GalleryItemWidget> {
     var _isBlur = StorageUtil().getBool(ENABLE_IMG_BLUR);
 
     String _getTitle() {
-      var _title_en = widget?.galleryItemBean?.english_title ?? '';
-      var _title_jpn = widget?.galleryItemBean?.japanese_title ?? '';
-      var _ena_jpn = StorageUtil().getBool(ENABLE_JPN_TITLE);
+      var _titleEn = widget?.galleryItemBean?.englishTitle ?? '';
+      var _titleJpn = widget?.galleryItemBean?.japaneseTitle ?? '';
+      var _enaJpn = StorageUtil().getBool(ENABLE_JPN_TITLE);
 
       // 日语标题判断
-      var _title = _ena_jpn && _title_jpn != null && _title_jpn.isNotEmpty
-          ? _title_jpn
-          : _title_en;
+      var _title = _enaJpn && _titleJpn != null && _titleJpn.isNotEmpty
+          ? _titleJpn
+          : _titleEn;
 
       return _title;
     }

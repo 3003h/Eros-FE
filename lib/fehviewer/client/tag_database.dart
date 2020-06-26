@@ -1,6 +1,6 @@
 import 'dart:convert';
 import 'package:dio/dio.dart';
-import 'package:FEhViewer/models/entity/tagTranslat.dart';
+import 'package:FEhViewer/models/entity/tag_translat.dart';
 import 'package:FEhViewer/http/dio_util.dart';
 import 'package:FEhViewer/utils/dataBase.dart';
 import 'package:FEhViewer/utils/storage.dart';
@@ -54,7 +54,7 @@ class EhTagDatabase {
 
       Options options = Options(receiveTimeout: receiveTimeout);
 
-      dbJson = await httpDB.get(dbUrl,options: options);
+      dbJson = await httpDB.get(dbUrl, options: options);
       if (dbJson != null) {
         var dataAll = jsonDecode(dbJson.toString());
         var listDataP = dataAll["data"];

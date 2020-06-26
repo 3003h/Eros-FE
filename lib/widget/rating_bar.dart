@@ -105,10 +105,10 @@ Path createStarPath(double radius, double radiusRatio, Path path) {
   double radian = degree2Radian(36);
 
   // 正五角星情况下 中间五边形的半径
-  double radius_in_def = radius * Math.sin(radian / 2) / Math.cos(radian);
+  double radiusInDef = radius * Math.sin(radian / 2) / Math.cos(radian);
 
   // 实际中间五边形的半径,太正不是很好看，扩大一点点
-  double radius_in = radius_in_def * radiusRatio;
+  double radiusIn = radiusInDef * radiusRatio;
 //  debugPrint('radius_in $radius_in');
 
   // 计算外部五边形5个顶点坐标
@@ -130,20 +130,15 @@ Path createStarPath(double radius, double radiusRatio, Path path) {
 
 //  radius_in = 10.0;
   // 计算内部五边形5个顶点坐标
-  _Point _pointAi = _Point(
-      _pointO.px + radius_in * Math.sin(radian),
-      _pointO.py - radius_in * Math.cos(radian));
-  _Point _pointBi = _Point(
-      _pointO.px + radius_in * Math.cos(radian/2),
-      _pointO.py + radius_in * Math.sin(radian/2));
-  _Point _pointCi =
-      _Point(_pointO.px, _pointO.py + radius_in);
-  _Point _pointDi = _Point(
-      _pointO.px - radius_in * Math.cos(radian/2),
-      _pointO.py + radius_in * Math.sin(radian/2));
-  _Point _pointEi = _Point(
-      _pointO.px - radius_in * Math.sin(radian),
-      _pointO.py - radius_in * Math.cos(radian));
+  _Point _pointAi = _Point(_pointO.px + radiusIn * Math.sin(radian),
+      _pointO.py - radiusIn * Math.cos(radian));
+  _Point _pointBi = _Point(_pointO.px + radiusIn * Math.cos(radian / 2),
+      _pointO.py + radiusIn * Math.sin(radian / 2));
+  _Point _pointCi = _Point(_pointO.px, _pointO.py + radiusIn);
+  _Point _pointDi = _Point(_pointO.px - radiusIn * Math.cos(radian / 2),
+      _pointO.py + radiusIn * Math.sin(radian / 2));
+  _Point _pointEi = _Point(_pointO.px - radiusIn * Math.sin(radian),
+      _pointO.py - radiusIn * Math.cos(radian));
 
   // 绘制
   path.moveTo(_pointA.px, _pointA.py);

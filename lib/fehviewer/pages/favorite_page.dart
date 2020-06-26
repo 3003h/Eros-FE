@@ -1,4 +1,4 @@
-import 'package:FEhViewer/fehviewer/client/parser/GalleryListParser.dart';
+import 'package:FEhViewer/fehviewer/client/parser/gallery_list_parser.dart';
 import 'package:FEhViewer/fehviewer/route/navigator_util.dart';
 import 'package:FEhViewer/fehviewer/route/routes.dart';
 import 'package:FEhViewer/models/entity/favorite.dart';
@@ -122,7 +122,6 @@ class SelFavorite extends StatefulWidget {
 /// 收藏夹选择页面 列表
 class _SelFavorite extends State<SelFavorite> {
   String _title = "收藏夹";
-  Color _color;
 
   final List<FavcatItemBean> favItemBeans = [];
 

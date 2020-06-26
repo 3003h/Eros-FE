@@ -5,9 +5,9 @@ import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 
 import 'common/global.dart';
-import 'fehviewer/route/Application.dart';
-import 'models/states/localeModel.dart';
-import 'models/states/userModel.dart';
+import 'fehviewer/route/application.dart';
+import 'models/states/locale_model.dart';
+import 'models/states/user_model.dart';
 
 void main() => Global.init().then((e) => runApp(MyApp()));
 

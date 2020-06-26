@@ -1,20 +1,34 @@
 import 'dart:convert';
 
-import 'package:FEhViewer/fehviewer/client/EhTagDatabase.dart';
+import 'package:FEhViewer/fehviewer/client/tag_database.dart';
 import 'package:FEhViewer/models/profile.dart';
 import 'package:FEhViewer/utils/storage.dart';
 import 'package:FEhViewer/fehviewer/route/routes.dart';
-import 'package:FEhViewer/fehviewer/route/Application.dart';
+import 'package:FEhViewer/fehviewer/route/application.dart';
 import 'package:FEhViewer/values/storages.dart';
 import 'package:fluro/fluro.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:logger/logger.dart';
 
 // 全局配置
 class Global {
   // 是否第一次打开
   static bool isFirstOpen = false;
   static Profile profile = Profile();
+
+  static final logger = Logger(
+    printer: PrettyPrinter(
+      lineLength: 115,
+    ),
+  );
+
+  static final loggerNoStack = Logger(
+    printer: PrettyPrinter(
+      lineLength: 115,
+      methodCount: 0,
+    ),
+  );
 
   // init
   static Future init() async {
@@ -23,7 +37,7 @@ class Global {
 
     //statusBar设置为透明，去除半透明遮罩
     final SystemUiOverlayStyle _style =
-    SystemUiOverlayStyle(statusBarColor: Colors.transparent);
+        SystemUiOverlayStyle(statusBarColor: Colors.transparent);
     SystemChrome.setSystemUIOverlayStyle(_style);
 
     // 工具初始
@@ -56,7 +70,6 @@ class Global {
 //    var count = await database.rawDelete('DELETE FROM tag_translat ');
 //    debugPrint('$count');
 
-
     // 路由
     Router router = Router();
     EHRoutes.configureRoutes(router);
@@ -78,8 +91,6 @@ class Global {
     }
   }
 
-
   // 持久化Profile信息
   static saveProfile() => StorageUtil().setJSON(PROFILE, profile);
-
 }
