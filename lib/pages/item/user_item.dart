@@ -1,6 +1,6 @@
 import 'package:FEhViewer/common/global.dart';
-import 'package:FEhViewer/fehviewer/route/navigator_util.dart';
-import 'package:FEhViewer/fehviewer/route/routes.dart';
+import 'package:FEhViewer/route/navigator_util.dart';
+import 'package:FEhViewer/route/routes.dart';
 import 'package:FEhViewer/models/states/user_model.dart';
 import 'package:FEhViewer/models/user.dart';
 import 'package:flutter/cupertino.dart';

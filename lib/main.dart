@@ -1,11 +1,11 @@
-import 'package:FEhViewer/fehviewer/pages/splash_page.dart';
+import 'package:FEhViewer/pages/splash_page.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 
 import 'common/global.dart';
-import 'fehviewer/route/application.dart';
+import 'route/application.dart';
 import 'models/states/locale_model.dart';
 import 'models/states/user_model.dart';
 

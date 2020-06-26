@@ -1,4 +1,4 @@
-import 'package:FEhViewer/fehviewer/route/routes.dart';
+import 'package:FEhViewer/route/routes.dart';
 import 'package:FEhViewer/utils/icon.dart';
 import 'package:flutter/cupertino.dart';
 

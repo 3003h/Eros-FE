@@ -1,8 +1,8 @@
-import 'package:FEhViewer/fehviewer/client/parser/gallery_list_parser.dart';
-import 'package:FEhViewer/fehviewer/route/navigator_util.dart';
-import 'package:FEhViewer/fehviewer/route/routes.dart';
+import 'package:FEhViewer/client/parser/gallery_list_parser.dart';
 import 'package:FEhViewer/models/entity/favorite.dart';
 import 'package:FEhViewer/models/entity/gallery.dart';
+import 'package:FEhViewer/route/navigator_util.dart';
+import 'package:FEhViewer/route/routes.dart';
 import 'package:FEhViewer/utils/icon.dart';
 import 'package:FEhViewer/values/const.dart';
 import 'package:FEhViewer/values/theme_colors.dart';

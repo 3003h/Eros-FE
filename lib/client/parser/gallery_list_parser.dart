@@ -11,7 +11,7 @@ import 'package:html/dom.dart' as dom;
 import 'package:html/parser.dart';
 import 'package:html_unescape/html_unescape.dart';
 
-import '../../../utils/utility.dart';
+import '../../utils/utility.dart';
 import '../tag_database.dart';
 
 class GalleryListParser {

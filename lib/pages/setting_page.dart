@@ -1,5 +1,5 @@
-import 'package:FEhViewer/fehviewer/pages/item/setting_item.dart';
-import 'package:FEhViewer/fehviewer/pages/item/user_item.dart';
+import 'package:FEhViewer/pages/item/setting_item.dart';
+import 'package:FEhViewer/pages/item/user_item.dart';
 import 'package:FEhViewer/values/const.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
