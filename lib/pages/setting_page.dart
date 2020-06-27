@@ -37,6 +37,7 @@ class _SettingTab extends State<SettingTab> {
       slivers: <Widget>[
         CupertinoSliverNavigationBar(
           largeTitle: Text(_title),
+          transitionBetweenRoutes: false,
         ),
         SliverSafeArea(
             top: false,

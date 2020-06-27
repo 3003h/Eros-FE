@@ -1,4 +1,4 @@
-import 'package:FEhViewer/utils/fluro_convert_util.dart';
+import 'package:FEhViewer/common/global.dart';
 import 'package:FEhViewer/values/const.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -13,7 +13,7 @@ class WebLogin extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     /// 对 中文 进行解码
-    String _title = FluroConvertUtils.fluroCnParamsDecode(title);
+    // String _title = FluroConvertUtils.decodeRouteParam(title);
 
     final flutterWebviewPlugin = new FlutterWebviewPlugin();
 
@@ -27,25 +27,25 @@ class WebLogin extends StatelessWidget {
 
     flutterWebviewPlugin.onUrlChanged.listen((String url) {
       var _uri = Uri.parse(url);
-      debugPrint('url $_uri path ${_uri.path}  ${_uri.query}');
+      Global.logger.i('url $_uri path ${_uri.path}  ${_uri.query}');
 
       if (_uri.path == "/index.php" && _uri.query == '') {
-        debugPrint("登录成功");
+        Global.logger.i("登录成功");
         flutterWebviewPlugin.getCookies().then((Map<String, String> _cookies) {
-          debugPrint('$_cookies');
+          Global.logger.i('$_cookies');
         });
       }
     });
 
     CupertinoPageScaffold cpf = CupertinoPageScaffold(
         navigationBar: CupertinoNavigationBar(
-          middle: Text(_title),
+          middle: Text(title),
           trailing: CupertinoButton(
             padding: const EdgeInsets.all(0),
             child: Icon(CupertinoIcons.add_circled_solid),
             onPressed: () {
               flutterWebviewPlugin.getCookies().then((m) {
-                debugPrint('cookies: $m');
+                Global.logger.i('cookies: $m');
               });
             },
           ),

@@ -31,7 +31,7 @@ class EhUserManager {
     Response rult =
         await httpManager.postForm(url, data: formData, options: options);
 
-    // TODO 登录异常处理
+    // todo 登录异常处理
 
     var setcookie = rult.headers['set-cookie'];
 

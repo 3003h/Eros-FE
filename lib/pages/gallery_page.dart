@@ -65,6 +65,7 @@ class _GalleryListTab extends State<GalleryListTab> {
       slivers: <Widget>[
         CupertinoSliverNavigationBar(
           largeTitle: Text(_title),
+          transitionBetweenRoutes: false,
         ),
         SliverSafeArea(
           top: false,

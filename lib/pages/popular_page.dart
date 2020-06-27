@@ -48,6 +48,7 @@ class _PopularListTab extends State<PopularListTab> {
       slivers: <Widget>[
         CupertinoSliverNavigationBar(
           largeTitle: Text(_title),
+          transitionBetweenRoutes: false,
         ),
         SliverSafeArea(
           top: false,

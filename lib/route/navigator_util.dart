@@ -1,4 +1,4 @@
-import 'package:FEhViewer/utils/fluro_convert_util.dart';
+import 'package:FEhViewer/common/global.dart';
 
 import 'application.dart';
 import 'routes.dart';
@@ -31,10 +31,7 @@ class NavigatorUtil {
   /// 跳转到 转场动画 页面 ， 这边只展示 inFromLeft ，剩下的自己去尝试下，
   /// 框架自带的有 native，nativeModal，inFromLeft，inFromRight，inFromBottom，fadeIn，custom
   static Future jump(BuildContext context, String title) {
-    return Application.router
-        .navigateTo(context, title, transition: TransitionType.native);
-
-    /// 指定了 转场动画
+    return Application.router.navigateTo(context, title);
   }
 
   /// 框架自带的有 native，nativeModal，inFromLeft，inFromRight，inFromBottom，fadeIn，custom
@@ -76,8 +73,7 @@ class NavigatorUtil {
     /// 时间
   }
 
-  /// 使用 IOS 的 Cupertino 的转场动画，这个是修改了源码的 转场动画
-  /// Fluro本身不带，但是 Flutter自带
+  /// 使用 IOS 的 Cupertino 的转场动画
   static Future gotransitionCupertinoDemoPage(
       BuildContext context, String title) {
     return Application.router
@@ -115,9 +111,10 @@ class NavigatorUtil {
   // goBrowser
   static void goWebLogin(BuildContext context, String title, String url) {
     final encodeUrl = Uri.encodeComponent(url);
-    final cnTitle = FluroConvertUtils.fluroCnParamsEncode(title);
+    final encodeTitle = Uri.encodeComponent(title);
+    Global.logger.i('encodeTitle $encodeTitle');
     Application.router.navigateTo(
-        context, EHRoutes.webLogin + "?title=$cnTitle&url=$encodeUrl",
+        context, EHRoutes.webLogin + "?title=$encodeTitle&url=$encodeUrl",
         transition: TransitionType.native);
   }
 }

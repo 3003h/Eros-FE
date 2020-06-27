@@ -7,7 +7,6 @@ import 'package:FEhViewer/utils/dataBase.dart';
 import 'package:FEhViewer/utils/storage.dart';
 import 'package:FEhViewer/values/const.dart';
 import 'package:FEhViewer/values/storages.dart';
-import 'package:flutter/cupertino.dart';
 
 final int connectTimeout = 10000;
 final int receiveTimeout = 30000;
