@@ -80,13 +80,12 @@ class _CupertinoHomePage extends State<CupertinoHomePage> {
         items: getBottomNavigationBarItem(),
       ),
       tabBuilder: (context, index) {
-        return CupertinoTabView(
-          builder: (BuildContext context) {
-            return CupertinoPageScaffold(
-              child: _pages[index],
-            );
-          },
-        );
+        return _pages[index];
+        // return CupertinoTabView(
+        //   builder: (BuildContext context) {
+        //     return _pages[index];
+        //   },
+        // );
       },
     );
 

@@ -14,7 +14,7 @@ void main() => Global.init().then((e) => runApp(MyApp()));
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    CupertinoApp cApp = CupertinoApp(
+    CupertinoApp cupertinoApp = CupertinoApp(
       onGenerateRoute: Application.router.generator,
       theme: CupertinoThemeData(brightness: Brightness.light),
       home: SplashPage(),
@@ -26,7 +26,7 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider.value(value: LocaleModel()),
         ChangeNotifierProvider.value(value: EhConfigModel()),
       ],
-      child: cApp,
+      child: cupertinoApp,
     );
 
     return multiProvider;

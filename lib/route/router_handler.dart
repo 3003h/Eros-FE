@@ -46,6 +46,6 @@ Handler webLoginHanderl = Handler(
     handlerFunc: (BuildContext context, Map<String, List<String>> params) {
   String title = params["title"]?.first;
   String url = params["url"]?.first;
-//  debugPrint('title $title   url $url');
+
   return WebLogin(title: title, url: url);
 });

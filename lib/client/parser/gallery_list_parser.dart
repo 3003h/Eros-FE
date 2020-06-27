@@ -4,14 +4,12 @@ import 'package:FEhViewer/client/tag_database.dart';
 import 'package:FEhViewer/common/global.dart';
 import 'package:FEhViewer/http/dio_util.dart';
 import 'package:FEhViewer/models/entity/gallery.dart';
-import 'package:FEhViewer/models/states/ehconfig_model.dart';
 import 'package:FEhViewer/utils/utility.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:html/dom.dart' as dom;
 import 'package:html/parser.dart';
 import 'package:html_unescape/html_unescape.dart';
-import 'package:provider/provider.dart';
 
 class GalleryListParser {
   /// 获取热门画廊列表

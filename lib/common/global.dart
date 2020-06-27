@@ -20,13 +20,13 @@ class Global {
 
   static final logger = Logger(
     printer: PrettyPrinter(
-      lineLength: 115,
+      lineLength: 100,
     ),
   );
 
   static final loggerNoStack = Logger(
     printer: PrettyPrinter(
-      lineLength: 115,
+      lineLength: 100,
       methodCount: 0,
     ),
   );
@@ -71,12 +71,6 @@ class Global {
     Router router = Router();
     EHRoutes.configureRoutes(router);
     Application.router = router;
-
-    // 开启tag翻译
-    // StorageUtil().setBool(ENABLE_TAG_TRANSLAT, true);
-
-    // 日语标题
-    // StorageUtil().setBool(ENABLE_JPN_TITLE, true);
 
     // 封面blur
     StorageUtil().setBool(ENABLE_IMG_BLUR, false);

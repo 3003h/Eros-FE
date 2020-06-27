@@ -64,6 +64,7 @@ class _FavoriteTab extends State<FavoriteTab> {
       slivers: <Widget>[
         CupertinoSliverNavigationBar(
           largeTitle: Text(_title),
+          transitionBetweenRoutes: false,
           previousPageTitle: _title,
           trailing: CupertinoButton(
             padding: const EdgeInsets.all(0),
