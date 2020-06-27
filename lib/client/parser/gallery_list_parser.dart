@@ -1,16 +1,17 @@
 import 'dart:convert';
 
+import 'package:FEhViewer/client/tag_database.dart';
 import 'package:FEhViewer/common/global.dart';
 import 'package:FEhViewer/http/dio_util.dart';
 import 'package:FEhViewer/models/entity/gallery.dart';
+import 'package:FEhViewer/models/states/ehconfig_model.dart';
+import 'package:FEhViewer/utils/utility.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:html/dom.dart' as dom;
 import 'package:html/parser.dart';
 import 'package:html_unescape/html_unescape.dart';
-
-import '../../utils/utility.dart';
-import '../tag_database.dart';
+import 'package:provider/provider.dart';
 
 class GalleryListParser {
   /// 获取热门画廊列表
@@ -83,8 +84,6 @@ class GalleryListParser {
 
     var response = await httpManager.get(url, options: options);
 
-//    debugPrint(response.toString());
-
     List<GalleryItemBean> list =
         await parseGalleryList(response, isFavorite: true);
 
@@ -102,7 +101,7 @@ class GalleryListParser {
   }
 
   static void getMoreGalleryInfo(List<GalleryItemBean> galleryItems) async {
-    debugPrint('api qry items ${galleryItems.length}');
+    Global.logger.v('api qry items ${galleryItems.length}');
     if (galleryItems.length == 0) {
       return;
     }
@@ -129,13 +128,10 @@ class GalleryListParser {
       var tempList = jsonObj['gmetadata'];
       rultList.addAll(tempList);
     }
-//    debugPrint('${rultList}');
 
     var unescape = new HtmlUnescape();
 
     for (int i = 0; i < galleryItems.length; i++) {
-//      print('${galleryItems[i].simpleTags}    ${rultList[i]['tags']}');
-
       galleryItems[i].englishTitle = unescape.convert(rultList[i]['title']);
       galleryItems[i].japaneseTitle =
           unescape.convert(rultList[i]['title_jpn']);
@@ -159,12 +155,12 @@ class GalleryListParser {
 
     final fav =
         document.querySelector("body > div.ido > form > p")?.text?.trim() ?? "";
-    debugPrint("num  $fav");
+    Global.logger.v("fav num  $fav");
 
     // 画廊列表
     List<dom.Element> gallerys = document.querySelectorAll(select);
 
-    debugPrint("gallerys.len  ${gallerys.length}");
+    Global.logger.v("gallerys.len  ${gallerys.length}");
 
     List<GalleryItemBean> gallaryItems = [];
 
@@ -184,25 +180,28 @@ class GalleryListParser {
       final url =
           tr.querySelector('td.gl3c.glname > a')?.attributes['href'] ?? '';
 
-//      debugPrint(url);
       RegExp urlRex = new RegExp(r"/g/(\d+)/(\w+)/$");
       var urlRult = urlRex.firstMatch(url);
-//      debugPrint('gid ${urlRult.group(1)}  token ${urlRult.group(2)}');
 
       final gid = urlRult.group(1);
       final token = urlRult.group(2);
 
       // tags
-      // todo 是否翻译tag
-      // final bool _enableTagTran = StorageUtil().getBool(ENABLE_TAG_TRANSLAT);
-      final bool _enableTagTran = Global.profile.ehConfig.tagTranslat;
-      final List<String> simpleTags = [];
       List tags = tr.querySelectorAll('div.gt');
+
+      // 英文tag
+      final List<String> simpleTags = [];
       for (var tag in tags) {
         var tagText = tag.text.trim();
-        simpleTags.add(_enableTagTran
-            ? await EhTagDatabase.getTranTag(tagText) ?? tagText
-            : tagText);
+        simpleTags.add(tagText);
+      }
+
+      // 中文tag
+      final List<String> simpleTagsTranslate = [];
+      for (var tag in tags) {
+        var tagText = tag.text.trim();
+        simpleTagsTranslate
+            .add(await EhTagDatabase.getTranTag(tagText) ?? tagText);
       }
 
       final img = tr.querySelector('td.gl2c > div > div > img');
@@ -225,6 +224,7 @@ class GalleryListParser {
         category: category,
         simpleTags: simpleTags,
         postTime: postTime,
+        simpleTagsTranslat: simpleTagsTranslate,
       );
 
       gallaryItems.add(galleryItemBean);

@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:FEhViewer/common/global.dart';
 import 'package:dio/dio.dart';
 import 'package:FEhViewer/models/entity/tag_translat.dart';
 import 'package:FEhViewer/http/dio_util.dart';
@@ -23,10 +24,10 @@ class EhTagDatabase {
     // 获取发布时间 作为版本号
     var remoteVer = "";
     remoteVer = urlJson != null ? urlJson["published_at"] : '';
-    debugPrint(remoteVer);
+    Global.loggerNoStack.v("remoteVer $remoteVer");
 
     var localVer = StorageUtil().getString(TAG_TRANSLAT_VER);
-    debugPrint(localVer);
+    Global.loggerNoStack.v("localVer $localVer");
 
     // 测试
 //    localVer = 'aaaaaaa';
@@ -39,7 +40,7 @@ class EhTagDatabase {
         dbJson.isEmpty ||
         dbJson == "null" ||
         remoteVer != localVer) {
-      debugPrint("TagTranslat更新");
+      Global.loggerNoStack.v("TagTranslat更新");
       List assList = urlJson["assets"];
 
       Map assMap = new Map();
@@ -48,7 +49,7 @@ class EhTagDatabase {
       });
       var dbUrl = assMap["db.text.json"];
 
-      debugPrint(dbUrl);
+      Global.loggerNoStack.v(dbUrl);
 
       HttpManager httpDB = HttpManager.getInstance();
 
@@ -62,9 +63,9 @@ class EhTagDatabase {
 
         await tagSaveToDB(listDataP);
       }
-      debugPrint("tag翻译更新完成");
+      Global.loggerNoStack.v("tag翻译更新完成");
     } else {
-      debugPrint("tag为最新数据 不需更新");
+      Global.loggerNoStack.v("tag为最新数据 不需更新");
     }
 
     return remoteVer;
@@ -75,7 +76,7 @@ class EhTagDatabase {
     List<TagTranslat> tags = [];
 
     listDataP.forEach((objC) {
-      debugPrint('${objC['namespace']}  ${objC['count']}');
+      Global.loggerNoStack.v('${objC['namespace']}  ${objC['count']}');
       final _namespace = objC['namespace'];
       Map mapC = objC['data'];
       mapC.forEach((key, value) {
@@ -91,7 +92,7 @@ class EhTagDatabase {
 
     await DataBaseUtil().insertTagAll(tags);
 
-    debugPrint('tag中文翻译数量 ${tags.length}');
+    Global.loggerNoStack.v('tag中文翻译数量 ${tags.length}');
   }
 
   static Future<String> getTranTag(String tag) async {

@@ -1,3 +1,4 @@
+import 'package:FEhViewer/common/global.dart';
 import 'package:FEhViewer/route/navigator_util.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -77,7 +78,7 @@ class _SettingItems extends State<SettingItems> {
       // 不可见区域有效
       behavior: HitTestBehavior.opaque,
       onTap: () {
-        debugPrint("set tap ${widget.index}  ${widget.isLast}");
+        Global.loggerNoStack.v("set tap ${widget.index}  ${widget.isLast}");
         NavigatorUtil.jump(context, widget.route);
       },
       onTapDown: (_) => _updatePressedColor(),
