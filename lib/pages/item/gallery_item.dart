@@ -72,11 +72,10 @@ class _GalleryItemWidgetState extends State<GalleryItemWidget> {
             text ?? "",
             textAlign: TextAlign.center,
             style: TextStyle(
-              fontSize: 10,
-              fontWeight: FontWeight.w500,
-              color: Color(0xff666666),
-//              fontFamilyFallback: ['PingFang','NotoSansSC']
-            ),
+                fontSize: 10,
+                fontWeight: FontWeight.w500,
+                color: Color(0xff666666),
+                fontFamilyFallback: ['PingFang', 'NotoSansSC']),
           ),
         ),
       );
