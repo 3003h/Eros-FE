@@ -18,6 +18,7 @@ class GalleryItemBean {
   String numberOfReviews;
   String postTime;
   List<String> simpleTags;
+  List<String> simpleTagsTranslat;
 
   GalleryItemBean(
       {this.gid,
@@ -35,10 +36,11 @@ class GalleryItemBean {
       this.rating,
       this.numberOfReviews,
       this.postTime,
-      this.simpleTags});
+      this.simpleTags,
+      this.simpleTagsTranslat});
 
   @override
   String toString() {
-    return 'GalleryItemBean{gid: $gid, token: $token, url: $url, imgUrl: $imgUrl, imgUrl_l: $imgUrlL, japanese_title: $japaneseTitle, english_title: $englishTitle, category: $category, uploader: $uploader, posted: $posted, language: $language, filecount: $filecount, rating: $rating, numberOfReviews: $numberOfReviews, postTime: $postTime, simpleTags: $simpleTags}';
+    return 'GalleryItemBean{gid: $gid, token: $token, url: $url, imgUrl: $imgUrl, imgUrlL: $imgUrlL, japaneseTitle: $japaneseTitle, englishTitle: $englishTitle, category: $category, uploader: $uploader, posted: $posted, language: $language, filecount: $filecount, rating: $rating, numberOfReviews: $numberOfReviews, postTime: $postTime, simpleTags: $simpleTags, simpleTagsTranslat: $simpleTagsTranslat}';
   }
 }

@@ -1,5 +1,6 @@
 import 'package:FEhViewer/common/global.dart';
 import 'package:FEhViewer/models/entity/gallery.dart';
+import 'package:FEhViewer/models/states/ehconfig_model.dart';
 import 'package:FEhViewer/utils/storage.dart';
 import 'package:FEhViewer/values/storages.dart';
 import 'package:FEhViewer/values/theme_colors.dart';
@@ -8,6 +9,7 @@ import 'package:FEhViewer/widget/rating_bar.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class GalleryItemWidget extends StatefulWidget {
   final int index;
@@ -22,6 +24,8 @@ class GalleryItemWidget extends StatefulWidget {
 class _GalleryItemWidgetState extends State<GalleryItemWidget> {
   Color _colorTap; // 按下时颜色反馈
   double _padL;
+  String _title;
+  List<String> _simpleTags = [];
 
   @override
   Widget build(BuildContext context) {
@@ -29,17 +33,86 @@ class _GalleryItemWidgetState extends State<GalleryItemWidget> {
 
     var _isBlur = StorageUtil().getBool(ENABLE_IMG_BLUR);
 
-    String _getTitle() {
+    String _getTitle(bool isJpnTitle) {
       var _titleEn = widget?.galleryItemBean?.englishTitle ?? '';
       var _titleJpn = widget?.galleryItemBean?.japaneseTitle ?? '';
-      var _enaJpn = Global.profile.ehConfig.jpnTitle;
 
       // 日语标题判断
-      var _title = _enaJpn && _titleJpn != null && _titleJpn.isNotEmpty
+      var _title = isJpnTitle && _titleJpn != null && _titleJpn.isNotEmpty
           ? _titleJpn
           : _titleEn;
 
       return _title;
+    }
+
+    Widget _buildTitle() {
+      return Consumer<EhConfigModel>(
+        builder: (BuildContext context, EhConfigModel value, Widget child) {
+          _title = _getTitle(value.isJpnTitle);
+          return Text(
+            _title,
+            maxLines: 3,
+            textAlign: TextAlign.left, // 对齐方式
+            overflow: TextOverflow.ellipsis, // 超出部分省略号
+            style: TextStyle(fontSize: 13, fontWeight: FontWeight.bold),
+          );
+        },
+      );
+    }
+
+    // 标签 Item
+    Widget _tagItem(String text) {
+      ClipRRect clipRRect = ClipRRect(
+        borderRadius: BorderRadius.circular(4),
+        child: Container(
+          height: 18,
+          padding: const EdgeInsets.fromLTRB(4, 2, 4, 2),
+          color: Color(0xffeeeeee),
+          child: Text(
+            text ?? "",
+            textAlign: TextAlign.center,
+            style: TextStyle(
+              fontSize: 10,
+              fontWeight: FontWeight.w500,
+              color: Color(0xff666666),
+//              fontFamilyFallback: ['PingFang','NotoSansSC']
+            ),
+          ),
+        ),
+      );
+
+      return Container(
+//      padding: EdgeInsets.all(4),
+        child: clipRRect,
+      );
+    }
+
+    List<Widget> _buildTagItems() {
+      List<Widget> tags = [];
+
+      _simpleTags.forEach((tagText) {
+        tags.add(_tagItem(tagText));
+      });
+
+      return tags;
+    }
+
+    Widget _buildTagBox() {
+      return Consumer<EhConfigModel>(
+        builder: (BuildContext context, EhConfigModel value, Widget child) {
+          _simpleTags = value.isTagTranslat
+              ? widget.galleryItemBean.simpleTagsTranslat
+              : widget.galleryItemBean.simpleTags;
+          return Container(
+            padding: const EdgeInsets.fromLTRB(0, 0, 0, 8),
+            child: Wrap(
+              spacing: 4, //主轴上子控件的间距
+              runSpacing: 4, //交叉轴上子控件之间的间距
+              children: _buildTagItems(), //要显示的子控件集合
+            ),
+          );
+        },
+      );
     }
 
     Color _colorCategory =
@@ -94,13 +167,7 @@ class _GalleryItemWidgetState extends State<GalleryItemWidget> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
                   // 标题
-                  Text(
-                    _getTitle(),
-                    maxLines: 3,
-                    textAlign: TextAlign.left, // 对齐方式
-                    overflow: TextOverflow.ellipsis, // 超出部分省略号
-                    style: TextStyle(fontSize: 13, fontWeight: FontWeight.bold),
-                  ),
+                  _buildTitle(),
                   // 上传者
                   Text(
                     widget?.galleryItemBean?.uploader ?? '',
@@ -109,18 +176,8 @@ class _GalleryItemWidgetState extends State<GalleryItemWidget> {
                   ),
 
                   // 标签
-                  Container(
-                    padding: const EdgeInsets.fromLTRB(0, 0, 0, 8),
-                    child: Wrap(
-                      spacing: 4, //主轴上子控件的间距
-                      runSpacing: 4, //交叉轴上子控件之间的间距
-                      children:
-                          _getTagItems(widget.galleryItemBean), //要显示的子控件集合
-                    ),
-                  ),
-
+                  _buildTagBox(),
 //                  Expanded(child: Container(),),
-
                   // 评分和页数
                   Row(
                     crossAxisAlignment: CrossAxisAlignment.end,
@@ -224,7 +281,7 @@ class _GalleryItemWidgetState extends State<GalleryItemWidget> {
       // 不可见区域点击有效
       behavior: HitTestBehavior.opaque,
       onTap: () {
-        debugPrint("title: ${_getTitle()}");
+        Global.logger.v("title: $_title \n tags: $_simpleTags");
         // 返回 并带上参数
 //        NavigatorUtil.goBackWithParams(context, widget.galleryItemBean);
       },
@@ -257,43 +314,5 @@ class _GalleryItemWidgetState extends State<GalleryItemWidget> {
       indent: _padL,
       color: CupertinoColors.systemGrey4,
     );
-  }
-
-  // tag Item
-  Widget _tagItem(String text) {
-    ClipRRect clipRRect = ClipRRect(
-      borderRadius: BorderRadius.circular(4),
-      child: Container(
-        height: 18,
-        padding: const EdgeInsets.fromLTRB(4, 2, 4, 2),
-        color: Color(0xffeeeeee),
-        child: Text(
-          text ?? "",
-          textAlign: TextAlign.center,
-          style: TextStyle(
-            fontSize: 10,
-            fontWeight: FontWeight.w500,
-            color: Color(0xff666666),
-//              fontFamilyFallback: ['PingFang','NotoSansSC']
-          ),
-        ),
-      ),
-    );
-
-    return Container(
-//      padding: EdgeInsets.all(4),
-      child: clipRRect,
-    );
-  }
-
-  List<Widget> _getTagItems(GalleryItemBean galleryItemBean) {
-    List<Widget> tags = [];
-    if (galleryItemBean.simpleTags != null) {
-      galleryItemBean.simpleTags.forEach((tagText) {
-        tags.add(_tagItem(tagText));
-      });
-    }
-
-    return tags;
   }
 }
