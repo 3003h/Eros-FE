@@ -3,8 +3,6 @@ import 'dart:convert';
 import 'package:FEhViewer/common/global.dart';
 import 'package:FEhViewer/http/dio_util.dart';
 import 'package:FEhViewer/models/entity/gallery.dart';
-import 'package:FEhViewer/utils/storage.dart';
-import 'package:FEhViewer/values/storages.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:html/dom.dart' as dom;
