@@ -65,6 +65,8 @@ dependencies:
 
   logger: ^0.9.1
 
+  widget_chain: ^0.1.0
+
 dev_dependencies:
   build_runner: ^1.0.0
   json_serializable: ^2.0.0

@@ -1,6 +1,9 @@
 import 'package:FEhViewer/common/global.dart';
+import 'package:FEhViewer/models/states/ehconfig_model.dart';
+import 'package:FEhViewer/pages/setting/settting_text_switch_item.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class EhSettingPage extends StatefulWidget {
   @override
@@ -38,16 +41,15 @@ class _ListViewEhSetting extends State<ListViewEhSetting> {
   void _handleJpnTitleChanged(bool newValue) {
     setState(() {
       _jpnTitle = newValue;
-      Global.profile.ehConfig.jpnTitle = _jpnTitle;
-      Global.saveProfile();
+      Provider.of<EhConfigModel>(context, listen: false).jpnTitle = _jpnTitle;
     });
   }
 
   void _handleTagTranslatChanged(bool newValue) {
     setState(() {
       _tagTranslat = newValue;
-      Global.profile.ehConfig.tagTranslat = _tagTranslat;
-      Global.saveProfile();
+      Provider.of<EhConfigModel>(context, listen: false).tagTranslat =
+          _tagTranslat;
     });
   }
 
@@ -59,12 +61,12 @@ class _ListViewEhSetting extends State<ListViewEhSetting> {
         switch (index) {
           case (0):
             return TextSwitchItem('显示标签中文翻译',
-                oriValue: _tagTranslat,
+                intValue: _tagTranslat,
                 onChanged: _handleTagTranslatChanged,
                 desc: '显示翻译后的标签（需要下载数据文件）');
           case (1):
             return TextSwitchItem('显示日文标题',
-                oriValue: _jpnTitle,
+                intValue: _jpnTitle,
                 onChanged: _handleJpnTitleChanged,
                 desc: '如果该画廊有日文标题则优先显示');
           case (2):
@@ -78,78 +80,6 @@ class _ListViewEhSetting extends State<ListViewEhSetting> {
             return null;
         }
       },
-    );
-  }
-}
-
-class TextSwitchItem extends StatefulWidget {
-  final bool oriValue;
-  final ValueChanged<bool> onChanged;
-  final String title;
-  final String desc;
-  final String descOn;
-  TextSwitchItem(
-    this.title, {
-    this.oriValue,
-    this.onChanged,
-    this.desc,
-    this.descOn,
-    Key key,
-  }) : super(key: key);
-
-  @override
-  _TextSwitchItemState createState() => _TextSwitchItemState();
-}
-
-class _TextSwitchItemState extends State<TextSwitchItem> {
-  bool _switchValue;
-  String _desc = '';
-
-  void _handOnChanged() {
-    widget.onChanged(!widget.oriValue);
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    _switchValue = _switchValue ?? widget.oriValue ?? false;
-    _desc = _switchValue ? widget.descOn : widget.desc;
-    return Column(
-      children: <Widget>[
-        Container(
-          margin: const EdgeInsets.fromLTRB(20, 8, 20, 8),
-          child: Row(
-            children: <Widget>[
-              Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: <Widget>[
-                    Text(widget.title),
-                    Text(
-                      _desc ?? widget.desc,
-                      style: TextStyle(
-                          fontSize: 13, color: CupertinoColors.systemGrey),
-                    ),
-                  ]),
-              Expanded(
-                child: Container(),
-              ),
-              CupertinoSwitch(
-                onChanged: (bool value) {
-                  setState(() {
-                    _switchValue = value;
-                    _desc = value ? widget.descOn : widget.desc;
-                    _handOnChanged();
-                  });
-                },
-                value: _switchValue,
-              ),
-            ],
-          ),
-        ),
-        Container(
-          height: 0.5,
-          color: CupertinoColors.systemGrey4,
-        )
-      ],
     );
   }
 }

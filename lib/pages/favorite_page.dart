@@ -156,7 +156,7 @@ class _SelFavorite extends State<SelFavorite> {
 }
 
 class ListViewFavorite extends StatelessWidget {
-  List<FavcatItemBean> favItemBeans = [];
+  final List<FavcatItemBean> favItemBeans;
 
   ListViewFavorite(this.favItemBeans);
 
