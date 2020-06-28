@@ -37,6 +37,7 @@ class ListViewEhSetting extends StatefulWidget {
 class _ListViewEhSetting extends State<ListViewEhSetting> {
   bool _jpnTitle = Global.profile.ehConfig.jpnTitle;
   bool _tagTranslat = Global.profile.ehConfig.tagTranslat;
+  bool _galleryImgBlur = Global.profile.ehConfig.galleryImgBlur;
 
   void _handleJpnTitleChanged(bool newValue) {
     setState(() {
@@ -53,31 +54,44 @@ class _ListViewEhSetting extends State<ListViewEhSetting> {
     });
   }
 
+  void _handleGalleryListImgBlurChanged(bool newValue) {
+    setState(() {
+      _galleryImgBlur = newValue;
+      Provider.of<EhConfigModel>(context, listen: false).galleryImgBlur =
+          _galleryImgBlur;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
+    List _items = [
+      TextSwitchItem('显示标签中文翻译',
+          intValue: _tagTranslat,
+          onChanged: _handleTagTranslatChanged,
+          desc: '显示翻译后的标签（需要下载数据文件）'),
+      TextSwitchItem('显示日文标题',
+          intValue: _jpnTitle,
+          onChanged: _handleJpnTitleChanged,
+          desc: '如果该画廊有日文标题则优先显示'),
+      TextSwitchItem('画廊封面模糊',
+          intValue: _galleryImgBlur,
+          onChanged: _handleGalleryListImgBlurChanged,
+          desc: '画廊列表封面模糊效果'),
+      TextSwitchItem(
+        '收藏夹排序方式',
+        onChanged: _handleJpnTitleChanged,
+        desc: '按更新时间排序',
+        descOn: '按收藏时间排序',
+      )
+    ];
+
     return ListView.builder(
       //列表项构造器
       itemBuilder: (BuildContext context, int index) {
-        switch (index) {
-          case (0):
-            return TextSwitchItem('显示标签中文翻译',
-                intValue: _tagTranslat,
-                onChanged: _handleTagTranslatChanged,
-                desc: '显示翻译后的标签（需要下载数据文件）');
-          case (1):
-            return TextSwitchItem('显示日文标题',
-                intValue: _jpnTitle,
-                onChanged: _handleJpnTitleChanged,
-                desc: '如果该画廊有日文标题则优先显示');
-          case (2):
-            return TextSwitchItem(
-              '收藏夹排序方式',
-              onChanged: _handleJpnTitleChanged,
-              desc: '按更新时间排序',
-              descOn: '按收藏时间排序',
-            );
-          default:
-            return null;
+        if (index < _items.length) {
+          return _items[index];
+        } else {
+          return null;
         }
       },
     );

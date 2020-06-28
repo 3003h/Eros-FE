@@ -24,7 +24,7 @@ class _TextSwitchItemState extends State<TextSwitchItem> {
   String _desc = '';
 
   void _handOnChanged() {
-    widget.onChanged(!widget.intValue);
+    widget.onChanged(_switchValue);
   }
 
   @override
