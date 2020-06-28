@@ -100,7 +100,7 @@ class GalleryListParser {
 
   static Future<List<GalleryItemBean>> getMoreGalleryInfo(
       List<GalleryItemBean> galleryItems) async {
-    Global.logger.v('api qry items ${galleryItems.length}');
+    Global.logger.i('api qry items ${galleryItems.length}');
     if (galleryItems.length == 0) {
       return galleryItems;
     }

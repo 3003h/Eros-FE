@@ -63,6 +63,7 @@ class Global {
       EhConfig ehConfig = new EhConfig();
       ehConfig.tagTranslat = false;
       ehConfig.jpnTitle = false;
+      ehConfig.galleryImgBlur = false;
       profile.ehConfig = ehConfig;
       saveProfile();
     }
@@ -73,7 +74,6 @@ class Global {
     Application.router = router;
 
     // 封面blur
-    StorageUtil().setBool(ENABLE_IMG_BLUR, false);
 
     // Global.profile.ehConfig.tagTranslat = true;
     // Global.profile.ehConfig.jpnTitle = true;

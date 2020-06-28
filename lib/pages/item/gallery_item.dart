@@ -1,8 +1,6 @@
 import 'package:FEhViewer/common/global.dart';
 import 'package:FEhViewer/models/entity/gallery.dart';
 import 'package:FEhViewer/models/states/ehconfig_model.dart';
-import 'package:FEhViewer/utils/storage.dart';
-import 'package:FEhViewer/values/storages.dart';
 import 'package:FEhViewer/values/theme_colors.dart';
 import 'package:FEhViewer/widget/blur_image.dart';
 import 'package:FEhViewer/widget/rating_bar.dart';
@@ -29,9 +27,10 @@ class _GalleryItemWidgetState extends State<GalleryItemWidget> {
 
   @override
   Widget build(BuildContext context) {
+    // Global.logger.v('bulid _GalleryItemWidgetState');
     _padL = 8.0;
 
-    var _isBlur = StorageUtil().getBool(ENABLE_IMG_BLUR);
+    var _isBlur = Global.profile.ehConfig.galleryImgBlur ?? false;
 
     String _getTitle(bool isJpnTitle) {
       var _titleEn = widget?.galleryItemBean?.englishTitle ?? '';
@@ -114,24 +113,30 @@ class _GalleryItemWidgetState extends State<GalleryItemWidget> {
       );
     }
 
+    // 封面图片
+    Widget _buildImg() {
+      return Consumer<EhConfigModel>(
+          builder: (BuildContext context, EhConfigModel value, Widget child) {
+        _isBlur = value.isGalleryImgBlur;
+        return widget?.galleryItemBean?.imgUrl != null
+            ? (_isBlur
+                ? BlurImage(
+                    widget: CachedNetworkImage(
+                    imageUrl: widget.galleryItemBean.imgUrl,
+                  ))
+                : CachedNetworkImage(
+                    imageUrl: widget.galleryItemBean.imgUrl,
+                  ))
+            : Container();
+      });
+    }
+
     Color _colorCategory =
         ThemeColors.nameColor[widget?.galleryItemBean?.category ?? "defaule"]
                 ["color"] ??
             CupertinoColors.white;
 
-    // 封面图片
-    Widget _gaImage = widget?.galleryItemBean?.imgUrl != null
-        ? (_isBlur
-            ? BlurImage(
-                widget: CachedNetworkImage(
-                imageUrl: widget.galleryItemBean.imgUrl,
-              ))
-            : CachedNetworkImage(
-                imageUrl: widget.galleryItemBean.imgUrl,
-              ))
-        : Container();
-
-    Widget container = Container(
+    Widget containerGallery = Container(
       color: _colorTap,
 //      height: 200,
       padding: EdgeInsets.fromLTRB(_padL, 8, 8, 8),
@@ -155,7 +160,7 @@ class _GalleryItemWidgetState extends State<GalleryItemWidget> {
                 child: ClipRRect(
                   // 圆角
                   borderRadius: BorderRadius.circular(8),
-                  child: _gaImage,
+                  child: _buildImg(),
                 ),
               ),
             ),
@@ -273,7 +278,7 @@ class _GalleryItemWidgetState extends State<GalleryItemWidget> {
     return GestureDetector(
       child: Column(
         children: <Widget>[
-          container,
+          containerGallery,
           _galleryItemDivider(),
         ],
       ),

@@ -8,6 +8,8 @@ class EhConfigModel extends ProfileChangeNotifier {
 
   bool get isTagTranslat => ehConfig?.tagTranslat ?? false;
 
+  bool get isGalleryImgBlur => ehConfig?.galleryImgBlur ?? false;
+
   //更新并通知依赖它的子孙Widgets更新
   set jpnTitle(bool value) {
     profile.ehConfig.jpnTitle = value;
@@ -16,6 +18,11 @@ class EhConfigModel extends ProfileChangeNotifier {
 
   set tagTranslat(bool value) {
     profile.ehConfig.tagTranslat = value;
+    notifyListeners();
+  }
+
+  set galleryImgBlur(bool value) {
+    profile.ehConfig.galleryImgBlur = value;
     notifyListeners();
   }
 }
