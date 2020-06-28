@@ -48,7 +48,7 @@ class S {
     return Intl.message(
       '~oh~ oh~ oh~~~',
       name: 'welcome_text',
-      desc: '启动页提示语',
+      desc: 'welcom Tex',
       args: [],
     );
   }
@@ -98,6 +98,76 @@ class S {
     return Intl.message(
       'Favorites',
       name: 'favcat',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `User Sign`
+  String get user_login {
+    return Intl.message(
+      'User Sign',
+      name: 'user_login',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Please enter user name`
+  String get pls_i_username {
+    return Intl.message(
+      'Please enter user name',
+      name: 'pls_i_username',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Please enter your password`
+  String get pls_i_passwd {
+    return Intl.message(
+      'Please enter your password',
+      name: 'pls_i_passwd',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Username`
+  String get user_name {
+    return Intl.message(
+      'Username',
+      name: 'user_name',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Password`
+  String get passwd {
+    return Intl.message(
+      'Password',
+      name: 'passwd',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Sign`
+  String get login {
+    return Intl.message(
+      'Sign',
+      name: 'login',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Sign in on the web`
+  String get login_web {
+    return Intl.message(
+      'Sign in on the web',
+      name: 'login_web',
       desc: '',
       args: [],
     );

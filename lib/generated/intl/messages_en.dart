@@ -23,10 +23,17 @@ class MessageLookup extends MessageLookupByLibrary {
   static _notInlinedMessages(_) => <String, Function> {
     "app_title" : MessageLookupByLibrary.simpleMessage("FEhViewer"),
     "favcat" : MessageLookupByLibrary.simpleMessage("Favorites"),
+    "login" : MessageLookupByLibrary.simpleMessage("Sign"),
+    "login_web" : MessageLookupByLibrary.simpleMessage("Sign in on the web"),
+    "passwd" : MessageLookupByLibrary.simpleMessage("Password"),
+    "pls_i_passwd" : MessageLookupByLibrary.simpleMessage("Please enter your password"),
+    "pls_i_username" : MessageLookupByLibrary.simpleMessage("Please enter user name"),
     "tab_favorite" : MessageLookupByLibrary.simpleMessage("Favorite"),
     "tab_gallery" : MessageLookupByLibrary.simpleMessage("Gallery"),
     "tab_popular" : MessageLookupByLibrary.simpleMessage("Popular"),
     "tab_setting" : MessageLookupByLibrary.simpleMessage("Setting"),
+    "user_login" : MessageLookupByLibrary.simpleMessage("User Sign"),
+    "user_name" : MessageLookupByLibrary.simpleMessage("Username"),
     "welcome_text" : MessageLookupByLibrary.simpleMessage("~oh~ oh~ oh~~~")
   };
 }

@@ -23,10 +23,17 @@ class MessageLookup extends MessageLookupByLibrary {
   static _notInlinedMessages(_) => <String, Function> {
     "app_title" : MessageLookupByLibrary.simpleMessage("FEhViewer"),
     "favcat" : MessageLookupByLibrary.simpleMessage("收藏夹"),
+    "login" : MessageLookupByLibrary.simpleMessage("登录"),
+    "login_web" : MessageLookupByLibrary.simpleMessage("通过网页登录"),
+    "passwd" : MessageLookupByLibrary.simpleMessage("密码"),
+    "pls_i_passwd" : MessageLookupByLibrary.simpleMessage("请输入密码"),
+    "pls_i_username" : MessageLookupByLibrary.simpleMessage("请输入用户名"),
     "tab_favorite" : MessageLookupByLibrary.simpleMessage("收藏"),
     "tab_gallery" : MessageLookupByLibrary.simpleMessage("画廊"),
     "tab_popular" : MessageLookupByLibrary.simpleMessage("热门"),
     "tab_setting" : MessageLookupByLibrary.simpleMessage("设置"),
+    "user_login" : MessageLookupByLibrary.simpleMessage("用户登录"),
+    "user_name" : MessageLookupByLibrary.simpleMessage("用户名"),
     "welcome_text" : MessageLookupByLibrary.simpleMessage("小撸怡情~大撸伤身~强撸灰飞烟灭~~")
   };
 }
