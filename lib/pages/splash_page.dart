@@ -39,6 +39,7 @@ class _SplashPageState extends State<SplashPage> {
             children: <Widget>[
               Icon(
                 Icons.local_cafe,
+                // FontAwesomeIcons.heading,
                 size: 150.0,
                 color: Colors.grey,
               ),

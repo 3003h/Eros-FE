@@ -1,4 +1,5 @@
 import 'package:FEhViewer/client/parser/gallery_list_parser.dart';
+import 'package:FEhViewer/common/global.dart';
 import 'package:FEhViewer/generated/l10n.dart';
 import 'package:FEhViewer/models/entity/favorite.dart';
 import 'package:FEhViewer/models/entity/gallery.dart';
@@ -73,15 +74,14 @@ class _FavoriteTab extends State<FavoriteTab> {
               debugPrint('sel icon tapped');
               // 跳转收藏夹选择页
               NavigatorUtil.jump(context, EHRoutes.selFavorie).then((result) {
-                debugPrint('${result.runtimeType}');
                 if (result.runtimeType == FavcatItemBean) {
                   FavcatItemBean fav = result;
-                  debugPrint('${fav.title}');
+                  Global.loggerNoStack.i('${fav.title}');
                   _setTitle(fav.title);
                   _curFavcat = fav.key;
                   _loadData();
                 } else {
-                  debugPrint('$result');
+                  Global.loggerNoStack.i('$result');
                 }
               });
             },
