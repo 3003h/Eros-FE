@@ -21,6 +21,7 @@ class Global {
   static final logger = Logger(
     printer: PrettyPrinter(
       lineLength: 100,
+      colors: false,
     ),
   );
 
@@ -28,6 +29,7 @@ class Global {
     printer: PrettyPrinter(
       lineLength: 100,
       methodCount: 0,
+      colors: false,
     ),
   );
 

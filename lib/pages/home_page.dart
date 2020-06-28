@@ -1,9 +1,8 @@
 import 'package:FEhViewer/generated/l10n.dart';
-
 import 'gallery_page.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:FEhViewer/utils/icon.dart';
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'popular_page.dart';
 import 'setting_page.dart';
 import 'favorite_page.dart';
@@ -33,12 +32,29 @@ class _CupertinoHomePage extends State<CupertinoHomePage> {
   var _tabTitles = [];
 
   void initData(BuildContext context) {
+    final _iconSize = 24.0;
     if (tabIcon == null) {
       tabIcon = [
-        Icon(EHCupertinoIcons.fire_solid),
-        Icon(EHCupertinoIcons.gallery_solid),
-        Icon(EHCupertinoIcons.heart_solid),
-        Icon(CupertinoIcons.settings_solid),
+        // Icon(EHCupertinoIcons.fire_solid),
+        // Icon(EHCupertinoIcons.gallery_solid),
+        // Icon(EHCupertinoIcons.heart_solid),
+        // Icon(CupertinoIcons.settings_solid),
+        Icon(
+          FontAwesomeIcons.fire,
+          size: _iconSize,
+        ),
+        Icon(
+          FontAwesomeIcons.images,
+          size: _iconSize,
+        ),
+        Icon(
+          FontAwesomeIcons.solidHeart,
+          size: _iconSize,
+        ),
+        Icon(
+          FontAwesomeIcons.cogs,
+          size: _iconSize,
+        ),
       ];
     }
 

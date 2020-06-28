@@ -37,6 +37,8 @@ class MyApp extends StatelessWidget {
         ],
         localeResolutionCallback:
             (Locale _locale, Iterable<Locale> supportedLocales) {
+          print(
+              '${_locale?.languageCode}  ${_locale?.scriptCode}  ${_locale?.countryCode}');
           if (localeModel.getLocale() != null) {
             //如果已经选定语言，则不跟随系统
             return localeModel.getLocale();
@@ -51,8 +53,8 @@ class MyApp extends StatelessWidget {
             }
 
             // 中文 简繁体处理
-            if (locale?.languageCode == 'zh') {
-              if (locale?.scriptCode == 'Hant') {
+            if (_locale?.languageCode == 'zh') {
+              if (_locale?.scriptCode == 'Hant') {
                 locale = Locale('zh', 'HK'); //繁体
               } else {
                 locale = Locale('zh', 'CN'); //简体

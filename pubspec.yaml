@@ -30,6 +30,8 @@ dependencies:
 
   cupertino_icons: ^0.1.3
 
+  font_awesome_flutter: ^8.8.1
+
   # 网络请求
   dio: ^3.0.9
   # 路由管理
