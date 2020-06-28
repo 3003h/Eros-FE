@@ -1,4 +1,5 @@
 import 'package:FEhViewer/client/parser/gallery_list_parser.dart';
+import 'package:FEhViewer/generated/l10n.dart';
 import 'package:FEhViewer/models/entity/favorite.dart';
 import 'package:FEhViewer/models/entity/gallery.dart';
 import 'package:FEhViewer/route/navigator_util.dart';
@@ -122,7 +123,7 @@ class SelFavorite extends StatefulWidget {
 
 /// 收藏夹选择页面 列表
 class _SelFavorite extends State<SelFavorite> {
-  String _title = "收藏夹";
+  String _title = "Favcat";
 
   final List<FavcatItemBean> favItemBeans = [];
 
@@ -144,6 +145,8 @@ class _SelFavorite extends State<SelFavorite> {
 
   @override
   Widget build(BuildContext context) {
+    var ln = S.of(context);
+    var _title = ln.favcat;
     CupertinoPageScaffold sca = CupertinoPageScaffold(
         navigationBar: CupertinoNavigationBar(
           middle: Text(_title),

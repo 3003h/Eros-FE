@@ -1,4 +1,5 @@
 import 'package:FEhViewer/client/parser/gallery_list_parser.dart';
+import 'package:FEhViewer/generated/l10n.dart';
 import 'package:FEhViewer/models/entity/gallery.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -12,7 +13,6 @@ class PopularListTab extends StatefulWidget {
 }
 
 class _PopularListTab extends State<PopularListTab> {
-  String _title = "当前热门";
   List<GalleryItemBean> _gallerItemBeans = [];
 
   @override
@@ -44,6 +44,8 @@ class _PopularListTab extends State<PopularListTab> {
 
   @override
   Widget build(BuildContext context) {
+    var ln = S.of(context);
+    var _title = ln.tab_popular;
     CustomScrollView customScrollView = CustomScrollView(
       slivers: <Widget>[
         CupertinoSliverNavigationBar(

@@ -1,3 +1,5 @@
+import 'package:FEhViewer/generated/l10n.dart';
+
 import 'gallery_page.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:FEhViewer/utils/icon.dart';
@@ -28,9 +30,9 @@ class _CupertinoHomePage extends State<CupertinoHomePage> {
   var _pages = [];
 
   // 菜单文案
-  var tabTitles = ['热门', '画廊', '收藏', '设置'];
+  var _tabTitles = [];
 
-  void initData() {
+  void initData(BuildContext context) {
     if (tabIcon == null) {
       tabIcon = [
         Icon(EHCupertinoIcons.fire_solid),
@@ -46,6 +48,13 @@ class _CupertinoHomePage extends State<CupertinoHomePage> {
       new FavoriteTab(),
       new SettingTab()
     ];
+
+    _tabTitles = [
+      S.of(context).tab_popular,
+      S.of(context).tab_gallery,
+      S.of(context).tab_favorite,
+      S.of(context).tab_setting
+    ];
   }
 
   // 获取图标
@@ -56,7 +65,7 @@ class _CupertinoHomePage extends State<CupertinoHomePage> {
   // 获取标题文本
   Text getTabTitle(int curIndex) {
     return new Text(
-      tabTitles[curIndex],
+      _tabTitles[curIndex],
 //      style: getTabTextStyle(curIndex),
     );
   }
@@ -73,7 +82,7 @@ class _CupertinoHomePage extends State<CupertinoHomePage> {
 
   @override
   Widget build(BuildContext context) {
-    initData();
+    initData(context);
 
     CupertinoTabScaffold cupertinoTabScaffold = CupertinoTabScaffold(
       tabBar: CupertinoTabBar(

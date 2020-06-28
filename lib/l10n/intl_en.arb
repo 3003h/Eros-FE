@@ -1,0 +1,14 @@
+{
+    "app_title": "FEhViewer",
+    "welcome_text": "~oh~ oh~ oh~~~",
+    "@welcome_text": {
+        "description": "启动页提示语",
+        "type": "text",
+        "placeholders": {}
+      },
+      "tab_popular": "Popular",
+      "tab_gallery": "Gallery",
+      "tab_favorite": "Favorite",
+      "tab_setting": "Setting",
+      "favcat":"Favorites"
+}

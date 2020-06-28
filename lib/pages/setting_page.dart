@@ -1,3 +1,4 @@
+import 'package:FEhViewer/generated/l10n.dart';
 import 'package:FEhViewer/pages/item/setting_item.dart';
 import 'package:FEhViewer/pages/item/user_item.dart';
 import 'package:FEhViewer/values/const.dart';
@@ -10,7 +11,6 @@ class SettingTab extends StatefulWidget {
 }
 
 class _SettingTab extends State<SettingTab> {
-  String _title = "设置";
   List _settingItemList = EHConst.settingList;
 
   List _getItemList() {
@@ -33,6 +33,8 @@ class _SettingTab extends State<SettingTab> {
 
   @override
   Widget build(BuildContext context) {
+    var ln = S.of(context);
+    var _title = ln.tab_setting;
     return CustomScrollView(
       slivers: <Widget>[
         CupertinoSliverNavigationBar(
