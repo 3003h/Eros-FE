@@ -123,7 +123,7 @@ class SelFavorite extends StatefulWidget {
 
 /// 收藏夹选择页面 列表
 class _SelFavorite extends State<SelFavorite> {
-  String _title = "Favcat";
+  // String _title = "Favcat";
 
   final List<FavcatItemBean> favItemBeans = [];
 

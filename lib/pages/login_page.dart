@@ -1,4 +1,5 @@
 import 'package:FEhViewer/client/eh_login.dart';
+import 'package:FEhViewer/generated/l10n.dart';
 import 'package:FEhViewer/models/states/user_model.dart';
 import 'package:FEhViewer/models/user.dart';
 import 'package:FEhViewer/route/navigator_util.dart';
@@ -24,9 +25,10 @@ class _LoginPage extends State<LoginPage> {
 
   @override
   Widget build(BuildContext context) {
+    var ln = S.of(context);
     return CupertinoPageScaffold(
         navigationBar: CupertinoNavigationBar(
-          middle: Text('用户登录'),
+          middle: Text(ln.user_login),
         ),
         child: SafeArea(
           child: Container(
@@ -37,8 +39,11 @@ class _LoginPage extends State<LoginPage> {
                   height: 38,
                   child: CupertinoTextField(
                     controller: _usernameController,
-                    placeholder: "请输入账号",
-                    prefix: Container(width: 50, child: Text('账号')),
+                    placeholder: ln.pls_i_username,
+                    prefix: ConstrainedBox(
+                        constraints: BoxConstraints(minWidth: 50),
+                        child: Text(ln.user_name)),
+                    // prefixMode: OverlayVisibilityMode.never,
                     decoration: null,
                     // autofocus 自动获得焦点
 //                    autofocus: true,
@@ -57,8 +62,11 @@ class _LoginPage extends State<LoginPage> {
                   padding: const EdgeInsets.only(top: 10, bottom: 0),
                   child: CupertinoTextField(
                     controller: _passwdController,
-                    placeholder: '请输入密码',
-                    prefix: Container(width: 50, child: Text('密码')),
+                    placeholder: ln.pls_i_passwd,
+                    prefix: ConstrainedBox(
+                        constraints: BoxConstraints(minWidth: 50),
+                        child: Text(ln.passwd)),
+                    // prefixMode: OverlayVisibilityMode.never,
                     decoration: null,
                     obscureText: true,
                     focusNode: _nodePwd,
@@ -69,18 +77,17 @@ class _LoginPage extends State<LoginPage> {
                   color: CupertinoColors.systemGrey4,
                 ),
                 CupertinoButton(
-                  child: Text('登录'),
+                  child: Text(ln.login),
 //                  color: CupertinoColors.activeBlue,
                   onPressed: () {
                     _login();
                   },
                 ),
                 CupertinoButton(
-                  child: Text('通过网页登录'),
+                  child: Text(ln.login_web),
                   onPressed: () {
-                    debugPrint('通过网页登录');
                     NavigatorUtil.goWebLogin(
-                        context, "网页登录", EHConst.URL_SIGN_IN);
+                        context, ln.login_web, EHConst.URL_SIGN_IN);
                   },
                 )
               ],
