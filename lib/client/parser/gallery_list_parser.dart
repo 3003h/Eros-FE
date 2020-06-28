@@ -98,10 +98,11 @@ class GalleryListParser {
     return response;
   }
 
-  static void getMoreGalleryInfo(List<GalleryItemBean> galleryItems) async {
+  static Future<List<GalleryItemBean>> getMoreGalleryInfo(
+      List<GalleryItemBean> galleryItems) async {
     Global.logger.v('api qry items ${galleryItems.length}');
     if (galleryItems.length == 0) {
-      return;
+      return galleryItems;
     }
 
     // 通过api获取画廊详细信息
@@ -133,10 +134,18 @@ class GalleryListParser {
       galleryItems[i].englishTitle = unescape.convert(rultList[i]['title']);
       galleryItems[i].japaneseTitle =
           unescape.convert(rultList[i]['title_jpn']);
-      galleryItems[i].rating = double.parse(rultList[i]['rating']);
+
+      var rating = rultList[i]['rating'];
+      // Global.loggerNoStack.v('$rating');
+      galleryItems[i].rating = rating != null
+          ? double.parse(rating)
+          : galleryItems[i].ratingFallBack;
+
 //      galleryItems[i].imgUrl = rultList[i]['thumb'];
       galleryItems[i].filecount = rultList[i]['filecount'];
     }
+
+    return galleryItems;
   }
 
   /// 列表数据处理
@@ -207,6 +216,19 @@ class GalleryListParser {
       final imgSrc = img.attributes['src'];
       final imgUrl = imgDataSrc ?? imgSrc ?? '';
 
+      // 评分星级计算 (api获取不到评分时用)
+      final ratPx = tr
+          .querySelector('td.gl2c > div:nth-child(2) > div.ir')
+          .attributes['style'];
+      RegExp pxA = new RegExp(r"-?(\d+)px\s+-?(\d+)px");
+      var px = pxA.firstMatch(ratPx);
+
+      //
+      final ratingFB = (80.0 - double.parse(px.group(1))) / 16.0 -
+          (px.group(2) == '21' ? 0.5 : 0.0);
+
+//      Global.loggerNoStack.i('ratingFB $ratingFB');
+
       // old
       final postTime =
           tr.querySelector('td.gl2c > div:nth-child(2) > div')?.text?.trim() ??
@@ -223,6 +245,7 @@ class GalleryListParser {
         simpleTags: simpleTags,
         postTime: postTime,
         simpleTagsTranslat: simpleTagsTranslate,
+        ratingFallBack: ratingFB,
       );
 
       gallaryItems.add(galleryItemBean);
@@ -231,7 +254,9 @@ class GalleryListParser {
 
     // 通过api请求获取更多信息
     if (gallaryItems.length > 0) {
-      getMoreGalleryInfo(gallaryItems);
+      // var gallaryItemsAfterAPI = await getMoreGalleryInfo(gallaryItems);
+      // return gallaryItemsAfterAPI;
+      await getMoreGalleryInfo(gallaryItems);
     }
 
     return gallaryItems;
