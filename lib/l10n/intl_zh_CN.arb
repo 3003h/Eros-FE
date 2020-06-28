@@ -1,0 +1,14 @@
+{
+    "app_title": "FEhViewer",
+    "welcome_text": "小撸怡情~大撸伤身~强撸灰飞烟灭~~",
+    "@welcome_text": {
+        "description": "启动页提示语",
+        "type": "text",
+        "placeholders": {}
+      },
+      "tab_popular": "热门",
+      "tab_gallery": "画廊",
+      "tab_favorite": "收藏",
+      "tab_setting": "设置",
+      "favcat":"收藏夹"
+}

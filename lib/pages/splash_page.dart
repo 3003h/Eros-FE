@@ -1,3 +1,4 @@
+import 'package:FEhViewer/generated/l10n.dart';
 import 'package:FEhViewer/route/navigator_util.dart';
 import 'package:flutter/material.dart';
 
@@ -42,11 +43,11 @@ class _SplashPageState extends State<SplashPage> {
                 color: Colors.grey,
               ),
               Text(
-                "小撸怡情大撸伤身,强撸灰飞烟灭",
+                S.of(context).welcome_text,
                 style: TextStyle(color: Colors.grey),
               ),
               Text(
-                "FEhViewver",
+                S.of(context).app_title,
                 style: TextStyle(color: Colors.grey),
               )
             ],

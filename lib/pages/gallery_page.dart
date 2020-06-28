@@ -1,4 +1,5 @@
 import 'package:FEhViewer/client/parser/gallery_list_parser.dart';
+import 'package:FEhViewer/generated/l10n.dart';
 import 'package:FEhViewer/models/entity/gallery.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -14,7 +15,7 @@ class GalleryListTab extends StatefulWidget {
 }
 
 class _GalleryListTab extends State<GalleryListTab> {
-  String _title = "画廊";
+  String _title = "Gallery";
   int _curPage = 0;
   bool _isLoadMore = false;
   final List<GalleryItemBean> _gallerItemBeans = [];
@@ -61,6 +62,8 @@ class _GalleryListTab extends State<GalleryListTab> {
 
   @override
   Widget build(BuildContext context) {
+    var ln = S.of(context);
+    _title = ln.tab_gallery;
     CustomScrollView customScrollView = CustomScrollView(
       slivers: <Widget>[
         CupertinoSliverNavigationBar(
