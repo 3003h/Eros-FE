@@ -80,9 +80,9 @@ flutter:
   uses-material-design: true
 
   fonts:
-    - family: NotoSansSC
+    - family: JyuuGothic
       fonts:
-        - asset: fonts/NotoSansSC-Medium.otf
+        - asset: fonts/GenJyuuGothic-Regular.ttf
 flutter_intl:
   enabled: true
 

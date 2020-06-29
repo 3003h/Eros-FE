@@ -100,7 +100,7 @@ class GalleryListParser {
 
   static Future<List<GalleryItemBean>> getMoreGalleryInfo(
       List<GalleryItemBean> galleryItems) async {
-    Global.logger.i('api qry items ${galleryItems.length}');
+    // Global.logger.i('api qry items ${galleryItems.length}');
     if (galleryItems.length == 0) {
       return galleryItems;
     }
@@ -162,12 +162,14 @@ class GalleryListParser {
 
     final fav =
         document.querySelector("body > div.ido > form > p")?.text?.trim() ?? "";
-    Global.logger.v("fav num  $fav");
+
+    // ignore: unnecessary_statements
+    isFavorite ? Global.logger.v("fav num  $fav") : null;
 
     // 画廊列表
     List<dom.Element> gallerys = document.querySelectorAll(select);
 
-    Global.logger.v("gallerys.len  ${gallerys.length}");
+    // Global.logger.v("gallerys.len  ${gallerys.length}");
 
     List<GalleryItemBean> gallaryItems = [];
 
