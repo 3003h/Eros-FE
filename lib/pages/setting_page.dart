@@ -38,7 +38,10 @@ class _SettingTab extends State<SettingTab> {
     return CustomScrollView(
       slivers: <Widget>[
         CupertinoSliverNavigationBar(
-          largeTitle: Text(_title),
+          largeTitle: Text(
+            _title,
+            style: TextStyle(fontFamilyFallback: ['JyuuGothic']),
+          ),
           transitionBetweenRoutes: false,
         ),
         SliverSafeArea(
