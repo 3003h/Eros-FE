@@ -8,9 +8,11 @@ import 'package:FEhViewer/route/routes.dart';
 import 'package:FEhViewer/utils/icon.dart';
 import 'package:FEhViewer/values/const.dart';
 import 'package:FEhViewer/values/theme_colors.dart';
+import 'package:FEhViewer/widget/eh_widget.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_easyrefresh/easy_refresh.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 import 'item/gallery_item.dart';
 
@@ -47,6 +49,15 @@ class _FavoriteTab extends State<FavoriteTab> {
     });
   }
 
+  _reloadData() async {
+    var gallerItemBeans =
+        await GalleryListParser.getFavorite(favcat: _curFavcat);
+    setState(() {
+      _gallerItemBeans.clear();
+      _gallerItemBeans.addAll(gallerItemBeans);
+    });
+  }
+
   SliverList gallerySliverListView(List gallerItemBeans) {
     return SliverList(
       delegate: SliverChildBuilderDelegate(
@@ -65,9 +76,11 @@ class _FavoriteTab extends State<FavoriteTab> {
     CustomScrollView customScrollView = CustomScrollView(
       slivers: <Widget>[
         CupertinoSliverNavigationBar(
-          largeTitle: Text(_title),
+          largeTitle: TabPageTitle(
+            title: _title,
+            isNotEmptyData: _gallerItemBeans.isNotEmpty,
+          ),
           transitionBetweenRoutes: false,
-          previousPageTitle: _title,
           trailing: CupertinoButton(
             padding: const EdgeInsets.all(0),
             onPressed: () {
@@ -77,18 +90,31 @@ class _FavoriteTab extends State<FavoriteTab> {
                 if (result.runtimeType == FavcatItemBean) {
                   FavcatItemBean fav = result;
                   Global.loggerNoStack.i('${fav.title}');
-                  _setTitle(fav.title);
-                  _curFavcat = fav.key;
-                  _loadData();
+                  if (_curFavcat != fav.key) {
+                    Global.loggerNoStack.v('修改favcat to ${fav.title}');
+                    _setTitle(fav.title);
+                    _curFavcat = fav.key;
+                    setState(() {
+                      _gallerItemBeans.clear();
+                    });
+                    _loadData();
+                  } else {
+                    Global.loggerNoStack.v('未修改favcat');
+                  }
                 } else {
                   Global.loggerNoStack.i('$result');
                 }
               });
             },
             child: Icon(
-              EHCupertinoIcons.menu,
+              FontAwesomeIcons.star,
             ),
           ),
+        ),
+        CupertinoSliverRefreshControl(
+          onRefresh: () async {
+            await _reloadData();
+          },
         ),
         SliverSafeArea(
           top: false,
@@ -99,9 +125,6 @@ class _FavoriteTab extends State<FavoriteTab> {
 
     EasyRefresh re = EasyRefresh(
       child: customScrollView,
-      onRefresh: () async {
-        _loadData();
-      },
       onLoad: () async {
         // 上拉加载更多
       },
