@@ -14,6 +14,7 @@ class PopularListTab extends StatefulWidget {
 
 class _PopularListTab extends State<PopularListTab> {
   List<GalleryItemBean> _gallerItemBeans = [];
+  bool _loading = false;
 
   @override
   void initState() {
@@ -22,6 +23,18 @@ class _PopularListTab extends State<PopularListTab> {
   }
 
   _loadData() async {
+    var gallerItemBeans = await GalleryListParser.getPopular();
+    setState(() {
+      _loading = true;
+      _gallerItemBeans.clear();
+    });
+    _gallerItemBeans.addAll(gallerItemBeans);
+    setState(() {
+      _loading = false;
+    });
+  }
+
+  _reloadData() async {
     var gallerItemBeans = await GalleryListParser.getPopular();
     setState(() {
       _gallerItemBeans.clear();
@@ -49,8 +62,16 @@ class _PopularListTab extends State<PopularListTab> {
     CustomScrollView customScrollView = CustomScrollView(
       slivers: <Widget>[
         CupertinoSliverNavigationBar(
-          largeTitle: Text(_title),
+          largeTitle: Text(
+            _title,
+            style: TextStyle(fontFamilyFallback: ['JyuuGothic']),
+          ),
           transitionBetweenRoutes: false,
+        ),
+        CupertinoSliverRefreshControl(
+          onRefresh: () async {
+            await _reloadData();
+          },
         ),
         SliverSafeArea(
           top: false,
@@ -59,17 +80,6 @@ class _PopularListTab extends State<PopularListTab> {
       ],
     );
 
-    EasyRefresh re = EasyRefresh(
-//      header: DeliveryHeader(enableHapticFeedback: true),
-      child: customScrollView,
-      onRefresh: () async {
-        _loadData();
-      },
-      onLoad: () async {
-        _loadData();
-      },
-    );
-
-    return re;
+    return customScrollView;
   }
 }

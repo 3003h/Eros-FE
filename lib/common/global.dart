@@ -75,12 +75,6 @@ class Global {
     EHRoutes.configureRoutes(router);
     Application.router = router;
 
-    // 封面blur
-
-    // Global.profile.ehConfig.tagTranslat = true;
-    // Global.profile.ehConfig.jpnTitle = true;
-    // saveProfile();
-
     // 读取设备第一次打开
     isFirstOpen = !StorageUtil().getBool(STORAGE_DEVICE_ALREADY_OPEN_KEY);
     if (isFirstOpen) {

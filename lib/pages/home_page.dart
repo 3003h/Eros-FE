@@ -44,7 +44,7 @@ class _CupertinoHomePage extends State<CupertinoHomePage> {
           size: _iconSize,
         ),
         Icon(
-          FontAwesomeIcons.images,
+          FontAwesomeIcons.list,
           size: _iconSize,
         ),
         Icon(
@@ -52,7 +52,7 @@ class _CupertinoHomePage extends State<CupertinoHomePage> {
           size: _iconSize,
         ),
         Icon(
-          FontAwesomeIcons.cogs,
+          FontAwesomeIcons.cog,
           size: _iconSize,
         ),
       ];
@@ -80,8 +80,9 @@ class _CupertinoHomePage extends State<CupertinoHomePage> {
 
   // 获取标题文本
   Text getTabTitle(int curIndex) {
-    return new Text(
+    return Text(
       _tabTitles[curIndex],
+      style: TextStyle(fontFamilyFallback: ['JyuuGothic']),
 //      style: getTabTextStyle(curIndex),
     );
   }

@@ -37,7 +37,7 @@ class MyApp extends StatelessWidget {
         ],
         localeResolutionCallback:
             (Locale _locale, Iterable<Locale> supportedLocales) {
-          print(
+          Global.loggerNoStack.v(
               '${_locale?.languageCode}  ${_locale?.scriptCode}  ${_locale?.countryCode}');
           if (localeModel.getLocale() != null) {
             //如果已经选定语言，则不跟随系统

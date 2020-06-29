@@ -1,8 +1,10 @@
 import 'package:FEhViewer/client/parser/gallery_list_parser.dart';
+import 'package:FEhViewer/common/global.dart';
 import 'package:FEhViewer/generated/l10n.dart';
 import 'package:FEhViewer/models/entity/gallery.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_easyrefresh/ball_pulse_footer.dart';
 import 'package:flutter_easyrefresh/easy_refresh.dart';
 
 import 'item/gallery_item.dart';
@@ -34,9 +36,17 @@ class _GalleryListTab extends State<GalleryListTab> {
     });
   }
 
+  _reloadData() async {
+    var gallerItemBeans = await GalleryListParser.getGallery();
+    setState(() {
+      _gallerItemBeans.clear();
+      _gallerItemBeans.addAll(gallerItemBeans);
+    });
+  }
+
   _loadDataMore() async {
     _isLoadMore = true;
-    debugPrint('last gid   ===>  ${_gallerItemBeans.last.gid}');
+    Global.logger.v('last gid   ===>  ${_gallerItemBeans.last.gid}');
     _curPage += 1;
     var fromGid = _gallerItemBeans.last.gid;
     var gallerItemBeans =
@@ -67,8 +77,14 @@ class _GalleryListTab extends State<GalleryListTab> {
     CustomScrollView customScrollView = CustomScrollView(
       slivers: <Widget>[
         CupertinoSliverNavigationBar(
-          largeTitle: Text(_title),
+          largeTitle: Text(_title,
+              style: TextStyle(fontFamilyFallback: ['JyuuGothic'])),
           transitionBetweenRoutes: false,
+        ),
+        CupertinoSliverRefreshControl(
+          onRefresh: () async {
+            await _reloadData();
+          },
         ),
         SliverSafeArea(
           top: false,
@@ -79,11 +95,8 @@ class _GalleryListTab extends State<GalleryListTab> {
 
     EasyRefresh re = EasyRefresh(
       child: customScrollView,
-      onRefresh: () async {
-        _loadData();
-      },
+      footer: BallPulseFooter(),
       onLoad: () async {
-        // 上拉加载更多
         // ignore: unnecessary_statements
         _isLoadMore ? null : _loadDataMore();
       },

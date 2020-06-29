@@ -53,7 +53,10 @@ class _GalleryItemWidgetState extends State<GalleryItemWidget> {
             maxLines: 3,
             textAlign: TextAlign.left, // 对齐方式
             overflow: TextOverflow.ellipsis, // 超出部分省略号
-            style: TextStyle(fontSize: 13, fontWeight: FontWeight.bold),
+            style: TextStyle(
+                fontSize: 13,
+                fontWeight: FontWeight.bold,
+                fontFamilyFallback: ['JyuuGothic']),
           );
         },
       );
@@ -72,9 +75,9 @@ class _GalleryItemWidgetState extends State<GalleryItemWidget> {
             textAlign: TextAlign.center,
             style: TextStyle(
                 fontSize: 10,
-                fontWeight: FontWeight.w500,
+                fontWeight: FontWeight.normal,
                 color: Color(0xff666666),
-                fontFamilyFallback: ['PingFang', 'NotoSansSC']),
+                fontFamilyFallback: ['JyuuGothic']),
           ),
         ),
       );
