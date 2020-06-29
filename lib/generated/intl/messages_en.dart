@@ -22,16 +22,17 @@ class MessageLookup extends MessageLookupByLibrary {
   final messages = _notInlinedMessages(_notInlinedMessages);
   static _notInlinedMessages(_) => <String, Function> {
     "app_title" : MessageLookupByLibrary.simpleMessage("FEhViewer"),
+    "double_click_back" : MessageLookupByLibrary.simpleMessage("Press again to exit"),
     "favcat" : MessageLookupByLibrary.simpleMessage("Favorites"),
     "login" : MessageLookupByLibrary.simpleMessage("Sign"),
     "login_web" : MessageLookupByLibrary.simpleMessage("Sign in on the web"),
     "passwd" : MessageLookupByLibrary.simpleMessage("Password"),
     "pls_i_passwd" : MessageLookupByLibrary.simpleMessage("Please enter your password"),
     "pls_i_username" : MessageLookupByLibrary.simpleMessage("Please enter user name"),
-    "tab_favorite" : MessageLookupByLibrary.simpleMessage("Favorite"),
+    "tab_favorite" : MessageLookupByLibrary.simpleMessage("Favorites"),
     "tab_gallery" : MessageLookupByLibrary.simpleMessage("Gallery"),
     "tab_popular" : MessageLookupByLibrary.simpleMessage("Popular"),
-    "tab_setting" : MessageLookupByLibrary.simpleMessage("Setting"),
+    "tab_setting" : MessageLookupByLibrary.simpleMessage("Settings"),
     "user_login" : MessageLookupByLibrary.simpleMessage("User Sign"),
     "user_name" : MessageLookupByLibrary.simpleMessage("Username"),
     "welcome_text" : MessageLookupByLibrary.simpleMessage("~oh~ oh~ oh~~~")

@@ -23,19 +23,27 @@ class _PopularListTab extends State<PopularListTab> {
   }
 
   _loadData() async {
-    var gallerItemBeans = await GalleryListParser.getPopular();
     setState(() {
-      _loading = true;
       _gallerItemBeans.clear();
+      _loading = true;
     });
+    var gallerItemBeans = await GalleryListParser.getPopular();
     _gallerItemBeans.addAll(gallerItemBeans);
     setState(() {
       _loading = false;
     });
   }
 
+  // _reloadData() async {
+  //   var gallerItemBeans = await GalleryListParser.getPopular();
+  //   setState(() {
+  //     _gallerItemBeans.clear();
+  //     _gallerItemBeans.addAll(gallerItemBeans);
+  //   });
+  // }
   _reloadData() async {
     var gallerItemBeans = await GalleryListParser.getPopular();
+
     setState(() {
       _gallerItemBeans.clear();
       _gallerItemBeans.addAll(gallerItemBeans);
@@ -64,7 +72,7 @@ class _PopularListTab extends State<PopularListTab> {
         CupertinoSliverNavigationBar(
           largeTitle: TabPageTitle(
             title: _title,
-            isNotEmptyData: _gallerItemBeans.isNotEmpty,
+            isLoading: _loading,
           ),
           transitionBetweenRoutes: false,
         ),

@@ -22,6 +22,7 @@ class MessageLookup extends MessageLookupByLibrary {
   final messages = _notInlinedMessages(_notInlinedMessages);
   static _notInlinedMessages(_) => <String, Function> {
     "app_title" : MessageLookupByLibrary.simpleMessage("FEhViewer"),
+    "double_click_back" : MessageLookupByLibrary.simpleMessage("再按一次返回退出"),
     "favcat" : MessageLookupByLibrary.simpleMessage("收藏夹"),
     "login" : MessageLookupByLibrary.simpleMessage("登录"),
     "login_web" : MessageLookupByLibrary.simpleMessage("通过网页登录"),
