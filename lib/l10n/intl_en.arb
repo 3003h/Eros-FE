@@ -8,8 +8,8 @@
   },
   "tab_popular": "Popular",
   "tab_gallery": "Gallery",
-  "tab_favorite": "Favorite",
-  "tab_setting": "Setting",
+  "tab_favorite": "Favorites",
+  "tab_setting": "Settings",
   "favcat": "Favorites",
   "user_login": "User Sign",
   "pls_i_username": "Please enter user name",
@@ -17,5 +17,6 @@
   "user_name": "Username",
   "passwd": "Password",
   "login": "Sign",
-  "login_web": "Sign in on the web"
+  "login_web": "Sign in on the web",
+  "double_click_back" : "Press again to exit"
 }

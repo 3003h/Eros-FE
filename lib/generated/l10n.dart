@@ -73,20 +73,20 @@ class S {
     );
   }
 
-  /// `Favorite`
+  /// `Favorites`
   String get tab_favorite {
     return Intl.message(
-      'Favorite',
+      'Favorites',
       name: 'tab_favorite',
       desc: '',
       args: [],
     );
   }
 
-  /// `Setting`
+  /// `Settings`
   String get tab_setting {
     return Intl.message(
-      'Setting',
+      'Settings',
       name: 'tab_setting',
       desc: '',
       args: [],
@@ -168,6 +168,16 @@ class S {
     return Intl.message(
       'Sign in on the web',
       name: 'login_web',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Press again to exit`
+  String get double_click_back {
+    return Intl.message(
+      'Press again to exit',
+      name: 'double_click_back',
       desc: '',
       args: [],
     );

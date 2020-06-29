@@ -1,21 +1,17 @@
 import 'package:flutter/cupertino.dart';
 
 class TabPageTitle extends StatelessWidget {
-  final bool isNotEmptyData;
+  final bool isLoading;
   final String title;
   final String loadingText;
 
-  TabPageTitle({this.isNotEmptyData, this.title, loadingText})
+  TabPageTitle({this.isLoading, this.title, loadingText})
       : loadingText = loadingText ?? title;
 
   @override
   Widget build(BuildContext context) {
-    return isNotEmptyData
-        ? Text(
-            title,
-            style: TextStyle(fontFamilyFallback: ['JyuuGothic']),
-          )
-        : Container(
+    return isLoading
+        ? Container(
             child: Row(
               children: <Widget>[
                 Text(
@@ -30,6 +26,10 @@ class TabPageTitle extends StatelessWidget {
                 ),
               ],
             ),
+          )
+        : Text(
+            title,
+            style: TextStyle(fontFamilyFallback: ['JyuuGothic']),
           );
   }
 }

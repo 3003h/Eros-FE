@@ -21,6 +21,7 @@ class _GalleryListTab extends State<GalleryListTab> {
   String _title = "Gallery";
   int _curPage = 0;
   bool _isLoadMore = false;
+  bool _loading = false;
   final List<GalleryItemBean> _gallerItemBeans = [];
 
   @override
@@ -29,11 +30,22 @@ class _GalleryListTab extends State<GalleryListTab> {
     _loadData();
   }
 
+  // _loadData() async {
+  //   var gallerItemBeans = await GalleryListParser.getGallery();
+  //   setState(() {
+  //     _gallerItemBeans.clear();
+  //     _gallerItemBeans.addAll(gallerItemBeans);
+  //   });
+  // }
   _loadData() async {
-    var gallerItemBeans = await GalleryListParser.getGallery();
     setState(() {
       _gallerItemBeans.clear();
-      _gallerItemBeans.addAll(gallerItemBeans);
+      _loading = true;
+    });
+    var gallerItemBeans = await GalleryListParser.getGallery();
+    _gallerItemBeans.addAll(gallerItemBeans);
+    setState(() {
+      _loading = false;
     });
   }
 
@@ -80,7 +92,7 @@ class _GalleryListTab extends State<GalleryListTab> {
         CupertinoSliverNavigationBar(
           largeTitle: TabPageTitle(
             title: _title,
-            isNotEmptyData: _gallerItemBeans.isNotEmpty,
+            isLoading: _gallerItemBeans.isEmpty,
           ),
           transitionBetweenRoutes: false,
         ),

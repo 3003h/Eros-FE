@@ -27,6 +27,7 @@ class _FavoriteTab extends State<FavoriteTab> {
   String _title = "All Favorites";
   final List<GalleryItemBean> _gallerItemBeans = [];
   String _curFavcat = '';
+  bool _loading = false;
 
   void _setTitle(String title) {
     setState(() {
@@ -46,6 +47,7 @@ class _FavoriteTab extends State<FavoriteTab> {
     setState(() {
       _gallerItemBeans.clear();
       _gallerItemBeans.addAll(gallerItemBeans);
+      _loading = false;
     });
   }
 
@@ -78,7 +80,7 @@ class _FavoriteTab extends State<FavoriteTab> {
         CupertinoSliverNavigationBar(
           largeTitle: TabPageTitle(
             title: _title,
-            isNotEmptyData: _gallerItemBeans.isNotEmpty,
+            isLoading: _gallerItemBeans.isEmpty || _loading,
           ),
           transitionBetweenRoutes: false,
           trailing: CupertinoButton(
@@ -86,7 +88,8 @@ class _FavoriteTab extends State<FavoriteTab> {
             onPressed: () {
               debugPrint('sel icon tapped');
               // 跳转收藏夹选择页
-              NavigatorUtil.jump(context, EHRoutes.selFavorie).then((result) {
+              NavigatorUtil.jump(context, EHRoutes.selFavorie)
+                  .then((result) async {
                 if (result.runtimeType == FavcatItemBean) {
                   FavcatItemBean fav = result;
                   Global.loggerNoStack.i('${fav.title}');
@@ -95,9 +98,9 @@ class _FavoriteTab extends State<FavoriteTab> {
                     _setTitle(fav.title);
                     _curFavcat = fav.key;
                     setState(() {
-                      _gallerItemBeans.clear();
+                      _loading = true;
                     });
-                    _loadData();
+                    await _loadData();
                   } else {
                     Global.loggerNoStack.v('未修改favcat');
                   }

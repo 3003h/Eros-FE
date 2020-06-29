@@ -1,4 +1,6 @@
+import 'package:FEhViewer/common/global.dart';
 import 'package:FEhViewer/generated/l10n.dart';
+import 'package:FEhViewer/utils/toast.dart';
 import 'gallery_page.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -7,21 +9,14 @@ import 'popular_page.dart';
 import 'setting_page.dart';
 import 'favorite_page.dart';
 
-class FEhHome extends StatelessWidget {
+class FEhHome extends StatefulWidget {
   @override
-  Widget build(BuildContext context) {
-    return Container(
-      child: CupertinoHomePage(),
-    );
-  }
+  _FEhHomeState createState() => _FEhHomeState();
 }
 
-class CupertinoHomePage extends StatefulWidget {
-  @override
-  _CupertinoHomePage createState() => _CupertinoHomePage();
-}
+class _FEhHomeState extends State<FEhHome> {
+  DateTime _lastPressedAt; //上次点击时间
 
-class _CupertinoHomePage extends State<CupertinoHomePage> {
   // 底部菜单栏图标数组
   var tabIcon;
 
@@ -115,6 +110,23 @@ class _CupertinoHomePage extends State<CupertinoHomePage> {
       },
     );
 
-    return cupertinoTabScaffold;
+    WillPopScope willPopScope = WillPopScope(
+      onWillPop: doubleClickBack,
+      child: cupertinoTabScaffold,
+    );
+
+    return willPopScope;
+  }
+
+  Future<bool> doubleClickBack() async {
+    Global.loggerNoStack.v("click back");
+    if (_lastPressedAt == null ||
+        DateTime.now().difference(_lastPressedAt) > Duration(seconds: 1)) {
+      showToast(S.of(context).double_click_back);
+      //两次点击间隔超过1秒则重新计时
+      _lastPressedAt = DateTime.now();
+      return false;
+    }
+    return true;
   }
 }
