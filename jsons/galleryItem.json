@@ -1,0 +1,20 @@
+{
+    "gid":"",
+    "token":"",
+    "url":"",
+    "imgUrl":"",
+    "imgUrlL":"",
+    "japaneseTitle":"",
+    "englishTitle":"",
+    "category":"",
+    "uploader":"",
+    "posted":"",
+    "language":"",
+    "filecount":"",
+    "rating":4.5,
+    "ratingFallBack":4.0,
+    "numberOfReviews":"",
+    "postTime":"",
+    "simpleTags":["", ""],
+    "simpleTagsTranslat":["", ""]
+}

@@ -3,7 +3,7 @@ import 'dart:convert';
 import 'package:FEhViewer/client/tag_database.dart';
 import 'package:FEhViewer/common/global.dart';
 import 'package:FEhViewer/utils/dio_util.dart';
-import 'package:FEhViewer/models/entity/gallery.dart';
+import 'package:FEhViewer/models/index.dart';
 import 'package:FEhViewer/utils/utility.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/cupertino.dart';
@@ -13,7 +13,7 @@ import 'package:html_unescape/html_unescape.dart';
 
 class GalleryListParser {
   /// 获取热门画廊列表
-  static Future<List<GalleryItemBean>> getPopular() async {
+  static Future<List<GalleryItem>> getPopular() async {
     Global.logger.v("获取热门");
     HttpManager httpManager = HttpManager.getInstance("https://e-hentai.org");
     const url = "/popular";
@@ -26,13 +26,13 @@ class GalleryListParser {
 
     var response = await httpManager.get(url, options: options);
 
-    List<GalleryItemBean> list = await parseGalleryList(response);
+    List<GalleryItem> list = await parseGalleryList(response);
 
     return list;
   }
 
   /// 获取默认画廊列表
-  static Future<List<GalleryItemBean>> getGallery(
+  static Future<List<GalleryItem>> getGallery(
       {int page, String fromGid}) async {
     HttpManager httpManager = HttpManager.getInstance("https://e-hentai.org");
 
@@ -52,13 +52,13 @@ class GalleryListParser {
 
     var response = await httpManager.get(url, options: options);
 
-    List<GalleryItemBean> list = await parseGalleryList(response);
+    List<GalleryItem> list = await parseGalleryList(response);
 
     return list;
   }
 
   /// 获取收藏
-  static Future<List<GalleryItemBean>> getFavorite({String favcat}) async {
+  static Future<List<GalleryItem>> getFavorite({String favcat}) async {
     HttpManager httpManager = HttpManager.getInstance("https://e-hentai.org");
 
     //收藏时间排序
@@ -82,8 +82,7 @@ class GalleryListParser {
 
     var response = await httpManager.get(url, options: options);
 
-    List<GalleryItemBean> list =
-        await parseGalleryList(response, isFavorite: true);
+    List<GalleryItem> list = await parseGalleryList(response, isFavorite: true);
 
     return list;
   }
@@ -98,8 +97,8 @@ class GalleryListParser {
     return response;
   }
 
-  static Future<List<GalleryItemBean>> getMoreGalleryInfo(
-      List<GalleryItemBean> galleryItems) async {
+  static Future<List<GalleryItem>> getMoreGalleryInfo(
+      List<GalleryItem> galleryItems) async {
     // Global.logger.i('api qry items ${galleryItems.length}');
     if (galleryItems.length == 0) {
       return galleryItems;
@@ -149,7 +148,7 @@ class GalleryListParser {
   }
 
   /// 列表数据处理
-  static Future<List<GalleryItemBean>> parseGalleryList(String response,
+  static Future<List<GalleryItem>> parseGalleryList(String response,
       {isFavorite = false}) async {
     var document = parse(response);
 
@@ -171,7 +170,7 @@ class GalleryListParser {
 
     // Global.logger.v("gallerys.len  ${gallerys.length}");
 
-    List<GalleryItemBean> gallaryItems = [];
+    List<GalleryItem> gallaryItems = [];
 
     for (int i = 0; i < gallerys.length; i++) {
       var tr = gallerys[i];
@@ -237,18 +236,18 @@ class GalleryListParser {
               '';
 
       /// old end
-      GalleryItemBean galleryItemBean = new GalleryItemBean(
-        gid: gid,
-        token: token,
-        englishTitle: title,
-        imgUrl: imgUrl ?? '',
-        url: url,
-        category: category,
-        simpleTags: simpleTags,
-        postTime: postTime,
-        simpleTagsTranslat: simpleTagsTranslate,
-        ratingFallBack: ratingFB,
-      );
+      GalleryItem galleryItemBean = new GalleryItem();
+
+      galleryItemBean.gid = gid;
+      galleryItemBean.token = token;
+      galleryItemBean.englishTitle = title;
+      galleryItemBean.imgUrl = imgUrl ?? '';
+      galleryItemBean.url = url;
+      galleryItemBean.category = category;
+      galleryItemBean.simpleTags = simpleTags;
+      galleryItemBean.postTime = postTime;
+      galleryItemBean.simpleTagsTranslat = simpleTagsTranslate;
+      galleryItemBean.ratingFallBack = ratingFB;
 
       gallaryItems.add(galleryItemBean);
 //      debugPrint(galleryItemBean.toString());

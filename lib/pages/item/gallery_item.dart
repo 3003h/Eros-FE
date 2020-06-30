@@ -1,5 +1,5 @@
 import 'package:FEhViewer/common/global.dart';
-import 'package:FEhViewer/models/entity/gallery.dart';
+import 'package:FEhViewer/models/galleryItem.dart';
 import 'package:FEhViewer/models/states/ehconfig_model.dart';
 import 'package:FEhViewer/route/navigator_util.dart';
 import 'package:FEhViewer/route/routes.dart';
@@ -14,7 +14,7 @@ import 'package:provider/provider.dart';
 
 class GalleryItemWidget extends StatefulWidget {
   final int index;
-  final GalleryItemBean galleryItemBean;
+  final GalleryItem galleryItemBean;
 
   GalleryItemWidget({this.index, this.galleryItemBean});
 

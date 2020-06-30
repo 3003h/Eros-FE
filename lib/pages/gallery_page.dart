@@ -1,7 +1,7 @@
 import 'package:FEhViewer/client/parser/gallery_list_parser.dart';
 import 'package:FEhViewer/common/global.dart';
 import 'package:FEhViewer/generated/l10n.dart';
-import 'package:FEhViewer/models/entity/gallery.dart';
+import 'package:FEhViewer/models/index.dart';
 import 'package:FEhViewer/widget/eh_widget.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -21,7 +21,7 @@ class _GalleryListTab extends State<GalleryListTab> {
   int _curPage = 0;
   bool _isLoadMore = false;
   bool _loading = false;
-  final List<GalleryItemBean> _gallerItemBeans = [];
+  final List<GalleryItem> _gallerItemBeans = [];
 
   //页码跳转的控制器
   TextEditingController _pageController = TextEditingController();

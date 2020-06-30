@@ -2,7 +2,7 @@ import 'package:FEhViewer/client/parser/gallery_list_parser.dart';
 import 'package:FEhViewer/common/global.dart';
 import 'package:FEhViewer/generated/l10n.dart';
 import 'package:FEhViewer/models/entity/favorite.dart';
-import 'package:FEhViewer/models/entity/gallery.dart';
+import 'package:FEhViewer/models/index.dart';
 import 'package:FEhViewer/route/navigator_util.dart';
 import 'package:FEhViewer/route/routes.dart';
 import 'package:FEhViewer/utils/icon.dart';
@@ -25,7 +25,7 @@ class FavoriteTab extends StatefulWidget {
 
 class _FavoriteTab extends State<FavoriteTab> {
   String _title = "All Favorites";
-  final List<GalleryItemBean> _gallerItemBeans = [];
+  final List<GalleryItem> _gallerItemBeans = [];
   String _curFavcat = '';
   bool _loading = false;
 
