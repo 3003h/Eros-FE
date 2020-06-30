@@ -1,5 +1,5 @@
 import 'package:FEhViewer/common/global.dart';
-import 'package:FEhViewer/http/dio_util.dart';
+import 'package:FEhViewer/utils/dio_util.dart';
 import 'package:FEhViewer/models/user.dart';
 import 'package:dio/dio.dart';
 
