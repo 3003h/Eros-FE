@@ -76,16 +76,13 @@ dev_dependencies:
   flutter_test:
     sdk: flutter
 
-flutter:
-  uses-material-design: true
-
-  fonts:
-    - family: JyuuGothic
-      fonts:
-        - asset: fonts/GenJyuuGothic-Regular.ttf
 flutter_intl:
   enabled: true
 
-#    - family: ZCOOLXiaoWei
-#      fonts:
-#        - asset: fonts/ZCOOLXiaoWei-Regular.ttf
+flutter:
+  uses-material-design: true
+
+# fonts:
+#   - family: SourceHanSansSC
+#     fonts:
+#       - asset: fonts/SourceHanSansSC-Regular.otf

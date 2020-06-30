@@ -99,6 +99,7 @@ class _FavoriteTab extends State<FavoriteTab> {
                     _curFavcat = fav.key;
                     setState(() {
                       _loading = true;
+                      _gallerItemBeans.clear();
                     });
                     await _loadData();
                   } else {

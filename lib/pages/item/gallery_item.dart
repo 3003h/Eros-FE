@@ -1,6 +1,7 @@
 import 'package:FEhViewer/common/global.dart';
 import 'package:FEhViewer/models/entity/gallery.dart';
 import 'package:FEhViewer/models/states/ehconfig_model.dart';
+import 'package:FEhViewer/values/const.dart';
 import 'package:FEhViewer/values/theme_colors.dart';
 import 'package:FEhViewer/widget/blur_image.dart';
 import 'package:FEhViewer/widget/rating_bar.dart';
@@ -56,7 +57,7 @@ class _GalleryItemWidgetState extends State<GalleryItemWidget> {
             style: TextStyle(
                 fontSize: 13,
                 fontWeight: FontWeight.bold,
-                fontFamilyFallback: ['JyuuGothic']),
+                fontFamilyFallback: [EHConst.FONT_FAMILY]),
           );
         },
       );
@@ -67,7 +68,7 @@ class _GalleryItemWidgetState extends State<GalleryItemWidget> {
       ClipRRect clipRRect = ClipRRect(
         borderRadius: BorderRadius.circular(4),
         child: Container(
-          height: 18,
+          // height: 18,
           padding: const EdgeInsets.fromLTRB(4, 2, 4, 2),
           color: Color(0xffeeeeee),
           child: Text(
@@ -75,9 +76,11 @@ class _GalleryItemWidgetState extends State<GalleryItemWidget> {
             textAlign: TextAlign.center,
             style: TextStyle(
                 fontSize: 10,
+                height: 1,
                 fontWeight: FontWeight.normal,
                 color: Color(0xff666666),
-                fontFamilyFallback: ['JyuuGothic']),
+                fontFamilyFallback: [EHConst.FONT_FAMILY]),
+            strutStyle: StrutStyle(height: 1),
           ),
         ),
       );

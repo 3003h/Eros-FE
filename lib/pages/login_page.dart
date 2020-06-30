@@ -1,4 +1,5 @@
 import 'package:FEhViewer/client/eh_login.dart';
+import 'package:FEhViewer/common/global.dart';
 import 'package:FEhViewer/generated/l10n.dart';
 import 'package:FEhViewer/models/states/user_model.dart';
 import 'package:FEhViewer/models/user.dart';
@@ -98,7 +99,7 @@ class _LoginPage extends State<LoginPage> {
 
   /// 用户登录
   void _login() async {
-    print({
+    Global.loggerNoStack.i({
       'username': _usernameController.text,
       'password': _passwdController.text
     });

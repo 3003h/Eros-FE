@@ -34,14 +34,10 @@ class _PopularListTab extends State<PopularListTab> {
     });
   }
 
-  // _reloadData() async {
-  //   var gallerItemBeans = await GalleryListParser.getPopular();
-  //   setState(() {
-  //     _gallerItemBeans.clear();
-  //     _gallerItemBeans.addAll(gallerItemBeans);
-  //   });
-  // }
   _reloadData() async {
+    setState(() {
+      _loading = false;
+    });
     var gallerItemBeans = await GalleryListParser.getPopular();
 
     setState(() {

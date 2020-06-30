@@ -1,3 +1,4 @@
+import 'package:FEhViewer/values/const.dart';
 import 'package:flutter/cupertino.dart';
 
 class TabPageTitle extends StatelessWidget {
@@ -16,7 +17,7 @@ class TabPageTitle extends StatelessWidget {
               children: <Widget>[
                 Text(
                   loadingText,
-                  style: TextStyle(fontFamilyFallback: ['JyuuGothic']),
+                  style: TextStyle(fontFamilyFallback: [EHConst.FONT_FAMILY]),
                 ),
                 Container(
                   width: 18,
@@ -29,7 +30,7 @@ class TabPageTitle extends StatelessWidget {
           )
         : Text(
             title,
-            style: TextStyle(fontFamilyFallback: ['JyuuGothic']),
+            style: TextStyle(fontFamilyFallback: [EHConst.FONT_FAMILY]),
           );
   }
 }
