@@ -1,4 +1,7 @@
+import 'dart:convert';
+
 import 'package:FEhViewer/common/global.dart';
+import 'package:FEhViewer/models/galleryItem.dart';
 
 import 'application.dart';
 import 'routes.dart';
@@ -96,12 +99,6 @@ class NavigatorUtil {
   //         ), (route) => route == null);
   // }
 
-  // 跳转到http测试
-  static void goHttpTestPage(BuildContext context) {
-    Application.router.navigateTo(context, EHRoutes.httpPage,
-        transition: TransitionType.cupertino);
-  }
-
   // 跳转到selfav
   static void goSelFavPage(BuildContext context) {
     Application.router.navigateTo(context, EHRoutes.selFavorie,
@@ -115,6 +112,19 @@ class NavigatorUtil {
     Global.logger.i('encodeTitle $encodeTitle');
     Application.router.navigateTo(
         context, EHRoutes.webLogin + "?title=$encodeTitle&url=$encodeUrl",
-        transition: TransitionType.native);
+        transition: TransitionType.cupertino);
+  }
+
+  static void goGalleryDetail(
+      BuildContext context, String title, GalleryItem galleryItem) {
+    final encodeGalleryItem =
+        Uri.encodeComponent(jsonEncode(galleryItem.toJson()));
+    final encodeTitle = Uri.encodeComponent(title);
+    // Global.logger.i('encodeGalleryItem $encodeGalleryItem');
+    Application.router.navigateTo(
+        context,
+        EHRoutes.galleryDetail +
+            "?title=$encodeTitle&galleryItem=$encodeGalleryItem",
+        transition: TransitionType.cupertino);
   }
 }

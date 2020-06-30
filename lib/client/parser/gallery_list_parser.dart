@@ -142,6 +142,7 @@ class GalleryListParser {
 
 //      galleryItems[i].imgUrl = rultList[i]['thumb'];
       galleryItems[i].filecount = rultList[i]['filecount'];
+      galleryItems[i].uploader = rultList[i]['uploader'];
     }
 
     return galleryItems;
@@ -255,8 +256,6 @@ class GalleryListParser {
 
     // 通过api请求获取更多信息
     if (gallaryItems.length > 0) {
-      // var gallaryItemsAfterAPI = await getMoreGalleryInfo(gallaryItems);
-      // return gallaryItemsAfterAPI;
       await getMoreGalleryInfo(gallaryItems);
     }
 

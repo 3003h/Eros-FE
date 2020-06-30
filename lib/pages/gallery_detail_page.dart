@@ -1,16 +1,17 @@
+import 'package:FEhViewer/generated/l10n.dart';
 import 'package:FEhViewer/models/index.dart';
 import 'package:FEhViewer/values/const.dart';
+import 'package:FEhViewer/values/theme_colors.dart';
 import 'package:FEhViewer/widget/rating_bar.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 class GalleryDetailPage extends StatefulWidget {
   final String title;
-  final Color colorCategory;
   final GalleryItem galleryItem;
-  GalleryDetailPage({Key key, this.galleryItem, this.title, this.colorCategory})
-      : super(key: key);
+  GalleryDetailPage({Key key, this.galleryItem, this.title}) : super(key: key);
 
   @override
   _GalleryDetailPageState createState() => _GalleryDetailPageState();
@@ -27,7 +28,7 @@ class _GalleryDetailPageState extends State<GalleryDetailPage> {
             margin: const EdgeInsets.only(left: 12),
             child: ListView(
               children: <Widget>[
-                _buildGalletyHead(),
+                _buildGalletyHead(context),
                 Container(
                   height: 0.5,
                   color: CupertinoColors.systemGrey4,
@@ -40,7 +41,11 @@ class _GalleryDetailPageState extends State<GalleryDetailPage> {
     );
   }
 
-  Widget _buildGalletyHead() {
+  Widget _buildGalletyHead(BuildContext context) {
+    Color _colorCategory = ThemeColors
+            .nameColor[widget?.galleryItem?.category ?? "defaule"]["color"] ??
+        CupertinoColors.white;
+    var ln = S.of(context);
     return Container(
       margin: const EdgeInsets.fromLTRB(0, 12, 12, 12),
       child: Column(
@@ -50,10 +55,24 @@ class _GalleryDetailPageState extends State<GalleryDetailPage> {
             margin: const EdgeInsets.only(bottom: 12),
             child: Row(
               children: <Widget>[
-                Container(
-                  margin: const EdgeInsets.only(right: 8),
-                  color: CupertinoColors.systemGrey6,
-                  width: 130,
+                ConstrainedBox(
+                  constraints: BoxConstraints(
+//                minWidth: double.infinity, //宽度尽可能大
+                      minWidth: 130.0,
+                      maxWidth: 150.0
+//                maxWidth: 140,
+                      ),
+                  child: Container(
+                    margin: const EdgeInsets.only(right: 8),
+                    // color: CupertinoColors.systemGrey6,
+                    // width: 130,
+                    child: ClipRRect(
+                      borderRadius: BorderRadius.circular(8),
+                      child: CachedNetworkImage(
+                        imageUrl: widget.galleryItem.imgUrl,
+                      ),
+                    ),
+                  ),
                 ),
                 Expanded(
                   child: Column(
@@ -61,16 +80,16 @@ class _GalleryDetailPageState extends State<GalleryDetailPage> {
                     children: <Widget>[
                       Text(
                         widget.title,
-                        maxLines: 3,
+                        maxLines: 4,
                         textAlign: TextAlign.left, // 对齐方式
                         overflow: TextOverflow.ellipsis, // 超出部分省略号
                         style: TextStyle(
-                            fontSize: 14,
-                            fontWeight: FontWeight.normal,
+                            fontSize: 15,
+                            fontWeight: FontWeight.bold,
                             fontFamilyFallback: [EHConst.FONT_FAMILY]),
                       ),
                       Text(
-                        widget.galleryItem.posted,
+                        widget?.galleryItem?.uploader ?? '',
                         maxLines: 1,
                         textAlign: TextAlign.left, // 对齐方式
                         overflow: TextOverflow.ellipsis, // 超出部分省略号
@@ -84,7 +103,7 @@ class _GalleryDetailPageState extends State<GalleryDetailPage> {
                         children: <Widget>[
                           CupertinoButton(
                               child: Text(
-                                "阅读",
+                                ln.READ,
                                 style: TextStyle(fontSize: 15),
                               ),
                               minSize: 20,
@@ -107,10 +126,10 @@ class _GalleryDetailPageState extends State<GalleryDetailPage> {
             children: <Widget>[
               Container(
                   padding: const EdgeInsets.only(right: 8),
-                  child: Text("${widget.galleryItem.rating}")),
+                  child: Text("${widget?.galleryItem?.rating ?? ''}")),
               StaticRatingBar(
                 size: 18.0,
-                rate: widget.galleryItem.rating,
+                rate: widget?.galleryItem?.rating ?? 0,
                 radiusRatio: 1.5,
               ),
               Spacer(),
@@ -118,9 +137,9 @@ class _GalleryDetailPageState extends State<GalleryDetailPage> {
                 borderRadius: BorderRadius.circular(4),
                 child: Container(
                   padding: const EdgeInsets.fromLTRB(6, 3, 6, 3),
-                  color: widget.colorCategory,
+                  color: _colorCategory,
                   child: Text(
-                    widget.galleryItem.category,
+                    widget?.galleryItem?.category ?? '',
                     style: TextStyle(
                       fontSize: 14.5,
                       height: 1,
