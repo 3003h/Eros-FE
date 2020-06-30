@@ -1,4 +1,5 @@
 import 'package:FEhViewer/pages/favorite_page.dart';
+import 'package:FEhViewer/pages/gallery_detail_page.dart';
 import 'package:FEhViewer/pages/login_page.dart';
 import 'package:FEhViewer/pages/setting/eh_setting_page.dart';
 import 'package:FEhViewer/pages/splash_page.dart';
@@ -48,4 +49,9 @@ Handler webLoginHanderl = Handler(
   String url = params["url"]?.first;
 
   return WebLogin(title: title, url: url);
+});
+
+Handler galleryDetailHanderl = Handler(
+    handlerFunc: (BuildContext context, Map<String, List<String>> params) {
+  return GalleryDetailPage();
 });
