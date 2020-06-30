@@ -4,10 +4,12 @@ import 'package:fluro/fluro.dart';
 class EHRoutes {
   static const String root = "/";
   static const String home = "/home";
-  static const String selFavorie = "/favoriePage/selFavoriePage";
+  static const String selFavorie = "/selFavoriePage";
   static const String ehSetting = "/ehSetting";
   static const String login = "/login";
   static const String webLogin = "/webLogin";
+
+  static const String galleryDetail = "/galleryDetailPage";
 
   static const String chanelDetail = '/chanelDetail';
 
@@ -36,6 +38,10 @@ class EHRoutes {
 
     router.define(webLogin,
         handler: webLoginHanderl, transitionType: TransitionType.cupertino);
+
+    router.define(galleryDetail,
+        handler: galleryDetailHanderl,
+        transitionType: TransitionType.cupertino);
 
     router.define(httpPage,
         handler: httpPageHanderl, transitionType: TransitionType.cupertino);

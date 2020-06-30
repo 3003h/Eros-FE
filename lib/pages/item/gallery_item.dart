@@ -1,6 +1,8 @@
 import 'package:FEhViewer/common/global.dart';
 import 'package:FEhViewer/models/entity/gallery.dart';
 import 'package:FEhViewer/models/states/ehconfig_model.dart';
+import 'package:FEhViewer/route/navigator_util.dart';
+import 'package:FEhViewer/route/routes.dart';
 import 'package:FEhViewer/values/const.dart';
 import 'package:FEhViewer/values/theme_colors.dart';
 import 'package:FEhViewer/widget/blur_image.dart';
@@ -246,12 +248,13 @@ class _GalleryItemWidgetState extends State<GalleryItemWidget> {
                       ClipRRect(
                         borderRadius: BorderRadius.circular(4),
                         child: Container(
-                          padding: const EdgeInsets.fromLTRB(6, 2, 6, 2),
+                          padding: const EdgeInsets.fromLTRB(6, 3, 6, 3),
                           color: _colorCategory,
                           child: Text(
                             widget?.galleryItemBean?.category ?? "",
                             style: TextStyle(
                               fontSize: 14,
+                              height: 1,
                               color: CupertinoColors.white,
 //                              backgroundColor: _colorCategory
                             ),
@@ -292,8 +295,7 @@ class _GalleryItemWidgetState extends State<GalleryItemWidget> {
       behavior: HitTestBehavior.opaque,
       onTap: () {
         Global.logger.v("title: $_title \n tags: $_simpleTags");
-        // 返回 并带上参数
-//        NavigatorUtil.goBackWithParams(context, widget.galleryItemBean);
+        NavigatorUtil.jump(context, EHRoutes.galleryDetail);
       },
       onTapDown: (_) => _updatePressedColor(),
       onTapUp: (_) {
