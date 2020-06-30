@@ -22,6 +22,8 @@ class EHConst {
   static const FAV_ORDER_FAV = 'fs_f';
   static const FAV_ORDER_PUB = 'fs_p';
 
+  static const FONT_FAMILY = '';
+
   static const List settingList = [
     {
       "name": "eh",

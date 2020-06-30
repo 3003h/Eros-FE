@@ -1,6 +1,7 @@
 import 'package:FEhViewer/common/global.dart';
 import 'package:FEhViewer/generated/l10n.dart';
 import 'package:FEhViewer/utils/toast.dart';
+import 'package:FEhViewer/values/const.dart';
 import 'gallery_page.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -77,7 +78,7 @@ class _FEhHomeState extends State<FEhHome> {
   Text getTabTitle(int curIndex) {
     return Text(
       _tabTitles[curIndex],
-      style: TextStyle(fontFamilyFallback: ['JyuuGothic']),
+      style: TextStyle(fontFamilyFallback: [EHConst.FONT_FAMILY]),
 //      style: getTabTextStyle(curIndex),
     );
   }
