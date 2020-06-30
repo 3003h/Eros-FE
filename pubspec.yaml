@@ -69,7 +69,7 @@ dependencies:
 dev_dependencies:
   build_runner: ^1.0.0
   json_serializable: ^2.0.0
-  json_model: ^0.0.2
+  json_model: ^0.0.2 # flutter packages pub run json_model src=json_files  dist=data # will save in lib/data dir
 
   intl_translation: ^0.17.10
 
