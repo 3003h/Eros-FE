@@ -2,7 +2,6 @@ import 'package:FEhViewer/common/global.dart';
 import 'package:FEhViewer/models/galleryItem.dart';
 import 'package:FEhViewer/models/states/ehconfig_model.dart';
 import 'package:FEhViewer/route/navigator_util.dart';
-import 'package:FEhViewer/route/routes.dart';
 import 'package:FEhViewer/values/const.dart';
 import 'package:FEhViewer/values/theme_colors.dart';
 import 'package:FEhViewer/widget/blur_image.dart';
@@ -110,7 +109,7 @@ class _GalleryItemWidgetState extends State<GalleryItemWidget> {
               ? widget.galleryItemBean.simpleTagsTranslat
               : widget.galleryItemBean.simpleTags;
           return Container(
-            padding: const EdgeInsets.fromLTRB(0, 0, 0, 8),
+            padding: const EdgeInsets.fromLTRB(0, 4, 0, 8),
             child: Wrap(
               spacing: 4, //主轴上子控件的间距
               runSpacing: 4, //交叉轴上子控件之间的间距
@@ -146,22 +145,19 @@ class _GalleryItemWidgetState extends State<GalleryItemWidget> {
 
     Widget containerGallery = Container(
       color: _colorTap,
-//      height: 200,
+      // height: 200,
       padding: EdgeInsets.fromLTRB(_padL, 8, 8, 8),
-      child: Column(
+      child: ConstrainedBox(
+        constraints: BoxConstraints(
+          minHeight: 120.0, //最小高度
+          // maxHeight: 200,
+        ),
+        child: Column(
 //        mainAxisAlignment: MainAxisAlignment.start,
 //        crossAxisAlignment: CrossAxisAlignment.start,
-        children: <Widget>[
-          Row(children: <Widget>[
-            ConstrainedBox(
-              constraints: BoxConstraints(
-//                minWidth: double.infinity, //宽度尽可能大
-                minHeight: 50.0, //最小高度
-                maxHeight: 180,
-//                maxWidth: 140,
-              ),
-              // 图片容器
-              child: Container(
+          children: <Widget>[
+            Row(children: <Widget>[
+              Container(
                 width: 120,
 //                height: 180,
                 padding: const EdgeInsets.only(right: 8),
@@ -171,116 +167,114 @@ class _GalleryItemWidgetState extends State<GalleryItemWidget> {
                   child: _buildImg(),
                 ),
               ),
-            ),
 
-            // 右侧信息
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: <Widget>[
-                  // 标题
-                  _buildTitle(),
-                  // 上传者
-                  Text(
-                    widget?.galleryItemBean?.uploader ?? '',
-                    style: TextStyle(
-                        fontSize: 12, color: CupertinoColors.systemGrey),
-                  ),
+              // 右侧信息
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: <Widget>[
+                    // 标题
+                    _buildTitle(),
+                    // 上传者
+                    Text(
+                      widget?.galleryItemBean?.uploader ?? '',
+                      style: TextStyle(
+                          fontSize: 12, color: CupertinoColors.systemGrey),
+                    ),
 
-                  // 标签
-                  _buildTagBox(),
-//                  Expanded(child: Container(),),
-                  // 评分和页数
-                  Row(
-                    crossAxisAlignment: CrossAxisAlignment.end,
-                    children: <Widget>[
-                      Padding(
-                        padding: const EdgeInsets.fromLTRB(0, 0, 4, 0),
-                        child: StaticRatingBar(
-                          size: 20.0,
-                          rate: widget.galleryItemBean.rating,
-                          radiusRatio: 1.5,
+                    // 标签
+                    _buildTagBox(),
+                    // Spacer(),
+                    // 评分和页数
+                    Row(
+                      crossAxisAlignment: CrossAxisAlignment.end,
+                      children: <Widget>[
+                        Padding(
+                          padding: const EdgeInsets.fromLTRB(0, 0, 4, 0),
+                          child: StaticRatingBar(
+                            size: 20.0,
+                            rate: widget.galleryItemBean.rating,
+                            radiusRatio: 1.5,
+                          ),
                         ),
-                      ),
-                      Text(
-                        widget?.galleryItemBean?.rating.toString(),
-                        style: TextStyle(
-                          fontSize: 13,
-                          color: CupertinoColors.systemGrey,
+                        Text(
+                          widget?.galleryItemBean?.rating.toString(),
+                          style: TextStyle(
+                            fontSize: 13,
+                            color: CupertinoColors.systemGrey,
+                          ),
                         ),
-                      ),
-                      // 占位
-                      Expanded(
-                        child: Container(),
-                      ),
-                      Row(
-                        crossAxisAlignment: CrossAxisAlignment.end,
-                        children: <Widget>[
-                          Padding(
-                            padding: const EdgeInsets.only(bottom: 1),
-                            child: Icon(
+                        // 占位
+                        Spacer(),
+                        Row(
+                          crossAxisAlignment: CrossAxisAlignment.end,
+                          children: <Widget>[
+                            Padding(
+                              padding: const EdgeInsets.only(bottom: 1),
+                              child: Icon(
 //                              EHCupertinoIcons.paper_solid,
-                              Icons.panorama,
-                              size: 13,
-                              color: CupertinoColors.systemGrey,
+                                Icons.panorama,
+                                size: 13,
+                                color: CupertinoColors.systemGrey,
+                              ),
+                            ),
+                            Padding(
+                              padding: const EdgeInsets.only(left: 2),
+                              child: Text(
+                                widget?.galleryItemBean?.filecount ?? "",
+                                style: TextStyle(
+                                    fontSize: 12,
+                                    color: CupertinoColors.systemGrey),
+                              ),
+                            ),
+                          ],
+                        )
+                      ],
+                    ),
+                    Container(
+                      height: 4,
+                    ),
+                    // 类型和时间
+                    Row(
+                      crossAxisAlignment: CrossAxisAlignment.end,
+                      children: <Widget>[
+                        ClipRRect(
+                          borderRadius: BorderRadius.circular(4),
+                          child: Container(
+                            padding: const EdgeInsets.fromLTRB(6, 3, 6, 3),
+                            color: _colorCategory,
+                            child: Text(
+                              widget?.galleryItemBean?.category ?? "",
+                              style: TextStyle(
+                                fontSize: 14,
+                                height: 1,
+                                color: CupertinoColors.white,
+//                              backgroundColor: _colorCategory
+                              ),
                             ),
                           ),
-                          Padding(
-                            padding: const EdgeInsets.only(left: 2),
+                        ),
+
+                        // 上传时间
+                        Expanded(
+                          child: Align(
+                            alignment: Alignment.centerRight,
                             child: Text(
-                              widget?.galleryItemBean?.filecount ?? "",
+                              widget?.galleryItemBean?.postTime ?? "",
                               style: TextStyle(
                                   fontSize: 12,
                                   color: CupertinoColors.systemGrey),
                             ),
                           ),
-                        ],
-                      )
-                    ],
-                  ),
-                  Container(
-                    height: 4,
-                  ),
-                  // 类型和时间
-                  Row(
-                    crossAxisAlignment: CrossAxisAlignment.end,
-                    children: <Widget>[
-                      ClipRRect(
-                        borderRadius: BorderRadius.circular(4),
-                        child: Container(
-                          padding: const EdgeInsets.fromLTRB(6, 3, 6, 3),
-                          color: _colorCategory,
-                          child: Text(
-                            widget?.galleryItemBean?.category ?? "",
-                            style: TextStyle(
-                              fontSize: 14,
-                              height: 1,
-                              color: CupertinoColors.white,
-//                              backgroundColor: _colorCategory
-                            ),
-                          ),
-                        ),
-                      ),
-
-                      // 上传时间
-                      Expanded(
-                        child: Align(
-                          alignment: Alignment.centerRight,
-                          child: Text(
-                            widget?.galleryItemBean?.postTime ?? "",
-                            style: TextStyle(
-                                fontSize: 12,
-                                color: CupertinoColors.systemGrey),
-                          ),
-                        ),
-                      )
-                    ],
-                  )
-                ],
+                        )
+                      ],
+                    )
+                  ],
+                ),
               ),
-            ),
-          ]),
-        ],
+            ]),
+          ],
+        ),
       ),
     );
 
@@ -295,7 +289,7 @@ class _GalleryItemWidgetState extends State<GalleryItemWidget> {
       behavior: HitTestBehavior.opaque,
       onTap: () {
         Global.logger.v("title: $_title \n tags: $_simpleTags");
-        NavigatorUtil.jump(context, EHRoutes.galleryDetail);
+        NavigatorUtil.goGalleryDetail(context, _title, widget.galleryItemBean);
       },
       onTapDown: (_) => _updatePressedColor(),
       onTapUp: (_) {

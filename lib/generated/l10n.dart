@@ -182,6 +182,16 @@ class S {
       args: [],
     );
   }
+
+  /// `READ`
+  String get READ {
+    return Intl.message(
+      'READ',
+      name: 'READ',
+      desc: '',
+      args: [],
+    );
+  }
 }
 
 class AppLocalizationDelegate extends LocalizationsDelegate<S> {
