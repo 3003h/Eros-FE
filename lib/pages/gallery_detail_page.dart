@@ -1,3 +1,5 @@
+import 'package:FEhViewer/client/parser/gallery_detail_parser.dart';
+import 'package:FEhViewer/common/global.dart';
 import 'package:FEhViewer/generated/l10n.dart';
 import 'package:FEhViewer/models/index.dart';
 import 'package:FEhViewer/values/const.dart';
@@ -18,6 +20,31 @@ class GalleryDetailPage extends StatefulWidget {
 }
 
 class _GalleryDetailPageState extends State<GalleryDetailPage> {
+  List<Widget> _lisTagGroupW = [];
+  GalleryItem _galleryItem;
+  bool _loading = false;
+
+  _loadData() async {
+    setState(() {
+      _loading = true;
+    });
+    _galleryItem =
+        await GalleryDetailParser.getGalleryDetail(widget.galleryItem);
+    _galleryItem.tagGroup.forEach((tagGroup) {
+      _lisTagGroupW
+          .add(_buildTagGloups(tagGroup.tagType, tagGroup.galleryTags));
+    });
+    setState(() {
+      _loading = false;
+    });
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    _loadData();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -33,10 +60,71 @@ class _GalleryDetailPageState extends State<GalleryDetailPage> {
                   height: 0.5,
                   color: CupertinoColors.systemGrey4,
                 ),
+                _buildTagBox(),
+                Container(
+                  height: 0.5,
+                  color: CupertinoColors.systemGrey4,
+                ),
               ],
             ),
           ),
         ),
+      ),
+    );
+  }
+
+  /// 标签按钮
+  Widget _buildTagButton(String text, {Color color}) {
+    return CupertinoButton(
+        child: Text(
+          text,
+          style: TextStyle(fontSize: 14.5, height: 1.22),
+        ),
+        minSize: 20,
+        padding: const EdgeInsets.fromLTRB(8, 2, 8, 2),
+        borderRadius: BorderRadius.circular(50),
+        color: color ?? Colors.teal,
+        onPressed: () {});
+  }
+
+  Widget _buildTagGloups(String types, List<GalleryTag> galleryTags) {
+    bool isTagTranslat = Global.profile.ehConfig.tagTranslat;
+    List<Widget> _tagBtnList = [];
+    galleryTags.forEach((tag) {
+      _tagBtnList.add(_buildTagButton(
+          isTagTranslat ? tag?.tagTranslat ?? '' : tag?.title ?? ''));
+    });
+    Container container = Container(
+      padding: const EdgeInsets.fromLTRB(0, 4, 0, 4),
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          // tag 分类
+          Container(
+            padding: const EdgeInsets.only(right: 8, left: 8),
+            child: _buildTagButton(types, color: CupertinoColors.activeBlue),
+          ),
+          Expanded(
+            child: Container(
+              child: Wrap(
+                spacing: 4, //主轴上子控件的间距
+                runSpacing: 4, //交叉轴上子控件之间的间距
+                children: _tagBtnList, //要显示的子控件集合
+              ),
+            ),
+          )
+        ],
+      ),
+    );
+
+    return container;
+  }
+
+  Widget _buildTagBox() {
+    return Container(
+      margin: const EdgeInsets.fromLTRB(0, 8, 12, 8),
+      child: Column(
+        children: _lisTagGroupW,
       ),
     );
   }
@@ -85,18 +173,21 @@ class _GalleryDetailPageState extends State<GalleryDetailPage> {
                         overflow: TextOverflow.ellipsis, // 超出部分省略号
                         style: TextStyle(
                             fontSize: 15,
-                            fontWeight: FontWeight.bold,
+                            fontWeight: FontWeight.w500,
                             fontFamilyFallback: [EHConst.FONT_FAMILY]),
                       ),
-                      Text(
-                        widget?.galleryItem?.uploader ?? '',
-                        maxLines: 1,
-                        textAlign: TextAlign.left, // 对齐方式
-                        overflow: TextOverflow.ellipsis, // 超出部分省略号
-                        style: TextStyle(
-                            fontSize: 12,
-                            color: CupertinoColors.systemGrey,
-                            fontFamilyFallback: [EHConst.FONT_FAMILY]),
+                      Container(
+                        margin: const EdgeInsets.only(top: 4, bottom: 4),
+                        child: Text(
+                          widget?.galleryItem?.uploader ?? '',
+                          maxLines: 1,
+                          textAlign: TextAlign.left, // 对齐方式
+                          overflow: TextOverflow.ellipsis, // 超出部分省略号
+                          style: TextStyle(
+                              fontSize: 12,
+                              color: CupertinoColors.systemGrey,
+                              fontFamilyFallback: [EHConst.FONT_FAMILY]),
+                        ),
                       ),
                       Spacer(),
                       Row(
@@ -142,7 +233,7 @@ class _GalleryDetailPageState extends State<GalleryDetailPage> {
                     widget?.galleryItem?.category ?? '',
                     style: TextStyle(
                       fontSize: 14.5,
-                      height: 1,
+                      // height: 1.1,
                       color: CupertinoColors.white,
                     ),
                   ),

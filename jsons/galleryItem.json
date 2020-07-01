@@ -16,5 +16,6 @@
     "numberOfReviews":"",
     "postTime":"",
     "simpleTags":["", ""],
-    "simpleTagsTranslat":["", ""]
+    "simpleTagsTranslat":["", ""],
+    "tagGroup":"$[]tagGroup"
 }

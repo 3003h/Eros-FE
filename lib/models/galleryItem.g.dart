@@ -25,7 +25,11 @@ GalleryItem _$GalleryItemFromJson(Map<String, dynamic> json) {
     ..numberOfReviews = json['numberOfReviews'] as String
     ..postTime = json['postTime'] as String
     ..simpleTags = json['simpleTags'] as List
-    ..simpleTagsTranslat = json['simpleTagsTranslat'] as List;
+    ..simpleTagsTranslat = json['simpleTagsTranslat'] as List
+    ..tagGroup = (json['tagGroup'] as List)
+        ?.map((e) =>
+            e == null ? null : TagGroup.fromJson(e as Map<String, dynamic>))
+        ?.toList();
 }
 
 Map<String, dynamic> _$GalleryItemToJson(GalleryItem instance) =>
@@ -47,5 +51,6 @@ Map<String, dynamic> _$GalleryItemToJson(GalleryItem instance) =>
       'numberOfReviews': instance.numberOfReviews,
       'postTime': instance.postTime,
       'simpleTags': instance.simpleTags,
-      'simpleTagsTranslat': instance.simpleTagsTranslat
+      'simpleTagsTranslat': instance.simpleTagsTranslat,
+      'tagGroup': instance.tagGroup
     };
