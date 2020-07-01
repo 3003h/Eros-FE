@@ -94,9 +94,8 @@ class EhTagDatabase {
     Global.loggerNoStack.v('tag中文翻译数量 ${tags.length}');
   }
 
-  static Future<String> getTranTag(String tag) async {
+  static Future<String> getTranTag(String tag, {String nameSpase}) async {
     if (tag.contains(':')) {
-//      debugPrint('$tag');
       RegExp rpfx = new RegExp(r"(\w:)(.+)");
       final rult = rpfx.firstMatch(tag);
       final pfx = rult.group(1) ?? '';
@@ -107,7 +106,10 @@ class EhTagDatabase {
 
       return _transTag != null ? '$pfx$_transTag' : tag;
     } else {
-      return await DataBaseUtil().getTagTransStr(tag);
+      return nameSpase != null && nameSpase.isNotEmpty
+          ? await DataBaseUtil().getTagTransStr(tag)
+          : await DataBaseUtil().getTagTransStr(tag, namespace: nameSpase);
+      ;
     }
   }
 }

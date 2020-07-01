@@ -57,7 +57,7 @@ class _GalleryItemWidgetState extends State<GalleryItemWidget> {
             overflow: TextOverflow.ellipsis, // 超出部分省略号
             style: TextStyle(
                 fontSize: 13,
-                fontWeight: FontWeight.bold,
+                fontWeight: FontWeight.w500,
                 fontFamilyFallback: [EHConst.FONT_FAMILY]),
           );
         },
