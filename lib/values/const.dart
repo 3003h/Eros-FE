@@ -57,6 +57,18 @@ class EHConst {
     },
   ];
 
+  static const translateTagType = {
+    "artist": "作者",
+    "female": "女性",
+    "male": "男性",
+    "parody": "原作",
+    "character": "角色",
+    "group": "团队",
+    "language": "语言",
+    "reclass": "归类",
+    "misc": "杂项"
+  };
+
   static const urls = {
     "default": "https://exhentai.org/",
     "homepage": "https://exhentai.org/",

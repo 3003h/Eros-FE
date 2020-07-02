@@ -78,10 +78,10 @@ class _GalleryDetailPageState extends State<GalleryDetailPage> {
     return CupertinoButton(
         child: Text(
           text,
-          style: TextStyle(fontSize: 14.5, height: 1.22),
+          style: TextStyle(fontSize: 13, height: 1.225),
         ),
-        minSize: 20,
-        padding: const EdgeInsets.fromLTRB(8, 2, 8, 2),
+        minSize: 5,
+        padding: const EdgeInsets.fromLTRB(8, 3, 8, 3),
         borderRadius: BorderRadius.circular(50),
         color: color ?? Colors.teal,
         onPressed: () {});
@@ -94,6 +94,7 @@ class _GalleryDetailPageState extends State<GalleryDetailPage> {
       _tagBtnList.add(_buildTagButton(
           isTagTranslat ? tag?.tagTranslat ?? '' : tag?.title ?? ''));
     });
+
     Container container = Container(
       padding: const EdgeInsets.fromLTRB(0, 4, 0, 4),
       child: Row(
@@ -102,7 +103,13 @@ class _GalleryDetailPageState extends State<GalleryDetailPage> {
           // tag 分类
           Container(
             padding: const EdgeInsets.only(right: 8, left: 8),
-            child: _buildTagButton(types, color: CupertinoColors.activeBlue),
+            child: _buildTagButton(
+              isTagTranslat
+                  ? EHConst.translateTagType[types.trim()] ?? types
+                  : types,
+              color: Colors.blueGrey,
+              // color: CupertinoColors.systemGrey,
+            ),
           ),
           Expanded(
             child: Container(
@@ -172,7 +179,7 @@ class _GalleryDetailPageState extends State<GalleryDetailPage> {
                         textAlign: TextAlign.left, // 对齐方式
                         overflow: TextOverflow.ellipsis, // 超出部分省略号
                         style: TextStyle(
-                            fontSize: 15,
+                            fontSize: 16,
                             fontWeight: FontWeight.w500,
                             fontFamilyFallback: [EHConst.FONT_FAMILY]),
                       ),
