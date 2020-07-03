@@ -78,7 +78,7 @@ class _FEhHomeState extends State<FEhHome> {
   Text getTabTitle(int curIndex) {
     return Text(
       _tabTitles[curIndex],
-      style: TextStyle(fontFamilyFallback: [EHConst.FONT_FAMILY]),
+      // style: TextStyle(fontFamilyFallback: [EHConst.FONT_FAMILY]),
 //      style: getTabTextStyle(curIndex),
     );
   }

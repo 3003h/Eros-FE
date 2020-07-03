@@ -107,7 +107,7 @@ class _GalleryListTab extends State<GalleryListTab> {
   Future<void> _jumtToPage(BuildContext context) async {
     return showCupertinoDialog<void>(
       context: context,
-      barrierDismissible: false, // user must tap button!
+      // barrierDismissible: false, // user must tap button!
       builder: (BuildContext context) {
         return CupertinoAlertDialog(
           title: Text('页面跳转'),

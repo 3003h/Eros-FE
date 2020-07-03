@@ -40,7 +40,7 @@ class _SettingTab extends State<SettingTab> {
         CupertinoSliverNavigationBar(
           largeTitle: Text(
             _title,
-            style: TextStyle(fontFamilyFallback: [EHConst.FONT_FAMILY]),
+            // style: TextStyle(fontFamilyFallback: [EHConst.FONT_FAMILY]),
           ),
           transitionBetweenRoutes: false,
         ),
