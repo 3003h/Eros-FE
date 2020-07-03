@@ -60,11 +60,13 @@ class _GalleryDetailPageState extends State<GalleryDetailPage> {
                   height: 0.5,
                   color: CupertinoColors.systemGrey4,
                 ),
-                _buildTagBox(),
-                Container(
-                  height: 0.5,
-                  color: CupertinoColors.systemGrey4,
-                ),
+                TagBox(
+                  lisTagGroupW: _lisTagGroupW,
+                )
+                // Container(
+                //   height: 0.5,
+                //   color: CupertinoColors.systemGrey4,
+                // ),
               ],
             ),
           ),
@@ -78,7 +80,8 @@ class _GalleryDetailPageState extends State<GalleryDetailPage> {
     return CupertinoButton(
         child: Text(
           text,
-          style: TextStyle(fontSize: 13, height: 1.225),
+          style: TextStyle(fontSize: 14, height: 1.3),
+          strutStyle: StrutStyle(height: 1),
         ),
         minSize: 5,
         padding: const EdgeInsets.fromLTRB(8, 3, 8, 3),
@@ -127,15 +130,6 @@ class _GalleryDetailPageState extends State<GalleryDetailPage> {
     return container;
   }
 
-  Widget _buildTagBox() {
-    return Container(
-      margin: const EdgeInsets.fromLTRB(0, 8, 12, 8),
-      child: Column(
-        children: _lisTagGroupW,
-      ),
-    );
-  }
-
   Widget _buildGalletyHead(BuildContext context) {
     Color _colorCategory = ThemeColors
             .nameColor[widget?.galleryItem?.category ?? "defaule"]["color"] ??
@@ -176,13 +170,13 @@ class _GalleryDetailPageState extends State<GalleryDetailPage> {
                       // 标题
                       Text(
                         widget.title,
-                        maxLines: 4,
+                        maxLines: 5,
                         textAlign: TextAlign.left, // 对齐方式
                         overflow: TextOverflow.ellipsis, // 超出部分省略号
                         style: TextStyle(
                           fontSize: 16,
                           fontWeight: FontWeight.w500,
-                          fontFamilyFallback: [EHConst.FONT_FAMILY],
+                          // fontFamilyFallback: EHConst.FONT_FAMILY_FB,
                         ),
                       ),
                       Container(
@@ -252,6 +246,21 @@ class _GalleryDetailPageState extends State<GalleryDetailPage> {
             ],
           )
         ],
+      ),
+    );
+  }
+}
+
+class TagBox extends StatelessWidget {
+  final lisTagGroupW;
+  const TagBox({Key key, this.lisTagGroupW}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      margin: const EdgeInsets.fromLTRB(0, 8, 12, 8),
+      child: Column(
+        children: lisTagGroupW,
       ),
     );
   }

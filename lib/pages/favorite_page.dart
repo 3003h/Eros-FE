@@ -241,6 +241,9 @@ class _FavSelItemWidgetState extends State<FavSelItemWidget> {
             ), // 占位 宽度8
             Text(
               widget?.favcatItemBean?.title ?? '',
+              style: TextStyle(
+                fontSize: 20,
+              ),
             ),
             Expanded(
               child: Align(

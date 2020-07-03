@@ -52,13 +52,12 @@ class _GalleryItemWidgetState extends State<GalleryItemWidget> {
           _title = _getTitle(value.isJpnTitle);
           return Text(
             _title,
-            maxLines: 3,
+            maxLines: 4,
             textAlign: TextAlign.left, // 对齐方式
             overflow: TextOverflow.ellipsis, // 超出部分省略号
             style: TextStyle(
-              fontSize: 14,
+              fontSize: 14.5,
               fontWeight: FontWeight.w500,
-              fontFamilyFallback: [EHConst.FONT_FAMILY],
             ),
           );
         },
@@ -77,11 +76,10 @@ class _GalleryItemWidgetState extends State<GalleryItemWidget> {
             text ?? "",
             textAlign: TextAlign.center,
             style: TextStyle(
-              fontSize: 10,
+              fontSize: 12,
               height: 1,
-              fontWeight: FontWeight.normal,
-              color: Color(0xff666666),
-              // fontFamilyFallback: [EHConst.FONT_FAMILY],
+              fontWeight: FontWeight.w400,
+              color: Color(0xff444444),
             ),
             strutStyle: StrutStyle(height: 1),
           ),

@@ -17,7 +17,7 @@ class TabPageTitle extends StatelessWidget {
               children: <Widget>[
                 Text(
                   loadingText,
-                  style: TextStyle(fontFamilyFallback: [EHConst.FONT_FAMILY]),
+                  style: TextStyle(fontFamilyFallback: EHConst.FONT_FAMILY_FB),
                 ),
                 Container(
                   width: 18,
