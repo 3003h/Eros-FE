@@ -56,9 +56,10 @@ class _GalleryItemWidgetState extends State<GalleryItemWidget> {
             textAlign: TextAlign.left, // 对齐方式
             overflow: TextOverflow.ellipsis, // 超出部分省略号
             style: TextStyle(
-                fontSize: 13,
-                fontWeight: FontWeight.w500,
-                fontFamilyFallback: [EHConst.FONT_FAMILY]),
+              fontSize: 14,
+              fontWeight: FontWeight.w500,
+              fontFamilyFallback: [EHConst.FONT_FAMILY],
+            ),
           );
         },
       );
@@ -76,11 +77,12 @@ class _GalleryItemWidgetState extends State<GalleryItemWidget> {
             text ?? "",
             textAlign: TextAlign.center,
             style: TextStyle(
-                fontSize: 10,
-                height: 1,
-                fontWeight: FontWeight.normal,
-                color: Color(0xff666666),
-                fontFamilyFallback: [EHConst.FONT_FAMILY]),
+              fontSize: 10,
+              height: 1,
+              fontWeight: FontWeight.normal,
+              color: Color(0xff666666),
+              // fontFamilyFallback: [EHConst.FONT_FAMILY],
+            ),
             strutStyle: StrutStyle(height: 1),
           ),
         ),

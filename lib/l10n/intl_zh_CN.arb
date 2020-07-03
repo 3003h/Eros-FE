@@ -18,6 +18,6 @@
   "passwd": "密码",
   "login": "登录",
   "login_web": "通过网页登录",
-  "double_click_back" : "再按一次返回退出",
-  "READ":"阅读"
+  "double_click_back": "再按一次返回退出",
+  "READ": "阅读"
 }

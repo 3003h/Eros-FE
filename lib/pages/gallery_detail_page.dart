@@ -173,15 +173,17 @@ class _GalleryDetailPageState extends State<GalleryDetailPage> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: <Widget>[
+                      // 标题
                       Text(
                         widget.title,
                         maxLines: 4,
                         textAlign: TextAlign.left, // 对齐方式
                         overflow: TextOverflow.ellipsis, // 超出部分省略号
                         style: TextStyle(
-                            fontSize: 16,
-                            fontWeight: FontWeight.w500,
-                            fontFamilyFallback: [EHConst.FONT_FAMILY]),
+                          fontSize: 16,
+                          fontWeight: FontWeight.w500,
+                          fontFamilyFallback: [EHConst.FONT_FAMILY],
+                        ),
                       ),
                       Container(
                         margin: const EdgeInsets.only(top: 4, bottom: 4),
@@ -191,9 +193,10 @@ class _GalleryDetailPageState extends State<GalleryDetailPage> {
                           textAlign: TextAlign.left, // 对齐方式
                           overflow: TextOverflow.ellipsis, // 超出部分省略号
                           style: TextStyle(
-                              fontSize: 12,
-                              color: CupertinoColors.systemGrey,
-                              fontFamilyFallback: [EHConst.FONT_FAMILY]),
+                            fontSize: 12,
+                            color: CupertinoColors.systemGrey,
+                            // fontFamilyFallback: [EHConst.FONT_FAMILY],
+                          ),
                         ),
                       ),
                       Spacer(),

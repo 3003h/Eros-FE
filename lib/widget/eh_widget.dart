@@ -30,7 +30,7 @@ class TabPageTitle extends StatelessWidget {
           )
         : Text(
             title,
-            style: TextStyle(fontFamilyFallback: [EHConst.FONT_FAMILY]),
+            // style: TextStyle(fontFamilyFallback: [EHConst.FONT_FAMILY]),
           );
   }
 }
