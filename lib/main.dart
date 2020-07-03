@@ -4,6 +4,7 @@ import 'package:FEhViewer/models/states/locale_model.dart';
 import 'package:FEhViewer/models/states/user_model.dart';
 import 'package:FEhViewer/pages/splash_page.dart';
 import 'package:FEhViewer/route/application.dart';
+import 'package:FEhViewer/values/const.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -21,7 +22,16 @@ class MyApp extends StatelessWidget {
         builder: (BuildContext context, localeModel, Widget child) {
       return CupertinoApp(
         onGenerateRoute: Application.router.generator,
-        theme: CupertinoThemeData(brightness: Brightness.light),
+        theme: CupertinoThemeData(
+          brightness: Brightness.light,
+          textTheme: CupertinoTextThemeData(
+            textStyle: TextStyle(
+              fontFamilyFallback: EHConst.FONT_FAMILY_FB,
+              color: CupertinoColors.black,
+              fontSize: 18,
+            ),
+          ),
+        ),
         home: SplashPage(),
         locale: localeModel.getLocale(),
         supportedLocales: [

@@ -22,7 +22,7 @@ class EHConst {
   static const FAV_ORDER_FAV = 'fs_f';
   static const FAV_ORDER_PUB = 'fs_p';
 
-  static const FONT_FAMILY = '';
+  static const FONT_FAMILY_FB = ["PingFang SC", "Heiti SC"];
 
   static const List settingList = [
     {
