@@ -50,7 +50,13 @@ class _GalleryDetailPageState extends State<GalleryDetailPage> {
     return Container(
       child: Container(
         child: CupertinoPageScaffold(
-          navigationBar: CupertinoNavigationBar(),
+          navigationBar: CupertinoNavigationBar(
+            middle: _loading
+                ? CupertinoActivityIndicator(
+                    // radius: 15.0,
+                    )
+                : Container(),
+          ),
           child: Container(
             margin: const EdgeInsets.only(left: 12),
             child: ListView(
@@ -75,27 +81,13 @@ class _GalleryDetailPageState extends State<GalleryDetailPage> {
     );
   }
 
-  /// 标签按钮
-  Widget _buildTagButton(String text, {Color color}) {
-    return CupertinoButton(
-        child: Text(
-          text,
-          style: TextStyle(fontSize: 14, height: 1.3),
-          strutStyle: StrutStyle(height: 1),
-        ),
-        minSize: 5,
-        padding: const EdgeInsets.fromLTRB(8, 3, 8, 3),
-        borderRadius: BorderRadius.circular(50),
-        color: color ?? Colors.teal,
-        onPressed: () {});
-  }
-
   Widget _buildTagGloups(String types, List<GalleryTag> galleryTags) {
     bool isTagTranslat = Global.profile.ehConfig.tagTranslat;
     List<Widget> _tagBtnList = [];
     galleryTags.forEach((tag) {
-      _tagBtnList.add(_buildTagButton(
-          isTagTranslat ? tag?.tagTranslat ?? '' : tag?.title ?? ''));
+      _tagBtnList.add(TagButton(
+        text: isTagTranslat ? tag?.tagTranslat ?? '' : tag?.title ?? '',
+      ));
     });
 
     Container container = Container(
@@ -106,8 +98,8 @@ class _GalleryDetailPageState extends State<GalleryDetailPage> {
           // tag 分类
           Container(
             padding: const EdgeInsets.only(right: 8, left: 8),
-            child: _buildTagButton(
-              isTagTranslat
+            child: TagButton(
+              text: isTagTranslat
                   ? EHConst.translateTagType[types.trim()] ?? types
                   : types,
               color: Colors.blueGrey,
@@ -248,6 +240,31 @@ class _GalleryDetailPageState extends State<GalleryDetailPage> {
         ],
       ),
     );
+  }
+}
+
+/// 标签按钮
+class TagButton extends StatelessWidget {
+  final String text;
+  final Color color;
+  const TagButton({
+    @required this.text,
+    color,
+  }) : this.color = color ?? Colors.teal;
+
+  @override
+  Widget build(BuildContext context) {
+    return CupertinoButton(
+        child: Text(
+          text,
+          style: TextStyle(fontSize: 14, height: 1.3),
+          strutStyle: StrutStyle(height: 1),
+        ),
+        minSize: 5,
+        padding: const EdgeInsets.fromLTRB(8, 3, 8, 3),
+        borderRadius: BorderRadius.circular(50),
+        color: color,
+        onPressed: () {});
   }
 }
 
