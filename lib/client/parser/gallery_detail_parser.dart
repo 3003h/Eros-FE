@@ -56,20 +56,17 @@ class GalleryDetailParser {
         }
         var tagTranslat =
             await EhTagDatabase.getTranTag(title, nameSpase: type) ?? title;
-        Global.logger.v('$title $tagTranslat');
-        galleryTags.add(
-            GalleryTag().init(title, type: type, tagTranslat: tagTranslat));
+//        Global.logger.v('$title $tagTranslat');
+        galleryTags.add(GalleryTag()
+          ..title = title
+          ..type = type
+          ..tagTranslat = tagTranslat);
       }
 
-      Global.logger.v('$type  ${tags.length}');
-
-      galleryItem.tagGroup.add(TagGroup().init(type, galleryTags: galleryTags));
+      galleryItem.tagGroup.add(TagGroup()
+        ..tagType = type
+        ..galleryTags = galleryTags);
     }
-
-    // galleryItem.tagGroup.add(
-    //     TagGroup().init("language", tags: ['chinese', 'translated', '123']));
-    // galleryItem.tagGroup
-    //     .add(TagGroup().init("parody", tags: ['kantai collection']));
 
     return galleryItem;
   }

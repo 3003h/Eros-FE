@@ -48,33 +48,29 @@ class _GalleryDetailPageState extends State<GalleryDetailPage> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      child: Container(
-        child: CupertinoPageScaffold(
-          navigationBar: CupertinoNavigationBar(
-            middle: _loading
-                ? CupertinoActivityIndicator(
-                    // radius: 15.0,
-                    )
-                : Container(),
-          ),
-          child: Container(
-            margin: const EdgeInsets.only(left: 12),
-            child: ListView(
-              children: <Widget>[
-                _buildGalletyHead(context),
-                Container(
-                  height: 0.5,
-                  color: CupertinoColors.systemGrey4,
-                ),
-                TagBox(
-                  lisTagGroupW: _lisTagGroupW,
-                )
-                // Container(
-                //   height: 0.5,
-                //   color: CupertinoColors.systemGrey4,
-                // ),
-              ],
-            ),
+      child: CupertinoPageScaffold(
+        navigationBar: CupertinoNavigationBar(
+          middle: _loading
+              ? CupertinoActivityIndicator(
+                  // radius: 15.0,
+                  )
+              : Container(),
+        ),
+        child: Container(
+          margin: const EdgeInsets.only(left: 12),
+          child: ListView(
+            children: <Widget>[
+              _buildGalletyHead(context),
+              Container(
+                height: 0.5,
+                color: CupertinoColors.systemGrey4,
+              ),
+              _loading
+                  ? Container()
+                  : TagBox(
+                      lisTagGroupW: _lisTagGroupW,
+                    ),
+            ],
           ),
         ),
       ),
@@ -85,8 +81,10 @@ class _GalleryDetailPageState extends State<GalleryDetailPage> {
     bool isTagTranslat = Global.profile.ehConfig.tagTranslat;
     List<Widget> _tagBtnList = [];
     galleryTags.forEach((tag) {
+//      Global.logger.v('${tag.type};  ${tag.title}; ${tag.tagTranslat}');
       _tagBtnList.add(TagButton(
         text: isTagTranslat ? tag?.tagTranslat ?? '' : tag?.title ?? '',
+        galleryTag: tag,
       ));
     });
 
@@ -247,9 +245,11 @@ class _GalleryDetailPageState extends State<GalleryDetailPage> {
 class TagButton extends StatelessWidget {
   final String text;
   final Color color;
+  final GalleryTag galleryTag;
   const TagButton({
     @required this.text,
     color,
+    this.galleryTag,
   }) : this.color = color ?? Colors.teal;
 
   @override
@@ -264,21 +264,32 @@ class TagButton extends StatelessWidget {
         padding: const EdgeInsets.fromLTRB(8, 3, 8, 3),
         borderRadius: BorderRadius.circular(50),
         color: color,
-        onPressed: () {});
+        onPressed: () {
+          if (galleryTag != null) {
+            Global.logger
+                .v('search type[${galleryTag.type}] tag[${galleryTag.title}]');
+          }
+        });
   }
 }
 
 class TagBox extends StatelessWidget {
-  final lisTagGroupW;
+  final List<Widget> lisTagGroupW;
   const TagBox({Key key, this.lisTagGroupW}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      margin: const EdgeInsets.fromLTRB(0, 8, 12, 8),
-      child: Column(
-        children: lisTagGroupW,
-      ),
+    return Column(
+      children: [
+        Container(
+          margin: const EdgeInsets.fromLTRB(0, 8, 12, 8),
+          child: Column(children: lisTagGroupW),
+        ),
+        Container(
+          height: 0.5,
+          color: CupertinoColors.systemGrey4,
+        ),
+      ],
     );
   }
 }
