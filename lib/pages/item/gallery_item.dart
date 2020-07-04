@@ -22,15 +22,15 @@ class GalleryItemWidget extends StatefulWidget {
 }
 
 class _GalleryItemWidgetState extends State<GalleryItemWidget> {
+  final double _padL = 8.0;
+
   Color _colorTap; // 按下时颜色反馈
-  double _padL;
-  String _title;
+  String _title; // 英语或者日语
   List<String> _simpleTags = [];
 
   @override
   Widget build(BuildContext context) {
     // Global.logger.v('bulid _GalleryItemWidgetState');
-    _padL = 8.0;
 
     var _isBlur = Global.profile.ehConfig.galleryImgBlur ?? false;
 
@@ -282,7 +282,11 @@ class _GalleryItemWidgetState extends State<GalleryItemWidget> {
       child: Column(
         children: <Widget>[
           containerGallery,
-          _galleryItemDivider(),
+          Divider(
+            height: 0.5,
+            indent: _padL,
+            color: CupertinoColors.systemGrey4,
+          ),
         ],
       ),
       // 不可见区域点击有效
@@ -311,14 +315,5 @@ class _GalleryItemWidgetState extends State<GalleryItemWidget> {
     setState(() {
       _colorTap = CupertinoColors.systemGrey4;
     });
-  }
-
-  /// 设置项分隔线
-  Widget _galleryItemDivider() {
-    return Divider(
-      height: 0.5,
-      indent: _padL,
-      color: CupertinoColors.systemGrey4,
-    );
   }
 }
