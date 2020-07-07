@@ -31,7 +31,7 @@ class _GalleryItemWidgetState extends State<GalleryItemWidget> {
     return Selector<EhConfigModel, bool>(
       selector: (context, provider) => provider.isJpnTitle,
       builder: (context, value, child) {
-        Global.logger.v('Provider build title');
+//        Global.logger.v('Provider build title');
         _title = _getTitle(value);
         return Text(
           _title,
@@ -61,8 +61,6 @@ class _GalleryItemWidgetState extends State<GalleryItemWidget> {
 
   @override
   Widget build(BuildContext context) {
-    // Global.logger.v('bulid _GalleryItemWidgetState');
-
     Color _colorCategory =
         ThemeColors.nameColor[widget?.galleryItemBean?.category ?? "defaule"]
                 ["color"] ??
@@ -221,12 +219,15 @@ class _GalleryItemWidgetState extends State<GalleryItemWidget> {
       // 不可见区域点击有效
       behavior: HitTestBehavior.opaque,
       onTap: () {
-        Global.logger.v("title: $_title \n tags: $_simpleTags");
+        Global.logger.v("onTap title: $_title \n tags: $_simpleTags");
         NavigatorUtil.goGalleryDetail(context, _title, widget.galleryItemBean);
+      },
+      onLongPress: () {
+        Global.logger.v("onLongPress title: $_title ");
       },
       onTapDown: (_) => _updatePressedColor(),
       onTapUp: (_) {
-        Future.delayed(const Duration(milliseconds: 100), () {
+        Future.delayed(const Duration(milliseconds: 150), () {
           _updateNormalColor();
         });
       },
@@ -278,9 +279,11 @@ class TagItem extends StatelessWidget {
   }
 }
 
+/// 传入原始标签和翻译标签
+/// 便于设置切换的时候变更
 class TagBox extends StatelessWidget {
-  final simpleTags;
-  final simpleTagsTranslat;
+  final List<String> simpleTags;
+  final List<String> simpleTagsTranslat;
 
   const TagBox(
       {Key key, @required this.simpleTags, @required this.simpleTagsTranslat})
@@ -310,6 +313,7 @@ class TagBox extends StatelessWidget {
   }
 }
 
+/// 封面图片Widget
 class CoverImg extends StatelessWidget {
   final String imgUrl;
   const CoverImg({
