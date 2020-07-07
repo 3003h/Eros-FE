@@ -4,17 +4,13 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class SettingItems extends StatefulWidget {
-  final int index;
   final String text;
   final IconData icon;
-  final bool isLast;
   final String route;
 
   SettingItems({
-    this.index,
     this.text,
     this.icon,
-    this.isLast,
     this.route,
   });
 
@@ -69,7 +65,6 @@ class _SettingItems extends State<SettingItems> {
                 ),
               ],
             ),
-            widget.isLast ? _settingItemDivider() : new Container(), // 末尾分隔线
           ],
         ));
 
@@ -78,7 +73,7 @@ class _SettingItems extends State<SettingItems> {
       // 不可见区域有效
       behavior: HitTestBehavior.opaque,
       onTap: () {
-        Global.loggerNoStack.v("set tap ${widget.index}  ${widget.isLast}");
+        Global.loggerNoStack.v("set tap ${widget.text} ");
         NavigatorUtil.jump(context, widget.route);
       },
       onTapDown: (_) => _updatePressedColor(),

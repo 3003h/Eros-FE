@@ -31,10 +31,6 @@ class _FEhHomeState extends State<FEhHome> {
     final _iconSize = 24.0;
     if (tabIcon == null) {
       tabIcon = [
-        // Icon(EHCupertinoIcons.fire_solid),
-        // Icon(EHCupertinoIcons.gallery_solid),
-        // Icon(EHCupertinoIcons.heart_solid),
-        // Icon(CupertinoIcons.settings_solid),
         Icon(
           FontAwesomeIcons.fire,
           size: _iconSize,
