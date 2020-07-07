@@ -2,7 +2,6 @@ import 'package:FEhViewer/common/global.dart';
 import 'package:FEhViewer/models/galleryItem.dart';
 import 'package:FEhViewer/models/states/ehconfig_model.dart';
 import 'package:FEhViewer/route/navigator_util.dart';
-import 'package:FEhViewer/values/const.dart';
 import 'package:FEhViewer/values/theme_colors.dart';
 import 'package:FEhViewer/widget/blur_image.dart';
 import 'package:FEhViewer/widget/rating_bar.dart';
@@ -28,115 +27,41 @@ class _GalleryItemWidgetState extends State<GalleryItemWidget> {
   String _title; // 英语或者日语
   List<String> _simpleTags = [];
 
+  Widget _buildTitle() {
+    return Selector<EhConfigModel, bool>(
+      selector: (context, provider) => provider.isJpnTitle,
+      builder: (context, value, child) {
+        Global.logger.v('Provider build title');
+        _title = _getTitle(value);
+        return Text(
+          _title,
+          maxLines: 4,
+          textAlign: TextAlign.left, // 对齐方式
+          overflow: TextOverflow.ellipsis, // 超出部分省略号
+          style: TextStyle(
+            fontSize: 14.5,
+            fontWeight: FontWeight.w500,
+          ),
+        );
+      },
+    );
+  }
+
+  String _getTitle(bool isJpnTitle) {
+    var _titleEn = widget?.galleryItemBean?.englishTitle ?? '';
+    var _titleJpn = widget?.galleryItemBean?.japaneseTitle ?? '';
+
+    // 日语标题判断
+    var _title = isJpnTitle && _titleJpn != null && _titleJpn.isNotEmpty
+        ? _titleJpn
+        : _titleEn;
+
+    return _title;
+  }
+
   @override
   Widget build(BuildContext context) {
     // Global.logger.v('bulid _GalleryItemWidgetState');
-
-    var _isBlur = Global.profile.ehConfig.galleryImgBlur ?? false;
-
-    String _getTitle(bool isJpnTitle) {
-      var _titleEn = widget?.galleryItemBean?.englishTitle ?? '';
-      var _titleJpn = widget?.galleryItemBean?.japaneseTitle ?? '';
-
-      // 日语标题判断
-      var _title = isJpnTitle && _titleJpn != null && _titleJpn.isNotEmpty
-          ? _titleJpn
-          : _titleEn;
-
-      return _title;
-    }
-
-    Widget _buildTitle() {
-      return Consumer<EhConfigModel>(
-        builder: (BuildContext context, EhConfigModel value, Widget child) {
-          _title = _getTitle(value.isJpnTitle);
-          return Text(
-            _title,
-            maxLines: 4,
-            textAlign: TextAlign.left, // 对齐方式
-            overflow: TextOverflow.ellipsis, // 超出部分省略号
-            style: TextStyle(
-              fontSize: 14.5,
-              fontWeight: FontWeight.w500,
-            ),
-          );
-        },
-      );
-    }
-
-    // 标签 Item
-    Widget _tagItem(String text) {
-      ClipRRect clipRRect = ClipRRect(
-        borderRadius: BorderRadius.circular(4),
-        child: Container(
-          // height: 18,
-          padding: const EdgeInsets.fromLTRB(4, 2, 4, 2),
-          color: Color(0xffeeeeee),
-          child: Text(
-            text ?? "",
-            textAlign: TextAlign.center,
-            style: TextStyle(
-              fontSize: 12,
-              height: 1,
-              fontWeight: FontWeight.w400,
-              color: Color(0xff444444),
-            ),
-            strutStyle: StrutStyle(height: 1),
-          ),
-        ),
-      );
-
-      return Container(
-//      padding: EdgeInsets.all(4),
-        child: clipRRect,
-      );
-    }
-
-    List<Widget> _buildTagItems() {
-      List<Widget> tags = [];
-
-      _simpleTags.forEach((tagText) {
-        tags.add(_tagItem(tagText));
-      });
-
-      return tags;
-    }
-
-    Widget _buildTagBox() {
-      return Consumer<EhConfigModel>(
-        builder: (BuildContext context, EhConfigModel value, Widget child) {
-          _simpleTags = value.isTagTranslat
-              ? widget.galleryItemBean.simpleTagsTranslat
-              : widget.galleryItemBean.simpleTags;
-          return Container(
-            padding: const EdgeInsets.fromLTRB(0, 4, 0, 8),
-            child: Wrap(
-              spacing: 4, //主轴上子控件的间距
-              runSpacing: 4, //交叉轴上子控件之间的间距
-              children: _buildTagItems(), //要显示的子控件集合
-            ),
-          );
-        },
-      );
-    }
-
-    // 封面图片
-    Widget _buildImg() {
-      return Consumer<EhConfigModel>(
-          builder: (BuildContext context, EhConfigModel value, Widget child) {
-        _isBlur = value.isGalleryImgBlur;
-        return widget?.galleryItemBean?.imgUrl != null
-            ? (_isBlur
-                ? BlurImage(
-                    widget: CachedNetworkImage(
-                    imageUrl: widget.galleryItemBean.imgUrl,
-                  ))
-                : CachedNetworkImage(
-                    imageUrl: widget.galleryItemBean.imgUrl,
-                  ))
-            : Container();
-      });
-    }
 
     Color _colorCategory =
         ThemeColors.nameColor[widget?.galleryItemBean?.category ?? "defaule"]
@@ -164,7 +89,8 @@ class _GalleryItemWidgetState extends State<GalleryItemWidget> {
                 child: ClipRRect(
                   // 圆角
                   borderRadius: BorderRadius.circular(8),
-                  child: _buildImg(),
+                  child:
+                      CoverImg(imgUrl: widget?.galleryItemBean?.imgUrl ?? ''),
                 ),
               ),
 
@@ -181,9 +107,12 @@ class _GalleryItemWidgetState extends State<GalleryItemWidget> {
                       style: TextStyle(
                           fontSize: 12, color: CupertinoColors.systemGrey),
                     ),
-
                     // 标签
-                    _buildTagBox(),
+                    TagBox(
+                      simpleTags: widget.galleryItemBean.simpleTags,
+                      simpleTagsTranslat:
+                          widget.galleryItemBean.simpleTagsTranslat,
+                    ),
                     // Spacer(),
                     // 评分和页数
                     Row(
@@ -315,5 +244,94 @@ class _GalleryItemWidgetState extends State<GalleryItemWidget> {
     setState(() {
       _colorTap = CupertinoColors.systemGrey4;
     });
+  }
+}
+
+class TagItem extends StatelessWidget {
+  final text;
+  const TagItem({
+    Key key,
+    this.text,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return ClipRRect(
+      borderRadius: BorderRadius.circular(4),
+      child: Container(
+        // height: 18,
+        padding: const EdgeInsets.fromLTRB(4, 2, 4, 2),
+        color: Color(0xffeeeeee),
+        child: Text(
+          text ?? "",
+          textAlign: TextAlign.center,
+          style: TextStyle(
+            fontSize: 12,
+            height: 1,
+            fontWeight: FontWeight.w400,
+            color: Color(0xff444444),
+          ),
+          strutStyle: StrutStyle(height: 1),
+        ),
+      ),
+    );
+  }
+}
+
+class TagBox extends StatelessWidget {
+  final simpleTags;
+  final simpleTagsTranslat;
+
+  const TagBox(
+      {Key key, @required this.simpleTags, @required this.simpleTagsTranslat})
+      : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    var _simpleTags;
+    return Selector<EhConfigModel, bool>(
+      selector: (context, provider) => provider.isTagTranslat,
+      builder: (context, value, child) {
+        _simpleTags = value ? simpleTagsTranslat : simpleTags;
+        return Container(
+          padding: const EdgeInsets.fromLTRB(0, 4, 0, 8),
+          child: Wrap(
+            spacing: 4, //主轴上子控件的间距
+            runSpacing: 4, //交叉轴上子控件之间的间距
+            children: List<Widget>.from(_simpleTags
+                .map((tagText) => TagItem(
+                      text: tagText,
+                    ))
+                .toList()), //要显示的子控件集合
+          ),
+        );
+      },
+    );
+  }
+}
+
+class CoverImg extends StatelessWidget {
+  final String imgUrl;
+  const CoverImg({
+    Key key,
+    @required this.imgUrl,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Selector<EhConfigModel, bool>(
+        selector: (context, provider) => provider.isGalleryImgBlur,
+        builder: (BuildContext context, bool value, Widget child) {
+          return imgUrl != null
+              ? (value
+                  ? BlurImage(
+                      child: CachedNetworkImage(
+                      imageUrl: imgUrl,
+                    ))
+                  : CachedNetworkImage(
+                      imageUrl: imgUrl,
+                    ))
+              : Container();
+        });
   }
 }
