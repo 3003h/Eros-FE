@@ -3,16 +3,16 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 
 class BlurImage extends StatelessWidget {
-  final Widget widget;
+  final Widget child;
 
-  BlurImage({this.widget});
+  BlurImage({this.child});
 
   @override
   Widget build(BuildContext context) {
     return Stack(
       alignment: Alignment.center,
       children: <Widget>[
-        Container(child: widget),
+        Container(child: child),
         BackdropFilter(
           filter: ImageFilter.blur(
             sigmaX: 5,
