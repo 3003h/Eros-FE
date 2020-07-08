@@ -4,6 +4,7 @@ import 'package:FEhViewer/client/parser/gallery_detail_parser.dart';
 import 'package:FEhViewer/common/global.dart';
 import 'package:FEhViewer/generated/l10n.dart';
 import 'package:FEhViewer/models/index.dart';
+import 'package:FEhViewer/route/navigator_util.dart';
 import 'package:FEhViewer/values/const.dart';
 import 'package:FEhViewer/values/theme_colors.dart';
 import 'package:FEhViewer/widget/rating_bar.dart';
@@ -38,6 +39,7 @@ class _GalleryDetailPageState extends State<GalleryDetailPage> {
     });
     _galleryItem =
         await GalleryDetailParser.getGalleryDetail(widget.galleryItem);
+
     _galleryItem.tagGroup.forEach((tagGroup) {
       _lisTagGroupW
           .add(_buildTagGloups(tagGroup.tagType, tagGroup.galleryTags));
@@ -97,11 +99,19 @@ class _GalleryDetailPageState extends State<GalleryDetailPage> {
                 height: 0.5,
                 color: CupertinoColors.systemGrey4,
               ),
+              // 标签
               _loading
                   ? Container()
                   : TagBox(
                       lisTagGroupW: _lisTagGroupW,
                     ),
+              CupertinoButton(
+                child: Text('Comment'),
+                onPressed: () {
+                  NavigatorUtil.goGalleryDetailComment(
+                      context, _galleryItem.galleryComment);
+                },
+              )
             ],
           ),
         ),

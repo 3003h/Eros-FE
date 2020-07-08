@@ -70,6 +70,7 @@ class GalleryDetailParser {
     }
 
     /// 评论区数据处理
+    galleryItem.galleryComment = [];
     const commentSelect = '#cdiv > div.c1';
     List<dom.Element> commentList = document.querySelectorAll(commentSelect);
 //    Global.logger.v('${commentList.length}');
@@ -99,12 +100,12 @@ class GalleryDetailParser {
 
       Global.logger.v('$postName\n$postTime\n$score\n$context');
 
+
       galleryItem.galleryComment.add(GalleryComment()
         ..name = postName
         ..context = context
         ..time = postTime
-        ..score = score
-      );
+        ..score = score);
     }
 
     return galleryItem;
