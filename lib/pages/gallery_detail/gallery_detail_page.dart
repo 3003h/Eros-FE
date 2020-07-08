@@ -40,9 +40,8 @@ class _GalleryDetailPageState extends State<GalleryDetailPage> {
     _galleryItem =
         await GalleryDetailParser.getGalleryDetail(widget.galleryItem);
 
-    _galleryItem.tagGroup.forEach((tagGroup) {
-      _lisTagGroupW
-          .add(_buildTagGloups(tagGroup.tagType, tagGroup.galleryTags));
+    _galleryItem.tagGroup.forEach((tagGroupData) {
+      _lisTagGroupW.add(TagGroupW(tagGroupData: tagGroupData));
     });
     setState(() {
       _loading = false;
@@ -103,7 +102,7 @@ class _GalleryDetailPageState extends State<GalleryDetailPage> {
               _loading
                   ? Container()
                   : TagBox(
-                      lisTagGroupW: _lisTagGroupW,
+                      lisTagGroup: _lisTagGroupW,
                     ),
               CupertinoButton(
                 child: Text('Comment'),
@@ -117,47 +116,6 @@ class _GalleryDetailPageState extends State<GalleryDetailPage> {
         ),
       ),
     );
-  }
-
-  Widget _buildTagGloups(String types, List<GalleryTag> galleryTags) {
-    bool isTagTranslat = Global.profile.ehConfig.tagTranslat;
-    List<Widget> _tagBtnList = List<Widget>.from(galleryTags
-        .map((tag) => TagButton(
-              text: isTagTranslat ? tag?.tagTranslat ?? '' : tag?.title ?? '',
-              galleryTag: tag,
-            ))
-        .toList());
-
-    Container container = Container(
-      padding: const EdgeInsets.fromLTRB(0, 4, 0, 4),
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          // tag 分类
-          Container(
-            padding: const EdgeInsets.only(right: 8, left: 8),
-            child: TagButton(
-              text: isTagTranslat
-                  ? EHConst.translateTagType[types.trim()] ?? types
-                  : types,
-              color: Colors.blueGrey,
-              // color: CupertinoColors.systemGrey,
-            ),
-          ),
-          Expanded(
-            child: Container(
-              child: Wrap(
-                spacing: 4, //主轴上子控件的间距
-                runSpacing: 4, //交叉轴上子控件之间的间距
-                children: _tagBtnList, //要显示的子控件集合
-              ),
-            ),
-          )
-        ],
-      ),
-    );
-
-    return container;
   }
 
   Widget _buildGalletyHead(BuildContext context) {
@@ -287,41 +245,100 @@ class _GalleryDetailPageState extends State<GalleryDetailPage> {
   }
 }
 
+/// 一个标签组 第一个是类型
+class TagGroupW extends StatelessWidget {
+  TagGroupW({
+    @required this.tagGroupData,
+  });
+
+  final tagGroupData;
+
+  static initTagBtnList(galleryTags) {
+    final _isTagTranslat = Global.profile.ehConfig.tagTranslat;
+    List<Widget> _tagBtnList = [];
+    galleryTags.forEach((tag) {
+      _tagBtnList.add(TagButton(
+        text: _isTagTranslat ? tag?.tagTranslat ?? '' : tag?.title ?? '',
+        onPressed: () {
+          Global.logger.v('search type[${tag.type}] tag[${tag.title}]');
+        },
+      ));
+    });
+    return _tagBtnList;
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final _isTagTranslat = Global.profile.ehConfig.tagTranslat;
+    final _tagBtnList = initTagBtnList(tagGroupData.galleryTags);
+    final _tagType = tagGroupData.tagType;
+
+    Container container = Container(
+      padding: const EdgeInsets.fromLTRB(0, 4, 0, 4),
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          // tag 分类
+          Container(
+            padding: const EdgeInsets.only(right: 8, left: 8),
+            child: TagButton(
+              text: _isTagTranslat
+                  ? EHConst.translateTagType[_tagType.trim()] ?? _tagType
+                  : _tagType,
+            ),
+          ),
+          Expanded(
+            child: Container(
+              child: Wrap(
+                spacing: 4, //主轴上子控件的间距
+                runSpacing: 4, //交叉轴上子控件之间的间距
+                children: _tagBtnList, //要显示的子控件集合
+              ),
+            ),
+          )
+        ],
+      ),
+    );
+
+    return container;
+  }
+}
+
 /// 标签按钮
+/// onPressed 回调
 class TagButton extends StatelessWidget {
   final String text;
   final Color color;
-  final GalleryTag galleryTag;
+  final VoidCallback _onPressed;
   const TagButton({
     @required this.text,
     color,
-    this.galleryTag,
-  }) : this.color = color ?? Colors.teal;
+    VoidCallback onPressed,
+  })  : this.color = color ?? Colors.teal,
+        _onPressed = onPressed;
 
   @override
   Widget build(BuildContext context) {
     return CupertinoButton(
-        child: Text(
-          text,
-          style: TextStyle(fontSize: 14, height: 1.3),
-          strutStyle: StrutStyle(height: 1),
-        ),
-        minSize: 5,
-        padding: const EdgeInsets.fromLTRB(8, 3, 8, 3),
-        borderRadius: BorderRadius.circular(50),
-        color: color,
-        onPressed: () {
-          if (galleryTag != null) {
-            Global.logger
-                .v('search type[${galleryTag.type}] tag[${galleryTag.title}]');
-          }
-        });
+      child: Text(
+        text,
+        style: TextStyle(fontSize: 14, height: 1.3),
+        strutStyle: StrutStyle(height: 1),
+      ),
+      minSize: 5,
+      padding: const EdgeInsets.fromLTRB(8, 3, 8, 3),
+      borderRadius: BorderRadius.circular(50),
+      color: color,
+      onPressed: _onPressed,
+      disabledColor: Colors.blueGrey,
+    );
   }
 }
 
+/// 包含多个 TagBox
 class TagBox extends StatelessWidget {
-  final List<Widget> lisTagGroupW;
-  const TagBox({Key key, this.lisTagGroupW}) : super(key: key);
+  final List<Widget> lisTagGroup;
+  const TagBox({Key key, this.lisTagGroup}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -329,7 +346,7 @@ class TagBox extends StatelessWidget {
       children: [
         Container(
           margin: const EdgeInsets.fromLTRB(0, 8, 12, 8),
-          child: Column(children: lisTagGroupW),
+          child: Column(children: lisTagGroup),
         ),
         Container(
           height: 0.5,
