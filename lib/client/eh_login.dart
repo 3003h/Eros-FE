@@ -37,16 +37,22 @@ class EhUserManager {
 
     var cookieMap = _parseSetCookieString(setcookie);
 
+    Global.logger.v('$setcookie');
+
     var cookie = {
       "ipb_member_id": cookieMap["ipb_member_id"],
       "ipb_pass_hash": cookieMap["ipb_pass_hash"],
     };
 
+    if (cookie['ipb_member_id'] == null) {
+      throw Exception('login Fail');
+    }
+
     var tmpCookie = _getCookieStringFromMap(cookie);
 
-    Map morCookie = await _getHome(tmpCookie);
+    Map moreCookie = await _getHome(tmpCookie);
 
-    morCookie.forEach((key, value) {
+    moreCookie.forEach((key, value) {
       cookie.putIfAbsent(key, () => value);
     });
 

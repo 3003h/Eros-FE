@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:FEhViewer/client/parser/gallery_detail_parser.dart';
 import 'package:FEhViewer/common/global.dart';
 import 'package:FEhViewer/generated/l10n.dart';
@@ -95,26 +97,6 @@ class _GalleryDetailPageState extends State<GalleryDetailPage> {
                 height: 0.5,
                 color: CupertinoColors.systemGrey4,
               ),
-              _loading
-                  ? Container()
-                  : TagBox(
-                      lisTagGroupW: _lisTagGroupW,
-                    ),
-              _loading
-                  ? Container()
-                  : TagBox(
-                      lisTagGroupW: _lisTagGroupW,
-                    ),
-              _loading
-                  ? Container()
-                  : TagBox(
-                      lisTagGroupW: _lisTagGroupW,
-                    ),
-              _loading
-                  ? Container()
-                  : TagBox(
-                      lisTagGroupW: _lisTagGroupW,
-                    ),
               _loading
                   ? Container()
                   : TagBox(
@@ -353,14 +335,13 @@ class CoveTinyImage extends StatelessWidget {
   final String imgUrl;
   final double statusBarHeight;
 
-  final _padding = 6.0;
-
   const CoveTinyImage({Key key, this.imgUrl, double statusBarHeight})
       : statusBarHeight = statusBarHeight ?? 44,
         super(key: key);
 
   @override
   Widget build(BuildContext context) {
+    var _padding = Platform.isAndroid ? 0.0 : 2.0;
     return Container(
       height: statusBarHeight,
       width: statusBarHeight,

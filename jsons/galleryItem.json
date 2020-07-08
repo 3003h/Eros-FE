@@ -17,5 +17,6 @@
     "postTime":"",
     "simpleTags":["", ""],
     "simpleTagsTranslat":["", ""],
-    "tagGroup":"$[]tagGroup"
+    "tagGroup":"$[]tagGroup",
+    "galleryComment": "$[]galleryComment"
 }
