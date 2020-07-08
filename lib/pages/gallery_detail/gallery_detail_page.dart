@@ -33,6 +33,7 @@ class _GalleryDetailPageState extends State<GalleryDetailPage> {
 
   ScrollController _controller = new ScrollController();
 
+  /// 初始化 请求数据
   _loadData() async {
     setState(() {
       _loading = true;

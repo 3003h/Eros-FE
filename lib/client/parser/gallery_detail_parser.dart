@@ -57,7 +57,8 @@ class GalleryDetailParser {
         }
         var tagTranslat =
             await EhTagDatabase.getTranTag(title, nameSpase: type) ?? title;
-//        Global.logger.v('$title $tagTranslat');
+
+//        Global.logger.v('$type:$title $tagTranslat');
         galleryTags.add(GalleryTag()
           ..title = title
           ..type = type
@@ -91,14 +92,24 @@ class GalleryDetailParser {
       // 评论内容
       var contextElem = comment.querySelector('div.c6');
       var context = contextElem.nodes
-          .where((node) => node.nodeType == dom.Node.TEXT_NODE)
-          .map((node) =>
-      RegExp(r'^"(.+)"$')
-          .firstMatch(node.text.trim())
-          ?.group(1) ?? node.text)
-          .join('\n');
+          .map((node) {
+        if (node.nodeType == dom.Node.TEXT_NODE) {
+          return RegExp(r'^"?(.+)"?$')
+              .firstMatch(node.text.trim())
+              ?.group(1) ?? node.text;
+        } else if (node.nodeType == dom.Node.ELEMENT_NODE &&
+            (node as dom.Element).localName == 'br') {
+          return '\n';
+        }
+      })
+          .join();
 
-      Global.logger.v('$postName\n$postTime\n$score\n$context');
+//      contextElem.children.forEach((element) {
+//        Global.logger.v('${element}');
+//      });
+
+
+//      Global.logger.v('${contextElem.children.length}');
 
 
       galleryItem.galleryComment.add(GalleryComment()

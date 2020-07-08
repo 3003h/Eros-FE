@@ -106,10 +106,7 @@ class EhTagDatabase {
 
       return _transTag != null ? '$pfx$_transTag' : tag;
     } else {
-      return nameSpase != null && nameSpase.isNotEmpty
-          ? await DataBaseUtil().getTagTransStr(tag)
-          : await DataBaseUtil().getTagTransStr(tag, namespace: nameSpase);
-      ;
+      return await DataBaseUtil().getTagTransStr(tag, namespace: nameSpase);
     }
   }
 }
