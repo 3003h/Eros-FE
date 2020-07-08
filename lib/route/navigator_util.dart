@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:FEhViewer/common/global.dart';
+import 'package:FEhViewer/models/galleryComment.dart';
 import 'package:FEhViewer/models/galleryItem.dart';
 
 import 'application.dart';
@@ -115,16 +116,31 @@ class NavigatorUtil {
         transition: TransitionType.cupertino);
   }
 
+  /// 转到画廊页面
   static void goGalleryDetail(
       BuildContext context, String title, GalleryItem galleryItem) {
     final encodeGalleryItem =
         Uri.encodeComponent(jsonEncode(galleryItem.toJson()));
     final encodeTitle = Uri.encodeComponent(title);
-    // Global.logger.i('encodeGalleryItem $encodeGalleryItem');
     Application.router.navigateTo(
         context,
         EHRoutes.galleryDetail +
             "?title=$encodeTitle&galleryItem=$encodeGalleryItem",
+        transition: TransitionType.cupertino);
+  }
+
+  /// 转到画廊评论页面
+  static void goGalleryDetailComment(
+      BuildContext context, List<GalleryComment> comments) {
+    final encodeComments = List<String>.from(comments
+        .map((comment) => Uri.encodeComponent(jsonEncode(comment.toJson())))
+        .toList());
+
+    final queryString = encodeComments.map((e) => 'comment=$e').join('&');
+    Global.logger.v('$queryString');
+
+    Application.router.navigateTo(
+        context, EHRoutes.galleryDetailComment + "?$queryString",
         transition: TransitionType.cupertino);
   }
 }

@@ -10,6 +10,7 @@ class EHRoutes {
   static const String webLogin = "/webLogin";
 
   static const String galleryDetail = "/galleryDetailPage";
+  static const String galleryDetailComment = "/galleryDetailPage/comment";
 
   static void configureRoutes(Router router) {
     pageRoutes.forEach((path, handler) {

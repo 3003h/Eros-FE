@@ -2,6 +2,8 @@ import 'dart:convert';
 
 import 'package:FEhViewer/models/index.dart';
 import 'package:FEhViewer/pages/favorite_page.dart';
+import 'package:FEhViewer/pages/gallery_detail/comment_item.dart';
+import 'package:FEhViewer/pages/gallery_detail/comment_page.dart';
 import 'package:FEhViewer/pages/gallery_detail/gallery_detail_page.dart';
 import 'package:FEhViewer/pages/login_page.dart';
 import 'package:FEhViewer/pages/setting/eh_setting_page.dart';
@@ -54,7 +56,6 @@ final Map<String, Handler> pageRoutes = {
       handlerFunc: (BuildContext context, Map<String, List<String>> params) {
     String title = params["title"]?.first;
     String galleryItemString = params["galleryItem"]?.first;
-    // Global.logger.v("galleryItemString   $galleryItemString");
     GalleryItem galleryItem =
         GalleryItem.fromJson(jsonDecode(galleryItemString));
     return GalleryDetailPage(
@@ -62,4 +63,17 @@ final Map<String, Handler> pageRoutes = {
       galleryItem: galleryItem,
     );
   }),
+
+  EHRoutes.galleryDetailComment: Handler(
+      handlerFunc: (BuildContext context, Map<String, List<String>> params) {
+    List<String> commentStringList = params["comment"];
+    List<GalleryComment> comments = List<GalleryComment>.from(commentStringList
+        .map((commentString) =>
+            GalleryComment.fromJson(jsonDecode(commentString)))
+        .toList());
+
+    return CommentPage(
+      galleryComments: comments,
+    );
+  })
 };
