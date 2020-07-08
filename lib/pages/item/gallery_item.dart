@@ -193,9 +193,9 @@ class _GalleryItemWidgetState extends State<GalleryItemWidget> {
                                   color: CupertinoColors.systemGrey),
                             ),
                           ),
-                        )
+                        ),
                       ],
-                    )
+                    ),
                   ],
                 ),
               ),

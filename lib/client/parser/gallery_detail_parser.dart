@@ -1,9 +1,7 @@
 import 'package:FEhViewer/client/tag_database.dart';
 import 'package:FEhViewer/common/global.dart';
 import 'package:FEhViewer/models/index.dart';
-import 'package:FEhViewer/models/base/mode_init.dart';
 import 'package:FEhViewer/utils/dio_util.dart';
-import 'package:flutter/material.dart';
 import 'package:html/dom.dart' as dom;
 import 'package:html/parser.dart';
 import 'package:dio/dio.dart';
@@ -38,13 +36,16 @@ class GalleryDetailParser {
 
     GalleryItem galleryItem = GalleryItem();
 
-    // taglist
+    /// taglist
     galleryItem.tagGroup = [];
     const tagGroupSelect = '#taglist > table > tbody > tr';
     List<dom.Element> tagGroups = document.querySelectorAll(tagGroupSelect);
     Global.logger.v('tagGroups len  ${tagGroups.length}');
     for (var tagGroup in tagGroups) {
-      var type = tagGroup.querySelector('td.tc').text.trim();
+      var type = tagGroup
+          .querySelector('td.tc')
+          .text
+          .trim();
       type = RegExp(r"(\w+):?$").firstMatch(type).group(1);
 
       List<dom.Element> tags = tagGroup.querySelectorAll('td > div > a');
@@ -66,6 +67,44 @@ class GalleryDetailParser {
       galleryItem.tagGroup.add(TagGroup()
         ..tagType = type
         ..galleryTags = galleryTags);
+    }
+
+    /// 评论区数据处理
+    const commentSelect = '#cdiv > div.c1';
+    List<dom.Element> commentList = document.querySelectorAll(commentSelect);
+//    Global.logger.v('${commentList.length}');
+    for (var comment in commentList) {
+      // 评论人
+      var postElem = comment.querySelector('div.c2 > div.c3 > a');
+      var postName = postElem.text.trim();
+
+      var timeElem = comment.querySelector('div.c2 > div.c3');
+      var postTime = timeElem.text.trim();
+      // 示例: Posted on 29 June 2020, 05:41 UTC by:  
+      postTime = RegExp(r"Posted on (.+, .+) by").firstMatch(postTime).group(1);
+
+      // 评论评分 (Uploader Comment 没有)
+      var scoreElem = comment.querySelector('div.c2 > div.c5.nosel');
+      var score = scoreElem?.text?.trim() ?? '';
+
+      // 评论内容
+      var contextElem = comment.querySelector('div.c6');
+      var context = contextElem.nodes
+          .where((node) => node.nodeType == dom.Node.TEXT_NODE)
+          .map((node) =>
+      RegExp(r'^"(.+)"$')
+          .firstMatch(node.text.trim())
+          ?.group(1) ?? node.text)
+          .join('\n');
+
+      Global.logger.v('$postName\n$postTime\n$score\n$context');
+
+      galleryItem.galleryComment.add(GalleryComment()
+        ..name = postName
+        ..context = context
+        ..time = postTime
+        ..score = score
+      );
     }
 
     return galleryItem;

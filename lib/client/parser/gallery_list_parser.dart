@@ -65,16 +65,17 @@ class GalleryListParser {
     var _order = Global?.profile?.ehConfig?.favoritesOrder;
 
     var url = "/favorites.php";
-    if (favcat != null && favcat != "a") {
+    if (favcat != null && favcat != "a" && favcat != '') {
       url = "$url?favcat=$favcat";
     }
 
     if (_order != null) {
       url = "$url?inline_set=$_order";
     }
-    debugPrint('$url');
 
     var cookie = Global.profile?.token ?? "";
+
+    Global.logger.v('$url  cookie:$cookie');
 
     Options options = Options(headers: {
       "Cookie": cookie,
@@ -97,57 +98,6 @@ class GalleryListParser {
     return response;
   }
 
-  static Future<List<GalleryItem>> getMoreGalleryInfo(
-      List<GalleryItem> galleryItems) async {
-    // Global.logger.i('api qry items ${galleryItems.length}');
-    if (galleryItems.length == 0) {
-      return galleryItems;
-    }
-
-    // 通过api获取画廊详细信息
-    List _gidlist = [];
-
-    galleryItems.forEach((galleryItem) {
-      _gidlist.add([galleryItem.gid, galleryItem.token]);
-    });
-
-    // 25个一组分割
-    List _group = EHUtils.splitList(_gidlist, 25);
-
-    List rultList = [];
-
-    // 查询 合并结果
-    for (int i = 0; i < _group.length; i++) {
-      Map reqMap = {'gidlist': _group[i], 'method': 'gdata'};
-      String reqJsonStr = jsonEncode(reqMap);
-      var rult = await getGalleryApi(reqJsonStr);
-
-      var jsonObj = jsonDecode(rult.toString());
-      var tempList = jsonObj['gmetadata'];
-      rultList.addAll(tempList);
-    }
-
-    var unescape = new HtmlUnescape();
-
-    for (int i = 0; i < galleryItems.length; i++) {
-      galleryItems[i].englishTitle = unescape.convert(rultList[i]['title']);
-      galleryItems[i].japaneseTitle =
-          unescape.convert(rultList[i]['title_jpn']);
-
-      var rating = rultList[i]['rating'];
-      // Global.loggerNoStack.v('$rating');
-      galleryItems[i].rating = rating != null
-          ? double.parse(rating)
-          : galleryItems[i].ratingFallBack;
-
-//      galleryItems[i].imgUrl = rultList[i]['thumb'];
-      galleryItems[i].filecount = rultList[i]['filecount'];
-      galleryItems[i].uploader = rultList[i]['uploader'];
-    }
-
-    return galleryItems;
-  }
-
   /// 列表数据处理
   static Future<List<GalleryItem>> parseGalleryList(String response,
       {isFavorite = false}) async {
@@ -168,11 +118,9 @@ class GalleryListParser {
 
     // 画廊列表
     List<dom.Element> gallerys = document.querySelectorAll(select);
-
-    // Global.logger.v("gallerys.len  ${gallerys.length}");
+    Global.logger.v('gallerys ${gallerys.length}');
 
     List<GalleryItem> gallaryItems = [];
-
     for (int i = 0; i < gallerys.length; i++) {
       var tr = gallerys[i];
 
@@ -260,5 +208,56 @@ class GalleryListParser {
     }
 
     return gallaryItems;
+  }
+
+  static Future<List<GalleryItem>> getMoreGalleryInfo(
+      List<GalleryItem> galleryItems) async {
+    // Global.logger.i('api qry items ${galleryItems.length}');
+    if (galleryItems.length == 0) {
+      return galleryItems;
+    }
+
+    // 通过api获取画廊详细信息
+    List _gidlist = [];
+
+    galleryItems.forEach((galleryItem) {
+      _gidlist.add([galleryItem.gid, galleryItem.token]);
+    });
+
+    // 25个一组分割
+    List _group = EHUtils.splitList(_gidlist, 25);
+
+    List rultList = [];
+
+    // 查询 合并结果
+    for (int i = 0; i < _group.length; i++) {
+      Map reqMap = {'gidlist': _group[i], 'method': 'gdata'};
+      String reqJsonStr = jsonEncode(reqMap);
+      var rult = await getGalleryApi(reqJsonStr);
+
+      var jsonObj = jsonDecode(rult.toString());
+      var tempList = jsonObj['gmetadata'];
+      rultList.addAll(tempList);
+    }
+
+    var unescape = new HtmlUnescape();
+
+    for (int i = 0; i < galleryItems.length; i++) {
+      galleryItems[i].englishTitle = unescape.convert(rultList[i]['title']);
+      galleryItems[i].japaneseTitle =
+          unescape.convert(rultList[i]['title_jpn']);
+
+      var rating = rultList[i]['rating'];
+      // Global.loggerNoStack.v('$rating');
+      galleryItems[i].rating = rating != null
+          ? double.parse(rating)
+          : galleryItems[i].ratingFallBack;
+
+//      galleryItems[i].imgUrl = rultList[i]['thumb'];
+      galleryItems[i].filecount = rultList[i]['filecount'];
+      galleryItems[i].uploader = rultList[i]['uploader'];
+    }
+
+    return galleryItems;
   }
 }

@@ -2,7 +2,7 @@ import 'dart:convert';
 
 import 'package:FEhViewer/models/index.dart';
 import 'package:FEhViewer/pages/favorite_page.dart';
-import 'package:FEhViewer/pages/gallery_detail_page.dart';
+import 'package:FEhViewer/pages/gallery_detail/gallery_detail_page.dart';
 import 'package:FEhViewer/pages/login_page.dart';
 import 'package:FEhViewer/pages/setting/eh_setting_page.dart';
 import 'package:FEhViewer/pages/splash_page.dart';
