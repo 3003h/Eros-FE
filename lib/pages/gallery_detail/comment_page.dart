@@ -13,17 +13,20 @@ class CommentPage extends StatelessWidget {
       navigationBar: CupertinoNavigationBar(
         middle: Text('Comment'),
       ),
-      child: Container(
+      child: SafeArea(
+        bottom: false,
+        child: Container(
 //        padding: const EdgeInsets.only(left: 10, right: 10),
-        child: ListView.builder(itemBuilder: (context, index) {
-          if (index < galleryComments.length) {
-            return CommentItemFull(
-              galleryComment: galleryComments[index],
-            );
-          } else {
-            return null;
-          }
-        }),
+          child: ListView.builder(itemBuilder: (context, index) {
+            if (index < galleryComments.length) {
+              return CommentItemFull(
+                galleryComment: galleryComments[index],
+              );
+            } else {
+              return null;
+            }
+          }),
+        ),
       ),
     );
   }

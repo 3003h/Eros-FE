@@ -5,6 +5,7 @@ import 'package:FEhViewer/utils/dio_util.dart';
 import 'package:html/dom.dart' as dom;
 import 'package:html/parser.dart';
 import 'package:dio/dio.dart';
+import 'package:intl/intl.dart';
 
 class GalleryDetailParser {
   /// 获取画廊详细信息
@@ -40,7 +41,7 @@ class GalleryDetailParser {
     galleryItem.tagGroup = [];
     const tagGroupSelect = '#taglist > table > tbody > tr';
     List<dom.Element> tagGroups = document.querySelectorAll(tagGroupSelect);
-    Global.logger.v('tagGroups len  ${tagGroups.length}');
+//    Global.logger.v('tagGroups len  ${tagGroups.length}');
     for (var tagGroup in tagGroups) {
       var type = tagGroup
           .querySelector('td.tc')
@@ -83,7 +84,30 @@ class GalleryDetailParser {
       var timeElem = comment.querySelector('div.c2 > div.c3');
       var postTime = timeElem.text.trim();
       // 示例: Posted on 29 June 2020, 05:41 UTC by:  
-      postTime = RegExp(r"Posted on (.+, .+) by").firstMatch(postTime).group(1);
+      var postTimeUTC = RegExp(r"Posted on (.+, .+) UTC by").firstMatch(
+          postTime).group(1);
+
+/*      var postTimes = RegExp(r"Posted on (\d+)\s?(\w+)\s+(\d+),\s?(.+) UTC by")
+          .firstMatch(postTime);
+
+      var postTimeParse = DateTime.parse(postTime);
+      Global.logger.v(
+          '${postTimes.group(1)} ${postTimes.group(2)} ${postTimes.group(
+              3)} ${postTimes.group(4)}');
+
+      var now = new DateTime.now();
+      var formatter = new DateFormat('yyyy-MMMM-dd HH:mm','en_US');
+      String formatted = formatter.format(now);
+      Global.logger.v(formatted);*/
+
+
+      DateTime time = DateFormat('dd MMMM yyyy, HH:mm', 'en_US').parseUtc(
+          postTimeUTC).toLocal();
+
+      final postTimeLocal = DateFormat('yyyy-MM-dd HH:mm').format(time);
+
+//      Global.logger.v('$postTimeUTC \n ${postTimeLocal}');
+
 
       // 评论评分 (Uploader Comment 没有)
       var scoreElem = comment.querySelector('div.c2 > div.c5.nosel');
@@ -91,6 +115,7 @@ class GalleryDetailParser {
 
       // 评论内容
       var contextElem = comment.querySelector('div.c6');
+      // br回车以及引号的处理
       var context = contextElem.nodes
           .map((node) {
         if (node.nodeType == dom.Node.TEXT_NODE) {
@@ -104,18 +129,13 @@ class GalleryDetailParser {
       })
           .join();
 
-//      contextElem.children.forEach((element) {
-//        Global.logger.v('${element}');
-//      });
-
-
 //      Global.logger.v('${contextElem.children.length}');
 
 
       galleryItem.galleryComment.add(GalleryComment()
         ..name = postName
         ..context = context
-        ..time = postTime
+        ..time = postTimeLocal
         ..score = score);
     }
 
