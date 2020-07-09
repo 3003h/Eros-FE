@@ -137,7 +137,7 @@ class NavigatorUtil {
         .toList());
 
     final queryString = encodeComments.map((e) => 'comment=$e').join('&');
-    Global.logger.v('$queryString');
+//    Global.logger.v('$queryString');
 
     Application.router.navigateTo(
         context, EHRoutes.galleryDetailComment + "?$queryString",

@@ -25,7 +25,6 @@ class _GalleryItemWidgetState extends State<GalleryItemWidget> {
 
   Color _colorTap; // 按下时颜色反馈
   String _title; // 英语或者日语
-  List<String> _simpleTags = [];
 
   Widget _buildTitle() {
     return Selector<EhConfigModel, bool>(
@@ -219,7 +218,7 @@ class _GalleryItemWidgetState extends State<GalleryItemWidget> {
       // 不可见区域点击有效
       behavior: HitTestBehavior.opaque,
       onTap: () {
-        Global.logger.v("onTap title: $_title \n tags: $_simpleTags");
+        Global.logger.v("onTap title: $_title");
         NavigatorUtil.goGalleryDetail(context, _title, widget.galleryItemBean);
       },
       onLongPress: () {

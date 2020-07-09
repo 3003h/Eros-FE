@@ -10,6 +10,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:html/dom.dart' as dom;
 import 'package:html/parser.dart';
 import 'package:html_unescape/html_unescape.dart';
+import 'package:intl/intl.dart';
 
 class GalleryListParser {
   /// 获取热门画廊列表
@@ -179,12 +180,14 @@ class GalleryListParser {
 
 //      Global.loggerNoStack.i('ratingFB $ratingFB');
 
-      // old
       final postTime =
           tr.querySelector('td.gl2c > div:nth-child(2) > div')?.text?.trim() ??
               '';
+      DateTime time =
+          DateFormat('yyyy-MM-dd HH:mm').parseUtc(postTime).toLocal();
 
-      /// old end
+      final postTimeLocal = DateFormat('yyyy-MM-dd HH:mm').format(time);
+
       GalleryItem galleryItemBean = new GalleryItem();
 
       galleryItemBean.gid = gid;
@@ -194,7 +197,7 @@ class GalleryListParser {
       galleryItemBean.url = url;
       galleryItemBean.category = category;
       galleryItemBean.simpleTags = simpleTags;
-      galleryItemBean.postTime = postTime;
+      galleryItemBean.postTime = postTimeLocal;
       galleryItemBean.simpleTagsTranslat = simpleTagsTranslate;
       galleryItemBean.ratingFallBack = ratingFB;
 

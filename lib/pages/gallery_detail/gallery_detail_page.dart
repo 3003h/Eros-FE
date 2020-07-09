@@ -71,24 +71,24 @@ class _GalleryDetailPageState extends State<GalleryDetailPage> {
 
   @override
   Widget build(BuildContext context) {
+    var ln = S.of(context);
     double _statusBarHeight = MediaQuery.of(context).padding.top;
 
-    var ln = S.of(context);
-    return Container(
-      child: CupertinoPageScaffold(
-        navigationBar: CupertinoNavigationBar(
-          middle: _loading
-              ? CupertinoActivityIndicator(
-                  // radius: 15.0,
-                  )
-              : _hideNavigationBtn
-                  ? Container()
-                  : CoveTinyImage(
-                      imgUrl: widget.galleryItem.imgUrl,
-                      statusBarHeight: _statusBarHeight,
-                    ),
-          trailing: _hideNavigationBtn ? Container() : _readButton(ln),
-        ),
+    var _tinyImg = _hideNavigationBtn
+        ? Container()
+        : CoveTinyImage(
+            imgUrl: widget.galleryItem.imgUrl,
+            statusBarHeight: _statusBarHeight,
+          );
+
+    var _navReadButton = _hideNavigationBtn ? Container() : _readButton(ln);
+
+    return CupertinoPageScaffold(
+      navigationBar: CupertinoNavigationBar(
+        middle: _tinyImg,
+        trailing: _navReadButton,
+      ),
+      child: SafeArea(
         child: Container(
           margin: const EdgeInsets.only(left: 12),
           child: ListView(
@@ -99,7 +99,30 @@ class _GalleryDetailPageState extends State<GalleryDetailPage> {
                 height: 0.5,
                 color: CupertinoColors.systemGrey4,
               ),
+              _loading
+                  ? Padding(
+                      padding: const EdgeInsets.all(18.0),
+                      child: CupertinoActivityIndicator(
+                        radius: 15.0,
+                      ),
+                    )
+                  : Container(),
               // 标签
+              _loading
+                  ? Container()
+                  : TagBox(
+                      lisTagGroup: _lisTagGroupW,
+                    ),
+              _loading
+                  ? Container()
+                  : TagBox(
+                      lisTagGroup: _lisTagGroupW,
+                    ),
+              _loading
+                  ? Container()
+                  : TagBox(
+                      lisTagGroup: _lisTagGroupW,
+                    ),
               _loading
                   ? Container()
                   : TagBox(
@@ -369,7 +392,7 @@ class CoveTinyImage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    var _padding = Platform.isAndroid ? 0.0 : 2.0;
+    var _padding = Platform.isAndroid ? 0.0 : 4.0;
     return Container(
       height: statusBarHeight,
       width: statusBarHeight,

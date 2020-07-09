@@ -45,7 +45,7 @@ class CommentItemFull extends StatelessWidget {
               Text(
                 galleryComment.time,
                 style: TextStyle(
-                  fontSize: 12,
+                  fontSize: 10,
                   fontWeight: FontWeight.normal,
                   color: Colors.black54,
                 ),
