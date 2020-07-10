@@ -2,14 +2,19 @@ import 'package:FEhViewer/models/index.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
-class CommentItemFull extends StatelessWidget {
-  final GalleryComment galleryComment;
+const kMaxline = 4;
 
-  const CommentItemFull({Key key, @required this.galleryComment})
+class CommentItem extends StatelessWidget {
+  final GalleryComment galleryComment;
+  final bool simple;
+
+  const CommentItem(
+      {Key key, @required this.galleryComment, this.simple = false})
       : super(key: key);
   @override
   Widget build(BuildContext context) {
     return Container(
+//      height: 50,
       margin: const EdgeInsets.fromLTRB(12, 8, 12, 0),
       child: ClipRRect(
         // 圆角
@@ -31,21 +36,41 @@ class CommentItemFull extends StatelessWidget {
                     ),
                   ),
                   Spacer(),
+                  Text(
+                    galleryComment.score,
+                    style: TextStyle(
+                      fontSize: 11,
+                      fontWeight: FontWeight.normal,
+                    ),
+                  ),
                 ],
               ),
               Container(
                 padding: const EdgeInsets.fromLTRB(0, 4, 0, 8),
-                child: Text(
-                  galleryComment.context,
-                  style: TextStyle(
-                    fontSize: 14,
-                  ),
-                ),
+                child: simple
+                    ? Text(
+                        galleryComment.context,
+                        maxLines: kMaxline,
+                        softWrap: true,
+                        textAlign: TextAlign.left, // 对齐方式
+                        overflow: TextOverflow.ellipsis, // 超出部分省略号
+                        style: TextStyle(
+                          fontSize: 13,
+                        ),
+                      )
+                    : Text(
+                        galleryComment.context,
+                        softWrap: true,
+                        textAlign: TextAlign.left, // 对齐方式
+                        style: TextStyle(
+                          fontSize: 14,
+                        ),
+                      ),
               ),
               Text(
                 galleryComment.time,
                 style: TextStyle(
-                  fontSize: 10,
+                  fontSize: 11,
                   fontWeight: FontWeight.normal,
                   color: Colors.black54,
                 ),
@@ -59,12 +84,5 @@ class CommentItemFull extends StatelessWidget {
         ),
       ),
     );
-  }
-}
-
-class CommentList extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return Container();
   }
 }

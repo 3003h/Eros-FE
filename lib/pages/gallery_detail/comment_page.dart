@@ -1,3 +1,4 @@
+import 'package:FEhViewer/generated/l10n.dart';
 import 'package:FEhViewer/models/galleryComment.dart';
 import 'package:flutter/cupertino.dart';
 
@@ -9,9 +10,10 @@ class CommentPage extends StatelessWidget {
   const CommentPage({Key key, this.galleryComments}) : super(key: key);
   @override
   Widget build(BuildContext context) {
+    var ln = S.of(context);
     return CupertinoPageScaffold(
       navigationBar: CupertinoNavigationBar(
-        middle: Text('Comment'),
+        middle: Text(ln.gallery_comments),
       ),
       child: SafeArea(
         bottom: false,
@@ -19,7 +21,7 @@ class CommentPage extends StatelessWidget {
 //        padding: const EdgeInsets.only(left: 10, right: 10),
           child: ListView.builder(itemBuilder: (context, index) {
             if (index < galleryComments.length) {
-              return CommentItemFull(
+              return CommentItem(
                 galleryComment: galleryComments[index],
               );
             } else {

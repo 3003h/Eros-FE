@@ -25,6 +25,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "app_title" : MessageLookupByLibrary.simpleMessage("FEhViewer"),
     "double_click_back" : MessageLookupByLibrary.simpleMessage("Press again to exit"),
     "favcat" : MessageLookupByLibrary.simpleMessage("Favorites"),
+    "gallery_comments" : MessageLookupByLibrary.simpleMessage("Gallery Comments"),
     "login" : MessageLookupByLibrary.simpleMessage("Sign"),
     "login_web" : MessageLookupByLibrary.simpleMessage("Sign in on the web"),
     "passwd" : MessageLookupByLibrary.simpleMessage("Password"),

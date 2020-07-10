@@ -91,7 +91,7 @@ class _GalleryItemWidgetState extends State<GalleryItemWidget> {
                 ),
               ),
 
-              // 右侧信息
+              // 右侧
               Expanded(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
