@@ -21,16 +21,17 @@ class MyApp extends StatelessWidget {
     Widget cupertinoApp = Consumer<LocaleModel>(
         builder: (BuildContext context, localeModel, Widget child) {
       return CupertinoApp(
+        onGenerateTitle: (context) => S.of(context).app_title,
         onGenerateRoute: Application.router.generator,
         theme: CupertinoThemeData(
           brightness: Brightness.light,
-          textTheme: CupertinoTextThemeData(
-            textStyle: TextStyle(
-              fontFamilyFallback: EHConst.FONT_FAMILY_FB,
-              color: CupertinoColors.black,
-              fontSize: 18,
-            ),
-          ),
+//          textTheme: CupertinoTextThemeData(
+//            textStyle: TextStyle(
+//              fontFamilyFallback: EHConst.FONT_FAMILY_FB,
+//              color: CupertinoColors.black,
+//              fontSize: 18,
+//            ),
+//          ),
         ),
         home: SplashPage(),
         locale: localeModel.getLocale(),

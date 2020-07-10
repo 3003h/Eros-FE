@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'package:FEhViewer/pages/gallery_detail/gallery_detail_widget.dart';
 
 import 'package:FEhViewer/client/parser/gallery_detail_parser.dart';
 import 'package:FEhViewer/common/global.dart';
@@ -12,6 +13,8 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+
+import 'comment_item.dart';
 
 class GalleryDetailPage extends StatefulWidget {
   final String title;
@@ -89,6 +92,7 @@ class _GalleryDetailPageState extends State<GalleryDetailPage> {
         trailing: _navReadButton,
       ),
       child: SafeArea(
+        bottom: false,
         child: Container(
           margin: const EdgeInsets.only(left: 12),
           child: ListView(
@@ -106,35 +110,8 @@ class _GalleryDetailPageState extends State<GalleryDetailPage> {
                         radius: 15.0,
                       ),
                     )
-                  : Container(),
-              // 标签
-              _loading
-                  ? Container()
-                  : TagBox(
-                      lisTagGroup: _lisTagGroupW,
-                    ),
-              _loading
-                  ? Container()
-                  : TagBox(
-                      lisTagGroup: _lisTagGroupW,
-                    ),
-              _loading
-                  ? Container()
-                  : TagBox(
-                      lisTagGroup: _lisTagGroupW,
-                    ),
-              _loading
-                  ? Container()
-                  : TagBox(
-                      lisTagGroup: _lisTagGroupW,
-                    ),
-              CupertinoButton(
-                child: Text('Comment'),
-                onPressed: () {
-                  NavigatorUtil.goGalleryDetailComment(
-                      context, _galleryItem.galleryComment);
-                },
-              )
+                  : GalleryDetailContex(
+                      lisTagGroupW: _lisTagGroupW, galleryItem: _galleryItem),
             ],
           ),
         ),
@@ -325,86 +302,5 @@ class TagGroupW extends StatelessWidget {
     );
 
     return container;
-  }
-}
-
-/// 标签按钮
-/// onPressed 回调
-class TagButton extends StatelessWidget {
-  final String text;
-  final Color color;
-  final VoidCallback _onPressed;
-  const TagButton({
-    @required this.text,
-    color,
-    VoidCallback onPressed,
-  })  : this.color = color ?? Colors.teal,
-        _onPressed = onPressed;
-
-  @override
-  Widget build(BuildContext context) {
-    return CupertinoButton(
-      child: Text(
-        text,
-        style: TextStyle(fontSize: 14, height: 1.3),
-        strutStyle: StrutStyle(height: 1),
-      ),
-      minSize: 5,
-      padding: const EdgeInsets.fromLTRB(8, 3, 8, 3),
-      borderRadius: BorderRadius.circular(50),
-      color: color,
-      onPressed: _onPressed,
-      disabledColor: Colors.blueGrey,
-    );
-  }
-}
-
-/// 包含多个 TagBox
-class TagBox extends StatelessWidget {
-  final List<Widget> lisTagGroup;
-  const TagBox({Key key, this.lisTagGroup}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return Column(
-      children: [
-        Container(
-          margin: const EdgeInsets.fromLTRB(0, 8, 12, 8),
-          child: Column(children: lisTagGroup),
-        ),
-        Container(
-          height: 0.5,
-          color: CupertinoColors.systemGrey4,
-        ),
-      ],
-    );
-  }
-}
-
-/// 封面小图
-class CoveTinyImage extends StatelessWidget {
-  final String imgUrl;
-  final double statusBarHeight;
-
-  const CoveTinyImage({Key key, this.imgUrl, double statusBarHeight})
-      : statusBarHeight = statusBarHeight ?? 44,
-        super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    var _padding = Platform.isAndroid ? 0.0 : 4.0;
-    return Container(
-      height: statusBarHeight,
-      width: statusBarHeight,
-      padding: EdgeInsets.all(_padding),
-      child: ClipRRect(
-        // 圆角
-        borderRadius: BorderRadius.circular(4),
-        child: CachedNetworkImage(
-          fit: BoxFit.cover,
-          imageUrl: imgUrl,
-        ),
-      ),
-    );
   }
 }

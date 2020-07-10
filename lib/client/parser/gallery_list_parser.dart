@@ -119,7 +119,7 @@ class GalleryListParser {
 
     // 画廊列表
     List<dom.Element> gallerys = document.querySelectorAll(select);
-    Global.logger.v('gallerys ${gallerys.length}');
+//    Global.logger.v('gallerys ${gallerys.length}');
 
     List<GalleryItem> gallaryItems = [];
     for (int i = 0; i < gallerys.length; i++) {

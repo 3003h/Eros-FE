@@ -192,6 +192,16 @@ class S {
       args: [],
     );
   }
+
+  /// `Gallery Comments`
+  String get gallery_comments {
+    return Intl.message(
+      'Gallery Comments',
+      name: 'gallery_comments',
+      desc: '',
+      args: [],
+    );
+  }
 }
 
 class AppLocalizationDelegate extends LocalizationsDelegate<S> {
