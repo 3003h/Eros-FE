@@ -79,6 +79,7 @@ class _GalleryItemWidgetState extends State<GalleryItemWidget> {
 //        crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
             Row(children: <Widget>[
+              // 封面
               Container(
                 width: 120,
 //                height: 180,

@@ -80,7 +80,7 @@ class TagButton extends StatelessWidget {
         strutStyle: StrutStyle(height: 1),
       ),
       minSize: 0,
-      padding: const EdgeInsets.fromLTRB(8, 4, 8, 2),
+      padding: const EdgeInsets.fromLTRB(8, 6, 8, 4),
       borderRadius: BorderRadius.circular(50),
       color: color,
       onPressed: _onPressed,
@@ -100,7 +100,7 @@ class TagBox extends StatelessWidget {
     return Column(
       children: [
         Container(
-          margin: const EdgeInsets.fromLTRB(0, 8, 12, 8),
+          margin: const EdgeInsets.fromLTRB(12, 8, 12, 8),
           child: Column(children: lisTagGroup),
         ),
         Container(
