@@ -9,6 +9,7 @@ import 'package:FEhViewer/values/theme_colors.dart';
 import 'package:FEhViewer/widget/rating_bar.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
@@ -100,7 +101,8 @@ class _GalleryDetailPageState extends State<GalleryDetailPage> {
             statusBarHeight: _statusBarHeight,
           );
 
-    var _navReadButton = _hideNavigationBtn ? Container() : _readButton(ln);
+    var _navReadButton =
+        _hideNavigationBtn ? Container() : _readButton(ln.READ);
 
     return CupertinoPageScaffold(
       navigationBar: CupertinoNavigationBar(
@@ -115,7 +117,8 @@ class _GalleryDetailPageState extends State<GalleryDetailPage> {
             onNotification: (notification) =>
                 _scrollUpdateNotification(notification),
             child: ListView(
-//            controller: _controller,
+//              controller: _controller,
+              dragStartBehavior: DragStartBehavior.down,
               children: <Widget>[
                 _buildGalletyHead(context),
                 Container(
@@ -155,15 +158,15 @@ class _GalleryDetailPageState extends State<GalleryDetailPage> {
               children: <Widget>[
                 ConstrainedBox(
                   constraints: BoxConstraints(
-//                minWidth: double.infinity, //宽度尽可能大
-                      minWidth: 130.0,
+//                      minWidth: double.infinity, //宽度尽可能大
+//                      minWidth: 130.0,
                       maxWidth: 150.0
 //                maxWidth: 140,
                       ),
                   child: Container(
-                    margin: const EdgeInsets.only(right: 8),
-                    // color: CupertinoColors.systemGrey6,
-                    // width: 130,
+                    color: CupertinoColors.systemGrey6,
+                    margin: const EdgeInsets.only(right: 10),
+//                    width: 130,
                     child: ClipRRect(
                       borderRadius: BorderRadius.circular(8),
                       child: CachedNetworkImage(
@@ -185,9 +188,10 @@ class _GalleryDetailPageState extends State<GalleryDetailPage> {
                         style: TextStyle(
                           fontSize: 16,
                           fontWeight: FontWeight.w500,
-                          // fontFamilyFallback: EHConst.FONT_FAMILY_FB,
+//                          fontFamilyFallback: EHConst.FONT_FAMILY_FB,
                         ),
                       ),
+                      // 上传用户
                       Container(
                         margin: const EdgeInsets.only(top: 4, bottom: 4),
                         child: Text(
@@ -196,16 +200,18 @@ class _GalleryDetailPageState extends State<GalleryDetailPage> {
                           textAlign: TextAlign.left, // 对齐方式
                           overflow: TextOverflow.ellipsis, // 超出部分省略号
                           style: TextStyle(
-                            fontSize: 12,
-                            color: CupertinoColors.systemGrey,
-                            // fontFamilyFallback: [EHConst.FONT_FAMILY],
+                            fontSize: 13,
+                            color: Colors.brown,
+                            fontWeight: FontWeight.w500,
+//                            fontFamilyFallback: EHConst.FONT_FAMILY_FB,
                           ),
                         ),
                       ),
                       Spacer(),
+                      // 阅读按钮
                       Row(
                         children: <Widget>[
-                          _readButton(ln),
+                          _readButton(ln.READ),
                           Spacer(),
                           Icon(FontAwesomeIcons.heart)
                         ],
@@ -252,10 +258,10 @@ class _GalleryDetailPageState extends State<GalleryDetailPage> {
     );
   }
 
-  CupertinoButton _readButton(S ln) {
+  CupertinoButton _readButton(String text) {
     return CupertinoButton(
         child: Text(
-          ln.READ,
+          text,
           style: TextStyle(fontSize: 15),
         ),
         minSize: 20,

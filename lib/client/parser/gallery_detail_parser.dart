@@ -129,15 +129,39 @@ class GalleryDetailParser {
       })
           .join();
 
-//      Global.logger.v('${contextElem.children.length}');
-
-
       galleryItem.galleryComment.add(GalleryComment()
         ..name = postName
         ..context = context
         ..time = postTimeLocal
         ..score = score);
     }
+
+
+    /// 画廊缩略图
+    /// 大图 #gdt > div.gdtl  小图 #gdt > div.gdtm
+    List<dom.Element> picLsit = document.querySelectorAll('#gdt > div.gdtm');
+    Global.logger.v('${picLsit.length}');
+
+    if (picLsit.length > 0 ) {
+      // 小图的处理
+      for (var pic in picLsit) {
+        var picHref = pic.querySelector('a').attributes['href'];
+        var style = pic.querySelector('div').attributes['style'];
+        var picSrcUrl = RegExp(r"url\((.+)\)").firstMatch(style).group(1);
+        Global.logger.v('$picHref    $picSrcUrl');
+      }
+    } else {
+      List<dom.Element> picLsit = document.querySelectorAll('#gdt > div.gdtl');
+      // 大图的处理
+      for (var pic in picLsit) {
+        var picHref = pic.querySelector('a').attributes['href'];
+        dom.Element imgElem = pic.querySelector('img');
+        var picSer = imgElem.attributes['alt'].trim();
+        var picSrcUrl = imgElem.attributes['src'].trim();
+        Global.logger.v('$picHref  $picSer  $picSrcUrl');
+      }
+    }
+
 
     return galleryItem;
   }
