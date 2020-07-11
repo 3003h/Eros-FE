@@ -1,11 +1,9 @@
-import 'dart:io';
 import 'package:FEhViewer/pages/gallery_detail/gallery_detail_widget.dart';
 
 import 'package:FEhViewer/client/parser/gallery_detail_parser.dart';
 import 'package:FEhViewer/common/global.dart';
 import 'package:FEhViewer/generated/l10n.dart';
 import 'package:FEhViewer/models/index.dart';
-import 'package:FEhViewer/route/navigator_util.dart';
 import 'package:FEhViewer/values/const.dart';
 import 'package:FEhViewer/values/theme_colors.dart';
 import 'package:FEhViewer/widget/rating_bar.dart';
@@ -13,8 +11,6 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-
-import 'comment_item.dart';
 
 class GalleryDetailPage extends StatefulWidget {
   final String title;
@@ -65,11 +61,31 @@ class _GalleryDetailPageState extends State<GalleryDetailPage> {
     }
   }
 
+  /// NotificationListener监听
+  _scrollUpdateNotification(notification) {
+    if (notification is ScrollUpdateNotification && notification.depth == 0) {
+      double _offset = notification.metrics.pixels;
+
+      /// 导航栏封面和阅读按钮显示切换控制
+      /// 滑动超过 _titleHeight 时显示
+      if (_offset < _titleHeight && !_hideNavigationBtn) {
+        setState(() {
+          _hideNavigationBtn = true;
+        });
+      } else if (_offset >= _titleHeight && _hideNavigationBtn) {
+        setState(() {
+          _hideNavigationBtn = false;
+        });
+      }
+    }
+    return true;
+  }
+
   @override
   void initState() {
     super.initState();
     _loadData();
-    _controller.addListener(_controllerLister);
+//    _controller.addListener(_controllerLister);
   }
 
   @override
@@ -95,24 +111,28 @@ class _GalleryDetailPageState extends State<GalleryDetailPage> {
         bottom: false,
         child: Container(
           margin: const EdgeInsets.only(left: 12),
-          child: ListView(
-            controller: _controller,
-            children: <Widget>[
-              _buildGalletyHead(context),
-              Container(
-                height: 0.5,
-                color: CupertinoColors.systemGrey4,
-              ),
-              _loading
-                  ? Padding(
-                      padding: const EdgeInsets.all(18.0),
-                      child: CupertinoActivityIndicator(
-                        radius: 15.0,
-                      ),
-                    )
-                  : GalleryDetailContex(
-                      lisTagGroupW: _lisTagGroupW, galleryItem: _galleryItem),
-            ],
+          child: NotificationListener(
+            onNotification: (notification) =>
+                _scrollUpdateNotification(notification),
+            child: ListView(
+//            controller: _controller,
+              children: <Widget>[
+                _buildGalletyHead(context),
+                Container(
+                  height: 0.5,
+                  color: CupertinoColors.systemGrey4,
+                ),
+                _loading
+                    ? Padding(
+                        padding: const EdgeInsets.all(18.0),
+                        child: CupertinoActivityIndicator(
+                          radius: 15.0,
+                        ),
+                      )
+                    : GalleryDetailContex(
+                        lisTagGroupW: _lisTagGroupW, galleryItem: _galleryItem),
+              ],
+            ),
           ),
         ),
       ),

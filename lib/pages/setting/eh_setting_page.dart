@@ -27,43 +27,26 @@ class _EhSettingPage extends State<EhSettingPage> {
   }
 }
 
-class ListViewEhSetting extends StatefulWidget {
-  ListViewEhSetting({Key key}) : super(key: key);
-
-  @override
-  _ListViewEhSetting createState() => _ListViewEhSetting();
-}
-
-class _ListViewEhSetting extends State<ListViewEhSetting> {
-  bool _jpnTitle = Global.profile.ehConfig.jpnTitle;
-  bool _tagTranslat = Global.profile.ehConfig.tagTranslat;
-  bool _galleryImgBlur = Global.profile.ehConfig.galleryImgBlur;
-
-  void _handleJpnTitleChanged(bool newValue) {
-    setState(() {
-      _jpnTitle = newValue;
-      Provider.of<EhConfigModel>(context, listen: false).jpnTitle = _jpnTitle;
-    });
-  }
-
-  void _handleTagTranslatChanged(bool newValue) {
-    setState(() {
-      _tagTranslat = newValue;
-      Provider.of<EhConfigModel>(context, listen: false).tagTranslat =
-          _tagTranslat;
-    });
-  }
-
-  void _handleGalleryListImgBlurChanged(bool newValue) {
-    setState(() {
-      _galleryImgBlur = newValue;
-      Provider.of<EhConfigModel>(context, listen: false).galleryImgBlur =
-          _galleryImgBlur;
-    });
-  }
+class ListViewEhSetting extends StatelessWidget {
+  final bool _jpnTitle = Global.profile.ehConfig.jpnTitle;
+  final bool _tagTranslat = Global.profile.ehConfig.tagTranslat;
+  final bool _galleryImgBlur = Global.profile.ehConfig.galleryImgBlur;
 
   @override
   Widget build(BuildContext context) {
+    void _handleJpnTitleChanged(bool newValue) {
+      Provider.of<EhConfigModel>(context, listen: false).jpnTitle = newValue;
+    }
+
+    void _handleTagTranslatChanged(bool newValue) {
+      Provider.of<EhConfigModel>(context, listen: false).tagTranslat = newValue;
+    }
+
+    void _handleGalleryListImgBlurChanged(bool newValue) {
+      Provider.of<EhConfigModel>(context, listen: false).galleryImgBlur =
+          newValue;
+    }
+
     List _items = [
       TextSwitchItem('显示标签中文翻译',
           intValue: _tagTranslat,
