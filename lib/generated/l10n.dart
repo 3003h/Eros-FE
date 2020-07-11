@@ -202,6 +202,16 @@ class S {
       args: [],
     );
   }
+
+  /// `All Comment`
+  String get all_comment {
+    return Intl.message(
+      'All Comment',
+      name: 'all_comment',
+      desc: '',
+      args: [],
+    );
+  }
 }
 
 class AppLocalizationDelegate extends LocalizationsDelegate<S> {

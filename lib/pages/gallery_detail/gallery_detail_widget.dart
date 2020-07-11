@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:FEhViewer/generated/l10n.dart';
 import 'package:FEhViewer/models/index.dart';
 import 'package:FEhViewer/route/navigator_util.dart';
 import 'package:cached_network_image/cached_network_image.dart';
@@ -21,7 +22,7 @@ class GalleryDetailContex extends StatelessWidget {
   final List<Widget> _lisTagGroupW;
   final GalleryItem _galleryItem;
 
-  List<Widget> _topComment(List<GalleryComment> comments, int max) {
+  List<Widget> _topComment(List<GalleryComment> comments, {int max = 2}) {
     var _comments = comments.take(max);
     return List<Widget>.from(_comments
         .map((comment) => CommentItem(
@@ -33,6 +34,7 @@ class GalleryDetailContex extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    var ln = S.of(context);
     return Container(
       child: Column(
         children: <Widget>[
@@ -40,9 +42,11 @@ class GalleryDetailContex extends StatelessWidget {
           TagBox(
             lisTagGroup: _lisTagGroupW,
           ),
-          ..._topComment(_galleryItem.galleryComment, 2),
+          ..._topComment(_galleryItem.galleryComment, max: 2),
           CupertinoButton(
-            child: Text('Comment'),
+            minSize: 0,
+            padding: const EdgeInsets.fromLTRB(4, 4, 0, 0),
+            child: Text(ln.all_comment),
             onPressed: () {
               NavigatorUtil.goGalleryDetailComment(
                   context, _galleryItem.galleryComment);
@@ -123,7 +127,7 @@ class CoveTinyImage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    var _padding = Platform.isAndroid ? 0.0 : 4.0;
+    var _padding = Platform.isAndroid ? 0.0 : 2.0;
     return Container(
       height: statusBarHeight,
       width: statusBarHeight,
