@@ -31,7 +31,7 @@ class _GalleryDetailPageState extends State<GalleryDetailPage> {
 
   final _titleHeight = 200.0;
 
-  ScrollController _controller = new ScrollController();
+  ScrollController _controller = ScrollController();
 
   /// 初始化 请求数据
   _loadData() async {
@@ -50,6 +50,7 @@ class _GalleryDetailPageState extends State<GalleryDetailPage> {
   }
 
   // 滚动监听
+  // 后续考虑用状态管理处理
   void _controllerLister() {
     if (_controller.offset < _titleHeight && !_hideNavigationBtn) {
       setState(() {
@@ -86,7 +87,7 @@ class _GalleryDetailPageState extends State<GalleryDetailPage> {
   void initState() {
     super.initState();
     _loadData();
-//    _controller.addListener(_controllerLister);
+    _controller.addListener(_controllerLister);
   }
 
   @override
@@ -113,29 +114,26 @@ class _GalleryDetailPageState extends State<GalleryDetailPage> {
         bottom: false,
         child: Container(
           margin: const EdgeInsets.only(left: 12),
-          child: NotificationListener(
-            onNotification: (notification) =>
-                _scrollUpdateNotification(notification),
-            child: ListView(
-//              controller: _controller,
-              dragStartBehavior: DragStartBehavior.down,
-              children: <Widget>[
-                _buildGalletyHead(context),
-                Container(
-                  height: 0.5,
-                  color: CupertinoColors.systemGrey4,
-                ),
-                _loading
-                    ? Padding(
-                        padding: const EdgeInsets.all(18.0),
-                        child: CupertinoActivityIndicator(
-                          radius: 15.0,
-                        ),
-                      )
-                    : GalleryDetailContex(
-                        lisTagGroupW: _lisTagGroupW, galleryItem: _galleryItem),
-              ],
-            ),
+          child: ListView(
+            physics: AlwaysScrollableScrollPhysics(),
+            controller: _controller,
+            dragStartBehavior: DragStartBehavior.down,
+            children: <Widget>[
+              _buildGalletyHead(context),
+              Container(
+                height: 0.5,
+                color: CupertinoColors.systemGrey4,
+              ),
+              _loading
+                  ? Padding(
+                      padding: const EdgeInsets.all(18.0),
+                      child: CupertinoActivityIndicator(
+                        radius: 15.0,
+                      ),
+                    )
+                  : GalleryDetailContex(
+                      lisTagGroupW: _lisTagGroupW, galleryItem: _galleryItem),
+            ],
           ),
         ),
       ),

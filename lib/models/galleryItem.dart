@@ -1,6 +1,7 @@
 import 'package:json_annotation/json_annotation.dart';
 import "tagGroup.dart";
 import "galleryComment.dart";
+import "galleryPreview.dart";
 part 'galleryItem.g.dart';
 
 @JsonSerializable()
@@ -27,6 +28,7 @@ class GalleryItem {
     List simpleTagsTranslat;
     List<TagGroup> tagGroup;
     List<GalleryComment> galleryComment;
+    List<GalleryPreview> galleryPreview;
     
     factory GalleryItem.fromJson(Map<String,dynamic> json) => _$GalleryItemFromJson(json);
     Map<String, dynamic> toJson() => _$GalleryItemToJson(this);

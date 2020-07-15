@@ -43,6 +43,7 @@ class GalleryDetailContex extends StatelessWidget {
             lisTagGroup: _lisTagGroupW,
           ),
           ..._topComment(_galleryItem.galleryComment, max: 2),
+          // 评论按钮
           CupertinoButton(
             minSize: 0,
             padding: const EdgeInsets.fromLTRB(4, 4, 0, 0),
@@ -52,9 +53,118 @@ class GalleryDetailContex extends StatelessWidget {
                   context, _galleryItem.galleryComment);
             },
           ),
+          ThumbnailBox(
+            galleryPreviewList: _galleryItem.galleryPreview,
+          ),
         ],
       ),
     );
+  }
+}
+
+class ThumbnailBox extends StatelessWidget {
+  final List<GalleryPreview> galleryPreviewList;
+
+  const ThumbnailBox({Key key, @required this.galleryPreviewList})
+      : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    List<Widget> thumbnails = List<Widget>.from(galleryPreviewList
+        .map((thumb) => PreviewContainer(
+              galleryPreview: thumb,
+            ))
+        .toList());
+
+//    return Container(
+//      child: GridView.count(
+//        crossAxisCount: 4,
+//        childAspectRatio: 0.5,
+//        children: <Widget>[...thumbnails],
+//      ),
+//    );
+
+    return Column(
+      children: <Widget>[...thumbnails],
+    );
+  }
+}
+
+class PreviewContainer extends StatelessWidget {
+  final GalleryPreview galleryPreview;
+
+  const PreviewContainer({Key key, @required this.galleryPreview})
+      : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: [
+        galleryPreview.isLarge ?? false
+            ? Container(
+                child: CachedNetworkImage(
+                  imageUrl: galleryPreview.imgUrl,
+                ),
+              )
+            : Container(
+                width: galleryPreview.width,
+                height: galleryPreview.height,
+                child: Stack(
+                  fit: StackFit.expand,
+                  overflow: Overflow.clip,
+                  children: <Widget>[
+                    Positioned(
+                      top: 0,
+                      left: -galleryPreview.offSet,
+                      child: CachedNetworkImage(
+//                  width: galleryThumbnail.width,
+//                  height: galleryThumbnail.height,
+                        fit: BoxFit.none,
+                        alignment: Alignment.topLeft,
+                        imageUrl: galleryPreview.imgUrl,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+        Container(
+          height: 10,
+        )
+      ],
+    );
+  }
+}
+
+/// 预览图小图裁剪
+class PreviewClipper extends CustomClipper<Path> {
+  final double offset;
+
+  // 宽高
+  final double width;
+  final double height;
+
+  /// 构造函数，接收传递过来的宽高
+  PreviewClipper(
+      {this.offset = 0.0, @required this.width, @required this.height});
+
+  /// 获取剪裁区域的接口
+  /// 返回一个矩形 path
+  @override
+  Path getClip(Size size) {
+    Path path = Path();
+    path.moveTo(offset, 0.0);
+    path.lineTo(offset + width, 0.0);
+    path.lineTo(offset + width, height);
+    path.lineTo(offset, height);
+    path.close();
+    return path;
+  }
+
+  /// 接口决定是否重新剪裁
+  /// 如果在应用中，剪裁区域始终不会发生变化时应该返回 false，这样就不会触发重新剪裁，避免不必要的性能开销。
+  @override
+  bool shouldReclip(CustomClipper<Path> oldClipper) {
+    return false;
   }
 }
 
