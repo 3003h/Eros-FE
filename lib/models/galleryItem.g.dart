@@ -34,6 +34,11 @@ GalleryItem _$GalleryItemFromJson(Map<String, dynamic> json) {
         ?.map((e) => e == null
             ? null
             : GalleryComment.fromJson(e as Map<String, dynamic>))
+        ?.toList()
+    ..galleryPreview = (json['galleryPreview'] as List)
+        ?.map((e) => e == null
+            ? null
+            : GalleryPreview.fromJson(e as Map<String, dynamic>))
         ?.toList();
 }
 
@@ -58,5 +63,6 @@ Map<String, dynamic> _$GalleryItemToJson(GalleryItem instance) =>
       'simpleTags': instance.simpleTags,
       'simpleTagsTranslat': instance.simpleTagsTranslat,
       'tagGroup': instance.tagGroup,
-      'galleryComment': instance.galleryComment
+      'galleryComment': instance.galleryComment,
+      'galleryPreview': instance.galleryPreview
     };

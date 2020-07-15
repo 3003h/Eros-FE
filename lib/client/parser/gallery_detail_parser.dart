@@ -140,28 +140,52 @@ class GalleryDetailParser {
     /// 画廊缩略图
     /// 大图 #gdt > div.gdtl  小图 #gdt > div.gdtm
     List<dom.Element> picLsit = document.querySelectorAll('#gdt > div.gdtm');
-    Global.logger.v('${picLsit.length}');
+//    Global.logger.v('${picLsit.length}');
 
-    if (picLsit.length > 0 ) {
+    galleryItem.galleryPreview = [];
+
+    if (picLsit.length > 0) {
       // 小图的处理
       for (var pic in picLsit) {
-        var picHref = pic.querySelector('a').attributes['href'];
-        var style = pic.querySelector('div').attributes['style'];
+        var picHref = pic
+            .querySelector('a')
+            .attributes['href'];
+        var style = pic
+            .querySelector('div')
+            .attributes['style'];
         var picSrcUrl = RegExp(r"url\((.+)\)").firstMatch(style).group(1);
-        Global.logger.v('$picHref    $picSrcUrl');
+        var height = RegExp(r"height:(\d+)?px").firstMatch(style).group(1);
+        var width = RegExp(r"width:(\d+)?px").firstMatch(style).group(1);
+        var offSet = RegExp(r"\) -(\d+)?px ").firstMatch(style).group(1);
+        Global.logger.v('$picHref $picSrcUrl $height $width $offSet');
+        galleryItem.galleryPreview.add(GalleryPreview()
+          ..isLarge = false
+          ..href = picHref
+          ..imgUrl = picSrcUrl
+          ..height = double.parse(height)
+          ..width = double.parse(width)
+          ..offSet = double.parse(offSet)
+        );
       }
     } else {
       List<dom.Element> picLsit = document.querySelectorAll('#gdt > div.gdtl');
       // 大图的处理
       for (var pic in picLsit) {
-        var picHref = pic.querySelector('a').attributes['href'];
+        var picHref = pic
+            .querySelector('a')
+            .attributes['href'];
         dom.Element imgElem = pic.querySelector('img');
         var picSer = imgElem.attributes['alt'].trim();
         var picSrcUrl = imgElem.attributes['src'].trim();
         Global.logger.v('$picHref  $picSer  $picSrcUrl');
+
+        galleryItem.galleryPreview.add(GalleryPreview()
+          ..isLarge = true
+          ..href = picHref
+          ..imgUrl = picSrcUrl
+        );
       }
     }
-
 
     return galleryItem;
   }
