@@ -250,6 +250,7 @@ class _GalleryItemWidgetState extends State<GalleryItemWidget> {
 
 class TagItem extends StatelessWidget {
   final text;
+
   const TagItem({
     Key key,
     this.text,
@@ -316,6 +317,7 @@ class TagBox extends StatelessWidget {
 /// 封面图片Widget
 class CoverImg extends StatelessWidget {
   final String imgUrl;
+
   const CoverImg({
     Key key,
     @required this.imgUrl,

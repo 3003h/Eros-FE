@@ -6,6 +6,7 @@ class TextSwitchItem extends StatefulWidget {
   final String title;
   final String desc;
   final String descOn;
+
   TextSwitchItem(
     this.title, {
     this.intValue,

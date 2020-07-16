@@ -1,9 +1,8 @@
-import 'package:FEhViewer/pages/gallery_detail/gallery_detail_widget.dart';
-
 import 'package:FEhViewer/client/parser/gallery_detail_parser.dart';
 import 'package:FEhViewer/common/global.dart';
 import 'package:FEhViewer/generated/l10n.dart';
 import 'package:FEhViewer/models/index.dart';
+import 'package:FEhViewer/pages/gallery_detail/gallery_detail_widget.dart';
 import 'package:FEhViewer/values/const.dart';
 import 'package:FEhViewer/values/theme_colors.dart';
 import 'package:FEhViewer/widget/rating_bar.dart';
@@ -16,6 +15,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 class GalleryDetailPage extends StatefulWidget {
   final String title;
   final GalleryItem galleryItem;
+
   GalleryDetailPage({Key key, this.galleryItem, this.title}) : super(key: key);
 
   @override

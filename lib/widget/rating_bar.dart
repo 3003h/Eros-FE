@@ -1,5 +1,6 @@
-import 'package:flutter/widgets.dart';
 import 'dart:math' as Math;
+
+import 'package:flutter/widgets.dart';
 
 const double kMaxRate = 5.0;
 const int kNumberOfStarts = 5;

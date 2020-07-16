@@ -1,9 +1,11 @@
 import 'dart:convert';
+
 import 'package:shared_preferences/shared_preferences.dart';
 
 /// 本地存储
 class StorageUtil {
   static StorageUtil _instance = new StorageUtil._();
+
   factory StorageUtil() => _instance;
   static SharedPreferences _prefs;
 

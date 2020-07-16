@@ -8,6 +8,7 @@ class CommentPage extends StatelessWidget {
   final List<GalleryComment> galleryComments;
 
   const CommentPage({Key key, this.galleryComments}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     var ln = S.of(context);

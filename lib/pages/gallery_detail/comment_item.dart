@@ -11,6 +11,7 @@ class CommentItem extends StatelessWidget {
   const CommentItem(
       {Key key, @required this.galleryComment, this.simple = false})
       : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -52,8 +53,10 @@ class CommentItem extends StatelessWidget {
                         galleryComment.context,
                         maxLines: kMaxline,
                         softWrap: true,
-                        textAlign: TextAlign.left, // 对齐方式
-                        overflow: TextOverflow.ellipsis, // 超出部分省略号
+                        textAlign: TextAlign.left,
+                        // 对齐方式
+                        overflow: TextOverflow.ellipsis,
+                        // 超出部分省略号
                         style: TextStyle(
                           fontSize: 13,
                         ),

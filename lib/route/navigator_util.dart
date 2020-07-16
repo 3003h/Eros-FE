@@ -3,11 +3,11 @@ import 'dart:convert';
 import 'package:FEhViewer/common/global.dart';
 import 'package:FEhViewer/models/galleryComment.dart';
 import 'package:FEhViewer/models/galleryItem.dart';
+import 'package:fluro/fluro.dart';
+import 'package:flutter/material.dart';
 
 import 'application.dart';
 import 'routes.dart';
-import 'package:flutter/material.dart';
-import 'package:fluro/fluro.dart';
 
 class NavigatorUtil {
   // 返回

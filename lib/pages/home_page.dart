@@ -1,14 +1,14 @@
 import 'package:FEhViewer/common/global.dart';
 import 'package:FEhViewer/generated/l10n.dart';
 import 'package:FEhViewer/utils/toast.dart';
-import 'package:FEhViewer/values/const.dart';
-import 'gallery_page.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+
+import 'favorite_page.dart';
+import 'gallery_page.dart';
 import 'popular_page.dart';
 import 'setting_page.dart';
-import 'favorite_page.dart';
 
 class FEhHome extends StatefulWidget {
   @override
