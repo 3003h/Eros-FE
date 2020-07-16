@@ -1,8 +1,10 @@
 import 'dart:io';
 
+import 'package:FEhViewer/common/global.dart';
 import 'package:FEhViewer/generated/l10n.dart';
 import 'package:FEhViewer/models/index.dart';
 import 'package:FEhViewer/route/navigator_util.dart';
+import 'package:FEhViewer/values/const.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -77,26 +79,12 @@ class PreviewBox extends StatelessWidget {
             ))
         .toList());
 
-//    return Container(
-//      child: GridView.count(
-//        crossAxisCount: 4,
-////        childAspectRatio: 0.5,
-//        children: <Widget>[...previews],
-//      ),
-//    );
-
-//    return Container(
-//      child: Column(
-//        children: <Widget>[...previews],
-//      ),
-//    );
-
     return Container(
-      padding: const EdgeInsets.only(top: 20),
+      padding: const EdgeInsets.only(top: 20, right: 10, left: 10),
       child: Wrap(
-        spacing: 15.0, // 主轴(水平)方向间距
+        spacing: 20.0, // 主轴(水平)方向间距
         runSpacing: 10.0, // 纵轴（垂直）方向间距
-        alignment: WrapAlignment.center, //沿主轴方向居中
+        alignment: WrapAlignment.spaceBetween,
         crossAxisAlignment: WrapCrossAlignment.center,
         children: <Widget>[...previews],
       ),
@@ -202,47 +190,34 @@ class TagButtonB extends StatelessWidget {
 
   const TagButtonB({
     @required this.text,
+    textColor,
     color,
-    backgroundColor,
     VoidCallback onPressed,
-  })  : this.textColor = color ?? Colors.black54,
-        this.color = backgroundColor ?? const Color(0xffeeeeee),
+  })  : this.textColor = textColor ?? const Color(0xff505050),
+        this.color = color ?? const Color(0xffeeeeee),
         _onPressed = onPressed;
 
   @override
   Widget build(BuildContext context) {
-    return ClipRRect(
-      borderRadius: BorderRadius.circular(8),
-      child: Container(
-        padding: const EdgeInsets.fromLTRB(6, 3, 6, 4),
-        color: color,
-        child: Text(
-          text,
-          style: TextStyle(
-            color: textColor,
-            fontSize: 14,
-            height: 1.3,
+    return GestureDetector(
+      onTap: _onPressed,
+      child: ClipRRect(
+        borderRadius: BorderRadius.circular(8),
+        child: Container(
+          padding: const EdgeInsets.fromLTRB(6, 3, 6, 4),
+          color: color,
+          child: Text(
+            text,
+            style: TextStyle(
+              color: textColor,
+              fontSize: 13,
+              height: 1.3,
+//              fontWeight: FontWeight.w500,
+            ),
+            strutStyle: StrutStyle(height: 1),
           ),
-          strutStyle: StrutStyle(height: 1),
         ),
       ),
-    );
-
-    return CupertinoButton(
-      child: Text(
-        text,
-        style: TextStyle(
-          fontSize: 14,
-          height: 1,
-        ),
-        strutStyle: StrutStyle(height: 1),
-      ),
-      minSize: 0,
-      padding: const EdgeInsets.fromLTRB(8, 6, 8, 4),
-      borderRadius: BorderRadius.circular(50),
-      color: textColor,
-      onPressed: _onPressed,
-      disabledColor: Colors.blueGrey,
     );
   }
 }
@@ -276,24 +251,86 @@ class CoveTinyImage extends StatelessWidget {
   final double statusBarHeight;
 
   const CoveTinyImage({Key key, this.imgUrl, double statusBarHeight})
-      : statusBarHeight = statusBarHeight ?? 44,
+      : statusBarHeight = statusBarHeight,
         super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    var _padding = Platform.isAndroid ? 0.0 : 2.0;
+//    Global.logger.v('$statusBarHeight');
+//    var _padding = Platform.isAndroid ? 0.0 : 0.0;
+    double _padding = statusBarHeight > 30.0 ? 4.0 : 0.0;
     return Container(
-      height: statusBarHeight,
-      width: statusBarHeight,
-      padding: EdgeInsets.all(_padding),
+      padding: EdgeInsets.all(4),
       child: ClipRRect(
         // 圆角
         borderRadius: BorderRadius.circular(4),
         child: CachedNetworkImage(
-          fit: BoxFit.cover,
+          width: 44,
+          height: 44,
+          fit: BoxFit.fitWidth,
           imageUrl: imgUrl,
         ),
       ),
     );
+  }
+}
+
+/// 一个标签组 第一个是类型
+class TagGroupItem extends StatelessWidget {
+  TagGroupItem({
+    @required this.tagGroupData,
+  });
+
+  final tagGroupData;
+
+  static initTagBtnList(galleryTags) {
+    final _isTagTranslat = Global.profile.ehConfig.tagTranslat;
+    List<Widget> _tagBtnList = [];
+    galleryTags.forEach((tag) {
+      _tagBtnList.add(TagButtonB(
+        text: _isTagTranslat ? tag?.tagTranslat ?? '' : tag?.title ?? '',
+        onPressed: () {
+          Global.logger.v('search type[${tag.type}] tag[${tag.title}]');
+        },
+      ));
+    });
+    return _tagBtnList;
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final _isTagTranslat = Global.profile.ehConfig.tagTranslat;
+    final _tagBtnList = initTagBtnList(tagGroupData.galleryTags);
+    final _tagType = tagGroupData.tagType;
+
+    Container container = Container(
+      padding: const EdgeInsets.fromLTRB(0, 4, 0, 4),
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          // tag 分类
+          Container(
+            padding: const EdgeInsets.only(right: 8),
+            child: TagButtonB(
+              color: EHConst.tagColorTagType[_tagType.trim()],
+              text: _isTagTranslat
+                  ? EHConst.translateTagType[_tagType.trim()] ?? _tagType
+                  : _tagType,
+            ),
+          ),
+          Expanded(
+            child: Container(
+              child: Wrap(
+                spacing: 4, //主轴上子控件的间距
+                runSpacing: 4, //交叉轴上子控件之间的间距
+                children: _tagBtnList, //要显示的子控件集合
+              ),
+            ),
+          )
+        ],
+      ),
+    );
+
+    return container;
   }
 }
