@@ -4,15 +4,14 @@ import 'package:FEhViewer/models/index.dart';
 import 'package:FEhViewer/pages/favorite_page.dart';
 import 'package:FEhViewer/pages/gallery_detail/comment_page.dart';
 import 'package:FEhViewer/pages/gallery_detail/gallery_detail_page.dart';
+import 'package:FEhViewer/pages/home_page.dart';
 import 'package:FEhViewer/pages/login_page.dart';
 import 'package:FEhViewer/pages/setting/eh_setting_page.dart';
 import 'package:FEhViewer/pages/splash_page.dart';
-
-import 'package:FEhViewer/pages/home_page.dart';
 import 'package:FEhViewer/pages/user/browser.dart';
 import 'package:FEhViewer/route/routes.dart';
-import 'package:flutter/material.dart';
 import 'package:fluro/fluro.dart';
+import 'package:flutter/material.dart';
 
 final Map<String, Handler> pageRoutes = {
   // 闪屏

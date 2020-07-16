@@ -2,9 +2,9 @@ import 'package:FEhViewer/client/tag_database.dart';
 import 'package:FEhViewer/common/global.dart';
 import 'package:FEhViewer/models/index.dart';
 import 'package:FEhViewer/utils/dio_util.dart';
+import 'package:dio/dio.dart';
 import 'package:html/dom.dart' as dom;
 import 'package:html/parser.dart';
-import 'package:dio/dio.dart';
 import 'package:intl/intl.dart';
 
 class GalleryDetailParser {

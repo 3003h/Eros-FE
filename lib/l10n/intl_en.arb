@@ -18,8 +18,8 @@
   "passwd": "Password",
   "login": "Sign",
   "login_web": "Sign in on the web",
-  "double_click_back" : "Press again to exit",
-  "READ":"READ",
+  "double_click_back": "Press again to exit",
+  "READ": "READ",
   "gallery_comments": "Gallery Comments",
   "all_comment": "All Comment"
 }

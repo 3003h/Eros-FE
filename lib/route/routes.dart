@@ -1,5 +1,6 @@
-import 'router_handler.dart';
 import 'package:fluro/fluro.dart';
+
+import 'router_handler.dart';
 
 class EHRoutes {
   static const String root = "/";
