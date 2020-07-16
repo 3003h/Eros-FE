@@ -103,7 +103,7 @@ class DataBaseUtil {
 
   /// 获取翻译结果
   Future<String> getTagTransStr(String key, {String namespace}) async {
-    var tr = await getTagTrans(key, namespace: namespace);
+    var tr = await getTagTrans(key.trim(), namespace: namespace.trim());
     return tr?.name;
   }
 }

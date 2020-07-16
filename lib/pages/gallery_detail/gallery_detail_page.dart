@@ -1,9 +1,7 @@
 import 'package:FEhViewer/client/parser/gallery_detail_parser.dart';
-import 'package:FEhViewer/common/global.dart';
 import 'package:FEhViewer/generated/l10n.dart';
 import 'package:FEhViewer/models/index.dart';
 import 'package:FEhViewer/pages/gallery_detail/gallery_detail_widget.dart';
-import 'package:FEhViewer/values/const.dart';
 import 'package:FEhViewer/values/theme_colors.dart';
 import 'package:FEhViewer/widget/rating_bar.dart';
 import 'package:cached_network_image/cached_network_image.dart';
@@ -42,7 +40,7 @@ class _GalleryDetailPageState extends State<GalleryDetailPage> {
         await GalleryDetailParser.getGalleryDetail(widget.galleryItem);
 
     _galleryItem.tagGroup.forEach((tagGroupData) {
-      _lisTagGroupW.add(TagGroupW(tagGroupData: tagGroupData));
+      _lisTagGroupW.add(TagGroupItem(tagGroupData: tagGroupData));
     });
     setState(() {
       _loading = false;
@@ -267,64 +265,5 @@ class _GalleryDetailPageState extends State<GalleryDetailPage> {
         borderRadius: BorderRadius.circular(50),
         color: CupertinoColors.activeBlue,
         onPressed: () {});
-  }
-}
-
-/// 一个标签组 第一个是类型
-class TagGroupW extends StatelessWidget {
-  TagGroupW({
-    @required this.tagGroupData,
-  });
-
-  final tagGroupData;
-
-  static initTagBtnList(galleryTags) {
-    final _isTagTranslat = Global.profile.ehConfig.tagTranslat;
-    List<Widget> _tagBtnList = [];
-    galleryTags.forEach((tag) {
-      _tagBtnList.add(TagButtonB(
-        text: _isTagTranslat ? tag?.tagTranslat ?? '' : tag?.title ?? '',
-        onPressed: () {
-          Global.logger.v('search type[${tag.type}] tag[${tag.title}]');
-        },
-      ));
-    });
-    return _tagBtnList;
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    final _isTagTranslat = Global.profile.ehConfig.tagTranslat;
-    final _tagBtnList = initTagBtnList(tagGroupData.galleryTags);
-    final _tagType = tagGroupData.tagType;
-
-    Container container = Container(
-      padding: const EdgeInsets.fromLTRB(0, 4, 0, 4),
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          // tag 分类
-          Container(
-            padding: const EdgeInsets.only(right: 12),
-            child: TagButtonB(
-              text: _isTagTranslat
-                  ? EHConst.translateTagType[_tagType.trim()] ?? _tagType
-                  : _tagType,
-            ),
-          ),
-          Expanded(
-            child: Container(
-              child: Wrap(
-                spacing: 4, //主轴上子控件的间距
-                runSpacing: 4, //交叉轴上子控件之间的间距
-                children: _tagBtnList, //要显示的子控件集合
-              ),
-            ),
-          )
-        ],
-      ),
-    );
-
-    return container;
   }
 }
