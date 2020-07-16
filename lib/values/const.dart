@@ -69,6 +69,18 @@ class EHConst {
     "misc": "杂项"
   };
 
+  static const tagColorTagType = {
+    "artist": Color(0xffE6D6D0),
+    "female": Color(0xffFAE0D4),
+    "male": Color(0xfff9eed8),
+    "parody": Color(0xffd8e6e2),
+    "character": Color(0xffd5e4f7),
+    "group": Color(0xffdfd6f7),
+    "language": Color(0xfff5d5e5),
+    "reclass": Color(0xfffbd6d5),
+    "misc": Color(0xffd7d7d6),
+  };
+
   static const urls = {
     "default": "https://exhentai.org/",
     "homepage": "https://exhentai.org/",

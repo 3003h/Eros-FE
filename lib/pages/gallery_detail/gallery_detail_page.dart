@@ -282,7 +282,7 @@ class TagGroupW extends StatelessWidget {
     final _isTagTranslat = Global.profile.ehConfig.tagTranslat;
     List<Widget> _tagBtnList = [];
     galleryTags.forEach((tag) {
-      _tagBtnList.add(TagButton(
+      _tagBtnList.add(TagButtonB(
         text: _isTagTranslat ? tag?.tagTranslat ?? '' : tag?.title ?? '',
         onPressed: () {
           Global.logger.v('search type[${tag.type}] tag[${tag.title}]');
@@ -305,8 +305,8 @@ class TagGroupW extends StatelessWidget {
         children: [
           // tag 分类
           Container(
-            padding: const EdgeInsets.only(right: 8, left: 8),
-            child: TagButton(
+            padding: const EdgeInsets.only(right: 12),
+            child: TagButtonB(
               text: _isTagTranslat
                   ? EHConst.translateTagType[_tagType.trim()] ?? _tagType
                   : _tagType,

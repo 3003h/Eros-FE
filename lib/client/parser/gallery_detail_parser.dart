@@ -157,8 +157,14 @@ class GalleryDetailParser {
         var height = RegExp(r"height:(\d+)?px").firstMatch(style).group(1);
         var width = RegExp(r"width:(\d+)?px").firstMatch(style).group(1);
         var offSet = RegExp(r"\) -(\d+)?px ").firstMatch(style).group(1);
+
         Global.logger.v('$picHref $picSrcUrl $height $width $offSet');
+
+        dom.Element imgElem = pic.querySelector('img');
+        var picSer = imgElem.attributes['alt'].trim();
+
         galleryItem.galleryPreview.add(GalleryPreview()
+          ..ser = int.parse(picSer)
           ..isLarge = false
           ..href = picHref
           ..imgUrl = picSrcUrl
@@ -180,6 +186,7 @@ class GalleryDetailParser {
         Global.logger.v('$picHref  $picSer  $picSrcUrl');
 
         galleryItem.galleryPreview.add(GalleryPreview()
+          ..ser = int.parse(picSer)
           ..isLarge = true
           ..href = picHref
           ..imgUrl = picSrcUrl
