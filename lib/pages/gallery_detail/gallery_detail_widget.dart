@@ -80,13 +80,26 @@ class PreviewBox extends StatelessWidget {
 //    return Container(
 //      child: GridView.count(
 //        crossAxisCount: 4,
-//        childAspectRatio: 0.5,
+////        childAspectRatio: 0.5,
 //        children: <Widget>[...previews],
 //      ),
 //    );
 
-    return Column(
-      children: <Widget>[...previews],
+//    return Container(
+//      child: Column(
+//        children: <Widget>[...previews],
+//      ),
+//    );
+
+    return Container(
+      padding: const EdgeInsets.only(top: 20),
+      child: Wrap(
+        spacing: 15.0, // 主轴(水平)方向间距
+        runSpacing: 10.0, // 纵轴（垂直）方向间距
+        alignment: WrapAlignment.center, //沿主轴方向居中
+        crossAxisAlignment: WrapCrossAlignment.center,
+        children: <Widget>[...previews],
+      ),
     );
   }
 }
@@ -118,15 +131,15 @@ class PreviewContainer extends StatelessWidget {
       children: [
         DecoratedBox(
           decoration: BoxDecoration(
-            //阴影
-            boxShadow: [
-              BoxShadow(
-                color: CupertinoColors.systemGrey,
-                offset: Offset(0.0, 0.0),
-                blurRadius: 4.0,
+              //阴影
+//            boxShadow: [
+//              BoxShadow(
+//                color: CupertinoColors.systemGrey,
+//                offset: Offset(0.0, 0.0),
+//                blurRadius: 4.0,
+//              ),
+//            ],
               ),
-            ],
-          ),
           child: Container(
             child: image,
           ),
@@ -134,7 +147,7 @@ class PreviewContainer extends StatelessWidget {
         Container(
           padding: const EdgeInsets.all(8),
           child: Text(
-            '1',
+            '${galleryPreview.ser ?? ''}',
             style: TextStyle(
               fontSize: 14,
               color: Colors.black54,
@@ -181,7 +194,60 @@ class TagButton extends StatelessWidget {
   }
 }
 
-/// 包含多个 TagBox
+class TagButtonB extends StatelessWidget {
+  final String text;
+  final Color textColor;
+  final Color color;
+  final VoidCallback _onPressed;
+
+  const TagButtonB({
+    @required this.text,
+    color,
+    backgroundColor,
+    VoidCallback onPressed,
+  })  : this.textColor = color ?? Colors.black54,
+        this.color = backgroundColor ?? const Color(0xffeeeeee),
+        _onPressed = onPressed;
+
+  @override
+  Widget build(BuildContext context) {
+    return ClipRRect(
+      borderRadius: BorderRadius.circular(8),
+      child: Container(
+        padding: const EdgeInsets.fromLTRB(6, 3, 6, 4),
+        color: color,
+        child: Text(
+          text,
+          style: TextStyle(
+            color: textColor,
+            fontSize: 14,
+            height: 1.3,
+          ),
+          strutStyle: StrutStyle(height: 1),
+        ),
+      ),
+    );
+
+    return CupertinoButton(
+      child: Text(
+        text,
+        style: TextStyle(
+          fontSize: 14,
+          height: 1,
+        ),
+        strutStyle: StrutStyle(height: 1),
+      ),
+      minSize: 0,
+      padding: const EdgeInsets.fromLTRB(8, 6, 8, 4),
+      borderRadius: BorderRadius.circular(50),
+      color: textColor,
+      onPressed: _onPressed,
+      disabledColor: Colors.blueGrey,
+    );
+  }
+}
+
+/// 包含多个 TagGroup
 class TagBox extends StatelessWidget {
   final List<Widget> lisTagGroup;
 
