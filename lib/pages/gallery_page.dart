@@ -95,7 +95,7 @@ class _GalleryListTab extends State<GalleryListTab> {
       delegate: SliverChildBuilderDelegate(
         (context, index) {
           if (index < gallerItemBeans.length) {
-            return GalleryItemWidget(galleryItemBean: gallerItemBeans[index]);
+            return GalleryItemWidget(galleryItem: gallerItemBeans[index]);
           }
           return null;
         },

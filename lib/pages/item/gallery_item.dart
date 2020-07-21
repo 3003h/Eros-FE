@@ -8,13 +8,14 @@ import 'package:FEhViewer/widget/rating_bar.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:provider/provider.dart';
 
 class GalleryItemWidget extends StatefulWidget {
   final int index;
-  final GalleryItem galleryItemBean;
+  final GalleryItem galleryItem;
 
-  GalleryItemWidget({this.index, this.galleryItemBean});
+  GalleryItemWidget({this.index, this.galleryItem});
 
   @override
   _GalleryItemWidgetState createState() => _GalleryItemWidgetState();
@@ -47,8 +48,8 @@ class _GalleryItemWidgetState extends State<GalleryItemWidget> {
   }
 
   String _getTitle(bool isJpnTitle) {
-    var _titleEn = widget?.galleryItemBean?.englishTitle ?? '';
-    var _titleJpn = widget?.galleryItemBean?.japaneseTitle ?? '';
+    var _titleEn = widget?.galleryItem?.englishTitle ?? '';
+    var _titleJpn = widget?.galleryItem?.japaneseTitle ?? '';
 
     // 日语标题判断
     var _title = isJpnTitle && _titleJpn != null && _titleJpn.isNotEmpty
@@ -60,10 +61,9 @@ class _GalleryItemWidgetState extends State<GalleryItemWidget> {
 
   @override
   Widget build(BuildContext context) {
-    Color _colorCategory =
-        ThemeColors.nameColor[widget?.galleryItemBean?.category ?? "defaule"]
-                ["color"] ??
-            CupertinoColors.white;
+    Color _colorCategory = ThemeColors
+            .nameColor[widget?.galleryItem?.category ?? "defaule"]["color"] ??
+        CupertinoColors.white;
 
     Widget containerGallery = Container(
       color: _colorTap,
@@ -87,8 +87,7 @@ class _GalleryItemWidgetState extends State<GalleryItemWidget> {
                 child: ClipRRect(
                   // 圆角
                   borderRadius: BorderRadius.circular(8),
-                  child:
-                      CoverImg(imgUrl: widget?.galleryItemBean?.imgUrl ?? ''),
+                  child: CoverImg(imgUrl: widget?.galleryItem?.imgUrl ?? ''),
                 ),
               ),
 
@@ -101,15 +100,14 @@ class _GalleryItemWidgetState extends State<GalleryItemWidget> {
                     _buildTitle(),
                     // 上传者
                     Text(
-                      widget?.galleryItemBean?.uploader ?? '',
+                      widget?.galleryItem?.uploader ?? '',
                       style: TextStyle(
                           fontSize: 12, color: CupertinoColors.systemGrey),
                     ),
                     // 标签
                     TagBox(
-                      simpleTags: widget.galleryItemBean.simpleTags,
-                      simpleTagsTranslat:
-                          widget.galleryItemBean.simpleTagsTranslat,
+                      simpleTags: widget.galleryItem.simpleTags,
+                      simpleTagsTranslat: widget.galleryItem.simpleTagsTranslat,
                     ),
                     // Spacer(),
                     // 评分和页数
@@ -120,12 +118,12 @@ class _GalleryItemWidgetState extends State<GalleryItemWidget> {
                           padding: const EdgeInsets.fromLTRB(0, 0, 4, 0),
                           child: StaticRatingBar(
                             size: 20.0,
-                            rate: widget.galleryItemBean.rating,
+                            rate: widget.galleryItem.rating,
                             radiusRatio: 1.5,
                           ),
                         ),
                         Text(
-                          widget?.galleryItemBean?.rating.toString(),
+                          widget?.galleryItem?.rating.toString(),
                           style: TextStyle(
                             fontSize: 13,
                             color: CupertinoColors.systemGrey,
@@ -136,6 +134,17 @@ class _GalleryItemWidgetState extends State<GalleryItemWidget> {
                         Row(
                           crossAxisAlignment: CrossAxisAlignment.end,
                           children: <Widget>[
+                            widget.galleryItem.favTitle?.isNotEmpty ?? false
+                                ? Container(
+                                    padding: const EdgeInsets.only(
+                                        bottom: 2.5, right: 8),
+                                    child: Icon(
+                                      FontAwesomeIcons.solidHeart,
+                                      size: 12,
+                                      color: Colors.redAccent,
+                                    ),
+                                  )
+                                : Container(),
                             Padding(
                               padding: const EdgeInsets.only(bottom: 1),
                               child: Icon(
@@ -148,7 +157,7 @@ class _GalleryItemWidgetState extends State<GalleryItemWidget> {
                             Padding(
                               padding: const EdgeInsets.only(left: 2),
                               child: Text(
-                                widget?.galleryItemBean?.filecount ?? "",
+                                widget?.galleryItem?.filecount ?? "",
                                 style: TextStyle(
                                     fontSize: 12,
                                     color: CupertinoColors.systemGrey),
@@ -171,7 +180,7 @@ class _GalleryItemWidgetState extends State<GalleryItemWidget> {
                             padding: const EdgeInsets.fromLTRB(6, 3, 6, 3),
                             color: _colorCategory,
                             child: Text(
-                              widget?.galleryItemBean?.category ?? "",
+                              widget?.galleryItem?.category ?? "",
                               style: TextStyle(
                                 fontSize: 14,
                                 height: 1,
@@ -187,7 +196,7 @@ class _GalleryItemWidgetState extends State<GalleryItemWidget> {
                           child: Align(
                             alignment: Alignment.centerRight,
                             child: Text(
-                              widget?.galleryItemBean?.postTime ?? "",
+                              widget?.galleryItem?.postTime ?? "",
                               style: TextStyle(
                                   fontSize: 12,
                                   color: CupertinoColors.systemGrey),
@@ -220,7 +229,7 @@ class _GalleryItemWidgetState extends State<GalleryItemWidget> {
       behavior: HitTestBehavior.opaque,
       onTap: () {
         Global.logger.v("onTap title: $_title");
-        NavigatorUtil.goGalleryDetail(context, _title, widget.galleryItemBean);
+        NavigatorUtil.goGalleryDetail(context, _title, widget.galleryItem);
       },
       onLongPress: () {
         Global.logger.v("onLongPress title: $_title ");

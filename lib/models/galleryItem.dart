@@ -24,6 +24,7 @@ class GalleryItem {
     num ratingFallBack;
     String numberOfReviews;
     String postTime;
+    String favTitle;
     List simpleTags;
     List simpleTagsTranslat;
     List<TagGroup> tagGroup;

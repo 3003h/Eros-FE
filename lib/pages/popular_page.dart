@@ -51,7 +51,7 @@ class _PopularListTab extends State<PopularListTab> {
       delegate: SliverChildBuilderDelegate(
         (context, index) {
           if (index < gallerItemBeans.length) {
-            return GalleryItemWidget(galleryItemBean: gallerItemBeans[index]);
+            return GalleryItemWidget(galleryItem: gallerItemBeans[index]);
           }
           return null;
         },
