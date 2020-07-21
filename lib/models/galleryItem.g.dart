@@ -24,6 +24,7 @@ GalleryItem _$GalleryItemFromJson(Map<String, dynamic> json) {
     ..ratingFallBack = json['ratingFallBack'] as num
     ..numberOfReviews = json['numberOfReviews'] as String
     ..postTime = json['postTime'] as String
+    ..favTitle = json['favTitle'] as String
     ..simpleTags = json['simpleTags'] as List
     ..simpleTagsTranslat = json['simpleTagsTranslat'] as List
     ..tagGroup = (json['tagGroup'] as List)
@@ -60,6 +61,7 @@ Map<String, dynamic> _$GalleryItemToJson(GalleryItem instance) =>
       'ratingFallBack': instance.ratingFallBack,
       'numberOfReviews': instance.numberOfReviews,
       'postTime': instance.postTime,
+      'favTitle': instance.favTitle,
       'simpleTags': instance.simpleTags,
       'simpleTagsTranslat': instance.simpleTagsTranslat,
       'tagGroup': instance.tagGroup,

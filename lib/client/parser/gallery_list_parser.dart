@@ -188,21 +188,24 @@ class GalleryListParser {
 
       final postTimeLocal = DateFormat('yyyy-MM-dd HH:mm').format(time);
 
-      GalleryItem galleryItemBean = new GalleryItem();
+      // 收藏标志
+      final favTitle = tr
+              .querySelector('td.gl2c > div:nth-child(2) > div')
+              ?.attributes['title'] ??
+          '';
 
-      galleryItemBean.gid = gid;
-      galleryItemBean.token = token;
-      galleryItemBean.englishTitle = title;
-      galleryItemBean.imgUrl = imgUrl ?? '';
-      galleryItemBean.url = url;
-      galleryItemBean.category = category;
-      galleryItemBean.simpleTags = simpleTags;
-      galleryItemBean.postTime = postTimeLocal;
-      galleryItemBean.simpleTagsTranslat = simpleTagsTranslate;
-      galleryItemBean.ratingFallBack = ratingFB;
-
-      gallaryItems.add(galleryItemBean);
-//      debugPrint(galleryItemBean.toString());
+      gallaryItems.add(GalleryItem()
+        ..gid = gid
+        ..token = token
+        ..englishTitle = title
+        ..imgUrl = imgUrl ?? ''
+        ..url = url
+        ..category = category
+        ..simpleTags = simpleTags
+        ..postTime = postTimeLocal
+        ..simpleTagsTranslat = simpleTagsTranslate
+        ..ratingFallBack = ratingFB
+        ..favTitle = favTitle);
     }
 
     // 通过api请求获取更多信息
@@ -213,6 +216,11 @@ class GalleryListParser {
     return gallaryItems;
   }
 
+  /// 通过api请求获取更多信息
+  /// 例如
+  /// 画廊评分
+  /// 日语标题
+  /// 等等
   static Future<List<GalleryItem>> getMoreGalleryInfo(
       List<GalleryItem> galleryItems) async {
     // Global.logger.i('api qry items ${galleryItems.length}');
