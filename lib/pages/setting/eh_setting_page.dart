@@ -1,5 +1,6 @@
 import 'package:FEhViewer/common/global.dart';
 import 'package:FEhViewer/models/states/ehconfig_model.dart';
+import 'package:FEhViewer/models/states/user_model.dart';
 import 'package:FEhViewer/pages/setting/settting_text_switch_item.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -28,12 +29,17 @@ class _EhSettingPage extends State<EhSettingPage> {
 }
 
 class ListViewEhSetting extends StatelessWidget {
+  final bool _siteEx = Global.profile.ehConfig.siteEx;
   final bool _jpnTitle = Global.profile.ehConfig.jpnTitle;
   final bool _tagTranslat = Global.profile.ehConfig.tagTranslat;
   final bool _galleryImgBlur = Global.profile.ehConfig.galleryImgBlur;
 
   @override
   Widget build(BuildContext context) {
+    void _handleSiteChanged(bool newValue) {
+      Provider.of<EhConfigModel>(context, listen: false).siteEx = newValue;
+    }
+
     void _handleJpnTitleChanged(bool newValue) {
       Provider.of<EhConfigModel>(context, listen: false).jpnTitle = newValue;
     }
@@ -67,6 +73,18 @@ class ListViewEhSetting extends StatelessWidget {
         descOn: '按收藏时间排序',
       )
     ];
+
+    if (Provider.of<UserModel>(context, listen: false).isLogin) {
+      _items.insert(
+          0,
+          TextSwitchItem(
+            '站点切换',
+            intValue: _siteEx,
+            onChanged: _handleSiteChanged,
+            desc: 'E-Hentai',
+            descOn: 'ExHentai',
+          ));
+    }
 
     return ListView.builder(
       //列表项构造器

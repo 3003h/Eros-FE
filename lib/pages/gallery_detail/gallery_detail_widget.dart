@@ -48,11 +48,19 @@ class GalleryDetailContex extends StatelessWidget {
           CupertinoButton(
             minSize: 0,
             padding: const EdgeInsets.fromLTRB(4, 4, 0, 0),
-            child: Text(ln.all_comment),
+            child: Text(
+              ln.all_comment,
+              style: TextStyle(fontSize: 14),
+            ),
             onPressed: () {
               NavigatorUtil.goGalleryDetailComment(
                   context, _galleryItem.galleryComment);
             },
+          ),
+          Container(
+            margin: const EdgeInsets.only(top: 4),
+            height: 0.5,
+            color: CupertinoColors.systemGrey4,
           ),
           PreviewBoxGrid(
             galleryPreviewList: _galleryItem.galleryPreview,
@@ -63,7 +71,7 @@ class GalleryDetailContex extends StatelessWidget {
   }
 }
 
-class PreviewBox extends StatelessWidget {
+/*class PreviewBox extends StatelessWidget {
   final List<GalleryPreview> galleryPreviewList;
 
   const PreviewBox({Key key, @required this.galleryPreviewList})
@@ -90,7 +98,7 @@ class PreviewBox extends StatelessWidget {
       ),
     );
   }
-}
+}*/
 
 class PreviewBoxGrid extends StatelessWidget {
   final List<GalleryPreview> galleryPreviewList;
@@ -100,13 +108,21 @@ class PreviewBoxGrid extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final size = MediaQuery.of(context).size;
+    final width = size.width;
+    final height = size.height;
+
+    final _crossAxisCount = width ~/ 130;
+
+//    Global.logger.v('${width}');
+
     return Container(
       padding: const EdgeInsets.only(top: 20, right: 10, left: 10),
       child: GridView.builder(
           shrinkWrap: true, //解决无限高度问题
           physics: NeverScrollableScrollPhysics(), //禁用滑动事件
           gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-              crossAxisCount: 3, //每行三列
+              crossAxisCount: _crossAxisCount, //每行列数
               mainAxisSpacing: 0, //主轴方向的间距
               crossAxisSpacing: 10, //交叉轴方向子元素的间距
               childAspectRatio: 0.6 //显示区域宽高
@@ -131,9 +147,13 @@ class PreviewContainer extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    var _httpHeaders = {
+      "Cookie": Global.profile?.token ?? '',
+    };
     var image = galleryPreview.isLarge ?? false
         ? Container(
             child: CachedNetworkImage(
+              httpHeaders: _httpHeaders,
               height: 150,
               imageUrl: galleryPreview.imgUrl,
             ),
@@ -288,12 +308,16 @@ class CoveTinyImage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    var _httpHeaders = {
+      "Cookie": Global.profile?.token ?? '',
+    };
     return Container(
       padding: EdgeInsets.all(4),
       child: ClipRRect(
         // 圆角
         borderRadius: BorderRadius.circular(4),
         child: CachedNetworkImage(
+          httpHeaders: _httpHeaders,
           width: 44,
           height: 44,
           fit: BoxFit.cover,

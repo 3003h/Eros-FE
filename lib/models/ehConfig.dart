@@ -9,6 +9,7 @@ class EhConfig {
     bool jpnTitle;
     bool tagTranslat;
     String favoritesOrder;
+    bool siteEx;
     bool galleryImgBlur;
     
     factory EhConfig.fromJson(Map<String,dynamic> json) => _$EhConfigFromJson(json);

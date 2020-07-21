@@ -5,6 +5,7 @@ import 'package:FEhViewer/common/global.dart';
 import 'package:FEhViewer/models/index.dart';
 import 'package:FEhViewer/utils/dio_util.dart';
 import 'package:FEhViewer/utils/utility.dart';
+import 'package:FEhViewer/values/const.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:html/dom.dart' as dom;
@@ -16,7 +17,8 @@ class GalleryListParser {
   /// 获取热门画廊列表
   static Future<List<GalleryItem>> getPopular() async {
     Global.logger.v("获取热门");
-    HttpManager httpManager = HttpManager.getInstance("https://e-hentai.org");
+    HttpManager httpManager = HttpManager.getInstance(
+        EHConst.getBaseSite(Global.profile.ehConfig.siteEx));
     const url = "/popular";
 
     var cookie = Global.profile?.token ?? "";
@@ -35,7 +37,10 @@ class GalleryListParser {
   /// 获取默认画廊列表
   static Future<List<GalleryItem>> getGallery(
       {int page, String fromGid}) async {
-    HttpManager httpManager = HttpManager.getInstance("https://e-hentai.org");
+    bool isEx = Global.profile.ehConfig.siteEx;
+
+    HttpManager httpManager = HttpManager.getInstance(
+        EHConst.getBaseSite(Global.profile.ehConfig.siteEx));
 
     var url = "";
     if (page != null && fromGid != null) {
@@ -60,7 +65,8 @@ class GalleryListParser {
 
   /// 获取收藏
   static Future<List<GalleryItem>> getFavorite({String favcat}) async {
-    HttpManager httpManager = HttpManager.getInstance("https://e-hentai.org");
+    HttpManager httpManager = HttpManager.getInstance(
+        EHConst.getBaseSite(Global.profile.ehConfig.siteEx));
 
     //收藏时间排序
     var _order = Global?.profile?.ehConfig?.favoritesOrder;
@@ -91,7 +97,7 @@ class GalleryListParser {
 
   /// 获取api
   static Future getGalleryApi(String req) async {
-    HttpManager httpManager = HttpManager.getInstance("https://e-hentai.org");
+    HttpManager httpManager = HttpManager.getInstance(EHConst.EH_BASE_URL);
     const url = "/api.php";
 
     var response = await httpManager.postForm(url, data: req);

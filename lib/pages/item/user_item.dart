@@ -1,4 +1,5 @@
 import 'package:FEhViewer/common/global.dart';
+import 'package:FEhViewer/models/states/ehconfig_model.dart';
 import 'package:FEhViewer/models/states/user_model.dart';
 import 'package:FEhViewer/models/user.dart';
 import 'package:FEhViewer/route/navigator_util.dart';
@@ -34,8 +35,9 @@ class _UserItem extends State<UserItem> {
             CupertinoDialogAction(
               child: Text('确定'),
               onPressed: () {
-                User user = User();
-                Provider.of<UserModel>(context, listen: false).user = user;
+                Provider.of<UserModel>(context, listen: false).user = User();
+                Provider.of<EhConfigModel>(context, listen: false).siteEx =
+                    false;
                 Navigator.of(context).pop();
               },
             ),
