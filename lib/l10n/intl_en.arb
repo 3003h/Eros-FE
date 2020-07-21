@@ -11,6 +11,8 @@
   "tab_favorite": "Favorites",
   "tab_setting": "Settings",
   "favcat": "Favorites",
+  "notFav": "Not Favorited",
+  "processing": "Processing",
   "user_login": "User Sign",
   "pls_i_username": "Please enter user name",
   "pls_i_passwd": "Please enter your password",
