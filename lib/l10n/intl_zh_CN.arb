@@ -11,6 +11,8 @@
   "tab_favorite": "收藏",
   "tab_setting": "设置",
   "favcat": "收藏夹",
+  "notFav": "未收藏",
+  "processing": "处理中",
   "user_login": "用户登录",
   "pls_i_username": "请输入用户名",
   "pls_i_passwd": "请输入密码",

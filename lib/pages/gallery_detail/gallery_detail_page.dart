@@ -1,6 +1,8 @@
 import 'package:FEhViewer/client/parser/gallery_detail_parser.dart';
+import 'package:FEhViewer/client/parser/gallery_fav_parser.dart';
 import 'package:FEhViewer/generated/l10n.dart';
 import 'package:FEhViewer/models/index.dart';
+import 'package:FEhViewer/models/states/gallery_model.dart';
 import 'package:FEhViewer/pages/gallery_detail/gallery_detail_widget.dart';
 import 'package:FEhViewer/values/theme_colors.dart';
 import 'package:FEhViewer/widget/rating_bar.dart';
@@ -9,6 +11,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:provider/provider.dart';
 
 class GalleryDetailPage extends StatefulWidget {
   final String title;
@@ -209,7 +212,16 @@ class _GalleryDetailPageState extends State<GalleryDetailPage> {
                         children: <Widget>[
                           _readButton(ln.READ),
                           Spacer(),
-                          Icon(FontAwesomeIcons.heart)
+                          // 收藏按钮
+                          _loading
+                              ? Container(
+                                  height: 38,
+                                )
+                              : GalleryFavButton(
+                                  favTitle: _galleryItem.favTitle,
+                                  gid: widget.galleryItem.gid,
+                                  token: widget.galleryItem.token,
+                                )
                         ],
                       )
                     ],
@@ -222,15 +234,18 @@ class _GalleryDetailPageState extends State<GalleryDetailPage> {
             padding: const EdgeInsets.only(top: 8.0),
             child: Row(
               children: <Widget>[
+                // 评分
                 Container(
                     padding: const EdgeInsets.only(right: 8),
                     child: Text("${widget?.galleryItem?.rating ?? ''}")),
+                // 星星
                 StaticRatingBar(
                   size: 18.0,
                   rate: widget?.galleryItem?.rating ?? 0,
                   radiusRatio: 1.5,
                 ),
                 Spacer(),
+                // 类型
                 ClipRRect(
                   borderRadius: BorderRadius.circular(4),
                   child: Container(
@@ -265,5 +280,201 @@ class _GalleryDetailPageState extends State<GalleryDetailPage> {
         borderRadius: BorderRadius.circular(50),
         color: CupertinoColors.activeBlue,
         onPressed: () {});
+  }
+}
+
+class GalleryFavButton extends StatefulWidget {
+  final String favTitle;
+  final String gid;
+  final String token;
+
+  const GalleryFavButton({
+    Key key,
+    this.favTitle,
+    @required this.gid,
+    @required this.token,
+  }) : super(key: key);
+
+  @override
+  _GalleryFavButtonState createState() => _GalleryFavButtonState();
+}
+
+class _GalleryFavButtonState extends State<GalleryFavButton> {
+  String _favTitle;
+  bool _isLoading = false;
+  String _addFavcat;
+  String _addFavnote = '';
+
+  // 收藏输入框控制器
+  TextEditingController _favnoteController = TextEditingController();
+
+  @override
+  void initState() {
+    super.initState();
+    _favTitle = widget.favTitle;
+  }
+
+  void _tapFav(context) async {
+    if (_favTitle.isNotEmpty) {
+      setState(() {
+        _isLoading = true;
+      });
+      try {
+        await GalleryFavParser.galleryAddfavorite(widget.gid, widget.token);
+      } catch (e) {} finally {
+        setState(() {
+          _favTitle = '';
+          _isLoading = false;
+        });
+      }
+    } else {
+      var favList =
+          await GalleryFavParser.gallerySelfavcat(widget.gid, widget.token);
+      await _addFav(context, favList);
+      if (_addFavcat != null) {
+        try {
+          await GalleryFavParser.galleryAddfavorite(widget.gid, widget.token,
+              favcat: _addFavcat);
+        } catch (e) {} finally {
+          setState(() {
+            _isLoading = false;
+          });
+        }
+      }
+    }
+  }
+
+  /// 添加收藏
+  Future<void> _addFav(BuildContext context, List favList) async {
+    var _favindex;
+
+    List<Widget> favPicker =
+        List<Widget>.from(favList.map((e) => Text(e['favTitle']))).toList();
+    return showCupertinoDialog<void>(
+      context: context,
+      // barrierDismissible: false,
+      builder: (BuildContext context) {
+        return CupertinoAlertDialog(
+          title: Text('添加收藏'),
+          content: Container(
+            child: Column(
+              children: <Widget>[
+                Container(
+                  height: 100,
+                  child: CupertinoPicker(
+                    itemExtent: 30,
+                    onSelectedItemChanged: (index) {
+                      _favindex = index;
+                    },
+                    children: <Widget>[...favPicker],
+                  ),
+                ),
+                CupertinoTextField(
+                  controller: _favnoteController,
+                  autofocus: true,
+                  keyboardType: TextInputType.number,
+                  onEditingComplete: () {
+                    // 点击键盘完成
+                    // 添加收藏
+                    setState(() {
+                      _isLoading = true;
+                      _addFavcat = '$_favindex';
+                      _favTitle = favList[_favindex]['favTitle'];
+                      _addFavnote = _favnoteController.text;
+                    });
+                    Navigator.of(context).pop();
+                  },
+                )
+              ],
+            ),
+          ),
+          actions: <Widget>[
+            CupertinoDialogAction(
+              child: Text('取消'),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+            CupertinoDialogAction(
+              child: Text('确定'),
+              onPressed: () {
+                // 添加收藏
+                setState(() {
+                  _isLoading = true;
+                  _addFavcat = '$_favindex';
+                  _favTitle = favList[_favindex]['favTitle'];
+                  _addFavnote = _favnoteController.text;
+                });
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    var ln = S.of(context);
+
+    Widget favIcon = Container(
+      child: _favTitle?.isEmpty ?? true
+          ? Column(
+              children: [
+                Icon(
+                  FontAwesomeIcons.heart,
+                ),
+                Container(
+                  height: 14,
+                  child: Text(
+                    ln.notFav,
+                    style: TextStyle(
+                      fontSize: 11,
+                    ),
+                  ),
+                ),
+              ],
+            )
+          : Column(
+              children: [
+                Icon(FontAwesomeIcons.solidHeart),
+                Container(
+                  height: 14,
+                  child: Text(
+                    _favTitle,
+                    style: TextStyle(
+                      fontSize: 11,
+                    ),
+                  ),
+                ),
+              ],
+            ),
+    );
+
+    Widget _loadIcon = Column(
+      children: [
+        CupertinoActivityIndicator(
+          radius: 12.0,
+        ),
+        Container(
+          height: 14,
+          child: Text(
+            ln.processing,
+            style: TextStyle(
+              fontSize: 11,
+            ),
+          ),
+        ),
+      ],
+    );
+
+    return GestureDetector(
+      child: Container(
+        width: 50,
+        child: _isLoading ? _loadIcon : favIcon,
+      ),
+      onTap: () => _tapFav(context),
+    );
   }
 }

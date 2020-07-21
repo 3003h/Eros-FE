@@ -103,6 +103,26 @@ class S {
     );
   }
 
+  /// `Not Favorited`
+  String get notFav {
+    return Intl.message(
+      'Not Favorited',
+      name: 'notFav',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Processing`
+  String get processing {
+    return Intl.message(
+      'Processing',
+      name: 'processing',
+      desc: '',
+      args: [],
+    );
+  }
+
   /// `User Sign`
   String get user_login {
     return Intl.message(

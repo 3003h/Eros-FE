@@ -4,7 +4,7 @@ import 'package:FEhViewer/models/index.dart';
 import 'package:FEhViewer/utils/dio_util.dart';
 import 'package:dio/dio.dart';
 import 'package:html/dom.dart' as dom;
-import 'package:html/parser.dart';
+import 'package:html/parser.dart' show parse;
 import 'package:intl/intl.dart';
 
 class GalleryDetailParser {
@@ -183,7 +183,7 @@ class GalleryDetailParser {
         dom.Element imgElem = pic.querySelector('img');
         var picSer = imgElem.attributes['alt'].trim();
         var picSrcUrl = imgElem.attributes['src'].trim();
-        Global.logger.v('$picHref  $picSer  $picSrcUrl');
+//        Global.logger.v('$picHref  $picSer  $picSrcUrl');
 
         galleryItem.galleryPreview.add(GalleryPreview()
           ..ser = int.parse(picSer)
@@ -194,6 +194,19 @@ class GalleryDetailParser {
       }
     }
 
+    // 收藏标志
+    var favTitle = '';
+    dom.Element fav = document.querySelector("#favoritelink");
+//    favTitle = fav.text.trim();
+    if (fav.nodes.length == 1) {
+      favTitle = fav.text.trim();
+    }
+//    Global.logger.v('$favTitle  ${fav.nodes}');
+    galleryItem.favTitle = favTitle;
+
     return galleryItem;
   }
+
+
+
 }
