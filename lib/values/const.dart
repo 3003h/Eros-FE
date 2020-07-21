@@ -24,6 +24,11 @@ class EHConst {
 
   static const FONT_FAMILY_FB = ["PingFang SC", "Heiti SC"];
 
+  static const EH_BASE_URL = 'https://e-hentai.org';
+  static const EX_BASE_URL = 'https://exhentai.org';
+
+  static getBaseSite(bool isEx) => isEx ? EX_BASE_URL : EH_BASE_URL;
+
   static const List settingList = [
     {
       "name": "eh",
@@ -79,19 +84,6 @@ class EHConst {
     "language": Color(0xfff5d5e5),
     "reclass": Color(0xfffbd6d5),
     "misc": Color(0xffd7d7d6),
-  };
-
-  static const urls = {
-    "default": "https://exhentai.org/",
-    "homepage": "https://exhentai.org/",
-    "watched": "https://exhentai.org/watched",
-    "popular": "https://exhentai.org/popular",
-    "favorites": "https://exhentai.org/favorites.php",
-    "config": "https://exhentai.org/uconfig.php",
-    "downloads": "downloads://index?page=0",
-    "login": "https://forums.e-hentai.org/index.php?act=Login&CODE=01",
-    "api": "https://exhentai.org/api.php",
-    "gallerypopups": "https://exhentai.org/gallerypopups.php"
   };
 
   static const List favList = [

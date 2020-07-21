@@ -11,6 +11,11 @@ class EhConfigModel extends ProfileChangeNotifier {
   bool get isGalleryImgBlur => ehConfig?.galleryImgBlur ?? false;
 
   //更新并通知依赖它的子孙Widgets更新
+  set siteEx(bool value) {
+    profile.ehConfig.siteEx = value;
+    notifyListeners();
+  }
+
   set jpnTitle(bool value) {
     profile.ehConfig.jpnTitle = value;
     notifyListeners();

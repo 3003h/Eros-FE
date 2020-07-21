@@ -2,6 +2,7 @@ import 'package:FEhViewer/common/global.dart';
 import 'package:FEhViewer/models/galleryItem.dart';
 import 'package:FEhViewer/models/states/ehconfig_model.dart';
 import 'package:FEhViewer/route/navigator_util.dart';
+import 'package:FEhViewer/values/const.dart';
 import 'package:FEhViewer/values/theme_colors.dart';
 import 'package:FEhViewer/widget/blur_image.dart';
 import 'package:FEhViewer/widget/rating_bar.dart';
@@ -334,6 +335,9 @@ class CoverImg extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    var _httpHeaders = {
+      "Cookie": Global.profile?.token ?? '',
+    };
     return Selector<EhConfigModel, bool>(
         selector: (context, provider) => provider.isGalleryImgBlur,
         builder: (BuildContext context, bool value, Widget child) {
@@ -341,9 +345,11 @@ class CoverImg extends StatelessWidget {
               ? (value
                   ? BlurImage(
                       child: CachedNetworkImage(
+                      httpHeaders: _httpHeaders,
                       imageUrl: imgUrl,
                     ))
                   : CachedNetworkImage(
+                      httpHeaders: _httpHeaders,
                       imageUrl: imgUrl,
                     ))
               : Container();

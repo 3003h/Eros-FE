@@ -29,3 +29,7 @@ subprojects {
 task clean(type: Delete) {
     delete rootProject.buildDir
 }
+
+//lintOptions {
+//    checkReleaseBuilds false
+//}

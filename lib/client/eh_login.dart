@@ -1,6 +1,7 @@
 import 'package:FEhViewer/common/global.dart';
 import 'package:FEhViewer/models/user.dart';
 import 'package:FEhViewer/utils/dio_util.dart';
+import 'package:FEhViewer/values/const.dart';
 import 'package:dio/dio.dart';
 
 class EhUserManager {
@@ -37,7 +38,7 @@ class EhUserManager {
 
     var cookieMap = _parseSetCookieString(setcookie);
 
-    Global.logger.v('$setcookie');
+//    Global.logger.v('$setcookie');
 
     var cookie = {
       "ipb_member_id": cookieMap["ipb_member_id"],
@@ -55,6 +56,14 @@ class EhUserManager {
     moreCookie.forEach((key, value) {
       cookie.putIfAbsent(key, () => value);
     });
+
+    Map moreCookieEx = await _getExIgneous(tmpCookie);
+
+    moreCookieEx.forEach((key, value) {
+      cookie.putIfAbsent(key, () => value);
+    });
+
+    Global.logger.v('$cookie');
 
     var cookieStr = _getCookieStringFromMap(cookie);
 
@@ -80,7 +89,26 @@ class EhUserManager {
 
     var cookieMap = _parseSetCookieString(setcookie);
 
-//    debugPrint('$cookieMap');
+    Global.logger.v('$setcookie');
+
+    return cookieMap;
+  }
+
+  Future<Map> _getExIgneous(String tmpCookie) async {
+    HttpManager httpManager = HttpManager.getInstance(EHConst.EX_BASE_URL);
+    const url = "/uconfig.php";
+
+    Options options = Options(headers: {
+      "Cookie": tmpCookie,
+    });
+
+    Response rult = await httpManager.getAll(url, options: options);
+
+    var setcookie = rult.headers['set-cookie'];
+
+    var cookieMap = _parseSetCookieString(setcookie);
+
+    Global.logger.v('$setcookie');
 
     return cookieMap;
   }

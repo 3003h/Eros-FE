@@ -6,6 +6,7 @@ import 'package:FEhViewer/models/profile.dart';
 import 'package:FEhViewer/route/application.dart';
 import 'package:FEhViewer/route/routes.dart';
 import 'package:FEhViewer/utils/storage.dart';
+import 'package:FEhViewer/values/const.dart';
 import 'package:FEhViewer/values/storages.dart';
 import 'package:fluro/fluro.dart';
 import 'package:flutter/material.dart';
@@ -62,11 +63,11 @@ class Global {
     }
 
     if (profile.ehConfig == null) {
-      EhConfig ehConfig = new EhConfig();
-      ehConfig.tagTranslat = false;
-      ehConfig.jpnTitle = false;
-      ehConfig.galleryImgBlur = false;
-      profile.ehConfig = ehConfig;
+      profile.ehConfig = EhConfig()
+        ..siteEx = false
+        ..tagTranslat = false
+        ..jpnTitle = false
+        ..galleryImgBlur = false;
       saveProfile();
     }
 
