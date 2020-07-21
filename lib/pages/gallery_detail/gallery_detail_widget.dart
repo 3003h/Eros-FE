@@ -1,5 +1,3 @@
-import 'dart:io';
-
 import 'package:FEhViewer/common/global.dart';
 import 'package:FEhViewer/generated/l10n.dart';
 import 'package:FEhViewer/models/index.dart';
@@ -56,7 +54,7 @@ class GalleryDetailContex extends StatelessWidget {
                   context, _galleryItem.galleryComment);
             },
           ),
-          PreviewBox(
+          PreviewBoxGrid(
             galleryPreviewList: _galleryItem.galleryPreview,
           ),
         ],
@@ -82,12 +80,45 @@ class PreviewBox extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.only(top: 20, right: 10, left: 10),
       child: Wrap(
-        spacing: 20.0, // 主轴(水平)方向间距
-        runSpacing: 10.0, // 纵轴（垂直）方向间距
+        spacing: 20.0,
+        // 主轴(水平)方向间距
+        runSpacing: 10.0,
+        // 纵轴（垂直）方向间距
         alignment: WrapAlignment.spaceBetween,
         crossAxisAlignment: WrapCrossAlignment.center,
         children: <Widget>[...previews],
       ),
+    );
+  }
+}
+
+class PreviewBoxGrid extends StatelessWidget {
+  final List<GalleryPreview> galleryPreviewList;
+
+  const PreviewBoxGrid({Key key, @required this.galleryPreviewList})
+      : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: const EdgeInsets.only(top: 20, right: 10, left: 10),
+      child: GridView.builder(
+          shrinkWrap: true, //解决无限高度问题
+          physics: NeverScrollableScrollPhysics(), //禁用滑动事件
+          gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+              crossAxisCount: 3, //每行三列
+              mainAxisSpacing: 0, //主轴方向的间距
+              crossAxisSpacing: 10, //交叉轴方向子元素的间距
+              childAspectRatio: 0.6 //显示区域宽高
+              ),
+          itemCount: galleryPreviewList.length,
+          itemBuilder: (context, index) {
+            return Center(
+              child: PreviewContainer(
+                galleryPreview: galleryPreviewList[index],
+              ),
+            );
+          }),
     );
   }
 }
@@ -103,6 +134,7 @@ class PreviewContainer extends StatelessWidget {
     var image = galleryPreview.isLarge ?? false
         ? Container(
             child: CachedNetworkImage(
+              height: 150,
               imageUrl: galleryPreview.imgUrl,
             ),
           )
@@ -256,9 +288,6 @@ class CoveTinyImage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-//    Global.logger.v('$statusBarHeight');
-//    var _padding = Platform.isAndroid ? 0.0 : 0.0;
-    double _padding = statusBarHeight > 30.0 ? 4.0 : 0.0;
     return Container(
       padding: EdgeInsets.all(4),
       child: ClipRRect(
@@ -267,7 +296,7 @@ class CoveTinyImage extends StatelessWidget {
         child: CachedNetworkImage(
           width: 44,
           height: 44,
-          fit: BoxFit.fitWidth,
+          fit: BoxFit.cover,
           imageUrl: imgUrl,
         ),
       ),
