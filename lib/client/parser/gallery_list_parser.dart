@@ -18,7 +18,7 @@ class GalleryListParser {
   static Future<List<GalleryItem>> getPopular() async {
     Global.logger.v("获取热门");
     HttpManager httpManager = HttpManager.getInstance(
-        EHConst.getBaseSite(Global.profile.ehConfig.siteEx));
+        EHConst.getBaseSite(Global.profile.ehConfig.siteEx ?? false));
     const url = "/popular";
 
     var cookie = Global.profile?.token ?? "";
@@ -40,7 +40,7 @@ class GalleryListParser {
     bool isEx = Global.profile.ehConfig.siteEx;
 
     HttpManager httpManager = HttpManager.getInstance(
-        EHConst.getBaseSite(Global.profile.ehConfig.siteEx));
+        EHConst.getBaseSite(Global.profile.ehConfig.siteEx ?? false));
 
     var url = "";
     if (page != null && fromGid != null) {

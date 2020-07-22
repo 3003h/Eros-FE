@@ -85,7 +85,7 @@ class Global {
 
   // 持久化Profile信息
   static saveProfile() {
-    // logger.v(profile.toJson());
+//    logger.v(profile.toJson());
     return StorageUtil().setJSON(PROFILE, profile);
   }
 }

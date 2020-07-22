@@ -112,7 +112,7 @@ class PreviewBoxGrid extends StatelessWidget {
     final width = size.width;
     final height = size.height;
 
-    final _crossAxisCount = width ~/ 130;
+    final _crossAxisCount = width ~/ 120;
 
 //    Global.logger.v('${width}');
 
@@ -125,7 +125,7 @@ class PreviewBoxGrid extends StatelessWidget {
               crossAxisCount: _crossAxisCount, //每行列数
               mainAxisSpacing: 0, //主轴方向的间距
               crossAxisSpacing: 10, //交叉轴方向子元素的间距
-              childAspectRatio: 0.6 //显示区域宽高
+              childAspectRatio: 0.5 //显示区域宽高
               ),
           itemCount: galleryPreviewList.length,
           itemBuilder: (context, index) {
@@ -154,7 +154,7 @@ class PreviewContainer extends StatelessWidget {
         ? Container(
             child: CachedNetworkImage(
               httpHeaders: _httpHeaders,
-              height: 150,
+              height: 180,
               imageUrl: galleryPreview.imgUrl,
             ),
           )
