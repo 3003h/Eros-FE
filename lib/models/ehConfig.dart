@@ -12,6 +12,8 @@ class EhConfig {
     bool siteEx;
     bool galleryImgBlur;
     bool favPicker;
+    bool favLongTap;
+    String lastFavcat;
     
     factory EhConfig.fromJson(Map<String,dynamic> json) => _$EhConfigFromJson(json);
     Map<String, dynamic> toJson() => _$EhConfigToJson(this);

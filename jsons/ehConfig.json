@@ -4,5 +4,7 @@
   "favoritesOrder": "fs_f",
   "siteEx": false,
   "galleryImgBlur": false,
-  "favPicker": false
+  "favPicker": false,
+  "favLongTap": false,
+  "lastFavcat": "3"
 }

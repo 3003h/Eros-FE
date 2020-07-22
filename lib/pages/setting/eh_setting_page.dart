@@ -33,6 +33,7 @@ class ListViewEhSetting extends StatelessWidget {
   final bool _jpnTitle = Global.profile.ehConfig.jpnTitle;
   final bool _tagTranslat = Global.profile.ehConfig.tagTranslat;
   final bool _galleryImgBlur = Global.profile.ehConfig.galleryImgBlur;
+  final bool _favLongTap = Global.profile.ehConfig.favLongTap;
 
   @override
   Widget build(BuildContext context) {
@@ -53,6 +54,10 @@ class ListViewEhSetting extends StatelessWidget {
           newValue;
     }
 
+    void _handleFavLongTapChanged(bool newValue) {
+      Provider.of<EhConfigModel>(context, listen: false).favLongTap = newValue;
+    }
+
     List _items = [
       TextSwitchItem('显示标签中文翻译',
           intValue: _tagTranslat,
@@ -67,11 +72,18 @@ class ListViewEhSetting extends StatelessWidget {
           onChanged: _handleGalleryListImgBlurChanged,
           desc: '画廊列表封面模糊效果'),
       TextSwitchItem(
+        '画廊收藏夹选择方式',
+        intValue: _favLongTap,
+        onChanged: _handleFavLongTapChanged,
+        desc: '每一次都要选择收藏夹',
+        descOn: '默认使用上次收藏夹，长按弹出选择框',
+      ),
+      TextSwitchItem(
         '收藏夹排序方式',
         onChanged: _handleJpnTitleChanged,
         desc: '按更新时间排序',
         descOn: '按收藏时间排序',
-      )
+      ),
     ];
 
     if (Provider.of<UserModel>(context, listen: false).isLogin) {

@@ -16,6 +16,11 @@ class EhConfigModel extends ProfileChangeNotifier {
     notifyListeners();
   }
 
+  set favLongTap(bool value) {
+    profile.ehConfig.favLongTap = value;
+    notifyListeners();
+  }
+
   set jpnTitle(bool value) {
     profile.ehConfig.jpnTitle = value;
     notifyListeners();
