@@ -67,6 +67,7 @@ class Global {
         ..siteEx = false
         ..tagTranslat = false
         ..jpnTitle = false
+        ..favLongTap = false
         ..galleryImgBlur = false;
       saveProfile();
     }

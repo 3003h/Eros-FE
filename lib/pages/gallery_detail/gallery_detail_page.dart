@@ -321,7 +321,7 @@ class _GalleryFavButtonState extends State<GalleryFavButton> {
         _isLoading = true;
       });
       try {
-//        Global.logger.v("取消收藏");
+        Global.logger.v("取消收藏");
         await GalleryFavParser.galleryAddfavorite(widget.gid, widget.token);
       } catch (e) {} finally {
         setState(() {
@@ -330,13 +330,52 @@ class _GalleryFavButtonState extends State<GalleryFavButton> {
         });
       }
     } else {
-//      Global.logger.v("添加到收藏夹");
+      var _lastFavcat = Global.profile.ehConfig.lastFavcat;
+      // 添加到上次收藏夹
+      if (Global.profile.ehConfig.favLongTap &&
+          _lastFavcat != null &&
+          _lastFavcat.isNotEmpty) {
+        setState(() {
+          _isLoading = true;
+          _addFavcat = _lastFavcat;
+          _favTitle =
+              Global.profile.user.favcat[int.parse(_addFavcat)]['favTitle'];
+        });
+      } else {
+        // 手选收藏夹
+        var favList =
+            await GalleryFavParser.getFavcat(widget.gid, widget.token);
+        Global.profile.ehConfig.favPicker
+            ? await _showAddFavPicker(context, favList)
+            : await _showAddFavList(context, favList);
+      }
+
+      if (_addFavcat != null && _addFavcat.trim().isNotEmpty) {
+        Global.logger.v('_addFavcat  $_addFavcat');
+        Global.profile.ehConfig.lastFavcat = _addFavcat;
+        try {
+          await GalleryFavParser.galleryAddfavorite(widget.gid, widget.token,
+              favcat: _addFavcat);
+        } catch (e) {} finally {
+          setState(() {
+            _isLoading = false;
+          });
+        }
+      }
+    }
+  }
+
+  void _longTapFav(context) async {
+    // 手选收藏夹
+    if (_favTitle.isEmpty) {
       var favList = await GalleryFavParser.getFavcat(widget.gid, widget.token);
       Global.profile.ehConfig.favPicker
           ? await _showAddFavPicker(context, favList)
           : await _showAddFavList(context, favList);
+
       if (_addFavcat != null && _addFavcat.trim().isNotEmpty) {
         Global.logger.v('_addFavcat  $_addFavcat');
+        Global.profile.ehConfig.lastFavcat = _addFavcat;
         try {
           await GalleryFavParser.galleryAddfavorite(widget.gid, widget.token,
               favcat: _addFavcat);
@@ -568,6 +607,7 @@ class _GalleryFavButtonState extends State<GalleryFavButton> {
         child: _isLoading ? _loadIcon : favIcon,
       ),
       onTap: () => _tapFav(context),
+      onLongPress: () => _longTapFav(context),
     );
   }
 }
