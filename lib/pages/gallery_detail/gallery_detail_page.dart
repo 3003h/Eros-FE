@@ -345,7 +345,7 @@ class _GalleryFavButtonState extends State<GalleryFavButton> {
         // 手选收藏夹
         var favList =
             await GalleryFavParser.getFavcat(widget.gid, widget.token);
-        Global.profile.ehConfig.favPicker
+        Global.profile.ehConfig.favPicker ?? false
             ? await _showAddFavPicker(context, favList)
             : await _showAddFavList(context, favList);
       }
@@ -480,6 +480,7 @@ class _GalleryFavButtonState extends State<GalleryFavButton> {
               GestureDetector(
                 behavior: HitTestBehavior.opaque,
                 child: Container(
+                  width: double.infinity,
                   padding: const EdgeInsets.fromLTRB(0, 8, 0, 8),
                   child: Text(
                     e['favTitle'],

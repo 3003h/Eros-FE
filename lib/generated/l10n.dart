@@ -113,6 +113,16 @@ class S {
     );
   }
 
+  /// `All Favorites`
+  String get all_Favorites {
+    return Intl.message(
+      'All Favorites',
+      name: 'all_Favorites',
+      desc: '',
+      args: [],
+    );
+  }
+
   /// `Processing`
   String get processing {
     return Intl.message(
@@ -178,6 +188,16 @@ class S {
     return Intl.message(
       'Sign',
       name: 'login',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Not Login`
+  String get not_login {
+    return Intl.message(
+      'Not Login',
+      name: 'not_login',
       desc: '',
       args: [],
     );

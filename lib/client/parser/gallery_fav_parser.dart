@@ -32,7 +32,7 @@ class GalleryFavParser {
   }
 
   static Future<List> gallerySelfavcat(String gid, String token) async {
-    Global.logger.v('gallerySelfavcat');
+//    Global.logger.v('gallerySelfavcat');
 
     HttpManager httpManager = HttpManager.getInstance(
         EHConst.getBaseSite(Global.profile.ehConfig.siteEx ?? false));

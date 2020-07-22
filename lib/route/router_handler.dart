@@ -1,8 +1,7 @@
 import 'dart:convert';
 
 import 'package:FEhViewer/models/index.dart';
-import 'package:FEhViewer/models/states/gallery_model.dart';
-import 'package:FEhViewer/pages/favorite_page.dart';
+import 'package:FEhViewer/pages/favorite_sel_page.dart';
 import 'package:FEhViewer/pages/gallery_detail/comment_page.dart';
 import 'package:FEhViewer/pages/gallery_detail/gallery_detail_page.dart';
 import 'package:FEhViewer/pages/home_page.dart';
@@ -13,7 +12,6 @@ import 'package:FEhViewer/pages/user/browser.dart';
 import 'package:FEhViewer/route/routes.dart';
 import 'package:fluro/fluro.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 
 final Map<String, Handler> pageRoutes = {
   // 闪屏
@@ -31,7 +29,7 @@ final Map<String, Handler> pageRoutes = {
   //
   EHRoutes.selFavorie: Handler(
       handlerFunc: (BuildContext context, Map<String, List<String>> params) {
-    return SelFavorite();
+    return SelFavoritePage();
   }),
 
   EHRoutes.ehSetting: Handler(

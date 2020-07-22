@@ -22,6 +22,7 @@ class MessageLookup extends MessageLookupByLibrary {
   final messages = _notInlinedMessages(_notInlinedMessages);
   static _notInlinedMessages(_) => <String, Function> {
     "READ" : MessageLookupByLibrary.simpleMessage("阅读"),
+    "all_Favorites" : MessageLookupByLibrary.simpleMessage("所有收藏"),
     "all_comment" : MessageLookupByLibrary.simpleMessage("所有评论"),
     "app_title" : MessageLookupByLibrary.simpleMessage("FEhViewer"),
     "double_click_back" : MessageLookupByLibrary.simpleMessage("再按一次返回退出"),
@@ -30,6 +31,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "login" : MessageLookupByLibrary.simpleMessage("登录"),
     "login_web" : MessageLookupByLibrary.simpleMessage("通过网页登录"),
     "notFav" : MessageLookupByLibrary.simpleMessage("未收藏"),
+    "not_login" : MessageLookupByLibrary.simpleMessage("未登录"),
     "passwd" : MessageLookupByLibrary.simpleMessage("密码"),
     "pls_i_passwd" : MessageLookupByLibrary.simpleMessage("请输入密码"),
     "pls_i_username" : MessageLookupByLibrary.simpleMessage("请输入用户名"),

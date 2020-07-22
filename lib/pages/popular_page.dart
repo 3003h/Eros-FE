@@ -1,4 +1,5 @@
 import 'package:FEhViewer/client/parser/gallery_list_parser.dart';
+import 'package:FEhViewer/common/global.dart';
 import 'package:FEhViewer/generated/l10n.dart';
 import 'package:FEhViewer/models/index.dart';
 import 'package:FEhViewer/widget/eh_widget.dart';
@@ -14,7 +15,7 @@ class PopularListTab extends StatefulWidget {
 
 class _PopularListTab extends State<PopularListTab> {
   List<GalleryItem> _gallerItemBeans = [];
-  bool _loading = false;
+  bool _firstLoading = false;
 
   @override
   void initState() {
@@ -25,21 +26,22 @@ class _PopularListTab extends State<PopularListTab> {
   _loadData() async {
     setState(() {
       _gallerItemBeans.clear();
-      _loading = true;
+      _firstLoading = true;
     });
-    var gallerItemBeans = await GalleryListParser.getPopular();
+    var tuple = await GalleryListParser.getPopular();
+    var gallerItemBeans = tuple.item1;
     _gallerItemBeans.addAll(gallerItemBeans);
     setState(() {
-      _loading = false;
+      _firstLoading = false;
     });
   }
 
   _reloadData() async {
     setState(() {
-      _loading = false;
+      _firstLoading = false;
     });
-    var gallerItemBeans = await GalleryListParser.getPopular();
-
+    var tuple = await GalleryListParser.getPopular();
+    var gallerItemBeans = tuple.item1;
     setState(() {
       _gallerItemBeans.clear();
       _gallerItemBeans.addAll(gallerItemBeans);
@@ -61,6 +63,11 @@ class _PopularListTab extends State<PopularListTab> {
 
   @override
   Widget build(BuildContext context) {
+    final size = MediaQuery.of(context).size;
+    final width = size.width;
+    final height = size.height;
+    final _topPad = height / 2 - 150;
+
     var ln = S.of(context);
     var _title = ln.tab_popular;
     CustomScrollView customScrollView = CustomScrollView(
@@ -68,7 +75,7 @@ class _PopularListTab extends State<PopularListTab> {
         CupertinoSliverNavigationBar(
           largeTitle: TabPageTitle(
             title: _title,
-            isLoading: _loading,
+            isLoading: false,
           ),
           transitionBetweenRoutes: false,
         ),
@@ -79,7 +86,16 @@ class _PopularListTab extends State<PopularListTab> {
         ),
         SliverSafeArea(
           top: false,
-          sliver: gallerySliverListView(_gallerItemBeans),
+          sliver: _firstLoading
+              ? SliverToBoxAdapter(
+                  child: Container(
+                    padding: EdgeInsets.only(top: _topPad),
+                    child: CupertinoActivityIndicator(
+                      radius: 14.0,
+                    ),
+                  ),
+                )
+              : gallerySliverListView(_gallerItemBeans),
         )
       ],
     );

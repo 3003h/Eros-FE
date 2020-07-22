@@ -5,7 +5,7 @@ class TabPageTitle extends StatelessWidget {
   final String title;
   final String loadingText;
 
-  TabPageTitle({this.isLoading, this.title, loadingText})
+  TabPageTitle({this.isLoading = false, this.title, loadingText})
       : loadingText = loadingText ?? title;
 
   @override
