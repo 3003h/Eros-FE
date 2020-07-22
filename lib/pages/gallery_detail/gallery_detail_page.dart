@@ -1,8 +1,8 @@
 import 'package:FEhViewer/client/parser/gallery_detail_parser.dart';
 import 'package:FEhViewer/client/parser/gallery_fav_parser.dart';
+import 'package:FEhViewer/common/global.dart';
 import 'package:FEhViewer/generated/l10n.dart';
 import 'package:FEhViewer/models/index.dart';
-import 'package:FEhViewer/models/states/gallery_model.dart';
 import 'package:FEhViewer/pages/gallery_detail/gallery_detail_widget.dart';
 import 'package:FEhViewer/values/theme_colors.dart';
 import 'package:FEhViewer/widget/rating_bar.dart';
@@ -11,7 +11,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:provider/provider.dart';
 
 class GalleryDetailPage extends StatefulWidget {
   final String title;
@@ -163,7 +162,7 @@ class _GalleryDetailPageState extends State<GalleryDetailPage> {
 //                maxWidth: 140,
                       ),
                   child: Container(
-                    color: CupertinoColors.systemGrey6,
+//                    color: CupertinoColors.systemGrey6,
                     margin: const EdgeInsets.only(right: 10),
 //                    width: 130,
                     child: ClipRRect(
@@ -303,7 +302,7 @@ class _GalleryFavButtonState extends State<GalleryFavButton> {
   String _favTitle;
   bool _isLoading = false;
   String _addFavcat;
-  String _addFavnote = '';
+  String _addFavnote;
 
   // 收藏输入框控制器
   TextEditingController _favnoteController = TextEditingController();
@@ -312,6 +311,8 @@ class _GalleryFavButtonState extends State<GalleryFavButton> {
   void initState() {
     super.initState();
     _favTitle = widget.favTitle;
+    _addFavcat = '';
+    _addFavnote = '';
   }
 
   void _tapFav(context) async {
@@ -320,6 +321,7 @@ class _GalleryFavButtonState extends State<GalleryFavButton> {
         _isLoading = true;
       });
       try {
+//        Global.logger.v("取消收藏");
         await GalleryFavParser.galleryAddfavorite(widget.gid, widget.token);
       } catch (e) {} finally {
         setState(() {
@@ -328,10 +330,13 @@ class _GalleryFavButtonState extends State<GalleryFavButton> {
         });
       }
     } else {
-      var favList =
-          await GalleryFavParser.gallerySelfavcat(widget.gid, widget.token);
-      await _addFav(context, favList);
-      if (_addFavcat != null) {
+//      Global.logger.v("添加到收藏夹");
+      var favList = await GalleryFavParser.getFavcat(widget.gid, widget.token);
+      Global.profile.ehConfig.favPicker
+          ? await _showAddFavPicker(context, favList)
+          : await _showAddFavList(context, favList);
+      if (_addFavcat != null && _addFavcat.trim().isNotEmpty) {
+        Global.logger.v('_addFavcat  $_addFavcat');
         try {
           await GalleryFavParser.galleryAddfavorite(widget.gid, widget.token,
               favcat: _addFavcat);
@@ -345,8 +350,8 @@ class _GalleryFavButtonState extends State<GalleryFavButton> {
   }
 
   /// 添加收藏
-  Future<void> _addFav(BuildContext context, List favList) async {
-    var _favindex;
+  Future<void> _showAddFavPicker(BuildContext context, List favList) async {
+    var _favindex = 0;
 
     List<Widget> favPicker =
         List<Widget>.from(favList.map((e) => Text(e['favTitle']))).toList();
@@ -355,12 +360,18 @@ class _GalleryFavButtonState extends State<GalleryFavButton> {
       // barrierDismissible: false,
       builder: (BuildContext context) {
         return CupertinoAlertDialog(
-          title: Text('添加收藏'),
+          title: GestureDetector(
+            onLongPress: () {
+              Global.profile.ehConfig.favPicker = false;
+              Global.saveProfile();
+            },
+            child: Text('添加收藏'),
+          ),
           content: Container(
             child: Column(
               children: <Widget>[
                 Container(
-                  height: 100,
+                  height: 150,
                   child: CupertinoPicker(
                     itemExtent: 30,
                     onSelectedItemChanged: (index) {
@@ -371,17 +382,17 @@ class _GalleryFavButtonState extends State<GalleryFavButton> {
                 ),
                 CupertinoTextField(
                   controller: _favnoteController,
-                  autofocus: true,
+//                  autofocus: true,
                   keyboardType: TextInputType.number,
                   onEditingComplete: () {
                     // 点击键盘完成
                     // 添加收藏
                     setState(() {
                       _isLoading = true;
-                      _addFavcat = '$_favindex';
-                      _favTitle = favList[_favindex]['favTitle'];
-                      _addFavnote = _favnoteController.text;
                     });
+                    _addFavcat = '$_favindex';
+                    _favTitle = favList[_favindex]['favTitle'];
+                    _addFavnote = _favnoteController.text;
                     Navigator.of(context).pop();
                   },
                 )
@@ -392,6 +403,10 @@ class _GalleryFavButtonState extends State<GalleryFavButton> {
             CupertinoDialogAction(
               child: Text('取消'),
               onPressed: () {
+                setState(() {
+                  _addFavcat = '';
+                  _favTitle = '';
+                });
                 Navigator.of(context).pop();
               },
             ),
@@ -401,9 +416,87 @@ class _GalleryFavButtonState extends State<GalleryFavButton> {
                 // 添加收藏
                 setState(() {
                   _isLoading = true;
-                  _addFavcat = '$_favindex';
-                  _favTitle = favList[_favindex]['favTitle'];
+                });
+                _addFavcat = '$_favindex';
+                _favTitle = favList[_favindex]['favTitle'];
+                _addFavnote = _favnoteController.text;
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  /// 添加收藏2
+  Future<void> _showAddFavList(BuildContext context, List favList) async {
+    List<Widget> favcatList = List<Widget>.from(favList.map((e) => Container(
+          child: Column(
+            children: [
+              Container(
+                color: CupertinoColors.systemGrey2,
+                height: 0.5,
+              ),
+              GestureDetector(
+                behavior: HitTestBehavior.opaque,
+                child: Container(
+                  padding: const EdgeInsets.fromLTRB(0, 8, 0, 8),
+                  child: Text(
+                    e['favTitle'],
+                    style: TextStyle(
+                      fontSize: 18,
+                    ),
+                  ),
+                ),
+                onTap: () {
+                  setState(() {
+                    _isLoading = true;
+                  });
+                  _addFavcat = e['favId'];
+                  _favTitle = e['favTitle'];
                   _addFavnote = _favnoteController.text;
+                  Navigator.of(context).pop();
+                },
+              ),
+            ],
+          ),
+        ))).toList();
+
+    return showCupertinoDialog<void>(
+      context: context,
+      // barrierDismissible: false,
+      builder: (BuildContext context) {
+        return CupertinoAlertDialog(
+          title: GestureDetector(
+            onLongPress: () {
+              Global.profile.ehConfig.favPicker = true;
+              Global.saveProfile();
+            },
+            child: Text('添加收藏'),
+          ),
+          content: Container(
+            child: Column(
+              children: <Widget>[
+                ...favcatList,
+                CupertinoTextField(
+                  controller: _favnoteController,
+//                  autofocus: true,
+                  keyboardType: TextInputType.number,
+                  onEditingComplete: () {
+                    // 点击键盘完成
+                  },
+                )
+              ],
+            ),
+          ),
+          actions: <Widget>[
+            CupertinoDialogAction(
+              child: Text('取消'),
+              onPressed: () {
+                setState(() {
+                  _addFavcat = '';
+                  _favTitle = '';
                 });
                 Navigator.of(context).pop();
               },
@@ -471,7 +564,7 @@ class _GalleryFavButtonState extends State<GalleryFavButton> {
 
     return GestureDetector(
       child: Container(
-        width: 50,
+//        width: 70,
         child: _isLoading ? _loadIcon : favIcon,
       ),
       onTap: () => _tapFav(context),

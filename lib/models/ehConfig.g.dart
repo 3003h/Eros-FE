@@ -12,7 +12,8 @@ EhConfig _$EhConfigFromJson(Map<String, dynamic> json) {
     ..tagTranslat = json['tagTranslat'] as bool
     ..favoritesOrder = json['favoritesOrder'] as String
     ..siteEx = json['siteEx'] as bool
-    ..galleryImgBlur = json['galleryImgBlur'] as bool;
+    ..galleryImgBlur = json['galleryImgBlur'] as bool
+    ..favPicker = json['favPicker'] as bool;
 }
 
 Map<String, dynamic> _$EhConfigToJson(EhConfig instance) => <String, dynamic>{
@@ -20,5 +21,6 @@ Map<String, dynamic> _$EhConfigToJson(EhConfig instance) => <String, dynamic>{
       'tagTranslat': instance.tagTranslat,
       'favoritesOrder': instance.favoritesOrder,
       'siteEx': instance.siteEx,
-      'galleryImgBlur': instance.galleryImgBlur
+      'galleryImgBlur': instance.galleryImgBlur,
+      'favPicker': instance.favPicker
     };

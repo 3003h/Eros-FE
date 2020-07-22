@@ -10,7 +10,7 @@ class GalleryFavParser {
   static Future<void> galleryAddfavorite(String gid, String token,
       {String favcat = 'favdel'}) async {
     HttpManager httpManager = HttpManager.getInstance(
-        EHConst.getBaseSite(Global.profile.ehConfig.siteEx));
+        EHConst.getBaseSite(Global.profile.ehConfig.siteEx ?? false));
 
     var url = '/gallerypopups.php?gid=$gid&t=$token&act=addfav';
     var cookie = Global.profile?.token ?? "";
@@ -27,14 +27,15 @@ class GalleryFavParser {
       data: formData,
     );
 
-    await gallerySelfavcat(gid, token);
-
-//    Global.logger.v("$response");
+    // TODO
+    saveFavcat(gid, token);
   }
 
   static Future<List> gallerySelfavcat(String gid, String token) async {
+    Global.logger.v('gallerySelfavcat');
+
     HttpManager httpManager = HttpManager.getInstance(
-        EHConst.getBaseSite(Global.profile.ehConfig.siteEx));
+        EHConst.getBaseSite(Global.profile.ehConfig.siteEx ?? false));
 
     var url = '/gallerypopups.php?gid=$gid&t=$token&act=addfav';
     var cookie = Global.profile?.token ?? "";
@@ -68,5 +69,21 @@ class GalleryFavParser {
     }
 
     return favList.sublist(0, 10);
+  }
+
+  static Future<List> getFavcat(String gid, String token,
+      {bool cache = true}) async {
+    // profile为空或者cache标志否
+    if (Global.profile.user.favcat == null ||
+        Global.profile.user.favcat.isEmpty ||
+        !cache) {
+      Global.profile.user.favcat = await gallerySelfavcat(gid, token);
+    }
+
+    return Global.profile.user.favcat;
+  }
+
+  static Future<void> saveFavcat(String gid, String token) async {
+    Global.profile.user.favcat = await gallerySelfavcat(gid, token);
   }
 }
