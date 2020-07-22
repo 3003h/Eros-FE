@@ -7,15 +7,15 @@ import 'package:FEhViewer/utils/dio_util.dart';
 import 'package:FEhViewer/utils/utility.dart';
 import 'package:FEhViewer/values/const.dart';
 import 'package:dio/dio.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:html/dom.dart' as dom;
-import 'package:html/parser.dart';
+import 'package:html/parser.dart' show parse;
 import 'package:html_unescape/html_unescape.dart';
 import 'package:intl/intl.dart';
+import 'package:tuple/tuple.dart';
 
 class GalleryListParser {
   /// 获取热门画廊列表
-  static Future<List<GalleryItem>> getPopular() async {
+  static Future<Tuple2<List<GalleryItem>, int>> getPopular() async {
     Global.logger.v("获取热门");
     HttpManager httpManager = HttpManager.getInstance(
         EHConst.getBaseSite(Global.profile.ehConfig.siteEx ?? false));
@@ -29,16 +29,14 @@ class GalleryListParser {
 
     var response = await httpManager.get(url, options: options);
 
-    List<GalleryItem> list = await parseGalleryList(response);
+    var tuple = await parseGalleryList(response);
 
-    return list;
+    return tuple;
   }
 
   /// 获取默认画廊列表
-  static Future<List<GalleryItem>> getGallery(
+  static Future<Tuple2<List<GalleryItem>, int>> getGallery(
       {int page, String fromGid}) async {
-    bool isEx = Global.profile.ehConfig.siteEx;
-
     HttpManager httpManager = HttpManager.getInstance(
         EHConst.getBaseSite(Global.profile.ehConfig.siteEx ?? false));
 
@@ -49,8 +47,6 @@ class GalleryListParser {
       url = "/?page=$page";
     }
 
-    debugPrint('$url');
-
     var cookie = Global.profile?.token ?? "";
 
     Options options =
@@ -58,13 +54,12 @@ class GalleryListParser {
 
     var response = await httpManager.get(url, options: options);
 
-    List<GalleryItem> list = await parseGalleryList(response);
-
-    return list;
+    return await parseGalleryList(response);
   }
 
   /// 获取收藏
-  static Future<List<GalleryItem>> getFavorite({String favcat}) async {
+  static Future<Tuple2<List<GalleryItem>, int>> getFavorite(
+      {String favcat, int page}) async {
     HttpManager httpManager = HttpManager.getInstance(
         EHConst.getBaseSite(Global.profile.ehConfig.siteEx));
 
@@ -72,8 +67,12 @@ class GalleryListParser {
     var _order = Global?.profile?.ehConfig?.favoritesOrder;
 
     var url = "/favorites.php";
-    if (favcat != null && favcat != "a" && favcat != '') {
+    if (favcat != null && favcat != "a" && favcat.isNotEmpty) {
       url = "$url?favcat=$favcat";
+    }
+
+    if (page != null) {
+      url = "$url?page=$page";
     }
 
     if (_order != null) {
@@ -82,7 +81,7 @@ class GalleryListParser {
 
     var cookie = Global.profile?.token ?? "";
 
-    Global.logger.v('$url  cookie:$cookie');
+//    Global.logger.v('$url  cookie:$cookie');
 
     Options options = Options(headers: {
       "Cookie": cookie,
@@ -90,9 +89,7 @@ class GalleryListParser {
 
     var response = await httpManager.get(url, options: options);
 
-    List<GalleryItem> list = await parseGalleryList(response, isFavorite: true);
-
-    return list;
+    return await parseGalleryList(response, isFavorite: true);
   }
 
   /// 获取api
@@ -106,7 +103,8 @@ class GalleryListParser {
   }
 
   /// 列表数据处理
-  static Future<List<GalleryItem>> parseGalleryList(String response,
+  static Future<Tuple2<List<GalleryItem>, int>> parseGalleryList(
+      String response,
       {isFavorite = false}) async {
     var document = parse(response);
 
@@ -120,8 +118,15 @@ class GalleryListParser {
     final fav =
         document.querySelector("body > div.ido > form > p")?.text?.trim() ?? "";
 
-    // ignore: unnecessary_statements
-    isFavorite ? Global.logger.v("fav num  $fav") : null;
+    // 最大页数
+    int maxPage = 0;
+    List<dom.Element> pages = document.querySelectorAll(
+        'body > div.ido > div:nth-child(2) > table.ptt > tbody > tr > td');
+    if (pages.length > 2) {
+      dom.Element maxPageElem = pages[pages.length - 2];
+      maxPage = int.parse(maxPageElem.text.trim());
+      Global.logger.v('maxPage $maxPage');
+    }
 
     // 画廊列表
     List<dom.Element> gallerys = document.querySelectorAll(select);
@@ -219,7 +224,7 @@ class GalleryListParser {
       await getMoreGalleryInfo(gallaryItems);
     }
 
-    return gallaryItems;
+    return Tuple2(gallaryItems, maxPage);
   }
 
   /// 通过api请求获取更多信息

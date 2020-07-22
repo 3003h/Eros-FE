@@ -19,8 +19,9 @@ class GalleryListTab extends StatefulWidget {
 class _GalleryListTab extends State<GalleryListTab> {
   String _title = "Gallery";
   int _curPage = 0;
+  int _maxPage = 0;
   bool _isLoadMore = false;
-  bool _loading = false;
+  bool _firstLoading = false;
   final List<GalleryItem> _gallerItemBeans = [];
 
   //页码跳转的控制器
@@ -32,34 +33,31 @@ class _GalleryListTab extends State<GalleryListTab> {
     _loadData();
   }
 
-  // _loadData() async {
-  //   var gallerItemBeans = await GalleryListParser.getGallery();
-  //   setState(() {
-  //     _gallerItemBeans.clear();
-  //     _gallerItemBeans.addAll(gallerItemBeans);
-  //   });
-  // }
   _loadData() async {
     setState(() {
       _gallerItemBeans.clear();
-      _loading = true;
+      _firstLoading = true;
     });
-    var gallerItemBeans = await GalleryListParser.getGallery();
+    var tuple = await GalleryListParser.getGallery();
+    var gallerItemBeans = tuple.item1;
     _gallerItemBeans.addAll(gallerItemBeans);
+    _maxPage = tuple.item2;
     setState(() {
-      _loading = false;
+      _firstLoading = false;
     });
   }
 
   _reloadData() async {
     setState(() {
-      _loading = false;
+      _firstLoading = false;
     });
-    var gallerItemBeans = await GalleryListParser.getGallery();
+    var tuple = await GalleryListParser.getGallery();
+    var gallerItemBeans = tuple.item1;
     setState(() {
       _curPage = 0;
       _gallerItemBeans.clear();
       _gallerItemBeans.addAll(gallerItemBeans);
+      _maxPage = tuple.item2;
     });
   }
 
@@ -68,25 +66,30 @@ class _GalleryListTab extends State<GalleryListTab> {
     Global.logger.v('last gid   ===>  ${_gallerItemBeans.last.gid}');
     _curPage += 1;
     var fromGid = _gallerItemBeans.last.gid;
-    var gallerItemBeans =
+    var tuple =
         await GalleryListParser.getGallery(page: _curPage, fromGid: fromGid);
+    var gallerItemBeans = tuple.item1;
+
     _isLoadMore = false;
     setState(() {
       _gallerItemBeans.addAll(gallerItemBeans);
+      _maxPage = tuple.item2;
     });
   }
 
   _loadFromPage(int page) async {
     Global.logger.v('jump to page   ===>  $page');
     setState(() {
-      _loading = true;
+      _firstLoading = true;
     });
     _curPage = page;
-    var gallerItemBeans = await GalleryListParser.getGallery(page: _curPage);
+    var tuple = await GalleryListParser.getGallery(page: _curPage);
+    var gallerItemBeans = tuple.item1;
     setState(() {
       _gallerItemBeans.clear();
       _gallerItemBeans.addAll(gallerItemBeans);
-      _loading = false;
+      _maxPage = tuple.item2;
+      _firstLoading = false;
     });
   }
 
@@ -116,7 +119,7 @@ class _GalleryListTab extends State<GalleryListTab> {
               children: <Widget>[
                 Padding(
                   padding: const EdgeInsets.all(8.0),
-                  child: Text("跳转范围 1~100"),
+                  child: Text("跳转范围 1~$_maxPage"),
                 ),
                 CupertinoTextField(
                   controller: _pageController,
@@ -155,6 +158,11 @@ class _GalleryListTab extends State<GalleryListTab> {
 
   @override
   Widget build(BuildContext context) {
+    final size = MediaQuery.of(context).size;
+    final width = size.width;
+    final height = size.height;
+    final _topPad = height / 2 - 150;
+
     var ln = S.of(context);
     _title = ln.tab_gallery;
     CustomScrollView customScrollView = CustomScrollView(
@@ -162,7 +170,7 @@ class _GalleryListTab extends State<GalleryListTab> {
         CupertinoSliverNavigationBar(
           largeTitle: TabPageTitle(
             title: _title,
-            isLoading: _loading,
+            isLoading: false,
           ),
           trailing: CupertinoButton(
             padding: const EdgeInsets.all(0),
@@ -180,7 +188,16 @@ class _GalleryListTab extends State<GalleryListTab> {
         ),
         SliverSafeArea(
           top: false,
-          sliver: gallerySliverListView(_gallerItemBeans),
+          sliver: _firstLoading
+              ? SliverToBoxAdapter(
+                  child: Container(
+                    padding: EdgeInsets.only(top: _topPad),
+                    child: CupertinoActivityIndicator(
+                      radius: 14.0,
+                    ),
+                  ),
+                )
+              : gallerySliverListView(_gallerItemBeans),
         ),
       ],
     );

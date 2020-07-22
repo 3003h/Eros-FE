@@ -3,16 +3,15 @@ import 'package:FEhViewer/common/global.dart';
 import 'package:FEhViewer/generated/l10n.dart';
 import 'package:FEhViewer/models/entity/favorite.dart';
 import 'package:FEhViewer/models/index.dart';
+import 'package:FEhViewer/models/states/user_model.dart';
 import 'package:FEhViewer/route/navigator_util.dart';
 import 'package:FEhViewer/route/routes.dart';
-import 'package:FEhViewer/utils/icon.dart';
-import 'package:FEhViewer/values/const.dart';
-import 'package:FEhViewer/values/theme_colors.dart';
 import 'package:FEhViewer/widget/eh_widget.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_easyrefresh/easy_refresh.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:provider/provider.dart';
 
 import 'item/gallery_item.dart';
 
@@ -24,10 +23,12 @@ class FavoriteTab extends StatefulWidget {
 }
 
 class _FavoriteTab extends State<FavoriteTab> {
-  String _title = "All Favorites";
+  String _title = '';
   final List<GalleryItem> _gallerItemBeans = [];
   String _curFavcat = '';
   bool _loading = false;
+  int _curPage = 0;
+  bool _isLoadMore = false;
 
   void _setTitle(String title) {
     setState(() {
@@ -42,8 +43,12 @@ class _FavoriteTab extends State<FavoriteTab> {
   }
 
   _loadData() async {
-    var gallerItemBeans =
-        await GalleryListParser.getFavorite(favcat: _curFavcat);
+    setState(() {
+      _loading = true;
+    });
+    var tuple = await GalleryListParser.getFavorite(favcat: _curFavcat);
+    var gallerItemBeans = tuple.item1;
+
     setState(() {
       _gallerItemBeans.clear();
       _gallerItemBeans.addAll(gallerItemBeans);
@@ -52,10 +57,23 @@ class _FavoriteTab extends State<FavoriteTab> {
   }
 
   _reloadData() async {
-    var gallerItemBeans =
-        await GalleryListParser.getFavorite(favcat: _curFavcat);
+    var tuple = await GalleryListParser.getFavorite(favcat: _curFavcat);
+    var gallerItemBeans = tuple.item1;
     setState(() {
       _gallerItemBeans.clear();
+      _gallerItemBeans.addAll(gallerItemBeans);
+    });
+  }
+
+  _loadDataMore() async {
+    _isLoadMore = true;
+    _curPage += 1;
+    var tuple =
+        await GalleryListParser.getFavorite(favcat: _curFavcat, page: _curPage);
+    var gallerItemBeans = tuple.item1;
+
+    _isLoadMore = false;
+    setState(() {
       _gallerItemBeans.addAll(gallerItemBeans);
     });
   }
@@ -75,233 +93,94 @@ class _FavoriteTab extends State<FavoriteTab> {
 
   @override
   Widget build(BuildContext context) {
-    CustomScrollView customScrollView = CustomScrollView(
-      slivers: <Widget>[
-        CupertinoSliverNavigationBar(
-          largeTitle: TabPageTitle(
-            title: _title,
-            isLoading: _gallerItemBeans.isEmpty || _loading,
-          ),
-          transitionBetweenRoutes: false,
-          trailing: CupertinoButton(
-            padding: const EdgeInsets.all(0),
-            onPressed: () {
-              debugPrint('sel icon tapped');
-              // 跳转收藏夹选择页
-              NavigatorUtil.jump(context, EHRoutes.selFavorie)
-                  .then((result) async {
-                if (result.runtimeType == FavcatItemBean) {
-                  FavcatItemBean fav = result;
-                  Global.loggerNoStack.i('${fav.title}');
-                  if (_curFavcat != fav.key) {
-                    Global.loggerNoStack.v('修改favcat to ${fav.title}');
-                    _setTitle(fav.title);
-                    _curFavcat = fav.key;
-                    setState(() {
-                      _loading = true;
-                      _gallerItemBeans.clear();
-                    });
-                    await _loadData();
-                  } else {
-                    Global.loggerNoStack.v('未修改favcat');
-                  }
-                } else {
-                  Global.loggerNoStack.i('$result');
-                }
-              });
-            },
-            child: Icon(
-              FontAwesomeIcons.star,
-            ),
-          ),
-        ),
-        CupertinoSliverRefreshControl(
-          onRefresh: () async {
-            await _reloadData();
-          },
-        ),
-        SliverSafeArea(
-          top: false,
-          sliver: gallerySliverListView(_gallerItemBeans),
-        )
-      ],
-    );
-
-    EasyRefresh re = EasyRefresh(
-      child: customScrollView,
-      onLoad: () async {
-        // 上拉加载更多
-      },
-    );
-
-    return re;
-  }
-}
-
-/// 收藏夹选择页面 列表
-class SelFavorite extends StatefulWidget {
-  final FavcatItemBean favcatItemBean;
-
-  SelFavorite({this.favcatItemBean});
-
-  @override
-  _SelFavorite createState() => _SelFavorite();
-}
-
-/// 收藏夹选择页面 列表
-class _SelFavorite extends State<SelFavorite> {
-  // String _title = "Favcat";
-
-  final List<FavcatItemBean> favItemBeans = [];
-
-  @override
-  void initState() {
-    super.initState();
-    _initData();
-  }
-
-  /// 初始化收藏夹选择数据
-  void _initData() {
-    EHConst.favList.forEach((fav) {
-      var key = fav['key'];
-      var desc = fav['desc'];
-      favItemBeans
-          .add(FavcatItemBean(desc, ThemeColors.favColor[key], key: key));
-    });
-  }
-
-  @override
-  Widget build(BuildContext context) {
     var ln = S.of(context);
-    var _title = ln.favcat;
-    CupertinoPageScaffold sca = CupertinoPageScaffold(
-        navigationBar: CupertinoNavigationBar(
-          middle: Text(_title),
-        ),
-        child: SafeArea(
-          child: ListViewFavorite(favItemBeans),
-        ));
+    if (_title.isEmpty) {
+      _title = ln.all_Favorites;
+    }
 
-    return sca;
-  }
-}
+    final size = MediaQuery.of(context).size;
+    final width = size.width;
+    final height = size.height;
+    final _topPad = height / 2 - 150;
 
-class ListViewFavorite extends StatelessWidget {
-  final List<FavcatItemBean> favItemBeans;
-
-  ListViewFavorite(this.favItemBeans);
-
-  @override
-  Widget build(BuildContext context) {
-    return ListView.builder(
-      itemCount: favItemBeans.length,
-
-      //列表项构造器
-      itemBuilder: (BuildContext context, int index) {
-        return FavSelItemWidget(
-          favcatItemBean: favItemBeans[index],
-          index: index,
-        );
-      },
-    );
-  }
-}
-
-/// 收藏夹选择单项
-class FavSelItemWidget extends StatefulWidget {
-  final int index;
-  final FavcatItemBean favcatItemBean;
-
-  FavSelItemWidget({this.index, this.favcatItemBean});
-
-  @override
-  _FavSelItemWidgetState createState() => _FavSelItemWidgetState();
-}
-
-class _FavSelItemWidgetState extends State<FavSelItemWidget> {
-  Color _colorTap;
-
-  @override
-  Widget build(BuildContext context) {
-    Widget container = Container(
-      color: _colorTap,
-      padding: EdgeInsets.fromLTRB(16, 8, 8, 8),
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: <Widget>[
-          Row(children: <Widget>[
-            // 图标
-            Icon(
-              EHCupertinoIcons.heart_solid,
-              color: widget.favcatItemBean.color,
-            ),
-            Container(
-              width: 8,
-            ), // 占位 宽度8
-            Text(
-              widget?.favcatItemBean?.title ?? '',
-              style: TextStyle(
-                fontSize: 20,
-              ),
-            ),
-            Expanded(
-              child: Align(
-                alignment: Alignment.centerRight,
-                child: Icon(
-                  CupertinoIcons.forward,
-                  size: 24.0,
-                  color: CupertinoColors.systemGrey,
-                ),
-              ),
-            ),
-          ]),
-        ],
-      ),
-    );
-
-    return GestureDetector(
-      child: Column(
-        children: <Widget>[
-          container,
-          _settingItemDivider(),
-        ],
-      ),
-      // 不可见区域点击有效
-      behavior: HitTestBehavior.opaque,
-      onTap: () {
-        debugPrint("fav tap ${widget.index}");
-        // 返回 并带上参数
-        NavigatorUtil.goBackWithParams(context, widget.favcatItemBean);
-      },
-      onTapDown: (_) => _updatePressedColor(),
-      onTapUp: (_) {
-        Future.delayed(const Duration(milliseconds: 100), () {
-          _updateNormalColor();
+    return Selector<UserModel, bool>(
+        selector: (context, provider) => provider.isLogin,
+        builder: (context, isLogin, child) {
+          return isLogin
+              ? EasyRefresh(
+                  onLoad: () async {
+                    // 上拉加载更多
+                    await _loadDataMore();
+                  },
+                  child: CustomScrollView(
+                    slivers: <Widget>[
+                      CupertinoSliverNavigationBar(
+                        largeTitle: TabPageTitle(
+                          title: _title,
+                        ),
+                        transitionBetweenRoutes: false,
+                        trailing: CupertinoButton(
+                          padding: const EdgeInsets.all(0),
+                          onPressed: () {
+                            debugPrint('sel icon tapped');
+                            // 跳转收藏夹选择页
+                            NavigatorUtil.jump(context, EHRoutes.selFavorie)
+                                .then((result) async {
+                              if (result.runtimeType == FavcatItemBean) {
+                                FavcatItemBean fav = result;
+                                Global.loggerNoStack.i('${fav.title}');
+                                if (_curFavcat != fav.key) {
+                                  Global.loggerNoStack
+                                      .v('修改favcat to ${fav.title}');
+                                  _setTitle(fav.title);
+                                  _curFavcat = fav.key;
+                                  setState(() {
+                                    _loading = true;
+                                    _gallerItemBeans.clear();
+                                  });
+                                  await _loadData();
+                                } else {
+                                  Global.loggerNoStack.v('未修改favcat');
+                                }
+                              } else {
+                                Global.loggerNoStack.i('$result');
+                              }
+                            });
+                          },
+                          child: Icon(
+                            FontAwesomeIcons.star,
+                          ),
+                        ),
+                      ),
+                      CupertinoSliverRefreshControl(
+                        onRefresh: () async {
+                          await _reloadData();
+                        },
+                      ),
+                      SliverSafeArea(
+                        top: false,
+                        sliver: _loading
+                            ? SliverToBoxAdapter(
+                                child: Container(
+                                  padding: EdgeInsets.only(top: _topPad),
+                                  child: CupertinoActivityIndicator(
+                                    radius: 14.0,
+                                  ),
+                                ),
+                              )
+                            : gallerySliverListView(_gallerItemBeans),
+                      ),
+                    ],
+                  ))
+              : CustomScrollView(slivers: <Widget>[
+                  CupertinoSliverNavigationBar(
+                    largeTitle: TabPageTitle(
+                      title: ln.not_login,
+                      isLoading: false,
+                    ),
+                    transitionBetweenRoutes: false,
+                  ),
+                ]);
         });
-      },
-      onTapCancel: () => _updateNormalColor(),
-    );
-  }
-
-  void _updateNormalColor() {
-    setState(() {
-      _colorTap = CupertinoColors.systemBackground;
-    });
-  }
-
-  void _updatePressedColor() {
-    setState(() {
-      _colorTap = CupertinoColors.systemGrey4;
-    });
-  }
-
-  /// 设置项分隔线
-  Widget _settingItemDivider() {
-    return Divider(
-      height: 1.0,
-      indent: 48,
-      color: CupertinoColors.systemGrey,
-    );
   }
 }
