@@ -62,7 +62,11 @@ dependencies:
 
   # 元组
   tuple: ^1.0.3
+
+
   provider: ^4.3.1
+
+  photo_view: ^0.9.2
 
   logger: ^0.9.1
 

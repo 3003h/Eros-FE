@@ -9,6 +9,7 @@ class GalleryPreview {
     bool isLarge;
     num ser;
     String href;
+    String largeImageUrl;
     String imgUrl;
     num height;
     num width;

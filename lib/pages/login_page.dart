@@ -12,10 +12,10 @@ import 'package:provider/provider.dart';
 
 class LoginPage extends StatefulWidget {
   @override
-  State<StatefulWidget> createState() => _LoginPage();
+  State<StatefulWidget> createState() => _LoginPageState();
 }
 
-class _LoginPage extends State<LoginPage> {
+class _LoginPageState extends State<LoginPage> {
   FocusNode _nodePwd = FocusNode();
 
   //账号的控制器

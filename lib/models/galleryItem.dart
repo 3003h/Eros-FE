@@ -10,6 +10,7 @@ class GalleryItem {
 
     String gid;
     String token;
+    String showKey;
     String url;
     String imgUrl;
     String imgUrlL;

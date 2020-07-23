@@ -8,10 +8,10 @@ import 'package:flutter/material.dart';
 
 class SettingTab extends StatefulWidget {
   @override
-  State<StatefulWidget> createState() => _SettingTab();
+  State<StatefulWidget> createState() => _SettingTabState();
 }
 
-class _SettingTab extends State<SettingTab> {
+class _SettingTabState extends State<SettingTab> {
   // 菜单文案
   var _itemTitles = [];
 
