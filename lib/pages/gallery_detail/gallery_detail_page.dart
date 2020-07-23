@@ -15,8 +15,14 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 class GalleryDetailPage extends StatefulWidget {
   final String title;
   final GalleryItem galleryItem;
+  final fromTabIndex;
 
-  GalleryDetailPage({Key key, this.galleryItem, this.title}) : super(key: key);
+  GalleryDetailPage({
+    Key key,
+    this.galleryItem,
+    this.title,
+    this.fromTabIndex,
+  }) : super(key: key);
 
   @override
   _GalleryDetailPageState createState() => _GalleryDetailPageState();
@@ -144,6 +150,7 @@ class _GalleryDetailPageState extends State<GalleryDetailPage> {
     Color _colorCategory = ThemeColors
             .nameColor[widget?.galleryItem?.category ?? "defaule"]["color"] ??
         CupertinoColors.white;
+    Global.logger.v('${widget.galleryItem.url}_cover_${widget.fromTabIndex}');
     var ln = S.of(context);
     return Container(
       margin: const EdgeInsets.fromLTRB(0, 0, 12, 12),
@@ -165,10 +172,14 @@ class _GalleryDetailPageState extends State<GalleryDetailPage> {
 //                    color: CupertinoColors.systemGrey6,
                     margin: const EdgeInsets.only(right: 10),
 //                    width: 130,
-                    child: ClipRRect(
-                      borderRadius: BorderRadius.circular(8),
-                      child: CachedNetworkImage(
-                        imageUrl: widget.galleryItem.imgUrl,
+                    child: Hero(
+                      tag: widget.galleryItem.url +
+                          '_cover_${widget.fromTabIndex}',
+                      child: ClipRRect(
+                        borderRadius: BorderRadius.circular(8),
+                        child: CachedNetworkImage(
+                          imageUrl: widget.galleryItem.imgUrl,
+                        ),
                       ),
                     ),
                   ),

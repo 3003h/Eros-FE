@@ -11,6 +11,7 @@ GalleryPreview _$GalleryPreviewFromJson(Map<String, dynamic> json) {
     ..isLarge = json['isLarge'] as bool
     ..ser = json['ser'] as num
     ..href = json['href'] as String
+    ..largeImageUrl = json['largeImageUrl'] as String
     ..imgUrl = json['imgUrl'] as String
     ..height = json['height'] as num
     ..width = json['width'] as num
@@ -22,6 +23,7 @@ Map<String, dynamic> _$GalleryPreviewToJson(GalleryPreview instance) =>
       'isLarge': instance.isLarge,
       'ser': instance.ser,
       'href': instance.href,
+      'largeImageUrl': instance.largeImageUrl,
       'imgUrl': instance.imgUrl,
       'height': instance.height,
       'width': instance.width,

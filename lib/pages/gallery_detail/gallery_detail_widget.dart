@@ -1,3 +1,4 @@
+import 'package:FEhViewer/client/parser/gallery_view_parser.dart';
 import 'package:FEhViewer/common/global.dart';
 import 'package:FEhViewer/generated/l10n.dart';
 import 'package:FEhViewer/models/index.dart';
@@ -9,6 +10,8 @@ import 'package:flutter/material.dart';
 
 import 'comment_item.dart';
 import 'gallery_preview_clipper.dart';
+
+const heightPreview = 180.0;
 
 /// 内容
 class GalleryDetailContex extends StatelessWidget {
@@ -50,7 +53,7 @@ class GalleryDetailContex extends StatelessWidget {
             padding: const EdgeInsets.fromLTRB(4, 4, 0, 0),
             child: Text(
               ln.all_comment,
-              style: TextStyle(fontSize: 14),
+              style: TextStyle(fontSize: 16),
             ),
             onPressed: () {
               NavigatorUtil.goGalleryDetailComment(
@@ -64,6 +67,7 @@ class GalleryDetailContex extends StatelessWidget {
           ),
           PreviewBoxGrid(
             galleryPreviewList: _galleryItem.galleryPreview,
+            showKey: _galleryItem.showKey,
           ),
         ],
       ),
@@ -71,39 +75,12 @@ class GalleryDetailContex extends StatelessWidget {
   }
 }
 
-/*class PreviewBox extends StatelessWidget {
-  final List<GalleryPreview> galleryPreviewList;
-
-  const PreviewBox({Key key, @required this.galleryPreviewList})
-      : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    List<Widget> previews = List<Widget>.from(galleryPreviewList
-        .map((preview) => PreviewContainer(
-              galleryPreview: preview,
-            ))
-        .toList());
-
-    return Container(
-      padding: const EdgeInsets.only(top: 20, right: 10, left: 10),
-      child: Wrap(
-        spacing: 20.0,
-        // 主轴(水平)方向间距
-        runSpacing: 10.0,
-        // 纵轴（垂直）方向间距
-        alignment: WrapAlignment.spaceBetween,
-        crossAxisAlignment: WrapCrossAlignment.center,
-        children: <Widget>[...previews],
-      ),
-    );
-  }
-}*/
-
 class PreviewBoxGrid extends StatelessWidget {
   final List<GalleryPreview> galleryPreviewList;
+  final showKey;
 
-  const PreviewBoxGrid({Key key, @required this.galleryPreviewList})
+  const PreviewBoxGrid(
+      {Key key, @required this.galleryPreviewList, @required this.showKey})
       : super(key: key);
 
   @override
@@ -125,13 +102,15 @@ class PreviewBoxGrid extends StatelessWidget {
               crossAxisCount: _crossAxisCount, //每行列数
               mainAxisSpacing: 0, //主轴方向的间距
               crossAxisSpacing: 10, //交叉轴方向子元素的间距
-              childAspectRatio: 0.5 //显示区域宽高
+              childAspectRatio: 0.55 //显示区域宽高
               ),
           itemCount: galleryPreviewList.length,
           itemBuilder: (context, index) {
             return Center(
               child: PreviewContainer(
-                galleryPreview: galleryPreviewList[index],
+                galleryPreviewList: galleryPreviewList,
+                index: index,
+                showKey: showKey,
               ),
             );
           }),
@@ -140,10 +119,21 @@ class PreviewBoxGrid extends StatelessWidget {
 }
 
 class PreviewContainer extends StatelessWidget {
+  final int index;
+  final List<GalleryPreview> galleryPreviewList;
+  final List<String> hrefs;
   final GalleryPreview galleryPreview;
+  final showKey;
 
-  const PreviewContainer({Key key, @required this.galleryPreview})
-      : super(key: key);
+  PreviewContainer(
+      {Key key,
+      @required this.index,
+      @required this.galleryPreviewList,
+      @required this.showKey})
+      : galleryPreview = galleryPreviewList[index],
+        hrefs =
+            List<String>.from(galleryPreviewList.map((e) => e.href).toList()),
+        super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -154,7 +144,7 @@ class PreviewContainer extends StatelessWidget {
         ? Container(
             child: CachedNetworkImage(
               httpHeaders: _httpHeaders,
-              height: 180,
+              height: heightPreview,
               imageUrl: galleryPreview.imgUrl,
             ),
           )
@@ -167,11 +157,17 @@ class PreviewContainer extends StatelessWidget {
             ),
           );
 
-    return Column(
-      children: [
-        DecoratedBox(
-          decoration: BoxDecoration(
-              //阴影
+    return GestureDetector(
+      onTap: () async {
+        hrefs[index] =
+            await GalleryViewParser.getShowInfo(hrefs[index], showKey);
+        NavigatorUtil.goGalleryViewPage(context, hrefs, index);
+      },
+      child: Column(
+        children: [
+          DecoratedBox(
+            decoration: BoxDecoration(
+                //阴影
 //            boxShadow: [
 //              BoxShadow(
 //                color: CupertinoColors.systemGrey,
@@ -179,22 +175,23 @@ class PreviewContainer extends StatelessWidget {
 //                blurRadius: 4.0,
 //              ),
 //            ],
-              ),
-          child: Container(
-            child: image,
-          ),
-        ),
-        Container(
-          padding: const EdgeInsets.all(8),
-          child: Text(
-            '${galleryPreview.ser ?? ''}',
-            style: TextStyle(
-              fontSize: 14,
-              color: Colors.black54,
+                ),
+            child: Container(
+              child: image,
             ),
           ),
-        ),
-      ],
+          Container(
+//            padding: const EdgeInsets.only(top: 0),
+            child: Text(
+              '${galleryPreview.ser ?? ''}',
+              style: TextStyle(
+                fontSize: 14,
+                color: Colors.black54,
+              ),
+            ),
+          ),
+        ],
+      ),
     );
   }
 }

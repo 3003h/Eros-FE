@@ -10,13 +10,14 @@ import 'package:flutter_easyrefresh/easy_refresh.dart';
 import 'item/gallery_item.dart';
 
 class GalleryListTab extends StatefulWidget {
+  final tabIndex;
+
+  const GalleryListTab({Key key, this.tabIndex}) : super(key: key);
   @override
-  State<StatefulWidget> createState() {
-    return _GalleryListTab();
-  }
+  State<StatefulWidget> createState() => _GalleryListTabState();
 }
 
-class _GalleryListTab extends State<GalleryListTab> {
+class _GalleryListTabState extends State<GalleryListTab> {
   String _title = "Gallery";
   int _curPage = 0;
   int _maxPage = 0;
@@ -98,7 +99,10 @@ class _GalleryListTab extends State<GalleryListTab> {
       delegate: SliverChildBuilderDelegate(
         (context, index) {
           if (index < gallerItemBeans.length) {
-            return GalleryItemWidget(galleryItem: gallerItemBeans[index]);
+            return GalleryItemWidget(
+              galleryItem: gallerItemBeans[index],
+              tabIndex: widget.tabIndex,
+            );
           }
           return null;
         },

@@ -118,14 +118,18 @@ class NavigatorUtil {
 
   /// 转到画廊页面
   static void goGalleryDetail(
-      BuildContext context, String title, GalleryItem galleryItem) {
+    BuildContext context,
+    String title,
+    GalleryItem galleryItem, {
+    @required fromTabIndex,
+  }) {
     final encodeGalleryItem =
         Uri.encodeComponent(jsonEncode(galleryItem.toJson()));
     final encodeTitle = Uri.encodeComponent(title);
     Application.router.navigateTo(
         context,
         EHRoutes.galleryDetail +
-            "?title=$encodeTitle&galleryItem=$encodeGalleryItem",
+            "?title=$encodeTitle&galleryItem=$encodeGalleryItem&fromTabIndex=$fromTabIndex",
         transition: TransitionType.cupertino);
   }
 
@@ -137,10 +141,25 @@ class NavigatorUtil {
         .toList());
 
     final queryString = encodeComments.map((e) => 'comment=$e').join('&');
-//    Global.logger.v('$queryString');
 
     Application.router.navigateTo(
         context, EHRoutes.galleryDetailComment + "?$queryString",
+        transition: TransitionType.cupertino);
+  }
+
+  ///
+  static void goGalleryViewPage(
+      BuildContext context, List<String> images, int currentIndex) {
+    final encodeImages = List<String>.from(
+        images.map((image) => Uri.encodeComponent(image)).toList());
+
+    var queryString = encodeImages.map((e) => 'image=$e').join('&');
+
+    Application.router.navigateTo(
+        context,
+        EHRoutes.galleryDetailView +
+            "?$queryString" +
+            '&currentIndex=$currentIndex',
         transition: TransitionType.cupertino);
   }
 }

@@ -12,6 +12,7 @@ class EHRoutes {
 
   static const String galleryDetail = "/galleryDetailPage";
   static const String galleryDetailComment = "/galleryDetailPage/comment";
+  static const String galleryDetailView = "/galleryDetailPage/view";
 
   static void configureRoutes(Router router) {
     pageRoutes.forEach((path, handler) {

@@ -10,6 +10,7 @@ GalleryItem _$GalleryItemFromJson(Map<String, dynamic> json) {
   return GalleryItem()
     ..gid = json['gid'] as String
     ..token = json['token'] as String
+    ..showKey = json['showKey'] as String
     ..url = json['url'] as String
     ..imgUrl = json['imgUrl'] as String
     ..imgUrlL = json['imgUrlL'] as String
@@ -47,6 +48,7 @@ Map<String, dynamic> _$GalleryItemToJson(GalleryItem instance) =>
     <String, dynamic>{
       'gid': instance.gid,
       'token': instance.token,
+      'showKey': instance.showKey,
       'url': instance.url,
       'imgUrl': instance.imgUrl,
       'imgUrlL': instance.imgUrlL,

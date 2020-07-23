@@ -9,11 +9,14 @@ import 'package:flutter/material.dart';
 import 'item/gallery_item.dart';
 
 class PopularListTab extends StatefulWidget {
+  final tabIndex;
+
+  const PopularListTab({Key key, this.tabIndex}) : super(key: key);
   @override
-  State<StatefulWidget> createState() => _PopularListTab();
+  State<StatefulWidget> createState() => _PopularListTabState();
 }
 
-class _PopularListTab extends State<PopularListTab> {
+class _PopularListTabState extends State<PopularListTab> {
   List<GalleryItem> _gallerItemBeans = [];
   bool _firstLoading = false;
 
@@ -53,7 +56,10 @@ class _PopularListTab extends State<PopularListTab> {
       delegate: SliverChildBuilderDelegate(
         (context, index) {
           if (index < gallerItemBeans.length) {
-            return GalleryItemWidget(galleryItem: gallerItemBeans[index]);
+            return GalleryItemWidget(
+              galleryItem: gallerItemBeans[index],
+              tabIndex: widget.tabIndex,
+            );
           }
           return null;
         },

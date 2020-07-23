@@ -16,13 +16,16 @@ import 'package:provider/provider.dart';
 import 'item/gallery_item.dart';
 
 class FavoriteTab extends StatefulWidget {
+  final tabIndex;
+
+  const FavoriteTab({Key key, this.tabIndex}) : super(key: key);
   @override
   State<StatefulWidget> createState() {
-    return _FavoriteTab();
+    return _FavoriteTabState();
   }
 }
 
-class _FavoriteTab extends State<FavoriteTab> {
+class _FavoriteTabState extends State<FavoriteTab> {
   String _title = '';
   final List<GalleryItem> _gallerItemBeans = [];
   String _curFavcat = '';
@@ -83,7 +86,10 @@ class _FavoriteTab extends State<FavoriteTab> {
       delegate: SliverChildBuilderDelegate(
         (context, index) {
           if (index < gallerItemBeans.length) {
-            return GalleryItemWidget(galleryItem: gallerItemBeans[index]);
+            return GalleryItemWidget(
+              galleryItem: gallerItemBeans[index],
+              tabIndex: widget.tabIndex,
+            );
           }
           return null;
         },

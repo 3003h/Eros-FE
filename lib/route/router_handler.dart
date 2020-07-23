@@ -1,9 +1,11 @@
 import 'dart:convert';
 
+import 'package:FEhViewer/common/global.dart';
 import 'package:FEhViewer/models/index.dart';
 import 'package:FEhViewer/pages/favorite_sel_page.dart';
 import 'package:FEhViewer/pages/gallery_detail/comment_page.dart';
 import 'package:FEhViewer/pages/gallery_detail/gallery_detail_page.dart';
+import 'package:FEhViewer/pages/gallery_view/gallery_view_page.dart';
 import 'package:FEhViewer/pages/home_page.dart';
 import 'package:FEhViewer/pages/login_page.dart';
 import 'package:FEhViewer/pages/setting/eh_setting_page.dart';
@@ -54,11 +56,14 @@ final Map<String, Handler> pageRoutes = {
       handlerFunc: (BuildContext context, Map<String, List<String>> params) {
     String title = params["title"]?.first ?? '';
     String galleryItemString = params["galleryItem"]?.first ?? '';
+    String fromTabIndex = params["fromTabIndex"]?.first ?? '';
+    Global.logger.v('$fromTabIndex');
     GalleryItem galleryItem =
         GalleryItem.fromJson(jsonDecode(galleryItemString));
     return GalleryDetailPage(
       title: title,
       galleryItem: galleryItem,
+      fromTabIndex: fromTabIndex,
     );
   }),
 
@@ -73,5 +78,16 @@ final Map<String, Handler> pageRoutes = {
     return CommentPage(
       galleryComments: comments,
     );
-  })
+  }),
+
+  EHRoutes.galleryDetailView: Handler(
+      handlerFunc: (BuildContext context, Map<String, List<String>> params) {
+    List<String> images = params["image"] ?? [];
+    String currentIndex = params["currentIndex"]?.first ?? '0';
+
+    return GalleryViewPage(
+      images: images,
+      index: int.parse(currentIndex),
+    );
+  }),
 };

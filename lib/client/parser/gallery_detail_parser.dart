@@ -7,6 +7,8 @@ import 'package:html/dom.dart' as dom;
 import 'package:html/parser.dart' show parse;
 import 'package:intl/intl.dart';
 
+import 'gallery_view_parser.dart';
+
 class GalleryDetailParser {
   /// 获取画廊详细信息
   static Future<GalleryItem> getGalleryDetail(GalleryItem inGalleryItem) async {
@@ -25,6 +27,9 @@ class GalleryDetailParser {
     var response = await httpManager.get(url, options: options);
 
     GalleryItem galleryItem = await parseGalleryDetail(response);
+
+    galleryItem.gid = inGalleryItem.gid;
+    galleryItem.token = inGalleryItem.token;
 
     // Global.logger.v("$response");
 
@@ -136,6 +141,7 @@ class GalleryDetailParser {
         ..score = score);
     }
 
+    var showKey = '';
 
     /// 画廊缩略图
     /// 大图 #gdt > div.gdtl  小图 #gdt > div.gdtm
@@ -163,11 +169,18 @@ class GalleryDetailParser {
         dom.Element imgElem = pic.querySelector('img');
         var picSer = imgElem.attributes['alt'].trim();
 
+        if(showKey.isEmpty) {
+          showKey = await GalleryViewParser.getShowkey(picHref);
+        }
+
+        galleryItem.showKey = showKey;
+
         galleryItem.galleryPreview.add(GalleryPreview()
           ..ser = int.parse(picSer)
           ..isLarge = false
           ..href = picHref
           ..imgUrl = picSrcUrl
+//          ..largeImageUrl = largeImageUrl
           ..height = double.parse(height)
           ..width = double.parse(width)
           ..offSet = double.parse(offSet)
@@ -183,10 +196,16 @@ class GalleryDetailParser {
         dom.Element imgElem = pic.querySelector('img');
         var picSer = imgElem.attributes['alt'].trim();
         var picSrcUrl = imgElem.attributes['src'].trim();
-//        Global.logger.v('$picHref  $picSer  $picSrcUrl');
+
+        if(showKey.isEmpty) {
+          showKey = await GalleryViewParser.getShowkey(picHref);
+        }
+
+        galleryItem.showKey = showKey;
 
         galleryItem.galleryPreview.add(GalleryPreview()
           ..ser = int.parse(picSer)
+//          ..largeImageUrl = largeImageUrl
           ..isLarge = true
           ..href = picHref
           ..imgUrl = picSrcUrl

@@ -51,10 +51,16 @@ class _FEhHomeState extends State<FEhHome> {
     }
 
     _pages = [
-      new PopularListTab(),
-      new GalleryListTab(),
-      new FavoriteTab(),
-      new SettingTab()
+      PopularListTab(
+        tabIndex: 1,
+      ),
+      GalleryListTab(
+        tabIndex: 2,
+      ),
+      FavoriteTab(
+        tabIndex: 3,
+      ),
+      SettingTab(),
     ];
 
     _tabTitles = [
@@ -81,7 +87,7 @@ class _FEhHomeState extends State<FEhHome> {
 
   // 获取BottomNavigationBarItem
   List<BottomNavigationBarItem> getBottomNavigationBarItem() {
-    List<BottomNavigationBarItem> list = new List();
+    List<BottomNavigationBarItem> list = [];
     for (int index = 0; index < 4; index++) {
       list.add(new BottomNavigationBarItem(
           icon: getTabIcon(index), title: getTabTitle(index)));
@@ -99,11 +105,11 @@ class _FEhHomeState extends State<FEhHome> {
       ),
       tabBuilder: (context, index) {
         return _pages[index];
-        // return CupertinoTabView(
-        //   builder: (BuildContext context) {
-        //     return _pages[index];
-        //   },
-        // );
+//        return CupertinoTabView(
+//          builder: (BuildContext context) {
+//            return _pages[index];
+//          },
+//        );
       },
     );
 

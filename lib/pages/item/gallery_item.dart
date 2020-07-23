@@ -13,10 +13,10 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:provider/provider.dart';
 
 class GalleryItemWidget extends StatefulWidget {
-  final int index;
+  final int tabIndex;
   final GalleryItem galleryItem;
 
-  GalleryItemWidget({this.index, this.galleryItem});
+  GalleryItemWidget({this.tabIndex, this.galleryItem});
 
   @override
   _GalleryItemWidgetState createState() => _GalleryItemWidgetState();
@@ -66,6 +66,8 @@ class _GalleryItemWidgetState extends State<GalleryItemWidget> {
             .nameColor[widget?.galleryItem?.category ?? "defaule"]["color"] ??
         CupertinoColors.white;
 
+//    Global.logger.v('${widget.galleryItem.url}_cover_${widget.tabIndex}');
+
     Widget containerGallery = Container(
       color: _colorTap,
       // height: 200,
@@ -81,14 +83,17 @@ class _GalleryItemWidgetState extends State<GalleryItemWidget> {
           children: <Widget>[
             Row(children: <Widget>[
               // 封面
-              Container(
-                width: 120,
+              Hero(
+                tag: '${widget.galleryItem.url}_cover_${widget.tabIndex}',
+                child: Container(
+                  width: 120,
 //                height: 180,
-                padding: const EdgeInsets.only(right: 8),
-                child: ClipRRect(
-                  // 圆角
-                  borderRadius: BorderRadius.circular(8),
-                  child: CoverImg(imgUrl: widget?.galleryItem?.imgUrl ?? ''),
+                  padding: const EdgeInsets.only(right: 8),
+                  child: ClipRRect(
+                    // 圆角
+                    borderRadius: BorderRadius.circular(8),
+                    child: CoverImg(imgUrl: widget?.galleryItem?.imgUrl ?? ''),
+                  ),
                 ),
               ),
 
@@ -230,7 +235,12 @@ class _GalleryItemWidgetState extends State<GalleryItemWidget> {
       behavior: HitTestBehavior.opaque,
       onTap: () {
         Global.logger.v("onTap title: $_title");
-        NavigatorUtil.goGalleryDetail(context, _title, widget.galleryItem);
+        NavigatorUtil.goGalleryDetail(
+          context,
+          _title,
+          widget.galleryItem,
+          fromTabIndex: widget.tabIndex,
+        );
       },
       onLongPress: () {
         Global.logger.v("onLongPress title: $_title ");
