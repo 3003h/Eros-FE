@@ -164,7 +164,7 @@ class GalleryDetailParser {
         var width = RegExp(r"width:(\d+)?px").firstMatch(style).group(1);
         var offSet = RegExp(r"\) -(\d+)?px ").firstMatch(style).group(1);
 
-        Global.logger.v('$picHref $picSrcUrl $height $width $offSet');
+//        Global.logger.v('$picHref $picSrcUrl $height $width $offSet');
 
         dom.Element imgElem = pic.querySelector('img');
         var picSer = imgElem.attributes['alt'].trim();
