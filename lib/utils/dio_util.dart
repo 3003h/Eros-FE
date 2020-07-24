@@ -65,6 +65,7 @@ class HttpManager {
       formatError(e);
 //      return response;
     }
+//    print('getHttp statusCode: ${response.statusCode}');
     return response.data;
   }
 

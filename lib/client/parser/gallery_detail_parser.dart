@@ -12,11 +12,13 @@ import 'gallery_view_parser.dart';
 class GalleryDetailParser {
   /// 获取画廊详细信息
   static Future<GalleryItem> getGalleryDetail(GalleryItem inGalleryItem) async {
-    //
+    //?inline_set=ts_m 小图,40一页
+    //?inline_set=ts_l 大图,20一页
+    //hc=1#comments 显示全部评论
+    //nw=always 不显示警告
 
-    Global.logger.i("获取画廊 ${inGalleryItem.url}");
     HttpManager httpManager = HttpManager.getInstance();
-    final url = inGalleryItem.url;
+    var url = inGalleryItem.url + '?hc=1&inline_set=ts_l&nw=always';
 
     var cookie = Global.profile?.user?.cookie ?? "";
 
@@ -24,14 +26,20 @@ class GalleryDetailParser {
       "Cookie": cookie,
     });
 
+    Global.logger.i("获取画廊 $url  $cookie");
     var response = await httpManager.get(url, options: options);
+
+//    Global.logger.v("$response");
+    // TODO 画廊警告问题 使用 nw=always 未解决 待处理 怀疑和Session有关
+    if ('$response'.contains(r'<strong>Offensive For Everyone</strong>')) {
+      Global.logger.v('Offensive For Everyone');
+    }
 
     GalleryItem galleryItem = await parseGalleryDetail(response);
 
     galleryItem.gid = inGalleryItem.gid;
     galleryItem.token = inGalleryItem.token;
 
-    // Global.logger.v("$response");
 
     return galleryItem;
   }
@@ -46,7 +54,7 @@ class GalleryDetailParser {
     galleryItem.tagGroup = [];
     const tagGroupSelect = '#taglist > table > tbody > tr';
     List<dom.Element> tagGroups = document.querySelectorAll(tagGroupSelect);
-//    Global.logger.v('tagGroups len  ${tagGroups.length}');
+//    assert(tagGroups.length != 0);
     for (var tagGroup in tagGroups) {
       var type = tagGroup
           .querySelector('td.tc')
@@ -169,7 +177,7 @@ class GalleryDetailParser {
         dom.Element imgElem = pic.querySelector('img');
         var picSer = imgElem.attributes['alt'].trim();
 
-        if(showKey.isEmpty) {
+        if (showKey.isEmpty) {
           showKey = await GalleryViewParser.getShowkey(picHref);
         }
 
@@ -180,7 +188,6 @@ class GalleryDetailParser {
           ..isLarge = false
           ..href = picHref
           ..imgUrl = picSrcUrl
-//          ..largeImageUrl = largeImageUrl
           ..height = double.parse(height)
           ..width = double.parse(width)
           ..offSet = double.parse(offSet)
@@ -197,7 +204,7 @@ class GalleryDetailParser {
         var picSer = imgElem.attributes['alt'].trim();
         var picSrcUrl = imgElem.attributes['src'].trim();
 
-        if(showKey.isEmpty) {
+        if (showKey.isEmpty) {
           showKey = await GalleryViewParser.getShowkey(picHref);
         }
 
@@ -205,7 +212,6 @@ class GalleryDetailParser {
 
         galleryItem.galleryPreview.add(GalleryPreview()
           ..ser = int.parse(picSer)
-//          ..largeImageUrl = largeImageUrl
           ..isLarge = true
           ..href = picHref
           ..imgUrl = picSrcUrl
@@ -217,7 +223,7 @@ class GalleryDetailParser {
     var favTitle = '';
     dom.Element fav = document.querySelector("#favoritelink");
 //    favTitle = fav.text.trim();
-    if (fav.nodes.length == 1) {
+    if (fav?.nodes?.length == 1) {
       favTitle = fav.text.trim();
     }
 //    Global.logger.v('$favTitle  ${fav.nodes}');
@@ -225,7 +231,6 @@ class GalleryDetailParser {
 
     return galleryItem;
   }
-
 
 
 }
