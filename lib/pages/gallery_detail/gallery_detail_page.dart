@@ -150,7 +150,7 @@ class _GalleryDetailPageState extends State<GalleryDetailPage> {
     Color _colorCategory = ThemeColors
             .nameColor[widget?.galleryItem?.category ?? "defaule"]["color"] ??
         CupertinoColors.white;
-    Global.logger.v('${widget.galleryItem.url}_cover_${widget.fromTabIndex}');
+//    Global.logger.v('${widget.galleryItem.url}_cover_${widget.fromTabIndex}');
     var ln = S.of(context);
     return Container(
       margin: const EdgeInsets.fromLTRB(0, 0, 12, 12),
@@ -343,7 +343,7 @@ class _GalleryFavButtonState extends State<GalleryFavButton> {
     } else {
       var _lastFavcat = Global.profile.ehConfig.lastFavcat;
       // 添加到上次收藏夹
-      if (Global.profile.ehConfig.favLongTap &&
+      if ((Global.profile.ehConfig.favLongTap ?? false) &&
           _lastFavcat != null &&
           _lastFavcat.isNotEmpty) {
         setState(() {
