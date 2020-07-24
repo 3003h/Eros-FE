@@ -87,7 +87,7 @@ class PreviewBoxGrid extends StatelessWidget {
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
     final width = size.width;
-    final height = size.height;
+    // final height = size.height;
 
     final _crossAxisCount = width ~/ 120;
 
@@ -138,7 +138,7 @@ class PreviewContainer extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     var _httpHeaders = {
-      "Cookie": Global.profile?.token ?? '',
+      "Cookie": Global.profile?.user?.cookie ?? '',
     };
     var image = galleryPreview.isLarge ?? false
         ? Container(
@@ -158,6 +158,7 @@ class PreviewContainer extends StatelessWidget {
           );
 
     return GestureDetector(
+      behavior: HitTestBehavior.opaque,
       onTap: () async {
         hrefs[index] =
             await GalleryViewParser.getShowInfo(hrefs[index], showKey);
@@ -306,7 +307,7 @@ class CoveTinyImage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     var _httpHeaders = {
-      "Cookie": Global.profile?.token ?? '',
+      "Cookie": Global.profile?.user?.cookie ?? '',
     };
     return Container(
       padding: EdgeInsets.all(4),

@@ -1,5 +1,4 @@
 import 'package:FEhViewer/client/parser/gallery_list_parser.dart';
-import 'package:FEhViewer/common/global.dart';
 import 'package:FEhViewer/generated/l10n.dart';
 import 'package:FEhViewer/models/index.dart';
 import 'package:FEhViewer/widget/eh_widget.dart';

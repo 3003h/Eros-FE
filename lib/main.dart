@@ -12,7 +12,6 @@ import 'package:oktoast/oktoast.dart';
 import 'package:provider/provider.dart';
 
 import 'generated/l10n.dart';
-import 'models/states/gallery_model.dart';
 
 void main() => Global.init().then((e) => runApp(MyApp()));
 

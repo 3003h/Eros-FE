@@ -21,7 +21,7 @@ class GalleryListParser {
         EHConst.getBaseSite(Global.profile.ehConfig.siteEx ?? false));
     const url = "/popular";
 
-    var cookie = Global.profile?.token ?? "";
+    var cookie = Global.profile?.user?.cookie ?? "";
 
     Options options = Options(headers: {
       "Cookie": cookie,
@@ -47,7 +47,7 @@ class GalleryListParser {
       url = "/?page=$page";
     }
 
-    var cookie = Global.profile?.token ?? "";
+    var cookie = Global.profile?.user?.cookie ?? "";
 
     Options options =
         Options(headers: {"Cookie": cookie, "Referer": "https://e-hentai.org"});
@@ -79,7 +79,7 @@ class GalleryListParser {
       url = "$url?inline_set=$_order";
     }
 
-    var cookie = Global.profile?.token ?? "";
+    var cookie = Global.profile?.user?.cookie ?? "";
 
 //    Global.logger.v('$url  cookie:$cookie');
 
@@ -115,8 +115,8 @@ class GalleryListParser {
 
     final select = isFavorite ? FAVORITE_SELECT : GALLERY_SELECT;
 
-    final fav =
-        document.querySelector("body > div.ido > form > p")?.text?.trim() ?? "";
+    // final fav =
+    //     document.querySelector("body > div.ido > form > p")?.text?.trim() ?? "";
 
     // 最大页数
     int maxPage = 0;

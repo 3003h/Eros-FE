@@ -105,7 +105,7 @@ class _FavoriteTabState extends State<FavoriteTab> {
     }
 
     final size = MediaQuery.of(context).size;
-    final width = size.width;
+    // final width = size.width;
     final height = size.height;
     final _topPad = height / 2 - 150;
 

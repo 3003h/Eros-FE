@@ -163,7 +163,7 @@ class _GalleryListTabState extends State<GalleryListTab> {
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
-    final width = size.width;
+    // final width = size.width;
     final height = size.height;
     final _topPad = height / 2 - 150;
 

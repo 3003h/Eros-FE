@@ -8,12 +8,12 @@ import 'package:html/parser.dart' show parse;
 class GalleryFavParser {
   /// 收藏操作
   static Future<void> galleryAddfavorite(String gid, String token,
-      {String favcat = 'favdel'}) async {
+      {String favcat = 'favdel', String favnote}) async {
     HttpManager httpManager = HttpManager.getInstance(
         EHConst.getBaseSite(Global.profile.ehConfig.siteEx ?? false));
 
     var url = '/gallerypopups.php?gid=$gid&t=$token&act=addfav';
-    var cookie = Global.profile?.token ?? "";
+    var cookie = Global.profile?.user?.cookie ?? "";
 
     Options options = Options(headers: {
       "Cookie": cookie,
@@ -27,7 +27,7 @@ class GalleryFavParser {
       data: formData,
     );
 
-    // TODO
+    // TODO a
     saveFavcat(gid, token);
   }
 
@@ -38,7 +38,7 @@ class GalleryFavParser {
         EHConst.getBaseSite(Global.profile.ehConfig.siteEx ?? false));
 
     var url = '/gallerypopups.php?gid=$gid&t=$token&act=addfav';
-    var cookie = Global.profile?.token ?? "";
+    var cookie = Global.profile?.user?.cookie ?? "";
 
     Options options = Options(headers: {
       "Cookie": cookie,

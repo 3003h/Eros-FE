@@ -1,6 +1,5 @@
 import 'dart:convert';
 
-import 'package:FEhViewer/common/global.dart';
 import 'package:FEhViewer/models/galleryComment.dart';
 import 'package:FEhViewer/models/galleryItem.dart';
 import 'package:fluro/fluro.dart';
@@ -107,11 +106,10 @@ class NavigatorUtil {
   }
 
   // goBrowser
-  static void goWebLogin(BuildContext context, String title, String url) {
+  static Future goWebLogin(BuildContext context, String title, String url) {
     final encodeUrl = Uri.encodeComponent(url);
     final encodeTitle = Uri.encodeComponent(title);
-    Global.logger.i('encodeTitle $encodeTitle');
-    Application.router.navigateTo(
+    return Application.router.navigateTo(
         context, EHRoutes.webLogin + "?title=$encodeTitle&url=$encodeUrl",
         transition: TransitionType.cupertino);
   }
