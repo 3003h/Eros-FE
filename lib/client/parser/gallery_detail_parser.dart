@@ -18,7 +18,7 @@ class GalleryDetailParser {
     HttpManager httpManager = HttpManager.getInstance();
     final url = inGalleryItem.url;
 
-    var cookie = Global.profile?.token ?? "";
+    var cookie = Global.profile?.user?.cookie ?? "";
 
     Options options = Options(headers: {
       "Cookie": cookie,

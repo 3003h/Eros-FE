@@ -18,7 +18,7 @@ class GalleryViewParser {
         '/' +
         urlTemp[urlTemp.length - 1];
 
-    var cookie = Global.profile?.token ?? "";
+    var cookie = Global.profile?.user?.cookie ?? "";
 
     Options options = Options(headers: {
       "Cookie": cookie,
@@ -44,7 +44,7 @@ class GalleryViewParser {
 
     var url = href;
 
-    var cookie = Global.profile?.token ?? "";
+    var cookie = Global.profile?.user?.cookie ?? "";
 
     Options options = Options(headers: {
       "Cookie": cookie,
@@ -69,7 +69,7 @@ class GalleryViewParser {
     HttpManager httpManager = HttpManager.getInstance(EHConst.EH_BASE_URL);
     const url = "/api.php";
 
-    var cookie = Global.profile?.token ?? "";
+    var cookie = Global.profile?.user?.cookie ?? "";
 
     Options options = Options(headers: {
       "Cookie": cookie,

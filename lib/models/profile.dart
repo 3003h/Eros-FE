@@ -9,7 +9,6 @@ class Profile {
     Profile();
 
     User user;
-    String token;
     CacheConfig cache;
     EhConfig ehConfig;
     String lastLogin;

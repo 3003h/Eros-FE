@@ -12,7 +12,6 @@ class EhUserManager {
   EhUserManager._();
 
   Future<User> signIn(String username, String passwd) async {
-    User user = User();
     HttpManager httpManager =
         HttpManager.getInstance("https://forums.e-hentai.org");
     const url = "/index.php?act=Login&CODE=01";
@@ -49,7 +48,50 @@ class EhUserManager {
       throw Exception('login Fail');
     }
 
-    var tmpCookie = _getCookieStringFromMap(cookie);
+    var tmpCookie = getCookieStringFromMap(cookie);
+
+    Map moreCookie = await _getHome(tmpCookie);
+
+    moreCookie.forEach((key, value) {
+      cookie.putIfAbsent(key, () => value);
+    });
+
+    Map moreCookieEx = await _getExIgneous(tmpCookie);
+
+    moreCookieEx.forEach((key, value) {
+      cookie.putIfAbsent(key, () => value);
+    });
+
+    // Global.logger.v('$cookie');
+
+    var cookieStr = getCookieStringFromMap(cookie);
+
+    var user = User()
+      ..cookie = cookieStr
+      ..username = username.replaceFirstMapped(
+          RegExp('(^.)'), (match) => match[1].toUpperCase());
+
+    return user;
+  }
+
+  /// 通过网页登录的处理
+  /// 处理cookie
+  /// 以及获取用户名
+  Future<User> signInByWeb(Map cookieMap) async {
+    // key value去空格
+    cookieMap = cookieMap.map((key, value) {
+      return new MapEntry(key.toString().trim(), value.toString().trim());
+    });
+
+    //
+    var cookie = {
+      "ipb_member_id": cookieMap["ipb_member_id"],
+      "ipb_pass_hash": cookieMap["ipb_pass_hash"],
+    };
+
+    var tmpCookie = getCookieStringFromMap(cookie);
+
+    Global.logger.v('$cookieMap');
 
     Map moreCookie = await _getHome(tmpCookie);
 
@@ -65,14 +107,37 @@ class EhUserManager {
 
     Global.logger.v('$cookie');
 
-    var cookieStr = _getCookieStringFromMap(cookie);
+    var cookieStr = getCookieStringFromMap(cookie);
+    Global.logger.v('$cookieStr');
 
-    Global.profile.token = cookieStr;
+    var username = await _getUserName(cookie['ipb_member_id'], tmpCookie);
 
-    user.username = username;
-    user.cookie = cookieStr;
+    var user = User()
+      ..cookie = cookieStr
+      ..username = username;
 
     return user;
+  }
+
+  Future<String> _getUserName(String id, String tmpCookie) async {
+    HttpManager httpManager =
+        HttpManager.getInstance("https://forums.e-hentai.org");
+    var url = '/index.php?showuser=$id';
+
+    Options options = Options(headers: {
+      "Cookie": tmpCookie,
+    });
+
+    var response = await httpManager.get(url, options: options);
+
+    // Global.logger.v('$response');
+
+    var regExp = RegExp(r'Viewing Profile: (\w+)</div');
+    var username = regExp.firstMatch('$response').group(1);
+
+    Global.logger.v('username $username');
+
+    return username;
   }
 
   Future<Map> _getHome(String tmpCookie) async {
@@ -108,7 +173,7 @@ class EhUserManager {
 
     var cookieMap = _parseSetCookieString(setcookie);
 
-    Global.logger.v('$setcookie');
+    // Global.logger.v('$setcookie');
 
     return cookieMap;
   }
@@ -126,7 +191,7 @@ class EhUserManager {
     return cookie;
   }
 
-  _getCookieStringFromMap(Map cookie) {
+  static String getCookieStringFromMap(Map cookie) {
     var texts = [];
     cookie.forEach((key, value) {
       texts.add('$key=$value');
