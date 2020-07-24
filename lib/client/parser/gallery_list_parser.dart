@@ -16,7 +16,7 @@ import 'package:tuple/tuple.dart';
 class GalleryListParser {
   /// 获取热门画廊列表
   static Future<Tuple2<List<GalleryItem>, int>> getPopular() async {
-    Global.logger.v("获取热门");
+//    Global.logger.v("获取热门");
     HttpManager httpManager = HttpManager.getInstance(
         EHConst.getBaseSite(Global.profile.ehConfig.siteEx ?? false));
     const url = "/popular";
@@ -61,7 +61,7 @@ class GalleryListParser {
   static Future<Tuple2<List<GalleryItem>, int>> getFavorite(
       {String favcat, int page}) async {
     HttpManager httpManager = HttpManager.getInstance(
-        EHConst.getBaseSite(Global.profile.ehConfig.siteEx));
+        EHConst.getBaseSite(Global.profile.ehConfig.siteEx ?? false));
 
     //收藏时间排序
     var _order = Global?.profile?.ehConfig?.favoritesOrder;

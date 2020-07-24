@@ -24,6 +24,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "READ" : MessageLookupByLibrary.simpleMessage("阅读"),
     "all_Favorites" : MessageLookupByLibrary.simpleMessage("所有收藏"),
     "all_comment" : MessageLookupByLibrary.simpleMessage("所有评论"),
+    "all_preview" : MessageLookupByLibrary.simpleMessage("所有预览"),
     "app_title" : MessageLookupByLibrary.simpleMessage("FEhViewer"),
     "double_click_back" : MessageLookupByLibrary.simpleMessage("再按一次返回退出"),
     "favcat" : MessageLookupByLibrary.simpleMessage("收藏夹"),

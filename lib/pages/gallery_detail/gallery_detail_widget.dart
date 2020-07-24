@@ -9,9 +9,10 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 import 'comment_item.dart';
+import 'gallery_all_preview_page.dart';
 import 'gallery_preview_clipper.dart';
 
-const heightPreview = 180.0;
+const kHeightPreview = 180.0;
 
 /// 内容
 class GalleryDetailContex extends StatelessWidget {
@@ -69,6 +70,22 @@ class GalleryDetailContex extends StatelessWidget {
             galleryPreviewList: _galleryItem.galleryPreview,
             showKey: _galleryItem.showKey,
           ),
+          CupertinoButton(
+            minSize: 0,
+            padding: const EdgeInsets.fromLTRB(4, 4, 0, 0),
+            child: Text(
+              ln.all_preview,
+              style: TextStyle(fontSize: 16),
+            ),
+            onPressed: () {
+              Navigator.push(context, CupertinoPageRoute(builder: (context) {
+                return AllPreviewPage(
+                  galleryPreviewList: _galleryItem.galleryPreview,
+                  showKey: _galleryItem.showKey,
+                );
+              }));
+            },
+          ),
         ],
       ),
     );
@@ -89,17 +106,16 @@ class PreviewBoxGrid extends StatelessWidget {
     final width = size.width;
     // final height = size.height;
 
-    final _crossAxisCount = width ~/ 120;
-
 //    Global.logger.v('${width}');
 
     return Container(
-      padding: const EdgeInsets.only(top: 20, right: 10, left: 10),
+      padding: const EdgeInsets.only(top: 20, right: 10, left: 0),
       child: GridView.builder(
           shrinkWrap: true, //解决无限高度问题
           physics: NeverScrollableScrollPhysics(), //禁用滑动事件
-          gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-              crossAxisCount: _crossAxisCount, //每行列数
+          gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
+//              crossAxisCount: _crossAxisCount, //每行列数
+              maxCrossAxisExtent: 130,
               mainAxisSpacing: 0, //主轴方向的间距
               crossAxisSpacing: 10, //交叉轴方向子元素的间距
               childAspectRatio: 0.55 //显示区域宽高
@@ -124,6 +140,7 @@ class PreviewContainer extends StatelessWidget {
   final List<String> hrefs;
   final GalleryPreview galleryPreview;
   final showKey;
+  final images = [];
 
   PreviewContainer(
       {Key key,
@@ -144,7 +161,7 @@ class PreviewContainer extends StatelessWidget {
         ? Container(
             child: CachedNetworkImage(
               httpHeaders: _httpHeaders,
-              height: heightPreview,
+              height: kHeightPreview,
               imageUrl: galleryPreview.imgUrl,
             ),
           )
@@ -182,7 +199,7 @@ class PreviewContainer extends StatelessWidget {
             ),
           ),
           Container(
-//            padding: const EdgeInsets.only(top: 0),
+            padding: const EdgeInsets.only(top: 4),
             child: Text(
               '${galleryPreview.ser ?? ''}',
               style: TextStyle(

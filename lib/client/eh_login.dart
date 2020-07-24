@@ -42,6 +42,7 @@ class EhUserManager {
     var cookie = {
       "ipb_member_id": cookieMap["ipb_member_id"],
       "ipb_pass_hash": cookieMap["ipb_pass_hash"],
+      "yay": "louder",
     };
 
     if (cookie['ipb_member_id'] == null) {
@@ -87,6 +88,7 @@ class EhUserManager {
     var cookie = {
       "ipb_member_id": cookieMap["ipb_member_id"],
       "ipb_pass_hash": cookieMap["ipb_pass_hash"],
+      "yay": "louder",
     };
 
     var tmpCookie = getCookieStringFromMap(cookie);

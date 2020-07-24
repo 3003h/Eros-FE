@@ -83,7 +83,7 @@ final Map<String, Handler> pageRoutes = {
     List<String> images = params["image"] ?? [];
     String currentIndex = params["currentIndex"]?.first ?? '0';
 
-    return GalleryViewPage(
+    return GalleryViewPageE(
       images: images,
       index: int.parse(currentIndex),
     );

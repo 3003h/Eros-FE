@@ -252,6 +252,16 @@ class S {
       args: [],
     );
   }
+
+  /// `All Preview`
+  String get all_preview {
+    return Intl.message(
+      'All Preview',
+      name: 'all_preview',
+      desc: '',
+      args: [],
+    );
+  }
 }
 
 class AppLocalizationDelegate extends LocalizationsDelegate<S> {
