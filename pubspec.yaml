@@ -1,20 +1,8 @@
 name: FEhViewer
 description: A new Flutter project.
 
-# The following line prevents the package from being accidentally published to
-# pub.dev using `pub publish`. This is preferred for private packages.
 publish_to: 'none' # Remove this line if you wish to publish to pub.dev
 
-# The following defines the version and build number for your application.
-# A version number is three numbers separated by dots, like 1.2.43
-# followed by an optional build number separated by a +.
-# Both the version and the builder number may be overridden in flutter
-# build by specifying --build-name and --build-number, respectively.
-# In Android, build-name is used as versionName while build-number used as versionCode.
-# Read more about Android versioning at https://developer.android.com/studio/publish/versioning
-# In iOS, build-name is used as CFBundleShortVersionString while build-number used as CFBundleVersion.
-# Read more about iOS versioning at
-# https://developer.apple.com/library/archive/documentation/General/Reference/InfoPlistKeyReference/Articles/CoreFoundationKeys.html
 version: 1.0.0+1
 
 environment:
@@ -28,12 +16,15 @@ dependencies:
   flutter_localizations:
     sdk: flutter
 
-  cupertino_icons: ^0.1.3
+  intl: ^0.16.1
 
+  # 图标
+  cupertino_icons: ^0.1.3
   font_awesome_flutter: ^8.8.1
 
   # 网络请求
   dio: ^3.0.9
+
   # 路由管理
   fluro: ^1.6.3
 
@@ -41,32 +32,33 @@ dependencies:
   shared_preferences: '>=0.5.7+3'
 
   # toast
-  fluttertoast: ^7.0.1
-
-  intl: ^0.16.1
+  #  fluttertoast: ^7.0.1
+  oktoast: ^2.3.2
 
   # 下拉刷新
   flutter_easyrefresh: ^2.1.1
 
-  cached_network_image: ^2.2.0+1
-
   # 数据库
   sqflite: ^1.3.1
-
   path: ^1.7.0
 
   # html反转义
   html_unescape: ^1.0.1+3
 
+  # webview
   flutter_webview_plugin: ^0.3.11
 
   # 元组
   tuple: ^1.0.3
 
-
+  # 状态管理
   provider: ^4.3.1
 
   photo_view: ^0.9.2
+
+  # 图片相关
+  cached_network_image: ^2.2.0+1
+  extended_image: ^0.9.0
 
   logger: ^0.9.1
 
@@ -85,8 +77,7 @@ flutter_intl:
 
 flutter:
   uses-material-design: true
-
-  fonts:
-    - family: SourceHanSansSC
-      fonts:
-        - asset: fonts/SourceHanSansSC-Regular.otf
+  # fonts:
+  #   - family: SourceHanSansSC
+  #     fonts:
+  #       - asset: fonts/SourceHanSansSC-Regular.otf

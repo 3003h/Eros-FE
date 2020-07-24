@@ -8,6 +8,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:oktoast/oktoast.dart';
 import 'package:provider/provider.dart';
 
 import 'generated/l10n.dart';
@@ -83,7 +84,7 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider.value(value: LocaleModel()),
         ChangeNotifierProvider.value(value: EhConfigModel()),
       ],
-      child: cupertinoApp,
+      child: OKToast(child: cupertinoApp),
     );
 
     return multiProvider;

@@ -1,4 +1,3 @@
-import 'package:FEhViewer/common/global.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -41,9 +40,9 @@ class _GalleryViewPageState extends State<GalleryViewPage> {
           builder: (BuildContext context, int index) {
             return PhotoViewGalleryPageOptions(
               imageProvider: CachedNetworkImageProvider(widget.images[index]),
-//              initialScale: PhotoViewComputedScale.contained * 0.8,
-//              minScale: PhotoViewComputedScale.contained * 0.8,
-//              maxScale: PhotoViewComputedScale.covered * 1.1,
+              initialScale: PhotoViewComputedScale.contained,
+              minScale: PhotoViewComputedScale.contained * 0.5,
+              maxScale: PhotoViewComputedScale.covered * 1.1,
               heroAttributes:
                   PhotoViewHeroAttributes(tag: widget.images[index]),
             );

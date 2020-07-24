@@ -57,7 +57,6 @@ final Map<String, Handler> pageRoutes = {
     String title = params["title"]?.first ?? '';
     String galleryItemString = params["galleryItem"]?.first ?? '';
     String fromTabIndex = params["fromTabIndex"]?.first ?? '';
-    Global.logger.v('$fromTabIndex');
     GalleryItem galleryItem =
         GalleryItem.fromJson(jsonDecode(galleryItemString));
     return GalleryDetailPage(

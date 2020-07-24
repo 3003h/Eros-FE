@@ -77,7 +77,7 @@ class GalleryViewParser {
 
     Global.logger.v('href = $href');
 
-    var regExp = RegExp(r'https://e[-|x]hentai.org/s/([0-9a-z]+)/(\d+)-(\d+)');
+    var regExp = RegExp(r'https://e[-x]hentai.org/s/([0-9a-z]+)/(\d+)-(\d+)');
     var regRult = regExp.firstMatch(href);
     var gid = int.parse(regRult.group(2));
     var imgkey = regRult.group(1);
