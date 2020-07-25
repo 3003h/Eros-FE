@@ -146,7 +146,9 @@ class _GalleryItemWidgetState extends State<GalleryItemWidget> {
                                     child: Icon(
                                       FontAwesomeIcons.solidHeart,
                                       size: 12,
-                                      color: Colors.redAccent,
+//                                      color: Colors.redAccent,
+                                      color: ThemeColors
+                                          .favColor[widget.galleryItem.favcat],
                                     ),
                                   )
                                 : Container(),

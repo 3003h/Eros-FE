@@ -126,6 +126,18 @@ class GalleryListParser {
               ?.attributes['title'] ??
           '';
 
+      var favcat;
+      if (favTitle.isNotEmpty) {
+        var favcatStyle = tr
+            .querySelector('td.gl2c > div:nth-child(2) > div')
+            ?.attributes['style'];
+        var favcatColor = RegExp(r'border-color:(#\w{3});')
+                ?.firstMatch(favcatStyle)
+                ?.group(1) ??
+            '';
+        favcat = EHConst.favCat[favcatColor];
+      }
+
       gallaryItems.add(GalleryItem()
         ..gid = gid
         ..token = token
@@ -137,7 +149,8 @@ class GalleryListParser {
         ..postTime = postTimeLocal
         ..simpleTagsTranslat = simpleTagsTranslate
         ..ratingFallBack = ratingFB
-        ..favTitle = favTitle);
+        ..favTitle = favTitle
+        ..favcat = favcat);
     }
 
     // 通过api请求获取更多信息
