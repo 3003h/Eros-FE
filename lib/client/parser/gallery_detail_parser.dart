@@ -1,8 +1,11 @@
+import 'dart:io';
+
 import 'package:FEhViewer/client/tag_database.dart';
 import 'package:FEhViewer/common/global.dart';
 import 'package:FEhViewer/models/index.dart';
 import 'package:FEhViewer/utils/dio_util.dart';
-import 'package:dio/dio.dart';
+import 'package:FEhViewer/utils/toast.dart';
+import 'package:FEhViewer/utils/utility.dart';
 import 'package:html/dom.dart' as dom;
 import 'package:html/parser.dart' show parse;
 import 'package:intl/intl.dart';
@@ -11,6 +14,7 @@ import 'gallery_view_parser.dart';
 
 class GalleryDetailParser {
   /// 获取画廊详细信息
+  ///
   static Future<GalleryItem> getGalleryDetail(GalleryItem inGalleryItem) async {
     //?inline_set=ts_m 小图,40一页
     //?inline_set=ts_l 大图,20一页
@@ -19,20 +23,26 @@ class GalleryDetailParser {
 
     HttpManager httpManager = HttpManager.getInstance();
     var url = inGalleryItem.url + '?hc=1&inline_set=ts_l&nw=always';
+//    var url = inGalleryItem.url + '?hc=1&nw=always';
 
-    var cookie = Global.profile?.user?.cookie ?? "";
+    // 不显示警告的处理 cookie加上 nw=1
+    // 在 url使用 nw=always 未解决 自动写入cookie 暂时搞不懂 先手动设置下
+    // todo 待优化
+    var cookieJar = await Api.cookieJar;
+    List<Cookie> cookies =
+    cookieJar.loadForRequest(Uri.parse(inGalleryItem.url));
+    cookies.add(Cookie('nw', '1'));
+    cookieJar.saveFromResponse(Uri.parse(url), cookies);
 
-    Options options = Options(headers: {
-      "Cookie": cookie,
-    });
 
-    Global.logger.i("获取画廊 $url  $cookie");
-    var response = await httpManager.get(url, options: options);
 
-//    Global.logger.v("$response");
+    Global.logger.i("获取画廊 $url");
+    var response = await httpManager.get(url);
+
     // TODO 画廊警告问题 使用 nw=always 未解决 待处理 怀疑和Session有关
     if ('$response'.contains(r'<strong>Offensive For Everyone</strong>')) {
       Global.logger.v('Offensive For Everyone');
+      showToast('Offensive For Everyone');
     }
 
     GalleryItem galleryItem = await parseGalleryDetail(response);
@@ -44,6 +54,7 @@ class GalleryDetailParser {
     return galleryItem;
   }
 
+  /// 解析响应数据
   static Future<GalleryItem> parseGalleryDetail(String response) async {
     // 解析响应信息dom
     var document = parse(response);
@@ -84,7 +95,7 @@ class GalleryDetailParser {
         ..galleryTags = galleryTags);
     }
 
-    /// 评论区数据处理
+    // 解析评论区数据
     galleryItem.galleryComment = [];
     const commentSelect = '#cdiv > div.c1';
     List<dom.Element> commentList = document.querySelectorAll(commentSelect);
@@ -94,39 +105,24 @@ class GalleryDetailParser {
       var postElem = comment.querySelector('div.c2 > div.c3 > a');
       var postName = postElem.text.trim();
 
+      // 解析时间
       var timeElem = comment.querySelector('div.c2 > div.c3');
       var postTime = timeElem.text.trim();
       // 示例: Posted on 29 June 2020, 05:41 UTC by:  
       var postTimeUTC = RegExp(r"Posted on (.+, .+) UTC by").firstMatch(
           postTime).group(1);
 
-/*      var postTimes = RegExp(r"Posted on (\d+)\s?(\w+)\s+(\d+),\s?(.+) UTC by")
-          .firstMatch(postTime);
-
-      var postTimeParse = DateTime.parse(postTime);
-      Global.logger.v(
-          '${postTimes.group(1)} ${postTimes.group(2)} ${postTimes.group(
-              3)} ${postTimes.group(4)}');
-
-      var now = new DateTime.now();
-      var formatter = new DateFormat('yyyy-MMMM-dd HH:mm','en_US');
-      String formatted = formatter.format(now);
-      Global.logger.v(formatted);*/
-
-
+      // 时间由utc转为本地时间
       DateTime time = DateFormat('dd MMMM yyyy, HH:mm', 'en_US').parseUtc(
           postTimeUTC).toLocal();
-
       final postTimeLocal = DateFormat('yyyy-MM-dd HH:mm').format(time);
-
-//      Global.logger.v('$postTimeUTC \n ${postTimeLocal}');
 
 
       // 评论评分 (Uploader Comment 没有)
       var scoreElem = comment.querySelector('div.c2 > div.c5.nosel');
       var score = scoreElem?.text?.trim() ?? '';
 
-      // 评论内容
+      // 解析评论内容 TODO href的解析有问题
       var contextElem = comment.querySelector('div.c6');
       // br回车以及引号的处理
       var context = contextElem.nodes
@@ -151,8 +147,8 @@ class GalleryDetailParser {
 
     var showKey = '';
 
-    /// 画廊缩略图
-    /// 大图 #gdt > div.gdtl  小图 #gdt > div.gdtm
+    // 解析画廊缩略图
+    // 大图 #gdt > div.gdtl  小图 #gdt > div.gdtm
     List<dom.Element> picLsit = document.querySelectorAll('#gdt > div.gdtm');
 //    Global.logger.v('${picLsit.length}');
 
@@ -219,7 +215,7 @@ class GalleryDetailParser {
       }
     }
 
-    // 收藏标志
+    // 解析收藏标志
     var favTitle = '';
     dom.Element fav = document.querySelector("#favoritelink");
 //    favTitle = fav.text.trim();

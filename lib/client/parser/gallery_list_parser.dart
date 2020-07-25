@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:io';
 
 import 'package:FEhViewer/client/tag_database.dart';
 import 'package:FEhViewer/common/global.dart';
@@ -17,17 +18,20 @@ class GalleryListParser {
   /// 获取热门画廊列表
   static Future<Tuple2<List<GalleryItem>, int>> getPopular() async {
 //    Global.logger.v("获取热门");
+
     HttpManager httpManager = HttpManager.getInstance(
         EHConst.getBaseSite(Global.profile.ehConfig.siteEx ?? false));
     const url = "/popular";
 
-    var cookie = Global.profile?.user?.cookie ?? "";
+    var response = await httpManager.get(url);
 
-    Options options = Options(headers: {
-      "Cookie": cookie,
-    });
+    var cookieJar = await Api.cookieJar;
+    List<Cookie> cookiesE =
+        cookieJar.loadForRequest(Uri.parse(EHConst.EH_BASE_URL));
+    List<Cookie> cookiesEX =
+        cookieJar.loadForRequest(Uri.parse(EHConst.EX_BASE_URL));
 
-    var response = await httpManager.get(url, options: options);
+    Global.logger.v('$cookiesE\n$cookiesEX');
 
     var tuple = await parseGalleryList(response);
 
@@ -47,10 +51,9 @@ class GalleryListParser {
       url = "/?page=$page";
     }
 
-    var cookie = Global.profile?.user?.cookie ?? "";
-
-    Options options =
-        Options(headers: {"Cookie": cookie, "Referer": "https://e-hentai.org"});
+    Options options = Options(headers: {
+      "Referer": "https://e-hentai.org",
+    });
 
     var response = await httpManager.get(url, options: options);
 
@@ -79,15 +82,7 @@ class GalleryListParser {
       url = "$url?inline_set=$_order";
     }
 
-    var cookie = Global.profile?.user?.cookie ?? "";
-
-//    Global.logger.v('$url  cookie:$cookie');
-
-    Options options = Options(headers: {
-      "Cookie": cookie,
-    });
-
-    var response = await httpManager.get(url, options: options);
+    var response = await httpManager.get(url);
 
     return await parseGalleryList(response, isFavorite: true);
   }

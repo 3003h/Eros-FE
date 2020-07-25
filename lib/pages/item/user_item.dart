@@ -4,6 +4,7 @@ import 'package:FEhViewer/models/states/user_model.dart';
 import 'package:FEhViewer/models/user.dart';
 import 'package:FEhViewer/route/navigator_util.dart';
 import 'package:FEhViewer/route/routes.dart';
+import 'package:FEhViewer/utils/utility.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -34,7 +35,8 @@ class _UserItem extends State<UserItem> {
             ),
             CupertinoDialogAction(
               child: Text('确定'),
-              onPressed: () {
+              onPressed: () async {
+                (await Api.cookieJar).deleteAll();
                 Provider.of<UserModel>(context, listen: false).user = User();
                 Provider.of<EhConfigModel>(context, listen: false).siteEx =
                     false;
