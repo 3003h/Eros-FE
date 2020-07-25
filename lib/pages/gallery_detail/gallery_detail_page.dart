@@ -5,6 +5,7 @@ import 'package:FEhViewer/models/index.dart';
 import 'package:FEhViewer/pages/gallery_detail/gallery_detail_widget.dart';
 import 'package:FEhViewer/utils/toast.dart';
 import 'package:FEhViewer/utils/utility.dart';
+import 'package:FEhViewer/values/const.dart';
 import 'package:FEhViewer/values/theme_colors.dart';
 import 'package:FEhViewer/widget/rating_bar.dart';
 import 'package:cached_network_image/cached_network_image.dart';
@@ -233,6 +234,7 @@ class _GalleryDetailPageState extends State<GalleryDetailPage> {
                                 )
                               : GalleryFavButton(
                                   favTitle: _galleryItem.favTitle,
+                                  favcat: _galleryItem.favcat,
                                   gid: widget.galleryItem.gid,
                                   token: widget.galleryItem.token,
                                 )
@@ -299,6 +301,7 @@ class _GalleryDetailPageState extends State<GalleryDetailPage> {
 
 class GalleryFavButton extends StatefulWidget {
   final String favTitle;
+  final String favcat;
   final String gid;
   final String token;
 
@@ -307,6 +310,7 @@ class GalleryFavButton extends StatefulWidget {
     this.favTitle,
     @required this.gid,
     @required this.token,
+    @required this.favcat,
   }) : super(key: key);
 
   @override
@@ -316,8 +320,8 @@ class GalleryFavButton extends StatefulWidget {
 class _GalleryFavButtonState extends State<GalleryFavButton> {
   String _favTitle;
   bool _isLoading = false;
-  String _addFavcat;
-  String _addFavnote;
+  String _favcat;
+  String _favnote;
 
   // 收藏输入框控制器
   TextEditingController _favnoteController = TextEditingController();
@@ -326,8 +330,8 @@ class _GalleryFavButtonState extends State<GalleryFavButton> {
   void initState() {
     super.initState();
     _favTitle = widget.favTitle;
-    _addFavcat = '';
-    _addFavnote = '';
+    _favcat = widget.favcat;
+    _favnote = '';
   }
 
   void _tapFav(context) async {
@@ -355,9 +359,9 @@ class _GalleryFavButtonState extends State<GalleryFavButton> {
           _lastFavcat.isNotEmpty) {
         setState(() {
           _isLoading = true;
-          _addFavcat = _lastFavcat;
+          _favcat = _lastFavcat;
           _favTitle =
-              Global.profile.user.favcat[int.parse(_addFavcat)]['favTitle'];
+              Global.profile.user.favcat[int.parse(_favcat)]['favTitle'];
         });
       } else {
         // 手选收藏夹
@@ -368,15 +372,15 @@ class _GalleryFavButtonState extends State<GalleryFavButton> {
             : await _showAddFavList(context, favList);
       }
 
-      if (_addFavcat != null && _addFavcat.trim().isNotEmpty) {
-        Global.logger.v('_addFavcat  $_addFavcat');
-        Global.profile.ehConfig.lastFavcat = _addFavcat;
+      if (_favcat != null && _favcat.trim().isNotEmpty) {
+        Global.logger.v('_addFavcat  $_favcat');
+        Global.profile.ehConfig.lastFavcat = _favcat;
         try {
           await GalleryFavParser.galleryAddfavorite(
             widget.gid,
             widget.token,
-            favcat: _addFavcat,
-            favnote: _addFavnote,
+            favcat: _favcat,
+            favnote: _favnote,
           );
         } catch (e) {} finally {
           setState(() {
@@ -398,15 +402,15 @@ class _GalleryFavButtonState extends State<GalleryFavButton> {
           ? await _showAddFavPicker(context, favList)
           : await _showAddFavList(context, favList);
 
-      if (_addFavcat != null && _addFavcat.trim().isNotEmpty) {
-        Global.logger.v('_addFavcat  $_addFavcat');
-        Global.profile.ehConfig.lastFavcat = _addFavcat;
+      if (_favcat != null && _favcat.trim().isNotEmpty) {
+        Global.logger.v('_addFavcat  $_favcat');
+        Global.profile.ehConfig.lastFavcat = _favcat;
         try {
           await GalleryFavParser.galleryAddfavorite(
             widget.gid,
             widget.token,
-            favcat: _addFavcat,
-            favnote: _addFavnote,
+            favcat: _favcat,
+            favnote: _favnote,
           );
         } catch (e) {} finally {
           setState(() {
@@ -458,9 +462,9 @@ class _GalleryFavButtonState extends State<GalleryFavButton> {
                     setState(() {
                       _isLoading = true;
                     });
-                    _addFavcat = '$_favindex';
+                    _favcat = '$_favindex';
                     _favTitle = favList[_favindex]['favTitle'];
-                    _addFavnote = _favnoteController.text;
+                    _favnote = _favnoteController.text;
                     Navigator.of(context).pop();
                   },
                 )
@@ -472,7 +476,7 @@ class _GalleryFavButtonState extends State<GalleryFavButton> {
               child: Text('取消'),
               onPressed: () {
                 setState(() {
-                  _addFavcat = '';
+                  _favcat = '';
                   _favTitle = '';
                 });
                 Navigator.of(context).pop();
@@ -485,9 +489,9 @@ class _GalleryFavButtonState extends State<GalleryFavButton> {
                 setState(() {
                   _isLoading = true;
                 });
-                _addFavcat = '$_favindex';
+                _favcat = '$_favindex';
                 _favTitle = favList[_favindex]['favTitle'];
-                _addFavnote = _favnoteController.text;
+                _favnote = _favnoteController.text;
                 Navigator.of(context).pop();
               },
             ),
@@ -506,9 +510,9 @@ class _GalleryFavButtonState extends State<GalleryFavButton> {
                 setState(() {
                   _isLoading = true;
                 });
-                _addFavcat = fav['favId'];
+                _favcat = fav['favId'];
                 _favTitle = fav['favTitle'];
-                _addFavnote = _favnoteController.text;
+                _favnote = _favnoteController.text;
                 Navigator.of(context).pop();
               },
             ))).toList();
@@ -545,7 +549,7 @@ class _GalleryFavButtonState extends State<GalleryFavButton> {
               child: Text('取消'),
               onPressed: () {
                 setState(() {
-                  _addFavcat = '';
+                  _favcat = '';
                   _favTitle = '';
                 });
                 Navigator.of(context).pop();
@@ -567,6 +571,7 @@ class _GalleryFavButtonState extends State<GalleryFavButton> {
               children: [
                 Icon(
                   FontAwesomeIcons.heart,
+                  color: CupertinoColors.systemGrey,
                 ),
                 Container(
                   height: 14,
@@ -581,7 +586,10 @@ class _GalleryFavButtonState extends State<GalleryFavButton> {
             )
           : Column(
               children: [
-                Icon(FontAwesomeIcons.solidHeart),
+                Icon(
+                  FontAwesomeIcons.solidHeart,
+                  color: ThemeColors.favColor[_favcat],
+                ),
                 Container(
                   height: 14,
                   child: Text(

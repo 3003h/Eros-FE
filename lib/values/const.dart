@@ -86,6 +86,19 @@ class EHConst {
     "misc": Color(0xffd7d7d6),
   };
 
+  static const Map favCat = {
+    '#000': '0',
+    '#f00': '1',
+    '#fa0': '2',
+    '#dd0': '3',
+    '#080': '4',
+    '#9f4': '5',
+    '#4bf': '6',
+    '#00f': '7',
+    '#508': '8',
+    '#e8e': '9',
+  };
+
   static const List favList = [
     {'key': '0', 'desc': 'Favorites 0'},
     {'key': '1', 'desc': 'Favorites 1'},
