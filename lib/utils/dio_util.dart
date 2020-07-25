@@ -1,6 +1,8 @@
 import 'package:FEhViewer/utils/toast.dart';
+import 'package:FEhViewer/utils/utility.dart';
 import 'package:FEhViewer/values/const.dart';
 import 'package:dio/dio.dart';
+import 'package:dio_cookie_manager/dio_cookie_manager.dart';
 import 'package:flutter/cupertino.dart';
 
 class HttpManager {
@@ -8,7 +10,7 @@ class HttpManager {
   final int receiveTimeout = 5000;
 
   //单例模式
-  static Map _instanceMap = new Map();
+  static Map _instanceMap = Map();
 
   Dio _dio;
   BaseOptions _options;
@@ -16,7 +18,7 @@ class HttpManager {
   //单例模式，一个baseUrl只创建一次实例
   static HttpManager getInstance([baseUrl = ""]) {
     if (null == _instanceMap[baseUrl]) {
-      _instanceMap[baseUrl] = new HttpManager(baseUrl);
+      _instanceMap[baseUrl] = HttpManager(baseUrl);
     }
     return _instanceMap[baseUrl];
   }
@@ -41,7 +43,7 @@ class HttpManager {
         responseType: ResponseType.json);
     _dio = new Dio(_options);
     //设置Cookie
-//    _dio.interceptors.add(CookieManager(CookieJar()));
+//    _dio.interceptors.add(CookieManager(await Api.cookieJar));
 
     //添加拦截器
     _dio.interceptors
@@ -56,34 +58,45 @@ class HttpManager {
 
   //get请求方法
   get(url, {params, options, cancelToken}) async {
+    //设置Cookie管理
+    _dio.interceptors.add(CookieManager(await Api.cookieJar));
+
     Response response;
     try {
       response = await _dio.get(url,
           queryParameters: params, options: options, cancelToken: cancelToken);
     } on DioError catch (e) {
       print('getHttp exception: $e');
-      formatError(e);
-//      return response;
+//      formatError(e);
+      return response;
+//      throw e;
     }
 //    print('getHttp statusCode: ${response.statusCode}');
     return response.data;
   }
 
   getAll(url, {params, options, cancelToken}) async {
+    //设置Cookie管理
+    _dio.interceptors.add(CookieManager(await Api.cookieJar));
+
     Response response;
     try {
       response = await _dio.get(url,
           queryParameters: params, options: options, cancelToken: cancelToken);
     } on DioError catch (e) {
       print('getHttp exception: $e');
-      formatError(e);
-//      return response;
+//      formatError(e);
+      return response;
+//      throw e;
     }
     return response;
   }
 
   //post请求
   post(url, {params, options, cancelToken}) async {
+    //设置Cookie管理
+    _dio.interceptors.add(CookieManager(await Api.cookieJar));
+
     Response response;
     try {
       response = await _dio.post(url,
@@ -92,12 +105,16 @@ class HttpManager {
     } on DioError catch (e) {
       print('postHttp exception: $e');
       formatError(e);
+//      throw e;
     }
     return response;
   }
 
   //post Form请求
   postForm(url, {data, options, cancelToken}) async {
+    //设置Cookie管理
+    _dio.interceptors.add(CookieManager(await Api.cookieJar));
+
     Response response;
     try {
       response = await _dio.post(url,
@@ -106,12 +123,16 @@ class HttpManager {
     } on DioError catch (e) {
 //      print('postHttp exception: $e');
       formatError(e);
+//      throw e;
     }
     return response;
   }
 
   //下载文件
   downLoadFile(urlPath, savePath) async {
+    //设置Cookie管理
+    _dio.interceptors.add(CookieManager(await Api.cookieJar));
+
     Response response;
     try {
       response = await _dio.download(urlPath, savePath,

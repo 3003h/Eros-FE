@@ -1,6 +1,9 @@
+import 'dart:io';
+
 import 'package:FEhViewer/common/global.dart';
 import 'package:FEhViewer/models/user.dart';
 import 'package:FEhViewer/utils/dio_util.dart';
+import 'package:FEhViewer/utils/utility.dart';
 import 'package:FEhViewer/values/const.dart';
 import 'package:dio/dio.dart';
 
@@ -28,47 +31,49 @@ class EhUserManager {
 
     Options options = Options(headers: {"Referer": referer, "Origin": origin});
 
-    Response rult =
-        await httpManager.postForm(url, data: formData, options: options);
+    Response rult;
+    try {
+      rult = await httpManager.postForm(url, data: formData, options: options);
+    } catch (e) {
+      Global.logger.v('$e');
+    }
 
-    // todo 登录异常处理
-
+    // TODO 登录异常处理
     var setcookie = rult.headers['set-cookie'];
-
     var cookieMap = _parseSetCookieString(setcookie);
 
-//    Global.logger.v('$setcookie');
+    if (cookieMap['ipb_member_id'] == null) {
+      throw Exception('login Fail');
+    }
+
+    List<Cookie> cookies = [
+      Cookie('ipb_member_id', cookieMap['ipb_member_id']),
+      Cookie('ipb_pass_hash', cookieMap['ipb_pass_hash']),
+      Cookie('nw', '1'),
+    ];
+
+    var cookieJar = await Api.cookieJar;
+
+    // 设置EX的cookie
+    cookieJar.saveFromResponse(Uri.parse(EHConst.EX_BASE_URL), cookies);
+
+    await _getExIgneous();
+
+    //获取Ex cookies
+    List<Cookie> cookiesEx =
+        cookieJar.loadForRequest(Uri.parse(EHConst.EX_BASE_URL));
+
+    Global.logger.v('$cookiesEx');
+
+    // h
 
     var cookie = {
       "ipb_member_id": cookieMap["ipb_member_id"],
       "ipb_pass_hash": cookieMap["ipb_pass_hash"],
-      "yay": "louder",
     };
 
-    if (cookie['ipb_member_id'] == null) {
-      throw Exception('login Fail');
-    }
-
-    var tmpCookie = getCookieStringFromMap(cookie);
-
-    Map moreCookie = await _getHome(tmpCookie);
-
-    moreCookie.forEach((key, value) {
-      cookie.putIfAbsent(key, () => value);
-    });
-
-    Map moreCookieEx = await _getExIgneous(tmpCookie);
-
-    moreCookieEx.forEach((key, value) {
-      cookie.putIfAbsent(key, () => value);
-    });
-
-    // Global.logger.v('$cookie');
-
-    var cookieStr = getCookieStringFromMap(cookie);
-
     var user = User()
-      ..cookie = cookieStr
+//      ..cookie = cookieStr
       ..username = username.replaceFirstMapped(
           RegExp('(^.)'), (match) => match[1].toUpperCase());
 
@@ -81,56 +86,47 @@ class EhUserManager {
   Future<User> signInByWeb(Map cookieMap) async {
     // key value去空格
     cookieMap = cookieMap.map((key, value) {
-      return new MapEntry(key.toString().trim(), value.toString().trim());
+      return MapEntry(key.toString().trim(), value.toString().trim());
     });
 
-    //
     var cookie = {
       "ipb_member_id": cookieMap["ipb_member_id"],
       "ipb_pass_hash": cookieMap["ipb_pass_hash"],
-      "yay": "louder",
     };
 
     var tmpCookie = getCookieStringFromMap(cookie);
-
     Global.logger.v('$cookieMap');
 
-    Map moreCookie = await _getHome(tmpCookie);
+    List<Cookie> cookies = [
+      Cookie('ipb_member_id', cookieMap['ipb_member_id']),
+      Cookie('ipb_pass_hash', cookieMap['ipb_pass_hash']),
+      Cookie('nw', '1'),
+    ];
 
-    moreCookie.forEach((key, value) {
-      cookie.putIfAbsent(key, () => value);
-    });
+    var cookieJar = await Api.cookieJar;
 
-    Map moreCookieEx = await _getExIgneous(tmpCookie);
+    // 设置EH的cookie
+    cookieJar.saveFromResponse(Uri.parse(EHConst.EH_BASE_URL), cookies);
 
-    moreCookieEx.forEach((key, value) {
-      cookie.putIfAbsent(key, () => value);
-    });
+    // 设置EX的cookie
+    cookieJar.saveFromResponse(Uri.parse(EHConst.EX_BASE_URL), cookies);
+    await _getExIgneous();
 
-    Global.logger.v('$cookie');
-
-    var cookieStr = getCookieStringFromMap(cookie);
-    Global.logger.v('$cookieStr');
-
-    var username = await _getUserName(cookie['ipb_member_id'], tmpCookie);
+    var username = await _getUserName(cookie['ipb_member_id']);
 
     var user = User()
-      ..cookie = cookieStr
+//      ..cookie = cookieStr
       ..username = username;
 
     return user;
   }
 
-  Future<String> _getUserName(String id, String tmpCookie) async {
+  Future<String> _getUserName(String id) async {
     HttpManager httpManager =
         HttpManager.getInstance("https://forums.e-hentai.org");
     var url = '/index.php?showuser=$id';
 
-    Options options = Options(headers: {
-      "Cookie": tmpCookie,
-    });
-
-    var response = await httpManager.get(url, options: options);
+    var response = await httpManager.get(url);
 
     // Global.logger.v('$response');
 
@@ -142,42 +138,11 @@ class EhUserManager {
     return username;
   }
 
-  Future<Map> _getHome(String tmpCookie) async {
-    HttpManager httpManager = HttpManager.getInstance("https://e-hentai.org");
-    const url = "/home.php";
-
-    Options options = Options(headers: {
-      "Cookie": tmpCookie,
-    });
-
-    Response rult = await httpManager.getAll(url, options: options);
-
-    var setcookie = rult.headers['set-cookie'];
-
-    var cookieMap = _parseSetCookieString(setcookie);
-
-    Global.logger.v('$setcookie');
-
-    return cookieMap;
-  }
-
-  Future<Map> _getExIgneous(String tmpCookie) async {
+  Future<void> _getExIgneous() async {
     HttpManager httpManager = HttpManager.getInstance(EHConst.EX_BASE_URL);
     const url = "/uconfig.php";
 
-    Options options = Options(headers: {
-      "Cookie": tmpCookie,
-    });
-
-    Response rult = await httpManager.getAll(url, options: options);
-
-    var setcookie = rult.headers['set-cookie'];
-
-    var cookieMap = _parseSetCookieString(setcookie);
-
-    // Global.logger.v('$setcookie');
-
-    return cookieMap;
+    await httpManager.getAll(url);
   }
 
   /// 处理SetCookie 转为map

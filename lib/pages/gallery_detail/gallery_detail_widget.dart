@@ -154,11 +154,15 @@ class PreviewContainer extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+//    var witdh = MediaQuery.of(context).size.width;
+//    Global.logger.v(witdh);
+
     var _httpHeaders = {
       "Cookie": Global.profile?.user?.cookie ?? '',
     };
     var image = galleryPreview.isLarge ?? false
         ? Container(
+            // 缩略大图
             child: CachedNetworkImage(
               httpHeaders: _httpHeaders,
               height: kHeightPreview,
@@ -166,11 +170,20 @@ class PreviewContainer extends StatelessWidget {
             ),
           )
         : Container(
-            child: PreviewImageClipper(
-              imgUrl: galleryPreview.imgUrl,
-              offset: galleryPreview.offSet,
-              height: galleryPreview.height,
-              width: galleryPreview.width,
+            // 缩略小图
+            child: Stack(
+              alignment: AlignmentDirectional.center,
+              children: [
+                Container(
+                  height: kHeightPreview,
+                ),
+                PreviewImageClipper(
+                  imgUrl: galleryPreview.imgUrl,
+                  offset: galleryPreview.offSet,
+                  height: galleryPreview.height,
+                  width: galleryPreview.width,
+                ),
+              ],
             ),
           );
 
@@ -183,20 +196,8 @@ class PreviewContainer extends StatelessWidget {
       },
       child: Column(
         children: [
-          DecoratedBox(
-            decoration: BoxDecoration(
-                //阴影
-//            boxShadow: [
-//              BoxShadow(
-//                color: CupertinoColors.systemGrey,
-//                offset: Offset(0.0, 0.0),
-//                blurRadius: 4.0,
-//              ),
-//            ],
-                ),
-            child: Container(
-              child: image,
-            ),
+          Container(
+            child: image,
           ),
           Container(
             padding: const EdgeInsets.only(top: 4),

@@ -171,6 +171,7 @@ class _LoginPageState extends State<LoginPage> {
       setState(() {
         _isLogin = false;
       });
+      throw e;
     }
 
     if (user != null) {

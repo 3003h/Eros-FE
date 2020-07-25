@@ -2,7 +2,10 @@ import 'dart:async';
 import 'dart:ui' as ui;
 
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:extended_image/extended_image.dart';
 import 'package:flutter/cupertino.dart';
+
+const kScale = 1.0;
 
 class PreviewImageClipper extends StatefulWidget {
   final String imgUrl;
@@ -24,7 +27,6 @@ class PreviewImageClipper extends StatefulWidget {
 
 class _PreviewImageClipperState extends State<PreviewImageClipper> {
   ImageClipper clipper;
-  final double size = 1;
 
   @override
   void initState() {
@@ -37,7 +39,7 @@ class _PreviewImageClipperState extends State<PreviewImageClipper> {
     return Container(
       child: CustomPaint(
         painter: clipper,
-        size: Size(widget.width * size, widget.height * size),
+        size: Size(widget.width * kScale, widget.height * kScale),
       ),
     );
   }
@@ -52,8 +54,13 @@ class _PreviewImageClipperState extends State<PreviewImageClipper> {
 
   /// 监听图片加载
   Future<ui.Image> _loadPreviewImge(String imgUrl) async {
-    ImageStream imageStream =
-        CachedNetworkImageProvider(imgUrl).resolve(ImageConfiguration());
+    ImageStream imageStream = ExtendedNetworkImageProvider(
+      imgUrl,
+      scale: kScale,
+      cache: true,
+    ).resolve(ImageConfiguration());
+//    imageStream =
+//        CachedNetworkImageProvider(imgUrl).resolve(ImageConfiguration());
     Completer<ui.Image> completer = Completer<ui.Image>();
     void imageListener(ImageInfo info, bool synchronousCall) {
       ui.Image image = info.image;

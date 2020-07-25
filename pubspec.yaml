@@ -25,6 +25,12 @@ dependencies:
   # 网络请求
   dio: ^3.0.9
 
+  # cookie
+  cookie_jar: ^1.0.1
+  dio_cookie_manager: ^1.0.0
+  path_provider: ^1.6.11
+
+
   # 路由管理
   fluro: ^1.6.3
 

@@ -39,8 +39,8 @@ class _AllPreviewPageState extends State<AllPreviewPage> {
               gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
                   maxCrossAxisExtent: 135.0,
                   mainAxisSpacing: 0, //主轴方向的间距
-                  crossAxisSpacing: 5, //交叉轴方向子元素的间距
-                  childAspectRatio: 0.6 //显示区域宽高
+                  crossAxisSpacing: 4, //交叉轴方向子元素的间距
+                  childAspectRatio: 0.595 //显示区域宽高
                   ),
               itemCount: widget.galleryPreviewList.length,
               itemBuilder: (context, index) {
