@@ -1,6 +1,6 @@
 import 'dart:convert';
 
-import 'package:FEhViewer/client/tag_database.dart';
+import 'package:FEhViewer/common/tag_database.dart';
 import 'package:FEhViewer/models/index.dart';
 import 'package:FEhViewer/models/profile.dart';
 import 'package:FEhViewer/route/application.dart';

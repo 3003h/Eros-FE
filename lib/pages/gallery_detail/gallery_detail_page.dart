@@ -1,10 +1,10 @@
-import 'package:FEhViewer/client/parser/gallery_detail_parser.dart';
-import 'package:FEhViewer/client/parser/gallery_fav_parser.dart';
 import 'package:FEhViewer/common/global.dart';
+import 'package:FEhViewer/common/parser/gallery_fav_parser.dart';
 import 'package:FEhViewer/generated/l10n.dart';
 import 'package:FEhViewer/models/index.dart';
 import 'package:FEhViewer/pages/gallery_detail/gallery_detail_widget.dart';
 import 'package:FEhViewer/utils/toast.dart';
+import 'package:FEhViewer/utils/utility.dart';
 import 'package:FEhViewer/values/theme_colors.dart';
 import 'package:FEhViewer/widget/rating_bar.dart';
 import 'package:cached_network_image/cached_network_image.dart';
@@ -30,7 +30,7 @@ class GalleryDetailPage extends StatefulWidget {
 }
 
 class _GalleryDetailPageState extends State<GalleryDetailPage> {
-  List<Widget> _lisTagGroupW = [];
+  List<Widget> _listTagGroupW = [];
   GalleryItem _galleryItem;
 
   bool _loading = false;
@@ -45,11 +45,12 @@ class _GalleryDetailPageState extends State<GalleryDetailPage> {
     setState(() {
       _loading = true;
     });
-    _galleryItem =
-        await GalleryDetailParser.getGalleryDetail(widget.galleryItem);
+    _galleryItem = await Api.getGalleryDetail(widget.galleryItem);
+//    _galleryItem.gid = widget.galleryItem.gid;
+//    _galleryItem.token = widget.galleryItem.token;
 
     _galleryItem.tagGroup.forEach((tagGroupData) {
-      _lisTagGroupW.add(TagGroupItem(tagGroupData: tagGroupData));
+      _listTagGroupW.add(TagGroupItem(tagGroupData: tagGroupData));
     });
     setState(() {
       _loading = false;
@@ -139,7 +140,9 @@ class _GalleryDetailPageState extends State<GalleryDetailPage> {
                       ),
                     )
                   : GalleryDetailContex(
-                      lisTagGroupW: _lisTagGroupW, galleryItem: _galleryItem),
+                      listTagGroupW: _listTagGroupW,
+                      galleryItem: _galleryItem,
+                    ),
             ],
           ),
         ),

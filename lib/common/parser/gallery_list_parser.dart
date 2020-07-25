@@ -1,13 +1,11 @@
 import 'dart:convert';
-import 'dart:io';
 
-import 'package:FEhViewer/client/tag_database.dart';
+import 'package:FEhViewer/common/tag_database.dart';
 import 'package:FEhViewer/common/global.dart';
 import 'package:FEhViewer/models/index.dart';
 import 'package:FEhViewer/utils/dio_util.dart';
 import 'package:FEhViewer/utils/utility.dart';
 import 'package:FEhViewer/values/const.dart';
-import 'package:dio/dio.dart';
 import 'package:html/dom.dart' as dom;
 import 'package:html/parser.dart' show parse;
 import 'package:html_unescape/html_unescape.dart';
@@ -15,78 +13,6 @@ import 'package:intl/intl.dart';
 import 'package:tuple/tuple.dart';
 
 class GalleryListParser {
-  /// 获取热门画廊列表
-  static Future<Tuple2<List<GalleryItem>, int>> getPopular() async {
-//    Global.logger.v("获取热门");
-
-    HttpManager httpManager = HttpManager.getInstance(
-        EHConst.getBaseSite(Global.profile.ehConfig.siteEx ?? false));
-    const url = "/popular";
-
-    var response = await httpManager.get(url);
-
-    var cookieJar = await Api.cookieJar;
-    List<Cookie> cookiesE =
-        cookieJar.loadForRequest(Uri.parse(EHConst.EH_BASE_URL));
-    List<Cookie> cookiesEX =
-        cookieJar.loadForRequest(Uri.parse(EHConst.EX_BASE_URL));
-
-    Global.logger.v('$cookiesE\n$cookiesEX');
-
-    var tuple = await parseGalleryList(response);
-
-    return tuple;
-  }
-
-  /// 获取默认画廊列表
-  static Future<Tuple2<List<GalleryItem>, int>> getGallery(
-      {int page, String fromGid}) async {
-    HttpManager httpManager = HttpManager.getInstance(
-        EHConst.getBaseSite(Global.profile.ehConfig.siteEx ?? false));
-
-    var url = "";
-    if (page != null && fromGid != null) {
-      url = "/?page=$page&from=$fromGid";
-    } else if (page != null) {
-      url = "/?page=$page";
-    }
-
-    Options options = Options(headers: {
-      "Referer": "https://e-hentai.org",
-    });
-
-    var response = await httpManager.get(url, options: options);
-
-    return await parseGalleryList(response);
-  }
-
-  /// 获取收藏
-  static Future<Tuple2<List<GalleryItem>, int>> getFavorite(
-      {String favcat, int page}) async {
-    HttpManager httpManager = HttpManager.getInstance(
-        EHConst.getBaseSite(Global.profile.ehConfig.siteEx ?? false));
-
-    //收藏时间排序
-    var _order = Global?.profile?.ehConfig?.favoritesOrder;
-
-    var url = "/favorites.php";
-    if (favcat != null && favcat != "a" && favcat.isNotEmpty) {
-      url = "$url?favcat=$favcat";
-    }
-
-    if (page != null) {
-      url = "$url?page=$page";
-    }
-
-    if (_order != null) {
-      url = "$url?inline_set=$_order";
-    }
-
-    var response = await httpManager.get(url);
-
-    return await parseGalleryList(response, isFavorite: true);
-  }
-
   /// 获取api
   static Future getGalleryApi(String req) async {
     HttpManager httpManager = HttpManager.getInstance(EHConst.EH_BASE_URL);
