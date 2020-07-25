@@ -1,11 +1,12 @@
-import 'package:FEhViewer/client/parser/gallery_list_parser.dart';
 import 'package:FEhViewer/common/global.dart';
+import 'package:FEhViewer/common/parser/gallery_list_parser.dart';
 import 'package:FEhViewer/generated/l10n.dart';
 import 'package:FEhViewer/models/entity/favorite.dart';
 import 'package:FEhViewer/models/index.dart';
 import 'package:FEhViewer/models/states/user_model.dart';
 import 'package:FEhViewer/route/navigator_util.dart';
 import 'package:FEhViewer/route/routes.dart';
+import 'package:FEhViewer/utils/utility.dart';
 import 'package:FEhViewer/widget/eh_widget.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -49,7 +50,7 @@ class _FavoriteTabState extends State<FavoriteTab> {
     setState(() {
       _loading = true;
     });
-    var tuple = await GalleryListParser.getFavorite(favcat: _curFavcat);
+    var tuple = await Api.getFavorite(favcat: _curFavcat);
     var gallerItemBeans = tuple.item1;
 
     setState(() {
@@ -60,7 +61,7 @@ class _FavoriteTabState extends State<FavoriteTab> {
   }
 
   _reloadData() async {
-    var tuple = await GalleryListParser.getFavorite(favcat: _curFavcat);
+    var tuple = await Api.getFavorite(favcat: _curFavcat);
     var gallerItemBeans = tuple.item1;
     setState(() {
       _gallerItemBeans.clear();
@@ -71,8 +72,7 @@ class _FavoriteTabState extends State<FavoriteTab> {
   _loadDataMore() async {
     _isLoadMore = true;
     _curPage += 1;
-    var tuple =
-        await GalleryListParser.getFavorite(favcat: _curFavcat, page: _curPage);
+    var tuple = await Api.getFavorite(favcat: _curFavcat, page: _curPage);
     var gallerItemBeans = tuple.item1;
 
     _isLoadMore = false;

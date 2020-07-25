@@ -1,6 +1,7 @@
-import 'package:FEhViewer/client/parser/gallery_list_parser.dart';
+import 'package:FEhViewer/common/parser/gallery_list_parser.dart';
 import 'package:FEhViewer/generated/l10n.dart';
 import 'package:FEhViewer/models/index.dart';
+import 'package:FEhViewer/utils/utility.dart';
 import 'package:FEhViewer/widget/eh_widget.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -30,7 +31,7 @@ class _PopularListTabState extends State<PopularListTab> {
       _gallerItemBeans.clear();
       _firstLoading = true;
     });
-    var tuple = await GalleryListParser.getPopular();
+    var tuple = await Api.getPopular();
     var gallerItemBeans = tuple.item1;
     _gallerItemBeans.addAll(gallerItemBeans);
     setState(() {
@@ -42,7 +43,7 @@ class _PopularListTabState extends State<PopularListTab> {
     setState(() {
       _firstLoading = false;
     });
-    var tuple = await GalleryListParser.getPopular();
+    var tuple = await Api.getPopular();
     var gallerItemBeans = tuple.item1;
     setState(() {
       _gallerItemBeans.clear();

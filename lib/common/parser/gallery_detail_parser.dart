@@ -1,71 +1,23 @@
-import 'dart:io';
-
-import 'package:FEhViewer/client/tag_database.dart';
-import 'package:FEhViewer/common/global.dart';
+import 'package:FEhViewer/common/tag_database.dart';
 import 'package:FEhViewer/models/index.dart';
-import 'package:FEhViewer/utils/dio_util.dart';
-import 'package:FEhViewer/utils/toast.dart';
 import 'package:FEhViewer/utils/utility.dart';
-import 'package:html/dom.dart' as dom;
+import 'package:html/dom.dart';
 import 'package:html/parser.dart' show parse;
 import 'package:intl/intl.dart';
 
-import 'gallery_view_parser.dart';
-
 class GalleryDetailParser {
-  /// 获取画廊详细信息
-  ///
-  static Future<GalleryItem> getGalleryDetail(GalleryItem inGalleryItem) async {
-    //?inline_set=ts_m 小图,40一页
-    //?inline_set=ts_l 大图,20一页
-    //hc=1#comments 显示全部评论
-    //nw=always 不显示警告
-
-    HttpManager httpManager = HttpManager.getInstance();
-    var url = inGalleryItem.url + '?hc=1&inline_set=ts_l&nw=always';
-//    var url = inGalleryItem.url + '?hc=1&nw=always';
-
-    // 不显示警告的处理 cookie加上 nw=1
-    // 在 url使用 nw=always 未解决 自动写入cookie 暂时搞不懂 先手动设置下
-    // todo 待优化
-    var cookieJar = await Api.cookieJar;
-    List<Cookie> cookies =
-    cookieJar.loadForRequest(Uri.parse(inGalleryItem.url));
-    cookies.add(Cookie('nw', '1'));
-    cookieJar.saveFromResponse(Uri.parse(url), cookies);
-
-
-
-    Global.logger.i("获取画廊 $url");
-    var response = await httpManager.get(url);
-
-    // TODO 画廊警告问题 使用 nw=always 未解决 待处理 怀疑和Session有关
-    if ('$response'.contains(r'<strong>Offensive For Everyone</strong>')) {
-      Global.logger.v('Offensive For Everyone');
-      showToast('Offensive For Everyone');
-    }
-
-    GalleryItem galleryItem = await parseGalleryDetail(response);
-
-    galleryItem.gid = inGalleryItem.gid;
-    galleryItem.token = inGalleryItem.token;
-
-
-    return galleryItem;
-  }
 
   /// 解析响应数据
-  static Future<GalleryItem> parseGalleryDetail(String response) async {
+  static Future<GalleryItem> parseGalleryDetail(String response, {GalleryItem inGalleryItem}) async {
     // 解析响应信息dom
     var document = parse(response);
 
-    GalleryItem galleryItem = GalleryItem();
+    GalleryItem galleryItem = inGalleryItem ?? GalleryItem();
 
     /// taglist
     galleryItem.tagGroup = [];
     const tagGroupSelect = '#taglist > table > tbody > tr';
-    List<dom.Element> tagGroups = document.querySelectorAll(tagGroupSelect);
-//    assert(tagGroups.length != 0);
+    List<Element> tagGroups = document.querySelectorAll(tagGroupSelect);
     for (var tagGroup in tagGroups) {
       var type = tagGroup
           .querySelector('td.tc')
@@ -73,7 +25,7 @@ class GalleryDetailParser {
           .trim();
       type = RegExp(r"(\w+):?$").firstMatch(type).group(1);
 
-      List<dom.Element> tags = tagGroup.querySelectorAll('td > div > a');
+      List<Element> tags = tagGroup.querySelectorAll('td > div > a');
       List<GalleryTag> galleryTags = [];
       for (var tagElm in tags) {
         var title = tagElm.text.trim() ?? '';
@@ -98,7 +50,7 @@ class GalleryDetailParser {
     // 解析评论区数据
     galleryItem.galleryComment = [];
     const commentSelect = '#cdiv > div.c1';
-    List<dom.Element> commentList = document.querySelectorAll(commentSelect);
+    List<Element> commentList = document.querySelectorAll(commentSelect);
 //    Global.logger.v('${commentList.length}');
     for (var comment in commentList) {
       // 评论人
@@ -127,12 +79,12 @@ class GalleryDetailParser {
       // br回车以及引号的处理
       var context = contextElem.nodes
           .map((node) {
-        if (node.nodeType == dom.Node.TEXT_NODE) {
+        if (node.nodeType == Node.TEXT_NODE) {
           return RegExp(r'^"?(.+)"?$')
               .firstMatch(node.text.trim())
               ?.group(1) ?? node.text;
-        } else if (node.nodeType == dom.Node.ELEMENT_NODE &&
-            (node as dom.Element).localName == 'br') {
+        } else if (node.nodeType == Node.ELEMENT_NODE &&
+            (node as Element).localName == 'br') {
           return '\n';
         }
       })
@@ -145,14 +97,39 @@ class GalleryDetailParser {
         ..score = score);
     }
 
-    var showKey = '';
 
     // 解析画廊缩略图
-    // 大图 #gdt > div.gdtl  小图 #gdt > div.gdtm
-    List<dom.Element> picLsit = document.querySelectorAll('#gdt > div.gdtm');
-//    Global.logger.v('${picLsit.length}');
+    List<GalleryPreview> previewList = parseGalleryPreview(document);
+    galleryItem.galleryPreview = previewList;
 
-    galleryItem.galleryPreview = [];
+
+    // 获取画廊 showKey
+    final showKey = await Api.getShowkey(previewList[0].href);
+    galleryItem.showKey = showKey;
+
+    // 解析收藏标志
+    var favTitle = '';
+    Element fav = document.querySelector("#favoritelink");
+    if (fav?.nodes?.length == 1) {
+      favTitle = fav.text.trim();
+    }
+
+    galleryItem.favTitle = favTitle;
+
+    return galleryItem;
+  }
+
+  static List<GalleryPreview> parseGalleryPreviewFromHtml(String response) {
+    // 解析响应信息dom
+    var document = parse(response);
+    return parseGalleryPreview(document);
+  }
+
+  static List<GalleryPreview> parseGalleryPreview(Document document) {
+    // 大图 #gdt > div.gdtl  小图 #gdt > div.gdtm
+    List<Element> picLsit = document.querySelectorAll('#gdt > div.gdtm');
+
+    List<GalleryPreview> galleryPreview = [];
 
     if (picLsit.length > 0) {
       // 小图的处理
@@ -168,18 +145,10 @@ class GalleryDetailParser {
         var width = RegExp(r"width:(\d+)?px").firstMatch(style).group(1);
         var offSet = RegExp(r"\) -(\d+)?px ").firstMatch(style).group(1);
 
-//        Global.logger.v('$picHref $picSrcUrl $height $width $offSet');
-
-        dom.Element imgElem = pic.querySelector('img');
+        Element imgElem = pic.querySelector('img');
         var picSer = imgElem.attributes['alt'].trim();
 
-        if (showKey.isEmpty) {
-          showKey = await GalleryViewParser.getShowkey(picHref);
-        }
-
-        galleryItem.showKey = showKey;
-
-        galleryItem.galleryPreview.add(GalleryPreview()
+        galleryPreview.add(GalleryPreview()
           ..ser = int.parse(picSer)
           ..isLarge = false
           ..href = picHref
@@ -190,23 +159,17 @@ class GalleryDetailParser {
         );
       }
     } else {
-      List<dom.Element> picLsit = document.querySelectorAll('#gdt > div.gdtl');
+      List<Element> picLsit = document.querySelectorAll('#gdt > div.gdtl');
       // 大图的处理
       for (var pic in picLsit) {
         var picHref = pic
             .querySelector('a')
             .attributes['href'];
-        dom.Element imgElem = pic.querySelector('img');
+        Element imgElem = pic.querySelector('img');
         var picSer = imgElem.attributes['alt'].trim();
         var picSrcUrl = imgElem.attributes['src'].trim();
 
-        if (showKey.isEmpty) {
-          showKey = await GalleryViewParser.getShowkey(picHref);
-        }
-
-        galleryItem.showKey = showKey;
-
-        galleryItem.galleryPreview.add(GalleryPreview()
+        galleryPreview.add(GalleryPreview()
           ..ser = int.parse(picSer)
           ..isLarge = true
           ..href = picHref
@@ -215,17 +178,7 @@ class GalleryDetailParser {
       }
     }
 
-    // 解析收藏标志
-    var favTitle = '';
-    dom.Element fav = document.querySelector("#favoritelink");
-//    favTitle = fav.text.trim();
-    if (fav?.nodes?.length == 1) {
-      favTitle = fav.text.trim();
-    }
-//    Global.logger.v('$favTitle  ${fav.nodes}');
-    galleryItem.favTitle = favTitle;
-
-    return galleryItem;
+    return galleryPreview;
   }
 
 

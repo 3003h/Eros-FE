@@ -1,8 +1,9 @@
-import 'package:FEhViewer/client/parser/gallery_view_parser.dart';
 import 'package:FEhViewer/common/global.dart';
+import 'package:FEhViewer/common/parser/gallery_view_parser.dart';
 import 'package:FEhViewer/generated/l10n.dart';
 import 'package:FEhViewer/models/index.dart';
 import 'package:FEhViewer/route/navigator_util.dart';
+import 'package:FEhViewer/utils/utility.dart';
 import 'package:FEhViewer/values/const.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
@@ -18,14 +19,12 @@ const kHeightPreview = 180.0;
 class GalleryDetailContex extends StatelessWidget {
   const GalleryDetailContex({
     Key key,
-    @required List<Widget> lisTagGroupW,
-    @required GalleryItem galleryItem,
-  })  : _lisTagGroupW = lisTagGroupW,
-        _galleryItem = galleryItem,
-        super(key: key);
+    @required this.listTagGroupW,
+    @required this.galleryItem,
+  }) : super(key: key);
 
-  final List<Widget> _lisTagGroupW;
-  final GalleryItem _galleryItem;
+  final List<Widget> listTagGroupW;
+  final GalleryItem galleryItem;
 
   List<Widget> _topComment(List<GalleryComment> comments, {int max = 2}) {
     var _comments = comments.take(max);
@@ -45,9 +44,9 @@ class GalleryDetailContex extends StatelessWidget {
         children: <Widget>[
           // 标签
           TagBox(
-            lisTagGroup: _lisTagGroupW,
+            lisTagGroup: listTagGroupW,
           ),
-          ..._topComment(_galleryItem.galleryComment, max: 2),
+          ..._topComment(galleryItem.galleryComment, max: 2),
           // 评论按钮
           CupertinoButton(
             minSize: 0,
@@ -58,7 +57,7 @@ class GalleryDetailContex extends StatelessWidget {
             ),
             onPressed: () {
               NavigatorUtil.goGalleryDetailComment(
-                  context, _galleryItem.galleryComment);
+                  context, galleryItem.galleryComment);
             },
           ),
           Container(
@@ -67,8 +66,8 @@ class GalleryDetailContex extends StatelessWidget {
             color: CupertinoColors.systemGrey4,
           ),
           PreviewBoxGrid(
-            galleryPreviewList: _galleryItem.galleryPreview,
-            showKey: _galleryItem.showKey,
+            galleryPreviewList: galleryItem.galleryPreview,
+            showKey: galleryItem.showKey,
           ),
           CupertinoButton(
             minSize: 0,
@@ -80,8 +79,10 @@ class GalleryDetailContex extends StatelessWidget {
             onPressed: () {
               Navigator.push(context, CupertinoPageRoute(builder: (context) {
                 return AllPreviewPage(
-                  galleryPreviewList: _galleryItem.galleryPreview,
-                  showKey: _galleryItem.showKey,
+                  galleryPreviewList: galleryItem.galleryPreview,
+                  showKey: galleryItem.showKey,
+                  filecount: galleryItem.filecount,
+                  galleryUrl: galleryItem.url,
                 );
               }));
             },
@@ -190,8 +191,7 @@ class PreviewContainer extends StatelessWidget {
     return GestureDetector(
       behavior: HitTestBehavior.opaque,
       onTap: () async {
-        hrefs[index] =
-            await GalleryViewParser.getShowInfo(hrefs[index], showKey);
+        hrefs[index] = await Api.getShowInfo(hrefs[index], showKey);
         NavigatorUtil.goGalleryViewPage(context, hrefs, index);
       },
       child: Column(

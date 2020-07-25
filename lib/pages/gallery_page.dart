@@ -1,7 +1,8 @@
-import 'package:FEhViewer/client/parser/gallery_list_parser.dart';
 import 'package:FEhViewer/common/global.dart';
+import 'package:FEhViewer/common/parser/gallery_list_parser.dart';
 import 'package:FEhViewer/generated/l10n.dart';
 import 'package:FEhViewer/models/index.dart';
+import 'package:FEhViewer/utils/utility.dart';
 import 'package:FEhViewer/widget/eh_widget.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -39,7 +40,7 @@ class _GalleryListTabState extends State<GalleryListTab> {
       _gallerItemBeans.clear();
       _firstLoading = true;
     });
-    var tuple = await GalleryListParser.getGallery();
+    var tuple = await Api.getGallery();
     var gallerItemBeans = tuple.item1;
     _gallerItemBeans.addAll(gallerItemBeans);
     _maxPage = tuple.item2;
@@ -52,7 +53,7 @@ class _GalleryListTabState extends State<GalleryListTab> {
     setState(() {
       _firstLoading = false;
     });
-    var tuple = await GalleryListParser.getGallery();
+    var tuple = await Api.getGallery();
     var gallerItemBeans = tuple.item1;
     setState(() {
       _curPage = 0;
@@ -67,8 +68,7 @@ class _GalleryListTabState extends State<GalleryListTab> {
     Global.logger.v('last gid   ===>  ${_gallerItemBeans.last.gid}');
     _curPage += 1;
     var fromGid = _gallerItemBeans.last.gid;
-    var tuple =
-        await GalleryListParser.getGallery(page: _curPage, fromGid: fromGid);
+    var tuple = await Api.getGallery(page: _curPage, fromGid: fromGid);
     var gallerItemBeans = tuple.item1;
 
     _isLoadMore = false;
@@ -84,7 +84,7 @@ class _GalleryListTabState extends State<GalleryListTab> {
       _firstLoading = true;
     });
     _curPage = page;
-    var tuple = await GalleryListParser.getGallery(page: _curPage);
+    var tuple = await Api.getGallery(page: _curPage);
     var gallerItemBeans = tuple.item1;
     setState(() {
       _gallerItemBeans.clear();
