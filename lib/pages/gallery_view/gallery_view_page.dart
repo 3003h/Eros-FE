@@ -34,41 +34,51 @@ class _GalleryViewPageState extends State<GalleryViewPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: Container(
-        color: CupertinoColors.black,
+//        color: CupertinoColors.black,
         child: PhotoViewGallery.builder(
           scrollPhysics: const BouncingScrollPhysics(),
           itemCount: widget.images.length,
           builder: (BuildContext context, int index) {
-            return PhotoViewGalleryPageOptions(
-              imageProvider: CachedNetworkImageProvider(widget.images[index]),
+//            return PhotoViewGalleryPageOptions(
+//              imageProvider: CachedNetworkImageProvider(widget.images[index]),
+//              initialScale: PhotoViewComputedScale.contained,
+//              minScale: PhotoViewComputedScale.contained * 0.5,
+//              maxScale: PhotoViewComputedScale.covered * 1.1,
+//              heroAttributes:
+//                  PhotoViewHeroAttributes(tag: widget.images[index]),
+//            );
+            return PhotoViewGalleryPageOptions.customChild(
+              child: Container(
+                child: CachedNetworkImage(imageUrl: widget.images[index]),
+              ),
               initialScale: PhotoViewComputedScale.contained,
               minScale: PhotoViewComputedScale.contained * 0.5,
               maxScale: PhotoViewComputedScale.covered * 1.1,
-              heroAttributes:
-                  PhotoViewHeroAttributes(tag: widget.images[index]),
             );
           },
-          loadingBuilder: (BuildContext context, progress) {
-            return progress != null
-                ? Container(
-                    child: Center(
-                      child: Text(
-                        '${progress.cumulativeBytesLoaded * 100 ~/ progress.expectedTotalBytes} %',
-                        style: TextStyle(
-                          color: Colors.white,
-                        ),
-                      ),
-                    ),
-                  )
-                : Container(
-                    child: Center(
-                      child: Text(
-                        '获取中',
-                        style: TextStyle(color: Colors.white),
-                      ),
-                    ),
-                  );
-          },
+//          loadingBuilder: (BuildContext context, progress) {
+//            return progress != null
+//                ? Container(
+//                    child: Center(
+//                      child: Text(
+//                        '${progress.cumulativeBytesLoaded * 100 ~/ progress.expectedTotalBytes} %',
+//                        style: TextStyle(
+////                          color: Colors.white,
+//                            ),
+//                      ),
+//                    ),
+//                  )
+//                : Container(
+//                    child: Center(
+//                      child: Text(
+//                        '获取中',
+//                        style: TextStyle(
+////                          color: Colors.white,
+//                            ),
+//                      ),
+//                    ),
+//                  );
+//          },
           backgroundDecoration: null,
           pageController: widget.controller,
           enableRotation: false, // 旋转
