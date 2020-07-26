@@ -65,15 +65,23 @@ class EhUserManager {
 
     Global.logger.v('$cookiesEx');
 
-    // h
+    // 处理cookie 存入sp 方便里站图片请求时构建头 否则会403
+    Map cookieMapEx = {};
+    cookiesEx.forEach((cookie) {
+      cookieMapEx.putIfAbsent(cookie.name, () => cookie.value);
+    });
 
     var cookie = {
-      "ipb_member_id": cookieMap["ipb_member_id"],
-      "ipb_pass_hash": cookieMap["ipb_pass_hash"],
+      "ipb_member_id": cookieMapEx["ipb_member_id"],
+      "ipb_pass_hash": cookieMapEx["ipb_pass_hash"],
+      "igneous": cookieMapEx["igneous"],
     };
 
+    var cookieStr = getCookieStringFromMap(cookie);
+    Global.logger.v(cookieStr);
+
     var user = User()
-//      ..cookie = cookieStr
+      ..cookie = cookieStr
       ..username = username.replaceFirstMapped(
           RegExp('(^.)'), (match) => match[1].toUpperCase());
 
@@ -88,14 +96,6 @@ class EhUserManager {
     cookieMap = cookieMap.map((key, value) {
       return MapEntry(key.toString().trim(), value.toString().trim());
     });
-
-    var cookie = {
-      "ipb_member_id": cookieMap["ipb_member_id"],
-      "ipb_pass_hash": cookieMap["ipb_pass_hash"],
-    };
-
-    var tmpCookie = getCookieStringFromMap(cookie);
-    Global.logger.v('$cookieMap');
 
     List<Cookie> cookies = [
       Cookie('ipb_member_id', cookieMap['ipb_member_id']),
@@ -112,10 +112,73 @@ class EhUserManager {
     cookieJar.saveFromResponse(Uri.parse(EHConst.EX_BASE_URL), cookies);
     await _getExIgneous();
 
-    var username = await _getUserName(cookie['ipb_member_id']);
+    var username = await _getUserName(cookieMap['ipb_member_id']);
+
+    //获取Ex cookies
+    List<Cookie> cookiesEx =
+        cookieJar.loadForRequest(Uri.parse(EHConst.EX_BASE_URL));
+    // 处理cookie 存入sp 方便里站图片请求时构建头 否则会403
+    Map cookieMapEx = {};
+    cookiesEx.forEach((cookie) {
+      cookieMapEx.putIfAbsent(cookie.name, () => cookie.value);
+    });
+
+    var cookie = {
+      "ipb_member_id": cookieMapEx["ipb_member_id"],
+      "ipb_pass_hash": cookieMapEx["ipb_pass_hash"],
+      "igneous": cookieMapEx["igneous"],
+    };
+
+    var cookieStr = getCookieStringFromMap(cookie);
+    Global.logger.v(cookieStr);
 
     var user = User()
-//      ..cookie = cookieStr
+      ..cookie = cookieStr
+      ..username = username;
+
+    return user;
+  }
+
+  /// 通过Cookie登录
+  /// 以及获取用户名
+  Future<User> signInByCookie(String id, String hash) async {
+    List<Cookie> cookies = [
+      Cookie('ipb_member_id', id),
+      Cookie('ipb_pass_hash', hash),
+      Cookie('nw', '1'),
+    ];
+
+    var cookieJar = await Api.cookieJar;
+
+    // 设置EH的cookie
+    cookieJar.saveFromResponse(Uri.parse(EHConst.EH_BASE_URL), cookies);
+
+    // 设置EX的cookie
+    cookieJar.saveFromResponse(Uri.parse(EHConst.EX_BASE_URL), cookies);
+    await _getExIgneous();
+
+    var username = await _getUserName(id);
+
+    //获取Ex cookies
+    List<Cookie> cookiesEx =
+        cookieJar.loadForRequest(Uri.parse(EHConst.EX_BASE_URL));
+    // 处理cookie 存入sp 方便里站图片请求时构建头 否则会403
+    Map cookieMapEx = {};
+    cookiesEx.forEach((cookie) {
+      cookieMapEx.putIfAbsent(cookie.name, () => cookie.value);
+    });
+
+    var cookie = {
+      "ipb_member_id": cookieMapEx["ipb_member_id"],
+      "ipb_pass_hash": cookieMapEx["ipb_pass_hash"],
+      "igneous": cookieMapEx["igneous"],
+    };
+
+    var cookieStr = getCookieStringFromMap(cookie);
+    Global.logger.v(cookieStr);
+
+    var user = User()
+      ..cookie = cookieStr
       ..username = username;
 
     return user;

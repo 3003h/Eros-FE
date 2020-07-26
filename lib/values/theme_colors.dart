@@ -64,7 +64,7 @@ class ThemeColors {
     "7": Color(0xff1661AB),
     "8": Color(0xff9F3EF9),
     "9": Color(0xffEC2D7A),
-    "a": Color(0xff715C1F),
+    "a": Color(0xffB5A4A4),
   };
 
   static const Map themeColor = {
