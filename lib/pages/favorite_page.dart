@@ -1,5 +1,4 @@
 import 'package:FEhViewer/common/global.dart';
-import 'package:FEhViewer/common/parser/gallery_list_parser.dart';
 import 'package:FEhViewer/generated/l10n.dart';
 import 'package:FEhViewer/models/entity/favorite.dart';
 import 'package:FEhViewer/models/index.dart';
@@ -10,7 +9,6 @@ import 'package:FEhViewer/utils/utility.dart';
 import 'package:FEhViewer/widget/eh_widget.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_easyrefresh/easy_refresh.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:provider/provider.dart';
 
@@ -43,12 +41,14 @@ class _FavoriteTabState extends State<FavoriteTab> {
   @override
   void initState() {
     super.initState();
-    _loadData();
+    _curFavcat = 'a';
+    _loadDataFirst();
   }
 
-  _loadData() async {
+  _loadDataFirst() async {
     setState(() {
       _loading = true;
+      _curPage = 0;
     });
     var tuple = await Api.getFavorite(favcat: _curFavcat);
     var gallerItemBeans = tuple.item1;
@@ -70,14 +70,23 @@ class _FavoriteTabState extends State<FavoriteTab> {
   }
 
   _loadDataMore() async {
-    _isLoadMore = true;
+    if (_isLoadMore) {
+      return;
+    }
+
+    // 增加延时 避免build期间进行 setState
+    await Future.delayed(Duration(milliseconds: 100));
+    setState(() {
+      _isLoadMore = true;
+    });
+
     _curPage += 1;
     var tuple = await Api.getFavorite(favcat: _curFavcat, page: _curPage);
     var gallerItemBeans = tuple.item1;
 
-    _isLoadMore = false;
     setState(() {
       _gallerItemBeans.addAll(gallerItemBeans);
+      _isLoadMore = false;
     });
   }
 
@@ -86,6 +95,11 @@ class _FavoriteTabState extends State<FavoriteTab> {
       delegate: SliverChildBuilderDelegate(
         (context, index) {
           if (index < gallerItemBeans.length) {
+            if (index == gallerItemBeans.length - 1) {
+              Global.logger.v('load more');
+              _loadDataMore();
+            }
+
             return GalleryItemWidget(
               galleryItem: gallerItemBeans[index],
               tabIndex: widget.tabIndex,
@@ -113,71 +127,79 @@ class _FavoriteTabState extends State<FavoriteTab> {
         selector: (context, provider) => provider.isLogin,
         builder: (context, isLogin, child) {
           return isLogin
-              ? EasyRefresh(
-                  onLoad: () async {
-                    // 上拉加载更多
-                    await _loadDataMore();
-                  },
-                  child: CustomScrollView(
-                    slivers: <Widget>[
-                      CupertinoSliverNavigationBar(
-                        largeTitle: TabPageTitle(
-                          title: _title,
-                        ),
-                        transitionBetweenRoutes: false,
-                        trailing: CupertinoButton(
-                          padding: const EdgeInsets.all(0),
-                          onPressed: () {
-                            debugPrint('sel icon tapped');
-                            // 跳转收藏夹选择页
-                            NavigatorUtil.jump(context, EHRoutes.selFavorie)
-                                .then((result) async {
-                              if (result.runtimeType == FavcatItemBean) {
-                                FavcatItemBean fav = result;
-                                Global.loggerNoStack.i('${fav.title}');
-                                if (_curFavcat != fav.key) {
-                                  Global.loggerNoStack
-                                      .v('修改favcat to ${fav.title}');
-                                  _setTitle(fav.title);
-                                  _curFavcat = fav.key;
-                                  setState(() {
-                                    _loading = true;
-                                    _gallerItemBeans.clear();
-                                  });
-                                  await _loadData();
-                                } else {
-                                  Global.loggerNoStack.v('未修改favcat');
-                                }
+              ? CustomScrollView(
+                  slivers: <Widget>[
+                    CupertinoSliverNavigationBar(
+                      largeTitle: TabPageTitle(
+                        title: _title,
+                      ),
+                      transitionBetweenRoutes: false,
+                      trailing: CupertinoButton(
+                        padding: const EdgeInsets.all(0),
+                        onPressed: () {
+                          debugPrint('sel icon tapped');
+                          // 跳转收藏夹选择页
+                          NavigatorUtil.jump(context, EHRoutes.selFavorie)
+                              .then((result) async {
+                            if (result.runtimeType == FavcatItemBean) {
+                              FavcatItemBean fav = result;
+                              Global.loggerNoStack.i('${fav.title}');
+                              if (_curFavcat != fav.key) {
+                                Global.loggerNoStack
+                                    .v('修改favcat to ${fav.title}');
+                                _setTitle(fav.title);
+                                _curFavcat = fav.key;
+                                setState(() {
+                                  _loading = true;
+                                  _gallerItemBeans.clear();
+                                });
+                                await _loadDataFirst();
                               } else {
-                                Global.loggerNoStack.i('$result');
+                                Global.loggerNoStack.v('未修改favcat');
                               }
-                            });
-                          },
-                          child: Icon(
-                            FontAwesomeIcons.star,
-                          ),
+                            } else {
+                              Global.loggerNoStack.i('$result');
+                            }
+                          });
+                        },
+                        child: Icon(
+                          FontAwesomeIcons.star,
                         ),
                       ),
-                      CupertinoSliverRefreshControl(
-                        onRefresh: () async {
-                          await _reloadData();
-                        },
-                      ),
-                      SliverSafeArea(
-                        top: false,
-                        sliver: _loading
-                            ? SliverToBoxAdapter(
-                                child: Container(
-                                  padding: EdgeInsets.only(top: _topPad),
-                                  child: CupertinoActivityIndicator(
-                                    radius: 14.0,
-                                  ),
+                    ),
+                    CupertinoSliverRefreshControl(
+                      onRefresh: () async {
+                        await _reloadData();
+                      },
+                    ),
+                    SliverSafeArea(
+                      top: false,
+                      sliver: _loading
+                          ? SliverToBoxAdapter(
+                              child: Container(
+                                padding: EdgeInsets.only(top: _topPad),
+                                child: CupertinoActivityIndicator(
+                                  radius: 14.0,
                                 ),
+                              ),
+                            )
+                          : gallerySliverListView(_gallerItemBeans),
+                    ),
+                    SliverToBoxAdapter(
+                      child: Container(
+                        padding: const EdgeInsets.only(bottom: 150),
+                        child: _isLoadMore
+                            ? CupertinoActivityIndicator(
+                                radius: 14,
+                                iOSVersionStyle:
+                                    CupertinoActivityIndicatorIOSVersionStyle
+                                        .iOS14,
                               )
-                            : gallerySliverListView(_gallerItemBeans),
+                            : Container(),
                       ),
-                    ],
-                  ))
+                    ),
+                  ],
+                )
               : CustomScrollView(slivers: <Widget>[
                   CupertinoSliverNavigationBar(
                     largeTitle: TabPageTitle(

@@ -1,12 +1,10 @@
 import 'package:FEhViewer/common/global.dart';
-import 'package:FEhViewer/common/parser/gallery_list_parser.dart';
 import 'package:FEhViewer/generated/l10n.dart';
 import 'package:FEhViewer/models/index.dart';
 import 'package:FEhViewer/utils/utility.dart';
 import 'package:FEhViewer/widget/eh_widget.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_easyrefresh/easy_refresh.dart';
 
 import 'item/gallery_item.dart';
 
@@ -14,6 +12,7 @@ class GalleryListTab extends StatefulWidget {
   final tabIndex;
 
   const GalleryListTab({Key key, this.tabIndex}) : super(key: key);
+
   @override
   State<StatefulWidget> createState() => _GalleryListTabState();
 }
@@ -32,10 +31,10 @@ class _GalleryListTabState extends State<GalleryListTab> {
   @override
   void initState() {
     super.initState();
-    _loadData();
+    _loadDataFirst();
   }
 
-  _loadData() async {
+  _loadDataFirst() async {
     setState(() {
       _gallerItemBeans.clear();
       _firstLoading = true;
@@ -64,17 +63,26 @@ class _GalleryListTabState extends State<GalleryListTab> {
   }
 
   _loadDataMore() async {
-    _isLoadMore = true;
-    Global.logger.v('last gid   ===>  ${_gallerItemBeans.last.gid}');
+    if (_isLoadMore) {
+      return;
+    }
+
+    // 增加延时 避免build期间进行 setState
+    await Future.delayed(Duration(milliseconds: 100));
+    setState(() {
+      _isLoadMore = true;
+    });
+
+    Global.logger.v('last gid   =>  ${_gallerItemBeans.last.gid}');
     _curPage += 1;
     var fromGid = _gallerItemBeans.last.gid;
     var tuple = await Api.getGallery(page: _curPage, fromGid: fromGid);
     var gallerItemBeans = tuple.item1;
 
-    _isLoadMore = false;
     setState(() {
       _gallerItemBeans.addAll(gallerItemBeans);
       _maxPage = tuple.item2;
+      _isLoadMore = false;
     });
   }
 
@@ -98,14 +106,17 @@ class _GalleryListTabState extends State<GalleryListTab> {
     return SliverList(
       delegate: SliverChildBuilderDelegate(
         (context, index) {
-          if (index < gallerItemBeans.length) {
-            return GalleryItemWidget(
-              galleryItem: gallerItemBeans[index],
-              tabIndex: widget.tabIndex,
-            );
+          if (index == gallerItemBeans.length - 1) {
+            Global.logger.v('load more');
+            _loadDataMore();
           }
-          return null;
+
+          return GalleryItemWidget(
+            galleryItem: gallerItemBeans[index],
+            tabIndex: widget.tabIndex,
+          );
         },
+        childCount: gallerItemBeans.length,
       ),
     );
   }
@@ -203,18 +214,21 @@ class _GalleryListTabState extends State<GalleryListTab> {
                 )
               : gallerySliverListView(_gallerItemBeans),
         ),
+        SliverToBoxAdapter(
+          child: Container(
+            padding: const EdgeInsets.only(bottom: 150),
+            child: _isLoadMore
+                ? CupertinoActivityIndicator(
+                    radius: 14,
+                    iOSVersionStyle:
+                        CupertinoActivityIndicatorIOSVersionStyle.iOS14,
+                  )
+                : Container(),
+          ),
+        ),
       ],
     );
 
-    EasyRefresh re = EasyRefresh(
-      child: customScrollView,
-      // footer: BallPulseFooter(),
-      onLoad: () async {
-        // ignore: unnecessary_statements
-        _isLoadMore ? null : _loadDataMore();
-      },
-    );
-
-    return re;
+    return customScrollView;
   }
 }

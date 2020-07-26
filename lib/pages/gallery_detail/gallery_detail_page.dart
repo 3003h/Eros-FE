@@ -621,8 +621,9 @@ class _GalleryFavButtonState extends State<GalleryFavButton> {
     );
 
     return GestureDetector(
+      behavior: HitTestBehavior.opaque,
       child: Container(
-//        width: 70,
+        margin: const EdgeInsets.only(right: 10, left: 10),
         child: _isLoading ? _loadIcon : favIcon,
       ),
       onTap: () => _tapFav(context),
