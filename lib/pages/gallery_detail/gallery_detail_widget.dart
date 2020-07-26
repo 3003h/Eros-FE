@@ -103,12 +103,6 @@ class PreviewBoxGrid extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final size = MediaQuery.of(context).size;
-    final width = size.width;
-    // final height = size.height;
-
-//    Global.logger.v('${width}');
-
     return Container(
       padding: const EdgeInsets.only(top: 20, right: 10, left: 0),
       child: GridView.builder(
@@ -199,13 +193,15 @@ class PreviewContainer extends StatelessWidget {
           Container(
             child: image,
           ),
-          Container(
-            padding: const EdgeInsets.only(top: 4),
-            child: Text(
-              '${galleryPreview.ser ?? ''}',
-              style: TextStyle(
-                fontSize: 14,
-                color: Colors.black54,
+          Expanded(
+            child: Container(
+              padding: const EdgeInsets.only(top: 4),
+              child: Text(
+                '${galleryPreview.ser ?? ''}',
+                style: TextStyle(
+                  fontSize: 14,
+                  color: Colors.black54,
+                ),
               ),
             ),
           ),

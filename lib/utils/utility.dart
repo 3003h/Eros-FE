@@ -110,18 +110,27 @@ class Api {
     //收藏时间排序
     var _order = Global?.profile?.ehConfig?.favoritesOrder;
 
-    var url = "/favorites.php";
+    var url = '/favorites.php';
+    var qry = '';
     if (favcat != null && favcat != "a" && favcat.isNotEmpty) {
-      url = "$url?favcat=$favcat";
+      qry = '$qry?favcat=$favcat';
     }
 
-    if (page != null) {
-      url = "$url?page=$page";
+    if (qry.isNotEmpty) {
+      qry = "$qry&page=${page ?? '0'}";
+    } else {
+      qry = "$qry?page=${page ?? '0'}";
     }
 
-    if (_order != null) {
-      url = "$url?inline_set=$_order";
+    if (qry.isNotEmpty) {
+      qry = "$qry&inline_set=${_order ?? ''}";
+    } else {
+      qry = "$qry?inline_set=${_order ?? ''}";
     }
+
+    url = url + '/' + qry;
+
+    Global.logger.v(url);
 
     var response = await httpManager.get(url);
 
