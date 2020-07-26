@@ -61,12 +61,6 @@ class _GalleryItemWidgetState extends State<GalleryItemWidget> {
 
   @override
   Widget build(BuildContext context) {
-    Color _colorCategory = ThemeColors
-            .nameColor[widget?.galleryItem?.category ?? "defaule"]["color"] ??
-        CupertinoColors.white;
-
-//    Global.logger.v('${widget.galleryItem.url}_cover_${widget.tabIndex}');
-
     Widget containerGallery = Container(
       color: _colorTap,
       // height: 200,
@@ -81,7 +75,7 @@ class _GalleryItemWidgetState extends State<GalleryItemWidget> {
 //        crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
             Row(children: <Widget>[
-              // 封面
+              // 封面图片
               Hero(
                 tag: '${widget.galleryItem.url}_cover_${widget.tabIndex}',
                 child: Container(
@@ -96,7 +90,7 @@ class _GalleryItemWidgetState extends State<GalleryItemWidget> {
                 ),
               ),
 
-              // 右侧
+              // 右侧信息
               Expanded(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -114,64 +108,19 @@ class _GalleryItemWidgetState extends State<GalleryItemWidget> {
                       simpleTags: widget.galleryItem.simpleTags,
                       simpleTagsTranslat: widget.galleryItem.simpleTagsTranslat,
                     ),
-                    // Spacer(),
-                    // 评分和页数
+
+                    // 评分行
                     Row(
                       crossAxisAlignment: CrossAxisAlignment.end,
                       children: <Widget>[
-                        Padding(
-                          padding: const EdgeInsets.fromLTRB(0, 0, 4, 0),
-                          child: StaticRatingBar(
-                            size: 20.0,
-                            rate: widget.galleryItem.rating,
-                            radiusRatio: 1.5,
-                          ),
-                        ),
-                        Text(
-                          widget?.galleryItem?.rating.toString(),
-                          style: TextStyle(
-                            fontSize: 13,
-                            color: CupertinoColors.systemGrey,
-                          ),
-                        ),
+                        // 评分
+                        _buildRating(),
                         // 占位
                         Spacer(),
-                        Row(
-                          crossAxisAlignment: CrossAxisAlignment.end,
-                          children: <Widget>[
-                            widget.galleryItem.favTitle?.isNotEmpty ?? false
-                                ? Container(
-                                    padding: const EdgeInsets.only(
-                                        bottom: 2.5, right: 8),
-                                    child: Icon(
-                                      FontAwesomeIcons.solidHeart,
-                                      size: 12,
-//                                      color: Colors.redAccent,
-                                      color: ThemeColors
-                                          .favColor[widget.galleryItem.favcat],
-                                    ),
-                                  )
-                                : Container(),
-                            Padding(
-                              padding: const EdgeInsets.only(bottom: 1),
-                              child: Icon(
-//                              EHCupertinoIcons.paper_solid,
-                                Icons.panorama,
-                                size: 13,
-                                color: CupertinoColors.systemGrey,
-                              ),
-                            ),
-                            Padding(
-                              padding: const EdgeInsets.only(left: 2),
-                              child: Text(
-                                widget?.galleryItem?.filecount ?? "",
-                                style: TextStyle(
-                                    fontSize: 12,
-                                    color: CupertinoColors.systemGrey),
-                              ),
-                            ),
-                          ],
-                        )
+                        // 收藏图标
+                        _buildFavcatIcon(),
+                        // 图片数量
+                        _buildFilecontWidget(),
                       ],
                     ),
                     Container(
@@ -181,35 +130,11 @@ class _GalleryItemWidgetState extends State<GalleryItemWidget> {
                     Row(
                       crossAxisAlignment: CrossAxisAlignment.end,
                       children: <Widget>[
-                        ClipRRect(
-                          borderRadius: BorderRadius.circular(4),
-                          child: Container(
-                            padding: const EdgeInsets.fromLTRB(6, 3, 6, 3),
-                            color: _colorCategory,
-                            child: Text(
-                              widget?.galleryItem?.category ?? "",
-                              style: TextStyle(
-                                fontSize: 14,
-                                height: 1,
-                                color: CupertinoColors.white,
-//                              backgroundColor: _colorCategory
-                              ),
-                            ),
-                          ),
-                        ),
-
+                        // 类型
+                        _buildCategory(),
+                        Spacer(),
                         // 上传时间
-                        Expanded(
-                          child: Align(
-                            alignment: Alignment.centerRight,
-                            child: Text(
-                              widget?.galleryItem?.postTime ?? "",
-                              style: TextStyle(
-                                  fontSize: 12,
-                                  color: CupertinoColors.systemGrey),
-                            ),
-                          ),
-                        ),
+                        _buildPostTime(),
                       ],
                     ),
                   ],
@@ -256,6 +181,91 @@ class _GalleryItemWidgetState extends State<GalleryItemWidget> {
     );
   }
 
+  Row _buildRating() {
+    return Row(
+      children: <Widget>[
+        Container(
+          padding: const EdgeInsets.fromLTRB(0, 0, 4, 0),
+          child: StaticRatingBar(
+            size: 20.0,
+            rate: widget.galleryItem.rating,
+            radiusRatio: 1.5,
+          ),
+        ),
+        Text(
+          widget?.galleryItem?.rating.toString(),
+          style: TextStyle(
+            fontSize: 13,
+            color: CupertinoColors.systemGrey,
+          ),
+        ),
+      ],
+    );
+  }
+
+  Row _buildFilecontWidget() {
+    return Row(
+      children: <Widget>[
+        Icon(
+          Icons.panorama,
+          size: 13,
+          color: CupertinoColors.systemGrey,
+        ),
+        Container(
+          padding: const EdgeInsets.only(left: 2),
+          child: Text(
+            widget?.galleryItem?.filecount ?? "",
+            style: TextStyle(fontSize: 12, color: CupertinoColors.systemGrey),
+          ),
+        ),
+      ],
+    );
+  }
+
+  Container _buildFavcatIcon() {
+    return Container(
+      child: widget.galleryItem.favTitle?.isNotEmpty ?? false
+          ? Container(
+              padding: const EdgeInsets.only(bottom: 2.5, right: 8),
+              child: Icon(
+                FontAwesomeIcons.solidHeart,
+                size: 12,
+                color: ThemeColors.favColor[widget.galleryItem.favcat],
+              ),
+            )
+          : Container(),
+    );
+  }
+
+  Text _buildPostTime() {
+    return Text(
+      widget?.galleryItem?.postTime ?? "",
+      style: TextStyle(fontSize: 12, color: CupertinoColors.systemGrey),
+    );
+  }
+
+  ClipRRect _buildCategory() {
+    Color _colorCategory = ThemeColors
+            .nameColor[widget?.galleryItem?.category ?? "defaule"]["color"] ??
+        CupertinoColors.white;
+
+    return ClipRRect(
+      borderRadius: BorderRadius.circular(4),
+      child: Container(
+        padding: const EdgeInsets.fromLTRB(6, 3, 6, 3),
+        color: _colorCategory,
+        child: Text(
+          widget?.galleryItem?.category ?? "",
+          style: TextStyle(
+            fontSize: 14,
+            height: 1,
+            color: CupertinoColors.white,
+          ),
+        ),
+      ),
+    );
+  }
+
   void _updateNormalColor() {
     setState(() {
       _colorTap = CupertinoColors.systemBackground;
@@ -269,6 +279,12 @@ class _GalleryItemWidgetState extends State<GalleryItemWidget> {
   }
 }
 
+///
+///
+///
+///
+///
+///
 class TagItem extends StatelessWidget {
   final text;
 
@@ -302,7 +318,7 @@ class TagItem extends StatelessWidget {
 }
 
 /// 传入原始标签和翻译标签
-/// 便于设置切换的时候变更
+/// 用于设置切换的时候变更
 class TagBox extends StatelessWidget {
   final List<String> simpleTags;
   final List<String> simpleTagsTranslat;
