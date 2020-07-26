@@ -224,6 +224,7 @@ class _GalleryDetailPageState extends State<GalleryDetailPage> {
                       Spacer(),
                       // 阅读按钮
                       Row(
+                        crossAxisAlignment: CrossAxisAlignment.end,
                         children: <Widget>[
                           _readButton(ln.READ),
                           Spacer(),
@@ -421,7 +422,7 @@ class _GalleryFavButtonState extends State<GalleryFavButton> {
     }
   }
 
-  /// 添加收藏
+  /// 添加收藏 Picker 形式
   Future<void> _showAddFavPicker(BuildContext context, List favList) async {
     var _favindex = 0;
 
@@ -501,7 +502,7 @@ class _GalleryFavButtonState extends State<GalleryFavButton> {
     );
   }
 
-  /// 添加收藏2
+  /// 添加收藏 List形式
   Future<void> _showAddFavList(BuildContext context, List favList) async {
     List<Widget> favcatList =
         List<Widget>.from(favList.map((fav) => FavcatAddItem(

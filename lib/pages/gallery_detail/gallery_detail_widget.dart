@@ -71,7 +71,7 @@ class GalleryDetailContex extends StatelessWidget {
           ),
           CupertinoButton(
             minSize: 0,
-            padding: const EdgeInsets.fromLTRB(4, 4, 0, 0),
+            padding: const EdgeInsets.fromLTRB(0, 4, 0, 30),
             child: Text(
               ln.all_preview,
               style: TextStyle(fontSize: 16),
