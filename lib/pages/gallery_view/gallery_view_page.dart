@@ -1,3 +1,5 @@
+import 'package:FEhViewer/common/global.dart';
+import 'package:FEhViewer/utils/utility.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:extended_image/extended_image.dart';
 import 'package:flutter/cupertino.dart';
@@ -6,13 +8,14 @@ import 'package:photo_view/photo_view.dart';
 import 'package:photo_view/photo_view_gallery.dart';
 
 class GalleryViewPage extends StatefulWidget {
-  final List images;
+  final List hrefs;
   final int index;
 //  String heroTag;
+  final showKey;
   final PageController controller;
 
-  GalleryViewPage({Key key, int index, List images})
-      : this.images = images ?? [],
+  GalleryViewPage({Key key, int index, List hrefs, this.showKey})
+      : this.hrefs = hrefs ?? [],
         this.index = index ?? 0,
         this.controller = PageController(initialPage: index),
         super(key: key);
@@ -32,12 +35,14 @@ class _GalleryViewPageState extends State<GalleryViewPage> {
 
   @override
   Widget build(BuildContext context) {
+    Global.logger.v('build GalleryViewPage ');
+
     return Scaffold(
       body: Container(
 //        color: CupertinoColors.black,
         child: PhotoViewGallery.builder(
           scrollPhysics: const BouncingScrollPhysics(),
-          itemCount: widget.images.length,
+          itemCount: widget.hrefs.length,
           builder: (BuildContext context, int index) {
 //            return PhotoViewGalleryPageOptions(
 //              imageProvider: CachedNetworkImageProvider(widget.images[index]),
@@ -49,7 +54,20 @@ class _GalleryViewPageState extends State<GalleryViewPage> {
 //            );
             return PhotoViewGalleryPageOptions.customChild(
               child: Container(
-                child: CachedNetworkImage(imageUrl: widget.images[index]),
+                child: GalleryImage(
+                  href: widget.hrefs[index],
+                  showKey: widget.showKey,
+                  index: widget.index,
+                ),
+//                child: CachedNetworkImage(
+//                  imageUrl: widget.hrefs[index],
+//              ),
+//                child: ExtendedImage.network(
+//                  widget.images[index],
+//                  fit: BoxFit.contain,
+//                  mode: ExtendedImageMode.gesture,
+//                  cache: true,
+//                ),
               ),
               initialScale: PhotoViewComputedScale.contained,
               minScale: PhotoViewComputedScale.contained * 0.5,
@@ -95,12 +113,13 @@ class _GalleryViewPageState extends State<GalleryViewPage> {
 }
 
 class GalleryViewPageE extends StatefulWidget {
-  final List images;
+  final List hrefs;
   final int index;
+  final showKey;
   final PageController controller;
 
-  GalleryViewPageE({Key key, int index, List images})
-      : this.images = images ?? [],
+  GalleryViewPageE({Key key, int index, List hrefs, this.showKey})
+      : this.hrefs = hrefs ?? [],
         this.index = index ?? 0,
         this.controller = PageController(initialPage: index),
         super(key: key);
@@ -111,6 +130,7 @@ class GalleryViewPageE extends StatefulWidget {
 
 class _GalleryViewPageEState extends State<GalleryViewPageE> {
   int currentIndex;
+  Map urlMap = {};
 
   @override
   Widget build(BuildContext context) {
@@ -119,16 +139,12 @@ class _GalleryViewPageEState extends State<GalleryViewPageE> {
       child: Container(
         child: ExtendedImageGesturePageView.builder(
           itemBuilder: (BuildContext context, int index) {
-            var item = widget.images[index];
-            Widget image = ExtendedImage.network(
-              item,
-              fit: BoxFit.contain,
-              mode: ExtendedImageMode.gesture,
-              cache: true,
-            );
-            image = Container(
-              child: image,
-//              padding: EdgeInsets.all(5.0),
+            var item = widget.hrefs[index];
+            Widget image = GalleryImage(
+              href: item,
+              showKey: widget.showKey,
+              index: index,
+              urlMap: urlMap,
             );
             if (index == currentIndex) {
               return Hero(
@@ -139,7 +155,7 @@ class _GalleryViewPageEState extends State<GalleryViewPageE> {
               return image;
             }
           },
-          itemCount: widget.images.length,
+          itemCount: widget.hrefs.length,
           onPageChanged: (int index) {
             currentIndex = index;
           },
@@ -148,5 +164,76 @@ class _GalleryViewPageEState extends State<GalleryViewPageE> {
         ),
       ),
     );
+  }
+}
+
+class GalleryImage extends StatefulWidget {
+  GalleryImage({
+    Key key,
+    @required this.href,
+    @required this.showKey,
+    @required this.index,
+    this.urlMap,
+  }) : super(key: key);
+
+  @override
+  _GalleryImageState createState() => _GalleryImageState();
+  final href;
+  final showKey;
+  final index;
+  final urlMap;
+}
+
+class _GalleryImageState extends State<GalleryImage> {
+  Future<String> getImageUrl() async {
+    return Api.getShowInfo(widget.href, widget.showKey, index: widget.index);
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return FutureBuilder<String>(
+        future: getImageUrl(),
+        builder: (context, snapshot) {
+          if (widget.urlMap['${widget.index}'] == null) {
+            if (snapshot.connectionState == ConnectionState.done) {
+              if (snapshot.hasError) {
+                return Text("Error: ${snapshot.error}");
+              } else {
+                widget.urlMap['${widget.index}'] = snapshot.data;
+                Global.logger.v(widget.urlMap);
+                return ExtendedImage.network(
+                  snapshot.data,
+                  fit: BoxFit.contain,
+                  mode: ExtendedImageMode.gesture,
+                  cache: true,
+                );
+              }
+            } else {
+              return Center(
+//                child: CircularProgressIndicator(),
+                child: Container(
+                  height: 100,
+                  child: Column(
+                    children: [
+                      Text(
+                        '${widget.index + 1}',
+                        style: TextStyle(fontSize: 50),
+                      ),
+                      Text('获取中...'),
+                    ],
+                  ),
+                ),
+              );
+            }
+          } else {
+            var url = widget.urlMap['${widget.index}'];
+            return ExtendedImage.network(
+              url,
+              fit: BoxFit.contain,
+              mode: ExtendedImageMode.gesture,
+              cache: true,
+            );
+          }
+        });
   }
 }

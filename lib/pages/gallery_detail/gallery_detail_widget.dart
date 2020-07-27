@@ -184,9 +184,8 @@ class PreviewContainer extends StatelessWidget {
 
     return GestureDetector(
       behavior: HitTestBehavior.opaque,
-      onTap: () async {
-        hrefs[index] = await Api.getShowInfo(hrefs[index], showKey);
-        NavigatorUtil.goGalleryViewPage(context, hrefs, index);
+      onTap: () {
+        NavigatorUtil.goGalleryViewPage(context, hrefs, index, showKey);
       },
       child: Column(
         children: [

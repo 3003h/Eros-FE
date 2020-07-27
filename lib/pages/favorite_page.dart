@@ -2,6 +2,7 @@ import 'package:FEhViewer/common/global.dart';
 import 'package:FEhViewer/generated/l10n.dart';
 import 'package:FEhViewer/models/entity/favorite.dart';
 import 'package:FEhViewer/models/index.dart';
+import 'package:FEhViewer/models/states/gallery_model.dart';
 import 'package:FEhViewer/models/states/user_model.dart';
 import 'package:FEhViewer/route/navigator_util.dart';
 import 'package:FEhViewer/route/routes.dart';
@@ -61,6 +62,11 @@ class _FavoriteTabState extends State<FavoriteTab> {
   }
 
   _reloadData() async {
+    if (_loading) {
+      setState(() {
+        _loading = false;
+      });
+    }
     var tuple = await Api.getFavorite(favcat: _curFavcat);
     var gallerItemBeans = tuple.item1;
     setState(() {
@@ -90,23 +96,24 @@ class _FavoriteTabState extends State<FavoriteTab> {
     });
   }
 
-  SliverList gallerySliverListView(List gallerItemBeans) {
+  SliverList gallerySliverListView(List<GalleryItem> gallerItemBeans) {
     return SliverList(
       delegate: SliverChildBuilderDelegate(
         (context, index) {
-          if (index < gallerItemBeans.length) {
-            if (index == gallerItemBeans.length - 1) {
-              Global.logger.v('load more');
-              _loadDataMore();
-            }
-
-            return GalleryItemWidget(
+          if (index == gallerItemBeans.length - 1) {
+            Global.logger.v('load more');
+            _loadDataMore();
+          }
+//          Global.logger.v('build ${gallerItemBeans[index].gid} ');
+          return ChangeNotifierProvider.value(
+            value: GalleryModel(),
+            child: GalleryItemWidget(
               galleryItem: gallerItemBeans[index],
               tabIndex: widget.tabIndex,
-            );
-          }
-          return null;
+            ),
+          );
         },
+        childCount: gallerItemBeans.length,
       ),
     );
   }

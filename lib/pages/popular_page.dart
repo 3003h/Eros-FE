@@ -1,10 +1,13 @@
+import 'package:FEhViewer/common/global.dart';
 import 'package:FEhViewer/common/parser/gallery_list_parser.dart';
 import 'package:FEhViewer/generated/l10n.dart';
 import 'package:FEhViewer/models/index.dart';
+import 'package:FEhViewer/models/states/gallery_model.dart';
 import 'package:FEhViewer/utils/utility.dart';
 import 'package:FEhViewer/widget/eh_widget.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 import 'item/gallery_item.dart';
 
@@ -40,29 +43,34 @@ class _PopularListTabState extends State<PopularListTab> {
   }
 
   _reloadData() async {
-    setState(() {
-      _firstLoading = false;
-    });
+    if (_firstLoading) {
+      setState(() {
+        _firstLoading = false;
+      });
+    }
+
     var tuple = await Api.getPopular();
-    var gallerItemBeans = tuple.item1;
+    List<GalleryItem> gallerItemBeans = tuple.item1;
+
     setState(() {
       _gallerItemBeans.clear();
       _gallerItemBeans.addAll(gallerItemBeans);
     });
   }
 
-  SliverList gallerySliverListView(List gallerItemBeans) {
+  SliverList gallerySliverListView(List<GalleryItem> gallerItemBeans) {
     return SliverList(
       delegate: SliverChildBuilderDelegate(
         (context, index) {
-          if (index < gallerItemBeans.length) {
-            return GalleryItemWidget(
+          return ChangeNotifierProvider.value(
+            value: GalleryModel(),
+            child: GalleryItemWidget(
               galleryItem: gallerItemBeans[index],
               tabIndex: widget.tabIndex,
-            );
-          }
-          return null;
+            ),
+          );
         },
+        childCount: gallerItemBeans.length,
       ),
     );
   }

@@ -1,9 +1,14 @@
 import 'dart:convert';
 
+import 'package:FEhViewer/common/global.dart';
 import 'package:FEhViewer/models/galleryComment.dart';
 import 'package:FEhViewer/models/galleryItem.dart';
+import 'package:FEhViewer/models/states/gallery_model.dart';
+import 'package:FEhViewer/pages/gallery_detail/gallery_detail_page.dart';
 import 'package:fluro/fluro.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 import 'application.dart';
 import 'routes.dart';
@@ -114,6 +119,26 @@ class NavigatorUtil {
   }
 
   /// 转到画廊页面
+  /// [GalleryModel] 复用画廊状态Provider
+  /// fluro的方式不知道怎么处理 使用默认路由方式
+  static void goGalleryDetailPr(
+    BuildContext context,
+    String title,
+  ) {
+    var galleryModel = Provider.of<GalleryModel>(context, listen: false);
+    Navigator.push(context, CupertinoPageRoute(builder: (context) {
+      return ChangeNotifierProvider.value(
+        value: galleryModel,
+        child: GalleryDetailPage(
+          title: title,
+          galleryItem: galleryModel.galleryItem,
+          fromTabIndex: galleryModel.tabIndex,
+        ),
+      );
+    }));
+  }
+
+  /// 转到画廊页面
   static void goGalleryDetail(
     BuildContext context,
     String title,
@@ -123,6 +148,10 @@ class NavigatorUtil {
     final encodeGalleryItem =
         Uri.encodeComponent(jsonEncode(galleryItem.toJson()));
     final encodeTitle = Uri.encodeComponent(title);
+
+    final galleryModel = Provider.of<GalleryModel>(context, listen: false);
+    Global.logger.v('${galleryModel.galleryItem.toJson()}');
+
     Application.router.navigateTo(
         context,
         EHRoutes.galleryDetail +
@@ -145,18 +174,19 @@ class NavigatorUtil {
   }
 
   ///
-  static void goGalleryViewPage(
-      BuildContext context, List<String> images, int currentIndex) {
+  static void goGalleryViewPage(BuildContext context, List<String> hrefs,
+      int currentIndex, String showKey) {
     final encodeImages = List<String>.from(
-        images.map((image) => Uri.encodeComponent(image)).toList());
+        hrefs.map((href) => Uri.encodeComponent(href)).toList());
 
-    var queryString = encodeImages.map((e) => 'image=$e').join('&');
+    var queryString = encodeImages.map((e) => 'href=$e').join('&');
 
     Application.router.navigateTo(
         context,
         EHRoutes.galleryDetailView +
-            "?$queryString" +
-            '&currentIndex=$currentIndex',
+            '?$queryString'
+                '&currentIndex=$currentIndex'
+                '&showKey=$showKey',
         transition: TransitionType.cupertino);
   }
 }

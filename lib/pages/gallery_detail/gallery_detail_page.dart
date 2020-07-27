@@ -47,8 +47,6 @@ class _GalleryDetailPageState extends State<GalleryDetailPage> {
       _loading = true;
     });
     _galleryItem = await Api.getGalleryDetail(widget.galleryItem);
-//    _galleryItem.gid = widget.galleryItem.gid;
-//    _galleryItem.token = widget.galleryItem.token;
 
     _galleryItem.tagGroup.forEach((tagGroupData) {
       _listTagGroupW.add(TagGroupItem(tagGroupData: tagGroupData));
@@ -71,26 +69,6 @@ class _GalleryDetailPageState extends State<GalleryDetailPage> {
       });
     }
   }
-
-  /// NotificationListener监听
-  /* _scrollUpdateNotification(notification) {
-    if (notification is ScrollUpdateNotification && notification.depth == 0) {
-      double _offset = notification.metrics.pixels;
-
-      /// 导航栏封面和阅读按钮显示切换控制
-      /// 滑动超过 _titleHeight 时显示
-      if (_offset < _titleHeight && !_hideNavigationBtn) {
-        setState(() {
-          _hideNavigationBtn = true;
-        });
-      } else if (_offset >= _titleHeight && _hideNavigationBtn) {
-        setState(() {
-          _hideNavigationBtn = false;
-        });
-      }
-    }
-    return true;
-  } */
 
   @override
   void initState() {

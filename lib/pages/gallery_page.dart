@@ -1,10 +1,12 @@
 import 'package:FEhViewer/common/global.dart';
 import 'package:FEhViewer/generated/l10n.dart';
 import 'package:FEhViewer/models/index.dart';
+import 'package:FEhViewer/models/states/gallery_model.dart';
 import 'package:FEhViewer/utils/utility.dart';
 import 'package:FEhViewer/widget/eh_widget.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 import 'item/gallery_item.dart';
 
@@ -49,9 +51,11 @@ class _GalleryListTabState extends State<GalleryListTab> {
   }
 
   _reloadData() async {
-    setState(() {
-      _firstLoading = false;
-    });
+    if (_firstLoading) {
+      setState(() {
+        _firstLoading = false;
+      });
+    }
     var tuple = await Api.getGallery();
     var gallerItemBeans = tuple.item1;
     setState(() {
@@ -111,9 +115,12 @@ class _GalleryListTabState extends State<GalleryListTab> {
             _loadDataMore();
           }
 
-          return GalleryItemWidget(
-            galleryItem: gallerItemBeans[index],
-            tabIndex: widget.tabIndex,
+          return ChangeNotifierProvider.value(
+            value: GalleryModel(),
+            child: GalleryItemWidget(
+              galleryItem: gallerItemBeans[index],
+              tabIndex: widget.tabIndex,
+            ),
           );
         },
         childCount: gallerItemBeans.length,
