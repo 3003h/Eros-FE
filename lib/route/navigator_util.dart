@@ -5,6 +5,7 @@ import 'package:FEhViewer/models/galleryComment.dart';
 import 'package:FEhViewer/models/galleryItem.dart';
 import 'package:FEhViewer/models/states/gallery_model.dart';
 import 'package:FEhViewer/pages/gallery_detail/gallery_detail_page.dart';
+import 'package:FEhViewer/pages/gallery_detail/gallery_detail_page_p.dart';
 import 'package:fluro/fluro.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -129,10 +130,8 @@ class NavigatorUtil {
     Navigator.push(context, CupertinoPageRoute(builder: (context) {
       return ChangeNotifierProvider.value(
         value: galleryModel,
-        child: GalleryDetailPage(
-          title: title,
+        child: GalleryDetailPagePr(
           galleryItem: galleryModel.galleryItem,
-          fromTabIndex: galleryModel.tabIndex,
         ),
       );
     }));

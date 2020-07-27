@@ -1,9 +1,7 @@
 import 'package:FEhViewer/common/global.dart';
-import 'package:FEhViewer/common/parser/gallery_view_parser.dart';
 import 'package:FEhViewer/generated/l10n.dart';
 import 'package:FEhViewer/models/index.dart';
 import 'package:FEhViewer/route/navigator_util.dart';
-import 'package:FEhViewer/utils/utility.dart';
 import 'package:FEhViewer/values/const.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
@@ -16,8 +14,8 @@ import 'gallery_preview_clipper.dart';
 const kHeightPreview = 180.0;
 
 /// 内容
-class GalleryDetailContex extends StatelessWidget {
-  const GalleryDetailContex({
+class GalleryDetailInfo extends StatelessWidget {
+  const GalleryDetailInfo({
     Key key,
     @required this.listTagGroupW,
     @required this.galleryItem,

@@ -2,7 +2,6 @@ import 'package:FEhViewer/common/global.dart';
 import 'package:FEhViewer/models/index.dart';
 import 'package:FEhViewer/models/states/ehconfig_model.dart';
 import 'package:FEhViewer/models/states/gallery_model.dart';
-import 'package:FEhViewer/pages/gallery_detail/gallery_detail_page.dart';
 import 'package:FEhViewer/route/navigator_util.dart';
 import 'package:FEhViewer/values/theme_colors.dart';
 import 'package:FEhViewer/widget/blur_image.dart';
@@ -31,7 +30,7 @@ class _GalleryItemWidgetState extends State<GalleryItemWidget> {
 
   Color _colorTap; // 按下时颜色反馈
   String _title; // 英语或者日语
-  GalleryModel galleryModel;
+  GalleryModel _galleryModel;
 
   @override
   void initState() {
@@ -46,9 +45,9 @@ class _GalleryItemWidgetState extends State<GalleryItemWidget> {
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-    final galleryModel = Provider.of<GalleryModel>(context);
-    if (galleryModel != this.galleryModel) {
-      this.galleryModel = galleryModel;
+    final galleryModel = Provider.of<GalleryModel>(context, listen: false);
+    if (galleryModel != this._galleryModel) {
+      this._galleryModel = galleryModel;
       galleryModel.initData(widget.galleryItem, tabIndex: widget.tabIndex);
     }
   }

@@ -14,7 +14,7 @@ class GalleryDetailParser {
 
     GalleryItem galleryItem = inGalleryItem ?? GalleryItem();
 
-    /// taglist
+    // 完整的标签信息
     galleryItem.tagGroup = [];
     const tagGroupSelect = '#taglist > table > tbody > tr';
     List<Element> tagGroups = document.querySelectorAll(tagGroupSelect);
@@ -47,7 +47,7 @@ class GalleryDetailParser {
         ..galleryTags = galleryTags);
     }
 
-    // 解析评论区数据
+    // 全部评论数据
     galleryItem.galleryComment = [];
     const commentSelect = '#cdiv > div.c1';
     List<Element> commentList = document.querySelectorAll(commentSelect);
@@ -98,16 +98,16 @@ class GalleryDetailParser {
     }
 
 
-    // 解析画廊缩略图
+    // 画廊缩略图
     List<GalleryPreview> previewList = parseGalleryPreview(document);
     galleryItem.galleryPreview = previewList;
 
 
-    // 获取画廊 showKey
+    // 画廊 showKey
     final showKey = await Api.getShowkey(previewList[0].href);
     galleryItem.showKey = showKey;
 
-    // 解析收藏标志
+    // 收藏标志
     var favTitle = '';
     Element fav = document.querySelector("#favoritelink");
     if (fav?.nodes?.length == 1) {

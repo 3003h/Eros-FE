@@ -29,9 +29,6 @@ class EhTagDatabase {
     var localVer = StorageUtil().getString(TAG_TRANSLAT_VER);
     Global.loggerNoStack.v("localVer $localVer");
 
-    // 测试
-//    localVer = 'aaaaaaa';
-
     StorageUtil().setString(TAG_TRANSLAT_VER, remoteVer);
 
     var dbJson = jsonEncode(StorageUtil().getJSON(TAG_TRANSLAT));
@@ -59,7 +56,7 @@ class EhTagDatabase {
       if (dbJson != null) {
         var dataAll = jsonDecode(dbJson.toString());
         var listDataP = dataAll["data"];
-        StorageUtil().setJSON(TAG_TRANSLAT, jsonEncode(listDataP));
+//        StorageUtil().setJSON(TAG_TRANSLAT, jsonEncode(listDataP));
 
         await tagSaveToDB(listDataP);
       }

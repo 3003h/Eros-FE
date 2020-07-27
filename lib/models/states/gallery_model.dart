@@ -6,19 +6,21 @@ import 'base.dart';
 class GalleryModel extends ProfileChangeNotifier {
   GalleryItem _galleryItem;
   var _tabindex;
+  var _title;
 
   initData(GalleryItem galleryItem, {@required tabIndex}) {
     _galleryItem = galleryItem;
     _tabindex = tabIndex;
   }
 
-//  set galleryItem(GalleryItem galleryItem) => _galleryItem = galleryItem;
-
   GalleryItem get galleryItem => _galleryItem;
-  setTitle(String title) {
-    _galleryItem.englishTitle = title;
+
+  set title(String title) {
+    _title = title;
     notifyListeners();
   }
+
+  get title => _title;
 
   get tabIndex => _tabindex;
 }
