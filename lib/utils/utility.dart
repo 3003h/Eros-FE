@@ -165,9 +165,8 @@ class Api {
       showToast('Offensive For Everyone');
     }
 
-    GalleryItem galleryItem = await GalleryDetailParser.parseGalleryDetail(
-        response,
-        inGalleryItem: inGalleryItem);
+    GalleryItem galleryItem =
+        await GalleryDetailParser.parseGalleryDetail(response);
 
     return galleryItem;
   }
