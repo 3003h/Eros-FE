@@ -250,7 +250,7 @@ class Api {
     };
     String reqJsonStr = jsonEncode(reqMap);
 
-    Global.logger.v('$reqJsonStr');
+//    Global.logger.v('$reqJsonStr');
 
     var response = await httpManager.postForm(
       url,
@@ -265,7 +265,7 @@ class Api {
     final RegExp regImageUrl = RegExp("<img[^>]*src=\"([^\"]+)\" style");
     var imageUrl = regImageUrl.firstMatch(rultJson['i3']).group(1);
 
-    Global.logger.v('$imageUrl');
+//    Global.logger.v('$imageUrl');
 
     return imageUrl;
   }
