@@ -1,11 +1,13 @@
 import 'package:FEhViewer/common/global.dart';
 import 'package:FEhViewer/generated/l10n.dart';
 import 'package:FEhViewer/models/index.dart';
+import 'package:FEhViewer/models/states/gallery_model.dart';
 import 'package:FEhViewer/route/navigator_util.dart';
 import 'package:FEhViewer/values/const.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 import 'comment_item.dart';
 import 'gallery_all_preview_page.dart';
@@ -17,22 +19,10 @@ const kHeightPreview = 180.0;
 class GalleryDetailInfo extends StatelessWidget {
   const GalleryDetailInfo({
     Key key,
-    @required this.listTagGroupW,
     @required this.galleryItem,
   }) : super(key: key);
 
-  final List<Widget> listTagGroupW;
   final GalleryItem galleryItem;
-
-  List<Widget> _topComment(List<GalleryComment> comments, {int max = 2}) {
-    var _comments = comments.take(max);
-    return List<Widget>.from(_comments
-        .map((comment) => CommentItem(
-              galleryComment: comment,
-              simple: true,
-            ))
-        .toList());
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -41,32 +31,14 @@ class GalleryDetailInfo extends StatelessWidget {
       child: Column(
         children: <Widget>[
           // 标签
-          TagBox(
-            lisTagGroup: listTagGroupW,
-          ),
-          ..._topComment(galleryItem.galleryComment, max: 2),
-          // 评论按钮
-          CupertinoButton(
-            minSize: 0,
-            padding: const EdgeInsets.fromLTRB(4, 4, 0, 0),
-            child: Text(
-              ln.all_comment,
-              style: TextStyle(fontSize: 16),
-            ),
-            onPressed: () {
-              NavigatorUtil.goGalleryDetailComment(
-                  context, galleryItem.galleryComment);
-            },
-          ),
+          _buildTagBox(),
+          _buildTopComment(),
           Container(
             margin: const EdgeInsets.only(top: 4),
             height: 0.5,
             color: CupertinoColors.systemGrey4,
           ),
-          PreviewBoxGrid(
-            galleryPreviewList: galleryItem.galleryPreview,
-            showKey: galleryItem.showKey,
-          ),
+          _buildPreviewGrid(),
           CupertinoButton(
             minSize: 0,
             padding: const EdgeInsets.fromLTRB(0, 4, 0, 30),
@@ -75,12 +47,12 @@ class GalleryDetailInfo extends StatelessWidget {
               style: TextStyle(fontSize: 16),
             ),
             onPressed: () {
+              var galleryModel =
+                  Provider.of<GalleryModel>(context, listen: false);
               Navigator.push(context, CupertinoPageRoute(builder: (context) {
-                return AllPreviewPage(
-                  galleryPreviewList: galleryItem.galleryPreview,
-                  showKey: galleryItem.showKey,
-                  filecount: galleryItem.filecount,
-                  galleryUrl: galleryItem.url,
+                return ChangeNotifierProvider.value(
+                  value: galleryModel,
+                  child: AllPreviewPage(),
                 );
               }));
             },
@@ -89,41 +61,75 @@ class GalleryDetailInfo extends StatelessWidget {
       ),
     );
   }
-}
 
-class PreviewBoxGrid extends StatelessWidget {
-  final List<GalleryPreview> galleryPreviewList;
-  final showKey;
+  Widget _buildTopComment() {
+    // 显示最前面两条
+    List<Widget> _topComment(List<GalleryComment> comments, {int max = 2}) {
+      var _comments = comments.take(max);
+      return List<Widget>.from(_comments
+          .map((comment) => CommentItem(
+                galleryComment: comment,
+                simple: true,
+              ))
+          .toList());
+    }
 
-  const PreviewBoxGrid(
-      {Key key, @required this.galleryPreviewList, @required this.showKey})
-      : super(key: key);
+    return Selector<GalleryModel, List<GalleryComment>>(
+        shouldRebuild: (pre, next) => false, // 不进行重绘
+        selector: (context, galleryModel) =>
+            galleryModel.galleryItem.galleryComment,
+//        shouldRebuild: (pre, next) => pre != next,
+        builder: (context, comment, child) {
+          var ln = S.of(context);
+          return Column(
+            children: <Widget>[
+              // 评论
+              ..._topComment(comment, max: 2),
+              // 评论按钮
+              CupertinoButton(
+                minSize: 0,
+                padding: const EdgeInsets.fromLTRB(4, 4, 0, 0),
+                child: Text(
+                  ln.all_comment,
+                  style: TextStyle(fontSize: 16),
+                ),
+                onPressed: () {
+                  NavigatorUtil.goGalleryDetailComment(context, comment);
+                },
+              ),
+            ],
+          );
+        });
+  }
 
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      padding: const EdgeInsets.only(top: 20, right: 10, left: 0),
-      child: GridView.builder(
-          shrinkWrap: true, //解决无限高度问题
-          physics: NeverScrollableScrollPhysics(), //禁用滑动事件
-          gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
+  Widget _buildPreviewGrid() {
+    return Selector<GalleryModel, List<GalleryPreview>>(
+        shouldRebuild: (pre, next) => false, // 不进行重绘
+        selector: (context, galleryModel) => galleryModel.oriGalleryPreview,
+        builder: (context, List<GalleryPreview> previews, child) {
+          return Container(
+            padding: const EdgeInsets.only(top: 20, right: 10, left: 0),
+            child: GridView.builder(
+                shrinkWrap: true, //解决无限高度问题
+                physics: NeverScrollableScrollPhysics(), //禁用滑动事件
+                gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
 //              crossAxisCount: _crossAxisCount, //每行列数
-              maxCrossAxisExtent: 130,
-              mainAxisSpacing: 0, //主轴方向的间距
-              crossAxisSpacing: 10, //交叉轴方向子元素的间距
-              childAspectRatio: 0.55 //显示区域宽高
-              ),
-          itemCount: galleryPreviewList.length,
-          itemBuilder: (context, index) {
-            return Center(
-              child: PreviewContainer(
-                galleryPreviewList: galleryPreviewList,
-                index: index,
-                showKey: showKey,
-              ),
-            );
-          }),
-    );
+                    maxCrossAxisExtent: 130,
+                    mainAxisSpacing: 0, //主轴方向的间距
+                    crossAxisSpacing: 10, //交叉轴方向子元素的间距
+                    childAspectRatio: 0.55 //显示区域宽高
+                    ),
+                itemCount: previews.length,
+                itemBuilder: (context, index) {
+                  return Center(
+                    child: PreviewContainer(
+                      galleryPreviewList: previews,
+                      index: index,
+                    ),
+                  );
+                }),
+          );
+        });
   }
 }
 
@@ -132,15 +138,13 @@ class PreviewContainer extends StatelessWidget {
   final List<GalleryPreview> galleryPreviewList;
   final List<String> hrefs;
   final GalleryPreview galleryPreview;
-  final showKey;
   final images = [];
 
-  PreviewContainer(
-      {Key key,
-      @required this.index,
-      @required this.galleryPreviewList,
-      @required this.showKey})
-      : galleryPreview = galleryPreviewList[index],
+  PreviewContainer({
+    Key key,
+    @required this.index,
+    @required this.galleryPreviewList,
+  })  : galleryPreview = galleryPreviewList[index],
         hrefs =
             List<String>.from(galleryPreviewList.map((e) => e.href).toList()),
         super(key: key);
@@ -183,7 +187,7 @@ class PreviewContainer extends StatelessWidget {
     return GestureDetector(
       behavior: HitTestBehavior.opaque,
       onTap: () {
-        NavigatorUtil.goGalleryViewPage(context, hrefs, index, showKey);
+        NavigatorUtil.goGalleryViewPagePr(context, index);
       },
       child: Column(
         children: [
@@ -284,26 +288,28 @@ class TagButtonB extends StatelessWidget {
 }
 
 /// 包含多个 TagGroup
-class TagBox extends StatelessWidget {
-  final List<Widget> lisTagGroup;
+Widget _buildTagBox() {
+  return Selector<GalleryModel, List<TagGroup>>(
+      selector: (context, galleryModel) => galleryModel.galleryItem.tagGroup,
+      builder: (context, List<TagGroup> listTagGroup, child) {
+        List<Widget> listGroupWidget = [];
+        listTagGroup.forEach((tagGroupData) {
+          listGroupWidget.add(TagGroupItem(tagGroupData: tagGroupData));
+        });
 
-  const TagBox({Key key, this.lisTagGroup}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return Column(
-      children: [
-        Container(
-          margin: const EdgeInsets.fromLTRB(12, 8, 12, 8),
-          child: Column(children: lisTagGroup),
-        ),
-        Container(
-          height: 0.5,
-          color: CupertinoColors.systemGrey4,
-        ),
-      ],
-    );
-  }
+        return Column(
+          children: [
+            Container(
+              margin: const EdgeInsets.fromLTRB(12, 8, 12, 8),
+              child: Column(children: listGroupWidget),
+            ),
+            Container(
+              height: 0.5,
+              color: CupertinoColors.systemGrey4,
+            ),
+          ],
+        );
+      });
 }
 
 /// 封面小图

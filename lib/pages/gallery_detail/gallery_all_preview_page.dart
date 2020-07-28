@@ -1,25 +1,16 @@
 import 'package:FEhViewer/common/global.dart';
 import 'package:FEhViewer/generated/l10n.dart';
 import 'package:FEhViewer/models/index.dart';
+import 'package:FEhViewer/models/states/gallery_model.dart';
 import 'package:FEhViewer/utils/utility.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 import 'gallery_detail_widget.dart';
 
 class AllPreviewPage extends StatefulWidget {
-  final List<GalleryPreview> galleryPreviewList;
-  final showKey;
-  final filecount;
-  final galleryUrl;
-
-  const AllPreviewPage({
-    Key key,
-    @required this.galleryPreviewList,
-    @required this.showKey,
-    @required this.filecount,
-    @required this.galleryUrl,
-  }) : super(key: key);
+  const AllPreviewPage({Key key}) : super(key: key);
 
   @override
   _AllPreviewPageState createState() => _AllPreviewPageState();
@@ -31,13 +22,27 @@ class _AllPreviewPageState extends State<AllPreviewPage> {
   bool _isLoading = false;
   bool _isLoadFinsh = false;
 
+  GalleryModel _galleryModel;
+
   @override
   void initState() {
     super.initState();
-    // 初始化
-//    _galleryPreviewList = widget.galleryPreviewList;
-    _galleryPreviewList.addAll(widget.galleryPreviewList);
+
     _currentPage = 0;
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    final galleryModel = Provider.of<GalleryModel>(context, listen: false);
+    if (galleryModel != this._galleryModel) {
+      this._galleryModel = galleryModel;
+    }
+
+    // 初始化
+//    _galleryPreviewList.addAll(_galleryModel.galleryItem.galleryPreview);
+
+    _galleryPreviewList = _galleryModel.galleryItem.galleryPreview;
   }
 
 /*  @override
@@ -82,7 +87,7 @@ class _AllPreviewPageState extends State<AllPreviewPage> {
   @override
   Widget build(BuildContext context) {
     var ln = S.of(context);
-    var _count = int.parse(widget.filecount);
+    var _count = int.parse(_galleryModel.galleryItem.filecount);
     return CupertinoPageScaffold(
       navigationBar: CupertinoNavigationBar(
         middle: Text(ln.all_preview),
@@ -97,7 +102,7 @@ class _AllPreviewPageState extends State<AllPreviewPage> {
                     maxCrossAxisExtent: 135.0,
                     mainAxisSpacing: 0, //主轴方向的间距
                     crossAxisSpacing: 4, //交叉轴方向子元素的间距
-                    childAspectRatio: 0.6 //显示区域宽高
+                    childAspectRatio: 0.55 //显示区域宽高
                     ),
                 delegate: SliverChildBuilderDelegate(
                   (context, index) {
@@ -112,7 +117,6 @@ class _AllPreviewPageState extends State<AllPreviewPage> {
                       child: PreviewContainer(
                         galleryPreviewList: _galleryPreviewList,
                         index: index,
-                        showKey: widget.showKey,
                       ),
                     );
                   },
@@ -146,7 +150,7 @@ class _AllPreviewPageState extends State<AllPreviewPage> {
       return;
     }
     //
-    Global.logger.v('获取更多预览 ${widget.galleryUrl}');
+    Global.logger.v('获取更多预览 ${_galleryModel.galleryItem.url}');
     // 增加延时 避免build期间进行 setState
     await Future.delayed(Duration(milliseconds: 100));
     setState(() {
@@ -154,8 +158,9 @@ class _AllPreviewPageState extends State<AllPreviewPage> {
       _isLoading = true;
     });
 
-    var _moreGalleryPreviewList =
-        await Api.getGalleryPreview(widget.galleryUrl, page: _currentPage);
+    var _moreGalleryPreviewList = await Api.getGalleryPreview(
+        _galleryModel.galleryItem.url,
+        page: _currentPage);
 
     _galleryPreviewList.addAll(_moreGalleryPreviewList);
     setState(() {

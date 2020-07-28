@@ -5,7 +5,7 @@ import 'package:FEhViewer/models/galleryComment.dart';
 import 'package:FEhViewer/models/galleryItem.dart';
 import 'package:FEhViewer/models/states/gallery_model.dart';
 import 'package:FEhViewer/pages/gallery_detail/gallery_detail_page.dart';
-import 'package:FEhViewer/pages/gallery_detail/gallery_detail_page_p.dart';
+import 'package:FEhViewer/pages/gallery_view/gallery_view_page.dart';
 import 'package:fluro/fluro.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -130,9 +130,7 @@ class NavigatorUtil {
     Navigator.push(context, CupertinoPageRoute(builder: (context) {
       return ChangeNotifierProvider.value(
         value: galleryModel,
-        child: GalleryDetailPagePr(
-          galleryItem: galleryModel.galleryItem,
-        ),
+        child: GalleryDetailPage(),
       );
     }));
   }
@@ -172,7 +170,7 @@ class NavigatorUtil {
         transition: TransitionType.cupertino);
   }
 
-  ///
+  // 转到大图浏览
   static void goGalleryViewPage(BuildContext context, List<String> hrefs,
       int currentIndex, String showKey) {
     final encodeImages = List<String>.from(
@@ -187,5 +185,16 @@ class NavigatorUtil {
                 '&currentIndex=$currentIndex'
                 '&showKey=$showKey',
         transition: TransitionType.cupertino);
+  }
+
+  // 转到大图浏览
+  static void goGalleryViewPagePr(BuildContext context, int index) {
+    var galleryModel = Provider.of<GalleryModel>(context, listen: false);
+    Navigator.push(context, CupertinoPageRoute(builder: (context) {
+      return ChangeNotifierProvider.value(
+        value: galleryModel,
+        child: GalleryViewPageE(index: index),
+      );
+    }));
   }
 }
