@@ -37,11 +37,10 @@ class _GalleryDetailPageState extends State<GalleryDetailPage> {
     var _galleryItemFromApi =
         await Api.getGalleryDetail(_galleryModel.galleryItem.url);
 
+    _galleryModel.currentPreviewPage = 0;
     _galleryModel.galleryItem.tagGroup = _galleryItemFromApi.tagGroup;
     _galleryModel.galleryItem.galleryComment =
         _galleryItemFromApi.galleryComment;
-//    _galleryModel.galleryItem.galleryPreview =
-//        _galleryItemFromApi.galleryPreview;
     _galleryModel.setGalleryPreview(_galleryItemFromApi.galleryPreview);
     _galleryModel.galleryItem.showKey = _galleryItemFromApi.showKey;
     _galleryModel.galleryItem.favTitle = _galleryItemFromApi.favTitle;
@@ -77,9 +76,8 @@ class _GalleryDetailPageState extends State<GalleryDetailPage> {
     final galleryModel = Provider.of<GalleryModel>(context, listen: false);
     if (galleryModel != this._galleryModel) {
       this._galleryModel = galleryModel;
+      _loadData();
     }
-
-    _loadData();
   }
 
   @override

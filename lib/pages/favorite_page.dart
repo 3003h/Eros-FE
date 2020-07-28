@@ -17,8 +17,10 @@ import 'item/gallery_item.dart';
 
 class FavoriteTab extends StatefulWidget {
   final tabIndex;
+  final scrollController;
 
-  const FavoriteTab({Key key, this.tabIndex}) : super(key: key);
+  const FavoriteTab({Key key, this.tabIndex, this.scrollController})
+      : super(key: key);
   @override
   State<StatefulWidget> createState() {
     return _FavoriteTabState();
@@ -135,6 +137,7 @@ class _FavoriteTabState extends State<FavoriteTab> {
         builder: (context, isLogin, child) {
           return isLogin
               ? CustomScrollView(
+                  controller: widget.scrollController,
                   slivers: <Widget>[
                     CupertinoSliverNavigationBar(
                       largeTitle: TabPageTitle(

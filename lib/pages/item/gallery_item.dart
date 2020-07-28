@@ -12,6 +12,8 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:provider/provider.dart';
 
+const kCoverImageWidth = 120.0;
+
 /// 画廊列表项
 /// 使用provider进行管理
 /// 标题和tag需要随设置变化重构ui
@@ -196,13 +198,18 @@ class _GalleryItemWidgetState extends State<GalleryItemWidget> {
       return Hero(
         tag: '${galleryModel.galleryItem.url}_cover_${galleryModel.tabIndex}',
         child: Container(
-          width: 120,
-//         height: 180,
-          padding: const EdgeInsets.only(right: 8),
+          width: kCoverImageWidth,
+          height: galleryModel.galleryItem.imgHeight *
+              kCoverImageWidth /
+              galleryModel.galleryItem.imgWidth,
+          margin: const EdgeInsets.only(right: 8),
           child: ClipRRect(
             // 圆角
-            borderRadius: BorderRadius.circular(8),
-            child: CoverImg(imgUrl: galleryModel?.galleryItem?.imgUrl ?? ''),
+            borderRadius: BorderRadius.circular(6),
+            child: Container(
+                color: CupertinoColors.systemGrey6,
+                child:
+                    CoverImg(imgUrl: galleryModel?.galleryItem?.imgUrl ?? '')),
           ),
         ),
       );
