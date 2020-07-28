@@ -14,6 +14,8 @@ class GalleryItem {
     String url;
     String imgUrl;
     String imgUrlL;
+    num imgHeight;
+    num imgWidth;
     String japaneseTitle;
     String englishTitle;
     String category;

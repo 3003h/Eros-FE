@@ -12,8 +12,10 @@ import 'item/gallery_item.dart';
 
 class GalleryListTab extends StatefulWidget {
   final tabIndex;
+  final scrollController;
 
-  const GalleryListTab({Key key, this.tabIndex}) : super(key: key);
+  const GalleryListTab({Key key, this.tabIndex, this.scrollController})
+      : super(key: key);
 
   @override
   State<StatefulWidget> createState() => _GalleryListTabState();
@@ -188,6 +190,7 @@ class _GalleryListTabState extends State<GalleryListTab> {
     var ln = S.of(context);
     _title = ln.tab_gallery;
     CustomScrollView customScrollView = CustomScrollView(
+      controller: widget.scrollController,
       slivers: <Widget>[
         CupertinoSliverNavigationBar(
           largeTitle: TabPageTitle(

@@ -7,6 +7,12 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class SettingTab extends StatefulWidget {
+  final tabIndex;
+  final scrollController;
+
+  const SettingTab({Key key, this.tabIndex, this.scrollController})
+      : super(key: key);
+
   @override
   State<StatefulWidget> createState() => _SettingTabState();
 }

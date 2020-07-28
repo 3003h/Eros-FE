@@ -13,8 +13,10 @@ import 'item/gallery_item.dart';
 
 class PopularListTab extends StatefulWidget {
   final tabIndex;
+  final scrollController;
 
-  const PopularListTab({Key key, this.tabIndex}) : super(key: key);
+  const PopularListTab({Key key, this.tabIndex, this.scrollController})
+      : super(key: key);
   @override
   State<StatefulWidget> createState() => _PopularListTabState();
 }
@@ -22,6 +24,8 @@ class PopularListTab extends StatefulWidget {
 class _PopularListTabState extends State<PopularListTab> {
   List<GalleryItem> _gallerItemBeans = [];
   bool _firstLoading = false;
+
+  ScrollController _scrollController = ScrollController();
 
   @override
   void initState() {
@@ -85,6 +89,7 @@ class _PopularListTabState extends State<PopularListTab> {
     var ln = S.of(context);
     var _title = ln.tab_popular;
     CustomScrollView customScrollView = CustomScrollView(
+      controller: widget.scrollController,
       slivers: <Widget>[
         CupertinoSliverNavigationBar(
           largeTitle: TabPageTitle(

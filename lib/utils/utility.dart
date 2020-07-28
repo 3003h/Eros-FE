@@ -155,7 +155,7 @@ class Api {
     cookies.add(Cookie('nw', '1'));
     cookieJar.saveFromResponse(Uri.parse(url), cookies);
 
-    Global.logger.i("获取画廊 $url");
+//    Global.logger.i("获取画廊 $url");
     var response = await httpManager.get(url);
 
     // TODO 画廊警告问题 使用 nw=always 未解决 待处理 怀疑和Session有关
@@ -231,7 +231,7 @@ class Api {
       "Cookie": cookie,
     });
 
-    Global.logger.v('href = $href');
+//    Global.logger.v('href = $href');
 
     var regExp = RegExp(r'https://e[-x]hentai.org/s/([0-9a-z]+)/(\d+)-(\d+)');
     var regRult = regExp.firstMatch(href);

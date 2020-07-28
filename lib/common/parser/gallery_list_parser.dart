@@ -54,9 +54,7 @@ class GalleryListParser {
 //    Global.logger.v('gallerys ${gallerys.length}');
 
     List<GalleryItem> gallaryItems = [];
-    for (int i = 0; i < gallerys.length; i++) {
-      var tr = gallerys[i];
-
+    for (var tr in gallerys) {
       final category = tr.querySelector('td.gl1c.glcat > div')?.text?.trim();
 
       // 表头或者广告
@@ -94,10 +92,18 @@ class GalleryListParser {
             .add(await EhTagDatabase.getTranTag(tagText) ?? tagText);
       }
 
+      // 封面图片
       final img = tr.querySelector('td.gl2c > div > div > img');
       final imgDataSrc = img.attributes['data-src'];
       final imgSrc = img.attributes['src'];
       final imgUrl = imgDataSrc ?? imgSrc ?? '';
+
+      // 图片宽高
+      final imageStyle = img.attributes['style'];
+      var match =
+          RegExp(r'height:(\d+)px;width:(\d+)px').firstMatch(imageStyle);
+      final imageHeight = double.parse(match[1]);
+      final imageWidth = double.parse(match[2]);
 
       // 评分星级计算 (api获取不到评分时用)
       final ratPx = tr
@@ -143,6 +149,8 @@ class GalleryListParser {
         ..token = token
         ..englishTitle = title
         ..imgUrl = imgUrl ?? ''
+        ..imgHeight = imageHeight
+        ..imgWidth = imageWidth
         ..url = url
         ..category = category
         ..simpleTags = simpleTags

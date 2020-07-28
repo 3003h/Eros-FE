@@ -14,6 +14,8 @@ GalleryItem _$GalleryItemFromJson(Map<String, dynamic> json) {
     ..url = json['url'] as String
     ..imgUrl = json['imgUrl'] as String
     ..imgUrlL = json['imgUrlL'] as String
+    ..imgHeight = json['imgHeight'] as num
+    ..imgWidth = json['imgWidth'] as num
     ..japaneseTitle = json['japaneseTitle'] as String
     ..englishTitle = json['englishTitle'] as String
     ..category = json['category'] as String
@@ -53,6 +55,8 @@ Map<String, dynamic> _$GalleryItemToJson(GalleryItem instance) =>
       'url': instance.url,
       'imgUrl': instance.imgUrl,
       'imgUrlL': instance.imgUrlL,
+      'imgHeight': instance.imgHeight,
+      'imgWidth': instance.imgWidth,
       'japaneseTitle': instance.japaneseTitle,
       'englishTitle': instance.englishTitle,
       'category': instance.category,
