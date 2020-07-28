@@ -5,6 +5,7 @@ import 'base.dart';
 
 class GalleryModel extends ProfileChangeNotifier {
   GalleryItem _galleryItem;
+  List<GalleryPreview> _oriGalleryPreview;
   var _tabindex;
   var _title;
 
@@ -15,12 +16,17 @@ class GalleryModel extends ProfileChangeNotifier {
 
   GalleryItem get galleryItem => _galleryItem;
 
-  set title(String title) {
-    _title = title;
-    notifyListeners();
+  setGalleryPreview(List<GalleryPreview> galleryPreview) {
+    _galleryItem.galleryPreview = galleryPreview;
+    _oriGalleryPreview =
+        _galleryItem.galleryPreview.sublist(0, galleryPreview.length);
   }
+
+  get oriGalleryPreview => _oriGalleryPreview;
 
   get title => _title;
 
   get tabIndex => _tabindex;
+
+  get showKey => _galleryItem.showKey;
 }

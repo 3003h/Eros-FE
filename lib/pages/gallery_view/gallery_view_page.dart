@@ -1,11 +1,13 @@
 import 'package:FEhViewer/common/global.dart';
+import 'package:FEhViewer/models/index.dart';
+import 'package:FEhViewer/models/states/gallery_model.dart';
 import 'package:FEhViewer/utils/utility.dart';
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:extended_image/extended_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:photo_view/photo_view.dart';
 import 'package:photo_view/photo_view_gallery.dart';
+import 'package:provider/provider.dart';
 
 class GalleryViewPage extends StatefulWidget {
   final List hrefs;
@@ -55,8 +57,8 @@ class _GalleryViewPageState extends State<GalleryViewPage> {
             return PhotoViewGalleryPageOptions.customChild(
               child: Container(
                 child: GalleryImage(
-                  href: widget.hrefs[index],
-                  showKey: widget.showKey,
+//                  href: widget.hrefs[index],
+//                  showKey: widget.showKey,
                   index: widget.index,
                 ),
 //                child: CachedNetworkImage(
@@ -113,14 +115,11 @@ class _GalleryViewPageState extends State<GalleryViewPage> {
 }
 
 class GalleryViewPageE extends StatefulWidget {
-  final List hrefs;
   final int index;
-  final showKey;
   final PageController controller;
 
-  GalleryViewPageE({Key key, int index, List hrefs, this.showKey})
-      : this.hrefs = hrefs ?? [],
-        this.index = index ?? 0,
+  GalleryViewPageE({Key key, int index})
+      : this.index = index ?? 0,
         this.controller = PageController(initialPage: index),
         super(key: key);
 
@@ -136,33 +135,35 @@ class _GalleryViewPageEState extends State<GalleryViewPageE> {
   Widget build(BuildContext context) {
     return CupertinoPageScaffold(
 //      backgroundColor: CupertinoColors.black,
-      child: Container(
-        child: ExtendedImageGesturePageView.builder(
-          itemBuilder: (BuildContext context, int index) {
-            var item = widget.hrefs[index];
-            Widget image = GalleryImage(
-              href: item,
-              showKey: widget.showKey,
-              index: index,
-              urlMap: urlMap,
+      child: Selector<GalleryModel, List<GalleryPreview>>(
+          selector: (context, galleryModel) =>
+              galleryModel.galleryItem.galleryPreview,
+          shouldRebuild: (pre, next) => false,
+          builder: (context, List<GalleryPreview> listPreview, child) {
+            return Container(
+              child: ExtendedImageGesturePageView.builder(
+                itemBuilder: (BuildContext context, int index) {
+                  Widget image = GalleryImage(
+                    index: index,
+                  );
+                  if (index == currentIndex) {
+                    return Hero(
+                      tag: listPreview[index].href + index.toString(),
+                      child: image,
+                    );
+                  } else {
+                    return image;
+                  }
+                },
+                itemCount: listPreview.length,
+                onPageChanged: (int index) {
+                  currentIndex = index;
+                },
+                controller: widget.controller,
+                scrollDirection: Axis.horizontal,
+              ),
             );
-            if (index == currentIndex) {
-              return Hero(
-                tag: item + index.toString(),
-                child: image,
-              );
-            } else {
-              return image;
-            }
-          },
-          itemCount: widget.hrefs.length,
-          onPageChanged: (int index) {
-            currentIndex = index;
-          },
-          controller: widget.controller,
-          scrollDirection: Axis.horizontal,
-        ),
-      ),
+          }),
     );
   }
 }
@@ -170,37 +171,47 @@ class _GalleryViewPageEState extends State<GalleryViewPageE> {
 class GalleryImage extends StatefulWidget {
   GalleryImage({
     Key key,
-    @required this.href,
-    @required this.showKey,
     @required this.index,
-    this.urlMap,
   }) : super(key: key);
 
   @override
   _GalleryImageState createState() => _GalleryImageState();
-  final href;
-  final showKey;
   final index;
-  final urlMap;
 }
 
 class _GalleryImageState extends State<GalleryImage> {
+  GalleryModel _galleryModel;
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    final galleryModel = Provider.of<GalleryModel>(context, listen: false);
+    if (galleryModel != this._galleryModel) {
+      this._galleryModel = galleryModel;
+    }
+  }
+
   Future<String> getImageUrl() async {
-    return Api.getShowInfo(widget.href, widget.showKey, index: widget.index);
+    return Api.getShowInfo(
+        _galleryModel.galleryItem.galleryPreview[widget.index].href,
+        _galleryModel.showKey,
+        index: widget.index);
   }
 
   @override
   Widget build(BuildContext context) {
+    var _currentPreview =
+        _galleryModel.galleryItem.galleryPreview[widget.index];
     return FutureBuilder<String>(
         future: getImageUrl(),
         builder: (context, snapshot) {
-          if (widget.urlMap['${widget.index}'] == null) {
+          if (_currentPreview.largeImageUrl == null) {
             if (snapshot.connectionState == ConnectionState.done) {
               if (snapshot.hasError) {
-                return Text("Error: ${snapshot.error}");
+                return Center(child: Text("Error: ${snapshot.error}"));
               } else {
-                widget.urlMap['${widget.index}'] = snapshot.data;
-                Global.logger.v(widget.urlMap);
+                _currentPreview.largeImageUrl = snapshot.data;
+//                Global.logger.v(widget.urlMap);
                 return ExtendedImage.network(
                   snapshot.data,
                   fit: BoxFit.contain,
@@ -226,7 +237,7 @@ class _GalleryImageState extends State<GalleryImage> {
               );
             }
           } else {
-            var url = widget.urlMap['${widget.index}'];
+            var url = _currentPreview.largeImageUrl;
             return ExtendedImage.network(
               url,
               fit: BoxFit.contain,

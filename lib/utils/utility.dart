@@ -138,21 +138,20 @@ class Api {
   }
 
   /// 获取画廊详细信息
-  static Future<GalleryItem> getGalleryDetail(GalleryItem inGalleryItem) async {
+  static Future<GalleryItem> getGalleryDetail(String inUrl) async {
     //?inline_set=ts_m 小图,40一页
     //?inline_set=ts_l 大图,20一页
     //hc=1#comments 显示全部评论
     //nw=always 不显示警告
 
     HttpManager httpManager = HttpManager.getInstance();
-    var url = inGalleryItem.url + '?hc=1&inline_set=ts_l&nw=always';
+    var url = inUrl + '?hc=1&inline_set=ts_l&nw=always';
 
     // 不显示警告的处理 cookie加上 nw=1
     // 在 url使用 nw=always 未解决 自动写入cookie 暂时搞不懂 先手动设置下
     // todo 待优化
     var cookieJar = await Api.cookieJar;
-    List<Cookie> cookies =
-        cookieJar.loadForRequest(Uri.parse(inGalleryItem.url));
+    List<Cookie> cookies = cookieJar.loadForRequest(Uri.parse(inUrl));
     cookies.add(Cookie('nw', '1'));
     cookieJar.saveFromResponse(Uri.parse(url), cookies);
 
