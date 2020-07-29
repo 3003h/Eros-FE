@@ -7,8 +7,9 @@ import 'package:intl/intl.dart';
 
 class GalleryDetailParser {
 
-  /// 解析响应数据
-  static Future<GalleryItem> parseGalleryDetail(String response, {GalleryItem inGalleryItem}) async {
+  /// 解析画廊详情数据
+  static Future<GalleryItem> parseGalleryDetail(String response,
+      {GalleryItem inGalleryItem}) async {
     // 解析响应信息dom
     var document = parse(response);
 
@@ -104,17 +105,30 @@ class GalleryDetailParser {
 
 
     // 画廊 showKey
-    final showKey = await Api.getShowkey(previewList[0].href);
-    galleryItem.showKey = showKey;
+    final _showKey = await Api.getShowkey(previewList[0].href);
+    galleryItem.showKey = _showKey;
 
-    // 收藏标志
-    var favTitle = '';
+    // 收藏夹标题
+    var _favTitle = '';
     Element fav = document.querySelector("#favoritelink");
     if (fav?.nodes?.length == 1) {
-      favTitle = fav.text.trim();
+      _favTitle = fav.text.trim();
     }
+    galleryItem.favTitle = _favTitle;
 
-    galleryItem.favTitle = favTitle;
+    // 收藏夹序号
+    var _favcat = '';
+    Element _favcatElm = document.querySelector("#fav");
+    if (_favcatElm.nodes.length > 0) {
+      var _div = _favcatElm.querySelector('div');
+      var _catStyle = _div?.attributes['style'];
+      var _catPosition = RegExp(r'background-position:0px -(\d+)px;')
+          .firstMatch(
+          _catStyle)[1];
+      _favcat = '${(int.parse(_catPosition) - 2) ~/ 19}';
+    }
+    galleryItem.favcat = _favcat;
+
 
     return galleryItem;
   }

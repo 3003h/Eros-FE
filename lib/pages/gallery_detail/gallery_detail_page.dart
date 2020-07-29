@@ -34,6 +34,7 @@ class _GalleryDetailPageState extends State<GalleryDetailPage> {
 
   /// 初始化 请求数据
   _loadData() async {
+    //todo 先判断 ，没有再获取
     setState(() {
       _loading = true;
     });
@@ -45,8 +46,9 @@ class _GalleryDetailPageState extends State<GalleryDetailPage> {
     _galleryModel.galleryItem.galleryComment =
         _galleryItemFromApi.galleryComment;
     _galleryModel.setGalleryPreview(_galleryItemFromApi.galleryPreview);
+    _galleryModel.setFavTitle(_galleryItemFromApi.favTitle,
+        favcat: _galleryItemFromApi.favcat);
     _galleryModel.galleryItem.showKey = _galleryItemFromApi.showKey;
-    _galleryModel.galleryItem.favTitle = _galleryItemFromApi.favTitle;
 
     setState(() {
       _loading = false;
@@ -317,17 +319,18 @@ class _GalleryDetailPageState extends State<GalleryDetailPage> {
   }
 
   Widget _buildFavIcon() {
+    return GalleryFavButton();
     return Container(
       child: _loading
           ? Container(
               height: 38,
             )
           : GalleryFavButton(
-              favTitle: _galleryModel.galleryItem.favTitle,
-              favcat: _galleryModel.galleryItem.favcat,
-              gid: _galleryModel.galleryItem.gid,
-              token: _galleryModel.galleryItem.token,
-            ),
+//              favTitle: _galleryModel.galleryItem.favTitle,
+//              favcat: _galleryModel.galleryItem.favcat,
+//              gid: _galleryModel.galleryItem.gid,
+//              token: _galleryModel.galleryItem.token,
+              ),
     );
   }
 
