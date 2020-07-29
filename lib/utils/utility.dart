@@ -97,7 +97,12 @@ class Api {
     if (serach != null) {
       var searArr = serach.split(':');
       if (searArr.length > 1) {
-        var _search = Uri.encodeQueryComponent('${searArr[0]}:"${searArr[1]}"');
+        var _end = '';
+        if (searArr[0] != 'uploader') {
+          _end = '\$';
+        }
+        var _search =
+            Uri.encodeQueryComponent('${searArr[0]}:"${searArr[1]}$_end"');
         qry = '$qry&f_search=$_search';
       }
     }
