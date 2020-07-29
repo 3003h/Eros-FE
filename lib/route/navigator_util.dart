@@ -119,6 +119,13 @@ class NavigatorUtil {
         transition: TransitionType.cupertino);
   }
 
+  static Future goGalleryList(BuildContext context,
+      {int cats = 0, String simpleSearch}) {
+    return Application.router.navigateTo(
+        context, EHRoutes.galleryList + "?cats=$cats&s_search=$simpleSearch",
+        transition: TransitionType.cupertino);
+  }
+
   /// 转到画廊页面
   /// [GalleryModel] 复用画廊状态Provider
   /// fluro的方式不知道怎么处理 使用默认路由方式

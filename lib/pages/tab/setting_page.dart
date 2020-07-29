@@ -62,28 +62,30 @@ class _SettingTabState extends State<SettingTab> {
 
     var ln = S.of(context);
     var _title = ln.tab_setting;
-    return CustomScrollView(
-      slivers: <Widget>[
-        CupertinoSliverNavigationBar(
-          largeTitle: Text(
-            _title,
+    return CupertinoPageScaffold(
+      child: CustomScrollView(
+        slivers: <Widget>[
+          CupertinoSliverNavigationBar(
+            largeTitle: Text(
+              _title,
+            ),
+            transitionBetweenRoutes: false,
           ),
-          transitionBetweenRoutes: false,
-        ),
-        SliverSafeArea(
-            top: false,
-            minimum: const EdgeInsets.all(8),
-            sliver: SliverList(
-              delegate: SliverChildBuilderDelegate((context, index) {
-                List _itemList = _getItemList();
-                if (index < _itemList.length) {
-                  return _itemList[index];
-                } else {
-                  return null;
-                }
-              }),
-            ))
-      ],
+          SliverSafeArea(
+              top: false,
+              minimum: const EdgeInsets.all(8),
+              sliver: SliverList(
+                delegate: SliverChildBuilderDelegate((context, index) {
+                  List _itemList = _getItemList();
+                  if (index < _itemList.length) {
+                    return _itemList[index];
+                  } else {
+                    return null;
+                  }
+                }),
+              ))
+        ],
+      ),
     );
   }
 }

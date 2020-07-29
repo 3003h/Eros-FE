@@ -46,7 +46,7 @@ class GalleryListParser {
     if (pages.length > 2) {
       dom.Element maxPageElem = pages[pages.length - 2];
       maxPage = int.parse(maxPageElem.text.trim());
-      Global.logger.v('maxPage $maxPage');
+//      Global.logger.v('maxPage $maxPage');
     }
 
     // 画廊列表

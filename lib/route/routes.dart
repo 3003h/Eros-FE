@@ -5,6 +5,7 @@ import 'router_handler.dart';
 class EHRoutes {
   static const String root = "/";
   static const String home = "/home";
+  static const String galleryList = "/galleryList";
   static const String selFavorie = "/selFavoriePage";
   static const String ehSetting = "/ehSetting";
   static const String login = "/login";
