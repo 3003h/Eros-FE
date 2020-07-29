@@ -11,11 +11,11 @@
 就这样从入门到入土，折腾一个多月有了现在的版本，虽然问题还缺失的功能还不少。但至少是个能看的版本了
 
 UI 界面方面不少都参考的[E-HentaiViewer](https://github.com/kayanouriko/E-HentaiViewer)\
-所以一眼看过去比较像，毕竟之前主要用的都是它\
+所以一眼看过去比较像，毕竟之前主要用的都是它
 
 因为是 flutter 所以也是跨平台支持的，测试的平台主要有\
 iOS 14 : iPhone XR / iPad Pro 2018\
-Android 10 : MIUI12/ MI K30\
+Android 10 : MIUI12/ MI K30
 
 现有问题:
 
@@ -36,7 +36,7 @@ ehentai 标签汉化项目
 
 # 应用截图
 
-![](https://i.loli.net/2020/07/30/YnpIjzJDQ7mRg53.png)
+![](https://i.loli.net/2020/07/30/YnpIjzJDQ7mRg53.png){:height="50%" width="50%"}
 
 # 功能
 
