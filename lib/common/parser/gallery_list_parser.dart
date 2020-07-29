@@ -132,7 +132,7 @@ class GalleryListParser {
               ?.attributes['title'] ??
           '';
 
-      var favcat;
+      var favcat = '';
       if (favTitle.isNotEmpty) {
         var favcatStyle = tr
             .querySelector('td.gl2c > div:nth-child(2) > div')
@@ -141,7 +141,7 @@ class GalleryListParser {
                 ?.firstMatch(favcatStyle)
                 ?.group(1) ??
             '';
-        favcat = EHConst.favCat[favcatColor];
+        favcat = EHConst.favCat[favcatColor] ?? '';
       }
 
       gallaryItems.add(GalleryItem()

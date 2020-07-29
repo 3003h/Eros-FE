@@ -27,6 +27,14 @@ class GalleryModel extends ProfileChangeNotifier {
         _galleryItem.galleryPreview.sublist(0, galleryPreview.length);
   }
 
+  setFavTitle(String favTitle, {String favcat}) {
+    _galleryItem.favTitle = favTitle;
+    if (favcat != null) {
+      _galleryItem.favcat = favcat;
+    }
+    notifyListeners();
+  }
+
   addAllPreview(List<GalleryPreview> galleryPreview) {
     _galleryItem.galleryPreview.addAll(galleryPreview);
     Global.logger.v('${_galleryItem.galleryPreview.length}');
