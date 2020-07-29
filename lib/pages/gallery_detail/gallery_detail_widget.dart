@@ -351,7 +351,7 @@ class TagGroupItem extends StatelessWidget {
 
   final tagGroupData;
 
-  static initTagBtnList(galleryTags) {
+  _initTagBtnList(galleryTags, context) {
     final _isTagTranslat = Global.profile.ehConfig.tagTranslat;
     List<Widget> _tagBtnList = [];
     galleryTags.forEach((tag) {
@@ -359,6 +359,8 @@ class TagGroupItem extends StatelessWidget {
         text: _isTagTranslat ? tag?.tagTranslat ?? '' : tag?.title ?? '',
         onPressed: () {
           Global.logger.v('search type[${tag.type}] tag[${tag.title}]');
+          NavigatorUtil.goGalleryList(context,
+              simpleSearch: '${tag.type}:${tag.title}');
         },
       ));
     });
@@ -368,7 +370,7 @@ class TagGroupItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final _isTagTranslat = Global.profile.ehConfig.tagTranslat;
-    final _tagBtnList = initTagBtnList(tagGroupData.galleryTags);
+    final _tagBtnList = _initTagBtnList(tagGroupData.galleryTags, context);
     final _tagType = tagGroupData.tagType;
 
     Container container = Container(

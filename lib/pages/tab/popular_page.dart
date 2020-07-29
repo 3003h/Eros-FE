@@ -9,7 +9,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import 'item/gallery_item.dart';
+import '../item/gallery_item.dart';
 
 class PopularListTab extends StatefulWidget {
   final tabIndex;
@@ -119,6 +119,6 @@ class _PopularListTabState extends State<PopularListTab> {
       ],
     );
 
-    return customScrollView;
+    return CupertinoPageScaffold(child: customScrollView);
   }
 }

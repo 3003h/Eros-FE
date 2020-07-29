@@ -1,9 +1,12 @@
+import 'package:FEhViewer/common/global.dart';
 import 'package:FEhViewer/generated/l10n.dart';
 import 'package:FEhViewer/models/states/ehconfig_model.dart';
 import 'package:FEhViewer/models/states/gallery_model.dart';
 import 'package:FEhViewer/pages/gallery_detail/gallery_detail_widget.dart';
 import 'package:FEhViewer/pages/gallery_detail/gallery_favcat.dart';
+import 'package:FEhViewer/route/navigator_util.dart';
 import 'package:FEhViewer/utils/utility.dart';
+import 'package:FEhViewer/values/const.dart';
 import 'package:FEhViewer/values/theme_colors.dart';
 import 'package:FEhViewer/widget/rating_bar.dart';
 import 'package:cached_network_image/cached_network_image.dart';
@@ -123,20 +126,32 @@ class _GalleryDetailPageState extends State<GalleryDetailPage> {
 
   Widget _buildNavigationBar() {
     var ln = S.of(context);
-    double _statusBarHeight = MediaQuery.of(context).padding.top;
-    var _tinyImg = _hideNavigationBtn
-        ? Container()
-        : CoveTinyImage(
-            imgUrl: _galleryModel.galleryItem.imgUrl,
-            statusBarHeight: _statusBarHeight,
-          );
 
     var _navReadButton =
         _hideNavigationBtn ? Container() : _buildReadButton(ln.READ);
 
     return CupertinoNavigationBar(
-      middle: _tinyImg,
+      middle: _buildCoveTinyImage(),
       trailing: _navReadButton,
+    );
+  }
+
+  Widget _buildCoveTinyImage() {
+    double _statusBarHeight = MediaQuery.of(context).padding.top;
+
+    return GestureDetector(
+      onTap: () {
+        _controller.animateTo(0,
+            duration: Duration(milliseconds: 500), curve: Curves.ease);
+      },
+      child: Container(
+        child: _hideNavigationBtn
+            ? Container()
+            : CoveTinyImage(
+                imgUrl: _galleryModel.galleryItem.imgUrl,
+                statusBarHeight: _statusBarHeight,
+              ),
+      ),
     );
   }
 
@@ -193,7 +208,7 @@ class _GalleryDetailPageState extends State<GalleryDetailPage> {
                       // 标题
                       _buildTitle(),
                       // 上传用户
-                      _buildUploaderWidget(),
+                      _buildUploader(),
                       Spacer(),
                       Row(
                         crossAxisAlignment: CrossAxisAlignment.end,
@@ -253,26 +268,35 @@ class _GalleryDetailPageState extends State<GalleryDetailPage> {
         });
   }
 
+  // 类别 点击可跳转搜索
   Widget _buildCategory() {
     Color _colorCategory =
         ThemeColors.nameColor[_galleryModel?.galleryItem?.category ?? "defaule"]
                 ["color"] ??
             CupertinoColors.white;
 
-    return ClipRRect(
-      borderRadius: BorderRadius.circular(4),
-      child: Container(
-        padding: const EdgeInsets.fromLTRB(6, 3, 6, 3),
-        color: _colorCategory,
-        child: Text(
-          _galleryModel?.galleryItem?.category ?? '',
-          style: TextStyle(
-            fontSize: 14.5,
-            // height: 1.1,
-            color: CupertinoColors.white,
+    return GestureDetector(
+      child: ClipRRect(
+        borderRadius: BorderRadius.circular(4),
+        child: Container(
+          padding: const EdgeInsets.fromLTRB(6, 3, 6, 3),
+          color: _colorCategory,
+          child: Text(
+            _galleryModel?.galleryItem?.category ?? '',
+            style: TextStyle(
+              fontSize: 14.5,
+              // height: 1.1,
+              color: CupertinoColors.white,
+            ),
           ),
         ),
       ),
+      onTap: () {
+        final iCat =
+            EHConst.cats[_galleryModel?.galleryItem?.category?.trim() ?? ''];
+        final cats = EHConst.sumCats - iCat;
+        NavigatorUtil.goGalleryList(context, cats: cats);
+      },
     );
   }
 
@@ -307,20 +331,29 @@ class _GalleryDetailPageState extends State<GalleryDetailPage> {
     );
   }
 
-  Widget _buildUploaderWidget() {
-    return Container(
-      margin: const EdgeInsets.only(top: 4, bottom: 4),
-      child: Text(
-        _galleryModel?.galleryItem?.uploader ?? '',
-        maxLines: 1,
-        textAlign: TextAlign.left, // 对齐方式
-        overflow: TextOverflow.ellipsis, // 超出部分省略号
-        style: TextStyle(
-          fontSize: 13,
-          color: Colors.brown,
-          fontWeight: FontWeight.w500,
+  Widget _buildUploader() {
+    var _uploader = _galleryModel?.galleryItem?.uploader ?? '';
+    return GestureDetector(
+      behavior: HitTestBehavior.opaque,
+      child: Container(
+        margin: const EdgeInsets.only(top: 8, bottom: 8),
+        child: Text(
+          _uploader,
+          maxLines: 1,
+          textAlign: TextAlign.left, // 对齐方式
+          overflow: TextOverflow.ellipsis, // 超出部分省略号
+          style: TextStyle(
+            fontSize: 13,
+            color: Colors.brown,
+            fontWeight: FontWeight.w500,
+          ),
         ),
       ),
+      onTap: () {
+        Global.logger.v('search uploader:$_uploader');
+        NavigatorUtil.goGalleryList(context,
+            simpleSearch: 'uploader:$_uploader');
+      },
     );
   }
 

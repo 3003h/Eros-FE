@@ -86,6 +86,20 @@ class EHConst {
     "misc": Color(0xffd7d7d6),
   };
 
+  static const sumCats = 1023;
+  static const cats = {
+    "Doujinshi": 2,
+    "Manga": 4,
+    "Artist CG": 8,
+    "Game CG": 16,
+    "Western": 512,
+    "Non-H": 256,
+    "Image Set": 32,
+    "Cosplay": 64,
+    "Asian Porn": 128,
+    "Misc": 1,
+  };
+
   static const Map favCat = {
     '#000': '0',
     '#f00': '1',

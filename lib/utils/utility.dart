@@ -79,22 +79,36 @@ class Api {
     return tuple;
   }
 
-  /// 获取默认画廊列表
+  /// 获取画廊列表
   static Future<Tuple2<List<GalleryItem>, int>> getGallery(
-      {int page, String fromGid}) async {
+      {int page, String fromGid, String serach, int cats}) async {
     HttpManager httpManager = HttpManager.getInstance(
         EHConst.getBaseSite(Global.profile.ehConfig.siteEx ?? false));
 
-    var url = "";
-    if (page != null && fromGid != null) {
-      url = "/?page=$page&from=$fromGid";
-    } else if (page != null) {
-      url = "/?page=$page";
+    var url = "/";
+    var qry = '?page=${page ?? 0}';
+    if (fromGid != null) {
+      qry = '$qry&from=$fromGid';
     }
+    if (cats != null) {
+      qry = '$qry&f_cats=$cats';
+    }
+
+    if (serach != null) {
+      var searArr = serach.split(':');
+      if (searArr.length > 1) {
+        var _search = Uri.encodeQueryComponent('${searArr[0]}:"${searArr[1]}"');
+        qry = '$qry&f_search=$_search';
+      }
+    }
+
+    url = '$url$qry';
 
     Options options = Options(headers: {
       "Referer": "https://e-hentai.org",
     });
+
+    Global.logger.v(url);
 
     var response = await httpManager.get(url, options: options);
 
@@ -110,25 +124,13 @@ class Api {
     //收藏时间排序
     var _order = Global?.profile?.ehConfig?.favoritesOrder;
 
-    var url = '/favorites.php';
-    var qry = '';
+    var url = '/favorites.php/';
+    var qry = '?page=${page ?? 0}';
     if (favcat != null && favcat != "a" && favcat.isNotEmpty) {
-      qry = '$qry?favcat=$favcat';
+      qry = '$qry&favcat=$favcat';
     }
-
-    if (qry.isNotEmpty) {
-      qry = "$qry&page=${page ?? '0'}";
-    } else {
-      qry = "$qry?page=${page ?? '0'}";
-    }
-
-    if (qry.isNotEmpty) {
-      qry = "$qry&inline_set=${_order ?? ''}";
-    } else {
-      qry = "$qry?inline_set=${_order ?? ''}";
-    }
-
-    url = url + '/' + qry;
+    qry = "$qry&inline_set=${_order ?? ''}";
+    url = '$url$qry';
 
     Global.logger.v(url);
 

@@ -8,13 +8,21 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import 'item/gallery_item.dart';
+import '../item/gallery_item.dart';
 
 class GalleryListTab extends StatefulWidget {
   final tabIndex;
   final scrollController;
 
-  const GalleryListTab({Key key, this.tabIndex, this.scrollController})
+  final simpleSearch;
+  final int cats;
+
+  const GalleryListTab(
+      {Key key,
+      this.tabIndex,
+      this.scrollController,
+      this.simpleSearch,
+      this.cats})
       : super(key: key);
 
   @override
@@ -28,6 +36,7 @@ class _GalleryListTabState extends State<GalleryListTab> {
   bool _isLoadMore = false;
   bool _firstLoading = false;
   final List<GalleryItem> _gallerItemBeans = [];
+  String _search;
 
   //页码跳转的控制器
   TextEditingController _pageController = TextEditingController();
@@ -35,7 +44,12 @@ class _GalleryListTabState extends State<GalleryListTab> {
   @override
   void initState() {
     super.initState();
+    _parserSearch();
     _loadDataFirst();
+  }
+
+  _parserSearch() {
+    _search = '${widget.simpleSearch}'.trim();
   }
 
   _loadDataFirst() async {
@@ -43,7 +57,7 @@ class _GalleryListTabState extends State<GalleryListTab> {
       _gallerItemBeans.clear();
       _firstLoading = true;
     });
-    var tuple = await Api.getGallery();
+    var tuple = await Api.getGallery(cats: widget.cats, serach: _search);
     var gallerItemBeans = tuple.item1;
     _gallerItemBeans.addAll(gallerItemBeans);
     _maxPage = tuple.item2;
@@ -58,7 +72,7 @@ class _GalleryListTabState extends State<GalleryListTab> {
         _firstLoading = false;
       });
     }
-    var tuple = await Api.getGallery();
+    var tuple = await Api.getGallery(cats: widget.cats, serach: _search);
     var gallerItemBeans = tuple.item1;
     setState(() {
       _curPage = 0;
@@ -79,10 +93,11 @@ class _GalleryListTabState extends State<GalleryListTab> {
       _isLoadMore = true;
     });
 
-    Global.logger.v('last gid   =>  ${_gallerItemBeans.last.gid}');
+//    Global.logger.v('last gid   =>  ${_gallerItemBeans.last.gid}');
     _curPage += 1;
     var fromGid = _gallerItemBeans.last.gid;
-    var tuple = await Api.getGallery(page: _curPage, fromGid: fromGid);
+    var tuple = await Api.getGallery(
+        page: _curPage, fromGid: fromGid, cats: widget.cats, serach: _search);
     var gallerItemBeans = tuple.item1;
 
     setState(() {
@@ -98,7 +113,8 @@ class _GalleryListTabState extends State<GalleryListTab> {
       _firstLoading = true;
     });
     _curPage = page;
-    var tuple = await Api.getGallery(page: _curPage);
+    var tuple = await Api.getGallery(
+        page: _curPage, cats: widget.cats, serach: _search);
     var gallerItemBeans = tuple.item1;
     setState(() {
       _gallerItemBeans.clear();
@@ -112,8 +128,8 @@ class _GalleryListTabState extends State<GalleryListTab> {
     return SliverList(
       delegate: SliverChildBuilderDelegate(
         (context, index) {
-          if (index == gallerItemBeans.length - 1) {
-            Global.logger.v('load more');
+          if (index == gallerItemBeans.length - 1 && _curPage < _maxPage - 1) {
+//            Global.logger.v('load more');
             _loadDataMore();
           }
 
@@ -213,6 +229,7 @@ class _GalleryListTabState extends State<GalleryListTab> {
         ),
         SliverSafeArea(
           top: false,
+          bottom: false,
           sliver: _firstLoading
               ? SliverToBoxAdapter(
                   child: Container(
@@ -226,7 +243,7 @@ class _GalleryListTabState extends State<GalleryListTab> {
         ),
         SliverToBoxAdapter(
           child: Container(
-            padding: const EdgeInsets.only(bottom: 150),
+            padding: const EdgeInsets.only(top: 50, bottom: 100),
             child: _isLoadMore
                 ? CupertinoActivityIndicator(
                     radius: 14,
@@ -239,6 +256,8 @@ class _GalleryListTabState extends State<GalleryListTab> {
       ],
     );
 
-    return customScrollView;
+    return CupertinoPageScaffold(
+      child: customScrollView,
+    );
   }
 }
