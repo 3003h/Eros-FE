@@ -36,7 +36,8 @@ ehentai 标签汉化项目
 
 # 应用截图
 
-![fehv-w50](https://i.loli.net/2020/07/30/YnpIjzJDQ7mRg53.png)
+<!-- ![fehv-w50](https://i.loli.net/2020/07/30/YnpIjzJDQ7mRg53.png) -->
+<img width="300"  src="https://i.loli.net/2020/07/30/YnpIjzJDQ7mRg53.png"/>
 
 # 功能
 
