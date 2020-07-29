@@ -28,7 +28,6 @@ class _FEhHomeState extends State<FEhHome> {
   // tab控制器 可设置默认tab
   CupertinoTabController _controller = CupertinoTabController();
   int _currentIndex = 0;
-  DateTime _lastPressedAtBar; // bar 上次点击时间
   bool _tapAwait = true;
 
   // 底部菜单栏图标数组
@@ -142,7 +141,6 @@ class _FEhHomeState extends State<FEhHome> {
 
   @override
   void didChangeDependencies() {
-    // TODO: implement didChangeDependencies
     super.didChangeDependencies();
     initData();
     _tapAwait = false;
