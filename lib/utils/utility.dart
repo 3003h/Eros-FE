@@ -113,7 +113,7 @@ class Api {
       "Referer": "https://e-hentai.org",
     });
 
-    Global.logger.v(url);
+//    Global.logger.v(url);
 
     var response = await httpManager.get(url, options: options);
 

@@ -107,6 +107,7 @@ class _LoginCookiePageState extends State<LoginCookiePage> {
       });
     }
 
+    FocusScope.of(context).requestFocus(FocusNode());
     User user;
     try {
       user = await EhUserManager().signInByCookie(

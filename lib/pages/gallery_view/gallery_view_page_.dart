@@ -1,13 +1,8 @@
 import 'package:FEhViewer/common/global.dart';
-import 'package:FEhViewer/models/index.dart';
-import 'package:FEhViewer/models/states/gallery_model.dart';
-import 'package:FEhViewer/utils/utility.dart';
-import 'package:extended_image/extended_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:photo_view/photo_view.dart';
 import 'package:photo_view/photo_view_gallery.dart';
-import 'package:provider/provider.dart';
 
 class GalleryViewPage extends StatefulWidget {
   final List hrefs;

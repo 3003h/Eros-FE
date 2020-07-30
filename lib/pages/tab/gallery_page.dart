@@ -2,6 +2,7 @@ import 'package:FEhViewer/common/global.dart';
 import 'package:FEhViewer/generated/l10n.dart';
 import 'package:FEhViewer/models/index.dart';
 import 'package:FEhViewer/models/states/gallery_model.dart';
+import 'package:FEhViewer/utils/toast.dart';
 import 'package:FEhViewer/utils/utility.dart';
 import 'package:FEhViewer/widget/eh_widget.dart';
 import 'package:flutter/cupertino.dart';
@@ -92,8 +93,6 @@ class _GalleryListTabState extends State<GalleryListTab> {
     setState(() {
       _isLoadMore = true;
     });
-
-//    Global.logger.v('last gid   =>  ${_gallerItemBeans.last.gid}');
     _curPage += 1;
     var fromGid = _gallerItemBeans.last.gid;
     var tuple = await Api.getGallery(
@@ -148,6 +147,28 @@ class _GalleryListTabState extends State<GalleryListTab> {
 
   /// 跳转页码
   Future<void> _jumtToPage(BuildContext context) async {
+    _jump(context) {
+      var _input = _pageController.text.trim();
+
+      if (_input.isEmpty) {
+        showToast('输入为空');
+      }
+
+      // 数字检查
+      if (!RegExp(r'(^\d+$)').hasMatch(_input)) {
+        showToast('输入格式有误');
+      }
+
+      int _toPage = int.parse(_input) - 1;
+      if (_toPage >= 0 && _toPage <= _maxPage) {
+        FocusScope.of(context).requestFocus(FocusNode());
+        _loadFromPage(_toPage);
+        Navigator.of(context).pop();
+      } else {
+        showToast('输入范围有误');
+      }
+    }
+
     return showCupertinoDialog<void>(
       context: context,
       // barrierDismissible: false, // user must tap button!
@@ -168,8 +189,7 @@ class _GalleryListTabState extends State<GalleryListTab> {
                   onEditingComplete: () {
                     // 点击键盘完成
                     // 画廊跳转
-                    _loadFromPage(int.parse(_pageController.text) - 1);
-                    Navigator.of(context).pop();
+                    _jump(context);
                   },
                 )
               ],
@@ -186,8 +206,7 @@ class _GalleryListTabState extends State<GalleryListTab> {
               child: Text('确定'),
               onPressed: () {
                 // 画廊跳转
-                _loadFromPage(int.parse(_pageController.text) - 1);
-                Navigator.of(context).pop();
+                _jump(context);
               },
             ),
           ],
@@ -215,7 +234,17 @@ class _GalleryListTabState extends State<GalleryListTab> {
           ),
           trailing: CupertinoButton(
             padding: const EdgeInsets.all(0),
-            child: Text('${_curPage + 1}'),
+            child: ClipRRect(
+              borderRadius: BorderRadius.circular(4),
+              child: Container(
+                padding: const EdgeInsets.fromLTRB(4, 2, 4, 2),
+                color: CupertinoColors.activeBlue,
+                child: Text(
+                  '${_curPage + 1}',
+                  style: TextStyle(color: CupertinoColors.white),
+                ),
+              ),
+            ),
             onPressed: () {
               _jumtToPage(context);
             },
