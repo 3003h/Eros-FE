@@ -11,6 +11,7 @@ class GalleryModel extends ProfileChangeNotifier {
   var _title;
   int _currentPreviewPage;
   bool _isGetAllImageHref;
+  bool _hideNavigationBtn = true;
 
   initData(GalleryItem galleryItem, {@required tabIndex}) {
     _galleryItem = galleryItem;
@@ -25,7 +26,7 @@ class GalleryModel extends ProfileChangeNotifier {
     _galleryItem.galleryPreview = galleryPreview;
     _oriGalleryPreview =
         _galleryItem.galleryPreview.sublist(0, galleryPreview.length);
-    notifyListeners();
+//    notifyListeners();
   }
 
   setFavTitle(String favTitle, {String favcat}) {
@@ -41,6 +42,13 @@ class GalleryModel extends ProfileChangeNotifier {
 //    Global.logger.v('${_galleryItem.galleryPreview.length}');
     notifyListeners();
   }
+
+  set hideNavigationBtn(bool value) {
+    _hideNavigationBtn = value;
+    notifyListeners();
+  }
+
+  get hideNavigationBtn => _hideNavigationBtn;
 
   bool get isGetAllImageHref => _isGetAllImageHref ?? false;
   set isGetAllImageHref(bool value) => _isGetAllImageHref = value;
