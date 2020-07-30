@@ -1,7 +1,10 @@
 import 'package:json_annotation/json_annotation.dart';
-import "tagGroup.dart";
+
 import "galleryComment.dart";
 import "galleryPreview.dart";
+import "tagGroup.dart";
+
+
 part 'galleryItem.g.dart';
 
 @JsonSerializable()

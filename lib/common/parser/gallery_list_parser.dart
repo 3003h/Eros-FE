@@ -1,7 +1,6 @@
 import 'dart:convert';
 
 import 'package:FEhViewer/common/tag_database.dart';
-import 'package:FEhViewer/common/global.dart';
 import 'package:FEhViewer/models/index.dart';
 import 'package:FEhViewer/utils/dio_util.dart';
 import 'package:FEhViewer/utils/utility.dart';
@@ -29,31 +28,35 @@ class GalleryListParser {
       {isFavorite = false}) async {
     var document = parse(response);
 
-    const GALLERY_SELECT =
+    final _gallerySelector =
         "body > div.ido > div:nth-child(2) > table > tbody > tr";
-    const FAVORITE_SELECT =
-        "body > div.ido > form > table.itg.gltc > tbody > tr";
+    final _favSelector = "body > div.ido > form > table.itg.gltc > tbody > tr";
 
-    final select = isFavorite ? FAVORITE_SELECT : GALLERY_SELECT;
+    final _listSelector = isFavorite ? _favSelector : _gallerySelector;
+
+    final _galleryPageSelector =
+        'body > div.ido > div:nth-child(2) > table.ptt > tbody > tr > td';
+    final _favPageSelector =
+        'body > div.ido > form > table.ptt > tbody > tr > td';
+    final _pageSelector = isFavorite ? _favPageSelector : _galleryPageSelector;
 
     // final fav =
     //     document.querySelector("body > div.ido > form > p")?.text?.trim() ?? "";
 
     // 最大页数
-    int maxPage = 0;
-    List<dom.Element> pages = document.querySelectorAll(
-        'body > div.ido > div:nth-child(2) > table.ptt > tbody > tr > td');
-    if (pages.length > 2) {
-      dom.Element maxPageElem = pages[pages.length - 2];
-      maxPage = int.parse(maxPageElem.text.trim());
-//      Global.logger.v('maxPage $maxPage');
+    int _maxPage = 0;
+    List<dom.Element> _pages = document.querySelectorAll(_pageSelector);
+    if (_pages.length > 2) {
+      dom.Element _maxPageElem = _pages[_pages.length - 2];
+      _maxPage = int.parse(_maxPageElem.text.trim());
+//      Global.logger.v('_maxPage $_maxPage');
     }
 
     // 画廊列表
-    List<dom.Element> gallerys = document.querySelectorAll(select);
+    List<dom.Element> gallerys = document.querySelectorAll(_listSelector);
 //    Global.logger.v('gallerys ${gallerys.length}');
 
-    List<GalleryItem> gallaryItems = [];
+    List<GalleryItem> _gallaryItems = [];
     for (var tr in gallerys) {
       final category = tr.querySelector('td.gl1c.glcat > div')?.text?.trim();
 
@@ -144,7 +147,7 @@ class GalleryListParser {
         favcat = EHConst.favCat[favcatColor] ?? '';
       }
 
-      gallaryItems.add(GalleryItem()
+      _gallaryItems.add(GalleryItem()
         ..gid = gid
         ..token = token
         ..englishTitle = title
@@ -162,11 +165,11 @@ class GalleryListParser {
     }
 
     // 通过api请求获取更多信息
-    if (gallaryItems.length > 0) {
-      await getMoreGalleryInfo(gallaryItems);
+    if (_gallaryItems.length > 0) {
+      await getMoreGalleryInfo(_gallaryItems);
     }
 
-    return Tuple2(gallaryItems, maxPage);
+    return Tuple2(_gallaryItems, _maxPage);
   }
 
   /// 通过api请求获取更多信息

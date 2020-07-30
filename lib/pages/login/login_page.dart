@@ -201,6 +201,7 @@ class _LoginPageState extends State<LoginPage> {
       });
     }
 
+    FocusScope.of(context).requestFocus(FocusNode());
     User user;
     try {
       user = await EhUserManager()
