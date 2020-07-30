@@ -79,7 +79,7 @@ class _FEhHomeState extends State<FEhHome> {
 
   _addPopularPage() {
     int index = _pages.length;
-    Global.logger.v(index);
+//    Global.logger.v(index);
     _pages.add(PopularListTab(
       tabIndex: index,
       scrollController: _scrollControllerList[index],

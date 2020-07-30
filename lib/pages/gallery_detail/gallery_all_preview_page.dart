@@ -54,7 +54,7 @@ class _AllPreviewPageState extends State<AllPreviewPage> {
                   shouldRebuild: (pre, next) =>
                       int.parse(pre.filecount) == next.galleryPreview.length,
                   builder: (context, GalleryItem galleryItem, child) {
-                    Global.logger.v('build SliverGrid');
+//                    Global.logger.v('build SliverGrid');
                     return SliverGrid(
                       gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
                           maxCrossAxisExtent: 135.0,

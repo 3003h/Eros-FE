@@ -17,12 +17,7 @@ const kHeightPreview = 180.0;
 
 /// 内容
 class GalleryDetailInfo extends StatelessWidget {
-  const GalleryDetailInfo({
-    Key key,
-    @required this.galleryItem,
-  }) : super(key: key);
-
-  final GalleryItem galleryItem;
+  const GalleryDetailInfo({Key key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

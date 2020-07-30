@@ -27,7 +27,6 @@ class GalleryDetailPage extends StatefulWidget {
 
 class _GalleryDetailPageState extends State<GalleryDetailPage> {
   bool _loading = false;
-  bool _hideNavigationBtn = true;
 
   ScrollController _controller = ScrollController();
 
@@ -59,14 +58,12 @@ class _GalleryDetailPageState extends State<GalleryDetailPage> {
   // 滚动监听
   // 后续考虑用状态管理处理
   void _controllerLister() {
-    if (_controller.offset < kHeaderHeight && !_hideNavigationBtn) {
-      setState(() {
-        _hideNavigationBtn = true;
-      });
-    } else if (_controller.offset >= kHeaderHeight && _hideNavigationBtn) {
-      setState(() {
-        _hideNavigationBtn = false;
-      });
+    if (_controller.offset < kHeaderHeight &&
+        !_galleryModel.hideNavigationBtn) {
+      _galleryModel.hideNavigationBtn = true;
+    } else if (_controller.offset >= kHeaderHeight &&
+        _galleryModel.hideNavigationBtn) {
+      _galleryModel.hideNavigationBtn = false;
     }
   }
 
@@ -121,41 +118,47 @@ class _GalleryDetailPageState extends State<GalleryDetailPage> {
                 radius: 15.0,
               ),
             )
-          : GalleryDetailInfo(
-              galleryItem: _galleryModel.galleryItem,
-            ),
+          : GalleryDetailInfo(),
     );
   }
 
   Widget _buildNavigationBar() {
-    var ln = S.of(context);
-
-    var _navReadButton =
-        _hideNavigationBtn ? Container() : _buildReadButton(ln.READ);
-
     return CupertinoNavigationBar(
-      middle: _buildCoveTinyImage(),
-      trailing: _navReadButton,
+      transitionBetweenRoutes: false,
+      middle: _buildNavigationBarImage(),
+      trailing: _buildNavigationBarReadButton(),
     );
   }
 
-  Widget _buildCoveTinyImage() {
+  Widget _buildNavigationBarReadButton() {
+    return Selector<GalleryModel, bool>(
+        selector: (context, galleryModel) => galleryModel.hideNavigationBtn,
+        builder: (context, value, child) {
+          return value ? Container() : _buildReadButton();
+        });
+  }
+
+  Widget _buildNavigationBarImage() {
     double _statusBarHeight = MediaQuery.of(context).padding.top;
 
-    return GestureDetector(
-      onTap: () {
-        _controller.animateTo(0,
-            duration: Duration(milliseconds: 500), curve: Curves.ease);
-      },
-      child: Container(
-        child: _hideNavigationBtn
-            ? Container()
-            : CoveTinyImage(
-                imgUrl: _galleryModel.galleryItem.imgUrl,
-                statusBarHeight: _statusBarHeight,
-              ),
-      ),
-    );
+    return Selector<GalleryModel, bool>(
+        selector: (context, galleryModel) => galleryModel.hideNavigationBtn,
+        builder: (context, value, child) {
+          return GestureDetector(
+            onTap: () {
+              _controller.animateTo(0,
+                  duration: Duration(milliseconds: 500), curve: Curves.ease);
+            },
+            child: value
+                ? Container()
+                : Container(
+                    child: CoveTinyImage(
+                      imgUrl: _galleryModel.galleryItem.imgUrl,
+                      statusBarHeight: _statusBarHeight,
+                    ),
+                  ),
+          );
+        });
   }
 
   /// 构建标题
@@ -217,7 +220,7 @@ class _GalleryDetailPageState extends State<GalleryDetailPage> {
                         crossAxisAlignment: CrossAxisAlignment.end,
                         children: <Widget>[
                           // 阅读按钮
-                          _buildReadButton(ln.READ),
+                          _buildReadButton(),
                           Spacer(),
                           // 收藏按钮
                           _buildFavIcon(),
@@ -268,6 +271,28 @@ class _GalleryDetailPageState extends State<GalleryDetailPage> {
               ),
             ),
           );
+        });
+  }
+
+  Widget _buildReadButton() {
+    return Selector<GalleryModel, bool>(
+        selector: (context, provider) => provider.oriGalleryPreview.length > 0,
+        builder: (context, value, child) {
+          var ln = S.of(context);
+          return CupertinoButton(
+              child: Text(
+                ln.READ,
+                style: TextStyle(fontSize: 15),
+              ),
+              minSize: 20,
+              padding: const EdgeInsets.fromLTRB(15, 2.5, 15, 2.5),
+              borderRadius: BorderRadius.circular(50),
+              color: CupertinoColors.activeBlue,
+              onPressed: value
+                  ? () {
+                      NavigatorUtil.goGalleryViewPagePr(context, 0);
+                    }
+                  : null);
         });
   }
 
@@ -348,26 +373,5 @@ class _GalleryDetailPageState extends State<GalleryDetailPage> {
             simpleSearch: 'uploader:$_uploader');
       },
     );
-  }
-
-  Widget _buildReadButton(String text) {
-    return Selector<GalleryModel, bool>(
-        selector: (context, provider) => provider.oriGalleryPreview.length > 0,
-        builder: (context, value, child) {
-          return CupertinoButton(
-              child: Text(
-                text,
-                style: TextStyle(fontSize: 15),
-              ),
-              minSize: 20,
-              padding: const EdgeInsets.fromLTRB(15, 2.5, 15, 2.5),
-              borderRadius: BorderRadius.circular(50),
-              color: CupertinoColors.activeBlue,
-              onPressed: value
-                  ? () {
-                      NavigatorUtil.goGalleryViewPagePr(context, 0);
-                    }
-                  : null);
-        });
   }
 }
