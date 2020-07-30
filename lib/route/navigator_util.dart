@@ -119,10 +119,12 @@ class NavigatorUtil {
         transition: TransitionType.cupertino);
   }
 
+  /// 转到画廊列表页面
   static Future goGalleryList(BuildContext context,
       {int cats = 0, String simpleSearch}) {
-    return Application.router.navigateTo(
-        context, EHRoutes.galleryList + "?cats=$cats&s_search=$simpleSearch",
+    var _simpleSearchEncode = Uri.encodeComponent(simpleSearch);
+    return Application.router.navigateTo(context,
+        EHRoutes.galleryList + "?cats=$cats&s_search=$_simpleSearchEncode",
         transition: TransitionType.cupertino);
   }
 

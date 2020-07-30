@@ -6,7 +6,7 @@ import 'base.dart';
 
 class GalleryModel extends ProfileChangeNotifier {
   GalleryItem _galleryItem;
-  List<GalleryPreview> _oriGalleryPreview;
+  List<GalleryPreview> _oriGalleryPreview = [];
   var _tabindex;
   var _title;
   int _currentPreviewPage;
@@ -25,6 +25,7 @@ class GalleryModel extends ProfileChangeNotifier {
     _galleryItem.galleryPreview = galleryPreview;
     _oriGalleryPreview =
         _galleryItem.galleryPreview.sublist(0, galleryPreview.length);
+    notifyListeners();
   }
 
   setFavTitle(String favTitle, {String favcat}) {
@@ -37,7 +38,7 @@ class GalleryModel extends ProfileChangeNotifier {
 
   addAllPreview(List<GalleryPreview> galleryPreview) {
     _galleryItem.galleryPreview.addAll(galleryPreview);
-    Global.logger.v('${_galleryItem.galleryPreview.length}');
+//    Global.logger.v('${_galleryItem.galleryPreview.length}');
     notifyListeners();
   }
 
@@ -46,7 +47,7 @@ class GalleryModel extends ProfileChangeNotifier {
 
   get previews => _galleryItem.galleryPreview;
 
-  get oriGalleryPreview => _oriGalleryPreview;
+  List<GalleryPreview> get oriGalleryPreview => _oriGalleryPreview;
 
   get title => _title;
 

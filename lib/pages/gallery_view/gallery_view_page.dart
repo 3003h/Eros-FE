@@ -21,8 +21,7 @@ class GalleryViewPageE extends StatefulWidget {
 }
 
 class _GalleryViewPageEState extends State<GalleryViewPageE> {
-  int currentIndex;
-  Map urlMap = {};
+  int _currentIndex = 0;
 
   @override
   Widget build(BuildContext context) {
@@ -42,7 +41,7 @@ class _GalleryViewPageEState extends State<GalleryViewPageE> {
                       Widget image = GalleryImage(
                         index: index,
                       );
-                      if (index == currentIndex) {
+                      if (index == _currentIndex) {
                         return Hero(
                           tag: previews[index].href + index.toString(),
                           child: image,
@@ -53,7 +52,9 @@ class _GalleryViewPageEState extends State<GalleryViewPageE> {
                     },
                     itemCount: previews.length,
                     onPageChanged: (int index) {
-                      currentIndex = index;
+                      setState(() {
+                        _currentIndex = index;
+                      });
                     },
                     controller: widget.controller,
                     scrollDirection: Axis.horizontal,
@@ -62,7 +63,7 @@ class _GalleryViewPageEState extends State<GalleryViewPageE> {
                 Positioned(
                   child: Container(
                       height: 40,
-                      child: Text('$currentIndex/${previews.length}')),
+                      child: Text('${_currentIndex + 1}/${previews.length}')),
                 ),
               ],
             );

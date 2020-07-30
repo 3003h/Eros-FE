@@ -61,68 +61,64 @@ class _GalleryItemWidgetState extends State<GalleryItemWidget> {
     Widget containerGallery = Container(
       color: _colorTap,
       // height: 200,
-      padding: EdgeInsets.fromLTRB(_padL, 8, 8, 8),
-      child: ConstrainedBox(
-        constraints: BoxConstraints(
-          minHeight: 120.0, //最小高度
-          // maxHeight: 200,
-        ),
-        child: Column(
-          children: <Widget>[
-            Row(children: <Widget>[
-              // 封面图片
-              _buildCoverImage(),
+      margin: EdgeInsets.fromLTRB(_padL, 8, 8, 8),
+      child: Column(
+        children: <Widget>[
+          Row(children: <Widget>[
+            // 封面图片
+            _buildCoverImage(),
+            Container(
+              width: 8,
+            ),
+            // 右侧信息
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: <Widget>[
+                  // 标题 provider
+                  _buildTitle(),
+                  // 上传者
+                  Text(
+                    galleryModel?.galleryItem?.uploader ?? '',
+                    style: TextStyle(
+                        fontSize: 12, color: CupertinoColors.systemGrey),
+                  ),
+                  // 标签
+                  TagBox(),
 
-              // 右侧信息
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: <Widget>[
-                    // 标题 provider
-                    _buildTitle(),
-                    // 上传者
-                    Text(
-                      galleryModel?.galleryItem?.uploader ?? '',
-                      style: TextStyle(
-                          fontSize: 12, color: CupertinoColors.systemGrey),
-                    ),
-                    // 标签
-                    TagBox(),
-
-                    // 评分行
-                    Row(
-                      crossAxisAlignment: CrossAxisAlignment.end,
-                      children: <Widget>[
-                        // 评分
-                        _buildRating(),
-                        // 占位
-                        Spacer(),
-                        // 收藏图标
-                        _buildFavcatIcon(),
-                        // 图片数量
-                        _buildFilecontWidget(),
-                      ],
-                    ),
-                    Container(
-                      height: 4,
-                    ),
-                    // 类型和时间
-                    Row(
-                      crossAxisAlignment: CrossAxisAlignment.end,
-                      children: <Widget>[
-                        // 类型
-                        _buildCategory(),
-                        Spacer(),
-                        // 上传时间
-                        _buildPostTime(),
-                      ],
-                    ),
-                  ],
-                ),
+                  // 评分行
+                  Row(
+                    crossAxisAlignment: CrossAxisAlignment.end,
+                    children: <Widget>[
+                      // 评分
+                      _buildRating(),
+                      // 占位
+                      Spacer(),
+                      // 收藏图标
+                      _buildFavcatIcon(),
+                      // 图片数量
+                      _buildFilecontWidget(),
+                    ],
+                  ),
+                  Container(
+                    height: 4,
+                  ),
+                  // 类型和时间
+                  Row(
+                    crossAxisAlignment: CrossAxisAlignment.end,
+                    children: <Widget>[
+                      // 类型
+                      _buildCategory(),
+                      Spacer(),
+                      // 上传时间
+                      _buildPostTime(),
+                    ],
+                  ),
+                ],
               ),
-            ]),
-          ],
-        ),
+            ),
+          ]),
+        ],
       ),
     );
 
@@ -195,21 +191,34 @@ class _GalleryItemWidgetState extends State<GalleryItemWidget> {
   /// 构建封面图片
   Widget _buildCoverImage() {
     return Consumer<GalleryModel>(builder: (context, galleryModel, child) {
+      var _item = galleryModel.galleryItem;
+//      Global.logger.v(
+//          '${_item.englishTitle} => height:${_item.imgHeight} width:${_item.imgWidth} ');
+      _getHeigth() {
+        if (_item.imgWidth >= kCoverImageWidth) {
+          return _item.imgHeight * kCoverImageWidth / _item.imgWidth;
+        } else {
+          return _item.imgHeight;
+        }
+      }
+
       return Hero(
         tag: '${galleryModel.galleryItem.url}_cover_${galleryModel.tabIndex}',
-        child: Container(
-          width: kCoverImageWidth,
-          height: galleryModel.galleryItem.imgHeight *
-              kCoverImageWidth /
-              galleryModel.galleryItem.imgWidth,
-          margin: const EdgeInsets.only(right: 8),
-          child: ClipRRect(
-            // 圆角
-            borderRadius: BorderRadius.circular(6),
-            child: Container(
-                color: CupertinoColors.systemGrey6,
-                child:
-                    CoverImg(imgUrl: galleryModel?.galleryItem?.imgUrl ?? '')),
+        child: ClipRRect(
+          borderRadius: BorderRadius.circular(6),
+          child: Container(
+            width: kCoverImageWidth,
+            height: _getHeigth(),
+            color: CupertinoColors.systemGrey6,
+            child: Center(
+              child: ClipRRect(
+                // 圆角
+                borderRadius: BorderRadius.circular(6),
+                child: Container(
+                    child: CoverImg(
+                        imgUrl: galleryModel?.galleryItem?.imgUrl ?? '')),
+              ),
+            ),
           ),
         ),
       );
