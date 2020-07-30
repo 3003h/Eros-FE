@@ -1,5 +1,6 @@
 import 'package:FEhViewer/common/global.dart';
 import 'package:FEhViewer/generated/l10n.dart';
+import 'package:FEhViewer/models/galleryPreview.dart';
 import 'package:FEhViewer/models/states/ehconfig_model.dart';
 import 'package:FEhViewer/models/states/gallery_model.dart';
 import 'package:FEhViewer/pages/gallery_detail/gallery_detail_widget.dart';
@@ -320,20 +321,9 @@ class _GalleryDetailPageState extends State<GalleryDetailPage> {
 
   Widget _buildFavIcon() {
     return GalleryFavButton();
-    return Container(
-      child: _loading
-          ? Container(
-              height: 38,
-            )
-          : GalleryFavButton(
-//              favTitle: _galleryModel.galleryItem.favTitle,
-//              favcat: _galleryModel.galleryItem.favcat,
-//              gid: _galleryModel.galleryItem.gid,
-//              token: _galleryModel.galleryItem.token,
-              ),
-    );
   }
 
+  // 上传用户
   Widget _buildUploader() {
     var _uploader = _galleryModel?.galleryItem?.uploader ?? '';
     return GestureDetector(
@@ -361,15 +351,23 @@ class _GalleryDetailPageState extends State<GalleryDetailPage> {
   }
 
   Widget _buildReadButton(String text) {
-    return CupertinoButton(
-        child: Text(
-          text,
-          style: TextStyle(fontSize: 15),
-        ),
-        minSize: 20,
-        padding: const EdgeInsets.fromLTRB(15, 2.5, 15, 2.5),
-        borderRadius: BorderRadius.circular(50),
-        color: CupertinoColors.activeBlue,
-        onPressed: () {});
+    return Selector<GalleryModel, bool>(
+        selector: (context, provider) => provider.oriGalleryPreview.length > 0,
+        builder: (context, value, child) {
+          return CupertinoButton(
+              child: Text(
+                text,
+                style: TextStyle(fontSize: 15),
+              ),
+              minSize: 20,
+              padding: const EdgeInsets.fromLTRB(15, 2.5, 15, 2.5),
+              borderRadius: BorderRadius.circular(50),
+              color: CupertinoColors.activeBlue,
+              onPressed: value
+                  ? () {
+                      NavigatorUtil.goGalleryViewPagePr(context, 0);
+                    }
+                  : null);
+        });
   }
 }

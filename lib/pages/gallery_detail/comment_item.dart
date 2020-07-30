@@ -1,4 +1,6 @@
+import 'package:FEhViewer/common/global.dart';
 import 'package:FEhViewer/models/index.dart';
+import 'package:FEhViewer/route/navigator_util.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
@@ -28,14 +30,7 @@ class CommentItem extends StatelessWidget {
             children: <Widget>[
               Row(
                 children: [
-                  Text(
-                    galleryComment.name,
-                    style: TextStyle(
-                      fontSize: 13,
-                      fontWeight: FontWeight.bold,
-                      color: CupertinoColors.activeBlue,
-                    ),
-                  ),
+                  _buildUsername(context),
                   Spacer(),
                   Text(
                     galleryComment.score,
@@ -86,6 +81,25 @@ class CommentItem extends StatelessWidget {
           ),
         ),
       ),
+    );
+  }
+
+  Widget _buildUsername(context) {
+    return GestureDetector(
+      child: Text(
+        galleryComment.name,
+        style: TextStyle(
+          fontSize: 13,
+          fontWeight: FontWeight.bold,
+          color: CupertinoColors.activeBlue,
+        ),
+      ),
+      behavior: HitTestBehavior.opaque,
+      onTap: () {
+        Global.logger.v('search uploader:${galleryComment.name}');
+        NavigatorUtil.goGalleryList(context,
+            simpleSearch: 'uploader:${galleryComment.name}');
+      },
     );
   }
 }

@@ -25,8 +25,6 @@ class _PopularListTabState extends State<PopularListTab> {
   List<GalleryItem> _gallerItemBeans = [];
   bool _firstLoading = false;
 
-  ScrollController _scrollController = ScrollController();
-
   @override
   void initState() {
     super.initState();

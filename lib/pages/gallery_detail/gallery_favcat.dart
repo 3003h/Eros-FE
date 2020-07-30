@@ -11,17 +11,8 @@ import 'package:provider/provider.dart';
 
 /// 收藏操作处理类
 class GalleryFavButton extends StatefulWidget {
-//  final String favTitle;
-//  final String favcat;
-//  final String gid;
-//  final String token;
-
   const GalleryFavButton({
     Key key,
-//    this.favTitle,
-//    @required this.gid,
-//    @required this.token,
-//    @required this.favcat,
   }) : super(key: key);
 
   @override
