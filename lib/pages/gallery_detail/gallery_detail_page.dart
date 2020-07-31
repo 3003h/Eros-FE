@@ -63,7 +63,7 @@ class GalleryDetailPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    Global.logger.v('build GalleryDetailPageLess');
+//    Global.logger.v('build GalleryDetailPageLess');
 
     _controller.addListener(() => {_controllerLister(context)});
 
@@ -225,16 +225,18 @@ class GalleryDetailPage extends StatelessWidget {
         return _title;
       },
       builder: (context, title, child) {
-        return Text(
+        return SelectableText(
           title,
           maxLines: 5,
+          minLines: 1,
           textAlign: TextAlign.left, // 对齐方式
-          overflow: TextOverflow.ellipsis, // 超出部分省略号
+//          overflow: TextOverflow.ellipsis, // 超出部分省略号
           style: TextStyle(
             fontSize: 16,
             fontWeight: FontWeight.w500,
 //            fontFamilyFallback: EHConst.FONT_FAMILY_FB,
           ),
+          scrollPhysics: ClampingScrollPhysics(),
         );
       },
     );

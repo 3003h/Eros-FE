@@ -1,6 +1,8 @@
 import 'package:FEhViewer/common/global.dart';
 import 'package:FEhViewer/models/index.dart';
 import 'package:FEhViewer/route/navigator_util.dart';
+import 'package:flutter_linkify/flutter_linkify.dart';
+import 'package:url_launcher/url_launcher.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
@@ -16,6 +18,54 @@ class CommentItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    var _fullText = Text(
+      galleryComment.context,
+      softWrap: true,
+      textAlign: TextAlign.left, // 对齐方式
+      style: TextStyle(
+        fontSize: 14,
+      ),
+    );
+
+    var _fullTextLinkify = SelectableLinkify(
+      onOpen: _onOpen,
+      text: galleryComment.context,
+//      softWrap: true,
+      textAlign: TextAlign.left, // 对齐方式
+      style: TextStyle(
+        fontSize: 14,
+      ),
+      options: LinkifyOptions(humanize: false),
+    );
+
+    var _simpleText = Text(
+      galleryComment.context,
+      maxLines: kMaxline,
+      softWrap: true,
+      textAlign: TextAlign.left,
+      // 对齐方式
+      overflow: TextOverflow.ellipsis,
+      // 超出部分省略号
+      style: TextStyle(
+        fontSize: 13,
+      ),
+    );
+
+    var _simpleTextLinkify = Linkify(
+      text: galleryComment.context,
+      onOpen: _onOpen,
+      options: LinkifyOptions(humanize: false),
+      maxLines: kMaxline,
+      softWrap: true,
+      textAlign: TextAlign.left,
+      // 对齐方式
+      overflow: TextOverflow.ellipsis,
+      // 超出部分省略号
+      style: TextStyle(
+        fontSize: 13,
+      ),
+    );
+
     return Container(
 //      height: 50,
       margin: const EdgeInsets.fromLTRB(12, 8, 12, 0),
@@ -43,27 +93,7 @@ class CommentItem extends StatelessWidget {
               ),
               Container(
                 padding: const EdgeInsets.fromLTRB(0, 4, 0, 8),
-                child: simple
-                    ? Text(
-                        galleryComment.context,
-                        maxLines: kMaxline,
-                        softWrap: true,
-                        textAlign: TextAlign.left,
-                        // 对齐方式
-                        overflow: TextOverflow.ellipsis,
-                        // 超出部分省略号
-                        style: TextStyle(
-                          fontSize: 13,
-                        ),
-                      )
-                    : Text(
-                        galleryComment.context,
-                        softWrap: true,
-                        textAlign: TextAlign.left, // 对齐方式
-                        style: TextStyle(
-                          fontSize: 14,
-                        ),
-                      ),
+                child: simple ? _simpleTextLinkify : _fullTextLinkify,
               ),
               Text(
                 galleryComment.time,
@@ -101,5 +131,14 @@ class CommentItem extends StatelessWidget {
             simpleSearch: 'uploader:${galleryComment.name}');
       },
     );
+  }
+
+  Future<void> _onOpen(LinkableElement link) async {
+    Global.logger.v('${link.url}');
+    if (await canLaunch(link.url)) {
+      await launch(link.url);
+    } else {
+      throw 'Could not launch $link';
+    }
   }
 }
