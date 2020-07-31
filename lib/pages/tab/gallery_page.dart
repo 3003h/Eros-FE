@@ -228,6 +228,7 @@ class _GalleryListTabState extends State<GalleryListTab> {
       controller: widget.scrollController,
       slivers: <Widget>[
         CupertinoSliverNavigationBar(
+          heroTag: 'gallery',
           largeTitle: TabPageTitle(
             title: _title,
             isLoading: false,

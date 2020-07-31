@@ -45,10 +45,10 @@ class _SettingItems extends State<SettingItems> {
               child: Row(
                 children: <Widget>[
                   Container(
-                    padding: const EdgeInsets.fromLTRB(0, 8, 8, 8),
+//                    padding: const EdgeInsets.fromLTRB(0, 8, 8, 8),
                     child: Icon(
                       widget.icon,
-                      size: 28.0,
+                      size: 26.0,
                       color: CupertinoColors.systemGrey,
                     ),
                   ),
@@ -73,7 +73,7 @@ class _SettingItems extends State<SettingItems> {
       behavior: HitTestBehavior.opaque,
       onTap: () {
         Global.loggerNoStack.v("set tap ${widget.text} ");
-        NavigatorUtil.jump(context, widget.route);
+        NavigatorUtil.jump(context, widget.route, rootNavigator: true);
       },
       onTapDown: (_) => _updatePressedColor(),
       onTapUp: (_) {

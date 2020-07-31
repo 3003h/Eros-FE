@@ -116,7 +116,7 @@ class _GalleryFavButtonState extends State<GalleryFavButton> {
       _isLoading = true;
     });
     try {
-      Global.logger.v("取消收藏");
+//      Global.logger.v("取消收藏");
       await GalleryFavParser.galleryAddfavorite(
         _galleryModel.galleryItem.gid,
         _galleryModel.galleryItem.token,

@@ -174,7 +174,7 @@ class _FEhHomeState extends State<FEhHome> {
         },
       ),
       tabBuilder: (context, index) {
-//        return _pages[index];
+        return _pages[index];
         return CupertinoTabView(
           builder: (BuildContext context) {
             return _pages[index];

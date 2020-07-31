@@ -96,6 +96,7 @@ class _FavoriteTabState extends State<FavoriteTab> {
                     controller: widget.scrollController,
                     slivers: <Widget>[
                       CupertinoSliverNavigationBar(
+                        heroTag: 'fav',
                         largeTitle: TabPageTitle(
                           title: _title,
                         ),

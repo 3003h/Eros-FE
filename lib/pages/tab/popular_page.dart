@@ -88,6 +88,7 @@ class _PopularListTabState extends State<PopularListTab> {
       controller: widget.scrollController,
       slivers: <Widget>[
         CupertinoSliverNavigationBar(
+          heroTag: 'pop',
           largeTitle: TabPageTitle(
             title: _title,
             isLoading: false,
