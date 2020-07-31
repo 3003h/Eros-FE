@@ -77,6 +77,12 @@ class GalleryDetailParser {
 
       // 解析评论内容 TODO href的解析有问题
       var contextElem = comment.querySelector('div.c6');
+
+//      var _type = contextElem.nodes.map((element) => element.nodeType).join(
+//          '|');
+//      Global.logger.v('$_type');
+
+
       // br回车以及引号的处理
       var context = contextElem.nodes
           .map((node) {
@@ -86,7 +92,12 @@ class GalleryDetailParser {
               ?.group(1) ?? node.text;
         } else if (node.nodeType == Node.ELEMENT_NODE &&
             (node as Element).localName == 'br') {
+//          Global.logger.v('${(node as Element).localName}  ${(node as Element).text}');
           return '\n';
+        } else if (node.nodeType == Node.ELEMENT_NODE) {
+//          Global.logger.v('${(node as Element).localName}  ${(node as Element).text}');
+          // 通常是链接 前后加空格便于和内容分开
+          return ' ' + (node as Element).text.trim() + ' ';
         }
       })
           .join();

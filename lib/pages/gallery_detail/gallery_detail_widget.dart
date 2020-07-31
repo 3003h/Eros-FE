@@ -83,7 +83,7 @@ class GalleryDetailInfo extends StatelessWidget {
               // 评论按钮
               CupertinoButton(
                 minSize: 0,
-                padding: const EdgeInsets.fromLTRB(4, 4, 0, 0),
+                padding: const EdgeInsets.fromLTRB(8, 4, 8, 4),
                 child: Text(
                   ln.all_comment,
                   style: TextStyle(fontSize: 16),
