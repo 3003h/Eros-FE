@@ -165,7 +165,7 @@ class _GalleryFavButtonState extends State<GalleryFavButton> {
         _addToLastFavcat(_lastFavcat);
       } else {
         // 手选收藏夹
-        await _showAddFavDialog();
+        await _showAddFavDialog(context);
       }
     }
   }
@@ -173,10 +173,10 @@ class _GalleryFavButtonState extends State<GalleryFavButton> {
   // 长按事件
   void _longTapFav(context) async {
     // 手选收藏夹
-    await _showAddFavDialog();
+    await _showAddFavDialog(context);
   }
 
-  _showAddFavDialog() async {
+  _showAddFavDialog(context) async {
     var favList = await GalleryFavParser.getFavcat(
       _galleryModel.galleryItem.gid,
       _galleryModel.galleryItem.token,
@@ -216,6 +216,7 @@ class _GalleryFavButtonState extends State<GalleryFavButton> {
 
     List<Widget> favPicker =
         List<Widget>.from(favList.map((e) => Text(e['favTitle']))).toList();
+
     return showCupertinoDialog<Map>(
       context: context,
       // barrierDismissible: false,
@@ -288,24 +289,23 @@ class _GalleryFavButtonState extends State<GalleryFavButton> {
 
   /// 添加收藏 List形式
   Future<Map> _showAddFavList(BuildContext context, List favList) async {
-    List<Widget> favcatList =
-        List<Widget>.from(favList.map((fav) => FavcatAddItem(
-              text: fav['favTitle'],
-              onTap: () {
-                var favMap = {
-                  'favcat': fav['favId'],
-                  'favTitle': fav['favTitle'],
-                  'favnode': _favnoteController.text
-                };
-                // 返回数据
-                Navigator.of(context).pop(favMap);
-              },
-            ))).toList();
-
     return showCupertinoDialog<Map>(
       context: context,
-      // barrierDismissible: false,
       builder: (BuildContext context) {
+        List<Widget> favcatList =
+            List<Widget>.from(favList.map((fav) => FavcatAddItem(
+                  text: fav['favTitle'],
+                  onTap: () {
+                    var favMap = {
+                      'favcat': fav['favId'],
+                      'favTitle': fav['favTitle'],
+                      'favnode': _favnoteController.text
+                    };
+                    // 返回数据
+                    Navigator.of(context).pop(favMap);
+                  },
+                ))).toList();
+
         return CupertinoAlertDialog(
           title: GestureDetector(
             onLongPress: () {

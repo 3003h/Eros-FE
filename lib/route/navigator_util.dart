@@ -137,14 +137,17 @@ class NavigatorUtil {
     String title,
   ) {
     var galleryModel = Provider.of<GalleryModel>(context, listen: false);
-    Navigator.push(context, CupertinoPageRoute(
-      builder: (context) {
-        return ChangeNotifierProvider.value(
-          value: galleryModel,
-          child: GalleryDetailPageLess(),
-        );
-      },
-    ));
+    Navigator.of(context, rootNavigator: true).push(
+      CupertinoPageRoute(
+//        fullscreenDialog: true,
+        builder: (context) {
+          return ChangeNotifierProvider.value(
+            value: galleryModel,
+            child: GalleryDetailPageLess(),
+          );
+        },
+      ),
+    );
   }
 
   /// 转到画廊页面
