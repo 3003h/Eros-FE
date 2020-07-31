@@ -7,6 +7,7 @@ import 'package:FEhViewer/route/routes.dart';
 import 'package:FEhViewer/utils/utility.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:provider/provider.dart';
 
 class UserItem extends StatefulWidget {
@@ -86,7 +87,8 @@ class _UserItem extends State<UserItem> {
         color: _color,
         child: Row(children: <Widget>[
           Icon(
-            CupertinoIcons.profile_circled,
+//            CupertinoIcons.profile_circled,
+            FontAwesomeIcons.solidUserCircle,
             size: 55.0,
             color: CupertinoColors.systemGrey,
           ),

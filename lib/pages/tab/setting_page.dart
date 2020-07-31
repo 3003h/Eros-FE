@@ -5,6 +5,7 @@ import 'package:FEhViewer/route/routes.dart';
 import 'package:FEhViewer/utils/icon.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 class SettingTab extends StatefulWidget {
   final tabIndex;
@@ -26,16 +27,20 @@ class _SettingTabState extends State<SettingTab> {
   var _routes = [];
 
   void initData(BuildContext context) {
-    _itemTitles = ['EH设置', '关于'];
+    _itemTitles = ['EH设置', '高级设置', '安全设置', '关于'];
 
     _icons = [
-      CupertinoIcons.book_solid,
-      EHCupertinoIcons.info_solid,
+      FontAwesomeIcons.cookieBite,
+      FontAwesomeIcons.tools,
+      FontAwesomeIcons.shieldAlt,
+      FontAwesomeIcons.infoCircle,
     ];
 
     _routes = [
       EHRoutes.ehSetting,
+      EHRoutes.advancedSetting,
       '',
+      EHRoutes.about,
     ];
   }
 
@@ -66,10 +71,11 @@ class _SettingTabState extends State<SettingTab> {
       child: CustomScrollView(
         slivers: <Widget>[
           CupertinoSliverNavigationBar(
+//            heroTag: '1',
             largeTitle: Text(
               _title,
             ),
-            transitionBetweenRoutes: false,
+//            transitionBetweenRoutes: false,
           ),
           SliverSafeArea(
               top: false,
