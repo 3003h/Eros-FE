@@ -4,7 +4,6 @@ import "galleryComment.dart";
 import "galleryPreview.dart";
 import "tagGroup.dart";
 
-
 part 'galleryItem.g.dart';
 
 @JsonSerializable()

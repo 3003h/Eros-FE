@@ -4,7 +4,6 @@ import "cacheConfig.dart";
 import "ehConfig.dart";
 import "user.dart";
 
-
 part 'profile.g.dart';
 
 @JsonSerializable()
