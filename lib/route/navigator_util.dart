@@ -4,7 +4,7 @@ import 'package:FEhViewer/common/global.dart';
 import 'package:FEhViewer/models/galleryComment.dart';
 import 'package:FEhViewer/models/galleryItem.dart';
 import 'package:FEhViewer/models/states/gallery_model.dart';
-import 'package:FEhViewer/pages/gallery_detail/gallery_detail_page_stless.dart';
+import 'package:FEhViewer/pages/gallery_detail/gallery_detail_page.dart';
 import 'package:FEhViewer/pages/gallery_view/gallery_view_page.dart';
 import 'package:fluro/fluro.dart';
 import 'package:flutter/cupertino.dart';
@@ -146,7 +146,7 @@ class NavigatorUtil {
         builder: (context) {
           return ChangeNotifierProvider.value(
             value: galleryModel,
-            child: GalleryDetailPageLess(),
+            child: GalleryDetailPage(),
           );
         },
       ),

@@ -40,6 +40,7 @@ class ListViewAdvancedSetting extends StatelessWidget {
     );
   }
 
+  /// 语言设置部件
   Widget _buildLanguageItem(context) {
     var _title = '语言设置';
     var localeModel = Provider.of<LocaleModel>(context, listen: false);
@@ -66,7 +67,6 @@ class ListViewAdvancedSetting extends StatelessWidget {
           builder: (context) {
             var dialog = CupertinoActionSheet(
               title: Text("语言选择"),
-//              message: Text('Chose a item !'),
               cancelButton: CupertinoActionSheetAction(
                   onPressed: () {
                     Navigator.pop(context);
@@ -81,7 +81,7 @@ class ListViewAdvancedSetting extends StatelessWidget {
     }
 
     return Selector<LocaleModel, String>(
-        selector: (context, localeModel) => localeMap[localeModel.locale],
+        selector: (context, localeModel) => localeMap[localeModel.locale ?? ''],
         builder: (context, locale, _) {
           return SelectorSettingItem(
             title: _title,
