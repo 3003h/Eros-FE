@@ -6,8 +6,13 @@ class EHRoutes {
   static const String root = "/";
   static const String home = "/home";
   static const String galleryList = "/galleryList";
+
   static const String selFavorie = "/selFavoriePage";
-  static const String ehSetting = "/ehSetting";
+
+  static const String ehSetting = "/setting/ehSetting";
+  static const String advancedSetting = "/setting/advancedSetting";
+  static const String about = "/setting/about";
+
   static const String login = "/login";
   static const String webLogin = "/webLogin";
 
