@@ -1,6 +1,8 @@
 import 'package:FEhViewer/common/global.dart';
+import 'package:FEhViewer/models/states/locale_model.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class AdvancedSettingPage extends StatefulWidget {
   @override
@@ -27,27 +29,73 @@ class AdvancedSettingPageState extends State<AdvancedSettingPage> {
 }
 
 class ListViewAdvancedSetting extends StatelessWidget {
-  Widget _buildLanguageItem() {
-    var _title = '语言设置';
-    var _lang = '跟随系统设置';
-    return SelectorSettingItem(
-      title: _title,
-      selector: _lang,
-      onTap: () {
-        Global.logger.v('tap LanguageItem');
-      },
-    );
-  }
-
   @override
   Widget build(BuildContext context) {
     return Container(
       child: ListView(
         children: <Widget>[
-          _buildLanguageItem(),
+          _buildLanguageItem(context),
         ],
       ),
     );
+  }
+
+  Widget _buildLanguageItem(context) {
+    var _title = '语言设置';
+    var localeModel = Provider.of<LocaleModel>(context, listen: false);
+
+    var localeMap = {
+      '': '系统语言(默认)',
+      'zh_CN': '简体中文',
+      'en_US': 'English',
+    };
+
+    List<Widget> _getLocaleList(context) {
+      return List<Widget>.from(localeMap.keys.map((element) {
+        return CupertinoActionSheetAction(
+            onPressed: () {
+              Navigator.pop(context, element);
+            },
+            child: Text(localeMap[element]));
+      }).toList());
+    }
+
+    Future<String> _showDialog(BuildContext context) {
+      return showCupertinoModalPopup<String>(
+          context: context,
+          builder: (context) {
+            var dialog = CupertinoActionSheet(
+              title: Text("语言选择"),
+//              message: Text('Chose a item !'),
+              cancelButton: CupertinoActionSheetAction(
+                  onPressed: () {
+                    Navigator.pop(context);
+                  },
+                  child: Text("取消")),
+              actions: <Widget>[
+                ..._getLocaleList(context),
+              ],
+            );
+            return dialog;
+          });
+    }
+
+    return Selector<LocaleModel, String>(
+        selector: (context, localeModel) => localeMap[localeModel.locale],
+        builder: (context, locale, _) {
+          return SelectorSettingItem(
+            title: _title,
+            selector: locale,
+            onTap: () async {
+              Global.logger.v('tap LanguageItem');
+              var _result = await _showDialog(context);
+              if (_result is String) {
+                localeModel.locale = _result;
+              }
+              Global.logger.v('$_result');
+            },
+          );
+        });
   }
 }
 
