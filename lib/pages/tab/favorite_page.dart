@@ -99,7 +99,6 @@ class _FavoriteTabState extends State<FavoriteTab> {
                         largeTitle: TabPageTitle(
                           title: _title,
                         ),
-                        transitionBetweenRoutes: false,
                         trailing: Container(
                           width: 150,
                           child: Row(

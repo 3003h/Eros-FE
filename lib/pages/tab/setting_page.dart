@@ -71,11 +71,10 @@ class _SettingTabState extends State<SettingTab> {
       child: CustomScrollView(
         slivers: <Widget>[
           CupertinoSliverNavigationBar(
-//            heroTag: '1',
             largeTitle: Text(
               _title,
             ),
-//            transitionBetweenRoutes: false,
+            transitionBetweenRoutes: true,
           ),
           SliverSafeArea(
               top: false,

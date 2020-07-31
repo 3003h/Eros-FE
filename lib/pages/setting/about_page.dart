@@ -1,15 +1,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
-class AboutPage extends StatefulWidget {
-  @override
-  State<StatefulWidget> createState() {
-    return AboutPageState();
-  }
-}
-
-class AboutPageState extends State<AboutPage> {
-  String _title = "关于";
+class AboutPage extends StatelessWidget {
+  final String _title = "关于";
 
   @override
   Widget build(BuildContext context) {

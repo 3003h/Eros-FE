@@ -34,36 +34,35 @@ class _SettingItems extends State<SettingItems> {
 
     Widget container = Container(
         color: _color,
-        padding: EdgeInsets.fromLTRB(8, 0, 8, 0),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
             _settingItemDivider(),
-            Row(
-              children: <Widget>[
-                Padding(
-                  padding: const EdgeInsets.fromLTRB(0, 8, 8, 8),
-                  child: Icon(
-                    widget.icon,
-                    size: 28.0,
-                    color: CupertinoColors.systemGrey,
-                  ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.only(left: 16),
-                  child: Text(widget.text),
-                ),
-                Expanded(
-                  child: Align(
-                    alignment: Alignment.centerRight,
+            Container(
+              height: 50,
+              padding: const EdgeInsets.fromLTRB(8, 8, 20, 8),
+              child: Row(
+                children: <Widget>[
+                  Container(
+                    padding: const EdgeInsets.fromLTRB(0, 8, 8, 8),
                     child: Icon(
-                      CupertinoIcons.forward,
+                      widget.icon,
+                      size: 28.0,
                       color: CupertinoColors.systemGrey,
                     ),
                   ),
-                ),
-              ],
+                  Container(
+                    padding: const EdgeInsets.only(left: 16),
+                    child: Text(widget.text),
+                  ),
+                  Spacer(),
+                  Icon(
+                    CupertinoIcons.forward,
+                    color: CupertinoColors.systemGrey,
+                  ),
+                ],
+              ),
             ),
           ],
         ));

@@ -92,7 +92,6 @@ class _PopularListTabState extends State<PopularListTab> {
             title: _title,
             isLoading: false,
           ),
-          transitionBetweenRoutes: false,
         ),
         CupertinoSliverRefreshControl(
           onRefresh: () async {
