@@ -249,7 +249,6 @@ class _GalleryListTabState extends State<GalleryListTab> {
               _jumtToPage(context);
             },
           ),
-          transitionBetweenRoutes: false,
         ),
         CupertinoSliverRefreshControl(
           onRefresh: () async {

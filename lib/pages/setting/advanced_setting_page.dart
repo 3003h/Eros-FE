@@ -80,7 +80,7 @@ class _SelectorSettingItemState extends State<SelectorSettingItem> {
       child: Column(
         children: [
           Container(
-            height: 60,
+            height: 50,
             padding: const EdgeInsets.fromLTRB(20, 8, 20, 8),
             child: Row(
               children: <Widget>[

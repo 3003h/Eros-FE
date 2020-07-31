@@ -5,12 +5,13 @@ import 'base.dart';
 
 class GalleryModel extends ProfileChangeNotifier {
   GalleryItem _galleryItem;
-  List<GalleryPreview> _oriGalleryPreview = [];
+  List<GalleryPreview> _oriGalleryPreview;
   var _tabindex;
   var _title;
   int _currentPreviewPage;
   bool _isGetAllImageHref;
   bool _hideNavigationBtn = true;
+  bool _detailLoadFinish;
 
   initData(GalleryItem galleryItem, {@required tabIndex}) {
     _galleryItem = galleryItem;
@@ -22,7 +23,10 @@ class GalleryModel extends ProfileChangeNotifier {
   GalleryItem get galleryItem => _galleryItem;
 
   setGalleryPreview(List<GalleryPreview> galleryPreview) {
-    _galleryItem.galleryPreview = galleryPreview;
+    if (galleryPreview.isNotEmpty) {
+      _galleryItem.galleryPreview = galleryPreview;
+    }
+
     _oriGalleryPreview =
         _galleryItem.galleryPreview.sublist(0, galleryPreview.length);
 //    notifyListeners();
@@ -54,7 +58,10 @@ class GalleryModel extends ProfileChangeNotifier {
 
   get previews => _galleryItem.galleryPreview;
 
-  List<GalleryPreview> get oriGalleryPreview => _oriGalleryPreview;
+  List<GalleryPreview> get oriGalleryPreview => _oriGalleryPreview ?? [];
+
+  set detailLoadFinish(bool value) => _detailLoadFinish = value;
+  get detailLoadFinish => _detailLoadFinish ?? false;
 
   get title => _title;
 

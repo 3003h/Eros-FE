@@ -1,5 +1,6 @@
 import 'package:FEhViewer/common/global.dart';
 import 'package:FEhViewer/generated/l10n.dart';
+import 'package:FEhViewer/models/galleryItem.dart';
 import 'package:FEhViewer/models/states/ehconfig_model.dart';
 import 'package:FEhViewer/models/states/gallery_model.dart';
 import 'package:FEhViewer/pages/gallery_detail/gallery_detail_widget.dart';
@@ -13,49 +14,45 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:path/path.dart';
 import 'package:provider/provider.dart';
+import 'package:tuple/tuple.dart';
 
 const kHeaderHeight = 200.0;
 
-class GalleryDetailPage extends StatefulWidget {
-  GalleryDetailPage({Key key}) : super(key: key);
+class GalleryDetailPageLess extends StatelessWidget {
+  GalleryDetailPageLess({Key key}) : super(key: key);
 
-  @override
-  _GalleryDetailPageState createState() => _GalleryDetailPageState();
-}
-
-class _GalleryDetailPageState extends State<GalleryDetailPage> {
-  bool _loading = false;
-
-  ScrollController _controller = ScrollController();
-
-  GalleryModel _galleryModel;
+  final ScrollController _controller = ScrollController();
 
   /// 初始化 请求数据
-  _loadData() async {
-    //todo 先判断 ，没有再获取
-    setState(() {
-      _loading = true;
-    });
-    var _galleryItemFromApi =
-        await Api.getGalleryDetail(_galleryModel.galleryItem.url);
+  Future<GalleryItem> _loadData(context) async {
+    final _galleryModel = Provider.of<GalleryModel>(context, listen: false);
+    if (!_galleryModel.detailLoadFinish) {
+      var _galleryItemFromApi =
+          await Api.getGalleryDetail(_galleryModel.galleryItem.url);
 
-    _galleryModel.currentPreviewPage = 0;
-    _galleryModel.galleryItem.tagGroup = _galleryItemFromApi.tagGroup;
-    _galleryModel.galleryItem.galleryComment =
-        _galleryItemFromApi.galleryComment;
-    _galleryModel.setGalleryPreview(_galleryItemFromApi.galleryPreview);
-    _galleryModel.setFavTitle(_galleryItemFromApi.favTitle,
-        favcat: _galleryItemFromApi.favcat);
-    _galleryModel.galleryItem.showKey = _galleryItemFromApi.showKey;
+      _galleryModel.currentPreviewPage = 0;
+      _galleryModel.galleryItem.tagGroup = _galleryItemFromApi.tagGroup;
+      _galleryModel.galleryItem.galleryComment =
+          _galleryItemFromApi.galleryComment;
+      _galleryModel.setGalleryPreview(_galleryItemFromApi.galleryPreview);
+      _galleryModel.setFavTitle(_galleryItemFromApi.favTitle,
+          favcat: _galleryItemFromApi.favcat);
+      _galleryModel.galleryItem.showKey = _galleryItemFromApi.showKey;
 
-    setState(() {
-      _loading = false;
-    });
+      _galleryModel.detailLoadFinish = true;
+
+      return _galleryItemFromApi;
+    } else {
+      return _galleryModel.galleryItem;
+    }
   }
 
   // 滚动监听
-  void _controllerLister() {
+  void _controllerLister(context) {
+    final GalleryModel _galleryModel =
+        Provider.of<GalleryModel>(context, listen: false);
     if (_controller.offset < kHeaderHeight &&
         !_galleryModel.hideNavigationBtn) {
       _galleryModel.hideNavigationBtn = true;
@@ -66,89 +63,94 @@ class _GalleryDetailPageState extends State<GalleryDetailPage> {
   }
 
   @override
-  void initState() {
-    super.initState();
-    _controller.addListener(_controllerLister);
-  }
-
-  @override
-  void didChangeDependencies() {
-    super.didChangeDependencies();
-    final galleryModel = Provider.of<GalleryModel>(context, listen: false);
-    if (galleryModel != this._galleryModel) {
-      this._galleryModel = galleryModel;
-      _loadData();
-    }
-  }
-
-  @override
   Widget build(BuildContext context) {
-    return Selector<GalleryModel, GalleryModel>(
-        selector: (_, galleryModel) => galleryModel,
-        shouldRebuild: (pre, next) => false,
-        builder: (_, galleryModel, __) {
-          Global.logger.v('build CupertinoPageScaffold');
-          return CupertinoPageScaffold(
-            navigationBar: _buildNavigationBar(),
-            child: SafeArea(
-              bottom: false,
-              child: Container(
-                margin: const EdgeInsets.only(left: 12),
-                child: ListView(
-                  physics: AlwaysScrollableScrollPhysics(),
-                  controller: _controller,
-                  dragStartBehavior: DragStartBehavior.down,
-                  children: <Widget>[
-                    _buildGalletyHead(),
-                    Container(
-                      height: 0.5,
-                      color: CupertinoColors.systemGrey4,
-                    ),
-                    _buildGalleryDetailInfo(),
-                  ],
-                ),
-              ),
-            ),
-          );
-        });
-  }
+    Global.logger.v('build GalleryDetailPageLess');
 
-  Widget _buildGalleryDetailInfo() {
-    return Container(
-      child: _loading
-          ? Padding(
-              padding: const EdgeInsets.all(18.0),
-              child: CupertinoActivityIndicator(
-                radius: 15.0,
+    return CupertinoPageScaffold(
+      navigationBar: _buildNavigationBar(context),
+      child: SafeArea(
+        child: Container(
+          margin: const EdgeInsets.only(left: 12),
+          child: ListView(
+            physics: AlwaysScrollableScrollPhysics(),
+            controller: _controller,
+            dragStartBehavior: DragStartBehavior.down,
+            children: <Widget>[
+              _buildGalletyHead(context),
+              Container(
+                height: 0.5,
+                color: CupertinoColors.systemGrey4,
               ),
-            )
-          : GalleryDetailInfo(),
+              _buildDetail(context),
+            ],
+          ),
+        ),
+      ),
     );
   }
 
-  Widget _buildNavigationBar() {
+  Widget _buildDetail(context) {
+    return FutureBuilder<GalleryItem>(
+        future: _loadData(context),
+        builder: (context, snapshot) {
+          switch (snapshot.connectionState) {
+            case ConnectionState.none:
+            case ConnectionState.active:
+//              Global.logger.v('active');
+              return _buildLoading(context);
+            case ConnectionState.waiting:
+//              Global.logger.v('waiting');
+              return _buildLoading(context);
+            case ConnectionState.done:
+//              Global.logger.v('done');
+              if (snapshot.hasError) {
+                return Text('Error: ${snapshot.error}');
+              } else {
+                return _buildLoadSuccessful();
+              }
+          }
+          return null;
+        });
+  }
+
+  Widget _buildLoading(context) {
+    // 加载中 显示一个菊花
+    return Padding(
+      padding: const EdgeInsets.all(18.0),
+      child: CupertinoActivityIndicator(
+        radius: 15.0,
+      ),
+    );
+  }
+
+  Widget _buildLoadSuccessful() {
+    // 加载完成 显示内容
+    return GalleryDetailInfo();
+  }
+
+  Widget _buildNavigationBar(context) {
     return CupertinoNavigationBar(
 //      transitionBetweenRoutes: false,
-      middle: _buildNavigationBarImage(),
-      trailing: _buildNavigationBarReadButton(),
+      middle: _buildNavigationBarImage(context),
+      trailing: _buildNavigationBarReadButton(context),
     );
   }
 
-  Widget _buildNavigationBarReadButton() {
-    return Builder(builder: (_context) {
-      var _value = Provider.of<GalleryModel>(context).hideNavigationBtn;
-      return _value ? Container() : _buildReadButton();
-    });
+  Widget _buildNavigationBarReadButton(context) {
+    var _value = Provider.of<GalleryModel>(context).hideNavigationBtn;
+    return _value ? Container() : _buildReadButton();
 
-    return Selector<GalleryModel, bool>(
-        selector: (context, galleryModel) => galleryModel.hideNavigationBtn,
-        builder: (context, value, child) {
-          return value ? Container() : _buildReadButton();
-        });
+//    return Selector<GalleryModel, bool>(
+//        selector: (context, galleryModel) => galleryModel.hideNavigationBtn,
+//        builder: (context, value, child) {
+//          return value ? Container() : _buildReadButton();
+//        });
   }
 
-  Widget _buildNavigationBarImage() {
+  Widget _buildNavigationBarImage(context) {
     double _statusBarHeight = MediaQuery.of(context).padding.top;
+    final GalleryModel _galleryModel =
+        Provider.of<GalleryModel>(context, listen: false);
 
     return GestureDetector(
       onTap: () {
@@ -165,24 +167,25 @@ class _GalleryDetailPageState extends State<GalleryDetailPage> {
             ),
     );
 
-    return Selector<GalleryModel, bool>(
-        selector: (context, galleryModel) => galleryModel.hideNavigationBtn,
-        builder: (context, value, child) {
-          return GestureDetector(
-            onTap: () {
-              _controller.animateTo(0,
-                  duration: Duration(milliseconds: 500), curve: Curves.ease);
-            },
-            child: value
-                ? Container()
-                : Container(
-                    child: CoveTinyImage(
-                      imgUrl: _galleryModel.galleryItem.imgUrl,
-                      statusBarHeight: _statusBarHeight,
-                    ),
-                  ),
-          );
-        });
+//    return Selector<GalleryModel, Tuple2<bool, String>>(
+//        selector: (context, galleryModel) => Tuple2(
+//            galleryModel.hideNavigationBtn, galleryModel.galleryItem.imgUrl),
+//        builder: (context, tuple, child) {
+//          return GestureDetector(
+//            onTap: () {
+//              _controller.animateTo(0,
+//                  duration: Duration(milliseconds: 500), curve: Curves.ease);
+//            },
+//            child: tuple.item1
+//                ? Container()
+//                : Container(
+//                    child: CoveTinyImage(
+//                      imgUrl: tuple.item2,
+//                      statusBarHeight: _statusBarHeight,
+//                    ),
+//                  ),
+//          );
+//        });
   }
 
   /// 构建标题
@@ -218,7 +221,7 @@ class _GalleryDetailPageState extends State<GalleryDetailPage> {
     );
   }
 
-  Widget _buildGalletyHead() {
+  Widget _buildGalletyHead(context) {
     var ln = S.of(context);
     return Container(
       margin: const EdgeInsets.fromLTRB(0, 0, 12, 12),
@@ -238,7 +241,7 @@ class _GalleryDetailPageState extends State<GalleryDetailPage> {
                       // 标题
                       _buildTitle(),
                       // 上传用户
-                      _buildUploader(),
+                      _buildUploader(context),
                       Spacer(),
                       Row(
                         crossAxisAlignment: CrossAxisAlignment.end,
@@ -261,10 +264,10 @@ class _GalleryDetailPageState extends State<GalleryDetailPage> {
             child: Row(
               children: <Widget>[
                 // 评分
-                _buildRating(),
+                _buildRating(context),
                 Spacer(),
                 // 类型
-                _buildCategory(),
+                _buildCategory(context),
               ],
             ),
           )
@@ -321,7 +324,10 @@ class _GalleryDetailPageState extends State<GalleryDetailPage> {
   }
 
   // 类别 点击可跳转搜索
-  Widget _buildCategory() {
+  Widget _buildCategory(context) {
+    final GalleryModel _galleryModel =
+        Provider.of<GalleryModel>(context, listen: false);
+
     Color _colorCategory =
         ThemeColors.nameColor[_galleryModel?.galleryItem?.category ?? "defaule"]
                 ["color"] ??
@@ -352,7 +358,10 @@ class _GalleryDetailPageState extends State<GalleryDetailPage> {
     );
   }
 
-  Widget _buildRating() {
+  Widget _buildRating(context) {
+    final GalleryModel _galleryModel =
+        Provider.of<GalleryModel>(context, listen: false);
+
     return Row(
       children: <Widget>[
         Container(
@@ -373,7 +382,10 @@ class _GalleryDetailPageState extends State<GalleryDetailPage> {
   }
 
   // 上传用户
-  Widget _buildUploader() {
+  Widget _buildUploader(context) {
+    final GalleryModel _galleryModel =
+        Provider.of<GalleryModel>(context, listen: false);
+
     var _uploader = _galleryModel?.galleryItem?.uploader ?? '';
     return GestureDetector(
       behavior: HitTestBehavior.opaque,
