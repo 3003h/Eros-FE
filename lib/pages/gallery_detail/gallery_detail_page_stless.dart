@@ -25,7 +25,7 @@ class GalleryDetailPageLess extends StatelessWidget {
 
   final ScrollController _controller = ScrollController();
 
-  /// 初始化 请求数据
+  /// 异步请求数据
   Future<GalleryItem> _loadData(context) async {
     final _galleryModel = Provider.of<GalleryModel>(context, listen: false);
     if (!_galleryModel.detailLoadFinish) {
@@ -64,10 +64,28 @@ class GalleryDetailPageLess extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-//    Global.logger.v('build GalleryDetailPageLess');
+    Global.logger.v('build GalleryDetailPageLess');
 
-    return CupertinoPageScaffold(
-      navigationBar: _buildNavigationBar(context),
+    _controller.addListener(() => {_controllerLister(context)});
+
+    /// 因为 CupertinoNavigationBar的特殊 不能直接用Selector包裹控制build 所以在
+    /// CupertinoPageScaffold 外层加了 Selector , hideNavigationBtn变化才会重绘
+    /// 内容作为 child 缓存避免重绘
+    ///
+    /// 增加 oriGalleryPreview 变化时可重绘的控制
+    return Selector<GalleryModel, Tuple2<bool, bool>>(
+      selector: (context, galleryModel) => Tuple2(
+          galleryModel.hideNavigationBtn,
+          galleryModel.oriGalleryPreview.isNotEmpty),
+      shouldRebuild: (pre, next) =>
+          pre.item1 != next.item1 || pre.item2 != next.item2,
+      builder: (context, _tuple, child) {
+        return CupertinoPageScaffold(
+          navigationBar:
+              _buildNavigationBar(context, hideNavigationBtn: _tuple.item1),
+          child: child,
+        );
+      },
       child: SafeArea(
         child: Container(
           margin: const EdgeInsets.only(left: 12),
@@ -102,10 +120,10 @@ class GalleryDetailPageLess extends StatelessWidget {
                 switch (snapshot.connectionState) {
                   case ConnectionState.none:
                   case ConnectionState.active:
-                    Global.logger.v('active');
+//                    Global.logger.v('active');
                     return _buildLoading(context);
                   case ConnectionState.waiting:
-                    Global.logger.v('waiting');
+//                    Global.logger.v('waiting');
                     return _buildLoading(context);
                   case ConnectionState.done:
                     Global.logger.v('done');
@@ -124,26 +142,6 @@ class GalleryDetailPageLess extends StatelessWidget {
   }
 
   Widget _buildLoading(context) {
-//    Future _futuer = Future.delayed(Duration(milliseconds: 5000));
-//
-//    return FutureBuilder(
-//        future: _futuer,
-//        builder: (context, snapshot) {
-//          switch (snapshot.connectionState) {
-//            case ConnectionState.none:
-//            case ConnectionState.waiting:
-//            case ConnectionState.active:
-//            case ConnectionState.done:
-//              return Padding(
-//                padding: const EdgeInsets.all(18.0),
-//                child: CupertinoActivityIndicator(
-//                  radius: 15.0,
-//                ),
-//              );
-//          }
-//          return Container();
-//        });
-
     // 加载中 显示一个菊花
     return Padding(
       padding: const EdgeInsets.all(18.0),
@@ -158,22 +156,37 @@ class GalleryDetailPageLess extends StatelessWidget {
     return GalleryDetailInfo();
   }
 
-  Widget _buildNavigationBar(context) {
-    return CupertinoNavigationBar(
-      middle: _buildNavigationBarImage(context),
-      trailing: _buildNavigationBarReadButton(context),
-    );
+  Widget _buildNavigationBar(context, {bool hideNavigationBtn = true}) {
+    return hideNavigationBtn
+        ? CupertinoNavigationBar()
+        : CupertinoNavigationBar(
+            middle: _buildNavigationBarImage(context),
+            trailing: _buildNavigationBarReadButton(context),
+          );
   }
 
+  /// 独立出导航栏的阅读按钮
   Widget _buildNavigationBarReadButton(context) {
-    var _value = Provider.of<GalleryModel>(context).hideNavigationBtn;
-    return _value ? Container() : _buildReadButton();
+    final GalleryModel _galleryModel =
+        Provider.of<GalleryModel>(context, listen: false);
 
-//    return Selector<GalleryModel, bool>(
-//        selector: (context, galleryModel) => galleryModel.hideNavigationBtn,
-//        builder: (context, value, child) {
-//          return value ? Container() : _buildReadButton();
-//        });
+    var _hasPreview = _galleryModel.oriGalleryPreview.isNotEmpty;
+
+    var ln = S.of(context);
+    return CupertinoButton(
+        child: Text(
+          ln.READ,
+          style: TextStyle(fontSize: 15),
+        ),
+        minSize: 20,
+        padding: const EdgeInsets.fromLTRB(15, 2.5, 15, 2.5),
+        borderRadius: BorderRadius.circular(50),
+        color: CupertinoColors.activeBlue,
+        onPressed: _hasPreview
+            ? () {
+                NavigatorUtil.goGalleryViewPagePr(context, 0);
+              }
+            : null);
   }
 
   Widget _buildNavigationBarImage(context) {
@@ -186,35 +199,13 @@ class GalleryDetailPageLess extends StatelessWidget {
         _controller.animateTo(0,
             duration: Duration(milliseconds: 500), curve: Curves.ease);
       },
-      child: _galleryModel.hideNavigationBtn
-          ? Container()
-          : Container(
-              child: CoveTinyImage(
-                imgUrl: _galleryModel.galleryItem.imgUrl,
-                statusBarHeight: _statusBarHeight,
-              ),
-            ),
+      child: Container(
+        child: CoveTinyImage(
+          imgUrl: _galleryModel.galleryItem.imgUrl,
+          statusBarHeight: _statusBarHeight,
+        ),
+      ),
     );
-
-//    return Selector<GalleryModel, Tuple2<bool, String>>(
-//        selector: (context, galleryModel) => Tuple2(
-//            galleryModel.hideNavigationBtn, galleryModel.galleryItem.imgUrl),
-//        builder: (context, tuple, child) {
-//          return GestureDetector(
-//            onTap: () {
-//              _controller.animateTo(0,
-//                  duration: Duration(milliseconds: 500), curve: Curves.ease);
-//            },
-//            child: tuple.item1
-//                ? Container()
-//                : Container(
-//                    child: CoveTinyImage(
-//                      imgUrl: tuple.item2,
-//                      statusBarHeight: _statusBarHeight,
-//                    ),
-//                  ),
-//          );
-//        });
   }
 
   /// 构建标题
