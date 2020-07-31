@@ -57,7 +57,7 @@ class _UserItem extends State<UserItem> {
         debugPrint(Global.profile.user.username);
         _logOut(context);
       } else {
-        NavigatorUtil.jump(context, EHRoutes.login);
+        NavigatorUtil.jump(context, EHRoutes.login, rootNavigator: true);
       }
     }
 

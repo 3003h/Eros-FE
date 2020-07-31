@@ -39,7 +39,11 @@ class NavigatorUtil {
 
   /// 跳转到 转场动画 页面 ， 这边只展示 inFromLeft ，剩下的自己去尝试下，
   /// 框架自带的有 native，nativeModal，inFromLeft，inFromRight，inFromBottom，fadeIn，custom
-  static Future jump(BuildContext context, String title) {
+  static Future jump(BuildContext context, String title,
+      {bool rootNavigator = false}) {
+    if (rootNavigator) {
+      return Navigator.of(context, rootNavigator: true).pushNamed(title);
+    }
     return Application.router.navigateTo(context, title);
   }
 

@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:FEhViewer/generated/l10n.dart';
 import 'package:FEhViewer/pages/item/setting_item.dart';
 import 'package:FEhViewer/pages/item/user_item.dart';
@@ -71,6 +73,7 @@ class _SettingTabState extends State<SettingTab> {
       child: CustomScrollView(
         slivers: <Widget>[
           CupertinoSliverNavigationBar(
+            heroTag: 'setting',
             largeTitle: Text(
               _title,
             ),
