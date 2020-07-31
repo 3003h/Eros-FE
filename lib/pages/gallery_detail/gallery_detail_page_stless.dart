@@ -64,7 +64,7 @@ class GalleryDetailPageLess extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    Global.logger.v('build GalleryDetailPageLess');
+//    Global.logger.v('build GalleryDetailPageLess');
 
     return CupertinoPageScaffold(
       navigationBar: _buildNavigationBar(context),
@@ -90,30 +90,60 @@ class GalleryDetailPageLess extends StatelessWidget {
   }
 
   Widget _buildDetail(context) {
-    return FutureBuilder<GalleryItem>(
-        future: _loadData(context),
-        builder: (context, snapshot) {
-          switch (snapshot.connectionState) {
-            case ConnectionState.none:
-            case ConnectionState.active:
-//              Global.logger.v('active');
-              return _buildLoading(context);
-            case ConnectionState.waiting:
-//              Global.logger.v('waiting');
-              return _buildLoading(context);
-            case ConnectionState.done:
-//              Global.logger.v('done');
-              if (snapshot.hasError) {
-                return Text('Error: ${snapshot.error}');
+    return Selector<GalleryModel, bool>(
+      selector: (_, gllaeryModel) => gllaeryModel.detailLoadFinish,
+      builder: (context, loadFinish, child) {
+        return FutureBuilder<GalleryItem>(
+            future: _loadData(context),
+            builder: (context, snapshot) {
+              if (loadFinish) {
+                return child;
               } else {
-                return _buildLoadSuccessful();
+                switch (snapshot.connectionState) {
+                  case ConnectionState.none:
+                  case ConnectionState.active:
+                    Global.logger.v('active');
+                    return _buildLoading(context);
+                  case ConnectionState.waiting:
+                    Global.logger.v('waiting');
+                    return _buildLoading(context);
+                  case ConnectionState.done:
+                    Global.logger.v('done');
+                    if (snapshot.hasError) {
+                      return Text('Error: ${snapshot.error}');
+                    } else {
+                      return child;
+                    }
+                }
+                return null;
               }
-          }
-          return null;
-        });
+            });
+      },
+      child: _buildLoadSuccessful(),
+    );
   }
 
   Widget _buildLoading(context) {
+//    Future _futuer = Future.delayed(Duration(milliseconds: 5000));
+//
+//    return FutureBuilder(
+//        future: _futuer,
+//        builder: (context, snapshot) {
+//          switch (snapshot.connectionState) {
+//            case ConnectionState.none:
+//            case ConnectionState.waiting:
+//            case ConnectionState.active:
+//            case ConnectionState.done:
+//              return Padding(
+//                padding: const EdgeInsets.all(18.0),
+//                child: CupertinoActivityIndicator(
+//                  radius: 15.0,
+//                ),
+//              );
+//          }
+//          return Container();
+//        });
+
     // 加载中 显示一个菊花
     return Padding(
       padding: const EdgeInsets.all(18.0),
@@ -130,7 +160,6 @@ class GalleryDetailPageLess extends StatelessWidget {
 
   Widget _buildNavigationBar(context) {
     return CupertinoNavigationBar(
-//      transitionBetweenRoutes: false,
       middle: _buildNavigationBarImage(context),
       trailing: _buildNavigationBarReadButton(context),
     );
