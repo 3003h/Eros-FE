@@ -22,11 +22,11 @@ class EhTagDatabase {
     var urlJson = await httpManager.get(url);
 
     // 获取发布时间 作为远程版本号
-    String remoteVer = urlJson != null ? urlJson["published_at"].trim() : '';
+    String remoteVer = urlJson != null ? urlJson["published_at"]?.trim() : '';
     Global.loggerNoStack.v("remoteVer $remoteVer");
 
     // 获取当前本地版本
-    String localVer = StorageUtil().getString(TAG_TRANSLAT_VER).trim();
+    String localVer = StorageUtil().getString(TAG_TRANSLAT_VER)?.trim() ?? '';
     Global.loggerNoStack.v("localVer $localVer");
 
     if (remoteVer != localVer) {
