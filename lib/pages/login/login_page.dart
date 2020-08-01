@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'dart:ui';
 
 import 'package:FEhViewer/common/eh_login.dart';
 import 'package:FEhViewer/common/global.dart';
@@ -48,6 +49,8 @@ class _LoginPageState extends State<LoginPage> {
                   Container(
                     height: 38,
                     child: CupertinoTextField(
+                      selectionHeightStyle: BoxHeightStyle.max,
+                      style: TextStyle(textBaseline: TextBaseline.alphabetic),
                       controller: _usernameController,
                       placeholder: ln.pls_i_username,
                       prefix: ConstrainedBox(
@@ -71,6 +74,7 @@ class _LoginPageState extends State<LoginPage> {
                     height: 48,
                     padding: const EdgeInsets.only(top: 10, bottom: 0),
                     child: CupertinoTextField(
+                      style: TextStyle(textBaseline: TextBaseline.alphabetic),
                       controller: _passwdController,
                       placeholder: ln.pls_i_passwd,
                       prefix: ConstrainedBox(

@@ -1,6 +1,7 @@
 import 'package:FEhViewer/common/global.dart';
 import 'package:FEhViewer/models/index.dart';
 import 'package:FEhViewer/route/navigator_util.dart';
+import 'package:FEhViewer/utils/cust_lib/flutter_linkify.dart' as linkify;
 import 'package:flutter_linkify/flutter_linkify.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:flutter/cupertino.dart';
@@ -27,7 +28,7 @@ class CommentItem extends StatelessWidget {
       ),
     );
 
-    var _fullTextLinkify = SelectableLinkify(
+    var _fullTextLinkify = linkify.SelectableLinkify(
       onOpen: _onOpen,
       text: galleryComment.context,
 //      softWrap: true,

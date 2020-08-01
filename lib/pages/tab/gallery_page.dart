@@ -276,8 +276,8 @@ class _GalleryListTabState extends State<GalleryListTab> {
             child: _isLoadMore
                 ? CupertinoActivityIndicator(
                     radius: 14,
-                    iOSVersionStyle:
-                        CupertinoActivityIndicatorIOSVersionStyle.iOS14,
+//                    iOSVersionStyle:
+//                        CupertinoActivityIndicatorIOSVersionStyle.iOS14,
                   )
                 : Container(),
           ),

@@ -22,7 +22,7 @@ class _UserItem extends State<UserItem> {
   Future<void> _logOut(BuildContext context) async {
     return showCupertinoDialog<void>(
       context: context,
-      barrierDismissible: false, // user must tap button!
+//      barrierDismissible: false, // user must tap button!
       builder: (BuildContext context) {
         return CupertinoAlertDialog(
           title: Text('注销用户'),
