@@ -6,8 +6,6 @@ import 'package:FEhViewer/models/states/gallery_model.dart';
 import 'package:FEhViewer/pages/gallery_detail/gallery_detail_widget.dart';
 import 'package:FEhViewer/pages/gallery_detail/gallery_favcat.dart';
 import 'package:FEhViewer/route/navigator_util.dart';
-import 'package:FEhViewer/utils/cust_lib/selectable_text.dart'
-    show SelectableText;
 import 'package:FEhViewer/utils/utility.dart';
 import 'package:FEhViewer/values/const.dart';
 import 'package:FEhViewer/values/theme_colors.dart';
@@ -15,11 +13,12 @@ import 'package:FEhViewer/widget/rating_bar.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/gestures.dart';
-import 'package:flutter/material.dart' hide SelectableText;
+import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:tuple/tuple.dart';
 
 const kHeaderHeight = 200.0;
+const kHeaderPaddingTop = 12.0;
 
 class GalleryDetailPage extends StatelessWidget {
   GalleryDetailPage({Key key}) : super(key: key);
@@ -29,6 +28,7 @@ class GalleryDetailPage extends StatelessWidget {
   /// 异步请求数据
   Future<GalleryItem> _loadData(context) async {
     final _galleryModel = Provider.of<GalleryModel>(context, listen: false);
+    _galleryModel.resetHideNavigationBtn();
     if (!_galleryModel.detailLoadFinish) {
       var _galleryItemFromApi =
           await Api.getGalleryDetail(_galleryModel.galleryItem.url);
@@ -54,27 +54,36 @@ class GalleryDetailPage extends StatelessWidget {
   void _controllerLister(context) {
     final GalleryModel _galleryModel =
         Provider.of<GalleryModel>(context, listen: false);
-    if (_controller.offset < kHeaderHeight &&
+//    _galleryModel.resetHideNavigationBtn();
+
+    if (_controller.offset < kHeaderHeight + kHeaderPaddingTop &&
         !_galleryModel.hideNavigationBtn) {
       _galleryModel.hideNavigationBtn = true;
-    } else if (_controller.offset >= kHeaderHeight &&
+    } else if (_controller.offset >= kHeaderHeight + kHeaderPaddingTop &&
         _galleryModel.hideNavigationBtn) {
       _galleryModel.hideNavigationBtn = false;
     }
   }
 
+  _initData(context) {
+    final GalleryModel _galleryModel =
+        Provider.of<GalleryModel>(context, listen: false);
+    _galleryModel.resetHideNavigationBtn();
+  }
+
   @override
   Widget build(BuildContext context) {
 //    Global.logger.v('build GalleryDetailPageLess');
+    _initData(context);
 
-    _controller.addListener(() => {_controllerLister(context)});
+    _controller.addListener(() => _controllerLister(context));
 
     /// 因为 CupertinoNavigationBar的特殊 不能直接用Selector包裹控制build 所以在
     /// CupertinoPageScaffold 外层加了 Selector , hideNavigationBtn变化才会重绘
     /// 内容作为 child 缓存避免重绘
     ///
     /// 增加 oriGalleryPreview 变化时可重绘的控制
-    return Selector<GalleryModel, Tuple2<bool, bool>>(
+    Widget cupertinoTabScaffold = Selector<GalleryModel, Tuple2<bool, bool>>(
       selector: (context, galleryModel) => Tuple2(
           galleryModel.hideNavigationBtn,
           galleryModel.oriGalleryPreview.isNotEmpty),
@@ -106,6 +115,8 @@ class GalleryDetailPage extends StatelessWidget {
         ),
       ),
     );
+
+    return cupertinoTabScaffold;
   }
 
   Widget _buildDetail(context) {
@@ -211,12 +222,11 @@ class GalleryDetailPage extends StatelessWidget {
 
   Widget _buildGalletyHead() {
     return Container(
-      margin: const EdgeInsets.fromLTRB(0, 0, 12, 12),
+      margin: const EdgeInsets.fromLTRB(0, kHeaderPaddingTop, 12, 12),
       child: Column(
         children: [
           Container(
             height: kHeaderHeight,
-            padding: const EdgeInsets.only(top: 12),
             child: Row(
               children: <Widget>[
                 // 封面
@@ -265,21 +275,35 @@ class GalleryDetailPage extends StatelessWidget {
 
   /// 封面图片
   Widget _buildCoverImage() {
+    const kWidth = 145.0;
+
+    //
     return Selector<GalleryModel, GalleryModel>(
         shouldRebuild: (pre, next) => false,
         selector: (context, provider) => provider,
         builder: (context, GalleryModel galleryModel, child) {
-          return ConstrainedBox(
-            constraints: BoxConstraints(maxWidth: 150.0),
-            child: Container(
-              margin: const EdgeInsets.only(right: 10),
-              child: Hero(
-                tag: galleryModel.galleryItem.url +
-                    '_cover_${galleryModel.tabIndex}',
-                child: ClipRRect(
-                  borderRadius: BorderRadius.circular(8),
-                  child: CachedNetworkImage(
-                    imageUrl: galleryModel.galleryItem.imgUrl,
+          final _item = galleryModel.galleryItem;
+
+          return Padding(
+            padding: const EdgeInsets.only(right: 10),
+            child: ClipRRect(
+              borderRadius: BorderRadius.circular(6),
+              child: Container(
+                width: kWidth,
+//                  height: _getHeigth(),
+//                  color: CupertinoColors.systemGrey6,
+                child: Hero(
+                  tag: '${_item.url}_cover_${galleryModel.tabIndex}',
+                  child: Center(
+                    child: ClipRRect(
+                      borderRadius: BorderRadius.circular(6),
+                      child: Container(
+                        child: CachedNetworkImage(
+                          imageUrl: _item.imgUrl,
+                          fit: BoxFit.cover,
+                        ),
+                      ),
+                    ),
                   ),
                 ),
               ),
@@ -427,6 +451,13 @@ class GalleryTitle extends StatelessWidget {
     /// 构建标题
     /// [EhConfigModel] eh设置的state 控制显示日文还是英文标题
     /// [GalleryModel] 画廊数据
+    ///
+    /// 问题 文字如果使用 SelectableText 并且页面拉到比较下方的时候
+    /// 在返回列表时会异常 疑似和封面图片的Hero动画有关
+    /// 如果修改封面图片的 Hero tag ,即不使用 Hero 动画
+    /// 异常则不会出现
+    ///
+    /// 暂时放弃使用 SelectableText
     return Selector2<EhConfigModel, GalleryModel, String>(
       selector: (context, ehconfig, gallery) {
         var _titleEn = gallery?.galleryItem?.englishTitle ?? '';
@@ -441,7 +472,24 @@ class GalleryTitle extends StatelessWidget {
         return _title;
       },
       builder: (context, title, child) {
-        return SelectableText(
+        return GestureDetector(
+          child: Text(
+            title,
+            maxLines: 5,
+            textAlign: TextAlign.left, // 对齐方式
+            overflow: TextOverflow.ellipsis, // 超出部分省略号
+            style: TextStyle(
+              textBaseline: TextBaseline.alphabetic,
+              height: 1.2,
+              fontSize: 16,
+              fontWeight: FontWeight.w500,
+//            backgroundColor: CupertinoColors.systemGrey3,
+//            fontFamilyFallback: EHConst.FONT_FAMILY_FB,
+            ),
+          ),
+        );
+
+        /*return cust.SelectableText(
           title,
           maxLines: 5,
           minLines: 1,
@@ -456,7 +504,7 @@ class GalleryTitle extends StatelessWidget {
 //            fontFamilyFallback: EHConst.FONT_FAMILY_FB,
           ),
           scrollPhysics: ClampingScrollPhysics(),
-        );
+        );*/
       },
     );
   }
