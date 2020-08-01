@@ -21,22 +21,15 @@ class EhTagDatabase {
 
     var urlJson = await httpManager.get(url);
 
-    // 获取发布时间 作为版本号
-    var remoteVer = "";
-    remoteVer = urlJson != null ? urlJson["published_at"] : '';
+    // 获取发布时间 作为远程版本号
+    String remoteVer = urlJson != null ? urlJson["published_at"].trim() : '';
     Global.loggerNoStack.v("remoteVer $remoteVer");
 
-    var localVer = StorageUtil().getString(TAG_TRANSLAT_VER);
+    // 获取当前本地版本
+    String localVer = StorageUtil().getString(TAG_TRANSLAT_VER).trim();
     Global.loggerNoStack.v("localVer $localVer");
 
-    StorageUtil().setString(TAG_TRANSLAT_VER, remoteVer);
-
-    var dbJson = jsonEncode(StorageUtil().getJSON(TAG_TRANSLAT));
-
-    if (dbJson == null ||
-        dbJson.isEmpty ||
-        dbJson == "null" ||
-        remoteVer != localVer) {
+    if (remoteVer != localVer) {
       Global.loggerNoStack.v("TagTranslat更新");
       List assList = urlJson["assets"];
 
@@ -52,17 +45,15 @@ class EhTagDatabase {
 
       Options options = Options(receiveTimeout: receiveTimeout);
 
-      dbJson = await httpDB.get(dbUrl, options: options);
+      var dbJson = await httpDB.get(dbUrl, options: options);
       if (dbJson != null) {
         var dataAll = jsonDecode(dbJson.toString());
         var listDataP = dataAll["data"];
-//        StorageUtil().setJSON(TAG_TRANSLAT, jsonEncode(listDataP));
 
         await tagSaveToDB(listDataP);
+        StorageUtil().setString(TAG_TRANSLAT_VER, remoteVer);
       }
       Global.loggerNoStack.v("tag翻译更新完成");
-    } else {
-      Global.loggerNoStack.v("tag为最新数据 不需更新");
     }
 
     return remoteVer;

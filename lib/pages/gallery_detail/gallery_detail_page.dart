@@ -95,7 +95,7 @@ class GalleryDetailPage extends StatelessWidget {
             controller: _controller,
             dragStartBehavior: DragStartBehavior.down,
             children: <Widget>[
-              _buildGalletyHead(context),
+              _buildGalletyHead(),
               Container(
                 height: 0.5,
                 color: CupertinoColors.systemGrey4,
@@ -209,51 +209,7 @@ class GalleryDetailPage extends StatelessWidget {
     );
   }
 
-  /// 构建标题
-  /// [EhConfigModel] eh设置的state 控制显示日文还是英文标题
-  /// [GalleryModel] 画廊数据
-  Widget _buildTitle() {
-    return Selector2<EhConfigModel, GalleryModel, String>(
-      selector: (context, ehconfig, gallery) {
-        var _titleEn = gallery?.galleryItem?.englishTitle ?? '';
-        var _titleJpn = gallery?.galleryItem?.japaneseTitle ?? '';
-
-        // 日语标题判断
-        var _title =
-            ehconfig.isJpnTitle && _titleJpn != null && _titleJpn.isNotEmpty
-                ? _titleJpn
-                : _titleEn;
-
-        return _title;
-      },
-      builder: (context, title, child) {
-        return SelectableText(
-          title,
-          maxLines: 5,
-          minLines: 1,
-          textAlign: TextAlign.left, // 对齐方式
-//          overflow: TextOverflow.ellipsis, // 超出部分省略号
-          style: TextStyle(
-            textBaseline: TextBaseline.alphabetic,
-//            height: 1.2,
-            fontSize: 16,
-            fontWeight: FontWeight.w500,
-//            backgroundColor: CupertinoColors.systemGrey3,
-//            fontFamilyFallback: EHConst.FONT_FAMILY_FB,
-          ),
-          strutStyle: StrutStyle(
-            height: 1.5,
-            forceStrutHeight: true,
-            fontSize: 16,
-          ),
-          scrollPhysics: ClampingScrollPhysics(),
-        );
-      },
-    );
-  }
-
-  Widget _buildGalletyHead(context) {
-    var ln = S.of(context);
+  Widget _buildGalletyHead() {
     return Container(
       margin: const EdgeInsets.fromLTRB(0, 0, 12, 12),
       child: Column(
@@ -270,9 +226,9 @@ class GalleryDetailPage extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: <Widget>[
                       // 标题
-                      _buildTitle(),
+                      GalleryTitle(),
                       // 上传用户
-                      _buildUploader(context),
+                      GalleryUploader(),
                       Spacer(),
                       Row(
                         crossAxisAlignment: CrossAxisAlignment.end,
@@ -281,7 +237,7 @@ class GalleryDetailPage extends StatelessWidget {
                           _buildReadButton(),
                           Spacer(),
                           // 收藏按钮
-                          _buildFavIcon(),
+                          GalleryFavButton(),
                         ],
                       )
                     ],
@@ -295,10 +251,10 @@ class GalleryDetailPage extends StatelessWidget {
             child: Row(
               children: <Widget>[
                 // 评分
-                _buildRating(context),
+                GalleryRating(),
                 Spacer(),
                 // 类型
-                _buildCategory(context),
+                GalleryCategory(),
               ],
             ),
           )
@@ -353,91 +309,154 @@ class GalleryDetailPage extends StatelessWidget {
                   : null);
         });
   }
+}
 
-  // 类别 点击可跳转搜索
-  Widget _buildCategory(context) {
-    final GalleryModel _galleryModel =
-        Provider.of<GalleryModel>(context, listen: false);
+/// 类别 点击可跳转搜索
+class GalleryCategory extends StatelessWidget {
+  const GalleryCategory({
+    Key key,
+  }) : super(key: key);
 
-    Color _colorCategory =
-        ThemeColors.nameColor[_galleryModel?.galleryItem?.category ?? "defaule"]
-                ["color"] ??
-            CupertinoColors.white;
+  @override
+  Widget build(BuildContext context) {
+    return Selector<GalleryModel, String>(
+        selector: (_, galleryModel) => galleryModel.galleryItem.category ?? '',
+        builder: (context, category, _) {
+          Color _colorCategory = ThemeColors.nameColor[category ?? "defaule"]
+                  ["color"] ??
+              CupertinoColors.white;
 
-    return GestureDetector(
-      child: ClipRRect(
-        borderRadius: BorderRadius.circular(4),
-        child: Container(
-          padding: const EdgeInsets.fromLTRB(6, 3, 6, 3),
-          color: _colorCategory,
-          child: Text(
-            _galleryModel?.galleryItem?.category ?? '',
-            style: TextStyle(
-              fontSize: 14.5,
-              // height: 1.1,
-              color: CupertinoColors.white,
+          return GestureDetector(
+            child: ClipRRect(
+              borderRadius: BorderRadius.circular(4),
+              child: Container(
+                padding: const EdgeInsets.fromLTRB(6, 3, 6, 3),
+                color: _colorCategory,
+                child: Text(
+                  category,
+                  style: TextStyle(
+                    fontSize: 14.5,
+                    // height: 1.1,
+                    color: CupertinoColors.white,
+                  ),
+                ),
+              ),
             ),
-          ),
-        ),
-      ),
-      onTap: () {
-        final iCat =
-            EHConst.cats[_galleryModel?.galleryItem?.category?.trim() ?? ''];
-        final cats = EHConst.sumCats - iCat;
-        NavigatorUtil.goGalleryList(context, cats: cats);
+            onTap: () {
+              final iCat = EHConst.cats[category];
+              final cats = EHConst.sumCats - iCat;
+              NavigatorUtil.goGalleryList(context, cats: cats);
+            },
+          );
+        });
+  }
+}
+
+class GalleryRating extends StatelessWidget {
+  const GalleryRating({
+    Key key,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Selector<GalleryModel, double>(
+        selector: (_, galleryModel) => galleryModel.galleryItem.rating ?? 0,
+        builder: (context, rating, _) {
+          return Row(
+            children: <Widget>[
+              Container(
+                  padding: const EdgeInsets.only(right: 8),
+                  child: Text('$rating')),
+              // 星星
+              StaticRatingBar(
+                size: 18.0,
+                rate: rating,
+                radiusRatio: 1.5,
+              ),
+            ],
+          );
+        });
+  }
+}
+
+/// 上传用户
+class GalleryUploader extends StatelessWidget {
+  const GalleryUploader({
+    Key key,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Selector<GalleryModel, String>(
+        selector: (_, galleryModel) => galleryModel.galleryItem.uploader,
+        builder: (context, uploader, _) {
+          return GestureDetector(
+            behavior: HitTestBehavior.opaque,
+            child: Container(
+              padding: const EdgeInsets.only(top: 8, right: 8, bottom: 4),
+              child: Text(
+                uploader,
+                maxLines: 1,
+                textAlign: TextAlign.left, // 对齐方式
+                overflow: TextOverflow.ellipsis, // 超出部分省略号
+                style: TextStyle(
+                  fontSize: 13,
+                  color: Colors.brown,
+                  fontWeight: FontWeight.w500,
+                ),
+              ),
+            ),
+            onTap: () {
+              Global.logger.v('search uploader:$uploader');
+              NavigatorUtil.goGalleryList(context,
+                  simpleSearch: 'uploader:$uploader');
+            },
+          );
+        });
+  }
+}
+
+/// 标题
+class GalleryTitle extends StatelessWidget {
+  const GalleryTitle({
+    Key key,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    /// 构建标题
+    /// [EhConfigModel] eh设置的state 控制显示日文还是英文标题
+    /// [GalleryModel] 画廊数据
+    return Selector2<EhConfigModel, GalleryModel, String>(
+      selector: (context, ehconfig, gallery) {
+        var _titleEn = gallery?.galleryItem?.englishTitle ?? '';
+        var _titleJpn = gallery?.galleryItem?.japaneseTitle ?? '';
+
+        // 日语标题判断
+        var _title =
+            ehconfig.isJpnTitle && _titleJpn != null && _titleJpn.isNotEmpty
+                ? _titleJpn
+                : _titleEn;
+
+        return _title;
       },
-    );
-  }
-
-  Widget _buildRating(context) {
-    final GalleryModel _galleryModel =
-        Provider.of<GalleryModel>(context, listen: false);
-
-    return Row(
-      children: <Widget>[
-        Container(
-            padding: const EdgeInsets.only(right: 8),
-            child: Text("${_galleryModel?.galleryItem?.rating ?? ''}")),
-        // 星星
-        StaticRatingBar(
-          size: 18.0,
-          rate: _galleryModel?.galleryItem?.rating ?? 0,
-          radiusRatio: 1.5,
-        ),
-      ],
-    );
-  }
-
-  Widget _buildFavIcon() {
-    return GalleryFavButton();
-  }
-
-  // 上传用户
-  Widget _buildUploader(context) {
-    final GalleryModel _galleryModel =
-        Provider.of<GalleryModel>(context, listen: false);
-
-    var _uploader = _galleryModel?.galleryItem?.uploader ?? '';
-    return GestureDetector(
-      behavior: HitTestBehavior.opaque,
-      child: Container(
-        margin: const EdgeInsets.only(top: 8, bottom: 8),
-        child: Text(
-          _uploader,
-          maxLines: 1,
+      builder: (context, title, child) {
+        return SelectableText(
+          title,
+          maxLines: 5,
+          minLines: 1,
           textAlign: TextAlign.left, // 对齐方式
-          overflow: TextOverflow.ellipsis, // 超出部分省略号
+//          overflow: TextOverflow.ellipsis, // 超出部分省略号
           style: TextStyle(
-            fontSize: 13,
-            color: Colors.brown,
+            textBaseline: TextBaseline.alphabetic,
+            height: 1.2,
+            fontSize: 16,
             fontWeight: FontWeight.w500,
+//            backgroundColor: CupertinoColors.systemGrey3,
+//            fontFamilyFallback: EHConst.FONT_FAMILY_FB,
           ),
-        ),
-      ),
-      onTap: () {
-        Global.logger.v('search uploader:$_uploader');
-        NavigatorUtil.goGalleryList(context,
-            simpleSearch: 'uploader:$_uploader');
+          scrollPhysics: ClampingScrollPhysics(),
+        );
       },
     );
   }

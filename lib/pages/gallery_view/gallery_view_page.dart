@@ -85,14 +85,19 @@ class _GalleryViewPageEState extends State<GalleryViewPageE> {
     );
   }
 
+  // 一个很傻的预载功能 需要优化
   _precache(List<GalleryPreview> previews, int index, int max) async {
     final _galleryModel = Provider.of<GalleryModel>(context, listen: false);
 
     for (int add = 0; add < max; add++) {
       int _index = index + add + 1;
+      if (_index > _galleryModel.previews.length - 1) {
+        return;
+      }
+      final _preview = _galleryModel.previews[_index];
 
       String _url = '';
-      if (_galleryModel.previews[_index].largeImageUrl?.isEmpty ?? true) {
+      if (_preview.largeImageUrl?.isEmpty ?? true) {
         _url = await Api.getShowInfo(
             previews[_index].href, _galleryModel.showKey,
             index: _index);
@@ -101,14 +106,16 @@ class _GalleryViewPageEState extends State<GalleryViewPageE> {
 
       _url = _galleryModel.previews[_index].largeImageUrl;
 
-//      Global.logger.v('$_index : $_url');
-
-      precacheImage(
-          ExtendedNetworkImageProvider(
-            _url,
-            cache: true,
-          ),
-          context);
+      if (!(_preview?.isCache ?? false)) {
+        Global.logger.v('$_index : $_url');
+        precacheImage(
+                ExtendedNetworkImageProvider(
+                  _url,
+                  cache: true,
+                ),
+                context)
+            .then((_) => {_galleryModel.previews[_index].isCache = true});
+      }
     }
   }
 }

@@ -7,6 +7,7 @@ class GalleryPreview {
     GalleryPreview();
 
     bool isLarge;
+    bool isCache;
     num ser;
     String href;
     String largeImageUrl;
