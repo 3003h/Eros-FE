@@ -1,7 +1,5 @@
 import 'package:json_annotation/json_annotation.dart';
-
 import "galleryTag.dart";
-
 part 'tagGroup.g.dart';
 
 @JsonSerializable()

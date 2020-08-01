@@ -9,6 +9,7 @@ part of 'galleryPreview.dart';
 GalleryPreview _$GalleryPreviewFromJson(Map<String, dynamic> json) {
   return GalleryPreview()
     ..isLarge = json['isLarge'] as bool
+    ..isCache = json['isCache'] as bool
     ..ser = json['ser'] as num
     ..href = json['href'] as String
     ..largeImageUrl = json['largeImageUrl'] as String
@@ -21,6 +22,7 @@ GalleryPreview _$GalleryPreviewFromJson(Map<String, dynamic> json) {
 Map<String, dynamic> _$GalleryPreviewToJson(GalleryPreview instance) =>
     <String, dynamic>{
       'isLarge': instance.isLarge,
+      'isCache': instance.isCache,
       'ser': instance.ser,
       'href': instance.href,
       'largeImageUrl': instance.largeImageUrl,
