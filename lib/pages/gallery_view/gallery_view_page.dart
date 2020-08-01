@@ -31,6 +31,7 @@ class _GalleryViewPageEState extends State<GalleryViewPageE> {
     final galleryModel = Provider.of<GalleryModel>(context, listen: false);
     if (galleryModel != this._galleryModel) {
       this._galleryModel = galleryModel;
+      // 预载后面5张图
       _precache(_galleryModel.previews, widget.index, 5);
     }
   }
