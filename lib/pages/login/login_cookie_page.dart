@@ -75,8 +75,8 @@ class _LoginCookiePageState extends State<LoginCookiePage> {
           ? Container(
               child: CupertinoActivityIndicator(
                 radius: 14.0,
-                iOSVersionStyle:
-                    CupertinoActivityIndicatorIOSVersionStyle.iOS14,
+//                iOSVersionStyle:
+//                    CupertinoActivityIndicatorIOSVersionStyle.iOS14,
               ),
             )
           : Container(

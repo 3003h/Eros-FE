@@ -23,6 +23,18 @@ class GalleryViewPageE extends StatefulWidget {
 class _GalleryViewPageEState extends State<GalleryViewPageE> {
   int _currentIndex = 0;
 
+  GalleryModel _galleryModel;
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    final galleryModel = Provider.of<GalleryModel>(context, listen: false);
+    if (galleryModel != this._galleryModel) {
+      this._galleryModel = galleryModel;
+      _precache(_galleryModel.previews, widget.index, 5);
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return CupertinoPageScaffold(
@@ -52,6 +64,8 @@ class _GalleryViewPageEState extends State<GalleryViewPageE> {
                     },
                     itemCount: previews.length,
                     onPageChanged: (int index) {
+                      // 预载
+                      _precache(previews, index, 5);
                       setState(() {
                         _currentIndex = index;
                       });
@@ -69,6 +83,33 @@ class _GalleryViewPageEState extends State<GalleryViewPageE> {
             );
           }),
     );
+  }
+
+  _precache(List<GalleryPreview> previews, int index, int max) async {
+    final _galleryModel = Provider.of<GalleryModel>(context, listen: false);
+
+    for (int add = 0; add < max; add++) {
+      int _index = index + add + 1;
+
+      String _url = '';
+      if (_galleryModel.previews[_index].largeImageUrl?.isEmpty ?? true) {
+        _url = await Api.getShowInfo(
+            previews[_index].href, _galleryModel.showKey,
+            index: _index);
+        _galleryModel.previews[_index].largeImageUrl = _url;
+      }
+
+      _url = _galleryModel.previews[_index].largeImageUrl;
+
+//      Global.logger.v('$_index : $_url');
+
+      precacheImage(
+          ExtendedNetworkImageProvider(
+            _url,
+            cache: true,
+          ),
+          context);
+    }
   }
 }
 

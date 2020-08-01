@@ -6,6 +6,8 @@ import 'package:FEhViewer/models/states/gallery_model.dart';
 import 'package:FEhViewer/pages/gallery_detail/gallery_detail_widget.dart';
 import 'package:FEhViewer/pages/gallery_detail/gallery_favcat.dart';
 import 'package:FEhViewer/route/navigator_util.dart';
+import 'package:FEhViewer/utils/cust_lib/selectable_text.dart'
+    show SelectableText;
 import 'package:FEhViewer/utils/utility.dart';
 import 'package:FEhViewer/values/const.dart';
 import 'package:FEhViewer/values/theme_colors.dart';
@@ -13,7 +15,7 @@ import 'package:FEhViewer/widget/rating_bar.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/gestures.dart';
-import 'package:flutter/material.dart';
+import 'package:flutter/material.dart' hide SelectableText;
 import 'package:provider/provider.dart';
 import 'package:tuple/tuple.dart';
 
@@ -232,9 +234,17 @@ class GalleryDetailPage extends StatelessWidget {
           textAlign: TextAlign.left, // 对齐方式
 //          overflow: TextOverflow.ellipsis, // 超出部分省略号
           style: TextStyle(
+            textBaseline: TextBaseline.alphabetic,
+//            height: 1.2,
             fontSize: 16,
             fontWeight: FontWeight.w500,
+//            backgroundColor: CupertinoColors.systemGrey3,
 //            fontFamilyFallback: EHConst.FONT_FAMILY_FB,
+          ),
+          strutStyle: StrutStyle(
+            height: 1.5,
+            forceStrutHeight: true,
+            fontSize: 16,
           ),
           scrollPhysics: ClampingScrollPhysics(),
         );

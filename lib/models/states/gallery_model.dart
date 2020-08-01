@@ -56,7 +56,7 @@ class GalleryModel extends ProfileChangeNotifier {
   bool get isGetAllImageHref => _isGetAllImageHref ?? false;
   set isGetAllImageHref(bool value) => _isGetAllImageHref = value;
 
-  get previews => _galleryItem.galleryPreview;
+  List<GalleryPreview> get previews => _galleryItem.galleryPreview;
 
   List<GalleryPreview> get oriGalleryPreview => _oriGalleryPreview ?? [];
 
