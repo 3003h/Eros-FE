@@ -202,14 +202,15 @@ class _GalleryItemWidgetState extends State<GalleryItemWidget> {
         }
       }
 
-      return Hero(
-        tag: '${galleryModel.galleryItem.url}_cover_${galleryModel.tabIndex}',
-        child: ClipRRect(
-          borderRadius: BorderRadius.circular(6),
-          child: Container(
-            width: kCoverImageWidth,
-            height: _getHeigth(),
-            color: CupertinoColors.systemGrey6,
+      return ClipRRect(
+        borderRadius: BorderRadius.circular(6),
+        child: Container(
+          width: kCoverImageWidth,
+          height: _getHeigth(),
+          color: CupertinoColors.systemGrey6,
+          child: Hero(
+            tag:
+                '${galleryModel.galleryItem.url}_cover_${galleryModel.tabIndex}',
             child: Center(
               child: ClipRRect(
                 // 圆角

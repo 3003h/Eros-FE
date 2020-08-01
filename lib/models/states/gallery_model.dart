@@ -46,6 +46,10 @@ class GalleryModel extends ProfileChangeNotifier {
     notifyListeners();
   }
 
+  resetHideNavigationBtn() {
+    _hideNavigationBtn = true;
+  }
+
   set hideNavigationBtn(bool value) {
     _hideNavigationBtn = value;
     notifyListeners();
