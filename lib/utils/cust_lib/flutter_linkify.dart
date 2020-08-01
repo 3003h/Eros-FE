@@ -4,6 +4,8 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart' hide SelectableText;
 import 'package:linkify/linkify.dart';
 
+//        selectionHeightStyle: BoxHeightStyle.max,
+
 export 'package:linkify/linkify.dart'
     show
         LinkifyElement,
