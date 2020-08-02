@@ -57,7 +57,7 @@ class _FavoriteTabState extends State<FavoriteTab> {
     return SliverList(
       delegate: SliverChildBuilderDelegate(
         (context, index) {
-          if (index == gallerItemBeans.length - 1) {
+          if (index == gallerItemBeans.length - 1 && _curPage < _maxPage - 1) {
             Global.logger.v('load more');
             _loadDataMore();
           }
@@ -82,10 +82,9 @@ class _FavoriteTabState extends State<FavoriteTab> {
       _title = ln.all_Favorites;
     }
 
-    final size = MediaQuery.of(context).size;
-    // final width = size.width;
-    final height = size.height;
-    final _topPad = height / 2 - 150;
+//    final size = MediaQuery.of(context).size;
+//     final width = size.width;
+//    final height = size.height;
 
     return CupertinoPageScaffold(
       child: Selector<UserModel, bool>(
@@ -137,9 +136,9 @@ class _FavoriteTabState extends State<FavoriteTab> {
                       SliverSafeArea(
                         top: false,
                         sliver: _loading
-                            ? SliverToBoxAdapter(
+                            ? SliverFillRemaining(
                                 child: Container(
-                                  padding: EdgeInsets.only(top: _topPad),
+                                  padding: const EdgeInsets.only(bottom: 50),
                                   child: CupertinoActivityIndicator(
                                     radius: 14.0,
                                   ),

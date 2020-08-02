@@ -102,9 +102,9 @@ class _PopularListTabState extends State<PopularListTab> {
         SliverSafeArea(
           top: false,
           sliver: _firstLoading
-              ? SliverToBoxAdapter(
+              ? SliverFillRemaining(
                   child: Container(
-                    padding: EdgeInsets.only(top: _topPad),
+                    padding: const EdgeInsets.only(bottom: 50),
                     child: CupertinoActivityIndicator(
                       radius: 14.0,
                     ),
