@@ -225,6 +225,7 @@ class _GalleryListTabState extends State<GalleryListTab> {
     _title = ln.tab_gallery;
     CustomScrollView customScrollView = CustomScrollView(
       controller: widget.scrollController,
+      physics: AlwaysScrollableScrollPhysics(),
       slivers: <Widget>[
         CupertinoSliverNavigationBar(
           heroTag: 'gallery',

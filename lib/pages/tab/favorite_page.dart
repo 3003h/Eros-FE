@@ -93,6 +93,7 @@ class _FavoriteTabState extends State<FavoriteTab> {
             return isLogin
                 ? CustomScrollView(
                     controller: widget.scrollController,
+                    physics: AlwaysScrollableScrollPhysics(),
                     slivers: <Widget>[
                       CupertinoSliverNavigationBar(
                         heroTag: 'fav',

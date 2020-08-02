@@ -392,6 +392,15 @@ packages:
       url: "https://pub.flutter-io.cn"
     source: hosted
     version: "0.3.19"
+  like_button:
+    dependency: "direct main"
+    description:
+      path: "."
+      ref: HEAD
+      resolved-ref: "1b72d7a82bc83971d221b51eb1507fa60626bd47"
+      url: "git://github.com/fluttercandies/like_button.git"
+    source: git
+    version: "1.0.1"
   linkify:
     dependency: transitive
     description:

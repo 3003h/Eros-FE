@@ -7,6 +7,7 @@ import 'package:FEhViewer/utils/toast.dart';
 import 'package:FEhViewer/values/theme_colors.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:like_button/like_button.dart';
 import 'package:provider/provider.dart';
 
 /// 收藏操作处理类
@@ -42,6 +43,46 @@ class _GalleryFavButtonState extends State<GalleryFavButton> {
       _favnote = '';
     }
   }
+
+  /*@override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onLongPress: () => _longTapFav(context),
+      child: Selector<GalleryModel, GalleryItem>(
+          selector: (context, galleryModel) => galleryModel.galleryItem,
+//          shouldRebuild: (pre, next) =>
+//              pre.favTitle != next.favTitle || pre.favcat != next.favcat,
+          shouldRebuild: (_, __) => true,
+          builder: (context, galleryItem, child) {
+            return LikeButton(
+              isLiked: galleryItem.favcat.isNotEmpty,
+              likeBuilder: (bool isLiked) {
+                return Icon(
+                  FontAwesomeIcons.solidHeart,
+                  color: isLiked
+                      ? ThemeColors.favColor[galleryItem.favcat]
+                      : CupertinoColors.systemGrey,
+                );
+              },
+              likeCount: 233,
+              onTap: onLikeButtonTapped,
+            );
+          }),
+    );
+  }
+
+  Future<bool> onLikeButtonTapped(bool isLiked) async {
+    /// send your request here
+    // final bool success= await sendRequest();
+
+    /// if failed, you can do nothing
+    // return success? !isLiked:isLiked;
+    final bool val = await _tapFav(context);
+
+    Global.logger.v(val);
+
+    return val ?? isLiked;
+  }*/
 
   @override
   Widget build(BuildContext context) {
@@ -121,12 +162,15 @@ class _GalleryFavButtonState extends State<GalleryFavButton> {
         _galleryModel.galleryItem.gid,
         _galleryModel.galleryItem.token,
       );
-    } catch (e) {} finally {
+    } catch (e) {
+      return true;
+    } finally {
       setState(() {
         _isLoading = false;
       });
       _galleryModel.setFavTitle('', favcat: '');
     }
+    return false;
   }
 
   _addToLastFavcat(_lastFavcat) async {
@@ -144,17 +188,20 @@ class _GalleryFavButtonState extends State<GalleryFavButton> {
         favcat: _lastFavcat,
         favnote: _favnote,
       );
-    } catch (e) {} finally {
+    } catch (e) {
+      return false;
+    } finally {
       setState(() {
         _isLoading = false;
       });
       _galleryModel.setFavTitle(_favTitle, favcat: _lastFavcat);
     }
+    return true;
   }
 
-  void _tapFav(context) async {
+  _tapFav(context) async {
     if (_galleryModel.galleryItem.favcat.isNotEmpty) {
-      _delFav();
+      return _delFav();
     } else {
       var _lastFavcat = Global.profile.ehConfig.lastFavcat;
 
@@ -162,10 +209,10 @@ class _GalleryFavButtonState extends State<GalleryFavButton> {
       if ((Global.profile.ehConfig.favLongTap ?? false) &&
           _lastFavcat != null &&
           _lastFavcat.isNotEmpty) {
-        _addToLastFavcat(_lastFavcat);
+        return _addToLastFavcat(_lastFavcat);
       } else {
         // 手选收藏夹
-        await _showAddFavDialog(context);
+        return await _showAddFavDialog(context);
       }
     }
   }
@@ -176,11 +223,14 @@ class _GalleryFavButtonState extends State<GalleryFavButton> {
     await _showAddFavDialog(context);
   }
 
+  // 选择并收藏
   _showAddFavDialog(context) async {
     var favList = await GalleryFavParser.getFavcat(
       _galleryModel.galleryItem.gid,
       _galleryModel.galleryItem.token,
     );
+
+    // diaolog 获取选择结果
     var result = Global.profile.ehConfig.favPicker
         ? await _showAddFavPicker(context, favList)
         : await _showAddFavList(context, favList);
@@ -201,12 +251,17 @@ class _GalleryFavButtonState extends State<GalleryFavButton> {
           favcat: _favcat,
           favnote: _favnote,
         );
-      } catch (e) {} finally {
+      } catch (e) {
+        return false;
+      } finally {
         setState(() {
           _isLoading = false;
         });
         _galleryModel.setFavTitle(_favTitle, favcat: _favcat);
       }
+      return true;
+    } else {
+      return null;
     }
   }
 
