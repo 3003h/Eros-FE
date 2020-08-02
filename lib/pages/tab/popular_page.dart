@@ -86,6 +86,7 @@ class _PopularListTabState extends State<PopularListTab> {
     var _title = ln.tab_popular;
     CustomScrollView customScrollView = CustomScrollView(
       controller: widget.scrollController,
+      physics: AlwaysScrollableScrollPhysics(),
       slivers: <Widget>[
         CupertinoSliverNavigationBar(
           heroTag: 'pop',
