@@ -1,10 +1,9 @@
-import 'package:FEhViewer/utils/cust_lib/selectable_text.dart'
-    show SelectableText;
+import 'package:FEhViewer/utils/cust_lib/selectable_text.dart' as cust;
 import 'package:flutter/gestures.dart';
-import 'package:flutter/material.dart' hide SelectableText;
+import 'package:flutter/material.dart';
 import 'package:linkify/linkify.dart';
 
-//        selectionHeightStyle: BoxHeightStyle.max,
+//     [SelectableText]   selectionHeightStyle: BoxHeightStyle.max,
 
 export 'package:linkify/linkify.dart'
     show
@@ -241,7 +240,7 @@ class SelectableLinkify extends StatelessWidget {
       linkifiers: linkifiers,
     );
 
-    return SelectableText.rich(
+    return cust.SelectableText.rich(
       buildTextSpan(
         elements,
         style: Theme.of(context).textTheme.bodyText2.merge(style),

@@ -217,10 +217,9 @@ class _GalleryListTabState extends State<GalleryListTab> {
 
   @override
   Widget build(BuildContext context) {
-    final size = MediaQuery.of(context).size;
-    // final width = size.width;
-    final height = size.height;
-    final _topPad = height / 2 - 150;
+//    final size = MediaQuery.of(context).size;
+//    // final width = size.width;
+//    final height = size.height;
 
     var ln = S.of(context);
     _title = ln.tab_gallery;
@@ -260,9 +259,9 @@ class _GalleryListTabState extends State<GalleryListTab> {
           top: false,
           bottom: false,
           sliver: _firstLoading
-              ? SliverToBoxAdapter(
+              ? SliverFillRemaining(
                   child: Container(
-                    padding: EdgeInsets.only(top: _topPad),
+                    padding: const EdgeInsets.only(bottom: 50),
                     child: CupertinoActivityIndicator(
                       radius: 14.0,
                     ),
