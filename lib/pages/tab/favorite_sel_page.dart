@@ -6,6 +6,7 @@ import 'package:FEhViewer/values/const.dart';
 import 'package:FEhViewer/values/theme_colors.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 /// 收藏夹选择页面 列表
 class SelFavoritePage extends StatefulWidget {
@@ -92,9 +93,9 @@ class _FavSelItemWidgetState extends State<FavSelItemWidget> {
 
   @override
   Widget build(BuildContext context) {
-    Widget container = Container(
+    final Widget container = Container(
       color: _colorTap,
-      padding: EdgeInsets.fromLTRB(16, 8, 8, 8),
+      padding: const EdgeInsets.fromLTRB(16, 8, 8, 8),
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -102,7 +103,8 @@ class _FavSelItemWidgetState extends State<FavSelItemWidget> {
           Row(children: <Widget>[
             // 图标
             Icon(
-              EHCupertinoIcons.heart_solid,
+//              EHCupertinoIcons.heart_solid,
+              FontAwesomeIcons.solidHeart,
               color: widget.favcatItemBean.color,
             ),
             Container(
@@ -110,11 +112,11 @@ class _FavSelItemWidgetState extends State<FavSelItemWidget> {
             ), // 占位 宽度8
             Text(
               widget?.favcatItemBean?.title ?? '',
-              style: TextStyle(
+              style: const TextStyle(
                 fontSize: 20,
               ),
             ),
-            Expanded(
+            const Expanded(
               child: Align(
                 alignment: Alignment.centerRight,
                 child: Icon(
