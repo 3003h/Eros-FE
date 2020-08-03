@@ -9,51 +9,57 @@ import 'package:FEhViewer/values/const.dart';
 import 'package:FEhViewer/values/storages.dart';
 import 'package:dio/dio.dart';
 
-final int connectTimeout = 10000;
-final int receiveTimeout = 30000;
+const int connectTimeout = 10000;
+const int receiveTimeout = 30000;
 
 class EhTagDatabase {
   ///tag翻译
   static Future<String> generateTagTranslat() async {
-    HttpManager httpManager = HttpManager.getInstance("https://api.github.com");
+    final HttpManager httpManager =
+        HttpManager.getInstance('https://api.github.com');
 
-    const url = "/repos/EhTagTranslation/Database/releases/latest";
+    const String url = '/repos/EhTagTranslation/Database/releases/latest';
 
-    var urlJson = await httpManager.get(url);
+    final String urlJsonString = await httpManager.get(url);
+    final Map<String, dynamic> urlJson =
+        jsonDecode(urlJsonString) as Map<String, dynamic>;
 
     // 获取发布时间 作为远程版本号
-    String remoteVer = urlJson != null ? urlJson["published_at"]?.trim() : '';
-    Global.loggerNoStack.v("remoteVer $remoteVer");
+    final String remoteVer =
+        (urlJson != null ? urlJson['published_at']?.trim() : '') as String;
+    Global.loggerNoStack.v('remoteVer $remoteVer');
 
     // 获取当前本地版本
-    String localVer = StorageUtil().getString(TAG_TRANSLAT_VER)?.trim() ?? '';
-    Global.loggerNoStack.v("localVer $localVer");
+    final String localVer =
+        StorageUtil().getString(TAG_TRANSLAT_VER)?.trim() ?? '';
+    Global.loggerNoStack.v('localVer $localVer');
 
     if (remoteVer != localVer) {
-      Global.loggerNoStack.v("TagTranslat更新");
-      List assList = urlJson["assets"];
+      Global.loggerNoStack.v('TagTranslat更新');
+      final List<Map<String, String>> assList =
+          urlJson['assets'] as List<Map<String, String>>;
 
-      Map assMap = new Map();
-      assList.forEach((assets) {
-        assMap[assets["name"]] = assets["browser_download_url"];
+      final Map<String, String> assMap = <String, String>{};
+      assList.forEach((Map<String, String> assets) {
+        assMap[assets['name']] = assets['browser_download_url'];
       });
-      var dbUrl = assMap["db.text.json"];
+      final String dbUrl = assMap['db.text.json'];
 
       Global.loggerNoStack.v(dbUrl);
 
-      HttpManager httpDB = HttpManager.getInstance();
+      final HttpManager httpDB = HttpManager.getInstance();
 
-      Options options = Options(receiveTimeout: receiveTimeout);
+      final Options options = Options(receiveTimeout: receiveTimeout);
 
-      var dbJson = await httpDB.get(dbUrl, options: options);
+      final String dbJson = await httpDB.get(dbUrl, options: options);
       if (dbJson != null) {
-        var dataAll = jsonDecode(dbJson.toString());
-        var listDataP = dataAll["data"];
+        final Map dataAll = jsonDecode(dbJson.toString()) as Map;
+        final List listDataP = dataAll['data'] as List;
 
         await tagSaveToDB(listDataP);
         StorageUtil().setString(TAG_TRANSLAT_VER, remoteVer);
       }
-      Global.loggerNoStack.v("tag翻译更新完成");
+      Global.loggerNoStack.v('tag翻译更新完成');
     }
 
     return remoteVer;
@@ -61,17 +67,17 @@ class EhTagDatabase {
 
   /// 保存到数据库
   static Future<void> tagSaveToDB(List listDataP) async {
-    List<TagTranslat> tags = [];
+    final List<TagTranslat> tags = <TagTranslat>[];
 
     listDataP.forEach((objC) {
       Global.loggerNoStack.v('${objC['namespace']}  ${objC['count']}');
-      final _namespace = objC['namespace'];
-      Map mapC = objC['data'];
+      final String _namespace = objC['namespace'] as String;
+      Map mapC = objC['data'] as Map;
       mapC.forEach((key, value) {
-        final _key = key;
-        final _name = value['name'] ?? '';
-        final _intro = value['intro'] ?? '';
-        final _links = value['links'] ?? '';
+        final String _key = key as String;
+        final String _name = (value['name'] ?? '') as String;
+        final String _intro = (value['intro'] ?? '') as String;
+        final String _links = (value['links'] ?? '') as String;
 
         tags.add(
             TagTranslat(_namespace, _key, _name, intro: _intro, links: _links));
@@ -85,12 +91,12 @@ class EhTagDatabase {
 
   static Future<String> getTranTag(String tag, {String nameSpase}) async {
     if (tag.contains(':')) {
-      RegExp rpfx = new RegExp(r"(\w:)(.+)");
-      final rult = rpfx.firstMatch(tag);
-      final pfx = rult.group(1) ?? '';
-      final _nameSpase = EHConst.prefixToNameSpaceMap[pfx];
-      final _tag = rult.group(2) ?? '';
-      final _transTag =
+      final RegExp rpfx = RegExp(r'(\w:)(.+)');
+      final RegExpMatch rult = rpfx.firstMatch(tag);
+      final String pfx = rult.group(1) ?? '';
+      final String _nameSpase = EHConst.prefixToNameSpaceMap[pfx] as String;
+      final String _tag = rult.group(2) ?? '';
+      final String _transTag =
           await DataBaseUtil().getTagTransStr(_tag, namespace: _nameSpase);
 
       return _transTag != null ? '$pfx$_transTag' : tag;

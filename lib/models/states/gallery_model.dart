@@ -6,14 +6,14 @@ import 'base.dart';
 class GalleryModel extends ProfileChangeNotifier {
   GalleryItem _galleryItem;
   List<GalleryPreview> _oriGalleryPreview;
-  var _tabindex;
-  var _title;
+  dynamic _tabindex;
+  String _title;
   int _currentPreviewPage;
   bool _isGetAllImageHref;
   bool _hideNavigationBtn = true;
   bool _detailLoadFinish;
 
-  initData(GalleryItem galleryItem, {@required tabIndex}) {
+  void initData(GalleryItem galleryItem, {@required tabIndex}) {
     _galleryItem = galleryItem;
     _tabindex = tabIndex;
     _currentPreviewPage = 0;
@@ -22,7 +22,7 @@ class GalleryModel extends ProfileChangeNotifier {
   // todo 待优化 直接暴露_galleryItem会导致随意写入数据
   GalleryItem get galleryItem => _galleryItem;
 
-  setGalleryPreview(List<GalleryPreview> galleryPreview) {
+  void setGalleryPreview(List<GalleryPreview> galleryPreview) {
     if (galleryPreview.isNotEmpty) {
       _galleryItem.galleryPreview = galleryPreview;
     }
@@ -32,7 +32,7 @@ class GalleryModel extends ProfileChangeNotifier {
 //    notifyListeners();
   }
 
-  setFavTitle(String favTitle, {String favcat}) {
+  void setFavTitle(String favTitle, {String favcat}) {
     _galleryItem.favTitle = favTitle;
     if (favcat != null) {
       _galleryItem.favcat = favcat;
@@ -40,13 +40,13 @@ class GalleryModel extends ProfileChangeNotifier {
     notifyListeners();
   }
 
-  addAllPreview(List<GalleryPreview> galleryPreview) {
+  void addAllPreview(List<GalleryPreview> galleryPreview) {
     _galleryItem.galleryPreview.addAll(galleryPreview);
 //    Global.logger.v('${_galleryItem.galleryPreview.length}');
     notifyListeners();
   }
 
-  resetHideNavigationBtn() {
+  void resetHideNavigationBtn() {
     _hideNavigationBtn = true;
   }
 
@@ -55,7 +55,7 @@ class GalleryModel extends ProfileChangeNotifier {
     notifyListeners();
   }
 
-  get hideNavigationBtn => _hideNavigationBtn;
+  bool get hideNavigationBtn => _hideNavigationBtn;
 
   bool get isGetAllImageHref => _isGetAllImageHref ?? false;
   set isGetAllImageHref(bool value) => _isGetAllImageHref = value;
@@ -65,18 +65,16 @@ class GalleryModel extends ProfileChangeNotifier {
   List<GalleryPreview> get oriGalleryPreview => _oriGalleryPreview ?? [];
 
   set detailLoadFinish(bool value) => _detailLoadFinish = value;
-  get detailLoadFinish => _detailLoadFinish ?? false;
+  bool get detailLoadFinish => _detailLoadFinish ?? false;
 
-  get title => _title;
+  dynamic get title => _title;
 
-  get tabIndex => _tabindex;
+  dynamic get tabIndex => _tabindex;
 
-  get showKey => _galleryItem.showKey;
+  String get showKey => _galleryItem.showKey;
 
-  get currentPreviewPage {
-    if (_currentPreviewPage == null) {
-      _currentPreviewPage = 0;
-    }
+  int get currentPreviewPage {
+    _currentPreviewPage ??= 0;
     return _currentPreviewPage;
   }
 
@@ -84,7 +82,7 @@ class GalleryModel extends ProfileChangeNotifier {
     _currentPreviewPage = page;
   }
 
-  currentPreviewPageAdd() {
+  void currentPreviewPageAdd() {
     _currentPreviewPage++;
   }
 }

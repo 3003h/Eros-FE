@@ -6,5 +6,6 @@
   "galleryImgBlur": false,
   "favPicker": false,
   "favLongTap": false,
-  "lastFavcat": "3"
+  "lastFavcat": "3",
+  "listMode": "list"
 }

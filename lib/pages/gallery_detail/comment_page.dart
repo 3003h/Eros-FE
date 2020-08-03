@@ -5,9 +5,8 @@ import 'package:flutter/cupertino.dart';
 import 'comment_item.dart';
 
 class CommentPage extends StatelessWidget {
-  final List<GalleryComment> galleryComments;
-
   const CommentPage({Key key, this.galleryComments}) : super(key: key);
+  final List<GalleryComment> galleryComments;
 
   @override
   Widget build(BuildContext context) {

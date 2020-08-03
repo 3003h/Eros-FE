@@ -2,44 +2,44 @@ import 'package:FEhViewer/common/global.dart';
 import 'package:FEhViewer/models/index.dart';
 import 'package:FEhViewer/route/navigator_util.dart';
 import 'package:FEhViewer/utils/cust_lib/flutter_linkify.dart' as linkify;
-import 'package:flutter_linkify/flutter_linkify.dart';
-import 'package:url_launcher/url_launcher.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_linkify/flutter_linkify.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 const kMaxline = 4;
 
 class CommentItem extends StatelessWidget {
-  final GalleryComment galleryComment;
-  final bool simple;
-
   const CommentItem(
       {Key key, @required this.galleryComment, this.simple = false})
       : super(key: key);
+  final GalleryComment galleryComment;
+  final bool simple;
 
   @override
   Widget build(BuildContext context) {
-    var _fullText = Text(
+    final Text _fullText = Text(
       galleryComment.context,
       softWrap: true,
       textAlign: TextAlign.left, // 对齐方式
-      style: TextStyle(
+      style: const TextStyle(
         fontSize: 14,
       ),
     );
 
-    var _fullTextLinkify = linkify.SelectableLinkify(
+    final linkify.SelectableLinkify _fullTextLinkify =
+        linkify.SelectableLinkify(
       onOpen: _onOpen,
       text: galleryComment.context,
 //      softWrap: true,
       textAlign: TextAlign.left, // 对齐方式
-      style: TextStyle(
+      style: const TextStyle(
         fontSize: 14,
       ),
       options: LinkifyOptions(humanize: false),
     );
 
-    var _simpleText = Text(
+    final Text _simpleText = Text(
       galleryComment.context,
       maxLines: kMaxline,
       softWrap: true,
@@ -47,12 +47,12 @@ class CommentItem extends StatelessWidget {
       // 对齐方式
       overflow: TextOverflow.ellipsis,
       // 超出部分省略号
-      style: TextStyle(
+      style: const TextStyle(
         fontSize: 13,
       ),
     );
 
-    var _simpleTextLinkify = Linkify(
+    final Linkify _simpleTextLinkify = Linkify(
       text: galleryComment.context,
       onOpen: _onOpen,
       options: LinkifyOptions(humanize: false),
@@ -115,7 +115,7 @@ class CommentItem extends StatelessWidget {
     );
   }
 
-  Widget _buildUsername(context) {
+  Widget _buildUsername(BuildContext context) {
     return GestureDetector(
       child: Text(
         galleryComment.name,

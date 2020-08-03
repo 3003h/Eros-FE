@@ -26,7 +26,7 @@ class GalleryDetailPage extends StatelessWidget {
   final ScrollController _controller = ScrollController();
 
   /// 异步请求数据
-  Future<GalleryItem> _loadData(context) async {
+  Future<GalleryItem> _loadData(BuildContext context) async {
     final _galleryModel = Provider.of<GalleryModel>(context, listen: false);
     _galleryModel.resetHideNavigationBtn();
     if (!_galleryModel.detailLoadFinish) {
@@ -51,7 +51,7 @@ class GalleryDetailPage extends StatelessWidget {
   }
 
   // 滚动监听
-  void _controllerLister(context) {
+  void _controllerLister(BuildContext context) {
     final GalleryModel _galleryModel =
         Provider.of<GalleryModel>(context, listen: false);
 //    _galleryModel.resetHideNavigationBtn();
@@ -65,7 +65,7 @@ class GalleryDetailPage extends StatelessWidget {
     }
   }
 
-  _initData(context) {
+  _initData(BuildContext context) {
     final GalleryModel _galleryModel =
         Provider.of<GalleryModel>(context, listen: false);
     _galleryModel.resetHideNavigationBtn();
@@ -89,7 +89,7 @@ class GalleryDetailPage extends StatelessWidget {
           galleryModel.oriGalleryPreview.isNotEmpty),
       shouldRebuild: (pre, next) =>
           pre.item1 != next.item1 || pre.item2 != next.item2,
-      builder: (context, _tuple, child) {
+      builder: (BuildContext context, _tuple, child) {
         return CupertinoPageScaffold(
           navigationBar:
               _buildNavigationBar(context, hideNavigationBtn: _tuple.item1),
@@ -168,7 +168,8 @@ class GalleryDetailPage extends StatelessWidget {
     return GalleryDetailInfo();
   }
 
-  Widget _buildNavigationBar(context, {bool hideNavigationBtn = true}) {
+  ObstructingPreferredSizeWidget _buildNavigationBar(BuildContext context,
+      {bool hideNavigationBtn = true}) {
     return hideNavigationBtn
         ? CupertinoNavigationBar()
         : CupertinoNavigationBar(
@@ -178,7 +179,7 @@ class GalleryDetailPage extends StatelessWidget {
   }
 
   /// 独立出导航栏的阅读按钮
-  Widget _buildNavigationBarReadButton(context) {
+  Widget _buildNavigationBarReadButton(BuildContext context) {
     final GalleryModel _galleryModel =
         Provider.of<GalleryModel>(context, listen: false);
 
@@ -201,7 +202,7 @@ class GalleryDetailPage extends StatelessWidget {
             : null);
   }
 
-  Widget _buildNavigationBarImage(context) {
+  Widget _buildNavigationBarImage(BuildContext context) {
     double _statusBarHeight = MediaQuery.of(context).padding.top;
     final GalleryModel _galleryModel =
         Provider.of<GalleryModel>(context, listen: false);
@@ -346,9 +347,9 @@ class GalleryCategory extends StatelessWidget {
     return Selector<GalleryModel, String>(
         selector: (_, galleryModel) => galleryModel.galleryItem.category ?? '',
         builder: (context, category, _) {
-          Color _colorCategory = ThemeColors.nameColor[category ?? "defaule"]
-                  ["color"] ??
-              CupertinoColors.white;
+          final Color _colorCategory =
+              (ThemeColors.nameColor[category ?? 'defaule']['color'] ??
+                  CupertinoColors.white) as Color;
 
           return GestureDetector(
             child: ClipRRect(
@@ -384,7 +385,8 @@ class GalleryRating extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Selector<GalleryModel, double>(
-        selector: (_, galleryModel) => galleryModel.galleryItem.rating ?? 0,
+        selector: (_, GalleryModel galleryModel) =>
+            galleryModel.galleryItem.rating as double ?? 0.0,
         builder: (context, rating, _) {
           return Row(
             children: <Widget>[

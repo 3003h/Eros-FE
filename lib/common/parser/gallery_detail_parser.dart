@@ -11,29 +11,29 @@ class GalleryDetailParser {
   static Future<GalleryItem> parseGalleryDetail(String response,
       {GalleryItem inGalleryItem}) async {
     // 解析响应信息dom
-    var document = parse(response);
+    final Document document = parse(response);
 
-    GalleryItem galleryItem = inGalleryItem ?? GalleryItem();
+    final GalleryItem galleryItem = inGalleryItem ?? GalleryItem();
 
     // 完整的标签信息
     galleryItem.tagGroup = [];
-    const tagGroupSelect = '#taglist > table > tbody > tr';
-    List<Element> tagGroups = document.querySelectorAll(tagGroupSelect);
-    for (var tagGroup in tagGroups) {
-      var type = tagGroup
+    const String tagGroupSelect = '#taglist > table > tbody > tr';
+    final List<Element> tagGroups = document.querySelectorAll(tagGroupSelect);
+    for (final Element tagGroup in tagGroups) {
+      String type = tagGroup
           .querySelector('td.tc')
           .text
           .trim();
-      type = RegExp(r"(\w+):?$").firstMatch(type).group(1);
+      type = RegExp(r'(\w+):?$').firstMatch(type).group(1);
 
-      List<Element> tags = tagGroup.querySelectorAll('td > div > a');
-      List<GalleryTag> galleryTags = [];
-      for (var tagElm in tags) {
-        var title = tagElm.text.trim() ?? '';
+      final List<Element> tags = tagGroup.querySelectorAll('td > div > a');
+      final List<GalleryTag> galleryTags = [];
+      for (final Element tagElm in tags) {
+        String title = tagElm.text.trim() ?? '';
         if (title.contains('|')) {
           title = title.split('|')[0];
         }
-        var tagTranslat =
+        final String tagTranslat =
             await EhTagDatabase.getTranTag(title, nameSpase: type) ?? title;
 
 //        Global.logger.v('$type:$title $tagTranslat');
@@ -50,33 +50,33 @@ class GalleryDetailParser {
 
     // 全部评论数据
     galleryItem.galleryComment = [];
-    const commentSelect = '#cdiv > div.c1';
-    List<Element> commentList = document.querySelectorAll(commentSelect);
+    const String commentSelect = '#cdiv > div.c1';
+    final List<Element> commentList = document.querySelectorAll(commentSelect);
 //    Global.logger.v('${commentList.length}');
-    for (var comment in commentList) {
+    for (final Element comment in commentList) {
       // 评论人
-      var postElem = comment.querySelector('div.c2 > div.c3 > a');
-      var postName = postElem.text.trim();
+      final Element postElem = comment.querySelector('div.c2 > div.c3 > a');
+      final String postName = postElem.text.trim();
 
       // 解析时间
-      var timeElem = comment.querySelector('div.c2 > div.c3');
-      var postTime = timeElem.text.trim();
+      final Element timeElem = comment.querySelector('div.c2 > div.c3');
+      final String postTime = timeElem.text.trim();
       // 示例: Posted on 29 June 2020, 05:41 UTC by:  
-      var postTimeUTC = RegExp(r"Posted on (.+, .+) UTC by").firstMatch(
+      final String postTimeUTC = RegExp(r'Posted on (.+, .+) UTC by').firstMatch(
           postTime).group(1);
 
       // 时间由utc转为本地时间
-      DateTime time = DateFormat('dd MMMM yyyy, HH:mm', 'en_US').parseUtc(
+      final DateTime time = DateFormat('dd MMMM yyyy, HH:mm', 'en_US').parseUtc(
           postTimeUTC).toLocal();
-      final postTimeLocal = DateFormat('yyyy-MM-dd HH:mm').format(time);
+      final String postTimeLocal = DateFormat('yyyy-MM-dd HH:mm').format(time);
 
 
       // 评论评分 (Uploader Comment 没有)
-      var scoreElem = comment.querySelector('div.c2 > div.c5.nosel');
-      var score = scoreElem?.text?.trim() ?? '';
+      final Element scoreElem = comment.querySelector('div.c2 > div.c5.nosel');
+      final String score = scoreElem?.text?.trim() ?? '';
 
-      // 解析评论内容 TODO href的解析有问题
-      var contextElem = comment.querySelector('div.c6');
+      // 解析评论内容
+      final Element contextElem = comment.querySelector('div.c6');
 
 //      var _type = contextElem.nodes.map((element) => element.nodeType).join(
 //          '|');
@@ -84,8 +84,8 @@ class GalleryDetailParser {
 
 
       // br回车以及引号的处理
-      var context = contextElem.nodes
-          .map((node) {
+      final String context = contextElem.nodes
+          .map((Node node) {
         if (node.nodeType == Node.TEXT_NODE) {
           return RegExp(r'^"?(.+)"?$')
               .firstMatch(node.text.trim())
@@ -111,17 +111,17 @@ class GalleryDetailParser {
 
 
     // 画廊缩略图
-    List<GalleryPreview> previewList = parseGalleryPreview(document);
+    final List<GalleryPreview> previewList = parseGalleryPreview(document);
     galleryItem.galleryPreview = previewList;
 
 
     // 画廊 showKey
-    final _showKey = await Api.getShowkey(previewList[0].href);
+    final String _showKey = await Api.getShowkey(previewList[0].href);
     galleryItem.showKey = _showKey;
 
     // 收藏夹标题
-    var _favTitle = '';
-    Element fav = document.querySelector("#favoritelink");
+    String _favTitle = '';
+    final Element fav = document.querySelector('#favoritelink');
     if (fav?.nodes?.length == 1) {
       _favTitle = fav.text.trim();
     }
@@ -129,11 +129,11 @@ class GalleryDetailParser {
 
     // 收藏夹序号
     var _favcat = '';
-    Element _favcatElm = document.querySelector("#fav");
-    if (_favcatElm.nodes.length > 0) {
-      var _div = _favcatElm.querySelector('div');
-      var _catStyle = _div?.attributes['style'];
-      var _catPosition = RegExp(r'background-position:0px -(\d+)px;')
+    final Element _favcatElm = document.querySelector('#fav');
+    if (_favcatElm.nodes.isNotEmpty) {
+      final Element _div = _favcatElm.querySelector('div');
+      final String _catStyle = _div?.attributes['style'];
+      final String _catPosition = RegExp(r'background-position:0px -(\d+)px;')
           .firstMatch(
           _catStyle)[1];
       _favcat = '${(int.parse(_catPosition) - 2) ~/ 19}';
@@ -146,32 +146,32 @@ class GalleryDetailParser {
 
   static List<GalleryPreview> parseGalleryPreviewFromHtml(String response) {
     // 解析响应信息dom
-    var document = parse(response);
+    final Document document = parse(response);
     return parseGalleryPreview(document);
   }
 
   static List<GalleryPreview> parseGalleryPreview(Document document) {
     // 大图 #gdt > div.gdtl  小图 #gdt > div.gdtm
-    List<Element> picLsit = document.querySelectorAll('#gdt > div.gdtm');
+    final List<Element> picLsit = document.querySelectorAll('#gdt > div.gdtm');
 
-    List<GalleryPreview> galleryPreview = [];
+    final List<GalleryPreview> galleryPreview = [];
 
-    if (picLsit.length > 0) {
+    if (picLsit.isNotEmpty) {
       // 小图的处理
-      for (var pic in picLsit) {
-        var picHref = pic
+      for (final Element pic in picLsit) {
+        final String picHref = pic
             .querySelector('a')
             .attributes['href'];
-        var style = pic
+        final String style = pic
             .querySelector('div')
             .attributes['style'];
-        var picSrcUrl = RegExp(r"url\((.+)\)").firstMatch(style).group(1);
-        var height = RegExp(r"height:(\d+)?px").firstMatch(style).group(1);
-        var width = RegExp(r"width:(\d+)?px").firstMatch(style).group(1);
-        var offSet = RegExp(r"\) -(\d+)?px ").firstMatch(style).group(1);
+        final String picSrcUrl = RegExp(r'url\((.+)\)').firstMatch(style).group(1);
+        final String height = RegExp(r'height:(\d+)?px').firstMatch(style).group(1);
+        final String width = RegExp(r'width:(\d+)?px').firstMatch(style).group(1);
+        final String offSet = RegExp(r'\) -(\d+)?px ').firstMatch(style).group(1);
 
-        Element imgElem = pic.querySelector('img');
-        var picSer = imgElem.attributes['alt'].trim();
+        final Element imgElem = pic.querySelector('img');
+        final String picSer = imgElem.attributes['alt'].trim();
 
         galleryPreview.add(GalleryPreview()
           ..ser = int.parse(picSer)
@@ -184,15 +184,15 @@ class GalleryDetailParser {
         );
       }
     } else {
-      List<Element> picLsit = document.querySelectorAll('#gdt > div.gdtl');
+      final List<Element> picLsit = document.querySelectorAll('#gdt > div.gdtl');
       // 大图的处理
-      for (var pic in picLsit) {
-        var picHref = pic
+      for (final Element pic in picLsit) {
+        final String picHref = pic
             .querySelector('a')
             .attributes['href'];
-        Element imgElem = pic.querySelector('img');
-        var picSer = imgElem.attributes['alt'].trim();
-        var picSrcUrl = imgElem.attributes['src'].trim();
+        final Element imgElem = pic.querySelector('img');
+        final String picSer = imgElem.attributes['alt'].trim();
+        final String picSrcUrl = imgElem.attributes['src'].trim();
 
         galleryPreview.add(GalleryPreview()
           ..ser = int.parse(picSer)

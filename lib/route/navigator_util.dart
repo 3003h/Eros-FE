@@ -137,7 +137,6 @@ class NavigatorUtil {
   /// fluro的方式不知道怎么处理 使用默认路由方式
   static void goGalleryDetailPr(
     BuildContext context,
-    String title,
   ) {
     var galleryModel = Provider.of<GalleryModel>(context, listen: false);
     Navigator.of(context, rootNavigator: true).push(
@@ -207,11 +206,16 @@ class NavigatorUtil {
 
   // 转到大图浏览
   static void goGalleryViewPagePr(BuildContext context, int index) {
+    _child() {
+//      return GalleryViewPageLoad(index: index);
+      return GalleryViewPageE(index: index);
+    }
+
     var galleryModel = Provider.of<GalleryModel>(context, listen: false);
     Navigator.push(context, CupertinoPageRoute(builder: (context) {
       return ChangeNotifierProvider.value(
         value: galleryModel,
-        child: GalleryViewPageE(index: index),
+        child: _child(),
       );
     }));
   }
