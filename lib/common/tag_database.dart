@@ -36,11 +36,10 @@ class EhTagDatabase {
 
     if (remoteVer != localVer) {
       Global.loggerNoStack.v('TagTranslat更新');
-      final List<Map<String, String>> assList =
-          urlJson['assets'] as List<Map<String, String>>;
+      final List assList = urlJson['assets'];
 
       final Map<String, String> assMap = <String, String>{};
-      assList.forEach((Map<String, String> assets) {
+      assList.forEach((assets) {
         assMap[assets['name']] = assets['browser_download_url'];
       });
       final String dbUrl = assMap['db.text.json'];
