@@ -6,6 +6,7 @@ import 'package:FEhViewer/models/states/gallery_model.dart';
 import 'package:FEhViewer/utils/toast.dart';
 import 'package:FEhViewer/values/theme_colors.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:provider/provider.dart';
 
@@ -268,10 +269,23 @@ class _GalleryFavButtonState extends State<GalleryFavButton> {
 
   /// 添加收藏 Picker 形式
   Future<Map> _showAddFavPicker(BuildContext context, List favList) async {
-    var _favindex = 0;
+    int _favindex = 0;
 
-    List<Widget> favPicker =
-        List<Widget>.from(favList.map((e) => Text(e['favTitle']))).toList();
+    final List<Widget> favPicker = List<Widget>.from(favList.map((e) => Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            Padding(
+              padding: const EdgeInsets.only(right: 4, bottom: 4),
+              child: Icon(
+                FontAwesomeIcons.solidHeart,
+                color: ThemeColors.favColor[e['favId']],
+                size: 18,
+              ),
+            ),
+            Text(e['favTitle']),
+          ],
+        ))).toList();
 
     return showCupertinoDialog<Map>(
       context: context,
@@ -351,8 +365,9 @@ class _GalleryFavButtonState extends State<GalleryFavButton> {
         List<Widget> favcatList =
             List<Widget>.from(favList.map((fav) => FavcatAddItem(
                   text: fav['favTitle'],
+                  favcat: fav['favId'],
                   onTap: () {
-                    var favMap = {
+                    final Map<String, dynamic> favMap = {
                       'favcat': fav['favId'],
                       'favTitle': fav['favTitle'],
                       'favnode': _favnoteController.text
@@ -404,18 +419,20 @@ class FavcatAddItem extends StatefulWidget {
     Key key,
     @required VoidCallback onTap,
     @required this.text,
+    this.favcat,
   })  : _onTap = onTap,
         super(key: key);
 
   final VoidCallback _onTap;
   final String text;
+  final String favcat;
 
   @override
   _FavcatAddItemState createState() => _FavcatAddItemState();
 }
 
 class _FavcatAddItemState extends State<FavcatAddItem> {
-  var _color;
+  Color _color;
 
   @override
   Widget build(BuildContext context) {
@@ -432,11 +449,25 @@ class _FavcatAddItemState extends State<FavcatAddItem> {
               color: _color,
               width: double.infinity,
               padding: const EdgeInsets.fromLTRB(0, 8, 0, 8),
-              child: Text(
-                widget.text,
-                style: TextStyle(
-                  fontSize: 18,
-                ),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.end,
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.only(right: 4, bottom: 3),
+                    child: Icon(
+                      FontAwesomeIcons.solidHeart,
+                      color: ThemeColors.favColor[widget.favcat],
+                      size: 18,
+                    ),
+                  ),
+                  Text(
+                    widget.text,
+                    style: const TextStyle(
+                      fontSize: 18,
+                    ),
+                  ),
+                ],
               ),
             ),
             onTap: widget._onTap,
