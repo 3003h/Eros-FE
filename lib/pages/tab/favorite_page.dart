@@ -4,6 +4,7 @@ import 'package:FEhViewer/models/entity/favorite.dart';
 import 'package:FEhViewer/models/index.dart';
 import 'package:FEhViewer/models/states/gallery_model.dart';
 import 'package:FEhViewer/models/states/user_model.dart';
+import 'package:FEhViewer/pages/tab/tab_base.dart';
 import 'package:FEhViewer/route/navigator_util.dart';
 import 'package:FEhViewer/route/routes.dart';
 import 'package:FEhViewer/utils/toast.dart';
@@ -13,15 +14,16 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:provider/provider.dart';
+import 'package:tuple/tuple.dart';
 
 import '../item/gallery_item.dart';
 
 class FavoriteTab extends StatefulWidget {
+  const FavoriteTab({Key key, this.tabIndex, this.scrollController})
+      : super(key: key);
   final tabIndex;
   final scrollController;
 
-  const FavoriteTab({Key key, this.tabIndex, this.scrollController})
-      : super(key: key);
   @override
   State<StatefulWidget> createState() {
     return _FavoriteTabState();
@@ -38,7 +40,7 @@ class _FavoriteTabState extends State<FavoriteTab> {
   bool _isLoadMore = false;
 
   //页码跳转的控制器
-  TextEditingController _pageController = TextEditingController();
+  final TextEditingController _pageController = TextEditingController();
 
   void _setTitle(String title) {
     setState(() {
@@ -56,14 +58,15 @@ class _FavoriteTabState extends State<FavoriteTab> {
   SliverList gallerySliverListView(List<GalleryItem> gallerItemBeans) {
     return SliverList(
       delegate: SliverChildBuilderDelegate(
-        (context, index) {
+        (BuildContext context, int index) {
           if (index == gallerItemBeans.length - 1 && _curPage < _maxPage - 1) {
             Global.logger.v('load more');
             _loadDataMore();
           }
 //          Global.logger.v('build ${gallerItemBeans[index].gid} ');
-          return ChangeNotifierProvider.value(
-            value: GalleryModel(),
+          return ChangeNotifierProvider<GalleryModel>.value(
+            value: GalleryModel()
+              ..initData(gallerItemBeans[index], tabIndex: widget.tabIndex),
             child: GalleryItemWidget(
               galleryItem: gallerItemBeans[index],
               tabIndex: widget.tabIndex,
@@ -77,7 +80,7 @@ class _FavoriteTabState extends State<FavoriteTab> {
 
   @override
   Widget build(BuildContext context) {
-    var ln = S.of(context);
+    final S ln = S.of(context);
     if (_title.isEmpty) {
       _title = ln.all_Favorites;
     }
@@ -88,12 +91,13 @@ class _FavoriteTabState extends State<FavoriteTab> {
 
     return CupertinoPageScaffold(
       child: Selector<UserModel, bool>(
-          selector: (context, provider) => provider.isLogin,
-          builder: (context, isLogin, child) {
+          selector: (BuildContext context, UserModel provider) =>
+              provider.isLogin,
+          builder: (BuildContext context, bool isLogin, Widget child) {
             return isLogin
                 ? CustomScrollView(
                     controller: widget.scrollController,
-                    physics: AlwaysScrollableScrollPhysics(),
+                    physics: const AlwaysScrollableScrollPhysics(),
                     slivers: <Widget>[
                       CupertinoSliverNavigationBar(
                         heroTag: 'fav',
@@ -115,7 +119,7 @@ class _FavoriteTabState extends State<FavoriteTab> {
                                     color: CupertinoColors.activeBlue,
                                     child: Text(
                                       '${_curPage + 1}',
-                                      style: TextStyle(
+                                      style: const TextStyle(
                                           color: CupertinoColors.white),
                                     ),
                                   ),
@@ -140,22 +144,22 @@ class _FavoriteTabState extends State<FavoriteTab> {
                             ? SliverFillRemaining(
                                 child: Container(
                                   padding: const EdgeInsets.only(bottom: 50),
-                                  child: CupertinoActivityIndicator(
+                                  child: const CupertinoActivityIndicator(
                                     radius: 14.0,
                                   ),
                                 ),
                               )
-                            : gallerySliverListView(_gallerItemBeans),
+                            : getGalleryList(_gallerItemBeans, widget.tabIndex,
+                                maxPage: _maxPage,
+                                curPage: _curPage,
+                                loadMord: _loadDataMore),
                       ),
                       SliverToBoxAdapter(
                         child: Container(
                           padding: const EdgeInsets.only(bottom: 150),
                           child: _isLoadMore
-                              ? CupertinoActivityIndicator(
+                              ? const CupertinoActivityIndicator(
                                   radius: 14,
-//                                  iOSVersionStyle:
-//                                      CupertinoActivityIndicatorIOSVersionStyle
-//                                          .iOS14,
                                 )
                               : Container(),
                         ),
@@ -179,8 +183,9 @@ class _FavoriteTabState extends State<FavoriteTab> {
     setState(() {
       _loading = true;
     });
-    var tuple = await Api.getFavorite(favcat: _curFavcat);
-    var gallerItemBeans = tuple.item1;
+    final Tuple2<List<GalleryItem>, int> tuple =
+        await Api.getFavorite(favcat: _curFavcat);
+    final List<GalleryItem> gallerItemBeans = tuple.item1;
 
     setState(() {
       _gallerItemBeans.clear();
@@ -197,8 +202,9 @@ class _FavoriteTabState extends State<FavoriteTab> {
         _loading = false;
       });
     }
-    var tuple = await Api.getFavorite(favcat: _curFavcat);
-    var gallerItemBeans = tuple.item1;
+    final Tuple2<List<GalleryItem>, int> tuple =
+        await Api.getFavorite(favcat: _curFavcat);
+    final List<GalleryItem> gallerItemBeans = tuple.item1;
     setState(() {
       _curPage = 0;
       _gallerItemBeans.clear();
@@ -213,14 +219,15 @@ class _FavoriteTabState extends State<FavoriteTab> {
     }
 
     // 增加延时 避免build期间进行 setState
-    await Future.delayed(Duration(milliseconds: 100));
+    await Future.delayed(const Duration(milliseconds: 100));
     setState(() {
       _isLoadMore = true;
     });
 
     _curPage += 1;
-    var tuple = await Api.getFavorite(favcat: _curFavcat, page: _curPage);
-    var gallerItemBeans = tuple.item1;
+    final Tuple2<List<GalleryItem>, int> tuple =
+        await Api.getFavorite(favcat: _curFavcat, page: _curPage);
+    final List<GalleryItem> gallerItemBeans = tuple.item1;
 
     setState(() {
       _gallerItemBeans.addAll(gallerItemBeans);
@@ -234,8 +241,9 @@ class _FavoriteTabState extends State<FavoriteTab> {
       _loading = true;
     });
     _curPage = page;
-    var tuple = await Api.getFavorite(favcat: _curFavcat, page: _curPage);
-    var gallerItemBeans = tuple.item1;
+    final Tuple2<List<GalleryItem>, int> tuple =
+        await Api.getFavorite(favcat: _curFavcat, page: _curPage);
+    final List<GalleryItem> gallerItemBeans = tuple.item1;
     setState(() {
       _gallerItemBeans.clear();
       _gallerItemBeans.addAll(gallerItemBeans);
@@ -246,8 +254,8 @@ class _FavoriteTabState extends State<FavoriteTab> {
 
   /// 跳转页码
   Future<void> _jumtToPage(BuildContext context) async {
-    _jump(context) {
-      var _input = _pageController.text.trim();
+    _jump(BuildContext context) {
+      final String _input = _pageController.text.trim();
 
       if (_input.isEmpty) {
         showToast('输入为空');
@@ -258,7 +266,7 @@ class _FavoriteTabState extends State<FavoriteTab> {
         showToast('输入格式有误');
       }
 
-      int _toPage = int.parse(_input) - 1;
+      final int _toPage = int.parse(_input) - 1;
       if (_toPage >= 0 && _toPage <= _maxPage) {
         FocusScope.of(context).requestFocus(FocusNode());
         _loadFromPage(_toPage);
@@ -273,13 +281,13 @@ class _FavoriteTabState extends State<FavoriteTab> {
       // barrierDismissible: false, // user must tap button!
       builder: (BuildContext context) {
         return CupertinoAlertDialog(
-          title: Text('页面跳转'),
+          title: const Text('页面跳转'),
           content: Container(
             child: Column(
               children: <Widget>[
                 Padding(
                   padding: const EdgeInsets.all(8.0),
-                  child: Text("跳转范围 1~$_maxPage"),
+                  child: Text('跳转范围 1~$_maxPage'),
                 ),
                 CupertinoTextField(
                   controller: _pageController,
@@ -296,13 +304,13 @@ class _FavoriteTabState extends State<FavoriteTab> {
           ),
           actions: <Widget>[
             CupertinoDialogAction(
-              child: Text('取消'),
+              child: const Text('取消'),
               onPressed: () {
                 Navigator.of(context).pop();
               },
             ),
             CupertinoDialogAction(
-              child: Text('确定'),
+              child: const Text('确定'),
               onPressed: () {
                 // 画廊跳转
                 _jump(context);
@@ -339,7 +347,7 @@ class _FavoriteTabState extends State<FavoriteTab> {
           }
         });
       },
-      child: Icon(
+      child: const Icon(
         FontAwesomeIcons.star,
       ),
     );

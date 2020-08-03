@@ -50,7 +50,7 @@ class _GalleryItemWidgetState extends State<GalleryItemWidget> {
     final galleryModel = Provider.of<GalleryModel>(context, listen: false);
     if (galleryModel != this._galleryModel) {
       this._galleryModel = galleryModel;
-      galleryModel.initData(widget.galleryItem, tabIndex: widget.tabIndex);
+//      galleryModel.initData(widget.galleryItem, tabIndex: widget.tabIndex);
     }
   }
 
@@ -139,7 +139,6 @@ class _GalleryItemWidgetState extends State<GalleryItemWidget> {
         Global.logger.v(_title);
         NavigatorUtil.goGalleryDetailPr(
           context,
-          _title,
         );
       },
       onLongPress: () {
@@ -194,7 +193,7 @@ class _GalleryItemWidgetState extends State<GalleryItemWidget> {
       var _item = galleryModel.galleryItem;
 //      Global.logger.v(
 //          '${_item.englishTitle} => height:${_item.imgHeight} width:${_item.imgWidth} ');
-      _getHeigth() {
+      num _getHeigth() {
         if (_item.imgWidth >= kCoverImageWidth) {
           return _item.imgHeight * kCoverImageWidth / _item.imgWidth;
         } else {
@@ -202,22 +201,33 @@ class _GalleryItemWidgetState extends State<GalleryItemWidget> {
         }
       }
 
-      return ClipRRect(
-        borderRadius: BorderRadius.circular(6),
-        child: Container(
-          width: kCoverImageWidth,
-          height: _getHeigth(),
-          color: CupertinoColors.systemGrey6,
-          child: Hero(
-            tag:
-                '${galleryModel.galleryItem.url}_cover_${galleryModel.tabIndex}',
-            child: Center(
-              child: ClipRRect(
-                // 圆角
-                borderRadius: BorderRadius.circular(6),
-                child: Container(
-                    child: CoverImg(
-                        imgUrl: galleryModel?.galleryItem?.imgUrl ?? '')),
+      return Container(
+        decoration: BoxDecoration(borderRadius: BorderRadius.circular(6.0), //圆角
+            // ignore: prefer_const_literals_to_create_immutables
+            boxShadow: [
+              //阴影
+              const BoxShadow(
+                color: CupertinoColors.systemGrey2,
+                blurRadius: 2.0,
+              )
+            ]),
+        child: ClipRRect(
+          borderRadius: BorderRadius.circular(6),
+          child: Container(
+            width: kCoverImageWidth,
+            height: _getHeigth(),
+            color: CupertinoColors.systemGrey6,
+            child: Hero(
+              tag:
+                  '${galleryModel.galleryItem.url}_cover_${galleryModel.tabIndex}',
+              child: Center(
+                child: ClipRRect(
+                  // 圆角
+                  borderRadius: BorderRadius.circular(6),
+                  child: Container(
+                      child: CoverImg(
+                          imgUrl: galleryModel?.galleryItem?.imgUrl ?? '')),
+                ),
               ),
             ),
           ),
@@ -426,10 +436,12 @@ class CoverImg extends StatelessWidget {
                       child: CachedNetworkImage(
                       httpHeaders: _httpHeaders,
                       imageUrl: imgUrl,
+                      fit: BoxFit.cover,
                     ))
                   : CachedNetworkImage(
                       httpHeaders: _httpHeaders,
                       imageUrl: imgUrl,
+                      fit: BoxFit.cover,
                     ))
               : Container();
         });

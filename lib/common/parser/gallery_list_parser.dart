@@ -90,16 +90,16 @@ class GalleryListParser {
       // 中文tag
       final List<String> simpleTagsTranslate = [];
       for (var tag in tags) {
-        var tagText = tag.text.trim();
+        final tagText = tag.text.trim();
         simpleTagsTranslate
             .add(await EhTagDatabase.getTranTag(tagText) ?? tagText);
       }
 
       // 封面图片
-      final img = tr.querySelector('td.gl2c > div > div > img');
-      final imgDataSrc = img.attributes['data-src'];
-      final imgSrc = img.attributes['src'];
-      final imgUrl = imgDataSrc ?? imgSrc ?? '';
+      final dom.Element img = tr.querySelector('td.gl2c > div > div > img');
+      final String imgDataSrc = img.attributes['data-src'];
+      final String imgSrc = img.attributes['src'];
+      final String imgUrl = imgDataSrc ?? imgSrc ?? '';
 
       // 图片宽高
       final imageStyle = img.attributes['style'];

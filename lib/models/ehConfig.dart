@@ -14,6 +14,7 @@ class EhConfig {
     bool favPicker;
     bool favLongTap;
     String lastFavcat;
+    String listMode;
     
     factory EhConfig.fromJson(Map<String,dynamic> json) => _$EhConfigFromJson(json);
     Map<String, dynamic> toJson() => _$EhConfigToJson(this);

@@ -1,11 +1,7 @@
 import 'package:FEhViewer/common/global.dart';
 import 'package:flutter/cupertino.dart';
 
-import '../profile.dart';
-
 class ProfileChangeNotifier with ChangeNotifier {
-  Profile get profile => Global.profile;
-
   @override
   void notifyListeners() {
     Global.saveProfile(); //保存Profile变更

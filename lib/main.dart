@@ -4,7 +4,6 @@ import 'package:FEhViewer/models/states/locale_model.dart';
 import 'package:FEhViewer/models/states/user_model.dart';
 import 'package:FEhViewer/pages/splash_page.dart';
 import 'package:FEhViewer/route/application.dart';
-import 'package:FEhViewer/values/const.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -19,13 +18,13 @@ void main() => Global.init().then((e) => runApp(MyApp()));
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    Widget cupertinoApp = Consumer<LocaleModel>(
-        builder: (BuildContext context, localeModel, Widget child) {
+    final Widget cupertinoApp = Consumer<LocaleModel>(
+        builder: (BuildContext context, LocaleModel localeModel, Widget child) {
       return CupertinoApp(
         debugShowCheckedModeBanner: false,
-        onGenerateTitle: (context) => S.of(context).app_title,
+        onGenerateTitle: (BuildContext context) => S.of(context).app_title,
         onGenerateRoute: Application.router.generator,
-        theme: CupertinoThemeData(
+        theme: const CupertinoThemeData(
           brightness: Brightness.light,
 //          textTheme: CupertinoTextThemeData(
 //            textStyle: TextStyle(
@@ -63,15 +62,15 @@ class MyApp extends StatelessWidget {
             if (supportedLocales.contains(_locale)) {
               locale = _locale;
             } else {
-              locale = Locale('en', 'US');
+              locale = const Locale('en', 'US');
             }
 
             // 中文 简繁体处理
             if (_locale?.languageCode == 'zh') {
               if (_locale?.scriptCode == 'Hant') {
-                locale = Locale('zh', 'HK'); //繁体
+                locale = const Locale('zh', 'HK'); //繁体
               } else {
-                locale = Locale('zh', 'CN'); //简体
+                locale = const Locale('zh', 'CN'); //简体
               }
             }
             return locale;
@@ -80,11 +79,11 @@ class MyApp extends StatelessWidget {
       );
     });
 
-    MultiProvider multiProvider = MultiProvider(
+    final MultiProvider multiProvider = MultiProvider(
       providers: [
-        ChangeNotifierProvider.value(value: UserModel()),
-        ChangeNotifierProvider.value(value: LocaleModel()),
-        ChangeNotifierProvider.value(value: EhConfigModel()),
+        ChangeNotifierProvider<UserModel>.value(value: UserModel()),
+        ChangeNotifierProvider<LocaleModel>.value(value: LocaleModel()),
+        ChangeNotifierProvider<EhConfigModel>.value(value: EhConfigModel()),
       ],
       child: OKToast(child: cupertinoApp),
     );

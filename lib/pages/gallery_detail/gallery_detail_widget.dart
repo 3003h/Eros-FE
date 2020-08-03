@@ -171,9 +171,9 @@ class PreviewContainer extends StatelessWidget {
                 ),
                 PreviewImageClipper(
                   imgUrl: galleryPreview.imgUrl,
-                  offset: galleryPreview.offSet,
-                  height: galleryPreview.height,
-                  width: galleryPreview.width,
+                  offset: galleryPreview.offSet as double,
+                  height: galleryPreview.height as double,
+                  width: galleryPreview.width as double,
                 ),
               ],
             ),
@@ -216,10 +216,9 @@ class TagButton extends StatelessWidget {
 
   const TagButton({
     @required this.text,
-    color,
+    this.color,
     VoidCallback onPressed,
-  })  : this.color = color ?? Colors.teal,
-        _onPressed = onPressed;
+  }) : _onPressed = onPressed;
 
   @override
   Widget build(BuildContext context) {
@@ -250,11 +249,11 @@ class TagButtonB extends StatelessWidget {
 
   const TagButtonB({
     @required this.text,
-    textColor,
-    color,
+    Color textColor,
+    Color color,
     VoidCallback onPressed,
-  })  : this.textColor = textColor ?? const Color(0xff505050),
-        this.color = color ?? const Color(0xffeeeeee),
+  })  : textColor = textColor ?? const Color(0xff505050),
+        color = color ?? const Color(0xffeeeeee),
         _onPressed = onPressed;
 
   @override

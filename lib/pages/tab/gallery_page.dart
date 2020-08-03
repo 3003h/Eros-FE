@@ -8,16 +8,12 @@ import 'package:FEhViewer/widget/eh_widget.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:tuple/tuple.dart';
 
 import '../item/gallery_item.dart';
+import 'tab_base.dart';
 
 class GalleryListTab extends StatefulWidget {
-  final tabIndex;
-  final scrollController;
-
-  final simpleSearch;
-  final int cats;
-
   const GalleryListTab(
       {Key key,
       this.tabIndex,
@@ -26,12 +22,18 @@ class GalleryListTab extends StatefulWidget {
       this.cats})
       : super(key: key);
 
+  final tabIndex;
+  final scrollController;
+
+  final simpleSearch;
+  final int cats;
+
   @override
   State<StatefulWidget> createState() => _GalleryListTabState();
 }
 
 class _GalleryListTabState extends State<GalleryListTab> {
-  String _title = "Gallery";
+  String _title = 'Gallery';
   int _curPage = 0;
   int _maxPage = 0;
   bool _isLoadMore = false;
@@ -40,7 +42,7 @@ class _GalleryListTabState extends State<GalleryListTab> {
   String _search;
 
   //页码跳转的控制器
-  TextEditingController _pageController = TextEditingController();
+  final TextEditingController _pageController = TextEditingController();
 
   @override
   void initState() {
@@ -58,8 +60,9 @@ class _GalleryListTabState extends State<GalleryListTab> {
       _gallerItemBeans.clear();
       _firstLoading = true;
     });
-    var tuple = await Api.getGallery(cats: widget.cats, serach: _search);
-    var gallerItemBeans = tuple.item1;
+    final Tuple2<List<GalleryItem>, int> tuple =
+        await Api.getGallery(cats: widget.cats, serach: _search);
+    final List<GalleryItem> gallerItemBeans = tuple.item1;
     _gallerItemBeans.addAll(gallerItemBeans);
     _maxPage = tuple.item2;
     setState(() {
@@ -73,8 +76,9 @@ class _GalleryListTabState extends State<GalleryListTab> {
         _firstLoading = false;
       });
     }
-    var tuple = await Api.getGallery(cats: widget.cats, serach: _search);
-    var gallerItemBeans = tuple.item1;
+    final Tuple2<List<GalleryItem>, int> tuple =
+        await Api.getGallery(cats: widget.cats, serach: _search);
+    final List<GalleryItem> gallerItemBeans = tuple.item1;
     setState(() {
       _curPage = 0;
       _gallerItemBeans.clear();
@@ -89,15 +93,15 @@ class _GalleryListTabState extends State<GalleryListTab> {
     }
 
     // 增加延时 避免build期间进行 setState
-    await Future.delayed(Duration(milliseconds: 100));
+    await Future.delayed(const Duration(milliseconds: 100));
     setState(() {
       _isLoadMore = true;
     });
     _curPage += 1;
-    var fromGid = _gallerItemBeans.last.gid;
-    var tuple = await Api.getGallery(
+    final String fromGid = _gallerItemBeans.last.gid;
+    final Tuple2<List<GalleryItem>, int> tuple = await Api.getGallery(
         page: _curPage, fromGid: fromGid, cats: widget.cats, serach: _search);
-    var gallerItemBeans = tuple.item1;
+    final List<GalleryItem> gallerItemBeans = tuple.item1;
 
     setState(() {
       _gallerItemBeans.addAll(gallerItemBeans);
@@ -112,9 +116,9 @@ class _GalleryListTabState extends State<GalleryListTab> {
       _firstLoading = true;
     });
     _curPage = page;
-    var tuple = await Api.getGallery(
+    final Tuple2<List<GalleryItem>, int> tuple = await Api.getGallery(
         page: _curPage, cats: widget.cats, serach: _search);
-    var gallerItemBeans = tuple.item1;
+    final List<GalleryItem> gallerItemBeans = tuple.item1;
     setState(() {
       _gallerItemBeans.clear();
       _gallerItemBeans.addAll(gallerItemBeans);
@@ -123,17 +127,18 @@ class _GalleryListTabState extends State<GalleryListTab> {
     });
   }
 
-  SliverList gallerySliverListView(List gallerItemBeans) {
+  SliverList gallerySliverListView(List<GalleryItem> gallerItemBeans) {
     return SliverList(
       delegate: SliverChildBuilderDelegate(
-        (context, index) {
+        (BuildContext context, int index) {
           if (index == gallerItemBeans.length - 1 && _curPage < _maxPage - 1) {
 //            Global.logger.v('load more');
             _loadDataMore();
           }
 
-          return ChangeNotifierProvider.value(
-            value: GalleryModel(),
+          return ChangeNotifierProvider<GalleryModel>.value(
+            value: GalleryModel()
+              ..initData(gallerItemBeans[index], tabIndex: widget.tabIndex),
             child: GalleryItemWidget(
               galleryItem: gallerItemBeans[index],
               tabIndex: widget.tabIndex,
@@ -147,8 +152,8 @@ class _GalleryListTabState extends State<GalleryListTab> {
 
   /// 跳转页码
   Future<void> _jumtToPage(BuildContext context) async {
-    _jump(context) {
-      var _input = _pageController.text.trim();
+    _jump(BuildContext context) {
+      final String _input = _pageController.text.trim();
 
       if (_input.isEmpty) {
         showToast('输入为空');
@@ -159,7 +164,7 @@ class _GalleryListTabState extends State<GalleryListTab> {
         showToast('输入格式有误');
       }
 
-      int _toPage = int.parse(_input) - 1;
+      final int _toPage = int.parse(_input) - 1;
       if (_toPage >= 0 && _toPage <= _maxPage) {
         FocusScope.of(context).requestFocus(FocusNode());
         _loadFromPage(_toPage);
@@ -174,13 +179,13 @@ class _GalleryListTabState extends State<GalleryListTab> {
       // barrierDismissible: false, // user must tap button!
       builder: (BuildContext context) {
         return CupertinoAlertDialog(
-          title: Text('页面跳转'),
+          title: const Text('页面跳转'),
           content: Container(
             child: Column(
               children: <Widget>[
                 Padding(
                   padding: const EdgeInsets.all(8.0),
-                  child: Text("跳转范围 1~$_maxPage"),
+                  child: Text('跳转范围 1~$_maxPage'),
                 ),
                 CupertinoTextField(
                   controller: _pageController,
@@ -197,13 +202,13 @@ class _GalleryListTabState extends State<GalleryListTab> {
           ),
           actions: <Widget>[
             CupertinoDialogAction(
-              child: Text('取消'),
+              child: const Text('取消'),
               onPressed: () {
                 Navigator.of(context).pop();
               },
             ),
             CupertinoDialogAction(
-              child: Text('确定'),
+              child: const Text('确定'),
               onPressed: () {
                 // 画廊跳转
                 _jump(context);
@@ -217,15 +222,11 @@ class _GalleryListTabState extends State<GalleryListTab> {
 
   @override
   Widget build(BuildContext context) {
-//    final size = MediaQuery.of(context).size;
-//    // final width = size.width;
-//    final height = size.height;
-
-    var ln = S.of(context);
+    final S ln = S.of(context);
     _title = ln.tab_gallery;
-    CustomScrollView customScrollView = CustomScrollView(
+    final CustomScrollView customScrollView = CustomScrollView(
       controller: widget.scrollController,
-      physics: AlwaysScrollableScrollPhysics(),
+      physics: const AlwaysScrollableScrollPhysics(),
       slivers: <Widget>[
         CupertinoSliverNavigationBar(
           heroTag: 'gallery',
@@ -242,7 +243,7 @@ class _GalleryListTabState extends State<GalleryListTab> {
                 color: CupertinoColors.activeBlue,
                 child: Text(
                   '${_curPage + 1}',
-                  style: TextStyle(color: CupertinoColors.white),
+                  style: const TextStyle(color: CupertinoColors.white),
                 ),
               ),
             ),
@@ -257,27 +258,31 @@ class _GalleryListTabState extends State<GalleryListTab> {
           },
         ),
         SliverSafeArea(
-          top: false,
+          top: true,
           bottom: false,
           sliver: _firstLoading
               ? SliverFillRemaining(
                   child: Container(
                     padding: const EdgeInsets.only(bottom: 50),
-                    child: CupertinoActivityIndicator(
+                    child: const CupertinoActivityIndicator(
                       radius: 14.0,
                     ),
                   ),
                 )
-              : gallerySliverListView(_gallerItemBeans),
+              : getGalleryList(
+                  _gallerItemBeans,
+                  widget.tabIndex,
+                  maxPage: _maxPage,
+                  curPage: _curPage,
+                  loadMord: _loadDataMore,
+                ),
         ),
         SliverToBoxAdapter(
           child: Container(
             padding: const EdgeInsets.only(top: 50, bottom: 100),
             child: _isLoadMore
-                ? CupertinoActivityIndicator(
+                ? const CupertinoActivityIndicator(
                     radius: 14,
-//                    iOSVersionStyle:
-//                        CupertinoActivityIndicatorIOSVersionStyle.iOS14,
                   )
                 : Container(),
           ),
