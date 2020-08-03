@@ -258,7 +258,7 @@ class _GalleryListTabState extends State<GalleryListTab> {
           },
         ),
         SliverSafeArea(
-          top: true,
+          top: false,
           bottom: false,
           sliver: _firstLoading
               ? SliverFillRemaining(

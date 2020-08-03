@@ -47,9 +47,10 @@ class _GalleryItemWidgetState extends State<GalleryItemWidget> {
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-    final galleryModel = Provider.of<GalleryModel>(context, listen: false);
-    if (galleryModel != this._galleryModel) {
-      this._galleryModel = galleryModel;
+    final GalleryModel galleryModel =
+        Provider.of<GalleryModel>(context, listen: false);
+    if (galleryModel != _galleryModel) {
+      _galleryModel = galleryModel;
 //      galleryModel.initData(widget.galleryItem, tabIndex: widget.tabIndex);
     }
   }
@@ -80,11 +81,11 @@ class _GalleryItemWidgetState extends State<GalleryItemWidget> {
                   // 上传者
                   Text(
                     galleryModel?.galleryItem?.uploader ?? '',
-                    style: TextStyle(
+                    style: const TextStyle(
                         fontSize: 12, color: CupertinoColors.systemGrey),
                   ),
                   // 标签
-                  TagBox(),
+                  const TagBox(),
 
                   // 评分行
                   Row(
@@ -93,7 +94,7 @@ class _GalleryItemWidgetState extends State<GalleryItemWidget> {
                       // 评分
                       _buildRating(),
                       // 占位
-                      Spacer(),
+                      const Spacer(),
                       // 收藏图标
                       _buildFavcatIcon(),
                       // 图片数量
@@ -109,7 +110,7 @@ class _GalleryItemWidgetState extends State<GalleryItemWidget> {
                     children: <Widget>[
                       // 类型
                       _buildCategory(),
-                      Spacer(),
+                      const Spacer(),
                       // 上传时间
                       _buildPostTime(),
                     ],
@@ -178,7 +179,7 @@ class _GalleryItemWidgetState extends State<GalleryItemWidget> {
           maxLines: 4,
           textAlign: TextAlign.left, // 对齐方式
           overflow: TextOverflow.ellipsis, // 超出部分省略号
-          style: TextStyle(
+          style: const TextStyle(
             fontSize: 14.5,
             fontWeight: FontWeight.w500,
           ),
@@ -190,7 +191,7 @@ class _GalleryItemWidgetState extends State<GalleryItemWidget> {
   /// 构建封面图片
   Widget _buildCoverImage() {
     return Consumer<GalleryModel>(builder: (context, galleryModel, child) {
-      var _item = galleryModel.galleryItem;
+      final GalleryItem _item = galleryModel.galleryItem;
 //      Global.logger.v(
 //          '${_item.englishTitle} => height:${_item.imgHeight} width:${_item.imgWidth} ');
       num _getHeigth() {

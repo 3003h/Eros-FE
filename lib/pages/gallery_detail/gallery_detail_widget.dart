@@ -13,7 +13,8 @@ import 'comment_item.dart';
 import 'gallery_all_preview_page.dart';
 import 'gallery_preview_clipper.dart';
 
-const kHeightPreview = 180.0;
+const double kHeightPreview = 180.0;
+const double kPadding = 12.0;
 
 /// 内容
 class GalleryDetailInfo extends StatelessWidget {
@@ -21,7 +22,7 @@ class GalleryDetailInfo extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    var ln = S.of(context);
+    final S ln = S.of(context);
     return Container(
       child: Column(
         children: <Widget>[
@@ -39,15 +40,16 @@ class GalleryDetailInfo extends StatelessWidget {
             padding: const EdgeInsets.fromLTRB(0, 4, 0, 30),
             child: Text(
               ln.all_preview,
-              style: TextStyle(fontSize: 16),
+              style: const TextStyle(fontSize: 16),
             ),
             onPressed: () {
-              var galleryModel =
+              final GalleryModel galleryModel =
                   Provider.of<GalleryModel>(context, listen: false);
-              Navigator.push(context, CupertinoPageRoute(builder: (context) {
-                return ChangeNotifierProvider.value(
+              Navigator.push(context,
+                  CupertinoPageRoute(builder: (BuildContext context) {
+                return ChangeNotifierProvider<GalleryModel>.value(
                   value: galleryModel,
-                  child: AllPreviewPage(),
+                  child: const AllPreviewPage(),
                 );
               }));
             },
@@ -60,9 +62,9 @@ class GalleryDetailInfo extends StatelessWidget {
   Widget _buildTopComment() {
     // 显示最前面两条
     List<Widget> _topComment(List<GalleryComment> comments, {int max = 2}) {
-      var _comments = comments.take(max);
+      final Iterable<GalleryComment> _comments = comments.take(max);
       return List<Widget>.from(_comments
-          .map((comment) => CommentItem(
+          .map((GalleryComment comment) => CommentItem(
                 galleryComment: comment,
                 simple: true,
               ))
@@ -75,7 +77,7 @@ class GalleryDetailInfo extends StatelessWidget {
             galleryModel.galleryItem.galleryComment,
 //        shouldRebuild: (pre, next) => pre != next,
         builder: (context, comment, child) {
-          var ln = S.of(context);
+          final S ln = S.of(context);
           return Column(
             children: <Widget>[
               // 评论
@@ -86,7 +88,7 @@ class GalleryDetailInfo extends StatelessWidget {
                 padding: const EdgeInsets.fromLTRB(8, 4, 8, 4),
                 child: Text(
                   ln.all_comment,
-                  style: TextStyle(fontSize: 16),
+                  style: const TextStyle(fontSize: 16),
                 ),
                 onPressed: () {
                   NavigatorUtil.goGalleryDetailComment(context, comment);
@@ -103,11 +105,12 @@ class GalleryDetailInfo extends StatelessWidget {
         selector: (context, galleryModel) => galleryModel.oriGalleryPreview,
         builder: (context, List<GalleryPreview> previews, child) {
           return Container(
-            padding: const EdgeInsets.only(top: 20, right: 10, left: 0),
+            padding: const EdgeInsets.only(
+                top: kPadding, right: kPadding, left: kPadding),
             child: GridView.builder(
                 shrinkWrap: true, //解决无限高度问题
-                physics: NeverScrollableScrollPhysics(), //禁用滑动事件
-                gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
+                physics: const NeverScrollableScrollPhysics(), //禁用滑动事件
+                gridDelegate: const SliverGridDelegateWithMaxCrossAxisExtent(
 //              crossAxisCount: _crossAxisCount, //每行列数
                     maxCrossAxisExtent: 130,
                     mainAxisSpacing: 0, //主轴方向的间距
@@ -129,51 +132,58 @@ class GalleryDetailInfo extends StatelessWidget {
 }
 
 class PreviewContainer extends StatelessWidget {
-  final int index;
-  final List<GalleryPreview> galleryPreviewList;
-  final List<String> hrefs;
-  final GalleryPreview galleryPreview;
-  final images = [];
-
   PreviewContainer({
     Key key,
     @required this.index,
     @required this.galleryPreviewList,
   })  : galleryPreview = galleryPreviewList[index],
-        hrefs =
-            List<String>.from(galleryPreviewList.map((e) => e.href).toList()),
+        hrefs = List<String>.from(
+            galleryPreviewList.map((GalleryPreview e) => e.href).toList()),
         super(key: key);
+
+  final int index;
+  final List<GalleryPreview> galleryPreviewList;
+  final List<String> hrefs;
+  final GalleryPreview galleryPreview;
+  final List images = [];
 
   @override
   Widget build(BuildContext context) {
-//    var witdh = MediaQuery.of(context).size.width;
-//    Global.logger.v(witdh);
-
-    var _httpHeaders = {
-      "Cookie": Global.profile?.user?.cookie ?? '',
+    final Map<String, String> _httpHeaders = {
+      'Cookie': Global.profile?.user?.cookie ?? '',
     };
-    var image = galleryPreview.isLarge ?? false
+    final Container image = galleryPreview.isLarge ?? false
         ? Container(
+//            height: kHeightPreview,
             // 缩略大图
-            child: CachedNetworkImage(
-              httpHeaders: _httpHeaders,
-              height: kHeightPreview,
-              imageUrl: galleryPreview.imgUrl,
+            child: Center(
+              child: CachedNetworkImage(
+                httpHeaders: _httpHeaders,
+//              height: kHeightPreview,
+                imageUrl: galleryPreview.imgUrl,
+              ),
             ),
           )
         : Container(
+//            height: galleryPreview.height,
+//            width: galleryPreview.width,
+//            height: kHeightPreview,
             // 缩略小图
             child: Stack(
               alignment: AlignmentDirectional.center,
-              children: [
+//              fit: StackFit.loose,
+              children: <Widget>[
                 Container(
-                  height: kHeightPreview,
-                ),
-                PreviewImageClipper(
-                  imgUrl: galleryPreview.imgUrl,
-                  offset: galleryPreview.offSet as double,
-                  height: galleryPreview.height as double,
-                  width: galleryPreview.width as double,
+//                  height: kHeightPreview,
+                  width: galleryPreview.width *
+                      kHeightPreview /
+                      galleryPreview.height,
+                  child: PreviewImageClipper(
+                    imgUrl: galleryPreview.imgUrl,
+                    offset: galleryPreview.offSet as double,
+                    height: galleryPreview.height as double,
+                    width: galleryPreview.width as double,
+                  ),
                 ),
               ],
             ),
@@ -184,24 +194,49 @@ class PreviewContainer extends StatelessWidget {
       onTap: () {
         NavigatorUtil.goGalleryViewPagePr(context, index);
       },
-      child: Column(
-        children: [
-          Container(
-            child: image,
-          ),
-          Expanded(
-            child: Container(
-              padding: const EdgeInsets.only(top: 4),
-              child: Text(
-                '${galleryPreview.ser ?? ''}',
-                style: TextStyle(
-                  fontSize: 14,
-                  color: Colors.black54,
+      child: Container(
+        margin: const EdgeInsets.all(2.0),
+        child: Column(
+          children: <Widget>[
+            Stack(
+              alignment: Alignment.center,
+              children: [
+                Container(
+                  height: kHeightPreview,
+                ),
+                Container(
+                  decoration:
+                      BoxDecoration(borderRadius: BorderRadius.circular(6), //圆角
+                          // ignore: prefer_const_literals_to_create_immutables
+                          boxShadow: [
+                        //阴影
+                        const BoxShadow(
+                          color: CupertinoColors.systemGrey2,
+                          blurRadius: 2.0,
+                        )
+                      ]),
+                  child: ClipRRect(
+                    borderRadius: BorderRadius.circular(6),
+                    child:
+                        Container(color: CupertinoColors.white, child: image),
+                  ),
+                ),
+              ],
+            ),
+            Expanded(
+              child: Container(
+                padding: const EdgeInsets.only(top: 4),
+                child: Text(
+                  '${galleryPreview.ser ?? ''}',
+                  style: const TextStyle(
+                    fontSize: 14,
+                    color: Colors.black54,
+                  ),
                 ),
               ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }
@@ -210,26 +245,26 @@ class PreviewContainer extends StatelessWidget {
 /// 标签按钮
 /// onPressed 回调
 class TagButton extends StatelessWidget {
-  final String text;
-  final Color color;
-  final VoidCallback _onPressed;
-
   const TagButton({
     @required this.text,
     this.color,
     VoidCallback onPressed,
   }) : _onPressed = onPressed;
 
+  final String text;
+  final Color color;
+  final VoidCallback _onPressed;
+
   @override
   Widget build(BuildContext context) {
     return CupertinoButton(
       child: Text(
         text,
-        style: TextStyle(
+        style: const TextStyle(
           fontSize: 14,
           height: 1,
         ),
-        strutStyle: StrutStyle(height: 1),
+        strutStyle: const StrutStyle(height: 1),
       ),
       minSize: 0,
       padding: const EdgeInsets.fromLTRB(8, 6, 8, 4),
@@ -242,11 +277,6 @@ class TagButton extends StatelessWidget {
 }
 
 class TagButtonB extends StatelessWidget {
-  final String text;
-  final Color textColor;
-  final Color color;
-  final VoidCallback _onPressed;
-
   const TagButtonB({
     @required this.text,
     Color textColor,
@@ -255,6 +285,11 @@ class TagButtonB extends StatelessWidget {
   })  : textColor = textColor ?? const Color(0xff505050),
         color = color ?? const Color(0xffeeeeee),
         _onPressed = onPressed;
+
+  final String text;
+  final Color textColor;
+  final Color color;
+  final VoidCallback _onPressed;
 
   @override
   Widget build(BuildContext context) {
@@ -273,7 +308,7 @@ class TagButtonB extends StatelessWidget {
               height: 1.3,
 //              fontWeight: FontWeight.w500,
             ),
-            strutStyle: StrutStyle(height: 1),
+            strutStyle: const StrutStyle(height: 1),
           ),
         ),
       ),
@@ -286,15 +321,16 @@ Widget _buildTagBox() {
   return Selector<GalleryModel, List<TagGroup>>(
       selector: (context, galleryModel) => galleryModel.galleryItem.tagGroup,
       builder: (context, List<TagGroup> listTagGroup, child) {
-        List<Widget> listGroupWidget = [];
-        listTagGroup.forEach((tagGroupData) {
+        final List<Widget> listGroupWidget = [];
+        for (final TagGroup tagGroupData in listTagGroup) {
           listGroupWidget.add(TagGroupItem(tagGroupData: tagGroupData));
-        });
+        }
 
         return Column(
           children: [
             Container(
-              margin: const EdgeInsets.fromLTRB(12, 8, 12, 8),
+              margin: const EdgeInsets.fromLTRB(
+                  kPadding, kPadding / 2, kPadding, kPadding / 2),
               child: Column(children: listGroupWidget),
             ),
             Container(
@@ -308,20 +344,20 @@ Widget _buildTagBox() {
 
 /// 封面小图
 class CoveTinyImage extends StatelessWidget {
-  final String imgUrl;
-  final double statusBarHeight;
-
   const CoveTinyImage({Key key, this.imgUrl, double statusBarHeight})
       : statusBarHeight = statusBarHeight,
         super(key: key);
 
+  final String imgUrl;
+  final double statusBarHeight;
+
   @override
   Widget build(BuildContext context) {
-    var _httpHeaders = {
-      "Cookie": Global.profile?.user?.cookie ?? '',
+    final Map<String, String> _httpHeaders = {
+      'Cookie': Global.profile?.user?.cookie ?? '',
     };
     return Container(
-      padding: EdgeInsets.all(4),
+      padding: const EdgeInsets.all(4),
       child: ClipRRect(
         // 圆角
         borderRadius: BorderRadius.circular(4),
@@ -339,7 +375,7 @@ class CoveTinyImage extends StatelessWidget {
 
 /// 一个标签组 第一个是类型
 class TagGroupItem extends StatelessWidget {
-  TagGroupItem({
+  const TagGroupItem({
     @required this.tagGroupData,
   });
 
@@ -363,11 +399,12 @@ class TagGroupItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final _isTagTranslat = Global.profile.ehConfig.tagTranslat;
+    final bool _isTagTranslat = Global.profile.ehConfig.tagTranslat;
+
     final _tagBtnList = _initTagBtnList(tagGroupData.galleryTags, context);
     final _tagType = tagGroupData.tagType;
 
-    Container container = Container(
+    final Container container = Container(
       padding: const EdgeInsets.fromLTRB(0, 4, 0, 4),
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,

@@ -17,8 +17,9 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:tuple/tuple.dart';
 
-const kHeaderHeight = 200.0;
-const kHeaderPaddingTop = 12.0;
+const double kHeaderHeight = 200.0;
+const double kPadding = 12.0;
+const double kHeaderPaddingTop = 12.0;
 
 class GalleryDetailPage extends StatelessWidget {
   GalleryDetailPage({Key key}) : super(key: key);
@@ -27,10 +28,11 @@ class GalleryDetailPage extends StatelessWidget {
 
   /// 异步请求数据
   Future<GalleryItem> _loadData(BuildContext context) async {
-    final _galleryModel = Provider.of<GalleryModel>(context, listen: false);
+    final GalleryModel _galleryModel =
+        Provider.of<GalleryModel>(context, listen: false);
     _galleryModel.resetHideNavigationBtn();
     if (!_galleryModel.detailLoadFinish) {
-      var _galleryItemFromApi =
+      final GalleryItem _galleryItemFromApi =
           await Api.getGalleryDetail(_galleryModel.galleryItem.url);
 
       _galleryModel.currentPreviewPage = 0;
@@ -54,7 +56,6 @@ class GalleryDetailPage extends StatelessWidget {
   void _controllerLister(BuildContext context) {
     final GalleryModel _galleryModel =
         Provider.of<GalleryModel>(context, listen: false);
-//    _galleryModel.resetHideNavigationBtn();
 
     if (_controller.offset < kHeaderHeight + kHeaderPaddingTop &&
         !_galleryModel.hideNavigationBtn) {
@@ -83,13 +84,14 @@ class GalleryDetailPage extends StatelessWidget {
     /// 内容作为 child 缓存避免重绘
     ///
     /// 增加 oriGalleryPreview 变化时可重绘的控制
-    Widget cupertinoTabScaffold = Selector<GalleryModel, Tuple2<bool, bool>>(
-      selector: (context, galleryModel) => Tuple2(
+    final Widget cupertinoTabScaffold =
+        Selector<GalleryModel, Tuple2<bool, bool>>(
+      selector: (BuildContext context, GalleryModel galleryModel) => Tuple2(
           galleryModel.hideNavigationBtn,
           galleryModel.oriGalleryPreview.isNotEmpty),
-      shouldRebuild: (pre, next) =>
+      shouldRebuild: (Tuple2<bool, bool> pre, Tuple2<bool, bool> next) =>
           pre.item1 != next.item1 || pre.item2 != next.item2,
-      builder: (BuildContext context, _tuple, child) {
+      builder: (BuildContext context, Tuple2<bool, bool> _tuple, Widget child) {
         return CupertinoPageScaffold(
           navigationBar:
               _buildNavigationBar(context, hideNavigationBtn: _tuple.item1),
@@ -98,9 +100,9 @@ class GalleryDetailPage extends StatelessWidget {
       },
       child: SafeArea(
         child: Container(
-          margin: const EdgeInsets.only(left: 12),
+//          margin: const EdgeInsets.only(left: 12),
           child: ListView(
-            physics: AlwaysScrollableScrollPhysics(),
+            physics: const AlwaysScrollableScrollPhysics(),
             controller: _controller,
             dragStartBehavior: DragStartBehavior.down,
             children: <Widget>[
@@ -121,11 +123,12 @@ class GalleryDetailPage extends StatelessWidget {
 
   Widget _buildDetail(context) {
     return Selector<GalleryModel, bool>(
-      selector: (_, gllaeryModel) => gllaeryModel.detailLoadFinish,
-      builder: (context, loadFinish, child) {
+      selector: (_, GalleryModel gllaeryModel) => gllaeryModel.detailLoadFinish,
+      builder: (BuildContext context, bool loadFinish, Widget child) {
         return FutureBuilder<GalleryItem>(
             future: _loadData(context),
-            builder: (context, snapshot) {
+            builder:
+                (BuildContext context, AsyncSnapshot<GalleryItem> snapshot) {
               if (loadFinish) {
                 return child;
               } else {
@@ -155,8 +158,8 @@ class GalleryDetailPage extends StatelessWidget {
 
   Widget _buildLoading(context) {
     // 加载中 显示一个菊花
-    return Padding(
-      padding: const EdgeInsets.all(18.0),
+    return const Padding(
+      padding: EdgeInsets.all(18.0),
       child: CupertinoActivityIndicator(
         radius: 15.0,
       ),
@@ -165,13 +168,13 @@ class GalleryDetailPage extends StatelessWidget {
 
   Widget _buildLoadSuccessful() {
     // 加载完成 显示内容
-    return GalleryDetailInfo();
+    return const GalleryDetailInfo();
   }
 
   ObstructingPreferredSizeWidget _buildNavigationBar(BuildContext context,
       {bool hideNavigationBtn = true}) {
     return hideNavigationBtn
-        ? CupertinoNavigationBar()
+        ? const CupertinoNavigationBar()
         : CupertinoNavigationBar(
             middle: _buildNavigationBarImage(context),
             trailing: _buildNavigationBarReadButton(context),
@@ -183,13 +186,13 @@ class GalleryDetailPage extends StatelessWidget {
     final GalleryModel _galleryModel =
         Provider.of<GalleryModel>(context, listen: false);
 
-    var _hasPreview = _galleryModel.oriGalleryPreview.isNotEmpty;
+    final bool _hasPreview = _galleryModel.oriGalleryPreview.isNotEmpty;
 
-    var ln = S.of(context);
+    final S ln = S.of(context);
     return CupertinoButton(
         child: Text(
           ln.READ,
-          style: TextStyle(fontSize: 15),
+          style: const TextStyle(fontSize: 15),
         ),
         minSize: 20,
         padding: const EdgeInsets.fromLTRB(15, 2.5, 15, 2.5),
@@ -203,14 +206,14 @@ class GalleryDetailPage extends StatelessWidget {
   }
 
   Widget _buildNavigationBarImage(BuildContext context) {
-    double _statusBarHeight = MediaQuery.of(context).padding.top;
+    final double _statusBarHeight = MediaQuery.of(context).padding.top;
     final GalleryModel _galleryModel =
         Provider.of<GalleryModel>(context, listen: false);
 
     return GestureDetector(
       onTap: () {
         _controller.animateTo(0,
-            duration: Duration(milliseconds: 500), curve: Curves.ease);
+            duration: const Duration(milliseconds: 500), curve: Curves.ease);
       },
       child: Container(
         child: CoveTinyImage(
@@ -223,7 +226,7 @@ class GalleryDetailPage extends StatelessWidget {
 
   Widget _buildGalletyHead() {
     return Container(
-      margin: const EdgeInsets.fromLTRB(0, kHeaderPaddingTop, 12, 12),
+      margin: const EdgeInsets.all(kPadding),
       child: Column(
         children: [
           Container(
@@ -237,18 +240,18 @@ class GalleryDetailPage extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: <Widget>[
                       // 标题
-                      GalleryTitle(),
+                      const GalleryTitle(),
                       // 上传用户
-                      GalleryUploader(),
-                      Spacer(),
+                      const GalleryUploader(),
+                      const Spacer(),
                       Row(
                         crossAxisAlignment: CrossAxisAlignment.end,
                         children: <Widget>[
                           // 阅读按钮
                           _buildReadButton(),
-                          Spacer(),
+                          const Spacer(),
                           // 收藏按钮
-                          GalleryFavButton(),
+                          const GalleryFavButton(),
                         ],
                       )
                     ],
@@ -260,12 +263,13 @@ class GalleryDetailPage extends StatelessWidget {
           Container(
             padding: const EdgeInsets.only(top: 8.0),
             child: Row(
+              // ignore: prefer_const_literals_to_create_immutables
               children: <Widget>[
                 // 评分
-                GalleryRating(),
-                Spacer(),
+                const GalleryRating(),
+                const Spacer(),
                 // 类型
-                GalleryCategory(),
+                const GalleryCategory(),
               ],
             ),
           )
@@ -276,33 +280,38 @@ class GalleryDetailPage extends StatelessWidget {
 
   /// 封面图片
   Widget _buildCoverImage() {
-    const kWidth = 145.0;
+    const double kWidth = 145.0;
 
     //
     return Selector<GalleryModel, GalleryModel>(
-        shouldRebuild: (pre, next) => false,
-        selector: (context, provider) => provider,
-        builder: (context, GalleryModel galleryModel, child) {
-          final _item = galleryModel.galleryItem;
+        shouldRebuild: (_, __) => false,
+        selector: (_, GalleryModel provider) => provider,
+        builder: (_, GalleryModel galleryModel, __) {
+          final GalleryItem _item = galleryModel.galleryItem;
 
-          return Padding(
-            padding: const EdgeInsets.only(right: 10),
-            child: ClipRRect(
-              borderRadius: BorderRadius.circular(6),
-              child: Container(
-                width: kWidth,
-//                  height: _getHeigth(),
-//                  color: CupertinoColors.systemGrey6,
-                child: Hero(
-                  tag: '${_item.url}_cover_${galleryModel.tabIndex}',
-                  child: Center(
-                    child: ClipRRect(
-                      borderRadius: BorderRadius.circular(6),
-                      child: Container(
-                        child: CachedNetworkImage(
-                          imageUrl: _item.imgUrl,
-                          fit: BoxFit.cover,
-                        ),
+          return Container(
+            width: kWidth,
+            margin: const EdgeInsets.only(right: 10),
+            child: Hero(
+              tag: '${_item.url}_cover_${galleryModel.tabIndex}',
+              child: Center(
+                child: Container(
+                  decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(6.0), //圆角
+                      // ignore: prefer_const_literals_to_create_immutables
+                      boxShadow: [
+                        //阴影
+                        const BoxShadow(
+                          color: CupertinoColors.systemGrey2,
+                          blurRadius: 2.0,
+                        )
+                      ]),
+                  child: ClipRRect(
+                    borderRadius: BorderRadius.circular(6),
+                    child: Container(
+                      child: CachedNetworkImage(
+                        imageUrl: _item.imgUrl,
+                        fit: BoxFit.cover,
                       ),
                     ),
                   ),
@@ -315,13 +324,14 @@ class GalleryDetailPage extends StatelessWidget {
 
   Widget _buildReadButton() {
     return Selector<GalleryModel, bool>(
-        selector: (context, provider) => provider.oriGalleryPreview.length > 0,
-        builder: (context, value, child) {
+        selector: (_, GalleryModel provider) =>
+            provider.oriGalleryPreview.isNotEmpty,
+        builder: (BuildContext context, bool value, __) {
           var ln = S.of(context);
           return CupertinoButton(
               child: Text(
                 ln.READ,
-                style: TextStyle(fontSize: 15),
+                style: const TextStyle(fontSize: 15),
               ),
               minSize: 20,
               padding: const EdgeInsets.fromLTRB(15, 2.5, 15, 2.5),
@@ -345,8 +355,9 @@ class GalleryCategory extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Selector<GalleryModel, String>(
-        selector: (_, galleryModel) => galleryModel.galleryItem.category ?? '',
-        builder: (context, category, _) {
+        selector: (_, GalleryModel galleryModel) =>
+            galleryModel.galleryItem.category ?? '',
+        builder: (BuildContext context, String category, _) {
           final Color _colorCategory =
               (ThemeColors.nameColor[category ?? 'defaule']['color'] ??
                   CupertinoColors.white) as Color;
@@ -359,7 +370,7 @@ class GalleryCategory extends StatelessWidget {
                 color: _colorCategory,
                 child: Text(
                   category,
-                  style: TextStyle(
+                  style: const TextStyle(
                     fontSize: 14.5,
                     // height: 1.1,
                     color: CupertinoColors.white,
@@ -387,7 +398,7 @@ class GalleryRating extends StatelessWidget {
     return Selector<GalleryModel, double>(
         selector: (_, GalleryModel galleryModel) =>
             galleryModel.galleryItem.rating as double ?? 0.0,
-        builder: (context, rating, _) {
+        builder: (_, double rating, __) {
           return Row(
             children: <Widget>[
               Container(
@@ -414,8 +425,9 @@ class GalleryUploader extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Selector<GalleryModel, String>(
-        selector: (_, galleryModel) => galleryModel.galleryItem.uploader,
-        builder: (context, uploader, _) {
+        selector: (_, GalleryModel galleryModel) =>
+            galleryModel.galleryItem.uploader,
+        builder: (BuildContext context, String uploader, _) {
           return GestureDetector(
             behavior: HitTestBehavior.opaque,
             child: Container(
@@ -425,7 +437,7 @@ class GalleryUploader extends StatelessWidget {
                 maxLines: 1,
                 textAlign: TextAlign.left, // 对齐方式
                 overflow: TextOverflow.ellipsis, // 超出部分省略号
-                style: TextStyle(
+                style: const TextStyle(
                   fontSize: 13,
                   color: Colors.brown,
                   fontWeight: FontWeight.w500,
@@ -461,26 +473,26 @@ class GalleryTitle extends StatelessWidget {
     ///
     /// 暂时放弃使用 SelectableText
     return Selector2<EhConfigModel, GalleryModel, String>(
-      selector: (context, ehconfig, gallery) {
-        var _titleEn = gallery?.galleryItem?.englishTitle ?? '';
-        var _titleJpn = gallery?.galleryItem?.japaneseTitle ?? '';
+      selector: (_, EhConfigModel ehconfig, GalleryModel gallery) {
+        final String _titleEn = gallery?.galleryItem?.englishTitle ?? '';
+        final String _titleJpn = gallery?.galleryItem?.japaneseTitle ?? '';
 
         // 日语标题判断
-        var _title =
+        final String _title =
             ehconfig.isJpnTitle && _titleJpn != null && _titleJpn.isNotEmpty
                 ? _titleJpn
                 : _titleEn;
 
         return _title;
       },
-      builder: (context, title, child) {
+      builder: (_, String title, __) {
         return GestureDetector(
           child: Text(
             title,
             maxLines: 5,
             textAlign: TextAlign.left, // 对齐方式
             overflow: TextOverflow.ellipsis, // 超出部分省略号
-            style: TextStyle(
+            style: const TextStyle(
               textBaseline: TextBaseline.alphabetic,
               height: 1.2,
               fontSize: 16,
