@@ -37,10 +37,11 @@ class MyApp extends StatelessWidget {
         ),
         home: SplashPage(),
         locale: localeModel.getLocale(),
-        supportedLocales: [
+        supportedLocales: <Locale>[
           const Locale('en', ''),
           ...S.delegate.supportedLocales
         ],
+        // ignore: prefer_const_literals_to_create_immutables
         localizationsDelegates: [
           // 本地化的代理类
           S.delegate,
@@ -80,6 +81,7 @@ class MyApp extends StatelessWidget {
     });
 
     final MultiProvider multiProvider = MultiProvider(
+      // ignore: always_specify_types
       providers: [
         ChangeNotifierProvider<UserModel>.value(value: UserModel()),
         ChangeNotifierProvider<LocaleModel>.value(value: LocaleModel()),

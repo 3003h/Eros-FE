@@ -22,17 +22,17 @@ class EHUtils {
       return [list];
     }
 
-    List<List<T>> result = List();
+    final List<List<T>> result = [];
     int index = 1;
 
     while (true) {
       if (index * len < list.length) {
-        List<T> temp = list.skip((index - 1) * len).take(len).toList();
+        final List<T> temp = list.skip((index - 1) * len).take(len).toList();
         result.add(temp);
         index++;
         continue;
       }
-      List<T> temp = list.skip((index - 1) * len).toList();
+      final List<T> temp = list.skip((index - 1) * len).toList();
       result.add(temp);
       break;
     }
@@ -40,6 +40,7 @@ class EHUtils {
   }
 }
 
+// ignore: avoid_classes_with_only_static_members
 class Api {
   //改为使用 PersistCookieJar，在文档中有介绍，PersistCookieJar将cookie保留在文件中，
   // 因此，如果应用程序退出，则cookie始终存在，除非显式调用delete
@@ -48,10 +49,10 @@ class Api {
   static Future<PersistCookieJar> get cookieJar async {
     // print(_cookieJar);
     if (_cookieJar == null) {
-      Directory appDocDir = await getApplicationDocumentsDirectory();
-      String appDocPath = appDocDir.path;
+      final Directory appDocDir = await getApplicationDocumentsDirectory();
+      final String appDocPath = appDocDir.path;
       print('获取的文件系统目录 appDocPath： ' + appDocPath);
-      _cookieJar = new PersistCookieJar(dir: appDocPath);
+      _cookieJar = PersistCookieJar(dir: appDocPath);
     }
     return _cookieJar;
   }
@@ -60,11 +61,11 @@ class Api {
   static Future<Tuple2<List<GalleryItem>, int>> getPopular() async {
 //    Global.logger.v("获取热门");
 
-    HttpManager httpManager = HttpManager.getInstance(
+    final HttpManager httpManager = HttpManager.getInstance(
         EHConst.getBaseSite(Global.profile.ehConfig.siteEx ?? false));
-    const url = "/popular";
+    const String url = '/popular';
 
-    var response = await httpManager.get(url);
+    final String response = await httpManager.get(url);
 
     /*var cookieJar = await Api.cookieJar;
     List<Cookie> cookiesE =
@@ -74,7 +75,8 @@ class Api {
 
     Global.logger.v('$cookiesE\n$cookiesEX');*/
 
-    var tuple = await GalleryListParser.parseGalleryList(response);
+    final Tuple2<List<GalleryItem>, int> tuple =
+        await GalleryListParser.parseGalleryList(response);
 
     return tuple;
   }
@@ -82,11 +84,11 @@ class Api {
   /// 获取画廊列表
   static Future<Tuple2<List<GalleryItem>, int>> getGallery(
       {int page, String fromGid, String serach, int cats}) async {
-    HttpManager httpManager = HttpManager.getInstance(
+    final HttpManager httpManager = HttpManager.getInstance(
         EHConst.getBaseSite(Global.profile.ehConfig.siteEx ?? false));
 
-    var url = "/";
-    var qry = '?page=${page ?? 0}';
+    String url = '/';
+    String qry = '?page=${page ?? 0}';
     if (fromGid != null) {
       qry = '$qry&from=$fromGid';
     }
@@ -95,13 +97,13 @@ class Api {
     }
 
     if (serach != null) {
-      var searArr = serach.split(':');
+      final List<String> searArr = serach.split(':');
       if (searArr.length > 1) {
-        var _end = '';
+        String _end = '';
         if (searArr[0] != 'uploader') {
           _end = '\$';
         }
-        var _search =
+        final String _search =
             Uri.encodeQueryComponent('${searArr[0]}:"${searArr[1]}$_end"');
         qry = '$qry&f_search=$_search';
       }
@@ -109,13 +111,13 @@ class Api {
 
     url = '$url$qry';
 
-    Options options = Options(headers: {
-      "Referer": "https://e-hentai.org",
+    final Options options = Options(headers: {
+      'Referer': 'https://e-hentai.org',
     });
 
 //    Global.logger.v(url);
 
-    var response = await httpManager.get(url, options: options);
+    final response = await httpManager.get(url, options: options);
 
     return await GalleryListParser.parseGalleryList(response);
   }
@@ -123,14 +125,14 @@ class Api {
   /// 获取收藏
   static Future<Tuple2<List<GalleryItem>, int>> getFavorite(
       {String favcat, int page}) async {
-    HttpManager httpManager = HttpManager.getInstance(
+    final HttpManager httpManager = HttpManager.getInstance(
         EHConst.getBaseSite(Global.profile.ehConfig.siteEx ?? false));
 
     //收藏时间排序
-    var _order = Global?.profile?.ehConfig?.favoritesOrder;
+    final String _order = Global?.profile?.ehConfig?.favoritesOrder;
 
-    var url = '/favorites.php/';
-    var qry = '?page=${page ?? 0}';
+    String url = '/favorites.php/';
+    String qry = '?page=${page ?? 0}';
     if (favcat != null && favcat != "a" && favcat.isNotEmpty) {
       qry = '$qry&favcat=$favcat';
     }
@@ -139,7 +141,7 @@ class Api {
 
     Global.logger.v(url);
 
-    var response = await httpManager.get(url);
+    final String response = await httpManager.get(url);
 
     return await GalleryListParser.parseGalleryList(response, isFavorite: true);
   }
@@ -151,19 +153,20 @@ class Api {
     //hc=1#comments 显示全部评论
     //nw=always 不显示警告
 
-    HttpManager httpManager = HttpManager.getInstance();
-    var url = inUrl + '?hc=1&inline_set=ts_l&nw=always';
+    final HttpManager httpManager = HttpManager.getInstance();
+//    final String url = inUrl + '?hc=1&inline_set=ts_l&nw=always';
+    final String url = inUrl + '?hc=1&nw=always';
 
     // 不显示警告的处理 cookie加上 nw=1
     // 在 url使用 nw=always 未解决 自动写入cookie 暂时搞不懂 先手动设置下
     // todo 待优化
-    var cookieJar = await Api.cookieJar;
-    List<Cookie> cookies = cookieJar.loadForRequest(Uri.parse(inUrl));
+    final PersistCookieJar cookieJar = await Api.cookieJar;
+    final List<Cookie> cookies = cookieJar.loadForRequest(Uri.parse(inUrl));
     cookies.add(Cookie('nw', '1'));
     cookieJar.saveFromResponse(Uri.parse(url), cookies);
 
 //    Global.logger.i("获取画廊 $url");
-    var response = await httpManager.get(url);
+    final String response = await httpManager.get(url);
 
     // TODO 画廊警告问题 使用 nw=always 未解决 待处理 怀疑和Session有关
     if ('$response'.contains(r'<strong>Offensive For Everyone</strong>')) {
@@ -171,7 +174,7 @@ class Api {
       showToast('Offensive For Everyone');
     }
 
-    GalleryItem galleryItem =
+    final GalleryItem galleryItem =
         await GalleryDetailParser.parseGalleryDetail(response);
 
     return galleryItem;
@@ -187,20 +190,20 @@ class Api {
     //hc=1#comments 显示全部评论
     //nw=always 不显示警告
 
-    HttpManager httpManager = HttpManager.getInstance();
-    var url = inUrl + '?p=$page';
+    final HttpManager httpManager = HttpManager.getInstance();
+    final String url = inUrl + '?p=$page';
 
     Global.logger.v(url);
 
     // 不显示警告的处理 cookie加上 nw=1
     // 在 url使用 nw=always 未解决 自动写入cookie 暂时搞不懂 先手动设置下
     // todo 待优化
-    var cookieJar = await Api.cookieJar;
-    List<Cookie> cookies = cookieJar.loadForRequest(Uri.parse(inUrl));
+    final PersistCookieJar cookieJar = await Api.cookieJar;
+    final List<Cookie> cookies = cookieJar.loadForRequest(Uri.parse(inUrl));
     cookies.add(Cookie('nw', '1'));
     cookieJar.saveFromResponse(Uri.parse(url), cookies);
 
-    var response = await httpManager.get(url);
+    final String response = await httpManager.get(url);
 
     return GalleryDetailParser.parseGalleryPreviewFromHtml(response);
   }
@@ -208,15 +211,15 @@ class Api {
   /// 由图片url获取解析图库 showkey
   /// [href] 画廊图片展示页面的地址
   static Future<String> getShowkey(String href) async {
-    HttpManager httpManager = HttpManager.getInstance();
+    final HttpManager httpManager = HttpManager.getInstance();
 
-    var url = href;
+    final String url = href;
 
-    var response = await httpManager.get(url);
+    final String response = await httpManager.get(url);
 
     final RegExp regShowKey = RegExp(r'var showkey="([0-9a-z]+)";');
 
-    var showkey = regShowKey.firstMatch(response)?.group(1) ?? '';
+    final String showkey = regShowKey.firstMatch(response)?.group(1) ?? '';
 
 //    Global.logger.v('$showkey');
 
@@ -230,34 +233,35 @@ class Api {
   static Future<String> getShowInfo(String href, String showKey,
       {int index}) async {
     HttpManager httpManager = HttpManager.getInstance(EHConst.EH_BASE_URL);
-    const url = "/api.php";
+    const String url = '/api.php';
 
-    var cookie = Global.profile?.user?.cookie ?? "";
+    final String cookie = Global.profile?.user?.cookie ?? '';
 
-    Options options = Options(headers: {
-      "Cookie": cookie,
+    final Options options = Options(headers: {
+      'Cookie': cookie,
     });
 
 //    Global.logger.v('href = $href');
 
-    var regExp = RegExp(r'https://e[-x]hentai.org/s/([0-9a-z]+)/(\d+)-(\d+)');
-    var regRult = regExp.firstMatch(href);
-    var gid = int.parse(regRult.group(2));
-    var imgkey = regRult.group(1);
-    var page = int.parse(regRult.group(3));
+    final RegExp regExp =
+        RegExp(r'https://e[-x]hentai.org/s/([0-9a-z]+)/(\d+)-(\d+)');
+    final RegExpMatch regRult = regExp.firstMatch(href);
+    final int gid = int.parse(regRult.group(2));
+    final String imgkey = regRult.group(1);
+    final int page = int.parse(regRult.group(3));
 
-    Map reqMap = {
+    final Map<String, Object> reqMap = {
       'method': 'showpage',
       'gid': gid,
       'page': page,
       'imgkey': imgkey,
       'showkey': showKey,
     };
-    String reqJsonStr = jsonEncode(reqMap);
+    final String reqJsonStr = jsonEncode(reqMap);
 
 //    Global.logger.v('$reqJsonStr');
 
-    var response = await httpManager.postForm(
+    final Response response = await httpManager.postForm(
       url,
       options: options,
       data: reqJsonStr,
@@ -265,10 +269,10 @@ class Api {
 
 //    Global.logger.v('$response');
 
-    var rultJson = jsonDecode('$response');
+    final rultJson = jsonDecode('$response');
 
-    final RegExp regImageUrl = RegExp("<img[^>]*src=\"([^\"]+)\" style");
-    var imageUrl = regImageUrl.firstMatch(rultJson['i3']).group(1);
+    final RegExp regImageUrl = RegExp('<img[^>]*src=\"([^\"]+)\" style');
+    final imageUrl = regImageUrl.firstMatch(rultJson['i3']).group(1);
 
 //    Global.logger.v('$imageUrl');
 

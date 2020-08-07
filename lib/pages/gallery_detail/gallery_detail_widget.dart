@@ -152,32 +152,37 @@ class PreviewContainer extends StatelessWidget {
     final Map<String, String> _httpHeaders = {
       'Cookie': Global.profile?.user?.cookie ?? '',
     };
-    final Container image = galleryPreview.isLarge ?? false
-        ? Container(
-//            height: kHeightPreview,
-            // 缩略大图
-            child: Center(
-              child: CachedNetworkImage(
-                httpHeaders: _httpHeaders,
-//              height: kHeightPreview,
-                imageUrl: galleryPreview.imgUrl,
-              ),
-            ),
-          )
-        : Container(
-//            height: galleryPreview.height,
-//            width: galleryPreview.width,
-//            height: kHeightPreview,
+    Widget _buildImage() {
+      if (galleryPreview.isLarge ?? false) {
+        return CachedNetworkImage(
+          httpHeaders: _httpHeaders,
+          imageUrl: galleryPreview.imgUrl,
+        );
+      } else {
+        return LayoutBuilder(
+            builder: (BuildContext context, BoxConstraints constraints) {
+          double _subHeight;
+          double _subWidth;
+          final double _subHeightP = galleryPreview.height *
+              constraints.maxWidth /
+              galleryPreview.width;
+          if (_subHeightP > kHeightPreview) {
+            _subHeight = kHeightPreview;
+            _subWidth =
+                kHeightPreview * galleryPreview.width / galleryPreview.height;
+          } else {
+            _subWidth = constraints.maxWidth;
+            _subHeight = _subHeightP;
+          }
+          return Container(
+            height: _subHeight,
+            width: _subWidth,
             // 缩略小图
             child: Stack(
               alignment: AlignmentDirectional.center,
-//              fit: StackFit.loose,
+              fit: StackFit.expand,
               children: <Widget>[
                 Container(
-//                  height: kHeightPreview,
-                  width: galleryPreview.width *
-                      kHeightPreview /
-                      galleryPreview.height,
                   child: PreviewImageClipper(
                     imgUrl: galleryPreview.imgUrl,
                     offset: galleryPreview.offSet as double,
@@ -188,6 +193,9 @@ class PreviewContainer extends StatelessWidget {
               ],
             ),
           );
+        });
+      }
+    }
 
     return GestureDetector(
       behavior: HitTestBehavior.opaque,
@@ -198,40 +206,51 @@ class PreviewContainer extends StatelessWidget {
         margin: const EdgeInsets.all(2.0),
         child: Column(
           children: <Widget>[
-            Stack(
-              alignment: Alignment.center,
-              children: [
-                Container(
-                  height: kHeightPreview,
-                ),
-                Container(
-                  decoration:
-                      BoxDecoration(borderRadius: BorderRadius.circular(6), //圆角
-                          // ignore: prefer_const_literals_to_create_immutables
-                          boxShadow: [
-                        //阴影
-                        const BoxShadow(
-                          color: CupertinoColors.systemGrey2,
-                          blurRadius: 2.0,
-                        )
-                      ]),
-                  child: ClipRRect(
-                    borderRadius: BorderRadius.circular(6),
-                    child:
-                        Container(color: CupertinoColors.white, child: image),
-                  ),
-                ),
-              ],
-            ),
             Expanded(
-              child: Container(
-                padding: const EdgeInsets.only(top: 4),
-                child: Text(
-                  '${galleryPreview.ser ?? ''}',
-                  style: const TextStyle(
-                    fontSize: 14,
-                    color: Colors.black54,
+              child: Stack(
+                alignment: Alignment.center,
+                children: <Widget>[
+                  Container(
+                    height: kHeightPreview,
                   ),
+                  Container(
+                    decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(4), //圆角
+                        // ignore: prefer_const_literals_to_create_immutables
+                        boxShadow: [
+                          //阴影
+                          const BoxShadow(
+                            color: CupertinoColors.systemGrey2,
+                            blurRadius: 2.0,
+                          )
+                        ]),
+                    child: ClipRRect(
+                      borderRadius: BorderRadius.circular(4),
+                      child: Container(
+                        color: CupertinoColors.white,
+                        child: _buildImage(),
+                      ),
+                    ),
+                  ),
+                  // 直接使用Card实现的方式，缺点 阴影方向好像是固定的
+                  /*Card(
+                    margin: const EdgeInsets.all(0),
+                    elevation: 2,
+                    color: CupertinoColors.white,
+                    child: ClipRRect(
+                        borderRadius: BorderRadius.circular(4),
+                        child: _buildImage()),
+                  ),*/
+                ],
+              ),
+            ),
+            Container(
+              padding: const EdgeInsets.only(top: 4),
+              child: Text(
+                '${galleryPreview.ser ?? ''}',
+                style: const TextStyle(
+                  fontSize: 14,
+                  color: Colors.black54,
                 ),
               ),
             ),
