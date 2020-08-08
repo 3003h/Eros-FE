@@ -119,7 +119,7 @@ class CommentItem extends StatelessWidget {
     return GestureDetector(
       child: Text(
         galleryComment.name,
-        style: TextStyle(
+        style: const TextStyle(
           fontSize: 13,
           fontWeight: FontWeight.bold,
           color: CupertinoColors.activeBlue,

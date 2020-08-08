@@ -84,14 +84,13 @@ class GalleryDetailPage extends StatelessWidget {
     /// 内容作为 child 缓存避免重绘
     ///
     /// 增加 oriGalleryPreview 变化时可重绘的控制
-    final Widget cupertinoTabScaffold =
-        Selector<GalleryModel, Tuple2<bool, bool>>(
-      selector: (BuildContext context, GalleryModel galleryModel) => Tuple2(
+    final Widget cps = Selector<GalleryModel, Tuple2<bool, bool>>(
+      selector: (context, galleryModel) => Tuple2(
           galleryModel.hideNavigationBtn,
           galleryModel.oriGalleryPreview.isNotEmpty),
-      shouldRebuild: (Tuple2<bool, bool> pre, Tuple2<bool, bool> next) =>
+      shouldRebuild: (pre, next) =>
           pre.item1 != next.item1 || pre.item2 != next.item2,
-      builder: (BuildContext context, Tuple2<bool, bool> _tuple, Widget child) {
+      builder: (context, _tuple, child) {
         return CupertinoPageScaffold(
           navigationBar:
               _buildNavigationBar(context, hideNavigationBtn: _tuple.item1),
@@ -118,7 +117,7 @@ class GalleryDetailPage extends StatelessWidget {
       ),
     );
 
-    return cupertinoTabScaffold;
+    return cps;
   }
 
   Widget _buildDetail(context) {
@@ -174,8 +173,11 @@ class GalleryDetailPage extends StatelessWidget {
   ObstructingPreferredSizeWidget _buildNavigationBar(BuildContext context,
       {bool hideNavigationBtn = true}) {
     return hideNavigationBtn
-        ? const CupertinoNavigationBar()
+        ? const CupertinoNavigationBar(
+            backgroundColor: ThemeColors.navigationBarBackground,
+          )
         : CupertinoNavigationBar(
+            backgroundColor: ThemeColors.navigationBarBackground,
             middle: _buildNavigationBarImage(context),
             trailing: _buildNavigationBarReadButton(context),
           );
@@ -292,9 +294,9 @@ class GalleryDetailPage extends StatelessWidget {
           return Container(
             width: kWidth,
             margin: const EdgeInsets.only(right: 10),
-            child: Hero(
-              tag: '${_item.url}_cover_${galleryModel.tabIndex}',
-              child: Center(
+            child: Center(
+              child: Hero(
+                tag: '${_item.url}_cover_${galleryModel.tabIndex}',
                 child: Container(
                   decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(6.0), //圆角

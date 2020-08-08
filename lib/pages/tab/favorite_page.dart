@@ -9,6 +9,7 @@ import 'package:FEhViewer/route/navigator_util.dart';
 import 'package:FEhViewer/route/routes.dart';
 import 'package:FEhViewer/utils/toast.dart';
 import 'package:FEhViewer/utils/utility.dart';
+import 'package:FEhViewer/values/theme_colors.dart';
 import 'package:FEhViewer/widget/eh_widget.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -100,12 +101,13 @@ class _FavoriteTabState extends State<FavoriteTab> {
                     physics: const AlwaysScrollableScrollPhysics(),
                     slivers: <Widget>[
                       CupertinoSliverNavigationBar(
+                        backgroundColor: ThemeColors.navigationBarBackground,
                         heroTag: 'fav',
                         largeTitle: TabPageTitle(
                           title: _title,
                         ),
                         trailing: Container(
-                          width: 150,
+                          width: 100,
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.end,
                             children: [
@@ -168,6 +170,7 @@ class _FavoriteTabState extends State<FavoriteTab> {
                   )
                 : CustomScrollView(slivers: <Widget>[
                     CupertinoSliverNavigationBar(
+                      backgroundColor: ThemeColors.navigationBarBackground,
                       largeTitle: TabPageTitle(
                         title: ln.not_login,
                         isLoading: false,
@@ -325,6 +328,9 @@ class _FavoriteTabState extends State<FavoriteTab> {
   Widget _buildFavcatButton(BuildContext context) {
     return CupertinoButton(
       padding: const EdgeInsets.all(0),
+      child: const Icon(
+        FontAwesomeIcons.star,
+      ),
       onPressed: () {
         debugPrint('sel icon tapped');
         // 跳转收藏夹选择页
@@ -347,9 +353,6 @@ class _FavoriteTabState extends State<FavoriteTab> {
           }
         });
       },
-      child: const Icon(
-        FontAwesomeIcons.star,
-      ),
     );
   }
 }

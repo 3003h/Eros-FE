@@ -1,12 +1,17 @@
+import 'dart:ui' as ui;
+
 import 'package:FEhViewer/common/global.dart';
 import 'package:FEhViewer/generated/l10n.dart';
 import 'package:FEhViewer/models/index.dart';
 import 'package:FEhViewer/models/states/gallery_model.dart';
 import 'package:FEhViewer/utils/toast.dart';
 import 'package:FEhViewer/utils/utility.dart';
+import 'package:FEhViewer/values/theme_colors.dart';
+import 'package:FEhViewer/widget/blur_image.dart';
 import 'package:FEhViewer/widget/eh_widget.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:provider/provider.dart';
 import 'package:tuple/tuple.dart';
 
@@ -51,7 +56,7 @@ class _GalleryListTabState extends State<GalleryListTab> {
     _loadDataFirst();
   }
 
-  _parserSearch() {
+  void _parserSearch() {
     _search = '${widget.simpleSearch}'.trim();
   }
 
@@ -127,7 +132,7 @@ class _GalleryListTabState extends State<GalleryListTab> {
     });
   }
 
-  SliverList gallerySliverListView(List<GalleryItem> gallerItemBeans) {
+  /*SliverList gallerySliverListView(List<GalleryItem> gallerItemBeans) {
     return SliverList(
       delegate: SliverChildBuilderDelegate(
         (BuildContext context, int index) {
@@ -148,7 +153,7 @@ class _GalleryListTabState extends State<GalleryListTab> {
         childCount: gallerItemBeans.length,
       ),
     );
-  }
+  }*/
 
   /// 跳转页码
   Future<void> _jumtToPage(BuildContext context) async {
@@ -229,29 +234,52 @@ class _GalleryListTabState extends State<GalleryListTab> {
       physics: const AlwaysScrollableScrollPhysics(),
       slivers: <Widget>[
         CupertinoSliverNavigationBar(
+          backgroundColor: ThemeColors.navigationBarBackground,
           heroTag: 'gallery',
-          largeTitle: TabPageTitle(
-            title: _title,
-            isLoading: false,
-          ),
-          trailing: CupertinoButton(
-            padding: const EdgeInsets.all(0),
-            child: ClipRRect(
-              borderRadius: BorderRadius.circular(4),
-              child: Container(
-                padding: const EdgeInsets.fromLTRB(4, 2, 4, 2),
-                color: CupertinoColors.activeBlue,
-                child: Text(
-                  '${_curPage + 1}',
-                  style: const TextStyle(color: CupertinoColors.white),
+//          border: null, // 边线
+          largeTitle: Text(_title),
+          trailing: Container(
+            width: 100,
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.end,
+              children: [
+                CupertinoButton(
+                  padding: const EdgeInsets.all(0),
+                  child: const Icon(
+                    FontAwesomeIcons.search,
+                    size: 20,
+                  ),
+                  onPressed: () {
+                    _jumtToPage(context);
+                  },
                 ),
-              ),
+                CupertinoButton(
+                  padding: const EdgeInsets.all(0),
+                  child: ClipRRect(
+                    borderRadius: BorderRadius.circular(4),
+                    child: Container(
+                      padding: const EdgeInsets.fromLTRB(4, 2, 4, 2),
+                      color: CupertinoColors.activeBlue,
+                      child: Text(
+                        '${_curPage + 1}',
+                        style: const TextStyle(color: CupertinoColors.white),
+                      ),
+                    ),
+                  ),
+                  onPressed: () {
+                    _jumtToPage(context);
+                  },
+                ),
+              ],
             ),
-            onPressed: () {
-              _jumtToPage(context);
-            },
           ),
         ),
+        /*SliverToBoxAdapter(
+            child: Container(
+                padding: const EdgeInsets.fromLTRB(16, 0, 16, 0),
+                color: ThemeColors.navigationBarBackground,
+                child: CupertinoTextField())),*/
+
         CupertinoSliverRefreshControl(
           onRefresh: () async {
             await _reloadData();

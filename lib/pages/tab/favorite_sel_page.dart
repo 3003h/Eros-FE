@@ -1,7 +1,6 @@
 import 'package:FEhViewer/generated/l10n.dart';
 import 'package:FEhViewer/models/entity/favorite.dart';
 import 'package:FEhViewer/route/navigator_util.dart';
-import 'package:FEhViewer/utils/icon.dart';
 import 'package:FEhViewer/values/const.dart';
 import 'package:FEhViewer/values/theme_colors.dart';
 import 'package:flutter/cupertino.dart';
@@ -46,6 +45,7 @@ class _SelFavorite extends State<SelFavoritePage> {
     var _title = ln.favcat;
     CupertinoPageScaffold sca = CupertinoPageScaffold(
         navigationBar: CupertinoNavigationBar(
+          backgroundColor: ThemeColors.navigationBarBackground,
           middle: Text(_title),
         ),
         child: SafeArea(

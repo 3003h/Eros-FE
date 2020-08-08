@@ -43,26 +43,26 @@ class GalleryItemFlow extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
-                Container(
-                  decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(6.0), //圆角
-                      // ignore: prefer_const_literals_to_create_immutables
-                      boxShadow: [
-                        //阴影
-                        const BoxShadow(
-                          color: CupertinoColors.systemGrey2,
-                          blurRadius: 2.0,
-                        )
-                      ]),
-                  child: ClipRRect(
-                    borderRadius: BorderRadius.circular(6),
-                    child: Container(
-                      height: galleryItem.imgHeight *
-                          _sWidth /
-                          galleryItem.imgWidth,
-                      color: CupertinoColors.systemGrey6,
-                      child: Hero(
-                        tag: '${galleryItem.url}_cover_${tuple.item2}',
+                Hero(
+                  tag: '${galleryItem.url}_cover_${tuple.item2}',
+                  child: Container(
+                    decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(6.0), //圆角
+                        // ignore: prefer_const_literals_to_create_immutables
+                        boxShadow: [
+                          //阴影
+                          const BoxShadow(
+                            color: CupertinoColors.systemGrey3,
+                            blurRadius: 2.0,
+                          )
+                        ]),
+                    child: ClipRRect(
+                      borderRadius: BorderRadius.circular(6),
+                      child: Container(
+                        height: galleryItem.imgHeight *
+                            _sWidth /
+                            galleryItem.imgWidth,
+                        color: CupertinoColors.systemGroupedBackground,
                         child: Container(
                           child: ClipRRect(
                               borderRadius: BorderRadius.circular(6),

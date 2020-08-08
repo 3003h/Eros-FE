@@ -20,7 +20,7 @@ class TabPageTitle extends StatelessWidget {
                 Container(
                   width: 18,
                 ),
-                CupertinoActivityIndicator(
+                const CupertinoActivityIndicator(
                   radius: 15.0,
                 ),
               ],
