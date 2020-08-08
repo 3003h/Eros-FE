@@ -31,6 +31,8 @@ class MessageLookup extends MessageLookupByLibrary {
     "gallery_comments" : MessageLookupByLibrary.simpleMessage("画廊评论"),
     "login" : MessageLookupByLibrary.simpleMessage("登录"),
     "login_web" : MessageLookupByLibrary.simpleMessage("通过网页登录"),
+    "morePreviews" : MessageLookupByLibrary.simpleMessage("更多预览"),
+    "noMorePreviews" : MessageLookupByLibrary.simpleMessage("无更多预览"),
     "notFav" : MessageLookupByLibrary.simpleMessage("未收藏"),
     "not_login" : MessageLookupByLibrary.simpleMessage("未登录"),
     "passwd" : MessageLookupByLibrary.simpleMessage("密码"),

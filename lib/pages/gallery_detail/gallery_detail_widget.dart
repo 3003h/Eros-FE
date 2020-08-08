@@ -35,27 +35,34 @@ class GalleryDetailInfo extends StatelessWidget {
             color: CupertinoColors.systemGrey4,
           ),
           _buildPreviewGrid(),
-          CupertinoButton(
-            minSize: 0,
-            padding: const EdgeInsets.fromLTRB(0, 4, 0, 30),
-            child: Text(
-              ln.all_preview,
-              style: const TextStyle(fontSize: 16),
-            ),
-            onPressed: () {
-              final GalleryModel galleryModel =
-                  Provider.of<GalleryModel>(context, listen: false);
-              Navigator.push(context,
-                  CupertinoPageRoute(builder: (BuildContext context) {
-                return ChangeNotifierProvider<GalleryModel>.value(
-                  value: galleryModel,
-                  child: const AllPreviewPage(),
-                );
-              }));
-            },
-          ),
+          _buildAllPreviewButton(context),
         ],
       ),
+    );
+  }
+
+  CupertinoButton _buildAllPreviewButton(BuildContext context) {
+    final S ln = S.of(context);
+    final GalleryModel galleryModel =
+        Provider.of<GalleryModel>(context, listen: false);
+    final bool hasMorePreview = int.parse(galleryModel.galleryItem.filecount) >
+        galleryModel.oriGalleryPreview.length;
+    return CupertinoButton(
+      minSize: 0,
+      padding: const EdgeInsets.fromLTRB(0, 4, 0, 30),
+      child: Text(
+        hasMorePreview ? ln.morePreviews : ln.noMorePreviews,
+        style: const TextStyle(fontSize: 16),
+      ),
+      onPressed: () {
+        Navigator.push(context,
+            CupertinoPageRoute(builder: (BuildContext context) {
+          return ChangeNotifierProvider<GalleryModel>.value(
+            value: galleryModel,
+            child: const AllPreviewPage(),
+          );
+        }));
+      },
     );
   }
 
