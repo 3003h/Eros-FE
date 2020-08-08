@@ -1,6 +1,7 @@
 import 'package:FEhViewer/common/global.dart';
 import 'package:FEhViewer/generated/l10n.dart';
 import 'package:FEhViewer/utils/toast.dart';
+import 'package:FEhViewer/values/theme_colors.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -18,7 +19,7 @@ class FEhHome extends StatefulWidget {
 class _FEhHomeState extends State<FEhHome> {
   DateTime _lastPressedAt; //上次点击时间
 
-  var _scrollControllerList = [
+  final List<ScrollController> _scrollControllerList = [
     ScrollController(),
     ScrollController(),
     ScrollController(),
@@ -26,7 +27,7 @@ class _FEhHomeState extends State<FEhHome> {
   ];
 
   // tab控制器 可设置默认tab
-  CupertinoTabController _controller = CupertinoTabController();
+  final CupertinoTabController _controller = CupertinoTabController();
   int _currentIndex = 0;
   bool _tapAwait = true;
 
@@ -148,16 +149,18 @@ class _FEhHomeState extends State<FEhHome> {
 
   @override
   Widget build(BuildContext context) {
-    var _listBottomNavigationBarItem = getBottomNavigationBarItem();
-    CupertinoTabScaffold cupertinoTabScaffold = CupertinoTabScaffold(
+    final List<BottomNavigationBarItem> _listBottomNavigationBarItem =
+        getBottomNavigationBarItem();
+    final CupertinoTabScaffold cupertinoTabScaffold = CupertinoTabScaffold(
       controller: _controller,
       tabBar: CupertinoTabBar(
+        backgroundColor: ThemeColors.navigationBarBackground,
         items: _listBottomNavigationBarItem,
         onTap: (index) async {
           if (index == _currentIndex &&
               index != _listBottomNavigationBarItem.length - 1) {
             await _doubleTapBar(
-              duration: Duration(milliseconds: 800),
+              duration: const Duration(milliseconds: 800),
               awaitComplete: false,
               onTap: () {
                 _scrollControllerList[index].animateTo(0,

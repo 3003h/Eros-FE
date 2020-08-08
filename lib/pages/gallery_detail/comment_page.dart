@@ -1,5 +1,6 @@
 import 'package:FEhViewer/generated/l10n.dart';
 import 'package:FEhViewer/models/galleryComment.dart';
+import 'package:FEhViewer/values/theme_colors.dart';
 import 'package:flutter/cupertino.dart';
 
 import 'comment_item.dart';
@@ -13,6 +14,7 @@ class CommentPage extends StatelessWidget {
     var ln = S.of(context);
     return CupertinoPageScaffold(
       navigationBar: CupertinoNavigationBar(
+        backgroundColor: ThemeColors.navigationBarBackground,
         middle: Text(ln.gallery_comments),
       ),
       child: SafeArea(

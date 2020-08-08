@@ -2,6 +2,7 @@ import 'package:FEhViewer/common/global.dart';
 import 'package:FEhViewer/models/states/ehconfig_model.dart';
 import 'package:FEhViewer/models/states/user_model.dart';
 import 'package:FEhViewer/values/const.dart';
+import 'package:FEhViewer/values/theme_colors.dart';
 import 'package:enum_to_string/enum_to_string.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -21,6 +22,7 @@ class _EhSettingPage extends State<EhSettingPage> {
   Widget build(BuildContext context) {
     CupertinoPageScaffold cps = CupertinoPageScaffold(
         navigationBar: CupertinoNavigationBar(
+          backgroundColor: ThemeColors.navigationBarBackground,
           middle: Text(_title),
         ),
         child: SafeArea(

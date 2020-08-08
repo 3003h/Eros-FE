@@ -35,7 +35,7 @@ class EHConst {
 
   // 瀑布流视图参数
   static const double waterfallFlowCrossAxisSpacing = 10.0;
-  static const double waterfallFlowMainAxisSpacing = 20.0;
+  static const double waterfallFlowMainAxisSpacing = 10.0;
   static const double waterfallFlowMaxCrossAxisExtent = 150.0;
 
   static const Map<String, String> translateTagType = {

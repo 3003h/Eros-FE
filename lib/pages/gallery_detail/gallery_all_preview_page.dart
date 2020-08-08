@@ -3,6 +3,7 @@ import 'package:FEhViewer/generated/l10n.dart';
 import 'package:FEhViewer/models/index.dart';
 import 'package:FEhViewer/models/states/gallery_model.dart';
 import 'package:FEhViewer/utils/utility.dart';
+import 'package:FEhViewer/values/theme_colors.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -42,6 +43,7 @@ class _AllPreviewPageState extends State<AllPreviewPage> {
     var _count = int.parse(_galleryModel.galleryItem.filecount);
     return CupertinoPageScaffold(
       navigationBar: CupertinoNavigationBar(
+        backgroundColor: ThemeColors.navigationBarBackground,
         middle: Text(ln.all_preview),
       ),
       child: CustomScrollView(

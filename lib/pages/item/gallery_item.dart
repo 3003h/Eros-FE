@@ -143,7 +143,7 @@ class _GalleryItemWidgetState extends State<GalleryItemWidget> {
         );
       },
       onLongPress: () {
-        Global.logger.v("onLongPress title: $_title ");
+        Global.logger.v('onLongPress title: $_title ');
       },
       onTapDown: (_) => _updatePressedColor(),
       onTapUp: (_) {
@@ -161,11 +161,11 @@ class _GalleryItemWidgetState extends State<GalleryItemWidget> {
   Widget _buildTitle() {
     return Selector2<EhConfigModel, GalleryModel, String>(
       selector: (context, ehconfig, gallery) {
-        var _titleEn = gallery?.galleryItem?.englishTitle ?? '';
-        var _titleJpn = gallery?.galleryItem?.japaneseTitle ?? '';
+        final String _titleEn = gallery?.galleryItem?.englishTitle ?? '';
+        final String _titleJpn = gallery?.galleryItem?.japaneseTitle ?? '';
 
         // 日语标题判断
-        var _title =
+        final String _title =
             ehconfig.isJpnTitle && _titleJpn != null && _titleJpn.isNotEmpty
                 ? _titleJpn
                 : _titleEn;
@@ -202,25 +202,25 @@ class _GalleryItemWidgetState extends State<GalleryItemWidget> {
         }
       }
 
-      return Container(
-        decoration: BoxDecoration(borderRadius: BorderRadius.circular(6.0), //圆角
-            // ignore: prefer_const_literals_to_create_immutables
-            boxShadow: [
-              //阴影
-              const BoxShadow(
-                color: CupertinoColors.systemGrey2,
-                blurRadius: 2.0,
-              )
-            ]),
-        child: ClipRRect(
-          borderRadius: BorderRadius.circular(6),
-          child: Container(
-            width: kCoverImageWidth,
-            height: _getHeigth(),
-            color: CupertinoColors.systemGrey6,
-            child: Hero(
-              tag:
-                  '${galleryModel.galleryItem.url}_cover_${galleryModel.tabIndex}',
+      return Hero(
+        tag: '${galleryModel.galleryItem.url}_cover_${galleryModel.tabIndex}',
+        child: Container(
+          decoration:
+              BoxDecoration(borderRadius: BorderRadius.circular(6.0), //圆角
+                  // ignore: prefer_const_literals_to_create_immutables
+                  boxShadow: [
+                //阴影
+                const BoxShadow(
+                  color: CupertinoColors.systemGrey2,
+                  blurRadius: 2.0,
+                )
+              ]),
+          child: ClipRRect(
+            borderRadius: BorderRadius.circular(6),
+            child: Container(
+              width: kCoverImageWidth,
+              height: _getHeigth(),
+              color: CupertinoColors.systemBackground,
               child: Center(
                 child: ClipRRect(
                   // 圆角
@@ -251,7 +251,7 @@ class _GalleryItemWidgetState extends State<GalleryItemWidget> {
           ),
           Text(
             galleryModel?.galleryItem?.rating.toString(),
-            style: TextStyle(
+            style: const TextStyle(
               fontSize: 13,
               color: CupertinoColors.systemGrey,
             ),
@@ -265,7 +265,7 @@ class _GalleryItemWidgetState extends State<GalleryItemWidget> {
     return Consumer<GalleryModel>(builder: (context, galleryModel, child) {
       return Row(
         children: <Widget>[
-          Icon(
+          const Icon(
             Icons.panorama,
             size: 13,
             color: CupertinoColors.systemGrey,
@@ -274,7 +274,8 @@ class _GalleryItemWidgetState extends State<GalleryItemWidget> {
             padding: const EdgeInsets.only(left: 2),
             child: Text(
               galleryModel?.galleryItem?.filecount ?? "",
-              style: TextStyle(fontSize: 12, color: CupertinoColors.systemGrey),
+              style: const TextStyle(
+                  fontSize: 12, color: CupertinoColors.systemGrey),
             ),
           ),
         ],
@@ -310,9 +311,9 @@ class _GalleryItemWidgetState extends State<GalleryItemWidget> {
 
   Widget _buildCategory() {
     return Consumer<GalleryModel>(builder: (context, galleryModel, child) {
-      Color _colorCategory = ThemeColors
-                  .nameColor[galleryModel?.galleryItem?.category ?? "defaule"]
-              ["color"] ??
+      final Color _colorCategory = ThemeColors
+                  .nameColor[galleryModel?.galleryItem?.category ?? 'defaule']
+              ['color'] ??
           CupertinoColors.white;
 
       return ClipRRect(
@@ -322,7 +323,7 @@ class _GalleryItemWidgetState extends State<GalleryItemWidget> {
           color: _colorCategory,
           child: Text(
             galleryModel?.galleryItem?.category ?? "",
-            style: TextStyle(
+            style: const TextStyle(
               fontSize: 14,
               height: 1,
               color: CupertinoColors.white,
@@ -335,7 +336,7 @@ class _GalleryItemWidgetState extends State<GalleryItemWidget> {
 
   void _updateNormalColor() {
     setState(() {
-      _colorTap = CupertinoColors.systemBackground;
+      _colorTap = null;
     });
   }
 
@@ -353,12 +354,12 @@ class _GalleryItemWidgetState extends State<GalleryItemWidget> {
 ///
 ///
 class TagItem extends StatelessWidget {
-  final text;
-
   const TagItem({
     Key key,
     this.text,
   }) : super(key: key);
+
+  final String text;
 
   @override
   Widget build(BuildContext context) {
@@ -367,17 +368,17 @@ class TagItem extends StatelessWidget {
       child: Container(
         // height: 18,
         padding: const EdgeInsets.fromLTRB(4, 2, 4, 2),
-        color: Color(0xffeeeeee),
+        color: const Color(0xffeeeeee),
         child: Text(
-          text ?? "",
+          text ?? '',
           textAlign: TextAlign.center,
-          style: TextStyle(
+          style: const TextStyle(
             fontSize: 12,
             height: 1,
             fontWeight: FontWeight.w400,
             color: Color(0xff444444),
           ),
-          strutStyle: StrutStyle(height: 1),
+          strutStyle: const StrutStyle(height: 1),
         ),
       ),
     );
@@ -416,17 +417,17 @@ class TagBox extends StatelessWidget {
 
 /// 封面图片Widget
 class CoverImg extends StatelessWidget {
-  final String imgUrl;
-
   const CoverImg({
     Key key,
     @required this.imgUrl,
   }) : super(key: key);
 
+  final String imgUrl;
+
   @override
   Widget build(BuildContext context) {
-    var _httpHeaders = {
-      "Cookie": Global.profile?.user?.cookie ?? '',
+    final Map<String, String> _httpHeaders = {
+      'Cookie': Global.profile?.user?.cookie ?? '',
     };
     return Selector<EhConfigModel, bool>(
         selector: (context, provider) => provider.isGalleryImgBlur,

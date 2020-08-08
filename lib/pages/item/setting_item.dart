@@ -22,17 +22,17 @@ class SettingItems extends StatefulWidget {
 class _SettingItems extends State<SettingItems> {
   Color _color;
 
-  @override
-  void initState() {
-    super.initState();
-    _color = CupertinoColors.systemBackground;
-  }
+//  @override
+//  void initState() {
+//    super.initState();
+//    _color = CupertinoColors.systemBackground;
+//  }
 
   @override
   Widget build(BuildContext context) {
     // return Text(text);
 
-    Widget container = Container(
+    final Widget container = Container(
         color: _color,
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
@@ -56,8 +56,8 @@ class _SettingItems extends State<SettingItems> {
                     padding: const EdgeInsets.only(left: 16),
                     child: Text(widget.text),
                   ),
-                  Spacer(),
-                  Icon(
+                  const Spacer(),
+                  const Icon(
                     CupertinoIcons.forward,
                     color: CupertinoColors.systemGrey,
                   ),
@@ -72,7 +72,7 @@ class _SettingItems extends State<SettingItems> {
       // 不可见区域有效
       behavior: HitTestBehavior.opaque,
       onTap: () {
-        Global.loggerNoStack.v("set tap ${widget.text} ");
+        Global.loggerNoStack.v('set tap ${widget.text} ');
         NavigatorUtil.jump(context, widget.route, rootNavigator: true);
       },
       onTapDown: (_) => _updatePressedColor(),
@@ -87,19 +87,19 @@ class _SettingItems extends State<SettingItems> {
 
   void _updateNormalColor() {
     setState(() {
-      _color = CupertinoColors.systemBackground;
+      _color = null;
     });
   }
 
   void _updatePressedColor() {
     setState(() {
-      _color = CupertinoColors.systemGrey4;
+      _color = CupertinoColors.systemGrey2;
     });
   }
 
   /// 设置项分隔线
   Widget _settingItemDivider() {
-    return Divider(
+    return const Divider(
       height: 0.5,
       indent: 45.0,
       color: CupertinoColors.systemGrey4,
