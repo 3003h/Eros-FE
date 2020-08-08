@@ -7,12 +7,13 @@ import 'package:FEhViewer/route/application.dart';
 import 'package:FEhViewer/route/routes.dart';
 import 'package:FEhViewer/utils/storage.dart';
 import 'package:FEhViewer/values/storages.dart';
-import 'package:fluro/fluro.dart';
+import 'package:fluro/fluro.dart' as fluro;
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:logger/logger.dart';
 
 // 全局配置
+// ignore: avoid_classes_with_only_static_members
 class Global {
   // 是否第一次打开
   static bool isFirstOpen = false;
@@ -39,7 +40,7 @@ class Global {
     WidgetsFlutterBinding.ensureInitialized();
 
     //statusBar设置为透明，去除半透明遮罩
-    final SystemUiOverlayStyle _style =
+    const SystemUiOverlayStyle _style =
         SystemUiOverlayStyle(statusBarColor: Colors.transparent);
     SystemChrome.setSystemUIOverlayStyle(_style);
 
@@ -52,7 +53,7 @@ class Global {
       debugPrint('更新翻译异常 $e');
     }
 
-    var _profile = StorageUtil().getJSON(PROFILE);
+    final _profile = StorageUtil().getJSON(PROFILE);
     if (_profile != null) {
       try {
         profile = Profile.fromJson(jsonDecode(_profile));
@@ -73,7 +74,7 @@ class Global {
     }
 
     // 路由
-    Router router = Router();
+    fluro.Router router = fluro.Router();
     EHRoutes.configureRoutes(router);
     Application.router = router;
 

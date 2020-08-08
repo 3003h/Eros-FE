@@ -35,13 +35,13 @@ class ThemeColors {
   static const CupertinoDynamicColor navigationBarBackground =
       CupertinoDynamicColor(
     debugLabel: 'navigationBarBackground',
-    color: Color(0xc0f9f9f9),
-    darkColor: Color(0xc01b1b1b),
-    highContrastColor: Color(0xc0f9f9f9),
-    darkHighContrastColor: Color(0xc01b1b1b),
-    elevatedColor: Color(0xc0f9f9f9),
-    darkElevatedColor: Color(0xc01b1b1b),
-    highContrastElevatedColor: Color(0xc0f9f9f9),
-    darkHighContrastElevatedColor: Color(0xc01b1b1b),
+    color: Color(0xd0f9f9f9),
+    darkColor: Color(0xd01b1b1b),
+    highContrastColor: Color(0xd0f9f9f9),
+    darkHighContrastColor: Color(0xd01b1b1b),
+    elevatedColor: Color(0xd0f9f9f9),
+    darkElevatedColor: Color(0xd01b1b1b),
+    highContrastElevatedColor: Color(0xd0f9f9f9),
+    darkHighContrastElevatedColor: Color(0xd01b1b1b),
   );
 }

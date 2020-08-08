@@ -26,5 +26,7 @@
   "READ": "READ",
   "gallery_comments": "Gallery Comments",
   "all_comment": "All Comment",
-  "all_preview": "All Preview"
+  "all_preview": "All Preview",
+  "morePreviews": "More previews",
+  "noMorePreviews": "No more previews"
 }

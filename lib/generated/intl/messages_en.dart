@@ -31,6 +31,8 @@ class MessageLookup extends MessageLookupByLibrary {
     "gallery_comments" : MessageLookupByLibrary.simpleMessage("Gallery Comments"),
     "login" : MessageLookupByLibrary.simpleMessage("Sign"),
     "login_web" : MessageLookupByLibrary.simpleMessage("Sign in on the web"),
+    "morePreviews" : MessageLookupByLibrary.simpleMessage("More previews"),
+    "noMorePreviews" : MessageLookupByLibrary.simpleMessage("No more previews"),
     "notFav" : MessageLookupByLibrary.simpleMessage("Not Favorited"),
     "not_login" : MessageLookupByLibrary.simpleMessage("Not Login"),
     "passwd" : MessageLookupByLibrary.simpleMessage("Password"),

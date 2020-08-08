@@ -28,7 +28,7 @@ class GalleryItemWidget extends StatefulWidget {
 }
 
 class _GalleryItemWidgetState extends State<GalleryItemWidget> {
-  final double _padL = 8.0;
+  final double _paddingLeft = 8.0;
 
   Color _colorTap; // 按下时颜色反馈
   String _title; // 英语或者日语
@@ -57,12 +57,12 @@ class _GalleryItemWidgetState extends State<GalleryItemWidget> {
 
   @override
   Widget build(BuildContext context) {
-    var galleryModel = Provider.of<GalleryModel>(context);
+    final GalleryModel galleryModel = Provider.of<GalleryModel>(context);
 
-    Widget containerGallery = Container(
+    final Widget containerGallery = Container(
       color: _colorTap,
       // height: 200,
-      margin: EdgeInsets.fromLTRB(_padL, 8, 8, 8),
+      padding: EdgeInsets.fromLTRB(_paddingLeft, 8, 8, 8),
       child: Column(
         children: <Widget>[
           Row(children: <Widget>[
@@ -129,7 +129,7 @@ class _GalleryItemWidgetState extends State<GalleryItemWidget> {
           containerGallery,
           Divider(
             height: 0.5,
-            indent: _padL,
+            indent: _paddingLeft,
             color: CupertinoColors.systemGrey4,
           ),
         ],

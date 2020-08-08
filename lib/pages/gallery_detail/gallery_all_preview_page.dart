@@ -28,9 +28,10 @@ class _AllPreviewPageState extends State<AllPreviewPage> {
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-    final galleryModel = Provider.of<GalleryModel>(context, listen: false);
-    if (galleryModel != this._galleryModel) {
-      this._galleryModel = galleryModel;
+    final GalleryModel galleryModel =
+        Provider.of<GalleryModel>(context, listen: false);
+    if (galleryModel != _galleryModel) {
+      _galleryModel = galleryModel;
 
       _galleryPreviewList = _galleryModel.galleryItem.galleryPreview;
       _galleryModel.currentPreviewPage = 0;
@@ -39,8 +40,8 @@ class _AllPreviewPageState extends State<AllPreviewPage> {
 
   @override
   Widget build(BuildContext context) {
-    var ln = S.of(context);
-    var _count = int.parse(_galleryModel.galleryItem.filecount);
+    final S ln = S.of(context);
+    final int _count = int.parse(_galleryModel.galleryItem.filecount);
     return CupertinoPageScaffold(
       navigationBar: CupertinoNavigationBar(
         backgroundColor: ThemeColors.navigationBarBackground,
@@ -58,12 +59,13 @@ class _AllPreviewPageState extends State<AllPreviewPage> {
                   builder: (context, GalleryItem galleryItem, child) {
 //                    Global.logger.v('build SliverGrid');
                     return SliverGrid(
-                      gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
-                          maxCrossAxisExtent: 135.0,
-                          mainAxisSpacing: 0, //主轴方向的间距
-                          crossAxisSpacing: 4, //交叉轴方向子元素的间距
-                          childAspectRatio: 0.55 //显示区域宽高
-                          ),
+                      gridDelegate:
+                          const SliverGridDelegateWithMaxCrossAxisExtent(
+                              maxCrossAxisExtent: 135.0,
+                              mainAxisSpacing: 0, //主轴方向的间距
+                              crossAxisSpacing: 4, //交叉轴方向子元素的间距
+                              childAspectRatio: 0.55 //显示区域宽高
+                              ),
                       delegate: SliverChildBuilderDelegate(
                         (context, index) {
                           //如果显示到最后一个 获取下一页缩略图
@@ -88,20 +90,25 @@ class _AllPreviewPageState extends State<AllPreviewPage> {
           ),
           SliverToBoxAdapter(
             child: Container(
-              padding: const EdgeInsets.only(bottom: 50, top: 50),
+              padding: const EdgeInsets.only(bottom: 50, top: 10),
               child: Column(
                 children: <Widget>[
-                  _isLoading
-                      ? CupertinoActivityIndicator(
-                          radius: 14,
-                        )
-                      : Container(),
-                  _isLoadFinsh
-                      ? Container(
-                          padding: const EdgeInsets.only(top: 0),
-                          child: Text('no more pic'),
-                        )
-                      : Container(),
+                  if (_isLoading)
+                    const CupertinoActivityIndicator(
+                      radius: 14,
+                    )
+                  else
+                    Container(),
+                  if (_isLoadFinsh)
+                    Container(
+                      padding: const EdgeInsets.only(top: 0),
+                      child: Text(
+                        ln.noMorePreviews,
+                        style: const TextStyle(fontSize: 14),
+                      ),
+                    )
+                  else
+                    Container(),
                 ],
               ),
             ),
