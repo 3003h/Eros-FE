@@ -11,27 +11,31 @@ class CommentPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    var ln = S.of(context);
+    final S ln = S.of(context);
+
+    final Widget commSliverList = CustomScrollView(
+      slivers: <Widget>[
+        SliverSafeArea(
+          sliver: SliverList(
+            delegate: SliverChildBuilderDelegate(
+              (contex, index) {
+                return CommentItem(
+                  galleryComment: galleryComments[index],
+                );
+              },
+              childCount: galleryComments.length,
+            ),
+          ),
+        )
+      ],
+    );
+
     return CupertinoPageScaffold(
       navigationBar: CupertinoNavigationBar(
         backgroundColor: ThemeColors.navigationBarBackground,
         middle: Text(ln.gallery_comments),
       ),
-      child: SafeArea(
-        bottom: false,
-        child: Container(
-//        padding: const EdgeInsets.only(left: 10, right: 10),
-          child: ListView.builder(itemBuilder: (context, index) {
-            if (index < galleryComments.length) {
-              return CommentItem(
-                galleryComment: galleryComments[index],
-              );
-            } else {
-              return null;
-            }
-          }),
-        ),
-      ),
+      child: commSliverList,
     );
   }
 }

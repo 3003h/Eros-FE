@@ -1,9 +1,16 @@
+import 'package:FEhViewer/common/global.dart';
 import 'package:FEhViewer/models/index.dart';
 import 'package:flutter/material.dart';
 
 import 'base.dart';
 
 class GalleryModel extends ProfileChangeNotifier {
+  GalleryModel();
+
+  GalleryModel.initUrl({@required String url}) {
+    _galleryItem = GalleryItem()..url = url;
+  }
+
   GalleryItem _galleryItem;
   List<GalleryPreview> _oriGalleryPreview;
   dynamic _tabindex;

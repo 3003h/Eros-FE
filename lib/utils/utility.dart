@@ -10,6 +10,7 @@ import 'package:FEhViewer/utils/toast.dart';
 import 'package:FEhViewer/values/const.dart';
 import 'package:cookie_jar/cookie_jar.dart';
 import 'package:dio/dio.dart';
+import 'package:html_unescape/html_unescape.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:tuple/tuple.dart';
 
@@ -277,5 +278,95 @@ class Api {
 //    Global.logger.v('$imageUrl');
 
     return imageUrl;
+  }
+
+  /// 通过api请求获取更多信息
+  /// 例如
+  /// 画廊评分
+  /// 日语标题
+  /// 等等
+  static Future<List<GalleryItem>> getMoreGalleryInfo(
+      List<GalleryItem> galleryItems) async {
+    // Global.logger.i('api qry items ${galleryItems.length}');
+    if (galleryItems.isEmpty) {
+      return galleryItems;
+    }
+
+    // 通过api获取画廊详细信息
+    List _gidlist = [];
+
+    galleryItems.forEach((GalleryItem galleryItem) {
+      _gidlist.add([galleryItem.gid, galleryItem.token]);
+    });
+
+    // 25个一组分割
+    List _group = EHUtils.splitList(_gidlist, 25);
+
+    List rultList = [];
+
+    // 查询 合并结果
+    for (int i = 0; i < _group.length; i++) {
+      Map reqMap = {'gidlist': _group[i], 'method': 'gdata'};
+      String reqJsonStr = jsonEncode(reqMap);
+      final rult = await getGalleryApi(reqJsonStr);
+
+      final jsonObj = jsonDecode(rult.toString());
+      final tempList = jsonObj['gmetadata'];
+      rultList.addAll(tempList);
+    }
+
+    final unescape = HtmlUnescape();
+
+    for (int i = 0; i < galleryItems.length; i++) {
+      galleryItems[i].englishTitle = unescape.convert(rultList[i]['title']);
+      galleryItems[i].japaneseTitle =
+          unescape.convert(rultList[i]['title_jpn']);
+
+      final rating = rultList[i]['rating'];
+      galleryItems[i].rating = rating != null
+          ? double.parse(rating)
+          : galleryItems[i].ratingFallBack;
+
+      final String thumb = rultList[i]['thumb'];
+      final imageUrl = thumb.endsWith('-jpg_l.jpg')
+          ? thumb.replaceFirst('-jpg_l.jpg', '-jpg_250.jpg')
+          : thumb;
+
+      galleryItems[i].imgUrl = imageUrl;
+      galleryItems[i].filecount = rultList[i]['filecount'];
+      galleryItems[i].uploader = rultList[i]['uploader'];
+      galleryItems[i].category = rultList[i]['category'];
+    }
+
+    return galleryItems;
+  }
+
+  static Future<void> getMoreGalleryInfoOne(GalleryItem galleryItem) async {
+    final RegExp urlRex = RegExp(r'/g/(\d+)/(\w+)/$');
+    final RegExpMatch urlRult = urlRex.firstMatch(galleryItem.url);
+
+    final String gid = urlRult.group(1);
+    final String token = urlRult.group(2);
+
+    galleryItem.gid = gid;
+    galleryItem.token = token;
+
+    List<GalleryItem> reqGalleryItems = [galleryItem];
+    try {
+      await getMoreGalleryInfo(reqGalleryItems);
+    } catch (e) {
+      showToast('解析异常');
+    }
+  }
+
+  /// 获取api
+  static Future getGalleryApi(String req) async {
+    final HttpManager httpManager =
+        HttpManager.getInstance(EHConst.EH_BASE_URL);
+    const String url = '/api.php';
+
+    final Response response = await httpManager.postForm(url, data: req);
+
+    return response;
   }
 }

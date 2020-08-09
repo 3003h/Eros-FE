@@ -29,7 +29,7 @@ class CommentItem extends StatelessWidget {
 
     final linkify.SelectableLinkify _fullTextLinkify =
         linkify.SelectableLinkify(
-      onOpen: _onOpen,
+      onOpen: (link) => _onOpen(context, link),
       text: galleryComment.context,
 //      softWrap: true,
       textAlign: TextAlign.left, // 对齐方式
@@ -54,7 +54,7 @@ class CommentItem extends StatelessWidget {
 
     final Linkify _simpleTextLinkify = Linkify(
       text: galleryComment.context,
-      onOpen: _onOpen,
+      onOpen: (link) => _onOpen(context, link),
       options: LinkifyOptions(humanize: false),
       maxLines: kMaxline,
       softWrap: true,
@@ -134,10 +134,20 @@ class CommentItem extends StatelessWidget {
     );
   }
 
-  Future<void> _onOpen(LinkableElement link) async {
+  Future<void> _onOpen(BuildContext context, LinkableElement link) async {
     Global.logger.v('${link.url}');
+    final RegExp regExp =
+        RegExp(r'https?://e[-x]hentai.org/g/[0-9]+/[0-9a-z]+');
     if (await canLaunch(link.url)) {
-      await launch(link.url);
+      if (regExp.hasMatch(link.url)) {
+        Global.logger.v('in ${link.url}');
+        NavigatorUtil.goGalleryDetailPr(
+          context,
+          url: link.url,
+        );
+      } else {
+        await launch(link.url);
+      }
     } else {
       throw 'Could not launch $link';
     }

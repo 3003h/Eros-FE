@@ -135,21 +135,33 @@ class NavigatorUtil {
   /// 转到画廊页面
   /// [GalleryModel] 复用画廊状态Provider
   /// fluro的方式不知道怎么处理 使用默认路由方式
-  static void goGalleryDetailPr(
-    BuildContext context,
-  ) {
-    var galleryModel = Provider.of<GalleryModel>(context, listen: false);
-    Navigator.of(context, rootNavigator: true).push(
-      CupertinoPageRoute(
-//        fullscreenDialog: true,
-        builder: (context) {
-          return ChangeNotifierProvider.value(
-            value: galleryModel,
-            child: GalleryDetailPage(),
-          );
-        },
-      ),
-    );
+  static void goGalleryDetailPr(BuildContext context, {String url}) {
+    if (url != null && url.isNotEmpty) {
+      final GalleryModel galleryModel = GalleryModel.initUrl(url: url);
+      Navigator.of(context).push(
+        CupertinoPageRoute(
+          builder: (context) {
+            return ChangeNotifierProvider.value(
+              value: galleryModel,
+              child: GalleryDetailPage(),
+            );
+          },
+        ),
+      );
+    } else {
+      final GalleryModel galleryModel =
+          Provider.of<GalleryModel>(context, listen: false);
+      Navigator.of(context, rootNavigator: true).push(
+        CupertinoPageRoute(
+          builder: (context) {
+            return ChangeNotifierProvider.value(
+              value: galleryModel,
+              child: GalleryDetailPage(),
+            );
+          },
+        ),
+      );
+    }
   }
 
   /// 转到画廊页面

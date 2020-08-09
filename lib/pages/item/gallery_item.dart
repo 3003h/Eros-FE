@@ -138,9 +138,7 @@ class _GalleryItemWidgetState extends State<GalleryItemWidget> {
       behavior: HitTestBehavior.opaque,
       onTap: () {
         Global.logger.v(_title);
-        NavigatorUtil.goGalleryDetailPr(
-          context,
-        );
+        NavigatorUtil.goGalleryDetailPr(context);
       },
       onLongPress: () {
         Global.logger.v('onLongPress title: $_title ');
