@@ -17,10 +17,7 @@ class WebLogin extends StatelessWidget {
 
     final Set<JavascriptChannel> jsChannels = [
       JavascriptChannel(
-          name: 'Print',
-          onMessageReceived: (JavascriptMessage message) {
-            print(message.message);
-          }),
+          name: 'Print', onMessageReceived: (JavascriptMessage message) {}),
     ].toSet();
 
     flutterWebviewPlugin.onUrlChanged.listen((String url) {

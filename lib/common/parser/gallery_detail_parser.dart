@@ -15,6 +15,17 @@ class GalleryDetailParser {
 
     final GalleryItem galleryItem = inGalleryItem ?? GalleryItem();
 
+    // 封面图片
+    final Element imageElem = document.querySelector('#gd1 > div');
+    final String _imageElemStyle = imageElem.attributes['style'];
+    final RegExpMatch _match =
+    RegExp(r'url(.+)').firstMatch(_imageElemStyle);
+    final String _imageUrl = _match.group(1);
+    if (galleryItem.imgUrl?.isEmpty ?? true) {
+      galleryItem.imgUrl = _imageUrl;
+    }
+
+
     // 完整的标签信息
     galleryItem.tagGroup = [];
     const String tagGroupSelect = '#taglist > table > tbody > tr';
@@ -62,8 +73,10 @@ class GalleryDetailParser {
       final Element timeElem = comment.querySelector('div.c2 > div.c3');
       final String postTime = timeElem.text.trim();
       // 示例: Posted on 29 June 2020, 05:41 UTC by:  
-      final String postTimeUTC = RegExp(r'Posted on (.+, .+) UTC by').firstMatch(
-          postTime).group(1);
+      final String postTimeUTC = RegExp(r'Posted on (.+, .+) UTC by')
+          .firstMatch(
+          postTime)
+          .group(1);
 
       // 时间由utc转为本地时间
       final DateTime time = DateFormat('dd MMMM yyyy, HH:mm', 'en_US').parseUtc(
@@ -165,10 +178,15 @@ class GalleryDetailParser {
         final String style = pic
             .querySelector('div')
             .attributes['style'];
-        final String picSrcUrl = RegExp(r'url\((.+)\)').firstMatch(style).group(1);
-        final String height = RegExp(r'height:(\d+)?px').firstMatch(style).group(1);
-        final String width = RegExp(r'width:(\d+)?px').firstMatch(style).group(1);
-        final String offSet = RegExp(r'\) -(\d+)?px ').firstMatch(style).group(1);
+        final String picSrcUrl = RegExp(r'url\((.+)\)').firstMatch(style).group(
+            1);
+        final String height = RegExp(r'height:(\d+)?px')
+            .firstMatch(style)
+            .group(1);
+        final String width = RegExp(r'width:(\d+)?px').firstMatch(style).group(
+            1);
+        final String offSet = RegExp(r'\) -(\d+)?px ').firstMatch(style).group(
+            1);
 
         final Element imgElem = pic.querySelector('img');
         final String picSer = imgElem.attributes['alt'].trim();
@@ -184,7 +202,8 @@ class GalleryDetailParser {
         );
       }
     } else {
-      final List<Element> picLsit = document.querySelectorAll('#gdt > div.gdtl');
+      final List<Element> picLsit = document.querySelectorAll(
+          '#gdt > div.gdtl');
       // 大图的处理
       for (final Element pic in picLsit) {
         final String picHref = pic

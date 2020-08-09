@@ -540,13 +540,16 @@ class CoverImage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Selector<GalleryModel, Tuple2<String, dynamic>>(
+    return Selector<GalleryModel, Tuple3<String, GalleryItem, dynamic>>(
         shouldRebuild: (pre, next) => pre.item1 != next.item1,
-        selector: (_, GalleryModel galleryModel) =>
-            Tuple2(galleryModel.galleryItem.imgUrl, galleryModel.tabIndex),
+        selector: (_, GalleryModel galleryModel) => Tuple3(
+            galleryModel.galleryItem.imgUrl,
+            galleryModel.galleryItem,
+            galleryModel.tabIndex),
         builder: (_, tuple, __) {
           final _imageUrl = tuple.item1;
-          final _tabIndex = tuple.item2;
+          final _tabIndex = tuple.item3;
+          final GalleryItem _item = tuple.item2;
 
           if (_imageUrl != null && _imageUrl.isNotEmpty) {
             return Container(
@@ -554,7 +557,7 @@ class CoverImage extends StatelessWidget {
               margin: const EdgeInsets.only(right: 10),
               child: Center(
                 child: Hero(
-                  tag: '${_imageUrl}_cover_$_tabIndex',
+                  tag: '${_item.gid}_${_item.token}_cover_$_tabIndex',
                   child: Container(
                     decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(6.0), //圆角
@@ -569,6 +572,7 @@ class CoverImage extends StatelessWidget {
                     child: ClipRRect(
                       borderRadius: BorderRadius.circular(6),
                       child: Container(
+                        color: CupertinoColors.systemBackground,
                         child: CachedNetworkImage(
                           imageUrl: _imageUrl,
                           fit: BoxFit.cover,

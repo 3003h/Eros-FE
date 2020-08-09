@@ -25,8 +25,6 @@ class GalleryDetailPage extends StatelessWidget {
     final GalleryModel _galleryModel =
         Provider.of<GalleryModel>(context, listen: false);
 
-    Global.logger.v('${_galleryModel.galleryItem.url}');
-
     final GalleryItem _item = _galleryModel.galleryItem;
 
     _galleryModel.resetHideNavigationBtn();
@@ -73,8 +71,6 @@ class GalleryDetailPage extends StatelessWidget {
     final GalleryModel _galleryModel =
         Provider.of<GalleryModel>(context, listen: false);
     _galleryModel.resetHideNavigationBtn();
-    print(_galleryModel.galleryItem.url);
-    Global.logger.v(_galleryModel.galleryItem.url);
   }
 
   @override

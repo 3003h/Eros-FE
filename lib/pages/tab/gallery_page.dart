@@ -4,6 +4,7 @@ import 'package:FEhViewer/common/global.dart';
 import 'package:FEhViewer/generated/l10n.dart';
 import 'package:FEhViewer/models/index.dart';
 import 'package:FEhViewer/models/states/gallery_model.dart';
+import 'package:FEhViewer/route/navigator_util.dart';
 import 'package:FEhViewer/utils/toast.dart';
 import 'package:FEhViewer/utils/utility.dart';
 import 'package:FEhViewer/values/theme_colors.dart';
@@ -132,29 +133,6 @@ class _GalleryListTabState extends State<GalleryListTab> {
     });
   }
 
-  /*SliverList gallerySliverListView(List<GalleryItem> gallerItemBeans) {
-    return SliverList(
-      delegate: SliverChildBuilderDelegate(
-        (BuildContext context, int index) {
-          if (index == gallerItemBeans.length - 1 && _curPage < _maxPage - 1) {
-//            Global.logger.v('load more');
-            _loadDataMore();
-          }
-
-          return ChangeNotifierProvider<GalleryModel>.value(
-            value: GalleryModel()
-              ..initData(gallerItemBeans[index], tabIndex: widget.tabIndex),
-            child: GalleryItemWidget(
-              galleryItem: gallerItemBeans[index],
-              tabIndex: widget.tabIndex,
-            ),
-          );
-        },
-        childCount: gallerItemBeans.length,
-      ),
-    );
-  }*/
-
   /// 跳转页码
   Future<void> _jumtToPage(BuildContext context) async {
     _jump(BuildContext context) {
@@ -235,8 +213,7 @@ class _GalleryListTabState extends State<GalleryListTab> {
       slivers: <Widget>[
         CupertinoSliverNavigationBar(
           backgroundColor: ThemeColors.navigationBarBackground,
-          heroTag: 'gallery',
-//          border: null, // 边线
+//          heroTag: 'gallery',
           largeTitle: Text(_title),
           trailing: Container(
             width: 100,
@@ -250,7 +227,7 @@ class _GalleryListTabState extends State<GalleryListTab> {
                     size: 20,
                   ),
                   onPressed: () {
-                    _jumtToPage(context);
+                    NavigatorUtil.showSearch(context);
                   },
                 ),
                 CupertinoButton(

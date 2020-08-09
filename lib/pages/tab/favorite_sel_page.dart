@@ -141,7 +141,6 @@ class _FavSelItemWidgetState extends State<FavSelItemWidget> {
       // 不可见区域点击有效
       behavior: HitTestBehavior.opaque,
       onTap: () {
-        debugPrint("fav tap ${widget.index}");
         // 返回 并带上参数
         NavigatorUtil.goBackWithParams(context, widget.favcatItemBean);
       },

@@ -328,11 +328,13 @@ class Api {
           : galleryItems[i].ratingFallBack;
 
       final String thumb = rultList[i]['thumb'];
-      final imageUrl = thumb.endsWith('-jpg_l.jpg')
+      galleryItems[i].imgUrlL = thumb;
+      /*final String imageUrl = thumb.endsWith('-jpg_l.jpg')
           ? thumb.replaceFirst('-jpg_l.jpg', '-jpg_250.jpg')
           : thumb;
 
-      galleryItems[i].imgUrl = imageUrl;
+      galleryItems[i].imgUrl = imageUrl;*/
+
       galleryItems[i].filecount = rultList[i]['filecount'];
       galleryItems[i].uploader = rultList[i]['uploader'];
       galleryItems[i].category = rultList[i]['category'];
