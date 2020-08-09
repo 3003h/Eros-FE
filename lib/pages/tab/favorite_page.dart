@@ -102,7 +102,7 @@ class _FavoriteTabState extends State<FavoriteTab> {
                     slivers: <Widget>[
                       CupertinoSliverNavigationBar(
                         backgroundColor: ThemeColors.navigationBarBackground,
-                        heroTag: 'fav',
+//                        heroTag: 'fav',
                         largeTitle: TabPageTitle(
                           title: _title,
                         ),
@@ -332,7 +332,6 @@ class _FavoriteTabState extends State<FavoriteTab> {
         FontAwesomeIcons.star,
       ),
       onPressed: () {
-        debugPrint('sel icon tapped');
         // 跳转收藏夹选择页
         NavigatorUtil.jump(context, EHRoutes.selFavorie).then((result) async {
           if (result.runtimeType == FavcatItemBean) {

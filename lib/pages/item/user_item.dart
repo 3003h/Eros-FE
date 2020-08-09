@@ -54,7 +54,6 @@ class _UserItem extends State<UserItem> {
   Widget build(BuildContext context) {
     void _tapItem() {
       if (Global.profile.user?.username != null) {
-        debugPrint(Global.profile.user.username);
         _logOut(context);
       } else {
         NavigatorUtil.jump(context, EHRoutes.login, rootNavigator: true);

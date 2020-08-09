@@ -37,6 +37,7 @@ class GalleryItemFlow extends StatelessWidget {
             galleryModel.galleryItem, galleryModel.tabIndex),
         builder: (BuildContext context, Tuple2<GalleryItem, int> tuple, _) {
           final GalleryItem galleryItem = tuple.item1;
+          final _tabIndex = tuple.item2;
 
           final Widget container = Container(
 //            color: CupertinoColors.systemGrey2,
@@ -44,7 +45,8 @@ class GalleryItemFlow extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
                 Hero(
-                  tag: '${galleryItem.url}_cover_${tuple.item2}',
+                  tag:
+                      '${galleryItem.gid}_${galleryItem.token}_cover_$_tabIndex',
                   child: Container(
                     decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(6.0), //圆角

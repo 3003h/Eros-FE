@@ -89,7 +89,7 @@ class _PopularListTabState extends State<PopularListTab> {
         CupertinoSliverNavigationBar(
 //          brightness: Brightness.dark,
           backgroundColor: ThemeColors.navigationBarBackground,
-          heroTag: 'pop',
+//          heroTag: 'pop',
           largeTitle: TabPageTitle(
             title: _title,
             isLoading: false,

@@ -6,6 +6,7 @@ import 'package:FEhViewer/models/galleryItem.dart';
 import 'package:FEhViewer/models/states/gallery_model.dart';
 import 'package:FEhViewer/pages/gallery_detail/gallery_detail_page.dart';
 import 'package:FEhViewer/pages/gallery_view/gallery_view_page.dart';
+import 'package:FEhViewer/pages/tab/search_page.dart';
 import 'package:fluro/fluro.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -65,9 +66,9 @@ class NavigatorUtil {
   static Future gotransitionCustomDemoPage(BuildContext context, String title) {
     var transition = (BuildContext context, Animation<double> animation,
         Animation<double> secondaryAnimation, Widget child) {
-      return new ScaleTransition(
+      return ScaleTransition(
         scale: animation,
-        child: new RotationTransition(
+        child: RotationTransition(
           turns: animation,
           child: child,
         ),
@@ -119,7 +120,7 @@ class NavigatorUtil {
     final encodeUrl = Uri.encodeComponent(url);
     final encodeTitle = Uri.encodeComponent(title);
     return Application.router.navigateTo(
-        context, EHRoutes.webLogin + "?title=$encodeTitle&url=$encodeUrl",
+        context, EHRoutes.webLogin + '?title=$encodeTitle&url=$encodeUrl',
         transition: TransitionType.cupertino);
   }
 
@@ -128,7 +129,7 @@ class NavigatorUtil {
       {int cats = 0, String simpleSearch}) {
     var _simpleSearchEncode = Uri.encodeComponent(simpleSearch ?? '');
     return Application.router.navigateTo(context,
-        EHRoutes.galleryList + "?cats=$cats&s_search=$_simpleSearchEncode",
+        EHRoutes.galleryList + '?cats=$cats&s_search=$_simpleSearchEncode',
         transition: TransitionType.cupertino);
   }
 
@@ -164,6 +165,17 @@ class NavigatorUtil {
     }
   }
 
+  static void showSearch(BuildContext context) {
+    Navigator.of(context).push(
+      CupertinoPageRoute(
+//        fullscreenDialog: true,
+        builder: (context) {
+          return GallerySearchPage();
+        },
+      ),
+    );
+  }
+
   /// 转到画廊页面
   static void goGalleryDetail(
     BuildContext context,
@@ -181,7 +193,7 @@ class NavigatorUtil {
     Application.router.navigateTo(
         context,
         EHRoutes.galleryDetail +
-            "?title=$encodeTitle&galleryItem=$encodeGalleryItem&fromTabIndex=$fromTabIndex",
+            '?title=$encodeTitle&galleryItem=$encodeGalleryItem&fromTabIndex=$fromTabIndex',
         transition: TransitionType.cupertino);
   }
 
@@ -195,7 +207,7 @@ class NavigatorUtil {
     final queryString = encodeComments.map((e) => 'comment=$e').join('&');
 
     Application.router.navigateTo(
-        context, EHRoutes.galleryDetailComment + "?$queryString",
+        context, EHRoutes.galleryDetailComment + '?$queryString',
         transition: TransitionType.cupertino);
   }
 

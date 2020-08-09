@@ -190,8 +190,7 @@ class _GalleryItemWidgetState extends State<GalleryItemWidget> {
   Widget _buildCoverImage() {
     return Consumer<GalleryModel>(builder: (context, galleryModel, child) {
       final GalleryItem _item = galleryModel.galleryItem;
-//      Global.logger.v(
-//          '${_item.englishTitle} => height:${_item.imgHeight} width:${_item.imgWidth} ');
+
       num _getHeigth() {
         if (_item.imgWidth >= kCoverImageWidth) {
           return _item.imgHeight * kCoverImageWidth / _item.imgWidth;
@@ -201,7 +200,7 @@ class _GalleryItemWidgetState extends State<GalleryItemWidget> {
       }
 
       return Hero(
-        tag: '${galleryModel.galleryItem.url}_cover_${galleryModel.tabIndex}',
+        tag: '${_item.gid}_${_item.token}_cover_${galleryModel.tabIndex}',
         child: Container(
           decoration:
               BoxDecoration(borderRadius: BorderRadius.circular(6.0), //圆角
