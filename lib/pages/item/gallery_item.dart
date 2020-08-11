@@ -12,13 +12,14 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:provider/provider.dart';
 
-const kCoverImageWidth = 120.0;
+const double kCoverImageWidth = 120.0;
 
 /// 画廊列表项
 /// 使用provider进行管理
 /// 标题和tag需要随设置变化重构ui
 class GalleryItemWidget extends StatefulWidget {
-  GalleryItemWidget({@required this.galleryItem, @required this.tabIndex});
+  const GalleryItemWidget(
+      {@required this.galleryItem, @required this.tabIndex});
 
   final GalleryItem galleryItem;
   final tabIndex;
@@ -300,8 +301,8 @@ class _GalleryItemWidgetState extends State<GalleryItemWidget> {
   Widget _buildPostTime() {
     return Consumer<GalleryModel>(builder: (context, galleryModel, child) {
       return Text(
-        galleryModel?.galleryItem?.postTime ?? "",
-        style: TextStyle(fontSize: 12, color: CupertinoColors.systemGrey),
+        galleryModel?.galleryItem?.postTime ?? '',
+        style: const TextStyle(fontSize: 12, color: CupertinoColors.systemGrey),
       );
     });
   }
@@ -319,7 +320,7 @@ class _GalleryItemWidgetState extends State<GalleryItemWidget> {
           padding: const EdgeInsets.fromLTRB(6, 3, 6, 3),
           color: _colorCategory,
           child: Text(
-            galleryModel?.galleryItem?.category ?? "",
+            galleryModel?.galleryItem?.category ?? '',
             style: const TextStyle(
               fontSize: 14,
               height: 1,

@@ -1,4 +1,3 @@
-import 'package:FEhViewer/common/global.dart';
 import 'package:FEhViewer/models/index.dart';
 import 'package:flutter/material.dart';
 
@@ -19,6 +18,7 @@ class GalleryModel extends ProfileChangeNotifier {
   bool _isGetAllImageHref;
   bool _hideNavigationBtn = true;
   bool _detailLoadFinish;
+  bool _isReloading;
 
   void initData(GalleryItem galleryItem, {@required tabIndex}) {
     _galleryItem = galleryItem;
@@ -39,10 +39,20 @@ class GalleryModel extends ProfileChangeNotifier {
 //    notifyListeners();
   }
 
+  void reset() {
+    _galleryItem.galleryComment.clear();
+    _galleryItem.galleryPreview.clear();
+    _galleryItem.tagGroup.clear();
+    _oriGalleryPreview.clear();
+  }
+
   void setFavTitle(String favTitle, {String favcat}) {
     _galleryItem.favTitle = favTitle;
     if (favcat != null) {
       _galleryItem.favcat = favcat;
+    } else {
+      _galleryItem.favcat = '';
+      _galleryItem.favTitle = '';
     }
     notifyListeners();
   }
@@ -91,5 +101,11 @@ class GalleryModel extends ProfileChangeNotifier {
 
   void currentPreviewPageAdd() {
     _currentPreviewPage++;
+  }
+
+  bool get isReloading => _isReloading ?? false;
+  set isReloading(bool value) {
+    _isReloading = value;
+    notifyListeners();
   }
 }

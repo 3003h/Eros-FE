@@ -21,7 +21,7 @@ class MyApp extends StatelessWidget {
     final Widget cupertinoApp = Consumer<LocaleModel>(
         builder: (BuildContext context, LocaleModel localeModel, Widget child) {
       return CupertinoApp(
-//        debugShowCheckedModeBanner: false,
+        debugShowCheckedModeBanner: false,
         onGenerateTitle: (BuildContext context) => S.of(context).app_title,
         onGenerateRoute: Application.router.generator,
         theme: const CupertinoThemeData(
