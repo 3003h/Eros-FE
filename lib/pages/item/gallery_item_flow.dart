@@ -5,11 +5,13 @@ import 'package:FEhViewer/models/galleryItem.dart';
 import 'package:FEhViewer/models/states/gallery_model.dart';
 import 'package:FEhViewer/route/navigator_util.dart';
 import 'package:FEhViewer/values/const.dart';
+import 'package:FEhViewer/values/theme_colors.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:tuple/tuple.dart';
 
+import 'gallery_clipper.dart';
 import 'gallery_item.dart';
 
 class GalleryItemFlow extends StatelessWidget {
@@ -39,8 +41,11 @@ class GalleryItemFlow extends StatelessWidget {
           final GalleryItem galleryItem = tuple.item1;
           final _tabIndex = tuple.item2;
 
+          final Color _colorCategory = ThemeColors
+                  .nameColor[galleryItem?.category ?? 'defaule']['color'] ??
+              CupertinoColors.white;
+
           final Widget container = Container(
-//            color: CupertinoColors.systemGrey2,
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
@@ -60,16 +65,33 @@ class GalleryItemFlow extends StatelessWidget {
                         ]),
                     child: ClipRRect(
                       borderRadius: BorderRadius.circular(6),
-                      child: Container(
-                        height: galleryItem.imgHeight *
-                            _sWidth /
-                            galleryItem.imgWidth,
-                        color: CupertinoColors.systemGroupedBackground,
-                        child: Container(
-                          child: ClipRRect(
-                              borderRadius: BorderRadius.circular(6),
-                              child: CoverImg(imgUrl: galleryItem.imgUrl)),
-                        ),
+                      child: Stack(
+                        alignment: Alignment.topRight,
+                        children: <Widget>[
+                          Container(
+                            height: galleryItem.imgHeight *
+                                _sWidth /
+                                galleryItem.imgWidth,
+                            child: Stack(
+                              fit: StackFit.expand,
+                              children: <Widget>[
+                                Container(
+                                  color:
+                                      CupertinoColors.systemGroupedBackground,
+                                ),
+                                CoverImg(imgUrl: galleryItem.imgUrl),
+                              ],
+                            ),
+                          ),
+                          ClipPath(
+                            clipper: CategoryClipper(width: 26, height: 16),
+                            child: Container(
+                              width: 26,
+                              height: 16,
+                              color: _colorCategory,
+                            ),
+                          )
+                        ],
                       ),
                     ),
                   ),
