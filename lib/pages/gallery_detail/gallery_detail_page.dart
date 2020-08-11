@@ -1,17 +1,19 @@
 import 'package:FEhViewer/common/global.dart';
 import 'package:FEhViewer/generated/l10n.dart';
+import 'package:FEhViewer/models/ehConfig.dart';
 import 'package:FEhViewer/models/galleryItem.dart';
+import 'package:FEhViewer/models/states/ehconfig_model.dart';
 import 'package:FEhViewer/models/states/gallery_model.dart';
 import 'package:FEhViewer/pages/gallery_detail/gallery_detail_widget.dart';
 import 'package:FEhViewer/route/navigator_util.dart';
 import 'package:FEhViewer/utils/utility.dart';
-import 'package:FEhViewer/values/theme_colors.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:provider/provider.dart';
 import 'package:tuple/tuple.dart';
 
-const double kHeaderHeight = 200.0;
+const double kHeaderHeight = 200.0 + 52;
 const double kPadding = 12.0;
 const double kHeaderPaddingTop = 12.0;
 
@@ -38,6 +40,7 @@ class GalleryDetailPage extends StatelessWidget {
           await Api.getGalleryDetail(_item.url);
 
       _galleryModel.currentPreviewPage = 0;
+      _item.imgUrl = _galleryItemFromApi.imgUrl ?? _galleryItemFromApi.imgUrlL;
       _item.tagGroup = _galleryItemFromApi.tagGroup;
       _item.galleryComment = _galleryItemFromApi.galleryComment;
       _galleryModel.setGalleryPreview(_galleryItemFromApi.galleryPreview);
@@ -51,6 +54,18 @@ class GalleryDetailPage extends StatelessWidget {
     } else {
       return _item;
     }
+  }
+
+  Future<void> _reloadData(context) async {
+    Global.logger.v('_reloadData');
+    final GalleryModel _galleryModel =
+        Provider.of<GalleryModel>(context, listen: false);
+
+    _galleryModel.reset();
+    _galleryModel.detailLoadFinish = false;
+    _galleryModel.isReloading = true;
+    await _loadData(context);
+    _galleryModel.isReloading = false;
   }
 
   // 滚动监听
@@ -68,6 +83,8 @@ class GalleryDetailPage extends StatelessWidget {
   }
 
   _initData(BuildContext context) {
+    _controller.addListener(() => _controllerLister(context));
+
     final GalleryModel _galleryModel =
         Provider.of<GalleryModel>(context, listen: false);
     _galleryModel.resetHideNavigationBtn();
@@ -77,58 +94,93 @@ class GalleryDetailPage extends StatelessWidget {
   Widget build(BuildContext context) {
     _initData(context);
 
-    _controller.addListener(() => _controllerLister(context));
-
-    final Widget sliverSa = CustomScrollView(
-      physics: const AlwaysScrollableScrollPhysics(),
-      controller: _controller,
-      slivers: <Widget>[
-        SliverSafeArea(
-          bottom: false,
-          sliver: SliverToBoxAdapter(
-            child: Column(
-              children: <Widget>[
-                _buildGalletyHead(context),
-                Container(
-                  height: 0.5,
-                  color: CupertinoColors.systemGrey4,
-                ),
-                _buildDetail(context),
-              ],
-            ),
-          ),
-        ),
-      ],
-    );
-
     /// 因为 CupertinoNavigationBar的特殊 不能直接用Selector包裹控制build 所以在
     /// CupertinoPageScaffold 外层加了 Selector , hideNavigationBtn变化才会重绘
     /// 内容作为 child 缓存避免重绘
     ///
     /// 增加 oriGalleryPreview 变化时可重绘的控制
-    final Widget cps = Selector<GalleryModel, Tuple2<bool, bool>>(
-      selector: (context, galleryModel) => Tuple2(
+    final Widget cps = Selector2<GalleryModel, EhConfigModel,
+        Tuple4<bool, bool, bool, GalleryItem>>(
+      selector: (context, galleryModel, ehconfigModel) => Tuple4(
           galleryModel.hideNavigationBtn,
-          galleryModel.oriGalleryPreview.isNotEmpty),
+          galleryModel.oriGalleryPreview.isNotEmpty,
+          ehconfigModel.isJpnTitle,
+          galleryModel.galleryItem),
       shouldRebuild: (pre, next) =>
           pre.item1 != next.item1 || pre.item2 != next.item2,
       builder: (context, _tuple, child) {
+        final bool _hideNavigationBtn = _tuple.item1;
+        final bool _isJpnTitle = _tuple.item3;
+        final GalleryItem _item = _tuple.item4;
+
         return CupertinoPageScaffold(
-          navigationBar:
-              _buildNavigationBar(context, hideNavigationBtn: _tuple.item1),
-          child: child,
+          child: CustomScrollView(
+            physics: const AlwaysScrollableScrollPhysics(),
+            controller: _controller,
+            slivers: <Widget>[
+              CupertinoSliverNavigationBar(
+                largeTitle: Text(
+                  _isJpnTitle
+                      ? _item.englishTitle ?? ''
+                      : _item.japaneseTitle ?? '',
+                  textAlign: TextAlign.left,
+                  maxLines: 3,
+                  style: const TextStyle(
+                      fontSize: 12, color: CupertinoColors.systemGrey),
+                ),
+                middle: _hideNavigationBtn
+                    ? null
+                    : _buildNavigationBarImage(context),
+                trailing: _hideNavigationBtn
+                    ? CupertinoButton(
+                        padding: const EdgeInsets.fromLTRB(10, 10, 0, 10),
+                        minSize: 0,
+                        child: const Icon(
+                          FontAwesomeIcons.shareAltSquare,
+                          size: 26,
+                        ),
+                        onPressed: () {},
+                      )
+                    : _buildNavigationBarReadButton(context),
+              ),
+              CupertinoSliverRefreshControl(
+                onRefresh: () async {
+                  await _reloadData(context);
+                },
+              ),
+              child,
+            ],
+          ),
         );
       },
-      child: sliverSa,
+      child: SliverSafeArea(
+        bottom: false,
+        sliver: SliverToBoxAdapter(
+          child: Column(
+            children: <Widget>[
+              const GalleryHeader(),
+              Container(
+                height: 0.5,
+                color: CupertinoColors.systemGrey4,
+              ),
+              _buildDetail(context),
+            ],
+          ),
+        ),
+      ),
     );
 
     return cps;
   }
 
   Widget _buildDetail(context) {
-    return Selector<GalleryModel, bool>(
-      selector: (_, GalleryModel gllaeryModel) => gllaeryModel.detailLoadFinish,
-      builder: (BuildContext context, bool loadFinish, Widget child) {
+    return Selector<GalleryModel, Tuple2<bool, bool>>(
+      selector: (_, GalleryModel gllaeryModel) =>
+          Tuple2(gllaeryModel.detailLoadFinish, gllaeryModel.isReloading),
+      builder: (BuildContext context, Tuple2 tuple, Widget child) {
+        final bool loadFinish = tuple.item1;
+        final bool isReloading = tuple.item2;
+
         return FutureBuilder<GalleryItem>(
             future: _loadData(context),
             builder:
@@ -140,10 +192,10 @@ class GalleryDetailPage extends StatelessWidget {
                   case ConnectionState.none:
                   case ConnectionState.active:
 //                    Global.logger.v('active');
-                    return _buildLoading(context);
+                    return _buildLoading(context, isReloading);
                   case ConnectionState.waiting:
 //                    Global.logger.v('waiting');
-                    return _buildLoading(context);
+                    return _buildLoading(context, isReloading);
                   case ConnectionState.done:
                     Global.logger.v('done');
                     if (snapshot.hasError) {
@@ -160,17 +212,19 @@ class GalleryDetailPage extends StatelessWidget {
     );
   }
 
-  Widget _buildLoading(context) {
+  Widget _buildLoading(context, bool isReloading) {
     // 加载中 显示一个菊花
-    return const Padding(
-      padding: EdgeInsets.all(18.0),
-      child: CupertinoActivityIndicator(
-        radius: 15.0,
-      ),
+    return Padding(
+      padding: const EdgeInsets.all(18.0),
+      child: !isReloading
+          ? const CupertinoActivityIndicator(
+              radius: 15.0,
+            )
+          : null,
     );
   }
 
-  ObstructingPreferredSizeWidget _buildNavigationBar(BuildContext context,
+  /*ObstructingPreferredSizeWidget _buildNavigationBar(BuildContext context,
       {bool hideNavigationBtn = true}) {
     return hideNavigationBtn
         ? const CupertinoNavigationBar(
@@ -181,7 +235,7 @@ class GalleryDetailPage extends StatelessWidget {
             middle: _buildNavigationBarImage(context),
             trailing: _buildNavigationBarReadButton(context),
           );
-  }
+  }*/
 
   /// 独立出导航栏的阅读按钮
   Widget _buildNavigationBarReadButton(BuildContext context) {
@@ -224,9 +278,5 @@ class GalleryDetailPage extends StatelessWidget {
         ),
       ),
     );
-  }
-
-  Widget _buildGalletyHead(BuildContext context) {
-    return GalleryHeader();
   }
 }

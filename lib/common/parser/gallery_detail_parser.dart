@@ -19,7 +19,7 @@ class GalleryDetailParser {
     final Element imageElem = document.querySelector('#gd1 > div');
     final String _imageElemStyle = imageElem.attributes['style'];
     final RegExpMatch _match =
-    RegExp(r'url(.+)').firstMatch(_imageElemStyle);
+    RegExp(r'url\((.+)\)').firstMatch(_imageElemStyle);
     final String _imageUrl = _match.group(1);
     if (galleryItem.imgUrl?.isEmpty ?? true) {
       galleryItem.imgUrl = _imageUrl;

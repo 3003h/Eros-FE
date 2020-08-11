@@ -9,6 +9,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:provider/provider.dart';
+import 'package:tuple/tuple.dart';
 
 /// 收藏操作处理类
 class GalleryFavButton extends StatefulWidget {
@@ -90,21 +91,24 @@ class _GalleryFavButtonState extends State<GalleryFavButton> {
     final S ln = S.of(context);
 
     final Widget favIcon = Container(
-      child: Selector<GalleryModel, GalleryItem>(
-          selector: (context, galleryModel) => galleryModel.galleryItem,
-          shouldRebuild: (pre, next) =>
-              pre.favTitle != next.favTitle || pre.favcat != next.favcat,
-          builder: (context, galleryItem, child) {
+      child: Selector<GalleryModel, Tuple2<String, String>>(
+          selector: (context, galleryModel) => Tuple2(
+              galleryModel.galleryItem.favTitle,
+              galleryModel.galleryItem.favcat),
+//          shouldRebuild: (pre, next) =>
+//              pre.favTitle != next.favTitle || pre.favcat != next.favcat,
+          builder: (context, tuple, child) {
+            final String _facTitle = tuple.item1;
+            final String _favcat = tuple.item2;
 //            Global.logger.v('${galleryItem.favcat}  ${galleryItem.favTitle}');
-            bool _isFav =
-                galleryItem.favcat != null && galleryItem.favcat.isNotEmpty;
+            bool _isFav = _favcat?.isNotEmpty ?? false;
             return Container(
               child: Column(
-                children: [
+                children: <Widget>[
                   if (_isFav)
                     Icon(
                       FontAwesomeIcons.solidHeart,
-                      color: ThemeColors.favColor[galleryItem.favcat],
+                      color: ThemeColors.favColor[_favcat],
                     )
                   else
                     const Icon(
@@ -114,7 +118,7 @@ class _GalleryFavButtonState extends State<GalleryFavButton> {
                   Container(
                     height: 14,
                     child: Text(
-                      _isFav ? galleryItem.favTitle : ln.notFav,
+                      _isFav ? _facTitle : ln.notFav,
                       style: const TextStyle(
                         fontSize: 11,
                       ),
