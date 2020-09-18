@@ -13,8 +13,7 @@ SliverPadding buildWaterfallFlow(List<GalleryItem> gallerItemBeans, tabIndex,
     {int maxPage, int curPage, VoidCallback loadMord}) {
   const double _padding = EHConst.waterfallFlowCrossAxisSpacing;
   return SliverPadding(
-    padding:
-        const EdgeInsets.fromLTRB(_padding, _padding, _padding, 50 + _padding),
+    padding: const EdgeInsets.all(_padding),
     sliver: SliverWaterfallFlow(
       gridDelegate: SliverWaterfallFlowDelegateWithMaxCrossAxisExtent(
         maxCrossAxisExtent: EHConst.waterfallFlowMaxCrossAxisExtent,

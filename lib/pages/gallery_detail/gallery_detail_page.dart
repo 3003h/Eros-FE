@@ -154,6 +154,7 @@ class GalleryDetailPage extends StatelessWidget {
         );
       },
       child: SliverSafeArea(
+        top: false,
         bottom: false,
         sliver: SliverToBoxAdapter(
           child: Column(
