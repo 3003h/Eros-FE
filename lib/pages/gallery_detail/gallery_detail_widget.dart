@@ -32,6 +32,7 @@ class GalleryDetailInfo extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       child: Column(
+//        mainAxisAlignment: MainAxisAlignment.start,
         children: <Widget>[
           // 标签
           _buildTagBox(),
@@ -119,29 +120,27 @@ class GalleryDetailInfo extends StatelessWidget {
         shouldRebuild: (pre, next) => false, // 不进行重绘
         selector: (context, galleryModel) => galleryModel.oriGalleryPreview,
         builder: (context, List<GalleryPreview> previews, child) {
-          return Container(
-            padding: const EdgeInsets.only(
-                top: kPadding, right: kPadding, left: kPadding),
-            child: GridView.builder(
-                shrinkWrap: true, //解决无限高度问题
-                physics: const NeverScrollableScrollPhysics(), //禁用滑动事件
-                gridDelegate: const SliverGridDelegateWithMaxCrossAxisExtent(
+          return GridView.builder(
+              padding: const EdgeInsets.only(
+                  top: kPadding, right: kPadding, left: kPadding),
+              shrinkWrap: true, //解决无限高度问题
+              physics: const NeverScrollableScrollPhysics(), //禁用滑动事件
+              gridDelegate: const SliverGridDelegateWithMaxCrossAxisExtent(
 //              crossAxisCount: _crossAxisCount, //每行列数
-                    maxCrossAxisExtent: 130,
-                    mainAxisSpacing: 0, //主轴方向的间距
-                    crossAxisSpacing: 10, //交叉轴方向子元素的间距
-                    childAspectRatio: 0.55 //显示区域宽高
-                    ),
-                itemCount: previews.length,
-                itemBuilder: (context, index) {
-                  return Center(
-                    child: PreviewContainer(
-                      galleryPreviewList: previews,
-                      index: index,
-                    ),
-                  );
-                }),
-          );
+                  maxCrossAxisExtent: 130,
+                  mainAxisSpacing: 0, //主轴方向的间距
+                  crossAxisSpacing: 10, //交叉轴方向子元素的间距
+                  childAspectRatio: 0.55 //显示区域宽高
+                  ),
+              itemCount: previews.length,
+              itemBuilder: (context, index) {
+                return Center(
+                  child: PreviewContainer(
+                    galleryPreviewList: previews,
+                    index: index,
+                  ),
+                );
+              });
         });
   }
 }

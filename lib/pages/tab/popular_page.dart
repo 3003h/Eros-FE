@@ -102,7 +102,6 @@ class _PopularListTabState extends State<PopularListTab> {
         ),
         SliverSafeArea(
           top: false,
-          bottom: false,
           sliver: _firstLoading
               ? SliverFillRemaining(
                   child: Container(
