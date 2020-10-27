@@ -12,7 +12,7 @@ class CategoryClipper extends CustomClipper<Path> {
   /// 返回一个三角形 path
   @override
   Path getClip(Size size) {
-    Path path = Path();
+    final Path path = Path();
     path.moveTo(0.0, 0.0);
     path.lineTo(width, 0.0);
     path.lineTo(width, height);

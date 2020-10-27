@@ -3,31 +3,31 @@ import 'package:flutter/cupertino.dart';
 class EHCupertinoIcons {
   EHCupertinoIcons._();
 
-  static const IconData fire = const IconData(0xf42e,
+  static const IconData fire = IconData(0xf42e,
       fontFamily: CupertinoIcons.iconFont,
       fontPackage: CupertinoIcons.iconFontPackage);
 
-  static const IconData fire_solid = const IconData(0xf42f,
+  static const IconData fire_solid = IconData(0xf42f,
       fontFamily: CupertinoIcons.iconFont,
       fontPackage: CupertinoIcons.iconFontPackage);
 
-  static const IconData star = const IconData(0xf4b2,
+  static const IconData star = IconData(0xf4b2,
       fontFamily: CupertinoIcons.iconFont,
       fontPackage: CupertinoIcons.iconFontPackage);
 
-  static const IconData star_solid = const IconData(0xf4b3,
+  static const IconData star_solid = IconData(0xf4b3,
       fontFamily: CupertinoIcons.iconFont,
       fontPackage: CupertinoIcons.iconFontPackage);
 
-  static const IconData gallery = const IconData(0xf3c9,
+  static const IconData gallery = IconData(0xf3c9,
       fontFamily: CupertinoIcons.iconFont,
       fontPackage: CupertinoIcons.iconFontPackage);
 
-  static const IconData gallery_solid = const IconData(0xf3ca,
+  static const IconData gallery_solid = IconData(0xf3ca,
       fontFamily: CupertinoIcons.iconFont,
       fontPackage: CupertinoIcons.iconFontPackage);
 
-  static const IconData menu = const IconData(0xf394,
+  static const IconData menu = IconData(0xf394,
       fontFamily: CupertinoIcons.iconFont,
       fontPackage: CupertinoIcons.iconFontPackage);
 

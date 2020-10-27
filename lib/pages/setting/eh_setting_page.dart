@@ -158,7 +158,7 @@ Widget _buildListModeItem(BuildContext context) {
             final ListModeEnum _result = await _showDialog(context);
             if (_result != null) {
               // ignore: unnecessary_string_interpolations
-              Global.logger.v('${EnumToString.parse(_result)}');
+              Global.logger.v('${EnumToString.convertToString(_result)}');
               ehConfigModel.listMode = _result;
             }
           },

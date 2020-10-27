@@ -49,7 +49,7 @@ class EhConfigModel extends ProfileChangeNotifier {
       EnumToString.fromString(ListModeEnum.values, _ehConfig?.listMode) ??
       ListModeEnum.list;
   set listMode(ListModeEnum mode) {
-    _ehConfig.listMode = EnumToString.parse(mode);
+    _ehConfig.listMode = EnumToString.convertToString(mode);
     notifyListeners();
   }
 }

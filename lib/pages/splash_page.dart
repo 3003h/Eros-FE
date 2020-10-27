@@ -21,7 +21,7 @@ class _SplashPageState extends State<SplashPage> {
     startHome();
   }
 
-  startHome() async {
+  Future<void> startHome() async {
     await Future.delayed(const Duration(milliseconds: 1000), () {
       NavigatorUtil.goHomePage(context);
     });
@@ -37,7 +37,7 @@ class _SplashPageState extends State<SplashPage> {
             // center the children
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
-              Icon(
+              const Icon(
                 Icons.local_cafe,
                 // FontAwesomeIcons.heading,
                 size: 150.0,
@@ -45,11 +45,11 @@ class _SplashPageState extends State<SplashPage> {
               ),
               Text(
                 S.of(context).welcome_text,
-                style: TextStyle(color: Colors.grey),
+                style: const TextStyle(color: Colors.grey),
               ),
               Text(
                 S.of(context).app_title,
-                style: TextStyle(color: Colors.grey),
+                style: const TextStyle(color: Colors.grey),
               )
             ],
           ),

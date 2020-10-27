@@ -16,13 +16,13 @@ class LoginCookiePage extends StatefulWidget {
 class _LoginCookiePageState extends State<LoginCookiePage> {
   var _isLogin = false;
 
-  FocusNode _nodeHash = FocusNode();
+  final FocusNode _nodeHash = FocusNode();
 
   // ibp_member_id
-  TextEditingController _idController = TextEditingController();
+  final TextEditingController _idController = TextEditingController();
 
   // ibp_pass_hash
-  TextEditingController _hashController = TextEditingController();
+  final TextEditingController _hashController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -73,10 +73,8 @@ class _LoginCookiePageState extends State<LoginCookiePage> {
       height: 60,
       child: _isLogin
           ? Container(
-              child: CupertinoActivityIndicator(
+              child: const CupertinoActivityIndicator(
                 radius: 14.0,
-//                iOSVersionStyle:
-//                    CupertinoActivityIndicatorIOSVersionStyle.iOS14,
               ),
             )
           : Container(
@@ -118,7 +116,7 @@ class _LoginCookiePageState extends State<LoginCookiePage> {
       setState(() {
         _isLogin = false;
       });
-      throw e;
+      rethrow;
     }
 
     if (user != null) {

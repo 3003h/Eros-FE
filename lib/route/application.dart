@@ -1,5 +1,5 @@
 import 'package:fluro/fluro.dart';
 
-class Application {
+mixin Application {
   static Router router;
 }

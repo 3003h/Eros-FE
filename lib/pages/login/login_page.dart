@@ -24,17 +24,17 @@ class _LoginPageState extends State<LoginPage> {
   FocusNode _nodePwd = FocusNode();
 
   //账号的控制器
-  TextEditingController _usernameController = TextEditingController();
+  final TextEditingController _usernameController = TextEditingController();
 
   //密码的控制器
-  TextEditingController _passwdController = TextEditingController();
+  final TextEditingController _passwdController = TextEditingController();
 
   bool _isLogin = false;
   bool _isWebLogin = false;
 
   @override
   Widget build(BuildContext context) {
-    var ln = S.of(context);
+    final S ln = S.of(context);
     return CupertinoPageScaffold(
         navigationBar: CupertinoNavigationBar(
           middle: Text(ln.user_login),
@@ -74,11 +74,12 @@ class _LoginPageState extends State<LoginPage> {
                     height: 48,
                     padding: const EdgeInsets.only(top: 10, bottom: 0),
                     child: CupertinoTextField(
-                      style: TextStyle(textBaseline: TextBaseline.alphabetic),
+                      style: const TextStyle(
+                          textBaseline: TextBaseline.alphabetic),
                       controller: _passwdController,
                       placeholder: ln.pls_i_passwd,
                       prefix: ConstrainedBox(
-                          constraints: BoxConstraints(minWidth: 50),
+                          constraints: const BoxConstraints(minWidth: 50),
                           child: Text(ln.passwd)),
                       // prefixMode: OverlayVisibilityMode.never,
                       decoration: null,
@@ -113,7 +114,7 @@ class _LoginPageState extends State<LoginPage> {
       child: _isLogin
           ? Container(
 //              padding: const EdgeInsets.all(8),
-              child: CupertinoActivityIndicator(
+              child: const CupertinoActivityIndicator(
                 radius: 14.0,
               ),
             )
