@@ -14,6 +14,6 @@ void showToast(String msg) {
   oktoast.showToast(
     msg,
     position: ToastPosition.bottom,
-    backgroundColor: Color(0xaa000000),
+    backgroundColor: const Color(0xaa000000),
   );
 }

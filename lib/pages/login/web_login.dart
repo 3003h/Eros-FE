@@ -13,7 +13,7 @@ class WebLogin extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final flutterWebviewPlugin = new FlutterWebviewPlugin();
+    final FlutterWebviewPlugin flutterWebviewPlugin = FlutterWebviewPlugin();
 
     final Set<JavascriptChannel> jsChannels = [
       JavascriptChannel(
@@ -21,22 +21,22 @@ class WebLogin extends StatelessWidget {
     ].toSet();
 
     flutterWebviewPlugin.onUrlChanged.listen((String url) {
-      var _uri = Uri.parse(url);
-      if (_uri.path == "/index.php" && _uri.query.isEmpty) {
+      final Uri _uri = Uri.parse(url);
+      if (_uri.path == '/index.php' && _uri.query.isEmpty) {
         Global.logger.i("登录成功");
-        flutterWebviewPlugin.getCookies().then((_cookies) {
+        flutterWebviewPlugin.getCookies().then((Map<String, String> _cookies) {
           // 返回 并带上参数
           NavigatorUtil.goBackWithParams(context, _cookies);
         });
       }
     });
 
-    CupertinoPageScaffold cpf = CupertinoPageScaffold(
+    final CupertinoPageScaffold cpf = CupertinoPageScaffold(
         navigationBar: CupertinoNavigationBar(
           middle: Text(title),
           trailing: CupertinoButton(
             padding: const EdgeInsets.all(0),
-            child: Icon(CupertinoIcons.add_circled_solid),
+            child: const Icon(CupertinoIcons.add_circled_solid),
             onPressed: () {
               flutterWebviewPlugin.getCookies().then((cookie) {
                 Global.logger.i('cookies: $cookie');

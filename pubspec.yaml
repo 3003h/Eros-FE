@@ -19,11 +19,11 @@ dependencies:
   intl: ^0.16.1
 
   # 图标
-  cupertino_icons: ^0.1.3
+  cupertino_icons: ^1.0.0
   font_awesome_flutter: ^8.8.1
 
   # 网络请求
-  dio: ^3.0.9
+  dio: ^3.0.10
 
   # cookie
   cookie_jar: ^1.0.1
@@ -45,37 +45,40 @@ dependencies:
   # flutter_easyrefresh: ^2.1.1
 
   # 数据库
-  sqflite: ^1.3.1
+  sqflite: ^1.3.1+1
 #  path: ^1.7.0
 
   # html反转义
-  html_unescape: ^1.0.1+3
+  html_unescape: ^1.0.2
 
-  enum_to_string: ^1.0.9
+  enum_to_string: ^1.0.11
 
   # webview
   flutter_webview_plugin: ^0.3.11
 
   # 文字链接
   flutter_linkify: ^3.1.3
-  url_launcher: ^5.5.0
+  url_launcher: ^5.6.0
 
   # 元组
   tuple: ^1.0.3
 
   # 状态管理
-  provider: ^4.3.1
+  provider: ^4.3.2+2
 
-  photo_view: ^0.9.2
+  photo_view: ^0.10.2
 
   # 图片相关
-  cached_network_image: ^2.2.0+1
-  extended_image: ^0.9.0
+  cached_network_image: ^2.3.2+1
+  extended_image: ^1.1.1
 
   logger: ^0.9.2
 
   # 瀑布流
   waterfall_flow: any
+
+  # 生物认证 指纹 面容等
+  local_auth: ^0.6.3+2
 
   like_button:
     git:

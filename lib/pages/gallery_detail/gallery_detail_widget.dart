@@ -229,15 +229,16 @@ class PreviewContainer extends StatelessWidget {
                   ),
                   Container(
                     decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(4), //圆角
-                        // ignore: prefer_const_literals_to_create_immutables
-                        boxShadow: [
+                      borderRadius: BorderRadius.circular(4), //圆角
+                      // ignore: prefer_const_literals_to_create_immutables
+                      /*boxShadow: [
                           //阴影
                           const BoxShadow(
                             color: CupertinoColors.systemGrey2,
                             blurRadius: 2.0,
                           )
-                        ]),
+                        ]*/
+                    ),
                     child: ClipRRect(
                       borderRadius: BorderRadius.circular(4),
                       child: Container(

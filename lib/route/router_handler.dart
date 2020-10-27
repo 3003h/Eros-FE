@@ -56,8 +56,8 @@ final Map<String, Handler> pageRoutes = {
 
   EHRoutes.galleryList: Handler(
       handlerFunc: (BuildContext context, Map<String, List<String>> params) {
-    String _cats = params["cats"]?.first ?? '0';
-    String _simpleSearch = params["s_search"]?.first ?? '';
+    final String _cats = params['cats']?.first ?? '0';
+    final String _simpleSearch = params['s_search']?.first ?? '';
 
     return GalleryListTab(
       cats: int.parse(_cats),
@@ -67,19 +67,20 @@ final Map<String, Handler> pageRoutes = {
 
   EHRoutes.webLogin: Handler(
       handlerFunc: (BuildContext context, Map<String, List<String>> params) {
-    String title = params["title"]?.first;
-    String url = params["url"]?.first;
+    final String title = params['title']?.first;
+    final String url = params['url']?.first;
 
     return WebLogin(title: title, url: url);
   }),
 
   EHRoutes.galleryDetailComment: Handler(
       handlerFunc: (BuildContext context, Map<String, List<String>> params) {
-    List<String> commentStringList = params["comment"] ?? [];
-    List<GalleryComment> comments = List<GalleryComment>.from(commentStringList
-        .map((commentString) =>
-            GalleryComment.fromJson(jsonDecode(commentString)))
-        .toList());
+    final List<String> commentStringList = params['comment'] ?? [];
+    final List<GalleryComment> comments = List<GalleryComment>.from(
+        commentStringList
+            .map((String commentString) =>
+                GalleryComment.fromJson(jsonDecode(commentString)))
+            .toList());
 
     return CommentPage(
       galleryComments: comments,

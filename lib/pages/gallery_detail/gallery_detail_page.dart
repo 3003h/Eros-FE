@@ -1,6 +1,5 @@
 import 'package:FEhViewer/common/global.dart';
 import 'package:FEhViewer/generated/l10n.dart';
-import 'package:FEhViewer/models/ehConfig.dart';
 import 'package:FEhViewer/models/galleryItem.dart';
 import 'package:FEhViewer/models/states/ehconfig_model.dart';
 import 'package:FEhViewer/models/states/gallery_model.dart';
@@ -113,6 +112,7 @@ class GalleryDetailPage extends StatelessWidget {
         final bool _isJpnTitle = _tuple.item3;
         final GalleryItem _item = _tuple.item4;
 
+        // 主布局
         return CupertinoPageScaffold(
           child: CustomScrollView(
             physics: const AlwaysScrollableScrollPhysics(),
@@ -164,6 +164,7 @@ class GalleryDetailPage extends StatelessWidget {
                 height: 0.5,
                 color: CupertinoColors.systemGrey4,
               ),
+              // 内容
               _buildDetail(context),
             ],
           ),

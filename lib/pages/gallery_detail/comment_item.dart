@@ -62,7 +62,7 @@ class CommentItem extends StatelessWidget {
       // 对齐方式
       overflow: TextOverflow.ellipsis,
       // 超出部分省略号
-      style: TextStyle(
+      style: const TextStyle(
         fontSize: 13,
       ),
     );
@@ -85,7 +85,7 @@ class CommentItem extends StatelessWidget {
                   Spacer(),
                   Text(
                     galleryComment.score,
-                    style: TextStyle(
+                    style: const TextStyle(
                       fontSize: 11,
                       fontWeight: FontWeight.normal,
                     ),
@@ -98,7 +98,7 @@ class CommentItem extends StatelessWidget {
               ),
               Text(
                 galleryComment.time,
-                style: TextStyle(
+                style: const TextStyle(
                   fontSize: 11,
                   fontWeight: FontWeight.normal,
                   color: Colors.black54,

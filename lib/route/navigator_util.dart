@@ -117,8 +117,8 @@ class NavigatorUtil {
 
   // goBrowser
   static Future goWebLogin(BuildContext context, String title, String url) {
-    final encodeUrl = Uri.encodeComponent(url);
-    final encodeTitle = Uri.encodeComponent(title);
+    final String encodeUrl = Uri.encodeComponent(url);
+    final String encodeTitle = Uri.encodeComponent(title);
     return Application.router.navigateTo(
         context, EHRoutes.webLogin + '?title=$encodeTitle&url=$encodeUrl',
         transition: TransitionType.cupertino);
@@ -127,7 +127,7 @@ class NavigatorUtil {
   /// 转到画廊列表页面
   static Future goGalleryList(BuildContext context,
       {int cats = 0, String simpleSearch}) {
-    var _simpleSearchEncode = Uri.encodeComponent(simpleSearch ?? '');
+    final String _simpleSearchEncode = Uri.encodeComponent(simpleSearch ?? '');
     return Application.router.navigateTo(context,
         EHRoutes.galleryList + '?cats=$cats&s_search=$_simpleSearchEncode',
         transition: TransitionType.cupertino);
@@ -141,8 +141,8 @@ class NavigatorUtil {
       final GalleryModel galleryModel = GalleryModel.initUrl(url: url);
       Navigator.of(context).push(
         CupertinoPageRoute(
-          builder: (context) {
-            return ChangeNotifierProvider.value(
+          builder: (BuildContext context) {
+            return ChangeNotifierProvider<GalleryModel>.value(
               value: galleryModel,
               child: GalleryDetailPage(),
             );
@@ -154,8 +154,8 @@ class NavigatorUtil {
           Provider.of<GalleryModel>(context, listen: false);
       Navigator.of(context, rootNavigator: true).push(
         CupertinoPageRoute(
-          builder: (context) {
-            return ChangeNotifierProvider.value(
+          builder: (BuildContext context) {
+            return ChangeNotifierProvider<GalleryModel>.value(
               value: galleryModel,
               child: GalleryDetailPage(),
             );
@@ -169,7 +169,7 @@ class NavigatorUtil {
     Navigator.of(context).push(
       CupertinoPageRoute(
 //        fullscreenDialog: true,
-        builder: (context) {
+        builder: (BuildContext context) {
           return GallerySearchPage();
         },
       ),
@@ -183,11 +183,12 @@ class NavigatorUtil {
     GalleryItem galleryItem, {
     @required fromTabIndex,
   }) {
-    final encodeGalleryItem =
+    final String encodeGalleryItem =
         Uri.encodeComponent(jsonEncode(galleryItem.toJson()));
-    final encodeTitle = Uri.encodeComponent(title);
+    final String encodeTitle = Uri.encodeComponent(title);
 
-    final galleryModel = Provider.of<GalleryModel>(context, listen: false);
+    final GalleryModel galleryModel =
+        Provider.of<GalleryModel>(context, listen: false);
     Global.logger.v('${galleryModel.galleryItem.toJson()}');
 
     Application.router.navigateTo(
@@ -200,11 +201,13 @@ class NavigatorUtil {
   /// 转到画廊评论页面
   static void goGalleryDetailComment(
       BuildContext context, List<GalleryComment> comments) {
-    final encodeComments = List<String>.from(comments
-        .map((comment) => Uri.encodeComponent(jsonEncode(comment.toJson())))
+    final List<String> encodeComments = List<String>.from(comments
+        .map((GalleryComment comment) =>
+            Uri.encodeComponent(jsonEncode(comment.toJson())))
         .toList());
 
-    final queryString = encodeComments.map((e) => 'comment=$e').join('&');
+    final String queryString =
+        encodeComments.map((e) => 'comment=$e').join('&');
 
     Application.router.navigateTo(
         context, EHRoutes.galleryDetailComment + '?$queryString',
@@ -214,10 +217,11 @@ class NavigatorUtil {
   // 转到大图浏览
   static void goGalleryViewPage(BuildContext context, List<String> hrefs,
       int currentIndex, String showKey) {
-    final encodeImages = List<String>.from(
-        hrefs.map((href) => Uri.encodeComponent(href)).toList());
+    final List<String> encodeImages = List<String>.from(
+        hrefs.map((String href) => Uri.encodeComponent(href)).toList());
 
-    var queryString = encodeImages.map((e) => 'href=$e').join('&');
+    final String queryString =
+        encodeImages.map((String e) => 'href=$e').join('&');
 
     Application.router.navigateTo(
         context,
@@ -230,14 +234,15 @@ class NavigatorUtil {
 
   // 转到大图浏览
   static void goGalleryViewPagePr(BuildContext context, int index) {
-    _child() {
+    GalleryViewPageE _child() {
 //      return GalleryViewPageLoad(index: index);
       return GalleryViewPageE(index: index);
     }
 
-    var galleryModel = Provider.of<GalleryModel>(context, listen: false);
+    final GalleryModel galleryModel =
+        Provider.of<GalleryModel>(context, listen: false);
     Navigator.push(context, CupertinoPageRoute(builder: (context) {
-      return ChangeNotifierProvider.value(
+      return ChangeNotifierProvider<GalleryModel>.value(
         value: galleryModel,
         child: _child(),
       );
