@@ -20,7 +20,7 @@ class EHRoutes {
   static const String galleryDetailComment = '/galleryDetailPage/comment';
   static const String galleryDetailView = '/galleryDetailPage/view';
 
-  static void configureRoutes(Router router) {
+  static void configureRoutes(FluroRouter router) {
     pageRoutes.forEach((String path, Handler handler) {
       router.define(path,
           handler: handler, transitionType: TransitionType.cupertino);

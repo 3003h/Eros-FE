@@ -30,29 +30,33 @@ class GalleryDetailParser {
     const String tagGroupSelect = '#taglist > table > tbody > tr';
     final List<Element> tagGroups = document.querySelectorAll(tagGroupSelect);
     for (final Element tagGroup in tagGroups) {
-      String type = tagGroup.querySelector('td.tc').text.trim();
-      type = RegExp(r'(\w+):?$').firstMatch(type).group(1);
+      try {
+        String type = tagGroup.querySelector('td.tc').text.trim();
+        type = RegExp(r'(\w+):?$').firstMatch(type).group(1);
 
-      final List<Element> tags = tagGroup.querySelectorAll('td > div > a');
-      final List<GalleryTag> galleryTags = [];
-      for (final Element tagElm in tags) {
-        String title = tagElm.text.trim() ?? '';
-        if (title.contains('|')) {
-          title = title.split('|')[0];
-        }
-        final String tagTranslat =
-            await EhTagDatabase.getTranTag(title, nameSpase: type) ?? title;
+        final List<Element> tags = tagGroup.querySelectorAll('td > div > a');
+        final List<GalleryTag> galleryTags = [];
+        for (final Element tagElm in tags) {
+          String title = tagElm.text.trim() ?? '';
+          if (title.contains('|')) {
+            title = title.split('|')[0];
+          }
+          final String tagTranslat =
+              await EhTagDatabase.getTranTag(title, nameSpase: type) ?? title;
 
 //        Global.logger.v('$type:$title $tagTranslat');
-        galleryTags.add(GalleryTag()
-          ..title = title
-          ..type = type
-          ..tagTranslat = tagTranslat);
-      }
+          galleryTags.add(GalleryTag()
+            ..title = title
+            ..type = type
+            ..tagTranslat = tagTranslat);
+        }
 
-      galleryItem.tagGroup.add(TagGroup()
-        ..tagType = type
-        ..galleryTags = galleryTags);
+        galleryItem.tagGroup.add(TagGroup()
+          ..tagType = type
+          ..galleryTags = galleryTags);
+      } catch (e, stack) {
+        Global.logger.e('解析tag数据异常\n' + e.toString() + '\n' + stack.toString());
+      }
     }
 
     // 全部评论数据
@@ -69,7 +73,7 @@ class GalleryDetailParser {
         // 解析时间
         final Element timeElem = comment.querySelector('div.c2 > div.c3');
         final String postTime = timeElem.text.trim();
-        Global.logger.v(postTime);
+        // Global.logger.v(postTime);
         // 示例: Posted on 29 June 2020, 05:41 UTC by:
         // 20201027 修复评论问题
         // Posted on 29 June 2020, 05:41 by:
@@ -136,7 +140,7 @@ class GalleryDetailParser {
     galleryItem.favTitle = _favTitle;
 
     // 收藏夹序号
-    var _favcat = '';
+    String _favcat = '';
     final Element _favcatElm = document.querySelector('#fav');
     if (_favcatElm.nodes.isNotEmpty) {
       final Element _div = _favcatElm.querySelector('div');

@@ -23,35 +23,40 @@ class GalleryDetailPage extends StatelessWidget {
 
   /// 异步请求数据
   Future<GalleryItem> _loadData(BuildContext context) async {
-    final GalleryModel _galleryModel =
-        Provider.of<GalleryModel>(context, listen: false);
+    try {
+      final GalleryModel _galleryModel =
+          Provider.of<GalleryModel>(context, listen: false);
 
-    final GalleryItem _item = _galleryModel.galleryItem;
+      final GalleryItem _item = _galleryModel.galleryItem;
 
-    _galleryModel.resetHideNavigationBtn();
+      _galleryModel.resetHideNavigationBtn();
 
-    if (!_galleryModel.detailLoadFinish || _item.galleryPreview.isNotEmpty) {
-      if (_item.filecount == null || _item.filecount.isEmpty) {
-        await Api.getMoreGalleryInfoOne(_item);
+      if (!_galleryModel.detailLoadFinish || _item.galleryPreview.isNotEmpty) {
+        if (_item.filecount == null || _item.filecount.isEmpty) {
+          await Api.getMoreGalleryInfoOne(_item);
+        }
+
+        final GalleryItem _galleryItemFromApi =
+            await Api.getGalleryDetail(_item.url);
+
+        _galleryModel.currentPreviewPage = 0;
+        _item.imgUrl =
+            _galleryItemFromApi.imgUrl ?? _galleryItemFromApi.imgUrlL;
+        _item.tagGroup = _galleryItemFromApi.tagGroup;
+        _item.galleryComment = _galleryItemFromApi.galleryComment;
+        _galleryModel.setGalleryPreview(_galleryItemFromApi.galleryPreview);
+        _galleryModel.setFavTitle(_galleryItemFromApi.favTitle,
+            favcat: _galleryItemFromApi.favcat);
+        _item.showKey = _galleryItemFromApi.showKey;
+
+        _galleryModel.detailLoadFinish = true;
+
+        return _galleryItemFromApi;
+      } else {
+        return _item;
       }
-
-      final GalleryItem _galleryItemFromApi =
-          await Api.getGalleryDetail(_item.url);
-
-      _galleryModel.currentPreviewPage = 0;
-      _item.imgUrl = _galleryItemFromApi.imgUrl ?? _galleryItemFromApi.imgUrlL;
-      _item.tagGroup = _galleryItemFromApi.tagGroup;
-      _item.galleryComment = _galleryItemFromApi.galleryComment;
-      _galleryModel.setGalleryPreview(_galleryItemFromApi.galleryPreview);
-      _galleryModel.setFavTitle(_galleryItemFromApi.favTitle,
-          favcat: _galleryItemFromApi.favcat);
-      _item.showKey = _galleryItemFromApi.showKey;
-
-      _galleryModel.detailLoadFinish = true;
-
-      return _galleryItemFromApi;
-    } else {
-      return _item;
+    } catch (e, stack) {
+      Global.logger.e('解析数据异常\n' + e.toString() + '\n' + stack.toString());
     }
   }
 

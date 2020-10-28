@@ -82,7 +82,7 @@ class CommentItem extends StatelessWidget {
               Row(
                 children: [
                   _buildUsername(context),
-                  Spacer(),
+                  const Spacer(),
                   Text(
                     galleryComment.score,
                     style: const TextStyle(

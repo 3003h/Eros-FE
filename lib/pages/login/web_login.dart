@@ -15,10 +15,10 @@ class WebLogin extends StatelessWidget {
   Widget build(BuildContext context) {
     final FlutterWebviewPlugin flutterWebviewPlugin = FlutterWebviewPlugin();
 
-    final Set<JavascriptChannel> jsChannels = [
+    final Set<JavascriptChannel> jsChannels = {
       JavascriptChannel(
           name: 'Print', onMessageReceived: (JavascriptMessage message) {}),
-    ].toSet();
+    };
 
     flutterWebviewPlugin.onUrlChanged.listen((String url) {
       final Uri _uri = Uri.parse(url);

@@ -91,7 +91,7 @@ packages:
       name: cached_network_image
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "2.3.2+1"
+    version: "2.3.3"
   characters:
     dependency: transitive
     description:
@@ -203,7 +203,7 @@ packages:
       name: extended_image
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "1.1.1"
+    version: "1.3.0"
   extended_image_library:
     dependency: transitive
     description:
@@ -252,7 +252,7 @@ packages:
       name: fluro
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "1.6.3"
+    version: "1.7.7"
   flutter:
     dependency: "direct main"
     description: flutter
@@ -314,7 +314,7 @@ packages:
       name: font_awesome_flutter
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "8.8.1"
+    version: "8.10.0"
   front_end:
     dependency: transitive
     description:
@@ -449,14 +449,14 @@ packages:
       name: local_auth
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "0.6.3+2"
+    version: "0.6.3+3"
   logger:
     dependency: "direct main"
     description:
       name: logger
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "0.9.3"
+    version: "0.9.4"
   logging:
     dependency: transitive
     description:
@@ -734,7 +734,7 @@ packages:
       name: sqflite
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "1.3.1+1"
+    version: "1.3.2"
   sqflite_common:
     dependency: transitive
     description:
@@ -818,7 +818,7 @@ packages:
       name: url_launcher
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "5.7.2"
+    version: "5.7.8"
   url_launcher_linux:
     dependency: transitive
     description:
@@ -839,14 +839,14 @@ packages:
       name: url_launcher_platform_interface
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "1.0.8"
+    version: "1.0.9"
   url_launcher_web:
     dependency: transitive
     description:
       name: url_launcher_web
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "0.1.4+1"
+    version: "0.1.5"
   url_launcher_windows:
     dependency: transitive
     description:
@@ -912,4 +912,4 @@ packages:
     version: "2.2.1"
 sdks:
   dart: ">=2.11.0-0.0 <2.12.0"
-  flutter: ">=1.20.0 <2.0.0"
+  flutter: ">=1.22.2 <2.0.0"
