@@ -151,14 +151,14 @@ class _LoginPageState extends State<LoginPage> {
       height: 60,
       child: _isWebLogin
           ? Container(
-              child: CupertinoActivityIndicator(
+              child: const CupertinoActivityIndicator(
                 radius: 14.0,
               ),
             )
           : CupertinoButton(
               child: Text(ln.login_web),
               onPressed: () {
-                if (!Platform.isIOS || !Platform.isAndroid) {
+                if (!Platform.isIOS && !Platform.isAndroid) {
                   showToast('平台尚未支持');
                   return;
                 }
@@ -217,7 +217,7 @@ class _LoginPageState extends State<LoginPage> {
       setState(() {
         _isLogin = false;
       });
-      throw e;
+      rethrow;
     }
 
     if (user != null) {

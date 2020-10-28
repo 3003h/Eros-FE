@@ -7,7 +7,7 @@ import 'package:FEhViewer/route/application.dart';
 import 'package:FEhViewer/route/routes.dart';
 import 'package:FEhViewer/utils/storage.dart';
 import 'package:FEhViewer/values/storages.dart';
-import 'package:fluro/fluro.dart' as fluro;
+import 'package:fluro/fluro.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:logger/logger.dart';
@@ -74,7 +74,7 @@ class Global {
     }
 
     // 路由
-    fluro.Router router = fluro.Router();
+    final FluroRouter router = FluroRouter();
     EHRoutes.configureRoutes(router);
     Application.router = router;
 

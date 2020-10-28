@@ -178,6 +178,8 @@ class Api {
     final GalleryItem galleryItem =
         await GalleryDetailParser.parseGalleryDetail(response);
 
+    // Global.logger.v(galleryItem.toJson());
+
     return galleryItem;
   }
 
@@ -344,19 +346,23 @@ class Api {
   }
 
   static Future<void> getMoreGalleryInfoOne(GalleryItem galleryItem) async {
-    final RegExp urlRex = RegExp(r'/g/(\d+)/(\w+)/$');
-    final RegExpMatch urlRult = urlRex.firstMatch(galleryItem.url);
-
-    final String gid = urlRult.group(1);
-    final String token = urlRult.group(2);
-
-    galleryItem.gid = gid;
-    galleryItem.token = token;
-
-    List<GalleryItem> reqGalleryItems = [galleryItem];
     try {
+      // todo 正则
+      final RegExp urlRex = RegExp(r'/g/(\d+)/(\w+)$');
+      Global.logger.v(galleryItem.url);
+      final RegExpMatch urlRult = urlRex.firstMatch(galleryItem.url);
+
+      final String gid = urlRult.group(1);
+      final String token = urlRult.group(2);
+
+      galleryItem.gid = gid;
+      galleryItem.token = token;
+
+      List<GalleryItem> reqGalleryItems = [galleryItem];
+
       await getMoreGalleryInfo(reqGalleryItems);
-    } catch (e) {
+    } catch (e, stack) {
+      Global.logger.e('解析数据异常\n' + e.toString() + '\n' + stack.toString());
       showToast('解析异常');
     }
   }
