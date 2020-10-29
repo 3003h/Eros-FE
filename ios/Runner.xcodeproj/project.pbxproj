@@ -386,7 +386,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.honjow.fehv;
 				PRODUCT_NAME = fehviewer;
-				PROVISIONING_PROFILE_SPECIFIER = FEhViewer;
+				PROVISIONING_PROFILE_SPECIFIER = Wildcard_Distribution;
 				SWIFT_OBJC_BRIDGING_HEADER = "Runner/Runner-Bridging-Header.h";
 				SWIFT_VERSION = 5.0;
 				VERSIONING_SYSTEM = "apple-generic";
@@ -562,7 +562,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.honjow.fehv;
 				PRODUCT_NAME = fehviewer;
-				PROVISIONING_PROFILE_SPECIFIER = FEhViewer;
+				PROVISIONING_PROFILE_SPECIFIER = Wildcard_Distribution;
 				SWIFT_OBJC_BRIDGING_HEADER = "Runner/Runner-Bridging-Header.h";
 				SWIFT_VERSION = 5.0;
 				VERSIONING_SYSTEM = "apple-generic";
