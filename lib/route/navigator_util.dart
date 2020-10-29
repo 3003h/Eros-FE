@@ -234,8 +234,7 @@ class NavigatorUtil {
 
   // 转到大图浏览
   static void goGalleryViewPagePr(BuildContext context, int index) {
-    GalleryViewPageE _child() {
-//      return GalleryViewPageLoad(index: index);
+    Widget _child() {
       return GalleryViewPageE(index: index);
     }
 

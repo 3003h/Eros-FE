@@ -5,16 +5,17 @@ import 'package:FEhViewer/utils/utility.dart';
 import 'package:extended_image/extended_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 
 class GalleryViewPageE extends StatefulWidget {
+  GalleryViewPageE({Key key, int index})
+      : index = index ?? 0,
+        controller = PageController(initialPage: index),
+        super(key: key);
+
   final int index;
   final PageController controller;
-
-  GalleryViewPageE({Key key, int index})
-      : this.index = index ?? 0,
-        this.controller = PageController(initialPage: index),
-        super(key: key);
 
   @override
   _GalleryViewPageEState createState() => _GalleryViewPageEState();
@@ -28,74 +29,88 @@ class _GalleryViewPageEState extends State<GalleryViewPageE> {
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-    final galleryModel = Provider.of<GalleryModel>(context, listen: false);
-    if (galleryModel != this._galleryModel) {
-      this._galleryModel = galleryModel;
+    final GalleryModel galleryModel =
+        Provider.of<GalleryModel>(context, listen: false);
+    if (galleryModel != _galleryModel) {
+      _galleryModel = galleryModel;
       // 预载后面5张图
       _precache(_galleryModel.previews, widget.index, 5);
     }
   }
 
+  /// 画廊图片大图浏览
   @override
   Widget build(BuildContext context) {
-    return CupertinoPageScaffold(
-//      backgroundColor: CupertinoColors.black,
-      child: Selector<GalleryModel, List<GalleryPreview>>(
-          selector: (context, galleryModel) =>
-              galleryModel.galleryItem.galleryPreview,
-          shouldRebuild: (pre, next) => true,
-          builder: (context, List<GalleryPreview> previews, child) {
+    return CupertinoTheme(
+      data: const CupertinoThemeData(
+        brightness: Brightness.dark,
+        // barBackgroundColor: CupertinoColors.white,
+      ),
+      child: AnnotatedRegion<SystemUiOverlayStyle>(
+        value: SystemUiOverlayStyle.light,
+        child: CupertinoPageScaffold(
+          // backgroundColor: CupertinoColors.black,
+          child: Selector<GalleryModel, List<GalleryPreview>>(
+              selector: (context, galleryModel) =>
+                  galleryModel.galleryItem.galleryPreview,
+              shouldRebuild: (pre, next) => true,
+              builder: (context, List<GalleryPreview> previews, child) {
 //            Global.logger.v('build GalleryViewPageE');
-            return Stack(
-              children: [
-                Container(
-                  child: ExtendedImageGesturePageView.builder(
-                    itemBuilder: (BuildContext context, int index) {
-                      Widget image = GalleryImage(
-                        index: index,
-                      );
-                      if (index == _currentIndex) {
-                        return Hero(
-                          tag: previews[index].href + index.toString(),
-                          child: image,
-                        );
-                      } else {
-                        return image;
-                      }
-                    },
-                    itemCount: previews.length,
-                    onPageChanged: (int index) {
-                      // 预载
-                      _precache(previews, index, 5);
-                      setState(() {
-                        _currentIndex = index;
-                      });
-                    },
-                    controller: widget.controller,
-                    scrollDirection: Axis.horizontal,
-                  ),
-                ),
-                Positioned(
-                  child: Container(
-                      height: 40,
-                      child: Text('${_currentIndex + 1}/${previews.length}')),
-                ),
-              ],
-            );
-          }),
+                return Stack(
+                  children: <Widget>[
+                    Container(
+                      child: ExtendedImageGesturePageView.builder(
+                        itemBuilder: (BuildContext context, int index) {
+                          final Widget image = GalleryImage(
+                            index: index,
+                          );
+                          if (index == _currentIndex) {
+                            return Hero(
+                              tag: previews[index].href + index.toString(),
+                              child: image,
+                            );
+                          } else {
+                            return image;
+                          }
+                        },
+                        itemCount: previews.length,
+                        onPageChanged: (int index) {
+                          // 预载
+                          _precache(previews, index, 5);
+                          setState(() {
+                            _currentIndex = index;
+                          });
+                        },
+                        controller: widget.controller,
+                        scrollDirection: Axis.horizontal,
+                      ),
+                    ),
+                    Positioned(
+                      child: Container(
+                          height: 40,
+                          child:
+                              Text('${_currentIndex + 1}/${previews.length}')),
+                    ),
+                  ],
+                );
+              }),
+        ),
+      ),
     );
   }
 
   // 一个很傻的预载功能 需要优化
-  _precache(List<GalleryPreview> previews, int index, int max) async {
-    final _galleryModel = Provider.of<GalleryModel>(context, listen: false);
+  Future<void> _precache(
+      List<GalleryPreview> previews, int index, int max) async {
+    final GalleryModel _galleryModel =
+        Provider.of<GalleryModel>(context, listen: false);
 
     for (int add = 0; add < max; add++) {
-      int _index = index + add + 1;
+      final int _index = index + add + 1;
       if (_index > _galleryModel.previews.length - 1) {
         return;
       }
-      final _preview = _galleryModel.previews[_index];
+      final GalleryPreview _preview = _galleryModel.previews[_index];
 
       String _url = '';
       if (_preview.largeImageUrl?.isEmpty ?? true) {
@@ -122,7 +137,7 @@ class _GalleryViewPageEState extends State<GalleryViewPageE> {
 }
 
 class GalleryImage extends StatefulWidget {
-  GalleryImage({
+  const GalleryImage({
     Key key,
     @required this.index,
   }) : super(key: key);
@@ -138,24 +153,26 @@ class _GalleryImageState extends State<GalleryImage> {
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-    final galleryModel = Provider.of<GalleryModel>(context, listen: false);
-    if (galleryModel != this._galleryModel) {
-      this._galleryModel = galleryModel;
+    final GalleryModel galleryModel =
+        Provider.of<GalleryModel>(context, listen: false);
+    if (galleryModel != _galleryModel) {
+      _galleryModel = galleryModel;
     }
   }
 
-  _getAllImageHref() async {
+  Future<void> _getAllImageHref() async {
     if (_galleryModel.isGetAllImageHref) {
       return;
     }
     _galleryModel.isGetAllImageHref = true;
-    var _filecount = int.parse(_galleryModel.galleryItem.filecount);
+    final int _filecount = int.parse(_galleryModel.galleryItem.filecount);
 
     // 获取画廊所有图片页面的href
     while (_galleryModel.previews.length < _filecount) {
       _galleryModel.currentPreviewPageAdd();
 
-      var _moreGalleryPreviewList = await Api.getGalleryPreview(
+      final List<GalleryPreview> _moreGalleryPreviewList =
+          await Api.getGalleryPreview(
         _galleryModel.galleryItem.url,
         page: _galleryModel.currentPreviewPage,
       );
@@ -181,7 +198,7 @@ class _GalleryImageState extends State<GalleryImage> {
 
   @override
   Widget build(BuildContext context) {
-    var _currentPreview =
+    final GalleryPreview _currentPreview =
         _galleryModel.galleryItem.galleryPreview[widget.index];
     return FutureBuilder<String>(
         future: _getImageUrl(),
@@ -206,19 +223,27 @@ class _GalleryImageState extends State<GalleryImage> {
                 child: Container(
                   height: 100,
                   child: Column(
-                    children: [
+                    children: <Widget>[
                       Text(
                         '${widget.index + 1}',
-                        style: TextStyle(fontSize: 50),
+                        style: const TextStyle(
+                          fontSize: 50,
+                          color: CupertinoColors.systemGrey6,
+                        ),
                       ),
-                      Text('获取中...'),
+                      const Text(
+                        '获取中...',
+                        style: TextStyle(
+                          color: CupertinoColors.systemGrey6,
+                        ),
+                      ),
                     ],
                   ),
                 ),
               );
             }
           } else {
-            var url = _currentPreview.largeImageUrl;
+            final String url = _currentPreview.largeImageUrl;
             return ExtendedImage.network(
               url,
               fit: BoxFit.contain,

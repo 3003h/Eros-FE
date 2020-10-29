@@ -108,12 +108,12 @@ class ListViewEhSetting extends StatelessWidget {
 
 /// 列表模式切换
 Widget _buildListModeItem(BuildContext context) {
-  const String _title = '列表模式';
+  const String _title = '浏览模式';
   final EhConfigModel ehConfigModel =
       Provider.of<EhConfigModel>(context, listen: false);
 
   final Map<ListModeEnum, String> modeMap = <ListModeEnum, String>{
-    ListModeEnum.list: '列表模式',
+    ListModeEnum.list: '列表',
     ListModeEnum.waterfall: '瀑布流',
   };
 
