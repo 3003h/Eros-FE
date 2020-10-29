@@ -56,42 +56,48 @@ class _GalleryViewPageEState extends State<GalleryViewPageE> {
               shouldRebuild: (pre, next) => true,
               builder: (context, List<GalleryPreview> previews, child) {
 //            Global.logger.v('build GalleryViewPageE');
-                return Stack(
-                  children: <Widget>[
-                    Container(
-                      child: ExtendedImageGesturePageView.builder(
-                        itemBuilder: (BuildContext context, int index) {
-                          final Widget image = GalleryImage(
-                            index: index,
-                          );
-                          if (index == _currentIndex) {
-                            return Hero(
-                              tag: previews[index].href + index.toString(),
-                              child: image,
+                return SafeArea(
+                  child: Stack(
+                    children: <Widget>[
+                      Container(
+                        child: ExtendedImageGesturePageView.builder(
+                          itemBuilder: (BuildContext context, int index) {
+                            final Widget image = GalleryImage(
+                              index: index,
                             );
-                          } else {
-                            return image;
-                          }
-                        },
-                        itemCount: previews.length,
-                        onPageChanged: (int index) {
-                          // 预载
-                          _precache(previews, index, 5);
-                          setState(() {
-                            _currentIndex = index;
-                          });
-                        },
-                        controller: widget.controller,
-                        scrollDirection: Axis.horizontal,
+                            if (index == _currentIndex) {
+                              return Hero(
+                                tag: previews[index].href + index.toString(),
+                                child: image,
+                              );
+                            } else {
+                              return image;
+                            }
+                          },
+                          itemCount: previews.length,
+                          onPageChanged: (int index) {
+                            // 预载
+                            _precache(previews, index, 5);
+                            setState(() {
+                              _currentIndex = index;
+                            });
+                          },
+                          controller: widget.controller,
+                          scrollDirection: Axis.horizontal,
+                        ),
                       ),
-                    ),
-                    Positioned(
-                      child: Container(
-                          height: 40,
-                          child:
-                              Text('${_currentIndex + 1}/${previews.length}')),
-                    ),
-                  ],
+                      Positioned(
+                        child: Container(
+                            alignment: Alignment.topCenter,
+                            // height: 40,
+                            child: Text(
+                              '${_currentIndex + 1}/${previews.length}',
+                              style: const TextStyle(
+                                  color: CupertinoColors.systemGrey6),
+                            )),
+                      ),
+                    ],
+                  ),
                 );
               }),
         ),
