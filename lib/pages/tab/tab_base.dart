@@ -3,6 +3,7 @@ import 'package:FEhViewer/models/states/ehconfig_model.dart';
 import 'package:FEhViewer/models/states/gallery_model.dart';
 import 'package:FEhViewer/pages/item/gallery_item.dart';
 import 'package:FEhViewer/pages/item/gallery_item_flow.dart';
+import 'package:FEhViewer/pages/item/gallery_item_simple.dart';
 import 'package:FEhViewer/values/const.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -72,6 +73,33 @@ SliverList buildGallerySliverListView(
   );
 }
 
+SliverFixedExtentList buildGallerySliverListSimpleView(
+    List<GalleryItem> gallerItemBeans, tabIndex,
+    {int maxPage, int curPage, VoidCallback loadMord}) {
+  return SliverFixedExtentList(
+    delegate: SliverChildBuilderDelegate(
+          (BuildContext context, int index) {
+        if (maxPage != null) {
+          if (index == gallerItemBeans.length - 1 && curPage < maxPage - 1) {
+//            加载更多数据的回调
+            loadMord();
+          }
+        }
+
+        return ChangeNotifierProvider<GalleryModel>.value(
+          value: GalleryModel()
+            ..initData(gallerItemBeans[index], tabIndex: tabIndex),
+          child: GalleryItemSimpleWidget(
+            galleryItem: gallerItemBeans[index],
+            tabIndex: tabIndex,
+          ),
+        );
+      },
+      childCount: gallerItemBeans.length,
+    ), itemExtent: kItemWidth + 1,
+  );
+}
+
 Widget getGalleryList(List<GalleryItem> gallerItemBeans, tabIndex,
     {int maxPage, int curPage, VoidCallback loadMord}) {
   return Selector<EhConfigModel, ListModeEnum>(
@@ -84,6 +112,10 @@ Widget getGalleryList(List<GalleryItem> gallerItemBeans, tabIndex,
             break;
           case ListModeEnum.waterfall:
             return buildWaterfallFlow(gallerItemBeans, tabIndex,
+                maxPage: maxPage, curPage: curPage, loadMord: loadMord);
+            break;
+          case ListModeEnum.simpleList:
+            return buildGallerySliverListSimpleView(gallerItemBeans, tabIndex,
                 maxPage: maxPage, curPage: curPage, loadMord: loadMord);
             break;
         }

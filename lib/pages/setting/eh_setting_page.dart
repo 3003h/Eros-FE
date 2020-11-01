@@ -114,6 +114,7 @@ Widget _buildListModeItem(BuildContext context) {
 
   final Map<ListModeEnum, String> modeMap = <ListModeEnum, String>{
     ListModeEnum.list: '列表',
+    ListModeEnum.simpleList: '简单列表',
     ListModeEnum.waterfall: '瀑布流',
   };
 
