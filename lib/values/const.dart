@@ -4,6 +4,7 @@ import 'package:flutter/cupertino.dart';
 enum ListModeEnum {
   list,
   waterfall,
+  simpleList,
 }
 
 class EHConst {

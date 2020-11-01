@@ -559,17 +559,6 @@ class CoverImage extends StatelessWidget {
                 child: Hero(
                   tag: '${_item.gid}_${_item.token}_cover_$_tabIndex',
                   child: Container(
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(6.0), //圆角
-                      // ignore: prefer_const_literals_to_create_immutables
-                      /*boxShadow: [
-                          //阴影
-                          const BoxShadow(
-                            color: CupertinoColors.systemGrey2,
-                            blurRadius: 2.0,
-                          )
-                        ]*/
-                    ),
                     child: ClipRRect(
                       borderRadius: BorderRadius.circular(6),
                       child: Container(

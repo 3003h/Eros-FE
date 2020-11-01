@@ -12,23 +12,25 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:provider/provider.dart';
 
-const double kCoverImageWidth = 120.0;
+const double kCoverImageWidth = 70.0;
+const double kItemWidth = 115.0;
 
 /// 画廊列表项
+/// 尖端模式 精简显示信息 固定高度
 /// 使用provider进行管理
 /// 标题和tag需要随设置变化重构ui
-class GalleryItemWidget extends StatefulWidget {
-  const GalleryItemWidget(
+class GalleryItemSimpleWidget extends StatefulWidget {
+  const GalleryItemSimpleWidget(
       {@required this.galleryItem, @required this.tabIndex});
 
   final GalleryItem galleryItem;
   final tabIndex;
 
   @override
-  _GalleryItemWidgetState createState() => _GalleryItemWidgetState();
+  _GalleryItemSimpleWidgetState createState() => _GalleryItemSimpleWidgetState();
 }
 
-class _GalleryItemWidgetState extends State<GalleryItemWidget> {
+class _GalleryItemSimpleWidgetState extends State<GalleryItemSimpleWidget> {
   final double _paddingLeft = 8.0;
 
   Color _colorTap; // 按下时颜色反馈
@@ -38,11 +40,6 @@ class _GalleryItemWidgetState extends State<GalleryItemWidget> {
   @override
   void initState() {
     super.initState();
-//    Future.delayed(Duration.zero, () {
-//      Provider.of<GalleryModel>(context, listen: false)
-//          .initData(widget.galleryItem, tabIndex: widget.tabIndex);
-//    });
-//    WidgetsBinding.instance.addPostFrameCallback((callback) {});
   }
 
   @override
@@ -62,8 +59,8 @@ class _GalleryItemWidgetState extends State<GalleryItemWidget> {
 
     final Widget containerGallery = Container(
       color: _colorTap,
-      // height: 200,
-      padding: EdgeInsets.fromLTRB(_paddingLeft, 8, 8, 8),
+      height: kItemWidth,
+      padding: EdgeInsets.fromLTRB(_paddingLeft, 6, 6, 6),
       child: Column(
         children: <Widget>[
           Row(children: <Widget>[
@@ -85,9 +82,6 @@ class _GalleryItemWidgetState extends State<GalleryItemWidget> {
                     style: const TextStyle(
                         fontSize: 12, color: CupertinoColors.systemGrey),
                   ),
-                  // 标签
-                  const TagBox(),
-
                   // 评分行
                   Row(
                     crossAxisAlignment: CrossAxisAlignment.end,
@@ -175,11 +169,11 @@ class _GalleryItemWidgetState extends State<GalleryItemWidget> {
         _title = title;
         return Text(
           title,
-          maxLines: 4,
+          maxLines: 2,
           textAlign: TextAlign.left, // 对齐方式
           overflow: TextOverflow.ellipsis, // 超出部分省略号
           style: const TextStyle(
-            fontSize: 14.5,
+            fontSize: 13.5,
             fontWeight: FontWeight.w500,
           ),
         );
@@ -192,29 +186,19 @@ class _GalleryItemWidgetState extends State<GalleryItemWidget> {
     return Consumer<GalleryModel>(builder: (context, galleryModel, child) {
       final GalleryItem _item = galleryModel.galleryItem;
 
-      num _getHeigth() {
-        if (_item.imgWidth >= kCoverImageWidth) {
-          return _item.imgHeight * kCoverImageWidth / _item.imgWidth;
-        } else {
-          return _item.imgHeight;
-        }
-      }
-
-      return ClipRRect(
-        borderRadius: BorderRadius.circular(6),
-        child: Container(
-          width: kCoverImageWidth,
-          height: _getHeigth(),
+      return Container(
+        width: kCoverImageWidth,
+        height: kItemWidth-12,
+        color: CupertinoColors.systemBackground,
+        child: Center(
           child: Hero(
             tag: '${_item.gid}_${_item.token}_cover_${galleryModel.tabIndex}',
-            child: Center(
-              child: ClipRRect(
-                // 圆角
-                borderRadius: BorderRadius.circular(6),
-                child: Container(
-                    child: CoverImg(
-                        imgUrl: galleryModel?.galleryItem?.imgUrl ?? '')),
-              ),
+            child: ClipRRect(
+              // 圆角
+              borderRadius: BorderRadius.circular(6),
+              child: Container(
+                  child: CoverImg(
+                      imgUrl: galleryModel?.galleryItem?.imgUrl ?? '')),
             ),
           ),
         ),
@@ -332,73 +316,7 @@ class _GalleryItemWidgetState extends State<GalleryItemWidget> {
   }
 }
 
-///
-///
-///
-///
-///
-///
-class TagItem extends StatelessWidget {
-  const TagItem({
-    Key key,
-    this.text,
-  }) : super(key: key);
 
-  final String text;
-
-  @override
-  Widget build(BuildContext context) {
-    return ClipRRect(
-      borderRadius: BorderRadius.circular(4),
-      child: Container(
-        // height: 18,
-        padding: const EdgeInsets.fromLTRB(4, 2, 4, 2),
-        color: const Color(0xffeeeeee),
-        child: Text(
-          text ?? '',
-          textAlign: TextAlign.center,
-          style: const TextStyle(
-            fontSize: 12,
-            height: 1,
-            fontWeight: FontWeight.w400,
-            color: Color(0xff444444),
-          ),
-          strutStyle: const StrutStyle(height: 1),
-        ),
-      ),
-    );
-  }
-}
-
-/// 传入原始标签和翻译标签
-/// 用于设置切换的时候变更
-class TagBox extends StatelessWidget {
-  const TagBox({Key key}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return Selector2<EhConfigModel, GalleryModel, List>(
-      selector: (context, EhConfigModel ehconfig, GalleryModel galleryModel) =>
-          ehconfig.isTagTranslat
-              ? galleryModel.galleryItem.simpleTagsTranslat
-              : galleryModel.galleryItem.simpleTags,
-      builder: (context, simpleTags, child) {
-        return Container(
-          padding: const EdgeInsets.fromLTRB(0, 4, 0, 8),
-          child: Wrap(
-            spacing: 4, //主轴上子控件的间距
-            runSpacing: 4, //交叉轴上子控件之间的间距
-            children: List<Widget>.from(simpleTags
-                .map((tagText) => TagItem(
-                      text: tagText,
-                    ))
-                .toList()), //要显示的子控件集合
-          ),
-        );
-      },
-    );
-  }
-}
 
 /// 封面图片Widget
 class CoverImg extends StatelessWidget {
