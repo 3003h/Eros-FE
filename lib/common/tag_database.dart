@@ -30,18 +30,19 @@ class EhTagDatabase {
     Global.loggerNoStack.v('remoteVer $remoteVer');
 
     // 获取当前本地版本
-    final String localVer =
-        StorageUtil().getString(TAG_TRANSLAT_VER)?.trim() ?? '';
+    // final String localVer =
+    //     StorageUtil().getString(TAG_TRANSLAT_VER)?.trim() ?? '';
+    final String localVer = Global.profile.ehConfig.tagTranslatVer;
     Global.loggerNoStack.v('localVer $localVer');
 
     if (remoteVer != localVer) {
       Global.loggerNoStack.v('TagTranslat更新');
+      // ignore: always_specify_types
       final List assList = urlJson['assets'];
-
       final Map<String, String> assMap = <String, String>{};
-      assList.forEach((assets) {
+      for (final dynamic assets in assList) {
         assMap[assets['name']] = assets['browser_download_url'];
-      });
+      }
       final String dbUrl = assMap['db.text.json'];
 
       Global.loggerNoStack.v(dbUrl);
@@ -56,7 +57,9 @@ class EhTagDatabase {
         final List listDataP = dataAll['data'] as List;
 
         await tagSaveToDB(listDataP);
-        StorageUtil().setString(TAG_TRANSLAT_VER, remoteVer);
+        // StorageUtil().setString(TAG_TRANSLAT_VER, remoteVer);
+        Global.profile.ehConfig.tagTranslatVer = remoteVer;
+        Global.saveProfile();
       }
       Global.loggerNoStack.v('tag翻译更新完成');
     }

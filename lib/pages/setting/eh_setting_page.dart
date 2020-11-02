@@ -1,4 +1,5 @@
 import 'package:FEhViewer/common/global.dart';
+import 'package:FEhViewer/common/tag_database.dart';
 import 'package:FEhViewer/models/states/ehconfig_model.dart';
 import 'package:FEhViewer/models/states/user_model.dart';
 import 'package:FEhViewer/values/const.dart';
@@ -54,6 +55,13 @@ class ListViewEhSetting extends StatelessWidget {
 
     void _handleTagTranslatChanged(bool newValue) {
       Provider.of<EhConfigModel>(context, listen: false).tagTranslat = newValue;
+      if (newValue) {
+        try {
+          EhTagDatabase.generateTagTranslat();
+        } catch (e) {
+          debugPrint('更新翻译异常 $e');
+        }
+      }
     }
 
     void _handleGalleryListImgBlurChanged(bool newValue) {
@@ -78,7 +86,8 @@ class ListViewEhSetting extends StatelessWidget {
         TextSwitchItem('显示标签中文翻译',
             intValue: _tagTranslat,
             onChanged: _handleTagTranslatChanged,
-            desc: '显示翻译后的标签（需要下载数据文件）'),
+            desc:
+                '需要下载数据文件,当前版本:${Global.profile.ehConfig.tagTranslatVer ?? "无"}'),
         TextSwitchItem('显示日文标题',
             intValue: _jpnTitle,
             onChanged: _handleJpnTitleChanged,
