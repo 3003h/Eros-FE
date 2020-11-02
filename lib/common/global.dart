@@ -47,11 +47,11 @@ class Global {
     // 工具初始
     await StorageUtil.init();
 
-    try {
-      EhTagDatabase.generateTagTranslat();
-    } catch (e) {
-      debugPrint('更新翻译异常 $e');
-    }
+    // try {
+    //   EhTagDatabase.generateTagTranslat();
+    // } catch (e) {
+    //   debugPrint('更新翻译异常 $e');
+    // }
 
     final _profile = StorageUtil().getJSON(PROFILE);
     if (_profile != null) {

@@ -8,6 +8,7 @@ class EhConfig {
 
     bool jpnTitle;
     bool tagTranslat;
+    String tagTranslatVer;
     String favoritesOrder;
     bool siteEx;
     bool galleryImgBlur;
