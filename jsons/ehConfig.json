@@ -8,5 +8,6 @@
   "favPicker": false,
   "favLongTap": false,
   "lastFavcat": "3",
-  "listMode": "list"
+  "listMode": "list",
+  "safeMode": true
 }
