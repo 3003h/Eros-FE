@@ -1,3 +1,4 @@
+import 'package:FEhViewer/common/global.dart';
 import 'package:FEhViewer/common/tag_database.dart';
 import 'package:FEhViewer/models/index.dart';
 import 'package:FEhViewer/utils/utility.dart';
@@ -136,21 +137,42 @@ class GalleryListParser {
         favcat = EHConst.favCat[favcatColor] ?? '';
       }
 
-      _gallaryItems.add(GalleryItem()
-        ..gid = gid
-        ..token = token
-        ..englishTitle = title
-        ..imgUrl = imgUrl ?? ''
-        ..imgHeight = imageHeight
-        ..imgWidth = imageWidth
-        ..url = url
-        ..category = category
-        ..simpleTags = simpleTags
-        ..postTime = postTimeLocal
-        ..simpleTagsTranslat = simpleTagsTranslate
-        ..ratingFallBack = ratingFB
-        ..favTitle = favTitle
-        ..favcat = favcat);
+      // safeMode检查
+      if (Global.profile.ehConfig.safeMode) {
+        if (category.trim() == 'Non-H') {
+          _gallaryItems.add(GalleryItem()
+            ..gid = gid
+            ..token = token
+            ..englishTitle = title
+            ..imgUrl = imgUrl ?? ''
+            ..imgHeight = imageHeight
+            ..imgWidth = imageWidth
+            ..url = url
+            ..category = category
+            ..simpleTags = simpleTags
+            ..postTime = postTimeLocal
+            ..simpleTagsTranslat = simpleTagsTranslate
+            ..ratingFallBack = ratingFB
+            ..favTitle = favTitle
+            ..favcat = favcat);
+        }
+      } else {
+        _gallaryItems.add(GalleryItem()
+          ..gid = gid
+          ..token = token
+          ..englishTitle = title
+          ..imgUrl = imgUrl ?? ''
+          ..imgHeight = imageHeight
+          ..imgWidth = imageWidth
+          ..url = url
+          ..category = category
+          ..simpleTags = simpleTags
+          ..postTime = postTimeLocal
+          ..simpleTagsTranslat = simpleTagsTranslate
+          ..ratingFallBack = ratingFB
+          ..favTitle = favTitle
+          ..favcat = favcat);
+      }
     }
 
     // 通过api请求获取更多信息

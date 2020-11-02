@@ -1,6 +1,5 @@
 import 'dart:convert';
 
-import 'package:FEhViewer/common/tag_database.dart';
 import 'package:FEhViewer/models/index.dart';
 import 'package:FEhViewer/models/profile.dart';
 import 'package:FEhViewer/route/application.dart';
@@ -19,14 +18,14 @@ class Global {
   static bool isFirstOpen = false;
   static Profile profile = Profile();
 
-  static final logger = Logger(
+  static final Logger logger = Logger(
     printer: PrettyPrinter(
       lineLength: 100,
       colors: false,
     ),
   );
 
-  static final loggerNoStack = Logger(
+  static final Logger loggerNoStack = Logger(
     printer: PrettyPrinter(
       lineLength: 100,
       methodCount: 0,
@@ -47,12 +46,7 @@ class Global {
     // 工具初始
     await StorageUtil.init();
 
-    // try {
-    //   EhTagDatabase.generateTagTranslat();
-    // } catch (e) {
-    //   debugPrint('更新翻译异常 $e');
-    // }
-
+    // ignore: always_specify_types
     final _profile = StorageUtil().getJSON(PROFILE);
     if (_profile != null) {
       try {
@@ -64,6 +58,7 @@ class Global {
 
     if (profile.ehConfig == null) {
       profile.ehConfig = EhConfig()
+        ..safeMode = true
         ..siteEx = false
         ..tagTranslat = false
         ..jpnTitle = false
@@ -86,7 +81,7 @@ class Global {
   }
 
   // 持久化Profile信息
-  static saveProfile() {
+  static Future<bool> saveProfile() {
 //    logger.v(profile.toJson());
     return StorageUtil().setJSON(PROFILE, profile);
   }

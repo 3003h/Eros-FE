@@ -154,8 +154,67 @@ class _TextSwitchItemState extends State<TextSwitchItem> {
         Container(
           height: 0.5,
           color: CupertinoColors.systemGrey4,
-        )
+        ),
       ],
+    );
+  }
+}
+
+/// 普通文本类型
+class TextItem extends StatefulWidget {
+  const TextItem(
+    this.title, {
+    this.desc,
+    this.onTap,
+    Key key,
+  }) : super(key: key);
+
+  final String title;
+  final String desc;
+  final VoidCallback onTap;
+
+  @override
+  _TextItemState createState() => _TextItemState();
+}
+
+class _TextItemState extends State<TextItem> {
+  @override
+  Widget build(BuildContext context) {
+    final Widget item = Column(
+      children: <Widget>[
+        Container(
+          height: 60,
+          padding: const EdgeInsets.fromLTRB(20, 8, 20, 8),
+          child: Row(
+            children: <Widget>[
+              Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: <Widget>[
+                    Text(widget.title),
+                    Text(
+                      widget.desc,
+                      style: const TextStyle(
+                          fontSize: 12.5, color: CupertinoColors.systemGrey),
+                    ),
+                  ]),
+              Expanded(
+                child: Container(),
+              ),
+            ],
+          ),
+        ),
+        Container(
+          height: 0.5,
+          color: CupertinoColors.systemGrey4,
+        ),
+      ],
+    );
+
+    return GestureDetector(
+      child: item,
+      // 不可见区域有效
+      behavior: HitTestBehavior.opaque,
+      onTap: widget.onTap,
     );
   }
 }

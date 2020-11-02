@@ -68,14 +68,6 @@ class Api {
 
     final String response = await httpManager.get(url);
 
-    /*var cookieJar = await Api.cookieJar;
-    List<Cookie> cookiesE =
-        cookieJar.loadForRequest(Uri.parse(EHConst.EH_BASE_URL));
-    List<Cookie> cookiesEX =
-        cookieJar.loadForRequest(Uri.parse(EHConst.EX_BASE_URL));
-
-    Global.logger.v('$cookiesE\n$cookiesEX');*/
-
     final Tuple2<List<GalleryItem>, int> tuple =
         await GalleryListParser.parseGalleryList(response);
 
