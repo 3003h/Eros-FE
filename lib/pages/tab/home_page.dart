@@ -164,11 +164,13 @@ class _FEhHomeState extends State<FEhHome> {
               awaitComplete: false,
               onTap: () {
                 _scrollControllerList[index].animateTo(0,
-                    duration: Duration(milliseconds: 500), curve: Curves.ease);
+                    duration: const Duration(milliseconds: 500),
+                    curve: Curves.ease);
               },
               onDoubleTap: () {
                 _scrollControllerList[index].animateTo(-100,
-                    duration: Duration(milliseconds: 500), curve: Curves.ease);
+                    duration: const Duration(milliseconds: 500),
+                    curve: Curves.ease);
               },
             );
           } else {
