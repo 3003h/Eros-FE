@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:FEhViewer/common/global.dart';
 import 'package:FEhViewer/pages/setting/setting_base.dart';
 import 'package:FEhViewer/utils/toast.dart';
@@ -36,22 +38,24 @@ class ListViewAbout extends StatelessWidget {
               desc: '一个兴趣使然的e-hentai客户端',
             ),
             onTrigger: (int tapNum, int neededNum) {
-              if (Global.profile.ehConfig.safeMode ?? true) {
-                showToast('你发现了不得了的东西');
-                Global.logger.v('safeMode off');
-                Global.profile.ehConfig.safeMode = false;
-                Global.saveProfile();
-              } else {
-                showToast('ヾ(￣▽￣)Bye~Bye~');
-                Global.logger.v('safeMode on');
-                Global.profile.ehConfig.safeMode = true;
-                Global.saveProfile();
+              if (Platform.isIOS) {
+                if (Global.profile.ehConfig.safeMode ?? true) {
+                  showToast('你发现了不得了的东西');
+                  Global.logger.v('safeMode off');
+                  Global.profile.ehConfig.safeMode = false;
+                  Global.saveProfile();
+                } else {
+                  showToast('ヾ(￣▽￣)Bye~Bye~');
+                  Global.logger.v('safeMode on');
+                  Global.profile.ehConfig.safeMode = true;
+                  Global.saveProfile();
+                }
               }
             },
           ),
           TextItem(
             '作者',
-            desc: 'honjow',
+            desc: 'honjow  <honjow311@gmail.com>',
           ),
         ],
       ),

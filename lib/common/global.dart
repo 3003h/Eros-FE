@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:io';
 
 import 'package:FEhViewer/models/index.dart';
 import 'package:FEhViewer/models/profile.dart';
@@ -58,7 +59,7 @@ class Global {
 
     if (profile.ehConfig == null) {
       profile.ehConfig = EhConfig()
-        ..safeMode = true
+        ..safeMode = Platform.isIOS
         ..siteEx = false
         ..tagTranslat = false
         ..jpnTitle = false

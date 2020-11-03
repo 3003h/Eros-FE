@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:FEhViewer/common/global.dart';
 import 'package:FEhViewer/common/tag_database.dart';
 import 'package:FEhViewer/models/index.dart';
@@ -138,7 +140,7 @@ class GalleryListParser {
       }
 
       // safeMode检查
-      if (Global.profile.ehConfig.safeMode) {
+      if (Platform.isIOS && Global.profile.ehConfig.safeMode) {
         if (category.trim() == 'Non-H') {
           _gallaryItems.add(GalleryItem()
             ..gid = gid
