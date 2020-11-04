@@ -4,15 +4,15 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class SettingItems extends StatefulWidget {
-  final String text;
-  final IconData icon;
-  final String route;
-
-  SettingItems({
+  const SettingItems({
     this.text,
     this.icon,
     this.route,
   });
+
+  final String text;
+  final IconData icon;
+  final String route;
 
   @override
   _SettingItems createState() => _SettingItems();
@@ -22,16 +22,8 @@ class SettingItems extends StatefulWidget {
 class _SettingItems extends State<SettingItems> {
   Color _color;
 
-//  @override
-//  void initState() {
-//    super.initState();
-//    _color = CupertinoColors.systemBackground;
-//  }
-
   @override
   Widget build(BuildContext context) {
-    // return Text(text);
-
     final Widget container = Container(
         color: _color,
         child: Column(

@@ -371,7 +371,7 @@
 				CODE_SIGN_ENTITLEMENTS = Runner/fehviewer.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Distribution";
 				CODE_SIGN_STYLE = Manual;
-				CURRENT_PROJECT_VERSION = 5;
+				CURRENT_PROJECT_VERSION = 6;
 				DEVELOPMENT_TEAM = T7YU25UBLS;
 				ENABLE_BITCODE = NO;
 				FRAMEWORK_SEARCH_PATHS = (
@@ -387,9 +387,9 @@
 					"$(inherited)",
 					"$(PROJECT_DIR)/Flutter",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.honjow.fehv;
+				PRODUCT_BUNDLE_IDENTIFIER = com.honjow.fehviewer;
 				PRODUCT_NAME = fehviewer;
-				PROVISIONING_PROFILE_SPECIFIER = FEhViewer_AS;
+				PROVISIONING_PROFILE_SPECIFIER = Wildcard_AppStore;
 				SWIFT_OBJC_BRIDGING_HEADER = "Runner/Runner-Bridging-Header.h";
 				SWIFT_VERSION = 5.0;
 				VERSIONING_SYSTEM = "apple-generic";
@@ -515,7 +515,7 @@
 				CODE_SIGN_ENTITLEMENTS = Runner/fehviewer.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 5;
+				CURRENT_PROJECT_VERSION = 6;
 				DEVELOPMENT_TEAM = T7YU25UBLS;
 				ENABLE_BITCODE = NO;
 				FRAMEWORK_SEARCH_PATHS = (
@@ -531,7 +531,7 @@
 					"$(inherited)",
 					"$(PROJECT_DIR)/Flutter",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.honjow.fehv;
+				PRODUCT_BUNDLE_IDENTIFIER = com.honjow.fehviewer;
 				PRODUCT_NAME = fehviewer;
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_OBJC_BRIDGING_HEADER = "Runner/Runner-Bridging-Header.h";
@@ -550,7 +550,7 @@
 				CODE_SIGN_ENTITLEMENTS = Runner/fehviewer.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Distribution";
 				CODE_SIGN_STYLE = Manual;
-				CURRENT_PROJECT_VERSION = 5;
+				CURRENT_PROJECT_VERSION = 6;
 				DEVELOPMENT_TEAM = T7YU25UBLS;
 				ENABLE_BITCODE = NO;
 				FRAMEWORK_SEARCH_PATHS = (
@@ -566,9 +566,9 @@
 					"$(inherited)",
 					"$(PROJECT_DIR)/Flutter",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.honjow.fehv;
+				PRODUCT_BUNDLE_IDENTIFIER = com.honjow.fehviewer;
 				PRODUCT_NAME = fehviewer;
-				PROVISIONING_PROFILE_SPECIFIER = FEhViewer_AS;
+				PROVISIONING_PROFILE_SPECIFIER = Wildcard_AppStore;
 				SWIFT_OBJC_BRIDGING_HEADER = "Runner/Runner-Bridging-Header.h";
 				SWIFT_VERSION = 5.0;
 				VERSIONING_SYSTEM = "apple-generic";
