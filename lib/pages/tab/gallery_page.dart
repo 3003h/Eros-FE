@@ -1,22 +1,15 @@
-import 'dart:ui' as ui;
-
 import 'package:FEhViewer/common/global.dart';
 import 'package:FEhViewer/generated/l10n.dart';
 import 'package:FEhViewer/models/index.dart';
-import 'package:FEhViewer/models/states/gallery_model.dart';
 import 'package:FEhViewer/route/navigator_util.dart';
 import 'package:FEhViewer/utils/toast.dart';
 import 'package:FEhViewer/utils/utility.dart';
 import 'package:FEhViewer/values/theme_colors.dart';
-import 'package:FEhViewer/widget/blur_image.dart';
-import 'package:FEhViewer/widget/eh_widget.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:provider/provider.dart';
 import 'package:tuple/tuple.dart';
 
-import '../item/gallery_item.dart';
 import 'tab_base.dart';
 
 class GalleryListTab extends StatefulWidget {
@@ -29,9 +22,9 @@ class GalleryListTab extends StatefulWidget {
       : super(key: key);
 
   final tabIndex;
-  final scrollController;
+  final ScrollController scrollController;
 
-  final simpleSearch;
+  final String simpleSearch;
   final int cats;
 
   @override
@@ -61,7 +54,8 @@ class _GalleryListTabState extends State<GalleryListTab> {
     _search = '${widget.simpleSearch}'.trim();
   }
 
-  _loadDataFirst() async {
+  Future<void> _loadDataFirst() async {
+    Global.loggerNoStack.v('_loadDataFirst');
     setState(() {
       _gallerItemBeans.clear();
       _firstLoading = true;
@@ -76,7 +70,8 @@ class _GalleryListTabState extends State<GalleryListTab> {
     });
   }
 
-  _reloadData() async {
+  Future<void> _reloadData() async {
+    Global.loggerNoStack.v('_reloadData');
     if (_firstLoading) {
       setState(() {
         _firstLoading = false;
@@ -93,13 +88,13 @@ class _GalleryListTabState extends State<GalleryListTab> {
     });
   }
 
-  _loadDataMore() async {
+  Future<void> _loadDataMore() async {
     if (_isLoadMore) {
       return;
     }
 
     // 增加延时 避免build期间进行 setState
-    await Future.delayed(const Duration(milliseconds: 100));
+    await Future<void>.delayed(const Duration(milliseconds: 100));
     setState(() {
       _isLoadMore = true;
     });
@@ -116,7 +111,7 @@ class _GalleryListTabState extends State<GalleryListTab> {
     });
   }
 
-  _loadFromPage(int page) async {
+  Future<void> _loadFromPage(int page) async {
     Global.logger.v('jump to page   ===>  $page');
     setState(() {
       _firstLoading = true;
@@ -135,7 +130,7 @@ class _GalleryListTabState extends State<GalleryListTab> {
 
   /// 跳转页码
   Future<void> _jumtToPage(BuildContext context) async {
-    _jump(BuildContext context) {
+    void _jump(BuildContext context) {
       final String _input = _pageController.text.trim();
 
       if (_input.isEmpty) {

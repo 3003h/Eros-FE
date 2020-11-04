@@ -1,3 +1,4 @@
+import 'package:FEhViewer/common/global.dart';
 import 'package:FEhViewer/generated/l10n.dart';
 import 'package:FEhViewer/pages/item/setting_item.dart';
 import 'package:FEhViewer/pages/item/user_item.dart';
@@ -27,19 +28,19 @@ class _SettingTabState extends State<SettingTab> {
   var _routes = [];
 
   void initData(BuildContext context) {
-    _itemTitles = ['EH设置', '高级设置', '安全设置', '关于'];
+    _itemTitles = ['EH设置', '高级设置', /*'安全设置',*/ '关于'];
 
     _icons = [
       FontAwesomeIcons.cookieBite,
       FontAwesomeIcons.tools,
-      FontAwesomeIcons.shieldAlt,
+      // FontAwesomeIcons.shieldAlt,
       FontAwesomeIcons.infoCircle,
     ];
 
     _routes = [
       EHRoutes.ehSetting,
       EHRoutes.advancedSetting,
-      '',
+      // '',
       EHRoutes.about,
     ];
   }
@@ -48,7 +49,8 @@ class _SettingTabState extends State<SettingTab> {
     List _slivers = [];
     for (int _index = 0; _index < _itemTitles.length + 1; _index++) {
       if (_index == 0) {
-        _slivers.add(UserItem());
+        _slivers
+            .add(Global.profile.ehConfig.safeMode ? Container() : UserItem());
       } else {
         _slivers.add(SettingItems(
           text: _itemTitles[_index - 1],

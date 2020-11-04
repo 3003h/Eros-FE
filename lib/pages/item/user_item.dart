@@ -16,7 +16,7 @@ class UserItem extends StatefulWidget {
 }
 
 class _UserItem extends State<UserItem> {
-  final _normalText = "未登录";
+  final String _normalText = "未登录";
   Color _color;
 
   Future<void> _logOut(BuildContext context) async {

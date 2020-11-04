@@ -82,11 +82,15 @@ class Api {
 
     String url = '/';
     String qry = '?page=${page ?? 0}';
+
+    if (Global.profile.ehConfig.safeMode) {
+      qry = '$qry&f_cats=767';
+    } else if (cats != null) {
+      qry = '$qry&f_cats=$cats';
+    }
+
     if (fromGid != null) {
       qry = '$qry&from=$fromGid';
-    }
-    if (cats != null) {
-      qry = '$qry&f_cats=$cats';
     }
 
     if (serach != null) {
@@ -126,7 +130,7 @@ class Api {
 
     String url = '/favorites.php/';
     String qry = '?page=${page ?? 0}';
-    if (favcat != null && favcat != "a" && favcat.isNotEmpty) {
+    if (favcat != null && favcat != 'a' && favcat.isNotEmpty) {
       qry = '$qry&favcat=$favcat';
     }
     qry = "$qry&inline_set=${_order ?? ''}";
