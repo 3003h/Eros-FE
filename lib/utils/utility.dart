@@ -93,6 +93,10 @@ class Api {
       qry = '$qry&from=$fromGid';
     }
 
+    if (Global.profile.ehConfig.safeMode) {
+      serach = 'parody:gundam\$';
+    }
+
     if (serach != null) {
       final List<String> searArr = serach.split(':');
       if (searArr.length > 1) {
