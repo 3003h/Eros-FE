@@ -165,6 +165,36 @@ class NavigatorUtil {
     }
   }
 
+  static void goGalleryDetailReplace(BuildContext context, {String url}) {
+    if (url != null && url.isNotEmpty) {
+      final GalleryModel galleryModel = GalleryModel.initUrl(url: url);
+      Navigator.of(context).pushReplacement(
+        CupertinoPageRoute(
+          builder: (BuildContext context) {
+            return ChangeNotifierProvider<GalleryModel>.value(
+              value: galleryModel,
+              child: GalleryDetailPage(),
+            );
+          },
+        ),
+      );
+    } else {
+      final GalleryModel galleryModel =
+          Provider.of<GalleryModel>(context, listen: false);
+      Navigator.of(context, rootNavigator: true).pushReplacement(
+        CupertinoPageRoute(
+          builder: (BuildContext context) {
+            return ChangeNotifierProvider<GalleryModel>.value(
+              value: galleryModel,
+              child: GalleryDetailPage(),
+            );
+          },
+        ),
+      );
+    }
+    ;
+  }
+
   static void showSearch(BuildContext context) {
     Navigator.of(context).push(
       CupertinoPageRoute(
