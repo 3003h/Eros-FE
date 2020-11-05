@@ -34,10 +34,16 @@ class _FEhHomeNewState extends State<FEhHomeNew> {
   final List _pageList = [];
   final List _tabList = [];
   final List _scrollControllerList = [];
+  final List _oriTabList = [];
 
   void initData() {
+    _scrollControllerList.clear();
+    _tabList.clear();
+    _pageList.clear();
+    _oriTabList.clear();
+
     const double _iconSize = 24.0;
-    List oriTabList = [
+    _oriTabList.addAll([
       {
         'title': S.of(context).tab_popular,
         'icon': const Icon(FontAwesomeIcons.fire, size: _iconSize),
@@ -72,9 +78,9 @@ class _FEhHomeNewState extends State<FEhHomeNew> {
           scrollController: _getScrollController(S.of(context).tab_setting),
         )
       },
-    ];
+    ]);
 
-    for (final tabObj in oriTabList) {
+    for (final tabObj in _oriTabList) {
       if (tabObj['disable'] != null && tabObj['disable']) {
       } else {
         _scrollControllerList.add(_getScrollController(tabObj['title']));
@@ -123,12 +129,12 @@ class _FEhHomeNewState extends State<FEhHomeNew> {
               duration: const Duration(milliseconds: 800),
               awaitComplete: false,
               onTap: () {
-                _scrollControllerList[index].animateTo(0,
+                _scrollControllerList[index].animateTo(0.0,
                     duration: const Duration(milliseconds: 500),
                     curve: Curves.ease);
               },
               onDoubleTap: () {
-                _scrollControllerList[index].animateTo(-100,
+                _scrollControllerList[index].animateTo(-100.0,
                     duration: const Duration(milliseconds: 500),
                     curve: Curves.ease);
               },

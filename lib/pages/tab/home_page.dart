@@ -114,15 +114,6 @@ class _FEhHomeState extends State<FEhHome> {
     return tabIcon[curIndex];
   }
 
-  // 获取标题文本
-  Text getTabTitle(int curIndex) {
-    return Text(
-      _tabTitles[curIndex],
-      // style: TextStyle(fontFamilyFallback: [EHConst.FONT_FAMILY]),
-//      style: getTabTextStyle(curIndex),
-    );
-  }
-
   // 获取BottomNavigationBarItem
   List<BottomNavigationBarItem> getBottomNavigationBarItem() {
     final List<BottomNavigationBarItem> list = [];
