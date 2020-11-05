@@ -346,25 +346,42 @@ class Api {
   }
 
   static Future<void> getMoreGalleryInfoOne(GalleryItem galleryItem) async {
-    try {
-      // todo 正则
-      final RegExp urlRex = RegExp(r'/g/(\d+)/(\w+)$');
-      Global.logger.v(galleryItem.url);
-      final RegExpMatch urlRult = urlRex.firstMatch(galleryItem.url);
+    final RegExp urlRex = RegExp(r'http?s://e(-|x)hentai.org/g/(\d+)/(\w+)?/$');
+    Global.logger.v(galleryItem.url);
+    final RegExpMatch urlRult = urlRex.firstMatch(galleryItem.url);
+    Global.logger.v(urlRult.groupCount);
 
-      final String gid = urlRult.group(1);
-      final String token = urlRult.group(2);
+    final String gid = urlRult.group(2);
+    final String token = urlRult.group(3);
 
-      galleryItem.gid = gid;
-      galleryItem.token = token;
+    galleryItem.gid = gid;
+    galleryItem.token = token;
 
-      List<GalleryItem> reqGalleryItems = [galleryItem];
+    List<GalleryItem> reqGalleryItems = [galleryItem];
 
-      await getMoreGalleryInfo(reqGalleryItems);
-    } catch (e, stack) {
-      Global.logger.e('解析数据异常\n' + e.toString() + '\n' + stack.toString());
-      showToast('解析异常');
-    }
+    await getMoreGalleryInfo(reqGalleryItems);
+
+    // try {
+    //   // todo 正则
+    //   final RegExp urlRex =
+    //       RegExp(r'http?s://e(-|x)hentai.org/g/(\d+)/(\w+)?/$');
+    //   Global.logger.v(galleryItem.url);
+    //   final RegExpMatch urlRult = urlRex.firstMatch(galleryItem.url);
+    //   Global.logger.v(urlRult.groupNames.toString());
+    //
+    //   final String gid = urlRult.group(2);
+    //   final String token = urlRult.group(3);
+    //
+    //   galleryItem.gid = gid;
+    //   galleryItem.token = token;
+    //
+    //   List<GalleryItem> reqGalleryItems = [galleryItem];
+    //
+    //   await getMoreGalleryInfo(reqGalleryItems);
+    // } catch (e, stack) {
+    //   Global.logger.e('解析数据异常\n' + e.toString() + '\n' + stack.toString());
+    //   showToast('解析异常');
+    // }
   }
 
   /// 获取api
