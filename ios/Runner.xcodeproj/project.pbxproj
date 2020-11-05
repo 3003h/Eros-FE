@@ -14,7 +14,20 @@
 		97C146FC1CF9000F007C117D /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 97C146FA1CF9000F007C117D /* Main.storyboard */; };
 		97C146FE1CF9000F007C117D /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 97C146FD1CF9000F007C117D /* Assets.xcassets */; };
 		97C147011CF9000F007C117D /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 97C146FF1CF9000F007C117D /* LaunchScreen.storyboard */; };
+		BA0498C22553F1EA008DE488 /* ShareViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = BA0498C12553F1EA008DE488 /* ShareViewController.swift */; };
+		BA0498C52553F1EA008DE488 /* MainInterface.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = BA0498C32553F1EA008DE488 /* MainInterface.storyboard */; };
+		BA0498C92553F1EA008DE488 /* EHShareExtension.appex in Embed App Extensions */ = {isa = PBXBuildFile; fileRef = BA0498BF2553F1EA008DE488 /* EHShareExtension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 /* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		BA0498C72553F1EA008DE488 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 97C146E61CF9000F007C117D /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = BA0498BE2553F1EA008DE488;
+			remoteInfo = EHShareExtension;
+		};
+/* End PBXContainerItemProxy section */
 
 /* Begin PBXCopyFilesBuildPhase section */
 		9705A1C41CF9048500538489 /* Embed Frameworks */ = {
@@ -25,6 +38,17 @@
 			files = (
 			);
 			name = "Embed Frameworks";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		BA0498CA2553F1EA008DE488 /* Embed App Extensions */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 13;
+			files = (
+				BA0498C92553F1EA008DE488 /* EHShareExtension.appex in Embed App Extensions */,
+			);
+			name = "Embed App Extensions";
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXCopyFilesBuildPhase section */
@@ -48,6 +72,10 @@
 		97C147001CF9000F007C117D /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		97C147021CF9000F007C117D /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		BA04988D254FF9E3008DE488 /* fehviewer.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = fehviewer.entitlements; sourceTree = "<group>"; };
+		BA0498BF2553F1EA008DE488 /* EHShareExtension.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = EHShareExtension.appex; sourceTree = BUILT_PRODUCTS_DIR; };
+		BA0498C12553F1EA008DE488 /* ShareViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShareViewController.swift; sourceTree = "<group>"; };
+		BA0498C42553F1EA008DE488 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/MainInterface.storyboard; sourceTree = "<group>"; };
+		BA0498C62553F1EA008DE488 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		BADC7A7924A9198200AFDF67 /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/Main.strings"; sourceTree = "<group>"; };
 		BADC7A7A24A9198200AFDF67 /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/LaunchScreen.strings"; sourceTree = "<group>"; };
 		BADC7A7B24A919C100AFDF67 /* zh-Hant */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hant"; path = "zh-Hant.lproj/Main.strings"; sourceTree = "<group>"; };
@@ -60,6 +88,13 @@
 			buildActionMask = 2147483647;
 			files = (
 				6603A80151AAC0DF4A466BA4 /* Pods_Runner.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		BA0498BC2553F1EA008DE488 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -90,6 +125,7 @@
 			children = (
 				9740EEB11CF90186004384FC /* Flutter */,
 				97C146F01CF9000F007C117D /* Runner */,
+				BA0498C02553F1EA008DE488 /* EHShareExtension */,
 				97C146EF1CF9000F007C117D /* Products */,
 				BD2B51B0799E31FC8C88C126 /* Pods */,
 				8E17D831CCF214C421795E99 /* Frameworks */,
@@ -101,6 +137,7 @@
 			isa = PBXGroup;
 			children = (
 				97C146EE1CF9000F007C117D /* fehviewer.app */,
+				BA0498BF2553F1EA008DE488 /* EHShareExtension.appex */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -119,6 +156,16 @@
 				74858FAD1ED2DC5600515810 /* Runner-Bridging-Header.h */,
 			);
 			path = Runner;
+			sourceTree = "<group>";
+		};
+		BA0498C02553F1EA008DE488 /* EHShareExtension */ = {
+			isa = PBXGroup;
+			children = (
+				BA0498C12553F1EA008DE488 /* ShareViewController.swift */,
+				BA0498C32553F1EA008DE488 /* MainInterface.storyboard */,
+				BA0498C62553F1EA008DE488 /* Info.plist */,
+			);
+			path = EHShareExtension;
 			sourceTree = "<group>";
 		};
 		BD2B51B0799E31FC8C88C126 /* Pods */ = {
@@ -146,15 +193,34 @@
 				9705A1C41CF9048500538489 /* Embed Frameworks */,
 				3B06AD1E1E4923F5004D2608 /* Thin Binary */,
 				4C49F9EF0784633BDDCE8354 /* [CP] Embed Pods Frameworks */,
+				BA0498CA2553F1EA008DE488 /* Embed App Extensions */,
 			);
 			buildRules = (
 			);
 			dependencies = (
+				BA0498C82553F1EA008DE488 /* PBXTargetDependency */,
 			);
 			name = Runner;
 			productName = Runner;
 			productReference = 97C146EE1CF9000F007C117D /* fehviewer.app */;
 			productType = "com.apple.product-type.application";
+		};
+		BA0498BE2553F1EA008DE488 /* EHShareExtension */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = BA0498CE2553F1EA008DE488 /* Build configuration list for PBXNativeTarget "EHShareExtension" */;
+			buildPhases = (
+				BA0498BB2553F1EA008DE488 /* Sources */,
+				BA0498BC2553F1EA008DE488 /* Frameworks */,
+				BA0498BD2553F1EA008DE488 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = EHShareExtension;
+			productName = EHShareExtension;
+			productReference = BA0498BF2553F1EA008DE488 /* EHShareExtension.appex */;
+			productType = "com.apple.product-type.app-extension";
 		};
 /* End PBXNativeTarget section */
 
@@ -162,12 +228,16 @@
 		97C146E61CF9000F007C117D /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
+				LastSwiftUpdateCheck = 1210;
 				LastUpgradeCheck = 1020;
 				ORGANIZATIONNAME = "";
 				TargetAttributes = {
 					97C146ED1CF9000F007C117D = {
 						CreatedOnToolsVersion = 7.3.1;
 						LastSwiftMigration = 1100;
+					};
+					BA0498BE2553F1EA008DE488 = {
+						CreatedOnToolsVersion = 12.1;
 					};
 				};
 			};
@@ -187,6 +257,7 @@
 			projectRoot = "";
 			targets = (
 				97C146ED1CF9000F007C117D /* Runner */,
+				BA0498BE2553F1EA008DE488 /* EHShareExtension */,
 			);
 		};
 /* End PBXProject section */
@@ -200,6 +271,14 @@
 				3B3967161E833CAA004F5970 /* AppFrameworkInfo.plist in Resources */,
 				97C146FE1CF9000F007C117D /* Assets.xcassets in Resources */,
 				97C146FC1CF9000F007C117D /* Main.storyboard in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		BA0498BD2553F1EA008DE488 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				BA0498C52553F1EA008DE488 /* MainInterface.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -285,7 +364,23 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		BA0498BB2553F1EA008DE488 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				BA0498C22553F1EA008DE488 /* ShareViewController.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		BA0498C82553F1EA008DE488 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = BA0498BE2553F1EA008DE488 /* EHShareExtension */;
+			targetProxy = BA0498C72553F1EA008DE488 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
 
 /* Begin PBXVariantGroup section */
 		97C146FA1CF9000F007C117D /* Main.storyboard */ = {
@@ -306,6 +401,14 @@
 				BADC7A7C24A919C100AFDF67 /* zh-Hant */,
 			);
 			name = LaunchScreen.storyboard;
+			sourceTree = "<group>";
+		};
+		BA0498C32553F1EA008DE488 /* MainInterface.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				BA0498C42553F1EA008DE488 /* Base */,
+			);
+			name = MainInterface.storyboard;
 			sourceTree = "<group>";
 		};
 /* End PBXVariantGroup section */
@@ -366,6 +469,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 7AFA3C8E1D35360C0083082E /* Release.xcconfig */;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = Runner/fehviewer.entitlements;
@@ -390,7 +494,7 @@
 				MARKETING_VERSION = 1.0.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.honjow.fehv;
 				PRODUCT_NAME = fehviewer;
-				PROVISIONING_PROFILE_SPECIFIER = Wildcard_AppStore;
+				PROVISIONING_PROFILE_SPECIFIER = FEhViewer_AS;
 				SWIFT_OBJC_BRIDGING_HEADER = "Runner/Runner-Bridging-Header.h";
 				SWIFT_VERSION = 5.0;
 				VERSIONING_SYSTEM = "apple-generic";
@@ -511,6 +615,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 9740EEB21CF90195004384FC /* Debug.xcconfig */;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = Runner/fehviewer.entitlements;
@@ -547,6 +652,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 7AFA3C8E1D35360C0083082E /* Release.xcconfig */;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = Runner/fehviewer.entitlements;
@@ -571,12 +677,104 @@
 				MARKETING_VERSION = 1.0.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.honjow.fehv;
 				PRODUCT_NAME = fehviewer;
-				PROVISIONING_PROFILE_SPECIFIER = Wildcard_AppStore;
+				PROVISIONING_PROFILE_SPECIFIER = FEhViewer_AS;
 				SWIFT_OBJC_BRIDGING_HEADER = "Runner/Runner-Bridging-Header.h";
 				SWIFT_VERSION = 5.0;
 				VERSIONING_SYSTEM = "apple-generic";
 			};
 			name = Release;
+		};
+		BA0498CB2553F1EA008DE488 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CODE_SIGN_IDENTITY = "Apple Development";
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = T7YU25UBLS;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				INFOPLIST_FILE = EHShareExtension/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 14.1;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				PRODUCT_BUNDLE_IDENTIFIER = com.honjow.fehv.EHShareExtension;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		BA0498CC2553F1EA008DE488 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CODE_SIGN_IDENTITY = "iPhone Distribution";
+				CODE_SIGN_STYLE = Manual;
+				DEVELOPMENT_TEAM = T7YU25UBLS;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				INFOPLIST_FILE = EHShareExtension/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 14.1;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				MTL_FAST_MATH = YES;
+				PRODUCT_BUNDLE_IDENTIFIER = com.honjow.fehv.EHShareExtension;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = Wildcard_AppStore;
+				SKIP_INSTALL = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
+		BA0498CD2553F1EA008DE488 /* Profile */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CODE_SIGN_IDENTITY = "iPhone Distribution";
+				CODE_SIGN_STYLE = Manual;
+				DEVELOPMENT_TEAM = T7YU25UBLS;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				INFOPLIST_FILE = EHShareExtension/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 14.1;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				MTL_FAST_MATH = YES;
+				PRODUCT_BUNDLE_IDENTIFIER = com.honjow.fehv.EHShareExtension;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = Wildcard_AppStore;
+				SKIP_INSTALL = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Profile;
 		};
 /* End XCBuildConfiguration section */
 
@@ -597,6 +795,16 @@
 				97C147061CF9000F007C117D /* Debug */,
 				97C147071CF9000F007C117D /* Release */,
 				249021D4217E4FDB00AE95B9 /* Profile */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		BA0498CE2553F1EA008DE488 /* Build configuration list for PBXNativeTarget "EHShareExtension" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				BA0498CB2553F1EA008DE488 /* Debug */,
+				BA0498CC2553F1EA008DE488 /* Release */,
+				BA0498CD2553F1EA008DE488 /* Profile */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
