@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:FEhViewer/common/global.dart';
 import 'package:FEhViewer/models/states/ehconfig_model.dart';
 import 'package:FEhViewer/models/states/locale_model.dart';
@@ -10,12 +12,51 @@ import 'package:flutter/services.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:oktoast/oktoast.dart';
 import 'package:provider/provider.dart';
+import 'package:receive_sharing_intent/receive_sharing_intent.dart';
 
 import 'generated/l10n.dart';
 
 void main() => Global.init().then((e) => runApp(MyApp()));
 
-class MyApp extends StatelessWidget {
+class MyApp extends StatefulWidget {
+  @override
+  _MyAppState createState() => _MyAppState();
+}
+
+class _MyAppState extends State<MyApp> {
+  StreamSubscription _intentDataStreamSubscription;
+  List<SharedMediaFile> _sharedFiles;
+  String _sharedText;
+
+  @override
+  void initState() {
+    super.initState();
+    // For sharing or opening urls/text coming from outside the app while the app is in the memory
+    _intentDataStreamSubscription =
+        ReceiveSharingIntent.getTextStream().listen((String value) {
+      setState(() {
+        _sharedText = value;
+        Global.logger.v('Shared: $_sharedText');
+      });
+    }, onError: (err) {
+      Global.logger.e('getLinkStream error: $err');
+    });
+
+    // For sharing or opening urls/text coming from outside the app while the app is closed
+    ReceiveSharingIntent.getInitialText().then((String value) {
+      setState(() {
+        _sharedText = value;
+        Global.logger.v('Shared: $_sharedText');
+      });
+    });
+  }
+
+  @override
+  void dispose() {
+    _intentDataStreamSubscription.cancel();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     final Widget cupertinoApp = Consumer<LocaleModel>(
