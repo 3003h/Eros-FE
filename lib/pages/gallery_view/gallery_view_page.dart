@@ -1,11 +1,13 @@
 import 'package:FEhViewer/common/global.dart';
 import 'package:FEhViewer/models/index.dart';
 import 'package:FEhViewer/models/states/gallery_model.dart';
+import 'package:FEhViewer/route/navigator_util.dart';
 import 'package:FEhViewer/utils/utility.dart';
 import 'package:extended_image/extended_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:provider/provider.dart';
 
 class GalleryViewPageE extends StatefulWidget {
@@ -41,6 +43,8 @@ class _GalleryViewPageEState extends State<GalleryViewPageE> {
   /// 画廊图片大图浏览
   @override
   Widget build(BuildContext context) {
+    _currentIndex = widget.index;
+
     return CupertinoTheme(
       data: const CupertinoThemeData(
         brightness: Brightness.dark,
@@ -84,6 +88,8 @@ class _GalleryViewPageEState extends State<GalleryViewPageE> {
                           },
                           controller: widget.controller,
                           scrollDirection: Axis.horizontal,
+                          // canMovePage: (_) => false,
+                          // canScrollPage: (_) => false,
                         ),
                       ),
                       Positioned(
@@ -94,6 +100,23 @@ class _GalleryViewPageEState extends State<GalleryViewPageE> {
                               '${_currentIndex + 1}/${previews.length}',
                               style: const TextStyle(
                                   color: CupertinoColors.systemGrey6),
+                            )),
+                      ),
+                      Positioned(
+                        child: Container(
+                            padding: const EdgeInsets.only(left: 8, bottom: 8),
+                            alignment: Alignment.bottomLeft,
+                            child: GestureDetector(
+                              // 不可见区域点击有效
+                              behavior: HitTestBehavior.opaque,
+                              onTap: () {
+                                Global.logger.v('back');
+                                NavigatorUtil.goBack(context);
+                              },
+                              child: const Icon(
+                                FontAwesomeIcons.chevronLeft,
+                                color: CupertinoColors.systemGrey6,
+                              ),
                             )),
                       ),
                     ],
@@ -213,7 +236,7 @@ class _GalleryImageState extends State<GalleryImage> {
             if (snapshot.connectionState == ConnectionState.done) {
               if (snapshot.hasError) {
 //                throw snapshot.error;
-                return Center(child: Text("Error: ${snapshot.error}"));
+                return Center(child: Text('Error: ${snapshot.error}'));
               } else {
                 _currentPreview.largeImageUrl = snapshot.data;
                 return ExtendedImage.network(

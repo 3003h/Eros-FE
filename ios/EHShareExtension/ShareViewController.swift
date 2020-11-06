@@ -11,7 +11,7 @@ import MobileCoreServices
 import Photos
 
 class ShareViewController: SLComposeServiceViewController {
-    // TODO: IMPORTANT: This should be your host app bundle identifier
+    // 主应用id
     let hostAppBundleIdentifier = "com.honjow.fehv"
     let sharedKey = "ShareKey"
     var sharedMedia: [SharedMediaFile] = []
@@ -42,6 +42,13 @@ class ShareViewController: SLComposeServiceViewController {
                     } else if attachment.hasItemConformingToTypeIdentifier(videoContentType) {
                         handleVideos(content: content, attachment: attachment, index: index)
                     }
+                    
+                    
+//                    if attachment.hasItemConformingToTypeIdentifier(urlContentType) {
+//                        handleUrl(content: content, attachment: attachment, index: index)
+//                    } else if attachment.hasItemConformingToTypeIdentifier(textContentType) {
+//                        handleText(content: content, attachment: attachment, index: index)
+//                    }
                 }
             }
         }
@@ -314,6 +321,7 @@ class ShareViewController: SLComposeServiceViewController {
         // Debug method to print out SharedMediaFile details in the console
         func toString() {
             print("[SharedMediaFile] \n\tpath: \(self.path)\n\tthumbnail: \(self.thumbnail)\n\tduration: \(self.duration)\n\ttype: \(self.type)")
+
         }
     }
 
