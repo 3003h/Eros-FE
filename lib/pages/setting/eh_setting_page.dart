@@ -122,8 +122,8 @@ Widget _buildListModeItem(BuildContext context) {
       Provider.of<EhConfigModel>(context, listen: false);
 
   final Map<ListModeEnum, String> modeMap = <ListModeEnum, String>{
-    ListModeEnum.list: '列表',
-    ListModeEnum.simpleList: '简单列表',
+    ListModeEnum.list: '列表 - 中',
+    ListModeEnum.simpleList: '列表 - 小',
     ListModeEnum.waterfall: '瀑布流',
   };
 
