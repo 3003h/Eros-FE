@@ -34,10 +34,12 @@ class GalleryItemFlow extends StatelessWidget {
             EHConst.waterfallFlowCrossAxisSpacing;*/
     final Widget item = LayoutBuilder(
         builder: (BuildContext context, BoxConstraints constraints) {
-      return Selector<GalleryModel, Tuple2<GalleryItem, int>>(
-          selector: (_, GalleryModel galleryModel) => Tuple2<GalleryItem, int>(
-              galleryModel.galleryItem, galleryModel.tabIndex),
-          builder: (BuildContext context, Tuple2<GalleryItem, int> tuple, _) {
+      return Selector<GalleryModel, Tuple2<GalleryItem, dynamic>>(
+          selector: (_, GalleryModel galleryModel) =>
+              Tuple2<GalleryItem, dynamic>(
+                  galleryModel.galleryItem, galleryModel.tabIndex),
+          builder:
+              (BuildContext context, Tuple2<GalleryItem, dynamic> tuple, _) {
             final GalleryItem galleryItem = tuple.item1;
             final _tabIndex = tuple.item2;
 
