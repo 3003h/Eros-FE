@@ -13,6 +13,7 @@ class Profile {
     EhConfig ehConfig;
     String lastLogin;
     String locale;
+    String theme;
     
     factory Profile.fromJson(Map<String,dynamic> json) => _$ProfileFromJson(json);
     Map<String, dynamic> toJson() => _$ProfileToJson(this);

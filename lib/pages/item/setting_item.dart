@@ -85,16 +85,18 @@ class _SettingItems extends State<SettingItems> {
 
   void _updatePressedColor() {
     setState(() {
-      _color = CupertinoColors.systemGrey2;
+      _color =
+          CupertinoDynamicColor.resolve(CupertinoColors.systemGrey2, context);
     });
   }
 
   /// 设置项分隔线
   Widget _settingItemDivider() {
-    return const Divider(
+    return Divider(
       height: 0.5,
       indent: 45.0,
-      color: CupertinoColors.systemGrey4,
+      color:
+          CupertinoDynamicColor.resolve(CupertinoColors.systemGrey4, context),
     );
   }
 }

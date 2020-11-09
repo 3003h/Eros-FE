@@ -12,8 +12,10 @@ class LocaleModel extends ProfileChangeNotifier {
   Locale getLocale() {
     if (_profile.locale == null ||
         _profile.locale.isEmpty ||
-        _profile.locale == '_') return null;
+        _profile.locale == '_' ||
+        !_profile.locale.contains('_')) return null;
     final List<String> t = _profile.locale.split('_');
+    Global.logger.v(t);
     return Locale(t[0], t[1]);
   }
 

@@ -131,7 +131,8 @@ class _GalleryItemWidgetState extends State<GalleryItemWidget> {
           Divider(
             height: 0.5,
             indent: _paddingLeft,
-            color: CupertinoColors.systemGrey4,
+            color: CupertinoDynamicColor.resolve(
+                CupertinoColors.systemGrey4, context),
           ),
         ],
       ),
@@ -327,7 +328,9 @@ class _GalleryItemWidgetState extends State<GalleryItemWidget> {
 
   void _updatePressedColor() {
     setState(() {
-      _colorTap = CupertinoColors.systemGrey4;
+      // _colorTap = CupertinoColors.systemGrey4;
+      _colorTap =
+          CupertinoDynamicColor.resolve(ThemeColors.pressedBackground, context);
     });
   }
 }
@@ -353,15 +356,16 @@ class TagItem extends StatelessWidget {
       child: Container(
         // height: 18,
         padding: const EdgeInsets.fromLTRB(4, 2, 4, 2),
-        color: const Color(0xffeeeeee),
+        color:
+            CupertinoDynamicColor.resolve(ThemeColors.tagBackground, context),
         child: Text(
           text ?? '',
           textAlign: TextAlign.center,
-          style: const TextStyle(
+          style: TextStyle(
             fontSize: 12,
             height: 1,
             fontWeight: FontWeight.w400,
-            color: Color(0xff444444),
+            color: CupertinoDynamicColor.resolve(ThemeColors.tagText, context),
           ),
           strutStyle: const StrutStyle(height: 1),
         ),

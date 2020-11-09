@@ -167,7 +167,8 @@ class GalleryDetailPage extends StatelessWidget {
               const GalleryHeader(),
               Container(
                 height: 0.5,
-                color: CupertinoColors.systemGrey4,
+                color: CupertinoDynamicColor.resolve(
+                    CupertinoColors.systemGrey4, context),
               ),
               // 内容
               _buildDetail(context),

@@ -68,7 +68,8 @@ class _LoginPageState extends State<LoginPage> {
                   ),
                   Container(
                     height: 1,
-                    color: CupertinoColors.systemGrey4,
+                    color: CupertinoDynamicColor.resolve(
+                        CupertinoColors.systemGrey4, context),
                   ),
                   Container(
                     height: 48,
@@ -93,7 +94,8 @@ class _LoginPageState extends State<LoginPage> {
                   ),
                   Container(
                     height: 1,
-                    color: CupertinoColors.systemGrey4,
+                    color: CupertinoDynamicColor.resolve(
+                        CupertinoColors.systemGrey4, context),
                   ),
                   // 直接登录按钮
                   _buildLoginButton(ln),

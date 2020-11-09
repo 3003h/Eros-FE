@@ -120,13 +120,14 @@ class _UserItem extends State<UserItem> {
 
   void _updateNormalColor() {
     setState(() {
-      _color = CupertinoColors.systemBackground;
+      _color = null;
     });
   }
 
   void _updatePressedColor() {
     setState(() {
-      _color = CupertinoColors.systemGrey4;
+      _color =
+          CupertinoDynamicColor.resolve(CupertinoColors.systemGrey4, context);
     });
   }
 }
