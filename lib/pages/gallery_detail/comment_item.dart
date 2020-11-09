@@ -2,6 +2,7 @@ import 'package:FEhViewer/common/global.dart';
 import 'package:FEhViewer/models/index.dart';
 import 'package:FEhViewer/route/navigator_util.dart';
 import 'package:FEhViewer/utils/cust_lib/flutter_linkify.dart' as linkify;
+import 'package:FEhViewer/values/theme_colors.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_linkify/flutter_linkify.dart';
@@ -33,8 +34,9 @@ class CommentItem extends StatelessWidget {
       text: galleryComment.context,
 //      softWrap: true,
       textAlign: TextAlign.left, // 对齐方式
-      style: const TextStyle(
+      style: TextStyle(
         fontSize: 14,
+        color: CupertinoDynamicColor.resolve(ThemeColors.commitText, context),
       ),
       options: LinkifyOptions(humanize: false),
     );
@@ -62,8 +64,9 @@ class CommentItem extends StatelessWidget {
       // 对齐方式
       overflow: TextOverflow.ellipsis,
       // 超出部分省略号
-      style: const TextStyle(
+      style: TextStyle(
         fontSize: 13,
+        color: CupertinoDynamicColor.resolve(ThemeColors.commitText, context),
       ),
     );
 
@@ -74,7 +77,8 @@ class CommentItem extends StatelessWidget {
         // 圆角
         borderRadius: BorderRadius.circular(10),
         child: Container(
-          color: CupertinoColors.systemGrey6,
+          color: CupertinoDynamicColor.resolve(
+              ThemeColors.commitBackground, context),
           padding: const EdgeInsets.all(8),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -85,9 +89,11 @@ class CommentItem extends StatelessWidget {
                   const Spacer(),
                   Text(
                     galleryComment.score,
-                    style: const TextStyle(
+                    style: TextStyle(
                       fontSize: 11,
                       fontWeight: FontWeight.normal,
+                      color: CupertinoDynamicColor.resolve(
+                          ThemeColors.commitText, context),
                     ),
                   ),
                 ],
@@ -98,10 +104,11 @@ class CommentItem extends StatelessWidget {
               ),
               Text(
                 galleryComment.time,
-                style: const TextStyle(
+                style: TextStyle(
                   fontSize: 11,
-                  fontWeight: FontWeight.normal,
-                  color: Colors.black54,
+                  fontWeight: FontWeight.w600,
+                  color: CupertinoDynamicColor.resolve(
+                      ThemeColors.commitText, context),
                 ),
               ),
 //          Container(

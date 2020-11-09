@@ -7,6 +7,7 @@ import 'package:FEhViewer/values/theme_colors.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_egg/flutter_egg.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class AboutPage extends StatelessWidget {
   final String _title = '关于';
@@ -56,6 +57,12 @@ class ListViewAbout extends StatelessWidget {
           TextItem(
             '作者',
             desc: 'honjow  <honjow311@gmail.com>',
+            onTap: () => launch('mailto:honjow311@gmail.com'),
+          ),
+          TextItem(
+            '群组',
+            desc: 'https://t.me/f_ehviewer',
+            onTap: () => launch('https://t.me/f_ehviewer'),
           ),
         ],
       ),

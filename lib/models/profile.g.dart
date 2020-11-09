@@ -18,7 +18,8 @@ Profile _$ProfileFromJson(Map<String, dynamic> json) {
         ? null
         : EhConfig.fromJson(json['ehConfig'] as Map<String, dynamic>)
     ..lastLogin = json['lastLogin'] as String
-    ..locale = json['locale'] as String;
+    ..locale = json['locale'] as String
+    ..theme = json['theme'] as String;
 }
 
 Map<String, dynamic> _$ProfileToJson(Profile instance) => <String, dynamic>{
@@ -26,5 +27,6 @@ Map<String, dynamic> _$ProfileToJson(Profile instance) => <String, dynamic>{
       'cache': instance.cache,
       'ehConfig': instance.ehConfig,
       'lastLogin': instance.lastLogin,
-      'locale': instance.locale
+      'locale': instance.locale,
+      'theme': instance.theme
     };

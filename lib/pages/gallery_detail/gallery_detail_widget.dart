@@ -40,7 +40,8 @@ class GalleryDetailInfo extends StatelessWidget {
           Container(
             margin: const EdgeInsets.only(top: 4),
             height: 0.5,
-            color: CupertinoColors.systemGrey4,
+            color: CupertinoDynamicColor.resolve(
+                CupertinoColors.systemGrey4, context),
           ),
           _buildPreviewGrid(),
           _buildAllPreviewButton(context),
@@ -227,22 +228,12 @@ class PreviewContainer extends StatelessWidget {
                   Container(
                     height: kHeightPreview,
                   ),
-                  Container(
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(4), //圆角
-                      // ignore: prefer_const_literals_to_create_immutables
-                      /*boxShadow: [
-                          //阴影
-                          const BoxShadow(
-                            color: CupertinoColors.systemGrey2,
-                            blurRadius: 2.0,
-                          )
-                        ]*/
-                    ),
+                  Center(
                     child: ClipRRect(
                       borderRadius: BorderRadius.circular(4),
                       child: Container(
-                        color: CupertinoColors.white,
+                        // color: CupertinoDynamicColor.resolve(
+                        //     CupertinoColors.systemGrey4, context),
                         child: _buildImage(),
                       ),
                     ),
@@ -263,9 +254,10 @@ class PreviewContainer extends StatelessWidget {
               padding: const EdgeInsets.only(top: 4),
               child: Text(
                 '${galleryPreview.ser ?? ''}',
-                style: const TextStyle(
+                style: TextStyle(
                   fontSize: 14,
-                  color: Colors.black54,
+                  color: CupertinoDynamicColor.resolve(
+                      CupertinoColors.systemGrey, context),
                 ),
               ),
             ),
@@ -313,12 +305,10 @@ class TagButton extends StatelessWidget {
 class TagButtonB extends StatelessWidget {
   const TagButtonB({
     @required this.text,
-    Color textColor,
-    Color color,
+    this.textColor,
+    this.color,
     VoidCallback onPressed,
-  })  : textColor = textColor ?? const Color(0xff505050),
-        color = color ?? const Color(0xffeeeeee),
-        _onPressed = onPressed;
+  }) : _onPressed = onPressed;
 
   final String text;
   final Color textColor;
@@ -333,11 +323,13 @@ class TagButtonB extends StatelessWidget {
         borderRadius: BorderRadius.circular(8),
         child: Container(
           padding: const EdgeInsets.fromLTRB(6, 3, 6, 4),
-          color: color,
+          color: color ??
+              CupertinoDynamicColor.resolve(ThemeColors.tagBackground, context),
           child: Text(
             text,
             style: TextStyle(
-              color: textColor,
+              color: textColor ??
+                  CupertinoDynamicColor.resolve(ThemeColors.tagText, context),
               fontSize: 13,
               height: 1.3,
 //              fontWeight: FontWeight.w500,
@@ -369,7 +361,8 @@ Widget _buildTagBox() {
             ),
             Container(
               height: 0.5,
-              color: CupertinoColors.systemGrey4,
+              color: CupertinoDynamicColor.resolve(
+                  CupertinoColors.systemGrey4, context),
             ),
           ],
         );
@@ -447,7 +440,8 @@ class TagGroupItem extends StatelessWidget {
           Container(
             padding: const EdgeInsets.only(right: 8),
             child: TagButtonB(
-              color: EHConst.tagColorTagType[_tagType.trim()],
+              color: CupertinoDynamicColor.resolve(
+                  ThemeColors.tagColorTagType[_tagType.trim()], context),
               text: _isTagTranslat
                   ? EHConst.translateTagType[_tagType.trim()] ?? _tagType
                   : _tagType,

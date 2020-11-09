@@ -49,9 +49,10 @@ class _SelectorSettingItemState extends State<SelectorSettingItem> {
               ],
             ),
           ),
-          const Divider(
+          Divider(
             height: 0.5,
-            color: CupertinoColors.systemGrey4,
+            color: CupertinoDynamicColor.resolve(
+                CupertinoColors.systemGrey4, context),
           ),
         ],
       ),
@@ -80,7 +81,8 @@ class _SelectorSettingItemState extends State<SelectorSettingItem> {
 
   void _updatePressedColor() {
     setState(() {
-      _color = CupertinoColors.systemGrey4;
+      _color =
+          CupertinoDynamicColor.resolve(CupertinoColors.systemGrey4, context);
     });
   }
 }
@@ -153,7 +155,8 @@ class _TextSwitchItemState extends State<TextSwitchItem> {
         ),
         Container(
           height: 0.5,
-          color: CupertinoColors.systemGrey4,
+          color: CupertinoDynamicColor.resolve(
+              CupertinoColors.systemGrey4, context),
         ),
       ],
     );
@@ -205,7 +208,8 @@ class _TextItemState extends State<TextItem> {
         ),
         Container(
           height: 0.5,
-          color: CupertinoColors.systemGrey4,
+          color: CupertinoDynamicColor.resolve(
+              CupertinoColors.systemGrey4, context),
         ),
       ],
     );

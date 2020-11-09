@@ -3,5 +3,6 @@
   "cache": "$cacheConfig",
   "ehConfig": "$ehConfig",
   "lastLogin": "",
-  "locale": ""
+  "locale": "",
+  "theme": ""
 }

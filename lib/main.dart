@@ -1,9 +1,11 @@
 import 'package:FEhViewer/common/global.dart';
 import 'package:FEhViewer/models/states/ehconfig_model.dart';
 import 'package:FEhViewer/models/states/locale_model.dart';
+import 'package:FEhViewer/models/states/theme_model.dart';
 import 'package:FEhViewer/models/states/user_model.dart';
 import 'package:FEhViewer/pages/splash_page.dart';
 import 'package:FEhViewer/route/application.dart';
+import 'package:FEhViewer/values/theme_colors.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -15,26 +17,44 @@ import 'generated/l10n.dart';
 
 void main() => Global.init().then((e) => runApp(MyApp()));
 
-class MyApp extends StatelessWidget {
+class MyApp extends StatefulWidget {
+  @override
+  _MyAppState createState() => _MyAppState();
+}
+
+class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
+  Brightness _brightness = WidgetsBinding.instance.window.platformBrightness;
+
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addObserver(this);
+  }
+
+  @override
+  void dispose() {
+    WidgetsBinding.instance.removeObserver(this);
+    super.dispose();
+  }
+
+  @override
+  void didChangePlatformBrightness() {
+    setState(() {
+      _brightness = WidgetsBinding.instance.window.platformBrightness;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
-    final Widget cupertinoApp = Consumer<LocaleModel>(
-        builder: (BuildContext context, LocaleModel localeModel, Widget child) {
+    final Widget cupertinoApp = Consumer2<LocaleModel, ThemeModel>(builder:
+        (BuildContext context, LocaleModel localeModel, ThemeModel themeModel,
+            Widget child) {
       return CupertinoApp(
         debugShowCheckedModeBanner: false,
         onGenerateTitle: (BuildContext context) => S.of(context).app_title,
         onGenerateRoute: Application.router.generator,
-        theme: const CupertinoThemeData(
-          brightness: Brightness.light,
-//          textTheme: CupertinoTextThemeData(
-//            textStyle: TextStyle(
-//              textBaseline: TextBaseline.alphabetic,
-//              fontFamilyFallback: EHConst.FONT_FAMILY_FB,
-//              color: CupertinoColors.black,
-//              fontSize: 17,
-//            ),
-//          ),
-        ),
+        theme: themeModel.getTheme(context, _brightness),
+        // theme: ThemeColors.darkTheme,
         home: const SplashPage(),
         locale: localeModel.getLocale(),
         supportedLocales: <Locale>[
@@ -85,6 +105,7 @@ class MyApp extends StatelessWidget {
       providers: [
         ChangeNotifierProvider<UserModel>.value(value: UserModel()),
         ChangeNotifierProvider<LocaleModel>.value(value: LocaleModel()),
+        ChangeNotifierProvider<ThemeModel>.value(value: ThemeModel()),
         ChangeNotifierProvider<EhConfigModel>.value(value: EhConfigModel()),
       ],
       child: OKToast(child: cupertinoApp),

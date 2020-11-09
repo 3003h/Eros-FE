@@ -38,13 +38,12 @@ class _GalleryViewPageEState extends State<GalleryViewPageE> {
       // 预载后面5张图
       _precache(_galleryModel.previews, widget.index, 5);
     }
+    _currentIndex = widget.index;
   }
 
   /// 画廊图片大图浏览
   @override
   Widget build(BuildContext context) {
-    _currentIndex = widget.index;
-
     return CupertinoTheme(
       data: const CupertinoThemeData(
         brightness: Brightness.dark,

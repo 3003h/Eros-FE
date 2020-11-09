@@ -47,7 +47,8 @@ class _LoginCookiePageState extends State<LoginCookiePage> {
                 Container(
                   height: 1,
                   margin: const EdgeInsets.only(bottom: 10),
-                  color: CupertinoColors.systemGrey4,
+                  color: CupertinoDynamicColor.resolve(
+                      CupertinoColors.systemGrey4, context),
                 ),
                 CupertinoTextField(
                   controller: _hashController,
@@ -57,7 +58,8 @@ class _LoginCookiePageState extends State<LoginCookiePage> {
                 ),
                 Container(
                   height: 1,
-                  color: CupertinoColors.systemGrey4,
+                  color: CupertinoDynamicColor.resolve(
+                      CupertinoColors.systemGrey4, context),
                 ),
                 _buildLoginButton(),
               ],

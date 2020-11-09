@@ -30,11 +30,8 @@ class _SplashPageState extends State<SplashPage> {
   }
 
   Future<void> startHome(String url) async {
-    // String _url = await ReceiveSharingIntent.getInitialText();
-    //
-    // setState(() {
-    //   _sharedText = _url;
-    // });
+    Global.logger.v(
+        'MediaQuery ${MediaQuery.of(context).platformBrightness}\nCupertinoTheme ${CupertinoTheme.brightnessOf(context)}');
 
     if (url != null && url.isNotEmpty) {
       Global.logger.v('open $url');
@@ -84,6 +81,7 @@ class _SplashPageState extends State<SplashPage> {
                 const Center(child: CupertinoActivityIndicator(radius: 20.0)),
           )
         : Container(
+            color: CupertinoColors.systemBackground,
             child: Center(
               child: Column(
                 // center the children
