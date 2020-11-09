@@ -125,7 +125,8 @@ class _GalleryItemSimpleWidgetState extends State<GalleryItemSimpleWidget> {
           Divider(
             height: 0.5,
             indent: _paddingLeft,
-            color: CupertinoColors.systemGrey4,
+            color: CupertinoDynamicColor.resolve(
+                CupertinoColors.systemGrey4, context),
           ),
         ],
       ),
@@ -189,7 +190,7 @@ class _GalleryItemSimpleWidgetState extends State<GalleryItemSimpleWidget> {
       return Container(
         width: kCoverImageWidth,
         height: kItemWidth-12,
-        color: CupertinoColors.systemBackground,
+        // color: CupertinoColors.systemBackground,
         child: Center(
           child: Hero(
             tag: '${_item.gid}_${_item.token}_cover_${galleryModel.tabIndex}',
@@ -311,7 +312,8 @@ class _GalleryItemSimpleWidgetState extends State<GalleryItemSimpleWidget> {
 
   void _updatePressedColor() {
     setState(() {
-      _colorTap = CupertinoColors.systemGrey4;
+      _colorTap =
+          CupertinoDynamicColor.resolve(ThemeColors.pressedBackground, context);
     });
   }
 }

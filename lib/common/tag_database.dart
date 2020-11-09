@@ -5,6 +5,7 @@ import 'package:FEhViewer/models/entity/tag_translat.dart';
 import 'package:FEhViewer/utils/db_util.dart';
 import 'package:FEhViewer/utils/dio_util.dart';
 import 'package:FEhViewer/utils/storage.dart';
+import 'package:FEhViewer/utils/toast.dart';
 import 'package:FEhViewer/values/const.dart';
 import 'package:FEhViewer/values/storages.dart';
 import 'package:dio/dio.dart';
@@ -30,13 +31,12 @@ class EhTagDatabase {
     Global.loggerNoStack.v('remoteVer $remoteVer');
 
     // 获取当前本地版本
-    // final String localVer =
-    //     StorageUtil().getString(TAG_TRANSLAT_VER)?.trim() ?? '';
     final String localVer = Global.profile.ehConfig.tagTranslatVer;
     Global.loggerNoStack.v('localVer $localVer');
 
     if (remoteVer != localVer) {
       Global.loggerNoStack.v('TagTranslat更新');
+      showToast('标签翻译库开始更新');
       // ignore: always_specify_types
       final List assList = urlJson['assets'];
       final Map<String, String> assMap = <String, String>{};
@@ -61,6 +61,7 @@ class EhTagDatabase {
         Global.profile.ehConfig.tagTranslatVer = remoteVer;
         Global.saveProfile();
       }
+      showToast('标签翻译库更新完成');
       Global.loggerNoStack.v('tag翻译更新完成');
     }
 

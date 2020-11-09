@@ -1,3 +1,4 @@
+import 'package:FEhViewer/common/global.dart';
 import 'package:FEhViewer/generated/l10n.dart';
 import 'package:FEhViewer/values/theme_colors.dart';
 import 'package:flutter/cupertino.dart';
@@ -38,7 +39,9 @@ class _GallerySearchPageState extends State<GallerySearchPage> {
             FontAwesomeIcons.search,
             size: 20,
           ),
-          onPressed: () {},
+          onPressed: () {
+            Global.logger.v('search Btn');
+          },
         ),
       ),
       child: CustomScrollView(),

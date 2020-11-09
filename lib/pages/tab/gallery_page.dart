@@ -128,8 +128,40 @@ class _GalleryListTabState extends State<GalleryListTab> {
     });
   }
 
+  Future<void> _setCats(BuildContext context) async {
+    return showCupertinoDialog<void>(
+      context: context,
+      // barrierDismissible: false, // user must tap button!
+      builder: (BuildContext context) {
+        return CupertinoAlertDialog(
+          // title: const Text('FILTER'),
+          content: Container(
+            child: Column(
+              children: <Widget>[],
+            ),
+          ),
+          actions: <Widget>[
+            CupertinoDialogAction(
+              child: const Text('取消'),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+            CupertinoDialogAction(
+              child: const Text('确定'),
+              onPressed: () {
+                //
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
+
   /// 跳转页码
-  Future<void> _jumtToPage(BuildContext context) async {
+  Future<void> _jumpToPage(BuildContext context) async {
     void _jump(BuildContext context) {
       final String _input = _pageController.text.trim();
 
@@ -211,10 +243,11 @@ class _GalleryListTabState extends State<GalleryListTab> {
 //          heroTag: 'gallery',
           largeTitle: Text(_title),
           trailing: Container(
-            width: 100,
+            width: 150,
             child: Row(
               mainAxisAlignment: MainAxisAlignment.end,
               children: [
+                // 搜索按钮
                 CupertinoButton(
                   padding: const EdgeInsets.all(0),
                   child: const Icon(
@@ -225,6 +258,18 @@ class _GalleryListTabState extends State<GalleryListTab> {
                     NavigatorUtil.showSearch(context);
                   },
                 ),
+                // 筛选按钮
+                CupertinoButton(
+                  padding: const EdgeInsets.all(0),
+                  child: const Icon(
+                    FontAwesomeIcons.filter,
+                    size: 20,
+                  ),
+                  onPressed: () {
+                    _setCats(context);
+                  },
+                ),
+                // 页码跳转按钮
                 CupertinoButton(
                   padding: const EdgeInsets.all(0),
                   child: ClipRRect(
@@ -239,7 +284,7 @@ class _GalleryListTabState extends State<GalleryListTab> {
                     ),
                   ),
                   onPressed: () {
-                    _jumtToPage(context);
+                    _jumpToPage(context);
                   },
                 ),
               ],
