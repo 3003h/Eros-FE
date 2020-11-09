@@ -1,6 +1,9 @@
+import 'dart:io';
+
 import 'package:FEhViewer/utils/toast.dart';
 import 'package:FEhViewer/utils/utility.dart';
 import 'package:FEhViewer/values/const.dart';
+import 'package:dio/adapter.dart';
 import 'package:dio/dio.dart';
 import 'package:dio_cookie_manager/dio_cookie_manager.dart';
 import 'package:flutter/cupertino.dart';
@@ -27,6 +30,13 @@ class HttpManager {
     _dio = Dio(_options);
     //设置Cookie
 //    _dio.interceptors.add(CookieManager(await Api.cookieJar));
+
+    (_dio.httpClientAdapter as DefaultHttpClientAdapter).onHttpClientCreate =
+        (HttpClient client) {
+      client.badCertificateCallback =
+          (X509Certificate cert, String host, int port) => true;
+      return client;
+    };
 
     //添加拦截器
     _dio.interceptors
@@ -71,9 +81,9 @@ class HttpManager {
     } on DioError catch (e) {
       print('getHttp exception: $e');
       formatError(e);
-//      throw e;
+      throw e;
     }
-//    print('getHttp statusCode: ${response.statusCode}');
+    // print('getHttp statusCode: ${response.statusCode}');
     return response.data;
   }
 
@@ -164,7 +174,7 @@ class HttpManager {
 
   void formatError(DioError e) {
     if (e.type == DioErrorType.CONNECT_TIMEOUT) {
-      showToast('网络好像出问题了');
+      showToast('连接超时');
     } else if (e.type == DioErrorType.SEND_TIMEOUT) {
       showToast('请求超时');
     } else if (e.type == DioErrorType.RECEIVE_TIMEOUT) {
