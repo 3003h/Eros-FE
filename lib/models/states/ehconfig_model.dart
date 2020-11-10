@@ -45,6 +45,12 @@ class EhConfigModel extends ProfileChangeNotifier {
     notifyListeners();
   }
 
+  int get catFilter => _ehConfig.catFilter ?? 0;
+  set catFilter(int value) {
+    _ehConfig.catFilter = value;
+    notifyListeners();
+  }
+
   ListModeEnum get listMode =>
       EnumToString.fromString(ListModeEnum.values, _ehConfig?.listMode) ??
       ListModeEnum.list;

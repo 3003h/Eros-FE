@@ -39,6 +39,34 @@ class EHUtils {
     }
     return result;
   }
+
+  // 位图转map
+  static Map<String, bool> convNumToCatMap(int catNum) {
+    final List<String> catList = EHConst.catList;
+    final Map catsNumMaps = EHConst.cats;
+    final Map<String, bool> catMap = <String, bool>{};
+    for (int i = 0; i < catList.length; i++) {
+      final String catName = catList[i];
+      final int curCatNum = catsNumMaps[catName];
+      if (catNum & curCatNum != curCatNum) {
+        catMap[catName] = true;
+      } else {
+        catMap[catName] = false;
+      }
+    }
+    return catMap;
+  }
+
+  static int convCatMapToNum(Map<String, bool> catMap) {
+    int totCatNum = 0;
+    final Map catsNumMaps = EHConst.cats;
+    catMap.forEach((String key, bool value) {
+      if (!value) {
+        totCatNum += catsNumMaps[key];
+      }
+    });
+    return totCatNum;
+  }
 }
 
 // ignore: avoid_classes_with_only_static_members

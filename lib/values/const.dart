@@ -1,5 +1,3 @@
-import 'package:flutter/cupertino.dart';
-
 // 列表模式 瀑布流模式
 enum ListModeEnum {
   list,
@@ -7,6 +5,7 @@ enum ListModeEnum {
   simpleList,
 }
 
+// ignore: avoid_classes_with_only_static_members
 class EHConst {
   // 网页登陆页面
   static const String URL_SIGN_IN =
@@ -64,6 +63,19 @@ class EHConst {
     'Asian Porn': 128,
     'Misc': 1,
   };
+
+  static List<String> catList = <String>[
+    'Misc',
+    'Doujinshi',
+    'Manga',
+    'Artist CG',
+    'Game CG',
+    'Image Set',
+    'Cosplay',
+    'Asian Porn',
+    'Non-H',
+    'Western',
+  ];
 
   static const Map favCat = {
     '#000': '0',
