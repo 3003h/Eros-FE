@@ -1,5 +1,6 @@
 import 'package:FEhViewer/common/global.dart';
 import 'package:FEhViewer/generated/l10n.dart';
+import 'package:FEhViewer/pages/tab/gallery_base.dart';
 import 'package:FEhViewer/values/theme_colors.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -18,7 +19,7 @@ class _GallerySearchPageState extends State<GallerySearchPage> {
     Widget cfp = CupertinoPageScaffold(
       resizeToAvoidBottomInset: false,
       navigationBar: CupertinoNavigationBar(
-//        padding: EdgeInsetsDirectional.only(start: 0),
+        padding: EdgeInsetsDirectional.only(start: 0),
 //        border: null,
         backgroundColor: ThemeColors.navigationBarBackground,
         middle: CupertinoTextField(),
@@ -33,15 +34,32 @@ class _GallerySearchPageState extends State<GallerySearchPage> {
 //            Navigator.pop(context);
 //          },
 //        ),
-        trailing: CupertinoButton(
-          padding: const EdgeInsets.all(0),
-          child: const Icon(
-            FontAwesomeIcons.search,
-            size: 20,
+        trailing: Container(
+          width: 90,
+          child: Row(
+            children: [
+              CupertinoButton(
+                padding: const EdgeInsets.all(0),
+                child: const Icon(
+                  FontAwesomeIcons.search,
+                  size: 20,
+                ),
+                onPressed: () {
+                  Global.logger.v('search Btn');
+                },
+              ),
+              CupertinoButton(
+                padding: const EdgeInsets.all(0),
+                child: const Icon(
+                  FontAwesomeIcons.filter,
+                  size: 20,
+                ),
+                onPressed: () {
+                  GalleryBase().setCats(context);
+                },
+              ),
+            ],
           ),
-          onPressed: () {
-            Global.logger.v('search Btn');
-          },
         ),
       ),
       child: CustomScrollView(),
