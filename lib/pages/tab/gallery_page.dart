@@ -129,7 +129,7 @@ class _GalleryListTabState extends State<GalleryListTab> {
   }
 
   Future<void> _loadFromPage(int page) async {
-    Global.logger.v('jump to page   ===>  $page');
+    Global.logger.v('jump to page =>  $page');
     setState(() {
       _firstLoading = true;
     });
@@ -153,51 +153,19 @@ class _GalleryListTabState extends State<GalleryListTab> {
       context: context,
       builder: (BuildContext context) {
         // Global.logger.v('_setCats showCupertinoDialog builder');
-        final int _catNum =
+        int _catNum =
             Provider.of<EhConfigModel>(context, listen: false).catFilter;
-        final Map<String, bool> _catMap = EHUtils.convNumToCatMap(_catNum);
-
-        Widget _getCatButton({@required String catName}) {
-          return GalleryCatButton(
-            text: catName,
-            onChanged: (bool value) {
-              // Global.logger.v('$catName changed to ${!value}');
-              setState(() {
-                _catMap[catName] = !value;
-                // Global.logger.v('$_catMap');
-              });
-            },
-            onColor: ThemeColors.catColor[catName]['color'],
-            offColor: CupertinoColors.systemGrey4,
-            offTextColor: CupertinoColors.systemGrey,
-            value: _catMap[catName],
-          );
-        }
-
-        final List<Widget> catButttonListWidget = <Widget>[];
-        for (final String cat in EHConst.cats.keys) {
-          catButttonListWidget.add(_getCatButton(catName: cat));
-        }
-
-        final Widget cats = Container(
-            height: 180,
-            child: GridView.count(
-              crossAxisCount: 2,
-              childAspectRatio: 3.6,
-              mainAxisSpacing: 4.0,
-              crossAxisSpacing: 4.0,
-              // physics: const NeverScrollableScrollPhysics(),
-              padding: const EdgeInsets.all(0.0),
-              children: <Widget>[...catButttonListWidget],
-            ));
 
         return CupertinoAlertDialog(
           title: const Text('过滤类型'),
-          content: StatefulBuilder(
-            builder: (BuildContext context, StateSetter setState) {
-              // Global.logger.v('StatefulBuilder builder');
-              return cats;
-            },
+          content: Container(
+            height: 180,
+            child: GalleryCatFilter(
+              value: _catNum,
+              onChanged: (int toNum) {
+                _catNum = toNum;
+              },
+            ),
           ),
           actions: <Widget>[
             CupertinoDialogAction(
@@ -209,10 +177,8 @@ class _GalleryListTabState extends State<GalleryListTab> {
             CupertinoDialogAction(
               child: const Text('确定'),
               onPressed: () {
-                //
-                Global.logger.v('${EHUtils.convCatMapToNum(_catMap)}');
                 Provider.of<EhConfigModel>(context, listen: false).catFilter =
-                    EHUtils.convCatMapToNum(_catMap);
+                    _catNum;
                 Navigator.of(context).pop();
               },
             ),
@@ -329,7 +295,7 @@ class _GalleryListTabState extends State<GalleryListTab> {
                   ),
                   onPressed: () {
                     // Global.logger.v('${EHUtils.convNumToCatMap(1)}');
-                    _setCats(context);
+                    GalleryBase().setCats(context);
                   },
                 ),
                 // 页码跳转按钮
