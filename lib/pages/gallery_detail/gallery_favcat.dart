@@ -1,7 +1,6 @@
 import 'package:FEhViewer/common/global.dart';
 import 'package:FEhViewer/common/parser/gallery_fav_parser.dart';
 import 'package:FEhViewer/generated/l10n.dart';
-import 'package:FEhViewer/models/galleryItem.dart';
 import 'package:FEhViewer/models/states/gallery_model.dart';
 import 'package:FEhViewer/utils/toast.dart';
 import 'package:FEhViewer/values/theme_colors.dart';

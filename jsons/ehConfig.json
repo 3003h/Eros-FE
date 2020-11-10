@@ -9,5 +9,6 @@
   "favLongTap": false,
   "lastFavcat": "3",
   "listMode": "list",
-  "safeMode": true
+  "safeMode": true,
+  "catFilter": 0
 }

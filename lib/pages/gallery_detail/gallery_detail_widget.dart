@@ -638,7 +638,7 @@ class GalleryCategory extends StatelessWidget {
             galleryModel.galleryItem.category,
         builder: (BuildContext context, String category, _) {
           final Color _colorCategory =
-              (ThemeColors.nameColor[category ?? 'defaule']['color'] ??
+              (ThemeColors.catColor[category ?? 'defaule']['color'] ??
                   CupertinoColors.systemBackground) as Color;
 
           return GestureDetector(

@@ -5,7 +5,6 @@ import 'package:FEhViewer/models/states/theme_model.dart';
 import 'package:FEhViewer/models/states/user_model.dart';
 import 'package:FEhViewer/pages/splash_page.dart';
 import 'package:FEhViewer/route/application.dart';
-import 'package:FEhViewer/values/theme_colors.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';

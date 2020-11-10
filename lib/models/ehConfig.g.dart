@@ -18,7 +18,8 @@ EhConfig _$EhConfigFromJson(Map<String, dynamic> json) {
     ..favLongTap = json['favLongTap'] as bool
     ..lastFavcat = json['lastFavcat'] as String
     ..listMode = json['listMode'] as String
-    ..safeMode = json['safeMode'] as bool;
+    ..safeMode = json['safeMode'] as bool
+    ..catFilter = json['catFilter'] as num;
 }
 
 Map<String, dynamic> _$EhConfigToJson(EhConfig instance) => <String, dynamic>{
@@ -32,5 +33,6 @@ Map<String, dynamic> _$EhConfigToJson(EhConfig instance) => <String, dynamic>{
       'favLongTap': instance.favLongTap,
       'lastFavcat': instance.lastFavcat,
       'listMode': instance.listMode,
-      'safeMode': instance.safeMode
+      'safeMode': instance.safeMode,
+      'catFilter': instance.catFilter
     };

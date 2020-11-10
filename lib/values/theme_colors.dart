@@ -115,7 +115,7 @@ class ThemeColors {
   );
 
   // tap 颜色
-  static const Map nameColor = {
+  static const Map catColor = {
     'Doujinshi': {'string': 'Doujinshi', 'color': Color(0xfff44336)},
     'Manga': {'string': 'Manga', 'color': Color(0xffff9800)},
     'Artist CG': {'string': 'Artist CG', 'color': Color(0xfffbc02d)},

@@ -1,13 +1,17 @@
 import 'package:FEhViewer/common/global.dart';
 import 'package:FEhViewer/generated/l10n.dart';
 import 'package:FEhViewer/models/index.dart';
+import 'package:FEhViewer/models/states/ehconfig_model.dart';
+import 'package:FEhViewer/pages/tab/gallery_base.dart';
 import 'package:FEhViewer/route/navigator_util.dart';
 import 'package:FEhViewer/utils/toast.dart';
 import 'package:FEhViewer/utils/utility.dart';
+import 'package:FEhViewer/values/const.dart';
 import 'package:FEhViewer/values/theme_colors.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:provider/provider.dart';
 import 'package:tuple/tuple.dart';
 
 import 'tab_base.dart';
@@ -55,13 +59,17 @@ class _GalleryListTabState extends State<GalleryListTab> {
   }
 
   Future<void> _loadDataFirst() async {
+    final int _catNum =
+        Provider.of<EhConfigModel>(context, listen: false).catFilter;
+
     Global.loggerNoStack.v('_loadDataFirst');
     setState(() {
       _gallerItemBeans.clear();
       _firstLoading = true;
     });
+
     final Tuple2<List<GalleryItem>, int> tuple =
-        await Api.getGallery(cats: widget.cats, serach: _search);
+        await Api.getGallery(cats: widget.cats ?? _catNum, serach: _search);
     final List<GalleryItem> gallerItemBeans = tuple.item1;
     _gallerItemBeans.addAll(gallerItemBeans);
     _maxPage = tuple.item2;
@@ -71,6 +79,9 @@ class _GalleryListTabState extends State<GalleryListTab> {
   }
 
   Future<void> _reloadData() async {
+    final int _catNum =
+        Provider.of<EhConfigModel>(context, listen: false).catFilter;
+
     Global.loggerNoStack.v('_reloadData');
     if (_firstLoading) {
       setState(() {
@@ -78,7 +89,7 @@ class _GalleryListTabState extends State<GalleryListTab> {
       });
     }
     final Tuple2<List<GalleryItem>, int> tuple =
-        await Api.getGallery(cats: widget.cats, serach: _search);
+        await Api.getGallery(cats: widget.cats ?? _catNum, serach: _search);
     final List<GalleryItem> gallerItemBeans = tuple.item1;
     setState(() {
       _curPage = 0;
@@ -93,6 +104,9 @@ class _GalleryListTabState extends State<GalleryListTab> {
       return;
     }
 
+    final int _catNum =
+        Provider.of<EhConfigModel>(context, listen: false).catFilter;
+
     // 增加延时 避免build期间进行 setState
     await Future<void>.delayed(const Duration(milliseconds: 100));
     setState(() {
@@ -101,7 +115,10 @@ class _GalleryListTabState extends State<GalleryListTab> {
     _curPage += 1;
     final String fromGid = _gallerItemBeans.last.gid;
     final Tuple2<List<GalleryItem>, int> tuple = await Api.getGallery(
-        page: _curPage, fromGid: fromGid, cats: widget.cats, serach: _search);
+        page: _curPage,
+        fromGid: fromGid,
+        cats: widget.cats ?? _catNum,
+        serach: _search);
     final List<GalleryItem> gallerItemBeans = tuple.item1;
 
     setState(() {
@@ -116,9 +133,11 @@ class _GalleryListTabState extends State<GalleryListTab> {
     setState(() {
       _firstLoading = true;
     });
+    final int _catNum =
+        Provider.of<EhConfigModel>(context, listen: false).catFilter;
     _curPage = page;
     final Tuple2<List<GalleryItem>, int> tuple = await Api.getGallery(
-        page: _curPage, cats: widget.cats, serach: _search);
+        page: _curPage, cats: widget.cats ?? _catNum, serach: _search);
     final List<GalleryItem> gallerItemBeans = tuple.item1;
     setState(() {
       _gallerItemBeans.clear();
@@ -128,17 +147,57 @@ class _GalleryListTabState extends State<GalleryListTab> {
     });
   }
 
+  /// 设置类型筛选
   Future<void> _setCats(BuildContext context) async {
     return showCupertinoDialog<void>(
       context: context,
-      // barrierDismissible: false, // user must tap button!
       builder: (BuildContext context) {
+        // Global.logger.v('_setCats showCupertinoDialog builder');
+        final int _catNum =
+            Provider.of<EhConfigModel>(context, listen: false).catFilter;
+        final Map<String, bool> _catMap = EHUtils.convNumToCatMap(_catNum);
+
+        Widget _getCatButton({@required String catName}) {
+          return GalleryCatButton(
+            text: catName,
+            onChanged: (bool value) {
+              // Global.logger.v('$catName changed to ${!value}');
+              setState(() {
+                _catMap[catName] = !value;
+                // Global.logger.v('$_catMap');
+              });
+            },
+            onColor: ThemeColors.catColor[catName]['color'],
+            offColor: CupertinoColors.systemGrey4,
+            offTextColor: CupertinoColors.systemGrey,
+            value: _catMap[catName],
+          );
+        }
+
+        final List<Widget> catButttonListWidget = <Widget>[];
+        for (final String cat in EHConst.cats.keys) {
+          catButttonListWidget.add(_getCatButton(catName: cat));
+        }
+
+        final Widget cats = Container(
+            height: 180,
+            child: GridView.count(
+              crossAxisCount: 2,
+              childAspectRatio: 3.6,
+              mainAxisSpacing: 4.0,
+              crossAxisSpacing: 4.0,
+              // physics: const NeverScrollableScrollPhysics(),
+              padding: const EdgeInsets.all(0.0),
+              children: <Widget>[...catButttonListWidget],
+            ));
+
         return CupertinoAlertDialog(
-          // title: const Text('FILTER'),
-          content: Container(
-            child: Column(
-              children: <Widget>[],
-            ),
+          title: const Text('过滤类型'),
+          content: StatefulBuilder(
+            builder: (BuildContext context, StateSetter setState) {
+              // Global.logger.v('StatefulBuilder builder');
+              return cats;
+            },
           ),
           actions: <Widget>[
             CupertinoDialogAction(
@@ -151,6 +210,9 @@ class _GalleryListTabState extends State<GalleryListTab> {
               child: const Text('确定'),
               onPressed: () {
                 //
+                Global.logger.v('${EHUtils.convCatMapToNum(_catMap)}');
+                Provider.of<EhConfigModel>(context, listen: false).catFilter =
+                    EHUtils.convCatMapToNum(_catMap);
                 Navigator.of(context).pop();
               },
             ),
@@ -266,6 +328,7 @@ class _GalleryListTabState extends State<GalleryListTab> {
                     size: 20,
                   ),
                   onPressed: () {
+                    // Global.logger.v('${EHUtils.convNumToCatMap(1)}');
                     _setCats(context);
                   },
                 ),

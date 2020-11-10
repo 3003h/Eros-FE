@@ -4,10 +4,8 @@ import 'package:FEhViewer/common/global.dart';
 import 'package:FEhViewer/models/entity/tag_translat.dart';
 import 'package:FEhViewer/utils/db_util.dart';
 import 'package:FEhViewer/utils/dio_util.dart';
-import 'package:FEhViewer/utils/storage.dart';
 import 'package:FEhViewer/utils/toast.dart';
 import 'package:FEhViewer/values/const.dart';
-import 'package:FEhViewer/values/storages.dart';
 import 'package:dio/dio.dart';
 
 const int connectTimeout = 10000;
