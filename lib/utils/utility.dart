@@ -135,6 +135,9 @@ class Api {
         final String _search =
             Uri.encodeQueryComponent('${searArr[0]}:"${searArr[1]}$_end"');
         qry = '$qry&f_search=$_search';
+      } else {
+        final String _search = Uri.encodeQueryComponent('$serach');
+        qry = '$qry&f_search=$_search';
       }
     }
 

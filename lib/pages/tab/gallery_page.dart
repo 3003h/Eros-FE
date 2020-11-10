@@ -3,10 +3,10 @@ import 'package:FEhViewer/generated/l10n.dart';
 import 'package:FEhViewer/models/index.dart';
 import 'package:FEhViewer/models/states/ehconfig_model.dart';
 import 'package:FEhViewer/pages/tab/gallery_base.dart';
+import 'package:FEhViewer/pages/tab/search_page.dart';
 import 'package:FEhViewer/route/navigator_util.dart';
 import 'package:FEhViewer/utils/toast.dart';
 import 'package:FEhViewer/utils/utility.dart';
-import 'package:FEhViewer/values/const.dart';
 import 'package:FEhViewer/values/theme_colors.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -36,13 +36,13 @@ class GalleryListTab extends StatefulWidget {
 }
 
 class _GalleryListTabState extends State<GalleryListTab> {
-  String _title = 'Gallery';
+  String _title;
   int _curPage = 0;
   int _maxPage = 0;
   bool _isLoadMore = false;
   bool _firstLoading = false;
-  final List<GalleryItem> _gallerItemBeans = [];
-  String _search;
+  final List<GalleryItem> _gallerItemBeans = <GalleryItem>[];
+  String _search = '';
 
   //页码跳转的控制器
   final TextEditingController _pageController = TextEditingController();
@@ -55,7 +55,7 @@ class _GalleryListTabState extends State<GalleryListTab> {
   }
 
   void _parserSearch() {
-    _search = '${widget.simpleSearch}'.trim();
+    _search = widget.simpleSearch?.trim() ?? '';
   }
 
   Future<void> _loadDataFirst() async {
@@ -78,11 +78,14 @@ class _GalleryListTabState extends State<GalleryListTab> {
     });
   }
 
-  Future<void> _reloadData() async {
+  Future<void> _reloadData({bool cleanSearch = false}) async {
     final int _catNum =
         Provider.of<EhConfigModel>(context, listen: false).catFilter;
 
     Global.loggerNoStack.v('_reloadData');
+    if (cleanSearch) {
+      _search = '';
+    }
     if (_firstLoading) {
       setState(() {
         _firstLoading = false;
@@ -99,9 +102,13 @@ class _GalleryListTabState extends State<GalleryListTab> {
     });
   }
 
-  Future<void> _loadDataMore() async {
+  Future<void> _loadDataMore({bool cleanSearch = false}) async {
     if (_isLoadMore) {
       return;
+    }
+
+    if (cleanSearch) {
+      _search = '';
     }
 
     final int _catNum =
@@ -128,8 +135,12 @@ class _GalleryListTabState extends State<GalleryListTab> {
     });
   }
 
-  Future<void> _loadFromPage(int page) async {
+  Future<void> _loadFromPage(int page, {bool cleanSearch = false}) async {
     Global.logger.v('jump to page =>  $page');
+
+    if (cleanSearch) {
+      _search = '';
+    }
     setState(() {
       _firstLoading = true;
     });
@@ -145,47 +156,6 @@ class _GalleryListTabState extends State<GalleryListTab> {
       _maxPage = tuple.item2;
       _firstLoading = false;
     });
-  }
-
-  /// 设置类型筛选
-  Future<void> _setCats(BuildContext context) async {
-    return showCupertinoDialog<void>(
-      context: context,
-      builder: (BuildContext context) {
-        // Global.logger.v('_setCats showCupertinoDialog builder');
-        int _catNum =
-            Provider.of<EhConfigModel>(context, listen: false).catFilter;
-
-        return CupertinoAlertDialog(
-          title: const Text('过滤类型'),
-          content: Container(
-            height: 180,
-            child: GalleryCatFilter(
-              value: _catNum,
-              onChanged: (int toNum) {
-                _catNum = toNum;
-              },
-            ),
-          ),
-          actions: <Widget>[
-            CupertinoDialogAction(
-              child: const Text('取消'),
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-            ),
-            CupertinoDialogAction(
-              child: const Text('确定'),
-              onPressed: () {
-                Provider.of<EhConfigModel>(context, listen: false).catFilter =
-                    _catNum;
-                Navigator.of(context).pop();
-              },
-            ),
-          ],
-        );
-      },
-    );
   }
 
   /// 跳转页码
@@ -261,7 +231,11 @@ class _GalleryListTabState extends State<GalleryListTab> {
   @override
   Widget build(BuildContext context) {
     final S ln = S.of(context);
-    _title = ln.tab_gallery;
+
+    Global.logger.v('$_search ${ln.tab_gallery}');
+
+    _title = (_search != null && _search.isNotEmpty) ? _search : ln.tab_gallery;
+
     final CustomScrollView customScrollView = CustomScrollView(
       controller: widget.scrollController,
       physics: const AlwaysScrollableScrollPhysics(),
@@ -284,6 +258,19 @@ class _GalleryListTabState extends State<GalleryListTab> {
                   ),
                   onPressed: () {
                     NavigatorUtil.showSearch(context);
+
+                    /*Navigator.push(context,
+                        CupertinoPageRoute(builder: (context) {
+                      return GallerySearchPage();
+                    })).then((result) {
+                      if (result is String && (result as String).isNotEmpty) {
+                        // NavigatorUtil.goBack(context);
+                        Global.logger.v('search $result');
+                        _search = result;
+                        _title = result;
+                        _loadDataFirst();
+                      }
+                    });*/
                   },
                 ),
                 // 筛选按钮

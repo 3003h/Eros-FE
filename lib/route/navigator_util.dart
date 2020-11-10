@@ -125,12 +125,19 @@ class NavigatorUtil {
   }
 
   /// 转到画廊列表页面
-  static Future goGalleryList(BuildContext context,
-      {int cats = 0, String simpleSearch}) {
+  static Future goGalleryList(
+    BuildContext context, {
+    int cats = 0,
+    String simpleSearch,
+    bool replace = false,
+  }) {
     final String _simpleSearchEncode = Uri.encodeComponent(simpleSearch ?? '');
-    return Application.router.navigateTo(context,
-        EHRoutes.galleryList + '?cats=$cats&s_search=$_simpleSearchEncode',
-        transition: TransitionType.cupertino);
+    return Application.router.navigateTo(
+      context,
+      EHRoutes.galleryList + '?cats=$cats&s_search=$_simpleSearchEncode',
+      transition: TransitionType.cupertino,
+      replace: replace,
+    );
   }
 
   /// 转到画廊页面
