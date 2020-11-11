@@ -282,10 +282,11 @@ class _GalleryItemSimpleWidgetState extends State<GalleryItemSimpleWidget> {
 
   Widget _buildCategory() {
     return Consumer<GalleryModel>(builder: (context, galleryModel, child) {
-      final Color _colorCategory =
-          ThemeColors.catColor[galleryModel?.galleryItem?.category ?? 'defaule']
-                  ['color'] ??
-              CupertinoColors.white;
+      final Color _colorCategory = CupertinoDynamicColor.resolve(
+          ThemeColors
+                  .catColor[galleryModel?.galleryItem?.category ?? 'defaule'] ??
+              CupertinoColors.systemBackground,
+          context);
 
       return ClipRRect(
         borderRadius: BorderRadius.circular(4),

@@ -43,9 +43,10 @@ class GalleryItemFlow extends StatelessWidget {
             final GalleryItem galleryItem = tuple.item1;
             final _tabIndex = tuple.item2;
 
-            final Color _colorCategory = ThemeColors
-                    .catColor[galleryItem?.category ?? 'defaule']['color'] ??
-                CupertinoColors.white;
+            final Color _colorCategory = CupertinoDynamicColor.resolve(
+                ThemeColors.catColor[galleryItem?.category ?? 'defaule'] ??
+                    CupertinoColors.systemBackground,
+                context);
 
             final Widget container = Container(
               child: Column(

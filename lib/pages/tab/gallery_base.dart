@@ -100,7 +100,8 @@ class _GalleryCatFilterState extends State<GalleryCatFilter> {
           // Global.logger.v('$_catMap');
         });
       },
-      onColor: ThemeColors.catColor[catName]['color'],
+      onColor: ThemeColors.catColor[catName],
+      onTextColor: CupertinoColors.systemGrey6,
       offColor: CupertinoColors.systemGrey4,
       offTextColor: CupertinoColors.systemGrey,
       value: _catMap[catName],
