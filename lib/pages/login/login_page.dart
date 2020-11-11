@@ -33,6 +33,13 @@ class _LoginPageState extends State<LoginPage> {
   bool _isWebLogin = false;
 
   @override
+  void dispose() {
+    super.dispose();
+    _usernameController.dispose();
+    _passwdController.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     final S ln = S.of(context);
     return CupertinoPageScaffold(

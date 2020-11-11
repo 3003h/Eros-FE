@@ -31,15 +31,51 @@ class _GallerySearchPageState extends State<GallerySearchPage>
   final List<GalleryItem> _gallerItemBeans = <GalleryItem>[];
   String _search = '';
 
+  DateTime _lastInputCompleteAt; //上次输入完成时间
+  String _lastSearchText;
+
   void _jumpSearch() {
-    final String _searchText = _searchTextController.text;
+    final String _searchText = _searchTextController.text.trim();
     final int _catNum =
         Provider.of<EhConfigModel>(context, listen: false).catFilter;
     if (_searchText.isNotEmpty) {
-      FocusScope.of(context).requestFocus(FocusNode());
+      // FocusScope.of(context).requestFocus(FocusNode());
       _search = _searchText;
       _loadDataFirst();
+    } else {
+      setState(() {
+        _gallerItemBeans.clear();
+      });
     }
+  }
+
+  Future<void> _delayedSearch() async {
+    const Duration _duration = Duration(milliseconds: 800);
+    _lastInputCompleteAt = DateTime.now();
+    await Future<void>.delayed(_duration);
+    if (_lastSearchText != _searchTextController.text &&
+        DateTime.now().difference(_lastInputCompleteAt) >= _duration) {
+      Global.logger.v('${_searchTextController.text}');
+      _lastSearchText = _searchTextController.text;
+      _jumpSearch();
+    }
+  }
+
+  void _printLatestValue() {
+    // print('Second text field: ${_searchTextController.text}');
+    _delayedSearch();
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    _searchTextController.addListener(_printLatestValue);
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    _searchTextController.dispose();
   }
 
   @override
@@ -67,15 +103,26 @@ class _GallerySearchPageState extends State<GallerySearchPage>
           width: 90,
           child: Row(
             children: [
+              // CupertinoButton(
+              //   padding: const EdgeInsets.all(0),
+              //   child: const Icon(
+              //     FontAwesomeIcons.search,
+              //     size: 20,
+              //   ),
+              //   onPressed: () {
+              //     Global.logger.v('search Btn');
+              //     _jumpSearch();
+              //   },
+              // ),
               CupertinoButton(
                 padding: const EdgeInsets.all(0),
                 child: const Icon(
-                  FontAwesomeIcons.search,
-                  size: 20,
+                  FontAwesomeIcons.solidTimesCircle,
+                  size: 21.5,
                 ),
                 onPressed: () {
                   Global.logger.v('search Btn');
-                  _jumpSearch();
+                  _searchTextController.clear();
                 },
               ),
               CupertinoButton(
@@ -100,14 +147,13 @@ class _GallerySearchPageState extends State<GallerySearchPage>
         },
         onPanDown: (DragDownDetails details) {
           // 滑动收起键盘
-          Global.logger.v('onPanDown  ${details.globalPosition}');
           FocusScope.of(context).requestFocus(FocusNode());
         },
         child: CustomScrollView(
           slivers: <Widget>[
             SliverSafeArea(
               // top: false,
-              bottom: false,
+              // bottom: false,
               sliver: _firstLoading
                   ? SliverFillRemaining(
                       child: Container(
