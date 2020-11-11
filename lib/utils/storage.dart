@@ -5,7 +5,9 @@ import 'package:shared_preferences/shared_preferences.dart';
 /// 本地存储
 class StorageUtil {
   factory StorageUtil() => _instance;
+
   StorageUtil._();
+
   static final StorageUtil _instance = StorageUtil._();
   static SharedPreferences _prefs;
 

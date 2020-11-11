@@ -10,6 +10,7 @@ import 'package:dio/dio.dart';
 
 class EhUserManager {
   factory EhUserManager() => _instance;
+
   EhUserManager._();
 
   static final EhUserManager _instance = EhUserManager._();

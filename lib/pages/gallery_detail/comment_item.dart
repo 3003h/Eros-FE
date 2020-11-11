@@ -33,7 +33,8 @@ class CommentItem extends StatelessWidget {
       onOpen: (link) => _onOpen(context, link),
       text: galleryComment.context,
 //      softWrap: true,
-      textAlign: TextAlign.left, // 对齐方式
+      textAlign: TextAlign.left,
+      // 对齐方式
       style: TextStyle(
         fontSize: 14,
         color: CupertinoDynamicColor.resolve(ThemeColors.commitText, context),

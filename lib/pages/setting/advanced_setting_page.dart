@@ -17,6 +17,7 @@ class AdvancedSettingPage extends StatefulWidget {
 
 class AdvancedSettingPageState extends State<AdvancedSettingPage> {
   final String _title = '高级设置';
+
   @override
   Widget build(BuildContext context) {
     final CupertinoPageScaffold cps = CupertinoPageScaffold(
