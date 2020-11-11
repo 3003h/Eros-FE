@@ -114,8 +114,8 @@ class ThemeColors {
     brightness: Brightness.dark,
   );
 
-  // tap 颜色
-  static const Map catColor = {
+  // cap 颜色
+  static const Map catColor2 = {
     'Doujinshi': {'string': 'Doujinshi', 'color': Color(0xfff44336)},
     'Manga': {'string': 'Manga', 'color': Color(0xffff9800)},
     'Artist CG': {'string': 'Artist CG', 'color': Color(0xfffbc02d)},
@@ -127,6 +127,50 @@ class ThemeColors {
     'Asian Porn': {'string': 'Asian Porn', 'color': Color(0xff9575cd)},
     'Misc': {'string': 'Misc', 'color': Color(0xfff06292)},
     'defaule': {'color': CupertinoColors.systemBackground}
+  };
+
+  static const Map catColor = {
+    'Doujinshi': CupertinoDynamicColor.withBrightness(
+      color: Color(0xfff44336),
+      darkColor: Color.fromARGB(255, 145, 49, 39),
+    ),
+    'Manga': CupertinoDynamicColor.withBrightness(
+      color: Color(0xffff9800),
+      darkColor: Color.fromARGB(255, 206, 113, 56),
+    ),
+    'Artist CG': CupertinoDynamicColor.withBrightness(
+      color: Color(0xfffbc02d),
+      darkColor: Color.fromARGB(255, 202, 145, 58),
+    ),
+    'Game CG': CupertinoDynamicColor.withBrightness(
+      color: Color(0xff4caf50),
+      darkColor: Color.fromARGB(255, 115, 145, 112),
+    ),
+    'Western': CupertinoDynamicColor.withBrightness(
+      color: Color(0xff8bc34a),
+      darkColor: Color.fromARGB(255, 169, 158, 104),
+    ),
+    'Non-H': CupertinoDynamicColor.withBrightness(
+      color: Color(0xff2196f3),
+      darkColor: Color.fromARGB(255, 112, 168, 203),
+    ),
+    'Image Set': CupertinoDynamicColor.withBrightness(
+      color: Color(0xff3f51b5),
+      darkColor: Color.fromARGB(255, 59, 93, 157),
+    ),
+    'Cosplay': CupertinoDynamicColor.withBrightness(
+      color: Color(0xff9c27b0),
+      darkColor: Color.fromARGB(255, 98, 57, 156),
+    ),
+    'Asian Porn': CupertinoDynamicColor.withBrightness(
+      color: Color(0xff9575cd),
+      darkColor: Color.fromARGB(255, 150, 60, 127),
+    ),
+    'Misc': CupertinoDynamicColor.withBrightness(
+      color: Color(0xfff06292),
+      darkColor: Color.fromARGB(255, 119, 119, 119),
+    ),
+    'defaule': CupertinoColors.systemBackground
   };
 
   /// fav 颜色
