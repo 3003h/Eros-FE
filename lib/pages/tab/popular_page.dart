@@ -17,6 +17,7 @@ class PopularListTab extends StatefulWidget {
       : super(key: key);
   final tabIndex;
   final scrollController;
+
   @override
   State<StatefulWidget> createState() => _PopularListTabState();
 }

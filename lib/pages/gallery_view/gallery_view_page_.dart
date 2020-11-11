@@ -98,6 +98,7 @@ class GalleryViewPageLoad extends StatelessWidget {
 
 class GalleryViewPage extends StatefulWidget {
   final int index;
+
 //  String heroTag;
   final PageController controller;
 
@@ -193,7 +194,8 @@ class _GalleryViewPageState extends State<GalleryViewPage> {
           },
           backgroundDecoration: null,
           pageController: widget.controller,
-          enableRotation: false, // 旋转
+          enableRotation: false,
+          // 旋转
           onPageChanged: (index) {
 //            Global.logger.v('onPageChanged');
             _precache(_galleryModel.previews, index, 5);

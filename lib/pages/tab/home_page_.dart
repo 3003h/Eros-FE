@@ -24,6 +24,7 @@ class _FEhHomeNewState extends State<FEhHomeNew> {
   bool _tapAwait = true;
 
   final Map<String, ScrollController> _scrollControllerMap = {};
+
   ScrollController _getScrollController(String key) {
     if (_scrollControllerMap[key] == null) {
       _scrollControllerMap[key] = ScrollController();

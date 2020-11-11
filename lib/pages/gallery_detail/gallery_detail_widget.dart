@@ -124,8 +124,10 @@ class GalleryDetailInfo extends StatelessWidget {
           return GridView.builder(
               padding: const EdgeInsets.only(
                   top: kPadding, right: kPadding, left: kPadding),
-              shrinkWrap: true, //解决无限高度问题
-              physics: const NeverScrollableScrollPhysics(), //禁用滑动事件
+              shrinkWrap: true,
+              //解决无限高度问题
+              physics: const NeverScrollableScrollPhysics(),
+              //禁用滑动事件
               gridDelegate: const SliverGridDelegateWithMaxCrossAxisExtent(
 //              crossAxisCount: _crossAxisCount, //每行列数
                   maxCrossAxisExtent: 130,

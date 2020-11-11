@@ -78,7 +78,7 @@ SliverFixedExtentList buildGallerySliverListSimpleView(
     {int maxPage, int curPage, VoidCallback loadMord}) {
   return SliverFixedExtentList(
     delegate: SliverChildBuilderDelegate(
-          (BuildContext context, int index) {
+      (BuildContext context, int index) {
         if (maxPage != null) {
           if (index == gallerItemBeans.length - 1 && curPage < maxPage - 1) {
 //            加载更多数据的回调
@@ -96,7 +96,8 @@ SliverFixedExtentList buildGallerySliverListSimpleView(
         );
       },
       childCount: gallerItemBeans.length,
-    ), itemExtent: kItemWidth + 1,
+    ),
+    itemExtent: kItemWidth + 1,
   );
 }
 

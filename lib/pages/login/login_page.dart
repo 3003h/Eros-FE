@@ -193,7 +193,7 @@ class _LoginPageState extends State<LoginPage> {
   }
 
   /// 用户登录
-  void _login() async {
+  Future<void> _login() async {
     Global.loggerNoStack.i({
       'username': _usernameController.text,
       'password': _passwdController.text

@@ -19,6 +19,7 @@ class AllPreviewPage extends StatefulWidget {
 
 class _AllPreviewPageState extends State<AllPreviewPage> {
   List<GalleryPreview> _galleryPreviewList = [];
+
 //  int _currentPage;
   bool _isLoading = false;
   bool _isLoadFinsh = false;

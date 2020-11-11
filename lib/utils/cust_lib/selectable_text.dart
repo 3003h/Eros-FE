@@ -474,6 +474,7 @@ class _SelectableTextState extends State<SelectableText>
   _TextSpanEditingController _controller;
 
   FocusNode _focusNode;
+
   FocusNode get _effectiveFocusNode =>
       widget.focusNode ?? (_focusNode ??= FocusNode());
 
@@ -492,6 +493,7 @@ class _SelectableTextState extends State<SelectableText>
 
   @override
   bool get selectionEnabled => widget.selectionEnabled;
+
   // End of API for TextSelectionGestureDetectorBuilderDelegate.
 
   @override

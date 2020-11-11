@@ -14,7 +14,9 @@ const String columnLinks = 'links';
 
 class DataBaseUtil {
   factory DataBaseUtil() => _instance;
+
   DataBaseUtil._();
+
   static final DataBaseUtil _instance = DataBaseUtil._();
 
   Future<Database> _getDataBase() async {

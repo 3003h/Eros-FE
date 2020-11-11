@@ -91,7 +91,7 @@ class _LoginCookiePageState extends State<LoginCookiePage> {
   }
 
   /// cookie登录
-  void _loginCookie() async {
+  Future<void> _loginCookie() async {
     Global.loggerNoStack.i({
       'ibp_member_id': _idController.text,
       'ibp_pass_hash': _hashController.text
