@@ -6,6 +6,7 @@ import 'package:FEhViewer/models/profile.dart';
 import 'package:FEhViewer/route/application.dart';
 import 'package:FEhViewer/route/routes.dart';
 import 'package:FEhViewer/utils/storage.dart';
+import 'package:FEhViewer/utils/utility.dart';
 import 'package:FEhViewer/values/storages.dart';
 import 'package:fluro/fluro.dart';
 import 'package:flutter/material.dart';
@@ -18,6 +19,7 @@ class Global {
   // 是否第一次打开
   static bool isFirstOpen = false;
   static Profile profile = Profile();
+  static bool inDebugMode = false;
 
   static final Logger logger = Logger(
     printer: PrettyPrinter(
@@ -35,7 +37,7 @@ class Global {
   );
 
   // init
-  static Future init() async {
+  static Future<void> init() async {
     // 运行初始
     WidgetsFlutterBinding.ensureInitialized();
 
@@ -73,6 +75,9 @@ class Global {
     final FluroRouter router = FluroRouter();
     EHRoutes.configureRoutes(router);
     Application.router = router;
+
+    // 判断是否debug模式
+    inDebugMode = EHUtils().isInDebugMode;
 
     // 读取设备第一次打开
     isFirstOpen = !StorageUtil().getBool(STORAGE_DEVICE_ALREADY_OPEN_KEY);

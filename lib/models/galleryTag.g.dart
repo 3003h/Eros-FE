@@ -17,5 +17,5 @@ Map<String, dynamic> _$GalleryTagToJson(GalleryTag instance) =>
     <String, dynamic>{
       'title': instance.title,
       'type': instance.type,
-      'tagTranslat': instance.tagTranslat
+      'tagTranslat': instance.tagTranslat,
     };

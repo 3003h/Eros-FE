@@ -6,7 +6,7 @@ class Favorite {}
 class FavcatItemBean {
   final String title;
   final Color color;
-  final String key;
+  final String favId;
 
-  const FavcatItemBean(this.title, this.color, {this.key});
+  const FavcatItemBean(this.title, this.color, {this.favId});
 }

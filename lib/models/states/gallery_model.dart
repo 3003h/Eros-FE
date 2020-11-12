@@ -75,6 +75,7 @@ class GalleryModel extends ProfileChangeNotifier {
   bool get hideNavigationBtn => _hideNavigationBtn;
 
   bool get isGetAllImageHref => _isGetAllImageHref ?? false;
+
   set isGetAllImageHref(bool value) => _isGetAllImageHref = value;
 
   List<GalleryPreview> get previews => _galleryItem.galleryPreview;
@@ -82,6 +83,7 @@ class GalleryModel extends ProfileChangeNotifier {
   List<GalleryPreview> get oriGalleryPreview => _oriGalleryPreview ?? [];
 
   set detailLoadFinish(bool value) => _detailLoadFinish = value;
+
   bool get detailLoadFinish => _detailLoadFinish ?? false;
 
   dynamic get title => _title;
@@ -104,6 +106,7 @@ class GalleryModel extends ProfileChangeNotifier {
   }
 
   bool get isReloading => _isReloading ?? false;
+
   set isReloading(bool value) {
     _isReloading = value;
     notifyListeners();

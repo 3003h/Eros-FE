@@ -1,5 +1,6 @@
 import 'package:FEhViewer/common/global.dart';
 import 'package:FEhViewer/utils/dio_util.dart';
+import 'package:FEhViewer/utils/utility.dart';
 import 'package:FEhViewer/values/const.dart';
 import 'package:dio/dio.dart';
 import 'package:html/dom.dart';
@@ -9,42 +10,44 @@ class GalleryFavParser {
   /// 收藏操作
   static Future<void> galleryAddfavorite(String gid, String token,
       {String favcat = 'favdel', String favnote}) async {
-    HttpManager httpManager = HttpManager.getInstance(
+    final HttpManager httpManager = HttpManager.getInstance(
         EHConst.getBaseSite(Global.profile.ehConfig.siteEx ?? false));
 
-    var url = '/gallerypopups.php?gid=$gid&t=$token&act=addfav';
-    var cookie = Global.profile?.user?.cookie ?? "";
+    final String url = '/gallerypopups.php?gid=$gid&t=$token&act=addfav';
+    final String cookie = Global.profile?.user?.cookie ?? '';
 
-    Options options = Options(headers: {
-      "Cookie": cookie,
+    final Options options = Options(headers: {
+      'Cookie': cookie,
     });
 
-    FormData formData = FormData.fromMap({'favcat': favcat, 'update': '1'});
+    final FormData formData =
+        FormData.fromMap({'favcat': favcat, 'update': '1'});
 
-    var response = await httpManager.postForm(
+    final Response response = await httpManager.postForm(
       url,
       options: options,
       data: formData,
     );
 
-    // TODO a
     saveFavcat(gid, token);
   }
 
-  static Future<List> gallerySelfavcat(String gid, String token) async {
+  static Future<List<Map<String, String>>> gallerySelfavcat(
+      String gid, String token) async {
 //    Global.logger.v('gallerySelfavcat');
+    print('frome gallerySelfavcat');
 
-    HttpManager httpManager = HttpManager.getInstance(
+    final HttpManager httpManager = HttpManager.getInstance(
         EHConst.getBaseSite(Global.profile.ehConfig.siteEx ?? false));
 
-    var url = '/gallerypopups.php?gid=$gid&t=$token&act=addfav';
-    var cookie = Global.profile?.user?.cookie ?? "";
+    final String url = '/gallerypopups.php?gid=$gid&t=$token&act=addfav';
+    final String cookie = Global.profile?.user?.cookie ?? '';
 
-    Options options = Options(headers: {
-      "Cookie": cookie,
+    final Options options = Options(headers: {
+      'Cookie': cookie,
     });
 
-    var response = await httpManager.get(
+    final String response = await httpManager.get(
       url,
       options: options,
     );
@@ -52,35 +55,42 @@ class GalleryFavParser {
     return parserAddFavPage(response);
   }
 
-  static List parserAddFavPage(String response) {
+  static List<Map<String, String>> parserAddFavPage(String response) {
     // 解析响应信息dom
-    var document = parse(response);
+    final Document document = parse(response);
 
-    List favList = [];
+    print('frome parserAddFavPage');
+
+    final List<Map<String, String>> favList = <Map<String, String>>[];
 
     List<Element> favcats =
-        document.querySelectorAll("#galpop > div > div.nosel > div");
-    for (Element fav in favcats) {
-      List<Element> divs = fav.querySelectorAll('div');
-      String favId = divs[0].querySelector('input').attributes['value'].trim();
-      var favTitle = divs[2].text.trim();
+        document.querySelectorAll('#galpop > div > div.nosel > div');
+    for (final Element fav in favcats) {
+      final List<Element> divs = fav.querySelectorAll('div');
+      final String favId =
+          divs[0].querySelector('input').attributes['value'].trim();
+      final String favTitle = divs[2].text.trim();
 //      Global.logger.v('$favId  $favTitle');
-      favList.add({'favId': favId, 'favTitle': favTitle});
+      favList.add(<String, String>{'favId': favId, 'favTitle': favTitle});
     }
 
     return favList.sublist(0, 10);
   }
 
-  static Future<List> getFavcat(String gid, String token,
-      {bool cache = true}) async {
+  static Future<List<Map<String, String>>> getFavcat(
+      {String gid, String token, bool cache = true}) async {
     // profile为空或者cache标志否
     if (Global.profile.user.favcat == null ||
         Global.profile.user.favcat.isEmpty ||
         !cache) {
+      // Global.logger.v('$gid  $token');
       Global.profile.user.favcat = await gallerySelfavcat(gid, token);
     }
 
-    return Global.profile.user.favcat;
+    print('frome cache');
+    final List<Map<String, String>> favcatList =
+        EHUtils.getFavListFromProfile();
+    return Future<List<Map<String, String>>>.value(favcatList);
   }
 
   static Future<void> saveFavcat(String gid, String token) async {

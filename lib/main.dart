@@ -5,7 +5,10 @@ import 'package:FEhViewer/models/states/theme_model.dart';
 import 'package:FEhViewer/models/states/user_model.dart';
 import 'package:FEhViewer/pages/splash_page.dart';
 import 'package:FEhViewer/route/application.dart';
+import 'package:FEhViewer/values/theme_colors.dart';
+import 'package:device_preview/device_preview.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
@@ -14,7 +17,16 @@ import 'package:provider/provider.dart';
 
 import 'generated/l10n.dart';
 
-void main() => Global.init().then((e) => runApp(MyApp()));
+void main() => Global.init().then((e) {
+      ///滚动性能优化
+      GestureBinding.instance.resamplingEnabled = true;
+      runApp(
+        DevicePreview(
+          enabled: Global.inDebugMode,
+          builder: (context) => MyApp(), // Wrap your app
+        ),
+      );
+    });
 
 class MyApp extends StatefulWidget {
   @override
@@ -55,7 +67,10 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
         theme: themeModel.getTheme(context, _brightness),
         // theme: ThemeColors.darkTheme,
         home: const SplashPage(),
-        locale: localeModel.getLocale(),
+        locale: Global.inDebugMode
+            ? DevicePreview.locale(context)
+            : localeModel.getLocale(),
+        builder: DevicePreview.appBuilder,
         supportedLocales: <Locale>[
           const Locale('en', ''),
           ...S.delegate.supportedLocales

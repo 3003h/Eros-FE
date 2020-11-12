@@ -90,18 +90,17 @@ class EHConst {
     '#e8e': '9',
   };
 
-  static const List favList = [
-    {'key': '0', 'desc': 'Favorites 0'},
-    {'key': '1', 'desc': 'Favorites 1'},
-    {'key': '2', 'desc': 'Favorites 2'},
-    {'key': '3', 'desc': 'Favorites 3'},
-    {'key': '4', 'desc': 'Favorites 4'},
-    {'key': '5', 'desc': 'Favorites 5'},
-    {'key': '6', 'desc': 'Favorites 6'},
-    {'key': '7', 'desc': 'Favorites 7'},
-    {'key': '8', 'desc': 'Favorites 8'},
-    {'key': '9', 'desc': 'Favorites 9'},
-    {'key': 'a', 'desc': 'Favorites All'},
+  static const List<Map<String, String>> favList = <Map<String, String>>[
+    {'favcat': '0', 'desc': 'Favorites 0'},
+    {'favcat': '1', 'desc': 'Favorites 1'},
+    {'favcat': '2', 'desc': 'Favorites 2'},
+    {'favcat': '3', 'desc': 'Favorites 3'},
+    {'favcat': '4', 'desc': 'Favorites 4'},
+    {'favcat': '5', 'desc': 'Favorites 5'},
+    {'favcat': '6', 'desc': 'Favorites 6'},
+    {'favcat': '7', 'desc': 'Favorites 7'},
+    {'favcat': '8', 'desc': 'Favorites 8'},
+    {'favcat': '9', 'desc': 'Favorites 9'},
   ];
 
   static const Map prefixToNameSpaceMap = {

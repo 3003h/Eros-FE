@@ -28,5 +28,5 @@ Map<String, dynamic> _$ProfileToJson(Profile instance) => <String, dynamic>{
       'ehConfig': instance.ehConfig,
       'lastLogin': instance.lastLogin,
       'locale': instance.locale,
-      'theme': instance.theme
+      'theme': instance.theme,
     };

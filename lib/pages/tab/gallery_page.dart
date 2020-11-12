@@ -231,8 +231,6 @@ class _GalleryListTabState extends State<GalleryListTab> {
   Widget build(BuildContext context) {
     final S ln = S.of(context);
 
-    Global.logger.v('$_search ${ln.tab_gallery}');
-
     _title = (_search != null && _search.isNotEmpty) ? _search : ln.tab_gallery;
 
     final CustomScrollView customScrollView = CustomScrollView(

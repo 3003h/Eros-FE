@@ -325,6 +325,7 @@ class _FavoriteTabState extends State<FavoriteTab> {
     );
   }
 
+  /// 切换收藏夹
   Widget _buildFavcatButton(BuildContext context) {
     return CupertinoButton(
       padding: const EdgeInsets.all(0),
@@ -336,11 +337,10 @@ class _FavoriteTabState extends State<FavoriteTab> {
         NavigatorUtil.jump(context, EHRoutes.selFavorie).then((result) async {
           if (result.runtimeType == FavcatItemBean) {
             FavcatItemBean fav = result;
-            Global.loggerNoStack.i('${fav.title}');
-            if (_curFavcat != fav.key) {
+            if (_curFavcat != fav.favId) {
               Global.loggerNoStack.v('修改favcat to ${fav.title}');
               _setTitle(fav.title);
-              _curFavcat = fav.key;
+              _curFavcat = fav.favId;
               setState(() {
                 _loading = true;
                 _gallerItemBeans.clear();
