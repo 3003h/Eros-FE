@@ -17,6 +17,12 @@ import 'package:tuple/tuple.dart';
 import 'dio_util.dart';
 
 class EHUtils {
+  bool get isInDebugMode {
+    bool inDebugMode = false;
+    assert(inDebugMode = true); //如果debug模式下会触发赋值
+    return inDebugMode;
+  }
+
   /// list 分割
   static List<List<T>> splitList<T>(List<T> list, int len) {
     if (len <= 1) {
@@ -66,6 +72,20 @@ class EHUtils {
       }
     });
     return totCatNum;
+  }
+
+  static List<Map<String, String>> getFavListFromProfile() {
+    final List<Map<String, String>> favcatList = <Map<String, String>>[];
+    for (final dynamic mapObj in Global.profile.user.favcat) {
+      // Global.logger.v('$mapObj');
+      final Map<String, String> map = <String, String>{
+        'favId': mapObj['favId'],
+        'favTitle': mapObj['favTitle']
+      };
+      favcatList.add(map);
+    }
+
+    return favcatList;
   }
 }
 

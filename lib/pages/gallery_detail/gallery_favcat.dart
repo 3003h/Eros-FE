@@ -45,46 +45,6 @@ class _GalleryFavButtonState extends State<GalleryFavButton> {
     }
   }
 
-  /*@override
-  Widget build(BuildContext context) {
-    return GestureDetector(
-      onLongPress: () => _longTapFav(context),
-      child: Selector<GalleryModel, GalleryItem>(
-          selector: (context, galleryModel) => galleryModel.galleryItem,
-//          shouldRebuild: (pre, next) =>
-//              pre.favTitle != next.favTitle || pre.favcat != next.favcat,
-          shouldRebuild: (_, __) => true,
-          builder: (context, galleryItem, child) {
-            return LikeButton(
-              isLiked: galleryItem.favcat.isNotEmpty,
-              likeBuilder: (bool isLiked) {
-                return Icon(
-                  FontAwesomeIcons.solidHeart,
-                  color: isLiked
-                      ? ThemeColors.favColor[galleryItem.favcat]
-                      : CupertinoColors.systemGrey,
-                );
-              },
-              likeCount: 233,
-              onTap: onLikeButtonTapped,
-            );
-          }),
-    );
-  }
-
-  Future<bool> onLikeButtonTapped(bool isLiked) async {
-    /// send your request here
-    // final bool success= await sendRequest();
-
-    /// if failed, you can do nothing
-    // return success? !isLiked:isLiked;
-    final bool val = await _tapFav(context);
-
-    Global.logger.v(val);
-
-    return val ?? isLiked;
-  }*/
-
   @override
   Widget build(BuildContext context) {
     final S ln = S.of(context);
@@ -204,7 +164,8 @@ class _GalleryFavButtonState extends State<GalleryFavButton> {
     return true;
   }
 
-  Future _tapFav(context) async {
+  Future<void> _tapFav(context) async {
+    Global.logger.v('_tapFav');
     if (_galleryModel.galleryItem.favcat.isNotEmpty) {
       return _delFav();
     } else {
@@ -217,6 +178,7 @@ class _GalleryFavButtonState extends State<GalleryFavButton> {
         return _addToLastFavcat(_lastFavcat);
       } else {
         // 手选收藏夹
+        Global.logger.v('手选收藏夹');
         return await _showAddFavDialog(context);
       }
     }
@@ -230,25 +192,28 @@ class _GalleryFavButtonState extends State<GalleryFavButton> {
 
   // 选择并收藏
   Future<bool> _showAddFavDialog(context) async {
-    var favList = await GalleryFavParser.getFavcat(
-      _galleryModel.galleryItem.gid,
-      _galleryModel.galleryItem.token,
+    ///
+    /// [{'favId': favId, 'favTitle': favTitle}]
+    final List<Map<String, String>> favList = await GalleryFavParser.getFavcat(
+      gid: _galleryModel.galleryItem.gid,
+      token: _galleryModel.galleryItem.token,
     );
 
     // diaolog 获取选择结果
-    final Map result = Global.profile.ehConfig.favPicker
+    final Map<String, String> result = Global.profile.ehConfig.favPicker
         ? await _showAddFavPicker(context, favList)
         : await _showAddFavList(context, favList);
 
-    Global.logger.v('$result');
+    Global.logger.v('$result  ${result.runtimeType}');
 
     if (result != null && result is Map) {
+      Global.logger.v('result ${result}');
       setState(() {
         _isLoading = true;
       });
-      var _favcat = result['favcat'];
-      var _favnote = result['favnode'];
-      var _favTitle = result['favTitle'];
+      final String _favcat = result['favcat'];
+      final String _favnote = result['favnode'];
+      final String _favTitle = result['favTitle'];
       try {
         await GalleryFavParser.galleryAddfavorite(
           _galleryModel.galleryItem.gid,
@@ -271,7 +236,8 @@ class _GalleryFavButtonState extends State<GalleryFavButton> {
   }
 
   /// 添加收藏 Picker 形式
-  Future<Map> _showAddFavPicker(BuildContext context, List favList) async {
+  Future<Map<String, String>> _showAddFavPicker(
+      BuildContext context, List favList) async {
     int _favindex = 0;
 
     final List<Widget> favPicker = List<Widget>.from(favList.map((e) => Row(
@@ -290,7 +256,7 @@ class _GalleryFavButtonState extends State<GalleryFavButton> {
           ],
         ))).toList();
 
-    return showCupertinoDialog<Map>(
+    return showCupertinoDialog<Map<String, String>>(
       context: context,
       // barrierDismissible: false,
       builder: (BuildContext context) {
@@ -322,7 +288,7 @@ class _GalleryFavButtonState extends State<GalleryFavButton> {
                   onEditingComplete: () {
                     // 点击键盘完成
                     // 添加收藏
-                    final Map<String, dynamic> favMap = {
+                    final Map<String, String> favMap = <String, String>{
                       'favcat': '$_favindex',
                       'favTitle': favList[_favindex]['favTitle'],
                       'favnode': _favnoteController.text
@@ -345,7 +311,7 @@ class _GalleryFavButtonState extends State<GalleryFavButton> {
               child: const Text('确定'),
               onPressed: () {
                 // 添加收藏
-                final Map<String, dynamic> favMap = {
+                final Map<String, String> favMap = <String, String>{
                   'favcat': '$_favindex',
                   'favTitle': favList[_favindex]['favTitle'],
                   'favnode': _favnoteController.text
@@ -361,8 +327,9 @@ class _GalleryFavButtonState extends State<GalleryFavButton> {
   }
 
   /// 添加收藏 List形式
-  Future<Map> _showAddFavList(BuildContext context, List favList) async {
-    return showCupertinoDialog<Map>(
+  Future<Map<String, String>> _showAddFavList(
+      BuildContext context, List favList) async {
+    return showCupertinoDialog<Map<String, String>>(
       context: context,
       builder: (BuildContext context) {
         List<Widget> favcatList =
@@ -370,11 +337,12 @@ class _GalleryFavButtonState extends State<GalleryFavButton> {
                   text: fav['favTitle'],
                   favcat: fav['favId'],
                   onTap: () {
-                    final Map<String, dynamic> favMap = {
+                    final Map<String, String> favMap = <String, String>{
                       'favcat': fav['favId'],
                       'favTitle': fav['favTitle'],
                       'favnode': _favnoteController.text
                     };
+                    Global.logger.v('${favMap}');
                     // 返回数据
                     Navigator.of(context).pop(favMap);
                   },
@@ -443,7 +411,8 @@ class _FavcatAddItemState extends State<FavcatAddItem> {
       child: Column(
         children: [
           Container(
-            color: CupertinoColors.systemGrey3,
+            color: CupertinoDynamicColor.resolve(
+                CupertinoColors.systemGrey4, context),
             height: 0.5,
           ),
           GestureDetector(
@@ -460,7 +429,8 @@ class _FavcatAddItemState extends State<FavcatAddItem> {
                     padding: const EdgeInsets.only(right: 4, bottom: 3),
                     child: Icon(
                       FontAwesomeIcons.solidHeart,
-                      color: ThemeColors.favColor[widget.favcat],
+                      color: CupertinoDynamicColor.resolve(
+                          ThemeColors.favColor[widget.favcat], context),
                       size: 18,
                     ),
                   ),

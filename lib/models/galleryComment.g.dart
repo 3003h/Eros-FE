@@ -19,5 +19,5 @@ Map<String, dynamic> _$GalleryCommentToJson(GalleryComment instance) =>
       'name': instance.name,
       'time': instance.time,
       'context': instance.context,
-      'score': instance.score
+      'score': instance.score,
     };

@@ -31,8 +31,31 @@ class GalleryListParser {
     final String _pageSelector =
         isFavorite ? _favPageSelector : _galleryPageSelector;
 
-    // final fav =
-    //     document.querySelector("body > div.ido > form > p")?.text?.trim() ?? "";
+    const _favoritesSelector = 'body > div.ido > div.nosel > div';
+
+    if (isFavorite) {
+      /// 收藏夹列表
+      List<dom.Element> favorites =
+          document.querySelectorAll(_favoritesSelector);
+      int _favId = 0;
+      final List<Map<String, String>> favcatList = <Map<String, String>>[];
+      for (final dom.Element elm in favorites) {
+        final List<dom.Element> divs = elm.querySelectorAll('div');
+        // Global.logger.v('${divs}');
+        if (divs.isNotEmpty && divs.length >= 3) {
+          final Map<String, String> map = <String, String>{
+            'favId': '$_favId',
+            'favTitle': divs[2].text ?? ''
+          };
+          favcatList.add(map);
+          _favId += 1;
+        }
+      }
+      if (favcatList.isNotEmpty) {
+        Global.profile.user.favcat = favcatList;
+        Global.logger.v('$favcatList');
+      }
+    }
 
     // 最大页数
     int _maxPage = 0;

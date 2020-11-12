@@ -10,6 +10,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:provider/provider.dart';
+import 'package:share/share.dart';
 import 'package:tuple/tuple.dart';
 
 const double kHeaderHeight = 200.0 + 52;
@@ -116,6 +117,8 @@ class GalleryDetailPage extends StatelessWidget {
         final bool _hideNavigationBtn = _tuple.item1;
         final bool _isJpnTitle = _tuple.item3;
         final GalleryItem _item = _tuple.item4;
+        final String _title =
+            _isJpnTitle ? _item.englishTitle ?? '' : _item.japaneseTitle ?? '';
 
         // 主布局
         return CupertinoPageScaffold(
@@ -125,9 +128,7 @@ class GalleryDetailPage extends StatelessWidget {
             slivers: <Widget>[
               CupertinoSliverNavigationBar(
                 largeTitle: Text(
-                  _isJpnTitle
-                      ? _item.englishTitle ?? ''
-                      : _item.japaneseTitle ?? '',
+                  _title,
                   textAlign: TextAlign.left,
                   maxLines: 3,
                   style: const TextStyle(
@@ -144,7 +145,10 @@ class GalleryDetailPage extends StatelessWidget {
                           FontAwesomeIcons.shareAltSquare,
                           size: 26,
                         ),
-                        onPressed: () {},
+                        onPressed: () {
+                          Global.logger.v('tap shareBtn');
+                          Share.share('${_item.url}');
+                        },
                       )
                     : _buildNavigationBarReadButton(context),
               ),

@@ -6,6 +6,7 @@ import 'base.dart';
 
 class UserModel extends ProfileChangeNotifier {
   Profile get _profile => Global.profile;
+
   User get user => _profile.user;
 
   // APP是否登录(如果有用户信息，则证明登录过)

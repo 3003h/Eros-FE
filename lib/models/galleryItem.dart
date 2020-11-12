@@ -1,14 +1,13 @@
 import 'package:json_annotation/json_annotation.dart';
-
-import "galleryComment.dart";
-import "galleryPreview.dart";
-import "tagGroup.dart";
+import 'tagGroup.dart';
+import 'galleryComment.dart';
+import 'galleryPreview.dart';
 
 part 'galleryItem.g.dart';
 
 @JsonSerializable()
 class GalleryItem {
-  GalleryItem();
+      GalleryItem();
 
   String gid;
   String token;
@@ -16,8 +15,8 @@ class GalleryItem {
   String url;
   String imgUrl;
   String imgUrlL;
-  num imgHeight;
-  num imgWidth;
+  double imgHeight;
+  double imgWidth;
   String japaneseTitle;
   String englishTitle;
   String category;
@@ -25,19 +24,18 @@ class GalleryItem {
   String posted;
   String language;
   String filecount;
-  num rating;
-  num ratingFallBack;
+  double rating;
+  double ratingFallBack;
   String numberOfReviews;
   String postTime;
   String favTitle;
   String favcat;
-  List simpleTags;
-  List simpleTagsTranslat;
+  List<dynamic> simpleTags;
+  List<dynamic> simpleTagsTranslat;
   List<TagGroup> tagGroup;
   List<GalleryComment> galleryComment;
   List<GalleryPreview> galleryPreview;
 
-  factory GalleryItem.fromJson(Map<String, dynamic> json) =>
-      _$GalleryItemFromJson(json);
+  factory GalleryItem.fromJson(Map<String,dynamic> json) => _$GalleryItemFromJson(json);
   Map<String, dynamic> toJson() => _$GalleryItemToJson(this);
 }

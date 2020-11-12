@@ -17,5 +17,5 @@ TagGroup _$TagGroupFromJson(Map<String, dynamic> json) {
 
 Map<String, dynamic> _$TagGroupToJson(TagGroup instance) => <String, dynamic>{
       'tagType': instance.tagType,
-      'galleryTags': instance.galleryTags
+      'galleryTags': instance.galleryTags,
     };

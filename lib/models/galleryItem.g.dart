@@ -14,8 +14,8 @@ GalleryItem _$GalleryItemFromJson(Map<String, dynamic> json) {
     ..url = json['url'] as String
     ..imgUrl = json['imgUrl'] as String
     ..imgUrlL = json['imgUrlL'] as String
-    ..imgHeight = json['imgHeight'] as num
-    ..imgWidth = json['imgWidth'] as num
+    ..imgHeight = (json['imgHeight'] as num)?.toDouble()
+    ..imgWidth = (json['imgWidth'] as num)?.toDouble()
     ..japaneseTitle = json['japaneseTitle'] as String
     ..englishTitle = json['englishTitle'] as String
     ..category = json['category'] as String
@@ -23,8 +23,8 @@ GalleryItem _$GalleryItemFromJson(Map<String, dynamic> json) {
     ..posted = json['posted'] as String
     ..language = json['language'] as String
     ..filecount = json['filecount'] as String
-    ..rating = json['rating'] as num
-    ..ratingFallBack = json['ratingFallBack'] as num
+    ..rating = (json['rating'] as num)?.toDouble()
+    ..ratingFallBack = (json['ratingFallBack'] as num)?.toDouble()
     ..numberOfReviews = json['numberOfReviews'] as String
     ..postTime = json['postTime'] as String
     ..favTitle = json['favTitle'] as String
@@ -74,5 +74,5 @@ Map<String, dynamic> _$GalleryItemToJson(GalleryItem instance) =>
       'simpleTagsTranslat': instance.simpleTagsTranslat,
       'tagGroup': instance.tagGroup,
       'galleryComment': instance.galleryComment,
-      'galleryPreview': instance.galleryPreview
+      'galleryPreview': instance.galleryPreview,
     };

@@ -1,3 +1,4 @@
+import 'package:FEhViewer/common/parser/gallery_fav_parser.dart';
 import 'package:FEhViewer/generated/l10n.dart';
 import 'package:FEhViewer/models/entity/favorite.dart';
 import 'package:FEhViewer/route/navigator_util.dart';
@@ -9,9 +10,8 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 /// 收藏夹选择页面 列表
 class SelFavoritePage extends StatefulWidget {
+  const SelFavoritePage({this.favcatItemBean});
   final FavcatItemBean favcatItemBean;
-
-  SelFavoritePage({this.favcatItemBean});
 
   @override
   _SelFavorite createState() => _SelFavorite();
@@ -30,20 +30,35 @@ class _SelFavorite extends State<SelFavoritePage> {
   }
 
   /// 初始化收藏夹选择数据
-  void _initData() {
-    EHConst.favList.forEach((fav) {
-      var key = fav['key'];
-      var desc = fav['desc'];
+  void _initData() async {
+    // EHConst.favList.forEach((fav) {
+    //   final key = fav['favcat'];
+    //   final favTitle = fav['desc'];
+    //   favItemBeans
+    //       .add(FavcatItemBean(favTitle, ThemeColors.favColor[key], key: key));
+    // });
+
+    final List<Map<String, String>> favList =
+        await GalleryFavParser.getFavcat() ?? EHConst.favList;
+    for (final Map<String, String> catmap in favList) {
+      final String favTitle = catmap['favTitle'];
+      final String favId = catmap['favId'];
+
+      favItemBeans.add(
+        FavcatItemBean(favTitle, ThemeColors.favColor[favId], favId: favId),
+      );
+    }
+    setState(() {
       favItemBeans
-          .add(FavcatItemBean(desc, ThemeColors.favColor[key], key: key));
+          .add(FavcatItemBean('所有收藏', ThemeColors.favColor['a'], favId: 'a'));
     });
   }
 
   @override
   Widget build(BuildContext context) {
-    var ln = S.of(context);
-    var _title = ln.favcat;
-    CupertinoPageScaffold sca = CupertinoPageScaffold(
+    final S ln = S.of(context);
+    final String _title = ln.favcat;
+    final CupertinoPageScaffold sca = CupertinoPageScaffold(
         navigationBar: CupertinoNavigationBar(
           backgroundColor: ThemeColors.navigationBarBackground,
           middle: Text(_title),
@@ -57,9 +72,8 @@ class _SelFavorite extends State<SelFavoritePage> {
 }
 
 class ListViewFavorite extends StatelessWidget {
+  const ListViewFavorite(this.favItemBeans);
   final List<FavcatItemBean> favItemBeans;
-
-  ListViewFavorite(this.favItemBeans);
 
   @override
   Widget build(BuildContext context) {
@@ -79,10 +93,9 @@ class ListViewFavorite extends StatelessWidget {
 
 /// 收藏夹选择单项
 class FavSelItemWidget extends StatefulWidget {
+  const FavSelItemWidget({this.index, this.favcatItemBean});
   final int index;
   final FavcatItemBean favcatItemBean;
-
-  FavSelItemWidget({this.index, this.favcatItemBean});
 
   @override
   _FavSelItemWidgetState createState() => _FavSelItemWidgetState();
@@ -146,7 +159,7 @@ class _FavSelItemWidgetState extends State<FavSelItemWidget> {
       },
       onTapDown: (_) => _updatePressedColor(),
       onTapUp: (_) {
-        Future.delayed(const Duration(milliseconds: 100), () {
+        Future<void>.delayed(const Duration(milliseconds: 100), () {
           _updateNormalColor();
         });
       },
@@ -156,13 +169,14 @@ class _FavSelItemWidgetState extends State<FavSelItemWidget> {
 
   void _updateNormalColor() {
     setState(() {
-      _colorTap = CupertinoColors.systemBackground;
+      _colorTap = null;
     });
   }
 
   void _updatePressedColor() {
     setState(() {
-      _colorTap = CupertinoColors.systemGrey4;
+      _colorTap =
+          CupertinoDynamicColor.resolve(CupertinoColors.systemGrey4, context);
     });
   }
 
@@ -171,7 +185,8 @@ class _FavSelItemWidgetState extends State<FavSelItemWidget> {
     return Divider(
       height: 1.0,
       indent: 48,
-      color: CupertinoColors.systemGrey,
+      color:
+          CupertinoDynamicColor.resolve(CupertinoColors.systemGrey4, context),
     );
   }
 }
