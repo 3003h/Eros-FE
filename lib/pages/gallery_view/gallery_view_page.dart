@@ -1,12 +1,16 @@
+import 'dart:io';
+
 import 'package:FEhViewer/common/global.dart';
 import 'package:FEhViewer/models/index.dart';
 import 'package:FEhViewer/models/states/gallery_model.dart';
 import 'package:FEhViewer/route/navigator_util.dart';
 import 'package:FEhViewer/utils/utility.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:extended_image/extended_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_cache_manager/flutter_cache_manager.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:provider/provider.dart';
 
@@ -61,6 +65,8 @@ class _GalleryViewPageEState extends State<GalleryViewPageE> {
 //            Global.logger.v('build GalleryViewPageE');
                 return SafeArea(
                   child: Stack(
+                    fit: StackFit.expand,
+                    alignment: Alignment.center,
                     children: <Widget>[
                       Container(
                         child: ExtendedImageGesturePageView.builder(
@@ -92,31 +98,56 @@ class _GalleryViewPageEState extends State<GalleryViewPageE> {
                         ),
                       ),
                       Positioned(
+                        top: 0,
                         child: Container(
-                            alignment: Alignment.topCenter,
-                            // height: 40,
                             child: Text(
-                              '${_currentIndex + 1}/${previews.length}',
-                              style: const TextStyle(
-                                  color: CupertinoColors.systemGrey6),
-                            )),
+                          '${_currentIndex + 1}/${previews.length}',
+                          style: const TextStyle(
+                              color: CupertinoColors.systemGrey6),
+                        )),
                       ),
                       Positioned(
-                        child: Container(
-                            padding: const EdgeInsets.only(left: 8, bottom: 8),
-                            alignment: Alignment.bottomLeft,
-                            child: GestureDetector(
-                              // 不可见区域点击有效
-                              behavior: HitTestBehavior.opaque,
-                              onTap: () {
-                                Global.logger.v('back');
-                                NavigatorUtil.goBack(context);
-                              },
-                              child: const Icon(
-                                FontAwesomeIcons.chevronLeft,
-                                color: CupertinoColors.systemGrey6,
-                              ),
-                            )),
+                        bottom: 0,
+                        left: 0,
+                        child: GestureDetector(
+                          // 不可见区域点击有效
+                          behavior: HitTestBehavior.opaque,
+                          onTap: () {
+                            Global.logger.v('back');
+                            NavigatorUtil.goBack(context);
+                          },
+                          child: Container(
+                            width: 40,
+                            height: 40,
+                            child: const Icon(
+                              FontAwesomeIcons.chevronLeft,
+                              color: CupertinoColors.systemGrey6,
+                              // size: 24,
+                            ),
+                          ),
+                        ),
+                      ),
+                      Positioned(
+                        bottom: 0,
+                        right: 0,
+                        child: GestureDetector(
+                          // 不可见区域点击有效
+                          behavior: HitTestBehavior.opaque,
+                          onTap: () {
+                            Global.logger.v('tap share');
+                            Api.shareImage(
+                                previews[_currentIndex].largeImageUrl);
+                          },
+                          child: Container(
+                            width: 40,
+                            height: 40,
+                            child: const Icon(
+                              FontAwesomeIcons.share,
+                              color: CupertinoColors.systemGrey6,
+                              // size: 24,
+                            ),
+                          ),
+                        ),
                       ),
                     ],
                   ),
