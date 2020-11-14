@@ -4,6 +4,7 @@ import 'package:FEhViewer/models/entity/favorite.dart';
 import 'package:FEhViewer/models/index.dart';
 import 'package:FEhViewer/models/states/gallery_model.dart';
 import 'package:FEhViewer/models/states/user_model.dart';
+import 'package:FEhViewer/pages/tab/gallery_base.dart';
 import 'package:FEhViewer/pages/tab/tab_base.dart';
 import 'package:FEhViewer/route/navigator_util.dart';
 import 'package:FEhViewer/route/routes.dart';
@@ -33,7 +34,7 @@ class FavoriteTab extends StatefulWidget {
 
 class _FavoriteTabState extends State<FavoriteTab> {
   String _title = '';
-  final List<GalleryItem> _gallerItemBeans = [];
+  List<GalleryItem> _galleryItemBeans = [];
   String _curFavcat = '';
   bool _loading = false;
   int _curPage = 0;
@@ -42,6 +43,9 @@ class _FavoriteTabState extends State<FavoriteTab> {
 
   //页码跳转的控制器
   final TextEditingController _pageController = TextEditingController();
+
+  Future<Tuple2<List<GalleryItem>, int>> _futureBuilderFuture;
+  Widget _lastListWidget;
 
   void _setTitle(String title) {
     setState(() {
@@ -53,7 +57,8 @@ class _FavoriteTabState extends State<FavoriteTab> {
   void initState() {
     super.initState();
     _curFavcat = 'a';
-    _loadDataFirst();
+    // _loadDataFirst();
+    _futureBuilderFuture = _loadDataFirstF();
   }
 
   SliverList gallerySliverListView(List<GalleryItem> gallerItemBeans) {
@@ -137,24 +142,12 @@ class _FavoriteTabState extends State<FavoriteTab> {
                       ),
                       CupertinoSliverRefreshControl(
                         onRefresh: () async {
-                          await _reloadData();
+                          await _reloadDataF();
                         },
                       ),
                       SliverSafeArea(
                         top: false,
-                        sliver: _loading
-                            ? SliverFillRemaining(
-                                child: Container(
-                                  padding: const EdgeInsets.only(bottom: 50),
-                                  child: const CupertinoActivityIndicator(
-                                    radius: 14.0,
-                                  ),
-                                ),
-                              )
-                            : getGalleryList(_gallerItemBeans, widget.tabIndex,
-                                maxPage: _maxPage,
-                                curPage: _curPage,
-                                loadMord: _loadDataMore),
+                        sliver: _getGalleryList2(),
                       ),
                       SliverToBoxAdapter(
                         child: Container(
@@ -182,6 +175,109 @@ class _FavoriteTabState extends State<FavoriteTab> {
     );
   }
 
+  Widget _getGalleryList2() {
+    return FutureBuilder<Tuple2<List<GalleryItem>, int>>(
+      future: _futureBuilderFuture,
+      builder: (BuildContext context,
+          AsyncSnapshot<Tuple2<List<GalleryItem>, int>> snapshot) {
+        switch (snapshot.connectionState) {
+          case ConnectionState.none:
+          case ConnectionState.active:
+          case ConnectionState.waiting:
+            return _lastListWidget ??
+                SliverFillRemaining(
+                  child: Container(
+                    padding: const EdgeInsets.only(bottom: 50),
+                    child: const CupertinoActivityIndicator(
+                      radius: 14.0,
+                    ),
+                  ),
+                );
+          case ConnectionState.done:
+            if (snapshot.hasError) {
+              return SliverFillRemaining(
+                child: Container(
+                  padding: const EdgeInsets.only(bottom: 50),
+                  child: GalleryErrorPage(
+                    onTap: _reLoadDataFirstF,
+                  ),
+                ),
+              );
+            } else {
+              _galleryItemBeans = snapshot.data.item1;
+              _maxPage = snapshot.data.item2;
+              _lastListWidget = getGalleryList(
+                  _galleryItemBeans, widget.tabIndex,
+                  maxPage: _maxPage,
+                  curPage: _curPage,
+                  loadMord: _loadDataMore);
+              return _lastListWidget;
+            }
+        }
+        return null;
+      },
+    );
+  }
+
+  Future<Tuple2<List<GalleryItem>, int>> _loadDataFirstF() async {
+    Global.logger.v('_loadDataFirstF  fav');
+    _curPage = 0;
+
+    final Future<Tuple2<List<GalleryItem>, int>> tuple =
+        Api.getFavorite(favcat: _curFavcat);
+    return tuple;
+  }
+
+  Future<void> _reLoadDataFirstF() async {
+    setState(() {
+      _lastListWidget = null;
+      _futureBuilderFuture = _loadDataFirstF();
+    });
+  }
+
+  Future<void> _reloadDataF() async {
+    _curPage = 0;
+    final Tuple2<List<GalleryItem>, int> tuple = await _loadDataFirstF();
+    setState(() {
+      _futureBuilderFuture =
+          Future<Tuple2<List<GalleryItem>, int>>.value(tuple);
+    });
+  }
+
+  Future<void> _loadFromPageF(int page, {bool cleanSearch = false}) async {
+    Global.logger.v('jump to page =>  $page');
+
+    _curPage = page;
+    final Future<Tuple2<List<GalleryItem>, int>> tuple =
+        Api.getFavorite(favcat: _curFavcat, page: _curPage);
+
+    setState(() {
+      _lastListWidget = null;
+      _futureBuilderFuture = tuple;
+    });
+  }
+
+  ///
+  ///
+  ///
+  ///
+  ///
+  ///
+  /*
+  Widget _getGalleryList() {
+    return _loading
+        ? SliverFillRemaining(
+            child: Container(
+              padding: const EdgeInsets.only(bottom: 50),
+              child: const CupertinoActivityIndicator(
+                radius: 14.0,
+              ),
+            ),
+          )
+        : getGalleryList(_galleryItemBeans, widget.tabIndex,
+            maxPage: _maxPage, curPage: _curPage, loadMord: _loadDataMore);
+  }
+
   _loadDataFirst() async {
     setState(() {
       _loading = true;
@@ -191,8 +287,8 @@ class _FavoriteTabState extends State<FavoriteTab> {
     final List<GalleryItem> gallerItemBeans = tuple.item1;
 
     setState(() {
-      _gallerItemBeans.clear();
-      _gallerItemBeans.addAll(gallerItemBeans);
+      _galleryItemBeans.clear();
+      _galleryItemBeans.addAll(gallerItemBeans);
       _curPage = 0;
       _maxPage = tuple.item2;
       _loading = false;
@@ -210,12 +306,12 @@ class _FavoriteTabState extends State<FavoriteTab> {
     final List<GalleryItem> gallerItemBeans = tuple.item1;
     setState(() {
       _curPage = 0;
-      _gallerItemBeans.clear();
-      _gallerItemBeans.addAll(gallerItemBeans);
+      _galleryItemBeans.clear();
+      _galleryItemBeans.addAll(gallerItemBeans);
       _maxPage = tuple.item2;
     });
   }
-
+*/
   _loadDataMore() async {
     if (_isLoadMore) {
       return;
@@ -233,12 +329,12 @@ class _FavoriteTabState extends State<FavoriteTab> {
     final List<GalleryItem> gallerItemBeans = tuple.item1;
 
     setState(() {
-      _gallerItemBeans.addAll(gallerItemBeans);
+      _galleryItemBeans.addAll(gallerItemBeans);
       _isLoadMore = false;
     });
   }
 
-  _loadFromPage(int page) async {
+/*  _loadFromPage(int page) async {
     Global.logger.v('jump to page  =>  $page');
     setState(() {
       _loading = true;
@@ -248,16 +344,16 @@ class _FavoriteTabState extends State<FavoriteTab> {
         await Api.getFavorite(favcat: _curFavcat, page: _curPage);
     final List<GalleryItem> gallerItemBeans = tuple.item1;
     setState(() {
-      _gallerItemBeans.clear();
-      _gallerItemBeans.addAll(gallerItemBeans);
+      _galleryItemBeans.clear();
+      _galleryItemBeans.addAll(gallerItemBeans);
       _maxPage = tuple.item2;
       _loading = false;
     });
-  }
+  }*/
 
   /// 跳转页码
   Future<void> _jumtToPage(BuildContext context) async {
-    _jump(BuildContext context) {
+    void _jump(BuildContext context) {
       final String _input = _pageController.text.trim();
 
       if (_input.isEmpty) {
@@ -272,7 +368,7 @@ class _FavoriteTabState extends State<FavoriteTab> {
       final int _toPage = int.parse(_input) - 1;
       if (_toPage >= 0 && _toPage <= _maxPage) {
         FocusScope.of(context).requestFocus(FocusNode());
-        _loadFromPage(_toPage);
+        _loadFromPageF(_toPage);
         Navigator.of(context).pop();
       } else {
         showToast('输入范围有误');
@@ -336,16 +432,17 @@ class _FavoriteTabState extends State<FavoriteTab> {
         // 跳转收藏夹选择页
         NavigatorUtil.jump(context, EHRoutes.selFavorie).then((result) async {
           if (result.runtimeType == FavcatItemBean) {
-            FavcatItemBean fav = result;
+            final FavcatItemBean fav = result;
             if (_curFavcat != fav.favId) {
               Global.loggerNoStack.v('修改favcat to ${fav.title}');
               _setTitle(fav.title);
               _curFavcat = fav.favId;
-              setState(() {
-                _loading = true;
-                _gallerItemBeans.clear();
-              });
-              await _loadDataFirst();
+              // setState(() {
+              //   _loading = true;
+              //   _galleryItemBeans.clear();
+              // });
+              // await _loadDataFirst();
+              _reLoadDataFirstF();
             } else {
               Global.loggerNoStack.v('未修改favcat');
             }
