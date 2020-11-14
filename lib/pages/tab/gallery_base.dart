@@ -4,6 +4,7 @@ import 'package:FEhViewer/values/const.dart';
 import 'package:FEhViewer/values/theme_colors.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:provider/provider.dart';
 
 class GalleryCatButton extends StatefulWidget {
@@ -174,6 +175,26 @@ class GalleryBase {
           ],
         );
       },
+    );
+  }
+}
+
+class GalleryErrorPage extends StatelessWidget {
+  const GalleryErrorPage({Key key, this.onTap}) : super(key: key);
+  final VoidCallback onTap;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      child: CupertinoButton(
+        onPressed: onTap,
+        child: Icon(
+          FontAwesomeIcons.syncAlt,
+          size: 50,
+          color: CupertinoDynamicColor.resolve(
+              CupertinoColors.systemGrey, context),
+        ),
+      ),
     );
   }
 }

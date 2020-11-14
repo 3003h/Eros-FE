@@ -39,9 +39,12 @@ class _GalleryListTabState extends State<GalleryListTab> {
   int _curPage = 0;
   int _maxPage = 0;
   bool _isLoadMore = false;
-  bool _firstLoading = false;
-  final List<GalleryItem> _gallerItemBeans = <GalleryItem>[];
+  // bool _firstLoading = false;
+  List<GalleryItem> _gallerItemBeans = <GalleryItem>[];
   String _search = '';
+
+  Future<Tuple2<List<GalleryItem>, int>> _futureBuilderFuture;
+  Widget _lastListWidget;
 
   //页码跳转的控制器
   final TextEditingController _pageController = TextEditingController();
@@ -50,54 +53,80 @@ class _GalleryListTabState extends State<GalleryListTab> {
   void initState() {
     super.initState();
     _parserSearch();
-    _loadDataFirst();
+    // _loadDataFirst();
+    _futureBuilderFuture = _loadDataFirstF();
   }
 
   void _parserSearch() {
     _search = widget.simpleSearch?.trim() ?? '';
   }
 
-  Future<void> _loadDataFirst() async {
+  // Future<void> _loadDataFirst() async {
+  //   final int _catNum =
+  //       Provider.of<EhConfigModel>(context, listen: false).catFilter;
+  //
+  //   Global.loggerNoStack.v('_loadDataFirst');
+  //   setState(() {
+  //     _gallerItemBeans.clear();
+  //     _firstLoading = true;
+  //   });
+  //
+  //   final Tuple2<List<GalleryItem>, int> tuple =
+  //       await Api.getGallery(cats: widget.cats ?? _catNum, serach: _search);
+  //   final List<GalleryItem> gallerItemBeans = tuple.item1;
+  //   _gallerItemBeans.addAll(gallerItemBeans);
+  //   _maxPage = tuple.item2;
+  //   setState(() {
+  //     _firstLoading = false;
+  //   });
+  // }
+
+  Future<Tuple2<List<GalleryItem>, int>> _loadDataFirstF() async {
+    Global.logger.v('_loadDataFirstF  gallery');
     final int _catNum =
         Provider.of<EhConfigModel>(context, listen: false).catFilter;
 
-    Global.loggerNoStack.v('_loadDataFirst');
-    setState(() {
-      _gallerItemBeans.clear();
-      _firstLoading = true;
-    });
+    final Future<Tuple2<List<GalleryItem>, int>> tuple =
+        Api.getGallery(cats: widget.cats ?? _catNum, serach: _search);
+    return tuple;
+  }
 
-    final Tuple2<List<GalleryItem>, int> tuple =
-        await Api.getGallery(cats: widget.cats ?? _catNum, serach: _search);
-    final List<GalleryItem> gallerItemBeans = tuple.item1;
-    _gallerItemBeans.addAll(gallerItemBeans);
-    _maxPage = tuple.item2;
+  // Future<void> _reloadData({bool cleanSearch = false}) async {
+  //   final int _catNum =
+  //       Provider.of<EhConfigModel>(context, listen: false).catFilter;
+  //
+  //   Global.loggerNoStack.v('_reloadData');
+  //   if (cleanSearch) {
+  //     _search = '';
+  //   }
+  //   if (_firstLoading) {
+  //     setState(() {
+  //       _firstLoading = false;
+  //     });
+  //   }
+  //   final Tuple2<List<GalleryItem>, int> tuple =
+  //       await Api.getGallery(cats: widget.cats ?? _catNum, serach: _search);
+  //   final List<GalleryItem> gallerItemBeans = tuple.item1;
+  //   setState(() {
+  //     _curPage = 0;
+  //     _gallerItemBeans.clear();
+  //     _gallerItemBeans.addAll(gallerItemBeans);
+  //     _maxPage = tuple.item2;
+  //   });
+  // }
+
+  Future<void> _reloadDataF() async {
+    _curPage = 0;
+    final Tuple2<List<GalleryItem>, int> tuple = await _loadDataFirstF();
     setState(() {
-      _firstLoading = false;
+      _futureBuilderFuture =
+          Future<Tuple2<List<GalleryItem>, int>>.value(tuple);
     });
   }
 
-  Future<void> _reloadData({bool cleanSearch = false}) async {
-    final int _catNum =
-        Provider.of<EhConfigModel>(context, listen: false).catFilter;
-
-    Global.loggerNoStack.v('_reloadData');
-    if (cleanSearch) {
-      _search = '';
-    }
-    if (_firstLoading) {
-      setState(() {
-        _firstLoading = false;
-      });
-    }
-    final Tuple2<List<GalleryItem>, int> tuple =
-        await Api.getGallery(cats: widget.cats ?? _catNum, serach: _search);
-    final List<GalleryItem> gallerItemBeans = tuple.item1;
+  Future<void> _reLoadDataFirstF() async {
     setState(() {
-      _curPage = 0;
-      _gallerItemBeans.clear();
-      _gallerItemBeans.addAll(gallerItemBeans);
-      _maxPage = tuple.item2;
+      _futureBuilderFuture = _loadDataFirstF();
     });
   }
 
@@ -134,26 +163,45 @@ class _GalleryListTabState extends State<GalleryListTab> {
     });
   }
 
-  Future<void> _loadFromPage(int page, {bool cleanSearch = false}) async {
+  // Future<void> _loadFromPage(int page, {bool cleanSearch = false}) async {
+  //   Global.logger.v('jump to page =>  $page');
+  //
+  //   if (cleanSearch) {
+  //     _search = '';
+  //   }
+  //   setState(() {
+  //     _firstLoading = true;
+  //   });
+  //   final int _catNum =
+  //       Provider.of<EhConfigModel>(context, listen: false).catFilter;
+  //   _curPage = page;
+  //   final Tuple2<List<GalleryItem>, int> tuple = await Api.getGallery(
+  //       page: _curPage, cats: widget.cats ?? _catNum, serach: _search);
+  //   final List<GalleryItem> gallerItemBeans = tuple.item1;
+  //   setState(() {
+  //     _gallerItemBeans.clear();
+  //     _gallerItemBeans.addAll(gallerItemBeans);
+  //     _maxPage = tuple.item2;
+  //     _firstLoading = false;
+  //   });
+  // }
+
+  Future<void> _loadFromPageF(int page, {bool cleanSearch = false}) async {
     Global.logger.v('jump to page =>  $page');
 
     if (cleanSearch) {
       _search = '';
     }
-    setState(() {
-      _firstLoading = true;
-    });
+
     final int _catNum =
         Provider.of<EhConfigModel>(context, listen: false).catFilter;
     _curPage = page;
-    final Tuple2<List<GalleryItem>, int> tuple = await Api.getGallery(
+    final Future<Tuple2<List<GalleryItem>, int>> tuple = Api.getGallery(
         page: _curPage, cats: widget.cats ?? _catNum, serach: _search);
-    final List<GalleryItem> gallerItemBeans = tuple.item1;
+
     setState(() {
-      _gallerItemBeans.clear();
-      _gallerItemBeans.addAll(gallerItemBeans);
-      _maxPage = tuple.item2;
-      _firstLoading = false;
+      _lastListWidget = null;
+      _futureBuilderFuture = tuple;
     });
   }
 
@@ -174,7 +222,7 @@ class _GalleryListTabState extends State<GalleryListTab> {
       final int _toPage = int.parse(_input) - 1;
       if (_toPage >= 0 && _toPage <= _maxPage) {
         FocusScope.of(context).requestFocus(FocusNode());
-        _loadFromPage(_toPage);
+        _loadFromPageF(_toPage);
         Navigator.of(context).pop();
       } else {
         showToast('输入范围有误');
@@ -255,19 +303,6 @@ class _GalleryListTabState extends State<GalleryListTab> {
                   ),
                   onPressed: () {
                     NavigatorUtil.showSearch(context);
-
-                    /*Navigator.push(context,
-                        CupertinoPageRoute(builder: (context) {
-                      return GallerySearchPage();
-                    })).then((result) {
-                      if (result is String && (result as String).isNotEmpty) {
-                        // NavigatorUtil.goBack(context);
-                        Global.logger.v('search $result');
-                        _search = result;
-                        _title = result;
-                        _loadDataFirst();
-                      }
-                    });*/
                   },
                 ),
                 // 筛选按钮
@@ -304,36 +339,15 @@ class _GalleryListTabState extends State<GalleryListTab> {
             ),
           ),
         ),
-        /*SliverToBoxAdapter(
-            child: Container(
-                padding: const EdgeInsets.fromLTRB(16, 0, 16, 0),
-                color: ThemeColors.navigationBarBackground,
-                child: CupertinoTextField())),*/
-
         CupertinoSliverRefreshControl(
           onRefresh: () async {
-            await _reloadData();
+            await _reloadDataF();
           },
         ),
         SliverSafeArea(
           top: false,
           bottom: false,
-          sliver: _firstLoading
-              ? SliverFillRemaining(
-                  child: Container(
-                    padding: const EdgeInsets.only(bottom: 50),
-                    child: const CupertinoActivityIndicator(
-                      radius: 14.0,
-                    ),
-                  ),
-                )
-              : getGalleryList(
-                  _gallerItemBeans,
-                  widget.tabIndex,
-                  maxPage: _maxPage,
-                  curPage: _curPage,
-                  loadMord: _loadDataMore,
-                ),
+          sliver: _getGalleryList2(),
         ),
         SliverToBoxAdapter(
           child: Container(
@@ -350,6 +364,71 @@ class _GalleryListTabState extends State<GalleryListTab> {
 
     return CupertinoPageScaffold(
       child: customScrollView,
+    );
+  }
+
+  // Widget _getGalleryList() {
+  //   return _firstLoading
+  //       ? SliverFillRemaining(
+  //           child: Container(
+  //             padding: const EdgeInsets.only(bottom: 50),
+  //             child: const CupertinoActivityIndicator(
+  //               radius: 14.0,
+  //             ),
+  //           ),
+  //         )
+  //       : getGalleryList(
+  //           _gallerItemBeans,
+  //           widget.tabIndex,
+  //           maxPage: _maxPage,
+  //           curPage: _curPage,
+  //           loadMord: _loadDataMore,
+  //         );
+  // }
+
+  Widget _getGalleryList2() {
+    return FutureBuilder<Tuple2<List<GalleryItem>, int>>(
+      future: _futureBuilderFuture,
+      builder: (BuildContext context,
+          AsyncSnapshot<Tuple2<List<GalleryItem>, int>> snapshot) {
+        switch (snapshot.connectionState) {
+          case ConnectionState.none:
+          case ConnectionState.active:
+          case ConnectionState.waiting:
+            return _lastListWidget ??
+                SliverFillRemaining(
+                  child: Container(
+                    padding: const EdgeInsets.only(bottom: 50),
+                    child: const CupertinoActivityIndicator(
+                      radius: 14.0,
+                    ),
+                  ),
+                );
+          case ConnectionState.done:
+            if (snapshot.hasError) {
+              return SliverFillRemaining(
+                child: Container(
+                  padding: const EdgeInsets.only(bottom: 50),
+                  child: GalleryErrorPage(
+                    onTap: _reLoadDataFirstF,
+                  ),
+                ),
+              );
+            } else {
+              _gallerItemBeans = snapshot.data.item1;
+              _maxPage = snapshot.data.item2;
+              _lastListWidget = getGalleryList(
+                _gallerItemBeans,
+                widget.tabIndex,
+                maxPage: _maxPage,
+                curPage: _curPage,
+                loadMord: _loadDataMore,
+              );
+              return _lastListWidget;
+            }
+        }
+        return null;
+      },
     );
   }
 }

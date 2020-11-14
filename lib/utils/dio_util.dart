@@ -49,8 +49,8 @@ class HttpManager {
     }));
   }
 
-  final int connectTimeout = 10000;
-  final int receiveTimeout = 5000;
+  final int connectTimeout = 5000;
+  final int receiveTimeout = 10000;
 
   //单例模式
   static final Map<String, HttpManager> _instanceMap = <String, HttpManager>{};

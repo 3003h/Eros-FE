@@ -230,7 +230,7 @@ class _GalleryImageState extends State<GalleryImage> {
         _galleryModel.galleryItem.galleryPreview[widget.index];
     return FutureBuilder<String>(
         future: _getImageUrl(),
-        builder: (context, snapshot) {
+        builder: (context, AsyncSnapshot<String> snapshot) {
           if (_currentPreview.largeImageUrl == null) {
             if (snapshot.connectionState == ConnectionState.done) {
               if (snapshot.hasError) {

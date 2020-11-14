@@ -62,6 +62,7 @@ class _SelFavorite extends State<SelFavoritePage> {
         navigationBar: CupertinoNavigationBar(
           backgroundColor: ThemeColors.navigationBarBackground,
           middle: Text(_title),
+          transitionBetweenRoutes: false,
         ),
         child: SafeArea(
           child: ListViewFavorite(favItemBeans),

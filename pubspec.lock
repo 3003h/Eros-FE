@@ -333,6 +333,15 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "1.0.11"
+  flutter_screenutil:
+    dependency: "direct main"
+    description:
+      path: "."
+      ref: HEAD
+      resolved-ref: de09650f034164c1397678ca87482369bfb17307
+      url: "git://github.com/OpenFlutter/flutter_screenutil.git"
+    source: git
+    version: "3.2.0"
   flutter_svg:
     dependency: transitive
     description:
