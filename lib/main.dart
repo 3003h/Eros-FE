@@ -16,6 +16,8 @@ import 'package:provider/provider.dart';
 
 import 'generated/l10n.dart';
 
+final GlobalKey<NavigatorState> navigatorKey = new GlobalKey<NavigatorState>();
+
 void main() => Global.init().then((e) {
       ///滚动性能优化
       GestureBinding.instance.resamplingEnabled = true;
@@ -60,6 +62,7 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
         (BuildContext context, LocaleModel localeModel, ThemeModel themeModel,
             Widget child) {
       return CupertinoApp(
+        navigatorKey: navigatorKey,
         debugShowCheckedModeBanner: false,
         onGenerateTitle: (BuildContext context) => S.of(context).app_title,
         onGenerateRoute: Application.router.generator,

@@ -1,16 +1,13 @@
-import 'dart:io';
-
 import 'package:FEhViewer/common/global.dart';
 import 'package:FEhViewer/models/index.dart';
 import 'package:FEhViewer/models/states/gallery_model.dart';
 import 'package:FEhViewer/route/navigator_util.dart';
+import 'package:FEhViewer/utils/toast.dart';
 import 'package:FEhViewer/utils/utility.dart';
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:extended_image/extended_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_cache_manager/flutter_cache_manager.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:provider/provider.dart';
 
@@ -135,8 +132,10 @@ class _GalleryViewPageEState extends State<GalleryViewPageE> {
                           behavior: HitTestBehavior.opaque,
                           onTap: () {
                             Global.logger.v('tap share');
-                            Api.shareImage(
-                                previews[_currentIndex].largeImageUrl);
+                            // Api.shareImage(
+                            //     previews[_currentIndex].largeImageUrl);
+                            _showShareDialog(
+                                context, previews[_currentIndex].largeImageUrl);
                           },
                           child: Container(
                             width: 40,
@@ -156,6 +155,43 @@ class _GalleryViewPageEState extends State<GalleryViewPageE> {
         ),
       ),
     );
+  }
+
+  Future<void> _showShareDialog(BuildContext context, String imageUrl) {
+    return showCupertinoModalPopup<void>(
+        context: context,
+        builder: (BuildContext context) {
+          final CupertinoActionSheet dialog = CupertinoActionSheet(
+            title: const Text('分享方式'),
+            cancelButton: CupertinoActionSheetAction(
+                onPressed: () {
+                  Navigator.pop(context);
+                },
+                child: const Text('取消')),
+            actions: <Widget>[
+              CupertinoActionSheetAction(
+                  onPressed: () {
+                    Global.logger.v('保存到相册');
+                    Api.saveImage(context, imageUrl).then((rult) {
+                      Navigator.pop(context);
+                      if (rult != null && rult) {
+                        showToast('保存成功');
+                      }
+                    }).catchError((e) {
+                      showToast(e);
+                    });
+                  },
+                  child: Text('保存到相册')),
+              CupertinoActionSheetAction(
+                  onPressed: () {
+                    Global.logger.v('系统分享');
+                    Api.shareImage(imageUrl);
+                  },
+                  child: Text('系统分享')),
+            ],
+          );
+          return dialog;
+        });
   }
 
   // 一个很傻的预载功能 需要优化
