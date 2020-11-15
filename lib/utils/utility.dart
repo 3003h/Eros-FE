@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'dart:io';
+import 'dart:typed_data';
 
 import 'package:FEhViewer/common/global.dart';
 import 'package:FEhViewer/common/parser/gallery_detail_parser.dart';
@@ -11,10 +12,14 @@ import 'package:FEhViewer/values/const.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cookie_jar/cookie_jar.dart';
 import 'package:dio/dio.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_cache_manager/flutter_cache_manager.dart';
 import 'package:html_unescape/html_unescape.dart';
+import 'package:image_gallery_saver/image_gallery_saver.dart';
 import 'package:path_provider/path_provider.dart';
+import 'package:permission_handler/permission_handler.dart';
 import 'package:share/share.dart';
 import 'package:tuple/tuple.dart';
 
@@ -450,6 +455,7 @@ class Api {
     return response;
   }
 
+  /// 分享图片
   static Future<void> shareImage(String imageUrl) async {
     final CachedNetworkImage image = CachedNetworkImage(imageUrl: imageUrl);
     final DefaultCacheManager manager =
@@ -460,5 +466,114 @@ class Api {
       headers: headers,
     );
     Share.shareFiles(<String>[file.path]);
+  }
+
+  /// 保存图片到相册
+  ///
+  /// 默认为下载网络图片，如需下载资源图片，需要指定 [isAsset] 为 `true`。
+  static Future<bool> saveImage(BuildContext context, String imageUrl,
+      {bool isAsset = false}) async {
+    Future<void> _jumpToAppSettings(context) async {
+      return showCupertinoDialog<bool>(
+        context: context,
+        builder: (BuildContext context) {
+          return CupertinoAlertDialog(
+            title: const Text('页面跳转'),
+            content: Container(
+              child: const Text('您禁用了应用的必要权限:\n读写手机存储,是否到设置里允许?'),
+            ),
+            actions: <Widget>[
+              CupertinoDialogAction(
+                child: const Text('取消'),
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+              ),
+              CupertinoDialogAction(
+                child: const Text('确定'),
+                onPressed: () {
+                  // 跳转
+                  openAppSettings();
+                },
+              ),
+            ],
+          );
+        },
+      );
+    }
+
+    if (Platform.isIOS) {
+      Global.logger.v('check ios photos Permission');
+      final PermissionStatus status = await Permission.photos.status;
+      Global.logger.v(status);
+      if (status.isPermanentlyDenied) {
+        _jumpToAppSettings(context);
+        return false;
+      } else {
+        if (await Permission.photos.request().isGranted) {
+          return _saveImage(imageUrl);
+          // Either the permission was already granted before or the user just granted it.
+        } else {
+          throw '无法存储图片,请先授权~';
+        }
+      }
+    } else {
+      final PermissionStatus status = await Permission.storage.status;
+      Global.logger.v(status);
+      if (await Permission.storage.status.isPermanentlyDenied) {
+        if (await Permission.storage.request().isGranted) {
+          _saveImage(imageUrl);
+        } else {
+          await _jumpToAppSettings(context);
+          return false;
+        }
+      } else {
+        if (await Permission.storage.request().isGranted) {
+          // Either the permission was already granted before or the user just granted it.
+          return _saveImage(imageUrl);
+        } else {
+          throw '无法存储图片,请先授权~';
+        }
+      }
+    }
+    return false;
+  }
+
+  static Future<bool> _saveImage(String imageUrl,
+      {bool isAsset = false}) async {
+    try {
+      if (imageUrl == null) throw '保存失败,图片不存在!';
+
+      /// 保存的图片数据
+      Uint8List imageBytes;
+
+      if (isAsset == true) {
+        /// 保存资源图片
+        final ByteData bytes = await rootBundle.load(imageUrl);
+        imageBytes = bytes.buffer.asUint8List();
+      } else {
+        /// 保存网络图片
+        final CachedNetworkImage image = CachedNetworkImage(imageUrl: imageUrl);
+        final DefaultCacheManager manager =
+            image.cacheManager ?? DefaultCacheManager();
+        final Map<String, String> headers = image.httpHeaders;
+        final File file = await manager.getSingleFile(
+          image.imageUrl,
+          headers: headers,
+        );
+        imageBytes = await file.readAsBytes();
+      }
+
+      /// 保存图片
+      final result = await ImageGallerySaver.saveImage(imageBytes);
+
+      if (result == null || result == '') throw '图片保存失败';
+
+      print('保存成功');
+      return true;
+    } catch (e) {
+      print(e.toString());
+      rethrow;
+    }
   }
 }
