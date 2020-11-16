@@ -29,8 +29,10 @@ GalleryItem _$GalleryItemFromJson(Map<String, dynamic> json) {
     ..postTime = json['postTime'] as String
     ..favTitle = json['favTitle'] as String
     ..favcat = json['favcat'] as String
-    ..simpleTags = json['simpleTags'] as List
-    ..simpleTagsTranslat = json['simpleTagsTranslat'] as List
+    ..simpleTags =
+        (json['simpleTags'] as List)?.map((e) => e as String)?.toList()
+    ..simpleTagsTranslat =
+        (json['simpleTagsTranslat'] as List)?.map((e) => e as String)?.toList()
     ..tagGroup = (json['tagGroup'] as List)
         ?.map((e) =>
             e == null ? null : TagGroup.fromJson(e as Map<String, dynamic>))

@@ -12,6 +12,7 @@ import 'package:FEhViewer/values/const.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cookie_jar/cookie_jar.dart';
 import 'package:dio/dio.dart';
+import 'package:extended_image/extended_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -256,7 +257,7 @@ class Api {
     final HttpManager httpManager = HttpManager.getInstance();
     final String url = inUrl + '?p=$page';
 
-    Global.logger.v(url);
+    // Global.logger.v(url);
 
     // 不显示警告的处理 cookie加上 nw=1
     // 在 url使用 nw=always 未解决 自动写入cookie 暂时搞不懂 先手动设置下
@@ -562,6 +563,12 @@ class Api {
           headers: headers,
         );
         imageBytes = await file.readAsBytes();
+
+        ExtendedNetworkImageProvider _image = ExtendedNetworkImageProvider(
+          imageUrl,
+          cache: true,
+        );
+        Uint8List _imageBytes = await _image.getNetworkImageData();
       }
 
       /// 保存图片

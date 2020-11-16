@@ -6,6 +6,7 @@ import 'package:FEhViewer/utils/toast.dart';
 import 'package:FEhViewer/utils/utility.dart';
 import 'package:extended_image/extended_image.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -25,9 +26,14 @@ class GalleryViewPageE extends StatefulWidget {
 }
 
 class _GalleryViewPageEState extends State<GalleryViewPageE> {
-  int _currentIndex = 0;
-
+  int _currentIndex;
   GalleryModel _galleryModel;
+
+  @override
+  void initState() {
+    super.initState();
+    _currentIndex = 0;
+  }
 
   @override
   void didChangeDependencies() {
@@ -37,6 +43,7 @@ class _GalleryViewPageEState extends State<GalleryViewPageE> {
     if (galleryModel != _galleryModel) {
       _galleryModel = galleryModel;
       // 预载后面5张图
+      Global.logger.v('预载后面5张图 didChangeDependencies');
       _precache(_galleryModel.previews, widget.index, 5);
     }
     _currentIndex = widget.index;
@@ -45,6 +52,7 @@ class _GalleryViewPageEState extends State<GalleryViewPageE> {
   /// 画廊图片大图浏览
   @override
   Widget build(BuildContext context) {
+    Global.logger.v('build GalleryViewPageE ALL');
     return CupertinoTheme(
       data: const CupertinoThemeData(
         brightness: Brightness.dark,
@@ -54,12 +62,15 @@ class _GalleryViewPageEState extends State<GalleryViewPageE> {
         value: SystemUiOverlayStyle.light,
         child: CupertinoPageScaffold(
           // backgroundColor: CupertinoColors.black,
-          child: Selector<GalleryModel, List<GalleryPreview>>(
-              selector: (context, galleryModel) =>
-                  galleryModel.galleryItem.galleryPreview,
-              shouldRebuild: (pre, next) => true,
-              builder: (context, List<GalleryPreview> previews, child) {
-//            Global.logger.v('build GalleryViewPageE');
+          child: Selector<GalleryModel, int>(
+              selector: (context, galleryModel) => galleryModel.previews.length,
+              shouldRebuild: (pre, next) {
+                Global.logger.v('${pre}  ${next}');
+                return pre != next && next > pre;
+              },
+              builder: (context, int len, child) {
+                Global.logger.v('build GalleryViewPageE');
+                final List previews = _galleryModel.previews;
                 return SafeArea(
                   child: Stack(
                     fit: StackFit.expand,
@@ -98,7 +109,7 @@ class _GalleryViewPageEState extends State<GalleryViewPageE> {
                         top: 0,
                         child: Container(
                             child: Text(
-                          '${_currentIndex + 1}/${previews.length}',
+                          '${_currentIndex + 1}/${_galleryModel.galleryItem.filecount}',
                           style: const TextStyle(
                               color: CupertinoColors.systemGrey6),
                         )),
@@ -218,7 +229,7 @@ class _GalleryViewPageEState extends State<GalleryViewPageE> {
       _url = _galleryModel.previews[_index].largeImageUrl;
 
       if (!(_preview?.isCache ?? false)) {
-        Global.logger.v('$_index : $_url');
+        // Global.logger.v('$_index : $_url');
         precacheImage(
                 ExtendedNetworkImageProvider(
                   _url,
@@ -240,6 +251,13 @@ class GalleryImage extends StatefulWidget {
   @override
   _GalleryImageState createState() => _GalleryImageState();
   final index;
+}
+
+Future<List<GalleryPreview>> _getGalleryPreview(String url) async {
+  return await Api.getGalleryPreview(
+    url,
+    page: 1,
+  );
 }
 
 class _GalleryImageState extends State<GalleryImage> {
@@ -277,13 +295,12 @@ class _GalleryImageState extends State<GalleryImage> {
     _galleryModel.isGetAllImageHref = false;
   }
 
-  Future<String> _getImageUrl() async {
+  Future<String> _getImageUrl() {
+    // Global.logger.v('_getImageUrl  ');
     // 数据获取处理
-    try {
-      _getAllImageHref();
-    } catch (e) {
+    _getAllImageHref().catchError((e) {
       Global.logger.v('$e');
-    }
+    });
 
     return Api.getShowInfo(
         _galleryModel.galleryItem.galleryPreview[widget.index].href,
@@ -293,6 +310,7 @@ class _GalleryImageState extends State<GalleryImage> {
 
   @override
   Widget build(BuildContext context) {
+    Global.logger.v('build GalleryImage');
     final GalleryPreview _currentPreview =
         _galleryModel.galleryItem.galleryPreview[widget.index];
     return FutureBuilder<String>(
@@ -305,6 +323,7 @@ class _GalleryImageState extends State<GalleryImage> {
                 return Center(child: Text('Error: ${snapshot.error}'));
               } else {
                 _currentPreview.largeImageUrl = snapshot.data;
+                Global.logger.v('${snapshot.data}');
                 return ExtendedImage.network(
                   snapshot.data,
                   fit: BoxFit.contain,
