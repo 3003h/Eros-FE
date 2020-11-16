@@ -1,6 +1,7 @@
 import 'package:FEhViewer/common/global.dart';
 import 'package:FEhViewer/models/states/ehconfig_model.dart';
 import 'package:FEhViewer/models/states/locale_model.dart';
+import 'package:FEhViewer/models/states/searchText_model.dart';
 import 'package:FEhViewer/models/states/theme_model.dart';
 import 'package:FEhViewer/models/states/user_model.dart';
 import 'package:FEhViewer/pages/splash_page.dart';
@@ -16,14 +17,15 @@ import 'package:provider/provider.dart';
 
 import 'generated/l10n.dart';
 
-final GlobalKey<NavigatorState> navigatorKey = new GlobalKey<NavigatorState>();
+final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
 
 void main() => Global.init().then((e) {
       ///滚动性能优化
       GestureBinding.instance.resamplingEnabled = true;
       runApp(
         DevicePreview(
-          enabled: Global.inDebugMode,
+          // enabled: Global.inDebugMode,
+          enabled: false,
           builder: (context) => MyApp(), // Wrap your app
         ),
       );
@@ -123,6 +125,7 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
         ChangeNotifierProvider<LocaleModel>.value(value: LocaleModel()),
         ChangeNotifierProvider<ThemeModel>.value(value: ThemeModel()),
         ChangeNotifierProvider<EhConfigModel>.value(value: EhConfigModel()),
+        ChangeNotifierProvider<SearchTextModel>.value(value: SearchTextModel()),
       ],
       child: OKToast(child: cupertinoApp),
     );

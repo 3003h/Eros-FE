@@ -11,6 +11,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 /// 收藏夹选择页面 列表
 class SelFavoritePage extends StatefulWidget {
   const SelFavoritePage({this.favcatItemBean});
+
   final FavcatItemBean favcatItemBean;
 
   @override
@@ -74,6 +75,7 @@ class _SelFavorite extends State<SelFavoritePage> {
 
 class ListViewFavorite extends StatelessWidget {
   const ListViewFavorite(this.favItemBeans);
+
   final List<FavcatItemBean> favItemBeans;
 
   @override
@@ -95,6 +97,7 @@ class ListViewFavorite extends StatelessWidget {
 /// 收藏夹选择单项
 class FavSelItemWidget extends StatefulWidget {
   const FavSelItemWidget({this.index, this.favcatItemBean});
+
   final int index;
   final FavcatItemBean favcatItemBean;
 

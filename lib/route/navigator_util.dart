@@ -140,6 +140,17 @@ class NavigatorUtil {
     );
   }
 
+  static void goGalleryListBySearch(
+    BuildContext context, {
+    String simpleSearch,
+  }) {
+    Navigator.push(context, CupertinoPageRoute(builder: (context) {
+      return GallerySearchPage(
+        searchText: simpleSearch,
+      );
+    }));
+  }
+
   /// 转到画廊页面
   /// [GalleryModel] 复用画廊状态Provider
   /// fluro的方式不知道怎么处理 使用默认路由方式

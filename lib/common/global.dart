@@ -71,6 +71,8 @@ class Global {
       saveProfile();
     }
 
+    profile.searchText ??= <String>[];
+
     // 路由
     final FluroRouter router = FluroRouter();
     EHRoutes.configureRoutes(router);
@@ -88,7 +90,7 @@ class Global {
 
   // 持久化Profile信息
   static Future<bool> saveProfile() {
-//    logger.v(profile.toJson());
+    // logger.v(profile.toJson());
     return StorageUtil().setJSON(PROFILE, profile);
   }
 }

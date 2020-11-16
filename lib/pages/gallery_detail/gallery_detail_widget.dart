@@ -418,7 +418,9 @@ class TagGroupItem extends StatelessWidget {
         text: _isTagTranslat ? tag?.tagTranslat ?? '' : tag?.title ?? '',
         onPressed: () {
           Global.logger.v('search type[${tag.type}] tag[${tag.title}]');
-          NavigatorUtil.goGalleryList(context,
+          // NavigatorUtil.goGalleryList(context,
+          //     simpleSearch: '${tag.type}:${tag.title}');
+          NavigatorUtil.goGalleryListBySearch(context,
               simpleSearch: '${tag.type}:${tag.title}');
         },
       ));
@@ -728,7 +730,9 @@ class GalleryUploader extends StatelessWidget {
             ),
             onTap: () {
               Global.logger.v('search uploader:$uploader');
-              NavigatorUtil.goGalleryList(context,
+              // NavigatorUtil.goGalleryList(context,
+              //     simpleSearch: 'uploader:$uploader');
+              NavigatorUtil.goGalleryListBySearch(context,
                   simpleSearch: 'uploader:$uploader');
             },
           );

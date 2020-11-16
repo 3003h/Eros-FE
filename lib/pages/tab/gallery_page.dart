@@ -39,6 +39,7 @@ class _GalleryListTabState extends State<GalleryListTab> {
   int _curPage = 0;
   int _maxPage = 0;
   bool _isLoadMore = false;
+
   // bool _firstLoading = false;
   List<GalleryItem> _gallerItemBeans = <GalleryItem>[];
   String _search = '';
@@ -286,16 +287,18 @@ class _GalleryListTabState extends State<GalleryListTab> {
       physics: const AlwaysScrollableScrollPhysics(),
       slivers: <Widget>[
         CupertinoSliverNavigationBar(
+          padding: const EdgeInsetsDirectional.only(end: 4),
           backgroundColor: ThemeColors.navigationBarBackground,
 //          heroTag: 'gallery',
           largeTitle: Text(_title),
           trailing: Container(
-            width: 150,
+            width: 130,
             child: Row(
               mainAxisAlignment: MainAxisAlignment.end,
               children: [
                 // 搜索按钮
                 CupertinoButton(
+                  minSize: 30,
                   padding: const EdgeInsets.all(0),
                   child: const Icon(
                     FontAwesomeIcons.search,
@@ -307,6 +310,7 @@ class _GalleryListTabState extends State<GalleryListTab> {
                 ),
                 // 筛选按钮
                 CupertinoButton(
+                  minSize: 30,
                   padding: const EdgeInsets.all(0),
                   child: const Icon(
                     FontAwesomeIcons.filter,
@@ -319,7 +323,8 @@ class _GalleryListTabState extends State<GalleryListTab> {
                 ),
                 // 页码跳转按钮
                 CupertinoButton(
-                  padding: const EdgeInsets.all(0),
+                  minSize: 30,
+                  padding: const EdgeInsets.only(left: 4),
                   child: ClipRRect(
                     borderRadius: BorderRadius.circular(4),
                     child: Container(

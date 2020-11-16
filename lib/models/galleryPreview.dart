@@ -1,11 +1,9 @@
 import 'package:json_annotation/json_annotation.dart';
-
-
 part 'galleryPreview.g.dart';
 
 @JsonSerializable()
 class GalleryPreview {
-      GalleryPreview();
+  GalleryPreview();
 
   bool isLarge;
   bool isCache;
@@ -17,6 +15,8 @@ class GalleryPreview {
   double width;
   double offSet;
 
-  factory GalleryPreview.fromJson(Map<String,dynamic> json) => _$GalleryPreviewFromJson(json);
+  factory GalleryPreview.fromJson(Map<String, dynamic> json) =>
+      _$GalleryPreviewFromJson(json);
+
   Map<String, dynamic> toJson() => _$GalleryPreviewToJson(this);
 }

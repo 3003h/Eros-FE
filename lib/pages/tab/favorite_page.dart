@@ -106,6 +106,7 @@ class _FavoriteTabState extends State<FavoriteTab> {
                     physics: const AlwaysScrollableScrollPhysics(),
                     slivers: <Widget>[
                       CupertinoSliverNavigationBar(
+                        padding: const EdgeInsetsDirectional.only(end: 4),
                         backgroundColor: ThemeColors.navigationBarBackground,
 //                        heroTag: 'fav',
                         largeTitle: TabPageTitle(
@@ -424,7 +425,8 @@ class _FavoriteTabState extends State<FavoriteTab> {
   /// 切换收藏夹
   Widget _buildFavcatButton(BuildContext context) {
     return CupertinoButton(
-      padding: const EdgeInsets.all(0),
+      minSize: 30,
+      padding: const EdgeInsets.only(right: 8),
       child: const Icon(
         FontAwesomeIcons.star,
       ),

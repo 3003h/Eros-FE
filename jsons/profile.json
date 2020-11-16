@@ -4,5 +4,8 @@
   "ehConfig": "$ehConfig",
   "lastLogin": "",
   "locale": "",
-  "theme": ""
+  "theme": "",
+  "searchText": [""],
+  "history": "$[]galleryItem",
+  "localFav": "$[]galleryItem"
 }

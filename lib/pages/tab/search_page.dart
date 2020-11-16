@@ -2,8 +2,12 @@ import 'package:FEhViewer/common/global.dart';
 import 'package:FEhViewer/generated/l10n.dart';
 import 'package:FEhViewer/models/index.dart';
 import 'package:FEhViewer/models/states/ehconfig_model.dart';
+import 'package:FEhViewer/models/states/searchText_model.dart';
 import 'package:FEhViewer/pages/tab/gallery_base.dart';
+import 'package:FEhViewer/pages/tab/search_text_page.dart';
 import 'package:FEhViewer/pages/tab/tab_base.dart';
+import 'package:FEhViewer/utils/cust_lib/popup_menu.dart';
+import 'package:FEhViewer/utils/toast.dart';
 import 'package:FEhViewer/utils/utility.dart';
 import 'package:FEhViewer/values/theme_colors.dart';
 import 'package:flutter/cupertino.dart';
@@ -12,7 +16,16 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:provider/provider.dart';
 import 'package:tuple/tuple.dart';
 
+enum SearchMenuEnum {
+  filter,
+  quickSearchList,
+  addToQuickSearch,
+}
+
 class GallerySearchPage extends StatefulWidget {
+  const GallerySearchPage({Key key, this.searchText}) : super(key: key);
+  final String searchText;
+
   @override
   _GallerySearchPageState createState() => _GallerySearchPageState();
 }
@@ -20,6 +33,8 @@ class GallerySearchPage extends StatefulWidget {
 class _GallerySearchPageState extends State<GallerySearchPage>
     with SingleTickerProviderStateMixin {
   final String _index = 'search_idx';
+
+  final GlobalKey _searchMenukey = GlobalKey();
 
   // 搜索内容的控制器
   final TextEditingController _searchTextController = TextEditingController();
@@ -33,6 +48,9 @@ class _GallerySearchPageState extends State<GallerySearchPage>
 
   DateTime _lastInputCompleteAt; //上次输入完成时间
   String _lastSearchText;
+
+  SearchTextModel _searchTextModel;
+  bool _autofocus;
 
   void _jumpSearch() {
     final String _searchText = _searchTextController.text.trim();
@@ -70,6 +88,22 @@ class _GallerySearchPageState extends State<GallerySearchPage>
   void initState() {
     super.initState();
     _searchTextController.addListener(_printLatestValue);
+    if (widget.searchText != null && widget.searchText.trim().isNotEmpty) {
+      _searchTextController.text = widget.searchText.trim();
+      _autofocus = false;
+    } else {
+      _autofocus = true;
+    }
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    final SearchTextModel searchTextModel =
+        Provider.of<SearchTextModel>(context, listen: false);
+    if (searchTextModel != _searchTextModel) {
+      _searchTextModel = searchTextModel;
+    }
   }
 
   @override
@@ -82,6 +116,72 @@ class _GallerySearchPageState extends State<GallerySearchPage>
   Widget build(BuildContext context) {
     final S ln = S.of(context);
 
+    PopupMenu.context = context;
+    final TextStyle _menuTextStyle = TextStyle(
+      color: CupertinoDynamicColor.resolve(CupertinoColors.label, context),
+      fontSize: 12,
+    );
+    final PopupMenu _menu = PopupMenu(
+      maxColumn: 2,
+      lineColor: CupertinoDynamicColor.resolve(
+          CupertinoColors.systemBackground, context),
+      backgroundColor:
+          CupertinoDynamicColor.resolve(CupertinoColors.systemGrey6, context),
+      // highlightColor:
+      //     CupertinoDynamicColor.resolve(CupertinoColors.label, context),
+      items: <MenuItemProvider>[
+        MenuItem(
+            title: '筛选',
+            itemKey: SearchMenuEnum.filter,
+            textStyle: _menuTextStyle,
+            image: const Icon(
+              FontAwesomeIcons.filter,
+              size: 20,
+            )),
+        MenuItem(
+            title: '添加',
+            itemKey: SearchMenuEnum.addToQuickSearch,
+            textStyle: _menuTextStyle,
+            image: const Icon(
+              FontAwesomeIcons.plusCircle,
+              size: 20,
+            )),
+        MenuItem(
+            title: '列表',
+            itemKey: SearchMenuEnum.quickSearchList,
+            textStyle: _menuTextStyle,
+            image: const Icon(
+              FontAwesomeIcons.alignJustify,
+              size: 20,
+            )),
+      ],
+      onClickMenu: (MenuItemProvider item) {
+        Global.logger.v('${item.menuKey}');
+        switch (item.menuKey) {
+          case SearchMenuEnum.filter:
+            GalleryBase().setCats(context);
+            break;
+          case SearchMenuEnum.addToQuickSearch:
+            final String _text = _searchTextController.text;
+            if (_text.isNotEmpty) {
+              _searchTextModel.addText(_text);
+              showToast('保存成功');
+            }
+            break;
+          case SearchMenuEnum.quickSearchList:
+            Navigator.push(
+              context,
+              CupertinoPageRoute<String>(
+                builder: (BuildContext context) {
+                  return SearchQuickListPage();
+                },
+              ),
+            ).then((String value) => _searchTextController.text = value);
+            break;
+        }
+      },
+    );
+
     final Widget cfp = CupertinoPageScaffold(
       resizeToAvoidBottomInset: false,
       navigationBar: CupertinoNavigationBar(
@@ -89,8 +189,10 @@ class _GallerySearchPageState extends State<GallerySearchPage>
 //        border: null,
         backgroundColor: ThemeColors.navigationBarBackground,
         middle: CupertinoTextField(
+          clearButtonMode: OverlayVisibilityMode.editing,
+          padding: const EdgeInsets.all(6.0),
           controller: _searchTextController,
-          autofocus: true,
+          autofocus: _autofocus,
           textInputAction: TextInputAction.search,
           onEditingComplete: () {
             // 点击键盘完成
@@ -98,41 +200,33 @@ class _GallerySearchPageState extends State<GallerySearchPage>
           },
         ),
         transitionBetweenRoutes: false,
-        previousPageTitle: '返回',
+        leading: Container(
+          width: 0,
+        ),
         trailing: Container(
           width: 90,
           child: Row(
-            children: [
-              // CupertinoButton(
-              //   padding: const EdgeInsets.all(0),
-              //   child: const Icon(
-              //     FontAwesomeIcons.search,
-              //     size: 20,
-              //   ),
-              //   onPressed: () {
-              //     Global.logger.v('search Btn');
-              //     _jumpSearch();
-              //   },
-              // ),
+            mainAxisAlignment: MainAxisAlignment.end,
+            children: <Widget>[
               CupertinoButton(
-                padding: const EdgeInsets.all(0),
-                child: const Icon(
-                  FontAwesomeIcons.solidTimesCircle,
-                  size: 21.5,
-                ),
+                minSize: 30,
+                padding: const EdgeInsets.only(left: 6, right: 6),
+                child: const Text('取消'),
                 onPressed: () {
-                  Global.logger.v('search Btn');
-                  _searchTextController.clear();
+                  Navigator.of(context).pop();
                 },
               ),
               CupertinoButton(
-                padding: const EdgeInsets.all(0),
+                key: _searchMenukey,
+                minSize: 40,
+                padding: const EdgeInsets.only(left: 0),
                 child: const Icon(
-                  FontAwesomeIcons.filter,
+                  FontAwesomeIcons.gripVertical,
                   size: 20,
                 ),
                 onPressed: () {
-                  GalleryBase().setCats(context);
+                  // GalleryBase().setCats(context);
+                  _menu.show(widgetKey: _searchMenukey);
                 },
               ),
             ],
