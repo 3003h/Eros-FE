@@ -1,4 +1,6 @@
+import 'package:FEhViewer/common/tag_database.dart';
 import 'package:FEhViewer/models/states/searchText_model.dart';
+import 'package:FEhViewer/utils/db_util.dart';
 import 'package:FEhViewer/utils/toast.dart';
 import 'package:FEhViewer/values/theme_colors.dart';
 import 'package:flutter/cupertino.dart';
@@ -8,6 +10,16 @@ import 'package:provider/provider.dart';
 
 class SearchQuickListPage extends StatelessWidget {
   final String _title = '快速搜索';
+
+  Future<String> _getTextTranslate(String text) async {
+    final String tranText =
+        await EhTagDatabase.getTranTagWithFullNameSpase(text);
+    if (tranText.trim() != text) {
+      return '$text / $tranText';
+    } else {
+      return text;
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -34,14 +46,19 @@ class SearchQuickListPage extends StatelessWidget {
                       Navigator.pop(context, _datas[position]);
                     },
                     behavior: HitTestBehavior.opaque,
-                    child: Container(
-                      height: 40,
-                      width: double.infinity,
-                      alignment: Alignment.centerLeft,
-                      child: Text(
-                        '${_datas[position]}',
-                      ),
-                    ),
+                    child: FutureBuilder<String>(
+                        future: _getTextTranslate(_datas[position]),
+                        initialData: _datas[position],
+                        builder: (context, snapshot) {
+                          return Container(
+                            height: 40,
+                            width: double.infinity,
+                            alignment: Alignment.centerLeft,
+                            child: Text(
+                              snapshot.data,
+                            ),
+                          );
+                        }),
                   ),
                   secondaryActions: <Widget>[
                     IconSlideAction(

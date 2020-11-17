@@ -105,4 +105,23 @@ class EhTagDatabase {
       return await DataBaseUtil().getTagTransStr(tag, namespace: nameSpase);
     }
   }
+
+  static Future<String> getTranTagWithFullNameSpase(String tag,
+      {String nameSpase}) async {
+    if (tag.contains(':')) {
+      final RegExp rpfx = RegExp(r'(\w+):(.+)');
+      final RegExpMatch rult = rpfx.firstMatch(tag);
+      final String _nameSpase = rult.group(1) ?? '';
+      final String _tag = rult.group(2) ?? '';
+      final String _nameSpaseTran =
+          EHConst.translateTagType[_nameSpase] ?? _nameSpase;
+      final String _transTag =
+          await DataBaseUtil().getTagTransStr(_tag, namespace: _nameSpase) ??
+              _tag;
+
+      return '$_nameSpaseTran:$_transTag';
+    } else {
+      return await DataBaseUtil().getTagTransStr(tag, namespace: nameSpase);
+    }
+  }
 }

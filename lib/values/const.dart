@@ -47,7 +47,8 @@ class EHConst {
     'group': '团队',
     'language': '语言',
     'reclass': '归类',
-    'misc': '杂项'
+    'misc': '杂项',
+    'uploader': '上传者'
   };
 
   static const int sumCats = 1023;
