@@ -1,6 +1,8 @@
+import 'package:FEhViewer/common/global.dart';
 import 'package:FEhViewer/common/parser/gallery_fav_parser.dart';
 import 'package:FEhViewer/generated/l10n.dart';
 import 'package:FEhViewer/models/entity/favorite.dart';
+import 'package:FEhViewer/pages/tab/gallery_base.dart';
 import 'package:FEhViewer/route/navigator_util.dart';
 import 'package:FEhViewer/values/const.dart';
 import 'package:FEhViewer/values/theme_colors.dart';
@@ -27,32 +29,63 @@ class _SelFavorite extends State<SelFavoritePage> {
   @override
   void initState() {
     super.initState();
-    _initData();
+    // _initData();
   }
 
   /// 初始化收藏夹选择数据
-  void _initData() async {
-    // EHConst.favList.forEach((fav) {
-    //   final key = fav['favcat'];
-    //   final favTitle = fav['desc'];
-    //   favItemBeans
-    //       .add(FavcatItemBean(favTitle, ThemeColors.favColor[key], key: key));
-    // });
+  // void _initData() async {
+  //   // 增加延时
+  //   await Future<void>.delayed(const Duration(milliseconds: 100));
+  //   final List<Map<String, String>> favList =
+  //       await GalleryFavParser.getFavcat() ?? EHConst.favList;
+  //   for (final Map<String, String> catmap in favList) {
+  //     final String favTitle = catmap['favTitle'];
+  //     final String favId = catmap['favId'];
+  //
+  //     favItemBeans.add(
+  //       FavcatItemBean(favTitle, ThemeColors.favColor[favId], favId: favId),
+  //     );
+  //   }
+  //   setState(() {
+  //     favItemBeans
+  //         .add(FavcatItemBean('所有收藏', ThemeColors.favColor['a'], favId: 'a'));
+  //   });
+  // }
 
+  Future<List<FavcatItemBean>> _getFavItemBeans() async {
+    Global.logger.v('_getFavItemBeans');
+    final List<FavcatItemBean> _favItemBeans = <FavcatItemBean>[];
+    // await Future<void>.delayed(const Duration(milliseconds: 200));
     final List<Map<String, String>> favList =
         await GalleryFavParser.getFavcat() ?? EHConst.favList;
     for (final Map<String, String> catmap in favList) {
       final String favTitle = catmap['favTitle'];
       final String favId = catmap['favId'];
 
-      favItemBeans.add(
+      _favItemBeans.add(
         FavcatItemBean(favTitle, ThemeColors.favColor[favId], favId: favId),
       );
     }
-    setState(() {
-      favItemBeans
-          .add(FavcatItemBean('所有收藏', ThemeColors.favColor['a'], favId: 'a'));
-    });
+
+    _favItemBeans
+        .add(FavcatItemBean('所有收藏', ThemeColors.favColor['a'], favId: 'a'));
+    return _favItemBeans;
+  }
+
+  List<FavcatItemBean> _initFavItemBeans() {
+    final List<FavcatItemBean> _favItemBeans = <FavcatItemBean>[];
+    for (final Map<String, String> catmap in EHConst.favList) {
+      final String favTitle = catmap['favTitle'];
+      final String favId = catmap['favId'];
+
+      _favItemBeans.add(
+        FavcatItemBean(favTitle, ThemeColors.favColor[favId], favId: favId),
+      );
+    }
+
+    _favItemBeans
+        .add(FavcatItemBean('所有收藏', ThemeColors.favColor['a'], favId: 'a'));
+    return _favItemBeans;
   }
 
   @override
@@ -66,7 +99,41 @@ class _SelFavorite extends State<SelFavoritePage> {
           transitionBetweenRoutes: false,
         ),
         child: SafeArea(
-          child: ListViewFavorite(favItemBeans),
+          child: FutureBuilder<List<FavcatItemBean>>(
+              future: _getFavItemBeans(),
+              initialData: _initFavItemBeans(),
+              builder: (BuildContext context,
+                  AsyncSnapshot<List<FavcatItemBean>> snapshot) {
+                // return ListViewFavorite(favItemBeans);
+                switch (snapshot.connectionState) {
+                  case ConnectionState.none:
+                  case ConnectionState.active:
+                  case ConnectionState.waiting:
+                    return Container(
+                      alignment: Alignment.center,
+                      padding: const EdgeInsets.only(bottom: 50),
+                      child: const CupertinoActivityIndicator(
+                        radius: 14.0,
+                      ),
+                    );
+                  case ConnectionState.done:
+                    if (snapshot.hasError) {
+                      return SliverFillRemaining(
+                        child: Container(
+                          padding: const EdgeInsets.only(bottom: 50),
+                          child: GalleryErrorPage(
+                            onTap: () {
+                              setState(() {});
+                            },
+                          ),
+                        ),
+                      );
+                    } else {
+                      return ListViewFavorite(snapshot.data);
+                    }
+                }
+                return null;
+              }),
         ));
 
     return sca;

@@ -73,7 +73,6 @@ class _GallerySearchPageState extends State<GallerySearchPage>
     await Future<void>.delayed(_duration);
     if (_lastSearchText != _searchTextController.text &&
         DateTime.now().difference(_lastInputCompleteAt) >= _duration) {
-      Global.logger.v('${_searchTextController.text}');
       _lastSearchText = _searchTextController.text;
       _jumpSearch();
     }
