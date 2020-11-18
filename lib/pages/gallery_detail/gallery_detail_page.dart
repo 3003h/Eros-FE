@@ -3,6 +3,7 @@ import 'package:FEhViewer/generated/l10n.dart';
 import 'package:FEhViewer/models/galleryItem.dart';
 import 'package:FEhViewer/models/states/ehconfig_model.dart';
 import 'package:FEhViewer/models/states/gallery_model.dart';
+import 'package:FEhViewer/models/states/local_favorite_model.dart';
 import 'package:FEhViewer/pages/gallery_detail/gallery_detail_widget.dart';
 import 'package:FEhViewer/route/navigator_util.dart';
 import 'package:FEhViewer/utils/utility.dart';
@@ -23,6 +24,7 @@ class GalleryDetailPage extends StatelessWidget {
   final ScrollController _controller = ScrollController();
 
   /// 异步请求数据
+  // ignore: missing_return
   Future<GalleryItem> _loadData(BuildContext context) async {
     try {
       final GalleryModel _galleryModel =
@@ -31,6 +33,10 @@ class GalleryDetailPage extends StatelessWidget {
       final GalleryItem _item = _galleryModel.galleryItem;
 
       _galleryModel.resetHideNavigationBtn();
+
+      final bool _localFav =
+          _isInLocalFav(context, _galleryModel.galleryItem.gid);
+      _item.localFav = _localFav;
 
       if (!_galleryModel.detailLoadFinish || _item.galleryPreview.isNotEmpty) {
         if (_item.filecount == null || _item.filecount.isEmpty) {
@@ -59,6 +65,18 @@ class GalleryDetailPage extends StatelessWidget {
     } catch (e, stack) {
       Global.logger.e('解析数据异常\n' + e.toString() + '\n' + stack.toString());
     }
+  }
+
+  bool _isInLocalFav(context, String gid) {
+    // 检查是否包含在本地收藏中
+    final LocalFavModel localFavModel =
+        Provider.of<LocalFavModel>(context, listen: false);
+    final int index =
+        localFavModel.loacalFavs.indexWhere((GalleryItem element) {
+      return element.gid == gid;
+    });
+    // Global.logger.v('index $index');
+    return index >= 0;
   }
 
   Future<void> _reloadData(context) async {

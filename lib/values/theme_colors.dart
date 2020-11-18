@@ -168,13 +168,13 @@ class ThemeColors {
     ),
     'Misc': CupertinoDynamicColor.withBrightness(
       color: Color(0xfff06292),
-      darkColor: Color.fromARGB(255, 119, 119, 119),
+      darkColor: Color.fromARGB(255, 188, 91, 123),
     ),
     'defaule': CupertinoColors.systemBackground
   };
 
   /// fav 颜色
-  static const Map favColor = {
+  static const Map<String, Color> favColor = <String, Color>{
     '0': Color(0xff5F5F5F),
     '1': Color(0xffDE1C31),
     '2': Color(0xffF97D1C),
@@ -186,6 +186,7 @@ class ThemeColors {
     '8': Color(0xff9F3EF9),
     '9': Color(0xffEC2D7A),
     'a': Color(0xffB5A4A4),
+    'l': Color.fromARGB(255, 169, 158, 104),
   };
 
   static const CupertinoDynamicColor navigationBarBackground =

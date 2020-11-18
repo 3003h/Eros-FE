@@ -3,6 +3,7 @@ import 'package:FEhViewer/generated/l10n.dart';
 import 'package:FEhViewer/models/entity/favorite.dart';
 import 'package:FEhViewer/models/index.dart';
 import 'package:FEhViewer/models/states/gallery_model.dart';
+import 'package:FEhViewer/models/states/local_favorite_model.dart';
 import 'package:FEhViewer/models/states/user_model.dart';
 import 'package:FEhViewer/pages/tab/gallery_base.dart';
 import 'package:FEhViewer/pages/tab/tab_base.dart';
@@ -57,7 +58,6 @@ class _FavoriteTabState extends State<FavoriteTab> {
   void initState() {
     super.initState();
     _curFavcat = 'a';
-    // _loadDataFirst();
     _futureBuilderFuture = _loadDataFirstF();
   }
 
@@ -90,10 +90,6 @@ class _FavoriteTabState extends State<FavoriteTab> {
     if (_title.isEmpty) {
       _title = ln.all_Favorites;
     }
-
-//    final size = MediaQuery.of(context).size;
-//     final width = size.width;
-//    final height = size.height;
 
     return CupertinoPageScaffold(
       child: Selector<UserModel, bool>(
@@ -162,18 +158,45 @@ class _FavoriteTabState extends State<FavoriteTab> {
                       ),
                     ],
                   )
-                : CustomScrollView(slivers: <Widget>[
-                    CupertinoSliverNavigationBar(
-                      backgroundColor: ThemeColors.navigationBarBackground,
-                      largeTitle: TabPageTitle(
-                        title: ln.not_login,
-                        isLoading: false,
-                      ),
-                      transitionBetweenRoutes: false,
-                    ),
-                  ]);
+                : _buildLocalFavView();
           }),
     );
+  }
+
+  Widget _buildLocalFavView() {
+    return CustomScrollView(slivers: <Widget>[
+      CupertinoSliverNavigationBar(
+        backgroundColor: ThemeColors.navigationBarBackground,
+        largeTitle: TabPageTitle(
+          title: '本地收藏',
+          isLoading: false,
+        ),
+        transitionBetweenRoutes: false,
+      ),
+      CupertinoSliverRefreshControl(
+        onRefresh: () async {
+          await _reloadDataF();
+        },
+      ),
+      Selector<LocalFavModel, int>(
+          selector: (context, localFavModel) => localFavModel.loacalFavs.length,
+          builder: (context, _, __) {
+            return SliverSafeArea(
+              top: false,
+              sliver: _getGalleryList2(),
+            );
+          }),
+      SliverToBoxAdapter(
+        child: Container(
+          padding: const EdgeInsets.only(bottom: 150),
+          child: _isLoadMore
+              ? const CupertinoActivityIndicator(
+                  radius: 14,
+                )
+              : Container(),
+        ),
+      ),
+    ]);
   }
 
   Widget _getGalleryList2() {
@@ -224,9 +247,23 @@ class _FavoriteTabState extends State<FavoriteTab> {
     Global.logger.v('_loadDataFirstF  fav');
     _curPage = 0;
 
-    final Future<Tuple2<List<GalleryItem>, int>> tuple =
-        Api.getFavorite(favcat: _curFavcat);
-    return tuple;
+    final bool _isLogin =
+        Provider.of<UserModel>(context, listen: false).isLogin;
+    if (!_isLogin) {
+      _curFavcat = 'l';
+    }
+
+    if (_curFavcat != 'l') {
+      final Future<Tuple2<List<GalleryItem>, int>> tuple =
+          Api.getFavorite(favcat: _curFavcat);
+      return tuple;
+    } else {
+      Global.logger.v('本地收藏');
+      final List<GalleryItem> localFav =
+          Provider.of<LocalFavModel>(context, listen: false).loacalFavs;
+
+      return Future<Tuple2<List<GalleryItem>, int>>.value(Tuple2(localFav, 1));
+    }
   }
 
   Future<void> _reLoadDataFirstF() async {
@@ -425,7 +462,7 @@ class _FavoriteTabState extends State<FavoriteTab> {
   /// 切换收藏夹
   Widget _buildFavcatButton(BuildContext context) {
     return CupertinoButton(
-      minSize: 30,
+      minSize: 40,
       padding: const EdgeInsets.only(right: 8),
       child: const Icon(
         FontAwesomeIcons.star,
@@ -439,11 +476,6 @@ class _FavoriteTabState extends State<FavoriteTab> {
               Global.loggerNoStack.v('修改favcat to ${fav.title}');
               _setTitle(fav.title);
               _curFavcat = fav.favId;
-              // setState(() {
-              //   _loading = true;
-              //   _galleryItemBeans.clear();
-              // });
-              // await _loadDataFirst();
               _reLoadDataFirstF();
             } else {
               Global.loggerNoStack.v('未修改favcat');

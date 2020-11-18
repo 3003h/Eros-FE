@@ -22,8 +22,6 @@ class SelFavoritePage extends StatefulWidget {
 
 /// 收藏夹选择页面 列表
 class _SelFavorite extends State<SelFavoritePage> {
-  // String _title = "Favcat";
-
   final List<FavcatItemBean> favItemBeans = [];
 
   @override
@@ -69,6 +67,9 @@ class _SelFavorite extends State<SelFavoritePage> {
 
     _favItemBeans
         .add(FavcatItemBean('所有收藏', ThemeColors.favColor['a'], favId: 'a'));
+
+    _favItemBeans
+        .add(FavcatItemBean('本地收藏', ThemeColors.favColor['l'], favId: 'l'));
     return _favItemBeans;
   }
 
@@ -85,6 +86,9 @@ class _SelFavorite extends State<SelFavoritePage> {
 
     _favItemBeans
         .add(FavcatItemBean('所有收藏', ThemeColors.favColor['a'], favId: 'a'));
+
+    _favItemBeans
+        .add(FavcatItemBean('本地收藏', ThemeColors.favColor['l'], favId: 'l'));
     return _favItemBeans;
   }
 

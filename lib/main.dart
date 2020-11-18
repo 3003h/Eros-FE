@@ -1,7 +1,8 @@
 import 'package:FEhViewer/common/global.dart';
 import 'package:FEhViewer/models/states/ehconfig_model.dart';
+import 'package:FEhViewer/models/states/local_favorite_model.dart';
 import 'package:FEhViewer/models/states/locale_model.dart';
-import 'package:FEhViewer/models/states/searchText_model.dart';
+import 'package:FEhViewer/models/states/search_text_model.dart';
 import 'package:FEhViewer/models/states/theme_model.dart';
 import 'package:FEhViewer/models/states/user_model.dart';
 import 'package:FEhViewer/pages/splash_page.dart';
@@ -126,6 +127,8 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
         ChangeNotifierProvider<ThemeModel>.value(value: ThemeModel()),
         ChangeNotifierProvider<EhConfigModel>.value(value: EhConfigModel()),
         ChangeNotifierProvider<SearchTextModel>.value(value: SearchTextModel()),
+        //LocalFavModel
+        ChangeNotifierProvider<LocalFavModel>.value(value: LocalFavModel()),
       ],
       child: OKToast(child: cupertinoApp),
     );

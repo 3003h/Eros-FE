@@ -1,15 +1,15 @@
 import 'package:json_annotation/json_annotation.dart';
-
+import 'user.dart';
 import 'cacheConfig.dart';
 import 'ehConfig.dart';
 import 'galleryItem.dart';
-import 'user.dart';
+import 'localFav.dart';
 
 part 'profile.g.dart';
 
 @JsonSerializable()
 class Profile {
-  Profile();
+      Profile();
 
   User user;
   CacheConfig cache;
@@ -19,10 +19,8 @@ class Profile {
   String theme;
   List<String> searchText;
   List<GalleryItem> history;
-  List<GalleryItem> localFav;
+  LocalFav localFav;
 
-  factory Profile.fromJson(Map<String, dynamic> json) =>
-      _$ProfileFromJson(json);
-
+  factory Profile.fromJson(Map<String,dynamic> json) => _$ProfileFromJson(json);
   Map<String, dynamic> toJson() => _$ProfileToJson(this);
 }

@@ -73,6 +73,8 @@ class Global {
 
     profile.searchText ??= <String>[];
 
+    profile.localFav ??= LocalFav()..gallerys = <GalleryItem>[];
+
     // 路由
     final FluroRouter router = FluroRouter();
     EHRoutes.configureRoutes(router);
