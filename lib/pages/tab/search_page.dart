@@ -2,7 +2,7 @@ import 'package:FEhViewer/common/global.dart';
 import 'package:FEhViewer/generated/l10n.dart';
 import 'package:FEhViewer/models/index.dart';
 import 'package:FEhViewer/models/states/ehconfig_model.dart';
-import 'package:FEhViewer/models/states/searchText_model.dart';
+import 'package:FEhViewer/models/states/search_text_model.dart';
 import 'package:FEhViewer/pages/tab/gallery_base.dart';
 import 'package:FEhViewer/pages/tab/search_text_page.dart';
 import 'package:FEhViewer/pages/tab/tab_base.dart';
@@ -181,6 +181,21 @@ class _GallerySearchPageState extends State<GallerySearchPage>
       },
     );
 
+    const BorderSide _kDefaultRoundedBorderSide = BorderSide(
+      color: CupertinoDynamicColor.withBrightness(
+        color: Color(0x33000000),
+        darkColor: Color(0x33FFFFFF),
+      ),
+      style: BorderStyle.solid,
+      width: 0.0,
+    );
+    const Border _kDefaultRoundedBorder = Border(
+      top: _kDefaultRoundedBorderSide,
+      bottom: _kDefaultRoundedBorderSide,
+      left: _kDefaultRoundedBorderSide,
+      right: _kDefaultRoundedBorderSide,
+    );
+
     final Widget cfp = CupertinoPageScaffold(
       resizeToAvoidBottomInset: false,
       navigationBar: CupertinoNavigationBar(
@@ -188,8 +203,20 @@ class _GallerySearchPageState extends State<GallerySearchPage>
 //        border: null,
         backgroundColor: ThemeColors.navigationBarBackground,
         middle: CupertinoTextField(
+          style: const TextStyle(
+            height: 1,
+            textBaseline: TextBaseline.alphabetic,
+          ),
+          decoration: const BoxDecoration(
+            color: CupertinoDynamicColor.withBrightness(
+              color: CupertinoColors.white,
+              darkColor: CupertinoColors.black,
+            ),
+            border: _kDefaultRoundedBorder,
+            borderRadius: BorderRadius.all(Radius.circular(12.0)),
+          ),
           clearButtonMode: OverlayVisibilityMode.editing,
-          padding: const EdgeInsets.all(6.0),
+          padding: const EdgeInsets.fromLTRB(12, 6, 6, 6),
           controller: _searchTextController,
           autofocus: _autofocus,
           textInputAction: TextInputAction.search,
@@ -208,8 +235,8 @@ class _GallerySearchPageState extends State<GallerySearchPage>
             mainAxisAlignment: MainAxisAlignment.end,
             children: <Widget>[
               CupertinoButton(
-                minSize: 30,
-                padding: const EdgeInsets.only(left: 6, right: 6),
+                minSize: 40,
+                padding: const EdgeInsets.all(0),
                 child: const Text('取消'),
                 onPressed: () {
                   Navigator.of(context).pop();
@@ -218,9 +245,9 @@ class _GallerySearchPageState extends State<GallerySearchPage>
               CupertinoButton(
                 key: _searchMenukey,
                 minSize: 40,
-                padding: const EdgeInsets.only(left: 0),
+                padding: const EdgeInsets.only(right: 4),
                 child: const Icon(
-                  FontAwesomeIcons.gripVertical,
+                  FontAwesomeIcons.th,
                   size: 20,
                 ),
                 onPressed: () {

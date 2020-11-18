@@ -298,7 +298,7 @@ class _GalleryListTabState extends State<GalleryListTab> {
               children: [
                 // 搜索按钮
                 CupertinoButton(
-                  minSize: 30,
+                  minSize: 40,
                   padding: const EdgeInsets.all(0),
                   child: const Icon(
                     FontAwesomeIcons.search,
@@ -310,7 +310,7 @@ class _GalleryListTabState extends State<GalleryListTab> {
                 ),
                 // 筛选按钮
                 CupertinoButton(
-                  minSize: 30,
+                  minSize: 40,
                   padding: const EdgeInsets.all(0),
                   child: const Icon(
                     FontAwesomeIcons.filter,
@@ -323,8 +323,8 @@ class _GalleryListTabState extends State<GalleryListTab> {
                 ),
                 // 页码跳转按钮
                 CupertinoButton(
-                  minSize: 30,
-                  padding: const EdgeInsets.only(left: 4),
+                  minSize: 40,
+                  padding: const EdgeInsets.only(right: 0),
                   child: ClipRRect(
                     borderRadius: BorderRadius.circular(4),
                     child: Container(

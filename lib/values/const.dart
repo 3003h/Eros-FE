@@ -102,6 +102,7 @@ class EHConst {
     {'favcat': '7', 'desc': 'Favorites 7'},
     {'favcat': '8', 'desc': 'Favorites 8'},
     {'favcat': '9', 'desc': 'Favorites 9'},
+    {'favcat': 'l', 'desc': '本地收藏'},
   ];
 
   static const Map prefixToNameSpaceMap = {

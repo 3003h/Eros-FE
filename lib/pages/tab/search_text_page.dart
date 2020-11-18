@@ -1,5 +1,5 @@
 import 'package:FEhViewer/common/tag_database.dart';
-import 'package:FEhViewer/models/states/searchText_model.dart';
+import 'package:FEhViewer/models/states/search_text_model.dart';
 import 'package:FEhViewer/utils/db_util.dart';
 import 'package:FEhViewer/utils/toast.dart';
 import 'package:FEhViewer/values/theme_colors.dart';
@@ -51,11 +51,14 @@ class SearchQuickListPage extends StatelessWidget {
                         initialData: _datas[position],
                         builder: (context, snapshot) {
                           return Container(
-                            height: 40,
+                            height: 46,
                             width: double.infinity,
                             alignment: Alignment.centerLeft,
                             child: Text(
                               snapshot.data,
+                              maxLines: 2,
+                              overflow: TextOverflow.ellipsis,
+                              style: const TextStyle(fontSize: 16),
                             ),
                           );
                         }),

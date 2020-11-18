@@ -26,10 +26,9 @@ Profile _$ProfileFromJson(Map<String, dynamic> json) {
         ?.map((e) =>
             e == null ? null : GalleryItem.fromJson(e as Map<String, dynamic>))
         ?.toList()
-    ..localFav = (json['localFav'] as List)
-        ?.map((e) =>
-            e == null ? null : GalleryItem.fromJson(e as Map<String, dynamic>))
-        ?.toList();
+    ..localFav = json['localFav'] == null
+        ? null
+        : LocalFav.fromJson(json['localFav'] as Map<String, dynamic>);
 }
 
 Map<String, dynamic> _$ProfileToJson(Profile instance) => <String, dynamic>{

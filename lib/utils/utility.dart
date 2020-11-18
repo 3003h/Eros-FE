@@ -7,6 +7,7 @@ import 'package:FEhViewer/common/parser/gallery_detail_parser.dart';
 import 'package:FEhViewer/common/parser/gallery_list_parser.dart';
 import 'package:FEhViewer/models/galleryItem.dart';
 import 'package:FEhViewer/models/index.dart';
+import 'package:FEhViewer/models/states/local_favorite_model.dart';
 import 'package:FEhViewer/utils/toast.dart';
 import 'package:FEhViewer/values/const.dart';
 import 'package:cached_network_image/cached_network_image.dart';
@@ -21,6 +22,7 @@ import 'package:html_unescape/html_unescape.dart';
 import 'package:image_gallery_saver/image_gallery_saver.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:permission_handler/permission_handler.dart';
+import 'package:provider/provider.dart';
 import 'package:share/share.dart';
 import 'package:tuple/tuple.dart';
 

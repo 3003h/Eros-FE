@@ -7,5 +7,5 @@
   "theme": "",
   "searchText": [""],
   "history": "$[]galleryItem",
-  "localFav": "$[]galleryItem"
+  "localFav": "$localFav"
 }

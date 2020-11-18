@@ -111,4 +111,11 @@ class GalleryModel extends ProfileChangeNotifier {
     _isReloading = value;
     notifyListeners();
   }
+
+  set localFav(bool value) {
+    _galleryItem.localFav = value;
+    notifyListeners();
+  }
+
+  bool get localFav => _galleryItem.localFav;
 }

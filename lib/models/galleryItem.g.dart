@@ -29,6 +29,7 @@ GalleryItem _$GalleryItemFromJson(Map<String, dynamic> json) {
     ..postTime = json['postTime'] as String
     ..favTitle = json['favTitle'] as String
     ..favcat = json['favcat'] as String
+    ..localFav = json['localFav'] as bool
     ..simpleTags =
         (json['simpleTags'] as List)?.map((e) => e as String)?.toList()
     ..simpleTagsTranslat =
@@ -72,6 +73,7 @@ Map<String, dynamic> _$GalleryItemToJson(GalleryItem instance) =>
       'postTime': instance.postTime,
       'favTitle': instance.favTitle,
       'favcat': instance.favcat,
+      'localFav': instance.localFav,
       'simpleTags': instance.simpleTags,
       'simpleTagsTranslat': instance.simpleTagsTranslat,
       'tagGroup': instance.tagGroup,
