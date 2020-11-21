@@ -38,6 +38,8 @@ class EHConst {
   static const double waterfallFlowMainAxisSpacing = 10.0;
   static const double waterfallFlowMaxCrossAxisExtent = 150.0;
 
+  static List<int> historyMax = <int>[50, 100, 300, 0];
+
   static const Map<String, String> translateTagType = {
     'artist': '作者',
     'female': '女性',

@@ -65,4 +65,10 @@ class EhConfigModel extends ProfileChangeNotifier {
     _ehConfig.listMode = EnumToString.convertToString(mode);
     notifyListeners();
   }
+
+  int get maxHistory => _ehConfig.maxHistory ?? 100;
+  set maxHistory(int max) {
+    _ehConfig.maxHistory = max;
+    notifyListeners();
+  }
 }

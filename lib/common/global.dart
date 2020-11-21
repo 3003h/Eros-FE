@@ -18,8 +18,9 @@ import 'package:logger/logger.dart';
 class Global {
   // 是否第一次打开
   static bool isFirstOpen = false;
-  static Profile profile = Profile();
   static bool inDebugMode = false;
+  static Profile profile = Profile();
+  static History history = History();
 
   static final Logger logger = Logger(
     printer: PrettyPrinter(
@@ -59,9 +60,12 @@ class Global {
       }
     }
 
+    getHistoryFromSP();
+
     if (profile.ehConfig == null) {
       profile.ehConfig = EhConfig()
         ..safeMode = Platform.isIOS
+        ..maxHistory = 100
         ..siteEx = false
         ..tagTranslat = false
         ..jpnTitle = false
@@ -74,6 +78,8 @@ class Global {
     profile.searchText ??= <String>[];
 
     profile.localFav ??= LocalFav()..gallerys = <GalleryItem>[];
+
+    history.history = <GalleryItem>[];
 
     // 路由
     final FluroRouter router = FluroRouter();
@@ -94,5 +100,23 @@ class Global {
   static Future<bool> saveProfile() {
     // logger.v(profile.toJson());
     return StorageUtil().setJSON(PROFILE, profile);
+  }
+
+  static Future<bool> saveHistory() async {
+    // logger.v(history.toJson());
+    logger.v('${history.history.length}');
+    return StorageUtil().setJSON(HISTORY, history);
+  }
+
+  static Future<void> getHistoryFromSP() async {
+    // ignore: always_specify_types
+    final _history = StorageUtil().getJSON(HISTORY);
+    if (_history != null) {
+      try {
+        history = History.fromJson(jsonDecode(_history));
+      } catch (e) {
+        print(e);
+      }
+    }
   }
 }

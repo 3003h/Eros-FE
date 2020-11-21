@@ -10,7 +10,7 @@ import 'package:FEhViewer/pages/setting/eh_setting_page.dart';
 import 'package:FEhViewer/pages/splash_page.dart';
 import 'package:FEhViewer/pages/tab/favorite_sel_page.dart';
 import 'package:FEhViewer/pages/tab/gallery_page.dart';
-import 'package:FEhViewer/pages/tab/home_page_.dart';
+import 'package:FEhViewer/pages/tab/home_page.dart';
 import 'package:FEhViewer/route/routes.dart';
 import 'package:fluro/fluro.dart';
 import 'package:flutter/material.dart';

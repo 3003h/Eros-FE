@@ -20,37 +20,32 @@ class MessageLookup extends MessageLookupByLibrary {
   String get localeName => 'en';
 
   final messages = _notInlinedMessages(_notInlinedMessages);
-
-  static _notInlinedMessages(_) => <String, Function>{
-        "READ": MessageLookupByLibrary.simpleMessage("READ"),
-        "all_Favorites": MessageLookupByLibrary.simpleMessage("All Favorites"),
-        "all_comment": MessageLookupByLibrary.simpleMessage("All Comment"),
-        "all_preview": MessageLookupByLibrary.simpleMessage("All Preview"),
-        "app_title": MessageLookupByLibrary.simpleMessage("FEhViewer"),
-        "double_click_back":
-            MessageLookupByLibrary.simpleMessage("Press again to exit"),
-        "favcat": MessageLookupByLibrary.simpleMessage("Favorites"),
-        "gallery_comments":
-            MessageLookupByLibrary.simpleMessage("Gallery Comments"),
-        "login": MessageLookupByLibrary.simpleMessage("Sign"),
-        "login_web": MessageLookupByLibrary.simpleMessage("Sign in on the web"),
-        "morePreviews": MessageLookupByLibrary.simpleMessage("More previews"),
-        "noMorePreviews":
-            MessageLookupByLibrary.simpleMessage("No more previews"),
-        "notFav": MessageLookupByLibrary.simpleMessage("Not Favorited"),
-        "not_login": MessageLookupByLibrary.simpleMessage("Not Login"),
-        "passwd": MessageLookupByLibrary.simpleMessage("Password"),
-        "pls_i_passwd":
-            MessageLookupByLibrary.simpleMessage("Please enter your password"),
-        "pls_i_username":
-            MessageLookupByLibrary.simpleMessage("Please enter user name"),
-        "processing": MessageLookupByLibrary.simpleMessage("Processing"),
-        "tab_favorite": MessageLookupByLibrary.simpleMessage("Favorites"),
-        "tab_gallery": MessageLookupByLibrary.simpleMessage("Gallery"),
-        "tab_popular": MessageLookupByLibrary.simpleMessage("Popular"),
-        "tab_setting": MessageLookupByLibrary.simpleMessage("Settings"),
-        "user_login": MessageLookupByLibrary.simpleMessage("User Sign"),
-        "user_name": MessageLookupByLibrary.simpleMessage("Username"),
-        "welcome_text": MessageLookupByLibrary.simpleMessage("~oh~ oh~ oh~~~")
-      };
+  static _notInlinedMessages(_) => <String, Function> {
+    "READ" : MessageLookupByLibrary.simpleMessage("READ"),
+    "all_Favorites" : MessageLookupByLibrary.simpleMessage("All Favorites"),
+    "all_comment" : MessageLookupByLibrary.simpleMessage("All Comment"),
+    "all_preview" : MessageLookupByLibrary.simpleMessage("All Preview"),
+    "app_title" : MessageLookupByLibrary.simpleMessage("FEhViewer"),
+    "double_click_back" : MessageLookupByLibrary.simpleMessage("Press again to exit"),
+    "favcat" : MessageLookupByLibrary.simpleMessage("Favorites"),
+    "gallery_comments" : MessageLookupByLibrary.simpleMessage("Gallery Comments"),
+    "login" : MessageLookupByLibrary.simpleMessage("Sign"),
+    "login_web" : MessageLookupByLibrary.simpleMessage("Sign in on the web"),
+    "morePreviews" : MessageLookupByLibrary.simpleMessage("More previews"),
+    "noMorePreviews" : MessageLookupByLibrary.simpleMessage("No more previews"),
+    "notFav" : MessageLookupByLibrary.simpleMessage("Not Favorited"),
+    "not_login" : MessageLookupByLibrary.simpleMessage("Not Login"),
+    "passwd" : MessageLookupByLibrary.simpleMessage("Password"),
+    "pls_i_passwd" : MessageLookupByLibrary.simpleMessage("Please enter your password"),
+    "pls_i_username" : MessageLookupByLibrary.simpleMessage("Please enter user name"),
+    "processing" : MessageLookupByLibrary.simpleMessage("Processing"),
+    "tab_favorite" : MessageLookupByLibrary.simpleMessage("Favorites"),
+    "tab_gallery" : MessageLookupByLibrary.simpleMessage("Gallery"),
+    "tab_history" : MessageLookupByLibrary.simpleMessage("History"),
+    "tab_popular" : MessageLookupByLibrary.simpleMessage("Popular"),
+    "tab_setting" : MessageLookupByLibrary.simpleMessage("Settings"),
+    "user_login" : MessageLookupByLibrary.simpleMessage("User Sign"),
+    "user_name" : MessageLookupByLibrary.simpleMessage("Username"),
+    "welcome_text" : MessageLookupByLibrary.simpleMessage("~oh~ oh~ oh~~~")
+  };
 }

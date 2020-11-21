@@ -11,94 +11,116 @@ import 'gallery_page.dart';
 import 'popular_page.dart';
 import 'setting_page.dart';
 
-class FEhHomeNew extends StatefulWidget {
+class FEhHome extends StatefulWidget {
   @override
-  _FEhHomeNewState createState() => _FEhHomeNewState();
+  _FEhHomeState createState() => _FEhHomeState();
 }
 
-class _FEhHomeNewState extends State<FEhHomeNew> {
+class _FEhHomeState extends State<FEhHome> {
   DateTime _lastPressedAt; //上次点击时间
+
+  final List<ScrollController> _scrollControllerList = [
+    ScrollController(),
+    ScrollController(),
+    ScrollController(),
+    ScrollController(),
+  ];
+
   // tab控制器 可设置默认tab
   final CupertinoTabController _controller = CupertinoTabController();
   int _currentIndex = 0;
   bool _tapAwait = true;
 
-  final Map<String, ScrollController> _scrollControllerMap = {};
+  // 底部菜单栏图标数组
+  List tabIcon;
 
-  ScrollController _getScrollController(String key) {
-    if (_scrollControllerMap[key] == null) {
-      _scrollControllerMap[key] = ScrollController();
-    }
-    return _scrollControllerMap[key];
-  }
+  // 页面内容
+  final List<Widget> _pages = [];
 
-  final List _pageList = [];
-  final List _tabList = [];
-  final List _scrollControllerList = [];
-  final List _oriTabList = [];
+  // 菜单文案
+  List _tabTitles = [];
 
   void initData() {
-    _scrollControllerList.clear();
-    _tabList.clear();
-    _pageList.clear();
-    _oriTabList.clear();
-
     const double _iconSize = 24.0;
-    _oriTabList.addAll([
-      {
-        'title': S.of(context).tab_popular,
-        'icon': const Icon(FontAwesomeIcons.fire, size: _iconSize),
-        'disable': Global.profile.ehConfig.safeMode,
-        'page': PopularListTab(
-          tabIndex: S.of(context).tab_popular,
-          scrollController: _getScrollController(S.of(context).tab_popular),
-        )
-      },
-      {
-        'title': S.of(context).tab_gallery,
-        'icon': const Icon(FontAwesomeIcons.list, size: _iconSize),
-        'page': GalleryListTab(
-          tabIndex: S.of(context).tab_gallery,
-          scrollController: _getScrollController(S.of(context).tab_gallery),
-        )
-      },
-      {
-        'title': S.of(context).tab_favorite,
-        'icon': const Icon(FontAwesomeIcons.solidHeart, size: _iconSize),
-        'disable': Global.profile.ehConfig.safeMode,
-        'page': FavoriteTab(
-          tabIndex: S.of(context).tab_favorite,
-          scrollController: _getScrollController(S.of(context).tab_favorite),
-        )
-      },
-      {
-        'title': S.of(context).tab_setting,
-        'icon': const Icon(FontAwesomeIcons.cog, size: _iconSize),
-        'page': SettingTab(
-          tabIndex: S.of(context).tab_setting,
-          scrollController: _getScrollController(S.of(context).tab_setting),
-        )
-      },
-    ]);
+    tabIcon ??= [
+      const Icon(
+        FontAwesomeIcons.fire,
+        size: _iconSize,
+      ),
+      const Icon(
+        FontAwesomeIcons.list,
+        size: _iconSize,
+      ),
+      const Icon(
+        FontAwesomeIcons.solidHeart,
+        size: _iconSize,
+      ),
+      const Icon(
+        FontAwesomeIcons.cog,
+        size: _iconSize,
+      ),
+    ];
 
-    for (final tabObj in _oriTabList) {
-      if (tabObj['disable'] != null && tabObj['disable']) {
-      } else {
-        _scrollControllerList.add(_getScrollController(tabObj['title']));
-        _tabList.add(tabObj);
-        _pageList.add(tabObj['page']);
-      }
+    if (_pages.isEmpty) {
+      _addPopularPage();
+      _addGalleryPage();
+      _addFavoritePage();
+      _addSettingPage();
     }
+
+    _tabTitles = [
+      S.of(context).tab_popular,
+      S.of(context).tab_gallery,
+      S.of(context).tab_favorite,
+      S.of(context).tab_setting
+    ];
+  }
+
+  void _addPopularPage() {
+    final int index = _pages.length;
+//    Global.logger.v(index);
+    _pages.add(PopularListTab(
+      tabIndex: index,
+      scrollController: _scrollControllerList[index],
+    ));
+  }
+
+  void _addGalleryPage() {
+    final int index = _pages.length;
+    _pages.add(GalleryListTab(
+      tabIndex: index,
+      scrollController: _scrollControllerList[index],
+    ));
+  }
+
+  void _addFavoritePage() {
+    final int index = _pages.length;
+    _pages.add(FavoriteTab(
+      tabIndex: index,
+      scrollController: _scrollControllerList[index],
+    ));
+  }
+
+  void _addSettingPage() {
+    final int index = _pages.length;
+    _pages.add(SettingTab(
+      tabIndex: index,
+      scrollController: _scrollControllerList[index],
+    ));
+  }
+
+  // 获取图标
+  Icon getTabIcon(int curIndex) {
+    return tabIcon[curIndex];
   }
 
   // 获取BottomNavigationBarItem
   List<BottomNavigationBarItem> getBottomNavigationBarItem() {
     final List<BottomNavigationBarItem> list = [];
-    for (final tabObj in _tabList) {
+    for (int index = 0; index < 4; index++) {
       list.add(BottomNavigationBarItem(
-          icon: tabObj['icon'], label: tabObj['title']));
+          icon: getTabIcon(index), label: _tabTitles[index]));
     }
-
     return list;
   }
 
@@ -130,12 +152,12 @@ class _FEhHomeNewState extends State<FEhHomeNew> {
               duration: const Duration(milliseconds: 800),
               awaitComplete: false,
               onTap: () {
-                _scrollControllerList[index].animateTo(0.0,
+                _scrollControllerList[index].animateTo(0,
                     duration: const Duration(milliseconds: 500),
                     curve: Curves.ease);
               },
               onDoubleTap: () {
-                _scrollControllerList[index].animateTo(-100.0,
+                _scrollControllerList[index].animateTo(-100,
                     duration: const Duration(milliseconds: 500),
                     curve: Curves.ease);
               },
@@ -149,7 +171,7 @@ class _FEhHomeNewState extends State<FEhHomeNew> {
 //        return _pages[index];
         return CupertinoTabView(
           builder: (BuildContext context) {
-            return _pageList[index];
+            return _pages[index];
           },
         );
       },

@@ -230,10 +230,12 @@ class _GalleryViewPageEState extends State<GalleryViewPageE> {
 
       if (!(_preview?.isCache ?? false)) {
         // Global.logger.v('$_index : $_url');
+        /// 预缓存图片
         precacheImage(
                 ExtendedNetworkImageProvider(
                   _url,
                   cache: true,
+                  retries: 5,
                 ),
                 context)
             .then((_) => {_galleryModel.previews[_index].isCache = true});

@@ -211,12 +211,12 @@ class Api {
   }
 
   /// 获取画廊详细信息
-  static Future<GalleryItem> getGalleryDetail(String inUrl) async {
-    //?inline_set=ts_m 小图,40一页
-    //?inline_set=ts_l 大图,20一页
-    //hc=1#comments 显示全部评论
-    //nw=always 不显示警告
-
+  /// ?inline_set=ts_m 小图,40一页
+  /// ?inline_set=ts_l 大图,20一页
+  /// c=1#comments 显示全部评论
+  /// nw=always 不显示警告
+  static Future<GalleryItem> getGalleryDetail(
+      {String inUrl, GalleryItem inGalleryItem}) async {
     final HttpManager httpManager = HttpManager.getInstance();
 //    final String url = inUrl + '?hc=1&inline_set=ts_l&nw=always';
     final String url = inUrl + '?hc=1&nw=always';
@@ -239,7 +239,8 @@ class Api {
     }
 
     final GalleryItem galleryItem =
-        await GalleryDetailParser.parseGalleryDetail(response);
+        await GalleryDetailParser.parseGalleryDetail(response,
+            inGalleryItem: inGalleryItem);
 
     // Global.logger.v(galleryItem.toJson());
 
@@ -420,31 +421,9 @@ class Api {
     galleryItem.gid = gid;
     galleryItem.token = token;
 
-    List<GalleryItem> reqGalleryItems = [galleryItem];
+    final List<GalleryItem> reqGalleryItems = <GalleryItem>[galleryItem];
 
     await getMoreGalleryInfo(reqGalleryItems);
-
-    // try {
-    //   // todo 正则
-    //   final RegExp urlRex =
-    //       RegExp(r'http?s://e(-|x)hentai.org/g/(\d+)/(\w+)?/$');
-    //   Global.logger.v(galleryItem.url);
-    //   final RegExpMatch urlRult = urlRex.firstMatch(galleryItem.url);
-    //   Global.logger.v(urlRult.groupNames.toString());
-    //
-    //   final String gid = urlRult.group(2);
-    //   final String token = urlRult.group(3);
-    //
-    //   galleryItem.gid = gid;
-    //   galleryItem.token = token;
-    //
-    //   List<GalleryItem> reqGalleryItems = [galleryItem];
-    //
-    //   await getMoreGalleryInfo(reqGalleryItems);
-    // } catch (e, stack) {
-    //   Global.logger.e('解析数据异常\n' + e.toString() + '\n' + stack.toString());
-    //   showToast('解析异常');
-    // }
   }
 
   /// 获取api

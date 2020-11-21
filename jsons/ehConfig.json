@@ -10,5 +10,6 @@
   "lastFavcat": "3",
   "listMode": "list",
   "safeMode": true,
-  "catFilter": 0
+  "catFilter": 0,
+  "maxHistory": 100
 }

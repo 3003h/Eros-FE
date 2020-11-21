@@ -38,19 +38,6 @@ class _PopularListTabState extends State<PopularListTab> {
     _futureBuilderFuture = _loadDataF();
   }
 
-  // Future<void> _loadData() async {
-  //   setState(() {
-  //     _gallerItemBeans.clear();
-  //     _firstLoading = true;
-  //   });
-  //   final Tuple2<List<GalleryItem>, int> tuple = await Api.getPopular();
-  //   final List<GalleryItem> gallerItemBeans = tuple.item1;
-  //   _gallerItemBeans.addAll(gallerItemBeans);
-  //   setState(() {
-  //     _firstLoading = false;
-  //   });
-  // }
-
   Future<List<GalleryItem>> _loadDataF() async {
     Global.logger.v('_loadDataF ');
     final Future<Tuple2<List<GalleryItem>, int>> tuple = Api.getPopular();
@@ -58,22 +45,6 @@ class _PopularListTabState extends State<PopularListTab> {
         tuple.then((value) => value.item1);
     return gallerItemBeans;
   }
-
-  // Future<void> _reloadData() async {
-  //   if (_firstLoading) {
-  //     setState(() {
-  //       _firstLoading = false;
-  //     });
-  //   }
-  //
-  //   Tuple2<List<GalleryItem>, int> tuple = await Api.getPopular();
-  //   final List<GalleryItem> gallerItemBeans = tuple.item1;
-  //
-  //   setState(() {
-  //     _gallerItemBeans.clear();
-  //     _gallerItemBeans.addAll(gallerItemBeans);
-  //   });
-  // }
 
   Future<void> _reloadDataF() async {
     final List<GalleryItem> gallerItemBeans = await _loadDataF();
@@ -86,24 +57,6 @@ class _PopularListTabState extends State<PopularListTab> {
     setState(() {
       _futureBuilderFuture = _loadDataF();
     });
-  }
-
-  SliverList gallerySliverListView(List<GalleryItem> gallerItemBeans) {
-    return SliverList(
-      delegate: SliverChildBuilderDelegate(
-        (BuildContext context, int index) {
-          return ChangeNotifierProvider<GalleryModel>.value(
-            value: GalleryModel()
-              ..initData(gallerItemBeans[index], tabIndex: widget.tabIndex),
-            child: GalleryItemWidget(
-              galleryItem: gallerItemBeans[index],
-              tabIndex: widget.tabIndex,
-            ),
-          );
-        },
-        childCount: gallerItemBeans.length,
-      ),
-    );
   }
 
   @override
@@ -137,19 +90,6 @@ class _PopularListTabState extends State<PopularListTab> {
 
     return CupertinoPageScaffold(child: customScrollView);
   }
-
-  // Widget _getGalleryList() {
-  //   return _firstLoading
-  //       ? SliverFillRemaining(
-  //           child: Container(
-  //             padding: const EdgeInsets.only(bottom: 50),
-  //             child: const CupertinoActivityIndicator(
-  //               radius: 14.0,
-  //             ),
-  //           ),
-  //         )
-  //       : getGalleryList(_gallerItemBeans, widget.tabIndex);
-  // }
 
   Widget _getGalleryList2() {
     return FutureBuilder<List<GalleryItem>>(

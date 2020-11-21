@@ -1,5 +1,6 @@
 export 'tagGroup.dart';
 export 'galleryPreview.dart';
+export 'history.dart';
 export 'ehConfig.dart';
 export 'galleryItem.dart';
 export 'cacheConfig.dart';

@@ -3,11 +3,13 @@ import 'package:FEhViewer/generated/l10n.dart';
 import 'package:FEhViewer/models/galleryItem.dart';
 import 'package:FEhViewer/models/states/ehconfig_model.dart';
 import 'package:FEhViewer/models/states/gallery_model.dart';
+import 'package:FEhViewer/models/states/history_model.dart';
 import 'package:FEhViewer/models/states/local_favorite_model.dart';
 import 'package:FEhViewer/pages/gallery_detail/gallery_detail_widget.dart';
 import 'package:FEhViewer/route/navigator_util.dart';
 import 'package:FEhViewer/utils/utility.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:provider/provider.dart';
@@ -18,52 +20,80 @@ const double kHeaderHeight = 200.0 + 52;
 const double kPadding = 12.0;
 const double kHeaderPaddingTop = 12.0;
 
-class GalleryDetailPage extends StatelessWidget {
-  GalleryDetailPage({Key key}) : super(key: key);
+class GalleryDetailPage extends StatefulWidget {
+  const GalleryDetailPage({Key key}) : super(key: key);
 
+  @override
+  _GalleryDetailPageState createState() => _GalleryDetailPageState();
+}
+
+class _GalleryDetailPageState extends State<GalleryDetailPage> {
   final ScrollController _controller = ScrollController();
+  GalleryModel _galleryModel;
+  HistoryModel _historyModel;
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    final GalleryModel galleryModel =
+        Provider.of<GalleryModel>(context, listen: false);
+    if (galleryModel != _galleryModel) {
+      _galleryModel = galleryModel;
+    }
+    final HistoryModel historyModel =
+        Provider.of<HistoryModel>(context, listen: false);
+    if (historyModel != _historyModel) {
+      _historyModel = historyModel;
+    }
+  }
 
   /// 异步请求数据
-  // ignore: missing_return
   Future<GalleryItem> _loadData(BuildContext context) async {
     try {
-      final GalleryModel _galleryModel =
-          Provider.of<GalleryModel>(context, listen: false);
+      GalleryItem _item = _galleryModel.galleryItem;
 
-      final GalleryItem _item = _galleryModel.galleryItem;
+      Future<void>.delayed(const Duration(milliseconds: 1000))
+          .then((_) => {_historyModel.addHistory(_item)});
+
+      Global.logger.v('${_item.toJson()}');
 
       _galleryModel.resetHideNavigationBtn();
 
+      // 检查画廊是否包含在本地收藏中
       final bool _localFav =
           _isInLocalFav(context, _galleryModel.galleryItem.gid);
       _item.localFav = _localFav;
 
+      /// 画廊详情内容未获取完毕 或者 画廊缩略对象列表为空的情况
+      /// 需要请求网络获取数据
       if (!_galleryModel.detailLoadFinish || _item.galleryPreview.isNotEmpty) {
         if (_item.filecount == null || _item.filecount.isEmpty) {
           await Api.getMoreGalleryInfoOne(_item);
         }
 
-        final GalleryItem _galleryItemFromApi =
-            await Api.getGalleryDetail(_item.url);
+        // final GalleryItem _galleryItemFromApi =
+        _item =
+            await Api.getGalleryDetail(inUrl: _item.url, inGalleryItem: _item);
 
         _galleryModel.currentPreviewPage = 0;
-        _item.imgUrl =
+        _galleryModel.setGalleryPreview(_item.galleryPreview);
+        _galleryModel.setFavTitle(_item.favTitle, favcat: _item.favcat);
+
+        /*_item.imgUrl =
             _galleryItemFromApi.imgUrl ?? _galleryItemFromApi.imgUrlL;
         _item.tagGroup = _galleryItemFromApi.tagGroup;
         _item.galleryComment = _galleryItemFromApi.galleryComment;
-        _galleryModel.setGalleryPreview(_galleryItemFromApi.galleryPreview);
-        _galleryModel.setFavTitle(_galleryItemFromApi.favTitle,
-            favcat: _galleryItemFromApi.favcat);
-        _item.showKey = _galleryItemFromApi.showKey;
+        _item.showKey = _galleryItemFromApi.showKey;*/
 
         _galleryModel.detailLoadFinish = true;
 
-        return _galleryItemFromApi;
+        return _item;
       } else {
         return _item;
       }
     } catch (e, stack) {
       Global.logger.e('解析数据异常\n' + e.toString() + '\n' + stack.toString());
+      rethrow;
     }
   }
 
@@ -75,14 +105,11 @@ class GalleryDetailPage extends StatelessWidget {
         localFavModel.loacalFavs.indexWhere((GalleryItem element) {
       return element.gid == gid;
     });
-    // Global.logger.v('index $index');
     return index >= 0;
   }
 
   Future<void> _reloadData(context) async {
     Global.logger.v('_reloadData');
-    final GalleryModel _galleryModel =
-        Provider.of<GalleryModel>(context, listen: false);
 
     _galleryModel.reset();
     _galleryModel.detailLoadFinish = false;
@@ -91,11 +118,7 @@ class GalleryDetailPage extends StatelessWidget {
     _galleryModel.isReloading = false;
   }
 
-  // 滚动监听
   void _controllerLister(BuildContext context) {
-    final GalleryModel _galleryModel =
-        Provider.of<GalleryModel>(context, listen: false);
-
     if (_controller.offset < kHeaderHeight + kHeaderPaddingTop &&
         !_galleryModel.hideNavigationBtn) {
       _galleryModel.hideNavigationBtn = true;
@@ -105,11 +128,9 @@ class GalleryDetailPage extends StatelessWidget {
     }
   }
 
-  _initData(BuildContext context) {
+  void _initData(BuildContext context) {
     _controller.addListener(() => _controllerLister(context));
 
-    final GalleryModel _galleryModel =
-        Provider.of<GalleryModel>(context, listen: false);
     _galleryModel.resetHideNavigationBtn();
   }
 
@@ -204,33 +225,39 @@ class GalleryDetailPage extends StatelessWidget {
   }
 
   Widget _buildDetail(context) {
-    return Selector<GalleryModel, Tuple2<bool, bool>>(
-      selector: (_, GalleryModel gllaeryModel) =>
-          Tuple2(gllaeryModel.detailLoadFinish, gllaeryModel.isReloading),
-      builder: (BuildContext context, Tuple2 tuple, Widget child) {
+    return Selector<GalleryModel, Tuple3<bool, bool, GalleryItem>>(
+      selector: (_, GalleryModel gllaeryModel) => Tuple3(
+          gllaeryModel.detailLoadFinish,
+          gllaeryModel.isReloading,
+          gllaeryModel.galleryItem),
+      builder: (BuildContext context, Tuple3 tuple, Widget child) {
         final bool loadFinish = tuple.item1;
         final bool isReloading = tuple.item2;
+        final GalleryItem galleryItem = tuple.item3;
 
         return FutureBuilder<GalleryItem>(
             future: _loadData(context),
+            initialData: galleryItem,
             builder:
                 (BuildContext context, AsyncSnapshot<GalleryItem> snapshot) {
               if (loadFinish) {
+                Future<void>.delayed(const Duration(milliseconds: 100))
+                    .then((_) => {_historyModel.addHistory(snapshot.data)});
                 return child;
               } else {
                 switch (snapshot.connectionState) {
                   case ConnectionState.none:
                   case ConnectionState.active:
-//                    Global.logger.v('active');
-                    return _buildLoading(context, isReloading);
                   case ConnectionState.waiting:
-//                    Global.logger.v('waiting');
                     return _buildLoading(context, isReloading);
                   case ConnectionState.done:
                     Global.logger.v('done');
                     if (snapshot.hasError) {
                       return Text('Error: ${snapshot.error}');
                     } else {
+                      Future<void>.delayed(const Duration(milliseconds: 100))
+                          .then(
+                              (_) => {_historyModel.addHistory(snapshot.data)});
                       return child;
                     }
                 }
@@ -254,24 +281,8 @@ class GalleryDetailPage extends StatelessWidget {
     );
   }
 
-  /*ObstructingPreferredSizeWidget _buildNavigationBar(BuildContext context,
-      {bool hideNavigationBtn = true}) {
-    return hideNavigationBtn
-        ? const CupertinoNavigationBar(
-            backgroundColor: ThemeColors.navigationBarBackground,
-          )
-        : CupertinoNavigationBar(
-            backgroundColor: ThemeColors.navigationBarBackground,
-            middle: _buildNavigationBarImage(context),
-            trailing: _buildNavigationBarReadButton(context),
-          );
-  }*/
-
   /// 独立出导航栏的阅读按钮
   Widget _buildNavigationBarReadButton(BuildContext context) {
-    final GalleryModel _galleryModel =
-        Provider.of<GalleryModel>(context, listen: false);
-
     final bool _hasPreview = _galleryModel.oriGalleryPreview.isNotEmpty;
 
     final S ln = S.of(context);
@@ -293,8 +304,6 @@ class GalleryDetailPage extends StatelessWidget {
 
   Widget _buildNavigationBarImage(BuildContext context) {
     final double _statusBarHeight = MediaQuery.of(context).padding.top;
-    final GalleryModel _galleryModel =
-        Provider.of<GalleryModel>(context, listen: false);
 
     return GestureDetector(
       onTap: () {

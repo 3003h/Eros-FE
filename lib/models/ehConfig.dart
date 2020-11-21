@@ -19,6 +19,7 @@ class EhConfig {
   String listMode;
   bool safeMode;
   int catFilter;
+  int maxHistory;
 
   factory EhConfig.fromJson(Map<String,dynamic> json) => _$EhConfigFromJson(json);
   Map<String, dynamic> toJson() => _$EhConfigToJson(this);
