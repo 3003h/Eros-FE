@@ -98,7 +98,15 @@ class GalleryDetailInfo extends StatelessWidget {
           return Column(
             children: <Widget>[
               // 评论
-              ..._topComment(comment, max: 2),
+              GestureDetector(
+                onTap: () =>
+                    NavigatorUtil.goGalleryDetailComment(context, comment),
+                child: Column(
+                  children: <Widget>[
+                    ..._topComment(comment, max: 2),
+                  ],
+                ),
+              ),
               // 评论按钮
               CupertinoButton(
                 minSize: 0,
@@ -162,7 +170,6 @@ class PreviewContainer extends StatelessWidget {
   final List<GalleryPreview> galleryPreviewList;
   final List<String> hrefs;
   final GalleryPreview galleryPreview;
-  final List images = [];
 
   @override
   Widget build(BuildContext context) {
@@ -202,9 +209,9 @@ class PreviewContainer extends StatelessWidget {
                 Container(
                   child: PreviewImageClipper(
                     imgUrl: galleryPreview.imgUrl,
-                    offset: galleryPreview.offSet as double,
-                    height: galleryPreview.height as double,
-                    width: galleryPreview.width as double,
+                    offset: galleryPreview.offSet,
+                    height: galleryPreview.height,
+                    width: galleryPreview.width,
                   ),
                 ),
               ],
@@ -373,9 +380,8 @@ Widget _buildTagBox() {
 
 /// 封面小图
 class CoveTinyImage extends StatelessWidget {
-  const CoveTinyImage({Key key, this.imgUrl, double statusBarHeight})
-      : statusBarHeight = statusBarHeight,
-        super(key: key);
+  const CoveTinyImage({Key key, this.imgUrl, this.statusBarHeight})
+      : super(key: key);
 
   final String imgUrl;
   final double statusBarHeight;
@@ -408,9 +414,9 @@ class TagGroupItem extends StatelessWidget {
     @required this.tagGroupData,
   });
 
-  final tagGroupData;
+  final TagGroup tagGroupData;
 
-  _initTagBtnList(galleryTags, context) {
+  List<Widget> _initTagBtnList(galleryTags, context) {
     final _isTagTranslat = Global.profile.ehConfig.tagTranslat;
     List<Widget> _tagBtnList = [];
     galleryTags.forEach((tag) {

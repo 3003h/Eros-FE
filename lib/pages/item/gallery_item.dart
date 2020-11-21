@@ -52,7 +52,6 @@ class _GalleryItemWidgetState extends State<GalleryItemWidget> {
         Provider.of<GalleryModel>(context, listen: false);
     if (galleryModel != _galleryModel) {
       _galleryModel = galleryModel;
-//      galleryModel.initData(widget.galleryItem, tabIndex: widget.tabIndex);
     }
   }
 
@@ -62,7 +61,6 @@ class _GalleryItemWidgetState extends State<GalleryItemWidget> {
 
     final Widget containerGallery = Container(
       color: _colorTap,
-      // height: 200,
       padding: EdgeInsets.fromLTRB(_paddingLeft, 8, 8, 8),
       child: Column(
         children: <Widget>[
@@ -190,7 +188,7 @@ class _GalleryItemWidgetState extends State<GalleryItemWidget> {
 
   /// 构建封面图片
   Widget _buildCoverImage() {
-    return Consumer<GalleryModel>(builder: (context, galleryModel, child) {
+    return Consumer<GalleryModel>(builder: (context, galleryModel, _) {
       final GalleryItem _item = galleryModel.galleryItem;
 
       num _getHeigth() {

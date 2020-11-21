@@ -21,3 +21,5 @@ const String COOKIE = 'cookie';
 
 //
 const String PROFILE = 'profile';
+
+const String HISTORY = 'history';

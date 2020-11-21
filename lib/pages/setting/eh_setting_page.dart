@@ -110,6 +110,7 @@ class ListViewEhSetting extends StatelessWidget {
           descOn: '按收藏时间排序',
         ),
         _buildListModeItem(context),
+        _buildHistoryMaxItem(context),
       ],
     );
   }
@@ -142,7 +143,7 @@ Widget _buildListModeItem(BuildContext context) {
         context: context,
         builder: (BuildContext context) {
           final CupertinoActionSheet dialog = CupertinoActionSheet(
-            title: const Text('列表模式选择'),
+            // title: const Text('列表模式选择'),
             cancelButton: CupertinoActionSheetAction(
                 onPressed: () {
                   Navigator.pop(context);
@@ -170,6 +171,67 @@ Widget _buildListModeItem(BuildContext context) {
               // ignore: unnecessary_string_interpolations
               Global.logger.v('${EnumToString.convertToString(_result)}');
               ehConfigModel.listMode = _result;
+            }
+          },
+        );
+      });
+}
+
+/// 历史记录数量切换
+Widget _buildHistoryMaxItem(BuildContext context) {
+  const String _title = '最大历史记录数';
+  final EhConfigModel ehConfigModel =
+      Provider.of<EhConfigModel>(context, listen: false);
+
+  String _getMaxNumText(int max) {
+    if (max == 0) {
+      return '无限制';
+    } else {
+      return '$max';
+    }
+  }
+
+  List<Widget> _getModeList(BuildContext context) {
+    return List<Widget>.from(EHConst.historyMax.map((int element) {
+      return CupertinoActionSheetAction(
+          onPressed: () {
+            Navigator.pop(context, element);
+          },
+          child: Text(_getMaxNumText(element)));
+    }).toList());
+  }
+
+  Future<int> _showDialog(BuildContext context) {
+    return showCupertinoModalPopup<int>(
+        context: context,
+        builder: (BuildContext context) {
+          final CupertinoActionSheet dialog = CupertinoActionSheet(
+            // title: const Text('列表模式选择'),
+            cancelButton: CupertinoActionSheetAction(
+                onPressed: () {
+                  Navigator.pop(context);
+                },
+                child: const Text('取消')),
+            actions: <Widget>[
+              ..._getModeList(context),
+            ],
+          );
+          return dialog;
+        });
+  }
+
+  return Selector<EhConfigModel, int>(
+      selector: (BuildContext context, EhConfigModel ehConfigModel) =>
+          ehConfigModel.maxHistory,
+      builder: (BuildContext context, int maxHistory, _) {
+        return SelectorSettingItem(
+          title: _title,
+          selector: _getMaxNumText(maxHistory) ?? '',
+          onTap: () async {
+            Global.logger.v('tap ModeItem');
+            final int _result = await _showDialog(context);
+            if (_result != null) {
+              ehConfigModel.maxHistory = _result;
             }
           },
         );

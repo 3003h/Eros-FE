@@ -19,7 +19,8 @@ EhConfig _$EhConfigFromJson(Map<String, dynamic> json) {
     ..lastFavcat = json['lastFavcat'] as String
     ..listMode = json['listMode'] as String
     ..safeMode = json['safeMode'] as bool
-    ..catFilter = json['catFilter'] as int;
+    ..catFilter = json['catFilter'] as int
+    ..maxHistory = json['maxHistory'] as int;
 }
 
 Map<String, dynamic> _$EhConfigToJson(EhConfig instance) => <String, dynamic>{
@@ -35,4 +36,5 @@ Map<String, dynamic> _$EhConfigToJson(EhConfig instance) => <String, dynamic>{
       'listMode': instance.listMode,
       'safeMode': instance.safeMode,
       'catFilter': instance.catFilter,
+      'maxHistory': instance.maxHistory,
     };

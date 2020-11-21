@@ -83,7 +83,7 @@ class _GalleryFavButtonState extends State<GalleryFavButton> {
 
             final bool _isFav = _favcat().isNotEmpty || _localFav;
 
-            Global.logger.v('$tuple');
+            // Global.logger.v('$tuple');
 
             return Container(
               child: Column(

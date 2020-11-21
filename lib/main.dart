@@ -1,5 +1,6 @@
 import 'package:FEhViewer/common/global.dart';
 import 'package:FEhViewer/models/states/ehconfig_model.dart';
+import 'package:FEhViewer/models/states/history_model.dart';
 import 'package:FEhViewer/models/states/local_favorite_model.dart';
 import 'package:FEhViewer/models/states/locale_model.dart';
 import 'package:FEhViewer/models/states/search_text_model.dart';
@@ -17,8 +18,6 @@ import 'package:oktoast/oktoast.dart';
 import 'package:provider/provider.dart';
 
 import 'generated/l10n.dart';
-
-final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
 
 void main() => Global.init().then((e) {
       ///滚动性能优化
@@ -65,7 +64,6 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
         (BuildContext context, LocaleModel localeModel, ThemeModel themeModel,
             Widget child) {
       return CupertinoApp(
-        navigatorKey: navigatorKey,
         debugShowCheckedModeBanner: false,
         onGenerateTitle: (BuildContext context) => S.of(context).app_title,
         onGenerateRoute: Application.router.generator,
@@ -126,9 +124,12 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
         ChangeNotifierProvider<LocaleModel>.value(value: LocaleModel()),
         ChangeNotifierProvider<ThemeModel>.value(value: ThemeModel()),
         ChangeNotifierProvider<EhConfigModel>.value(value: EhConfigModel()),
+        // 快速搜索词
         ChangeNotifierProvider<SearchTextModel>.value(value: SearchTextModel()),
-        //LocalFavModel
+        // LocalFavModel 本地收藏
         ChangeNotifierProvider<LocalFavModel>.value(value: LocalFavModel()),
+        // HistoryModel 历史记录
+        ChangeNotifierProvider<HistoryModel>.value(value: HistoryModel()),
       ],
       child: OKToast(child: cupertinoApp),
     );
