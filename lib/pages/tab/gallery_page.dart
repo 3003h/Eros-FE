@@ -40,7 +40,6 @@ class _GalleryListTabState extends State<GalleryListTab> {
   int _maxPage = 0;
   bool _isLoadMore = false;
 
-  // bool _firstLoading = false;
   List<GalleryItem> _gallerItemBeans = <GalleryItem>[];
   String _search = '';
 
@@ -54,33 +53,12 @@ class _GalleryListTabState extends State<GalleryListTab> {
   void initState() {
     super.initState();
     _parserSearch();
-    // _loadDataFirst();
     _futureBuilderFuture = _loadDataFirstF();
   }
 
   void _parserSearch() {
     _search = widget.simpleSearch?.trim() ?? '';
   }
-
-  // Future<void> _loadDataFirst() async {
-  //   final int _catNum =
-  //       Provider.of<EhConfigModel>(context, listen: false).catFilter;
-  //
-  //   Global.loggerNoStack.v('_loadDataFirst');
-  //   setState(() {
-  //     _gallerItemBeans.clear();
-  //     _firstLoading = true;
-  //   });
-  //
-  //   final Tuple2<List<GalleryItem>, int> tuple =
-  //       await Api.getGallery(cats: widget.cats ?? _catNum, serach: _search);
-  //   final List<GalleryItem> gallerItemBeans = tuple.item1;
-  //   _gallerItemBeans.addAll(gallerItemBeans);
-  //   _maxPage = tuple.item2;
-  //   setState(() {
-  //     _firstLoading = false;
-  //   });
-  // }
 
   Future<Tuple2<List<GalleryItem>, int>> _loadDataFirstF() async {
     Global.logger.v('_loadDataFirstF  gallery');
@@ -91,30 +69,6 @@ class _GalleryListTabState extends State<GalleryListTab> {
         Api.getGallery(cats: widget.cats ?? _catNum, serach: _search);
     return tuple;
   }
-
-  // Future<void> _reloadData({bool cleanSearch = false}) async {
-  //   final int _catNum =
-  //       Provider.of<EhConfigModel>(context, listen: false).catFilter;
-  //
-  //   Global.loggerNoStack.v('_reloadData');
-  //   if (cleanSearch) {
-  //     _search = '';
-  //   }
-  //   if (_firstLoading) {
-  //     setState(() {
-  //       _firstLoading = false;
-  //     });
-  //   }
-  //   final Tuple2<List<GalleryItem>, int> tuple =
-  //       await Api.getGallery(cats: widget.cats ?? _catNum, serach: _search);
-  //   final List<GalleryItem> gallerItemBeans = tuple.item1;
-  //   setState(() {
-  //     _curPage = 0;
-  //     _gallerItemBeans.clear();
-  //     _gallerItemBeans.addAll(gallerItemBeans);
-  //     _maxPage = tuple.item2;
-  //   });
-  // }
 
   Future<void> _reloadDataF() async {
     _curPage = 0;

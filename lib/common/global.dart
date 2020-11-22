@@ -51,14 +51,6 @@ class Global {
     // 工具初始
     await StorageUtil.init();
 
-    const String url = 'exhentai.org';
-
-    final dns = DnsOverHttps.cloudflare();
-    final response = await dns.lookup(url);
-    response.forEach((address) {
-      print(address.address.toString());
-    });
-
     // ignore: always_specify_types
     final _profile = StorageUtil().getJSON(PROFILE);
     if (_profile != null) {

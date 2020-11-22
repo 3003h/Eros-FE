@@ -15,7 +15,7 @@ class LocalFavModel extends ProfileChangeNotifier {
     // Global.logger.v('${galleryItem.toJson()}');
     if (loacalFavs.indexWhere((element) => element.gid == galleryItem.gid) ==
         -1) {
-      _profile.localFav.gallerys.add(galleryItem);
+      _profile.localFav.gallerys.insert(0, galleryItem);
       Global.logger.v('${_profile.localFav.gallerys.length}');
       notifyListeners();
     } else {
