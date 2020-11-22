@@ -7,6 +7,7 @@ import 'package:FEhViewer/values/theme_colors.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_egg/flutter_egg.dart';
+import 'package:flutter_vibrate/flutter_vibrate.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class AboutPage extends StatelessWidget {
@@ -34,7 +35,7 @@ class ListViewAbout extends StatelessWidget {
       child: ListView(
         children: <Widget>[
           Egg(
-            child: TextItem(
+            child: const TextItem(
               'FEhViewer',
               desc: '一个兴趣使然的e-hentai客户端',
             ),
@@ -45,11 +46,13 @@ class ListViewAbout extends StatelessWidget {
                   Global.logger.v('safeMode off');
                   Global.profile.ehConfig.safeMode = false;
                   Global.saveProfile();
+                  Vibrate.feedback(FeedbackType.success);
                 } else {
                   showToast('ヾ(￣▽￣)Bye~Bye~');
                   Global.logger.v('safeMode on');
                   Global.profile.ehConfig.safeMode = true;
                   Global.saveProfile();
+                  Vibrate.feedback(FeedbackType.error);
                 }
               }
             },
@@ -64,6 +67,17 @@ class ListViewAbout extends StatelessWidget {
             desc: 'https://t.me/f_ehviewer',
             onTap: () => launch('https://t.me/f_ehviewer'),
           ),
+          TextItem(
+            '频道',
+            desc: 'https://t.me/fehviewer',
+            onTap: () => launch('https://t.me/fehviewer'),
+          ),
+          if (!Global.profile.ehConfig.safeMode)
+            TextItem(
+              '源码',
+              desc: 'https://github.com/honjow/FEhViewer',
+              onTap: () => launch('https://github.com/honjow/FEhViewer'),
+            ),
         ],
       ),
     );

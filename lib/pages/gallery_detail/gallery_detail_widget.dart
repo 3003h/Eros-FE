@@ -555,6 +555,10 @@ class CoverImage extends StatelessWidget {
           final _tabIndex = tuple.item3;
           final GalleryItem _item = tuple.item2;
 
+          final Map<String, String> _httpHeaders = {
+            'Cookie': Global.profile?.user?.cookie ?? '',
+          };
+
           if (_imageUrl != null && _imageUrl.isNotEmpty) {
             return Container(
               width: kWidth,
@@ -570,6 +574,7 @@ class CoverImage extends StatelessWidget {
                         child: CachedNetworkImage(
                           imageUrl: _imageUrl,
                           fit: BoxFit.cover,
+                          httpHeaders: _httpHeaders,
                         ),
                       ),
                     ),

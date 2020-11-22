@@ -13,6 +13,7 @@ import 'package:FEhViewer/values/const.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cookie_jar/cookie_jar.dart';
 import 'package:dio/dio.dart';
+import 'package:dns_client/dns_client.dart';
 import 'package:extended_image/extended_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -116,6 +117,16 @@ class Api {
       _cookieJar = PersistCookieJar(dir: appDocPath);
     }
     return _cookieJar;
+  }
+
+  static Future<String> getIpByDoH(String url) async {
+    final DnsOverHttps dns = DnsOverHttps.cloudflare();
+    final List<InternetAddress> response = await dns.lookup(url);
+    if (response.isNotEmpty) {
+      return response.first.address;
+    } else {
+      return url;
+    }
   }
 
   /// 获取热门画廊列表

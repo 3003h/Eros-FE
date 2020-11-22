@@ -25,8 +25,6 @@ class PopularListTab extends StatefulWidget {
 }
 
 class _PopularListTabState extends State<PopularListTab> {
-  final List<GalleryItem> _gallerItemBeans = [];
-
   // bool _firstLoading = false;
   Future<List<GalleryItem>> _futureBuilderFuture;
   Widget _lastListWidget;

@@ -147,6 +147,7 @@ class _HistoryTabState extends State<HistoryTab> {
   Widget _getGalleryList() {
     return FutureBuilder<List<GalleryItem>>(
       future: _futureBuilderFuture,
+      initialData: _historyModel.history,
       builder:
           (BuildContext context, AsyncSnapshot<List<GalleryItem>> snapshot) {
         switch (snapshot.connectionState) {
@@ -164,6 +165,8 @@ class _HistoryTabState extends State<HistoryTab> {
                 );
           case ConnectionState.done:
             if (snapshot.hasError) {
+              Global.logger.v(snapshot.error);
+              _reloadData();
               return SliverFillRemaining(
                 child: Container(
                   padding: const EdgeInsets.only(bottom: 50),

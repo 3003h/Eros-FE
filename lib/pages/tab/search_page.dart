@@ -12,6 +12,7 @@ import 'package:FEhViewer/utils/utility.dart';
 import 'package:FEhViewer/values/theme_colors.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_vibrate/flutter_vibrate.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:provider/provider.dart';
 import 'package:tuple/tuple.dart';
@@ -283,96 +284,109 @@ class _GallerySearchPageState extends State<GallerySearchPage>
     );
 
     Widget _buildListBtns() {
-      return Container(
-        width: 153,
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.end,
-          children: <Widget>[
-            CupertinoButton(
-              minSize: 40,
-              padding: const EdgeInsets.all(0),
-              child: const Text('取消'),
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-            ),
-            CupertinoButton(
-              minSize: 36,
-              padding: const EdgeInsets.all(0),
-              child: const Icon(
-                FontAwesomeIcons.filter,
-                size: 20,
+      return GestureDetector(
+        onLongPress: () {
+          Provider.of<EhConfigModel>(context, listen: false).searchBarComp =
+              true;
+          Vibrate.feedback(FeedbackType.heavy);
+        },
+        child: Container(
+          width: 153,
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.end,
+            children: <Widget>[
+              CupertinoButton(
+                minSize: 40,
+                padding: const EdgeInsets.all(0),
+                child: const Text('取消'),
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
               ),
-              onPressed: () {
-                GalleryBase().setCats(context);
-              },
-            ),
-            CupertinoButton(
-              minSize: 36,
-              padding: const EdgeInsets.all(0),
-              child: const Icon(
-                FontAwesomeIcons.plusCircle,
-                size: 20,
+              CupertinoButton(
+                minSize: 36,
+                padding: const EdgeInsets.all(0),
+                child: const Icon(
+                  FontAwesomeIcons.filter,
+                  size: 20,
+                ),
+                onPressed: () {
+                  GalleryBase().setCats(context);
+                },
               ),
-              onPressed: () {
-                final String _text = _searchTextController.text;
-                if (_text.isNotEmpty) {
-                  _searchTextModel.addText(_text);
-                  showToast('保存成功');
-                }
-              },
-            ),
-            CupertinoButton(
-              minSize: 36,
-              padding: const EdgeInsets.all(0),
-              child: const Icon(
-                FontAwesomeIcons.alignJustify,
-                size: 20,
+              CupertinoButton(
+                minSize: 36,
+                padding: const EdgeInsets.all(0),
+                child: const Icon(
+                  FontAwesomeIcons.plusCircle,
+                  size: 20,
+                ),
+                onPressed: () {
+                  final String _text = _searchTextController.text;
+                  if (_text.isNotEmpty) {
+                    _searchTextModel.addText(_text);
+                    showToast('保存成功');
+                  }
+                },
               ),
-              onPressed: () {
-                Navigator.push(
-                  context,
-                  CupertinoPageRoute<String>(
-                    builder: (BuildContext context) {
-                      return SearchQuickListPage();
-                    },
-                  ),
-                ).then((String value) => _searchTextController.text = value);
-              },
-            ),
-          ],
+              CupertinoButton(
+                minSize: 36,
+                padding: const EdgeInsets.all(0),
+                child: const Icon(
+                  FontAwesomeIcons.alignJustify,
+                  size: 20,
+                ),
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    CupertinoPageRoute<String>(
+                      builder: (BuildContext context) {
+                        return SearchQuickListPage();
+                      },
+                    ),
+                  ).then((String value) => _searchTextController.text = value);
+                },
+              ),
+            ],
+          ),
         ),
       );
     }
 
     Widget _buildPopMenuBtn() {
-      return Container(
-        width: 90,
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.end,
-          children: <Widget>[
-            CupertinoButton(
-              minSize: 40,
-              padding: const EdgeInsets.all(0),
-              child: const Text('取消'),
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-            ),
-            CupertinoButton(
-              key: _searchMenukey,
-              minSize: 40,
-              padding: const EdgeInsets.only(right: 4),
-              child: const Icon(
-                FontAwesomeIcons.th,
-                size: 20,
+      return GestureDetector(
+        onLongPress: () {
+          Provider.of<EhConfigModel>(context, listen: false).searchBarComp =
+              false;
+          Vibrate.feedback(FeedbackType.heavy);
+        },
+        child: Container(
+          width: 90,
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.end,
+            children: <Widget>[
+              CupertinoButton(
+                minSize: 40,
+                padding: const EdgeInsets.all(0),
+                child: const Text('取消'),
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
               ),
-              onPressed: () {
-                // GalleryBase().setCats(context);
-                _menu.show(widgetKey: _searchMenukey);
-              },
-            ),
-          ],
+              CupertinoButton(
+                key: _searchMenukey,
+                minSize: 40,
+                padding: const EdgeInsets.only(right: 4),
+                child: const Icon(
+                  FontAwesomeIcons.th,
+                  size: 20,
+                ),
+                onPressed: () {
+                  _menu.show(widgetKey: _searchMenukey);
+                },
+              ),
+            ],
+          ),
         ),
       );
     }

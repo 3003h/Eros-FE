@@ -18,7 +18,7 @@ class HistoryModel with ChangeNotifier {
   void addHistory(GalleryItem galleryItem) {
     // Global.logger.v('${galleryItem.toJson()}');
     final int _index = history.indexWhere((GalleryItem element) {
-      return element.url == galleryItem.url;
+      return element.gid == galleryItem.gid;
     });
     if (_index >= 0) {
       _history.history.removeAt(_index);

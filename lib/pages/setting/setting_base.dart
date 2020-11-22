@@ -186,9 +186,12 @@ class _TextItemState extends State<TextItem> {
     final Widget item = Column(
       children: <Widget>[
         Container(
-          height: 60,
+          alignment: Alignment.center,
+          // height: 60,
           padding: const EdgeInsets.fromLTRB(20, 8, 20, 8),
           child: Row(
+            mainAxisAlignment: MainAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.center,
             children: <Widget>[
               Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -200,9 +203,6 @@ class _TextItemState extends State<TextItem> {
                           fontSize: 12.5, color: CupertinoColors.systemGrey),
                     ),
                   ]),
-              Expanded(
-                child: Container(),
-              ),
             ],
           ),
         ),

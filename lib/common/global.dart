@@ -105,7 +105,7 @@ class Global {
 
   static Future<bool> saveHistory() async {
     // logger.v(history.toJson());
-    logger.v('${history.history.length}');
+    // logger.v('${history.history.length}');
     return StorageUtil().setJSON(HISTORY, history);
   }
 
