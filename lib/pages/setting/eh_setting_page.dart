@@ -21,7 +21,7 @@ class _EhSettingPage extends State<EhSettingPage> {
 
   @override
   Widget build(BuildContext context) {
-    CupertinoPageScaffold cps = CupertinoPageScaffold(
+    final CupertinoPageScaffold cps = CupertinoPageScaffold(
         navigationBar: CupertinoNavigationBar(
           backgroundColor: ThemeColors.navigationBarBackground,
           middle: Text(_title),
@@ -46,15 +46,15 @@ class ListViewEhSetting extends StatelessWidget {
     final bool _favLongTap = ehConfigModel.favLongTap;
 
     void _handleSiteChanged(bool newValue) {
-      Provider.of<EhConfigModel>(context, listen: false).siteEx = newValue;
+      ehConfigModel.siteEx = newValue;
     }
 
     void _handleJpnTitleChanged(bool newValue) {
-      Provider.of<EhConfigModel>(context, listen: false).jpnTitle = newValue;
+      ehConfigModel.jpnTitle = newValue;
     }
 
     void _handleTagTranslatChanged(bool newValue) {
-      Provider.of<EhConfigModel>(context, listen: false).tagTranslat = newValue;
+      ehConfigModel.tagTranslat = newValue;
       if (newValue) {
         try {
           EhTagDatabase.generateTagTranslat();
@@ -65,12 +65,11 @@ class ListViewEhSetting extends StatelessWidget {
     }
 
     void _handleGalleryListImgBlurChanged(bool newValue) {
-      Provider.of<EhConfigModel>(context, listen: false).galleryImgBlur =
-          newValue;
+      ehConfigModel.galleryImgBlur = newValue;
     }
 
     void _handleFavLongTapChanged(bool newValue) {
-      Provider.of<EhConfigModel>(context, listen: false).favLongTap = newValue;
+      ehConfigModel.favLongTap = newValue;
     }
 
     return ListView(
