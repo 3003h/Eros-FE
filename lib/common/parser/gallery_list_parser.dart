@@ -11,6 +11,24 @@ import 'package:intl/intl.dart';
 import 'package:tuple/tuple.dart';
 
 class GalleryListParser {
+  /// 检查返回结果是否是l视图
+  static bool isGalleryListDmL(String response) {
+    final dom.Document document = parse(response);
+    final List<dom.Element> domList =
+        document.querySelectorAll('#dms > div > select > option');
+
+    for (final dom.Element elm in domList) {
+      Global.logger.v('${elm.attributes["value"]}  ${elm.attributes.keys}');
+      final Map<dynamic, String> attributes = elm.attributes;
+      if (attributes.keys.contains('selected')) {
+        return attributes['value'] == 'l';
+      } else {
+        return true;
+      }
+    }
+    return true;
+  }
+
   /// 列表数据处理
   static Future<Tuple2<List<GalleryItem>, int>> parseGalleryList(
       String response,

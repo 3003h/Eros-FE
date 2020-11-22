@@ -124,7 +124,7 @@ class Api {
 
     final HttpManager httpManager = HttpManager.getInstance(
         EHConst.getBaseSite(Global.profile.ehConfig.siteEx ?? false));
-    const String url = '/popular';
+    const String url = '/popular?inline_set=dm_l';
 
     final String response = await httpManager.get(url);
 
@@ -141,7 +141,7 @@ class Api {
         EHConst.getBaseSite(Global.profile.ehConfig.siteEx ?? false));
 
     String url = '/';
-    String qry = '?page=${page ?? 0}';
+    String qry = '?page=${page ?? 0}&inline_set=dm_l';
 
     if (Global.profile.ehConfig.safeMode) {
       qry = '$qry&f_cats=767';
@@ -192,22 +192,36 @@ class Api {
     final HttpManager httpManager = HttpManager.getInstance(
         EHConst.getBaseSite(Global.profile.ehConfig.siteEx ?? false));
 
-    //收藏时间排序
-    final String _order = Global?.profile?.ehConfig?.favoritesOrder;
+    String _getUrl({String inlineSet}) {
+      //收藏时间排序
+      final String _order = Global?.profile?.ehConfig?.favoritesOrder;
 
-    String url = '/favorites.php/';
-    String qry = '?page=${page ?? 0}';
-    if (favcat != null && favcat != 'a' && favcat.isNotEmpty) {
-      qry = '$qry&favcat=$favcat';
+      String url = '/favorites.php/';
+      String qry = '?page=${page ?? 0}';
+      if (favcat != null && favcat != 'a' && favcat.isNotEmpty) {
+        qry = '$qry&favcat=$favcat';
+      }
+      qry = "$qry&inline_set=${inlineSet ?? _order ?? ''}";
+      url = '$url$qry';
+
+      Global.logger.v(url);
+      return url;
     }
-    qry = "$qry&inline_set=${_order ?? ''}";
-    url = '$url$qry';
 
-    Global.logger.v(url);
+    final String url = _getUrl();
 
     final String response = await httpManager.get(url);
 
-    return await GalleryListParser.parseGalleryList(response, isFavorite: true);
+    final bool isDml = GalleryListParser.isGalleryListDmL(response);
+    if (isDml) {
+      return await GalleryListParser.parseGalleryList(response,
+          isFavorite: true);
+    } else {
+      final String url = _getUrl(inlineSet: 'dm_l');
+      final String response = await httpManager.get(url);
+      return await GalleryListParser.parseGalleryList(response,
+          isFavorite: true);
+    }
   }
 
   /// 获取画廊详细信息
