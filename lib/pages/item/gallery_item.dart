@@ -11,6 +11,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:provider/provider.dart';
+import 'package:tuple/tuple.dart';
 
 const double kCoverImageWidth = 120.0;
 
@@ -59,73 +60,10 @@ class _GalleryItemWidgetState extends State<GalleryItemWidget> {
   Widget build(BuildContext context) {
     final GalleryModel galleryModel = Provider.of<GalleryModel>(context);
 
-    final Widget containerGallery = Container(
-      color: _colorTap,
-      padding: EdgeInsets.fromLTRB(_paddingLeft, 8, 8, 8),
-      child: Column(
-        children: <Widget>[
-          Row(children: <Widget>[
-            // 封面图片
-            _buildCoverImage(),
-            Container(
-              width: 8,
-            ),
-            // 右侧信息
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: <Widget>[
-                  // 标题 provider
-                  _buildTitle(),
-                  // 上传者
-                  Text(
-                    galleryModel?.galleryItem?.uploader ?? '',
-                    style: const TextStyle(
-                        fontSize: 12, color: CupertinoColors.systemGrey),
-                  ),
-                  // 标签
-                  const TagBox(),
-
-                  // 评分行
-                  Row(
-                    crossAxisAlignment: CrossAxisAlignment.end,
-                    children: <Widget>[
-                      // 评分
-                      _buildRating(),
-                      // 占位
-                      const Spacer(),
-                      // 收藏图标
-                      _buildFavcatIcon(),
-                      // 图片数量
-                      _buildFilecontWidget(),
-                    ],
-                  ),
-                  Container(
-                    height: 4,
-                  ),
-                  // 类型和时间
-                  Row(
-                    crossAxisAlignment: CrossAxisAlignment.end,
-                    children: <Widget>[
-                      // 类型
-                      _buildCategory(),
-                      const Spacer(),
-                      // 上传时间
-                      _buildPostTime(),
-                    ],
-                  ),
-                ],
-              ),
-            ),
-          ]),
-        ],
-      ),
-    );
-
     return GestureDetector(
       child: Column(
         children: <Widget>[
-          containerGallery,
+          _buildContainer(),
           Divider(
             height: 0.5,
             indent: _paddingLeft,
@@ -151,6 +89,78 @@ class _GalleryItemWidgetState extends State<GalleryItemWidget> {
       },
       onTapCancel: () => _updateNormalColor(),
     );
+  }
+
+  Widget _buildContainer() {
+    return Selector<GalleryModel, Tuple2>(
+        selector: (_, galleryModel) =>
+            Tuple2(galleryModel.galleryItem, galleryModel.detailLoadFinish),
+        builder: (context, snapshot, _) {
+          final GalleryItem _galleryItem = snapshot.item1;
+
+          return Container(
+            color: _colorTap,
+            padding: EdgeInsets.fromLTRB(_paddingLeft, 8, 8, 8),
+            child: Column(
+              children: <Widget>[
+                Row(children: <Widget>[
+                  // 封面图片
+                  _buildCoverImage(),
+                  Container(
+                    width: 8,
+                  ),
+                  // 右侧信息
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: <Widget>[
+                        // 标题 provider
+                        _buildTitle(),
+                        // 上传者
+                        Text(
+                          _galleryItem?.uploader ?? '',
+                          style: const TextStyle(
+                              fontSize: 12, color: CupertinoColors.systemGrey),
+                        ),
+                        // 标签
+                        const TagBox(),
+
+                        // 评分行
+                        Row(
+                          crossAxisAlignment: CrossAxisAlignment.end,
+                          children: <Widget>[
+                            // 评分
+                            _buildRating(),
+                            // 占位
+                            const Spacer(),
+                            // 收藏图标
+                            _buildFavcatIcon(),
+                            // 图片数量
+                            _buildFilecontWidget(),
+                          ],
+                        ),
+                        Container(
+                          height: 4,
+                        ),
+                        // 类型和时间
+                        Row(
+                          crossAxisAlignment: CrossAxisAlignment.end,
+                          children: <Widget>[
+                            // 类型
+                            _buildCategory(),
+                            const Spacer(),
+                            // 上传时间
+                            _buildPostTime(),
+                          ],
+                        ),
+                      ],
+                    ),
+                  ),
+                ]),
+              ],
+            ),
+          );
+        });
   }
 
   /// 构建标题
@@ -203,7 +213,7 @@ class _GalleryItemWidgetState extends State<GalleryItemWidget> {
         borderRadius: BorderRadius.circular(6),
         child: Container(
           width: kCoverImageWidth,
-          height: _getHeigth(),
+          height: _item.imgWidth != null ? _getHeigth() : null,
           child: Hero(
             tag: '${_item.gid}_${_item.token}_cover_${galleryModel.tabIndex}',
             child: Center(
@@ -386,18 +396,20 @@ class TagBox extends StatelessWidget {
               ? galleryModel.galleryItem.simpleTagsTranslat
               : galleryModel.galleryItem.simpleTags,
       builder: (context, simpleTags, child) {
-        return Container(
-          padding: const EdgeInsets.fromLTRB(0, 4, 0, 8),
-          child: Wrap(
-            spacing: 4, //主轴上子控件的间距
-            runSpacing: 4, //交叉轴上子控件之间的间距
-            children: List<Widget>.from(simpleTags
-                .map((tagText) => TagItem(
-                      text: tagText,
-                    ))
-                .toList()), //要显示的子控件集合
-          ),
-        );
+        return simpleTags != null
+            ? Container(
+                padding: const EdgeInsets.fromLTRB(0, 4, 0, 8),
+                child: Wrap(
+                  spacing: 4, //主轴上子控件的间距
+                  runSpacing: 4, //交叉轴上子控件之间的间距
+                  children: List<Widget>.from(simpleTags
+                      .map((tagText) => TagItem(
+                            text: tagText,
+                          ))
+                      .toList()), //要显示的子控件集合
+                ),
+              )
+            : Container();
       },
     );
   }
@@ -418,9 +430,10 @@ class CoverImg extends StatelessWidget {
       'Cookie': Global.profile?.user?.cookie ?? '',
     };
     return Selector<EhConfigModel, bool>(
-        selector: (context, provider) => provider.isGalleryImgBlur,
+        selector: (context, EhConfigModel ehconfig) =>
+            ehconfig.isGalleryImgBlur,
         builder: (BuildContext context, bool value, Widget child) {
-          return imgUrl != null
+          return imgUrl != null && imgUrl.isNotEmpty
               ? (value
                   ? BlurImage(
                       child: CachedNetworkImage(

@@ -82,7 +82,10 @@ class GalleryModel extends ProfileChangeNotifier {
 
   List<GalleryPreview> get oriGalleryPreview => _oriGalleryPreview ?? [];
 
-  set detailLoadFinish(bool value) => _detailLoadFinish = value;
+  set detailLoadFinish(bool value) {
+    _detailLoadFinish = value;
+    notifyListeners();
+  }
 
   bool get detailLoadFinish => _detailLoadFinish ?? false;
 

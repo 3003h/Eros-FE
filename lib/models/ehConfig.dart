@@ -20,6 +20,7 @@ class EhConfig {
   bool safeMode;
   int catFilter;
   int maxHistory;
+  bool searchBarComp;
 
   factory EhConfig.fromJson(Map<String,dynamic> json) => _$EhConfigFromJson(json);
   Map<String, dynamic> toJson() => _$EhConfigToJson(this);

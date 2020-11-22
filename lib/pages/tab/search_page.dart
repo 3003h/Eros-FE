@@ -115,6 +115,107 @@ class _GallerySearchPageState extends State<GallerySearchPage>
   Widget build(BuildContext context) {
     final S ln = S.of(context);
 
+    const BorderSide _kDefaultRoundedBorderSide = BorderSide(
+      color: CupertinoDynamicColor.withBrightness(
+        color: Color(0x33000000),
+        darkColor: Color(0x33FFFFFF),
+      ),
+      style: BorderStyle.solid,
+      width: 0.0,
+    );
+    const Border _kDefaultRoundedBorder = Border(
+      top: _kDefaultRoundedBorderSide,
+      bottom: _kDefaultRoundedBorderSide,
+      left: _kDefaultRoundedBorderSide,
+      right: _kDefaultRoundedBorderSide,
+    );
+
+    final Widget cfp = CupertinoPageScaffold(
+      resizeToAvoidBottomInset: false,
+      navigationBar: CupertinoNavigationBar(
+        padding: const EdgeInsetsDirectional.only(start: 0),
+//        border: null,
+        backgroundColor: ThemeColors.navigationBarBackground,
+        middle: CupertinoTextField(
+          style: const TextStyle(
+            height: 1,
+            textBaseline: TextBaseline.alphabetic,
+          ),
+          decoration: const BoxDecoration(
+            color: CupertinoDynamicColor.withBrightness(
+              color: CupertinoColors.white,
+              darkColor: CupertinoColors.black,
+            ),
+            border: _kDefaultRoundedBorder,
+            borderRadius: BorderRadius.all(Radius.circular(12.0)),
+          ),
+          clearButtonMode: OverlayVisibilityMode.editing,
+          padding: const EdgeInsets.fromLTRB(12, 6, 6, 6),
+          controller: _searchTextController,
+          autofocus: _autofocus,
+          textInputAction: TextInputAction.search,
+          onEditingComplete: () {
+            // 点击键盘完成
+            _jumpSearch();
+          },
+        ),
+        transitionBetweenRoutes: false,
+        leading: Container(
+          width: 0,
+        ),
+        trailing: _buildTrailing(context),
+      ),
+      child: GestureDetector(
+        behavior: HitTestBehavior.opaque,
+        onTap: () {
+          // 触摸收起键盘
+          FocusScope.of(context).requestFocus(FocusNode());
+        },
+        onPanDown: (DragDownDetails details) {
+          // 滑动收起键盘
+          FocusScope.of(context).requestFocus(FocusNode());
+        },
+        child: CustomScrollView(
+          slivers: <Widget>[
+            SliverSafeArea(
+              // top: false,
+              // bottom: false,
+              sliver: _firstLoading
+                  ? SliverFillRemaining(
+                      child: Container(
+                        padding: const EdgeInsets.only(bottom: 50),
+                        child: const CupertinoActivityIndicator(
+                          radius: 14.0,
+                        ),
+                      ),
+                    )
+                  : getGalleryList(
+                      _gallerItemBeans,
+                      _index,
+                      maxPage: _maxPage,
+                      curPage: _curPage,
+                      loadMord: _loadDataMore,
+                    ),
+            ),
+            SliverToBoxAdapter(
+              child: Container(
+                padding: const EdgeInsets.only(top: 50, bottom: 100),
+                child: _isLoadMore
+                    ? const CupertinoActivityIndicator(
+                        radius: 14,
+                      )
+                    : Container(),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+
+    return cfp;
+  }
+
+  Widget _buildTrailing(BuildContext context) {
     PopupMenu.context = context;
     final TextStyle _menuTextStyle = TextStyle(
       color: CupertinoDynamicColor.resolve(CupertinoColors.label, context),
@@ -181,132 +282,113 @@ class _GallerySearchPageState extends State<GallerySearchPage>
       },
     );
 
-    const BorderSide _kDefaultRoundedBorderSide = BorderSide(
-      color: CupertinoDynamicColor.withBrightness(
-        color: Color(0x33000000),
-        darkColor: Color(0x33FFFFFF),
-      ),
-      style: BorderStyle.solid,
-      width: 0.0,
-    );
-    const Border _kDefaultRoundedBorder = Border(
-      top: _kDefaultRoundedBorderSide,
-      bottom: _kDefaultRoundedBorderSide,
-      left: _kDefaultRoundedBorderSide,
-      right: _kDefaultRoundedBorderSide,
-    );
-
-    final Widget cfp = CupertinoPageScaffold(
-      resizeToAvoidBottomInset: false,
-      navigationBar: CupertinoNavigationBar(
-        padding: const EdgeInsetsDirectional.only(start: 0),
-//        border: null,
-        backgroundColor: ThemeColors.navigationBarBackground,
-        middle: CupertinoTextField(
-          style: const TextStyle(
-            height: 1,
-            textBaseline: TextBaseline.alphabetic,
-          ),
-          decoration: const BoxDecoration(
-            color: CupertinoDynamicColor.withBrightness(
-              color: CupertinoColors.white,
-              darkColor: CupertinoColors.black,
+    Widget _buildListBtns() {
+      return Container(
+        width: 153,
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.end,
+          children: <Widget>[
+            CupertinoButton(
+              minSize: 40,
+              padding: const EdgeInsets.all(0),
+              child: const Text('取消'),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
             ),
-            border: _kDefaultRoundedBorder,
-            borderRadius: BorderRadius.all(Radius.circular(12.0)),
-          ),
-          clearButtonMode: OverlayVisibilityMode.editing,
-          padding: const EdgeInsets.fromLTRB(12, 6, 6, 6),
-          controller: _searchTextController,
-          autofocus: _autofocus,
-          textInputAction: TextInputAction.search,
-          onEditingComplete: () {
-            // 点击键盘完成
-            _jumpSearch();
-          },
-        ),
-        transitionBetweenRoutes: false,
-        leading: Container(
-          width: 0,
-        ),
-        trailing: Container(
-          width: 90,
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.end,
-            children: <Widget>[
-              CupertinoButton(
-                minSize: 40,
-                padding: const EdgeInsets.all(0),
-                child: const Text('取消'),
-                onPressed: () {
-                  Navigator.of(context).pop();
-                },
+            CupertinoButton(
+              minSize: 36,
+              padding: const EdgeInsets.all(0),
+              child: const Icon(
+                FontAwesomeIcons.filter,
+                size: 20,
               ),
-              CupertinoButton(
-                key: _searchMenukey,
-                minSize: 40,
-                padding: const EdgeInsets.only(right: 4),
-                child: const Icon(
-                  FontAwesomeIcons.th,
-                  size: 20,
-                ),
-                onPressed: () {
-                  // GalleryBase().setCats(context);
-                  _menu.show(widgetKey: _searchMenukey);
-                },
-              ),
-            ],
-          ),
-        ),
-      ),
-      child: GestureDetector(
-        behavior: HitTestBehavior.opaque,
-        onTap: () {
-          // 触摸收起键盘
-          FocusScope.of(context).requestFocus(FocusNode());
-        },
-        onPanDown: (DragDownDetails details) {
-          // 滑动收起键盘
-          FocusScope.of(context).requestFocus(FocusNode());
-        },
-        child: CustomScrollView(
-          slivers: <Widget>[
-            SliverSafeArea(
-              // top: false,
-              // bottom: false,
-              sliver: _firstLoading
-                  ? SliverFillRemaining(
-                      child: Container(
-                        padding: const EdgeInsets.only(bottom: 50),
-                        child: const CupertinoActivityIndicator(
-                          radius: 14.0,
-                        ),
-                      ),
-                    )
-                  : getGalleryList(
-                      _gallerItemBeans,
-                      _index,
-                      maxPage: _maxPage,
-                      curPage: _curPage,
-                      loadMord: _loadDataMore,
-                    ),
+              onPressed: () {
+                GalleryBase().setCats(context);
+              },
             ),
-            SliverToBoxAdapter(
-              child: Container(
-                padding: const EdgeInsets.only(top: 50, bottom: 100),
-                child: _isLoadMore
-                    ? const CupertinoActivityIndicator(
-                        radius: 14,
-                      )
-                    : Container(),
+            CupertinoButton(
+              minSize: 36,
+              padding: const EdgeInsets.all(0),
+              child: const Icon(
+                FontAwesomeIcons.plusCircle,
+                size: 20,
               ),
+              onPressed: () {
+                final String _text = _searchTextController.text;
+                if (_text.isNotEmpty) {
+                  _searchTextModel.addText(_text);
+                  showToast('保存成功');
+                }
+              },
+            ),
+            CupertinoButton(
+              minSize: 36,
+              padding: const EdgeInsets.all(0),
+              child: const Icon(
+                FontAwesomeIcons.alignJustify,
+                size: 20,
+              ),
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  CupertinoPageRoute<String>(
+                    builder: (BuildContext context) {
+                      return SearchQuickListPage();
+                    },
+                  ),
+                ).then((String value) => _searchTextController.text = value);
+              },
             ),
           ],
         ),
-      ),
-    );
+      );
+    }
 
-    return cfp;
+    Widget _buildPopMenuBtn() {
+      return Container(
+        width: 90,
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.end,
+          children: <Widget>[
+            CupertinoButton(
+              minSize: 40,
+              padding: const EdgeInsets.all(0),
+              child: const Text('取消'),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+            CupertinoButton(
+              key: _searchMenukey,
+              minSize: 40,
+              padding: const EdgeInsets.only(right: 4),
+              child: const Icon(
+                FontAwesomeIcons.th,
+                size: 20,
+              ),
+              onPressed: () {
+                // GalleryBase().setCats(context);
+                _menu.show(widgetKey: _searchMenukey);
+              },
+            ),
+          ],
+        ),
+      );
+    }
+
+    return Selector<EhConfigModel, bool>(
+        selector: (_, ehconfigModel) => ehconfigModel.searchBarComp,
+        builder: (context, bool searchBarComp, _) {
+          final Size size = MediaQuery.of(context).size;
+          final double width = size.width;
+          // Global.logger.v(width);
+          if (width > 450) {
+            return _buildListBtns();
+          } else {
+            return searchBarComp ? _buildPopMenuBtn() : _buildListBtns();
+          }
+        });
   }
 
   Future<void> _loadDataMore({bool cleanSearch = false}) async {

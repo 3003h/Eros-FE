@@ -11,5 +11,6 @@
   "listMode": "list",
   "safeMode": true,
   "catFilter": 0,
-  "maxHistory": 100
+  "maxHistory": 100,
+  "searchBarComp": false
 }

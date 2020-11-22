@@ -88,7 +88,7 @@ class Global {
 
     profile.localFav ??= LocalFav()..gallerys = <GalleryItem>[];
 
-    history.history = <GalleryItem>[];
+    history.history ??= <GalleryItem>[];
 
     // 路由
     final FluroRouter router = FluroRouter();

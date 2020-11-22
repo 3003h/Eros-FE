@@ -71,4 +71,11 @@ class EhConfigModel extends ProfileChangeNotifier {
     _ehConfig.maxHistory = max;
     notifyListeners();
   }
+
+  bool get searchBarComp => _ehConfig.searchBarComp ?? true;
+
+  set searchBarComp(bool value) {
+    _ehConfig.searchBarComp = value;
+    notifyListeners();
+  }
 }
