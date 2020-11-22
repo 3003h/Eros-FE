@@ -52,8 +52,10 @@ class _GalleryDetailPageState extends State<GalleryDetailPage> {
     try {
       GalleryItem _item = _galleryModel.galleryItem;
 
-      Future<void>.delayed(const Duration(milliseconds: 1000))
-          .then((_) => {_historyModel.addHistory(_item)});
+      if (_item.gid != null) {
+        Future<void>.delayed(const Duration(milliseconds: 1000))
+            .then((_) => {_historyModel.addHistory(_item)});
+      }
 
       Global.logger.v('${_item.toJson()}');
 
@@ -79,18 +81,15 @@ class _GalleryDetailPageState extends State<GalleryDetailPage> {
         _galleryModel.setGalleryPreview(_item.galleryPreview);
         _galleryModel.setFavTitle(_item.favTitle, favcat: _item.favcat);
 
-        /*_item.imgUrl =
-            _galleryItemFromApi.imgUrl ?? _galleryItemFromApi.imgUrlL;
+        _item.imgUrl = _item.imgUrl ?? _item.imgUrlL;
+        /*
         _item.tagGroup = _galleryItemFromApi.tagGroup;
         _item.galleryComment = _galleryItemFromApi.galleryComment;
         _item.showKey = _galleryItemFromApi.showKey;*/
 
         _galleryModel.detailLoadFinish = true;
-
-        return _item;
-      } else {
-        return _item;
       }
+      return _item;
     } catch (e, stack) {
       Global.logger.e('解析数据异常\n' + e.toString() + '\n' + stack.toString());
       rethrow;
