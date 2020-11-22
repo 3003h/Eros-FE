@@ -218,6 +218,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "1.0.0"
+  dns_client:
+    dependency: "direct main"
+    description:
+      name: dns_client
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "0.1.0+2"
   enum_to_string:
     dependency: "direct main"
     description:
