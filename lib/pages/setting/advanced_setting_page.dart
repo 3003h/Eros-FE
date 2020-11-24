@@ -1,4 +1,5 @@
 import 'package:FEhViewer/common/global.dart';
+import 'package:FEhViewer/models/states/ehconfig_model.dart';
 import 'package:FEhViewer/models/states/locale_model.dart';
 import 'package:FEhViewer/models/states/theme_model.dart';
 import 'package:FEhViewer/values/theme_colors.dart';
@@ -22,7 +23,6 @@ class AdvancedSettingPageState extends State<AdvancedSettingPage> {
   Widget build(BuildContext context) {
     final CupertinoPageScaffold cps = CupertinoPageScaffold(
         navigationBar: CupertinoNavigationBar(
-          backgroundColor: ThemeColors.navigationBarBackground,
           transitionBetweenRoutes: true,
           middle: Text(_title),
         ),
@@ -37,11 +37,25 @@ class AdvancedSettingPageState extends State<AdvancedSettingPage> {
 class ListViewAdvancedSetting extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    final ThemeModel themeModel =
+        Provider.of<ThemeModel>(context, listen: false);
+    final bool _pureDark = themeModel.pureDarkTheme;
+    void _handlePureDarkChanged(bool newValue) {
+      themeModel.pureDarkTheme = newValue;
+    }
+
     return Container(
       child: ListView(
         children: <Widget>[
           _buildLanguageItem(context),
           _buildThemeItem(context),
+          TextSwitchItem(
+            '深色模式效果',
+            intValue: _pureDark,
+            onChanged: _handlePureDarkChanged,
+            desc: '灰黑背景',
+            descOn: '纯黑背景',
+          ),
         ],
       ),
     );

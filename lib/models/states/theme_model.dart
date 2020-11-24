@@ -9,22 +9,26 @@ import '../profile.dart';
 
 class ThemeModel extends ProfileChangeNotifier {
   Profile get _profile => Global.profile;
+  bool get _pureDarkTheme => _profile.ehConfig.pureDarkTheme ?? false;
 
   // 获取当前主题，如果未设置主题，则默认设置为跟随系统
   ThemesModeEnum get themeMode =>
       EnumToString.fromString(ThemesModeEnum.values, _profile?.theme) ??
       ThemesModeEnum.system;
 
+  CupertinoThemeData get _getDarkTheme =>
+      _pureDarkTheme ? ThemeColors.darkPureTheme : ThemeColors.darkGrayTheme;
+
   CupertinoThemeData getTheme(BuildContext context, Brightness brightness) {
     switch (themeMode) {
       case ThemesModeEnum.system:
         return brightness == Brightness.dark
-            ? ThemeColors.darkTheme
+            ? _getDarkTheme
             : ThemeColors.ligthTheme;
       case ThemesModeEnum.ligthMode:
         return ThemeColors.ligthTheme;
       case ThemesModeEnum.darkMode:
-        return ThemeColors.darkTheme;
+        return _getDarkTheme;
       default:
         return null;
     }
@@ -36,5 +40,11 @@ class ThemeModel extends ProfileChangeNotifier {
       _profile.theme = EnumToString.convertToString(setThemesMode);
       notifyListeners();
     }
+  }
+
+  bool get pureDarkTheme => _profile.ehConfig.pureDarkTheme ?? false;
+  set pureDarkTheme(bool value) {
+    _profile.ehConfig.pureDarkTheme = value;
+    notifyListeners();
   }
 }

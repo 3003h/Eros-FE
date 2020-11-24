@@ -4,9 +4,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 
 class BlurImage extends StatelessWidget {
+  const BlurImage({this.child, this.isBlur = true});
   final Widget child;
-
-  BlurImage({this.child});
+  final bool isBlur;
 
   @override
   Widget build(BuildContext context) {
@@ -14,15 +14,18 @@ class BlurImage extends StatelessWidget {
       alignment: Alignment.center,
       children: <Widget>[
         Container(child: child),
-        BackdropFilter(
-          filter: ImageFilter.blur(
-            sigmaX: 5,
-            sigmaY: 5,
-          ),
-          child: Container(
-            color: Colors.white.withOpacity(0.1),
-            width: 1,
-            height: 1,
+        Offstage(
+          offstage: !isBlur,
+          child: BackdropFilter(
+            filter: ImageFilter.blur(
+              sigmaX: 5,
+              sigmaY: 5,
+            ),
+            child: Container(
+              color: Colors.white.withOpacity(0.1),
+              width: 1,
+              height: 1,
+            ),
           ),
         ),
       ],

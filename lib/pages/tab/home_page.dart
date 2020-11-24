@@ -6,6 +6,7 @@ import 'package:FEhViewer/values/theme_colors.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:FEhViewer/widget/blur_image.dart';
 
 import 'favorite_page.dart';
 import 'gallery_page.dart';
@@ -17,12 +18,13 @@ class FEhHomeNew extends StatefulWidget {
   _FEhHomeNewState createState() => _FEhHomeNewState();
 }
 
-class _FEhHomeNewState extends State<FEhHomeNew> {
+class _FEhHomeNewState extends State<FEhHomeNew> with WidgetsBindingObserver {
   DateTime _lastPressedAt; //上次点击时间
   // tab控制器 可设置默认tab
   final CupertinoTabController _controller = CupertinoTabController();
   int _currentIndex = 0;
   bool _tapAwait = true;
+  bool _isBlur;
 
   final Map<String, ScrollController> _scrollControllerMap = {};
 
@@ -115,6 +117,10 @@ class _FEhHomeNewState extends State<FEhHomeNew> {
   @override
   void initState() {
     super.initState();
+    _isBlur = false;
+
+    ///初始化注册监听
+    WidgetsBinding.instance.addObserver(this);
   }
 
   @override
@@ -125,13 +131,35 @@ class _FEhHomeNewState extends State<FEhHomeNew> {
   }
 
   @override
+  void dispose() {
+    super.dispose();
+
+    ///页面销毁移除监听
+    WidgetsBinding.instance.removeObserver(this);
+  }
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    super.didChangeAppLifecycleState(state);
+    // Global.logger.v('$state');
+    if (state == AppLifecycleState.paused ||
+        state == AppLifecycleState.inactive) {
+      //页面处于后台
+
+    }
+    if (state == AppLifecycleState.resumed) {
+      //页面回到前台
+
+    }
+  }
+
+  @override
   Widget build(BuildContext context) {
     final List<BottomNavigationBarItem> _listBottomNavigationBarItem =
         getBottomNavigationBarItem();
     final CupertinoTabScaffold cupertinoTabScaffold = CupertinoTabScaffold(
       controller: _controller,
       tabBar: CupertinoTabBar(
-        backgroundColor: ThemeColors.navigationBarBackground,
         items: _listBottomNavigationBarItem,
         onTap: (int index) async {
           if (index == _currentIndex &&
@@ -167,7 +195,10 @@ class _FEhHomeNewState extends State<FEhHomeNew> {
 
     final WillPopScope willPopScope = WillPopScope(
       onWillPop: doubleClickBack,
-      child: cupertinoTabScaffold,
+      child: BlurImage(
+        child: cupertinoTabScaffold,
+        isBlur: _isBlur,
+      ),
     );
 
     return willPopScope;

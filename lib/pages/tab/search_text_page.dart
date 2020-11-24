@@ -25,7 +25,6 @@ class SearchQuickListPage extends StatelessWidget {
   Widget build(BuildContext context) {
     final CupertinoPageScaffold sca = CupertinoPageScaffold(
         navigationBar: CupertinoNavigationBar(
-          backgroundColor: ThemeColors.navigationBarBackground,
           middle: Text(_title),
           transitionBetweenRoutes: false,
         ),

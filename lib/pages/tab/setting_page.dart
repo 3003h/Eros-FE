@@ -73,7 +73,6 @@ class _SettingTabState extends State<SettingTab> {
       child: CustomScrollView(
         slivers: <Widget>[
           CupertinoSliverNavigationBar(
-            backgroundColor: ThemeColors.navigationBarBackground,
             heroTag: 'setting',
             largeTitle: Text(
               _title,

@@ -1,7 +1,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.honjow.fehviewer"
     android:versionName="1.0.0"
-    android:versionCode="26">
+    android:versionCode="28">
     <!-- io.flutter.app.FlutterApplication is an android.app.Application that
          calls FlutterMain.startInitialization(this); in its onCreate method.
          In most cases you can leave this as-is, but you if you want to provide
@@ -72,6 +72,9 @@
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
 
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+
+    <!-- 震动 -->
+    <uses-permission android:name="android.permission.VIBRATE"/>
 
     <uses-permission android:name="android.permission.USE_FINGERPRINT"/>
 </manifest>

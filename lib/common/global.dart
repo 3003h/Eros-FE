@@ -8,7 +8,6 @@ import 'package:FEhViewer/route/routes.dart';
 import 'package:FEhViewer/utils/storage.dart';
 import 'package:FEhViewer/utils/utility.dart';
 import 'package:FEhViewer/values/storages.dart';
-import 'package:dns_client/dns_client.dart';
 import 'package:fluro/fluro.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -20,6 +19,7 @@ class Global {
   // 是否第一次打开
   static bool isFirstOpen = false;
   static bool inDebugMode = false;
+  static bool isFirstReOpenEhSetting = true;
   static Profile profile = Profile();
   static History history = History();
 

@@ -20,6 +20,14 @@ class ThemeColors {
     darkColor: Color.fromARGB(255, 30, 30, 30),
   );
 
+  // Gray
+  static const CupertinoDynamicColor commitBackgroundGray =
+      CupertinoDynamicColor.withBrightness(
+    debugLabel: 'commitBackground',
+    color: Color.fromARGB(255, 242, 242, 247),
+    darkColor: Color.fromARGB(255, 60, 60, 60),
+  );
+
   static const CupertinoDynamicColor pressedBackground =
       CupertinoDynamicColor.withBrightness(
     debugLabel: 'pressedBackground',
@@ -106,12 +114,24 @@ class ThemeColors {
     'misc': Color(0xffd7d7d6),
   };
 
+  /// 主题配置
+  /// 浅色主题
   static CupertinoThemeData ligthTheme = const CupertinoThemeData(
     brightness: Brightness.light,
+    barBackgroundColor: navigationBarBackground,
   );
 
-  static CupertinoThemeData darkTheme = const CupertinoThemeData(
+  /// 深色纯黑主题
+  static CupertinoThemeData darkPureTheme = const CupertinoThemeData(
     brightness: Brightness.dark,
+    barBackgroundColor: navigationBarBackground,
+  );
+
+  /// 深色灰黑
+  static CupertinoThemeData darkGrayTheme = const CupertinoThemeData(
+    brightness: Brightness.dark,
+    scaffoldBackgroundColor: Color.fromARGB(255, 50, 50, 50),
+    barBackgroundColor: navigationBarBackgroundGray,
   );
 
   // cap 颜色
@@ -190,15 +210,16 @@ class ThemeColors {
   };
 
   static const CupertinoDynamicColor navigationBarBackground =
-      CupertinoDynamicColor(
+      CupertinoDynamicColor.withBrightness(
     debugLabel: 'navigationBarBackground',
     color: Color(0xd0f9f9f9),
-    darkColor: Color(0xd01b1b1b),
-    highContrastColor: Color(0xd0f9f9f9),
-    darkHighContrastColor: Color(0xd01b1b1b),
-    elevatedColor: Color(0xd0f9f9f9),
-    darkElevatedColor: Color(0xd01b1b1b),
-    highContrastElevatedColor: Color(0xd0f9f9f9),
-    darkHighContrastElevatedColor: Color(0xd01b1b1b),
+    darkColor: Color(0xc01b1b1b),
+  );
+
+  static const CupertinoDynamicColor navigationBarBackgroundGray =
+      CupertinoDynamicColor.withBrightness(
+    debugLabel: 'navigationBarBackground',
+    color: Color(0xd0f9f9f9),
+    darkColor: Color(0xd0303030),
   );
 }

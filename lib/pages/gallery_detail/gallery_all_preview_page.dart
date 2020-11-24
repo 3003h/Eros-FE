@@ -45,7 +45,6 @@ class _AllPreviewPageState extends State<AllPreviewPage> {
     final int _count = int.parse(_galleryModel.galleryItem.filecount);
     return CupertinoPageScaffold(
       navigationBar: CupertinoNavigationBar(
-        backgroundColor: ThemeColors.navigationBarBackground,
         middle: Text(ln.all_preview),
       ),
       child: CustomScrollView(

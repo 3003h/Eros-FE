@@ -19,15 +19,36 @@ class EhSettingPage extends StatefulWidget {
 class _EhSettingPage extends State<EhSettingPage> {
   final String _title = 'EH设置';
 
+  Future<bool> _getDelayed() async {
+    final int _delayed = (Global.isFirstReOpenEhSetting ?? true) ? 200 : 1;
+    Global.logger.v('$_delayed');
+    await Future<void>.delayed(Duration(milliseconds: _delayed));
+    Global.isFirstReOpenEhSetting = false;
+    return Future<bool>.value(true);
+  }
+
   @override
   Widget build(BuildContext context) {
     final CupertinoPageScaffold cps = CupertinoPageScaffold(
         navigationBar: CupertinoNavigationBar(
-          backgroundColor: ThemeColors.navigationBarBackground,
           middle: Text(_title),
         ),
         child: SafeArea(
-          child: ListViewEhSetting(),
+          child: FutureBuilder<bool>(
+              future: _getDelayed(),
+              builder: (context, snapshot) {
+                if (snapshot.connectionState == ConnectionState.done) {
+                  return ListViewEhSetting();
+                  // return Container();
+                } else {
+                  return Container(
+                      alignment: Alignment.center,
+                      padding: const EdgeInsets.only(top: 50, bottom: 100),
+                      child: const CupertinoActivityIndicator(
+                        radius: 14,
+                      ));
+                }
+              }),
         ));
 
     return cps;
@@ -72,45 +93,50 @@ class ListViewEhSetting extends StatelessWidget {
       ehConfigModel.favLongTap = newValue;
     }
 
-    return ListView(
-      children: <Widget>[
-        if (Provider.of<UserModel>(context, listen: false).isLogin)
-          TextSwitchItem(
-            '站点切换',
-            intValue: _siteEx,
-            onChanged: _handleSiteChanged,
-            desc: 'E-Hentai',
-            descOn: 'ExHentai',
-          ),
-        TextSwitchItem('显示标签中文翻译',
-            intValue: _tagTranslat,
-            onChanged: _handleTagTranslatChanged,
-            desc:
-                '需要下载数据文件,当前版本:${Global.profile.ehConfig.tagTranslatVer ?? "无"}'),
-        TextSwitchItem('显示日文标题',
-            intValue: _jpnTitle,
-            onChanged: _handleJpnTitleChanged,
-            desc: '如果该画廊有日文标题则优先显示'),
-        TextSwitchItem('画廊封面模糊',
-            intValue: _galleryImgBlur,
-            onChanged: _handleGalleryListImgBlurChanged,
-            desc: '画廊列表封面模糊效果'),
+    List<Widget> _list = <Widget>[
+      if (Provider.of<UserModel>(context, listen: false).isLogin)
         TextSwitchItem(
-          '画廊收藏夹选择方式',
-          intValue: _favLongTap,
-          onChanged: _handleFavLongTapChanged,
-          desc: '每一次都要选择收藏夹',
-          descOn: '默认使用上次收藏夹，长按弹出选择框',
+          '站点切换',
+          intValue: _siteEx,
+          onChanged: _handleSiteChanged,
+          desc: 'E-Hentai',
+          descOn: 'ExHentai',
         ),
-        TextSwitchItem(
-          '收藏夹排序方式',
+      TextSwitchItem('显示标签中文翻译',
+          intValue: _tagTranslat,
+          onChanged: _handleTagTranslatChanged,
+          desc:
+              '需要下载数据文件,当前版本:${Global.profile.ehConfig.tagTranslatVer ?? "无"}'),
+      TextSwitchItem('显示日文标题',
+          intValue: _jpnTitle,
           onChanged: _handleJpnTitleChanged,
-          desc: '按更新时间排序',
-          descOn: '按收藏时间排序',
-        ),
-        _buildListModeItem(context),
-        _buildHistoryMaxItem(context),
-      ],
+          desc: '如果该画廊有日文标题则优先显示'),
+      TextSwitchItem('画廊封面模糊',
+          intValue: _galleryImgBlur,
+          onChanged: _handleGalleryListImgBlurChanged,
+          desc: '画廊列表封面模糊效果'),
+      TextSwitchItem(
+        '画廊收藏夹选择方式',
+        intValue: _favLongTap,
+        onChanged: _handleFavLongTapChanged,
+        desc: '每一次都要选择收藏夹',
+        descOn: '默认使用上次收藏夹，长按弹出选择框',
+      ),
+      TextSwitchItem(
+        '收藏夹排序方式',
+        onChanged: _handleJpnTitleChanged,
+        desc: '按更新时间排序',
+        descOn: '按收藏时间排序',
+      ),
+      _buildListModeItem(context),
+      _buildHistoryMaxItem(context),
+    ];
+
+    return ListView.builder(
+      itemCount: _list.length,
+      itemBuilder: (BuildContext context, int index) {
+        return _list[index];
+      },
     );
   }
 }
