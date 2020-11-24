@@ -118,29 +118,6 @@ class _GalleryListTabState extends State<GalleryListTab> {
     });
   }
 
-  // Future<void> _loadFromPage(int page, {bool cleanSearch = false}) async {
-  //   Global.logger.v('jump to page =>  $page');
-  //
-  //   if (cleanSearch) {
-  //     _search = '';
-  //   }
-  //   setState(() {
-  //     _firstLoading = true;
-  //   });
-  //   final int _catNum =
-  //       Provider.of<EhConfigModel>(context, listen: false).catFilter;
-  //   _curPage = page;
-  //   final Tuple2<List<GalleryItem>, int> tuple = await Api.getGallery(
-  //       page: _curPage, cats: widget.cats ?? _catNum, serach: _search);
-  //   final List<GalleryItem> gallerItemBeans = tuple.item1;
-  //   setState(() {
-  //     _gallerItemBeans.clear();
-  //     _gallerItemBeans.addAll(gallerItemBeans);
-  //     _maxPage = tuple.item2;
-  //     _firstLoading = false;
-  //   });
-  // }
-
   Future<void> _loadFromPageF(int page, {bool cleanSearch = false}) async {
     Global.logger.v('jump to page =>  $page');
 
@@ -242,7 +219,7 @@ class _GalleryListTabState extends State<GalleryListTab> {
       slivers: <Widget>[
         CupertinoSliverNavigationBar(
           padding: const EdgeInsetsDirectional.only(end: 4),
-          backgroundColor: ThemeColors.navigationBarBackground,
+
 //          heroTag: 'gallery',
           largeTitle: Text(_title),
           trailing: Container(

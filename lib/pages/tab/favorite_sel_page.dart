@@ -98,7 +98,6 @@ class _SelFavorite extends State<SelFavoritePage> {
     final String _title = ln.favcat;
     final CupertinoPageScaffold sca = CupertinoPageScaffold(
         navigationBar: CupertinoNavigationBar(
-          backgroundColor: ThemeColors.navigationBarBackground,
           middle: Text(_title),
           transitionBetweenRoutes: false,
         ),

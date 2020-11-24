@@ -67,7 +67,6 @@ class _HistoryTabState extends State<HistoryTab> {
       physics: const AlwaysScrollableScrollPhysics(),
       slivers: <Widget>[
         CupertinoSliverNavigationBar(
-          backgroundColor: ThemeColors.navigationBarBackground,
           largeTitle: TabPageTitle(
             title: _title,
             isLoading: false,
@@ -136,6 +135,7 @@ class _HistoryTabState extends State<HistoryTab> {
               onPressed: () {
                 _historyModel.cleanHistory();
                 Navigator.of(context).pop();
+                _reloadData();
               },
             ),
           ],

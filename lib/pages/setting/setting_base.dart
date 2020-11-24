@@ -30,11 +30,16 @@ class _SelectorSettingItemState extends State<SelectorSettingItem> {
       child: Column(
         children: <Widget>[
           Container(
-            height: 60,
-            padding: const EdgeInsets.fromLTRB(20, 8, 20, 8),
+            // height: 54,
+            padding: const EdgeInsets.fromLTRB(20, 14, 20, 14),
             child: Row(
               children: <Widget>[
-                Text(widget.title),
+                Text(
+                  widget.title,
+                  style: const TextStyle(
+                    height: 1.0,
+                  ),
+                ),
                 const Spacer(),
                 Text(
                   widget.selector ?? '',
@@ -50,6 +55,7 @@ class _SelectorSettingItemState extends State<SelectorSettingItem> {
             ),
           ),
           Divider(
+            indent: 20,
             height: 0.5,
             color: CupertinoDynamicColor.resolve(
                 CupertinoColors.systemGrey4, context),
@@ -123,14 +129,19 @@ class _TextSwitchItemState extends State<TextSwitchItem> {
     return Column(
       children: <Widget>[
         Container(
-          height: 60,
+          // height: 60,
           padding: const EdgeInsets.fromLTRB(20, 8, 20, 8),
           child: Row(
             children: <Widget>[
               Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: <Widget>[
-                    Text(widget.title),
+                    Text(
+                      widget.title,
+                      style: const TextStyle(
+                        height: 1.0,
+                      ),
+                    ),
                     Text(
                       _desc ?? widget.desc,
                       style: const TextStyle(
@@ -153,7 +164,8 @@ class _TextSwitchItemState extends State<TextSwitchItem> {
             ],
           ),
         ),
-        Container(
+        Divider(
+          indent: 20,
           height: 0.5,
           color: CupertinoDynamicColor.resolve(
               CupertinoColors.systemGrey4, context),
@@ -188,7 +200,7 @@ class _TextItemState extends State<TextItem> {
         Container(
           alignment: Alignment.center,
           // height: 60,
-          padding: const EdgeInsets.fromLTRB(20, 8, 20, 8),
+          padding: const EdgeInsets.fromLTRB(20, 10, 20, 10),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.start,
             crossAxisAlignment: CrossAxisAlignment.center,
@@ -196,7 +208,12 @@ class _TextItemState extends State<TextItem> {
               Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: <Widget>[
-                    Text(widget.title),
+                    Text(
+                      widget.title,
+                      style: const TextStyle(
+                        height: 1.0,
+                      ),
+                    ),
                     Text(
                       widget.desc,
                       style: const TextStyle(
@@ -206,7 +223,8 @@ class _TextItemState extends State<TextItem> {
             ],
           ),
         ),
-        Container(
+        Divider(
+          indent: 20,
           height: 0.5,
           color: CupertinoDynamicColor.resolve(
               CupertinoColors.systemGrey4, context),

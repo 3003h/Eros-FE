@@ -9,6 +9,7 @@ import 'package:FEhViewer/pages/tab/tab_base.dart';
 import 'package:FEhViewer/utils/cust_lib/popup_menu.dart';
 import 'package:FEhViewer/utils/toast.dart';
 import 'package:FEhViewer/utils/utility.dart';
+import 'package:FEhViewer/utils/vibrate.dart';
 import 'package:FEhViewer/values/theme_colors.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -136,7 +137,7 @@ class _GallerySearchPageState extends State<GallerySearchPage>
       navigationBar: CupertinoNavigationBar(
         padding: const EdgeInsetsDirectional.only(start: 0),
 //        border: null,
-        backgroundColor: ThemeColors.navigationBarBackground,
+
         middle: CupertinoTextField(
           style: const TextStyle(
             height: 1,
@@ -288,7 +289,7 @@ class _GallerySearchPageState extends State<GallerySearchPage>
         onLongPress: () {
           Provider.of<EhConfigModel>(context, listen: false).searchBarComp =
               true;
-          Vibrate.feedback(FeedbackType.heavy);
+          VibrateUtil.heavy();
         },
         child: Container(
           width: 153,
@@ -358,7 +359,7 @@ class _GallerySearchPageState extends State<GallerySearchPage>
         onLongPress: () {
           Provider.of<EhConfigModel>(context, listen: false).searchBarComp =
               false;
-          Vibrate.feedback(FeedbackType.heavy);
+          VibrateUtil.heavy();
         },
         child: Container(
           width: 90,

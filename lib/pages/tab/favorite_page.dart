@@ -103,7 +103,7 @@ class _FavoriteTabState extends State<FavoriteTab> {
                     slivers: <Widget>[
                       CupertinoSliverNavigationBar(
                         padding: const EdgeInsetsDirectional.only(end: 4),
-                        backgroundColor: ThemeColors.navigationBarBackground,
+
 //                        heroTag: 'fav',
                         largeTitle: TabPageTitle(
                           title: _title,
@@ -166,7 +166,6 @@ class _FavoriteTabState extends State<FavoriteTab> {
   Widget _buildLocalFavView() {
     return CustomScrollView(slivers: <Widget>[
       CupertinoSliverNavigationBar(
-        backgroundColor: ThemeColors.navigationBarBackground,
         largeTitle: TabPageTitle(
           title: '本地收藏',
           isLoading: false,

@@ -12,5 +12,6 @@
   "safeMode": true,
   "catFilter": 0,
   "maxHistory": 100,
-  "searchBarComp": false
+  "searchBarComp": false,
+  "pureDarkTheme": false
 }

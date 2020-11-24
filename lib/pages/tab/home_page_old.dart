@@ -143,7 +143,6 @@ class _FEhHomeState extends State<FEhHome> {
     final CupertinoTabScaffold cupertinoTabScaffold = CupertinoTabScaffold(
       controller: _controller,
       tabBar: CupertinoTabBar(
-        backgroundColor: ThemeColors.navigationBarBackground,
         items: _listBottomNavigationBarItem,
         onTap: (int index) async {
           if (index == _currentIndex &&

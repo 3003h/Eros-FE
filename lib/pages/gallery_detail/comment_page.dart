@@ -32,7 +32,6 @@ class CommentPage extends StatelessWidget {
 
     return CupertinoPageScaffold(
       navigationBar: CupertinoNavigationBar(
-        backgroundColor: ThemeColors.navigationBarBackground,
         middle: Text(ln.gallery_comments),
       ),
       child: commSliverList,

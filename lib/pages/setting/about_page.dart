@@ -17,7 +17,6 @@ class AboutPage extends StatelessWidget {
   Widget build(BuildContext context) {
     final CupertinoPageScaffold cps = CupertinoPageScaffold(
         navigationBar: CupertinoNavigationBar(
-          backgroundColor: ThemeColors.navigationBarBackground,
           middle: Text(_title),
         ),
         child: SafeArea(
@@ -63,7 +62,7 @@ class ListViewAbout extends StatelessWidget {
             onTap: () => launch('mailto:honjow311@gmail.com'),
           ),
           TextItem(
-            '群组',
+            'Telegram',
             desc: 'https://t.me/f_ehviewer',
             onTap: () => launch('https://t.me/f_ehviewer'),
           ),
@@ -74,7 +73,7 @@ class ListViewAbout extends StatelessWidget {
           ),
           if (!Global.profile.ehConfig.safeMode)
             TextItem(
-              '源码',
+              'Github',
               desc: 'https://github.com/honjow/FEhViewer',
               onTap: () => launch('https://github.com/honjow/FEhViewer'),
             ),
