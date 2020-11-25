@@ -117,4 +117,23 @@ class EHConst {
     'p:': 'parody',
     'r:': 'reclass',
   };
+
+  /// iso936语言对应缩写
+  static const Map<String, String> iso936 = <String, String>{
+    'Japanese': 'JP',
+    'English': 'EN',
+    'Chinese': 'ZH',
+    'Dutch': 'NL',
+    'French': 'FR',
+    'German': 'DE',
+    'Hungarian': 'HU',
+    'Italian': 'IT',
+    'Korean': 'KR',
+    'Polish': 'PL',
+    'Portuguese': 'PT',
+    'Russian': 'RU',
+    'Spanish': 'ES',
+    'Thai': 'TH',
+    'Vietnamese': 'VI',
+  };
 }

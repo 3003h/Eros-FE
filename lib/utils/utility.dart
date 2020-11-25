@@ -36,6 +36,15 @@ class EHUtils {
     return inDebugMode;
   }
 
+  static String getLangeage(String value) {
+    for (final String key in EHConst.iso936.keys) {
+      if (key.toUpperCase().trim() == value.toUpperCase().trim()) {
+        return EHConst.iso936[key];
+      }
+    }
+    return '';
+  }
+
   /// list 分割
   static List<List<T>> splitList<T>(List<T> list, int len) {
     if (len <= 1) {
@@ -398,7 +407,7 @@ class Api {
     // 查询 合并结果
     for (int i = 0; i < _group.length; i++) {
       Map reqMap = {'gidlist': _group[i], 'method': 'gdata'};
-      String reqJsonStr = jsonEncode(reqMap);
+      final String reqJsonStr = jsonEncode(reqMap);
       final rult = await getGalleryApi(reqJsonStr);
 
       final jsonObj = jsonDecode(rult.toString());
@@ -406,7 +415,7 @@ class Api {
       rultList.addAll(tempList);
     }
 
-    final unescape = HtmlUnescape();
+    final HtmlUnescape unescape = HtmlUnescape();
 
     for (int i = 0; i < galleryItems.length; i++) {
       galleryItems[i].englishTitle = unescape.convert(rultList[i]['title']);
@@ -426,9 +435,25 @@ class Api {
 
       galleryItems[i].imgUrl = imageUrl;*/
 
-      galleryItems[i].filecount = rultList[i]['filecount'];
-      galleryItems[i].uploader = rultList[i]['uploader'];
-      galleryItems[i].category = rultList[i]['category'];
+      // Global.logger.v('${rultList[i]["tags"]}');
+
+      galleryItems[i].filecount = rultList[i]['filecount'] as String;
+      galleryItems[i].uploader = rultList[i]['uploader'] as String;
+      galleryItems[i].category = rultList[i]['category'] as String;
+      final List<String> tags = List<String>.from(
+          rultList[i]['tags'].map((e) => e as String).toList());
+      galleryItems[i].tagsFromApi = tags;
+
+      /// 判断获取语言标识
+      // galleryItems[i].translated = '';
+      // if (tags.contains('translated')) {
+      //   Global.logger.v('hase translated');
+      //   galleryItems[i].translated = EHUtils.getLangeage(tags[0]);
+      // }
+      galleryItems[i].translated = EHUtils.getLangeage(tags[0]) ?? '';
+
+      Global.logger
+          .v('${galleryItems[i].translated}   ${galleryItems[i].tagsFromApi}');
     }
 
     return galleryItems;
