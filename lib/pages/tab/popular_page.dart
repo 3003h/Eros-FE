@@ -33,10 +33,10 @@ class _PopularListTabState extends State<PopularListTab> {
   void initState() {
     super.initState();
     // _loadData();
-    _futureBuilderFuture = _loadDataF();
+    _futureBuilderFuture = _loadData();
   }
 
-  Future<List<GalleryItem>> _loadDataF() async {
+  Future<List<GalleryItem>> _loadData() async {
     Global.logger.v('_loadDataF ');
     final Future<Tuple2<List<GalleryItem>, int>> tuple = Api.getPopular();
     final Future<List<GalleryItem>> gallerItemBeans =
@@ -45,7 +45,7 @@ class _PopularListTabState extends State<PopularListTab> {
   }
 
   Future<void> _reloadDataF() async {
-    final List<GalleryItem> gallerItemBeans = await _loadDataF();
+    final List<GalleryItem> gallerItemBeans = await _loadData();
     setState(() {
       _futureBuilderFuture = Future<List<GalleryItem>>.value(gallerItemBeans);
     });
@@ -53,7 +53,7 @@ class _PopularListTabState extends State<PopularListTab> {
 
   Future<void> _reLoadDataFirstF() async {
     setState(() {
-      _futureBuilderFuture = _loadDataF();
+      _futureBuilderFuture = _loadData();
     });
   }
 
@@ -107,6 +107,7 @@ class _PopularListTabState extends State<PopularListTab> {
                 );
           case ConnectionState.done:
             if (snapshot.hasError) {
+              Global.logger.e('${snapshot.error}');
               return SliverFillRemaining(
                 child: Container(
                   padding: const EdgeInsets.only(bottom: 50),
