@@ -33,12 +33,12 @@ class _GalleryViewPageEState extends State<GalleryViewPageE> {
   @override
   void initState() {
     super.initState();
-    widget.controller.addListener(() {
-      setState(() {
-        _currPageValue = widget.controller.page;
-        Global.logger.v('$_currPageValue');
-      });
-    });
+    // widget.controller.addListener(() {
+    //   setState(() {
+    //     _currPageValue = widget.controller.page;
+    //     Global.logger.v('$_currPageValue');
+    //   });
+    // });
     _currentIndex = 0;
   }
 
@@ -107,7 +107,9 @@ class _GalleryViewPageEState extends State<GalleryViewPageE> {
                           onPageChanged: (int index) {
                             // 预载
                             _precache(previews, index, 5);
-                            _currentIndex = index;
+                            setState(() {
+                              _currentIndex = index;
+                            });
                           },
                           controller: widget.controller,
                           scrollDirection: Axis.horizontal,

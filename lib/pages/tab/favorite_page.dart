@@ -218,6 +218,7 @@ class _FavoriteTabState extends State<FavoriteTab> {
                 );
           case ConnectionState.done:
             if (snapshot.hasError) {
+              Global.logger.e('${snapshot.error}');
               return SliverFillRemaining(
                 child: Container(
                   padding: const EdgeInsets.only(bottom: 50),

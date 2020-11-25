@@ -483,7 +483,9 @@ class Api {
       //   Global.logger.v('hase translated');
       //   galleryItems[i].translated = EHUtils.getLangeage(tags[0]);
       // }
-      galleryItems[i].translated = EHUtils.getLangeage(tags[0]) ?? '';
+      if (tags.isNotEmpty) {
+        galleryItems[i].translated = EHUtils.getLangeage(tags[0]) ?? '';
+      }
 
       // Global.logger
       //     .v('${galleryItems[i].translated}   ${galleryItems[i].tagsFromApi}');

@@ -304,25 +304,6 @@ class _GalleryListTabState extends State<GalleryListTab> {
     );
   }
 
-  // Widget _getGalleryList() {
-  //   return _firstLoading
-  //       ? SliverFillRemaining(
-  //           child: Container(
-  //             padding: const EdgeInsets.only(bottom: 50),
-  //             child: const CupertinoActivityIndicator(
-  //               radius: 14.0,
-  //             ),
-  //           ),
-  //         )
-  //       : getGalleryList(
-  //           _gallerItemBeans,
-  //           widget.tabIndex,
-  //           maxPage: _maxPage,
-  //           curPage: _curPage,
-  //           loadMord: _loadDataMore,
-  //         );
-  // }
-
   Widget _getGalleryList2() {
     return FutureBuilder<Tuple2<List<GalleryItem>, int>>(
       future: _futureBuilderFuture,
@@ -343,6 +324,7 @@ class _GalleryListTabState extends State<GalleryListTab> {
                 );
           case ConnectionState.done:
             if (snapshot.hasError) {
+              Global.logger.e('${snapshot.error}');
               return SliverFillRemaining(
                 child: Container(
                   padding: const EdgeInsets.only(bottom: 50),
