@@ -88,13 +88,25 @@ class GalleryItemFlow extends StatelessWidget {
                               ),
                             ),
                             ClipPath(
-                              clipper: CategoryClipper(width: 26, height: 16),
+                              clipper: CategoryClipper(width: 28, height: 18),
                               child: Container(
-                                width: 26,
-                                height: 16,
+                                width: 28,
+                                height: 18,
                                 color: _colorCategory,
                               ),
-                            )
+                            ),
+                            Padding(
+                              padding:
+                                  const EdgeInsets.only(top: 0.8, right: 1.5),
+                              child: Text(
+                                galleryItem?.translated ?? '',
+                                style: const TextStyle(
+                                  fontSize: 8,
+                                  color: CupertinoColors.white,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                            ),
                           ],
                         ),
                       ),

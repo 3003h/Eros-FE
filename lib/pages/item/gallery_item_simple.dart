@@ -236,6 +236,14 @@ class _GalleryItemSimpleWidgetState extends State<GalleryItemSimpleWidget> {
     return Consumer<GalleryModel>(builder: (context, galleryModel, child) {
       return Row(
         children: <Widget>[
+          Padding(
+            padding: const EdgeInsets.only(right: 4),
+            child: Text(
+              galleryModel?.galleryItem?.translated ?? '',
+              style: const TextStyle(
+                  fontSize: 12, color: CupertinoColors.systemGrey),
+            ),
+          ),
           const Icon(
             Icons.panorama,
             size: 13,
@@ -244,7 +252,7 @@ class _GalleryItemSimpleWidgetState extends State<GalleryItemSimpleWidget> {
           Container(
             padding: const EdgeInsets.only(left: 2),
             child: Text(
-              galleryModel?.galleryItem?.filecount ?? "",
+              galleryModel?.galleryItem?.filecount ?? '',
               style: const TextStyle(
                   fontSize: 12, color: CupertinoColors.systemGrey),
             ),

@@ -7,7 +7,7 @@ part 'galleryItem.g.dart';
 
 @JsonSerializable()
 class GalleryItem {
-      GalleryItem();
+  GalleryItem();
 
   String gid;
   String token;
@@ -33,10 +33,13 @@ class GalleryItem {
   bool localFav;
   List<String> simpleTags;
   List<String> simpleTagsTranslat;
+  List<String> tagsFromApi;
+  String translated;
   List<TagGroup> tagGroup;
   List<GalleryComment> galleryComment;
   List<GalleryPreview> galleryPreview;
 
-  factory GalleryItem.fromJson(Map<String,dynamic> json) => _$GalleryItemFromJson(json);
+  factory GalleryItem.fromJson(Map<String, dynamic> json) =>
+      _$GalleryItemFromJson(json);
   Map<String, dynamic> toJson() => _$GalleryItemToJson(this);
 }

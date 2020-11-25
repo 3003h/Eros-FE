@@ -23,6 +23,8 @@
   "localFav": false,
   "simpleTags": [""],
   "simpleTagsTranslat": [""],
+  "tagsFromApi": [""],
+  "translated": "chinese",
   "tagGroup": "$[]tagGroup",
   "galleryComment": "$[]galleryComment",
   "galleryPreview": "$[]galleryPreview"

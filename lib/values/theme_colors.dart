@@ -220,6 +220,6 @@ class ThemeColors {
       CupertinoDynamicColor.withBrightness(
     debugLabel: 'navigationBarBackground',
     color: Color(0xd0f9f9f9),
-    darkColor: Color(0xd0303030),
+    darkColor: Color(0xc0303030),
   );
 }
