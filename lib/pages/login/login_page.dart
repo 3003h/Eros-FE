@@ -21,7 +21,7 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
-  FocusNode _nodePwd = FocusNode();
+  final FocusNode _nodePwd = FocusNode();
 
   //账号的控制器
   final TextEditingController _usernameController = TextEditingController();

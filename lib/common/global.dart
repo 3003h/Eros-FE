@@ -76,6 +76,13 @@ class Global {
       saveProfile();
     }
 
+    if (profile.advanceSearch == null) {
+      profile.advanceSearch = AdvanceSearch()
+        ..searchGalleryName = true
+        ..searchGalleryTags = true;
+      saveProfile();
+    }
+
     profile.searchText ??= <String>[];
 
     profile.localFav ??= LocalFav()..gallerys = <GalleryItem>[];

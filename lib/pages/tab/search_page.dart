@@ -80,15 +80,10 @@ class _GallerySearchPageState extends State<GallerySearchPage>
     }
   }
 
-  void _printLatestValue() {
-    // print('Second text field: ${_searchTextController.text}');
-    _delayedSearch();
-  }
-
   @override
   void initState() {
     super.initState();
-    _searchTextController.addListener(_printLatestValue);
+    _searchTextController.addListener(_delayedSearch);
     if (widget.searchText != null && widget.searchText.trim().isNotEmpty) {
       _searchTextController.text = widget.searchText.trim();
       _autofocus = false;
@@ -261,7 +256,7 @@ class _GallerySearchPageState extends State<GallerySearchPage>
         Global.logger.v('${item.menuKey}');
         switch (item.menuKey) {
           case SearchMenuEnum.filter:
-            GalleryBase().setCats(context);
+            GalleryBase().showFilterSetting(context, showAdevance: true);
             break;
           case SearchMenuEnum.addToQuickSearch:
             final String _text = _searchTextController.text;
@@ -312,7 +307,7 @@ class _GallerySearchPageState extends State<GallerySearchPage>
                   size: 20,
                 ),
                 onPressed: () {
-                  GalleryBase().setCats(context);
+                  GalleryBase().showFilterSetting(context, showAdevance: true);
                 },
               ),
               CupertinoButton(

@@ -7,7 +7,7 @@ part 'galleryItem.g.dart';
 
 @JsonSerializable()
 class GalleryItem {
-  GalleryItem();
+      GalleryItem();
 
   String gid;
   String token;
@@ -39,7 +39,6 @@ class GalleryItem {
   List<GalleryComment> galleryComment;
   List<GalleryPreview> galleryPreview;
 
-  factory GalleryItem.fromJson(Map<String, dynamic> json) =>
-      _$GalleryItemFromJson(json);
+  factory GalleryItem.fromJson(Map<String,dynamic> json) => _$GalleryItemFromJson(json);
   Map<String, dynamic> toJson() => _$GalleryItemToJson(this);
 }

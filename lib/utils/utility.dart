@@ -138,6 +138,30 @@ class Api {
     }
   }
 
+  static String getAdvanceSearchText() {
+    final AdvanceSearch advanceSearch = Global.profile.advanceSearch;
+
+    final String para =
+        '&f_sname=${advanceSearch.searchGalleryName ?? false ? "on" : ""}'
+        '&f_stags=${advanceSearch.searchGalleryTags ?? false ? "on" : ""}'
+        '&f_sdesc=${advanceSearch.searchGalleryDesc ?? false ? "on" : ""}'
+        '&f_storr=${advanceSearch.searchToreenFilenames ?? false ? "on" : ""}'
+        '&f_sto=${advanceSearch.onlyShowWhithTorrents ?? false ? "on" : ""}'
+        '&f_sdt1=${advanceSearch.searchLowPowerTags ?? false ? "on" : ""}'
+        '&f_sdt2=${advanceSearch.searchDownvotedTags ?? false ? "on" : ""}'
+        '&f_sh=${advanceSearch.searchExpunged ?? false ? "on" : ""}'
+        '&f_sr=${advanceSearch.searchWithminRating ?? false ? "on" : ""}'
+        '&f_srdd=${advanceSearch.minRating ?? ""}'
+        '&f_sp=${advanceSearch.searchBetweenpage ?? false ? "on" : ""}'
+        '&f_spf=${advanceSearch.startPage ?? ""}'
+        '&f_spt=${advanceSearch.endPage ?? ""}'
+        '&f_sfl=${advanceSearch.disableDFLanguage ?? false ? "on" : ""}'
+        '&f_sfu=${advanceSearch.disableDFUploader ?? false ? "on" : ""}'
+        '&f_sft=${advanceSearch.disableDFTags ?? false ? "on" : ""}';
+
+    return para;
+  }
+
   /// 获取热门画廊列表
   static Future<Tuple2<List<GalleryItem>, int>> getPopular() async {
 //    Global.logger.v("获取热门");
@@ -156,7 +180,11 @@ class Api {
 
   /// 获取画廊列表
   static Future<Tuple2<List<GalleryItem>, int>> getGallery(
-      {int page, String fromGid, String serach, int cats}) async {
+      {int page,
+      String fromGid,
+      String serach,
+      int cats,
+      bool disableAdvSearch = false}) async {
     final HttpManager httpManager = HttpManager.getInstance(
         EHConst.getBaseSite(Global.profile.ehConfig.siteEx ?? false));
 
@@ -195,11 +223,16 @@ class Api {
 
     url = '$url$qry';
 
+    /// 高级搜索处理
+    if (Global.profile.enableAdvanceSearch && !disableAdvSearch) {
+      url = '$url&advsearch=1${getAdvanceSearchText()}';
+    }
+
     final Options options = Options(headers: {
       'Referer': 'https://e-hentai.org',
     });
 
-//    Global.logger.v(url);
+    Global.logger.v(url);
 
     final response = await httpManager.get(url, options: options);
 
@@ -452,8 +485,8 @@ class Api {
       // }
       galleryItems[i].translated = EHUtils.getLangeage(tags[0]) ?? '';
 
-      Global.logger
-          .v('${galleryItems[i].translated}   ${galleryItems[i].tagsFromApi}');
+      // Global.logger
+      //     .v('${galleryItems[i].translated}   ${galleryItems[i].tagsFromApi}');
     }
 
     return galleryItems;

@@ -28,7 +28,11 @@ Profile _$ProfileFromJson(Map<String, dynamic> json) {
         ?.toList()
     ..localFav = json['localFav'] == null
         ? null
-        : LocalFav.fromJson(json['localFav'] as Map<String, dynamic>);
+        : LocalFav.fromJson(json['localFav'] as Map<String, dynamic>)
+    ..enableAdvanceSearch = json['enableAdvanceSearch'] as bool
+    ..advanceSearch = json['advanceSearch'] == null
+        ? null
+        : AdvanceSearch.fromJson(json['advanceSearch'] as Map<String, dynamic>);
 }
 
 Map<String, dynamic> _$ProfileToJson(Profile instance) => <String, dynamic>{
@@ -41,4 +45,6 @@ Map<String, dynamic> _$ProfileToJson(Profile instance) => <String, dynamic>{
       'searchText': instance.searchText,
       'history': instance.history,
       'localFav': instance.localFav,
+      'enableAdvanceSearch': instance.enableAdvanceSearch,
+      'advanceSearch': instance.advanceSearch,
     };

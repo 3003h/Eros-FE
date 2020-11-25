@@ -4,6 +4,7 @@ import 'cacheConfig.dart';
 import 'ehConfig.dart';
 import 'galleryItem.dart';
 import 'localFav.dart';
+import 'advanceSearch.dart';
 
 part 'profile.g.dart';
 
@@ -20,6 +21,8 @@ class Profile {
   List<String> searchText;
   List<GalleryItem> history;
   LocalFav localFav;
+  bool enableAdvanceSearch;
+  AdvanceSearch advanceSearch;
 
   factory Profile.fromJson(Map<String,dynamic> json) => _$ProfileFromJson(json);
   Map<String, dynamic> toJson() => _$ProfileToJson(this);
