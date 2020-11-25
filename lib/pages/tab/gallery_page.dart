@@ -249,7 +249,8 @@ class _GalleryListTabState extends State<GalleryListTab> {
                   ),
                   onPressed: () {
                     // Global.logger.v('${EHUtils.convNumToCatMap(1)}');
-                    GalleryBase().setCats(context);
+                    GalleryBase()
+                        .showFilterSetting(context, showAdevance: true);
                   },
                 ),
                 // 页码跳转按钮

@@ -1,4 +1,5 @@
 import 'package:FEhViewer/common/global.dart';
+import 'package:FEhViewer/models/states/advance_search_model.dart';
 import 'package:FEhViewer/models/states/ehconfig_model.dart';
 import 'package:FEhViewer/models/states/history_model.dart';
 import 'package:FEhViewer/models/states/local_favorite_model.dart';
@@ -130,6 +131,9 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
         ChangeNotifierProvider<LocalFavModel>.value(value: LocalFavModel()),
         // HistoryModel 历史记录
         ChangeNotifierProvider<HistoryModel>.value(value: HistoryModel()),
+        // AdvanceSearchModel
+        ChangeNotifierProvider<AdvanceSearchModel>.value(
+            value: AdvanceSearchModel()),
       ],
       child: OKToast(child: cupertinoApp),
     );

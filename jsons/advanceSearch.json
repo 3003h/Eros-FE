@@ -1,0 +1,18 @@
+{
+  "searchGalleryName": true,
+  "searchGalleryTags": true,
+  "searchGalleryDesc": true,
+  "searchToreenFilenames": true,
+  "onlyShowWhithTorrents": true,
+  "searchLowPowerTags": true,
+  "searchDownvotedTags": true,
+  "searchExpunged": true,
+  "searchWithminRating": true,
+  "minRating": 2,
+  "searchBetweenpage": true,
+  "startPage": "",
+  "endPage": "",
+  "disableDFLanguage": false,
+  "disableDFUploader": false,
+  "disableDFTags": false
+}

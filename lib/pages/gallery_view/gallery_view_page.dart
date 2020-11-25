@@ -28,11 +28,24 @@ class GalleryViewPageE extends StatefulWidget {
 class _GalleryViewPageEState extends State<GalleryViewPageE> {
   int _currentIndex;
   GalleryModel _galleryModel;
+  double _currPageValue;
 
   @override
   void initState() {
     super.initState();
+    widget.controller.addListener(() {
+      setState(() {
+        _currPageValue = widget.controller.page;
+        Global.logger.v('$_currPageValue');
+      });
+    });
     _currentIndex = 0;
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    widget.controller.dispose();
   }
 
   @override
@@ -52,7 +65,7 @@ class _GalleryViewPageEState extends State<GalleryViewPageE> {
   /// 画廊图片大图浏览
   @override
   Widget build(BuildContext context) {
-    Global.logger.v('build GalleryViewPageE ALL');
+    Global.logger.v('bbb');
     return CupertinoTheme(
       data: const CupertinoThemeData(
         brightness: Brightness.dark,
@@ -69,7 +82,6 @@ class _GalleryViewPageEState extends State<GalleryViewPageE> {
                 return pre != next && next > pre;
               },
               builder: (context, int len, child) {
-                Global.logger.v('build GalleryViewPageE');
                 final List previews = _galleryModel.previews;
                 return SafeArea(
                   child: Stack(
@@ -95,14 +107,10 @@ class _GalleryViewPageEState extends State<GalleryViewPageE> {
                           onPageChanged: (int index) {
                             // 预载
                             _precache(previews, index, 5);
-                            setState(() {
-                              _currentIndex = index;
-                            });
+                            _currentIndex = index;
                           },
                           controller: widget.controller,
                           scrollDirection: Axis.horizontal,
-                          // canMovePage: (_) => false,
-                          // canScrollPage: (_) => false,
                         ),
                       ),
                       Positioned(
@@ -143,8 +151,6 @@ class _GalleryViewPageEState extends State<GalleryViewPageE> {
                           behavior: HitTestBehavior.opaque,
                           onTap: () {
                             Global.logger.v('tap share');
-                            // Api.shareImage(
-                            //     previews[_currentIndex].largeImageUrl);
                             _showShareDialog(
                                 context, previews[_currentIndex].largeImageUrl);
                           },
@@ -255,13 +261,6 @@ class GalleryImage extends StatefulWidget {
   final index;
 }
 
-Future<List<GalleryPreview>> _getGalleryPreview(String url) async {
-  return await Api.getGalleryPreview(
-    url,
-    page: 1,
-  );
-}
-
 class _GalleryImageState extends State<GalleryImage> {
   GalleryModel _galleryModel;
 
@@ -312,7 +311,6 @@ class _GalleryImageState extends State<GalleryImage> {
 
   @override
   Widget build(BuildContext context) {
-    Global.logger.v('build GalleryImage');
     final GalleryPreview _currentPreview =
         _galleryModel.galleryItem.galleryPreview[widget.index];
     return FutureBuilder<String>(
@@ -335,7 +333,6 @@ class _GalleryImageState extends State<GalleryImage> {
               }
             } else {
               return Center(
-//                child: CircularProgressIndicator(),
                 child: Container(
                   height: 100,
                   child: Column(
@@ -360,11 +357,14 @@ class _GalleryImageState extends State<GalleryImage> {
             }
           } else {
             final String url = _currentPreview.largeImageUrl;
-            return ExtendedImage.network(
-              url,
-              fit: BoxFit.contain,
-              mode: ExtendedImageMode.gesture,
-              cache: true,
+            return Container(
+              margin: const EdgeInsets.all(1.0),
+              child: ExtendedImage.network(
+                url,
+                fit: BoxFit.contain,
+                mode: ExtendedImageMode.gesture,
+                cache: true,
+              ),
             );
           }
         });

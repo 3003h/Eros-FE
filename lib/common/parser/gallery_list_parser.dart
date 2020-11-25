@@ -71,7 +71,7 @@ class GalleryListParser {
       }
       if (favcatList.isNotEmpty) {
         Global.profile.user.favcat = favcatList;
-        Global.logger.v('$favcatList');
+        // Global.logger.v('$favcatList');
       }
     }
 
