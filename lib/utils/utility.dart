@@ -179,12 +179,12 @@ class Api {
   }
 
   /// 获取画廊列表
-  static Future<Tuple2<List<GalleryItem>, int>> getGallery(
-      {int page,
-      String fromGid,
-      String serach,
-      int cats,
-      bool disableAdvSearch = false}) async {
+  static Future<Tuple2<List<GalleryItem>, int>> getGallery({
+    int page,
+    String fromGid,
+    String serach,
+    int cats,
+  }) async {
     final HttpManager httpManager = HttpManager.getInstance(
         EHConst.getBaseSite(Global.profile.ehConfig.siteEx ?? false));
 
@@ -224,7 +224,7 @@ class Api {
     url = '$url$qry';
 
     /// 高级搜索处理
-    if (Global.profile.enableAdvanceSearch && !disableAdvSearch) {
+    if (Global.profile.enableAdvanceSearch ?? false) {
       url = '$url&advsearch=1${getAdvanceSearchText()}';
     }
 
