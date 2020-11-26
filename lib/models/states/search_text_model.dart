@@ -22,4 +22,9 @@ class SearchTextModel extends ProfileChangeNotifier {
     _profile.searchText.removeAt(idx);
     notifyListeners();
   }
+
+  void removeAll() {
+    _profile.searchText.clear();
+    notifyListeners();
+  }
 }
