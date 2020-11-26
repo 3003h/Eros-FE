@@ -13,6 +13,10 @@ import 'package:tuple/tuple.dart';
 import 'gallery_clipper.dart';
 import 'gallery_item.dart';
 
+const double kRadius = 6.0;
+const double kWidth = 28.0;
+const double kHeight = 18.0;
+
 class GalleryItemFlow extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
@@ -41,7 +45,7 @@ class GalleryItemFlow extends StatelessWidget {
           builder:
               (BuildContext context, Tuple2<GalleryItem, dynamic> tuple, _) {
             final GalleryItem galleryItem = tuple.item1;
-            final _tabIndex = tuple.item2;
+            final dynamic _tabIndex = tuple.item2;
 
             final Color _colorCategory = CupertinoDynamicColor.resolve(
                 ThemeColors.catColor[galleryItem?.category ?? 'defaule'] ??
@@ -57,7 +61,7 @@ class GalleryItemFlow extends StatelessWidget {
                         '${galleryItem.gid}_${galleryItem.token}_cover_$_tabIndex',
                     child: Container(
                       decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(6.0), //圆角
+                        borderRadius: BorderRadius.circular(kRadius), //圆角
                         // ignore: prefer_const_literals_to_create_immutables
                         /*boxShadow: [
                             //阴影
@@ -68,7 +72,7 @@ class GalleryItemFlow extends StatelessWidget {
                           ]*/
                       ),
                       child: ClipRRect(
-                        borderRadius: BorderRadius.circular(6),
+                        borderRadius: BorderRadius.circular(kRadius),
                         child: Stack(
                           alignment: Alignment.topRight,
                           children: <Widget>[
@@ -88,23 +92,25 @@ class GalleryItemFlow extends StatelessWidget {
                               ),
                             ),
                             ClipPath(
-                              clipper: CategoryClipper(width: 28, height: 18),
+                              clipper: CategoryClipper(
+                                  width: kWidth, height: kHeight),
                               child: Container(
-                                width: 28,
-                                height: 18,
+                                width: kWidth,
+                                height: kHeight,
                                 color: _colorCategory,
                               ),
                             ),
-                            Padding(
-                              padding:
-                                  const EdgeInsets.only(top: 0.8, right: 1.5),
+                            Container(
+                              height: (kHeight + kRadius) / 2,
+                              width: (kWidth + kRadius) / 2,
+                              alignment: Alignment.center,
                               child: Text(
                                 galleryItem?.translated ?? '',
                                 style: const TextStyle(
-                                  fontSize: 8,
-                                  color: CupertinoColors.white,
-                                  fontWeight: FontWeight.bold,
-                                ),
+                                    fontSize: 8,
+                                    color: CupertinoColors.white,
+                                    fontWeight: FontWeight.bold,
+                                    height: 1),
                               ),
                             ),
                           ],
