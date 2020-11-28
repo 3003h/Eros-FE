@@ -178,6 +178,7 @@ class PreviewContainer extends StatelessWidget {
     };
     Widget _buildImage() {
       if (galleryPreview.isLarge ?? false) {
+        // 缩略大图
         return CachedNetworkImage(
           httpHeaders: _httpHeaders,
           imageUrl: galleryPreview.imgUrl,
@@ -241,21 +242,19 @@ class PreviewContainer extends StatelessWidget {
                     child: ClipRRect(
                       borderRadius: BorderRadius.circular(4),
                       child: Container(
-                        // color: CupertinoDynamicColor.resolve(
-                        //     CupertinoColors.systemGrey4, context),
                         child: _buildImage(),
                       ),
                     ),
                   ),
                   // 直接使用Card实现的方式，缺点 阴影方向好像是固定的
-                  /*Card(
-                    margin: const EdgeInsets.all(0),
-                    elevation: 2,
-                    color: CupertinoColors.white,
-                    child: ClipRRect(
-                        borderRadius: BorderRadius.circular(4),
-                        child: _buildImage()),
-                  ),*/
+                  // Card(
+                  //   margin: const EdgeInsets.all(0),
+                  //   elevation: 2,
+                  //   color: CupertinoColors.systemBackground,
+                  //   child: ClipRRect(
+                  //       borderRadius: BorderRadius.circular(4),
+                  //       child: _buildImage()),
+                  // ),
                 ],
               ),
             ),

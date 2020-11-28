@@ -1,7 +1,10 @@
+import 'dart:io';
+
 import 'package:FEhViewer/common/global.dart';
-import 'package:FEhViewer/models/states/ehconfig_model.dart';
+import 'package:FEhViewer/models/states/dnsconfig_model.dart';
 import 'package:FEhViewer/models/states/locale_model.dart';
 import 'package:FEhViewer/models/states/theme_model.dart';
+import 'package:FEhViewer/pages/setting/custom_hosts_page.dart';
 import 'package:FEhViewer/values/theme_colors.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -44,10 +47,30 @@ class ListViewAdvancedSetting extends StatelessWidget {
       themeModel.pureDarkTheme = newValue;
     }
 
+    final bool _doh = Global.profile.dnsConfig.doh ?? false;
+    void _handleDoHChanged(bool newValue) {
+      if (!newValue) {
+        /// 清除hosts 关闭代理
+        Global.hosts.clear();
+        HttpOverrides.global = null;
+      } else {
+        /// 设置全局本地代理
+        HttpOverrides.global = Global.httpProxy;
+      }
+      Global.profile.dnsConfig.doh = newValue;
+      Global.saveProfile();
+    }
+
     return Container(
       child: ListView(
         children: <Widget>[
           _buildLanguageItem(context),
+          Divider(
+            height: 38,
+            thickness: 38.5,
+            color: CupertinoDynamicColor.resolve(
+                CupertinoColors.systemGrey5, context),
+          ),
           _buildThemeItem(context),
           TextSwitchItem(
             '深色模式效果',
@@ -56,6 +79,36 @@ class ListViewAdvancedSetting extends StatelessWidget {
             desc: '灰黑背景',
             descOn: '纯黑背景',
           ),
+          Divider(
+            height: 38,
+            thickness: 38.5,
+            color: CupertinoDynamicColor.resolve(
+                CupertinoColors.systemGrey5, context),
+          ),
+          // TextSwitchItem(
+          //   'DNS-over-HTTPS',
+          //   intValue: _doh,
+          //   onChanged: _handleDoHChanged,
+          //   desc: '实验性功能',
+          // ),
+          Selector<DnsConfigModel, bool>(
+              selector: (_, dnsConfigModel) => dnsConfigModel.customHosts,
+              builder: (context, bool customHosts, _) {
+                return SelectorSettingItem(
+                  title: '自定义hosts (实验性功能)',
+                  selector: customHosts ? '已开启' : '已关闭',
+                  onTap: () async {
+                    Navigator.push(
+                      context,
+                      CupertinoPageRoute<dynamic>(
+                        builder: (BuildContext context) {
+                          return CustomHostsPage();
+                        },
+                      ),
+                    );
+                  },
+                );
+              }),
         ],
       ),
     );
@@ -175,7 +228,6 @@ class ListViewAdvancedSetting extends StatelessWidget {
               if (_result is ThemesModeEnum) {
                 themeModel.themeMode = _result;
               }
-              Global.logger.v('$_result');
             },
           );
         });

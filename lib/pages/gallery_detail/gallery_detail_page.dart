@@ -57,7 +57,7 @@ class _GalleryDetailPageState extends State<GalleryDetailPage> {
             .then((_) => {_historyModel.addHistory(_item)});
       }
 
-      Global.logger.v('${_item.toJson()}');
+      // Global.logger.v('${_item.toJson()}');
 
       _galleryModel.resetHideNavigationBtn();
 

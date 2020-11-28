@@ -1,5 +1,6 @@
 import 'package:FEhViewer/common/global.dart';
 import 'package:FEhViewer/models/states/advance_search_model.dart';
+import 'package:FEhViewer/models/states/dnsconfig_model.dart';
 import 'package:FEhViewer/models/states/ehconfig_model.dart';
 import 'package:FEhViewer/models/states/history_model.dart';
 import 'package:FEhViewer/models/states/local_favorite_model.dart';
@@ -134,6 +135,8 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
         // AdvanceSearchModel
         ChangeNotifierProvider<AdvanceSearchModel>.value(
             value: AdvanceSearchModel()),
+        // DnsConfigModel
+        ChangeNotifierProvider<DnsConfigModel>.value(value: DnsConfigModel()),
       ],
       child: OKToast(child: cupertinoApp),
     );

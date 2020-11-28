@@ -77,7 +77,7 @@ class SearchQuickListPage extends StatelessWidget {
                           CupertinoColors.systemRed, context),
                       icon: Icons.delete,
                       onTap: () {
-                        showToast('delete');
+                        // showToast('delete');
                         searchTextModel.removeTextAt(position);
                       },
                     ),

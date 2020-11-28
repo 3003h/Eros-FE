@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:ui' as ui;
 
+import 'package:FEhViewer/common/global.dart';
 import 'package:extended_image/extended_image.dart';
 import 'package:flutter/cupertino.dart';
 
@@ -44,7 +45,7 @@ class _PreviewImageClipperState extends State<PreviewImageClipper> {
   }
 
   void _clip() async {
-    ui.Image uiImage = await _loadPreviewImge(widget.imgUrl);
+    final ui.Image uiImage = await _loadPreviewImge(widget.imgUrl);
     setState(() {
       clipper = ImageClipper(uiImage,
           width: widget.width, height: widget.height, offset: widget.offset);
@@ -53,16 +54,20 @@ class _PreviewImageClipperState extends State<PreviewImageClipper> {
 
   /// 监听图片加载
   Future<ui.Image> _loadPreviewImge(String imgUrl) async {
-    ImageStream imageStream = ExtendedNetworkImageProvider(
+    final Map<String, String> _httpHeaders = {
+      'Cookie': Global.profile?.user?.cookie ?? '',
+    };
+    final ImageStream imageStream = ExtendedNetworkImageProvider(
       imgUrl,
       scale: kScale,
       cache: true,
-    ).resolve(ImageConfiguration());
+      headers: _httpHeaders,
+    ).resolve(const ImageConfiguration());
 //    imageStream =
 //        CachedNetworkImageProvider(imgUrl).resolve(ImageConfiguration());
-    Completer<ui.Image> completer = Completer<ui.Image>();
+    final Completer<ui.Image> completer = Completer<ui.Image>();
     void imageListener(ImageInfo info, bool synchronousCall) {
-      ui.Image image = info.image;
+      final ui.Image image = info.image;
       completer.complete(image);
       imageStream.removeListener(ImageStreamListener(imageListener));
     }

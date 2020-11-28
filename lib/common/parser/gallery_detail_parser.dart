@@ -182,6 +182,7 @@ class GalleryDetailParser {
 
         final Element imgElem = pic.querySelector('img');
         final String picSer = imgElem.attributes['alt'].trim();
+        // Global.logger.v('小图$picSer  $picSrcUrl');
 
         galleryPreview.add(GalleryPreview()
           ..ser = int.parse(picSer)

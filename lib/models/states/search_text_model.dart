@@ -1,5 +1,6 @@
 import 'package:FEhViewer/common/global.dart';
 import 'package:FEhViewer/models/states/base.dart';
+import 'package:FEhViewer/utils/toast.dart';
 
 import '../index.dart';
 
@@ -13,9 +14,14 @@ class SearchTextModel extends ProfileChangeNotifier {
   set searchTextList(List<String> inSearTextList) =>
       _profile.searchText = inSearTextList;
 
-  void addText(String text) {
-    _profile.searchText.add(text);
-    notifyListeners();
+  bool addText(String text) {
+    if (_profile.searchText.contains(text.trim())) {
+      return false;
+    } else {
+      _profile.searchText.add(text);
+      notifyListeners();
+      return true;
+    }
   }
 
   void removeTextAt(int idx) {
