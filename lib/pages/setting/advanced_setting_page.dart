@@ -51,7 +51,6 @@ class ListViewAdvancedSetting extends StatelessWidget {
     void _handleDoHChanged(bool newValue) {
       if (!newValue) {
         /// 清除hosts 关闭代理
-        Global.hosts.clear();
         HttpOverrides.global = null;
       } else {
         /// 设置全局本地代理

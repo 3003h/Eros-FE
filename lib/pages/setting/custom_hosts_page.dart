@@ -2,10 +2,8 @@ import 'dart:io';
 
 import 'package:FEhViewer/common/global.dart';
 import 'package:FEhViewer/models/dnsCache.dart';
-import 'package:FEhViewer/models/dnsConfig.dart';
 import 'package:FEhViewer/models/states/dnsconfig_model.dart';
 import 'package:FEhViewer/pages/setting/setting_base.dart';
-import 'package:FEhViewer/utils/toast.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
@@ -23,7 +21,6 @@ class CustomHostsPage extends StatelessWidget {
     void _handleEnableCustomHostDarkChanged(bool value) {
       if (!value) {
         /// 关闭代理
-        Global.hosts.clear();
         HttpOverrides.global = null;
       } else {
         /// 设置全局本地代理
@@ -129,6 +126,7 @@ class CuttomHostItem extends StatelessWidget {
   final String host;
   final String addr;
   final int index;
+
   @override
   Widget build(BuildContext context) {
     return Container(

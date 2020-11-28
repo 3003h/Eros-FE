@@ -1,6 +1,5 @@
 import 'package:FEhViewer/generated/l10n.dart';
 import 'package:FEhViewer/models/galleryComment.dart';
-import 'package:FEhViewer/values/theme_colors.dart';
 import 'package:flutter/cupertino.dart';
 
 import 'comment_item.dart';

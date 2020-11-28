@@ -25,9 +25,8 @@ class Global {
   static bool isFirstReOpenEhSetting = true;
   static Profile profile = Profile();
   static History history = History();
-  static Map hosts = {};
 
-  static HttpProxy httpProxy = HttpProxy._('localhost', '$kProxyPort');
+  static HttpProxy httpProxy = HttpProxy('localhost', '$kProxyPort');
 
   static final Logger logger = Logger(
     printer: PrettyPrinter(
@@ -49,9 +48,7 @@ class Global {
     // 运行初始
     WidgetsFlutterBinding.ensureInitialized();
 
-    hosts['exhentai.org'] = 'e9c94a2e71d54b2f96019697060e89d6.pacloudflare.com';
-    final CustomHttpsProxy proxy = CustomHttpsProxy.instance;
-    await proxy.init();
+    // await CustomHttpsProxy.instance.init();
 
     //statusBar设置为透明，去除半透明遮罩
     const SystemUiOverlayStyle _style =
@@ -67,14 +64,8 @@ class Global {
       try {
         profile = Profile.fromJson(jsonDecode(_profile));
       } catch (e) {
-        print(e);
+        print('get profile $e');
       }
-    }
-
-    if (profile.dnsConfig.doh ??
-        false || profile.dnsConfig.customHosts ??
-        false) {
-      HttpOverrides.global = Global.httpProxy;
     }
 
     getHistoryFromSP();
@@ -107,6 +98,12 @@ class Global {
       ..hosts = <DnsCache>[]
       ..doh = false
       ..cache = <DnsCache>[];
+
+    if (profile.dnsConfig?.doh ??
+        false || profile.dnsConfig.customHosts ??
+        false) {
+      HttpOverrides.global = Global.httpProxy;
+    }
 
     history.history ??= <GalleryItem>[];
 
@@ -144,43 +141,8 @@ class Global {
       try {
         history = History.fromJson(jsonDecode(_history));
       } catch (e) {
-        print(e);
+        print('getHistoryFromSP $e');
       }
     }
-  }
-}
-
-class HttpProxy extends HttpOverrides {
-  HttpProxy._(this.host, this.port);
-  String host;
-  String port;
-
-  @override
-  HttpClient createHttpClient(SecurityContext context) {
-    final HttpClient client = super.createHttpClient(context);
-    client.badCertificateCallback =
-        (X509Certificate cert, String host, int port) {
-      return true;
-    };
-    return client;
-  }
-
-  @override
-  String findProxyFromEnvironment(Uri url, Map<String, String> environment) {
-    if (host == null) {
-      return super.findProxyFromEnvironment(url, environment);
-    }
-
-    environment ??= {};
-
-    if (port != null) {
-      environment['http_proxy'] = '$host:$port';
-      environment['https_proxy'] = '$host:$port';
-    } else {
-      environment['http_proxy'] = '$host:8888';
-      environment['https_proxy'] = '$host:8888';
-    }
-
-    return super.findProxyFromEnvironment(url, environment);
   }
 }

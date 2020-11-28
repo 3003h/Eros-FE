@@ -3,7 +3,6 @@ import 'dart:io';
 import 'package:FEhViewer/common/global.dart';
 import 'package:FEhViewer/pages/setting/setting_base.dart';
 import 'package:FEhViewer/utils/toast.dart';
-import 'package:FEhViewer/values/theme_colors.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_egg/flutter_egg.dart';

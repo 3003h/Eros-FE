@@ -701,7 +701,7 @@ class DnsUtil {
       ..addrs = <String>[_addr]);
 
     for (DnsCache cache in dnsCacheList) {
-      Global.hosts[cache.host] = cache.addrs.first;
+      // Global.hosts[cache.host] = cache.addrs.first;
     }
   }
 }
