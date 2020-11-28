@@ -4,13 +4,11 @@ import 'package:FEhViewer/models/index.dart';
 import 'package:FEhViewer/models/states/history_model.dart';
 import 'package:FEhViewer/pages/tab/gallery_base.dart';
 import 'package:FEhViewer/pages/tab/tab_base.dart';
-import 'package:FEhViewer/values/theme_colors.dart';
 import 'package:FEhViewer/widget/eh_widget.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:provider/provider.dart';
-import 'package:tuple/tuple.dart';
 
 class HistoryTab extends StatefulWidget {
   const HistoryTab({Key key, this.tabIndex, this.scrollController})

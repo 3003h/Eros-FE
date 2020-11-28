@@ -3,7 +3,6 @@ import 'dart:io';
 import 'package:FEhViewer/common/global.dart';
 import 'package:FEhViewer/common/tag_database.dart';
 import 'package:FEhViewer/models/states/search_text_model.dart';
-import 'package:FEhViewer/utils/toast.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';

@@ -2,11 +2,10 @@ import 'package:FEhViewer/common/global.dart';
 import 'package:FEhViewer/generated/l10n.dart';
 import 'package:FEhViewer/pages/tab/history_page.dart';
 import 'package:FEhViewer/utils/toast.dart';
-import 'package:FEhViewer/values/theme_colors.dart';
+import 'package:FEhViewer/widget/blur_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:FEhViewer/widget/blur_image.dart';
 
 import 'favorite_page.dart';
 import 'gallery_page.dart';

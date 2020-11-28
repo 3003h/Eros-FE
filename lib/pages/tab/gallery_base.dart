@@ -201,6 +201,7 @@ class GalleryFilter extends StatefulWidget {
   final ValueChanged<int> catNumChanged;
   final bool advanceSearchValue;
   final ValueChanged<bool> advanceSearchSwitch;
+
   @override
   _GalleryFilterState createState() => _GalleryFilterState();
 }
@@ -489,6 +490,7 @@ class AdvanceSearchSwitchItem extends StatelessWidget {
   final bool value;
   final ValueChanged<bool> onChanged;
   final bool expand;
+
   @override
   Widget build(BuildContext context) {
     return Container(

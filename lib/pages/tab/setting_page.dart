@@ -3,7 +3,6 @@ import 'package:FEhViewer/generated/l10n.dart';
 import 'package:FEhViewer/pages/item/setting_item.dart';
 import 'package:FEhViewer/pages/item/user_item.dart';
 import 'package:FEhViewer/route/routes.dart';
-import 'package:FEhViewer/values/theme_colors.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';

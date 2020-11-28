@@ -12,7 +12,6 @@ import 'package:FEhViewer/pages/splash_page.dart';
 import 'package:FEhViewer/route/application.dart';
 import 'package:device_preview/device_preview.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
@@ -21,17 +20,19 @@ import 'package:provider/provider.dart';
 
 import 'generated/l10n.dart';
 
-void main() => Global.init().then((e) {
-      ///滚动性能优化
-      GestureBinding.instance.resamplingEnabled = true;
-      runApp(
-        DevicePreview(
-          // enabled: Global.inDebugMode,
-          enabled: false,
-          builder: (context) => MyApp(), // Wrap your app
-        ),
-      );
-    });
+void main() {
+  Global.init().then((_) {
+    runApp(
+      DevicePreview(
+        // enabled: Global.inDebugMode,
+        enabled: false,
+        builder: (context) => MyApp(), // Wrap your app
+      ),
+    );
+  }).catchError((e) {
+    print('catchError $e');
+  });
+}
 
 class MyApp extends StatefulWidget {
   @override
@@ -90,7 +91,7 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
         ],
         localeResolutionCallback:
             (Locale _locale, Iterable<Locale> supportedLocales) {
-          Global.loggerNoStack.v(
+          Global.logger.v(
               '${_locale?.languageCode}  ${_locale?.scriptCode}  ${_locale?.countryCode}');
           if (localeModel.getLocale() != null) {
             //如果已经选定语言，则不跟随系统
