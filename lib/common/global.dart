@@ -5,6 +5,7 @@ import 'package:FEhViewer/models/index.dart';
 import 'package:FEhViewer/models/profile.dart';
 import 'package:FEhViewer/route/application.dart';
 import 'package:FEhViewer/route/routes.dart';
+import 'package:FEhViewer/utils/https_proxy.dart';
 import 'package:FEhViewer/utils/storage.dart';
 import 'package:FEhViewer/utils/utility.dart';
 import 'package:FEhViewer/values/storages.dart';
@@ -12,6 +13,8 @@ import 'package:fluro/fluro.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:logger/logger.dart';
+
+const int kProxyPort = 4041;
 
 // 全局配置
 // ignore: avoid_classes_with_only_static_members
@@ -22,6 +25,9 @@ class Global {
   static bool isFirstReOpenEhSetting = true;
   static Profile profile = Profile();
   static History history = History();
+  static Map hosts = {};
+
+  static HttpProxy httpProxy = HttpProxy._('localhost', '$kProxyPort');
 
   static final Logger logger = Logger(
     printer: PrettyPrinter(
@@ -43,6 +49,10 @@ class Global {
     // 运行初始
     WidgetsFlutterBinding.ensureInitialized();
 
+    hosts['exhentai.org'] = 'e9c94a2e71d54b2f96019697060e89d6.pacloudflare.com';
+    final CustomHttpsProxy proxy = CustomHttpsProxy.instance;
+    await proxy.init();
+
     //statusBar设置为透明，去除半透明遮罩
     const SystemUiOverlayStyle _style =
         SystemUiOverlayStyle(statusBarColor: Colors.transparent);
@@ -59,6 +69,12 @@ class Global {
       } catch (e) {
         print(e);
       }
+    }
+
+    if (profile.dnsConfig.doh ??
+        false || profile.dnsConfig.customHosts ??
+        false) {
+      HttpOverrides.global = Global.httpProxy;
     }
 
     getHistoryFromSP();
@@ -86,6 +102,11 @@ class Global {
     profile.searchText ??= <String>[];
 
     profile.localFav ??= LocalFav()..gallerys = <GalleryItem>[];
+
+    profile.dnsConfig ??= DnsConfig()
+      ..hosts = <DnsCache>[]
+      ..doh = false
+      ..cache = <DnsCache>[];
 
     history.history ??= <GalleryItem>[];
 
@@ -126,5 +147,40 @@ class Global {
         print(e);
       }
     }
+  }
+}
+
+class HttpProxy extends HttpOverrides {
+  HttpProxy._(this.host, this.port);
+  String host;
+  String port;
+
+  @override
+  HttpClient createHttpClient(SecurityContext context) {
+    final HttpClient client = super.createHttpClient(context);
+    client.badCertificateCallback =
+        (X509Certificate cert, String host, int port) {
+      return true;
+    };
+    return client;
+  }
+
+  @override
+  String findProxyFromEnvironment(Uri url, Map<String, String> environment) {
+    if (host == null) {
+      return super.findProxyFromEnvironment(url, environment);
+    }
+
+    environment ??= {};
+
+    if (port != null) {
+      environment['http_proxy'] = '$host:$port';
+      environment['https_proxy'] = '$host:$port';
+    } else {
+      environment['http_proxy'] = '$host:8888';
+      environment['https_proxy'] = '$host:8888';
+    }
+
+    return super.findProxyFromEnvironment(url, environment);
   }
 }

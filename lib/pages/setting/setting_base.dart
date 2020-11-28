@@ -1,5 +1,7 @@
+import 'package:FEhViewer/models/states/dnsconfig_model.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 /// 选择类型的设置项
 class SelectorSettingItem extends StatefulWidget {
@@ -30,8 +32,9 @@ class _SelectorSettingItemState extends State<SelectorSettingItem> {
       child: Column(
         children: <Widget>[
           Container(
-            // height: 54,
-            padding: const EdgeInsets.fromLTRB(20, 14, 20, 14),
+            height: 54,
+            alignment: Alignment.centerLeft,
+            padding: const EdgeInsets.fromLTRB(20, 0, 20, 0),
             child: Row(
               children: <Widget>[
                 Text(
@@ -116,7 +119,7 @@ class TextSwitchItem extends StatefulWidget {
 
 class _TextSwitchItemState extends State<TextSwitchItem> {
   bool _switchValue;
-  String _desc = '';
+  String _desc;
 
   void _handOnChanged() {
     widget.onChanged(_switchValue);
@@ -129,12 +132,14 @@ class _TextSwitchItemState extends State<TextSwitchItem> {
     return Column(
       children: <Widget>[
         Container(
-          // height: 60,
-          padding: const EdgeInsets.fromLTRB(20, 8, 20, 8),
+          height: 54.0,
+          alignment: Alignment.centerLeft,
+          padding: const EdgeInsets.fromLTRB(20, 0, 20, 0),
           child: Row(
             children: <Widget>[
               Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisAlignment: MainAxisAlignment.center,
                   children: <Widget>[
                     Text(
                       widget.title,
@@ -142,11 +147,12 @@ class _TextSwitchItemState extends State<TextSwitchItem> {
                         height: 1.0,
                       ),
                     ),
-                    Text(
-                      _desc ?? widget.desc,
-                      style: const TextStyle(
-                          fontSize: 12.5, color: CupertinoColors.systemGrey),
-                    ),
+                    if (_desc != null || widget.desc != null)
+                      Text(
+                        _desc ?? widget.desc,
+                        style: const TextStyle(
+                            fontSize: 12.5, color: CupertinoColors.systemGrey),
+                      ),
                   ]),
               Expanded(
                 child: Container(),
@@ -182,31 +188,37 @@ class TextItem extends StatefulWidget {
     this.desc,
     this.onTap,
     Key key,
+    this.height = 54.0,
   }) : super(key: key);
 
   final String title;
   final String desc;
   final VoidCallback onTap;
+  final double height;
 
   @override
   _TextItemState createState() => _TextItemState();
 }
 
 class _TextItemState extends State<TextItem> {
+  Color _color;
+
   @override
   Widget build(BuildContext context) {
     final Widget item = Column(
       children: <Widget>[
         Container(
+          color: _color,
           alignment: Alignment.center,
-          // height: 60,
-          padding: const EdgeInsets.fromLTRB(20, 10, 20, 10),
+          height: widget.height,
+          padding: const EdgeInsets.fromLTRB(20, 0, 20, 0),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.start,
             crossAxisAlignment: CrossAxisAlignment.center,
             children: <Widget>[
               Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisAlignment: MainAxisAlignment.center,
                   children: <Widget>[
                     Text(
                       widget.title,
@@ -237,6 +249,102 @@ class _TextItemState extends State<TextItem> {
       // 不可见区域有效
       behavior: HitTestBehavior.opaque,
       onTap: widget.onTap,
+      onTapDown: (_) => _updatePressedColor(),
+      onTapUp: (_) {
+        Future.delayed(const Duration(milliseconds: 100), () {
+          _updateNormalColor();
+        });
+      },
+      onTapCancel: () => _updateNormalColor(),
+    );
+  }
+
+  void _updateNormalColor() {
+    setState(() {
+      _color = null;
+    });
+  }
+
+  void _updatePressedColor() {
+    setState(() {
+      _color =
+          CupertinoDynamicColor.resolve(CupertinoColors.systemGrey4, context);
+    });
+  }
+}
+
+class SettingBase {
+  Future<void> showCustomHostEditer(BuildContext context, {int index}) async {
+    final TextEditingController _hostController = TextEditingController();
+    final TextEditingController _addrController = TextEditingController();
+    final FocusNode _nodeAddr = FocusNode();
+    return showCupertinoDialog<void>(
+      context: context,
+      builder: (BuildContext context) {
+        final DnsConfigModel dnsConfigModel =
+            Provider.of<DnsConfigModel>(context, listen: false);
+        final bool _isAddNew = index == null;
+        if (!_isAddNew) {
+          _hostController.text = dnsConfigModel.hosts[index].host;
+          _addrController.text = dnsConfigModel.hosts[index].addr;
+        }
+
+        return CupertinoAlertDialog(
+          content: Container(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: <Widget>[
+                CupertinoTextField(
+                  enabled: _isAddNew,
+                  clearButtonMode: _isAddNew
+                      ? OverlayVisibilityMode.editing
+                      : OverlayVisibilityMode.never,
+                  controller: _hostController,
+                  placeholder: 'Host',
+                  autofocus: _isAddNew,
+                  onEditingComplete: () {
+                    // 点击键盘完成
+                    FocusScope.of(context).requestFocus(_nodeAddr);
+                  },
+                ),
+                Container(
+                  height: 10,
+                ),
+                CupertinoTextField(
+                  clearButtonMode: OverlayVisibilityMode.editing,
+                  controller: _addrController,
+                  placeholder: 'Addr',
+                  focusNode: _nodeAddr,
+                  autofocus: !_isAddNew,
+                  onEditingComplete: () {
+                    // 点击键盘完成
+                    if (dnsConfigModel.addCustomHost(
+                        _hostController.text.trim(),
+                        _addrController.text.trim()))
+                      Navigator.of(context).pop();
+                  },
+                ),
+              ],
+            ),
+          ),
+          actions: <Widget>[
+            CupertinoDialogAction(
+              child: const Text('取消'),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+            CupertinoDialogAction(
+              child: const Text('确定'),
+              onPressed: () {
+                if (dnsConfigModel.addCustomHost(
+                    _hostController.text.trim(), _addrController.text.trim()))
+                  Navigator.of(context).pop();
+              },
+            ),
+          ],
+        );
+      },
     );
   }
 }

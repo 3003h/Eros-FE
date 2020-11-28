@@ -65,7 +65,7 @@ class _GalleryViewPageEState extends State<GalleryViewPageE> {
   /// 画廊图片大图浏览
   @override
   Widget build(BuildContext context) {
-    Global.logger.v('bbb');
+    // Global.logger.v('bbb');
     return CupertinoTheme(
       data: const CupertinoThemeData(
         brightness: Brightness.dark,

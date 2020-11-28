@@ -7,6 +7,7 @@ import 'package:FEhViewer/common/parser/gallery_detail_parser.dart';
 import 'package:FEhViewer/common/parser/gallery_list_parser.dart';
 import 'package:FEhViewer/models/galleryItem.dart';
 import 'package:FEhViewer/models/index.dart';
+import 'package:FEhViewer/utils/https_proxy.dart';
 import 'package:FEhViewer/utils/toast.dart';
 import 'package:FEhViewer/values/const.dart';
 import 'package:cached_network_image/cached_network_image.dart';
@@ -160,15 +161,36 @@ class Api {
     return para;
   }
 
+  static HttpManager _getHttpManager() {
+    final String _baseUrl =
+        EHConst.getBaseSite(Global.profile.ehConfig.siteEx ?? false);
+    final bool _doh = Global.profile.dnsConfig.doh ?? false;
+    if (_doh) {
+      return HttpManager.withProxy(_baseUrl);
+    } else {
+      return HttpManager.getInstance(_baseUrl);
+    }
+  }
+
+  static String _getBaseUrl() {
+    return EHConst.getBaseSite(Global.profile.ehConfig.siteEx ?? false);
+  }
+
   /// 获取热门画廊列表
   static Future<Tuple2<List<GalleryItem>, int>> getPopular() async {
 //    Global.logger.v("获取热门");
 
-    final HttpManager httpManager = HttpManager.getInstance(
-        EHConst.getBaseSite(Global.profile.ehConfig.siteEx ?? false));
     const String url = '/popular?inline_set=dm_l';
 
-    final String response = await httpManager.get(url);
+    await CustomHttpsProxy.instance.init();
+    try {
+      await DnsUtil.dohToProfile(_getBaseUrl());
+    } catch (e, stack) {
+      Global.logger.v('$stack');
+      rethrow;
+    }
+
+    final String response = await _getHttpManager().get(url);
 
     final Tuple2<List<GalleryItem>, int> tuple =
         await GalleryListParser.parseGalleryList(response);
@@ -183,9 +205,6 @@ class Api {
     String serach,
     int cats,
   }) async {
-    final HttpManager httpManager = HttpManager.getInstance(
-        EHConst.getBaseSite(Global.profile.ehConfig.siteEx ?? false));
-
     String url = '/';
     String qry = '?page=${page ?? 0}&inline_set=dm_l';
 
@@ -232,7 +251,8 @@ class Api {
 
     Global.logger.v(url);
 
-    final response = await httpManager.get(url, options: options);
+    await CustomHttpsProxy.instance.init();
+    final String response = await _getHttpManager().get(url, options: options);
 
     return await GalleryListParser.parseGalleryList(response);
   }
@@ -240,9 +260,6 @@ class Api {
   /// 获取收藏
   static Future<Tuple2<List<GalleryItem>, int>> getFavorite(
       {String favcat, int page}) async {
-    final HttpManager httpManager = HttpManager.getInstance(
-        EHConst.getBaseSite(Global.profile.ehConfig.siteEx ?? false));
-
     String _getUrl({String inlineSet}) {
       //收藏时间排序
       final String _order = Global?.profile?.ehConfig?.favoritesOrder;
@@ -261,7 +278,8 @@ class Api {
 
     final String url = _getUrl();
 
-    final String response = await httpManager.get(url);
+    await CustomHttpsProxy.instance.init();
+    final String response = await _getHttpManager().get(url);
 
     final bool isDml = GalleryListParser.isGalleryListDmL(response);
     if (isDml) {
@@ -269,7 +287,7 @@ class Api {
           isFavorite: true);
     } else {
       final String url = _getUrl(inlineSet: 'dm_l');
-      final String response = await httpManager.get(url);
+      final String response = await _getHttpManager().get(url);
       return await GalleryListParser.parseGalleryList(response,
           isFavorite: true);
     }
@@ -282,9 +300,9 @@ class Api {
   /// nw=always 不显示警告
   static Future<GalleryItem> getGalleryDetail(
       {String inUrl, GalleryItem inGalleryItem}) async {
-    final HttpManager httpManager = HttpManager.getInstance();
-//    final String url = inUrl + '?hc=1&inline_set=ts_l&nw=always';
-    final String url = inUrl + '?hc=1&nw=always';
+    // final HttpManager httpManager = HttpManager.getInstance();
+    final String url = inUrl + '?hc=1&inline_set=ts_l&nw=always';
+    // final String url = inUrl + '?hc=1&nw=always';
 
     // 不显示警告的处理 cookie加上 nw=1
     // 在 url使用 nw=always 未解决 自动写入cookie 暂时搞不懂 先手动设置下
@@ -294,8 +312,9 @@ class Api {
     cookies.add(Cookie('nw', '1'));
     cookieJar.saveFromResponse(Uri.parse(url), cookies);
 
-//    Global.logger.i("获取画廊 $url");
-    final String response = await httpManager.get(url);
+    Global.logger.i('获取画廊 $url');
+    await CustomHttpsProxy.instance.init();
+    final String response = await _getHttpManager().get(url);
 
     // TODO 画廊警告问题 使用 nw=always 未解决 待处理 怀疑和Session有关
     if ('$response'.contains(r'<strong>Offensive For Everyone</strong>')) {
@@ -322,7 +341,7 @@ class Api {
     //hc=1#comments 显示全部评论
     //nw=always 不显示警告
 
-    final HttpManager httpManager = HttpManager.getInstance();
+    // final HttpManager httpManager = HttpManager.getInstance();
     final String url = inUrl + '?p=$page';
 
     // Global.logger.v(url);
@@ -335,7 +354,8 @@ class Api {
     cookies.add(Cookie('nw', '1'));
     cookieJar.saveFromResponse(Uri.parse(url), cookies);
 
-    final String response = await httpManager.get(url);
+    await CustomHttpsProxy.instance.init();
+    final String response = await _getHttpManager().get(url);
 
     return GalleryDetailParser.parseGalleryPreviewFromHtml(response);
   }
@@ -343,11 +363,12 @@ class Api {
   /// 由图片url获取解析图库 showkey
   /// [href] 画廊图片展示页面的地址
   static Future<String> getShowkey(String href) async {
-    final HttpManager httpManager = HttpManager.getInstance();
+    // final HttpManager httpManager = HttpManager.getInstance();
 
     final String url = href;
 
-    final String response = await httpManager.get(url);
+    await CustomHttpsProxy.instance.init();
+    final String response = await _getHttpManager().get(url);
 
     final RegExp regShowKey = RegExp(r'var showkey="([0-9a-z]+)";');
 
@@ -364,7 +385,7 @@ class Api {
   /// [index] 索引 从 1 开始
   static Future<String> getShowInfo(String href, String showKey,
       {int index}) async {
-    HttpManager httpManager = HttpManager.getInstance(EHConst.EH_BASE_URL);
+    // final HttpManager httpManager = HttpManager.getInstance(EHConst.EH_BASE_URL);
     const String url = '/api.php';
 
     final String cookie = Global.profile?.user?.cookie ?? '';
@@ -393,7 +414,8 @@ class Api {
 
 //    Global.logger.v('$reqJsonStr');
 
-    final Response response = await httpManager.postForm(
+    await CustomHttpsProxy.instance.init();
+    final Response response = await _getHttpManager().postForm(
       url,
       options: options,
       data: reqJsonStr,
@@ -439,6 +461,8 @@ class Api {
     for (int i = 0; i < _group.length; i++) {
       Map reqMap = {'gidlist': _group[i], 'method': 'gdata'};
       final String reqJsonStr = jsonEncode(reqMap);
+
+      await CustomHttpsProxy.instance.init();
       final rult = await getGalleryApi(reqJsonStr);
 
       final jsonObj = jsonDecode(rult.toString());
@@ -511,11 +535,10 @@ class Api {
 
   /// 获取api
   static Future getGalleryApi(String req) async {
-    final HttpManager httpManager =
-        HttpManager.getInstance(EHConst.EH_BASE_URL);
     const String url = '/api.php';
 
-    final Response response = await httpManager.postForm(url, data: req);
+    await CustomHttpsProxy.instance.init();
+    final Response response = await _getHttpManager().postForm(url, data: req);
 
     return response;
   }
@@ -645,6 +668,40 @@ class Api {
     } catch (e) {
       print(e.toString());
       rethrow;
+    }
+  }
+}
+
+enum DohResolve {
+  google,
+  cloudflare,
+}
+
+class DnsUtil {
+  static Future<String> doh(String host,
+      {DohResolve dhoResolve = DohResolve.cloudflare}) async {
+    final DnsOverHttps dns = dhoResolve == DohResolve.cloudflare
+        ? DnsOverHttps.cloudflare()
+        : DnsOverHttps.google();
+    final List<InternetAddress> response = await dns.lookup(host.trim());
+    return (response..shuffle()).first.address;
+  }
+
+  static Future<void> dohToProfile(String url) async {
+    if (!Global.profile.dnsConfig.doh ?? false) {
+      return;
+    }
+    // 解析host
+    final String _host = Uri.parse(url).host;
+    final String _addr = await doh(_host);
+    Global.logger.v('$_host  $_addr');
+    final List<DnsCache> dnsCacheList = Global.profile.dnsConfig.cache;
+    dnsCacheList.add(DnsCache()
+      ..host = _host
+      ..addrs = <String>[_addr]);
+
+    for (DnsCache cache in dnsCacheList) {
+      Global.hosts[cache.host] = cache.addrs.first;
     }
   }
 }

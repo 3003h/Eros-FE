@@ -259,8 +259,11 @@ class _GallerySearchPageState extends State<GallerySearchPage>
           case SearchMenuEnum.addToQuickSearch:
             final String _text = _searchTextController.text;
             if (_text.isNotEmpty) {
-              _searchTextModel.addText(_text);
-              showToast('保存成功');
+              if (_searchTextModel.addText(_text)) {
+                showToast('保存成功');
+              } else {
+                showToast('搜索词已存在');
+              }
             }
             break;
           case SearchMenuEnum.quickSearchList:
@@ -318,8 +321,11 @@ class _GallerySearchPageState extends State<GallerySearchPage>
                 onPressed: () {
                   final String _text = _searchTextController.text;
                   if (_text.isNotEmpty) {
-                    _searchTextModel.addText(_text);
-                    showToast('保存成功');
+                    if (_searchTextModel.addText(_text)) {
+                      showToast('保存成功');
+                    } else {
+                      showToast('搜索词已存在');
+                    }
                   }
                 },
               ),

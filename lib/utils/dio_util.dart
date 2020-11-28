@@ -31,11 +31,46 @@ class HttpManager {
     //设置Cookie
 //    _dio.interceptors.add(CookieManager(await Api.cookieJar));
 
+    // (_dio.httpClientAdapter as DefaultHttpClientAdapter).onHttpClientCreate =
+    //     (HttpClient client) {
+    //   client.badCertificateCallback =
+    //       (X509Certificate cert, String host, int port) => true;
+    //   return client;
+    // };
+
+    //添加拦截器
+    _dio.interceptors
+        .add(InterceptorsWrapper(onRequest: (RequestOptions options) {
+      return options;
+    }, onResponse: (Response<dynamic> response) {
+      return response;
+    }, onError: (DioError e) {
+      return e;
+    }));
+  }
+
+  HttpManager.withProxy(String _baseUrl) {
+    _options = BaseOptions(
+        baseUrl: _baseUrl,
+        //连接时间为5秒
+        connectTimeout: connectTimeout,
+        //响应时间为3秒
+        receiveTimeout: receiveTimeout,
+        //设置请求头
+        headers: <String, String>{
+          'User-Agent': EHConst.CHROME_USER_AGENT,
+          'Accept': EHConst.CHROME_ACCEPT,
+          'Accept-Language': EHConst.CHROME_ACCEPT_LANGUAGE,
+        },
+        //默认值是"application/json; charset=utf-8",Headers.formUrlEncodedContentType会自动编码请求体.
+        contentType: Headers.formUrlEncodedContentType,
+        //共有三种方式json,bytes(响应字节),stream（响应流）,plain
+        responseType: ResponseType.json);
+    _dio = Dio(_options);
+
     (_dio.httpClientAdapter as DefaultHttpClientAdapter).onHttpClientCreate =
         (HttpClient client) {
-      client.badCertificateCallback =
-          (X509Certificate cert, String host, int port) => true;
-      return client;
+      client.findProxy = (Uri uri) => 'PROXY localhost:4041';
     };
 
     //添加拦截器
@@ -49,7 +84,7 @@ class HttpManager {
     }));
   }
 
-  final int connectTimeout = 5000;
+  final int connectTimeout = 8000;
   final int receiveTimeout = 10000;
 
   //单例模式

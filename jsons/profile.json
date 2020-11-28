@@ -9,5 +9,6 @@
   "history": "$[]galleryItem",
   "localFav": "$localFav",
   "enableAdvanceSearch": false,
-  "advanceSearch": "$advanceSearch"
+  "advanceSearch": "$advanceSearch",
+  "dnsConfig": "$dnsConfig"
 }
