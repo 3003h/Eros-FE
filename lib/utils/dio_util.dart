@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:FEhViewer/common/global.dart';
 import 'package:FEhViewer/utils/toast.dart';
 import 'package:FEhViewer/utils/utility.dart';
 import 'package:FEhViewer/values/const.dart';
@@ -114,9 +115,9 @@ class HttpManager {
       response = await _dio.get<String>(url,
           queryParameters: params, options: options, cancelToken: cancelToken);
     } on DioError catch (e) {
-      print('getHttp exception: $e');
+      Global.logger.v('getHttp exception: $e');
       formatError(e);
-      throw e;
+      rethrow;
     }
     // print('getHttp statusCode: ${response.statusCode}');
     return response.data;

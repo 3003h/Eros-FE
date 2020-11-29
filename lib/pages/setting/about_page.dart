@@ -2,10 +2,10 @@ import 'dart:io';
 
 import 'package:FEhViewer/common/global.dart';
 import 'package:FEhViewer/pages/setting/setting_base.dart';
+import 'package:FEhViewer/utils/cust_lib/flutter_egg.dart';
 import 'package:FEhViewer/utils/toast.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_egg/flutter_egg.dart';
 import 'package:flutter_vibrate/flutter_vibrate.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -36,6 +36,7 @@ class ListViewAbout extends StatelessWidget {
             child: const TextItem(
               'FEhViewer',
               desc: '一个兴趣使然的e-hentai客户端',
+              onTap: null,
             ),
             onTrigger: (int tapNum, int neededNum) {
               if (Platform.isIOS) {

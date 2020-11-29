@@ -48,7 +48,7 @@ class Global {
     // 运行初始
     WidgetsFlutterBinding.ensureInitialized();
 
-    // await CustomHttpsProxy.instance.init();
+    await CustomHttpsProxy.instance.init();
 
     //statusBar设置为透明，去除半透明遮罩
     const SystemUiOverlayStyle _style =
@@ -99,10 +99,9 @@ class Global {
       ..doh = false
       ..cache = <DnsCache>[];
 
-    if (profile.dnsConfig?.doh ??
-        false || profile.dnsConfig.customHosts ??
-        false) {
-      HttpOverrides.global = Global.httpProxy;
+    if (profile.dnsConfig.customHosts ?? false) {
+      logger.v('${profile.dnsConfig.customHosts}');
+      HttpOverrides.global = httpProxy;
     }
 
     history.history ??= <GalleryItem>[];

@@ -246,8 +246,7 @@ class _TextItemState extends State<TextItem> {
 
     return GestureDetector(
       child: item,
-      // 不可见区域有效
-      behavior: HitTestBehavior.opaque,
+      behavior: HitTestBehavior.translucent,
       onTap: widget.onTap,
       onTapDown: (_) => _updatePressedColor(),
       onTapUp: (_) {

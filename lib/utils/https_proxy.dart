@@ -74,7 +74,7 @@ class ClientConnectionHandler {
     final List<DnsCache> _hosts = Global.profile.dnsConfig.hosts;
     if (server == null) {
       content += utf8.decode(data);
-      // Global.logger.v('$content');
+      Global.logger.d('$content');
       final RegExpMatch m = regx.firstMatch(content);
       if (m != null) {
         host = m.group(1);
@@ -83,6 +83,7 @@ class ClientConnectionHandler {
             _hosts.indexWhere((DnsCache element) => element.host == host);
         final realHost =
             _hosts != null && _index >= 0 ? _hosts[_index].addr : host;
+        Global.logger.i('$host  =>  $realHost');
         try {
           ServerConnectionHandler(realHost, port, this)
               .handle()
