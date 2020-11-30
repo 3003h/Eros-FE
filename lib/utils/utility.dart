@@ -14,6 +14,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cookie_jar/cookie_jar.dart';
 import 'package:dio/dio.dart';
 import 'package:dns_client/dns_client.dart';
+import 'package:enum_to_string/enum_to_string.dart';
 import 'package:extended_image/extended_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -261,8 +262,11 @@ class Api {
   static Future<Tuple2<List<GalleryItem>, int>> getFavorite(
       {String favcat, int page}) async {
     String _getUrl({String inlineSet}) {
-      //收藏时间排序
-      final String _order = Global?.profile?.ehConfig?.favoritesOrder;
+      //收藏排序
+      final FavoriteOrder order = EnumToString.fromString(
+          FavoriteOrder.values, Global?.profile?.ehConfig?.favoritesOrder);
+      final String _order =
+          EHConst.favoriteDesc[order] ?? EHConst.FAV_ORDER_FAV;
 
       String url = '/favorites.php/';
       String qry = '?page=${page ?? 0}';

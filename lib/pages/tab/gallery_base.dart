@@ -242,7 +242,7 @@ class _GalleryFilterState extends State<GalleryFilter> {
     return AnimatedContainer(
       height: _height,
       duration: const Duration(milliseconds: 300),
-      curve: Curves.easeOutSine,
+      curve: Curves.ease,
       child: Container(
         child: SingleChildScrollView(
           child: Column(

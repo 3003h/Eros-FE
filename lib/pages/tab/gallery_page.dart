@@ -69,7 +69,7 @@ class _GalleryListTabState extends State<GalleryListTab> {
     return tuple;
   }
 
-  Future<void> _reloadDataF() async {
+  Future<void> _reloadData() async {
     _curPage = 0;
     final Tuple2<List<GalleryItem>, int> tuple = await _loadDataFirstF();
     setState(() {
@@ -78,7 +78,7 @@ class _GalleryListTabState extends State<GalleryListTab> {
     });
   }
 
-  Future<void> _reLoadDataFirstF() async {
+  Future<void> _reLoadDataFirst() async {
     setState(() {
       _futureBuilderFuture = _loadDataFirstF();
     });
@@ -277,7 +277,7 @@ class _GalleryListTabState extends State<GalleryListTab> {
         ),
         CupertinoSliverRefreshControl(
           onRefresh: () async {
-            await _reloadDataF();
+            await _reloadData();
           },
         ),
         SliverSafeArea(
@@ -328,7 +328,7 @@ class _GalleryListTabState extends State<GalleryListTab> {
                 child: Container(
                   padding: const EdgeInsets.only(bottom: 50),
                   child: GalleryErrorPage(
-                    onTap: _reLoadDataFirstF,
+                    onTap: _reLoadDataFirst,
                   ),
                 ),
               );

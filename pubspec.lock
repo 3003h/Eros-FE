@@ -545,6 +545,15 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "0.9.4"
+  logger_flutter:
+    dependency: "direct main"
+    description:
+      path: "."
+      ref: HEAD
+      resolved-ref: "3872e8d9261ec70663725aca24591ff9636a3861"
+      url: "https://github.com/ewertonrp/logger_flutter.git"
+    source: git
+    version: "0.9.0"
   logging:
     dependency: transitive
     description:
@@ -705,7 +714,7 @@ packages:
       name: photo_view
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "0.10.2"
+    version: "0.10.3"
   platform:
     dependency: transitive
     description:
@@ -783,6 +792,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "0.24.1"
+  sensors:
+    dependency: transitive
+    description:
+      name: sensors
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "0.4.2+6"
   share:
     dependency: "direct main"
     description:

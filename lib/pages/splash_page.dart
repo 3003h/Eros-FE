@@ -34,12 +34,12 @@ class _SplashPageState extends State<SplashPage> {
         'MediaQuery ${MediaQuery.of(context).platformBrightness}\nCupertinoTheme ${CupertinoTheme.brightnessOf(context)}');
 
     if (url != null && url.isNotEmpty) {
-      Global.logger.v('open $url');
+      Global.logger.i('open $url');
       await Future<void>.delayed(const Duration(milliseconds: 300), () {
         NavigatorUtil.goGalleryDetailReplace(context, url: url);
       });
     } else {
-      Global.logger.v('url is Empty,jump to home');
+      Global.logger.i('url is Empty,jump to home');
       await Future<void>.delayed(const Duration(milliseconds: 500), () {
         NavigatorUtil.goHomePage(context);
       });
@@ -52,10 +52,10 @@ class _SplashPageState extends State<SplashPage> {
     // For sharing or opening urls/text coming from outside the app while the app is in the memory
     _intentDataStreamSubscription =
         ReceiveSharingIntent.getTextStream().listen((String value) {
-      Global.logger.v('value(memory): $value');
+      Global.logger.i('value(memory): $value');
       setState(() {
         _sharedText = value;
-        Global.logger.v('Shared: $_sharedText');
+        Global.logger.i('Shared: $_sharedText');
       });
       startHome(_sharedText);
     }, onError: (err) {
@@ -64,10 +64,10 @@ class _SplashPageState extends State<SplashPage> {
 
     // For sharing or opening urls/text coming from outside the app while the app is closed
     ReceiveSharingIntent.getInitialText().then((String value) {
-      Global.logger.v('value(closed): $value');
+      Global.logger.i('value(closed): $value');
       setState(() {
         _sharedText = value;
-        Global.logger.v('Shared: $_sharedText');
+        Global.logger.i('Shared: $_sharedText');
       });
       startHome(_sharedText);
     });

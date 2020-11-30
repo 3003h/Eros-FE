@@ -35,7 +35,7 @@ class _EhSettingPage extends State<EhSettingPage> {
         child: SafeArea(
           child: FutureBuilder<bool>(
               future: _getDelayed(),
-              builder: (context, snapshot) {
+              builder: (_, AsyncSnapshot<bool> snapshot) {
                 if (snapshot.connectionState == ConnectionState.done) {
                   return ListViewEhSetting();
                   // return Container();
@@ -64,6 +64,7 @@ class ListViewEhSetting extends StatelessWidget {
     final bool _tagTranslat = ehConfigModel.tagTranslat;
     final bool _galleryImgBlur = ehConfigModel.galleryImgBlur;
     final bool _favLongTap = ehConfigModel.favLongTap;
+    final bool _favOrder = ehConfigModel.favoriteOrder == FavoriteOrder.favTime;
 
     void _handleSiteChanged(bool newValue) {
       ehConfigModel.siteEx = newValue;
@@ -71,6 +72,11 @@ class ListViewEhSetting extends StatelessWidget {
 
     void _handleJpnTitleChanged(bool newValue) {
       ehConfigModel.jpnTitle = newValue;
+    }
+
+    void _handleFavOrderChanged(bool newValue) {
+      ehConfigModel.favoriteOrder =
+          newValue ? FavoriteOrder.favTime : FavoriteOrder.updateTime;
     }
 
     void _handleTagTranslatChanged(bool newValue) {
@@ -98,8 +104,8 @@ class ListViewEhSetting extends StatelessWidget {
           '站点切换',
           intValue: _siteEx,
           onChanged: _handleSiteChanged,
-          desc: 'E-Hentai',
-          descOn: 'ExHentai',
+          desc: '当前E-Hentai',
+          descOn: '当前ExHentai',
         ),
       TextSwitchItem('显示标签中文翻译',
           intValue: _tagTranslat,
@@ -115,17 +121,18 @@ class ListViewEhSetting extends StatelessWidget {
           onChanged: _handleGalleryListImgBlurChanged,
           desc: '画廊列表封面模糊效果'),
       TextSwitchItem(
-        '画廊收藏夹选择方式',
+        '默认收藏夹设置',
         intValue: _favLongTap,
         onChanged: _handleFavLongTapChanged,
-        desc: '每一次都要选择收藏夹',
-        descOn: '默认使用上次收藏夹，长按弹出选择框',
+        desc: '无默认,每次进行选择',
+        descOn: '使用上次选择，长按选择其他',
       ),
       TextSwitchItem(
         '收藏夹排序方式',
-        onChanged: _handleJpnTitleChanged,
-        desc: '按更新时间排序',
-        descOn: '按收藏时间排序',
+        intValue: _favOrder,
+        onChanged: _handleFavOrderChanged,
+        desc: '按收藏时间排序',
+        descOn: '按更新时间排序',
       ),
       _buildListModeItem(context),
       _buildHistoryMaxItem(context),

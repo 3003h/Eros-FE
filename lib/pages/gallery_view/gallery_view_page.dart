@@ -10,12 +10,14 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:photo_view/photo_view.dart';
+import 'package:photo_view/photo_view_gallery.dart';
 import 'package:provider/provider.dart';
 
 class GalleryViewPageE extends StatefulWidget {
   GalleryViewPageE({Key key, int index})
       : index = index ?? 0,
-        controller = PageController(initialPage: index),
+        controller = PageController(initialPage: index, viewportFraction: 1.1),
         super(key: key);
 
   final int index;
@@ -78,97 +80,77 @@ class _GalleryViewPageEState extends State<GalleryViewPageE> {
           child: Selector<GalleryModel, int>(
               selector: (context, galleryModel) => galleryModel.previews.length,
               shouldRebuild: (pre, next) {
-                Global.logger.v('${pre}  ${next}');
+                // Global.logger.v('${pre}  ${next}');
                 return pre != next && next > pre;
               },
               builder: (context, int len, child) {
-                final List previews = _galleryModel.previews;
-                return SafeArea(
-                  child: Stack(
-                    fit: StackFit.expand,
-                    alignment: Alignment.center,
-                    children: <Widget>[
-                      Container(
-                        child: ExtendedImageGesturePageView.builder(
-                          itemBuilder: (BuildContext context, int index) {
-                            final Widget image = GalleryImage(
-                              index: index,
-                            );
-                            if (index == _currentIndex) {
-                              return Hero(
-                                tag: previews[index].href + index.toString(),
-                                child: image,
-                              );
-                            } else {
-                              return image;
-                            }
-                          },
-                          itemCount: previews.length,
-                          onPageChanged: (int index) {
-                            // 预载
-                            _precache(previews, index, 5);
-                            setState(() {
-                              _currentIndex = index;
-                            });
-                          },
-                          controller: widget.controller,
-                          scrollDirection: Axis.horizontal,
-                        ),
-                      ),
-                      Positioned(
-                        top: 0,
-                        child: Container(
-                            child: Text(
-                          '${_currentIndex + 1}/${_galleryModel.galleryItem.filecount}',
-                          style: const TextStyle(
-                              color: CupertinoColors.systemGrey6),
-                        )),
-                      ),
-                      Positioned(
-                        bottom: 0,
-                        left: 0,
-                        child: GestureDetector(
-                          // 不可见区域点击有效
-                          behavior: HitTestBehavior.opaque,
-                          onTap: () {
-                            Global.logger.v('back');
-                            NavigatorUtil.goBack(context);
-                          },
-                          child: Container(
-                            width: 40,
-                            height: 40,
-                            child: const Icon(
-                              FontAwesomeIcons.chevronLeft,
-                              color: CupertinoColors.systemGrey6,
-                              // size: 24,
+                final List<GalleryPreview> previews = _galleryModel.previews;
+                return Stack(
+                  children: <Widget>[
+                    Container(
+                      child: _buildPhotoViewGallery(),
+                    ),
+                    SafeArea(
+                      child: Stack(
+                        fit: StackFit.expand,
+                        alignment: Alignment.center,
+                        children: <Widget>[
+                          Positioned(
+                            top: 0,
+                            child: Container(
+                                child: Text(
+                              '${_currentIndex + 1}/${_galleryModel.galleryItem.filecount}',
+                              style: const TextStyle(
+                                  color: CupertinoColors.systemGrey6),
+                            )),
+                          ),
+                          Positioned(
+                            bottom: 0,
+                            left: 0,
+                            child: GestureDetector(
+                              // 不可见区域点击有效
+                              behavior: HitTestBehavior.opaque,
+                              onTap: () {
+                                Global.logger.v('back');
+                                NavigatorUtil.goBack(context);
+                              },
+                              child: Container(
+                                width: 40,
+                                height: 40,
+                                child: const Icon(
+                                  FontAwesomeIcons.chevronLeft,
+                                  color: CupertinoColors.systemGrey6,
+                                  // size: 24,
+                                ),
+                              ),
                             ),
                           ),
-                        ),
-                      ),
-                      Positioned(
-                        bottom: 0,
-                        right: 0,
-                        child: GestureDetector(
-                          // 不可见区域点击有效
-                          behavior: HitTestBehavior.opaque,
-                          onTap: () {
-                            Global.logger.v('tap share');
-                            _showShareDialog(
-                                context, previews[_currentIndex].largeImageUrl);
-                          },
-                          child: Container(
-                            width: 40,
-                            height: 40,
-                            child: const Icon(
-                              FontAwesomeIcons.share,
-                              color: CupertinoColors.systemGrey6,
-                              // size: 24,
+                          Positioned(
+                            bottom: 0,
+                            right: 0,
+                            child: GestureDetector(
+                              // 不可见区域点击有效
+                              behavior: HitTestBehavior.opaque,
+                              onTap: () {
+                                Global.logger.v('tap share');
+                                _showShareDialog(context,
+                                    previews[_currentIndex].largeImageUrl);
+                              },
+                              child: Container(
+                                width: 40,
+                                height: 40,
+                                child: const Icon(
+                                  FontAwesomeIcons.share,
+                                  color: CupertinoColors.systemGrey6,
+                                  // size: 24,
+                                ),
+                              ),
                             ),
                           ),
-                        ),
+                        ],
                       ),
-                    ],
-                  ),
+                    ),
+                  ],
                 );
               }),
         ),
@@ -176,41 +158,86 @@ class _GalleryViewPageEState extends State<GalleryViewPageE> {
     );
   }
 
-  Future<void> _showShareDialog(BuildContext context, String imageUrl) {
-    return showCupertinoModalPopup<void>(
-        context: context,
-        builder: (BuildContext context) {
-          final CupertinoActionSheet dialog = CupertinoActionSheet(
-            title: const Text('分享方式'),
-            cancelButton: CupertinoActionSheetAction(
-                onPressed: () {
-                  Navigator.pop(context);
-                },
-                child: const Text('取消')),
-            actions: <Widget>[
-              CupertinoActionSheetAction(
-                  onPressed: () {
-                    Global.logger.v('保存到相册');
-                    Api.saveImage(context, imageUrl).then((rult) {
-                      Navigator.pop(context);
-                      if (rult != null && rult) {
-                        showToast('保存成功');
-                      }
-                    }).catchError((e) {
-                      showToast(e);
-                    });
-                  },
-                  child: Text('保存到相册')),
-              CupertinoActionSheetAction(
-                  onPressed: () {
-                    Global.logger.v('系统分享');
-                    Api.shareImage(imageUrl);
-                  },
-                  child: Text('系统分享')),
-            ],
+  Widget _buildExtendedImageGesturePageView() {
+    final List<GalleryPreview> previews = _galleryModel.previews;
+    return ExtendedImageGesturePageView.builder(
+      itemBuilder: (BuildContext context, int index) {
+        final Widget image = GalleryImage(index: index);
+        if (index == _currentIndex) {
+          return Hero(
+            tag: previews[index].href + index.toString(),
+            child: image,
           );
-          return dialog;
+        } else {
+          return image;
+        }
+      },
+      itemCount: previews.length,
+      onPageChanged: (int index) {
+        // 预载
+        _precache(previews, index, 5);
+        setState(() {
+          _currentIndex = index;
         });
+      },
+      controller: widget.controller,
+      scrollDirection: Axis.horizontal,
+    );
+  }
+
+  Widget _buildPhotoViewGallery() {
+    return PhotoViewGallery.builder(
+      scrollPhysics: const BouncingScrollPhysics(),
+      itemCount: _galleryModel.previews.length,
+      customSize: MediaQuery.of(context).size,
+      backgroundDecoration: const BoxDecoration(
+        color: null,
+      ),
+      builder: (BuildContext context, int index) {
+        return PhotoViewGalleryPageOptions.customChild(
+          child: Container(
+            child: GalleryImage(index: index),
+          ),
+          initialScale: PhotoViewComputedScale.contained,
+          minScale: PhotoViewComputedScale.contained * 0.8,
+          maxScale: PhotoViewComputedScale.covered * 2,
+        );
+      },
+      loadingBuilder: (BuildContext context, progress) {
+        return progress != null
+            ? Container(
+                child: Center(
+                  child: Text(
+                    '${progress.cumulativeBytesLoaded * 100 ~/ progress.expectedTotalBytes} %',
+                    style: const TextStyle(
+                      color: Colors.white,
+                    ),
+                  ),
+                ),
+              )
+            : Container(
+                child: Center(
+                  child: Text(
+                    '获取中 ${_currentIndex + 1}',
+                    style: const TextStyle(
+//                          color: Colors.white,
+                        ),
+                  ),
+                ),
+              );
+      },
+      // backgroundDecoration: null,
+      pageController: widget.controller,
+      enableRotation: false,
+      // 旋转
+      onPageChanged: (int index) {
+//            Global.logger.v('onPageChanged');
+        _precache(_galleryModel.previews, index, 5);
+        setState(() {
+          _currentIndex = index;
+        });
+      },
+    );
   }
 
   // 一个很傻的预载功能 需要优化
@@ -246,10 +273,49 @@ class _GalleryViewPageEState extends State<GalleryViewPageE> {
                   retries: 5,
                 ),
                 context)
-            .then((_) => {_galleryModel.previews[_index].isCache = true});
+            .then((_) {
+          _galleryModel.previews[_index].isCache = true;
+        });
       }
     }
   }
+}
+
+Future<void> _showShareDialog(BuildContext context, String imageUrl) {
+  return showCupertinoModalPopup<void>(
+      context: context,
+      builder: (BuildContext context) {
+        final CupertinoActionSheet dialog = CupertinoActionSheet(
+          // title: const Text('分享方式'),
+          cancelButton: CupertinoActionSheetAction(
+              onPressed: () {
+                Navigator.pop(context);
+              },
+              child: const Text('取消')),
+          actions: <Widget>[
+            CupertinoActionSheetAction(
+                onPressed: () {
+                  Global.logger.v('保存到相册');
+                  Api.saveImage(context, imageUrl).then((rult) {
+                    Navigator.pop(context);
+                    if (rult != null && rult) {
+                      showToast('保存成功');
+                    }
+                  }).catchError((e) {
+                    showToast(e);
+                  });
+                },
+                child: const Text('保存到相册')),
+            CupertinoActionSheetAction(
+                onPressed: () {
+                  Global.logger.v('系统分享');
+                  Api.shareImage(imageUrl);
+                },
+                child: const Text('系统分享')),
+          ],
+        );
+        return dialog;
+      });
 }
 
 class GalleryImage extends StatefulWidget {
@@ -293,7 +359,10 @@ class _GalleryImageState extends State<GalleryImage> {
         page: _galleryModel.currentPreviewPage,
       );
 
-      _galleryModel.addAllPreview(_moreGalleryPreviewList);
+      // 避免重复添加
+      if (_moreGalleryPreviewList.first.ser > _galleryModel.previews.last.ser) {
+        _galleryModel.addAllPreview(_moreGalleryPreviewList);
+      }
     }
     _galleryModel.isGetAllImageHref = false;
   }
@@ -317,7 +386,7 @@ class _GalleryImageState extends State<GalleryImage> {
         _galleryModel.galleryItem.galleryPreview[widget.index];
     return FutureBuilder<String>(
         future: _getImageUrl(),
-        builder: (context, AsyncSnapshot<String> snapshot) {
+        builder: (_, AsyncSnapshot<String> snapshot) {
           if (_currentPreview.largeImageUrl == null) {
             if (snapshot.connectionState == ConnectionState.done) {
               if (snapshot.hasError) {
@@ -360,7 +429,7 @@ class _GalleryImageState extends State<GalleryImage> {
           } else {
             final String url = _currentPreview.largeImageUrl;
             return Container(
-              margin: const EdgeInsets.all(1.0),
+              // margin: const EdgeInsets.all(1.0),
               child: ExtendedImage.network(
                 url,
                 fit: BoxFit.contain,

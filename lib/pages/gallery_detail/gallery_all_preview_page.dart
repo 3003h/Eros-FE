@@ -9,6 +9,11 @@ import 'package:provider/provider.dart';
 
 import 'gallery_detail_widget.dart';
 
+const double kMaxCrossAxisExtent = 135.0;
+const double kMainAxisSpacing = 0; //主轴方向的间距
+const double kCrossAxisSpacing = 4; //交叉轴方向子元素的间距
+const double kChildAspectRatio = 0.55; //显示区域宽高比
+
 class AllPreviewPage extends StatefulWidget {
   const AllPreviewPage({Key key}) : super(key: key);
 
@@ -17,13 +22,23 @@ class AllPreviewPage extends StatefulWidget {
 }
 
 class _AllPreviewPageState extends State<AllPreviewPage> {
-  List<GalleryPreview> _galleryPreviewList = [];
+  List<GalleryPreview> _galleryPreviewList = <GalleryPreview>[];
 
 //  int _currentPage;
   bool _isLoading = false;
   bool _isLoadFinsh = false;
 
   GalleryModel _galleryModel;
+
+  final GlobalKey globalKey = GlobalKey();
+  final ScrollController _scrollController =
+      ScrollController(keepScrollOffset: true);
+
+  @override
+  void dispose() {
+    super.dispose();
+    _scrollController.dispose();
+  }
 
   @override
   void didChangeDependencies() {
@@ -35,6 +50,51 @@ class _AllPreviewPageState extends State<AllPreviewPage> {
 
       _galleryPreviewList = _galleryModel.galleryItem.galleryPreview;
       _galleryModel.currentPreviewPage = 0;
+
+      Future<void>.delayed(const Duration(milliseconds: 100)).then((_) {
+        //获取position
+        final RenderBox box = globalKey.currentContext.findRenderObject();
+
+        //获取size
+        final Size size = box.size;
+
+        final MediaQueryData _mq = MediaQuery.of(context);
+        final Size _screensize = _mq.size;
+        final double _paddingLeft = _mq.padding.left;
+        final double _paddingRight = _mq.padding.right;
+        final double _paddingTop = _mq.padding.top;
+
+        // 每行数量
+        final int itemCountCross = (_screensize.width -
+                kCrossAxisSpacing -
+                _paddingRight -
+                _paddingLeft) ~/
+            size.width;
+
+        // 单屏幕列数
+        final int itemCountCrossMain = (_screensize.height -
+                _paddingTop -
+                kMinInteractiveDimensionCupertino) ~/
+            size.height;
+
+        final int _toLine =
+            _galleryModel.oriGalleryPreview.length ~/ itemCountCross + 1;
+
+        // 计算滚动距离
+        final double _offset = (_toLine - itemCountCrossMain) * size.height;
+
+        // 滚动
+        _scrollController.animateTo(
+          _offset,
+          duration: Duration(milliseconds: _offset ~/ 6),
+          curve: Curves.ease,
+        );
+        // _scrollController.jumpTo(_offset);
+
+        Global.logger.d('toLine:$_toLine  _offset:$_offset');
+      }).catchError((e, stack) {
+        Global.logger.e('$stack');
+      });
     }
   }
 
@@ -47,6 +107,7 @@ class _AllPreviewPageState extends State<AllPreviewPage> {
         middle: Text(ln.all_preview),
       ),
       child: CustomScrollView(
+        controller: _scrollController,
         slivers: <Widget>[
           SliverSafeArea(
             sliver: SliverPadding(
@@ -60,13 +121,13 @@ class _AllPreviewPageState extends State<AllPreviewPage> {
                     return SliverGrid(
                       gridDelegate:
                           const SliverGridDelegateWithMaxCrossAxisExtent(
-                              maxCrossAxisExtent: 135.0,
-                              mainAxisSpacing: 0, //主轴方向的间距
-                              crossAxisSpacing: 4, //交叉轴方向子元素的间距
-                              childAspectRatio: 0.55 //显示区域宽高
+                              maxCrossAxisExtent: kMaxCrossAxisExtent,
+                              mainAxisSpacing: kMainAxisSpacing, //主轴方向的间距
+                              crossAxisSpacing: kCrossAxisSpacing, //交叉轴方向子元素的间距
+                              childAspectRatio: kChildAspectRatio //显示区域宽高比
                               ),
                       delegate: SliverChildBuilderDelegate(
-                        (context, index) {
+                        (context, int index) {
                           //如果显示到最后一个 获取下一页缩略图
                           if (index == _galleryPreviewList.length - 1 &&
                               index < _count - 1) {
@@ -75,6 +136,7 @@ class _AllPreviewPageState extends State<AllPreviewPage> {
                             _loadFinsh();
                           }
                           return Center(
+                            key: index == 0 ? globalKey : null,
                             child: PreviewContainer(
                               galleryPreviewList: _galleryPreviewList,
                               index: index,
