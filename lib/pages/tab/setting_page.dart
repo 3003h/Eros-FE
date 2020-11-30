@@ -48,8 +48,9 @@ class _SettingTabState extends State<SettingTab> {
     List _slivers = [];
     for (int _index = 0; _index < _itemTitles.length + 1; _index++) {
       if (_index == 0) {
-        _slivers
-            .add(Global.profile.ehConfig.safeMode ? Container() : UserItem());
+        _slivers.add(Global.profile.ehConfig.safeMode ?? false
+            ? Container()
+            : UserItem());
       } else {
         _slivers.add(SettingItems(
           text: _itemTitles[_index - 1],

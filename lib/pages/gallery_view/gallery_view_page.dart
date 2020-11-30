@@ -14,6 +14,8 @@ import 'package:photo_view/photo_view.dart';
 import 'package:photo_view/photo_view_gallery.dart';
 import 'package:provider/provider.dart';
 
+import 'gallery_view_base.dart';
+
 class GalleryViewPageE extends StatefulWidget {
   GalleryViewPageE({Key key, int index})
       : index = index ?? 0,
@@ -59,7 +61,13 @@ class _GalleryViewPageEState extends State<GalleryViewPageE> {
       _galleryModel = galleryModel;
       // 预载后面5张图
       Global.logger.v('预载后面5张图 didChangeDependencies');
-      _precache(_galleryModel.previews, widget.index, 5);
+      GalleryPrecache.instance.precache(
+        context,
+        _galleryModel,
+        previews: _galleryModel.previews,
+        index: widget.index,
+        max: 5,
+      );
     }
     _currentIndex = widget.index;
   }
@@ -175,7 +183,13 @@ class _GalleryViewPageEState extends State<GalleryViewPageE> {
       itemCount: previews.length,
       onPageChanged: (int index) {
         // 预载
-        _precache(previews, index, 5);
+        GalleryPrecache.instance.precache(
+          context,
+          _galleryModel,
+          previews: _galleryModel.previews,
+          index: index,
+          max: 5,
+        );
         setState(() {
           _currentIndex = index;
         });
@@ -232,52 +246,18 @@ class _GalleryViewPageEState extends State<GalleryViewPageE> {
       // 旋转
       onPageChanged: (int index) {
 //            Global.logger.v('onPageChanged');
-        _precache(_galleryModel.previews, index, 5);
+        GalleryPrecache.instance.precache(
+          context,
+          _galleryModel,
+          previews: _galleryModel.previews,
+          index: index,
+          max: 5,
+        );
         setState(() {
           _currentIndex = index;
         });
       },
     );
-  }
-
-  // 一个很傻的预载功能 需要优化
-  Future<void> _precache(
-      List<GalleryPreview> previews, int index, int max) async {
-    final GalleryModel _galleryModel =
-        Provider.of<GalleryModel>(context, listen: false);
-
-    for (int add = 0; add < max; add++) {
-      final int _index = index + add + 1;
-      if (_index > _galleryModel.previews.length - 1) {
-        return;
-      }
-      final GalleryPreview _preview = _galleryModel.previews[_index];
-
-      String _url = '';
-      if (_preview.largeImageUrl?.isEmpty ?? true) {
-        _url = await Api.getShowInfo(
-            previews[_index].href, _galleryModel.showKey,
-            index: _index);
-        _galleryModel.previews[_index].largeImageUrl = _url;
-      }
-
-      _url = _galleryModel.previews[_index].largeImageUrl;
-
-      if (!(_preview?.isCache ?? false)) {
-        // Global.logger.v('$_index : $_url');
-        /// 预缓存图片
-        precacheImage(
-                ExtendedNetworkImageProvider(
-                  _url,
-                  cache: true,
-                  retries: 5,
-                ),
-                context)
-            .then((_) {
-          _galleryModel.previews[_index].isCache = true;
-        });
-      }
-    }
   }
 }
 
@@ -331,6 +311,7 @@ class GalleryImage extends StatefulWidget {
 
 class _GalleryImageState extends State<GalleryImage> {
   GalleryModel _galleryModel;
+  Future<String> _future;
 
   @override
   void didChangeDependencies() {
@@ -339,6 +320,7 @@ class _GalleryImageState extends State<GalleryImage> {
         Provider.of<GalleryModel>(context, listen: false);
     if (galleryModel != _galleryModel) {
       _galleryModel = galleryModel;
+      _future = _getImageUrl();
     }
   }
 
@@ -368,16 +350,21 @@ class _GalleryImageState extends State<GalleryImage> {
   }
 
   Future<String> _getImageUrl() {
-    // Global.logger.v('_getImageUrl  ');
     // 数据获取处理
     _getAllImageHref().catchError((e) {
       Global.logger.v('$e');
     });
 
-    return Api.getShowInfo(
-        _galleryModel.galleryItem.galleryPreview[widget.index].href,
-        _galleryModel.showKey,
-        index: widget.index);
+    final String _largeImageUrl =
+        _galleryModel.galleryItem.galleryPreview[widget.index].largeImageUrl;
+    if (_largeImageUrl != null && _largeImageUrl.isNotEmpty) {
+      return Future<String>.value(_largeImageUrl);
+    } else {
+      return GalleryPrecache.instance.getImageLageUrl(
+          _galleryModel.galleryItem.galleryPreview[widget.index].href,
+          _galleryModel.showKey,
+          index: widget.index);
+    }
   }
 
   @override
@@ -385,7 +372,7 @@ class _GalleryImageState extends State<GalleryImage> {
     final GalleryPreview _currentPreview =
         _galleryModel.galleryItem.galleryPreview[widget.index];
     return FutureBuilder<String>(
-        future: _getImageUrl(),
+        future: _future,
         builder: (_, AsyncSnapshot<String> snapshot) {
           if (_currentPreview.largeImageUrl == null) {
             if (snapshot.connectionState == ConnectionState.done) {
@@ -394,7 +381,7 @@ class _GalleryImageState extends State<GalleryImage> {
                 return Center(child: Text('Error: ${snapshot.error}'));
               } else {
                 _currentPreview.largeImageUrl = snapshot.data;
-                Global.logger.v('${snapshot.data}');
+                // Global.logger.v('${snapshot.data}');
                 return ExtendedImage.network(
                   snapshot.data,
                   fit: BoxFit.contain,
