@@ -6,6 +6,7 @@ import 'package:FEhViewer/models/states/gallery_model.dart';
 import 'package:FEhViewer/models/states/history_model.dart';
 import 'package:FEhViewer/models/states/local_favorite_model.dart';
 import 'package:FEhViewer/pages/gallery_detail/gallery_detail_widget.dart';
+import 'package:FEhViewer/pages/tab/gallery_base.dart';
 import 'package:FEhViewer/route/navigator_util.dart';
 import 'package:FEhViewer/utils/utility.dart';
 import 'package:flutter/cupertino.dart';
@@ -31,6 +32,9 @@ class _GalleryDetailPageState extends State<GalleryDetailPage> {
   final ScrollController _controller = ScrollController();
   GalleryModel _galleryModel;
   HistoryModel _historyModel;
+  LocalFavModel _localFavModel;
+
+  Future<GalleryItem> _futureBuilderFuture;
 
   @override
   void didChangeDependencies() {
@@ -45,25 +49,31 @@ class _GalleryDetailPageState extends State<GalleryDetailPage> {
     if (historyModel != _historyModel) {
       _historyModel = historyModel;
     }
+
+    final LocalFavModel localFavModel =
+        Provider.of<LocalFavModel>(context, listen: false);
+    if (localFavModel != _localFavModel) {
+      _localFavModel = localFavModel;
+    }
+
+    _futureBuilderFuture = _loadData();
   }
 
   /// 异步请求数据
-  Future<GalleryItem> _loadData(BuildContext context) async {
+  Future<GalleryItem> _loadData() async {
     try {
       GalleryItem _item = _galleryModel.galleryItem;
 
       if (_item.gid != null) {
-        Future<void>.delayed(const Duration(milliseconds: 1000))
-            .then((_) => {_historyModel.addHistory(_item)});
+        Future<void>.delayed(const Duration(milliseconds: 1000)).then((_) {
+          _historyModel.addHistory(_item);
+        });
       }
-
-      // Global.logger.v('${_item.toJson()}');
 
       _galleryModel.resetHideNavigationBtn();
 
       // 检查画廊是否包含在本地收藏中
-      final bool _localFav =
-          _isInLocalFav(context, _galleryModel.galleryItem.gid);
+      final bool _localFav = _isInLocalFav(_galleryModel.galleryItem.gid);
       _item.localFav = _localFav;
 
       /// 画廊详情内容未获取完毕 或者 画廊缩略对象列表为空的情况
@@ -96,25 +106,26 @@ class _GalleryDetailPageState extends State<GalleryDetailPage> {
     }
   }
 
-  bool _isInLocalFav(context, String gid) {
+  bool _isInLocalFav(String gid) {
     // 检查是否包含在本地收藏中
-    final LocalFavModel localFavModel =
-        Provider.of<LocalFavModel>(context, listen: false);
     final int index =
-        localFavModel.loacalFavs.indexWhere((GalleryItem element) {
+        _localFavModel.loacalFavs.indexWhere((GalleryItem element) {
       return element.gid == gid;
     });
     return index >= 0;
   }
 
-  Future<void> _reloadData(context) async {
+  Future<void> _reloadData() async {
     Global.logger.v('_reloadData');
 
-    _galleryModel.reset();
     _galleryModel.detailLoadFinish = false;
     _galleryModel.isReloading = true;
-    await _loadData(context);
-    _galleryModel.isReloading = false;
+    _galleryModel.reset();
+    final GalleryItem _reloadRult = await _loadData();
+    setState(() {
+      _futureBuilderFuture = Future<GalleryItem>.value(_reloadRult);
+      _galleryModel.isReloading = false;
+    });
   }
 
   void _controllerLister(BuildContext context) {
@@ -192,7 +203,7 @@ class _GalleryDetailPageState extends State<GalleryDetailPage> {
               ),
               CupertinoSliverRefreshControl(
                 onRefresh: () async {
-                  await _reloadData(context);
+                  await _reloadData();
                 },
               ),
               child,
@@ -235,13 +246,15 @@ class _GalleryDetailPageState extends State<GalleryDetailPage> {
         final GalleryItem galleryItem = tuple.item3;
 
         return FutureBuilder<GalleryItem>(
-            future: _loadData(context),
+            future: _futureBuilderFuture,
             initialData: galleryItem,
             builder:
                 (BuildContext context, AsyncSnapshot<GalleryItem> snapshot) {
               if (loadFinish) {
                 Future<void>.delayed(const Duration(milliseconds: 100))
-                    .then((_) => {_historyModel.addHistory(snapshot.data)});
+                    .then((_) {
+                  _historyModel.addHistory(snapshot.data);
+                });
                 return child;
               } else {
                 switch (snapshot.connectionState) {
@@ -252,11 +265,16 @@ class _GalleryDetailPageState extends State<GalleryDetailPage> {
                   case ConnectionState.done:
                     Global.logger.v('done');
                     if (snapshot.hasError) {
-                      return Text('Error: ${snapshot.error}');
+                      // return Text('Error: ${snapshot.error}');
+                      Global.logger.v('${snapshot.error}');
+                      return GalleryErrorPage(
+                        onTap: _reloadData,
+                      );
                     } else {
                       Future<void>.delayed(const Duration(milliseconds: 100))
-                          .then(
-                              (_) => {_historyModel.addHistory(snapshot.data)});
+                          .then((_) {
+                        _historyModel.addHistory(snapshot.data);
+                      });
                       return child;
                     }
                 }

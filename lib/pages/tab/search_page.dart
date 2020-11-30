@@ -400,7 +400,11 @@ class _GallerySearchPageState extends State<GallerySearchPage>
           if (width > 450) {
             return _buildListBtns();
           } else {
-            return searchBarComp ? _buildPopMenuBtn() : _buildListBtns();
+            return AnimatedSwitcher(
+                duration: const Duration(milliseconds: 0),
+                child: searchBarComp
+                    ? Container(key: UniqueKey(), child: _buildPopMenuBtn())
+                    : Container(key: UniqueKey(), child: _buildListBtns()));
           }
         });
   }

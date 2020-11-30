@@ -78,4 +78,15 @@ class EhConfigModel extends ProfileChangeNotifier {
     _ehConfig.searchBarComp = value;
     notifyListeners();
   }
+
+  // 设网络收藏夹排序方式
+  FavoriteOrder get favoriteOrder =>
+      EnumToString.fromString(
+          FavoriteOrder.values, _ehConfig?.favoritesOrder) ??
+      FavoriteOrder.favTime;
+
+  set favoriteOrder(FavoriteOrder favoriteOrder) {
+    _ehConfig.favoritesOrder = EnumToString.convertToString(favoriteOrder);
+    notifyListeners();
+  }
 }

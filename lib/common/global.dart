@@ -13,6 +13,7 @@ import 'package:fluro/fluro.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:logger/logger.dart';
+import 'package:logger_flutter/logger_flutter.dart';
 
 const int kProxyPort = 4041;
 
@@ -29,6 +30,7 @@ class Global {
   static HttpProxy httpProxy = HttpProxy('localhost', '$kProxyPort');
 
   static final Logger logger = Logger(
+    output: ExampleLogOutput(),
     printer: PrettyPrinter(
       lineLength: 100,
       colors: false,
@@ -36,6 +38,7 @@ class Global {
   );
 
   static final Logger loggerNoStack = Logger(
+    output: ExampleLogOutput(),
     printer: PrettyPrinter(
       lineLength: 100,
       methodCount: 0,
@@ -143,5 +146,13 @@ class Global {
         print('getHistoryFromSP $e');
       }
     }
+  }
+}
+
+class ExampleLogOutput extends ConsoleOutput {
+  @override
+  void output(OutputEvent event) {
+    super.output(event);
+    LogConsole.add(event);
   }
 }

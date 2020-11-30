@@ -5,6 +5,11 @@ enum ListModeEnum {
   simpleList,
 }
 
+enum FavoriteOrder {
+  favTime,
+  updateTime,
+}
+
 // ignore: avoid_classes_with_only_static_members
 class EHConst {
   // 网页登陆页面
@@ -39,6 +44,12 @@ class EHConst {
   static const double waterfallFlowMaxCrossAxisExtent = 150.0;
 
   static List<int> historyMax = <int>[50, 100, 300, 0];
+
+  static const Map<FavoriteOrder, String> favoriteDesc =
+      <FavoriteOrder, String>{
+    FavoriteOrder.favTime: FAV_ORDER_FAV,
+    FavoriteOrder.updateTime: FAV_ORDER_PUB,
+  };
 
   static const Map<String, String> translateTagType = {
     'artist': '作者',
