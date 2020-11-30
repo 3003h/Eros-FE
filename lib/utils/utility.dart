@@ -162,7 +162,7 @@ class Api {
     return para;
   }
 
-  static HttpManager _getHttpManager() {
+  static HttpManager getHttpManager() {
     final String _baseUrl =
         EHConst.getBaseSite(Global.profile.ehConfig.siteEx ?? false);
     final bool _doh = Global.profile.dnsConfig.doh ?? false;
@@ -191,7 +191,7 @@ class Api {
       rethrow;
     }
 
-    final String response = await _getHttpManager().get(url);
+    final String response = await getHttpManager().get(url);
 
     final Tuple2<List<GalleryItem>, int> tuple =
         await GalleryListParser.parseGalleryList(response);
@@ -253,7 +253,7 @@ class Api {
     Global.logger.v(url);
 
     await CustomHttpsProxy.instance.init();
-    final String response = await _getHttpManager().get(url, options: options);
+    final String response = await getHttpManager().get(url, options: options);
 
     return await GalleryListParser.parseGalleryList(response);
   }
@@ -283,7 +283,7 @@ class Api {
     final String url = _getUrl();
 
     await CustomHttpsProxy.instance.init();
-    final String response = await _getHttpManager().get(url);
+    final String response = await getHttpManager().get(url);
 
     final bool isDml = GalleryListParser.isGalleryListDmL(response);
     if (isDml) {
@@ -291,7 +291,7 @@ class Api {
           isFavorite: true);
     } else {
       final String url = _getUrl(inlineSet: 'dm_l');
-      final String response = await _getHttpManager().get(url);
+      final String response = await getHttpManager().get(url);
       return await GalleryListParser.parseGalleryList(response,
           isFavorite: true);
     }
@@ -318,7 +318,7 @@ class Api {
 
     Global.logger.i('获取画廊 $url');
     await CustomHttpsProxy.instance.init();
-    final String response = await _getHttpManager().get(url);
+    final String response = await getHttpManager().get(url);
 
     // TODO 画廊警告问题 使用 nw=always 未解决 待处理 怀疑和Session有关
     if ('$response'.contains(r'<strong>Offensive For Everyone</strong>')) {
@@ -359,7 +359,7 @@ class Api {
     cookieJar.saveFromResponse(Uri.parse(url), cookies);
 
     await CustomHttpsProxy.instance.init();
-    final String response = await _getHttpManager().get(url);
+    final String response = await getHttpManager().get(url);
 
     return GalleryDetailParser.parseGalleryPreviewFromHtml(response);
   }
@@ -372,7 +372,7 @@ class Api {
     final String url = href;
 
     await CustomHttpsProxy.instance.init();
-    final String response = await _getHttpManager().get(url);
+    final String response = await getHttpManager().get(url);
 
     final RegExp regShowKey = RegExp(r'var showkey="([0-9a-z]+)";');
 
@@ -381,60 +381,6 @@ class Api {
 //    Global.logger.v('$showkey');
 
     return showkey;
-  }
-
-  /// 由api获取画廊图片的url
-  /// [href] 爬取的页面地址 用来解析gid 和 imgkey
-  /// [showKey] api必须
-  /// [index] 索引 从 1 开始
-  static Future<String> getShowInfo(String href, String showKey,
-      {int index}) async {
-    // final HttpManager httpManager = HttpManager.getInstance(EHConst.EH_BASE_URL);
-    const String url = '/api.php';
-
-    final String cookie = Global.profile?.user?.cookie ?? '';
-
-    final Options options = Options(headers: {
-      'Cookie': cookie,
-    });
-
-//    Global.logger.v('href = $href');
-
-    final RegExp regExp =
-        RegExp(r'https://e[-x]hentai.org/s/([0-9a-z]+)/(\d+)-(\d+)');
-    final RegExpMatch regRult = regExp.firstMatch(href);
-    final int gid = int.parse(regRult.group(2));
-    final String imgkey = regRult.group(1);
-    final int page = int.parse(regRult.group(3));
-
-    final Map<String, Object> reqMap = {
-      'method': 'showpage',
-      'gid': gid,
-      'page': page,
-      'imgkey': imgkey,
-      'showkey': showKey,
-    };
-    final String reqJsonStr = jsonEncode(reqMap);
-
-//    Global.logger.v('$reqJsonStr');
-
-    await CustomHttpsProxy.instance.init();
-    final Response response = await _getHttpManager().postForm(
-      url,
-      options: options,
-      data: reqJsonStr,
-    );
-
-//    Global.logger.v('$response');
-
-    final rultJson = jsonDecode('$response');
-
-    final RegExp regImageUrl = RegExp('<img[^>]*src=\"([^\"]+)\" style');
-    final imageUrl = regImageUrl.firstMatch(rultJson['i3']).group(1);
-
-//    Global.logger.v('$imageUrl');
-
-    return imageUrl;
   }
 
   /// 通过api请求获取更多信息
@@ -542,7 +488,7 @@ class Api {
     const String url = '/api.php';
 
     await CustomHttpsProxy.instance.init();
-    final Response response = await _getHttpManager().postForm(url, data: req);
+    final Response response = await getHttpManager().postForm(url, data: req);
 
     return response;
   }
