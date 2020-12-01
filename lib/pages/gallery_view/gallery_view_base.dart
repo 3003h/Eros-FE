@@ -123,7 +123,7 @@ class GalleryPrecache {
 
       _url = galleryModel.previews[_index].largeImageUrl;
 
-      // Global.logger.v('index : $_url');
+      Global.logger.v('index : $_url');
 
       /// 预缓存图片
       precacheImage(

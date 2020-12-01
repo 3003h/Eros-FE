@@ -60,7 +60,7 @@ class _GalleryDetailPageState extends State<GalleryDetailPage> {
   }
 
   /// 异步请求数据
-  Future<GalleryItem> _loadData() async {
+  Future<GalleryItem> _loadData({bool refresh = false}) async {
     try {
       GalleryItem _item = _galleryModel.galleryItem;
 
@@ -80,12 +80,15 @@ class _GalleryDetailPageState extends State<GalleryDetailPage> {
       /// 需要请求网络获取数据
       if (!_galleryModel.detailLoadFinish || _item.galleryPreview.isNotEmpty) {
         if (_item.filecount == null || _item.filecount.isEmpty) {
-          await Api.getMoreGalleryInfoOne(_item);
+          await Api.getMoreGalleryInfoOne(_item, refresh: refresh);
         }
 
         // final GalleryItem _galleryItemFromApi =
-        _item =
-            await Api.getGalleryDetail(inUrl: _item.url, inGalleryItem: _item);
+        _item = await Api.getGalleryDetail(
+          inUrl: _item.url,
+          inGalleryItem: _item,
+          refresh: refresh,
+        );
 
         _galleryModel.currentPreviewPage = 0;
         _galleryModel.setGalleryPreview(_item.galleryPreview);
@@ -121,7 +124,7 @@ class _GalleryDetailPageState extends State<GalleryDetailPage> {
     _galleryModel.detailLoadFinish = false;
     _galleryModel.isReloading = true;
     _galleryModel.reset();
-    final GalleryItem _reloadRult = await _loadData();
+    final GalleryItem _reloadRult = await _loadData(refresh: true);
     setState(() {
       _futureBuilderFuture = Future<GalleryItem>.value(_reloadRult);
       _galleryModel.isReloading = false;

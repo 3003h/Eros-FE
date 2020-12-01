@@ -178,7 +178,8 @@ class Api {
   }
 
   /// 获取热门画廊列表
-  static Future<Tuple2<List<GalleryItem>, int>> getPopular() async {
+  static Future<Tuple2<List<GalleryItem>, int>> getPopular(
+      {bool refresh = false}) async {
 //    Global.logger.v("获取热门");
 
     const String url = '/popular?inline_set=dm_l';
@@ -191,10 +192,11 @@ class Api {
       rethrow;
     }
 
-    final String response = await getHttpManager().get(url);
+    final String response = await getHttpManager()
+        .get(url, options: Options(extra: {'refresh': refresh}));
 
     final Tuple2<List<GalleryItem>, int> tuple =
-        await GalleryListParser.parseGalleryList(response);
+        await GalleryListParser.parseGalleryList(response, refresh: refresh);
 
     return tuple;
   }
@@ -205,6 +207,7 @@ class Api {
     String fromGid,
     String serach,
     int cats,
+    bool refresh = false,
   }) async {
     String url = '/';
     String qry = '?page=${page ?? 0}&inline_set=dm_l';
@@ -246,8 +249,11 @@ class Api {
       url = '$url&advsearch=1${getAdvanceSearchText()}';
     }
 
+    // , options: Options(extra: {'refresh': refresh})
     final Options options = Options(headers: {
       'Referer': 'https://e-hentai.org',
+    }, extra: {
+      'refresh': refresh
     });
 
     Global.logger.v(url);
@@ -255,12 +261,15 @@ class Api {
     await CustomHttpsProxy.instance.init();
     final String response = await getHttpManager().get(url, options: options);
 
-    return await GalleryListParser.parseGalleryList(response);
+    return await GalleryListParser.parseGalleryList(response, refresh: refresh);
   }
 
   /// 获取收藏
-  static Future<Tuple2<List<GalleryItem>, int>> getFavorite(
-      {String favcat, int page}) async {
+  static Future<Tuple2<List<GalleryItem>, int>> getFavorite({
+    String favcat,
+    int page,
+    bool refresh = false,
+  }) async {
     /// inline_set不能和页码同时使用 会默认定向到第一页
     String _getUrl({String inlineSet}) {
       String url = '/favorites.php/';
@@ -268,7 +277,9 @@ class Api {
       if (favcat != null && favcat != 'a' && favcat.isNotEmpty) {
         qry = '$qry&favcat=$favcat';
       }
-      qry = "$qry&inline_set=${inlineSet ?? ''}";
+      if (inlineSet != null && inlineSet.isNotEmpty) {
+        qry = "$qry&inline_set=${inlineSet ?? ''}";
+      }
       url = '$url$qry';
 
       Global.logger.v(url);
@@ -278,7 +289,8 @@ class Api {
     final String url = _getUrl();
 
     await CustomHttpsProxy.instance.init();
-    String response = await getHttpManager().get(url);
+    String response = await getHttpManager()
+        .get(url, options: Options(extra: {'refresh': refresh}));
 
     // 排序方式检查 不符合则设置 然后重新请求
     // 获取收藏排序设置
@@ -292,20 +304,29 @@ class Api {
       // 重设排序方式
       Global.loggerNoStack.d('$isOrderFav 重设排序方式 $_order');
       final String _urlOrder = _getUrl(inlineSet: _order);
-      await getHttpManager().get(_urlOrder);
-      response = await getHttpManager().get(url);
+      await getHttpManager()
+          .get(_urlOrder, options: Options(extra: {'noCache': true}));
+      response = await getHttpManager()
+          .get(url, options: Options(extra: {'refresh': refresh}));
     }
 
     // 列表样式检查 不符合则重新设置
     final bool isDml = GalleryListParser.isGalleryListDmL(response);
     if (isDml) {
-      return await GalleryListParser.parseGalleryList(response,
-          isFavorite: true);
+      return await GalleryListParser.parseGalleryList(
+        response,
+        isFavorite: true,
+        refresh: refresh,
+      );
     } else {
       final String url = _getUrl(inlineSet: 'dm_l');
-      final String response = await getHttpManager().get(url);
-      return await GalleryListParser.parseGalleryList(response,
-          isFavorite: true);
+      final String response = await getHttpManager()
+          .get(url, options: Options(extra: {'refresh': refresh}));
+      return await GalleryListParser.parseGalleryList(
+        response,
+        isFavorite: true,
+        refresh: refresh,
+      );
     }
   }
 
@@ -314,8 +335,11 @@ class Api {
   /// ?inline_set=ts_l 大图,20一页
   /// c=1#comments 显示全部评论
   /// nw=always 不显示警告
-  static Future<GalleryItem> getGalleryDetail(
-      {String inUrl, GalleryItem inGalleryItem}) async {
+  static Future<GalleryItem> getGalleryDetail({
+    String inUrl,
+    GalleryItem inGalleryItem,
+    bool refresh = false,
+  }) async {
     // final HttpManager httpManager = HttpManager.getInstance();
     final String url = inUrl + '?hc=1&inline_set=ts_l&nw=always';
     // final String url = inUrl + '?hc=1&nw=always';
@@ -330,7 +354,8 @@ class Api {
 
     Global.logger.i('获取画廊 $url');
     await CustomHttpsProxy.instance.init();
-    final String response = await getHttpManager().get(url);
+    final String response = await getHttpManager()
+        .get(url, options: Options(extra: {'refresh': refresh}));
 
     // TODO 画廊警告问题 使用 nw=always 未解决 待处理 怀疑和Session有关
     if ('$response'.contains(r'<strong>Offensive For Everyone</strong>')) {
@@ -350,8 +375,11 @@ class Api {
   /// 获取画廊缩略图
   /// [inUrl] 画廊的地址
   /// [page] 缩略图页码
-  static Future<List<GalleryPreview>> getGalleryPreview(String inUrl,
-      {int page}) async {
+  static Future<List<GalleryPreview>> getGalleryPreview(
+    String inUrl, {
+    int page,
+    bool refresh = false,
+  }) async {
     //?inline_set=ts_m 小图,40一页
     //?inline_set=ts_l 大图,20一页
     //hc=1#comments 显示全部评论
@@ -371,20 +399,25 @@ class Api {
     cookieJar.saveFromResponse(Uri.parse(url), cookies);
 
     await CustomHttpsProxy.instance.init();
-    final String response = await getHttpManager().get(url);
+    final String response = await getHttpManager()
+        .get(url, options: Options(extra: {'refresh': refresh}));
 
     return GalleryDetailParser.parseGalleryPreviewFromHtml(response);
   }
 
   /// 由图片url获取解析图库 showkey
   /// [href] 画廊图片展示页面的地址
-  static Future<String> getShowkey(String href) async {
+  static Future<String> getShowkey(
+    String href, {
+    bool refresh = false,
+  }) async {
     // final HttpManager httpManager = HttpManager.getInstance();
 
     final String url = href;
 
     await CustomHttpsProxy.instance.init();
-    final String response = await getHttpManager().get(url);
+    final String response = await getHttpManager()
+        .get(url, options: Options(extra: {'refresh': refresh}));
 
     final RegExp regShowKey = RegExp(r'var showkey="([0-9a-z]+)";');
 
@@ -401,7 +434,9 @@ class Api {
   /// 日语标题
   /// 等等
   static Future<List<GalleryItem>> getMoreGalleryInfo(
-      List<GalleryItem> galleryItems) async {
+    List<GalleryItem> galleryItems, {
+    bool refresh = false,
+  }) async {
     // Global.logger.i('api qry items ${galleryItems.length}');
     if (galleryItems.isEmpty) {
       return galleryItems;
@@ -425,7 +460,7 @@ class Api {
       final String reqJsonStr = jsonEncode(reqMap);
 
       await CustomHttpsProxy.instance.init();
-      final rult = await getGalleryApi(reqJsonStr);
+      final rult = await getGalleryApi(reqJsonStr, refresh: refresh);
 
       final jsonObj = jsonDecode(rult.toString());
       final tempList = jsonObj['gmetadata'];
@@ -478,7 +513,10 @@ class Api {
     return galleryItems;
   }
 
-  static Future<void> getMoreGalleryInfoOne(GalleryItem galleryItem) async {
+  static Future<void> getMoreGalleryInfoOne(
+    GalleryItem galleryItem, {
+    bool refresh = false,
+  }) async {
     final RegExp urlRex = RegExp(r'http?s://e(-|x)hentai.org/g/(\d+)/(\w+)?/$');
     Global.logger.v(galleryItem.url);
     final RegExpMatch urlRult = urlRex.firstMatch(galleryItem.url);
@@ -492,15 +530,22 @@ class Api {
 
     final List<GalleryItem> reqGalleryItems = <GalleryItem>[galleryItem];
 
-    await getMoreGalleryInfo(reqGalleryItems);
+    await getMoreGalleryInfo(reqGalleryItems, refresh: refresh);
   }
 
   /// 获取api
-  static Future getGalleryApi(String req) async {
+  static Future getGalleryApi(
+    String req, {
+    bool refresh = false,
+  }) async {
     const String url = '/api.php';
 
     await CustomHttpsProxy.instance.init();
-    final Response response = await getHttpManager().postForm(url, data: req);
+    final Response response = await getHttpManager().postForm(
+      url,
+      data: req,
+      options: Options(extra: {'refresh': refresh}),
+    );
 
     return response;
   }

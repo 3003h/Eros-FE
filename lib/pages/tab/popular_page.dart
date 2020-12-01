@@ -32,16 +32,17 @@ class _PopularListTabState extends State<PopularListTab> {
     _futureBuilderFuture = _loadData();
   }
 
-  Future<List<GalleryItem>> _loadData() async {
-    Global.logger.v('_loadDataF ');
-    final Future<Tuple2<List<GalleryItem>, int>> tuple = Api.getPopular();
+  Future<List<GalleryItem>> _loadData({bool refresh = false}) async {
+    Global.logger.v('_loadData ');
+    final Future<Tuple2<List<GalleryItem>, int>> tuple =
+        Api.getPopular(refresh: refresh);
     final Future<List<GalleryItem>> gallerItemBeans =
         tuple.then((value) => value.item1);
     return gallerItemBeans;
   }
 
-  Future<void> _reloadDataF() async {
-    final List<GalleryItem> gallerItemBeans = await _loadData();
+  Future<void> _reloadData() async {
+    final List<GalleryItem> gallerItemBeans = await _loadData(refresh: true);
     setState(() {
       _futureBuilderFuture = Future<List<GalleryItem>>.value(gallerItemBeans);
     });
@@ -70,7 +71,7 @@ class _PopularListTabState extends State<PopularListTab> {
         ),
         CupertinoSliverRefreshControl(
           onRefresh: () async {
-            await _reloadDataF();
+            await _reloadData();
           },
         ),
         SliverSafeArea(

@@ -4,6 +4,7 @@ import 'package:FEhViewer/generated/l10n.dart';
 import 'package:FEhViewer/models/entity/favorite.dart';
 import 'package:FEhViewer/pages/tab/gallery_base.dart';
 import 'package:FEhViewer/route/navigator_util.dart';
+import 'package:FEhViewer/utils/utility.dart';
 import 'package:FEhViewer/values/const.dart';
 import 'package:FEhViewer/values/theme_colors.dart';
 import 'package:flutter/cupertino.dart';
@@ -53,9 +54,10 @@ class _SelFavorite extends State<SelFavoritePage> {
   Future<List<FavcatItemBean>> _getFavItemBeans() async {
     Global.logger.v('_getFavItemBeans');
     final List<FavcatItemBean> _favItemBeans = <FavcatItemBean>[];
-    // await Future<void>.delayed(const Duration(milliseconds: 200));
-    final List<Map<String, String>> favList =
+
+    List<Map<String, String>> favList =
         await GalleryFavParser.getFavcat() ?? EHConst.favList;
+
     for (final Map<String, String> catmap in favList) {
       final String favTitle = catmap['favTitle'];
       final String favId = catmap['favId'];
@@ -121,11 +123,15 @@ class _SelFavorite extends State<SelFavoritePage> {
                     );
                   case ConnectionState.done:
                     if (snapshot.hasError) {
-                      return SliverFillRemaining(
+                      return Center(
                         child: Container(
                           padding: const EdgeInsets.only(bottom: 50),
                           child: GalleryErrorPage(
-                            onTap: () {
+                            onTap: () async {
+                              await Api.getFavorite(
+                                favcat: 'a',
+                                refresh: true,
+                              );
                               setState(() {});
                             },
                           ),

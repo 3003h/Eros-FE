@@ -57,7 +57,7 @@ class _FavoriteTabState extends State<FavoriteTab> {
   void initState() {
     super.initState();
     _curFavcat = 'a';
-    _futureBuilderFuture = _loadDataFirst();
+    _futureBuilderFuture = _loadData();
   }
 
   SliverList gallerySliverListView(List<GalleryItem> gallerItemBeans) {
@@ -222,7 +222,7 @@ class _FavoriteTabState extends State<FavoriteTab> {
                 child: Container(
                   padding: const EdgeInsets.only(bottom: 50),
                   child: GalleryErrorPage(
-                    onTap: _reLoadDataFirstF,
+                    onTap: _reLoadDataFirst,
                   ),
                 ),
               );
@@ -242,7 +242,9 @@ class _FavoriteTabState extends State<FavoriteTab> {
     );
   }
 
-  Future<Tuple2<List<GalleryItem>, int>> _loadDataFirst() async {
+  Future<Tuple2<List<GalleryItem>, int>> _loadData({
+    bool refresh = false,
+  }) async {
     Global.logger.v('_loadDataFirstF  fav');
     _curPage = 0;
 
@@ -253,8 +255,10 @@ class _FavoriteTabState extends State<FavoriteTab> {
     }
 
     if (_curFavcat != 'l') {
-      final Future<Tuple2<List<GalleryItem>, int>> tuple =
-          Api.getFavorite(favcat: _curFavcat);
+      final Future<Tuple2<List<GalleryItem>, int>> tuple = Api.getFavorite(
+        favcat: _curFavcat,
+        refresh: refresh,
+      );
       return tuple;
     } else {
       Global.logger.v('本地收藏');
@@ -265,16 +269,16 @@ class _FavoriteTabState extends State<FavoriteTab> {
     }
   }
 
-  Future<void> _reLoadDataFirstF() async {
+  Future<void> _reLoadDataFirst() async {
     setState(() {
       _lastListWidget = null;
-      _futureBuilderFuture = _loadDataFirst();
+      _futureBuilderFuture = _loadData(refresh: false);
     });
   }
 
   Future<void> _reloadData() async {
     _curPage = 0;
-    final Tuple2<List<GalleryItem>, int> tuple = await _loadDataFirst();
+    final Tuple2<List<GalleryItem>, int> tuple = await _loadData(refresh: true);
     setState(() {
       _futureBuilderFuture =
           Future<Tuple2<List<GalleryItem>, int>>.value(tuple);
@@ -286,7 +290,7 @@ class _FavoriteTabState extends State<FavoriteTab> {
 
     _curPage = page;
     final Future<Tuple2<List<GalleryItem>, int>> tuple =
-        Api.getFavorite(favcat: _curFavcat, page: _curPage);
+        Api.getFavorite(favcat: _curFavcat, page: _curPage, refresh: true);
 
     setState(() {
       _lastListWidget = null;
@@ -306,8 +310,11 @@ class _FavoriteTabState extends State<FavoriteTab> {
     });
 
     _curPage += 1;
-    final Tuple2<List<GalleryItem>, int> tuple =
-        await Api.getFavorite(favcat: _curFavcat, page: _curPage);
+    final Tuple2<List<GalleryItem>, int> tuple = await Api.getFavorite(
+      favcat: _curFavcat,
+      page: _curPage,
+      refresh: true,
+    );
     final List<GalleryItem> gallerItemBeans = tuple.item1;
 
     setState(() {
@@ -403,7 +410,7 @@ class _FavoriteTabState extends State<FavoriteTab> {
               Global.loggerNoStack.v('修改favcat to ${fav.title}');
               _setTitle(fav.title);
               _curFavcat = fav.favId;
-              _reLoadDataFirstF();
+              _reLoadDataFirst();
             } else {
               Global.loggerNoStack.v('未修改favcat');
             }

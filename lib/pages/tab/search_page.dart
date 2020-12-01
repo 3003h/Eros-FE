@@ -59,7 +59,7 @@ class _GallerySearchPageState extends State<GallerySearchPage>
     if (_searchText.isNotEmpty) {
       // FocusScope.of(context).requestFocus(FocusNode());
       _search = _searchText;
-      _loadDataFirst();
+      _loadData();
     } else {
       setState(() {
         _gallerItemBeans.clear();
@@ -429,7 +429,12 @@ class _GallerySearchPageState extends State<GallerySearchPage>
     _curPage += 1;
     final String fromGid = _gallerItemBeans.last.gid;
     final Tuple2<List<GalleryItem>, int> tuple = await Api.getGallery(
-        page: _curPage, fromGid: fromGid, cats: _catNum, serach: _search);
+      page: _curPage,
+      fromGid: fromGid,
+      cats: _catNum,
+      serach: _search,
+      refresh: true,
+    );
     final List<GalleryItem> gallerItemBeans = tuple.item1;
 
     setState(() {
@@ -439,7 +444,7 @@ class _GallerySearchPageState extends State<GallerySearchPage>
     });
   }
 
-  Future<void> _loadDataFirst() async {
+  Future<void> _loadData({bool refresh = false}) async {
     final int _catNum =
         Provider.of<EhConfigModel>(context, listen: false).catFilter;
 
@@ -450,7 +455,7 @@ class _GallerySearchPageState extends State<GallerySearchPage>
     });
 
     final Tuple2<List<GalleryItem>, int> tuple =
-        await Api.getGallery(cats: _catNum, serach: _search);
+        await Api.getGallery(cats: _catNum, serach: _search, refresh: refresh);
     final List<GalleryItem> gallerItemBeans = tuple.item1;
     _gallerItemBeans.addAll(gallerItemBeans);
     _maxPage = tuple.item2;

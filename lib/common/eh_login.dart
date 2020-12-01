@@ -31,8 +31,12 @@ class EhUserManager {
       'CookieDate': '1',
     });
 
-    final Options options =
-        Options(headers: {'Referer': referer, 'Origin': origin});
+    final Options options = Options(headers: {
+      'Referer': referer,
+      'Origin': origin
+    }, extra: {
+      'noCache': true, //本接口禁用缓存
+    });
 
     Response rult;
     try {
@@ -194,7 +198,10 @@ class EhUserManager {
         HttpManager.getInstance('https://forums.e-hentai.org');
     final String url = '/index.php?showuser=$id';
 
-    final String response = await httpManager.get(url);
+    final String response = await httpManager.get(url,
+        options: Options(extra: {
+          'noCache': true, //本接口禁用缓存
+        }));
 
     // Global.logger.v('$response');
 
@@ -211,7 +218,10 @@ class EhUserManager {
         HttpManager.getInstance(EHConst.EX_BASE_URL);
     const String url = '/uconfig.php';
 
-    await httpManager.getAll(url);
+    await httpManager.getAll(url,
+        options: Options(extra: {
+          'noCache': true, //本接口禁用缓存
+        }));
   }
 
   /// 处理SetCookie 转为map
