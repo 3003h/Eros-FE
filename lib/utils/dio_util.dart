@@ -40,14 +40,15 @@ class HttpManager {
     // };
 
     //添加拦截器
-    _dio.interceptors
-        .add(InterceptorsWrapper(onRequest: (RequestOptions options) {
-      return options;
-    }, onResponse: (Response<dynamic> response) {
-      return response;
-    }, onError: (DioError e) {
-      return e;
-    }));
+    // _dio.interceptors
+    //     .add(InterceptorsWrapper(onRequest: (RequestOptions options) {
+    //   return options;
+    // }, onResponse: (Response<dynamic> response) {
+    //   return response;
+    // }, onError: (DioError e) {
+    //   return e;
+    // }));
+    _dio.interceptors.add(Global.netCache);
   }
 
   HttpManager.withProxy(String _baseUrl) {
@@ -75,14 +76,15 @@ class HttpManager {
     };
 
     //添加拦截器
-    _dio.interceptors
-        .add(InterceptorsWrapper(onRequest: (RequestOptions options) {
-      return options;
-    }, onResponse: (Response<dynamic> response) {
-      return response;
-    }, onError: (DioError e) {
-      return e;
-    }));
+    // _dio.interceptors
+    //     .add(InterceptorsWrapper(onRequest: (RequestOptions options) {
+    //   return options;
+    // }, onResponse: (Response<dynamic> response) {
+    //   return response;
+    // }, onError: (DioError e) {
+    //   return e;
+    // }));
+    _dio.interceptors.add(Global.netCache);
   }
 
   final int connectTimeout = 8000;

@@ -52,26 +52,32 @@ class _GalleryListTabState extends State<GalleryListTab> {
   void initState() {
     super.initState();
     _parserSearch();
-    _futureBuilderFuture = _loadDataFirstF();
+    _futureBuilderFuture = _loadData();
   }
 
   void _parserSearch() {
     _search = widget.simpleSearch?.trim() ?? '';
   }
 
-  Future<Tuple2<List<GalleryItem>, int>> _loadDataFirstF() async {
+  Future<Tuple2<List<GalleryItem>, int>> _loadData(
+      {bool refresh = false}) async {
     Global.logger.v('_loadDataFirstF  gallery');
     final int _catNum =
         Provider.of<EhConfigModel>(context, listen: false).catFilter;
 
-    final Future<Tuple2<List<GalleryItem>, int>> tuple =
-        Api.getGallery(cats: widget.cats ?? _catNum, serach: _search);
+    final Future<Tuple2<List<GalleryItem>, int>> tuple = Api.getGallery(
+      cats: widget.cats ?? _catNum,
+      serach: _search,
+      refresh: refresh,
+    );
     return tuple;
   }
 
   Future<void> _reloadData() async {
     _curPage = 0;
-    final Tuple2<List<GalleryItem>, int> tuple = await _loadDataFirstF();
+    final Tuple2<List<GalleryItem>, int> tuple = await _loadData(
+      refresh: true,
+    );
     setState(() {
       _futureBuilderFuture =
           Future<Tuple2<List<GalleryItem>, int>>.value(tuple);
@@ -80,7 +86,7 @@ class _GalleryListTabState extends State<GalleryListTab> {
 
   Future<void> _reLoadDataFirst() async {
     setState(() {
-      _futureBuilderFuture = _loadDataFirstF();
+      _futureBuilderFuture = _loadData(refresh: true);
     });
   }
 
@@ -104,10 +110,12 @@ class _GalleryListTabState extends State<GalleryListTab> {
     _curPage += 1;
     final String fromGid = _gallerItemBeans.last.gid;
     final Tuple2<List<GalleryItem>, int> tuple = await Api.getGallery(
-        page: _curPage,
-        fromGid: fromGid,
-        cats: widget.cats ?? _catNum,
-        serach: _search);
+      page: _curPage,
+      fromGid: fromGid,
+      cats: widget.cats ?? _catNum,
+      serach: _search,
+      refresh: true,
+    );
     final List<GalleryItem> gallerItemBeans = tuple.item1;
 
     setState(() {
@@ -117,7 +125,7 @@ class _GalleryListTabState extends State<GalleryListTab> {
     });
   }
 
-  Future<void> _loadFromPageF(int page, {bool cleanSearch = false}) async {
+  Future<void> _loadFromPage(int page, {bool cleanSearch = false}) async {
     Global.logger.v('jump to page =>  $page');
 
     if (cleanSearch) {
@@ -128,7 +136,11 @@ class _GalleryListTabState extends State<GalleryListTab> {
         Provider.of<EhConfigModel>(context, listen: false).catFilter;
     _curPage = page;
     final Future<Tuple2<List<GalleryItem>, int>> tuple = Api.getGallery(
-        page: _curPage, cats: widget.cats ?? _catNum, serach: _search);
+      page: _curPage,
+      cats: widget.cats ?? _catNum,
+      serach: _search,
+      refresh: true,
+    );
 
     setState(() {
       _lastListWidget = null;
@@ -153,7 +165,7 @@ class _GalleryListTabState extends State<GalleryListTab> {
       final int _toPage = int.parse(_input) - 1;
       if (_toPage >= 0 && _toPage <= _maxPage) {
         FocusScope.of(context).requestFocus(FocusNode());
-        _loadFromPageF(_toPage);
+        _loadFromPage(_toPage);
         Navigator.of(context).pop();
       } else {
         showToast('输入范围有误');

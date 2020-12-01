@@ -38,7 +38,7 @@ class GalleryListParser {
 
     if (domList.length > 2) {
       final dom.Element orderElm = domList[2].querySelector('div > span');
-      Global.logger.d('${orderElm.text}');
+      // Global.logger.d('${orderElm.text}');
       return orderElm.text?.trim() == 'Favorited';
     }
 
@@ -47,8 +47,10 @@ class GalleryListParser {
 
   /// 列表数据处理
   static Future<Tuple2<List<GalleryItem>, int>> parseGalleryList(
-      String response,
-      {bool isFavorite = false}) async {
+    String response, {
+    bool isFavorite = false,
+    bool refresh = false,
+  }) async {
     final dom.Document document = parse(response);
 
     const String _gallerySelector =
@@ -236,7 +238,7 @@ class GalleryListParser {
 
     // 通过api请求获取更多信息
     if (_gallaryItems.isNotEmpty) {
-      await Api.getMoreGalleryInfo(_gallaryItems);
+      await Api.getMoreGalleryInfo(_gallaryItems, refresh: refresh);
     }
 
     return Tuple2(_gallaryItems, _maxPage);

@@ -5,6 +5,7 @@ import 'package:FEhViewer/models/index.dart';
 import 'package:FEhViewer/models/profile.dart';
 import 'package:FEhViewer/route/application.dart';
 import 'package:FEhViewer/route/routes.dart';
+import 'package:FEhViewer/utils/cache.dart';
 import 'package:FEhViewer/utils/https_proxy.dart';
 import 'package:FEhViewer/utils/storage.dart';
 import 'package:FEhViewer/utils/utility.dart';
@@ -28,6 +29,9 @@ class Global {
   static History history = History();
 
   static HttpProxy httpProxy = HttpProxy('localhost', '$kProxyPort');
+
+  // 网络缓存对象
+  static NetCache netCache = NetCache();
 
   static final Logger logger = Logger(
     output: ExampleLogOutput(),
@@ -92,6 +96,11 @@ class Global {
         ..searchGalleryTags = true;
       saveProfile();
     }
+
+    profile.cache ??= CacheConfig()
+      ..enable = true
+      ..maxAge = 1000
+      ..maxCount = 100;
 
     profile.searchText ??= <String>[];
 

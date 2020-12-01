@@ -80,8 +80,12 @@ class GalleryFavParser {
     if (Global.profile.user.favcat == null ||
         Global.profile.user.favcat.isEmpty ||
         !cache) {
-      // Global.logger.v('$gid  $token');
-      Global.profile.user.favcat = await gallerySelfavcat(gid, token);
+      if (gid.isNotEmpty && token.isNotEmpty) {
+        // Global.logger.v('$gid  $token');
+        Global.profile.user.favcat = await gallerySelfavcat(gid, token);
+      } else {
+        return null;
+      }
     }
 
     print('frome cache');
