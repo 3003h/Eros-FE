@@ -64,7 +64,7 @@ class ListViewEhSetting extends StatelessWidget {
     final bool _tagTranslat = ehConfigModel.tagTranslat;
     final bool _galleryImgBlur = ehConfigModel.galleryImgBlur;
     final bool _favLongTap = ehConfigModel.favLongTap;
-    final bool _favOrder = ehConfigModel.favoriteOrder == FavoriteOrder.favTime;
+    final bool _favOrder = ehConfigModel.favoriteOrder == FavoriteOrder.fav;
 
     void _handleSiteChanged(bool newValue) {
       ehConfigModel.siteEx = newValue;
@@ -76,7 +76,7 @@ class ListViewEhSetting extends StatelessWidget {
 
     void _handleFavOrderChanged(bool newValue) {
       ehConfigModel.favoriteOrder =
-          newValue ? FavoriteOrder.favTime : FavoriteOrder.updateTime;
+          newValue ? FavoriteOrder.fav : FavoriteOrder.posted;
     }
 
     void _handleTagTranslatChanged(bool newValue) {

@@ -29,6 +29,22 @@ class GalleryListParser {
     return true;
   }
 
+  ///  收藏夹，检查返回结果的排序方式
+  static bool isFavoriteOrder(String response) {
+    final dom.Document document = parse(response);
+
+    final List<dom.Element> domList =
+        document.querySelectorAll('body > div.ido > div');
+
+    if (domList.length > 2) {
+      final dom.Element orderElm = domList[2].querySelector('div > span');
+      Global.logger.d('${orderElm.text}');
+      return orderElm.text?.trim() == 'Favorited';
+    }
+
+    return false;
+  }
+
   /// 列表数据处理
   static Future<Tuple2<List<GalleryItem>, int>> parseGalleryList(
       String response,
