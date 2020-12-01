@@ -83,7 +83,7 @@ class EhConfigModel extends ProfileChangeNotifier {
   FavoriteOrder get favoriteOrder =>
       EnumToString.fromString(
           FavoriteOrder.values, _ehConfig?.favoritesOrder) ??
-      FavoriteOrder.favTime;
+      FavoriteOrder.fav;
 
   set favoriteOrder(FavoriteOrder favoriteOrder) {
     _ehConfig.favoritesOrder = EnumToString.convertToString(favoriteOrder);

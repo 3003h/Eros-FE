@@ -261,19 +261,14 @@ class Api {
   /// 获取收藏
   static Future<Tuple2<List<GalleryItem>, int>> getFavorite(
       {String favcat, int page}) async {
+    /// inline_set不能和页码同时使用 会默认定向到第一页
     String _getUrl({String inlineSet}) {
-      //收藏排序
-      final FavoriteOrder order = EnumToString.fromString(
-          FavoriteOrder.values, Global?.profile?.ehConfig?.favoritesOrder);
-      final String _order =
-          EHConst.favoriteDesc[order] ?? EHConst.FAV_ORDER_FAV;
-
       String url = '/favorites.php/';
       String qry = '?page=${page ?? 0}';
       if (favcat != null && favcat != 'a' && favcat.isNotEmpty) {
         qry = '$qry&favcat=$favcat';
       }
-      qry = "$qry&inline_set=${inlineSet ?? _order ?? ''}";
+      qry = "$qry&inline_set=${inlineSet ?? ''}";
       url = '$url$qry';
 
       Global.logger.v(url);
@@ -283,8 +278,25 @@ class Api {
     final String url = _getUrl();
 
     await CustomHttpsProxy.instance.init();
-    final String response = await getHttpManager().get(url);
+    String response = await getHttpManager().get(url);
 
+    // 排序方式检查 不符合则设置 然后重新请求
+    // 获取收藏排序设置
+    final FavoriteOrder order = EnumToString.fromString(
+            FavoriteOrder.values, Global?.profile?.ehConfig?.favoritesOrder) ??
+        FavoriteOrder.fav;
+    // 排序参数
+    final String _order = EHConst.favoriteOrder[order] ?? EHConst.FAV_ORDER_FAV;
+    final bool isOrderFav = GalleryListParser.isFavoriteOrder(response);
+    if (isOrderFav ^ (order == FavoriteOrder.fav)) {
+      // 重设排序方式
+      Global.loggerNoStack.d('$isOrderFav 重设排序方式 $_order');
+      final String _urlOrder = _getUrl(inlineSet: _order);
+      await getHttpManager().get(_urlOrder);
+      response = await getHttpManager().get(url);
+    }
+
+    // 列表样式检查 不符合则重新设置
     final bool isDml = GalleryListParser.isGalleryListDmL(response);
     if (isDml) {
       return await GalleryListParser.parseGalleryList(response,

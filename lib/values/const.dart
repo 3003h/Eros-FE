@@ -6,8 +6,8 @@ enum ListModeEnum {
 }
 
 enum FavoriteOrder {
-  favTime,
-  updateTime,
+  fav,
+  posted,
 }
 
 // ignore: avoid_classes_with_only_static_members
@@ -29,7 +29,7 @@ class EHConst {
   static const String CHROME_ACCEPT_LANGUAGE = 'en-US,en;q=0.5';
 
   static const String FAV_ORDER_FAV = 'fs_f';
-  static const String FAV_ORDER_PUB = 'fs_p';
+  static const String FAV_ORDER_POSTED = 'fs_p';
 
   static const List<String> FONT_FAMILY_FB = ['PingFang SC', 'Heiti SC'];
 
@@ -45,10 +45,10 @@ class EHConst {
 
   static List<int> historyMax = <int>[50, 100, 300, 0];
 
-  static const Map<FavoriteOrder, String> favoriteDesc =
+  static const Map<FavoriteOrder, String> favoriteOrder =
       <FavoriteOrder, String>{
-    FavoriteOrder.favTime: FAV_ORDER_FAV,
-    FavoriteOrder.updateTime: FAV_ORDER_PUB,
+    FavoriteOrder.fav: FAV_ORDER_FAV,
+    FavoriteOrder.posted: FAV_ORDER_POSTED,
   };
 
   static const Map<String, String> translateTagType = {
