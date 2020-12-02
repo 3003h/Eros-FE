@@ -4,6 +4,7 @@ import 'package:FEhViewer/common/global.dart';
 import 'package:FEhViewer/utils/toast.dart';
 import 'package:FEhViewer/utils/utility.dart';
 import 'package:FEhViewer/values/const.dart';
+import 'package:cookie_jar/src/persist_cookie_jar.dart';
 import 'package:dio/adapter.dart';
 import 'package:dio/dio.dart';
 import 'package:dio_cookie_manager/dio_cookie_manager.dart';
@@ -40,6 +41,10 @@ class HttpManager {
     //   return client;
     // };
 
+    //设置Cookie管理
+    Api.cookieJar.then((PersistCookieJar cookieJar) {
+      _dio.interceptors.add(CookieManager(cookieJar));
+    });
     //添加拦截器
     // _dio.interceptors.add(Global.netCache);
     if (cache) {
@@ -72,6 +77,10 @@ class HttpManager {
         (HttpClient client) {
       client.findProxy = (Uri uri) => 'PROXY localhost:4041';
     };
+    //设置Cookie管理
+    Api.cookieJar.then((PersistCookieJar cookieJar) {
+      _dio.interceptors.add(CookieManager(cookieJar));
+    });
 
     // _dio.interceptors.add(Global.netCache);
     if (cache) {
@@ -104,8 +113,7 @@ class HttpManager {
       Options options,
       CancelToken cancelToken}) async {
     //设置Cookie管理
-    _dio.interceptors.add(CookieManager(await Api.cookieJar));
-
+    // _dio.interceptors.add(CookieManager(await Api.cookieJar));
     Response<String> response;
     try {
       response = await _dio.get<String>(url,
@@ -124,7 +132,7 @@ class HttpManager {
       Options options,
       CancelToken cancelToken}) async {
     //设置Cookie管理
-    _dio.interceptors.add(CookieManager(await Api.cookieJar));
+    // _dio.interceptors.add(CookieManager(await Api.cookieJar));
 
     Response<dynamic> response;
     try {
@@ -145,7 +153,7 @@ class HttpManager {
       Options options,
       CancelToken cancelToken}) async {
     //设置Cookie管理
-    _dio.interceptors.add(CookieManager(await Api.cookieJar));
+    // _dio.interceptors.add(CookieManager(await Api.cookieJar));
 
     Response<dynamic> response;
     try {
@@ -164,7 +172,7 @@ class HttpManager {
   Future<Response<dynamic>> postForm(String url,
       {Object data, Options options, CancelToken cancelToken}) async {
     //设置Cookie管理
-    _dio.interceptors.add(CookieManager(await Api.cookieJar));
+    // _dio.interceptors.add(CookieManager(await Api.cookieJar));
 
     Response<dynamic> response;
     try {
@@ -183,7 +191,7 @@ class HttpManager {
   Future<Response<dynamic>> downLoadFile(
       String urlPath, String savePath) async {
     //设置Cookie管理
-    _dio.interceptors.add(CookieManager(await Api.cookieJar));
+    // _dio.interceptors.add(CookieManager(await Api.cookieJar));
 
     Response<dynamic> response;
     try {

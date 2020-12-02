@@ -1,10 +1,14 @@
+import 'dart:io';
+
 import 'package:FEhViewer/common/global.dart';
 import 'package:FEhViewer/common/tag_database.dart';
 import 'package:FEhViewer/models/states/ehconfig_model.dart';
 import 'package:FEhViewer/models/states/user_model.dart';
 import 'package:FEhViewer/pages/login/web_mysetting.dart';
 import 'package:FEhViewer/pages/setting/custom_hosts_page.dart';
+import 'package:FEhViewer/utils/utility.dart';
 import 'package:FEhViewer/values/const.dart';
+import 'package:cookie_jar/cookie_jar.dart';
 import 'package:enum_to_string/enum_to_string.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -70,7 +74,21 @@ class ListViewEhSetting extends StatelessWidget {
     final bool _isLogin =
         Provider.of<UserModel>(context, listen: false).isLogin;
 
-    void _handleSiteChanged(bool newValue) {
+    Future<void> _handleSiteChanged(bool newValue) async {
+      final PersistCookieJar cookieJar = await Api.cookieJar;
+      final List<Cookie> cookiesEh =
+          cookieJar.loadForRequest(Uri.parse(EHConst.EH_BASE_URL));
+      final Cookie _memberId = cookiesEh
+          .firstWhere((Cookie cookie) => cookie.name == 'ipb_member_id')
+            ..domain = '.exhentai.org';
+      final Cookie _passHash = cookiesEh
+          .firstWhere((Cookie cookie) => cookie.name == 'ipb_pass_hash')
+            ..domain = '.exhentai.org';
+
+      cookieJar.delete(Uri.parse(EHConst.EX_BASE_URL));
+      cookieJar.saveFromResponse(
+          Uri.parse(EHConst.EX_BASE_URL), <Cookie>[_memberId, _passHash]);
+
       ehConfigModel.siteEx = newValue;
     }
 
