@@ -59,7 +59,7 @@ class _GallerySearchPageState extends State<GallerySearchPage>
     if (_searchText.isNotEmpty) {
       // FocusScope.of(context).requestFocus(FocusNode());
       _search = _searchText;
-      _loadData();
+      _loadData(refresh: true);
     } else {
       setState(() {
         _gallerItemBeans.clear();

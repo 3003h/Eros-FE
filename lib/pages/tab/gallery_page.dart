@@ -53,6 +53,9 @@ class _GalleryListTabState extends State<GalleryListTab> {
     super.initState();
     _parserSearch();
     _futureBuilderFuture = _loadData();
+    Future<void>.delayed(const Duration(milliseconds: 100)).then((_) {
+      _reloadData();
+    });
   }
 
   void _parserSearch() {

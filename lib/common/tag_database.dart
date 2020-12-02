@@ -15,7 +15,7 @@ class EhTagDatabase {
   ///tag翻译
   static Future<String> generateTagTranslat() async {
     final HttpManager httpManager =
-        HttpManager.getInstance('https://api.github.com');
+        HttpManager.getInstance(baseUrl: 'https://api.github.com');
 
     const String url = '/repos/EhTagTranslation/Database/releases/latest';
 

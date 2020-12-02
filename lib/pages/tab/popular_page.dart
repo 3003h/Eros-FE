@@ -30,6 +30,9 @@ class _PopularListTabState extends State<PopularListTab> {
     super.initState();
     // _loadData();
     _futureBuilderFuture = _loadData();
+    Future<void>.delayed(const Duration(milliseconds: 100)).then((_) {
+      _reloadData();
+    });
   }
 
   Future<List<GalleryItem>> _loadData({bool refresh = false}) async {

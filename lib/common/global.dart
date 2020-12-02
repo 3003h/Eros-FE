@@ -10,6 +10,8 @@ import 'package:FEhViewer/utils/https_proxy.dart';
 import 'package:FEhViewer/utils/storage.dart';
 import 'package:FEhViewer/utils/utility.dart';
 import 'package:FEhViewer/values/storages.dart';
+import 'package:dio/dio.dart';
+import 'package:dio_http_cache/dio_http_cache.dart' as dio;
 import 'package:fluro/fluro.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -99,8 +101,8 @@ class Global {
 
     profile.cache ??= CacheConfig()
       ..enable = true
-      ..maxAge = 1000
-      ..maxCount = 100;
+      ..maxAge = 3600
+      ..maxCount = 200;
 
     profile.searchText ??= <String>[];
 
