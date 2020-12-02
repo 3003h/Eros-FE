@@ -36,7 +36,6 @@ class _FavoriteTabState extends State<FavoriteTab> {
   String _title = '';
   List<GalleryItem> _galleryItemBeans = [];
   String _curFavcat = '';
-  bool _loading = false;
   int _curPage = 0;
   int _maxPage = 0;
   bool _isLoadMore = false;
@@ -58,6 +57,9 @@ class _FavoriteTabState extends State<FavoriteTab> {
     super.initState();
     _curFavcat = 'a';
     _futureBuilderFuture = _loadData();
+    Future<void>.delayed(const Duration(milliseconds: 100)).then((_) {
+      _reloadData();
+    });
   }
 
   SliverList gallerySliverListView(List<GalleryItem> gallerItemBeans) {
@@ -245,7 +247,7 @@ class _FavoriteTabState extends State<FavoriteTab> {
   Future<Tuple2<List<GalleryItem>, int>> _loadData({
     bool refresh = false,
   }) async {
-    Global.logger.v('_loadDataFirstF  fav');
+    Global.logger.v('_loadDataFirst  fav');
     _curPage = 0;
 
     final bool _isLogin =

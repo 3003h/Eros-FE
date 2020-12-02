@@ -13,6 +13,7 @@ import 'package:FEhViewer/values/const.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cookie_jar/cookie_jar.dart';
 import 'package:dio/dio.dart';
+import 'package:dio_http_cache/dio_http_cache.dart';
 import 'package:dns_client/dns_client.dart';
 import 'package:enum_to_string/enum_to_string.dart';
 import 'package:extended_image/extended_image.dart';
@@ -138,6 +139,7 @@ class Api {
     }
   }
 
+  /// 高级搜索参数拼接
   static String getAdvanceSearchText() {
     final AdvanceSearch advanceSearch = Global.profile.advanceSearch;
 
@@ -162,15 +164,26 @@ class Api {
     return para;
   }
 
-  static HttpManager getHttpManager() {
+  static HttpManager getHttpManager({bool cache = true}) {
     final String _baseUrl =
         EHConst.getBaseSite(Global.profile.ehConfig.siteEx ?? false);
+    final bool enableCache = Global.profile.cache.enable ?? true;
     final bool _doh = Global.profile.dnsConfig.doh ?? false;
     if (_doh) {
-      return HttpManager.withProxy(_baseUrl);
+      return HttpManager.withProxy(_baseUrl,
+          cache: cache ? enableCache : cache);
     } else {
-      return HttpManager.getInstance(_baseUrl);
+      return HttpManager.getInstance(
+          baseUrl: _baseUrl, cache: cache ? enableCache : cache);
     }
+  }
+
+  static Options getCacheOptions({bool forceRefresh = false}) {
+    return buildCacheOptions(
+      const Duration(days: 1),
+      maxStale: const Duration(hours: 1),
+      forceRefresh: forceRefresh,
+    );
   }
 
   static String _getBaseUrl() {
@@ -192,8 +205,10 @@ class Api {
       rethrow;
     }
 
-    final String response = await getHttpManager()
-        .get(url, options: Options(extra: {'refresh': refresh}));
+    final Options _cacheOptions = getCacheOptions(forceRefresh: refresh);
+
+    final String response =
+        await getHttpManager().get(url, options: _cacheOptions);
 
     final Tuple2<List<GalleryItem>, int> tuple =
         await GalleryListParser.parseGalleryList(response, refresh: refresh);
@@ -237,7 +252,7 @@ class Api {
             Uri.encodeQueryComponent('${searArr[0]}:"${searArr[1]}$_end"');
         qry = '$qry&f_search=$_search';
       } else {
-        final String _search = Uri.encodeQueryComponent('$serach');
+        final String _search = Uri.encodeQueryComponent(serach.trim());
         qry = '$qry&f_search=$_search';
       }
     }
@@ -256,10 +271,21 @@ class Api {
       'refresh': refresh
     });
 
+    // final Options _cacheOptions = buildCacheOptions(
+    //   const Duration(days: 1),
+    //   maxStale: const Duration(hours: 1),
+    //   forceRefresh: refresh,
+    //   options: Options(headers: {
+    //     'Referer': 'https://e-hentai.org',
+    //   }),
+    // );
+    final Options _cacheOptions = getCacheOptions(forceRefresh: refresh);
+
     Global.logger.v(url);
 
     await CustomHttpsProxy.instance.init();
-    final String response = await getHttpManager().get(url, options: options);
+    final String response =
+        await getHttpManager().get(url, options: _cacheOptions);
 
     return await GalleryListParser.parseGalleryList(response, refresh: refresh);
   }
@@ -288,9 +314,10 @@ class Api {
 
     final String url = _getUrl();
 
+    final Options _cacheOptions = getCacheOptions(forceRefresh: refresh);
+
     await CustomHttpsProxy.instance.init();
-    String response = await getHttpManager()
-        .get(url, options: Options(extra: {'refresh': refresh}));
+    String response = await getHttpManager().get(url, options: _cacheOptions);
 
     // 排序方式检查 不符合则设置 然后重新请求
     // 获取收藏排序设置
@@ -305,9 +332,8 @@ class Api {
       Global.loggerNoStack.d('$isOrderFav 重设排序方式 $_order');
       final String _urlOrder = _getUrl(inlineSet: _order);
       await getHttpManager()
-          .get(_urlOrder, options: Options(extra: {'noCache': true}));
-      response = await getHttpManager()
-          .get(url, options: Options(extra: {'refresh': refresh}));
+          .get(_urlOrder, options: getCacheOptions(forceRefresh: true));
+      response = await getHttpManager().get(url, options: _cacheOptions);
     }
 
     // 列表样式检查 不符合则重新设置
@@ -320,8 +346,8 @@ class Api {
       );
     } else {
       final String url = _getUrl(inlineSet: 'dm_l');
-      final String response = await getHttpManager()
-          .get(url, options: Options(extra: {'refresh': refresh}));
+      final String response =
+          await getHttpManager().get(url, options: _cacheOptions);
       return await GalleryListParser.parseGalleryList(
         response,
         isFavorite: true,
@@ -355,7 +381,7 @@ class Api {
     Global.logger.i('获取画廊 $url');
     await CustomHttpsProxy.instance.init();
     final String response = await getHttpManager()
-        .get(url, options: Options(extra: {'refresh': refresh}));
+        .get(url, options: getCacheOptions(forceRefresh: refresh));
 
     // TODO 画廊警告问题 使用 nw=always 未解决 待处理 怀疑和Session有关
     if ('$response'.contains(r'<strong>Offensive For Everyone</strong>')) {
@@ -400,7 +426,7 @@ class Api {
 
     await CustomHttpsProxy.instance.init();
     final String response = await getHttpManager()
-        .get(url, options: Options(extra: {'refresh': refresh}));
+        .get(url, options: getCacheOptions(forceRefresh: refresh));
 
     return GalleryDetailParser.parseGalleryPreviewFromHtml(response);
   }
@@ -417,7 +443,7 @@ class Api {
 
     await CustomHttpsProxy.instance.init();
     final String response = await getHttpManager()
-        .get(url, options: Options(extra: {'refresh': refresh}));
+        .get(url, options: getCacheOptions(forceRefresh: refresh));
 
     final RegExp regShowKey = RegExp(r'var showkey="([0-9a-z]+)";');
 
@@ -544,7 +570,7 @@ class Api {
     final Response response = await getHttpManager().postForm(
       url,
       data: req,
-      options: Options(extra: {'refresh': refresh}),
+      options: getCacheOptions(forceRefresh: refresh),
     );
 
     return response;

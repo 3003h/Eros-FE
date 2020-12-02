@@ -218,6 +218,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "1.0.0"
+  dio_http_cache:
+    dependency: "direct main"
+    description:
+      name: dio_http_cache
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "0.2.11"
   dns_client:
     dependency: "direct main"
     description:

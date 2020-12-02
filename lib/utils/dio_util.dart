@@ -7,11 +7,12 @@ import 'package:FEhViewer/values/const.dart';
 import 'package:dio/adapter.dart';
 import 'package:dio/dio.dart';
 import 'package:dio_cookie_manager/dio_cookie_manager.dart';
+import 'package:dio_http_cache/dio_http_cache.dart';
 import 'package:flutter/cupertino.dart';
 
 class HttpManager {
   //构造函数
-  HttpManager(String _baseUrl) {
+  HttpManager(String _baseUrl, {bool cache = true}) {
     _options = BaseOptions(
         baseUrl: _baseUrl,
         //连接时间为5秒
@@ -40,18 +41,15 @@ class HttpManager {
     // };
 
     //添加拦截器
-    // _dio.interceptors
-    //     .add(InterceptorsWrapper(onRequest: (RequestOptions options) {
-    //   return options;
-    // }, onResponse: (Response<dynamic> response) {
-    //   return response;
-    // }, onError: (DioError e) {
-    //   return e;
-    // }));
-    _dio.interceptors.add(Global.netCache);
+    // _dio.interceptors.add(Global.netCache);
+    if (cache) {
+      _dio.interceptors.add(DioCacheManager(CacheConfig(
+        baseUrl: _baseUrl,
+      )).interceptor);
+    }
   }
 
-  HttpManager.withProxy(String _baseUrl) {
+  HttpManager.withProxy(String _baseUrl, {bool cache = true}) {
     _options = BaseOptions(
         baseUrl: _baseUrl,
         //连接时间为5秒
@@ -75,16 +73,11 @@ class HttpManager {
       client.findProxy = (Uri uri) => 'PROXY localhost:4041';
     };
 
-    //添加拦截器
-    // _dio.interceptors
-    //     .add(InterceptorsWrapper(onRequest: (RequestOptions options) {
-    //   return options;
-    // }, onResponse: (Response<dynamic> response) {
-    //   return response;
-    // }, onError: (DioError e) {
-    //   return e;
-    // }));
-    _dio.interceptors.add(Global.netCache);
+    // _dio.interceptors.add(Global.netCache);
+    if (cache) {
+      _dio.interceptors
+          .add(DioCacheManager(CacheConfig(baseUrl: _baseUrl)).interceptor);
+    }
   }
 
   final int connectTimeout = 8000;
@@ -97,11 +90,12 @@ class HttpManager {
   BaseOptions _options;
 
   //单例模式，一个baseUrl只创建一次实例
-  static HttpManager getInstance([String baseUrl = '']) {
-    if (null == _instanceMap[baseUrl]) {
-      _instanceMap[baseUrl] = HttpManager(baseUrl);
+  static HttpManager getInstance({String baseUrl = '', bool cache = true}) {
+    final String _key = '${baseUrl}_$cache';
+    if (null == _instanceMap[_key]) {
+      _instanceMap[_key] = HttpManager(baseUrl, cache: cache);
     }
-    return _instanceMap[baseUrl];
+    return _instanceMap[_key];
   }
 
   //get请求方法

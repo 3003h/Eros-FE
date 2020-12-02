@@ -10,13 +10,19 @@ class GalleryFavParser {
   /// 收藏操作
   static Future<void> galleryAddfavorite(String gid, String token,
       {String favcat = 'favdel', String favnote}) async {
-    final HttpManager httpManager = HttpManager.getInstance(
-        EHConst.getBaseSite(Global.profile.ehConfig.siteEx ?? false));
+    final HttpManager httpManager = Api.getHttpManager(cache: false);
+    // final HttpManager httpManager = HttpManager.getInstance(
+    //     EHConst.getBaseSite(Global.profile.ehConfig.siteEx ?? false));
 
     final String url = '/gallerypopups.php?gid=$gid&t=$token&act=addfav';
     final String cookie = Global.profile?.user?.cookie ?? '';
 
     final Options options = Options(headers: {
+      'Cookie': cookie,
+    });
+
+    final Options _cacheOptions =
+        Api.getCacheOptions(forceRefresh: true).merge(headers: {
       'Cookie': cookie,
     });
 
@@ -25,7 +31,7 @@ class GalleryFavParser {
 
     final Response response = await httpManager.postForm(
       url,
-      options: options,
+      options: _cacheOptions,
       data: formData,
     );
 
@@ -34,8 +40,9 @@ class GalleryFavParser {
 
   static Future<List<Map<String, String>>> gallerySelfavcat(
       String gid, String token) async {
-    final HttpManager httpManager = HttpManager.getInstance(
-        EHConst.getBaseSite(Global.profile.ehConfig.siteEx ?? false));
+    final HttpManager httpManager = Api.getHttpManager(cache: false);
+    // final HttpManager httpManager = HttpManager.getInstance(
+    //     EHConst.getBaseSite(Global.profile.ehConfig.siteEx ?? false));
 
     final String url = '/gallerypopups.php?gid=$gid&t=$token&act=addfav';
     final String cookie = Global.profile?.user?.cookie ?? '';
@@ -44,9 +51,14 @@ class GalleryFavParser {
       'Cookie': cookie,
     });
 
+    final Options _cacheOptions =
+        Api.getCacheOptions(forceRefresh: true).merge(headers: {
+      'Cookie': cookie,
+    });
+
     final String response = await httpManager.get(
       url,
-      options: options,
+      options: _cacheOptions,
     );
 
     return parserAddFavPage(response);

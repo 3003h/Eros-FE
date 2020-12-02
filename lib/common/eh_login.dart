@@ -16,8 +16,8 @@ class EhUserManager {
   static final EhUserManager _instance = EhUserManager._();
 
   Future<User> signIn(String username, String passwd) async {
-    final HttpManager httpManager =
-        HttpManager.getInstance('https://forums.e-hentai.org');
+    final HttpManager httpManager = HttpManager.getInstance(
+        baseUrl: 'https://forums.e-hentai.org', cache: false);
     const String url = '/index.php?act=Login&CODE=01';
     const String referer =
         'https://forums.e-hentai.org/index.php?act=Login&CODE=00';
@@ -31,12 +31,17 @@ class EhUserManager {
       'CookieDate': '1',
     });
 
+    /*
     final Options options = Options(headers: {
       'Referer': referer,
       'Origin': origin
     }, extra: {
       'noCache': true, //本接口禁用缓存
     });
+     */
+
+    final Options options =
+        Options(headers: {'Referer': referer, 'Origin': origin});
 
     Response rult;
     try {
@@ -194,14 +199,15 @@ class EhUserManager {
   }
 
   Future<String> _getUserName(String id) async {
-    final HttpManager httpManager =
-        HttpManager.getInstance('https://forums.e-hentai.org');
+    final HttpManager httpManager = HttpManager.getInstance(
+        baseUrl: 'https://forums.e-hentai.org', cache: false);
     final String url = '/index.php?showuser=$id';
 
-    final String response = await httpManager.get(url,
-        options: Options(extra: {
-          'noCache': true, //本接口禁用缓存
-        }));
+    // final String response = await httpManager.get(url,
+    //     options: Options(extra: {
+    //       'noCache': true, //本接口禁用缓存
+    //     }));
+    final String response = await httpManager.get(url);
 
     // Global.logger.v('$response');
 
@@ -215,13 +221,10 @@ class EhUserManager {
 
   Future<void> _getExIgneous() async {
     final HttpManager httpManager =
-        HttpManager.getInstance(EHConst.EX_BASE_URL);
+        HttpManager.getInstance(baseUrl: EHConst.EX_BASE_URL, cache: false);
     const String url = '/uconfig.php';
 
-    await httpManager.getAll(url,
-        options: Options(extra: {
-          'noCache': true, //本接口禁用缓存
-        }));
+    await httpManager.getAll(url);
   }
 
   /// 处理SetCookie 转为map
