@@ -224,7 +224,7 @@ class Api {
     );
   }
 
-  static String _getBaseUrl() {
+  static String getBaseUrl() {
     return EHConst.getBaseSite(Global.profile.ehConfig.siteEx ?? false);
   }
 
@@ -237,7 +237,7 @@ class Api {
 
     await CustomHttpsProxy.instance.init();
     try {
-      await DnsUtil.dohToProfile(_getBaseUrl());
+      await DnsUtil.dohToProfile(getBaseUrl());
     } catch (e, stack) {
       Global.logger.v('$stack');
       rethrow;

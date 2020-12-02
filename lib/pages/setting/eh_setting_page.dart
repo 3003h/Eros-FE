@@ -2,6 +2,8 @@ import 'package:FEhViewer/common/global.dart';
 import 'package:FEhViewer/common/tag_database.dart';
 import 'package:FEhViewer/models/states/ehconfig_model.dart';
 import 'package:FEhViewer/models/states/user_model.dart';
+import 'package:FEhViewer/pages/login/web_mysetting.dart';
+import 'package:FEhViewer/pages/setting/custom_hosts_page.dart';
 import 'package:FEhViewer/values/const.dart';
 import 'package:enum_to_string/enum_to_string.dart';
 import 'package:flutter/cupertino.dart';
@@ -65,6 +67,8 @@ class ListViewEhSetting extends StatelessWidget {
     final bool _galleryImgBlur = ehConfigModel.galleryImgBlur;
     final bool _favLongTap = ehConfigModel.favLongTap;
     final bool _favOrder = ehConfigModel.favoriteOrder == FavoriteOrder.fav;
+    final bool _isLogin =
+        Provider.of<UserModel>(context, listen: false).isLogin;
 
     void _handleSiteChanged(bool newValue) {
       ehConfigModel.siteEx = newValue;
@@ -99,13 +103,35 @@ class ListViewEhSetting extends StatelessWidget {
     }
 
     List<Widget> _list = <Widget>[
-      if (Provider.of<UserModel>(context, listen: false).isLogin)
+      if (_isLogin)
         TextSwitchItem(
           '站点切换',
           intValue: _siteEx,
           onChanged: _handleSiteChanged,
           desc: '当前E-Hentai',
           descOn: '当前ExHentai',
+        ),
+      if (_isLogin)
+        SelectorSettingItem(
+          title: 'Ehentai设置',
+          selector: '网站设置',
+          onTap: () async {
+            Navigator.push(
+              context,
+              CupertinoPageRoute<dynamic>(
+                builder: (BuildContext context) {
+                  return WebMySetting();
+                },
+              ),
+            );
+          },
+        ),
+      if (_isLogin)
+        Divider(
+          height: 38,
+          thickness: 38.5,
+          color: CupertinoDynamicColor.resolve(
+              CupertinoColors.systemGrey5, context),
         ),
       TextSwitchItem('显示标签中文翻译',
           intValue: _tagTranslat,
@@ -120,6 +146,12 @@ class ListViewEhSetting extends StatelessWidget {
           intValue: _galleryImgBlur,
           onChanged: _handleGalleryListImgBlurChanged,
           desc: '画廊列表封面模糊效果'),
+      Divider(
+        height: 38,
+        thickness: 38.5,
+        color:
+            CupertinoDynamicColor.resolve(CupertinoColors.systemGrey5, context),
+      ),
       TextSwitchItem(
         '默认收藏夹设置',
         intValue: _favLongTap,
