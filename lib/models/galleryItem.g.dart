@@ -30,10 +30,10 @@ GalleryItem _$GalleryItemFromJson(Map<String, dynamic> json) {
     ..favTitle = json['favTitle'] as String
     ..favcat = json['favcat'] as String
     ..localFav = json['localFav'] as bool
-    ..simpleTags =
-        (json['simpleTags'] as List)?.map((e) => e as String)?.toList()
-    ..simpleTagsTranslat =
-        (json['simpleTagsTranslat'] as List)?.map((e) => e as String)?.toList()
+    ..simpleTags = (json['simpleTags'] as List)
+        ?.map((e) =>
+            e == null ? null : SimpleTag.fromJson(e as Map<String, dynamic>))
+        ?.toList()
     ..tagsFromApi =
         (json['tagsFromApi'] as List)?.map((e) => e as String)?.toList()
     ..translated = json['translated'] as String
@@ -78,7 +78,6 @@ Map<String, dynamic> _$GalleryItemToJson(GalleryItem instance) =>
       'favcat': instance.favcat,
       'localFav': instance.localFav,
       'simpleTags': instance.simpleTags,
-      'simpleTagsTranslat': instance.simpleTagsTranslat,
       'tagsFromApi': instance.tagsFromApi,
       'translated': instance.translated,
       'tagGroup': instance.tagGroup,

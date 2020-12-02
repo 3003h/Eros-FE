@@ -129,21 +129,31 @@ class GalleryListParser {
       final String token = urlRult.group(2);
 
       // tags
-      final List tags = tr.querySelectorAll('div.gt');
+      final List<dom.Element> tags = tr.querySelectorAll('div.gt');
 
-      // 英文tag
-      final List<String> simpleTags = [];
-      for (final tag in tags) {
-        final tagText = tag.text.trim();
-        simpleTags.add(tagText);
-      }
+      // tag
+      final List<SimpleTag> simpleTags = <SimpleTag>[];
+      final RegExp colorRex = RegExp(r'#(\w{6})');
+      for (final dom.Element tag in tags) {
+        final String tagText = tag.text.trim();
+        final String translate =
+            await EhTagDatabase.getTranTag(tagText) ?? tagText;
 
-      // 中文tag
-      final List<String> simpleTagsTranslate = [];
-      for (final tag in tags) {
-        final tagText = tag.text.trim();
-        simpleTagsTranslate
-            .add(await EhTagDatabase.getTranTag(tagText) ?? tagText);
+        final String style = tag.attributes['style'];
+        String color = '';
+        String backgroundColor = '';
+        if (style != null) {
+          final Iterable<RegExpMatch> matches = colorRex.allMatches(style);
+          color = matches.elementAt(0)[0];
+          backgroundColor = matches.elementAt(3)[0];
+          // Global.logger
+          //     .d('$translate ${matches.length} $color  $backgroundColor');
+        }
+        simpleTags.add(SimpleTag()
+          ..text = tagText
+          ..translat = translate
+          ..color = color
+          ..backgrondColor = backgroundColor);
       }
 
       // 封面图片
@@ -212,7 +222,6 @@ class GalleryListParser {
             ..category = category
             ..simpleTags = simpleTags
             ..postTime = postTimeLocal
-            ..simpleTagsTranslat = simpleTagsTranslate
             ..ratingFallBack = ratingFB
             ..favTitle = favTitle
             ..favcat = favcat);
@@ -229,7 +238,6 @@ class GalleryListParser {
           ..category = category
           ..simpleTags = simpleTags
           ..postTime = postTimeLocal
-          ..simpleTagsTranslat = simpleTagsTranslate
           ..ratingFallBack = ratingFB
           ..favTitle = favTitle
           ..favcat = favcat);
