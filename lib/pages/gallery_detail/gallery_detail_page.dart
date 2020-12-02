@@ -8,7 +8,9 @@ import 'package:FEhViewer/models/states/local_favorite_model.dart';
 import 'package:FEhViewer/pages/gallery_detail/gallery_detail_widget.dart';
 import 'package:FEhViewer/pages/tab/gallery_base.dart';
 import 'package:FEhViewer/route/navigator_util.dart';
+import 'package:FEhViewer/utils/toast.dart';
 import 'package:FEhViewer/utils/utility.dart';
+import 'package:dio/dio.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -103,7 +105,13 @@ class _GalleryDetailPageState extends State<GalleryDetailPage> {
         _galleryModel.detailLoadFinish = true;
       }
       return _item;
+    } on DioError catch (e) {
+      if (e.type == DioErrorType.RESPONSE && e.response.statusCode == 404) {
+        showToast('画廊已被删除');
+        rethrow;
+      }
     } catch (e, stack) {
+      showToast('解析数据异常');
       Global.logger.e('解析数据异常\n' + e.toString() + '\n' + stack.toString());
       rethrow;
     }

@@ -3,6 +3,7 @@ import 'package:FEhViewer/models/index.dart';
 import 'package:FEhViewer/models/states/ehconfig_model.dart';
 import 'package:FEhViewer/models/states/gallery_model.dart';
 import 'package:FEhViewer/route/navigator_util.dart';
+import 'package:FEhViewer/utils/utility.dart';
 import 'package:FEhViewer/values/theme_colors.dart';
 import 'package:FEhViewer/widget/blur_image.dart';
 import 'package:FEhViewer/widget/rating_bar.dart';
@@ -362,9 +363,13 @@ class TagItem extends StatelessWidget {
   const TagItem({
     Key key,
     this.text,
+    this.color,
+    this.backgrondColor,
   }) : super(key: key);
 
   final String text;
+  final Color color;
+  final Color backgrondColor;
 
   @override
   Widget build(BuildContext context) {
@@ -373,7 +378,7 @@ class TagItem extends StatelessWidget {
       child: Container(
         // height: 18,
         padding: const EdgeInsets.fromLTRB(4, 2, 4, 2),
-        color:
+        color: backgrondColor ??
             CupertinoDynamicColor.resolve(ThemeColors.tagBackground, context),
         child: Text(
           text ?? '',
@@ -382,7 +387,8 @@ class TagItem extends StatelessWidget {
             fontSize: 12,
             height: 1,
             fontWeight: FontWeight.w400,
-            color: CupertinoDynamicColor.resolve(ThemeColors.tagText, context),
+            color: color ??
+                CupertinoDynamicColor.resolve(ThemeColors.tagText, context),
           ),
           strutStyle: const StrutStyle(height: 1),
         ),
@@ -398,23 +404,31 @@ class TagBox extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Selector2<EhConfigModel, GalleryModel, List>(
+    return Selector2<EhConfigModel, GalleryModel,
+        Tuple2<List<SimpleTag>, bool>>(
       selector: (context, EhConfigModel ehconfig, GalleryModel galleryModel) =>
-          ehconfig.isTagTranslat
-              ? galleryModel.galleryItem.simpleTagsTranslat
-              : galleryModel.galleryItem.simpleTags,
-      builder: (context, simpleTags, child) {
-        return simpleTags != null
+          Tuple2<List<SimpleTag>, bool>(
+              galleryModel.galleryItem.simpleTags, ehconfig.isTagTranslat),
+      builder: (context, Tuple2<List<SimpleTag>, bool> tuple, Widget child) {
+        final List<SimpleTag> simpleTags = tuple.item1;
+        final bool isTagTranslat = tuple.item2;
+        return simpleTags != null && simpleTags.isNotEmpty
             ? Container(
                 padding: const EdgeInsets.fromLTRB(0, 4, 0, 8),
                 child: Wrap(
                   spacing: 4, //主轴上子控件的间距
                   runSpacing: 4, //交叉轴上子控件之间的间距
-                  children: List<Widget>.from(simpleTags
-                      .map((tagText) => TagItem(
-                            text: tagText,
-                          ))
-                      .toList()), //要显示的子控件集合
+                  children:
+                      List<Widget>.from(simpleTags.map((SimpleTag _simpleTag) {
+                    final String _text =
+                        isTagTranslat ? _simpleTag.translat : _simpleTag.text;
+                    return TagItem(
+                      text: _text,
+                      color: ColorsUtil.getTagColor(_simpleTag.color),
+                      backgrondColor:
+                          ColorsUtil.getTagColor(_simpleTag.backgrondColor),
+                    );
+                  }).toList()), //要显示的子控件集合
                 ),
               )
             : Container();

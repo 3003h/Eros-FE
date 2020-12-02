@@ -1,4 +1,5 @@
 import 'package:json_annotation/json_annotation.dart';
+import 'simpleTag.dart';
 import 'tagGroup.dart';
 import 'galleryComment.dart';
 import 'galleryPreview.dart';
@@ -31,8 +32,7 @@ class GalleryItem {
   String favTitle;
   String favcat;
   bool localFav;
-  List<String> simpleTags;
-  List<String> simpleTagsTranslat;
+  List<SimpleTag> simpleTags;
   List<String> tagsFromApi;
   String translated;
   List<TagGroup> tagGroup;

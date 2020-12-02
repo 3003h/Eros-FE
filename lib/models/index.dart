@@ -6,6 +6,7 @@ export 'ehConfig.dart';
 export 'galleryItem.dart';
 export 'cacheConfig.dart';
 export 'user.dart';
+export 'simpleTag.dart';
 export 'dnsConfig.dart';
 export 'advanceSearch.dart';
 export 'galleryComment.dart';
