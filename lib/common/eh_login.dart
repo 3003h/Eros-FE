@@ -52,22 +52,32 @@ class EhUserManager {
 
     //  登录异常处理
     final List<String> setcookie = rult.headers['set-cookie'];
-    final cookieMap = _parseSetCookieString(setcookie);
 
-    if (cookieMap['ipb_member_id'] == null) {
+    final String cookieMemberId = setcookie.firstWhere(
+        (String cookieValue) => cookieValue.contains('ipb_member_id'));
+    final String cookiePassHash = setcookie.firstWhere(
+        (String cookieValue) => cookieValue.contains('ipb_pass_hash'));
+    Global.loggerNoStack.d('$cookieMemberId\n$cookiePassHash');
+    setcookie.add(cookieMemberId.replaceFirst('e-hentai.org', 'exhentai.org'));
+    setcookie.add(cookiePassHash.replaceFirst('e-hentai.org', 'exhentai.org'));
+
+    final List<Cookie> _cookies = setcookie.map((String cookieStr) {
+      return Cookie.fromSetCookieValue(cookieStr);
+    }).toList();
+
+    Global.loggerNoStack.d('$_cookies');
+
+    final String _id = _cookies
+        .firstWhere((Cookie cookie) => cookie.name == 'ipb_member_id')
+        .value;
+    if (_id == null || _id.isEmpty) {
       throw Exception('login Fail');
     }
-
-    final List<Cookie> cookies = [
-      Cookie('ipb_member_id', cookieMap['ipb_member_id']),
-      Cookie('ipb_pass_hash', cookieMap['ipb_pass_hash']),
-      Cookie('nw', '1'),
-    ];
 
     final PersistCookieJar cookieJar = await Api.cookieJar;
 
     // 设置EX的cookie
-    cookieJar.saveFromResponse(Uri.parse(EHConst.EX_BASE_URL), cookies);
+    cookieJar.saveFromResponse(Uri.parse(EHConst.EX_BASE_URL), _cookies);
 
     await _getExIgneous();
 

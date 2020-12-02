@@ -57,11 +57,12 @@ class _LoginPageState extends State<LoginPage> {
                     height: 38,
                     child: CupertinoTextField(
                       selectionHeightStyle: BoxHeightStyle.max,
-                      style: TextStyle(textBaseline: TextBaseline.alphabetic),
+                      style: const TextStyle(
+                          textBaseline: TextBaseline.alphabetic),
                       controller: _usernameController,
                       placeholder: ln.pls_i_username,
                       prefix: ConstrainedBox(
-                          constraints: BoxConstraints(minWidth: 50),
+                          constraints: const BoxConstraints(minWidth: 50),
                           child: Text(ln.user_name)),
                       // prefixMode: OverlayVisibilityMode.never,
                       decoration: null,

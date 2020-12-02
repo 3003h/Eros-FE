@@ -23,7 +23,7 @@ class WebLogin extends StatelessWidget {
     flutterWebviewPlugin.onUrlChanged.listen((String url) {
       final Uri _uri = Uri.parse(url);
       if (_uri.path == '/index.php' && _uri.query.isEmpty) {
-        Global.logger.i("登录成功");
+        Global.logger.i('登录成功');
         flutterWebviewPlugin.getCookies().then((Map<String, String> _cookies) {
           // 返回 并带上参数
           NavigatorUtil.goBackWithParams(context, _cookies);
