@@ -150,6 +150,33 @@ class ColorsUtil {
   }
 }
 
+class WidgetUtil {
+  static Rect getWidgetGlobalRect(GlobalKey key) {
+    final RenderBox renderBox = key.currentContext.findRenderObject();
+    final Offset offset = renderBox.localToGlobal(Offset.zero);
+    return Rect.fromLTWH(
+        offset.dx, offset.dy, renderBox.size.width, renderBox.size.height);
+  }
+}
+
+class CookieUtil {
+  static Future<void> resetExCookieFromEh() async {
+    final PersistCookieJar cookieJar = await Api.cookieJar;
+    final List<Cookie> cookiesEh =
+        cookieJar.loadForRequest(Uri.parse(EHConst.EH_BASE_URL));
+    final Cookie _memberId = cookiesEh
+        .firstWhere((Cookie cookie) => cookie.name == 'ipb_member_id')
+          ..domain = '.exhentai.org';
+    final Cookie _passHash = cookiesEh
+        .firstWhere((Cookie cookie) => cookie.name == 'ipb_pass_hash')
+          ..domain = '.exhentai.org';
+
+    cookieJar.delete(Uri.parse(EHConst.EX_BASE_URL));
+    cookieJar.saveFromResponse(
+        Uri.parse(EHConst.EX_BASE_URL), <Cookie>[_memberId, _passHash]);
+  }
+}
+
 // ignore: avoid_classes_with_only_static_members
 class Api {
   //改为使用 PersistCookieJar，在文档中有介绍，PersistCookieJar将cookie保留在文件中，

@@ -3,6 +3,7 @@ import 'dart:io';
 
 import 'package:FEhViewer/common/global.dart';
 import 'package:FEhViewer/utils/utility.dart';
+import 'package:FEhViewer/values/const.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:webview_cookie_manager/webview_cookie_manager.dart';
@@ -28,6 +29,10 @@ class _WebMySettingState extends State<WebMySetting> {
   final TextEditingController _nameController = TextEditingController();
 
   Future<void> _getCookies() async {
+    if (Api.getBaseUrl() == EHConst.EX_BASE_URL) {
+      await CookieUtil.resetExCookieFromEh();
+    }
+
     final WebviewCookieManager cookieManager = WebviewCookieManager();
     final List<Cookie> cookies =
         (await Api.cookieJar).loadForRequest(Uri.parse(Api.getBaseUrl()));
@@ -39,6 +44,7 @@ class _WebMySettingState extends State<WebMySetting> {
   void initState() {
     super.initState();
     _future = _getCookies();
+    // ignore: always_put_control_body_on_new_line
     if (Platform.isAndroid) WebView.platform = SurfaceAndroidWebView();
   }
 
@@ -83,7 +89,13 @@ class _WebMySettingState extends State<WebMySetting> {
     bool textField = true,
   }) {
     final String _title = type == ShowType.rename ? '重命名配置' : '新建配置';
-    _nameController.text = defaultText;
+
+    _nameController.value = TextEditingValue(
+        // 设置内容
+        text: defaultText,
+        // 保持光标在最后
+        selection: TextSelection.fromPosition(TextPosition(
+            affinity: TextAffinity.downstream, offset: defaultText.length)));
 
     return showCupertinoDialog<void>(
       context: context,
@@ -96,6 +108,7 @@ class _WebMySettingState extends State<WebMySetting> {
                 ? CupertinoTextField(
                     controller: _nameController,
                     autofocus: true,
+                    clearButtonMode: OverlayVisibilityMode.editing,
                     onEditingComplete: () {
                       // 点击键盘完成 提交
                       if (_nameController.text.trim().isNotEmpty) {
@@ -106,6 +119,7 @@ class _WebMySettingState extends State<WebMySetting> {
                         } else if (type == ShowType.delete) {
                           _deleteProfile();
                         }
+                        Navigator.of(context).pop();
                       }
                     },
                   )
@@ -130,8 +144,8 @@ class _WebMySettingState extends State<WebMySetting> {
                   } else if (type == ShowType.delete) {
                     _deleteProfile();
                   }
+                  Navigator.of(context).pop();
                 }
-                Navigator.of(context).pop();
               },
             ),
           ],
@@ -141,10 +155,11 @@ class _WebMySettingState extends State<WebMySetting> {
   }
 
   Future<void> _renameProfile(String profileName) async {
+    Global.logger.d('rename to $profileName');
     try {
       final String javascript = '''
       document.getElementById("profile_action").value = "rename";
-		  document.getElementById("profile_name").value = $profileName;
+		  document.getElementById("profile_name").value = "$profileName";
 		  do_profile_post();
       ''';
       (await _controller.future)?.evaluateJavascript(javascript);
@@ -155,7 +170,7 @@ class _WebMySettingState extends State<WebMySetting> {
     try {
       final String javascript = '''
       document.getElementById("profile_action").value = "create";
-		  document.getElementById("profile_name").value = $profileName;
+		  document.getElementById("profile_name").value = "$profileName";
 		  do_profile_post();
       ''';
       (await _controller.future)?.evaluateJavascript(javascript);
@@ -181,7 +196,6 @@ class _WebMySettingState extends State<WebMySetting> {
             padding: const EdgeInsets.all(0),
             child: const Icon(FontAwesomeIcons.checkCircle),
             onPressed: () async {
-              // (await _controller.future).reload();
               (await _controller.future).evaluateJavascript(
                   'document.querySelector("#apply > input[type=submit]").click();');
             },
@@ -210,6 +224,7 @@ class _WebMySettingState extends State<WebMySetting> {
                     },
                     onPageFinished: (String url) async {
                       print('Page Finished loading: $url');
+                      // 重写 window.prompt和 window.confirm方法
                       try {
                         const String javascript = '''
                         window.prompt = function (msg,defaultText){

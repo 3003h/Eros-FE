@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:FEhViewer/common/global.dart';
 import 'package:FEhViewer/models/index.dart';
 import 'package:FEhViewer/models/states/gallery_model.dart';
@@ -16,14 +18,17 @@ import 'package:provider/provider.dart';
 
 import 'gallery_view_base.dart';
 
+const double kBottomBarHeight = 40.0;
+
 class GalleryViewPageE extends StatefulWidget {
   GalleryViewPageE({Key key, int index})
       : index = index ?? 0,
-        controller = PageController(initialPage: index, viewportFraction: 1.1),
+        pageController =
+            PageController(initialPage: index, viewportFraction: 1.1),
         super(key: key);
 
   final int index;
-  final PageController controller;
+  final PageController pageController;
 
   @override
   _GalleryViewPageEState createState() => _GalleryViewPageEState();
@@ -32,24 +37,24 @@ class GalleryViewPageE extends StatefulWidget {
 class _GalleryViewPageEState extends State<GalleryViewPageE> {
   int _currentIndex;
   GalleryModel _galleryModel;
-  double _currPageValue;
+  double _sliderValue;
+  double _bottomBaroffset;
+  bool _showBar;
+
+  final GlobalKey _centkey = GlobalKey();
 
   @override
   void initState() {
     super.initState();
-    // widget.controller.addListener(() {
-    //   setState(() {
-    //     _currPageValue = widget.controller.page;
-    //     Global.logger.v('$_currPageValue');
-    //   });
-    // });
     _currentIndex = 0;
+    _bottomBaroffset = 0;
+    _showBar = false;
   }
 
   @override
   void dispose() {
     super.dispose();
-    widget.controller.dispose();
+    widget.pageController.dispose();
   }
 
   @override
@@ -70,12 +75,99 @@ class _GalleryViewPageEState extends State<GalleryViewPageE> {
       );
     }
     _currentIndex = widget.index;
+    _sliderValue = _currentIndex / 1.0;
   }
 
   /// 画廊图片大图浏览
   @override
   Widget build(BuildContext context) {
-    // Global.logger.v('bbb');
+    final MediaQueryData _mq = MediaQuery.of(context);
+    final Size _screensize = _mq.size;
+    final double _paddingLeft = _mq.padding.left;
+    final double _paddingRight = _mq.padding.right;
+    final double _paddingTop = _mq.padding.top;
+    final double _paddingBottom = _mq.padding.bottom;
+
+    final double _realPaddingBottom =
+        Platform.isAndroid ? 20 + _paddingBottom : _paddingBottom;
+    final double _offsetPositioned = _realPaddingBottom + kBottomBarHeight;
+    _bottomBaroffset = _showBar ? 0 : -_offsetPositioned;
+
+    final double _max = int.parse(_galleryModel.galleryItem.filecount) - 1.0;
+
+    void _handOnChangedEnd(double value) {
+      Global.logger.d('$value');
+      // widget.pageController.jumpToPage(value ~/ 1);
+      setState(() {
+        widget.pageController.jumpToPage(value ~/ 1);
+        _currentIndex = value ~/ 1;
+      });
+    }
+
+    void _handOnChanged(double value) {
+      setState(() {
+        _sliderValue = value;
+      });
+    }
+
+    Widget _buildBottomBar() {
+      final List<GalleryPreview> previews = _galleryModel.previews;
+      return Container(
+        color: const Color.fromARGB(150, 0, 0, 0),
+        padding: EdgeInsets.only(bottom: _realPaddingBottom, top: 10.0),
+        width: _screensize.width - _paddingLeft - _paddingRight,
+        child: Column(
+          children: <Widget>[
+            Row(
+              children: <Widget>[
+                GestureDetector(
+                  behavior: HitTestBehavior.opaque,
+                  onTap: () {
+                    Global.logger.v('back');
+                    NavigatorUtil.goBack(context);
+                  },
+                  child: Container(
+                    width: 40,
+                    height: kBottomBarHeight,
+                    child: const Icon(
+                      FontAwesomeIcons.chevronLeft,
+                      color: CupertinoColors.systemGrey6,
+                      // size: 24,
+                    ),
+                  ),
+                ),
+                Expanded(
+                  child: PageSlider(
+                    max: _max,
+                    sliderValue: _sliderValue,
+                    onChangedEnd: _handOnChangedEnd,
+                    onChanged: _handOnChanged,
+                  ),
+                ),
+                GestureDetector(
+                  behavior: HitTestBehavior.opaque,
+                  onTap: () {
+                    Global.logger.v('tap share');
+                    _showShareDialog(
+                        context, previews[_currentIndex].largeImageUrl);
+                  },
+                  child: Container(
+                    width: 40,
+                    height: kBottomBarHeight,
+                    child: const Icon(
+                      FontAwesomeIcons.share,
+                      color: CupertinoColors.systemGrey6,
+                      // size: 24,
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ],
+        ),
+      );
+    }
+
     return CupertinoTheme(
       data: const CupertinoThemeData(
         brightness: Brightness.dark,
@@ -92,13 +184,51 @@ class _GalleryViewPageEState extends State<GalleryViewPageE> {
                 return pre != next && next > pre;
               },
               builder: (context, int len, child) {
-                final List<GalleryPreview> previews = _galleryModel.previews;
                 return Stack(
+                  alignment: Alignment.center,
                   children: <Widget>[
                     Container(
                       child: _buildPhotoViewGallery(),
                     ),
+                    GestureDetector(
+                      behavior: HitTestBehavior.translucent,
+                      child: Container(),
+                      onPanDown: (DragDownDetails details) {
+                        final Rect _centRect =
+                            WidgetUtil.getWidgetGlobalRect(_centkey);
+
+                        final double _dx = details.globalPosition.dx;
+                        final double _dy = details.globalPosition.dy;
+                        // Global.logger.d(
+                        //     'onPanDown ${details.globalPosition}  $_centRect');
+                        if ((_dx < _centRect.left || _dx > _centRect.right) &&
+                            (_dy < _centRect.top || _dy > _centRect.bottom)) {
+                          Global.logger.d('onPanDown hide bar');
+                          setState(() {
+                            _showBar = false;
+                          });
+                        }
+                      },
+                      onPanStart: (DragStartDetails details) {
+                        Global.logger.d('${details.localPosition} ');
+                      },
+                    ),
+                    // 中心触摸区
+                    GestureDetector(
+                      behavior: HitTestBehavior.translucent,
+                      child: Container(
+                        key: _centkey,
+                        height: _screensize.height / 4,
+                        width: _screensize.width / 2.5,
+                      ),
+                      onTap: () {
+                        setState(() {
+                          _showBar = !_showBar;
+                        });
+                      },
+                    ),
                     SafeArea(
+                      bottom: false,
                       child: Stack(
                         fit: StackFit.expand,
                         alignment: Alignment.center,
@@ -109,51 +239,21 @@ class _GalleryViewPageEState extends State<GalleryViewPageE> {
                                 child: Text(
                               '${_currentIndex + 1}/${_galleryModel.galleryItem.filecount}',
                               style: const TextStyle(
-                                  color: CupertinoColors.systemGrey6),
+                                  color: CupertinoColors.systemGrey6,
+                                  shadows: <Shadow>[
+                                    Shadow(
+                                      color: Colors.black,
+                                      offset: Offset(1, 1),
+                                      blurRadius: 2,
+                                    )
+                                  ]),
                             )),
                           ),
-                          Positioned(
-                            bottom: 0,
-                            left: 0,
-                            child: GestureDetector(
-                              // 不可见区域点击有效
-                              behavior: HitTestBehavior.opaque,
-                              onTap: () {
-                                Global.logger.v('back');
-                                NavigatorUtil.goBack(context);
-                              },
-                              child: Container(
-                                width: 40,
-                                height: 40,
-                                child: const Icon(
-                                  FontAwesomeIcons.chevronLeft,
-                                  color: CupertinoColors.systemGrey6,
-                                  // size: 24,
-                                ),
-                              ),
-                            ),
-                          ),
-                          Positioned(
-                            bottom: 0,
-                            right: 0,
-                            child: GestureDetector(
-                              // 不可见区域点击有效
-                              behavior: HitTestBehavior.opaque,
-                              onTap: () {
-                                Global.logger.v('tap share');
-                                _showShareDialog(context,
-                                    previews[_currentIndex].largeImageUrl);
-                              },
-                              child: Container(
-                                width: 40,
-                                height: 40,
-                                child: const Icon(
-                                  FontAwesomeIcons.share,
-                                  color: CupertinoColors.systemGrey6,
-                                  // size: 24,
-                                ),
-                              ),
-                            ),
+                          AnimatedPositioned(
+                            curve: Curves.fastOutSlowIn,
+                            duration: const Duration(milliseconds: 300),
+                            bottom: _bottomBaroffset,
+                            child: _buildBottomBar(),
                           ),
                         ],
                       ),
@@ -166,7 +266,7 @@ class _GalleryViewPageEState extends State<GalleryViewPageE> {
     );
   }
 
-  Widget _buildExtendedImageGesturePageView() {
+  /*Widget _buildExtendedImageGesturePageView() {
     final List<GalleryPreview> previews = _galleryModel.previews;
     return ExtendedImageGesturePageView.builder(
       itemBuilder: (BuildContext context, int index) {
@@ -194,10 +294,10 @@ class _GalleryViewPageEState extends State<GalleryViewPageE> {
           _currentIndex = index;
         });
       },
-      controller: widget.controller,
+      controller: widget.pageController,
       scrollDirection: Axis.horizontal,
     );
-  }
+  }*/
 
   Widget _buildPhotoViewGallery() {
     return PhotoViewGallery.builder(
@@ -241,7 +341,7 @@ class _GalleryViewPageEState extends State<GalleryViewPageE> {
               );
       },
       // backgroundDecoration: null,
-      pageController: widget.controller,
+      pageController: widget.pageController,
       enableRotation: false,
       // 旋转
       onPageChanged: (int index) {
@@ -255,8 +355,76 @@ class _GalleryViewPageEState extends State<GalleryViewPageE> {
         );
         setState(() {
           _currentIndex = index;
+          _sliderValue = _currentIndex / 1.0;
         });
       },
+    );
+  }
+}
+
+class PageSlider extends StatefulWidget {
+  const PageSlider({
+    Key key,
+    @required this.max,
+    @required this.sliderValue,
+    @required this.onChangedEnd,
+    @required this.onChanged,
+  }) : super(key: key);
+
+  final double max;
+  final double sliderValue;
+  final ValueChanged<double> onChangedEnd;
+  final ValueChanged<double> onChanged;
+
+  @override
+  _PageSliderState createState() => _PageSliderState();
+}
+
+class _PageSliderState extends State<PageSlider> {
+  double _value;
+
+  @override
+  void initState() {
+    super.initState();
+    _value = widget.sliderValue;
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    _value = widget.sliderValue;
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      child: Row(
+        children: <Widget>[
+          Text(
+            '${widget.sliderValue ~/ 1 + 1}',
+            style: const TextStyle(color: CupertinoColors.systemGrey6),
+          ),
+          Expanded(
+            child: CupertinoSlider(
+                min: 0,
+                max: widget.max,
+                value: widget.sliderValue,
+                onChanged: (double newValue) {
+                  setState(() {
+                    _value = newValue;
+                  });
+                  widget.onChanged(newValue);
+                },
+                onChangeEnd: (double newValue) {
+                  widget.onChangedEnd(newValue);
+                }),
+          ),
+          Text(
+            '${widget.max ~/ 1 + 1}',
+            style: const TextStyle(color: CupertinoColors.systemGrey6),
+          ),
+        ],
+      ),
     );
   }
 }
