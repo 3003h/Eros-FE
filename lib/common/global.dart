@@ -10,8 +10,7 @@ import 'package:FEhViewer/utils/https_proxy.dart';
 import 'package:FEhViewer/utils/storage.dart';
 import 'package:FEhViewer/utils/utility.dart';
 import 'package:FEhViewer/values/storages.dart';
-import 'package:dio/dio.dart';
-import 'package:dio_http_cache/dio_http_cache.dart' as dio;
+import 'package:dio_cookie_manager/dio_cookie_manager.dart';
 import 'package:fluro/fluro.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -29,6 +28,8 @@ class Global {
   static bool isFirstReOpenEhSetting = true;
   static Profile profile = Profile();
   static History history = History();
+
+  static CookieManager cookieManager;
 
   static HttpProxy httpProxy = HttpProxy('localhost', '$kProxyPort');
 
@@ -57,6 +58,7 @@ class Global {
     // 运行初始
     WidgetsFlutterBinding.ensureInitialized();
 
+    // 代理初始化
     await CustomHttpsProxy.instance.init();
 
     //statusBar设置为透明，去除半透明遮罩
@@ -64,9 +66,30 @@ class Global {
         SystemUiOverlayStyle(statusBarColor: Colors.transparent);
     SystemChrome.setSystemUIOverlayStyle(_style);
 
-    // 工具初始
+    // SP初始化
     await StorageUtil.init();
 
+    _profileInit();
+
+    cookieManager = CookieManager(await Api.cookieJar);
+
+    // 路由
+    final FluroRouter router = FluroRouter();
+    EHRoutes.configureRoutes(router);
+    Application.router = router;
+
+    // 判断是否debug模式
+    inDebugMode = EHUtils().isInDebugMode;
+
+    // 读取设备第一次打开
+    isFirstOpen = !StorageUtil().getBool(STORAGE_DEVICE_ALREADY_OPEN_KEY);
+    if (isFirstOpen) {
+      StorageUtil().setBool(STORAGE_DEVICE_ALREADY_OPEN_KEY, true);
+    }
+  }
+
+  /// profile初始化
+  static void _profileInit() {
     // ignore: always_specify_types
     final _profile = StorageUtil().getJSON(PROFILE);
     if (_profile != null) {
@@ -119,20 +142,6 @@ class Global {
     }
 
     history.history ??= <GalleryItem>[];
-
-    // 路由
-    final FluroRouter router = FluroRouter();
-    EHRoutes.configureRoutes(router);
-    Application.router = router;
-
-    // 判断是否debug模式
-    inDebugMode = EHUtils().isInDebugMode;
-
-    // 读取设备第一次打开
-    isFirstOpen = !StorageUtil().getBool(STORAGE_DEVICE_ALREADY_OPEN_KEY);
-    if (isFirstOpen) {
-      StorageUtil().setBool(STORAGE_DEVICE_ALREADY_OPEN_KEY, true);
-    }
   }
 
   // 持久化Profile信息

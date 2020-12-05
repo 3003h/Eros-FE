@@ -21,9 +21,7 @@ class WebMySetting extends StatefulWidget {
 }
 
 class _WebMySettingState extends State<WebMySetting> {
-  // WebViewController _controller;
-  final Completer<WebViewController> _controller =
-      Completer<WebViewController>();
+  WebViewController _controller;
   Future<void> _future;
 
   final TextEditingController _nameController = TextEditingController();
@@ -36,6 +34,7 @@ class _WebMySettingState extends State<WebMySetting> {
     final WebviewCookieManager cookieManager = WebviewCookieManager();
     final List<Cookie> cookies =
         (await Api.cookieJar).loadForRequest(Uri.parse(Api.getBaseUrl()));
+    // await cookieManager.clearCookies();
     Global.logger.d(cookies.join('\n'));
     await cookieManager?.setCookies(cookies);
   }
@@ -70,10 +69,10 @@ class _WebMySettingState extends State<WebMySetting> {
         name: 'Prompt',
         onMessageReceived: (JavascriptMessage message) {
           Global.logger.d(message.message);
-          List<String> _msgs = message.message.split('#@#');
+          final List<String> _msgs = message.message.split('#@#');
           final String _msg = _msgs[0];
           final String _defaultText = _msgs[1];
-          if (_msg.contains('new name')) {
+          if (_msg.contains('new name for this profile')) {
             Global.logger.d('重命名 $_defaultText');
             _showAlterDilog(ShowType.rename, defaultText: _defaultText);
           } else if (_msg.contains('new profile')) {
@@ -162,7 +161,8 @@ class _WebMySettingState extends State<WebMySetting> {
 		  document.getElementById("profile_name").value = "$profileName";
 		  do_profile_post();
       ''';
-      (await _controller.future)?.evaluateJavascript(javascript);
+      // (await _controller.future)?.evaluateJavascript(javascript);
+      _controller.evaluateJavascript(javascript);
     } catch (_) {}
   }
 
@@ -173,7 +173,8 @@ class _WebMySettingState extends State<WebMySetting> {
 		  document.getElementById("profile_name").value = "$profileName";
 		  do_profile_post();
       ''';
-      (await _controller.future)?.evaluateJavascript(javascript);
+      // (await _controller.future)?.evaluateJavascript(javascript);
+      _controller.evaluateJavascript(javascript);
     } catch (_) {}
   }
 
@@ -183,7 +184,8 @@ class _WebMySettingState extends State<WebMySetting> {
       document.getElementById("profile_action").value = "delete";
 		  do_profile_post();
       ''';
-      (await _controller.future)?.evaluateJavascript(javascript);
+      // (await _controller.future)?.evaluateJavascript(javascript);
+      _controller.evaluateJavascript(javascript);
     } catch (_) {}
   }
 
@@ -196,7 +198,7 @@ class _WebMySettingState extends State<WebMySetting> {
             padding: const EdgeInsets.all(0),
             child: const Icon(FontAwesomeIcons.checkCircle),
             onPressed: () async {
-              (await _controller.future).evaluateJavascript(
+              _controller.evaluateJavascript(
                   'document.querySelector("#apply > input[type=submit]").click();');
             },
           ),
@@ -216,8 +218,8 @@ class _WebMySettingState extends State<WebMySetting> {
                       _deleteJavascriptChannel(context),
                     },
                     onWebViewCreated: (WebViewController webViewController) {
-                      // _controller = webViewController;
-                      _controller.complete(webViewController);
+                      _controller = webViewController;
+                      // _controller.complete(webViewController);
                     },
                     onPageStarted: (String url) {
                       print('Page started loading: $url');
@@ -234,14 +236,14 @@ class _WebMySettingState extends State<WebMySetting> {
                           Delete.postMessage(msg);
                         }
                         ''';
-                        (await _controller.future)
-                            ?.evaluateJavascript(javascript);
+                        _controller?.evaluateJavascript(javascript);
                       } catch (_) {}
                     },
                     gestureNavigationEnabled: true,
                     navigationDelegate: (NavigationRequest request) {
-                      if (!request.url.endsWith('uconfig.php')) {
+                      if (!request.url.endsWith('/uconfig.php')) {
                         print('阻止打开 ${request.url}');
+                        // _controller.loadUrl('${Api.getBaseUrl()}/uconfig.php');
                         return NavigationDecision.prevent;
                       }
                       return NavigationDecision.navigate;

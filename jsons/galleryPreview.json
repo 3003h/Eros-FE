@@ -1,11 +1,14 @@
 {
   "isLarge": false,
   "isCache": false,
+  "startPrecache": false,
   "ser": 1,
   "href": "",
   "largeImageUrl": "",
   "imgUrl": "",
   "height": 2.0,
   "width": 2.0,
+  "largeImageHeight": 2000.0,
+  "largeImageWidth": 1280.0,
   "offSet" : 200.0
 }
