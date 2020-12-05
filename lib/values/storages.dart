@@ -23,3 +23,5 @@ const String COOKIE = 'cookie';
 const String PROFILE = 'profile';
 
 const String HISTORY = 'history';
+
+const String GALLERY_CACHE = 'galleryCache';

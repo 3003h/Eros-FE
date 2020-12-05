@@ -1,7 +1,9 @@
 import 'package:FEhViewer/common/global.dart';
 import 'package:FEhViewer/generated/l10n.dart';
 import 'package:FEhViewer/models/galleryItem.dart';
+import 'package:FEhViewer/models/index.dart';
 import 'package:FEhViewer/models/states/ehconfig_model.dart';
+import 'package:FEhViewer/models/states/gallery_cache_model.dart';
 import 'package:FEhViewer/models/states/gallery_model.dart';
 import 'package:FEhViewer/models/states/history_model.dart';
 import 'package:FEhViewer/models/states/local_favorite_model.dart';
@@ -35,6 +37,7 @@ class _GalleryDetailPageState extends State<GalleryDetailPage> {
   GalleryModel _galleryModel;
   HistoryModel _historyModel;
   LocalFavModel _localFavModel;
+  GalleryCacheModel _galleryCacheModel;
 
   Future<GalleryItem> _futureBuilderFuture;
 
@@ -56,6 +59,12 @@ class _GalleryDetailPageState extends State<GalleryDetailPage> {
         Provider.of<LocalFavModel>(context, listen: false);
     if (localFavModel != _localFavModel) {
       _localFavModel = localFavModel;
+    }
+
+    final GalleryCacheModel galleryCacheModel =
+        Provider.of<GalleryCacheModel>(context, listen: false);
+    if (galleryCacheModel != _galleryCacheModel) {
+      _galleryCacheModel = galleryCacheModel;
     }
 
     _futureBuilderFuture = _loadData();
@@ -110,6 +119,7 @@ class _GalleryDetailPageState extends State<GalleryDetailPage> {
         showToast('画廊已被删除');
         rethrow;
       }
+      rethrow;
     } catch (e, stack) {
       showToast('解析数据异常');
       Global.logger.e('解析数据异常\n' + e.toString() + '\n' + stack.toString());
@@ -245,7 +255,7 @@ class _GalleryDetailPageState extends State<GalleryDetailPage> {
     return cps;
   }
 
-  Widget _buildDetail(context) {
+  Widget _buildDetail(BuildContext context) {
     return Selector<GalleryModel, Tuple3<bool, bool, GalleryItem>>(
       selector: (_, GalleryModel gllaeryModel) => Tuple3(
           gllaeryModel.detailLoadFinish,
@@ -325,7 +335,10 @@ class _GalleryDetailPageState extends State<GalleryDetailPage> {
         color: CupertinoColors.activeBlue,
         onPressed: _hasPreview
             ? () {
-                NavigatorUtil.goGalleryViewPagePr(context, 0);
+                final GalleryCache _galleryCache = _galleryCacheModel
+                    .getGalleryCache(_galleryModel.galleryItem.gid);
+                final int _index = _galleryCache?.lastIndex ?? 0;
+                NavigatorUtil.goGalleryViewPagePr(context, _index);
               }
             : null);
   }
