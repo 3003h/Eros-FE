@@ -2,11 +2,11 @@ import 'dart:io';
 
 import 'package:FEhViewer/common/global.dart';
 import 'package:FEhViewer/models/index.dart';
+import 'package:FEhViewer/models/states/gallery_cache_model.dart';
 import 'package:FEhViewer/models/states/gallery_model.dart';
 import 'package:FEhViewer/route/navigator_util.dart';
 import 'package:FEhViewer/utils/toast.dart';
 import 'package:FEhViewer/utils/utility.dart';
-import 'package:extended_image/extended_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -36,6 +36,7 @@ class _GalleryViewPageState extends State<GalleryViewPage> {
   // with AutomaticKeepAliveClientMixin {
   int _currentIndex;
   GalleryModel _galleryModel;
+  GalleryCacheModel _galleryCacheModel;
   double _sliderValue;
 
   bool _showBar;
@@ -82,8 +83,11 @@ class _GalleryViewPageState extends State<GalleryViewPage> {
     super.didChangeDependencies();
     final GalleryModel galleryModel =
         Provider.of<GalleryModel>(context, listen: false);
+    final GalleryCacheModel galleryCacheModel =
+        Provider.of<GalleryCacheModel>(context, listen: false);
     if (galleryModel != _galleryModel) {
       _galleryModel = galleryModel;
+      _galleryCacheModel = galleryCacheModel;
       // 预载后面5张图
       Global.logger.v('预载后面5张图 didChangeDependencies');
       GalleryPrecache.instance.precacheImages(
@@ -95,6 +99,10 @@ class _GalleryViewPageState extends State<GalleryViewPage> {
       );
     }
     _currentIndex = widget.index;
+    Future<void>.delayed(const Duration(milliseconds: 100)).then((_) {
+      _galleryCacheModel.setIndex(_galleryModel.galleryItem.gid, _currentIndex,
+          notify: false);
+    });
     _sliderValue = _currentIndex / 1.0;
     _futurePhotoViewGallery = _getImageInfo();
   }
@@ -147,7 +155,9 @@ class _GalleryViewPageState extends State<GalleryViewPage> {
     // if (widget.pageController.hasClients) {
     //   widget.pageController.jumpToPage(value ~/ 1);
     // }
-    _pageController.jumpToPage(value ~/ 1);
+    final int _index = value ~/ 1;
+    _galleryCacheModel.setIndex(_galleryModel.galleryItem.gid, _index);
+    _pageController.jumpToPage(_index);
   }
 
   void _handOnChanged(double value) {
@@ -180,6 +190,7 @@ class _GalleryViewPageState extends State<GalleryViewPage> {
                     // 内容部件
                     Container(
                       child: _buildPhotoViewGallery(),
+                      // child: _buildListView(),
                     ),
                     // 外沿触摸区
                     GestureDetector(
@@ -345,7 +356,6 @@ class _GalleryViewPageState extends State<GalleryViewPage> {
 
   /// 底栏
   Widget _buildBottomBar() {
-    final List<GalleryPreview> previews = _galleryModel.previews;
     final double _max = int.parse(_galleryModel.galleryItem.filecount) - 1.0;
     return Container(
       color: const Color.fromARGB(150, 0, 0, 0),
@@ -406,6 +416,16 @@ class _GalleryViewPageState extends State<GalleryViewPage> {
       scrollDirection: Axis.horizontal,
     );
   }*/
+
+  /// 竖直浏览布局
+  Widget _buildListView() {
+    return ListView.builder(
+      itemBuilder: (BuildContext context, int index) {
+        return GalleryImage(index: index);
+      },
+      itemCount: _galleryModel.previews.length,
+    );
+  }
 
   /// 水平方向浏览部件
   Widget _buildPhotoViewGallery() {
@@ -474,6 +494,8 @@ class _GalleryViewPageState extends State<GalleryViewPage> {
         );
         _currentIndex = index;
         _sliderValue = _currentIndex / 1.0;
+        _galleryCacheModel.setIndex(
+            _galleryModel.galleryItem.gid, _currentIndex);
         _futurePhotoViewGallery =
             GalleryUtil.getImageInfo(_galleryModel, _currentIndex);
         setState(() {});

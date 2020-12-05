@@ -1,5 +1,6 @@
 export 'dnsCache.dart';
 export 'tagGroup.dart';
+export 'galleryCache.dart';
 export 'galleryPreview.dart';
 export 'history.dart';
 export 'ehConfig.dart';

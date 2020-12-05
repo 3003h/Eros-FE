@@ -28,6 +28,7 @@ class Global {
   static bool isFirstReOpenEhSetting = true;
   static Profile profile = Profile();
   static History history = History();
+  static List<GalleryCache> galleryCaches = <GalleryCache>[];
 
   static CookieManager cookieManager;
 
@@ -101,6 +102,7 @@ class Global {
     }
 
     getHistoryFromSP();
+    getGalleryCaches();
 
     if (profile.ehConfig == null) {
       profile.ehConfig = EhConfig()
@@ -151,9 +153,26 @@ class Global {
   }
 
   static Future<bool> saveHistory() async {
-    // logger.v(history.toJson());
-    // logger.v('${history.history.length}');
     return StorageUtil().setJSON(HISTORY, history);
+  }
+
+  static Future<void> getGalleryCaches() async {
+    final dynamic _galleryCachesStr = StorageUtil().getJSON(GALLERY_CACHE);
+    final List<dynamic> _galleryCaches = json.decode(_galleryCachesStr);
+    // Global.logger.d('$_galleryCaches');
+    if (_galleryCaches != null) {
+      for (final dynamic cache in _galleryCaches) {
+        Global.logger.d('$cache');
+        galleryCaches.add(GalleryCache.fromJson(cache));
+      }
+    }
+  }
+
+  static Future<bool> saveGalleryCaches() async {
+    galleryCaches.forEach((GalleryCache element) {
+      Global.logger.d(' ${element.toJson()}');
+    });
+    return StorageUtil().setJSON(GALLERY_CACHE, galleryCaches);
   }
 
   static Future<void> getHistoryFromSP() async {

@@ -2,6 +2,7 @@ import 'package:FEhViewer/common/global.dart';
 import 'package:FEhViewer/generated/l10n.dart';
 import 'package:FEhViewer/models/index.dart';
 import 'package:FEhViewer/models/states/ehconfig_model.dart';
+import 'package:FEhViewer/models/states/gallery_cache_model.dart';
 import 'package:FEhViewer/models/states/gallery_model.dart';
 import 'package:FEhViewer/route/navigator_util.dart';
 import 'package:FEhViewer/values/const.dart';
@@ -616,11 +617,16 @@ class ReadButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final GalleryCacheModel _galleryCacheModel =
+        Provider.of<GalleryCacheModel>(context, listen: false);
+    final GalleryModel _galleryModel =
+        Provider.of<GalleryModel>(context, listen: false);
     return Selector<GalleryModel, bool>(
         selector: (_, GalleryModel provider) =>
             provider.oriGalleryPreview.isNotEmpty,
         builder: (BuildContext context, bool value, __) {
-          var ln = S.of(context);
+          final S ln = S.of(context);
+
           return CupertinoButton(
               child: Text(
                 ln.READ,
@@ -632,7 +638,11 @@ class ReadButton extends StatelessWidget {
               color: CupertinoColors.activeBlue,
               onPressed: value
                   ? () {
-                      NavigatorUtil.goGalleryViewPagePr(context, 0);
+                      final GalleryCache _galleryCache = _galleryCacheModel
+                          .getGalleryCache(_galleryModel.galleryItem.gid);
+                      final int _index = _galleryCache?.lastIndex ?? 0;
+                      Global.logger.d('lastIndex $_index');
+                      NavigatorUtil.goGalleryViewPagePr(context, _index);
                     }
                   : null);
         });
