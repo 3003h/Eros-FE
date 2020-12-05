@@ -31,20 +31,10 @@ class HttpManager {
         //共有三种方式json,bytes(响应字节),stream（响应流）,plain
         responseType: ResponseType.json);
     _dio = Dio(_options);
-    //设置Cookie
-//    _dio.interceptors.add(CookieManager(await Api.cookieJar));
-
-    // (_dio.httpClientAdapter as DefaultHttpClientAdapter).onHttpClientCreate =
-    //     (HttpClient client) {
-    //   client.badCertificateCallback =
-    //       (X509Certificate cert, String host, int port) => true;
-    //   return client;
-    // };
 
     //设置Cookie管理
-    Api.cookieJar.then((PersistCookieJar cookieJar) {
-      _dio.interceptors.add(CookieManager(cookieJar));
-    });
+    _dio.interceptors.add(Global.cookieManager);
+
     //添加拦截器
     // _dio.interceptors.add(Global.netCache);
     if (cache) {
@@ -78,9 +68,7 @@ class HttpManager {
       client.findProxy = (Uri uri) => 'PROXY localhost:4041';
     };
     //设置Cookie管理
-    Api.cookieJar.then((PersistCookieJar cookieJar) {
-      _dio.interceptors.add(CookieManager(cookieJar));
-    });
+    _dio.interceptors.add(Global.cookieManager);
 
     // _dio.interceptors.add(Global.netCache);
     if (cache) {
@@ -113,7 +101,7 @@ class HttpManager {
       Options options,
       CancelToken cancelToken}) async {
     //设置Cookie管理
-    // _dio.interceptors.add(CookieManager(await Api.cookieJar));
+    _dio.interceptors.add(CookieManager(await Api.cookieJar));
     Response<String> response;
     try {
       response = await _dio.get<String>(url,

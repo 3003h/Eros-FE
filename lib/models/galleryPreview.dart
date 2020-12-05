@@ -9,12 +9,15 @@ class GalleryPreview {
 
   bool isLarge;
   bool isCache;
+  bool startPrecache;
   int ser;
   String href;
   String largeImageUrl;
   String imgUrl;
   double height;
   double width;
+  double largeImageHeight;
+  double largeImageWidth;
   double offSet;
 
   factory GalleryPreview.fromJson(Map<String,dynamic> json) => _$GalleryPreviewFromJson(json);

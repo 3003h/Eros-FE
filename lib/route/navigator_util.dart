@@ -292,7 +292,7 @@ class NavigatorUtil {
   // 转到大图浏览
   static void goGalleryViewPagePr(BuildContext context, int index) {
     Widget _child() {
-      return GalleryViewPageE(index: index);
+      return GalleryViewPage(index: index);
     }
 
     final GalleryModel galleryModel =

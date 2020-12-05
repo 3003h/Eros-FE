@@ -28,18 +28,12 @@ class _HistoryTabState extends State<HistoryTab> {
   @override
   void initState() {
     super.initState();
-    _futureBuilderFuture = _loadData();
-  }
-
-  @override
-  void didChangeDependencies() {
-    super.didChangeDependencies();
-
     final HistoryModel historyModel =
         Provider.of<HistoryModel>(context, listen: false);
     if (historyModel != _historyModel) {
       _historyModel = historyModel;
     }
+    _futureBuilderFuture = _loadData();
   }
 
   Future<List<GalleryItem>> _loadData() async {

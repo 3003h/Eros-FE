@@ -17,12 +17,16 @@ class CommentPage extends StatelessWidget {
         SliverSafeArea(
           sliver: SliverList(
             delegate: SliverChildBuilderDelegate(
-              (contex, index) {
-                return CommentItem(
-                  galleryComment: galleryComments[index],
-                );
+              (BuildContext contex, int index) {
+                if (index < galleryComments.length) {
+                  return CommentItem(
+                    galleryComment: galleryComments[index],
+                  );
+                } else {
+                  return Container(height: 20);
+                }
               },
-              childCount: galleryComments.length,
+              childCount: galleryComments.length + 1,
             ),
           ),
         )
