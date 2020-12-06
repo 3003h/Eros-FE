@@ -89,4 +89,10 @@ class EhConfigModel extends ProfileChangeNotifier {
     _ehConfig.favoritesOrder = EnumToString.convertToString(favoriteOrder);
     notifyListeners();
   }
+
+  bool get isSafeMode => _ehConfig.safeMode;
+  set isSafeMode(bool value) {
+    _ehConfig.safeMode = value;
+    notifyListeners();
+  }
 }

@@ -31,8 +31,8 @@ void main() {
         builder: (context) => MyApp(), // Wrap your app
       ),
     );
-  }).catchError((e) {
-    print('catchError $e');
+  }).catchError((e, stack) {
+    Global.logger.e('$stack');
   });
 }
 
@@ -68,58 +68,64 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
     final Widget cupertinoApp = Consumer2<LocaleModel, ThemeModel>(builder:
         (BuildContext context, LocaleModel localeModel, ThemeModel themeModel,
             Widget child) {
-      return CupertinoApp(
-        debugShowCheckedModeBanner: false,
-        onGenerateTitle: (BuildContext context) => S.of(context).app_title,
-        onGenerateRoute: Application.router.generator,
-        theme: themeModel.getTheme(context, _brightness),
-        // theme: ThemeColors.darkTheme,
-        home: const SplashPage(),
-        locale: Global.inDebugMode
-            ? DevicePreview.locale(context)
-            : localeModel.getLocale(),
-        builder: DevicePreview.appBuilder,
-        supportedLocales: <Locale>[
-          const Locale('en', ''),
-          ...S.delegate.supportedLocales
-        ],
-        // ignore: prefer_const_literals_to_create_immutables
-        localizationsDelegates: [
-          // 本地化的代理类
-          S.delegate,
-          GlobalMaterialLocalizations.delegate,
-          GlobalCupertinoLocalizations.delegate,
-          GlobalWidgetsLocalizations.delegate,
-        ],
-        localeResolutionCallback:
-            (Locale _locale, Iterable<Locale> supportedLocales) {
-          Global.logger.v(
-              '${_locale?.languageCode}  ${_locale?.scriptCode}  ${_locale?.countryCode}');
-          if (localeModel.getLocale() != null) {
-            //如果已经选定语言，则不跟随系统
-            return localeModel.getLocale();
-          } else {
-            Locale locale;
-            //APP语言跟随系统语言，如果系统语言不是中文简体或美国英语，
-            //则默认使用美国英语
-            if (supportedLocales.contains(_locale)) {
-              locale = _locale;
-            } else {
-              locale = const Locale('en', 'US');
-            }
+      return Selector<EhConfigModel, bool>(
+          selector: (_, EhConfigModel ehConfig) => ehConfig.isSafeMode,
+          builder: (context, snapshot, _) {
+            Global.logger.d('CupertinoApp');
+            return CupertinoApp(
+              debugShowCheckedModeBanner: false,
+              onGenerateTitle: (BuildContext context) =>
+                  S.of(context).app_title,
+              onGenerateRoute: Application.router.generator,
+              theme: themeModel.getTheme(context, _brightness),
+              // theme: ThemeColors.darkTheme,
+              home: const SplashPage(),
+              locale: Global.inDebugMode
+                  ? DevicePreview.locale(context)
+                  : localeModel.getLocale(),
+              builder: DevicePreview.appBuilder,
+              supportedLocales: <Locale>[
+                const Locale('en', ''),
+                ...S.delegate.supportedLocales
+              ],
+              // ignore: prefer_const_literals_to_create_immutables
+              localizationsDelegates: [
+                // 本地化的代理类
+                S.delegate,
+                GlobalMaterialLocalizations.delegate,
+                GlobalCupertinoLocalizations.delegate,
+                GlobalWidgetsLocalizations.delegate,
+              ],
+              localeResolutionCallback:
+                  (Locale _locale, Iterable<Locale> supportedLocales) {
+                Global.logger.v(
+                    '${_locale?.languageCode}  ${_locale?.scriptCode}  ${_locale?.countryCode}');
+                if (localeModel.getLocale() != null) {
+                  //如果已经选定语言，则不跟随系统
+                  return localeModel.getLocale();
+                } else {
+                  Locale locale;
+                  //APP语言跟随系统语言，如果系统语言不是中文简体或美国英语，
+                  //则默认使用美国英语
+                  if (supportedLocales.contains(_locale)) {
+                    locale = _locale;
+                  } else {
+                    locale = const Locale('en', 'US');
+                  }
 
-            // 中文 简繁体处理
-            if (_locale?.languageCode == 'zh') {
-              if (_locale?.scriptCode == 'Hant') {
-                locale = const Locale('zh', 'HK'); //繁体
-              } else {
-                locale = const Locale('zh', 'CN'); //简体
-              }
-            }
-            return locale;
-          }
-        },
-      );
+                  // 中文 简繁体处理
+                  if (_locale?.languageCode == 'zh') {
+                    if (_locale?.scriptCode == 'Hant') {
+                      locale = const Locale('zh', 'HK'); //繁体
+                    } else {
+                      locale = const Locale('zh', 'CN'); //简体
+                    }
+                  }
+                  return locale;
+                }
+              },
+            );
+          });
     });
 
     final MultiProvider multiProvider = MultiProvider(
