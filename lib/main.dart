@@ -71,7 +71,7 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
       return Selector<EhConfigModel, bool>(
           selector: (_, EhConfigModel ehConfig) => ehConfig.isSafeMode,
           builder: (context, snapshot, _) {
-            Global.logger.d('CupertinoApp');
+            // Global.logger.d('CupertinoApp');
             return CupertinoApp(
               debugShowCheckedModeBanner: false,
               onGenerateTitle: (BuildContext context) =>

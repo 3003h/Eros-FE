@@ -102,7 +102,7 @@ class _GalleryDetailPageState extends State<GalleryDetailPage> {
         );
 
         _galleryModel.currentPreviewPage = 0;
-        _galleryModel.setGalleryPreview(_item.galleryPreview);
+        _galleryModel.setGalleryPreviewAfterRequest(_item.galleryPreview);
         _galleryModel.setFavTitle(_item.favTitle, favcat: _item.favcat);
 
         _item.imgUrl = _item.imgUrl ?? _item.imgUrlL;
@@ -212,7 +212,7 @@ class _GalleryDetailPageState extends State<GalleryDetailPage> {
                         padding: const EdgeInsets.fromLTRB(10, 10, 0, 10),
                         minSize: 0,
                         child: const Icon(
-                          FontAwesomeIcons.shareAltSquare,
+                          FontAwesomeIcons.share,
                           size: 26,
                         ),
                         onPressed: () {
@@ -284,7 +284,7 @@ class _GalleryDetailPageState extends State<GalleryDetailPage> {
                   case ConnectionState.waiting:
                     return _buildLoading(context, isReloading);
                   case ConnectionState.done:
-                    Global.logger.v('done');
+                    // Global.logger.v('done');
                     if (snapshot.hasError) {
                       // return Text('Error: ${snapshot.error}');
                       Global.logger.v('${snapshot.error}');
@@ -334,10 +334,11 @@ class _GalleryDetailPageState extends State<GalleryDetailPage> {
         borderRadius: BorderRadius.circular(50),
         color: CupertinoColors.activeBlue,
         onPressed: _hasPreview
-            ? () {
+            ? () async {
                 final GalleryCache _galleryCache = _galleryCacheModel
                     .getGalleryCache(_galleryModel.galleryItem.gid);
                 final int _index = _galleryCache?.lastIndex ?? 0;
+                await showLoadingDialog(context, _index);
                 NavigatorUtil.goGalleryViewPagePr(context, _index);
               }
             : null);

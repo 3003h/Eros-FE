@@ -43,9 +43,11 @@ class GalleryUtil {
   static Future<GalleryPreview> getImageInfo(
       GalleryModel _galleryModel, int index) async {
     // 数据获取处理
-    GalleryUtil.getAllImageHref(_galleryModel).catchError((e) {
-      Global.logger.v('$e');
-    }).whenComplete(() => Global.logger.v('getAllImageHref Complete'));
+    GalleryUtil.getAllImageHref(_galleryModel).catchError((e, stack) {
+      Global.logger.e('$e \n $stack');
+    }).whenComplete(() {
+      // Global.logger.v('getAllImageHref Complete');
+    });
 
     final GalleryPreview _curPreview =
         _galleryModel.galleryItem.galleryPreview[index];
@@ -154,7 +156,7 @@ class GalleryPrecache {
       ..ser = index + 1
       ..largeImageWidth = width
       ..largeImageHeight = height;
-    Global.logger.v('${_rePreview.toJson()}');
+    // Global.logger.v('${_rePreview.toJson()}');
 
     return _rePreview;
   }
@@ -233,6 +235,16 @@ class GalleryPrecache {
         _preview.startPrecache = false;
         _curIndexList.remove(_index);
       });
+
+      /// 预缓存图片 isolate
+      // PreCacheImage.createIsolate(context, _url).then((_) {
+      //   _preview
+      //     ..startPrecache = false
+      //     ..isCache = true;
+      // }).whenComplete(() {
+      //   _preview.startPrecache = false;
+      //   _curIndexList.remove(_index);
+      // });
     }
   }
 }
@@ -303,8 +315,6 @@ class _GalleryImageState extends State<GalleryImage> {
               } else {
                 _currentPreview.largeImageUrl =
                     previewFromApi.data.largeImageUrl;
-                Global.logger.v(
-                    'ExtendedImage.network ${previewFromApi.data.largeImageUrl}');
                 return _buildImage(_currentPreview.largeImageUrl);
               }
             } else {

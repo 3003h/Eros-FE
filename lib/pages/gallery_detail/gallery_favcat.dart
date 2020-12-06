@@ -1,12 +1,10 @@
 import 'package:FEhViewer/common/global.dart';
 import 'package:FEhViewer/common/parser/gallery_fav_parser.dart';
 import 'package:FEhViewer/generated/l10n.dart';
-import 'package:FEhViewer/models/index.dart';
 import 'package:FEhViewer/models/states/gallery_model.dart';
 import 'package:FEhViewer/models/states/local_favorite_model.dart';
 import 'package:FEhViewer/models/states/user_model.dart';
 import 'package:FEhViewer/utils/toast.dart';
-import 'package:FEhViewer/values/const.dart';
 import 'package:FEhViewer/values/theme_colors.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';

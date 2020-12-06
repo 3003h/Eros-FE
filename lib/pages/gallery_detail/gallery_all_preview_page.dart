@@ -179,20 +179,21 @@ class _AllPreviewPageState extends State<AllPreviewPage> {
     );
   }
 
-  void _loarMordPriview() async {
+  Future<void> _loarMordPriview() async {
     if (_isLoading) {
       return;
     }
     //
     Global.logger.v('获取更多预览 ${_galleryModel.galleryItem.url}');
     // 增加延时 避免build期间进行 setState
-    await Future.delayed(Duration(milliseconds: 100));
+    await Future<void>.delayed(const Duration(milliseconds: 100));
     _galleryModel.currentPreviewPageAdd();
     setState(() {
       _isLoading = true;
     });
 
-    var _moreGalleryPreviewList = await Api.getGalleryPreview(
+    final List<GalleryPreview> _moreGalleryPreviewList =
+        await Api.getGalleryPreview(
       _galleryModel.galleryItem.url,
       page: _galleryModel.currentPreviewPage,
     );
@@ -203,12 +204,12 @@ class _AllPreviewPageState extends State<AllPreviewPage> {
     });
   }
 
-  void _loadFinsh() async {
+  Future<void> _loadFinsh() async {
     if (_isLoadFinsh) {
       return;
     }
     // 增加延时 避免build期间进行 setState
-    await Future.delayed(Duration(milliseconds: 100));
+    await Future<void>.delayed(const Duration(milliseconds: 100));
     setState(() {
       _isLoadFinsh = true;
     });

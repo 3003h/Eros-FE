@@ -4,6 +4,7 @@ import 'package:FEhViewer/common/global.dart';
 import 'package:FEhViewer/models/index.dart';
 import 'package:FEhViewer/models/states/gallery_cache_model.dart';
 import 'package:FEhViewer/models/states/gallery_model.dart';
+import 'package:FEhViewer/pages/gallery_detail/gallery_detail_widget.dart';
 import 'package:FEhViewer/route/navigator_util.dart';
 import 'package:FEhViewer/utils/toast.dart';
 import 'package:FEhViewer/utils/utility.dart';
@@ -60,6 +61,7 @@ class _GalleryViewPageState extends State<GalleryViewPage> {
   PageController _pageController;
 
   Future<GalleryPreview> _futurePhotoViewGallery;
+  Future<bool> _futureGetPreviews;
 
   @override
   void initState() {
@@ -68,6 +70,7 @@ class _GalleryViewPageState extends State<GalleryViewPage> {
     _bottomBarOffset = 0;
     _topBarOffset = 0;
     _showBar = false;
+    Global.logger.d('_index ${widget.index}');
     _pageController =
         PageController(initialPage: widget.index, viewportFraction: 1.1);
   }
@@ -151,13 +154,17 @@ class _GalleryViewPageState extends State<GalleryViewPage> {
   }
 
   void _handOnChangedEnd(double value) {
-    Global.logger.d('$value');
+    Global.logger.d('to $value');
     // if (widget.pageController.hasClients) {
     //   widget.pageController.jumpToPage(value ~/ 1);
     // }
     final int _index = value ~/ 1;
-    _galleryCacheModel.setIndex(_galleryModel.galleryItem.gid, _index);
-    _pageController.jumpToPage(_index);
+    showLoadingDialog(context, _index).then((_) {
+      _galleryCacheModel.setIndex(_galleryModel.galleryItem.gid, _index);
+      _pageController.jumpToPage(_index);
+    });
+    // _galleryCacheModel.setIndex(_galleryModel.galleryItem.gid, _index);
+    // _pageController.jumpToPage(_index);
   }
 
   void _handOnChanged(double value) {
@@ -179,7 +186,7 @@ class _GalleryViewPageState extends State<GalleryViewPage> {
           child: Selector<GalleryModel, int>(
               selector: (context, galleryModel) => galleryModel.previews.length,
               shouldRebuild: (pre, next) {
-                Global.logger.v('${pre}  ${next}');
+                // Global.logger.v('${pre}  ${next}');
                 return pre != next && next > pre;
               },
               builder: (context, int len, child) {
@@ -342,7 +349,7 @@ class _GalleryViewPageState extends State<GalleryViewPage> {
                     margin: const EdgeInsets.only(right: 8.0),
                     height: kBottomBarHeight,
                     child: const Icon(
-                      FontAwesomeIcons.listUl,
+                      FontAwesomeIcons.ellipsisH,
                       color: CupertinoColors.systemGrey6,
                       // size: 24,
                     ),
@@ -440,9 +447,9 @@ class _GalleryViewPageState extends State<GalleryViewPage> {
     //   Global.logger.d('_tempHeight $_tempHeight');
     //   _maxScale = _tempHeight / _size.height;
     // }
-    Global.logger.d(' $_maxScale');
+    // Global.logger.d(' $_maxScale');
     return PhotoViewGallery.builder(
-      scrollPhysics: const BouncingScrollPhysics(),
+      // scrollPhysics: const BouncingScrollPhysics(),
       itemCount: _galleryModel.previews.length,
       customSize: _screensize,
       backgroundDecoration: const BoxDecoration(
