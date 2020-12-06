@@ -193,14 +193,35 @@ class _WebMySettingState extends State<WebMySetting> {
   Widget build(BuildContext context) {
     final CupertinoPageScaffold cpf = CupertinoPageScaffold(
         navigationBar: CupertinoNavigationBar(
+          padding: const EdgeInsetsDirectional.only(end: 6),
           middle: const Text('Ehentai设置'),
-          trailing: CupertinoButton(
-            padding: const EdgeInsets.all(0),
-            child: const Icon(FontAwesomeIcons.checkCircle),
-            onPressed: () async {
-              _controller.evaluateJavascript(
-                  'document.querySelector("#apply > input[type=submit]").click();');
-            },
+          trailing: Container(
+            width: 90,
+            child: Row(
+              children: <Widget>[
+                CupertinoButton(
+                  padding: const EdgeInsets.all(0),
+                  child: const Icon(
+                    FontAwesomeIcons.redo,
+                    size: 24,
+                  ),
+                  onPressed: () async {
+                    _controller.reload();
+                  },
+                ),
+                CupertinoButton(
+                  padding: const EdgeInsets.all(0),
+                  child: const Icon(
+                    FontAwesomeIcons.checkCircle,
+                    size: 28,
+                  ),
+                  onPressed: () async {
+                    _controller.evaluateJavascript(
+                        'document.querySelector("#apply > input[type=submit]").click();');
+                  },
+                ),
+              ],
+            ),
           ),
         ),
         child: SafeArea(
