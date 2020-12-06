@@ -1,13 +1,9 @@
-import 'dart:io';
-
 import 'package:FEhViewer/common/global.dart';
 import 'package:FEhViewer/common/tag_database.dart';
 import 'package:FEhViewer/models/states/ehconfig_model.dart';
 import 'package:FEhViewer/models/states/user_model.dart';
 import 'package:FEhViewer/pages/login/web_mysetting.dart';
-import 'package:FEhViewer/utils/utility.dart';
 import 'package:FEhViewer/values/const.dart';
-import 'package:cookie_jar/cookie_jar.dart';
 import 'package:enum_to_string/enum_to_string.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -106,7 +102,7 @@ class ListViewEhSetting extends StatelessWidget {
       ehConfigModel.favLongTap = newValue;
     }
 
-    List<Widget> _list = <Widget>[
+    final List<Widget> _list = <Widget>[
       if (_isLogin)
         TextSwitchItem(
           '站点切换',

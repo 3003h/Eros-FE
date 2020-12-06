@@ -158,10 +158,10 @@ class Global {
     final dynamic _galleryCachesStr = StorageUtil().getJSON(GALLERY_CACHE);
     // Global.logger.d('$_galleryCaches');
     if (_galleryCachesStr != null) {
-      Global.logger.d(' $_galleryCachesStr');
+      // Global.logger.d(' $_galleryCachesStr');
       final List<dynamic> _galleryCaches = json.decode(_galleryCachesStr);
       for (final dynamic cache in _galleryCaches) {
-        Global.logger.d('$cache');
+        // Global.logger.d('$cache');
         galleryCaches.add(GalleryCache.fromJson(cache));
       }
     }
@@ -169,7 +169,7 @@ class Global {
 
   static Future<bool> saveGalleryCaches() {
     galleryCaches.forEach((GalleryCache element) {
-      Global.logger.d(' ${element.toJson()}');
+      // Global.logger.d(' ${element.toJson()}');
     });
     return StorageUtil().setJSON(GALLERY_CACHE, galleryCaches);
   }

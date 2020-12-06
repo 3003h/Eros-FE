@@ -7,7 +7,6 @@ import 'package:FEhViewer/utils/utility.dart';
 import 'package:FEhViewer/widget/eh_widget.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:logger_flutter/logger_flutter.dart';
 import 'package:tuple/tuple.dart';
 
 class PopularListTab extends StatefulWidget {
@@ -36,7 +35,7 @@ class _PopularListTabState extends State<PopularListTab> {
   }
 
   Future<List<GalleryItem>> _loadData({bool refresh = false}) async {
-    Global.logger.v('_loadData ');
+    // Global.logger.v('_loadData ');
     final Future<Tuple2<List<GalleryItem>, int>> tuple =
         Api.getPopular(refresh: refresh);
     final Future<List<GalleryItem>> gallerItemBeans =

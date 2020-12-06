@@ -5,6 +5,7 @@ import 'package:FEhViewer/models/states/ehconfig_model.dart';
 import 'package:FEhViewer/models/states/gallery_cache_model.dart';
 import 'package:FEhViewer/models/states/gallery_model.dart';
 import 'package:FEhViewer/route/navigator_util.dart';
+import 'package:FEhViewer/utils/utility.dart';
 import 'package:FEhViewer/values/const.dart';
 import 'package:FEhViewer/values/theme_colors.dart';
 import 'package:FEhViewer/widget/rating_bar.dart';
@@ -637,11 +638,12 @@ class ReadButton extends StatelessWidget {
               borderRadius: BorderRadius.circular(50),
               color: CupertinoColors.activeBlue,
               onPressed: value
-                  ? () {
+                  ? () async {
                       final GalleryCache _galleryCache = _galleryCacheModel
                           .getGalleryCache(_galleryModel.galleryItem.gid);
                       final int _index = _galleryCache?.lastIndex ?? 0;
                       Global.logger.d('lastIndex $_index');
+                      await showLoadingDialog(context, _index);
                       NavigatorUtil.goGalleryViewPagePr(context, _index);
                     }
                   : null);
@@ -828,4 +830,70 @@ class GalleryTitle extends StatelessWidget {
       },
     );
   }
+}
+
+/// 显示等待
+Future<void> showLoadingDialog(BuildContext context, int index) async {
+  final GalleryModel _galleryModel =
+      Provider.of<GalleryModel>(context, listen: false);
+
+  /// 加载下一页缩略图
+  Future<void> _loarMordPriview() async {
+    final List<GalleryPreview> _galleryPreviewList =
+        _galleryModel.galleryItem.galleryPreview;
+    //
+
+    // 增加延时 避免build期间进行 setState
+    // await Future<void>.delayed(const Duration(milliseconds: 0));
+    _galleryModel.currentPreviewPageAdd();
+    Global.logger.v(
+        '获取更多预览 ${_galleryModel.galleryItem.url} : ${_galleryModel.currentPreviewPage}');
+
+    final List<GalleryPreview> _moreGalleryPreviewList =
+        await Api.getGalleryPreview(
+      _galleryModel.galleryItem.url,
+      page: _galleryModel.currentPreviewPage,
+    );
+
+    _galleryPreviewList.addAll(_moreGalleryPreviewList);
+  }
+
+  Future<bool> _loadPriview(int index) async {
+    final List<GalleryPreview> _galleryPreviewList =
+        _galleryModel.galleryItem.galleryPreview;
+
+    while (index > _galleryPreviewList.length - 1) {
+      Global.logger.d(' index = $index ; len = ${_galleryPreviewList.length}');
+      await _loarMordPriview();
+    }
+    return true;
+  }
+
+  return showCupertinoDialog<void>(
+    context: context,
+    builder: (BuildContext context) {
+      Future<void>.delayed(const Duration(milliseconds: 0))
+          .then((_) => _loadPriview(index))
+          .whenComplete(() => Navigator.pop(context));
+      return CupertinoAlertDialog(
+        content: Container(
+            width: 40,
+            child: const CupertinoActivityIndicator(
+              radius: 30,
+            )),
+        actions: const <Widget>[],
+      );
+
+      /// 自定义Dialog
+      // return Dialog(
+      //   insetPadding: const EdgeInsets.symmetric(vertical: 10, horizontal: 10),
+      //   child: Container(
+      //       // width: 40,
+      //       // height: 40,
+      //       child: const CupertinoActivityIndicator(
+      //     radius: 20,
+      //   )),
+      // );
+    },
+  );
 }

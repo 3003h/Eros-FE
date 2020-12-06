@@ -1,3 +1,4 @@
+import 'package:FEhViewer/common/global.dart';
 import 'package:FEhViewer/models/index.dart';
 import 'package:flutter/material.dart';
 
@@ -29,13 +30,21 @@ class GalleryModel extends ProfileChangeNotifier {
   // todo 待优化 直接暴露_galleryItem会导致随意写入数据
   GalleryItem get galleryItem => _galleryItem;
 
-  void setGalleryPreview(List<GalleryPreview> galleryPreview) {
+  // 首次请求或刷新后设置
+  void setGalleryPreviewAfterRequest(List<GalleryPreview> galleryPreview) {
     if (galleryPreview.isNotEmpty) {
       _galleryItem.galleryPreview = galleryPreview;
     }
 
     _oriGalleryPreview =
         _galleryItem.galleryPreview.sublist(0, galleryPreview.length);
+
+    // final int count = int.parse(galleryItem.filecount);
+    // Global.logger.d(' _filecount = $count');
+    // for (int i = 0; i < count - galleryPreview.length; i++) {
+    //   _galleryItem.galleryPreview
+    //       .add(GalleryPreview()..ser = galleryPreview.length + i + 1);
+    // }
 //    notifyListeners();
   }
 
