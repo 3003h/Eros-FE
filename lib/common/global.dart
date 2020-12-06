@@ -91,18 +91,9 @@ class Global {
 
   /// profile初始化
   static void _profileInit() {
-    // ignore: always_specify_types
-    final _profile = StorageUtil().getJSON(PROFILE);
-    if (_profile != null) {
-      try {
-        profile = Profile.fromJson(jsonDecode(_profile));
-      } catch (e) {
-        print('get profile $e');
-      }
-    }
-
-    getHistoryFromSP();
-    getGalleryCaches();
+    _initProfile();
+    _initHistory();
+    _initGalleryCaches();
 
     if (profile.ehConfig == null) {
       profile.ehConfig = EhConfig()
@@ -146,21 +137,29 @@ class Global {
     history.history ??= <GalleryItem>[];
   }
 
+  static void _initProfile() {
+    final dynamic _profile = StorageUtil().getJSON(PROFILE);
+    if (_profile != null) {
+      try {
+        profile = Profile.fromJson(jsonDecode(_profile));
+      } catch (e) {
+        print('get profile $e');
+      }
+    }
+  }
+
   // 持久化Profile信息
   static Future<bool> saveProfile() {
     // logger.v(profile.toJson());
     return StorageUtil().setJSON(PROFILE, profile);
   }
 
-  static Future<bool> saveHistory() async {
-    return StorageUtil().setJSON(HISTORY, history);
-  }
-
-  static Future<void> getGalleryCaches() async {
+  static void _initGalleryCaches() {
     final dynamic _galleryCachesStr = StorageUtil().getJSON(GALLERY_CACHE);
-    final List<dynamic> _galleryCaches = json.decode(_galleryCachesStr);
     // Global.logger.d('$_galleryCaches');
-    if (_galleryCaches != null) {
+    if (_galleryCachesStr != null) {
+      Global.logger.d(' $_galleryCachesStr');
+      final List<dynamic> _galleryCaches = json.decode(_galleryCachesStr);
       for (final dynamic cache in _galleryCaches) {
         Global.logger.d('$cache');
         galleryCaches.add(GalleryCache.fromJson(cache));
@@ -168,16 +167,15 @@ class Global {
     }
   }
 
-  static Future<bool> saveGalleryCaches() async {
+  static Future<bool> saveGalleryCaches() {
     galleryCaches.forEach((GalleryCache element) {
       Global.logger.d(' ${element.toJson()}');
     });
     return StorageUtil().setJSON(GALLERY_CACHE, galleryCaches);
   }
 
-  static Future<void> getHistoryFromSP() async {
-    // ignore: always_specify_types
-    final _history = StorageUtil().getJSON(HISTORY);
+  static void _initHistory() {
+    final dynamic _history = StorageUtil().getJSON(HISTORY);
     if (_history != null) {
       try {
         history = History.fromJson(jsonDecode(_history));
@@ -185,6 +183,10 @@ class Global {
         print('getHistoryFromSP $e');
       }
     }
+  }
+
+  static Future<bool> saveHistory() async {
+    return StorageUtil().setJSON(HISTORY, history);
   }
 }
 

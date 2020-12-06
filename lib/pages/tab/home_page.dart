@@ -125,6 +125,7 @@ class _FEhHomeNewState extends State<FEhHomeNew> with WidgetsBindingObserver {
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
+    Global.logger.d('home didChangeDependencies');
     initData();
     _tapAwait = false;
   }

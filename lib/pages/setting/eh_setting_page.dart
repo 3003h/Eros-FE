@@ -69,7 +69,7 @@ class ListViewEhSetting extends StatelessWidget {
     final bool _tagTranslat = ehConfigModel.tagTranslat;
     final bool _galleryImgBlur = ehConfigModel.galleryImgBlur;
     final bool _favLongTap = ehConfigModel.favLongTap;
-    final bool _favOrder = ehConfigModel.favoriteOrder == FavoriteOrder.fav;
+    final bool _favOrder = ehConfigModel.favoriteOrder == FavoriteOrder.posted;
     final bool _isLogin =
         Provider.of<UserModel>(context, listen: false).isLogin;
 
@@ -81,9 +81,10 @@ class ListViewEhSetting extends StatelessWidget {
       ehConfigModel.jpnTitle = newValue;
     }
 
+    /// 打开表示按更新时间排序 关闭表示按照收藏时间排序
     void _handleFavOrderChanged(bool newValue) {
       ehConfigModel.favoriteOrder =
-          newValue ? FavoriteOrder.fav : FavoriteOrder.posted;
+          newValue ? FavoriteOrder.posted : FavoriteOrder.fav;
     }
 
     void _handleTagTranslatChanged(bool newValue) {

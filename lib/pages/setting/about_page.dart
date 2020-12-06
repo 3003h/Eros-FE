@@ -1,12 +1,14 @@
 import 'dart:io';
 
 import 'package:FEhViewer/common/global.dart';
+import 'package:FEhViewer/models/states/ehconfig_model.dart';
 import 'package:FEhViewer/pages/setting/setting_base.dart';
 import 'package:FEhViewer/utils/cust_lib/flutter_egg.dart';
 import 'package:FEhViewer/utils/toast.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_vibrate/flutter_vibrate.dart';
+import 'package:provider/provider.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class AboutPage extends StatelessWidget {
@@ -29,6 +31,8 @@ class AboutPage extends StatelessWidget {
 class ListViewAbout extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    final EhConfigModel ehConfigModel =
+        Provider.of<EhConfigModel>(context, listen: false);
     return Container(
       child: ListView(
         children: <Widget>[
@@ -43,14 +47,16 @@ class ListViewAbout extends StatelessWidget {
                 if (Global.profile.ehConfig.safeMode ?? true) {
                   showToast('你发现了不得了的东西');
                   Global.logger.v('safeMode off');
-                  Global.profile.ehConfig.safeMode = false;
-                  Global.saveProfile();
+                  // Global.profile.ehConfig.safeMode = false;
+                  // Global.saveProfile();
+                  ehConfigModel.isSafeMode = false;
                   Vibrate.feedback(FeedbackType.success);
                 } else {
                   showToast('ヾ(￣▽￣)Bye~Bye~');
                   Global.logger.v('safeMode on');
-                  Global.profile.ehConfig.safeMode = true;
-                  Global.saveProfile();
+                  // Global.profile.ehConfig.safeMode = true;
+                  // Global.saveProfile();
+                  ehConfigModel.isSafeMode = true;
                   Vibrate.feedback(FeedbackType.error);
                 }
               }
