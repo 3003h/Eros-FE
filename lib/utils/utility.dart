@@ -164,16 +164,37 @@ class CookieUtil {
     final PersistCookieJar cookieJar = await Api.cookieJar;
     final List<Cookie> cookiesEh =
         cookieJar.loadForRequest(Uri.parse(EHConst.EH_BASE_URL));
-    final Cookie _memberId = cookiesEh
+    final Cookie _memberId = Cookie.fromSetCookieValue(cookiesEh
         .firstWhere((Cookie cookie) => cookie.name == 'ipb_member_id')
-          ..domain = '.exhentai.org';
-    final Cookie _passHash = cookiesEh
+        .toString()
+        .replaceAll('.e-hentai.org', '.exhentai.org'));
+    final Cookie _passHash = Cookie.fromSetCookieValue(cookiesEh
         .firstWhere((Cookie cookie) => cookie.name == 'ipb_pass_hash')
-          ..domain = '.exhentai.org';
+        .toString()
+        .replaceAll('.e-hentai.org', '.exhentai.org'));
 
     cookieJar.delete(Uri.parse(EHConst.EX_BASE_URL));
     cookieJar.saveFromResponse(
         Uri.parse(EHConst.EX_BASE_URL), <Cookie>[_memberId, _passHash]);
+
+    Global.logger.d('cookiesEh\n' + cookiesEh.join('\n'));
+  }
+
+  static Future<void> fixEhCookie() async {
+    final PersistCookieJar cookieJar = await Api.cookieJar;
+    final List<Cookie> cookiesEh =
+        cookieJar.loadForRequest(Uri.parse(EHConst.EH_BASE_URL));
+    final Cookie _memberId = cookiesEh
+        .firstWhere((Cookie cookie) => cookie.name == 'ipb_member_id')
+          ..domain = '.e-hentai.org';
+    final Cookie _passHash = cookiesEh
+        .firstWhere((Cookie cookie) => cookie.name == 'ipb_pass_hash')
+          ..domain = '.e-hentai.org';
+
+    cookieJar.saveFromResponse(
+        Uri.parse(EHConst.EH_BASE_URL), <Cookie>[_memberId, _passHash]);
+
+    Global.logger.d('cookiesEh\n' + cookiesEh.join('\n'));
   }
 }
 
