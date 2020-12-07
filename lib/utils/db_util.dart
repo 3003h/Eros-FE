@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:FEhViewer/common/global.dart';
 import 'package:FEhViewer/models/entity/tag_translat.dart';
 import 'package:path/path.dart';
 import 'package:sqflite/sqflite.dart';
@@ -21,8 +22,8 @@ class DataBaseUtil {
 
   Future<Database> _getDataBase() async {
     // 获取数据库文件的存储路径
-    final String databasesPath = await getDatabasesPath();
-    final String path = join(databasesPath, dbname);
+    // final String databasesPath = await getDatabasesPath();
+    final String path = join(Global.appSupportPath, dbname);
 
     //根据数据库文件路径和数据库版本号创建数据库表
     final Future<Database> database = openDatabase(
@@ -59,7 +60,7 @@ class DataBaseUtil {
   // 批量插入
   Future<void> insertTagAll(List<TagTranslat> translats) async {
     final Database db = await _getDataBase();
-    Batch batch = db.batch();
+    final Batch batch = db.batch();
     translats.forEach((TagTranslat translat) {
       batch.insert(
         tableTag,
@@ -74,7 +75,7 @@ class DataBaseUtil {
 
   /// 获取翻译对象
   Future<TagTranslat> getTagTrans(String key, {String namespace}) async {
-    final Database db = await this._getDataBase();
+    final Database db = await _getDataBase();
 
     final bool _isNameSpace = namespace != null && namespace.isNotEmpty;
     final String _where = _isNameSpace
@@ -103,7 +104,8 @@ class DataBaseUtil {
 
   /// 获取翻译结果
   Future<String> getTagTransStr(String key, {String namespace}) async {
-    var tr = await getTagTrans(key?.trim(), namespace: namespace?.trim());
+    final TagTranslat tr =
+        await getTagTrans(key?.trim(), namespace: namespace?.trim());
     return tr?.name;
   }
 }

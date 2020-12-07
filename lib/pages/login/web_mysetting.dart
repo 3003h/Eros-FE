@@ -203,7 +203,7 @@ class _WebMySettingState extends State<WebMySetting> {
                   padding: const EdgeInsets.all(0),
                   child: const Icon(
                     FontAwesomeIcons.redo,
-                    size: 24,
+                    size: 20,
                   ),
                   onPressed: () async {
                     _controller.reload();
@@ -213,7 +213,7 @@ class _WebMySettingState extends State<WebMySetting> {
                   padding: const EdgeInsets.all(0),
                   child: const Icon(
                     FontAwesomeIcons.checkCircle,
-                    size: 28,
+                    size: 24,
                   ),
                   onPressed: () async {
                     _controller.evaluateJavascript(

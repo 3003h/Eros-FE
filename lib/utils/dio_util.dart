@@ -39,6 +39,7 @@ class HttpManager {
     // _dio.interceptors.add(Global.netCache);
     if (cache) {
       _dio.interceptors.add(DioCacheManager(CacheConfig(
+        databasePath: Global.appSupportPath,
         baseUrl: _baseUrl,
       )).interceptor);
     }
@@ -72,8 +73,10 @@ class HttpManager {
 
     // _dio.interceptors.add(Global.netCache);
     if (cache) {
-      _dio.interceptors
-          .add(DioCacheManager(CacheConfig(baseUrl: _baseUrl)).interceptor);
+      _dio.interceptors.add(DioCacheManager(CacheConfig(
+        databasePath: Global.appSupportPath,
+        baseUrl: _baseUrl,
+      )).interceptor);
     }
   }
 
