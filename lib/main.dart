@@ -32,7 +32,7 @@ void main() {
       ),
     );
   }).catchError((e, stack) {
-    Global.logger.e('$stack');
+    Global.logger.e('$e \n $stack');
   });
 }
 

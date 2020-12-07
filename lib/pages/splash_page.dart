@@ -77,14 +77,10 @@ class _SplashPageState extends State<SplashPage> {
   Widget build(BuildContext context) {
     final Widget container = (_sharedText != null && _sharedText.isNotEmpty)
         ? Container(
-            color: CupertinoDynamicColor.resolve(
-                CupertinoColors.systemBackground, context),
             child:
                 const Center(child: CupertinoActivityIndicator(radius: 20.0)),
           )
         : Container(
-            color: CupertinoDynamicColor.resolve(
-                CupertinoColors.systemBackground, context),
             child: Center(
               child: Column(
                 // center the children
@@ -109,9 +105,8 @@ class _SplashPageState extends State<SplashPage> {
             ),
           );
 
-    return Scaffold(
-//      backgroundColor: Colors.white,
-      body: container,
+    return CupertinoPageScaffold(
+      child: container,
     );
   }
 }

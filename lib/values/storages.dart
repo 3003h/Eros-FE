@@ -25,3 +25,5 @@ const String PROFILE = 'profile';
 const String HISTORY = 'history';
 
 const String GALLERY_CACHE = 'galleryCache';
+
+const String IS_DB_IN_SUPPORT_DIR = 'isDBinappSupportPath';

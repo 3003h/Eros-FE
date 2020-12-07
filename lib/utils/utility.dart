@@ -23,7 +23,6 @@ import 'package:flutter/services.dart';
 import 'package:flutter_cache_manager/flutter_cache_manager.dart';
 import 'package:html_unescape/html_unescape.dart';
 import 'package:image_gallery_saver/image_gallery_saver.dart';
-import 'package:path_provider/path_provider.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:share/share.dart';
 import 'package:tuple/tuple.dart';
@@ -207,10 +206,8 @@ class Api {
   static Future<PersistCookieJar> get cookieJar async {
     // print(_cookieJar);
     if (_cookieJar == null) {
-      final Directory appDocDir = await getApplicationDocumentsDirectory();
-      final String appDocPath = appDocDir.path;
-      print('获取的文件系统目录 appDocPath： ' + appDocPath);
-      _cookieJar = PersistCookieJar(dir: appDocPath);
+      print('获取的文件系统目录 appSupportPath： ' + Global.appSupportPath);
+      _cookieJar = PersistCookieJar(dir: Global.appSupportPath);
     }
     return _cookieJar;
   }

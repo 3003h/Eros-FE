@@ -63,7 +63,8 @@ class ThemeColors {
     darkColor: CupertinoColors.secondaryLabel,
   );
 
-  static const Map<String, Color> tagColorTagType = {
+  /// 标签总分类颜色
+  static const Map<String, Color> tagColorTagType = <String, Color>{
     'artist': CupertinoDynamicColor.withBrightness(
       color: Color(0xffE6D6D0),
       darkColor: Color.fromARGB(255, 94, 84, 78),
@@ -102,18 +103,6 @@ class ThemeColors {
     ),
   };
 
-  static const Map<String, Color> tagColorTagType2 = {
-    'artist': Color(0xffE6D6D0),
-    'female': Color(0xffFAE0D4),
-    'male': Color(0xfff9eed8),
-    'parody': Color(0xffd8e6e2),
-    'character': Color(0xffd5e4f7),
-    'group': Color(0xffdfd6f7),
-    'language': Color(0xfff5d5e5),
-    'reclass': Color(0xfffbd6d5),
-    'misc': Color(0xffd7d7d6),
-  };
-
   /// 主题配置
   /// 浅色主题
   static CupertinoThemeData ligthTheme = const CupertinoThemeData(
@@ -134,22 +123,8 @@ class ThemeColors {
     barBackgroundColor: navigationBarBackgroundGray,
   );
 
-  // cap 颜色
-  static const Map catColor2 = {
-    'Doujinshi': {'string': 'Doujinshi', 'color': Color(0xfff44336)},
-    'Manga': {'string': 'Manga', 'color': Color(0xffff9800)},
-    'Artist CG': {'string': 'Artist CG', 'color': Color(0xfffbc02d)},
-    'Game CG': {'string': 'Game CG', 'color': Color(0xff4caf50)},
-    'Western': {'string': 'Western', 'color': Color(0xff8bc34a)},
-    'Non-H': {'string': 'Non-H', 'color': Color(0xff2196f3)},
-    'Image Set': {'string': 'Image Set', 'color': Color(0xff3f51b5)},
-    'Cosplay': {'string': 'Cosplay', 'color': Color(0xff9c27b0)},
-    'Asian Porn': {'string': 'Asian Porn', 'color': Color(0xff9575cd)},
-    'Misc': {'string': 'Misc', 'color': Color(0xfff06292)},
-    'defaule': {'color': CupertinoColors.systemBackground}
-  };
-
-  static const Map catColor = {
+  // 画廊类型主题色
+  static const Map<String, Color> catColor = <String, Color>{
     'Doujinshi': CupertinoDynamicColor.withBrightness(
       color: Color(0xfff44336),
       darkColor: Color.fromARGB(255, 145, 49, 39),
