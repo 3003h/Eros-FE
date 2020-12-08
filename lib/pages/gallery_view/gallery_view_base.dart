@@ -6,11 +6,14 @@ import 'package:FEhViewer/models/states/gallery_model.dart';
 import 'package:FEhViewer/utils/https_proxy.dart';
 import 'package:FEhViewer/utils/toast.dart';
 import 'package:FEhViewer/utils/utility.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:dio/dio.dart';
 import 'package:dio_http_cache/dio_http_cache.dart';
 import 'package:extended_image/extended_image.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:liquid_progress_indicator/liquid_progress_indicator.dart';
 import 'package:provider/provider.dart';
 
 class GalleryUtil {
@@ -177,7 +180,7 @@ class GalleryPrecache {
     @required int max,
   }) async {
     // Global.loggerNoStack.d('当前index $index');
-    for (int add = 1; add < max + 1; add++) {
+    for (int add = 1; add < 1 + 1; add++) {
       final int _index = index + add;
 
       // Global.loggerNoStack.d('开始缓存index $index');
@@ -240,15 +243,16 @@ class GalleryPrecache {
 
   Future<bool> _precacheSingleImage(
       BuildContext context, String url, GalleryPreview preview) async {
+    final ImageProvider imageProviderExt = ExtendedNetworkImageProvider(
+      url,
+      cache: true,
+      retries: 5,
+    );
+
+    final ImageProvider imageProvider = CachedNetworkImageProvider(url);
+
     /// 预缓存图片
-    precacheImage(
-            ExtendedNetworkImageProvider(
-              url,
-              cache: true,
-              retries: 5,
-            ),
-            context)
-        .then((_) {
+    precacheImage(imageProvider, context).then((_) {
       preview.isCache = true;
       return true;
     }).catchError((e, stack) {
@@ -302,16 +306,80 @@ class _GalleryImageState extends State<GalleryImage> {
     return FutureBuilder<GalleryPreview>(
         future: _future,
         builder: (_, AsyncSnapshot<GalleryPreview> previewFromApi) {
-          Widget _buildImage(String url) {
+          Widget _buildImage(String url, {bool extendedImage = false}) {
             return Container(
-              child: ExtendedImage.network(
-                url,
-                // height: previewFromApi.data.largeImageHeight,
-                // width: previewFromApi.data.largeImageWidth,
-                fit: BoxFit.contain,
-                mode: ExtendedImageMode.gesture,
-                cache: true,
-              ),
+              child: extendedImage
+                  ? ExtendedImage.network(
+                      url,
+                      // height: previewFromApi.data.largeImageHeight,
+                      // width: previewFromApi.data.largeImageWidth,
+                      fit: BoxFit.contain,
+                      mode: ExtendedImageMode.gesture,
+                      cache: true,
+                    )
+                  : CachedNetworkImage(
+                      imageUrl: url,
+                      fit: BoxFit.contain,
+                      progressIndicatorBuilder:
+                          (context, url, downloadProgress) {
+                        return Center(
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: <Widget>[
+                              // CircularProgressIndicator(
+                              //     value: downloadProgress.progress),
+                              Container(
+                                height: 70,
+                                width: 70,
+                                child: LiquidCircularProgressIndicator(
+                                  value: downloadProgress.progress ??
+                                      0.0, // Defaults to 0.5.
+                                  valueColor: AlwaysStoppedAnimation(
+                                      Color.fromARGB(255, 163, 199, 100)),
+                                  // backgroundColor:
+                                  //     Color.fromARGB(255, 115, 136, 149),
+                                  backgroundColor:
+                                      Color.fromARGB(255, 50, 50, 50),
+                                  // borderColor: Colors.teal[900],
+                                  // borderWidth: 2.0,
+                                  direction: Axis.vertical,
+                                  center: downloadProgress.progress != null
+                                      ? Text(
+                                          '${(downloadProgress.progress ?? 0) * 100 ~/ 1}%',
+                                          style: TextStyle(
+                                            color:
+                                                downloadProgress.progress < 0.5
+                                                    ? CupertinoColors.white
+                                                    : CupertinoColors.black,
+                                            fontSize: 12,
+                                            height: 1,
+                                          ),
+                                        )
+                                      : Container(),
+                                ),
+                              ),
+                              Padding(
+                                padding: const EdgeInsets.all(12.0),
+                                child: Text(
+                                  '${widget.index + 1}',
+                                  style: const TextStyle(
+                                    color: CupertinoColors.systemGrey6,
+                                    height: 1,
+                                  ),
+                                ),
+                              )
+                            ],
+                          ),
+                        );
+                      },
+                      errorWidget: (context, url, error) => const Center(
+                        child: Icon(
+                          Icons.error,
+                          size: 50,
+                          color: Colors.red,
+                        ),
+                      ),
+                    ),
             );
           }
 
