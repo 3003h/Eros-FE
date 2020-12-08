@@ -224,10 +224,10 @@ class NavigatorUtil {
 
   static void showSearch(BuildContext context) {
     Navigator.of(context).push(
-      CupertinoPageRoute(
+      CupertinoPageRoute<GallerySearchPage>(
 //        fullscreenDialog: true,
         builder: (BuildContext context) {
-          return GallerySearchPage();
+          return const GallerySearchPage();
         },
       ),
     );

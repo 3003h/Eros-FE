@@ -324,9 +324,12 @@ class Api {
       serach = 'parody:gundam\$';
     }
 
+    /// 搜索词处理
     if (serach != null) {
       final List<String> searArr = serach.split(':');
-      if (searArr.length > 1) {
+      if (searArr.length == 2 &&
+          !serach.trim().endsWith('\$') &&
+          !serach.trim().endsWith('"')) {
         String _end = '';
         if (searArr[0] != 'uploader') {
           _end = '\$';
@@ -335,6 +338,7 @@ class Api {
             Uri.encodeQueryComponent('${searArr[0]}:"${searArr[1]}$_end"');
         qry = '$qry&f_search=$_search';
       } else {
+        Global.logger.d('原始处理');
         final String _search = Uri.encodeQueryComponent(serach.trim());
         qry = '$qry&f_search=$_search';
       }
