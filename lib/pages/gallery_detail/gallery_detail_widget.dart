@@ -552,8 +552,8 @@ class CoverImage extends StatelessWidget {
             galleryModel.galleryItem,
             galleryModel.tabIndex),
         builder: (_, tuple, __) {
-          final _imageUrl = tuple.item1;
-          final _tabIndex = tuple.item3;
+          final String _imageUrl = tuple.item1;
+          final dynamic _tabIndex = tuple.item3;
           final GalleryItem _item = tuple.item2;
 
           final Map<String, String> _httpHeaders = {
@@ -571,6 +571,8 @@ class CoverImage extends StatelessWidget {
                     child: ClipRRect(
                       borderRadius: BorderRadius.circular(6),
                       child: Container(
+                        height: _item.imgHeight,
+                        width: _item.imgWidth,
                         color: CupertinoColors.systemBackground,
                         child: CachedNetworkImage(
                           imageUrl: _imageUrl,
@@ -664,9 +666,7 @@ class GalleryCategory extends StatelessWidget {
             galleryModel.galleryItem.category,
         builder: (BuildContext context, String category, _) {
           final Color _colorCategory = CupertinoDynamicColor.resolve(
-              (ThemeColors.catColor[category ?? 'defaule'] ??
-                  CupertinoColors.systemBackground) as Color,
-              context);
+              ThemeColors.catColor[category ?? 'default'], context);
 
           return GestureDetector(
             child: ClipRRect(
@@ -685,8 +685,8 @@ class GalleryCategory extends StatelessWidget {
               ),
             ),
             onTap: () {
-              final iCat = EHConst.cats[category];
-              final cats = EHConst.sumCats - iCat;
+              final int iCat = EHConst.cats[category];
+              final int cats = EHConst.sumCats - iCat;
               NavigatorUtil.goGalleryList(context, cats: cats);
             },
           );
@@ -703,7 +703,7 @@ class GalleryRating extends StatelessWidget {
   Widget build(BuildContext context) {
     return Selector<GalleryModel, double>(
         selector: (_, GalleryModel galleryModel) =>
-            galleryModel.galleryItem.rating as double ?? 0.0,
+            galleryModel.galleryItem.rating ?? 0.0,
         builder: (_, double rating, __) {
           return Row(
             children: <Widget>[

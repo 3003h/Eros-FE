@@ -165,7 +165,7 @@ class ThemeColors {
       color: Color(0xfff06292),
       darkColor: Color.fromARGB(255, 188, 91, 123),
     ),
-    'defaule': CupertinoColors.systemBackground
+    'default': CupertinoColors.systemBackground
   };
 
   /// fav 颜色

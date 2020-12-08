@@ -316,7 +316,7 @@ class _GalleryItemWidgetState extends State<GalleryItemWidget> {
     return Consumer<GalleryModel>(builder: (context, galleryModel, child) {
       final Color _colorCategory = CupertinoDynamicColor.resolve(
           ThemeColors
-                  .catColor[galleryModel?.galleryItem?.category ?? 'defaule'] ??
+                  .catColor[galleryModel?.galleryItem?.category ?? 'default'] ??
               CupertinoColors.systemBackground,
           context);
 
