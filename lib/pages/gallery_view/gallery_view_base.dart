@@ -180,7 +180,7 @@ class GalleryPrecache {
     @required int max,
   }) async {
     // Global.loggerNoStack.d('当前index $index');
-    for (int add = 1; add < 1 + 1; add++) {
+    for (int add = 1; add < max + 1; add++) {
       final int _index = index + add;
 
       // Global.loggerNoStack.d('开始缓存index $index');
