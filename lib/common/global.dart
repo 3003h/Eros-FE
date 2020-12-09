@@ -47,7 +47,7 @@ class Global {
   static final Logger logger = Logger(
     output: ExampleLogOutput(),
     printer: PrettyPrinter(
-      lineLength: 100,
+      // lineLength: 100,
       colors: false,
     ),
   );
@@ -55,7 +55,7 @@ class Global {
   static final Logger loggerNoStack = Logger(
     output: ExampleLogOutput(),
     printer: PrettyPrinter(
-      lineLength: 100,
+      // lineLength: 100,
       methodCount: 0,
       colors: false,
     ),
@@ -67,7 +67,9 @@ class Global {
     WidgetsFlutterBinding.ensureInitialized();
 
     // 代理初始化
-    await CustomHttpsProxy.instance.init();
+    if (Platform.isIOS || Platform.isAndroid) {
+      await CustomHttpsProxy.instance.init();
+    }
 
     //statusBar设置为透明，去除半透明遮罩
     const SystemUiOverlayStyle _style =
@@ -201,6 +203,8 @@ class Global {
     }
 
     history.history ??= <GalleryItem>[];
+
+    profile.downloadConfig ??= DownloadConfig()..preloadImage = 5;
   }
 
   static void _initProfile() {

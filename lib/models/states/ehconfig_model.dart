@@ -1,4 +1,5 @@
 import 'package:FEhViewer/common/global.dart';
+import 'package:FEhViewer/models/downloadConfig.dart';
 import 'package:FEhViewer/values/const.dart';
 import 'package:enum_to_string/enum_to_string.dart';
 
@@ -7,6 +8,7 @@ import 'base.dart';
 
 class EhConfigModel extends ProfileChangeNotifier {
   EhConfig get _ehConfig => Global.profile.ehConfig;
+  DownloadConfig get _downloadConfig => Global.profile.downloadConfig;
 
   bool get isJpnTitle => _ehConfig?.jpnTitle ?? false;
 
@@ -93,6 +95,23 @@ class EhConfigModel extends ProfileChangeNotifier {
   bool get isSafeMode => _ehConfig.safeMode;
   set isSafeMode(bool value) {
     _ehConfig.safeMode = value;
+    notifyListeners();
+  }
+
+  /// 预载图片数量
+  int get preloadImage => _downloadConfig.preloadImage ?? 5;
+  set preloadImage(int value) {
+    _downloadConfig.preloadImage = value;
+    notifyListeners();
+  }
+
+  /// 阅读方向设置
+  ViewMode get viewMode =>
+      EnumToString.fromString(ViewMode.values, _ehConfig?.viewModel) ??
+      ViewMode.horizontalLeft;
+
+  set viewMode(ViewMode mode) {
+    _ehConfig.viewModel = EnumToString.convertToString(mode);
     notifyListeners();
   }
 }

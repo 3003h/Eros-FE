@@ -4,7 +4,6 @@ import 'package:FEhViewer/common/global.dart';
 import 'package:FEhViewer/models/index.dart';
 import 'package:FEhViewer/models/states/gallery_model.dart';
 import 'package:FEhViewer/utils/https_proxy.dart';
-import 'package:FEhViewer/utils/toast.dart';
 import 'package:FEhViewer/utils/utility.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:dio/dio.dart';
@@ -19,6 +18,7 @@ import 'package:provider/provider.dart';
 class GalleryUtil {
   static Future<void> getAllImageHref(GalleryModel galleryModel) async {
     if (galleryModel.isGetAllImageHref) {
+      Global.loggerNoStack.d(' isGetAllImageHref return');
       return;
     }
     galleryModel.isGetAllImageHref = true;
@@ -49,7 +49,7 @@ class GalleryUtil {
     GalleryUtil.getAllImageHref(_galleryModel).catchError((e, stack) {
       Global.logger.e('$e \n $stack');
     }).whenComplete(() {
-      Global.logger.v('getAllImageHref Complete');
+      // Global.logger.v('getAllImageHref Complete');
     });
 
     try {
@@ -267,11 +267,13 @@ class GalleryImage extends StatefulWidget {
   const GalleryImage({
     Key key,
     @required this.index,
+    this.downloadComplete,
   }) : super(key: key);
 
   @override
   _GalleryImageState createState() => _GalleryImageState();
   final int index;
+  final ValueChanged<bool> downloadComplete;
 }
 
 class _GalleryImageState extends State<GalleryImage> {
@@ -322,6 +324,7 @@ class _GalleryImageState extends State<GalleryImage> {
                       fit: BoxFit.contain,
                       progressIndicatorBuilder:
                           (context, url, downloadProgress) {
+                        // 下载进度回调
                         return Center(
                           child: Column(
                             mainAxisAlignment: MainAxisAlignment.center,
@@ -332,14 +335,12 @@ class _GalleryImageState extends State<GalleryImage> {
                                 height: 70,
                                 width: 70,
                                 child: LiquidCircularProgressIndicator(
-                                  value: downloadProgress.progress ??
-                                      0.0, // Defaults to 0.5.
-                                  valueColor: AlwaysStoppedAnimation(
-                                      Color.fromARGB(255, 163, 199, 100)),
-                                  // backgroundColor:
-                                  //     Color.fromARGB(255, 115, 136, 149),
+                                  value: downloadProgress.progress ?? 0.0,
+                                  valueColor:
+                                      const AlwaysStoppedAnimation<Color>(
+                                          Color.fromARGB(255, 163, 199, 100)),
                                   backgroundColor:
-                                      Color.fromARGB(255, 50, 50, 50),
+                                      const Color.fromARGB(255, 50, 50, 50),
                                   // borderColor: Colors.teal[900],
                                   // borderWidth: 2.0,
                                   direction: Axis.vertical,
@@ -426,5 +427,22 @@ class _GalleryImageState extends State<GalleryImage> {
             return _buildImage(url);
           }
         });
+  }
+}
+
+class ViewChildBuilderDelegate extends SliverChildBuilderDelegate {
+  ViewChildBuilderDelegate(
+    Widget Function(BuildContext, int) builder, {
+    int childCount,
+    bool addAutomaticKeepAlives = true,
+    bool addRepaintBoundaries = true,
+  }) : super(builder,
+            childCount: childCount,
+            addAutomaticKeepAlives: addAutomaticKeepAlives,
+            addRepaintBoundaries: addRepaintBoundaries);
+
+  @override
+  void didFinishLayout(int firstIndex, int lastIndex) {
+    print('firstIndex: $firstIndex, lastIndex: $lastIndex');
   }
 }

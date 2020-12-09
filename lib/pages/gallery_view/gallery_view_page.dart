@@ -2,12 +2,14 @@ import 'dart:io';
 
 import 'package:FEhViewer/common/global.dart';
 import 'package:FEhViewer/models/index.dart';
+import 'package:FEhViewer/models/states/ehconfig_model.dart';
 import 'package:FEhViewer/models/states/gallery_cache_model.dart';
 import 'package:FEhViewer/models/states/gallery_model.dart';
 import 'package:FEhViewer/pages/gallery_detail/gallery_detail_widget.dart';
 import 'package:FEhViewer/route/navigator_util.dart';
 import 'package:FEhViewer/utils/toast.dart';
 import 'package:FEhViewer/utils/utility.dart';
+import 'package:FEhViewer/values/const.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -60,8 +62,7 @@ class _GalleryViewPageState extends State<GalleryViewPage> {
 
   PageController _pageController;
 
-  Future<GalleryPreview> _futurePhotoViewGallery;
-  Future<bool> _futureGetPreviews;
+  Future<GalleryPreview> _futureViewGallery;
 
   @override
   void initState() {
@@ -88,18 +89,24 @@ class _GalleryViewPageState extends State<GalleryViewPage> {
         Provider.of<GalleryModel>(context, listen: false);
     final GalleryCacheModel galleryCacheModel =
         Provider.of<GalleryCacheModel>(context, listen: false);
+    final EhConfigModel ehConfigModel =
+        Provider.of<EhConfigModel>(context, listen: false);
     if (galleryModel != _galleryModel) {
       _galleryModel = galleryModel;
       _galleryCacheModel = galleryCacheModel;
-      // 预载后面5张图
-      Global.logger.v('预载后面5张图 didChangeDependencies');
-      GalleryPrecache.instance.precacheImages(
-        context,
-        _galleryModel,
-        previews: _galleryModel.previews,
-        index: widget.index,
-        max: 5,
-      );
+
+      final int preload = ehConfigModel.preloadImage;
+      if (ehConfigModel.viewMode != ViewMode.vertical) {
+        // 预载后面5张图
+        Global.logger.v('预载后面 $preload 张图 didChangeDependencies');
+        GalleryPrecache.instance.precacheImages(
+          context,
+          _galleryModel,
+          previews: _galleryModel.previews,
+          index: widget.index,
+          max: preload,
+        );
+      }
     }
     _currentIndex = widget.index;
     Future<void>.delayed(const Duration(milliseconds: 100)).then((_) {
@@ -107,7 +114,7 @@ class _GalleryViewPageState extends State<GalleryViewPage> {
           notify: false);
     });
     _sliderValue = _currentIndex / 1.0;
-    _futurePhotoViewGallery = _getImageInfo();
+    _futureViewGallery = _getImageInfo();
   }
 
   Future<GalleryPreview> _getImageInfo() async {
@@ -195,10 +202,7 @@ class _GalleryViewPageState extends State<GalleryViewPage> {
                   alignment: Alignment.center,
                   children: <Widget>[
                     // 内容部件
-                    Container(
-                      child: _buildPhotoViewGallery(),
-                      // child: _buildListView(),
-                    ),
+                    _buildView(),
                     // 外沿触摸区
                     GestureDetector(
                       behavior: HitTestBehavior.translucent,
@@ -269,6 +273,23 @@ class _GalleryViewPageState extends State<GalleryViewPage> {
         ),
       ),
     );
+  }
+
+  Widget _buildView() {
+    return Selector<EhConfigModel, ViewMode>(
+        selector: (_, EhConfigModel model) => model.viewMode,
+        builder: (_, ViewMode viewMode, __) {
+          switch (viewMode) {
+            case ViewMode.vertical:
+              return _buildListView();
+            case ViewMode.horizontalLeft:
+              return _buildPhotoViewGallery();
+            case ViewMode.horizontalRight:
+              return _buildPhotoViewGallery(reverse: true);
+            default:
+              return _buildPhotoViewGallery();
+          }
+        });
   }
 
   /// 顶栏
@@ -342,7 +363,7 @@ class _GalleryViewPageState extends State<GalleryViewPage> {
                   behavior: HitTestBehavior.opaque,
                   onTap: () {
                     Global.logger.v('menu');
-                    // NavigatorUtil.goBack(context);
+                    NavigatorUtil.goViewSetting(context);
                   },
                   child: Container(
                     width: 40,
@@ -424,18 +445,69 @@ class _GalleryViewPageState extends State<GalleryViewPage> {
     );
   }*/
 
-  /// 竖直浏览布局
+  /// 竖直浏览布局  TODO 还没有实现
   Widget _buildListView() {
-    return ListView.builder(
+    return ListView.custom(
+      childrenDelegate: ViewChildBuilderDelegate(
+        (BuildContext context, int index) {
+          return ConstrainedBox(
+            constraints: const BoxConstraints(
+              minWidth: double.infinity, //宽度尽可能大
+              minHeight: 200.0, //最小高度
+            ),
+            child: FutureBuilder<GalleryPreview>(
+                future: _futureViewGallery,
+                builder: (BuildContext context,
+                    AsyncSnapshot<GalleryPreview> snapshot) {
+                  if (snapshot.connectionState == ConnectionState.done) {
+                    if (snapshot.hasError) {
+                      return Container();
+                    } else {
+                      Global.logger.d(
+                          ' h: ${snapshot.data.largeImageHeight}  w: ${snapshot.data.largeImageWidth}  ${snapshot.data.largeImageWidth / _screensize.width}');
+                      return Container(
+                          // height: snapshot.data.largeImageHeight *
+                          //     (snapshot.data.largeImageWidth /
+                          //         _screensize.width),
+                          // width: _screensize.width,
+                          height: snapshot.data.largeImageHeight /
+                              (snapshot.data.largeImageWidth /
+                                  _screensize.width),
+                          // width: snapshot.data.largeImageWidth,
+                          child: GalleryImage(index: index));
+                    }
+                  } else {
+                    return Container(
+                      alignment: Alignment.center,
+                      child: const CupertinoActivityIndicator(
+                        radius: 20,
+                      ),
+                    );
+                  }
+                }),
+          );
+        },
+        childCount: _galleryModel.previews.length,
+      ),
+      cacheExtent: 0.0,
+    );
+
+    /*return ListView.builder(
       itemBuilder: (BuildContext context, int index) {
-        return GalleryImage(index: index);
+        return ConstrainedBox(
+          child: GalleryImage(index: index),
+          constraints: const BoxConstraints(
+              minWidth: double.infinity, //宽度尽可能大
+              minHeight: 200.0 //最小高度
+              ),
+        );
       },
       itemCount: _galleryModel.previews.length,
-    );
+    );*/
   }
 
   /// 水平方向浏览部件
-  Widget _buildPhotoViewGallery() {
+  Widget _buildPhotoViewGallery({bool reverse = false}) {
     double _maxScale = 10;
     // Global.logger.d('preview ${preview.data.toJson()}');
     // final double _width = preview.data.largeImageWidth;
@@ -448,8 +520,11 @@ class _GalleryViewPageState extends State<GalleryViewPage> {
     //   _maxScale = _tempHeight / _size.height;
     // }
     // Global.logger.d(' $_maxScale');
+    final EhConfigModel ehConfigModel =
+        Provider.of<EhConfigModel>(context, listen: false);
     return PhotoViewGallery.builder(
       // scrollPhysics: const BouncingScrollPhysics(),
+      reverse: reverse,
       itemCount: _galleryModel.previews.length,
       customSize: _screensize,
       backgroundDecoration: const BoxDecoration(
@@ -457,7 +532,9 @@ class _GalleryViewPageState extends State<GalleryViewPage> {
       ),
       builder: (BuildContext context, int index) {
         return PhotoViewGalleryPageOptions.customChild(
-          child: GalleryImage(index: index),
+          child: GalleryImage(
+            index: index,
+          ),
           initialScale: PhotoViewComputedScale.covered,
           minScale: PhotoViewComputedScale.contained * 1.0,
           maxScale: PhotoViewComputedScale.covered * _maxScale,
@@ -497,14 +574,12 @@ class _GalleryViewPageState extends State<GalleryViewPage> {
           _galleryModel,
           previews: _galleryModel.previews,
           index: index,
-          max: 5,
+          max: ehConfigModel.preloadImage,
         );
         _currentIndex = index;
         _sliderValue = _currentIndex / 1.0;
         _galleryCacheModel.setIndex(
             _galleryModel.galleryItem.gid, _currentIndex);
-        _futurePhotoViewGallery =
-            GalleryUtil.getImageInfo(_galleryModel, _currentIndex);
         setState(() {});
       },
     );

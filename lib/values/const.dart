@@ -10,6 +10,12 @@ enum FavoriteOrder {
   posted,
 }
 
+enum ViewMode {
+  vertical,
+  horizontalLeft,
+  horizontalRight,
+}
+
 // ignore: avoid_classes_with_only_static_members
 class EHConst {
   // 网页登陆页面
@@ -44,6 +50,8 @@ class EHConst {
   static const double waterfallFlowMaxCrossAxisExtent = 150.0;
 
   static List<int> historyMax = <int>[50, 100, 300, 0];
+
+  static List<int> preloadImage = <int>[3, 5, 7, 9, 11, 13, 17];
 
   static const Map<FavoriteOrder, String> favoriteOrder =
       <FavoriteOrder, String>{

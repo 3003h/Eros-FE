@@ -35,7 +35,11 @@ Profile _$ProfileFromJson(Map<String, dynamic> json) {
         : AdvanceSearch.fromJson(json['advanceSearch'] as Map<String, dynamic>)
     ..dnsConfig = json['dnsConfig'] == null
         ? null
-        : DnsConfig.fromJson(json['dnsConfig'] as Map<String, dynamic>);
+        : DnsConfig.fromJson(json['dnsConfig'] as Map<String, dynamic>)
+    ..downloadConfig = json['downloadConfig'] == null
+        ? null
+        : DownloadConfig.fromJson(
+            json['downloadConfig'] as Map<String, dynamic>);
 }
 
 Map<String, dynamic> _$ProfileToJson(Profile instance) => <String, dynamic>{
@@ -51,4 +55,5 @@ Map<String, dynamic> _$ProfileToJson(Profile instance) => <String, dynamic>{
       'enableAdvanceSearch': instance.enableAdvanceSearch,
       'advanceSearch': instance.advanceSearch,
       'dnsConfig': instance.dnsConfig,
+      'downloadConfig': instance.downloadConfig,
     };

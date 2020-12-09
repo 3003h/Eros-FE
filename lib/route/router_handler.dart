@@ -6,6 +6,7 @@ import 'package:FEhViewer/pages/login/login_page.dart';
 import 'package:FEhViewer/pages/login/web_login.dart';
 import 'package:FEhViewer/pages/setting/about_page.dart';
 import 'package:FEhViewer/pages/setting/advanced_setting_page.dart';
+import 'package:FEhViewer/pages/setting/download_setting_page.dart';
 import 'package:FEhViewer/pages/setting/eh_setting_page.dart';
 import 'package:FEhViewer/pages/splash_page.dart';
 import 'package:FEhViewer/pages/tab/favorite_sel_page.dart';
@@ -43,6 +44,12 @@ final Map<String, Handler> pageRoutes = {
   EHRoutes.about: Handler(
       handlerFunc: (BuildContext context, Map<String, List<String>> params) {
     return AboutPage();
+  }),
+
+// DownloadSettingPage
+  EHRoutes.downloadSetting: Handler(
+      handlerFunc: (BuildContext context, Map<String, List<String>> params) {
+    return DownloadSettingPage();
   }),
 
   EHRoutes.advancedSetting: Handler(

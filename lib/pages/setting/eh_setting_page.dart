@@ -264,7 +264,7 @@ Widget _buildHistoryMaxItem(BuildContext context) {
     }).toList());
   }
 
-  Future<int> _showDialog(BuildContext context) {
+  Future<int> _showActionSheet(BuildContext context) {
     return showCupertinoModalPopup<int>(
         context: context,
         builder: (BuildContext context) {
@@ -292,7 +292,7 @@ Widget _buildHistoryMaxItem(BuildContext context) {
           selector: _getMaxNumText(maxHistory) ?? '',
           onTap: () async {
             Global.logger.v('tap ModeItem');
-            final int _result = await _showDialog(context);
+            final int _result = await _showActionSheet(context);
             if (_result != null) {
               ehConfigModel.maxHistory = _result;
             }

@@ -11,6 +11,7 @@ export 'simpleTag.dart';
 export 'dnsConfig.dart';
 export 'advanceSearch.dart';
 export 'galleryComment.dart';
+export 'downloadConfig.dart';
 export 'profile.dart';
 export 'localFav.dart';
 export 'galleryTag.dart';

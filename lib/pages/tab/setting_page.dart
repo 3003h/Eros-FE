@@ -27,17 +27,19 @@ class _SettingTabState extends State<SettingTab> {
   var _routes = [];
 
   void initData(BuildContext context) {
-    _itemTitles = ['EH设置', '高级设置', /*'安全设置',*/ '关于'];
+    _itemTitles = <String>['EH设置', '下载设置', '高级设置', /*'安全设置',*/ '关于'];
 
-    _icons = [
+    _icons = <IconData>[
       FontAwesomeIcons.cookieBite,
+      FontAwesomeIcons.download,
       FontAwesomeIcons.tools,
       // FontAwesomeIcons.shieldAlt,
       FontAwesomeIcons.infoCircle,
     ];
 
-    _routes = [
+    _routes = <String>[
       EHRoutes.ehSetting,
+      EHRoutes.downloadSetting,
       EHRoutes.advancedSetting,
       // '',
       EHRoutes.about,
