@@ -13,5 +13,6 @@
   "catFilter": 0,
   "maxHistory": 100,
   "searchBarComp": false,
-  "pureDarkTheme": false
+  "pureDarkTheme": false,
+  "viewModel": "vertical"
 }

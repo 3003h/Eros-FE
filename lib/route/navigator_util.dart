@@ -7,6 +7,7 @@ import 'package:FEhViewer/models/states/gallery_model.dart';
 import 'package:FEhViewer/models/states/history_model.dart';
 import 'package:FEhViewer/pages/gallery_detail/gallery_detail_page.dart';
 import 'package:FEhViewer/pages/gallery_view/gallery_view_page.dart';
+import 'package:FEhViewer/pages/setting/view_setting_page.dart';
 import 'package:FEhViewer/pages/tab/search_page.dart';
 import 'package:fluro/fluro.dart';
 import 'package:flutter/cupertino.dart';
@@ -149,6 +150,12 @@ class NavigatorUtil {
       return GallerySearchPage(
         searchText: simpleSearch,
       );
+    }));
+  }
+
+  static void goViewSetting(BuildContext context) {
+    Navigator.push(context, CupertinoPageRoute(builder: (context) {
+      return ViewSettingPage();
     }));
   }
 

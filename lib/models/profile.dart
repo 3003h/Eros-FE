@@ -6,6 +6,7 @@ import 'galleryItem.dart';
 import 'localFav.dart';
 import 'advanceSearch.dart';
 import 'dnsConfig.dart';
+import 'downloadConfig.dart';
 
 part 'profile.g.dart';
 
@@ -25,6 +26,7 @@ class Profile {
   bool enableAdvanceSearch;
   AdvanceSearch advanceSearch;
   DnsConfig dnsConfig;
+  DownloadConfig downloadConfig;
 
   factory Profile.fromJson(Map<String,dynamic> json) => _$ProfileFromJson(json);
   Map<String, dynamic> toJson() => _$ProfileToJson(this);

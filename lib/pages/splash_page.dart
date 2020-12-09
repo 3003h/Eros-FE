@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:io';
 
 import 'package:FEhViewer/common/global.dart';
 import 'package:FEhViewer/generated/l10n.dart';
@@ -30,8 +31,8 @@ class _SplashPageState extends State<SplashPage> {
   }
 
   Future<void> startHome(String url) async {
-    Global.logger.v(
-        'MediaQuery ${MediaQuery.of(context).platformBrightness}\nCupertinoTheme ${CupertinoTheme.brightnessOf(context)}');
+    // Global.logger.v(
+    //     'MediaQuery ${MediaQuery.of(context).platformBrightness}\nCupertinoTheme ${CupertinoTheme.brightnessOf(context)}');
 
     if (url != null && url.isNotEmpty) {
       Global.logger.i('open $url');
@@ -49,28 +50,35 @@ class _SplashPageState extends State<SplashPage> {
   @override
   void initState() {
     super.initState();
-    // For sharing or opening urls/text coming from outside the app while the app is in the memory
-    _intentDataStreamSubscription =
-        ReceiveSharingIntent.getTextStream().listen((String value) {
-      Global.logger.i('value(memory): $value');
-      setState(() {
-        _sharedText = value;
-        Global.logger.i('Shared: $_sharedText');
-      });
-      startHome(_sharedText);
-    }, onError: (err) {
-      Global.logger.e('getLinkStream error: $err');
-    });
 
-    // For sharing or opening urls/text coming from outside the app while the app is closed
-    ReceiveSharingIntent.getInitialText().then((String value) {
-      Global.logger.i('value(closed): $value');
-      setState(() {
-        _sharedText = value;
-        Global.logger.i('Shared: $_sharedText');
+    if (!Platform.isIOS && !Platform.isAndroid) {
+      Future<void>.delayed(const Duration(milliseconds: 500), () {
+        NavigatorUtil.goHomePage(context);
       });
-      startHome(_sharedText);
-    });
+    } else {
+      // For sharing or opening urls/text coming from outside the app while the app is in the memory
+      _intentDataStreamSubscription =
+          ReceiveSharingIntent.getTextStream().listen((String value) {
+        Global.logger.i('value(memory): $value');
+        setState(() {
+          _sharedText = value;
+          Global.logger.i('Shared: $_sharedText');
+        });
+        startHome(_sharedText);
+      }, onError: (err) {
+        Global.logger.e('getLinkStream error: $err');
+      });
+
+      // For sharing or opening urls/text coming from outside the app while the app is closed
+      ReceiveSharingIntent.getInitialText().then((String value) {
+        Global.logger.i('value(closed): $value');
+        setState(() {
+          _sharedText = value;
+          Global.logger.i('Shared: $_sharedText');
+        });
+        startHome(_sharedText);
+      });
+    }
   }
 
   @override

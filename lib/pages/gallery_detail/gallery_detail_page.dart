@@ -90,6 +90,8 @@ class _GalleryDetailPageState extends State<GalleryDetailPage> {
       /// 画廊详情内容未获取完毕 或者 画廊缩略对象列表为空的情况
       /// 需要请求网络获取数据
       if (!_galleryModel.detailLoadFinish || _item.galleryPreview.isNotEmpty) {
+        await Future<void>.delayed(const Duration(milliseconds: 200));
+
         if (_item.filecount == null || _item.filecount.isEmpty) {
           await Api.getMoreGalleryInfoOne(_item, refresh: refresh);
         }

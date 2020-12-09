@@ -22,6 +22,7 @@ class EhConfig {
   int maxHistory;
   bool searchBarComp;
   bool pureDarkTheme;
+  String viewModel;
 
   factory EhConfig.fromJson(Map<String,dynamic> json) => _$EhConfigFromJson(json);
   Map<String, dynamic> toJson() => _$EhConfigToJson(this);

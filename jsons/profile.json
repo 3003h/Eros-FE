@@ -10,5 +10,6 @@
   "localFav": "$localFav",
   "enableAdvanceSearch": false,
   "advanceSearch": "$advanceSearch",
-  "dnsConfig": "$dnsConfig"
+  "dnsConfig": "$dnsConfig",
+  "downloadConfig": "$downloadConfig"
 }
