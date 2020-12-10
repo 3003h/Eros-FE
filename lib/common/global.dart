@@ -199,7 +199,8 @@ class Global {
 
     profile.dnsConfig.dohCache = <DnsCache>[];
 
-    if (profile.dnsConfig.enableCustomHosts ?? false) {
+    if ((profile.dnsConfig.enableCustomHosts ?? false) ||
+        (profile.dnsConfig.dohCache ?? false)) {
       logger.v('${profile.dnsConfig.enableCustomHosts}');
       HttpOverrides.global = httpProxy;
     }
