@@ -11,12 +11,12 @@ const String _regExpHost =
 class DnsConfigModel extends ProfileChangeNotifier {
   DnsConfig get _dnsConfig => Global.profile.dnsConfig;
 
-  set customHosts(bool value) {
-    _dnsConfig.customHosts = value;
+  set enableCustomHosts(bool value) {
+    _dnsConfig.enableCustomHosts = value;
     notifyListeners();
   }
 
-  bool get customHosts => _dnsConfig.customHosts ?? false;
+  bool get enableCustomHosts => _dnsConfig.enableCustomHosts ?? false;
 
   List<DnsCache> get hosts => _dnsConfig.hosts ?? <DnsCache>[];
 

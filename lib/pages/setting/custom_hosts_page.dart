@@ -26,7 +26,7 @@ class CustomHostsPage extends StatelessWidget {
         /// 设置全局本地代理
         HttpOverrides.global = Global.httpProxy;
       }
-      dnsConfigModel.customHosts = value;
+      dnsConfigModel.enableCustomHosts = value;
     }
 
     return CupertinoPageScaffold(
@@ -42,7 +42,7 @@ class CustomHostsPage extends StatelessWidget {
             children: <Widget>[
               TextSwitchItem(
                 _title,
-                intValue: dnsConfigModel.customHosts,
+                intValue: dnsConfigModel.enableCustomHosts,
                 onChanged: _handleEnableCustomHostDarkChanged,
                 // desc: '已关闭',
                 // descOn: '已开启',

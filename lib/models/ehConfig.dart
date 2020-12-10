@@ -16,6 +16,8 @@ class EhConfig {
   bool favPicker;
   bool favLongTap;
   String lastFavcat;
+  String lastShowFavcat;
+  String lastShowFavTitle;
   String listMode;
   bool safeMode;
   int catFilter;

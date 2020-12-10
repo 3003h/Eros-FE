@@ -47,7 +47,7 @@ class ListViewAdvancedSetting extends StatelessWidget {
       themeModel.pureDarkTheme = newValue;
     }
 
-    final bool _doh = Global.profile.dnsConfig.doh ?? false;
+    final bool _doh = Global.profile.dnsConfig.enableDoH ?? false;
     void _handleDoHChanged(bool newValue) {
       if (!newValue) {
         /// 清除hosts 关闭代理
@@ -56,7 +56,7 @@ class ListViewAdvancedSetting extends StatelessWidget {
         /// 设置全局本地代理
         HttpOverrides.global = Global.httpProxy;
       }
-      Global.profile.dnsConfig.doh = newValue;
+      Global.profile.dnsConfig.enableDoH = newValue;
       Global.saveProfile();
     }
 
@@ -84,14 +84,8 @@ class ListViewAdvancedSetting extends StatelessWidget {
             color: CupertinoDynamicColor.resolve(
                 CupertinoColors.systemGrey5, context),
           ),
-          // TextSwitchItem(
-          //   'DNS-over-HTTPS',
-          //   intValue: _doh,
-          //   onChanged: _handleDoHChanged,
-          //   desc: '实验性功能',
-          // ),
           Selector<DnsConfigModel, bool>(
-              selector: (_, dnsConfigModel) => dnsConfigModel.customHosts,
+              selector: (_, dnsConfigModel) => dnsConfigModel.enableCustomHosts,
               builder: (context, bool customHosts, _) {
                 return SelectorSettingItem(
                   title: '自定义hosts (实验性功能)',
@@ -108,6 +102,12 @@ class ListViewAdvancedSetting extends StatelessWidget {
                   },
                 );
               }),
+          TextSwitchItem(
+            'DNS-over-HTTPS',
+            intValue: _doh,
+            onChanged: _handleDoHChanged,
+            desc: '优先级低于自定义hosts',
+          ),
         ],
       ),
     );

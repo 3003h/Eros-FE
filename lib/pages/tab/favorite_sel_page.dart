@@ -188,7 +188,7 @@ class _FavSelItemWidgetState extends State<FavSelItemWidget> {
   Widget build(BuildContext context) {
     final Widget container = Container(
       color: _colorTap,
-      padding: const EdgeInsets.fromLTRB(16, 8, 8, 8),
+      padding: const EdgeInsets.fromLTRB(24, 8, 12, 8),
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         crossAxisAlignment: CrossAxisAlignment.start,

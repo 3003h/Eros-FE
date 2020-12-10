@@ -251,7 +251,7 @@ class Api {
     final String _baseUrl =
         EHConst.getBaseSite(Global.profile.ehConfig.siteEx ?? false);
     final bool enableCache = Global.profile.cache.enable ?? true;
-    final bool _doh = Global.profile.dnsConfig.doh ?? false;
+    final bool _doh = Global.profile.dnsConfig.enableDoH ?? false;
     if (_doh) {
       return HttpManager.withProxy(_baseUrl,
           cache: cache ? enableCache : cache);
@@ -281,12 +281,6 @@ class Api {
     const String url = '/popular?inline_set=dm_l';
 
     await CustomHttpsProxy.instance.init();
-    try {
-      await DnsUtil.dohToProfile(getBaseUrl());
-    } catch (e, stack) {
-      Global.logger.v('$stack');
-      rethrow;
-    }
 
     final Options _cacheOptions = getCacheOptions(forceRefresh: refresh);
 
@@ -328,8 +322,8 @@ class Api {
     if (serach != null) {
       final List<String> searArr = serach.split(':');
       if (searArr.length == 2 &&
-          !serach.trim().endsWith('\$') &&
-          !serach.trim().endsWith('"')) {
+          !serach.trim().contains('\$') &&
+          !serach.trim().contains('"')) {
         String _end = '';
         if (searArr[0] != 'uploader') {
           _end = '\$';
@@ -795,33 +789,4 @@ class Api {
 enum DohResolve {
   google,
   cloudflare,
-}
-
-class DnsUtil {
-  static Future<String> doh(String host,
-      {DohResolve dhoResolve = DohResolve.cloudflare}) async {
-    final DnsOverHttps dns = dhoResolve == DohResolve.cloudflare
-        ? DnsOverHttps.cloudflare()
-        : DnsOverHttps.google();
-    final List<InternetAddress> response = await dns.lookup(host.trim());
-    return (response..shuffle()).first.address;
-  }
-
-  static Future<void> dohToProfile(String url) async {
-    if (!Global.profile.dnsConfig.doh ?? false) {
-      return;
-    }
-    // 解析host
-    final String _host = Uri.parse(url).host;
-    final String _addr = await doh(_host);
-    Global.logger.v('$_host  $_addr');
-    final List<DnsCache> dnsCacheList = Global.profile.dnsConfig.cache;
-    dnsCacheList.add(DnsCache()
-      ..host = _host
-      ..addrs = <String>[_addr]);
-
-    for (DnsCache cache in dnsCacheList) {
-      // Global.hosts[cache.host] = cache.addrs.first;
-    }
-  }
 }

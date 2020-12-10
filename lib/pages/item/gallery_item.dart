@@ -99,6 +99,8 @@ class _GalleryItemWidgetState extends State<GalleryItemWidget> {
         builder: (context, snapshot, _) {
           final GalleryItem _galleryItem = snapshot.item1;
 
+          // Global.logger.d('${widget.tabIndex} ${_galleryItem.toJson()}');
+
           return Container(
             color: _colorTap,
             padding: EdgeInsets.fromLTRB(_paddingLeft, 8, 8, 8),
@@ -202,10 +204,14 @@ class _GalleryItemWidgetState extends State<GalleryItemWidget> {
     return Consumer<GalleryModel>(builder: (context, galleryModel, _) {
       final GalleryItem _item = galleryModel.galleryItem;
 
+      // 获取图片高度
       num _getHeigth() {
+        // Global.logger.d(
+        // '${widget.tabIndex} ${_item.japaneseTitle}\n list imgWidth ${_item.imgWidth}');
         if (_item.imgWidth >= kCoverImageWidth) {
           return _item.imgHeight * kCoverImageWidth / _item.imgWidth;
         } else {
+          // Global.logger.d('为空');
           return _item.imgHeight;
         }
       }
@@ -221,9 +227,17 @@ class _GalleryItemWidgetState extends State<GalleryItemWidget> {
               child: ClipRRect(
                 // 圆角
                 borderRadius: BorderRadius.circular(6),
-                child: Container(
-                    child: CoverImg(
-                        imgUrl: galleryModel?.galleryItem?.imgUrl ?? '')),
+                child: Stack(
+                  children: <Widget>[
+                    Container(
+                      color: CupertinoDynamicColor.resolve(
+                          CupertinoColors.systemGrey3, context),
+                    ),
+                    Container(
+                        child: CoverImg(
+                            imgUrl: galleryModel?.galleryItem?.imgUrl ?? '')),
+                  ],
+                ),
               ),
             ),
           ),

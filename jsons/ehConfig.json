@@ -8,6 +8,8 @@
   "favPicker": false,
   "favLongTap": false,
   "lastFavcat": "3",
+  "lastShowFavcat": "3",
+  "lastShowFavTitle": "",
   "listMode": "list",
   "safeMode": true,
   "catFilter": 0,

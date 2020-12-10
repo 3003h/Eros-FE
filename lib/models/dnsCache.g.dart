@@ -9,7 +9,7 @@ part of 'dnsCache.dart';
 DnsCache _$DnsCacheFromJson(Map<String, dynamic> json) {
   return DnsCache()
     ..host = json['host'] as String
-    ..lastResolve = json['lastResolve'] as String
+    ..lastResolve = json['lastResolve'] as int
     ..addrs = (json['addrs'] as List)?.map((e) => e as String)?.toList()
     ..addr = json['addr'] as String;
 }

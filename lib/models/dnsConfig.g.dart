@@ -8,21 +8,21 @@ part of 'dnsConfig.dart';
 
 DnsConfig _$DnsConfigFromJson(Map<String, dynamic> json) {
   return DnsConfig()
-    ..doh = json['doh'] as bool
-    ..customHosts = json['customHosts'] as bool
+    ..enableDoH = json['enableDoH'] as bool
+    ..enableCustomHosts = json['enableCustomHosts'] as bool
     ..hosts = (json['hosts'] as List)
         ?.map((e) =>
             e == null ? null : DnsCache.fromJson(e as Map<String, dynamic>))
         ?.toList()
-    ..cache = (json['cache'] as List)
+    ..dohCache = (json['dohCache'] as List)
         ?.map((e) =>
             e == null ? null : DnsCache.fromJson(e as Map<String, dynamic>))
         ?.toList();
 }
 
 Map<String, dynamic> _$DnsConfigToJson(DnsConfig instance) => <String, dynamic>{
-      'doh': instance.doh,
-      'customHosts': instance.customHosts,
+      'enableDoH': instance.enableDoH,
+      'enableCustomHosts': instance.enableCustomHosts,
       'hosts': instance.hosts,
-      'cache': instance.cache,
+      'dohCache': instance.dohCache,
     };

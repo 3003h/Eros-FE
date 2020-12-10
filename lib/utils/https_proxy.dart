@@ -3,6 +3,7 @@ import 'dart:io';
 
 import 'package:FEhViewer/common/global.dart';
 import 'package:FEhViewer/models/dnsCache.dart';
+import 'package:FEhViewer/utils/dns_util.dart';
 
 class CustomHttpsProxy {
   /// 内部构造方法，可避免外部暴露构造函数，进行实例化
@@ -10,6 +11,7 @@ class CustomHttpsProxy {
 
   /// 工厂构造方法，这里使用命名构造函数方式进行声明
   factory CustomHttpsProxy.getInstance() => _getInstance();
+
   static CustomHttpsProxy get instance => _getInstance();
 
   /// 获取单例内部方法
@@ -59,7 +61,7 @@ class ClientConnectionHandler {
   Socket server;
   Socket client;
   String content = '';
-  String host;
+  String _oriHost;
   int port;
 
   void closeSockets() {
@@ -70,29 +72,67 @@ class ClientConnectionHandler {
     client.destroy();
   }
 
-  void dataHandler(data) {
-    final List<DnsCache> _hosts = Global.profile.dnsConfig.hosts;
+  void dataHandler(data) async {
+    // 自定义hosts
+    final List<DnsCache> _customHosts =
+        Global.profile.dnsConfig.hosts ?? <DnsCache>[];
+    final bool enableDoH = Global.profile.dnsConfig.enableDoH;
+
     if (server == null) {
       content += utf8.decode(data);
-      Global.logger.d('$content');
+      Global.logger.d('\n$content');
       final RegExpMatch m = regx.firstMatch(content);
       if (m != null) {
-        host = m.group(1);
+        _oriHost = m.group(1);
         port = m.group(2) == null ? 443 : int.parse(m.group(2));
-        final int _index =
-            _hosts.indexWhere((DnsCache element) => element.host == host);
-        final realHost =
-            _hosts != null && _index >= 0 ? _hosts[_index].addr : host;
-        Global.logger.i('$host  =>  $realHost');
+
+        // 更新doh
+        if (enableDoH) {
+          await DnsUtil.updateDoHCache(_oriHost);
+          // Global.logger.d(' updateDoHCache end');
+        }
+
+        String realHost = _oriHost;
+        try {
+          final List<DnsCache> _dohDnsCacheList =
+              Global.profile.dnsConfig.dohCache ?? <DnsCache>[];
+
+          // 查询自定义hosts
+          final int customDnsCacheIndex = _customHosts
+              .indexWhere((DnsCache element) => element.host == _oriHost);
+          final DnsCache customDnsCache = customDnsCacheIndex > -1
+              ? _customHosts[customDnsCacheIndex]
+              : null;
+
+          if (enableDoH) {
+            final int _dohDnsCacheIndex = Global.profile.dnsConfig.dohCache
+                .indexWhere((DnsCache element) => element.host == _oriHost);
+            Global.logger.d('$_oriHost $_dohDnsCacheIndex');
+            final DnsCache dohDnsCache = _dohDnsCacheIndex > -1
+                ? _dohDnsCacheList[_dohDnsCacheIndex]
+                : null;
+            if (Global.profile.dnsConfig.enableCustomHosts) {
+              realHost = customDnsCache?.addr ?? dohDnsCache?.addr ?? _oriHost;
+            } else {
+              realHost = dohDnsCache?.addr ?? _oriHost;
+            }
+          } else {
+            realHost = customDnsCache?.addr ?? _oriHost;
+          }
+        } catch (e, stack) {
+          Global.logger.e('$e \n $stack');
+        }
+
+        Global.logger.i('$_oriHost  =>  $realHost');
         try {
           ServerConnectionHandler(realHost, port, this)
               .handle()
               .catchError((e) {
-            print('Server error $e');
+            Global.logger.e('Server error $e');
             closeSockets();
           });
         } catch (e) {
-          print('Server exception $e');
+          Global.logger.e('Server exception $e');
           closeSockets();
         }
       }
@@ -124,6 +164,7 @@ class ServerConnectionHandler {
   ServerConnectionHandler(this.host, this.port, this.handler) {
     client = handler.client;
   }
+
   final String responce = 'HTTP/1.1 200 Connection Established\r\n\r\n';
   final String host;
   final int port;
@@ -143,7 +184,7 @@ class ServerConnectionHandler {
   }
 
   void errorHandler(error, StackTrace trace) {
-    print('server socket error: $error');
+    Global.logger.e('server socket error: $error \n $trace');
   }
 
   void doneHandler() {
@@ -163,6 +204,7 @@ class ServerConnectionHandler {
 
 class HttpProxy extends HttpOverrides {
   HttpProxy(this.host, this.port);
+
   String host;
   String port;
 
