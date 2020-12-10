@@ -40,6 +40,8 @@ class _FavoriteTabState extends State<FavoriteTab> {
   int _maxPage = 0;
   bool _isLoadMore = false;
 
+  bool enableDelayedLoad = true;
+
   //页码跳转的控制器
   final TextEditingController _pageController = TextEditingController();
 
@@ -55,10 +57,13 @@ class _FavoriteTabState extends State<FavoriteTab> {
   @override
   void initState() {
     super.initState();
-    _curFavcat = 'a';
+    _curFavcat = Global.profile.ehConfig.lastShowFavcat ?? 'a';
+    _title = Global.profile.ehConfig.lastShowFavTitle;
     _futureBuilderFuture = _loadData();
-    Future<void>.delayed(const Duration(milliseconds: 100)).then((_) {
-      _reloadData();
+    Future<void>.delayed(const Duration(milliseconds: 200)).then((_) {
+      if (enableDelayedLoad) {
+        _reloadData(delayed: true);
+      }
     });
   }
 
@@ -278,13 +283,21 @@ class _FavoriteTabState extends State<FavoriteTab> {
     });
   }
 
-  Future<void> _reloadData() async {
+  Future<void> _reloadData({bool delayed = false}) async {
     _curPage = 0;
     final Tuple2<List<GalleryItem>, int> tuple = await _loadData(refresh: true);
-    setState(() {
-      _futureBuilderFuture =
-          Future<Tuple2<List<GalleryItem>, int>>.value(tuple);
-    });
+    if (delayed && enableDelayedLoad) {
+      Global.logger.d(' delayed reload');
+      setState(() {
+        _futureBuilderFuture =
+            Future<Tuple2<List<GalleryItem>, int>>.value(tuple);
+      });
+    } else {
+      setState(() {
+        _futureBuilderFuture =
+            Future<Tuple2<List<GalleryItem>, int>>.value(tuple);
+      });
+    }
   }
 
   Future<void> _loadFromPage(int page, {bool cleanSearch = false}) async {
@@ -411,7 +424,11 @@ class _FavoriteTabState extends State<FavoriteTab> {
             if (_curFavcat != fav.favId) {
               Global.loggerNoStack.v('修改favcat to ${fav.title}');
               _setTitle(fav.title);
+              enableDelayedLoad = false;
               _curFavcat = fav.favId;
+              Global.profile.ehConfig.lastShowFavcat = _curFavcat;
+              Global.profile.ehConfig.lastShowFavTitle = fav.title;
+              Global.saveProfile();
               _reLoadDataFirst();
             } else {
               Global.loggerNoStack.v('未修改favcat');

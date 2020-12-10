@@ -5,6 +5,7 @@ import 'package:FEhViewer/models/states/gallery_model.dart';
 import 'package:FEhViewer/models/states/local_favorite_model.dart';
 import 'package:FEhViewer/models/states/user_model.dart';
 import 'package:FEhViewer/utils/toast.dart';
+import 'package:FEhViewer/utils/vibrate.dart';
 import 'package:FEhViewer/values/theme_colors.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -224,6 +225,7 @@ class _GalleryFavButtonState extends State<GalleryFavButton> {
 
   // 长按事件
   Future<void> _longTapFav(context) async {
+    VibrateUtil.heavy();
     // 手选收藏夹
     await _showAddFavDialog(context);
   }

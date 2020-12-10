@@ -1,6 +1,6 @@
 {
-  "doh": false,
-  "customHosts": false,
+  "enableDoH": false,
+  "enableCustomHosts": false,
   "hosts": "$[]dnsCache",
-  "cache": "$[]dnsCache"
+  "dohCache": "$[]dnsCache"
 }

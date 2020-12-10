@@ -8,10 +8,10 @@ part 'dnsConfig.g.dart';
 class DnsConfig {
       DnsConfig();
 
-  bool doh;
-  bool customHosts;
+  bool enableDoH;
+  bool enableCustomHosts;
   List<DnsCache> hosts;
-  List<DnsCache> cache;
+  List<DnsCache> dohCache;
 
   factory DnsConfig.fromJson(Map<String,dynamic> json) => _$DnsConfigFromJson(json);
   Map<String, dynamic> toJson() => _$DnsConfigToJson(this);

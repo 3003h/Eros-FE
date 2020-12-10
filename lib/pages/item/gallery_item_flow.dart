@@ -42,6 +42,7 @@ class GalleryItemFlow extends StatelessWidget {
           selector: (_, GalleryModel galleryModel) =>
               Tuple2<GalleryItem, dynamic>(
                   galleryModel.galleryItem, galleryModel.tabIndex),
+          shouldRebuild: (_, __) => true,
           builder:
               (BuildContext context, Tuple2<GalleryItem, dynamic> tuple, _) {
             final GalleryItem galleryItem = tuple.item1;
@@ -51,6 +52,17 @@ class GalleryItemFlow extends StatelessWidget {
                 ThemeColors.catColor[galleryItem?.category ?? 'default'] ??
                     CupertinoColors.systemBackground,
                 context);
+
+            // 获取图片高度
+            num _getHeigth() {
+              if (galleryItem.imgWidth >= constraints.maxWidth) {
+                return galleryItem.imgHeight *
+                    constraints.maxWidth /
+                    galleryItem.imgWidth;
+              } else {
+                return galleryItem.imgHeight;
+              }
+            }
 
             final Widget container = Container(
               child: Column(
@@ -77,11 +89,10 @@ class GalleryItemFlow extends StatelessWidget {
                           alignment: Alignment.topRight,
                           children: <Widget>[
                             Container(
-                              height: galleryItem.imgHeight *
-                                  constraints.maxWidth /
-                                  galleryItem.imgWidth,
+                              height: galleryItem.imgWidth != null
+                                  ? _getHeigth()
+                                  : null,
                               child: Stack(
-                                fit: StackFit.expand,
                                 children: <Widget>[
                                   Container(
                                     color:

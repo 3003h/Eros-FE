@@ -8,7 +8,7 @@ class DnsCache {
       DnsCache();
 
   String host;
-  String lastResolve;
+  int lastResolve;
   List<String> addrs;
   String addr;
 
