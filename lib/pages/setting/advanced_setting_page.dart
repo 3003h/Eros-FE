@@ -49,7 +49,7 @@ class ListViewAdvancedSetting extends StatelessWidget {
 
     final bool _doh = Global.profile.dnsConfig.enableDoH ?? false;
     void _handleDoHChanged(bool newValue) {
-      if (!newValue && !Global.profile.dnsConfig.enableCustomHosts) {
+      if (!newValue && !(Global.profile.dnsConfig.enableCustomHosts ?? false)) {
         /// 清除hosts 关闭代理
         Global.logger.d(' 关闭代理');
         HttpOverrides.global = null;

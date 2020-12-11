@@ -19,7 +19,7 @@ class CustomHostsPage extends StatelessWidget {
         Provider.of<DnsConfigModel>(context, listen: false);
 
     void _handleEnableCustomHostDarkChanged(bool value) {
-      if (!value && !Global.profile.dnsConfig.enableDoH) {
+      if (!value && !(Global.profile.dnsConfig.enableDoH ?? false)) {
         /// 关闭代理
         HttpOverrides.global = null;
       } else {
