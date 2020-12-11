@@ -53,7 +53,7 @@ class ListViewAdvancedSetting extends StatelessWidget {
         /// 清除hosts 关闭代理
         Global.logger.d(' 关闭代理');
         HttpOverrides.global = null;
-      } else {
+      } else if (newValue) {
         /// 设置全局本地代理
         HttpOverrides.global = Global.httpProxy;
       }

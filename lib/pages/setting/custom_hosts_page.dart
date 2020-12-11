@@ -22,7 +22,7 @@ class CustomHostsPage extends StatelessWidget {
       if (!value && !(Global.profile.dnsConfig.enableDoH ?? false)) {
         /// 关闭代理
         HttpOverrides.global = null;
-      } else {
+      } else if (value) {
         /// 设置全局本地代理
         HttpOverrides.global = Global.httpProxy;
       }
