@@ -104,13 +104,13 @@ class HttpManager {
       Options options,
       CancelToken cancelToken}) async {
     //设置Cookie管理
-    _dio.interceptors.add(CookieManager(await Api.cookieJar));
+    // _dio.interceptors.add(CookieManager(await Api.cookieJar));
     Response<String> response;
     try {
       response = await _dio.get<String>(url,
           queryParameters: params, options: options, cancelToken: cancelToken);
-    } on DioError catch (e) {
-      Global.logger.v('getHttp exception: $e');
+    } on DioError catch (e, stack) {
+      Global.logger.e('getHttp exception: $e\n$stack');
       formatError(e);
       rethrow;
     }
@@ -173,6 +173,7 @@ class HttpManager {
     } on DioError catch (e) {
 //      print('postHttp exception: $e');
       formatError(e);
+      rethrow;
 //      throw e;
     }
     return response;

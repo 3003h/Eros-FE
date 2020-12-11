@@ -28,51 +28,46 @@ class _SelFavorite extends State<SelFavoritePage> {
   @override
   void initState() {
     super.initState();
-    // _initData();
   }
 
-  /// 初始化收藏夹选择数据
-  // void _initData() async {
-  //   // 增加延时
-  //   await Future<void>.delayed(const Duration(milliseconds: 100));
-  //   final List<Map<String, String>> favList =
-  //       await GalleryFavParser.getFavcat() ?? EHConst.favList;
-  //   for (final Map<String, String> catmap in favList) {
-  //     final String favTitle = catmap['favTitle'];
-  //     final String favId = catmap['favId'];
-  //
-  //     favItemBeans.add(
-  //       FavcatItemBean(favTitle, ThemeColors.favColor[favId], favId: favId),
-  //     );
-  //   }
-  //   setState(() {
-  //     favItemBeans
-  //         .add(FavcatItemBean('所有收藏', ThemeColors.favColor['a'], favId: 'a'));
-  //   });
-  // }
+  Future<List<Map<String, String>>> _getFavList() async {
+    final List<Map<String, String>> favList = EHUtils.getFavListFromProfile();
+    if (favList == null || favList.isEmpty) {
+      await Api.getFavorite(
+        favcat: 'a',
+        refresh: true,
+      );
+    }
+    return EHUtils.getFavListFromProfile();
+  }
 
   Future<List<FavcatItemBean>> _getFavItemBeans() async {
     Global.logger.v('_getFavItemBeans');
     final List<FavcatItemBean> _favItemBeans = <FavcatItemBean>[];
 
-    List<Map<String, String>> favList =
-        await GalleryFavParser.getFavcat() ?? EHConst.favList;
+    try {
+      final List<Map<String, String>> favList =
+          (await _getFavList()) ?? EHConst.favList;
 
-    for (final Map<String, String> catmap in favList) {
-      final String favTitle = catmap['favTitle'];
-      final String favId = catmap['favId'];
+      for (final Map<String, String> catmap in favList) {
+        final String favTitle = catmap['favTitle'];
+        final String favId = catmap['favId'];
 
-      _favItemBeans.add(
-        FavcatItemBean(favTitle, ThemeColors.favColor[favId], favId: favId),
-      );
+        _favItemBeans.add(
+          FavcatItemBean(favTitle, ThemeColors.favColor[favId], favId: favId),
+        );
+      }
+
+      _favItemBeans
+          .add(FavcatItemBean('所有收藏', ThemeColors.favColor['a'], favId: 'a'));
+
+      _favItemBeans
+          .add(FavcatItemBean('本地收藏', ThemeColors.favColor['l'], favId: 'l'));
+      return _favItemBeans;
+    } catch (e, stack) {
+      Global.logger.e('$e /n $stack');
+      rethrow;
     }
-
-    _favItemBeans
-        .add(FavcatItemBean('所有收藏', ThemeColors.favColor['a'], favId: 'a'));
-
-    _favItemBeans
-        .add(FavcatItemBean('本地收藏', ThemeColors.favColor['l'], favId: 'l'));
-    return _favItemBeans;
   }
 
   List<FavcatItemBean> _initFavItemBeans() {
@@ -123,6 +118,7 @@ class _SelFavorite extends State<SelFavoritePage> {
                     );
                   case ConnectionState.done:
                     if (snapshot.hasError) {
+                      Global.logger.e(' ${snapshot.error}');
                       return Center(
                         child: Container(
                           padding: const EdgeInsets.only(bottom: 50),

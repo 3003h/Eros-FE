@@ -200,7 +200,7 @@ class Global {
     profile.dnsConfig.dohCache = <DnsCache>[];
 
     if ((profile.dnsConfig.enableCustomHosts ?? false) ||
-        (profile.dnsConfig.dohCache ?? false)) {
+        (profile.dnsConfig.enableDoH ?? false)) {
       logger.v('${profile.dnsConfig.enableCustomHosts}');
       HttpOverrides.global = httpProxy;
     }
@@ -217,6 +217,7 @@ class Global {
         profile = Profile.fromJson(jsonDecode(_profile));
       } catch (e) {
         print('get profile $e');
+        rethrow;
       }
     }
   }

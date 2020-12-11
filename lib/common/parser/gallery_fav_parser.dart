@@ -92,15 +92,12 @@ class GalleryFavParser {
     if (Global.profile.user.favcat == null ||
         Global.profile.user.favcat.isEmpty ||
         !cache) {
-      if (gid.isNotEmpty && token.isNotEmpty) {
+      if (gid != null && gid.isNotEmpty && token.isNotEmpty) {
         // Global.logger.v('$gid  $token');
         Global.profile.user.favcat = await gallerySelfavcat(gid, token);
-      } else {
-        return null;
       }
     }
 
-    print('frome cache');
     final List<Map<String, String>> favcatList =
         EHUtils.getFavListFromProfile();
     return Future<List<Map<String, String>>>.value(favcatList);

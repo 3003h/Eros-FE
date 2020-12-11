@@ -98,13 +98,15 @@ class EHUtils {
 
   static List<Map<String, String>> getFavListFromProfile() {
     final List<Map<String, String>> favcatList = <Map<String, String>>[];
-    for (final dynamic mapObj in Global.profile.user.favcat) {
-      // Global.logger.v('$mapObj');
-      final Map<String, String> map = <String, String>{
-        'favId': mapObj['favId'],
-        'favTitle': mapObj['favTitle']
-      };
-      favcatList.add(map);
+    if (Global.profile.user.favcat != null) {
+      for (final dynamic mapObj in Global.profile.user.favcat) {
+        // Global.logger.v('$mapObj');
+        final Map<String, String> map = <String, String>{
+          'favId': mapObj['favId'],
+          'favTitle': mapObj['favTitle']
+        };
+        favcatList.add(map);
+      }
     }
 
     return favcatList;

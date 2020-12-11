@@ -59,7 +59,7 @@ class _FavoriteTabState extends State<FavoriteTab> {
     super.initState();
     _curFavcat = Global.profile.ehConfig.lastShowFavcat ?? 'a';
     _title = Global.profile.ehConfig.lastShowFavTitle;
-    _futureBuilderFuture = _loadData();
+    _futureBuilderFuture = _loadData(first: true);
     Future<void>.delayed(const Duration(milliseconds: 200)).then((_) {
       if (enableDelayedLoad) {
         _reloadData(delayed: true);
@@ -93,79 +93,83 @@ class _FavoriteTabState extends State<FavoriteTab> {
   @override
   Widget build(BuildContext context) {
     final S ln = S.of(context);
-    if (_title.isEmpty) {
-      _title = ln.all_Favorites;
-    }
 
     return CupertinoPageScaffold(
       child: Selector<UserModel, bool>(
           selector: (BuildContext context, UserModel provider) =>
               provider.isLogin,
           builder: (BuildContext context, bool isLogin, Widget child) {
-            return isLogin
-                ? CustomScrollView(
-                    controller: widget.scrollController,
-                    physics: const AlwaysScrollableScrollPhysics(),
-                    slivers: <Widget>[
-                      CupertinoSliverNavigationBar(
-                        padding: const EdgeInsetsDirectional.only(end: 4),
+            Global.logger.d(' rebuild fav');
 
-//                        heroTag: 'fav',
-                        largeTitle: TabPageTitle(
-                          title: _title,
-                        ),
-                        trailing: Container(
-                          width: 100,
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.end,
-                            children: [
-                              CupertinoButton(
-                                padding: const EdgeInsets.all(0),
-                                child: ClipRRect(
-                                  borderRadius: BorderRadius.circular(4),
-                                  child: Container(
-                                    padding:
-                                        const EdgeInsets.fromLTRB(4, 2, 4, 2),
-                                    color: CupertinoColors.activeBlue,
-                                    child: Text(
-                                      '${_curPage + 1}',
-                                      style: const TextStyle(
-                                          color: CupertinoColors.white),
-                                    ),
-                                  ),
-                                ),
-                                onPressed: () {
-                                  _jumtToPage(context);
-                                },
-                              ),
-                              _buildFavcatButton(context),
-                            ],
-                          ),
-                        ),
-                      ),
-                      CupertinoSliverRefreshControl(
-                        onRefresh: () async {
-                          await _reloadData();
-                        },
-                      ),
-                      SliverSafeArea(
-                        top: false,
-                        sliver: _getGalleryList(),
-                      ),
-                      SliverToBoxAdapter(
-                        child: Container(
-                          padding: const EdgeInsets.only(bottom: 150),
-                          child: _isLoadMore
-                              ? const CupertinoActivityIndicator(
-                                  radius: 14,
-                                )
-                              : Container(),
-                        ),
-                      ),
-                    ],
-                  )
-                : _buildLocalFavView();
+            if (isLogin) {
+              if (_title == null || _title.isEmpty) {
+                _title = ln.all_Favorites;
+              }
+              return _buildNetworkFavView(context);
+            } else {
+              return _buildLocalFavView();
+            }
           }),
+    );
+  }
+
+  Widget _buildNetworkFavView(BuildContext context) {
+    return CustomScrollView(
+      controller: widget.scrollController,
+      physics: const AlwaysScrollableScrollPhysics(),
+      slivers: <Widget>[
+        CupertinoSliverNavigationBar(
+          padding: const EdgeInsetsDirectional.only(end: 4),
+          largeTitle: TabPageTitle(
+            title: _title,
+          ),
+          trailing: Container(
+            width: 100,
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.end,
+              children: [
+                CupertinoButton(
+                  padding: const EdgeInsets.all(0),
+                  child: ClipRRect(
+                    borderRadius: BorderRadius.circular(4),
+                    child: Container(
+                      padding: const EdgeInsets.fromLTRB(4, 2, 4, 2),
+                      color: CupertinoColors.activeBlue,
+                      child: Text(
+                        '${_curPage + 1}',
+                        style: const TextStyle(color: CupertinoColors.white),
+                      ),
+                    ),
+                  ),
+                  onPressed: () {
+                    _jumtToPage(context);
+                  },
+                ),
+                _buildFavcatButton(context),
+              ],
+            ),
+          ),
+        ),
+        CupertinoSliverRefreshControl(
+          onRefresh: () async {
+            await _reloadData();
+          },
+        ),
+        SliverSafeArea(
+          top: false,
+          sliver: _getGalleryList(),
+        ),
+        SliverToBoxAdapter(
+          child: Container(
+            padding: const EdgeInsets.only(bottom: 150),
+            child: _isLoadMore
+                ? const CupertinoActivityIndicator(
+                    radius: 14,
+                  )
+                : Container(),
+          ),
+        ),
+      ],
     );
   }
 
@@ -251,6 +255,7 @@ class _FavoriteTabState extends State<FavoriteTab> {
 
   Future<Tuple2<List<GalleryItem>, int>> _loadData({
     bool refresh = false,
+    bool first = false,
   }) async {
     Global.logger.v('_loadDataFirst  fav');
     _curPage = 0;
@@ -262,12 +267,19 @@ class _FavoriteTabState extends State<FavoriteTab> {
     }
 
     if (_curFavcat != 'l') {
+      // 网络收藏夹
       final Future<Tuple2<List<GalleryItem>, int>> tuple = Api.getFavorite(
         favcat: _curFavcat,
         refresh: refresh,
       );
       return tuple;
     } else {
+      if (first) {
+        Global.profile.ehConfig.lastShowFavcat = 'l';
+        Global.profile.ehConfig.lastShowFavTitle = '本地收藏';
+        Global.saveProfile();
+      }
+      // 本地收藏夹
       Global.logger.v('本地收藏');
       final List<GalleryItem> localFav =
           Provider.of<LocalFavModel>(context, listen: false).loacalFavs;
@@ -279,7 +291,7 @@ class _FavoriteTabState extends State<FavoriteTab> {
   Future<void> _reLoadDataFirst() async {
     setState(() {
       _lastListWidget = null;
-      _futureBuilderFuture = _loadData(refresh: false);
+      _futureBuilderFuture = _loadData(refresh: false, first: true);
     });
   }
 
@@ -422,7 +434,7 @@ class _FavoriteTabState extends State<FavoriteTab> {
           if (result.runtimeType == FavcatItemBean) {
             final FavcatItemBean fav = result;
             if (_curFavcat != fav.favId) {
-              Global.loggerNoStack.v('修改favcat to ${fav.title}');
+              Global.loggerNoStack.v('set fav to ${fav.title}');
               _setTitle(fav.title);
               enableDelayedLoad = false;
               _curFavcat = fav.favId;

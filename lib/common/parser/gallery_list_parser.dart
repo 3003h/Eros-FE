@@ -71,7 +71,7 @@ class GalleryListParser {
 
     if (isFavorite) {
       /// 收藏夹列表
-      List<dom.Element> favorites =
+      final List<dom.Element> favorites =
           document.querySelectorAll(_favoritesSelector);
       int _favId = 0;
       final List<Map<String, String>> favcatList = <Map<String, String>>[];
@@ -89,6 +89,7 @@ class GalleryListParser {
       }
       if (favcatList.isNotEmpty) {
         Global.profile.user.favcat = favcatList;
+        Global.saveProfile();
         // Global.logger.v('$favcatList');
       }
     }
@@ -185,7 +186,7 @@ class GalleryListParser {
       final String postTime =
           tr.querySelector('td.gl2c > div:nth-child(2) > div')?.text?.trim() ??
               '';
-      DateTime time =
+      final DateTime time =
           DateFormat('yyyy-MM-dd HH:mm').parseUtc(postTime).toLocal();
 
       final String postTimeLocal = DateFormat('yyyy-MM-dd HH:mm').format(time);
