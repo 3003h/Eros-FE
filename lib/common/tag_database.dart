@@ -19,6 +19,8 @@ class EhTagDatabase {
 
     const String url = '/repos/EhTagTranslation/Database/releases/latest';
 
+    Global.logger.v(url);
+
     final String urlJsonString = await httpManager.get(url);
     final Map<String, dynamic> urlJson =
         jsonDecode(urlJsonString) as Map<String, dynamic>;
