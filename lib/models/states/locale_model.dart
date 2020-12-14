@@ -18,7 +18,6 @@ class LocaleModel extends ProfileChangeNotifier {
       return window.locale;
     }
     final List<String> t = _profile.locale.split('_');
-    Global.logger.i('getLocale $t');
     return Locale(t[0], t[1]);
   }
 

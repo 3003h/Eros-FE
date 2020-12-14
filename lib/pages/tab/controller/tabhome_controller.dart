@@ -29,9 +29,7 @@ class TabHomeController extends GetxController {
 
   final BuildContext context = Get.context;
 
-
   void init() {
-
     scrollControllerList.clear();
     tabList.clear();
     pageList.clear();
@@ -55,6 +53,7 @@ class TabHomeController extends GetxController {
           scrollController: _getScrollController('tab_gallery'.tr),
         )
       },
+      /*
       {
         'title': 'tab_favorite'.tr,
         'icon': const Icon(FontAwesomeIcons.solidHeart, size: _iconSize),
@@ -72,7 +71,7 @@ class TabHomeController extends GetxController {
           tabIndex: 'tab_history'.tr,
           scrollController: _getScrollController('tab_history'.tr),
         )
-      },
+      },*/
       {
         'title': 'tab_setting'.tr,
         'icon': const Icon(FontAwesomeIcons.cog, size: _iconSize),
