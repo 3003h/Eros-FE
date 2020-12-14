@@ -30,6 +30,60 @@ import 'package:tuple/tuple.dart';
 import 'dio_util.dart';
 
 class EHUtils {
+  static Uint8List stringToUint8List(String source) {
+    /*print('${source.length}: "$source" (${source.runes.length})');
+
+    // String (Dart uses UTF-16) to bytes
+    final List<int> list = <int>[];
+    // ignore: avoid_function_literals_in_foreach_calls
+    source.runes.forEach((int rune) {
+      if (rune >= 0x10000) {
+        rune -= 0x10000;
+        final int firstWord = (rune >> 10) + 0xD800;
+        list.add(firstWord >> 8);
+        list.add(firstWord & 0xFF);
+        final int secondWord = (rune & 0x3FF) + 0xDC00;
+        list.add(secondWord >> 8);
+        list.add(secondWord & 0xFF);
+      } else {
+        list.add(rune >> 8);
+        list.add(rune & 0xFF);
+      }
+    });
+    return Uint8List.fromList(list);*/
+    final List<int> list = source.codeUnits;
+    final Uint8List bytes = Uint8List.fromList(list);
+    // final String string = String.fromCharCodes(bytes);
+    return bytes;
+  }
+
+  static String stringToHex(String source) {
+    final List<int> list = source.codeUnits;
+    final Uint8List bytes = Uint8List.fromList(list);
+    return formatBytesAsHexString(bytes);
+  }
+
+  /// Converts binary data to a hexdecimal representation.
+  static String formatBytesAsHexString(Uint8List bytes) {
+    final StringBuffer result = StringBuffer();
+    for (int i = 0; i < bytes.lengthInBytes; i++) {
+      final int part = bytes[i];
+      result.write('${part < 16 ? '0' : ''}${part.toRadixString(16)}');
+    }
+    return result.toString();
+  }
+
+  /// Converts a hexdecimal representation to binary data.
+  static Uint8List createUint8ListFromHexString(String hex) {
+    final Uint8List result = Uint8List(hex.length ~/ 2);
+    for (int i = 0; i < hex.length; i += 2) {
+      final String num = hex.substring(i, i + 2);
+      final int byte = int.parse(num, radix: 16);
+      result[i ~/ 2] = byte;
+    }
+    return result;
+  }
+
   bool get isInDebugMode {
     bool inDebugMode = false;
     assert(inDebugMode = true); //如果debug模式下会触发赋值

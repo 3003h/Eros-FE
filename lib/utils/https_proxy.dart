@@ -1,9 +1,12 @@
 import 'dart:convert';
 import 'dart:io';
+import 'dart:typed_data';
 
 import 'package:FEhViewer/common/global.dart';
 import 'package:FEhViewer/models/dnsCache.dart';
 import 'package:FEhViewer/utils/dns_util.dart';
+import 'package:FEhViewer/utils/utility.dart';
+import 'package:flutter/foundation.dart';
 
 class CustomHttpsProxy {
   /// 内部构造方法，可避免外部暴露构造函数，进行实例化
@@ -72,13 +75,14 @@ class ClientConnectionHandler {
     client.destroy();
   }
 
-  void dataHandler(data) async {
+  Future<void> dataHandler(dynamic data) async {
     // 自定义hosts
     final List<DnsCache> _customHosts =
         Global.profile.dnsConfig.hosts ?? <DnsCache>[];
-    final bool enableDoH = Global.profile.dnsConfig.enableDoH;
+    final bool enableDoH = Global.profile.dnsConfig.enableDoH ?? false;
 
     if (server == null) {
+      // 建立连接
       content += utf8.decode(data);
       Global.logger.d('\n$content');
       final RegExpMatch m = regx.firstMatch(content);
@@ -107,11 +111,11 @@ class ClientConnectionHandler {
           if (enableDoH) {
             final int _dohDnsCacheIndex = Global.profile.dnsConfig.dohCache
                 .indexWhere((DnsCache element) => element.host == _oriHost);
-            Global.logger.d('$_oriHost $_dohDnsCacheIndex');
+            // Global.logger.d('$_oriHost $_dohDnsCacheIndex');
             final DnsCache dohDnsCache = _dohDnsCacheIndex > -1
                 ? _dohDnsCacheList[_dohDnsCacheIndex]
                 : null;
-            if (Global.profile.dnsConfig.enableCustomHosts) {
+            if (Global.profile.dnsConfig.enableCustomHosts ?? false) {
               realHost = customDnsCache?.addr ?? dohDnsCache?.addr ?? _oriHost;
             } else {
               realHost = dohDnsCache?.addr ?? _oriHost;
@@ -121,6 +125,7 @@ class ClientConnectionHandler {
           }
         } catch (e, stack) {
           Global.logger.e('$e \n $stack');
+          closeSockets();
         }
 
         Global.logger.i('$_oriHost  =>  $realHost');
@@ -137,6 +142,27 @@ class ClientConnectionHandler {
         }
       }
     } else {
+      // debugPrint('${data.runtimeType}');
+      final String hex = EHUtils.formatBytesAsHexString(data);
+      // print(hex);
+      // print(EHUtils.stringToHex('e-hentai.org'));
+      if (hex.contains(EHUtils.stringToHex('e-hentai.org')) ||
+          hex.contains(EHUtils.stringToHex('exhentai.org')) ||
+          hex.contains(EHUtils.stringToHex('ehgt.org')) ||
+          hex.contains(EHUtils.stringToHex('hath.network'))) {
+        Global.logger.i('client hello [$hex]');
+        final String _newHex = hex;
+        // .replaceFirst(EHUtils.stringToHex('e-hentai.org'),
+        //     EHUtils.stringToHex('xxxxxxxxxxxx'))
+        // .replaceFirst(EHUtils.stringToHex('exhentai.org'),
+        //     EHUtils.stringToHex('xxxxxxxxxxxx'));
+        // .replaceFirst(EHUtils.stringToHex('ehgt.org'),
+        //     EHUtils.stringToHex('xxxxxxxx'))
+        // .replaceFirst(EHUtils.stringToHex('hath.network'),
+        //     EHUtils.stringToHex('xxxxxxxxxxxx'));
+        data = EHUtils.createUint8ListFromHexString(_newHex);
+      }
+
       try {
         server.add(data);
       } catch (e) {
@@ -174,7 +200,7 @@ class ServerConnectionHandler {
   String content = '';
 
   //接收报文
-  void dataHandler(data) {
+  void dataHandler(Uint8List data) {
     try {
       client.add(data);
     } on Exception catch (e) {
@@ -185,6 +211,8 @@ class ServerConnectionHandler {
 
   void errorHandler(error, StackTrace trace) {
     Global.logger.e('server socket error: $error \n $trace');
+    handler.closeSockets();
+    throw error;
   }
 
   void doneHandler() {
@@ -192,9 +220,9 @@ class ServerConnectionHandler {
   }
 
   Future handle() async {
-//    print('尝试建立连接： $host:$port');
-    server =
-        await Socket.connect(host, port, timeout: const Duration(seconds: 60));
+    // print('尝试建立连接： $host:$port');
+    server = await Socket.connect(host, port,
+        timeout: const Duration(milliseconds: 10000));
     server.listen(dataHandler,
         onError: errorHandler, onDone: doneHandler, cancelOnError: true);
     handler.server = server;
