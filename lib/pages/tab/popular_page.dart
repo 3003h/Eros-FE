@@ -20,14 +20,12 @@ class PopularListTab extends StatefulWidget {
 }
 
 class _PopularListTabState extends State<PopularListTab> {
-  // bool _firstLoading = false;
   Future<List<GalleryItem>> _futureBuilderFuture;
   Widget _lastListWidget;
 
   @override
   void initState() {
     super.initState();
-    // _loadData();
     _futureBuilderFuture = _loadData();
     Future<void>.delayed(const Duration(milliseconds: 100)).then((_) {
       _reloadData();
@@ -39,7 +37,7 @@ class _PopularListTabState extends State<PopularListTab> {
     final Future<Tuple2<List<GalleryItem>, int>> tuple =
         Api.getPopular(refresh: refresh);
     final Future<List<GalleryItem>> gallerItemBeans =
-        tuple.then((value) => value.item1);
+        tuple.then((Tuple2<List<GalleryItem>, int> value) => value.item1);
     return gallerItemBeans;
   }
 
@@ -50,7 +48,7 @@ class _PopularListTabState extends State<PopularListTab> {
     });
   }
 
-  Future<void> _reLoadDataFirstF() async {
+  Future<void> _reLoadDataFirst() async {
     setState(() {
       _futureBuilderFuture = _loadData();
     });
@@ -65,7 +63,6 @@ class _PopularListTabState extends State<PopularListTab> {
       physics: const AlwaysScrollableScrollPhysics(),
       slivers: <Widget>[
         CupertinoSliverNavigationBar(
-//          heroTag: 'pop',
           largeTitle: TabPageTitle(
             title: _title,
             isLoading: false,
@@ -78,7 +75,7 @@ class _PopularListTabState extends State<PopularListTab> {
         ),
         SliverSafeArea(
           top: false,
-          sliver: _getGalleryList2(),
+          sliver: _getGalleryList(),
         ),
       ],
     );
@@ -86,7 +83,7 @@ class _PopularListTabState extends State<PopularListTab> {
     return CupertinoPageScaffold(child: customScrollView);
   }
 
-  Widget _getGalleryList2() {
+  Widget _getGalleryList() {
     return FutureBuilder<List<GalleryItem>>(
       future: _futureBuilderFuture,
       builder:
@@ -111,7 +108,7 @@ class _PopularListTabState extends State<PopularListTab> {
                 child: Container(
                   padding: const EdgeInsets.only(bottom: 50),
                   child: GalleryErrorPage(
-                    onTap: _reLoadDataFirstF,
+                    onTap: _reLoadDataFirst,
                   ),
                 ),
               );

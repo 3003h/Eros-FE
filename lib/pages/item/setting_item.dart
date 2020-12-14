@@ -1,7 +1,7 @@
 import 'package:FEhViewer/common/global.dart';
-import 'package:FEhViewer/route/navigator_util.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
 class SettingItems extends StatefulWidget {
   const SettingItems({
@@ -65,7 +65,8 @@ class _SettingItems extends State<SettingItems> {
       behavior: HitTestBehavior.opaque,
       onTap: () {
         Global.loggerNoStack.v('set tap ${widget.text} ');
-        NavigatorUtil.jump(context, widget.route, rootNavigator: true);
+        // NavigatorUtil.jump(context, widget.route, rootNavigator: false);
+        Get.toNamed(widget.route);
       },
       onTapDown: (_) => _updatePressedColor(),
       onTapUp: (_) {

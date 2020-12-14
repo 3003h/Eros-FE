@@ -341,7 +341,7 @@ class _GalleryDetailPageState extends State<GalleryDetailPage> {
                     .getGalleryCache(_galleryModel.galleryItem.gid);
                 final int _index = _galleryCache?.lastIndex ?? 0;
                 await showLoadingDialog(context, _index);
-                NavigatorUtil.goGalleryViewPagePr(context, _index);
+                NavigatorUtil.goGalleryViewPage(context, _index);
               }
             : null);
   }

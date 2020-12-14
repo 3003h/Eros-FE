@@ -9,6 +9,7 @@ import 'package:FEhViewer/utils/utility.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:get/get.dart';
 import 'package:provider/provider.dart';
 import 'package:tuple/tuple.dart';
 
@@ -169,7 +170,7 @@ class _GalleryListTabState extends State<GalleryListTab> {
       if (_toPage >= 0 && _toPage <= _maxPage) {
         FocusScope.of(context).requestFocus(FocusNode());
         _loadFromPage(_toPage);
-        Navigator.of(context).pop();
+        Get.back();
       } else {
         showToast('输入范围有误');
       }
@@ -205,7 +206,7 @@ class _GalleryListTabState extends State<GalleryListTab> {
             CupertinoDialogAction(
               child: const Text('取消'),
               onPressed: () {
-                Navigator.of(context).pop();
+                Get.back();
               },
             ),
             CupertinoDialogAction(
@@ -250,7 +251,7 @@ class _GalleryListTabState extends State<GalleryListTab> {
                     size: 20,
                   ),
                   onPressed: () {
-                    NavigatorUtil.showSearch(context);
+                    NavigatorUtil.showSearch();
                   },
                 ),
                 // 筛选按钮

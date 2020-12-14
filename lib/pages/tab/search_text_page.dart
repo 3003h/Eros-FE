@@ -8,6 +8,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:provider/provider.dart';
@@ -49,7 +50,7 @@ class SearchQuickListPage extends StatelessWidget {
                   actionExtentRatio: 0.25,
                   child: GestureDetector(
                     onTap: () {
-                      Navigator.pop(context, _datas[position]);
+                      Get.back<String>(result: _datas[position]);
                     },
                     behavior: HitTestBehavior.opaque,
                     child: FutureBuilder<String>(
@@ -197,14 +198,14 @@ class SearchQuickListPage extends StatelessWidget {
             CupertinoDialogAction(
               child: const Text('取消'),
               onPressed: () {
-                Navigator.of(context).pop();
+                Get.back();
               },
             ),
             CupertinoDialogAction(
               child: const Text('确定'),
               onPressed: () {
                 searchTextModel.removeAll();
-                Navigator.of(context).pop();
+                Get.back();
               },
             ),
           ],

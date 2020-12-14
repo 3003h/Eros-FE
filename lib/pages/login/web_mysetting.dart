@@ -6,6 +6,7 @@ import 'package:FEhViewer/utils/utility.dart';
 import 'package:FEhViewer/values/const.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:get/get.dart';
 import 'package:webview_cookie_manager/webview_cookie_manager.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 
@@ -118,7 +119,7 @@ class _WebMySettingState extends State<WebMySetting> {
                         } else if (type == ShowType.delete) {
                           _deleteProfile();
                         }
-                        Navigator.of(context).pop();
+                        Get.back();
                       }
                     },
                   )
@@ -128,7 +129,7 @@ class _WebMySettingState extends State<WebMySetting> {
             CupertinoDialogAction(
               child: const Text('取消'),
               onPressed: () {
-                Navigator.of(context).pop();
+                Get.back();
               },
             ),
             CupertinoDialogAction(
@@ -143,7 +144,7 @@ class _WebMySettingState extends State<WebMySetting> {
                   } else if (type == ShowType.delete) {
                     _deleteProfile();
                   }
-                  Navigator.of(context).pop();
+                  Get.back();
                 }
               },
             ),

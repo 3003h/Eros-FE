@@ -6,6 +6,7 @@ import 'package:FEhViewer/models/states/user_model.dart';
 import 'package:FEhViewer/utils/toast.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:provider/provider.dart';
 
 class LoginCookiePage extends StatefulWidget {
@@ -122,7 +123,7 @@ class _LoginCookiePageState extends State<LoginCookiePage> {
     }
 
     if (user != null) {
-      Navigator.pop(context, true);
+      Get.back(result: true);
     }
   }
 }

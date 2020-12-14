@@ -7,6 +7,7 @@ import 'package:FEhViewer/values/const.dart';
 import 'package:enum_to_string/enum_to_string.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:provider/provider.dart';
 
 import 'setting_base.dart';
@@ -115,15 +116,8 @@ class ListViewEhSetting extends StatelessWidget {
         SelectorSettingItem(
           title: 'Ehentai设置',
           selector: '网站设置',
-          onTap: () async {
-            Navigator.push(
-              context,
-              CupertinoPageRoute<dynamic>(
-                builder: (BuildContext context) {
-                  return WebMySetting();
-                },
-              ),
-            );
+          onTap: () {
+            Get.to(WebMySetting());
           },
         ),
       if (_isLogin)
@@ -195,7 +189,7 @@ Widget _buildListModeItem(BuildContext context) {
     return List<Widget>.from(modeMap.keys.map((ListModeEnum element) {
       return CupertinoActionSheetAction(
           onPressed: () {
-            Navigator.pop(context, element);
+            Get.back(result: element);
           },
           child: Text(modeMap[element]));
     }).toList());
@@ -209,7 +203,7 @@ Widget _buildListModeItem(BuildContext context) {
             // title: const Text('列表模式选择'),
             cancelButton: CupertinoActionSheetAction(
                 onPressed: () {
-                  Navigator.pop(context);
+                  Get.back();
                 },
                 child: const Text('取消')),
             actions: <Widget>[
@@ -258,7 +252,7 @@ Widget _buildHistoryMaxItem(BuildContext context) {
     return List<Widget>.from(EHConst.historyMax.map((int element) {
       return CupertinoActionSheetAction(
           onPressed: () {
-            Navigator.pop(context, element);
+            Get.back(result: element);
           },
           child: Text(_getMaxNumText(element)));
     }).toList());
@@ -272,7 +266,7 @@ Widget _buildHistoryMaxItem(BuildContext context) {
             // title: const Text('列表模式选择'),
             cancelButton: CupertinoActionSheetAction(
                 onPressed: () {
-                  Navigator.pop(context);
+                  Get.back();
                 },
                 child: const Text('取消')),
             actions: <Widget>[

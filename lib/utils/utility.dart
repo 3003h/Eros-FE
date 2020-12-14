@@ -21,6 +21,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_cache_manager/flutter_cache_manager.dart';
+import 'package:get/get.dart';
 import 'package:html_unescape/html_unescape.dart';
 import 'package:image_gallery_saver/image_gallery_saver.dart';
 import 'package:permission_handler/permission_handler.dart';
@@ -704,7 +705,7 @@ class Api {
     const String url = '/api.php';
 
     await CustomHttpsProxy.instance.init();
-    final Response response = await getHttpManager().postForm(
+    final response = await getHttpManager().postForm(
       url,
       data: req,
       options: getCacheOptions(forceRefresh: refresh),
@@ -744,7 +745,7 @@ class Api {
               CupertinoDialogAction(
                 child: const Text('取消'),
                 onPressed: () {
-                  Navigator.of(context).pop();
+                  Get.back();
                 },
               ),
               CupertinoDialogAction(

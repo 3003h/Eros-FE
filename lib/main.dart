@@ -10,13 +10,13 @@ import 'package:FEhViewer/models/states/search_text_model.dart';
 import 'package:FEhViewer/models/states/theme_model.dart';
 import 'package:FEhViewer/models/states/user_model.dart';
 import 'package:FEhViewer/pages/splash_page.dart';
-import 'package:FEhViewer/route/application.dart';
+import 'package:FEhViewer/route/app_pages.dart';
 import 'package:device_preview/device_preview.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
-import 'package:logger_flutter/logger_flutter.dart';
+import 'package:get/get.dart';
 import 'package:oktoast/oktoast.dart';
 import 'package:provider/provider.dart';
 
@@ -28,7 +28,7 @@ void main() {
       DevicePreview(
         // enabled: Global.inDebugMode,
         enabled: false,
-        builder: (context) => MyApp(), // Wrap your app
+        builder: (BuildContext context) => MyApp(), // Wrap your app
       ),
     );
   }).catchError((e, stack) {
@@ -72,11 +72,11 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
           selector: (_, EhConfigModel ehConfig) => ehConfig.isSafeMode,
           builder: (context, snapshot, _) {
             // Global.logger.d('CupertinoApp');
-            return CupertinoApp(
+            return GetCupertinoApp(
               debugShowCheckedModeBanner: false,
               onGenerateTitle: (BuildContext context) =>
                   S.of(context).app_title,
-              onGenerateRoute: Application.router.generator,
+              getPages: AppPages.routes,
               theme: themeModel.getTheme(context, _brightness),
               // theme: ThemeColors.darkTheme,
               home: const SplashPage(),

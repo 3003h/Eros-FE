@@ -1,15 +1,14 @@
 import 'package:FEhViewer/common/global.dart';
-import 'package:FEhViewer/common/parser/gallery_fav_parser.dart';
 import 'package:FEhViewer/generated/l10n.dart';
 import 'package:FEhViewer/models/entity/favorite.dart';
 import 'package:FEhViewer/pages/tab/gallery_base.dart';
-import 'package:FEhViewer/route/navigator_util.dart';
 import 'package:FEhViewer/utils/utility.dart';
 import 'package:FEhViewer/values/const.dart';
 import 'package:FEhViewer/values/theme_colors.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:get/get.dart';
 
 /// 收藏夹选择页面 列表
 class SelFavoritePage extends StatefulWidget {
@@ -231,7 +230,8 @@ class _FavSelItemWidgetState extends State<FavSelItemWidget> {
       behavior: HitTestBehavior.opaque,
       onTap: () {
         // 返回 并带上参数
-        NavigatorUtil.goBackWithParams(context, widget.favcatItemBean);
+        // NavigatorUtil.goBackWithParams(context, widget.favcatItemBean);
+        Get.back(result: widget.favcatItemBean);
       },
       onTapDown: (_) => _updatePressedColor(),
       onTapUp: (_) {

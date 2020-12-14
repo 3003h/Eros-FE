@@ -34,7 +34,7 @@ dependencies:
 
 
   # 路由管理
-  fluro: ^1.7.7
+  #fluro: ^1.7.7
 
   #shared_preferences插件 持久化
   shared_preferences: '>=0.5.7+3'
@@ -68,6 +68,8 @@ dependencies:
 
   # 状态管理
   provider: ^4.3.2+2
+
+  get: ^3.22.2
 
   photo_view: ^0.10.3
 

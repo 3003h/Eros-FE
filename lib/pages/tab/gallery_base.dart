@@ -8,6 +8,7 @@ import 'package:FEhViewer/values/theme_colors.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:get/get.dart';
 import 'package:provider/provider.dart';
 
 ///
@@ -552,7 +553,7 @@ class GalleryBase {
             CupertinoDialogAction(
               child: const Text('取消'),
               onPressed: () {
-                Navigator.of(context).pop();
+                Get.back();
               },
             ),
             CupertinoDialogAction(
@@ -562,7 +563,7 @@ class GalleryBase {
                     _catNum;
                 advanceSearchModel.enable = _enableAdvance;
                 // Global.logger.v(advanceSearchModel.urlPara);
-                Navigator.of(context).pop();
+                Get.back();
               },
             ),
           ],

@@ -13,6 +13,7 @@ import 'package:FEhViewer/utils/vibrate.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:get/get.dart';
 import 'package:provider/provider.dart';
 import 'package:tuple/tuple.dart';
 
@@ -267,14 +268,8 @@ class _GallerySearchPageState extends State<GallerySearchPage>
             }
             break;
           case SearchMenuEnum.quickSearchList:
-            Navigator.push(
-              context,
-              CupertinoPageRoute<String>(
-                builder: (BuildContext context) {
-                  return SearchQuickListPage();
-                },
-              ),
-            ).then((String value) => _searchTextController.text = value);
+            Get.to<String>(SearchQuickListPage())
+                .then((String value) => _searchTextController.text = value);
             break;
         }
       },
@@ -297,7 +292,7 @@ class _GallerySearchPageState extends State<GallerySearchPage>
                 padding: const EdgeInsets.all(0),
                 child: const Text('取消'),
                 onPressed: () {
-                  Navigator.of(context).pop();
+                  Get.back();
                 },
               ),
               CupertinoButton(
@@ -337,14 +332,8 @@ class _GallerySearchPageState extends State<GallerySearchPage>
                   size: 20,
                 ),
                 onPressed: () {
-                  Navigator.push(
-                    context,
-                    CupertinoPageRoute<String>(
-                      builder: (BuildContext context) {
-                        return SearchQuickListPage();
-                      },
-                    ),
-                  ).then((String value) => _searchTextController.text = value);
+                  Get.to<String>(SearchQuickListPage()).then(
+                      (String value) => _searchTextController.text = value);
                 },
               ),
             ],
@@ -370,7 +359,7 @@ class _GallerySearchPageState extends State<GallerySearchPage>
                 padding: const EdgeInsets.all(0),
                 child: const Text('取消'),
                 onPressed: () {
-                  Navigator.of(context).pop();
+                  Get.back();
                 },
               ),
               CupertinoButton(

@@ -1,9 +1,7 @@
 import 'dart:isolate';
 
 import 'package:FEhViewer/common/global.dart';
-import 'package:extended_image/extended_image.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:flutter/foundation.dart';
 
 /// 缓存图片的顶级函数
 Future<void> _precacheImage(PrecacheMessageProtocol protocol) async {
