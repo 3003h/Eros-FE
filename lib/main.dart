@@ -80,7 +80,6 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
               initialRoute: EHRoutes.root,
               theme: themeModel.getTheme(context, _brightness),
               locale: localeModel.getLocale(),
-              // fallbackLocale: const Locale('en', 'US'),
               builder: DevicePreview.appBuilder,
               // ignore: prefer_const_literals_to_create_immutables
               supportedLocales: <Locale>[

@@ -29,30 +29,37 @@ class AppPages {
     GetPage(
       name: EHRoutes.selFavorie,
       page: () => const SelFavoritePage(),
+      transition: Transition.cupertino,
     ),
     GetPage(
       name: EHRoutes.ehSetting,
       page: () => EhSettingPage(),
+      transition: Transition.cupertino,
     ),
     GetPage(
       name: EHRoutes.advancedSetting,
       page: () => AdvancedSettingPage(),
+      transition: Transition.cupertino,
     ),
     GetPage(
       name: EHRoutes.about,
       page: () => AboutPage(),
+      transition: Transition.cupertino,
     ),
     GetPage(
       name: EHRoutes.downloadSetting,
       page: () => DownloadSettingPage(),
+      transition: Transition.cupertino,
     ),
     GetPage(
       name: EHRoutes.viewSeting,
       page: () => ViewSettingPage(),
+      transition: Transition.cupertino,
     ),
     GetPage(
       name: EHRoutes.login,
       page: () => LoginPage(),
+      transition: Transition.cupertino,
     ),
   ];
 }
