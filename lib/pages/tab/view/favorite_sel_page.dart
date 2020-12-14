@@ -1,7 +1,6 @@
 import 'package:FEhViewer/common/global.dart';
-import 'package:FEhViewer/generated/l10n.dart';
 import 'package:FEhViewer/models/entity/favorite.dart';
-import 'package:FEhViewer/pages/tab/gallery_base.dart';
+import 'package:FEhViewer/pages/tab/view/gallery_base.dart';
 import 'package:FEhViewer/utils/utility.dart';
 import 'package:FEhViewer/values/const.dart';
 import 'package:FEhViewer/values/theme_colors.dart';
@@ -90,8 +89,7 @@ class _SelFavorite extends State<SelFavoritePage> {
 
   @override
   Widget build(BuildContext context) {
-    final S ln = S.of(context);
-    final String _title = ln.favcat;
+    final String _title = 'favcat'.tr;
     final CupertinoPageScaffold sca = CupertinoPageScaffold(
         navigationBar: CupertinoNavigationBar(
           middle: Text(_title),

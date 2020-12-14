@@ -1,5 +1,4 @@
 import 'package:FEhViewer/common/global.dart';
-import 'package:FEhViewer/generated/l10n.dart';
 import 'package:FEhViewer/values/const.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -13,8 +12,7 @@ class WebLogin extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final S ln = S.of(context);
-    String title = ln.login_web;
+    String title = 'login_web'.tr;
     final FlutterWebviewPlugin flutterWebviewPlugin = FlutterWebviewPlugin();
 
     final Set<JavascriptChannel> jsChannels = {

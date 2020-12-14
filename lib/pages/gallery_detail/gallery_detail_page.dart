@@ -1,5 +1,4 @@
 import 'package:FEhViewer/common/global.dart';
-import 'package:FEhViewer/generated/l10n.dart';
 import 'package:FEhViewer/models/galleryItem.dart';
 import 'package:FEhViewer/models/index.dart';
 import 'package:FEhViewer/models/states/ehconfig_model.dart';
@@ -8,7 +7,7 @@ import 'package:FEhViewer/models/states/gallery_model.dart';
 import 'package:FEhViewer/models/states/history_model.dart';
 import 'package:FEhViewer/models/states/local_favorite_model.dart';
 import 'package:FEhViewer/pages/gallery_detail/gallery_detail_widget.dart';
-import 'package:FEhViewer/pages/tab/gallery_base.dart';
+import 'package:FEhViewer/pages/tab/view/gallery_base.dart';
 import 'package:FEhViewer/route/navigator_util.dart';
 import 'package:FEhViewer/utils/toast.dart';
 import 'package:FEhViewer/utils/utility.dart';
@@ -17,6 +16,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:get/get.dart';
 import 'package:provider/provider.dart';
 import 'package:share/share.dart';
 import 'package:tuple/tuple.dart';
@@ -325,10 +325,9 @@ class _GalleryDetailPageState extends State<GalleryDetailPage> {
   Widget _buildNavigationBarReadButton(BuildContext context) {
     final bool _hasPreview = _galleryModel.oriGalleryPreview.isNotEmpty;
 
-    final S ln = S.of(context);
     return CupertinoButton(
         child: Text(
-          ln.READ,
+          'READ'.tr,
           style: const TextStyle(fontSize: 15),
         ),
         minSize: 20,

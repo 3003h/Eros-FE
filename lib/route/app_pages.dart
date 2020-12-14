@@ -4,9 +4,11 @@ import 'package:FEhViewer/pages/setting/advanced_setting_page.dart';
 import 'package:FEhViewer/pages/setting/download_setting_page.dart';
 import 'package:FEhViewer/pages/setting/eh_setting_page.dart';
 import 'package:FEhViewer/pages/setting/view_setting_page.dart';
-import 'package:FEhViewer/pages/splash_page.dart';
-import 'package:FEhViewer/pages/tab/favorite_sel_page.dart';
-import 'package:FEhViewer/pages/tab/home_page.dart';
+import 'package:FEhViewer/pages/tab/bindings/splash_binding.dart';
+import 'package:FEhViewer/pages/tab/bindings/tabhome_binding.dart';
+import 'package:FEhViewer/pages/tab/view/favorite_sel_page.dart';
+import 'package:FEhViewer/pages/tab/view/splash_page.dart';
+import 'package:FEhViewer/pages/tab/view/tabhome_page.dart';
 import 'package:get/get.dart';
 
 import 'routes.dart';
@@ -16,11 +18,13 @@ class AppPages {
   static final List<GetPage> routes = <GetPage>[
     GetPage(
       name: EHRoutes.root,
-      page: () => const SplashPage(),
+      page: () => SplashPage(),
+      binding: SplashBinding(),
     ),
     GetPage(
       name: EHRoutes.home,
-      page: () => FEhHomeNew(),
+      page: () => TabHome(),
+      binding: TabHomeBinding(),
     ),
     GetPage(
       name: EHRoutes.selFavorie,

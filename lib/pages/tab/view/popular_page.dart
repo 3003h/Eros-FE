@@ -1,12 +1,12 @@
 import 'package:FEhViewer/common/global.dart';
-import 'package:FEhViewer/generated/l10n.dart';
 import 'package:FEhViewer/models/index.dart';
-import 'package:FEhViewer/pages/tab/gallery_base.dart';
-import 'package:FEhViewer/pages/tab/tab_base.dart';
+import 'package:FEhViewer/pages/tab/view/gallery_base.dart';
+import 'package:FEhViewer/pages/tab/view/tab_base.dart';
 import 'package:FEhViewer/utils/utility.dart';
 import 'package:FEhViewer/widget/eh_widget.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:tuple/tuple.dart';
 
 class PopularListTab extends StatefulWidget {
@@ -56,8 +56,7 @@ class _PopularListTabState extends State<PopularListTab> {
 
   @override
   Widget build(BuildContext context) {
-    final S ln = S.of(context);
-    final String _title = ln.tab_popular;
+    final String _title = 'tab_popular'.tr;
     final CustomScrollView customScrollView = CustomScrollView(
       controller: widget.scrollController,
       physics: const AlwaysScrollableScrollPhysics(),

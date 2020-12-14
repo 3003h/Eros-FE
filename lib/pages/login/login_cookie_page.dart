@@ -1,6 +1,5 @@
 import 'package:FEhViewer/common/eh_login.dart';
 import 'package:FEhViewer/common/global.dart';
-import 'package:FEhViewer/generated/l10n.dart';
 import 'package:FEhViewer/models/index.dart';
 import 'package:FEhViewer/models/states/user_model.dart';
 import 'package:FEhViewer/utils/toast.dart';
@@ -27,7 +26,6 @@ class _LoginCookiePageState extends State<LoginCookiePage> {
 
   @override
   Widget build(BuildContext context) {
-    var ln = S.of(context);
     return CupertinoPageScaffold(
       navigationBar: CupertinoNavigationBar(
         middle: Text('cookie 登录'),

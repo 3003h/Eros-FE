@@ -1,6 +1,6 @@
-import 'package:FEhViewer/generated/l10n.dart';
 import 'package:FEhViewer/models/galleryComment.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:get/get.dart';
 
 import 'comment_item.dart';
 
@@ -10,8 +10,6 @@ class CommentPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final S ln = S.of(context);
-
     final Widget commSliverList = CustomScrollView(
       slivers: <Widget>[
         SliverSafeArea(
@@ -35,7 +33,7 @@ class CommentPage extends StatelessWidget {
 
     return CupertinoPageScaffold(
       navigationBar: CupertinoNavigationBar(
-        middle: Text(ln.gallery_comments),
+        middle: Text('gallery_comments'.tr),
       ),
       child: commSliverList,
     );

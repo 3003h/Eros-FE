@@ -1,4 +1,3 @@
-import 'package:FEhViewer/common/global.dart';
 import 'package:FEhViewer/models/index.dart';
 import 'package:flutter/material.dart';
 
