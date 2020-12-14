@@ -8,6 +8,7 @@ import 'package:FEhViewer/widget/eh_widget.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:get/get.dart';
 import 'package:provider/provider.dart';
 
 class HistoryTab extends StatefulWidget {
@@ -119,14 +120,14 @@ class _HistoryTabState extends State<HistoryTab> {
             CupertinoDialogAction(
               child: const Text('取消'),
               onPressed: () {
-                Navigator.of(context).pop();
+                Get.back();
               },
             ),
             CupertinoDialogAction(
               child: const Text('确定'),
               onPressed: () {
                 _historyModel.cleanHistory();
-                Navigator.of(context).pop();
+                Get.back();
                 _reloadData();
               },
             ),

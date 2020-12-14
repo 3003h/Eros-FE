@@ -4,8 +4,10 @@ import 'dart:io';
 import 'package:FEhViewer/common/global.dart';
 import 'package:FEhViewer/generated/l10n.dart';
 import 'package:FEhViewer/route/navigator_util.dart';
+import 'package:FEhViewer/route/routes.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:receive_sharing_intent/receive_sharing_intent.dart';
 
 /// 闪屏页
@@ -31,9 +33,6 @@ class _SplashPageState extends State<SplashPage> {
   }
 
   Future<void> startHome(String url) async {
-    // Global.logger.v(
-    //     'MediaQuery ${MediaQuery.of(context).platformBrightness}\nCupertinoTheme ${CupertinoTheme.brightnessOf(context)}');
-
     if (url != null && url.isNotEmpty) {
       Global.logger.i('open $url');
       await Future<void>.delayed(const Duration(milliseconds: 300), () {
@@ -42,7 +41,7 @@ class _SplashPageState extends State<SplashPage> {
     } else {
       Global.logger.i('url is Empty,jump to home');
       await Future<void>.delayed(const Duration(milliseconds: 500), () {
-        NavigatorUtil.goHomePage(context);
+        Get.offNamed(EHRoutes.home);
       });
     }
   }
@@ -53,7 +52,7 @@ class _SplashPageState extends State<SplashPage> {
 
     if (!Platform.isIOS && !Platform.isAndroid) {
       Future<void>.delayed(const Duration(milliseconds: 500), () {
-        NavigatorUtil.goHomePage(context);
+        Get.offNamed(EHRoutes.home);
       });
     } else {
       // For sharing or opening urls/text coming from outside the app while the app is in the memory

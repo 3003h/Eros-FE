@@ -6,11 +6,11 @@ import 'package:FEhViewer/common/global.dart';
 import 'package:FEhViewer/generated/l10n.dart';
 import 'package:FEhViewer/models/states/user_model.dart';
 import 'package:FEhViewer/models/user.dart';
-import 'package:FEhViewer/route/navigator_util.dart';
+import 'package:FEhViewer/route/routes.dart';
 import 'package:FEhViewer/utils/toast.dart';
-import 'package:FEhViewer/values/const.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:provider/provider.dart';
 
 import 'login_cookie_page.dart';
@@ -144,11 +144,9 @@ class _LoginPageState extends State<LoginPage> {
       child: CupertinoButton(
         child: Text('cookie 登录'),
         onPressed: () {
-          Navigator.push(context, CupertinoPageRoute(builder: (context) {
-            return LoginCookiePage();
-          })).then((result) {
+          Get.to(LoginCookiePage()).then((result) {
             if (result ?? false) {
-              NavigatorUtil.goBack(context);
+              Get.back();
             }
           });
         },
@@ -173,11 +171,7 @@ class _LoginPageState extends State<LoginPage> {
                   return;
                 }
 
-                NavigatorUtil.goWebLogin(
-                  context,
-                  ln.login_web,
-                  EHConst.URL_SIGN_IN,
-                ).then((result) async {
+                Get.toNamed(EHRoutes.webLogin).then((result) async {
                   if (result is Map) {
                     setState(() {
                       _isWebLogin = true;
@@ -186,7 +180,7 @@ class _LoginPageState extends State<LoginPage> {
                       var user = await EhUserManager().signInByWeb(result);
                       Provider.of<UserModel>(context, listen: false).user =
                           user;
-                      NavigatorUtil.goBack(context);
+                      Get.back();
                     } catch (e) {
                       showToast(e.toString());
                       setState(() {
@@ -231,7 +225,7 @@ class _LoginPageState extends State<LoginPage> {
     }
 
     if (user != null) {
-      NavigatorUtil.goBack(context);
+      Get.back();
     }
   }
 }

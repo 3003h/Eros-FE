@@ -12,6 +12,7 @@ import 'package:FEhViewer/widget/rating_bar.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:provider/provider.dart';
 import 'package:tuple/tuple.dart';
 
@@ -67,13 +68,10 @@ class GalleryDetailInfo extends StatelessWidget {
         style: const TextStyle(fontSize: 16),
       ),
       onPressed: () {
-        Navigator.push(context,
-            CupertinoPageRoute(builder: (BuildContext context) {
-          return ChangeNotifierProvider<GalleryModel>.value(
-            value: galleryModel,
-            child: const AllPreviewPage(),
-          );
-        }));
+        Get.to(ChangeNotifierProvider<GalleryModel>.value(
+          value: galleryModel,
+          child: const AllPreviewPage(),
+        ));
       },
     );
   }
@@ -101,8 +99,7 @@ class GalleryDetailInfo extends StatelessWidget {
             children: <Widget>[
               // 评论
               GestureDetector(
-                onTap: () =>
-                    NavigatorUtil.goGalleryDetailComment(context, comment),
+                onTap: () => NavigatorUtil.goGalleryDetailComment(comment),
                 child: Column(
                   children: <Widget>[
                     ..._topComment(comment, max: 2),
@@ -118,7 +115,7 @@ class GalleryDetailInfo extends StatelessWidget {
                   style: const TextStyle(fontSize: 16),
                 ),
                 onPressed: () {
-                  NavigatorUtil.goGalleryDetailComment(context, comment);
+                  NavigatorUtil.goGalleryDetailComment(comment);
                 },
               ),
             ],
@@ -227,7 +224,7 @@ class PreviewContainer extends StatelessWidget {
     return GestureDetector(
       behavior: HitTestBehavior.opaque,
       onTap: () {
-        NavigatorUtil.goGalleryViewPagePr(context, index);
+        NavigatorUtil.goGalleryViewPage(context, index);
       },
       child: Container(
         margin: const EdgeInsets.all(2.0),
@@ -427,7 +424,7 @@ class TagGroupItem extends StatelessWidget {
           Global.logger.v('search type[${tag.type}] tag[${tag.title}]');
           // NavigatorUtil.goGalleryList(context,
           //     simpleSearch: '${tag.type}:${tag.title}');
-          NavigatorUtil.goGalleryListBySearch(context,
+          NavigatorUtil.goGalleryListBySearch(
               simpleSearch: '${tag.type}:${tag.title}');
         },
       ));
@@ -646,7 +643,7 @@ class ReadButton extends StatelessWidget {
                       final int _index = _galleryCache?.lastIndex ?? 0;
                       Global.logger.d('lastIndex $_index');
                       await showLoadingDialog(context, _index);
-                      NavigatorUtil.goGalleryViewPagePr(context, _index);
+                      NavigatorUtil.goGalleryViewPage(context, _index);
                     }
                   : null);
         });
@@ -687,7 +684,7 @@ class GalleryCategory extends StatelessWidget {
             onTap: () {
               final int iCat = EHConst.cats[category];
               final int cats = EHConst.sumCats - iCat;
-              NavigatorUtil.goGalleryList(context, cats: cats);
+              NavigatorUtil.goGalleryList(cats: cats);
             },
           );
         });
@@ -754,7 +751,7 @@ class GalleryUploader extends StatelessWidget {
               Global.logger.v('search uploader:$uploader');
               // NavigatorUtil.goGalleryList(context,
               //     simpleSearch: 'uploader:$uploader');
-              NavigatorUtil.goGalleryListBySearch(context,
+              NavigatorUtil.goGalleryListBySearch(
                   simpleSearch: 'uploader:$uploader');
             },
           );
@@ -874,7 +871,7 @@ Future<void> showLoadingDialog(BuildContext context, int index) async {
     builder: (BuildContext context) {
       Future<void>.delayed(const Duration(milliseconds: 0))
           .then((_) => _loadPriview(index))
-          .whenComplete(() => Navigator.pop(context));
+          .whenComplete(() => Get.back());
       return CupertinoAlertDialog(
         content: Container(
             width: 40,

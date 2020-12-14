@@ -2,6 +2,7 @@ import 'package:FEhViewer/models/states/ehconfig_model.dart';
 import 'package:FEhViewer/pages/setting/setting_base.dart';
 import 'package:FEhViewer/values/const.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:get/get.dart';
 import 'package:provider/provider.dart';
 
 class DownloadSettingPage extends StatefulWidget {
@@ -51,7 +52,7 @@ Widget _buildPreloadImageItem(BuildContext context) {
     return List<Widget>.from(EHConst.preloadImage.map((int element) {
       return CupertinoActionSheetAction(
           onPressed: () {
-            Navigator.pop(context, element);
+            Get.back(result: element);
           },
           child: Text('$element'));
     }).toList());
@@ -64,7 +65,7 @@ Widget _buildPreloadImageItem(BuildContext context) {
           final CupertinoActionSheet dialog = CupertinoActionSheet(
             cancelButton: CupertinoActionSheetAction(
                 onPressed: () {
-                  Navigator.pop(context);
+                  Get.back();
                 },
                 child: const Text('取消')),
             actions: <Widget>[

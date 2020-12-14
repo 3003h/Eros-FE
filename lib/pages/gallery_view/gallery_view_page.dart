@@ -6,7 +6,7 @@ import 'package:FEhViewer/models/states/ehconfig_model.dart';
 import 'package:FEhViewer/models/states/gallery_cache_model.dart';
 import 'package:FEhViewer/models/states/gallery_model.dart';
 import 'package:FEhViewer/pages/gallery_detail/gallery_detail_widget.dart';
-import 'package:FEhViewer/route/navigator_util.dart';
+import 'package:FEhViewer/route/routes.dart';
 import 'package:FEhViewer/utils/toast.dart';
 import 'package:FEhViewer/utils/utility.dart';
 import 'package:FEhViewer/values/const.dart';
@@ -15,6 +15,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:get/get.dart';
 import 'package:photo_view/photo_view.dart';
 import 'package:photo_view/photo_view_gallery.dart';
 import 'package:provider/provider.dart';
@@ -329,7 +330,7 @@ class _GalleryViewPageState extends State<GalleryViewPage> {
                   behavior: HitTestBehavior.opaque,
                   onTap: () {
                     Global.logger.v('back');
-                    NavigatorUtil.goBack(context);
+                    Get.back();
                   },
                   child: Container(
                     width: 40,
@@ -363,7 +364,7 @@ class _GalleryViewPageState extends State<GalleryViewPage> {
                   behavior: HitTestBehavior.opaque,
                   onTap: () {
                     Global.logger.v('menu');
-                    NavigatorUtil.goViewSetting(context);
+                    Get.toNamed(EHRoutes.viewSeting);
                   },
                   child: Container(
                     width: 40,
@@ -663,7 +664,7 @@ Future<void> _showShareDialog(BuildContext context, String imageUrl) {
           // title: const Text('分享方式'),
           cancelButton: CupertinoActionSheetAction(
               onPressed: () {
-                Navigator.pop(context);
+                Get.back();
               },
               child: const Text('取消')),
           actions: <Widget>[
@@ -671,7 +672,7 @@ Future<void> _showShareDialog(BuildContext context, String imageUrl) {
                 onPressed: () {
                   Global.logger.v('保存到相册');
                   Api.saveImage(context, imageUrl).then((rult) {
-                    Navigator.pop(context);
+                    Get.back();
                     if (rult != null && rult) {
                       showToast('保存成功');
                     }

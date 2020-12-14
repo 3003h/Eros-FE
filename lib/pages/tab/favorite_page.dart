@@ -7,7 +7,6 @@ import 'package:FEhViewer/models/states/local_favorite_model.dart';
 import 'package:FEhViewer/models/states/user_model.dart';
 import 'package:FEhViewer/pages/tab/gallery_base.dart';
 import 'package:FEhViewer/pages/tab/tab_base.dart';
-import 'package:FEhViewer/route/navigator_util.dart';
 import 'package:FEhViewer/route/routes.dart';
 import 'package:FEhViewer/utils/toast.dart';
 import 'package:FEhViewer/utils/utility.dart';
@@ -15,6 +14,7 @@ import 'package:FEhViewer/widget/eh_widget.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:get/get.dart';
 import 'package:provider/provider.dart';
 import 'package:tuple/tuple.dart';
 
@@ -368,7 +368,7 @@ class _FavoriteTabState extends State<FavoriteTab> {
       if (_toPage >= 0 && _toPage <= _maxPage) {
         FocusScope.of(context).requestFocus(FocusNode());
         _loadFromPage(_toPage);
-        Navigator.of(context).pop();
+        Get.back();
       } else {
         showToast('输入范围有误');
       }
@@ -404,7 +404,7 @@ class _FavoriteTabState extends State<FavoriteTab> {
             CupertinoDialogAction(
               child: const Text('取消'),
               onPressed: () {
-                Navigator.of(context).pop();
+                Get.back();
               },
             ),
             CupertinoDialogAction(
@@ -428,9 +428,9 @@ class _FavoriteTabState extends State<FavoriteTab> {
       child: const Icon(
         FontAwesomeIcons.star,
       ),
-      onPressed: () {
+      onPressed: () async {
         // 跳转收藏夹选择页
-        NavigatorUtil.jump(context, EHRoutes.selFavorie).then((result) async {
+        Get.toNamed(EHRoutes.selFavorie).then((result) async {
           if (result.runtimeType == FavcatItemBean) {
             final FavcatItemBean fav = result;
             if (_curFavcat != fav.favId) {

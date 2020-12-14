@@ -4,6 +4,7 @@ import 'package:FEhViewer/pages/setting/setting_base.dart';
 import 'package:FEhViewer/values/const.dart';
 import 'package:enum_to_string/enum_to_string.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:get/get.dart';
 import 'package:provider/provider.dart';
 
 class ViewSettingPage extends StatefulWidget {
@@ -55,11 +56,11 @@ Widget _buildViewModeItem(BuildContext context) {
     if (Global.inDebugMode) ViewMode.vertical: '由上到下',
   };
 
-  List<Widget> _getModeList(BuildContext context) {
+  List<Widget> _getModeList() {
     return List<Widget>.from(modeMap.keys.map((ViewMode element) {
       return CupertinoActionSheetAction(
           onPressed: () {
-            Navigator.pop(context, element);
+            Get.back(result: element);
           },
           child: Text(modeMap[element]));
     }).toList());
@@ -72,11 +73,11 @@ Widget _buildViewModeItem(BuildContext context) {
           final CupertinoActionSheet dialog = CupertinoActionSheet(
             cancelButton: CupertinoActionSheetAction(
                 onPressed: () {
-                  Navigator.pop(context);
+                  Get.back();
                 },
                 child: const Text('取消')),
             actions: <Widget>[
-              ..._getModeList(context),
+              ..._getModeList(),
             ],
           );
           return dialog;

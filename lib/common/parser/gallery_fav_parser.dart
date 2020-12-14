@@ -1,7 +1,6 @@
 import 'package:FEhViewer/common/global.dart';
 import 'package:FEhViewer/utils/dio_util.dart';
 import 'package:FEhViewer/utils/utility.dart';
-import 'package:FEhViewer/values/const.dart';
 import 'package:dio/dio.dart';
 import 'package:html/dom.dart';
 import 'package:html/parser.dart' show parse;

@@ -10,6 +10,7 @@ import 'package:FEhViewer/values/theme_colors.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:get/get.dart';
 import 'package:provider/provider.dart';
 import 'package:tuple/tuple.dart';
 
@@ -348,7 +349,7 @@ class _GalleryFavButtonState extends State<GalleryFavButton> {
                       'favnode': _favnoteController.text
                     };
                     // 返回数据
-                    Navigator.of(context).pop(favMap);
+                    Get.back(result: favMap);
                   },
                 )
               ],
@@ -358,7 +359,7 @@ class _GalleryFavButtonState extends State<GalleryFavButton> {
             CupertinoDialogAction(
               child: const Text('取消'),
               onPressed: () {
-                Navigator.of(context).pop();
+                Get.back();
               },
             ),
             CupertinoDialogAction(
@@ -371,7 +372,7 @@ class _GalleryFavButtonState extends State<GalleryFavButton> {
                   'favnode': _favnoteController.text
                 };
                 // 返回数据
-                Navigator.of(context).pop(favMap);
+                Get.back(result: favMap);
               },
             ),
           ],
@@ -398,7 +399,7 @@ class _GalleryFavButtonState extends State<GalleryFavButton> {
                     };
                     Global.logger.v('${favMap}');
                     // 返回数据
-                    Navigator.of(context).pop(favMap);
+                    Get.back(result: favMap);
                   },
                 ))).toList();
 
@@ -429,7 +430,7 @@ class _GalleryFavButtonState extends State<GalleryFavButton> {
             CupertinoDialogAction(
               child: Text('取消'),
               onPressed: () {
-                Navigator.of(context).pop();
+                Get.back();
               },
             ),
           ],

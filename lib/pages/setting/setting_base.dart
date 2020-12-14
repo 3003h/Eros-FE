@@ -1,6 +1,7 @@
 import 'package:FEhViewer/models/states/dnsconfig_model.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:provider/provider.dart';
 
 /// 选择类型的设置项
@@ -319,8 +320,7 @@ class SettingBase {
                     // 点击键盘完成
                     if (dnsConfigModel.addCustomHost(
                         _hostController.text.trim(),
-                        _addrController.text.trim()))
-                      Navigator.of(context).pop();
+                        _addrController.text.trim())) Get.back();
                   },
                 ),
               ],
@@ -330,7 +330,7 @@ class SettingBase {
             CupertinoDialogAction(
               child: const Text('取消'),
               onPressed: () {
-                Navigator.of(context).pop();
+                Get.back();
               },
             ),
             CupertinoDialogAction(
@@ -338,7 +338,7 @@ class SettingBase {
               onPressed: () {
                 if (dnsConfigModel.addCustomHost(
                     _hostController.text.trim(), _addrController.text.trim()))
-                  Navigator.of(context).pop();
+                  Get.back();
               },
             ),
           ],

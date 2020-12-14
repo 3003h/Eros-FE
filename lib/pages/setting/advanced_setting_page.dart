@@ -8,6 +8,7 @@ import 'package:FEhViewer/pages/setting/custom_hosts_page.dart';
 import 'package:FEhViewer/values/theme_colors.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:provider/provider.dart';
 
 import 'setting_base.dart';
@@ -91,15 +92,8 @@ class ListViewAdvancedSetting extends StatelessWidget {
                 return SelectorSettingItem(
                   title: '自定义hosts (实验性功能)',
                   selector: customHosts ? '已开启' : '已关闭',
-                  onTap: () async {
-                    Navigator.push(
-                      context,
-                      CupertinoPageRoute<dynamic>(
-                        builder: (BuildContext context) {
-                          return CustomHostsPage();
-                        },
-                      ),
-                    );
+                  onTap: () {
+                    Get.to(CustomHostsPage());
                   },
                 );
               }),
@@ -130,7 +124,7 @@ class ListViewAdvancedSetting extends StatelessWidget {
       return List<Widget>.from(localeMap.keys.map((String element) {
         return CupertinoActionSheetAction(
             onPressed: () {
-              Navigator.pop(context, element);
+              Get.back(result: element);
             },
             child: Text(localeMap[element]));
       }).toList());
@@ -144,7 +138,7 @@ class ListViewAdvancedSetting extends StatelessWidget {
               title: const Text('语言选择'),
               cancelButton: CupertinoActionSheetAction(
                   onPressed: () {
-                    Navigator.pop(context);
+                    Get.back();
                   },
                   child: const Text('取消')),
               actions: <Widget>[
@@ -190,7 +184,7 @@ class ListViewAdvancedSetting extends StatelessWidget {
       return List<Widget>.from(themeMap.keys.map((ThemesModeEnum themesMode) {
         return CupertinoActionSheetAction(
             onPressed: () {
-              Navigator.pop(context, themesMode);
+              Get.back(result: themesMode);
             },
             child: Text(themeMap[themesMode]));
       }).toList());
@@ -204,7 +198,7 @@ class ListViewAdvancedSetting extends StatelessWidget {
               title: const Text('主题选择'),
               cancelButton: CupertinoActionSheetAction(
                   onPressed: () {
-                    Navigator.pop(context);
+                    Get.back();
                   },
                   child: const Text('取消')),
               actions: <Widget>[

@@ -1,18 +1,20 @@
 import 'package:FEhViewer/common/global.dart';
-import 'package:FEhViewer/route/navigator_util.dart';
+import 'package:FEhViewer/generated/l10n.dart';
 import 'package:FEhViewer/values/const.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_webview_plugin/flutter_webview_plugin.dart';
+import 'package:get/get.dart';
 
 class WebLogin extends StatelessWidget {
-  const WebLogin({Key key, this.url, this.title}) : super(key: key);
-
-  final String url;
-  final String title;
+  const WebLogin({
+    Key key,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
+    final S ln = S.of(context);
+    String title = ln.login_web;
     final FlutterWebviewPlugin flutterWebviewPlugin = FlutterWebviewPlugin();
 
     final Set<JavascriptChannel> jsChannels = {
@@ -26,7 +28,8 @@ class WebLogin extends StatelessWidget {
         Global.logger.i('登录成功');
         flutterWebviewPlugin.getCookies().then((Map<String, String> _cookies) {
           // 返回 并带上参数
-          NavigatorUtil.goBackWithParams(context, _cookies);
+          // NavigatorUtil.goBackWithParams(context, _cookies);
+          Get.back(result: _cookies);
         });
       }
     });
@@ -47,7 +50,7 @@ class WebLogin extends StatelessWidget {
         child: SafeArea(
           child: WebviewScaffold(
             userAgent: EHConst.CHROME_USER_AGENT,
-            url: url,
+            url: EHConst.URL_SIGN_IN,
             javascriptChannels: jsChannels,
             mediaPlaybackRequiresUserGesture: false,
           ),

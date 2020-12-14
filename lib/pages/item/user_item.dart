@@ -2,12 +2,12 @@ import 'package:FEhViewer/common/global.dart';
 import 'package:FEhViewer/models/states/ehconfig_model.dart';
 import 'package:FEhViewer/models/states/user_model.dart';
 import 'package:FEhViewer/models/user.dart';
-import 'package:FEhViewer/route/navigator_util.dart';
 import 'package:FEhViewer/route/routes.dart';
 import 'package:FEhViewer/utils/utility.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:get/get.dart';
 import 'package:provider/provider.dart';
 
 class UserItem extends StatefulWidget {
@@ -31,7 +31,7 @@ class _UserItem extends State<UserItem> {
             CupertinoDialogAction(
               child: Text('取消'),
               onPressed: () {
-                Navigator.of(context).pop();
+                Get.back();
               },
             ),
             CupertinoDialogAction(
@@ -41,7 +41,7 @@ class _UserItem extends State<UserItem> {
                 Provider.of<UserModel>(context, listen: false).user = User();
                 Provider.of<EhConfigModel>(context, listen: false).siteEx =
                     false;
-                Navigator.of(context).pop();
+                Get.back();
               },
             ),
           ],
@@ -56,7 +56,8 @@ class _UserItem extends State<UserItem> {
       if (Global.profile.user?.username != null) {
         _logOut(context);
       } else {
-        NavigatorUtil.jump(context, EHRoutes.login, rootNavigator: true);
+        // NavigatorUtil.jump(context, EHRoutes.login, rootNavigator: true);
+        Get.toNamed(EHRoutes.login);
       }
     }
 

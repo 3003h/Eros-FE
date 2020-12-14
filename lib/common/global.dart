@@ -3,15 +3,12 @@ import 'dart:io';
 
 import 'package:FEhViewer/models/index.dart';
 import 'package:FEhViewer/models/profile.dart';
-import 'package:FEhViewer/route/application.dart';
-import 'package:FEhViewer/route/routes.dart';
 import 'package:FEhViewer/utils/cache.dart';
 import 'package:FEhViewer/utils/https_proxy.dart';
 import 'package:FEhViewer/utils/storage.dart';
 import 'package:FEhViewer/utils/utility.dart';
 import 'package:FEhViewer/values/storages.dart';
 import 'package:dio_cookie_manager/dio_cookie_manager.dart';
-import 'package:fluro/fluro.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:logger/logger.dart';
@@ -87,9 +84,9 @@ class Global {
     cookieManager = CookieManager(await Api.cookieJar);
 
     // 路由
-    final FluroRouter router = FluroRouter();
-    EHRoutes.configureRoutes(router);
-    Application.router = router;
+    // final FluroRouter router = FluroRouter();
+    // EHRoutes.configureRoutes(router);
+    // Application.router = router;
 
     // 判断是否debug模式
     inDebugMode = EHUtils().isInDebugMode;
