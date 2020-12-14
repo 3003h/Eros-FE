@@ -1,6 +1,7 @@
 import 'dart:ui';
 
 import 'package:FEhViewer/common/global.dart';
+import 'package:get/get.dart';
 
 import '../profile.dart';
 import 'base.dart';
@@ -13,9 +14,11 @@ class LocaleModel extends ProfileChangeNotifier {
     if (_profile.locale == null ||
         _profile.locale.isEmpty ||
         _profile.locale == '_' ||
-        !_profile.locale.contains('_')) return null;
+        !_profile.locale.contains('_')) {
+      return window.locale;
+    }
     final List<String> t = _profile.locale.split('_');
-    Global.logger.v(t);
+    Global.logger.i('getLocale $t');
     return Locale(t[0], t[1]);
   }
 
@@ -26,6 +29,7 @@ class LocaleModel extends ProfileChangeNotifier {
   set locale(String locale) {
     if (locale != _profile.locale) {
       _profile.locale = locale;
+      Get.updateLocale(getLocale());
       notifyListeners();
     }
   }

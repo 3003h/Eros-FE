@@ -9,8 +9,8 @@ import 'package:FEhViewer/models/states/locale_model.dart';
 import 'package:FEhViewer/models/states/search_text_model.dart';
 import 'package:FEhViewer/models/states/theme_model.dart';
 import 'package:FEhViewer/models/states/user_model.dart';
-import 'package:FEhViewer/pages/splash_page.dart';
 import 'package:FEhViewer/route/app_pages.dart';
+import 'package:FEhViewer/route/routes.dart';
 import 'package:device_preview/device_preview.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -20,7 +20,7 @@ import 'package:get/get.dart';
 import 'package:oktoast/oktoast.dart';
 import 'package:provider/provider.dart';
 
-import 'generated/l10n.dart';
+import 'l10n/messages.dart';
 
 void main() {
   Global.init().then((_) {
@@ -67,31 +67,29 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
   Widget build(BuildContext context) {
     final Widget cupertinoApp = Consumer2<LocaleModel, ThemeModel>(builder:
         (BuildContext context, LocaleModel localeModel, ThemeModel themeModel,
-            Widget child) {
+            _) {
       return Selector<EhConfigModel, bool>(
           selector: (_, EhConfigModel ehConfig) => ehConfig.isSafeMode,
           builder: (context, snapshot, _) {
             // Global.logger.d('CupertinoApp');
             return GetCupertinoApp(
               debugShowCheckedModeBanner: false,
-              onGenerateTitle: (BuildContext context) =>
-                  S.of(context).app_title,
+              translations: Messages(),
+              onGenerateTitle: (BuildContext context) => 'app_title'.tr,
               getPages: AppPages.routes,
+              initialRoute: EHRoutes.root,
               theme: themeModel.getTheme(context, _brightness),
-              // theme: ThemeColors.darkTheme,
-              home: const SplashPage(),
-              locale: Global.inDebugMode
-                  ? DevicePreview.locale(context)
-                  : localeModel.getLocale(),
+              locale: localeModel.getLocale(),
+              // fallbackLocale: const Locale('en', 'US'),
               builder: DevicePreview.appBuilder,
+              // ignore: prefer_const_literals_to_create_immutables
               supportedLocales: <Locale>[
-                const Locale('en', ''),
-                ...S.delegate.supportedLocales
+                const Locale('en'),
+                const Locale('zh', 'CN'),
               ],
               // ignore: prefer_const_literals_to_create_immutables
               localizationsDelegates: [
                 // 本地化的代理类
-                S.delegate,
                 GlobalMaterialLocalizations.delegate,
                 GlobalCupertinoLocalizations.delegate,
                 GlobalWidgetsLocalizations.delegate,
@@ -104,12 +102,15 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
                   //如果已经选定语言，则不跟随系统
                   return localeModel.getLocale();
                 } else {
+                  Global.logger.d('语言跟随系统语言');
                   Locale locale;
                   //APP语言跟随系统语言，如果系统语言不是中文简体或美国英语，
                   //则默认使用美国英语
                   if (supportedLocales.contains(_locale)) {
+                    Global.logger.d('语言跟随系统语言');
                     locale = _locale;
                   } else {
+                    Global.logger.d('set en');
                     locale = const Locale('en', 'US');
                   }
 

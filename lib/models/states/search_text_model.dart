@@ -1,6 +1,5 @@
 import 'package:FEhViewer/common/global.dart';
 import 'package:FEhViewer/models/states/base.dart';
-import 'package:FEhViewer/utils/toast.dart';
 
 import '../index.dart';
 

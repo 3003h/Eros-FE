@@ -2,12 +2,9 @@ import 'dart:io';
 
 import 'package:FEhViewer/common/global.dart';
 import 'package:FEhViewer/utils/toast.dart';
-import 'package:FEhViewer/utils/utility.dart';
 import 'package:FEhViewer/values/const.dart';
-import 'package:cookie_jar/src/persist_cookie_jar.dart';
 import 'package:dio/adapter.dart';
 import 'package:dio/dio.dart';
-import 'package:dio_cookie_manager/dio_cookie_manager.dart';
 import 'package:dio_http_cache/dio_http_cache.dart';
 import 'package:flutter/cupertino.dart';
 

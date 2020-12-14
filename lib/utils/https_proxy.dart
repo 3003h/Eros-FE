@@ -6,7 +6,6 @@ import 'package:FEhViewer/common/global.dart';
 import 'package:FEhViewer/models/dnsCache.dart';
 import 'package:FEhViewer/utils/dns_util.dart';
 import 'package:FEhViewer/utils/utility.dart';
-import 'package:flutter/foundation.dart';
 
 class CustomHttpsProxy {
   /// 内部构造方法，可避免外部暴露构造函数，进行实例化

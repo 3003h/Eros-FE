@@ -1,12 +1,11 @@
 import 'package:FEhViewer/common/global.dart';
-import 'package:FEhViewer/generated/l10n.dart';
 import 'package:FEhViewer/models/entity/favorite.dart';
 import 'package:FEhViewer/models/index.dart';
 import 'package:FEhViewer/models/states/gallery_model.dart';
 import 'package:FEhViewer/models/states/local_favorite_model.dart';
 import 'package:FEhViewer/models/states/user_model.dart';
-import 'package:FEhViewer/pages/tab/gallery_base.dart';
-import 'package:FEhViewer/pages/tab/tab_base.dart';
+import 'package:FEhViewer/pages/tab/view/gallery_base.dart';
+import 'package:FEhViewer/pages/tab/view/tab_base.dart';
 import 'package:FEhViewer/route/routes.dart';
 import 'package:FEhViewer/utils/toast.dart';
 import 'package:FEhViewer/utils/utility.dart';
@@ -18,7 +17,7 @@ import 'package:get/get.dart';
 import 'package:provider/provider.dart';
 import 'package:tuple/tuple.dart';
 
-import '../item/gallery_item.dart';
+import '../../item/gallery_item.dart';
 
 class FavoriteTab extends StatefulWidget {
   const FavoriteTab({Key key, this.tabIndex, this.scrollController})
@@ -92,18 +91,16 @@ class _FavoriteTabState extends State<FavoriteTab> {
 
   @override
   Widget build(BuildContext context) {
-    final S ln = S.of(context);
-
     return CupertinoPageScaffold(
       child: Selector<UserModel, bool>(
           selector: (BuildContext context, UserModel provider) =>
               provider.isLogin,
           builder: (BuildContext context, bool isLogin, Widget child) {
-            Global.logger.d(' rebuild fav');
+            // Global.logger.d(' rebuild fav');
 
             if (isLogin) {
               if (_title == null || _title.isEmpty) {
-                _title = ln.all_Favorites;
+                _title = 'all_Favorites'.tr;
               }
               return _buildNetworkFavView(context);
             } else {

@@ -1,8 +1,7 @@
 import 'package:FEhViewer/common/global.dart';
-import 'package:FEhViewer/generated/l10n.dart';
 import 'package:FEhViewer/models/index.dart';
 import 'package:FEhViewer/models/states/ehconfig_model.dart';
-import 'package:FEhViewer/pages/tab/gallery_base.dart';
+import 'package:FEhViewer/pages/tab/view/gallery_base.dart';
 import 'package:FEhViewer/route/navigator_util.dart';
 import 'package:FEhViewer/utils/toast.dart';
 import 'package:FEhViewer/utils/utility.dart';
@@ -224,9 +223,8 @@ class _GalleryListTabState extends State<GalleryListTab> {
 
   @override
   Widget build(BuildContext context) {
-    final S ln = S.of(context);
-
-    _title = (_search != null && _search.isNotEmpty) ? _search : ln.tab_gallery;
+    _title =
+        (_search != null && _search.isNotEmpty) ? _search : 'tab_gallery'.tr;
 
     final CustomScrollView customScrollView = CustomScrollView(
       controller: widget.scrollController,

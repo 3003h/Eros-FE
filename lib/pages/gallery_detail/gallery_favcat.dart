@@ -1,6 +1,5 @@
 import 'package:FEhViewer/common/global.dart';
 import 'package:FEhViewer/common/parser/gallery_fav_parser.dart';
-import 'package:FEhViewer/generated/l10n.dart';
 import 'package:FEhViewer/models/states/gallery_model.dart';
 import 'package:FEhViewer/models/states/local_favorite_model.dart';
 import 'package:FEhViewer/models/states/user_model.dart';
@@ -51,8 +50,6 @@ class _GalleryFavButtonState extends State<GalleryFavButton> {
 
   @override
   Widget build(BuildContext context) {
-    final S ln = S.of(context);
-
     // 收藏按钮图标
     final Widget favIcon = Container(
       child: Selector<GalleryModel, Tuple3<String, String, bool>>(
@@ -101,7 +98,7 @@ class _GalleryFavButtonState extends State<GalleryFavButton> {
                   Container(
                     height: 14,
                     child: Text(
-                      _isFav ? _favTitle() : ln.notFav,
+                      _isFav ? _favTitle() : 'notFav'.tr,
                       style: const TextStyle(
                         fontSize: 11,
                       ),
@@ -121,7 +118,7 @@ class _GalleryFavButtonState extends State<GalleryFavButton> {
         Container(
           height: 14,
           child: Text(
-            ln.processing,
+            'processing'.tr,
             style: const TextStyle(
               fontSize: 11,
             ),

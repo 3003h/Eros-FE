@@ -1,11 +1,10 @@
 import 'package:FEhViewer/common/global.dart';
-import 'package:FEhViewer/generated/l10n.dart';
 import 'package:FEhViewer/models/index.dart';
 import 'package:FEhViewer/models/states/ehconfig_model.dart';
 import 'package:FEhViewer/models/states/search_text_model.dart';
-import 'package:FEhViewer/pages/tab/gallery_base.dart';
-import 'package:FEhViewer/pages/tab/search_text_page.dart';
-import 'package:FEhViewer/pages/tab/tab_base.dart';
+import 'package:FEhViewer/pages/tab/view/gallery_base.dart';
+import 'package:FEhViewer/pages/tab/view/search_text_page.dart';
+import 'package:FEhViewer/pages/tab/view/tab_base.dart';
 import 'package:FEhViewer/utils/cust_lib/popup_menu.dart';
 import 'package:FEhViewer/utils/toast.dart';
 import 'package:FEhViewer/utils/utility.dart';
@@ -109,8 +108,6 @@ class _GallerySearchPageState extends State<GallerySearchPage>
 
   @override
   Widget build(BuildContext context) {
-    final S ln = S.of(context);
-
     const BorderSide _kDefaultRoundedBorderSide = BorderSide(
       color: CupertinoDynamicColor.withBrightness(
         color: Color(0x33000000),

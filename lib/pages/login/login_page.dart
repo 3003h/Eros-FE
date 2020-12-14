@@ -3,7 +3,6 @@ import 'dart:ui';
 
 import 'package:FEhViewer/common/eh_login.dart';
 import 'package:FEhViewer/common/global.dart';
-import 'package:FEhViewer/generated/l10n.dart';
 import 'package:FEhViewer/models/states/user_model.dart';
 import 'package:FEhViewer/models/user.dart';
 import 'package:FEhViewer/route/routes.dart';
@@ -41,10 +40,9 @@ class _LoginPageState extends State<LoginPage> {
 
   @override
   Widget build(BuildContext context) {
-    final S ln = S.of(context);
     return CupertinoPageScaffold(
         navigationBar: CupertinoNavigationBar(
-          middle: Text(ln.user_login),
+          middle: Text('user_login'.tr),
         ),
         child: SafeArea(
           child: Center(
@@ -60,10 +58,10 @@ class _LoginPageState extends State<LoginPage> {
                       style: const TextStyle(
                           textBaseline: TextBaseline.alphabetic),
                       controller: _usernameController,
-                      placeholder: ln.pls_i_username,
+                      placeholder: 'pls_i_username'.tr,
                       prefix: ConstrainedBox(
                           constraints: const BoxConstraints(minWidth: 50),
-                          child: Text(ln.user_name)),
+                          child: Text('user_name'.tr)),
                       // prefixMode: OverlayVisibilityMode.never,
                       decoration: null,
                       // autofocus 自动获得焦点
@@ -86,10 +84,10 @@ class _LoginPageState extends State<LoginPage> {
                       style: const TextStyle(
                           textBaseline: TextBaseline.alphabetic),
                       controller: _passwdController,
-                      placeholder: ln.pls_i_passwd,
+                      placeholder: 'pls_i_passwd'.tr,
                       prefix: ConstrainedBox(
                           constraints: const BoxConstraints(minWidth: 50),
-                          child: Text(ln.passwd)),
+                          child: Text('passwd'.tr)),
                       // prefixMode: OverlayVisibilityMode.never,
                       decoration: null,
                       obscureText: true,
@@ -106,9 +104,9 @@ class _LoginPageState extends State<LoginPage> {
                         CupertinoColors.systemGrey4, context),
                   ),
                   // 直接登录按钮
-                  _buildLoginButton(ln),
+                  _buildLoginButton(),
                   // 网页登录按钮
-                  _buildWebLoginButton(ln, context),
+                  _buildWebLoginButton(context),
                   // Cookie登录按钮
                   _buildCookieLoginButton(context),
                 ],
@@ -118,7 +116,7 @@ class _LoginPageState extends State<LoginPage> {
         ));
   }
 
-  Widget _buildLoginButton(S ln) {
+  Widget _buildLoginButton() {
     return Container(
       height: 60,
       child: _isLogin
@@ -129,7 +127,7 @@ class _LoginPageState extends State<LoginPage> {
               ),
             )
           : CupertinoButton(
-              child: Text(ln.login),
+              child: Text('login'.tr),
 //             color: CupertinoColors.activeBlue,
               onPressed: () {
                 _login();
@@ -142,7 +140,7 @@ class _LoginPageState extends State<LoginPage> {
     return Container(
       height: 60,
       child: CupertinoButton(
-        child: Text('cookie 登录'),
+        child: const Text('cookie 登录'),
         onPressed: () {
           Get.to(LoginCookiePage()).then((result) {
             if (result ?? false) {
@@ -154,7 +152,7 @@ class _LoginPageState extends State<LoginPage> {
     );
   }
 
-  Widget _buildWebLoginButton(S ln, BuildContext context) {
+  Widget _buildWebLoginButton(BuildContext context) {
     return Container(
       height: 60,
       child: _isWebLogin
@@ -164,7 +162,7 @@ class _LoginPageState extends State<LoginPage> {
               ),
             )
           : CupertinoButton(
-              child: Text(ln.login_web),
+              child: Text('login_web'.tr),
               onPressed: () {
                 if (!Platform.isIOS && !Platform.isAndroid) {
                   showToast('平台尚未支持');

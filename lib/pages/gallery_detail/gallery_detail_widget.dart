@@ -1,5 +1,4 @@
 import 'package:FEhViewer/common/global.dart';
-import 'package:FEhViewer/generated/l10n.dart';
 import 'package:FEhViewer/models/index.dart';
 import 'package:FEhViewer/models/states/ehconfig_model.dart';
 import 'package:FEhViewer/models/states/gallery_cache_model.dart';
@@ -54,7 +53,6 @@ class GalleryDetailInfo extends StatelessWidget {
   }
 
   CupertinoButton _buildAllPreviewButton(BuildContext context) {
-    final S ln = S.of(context);
     final GalleryModel galleryModel =
         Provider.of<GalleryModel>(context, listen: false);
     final bool hasMorePreview =
@@ -64,7 +62,7 @@ class GalleryDetailInfo extends StatelessWidget {
       minSize: 0,
       padding: const EdgeInsets.fromLTRB(0, 4, 0, 30),
       child: Text(
-        hasMorePreview ? ln.morePreviews : ln.noMorePreviews,
+        hasMorePreview ? 'morePreviews'.tr : 'noMorePreviews'.tr,
         style: const TextStyle(fontSize: 16),
       ),
       onPressed: () {
@@ -94,7 +92,6 @@ class GalleryDetailInfo extends StatelessWidget {
             galleryModel.galleryItem.galleryComment,
 //        shouldRebuild: (pre, next) => pre != next,
         builder: (context, comment, child) {
-          final S ln = S.of(context);
           return Column(
             children: <Widget>[
               // 评论
@@ -111,7 +108,7 @@ class GalleryDetailInfo extends StatelessWidget {
                 minSize: 0,
                 padding: const EdgeInsets.fromLTRB(8, 4, 8, 4),
                 child: Text(
-                  ln.all_comment,
+                  'all_comment'.tr,
                   style: const TextStyle(fontSize: 16),
                 ),
                 onPressed: () {
@@ -625,11 +622,9 @@ class ReadButton extends StatelessWidget {
         selector: (_, GalleryModel provider) =>
             provider.oriGalleryPreview.isNotEmpty,
         builder: (BuildContext context, bool value, __) {
-          final S ln = S.of(context);
-
           return CupertinoButton(
               child: Text(
-                ln.READ,
+                'READ'.tr,
                 style: const TextStyle(fontSize: 15),
               ),
               minSize: 20,
