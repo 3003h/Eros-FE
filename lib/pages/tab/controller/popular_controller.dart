@@ -1,22 +1,18 @@
 import 'package:FEhViewer/models/index.dart';
 import 'package:FEhViewer/utils/utility.dart';
-import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
 import 'package:tuple/tuple.dart';
 
-class PopularController extends GetxController {
-  Widget lastListWidget;
-
-  Rx<Future<List<GalleryItem>>> futureBuilderFuture =
-      Future.value(<GalleryItem>[]).obs;
-  RxList<GalleryItem> gallerItemBeans = <GalleryItem>[].obs;
-
+class PopularController extends GetxController
+    with StateMixin<List<GalleryItem>> {
   @override
   void onInit() {
     super.onInit();
-    futureBuilderFuture.value = loadData();
-    Future<void>.delayed(const Duration(milliseconds: 100)).then((_) {
-      reloadData();
+
+    loadData().then((List<GalleryItem> value) {
+      change(value, status: RxStatus.success());
+    }, onError: (err) {
+      change(null, status: RxStatus.error(err.toString()));
     });
   }
 
@@ -30,12 +26,10 @@ class PopularController extends GetxController {
 
   Future<void> reloadData() async {
     final List<GalleryItem> gallerItemBeans = await loadData(refresh: true);
-
-    futureBuilderFuture.value =
-        Future<List<GalleryItem>>.value(gallerItemBeans);
+    change(gallerItemBeans);
   }
 
   Future<void> reLoadDataFirst() async {
-    futureBuilderFuture.value = loadData();
+    await loadData();
   }
 }

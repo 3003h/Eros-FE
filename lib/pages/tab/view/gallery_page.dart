@@ -11,20 +11,12 @@ import 'package:tuple/tuple.dart';
 
 import 'tab_base.dart';
 
-class GalleryListTab extends StatelessWidget {
-  GalleryListTab(
-      {Key key,
-      this.tabIndex,
-      this.scrollController,
-      String simpleSearch,
-      int cats})
-      : controller =
-            Get.put(GalleryController(cats: cats, simpleSearch: simpleSearch)),
-        super(key: key);
+class GalleryListTab extends GetView<GalleryController> {
+  const GalleryListTab({Key key, this.tabIndex, this.scrollController})
+      : super(key: key);
 
   final String tabIndex;
   final ScrollController scrollController;
-  final GalleryController controller;
 
   @override
   Widget build(BuildContext context) {
@@ -75,10 +67,11 @@ class GalleryListTab extends StatelessWidget {
                     child: Container(
                       padding: const EdgeInsets.fromLTRB(4, 2, 4, 2),
                       color: CupertinoColors.activeBlue,
-                      child: Text(
-                        '${controller.curPage + 1}',
-                        style: const TextStyle(color: CupertinoColors.white),
-                      ),
+                      child: Obx(() => Text(
+                            '${controller.curPage.value + 1}',
+                            style:
+                                const TextStyle(color: CupertinoColors.white),
+                          )),
                     ),
                   ),
                   onPressed: () {
@@ -100,8 +93,7 @@ class GalleryListTab extends StatelessWidget {
           sliver: _getGalleryList(),
         ),
         SliverToBoxAdapter(
-          child:
-              GetX<GalleryController>(builder: (GalleryController controller) {
+          child: GetX<GalleryController>(builder: (_) {
             return Container(
               padding: const EdgeInsets.only(top: 50, bottom: 100),
               child: controller.isLoadMore.value
@@ -121,52 +113,35 @@ class GalleryListTab extends StatelessWidget {
   }
 
   Widget _getGalleryList() {
-    return GetX<GalleryController>(builder: (GalleryController controller) {
-      return FutureBuilder<Tuple2<List<GalleryItem>, int>>(
-        future: controller.futureBuilderFuture.value,
-        builder: (BuildContext context,
-            AsyncSnapshot<Tuple2<List<GalleryItem>, int>> snapshot) {
-          Global.logger.d('_getGalleryList ');
-          switch (snapshot.connectionState) {
-            case ConnectionState.none:
-            case ConnectionState.active:
-            case ConnectionState.waiting:
-              return controller.lastListWidget ??
-                  SliverFillRemaining(
-                    child: Container(
-                      padding: const EdgeInsets.only(bottom: 50),
-                      child: const CupertinoActivityIndicator(
-                        radius: 14.0,
-                      ),
-                    ),
-                  );
-            case ConnectionState.done:
-              if (snapshot.hasError) {
-                Global.logger.e('${snapshot.error}');
-                return SliverFillRemaining(
-                  child: Container(
-                    padding: const EdgeInsets.only(bottom: 50),
-                    child: GalleryErrorPage(
-                      onTap: controller.reLoadDataFirst,
-                    ),
-                  ),
-                );
-              } else {
-                controller.frontGallerItemBeans = snapshot.data.item1;
-                controller.maxPage = snapshot.data.item2;
-                controller.lastListWidget = getGalleryList(
-                  controller.frontGallerItemBeans,
-                  tabIndex,
-                  maxPage: controller.maxPage,
-                  curPage: controller.curPage,
-                  loadMord: controller.loadDataMore,
-                );
-                return controller.lastListWidget;
-              }
-          }
-          return null;
+    return controller.obx(
+        (state) {
+          return getGalleryList(
+            state,
+            tabIndex,
+            maxPage: controller.maxPage,
+            curPage: controller.curPage.value,
+            loadMord: controller.loadDataMore,
+          );
         },
-      );
-    });
+        onLoading: SliverFillRemaining(
+          child: Container(
+            alignment: Alignment.center,
+            padding: const EdgeInsets.only(bottom: 50),
+            child: const CupertinoActivityIndicator(
+              radius: 14.0,
+            ),
+          ),
+        ),
+        onError: (err) {
+          Global.logger.e(' $err');
+          return SliverFillRemaining(
+            child: Container(
+              padding: const EdgeInsets.only(bottom: 50),
+              child: GalleryErrorPage(
+                onTap: controller.reLoadDataFirst,
+              ),
+            ),
+          );
+        });
   }
 }

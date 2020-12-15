@@ -95,8 +95,8 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
               ],
               localeResolutionCallback:
                   (Locale _locale, Iterable<Locale> supportedLocales) {
-                Global.logger.v(
-                    '${_locale?.languageCode}  ${_locale?.scriptCode}  ${_locale?.countryCode}');
+                // Global.logger.v(
+                //     '${_locale?.languageCode}  ${_locale?.scriptCode}  ${_locale?.countryCode}');
                 if (localeModel.getLocale() != null) {
                   //如果已经选定语言，则不跟随系统
                   return localeModel.getLocale();

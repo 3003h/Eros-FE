@@ -147,7 +147,7 @@ class CommentItem extends StatelessWidget {
       behavior: HitTestBehavior.opaque,
       onTap: () {
         Global.logger.v('search uploader:${galleryComment.name}');
-        NavigatorUtil.goGalleryList(
+        NavigatorUtil.goGalleryListBySearch(
             simpleSearch: 'uploader:${galleryComment.name}');
       },
     );

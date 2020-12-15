@@ -3,6 +3,7 @@ import 'package:FEhViewer/models/states/gallery_model.dart';
 import 'package:FEhViewer/pages/gallery_detail/comment_page.dart';
 import 'package:FEhViewer/pages/gallery_detail/gallery_detail_page.dart';
 import 'package:FEhViewer/pages/gallery_view/gallery_view_page.dart';
+import 'package:FEhViewer/pages/tab/controller/gallery_controller.dart';
 import 'package:FEhViewer/pages/tab/view/gallery_page.dart';
 import 'package:FEhViewer/pages/tab/view/search_page.dart';
 import 'package:flutter/cupertino.dart';
@@ -12,14 +13,11 @@ import 'package:provider/provider.dart';
 
 class NavigatorUtil {
   /// 转到画廊列表页面
-  static void goGalleryList({
-    int cats = 0,
-    String simpleSearch,
-  }) {
-    Get.to(GalleryListTab(
-      cats: cats,
-      simpleSearch: simpleSearch,
-    ));
+  static void goGalleryList({int cats = 0}) {
+    Get.to(const GalleryListTab(),
+        binding: BindingsBuilder<GalleryController>(() {
+      Get.put(GalleryController(cats: cats));
+    }));
   }
 
   static void goGalleryListBySearch({
