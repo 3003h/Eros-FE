@@ -1,12 +1,11 @@
 import 'package:flutter/cupertino.dart';
 
 class TabPageTitle extends StatelessWidget {
+  const TabPageTitle({this.isLoading = false, this.title, loadingText})
+      : loadingText = loadingText ?? title;
   final bool isLoading;
   final String title;
   final String loadingText;
-
-  TabPageTitle({this.isLoading = false, this.title, loadingText})
-      : loadingText = loadingText ?? title;
 
   @override
   Widget build(BuildContext context) {

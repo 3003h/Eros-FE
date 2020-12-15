@@ -36,15 +36,15 @@ class TabHomeController extends GetxController {
     oriTabList.clear();
     const double _iconSize = 24.0;
     oriTabList.addAll([
-      // {
-      //   'title': 'tab_popular'.tr,
-      //   'icon': const Icon(FontAwesomeIcons.fire, size: _iconSize),
-      //   'disable': Global.profile.ehConfig.safeMode,
-      //   'page': PopularListTab(
-      //     tabIndex: 'tab_popular'.tr,
-      //     scrollController: _getScrollController('tab_popular'.tr),
-      //   )
-      // },
+      {
+        'title': 'tab_popular'.tr,
+        'icon': const Icon(FontAwesomeIcons.fire, size: _iconSize),
+        'disable': Global.profile.ehConfig.safeMode,
+        'page': PopularListTab(
+          tabIndex: 'tab_popular'.tr,
+          scrollController: _getScrollController('tab_popular'.tr),
+        )
+      },
       {
         'title': 'tab_gallery'.tr,
         'icon': const Icon(FontAwesomeIcons.list, size: _iconSize),
@@ -53,8 +53,6 @@ class TabHomeController extends GetxController {
           scrollController: _getScrollController('tab_gallery'.tr),
         )
       },
-
-      /*
       {
         'title': 'tab_favorite'.tr,
         'icon': const Icon(FontAwesomeIcons.solidHeart, size: _iconSize),
@@ -72,7 +70,7 @@ class TabHomeController extends GetxController {
           tabIndex: 'tab_history'.tr,
           scrollController: _getScrollController('tab_history'.tr),
         )
-      },*/
+      },
       {
         'title': 'tab_setting'.tr,
         'icon': const Icon(FontAwesomeIcons.cog, size: _iconSize),

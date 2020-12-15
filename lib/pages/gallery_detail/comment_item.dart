@@ -154,7 +154,7 @@ class CommentItem extends StatelessWidget {
   }
 
   Future<void> _onOpen(BuildContext context, LinkableElement link) async {
-    Global.logger.v('${link.url}');
+    Global.logger.v(' ${link.url}');
     final RegExp regExp =
         RegExp(r'https?://e[-x]hentai.org/g/[0-9]+/[0-9a-z]+');
     if (await canLaunch(link.url)) {

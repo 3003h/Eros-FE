@@ -42,7 +42,6 @@ class GalleryController extends GetxController
 
     loadData().then((Tuple2<List<GalleryItem>, int> tuple) {
       maxPage = tuple.item2;
-      // _frontGallerItemBeans = tuple.item1;
       change(tuple.item1, status: RxStatus.success());
     }, onError: (err) {
       change(null, status: RxStatus.error(err.toString()));

@@ -1,9 +1,9 @@
 name: FEhViewer
-description: A new Flutter project.
+description: ..
 
 publish_to: 'none' # Remove this line if you wish to publish to pub.dev
 
-version: 1.0.1+56
+version: 1.0.1+58
 
 environment:
   sdk: '>=2.7.0 <3.0.0'
