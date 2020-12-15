@@ -1,6 +1,6 @@
 import 'package:FEhViewer/common/global.dart';
-import 'package:FEhViewer/models/index.dart';
 import 'package:FEhViewer/models/states/history_model.dart';
+import 'package:FEhViewer/pages/tab/controller/history_controller.dart';
 import 'package:FEhViewer/pages/tab/view/gallery_base.dart';
 import 'package:FEhViewer/pages/tab/view/tab_base.dart';
 import 'package:FEhViewer/widget/eh_widget.dart';
@@ -10,51 +10,17 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
 import 'package:provider/provider.dart';
 
-class HistoryTab extends StatefulWidget {
+class HistoryTab extends GetView<HistoryController> {
   const HistoryTab({Key key, this.tabIndex, this.scrollController})
       : super(key: key);
   final String tabIndex;
   final ScrollController scrollController;
 
   @override
-  State<StatefulWidget> createState() => _HistoryTabState();
-}
-
-class _HistoryTabState extends State<HistoryTab> {
-  Future<List<GalleryItem>> _futureBuilderFuture;
-  Widget _lastListWidget;
-  HistoryModel _historyModel;
-
-  @override
-  void initState() {
-    super.initState();
-    final HistoryModel historyModel =
-        Provider.of<HistoryModel>(context, listen: false);
-    if (historyModel != _historyModel) {
-      _historyModel = historyModel;
-    }
-    _futureBuilderFuture = _loadData();
-  }
-
-  Future<List<GalleryItem>> _loadData() async {
-    Global.logger.v('_loadData ');
-    final List<GalleryItem> historys = _historyModel.history;
-
-    return Future<List<GalleryItem>>.value(historys);
-  }
-
-  Future<void> _reloadData() async {
-    final List<GalleryItem> gallerItemBeans = await _loadData();
-    setState(() {
-      _futureBuilderFuture = Future<List<GalleryItem>>.value(gallerItemBeans);
-    });
-  }
-
-  @override
   Widget build(BuildContext context) {
     final String _title = 'tab_history'.tr;
     final CustomScrollView customScrollView = CustomScrollView(
-      controller: widget.scrollController,
+      controller: scrollController,
       physics: const AlwaysScrollableScrollPhysics(),
       slivers: <Widget>[
         CupertinoSliverNavigationBar(
@@ -76,7 +42,7 @@ class _HistoryTabState extends State<HistoryTab> {
                     size: 20,
                   ),
                   onPressed: () {
-                    _clearHistory(context);
+                    controller.clearHistory();
                   },
                 ),
               ],
@@ -85,7 +51,7 @@ class _HistoryTabState extends State<HistoryTab> {
         ),
         CupertinoSliverRefreshControl(
           onRefresh: () async {
-            await _reloadData();
+            await controller.reloadData();
           },
         ),
         SliverSafeArea(
@@ -106,76 +72,26 @@ class _HistoryTabState extends State<HistoryTab> {
     return CupertinoPageScaffold(child: customScrollView);
   }
 
-  // 清除历史记录 Dialog
-  Future<void> _clearHistory(BuildContext context) async {
-    return showCupertinoDialog<void>(
-      context: context,
-      // barrierDismissible: false, // user must tap button!
-      builder: (BuildContext context) {
-        return CupertinoAlertDialog(
-          title: const Text('清除所有历史?'),
-          actions: <Widget>[
-            CupertinoDialogAction(
-              child: const Text('取消'),
-              onPressed: () {
-                Get.back();
-              },
-            ),
-            CupertinoDialogAction(
-              child: const Text('确定'),
-              onPressed: () {
-                _historyModel.cleanHistory();
-                Get.back();
-                _reloadData();
-              },
-            ),
-          ],
-        );
-      },
-    );
-  }
-
   Widget _getGalleryList() {
-    return FutureBuilder<List<GalleryItem>>(
-      future: _futureBuilderFuture,
-      initialData: _historyModel.history,
-      builder:
-          (BuildContext context, AsyncSnapshot<List<GalleryItem>> snapshot) {
-        switch (snapshot.connectionState) {
-          case ConnectionState.none:
-          case ConnectionState.active:
-          case ConnectionState.waiting:
-            return _lastListWidget ??
-                SliverFillRemaining(
-                  child: Container(
-                    padding: const EdgeInsets.only(bottom: 50),
-                    child: const CupertinoActivityIndicator(
-                      radius: 14.0,
-                    ),
-                  ),
-                );
-          case ConnectionState.done:
-            if (snapshot.hasError) {
-              Global.logger.v(snapshot.error);
-              _reloadData();
-              return SliverFillRemaining(
-                child: Container(
-                  padding: const EdgeInsets.only(bottom: 50),
-                  child: GalleryErrorPage(
-                    onTap: _reloadData,
-                  ),
-                ),
-              );
-            } else {
-              // Global.logger.d(' his len :${snapshot.data.length}');
-              _lastListWidget = getGalleryList(snapshot.data, widget.tabIndex);
-              return _lastListWidget;
-            }
-        }
-        return SliverToBoxAdapter(
-          child: Container(),
-        );
-      },
-    );
+    return controller.obx((state) => getGalleryList(state, tabIndex),
+        onLoading: SliverFillRemaining(
+          child: Container(
+            alignment: Alignment.center,
+            padding: const EdgeInsets.only(bottom: 50),
+            child: const CupertinoActivityIndicator(
+              radius: 14.0,
+            ),
+          ),
+        ), onError: (err) {
+      Global.logger.e(' $err');
+      return SliverFillRemaining(
+        child: Container(
+          padding: const EdgeInsets.only(bottom: 50),
+          child: GalleryErrorPage(
+            onTap: controller.reloadData,
+          ),
+        ),
+      );
+    });
   }
 }

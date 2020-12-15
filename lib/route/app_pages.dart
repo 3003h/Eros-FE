@@ -28,7 +28,7 @@ class AppPages {
     ),
     GetPage(
       name: EHRoutes.selFavorie,
-      page: () => const SelFavoritePage(),
+      page: () => FavoriteSelectorPage(),
       transition: Transition.cupertino,
     ),
     GetPage(
