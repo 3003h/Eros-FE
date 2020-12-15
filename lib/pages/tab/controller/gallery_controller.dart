@@ -3,39 +3,35 @@ import 'package:FEhViewer/models/index.dart';
 import 'package:FEhViewer/models/states/ehconfig_model.dart';
 import 'package:FEhViewer/utils/toast.dart';
 import 'package:FEhViewer/utils/utility.dart';
+import 'package:FEhViewer/values/const.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
 import 'package:provider/provider.dart';
 import 'package:tuple/tuple.dart';
 
-class GalleryController extends GetxController {
-  GalleryController({@required this.cats, @required this.simpleSearch});
+class GalleryController extends GetxController
+    with StateMixin<List<GalleryItem>> {
+  GalleryController({this.cats});
   int cats;
-  String simpleSearch;
 
-  final RxList<GalleryItem> _frontGallerItemBeans = <GalleryItem>[].obs;
-
-  RxList<GalleryItem> get frontGallerItemBeans => _frontGallerItemBeans;
-  set frontGallerItemBeans(List<GalleryItem> frontGallerItemBeans) {
-    _frontGallerItemBeans.clear();
-    _frontGallerItemBeans.addAll(frontGallerItemBeans);
-  }
-
-  int curPage = 0;
+  var curPage = 0.obs;
   int maxPage = 0;
 
   RxBool isLoadMore = false.obs;
 
-  String _search = '';
-
-  Rx<Future<Tuple2<List<GalleryItem>, int>>> futureBuilderFuture =
-      Future.value(const Tuple2<List<GalleryItem>, int>(<GalleryItem>[], 0))
-          .obs;
-  Widget lastListWidget;
-
-  String get title =>
-      (_search != null && _search.isNotEmpty) ? _search : 'tab_gallery'.tr;
+  String get title {
+    // Global.logger.d('${EHConst.cats.entries.length}');
+    if (cats != null) {
+      return EHConst.cats.entries
+              ?.firstWhere((MapEntry<String, int> element) =>
+                  element.value == EHConst.sumCats - cats)
+              ?.key ??
+          'tab_gallery'.tr;
+    } else {
+      return 'tab_gallery'.tr;
+    }
+  }
 
   //页码跳转的控制器
   final TextEditingController _pageController = TextEditingController();
@@ -43,47 +39,45 @@ class GalleryController extends GetxController {
   @override
   void onInit() {
     super.onInit();
-    _search = simpleSearch?.trim() ?? '';
-    futureBuilderFuture.value = loadData();
-    Future<void>.delayed(const Duration(milliseconds: 100)).then((_) {
-      reloadData();
+
+    loadData().then((Tuple2<List<GalleryItem>, int> tuple) {
+      maxPage = tuple.item2;
+      // _frontGallerItemBeans = tuple.item1;
+      change(tuple.item1, status: RxStatus.success());
+    }, onError: (err) {
+      change(null, status: RxStatus.error(err.toString()));
     });
   }
 
   Future<Tuple2<List<GalleryItem>, int>> loadData(
       {bool refresh = false}) async {
-    Global.logger.v('_loadDataFirstF  gallery');
+    Global.logger.v('_loadDataFirst  gallery');
     final int _catNum =
         Provider.of<EhConfigModel>(Get.context, listen: false).catFilter;
 
     final Future<Tuple2<List<GalleryItem>, int>> tuple = Api.getGallery(
       cats: cats ?? _catNum,
-      serach: _search,
       refresh: refresh,
     );
     return tuple;
   }
 
   Future<void> reloadData() async {
-    curPage = 0;
+    curPage.value = 0;
     final Tuple2<List<GalleryItem>, int> tuple = await loadData(
       refresh: true,
     );
-    futureBuilderFuture.value =
-        Future<Tuple2<List<GalleryItem>, int>>.value(tuple);
+    // _frontGallerItemBeans = tuple.item1;
+    change(tuple.item1);
   }
 
   Future<void> reLoadDataFirst() async {
-    futureBuilderFuture.value = loadData(refresh: true);
+    onInit();
   }
 
-  Future<void> loadDataMore({bool cleanSearch = false}) async {
+  Future<void> loadDataMore() async {
     if (isLoadMore.value) {
       return;
-    }
-
-    if (cleanSearch) {
-      _search = '';
     }
 
     final int _catNum =
@@ -94,44 +88,41 @@ class GalleryController extends GetxController {
 
     isLoadMore.value = true;
 
-    Global.logger.d('${frontGallerItemBeans.length}');
+    Global.logger.d('${state.length}');
 
-    curPage += 1;
-    final String fromGid = frontGallerItemBeans.last.gid;
+    final String fromGid = state.last.gid;
     final Tuple2<List<GalleryItem>, int> tuple = await Api.getGallery(
-      page: curPage,
+      page: curPage.value + 1,
       fromGid: fromGid,
       cats: cats ?? _catNum,
-      serach: _search,
       refresh: true,
     );
+    curPage += 1;
     final List<GalleryItem> gallerItemBeans = tuple.item1;
 
-    frontGallerItemBeans.addAll(gallerItemBeans);
-    Global.logger.d('${frontGallerItemBeans.length}');
+    state.addAll(gallerItemBeans);
+
+    Global.logger.d('${state.length}');
     maxPage = tuple.item2;
     isLoadMore.value = false;
+    update();
   }
 
-  Future<void> loadFromPage(int page, {bool cleanSearch = false}) async {
+  Future<void> loadFromPage(int page) async {
     Global.logger.v('jump to page =>  $page');
-
-    if (cleanSearch) {
-      _search = '';
-    }
 
     final int _catNum =
         Provider.of<EhConfigModel>(Get.context, listen: false).catFilter;
-    curPage = page;
-    final Future<Tuple2<List<GalleryItem>, int>> tuple = Api.getGallery(
-      page: curPage,
-      cats: cats ?? _catNum,
-      serach: _search,
-      refresh: true,
-    );
 
-    lastListWidget = null;
-    futureBuilderFuture.value = tuple;
+    change(state, status: RxStatus.loading());
+    Api.getGallery(
+      page: page,
+      cats: cats ?? _catNum,
+      refresh: true,
+    ).then((tuple) {
+      curPage.value = page;
+      change(tuple.item1, status: RxStatus.success());
+    });
   }
 
   /// 跳转页码

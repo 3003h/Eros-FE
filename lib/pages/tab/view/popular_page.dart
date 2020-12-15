@@ -1,5 +1,4 @@
 import 'package:FEhViewer/common/global.dart';
-import 'package:FEhViewer/models/index.dart';
 import 'package:FEhViewer/pages/tab/controller/popular_controller.dart';
 import 'package:FEhViewer/pages/tab/view/gallery_base.dart';
 import 'package:FEhViewer/pages/tab/view/tab_base.dart';
@@ -8,13 +7,11 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-class PopularListTab extends StatelessWidget {
-  PopularListTab({Key key, this.tabIndex, this.scrollController})
+class PopularListTab extends GetView<PopularController> {
+  const PopularListTab({Key key, this.tabIndex, this.scrollController})
       : super(key: key);
   final String tabIndex;
   final ScrollController scrollController;
-
-  final PopularController controller = Get.put(PopularController());
 
   @override
   Widget build(BuildContext context) {
@@ -45,43 +42,24 @@ class PopularListTab extends StatelessWidget {
   }
 
   Widget _getGalleryList() {
-    return GetX<PopularController>(builder: (PopularController controller) {
-      return FutureBuilder<List<GalleryItem>>(
-        future: controller.futureBuilderFuture.value,
-        builder:
-            (BuildContext context, AsyncSnapshot<List<GalleryItem>> snapshot) {
-          switch (snapshot.connectionState) {
-            case ConnectionState.none:
-            case ConnectionState.active:
-            case ConnectionState.waiting:
-              return controller.lastListWidget ??
-                  SliverFillRemaining(
-                    child: Container(
-                      padding: const EdgeInsets.only(bottom: 50),
-                      child: const CupertinoActivityIndicator(
-                        radius: 14.0,
-                      ),
-                    ),
-                  );
-            case ConnectionState.done:
-              if (snapshot.hasError) {
-                Global.logger.e('${snapshot.error}');
-                return SliverFillRemaining(
-                  child: Container(
-                    padding: const EdgeInsets.only(bottom: 50),
-                    child: GalleryErrorPage(
-                      onTap: controller.reLoadDataFirst,
-                    ),
-                  ),
-                );
-              } else {
-                controller.lastListWidget =
-                    getGalleryList(snapshot.data, tabIndex);
-                return controller.lastListWidget;
-              }
-          }
-          return null;
-        },
+    return controller.obx((state) => getGalleryList(state, tabIndex),
+        onLoading: SliverFillRemaining(
+          child: Container(
+            alignment: Alignment.center,
+            padding: const EdgeInsets.only(bottom: 50),
+            child: const CupertinoActivityIndicator(
+              radius: 14.0,
+            ),
+          ),
+        ), onError: (err) {
+      Global.logger.e(' $err');
+      return SliverFillRemaining(
+        child: Container(
+          padding: const EdgeInsets.only(bottom: 50),
+          child: GalleryErrorPage(
+            onTap: controller.reLoadDataFirst,
+          ),
+        ),
       );
     });
   }
