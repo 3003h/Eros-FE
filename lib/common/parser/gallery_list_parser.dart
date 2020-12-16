@@ -1,10 +1,12 @@
 import 'dart:io';
 
+import 'package:FEhViewer/common/controller/ehconfig_controller.dart';
 import 'package:FEhViewer/common/global.dart';
 import 'package:FEhViewer/common/tag_database.dart';
 import 'package:FEhViewer/models/index.dart';
 import 'package:FEhViewer/utils/utility.dart';
 import 'package:FEhViewer/values/const.dart';
+import 'package:get/get.dart';
 import 'package:html/dom.dart' as dom;
 import 'package:html/parser.dart' show parse;
 import 'package:intl/intl.dart';
@@ -52,6 +54,8 @@ class GalleryListParser {
     bool refresh = false,
   }) async {
     final dom.Document document = parse(response);
+
+    final EhConfigController ehConfigController = Get.find();
 
     const String _gallerySelector =
         'body > div.ido > div:nth-child(2) > table > tbody > tr';
@@ -210,7 +214,7 @@ class GalleryListParser {
       }
 
       // safeMode检查
-      if (Platform.isIOS && Global.profile.ehConfig.safeMode) {
+      if (Platform.isIOS && ehConfigController.isSafeMode.value) {
         if (category.trim() == 'Non-H') {
           _gallaryItems.add(GalleryItem()
             ..gid = gid

@@ -1,12 +1,16 @@
+import 'package:FEhViewer/common/controller/ehconfig_controller.dart';
 import 'package:FEhViewer/common/global.dart';
 import 'package:flutter/foundation.dart';
+import 'package:get/get.dart';
 
 import '../index.dart';
 
 class HistoryModel with ChangeNotifier {
+  final EhConfigController ehConfigController = Get.find();
+
   History get _history => Global.history;
 
-  int get _max => Global.profile.ehConfig.maxHistory ?? 100;
+  int get _max => ehConfigController.maxHistory.value ?? 100;
 
   List<GalleryItem> get history => _history.history ?? <GalleryItem>[];
 

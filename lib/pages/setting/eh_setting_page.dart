@@ -129,11 +129,11 @@ class ListViewEhSetting extends StatelessWidget {
           color: CupertinoDynamicColor.resolve(
               CupertinoColors.systemGrey5, context),
         ),
-      TextSwitchItem('显示标签中文翻译',
+      Obx(() => TextSwitchItem('显示标签中文翻译',
           intValue: _tagTranslat,
           onChanged: _handleTagTranslatChanged,
           desc:
-              '需要下载数据文件,当前版本:${Global.profile.ehConfig.tagTranslatVer ?? "无"}'),
+              '需要下载数据文件,当前版本:${ehConfigController.tagTranslatVer.value ?? "无"}')),
       TextSwitchItem('显示日文标题',
           intValue: _jpnTitle,
           onChanged: _handleJpnTitleChanged,

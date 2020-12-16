@@ -1,4 +1,4 @@
-import 'package:FEhViewer/common/global.dart';
+import 'package:FEhViewer/common/controller/ehconfig_controller.dart';
 import 'package:FEhViewer/models/index.dart';
 import 'package:FEhViewer/models/states/local_favorite_model.dart';
 import 'package:FEhViewer/models/states/user_model.dart';
@@ -27,11 +27,13 @@ class FavoriteController extends GetxController
   Future<Tuple2<List<GalleryItem>, int>> futureBuilderFuture;
   Widget lastListWidget;
 
+  final EhConfigController ehConfigController = Get.find();
+
   @override
   void onInit() {
     super.onInit();
-    curFavcat = Global.profile.ehConfig.lastShowFavcat ?? 'a';
-    title.value = Global.profile.ehConfig.lastShowFavTitle;
+    curFavcat = ehConfigController.lastShowFavcat ?? 'a';
+    title.value = ehConfigController.lastShowFavTitle;
 
     loadData(first: true).then((Tuple2<List<GalleryItem>, int> tuple) {
       maxPage = tuple.item2;
@@ -68,9 +70,8 @@ class FavoriteController extends GetxController
       return tuple;
     } else {
       if (first) {
-        Global.profile.ehConfig.lastShowFavcat = 'l';
-        Global.profile.ehConfig.lastShowFavTitle = '本地收藏';
-        Global.saveProfile();
+        ehConfigController.lastShowFavcat = 'l';
+        ehConfigController.lastShowFavTitle = '本地收藏';
       }
       // 本地收藏夹
       logger.v('本地收藏');

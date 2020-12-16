@@ -1,7 +1,6 @@
 import 'dart:io';
 
 import 'package:FEhViewer/common/controller/ehconfig_controller.dart';
-import 'package:FEhViewer/common/global.dart';
 import 'package:FEhViewer/pages/setting/setting_base.dart';
 import 'package:FEhViewer/utils/cust_lib/flutter_egg.dart';
 import 'package:FEhViewer/utils/logger.dart';
@@ -45,7 +44,7 @@ class ListViewAbout extends StatelessWidget {
             ),
             onTrigger: (int tapNum, int neededNum) {
               if (Platform.isIOS) {
-                if (Global.profile.ehConfig.safeMode ?? true) {
+                if (ehConfigController.isSafeMode.value ?? true) {
                   showToast('你发现了不得了的东西');
                   logger.v('safeMode off');
                   ehConfigController.isSafeMode.value = false;
@@ -74,7 +73,7 @@ class ListViewAbout extends StatelessWidget {
             desc: 'https://t.me/fehviewer',
             onTap: () => launch('https://t.me/fehviewer'),
           ),
-          if (!Global.profile.ehConfig.safeMode)
+          if (!ehConfigController.isSafeMode.value)
             TextItem(
               'Github',
               desc: 'https://github.com/honjow/FEhViewer',

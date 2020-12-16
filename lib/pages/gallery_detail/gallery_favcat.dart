@@ -1,3 +1,4 @@
+import 'package:FEhViewer/common/controller/ehconfig_controller.dart';
 import 'package:FEhViewer/common/global.dart';
 import 'package:FEhViewer/common/parser/gallery_fav_parser.dart';
 import 'package:FEhViewer/models/states/gallery_model.dart';
@@ -200,16 +201,17 @@ class _GalleryFavButtonState extends State<GalleryFavButton> {
   /// 点击收藏按钮处理
   Future<void> _tapFav(context) async {
     logger.v('_tapFav');
+    final EhConfigController ehConfigController = Get.find();
 
     /// 网络收藏或者本地收藏
     if (_galleryModel.galleryItem.favcat.isNotEmpty ||
         _galleryModel.galleryItem.localFav) {
       return _delFav();
     } else {
-      final String _lastFavcat = Global.profile.ehConfig.lastFavcat;
+      final String _lastFavcat = ehConfigController.lastFavcat.value;
 
       // 添加到上次收藏夹
-      if ((Global.profile.ehConfig.favLongTap ?? false) &&
+      if ((ehConfigController.isFavLongTap.value ?? false) &&
           _lastFavcat != null &&
           _lastFavcat.isNotEmpty) {
         logger.v('添加到上次收藏夹');
@@ -231,6 +233,8 @@ class _GalleryFavButtonState extends State<GalleryFavButton> {
 
   // 选择并收藏
   Future<bool> _showAddFavDialog(context) async {
+    final EhConfigController ehConfigController = Get.find();
+
     final bool _isLogin =
         Provider.of<UserModel>(context, listen: false).isLogin;
 
@@ -246,7 +250,7 @@ class _GalleryFavButtonState extends State<GalleryFavButton> {
     favList.add({'favId': 'l', 'favTitle': '本地收藏'});
 
     // diaolog 获取选择结果
-    final Map<String, String> result = Global.profile.ehConfig.favPicker
+    final Map<String, String> result = ehConfigController.isFavPicker.value
         ? await _showAddFavPicker(context, favList)
         : await _showAddFavList(context, favList);
 
@@ -292,6 +296,7 @@ class _GalleryFavButtonState extends State<GalleryFavButton> {
   Future<Map<String, String>> _showAddFavPicker(
       BuildContext context, List favList) async {
     int _favindex = 0;
+    final EhConfigController ehConfigController = Get.find();
 
     final List<Widget> favPicker = List<Widget>.from(favList.map((e) => Row(
           mainAxisAlignment: MainAxisAlignment.center,
@@ -316,8 +321,7 @@ class _GalleryFavButtonState extends State<GalleryFavButton> {
         return CupertinoAlertDialog(
           title: GestureDetector(
             onLongPress: () {
-              Global.profile.ehConfig.favPicker = false;
-              Global.saveProfile();
+              ehConfigController.isFavPicker.value = false;
               showToast('切换样式');
             },
             child: Text('添加收藏'),
@@ -385,6 +389,8 @@ class _GalleryFavButtonState extends State<GalleryFavButton> {
     return showCupertinoDialog<Map<String, String>>(
       context: context,
       builder: (BuildContext context) {
+        final EhConfigController ehConfigController = Get.find();
+
         final List<Widget> favcatList =
             List<Widget>.from(favList.map((fav) => FavcatAddListItem(
                   text: fav['favTitle'],
@@ -404,8 +410,7 @@ class _GalleryFavButtonState extends State<GalleryFavButton> {
         return CupertinoAlertDialog(
           title: GestureDetector(
             onLongPress: () {
-              Global.profile.ehConfig.favPicker = true;
-              Global.saveProfile();
+              ehConfigController.isFavPicker.value = true;
               showToast('切换样式');
             },
             child: Text('添加收藏'),

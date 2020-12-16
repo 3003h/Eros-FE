@@ -1,3 +1,4 @@
+import 'package:FEhViewer/common/controller/advance_search_controller.dart';
 import 'package:FEhViewer/common/controller/ehconfig_controller.dart';
 import 'package:FEhViewer/common/global.dart';
 import 'package:FEhViewer/models/states/advance_search_model.dart';
@@ -26,6 +27,7 @@ import 'l10n/messages.dart';
 void main() {
   Global.init().then((_) {
     Get.put(EhConfigController(), permanent: true);
+    Get.put(AdvanceSearchController(), permanent: true);
     runApp(
       DevicePreview(
         // enabled: Global.inDebugMode,

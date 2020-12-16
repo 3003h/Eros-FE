@@ -1,4 +1,4 @@
-import 'package:FEhViewer/common/global.dart';
+import 'package:FEhViewer/common/controller/ehconfig_controller.dart';
 import 'package:FEhViewer/utils/logger.dart';
 import 'package:FEhViewer/utils/toast.dart';
 import 'package:flutter/cupertino.dart';
@@ -26,6 +26,8 @@ class TabHomeController extends GetxController {
   final Map<String, ScrollController> _scrollControllerMap = {};
   final CupertinoTabController tabController = CupertinoTabController();
 
+  final EhConfigController ehConfigController = Get.find();
+
   List<BottomNavigationBarItem> listBottomNavigationBarItem;
 
   final BuildContext context = Get.context;
@@ -40,7 +42,7 @@ class TabHomeController extends GetxController {
       {
         'title': 'tab_popular'.tr,
         'icon': const Icon(FontAwesomeIcons.fire, size: _iconSize),
-        'disable': Global.profile.ehConfig.safeMode,
+        'disable': ehConfigController.isSafeMode.value,
         'page': PopularListTab(
           tabIndex: 'tab_popular'.tr,
           scrollController: _getScrollController('tab_popular'.tr),
@@ -57,7 +59,7 @@ class TabHomeController extends GetxController {
       {
         'title': 'tab_favorite'.tr,
         'icon': const Icon(FontAwesomeIcons.solidHeart, size: _iconSize),
-        'disable': Global.profile.ehConfig.safeMode,
+        'disable': ehConfigController.isSafeMode.value,
         'page': FavoriteTab(
           tabIndex: 'tab_favorite'.tr,
           scrollController: _getScrollController('tab_favorite'.tr),
@@ -66,7 +68,7 @@ class TabHomeController extends GetxController {
       {
         'title': 'tab_history'.tr,
         'icon': const Icon(FontAwesomeIcons.history, size: _iconSize),
-        'disable': Global.profile.ehConfig.safeMode,
+        'disable': ehConfigController.isSafeMode.value,
         'page': HistoryTab(
           tabIndex: 'tab_history'.tr,
           scrollController: _getScrollController('tab_history'.tr),

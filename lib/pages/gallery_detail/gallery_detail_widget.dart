@@ -278,38 +278,6 @@ class PreviewContainer extends StatelessWidget {
 class TagButton extends StatelessWidget {
   const TagButton({
     @required this.text,
-    this.color,
-    VoidCallback onPressed,
-  }) : _onPressed = onPressed;
-
-  final String text;
-  final Color color;
-  final VoidCallback _onPressed;
-
-  @override
-  Widget build(BuildContext context) {
-    return CupertinoButton(
-      child: Text(
-        text,
-        style: const TextStyle(
-          fontSize: 14,
-          height: 1,
-        ),
-        strutStyle: const StrutStyle(height: 1),
-      ),
-      minSize: 0,
-      padding: const EdgeInsets.fromLTRB(8, 6, 8, 4),
-      borderRadius: BorderRadius.circular(50),
-      color: color,
-      onPressed: _onPressed,
-      disabledColor: Colors.blueGrey,
-    );
-  }
-}
-
-class TagButtonB extends StatelessWidget {
-  const TagButtonB({
-    @required this.text,
     this.textColor,
     this.color,
     VoidCallback onPressed,
@@ -413,29 +381,32 @@ class TagGroupItem extends StatelessWidget {
   final TagGroup tagGroupData;
 
   List<Widget> _initTagBtnList(galleryTags, context) {
-    final _isTagTranslat = Global.profile.ehConfig.tagTranslat;
-    List<Widget> _tagBtnList = [];
+    final EhConfigController ehConfigController = Get.find();
+    final List<Widget> _tagBtnList = <Widget>[];
     galleryTags.forEach((tag) {
-      _tagBtnList.add(TagButtonB(
-        text: _isTagTranslat ? tag?.tagTranslat ?? '' : tag?.title ?? '',
-        onPressed: () {
-          logger.v('search type[${tag.type}] tag[${tag.title}]');
-          // NavigatorUtil.goGalleryList(context,
-          //     simpleSearch: '${tag.type}:${tag.title}');
-          NavigatorUtil.goGalleryListBySearch(
-              simpleSearch: '${tag.type}:${tag.title}');
-        },
-      ));
+      _tagBtnList.add(
+        Obx(() => TagButton(
+              text: ehConfigController.isTagTranslat.value
+                  ? tag?.tagTranslat ?? ''
+                  : tag?.title ?? '',
+              onPressed: () {
+                logger.v('search type[${tag.type}] tag[${tag.title}]');
+                NavigatorUtil.goGalleryListBySearch(
+                    simpleSearch: '${tag.type}:${tag.title}');
+              },
+            )),
+      );
     });
     return _tagBtnList;
   }
 
   @override
   Widget build(BuildContext context) {
-    final bool _isTagTranslat = Global.profile.ehConfig.tagTranslat;
+    final EhConfigController ehConfigController = Get.find();
 
-    final _tagBtnList = _initTagBtnList(tagGroupData.galleryTags, context);
-    final _tagType = tagGroupData.tagType;
+    final List<Widget> _tagBtnList =
+        _initTagBtnList(tagGroupData.galleryTags, context);
+    final String _tagType = tagGroupData.tagType;
 
     final Container container = Container(
       padding: const EdgeInsets.fromLTRB(0, 4, 0, 4),
@@ -445,13 +416,13 @@ class TagGroupItem extends StatelessWidget {
           // tag 分类
           Container(
             padding: const EdgeInsets.only(right: 8),
-            child: TagButtonB(
-              color: CupertinoDynamicColor.resolve(
-                  ThemeColors.tagColorTagType[_tagType.trim()], context),
-              text: _isTagTranslat
-                  ? EHConst.translateTagType[_tagType.trim()] ?? _tagType
-                  : _tagType,
-            ),
+            child: Obx(() => TagButton(
+                  color: CupertinoDynamicColor.resolve(
+                      ThemeColors.tagColorTagType[_tagType.trim()], context),
+                  text: ehConfigController.isTagTranslat.value
+                      ? EHConst.translateTagType[_tagType.trim()] ?? _tagType
+                      : _tagType,
+                )),
           ),
           Expanded(
             child: Container(
