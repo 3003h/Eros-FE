@@ -1,5 +1,5 @@
+import 'package:FEhViewer/common/controller/ehconfig_controller.dart';
 import 'package:FEhViewer/common/global.dart';
-import 'package:FEhViewer/models/states/ehconfig_model.dart';
 import 'package:FEhViewer/models/states/user_model.dart';
 import 'package:FEhViewer/models/user.dart';
 import 'package:FEhViewer/route/routes.dart';
@@ -18,6 +18,7 @@ class UserItem extends StatefulWidget {
 class _UserItem extends State<UserItem> {
   final String _normalText = "未登录";
   Color _color;
+  final EhConfigController ehConfigController = Get.find();
 
   Future<void> _logOut(BuildContext context) async {
     return showCupertinoDialog<void>(
@@ -39,8 +40,7 @@ class _UserItem extends State<UserItem> {
               onPressed: () async {
                 (await Api.cookieJar).deleteAll();
                 Provider.of<UserModel>(context, listen: false).user = User();
-                Provider.of<EhConfigModel>(context, listen: false).siteEx =
-                    false;
+                ehConfigController.isSiteEx.value = false;
                 Get.back();
               },
             ),

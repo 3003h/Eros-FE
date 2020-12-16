@@ -1,5 +1,5 @@
+import 'package:FEhViewer/common/controller/ehconfig_controller.dart';
 import 'package:FEhViewer/models/index.dart';
-import 'package:FEhViewer/models/states/ehconfig_model.dart';
 import 'package:FEhViewer/utils/logger.dart';
 import 'package:FEhViewer/utils/toast.dart';
 import 'package:FEhViewer/utils/utility.dart';
@@ -7,7 +7,6 @@ import 'package:FEhViewer/values/const.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
-import 'package:provider/provider.dart';
 import 'package:tuple/tuple.dart';
 
 class GalleryController extends GetxController
@@ -15,10 +14,12 @@ class GalleryController extends GetxController
   GalleryController({this.cats});
   int cats;
 
-  var curPage = 0.obs;
+  RxInt curPage = 0.obs;
   int maxPage = 0;
 
   RxBool isLoadMore = false.obs;
+
+  final EhConfigController ehConfigController = Get.find();
 
   String get title {
     // logger.d('${EHConst.cats.entries.length}');
@@ -46,13 +47,16 @@ class GalleryController extends GetxController
     }, onError: (err) {
       change(null, status: RxStatus.error(err.toString()));
     });
+
+    Future<void>.delayed(const Duration(milliseconds: 500)).then((_) {
+      reloadData();
+    });
   }
 
   Future<Tuple2<List<GalleryItem>, int>> loadData(
       {bool refresh = false}) async {
     logger.v('_loadDataFirst  gallery');
-    final int _catNum =
-        Provider.of<EhConfigModel>(Get.context, listen: false).catFilter;
+    final int _catNum = ehConfigController.catFilter.value;
 
     final Future<Tuple2<List<GalleryItem>, int>> tuple = Api.getGallery(
       cats: cats ?? _catNum,
@@ -79,8 +83,7 @@ class GalleryController extends GetxController
       return;
     }
 
-    final int _catNum =
-        Provider.of<EhConfigModel>(Get.context, listen: false).catFilter;
+    final int _catNum = ehConfigController.catFilter.value;
 
     // 增加延时 避免build期间进行 setState
     await Future<void>.delayed(const Duration(milliseconds: 100));
@@ -110,8 +113,7 @@ class GalleryController extends GetxController
   Future<void> loadFromPage(int page) async {
     logger.v('jump to page =>  $page');
 
-    final int _catNum =
-        Provider.of<EhConfigModel>(Get.context, listen: false).catFilter;
+    final int _catNum = ehConfigController.catFilter.value;
 
     change(state, status: RxStatus.loading());
     Api.getGallery(

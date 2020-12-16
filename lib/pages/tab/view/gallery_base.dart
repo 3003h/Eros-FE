@@ -1,7 +1,7 @@
+import 'package:FEhViewer/common/controller/ehconfig_controller.dart';
 import 'package:FEhViewer/common/global.dart';
 import 'package:FEhViewer/models/advanceSearch.dart';
 import 'package:FEhViewer/models/states/advance_search_model.dart';
-import 'package:FEhViewer/models/states/ehconfig_model.dart';
 import 'package:FEhViewer/utils/logger.dart';
 import 'package:FEhViewer/utils/utility.dart';
 import 'package:FEhViewer/values/const.dart';
@@ -169,25 +169,22 @@ class _GalleryCatFilterState extends State<GalleryCatFilter> {
 
   @override
   Widget build(BuildContext context) {
-    return Selector<EhConfigModel, int>(
-        selector: (context, EhConfigModel ehconfig) => ehconfig.catFilter,
-        builder: (context, int catFilter, _) {
-          return Container(
-            margin: widget.margin,
-            padding: widget.padding,
-            child: GridView.count(
-              shrinkWrap: true,
-              physics: const NeverScrollableScrollPhysics(),
-              crossAxisCount: 2,
-              childAspectRatio: 3.6,
-              mainAxisSpacing: 4.0,
-              crossAxisSpacing: 4.0,
-              // physics: const NeverScrollableScrollPhysics(),
-              padding: const EdgeInsets.all(0.0),
-              children: <Widget>[..._catButttonListWidget],
-            ),
-          );
-        });
+    final EhConfigController ehConfigController = Get.find();
+    return Container(
+      margin: widget.margin,
+      padding: widget.padding,
+      child: GridView.count(
+        shrinkWrap: true,
+        physics: const NeverScrollableScrollPhysics(),
+        crossAxisCount: 2,
+        childAspectRatio: 3.6,
+        mainAxisSpacing: 4.0,
+        crossAxisSpacing: 4.0,
+        // physics: const NeverScrollableScrollPhysics(),
+        padding: const EdgeInsets.all(0.0),
+        children: <Widget>[..._catButttonListWidget],
+      ),
+    );
   }
 }
 
@@ -515,12 +512,12 @@ class GalleryBase {
   /// 弹出toast 通过Provider 全局 维护cat的值
   Future<void> showFilterSetting(BuildContext context,
       {bool showAdevance = false}) async {
+    final EhConfigController ehConfigController = Get.find();
     return showCupertinoDialog<void>(
       context: context,
       builder: (BuildContext context) {
         // logger.v('_setCats showCupertinoDialog builder');
-        int _catNum =
-            Provider.of<EhConfigModel>(context, listen: false).catFilter;
+        int _catNum = ehConfigController.catFilter.value;
         // AdvanceSearchModel
         final AdvanceSearchModel advanceSearchModel =
             Provider.of<AdvanceSearchModel>(context, listen: false);
@@ -560,8 +557,7 @@ class GalleryBase {
             CupertinoDialogAction(
               child: const Text('确定'),
               onPressed: () {
-                Provider.of<EhConfigModel>(context, listen: false).catFilter =
-                    _catNum;
+                ehConfigController.catFilter.value = _catNum;
                 advanceSearchModel.enable = _enableAdvance;
                 // logger.v(advanceSearchModel.urlPara);
                 Get.back();

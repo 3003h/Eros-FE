@@ -1,6 +1,6 @@
+import 'package:FEhViewer/common/controller/ehconfig_controller.dart';
 import 'package:FEhViewer/models/galleryItem.dart';
 import 'package:FEhViewer/models/index.dart';
-import 'package:FEhViewer/models/states/ehconfig_model.dart';
 import 'package:FEhViewer/models/states/gallery_cache_model.dart';
 import 'package:FEhViewer/models/states/gallery_model.dart';
 import 'package:FEhViewer/models/states/history_model.dart';
@@ -171,27 +171,23 @@ class _GalleryDetailPageState extends State<GalleryDetailPage> {
   Widget build(BuildContext context) {
     _initData(context);
 
+    final EhConfigController ehConfigController = Get.find();
+
     /// 因为 CupertinoNavigationBar的特殊 不能直接用Selector包裹控制build 所以在
     /// CupertinoPageScaffold 外层加了 Selector , hideNavigationBtn变化才会重绘
     /// 内容作为 child 缓存避免重绘
     ///
     /// 增加 oriGalleryPreview 变化时可重绘的控制
-    final Widget cps = Selector2<GalleryModel, EhConfigModel,
-        Tuple4<bool, bool, bool, GalleryItem>>(
-      selector: (context, galleryModel, ehconfigModel) => Tuple4(
+    final Widget cps = Selector<GalleryModel, Tuple3<bool, bool, GalleryItem>>(
+      selector: (context, galleryModel) => Tuple3(
           galleryModel.hideNavigationBtn,
           galleryModel.oriGalleryPreview.isNotEmpty,
-          ehconfigModel.isJpnTitle,
           galleryModel.galleryItem),
       shouldRebuild: (pre, next) =>
           pre.item1 != next.item1 || pre.item2 != next.item2,
       builder: (context, _tuple, child) {
         final bool _hideNavigationBtn = _tuple.item1;
-        final bool _isJpnTitle = _tuple.item3;
-        final GalleryItem _item = _tuple.item4;
-        final String _title =
-            _isJpnTitle ? _item.englishTitle ?? '' : _item.japaneseTitle ?? '';
-
+        final GalleryItem _item = _tuple.item3;
         // 主布局
         return CupertinoPageScaffold(
           child: CustomScrollView(
@@ -199,13 +195,15 @@ class _GalleryDetailPageState extends State<GalleryDetailPage> {
             controller: _controller,
             slivers: <Widget>[
               CupertinoSliverNavigationBar(
-                largeTitle: Text(
-                  _title,
-                  textAlign: TextAlign.left,
-                  maxLines: 3,
-                  style: const TextStyle(
-                      fontSize: 12, color: CupertinoColors.systemGrey),
-                ),
+                largeTitle: Obx(() => Text(
+                      ehConfigController.isJpnTitle.value
+                          ? _item.englishTitle ?? ''
+                          : _item.japaneseTitle ?? '',
+                      textAlign: TextAlign.left,
+                      maxLines: 3,
+                      style: const TextStyle(
+                          fontSize: 12, color: CupertinoColors.systemGrey),
+                    )),
                 middle: _hideNavigationBtn
                     ? null
                     : _buildNavigationBarImage(context),

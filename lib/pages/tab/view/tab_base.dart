@@ -1,5 +1,5 @@
+import 'package:FEhViewer/common/controller/ehconfig_controller.dart';
 import 'package:FEhViewer/models/index.dart';
-import 'package:FEhViewer/models/states/ehconfig_model.dart';
 import 'package:FEhViewer/models/states/gallery_model.dart';
 import 'package:FEhViewer/pages/item/gallery_item.dart';
 import 'package:FEhViewer/pages/item/gallery_item_flow.dart';
@@ -7,6 +7,7 @@ import 'package:FEhViewer/pages/item/gallery_item_simple.dart';
 import 'package:FEhViewer/values/const.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:provider/provider.dart';
 import 'package:waterfall_flow/waterfall_flow.dart';
 
@@ -103,23 +104,22 @@ SliverFixedExtentList buildGallerySliverListSimpleView(
 
 Widget getGalleryList(List<GalleryItem> gallerItemBeans, tabIndex,
     {int maxPage, int curPage, VoidCallback loadMord}) {
-  return Selector<EhConfigModel, ListModeEnum>(
-      selector: (_, EhConfigModel ehconfigModel) => ehconfigModel.listMode,
-      builder: (_, ListModeEnum mode, __) {
-        switch (mode) {
-          case ListModeEnum.list:
-            return buildGallerySliverListView(gallerItemBeans, tabIndex,
-                maxPage: maxPage, curPage: curPage, loadMord: loadMord);
-            break;
-          case ListModeEnum.waterfall:
-            return buildWaterfallFlow(gallerItemBeans, tabIndex,
-                maxPage: maxPage, curPage: curPage, loadMord: loadMord);
-            break;
-          case ListModeEnum.simpleList:
-            return buildGallerySliverListSimpleView(gallerItemBeans, tabIndex,
-                maxPage: maxPage, curPage: curPage, loadMord: loadMord);
-            break;
-        }
-        return Container();
-      });
+  final EhConfigController ehConfigController = Get.find();
+  return Obx(() {
+    switch (ehConfigController.listMode.value) {
+      case ListModeEnum.list:
+        return buildGallerySliverListView(gallerItemBeans, tabIndex,
+            maxPage: maxPage, curPage: curPage, loadMord: loadMord);
+        break;
+      case ListModeEnum.waterfall:
+        return buildWaterfallFlow(gallerItemBeans, tabIndex,
+            maxPage: maxPage, curPage: curPage, loadMord: loadMord);
+        break;
+      case ListModeEnum.simpleList:
+        return buildGallerySliverListSimpleView(gallerItemBeans, tabIndex,
+            maxPage: maxPage, curPage: curPage, loadMord: loadMord);
+        break;
+    }
+    return Container();
+  });
 }

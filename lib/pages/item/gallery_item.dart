@@ -1,6 +1,6 @@
+import 'package:FEhViewer/common/controller/ehconfig_controller.dart';
 import 'package:FEhViewer/common/global.dart';
 import 'package:FEhViewer/models/index.dart';
-import 'package:FEhViewer/models/states/ehconfig_model.dart';
 import 'package:FEhViewer/models/states/gallery_model.dart';
 import 'package:FEhViewer/route/navigator_util.dart';
 import 'package:FEhViewer/utils/logger.dart';
@@ -12,6 +12,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:get/get.dart';
 import 'package:provider/provider.dart';
 import 'package:tuple/tuple.dart';
 
@@ -171,31 +172,26 @@ class _GalleryItemWidgetState extends State<GalleryItemWidget> {
   /// [EhConfigModel] eh设置的state 控制显示日文还是英文标题
   /// [GalleryModel] 画廊数据
   Widget _buildTitle() {
-    return Selector2<EhConfigModel, GalleryModel, String>(
-      selector: (context, ehconfig, gallery) {
-        final String _titleEn = gallery?.galleryItem?.englishTitle ?? '';
-        final String _titleJpn = gallery?.galleryItem?.japaneseTitle ?? '';
-
-        // 日语标题判断
-        final String _title =
-            ehconfig.isJpnTitle && _titleJpn != null && _titleJpn.isNotEmpty
-                ? _titleJpn
-                : _titleEn;
-
-        return _title;
-      },
-      builder: (context, title, child) {
-        _title = title;
-        return Text(
-          title,
-          maxLines: 4,
-          textAlign: TextAlign.left, // 对齐方式
-          overflow: TextOverflow.ellipsis, // 超出部分省略号
-          style: const TextStyle(
-            fontSize: 14.5,
-            fontWeight: FontWeight.w500,
-          ),
-        );
+    return Selector<GalleryModel, GalleryItem>(
+      selector: (context, gallery) => gallery.galleryItem,
+      builder: (context, GalleryItem galleryItem, child) {
+        final EhConfigController ehConfigController = Get.find();
+        final String _titleEn = galleryItem?.englishTitle ?? '';
+        final String _titleJpn = galleryItem?.japaneseTitle ?? '';
+        return Obx(() => Text(
+              ehConfigController.isJpnTitle.value &&
+                      _titleJpn != null &&
+                      _titleJpn.isNotEmpty
+                  ? _titleJpn
+                  : _titleEn,
+              maxLines: 4,
+              textAlign: TextAlign.left, // 对齐方式
+              overflow: TextOverflow.ellipsis, // 超出部分省略号
+              style: const TextStyle(
+                fontSize: 14.5,
+                fontWeight: FontWeight.w500,
+              ),
+            ));
       },
     );
   }
@@ -420,33 +416,34 @@ class TagBox extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Selector2<EhConfigModel, GalleryModel,
-        Tuple2<List<SimpleTag>, bool>>(
-      selector: (context, EhConfigModel ehconfig, GalleryModel galleryModel) =>
-          Tuple2<List<SimpleTag>, bool>(
-              galleryModel.galleryItem.simpleTags, ehconfig.isTagTranslat),
-      builder: (context, Tuple2<List<SimpleTag>, bool> tuple, Widget child) {
-        final List<SimpleTag> simpleTags = tuple.item1;
-        final bool isTagTranslat = tuple.item2;
+    final EhConfigController ehConfigController = Get.find();
+
+    return Selector<GalleryModel, List<SimpleTag>>(
+      selector: (context, GalleryModel galleryModel) =>
+          galleryModel.galleryItem.simpleTags,
+      builder: (context, List<SimpleTag> list, Widget child) {
+        final List<SimpleTag> simpleTags = list;
         return simpleTags != null && simpleTags.isNotEmpty
-            ? Container(
-                padding: const EdgeInsets.fromLTRB(0, 4, 0, 8),
-                child: Wrap(
-                  spacing: 4, //主轴上子控件的间距
-                  runSpacing: 4, //交叉轴上子控件之间的间距
-                  children:
-                      List<Widget>.from(simpleTags.map((SimpleTag _simpleTag) {
-                    final String _text =
-                        isTagTranslat ? _simpleTag.translat : _simpleTag.text;
-                    return TagItem(
-                      text: _text,
-                      color: ColorsUtil.getTagColor(_simpleTag.color),
-                      backgrondColor:
-                          ColorsUtil.getTagColor(_simpleTag.backgrondColor),
-                    );
-                  }).toList()), //要显示的子控件集合
-                ),
-              )
+            ? Obx(() => Container(
+                  padding: const EdgeInsets.fromLTRB(0, 4, 0, 8),
+                  child: Wrap(
+                    spacing: 4, //主轴上子控件的间距
+                    runSpacing: 4, //交叉轴上子控件之间的间距
+                    children: List<Widget>.from(
+                        simpleTags.map((SimpleTag _simpleTag) {
+                      final String _text =
+                          ehConfigController.isTagTranslat.value
+                              ? _simpleTag.translat
+                              : _simpleTag.text;
+                      return TagItem(
+                        text: _text,
+                        color: ColorsUtil.getTagColor(_simpleTag.color),
+                        backgrondColor:
+                            ColorsUtil.getTagColor(_simpleTag.backgrondColor),
+                      );
+                    }).toList()), //要显示的子控件集合
+                  ),
+                ))
             : Container();
       },
     );
@@ -464,27 +461,27 @@ class CoverImg extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final EhConfigController ehConfigController = Get.find();
     final Map<String, String> _httpHeaders = {
       'Cookie': Global.profile?.user?.cookie ?? '',
     };
-    return Selector<EhConfigModel, bool>(
-        selector: (context, EhConfigModel ehconfig) =>
-            ehconfig.isGalleryImgBlur,
-        builder: (BuildContext context, bool value, Widget child) {
-          return imgUrl != null && imgUrl.isNotEmpty
-              ? (value
-                  ? BlurImage(
-                      child: CachedNetworkImage(
-                      httpHeaders: _httpHeaders,
-                      imageUrl: imgUrl,
-                      fit: BoxFit.cover,
-                    ))
-                  : CachedNetworkImage(
-                      httpHeaders: _httpHeaders,
-                      imageUrl: imgUrl,
-                      fit: BoxFit.cover,
-                    ))
-              : Container();
-        });
+    return imgUrl != null && imgUrl.isNotEmpty
+        ? Obx(() {
+            if (ehConfigController.isGalleryImgBlur.value) {
+              return BlurImage(
+                  child: CachedNetworkImage(
+                httpHeaders: _httpHeaders,
+                imageUrl: imgUrl,
+                fit: BoxFit.cover,
+              ));
+            } else {
+              return CachedNetworkImage(
+                httpHeaders: _httpHeaders,
+                imageUrl: imgUrl,
+                fit: BoxFit.cover,
+              );
+            }
+          })
+        : Container();
   }
 }

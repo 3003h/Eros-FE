@@ -1,16 +1,10 @@
-import 'package:FEhViewer/models/states/ehconfig_model.dart';
+import 'package:FEhViewer/common/controller/ehconfig_controller.dart';
 import 'package:FEhViewer/pages/setting/setting_base.dart';
 import 'package:FEhViewer/values/const.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
-import 'package:provider/provider.dart';
 
-class DownloadSettingPage extends StatefulWidget {
-  @override
-  _DownloadSettingPageState createState() => _DownloadSettingPageState();
-}
-
-class _DownloadSettingPageState extends State<DownloadSettingPage> {
+class DownloadSettingPage extends StatelessWidget {
   final String _title = '下载设置';
   @override
   Widget build(BuildContext context) {
@@ -45,8 +39,7 @@ class ListViewDownloadSetting extends StatelessWidget {
 /// 预载图片数量
 Widget _buildPreloadImageItem(BuildContext context) {
   const String _title = '预载图片数量';
-  final EhConfigModel ehConfigModel =
-      Provider.of<EhConfigModel>(context, listen: false);
+  final EhConfigController ehConfigController = Get.find();
 
   List<Widget> _getModeList(BuildContext context) {
     return List<Widget>.from(EHConst.preloadImage.map((int element) {
@@ -76,19 +69,14 @@ Widget _buildPreloadImageItem(BuildContext context) {
         });
   }
 
-  return Selector<EhConfigModel, int>(
-      selector: (BuildContext context, EhConfigModel ehConfigModel) =>
-          ehConfigModel.preloadImage,
-      builder: (BuildContext context, int preloadImage, _) {
-        return SelectorSettingItem(
-          title: _title,
-          selector: preloadImage?.toString() ?? '',
-          onTap: () async {
-            final int _result = await _showActionSheet(context);
-            if (_result != null) {
-              ehConfigModel.preloadImage = _result;
-            }
-          },
-        );
-      });
+  return Obx(() => SelectorSettingItem(
+        title: _title,
+        selector: ehConfigController.preloadImage?.toString() ?? '',
+        onTap: () async {
+          final int _result = await _showActionSheet(context);
+          if (_result != null) {
+            ehConfigController.preloadImage(_result);
+          }
+        },
+      ));
 }

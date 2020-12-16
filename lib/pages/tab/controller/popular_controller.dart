@@ -14,6 +14,10 @@ class PopularController extends GetxController
     }, onError: (err) {
       change(null, status: RxStatus.error(err.toString()));
     });
+
+    Future<void>.delayed(const Duration(milliseconds: 500)).then((_) {
+      reloadData();
+    });
   }
 
   Future<List<GalleryItem>> loadData({bool refresh = false}) async {
