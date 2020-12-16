@@ -5,14 +5,13 @@ import 'package:FEhViewer/models/index.dart';
 import 'package:FEhViewer/models/profile.dart';
 import 'package:FEhViewer/utils/cache.dart';
 import 'package:FEhViewer/utils/https_proxy.dart';
+import 'package:FEhViewer/utils/logger.dart';
 import 'package:FEhViewer/utils/storage.dart';
 import 'package:FEhViewer/utils/utility.dart';
 import 'package:FEhViewer/values/storages.dart';
 import 'package:dio_cookie_manager/dio_cookie_manager.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:logger/logger.dart';
-import 'package:logger_flutter/logger_flutter.dart';
 import 'package:path/path.dart';
 import 'package:path_provider/path_provider.dart';
 
@@ -40,23 +39,6 @@ class Global {
 
   // 网络缓存对象
   static NetCache netCache = NetCache();
-
-  static final Logger logger = Logger(
-    output: ExampleLogOutput(),
-    printer: PrettyPrinter(
-      // lineLength: 100,
-      colors: false,
-    ),
-  );
-
-  static final Logger loggerNoStack = Logger(
-    output: ExampleLogOutput(),
-    printer: PrettyPrinter(
-      // lineLength: 100,
-      methodCount: 0,
-      colors: false,
-    ),
-  );
 
   // init
   static Future<void> init() async {
@@ -227,12 +209,12 @@ class Global {
 
   static void _initGalleryCaches() {
     final dynamic _galleryCachesStr = StorageUtil().getJSON(GALLERY_CACHE);
-    // Global.logger.d('$_galleryCaches');
+    // logger.d('$_galleryCaches');
     if (_galleryCachesStr != null) {
-      // Global.logger.d(' $_galleryCachesStr');
+      // logger.d(' $_galleryCachesStr');
       final List<dynamic> _galleryCaches = json.decode(_galleryCachesStr);
       for (final dynamic cache in _galleryCaches) {
-        // Global.logger.d('$cache');
+        // logger.d('$cache');
         galleryCaches.add(GalleryCache.fromJson(cache));
       }
     }
@@ -240,7 +222,7 @@ class Global {
 
   static Future<bool> saveGalleryCaches() {
     galleryCaches.forEach((GalleryCache element) {
-      // Global.logger.d(' ${element.toJson()}');
+      // logger.d(' ${element.toJson()}');
     });
     return StorageUtil().setJSON(GALLERY_CACHE, galleryCaches);
   }
@@ -258,13 +240,5 @@ class Global {
 
   static Future<bool> saveHistory() async {
     return StorageUtil().setJSON(HISTORY, history);
-  }
-}
-
-class ExampleLogOutput extends ConsoleOutput {
-  @override
-  void output(OutputEvent event) {
-    super.output(event);
-    LogConsole.add(event);
   }
 }

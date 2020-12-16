@@ -4,6 +4,7 @@ import 'package:FEhViewer/common/global.dart';
 import 'package:FEhViewer/models/index.dart';
 import 'package:FEhViewer/models/states/gallery_model.dart';
 import 'package:FEhViewer/utils/https_proxy.dart';
+import 'package:FEhViewer/utils/logger.dart';
 import 'package:FEhViewer/utils/utility.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:dio/dio.dart';
@@ -18,7 +19,7 @@ import 'package:provider/provider.dart';
 class GalleryUtil {
   static Future<void> getAllImageHref(GalleryModel galleryModel) async {
     if (galleryModel.isGetAllImageHref) {
-      Global.loggerNoStack.d(' isGetAllImageHref return');
+      loggerNoStack.d(' isGetAllImageHref return');
       return;
     }
     galleryModel.isGetAllImageHref = true;
@@ -47,9 +48,9 @@ class GalleryUtil {
       GalleryModel _galleryModel, int index) async {
     // 数据获取处理
     GalleryUtil.getAllImageHref(_galleryModel).catchError((e, stack) {
-      Global.logger.e('$e \n $stack');
+      logger.e('$e \n $stack');
     }).whenComplete(() {
-      // Global.logger.v('getAllImageHref Complete');
+      // logger.v('getAllImageHref Complete');
     });
 
     try {
@@ -70,7 +71,7 @@ class GalleryUtil {
         return _preview;
       }
     } catch (e, stack) {
-      Global.logger.e('$e \n $stack');
+      logger.e('$e \n $stack');
       rethrow;
     }
   }
@@ -116,7 +117,7 @@ class GalleryPrecache {
       'Cookie': cookie,
     });
 
-//    Global.logger.v('href = $href');
+//    logger.v('href = $href');
 
     final RegExp regExp =
         RegExp(r'https://e[-x]hentai.org/s/([0-9a-z]+)/(\d+)-(\d+)');
@@ -134,7 +135,7 @@ class GalleryPrecache {
     };
     final String reqJsonStr = jsonEncode(reqMap);
 
-    // Global.logger.d('$reqJsonStr');
+    // logger.d('$reqJsonStr');
 
     final Options _cacheOptinos = buildCacheOptions(
       const Duration(days: 1),
@@ -150,7 +151,7 @@ class GalleryPrecache {
       data: reqJsonStr,
     );
 
-    // Global.logger.d('$response');
+    // logger.d('$response');
 
     final dynamic rultJson = jsonDecode('$response');
 
@@ -159,14 +160,14 @@ class GalleryPrecache {
     final double width = double.parse(rultJson['x'].toString());
     final double height = double.parse(rultJson['y'].toString());
 
-//    Global.logger.v('$imageUrl');
+//    logger.v('$imageUrl');
 
     final GalleryPreview _rePreview = GalleryPreview()
       ..largeImageUrl = imageUrl
       ..ser = index + 1
       ..largeImageWidth = width
       ..largeImageHeight = height;
-    // Global.logger.v('${_rePreview.toJson()}');
+    // logger.v('${_rePreview.toJson()}');
 
     return _rePreview;
   }
@@ -179,11 +180,11 @@ class GalleryPrecache {
     @required int index,
     @required int max,
   }) async {
-    // Global.loggerNoStack.d('当前index $index');
+    // loggerNoStack.d('当前index $index');
     for (int add = 1; add < max + 1; add++) {
       final int _index = index + add;
 
-      // Global.loggerNoStack.d('开始缓存index $index');
+      // loggerNoStack.d('开始缓存index $index');
       if (_index > galleryModel.previews.length - 1) {
         return;
       }
@@ -194,18 +195,18 @@ class GalleryPrecache {
 
       final GalleryPreview _preview = galleryModel.previews[_index];
       if (_preview?.isCache ?? false) {
-        Global.loggerNoStack.d('index $_index 已存在缓存中 跳过');
+        loggerNoStack.d('index $_index 已存在缓存中 跳过');
         continue;
       }
 
       if (_preview?.startPrecache ?? false) {
-        Global.loggerNoStack.d('index $_index 已开始缓存 跳过');
+        loggerNoStack.d('index $_index 已开始缓存 跳过');
         continue;
       }
 
       String _url = '';
       if (_preview.largeImageUrl?.isEmpty ?? true) {
-        Global.logger.d('get $_index from Api');
+        logger.d('get $_index from Api');
         _curIndexList.add(_index);
         final String _href = previews[_index].href;
         final GalleryPreview _imageFromApi = await GalleryPrecache.instance
@@ -218,20 +219,20 @@ class GalleryPrecache {
           ..largeImageUrl = _url
           ..largeImageWidth = _imageFromApi.largeImageWidth
           ..largeImageHeight = _imageFromApi.largeImageHeight;
-        // Global.logger.d('index $_index\n'
+        // logger.d('index $_index\n'
         //     'largeImageHeight:${_preview.largeImageHeight}\n'
         //     'largeImageWidth:${_preview.largeImageWidth}');
         _curIndexList.remove(_index);
       }
 
       _url = _preview.largeImageUrl;
-      Global.logger.v('$_index : $_url');
+      logger.v('$_index : $_url');
 
       final Future<bool> _future = _map[_url] ??
           (() {
-            // Global.logger.d(' new _future $_url');
+            // logger.d(' new _future $_url');
             _map[_url] = _precacheSingleImage(context, _url, _preview);
-            Global.logger.d(' $_map');
+            logger.d(' $_map');
             return _map[_url];
           })();
 
@@ -256,7 +257,7 @@ class GalleryPrecache {
       preview.isCache = true;
       return true;
     }).catchError((e, stack) {
-      Global.logger.e('$e /n $stack');
+      logger.e('$e /n $stack');
       return false;
     });
     return false;
@@ -390,7 +391,7 @@ class _GalleryImageState extends State<GalleryImage> {
               if (previewFromApi.hasError) {
                 // todo 加载异常
                 // showToast('Error: ${previewFromApi.error}');
-                Global.logger.e(' ${previewFromApi.error}');
+                logger.e(' ${previewFromApi.error}');
                 return Center(child: Text('Error: ${previewFromApi.error}'));
               } else {
                 _currentPreview.largeImageUrl =

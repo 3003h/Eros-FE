@@ -5,6 +5,7 @@ import 'dart:typed_data';
 import 'package:FEhViewer/common/global.dart';
 import 'package:FEhViewer/models/dnsCache.dart';
 import 'package:FEhViewer/utils/dns_util.dart';
+import 'package:FEhViewer/utils/logger.dart';
 import 'package:FEhViewer/utils/utility.dart';
 
 class CustomHttpsProxy {
@@ -83,7 +84,7 @@ class ClientConnectionHandler {
     if (server == null) {
       // 建立连接
       content += utf8.decode(data);
-      Global.logger.d('\n$content');
+      logger.d('\n$content');
       final RegExpMatch m = regx.firstMatch(content);
       if (m != null) {
         _oriHost = m.group(1);
@@ -92,7 +93,7 @@ class ClientConnectionHandler {
         // 更新doh
         if (enableDoH) {
           await DnsUtil.updateDoHCache(_oriHost);
-          // Global.logger.d(' updateDoHCache end');
+          // logger.d(' updateDoHCache end');
         }
 
         String realHost = _oriHost;
@@ -110,7 +111,7 @@ class ClientConnectionHandler {
           if (enableDoH) {
             final int _dohDnsCacheIndex = Global.profile.dnsConfig.dohCache
                 .indexWhere((DnsCache element) => element.host == _oriHost);
-            // Global.logger.d('$_oriHost $_dohDnsCacheIndex');
+            // logger.d('$_oriHost $_dohDnsCacheIndex');
             final DnsCache dohDnsCache = _dohDnsCacheIndex > -1
                 ? _dohDnsCacheList[_dohDnsCacheIndex]
                 : null;
@@ -123,20 +124,20 @@ class ClientConnectionHandler {
             realHost = customDnsCache?.addr ?? _oriHost;
           }
         } catch (e, stack) {
-          Global.logger.e('$e \n $stack');
+          logger.e('$e \n $stack');
           closeSockets();
         }
 
-        Global.logger.i('$_oriHost  =>  $realHost');
+        logger.i('$_oriHost  =>  $realHost');
         try {
           ServerConnectionHandler(realHost, port, this)
               .handle()
               .catchError((e) {
-            Global.logger.e('Server error $e');
+            logger.e('Server error $e');
             closeSockets();
           });
         } catch (e) {
-          Global.logger.e('Server exception $e');
+          logger.e('Server exception $e');
           closeSockets();
         }
       }
@@ -149,7 +150,7 @@ class ClientConnectionHandler {
           hex.contains(EHUtils.stringToHex('exhentai.org')) ||
           hex.contains(EHUtils.stringToHex('ehgt.org')) ||
           hex.contains(EHUtils.stringToHex('hath.network'))) {
-        Global.logger.i('client hello [$hex]');
+        logger.i('client hello [$hex]');
         final String _newHex = hex;
         // .replaceFirst(EHUtils.stringToHex('e-hentai.org'),
         //     EHUtils.stringToHex('xxxxxxxxxxxx'))
@@ -209,7 +210,7 @@ class ServerConnectionHandler {
   }
 
   void errorHandler(error, StackTrace trace) {
-    Global.logger.e('server socket error: $error \n $trace');
+    logger.e('server socket error: $error \n $trace');
     handler.closeSockets();
     throw error;
   }

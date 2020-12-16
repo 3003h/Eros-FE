@@ -1,12 +1,12 @@
 import 'dart:io';
 
-import 'package:FEhViewer/common/global.dart';
 import 'package:FEhViewer/models/index.dart';
 import 'package:FEhViewer/models/states/ehconfig_model.dart';
 import 'package:FEhViewer/models/states/gallery_cache_model.dart';
 import 'package:FEhViewer/models/states/gallery_model.dart';
 import 'package:FEhViewer/pages/gallery_detail/gallery_detail_widget.dart';
 import 'package:FEhViewer/route/routes.dart';
+import 'package:FEhViewer/utils/logger.dart';
 import 'package:FEhViewer/utils/toast.dart';
 import 'package:FEhViewer/utils/utility.dart';
 import 'package:FEhViewer/values/const.dart';
@@ -72,7 +72,7 @@ class _GalleryViewPageState extends State<GalleryViewPage> {
     _bottomBarOffset = 0;
     _topBarOffset = 0;
     _showBar = false;
-    Global.logger.d('_index ${widget.index}');
+    logger.d('_index ${widget.index}');
     _pageController =
         PageController(initialPage: widget.index, viewportFraction: 1.1);
   }
@@ -99,7 +99,7 @@ class _GalleryViewPageState extends State<GalleryViewPage> {
       final int preload = ehConfigModel.preloadImage;
       if (ehConfigModel.viewMode != ViewMode.vertical) {
         // 预载后面5张图
-        Global.logger.v('预载后面 $preload 张图 didChangeDependencies');
+        logger.v('预载后面 $preload 张图 didChangeDependencies');
         GalleryPrecache.instance.precacheImages(
           context,
           _galleryModel,
@@ -162,7 +162,7 @@ class _GalleryViewPageState extends State<GalleryViewPage> {
   }
 
   void _handOnChangedEnd(double value) {
-    Global.logger.d('to $value');
+    logger.d('to $value');
     // if (widget.pageController.hasClients) {
     //   widget.pageController.jumpToPage(value ~/ 1);
     // }
@@ -194,11 +194,11 @@ class _GalleryViewPageState extends State<GalleryViewPage> {
           child: Selector<GalleryModel, int>(
               selector: (context, galleryModel) => galleryModel.previews.length,
               shouldRebuild: (pre, next) {
-                // Global.logger.v('${pre}  ${next}');
+                // logger.v('${pre}  ${next}');
                 return pre != next && next > pre;
               },
               builder: (context, int len, child) {
-                // Global.logger.d('CupertinoPageScaffold build');
+                // logger.d('CupertinoPageScaffold build');
                 return Stack(
                   alignment: Alignment.center,
                   children: <Widget>[
@@ -214,18 +214,18 @@ class _GalleryViewPageState extends State<GalleryViewPage> {
 
                         final double _dx = details.globalPosition.dx;
                         final double _dy = details.globalPosition.dy;
-                        // Global.logger.d(
+                        // logger.d(
                         //     'onPanDown ${details.globalPosition}  $_centRect');
                         if ((_dx < _centRect.left || _dx > _centRect.right) &&
                             (_dy < _centRect.top || _dy > _centRect.bottom)) {
-                          Global.logger.d('onPanDown hide bar');
+                          logger.d('onPanDown hide bar');
                           setState(() {
                             _showBar = false;
                           });
                         }
                       },
                       onPanStart: (DragStartDetails details) {
-                        Global.logger.d('${details.localPosition} ');
+                        logger.d('${details.localPosition} ');
                       },
                     ),
                     // 中心触摸区
@@ -329,7 +329,7 @@ class _GalleryViewPageState extends State<GalleryViewPage> {
                 GestureDetector(
                   behavior: HitTestBehavior.opaque,
                   onTap: () {
-                    Global.logger.v('back');
+                    logger.v('back');
                     Get.back();
                   },
                   child: Container(
@@ -346,7 +346,7 @@ class _GalleryViewPageState extends State<GalleryViewPage> {
                 GestureDetector(
                   behavior: HitTestBehavior.opaque,
                   onTap: () {
-                    Global.logger.v('tap share');
+                    logger.v('tap share');
                     _showShareDialog(
                         context, previews[_currentIndex].largeImageUrl);
                   },
@@ -363,7 +363,7 @@ class _GalleryViewPageState extends State<GalleryViewPage> {
                 GestureDetector(
                   behavior: HitTestBehavior.opaque,
                   onTap: () {
-                    Global.logger.v('menu');
+                    logger.v('menu');
                     Get.toNamed(EHRoutes.viewSeting);
                   },
                   child: Container(
@@ -464,7 +464,7 @@ class _GalleryViewPageState extends State<GalleryViewPage> {
                     if (snapshot.hasError) {
                       return Container();
                     } else {
-                      Global.logger.d(
+                      logger.d(
                           ' h: ${snapshot.data.largeImageHeight}  w: ${snapshot.data.largeImageWidth}  ${snapshot.data.largeImageWidth / _screensize.width}');
                       return Container(
                           // height: snapshot.data.largeImageHeight *
@@ -510,17 +510,17 @@ class _GalleryViewPageState extends State<GalleryViewPage> {
   /// 水平方向浏览部件
   Widget _buildPhotoViewGallery({bool reverse = false}) {
     double _maxScale = 10;
-    // Global.logger.d('preview ${preview.data.toJson()}');
+    // logger.d('preview ${preview.data.toJson()}');
     // final double _width = preview.data.largeImageWidth;
     // final double _height = preview.data.largeImageHeight;
     //
     // if (_height / _width > _size.height / _size.width) {
     //   // 计算缩放到屏幕宽度一致时，图片的高
     //   final double _tempHeight = _height * _size.width / _width;
-    //   Global.logger.d('_tempHeight $_tempHeight');
+    //   logger.d('_tempHeight $_tempHeight');
     //   _maxScale = _tempHeight / _size.height;
     // }
-    // Global.logger.d(' $_maxScale');
+    // logger.d(' $_maxScale');
     final EhConfigModel ehConfigModel =
         Provider.of<EhConfigModel>(context, listen: false);
     return PhotoViewGallery.builder(
@@ -569,7 +569,7 @@ class _GalleryViewPageState extends State<GalleryViewPage> {
       enableRotation: false,
       // 旋转
       onPageChanged: (int index) {
-//            Global.logger.v('onPageChanged');
+//            logger.v('onPageChanged');
         GalleryPrecache.instance.precacheImages(
           context,
           _galleryModel,
@@ -670,7 +670,7 @@ Future<void> _showShareDialog(BuildContext context, String imageUrl) {
           actions: <Widget>[
             CupertinoActionSheetAction(
                 onPressed: () {
-                  Global.logger.v('保存到相册');
+                  logger.v('保存到相册');
                   Api.saveImage(context, imageUrl).then((rult) {
                     Get.back();
                     if (rult != null && rult) {
@@ -683,7 +683,7 @@ Future<void> _showShareDialog(BuildContext context, String imageUrl) {
                 child: const Text('保存到相册')),
             CupertinoActionSheetAction(
                 onPressed: () {
-                  Global.logger.v('系统分享');
+                  logger.v('系统分享');
                   Api.shareImage(imageUrl);
                 },
                 child: const Text('系统分享')),

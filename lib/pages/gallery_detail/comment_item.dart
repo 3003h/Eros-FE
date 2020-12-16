@@ -1,8 +1,8 @@
-import 'package:FEhViewer/common/global.dart';
 import 'package:FEhViewer/models/index.dart';
 import 'package:FEhViewer/models/states/theme_model.dart';
 import 'package:FEhViewer/route/navigator_util.dart';
 import 'package:FEhViewer/utils/cust_lib/flutter_linkify.dart' as linkify;
+import 'package:FEhViewer/utils/logger.dart';
 import 'package:FEhViewer/values/theme_colors.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -146,7 +146,7 @@ class CommentItem extends StatelessWidget {
       ),
       behavior: HitTestBehavior.opaque,
       onTap: () {
-        Global.logger.v('search uploader:${galleryComment.name}');
+        logger.v('search uploader:${galleryComment.name}');
         NavigatorUtil.goGalleryListBySearch(
             simpleSearch: 'uploader:${galleryComment.name}');
       },
@@ -154,12 +154,12 @@ class CommentItem extends StatelessWidget {
   }
 
   Future<void> _onOpen(BuildContext context, LinkableElement link) async {
-    Global.logger.v(' ${link.url}');
+    logger.v(' ${link.url}');
     final RegExp regExp =
         RegExp(r'https?://e[-x]hentai.org/g/[0-9]+/[0-9a-z]+');
     if (await canLaunch(link.url)) {
       if (regExp.hasMatch(link.url)) {
-        Global.logger.v('in ${link.url}');
+        logger.v('in ${link.url}');
         NavigatorUtil.goGalleryDetailPr(
           context,
           url: link.url,

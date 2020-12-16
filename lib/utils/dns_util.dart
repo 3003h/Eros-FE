@@ -2,18 +2,19 @@ import 'dart:io';
 
 import 'package:FEhViewer/common/global.dart';
 import 'package:FEhViewer/models/index.dart';
+import 'package:FEhViewer/utils/logger.dart';
 import 'package:FEhViewer/utils/utility.dart';
 import 'package:dns_client/dns_client.dart';
 
 class DnsUtil {
   static Future<String> doh(String host,
       {DohResolve dhoResolve = DohResolve.cloudflare}) async {
-    Global.logger.d(' DnsUtil.doh $host');
+    logger.d(' DnsUtil.doh $host');
     final DnsOverHttps dns = dhoResolve == DohResolve.cloudflare
         ? DnsOverHttps.cloudflare()
         : DnsOverHttps.google();
     final List<InternetAddress> response = await dns.lookup(host.trim());
-    Global.logger.d('$response');
+    logger.d('$response');
     return (response..shuffle()).first.address;
   }
 
@@ -24,7 +25,7 @@ class DnsUtil {
     // 解析host
     final String _host = Uri.parse(url).host;
     final String _addr = await doh(_host);
-    Global.logger.v('$_host  $_addr');
+    logger.v('$_host  $_addr');
     final List<DnsCache> dnsCacheList = Global.profile.dnsConfig.dohCache;
     dnsCacheList.add(DnsCache()
       ..host = _host
@@ -39,7 +40,7 @@ class DnsUtil {
     if (host == 'cloudflare-dns.com') {
       return;
     }
-    Global.logger.d(' updateDoHCache $host');
+    logger.d(' updateDoHCache $host');
     const int updateInterval = 300;
     final List<DnsCache> dnsCacheList =
         Global.profile.dnsConfig.dohCache ?? <DnsCache>[];
@@ -59,9 +60,9 @@ class DnsUtil {
       }
     } else {
       // get new
-      Global.logger.d(' get new doh $host');
+      logger.d(' get new doh $host');
       final String _addr = await doh(host);
-      Global.logger.d(' get new doh $host  addr=$_addr');
+      logger.d(' get new doh $host  addr=$_addr');
       Global.profile.dnsConfig.dohCache.add(DnsCache()
         ..host = host
         ..lastResolve = nowTime

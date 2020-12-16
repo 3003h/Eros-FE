@@ -6,6 +6,7 @@ import 'package:FEhViewer/pages/gallery_view/gallery_view_page.dart';
 import 'package:FEhViewer/pages/tab/controller/gallery_controller.dart';
 import 'package:FEhViewer/pages/tab/view/gallery_page.dart';
 import 'package:FEhViewer/pages/tab/view/search_page.dart';
+import 'package:FEhViewer/utils/logger.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -30,6 +31,7 @@ class NavigatorUtil {
   /// [GalleryModel] 复用画廊状态Provider
   /// fluro的方式不知道怎么处理 使用默认路由方式
   static void goGalleryDetailPr(BuildContext context, {String url}) {
+    logger.d(' goGalleryDetailPr');
     if (url != null && url.isNotEmpty) {
       final GalleryModel galleryModel = GalleryModel.initUrl(url: url);
       Get.to(ChangeNotifierProvider<GalleryModel>.value(
@@ -74,16 +76,27 @@ class NavigatorUtil {
 
   // 转到大图浏览
   static void goGalleryViewPage(BuildContext context, int index) {
-    Widget _child() {
-      return GalleryViewPage(index: index);
-    }
+    logger.d('goGalleryViewPage');
 
     final GalleryModel galleryModel =
         Provider.of<GalleryModel>(context, listen: false);
 
-    Get.to(ChangeNotifierProvider<GalleryModel>.value(
-      value: galleryModel,
-      child: _child(),
+    // Get.to(_child());
+
+    // Get.to(
+    //   ChangeNotifierProvider<GalleryModel>.value(
+    //     value: galleryModel,
+    //     child: GalleryViewPage(index: index),
+    //   ),
+    // );
+
+    Navigator.push(Get.context, CupertinoPageRoute(
+      builder: (context) {
+        return ChangeNotifierProvider<GalleryModel>.value(
+          value: galleryModel,
+          child: GalleryViewPage(index: index),
+        );
+      },
     ));
   }
 }

@@ -5,6 +5,7 @@ import 'package:FEhViewer/models/states/dnsconfig_model.dart';
 import 'package:FEhViewer/models/states/locale_model.dart';
 import 'package:FEhViewer/models/states/theme_model.dart';
 import 'package:FEhViewer/pages/setting/custom_hosts_page.dart';
+import 'package:FEhViewer/utils/logger.dart';
 import 'package:FEhViewer/values/theme_colors.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -52,7 +53,7 @@ class ListViewAdvancedSetting extends StatelessWidget {
     void _handleDoHChanged(bool newValue) {
       if (!newValue && !(Global.profile.dnsConfig.enableCustomHosts ?? false)) {
         /// 清除hosts 关闭代理
-        Global.logger.d(' 关闭代理');
+        logger.d(' 关闭代理');
         HttpOverrides.global = null;
       } else if (newValue) {
         /// 设置全局本地代理
@@ -157,12 +158,12 @@ class ListViewAdvancedSetting extends StatelessWidget {
             title: _title,
             selector: locale,
             onTap: () async {
-              Global.logger.v('tap LanguageItem');
+              logger.v('tap LanguageItem');
               final String _result = await _showDialog(context);
               if (_result is String) {
                 localeModel.locale = _result;
               }
-              Global.logger.v('$_result');
+              logger.v('$_result');
             },
           );
         });
@@ -217,7 +218,7 @@ class ListViewAdvancedSetting extends StatelessWidget {
             title: _title,
             selector: themeMap[themeModel.themeMode],
             onTap: () async {
-              Global.logger.v('tap ThemeItem');
+              logger.v('tap ThemeItem');
               final ThemesModeEnum _result = await _showDialog(context);
               if (_result is ThemesModeEnum) {
                 themeModel.themeMode = _result;

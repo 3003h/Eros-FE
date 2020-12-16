@@ -8,6 +8,8 @@ import 'package:dio/dio.dart';
 import 'package:dio_http_cache/dio_http_cache.dart';
 import 'package:flutter/cupertino.dart';
 
+import 'logger.dart';
+
 class HttpManager {
   //构造函数
   HttpManager(String _baseUrl, {bool cache = true}) {
@@ -107,7 +109,7 @@ class HttpManager {
       response = await _dio.get<String>(url,
           queryParameters: params, options: options, cancelToken: cancelToken);
     } on DioError catch (e, stack) {
-      Global.logger.e('getHttp exception: $e\n$stack');
+      logger.e('getHttp exception: $e\n$stack');
       formatError(e);
       rethrow;
     }

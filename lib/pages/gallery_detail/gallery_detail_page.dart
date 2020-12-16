@@ -1,4 +1,3 @@
-import 'package:FEhViewer/common/global.dart';
 import 'package:FEhViewer/models/galleryItem.dart';
 import 'package:FEhViewer/models/index.dart';
 import 'package:FEhViewer/models/states/ehconfig_model.dart';
@@ -9,6 +8,7 @@ import 'package:FEhViewer/models/states/local_favorite_model.dart';
 import 'package:FEhViewer/pages/gallery_detail/gallery_detail_widget.dart';
 import 'package:FEhViewer/pages/tab/view/gallery_base.dart';
 import 'package:FEhViewer/route/navigator_util.dart';
+import 'package:FEhViewer/utils/logger.dart';
 import 'package:FEhViewer/utils/toast.dart';
 import 'package:FEhViewer/utils/utility.dart';
 import 'package:dio/dio.dart';
@@ -124,7 +124,7 @@ class _GalleryDetailPageState extends State<GalleryDetailPage> {
       rethrow;
     } catch (e, stack) {
       showToast('解析数据异常');
-      Global.logger.e('解析数据异常\n' + e.toString() + '\n' + stack.toString());
+      logger.e('解析数据异常\n' + e.toString() + '\n' + stack.toString());
       rethrow;
     }
   }
@@ -139,7 +139,7 @@ class _GalleryDetailPageState extends State<GalleryDetailPage> {
   }
 
   Future<void> _reloadData() async {
-    Global.logger.v('_reloadData');
+    logger.v('_reloadData');
 
     _galleryModel.detailLoadFinish = false;
     _galleryModel.isReloading = true;
@@ -218,7 +218,7 @@ class _GalleryDetailPageState extends State<GalleryDetailPage> {
                           size: 26,
                         ),
                         onPressed: () {
-                          Global.logger.v('tap shareBtn');
+                          logger.v('tap shareBtn');
                           Share.share('${_item.url}');
                         },
                       )
@@ -286,10 +286,10 @@ class _GalleryDetailPageState extends State<GalleryDetailPage> {
                   case ConnectionState.waiting:
                     return _buildLoading(context, isReloading);
                   case ConnectionState.done:
-                    // Global.logger.v('done');
+                    // logger.v('done');
                     if (snapshot.hasError) {
                       // return Text('Error: ${snapshot.error}');
-                      Global.logger.v('${snapshot.error}');
+                      logger.v('${snapshot.error}');
                       return GalleryErrorPage(
                         onTap: _reloadData,
                       );

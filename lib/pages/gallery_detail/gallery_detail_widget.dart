@@ -4,6 +4,7 @@ import 'package:FEhViewer/models/states/ehconfig_model.dart';
 import 'package:FEhViewer/models/states/gallery_cache_model.dart';
 import 'package:FEhViewer/models/states/gallery_model.dart';
 import 'package:FEhViewer/route/navigator_util.dart';
+import 'package:FEhViewer/utils/logger.dart';
 import 'package:FEhViewer/utils/utility.dart';
 import 'package:FEhViewer/values/const.dart';
 import 'package:FEhViewer/values/theme_colors.dart';
@@ -418,7 +419,7 @@ class TagGroupItem extends StatelessWidget {
       _tagBtnList.add(TagButtonB(
         text: _isTagTranslat ? tag?.tagTranslat ?? '' : tag?.title ?? '',
         onPressed: () {
-          Global.logger.v('search type[${tag.type}] tag[${tag.title}]');
+          logger.v('search type[${tag.type}] tag[${tag.title}]');
           // NavigatorUtil.goGalleryList(context,
           //     simpleSearch: '${tag.type}:${tag.title}');
           NavigatorUtil.goGalleryListBySearch(
@@ -636,7 +637,7 @@ class ReadButton extends StatelessWidget {
                       final GalleryCache _galleryCache = _galleryCacheModel
                           .getGalleryCache(_galleryModel.galleryItem.gid);
                       final int _index = _galleryCache?.lastIndex ?? 0;
-                      Global.logger.d('lastIndex $_index');
+                      logger.d('lastIndex $_index');
                       await showLoadingDialog(context, _index);
                       NavigatorUtil.goGalleryViewPage(context, _index);
                     }
@@ -743,7 +744,7 @@ class GalleryUploader extends StatelessWidget {
               ),
             ),
             onTap: () {
-              Global.logger.v('search uploader:$uploader');
+              logger.v('search uploader:$uploader');
               // NavigatorUtil.goGalleryList(context,
               //     simpleSearch: 'uploader:$uploader');
               NavigatorUtil.goGalleryListBySearch(
@@ -838,7 +839,7 @@ Future<void> showLoadingDialog(BuildContext context, int index) async {
     // 增加延时 避免build期间进行 setState
     // await Future<void>.delayed(const Duration(milliseconds: 0));
     _galleryModel.currentPreviewPageAdd();
-    Global.logger.v(
+    logger.v(
         '获取更多预览 ${_galleryModel.galleryItem.url} : ${_galleryModel.currentPreviewPage}');
 
     final List<GalleryPreview> _moreGalleryPreviewList =
@@ -855,7 +856,7 @@ Future<void> showLoadingDialog(BuildContext context, int index) async {
         _galleryModel.galleryItem.galleryPreview;
 
     while (index > _galleryPreviewList.length - 1) {
-      Global.logger.d(' index = $index ; len = ${_galleryPreviewList.length}');
+      logger.d(' index = $index ; len = ${_galleryPreviewList.length}');
       await _loarMordPriview();
     }
     return true;

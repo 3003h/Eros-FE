@@ -16,7 +16,7 @@ class HistoryModel with ChangeNotifier {
   }
 
   void addHistory(GalleryItem galleryItem) {
-    // Global.logger.v('${galleryItem.toJson()}');
+    // logger.v('${galleryItem.toJson()}');
     final int _index = history.indexWhere((GalleryItem element) {
       return element.gid == galleryItem.gid;
     });

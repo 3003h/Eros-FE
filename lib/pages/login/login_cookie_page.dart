@@ -1,7 +1,7 @@
 import 'package:FEhViewer/common/eh_login.dart';
-import 'package:FEhViewer/common/global.dart';
 import 'package:FEhViewer/models/index.dart';
 import 'package:FEhViewer/models/states/user_model.dart';
+import 'package:FEhViewer/utils/logger.dart';
 import 'package:FEhViewer/utils/toast.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -91,7 +91,7 @@ class _LoginCookiePageState extends State<LoginCookiePage> {
 
   /// cookie登录
   Future<void> _loginCookie() async {
-    Global.loggerNoStack.i({
+    loggerNoStack.i({
       'ibp_member_id': _idController.text,
       'ibp_pass_hash': _hashController.text
     });

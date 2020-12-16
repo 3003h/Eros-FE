@@ -78,7 +78,7 @@ class GalleryFavParser {
       final String favId =
           divs[0].querySelector('input').attributes['value'].trim();
       final String favTitle = divs[2].text.trim();
-//      Global.logger.v('$favId  $favTitle');
+//      logger.v('$favId  $favTitle');
       favList.add(<String, String>{'favId': favId, 'favTitle': favTitle});
     }
 
@@ -92,7 +92,7 @@ class GalleryFavParser {
         Global.profile.user.favcat.isEmpty ||
         !cache) {
       if (gid != null && gid.isNotEmpty && token.isNotEmpty) {
-        // Global.logger.v('$gid  $token');
+        // logger.v('$gid  $token');
         Global.profile.user.favcat = await gallerySelfavcat(gid, token);
       }
     }

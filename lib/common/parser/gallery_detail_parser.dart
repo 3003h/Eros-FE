@@ -1,6 +1,6 @@
-import 'package:FEhViewer/common/global.dart';
 import 'package:FEhViewer/common/tag_database.dart';
 import 'package:FEhViewer/models/index.dart';
+import 'package:FEhViewer/utils/logger.dart';
 import 'package:FEhViewer/utils/utility.dart';
 import 'package:html/dom.dart';
 import 'package:html/parser.dart' show parse;
@@ -44,7 +44,7 @@ class GalleryDetailParser {
           final String tagTranslat =
               await EhTagDatabase.getTranTag(title, nameSpase: type) ?? title;
 
-//        Global.logger.v('$type:$title $tagTranslat');
+//        logger.v('$type:$title $tagTranslat');
           galleryTags.add(GalleryTag()
             ..title = title
             ..type = type
@@ -55,7 +55,7 @@ class GalleryDetailParser {
           ..tagType = type
           ..galleryTags = galleryTags);
       } catch (e, stack) {
-        Global.logger.e('解析tag数据异常\n' + e.toString() + '\n' + stack.toString());
+        logger.e('解析tag数据异常\n' + e.toString() + '\n' + stack.toString());
       }
     }
 
@@ -63,7 +63,7 @@ class GalleryDetailParser {
     galleryItem.galleryComment = [];
     const String commentSelect = '#cdiv > div.c1';
     final List<Element> commentList = document.querySelectorAll(commentSelect);
-//    Global.logger.v('${commentList.length}');
+//    logger.v('${commentList.length}');
     for (final Element comment in commentList) {
       try {
         // 评论人
@@ -73,7 +73,7 @@ class GalleryDetailParser {
         // 解析时间
         final Element timeElem = comment.querySelector('div.c2 > div.c3');
         final String postTime = timeElem.text.trim();
-        // Global.logger.v(postTime);
+        // logger.v(postTime);
         // 示例: Posted on 29 June 2020, 05:41 UTC by:
         // 20201027 修复评论问题
         // Posted on 29 June 2020, 05:41 by:
@@ -104,10 +104,10 @@ class GalleryDetailParser {
                 node.text;
           } else if (node.nodeType == Node.ELEMENT_NODE &&
               (node as Element).localName == 'br') {
-//          Global.logger.v('${(node as Element).localName}  ${(node as Element).text}');
+//          logger.v('${(node as Element).localName}  ${(node as Element).text}');
             return '\n';
           } else if (node.nodeType == Node.ELEMENT_NODE) {
-//          Global.logger.v('${(node as Element).localName}  ${(node as Element).text}');
+//          logger.v('${(node as Element).localName}  ${(node as Element).text}');
             // 通常是链接 前后加空格便于和内容分开
             return ' ' + (node as Element).text.trim() + ' ';
           }
@@ -119,7 +119,7 @@ class GalleryDetailParser {
           ..time = postTimeLocal
           ..score = score);
       } catch (e, stack) {
-        Global.logger.e('解析评论异常\n' + e.toString() + '\n' + stack.toString());
+        logger.e('解析评论异常\n' + e.toString() + '\n' + stack.toString());
       }
     }
 
@@ -182,7 +182,7 @@ class GalleryDetailParser {
 
         final Element imgElem = pic.querySelector('img');
         final String picSer = imgElem.attributes['alt'].trim();
-        // Global.logger.v('小图$picSer  $picSrcUrl');
+        // logger.v('小图$picSer  $picSrcUrl');
 
         galleryPreview.add(GalleryPreview()
           ..ser = int.parse(picSer)

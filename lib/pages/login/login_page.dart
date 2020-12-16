@@ -2,10 +2,10 @@ import 'dart:io';
 import 'dart:ui';
 
 import 'package:FEhViewer/common/eh_login.dart';
-import 'package:FEhViewer/common/global.dart';
 import 'package:FEhViewer/models/states/user_model.dart';
 import 'package:FEhViewer/models/user.dart';
 import 'package:FEhViewer/route/routes.dart';
+import 'package:FEhViewer/utils/logger.dart';
 import 'package:FEhViewer/utils/toast.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -194,7 +194,7 @@ class _LoginPageState extends State<LoginPage> {
 
   /// 用户登录
   Future<void> _login() async {
-    Global.loggerNoStack.i({
+    loggerNoStack.i({
       'username': _usernameController.text,
       'password': _passwdController.text
     });

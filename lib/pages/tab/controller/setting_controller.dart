@@ -29,7 +29,7 @@ class SettingController extends GetxController {
         ));
       }
     }
-//    Global.logger.v('${_slivers.length}');
+//    logger.v('${_slivers.length}');
     return _slivers;
   }
 

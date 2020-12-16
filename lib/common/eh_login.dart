@@ -1,8 +1,8 @@
 import 'dart:io';
 
-import 'package:FEhViewer/common/global.dart';
 import 'package:FEhViewer/models/user.dart';
 import 'package:FEhViewer/utils/dio_util.dart';
+import 'package:FEhViewer/utils/logger.dart';
 import 'package:FEhViewer/utils/utility.dart';
 import 'package:FEhViewer/values/const.dart';
 import 'package:cookie_jar/cookie_jar.dart';
@@ -47,7 +47,7 @@ class EhUserManager {
     try {
       rult = await httpManager.postForm(url, data: formData, options: options);
     } catch (e) {
-      Global.logger.v('$e');
+      logger.v('$e');
     }
 
     //  登录异常处理
@@ -57,7 +57,7 @@ class EhUserManager {
         (String cookieValue) => cookieValue.contains('ipb_member_id'));
     final String cookiePassHash = setcookie.firstWhere(
         (String cookieValue) => cookieValue.contains('ipb_pass_hash'));
-    Global.loggerNoStack.d('$cookieMemberId\n$cookiePassHash');
+    loggerNoStack.d('$cookieMemberId\n$cookiePassHash');
     setcookie.add(cookieMemberId.replaceFirst('e-hentai.org', 'exhentai.org'));
     setcookie.add(cookiePassHash.replaceFirst('e-hentai.org', 'exhentai.org'));
 
@@ -65,7 +65,7 @@ class EhUserManager {
       return Cookie.fromSetCookieValue(cookieStr);
     }).toList();
 
-    Global.loggerNoStack.d('$_cookies');
+    loggerNoStack.d('$_cookies');
 
     final String _id = _cookies
         .firstWhere((Cookie cookie) => cookie.name == 'ipb_member_id')
@@ -85,7 +85,7 @@ class EhUserManager {
     final List<Cookie> cookiesEx =
         cookieJar.loadForRequest(Uri.parse(EHConst.EX_BASE_URL));
 
-    Global.logger.v('$cookiesEx');
+    logger.v('$cookiesEx');
 
     // 处理cookie 存入sp 方便里站图片请求时构建头 否则会403
     final Map<String, String> cookieMapEx = <String, String>{};
@@ -100,7 +100,7 @@ class EhUserManager {
     };
 
     final String cookieStr = getCookieStringFromMap(cookie);
-    Global.logger.v(cookieStr);
+    logger.v(cookieStr);
 
     final User user = User()
       ..cookie = cookieStr
@@ -153,7 +153,7 @@ class EhUserManager {
     };
 
     final String cookieStr = getCookieStringFromMap(cookie);
-    Global.logger.v(cookieStr);
+    logger.v(cookieStr);
 
     final User user = User()
       ..cookie = cookieStr
@@ -199,7 +199,7 @@ class EhUserManager {
     };
 
     final String cookieStr = getCookieStringFromMap(cookie);
-    Global.logger.v(cookieStr);
+    logger.v(cookieStr);
 
     final User user = User()
       ..cookie = cookieStr
@@ -219,12 +219,12 @@ class EhUserManager {
     //     }));
     final String response = await httpManager.get(url);
 
-    // Global.logger.v('$response');
+    // logger.v('$response');
 
     final RegExp regExp = RegExp(r'Viewing Profile: (\w+)</div');
     final String username = regExp.firstMatch('$response').group(1);
 
-    Global.logger.v('username $username');
+    logger.v('username $username');
 
     return username;
   }

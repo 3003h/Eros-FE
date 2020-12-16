@@ -1,4 +1,5 @@
 import 'package:FEhViewer/common/global.dart';
+import 'package:FEhViewer/utils/logger.dart';
 import 'package:FEhViewer/utils/toast.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/widgets.dart';
@@ -113,7 +114,7 @@ class TabHomeController extends GetxController {
 
   /// 连按两次返回退出
   Future<bool> doubleClickBack() async {
-    Global.loggerNoStack.v('click back');
+    loggerNoStack.v('click back');
     if (lastPressedAt == null ||
         DateTime.now().difference(lastPressedAt) > const Duration(seconds: 1)) {
       showToast('double_click_back'.tr);
@@ -137,7 +138,7 @@ class TabHomeController extends GetxController {
       if (awaitComplete ?? false) {
         await Future<void>.delayed(_duration);
         if (tapAwait) {
-//        Global.loggerNoStack.v('等待结束 执行单击事件');
+//        loggerNoStack.v('等待结束 执行单击事件');
           tapAwait = false;
           onTap();
         }
@@ -147,7 +148,7 @@ class TabHomeController extends GetxController {
         tapAwait = false;
       }
     } else if (onDoubleTap != null) {
-//      Global.loggerNoStack.v('等待时间内第二次点击 执行双击事件');
+//      loggerNoStack.v('等待时间内第二次点击 执行双击事件');
       tapAwait = false;
       onDoubleTap();
     }

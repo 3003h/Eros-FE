@@ -1,4 +1,4 @@
-import 'package:FEhViewer/common/global.dart';
+import 'package:FEhViewer/utils/logger.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -64,7 +64,7 @@ class _SettingItems extends State<SettingItems> {
       // 不可见区域有效
       behavior: HitTestBehavior.opaque,
       onTap: () {
-        Global.loggerNoStack.v('set tap ${widget.text} ');
+        loggerNoStack.v('set tap ${widget.text} ');
         // NavigatorUtil.jump(context, widget.route, rootNavigator: false);
         Get.toNamed(widget.route);
       },

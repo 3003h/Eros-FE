@@ -11,6 +11,7 @@ import 'package:FEhViewer/models/states/theme_model.dart';
 import 'package:FEhViewer/models/states/user_model.dart';
 import 'package:FEhViewer/route/app_pages.dart';
 import 'package:FEhViewer/route/routes.dart';
+import 'package:FEhViewer/utils/logger.dart';
 import 'package:device_preview/device_preview.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -32,7 +33,7 @@ void main() {
       ),
     );
   }).catchError((e, stack) {
-    Global.logger.e('$e \n $stack');
+    logger.e('$e \n $stack');
   });
 }
 
@@ -71,7 +72,7 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
       return Selector<EhConfigModel, bool>(
           selector: (_, EhConfigModel ehConfig) => ehConfig.isSafeMode,
           builder: (context, snapshot, _) {
-            // Global.logger.d('CupertinoApp');
+            // logger.d('CupertinoApp');
             return GetCupertinoApp(
               debugShowCheckedModeBanner: false,
               translations: Messages(),
@@ -95,21 +96,21 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
               ],
               localeResolutionCallback:
                   (Locale _locale, Iterable<Locale> supportedLocales) {
-                // Global.logger.v(
+                // logger.v(
                 //     '${_locale?.languageCode}  ${_locale?.scriptCode}  ${_locale?.countryCode}');
                 if (localeModel.getLocale() != null) {
                   //如果已经选定语言，则不跟随系统
                   return localeModel.getLocale();
                 } else {
-                  Global.logger.d('语言跟随系统语言');
+                  logger.d('语言跟随系统语言');
                   Locale locale;
                   //APP语言跟随系统语言，如果系统语言不是中文简体或美国英语，
                   //则默认使用美国英语
                   if (supportedLocales.contains(_locale)) {
-                    Global.logger.d('语言跟随系统语言');
+                    logger.d('语言跟随系统语言');
                     locale = _locale;
                   } else {
-                    Global.logger.d('set en');
+                    logger.d('set en');
                     locale = const Locale('en', 'US');
                   }
 

@@ -1,9 +1,9 @@
 import 'dart:ui';
 
-import 'package:FEhViewer/common/global.dart';
 import 'package:FEhViewer/models/galleryItem.dart';
 import 'package:FEhViewer/models/states/gallery_model.dart';
 import 'package:FEhViewer/route/navigator_util.dart';
+import 'package:FEhViewer/utils/logger.dart';
 import 'package:FEhViewer/values/theme_colors.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -137,7 +137,7 @@ class GalleryItemFlow extends StatelessWidget {
               behavior: HitTestBehavior.opaque,
               child: container,
               onTap: () {
-                Global.logger.v(galleryItem.englishTitle);
+                logger.v(galleryItem.englishTitle);
                 NavigatorUtil.goGalleryDetailPr(
                   context,
                 );

@@ -1,5 +1,5 @@
-import 'package:FEhViewer/common/global.dart';
 import 'package:FEhViewer/models/entity/favorite.dart';
+import 'package:FEhViewer/utils/logger.dart';
 import 'package:FEhViewer/utils/utility.dart';
 import 'package:FEhViewer/values/const.dart';
 import 'package:FEhViewer/values/theme_colors.dart';
@@ -32,7 +32,7 @@ class FavoriteSelectorController extends GetxController
   }
 
   Future<List<FavcatItemBean>> getFavItemBeans() async {
-    Global.logger.v('_getFavItemBeans');
+    logger.v('_getFavItemBeans');
     final List<FavcatItemBean> _favItemBeans = <FavcatItemBean>[];
 
     try {
@@ -55,7 +55,7 @@ class FavoriteSelectorController extends GetxController
           .add(FavcatItemBean('本地收藏', ThemeColors.favColor['l'], favId: 'l'));
       return _favItemBeans;
     } catch (e, stack) {
-      Global.logger.e('$e /n $stack');
+      logger.e('$e /n $stack');
       rethrow;
     }
   }

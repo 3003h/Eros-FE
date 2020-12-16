@@ -8,6 +8,7 @@ import 'package:FEhViewer/common/parser/gallery_list_parser.dart';
 import 'package:FEhViewer/models/galleryItem.dart';
 import 'package:FEhViewer/models/index.dart';
 import 'package:FEhViewer/utils/https_proxy.dart';
+import 'package:FEhViewer/utils/logger.dart';
 import 'package:FEhViewer/utils/toast.dart';
 import 'package:FEhViewer/values/const.dart';
 import 'package:cached_network_image/cached_network_image.dart';
@@ -155,7 +156,7 @@ class EHUtils {
     final List<Map<String, String>> favcatList = <Map<String, String>>[];
     if (Global.profile.user.favcat != null) {
       for (final dynamic mapObj in Global.profile.user.favcat) {
-        // Global.logger.v('$mapObj');
+        // logger.v('$mapObj');
         final Map<String, String> map = <String, String>{
           'favId': mapObj['favId'],
           'favTitle': mapObj['favTitle']
@@ -199,7 +200,7 @@ class ColorsUtil {
 
   static Color getTagColor(String hexColor) {
     if (hexColor != null && hexColor.isNotEmpty) {
-      // Global.logger.d(' $hexColor');
+      // logger.d(' $hexColor');
       return hexStringToColor(hexColor);
     }
     return null;
@@ -233,7 +234,7 @@ class CookieUtil {
     cookieJar.saveFromResponse(
         Uri.parse(EHConst.EX_BASE_URL), <Cookie>[_memberId, _passHash]);
 
-    Global.logger.d('cookiesEh\n' + cookiesEh.join('\n'));
+    logger.d('cookiesEh\n' + cookiesEh.join('\n'));
   }
 
   static Future<void> fixEhCookie() async {
@@ -250,7 +251,7 @@ class CookieUtil {
     cookieJar.saveFromResponse(
         Uri.parse(EHConst.EH_BASE_URL), <Cookie>[_memberId, _passHash]);
 
-    Global.logger.d('cookiesEh\n' + cookiesEh.join('\n'));
+    logger.d('cookiesEh\n' + cookiesEh.join('\n'));
   }
 }
 
@@ -333,7 +334,7 @@ class Api {
   /// 获取热门画廊列表
   static Future<Tuple2<List<GalleryItem>, int>> getPopular(
       {bool refresh = false}) async {
-//    Global.logger.v("获取热门");
+//    logger.v("获取热门");
 
     const String url = '/popular?inline_set=dm_l';
 
@@ -389,7 +390,7 @@ class Api {
             Uri.encodeQueryComponent('${searArr[0]}:"${searArr[1]}$_end"');
         qry = '$qry&f_search=$_search';
       } else {
-        Global.logger.d('原始处理');
+        logger.d('原始处理');
         final String _search = Uri.encodeQueryComponent(serach.trim());
         qry = '$qry&f_search=$_search';
       }
@@ -419,7 +420,7 @@ class Api {
     // );
     final Options _cacheOptions = getCacheOptions(forceRefresh: refresh);
 
-    Global.logger.v(url);
+    logger.v(url);
 
     await CustomHttpsProxy.instance.init();
     final String response =
@@ -446,7 +447,7 @@ class Api {
       }
       url = '$url$qry';
 
-      Global.logger.v(url);
+      logger.v(url);
       return url;
     }
 
@@ -467,7 +468,7 @@ class Api {
     final bool isOrderFav = GalleryListParser.isFavoriteOrder(response);
     if (isOrderFav ^ (order == FavoriteOrder.fav)) {
       // 重设排序方式
-      Global.loggerNoStack.d('$isOrderFav 重设排序方式 $_order');
+      loggerNoStack.d('$isOrderFav 重设排序方式 $_order');
       final String _urlOrder = _getUrl(inlineSet: _order);
       await getHttpManager()
           .get(_urlOrder, options: getCacheOptions(forceRefresh: true));
@@ -516,14 +517,14 @@ class Api {
     cookies.add(Cookie('nw', '1'));
     cookieJar.saveFromResponse(Uri.parse(url), cookies);
 
-    Global.logger.i('获取画廊 $url');
+    logger.i('获取画廊 $url');
     await CustomHttpsProxy.instance.init();
     final String response = await getHttpManager()
         .get(url, options: getCacheOptions(forceRefresh: refresh));
 
     // TODO 画廊警告问题 使用 nw=always 未解决 待处理 怀疑和Session有关
     if ('$response'.contains(r'<strong>Offensive For Everyone</strong>')) {
-      Global.logger.v('Offensive For Everyone');
+      logger.v('Offensive For Everyone');
       showToast('Offensive For Everyone');
     }
 
@@ -531,7 +532,7 @@ class Api {
         await GalleryDetailParser.parseGalleryDetail(response,
             inGalleryItem: inGalleryItem);
 
-    // Global.logger.v(galleryItem.toJson());
+    // logger.v(galleryItem.toJson());
 
     return galleryItem;
   }
@@ -552,7 +553,7 @@ class Api {
     // final HttpManager httpManager = HttpManager.getInstance();
     final String url = inUrl + '?p=$page';
 
-    // Global.logger.v(url);
+    // logger.v(url);
 
     // 不显示警告的处理 cookie加上 nw=1
     // 在 url使用 nw=always 未解决 自动写入cookie 暂时搞不懂 先手动设置下
@@ -587,7 +588,7 @@ class Api {
 
     final String showkey = regShowKey.firstMatch(response)?.group(1) ?? '';
 
-//    Global.logger.v('$showkey');
+//    logger.v('$showkey');
 
     return showkey;
   }
@@ -601,7 +602,7 @@ class Api {
     List<GalleryItem> galleryItems, {
     bool refresh = false,
   }) async {
-    // Global.logger.i('api qry items ${galleryItems.length}');
+    // logger.i('api qry items ${galleryItems.length}');
     if (galleryItems.isEmpty) {
       return galleryItems;
     }
@@ -651,7 +652,7 @@ class Api {
 
       galleryItems[i].imgUrl = imageUrl;*/
 
-      // Global.logger.v('${rultList[i]["tags"]}');
+      // logger.v('${rultList[i]["tags"]}');
 
       galleryItems[i].filecount = rultList[i]['filecount'] as String;
       galleryItems[i].uploader = rultList[i]['uploader'] as String;
@@ -663,7 +664,7 @@ class Api {
       /// 判断获取语言标识
       // galleryItems[i].translated = '';
       // if (tags.contains('translated')) {
-      //   Global.logger.v('hase translated');
+      //   logger.v('hase translated');
       //   galleryItems[i].translated = EHUtils.getLangeage(tags[0]);
       // }
       if (tags.isNotEmpty) {
@@ -682,9 +683,9 @@ class Api {
     bool refresh = false,
   }) async {
     final RegExp urlRex = RegExp(r'http?s://e(-|x)hentai.org/g/(\d+)/(\w+)?/$');
-    Global.logger.v(galleryItem.url);
+    logger.v(galleryItem.url);
     final RegExpMatch urlRult = urlRex.firstMatch(galleryItem.url);
-    Global.logger.v(urlRult.groupCount);
+    logger.v(urlRult.groupCount);
 
     final String gid = urlRult.group(2);
     final String token = urlRult.group(3);
@@ -762,9 +763,9 @@ class Api {
     }
 
     if (Platform.isIOS) {
-      Global.logger.v('check ios photos Permission');
+      logger.v('check ios photos Permission');
       final PermissionStatus status = await Permission.photos.status;
-      Global.logger.v(status);
+      logger.v(status);
       if (status.isPermanentlyDenied) {
         _jumpToAppSettings(context);
         return false;
@@ -778,7 +779,7 @@ class Api {
       }
     } else {
       final PermissionStatus status = await Permission.storage.status;
-      Global.logger.v(status);
+      logger.v(status);
       if (await Permission.storage.status.isPermanentlyDenied) {
         if (await Permission.storage.request().isGranted) {
           _saveImage(imageUrl);
