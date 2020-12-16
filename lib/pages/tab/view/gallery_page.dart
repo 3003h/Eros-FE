@@ -53,8 +53,7 @@ class GalleryListTab extends GetView<GalleryController> {
                   ),
                   onPressed: () {
                     // logger.v('${EHUtils.convNumToCatMap(1)}');
-                    GalleryBase()
-                        .showFilterSetting(context, showAdevance: true);
+                    showFilterSetting();
                   },
                 ),
                 // 页码跳转按钮

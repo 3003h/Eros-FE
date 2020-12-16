@@ -253,7 +253,7 @@ class _GallerySearchPageState extends State<GallerySearchPage>
         logger.v('${item.menuKey}');
         switch (item.menuKey) {
           case SearchMenuEnum.filter:
-            GalleryBase().showFilterSetting(context, showAdevance: true);
+            showFilterSetting();
             break;
           case SearchMenuEnum.addToQuickSearch:
             final String _text = _searchTextController.text;
@@ -300,7 +300,7 @@ class _GallerySearchPageState extends State<GallerySearchPage>
                   size: 20,
                 ),
                 onPressed: () {
-                  GalleryBase().showFilterSetting(context, showAdevance: true);
+                  showFilterSetting();
                 },
               ),
               CupertinoButton(

@@ -1,4 +1,4 @@
-import 'package:FEhViewer/common/global.dart';
+import 'package:FEhViewer/common/controller/ehconfig_controller.dart';
 import 'package:FEhViewer/models/entity/favorite.dart';
 import 'package:FEhViewer/models/index.dart';
 import 'package:FEhViewer/models/states/local_favorite_model.dart';
@@ -169,6 +169,7 @@ class FavoriteTab extends GetView<FavoriteController> {
 
   /// 切换收藏夹
   Widget _buildFavcatButton(BuildContext context) {
+    final EhConfigController ehConfigController = Get.find();
     return CupertinoButton(
       minSize: 40,
       padding: const EdgeInsets.only(right: 8),
@@ -185,9 +186,8 @@ class FavoriteTab extends GetView<FavoriteController> {
               controller.title(fav.title);
               controller.enableDelayedLoad = false;
               controller.curFavcat = fav.favId;
-              Global.profile.ehConfig.lastShowFavcat = controller.curFavcat;
-              Global.profile.ehConfig.lastShowFavTitle = fav.title;
-              Global.saveProfile();
+              ehConfigController.lastShowFavcat = controller.curFavcat;
+              ehConfigController.lastShowFavTitle = fav.title;
               controller.reLoadDataFirst();
             } else {
               loggerNoStack.v('未修改favcat');

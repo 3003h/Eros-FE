@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:io';
 import 'dart:typed_data';
 
+import 'package:FEhViewer/common/controller/ehconfig_controller.dart';
 import 'package:FEhViewer/common/global.dart';
 import 'package:FEhViewer/common/parser/gallery_detail_parser.dart';
 import 'package:FEhViewer/common/parser/gallery_list_parser.dart';
@@ -306,8 +307,8 @@ class Api {
   }
 
   static HttpManager getHttpManager({bool cache = true}) {
-    final String _baseUrl =
-        EHConst.getBaseSite(Global.profile.ehConfig.siteEx ?? false);
+    final String _baseUrl = EHConst.getBaseSite(
+        Get.find<EhConfigController>().isSiteEx.value ?? false);
     final bool enableCache = Global.profile.cache.enable ?? true;
     final bool _doh = Global.profile.dnsConfig.enableDoH ?? false;
     if (_doh) {
@@ -328,7 +329,8 @@ class Api {
   }
 
   static String getBaseUrl() {
-    return EHConst.getBaseSite(Global.profile.ehConfig.siteEx ?? false);
+    return EHConst.getBaseSite(
+        Get.find<EhConfigController>().isSiteEx.value ?? false);
   }
 
   /// 获取热门画廊列表
@@ -359,10 +361,12 @@ class Api {
     int cats,
     bool refresh = false,
   }) async {
+    final EhConfigController ehConfigController = Get.find();
+
     String url = '/';
     String qry = '?page=${page ?? 0}&inline_set=dm_l';
 
-    if (Global.profile.ehConfig.safeMode) {
+    if (ehConfigController.isSafeMode.value) {
       qry = '$qry&f_cats=767';
     } else if (cats != null) {
       qry = '$qry&f_cats=$cats';
@@ -372,7 +376,7 @@ class Api {
       qry = '$qry&from=$fromGid';
     }
 
-    if (Global.profile.ehConfig.safeMode) {
+    if (ehConfigController.isSafeMode.value) {
       serach = 'parody:gundam\$';
     }
 

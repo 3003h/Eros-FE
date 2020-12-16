@@ -1,7 +1,5 @@
 import 'package:FEhViewer/common/controller/ehconfig_controller.dart';
-import 'package:FEhViewer/common/global.dart';
-import 'package:FEhViewer/models/advanceSearch.dart';
-import 'package:FEhViewer/models/states/advance_search_model.dart';
+import 'package:FEhViewer/pages/tab/view/gallery_filter_view.dart';
 import 'package:FEhViewer/utils/logger.dart';
 import 'package:FEhViewer/utils/utility.dart';
 import 'package:FEhViewer/values/const.dart';
@@ -10,7 +8,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
-import 'package:provider/provider.dart';
 
 ///
 /// 筛选画廊类型的按钮
@@ -139,7 +136,7 @@ class _GalleryCatFilterState extends State<GalleryCatFilter> {
         setState(() {
           catMap[catName] = !value;
           onChanged(EHUtils.convCatMapToNum(catMap));
-          logger.v('$catMap');
+          // logger.v('$catMap');
         });
       },
       onColor: ThemeColors.catColor[catName],
@@ -188,298 +185,6 @@ class _GalleryCatFilterState extends State<GalleryCatFilter> {
   }
 }
 
-class GalleryFilter extends StatefulWidget {
-  const GalleryFilter({
-    Key key,
-    @required this.catNum,
-    @required this.catNumChanged,
-    @required this.advanceSearchSwitch,
-    @required this.advanceSearchValue,
-  }) : super(key: key);
-  final int catNum;
-  final ValueChanged<int> catNumChanged;
-  final bool advanceSearchValue;
-  final ValueChanged<bool> advanceSearchSwitch;
-
-  @override
-  _GalleryFilterState createState() => _GalleryFilterState();
-}
-
-const double kHeight = 220.0;
-const double kAdvanceHeight = 500.0;
-
-class _GalleryFilterState extends State<GalleryFilter> {
-  double _height;
-  int _catNum;
-  bool _advance;
-
-  AdvanceSearch _advanceSearch = Global.profile.advanceSearch;
-
-  final TextEditingController _statrPageCtrl = TextEditingController();
-  final TextEditingController _endPageCtrl = TextEditingController();
-
-  @override
-  void initState() {
-    super.initState();
-    _catNum = widget.catNum;
-    _advance = widget.advanceSearchValue;
-    _height = _advance ? kAdvanceHeight : kHeight;
-
-    _statrPageCtrl.text = _advanceSearch.startPage;
-    _endPageCtrl.text = _advanceSearch.endPage;
-
-    _statrPageCtrl.addListener(() {
-      _advanceSearch.startPage = _statrPageCtrl.text.trim();
-    });
-    _endPageCtrl.addListener(() {
-      _advanceSearch.endPage = _endPageCtrl.text.trim();
-    });
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return AnimatedContainer(
-      height: _height,
-      duration: const Duration(milliseconds: 300),
-      curve: Curves.ease,
-      child: Container(
-        child: SingleChildScrollView(
-          child: Column(
-            children: <Widget>[
-              GalleryCatFilter(
-                // padding: const EdgeInsets.symmetric(vertical: 4.0),
-                value: _catNum,
-                onChanged: widget.catNumChanged,
-              ),
-              Container(
-                child: Row(
-                  children: <Widget>[
-                    const Text('高级搜索'),
-                    Transform.scale(
-                      scale: 0.8,
-                      child: CupertinoSwitch(
-                          value: _advance,
-                          onChanged: (bool value) {
-                            _height = value ? kAdvanceHeight : kHeight;
-                            setState(() {
-                              _advance = value;
-                              widget.advanceSearchSwitch(value);
-                            });
-                          }),
-                    ),
-                    const Spacer(),
-                    Offstage(
-                      offstage: !_advance,
-                      child: CupertinoButton(
-                          padding: const EdgeInsets.only(right: 8),
-                          minSize: 20,
-                          child: const Text(
-                            '重置',
-                            style: TextStyle(height: 1, fontSize: 14),
-                          ),
-                          onPressed: () {
-                            setState(() {
-                              _statrPageCtrl.clear();
-                              _endPageCtrl.clear();
-                              _advanceSearch = AdvanceSearch()
-                                ..searchGalleryName = true
-                                ..searchGalleryTags = true;
-                              Global.profile.advanceSearch = _advanceSearch;
-                            });
-                          }),
-                    ),
-                  ],
-                ),
-              ),
-              Divider(
-                height: 0.5,
-                color: CupertinoDynamicColor.resolve(
-                    CupertinoColors.systemGrey4, context),
-              ),
-              Offstage(
-                offstage: !_advance,
-                child: Container(
-                  child: Column(
-                    children: <Widget>[
-                      AdvanceSearchSwitchItem(
-                        title: '搜索画廊名字',
-                        value: _advanceSearch.searchGalleryName ?? true,
-                        onChanged: (bool value) {
-                          setState(() {
-                            _advanceSearch.searchGalleryName = value;
-                          });
-                        },
-                      ),
-                      AdvanceSearchSwitchItem(
-                        title: '搜索画廊标签',
-                        value: _advanceSearch.searchGalleryTags ?? true,
-                        onChanged: (bool value) {
-                          setState(() {
-                            _advanceSearch.searchGalleryTags = value;
-                          });
-                        },
-                      ),
-                      AdvanceSearchSwitchItem(
-                        title: '搜索画廊描述',
-                        value: _advanceSearch.searchGalleryDesc ?? false,
-                        onChanged: (bool value) {
-                          setState(() {
-                            _advanceSearch.searchGalleryDesc = value;
-                          });
-                        },
-                      ),
-                      AdvanceSearchSwitchItem(
-                        title: '搜索低愿力标签',
-                        value: _advanceSearch.searchLowPowerTags ?? false,
-                        onChanged: (bool value) {
-                          setState(() {
-                            _advanceSearch.searchLowPowerTags = value;
-                          });
-                        },
-                      ),
-                      AdvanceSearchSwitchItem(
-                        title: '搜索差评标签',
-                        value: _advanceSearch.searchDownvotedTags ?? false,
-                        onChanged: (bool value) {
-                          setState(() {
-                            _advanceSearch.searchDownvotedTags = value;
-                          });
-                        },
-                      ),
-                      AdvanceSearchSwitchItem(
-                        title: '搜索被删除的画廊',
-                        value: _advanceSearch.searchExpunged ?? false,
-                        onChanged: (bool value) {
-                          setState(() {
-                            _advanceSearch.searchExpunged = value;
-                          });
-                        },
-                      ),
-                      AdvanceSearchSwitchItem(
-                        title: '最低评分',
-                        value: _advanceSearch.searchWithminRating ?? false,
-                        onChanged: (bool value) {
-                          setState(() {
-                            _advanceSearch.searchWithminRating = value;
-                          });
-                        },
-                      ),
-                      CupertinoSlidingSegmentedControl<int>(
-                          // ignore: prefer_const_literals_to_create_immutables
-                          children: <int, Widget>{
-                            2: const Padding(
-                              padding: EdgeInsets.symmetric(horizontal: 8.0),
-                              child: Text('2星'),
-                            ),
-                            3: const Padding(
-                              padding: EdgeInsets.symmetric(horizontal: 8.0),
-                              child: Text('3星'),
-                            ),
-                            4: const Padding(
-                              padding: EdgeInsets.symmetric(horizontal: 8.0),
-                              child: Text('4星'),
-                            ),
-                            5: const Padding(
-                              padding: EdgeInsets.symmetric(horizontal: 8.0),
-                              child: Text('5星'),
-                            ),
-                          },
-                          groupValue: _advanceSearch.minRating ?? 2,
-                          onValueChanged: (int value) {
-                            setState(() {
-                              _advanceSearch.minRating = value;
-                            });
-                          }),
-                      Row(
-                        children: <Widget>[
-                          AdvanceSearchSwitchItem(
-                            title: '页数',
-                            expand: false,
-                            value: _advanceSearch.searchBetweenpage ?? false,
-                            onChanged: (bool value) {
-                              setState(() {
-                                _advanceSearch.searchBetweenpage = value;
-                              });
-                            },
-                          ),
-                          const Spacer(),
-                          Container(
-                            margin: const EdgeInsets.only(right: 4),
-                            width: 50,
-                            height: 28,
-                            child: CupertinoTextField(
-                              controller: _statrPageCtrl,
-                              keyboardType: TextInputType.number,
-                              cursorHeight: 14,
-                              enabled:
-                                  _advanceSearch.searchBetweenpage ?? false,
-                              style: const TextStyle(
-                                height: 1,
-                                textBaseline: TextBaseline.alphabetic,
-                              ),
-                            ),
-                          ),
-                          const Text('到'),
-                          Container(
-                            margin: const EdgeInsets.only(left: 4),
-                            width: 50,
-                            height: 28,
-                            child: CupertinoTextField(
-                              controller: _endPageCtrl,
-                              keyboardType: TextInputType.number,
-                              cursorHeight: 14,
-                              enabled:
-                                  _advanceSearch.searchBetweenpage ?? false,
-                              style: const TextStyle(
-                                height: 1,
-                                textBaseline: TextBaseline.alphabetic,
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
-                      Container(
-                          margin: const EdgeInsets.only(top: 8),
-                          child: const Text('禁用默认排除项')),
-                      AdvanceSearchSwitchItem(
-                        title: '语言',
-                        value: _advanceSearch.disableDFLanguage ?? false,
-                        onChanged: (bool value) {
-                          setState(() {
-                            _advanceSearch.disableDFLanguage = value;
-                          });
-                        },
-                      ),
-                      AdvanceSearchSwitchItem(
-                        title: '上传者',
-                        value: _advanceSearch.disableDFUploader ?? false,
-                        onChanged: (bool value) {
-                          setState(() {
-                            _advanceSearch.disableDFUploader = value;
-                          });
-                        },
-                      ),
-                      AdvanceSearchSwitchItem(
-                        title: '标签',
-                        value: _advanceSearch.disableDFTags ?? false,
-                        onChanged: (bool value) {
-                          setState(() {
-                            _advanceSearch.disableDFTags = value;
-                          });
-                        },
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-            ],
-          ),
-        ),
-      ),
-    );
-  }
-}
-
 class AdvanceSearchSwitchItem extends StatelessWidget {
   const AdvanceSearchSwitchItem(
       {Key key, this.value, this.onChanged, this.title, this.expand = true})
@@ -507,67 +212,32 @@ class AdvanceSearchSwitchItem extends StatelessWidget {
   }
 }
 
-class GalleryBase {
-  /// 设置类型筛选
-  /// 弹出toast 通过Provider 全局 维护cat的值
-  Future<void> showFilterSetting(BuildContext context,
-      {bool showAdevance = false}) async {
-    final EhConfigController ehConfigController = Get.find();
-    return showCupertinoDialog<void>(
-      context: context,
-      builder: (BuildContext context) {
-        // logger.v('_setCats showCupertinoDialog builder');
-        int _catNum = ehConfigController.catFilter.value;
-        // AdvanceSearchModel
-        final AdvanceSearchModel advanceSearchModel =
-            Provider.of<AdvanceSearchModel>(context, listen: false);
-        bool _enableAdvance = advanceSearchModel.enable;
-
-        return CupertinoAlertDialog(
-          title: const Text('搜索'),
-          content: showAdevance
-              ? GalleryFilter(
-                  catNum: _catNum,
-                  catNumChanged: (int toNum) {
-                    _catNum = toNum;
-                  },
-                  advanceSearchValue: _enableAdvance,
-                  advanceSearchSwitch: (bool value) {
-                    _enableAdvance = value;
-                  })
-              : Container(
-                  height: 180,
-                  child: SingleChildScrollView(
-                    child: GalleryCatFilter(
-                      margin: const EdgeInsets.symmetric(vertical: 2.0),
-                      value: _catNum,
-                      onChanged: (int toNum) {
-                        _catNum = toNum;
-                      },
-                    ),
-                  ),
-                ),
-          actions: <Widget>[
-            CupertinoDialogAction(
-              child: const Text('取消'),
-              onPressed: () {
-                Get.back();
-              },
-            ),
-            CupertinoDialogAction(
-              child: const Text('确定'),
-              onPressed: () {
-                ehConfigController.catFilter.value = _catNum;
-                advanceSearchModel.enable = _enableAdvance;
-                // logger.v(advanceSearchModel.urlPara);
-                Get.back();
-              },
-            ),
-          ],
-        );
-      },
-    );
-  }
+/// 设置类型筛选
+/// 弹出toast 全局维护cat的值
+Future<void> showFilterSetting() async {
+  final EhConfigController ehConfigController = Get.find();
+  return showCupertinoDialog<void>(
+    context: Get.context,
+    builder: (BuildContext context) {
+      return CupertinoAlertDialog(
+        title: const Text('搜索'),
+        content: GalleryFilterView(
+          catNum: ehConfigController.catFilter.value,
+          catNumChanged: (int toNum) {
+            ehConfigController.catFilter.value = toNum;
+          },
+        ),
+        actions: <Widget>[
+          CupertinoDialogAction(
+            child: const Text('确定'),
+            onPressed: () {
+              Get.back();
+            },
+          ),
+        ],
+      );
+    },
+  );
 }
 
 /// 列表加载异常时的默认页面

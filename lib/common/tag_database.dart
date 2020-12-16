@@ -1,6 +1,6 @@
 import 'dart:convert';
 
-import 'package:FEhViewer/common/global.dart';
+import 'package:FEhViewer/common/controller/ehconfig_controller.dart';
 import 'package:FEhViewer/models/entity/tag_translat.dart';
 import 'package:FEhViewer/utils/db_util.dart';
 import 'package:FEhViewer/utils/dio_util.dart';
@@ -8,6 +8,7 @@ import 'package:FEhViewer/utils/logger.dart';
 import 'package:FEhViewer/utils/toast.dart';
 import 'package:FEhViewer/values/const.dart';
 import 'package:dio/dio.dart';
+import 'package:get/get.dart';
 
 const int connectTimeout = 10000;
 const int receiveTimeout = 30000;
@@ -17,6 +18,8 @@ class EhTagDatabase {
   static Future<String> generateTagTranslat() async {
     final HttpManager httpManager = HttpManager.getInstance(
         baseUrl: 'https://api.github.com', cache: false);
+
+    final EhConfigController ehConfigController = Get.find();
 
     const String url = '/repos/EhTagTranslation/Database/releases/latest';
 
@@ -32,7 +35,8 @@ class EhTagDatabase {
     loggerNoStack.v('remoteVer $remoteVer');
 
     // 获取当前本地版本
-    final String localVer = Global.profile.ehConfig.tagTranslatVer;
+    // final String localVer = Global.profile.ehConfig.tagTranslatVer;
+    final String localVer = ehConfigController.tagTranslatVer.value;
     loggerNoStack.v('localVer $localVer');
 
     if (remoteVer != localVer) {
@@ -59,8 +63,9 @@ class EhTagDatabase {
 
         await tagSaveToDB(listDataP);
         // StorageUtil().setString(TAG_TRANSLAT_VER, remoteVer);
-        Global.profile.ehConfig.tagTranslatVer = remoteVer;
-        Global.saveProfile();
+        // Global.profile.ehConfig.tagTranslatVer = remoteVer;
+        // Global.saveProfile();
+        ehConfigController.tagTranslatVer.value = remoteVer;
       }
       showToast('标签翻译库更新完成');
       loggerNoStack.v('tag翻译更新完成');
