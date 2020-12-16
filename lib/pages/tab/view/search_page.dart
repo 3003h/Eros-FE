@@ -1,4 +1,3 @@
-import 'package:FEhViewer/common/global.dart';
 import 'package:FEhViewer/models/index.dart';
 import 'package:FEhViewer/models/states/ehconfig_model.dart';
 import 'package:FEhViewer/models/states/search_text_model.dart';
@@ -6,6 +5,7 @@ import 'package:FEhViewer/pages/tab/view/gallery_base.dart';
 import 'package:FEhViewer/pages/tab/view/search_text_page.dart';
 import 'package:FEhViewer/pages/tab/view/tab_base.dart';
 import 'package:FEhViewer/utils/cust_lib/popup_menu.dart';
+import 'package:FEhViewer/utils/logger.dart';
 import 'package:FEhViewer/utils/toast.dart';
 import 'package:FEhViewer/utils/utility.dart';
 import 'package:FEhViewer/utils/vibrate.dart';
@@ -249,7 +249,7 @@ class _GallerySearchPageState extends State<GallerySearchPage>
             )),
       ],
       onClickMenu: (MenuItemProvider item) {
-        Global.logger.v('${item.menuKey}');
+        logger.v('${item.menuKey}');
         switch (item.menuKey) {
           case SearchMenuEnum.filter:
             GalleryBase().showFilterSetting(context, showAdevance: true);
@@ -382,7 +382,7 @@ class _GallerySearchPageState extends State<GallerySearchPage>
         builder: (context, bool searchBarComp, _) {
           final Size size = MediaQuery.of(context).size;
           final double width = size.width;
-          // Global.logger.v(width);
+          // logger.v(width);
           if (width > 450) {
             return _buildListBtns();
           } else {
@@ -434,7 +434,7 @@ class _GallerySearchPageState extends State<GallerySearchPage>
     final int _catNum =
         Provider.of<EhConfigModel>(context, listen: false).catFilter;
 
-    Global.loggerNoStack.v('_loadDataFirst');
+    loggerNoStack.v('_loadDataFirst');
     setState(() {
       _gallerItemBeans.clear();
       _firstLoading = true;

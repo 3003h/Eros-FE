@@ -1,7 +1,7 @@
 import 'dart:async';
 import 'dart:io';
 
-import 'package:FEhViewer/common/global.dart';
+import 'package:FEhViewer/utils/logger.dart';
 import 'package:FEhViewer/utils/utility.dart';
 import 'package:FEhViewer/values/const.dart';
 import 'package:flutter/cupertino.dart';
@@ -36,7 +36,7 @@ class _WebMySettingState extends State<WebMySetting> {
     final List<Cookie> cookies =
         (await Api.cookieJar).loadForRequest(Uri.parse(Api.getBaseUrl()));
     // await cookieManager.clearCookies();
-    Global.logger.d(cookies.join('\n'));
+    logger.d(cookies.join('\n'));
     await cookieManager?.setCookies(cookies);
   }
 
@@ -57,7 +57,7 @@ class _WebMySettingState extends State<WebMySetting> {
     return JavascriptChannel(
         name: 'Delete',
         onMessageReceived: (JavascriptMessage message) {
-          Global.logger.d(message.message);
+          logger.d(message.message);
           if (message.message.contains('delete the profile')) {
             _showAlterDilog(ShowType.delete,
                 defaultText: message.message, textField: false);
@@ -69,15 +69,15 @@ class _WebMySettingState extends State<WebMySetting> {
     return JavascriptChannel(
         name: 'Prompt',
         onMessageReceived: (JavascriptMessage message) {
-          Global.logger.d(message.message);
+          logger.d(message.message);
           final List<String> _msgs = message.message.split('#@#');
           final String _msg = _msgs[0];
           final String _defaultText = _msgs[1];
           if (_msg.contains('new name for this profile')) {
-            Global.logger.d('重命名 $_defaultText');
+            logger.d('重命名 $_defaultText');
             _showAlterDilog(ShowType.rename, defaultText: _defaultText);
           } else if (_msg.contains('new profile')) {
-            Global.logger.d('新建配置 $_defaultText');
+            logger.d('新建配置 $_defaultText');
             _showAlterDilog(ShowType.create, defaultText: _defaultText);
           }
         });
@@ -155,7 +155,7 @@ class _WebMySettingState extends State<WebMySetting> {
   }
 
   Future<void> _renameProfile(String profileName) async {
-    Global.logger.d('rename to $profileName');
+    logger.d('rename to $profileName');
     try {
       final String javascript = '''
       document.getElementById("profile_action").value = "rename";

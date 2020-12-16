@@ -1,13 +1,12 @@
-import 'package:FEhViewer/common/global.dart';
 import 'package:FEhViewer/models/index.dart';
 import 'package:FEhViewer/pages/tab/controller/gallery_controller.dart';
 import 'package:FEhViewer/pages/tab/view/gallery_base.dart';
 import 'package:FEhViewer/route/navigator_util.dart';
+import 'package:FEhViewer/utils/logger.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
-import 'package:tuple/tuple.dart';
 
 import 'tab_base.dart';
 
@@ -53,7 +52,7 @@ class GalleryListTab extends GetView<GalleryController> {
                     size: 20,
                   ),
                   onPressed: () {
-                    // Global.logger.v('${EHUtils.convNumToCatMap(1)}');
+                    // logger.v('${EHUtils.convNumToCatMap(1)}');
                     GalleryBase()
                         .showFilterSetting(context, showAdevance: true);
                   },
@@ -133,7 +132,7 @@ class GalleryListTab extends GetView<GalleryController> {
           ),
         ),
         onError: (err) {
-          Global.logger.e(' $err');
+          logger.e(' $err');
           return SliverFillRemaining(
             child: Container(
               padding: const EdgeInsets.only(bottom: 50),

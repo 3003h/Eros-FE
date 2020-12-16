@@ -1,6 +1,6 @@
-import 'package:FEhViewer/common/global.dart';
 import 'package:FEhViewer/models/index.dart';
 import 'package:FEhViewer/models/states/ehconfig_model.dart';
+import 'package:FEhViewer/utils/logger.dart';
 import 'package:FEhViewer/utils/toast.dart';
 import 'package:FEhViewer/utils/utility.dart';
 import 'package:FEhViewer/values/const.dart';
@@ -21,7 +21,7 @@ class GalleryController extends GetxController
   RxBool isLoadMore = false.obs;
 
   String get title {
-    // Global.logger.d('${EHConst.cats.entries.length}');
+    // logger.d('${EHConst.cats.entries.length}');
     if (cats != null) {
       return EHConst.cats.entries
               ?.firstWhere((MapEntry<String, int> element) =>
@@ -50,7 +50,7 @@ class GalleryController extends GetxController
 
   Future<Tuple2<List<GalleryItem>, int>> loadData(
       {bool refresh = false}) async {
-    Global.logger.v('_loadDataFirst  gallery');
+    logger.v('_loadDataFirst  gallery');
     final int _catNum =
         Provider.of<EhConfigModel>(Get.context, listen: false).catFilter;
 
@@ -87,7 +87,7 @@ class GalleryController extends GetxController
 
     isLoadMore.value = true;
 
-    Global.logger.d('${state.length}');
+    logger.d('${state.length}');
 
     final String fromGid = state.last.gid;
     final Tuple2<List<GalleryItem>, int> tuple = await Api.getGallery(
@@ -101,14 +101,14 @@ class GalleryController extends GetxController
 
     state.addAll(gallerItemBeans);
 
-    Global.logger.d('${state.length}');
+    logger.d('${state.length}');
     maxPage = tuple.item2;
     isLoadMore.value = false;
     update();
   }
 
   Future<void> loadFromPage(int page) async {
-    Global.logger.v('jump to page =>  $page');
+    logger.v('jump to page =>  $page');
 
     final int _catNum =
         Provider.of<EhConfigModel>(Get.context, listen: false).catFilter;

@@ -3,6 +3,7 @@ import 'package:FEhViewer/common/parser/gallery_fav_parser.dart';
 import 'package:FEhViewer/models/states/gallery_model.dart';
 import 'package:FEhViewer/models/states/local_favorite_model.dart';
 import 'package:FEhViewer/models/states/user_model.dart';
+import 'package:FEhViewer/utils/logger.dart';
 import 'package:FEhViewer/utils/toast.dart';
 import 'package:FEhViewer/utils/vibrate.dart';
 import 'package:FEhViewer/values/theme_colors.dart';
@@ -80,7 +81,7 @@ class _GalleryFavButtonState extends State<GalleryFavButton> {
 
             final bool _isFav = _favcat().isNotEmpty || _localFav;
 
-            // Global.logger.v('$tuple');
+            // logger.v('$tuple');
 
             return Container(
               child: Column(
@@ -144,16 +145,16 @@ class _GalleryFavButtonState extends State<GalleryFavButton> {
       _isLoading = true;
     });
     try {
-      Global.logger.v('[${_galleryModel.galleryItem.favcat}]');
+      logger.v('[${_galleryModel.galleryItem.favcat}]');
       if (_galleryModel.galleryItem.favcat.isNotEmpty &&
           _galleryModel.galleryItem.favcat != 'l') {
-        Global.logger.v('取消网络收藏');
+        logger.v('取消网络收藏');
         await GalleryFavParser.galleryAddfavorite(
           _galleryModel.galleryItem.gid,
           _galleryModel.galleryItem.token,
         );
       } else {
-        Global.logger.v('取消本地收藏');
+        logger.v('取消本地收藏');
         final LocalFavModel localFavModel =
             Provider.of<LocalFavModel>(context, listen: false);
         _galleryModel.localFav = false;
@@ -198,7 +199,7 @@ class _GalleryFavButtonState extends State<GalleryFavButton> {
 
   /// 点击收藏按钮处理
   Future<void> _tapFav(context) async {
-    Global.logger.v('_tapFav');
+    logger.v('_tapFav');
 
     /// 网络收藏或者本地收藏
     if (_galleryModel.galleryItem.favcat.isNotEmpty ||
@@ -211,11 +212,11 @@ class _GalleryFavButtonState extends State<GalleryFavButton> {
       if ((Global.profile.ehConfig.favLongTap ?? false) &&
           _lastFavcat != null &&
           _lastFavcat.isNotEmpty) {
-        Global.logger.v('添加到上次收藏夹');
+        logger.v('添加到上次收藏夹');
         return _addToLastFavcat(_lastFavcat);
       } else {
         // 手选收藏夹
-        Global.logger.v('手选收藏夹');
+        logger.v('手选收藏夹');
         return await _showAddFavDialog(context);
       }
     }
@@ -249,10 +250,10 @@ class _GalleryFavButtonState extends State<GalleryFavButton> {
         ? await _showAddFavPicker(context, favList)
         : await _showAddFavList(context, favList);
 
-    // Global.logger.v('$result  ${result.runtimeType}');
+    // logger.v('$result  ${result.runtimeType}');
 
     if (result != null && result is Map) {
-      Global.logger.v('result ${result}');
+      logger.v('result ${result}');
       setState(() {
         _isLoading = true;
       });
@@ -394,7 +395,7 @@ class _GalleryFavButtonState extends State<GalleryFavButton> {
                       'favTitle': fav['favTitle'],
                       'favnode': _favnoteController.text
                     };
-                    Global.logger.v('${favMap}');
+                    logger.v('${favMap}');
                     // 返回数据
                     Get.back(result: favMap);
                   },

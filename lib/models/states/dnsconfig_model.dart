@@ -2,6 +2,7 @@ import 'package:FEhViewer/common/global.dart';
 import 'package:FEhViewer/models/dnsCache.dart';
 import 'package:FEhViewer/models/dnsConfig.dart';
 import 'package:FEhViewer/models/states/base.dart';
+import 'package:FEhViewer/utils/logger.dart';
 import 'package:FEhViewer/utils/toast.dart';
 
 const String _regExpIP = r'(\.((2(5[0-5]|[0-4]\d))|[0-1]?\d{1,2})){3}';
@@ -46,7 +47,7 @@ class DnsConfigModel extends ProfileChangeNotifier {
         _dnsConfig.hosts[index].addr = addr;
       }
 
-      Global.logger.v('add $host => $addr');
+      logger.v('add $host => $addr');
       notifyListeners();
       return true;
     } else {

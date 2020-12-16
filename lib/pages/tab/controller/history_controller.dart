@@ -1,6 +1,6 @@
-import 'package:FEhViewer/common/global.dart';
 import 'package:FEhViewer/models/index.dart';
 import 'package:FEhViewer/models/states/history_model.dart';
+import 'package:FEhViewer/utils/logger.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
@@ -25,7 +25,7 @@ class HistoryController extends GetxController
   }
 
   Future<List<GalleryItem>> loadData() async {
-    Global.logger.v('_loadData ');
+    logger.v('_loadData ');
     final List<GalleryItem> historys = historyModel.history;
 
     return Future<List<GalleryItem>>.value(historys);

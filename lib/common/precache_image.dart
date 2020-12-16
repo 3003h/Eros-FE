@@ -1,12 +1,12 @@
 import 'dart:isolate';
 
-import 'package:FEhViewer/common/global.dart';
+import 'package:FEhViewer/utils/logger.dart';
 import 'package:flutter/cupertino.dart';
 
 /// 缓存图片的顶级函数
 Future<void> _precacheImage(PrecacheMessageProtocol protocol) async {
-  // Global.logger.i('start precacheImageCompute ${protocol.url}');
-  Global.logger.i('start _precacheImage ');
+  // logger.i('start precacheImageCompute ${protocol.url}');
+  logger.i('start _precacheImage ');
   protocol.sendPort.send(' 123456');
   // await precacheImage(
   //     ExtendedNetworkImageProvider(
@@ -44,7 +44,7 @@ class PreCacheImage {
         print(message.toString());
       });
     } catch (e, stack) {
-      Global.logger.e('$e /n $stack');
+      logger.e('$e /n $stack');
     } finally {
       isolate.addOnExitListener(receivePort.sendPort,
           response: 'isolate has been killed');

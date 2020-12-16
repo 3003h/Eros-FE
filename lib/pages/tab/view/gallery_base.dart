@@ -2,6 +2,7 @@ import 'package:FEhViewer/common/global.dart';
 import 'package:FEhViewer/models/advanceSearch.dart';
 import 'package:FEhViewer/models/states/advance_search_model.dart';
 import 'package:FEhViewer/models/states/ehconfig_model.dart';
+import 'package:FEhViewer/utils/logger.dart';
 import 'package:FEhViewer/utils/utility.dart';
 import 'package:FEhViewer/values/const.dart';
 import 'package:FEhViewer/values/theme_colors.dart';
@@ -63,7 +64,7 @@ class _GalleryCatButtonState extends State<GalleryCatButton> {
 
   @override
   Widget build(BuildContext context) {
-    // Global.logger.v('GalleryCatButton build');
+    // logger.v('GalleryCatButton build');
     return Container(
       child: GestureDetector(
         onLongPress: () => widget.onLongPress(),
@@ -82,7 +83,7 @@ class _GalleryCatButtonState extends State<GalleryCatButton> {
   }
 
   void _pressBtn() {
-    // Global.logger.v('_pressBtn ${widget.text}');
+    // logger.v('_pressBtn ${widget.text}');
     _value = !_value;
     _textColor = _value ? widget.onTextColor : widget.offTextColor;
     _color = _value ? widget.onColor : widget.offColor;
@@ -134,11 +135,11 @@ class _GalleryCatFilterState extends State<GalleryCatFilter> {
     return GalleryCatButton(
       text: catName,
       onChanged: (bool value) {
-        Global.logger.v('$catName changed to ${!value}');
+        logger.v('$catName changed to ${!value}');
         setState(() {
           catMap[catName] = !value;
           onChanged(EHUtils.convCatMapToNum(catMap));
-          Global.logger.v('$catMap');
+          logger.v('$catMap');
         });
       },
       onColor: ThemeColors.catColor[catName],
@@ -517,7 +518,7 @@ class GalleryBase {
     return showCupertinoDialog<void>(
       context: context,
       builder: (BuildContext context) {
-        // Global.logger.v('_setCats showCupertinoDialog builder');
+        // logger.v('_setCats showCupertinoDialog builder');
         int _catNum =
             Provider.of<EhConfigModel>(context, listen: false).catFilter;
         // AdvanceSearchModel
@@ -562,7 +563,7 @@ class GalleryBase {
                 Provider.of<EhConfigModel>(context, listen: false).catFilter =
                     _catNum;
                 advanceSearchModel.enable = _enableAdvance;
-                // Global.logger.v(advanceSearchModel.urlPara);
+                // logger.v(advanceSearchModel.urlPara);
                 Get.back();
               },
             ),

@@ -7,6 +7,7 @@ import 'package:FEhViewer/pages/tab/controller/favorite_controller.dart';
 import 'package:FEhViewer/pages/tab/view/gallery_base.dart';
 import 'package:FEhViewer/pages/tab/view/tab_base.dart';
 import 'package:FEhViewer/route/routes.dart';
+import 'package:FEhViewer/utils/logger.dart';
 import 'package:FEhViewer/widget/eh_widget.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -154,7 +155,7 @@ class FavoriteTab extends GetView<FavoriteController> {
           ),
         ),
         onError: (err) {
-          Global.logger.e(' $err');
+          logger.e(' $err');
           return SliverFillRemaining(
             child: Container(
               padding: const EdgeInsets.only(bottom: 50),
@@ -180,7 +181,7 @@ class FavoriteTab extends GetView<FavoriteController> {
           if (result.runtimeType == FavcatItemBean) {
             final FavcatItemBean fav = result;
             if (controller.curFavcat != fav.favId) {
-              Global.loggerNoStack.v('set fav to ${fav.title}');
+              loggerNoStack.v('set fav to ${fav.title}');
               controller.title(fav.title);
               controller.enableDelayedLoad = false;
               controller.curFavcat = fav.favId;
@@ -189,7 +190,7 @@ class FavoriteTab extends GetView<FavoriteController> {
               Global.saveProfile();
               controller.reLoadDataFirst();
             } else {
-              Global.loggerNoStack.v('未修改favcat');
+              loggerNoStack.v('未修改favcat');
             }
           }
         });

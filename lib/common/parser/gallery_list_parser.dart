@@ -18,7 +18,7 @@ class GalleryListParser {
         document.querySelectorAll('#dms > div > select > option');
 
     for (final dom.Element elm in domList) {
-      // Global.logger.v('${elm.attributes["value"]}  ${elm.attributes.keys}');
+      // logger.v('${elm.attributes["value"]}  ${elm.attributes.keys}');
       final Map<dynamic, String> attributes = elm.attributes;
       if (attributes.keys.contains('selected')) {
         return attributes['value'] == 'l';
@@ -38,7 +38,7 @@ class GalleryListParser {
 
     if (domList.length > 2) {
       final dom.Element orderElm = domList[2].querySelector('div > span');
-      // Global.logger.d('${orderElm.text}');
+      // logger.d('${orderElm.text}');
       return orderElm.text?.trim() == 'Favorited';
     }
 
@@ -77,7 +77,7 @@ class GalleryListParser {
       final List<Map<String, String>> favcatList = <Map<String, String>>[];
       for (final dom.Element elm in favorites) {
         final List<dom.Element> divs = elm.querySelectorAll('div');
-        // Global.logger.v('${divs}');
+        // logger.v('${divs}');
         if (divs.isNotEmpty && divs.length >= 3) {
           final Map<String, String> map = <String, String>{
             'favId': '$_favId',
@@ -90,7 +90,7 @@ class GalleryListParser {
       if (favcatList.isNotEmpty) {
         Global.profile.user.favcat = favcatList;
         Global.saveProfile();
-        // Global.logger.v('$favcatList');
+        // logger.v('$favcatList');
       }
     }
 
@@ -100,12 +100,12 @@ class GalleryListParser {
     if (_pages.length > 2) {
       final dom.Element _maxPageElem = _pages[_pages.length - 2];
       _maxPage = int.parse(_maxPageElem.text.trim());
-//      Global.logger.v('_maxPage $_maxPage');
+//      logger.v('_maxPage $_maxPage');
     }
 
     // 画廊列表
     List<dom.Element> gallerys = document.querySelectorAll(_listSelector);
-//    Global.logger.v('gallerys ${gallerys.length}');
+//    logger.v('gallerys ${gallerys.length}');
 
     final List<GalleryItem> _gallaryItems = [];
     for (final dom.Element tr in gallerys) {
@@ -181,7 +181,7 @@ class GalleryListParser {
       final double ratingFB = (80.0 - double.parse(px.group(1))) / 16.0 -
           (px.group(2) == '21' ? 0.5 : 0.0);
 
-//      Global.loggerNoStack.i('ratingFB $ratingFB');
+//      loggerNoStack.i('ratingFB $ratingFB');
 
       final String postTime =
           tr.querySelector('td.gl2c > div:nth-child(2) > div')?.text?.trim() ??

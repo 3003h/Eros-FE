@@ -1,6 +1,6 @@
-import 'package:FEhViewer/common/global.dart';
 import 'package:FEhViewer/models/index.dart';
 import 'package:FEhViewer/models/states/gallery_model.dart';
+import 'package:FEhViewer/utils/logger.dart';
 import 'package:FEhViewer/utils/utility.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -91,9 +91,9 @@ class _AllPreviewPageState extends State<AllPreviewPage> {
         );
         // _scrollController.jumpTo(_offset);
 
-        Global.logger.d('toLine:$_toLine  _offset:$_offset');
+        logger.d('toLine:$_toLine  _offset:$_offset');
       }).catchError((e, stack) {
-        Global.logger.e('$stack');
+        logger.e('$stack');
       });
     }
   }
@@ -116,7 +116,7 @@ class _AllPreviewPageState extends State<AllPreviewPage> {
                   shouldRebuild: (pre, next) =>
                       int.parse(pre.filecount) == next.galleryPreview.length,
                   builder: (context, GalleryItem galleryItem, child) {
-//                    Global.logger.v('build SliverGrid');
+//                    logger.v('build SliverGrid');
                     return SliverGrid(
                       gridDelegate:
                           const SliverGridDelegateWithMaxCrossAxisExtent(
@@ -183,7 +183,7 @@ class _AllPreviewPageState extends State<AllPreviewPage> {
       return;
     }
     //
-    Global.logger.v('获取更多预览 ${_galleryModel.galleryItem.url}');
+    logger.v('获取更多预览 ${_galleryModel.galleryItem.url}');
     // 增加延时 避免build期间进行 setState
     await Future<void>.delayed(const Duration(milliseconds: 100));
     _galleryModel.currentPreviewPageAdd();

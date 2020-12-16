@@ -1,7 +1,7 @@
-import 'package:FEhViewer/common/global.dart';
 import 'package:FEhViewer/pages/tab/controller/popular_controller.dart';
 import 'package:FEhViewer/pages/tab/view/gallery_base.dart';
 import 'package:FEhViewer/pages/tab/view/tab_base.dart';
+import 'package:FEhViewer/utils/logger.dart';
 import 'package:FEhViewer/widget/eh_widget.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -52,7 +52,7 @@ class PopularListTab extends GetView<PopularController> {
             ),
           ),
         ), onError: (err) {
-      Global.logger.e(' $err');
+      logger.e(' $err');
       return SliverFillRemaining(
         child: Container(
           padding: const EdgeInsets.only(bottom: 50),

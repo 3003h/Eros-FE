@@ -39,7 +39,7 @@ class GalleryModel extends ProfileChangeNotifier {
         _galleryItem.galleryPreview.sublist(0, galleryPreview.length);
 
     // final int count = int.parse(galleryItem.filecount);
-    // Global.logger.d(' _filecount = $count');
+    // logger.d(' _filecount = $count');
     // for (int i = 0; i < count - galleryPreview.length; i++) {
     //   _galleryItem.galleryPreview
     //       .add(GalleryPreview()..ser = galleryPreview.length + i + 1);
@@ -48,10 +48,10 @@ class GalleryModel extends ProfileChangeNotifier {
   }
 
   void reset() {
-    _galleryItem.galleryComment.clear();
-    _galleryItem.galleryPreview.clear();
-    _galleryItem.tagGroup.clear();
-    _oriGalleryPreview.clear();
+    _galleryItem.galleryComment?.clear();
+    _galleryItem.galleryPreview?.clear();
+    _galleryItem.tagGroup?.clear();
+    _oriGalleryPreview?.clear();
   }
 
   void setFavTitle(String favTitle, {String favcat}) {
@@ -67,7 +67,7 @@ class GalleryModel extends ProfileChangeNotifier {
 
   void addAllPreview(List<GalleryPreview> galleryPreview) {
     _galleryItem.galleryPreview.addAll(galleryPreview);
-//    Global.logger.v('${_galleryItem.galleryPreview.length}');
+//    logger.v('${_galleryItem.galleryPreview.length}');
     notifyListeners();
   }
 

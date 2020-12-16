@@ -4,6 +4,7 @@ import 'package:FEhViewer/common/global.dart';
 import 'package:FEhViewer/models/entity/tag_translat.dart';
 import 'package:FEhViewer/utils/db_util.dart';
 import 'package:FEhViewer/utils/dio_util.dart';
+import 'package:FEhViewer/utils/logger.dart';
 import 'package:FEhViewer/utils/toast.dart';
 import 'package:FEhViewer/values/const.dart';
 import 'package:dio/dio.dart';
@@ -19,7 +20,7 @@ class EhTagDatabase {
 
     const String url = '/repos/EhTagTranslation/Database/releases/latest';
 
-    Global.logger.v(url);
+    logger.v(url);
 
     final String urlJsonString = await httpManager.get(url);
     final Map<String, dynamic> urlJson =
@@ -28,14 +29,14 @@ class EhTagDatabase {
     // 获取发布时间 作为远程版本号
     final String remoteVer =
         (urlJson != null ? urlJson['published_at']?.trim() : '') as String;
-    Global.loggerNoStack.v('remoteVer $remoteVer');
+    loggerNoStack.v('remoteVer $remoteVer');
 
     // 获取当前本地版本
     final String localVer = Global.profile.ehConfig.tagTranslatVer;
-    Global.loggerNoStack.v('localVer $localVer');
+    loggerNoStack.v('localVer $localVer');
 
     if (remoteVer != localVer) {
-      Global.loggerNoStack.v('TagTranslat更新');
+      loggerNoStack.v('TagTranslat更新');
       showToast('标签翻译库开始更新');
       // ignore: always_specify_types
       final List assList = urlJson['assets'];
@@ -45,7 +46,7 @@ class EhTagDatabase {
       }
       final String dbUrl = assMap['db.text.json'];
 
-      Global.loggerNoStack.v(dbUrl);
+      loggerNoStack.v(dbUrl);
 
       final HttpManager httpDB = HttpManager.getInstance();
 
@@ -62,7 +63,7 @@ class EhTagDatabase {
         Global.saveProfile();
       }
       showToast('标签翻译库更新完成');
-      Global.loggerNoStack.v('tag翻译更新完成');
+      loggerNoStack.v('tag翻译更新完成');
     }
 
     return remoteVer;
@@ -73,7 +74,7 @@ class EhTagDatabase {
     final List<TagTranslat> tags = <TagTranslat>[];
 
     listDataP.forEach((objC) {
-      Global.loggerNoStack.v('${objC['namespace']}  ${objC['count']}');
+      loggerNoStack.v('${objC['namespace']}  ${objC['count']}');
       final String _namespace = objC['namespace'] as String;
       Map mapC = objC['data'] as Map;
       mapC.forEach((key, value) {
@@ -89,7 +90,7 @@ class EhTagDatabase {
 
     await DataBaseUtil().insertTagAll(tags);
 
-    Global.loggerNoStack.v('tag中文翻译数量 ${tags.length}');
+    loggerNoStack.v('tag中文翻译数量 ${tags.length}');
   }
 
   static Future<String> getTranTag(String tag, {String nameSpase}) async {

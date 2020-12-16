@@ -3,6 +3,7 @@ import 'package:FEhViewer/models/index.dart';
 import 'package:FEhViewer/models/states/ehconfig_model.dart';
 import 'package:FEhViewer/models/states/gallery_model.dart';
 import 'package:FEhViewer/route/navigator_util.dart';
+import 'package:FEhViewer/utils/logger.dart';
 import 'package:FEhViewer/utils/utility.dart';
 import 'package:FEhViewer/values/theme_colors.dart';
 import 'package:FEhViewer/widget/blur_image.dart';
@@ -76,11 +77,11 @@ class _GalleryItemWidgetState extends State<GalleryItemWidget> {
       // 不可见区域点击有效
       behavior: HitTestBehavior.opaque,
       onTap: () {
-        Global.logger.v(_title);
+        logger.v(_title);
         NavigatorUtil.goGalleryDetailPr(context);
       },
       onLongPress: () {
-        Global.logger.v('onLongPress title: $_title ');
+        logger.v('onLongPress title: $_title ');
       },
       onTapDown: (_) => _updatePressedColor(),
       onTapUp: (_) {
@@ -99,7 +100,7 @@ class _GalleryItemWidgetState extends State<GalleryItemWidget> {
         builder: (context, snapshot, _) {
           final GalleryItem _galleryItem = snapshot.item1;
 
-          // Global.logger.d('${widget.tabIndex} ${_galleryItem.toJson()}');
+          // logger.d('${widget.tabIndex} ${_galleryItem.toJson()}');
 
           return Container(
             color: _colorTap,
@@ -206,12 +207,12 @@ class _GalleryItemWidgetState extends State<GalleryItemWidget> {
 
       // 获取图片高度
       num _getHeigth() {
-        // Global.logger.d(
+        // logger.d(
         // '${widget.tabIndex} ${_item.japaneseTitle}\n list imgWidth ${_item.imgWidth}');
         if (_item.imgWidth >= kCoverImageWidth) {
           return _item.imgHeight * kCoverImageWidth / _item.imgWidth;
         } else {
-          // Global.logger.d('为空');
+          // logger.d('为空');
           return _item.imgHeight;
         }
       }

@@ -1,6 +1,7 @@
 import 'package:FEhViewer/common/global.dart';
 import 'package:FEhViewer/models/states/ehconfig_model.dart';
 import 'package:FEhViewer/pages/setting/setting_base.dart';
+import 'package:FEhViewer/utils/logger.dart';
 import 'package:FEhViewer/values/const.dart';
 import 'package:enum_to_string/enum_to_string.dart';
 import 'package:flutter/cupertino.dart';
@@ -92,11 +93,11 @@ Widget _buildViewModeItem(BuildContext context) {
           title: _title,
           selector: viewModeText,
           onTap: () async {
-            Global.logger.v('tap ModeItem');
+            logger.v('tap ModeItem');
             final ViewMode _result = await _showDialog(context);
             if (_result != null) {
               // ignore: unnecessary_string_interpolations
-              Global.logger.v('${EnumToString.convertToString(_result)}');
+              logger.v('${EnumToString.convertToString(_result)}');
               ehConfigModel.viewMode = _result;
             }
           },

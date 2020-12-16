@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:FEhViewer/common/global.dart';
 import 'package:FEhViewer/common/tag_database.dart';
 import 'package:FEhViewer/models/states/search_text_model.dart';
+import 'package:FEhViewer/utils/logger.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -142,7 +143,7 @@ class SearchQuickListPage extends StatelessWidget {
                 final File _file = File(result.files.single.path);
                 final String _fileText = _file.readAsStringSync();
                 if (_fileText.contains('#FEhViewer')) {
-                  Global.logger.v('$_fileText');
+                  logger.v('$_fileText');
                   final List<String> _importTexts = _fileText.split('\n');
                   _importTexts.forEach((String element) {
                     if (element.trim().isNotEmpty && !element.startsWith('#'))
@@ -164,7 +165,7 @@ class SearchQuickListPage extends StatelessWidget {
               if (_searchTextList.isNotEmpty) {
                 final String _searchText =
                     '#FEhViewer\n${_searchTextList.join('\n')}';
-                Global.logger.v(_searchText);
+                logger.v(_searchText);
                 // Share.share(_searchText, subject: 'FEhViewer');
                 final File _tempFlie = await _getLocalFile();
                 _tempFlie.writeAsStringSync(_searchText);

@@ -3,6 +3,8 @@ import 'dart:collection';
 import 'package:FEhViewer/common/global.dart';
 import 'package:dio/dio.dart';
 
+import 'logger.dart';
+
 class CacheObject {
   CacheObject(this.response)
       : timeStamp = DateTime.now().millisecondsSinceEpoch;
@@ -57,7 +59,7 @@ class NetCache extends Interceptor {
         //若缓存未过期，则返回缓存内容
         if ((DateTime.now().millisecondsSinceEpoch - ob.timeStamp) / 1000 <
             Global.profile.cache.maxAge) {
-          Global.loggerNoStack.d('dio 返回缓存$_key');
+          loggerNoStack.d('dio 返回缓存$_key');
           return cache[_key].response;
         } else {
           //若已过期则删除缓存，继续向服务器请求
@@ -71,7 +73,7 @@ class NetCache extends Interceptor {
         //若缓存未过期，则返回缓存内容
         if ((DateTime.now().millisecondsSinceEpoch - ob.timeStamp) / 1000 <
             Global.profile.cache.maxAge) {
-          Global.loggerNoStack.d('dio 返回缓存$_key');
+          loggerNoStack.d('dio 返回缓存$_key');
           return cache[_key].response;
         } else {
           //若已过期则删除缓存，继续向服务器请求

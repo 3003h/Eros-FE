@@ -1,4 +1,4 @@
-import 'package:FEhViewer/common/global.dart';
+import 'package:FEhViewer/utils/logger.dart';
 import 'package:FEhViewer/values/const.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -23,7 +23,7 @@ class WebLogin extends StatelessWidget {
     flutterWebviewPlugin.onUrlChanged.listen((String url) {
       final Uri _uri = Uri.parse(url);
       if (_uri.path == '/index.php' && _uri.query.isEmpty) {
-        Global.logger.i('登录成功');
+        logger.i('登录成功');
         flutterWebviewPlugin.getCookies().then((Map<String, String> _cookies) {
           // 返回 并带上参数
           // NavigatorUtil.goBackWithParams(context, _cookies);
@@ -40,7 +40,7 @@ class WebLogin extends StatelessWidget {
             child: const Icon(CupertinoIcons.add_circled_solid),
             onPressed: () {
               flutterWebviewPlugin.getCookies().then((cookie) {
-                Global.logger.i('cookies: $cookie');
+                logger.i('cookies: $cookie');
               });
             },
           ),

@@ -2,6 +2,7 @@ import 'package:FEhViewer/common/global.dart';
 import 'package:FEhViewer/models/index.dart';
 import 'package:FEhViewer/models/states/local_favorite_model.dart';
 import 'package:FEhViewer/models/states/user_model.dart';
+import 'package:FEhViewer/utils/logger.dart';
 import 'package:FEhViewer/utils/toast.dart';
 import 'package:FEhViewer/utils/utility.dart';
 import 'package:flutter/cupertino.dart';
@@ -50,7 +51,7 @@ class FavoriteController extends GetxController
     bool refresh = false,
     bool first = false,
   }) async {
-    Global.logger.v('_loadDataFirst  fav');
+    logger.v('_loadDataFirst  fav');
 
     final bool _isLogin =
         Provider.of<UserModel>(Get.context, listen: false).isLogin;
@@ -72,7 +73,7 @@ class FavoriteController extends GetxController
         Global.saveProfile();
       }
       // 本地收藏夹
-      Global.logger.v('本地收藏');
+      logger.v('本地收藏');
       final List<GalleryItem> localFav =
           Provider.of<LocalFavModel>(Get.context, listen: false).loacalFavs;
 
@@ -89,7 +90,7 @@ class FavoriteController extends GetxController
     curPage.value = 0;
     final Tuple2<List<GalleryItem>, int> tuple = await loadData(refresh: true);
     if (delayed && enableDelayedLoad) {
-      Global.logger.d(' delayed reload');
+      logger.d(' delayed reload');
       maxPage = tuple.item2;
       change(tuple.item1, status: RxStatus.success());
     } else {
@@ -99,7 +100,7 @@ class FavoriteController extends GetxController
   }
 
   Future<void> loadFromPage(int page, {bool cleanSearch = false}) async {
-    Global.logger.v('jump to page =>  $page');
+    logger.v('jump to page =>  $page');
 
     change(state, status: RxStatus.loading());
     Api.getFavorite(favcat: curFavcat, page: page, refresh: true).then((tuple) {

@@ -3,6 +3,7 @@ import 'package:FEhViewer/common/tag_database.dart';
 import 'package:FEhViewer/models/states/ehconfig_model.dart';
 import 'package:FEhViewer/models/states/user_model.dart';
 import 'package:FEhViewer/pages/login/web_mysetting.dart';
+import 'package:FEhViewer/utils/logger.dart';
 import 'package:FEhViewer/values/const.dart';
 import 'package:enum_to_string/enum_to_string.dart';
 import 'package:flutter/cupertino.dart';
@@ -22,7 +23,7 @@ class _EhSettingPage extends State<EhSettingPage> {
 
   Future<bool> _getDelayed() async {
     final int _delayed = (Global.isFirstReOpenEhSetting ?? true) ? 200 : 1;
-    // Global.logger.v('$_delayed');
+    // logger.v('$_delayed');
     await Future<void>.delayed(Duration(milliseconds: _delayed));
     Global.isFirstReOpenEhSetting = false;
     return Future<bool>.value(true);
@@ -222,11 +223,11 @@ Widget _buildListModeItem(BuildContext context) {
           title: _title,
           selector: listModeText,
           onTap: () async {
-            Global.logger.v('tap ModeItem');
+            logger.v('tap ModeItem');
             final ListModeEnum _result = await _showDialog(context);
             if (_result != null) {
               // ignore: unnecessary_string_interpolations
-              Global.logger.v('${EnumToString.convertToString(_result)}');
+              logger.v('${EnumToString.convertToString(_result)}');
               ehConfigModel.listMode = _result;
             }
           },
@@ -285,7 +286,7 @@ Widget _buildHistoryMaxItem(BuildContext context) {
           title: _title,
           selector: _getMaxNumText(maxHistory) ?? '',
           onTap: () async {
-            Global.logger.v('tap ModeItem');
+            logger.v('tap ModeItem');
             final int _result = await _showActionSheet(context);
             if (_result != null) {
               ehConfigModel.maxHistory = _result;
