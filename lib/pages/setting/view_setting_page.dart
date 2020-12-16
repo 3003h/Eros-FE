@@ -1,12 +1,11 @@
+import 'package:FEhViewer/common/controller/ehconfig_controller.dart';
 import 'package:FEhViewer/common/global.dart';
-import 'package:FEhViewer/models/states/ehconfig_model.dart';
 import 'package:FEhViewer/pages/setting/setting_base.dart';
 import 'package:FEhViewer/utils/logger.dart';
 import 'package:FEhViewer/values/const.dart';
 import 'package:enum_to_string/enum_to_string.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
-import 'package:provider/provider.dart';
 
 class ViewSettingPage extends StatefulWidget {
   @override
@@ -48,8 +47,7 @@ class ViewSettingList extends StatelessWidget {
 /// 阅读方向模式切换
 Widget _buildViewModeItem(BuildContext context) {
   const String _title = '阅读方向';
-  final EhConfigModel ehConfigModel =
-      Provider.of<EhConfigModel>(context, listen: false);
+  final EhConfigController ehConfigController = Get.find();
 
   final Map<ViewMode, String> modeMap = <ViewMode, String>{
     ViewMode.horizontalLeft: '由左到右',
@@ -85,22 +83,18 @@ Widget _buildViewModeItem(BuildContext context) {
         });
   }
 
-  return Selector<EhConfigModel, String>(
-      selector: (BuildContext context, EhConfigModel ehConfigModel) =>
-          modeMap[ehConfigModel.viewMode ?? ViewMode.horizontalLeft],
-      builder: (BuildContext context, String viewModeText, _) {
-        return SelectorSettingItem(
-          title: _title,
-          selector: viewModeText,
-          onTap: () async {
-            logger.v('tap ModeItem');
-            final ViewMode _result = await _showDialog(context);
-            if (_result != null) {
-              // ignore: unnecessary_string_interpolations
-              logger.v('${EnumToString.convertToString(_result)}');
-              ehConfigModel.viewMode = _result;
-            }
-          },
-        );
-      });
+  return Obx(() => SelectorSettingItem(
+        title: _title,
+        selector: modeMap[
+            ehConfigController.viewMode.value ?? ViewMode.horizontalLeft],
+        onTap: () async {
+          logger.v('tap ModeItem');
+          final ViewMode _result = await _showDialog(context);
+          if (_result != null) {
+            // ignore: unnecessary_string_interpolations
+            logger.v('${EnumToString.convertToString(_result)}');
+            ehConfigController.viewMode.value = _result;
+          }
+        },
+      ));
 }

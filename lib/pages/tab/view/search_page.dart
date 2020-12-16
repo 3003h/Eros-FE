@@ -1,5 +1,5 @@
+import 'package:FEhViewer/common/controller/ehconfig_controller.dart';
 import 'package:FEhViewer/models/index.dart';
-import 'package:FEhViewer/models/states/ehconfig_model.dart';
 import 'package:FEhViewer/models/states/search_text_model.dart';
 import 'package:FEhViewer/pages/tab/view/gallery_base.dart';
 import 'package:FEhViewer/pages/tab/view/search_text_page.dart';
@@ -52,10 +52,11 @@ class _GallerySearchPageState extends State<GallerySearchPage>
   SearchTextModel _searchTextModel;
   bool _autofocus;
 
+  final EhConfigController ehConfigController = Get.find();
+
   void _jumpSearch() {
     final String _searchText = _searchTextController.text.trim();
-    final int _catNum =
-        Provider.of<EhConfigModel>(context, listen: false).catFilter;
+    final int _catNum = ehConfigController.catFilter.value;
     if (_searchText.isNotEmpty) {
       // FocusScope.of(context).requestFocus(FocusNode());
       _search = _searchText;
@@ -275,8 +276,7 @@ class _GallerySearchPageState extends State<GallerySearchPage>
     Widget _buildListBtns() {
       return GestureDetector(
         onLongPress: () {
-          Provider.of<EhConfigModel>(context, listen: false).searchBarComp =
-              true;
+          ehConfigController.isSearchBarComp.value = true;
           VibrateUtil.heavy();
         },
         child: Container(
@@ -342,8 +342,7 @@ class _GallerySearchPageState extends State<GallerySearchPage>
     Widget _buildPopMenuBtn() {
       return GestureDetector(
         onLongPress: () {
-          Provider.of<EhConfigModel>(context, listen: false).searchBarComp =
-              false;
+          ehConfigController.isSearchBarComp.value = false;
           VibrateUtil.heavy();
         },
         child: Container(
@@ -377,22 +376,20 @@ class _GallerySearchPageState extends State<GallerySearchPage>
       );
     }
 
-    return Selector<EhConfigModel, bool>(
-        selector: (_, ehconfigModel) => ehconfigModel.searchBarComp,
-        builder: (context, bool searchBarComp, _) {
-          final Size size = MediaQuery.of(context).size;
-          final double width = size.width;
-          // logger.v(width);
-          if (width > 450) {
-            return _buildListBtns();
-          } else {
-            return AnimatedSwitcher(
-                duration: const Duration(milliseconds: 0),
-                child: searchBarComp
-                    ? Container(key: UniqueKey(), child: _buildPopMenuBtn())
-                    : Container(key: UniqueKey(), child: _buildListBtns()));
-          }
-        });
+    return Obx(() {
+      final Size size = MediaQuery.of(context).size;
+      final double width = size.width;
+      // logger.v(width);
+      if (width > 450) {
+        return _buildListBtns();
+      } else {
+        return AnimatedSwitcher(
+            duration: const Duration(milliseconds: 0),
+            child: ehConfigController.isSearchBarComp.value
+                ? Container(key: UniqueKey(), child: _buildPopMenuBtn())
+                : Container(key: UniqueKey(), child: _buildListBtns()));
+      }
+    });
   }
 
   Future<void> _loadDataMore({bool cleanSearch = false}) async {
@@ -404,8 +401,7 @@ class _GallerySearchPageState extends State<GallerySearchPage>
       _search = '';
     }
 
-    final int _catNum =
-        Provider.of<EhConfigModel>(context, listen: false).catFilter;
+    final int _catNum = ehConfigController.catFilter.value;
 
     // 增加延时 避免build期间进行 setState
     await Future<void>.delayed(const Duration(milliseconds: 100));
@@ -431,8 +427,7 @@ class _GallerySearchPageState extends State<GallerySearchPage>
   }
 
   Future<void> _loadData({bool refresh = false}) async {
-    final int _catNum =
-        Provider.of<EhConfigModel>(context, listen: false).catFilter;
+    final int _catNum = ehConfigController.catFilter.value;
 
     loggerNoStack.v('_loadDataFirst');
     setState(() {

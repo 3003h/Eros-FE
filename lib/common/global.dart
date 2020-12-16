@@ -65,11 +65,6 @@ class Global {
 
     cookieManager = CookieManager(await Api.cookieJar);
 
-    // 路由
-    // final FluroRouter router = FluroRouter();
-    // EHRoutes.configureRoutes(router);
-    // Application.router = router;
-
     // 判断是否debug模式
     inDebugMode = EHUtils().isInDebugMode;
 

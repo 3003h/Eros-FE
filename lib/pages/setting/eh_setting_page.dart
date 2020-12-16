@@ -1,6 +1,6 @@
+import 'package:FEhViewer/common/controller/ehconfig_controller.dart';
 import 'package:FEhViewer/common/global.dart';
 import 'package:FEhViewer/common/tag_database.dart';
-import 'package:FEhViewer/models/states/ehconfig_model.dart';
 import 'package:FEhViewer/models/states/user_model.dart';
 import 'package:FEhViewer/pages/login/web_mysetting.dart';
 import 'package:FEhViewer/utils/logger.dart';
@@ -60,33 +60,34 @@ class _EhSettingPage extends State<EhSettingPage> {
 class ListViewEhSetting extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    final EhConfigModel ehConfigModel =
-        Provider.of<EhConfigModel>(context, listen: false);
-    final bool _siteEx = ehConfigModel.siteEx;
-    final bool _jpnTitle = ehConfigModel.jpnTitle;
-    final bool _tagTranslat = ehConfigModel.tagTranslat;
-    final bool _galleryImgBlur = ehConfigModel.galleryImgBlur;
-    final bool _favLongTap = ehConfigModel.favLongTap;
-    final bool _favOrder = ehConfigModel.favoriteOrder == FavoriteOrder.posted;
+    final EhConfigController ehConfigController = Get.find();
+
+    final bool _siteEx = ehConfigController.isSiteEx.value;
+    final bool _jpnTitle = ehConfigController.isJpnTitle.value;
+    final bool _tagTranslat = ehConfigController.isTagTranslat.value;
+    final bool _galleryImgBlur = ehConfigController.isGalleryImgBlur.value;
+    final bool _favLongTap = ehConfigController.isFavLongTap.value;
+    final bool _favOrder =
+        ehConfigController.favoriteOrder.value == FavoriteOrder.posted;
     final bool _isLogin =
         Provider.of<UserModel>(context, listen: false).isLogin;
 
     Future<void> _handleSiteChanged(bool newValue) async {
-      ehConfigModel.siteEx = newValue;
+      ehConfigController.isSiteEx(newValue);
     }
 
     void _handleJpnTitleChanged(bool newValue) {
-      ehConfigModel.jpnTitle = newValue;
+      ehConfigController.isJpnTitle(newValue);
     }
 
     /// 打开表示按更新时间排序 关闭表示按照收藏时间排序
     void _handleFavOrderChanged(bool newValue) {
-      ehConfigModel.favoriteOrder =
+      ehConfigController.favoriteOrder.value =
           newValue ? FavoriteOrder.posted : FavoriteOrder.fav;
     }
 
     void _handleTagTranslatChanged(bool newValue) {
-      ehConfigModel.tagTranslat = newValue;
+      ehConfigController.isTagTranslat.value = newValue;
       if (newValue) {
         try {
           EhTagDatabase.generateTagTranslat();
@@ -97,11 +98,11 @@ class ListViewEhSetting extends StatelessWidget {
     }
 
     void _handleGalleryListImgBlurChanged(bool newValue) {
-      ehConfigModel.galleryImgBlur = newValue;
+      ehConfigController.isGalleryImgBlur.value = newValue;
     }
 
     void _handleFavLongTapChanged(bool newValue) {
-      ehConfigModel.favLongTap = newValue;
+      ehConfigController.isFavLongTap.value = newValue;
     }
 
     final List<Widget> _list = <Widget>[
@@ -177,8 +178,7 @@ class ListViewEhSetting extends StatelessWidget {
 /// 列表模式切换
 Widget _buildListModeItem(BuildContext context) {
   const String _title = '浏览模式';
-  final EhConfigModel ehConfigModel =
-      Provider.of<EhConfigModel>(context, listen: false);
+  final EhConfigController ehConfigController = Get.find();
 
   final Map<ListModeEnum, String> modeMap = <ListModeEnum, String>{
     ListModeEnum.list: '列表 - 中',
@@ -215,31 +215,26 @@ Widget _buildListModeItem(BuildContext context) {
         });
   }
 
-  return Selector<EhConfigModel, String>(
-      selector: (BuildContext context, EhConfigModel ehConfigModel) =>
-          modeMap[ehConfigModel.listMode ?? ListModeEnum.list],
-      builder: (BuildContext context, String listModeText, _) {
-        return SelectorSettingItem(
-          title: _title,
-          selector: listModeText,
-          onTap: () async {
-            logger.v('tap ModeItem');
-            final ListModeEnum _result = await _showDialog(context);
-            if (_result != null) {
-              // ignore: unnecessary_string_interpolations
-              logger.v('${EnumToString.convertToString(_result)}');
-              ehConfigModel.listMode = _result;
-            }
-          },
-        );
-      });
+  return Obx(() => SelectorSettingItem(
+        title: _title,
+        selector:
+            modeMap[ehConfigController.listMode.value ?? ListModeEnum.list],
+        onTap: () async {
+          logger.v('tap ModeItem');
+          final ListModeEnum _result = await _showDialog(context);
+          if (_result != null) {
+            // ignore: unnecessary_string_interpolations
+            logger.v('${EnumToString.convertToString(_result)}');
+            ehConfigController.listMode.value = _result;
+          }
+        },
+      ));
 }
 
 /// 历史记录数量切换
 Widget _buildHistoryMaxItem(BuildContext context) {
   const String _title = '最大历史记录数';
-  final EhConfigModel ehConfigModel =
-      Provider.of<EhConfigModel>(context, listen: false);
+  final EhConfigController ehConfigController = Get.find();
 
   String _getMaxNumText(int max) {
     if (max == 0) {
@@ -278,20 +273,15 @@ Widget _buildHistoryMaxItem(BuildContext context) {
         });
   }
 
-  return Selector<EhConfigModel, int>(
-      selector: (BuildContext context, EhConfigModel ehConfigModel) =>
-          ehConfigModel.maxHistory,
-      builder: (BuildContext context, int maxHistory, _) {
-        return SelectorSettingItem(
-          title: _title,
-          selector: _getMaxNumText(maxHistory) ?? '',
-          onTap: () async {
-            logger.v('tap ModeItem');
-            final int _result = await _showActionSheet(context);
-            if (_result != null) {
-              ehConfigModel.maxHistory = _result;
-            }
-          },
-        );
-      });
+  return Obx(() => SelectorSettingItem(
+        title: _title,
+        selector: _getMaxNumText(ehConfigController.maxHistory.value) ?? '',
+        onTap: () async {
+          logger.v('tap ModeItem');
+          final int _result = await _showActionSheet(context);
+          if (_result != null) {
+            ehConfigController.maxHistory.value = _result;
+          }
+        },
+      ));
 }

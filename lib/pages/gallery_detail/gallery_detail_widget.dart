@@ -1,6 +1,6 @@
+import 'package:FEhViewer/common/controller/ehconfig_controller.dart';
 import 'package:FEhViewer/common/global.dart';
 import 'package:FEhViewer/models/index.dart';
-import 'package:FEhViewer/models/states/ehconfig_model.dart';
 import 'package:FEhViewer/models/states/gallery_cache_model.dart';
 import 'package:FEhViewer/models/states/gallery_model.dart';
 import 'package:FEhViewer/route/navigator_util.dart';
@@ -773,35 +773,32 @@ class GalleryTitle extends StatelessWidget {
     /// 异常则不会出现
     ///
     /// 暂时放弃使用 SelectableText
-    return Selector2<EhConfigModel, GalleryModel, String>(
-      selector: (_, EhConfigModel ehconfig, GalleryModel gallery) {
-        final String _titleEn = gallery?.galleryItem?.englishTitle ?? '';
-        final String _titleJpn = gallery?.galleryItem?.japaneseTitle ?? '';
+    return Selector<GalleryModel, GalleryItem>(
+      selector: (_, GalleryModel gallery) => gallery.galleryItem,
+      builder: (_, GalleryItem galleryItem, __) {
+        final EhConfigController ehConfigController = Get.find();
+        final String _titleEn = galleryItem?.englishTitle ?? '';
+        final String _titleJpn = galleryItem?.japaneseTitle ?? '';
 
-        // 日语标题判断
-        final String _title =
-            ehconfig.isJpnTitle && _titleJpn != null && _titleJpn.isNotEmpty
-                ? _titleJpn
-                : _titleEn;
-
-        return _title;
-      },
-      builder: (_, String title, __) {
         return GestureDetector(
-          child: Text(
-            title,
-            maxLines: 5,
-            textAlign: TextAlign.left, // 对齐方式
-            overflow: TextOverflow.ellipsis, // 超出部分省略号
-            style: const TextStyle(
-              textBaseline: TextBaseline.alphabetic,
-              height: 1.2,
-              fontSize: 16,
-              fontWeight: FontWeight.w500,
+          child: Obx(() => Text(
+                ehConfigController.isJpnTitle.value &&
+                        _titleJpn != null &&
+                        _titleJpn.isNotEmpty
+                    ? _titleJpn
+                    : _titleEn,
+                maxLines: 5,
+                textAlign: TextAlign.left, // 对齐方式
+                overflow: TextOverflow.ellipsis, // 超出部分省略号
+                style: const TextStyle(
+                  textBaseline: TextBaseline.alphabetic,
+                  height: 1.2,
+                  fontSize: 16,
+                  fontWeight: FontWeight.w500,
 //            backgroundColor: CupertinoColors.systemGrey3,
 //            fontFamilyFallback: EHConst.FONT_FAMILY_FB,
-            ),
-          ),
+                ),
+              )),
         );
 
         /*return cust.SelectableText(

@@ -1,7 +1,7 @@
 import 'dart:io';
 
+import 'package:FEhViewer/common/controller/ehconfig_controller.dart';
 import 'package:FEhViewer/models/index.dart';
-import 'package:FEhViewer/models/states/ehconfig_model.dart';
 import 'package:FEhViewer/models/states/gallery_cache_model.dart';
 import 'package:FEhViewer/models/states/gallery_model.dart';
 import 'package:FEhViewer/pages/gallery_detail/gallery_detail_widget.dart';
@@ -65,6 +65,8 @@ class _GalleryViewPageState extends State<GalleryViewPage> {
 
   Future<GalleryPreview> _futureViewGallery;
 
+  final EhConfigController ehConfigController = Get.find();
+
   @override
   void initState() {
     super.initState();
@@ -90,14 +92,13 @@ class _GalleryViewPageState extends State<GalleryViewPage> {
         Provider.of<GalleryModel>(context, listen: false);
     final GalleryCacheModel galleryCacheModel =
         Provider.of<GalleryCacheModel>(context, listen: false);
-    final EhConfigModel ehConfigModel =
-        Provider.of<EhConfigModel>(context, listen: false);
+
     if (galleryModel != _galleryModel) {
       _galleryModel = galleryModel;
       _galleryCacheModel = galleryCacheModel;
 
-      final int preload = ehConfigModel.preloadImage;
-      if (ehConfigModel.viewMode != ViewMode.vertical) {
+      final int preload = ehConfigController.preloadImage.value;
+      if (ehConfigController.viewMode.value != ViewMode.vertical) {
         // 预载后面5张图
         logger.v('预载后面 $preload 张图 didChangeDependencies');
         GalleryPrecache.instance.precacheImages(
@@ -277,20 +278,18 @@ class _GalleryViewPageState extends State<GalleryViewPage> {
   }
 
   Widget _buildView() {
-    return Selector<EhConfigModel, ViewMode>(
-        selector: (_, EhConfigModel model) => model.viewMode,
-        builder: (_, ViewMode viewMode, __) {
-          switch (viewMode) {
-            case ViewMode.vertical:
-              return _buildListView();
-            case ViewMode.horizontalLeft:
-              return _buildPhotoViewGallery();
-            case ViewMode.horizontalRight:
-              return _buildPhotoViewGallery(reverse: true);
-            default:
-              return _buildPhotoViewGallery();
-          }
-        });
+    return Obx(() {
+      switch (ehConfigController.viewMode.value) {
+        case ViewMode.vertical:
+          return _buildListView();
+        case ViewMode.horizontalLeft:
+          return _buildPhotoViewGallery();
+        case ViewMode.horizontalRight:
+          return _buildPhotoViewGallery(reverse: true);
+        default:
+          return _buildPhotoViewGallery();
+      }
+    });
   }
 
   /// 顶栏
@@ -521,8 +520,7 @@ class _GalleryViewPageState extends State<GalleryViewPage> {
     //   _maxScale = _tempHeight / _size.height;
     // }
     // logger.d(' $_maxScale');
-    final EhConfigModel ehConfigModel =
-        Provider.of<EhConfigModel>(context, listen: false);
+
     return PhotoViewGallery.builder(
       // scrollPhysics: const BouncingScrollPhysics(),
       reverse: reverse,
@@ -575,7 +573,7 @@ class _GalleryViewPageState extends State<GalleryViewPage> {
           _galleryModel,
           previews: _galleryModel.previews,
           index: index,
-          max: ehConfigModel.preloadImage,
+          max: ehConfigController.preloadImage.value,
         );
         _currentIndex = index;
         _sliderValue = _currentIndex / 1.0;

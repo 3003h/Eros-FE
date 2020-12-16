@@ -34,34 +34,46 @@ class NavigatorUtil {
     logger.d(' goGalleryDetailPr');
     if (url != null && url.isNotEmpty) {
       final GalleryModel galleryModel = GalleryModel.initUrl(url: url);
-      Get.to(ChangeNotifierProvider<GalleryModel>.value(
-        value: galleryModel,
-        child: const GalleryDetailPage(),
-      ));
+      Get.to(
+        ChangeNotifierProvider<GalleryModel>.value(
+          value: galleryModel,
+          child: const GalleryDetailPage(),
+        ),
+        preventDuplicates: false,
+      );
     } else {
       final GalleryModel galleryModel =
           Provider.of<GalleryModel>(context, listen: false);
-      Get.to(ChangeNotifierProvider<GalleryModel>.value(
-        value: galleryModel,
-        child: const GalleryDetailPage(),
-      ));
+      Get.to(
+        ChangeNotifierProvider<GalleryModel>.value(
+          value: galleryModel,
+          child: const GalleryDetailPage(),
+        ),
+        preventDuplicates: false,
+      );
     }
   }
 
   static void goGalleryDetailReplace(BuildContext context, {String url}) {
     if (url != null && url.isNotEmpty) {
       final GalleryModel galleryModel = GalleryModel.initUrl(url: url);
-      Get.off(ChangeNotifierProvider<GalleryModel>.value(
-        value: galleryModel,
-        child: const GalleryDetailPage(),
-      ));
+      Get.off(
+        ChangeNotifierProvider<GalleryModel>.value(
+          value: galleryModel,
+          child: const GalleryDetailPage(),
+        ),
+        preventDuplicates: false,
+      );
     } else {
       final GalleryModel galleryModel =
           Provider.of<GalleryModel>(context, listen: false);
-      Get.off(ChangeNotifierProvider<GalleryModel>.value(
-        value: galleryModel,
-        child: const GalleryDetailPage(),
-      ));
+      Get.off(
+        ChangeNotifierProvider<GalleryModel>.value(
+          value: galleryModel,
+          child: const GalleryDetailPage(),
+        ),
+        preventDuplicates: false,
+      );
     }
   }
 
@@ -81,22 +93,12 @@ class NavigatorUtil {
     final GalleryModel galleryModel =
         Provider.of<GalleryModel>(context, listen: false);
 
-    // Get.to(_child());
-
-    // Get.to(
-    //   ChangeNotifierProvider<GalleryModel>.value(
-    //     value: galleryModel,
-    //     child: GalleryViewPage(index: index),
-    //   ),
-    // );
-
-    Navigator.push(Get.context, CupertinoPageRoute(
-      builder: (context) {
-        return ChangeNotifierProvider<GalleryModel>.value(
-          value: galleryModel,
-          child: GalleryViewPage(index: index),
-        );
-      },
-    ));
+    Get.to(
+      ChangeNotifierProvider<GalleryModel>.value(
+        value: galleryModel,
+        child: GalleryViewPage(index: index),
+      ),
+      preventDuplicates: false,
+    );
   }
 }

@@ -1,7 +1,7 @@
+import 'package:FEhViewer/common/controller/ehconfig_controller.dart';
 import 'package:FEhViewer/common/global.dart';
 import 'package:FEhViewer/models/states/advance_search_model.dart';
 import 'package:FEhViewer/models/states/dnsconfig_model.dart';
-import 'package:FEhViewer/models/states/ehconfig_model.dart';
 import 'package:FEhViewer/models/states/gallery_cache_model.dart';
 import 'package:FEhViewer/models/states/history_model.dart';
 import 'package:FEhViewer/models/states/local_favorite_model.dart';
@@ -25,6 +25,7 @@ import 'l10n/messages.dart';
 
 void main() {
   Global.init().then((_) {
+    Get.put(EhConfigController(), permanent: true);
     runApp(
       DevicePreview(
         // enabled: Global.inDebugMode,
@@ -69,64 +70,59 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
     final Widget cupertinoApp = Consumer2<LocaleModel, ThemeModel>(builder:
         (BuildContext context, LocaleModel localeModel, ThemeModel themeModel,
             _) {
-      return Selector<EhConfigModel, bool>(
-          selector: (_, EhConfigModel ehConfig) => ehConfig.isSafeMode,
-          builder: (context, snapshot, _) {
-            // logger.d('CupertinoApp');
-            return GetCupertinoApp(
-              debugShowCheckedModeBanner: false,
-              translations: Messages(),
-              onGenerateTitle: (BuildContext context) => 'app_title'.tr,
-              getPages: AppPages.routes,
-              initialRoute: EHRoutes.root,
-              theme: themeModel.getTheme(context, _brightness),
-              locale: localeModel.getLocale(),
-              builder: DevicePreview.appBuilder,
-              // ignore: prefer_const_literals_to_create_immutables
-              supportedLocales: <Locale>[
-                const Locale('en'),
-                const Locale('zh', 'CN'),
-              ],
-              // ignore: prefer_const_literals_to_create_immutables
-              localizationsDelegates: [
-                // 本地化的代理类
-                GlobalMaterialLocalizations.delegate,
-                GlobalCupertinoLocalizations.delegate,
-                GlobalWidgetsLocalizations.delegate,
-              ],
-              localeResolutionCallback:
-                  (Locale _locale, Iterable<Locale> supportedLocales) {
-                // logger.v(
-                //     '${_locale?.languageCode}  ${_locale?.scriptCode}  ${_locale?.countryCode}');
-                if (localeModel.getLocale() != null) {
-                  //如果已经选定语言，则不跟随系统
-                  return localeModel.getLocale();
-                } else {
-                  logger.d('语言跟随系统语言');
-                  Locale locale;
-                  //APP语言跟随系统语言，如果系统语言不是中文简体或美国英语，
-                  //则默认使用美国英语
-                  if (supportedLocales.contains(_locale)) {
-                    logger.d('语言跟随系统语言');
-                    locale = _locale;
-                  } else {
-                    logger.d('set en');
-                    locale = const Locale('en', 'US');
-                  }
+      return GetCupertinoApp(
+        debugShowCheckedModeBanner: false,
+        translations: Messages(),
+        onGenerateTitle: (BuildContext context) => 'app_title'.tr,
+        getPages: AppPages.routes,
+        initialRoute: EHRoutes.root,
+        theme: themeModel.getTheme(context, _brightness),
+        locale: localeModel.getLocale(),
+        builder: DevicePreview.appBuilder,
+        // ignore: prefer_const_literals_to_create_immutables
+        supportedLocales: <Locale>[
+          const Locale('en'),
+          const Locale('zh', 'CN'),
+        ],
+        // ignore: prefer_const_literals_to_create_immutables
+        localizationsDelegates: [
+          // 本地化的代理类
+          GlobalMaterialLocalizations.delegate,
+          GlobalCupertinoLocalizations.delegate,
+          GlobalWidgetsLocalizations.delegate,
+        ],
+        localeResolutionCallback:
+            (Locale _locale, Iterable<Locale> supportedLocales) {
+          // logger.v(
+          //     '${_locale?.languageCode}  ${_locale?.scriptCode}  ${_locale?.countryCode}');
+          if (localeModel.getLocale() != null) {
+            //如果已经选定语言，则不跟随系统
+            return localeModel.getLocale();
+          } else {
+            logger.d('语言跟随系统语言');
+            Locale locale;
+            //APP语言跟随系统语言，如果系统语言不是中文简体或美国英语，
+            //则默认使用美国英语
+            if (supportedLocales.contains(_locale)) {
+              logger.d('语言跟随系统语言');
+              locale = _locale;
+            } else {
+              logger.d('set en');
+              locale = const Locale('en', 'US');
+            }
 
-                  // 中文 简繁体处理
-                  if (_locale?.languageCode == 'zh') {
-                    if (_locale?.scriptCode == 'Hant') {
-                      locale = const Locale('zh', 'HK'); //繁体
-                    } else {
-                      locale = const Locale('zh', 'CN'); //简体
-                    }
-                  }
-                  return locale;
-                }
-              },
-            );
-          });
+            // 中文 简繁体处理
+            if (_locale?.languageCode == 'zh') {
+              if (_locale?.scriptCode == 'Hant') {
+                locale = const Locale('zh', 'HK'); //繁体
+              } else {
+                locale = const Locale('zh', 'CN'); //简体
+              }
+            }
+            return locale;
+          }
+        },
+      );
     });
 
     final MultiProvider multiProvider = MultiProvider(
@@ -135,7 +131,6 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
         ChangeNotifierProvider<UserModel>.value(value: UserModel()),
         ChangeNotifierProvider<LocaleModel>.value(value: LocaleModel()),
         ChangeNotifierProvider<ThemeModel>.value(value: ThemeModel()),
-        ChangeNotifierProvider<EhConfigModel>.value(value: EhConfigModel()),
         // 快速搜索词
         ChangeNotifierProvider<SearchTextModel>.value(value: SearchTextModel()),
         // LocalFavModel 本地收藏

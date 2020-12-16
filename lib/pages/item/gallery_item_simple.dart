@@ -1,6 +1,6 @@
+import 'package:FEhViewer/common/controller/ehconfig_controller.dart';
 import 'package:FEhViewer/common/global.dart';
 import 'package:FEhViewer/models/index.dart';
-import 'package:FEhViewer/models/states/ehconfig_model.dart';
 import 'package:FEhViewer/models/states/gallery_model.dart';
 import 'package:FEhViewer/route/navigator_util.dart';
 import 'package:FEhViewer/utils/logger.dart';
@@ -11,6 +11,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:get/get.dart';
 import 'package:provider/provider.dart';
 
 const double kCoverImageWidth = 70.0;
@@ -155,31 +156,27 @@ class _GalleryItemSimpleWidgetState extends State<GalleryItemSimpleWidget> {
   /// [EhConfigModel] eh设置的state 控制显示日文还是英文标题
   /// [GalleryModel] 画廊数据
   Widget _buildTitle() {
-    return Selector2<EhConfigModel, GalleryModel, String>(
-      selector: (context, ehconfig, gallery) {
-        final String _titleEn = gallery?.galleryItem?.englishTitle ?? '';
-        final String _titleJpn = gallery?.galleryItem?.japaneseTitle ?? '';
+    return Selector<GalleryModel, GalleryItem>(
+      selector: (context, gallery) => gallery.galleryItem,
+      builder: (context, GalleryItem galleryItem, child) {
+        final EhConfigController ehConfigController = Get.find();
+        final String _titleEn = galleryItem?.englishTitle ?? '';
+        final String _titleJpn = galleryItem?.japaneseTitle ?? '';
 
-        // 日语标题判断
-        final String _title =
-            ehconfig.isJpnTitle && _titleJpn != null && _titleJpn.isNotEmpty
-                ? _titleJpn
-                : _titleEn;
-
-        return _title;
-      },
-      builder: (context, title, child) {
-        _title = title;
-        return Text(
-          title,
-          maxLines: 2,
-          textAlign: TextAlign.left, // 对齐方式
-          overflow: TextOverflow.ellipsis, // 超出部分省略号
-          style: const TextStyle(
-            fontSize: 13.5,
-            fontWeight: FontWeight.w500,
-          ),
-        );
+        return Obx(() => Text(
+              ehConfigController.isJpnTitle.value &&
+                      _titleJpn != null &&
+                      _titleJpn.isNotEmpty
+                  ? _titleJpn
+                  : _titleEn,
+              maxLines: 2,
+              textAlign: TextAlign.left, // 对齐方式
+              overflow: TextOverflow.ellipsis, // 超出部分省略号
+              style: const TextStyle(
+                fontSize: 13.5,
+                fontWeight: FontWeight.w500,
+              ),
+            ));
       },
     );
   }
@@ -340,26 +337,27 @@ class CoverImg extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final EhConfigController ehConfigController = Get.find();
     final Map<String, String> _httpHeaders = {
       'Cookie': Global.profile?.user?.cookie ?? '',
     };
-    return Selector<EhConfigModel, bool>(
-        selector: (context, provider) => provider.isGalleryImgBlur,
-        builder: (BuildContext context, bool value, Widget child) {
-          return imgUrl != null
-              ? (value
-                  ? BlurImage(
-                      child: CachedNetworkImage(
-                      httpHeaders: _httpHeaders,
-                      imageUrl: imgUrl,
-                      fit: BoxFit.cover,
-                    ))
-                  : CachedNetworkImage(
-                      httpHeaders: _httpHeaders,
-                      imageUrl: imgUrl,
-                      fit: BoxFit.cover,
-                    ))
-              : Container();
-        });
+    return imgUrl != null && imgUrl.isNotEmpty
+        ? Obx(() {
+            if (ehConfigController.isGalleryImgBlur.value) {
+              return BlurImage(
+                  child: CachedNetworkImage(
+                httpHeaders: _httpHeaders,
+                imageUrl: imgUrl,
+                fit: BoxFit.cover,
+              ));
+            } else {
+              return CachedNetworkImage(
+                httpHeaders: _httpHeaders,
+                imageUrl: imgUrl,
+                fit: BoxFit.cover,
+              );
+            }
+          })
+        : Container();
   }
 }
