@@ -9,9 +9,9 @@ import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
 import 'package:tuple/tuple.dart';
 
-class GalleryController extends GetxController
+class GalleryViewController extends GetxController
     with StateMixin<List<GalleryItem>> {
-  GalleryController({this.cats});
+  GalleryViewController({this.cats});
   int cats;
 
   RxInt curPage = 0.obs;

@@ -9,7 +9,7 @@ class SettingTab extends StatelessWidget {
   final scrollController;
 
   // ignore: avoid_field_initializers_in_const_classes
-  final controller = Get.put(SettingController());
+  final controller = Get.put(SettingViewController());
 
   @override
   Widget build(BuildContext context) {

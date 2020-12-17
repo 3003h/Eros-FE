@@ -7,7 +7,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-class PopularListTab extends GetView<PopularController> {
+class PopularListTab extends GetView<PopularViewController> {
   const PopularListTab({Key key, this.tabIndex, this.scrollController})
       : super(key: key);
   final String tabIndex;

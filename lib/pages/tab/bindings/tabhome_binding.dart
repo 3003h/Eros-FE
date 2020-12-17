@@ -1,3 +1,5 @@
+import 'package:FEhViewer/common/controller/history_controller.dart';
+import 'package:FEhViewer/common/controller/localfav_controller.dart';
 import 'package:FEhViewer/common/controller/quicksearch_controller.dart';
 import 'package:FEhViewer/pages/tab/controller/favorite_controller.dart';
 import 'package:FEhViewer/pages/tab/controller/gallery_controller.dart';
@@ -11,11 +13,13 @@ class TabHomeBinding extends Bindings {
   @override
   void dependencies() {
     Get.lazyPut(() => TabHomeController());
-    Get.lazyPut(() => PopularController());
-    Get.lazyPut(() => GalleryController());
-    Get.lazyPut(() => FavoriteController());
-    Get.lazyPut(() => HistoryController());
-    Get.lazyPut(() => SettingController());
+    Get.lazyPut(() => PopularViewController());
+    Get.lazyPut(() => GalleryViewController());
+    Get.lazyPut(() => FavoriteViewController());
+    Get.lazyPut(() => HistoryViewController());
+    Get.lazyPut(() => SettingViewController());
     Get.lazyPut(() => QuickSearchController(), fenix: true);
+    Get.lazyPut(() => LocalFavController());
+    Get.lazyPut(() => HistoryController());
   }
 }

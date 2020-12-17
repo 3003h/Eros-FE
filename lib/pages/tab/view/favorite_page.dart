@@ -1,7 +1,6 @@
 import 'package:FEhViewer/common/controller/ehconfig_controller.dart';
 import 'package:FEhViewer/models/entity/favorite.dart';
 import 'package:FEhViewer/models/index.dart';
-import 'package:FEhViewer/models/states/local_favorite_model.dart';
 import 'package:FEhViewer/models/states/user_model.dart';
 import 'package:FEhViewer/pages/tab/controller/favorite_controller.dart';
 import 'package:FEhViewer/pages/tab/view/gallery_base.dart';
@@ -15,7 +14,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
 import 'package:provider/provider.dart';
 
-class FavoriteTab extends GetView<FavoriteController> {
+class FavoriteTab extends GetView<FavoriteViewController> {
   const FavoriteTab({Key key, this.tabIndex, this.scrollController})
       : super(key: key);
   final String tabIndex;
@@ -113,14 +112,11 @@ class FavoriteTab extends GetView<FavoriteController> {
           await controller.reloadData();
         },
       ),
-      Selector<LocalFavModel, int>(
-          selector: (context, localFavModel) => localFavModel.loacalFavs.length,
-          builder: (context, _, __) {
-            return SliverSafeArea(
-              top: false,
-              sliver: _getGalleryList(),
-            );
-          }),
+      // todo 可能要设置刷新？
+      SliverSafeArea(
+        top: false,
+        sliver: _getGalleryList(),
+      ),
       SliverToBoxAdapter(
         child: Container(
           padding: const EdgeInsets.only(bottom: 150),

@@ -1,4 +1,4 @@
-import 'package:FEhViewer/models/states/history_model.dart';
+import 'package:FEhViewer/models/galleryItem.dart';
 import 'package:FEhViewer/pages/tab/controller/history_controller.dart';
 import 'package:FEhViewer/pages/tab/view/gallery_base.dart';
 import 'package:FEhViewer/pages/tab/view/tab_base.dart';
@@ -8,9 +8,8 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
-import 'package:provider/provider.dart';
 
-class HistoryTab extends GetView<HistoryController> {
+class HistoryTab extends GetView<HistoryViewController> {
   const HistoryTab({Key key, this.tabIndex, this.scrollController})
       : super(key: key);
   final String tabIndex;
@@ -56,14 +55,7 @@ class HistoryTab extends GetView<HistoryController> {
         ),
         SliverSafeArea(
           top: false,
-          sliver: Selector<HistoryModel, String>(selector: (_, historyModel) {
-            if (historyModel.history.isEmpty) {
-              return '';
-            }
-            return historyModel.history.first.url;
-          }, builder: (context, snapshot, _) {
-            return _getGalleryList();
-          }),
+          sliver: _getGalleryList(),
           // sliver: _getGalleryList(),
         ),
       ],
@@ -73,16 +65,17 @@ class HistoryTab extends GetView<HistoryController> {
   }
 
   Widget _getGalleryList() {
-    return controller.obx((state) => getGalleryList(state, tabIndex),
-        onLoading: SliverFillRemaining(
-          child: Container(
-            alignment: Alignment.center,
-            padding: const EdgeInsets.only(bottom: 50),
-            child: const CupertinoActivityIndicator(
-              radius: 14.0,
-            ),
-          ),
-        ), onError: (err) {
+    return controller
+        .obx((List<GalleryItem> state) => getGalleryList(state, tabIndex),
+            onLoading: SliverFillRemaining(
+              child: Container(
+                alignment: Alignment.center,
+                padding: const EdgeInsets.only(bottom: 50),
+                child: const CupertinoActivityIndicator(
+                  radius: 14.0,
+                ),
+              ),
+            ), onError: (err) {
       logger.e(' $err');
       return SliverFillRemaining(
         child: Container(

@@ -1,27 +1,16 @@
 import 'package:FEhViewer/common/controller/ehconfig_controller.dart';
 import 'package:FEhViewer/common/global.dart';
-import 'package:flutter/foundation.dart';
+import 'package:FEhViewer/models/index.dart';
 import 'package:get/get.dart';
 
-import '../index.dart';
+class HistoryController extends GetxController {
+  History _history;
+  RxList<GalleryItem> historys = <GalleryItem>[].obs;
 
-class HistoryModel with ChangeNotifier {
   final EhConfigController ehConfigController = Get.find();
 
-  History get _history => Global.history;
-
-  int get _max => ehConfigController.maxHistory.value ?? 100;
-
-  List<GalleryItem> get history => _history.history ?? <GalleryItem>[];
-
-  void _saveAndNotifyListeners() {
-    Global.saveHistory();
-    super.notifyListeners();
-  }
-
   void addHistory(GalleryItem galleryItem) {
-    // logger.v('${galleryItem.toJson()}');
-    final int _index = history.indexWhere((GalleryItem element) {
+    final int _index = historys.indexWhere((GalleryItem element) {
       return element.gid == galleryItem.gid;
     });
     if (_index >= 0) {
@@ -29,22 +18,32 @@ class HistoryModel with ChangeNotifier {
       _history.history.insert(0, galleryItem);
     } else {
       // 检查数量限制 超限则删除最后一条
-      if (_max > 0 && _history.history.length == _max) {
+      if (ehConfigController.maxHistory.value > 0 &&
+          _history.history.length == ehConfigController.maxHistory.value) {
         _history.history.removeLast();
       }
 
       _history.history.insert(0, galleryItem);
     }
-    _saveAndNotifyListeners();
   }
 
   void removeHistory(int index) {
     _history.history.removeAt(index);
-    _saveAndNotifyListeners();
   }
 
   void cleanHistory() {
     _history.history.clear();
-    _saveAndNotifyListeners();
+  }
+
+  @override
+  void onInit() {
+    super.onInit();
+    _history = Global.history;
+    historys(_history.history);
+
+    ever<List<GalleryItem>>(historys, (List<GalleryItem> value) {
+      _history.history = value;
+      Global.saveHistory();
+    });
   }
 }

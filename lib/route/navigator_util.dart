@@ -16,8 +16,8 @@ class NavigatorUtil {
   /// 转到画廊列表页面
   static void goGalleryList({int cats = 0}) {
     Get.to(const GalleryListTab(),
-        binding: BindingsBuilder<GalleryController>(() {
-      Get.put(GalleryController(cats: cats));
+        binding: BindingsBuilder<GalleryViewController>(() {
+      Get.put(GalleryViewController(cats: cats));
     }));
   }
 

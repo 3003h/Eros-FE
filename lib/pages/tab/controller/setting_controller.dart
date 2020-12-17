@@ -6,7 +6,7 @@ import 'package:flutter/widgets.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
 
-class SettingController extends GetxController {
+class SettingViewController extends GetxController {
   // 菜单文案
   var _itemTitles = [];
 

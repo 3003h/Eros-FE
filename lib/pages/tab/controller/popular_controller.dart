@@ -3,7 +3,7 @@ import 'package:FEhViewer/utils/network/gallery_request.dart';
 import 'package:get/get.dart';
 import 'package:tuple/tuple.dart';
 
-class PopularController extends GetxController
+class PopularViewController extends GetxController
     with StateMixin<List<GalleryItem>> {
   @override
   void onInit() {
