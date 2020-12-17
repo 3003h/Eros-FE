@@ -1,21 +1,17 @@
+import 'package:FEhViewer/common/controller/history_controller.dart';
 import 'package:FEhViewer/models/index.dart';
-import 'package:FEhViewer/models/states/history_model.dart';
 import 'package:FEhViewer/utils/logger.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
-import 'package:provider/provider.dart';
 
-class HistoryController extends GetxController
+class HistoryViewController extends GetxController
     with StateMixin<List<GalleryItem>> {
-  Future<List<GalleryItem>> futureBuilderFuture;
-  Widget lastListWidget;
-  HistoryModel historyModel;
+  final HistoryController historyController = Get.find();
 
   @override
   void onInit() {
     super.onInit();
-    historyModel = Provider.of<HistoryModel>(Get.context, listen: false);
 
     loadData().then((List<GalleryItem> value) {
       change(value, status: RxStatus.success());
@@ -26,7 +22,7 @@ class HistoryController extends GetxController
 
   Future<List<GalleryItem>> loadData() async {
     logger.v('_loadData ');
-    final List<GalleryItem> historys = historyModel.history;
+    final List<GalleryItem> historys = historyController.historys;
 
     return Future<List<GalleryItem>>.value(historys);
   }
@@ -54,7 +50,7 @@ class HistoryController extends GetxController
             CupertinoDialogAction(
               child: const Text('确定'),
               onPressed: () {
-                historyModel.cleanHistory();
+                historyController.cleanHistory();
                 Get.back();
                 reloadData();
               },

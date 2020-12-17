@@ -10,7 +10,7 @@ import 'package:get/get.dart';
 
 import 'tab_base.dart';
 
-class GalleryListTab extends GetView<GalleryController> {
+class GalleryListTab extends GetView<GalleryViewController> {
   const GalleryListTab({Key key, this.tabIndex, this.scrollController})
       : super(key: key);
 
@@ -91,7 +91,7 @@ class GalleryListTab extends GetView<GalleryController> {
           sliver: _getGalleryList(),
         ),
         SliverToBoxAdapter(
-          child: GetX<GalleryController>(builder: (_) {
+          child: GetX<GalleryViewController>(builder: (_) {
             return Container(
               padding: const EdgeInsets.only(top: 50, bottom: 100),
               child: controller.isLoadMore.value

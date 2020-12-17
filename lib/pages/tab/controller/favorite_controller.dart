@@ -1,6 +1,6 @@
 import 'package:FEhViewer/common/controller/ehconfig_controller.dart';
+import 'package:FEhViewer/common/controller/localfav_controller.dart';
 import 'package:FEhViewer/models/index.dart';
-import 'package:FEhViewer/models/states/local_favorite_model.dart';
 import 'package:FEhViewer/models/states/user_model.dart';
 import 'package:FEhViewer/utils/logger.dart';
 import 'package:FEhViewer/utils/network/gallery_request.dart';
@@ -10,7 +10,7 @@ import 'package:get/get.dart';
 import 'package:provider/provider.dart';
 import 'package:tuple/tuple.dart';
 
-class FavoriteController extends GetxController
+class FavoriteViewController extends GetxController
     with StateMixin<List<GalleryItem>> {
   RxString title = ''.obs;
   List<GalleryItem> galleryItemBeans = [];
@@ -28,6 +28,7 @@ class FavoriteController extends GetxController
   Widget lastListWidget;
 
   final EhConfigController ehConfigController = Get.find();
+  final LocalFavController localFavController = Get.find();
 
   @override
   void onInit() {
@@ -75,8 +76,7 @@ class FavoriteController extends GetxController
       }
       // 本地收藏夹
       logger.v('本地收藏');
-      final List<GalleryItem> localFav =
-          Provider.of<LocalFavModel>(Get.context, listen: false).loacalFavs;
+      final List<GalleryItem> localFav = localFavController.loacalFavs;
 
       return Future<Tuple2<List<GalleryItem>, int>>.value(Tuple2(localFav, 1));
     }

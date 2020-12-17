@@ -1,8 +1,8 @@
 import 'package:FEhViewer/common/controller/ehconfig_controller.dart';
+import 'package:FEhViewer/common/controller/localfav_controller.dart';
 import 'package:FEhViewer/common/global.dart';
 import 'package:FEhViewer/common/parser/gallery_fav_parser.dart';
 import 'package:FEhViewer/models/states/gallery_model.dart';
-import 'package:FEhViewer/models/states/local_favorite_model.dart';
 import 'package:FEhViewer/models/states/user_model.dart';
 import 'package:FEhViewer/utils/logger.dart';
 import 'package:FEhViewer/utils/toast.dart';
@@ -33,6 +33,7 @@ class _GalleryFavButtonState extends State<GalleryFavButton> {
 
   // 收藏输入框控制器
   final TextEditingController _favnoteController = TextEditingController();
+  final LocalFavController localFavController = Get.find();
 
   @override
   void initState() {
@@ -156,10 +157,8 @@ class _GalleryFavButtonState extends State<GalleryFavButton> {
         );
       } else {
         logger.v('取消本地收藏');
-        final LocalFavModel localFavModel =
-            Provider.of<LocalFavModel>(context, listen: false);
         _galleryModel.localFav = false;
-        localFavModel.removeFav(_galleryModel.galleryItem);
+        localFavController.removeFav(_galleryModel.galleryItem);
       }
     } catch (e) {
       return true;
@@ -273,10 +272,8 @@ class _GalleryFavButtonState extends State<GalleryFavButton> {
             favnote: _favnote,
           );
         } else {
-          final LocalFavModel localFavModel =
-              Provider.of<LocalFavModel>(context, listen: false);
           _galleryModel.localFav = true;
-          localFavModel.addLocalFav(_galleryModel.galleryItem);
+          localFavController.addLocalFav(_galleryModel.galleryItem);
         }
       } catch (e) {
         return false;

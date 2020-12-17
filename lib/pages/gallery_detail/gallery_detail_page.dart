@@ -1,10 +1,10 @@
 import 'package:FEhViewer/common/controller/ehconfig_controller.dart';
+import 'package:FEhViewer/common/controller/history_controller.dart';
+import 'package:FEhViewer/common/controller/localfav_controller.dart';
 import 'package:FEhViewer/models/galleryItem.dart';
 import 'package:FEhViewer/models/index.dart';
 import 'package:FEhViewer/models/states/gallery_cache_model.dart';
 import 'package:FEhViewer/models/states/gallery_model.dart';
-import 'package:FEhViewer/models/states/history_model.dart';
-import 'package:FEhViewer/models/states/local_favorite_model.dart';
 import 'package:FEhViewer/pages/gallery_detail/gallery_detail_widget.dart';
 import 'package:FEhViewer/pages/tab/view/gallery_base.dart';
 import 'package:FEhViewer/route/navigator_util.dart';
@@ -35,11 +35,11 @@ class GalleryDetailPage extends StatefulWidget {
 class _GalleryDetailPageState extends State<GalleryDetailPage> {
   final ScrollController _controller = ScrollController();
   GalleryModel _galleryModel;
-  HistoryModel _historyModel;
-  LocalFavModel _localFavModel;
   GalleryCacheModel _galleryCacheModel;
 
   Future<GalleryItem> _futureBuilderFuture;
+
+  final HistoryController historyController = Get.find();
 
   @override
   void didChangeDependencies() {
@@ -48,17 +48,6 @@ class _GalleryDetailPageState extends State<GalleryDetailPage> {
         Provider.of<GalleryModel>(context, listen: false);
     if (galleryModel != _galleryModel) {
       _galleryModel = galleryModel;
-    }
-    final HistoryModel historyModel =
-        Provider.of<HistoryModel>(context, listen: false);
-    if (historyModel != _historyModel) {
-      _historyModel = historyModel;
-    }
-
-    final LocalFavModel localFavModel =
-        Provider.of<LocalFavModel>(context, listen: false);
-    if (localFavModel != _localFavModel) {
-      _localFavModel = localFavModel;
     }
 
     final GalleryCacheModel galleryCacheModel =
@@ -77,7 +66,7 @@ class _GalleryDetailPageState extends State<GalleryDetailPage> {
 
       if (_item.gid != null) {
         Future<void>.delayed(const Duration(milliseconds: 1000)).then((_) {
-          _historyModel.addHistory(_item);
+          historyController.addHistory(_item);
         });
       }
 
@@ -131,8 +120,9 @@ class _GalleryDetailPageState extends State<GalleryDetailPage> {
 
   bool _isInLocalFav(String gid) {
     // 检查是否包含在本地收藏中
-    final int index =
-        _localFavModel.loacalFavs.indexWhere((GalleryItem element) {
+    final int index = Get.find<LocalFavController>()
+        .loacalFavs
+        .indexWhere((GalleryItem element) {
       return element.gid == gid;
     });
     return index >= 0;
@@ -274,7 +264,7 @@ class _GalleryDetailPageState extends State<GalleryDetailPage> {
               if (loadFinish) {
                 Future<void>.delayed(const Duration(milliseconds: 100))
                     .then((_) {
-                  _historyModel.addHistory(snapshot.data);
+                  historyController.addHistory(snapshot.data);
                 });
                 return child;
               } else {
@@ -294,7 +284,7 @@ class _GalleryDetailPageState extends State<GalleryDetailPage> {
                     } else {
                       Future<void>.delayed(const Duration(milliseconds: 100))
                           .then((_) {
-                        _historyModel.addHistory(snapshot.data);
+                        historyController.addHistory(snapshot.data);
                       });
                       return child;
                     }
