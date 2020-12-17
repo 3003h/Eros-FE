@@ -1,5 +1,6 @@
 import 'package:FEhViewer/models/entity/favorite.dart';
 import 'package:FEhViewer/utils/logger.dart';
+import 'package:FEhViewer/utils/network/gallery_request.dart';
 import 'package:FEhViewer/utils/utility.dart';
 import 'package:FEhViewer/values/const.dart';
 import 'package:FEhViewer/values/theme_colors.dart';

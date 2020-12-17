@@ -8,10 +8,17 @@ class ProfileController extends GetxController {
   EhConfig ehConfig;
   DownloadConfig downloadConfig;
 
-  Worker everSaveProfile<T>(RxInterface<T> listener, ValueChanged<T> onChange,
-      {bool isEnum = false}) {
+  Worker everProfile<T>(RxInterface<T> listener, ValueChanged<T> onChange) {
+    return ever<T>(listener, (value) {
+      onChange(value);
+      Global.saveProfile();
+    });
+  }
+
+  Worker everFromEunm<T>(
+      RxInterface<T> listener, ValueChanged<String> onChange) {
     return ever<T>(listener, (T value) {
-      onChange(isEnum ? EnumToString.convertToString(value) : value);
+      onChange(EnumToString.convertToString(value));
       Global.saveProfile();
     });
   }

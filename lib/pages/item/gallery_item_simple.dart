@@ -26,7 +26,7 @@ class GalleryItemSimpleWidget extends StatefulWidget {
       {@required this.galleryItem, @required this.tabIndex});
 
   final GalleryItem galleryItem;
-  final tabIndex;
+  final String tabIndex;
 
   @override
   _GalleryItemSimpleWidgetState createState() =>
@@ -189,16 +189,24 @@ class _GalleryItemSimpleWidgetState extends State<GalleryItemSimpleWidget> {
       return Container(
         width: kCoverImageWidth,
         height: kItemWidth - 12,
-        // color: CupertinoColors.systemBackground,
         child: Center(
           child: Hero(
             tag: '${_item.gid}_${_item.token}_cover_${galleryModel.tabIndex}',
-            child: ClipRRect(
-              // 圆角
-              borderRadius: BorderRadius.circular(6),
-              child: Container(
-                  child: CoverImg(
-                      imgUrl: galleryModel?.galleryItem?.imgUrl ?? '')),
+            child: Container(
+              decoration: BoxDecoration(boxShadow: [
+                //阴影
+                BoxShadow(
+                  color: CupertinoDynamicColor.resolve(
+                      CupertinoColors.systemGrey4, context),
+                  blurRadius: 10,
+                )
+              ]),
+              child: ClipRRect(
+                // 圆角
+                borderRadius: BorderRadius.circular(6),
+                child:
+                    CoverImg(imgUrl: galleryModel?.galleryItem?.imgUrl ?? ''),
+              ),
             ),
           ),
         ),

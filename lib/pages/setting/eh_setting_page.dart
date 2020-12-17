@@ -22,7 +22,7 @@ class _EhSettingPage extends State<EhSettingPage> {
   final String _title = 'EH设置';
 
   Future<bool> _getDelayed() async {
-    final int _delayed = (Global.isFirstReOpenEhSetting ?? true) ? 200 : 1;
+    final int _delayed = (Global.isFirstReOpenEhSetting ?? true) ? 0 : 0;
     // logger.v('$_delayed');
     await Future<void>.delayed(Duration(milliseconds: _delayed));
     Global.isFirstReOpenEhSetting = false;

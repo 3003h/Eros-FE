@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:io';
 
 import 'package:FEhViewer/utils/logger.dart';
+import 'package:FEhViewer/utils/network/gallery_request.dart';
 import 'package:FEhViewer/utils/utility.dart';
 import 'package:FEhViewer/values/const.dart';
 import 'package:flutter/cupertino.dart';

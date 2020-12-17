@@ -1,13 +1,11 @@
 import 'package:FEhViewer/common/controller/advance_search_controller.dart';
 import 'package:FEhViewer/common/controller/ehconfig_controller.dart';
 import 'package:FEhViewer/common/global.dart';
-import 'package:FEhViewer/models/states/advance_search_model.dart';
 import 'package:FEhViewer/models/states/dnsconfig_model.dart';
 import 'package:FEhViewer/models/states/gallery_cache_model.dart';
 import 'package:FEhViewer/models/states/history_model.dart';
 import 'package:FEhViewer/models/states/local_favorite_model.dart';
 import 'package:FEhViewer/models/states/locale_model.dart';
-import 'package:FEhViewer/models/states/search_text_model.dart';
 import 'package:FEhViewer/models/states/theme_model.dart';
 import 'package:FEhViewer/models/states/user_model.dart';
 import 'package:FEhViewer/route/app_pages.dart';
@@ -26,8 +24,10 @@ import 'l10n/messages.dart';
 
 void main() {
   Global.init().then((_) {
-    Get.put(EhConfigController(), permanent: true);
-    Get.put(AdvanceSearchController(), permanent: true);
+    // Get.put(EhConfigController(), permanent: true);
+    // Get.put(AdvanceSearchController(), permanent: true);
+    Get.lazyPut(() => EhConfigController(), fenix: true);
+    Get.lazyPut(() => AdvanceSearchController(), fenix: true);
     runApp(
       DevicePreview(
         // enabled: Global.inDebugMode,
@@ -133,15 +133,10 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
         ChangeNotifierProvider<UserModel>.value(value: UserModel()),
         ChangeNotifierProvider<LocaleModel>.value(value: LocaleModel()),
         ChangeNotifierProvider<ThemeModel>.value(value: ThemeModel()),
-        // 快速搜索词
-        ChangeNotifierProvider<SearchTextModel>.value(value: SearchTextModel()),
         // LocalFavModel 本地收藏
         ChangeNotifierProvider<LocalFavModel>.value(value: LocalFavModel()),
         // HistoryModel 历史记录
         ChangeNotifierProvider<HistoryModel>.value(value: HistoryModel()),
-        // AdvanceSearchModel
-        ChangeNotifierProvider<AdvanceSearchModel>.value(
-            value: AdvanceSearchModel()),
         // DnsConfigModel
         ChangeNotifierProvider<DnsConfigModel>.value(value: DnsConfigModel()),
         // GalleryCacheModel

@@ -73,34 +73,27 @@ class GalleryItemFlow extends StatelessWidget {
                         '${galleryItem.gid}_${galleryItem.token}_cover_$_tabIndex',
                     child: Container(
                       decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(kRadius), //圆角
-                        // ignore: prefer_const_literals_to_create_immutables
-                        /*boxShadow: [
+                          // borderRadius: BorderRadius.circular(kRadius), //圆角
+                          // ignore: prefer_const_literals_to_create_immutables
+                          boxShadow: [
                             //阴影
-                            const BoxShadow(
-                              color: CupertinoColors.systemGrey3,
-                              blurRadius: 2.0,
+                            BoxShadow(
+                              color: CupertinoDynamicColor.resolve(
+                                  CupertinoColors.systemGrey6, context),
+                              blurRadius: 5,
                             )
-                          ]*/
-                      ),
+                          ]),
                       child: ClipRRect(
                         borderRadius: BorderRadius.circular(kRadius),
                         child: Stack(
                           alignment: Alignment.topRight,
                           children: <Widget>[
                             Container(
+                              alignment: Alignment.center,
                               height: galleryItem.imgWidth != null
                                   ? _getHeigth()
                                   : null,
-                              child: Stack(
-                                children: <Widget>[
-                                  Container(
-                                    color:
-                                        CupertinoColors.systemGroupedBackground,
-                                  ),
-                                  CoverImg(imgUrl: galleryItem.imgUrl),
-                                ],
-                              ),
+                              child: CoverImg(imgUrl: galleryItem.imgUrl),
                             ),
                             ClipPath(
                               clipper: CategoryClipper(

@@ -26,7 +26,7 @@ class GalleryItemWidget extends StatefulWidget {
       {@required this.galleryItem, @required this.tabIndex});
 
   final GalleryItem galleryItem;
-  final tabIndex;
+  final String tabIndex;
 
   @override
   _GalleryItemWidgetState createState() => _GalleryItemWidgetState();
@@ -40,16 +40,6 @@ class _GalleryItemWidgetState extends State<GalleryItemWidget> {
   GalleryModel _galleryModel;
 
   @override
-  void initState() {
-    super.initState();
-//    Future.delayed(Duration.zero, () {
-//      Provider.of<GalleryModel>(context, listen: false)
-//          .initData(widget.galleryItem, tabIndex: widget.tabIndex);
-//    });
-//    WidgetsBinding.instance.addPostFrameCallback((callback) {});
-  }
-
-  @override
   void didChangeDependencies() {
     super.didChangeDependencies();
     final GalleryModel galleryModel =
@@ -61,8 +51,6 @@ class _GalleryItemWidgetState extends State<GalleryItemWidget> {
 
   @override
   Widget build(BuildContext context) {
-    final GalleryModel galleryModel = Provider.of<GalleryModel>(context);
-
     return GestureDetector(
       child: Column(
         children: <Widget>[
@@ -201,39 +189,39 @@ class _GalleryItemWidgetState extends State<GalleryItemWidget> {
     return Consumer<GalleryModel>(builder: (context, galleryModel, _) {
       final GalleryItem _item = galleryModel.galleryItem;
 
-      // 获取图片高度
-      num _getHeigth() {
-        // logger.d(
-        // '${widget.tabIndex} ${_item.japaneseTitle}\n list imgWidth ${_item.imgWidth}');
+      // 获取图片高度 用于占位
+      double _getHeigth() {
         if (_item.imgWidth >= kCoverImageWidth) {
           return _item.imgHeight * kCoverImageWidth / _item.imgWidth;
         } else {
-          // logger.d('为空');
           return _item.imgHeight;
         }
       }
 
-      return ClipRRect(
-        borderRadius: BorderRadius.circular(6),
-        child: Container(
-          width: kCoverImageWidth,
-          height: _item.imgWidth != null ? _getHeigth() : null,
-          child: Hero(
-            tag: '${_item.gid}_${_item.token}_cover_${galleryModel.tabIndex}',
+      // logger.d('${_item.englishTitle} ${_getHeigth()}');
+
+      return Container(
+        margin: const EdgeInsets.only(top: 10, bottom: 10),
+        width: kCoverImageWidth,
+        height: _item.imgWidth != null ? _getHeigth() : null,
+        child: Hero(
+          tag: '${_item.gid}_${_item.token}_cover_${galleryModel.tabIndex}',
+          child: Container(
+            decoration: BoxDecoration(boxShadow: [
+              //阴影
+              BoxShadow(
+                color: CupertinoDynamicColor.resolve(
+                    CupertinoColors.systemGrey4, context),
+                blurRadius: 10,
+              )
+            ]),
             child: Center(
               child: ClipRRect(
                 // 圆角
                 borderRadius: BorderRadius.circular(6),
-                child: Stack(
-                  children: <Widget>[
-                    Container(
-                      color: CupertinoDynamicColor.resolve(
-                          CupertinoColors.systemGrey3, context),
-                    ),
-                    Container(
-                        child: CoverImg(
-                            imgUrl: galleryModel?.galleryItem?.imgUrl ?? '')),
-                  ],
+                child: CoverImg(
+                  imgUrl: galleryModel?.galleryItem?.imgUrl ?? '',
+                  height: _item.imgWidth != null ? _getHeigth() : null,
                 ),
               ),
             ),
@@ -455,9 +443,13 @@ class CoverImg extends StatelessWidget {
   const CoverImg({
     Key key,
     @required this.imgUrl,
+    this.height,
+    this.width,
   }) : super(key: key);
 
   final String imgUrl;
+  final double height;
+  final double width;
 
   @override
   Widget build(BuildContext context) {
@@ -465,23 +457,35 @@ class CoverImg extends StatelessWidget {
     final Map<String, String> _httpHeaders = {
       'Cookie': Global.profile?.user?.cookie ?? '',
     };
-    return imgUrl != null && imgUrl.isNotEmpty
-        ? Obx(() {
-            if (ehConfigController.isGalleryImgBlur.value) {
-              return BlurImage(
-                  child: CachedNetworkImage(
-                httpHeaders: _httpHeaders,
-                imageUrl: imgUrl,
-                fit: BoxFit.cover,
-              ));
-            } else {
-              return CachedNetworkImage(
-                httpHeaders: _httpHeaders,
-                imageUrl: imgUrl,
-                fit: BoxFit.cover,
-              );
-            }
-          })
-        : Container();
+
+    Widget image() {
+      if (imgUrl != null && imgUrl.isNotEmpty) {
+        return CachedNetworkImage(
+          placeholder: (_, __) {
+            return Container(
+              color: CupertinoDynamicColor.resolve(
+                  CupertinoColors.systemGrey5, context),
+            );
+          },
+          height: height,
+          width: width,
+          httpHeaders: _httpHeaders,
+          imageUrl: imgUrl,
+          fit: BoxFit.cover,
+        );
+      } else {
+        return Container();
+      }
+    }
+
+    return Obx(() {
+      if (ehConfigController.isGalleryImgBlur.value) {
+        return BlurImage(
+          child: image(),
+        );
+      } else {
+        return image();
+      }
+    });
   }
 }
