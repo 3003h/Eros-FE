@@ -1,7 +1,7 @@
 import 'package:FEhViewer/common/tag_database.dart';
 import 'package:FEhViewer/models/index.dart';
 import 'package:FEhViewer/utils/logger.dart';
-import 'package:FEhViewer/utils/utility.dart';
+import 'package:FEhViewer/utils/network/gallery_request.dart';
 import 'package:html/dom.dart';
 import 'package:html/parser.dart' show parse;
 import 'package:intl/intl.dart';

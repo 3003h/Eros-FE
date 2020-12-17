@@ -5,7 +5,7 @@ import 'package:FEhViewer/models/states/gallery_cache_model.dart';
 import 'package:FEhViewer/models/states/gallery_model.dart';
 import 'package:FEhViewer/route/navigator_util.dart';
 import 'package:FEhViewer/utils/logger.dart';
-import 'package:FEhViewer/utils/utility.dart';
+import 'package:FEhViewer/utils/network/gallery_request.dart';
 import 'package:FEhViewer/values/const.dart';
 import 'package:FEhViewer/values/theme_colors.dart';
 import 'package:FEhViewer/widget/rating_bar.dart';
@@ -67,10 +67,13 @@ class GalleryDetailInfo extends StatelessWidget {
         style: const TextStyle(fontSize: 16),
       ),
       onPressed: () {
-        Get.to(ChangeNotifierProvider<GalleryModel>.value(
-          value: galleryModel,
-          child: const AllPreviewPage(),
-        ));
+        Get.to(
+          ChangeNotifierProvider<GalleryModel>.value(
+            value: galleryModel,
+            child: const AllPreviewPage(),
+          ),
+          preventDuplicates: false,
+        );
       },
     );
   }
@@ -229,30 +232,13 @@ class PreviewContainer extends StatelessWidget {
         child: Column(
           children: <Widget>[
             Expanded(
-              child: Stack(
-                alignment: Alignment.center,
-                children: <Widget>[
-                  Container(
-                    height: kHeightPreview,
+              child: Center(
+                child: ClipRRect(
+                  borderRadius: BorderRadius.circular(4),
+                  child: Container(
+                    child: _buildImage(),
                   ),
-                  Center(
-                    child: ClipRRect(
-                      borderRadius: BorderRadius.circular(4),
-                      child: Container(
-                        child: _buildImage(),
-                      ),
-                    ),
-                  ),
-                  // 直接使用Card实现的方式，缺点 阴影方向好像是固定的
-                  // Card(
-                  //   margin: const EdgeInsets.all(0),
-                  //   elevation: 2,
-                  //   color: CupertinoColors.systemBackground,
-                  //   child: ClipRRect(
-                  //       borderRadius: BorderRadius.circular(4),
-                  //       child: _buildImage()),
-                  // ),
-                ],
+                ),
               ),
             ),
             Container(
@@ -502,6 +488,7 @@ class GalleryHeader extends StatelessWidget {
   }
 }
 
+/// 封面
 class CoverImage extends StatelessWidget {
   const CoverImage({
     Key key,
@@ -534,6 +521,14 @@ class CoverImage extends StatelessWidget {
                 child: Hero(
                   tag: '${_item.gid}_${_item.token}_cover_$_tabIndex',
                   child: Container(
+                    decoration: BoxDecoration(boxShadow: [
+                      //阴影
+                      BoxShadow(
+                        color: CupertinoDynamicColor.resolve(
+                            CupertinoColors.systemGrey4, context),
+                        blurRadius: 10,
+                      )
+                    ]),
                     child: ClipRRect(
                       borderRadius: BorderRadius.circular(6),
                       child: Container(
@@ -541,6 +536,12 @@ class CoverImage extends StatelessWidget {
                         width: _item.imgWidth,
                         color: CupertinoColors.systemBackground,
                         child: CachedNetworkImage(
+                          placeholder: (_, __) {
+                            return Container(
+                              color: CupertinoDynamicColor.resolve(
+                                  CupertinoColors.systemGrey5, context),
+                            );
+                          },
                           imageUrl: _imageUrl,
                           fit: BoxFit.cover,
                           httpHeaders: _httpHeaders,

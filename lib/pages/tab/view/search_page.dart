@@ -1,19 +1,17 @@
 import 'package:FEhViewer/common/controller/ehconfig_controller.dart';
+import 'package:FEhViewer/common/controller/quicksearch_controller.dart';
 import 'package:FEhViewer/models/index.dart';
-import 'package:FEhViewer/models/states/search_text_model.dart';
 import 'package:FEhViewer/pages/tab/view/gallery_base.dart';
 import 'package:FEhViewer/pages/tab/view/search_text_page.dart';
 import 'package:FEhViewer/pages/tab/view/tab_base.dart';
 import 'package:FEhViewer/utils/cust_lib/popup_menu.dart';
 import 'package:FEhViewer/utils/logger.dart';
-import 'package:FEhViewer/utils/toast.dart';
-import 'package:FEhViewer/utils/utility.dart';
+import 'package:FEhViewer/utils/network/gallery_request.dart';
 import 'package:FEhViewer/utils/vibrate.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
-import 'package:provider/provider.dart';
 import 'package:tuple/tuple.dart';
 
 enum SearchMenuEnum {
@@ -49,10 +47,10 @@ class _GallerySearchPageState extends State<GallerySearchPage>
   DateTime _lastInputCompleteAt; //上次输入完成时间
   String _lastSearchText;
 
-  SearchTextModel _searchTextModel;
   bool _autofocus;
 
   final EhConfigController ehConfigController = Get.find();
+  final QuickSearchController quickSearchController = Get.find();
 
   void _jumpSearch() {
     final String _searchText = _searchTextController.text.trim();
@@ -88,16 +86,6 @@ class _GallerySearchPageState extends State<GallerySearchPage>
       _autofocus = false;
     } else {
       _autofocus = true;
-    }
-  }
-
-  @override
-  void didChangeDependencies() {
-    super.didChangeDependencies();
-    final SearchTextModel searchTextModel =
-        Provider.of<SearchTextModel>(context, listen: false);
-    if (searchTextModel != _searchTextModel) {
-      _searchTextModel = searchTextModel;
     }
   }
 
@@ -258,11 +246,7 @@ class _GallerySearchPageState extends State<GallerySearchPage>
           case SearchMenuEnum.addToQuickSearch:
             final String _text = _searchTextController.text;
             if (_text.isNotEmpty) {
-              if (_searchTextModel.addText(_text)) {
-                showToast('保存成功');
-              } else {
-                showToast('搜索词已存在');
-              }
+              quickSearchController.addText(_text);
             }
             break;
           case SearchMenuEnum.quickSearchList:
@@ -313,11 +297,7 @@ class _GallerySearchPageState extends State<GallerySearchPage>
                 onPressed: () {
                   final String _text = _searchTextController.text;
                   if (_text.isNotEmpty) {
-                    if (_searchTextModel.addText(_text)) {
-                      showToast('保存成功');
-                    } else {
-                      showToast('搜索词已存在');
-                    }
+                    quickSearchController.addText(_text);
                   }
                 },
               ),

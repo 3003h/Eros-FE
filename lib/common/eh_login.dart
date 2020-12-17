@@ -3,7 +3,7 @@ import 'dart:io';
 import 'package:FEhViewer/models/user.dart';
 import 'package:FEhViewer/utils/dio_util.dart';
 import 'package:FEhViewer/utils/logger.dart';
-import 'package:FEhViewer/utils/utility.dart';
+import 'package:FEhViewer/utils/network/gallery_request.dart';
 import 'package:FEhViewer/values/const.dart';
 import 'package:cookie_jar/cookie_jar.dart';
 import 'package:dio/dio.dart';
@@ -213,10 +213,6 @@ class EhUserManager {
         baseUrl: 'https://forums.e-hentai.org', cache: false);
     final String url = '/index.php?showuser=$id';
 
-    // final String response = await httpManager.get(url,
-    //     options: Options(extra: {
-    //       'noCache': true, //本接口禁用缓存
-    //     }));
     final String response = await httpManager.get(url);
 
     // logger.v('$response');
@@ -235,19 +231,6 @@ class EhUserManager {
     const String url = '/uconfig.php';
 
     await httpManager.getAll(url);
-  }
-
-  /// 处理SetCookie 转为map
-  Map _parseSetCookieString(List setCookieStrings) {
-    final Map cookie = {};
-    final RegExp regExp = RegExp(r'^([^;=]+)=([^;]+);');
-    setCookieStrings.forEach((setCookieString) {
-//      debugPrint(setCookieString);
-      final RegExpMatch found = regExp.firstMatch(setCookieString);
-      cookie[found.group(1)] = found.group(2);
-    });
-
-    return cookie;
   }
 
   static String getCookieStringFromMap(Map cookie) {

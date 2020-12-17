@@ -48,64 +48,60 @@ class EhConfigController extends ProfileController {
 
     /// 预载图片数量
     preloadImage.value = downloadConfig.preloadImage ?? 5;
-    everSaveProfile(
-        preloadImage, (value) => downloadConfig.preloadImage = value);
+    everProfile(preloadImage, (value) => downloadConfig.preloadImage = value);
 
     /// 阅读方向
     viewMode.value =
         EnumToString.fromString(ViewMode.values, ehConfig?.viewModel) ??
             ViewMode.horizontalLeft;
-    everSaveProfile(viewMode, (value) => ehConfig.viewModel = value,
-        isEnum: true);
+    everFromEunm(viewMode, (String value) => ehConfig.viewModel = value);
 
     //
     isSafeMode.value = ehConfig.safeMode ?? true;
-    everSaveProfile(isSafeMode, (value) => ehConfig.safeMode = value);
+    everProfile(isSafeMode, (value) => ehConfig.safeMode = value);
 
     isJpnTitle.value = ehConfig?.jpnTitle ?? false;
-    everSaveProfile(isJpnTitle, (value) => ehConfig.jpnTitle = value);
+    everProfile(isJpnTitle, (value) => ehConfig.jpnTitle = value);
 
     isTagTranslat.value = ehConfig?.tagTranslat ?? false;
-    everSaveProfile(isTagTranslat, (value) => ehConfig.tagTranslat = value);
+    everProfile(isTagTranslat, (value) => ehConfig.tagTranslat = value);
 
     isGalleryImgBlur.value = ehConfig?.galleryImgBlur ?? false;
-    everSaveProfile(
-        isGalleryImgBlur, (value) => ehConfig.galleryImgBlur = value);
+    everProfile(isGalleryImgBlur, (value) => ehConfig.galleryImgBlur = value);
 
     isSiteEx.value = ehConfig?.siteEx ?? false;
-    everSaveProfile(isSiteEx, (value) => ehConfig.siteEx = value);
+    everProfile(isSiteEx, (value) => ehConfig.siteEx = value);
 
     isFavLongTap.value = ehConfig?.favLongTap ?? false;
-    everSaveProfile(isFavLongTap, (value) => ehConfig.favLongTap = value);
+    everProfile(isFavLongTap, (value) => ehConfig.favLongTap = value);
 
     catFilter.value = ehConfig.catFilter ?? 0;
-    everSaveProfile(catFilter, (value) => ehConfig.catFilter = value);
+    everProfile(catFilter, (value) => ehConfig.catFilter = value);
 
     listMode.value =
         EnumToString.fromString(ListModeEnum.values, ehConfig?.listMode) ??
             ListModeEnum.list;
-    everSaveProfile(listMode, (value) => ehConfig.listMode = value,
-        isEnum: true);
+    everFromEunm(listMode, (String value) => ehConfig.listMode = value);
 
     maxHistory.value = ehConfig.maxHistory ?? 100;
-    everSaveProfile(maxHistory, (value) => ehConfig.maxHistory = value);
+    everProfile(maxHistory, (value) => ehConfig.maxHistory = value);
 
     isSearchBarComp.value = ehConfig.searchBarComp ?? true;
-    everSaveProfile(isSearchBarComp, (value) => ehConfig.searchBarComp = value);
+    everProfile(isSearchBarComp, (value) => ehConfig.searchBarComp = value);
 
     favoriteOrder.value = EnumToString.fromString(
             FavoriteOrder.values, ehConfig?.favoritesOrder) ??
         FavoriteOrder.fav;
-    everSaveProfile(favoriteOrder, (value) => ehConfig.favoritesOrder = value,
-        isEnum: true);
+    everFromEunm(
+        favoriteOrder, (String value) => ehConfig.favoritesOrder = value);
 
     tagTranslatVer.value = ehConfig.tagTranslatVer;
-    everSaveProfile(tagTranslatVer, (value) => ehConfig.tagTranslatVer = value);
+    everProfile(tagTranslatVer, (value) => ehConfig.tagTranslatVer = value);
 
     lastFavcat.value = ehConfig.lastFavcat ?? '0';
-    everSaveProfile(lastFavcat, (value) => ehConfig.lastFavcat);
+    everProfile(lastFavcat, (value) => ehConfig.lastFavcat);
 
     isFavPicker.value = ehConfig.favPicker;
-    everSaveProfile(isFavPicker, (value) => ehConfig.favPicker);
+    everProfile(isFavPicker, (value) => ehConfig.favPicker);
   }
 }

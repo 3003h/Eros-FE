@@ -6,6 +6,7 @@ import 'package:FEhViewer/models/profile.dart';
 import 'package:FEhViewer/utils/cache.dart';
 import 'package:FEhViewer/utils/https_proxy.dart';
 import 'package:FEhViewer/utils/logger.dart';
+import 'package:FEhViewer/utils/network/gallery_request.dart';
 import 'package:FEhViewer/utils/storage.dart';
 import 'package:FEhViewer/utils/utility.dart';
 import 'package:FEhViewer/values/storages.dart';
