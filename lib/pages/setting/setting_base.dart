@@ -1,4 +1,4 @@
-import 'package:FEhViewer/models/states/dnsconfig_model.dart';
+import 'package:fehviewer/models/states/dnsconfig_model.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';

@@ -1,9 +1,9 @@
 import 'dart:io';
 
-import 'package:FEhViewer/common/global.dart';
-import 'package:FEhViewer/models/dnsCache.dart';
-import 'package:FEhViewer/models/states/dnsconfig_model.dart';
-import 'package:FEhViewer/pages/setting/setting_base.dart';
+import 'package:fehviewer/common/global.dart';
+import 'package:fehviewer/models/dnsCache.dart';
+import 'package:fehviewer/models/states/dnsconfig_model.dart';
+import 'package:fehviewer/pages/setting/setting_base.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';

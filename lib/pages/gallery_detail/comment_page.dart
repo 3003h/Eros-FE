@@ -1,4 +1,4 @@
-import 'package:FEhViewer/models/galleryComment.dart';
+import 'package:fehviewer/models/galleryComment.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
 

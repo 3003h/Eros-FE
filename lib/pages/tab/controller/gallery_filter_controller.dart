@@ -1,5 +1,5 @@
-import 'package:FEhViewer/common/controller/advance_search_controller.dart';
-import 'package:FEhViewer/models/index.dart';
+import 'package:fehviewer/common/controller/advance_search_controller.dart';
+import 'package:fehviewer/models/index.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
 

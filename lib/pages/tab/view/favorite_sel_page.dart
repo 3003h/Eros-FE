@@ -1,7 +1,7 @@
-import 'package:FEhViewer/models/entity/favorite.dart';
-import 'package:FEhViewer/pages/tab/controller/favorite_sel_controller.dart';
-import 'package:FEhViewer/pages/tab/view/gallery_base.dart';
-import 'package:FEhViewer/utils/network/gallery_request.dart';
+import 'package:fehviewer/models/entity/favorite.dart';
+import 'package:fehviewer/pages/tab/controller/favorite_sel_controller.dart';
+import 'package:fehviewer/pages/tab/view/gallery_base.dart';
+import 'package:fehviewer/utils/network/gallery_request.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';

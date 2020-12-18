@@ -1,7 +1,7 @@
 import 'dart:ui';
 
-import 'package:FEhViewer/common/global.dart';
-import 'package:FEhViewer/models/index.dart';
+import 'package:fehviewer/common/global.dart';
+import 'package:fehviewer/models/index.dart';
 import 'package:get/get.dart';
 
 import 'base_controller.dart';

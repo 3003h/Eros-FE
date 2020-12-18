@@ -1,9 +1,9 @@
-import 'package:FEhViewer/common/controller/ehconfig_controller.dart';
-import 'package:FEhViewer/pages/tab/view/gallery_filter_view.dart';
-import 'package:FEhViewer/utils/logger.dart';
-import 'package:FEhViewer/utils/utility.dart';
-import 'package:FEhViewer/values/const.dart';
-import 'package:FEhViewer/values/theme_colors.dart';
+import 'package:fehviewer/common/controller/ehconfig_controller.dart';
+import 'package:fehviewer/pages/tab/view/gallery_filter_view.dart';
+import 'package:fehviewer/utils/logger.dart';
+import 'package:fehviewer/utils/utility.dart';
+import 'package:fehviewer/values/const.dart';
+import 'package:fehviewer/values/theme_colors.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';

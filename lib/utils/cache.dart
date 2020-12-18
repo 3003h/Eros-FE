@@ -1,6 +1,6 @@
 import 'dart:collection';
 
-import 'package:FEhViewer/common/global.dart';
+import 'package:fehviewer/common/global.dart';
 import 'package:dio/dio.dart';
 
 import 'logger.dart';

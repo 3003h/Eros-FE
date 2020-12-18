@@ -1,6 +1,6 @@
-import 'package:FEhViewer/common/controller/ehconfig_controller.dart';
-import 'package:FEhViewer/pages/setting/setting_base.dart';
-import 'package:FEhViewer/values/const.dart';
+import 'package:fehviewer/common/controller/ehconfig_controller.dart';
+import 'package:fehviewer/pages/setting/setting_base.dart';
+import 'package:fehviewer/values/const.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
 

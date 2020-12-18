@@ -1,6 +1,6 @@
 import 'dart:isolate';
 
-import 'package:FEhViewer/utils/logger.dart';
+import 'package:fehviewer/utils/logger.dart';
 import 'package:flutter/cupertino.dart';
 
 /// 缓存图片的顶级函数

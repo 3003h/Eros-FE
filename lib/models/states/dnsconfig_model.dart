@@ -1,9 +1,9 @@
-import 'package:FEhViewer/common/global.dart';
-import 'package:FEhViewer/models/dnsCache.dart';
-import 'package:FEhViewer/models/dnsConfig.dart';
-import 'package:FEhViewer/models/states/base.dart';
-import 'package:FEhViewer/utils/logger.dart';
-import 'package:FEhViewer/utils/toast.dart';
+import 'package:fehviewer/common/global.dart';
+import 'package:fehviewer/models/dnsCache.dart';
+import 'package:fehviewer/models/dnsConfig.dart';
+import 'package:fehviewer/models/states/base.dart';
+import 'package:fehviewer/utils/logger.dart';
+import 'package:fehviewer/utils/toast.dart';
 
 const String _regExpIP = r'(\.((2(5[0-5]|[0-4]\d))|[0-1]?\d{1,2})){3}';
 const String _regExpHost =

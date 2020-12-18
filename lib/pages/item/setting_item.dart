@@ -1,4 +1,4 @@
-import 'package:FEhViewer/utils/logger.dart';
+import 'package:fehviewer/utils/logger.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';

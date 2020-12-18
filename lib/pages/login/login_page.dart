@@ -1,16 +1,15 @@
 import 'dart:io';
 import 'dart:ui';
 
-import 'package:FEhViewer/common/eh_login.dart';
-import 'package:FEhViewer/models/states/user_model.dart';
-import 'package:FEhViewer/models/user.dart';
-import 'package:FEhViewer/route/routes.dart';
-import 'package:FEhViewer/utils/logger.dart';
-import 'package:FEhViewer/utils/toast.dart';
+import 'package:fehviewer/common/controller/user_controller.dart';
+import 'package:fehviewer/common/eh_login.dart';
+import 'package:fehviewer/models/user.dart';
+import 'package:fehviewer/route/routes.dart';
+import 'package:fehviewer/utils/logger.dart';
+import 'package:fehviewer/utils/toast.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:provider/provider.dart';
 
 import 'login_cookie_page.dart';
 
@@ -27,6 +26,8 @@ class _LoginPageState extends State<LoginPage> {
 
   //密码的控制器
   final TextEditingController _passwdController = TextEditingController();
+
+  final UserController userController = Get.find();
 
   bool _isLogin = false;
   bool _isWebLogin = false;
@@ -142,7 +143,10 @@ class _LoginPageState extends State<LoginPage> {
       child: CupertinoButton(
         child: const Text('cookie 登录'),
         onPressed: () {
-          Get.to(LoginCookiePage()).then((result) {
+          Get.to(
+            LoginCookiePage(),
+            transition: Transition.cupertino,
+          ).then((result) {
             if (result ?? false) {
               Get.back();
             }
@@ -163,30 +167,32 @@ class _LoginPageState extends State<LoginPage> {
             )
           : CupertinoButton(
               child: Text('login_web'.tr),
-              onPressed: () {
+              onPressed: () async {
                 if (!Platform.isIOS && !Platform.isAndroid) {
                   showToast('平台尚未支持');
                   return;
                 }
 
-                Get.toNamed(EHRoutes.webLogin).then((result) async {
-                  if (result is Map) {
+                final dynamic result = await Get.toNamed(
+                  EHRoutes.webLogin,
+                  preventDuplicates: false,
+                );
+                logger.i(' $result');
+                if (result != null && result is Map) {
+                  setState(() {
+                    _isWebLogin = true;
+                  });
+                  try {
+                    final User user = await EhUserManager().signInByWeb(result);
+                    userController.user(user);
+                    Get.back();
+                  } catch (e) {
+                    showToast(e.toString());
                     setState(() {
-                      _isWebLogin = true;
+                      _isWebLogin = false;
                     });
-                    try {
-                      var user = await EhUserManager().signInByWeb(result);
-                      Provider.of<UserModel>(context, listen: false).user =
-                          user;
-                      Get.back();
-                    } catch (e) {
-                      showToast(e.toString());
-                      setState(() {
-                        _isWebLogin = false;
-                      });
-                    }
                   }
-                });
+                }
               },
             ),
     );
@@ -213,7 +219,7 @@ class _LoginPageState extends State<LoginPage> {
     try {
       user = await EhUserManager()
           .signIn(_usernameController.text, _passwdController.text);
-      Provider.of<UserModel>(context, listen: false).user = user;
+      userController.user(user);
     } catch (e) {
       showToast(e.toString());
       setState(() {

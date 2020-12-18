@@ -1,10 +1,10 @@
 import 'dart:io';
 
-import 'package:FEhViewer/models/user.dart';
-import 'package:FEhViewer/utils/dio_util.dart';
-import 'package:FEhViewer/utils/logger.dart';
-import 'package:FEhViewer/utils/network/gallery_request.dart';
-import 'package:FEhViewer/values/const.dart';
+import 'package:fehviewer/models/user.dart';
+import 'package:fehviewer/utils/dio_util.dart';
+import 'package:fehviewer/utils/logger.dart';
+import 'package:fehviewer/utils/network/gallery_request.dart';
+import 'package:fehviewer/values/const.dart';
 import 'package:cookie_jar/cookie_jar.dart';
 import 'package:dio/dio.dart';
 

@@ -1,15 +1,14 @@
-import 'package:FEhViewer/common/controller/ehconfig_controller.dart';
-import 'package:FEhViewer/common/global.dart';
-import 'package:FEhViewer/common/tag_database.dart';
-import 'package:FEhViewer/models/states/user_model.dart';
-import 'package:FEhViewer/pages/login/web_mysetting.dart';
-import 'package:FEhViewer/utils/logger.dart';
-import 'package:FEhViewer/values/const.dart';
+import 'package:fehviewer/common/controller/ehconfig_controller.dart';
+import 'package:fehviewer/common/controller/user_controller.dart';
+import 'package:fehviewer/common/global.dart';
+import 'package:fehviewer/common/tag_database.dart';
+import 'package:fehviewer/pages/login/web_mysetting.dart';
+import 'package:fehviewer/utils/logger.dart';
+import 'package:fehviewer/values/const.dart';
 import 'package:enum_to_string/enum_to_string.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:provider/provider.dart';
 
 import 'setting_base.dart';
 
@@ -61,6 +60,7 @@ class ListViewEhSetting extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final EhConfigController ehConfigController = Get.find();
+    final UserController userController = Get.find();
 
     final bool _siteEx = ehConfigController.isSiteEx.value;
     final bool _jpnTitle = ehConfigController.isJpnTitle.value;
@@ -69,8 +69,7 @@ class ListViewEhSetting extends StatelessWidget {
     final bool _favLongTap = ehConfigController.isFavLongTap.value;
     final bool _favOrder =
         ehConfigController.favoriteOrder.value == FavoriteOrder.posted;
-    final bool _isLogin =
-        Provider.of<UserModel>(context, listen: false).isLogin;
+    final bool _isLogin = userController.isLogin;
 
     Future<void> _handleSiteChanged(bool newValue) async {
       ehConfigController.isSiteEx(newValue);
@@ -114,7 +113,7 @@ class ListViewEhSetting extends StatelessWidget {
           desc: '当前E-Hentai',
           descOn: '当前ExHentai',
         ),
-      if (_isLogin)
+      if (true)
         SelectorSettingItem(
           title: 'Ehentai设置',
           selector: '网站设置',

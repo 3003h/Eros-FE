@@ -1,9 +1,9 @@
 import 'dart:async';
 import 'dart:io';
 
-import 'package:FEhViewer/route/navigator_util.dart';
-import 'package:FEhViewer/route/routes.dart';
-import 'package:FEhViewer/utils/logger.dart';
+import 'package:fehviewer/route/navigator_util.dart';
+import 'package:fehviewer/route/routes.dart';
+import 'package:fehviewer/utils/logger.dart';
 import 'package:get/get.dart';
 import 'package:receive_sharing_intent/receive_sharing_intent.dart';
 

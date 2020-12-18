@@ -1,17 +1,10 @@
-import 'package:FEhViewer/common/global.dart';
-import 'package:FEhViewer/models/galleryCache.dart';
-import 'package:flutter/widgets.dart';
+import 'package:fehviewer/common/global.dart';
+import 'package:fehviewer/models/index.dart';
+import 'package:get/get.dart';
 
-class GalleryCacheModel with ChangeNotifier {
+class GalleryCacheController extends GetxController {
   List<GalleryCache> get _galleryCaches =>
       Global.galleryCaches ?? <GalleryCache>[];
-
-  void _saveCacheAndNotifyListeners({bool notify = true}) {
-    Global.saveGalleryCaches();
-    if (notify) {
-      super.notifyListeners();
-    }
-  }
 
   GalleryCache getGalleryCache(String gid) {
     final int _oriIndex =
@@ -21,7 +14,6 @@ class GalleryCacheModel with ChangeNotifier {
     } else {
       return null;
     }
-    ;
   }
 
   void setIndex(String gid, int index, {bool notify = true}) {
@@ -35,6 +27,6 @@ class GalleryCacheModel with ChangeNotifier {
         ..lastIndex = index);
     }
 
-    _saveCacheAndNotifyListeners(notify: notify);
+    Global.saveGalleryCaches();
   }
 }

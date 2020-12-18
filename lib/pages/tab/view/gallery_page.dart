@@ -1,8 +1,8 @@
-import 'package:FEhViewer/models/index.dart';
-import 'package:FEhViewer/pages/tab/controller/gallery_controller.dart';
-import 'package:FEhViewer/pages/tab/view/gallery_base.dart';
-import 'package:FEhViewer/route/navigator_util.dart';
-import 'package:FEhViewer/utils/logger.dart';
+import 'package:fehviewer/models/index.dart';
+import 'package:fehviewer/pages/tab/controller/gallery_controller.dart';
+import 'package:fehviewer/pages/tab/view/gallery_base.dart';
+import 'package:fehviewer/route/navigator_util.dart';
+import 'package:fehviewer/utils/logger.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';

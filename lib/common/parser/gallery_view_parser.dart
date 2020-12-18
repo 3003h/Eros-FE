@@ -1,6 +1,6 @@
-import 'package:FEhViewer/common/global.dart';
-import 'package:FEhViewer/utils/dio_util.dart';
-import 'package:FEhViewer/utils/logger.dart';
+import 'package:fehviewer/common/global.dart';
+import 'package:fehviewer/utils/dio_util.dart';
+import 'package:fehviewer/utils/logger.dart';
 import 'package:dio/dio.dart';
 import 'package:html/dom.dart';
 import 'package:html/parser.dart' show parse;

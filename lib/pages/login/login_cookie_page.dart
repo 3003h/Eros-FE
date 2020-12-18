@@ -1,12 +1,11 @@
-import 'package:FEhViewer/common/eh_login.dart';
-import 'package:FEhViewer/models/index.dart';
-import 'package:FEhViewer/models/states/user_model.dart';
-import 'package:FEhViewer/utils/logger.dart';
-import 'package:FEhViewer/utils/toast.dart';
+import 'package:fehviewer/common/controller/user_controller.dart';
+import 'package:fehviewer/common/eh_login.dart';
+import 'package:fehviewer/models/index.dart';
+import 'package:fehviewer/utils/logger.dart';
+import 'package:fehviewer/utils/toast.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:provider/provider.dart';
 
 class LoginCookiePage extends StatefulWidget {
   @override
@@ -23,6 +22,8 @@ class _LoginCookiePageState extends State<LoginCookiePage> {
 
   // ibp_pass_hash
   final TextEditingController _hashController = TextEditingController();
+
+  final UserController userController = Get.find();
 
   @override
   Widget build(BuildContext context) {
@@ -111,7 +112,7 @@ class _LoginCookiePageState extends State<LoginCookiePage> {
     try {
       user = await EhUserManager().signInByCookie(
           _idController.text.trim(), _hashController.text.trim());
-      Provider.of<UserModel>(context, listen: false).user = user;
+      userController.user(user);
     } catch (e) {
       showToast(e.toString());
       setState(() {

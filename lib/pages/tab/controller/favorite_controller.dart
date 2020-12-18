@@ -1,13 +1,12 @@
-import 'package:FEhViewer/common/controller/ehconfig_controller.dart';
-import 'package:FEhViewer/common/controller/localfav_controller.dart';
-import 'package:FEhViewer/models/index.dart';
-import 'package:FEhViewer/models/states/user_model.dart';
-import 'package:FEhViewer/utils/logger.dart';
-import 'package:FEhViewer/utils/network/gallery_request.dart';
-import 'package:FEhViewer/utils/toast.dart';
+import 'package:fehviewer/common/controller/ehconfig_controller.dart';
+import 'package:fehviewer/common/controller/localfav_controller.dart';
+import 'package:fehviewer/common/controller/user_controller.dart';
+import 'package:fehviewer/models/index.dart';
+import 'package:fehviewer/utils/logger.dart';
+import 'package:fehviewer/utils/network/gallery_request.dart';
+import 'package:fehviewer/utils/toast.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
-import 'package:provider/provider.dart';
 import 'package:tuple/tuple.dart';
 
 class FavoriteViewController extends GetxController
@@ -27,14 +26,15 @@ class FavoriteViewController extends GetxController
   Future<Tuple2<List<GalleryItem>, int>> futureBuilderFuture;
   Widget lastListWidget;
 
-  final EhConfigController ehConfigController = Get.find();
-  final LocalFavController localFavController = Get.find();
+  final EhConfigController _ehConfigController = Get.find();
+  final LocalFavController _localFavController = Get.find();
+  final UserController _userController = Get.find();
 
   @override
   void onInit() {
     super.onInit();
-    curFavcat = ehConfigController.lastShowFavcat ?? 'a';
-    title.value = ehConfigController.lastShowFavTitle;
+    curFavcat = _ehConfigController.lastShowFavcat ?? 'a';
+    title.value = _ehConfigController.lastShowFavTitle;
 
     loadData(first: true).then((Tuple2<List<GalleryItem>, int> tuple) {
       maxPage = tuple.item2;
@@ -56,8 +56,7 @@ class FavoriteViewController extends GetxController
   }) async {
     logger.v('_loadDataFirst  fav');
 
-    final bool _isLogin =
-        Provider.of<UserModel>(Get.context, listen: false).isLogin;
+    final bool _isLogin = _userController.isLogin;
     if (!_isLogin) {
       curFavcat = 'l';
     }
@@ -71,12 +70,12 @@ class FavoriteViewController extends GetxController
       return tuple;
     } else {
       if (first) {
-        ehConfigController.lastShowFavcat = 'l';
-        ehConfigController.lastShowFavTitle = '本地收藏';
+        _ehConfigController.lastShowFavcat = 'l';
+        _ehConfigController.lastShowFavTitle = '本地收藏';
       }
       // 本地收藏夹
       logger.v('本地收藏');
-      final List<GalleryItem> localFav = localFavController.loacalFavs;
+      final List<GalleryItem> localFav = _localFavController.loacalFavs;
 
       return Future<Tuple2<List<GalleryItem>, int>>.value(Tuple2(localFav, 1));
     }

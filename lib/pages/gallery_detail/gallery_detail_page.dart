@@ -1,16 +1,16 @@
-import 'package:FEhViewer/common/controller/ehconfig_controller.dart';
-import 'package:FEhViewer/common/controller/history_controller.dart';
-import 'package:FEhViewer/common/controller/localfav_controller.dart';
-import 'package:FEhViewer/models/galleryItem.dart';
-import 'package:FEhViewer/models/index.dart';
-import 'package:FEhViewer/models/states/gallery_cache_model.dart';
-import 'package:FEhViewer/models/states/gallery_model.dart';
-import 'package:FEhViewer/pages/gallery_detail/gallery_detail_widget.dart';
-import 'package:FEhViewer/pages/tab/view/gallery_base.dart';
-import 'package:FEhViewer/route/navigator_util.dart';
-import 'package:FEhViewer/utils/logger.dart';
-import 'package:FEhViewer/utils/network/gallery_request.dart';
-import 'package:FEhViewer/utils/toast.dart';
+import 'package:fehviewer/common/controller/ehconfig_controller.dart';
+import 'package:fehviewer/common/controller/gallerycache_controller.dart';
+import 'package:fehviewer/common/controller/history_controller.dart';
+import 'package:fehviewer/common/controller/localfav_controller.dart';
+import 'package:fehviewer/models/galleryItem.dart';
+import 'package:fehviewer/models/index.dart';
+import 'package:fehviewer/models/states/gallery_model.dart';
+import 'package:fehviewer/pages/gallery_detail/gallery_detail_widget.dart';
+import 'package:fehviewer/pages/tab/view/gallery_base.dart';
+import 'package:fehviewer/route/navigator_util.dart';
+import 'package:fehviewer/utils/logger.dart';
+import 'package:fehviewer/utils/network/gallery_request.dart';
+import 'package:fehviewer/utils/toast.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
@@ -35,11 +35,11 @@ class GalleryDetailPage extends StatefulWidget {
 class _GalleryDetailPageState extends State<GalleryDetailPage> {
   final ScrollController _controller = ScrollController();
   GalleryModel _galleryModel;
-  GalleryCacheModel _galleryCacheModel;
 
   Future<GalleryItem> _futureBuilderFuture;
 
   final HistoryController historyController = Get.find();
+  final GalleryCacheController galleryCacheController = Get.find();
 
   @override
   void didChangeDependencies() {
@@ -48,12 +48,6 @@ class _GalleryDetailPageState extends State<GalleryDetailPage> {
         Provider.of<GalleryModel>(context, listen: false);
     if (galleryModel != _galleryModel) {
       _galleryModel = galleryModel;
-    }
-
-    final GalleryCacheModel galleryCacheModel =
-        Provider.of<GalleryCacheModel>(context, listen: false);
-    if (galleryCacheModel != _galleryCacheModel) {
-      _galleryCacheModel = galleryCacheModel;
     }
 
     _futureBuilderFuture = _loadData();
@@ -324,7 +318,7 @@ class _GalleryDetailPageState extends State<GalleryDetailPage> {
         color: CupertinoColors.activeBlue,
         onPressed: _hasPreview
             ? () async {
-                final GalleryCache _galleryCache = _galleryCacheModel
+                final GalleryCache _galleryCache = galleryCacheController
                     .getGalleryCache(_galleryModel.galleryItem.gid);
                 final int _index = _galleryCache?.lastIndex ?? 0;
                 await showLoadingDialog(context, _index);

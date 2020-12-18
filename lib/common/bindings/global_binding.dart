@@ -1,5 +1,5 @@
-import 'package:FEhViewer/common/controller/advance_search_controller.dart';
-import 'package:FEhViewer/common/controller/ehconfig_controller.dart';
+import 'package:fehviewer/common/controller/advance_search_controller.dart';
+import 'package:fehviewer/common/controller/ehconfig_controller.dart';
 import 'package:get/get.dart';
 
 class GlobalBindings extends Bindings {

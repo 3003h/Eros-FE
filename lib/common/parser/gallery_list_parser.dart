@@ -1,11 +1,11 @@
 import 'dart:io';
 
-import 'package:FEhViewer/common/controller/ehconfig_controller.dart';
-import 'package:FEhViewer/common/global.dart';
-import 'package:FEhViewer/common/tag_database.dart';
-import 'package:FEhViewer/models/index.dart';
-import 'package:FEhViewer/utils/network/gallery_request.dart';
-import 'package:FEhViewer/values/const.dart';
+import 'package:fehviewer/common/controller/ehconfig_controller.dart';
+import 'package:fehviewer/common/global.dart';
+import 'package:fehviewer/common/tag_database.dart';
+import 'package:fehviewer/models/index.dart';
+import 'package:fehviewer/utils/network/gallery_request.dart';
+import 'package:fehviewer/values/const.dart';
 import 'package:get/get.dart';
 import 'package:html/dom.dart' as dom;
 import 'package:html/parser.dart' show parse;

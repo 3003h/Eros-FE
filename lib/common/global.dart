@@ -1,15 +1,15 @@
 import 'dart:convert';
 import 'dart:io';
 
-import 'package:FEhViewer/models/index.dart';
-import 'package:FEhViewer/models/profile.dart';
-import 'package:FEhViewer/utils/cache.dart';
-import 'package:FEhViewer/utils/https_proxy.dart';
-import 'package:FEhViewer/utils/logger.dart';
-import 'package:FEhViewer/utils/network/gallery_request.dart';
-import 'package:FEhViewer/utils/storage.dart';
-import 'package:FEhViewer/utils/utility.dart';
-import 'package:FEhViewer/values/storages.dart';
+import 'package:fehviewer/models/index.dart';
+import 'package:fehviewer/models/profile.dart';
+import 'package:fehviewer/utils/cache.dart';
+import 'package:fehviewer/utils/https_proxy.dart';
+import 'package:fehviewer/utils/logger.dart';
+import 'package:fehviewer/utils/network/gallery_request.dart';
+import 'package:fehviewer/utils/storage.dart';
+import 'package:fehviewer/utils/utility.dart';
+import 'package:fehviewer/values/storages.dart';
 import 'package:dio_cookie_manager/dio_cookie_manager.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';

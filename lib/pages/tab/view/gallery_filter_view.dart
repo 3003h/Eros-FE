@@ -1,6 +1,6 @@
-import 'package:FEhViewer/common/controller/advance_search_controller.dart';
-import 'package:FEhViewer/pages/tab/controller/gallery_filter_controller.dart';
-import 'package:FEhViewer/utils/logger.dart';
+import 'package:fehviewer/common/controller/advance_search_controller.dart';
+import 'package:fehviewer/pages/tab/controller/gallery_filter_controller.dart';
+import 'package:fehviewer/utils/logger.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';

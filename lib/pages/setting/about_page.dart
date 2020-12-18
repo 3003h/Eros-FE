@@ -1,10 +1,10 @@
 import 'dart:io';
 
-import 'package:FEhViewer/common/controller/ehconfig_controller.dart';
-import 'package:FEhViewer/pages/setting/setting_base.dart';
-import 'package:FEhViewer/utils/cust_lib/flutter_egg.dart';
-import 'package:FEhViewer/utils/logger.dart';
-import 'package:FEhViewer/utils/toast.dart';
+import 'package:fehviewer/common/controller/ehconfig_controller.dart';
+import 'package:fehviewer/pages/setting/setting_base.dart';
+import 'package:fehviewer/utils/cust_lib/flutter_egg.dart';
+import 'package:fehviewer/utils/logger.dart';
+import 'package:fehviewer/utils/toast.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_vibrate/flutter_vibrate.dart';
