@@ -49,7 +49,8 @@ class ListViewAdvancedSetting extends StatelessWidget {
     }
 
     void _handleDoHChanged(bool newValue) {
-      if (!newValue && !(dnsConfigController.enableCustomHosts ?? false)) {
+      if (!newValue &&
+          !(dnsConfigController.enableCustomHosts.value ?? false)) {
         /// 清除hosts 关闭代理
         logger.d(' 关闭代理');
         HttpOverrides.global = null;

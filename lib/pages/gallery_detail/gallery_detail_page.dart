@@ -48,6 +48,7 @@ class _GalleryDetailPageState extends State<GalleryDetailPage> {
         Provider.of<GalleryModel>(context, listen: false);
     if (galleryModel != _galleryModel) {
       _galleryModel = galleryModel;
+      _initData();
     }
 
     _futureBuilderFuture = _loadData();
@@ -59,7 +60,7 @@ class _GalleryDetailPageState extends State<GalleryDetailPage> {
       GalleryItem _item = _galleryModel.galleryItem;
 
       if (_item.gid != null) {
-        Future<void>.delayed(const Duration(milliseconds: 1000)).then((_) {
+        Future<void>.delayed(const Duration(milliseconds: 0)).then((_) {
           historyController.addHistory(_item);
         });
       }
@@ -135,7 +136,7 @@ class _GalleryDetailPageState extends State<GalleryDetailPage> {
     });
   }
 
-  void _controllerLister(BuildContext context) {
+  void _controllerLister() {
     if (_controller.offset < kHeaderHeight + kHeaderPaddingTop &&
         !_galleryModel.hideNavigationBtn) {
       _galleryModel.hideNavigationBtn = true;
@@ -145,16 +146,14 @@ class _GalleryDetailPageState extends State<GalleryDetailPage> {
     }
   }
 
-  void _initData(BuildContext context) {
-    _controller.addListener(() => _controllerLister(context));
+  void _initData() {
+    _controller.addListener(_controllerLister);
 
     _galleryModel.resetHideNavigationBtn();
   }
 
   @override
   Widget build(BuildContext context) {
-    _initData(context);
-
     final EhConfigController ehConfigController = Get.find();
 
     /// 因为 CupertinoNavigationBar的特殊 不能直接用Selector包裹控制build 所以在

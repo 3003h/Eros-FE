@@ -1,8 +1,6 @@
-import 'package:fehviewer/models/galleryItem.dart';
+import 'package:fehviewer/common/controller/history_controller.dart';
 import 'package:fehviewer/pages/tab/controller/history_controller.dart';
-import 'package:fehviewer/pages/tab/view/gallery_base.dart';
 import 'package:fehviewer/pages/tab/view/tab_base.dart';
-import 'package:fehviewer/utils/logger.dart';
 import 'package:fehviewer/widget/eh_widget.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -17,6 +15,7 @@ class HistoryTab extends GetView<HistoryViewController> {
 
   @override
   Widget build(BuildContext context) {
+    // final HistoryController historyController = Get.find();
     final String _title = 'tab_history'.tr;
     final CustomScrollView customScrollView = CustomScrollView(
       controller: scrollController,
@@ -54,37 +53,19 @@ class HistoryTab extends GetView<HistoryViewController> {
           },
         ),
         SliverSafeArea(
-          top: false,
-          sliver: _getGalleryList(),
-          // sliver: _getGalleryList(),
-        ),
+            top: false,
+            // sliver: _getGalleryList(),
+            sliver: GetBuilder<HistoryController>(
+              init: HistoryController(),
+              builder: (_) {
+                return getGalleryList(_.historys, tabIndex);
+              },
+            )
+            // sliver: _getGalleryList(),
+            ),
       ],
     );
 
     return CupertinoPageScaffold(child: customScrollView);
-  }
-
-  Widget _getGalleryList() {
-    return controller
-        .obx((List<GalleryItem> state) => getGalleryList(state, tabIndex),
-            onLoading: SliverFillRemaining(
-              child: Container(
-                alignment: Alignment.center,
-                padding: const EdgeInsets.only(bottom: 50),
-                child: const CupertinoActivityIndicator(
-                  radius: 14.0,
-                ),
-              ),
-            ), onError: (err) {
-      logger.e(' $err');
-      return SliverFillRemaining(
-        child: Container(
-          padding: const EdgeInsets.only(bottom: 50),
-          child: GalleryErrorPage(
-            onTap: controller.reloadData,
-          ),
-        ),
-      );
-    });
   }
 }
