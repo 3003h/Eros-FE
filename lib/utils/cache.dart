@@ -1,3 +1,4 @@
+/*
 import 'dart:collection';
 
 import 'package:fehviewer/common/global.dart';
@@ -118,3 +119,4 @@ class NetCache extends Interceptor {
     cache.remove(key);
   }
 }
+*/

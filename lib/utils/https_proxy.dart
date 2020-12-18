@@ -2,11 +2,12 @@ import 'dart:convert';
 import 'dart:io';
 import 'dart:typed_data';
 
+import 'package:fehviewer/common/controller/dnsconfig_controller.dart';
 import 'package:fehviewer/common/global.dart';
 import 'package:fehviewer/models/dnsCache.dart';
-import 'package:fehviewer/utils/dns_util.dart';
 import 'package:fehviewer/utils/logger.dart';
 import 'package:fehviewer/utils/utility.dart';
+import 'package:get/get.dart';
 
 class CustomHttpsProxy {
   /// 内部构造方法，可避免外部暴露构造函数，进行实例化
@@ -67,6 +68,8 @@ class ClientConnectionHandler {
   String _oriHost;
   int port;
 
+  final DnsConfigController dnsConfigController = Get.find();
+
   void closeSockets() {
 //    print('socket is going to destroy');
     if (server != null) {
@@ -78,8 +81,8 @@ class ClientConnectionHandler {
   Future<void> dataHandler(dynamic data) async {
     // 自定义hosts
     final List<DnsCache> _customHosts =
-        Global.profile.dnsConfig.hosts ?? <DnsCache>[];
-    final bool enableDoH = Global.profile.dnsConfig.enableDoH ?? false;
+        dnsConfigController.hosts ?? <DnsCache>[];
+    final bool enableDoH = dnsConfigController.enableDoH ?? false;
 
     if (server == null) {
       // 建立连接
@@ -92,14 +95,14 @@ class ClientConnectionHandler {
 
         // 更新doh
         if (enableDoH) {
-          await DnsUtil.updateDoHCache(_oriHost);
+          await dnsConfigController.updateDoHCache(_oriHost);
           // logger.d(' updateDoHCache end');
         }
 
         String realHost = _oriHost;
         try {
           final List<DnsCache> _dohDnsCacheList =
-              Global.profile.dnsConfig.dohCache ?? <DnsCache>[];
+              dnsConfigController.dohCache ?? <DnsCache>[];
 
           // 查询自定义hosts
           final int customDnsCacheIndex = _customHosts
@@ -109,13 +112,13 @@ class ClientConnectionHandler {
               : null;
 
           if (enableDoH) {
-            final int _dohDnsCacheIndex = Global.profile.dnsConfig.dohCache
+            final int _dohDnsCacheIndex = dnsConfigController.dohCache
                 .indexWhere((DnsCache element) => element.host == _oriHost);
             // logger.d('$_oriHost $_dohDnsCacheIndex');
             final DnsCache dohDnsCache = _dohDnsCacheIndex > -1
                 ? _dohDnsCacheList[_dohDnsCacheIndex]
                 : null;
-            if (Global.profile.dnsConfig.enableCustomHosts ?? false) {
+            if (dnsConfigController.enableCustomHosts.value ?? false) {
               realHost = customDnsCache?.addr ?? dohDnsCache?.addr ?? _oriHost;
             } else {
               realHost = dohDnsCache?.addr ?? _oriHost;

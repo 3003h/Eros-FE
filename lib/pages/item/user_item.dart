@@ -1,7 +1,5 @@
 import 'package:fehviewer/common/controller/ehconfig_controller.dart';
 import 'package:fehviewer/common/controller/user_controller.dart';
-import 'package:fehviewer/common/global.dart';
-import 'package:fehviewer/models/user.dart';
 import 'package:fehviewer/route/routes.dart';
 import 'package:fehviewer/utils/network/gallery_request.dart';
 import 'package:flutter/cupertino.dart';
@@ -54,7 +52,7 @@ class _UserItem extends State<UserItem> {
   @override
   Widget build(BuildContext context) {
     void _tapItem() {
-      if (Global.profile.user?.username != null) {
+      if (userController.isLogin) {
         _logOut(context);
       } else {
         // NavigatorUtil.jump(context, EHRoutes.login, rootNavigator: true);

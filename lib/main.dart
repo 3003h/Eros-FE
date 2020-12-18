@@ -1,19 +1,18 @@
+import 'package:device_preview/device_preview.dart';
 import 'package:fehviewer/common/controller/advance_search_controller.dart';
+import 'package:fehviewer/common/controller/dnsconfig_controller.dart';
 import 'package:fehviewer/common/controller/ehconfig_controller.dart';
 import 'package:fehviewer/common/controller/local_controller.dart';
 import 'package:fehviewer/common/controller/theme_controller.dart';
 import 'package:fehviewer/common/global.dart';
-import 'package:fehviewer/models/states/dnsconfig_model.dart';
 import 'package:fehviewer/route/app_pages.dart';
 import 'package:fehviewer/route/routes.dart';
 import 'package:fehviewer/utils/logger.dart';
-import 'package:device_preview/device_preview.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:get/get.dart';
 import 'package:oktoast/oktoast.dart';
-import 'package:provider/provider.dart';
 
 import 'l10n/messages.dart';
 
@@ -25,7 +24,8 @@ void main() {
     Get.lazyPut(() => LocaleController(), fenix: true);
     // ThemeController
     Get.lazyPut(() => ThemeController(), fenix: true);
-
+    // DnsConfigController
+    Get.lazyPut(() => DnsConfigController(), fenix: true);
     runApp(
       DevicePreview(
         // enabled: Global.inDebugMode,
@@ -126,15 +126,6 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
           },
         ));
 
-    final MultiProvider multiProvider = MultiProvider(
-      // ignore: always_specify_types
-      providers: [
-        // DnsConfigModel
-        ChangeNotifierProvider<DnsConfigModel>.value(value: DnsConfigModel()),
-      ],
-      child: OKToast(child: cupertinoApp),
-    );
-
-    return multiProvider;
+    return OKToast(child: cupertinoApp);
   }
 }

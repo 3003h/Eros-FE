@@ -1,17 +1,16 @@
 import 'dart:io';
 
+import 'package:fehviewer/common/controller/dnsconfig_controller.dart';
 import 'package:fehviewer/common/controller/ehconfig_controller.dart';
 import 'package:fehviewer/common/controller/local_controller.dart';
 import 'package:fehviewer/common/controller/theme_controller.dart';
 import 'package:fehviewer/common/global.dart';
-import 'package:fehviewer/models/states/dnsconfig_model.dart';
 import 'package:fehviewer/pages/setting/custom_hosts_page.dart';
 import 'package:fehviewer/utils/logger.dart';
 import 'package:fehviewer/values/theme_colors.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:provider/provider.dart';
 
 import 'setting_base.dart';
 
@@ -44,13 +43,13 @@ class ListViewAdvancedSetting extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final EhConfigController ehConfigController = Get.find();
+    final DnsConfigController dnsConfigController = Get.find();
     void _handlePureDarkChanged(bool newValue) {
       ehConfigController.isPureDarkTheme.value = newValue;
     }
 
-    final bool _doh = Global.profile.dnsConfig.enableDoH ?? false;
     void _handleDoHChanged(bool newValue) {
-      if (!newValue && !(Global.profile.dnsConfig.enableCustomHosts ?? false)) {
+      if (!newValue && !(dnsConfigController.enableCustomHosts ?? false)) {
         /// 清除hosts 关闭代理
         logger.d(' 关闭代理');
         HttpOverrides.global = null;
@@ -58,8 +57,7 @@ class ListViewAdvancedSetting extends StatelessWidget {
         /// 设置全局本地代理
         HttpOverrides.global = Global.httpProxy;
       }
-      Global.profile.dnsConfig.enableDoH = newValue;
-      Global.saveProfile();
+      dnsConfigController.enableDoH.value = newValue;
     }
 
     return Container(
@@ -86,20 +84,17 @@ class ListViewAdvancedSetting extends StatelessWidget {
             color: CupertinoDynamicColor.resolve(
                 CupertinoColors.systemGrey5, context),
           ),
-          Selector<DnsConfigModel, bool>(
-              selector: (_, dnsConfigModel) => dnsConfigModel.enableCustomHosts,
-              builder: (context, bool customHosts, _) {
-                return SelectorSettingItem(
-                  title: '自定义hosts (实验性功能)',
-                  selector: customHosts ? '已开启' : '已关闭',
-                  onTap: () {
-                    Get.to(CustomHostsPage());
-                  },
-                );
-              }),
+          Obx(() => SelectorSettingItem(
+                title: '自定义hosts (实验性功能)',
+                selector:
+                    dnsConfigController.enableCustomHosts.value ? '已开启' : '已关闭',
+                onTap: () {
+                  Get.to(CustomHostsPage());
+                },
+              )),
           TextSwitchItem(
             'DNS-over-HTTPS',
-            intValue: _doh,
+            intValue: dnsConfigController.enableDoH.value,
             onChanged: _handleDoHChanged,
             desc: '优先级低于自定义hosts',
           ),

@@ -1,8 +1,8 @@
 import 'dart:async';
 import 'dart:ui' as ui;
 
-import 'package:fehviewer/common/global.dart';
 import 'package:extended_image/extended_image.dart';
+import 'package:fehviewer/common/global.dart';
 import 'package:flutter/cupertino.dart';
 
 const kScale = 1.0;
