@@ -20,6 +20,7 @@ class EhConfigController extends ProfileController {
   RxString tagTranslatVer = ''.obs;
   RxString lastFavcat = '0'.obs;
   RxBool isFavPicker = false.obs;
+  RxBool isPureDarkTheme = false.obs;
 
   String get lastShowFavcat => ehConfig.lastShowFavcat;
   set lastShowFavcat(String value) {
@@ -103,5 +104,9 @@ class EhConfigController extends ProfileController {
 
     isFavPicker.value = ehConfig.favPicker;
     everProfile(isFavPicker, (value) => ehConfig.favPicker);
+
+    isPureDarkTheme.value = ehConfig.pureDarkTheme;
+    everProfile<bool>(
+        isPureDarkTheme, (bool value) => ehConfig.pureDarkTheme = value);
   }
 }

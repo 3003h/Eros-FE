@@ -1,5 +1,5 @@
+import 'package:FEhViewer/common/controller/ehconfig_controller.dart';
 import 'package:FEhViewer/models/index.dart';
-import 'package:FEhViewer/models/states/theme_model.dart';
 import 'package:FEhViewer/route/navigator_util.dart';
 import 'package:FEhViewer/utils/cust_lib/flutter_linkify.dart' as linkify;
 import 'package:FEhViewer/utils/logger.dart';
@@ -7,7 +7,7 @@ import 'package:FEhViewer/values/theme_colors.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_linkify/flutter_linkify.dart';
-import 'package:provider/provider.dart';
+import 'package:get/get.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 const kMaxline = 4;
@@ -21,6 +21,8 @@ class CommentItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final EhConfigController ehConfigController = Get.find();
+
     final Text _fullText = Text(
       galleryComment.context,
       softWrap: true,
@@ -74,24 +76,17 @@ class CommentItem extends StatelessWidget {
     );
 
     return Container(
-//      height: 50,
       margin: const EdgeInsets.fromLTRB(12, 8, 12, 0),
       child: ClipRRect(
         // 圆角
         borderRadius: BorderRadius.circular(10),
-        child: Selector<ThemeModel, bool>(
-          selector: (_, themeModel) => themeModel.pureDarkTheme,
-          builder: (context, bool pureDarkTheme, child) {
-            return Container(
-              color: pureDarkTheme
-                  ? CupertinoDynamicColor.resolve(
-                      ThemeColors.commitBackground, context)
-                  : CupertinoDynamicColor.resolve(
-                      ThemeColors.commitBackgroundGray, context),
-              padding: const EdgeInsets.all(8),
-              child: child,
-            );
-          },
+        child: Container(
+          color: ehConfigController.isPureDarkTheme.value
+              ? CupertinoDynamicColor.resolve(
+                  ThemeColors.commitBackground, context)
+              : CupertinoDynamicColor.resolve(
+                  ThemeColors.commitBackgroundGray, context),
+          padding: const EdgeInsets.all(8),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
@@ -123,10 +118,6 @@ class CommentItem extends StatelessWidget {
                       ThemeColors.commitText, context),
                 ),
               ),
-//          Container(
-//            height: 1,
-//            color: CupertinoColors.systemGrey4,
-//          ),
             ],
           ),
         ),
