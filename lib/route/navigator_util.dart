@@ -51,6 +51,12 @@ class NavigatorUtil {
         ),
         preventDuplicates: false,
       );
+/*      Navigator.push(context, CupertinoPageRoute(builder: (_) {
+        return ChangeNotifierProvider<GalleryModel>.value(
+          value: galleryModel,
+          child: const GalleryDetailPage(),
+        );
+      }));*/
     }
   }
 
