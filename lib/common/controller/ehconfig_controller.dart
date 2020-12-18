@@ -1,6 +1,6 @@
+import 'package:enum_to_string/enum_to_string.dart';
 import 'package:fehviewer/common/global.dart';
 import 'package:fehviewer/values/const.dart';
-import 'package:enum_to_string/enum_to_string.dart';
 import 'package:get/get.dart';
 
 import 'base_controller.dart';

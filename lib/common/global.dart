@@ -1,16 +1,15 @@
 import 'dart:convert';
 import 'dart:io';
 
+import 'package:dio_cookie_manager/dio_cookie_manager.dart';
 import 'package:fehviewer/models/index.dart';
 import 'package:fehviewer/models/profile.dart';
-import 'package:fehviewer/utils/cache.dart';
 import 'package:fehviewer/utils/https_proxy.dart';
 import 'package:fehviewer/utils/logger.dart';
 import 'package:fehviewer/utils/network/gallery_request.dart';
 import 'package:fehviewer/utils/storage.dart';
 import 'package:fehviewer/utils/utility.dart';
 import 'package:fehviewer/values/storages.dart';
-import 'package:dio_cookie_manager/dio_cookie_manager.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:path/path.dart';
@@ -25,7 +24,9 @@ class Global {
   static bool isFirstOpen = false;
   static bool inDebugMode = false;
   static bool isFirstReOpenEhSetting = true;
+
   static Profile profile = Profile();
+
   static History history = History();
   static List<GalleryCache> galleryCaches = <GalleryCache>[];
 
@@ -39,7 +40,7 @@ class Global {
   static bool isDBinappSupportPath = false;
 
   // 网络缓存对象
-  static NetCache netCache = NetCache();
+  // static NetCache netCache = NetCache();
 
   // init
   static Future<void> init() async {

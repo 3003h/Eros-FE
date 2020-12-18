@@ -20,10 +20,12 @@ class TabHomeBinding extends Bindings {
     Get.lazyPut(() => FavoriteViewController());
     Get.lazyPut(() => HistoryViewController());
     Get.lazyPut(() => SettingViewController());
+
+    /// 一些全局设置或者控制
     Get.lazyPut(() => QuickSearchController(), fenix: true);
     Get.lazyPut(() => LocalFavController(), fenix: true);
     Get.lazyPut(() => HistoryController(), fenix: true);
-    Get.lazyPut(() => UserController());
-    Get.lazyPut(() => GalleryCacheController());
+    Get.lazyPut(() => UserController(), fenix: true);
+    Get.lazyPut(() => GalleryCacheController(), fenix: true);
   }
 }

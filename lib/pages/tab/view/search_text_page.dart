@@ -1,7 +1,6 @@
 import 'dart:io';
 
 import 'package:fehviewer/common/controller/quicksearch_controller.dart';
-import 'package:fehviewer/common/global.dart';
 import 'package:fehviewer/common/tag_database.dart';
 import 'package:fehviewer/utils/logger.dart';
 import 'package:file_picker/file_picker.dart';
@@ -161,7 +160,8 @@ class SearchQuickListPage extends StatelessWidget {
               size: 20,
             ),
             onPressed: () async {
-              final List<String> _searchTextList = Global.profile.searchText;
+              final List<String> _searchTextList =
+                  quickSearchController.searchTextList;
               if (_searchTextList.isNotEmpty) {
                 final String _searchText =
                     '#FEhViewer\n${_searchTextList.join('\n')}';

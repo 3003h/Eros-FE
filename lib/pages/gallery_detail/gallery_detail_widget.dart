@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:fehviewer/common/controller/ehconfig_controller.dart';
 import 'package:fehviewer/common/controller/gallerycache_controller.dart';
 import 'package:fehviewer/common/global.dart';
@@ -9,7 +10,6 @@ import 'package:fehviewer/utils/network/gallery_request.dart';
 import 'package:fehviewer/values/const.dart';
 import 'package:fehviewer/values/theme_colors.dart';
 import 'package:fehviewer/widget/rating_bar.dart';
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';

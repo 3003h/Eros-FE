@@ -1,32 +1,31 @@
 import 'dart:io';
 
+import 'package:fehviewer/common/controller/dnsconfig_controller.dart';
 import 'package:fehviewer/common/global.dart';
 import 'package:fehviewer/models/dnsCache.dart';
-import 'package:fehviewer/models/states/dnsconfig_model.dart';
 import 'package:fehviewer/pages/setting/setting_base.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:provider/provider.dart';
+import 'package:get/get.dart';
 
 class CustomHostsPage extends StatelessWidget {
   final String _title = '自定义hosts';
 
   @override
   Widget build(BuildContext context) {
-    final DnsConfigModel dnsConfigModel =
-        Provider.of<DnsConfigModel>(context, listen: false);
+    final DnsConfigController dnsConfigController = Get.find();
 
     void _handleEnableCustomHostDarkChanged(bool value) {
-      if (!value && !(Global.profile.dnsConfig.enableDoH ?? false)) {
+      if (!value && !(dnsConfigController.enableDoH.value ?? false)) {
         /// 关闭代理
         HttpOverrides.global = null;
       } else if (value) {
         /// 设置全局本地代理
         HttpOverrides.global = Global.httpProxy;
       }
-      dnsConfigModel.enableCustomHosts = value;
+      dnsConfigController.enableCustomHosts.value = value;
     }
 
     return CupertinoPageScaffold(
@@ -40,13 +39,13 @@ class CustomHostsPage extends StatelessWidget {
         child: Container(
           child: ListView(
             children: <Widget>[
-              TextSwitchItem(
-                _title,
-                intValue: dnsConfigModel.enableCustomHosts,
-                onChanged: _handleEnableCustomHostDarkChanged,
-                // desc: '已关闭',
-                // descOn: '已开启',
-              ),
+              Obx(() => TextSwitchItem(
+                    _title,
+                    intValue: dnsConfigController.enableCustomHosts.value,
+                    onChanged: _handleEnableCustomHostDarkChanged,
+                    // desc: '已关闭',
+                    // descOn: '已开启',
+                  )),
               Divider(
                 height: 38,
                 thickness: 38.5,
@@ -76,43 +75,40 @@ class CustomHostsPage extends StatelessWidget {
 }
 
 class CustomHostsListView extends StatelessWidget {
+  final DnsConfigController dnsConfigController = Get.find();
   @override
   Widget build(BuildContext context) {
-    return Consumer<DnsConfigModel>(
-        builder: (context, DnsConfigModel dnsConfigModel, _) {
-      final hosts = dnsConfigModel.hosts;
-      return Container(
-        child: ListView.builder(
-          shrinkWrap: true,
-          physics: const NeverScrollableScrollPhysics(),
-          itemBuilder: (_, int index) {
-            final DnsCache _dnsCache = hosts[index];
-            return Slidable(
-              actionPane: const SlidableDrawerActionPane(),
-              actionExtentRatio: 0.25,
-              secondaryActions: <Widget>[
-                IconSlideAction(
-                  caption: '删除',
-                  color: CupertinoDynamicColor.resolve(
-                      CupertinoColors.systemRed, context),
-                  icon: Icons.delete,
-                  onTap: () {
-                    dnsConfigModel.removeCustomHostAt(index);
-                    // showToast('delete');
-                  },
+    return Obx(() => Container(
+          child: ListView.builder(
+            shrinkWrap: true,
+            physics: const NeverScrollableScrollPhysics(),
+            itemBuilder: (_, int index) {
+              final DnsCache _dnsCache = dnsConfigController.hosts[index];
+              return Slidable(
+                actionPane: const SlidableDrawerActionPane(),
+                actionExtentRatio: 0.25,
+                secondaryActions: <Widget>[
+                  IconSlideAction(
+                    caption: '删除',
+                    color: CupertinoDynamicColor.resolve(
+                        CupertinoColors.systemRed, context),
+                    icon: Icons.delete,
+                    onTap: () {
+                      dnsConfigController.removeCustomHostAt(index);
+                      // showToast('delete');
+                    },
+                  ),
+                ],
+                child: CuttomHostItem(
+                  index: index,
+                  host: _dnsCache.host,
+                  addr: _dnsCache.addr,
                 ),
-              ],
-              child: CuttomHostItem(
-                index: index,
-                host: _dnsCache.host,
-                addr: _dnsCache.addr,
-              ),
-            );
-          },
-          itemCount: hosts.length,
-        ),
-      );
-    });
+              );
+            },
+            itemCount: dnsConfigController.hosts.length,
+          ),
+        ));
   }
 }
 

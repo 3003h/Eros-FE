@@ -1,8 +1,7 @@
-import 'package:fehviewer/models/states/dnsconfig_model.dart';
+import 'package:fehviewer/common/controller/dnsconfig_controller.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:provider/provider.dart';
 
 /// 选择类型的设置项
 class SelectorSettingItem extends StatefulWidget {
@@ -277,16 +276,15 @@ class SettingBase {
   Future<void> showCustomHostEditer(BuildContext context, {int index}) async {
     final TextEditingController _hostController = TextEditingController();
     final TextEditingController _addrController = TextEditingController();
+    final DnsConfigController dnsConfigController = Get.find();
     final FocusNode _nodeAddr = FocusNode();
     return showCupertinoDialog<void>(
       context: context,
       builder: (BuildContext context) {
-        final DnsConfigModel dnsConfigModel =
-            Provider.of<DnsConfigModel>(context, listen: false);
         final bool _isAddNew = index == null;
         if (!_isAddNew) {
-          _hostController.text = dnsConfigModel.hosts[index].host;
-          _addrController.text = dnsConfigModel.hosts[index].addr;
+          _hostController.text = dnsConfigController.hosts[index].host;
+          _addrController.text = dnsConfigController.hosts[index].addr;
         }
 
         return CupertinoAlertDialog(
@@ -318,7 +316,7 @@ class SettingBase {
                   autofocus: !_isAddNew,
                   onEditingComplete: () {
                     // 点击键盘完成
-                    if (dnsConfigModel.addCustomHost(
+                    if (dnsConfigController.addCustomHost(
                         _hostController.text.trim(),
                         _addrController.text.trim())) Get.back();
                   },
@@ -336,7 +334,7 @@ class SettingBase {
             CupertinoDialogAction(
               child: const Text('确定'),
               onPressed: () {
-                if (dnsConfigModel.addCustomHost(
+                if (dnsConfigController.addCustomHost(
                     _hostController.text.trim(), _addrController.text.trim()))
                   Get.back();
               },
