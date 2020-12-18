@@ -1,8 +1,8 @@
 import 'dart:io';
 
-import 'package:FEhViewer/common/global.dart';
-import 'package:FEhViewer/utils/toast.dart';
-import 'package:FEhViewer/values/const.dart';
+import 'package:fehviewer/common/global.dart';
+import 'package:fehviewer/utils/toast.dart';
+import 'package:fehviewer/values/const.dart';
 import 'package:dio/adapter.dart';
 import 'package:dio/dio.dart';
 import 'package:dio_http_cache/dio_http_cache.dart';

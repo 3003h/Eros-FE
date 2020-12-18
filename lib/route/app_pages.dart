@@ -1,14 +1,15 @@
-import 'package:FEhViewer/pages/login/login_page.dart';
-import 'package:FEhViewer/pages/setting/about_page.dart';
-import 'package:FEhViewer/pages/setting/advanced_setting_page.dart';
-import 'package:FEhViewer/pages/setting/download_setting_page.dart';
-import 'package:FEhViewer/pages/setting/eh_setting_page.dart';
-import 'package:FEhViewer/pages/setting/view_setting_page.dart';
-import 'package:FEhViewer/pages/tab/bindings/splash_binding.dart';
-import 'package:FEhViewer/pages/tab/bindings/tabhome_binding.dart';
-import 'package:FEhViewer/pages/tab/view/favorite_sel_page.dart';
-import 'package:FEhViewer/pages/tab/view/splash_page.dart';
-import 'package:FEhViewer/pages/tab/view/tabhome_page.dart';
+import 'package:fehviewer/pages/login/login_page.dart';
+import 'package:fehviewer/pages/login/web_login.dart';
+import 'package:fehviewer/pages/setting/about_page.dart';
+import 'package:fehviewer/pages/setting/advanced_setting_page.dart';
+import 'package:fehviewer/pages/setting/download_setting_page.dart';
+import 'package:fehviewer/pages/setting/eh_setting_page.dart';
+import 'package:fehviewer/pages/setting/view_setting_page.dart';
+import 'package:fehviewer/pages/tab/bindings/splash_binding.dart';
+import 'package:fehviewer/pages/tab/bindings/tabhome_binding.dart';
+import 'package:fehviewer/pages/tab/view/favorite_sel_page.dart';
+import 'package:fehviewer/pages/tab/view/splash_page.dart';
+import 'package:fehviewer/pages/tab/view/tabhome_page.dart';
 import 'package:get/get.dart';
 
 import 'routes.dart';
@@ -60,6 +61,10 @@ class AppPages {
       name: EHRoutes.login,
       page: () => LoginPage(),
       transition: Transition.cupertino,
+    ),
+    GetPage(
+      name: EHRoutes.webLogin,
+      page: () => WebLoginView(),
     ),
   ];
 }

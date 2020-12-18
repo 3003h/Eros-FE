@@ -1,5 +1,5 @@
-import 'package:FEhViewer/common/global.dart';
-import 'package:FEhViewer/values/theme_colors.dart';
+import 'package:fehviewer/common/global.dart';
+import 'package:fehviewer/values/theme_colors.dart';
 import 'package:enum_to_string/enum_to_string.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';

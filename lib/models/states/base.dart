@@ -1,4 +1,4 @@
-import 'package:FEhViewer/common/global.dart';
+import 'package:fehviewer/common/global.dart';
 import 'package:flutter/cupertino.dart';
 
 class ProfileChangeNotifier with ChangeNotifier {

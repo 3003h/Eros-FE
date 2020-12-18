@@ -1,4 +1,4 @@
-import 'package:FEhViewer/pages/tab/controller/tabhome_controller.dart';
+import 'package:fehviewer/pages/tab/controller/tabhome_controller.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';

@@ -1,14 +1,14 @@
-import 'package:FEhViewer/common/controller/ehconfig_controller.dart';
-import 'package:FEhViewer/common/global.dart';
-import 'package:FEhViewer/models/index.dart';
-import 'package:FEhViewer/models/states/gallery_cache_model.dart';
-import 'package:FEhViewer/models/states/gallery_model.dart';
-import 'package:FEhViewer/route/navigator_util.dart';
-import 'package:FEhViewer/utils/logger.dart';
-import 'package:FEhViewer/utils/network/gallery_request.dart';
-import 'package:FEhViewer/values/const.dart';
-import 'package:FEhViewer/values/theme_colors.dart';
-import 'package:FEhViewer/widget/rating_bar.dart';
+import 'package:fehviewer/common/controller/ehconfig_controller.dart';
+import 'package:fehviewer/common/controller/gallerycache_controller.dart';
+import 'package:fehviewer/common/global.dart';
+import 'package:fehviewer/models/index.dart';
+import 'package:fehviewer/models/states/gallery_model.dart';
+import 'package:fehviewer/route/navigator_util.dart';
+import 'package:fehviewer/utils/logger.dart';
+import 'package:fehviewer/utils/network/gallery_request.dart';
+import 'package:fehviewer/values/const.dart';
+import 'package:fehviewer/values/theme_colors.dart';
+import 'package:fehviewer/widget/rating_bar.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -587,8 +587,6 @@ class ReadButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final GalleryCacheModel _galleryCacheModel =
-        Provider.of<GalleryCacheModel>(context, listen: false);
     final GalleryModel _galleryModel =
         Provider.of<GalleryModel>(context, listen: false);
     return Selector<GalleryModel, bool>(
@@ -606,7 +604,9 @@ class ReadButton extends StatelessWidget {
               color: CupertinoColors.activeBlue,
               onPressed: value
                   ? () async {
-                      final GalleryCache _galleryCache = _galleryCacheModel
+                      final GalleryCacheController galleryCacheController =
+                          Get.find();
+                      final GalleryCache _galleryCache = galleryCacheController
                           .getGalleryCache(_galleryModel.galleryItem.gid);
                       final int _index = _galleryCache?.lastIndex ?? 0;
                       logger.d('lastIndex $_index');

@@ -1,15 +1,13 @@
-import 'package:FEhViewer/pages/tab/controller/setting_controller.dart';
+import 'package:fehviewer/pages/tab/controller/setting_controller.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-class SettingTab extends StatelessWidget {
-  SettingTab({Key key, this.tabIndex, this.scrollController}) : super(key: key);
-  final tabIndex;
-  final scrollController;
-
-  // ignore: avoid_field_initializers_in_const_classes
-  final controller = Get.put(SettingViewController());
+class SettingTab extends GetView<SettingViewController> {
+  const SettingTab({Key key, this.tabIndex, this.scrollController})
+      : super(key: key);
+  final String tabIndex;
+  final ScrollController scrollController;
 
   @override
   Widget build(BuildContext context) {

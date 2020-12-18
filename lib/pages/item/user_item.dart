@@ -1,14 +1,13 @@
-import 'package:FEhViewer/common/controller/ehconfig_controller.dart';
-import 'package:FEhViewer/common/global.dart';
-import 'package:FEhViewer/models/states/user_model.dart';
-import 'package:FEhViewer/models/user.dart';
-import 'package:FEhViewer/route/routes.dart';
-import 'package:FEhViewer/utils/network/gallery_request.dart';
+import 'package:fehviewer/common/controller/ehconfig_controller.dart';
+import 'package:fehviewer/common/controller/user_controller.dart';
+import 'package:fehviewer/common/global.dart';
+import 'package:fehviewer/models/user.dart';
+import 'package:fehviewer/route/routes.dart';
+import 'package:fehviewer/utils/network/gallery_request.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
-import 'package:provider/provider.dart';
 
 class UserItem extends StatefulWidget {
   @override
@@ -16,9 +15,10 @@ class UserItem extends StatefulWidget {
 }
 
 class _UserItem extends State<UserItem> {
-  final String _normalText = "未登录";
+  final String _normalText = '未登录';
   Color _color;
   final EhConfigController ehConfigController = Get.find();
+  final UserController userController = Get.find();
 
   Future<void> _logOut(BuildContext context) async {
     return showCupertinoDialog<void>(
@@ -39,7 +39,8 @@ class _UserItem extends State<UserItem> {
               child: Text('确定'),
               onPressed: () async {
                 (await Api.cookieJar).deleteAll();
-                Provider.of<UserModel>(context, listen: false).user = User();
+                // userController.user(User());
+                userController.logOut();
                 ehConfigController.isSiteEx.value = false;
                 Get.back();
               },
@@ -62,16 +63,14 @@ class _UserItem extends State<UserItem> {
     }
 
     Widget _buildText() {
-      return Consumer<UserModel>(
-        builder: (BuildContext context, UserModel value, Widget child) {
-          if (value.isLogin) {
-            final _userName = value.user.username;
-            return Text(_userName);
-          } else {
-            return Text(_normalText);
-          }
-        },
-      );
+      return Obx(() {
+        if (userController.isLogin) {
+          final String _userName = userController.user().username;
+          return Text(_userName);
+        } else {
+          return Text(_normalText);
+        }
+      });
     }
 
     final row = SafeArea(

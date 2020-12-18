@@ -1,4 +1,4 @@
-import 'package:FEhViewer/utils/cust_lib/selectable_text.dart' as cust;
+import 'package:fehviewer/utils/cust_lib/selectable_text.dart' as cust;
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:linkify/linkify.dart';

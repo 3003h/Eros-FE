@@ -1,7 +1,7 @@
-import 'package:FEhViewer/models/index.dart';
-import 'package:FEhViewer/models/states/gallery_model.dart';
-import 'package:FEhViewer/utils/logger.dart';
-import 'package:FEhViewer/utils/network/gallery_request.dart';
+import 'package:fehviewer/models/index.dart';
+import 'package:fehviewer/models/states/gallery_model.dart';
+import 'package:fehviewer/utils/logger.dart';
+import 'package:fehviewer/utils/network/gallery_request.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';

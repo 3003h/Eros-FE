@@ -1,5 +1,5 @@
-import 'package:FEhViewer/models/index.dart';
-import 'package:FEhViewer/utils/network/gallery_request.dart';
+import 'package:fehviewer/models/index.dart';
+import 'package:fehviewer/utils/network/gallery_request.dart';
 import 'package:get/get.dart';
 import 'package:tuple/tuple.dart';
 

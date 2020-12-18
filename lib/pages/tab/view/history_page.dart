@@ -1,9 +1,9 @@
-import 'package:FEhViewer/models/galleryItem.dart';
-import 'package:FEhViewer/pages/tab/controller/history_controller.dart';
-import 'package:FEhViewer/pages/tab/view/gallery_base.dart';
-import 'package:FEhViewer/pages/tab/view/tab_base.dart';
-import 'package:FEhViewer/utils/logger.dart';
-import 'package:FEhViewer/widget/eh_widget.dart';
+import 'package:fehviewer/models/galleryItem.dart';
+import 'package:fehviewer/pages/tab/controller/history_controller.dart';
+import 'package:fehviewer/pages/tab/view/gallery_base.dart';
+import 'package:fehviewer/pages/tab/view/tab_base.dart';
+import 'package:fehviewer/utils/logger.dart';
+import 'package:fehviewer/widget/eh_widget.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';

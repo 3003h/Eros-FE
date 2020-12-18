@@ -1,16 +1,16 @@
 import 'dart:io';
 
-import 'package:FEhViewer/common/controller/ehconfig_controller.dart';
-import 'package:FEhViewer/models/index.dart';
-import 'package:FEhViewer/models/states/gallery_cache_model.dart';
-import 'package:FEhViewer/models/states/gallery_model.dart';
-import 'package:FEhViewer/pages/gallery_detail/gallery_detail_widget.dart';
-import 'package:FEhViewer/route/routes.dart';
-import 'package:FEhViewer/utils/logger.dart';
-import 'package:FEhViewer/utils/network/gallery_request.dart';
-import 'package:FEhViewer/utils/toast.dart';
-import 'package:FEhViewer/utils/utility.dart';
-import 'package:FEhViewer/values/const.dart';
+import 'package:fehviewer/common/controller/ehconfig_controller.dart';
+import 'package:fehviewer/common/controller/gallerycache_controller.dart';
+import 'package:fehviewer/models/index.dart';
+import 'package:fehviewer/models/states/gallery_model.dart';
+import 'package:fehviewer/pages/gallery_detail/gallery_detail_widget.dart';
+import 'package:fehviewer/route/routes.dart';
+import 'package:fehviewer/utils/logger.dart';
+import 'package:fehviewer/utils/network/gallery_request.dart';
+import 'package:fehviewer/utils/toast.dart';
+import 'package:fehviewer/utils/utility.dart';
+import 'package:fehviewer/values/const.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -41,7 +41,6 @@ class _GalleryViewPageState extends State<GalleryViewPage> {
   // with AutomaticKeepAliveClientMixin {
   int _currentIndex;
   GalleryModel _galleryModel;
-  GalleryCacheModel _galleryCacheModel;
   double _sliderValue;
 
   bool _showBar;
@@ -67,6 +66,7 @@ class _GalleryViewPageState extends State<GalleryViewPage> {
   Future<GalleryPreview> _futureViewGallery;
 
   final EhConfigController ehConfigController = Get.find();
+  final GalleryCacheController galleryCacheController = Get.find();
 
   @override
   void initState() {
@@ -91,12 +91,9 @@ class _GalleryViewPageState extends State<GalleryViewPage> {
     super.didChangeDependencies();
     final GalleryModel galleryModel =
         Provider.of<GalleryModel>(context, listen: false);
-    final GalleryCacheModel galleryCacheModel =
-        Provider.of<GalleryCacheModel>(context, listen: false);
 
     if (galleryModel != _galleryModel) {
       _galleryModel = galleryModel;
-      _galleryCacheModel = galleryCacheModel;
 
       final int preload = ehConfigController.preloadImage.value;
       if (ehConfigController.viewMode.value != ViewMode.vertical) {
@@ -113,7 +110,8 @@ class _GalleryViewPageState extends State<GalleryViewPage> {
     }
     _currentIndex = widget.index;
     Future<void>.delayed(const Duration(milliseconds: 100)).then((_) {
-      _galleryCacheModel.setIndex(_galleryModel.galleryItem.gid, _currentIndex,
+      galleryCacheController.setIndex(
+          _galleryModel.galleryItem.gid, _currentIndex,
           notify: false);
     });
     _sliderValue = _currentIndex / 1.0;
@@ -170,7 +168,7 @@ class _GalleryViewPageState extends State<GalleryViewPage> {
     // }
     final int _index = value ~/ 1;
     showLoadingDialog(context, _index).then((_) {
-      _galleryCacheModel.setIndex(_galleryModel.galleryItem.gid, _index);
+      galleryCacheController.setIndex(_galleryModel.galleryItem.gid, _index);
       _pageController.jumpToPage(_index);
     });
     // _galleryCacheModel.setIndex(_galleryModel.galleryItem.gid, _index);
@@ -578,7 +576,7 @@ class _GalleryViewPageState extends State<GalleryViewPage> {
         );
         _currentIndex = index;
         _sliderValue = _currentIndex / 1.0;
-        _galleryCacheModel.setIndex(
+        galleryCacheController.setIndex(
             _galleryModel.galleryItem.gid, _currentIndex);
         setState(() {});
       },

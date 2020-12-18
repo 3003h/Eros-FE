@@ -1,9 +1,9 @@
-import 'package:FEhViewer/models/entity/favorite.dart';
-import 'package:FEhViewer/utils/logger.dart';
-import 'package:FEhViewer/utils/network/gallery_request.dart';
-import 'package:FEhViewer/utils/utility.dart';
-import 'package:FEhViewer/values/const.dart';
-import 'package:FEhViewer/values/theme_colors.dart';
+import 'package:fehviewer/models/entity/favorite.dart';
+import 'package:fehviewer/utils/logger.dart';
+import 'package:fehviewer/utils/network/gallery_request.dart';
+import 'package:fehviewer/utils/utility.dart';
+import 'package:fehviewer/values/const.dart';
+import 'package:fehviewer/values/theme_colors.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
 

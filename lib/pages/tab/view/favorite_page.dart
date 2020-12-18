@@ -1,18 +1,17 @@
-import 'package:FEhViewer/common/controller/ehconfig_controller.dart';
-import 'package:FEhViewer/models/entity/favorite.dart';
-import 'package:FEhViewer/models/index.dart';
-import 'package:FEhViewer/models/states/user_model.dart';
-import 'package:FEhViewer/pages/tab/controller/favorite_controller.dart';
-import 'package:FEhViewer/pages/tab/view/gallery_base.dart';
-import 'package:FEhViewer/pages/tab/view/tab_base.dart';
-import 'package:FEhViewer/route/routes.dart';
-import 'package:FEhViewer/utils/logger.dart';
-import 'package:FEhViewer/widget/eh_widget.dart';
+import 'package:fehviewer/common/controller/ehconfig_controller.dart';
+import 'package:fehviewer/common/controller/user_controller.dart';
+import 'package:fehviewer/models/entity/favorite.dart';
+import 'package:fehviewer/models/index.dart';
+import 'package:fehviewer/pages/tab/controller/favorite_controller.dart';
+import 'package:fehviewer/pages/tab/view/gallery_base.dart';
+import 'package:fehviewer/pages/tab/view/tab_base.dart';
+import 'package:fehviewer/route/routes.dart';
+import 'package:fehviewer/utils/logger.dart';
+import 'package:fehviewer/widget/eh_widget.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
-import 'package:provider/provider.dart';
 
 class FavoriteTab extends GetView<FavoriteViewController> {
   const FavoriteTab({Key key, this.tabIndex, this.scrollController})
@@ -22,21 +21,19 @@ class FavoriteTab extends GetView<FavoriteViewController> {
 
   @override
   Widget build(BuildContext context) {
+    final UserController userController = Get.find();
     return CupertinoPageScaffold(
-      child: Selector<UserModel, bool>(
-          selector: (BuildContext context, UserModel provider) =>
-              provider.isLogin,
-          builder: (BuildContext context, bool isLogin, Widget child) {
-            if (isLogin) {
-              if (controller.title.value == null ||
-                  controller.title.value.isEmpty) {
-                controller.title.value = 'all_Favorites'.tr;
-              }
-              return _buildNetworkFavView(context);
-            } else {
-              return _buildLocalFavView();
-            }
-          }),
+      child: Obx(() {
+        if (userController.isLogin) {
+          if (controller.title.value == null ||
+              controller.title.value.isEmpty) {
+            controller.title.value = 'all_Favorites'.tr;
+          }
+          return _buildNetworkFavView(context);
+        } else {
+          return _buildLocalFavView();
+        }
+      }),
     );
   }
 

@@ -1,13 +1,13 @@
-import 'package:FEhViewer/common/controller/ehconfig_controller.dart';
-import 'package:FEhViewer/common/controller/localfav_controller.dart';
-import 'package:FEhViewer/common/global.dart';
-import 'package:FEhViewer/common/parser/gallery_fav_parser.dart';
-import 'package:FEhViewer/models/states/gallery_model.dart';
-import 'package:FEhViewer/models/states/user_model.dart';
-import 'package:FEhViewer/utils/logger.dart';
-import 'package:FEhViewer/utils/toast.dart';
-import 'package:FEhViewer/utils/vibrate.dart';
-import 'package:FEhViewer/values/theme_colors.dart';
+import 'package:fehviewer/common/controller/ehconfig_controller.dart';
+import 'package:fehviewer/common/controller/localfav_controller.dart';
+import 'package:fehviewer/common/controller/user_controller.dart';
+import 'package:fehviewer/common/global.dart';
+import 'package:fehviewer/common/parser/gallery_fav_parser.dart';
+import 'package:fehviewer/models/states/gallery_model.dart';
+import 'package:fehviewer/utils/logger.dart';
+import 'package:fehviewer/utils/toast.dart';
+import 'package:fehviewer/utils/vibrate.dart';
+import 'package:fehviewer/values/theme_colors.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -34,6 +34,7 @@ class _GalleryFavButtonState extends State<GalleryFavButton> {
   // 收藏输入框控制器
   final TextEditingController _favnoteController = TextEditingController();
   final LocalFavController localFavController = Get.find();
+  final UserController userController = Get.find();
 
   @override
   void initState() {
@@ -234,8 +235,7 @@ class _GalleryFavButtonState extends State<GalleryFavButton> {
   Future<bool> _showAddFavDialog(context) async {
     final EhConfigController ehConfigController = Get.find();
 
-    final bool _isLogin =
-        Provider.of<UserModel>(context, listen: false).isLogin;
+    final bool _isLogin = userController.isLogin;
 
     ///
     /// [{'favId': favId, 'favTitle': favTitle}]

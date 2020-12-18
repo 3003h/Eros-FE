@@ -1,7 +1,7 @@
-import 'package:FEhViewer/common/controller/ehconfig_controller.dart';
-import 'package:FEhViewer/pages/item/setting_item.dart';
-import 'package:FEhViewer/pages/item/user_item.dart';
-import 'package:FEhViewer/route/routes.dart';
+import 'package:fehviewer/common/controller/ehconfig_controller.dart';
+import 'package:fehviewer/pages/item/setting_item.dart';
+import 'package:fehviewer/pages/item/user_item.dart';
+import 'package:fehviewer/route/routes.dart';
 import 'package:flutter/widgets.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';

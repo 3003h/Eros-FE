@@ -1,7 +1,7 @@
 import 'dart:async';
 
-import 'package:FEhViewer/common/global.dart';
-import 'package:FEhViewer/models/entity/tag_translat.dart';
+import 'package:fehviewer/common/global.dart';
+import 'package:fehviewer/models/entity/tag_translat.dart';
 import 'package:path/path.dart';
 import 'package:sqflite/sqflite.dart';
 

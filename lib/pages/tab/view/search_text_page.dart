@@ -1,9 +1,9 @@
 import 'dart:io';
 
-import 'package:FEhViewer/common/controller/quicksearch_controller.dart';
-import 'package:FEhViewer/common/global.dart';
-import 'package:FEhViewer/common/tag_database.dart';
-import 'package:FEhViewer/utils/logger.dart';
+import 'package:fehviewer/common/controller/quicksearch_controller.dart';
+import 'package:fehviewer/common/global.dart';
+import 'package:fehviewer/common/tag_database.dart';
+import 'package:fehviewer/utils/logger.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';

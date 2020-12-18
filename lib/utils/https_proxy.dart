@@ -2,11 +2,11 @@ import 'dart:convert';
 import 'dart:io';
 import 'dart:typed_data';
 
-import 'package:FEhViewer/common/global.dart';
-import 'package:FEhViewer/models/dnsCache.dart';
-import 'package:FEhViewer/utils/dns_util.dart';
-import 'package:FEhViewer/utils/logger.dart';
-import 'package:FEhViewer/utils/utility.dart';
+import 'package:fehviewer/common/global.dart';
+import 'package:fehviewer/models/dnsCache.dart';
+import 'package:fehviewer/utils/dns_util.dart';
+import 'package:fehviewer/utils/logger.dart';
+import 'package:fehviewer/utils/utility.dart';
 
 class CustomHttpsProxy {
   /// 内部构造方法，可避免外部暴露构造函数，进行实例化

@@ -1,13 +1,13 @@
 import 'dart:io';
 
-import 'package:FEhViewer/common/controller/ehconfig_controller.dart';
-import 'package:FEhViewer/common/controller/local_controller.dart';
-import 'package:FEhViewer/common/controller/theme_controller.dart';
-import 'package:FEhViewer/common/global.dart';
-import 'package:FEhViewer/models/states/dnsconfig_model.dart';
-import 'package:FEhViewer/pages/setting/custom_hosts_page.dart';
-import 'package:FEhViewer/utils/logger.dart';
-import 'package:FEhViewer/values/theme_colors.dart';
+import 'package:fehviewer/common/controller/ehconfig_controller.dart';
+import 'package:fehviewer/common/controller/local_controller.dart';
+import 'package:fehviewer/common/controller/theme_controller.dart';
+import 'package:fehviewer/common/global.dart';
+import 'package:fehviewer/models/states/dnsconfig_model.dart';
+import 'package:fehviewer/pages/setting/custom_hosts_page.dart';
+import 'package:fehviewer/utils/logger.dart';
+import 'package:fehviewer/values/theme_colors.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';

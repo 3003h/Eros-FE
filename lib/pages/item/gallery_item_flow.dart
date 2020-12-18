@@ -1,10 +1,10 @@
 import 'dart:ui';
 
-import 'package:FEhViewer/models/galleryItem.dart';
-import 'package:FEhViewer/models/states/gallery_model.dart';
-import 'package:FEhViewer/route/navigator_util.dart';
-import 'package:FEhViewer/utils/logger.dart';
-import 'package:FEhViewer/values/theme_colors.dart';
+import 'package:fehviewer/models/galleryItem.dart';
+import 'package:fehviewer/models/states/gallery_model.dart';
+import 'package:fehviewer/route/navigator_util.dart';
+import 'package:fehviewer/utils/logger.dart';
+import 'package:fehviewer/values/theme_colors.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';

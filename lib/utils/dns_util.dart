@@ -1,9 +1,9 @@
 import 'dart:io';
 
-import 'package:FEhViewer/common/global.dart';
-import 'package:FEhViewer/models/index.dart';
-import 'package:FEhViewer/utils/logger.dart';
-import 'package:FEhViewer/utils/utility.dart';
+import 'package:fehviewer/common/global.dart';
+import 'package:fehviewer/models/index.dart';
+import 'package:fehviewer/utils/logger.dart';
+import 'package:fehviewer/utils/utility.dart';
 import 'package:dns_client/dns_client.dart';
 
 class DnsUtil {

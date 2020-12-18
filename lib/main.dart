@@ -1,14 +1,12 @@
-import 'package:FEhViewer/common/controller/advance_search_controller.dart';
-import 'package:FEhViewer/common/controller/ehconfig_controller.dart';
-import 'package:FEhViewer/common/controller/local_controller.dart';
-import 'package:FEhViewer/common/controller/theme_controller.dart';
-import 'package:FEhViewer/common/global.dart';
-import 'package:FEhViewer/models/states/dnsconfig_model.dart';
-import 'package:FEhViewer/models/states/gallery_cache_model.dart';
-import 'package:FEhViewer/models/states/user_model.dart';
-import 'package:FEhViewer/route/app_pages.dart';
-import 'package:FEhViewer/route/routes.dart';
-import 'package:FEhViewer/utils/logger.dart';
+import 'package:fehviewer/common/controller/advance_search_controller.dart';
+import 'package:fehviewer/common/controller/ehconfig_controller.dart';
+import 'package:fehviewer/common/controller/local_controller.dart';
+import 'package:fehviewer/common/controller/theme_controller.dart';
+import 'package:fehviewer/common/global.dart';
+import 'package:fehviewer/models/states/dnsconfig_model.dart';
+import 'package:fehviewer/route/app_pages.dart';
+import 'package:fehviewer/route/routes.dart';
+import 'package:fehviewer/utils/logger.dart';
 import 'package:device_preview/device_preview.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -131,12 +129,8 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
     final MultiProvider multiProvider = MultiProvider(
       // ignore: always_specify_types
       providers: [
-        ChangeNotifierProvider<UserModel>.value(value: UserModel()),
         // DnsConfigModel
         ChangeNotifierProvider<DnsConfigModel>.value(value: DnsConfigModel()),
-        // GalleryCacheModel
-        ChangeNotifierProvider<GalleryCacheModel>.value(
-            value: GalleryCacheModel()),
       ],
       child: OKToast(child: cupertinoApp),
     );

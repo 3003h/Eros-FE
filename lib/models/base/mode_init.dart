@@ -1,4 +1,4 @@
-import 'package:FEhViewer/models/index.dart';
+import 'package:fehviewer/models/index.dart';
 
 /// 避免json_model工具生成的代码覆盖 models类不加入构造方法 初始化方法再这里写
 extension GalleryTagExt on GalleryTag {

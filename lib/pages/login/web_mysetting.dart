@@ -1,10 +1,10 @@
 import 'dart:async';
 import 'dart:io';
 
-import 'package:FEhViewer/utils/logger.dart';
-import 'package:FEhViewer/utils/network/gallery_request.dart';
-import 'package:FEhViewer/utils/utility.dart';
-import 'package:FEhViewer/values/const.dart';
+import 'package:fehviewer/utils/logger.dart';
+import 'package:fehviewer/utils/network/gallery_request.dart';
+import 'package:fehviewer/utils/utility.dart';
+import 'package:fehviewer/values/const.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
@@ -47,11 +47,6 @@ class _WebMySettingState extends State<WebMySetting> {
     _future = _getCookies();
     // ignore: always_put_control_body_on_new_line
     if (Platform.isAndroid) WebView.platform = SurfaceAndroidWebView();
-  }
-
-  @override
-  void dispose() {
-    super.dispose();
   }
 
   JavascriptChannel _deleteJavascriptChannel(BuildContext context) {
@@ -242,7 +237,6 @@ class _WebMySettingState extends State<WebMySetting> {
                     },
                     onWebViewCreated: (WebViewController webViewController) {
                       _controller = webViewController;
-                      // _controller.complete(webViewController);
                     },
                     onPageStarted: (String url) {
                       print('Page started loading: $url');
