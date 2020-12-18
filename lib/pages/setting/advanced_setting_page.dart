@@ -1,9 +1,10 @@
 import 'dart:io';
 
+import 'package:FEhViewer/common/controller/ehconfig_controller.dart';
+import 'package:FEhViewer/common/controller/local_controller.dart';
+import 'package:FEhViewer/common/controller/theme_controller.dart';
 import 'package:FEhViewer/common/global.dart';
 import 'package:FEhViewer/models/states/dnsconfig_model.dart';
-import 'package:FEhViewer/models/states/locale_model.dart';
-import 'package:FEhViewer/models/states/theme_model.dart';
 import 'package:FEhViewer/pages/setting/custom_hosts_page.dart';
 import 'package:FEhViewer/utils/logger.dart';
 import 'package:FEhViewer/values/theme_colors.dart';
@@ -42,11 +43,9 @@ class AdvancedSettingPageState extends State<AdvancedSettingPage> {
 class ListViewAdvancedSetting extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    final ThemeModel themeModel =
-        Provider.of<ThemeModel>(context, listen: false);
-    final bool _pureDark = themeModel.pureDarkTheme;
+    final EhConfigController ehConfigController = Get.find();
     void _handlePureDarkChanged(bool newValue) {
-      themeModel.pureDarkTheme = newValue;
+      ehConfigController.isPureDarkTheme.value = newValue;
     }
 
     final bool _doh = Global.profile.dnsConfig.enableDoH ?? false;
@@ -74,13 +73,13 @@ class ListViewAdvancedSetting extends StatelessWidget {
                 CupertinoColors.systemGrey5, context),
           ),
           _buildThemeItem(context),
-          TextSwitchItem(
-            '深色模式效果',
-            intValue: _pureDark,
-            onChanged: _handlePureDarkChanged,
-            desc: '灰黑背景',
-            descOn: '纯黑背景',
-          ),
+          Obx(() => TextSwitchItem(
+                '深色模式效果',
+                intValue: ehConfigController.isPureDarkTheme.value,
+                onChanged: _handlePureDarkChanged,
+                desc: '灰黑背景',
+                descOn: '纯黑背景',
+              )),
           Divider(
             height: 38,
             thickness: 38.5,
@@ -111,9 +110,8 @@ class ListViewAdvancedSetting extends StatelessWidget {
 
   /// 语言设置部件
   Widget _buildLanguageItem(BuildContext context) {
+    final LocaleController localeController = Get.find();
     const String _title = '语言设置';
-    final LocaleModel localeModel =
-        Provider.of<LocaleModel>(context, listen: false);
 
     final Map<String, String> localeMap = <String, String>{
       '': '系统语言(默认)',
@@ -150,30 +148,24 @@ class ListViewAdvancedSetting extends StatelessWidget {
           });
     }
 
-    return Selector<LocaleModel, String>(
-        selector: (BuildContext context, LocaleModel localeModel) =>
-            localeMap[localeModel.locale ?? ''],
-        builder: (BuildContext context, String locale, _) {
-          return SelectorSettingItem(
-            title: _title,
-            selector: locale,
-            onTap: () async {
-              logger.v('tap LanguageItem');
-              final String _result = await _showDialog(context);
-              if (_result is String) {
-                localeModel.locale = _result;
-              }
-              logger.v('$_result');
-            },
-          );
-        });
+    return Obx(() => SelectorSettingItem(
+          title: _title,
+          selector: localeMap[localeController.localCode.value ?? ''],
+          onTap: () async {
+            logger.v('tap LanguageItem');
+            final String _result = await _showDialog(context);
+            if (_result is String) {
+              localeController.localCode.value = _result;
+            }
+            logger.v('$_result');
+          },
+        ));
   }
 
   /// 主题设置部件
   Widget _buildThemeItem(BuildContext context) {
     const String _title = '主题设置';
-    final ThemeModel themeModel =
-        Provider.of<ThemeModel>(context, listen: false);
+    final ThemeController themeController = Get.find();
 
     final Map<ThemesModeEnum, String> themeMap = <ThemesModeEnum, String>{
       ThemesModeEnum.system: '跟随系统(默认)',
@@ -210,21 +202,16 @@ class ListViewAdvancedSetting extends StatelessWidget {
           });
     }
 
-    return Selector<ThemeModel, ThemesModeEnum>(
-        selector: (BuildContext context, ThemeModel themeModel) =>
-            themeModel.themeMode,
-        builder: (BuildContext context, ThemesModeEnum themesModeEnum, _) {
-          return SelectorSettingItem(
-            title: _title,
-            selector: themeMap[themeModel.themeMode],
-            onTap: () async {
-              logger.v('tap ThemeItem');
-              final ThemesModeEnum _result = await _showDialog(context);
-              if (_result is ThemesModeEnum) {
-                themeModel.themeMode = _result;
-              }
-            },
-          );
-        });
+    return SelectorSettingItem(
+      title: _title,
+      selector: themeMap[themeController.themeModel],
+      onTap: () async {
+        logger.v('tap ThemeItem');
+        final ThemesModeEnum _result = await _showDialog(context);
+        if (_result is ThemesModeEnum) {
+          themeController.themeModel = _result;
+        }
+      },
+    );
   }
 }

@@ -19,7 +19,7 @@ class TabHomeBinding extends Bindings {
     Get.lazyPut(() => HistoryViewController());
     Get.lazyPut(() => SettingViewController());
     Get.lazyPut(() => QuickSearchController(), fenix: true);
-    Get.lazyPut(() => LocalFavController());
-    Get.lazyPut(() => HistoryController());
+    Get.lazyPut(() => LocalFavController(), fenix: true);
+    Get.lazyPut(() => HistoryController(), fenix: true);
   }
 }
