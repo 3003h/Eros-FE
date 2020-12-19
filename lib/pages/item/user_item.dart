@@ -1,5 +1,6 @@
 import 'package:fehviewer/common/controller/ehconfig_controller.dart';
 import 'package:fehviewer/common/controller/user_controller.dart';
+import 'package:fehviewer/generated/l10n.dart';
 import 'package:fehviewer/route/routes.dart';
 import 'package:fehviewer/utils/network/gallery_request.dart';
 import 'package:flutter/cupertino.dart';
@@ -13,7 +14,6 @@ class UserItem extends StatefulWidget {
 }
 
 class _UserItem extends State<UserItem> {
-  final String _normalText = '未登录';
   Color _color;
   final EhConfigController ehConfigController = Get.find();
   final UserController userController = Get.find();
@@ -28,13 +28,13 @@ class _UserItem extends State<UserItem> {
           content: Text('确定注销?'),
           actions: <Widget>[
             CupertinoDialogAction(
-              child: Text('取消'),
+              child: Text(S.of(context).cancel),
               onPressed: () {
                 Get.back();
               },
             ),
             CupertinoDialogAction(
-              child: Text('确定'),
+              child: Text(S.of(context).ok),
               onPressed: () async {
                 (await Api.cookieJar).deleteAll();
                 // userController.user(User());
@@ -66,12 +66,12 @@ class _UserItem extends State<UserItem> {
           final String _userName = userController.user().username;
           return Text(_userName);
         } else {
-          return Text(_normalText);
+          return Text(S.of(context).login);
         }
       });
     }
 
-    final row = SafeArea(
+    final Widget row = SafeArea(
       top: false,
       bottom: false,
       minimum: const EdgeInsets.only(
@@ -83,8 +83,7 @@ class _UserItem extends State<UserItem> {
       child: Container(
         color: _color,
         child: Row(children: <Widget>[
-          Icon(
-//            CupertinoIcons.profile_circled,
+          const Icon(
             FontAwesomeIcons.solidUserCircle,
             size: 55.0,
             color: CupertinoColors.systemGrey,

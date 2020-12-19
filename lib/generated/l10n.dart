@@ -294,6 +294,196 @@ class S {
       args: [],
     );
   }
+
+  /// `E·H`
+  String get eh {
+    return Intl.message(
+      'E·H',
+      name: 'eh',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Download`
+  String get download {
+    return Intl.message(
+      'Download',
+      name: 'download',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Advanced`
+  String get advanced {
+    return Intl.message(
+      'Advanced',
+      name: 'advanced',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `About`
+  String get about {
+    return Intl.message(
+      'About',
+      name: 'about',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Preload image`
+  String get preload_image {
+    return Intl.message(
+      'Preload image',
+      name: 'preload_image',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Language`
+  String get language {
+    return Intl.message(
+      'Language',
+      name: 'language',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Theme`
+  String get theme {
+    return Intl.message(
+      'Theme',
+      name: 'theme',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Follow system`
+  String get follow_system {
+    return Intl.message(
+      'Follow system',
+      name: 'follow_system',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Ligth`
+  String get light {
+    return Intl.message(
+      'Ligth',
+      name: 'light',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Dark`
+  String get dark {
+    return Intl.message(
+      'Dark',
+      name: 'dark',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Custom hosts`
+  String get custom_hosts {
+    return Intl.message(
+      'Custom hosts',
+      name: 'custom_hosts',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Cancel`
+  String get cancel {
+    return Intl.message(
+      'Cancel',
+      name: 'cancel',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `OK`
+  String get ok {
+    return Intl.message(
+      'OK',
+      name: 'ok',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Delete`
+  String get delete {
+    return Intl.message(
+      'Delete',
+      name: 'delete',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `On`
+  String get on {
+    return Intl.message(
+      'On',
+      name: 'on',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Off`
+  String get off {
+    return Intl.message(
+      'Off',
+      name: 'off',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Dark mode effect`
+  String get dark_mode_effect {
+    return Intl.message(
+      'Dark mode effect',
+      name: 'dark_mode_effect',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Gray black`
+  String get gray_black {
+    return Intl.message(
+      'Gray black',
+      name: 'gray_black',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Pure black`
+  String get pure_black {
+    return Intl.message(
+      'Pure black',
+      name: 'pure_black',
+      desc: '',
+      args: [],
+    );
+  }
 }
 
 class AppLocalizationDelegate extends LocalizationsDelegate<S> {

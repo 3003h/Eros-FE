@@ -1,6 +1,7 @@
 import 'package:enum_to_string/enum_to_string.dart';
 import 'package:fehviewer/common/controller/ehconfig_controller.dart';
 import 'package:fehviewer/common/global.dart';
+import 'package:fehviewer/generated/l10n.dart';
 import 'package:fehviewer/pages/setting/setting_base.dart';
 import 'package:fehviewer/utils/logger.dart';
 import 'package:fehviewer/values/const.dart';
@@ -74,7 +75,7 @@ Widget _buildViewModeItem(BuildContext context) {
                 onPressed: () {
                   Get.back();
                 },
-                child: const Text('取消')),
+                child: Text(S.of(context).cancel)),
             actions: <Widget>[
               ..._getModeList(),
             ],

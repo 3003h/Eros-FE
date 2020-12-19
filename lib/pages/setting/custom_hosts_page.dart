@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:fehviewer/common/controller/dnsconfig_controller.dart';
 import 'package:fehviewer/common/global.dart';
+import 'package:fehviewer/generated/l10n.dart';
 import 'package:fehviewer/models/dnsCache.dart';
 import 'package:fehviewer/pages/setting/setting_base.dart';
 import 'package:flutter/cupertino.dart';
@@ -11,10 +12,9 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
 
 class CustomHostsPage extends StatelessWidget {
-  final String _title = '自定义hosts';
-
   @override
   Widget build(BuildContext context) {
+    final String _title = S.of(context).custom_hosts;
     final DnsConfigController dnsConfigController = Get.find();
 
     void _handleEnableCustomHostDarkChanged(bool value) {
@@ -43,8 +43,6 @@ class CustomHostsPage extends StatelessWidget {
                     _title,
                     intValue: dnsConfigController.enableCustomHosts.value,
                     onChanged: _handleEnableCustomHostDarkChanged,
-                    // desc: '已关闭',
-                    // descOn: '已开启',
                   )),
               Divider(
                 height: 38,
@@ -89,7 +87,7 @@ class CustomHostsListView extends StatelessWidget {
                 actionExtentRatio: 0.25,
                 secondaryActions: <Widget>[
                   IconSlideAction(
-                    caption: '删除',
+                    caption: S.of(context).delete,
                     color: CupertinoDynamicColor.resolve(
                         CupertinoColors.systemRed, context),
                     icon: Icons.delete,
