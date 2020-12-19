@@ -1,4 +1,5 @@
 import 'package:fehviewer/common/controller/ehconfig_controller.dart';
+import 'package:fehviewer/generated/l10n.dart';
 import 'package:fehviewer/pages/item/setting_item.dart';
 import 'package:fehviewer/pages/item/user_item.dart';
 import 'package:fehviewer/route/routes.dart';
@@ -33,13 +34,14 @@ class SettingViewController extends GetxController {
     return _slivers;
   }
 
-  void initData(BuildContext context) {}
-
-  @override
-  void onInit() {
-    super.onInit();
-
-    _itemTitles = <String>['EH设置', '下载设置', '高级设置', /*'安全设置',*/ '关于'];
+  void initData(BuildContext context) {
+    _itemTitles = <String>[
+      S.of(context).eh,
+      S.of(context).download,
+      S.of(context).advanced,
+      // '安全设置',
+      S.of(context).about,
+    ];
 
     _icons = <IconData>[
       FontAwesomeIcons.cookieBite,

@@ -3,6 +3,7 @@ import 'package:fehviewer/common/controller/ehconfig_controller.dart';
 import 'package:fehviewer/common/controller/user_controller.dart';
 import 'package:fehviewer/common/global.dart';
 import 'package:fehviewer/common/tag_database.dart';
+import 'package:fehviewer/generated/l10n.dart';
 import 'package:fehviewer/pages/login/web_mysetting.dart';
 import 'package:fehviewer/utils/logger.dart';
 import 'package:fehviewer/values/const.dart';
@@ -18,8 +19,6 @@ class EhSettingPage extends StatefulWidget {
 }
 
 class _EhSettingPage extends State<EhSettingPage> {
-  final String _title = 'EH设置';
-
   Future<bool> _getDelayed() async {
     final int _delayed = (Global.isFirstReOpenEhSetting ?? true) ? 0 : 0;
     // logger.v('$_delayed');
@@ -32,7 +31,7 @@ class _EhSettingPage extends State<EhSettingPage> {
   Widget build(BuildContext context) {
     final CupertinoPageScaffold cps = CupertinoPageScaffold(
         navigationBar: CupertinoNavigationBar(
-          middle: Text(_title),
+          middle: Text(S.of(context).eh),
         ),
         child: SafeArea(
           child: FutureBuilder<bool>(

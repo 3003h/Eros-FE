@@ -5,6 +5,7 @@ import 'package:fehviewer/common/controller/ehconfig_controller.dart';
 import 'package:fehviewer/common/controller/local_controller.dart';
 import 'package:fehviewer/common/controller/theme_controller.dart';
 import 'package:fehviewer/common/global.dart';
+import 'package:fehviewer/generated/l10n.dart';
 import 'package:fehviewer/pages/setting/custom_hosts_page.dart';
 import 'package:fehviewer/utils/logger.dart';
 import 'package:fehviewer/values/theme_colors.dart';
@@ -22,14 +23,12 @@ class AdvancedSettingPage extends StatefulWidget {
 }
 
 class AdvancedSettingPageState extends State<AdvancedSettingPage> {
-  final String _title = '高级设置';
-
   @override
   Widget build(BuildContext context) {
     final CupertinoPageScaffold cps = CupertinoPageScaffold(
         navigationBar: CupertinoNavigationBar(
           transitionBetweenRoutes: true,
-          middle: Text(_title),
+          middle: Text(S.of(context).advanced),
         ),
         child: SafeArea(
           child: ListViewAdvancedSetting(),
@@ -73,11 +72,11 @@ class ListViewAdvancedSetting extends StatelessWidget {
           ),
           _buildThemeItem(context),
           Obx(() => TextSwitchItem(
-                '深色模式效果',
+                S.of(context).dark_mode_effect,
                 intValue: ehConfigController.isPureDarkTheme.value,
                 onChanged: _handlePureDarkChanged,
-                desc: '灰黑背景',
-                descOn: '纯黑背景',
+                desc: S.of(context).gray_black,
+                descOn: S.of(context).pure_black,
               )),
           Divider(
             height: 38,
@@ -86,9 +85,10 @@ class ListViewAdvancedSetting extends StatelessWidget {
                 CupertinoColors.systemGrey5, context),
           ),
           Obx(() => SelectorSettingItem(
-                title: '自定义hosts (实验性功能)',
-                selector:
-                    dnsConfigController.enableCustomHosts.value ? '已开启' : '已关闭',
+                title: S.of(context).custom_hosts,
+                selector: dnsConfigController.enableCustomHosts.value
+                    ? S.of(context).on
+                    : S.of(context).off,
                 onTap: () {
                   Get.to(CustomHostsPage());
                 },
@@ -107,10 +107,10 @@ class ListViewAdvancedSetting extends StatelessWidget {
   /// 语言设置部件
   Widget _buildLanguageItem(BuildContext context) {
     final LocaleController localeController = Get.find();
-    const String _title = '语言设置';
+    final String _title = S.of(context).language;
 
     final Map<String, String> localeMap = <String, String>{
-      '': '系统语言(默认)',
+      '': S.of(context).follow_system,
       'zh_CN': '简体中文',
       'en_US': 'English',
     };
@@ -130,12 +130,11 @@ class ListViewAdvancedSetting extends StatelessWidget {
           context: context,
           builder: (BuildContext context) {
             final CupertinoActionSheet dialog = CupertinoActionSheet(
-              title: const Text('语言选择'),
               cancelButton: CupertinoActionSheetAction(
                   onPressed: () {
                     Get.back();
                   },
-                  child: const Text('取消')),
+                  child: Text(S.of(context).cancel)),
               actions: <Widget>[
                 ..._getLocaleList(context),
               ],
@@ -160,13 +159,13 @@ class ListViewAdvancedSetting extends StatelessWidget {
 
   /// 主题设置部件
   Widget _buildThemeItem(BuildContext context) {
-    const String _title = '主题设置';
+    final String _title = S.of(context).theme;
     final ThemeController themeController = Get.find();
 
     final Map<ThemesModeEnum, String> themeMap = <ThemesModeEnum, String>{
-      ThemesModeEnum.system: '跟随系统(默认)',
-      ThemesModeEnum.ligthMode: '浅色模式',
-      ThemesModeEnum.darkMode: '深色模式',
+      ThemesModeEnum.system: S.of(context).follow_system,
+      ThemesModeEnum.ligthMode: S.of(context).light,
+      ThemesModeEnum.darkMode: S.of(context).dark,
     };
 
     List<Widget> _getThemeList(BuildContext context) {
@@ -184,12 +183,11 @@ class ListViewAdvancedSetting extends StatelessWidget {
           context: context,
           builder: (BuildContext context) {
             final CupertinoActionSheet dialog = CupertinoActionSheet(
-              title: const Text('主题选择'),
               cancelButton: CupertinoActionSheetAction(
                   onPressed: () {
                     Get.back();
                   },
-                  child: const Text('取消')),
+                  child: Text(S.of(context).cancel)),
               actions: <Widget>[
                 ..._getThemeList(context),
               ],

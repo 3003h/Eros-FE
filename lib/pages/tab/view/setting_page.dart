@@ -12,6 +12,7 @@ class SettingTab extends GetView<SettingViewController> {
 
   @override
   Widget build(BuildContext context) {
+    controller.initData(context);
     final String _title = S.of(context).tab_setting;
     return CupertinoPageScaffold(
       child: CustomScrollView(

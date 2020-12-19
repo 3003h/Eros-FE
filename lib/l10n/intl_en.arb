@@ -24,5 +24,25 @@
   "all_comment": "All Comment",
   "all_preview": "All Preview",
   "morePreviews": "More previews",
-  "noMorePreviews": "No more previews"
+  "noMorePreviews": "No more previews",
+  "eh": "E·H",
+  "download": "Download",
+  "advanced": "Advanced",
+  "about": "About",
+  "preload_image": "Preload image",
+  "language": "Language",
+  "theme": "Theme",
+  "follow_system": "Follow system",
+  "light": "Ligth",
+  "dark": "Dark",
+  "custom_hosts": "Custom hosts",
+  "cancel": "Cancel",
+  "ok": "OK",
+  "delete": "Delete",
+  "on": "On",
+  "off": "Off",
+  "dark_mode_effect": "Dark mode effect",
+  "gray_black": "Gray black",
+  "pure_black": "Pure black"
+
 }

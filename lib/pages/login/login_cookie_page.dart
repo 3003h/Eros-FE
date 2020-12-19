@@ -1,5 +1,6 @@
 import 'package:fehviewer/common/controller/user_controller.dart';
 import 'package:fehviewer/common/eh_login.dart';
+import 'package:fehviewer/generated/l10n.dart';
 import 'package:fehviewer/models/index.dart';
 import 'package:fehviewer/utils/logger.dart';
 import 'package:fehviewer/utils/toast.dart';
@@ -13,9 +14,7 @@ class LoginCookiePage extends StatefulWidget {
 }
 
 class _LoginCookiePageState extends State<LoginCookiePage> {
-  var _isLogin = false;
-
-  final FocusNode _nodeHash = FocusNode();
+  bool _isLogin = false;
 
   // ibp_member_id
   final TextEditingController _idController = TextEditingController();
@@ -81,7 +80,7 @@ class _LoginCookiePageState extends State<LoginCookiePage> {
             )
           : Container(
               child: CupertinoButton(
-                child: Text('Ok'),
+                child: Text(S.of(context).ok),
                 onPressed: () {
                   _loginCookie();
                 },

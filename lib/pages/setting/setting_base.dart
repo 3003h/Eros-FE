@@ -74,7 +74,7 @@ class _SelectorSettingItemState extends State<SelectorSettingItem> {
       onTap: widget.onTap,
       onTapDown: (_) => _updatePressedColor(),
       onTapUp: (_) {
-        Future.delayed(const Duration(milliseconds: 100), () {
+        Future.delayed(const Duration(milliseconds: 80), () {
           _updateNormalColor();
         });
       },

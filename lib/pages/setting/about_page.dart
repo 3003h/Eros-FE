@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:fehviewer/common/controller/ehconfig_controller.dart';
+import 'package:fehviewer/generated/l10n.dart';
 import 'package:fehviewer/pages/setting/setting_base.dart';
 import 'package:fehviewer/utils/cust_lib/flutter_egg.dart';
 import 'package:fehviewer/utils/logger.dart';
@@ -12,13 +13,11 @@ import 'package:get/get.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class AboutPage extends StatelessWidget {
-  final String _title = '关于';
-
   @override
   Widget build(BuildContext context) {
     final CupertinoPageScaffold cps = CupertinoPageScaffold(
         navigationBar: CupertinoNavigationBar(
-          middle: Text(_title),
+          middle: Text(S.of(context).about),
         ),
         child: SafeArea(
           child: ListViewAbout(),
