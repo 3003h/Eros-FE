@@ -1,3 +1,4 @@
+import 'package:fehviewer/generated/l10n.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -27,11 +28,11 @@ class SplashPage extends GetView<SplashController> {
                     color: Colors.grey,
                   ),
                   Text(
-                    'welcome_text'.tr,
+                    S.of(context).welcome_text,
                     style: const TextStyle(color: Colors.grey),
                   ),
                   Text(
-                    'app_title'.tr,
+                    S.of(context).app_title,
                     style: const TextStyle(color: Colors.grey),
                   )
                 ],

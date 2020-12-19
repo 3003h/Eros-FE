@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:fehviewer/generated/l10n.dart';
 import 'package:fehviewer/utils/logger.dart';
 import 'package:fehviewer/values/const.dart';
 import 'package:flutter/cupertino.dart';
@@ -25,7 +26,7 @@ class _WebLoginViewState extends State<WebLoginView> {
 
   @override
   Widget build(BuildContext context) {
-    final String title = 'login_web'.tr;
+    final String title = S.of(context).login_web;
     WebViewController _controller;
     final WebviewCookieManager cookieManager = WebviewCookieManager();
 

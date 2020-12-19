@@ -3,7 +3,8 @@ import 'package:fehviewer/common/controller/localfav_controller.dart';
 import 'package:fehviewer/common/controller/user_controller.dart';
 import 'package:fehviewer/common/global.dart';
 import 'package:fehviewer/common/parser/gallery_fav_parser.dart';
-import 'package:fehviewer/models/states/gallery_model.dart';
+import 'package:fehviewer/common/states/gallery_model.dart';
+import 'package:fehviewer/generated/l10n.dart';
 import 'package:fehviewer/utils/logger.dart';
 import 'package:fehviewer/utils/toast.dart';
 import 'package:fehviewer/utils/vibrate.dart';
@@ -102,7 +103,7 @@ class _GalleryFavButtonState extends State<GalleryFavButton> {
                   Container(
                     height: 14,
                     child: Text(
-                      _isFav ? _favTitle() : 'notFav'.tr,
+                      _isFav ? _favTitle() : S.of(context).notFav,
                       style: const TextStyle(
                         fontSize: 11,
                       ),
@@ -122,7 +123,7 @@ class _GalleryFavButtonState extends State<GalleryFavButton> {
         Container(
           height: 14,
           child: Text(
-            'processing'.tr,
+            S.of(context).processing,
             style: const TextStyle(
               fontSize: 11,
             ),

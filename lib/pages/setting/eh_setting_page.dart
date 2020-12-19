@@ -113,7 +113,7 @@ class ListViewEhSetting extends StatelessWidget {
           desc: '当前E-Hentai',
           descOn: '当前ExHentai',
         ),
-      if (true)
+      if (_isLogin)
         SelectorSettingItem(
           title: 'Ehentai设置',
           selector: '网站设置',

@@ -1,4 +1,5 @@
 import 'package:fehviewer/common/controller/ehconfig_controller.dart';
+import 'package:fehviewer/generated/l10n.dart';
 import 'package:fehviewer/models/index.dart';
 import 'package:fehviewer/utils/logger.dart';
 import 'package:fehviewer/utils/network/gallery_request.dart';
@@ -28,9 +29,9 @@ class GalleryViewController extends GetxController
               ?.firstWhere((MapEntry<String, int> element) =>
                   element.value == EHConst.sumCats - cats)
               ?.key ??
-          'tab_gallery'.tr;
+          S.of(Get.context).tab_gallery;
     } else {
-      return 'tab_gallery'.tr;
+      return S.of(Get.context).tab_gallery;
     }
   }
 

@@ -1,5 +1,5 @@
+import 'package:fehviewer/common/states/gallery_model.dart';
 import 'package:fehviewer/models/galleryComment.dart';
-import 'package:fehviewer/models/states/gallery_model.dart';
 import 'package:fehviewer/pages/gallery_detail/comment_page.dart';
 import 'package:fehviewer/pages/gallery_detail/gallery_detail_page.dart';
 import 'package:fehviewer/pages/gallery_view/gallery_view_page.dart';

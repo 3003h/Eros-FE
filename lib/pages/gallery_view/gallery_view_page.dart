@@ -2,8 +2,8 @@ import 'dart:io';
 
 import 'package:fehviewer/common/controller/ehconfig_controller.dart';
 import 'package:fehviewer/common/controller/gallerycache_controller.dart';
+import 'package:fehviewer/common/states/gallery_model.dart';
 import 'package:fehviewer/models/index.dart';
-import 'package:fehviewer/models/states/gallery_model.dart';
 import 'package:fehviewer/pages/gallery_detail/gallery_detail_widget.dart';
 import 'package:fehviewer/route/routes.dart';
 import 'package:fehviewer/utils/logger.dart';

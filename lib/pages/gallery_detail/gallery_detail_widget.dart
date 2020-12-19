@@ -2,8 +2,9 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:fehviewer/common/controller/ehconfig_controller.dart';
 import 'package:fehviewer/common/controller/gallerycache_controller.dart';
 import 'package:fehviewer/common/global.dart';
+import 'package:fehviewer/common/states/gallery_model.dart';
+import 'package:fehviewer/generated/l10n.dart';
 import 'package:fehviewer/models/index.dart';
-import 'package:fehviewer/models/states/gallery_model.dart';
 import 'package:fehviewer/route/navigator_util.dart';
 import 'package:fehviewer/utils/logger.dart';
 import 'package:fehviewer/utils/network/gallery_request.dart';
@@ -63,7 +64,9 @@ class GalleryDetailInfo extends StatelessWidget {
       minSize: 0,
       padding: const EdgeInsets.fromLTRB(0, 4, 0, 30),
       child: Text(
-        hasMorePreview ? 'morePreviews'.tr : 'noMorePreviews'.tr,
+        hasMorePreview
+            ? S.of(context).morePreviews
+            : S.of(context).noMorePreviews,
         style: const TextStyle(fontSize: 16),
       ),
       onPressed: () {
@@ -112,7 +115,7 @@ class GalleryDetailInfo extends StatelessWidget {
                 minSize: 0,
                 padding: const EdgeInsets.fromLTRB(8, 4, 8, 4),
                 child: Text(
-                  'all_comment'.tr,
+                  S.of(context).all_comment,
                   style: const TextStyle(fontSize: 16),
                 ),
                 onPressed: () {
@@ -595,7 +598,7 @@ class ReadButton extends StatelessWidget {
         builder: (BuildContext context, bool value, __) {
           return CupertinoButton(
               child: Text(
-                'READ'.tr,
+                S.of(context).READ,
                 style: const TextStyle(fontSize: 15),
               ),
               minSize: 20,

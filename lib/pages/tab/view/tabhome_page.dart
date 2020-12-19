@@ -6,7 +6,7 @@ import 'package:get/get.dart';
 class TabHome extends GetView<TabHomeController> {
   @override
   Widget build(BuildContext context) {
-    controller.init();
+    controller.init(inContext: context);
     final Widget cupertinoTabScaffold = CupertinoTabScaffold(
       controller: controller.tabController,
       tabBar: CupertinoTabBar(

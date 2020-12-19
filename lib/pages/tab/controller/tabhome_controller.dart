@@ -1,4 +1,6 @@
 import 'package:fehviewer/common/controller/ehconfig_controller.dart';
+import 'package:fehviewer/common/controller/local_controller.dart';
+import 'package:fehviewer/generated/l10n.dart';
 import 'package:fehviewer/utils/logger.dart';
 import 'package:fehviewer/utils/toast.dart';
 import 'package:flutter/cupertino.dart';
@@ -26,13 +28,17 @@ class TabHomeController extends GetxController {
   final Map<String, ScrollController> _scrollControllerMap = {};
   final CupertinoTabController tabController = CupertinoTabController();
 
-  final EhConfigController ehConfigController = Get.find();
+  final EhConfigController _ehConfigController = Get.find();
+  final LocaleController _localeController = Get.find();
+  Locale get locale => _localeController.locale;
 
   List<BottomNavigationBarItem> listBottomNavigationBarItem;
 
   final BuildContext context = Get.context;
 
-  void init() {
+  void init({BuildContext inContext}) {
+    final BuildContext context = inContext ?? Get.context;
+    logger.i(' init tab home');
     scrollControllerList.clear();
     tabList.clear();
     pageList.clear();
@@ -40,46 +46,46 @@ class TabHomeController extends GetxController {
     const double _iconSize = 24.0;
     oriTabList.addAll([
       {
-        'title': 'tab_popular'.tr,
+        'title': S.of(context).tab_popular,
         'icon': const Icon(FontAwesomeIcons.fire, size: _iconSize),
-        'disable': ehConfigController.isSafeMode.value,
+        'disable': _ehConfigController.isSafeMode.value,
         'page': PopularListTab(
-          tabIndex: 'tab_popular'.tr,
-          scrollController: _getScrollController('tab_popular'.tr),
+          tabIndex: S.of(context).tab_popular,
+          scrollController: _getScrollController(S.of(context).tab_popular),
         )
       },
       {
-        'title': 'tab_gallery'.tr,
+        'title': S.of(context).tab_gallery,
         'icon': const Icon(FontAwesomeIcons.list, size: _iconSize),
         'page': GalleryListTab(
-          tabIndex: 'tab_gallery'.tr,
-          scrollController: _getScrollController('tab_gallery'.tr),
+          tabIndex: S.of(context).tab_gallery,
+          scrollController: _getScrollController(S.of(context).tab_gallery),
         )
       },
       {
-        'title': 'tab_favorite'.tr,
+        'title': S.of(context).tab_favorite,
         'icon': const Icon(FontAwesomeIcons.solidHeart, size: _iconSize),
-        'disable': ehConfigController.isSafeMode.value,
+        'disable': _ehConfigController.isSafeMode.value,
         'page': FavoriteTab(
-          tabIndex: 'tab_favorite'.tr,
-          scrollController: _getScrollController('tab_favorite'.tr),
+          tabIndex: S.of(context).tab_favorite,
+          scrollController: _getScrollController(S.of(context).tab_favorite),
         )
       },
       {
-        'title': 'tab_history'.tr,
+        'title': S.of(context).tab_history,
         'icon': const Icon(FontAwesomeIcons.history, size: _iconSize),
-        'disable': ehConfigController.isSafeMode.value,
+        'disable': _ehConfigController.isSafeMode.value,
         'page': HistoryTab(
-          tabIndex: 'tab_history'.tr,
-          scrollController: _getScrollController('tab_history'.tr),
+          tabIndex: S.of(context).tab_history,
+          scrollController: _getScrollController(S.of(context).tab_history),
         )
       },
       {
-        'title': 'tab_setting'.tr,
+        'title': S.of(context).tab_setting,
         'icon': const Icon(FontAwesomeIcons.cog, size: _iconSize),
         'page': SettingTab(
-          tabIndex: 'tab_setting'.tr,
-          scrollController: _getScrollController('tab_setting'.tr),
+          tabIndex: S.of(context).tab_setting,
+          scrollController: _getScrollController(S.of(context).tab_setting),
         )
       },
     ]);
@@ -119,7 +125,7 @@ class TabHomeController extends GetxController {
     loggerNoStack.v('click back');
     if (lastPressedAt == null ||
         DateTime.now().difference(lastPressedAt) > const Duration(seconds: 1)) {
-      showToast('double_click_back'.tr);
+      showToast(S.of(context).double_click_back);
       //两次点击间隔超过1秒则重新计时
       lastPressedAt = DateTime.now();
       return false;

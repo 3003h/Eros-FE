@@ -1,8 +1,8 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:fehviewer/common/controller/ehconfig_controller.dart';
 import 'package:fehviewer/common/global.dart';
+import 'package:fehviewer/common/states/gallery_model.dart';
 import 'package:fehviewer/models/index.dart';
-import 'package:fehviewer/models/states/gallery_model.dart';
 import 'package:fehviewer/route/navigator_util.dart';
 import 'package:fehviewer/utils/logger.dart';
 import 'package:fehviewer/values/theme_colors.dart';

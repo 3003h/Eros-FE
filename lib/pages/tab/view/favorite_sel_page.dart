@@ -1,3 +1,4 @@
+import 'package:fehviewer/generated/l10n.dart';
 import 'package:fehviewer/models/entity/favorite.dart';
 import 'package:fehviewer/pages/tab/controller/favorite_sel_controller.dart';
 import 'package:fehviewer/pages/tab/view/gallery_base.dart';
@@ -18,7 +19,7 @@ class FavoriteSelectorPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final String _title = 'favcat'.tr;
+    final String _title = S.of(context).favcat;
     final CupertinoPageScaffold sca = CupertinoPageScaffold(
         navigationBar: CupertinoNavigationBar(
           middle: Text(_title),
