@@ -1,6 +1,6 @@
+import 'package:fehviewer/generated/l10n.dart';
 import 'package:fehviewer/models/galleryComment.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:get/get.dart';
 
 import 'comment_item.dart';
 
@@ -33,7 +33,7 @@ class CommentPage extends StatelessWidget {
 
     return CupertinoPageScaffold(
       navigationBar: CupertinoNavigationBar(
-        middle: Text('gallery_comments'.tr),
+        middle: Text(S.of(context).gallery_comments),
       ),
       child: commSliverList,
     );

@@ -1,3 +1,4 @@
+import 'package:fehviewer/generated/l10n.dart';
 import 'package:fehviewer/pages/tab/controller/popular_controller.dart';
 import 'package:fehviewer/pages/tab/view/gallery_base.dart';
 import 'package:fehviewer/pages/tab/view/tab_base.dart';
@@ -15,7 +16,7 @@ class PopularListTab extends GetView<PopularViewController> {
 
   @override
   Widget build(BuildContext context) {
-    final String _title = 'tab_popular'.tr;
+    final String _title = S.of(context).tab_popular;
     final CustomScrollView customScrollView = CustomScrollView(
       controller: scrollController,
       physics: const AlwaysScrollableScrollPhysics(),

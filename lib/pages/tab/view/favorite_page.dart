@@ -1,5 +1,6 @@
 import 'package:fehviewer/common/controller/ehconfig_controller.dart';
 import 'package:fehviewer/common/controller/user_controller.dart';
+import 'package:fehviewer/generated/l10n.dart';
 import 'package:fehviewer/models/entity/favorite.dart';
 import 'package:fehviewer/models/index.dart';
 import 'package:fehviewer/pages/tab/controller/favorite_controller.dart';
@@ -27,7 +28,7 @@ class FavoriteTab extends GetView<FavoriteViewController> {
         if (userController.isLogin) {
           if (controller.title.value == null ||
               controller.title.value.isEmpty) {
-            controller.title.value = 'all_Favorites'.tr;
+            controller.title.value = S.of(context).all_Favorites;
           }
           return _buildNetworkFavView(context);
         } else {

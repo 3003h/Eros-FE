@@ -153,7 +153,7 @@ class ListViewAdvancedSetting extends StatelessWidget {
             if (_result is String) {
               localeController.localCode.value = _result;
             }
-            logger.v('$_result');
+            // logger.v('$_result');
           },
         ));
   }

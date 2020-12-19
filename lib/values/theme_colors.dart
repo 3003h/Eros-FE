@@ -25,7 +25,7 @@ class ThemeColors {
       CupertinoDynamicColor.withBrightness(
     debugLabel: 'commitBackground',
     color: Color.fromARGB(255, 242, 242, 247),
-    darkColor: Color.fromARGB(255, 60, 60, 60),
+    darkColor: Color.fromARGB(255, 40, 40, 40),
   );
 
   static const CupertinoDynamicColor pressedBackground =
@@ -119,7 +119,7 @@ class ThemeColors {
   /// 深色灰黑
   static CupertinoThemeData darkGrayTheme = const CupertinoThemeData(
     brightness: Brightness.dark,
-    scaffoldBackgroundColor: Color.fromARGB(255, 50, 50, 50),
+    scaffoldBackgroundColor: Color.fromARGB(255, 30, 30, 30),
     barBackgroundColor: navigationBarBackgroundGray,
   );
 
@@ -195,6 +195,7 @@ class ThemeColors {
       CupertinoDynamicColor.withBrightness(
     debugLabel: 'navigationBarBackground',
     color: Color(0xd0f9f9f9),
-    darkColor: Color(0xc0303030),
+    // darkColor: Color(0xc0303030),
+    darkColor: Color.fromARGB(200, 35, 35, 35),
   );
 }

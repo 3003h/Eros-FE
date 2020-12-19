@@ -1,7 +1,7 @@
 import 'dart:ui';
 
+import 'package:fehviewer/common/states/gallery_model.dart';
 import 'package:fehviewer/models/galleryItem.dart';
-import 'package:fehviewer/models/states/gallery_model.dart';
 import 'package:fehviewer/route/navigator_util.dart';
 import 'package:fehviewer/utils/logger.dart';
 import 'package:fehviewer/values/theme_colors.dart';

@@ -2,6 +2,7 @@ import 'dart:ui';
 
 import 'package:fehviewer/common/global.dart';
 import 'package:fehviewer/models/index.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
 
 import 'base_controller.dart';
@@ -15,7 +16,8 @@ class LocaleController extends ProfileController {
         localeSt.isEmpty ||
         localeSt == '_' ||
         !localeSt.contains('_')) {
-      return window.locale;
+      // return window.locale;
+      return null;
     }
     final List<String> t = localeSt.split('_');
     return Locale(t[0], t[1]);
@@ -28,7 +30,6 @@ class LocaleController extends ProfileController {
 
     localCode.value = _profile.locale;
     everProfile<String>(localCode, (String value) {
-      Get.updateLocale(locale);
       _profile.locale = value;
     });
   }

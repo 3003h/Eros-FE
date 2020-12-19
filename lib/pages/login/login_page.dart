@@ -3,6 +3,7 @@ import 'dart:ui';
 
 import 'package:fehviewer/common/controller/user_controller.dart';
 import 'package:fehviewer/common/eh_login.dart';
+import 'package:fehviewer/generated/l10n.dart';
 import 'package:fehviewer/models/user.dart';
 import 'package:fehviewer/route/routes.dart';
 import 'package:fehviewer/utils/logger.dart';
@@ -43,7 +44,7 @@ class _LoginPageState extends State<LoginPage> {
   Widget build(BuildContext context) {
     return CupertinoPageScaffold(
         navigationBar: CupertinoNavigationBar(
-          middle: Text('user_login'.tr),
+          middle: Text(S.of(context).user_login),
         ),
         child: SafeArea(
           child: Center(
@@ -59,10 +60,10 @@ class _LoginPageState extends State<LoginPage> {
                       style: const TextStyle(
                           textBaseline: TextBaseline.alphabetic),
                       controller: _usernameController,
-                      placeholder: 'pls_i_username'.tr,
+                      placeholder: S.of(context).pls_i_username,
                       prefix: ConstrainedBox(
                           constraints: const BoxConstraints(minWidth: 50),
-                          child: Text('user_name'.tr)),
+                          child: Text(S.of(context).user_name)),
                       // prefixMode: OverlayVisibilityMode.never,
                       decoration: null,
                       // autofocus 自动获得焦点
@@ -85,10 +86,10 @@ class _LoginPageState extends State<LoginPage> {
                       style: const TextStyle(
                           textBaseline: TextBaseline.alphabetic),
                       controller: _passwdController,
-                      placeholder: 'pls_i_passwd'.tr,
+                      placeholder: S.of(context).pls_i_passwd,
                       prefix: ConstrainedBox(
                           constraints: const BoxConstraints(minWidth: 50),
-                          child: Text('passwd'.tr)),
+                          child: Text(S.of(context).passwd)),
                       // prefixMode: OverlayVisibilityMode.never,
                       decoration: null,
                       obscureText: true,
@@ -128,7 +129,7 @@ class _LoginPageState extends State<LoginPage> {
               ),
             )
           : CupertinoButton(
-              child: Text('login'.tr),
+              child: Text(S.of(context).login),
 //             color: CupertinoColors.activeBlue,
               onPressed: () {
                 _login();
@@ -166,7 +167,7 @@ class _LoginPageState extends State<LoginPage> {
               ),
             )
           : CupertinoButton(
-              child: Text('login_web'.tr),
+              child: Text(S.of(context).login_web),
               onPressed: () async {
                 if (!Platform.isIOS && !Platform.isAndroid) {
                   showToast('平台尚未支持');

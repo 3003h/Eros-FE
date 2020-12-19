@@ -1,4 +1,5 @@
 import 'package:fehviewer/common/controller/history_controller.dart';
+import 'package:fehviewer/generated/l10n.dart';
 import 'package:fehviewer/pages/tab/controller/history_controller.dart';
 import 'package:fehviewer/pages/tab/view/tab_base.dart';
 import 'package:fehviewer/widget/eh_widget.dart';
@@ -16,7 +17,7 @@ class HistoryTab extends GetView<HistoryViewController> {
   @override
   Widget build(BuildContext context) {
     // final HistoryController historyController = Get.find();
-    final String _title = 'tab_history'.tr;
+    final String _title = S.of(context).tab_history;
     final CustomScrollView customScrollView = CustomScrollView(
       controller: scrollController,
       physics: const AlwaysScrollableScrollPhysics(),

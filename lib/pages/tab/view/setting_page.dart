@@ -1,3 +1,4 @@
+import 'package:fehviewer/generated/l10n.dart';
 import 'package:fehviewer/pages/tab/controller/setting_controller.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -11,7 +12,7 @@ class SettingTab extends GetView<SettingViewController> {
 
   @override
   Widget build(BuildContext context) {
-    final String _title = 'tab_setting'.tr;
+    final String _title = S.of(context).tab_setting;
     return CupertinoPageScaffold(
       child: CustomScrollView(
         slivers: <Widget>[

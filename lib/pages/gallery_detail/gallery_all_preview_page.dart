@@ -1,10 +1,10 @@
+import 'package:fehviewer/common/states/gallery_model.dart';
+import 'package:fehviewer/generated/l10n.dart';
 import 'package:fehviewer/models/index.dart';
-import 'package:fehviewer/models/states/gallery_model.dart';
 import 'package:fehviewer/utils/logger.dart';
 import 'package:fehviewer/utils/network/gallery_request.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
 import 'package:provider/provider.dart';
 
 import 'gallery_detail_widget.dart';
@@ -103,7 +103,7 @@ class _AllPreviewPageState extends State<AllPreviewPage> {
     final int _count = int.parse(_galleryModel.galleryItem.filecount);
     return CupertinoPageScaffold(
       navigationBar: CupertinoNavigationBar(
-        middle: Text('all_preview'.tr),
+        middle: Text(S.of(context).all_preview),
       ),
       child: CustomScrollView(
         controller: _scrollController,
@@ -163,7 +163,7 @@ class _AllPreviewPageState extends State<AllPreviewPage> {
                     Container(
                       padding: const EdgeInsets.only(top: 0),
                       child: Text(
-                        'noMorePreviews'.tr,
+                        S.of(context).noMorePreviews,
                         style: const TextStyle(fontSize: 14),
                       ),
                     )

@@ -1,6 +1,6 @@
 import 'package:fehviewer/common/controller/ehconfig_controller.dart';
+import 'package:fehviewer/common/states/gallery_model.dart';
 import 'package:fehviewer/models/index.dart';
-import 'package:fehviewer/models/states/gallery_model.dart';
 import 'package:fehviewer/pages/item/gallery_item.dart';
 import 'package:fehviewer/pages/item/gallery_item_flow.dart';
 import 'package:fehviewer/pages/item/gallery_item_simple.dart';

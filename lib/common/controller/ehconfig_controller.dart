@@ -96,16 +96,16 @@ class EhConfigController extends ProfileController {
     everFromEunm(
         favoriteOrder, (String value) => ehConfig.favoritesOrder = value);
 
-    tagTranslatVer.value = ehConfig.tagTranslatVer;
+    tagTranslatVer.value = ehConfig.tagTranslatVer ?? '';
     everProfile(tagTranslatVer, (value) => ehConfig.tagTranslatVer = value);
 
     lastFavcat.value = ehConfig.lastFavcat ?? '0';
     everProfile(lastFavcat, (value) => ehConfig.lastFavcat);
 
-    isFavPicker.value = ehConfig.favPicker;
+    isFavPicker.value = ehConfig.favPicker ?? false;
     everProfile(isFavPicker, (value) => ehConfig.favPicker);
 
-    isPureDarkTheme.value = ehConfig.pureDarkTheme;
+    isPureDarkTheme.value = ehConfig.pureDarkTheme ?? false;
     everProfile<bool>(
         isPureDarkTheme, (bool value) => ehConfig.pureDarkTheme = value);
   }

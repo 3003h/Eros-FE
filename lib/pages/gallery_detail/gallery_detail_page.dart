@@ -3,9 +3,10 @@ import 'package:fehviewer/common/controller/ehconfig_controller.dart';
 import 'package:fehviewer/common/controller/gallerycache_controller.dart';
 import 'package:fehviewer/common/controller/history_controller.dart';
 import 'package:fehviewer/common/controller/localfav_controller.dart';
+import 'package:fehviewer/common/states/gallery_model.dart';
+import 'package:fehviewer/generated/l10n.dart';
 import 'package:fehviewer/models/galleryItem.dart';
 import 'package:fehviewer/models/index.dart';
-import 'package:fehviewer/models/states/gallery_model.dart';
 import 'package:fehviewer/pages/gallery_detail/gallery_detail_widget.dart';
 import 'package:fehviewer/pages/tab/view/gallery_base.dart';
 import 'package:fehviewer/route/navigator_util.dart';
@@ -308,7 +309,7 @@ class _GalleryDetailPageState extends State<GalleryDetailPage> {
 
     return CupertinoButton(
         child: Text(
-          'READ'.tr,
+          S.of(context).READ,
           style: const TextStyle(fontSize: 15),
         ),
         minSize: 20,
