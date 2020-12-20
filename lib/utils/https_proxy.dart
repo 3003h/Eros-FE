@@ -82,7 +82,7 @@ class ClientConnectionHandler {
     // 自定义hosts
     final List<DnsCache> _customHosts =
         dnsConfigController.hosts ?? <DnsCache>[];
-    final bool enableDoH = dnsConfigController.enableDoH ?? false;
+    final bool enableDoH = dnsConfigController.enableDoH.value ?? false;
 
     if (server == null) {
       // 建立连接

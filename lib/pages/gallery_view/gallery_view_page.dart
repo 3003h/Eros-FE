@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:dio/dio.dart';
 import 'package:fehviewer/common/controller/ehconfig_controller.dart';
 import 'package:fehviewer/common/controller/gallerycache_controller.dart';
 import 'package:fehviewer/common/states/gallery_model.dart';
@@ -65,6 +66,8 @@ class _GalleryViewPageState extends State<GalleryViewPage> {
 
   Future<GalleryPreview> _futureViewGallery;
 
+  final CancelToken _getMoreCancelToken = CancelToken();
+
   final EhConfigController ehConfigController = Get.find();
   final GalleryCacheController galleryCacheController = Get.find();
 
@@ -84,6 +87,7 @@ class _GalleryViewPageState extends State<GalleryViewPage> {
   void dispose() {
     super.dispose();
     _pageController.dispose();
+    _getMoreCancelToken.cancel();
   }
 
   @override
@@ -119,7 +123,8 @@ class _GalleryViewPageState extends State<GalleryViewPage> {
   }
 
   Future<GalleryPreview> _getImageInfo() async {
-    return GalleryUtil.getImageInfo(_galleryModel, _currentIndex);
+    return GalleryUtil.getImageInfo(_galleryModel, _currentIndex,
+        cancelToken: _getMoreCancelToken);
   }
 
   void _initSize(BuildContext context) {

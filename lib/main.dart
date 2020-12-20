@@ -2,6 +2,7 @@ import 'package:device_preview/device_preview.dart';
 import 'package:fehviewer/common/controller/advance_search_controller.dart';
 import 'package:fehviewer/common/controller/dnsconfig_controller.dart';
 import 'package:fehviewer/common/controller/ehconfig_controller.dart';
+import 'package:fehviewer/common/controller/gallerycache_controller.dart';
 import 'package:fehviewer/common/controller/local_controller.dart';
 import 'package:fehviewer/common/controller/theme_controller.dart';
 import 'package:fehviewer/common/global.dart';
@@ -24,9 +25,10 @@ void main() {
     // ThemeController
     Get.lazyPut(() => ThemeController(), fenix: true);
     // DnsConfigController
-    Get.lazyPut(() => DnsConfigController(), fenix: true);
+    Get.put(DnsConfigController(), permanent: true);
 
-    // Get.put(SplashController());
+    Get.put(GalleryCacheController(), permanent: true);
+
     runApp(
       DevicePreview(
         // enabled: Global.inDebugMode,
@@ -82,12 +84,9 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
         onGenerateTitle: (BuildContext context) => S.of(context).app_title,
         getPages: AppPages.routes,
         initialRoute: EHRoutes.root,
-        // home: SplashPage(),
-        // theme: themeModel.getTheme(context, _brightness),
-        // theme: themeController.themeData,
         theme: theme,
         locale: locale,
-        // builder: DevicePreview.appBuilder,
+        builder: DevicePreview.appBuilder,
         // ignore: prefer_const_literals_to_create_immutables
         supportedLocales: <Locale>[
           const Locale('en', ''),
@@ -115,7 +114,7 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
             //APP语言跟随系统语言，如果系统语言不是中文简体或美国英语，
             //则默认使用美国英语
             if (supportedLocales.contains(_locale)) {
-              logger.d('语言跟随系统语言');
+              // logger.d('语言跟随系统语言');
               locale = _locale;
             } else {
               locale = const Locale('en', 'US');

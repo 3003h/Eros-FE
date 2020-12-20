@@ -10,6 +10,7 @@ class DnsConfig {
 
   bool enableDoH;
   bool enableCustomHosts;
+  bool enableDomainFronting;
   List<DnsCache> hosts;
   List<DnsCache> dohCache;
 

@@ -1,3 +1,4 @@
+import 'package:dio/dio.dart';
 import 'package:fehviewer/common/states/gallery_model.dart';
 import 'package:fehviewer/generated/l10n.dart';
 import 'package:fehviewer/models/index.dart';
@@ -34,10 +35,13 @@ class _AllPreviewPageState extends State<AllPreviewPage> {
   final ScrollController _scrollController =
       ScrollController(keepScrollOffset: true);
 
+  CancelToken moreGalleryPreviewCancelToken = CancelToken();
+
   @override
   void dispose() {
     super.dispose();
     _scrollController.dispose();
+    moreGalleryPreviewCancelToken.cancel();
   }
 
   @override
@@ -195,6 +199,7 @@ class _AllPreviewPageState extends State<AllPreviewPage> {
         await Api.getGalleryPreview(
       _galleryModel.galleryItem.url,
       page: _galleryModel.currentPreviewPage,
+      cancelToken: moreGalleryPreviewCancelToken,
     );
 
     _galleryPreviewList.addAll(_moreGalleryPreviewList);

@@ -34,6 +34,7 @@ class PopularViewController extends GetxController
   }
 
   Future<void> reLoadDataFirst() async {
+    change(state, status: RxStatus.loading());
     await loadData();
   }
 }

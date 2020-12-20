@@ -17,7 +17,8 @@ import 'package:liquid_progress_indicator/liquid_progress_indicator.dart';
 import 'package:provider/provider.dart';
 
 class GalleryUtil {
-  static Future<void> getAllImageHref(GalleryModel galleryModel) async {
+  static Future<void> getAllImageHref(GalleryModel galleryModel,
+      {CancelToken cancelToken}) async {
     if (galleryModel.isGetAllImageHref) {
       loggerNoStack.d(' isGetAllImageHref return');
       return;
@@ -33,10 +34,13 @@ class GalleryUtil {
           await Api.getGalleryPreview(
         galleryModel.galleryItem.url,
         page: galleryModel.currentPreviewPage,
+        cancelToken: cancelToken,
       );
 
       // 避免重复添加
       if (_moreGalleryPreviewList.first.ser > galleryModel.previews.last.ser) {
+        logger.d(
+            'getAllImageHref ${_moreGalleryPreviewList.first.ser}  ${_moreGalleryPreviewList.length}');
         galleryModel.addAllPreview(_moreGalleryPreviewList);
       }
     }
@@ -45,9 +49,13 @@ class GalleryUtil {
 
   /// 获取当前页的图片地址 优先从_galleryModel中读取 为空再查询api获取
   static Future<GalleryPreview> getImageInfo(
-      GalleryModel _galleryModel, int index) async {
+    GalleryModel _galleryModel,
+    int index, {
+    CancelToken cancelToken,
+  }) async {
     // 数据获取处理
-    GalleryUtil.getAllImageHref(_galleryModel).catchError((e, stack) {
+    GalleryUtil.getAllImageHref(_galleryModel, cancelToken: cancelToken)
+        .catchError((e, stack) {
       logger.e('$e \n $stack');
     }).whenComplete(() {
       // logger.v('getAllImageHref Complete');
@@ -280,6 +288,7 @@ class GalleryImage extends StatefulWidget {
 class _GalleryImageState extends State<GalleryImage> {
   GalleryModel _galleryModel;
   Future<GalleryPreview> _future;
+  final CancelToken _getMoreCancelToken = CancelToken();
 
   @override
   void initState() {
@@ -288,7 +297,8 @@ class _GalleryImageState extends State<GalleryImage> {
         Provider.of<GalleryModel>(context, listen: false);
     if (galleryModel != _galleryModel) {
       _galleryModel = galleryModel;
-      _future = GalleryUtil.getImageInfo(_galleryModel, widget.index);
+      _future = GalleryUtil.getImageInfo(_galleryModel, widget.index,
+          cancelToken: _getMoreCancelToken);
     }
   }
 
@@ -300,6 +310,12 @@ class _GalleryImageState extends State<GalleryImage> {
     if (galleryModel != _galleryModel) {
       _galleryModel = galleryModel;
     }
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    _getMoreCancelToken.cancel();
   }
 
   @override

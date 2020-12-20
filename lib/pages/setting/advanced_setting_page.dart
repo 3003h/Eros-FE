@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:fehviewer/common/controller/cache_controller.dart';
 import 'package:fehviewer/common/controller/dnsconfig_controller.dart';
 import 'package:fehviewer/common/controller/ehconfig_controller.dart';
 import 'package:fehviewer/common/controller/local_controller.dart';
@@ -60,6 +61,10 @@ class ListViewAdvancedSetting extends StatelessWidget {
       dnsConfigController.enableDoH.value = newValue;
     }
 
+    void _handleEFChanged(bool newValue) {
+      dnsConfigController.enableDomainFronting.value = newValue;
+    }
+
     return Container(
       child: ListView(
         children: <Widget>[
@@ -84,6 +89,20 @@ class ListViewAdvancedSetting extends StatelessWidget {
             color: CupertinoDynamicColor.resolve(
                 CupertinoColors.systemGrey5, context),
           ),
+          SelectorSettingItem(
+            title: S.of(context).clear_cache,
+            selector: '',
+            onTap: () {
+              logger.d(' clear_cache');
+              Get.find<CacheController>().clearAllCache();
+            },
+          ),
+          Divider(
+            height: 38,
+            thickness: 38.5,
+            color: CupertinoDynamicColor.resolve(
+                CupertinoColors.systemGrey5, context),
+          ),
           Obx(() => SelectorSettingItem(
                 title: S.of(context).custom_hosts,
                 selector: dnsConfigController.enableCustomHosts.value
@@ -99,6 +118,13 @@ class ListViewAdvancedSetting extends StatelessWidget {
             onChanged: _handleDoHChanged,
             desc: '优先级低于自定义hosts',
           ),
+          if (Global.inDebugMode)
+            TextSwitchItem(
+              S.of(context).domain_fronting,
+              intValue: dnsConfigController.enableDomainFronting.value,
+              onChanged: _handleEFChanged,
+              desc: 'pass SNI',
+            ),
         ],
       ),
     );
@@ -208,4 +234,7 @@ class ListViewAdvancedSetting extends StatelessWidget {
       },
     );
   }
+
+  /// 清除缓存
+
 }

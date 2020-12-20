@@ -43,6 +43,8 @@
   "off": "Off",
   "dark_mode_effect": "Dark mode effect",
   "gray_black": "Gray black",
-  "pure_black": "Pure black"
+  "pure_black": "Pure black",
+  "domain_fronting": "Domain fronting",
+  "clear_cache": "Clear cache"
 
 }

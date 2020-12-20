@@ -13,6 +13,7 @@ const String _regExpHost =
 class DnsConfigController extends ProfileController {
   RxBool enableCustomHosts = false.obs;
   RxBool enableDoH = false.obs;
+  RxBool enableDomainFronting = false.obs;
   final RxList<DnsCache> _hosts = <DnsCache>[].obs;
   final RxList<DnsCache> _dohCache = <DnsCache>[].obs;
   RxList<DnsCache> get hosts => _hosts;
@@ -55,7 +56,7 @@ class DnsConfigController extends ProfileController {
     if (host == 'cloudflare-dns.com') {
       return;
     }
-    logger.d(' updateDoHCache $host');
+
     const int updateInterval = 300;
 
     final int index =
@@ -65,6 +66,7 @@ class DnsConfigController extends ProfileController {
     if (dnsCache != null) {
       if (dnsCache.lastResolve != null &&
           -dnsCache.lastResolve > updateInterval) {
+        logger.d(' updateDoHCache $host');
         // get new and cache
         final String _addr = await DnsUtil.doh(host);
         dnsCache
@@ -75,7 +77,7 @@ class DnsConfigController extends ProfileController {
       // get new
       logger.d(' get new doh $host');
       final String _addr = await DnsUtil.doh(host);
-      logger.d(' get new doh $host  addr=$_addr');
+      // logger.d(' get new doh $host  addr=$_addr');
       dohCache.add(DnsCache()
         ..host = host
         ..lastResolve = nowTime
@@ -100,8 +102,16 @@ class DnsConfigController extends ProfileController {
       Global.saveProfile();
     });
 
+    ever<bool>(enableDoH, (bool value) {
+      _dnsConfig.enableDoH = value;
+      Global.saveProfile();
+    });
     enableDoH.value = _dnsConfig.enableDoH ?? false;
     everProfile<List<DnsCache>>(
         _dohCache, (List<DnsCache> value) => _dnsConfig.dohCache = value);
+
+    enableDomainFronting.value = _dnsConfig.enableDomainFronting ?? false;
+    everProfile<bool>(enableDomainFronting,
+        (bool value) => _dnsConfig.enableDomainFronting = value);
   }
 }

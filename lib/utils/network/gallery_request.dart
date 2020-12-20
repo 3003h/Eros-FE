@@ -33,8 +33,18 @@ import 'package:permission_handler/permission_handler.dart';
 import 'package:share/share.dart';
 import 'package:tuple/tuple.dart';
 
+final Api api = Api();
+
 // ignore: avoid_classes_with_only_static_members
 class Api {
+  Api() {
+    final String _baseUrl = EHConst.getBaseSite(
+        Get.find<EhConfigController>().isSiteEx.value ?? false);
+    httpManager = HttpManager.getInstance(baseUrl: _baseUrl);
+  }
+  HttpManager httpManager;
+  String _baseUrl;
+
   //改为使用 PersistCookieJar，在文档中有介绍，PersistCookieJar将cookie保留在文件中，
   // 因此，如果应用程序退出，则cookie始终存在，除非显式调用delete
   static PersistCookieJar _cookieJar;
@@ -61,15 +71,7 @@ class Api {
   static HttpManager getHttpManager({bool cache = true}) {
     final String _baseUrl = EHConst.getBaseSite(
         Get.find<EhConfigController>().isSiteEx.value ?? false);
-    final bool enableCache = Global.profile.cache.enable ?? true;
-    final bool _doh = Global.profile.dnsConfig.enableDoH ?? false;
-    if (_doh) {
-      return HttpManager.withProxy(_baseUrl,
-          cache: cache ? enableCache : cache);
-    } else {
-      return HttpManager.getInstance(
-          baseUrl: _baseUrl, cache: cache ? enableCache : cache);
-    }
+    return HttpManager(_baseUrl, cache: cache);
   }
 
   static Options getCacheOptions({bool forceRefresh = false}) {
@@ -90,9 +92,10 @@ class Api {
       {bool refresh = false}) async {
 //    logger.v("获取热门");
 
-    const String url = '/popular?inline_set=dm_l';
+    // const String url = '/popular?inline_set=dm_l';
+    const String url = '/popular';
 
-    await CustomHttpsProxy.instance.init();
+    // await CustomHttpsProxy.instance.init();
 
     final Options _cacheOptions = getCacheOptions(forceRefresh: refresh);
 
@@ -117,7 +120,8 @@ class Api {
     final AdvanceSearchController searchController = Get.find();
 
     String url = '/';
-    String qry = '?page=${page ?? 0}&inline_set=dm_l';
+    // String qry = '?page=${page ?? 0}&inline_set=dm_l';
+    String qry = '?page=${page ?? 0}';
 
     if (ehConfigController.isSafeMode.value) {
       qry = '$qry&f_cats=767';
@@ -263,8 +267,8 @@ class Api {
     bool refresh = false,
   }) async {
     // final HttpManager httpManager = HttpManager.getInstance();
-    final String url = inUrl + '?hc=1&inline_set=ts_l&nw=always';
-    // final String url = inUrl + '?hc=1&nw=always';
+    // final String url = inUrl + '?hc=1&inline_set=ts_l&nw=always';
+    final String url = inUrl;
 
     // 不显示警告的处理 cookie加上 nw=1
     // 在 url使用 nw=always 未解决 自动写入cookie 暂时搞不懂 先手动设置下
@@ -275,7 +279,7 @@ class Api {
     cookieJar.saveFromResponse(Uri.parse(url), cookies);
 
     logger.i('获取画廊 $url');
-    await CustomHttpsProxy.instance.init();
+    // await CustomHttpsProxy.instance.init();
     final String response = await getHttpManager()
         .get(url, options: getCacheOptions(forceRefresh: refresh));
 
@@ -301,6 +305,7 @@ class Api {
     String inUrl, {
     int page,
     bool refresh = false,
+    CancelToken cancelToken,
   }) async {
     //?inline_set=ts_m 小图,40一页
     //?inline_set=ts_l 大图,20一页
@@ -321,8 +326,11 @@ class Api {
     cookieJar.saveFromResponse(Uri.parse(url), cookies);
 
     await CustomHttpsProxy.instance.init();
-    final String response = await getHttpManager()
-        .get(url, options: getCacheOptions(forceRefresh: refresh));
+    final String response = await getHttpManager().get(
+      url,
+      options: getCacheOptions(forceRefresh: refresh),
+      cancelToken: cancelToken,
+    );
 
     return GalleryDetailParser.parseGalleryPreviewFromHtml(response);
   }
@@ -333,8 +341,6 @@ class Api {
     String href, {
     bool refresh = false,
   }) async {
-    // final HttpManager httpManager = HttpManager.getInstance();
-
     final String url = href;
 
     await CustomHttpsProxy.instance.init();

@@ -43,5 +43,7 @@
   "off": "关闭",
   "dark_mode_effect": "深色模式效果",
   "gray_black": "灰黑",
-  "pure_black": "纯黑"
+  "pure_black": "纯黑",
+  "domain_fronting": "域名前置",
+  "clear_cache": "清除缓存"
 }
