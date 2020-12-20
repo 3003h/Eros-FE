@@ -1,4 +1,5 @@
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:dio/dio.dart';
 import 'package:fehviewer/common/controller/ehconfig_controller.dart';
 import 'package:fehviewer/common/controller/gallerycache_controller.dart';
 import 'package:fehviewer/common/global.dart';
@@ -143,7 +144,7 @@ class GalleryDetailInfo extends StatelessWidget {
 //              crossAxisCount: _crossAxisCount, //每行列数
                   maxCrossAxisExtent: 130,
                   mainAxisSpacing: 0, //主轴方向的间距
-                  crossAxisSpacing: 10, //交叉轴方向子元素的间距
+                  crossAxisSpacing: 4, //交叉轴方向子元素的间距
                   childAspectRatio: 0.55 //显示区域宽高
                   ),
               itemCount: previews.length,
@@ -231,7 +232,6 @@ class PreviewContainer extends StatelessWidget {
         NavigatorUtil.goGalleryViewPage(context, index);
       },
       child: Container(
-        margin: const EdgeInsets.all(2.0),
         child: Column(
           children: <Widget>[
             Expanded(
@@ -803,7 +803,7 @@ Future<void> showLoadingDialog(BuildContext context, int index) async {
       Provider.of<GalleryModel>(context, listen: false);
 
   /// 加载下一页缩略图
-  Future<void> _loarMordPriview() async {
+  Future<void> _loarMordPriview({CancelToken cancelToken}) async {
     final List<GalleryPreview> _galleryPreviewList =
         _galleryModel.galleryItem.galleryPreview;
     //
@@ -818,6 +818,7 @@ Future<void> showLoadingDialog(BuildContext context, int index) async {
         await Api.getGalleryPreview(
       _galleryModel.galleryItem.url,
       page: _galleryModel.currentPreviewPage,
+      cancelToken: cancelToken,
     );
 
     _galleryPreviewList.addAll(_moreGalleryPreviewList);
@@ -848,17 +849,6 @@ Future<void> showLoadingDialog(BuildContext context, int index) async {
             )),
         actions: const <Widget>[],
       );
-
-      /// 自定义Dialog
-      // return Dialog(
-      //   insetPadding: const EdgeInsets.symmetric(vertical: 10, horizontal: 10),
-      //   child: Container(
-      //       // width: 40,
-      //       // height: 40,
-      //       child: const CupertinoActivityIndicator(
-      //     radius: 20,
-      //   )),
-      // );
     },
   );
 }

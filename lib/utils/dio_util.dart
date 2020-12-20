@@ -15,9 +15,7 @@ class HttpManager {
   HttpManager(String _baseUrl, {bool cache = true}) {
     _options = BaseOptions(
         baseUrl: _baseUrl,
-        //连接时间为5秒
         connectTimeout: connectTimeout,
-        //响应时间为3秒
         receiveTimeout: receiveTimeout,
         //设置请求头
         headers: <String, String>{
@@ -42,44 +40,21 @@ class HttpManager {
         baseUrl: _baseUrl,
       )).interceptor);
     }
-  }
 
-  HttpManager.withProxy(String _baseUrl, {bool cache = true}) {
-    _options = BaseOptions(
-        baseUrl: _baseUrl,
-        //连接时间为5秒
-        connectTimeout: connectTimeout,
-        //响应时间为3秒
-        receiveTimeout: receiveTimeout,
-        //设置请求头
-        headers: <String, String>{
-          'User-Agent': EHConst.CHROME_USER_AGENT,
-          'Accept': EHConst.CHROME_ACCEPT,
-          'Accept-Language': EHConst.CHROME_ACCEPT_LANGUAGE,
-        },
-        //默认值是"application/json; charset=utf-8",Headers.formUrlEncodedContentType会自动编码请求体.
-        contentType: Headers.formUrlEncodedContentType,
-        //共有三种方式json,bytes(响应字节),stream（响应流）,plain
-        responseType: ResponseType.json);
-    _dio = Dio(_options);
+    // _dio.interceptors.add(ehInterceptor);
 
     (_dio.httpClientAdapter as DefaultHttpClientAdapter).onHttpClientCreate =
         (HttpClient client) {
-      client.findProxy = (Uri uri) => 'PROXY localhost:4041';
+      final HttpClient httpClient = HttpClient();
+      httpClient.badCertificateCallback =
+          (X509Certificate cert, String host, int port) {
+        return true;
+      };
+      return httpClient;
     };
-    //设置Cookie管理
-    _dio.interceptors.add(Global.cookieManager);
-
-    // _dio.interceptors.add(Global.netCache);
-    if (cache) {
-      _dio.interceptors.add(DioCacheManager(CacheConfig(
-        databasePath: Global.appSupportPath,
-        baseUrl: _baseUrl,
-      )).interceptor);
-    }
   }
 
-  final int connectTimeout = 8000;
+  final int connectTimeout = 10000;
   final int receiveTimeout = 10000;
 
   //单例模式
@@ -98,13 +73,14 @@ class HttpManager {
   }
 
   //get请求方法
-  Future<String> get(String url,
-      {Map<String, dynamic> params,
-      Options options,
-      CancelToken cancelToken}) async {
-    //设置Cookie管理
-    // _dio.interceptors.add(CookieManager(await Api.cookieJar));
+  Future<String> get(
+    String url, {
+    Map<String, dynamic> params,
+    Options options,
+    CancelToken cancelToken,
+  }) async {
     Response<String> response;
+
     try {
       response = await _dio.get<String>(url,
           queryParameters: params, options: options, cancelToken: cancelToken);
@@ -121,9 +97,6 @@ class HttpManager {
       {Map<String, dynamic> params,
       Options options,
       CancelToken cancelToken}) async {
-    //设置Cookie管理
-    // _dio.interceptors.add(CookieManager(await Api.cookieJar));
-
     Response<dynamic> response;
     try {
       response = await _dio.get<dynamic>(url,
@@ -142,9 +115,6 @@ class HttpManager {
       {Map<String, dynamic> params,
       Options options,
       CancelToken cancelToken}) async {
-    //设置Cookie管理
-    // _dio.interceptors.add(CookieManager(await Api.cookieJar));
-
     Response<dynamic> response;
     try {
       response = await _dio.post<dynamic>(url,
@@ -159,11 +129,12 @@ class HttpManager {
   }
 
   //post Form请求
-  Future<Response<dynamic>> postForm(String url,
-      {Object data, Options options, CancelToken cancelToken}) async {
-    //设置Cookie管理
-    // _dio.interceptors.add(CookieManager(await Api.cookieJar));
-
+  Future<Response<dynamic>> postForm(
+    String url, {
+    Object data,
+    Options options,
+    CancelToken cancelToken,
+  }) async {
     Response<dynamic> response;
     try {
       response = await _dio.post<dynamic>(url,
@@ -183,7 +154,6 @@ class HttpManager {
       String urlPath, String savePath) async {
     //设置Cookie管理
     // _dio.interceptors.add(CookieManager(await Api.cookieJar));
-
     Response<dynamic> response;
     try {
       response = await _dio.download(urlPath, savePath,

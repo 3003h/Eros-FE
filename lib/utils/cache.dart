@@ -1,8 +1,7 @@
-/*
 import 'dart:collection';
 
-import 'package:fehviewer/common/global.dart';
 import 'package:dio/dio.dart';
+import 'package:fehviewer/common/global.dart';
 
 import 'logger.dart';
 
@@ -119,4 +118,3 @@ class NetCache extends Interceptor {
     cache.remove(key);
   }
 }
-*/

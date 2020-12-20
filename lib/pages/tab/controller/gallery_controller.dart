@@ -103,10 +103,15 @@ class GalleryViewController extends GetxController
     curPage += 1;
     final List<GalleryItem> gallerItemBeans = tuple.item1;
 
-    state.addAll(gallerItemBeans);
+    if (gallerItemBeans.isNotEmpty &&
+        state.indexWhere((GalleryItem element) =>
+                element.gid == gallerItemBeans.first.gid) ==
+            -1) {
+      state.addAll(gallerItemBeans);
 
-    logger.d('${state.length}');
-    maxPage = tuple.item2;
+      logger.d('${state.length}');
+      maxPage = tuple.item2;
+    }
     isLoadMore.value = false;
     update();
   }

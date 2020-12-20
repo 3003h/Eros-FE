@@ -13,6 +13,10 @@ class DnsUtil {
         : DnsOverHttps.google();
     final List<InternetAddress> response = await dns.lookup(host.trim());
     logger.d('$response');
-    return (response..shuffle()).first.address;
+    if (response.isNotEmpty) {
+      return (response..shuffle()).first.address;
+    } else {
+      return host;
+    }
   }
 }
