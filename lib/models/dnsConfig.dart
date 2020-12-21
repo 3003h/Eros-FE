@@ -16,5 +16,6 @@ class DnsConfig {
 
   factory DnsConfig.fromJson(Map<String, dynamic> json) =>
       _$DnsConfigFromJson(json);
+
   Map<String, dynamic> toJson() => _$DnsConfigToJson(this);
 }

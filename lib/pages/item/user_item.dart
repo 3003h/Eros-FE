@@ -1,5 +1,5 @@
-import 'package:fehviewer/common/controller/ehconfig_controller.dart';
 import 'package:fehviewer/common/controller/user_controller.dart';
+import 'package:fehviewer/common/service/ehconfig_service.dart';
 import 'package:fehviewer/generated/l10n.dart';
 import 'package:fehviewer/route/routes.dart';
 import 'package:fehviewer/utils/network/gallery_request.dart';
@@ -15,7 +15,7 @@ class UserItem extends StatefulWidget {
 
 class _UserItem extends State<UserItem> {
   Color _color;
-  final EhConfigController ehConfigController = Get.find();
+  final EhConfigService ehConfigController = Get.find();
   final UserController userController = Get.find();
 
   Future<void> _logOut(BuildContext context) async {

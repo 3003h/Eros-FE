@@ -21,5 +21,6 @@ class GalleryPreview {
 
   factory GalleryPreview.fromJson(Map<String, dynamic> json) =>
       _$GalleryPreviewFromJson(json);
+
   Map<String, dynamic> toJson() => _$GalleryPreviewToJson(this);
 }

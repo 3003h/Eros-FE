@@ -42,5 +42,6 @@ class GalleryItem {
 
   factory GalleryItem.fromJson(Map<String, dynamic> json) =>
       _$GalleryItemFromJson(json);
+
   Map<String, dynamic> toJson() => _$GalleryItemToJson(this);
 }

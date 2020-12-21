@@ -1,6 +1,7 @@
-import 'package:fehviewer/common/controller/ehconfig_controller.dart';
 import 'package:fehviewer/common/controller/localfav_controller.dart';
 import 'package:fehviewer/common/controller/user_controller.dart';
+import 'package:fehviewer/common/service/ehconfig_service.dart';
+import 'package:fehviewer/generated/l10n.dart';
 import 'package:fehviewer/models/index.dart';
 import 'package:fehviewer/utils/logger.dart';
 import 'package:fehviewer/utils/network/gallery_request.dart';
@@ -26,7 +27,7 @@ class FavoriteViewController extends GetxController
   Future<Tuple2<List<GalleryItem>, int>> futureBuilderFuture;
   Widget lastListWidget;
 
-  final EhConfigController _ehConfigController = Get.find();
+  final EhConfigService _ehConfigController = Get.find();
   final LocalFavController _localFavController = Get.find();
   final UserController _userController = Get.find();
 
@@ -71,7 +72,7 @@ class FavoriteViewController extends GetxController
     } else {
       if (first) {
         _ehConfigController.lastShowFavcat = 'l';
-        _ehConfigController.lastShowFavTitle = '本地收藏';
+        _ehConfigController.lastShowFavTitle = S.of(Get.context).local_favorite;
       }
       // 本地收藏夹
       logger.v('本地收藏');

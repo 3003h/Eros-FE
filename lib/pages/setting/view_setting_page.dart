@@ -1,6 +1,6 @@
 import 'package:enum_to_string/enum_to_string.dart';
-import 'package:fehviewer/common/controller/ehconfig_controller.dart';
 import 'package:fehviewer/common/global.dart';
+import 'package:fehviewer/common/service/ehconfig_service.dart';
 import 'package:fehviewer/generated/l10n.dart';
 import 'package:fehviewer/pages/setting/setting_base.dart';
 import 'package:fehviewer/utils/logger.dart';
@@ -15,6 +15,7 @@ class ViewSettingPage extends StatefulWidget {
 
 class _ViewSettingPageState extends State<ViewSettingPage> {
   final String _title = '浏览设置';
+
   @override
   Widget build(BuildContext context) {
     final CupertinoPageScaffold cps = CupertinoPageScaffold(
@@ -48,7 +49,7 @@ class ViewSettingList extends StatelessWidget {
 /// 阅读方向模式切换
 Widget _buildViewModeItem(BuildContext context) {
   const String _title = '阅读方向';
-  final EhConfigController ehConfigController = Get.find();
+  final EhConfigService ehConfigController = Get.find();
 
   final Map<ViewMode, String> modeMap = <ViewMode, String>{
     ViewMode.horizontalLeft: '由左到右',

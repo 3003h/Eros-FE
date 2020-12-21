@@ -1,5 +1,5 @@
-import 'package:fehviewer/common/controller/ehconfig_controller.dart';
 import 'package:fehviewer/common/controller/user_controller.dart';
+import 'package:fehviewer/common/service/ehconfig_service.dart';
 import 'package:fehviewer/generated/l10n.dart';
 import 'package:fehviewer/models/entity/favorite.dart';
 import 'package:fehviewer/models/index.dart';
@@ -101,8 +101,8 @@ class FavoriteTab extends GetView<FavoriteViewController> {
 
   Widget _buildLocalFavView() {
     return CustomScrollView(slivers: <Widget>[
-      const CupertinoSliverNavigationBar(
-        largeTitle: TabPageTitle(title: '本地收藏'),
+      CupertinoSliverNavigationBar(
+        largeTitle: TabPageTitle(title: S.of(Get.context).local_favorite),
         transitionBetweenRoutes: false,
       ),
       CupertinoSliverRefreshControl(
@@ -163,7 +163,7 @@ class FavoriteTab extends GetView<FavoriteViewController> {
 
   /// 切换收藏夹
   Widget _buildFavcatButton(BuildContext context) {
-    final EhConfigController ehConfigController = Get.find();
+    final EhConfigService ehConfigController = Get.find();
     return CupertinoButton(
       minSize: 40,
       padding: const EdgeInsets.only(right: 8),

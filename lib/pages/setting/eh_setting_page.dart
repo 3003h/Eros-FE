@@ -1,7 +1,7 @@
 import 'package:enum_to_string/enum_to_string.dart';
-import 'package:fehviewer/common/controller/ehconfig_controller.dart';
 import 'package:fehviewer/common/controller/user_controller.dart';
 import 'package:fehviewer/common/global.dart';
+import 'package:fehviewer/common/service/ehconfig_service.dart';
 import 'package:fehviewer/common/tag_database.dart';
 import 'package:fehviewer/generated/l10n.dart';
 import 'package:fehviewer/pages/login/web_mysetting.dart';
@@ -58,7 +58,7 @@ class _EhSettingPage extends State<EhSettingPage> {
 class ListViewEhSetting extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    final EhConfigController ehConfigController = Get.find();
+    final EhConfigService ehConfigController = Get.find();
     final UserController userController = Get.find();
 
     final bool _siteEx = ehConfigController.isSiteEx.value;
@@ -176,7 +176,7 @@ class ListViewEhSetting extends StatelessWidget {
 /// 列表模式切换
 Widget _buildListModeItem(BuildContext context) {
   const String _title = '浏览模式';
-  final EhConfigController ehConfigController = Get.find();
+  final EhConfigService ehConfigController = Get.find();
 
   final Map<ListModeEnum, String> modeMap = <ListModeEnum, String>{
     ListModeEnum.list: '列表 - 中',
@@ -232,7 +232,7 @@ Widget _buildListModeItem(BuildContext context) {
 /// 历史记录数量切换
 Widget _buildHistoryMaxItem(BuildContext context) {
   const String _title = '最大历史记录数';
-  final EhConfigController ehConfigController = Get.find();
+  final EhConfigService ehConfigController = Get.find();
 
   String _getMaxNumText(int max) {
     if (max == 0) {

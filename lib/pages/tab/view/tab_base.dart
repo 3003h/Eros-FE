@@ -1,6 +1,6 @@
-import 'package:fehviewer/common/controller/ehconfig_controller.dart';
-import 'package:fehviewer/common/states/gallery_model.dart';
+import 'package:fehviewer/common/service/ehconfig_service.dart';
 import 'package:fehviewer/models/index.dart';
+import 'package:fehviewer/pages/item/controller/galleryitem_controller.dart';
 import 'package:fehviewer/pages/item/gallery_item.dart';
 import 'package:fehviewer/pages/item/gallery_item_flow.dart';
 import 'package:fehviewer/pages/item/gallery_item_simple.dart';
@@ -8,7 +8,6 @@ import 'package:fehviewer/values/const.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:provider/provider.dart';
 import 'package:waterfall_flow/waterfall_flow.dart';
 
 SliverPadding buildWaterfallFlow(List<GalleryItem> gallerItemBeans, tabIndex,
@@ -34,11 +33,13 @@ SliverPadding buildWaterfallFlow(List<GalleryItem> gallerItemBeans, tabIndex,
               loadMord();
             }
           }
+          Get.create(() => GalleryItemController.initData(
+              gallerItemBeans[index],
+              tabIndex: tabIndex));
 
-          return ChangeNotifierProvider<GalleryModel>.value(
-            value: GalleryModel()
-              ..initData(gallerItemBeans[index], tabIndex: tabIndex),
-            child: GalleryItemFlow(),
+          return GalleryItemFlow(
+            galleryItem: gallerItemBeans[index],
+            tabIndex: tabIndex,
           );
         },
         childCount: gallerItemBeans.length,
@@ -60,13 +61,9 @@ SliverList buildGallerySliverListView(
           }
         }
 
-        return ChangeNotifierProvider<GalleryModel>.value(
-          value: GalleryModel()
-            ..initData(gallerItemBeans[index], tabIndex: tabIndex),
-          child: GalleryItemWidget(
-            galleryItem: gallerItemBeans[index],
-            tabIndex: tabIndex,
-          ),
+        return GalleryItemWidget(
+          galleryItem: gallerItemBeans[index],
+          tabIndex: tabIndex,
         );
       },
       childCount: gallerItemBeans.length,
@@ -86,7 +83,10 @@ SliverFixedExtentList buildGallerySliverListSimpleView(
             loadMord();
           }
         }
+        Get.create(() => GalleryItemController.initData(gallerItemBeans[index],
+            tabIndex: tabIndex));
 
+/*
         return ChangeNotifierProvider<GalleryModel>.value(
           value: GalleryModel()
             ..initData(gallerItemBeans[index], tabIndex: tabIndex),
@@ -94,6 +94,11 @@ SliverFixedExtentList buildGallerySliverListSimpleView(
             galleryItem: gallerItemBeans[index],
             tabIndex: tabIndex,
           ),
+        );
+*/
+        return GalleryItemSimpleWidget(
+          galleryItem: gallerItemBeans[index],
+          tabIndex: tabIndex,
         );
       },
       childCount: gallerItemBeans.length,
@@ -104,7 +109,8 @@ SliverFixedExtentList buildGallerySliverListSimpleView(
 
 Widget getGalleryList(List<GalleryItem> gallerItemBeans, tabIndex,
     {int maxPage, int curPage, VoidCallback loadMord}) {
-  final EhConfigController ehConfigController = Get.find();
+  final EhConfigService ehConfigController = Get.find();
+
   return Obx(() {
     switch (ehConfigController.listMode.value) {
       case ListModeEnum.list:

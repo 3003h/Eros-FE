@@ -1,7 +1,7 @@
 import 'dart:io';
 
-import 'package:fehviewer/common/controller/dnsconfig_controller.dart';
 import 'package:fehviewer/common/global.dart';
+import 'package:fehviewer/common/service/dns_service.dart';
 import 'package:fehviewer/generated/l10n.dart';
 import 'package:fehviewer/models/dnsCache.dart';
 import 'package:fehviewer/pages/setting/setting_base.dart';
@@ -15,7 +15,7 @@ class CustomHostsPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final String _title = S.of(context).custom_hosts;
-    final DnsConfigController dnsConfigController = Get.find();
+    final DnsService dnsConfigController = Get.find();
 
     void _handleEnableCustomHostDarkChanged(bool value) {
       if (!value && !(dnsConfigController.enableDoH.value ?? false)) {
@@ -73,7 +73,8 @@ class CustomHostsPage extends StatelessWidget {
 }
 
 class CustomHostsListView extends StatelessWidget {
-  final DnsConfigController dnsConfigController = Get.find();
+  final DnsService dnsConfigController = Get.find();
+
   @override
   Widget build(BuildContext context) {
     return Obx(() => Container(

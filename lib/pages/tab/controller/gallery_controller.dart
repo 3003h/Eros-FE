@@ -1,4 +1,4 @@
-import 'package:fehviewer/common/controller/ehconfig_controller.dart';
+import 'package:fehviewer/common/service/ehconfig_service.dart';
 import 'package:fehviewer/generated/l10n.dart';
 import 'package:fehviewer/models/index.dart';
 import 'package:fehviewer/utils/logger.dart';
@@ -13,6 +13,7 @@ import 'package:tuple/tuple.dart';
 class GalleryViewController extends GetxController
     with StateMixin<List<GalleryItem>> {
   GalleryViewController({this.cats});
+
   int cats;
 
   RxInt curPage = 0.obs;
@@ -20,7 +21,7 @@ class GalleryViewController extends GetxController
 
   RxBool isLoadMore = false.obs;
 
-  final EhConfigController ehConfigController = Get.find();
+  final EhConfigService ehConfigController = Get.find();
 
   String get title {
     // logger.d('${EHConst.cats.entries.length}');

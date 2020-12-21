@@ -12,7 +12,7 @@ class DnsUtil {
         ? DnsOverHttps.cloudflare()
         : DnsOverHttps.google();
     final List<InternetAddress> response = await dns.lookup(host.trim());
-    logger.d('$response');
+    // logger.d('$response');
     if (response.isNotEmpty) {
       return (response..shuffle()).first.address;
     } else {

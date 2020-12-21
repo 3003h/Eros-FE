@@ -5,9 +5,9 @@ import 'package:fehviewer/models/index.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
 
-import 'base_controller.dart';
+import 'base_service.dart';
 
-class LocaleController extends ProfileController {
+class LocaleService extends ProfileService {
   RxString localCode = window.locale.toString().obs;
 
   Locale get locale {

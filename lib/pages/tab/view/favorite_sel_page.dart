@@ -94,8 +94,10 @@ class FavSelItemWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     // 每个Item单独的依赖
-    Get.create(() => FavSelectorItemController());
-    final FavSelectorItemController favoriteSelectorItemController = Get.find();
+    // Get.create(() => FavSelectorItemController());
+    // final FavSelectorItemController favoriteSelectorItemController = Get.find();
+    final FavSelectorItemController favoriteSelectorItemController =
+        Get.put(FavSelectorItemController(), tag: '$index');
 
     final Widget container = Obx(() => Container(
           color: favoriteSelectorItemController.colorTap?.value,

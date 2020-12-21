@@ -1,11 +1,11 @@
-import 'package:fehviewer/common/controller/dnsconfig_controller.dart';
+import 'package:fehviewer/common/service/dns_service.dart';
 import 'package:fehviewer/models/index.dart';
 import 'package:fehviewer/utils/logger.dart';
 import 'package:get/get.dart';
 
 extension EhString on String {
   String toRealUrl() {
-    final DnsConfigController dnsConfigController = Get.find();
+    final DnsService dnsConfigController = Get.find();
     final bool enableDoH = dnsConfigController.enableDoH.value;
     final bool enableCustomHosts = dnsConfigController.enableCustomHosts.value;
     final List<DnsCache> _dohDnsCacheList =
@@ -24,7 +24,7 @@ extension EhString on String {
       return this;
     } else if (enableDoH) {
       // logger.d(' enableDoH');
-      Get.find<DnsConfigController>().updateDoHCache(host);
+      Get.find<DnsService>().updateDoHCache(host);
       final int _dohDnsCacheIndex = dnsConfigController.dohCache
           .indexWhere((DnsCache element) => element.host == host);
       final DnsCache dohDnsCache =

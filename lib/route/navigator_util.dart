@@ -1,8 +1,11 @@
-import 'package:fehviewer/common/states/gallery_model.dart';
 import 'package:fehviewer/models/galleryComment.dart';
+import 'package:fehviewer/models/index.dart';
 import 'package:fehviewer/pages/gallery_detail/comment_page.dart';
-import 'package:fehviewer/pages/gallery_detail/gallery_detail_page.dart';
+import 'package:fehviewer/pages/gallery_main/controller/gallery_page_controller.dart';
+import 'package:fehviewer/pages/gallery_main/gallery_page.dart';
+import 'package:fehviewer/pages/gallery_view/controller/view_controller.dart';
 import 'package:fehviewer/pages/gallery_view/gallery_view_page.dart';
+import 'package:fehviewer/pages/item/controller/galleryitem_controller.dart';
 import 'package:fehviewer/pages/tab/controller/gallery_controller.dart';
 import 'package:fehviewer/pages/tab/view/gallery_page.dart';
 import 'package:fehviewer/pages/tab/view/search_page.dart';
@@ -10,7 +13,6 @@ import 'package:fehviewer/utils/logger.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:provider/provider.dart';
 
 class NavigatorUtil {
   /// 转到画廊列表页面
@@ -28,58 +30,40 @@ class NavigatorUtil {
   }
 
   /// 转到画廊页面
-  /// [GalleryModel] 复用画廊状态Provider
-  /// fluro的方式不知道怎么处理 使用默认路由方式
-  static void goGalleryDetailPr(BuildContext context, {String url}) {
-    logger.d(' goGalleryDetailPr');
+  static void goGalleryPage(
+      {String url, String tabIndex, GalleryItem galleryItem}) {
     if (url != null && url.isNotEmpty) {
-      final GalleryModel galleryModel = GalleryModel.initUrl(url: url);
-      Get.to(
-        ChangeNotifierProvider<GalleryModel>.value(
-          value: galleryModel,
-          child: const GalleryDetailPage(),
-        ),
-        preventDuplicates: false,
-      );
+      // TODO(honjow): 通过链接直接打开画廊的情况
+      // ignore: always_specify_types
+      Get.to(GalleryPage(), binding: BindingsBuilder(() {
+        Get.lazyPut(() => GalleryItemController.initUrl(url: url));
+      }));
     } else {
-      final GalleryModel galleryModel =
-          Provider.of<GalleryModel>(context, listen: false);
       Get.to(
-        ChangeNotifierProvider<GalleryModel>.value(
-          value: galleryModel,
-          child: const GalleryDetailPage(),
+        GalleryPage(),
+        transition: Transition.cupertino,
+        binding: BindingsBuilder<GalleryPageController>(
+          () {
+            // 创建GalleryPageController依赖 不能保留 在退出页面后销毁
+            Get.put(
+              GalleryPageController.fromItem(
+                galleryItem: galleryItem,
+                tabIndex: tabIndex,
+              ),
+            );
+          },
         ),
-        preventDuplicates: false,
       );
-/*      Navigator.push(context, CupertinoPageRoute(builder: (_) {
-        return ChangeNotifierProvider<GalleryModel>.value(
-          value: galleryModel,
-          child: const GalleryDetailPage(),
-        );
-      }));*/
     }
   }
 
   static void goGalleryDetailReplace(BuildContext context, {String url}) {
     if (url != null && url.isNotEmpty) {
-      final GalleryModel galleryModel = GalleryModel.initUrl(url: url);
-      Get.off(
-        ChangeNotifierProvider<GalleryModel>.value(
-          value: galleryModel,
-          child: const GalleryDetailPage(),
-        ),
-        preventDuplicates: false,
-      );
+      Get.off(GalleryPage(), binding: BindingsBuilder(() {
+        Get.create(() => GalleryItemController.initUrl(url: url));
+      }));
     } else {
-      final GalleryModel galleryModel =
-          Provider.of<GalleryModel>(context, listen: false);
-      Get.off(
-        ChangeNotifierProvider<GalleryModel>.value(
-          value: galleryModel,
-          child: const GalleryDetailPage(),
-        ),
-        preventDuplicates: false,
-      );
+      Get.to(GalleryPage());
     }
   }
 
@@ -93,18 +77,14 @@ class NavigatorUtil {
   }
 
   // 转到大图浏览
-  static void goGalleryViewPage(BuildContext context, int index) {
-    logger.d('goGalleryViewPage');
-
-    final GalleryModel galleryModel =
-        Provider.of<GalleryModel>(context, listen: false);
-
+  static void goGalleryViewPage(int index) {
+    logger.d('goGalleryViewPage $index');
     Get.to(
-      ChangeNotifierProvider<GalleryModel>.value(
-        value: galleryModel,
-        child: GalleryViewPage(index: index),
-      ),
-      preventDuplicates: false,
+      GalleryViewPage(),
+      binding: BindingsBuilder(() {
+        // Get.lazyPut(() => ViewController(index));
+        Get.put(ViewController(index));
+      }),
     );
   }
 }

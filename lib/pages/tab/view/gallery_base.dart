@@ -1,4 +1,5 @@
-import 'package:fehviewer/common/controller/ehconfig_controller.dart';
+import 'package:fehviewer/common/service/ehconfig_service.dart';
+import 'package:fehviewer/generated/l10n.dart';
 import 'package:fehviewer/pages/tab/view/gallery_filter_view.dart';
 import 'package:fehviewer/utils/logger.dart';
 import 'package:fehviewer/utils/utility.dart';
@@ -166,7 +167,7 @@ class _GalleryCatFilterState extends State<GalleryCatFilter> {
 
   @override
   Widget build(BuildContext context) {
-    final EhConfigController ehConfigController = Get.find();
+    final EhConfigService ehConfigController = Get.find();
     return Container(
       margin: widget.margin,
       padding: widget.padding,
@@ -215,12 +216,12 @@ class AdvanceSearchSwitchItem extends StatelessWidget {
 /// 设置类型筛选
 /// 弹出toast 全局维护cat的值
 Future<void> showFilterSetting() async {
-  final EhConfigController ehConfigController = Get.find();
+  final EhConfigService ehConfigController = Get.find();
   return showCupertinoDialog<void>(
     context: Get.context,
     builder: (BuildContext context) {
       return CupertinoAlertDialog(
-        title: const Text('搜索'),
+        title: Text(S.of(context).search),
         content: GalleryFilterView(
           catNum: ehConfigController.catFilter.value,
           catNumChanged: (int toNum) {
@@ -229,7 +230,7 @@ Future<void> showFilterSetting() async {
         ),
         actions: <Widget>[
           CupertinoDialogAction(
-            child: const Text('确定'),
+            child: Text(S.of(context).ok),
             onPressed: () {
               Get.back();
             },

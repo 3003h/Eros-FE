@@ -1,4 +1,4 @@
-import 'package:fehviewer/common/controller/dnsconfig_controller.dart';
+import 'package:fehviewer/common/service/dns_service.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -276,7 +276,7 @@ class SettingBase {
   Future<void> showCustomHostEditer(BuildContext context, {int index}) async {
     final TextEditingController _hostController = TextEditingController();
     final TextEditingController _addrController = TextEditingController();
-    final DnsConfigController dnsConfigController = Get.find();
+    final DnsService dnsConfigController = Get.find();
     final FocusNode _nodeAddr = FocusNode();
     return showCupertinoDialog<void>(
       context: context,

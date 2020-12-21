@@ -1,6 +1,7 @@
 {
   "host": "exhentai.org",
   "lastResolve": 12345,
+  "ttl": 60,
   "addrs": [""],
   "addr": ""
 }

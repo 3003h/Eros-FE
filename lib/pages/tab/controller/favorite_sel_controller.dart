@@ -1,3 +1,4 @@
+import 'package:fehviewer/generated/l10n.dart';
 import 'package:fehviewer/models/entity/favorite.dart';
 import 'package:fehviewer/utils/logger.dart';
 import 'package:fehviewer/utils/network/gallery_request.dart';
@@ -49,11 +50,13 @@ class FavoriteSelectorController extends GetxController
         );
       }
 
-      _favItemBeans
-          .add(FavcatItemBean('所有收藏', ThemeColors.favColor['a'], favId: 'a'));
+      _favItemBeans.add(FavcatItemBean(
+          S.of(Get.context).all_Favorites, ThemeColors.favColor['a'],
+          favId: 'a'));
 
-      _favItemBeans
-          .add(FavcatItemBean('本地收藏', ThemeColors.favColor['l'], favId: 'l'));
+      _favItemBeans.add(FavcatItemBean(
+          S.of(Get.context).local_favorite, ThemeColors.favColor['l'],
+          favId: 'l'));
       return _favItemBeans;
     } catch (e, stack) {
       logger.e('$e /n $stack');
@@ -72,17 +75,20 @@ class FavoriteSelectorController extends GetxController
       );
     }
 
-    _favItemBeans
-        .add(FavcatItemBean('所有收藏', ThemeColors.favColor['a'], favId: 'a'));
+    _favItemBeans.add(FavcatItemBean(
+        S.of(Get.context).all_Favorites, ThemeColors.favColor['a'],
+        favId: 'a'));
 
-    _favItemBeans
-        .add(FavcatItemBean('本地收藏', ThemeColors.favColor['l'], favId: 'l'));
+    _favItemBeans.add(FavcatItemBean(
+        S.of(Get.context).local_favorite, ThemeColors.favColor['l'],
+        favId: 'l'));
     return _favItemBeans;
   }
 }
 
 class FavSelectorItemController extends GetxController {
   Rx<Color> colorTap = const Color.fromARGB(0, 0, 0, 0).obs;
+
   void updateNormalColor() {
     colorTap.value = null;
   }

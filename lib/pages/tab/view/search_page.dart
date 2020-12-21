@@ -1,5 +1,6 @@
-import 'package:fehviewer/common/controller/ehconfig_controller.dart';
 import 'package:fehviewer/common/controller/quicksearch_controller.dart';
+import 'package:fehviewer/common/service/ehconfig_service.dart';
+import 'package:fehviewer/generated/l10n.dart';
 import 'package:fehviewer/models/index.dart';
 import 'package:fehviewer/pages/tab/view/gallery_base.dart';
 import 'package:fehviewer/pages/tab/view/search_text_page.dart';
@@ -49,7 +50,7 @@ class _GallerySearchPageState extends State<GallerySearchPage>
 
   bool _autofocus;
 
-  final EhConfigController ehConfigController = Get.find();
+  final EhConfigService ehConfigController = Get.find();
   final QuickSearchController quickSearchController = Get.find();
 
   void _jumpSearch() {
@@ -264,14 +265,14 @@ class _GallerySearchPageState extends State<GallerySearchPage>
           VibrateUtil.heavy();
         },
         child: Container(
-          width: 153,
+          width: 165,
           child: Row(
-            mainAxisAlignment: MainAxisAlignment.end,
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: <Widget>[
               CupertinoButton(
                 minSize: 40,
-                padding: const EdgeInsets.all(0),
-                child: const Text('取消'),
+                padding: const EdgeInsets.only(left: 4),
+                child: Text(S.of(context).cancel),
                 onPressed: () {
                   Get.back();
                 },
@@ -326,14 +327,14 @@ class _GallerySearchPageState extends State<GallerySearchPage>
           VibrateUtil.heavy();
         },
         child: Container(
-          width: 90,
+          width: 100,
           child: Row(
-            mainAxisAlignment: MainAxisAlignment.end,
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: <Widget>[
               CupertinoButton(
                 minSize: 40,
                 padding: const EdgeInsets.all(0),
-                child: const Text('取消'),
+                child: Text(S.of(context).cancel),
                 onPressed: () {
                   Get.back();
                 },

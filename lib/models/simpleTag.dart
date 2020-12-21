@@ -14,5 +14,6 @@ class SimpleTag {
 
   factory SimpleTag.fromJson(Map<String, dynamic> json) =>
       _$SimpleTagFromJson(json);
+
   Map<String, dynamic> toJson() => _$SimpleTagToJson(this);
 }

@@ -1,14 +1,14 @@
 import 'package:enum_to_string/enum_to_string.dart';
 import 'package:fehviewer/common/global.dart';
+import 'package:fehviewer/common/service/base_service.dart';
 import 'package:fehviewer/values/theme_colors.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
 
-import 'base_controller.dart';
-import 'ehconfig_controller.dart';
+import 'ehconfig_service.dart';
 
-class ThemeController extends ProfileController {
-  final EhConfigController _ehConfigController = Get.find();
+class ThemeService extends ProfileService {
+  final EhConfigService _ehConfigController = Get.find();
   final Rx<ThemesModeEnum> _themeModel = ThemesModeEnum.system.obs;
   Rx<Brightness> platformBrightness =
       WidgetsBinding.instance.window.platformBrightness.obs;

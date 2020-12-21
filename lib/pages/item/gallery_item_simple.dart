@@ -1,10 +1,9 @@
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:fehviewer/common/controller/ehconfig_controller.dart';
 import 'package:fehviewer/common/global.dart';
-import 'package:fehviewer/common/states/gallery_model.dart';
+import 'package:fehviewer/common/service/ehconfig_service.dart';
 import 'package:fehviewer/models/index.dart';
+import 'package:fehviewer/pages/item/controller/galleryitem_controller.dart';
 import 'package:fehviewer/route/navigator_util.dart';
-import 'package:fehviewer/utils/logger.dart';
 import 'package:fehviewer/values/theme_colors.dart';
 import 'package:fehviewer/widget/blur_image.dart';
 import 'package:fehviewer/widget/rating_bar.dart';
@@ -12,58 +11,29 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
-import 'package:provider/provider.dart';
 
 const double kCoverImageWidth = 70.0;
 const double kItemWidth = 115.0;
+const double kPaddingLeft = 8.0;
 
 /// 画廊列表项
-/// 尖端模式 精简显示信息 固定高度
-/// 使用provider进行管理
-/// 标题和tag需要随设置变化重构ui
-class GalleryItemSimpleWidget extends StatefulWidget {
-  const GalleryItemSimpleWidget(
-      {@required this.galleryItem, @required this.tabIndex});
+/// 简单模式 精简显示信息 固定高度
+class GalleryItemSimpleWidget extends StatelessWidget {
+  GalleryItemSimpleWidget({@required this.galleryItem, @required this.tabIndex})
+      : _galleryItemController = Get.put(
+            GalleryItemController.initData(galleryItem, tabIndex: tabIndex),
+            tag: galleryItem.gid);
 
   final GalleryItem galleryItem;
   final String tabIndex;
-
-  @override
-  _GalleryItemSimpleWidgetState createState() =>
-      _GalleryItemSimpleWidgetState();
-}
-
-class _GalleryItemSimpleWidgetState extends State<GalleryItemSimpleWidget> {
-  final double _paddingLeft = 8.0;
-
-  Color _colorTap; // 按下时颜色反馈
-  String _title; // 英语或者日语
-  GalleryModel _galleryModel;
-
-  @override
-  void initState() {
-    super.initState();
-  }
-
-  @override
-  void didChangeDependencies() {
-    super.didChangeDependencies();
-    final GalleryModel galleryModel =
-        Provider.of<GalleryModel>(context, listen: false);
-    if (galleryModel != _galleryModel) {
-      _galleryModel = galleryModel;
-//      galleryModel.initData(widget.galleryItem, tabIndex: widget.tabIndex);
-    }
-  }
+  final GalleryItemController _galleryItemController;
 
   @override
   Widget build(BuildContext context) {
-    final GalleryModel galleryModel = Provider.of<GalleryModel>(context);
-
     final Widget containerGallery = Container(
-      color: _colorTap,
+      color: _galleryItemController.colorTap.value,
       height: kItemWidth,
-      padding: EdgeInsets.fromLTRB(_paddingLeft, 6, 6, 6),
+      padding: const EdgeInsets.fromLTRB(kPaddingLeft, 6, 6, 6),
       child: Column(
         children: <Widget>[
           Row(children: <Widget>[
@@ -81,7 +51,7 @@ class _GalleryItemSimpleWidgetState extends State<GalleryItemSimpleWidget> {
                   _buildTitle(),
                   // 上传者
                   Text(
-                    galleryModel?.galleryItem?.uploader ?? '',
+                    _galleryItemController?.galleryItem?.uploader ?? '',
                     style: const TextStyle(
                         fontSize: 12, color: CupertinoColors.systemGrey),
                   ),
@@ -127,7 +97,7 @@ class _GalleryItemSimpleWidgetState extends State<GalleryItemSimpleWidget> {
           containerGallery,
           Divider(
             height: 0.5,
-            indent: _paddingLeft,
+            indent: kPaddingLeft,
             color: CupertinoDynamicColor.resolve(
                 CupertinoColors.systemGrey4, context),
           ),
@@ -136,39 +106,27 @@ class _GalleryItemSimpleWidgetState extends State<GalleryItemSimpleWidget> {
       // 不可见区域点击有效
       behavior: HitTestBehavior.opaque,
       onTap: () {
-        logger.v(_title);
-        NavigatorUtil.goGalleryDetailPr(context);
+        NavigatorUtil.goGalleryPage(
+            galleryItem: _galleryItemController.galleryItem,
+            tabIndex: tabIndex);
       },
-      onLongPress: () {
-        logger.v('onLongPress title: $_title ');
-      },
-      onTapDown: (_) => _updatePressedColor(),
+      onLongPress: () {},
+      onTapDown: (_) => _galleryItemController.updatePressedColor(),
       onTapUp: (_) {
         Future.delayed(const Duration(milliseconds: 150), () {
-          _updateNormalColor();
+          _galleryItemController.updateNormalColor();
         });
       },
-      onTapCancel: () => _updateNormalColor(),
+      onTapCancel: () => _galleryItemController.updateNormalColor(),
     );
   }
 
   /// 构建标题
-  /// [EhConfigModel] eh设置的state 控制显示日文还是英文标题
-  /// [GalleryModel] 画廊数据
   Widget _buildTitle() {
-    return Selector<GalleryModel, GalleryItem>(
-      selector: (context, gallery) => gallery.galleryItem,
-      builder: (context, GalleryItem galleryItem, child) {
-        final EhConfigController ehConfigController = Get.find();
-        final String _titleEn = galleryItem?.englishTitle ?? '';
-        final String _titleJpn = galleryItem?.japaneseTitle ?? '';
-
+    return Builder(
+      builder: (_) {
         return Obx(() => Text(
-              ehConfigController.isJpnTitle.value &&
-                      _titleJpn != null &&
-                      _titleJpn.isNotEmpty
-                  ? _titleJpn
-                  : _titleEn,
+              _galleryItemController.title,
               maxLines: 2,
               textAlign: TextAlign.left, // 对齐方式
               overflow: TextOverflow.ellipsis, // 超出部分省略号
@@ -183,29 +141,29 @@ class _GalleryItemSimpleWidgetState extends State<GalleryItemSimpleWidget> {
 
   /// 构建封面图片
   Widget _buildCoverImage() {
-    return Consumer<GalleryModel>(builder: (context, galleryModel, child) {
-      final GalleryItem _item = galleryModel.galleryItem;
+    return Builder(builder: (_) {
+      final GalleryItem _item = _galleryItemController.galleryItem;
 
       return Container(
         width: kCoverImageWidth,
         height: kItemWidth - 12,
         child: Center(
           child: Hero(
-            tag: '${_item.gid}_${_item.token}_cover_${galleryModel.tabIndex}',
+            tag: '${_item.gid}_${_item.token}_cover_$tabIndex',
             child: Container(
               decoration: BoxDecoration(boxShadow: [
                 //阴影
                 BoxShadow(
                   color: CupertinoDynamicColor.resolve(
-                      CupertinoColors.systemGrey4, context),
+                      CupertinoColors.systemGrey4, Get.context),
                   blurRadius: 10,
                 )
               ]),
               child: ClipRRect(
                 // 圆角
                 borderRadius: BorderRadius.circular(6),
-                child:
-                    CoverImg(imgUrl: galleryModel?.galleryItem?.imgUrl ?? ''),
+                child: CoverImg(
+                    imgUrl: _galleryItemController?.galleryItem?.imgUrl ?? ''),
               ),
             ),
           ),
@@ -215,19 +173,19 @@ class _GalleryItemSimpleWidgetState extends State<GalleryItemSimpleWidget> {
   }
 
   Widget _buildRating() {
-    return Consumer<GalleryModel>(builder: (context, galleryModel, child) {
+    return Builder(builder: (_) {
       return Row(
         children: <Widget>[
           Container(
             padding: const EdgeInsets.fromLTRB(0, 0, 4, 0),
             child: StaticRatingBar(
               size: 20.0,
-              rate: galleryModel.galleryItem.rating,
+              rate: _galleryItemController.galleryItem.rating,
               radiusRatio: 1.5,
             ),
           ),
           Text(
-            galleryModel?.galleryItem?.rating.toString(),
+            _galleryItemController?.galleryItem?.rating.toString(),
             style: const TextStyle(
               fontSize: 13,
               color: CupertinoColors.systemGrey,
@@ -239,13 +197,13 @@ class _GalleryItemSimpleWidgetState extends State<GalleryItemSimpleWidget> {
   }
 
   Widget _buildFilecontWidget() {
-    return Consumer<GalleryModel>(builder: (context, galleryModel, child) {
+    return Builder(builder: (_) {
       return Row(
         children: <Widget>[
           Padding(
             padding: const EdgeInsets.only(right: 4),
             child: Text(
-              galleryModel?.galleryItem?.translated ?? '',
+              _galleryItemController?.galleryItem?.translated ?? '',
               style: const TextStyle(
                   fontSize: 12, color: CupertinoColors.systemGrey),
             ),
@@ -258,7 +216,7 @@ class _GalleryItemSimpleWidgetState extends State<GalleryItemSimpleWidget> {
           Container(
             padding: const EdgeInsets.only(left: 2),
             child: Text(
-              galleryModel?.galleryItem?.filecount ?? '',
+              _galleryItemController?.galleryItem?.filecount ?? '',
               style: const TextStyle(
                   fontSize: 12, color: CupertinoColors.systemGrey),
             ),
@@ -269,15 +227,16 @@ class _GalleryItemSimpleWidgetState extends State<GalleryItemSimpleWidget> {
   }
 
   Widget _buildFavcatIcon() {
-    return Consumer<GalleryModel>(builder: (context, galleryModel, child) {
+    return Builder(builder: (_) {
       return Container(
-        child: galleryModel.galleryItem.favTitle?.isNotEmpty ?? false
+        child: _galleryItemController.galleryItem.favTitle?.isNotEmpty ?? false
             ? Container(
                 padding: const EdgeInsets.only(bottom: 2.5, right: 8),
                 child: Icon(
                   FontAwesomeIcons.solidHeart,
                   size: 12,
-                  color: ThemeColors.favColor[galleryModel.galleryItem.favcat],
+                  color: ThemeColors
+                      .favColor[_galleryItemController.galleryItem.favcat],
                 ),
               )
             : Container(),
@@ -286,21 +245,21 @@ class _GalleryItemSimpleWidgetState extends State<GalleryItemSimpleWidget> {
   }
 
   Widget _buildPostTime() {
-    return Consumer<GalleryModel>(builder: (context, galleryModel, child) {
+    return Builder(builder: (_) {
       return Text(
-        galleryModel?.galleryItem?.postTime ?? '',
+        _galleryItemController?.galleryItem?.postTime ?? '',
         style: const TextStyle(fontSize: 12, color: CupertinoColors.systemGrey),
       );
     });
   }
 
   Widget _buildCategory() {
-    return Consumer<GalleryModel>(builder: (context, galleryModel, child) {
+    return Builder(builder: (_) {
       final Color _colorCategory = CupertinoDynamicColor.resolve(
-          ThemeColors
-                  .catColor[galleryModel?.galleryItem?.category ?? 'default'] ??
+          ThemeColors.catColor[
+                  _galleryItemController?.galleryItem?.category ?? 'default'] ??
               CupertinoColors.systemBackground,
-          context);
+          Get.context);
 
       return ClipRRect(
         borderRadius: BorderRadius.circular(4),
@@ -308,7 +267,7 @@ class _GalleryItemSimpleWidgetState extends State<GalleryItemSimpleWidget> {
           padding: const EdgeInsets.fromLTRB(6, 3, 6, 3),
           color: _colorCategory,
           child: Text(
-            galleryModel?.galleryItem?.category ?? '',
+            _galleryItemController?.galleryItem?.category ?? '',
             style: const TextStyle(
               fontSize: 14,
               height: 1,
@@ -317,19 +276,6 @@ class _GalleryItemSimpleWidgetState extends State<GalleryItemSimpleWidget> {
           ),
         ),
       );
-    });
-  }
-
-  void _updateNormalColor() {
-    setState(() {
-      _colorTap = null;
-    });
-  }
-
-  void _updatePressedColor() {
-    setState(() {
-      _colorTap =
-          CupertinoDynamicColor.resolve(ThemeColors.pressedBackground, context);
     });
   }
 }
@@ -345,7 +291,7 @@ class CoverImg extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final EhConfigController ehConfigController = Get.find();
+    final EhConfigService ehConfigController = Get.find();
     final Map<String, String> _httpHeaders = {
       'Cookie': Global.profile?.user?.cookie ?? '',
     };

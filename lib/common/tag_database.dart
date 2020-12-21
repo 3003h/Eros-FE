@@ -1,7 +1,7 @@
 import 'dart:convert';
 
 import 'package:dio/dio.dart';
-import 'package:fehviewer/common/controller/ehconfig_controller.dart';
+import 'package:fehviewer/common/service/ehconfig_service.dart';
 import 'package:fehviewer/models/entity/tag_translat.dart';
 import 'package:fehviewer/utils/db_util.dart';
 import 'package:fehviewer/utils/dio_util.dart';
@@ -19,11 +19,9 @@ class EhTagDatabase {
     final HttpManager httpManager = HttpManager.getInstance(
         baseUrl: 'https://api.github.com', cache: false);
 
-    final EhConfigController ehConfigController = Get.find();
+    final EhConfigService ehConfigController = Get.find();
 
     const String url = '/repos/EhTagTranslation/Database/releases/latest';
-
-    logger.v(url);
 
     final String urlJsonString = await httpManager.get(url);
     final Map<String, dynamic> urlJson =
@@ -62,9 +60,6 @@ class EhTagDatabase {
         final List listDataP = dataAll['data'] as List;
 
         await tagSaveToDB(listDataP);
-        // StorageUtil().setString(TAG_TRANSLAT_VER, remoteVer);
-        // Global.profile.ehConfig.tagTranslatVer = remoteVer;
-        // Global.saveProfile();
         ehConfigController.tagTranslatVer.value = remoteVer;
       }
       showToast('标签翻译库更新完成');
