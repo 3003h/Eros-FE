@@ -1,4 +1,3 @@
-import 'package:fehviewer/common/controller/base_controller.dart';
 import 'package:fehviewer/common/global.dart';
 import 'package:fehviewer/models/index.dart';
 import 'package:fehviewer/utils/dns_util.dart';
@@ -6,17 +5,21 @@ import 'package:fehviewer/utils/logger.dart';
 import 'package:fehviewer/utils/toast.dart';
 import 'package:get/get.dart';
 
+import 'base_service.dart';
+
 const String _regExpIP = r'(\.((2(5[0-5]|[0-4]\d))|[0-1]?\d{1,2})){3}';
 const String _regExpHost =
     r'^(?=^.{3,255}$)[a-zA-Z0-9][-a-zA-Z0-9]{0,62}(\.[a-zA-Z0-9][-a-zA-Z0-9]{0,62})+$';
 
-class DnsConfigController extends ProfileController {
+class DnsService extends ProfileService {
   RxBool enableCustomHosts = false.obs;
   RxBool enableDoH = false.obs;
   RxBool enableDomainFronting = false.obs;
   final RxList<DnsCache> _hosts = <DnsCache>[].obs;
   final RxList<DnsCache> _dohCache = <DnsCache>[].obs;
+
   RxList<DnsCache> get hosts => _hosts;
+
   RxList<DnsCache> get dohCache => _dohCache;
 
   void removeCustomHostAt(int index) {
@@ -57,7 +60,8 @@ class DnsConfigController extends ProfileController {
       return;
     }
 
-    const int updateInterval = 300;
+    // 24小时
+    const int updateInterval = 86400;
 
     final int index =
         dohCache.indexWhere((DnsCache element) => element.host == host);
@@ -65,8 +69,8 @@ class DnsConfigController extends ProfileController {
     final int nowTime = DateTime.now().millisecondsSinceEpoch;
     if (dnsCache != null) {
       if (dnsCache.lastResolve != null &&
-          -dnsCache.lastResolve > updateInterval) {
-        logger.d(' updateDoHCache $host');
+          nowTime - dnsCache.lastResolve > updateInterval) {
+        logger.wtf(' updateDoHCache $host');
         // get new and cache
         final String _addr = await DnsUtil.doh(host);
         dnsCache
@@ -75,7 +79,7 @@ class DnsConfigController extends ProfileController {
       }
     } else {
       // get new
-      logger.d(' get new doh $host');
+      logger.wtf(' get new doh $host');
       final String _addr = await DnsUtil.doh(host);
       // logger.d(' get new doh $host  addr=$_addr');
       dohCache.add(DnsCache()

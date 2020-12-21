@@ -1,12 +1,12 @@
 import 'package:dio/dio.dart';
-import 'package:fehviewer/common/states/gallery_model.dart';
 import 'package:fehviewer/generated/l10n.dart';
 import 'package:fehviewer/models/index.dart';
+import 'package:fehviewer/pages/gallery_main/controller/gallery_page_controller.dart';
 import 'package:fehviewer/utils/logger.dart';
 import 'package:fehviewer/utils/network/gallery_request.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
+import 'package:get/get.dart';
 
 import 'gallery_detail_widget.dart';
 
@@ -29,13 +29,15 @@ class _AllPreviewPageState extends State<AllPreviewPage> {
   bool _isLoading = false;
   bool _isLoadFinsh = false;
 
-  GalleryModel _galleryModel;
+  // GalleryModel _galleryModel;
 
   final GlobalKey globalKey = GlobalKey();
   final ScrollController _scrollController =
       ScrollController(keepScrollOffset: true);
 
   CancelToken moreGalleryPreviewCancelToken = CancelToken();
+
+  final GalleryPageController _pageController = Get.find();
 
   @override
   void dispose() {
@@ -47,64 +49,58 @@ class _AllPreviewPageState extends State<AllPreviewPage> {
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-    final GalleryModel galleryModel =
-        Provider.of<GalleryModel>(context, listen: false);
-    if (galleryModel != _galleryModel) {
-      _galleryModel = galleryModel;
+    _galleryPreviewList = _pageController.galleryItem.galleryPreview;
+    _pageController.currentPreviewPage = 0;
 
-      _galleryPreviewList = _galleryModel.galleryItem.galleryPreview;
-      _galleryModel.currentPreviewPage = 0;
+    Future<void>.delayed(const Duration(milliseconds: 100)).then((_) {
+      //获取position
+      final RenderBox box = globalKey.currentContext.findRenderObject();
 
-      Future<void>.delayed(const Duration(milliseconds: 100)).then((_) {
-        //获取position
-        final RenderBox box = globalKey.currentContext.findRenderObject();
+      //获取size
+      final Size size = box.size;
 
-        //获取size
-        final Size size = box.size;
+      final MediaQueryData _mq = MediaQuery.of(context);
+      final Size _screensize = _mq.size;
+      final double _paddingLeft = _mq.padding.left;
+      final double _paddingRight = _mq.padding.right;
+      final double _paddingTop = _mq.padding.top;
 
-        final MediaQueryData _mq = MediaQuery.of(context);
-        final Size _screensize = _mq.size;
-        final double _paddingLeft = _mq.padding.left;
-        final double _paddingRight = _mq.padding.right;
-        final double _paddingTop = _mq.padding.top;
+      // 每行数量
+      final int itemCountCross = (_screensize.width -
+              kCrossAxisSpacing -
+              _paddingRight -
+              _paddingLeft) ~/
+          size.width;
 
-        // 每行数量
-        final int itemCountCross = (_screensize.width -
-                kCrossAxisSpacing -
-                _paddingRight -
-                _paddingLeft) ~/
-            size.width;
+      // 单屏幕列数
+      final int itemCountCrossMain = (_screensize.height -
+              _paddingTop -
+              kMinInteractiveDimensionCupertino) ~/
+          size.height;
 
-        // 单屏幕列数
-        final int itemCountCrossMain = (_screensize.height -
-                _paddingTop -
-                kMinInteractiveDimensionCupertino) ~/
-            size.height;
+      final int _toLine =
+          _pageController.firstPagePreview.length ~/ itemCountCross + 1;
 
-        final int _toLine =
-            _galleryModel.oriGalleryPreview.length ~/ itemCountCross + 1;
+      // 计算滚动距离
+      final double _offset = (_toLine - itemCountCrossMain) * size.height;
 
-        // 计算滚动距离
-        final double _offset = (_toLine - itemCountCrossMain) * size.height;
+      // 滚动
+      _scrollController.animateTo(
+        _offset,
+        duration: Duration(milliseconds: _offset ~/ 6),
+        curve: Curves.ease,
+      );
+      // _scrollController.jumpTo(_offset);
 
-        // 滚动
-        _scrollController.animateTo(
-          _offset,
-          duration: Duration(milliseconds: _offset ~/ 6),
-          curve: Curves.ease,
-        );
-        // _scrollController.jumpTo(_offset);
-
-        logger.d('toLine:$_toLine  _offset:$_offset');
-      }).catchError((e, stack) {
-        logger.e('$stack');
-      });
-    }
+      logger.d('toLine:$_toLine  _offset:$_offset');
+    }).catchError((e, stack) {
+      logger.e('$stack');
+    });
   }
 
   @override
   Widget build(BuildContext context) {
-    final int _count = int.parse(_galleryModel.galleryItem.filecount);
+    final int _count = int.parse(_pageController.galleryItem.filecount);
     return CupertinoPageScaffold(
       navigationBar: CupertinoNavigationBar(
         middle: Text(S.of(context).all_preview),
@@ -115,41 +111,37 @@ class _AllPreviewPageState extends State<AllPreviewPage> {
           SliverSafeArea(
             sliver: SliverPadding(
               padding: const EdgeInsets.only(top: 4, left: 4, right: 4),
-              sliver: Selector<GalleryModel, GalleryItem>(
-                  selector: (context, galleryModel) => galleryModel.galleryItem,
-                  shouldRebuild: (pre, next) =>
-                      int.parse(pre.filecount) == next.galleryPreview.length,
-                  builder: (context, GalleryItem galleryItem, child) {
+              sliver: Builder(builder: (_) {
 //                    logger.v('build SliverGrid');
-                    return SliverGrid(
-                      gridDelegate:
-                          const SliverGridDelegateWithMaxCrossAxisExtent(
-                              maxCrossAxisExtent: kMaxCrossAxisExtent,
-                              mainAxisSpacing: kMainAxisSpacing, //主轴方向的间距
-                              crossAxisSpacing: kCrossAxisSpacing, //交叉轴方向子元素的间距
-                              childAspectRatio: kChildAspectRatio //显示区域宽高比
-                              ),
-                      delegate: SliverChildBuilderDelegate(
-                        (context, int index) {
-                          //如果显示到最后一个 获取下一页缩略图
-                          if (index == _galleryPreviewList.length - 1 &&
-                              index < _count - 1) {
-                            _loarMordPriview();
-                          } else if (index >= _count - 1) {
-                            _loadFinsh();
-                          }
-                          return Center(
-                            key: index == 0 ? globalKey : null,
-                            child: PreviewContainer(
-                              galleryPreviewList: _galleryPreviewList,
-                              index: index,
-                            ),
-                          );
-                        },
-                        childCount: _galleryPreviewList.length,
+                GalleryItem galleryItem = _pageController.galleryItem;
+                return SliverGrid(
+                  gridDelegate: const SliverGridDelegateWithMaxCrossAxisExtent(
+                      maxCrossAxisExtent: kMaxCrossAxisExtent,
+                      mainAxisSpacing: kMainAxisSpacing, //主轴方向的间距
+                      crossAxisSpacing: kCrossAxisSpacing, //交叉轴方向子元素的间距
+                      childAspectRatio: kChildAspectRatio //显示区域宽高比
                       ),
-                    );
-                  }),
+                  delegate: SliverChildBuilderDelegate(
+                    (context, int index) {
+                      //如果显示到最后一个 获取下一页缩略图
+                      if (index == _galleryPreviewList.length - 1 &&
+                          index < _count - 1) {
+                        _loarMordPriview();
+                      } else if (index >= _count - 1) {
+                        _loadFinsh();
+                      }
+                      return Center(
+                        key: index == 0 ? globalKey : null,
+                        child: PreviewContainer(
+                          galleryPreviewList: _galleryPreviewList,
+                          index: index,
+                        ),
+                      );
+                    },
+                    childCount: _galleryPreviewList.length,
+                  ),
+                );
+              }),
             ),
           ),
           SliverToBoxAdapter(
@@ -187,18 +179,18 @@ class _AllPreviewPageState extends State<AllPreviewPage> {
       return;
     }
     //
-    logger.v('获取更多预览 ${_galleryModel.galleryItem.url}');
+    logger.v('获取更多预览 ${_pageController.galleryItem.url}');
     // 增加延时 避免build期间进行 setState
     await Future<void>.delayed(const Duration(milliseconds: 100));
-    _galleryModel.currentPreviewPageAdd();
+    _pageController.currentPreviewPage++;
     setState(() {
       _isLoading = true;
     });
 
     final List<GalleryPreview> _moreGalleryPreviewList =
         await Api.getGalleryPreview(
-      _galleryModel.galleryItem.url,
-      page: _galleryModel.currentPreviewPage,
+      _pageController.galleryItem.url,
+      page: _pageController.currentPreviewPage,
       cancelToken: moreGalleryPreviewCancelToken,
     );
 

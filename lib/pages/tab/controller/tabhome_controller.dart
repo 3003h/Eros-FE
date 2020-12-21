@@ -1,5 +1,5 @@
-import 'package:fehviewer/common/controller/ehconfig_controller.dart';
-import 'package:fehviewer/common/controller/local_controller.dart';
+import 'package:fehviewer/common/service/ehconfig_service.dart';
+import 'package:fehviewer/common/service/locale_service.dart';
 import 'package:fehviewer/generated/l10n.dart';
 import 'package:fehviewer/utils/logger.dart';
 import 'package:fehviewer/utils/toast.dart';
@@ -28,8 +28,9 @@ class TabHomeController extends GetxController {
   final Map<String, ScrollController> _scrollControllerMap = {};
   final CupertinoTabController tabController = CupertinoTabController();
 
-  final EhConfigController _ehConfigController = Get.find();
-  final LocaleController _localeController = Get.find();
+  final EhConfigService _ehConfigController = Get.find();
+  final LocaleService _localeController = Get.find();
+
   Locale get locale => _localeController.locale;
 
   List<BottomNavigationBarItem> listBottomNavigationBarItem;

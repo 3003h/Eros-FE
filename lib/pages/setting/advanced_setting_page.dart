@@ -1,11 +1,11 @@
 import 'dart:io';
 
 import 'package:fehviewer/common/controller/cache_controller.dart';
-import 'package:fehviewer/common/controller/dnsconfig_controller.dart';
-import 'package:fehviewer/common/controller/ehconfig_controller.dart';
-import 'package:fehviewer/common/controller/local_controller.dart';
-import 'package:fehviewer/common/controller/theme_controller.dart';
 import 'package:fehviewer/common/global.dart';
+import 'package:fehviewer/common/service/dns_service.dart';
+import 'package:fehviewer/common/service/ehconfig_service.dart';
+import 'package:fehviewer/common/service/locale_service.dart';
+import 'package:fehviewer/common/service/theme_service.dart';
 import 'package:fehviewer/generated/l10n.dart';
 import 'package:fehviewer/pages/setting/custom_hosts_page.dart';
 import 'package:fehviewer/utils/logger.dart';
@@ -42,8 +42,8 @@ class AdvancedSettingPageState extends State<AdvancedSettingPage> {
 class ListViewAdvancedSetting extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    final EhConfigController ehConfigController = Get.find();
-    final DnsConfigController dnsConfigController = Get.find();
+    final EhConfigService ehConfigController = Get.find();
+    final DnsService dnsConfigController = Get.find();
     void _handlePureDarkChanged(bool newValue) {
       ehConfigController.isPureDarkTheme.value = newValue;
     }
@@ -132,7 +132,7 @@ class ListViewAdvancedSetting extends StatelessWidget {
 
   /// 语言设置部件
   Widget _buildLanguageItem(BuildContext context) {
-    final LocaleController localeController = Get.find();
+    final LocaleService localeController = Get.find();
     final String _title = S.of(context).language;
 
     final Map<String, String> localeMap = <String, String>{
@@ -186,7 +186,7 @@ class ListViewAdvancedSetting extends StatelessWidget {
   /// 主题设置部件
   Widget _buildThemeItem(BuildContext context) {
     final String _title = S.of(context).theme;
-    final ThemeController themeController = Get.find();
+    final ThemeService themeController = Get.find();
 
     final Map<ThemesModeEnum, String> themeMap = <ThemesModeEnum, String>{
       ThemesModeEnum.system: S.of(context).follow_system,

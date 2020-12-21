@@ -13,5 +13,6 @@ class TagGroup {
 
   factory TagGroup.fromJson(Map<String, dynamic> json) =>
       _$TagGroupFromJson(json);
+
   Map<String, dynamic> toJson() => _$TagGroupToJson(this);
 }

@@ -1,6 +1,6 @@
 import 'dart:io';
 
-import 'package:fehviewer/common/controller/ehconfig_controller.dart';
+import 'package:fehviewer/common/service/ehconfig_service.dart';
 import 'package:fehviewer/generated/l10n.dart';
 import 'package:fehviewer/pages/setting/setting_base.dart';
 import 'package:fehviewer/utils/cust_lib/flutter_egg.dart';
@@ -30,7 +30,7 @@ class AboutPage extends StatelessWidget {
 class ListViewAbout extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    final EhConfigController ehConfigController = Get.find();
+    final EhConfigService ehConfigController = Get.find();
 
     return Container(
       child: ListView(

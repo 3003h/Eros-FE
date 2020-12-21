@@ -1,4 +1,4 @@
-import 'package:fehviewer/common/controller/ehconfig_controller.dart';
+import 'package:fehviewer/common/service/ehconfig_service.dart';
 import 'package:fehviewer/generated/l10n.dart';
 import 'package:fehviewer/pages/setting/setting_base.dart';
 import 'package:fehviewer/values/const.dart';
@@ -39,7 +39,7 @@ class ListViewDownloadSetting extends StatelessWidget {
 /// 预载图片数量
 Widget _buildPreloadImageItem(BuildContext context) {
   String _title = S.of(context).preload_image;
-  final EhConfigController ehConfigController = Get.find();
+  final EhConfigService ehConfigController = Get.find();
 
   List<Widget> _getModeList(BuildContext context) {
     return List<Widget>.from(EHConst.preloadImage.map((int element) {

@@ -31,5 +31,6 @@ class Profile {
 
   factory Profile.fromJson(Map<String, dynamic> json) =>
       _$ProfileFromJson(json);
+
   Map<String, dynamic> toJson() => _$ProfileToJson(this);
 }

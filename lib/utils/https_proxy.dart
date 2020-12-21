@@ -2,8 +2,8 @@ import 'dart:convert';
 import 'dart:io';
 import 'dart:typed_data';
 
-import 'package:fehviewer/common/controller/dnsconfig_controller.dart';
 import 'package:fehviewer/common/global.dart';
+import 'package:fehviewer/common/service/dns_service.dart';
 import 'package:fehviewer/models/dnsCache.dart';
 import 'package:fehviewer/utils/logger.dart';
 import 'package:fehviewer/utils/utility.dart';
@@ -68,7 +68,7 @@ class ClientConnectionHandler {
   String _oriHost;
   int port;
 
-  final DnsConfigController dnsConfigController = Get.find();
+  final DnsService dnsConfigController = Get.find();
 
   void closeSockets() {
 //    print('socket is going to destroy');

@@ -12,5 +12,6 @@ class LocalFav {
 
   factory LocalFav.fromJson(Map<String, dynamic> json) =>
       _$LocalFavFromJson(json);
+
   Map<String, dynamic> toJson() => _$LocalFavToJson(this);
 }

@@ -1,5 +1,6 @@
+/*
 import 'package:dio/dio.dart';
-import 'package:fehviewer/common/controller/ehconfig_controller.dart';
+import 'package:fehviewer/common/controller/ehconfig_service.dart';
 import 'package:fehviewer/common/controller/gallerycache_controller.dart';
 import 'package:fehviewer/common/controller/history_controller.dart';
 import 'package:fehviewer/common/controller/localfav_controller.dart';
@@ -8,6 +9,7 @@ import 'package:fehviewer/generated/l10n.dart';
 import 'package:fehviewer/models/galleryItem.dart';
 import 'package:fehviewer/models/index.dart';
 import 'package:fehviewer/pages/gallery_detail/gallery_detail_widget.dart';
+import 'package:fehviewer/pages/item/controller/galleryitem_controller.dart';
 import 'package:fehviewer/pages/tab/view/gallery_base.dart';
 import 'package:fehviewer/route/navigator_util.dart';
 import 'package:fehviewer/utils/logger.dart';
@@ -35,22 +37,24 @@ class GalleryDetailPage extends StatefulWidget {
 
 class _GalleryDetailPageState extends State<GalleryDetailPage> {
   final ScrollController _controller = ScrollController();
-  GalleryModel _galleryModel;
+  // GalleryModel _galleryModel;
 
   Future<GalleryItem> _futureBuilderFuture;
 
-  final HistoryController historyController = Get.find();
-  final GalleryCacheController galleryCacheController = Get.find();
+  final HistoryController _historyController = Get.find();
+  final GalleryCacheController _galleryCacheController = Get.find();
+  final EhConfigController _ehConfigController = Get.find();
+  final GalleryItemController _galleryItemController = Get.find();
 
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-    final GalleryModel galleryModel =
-        Provider.of<GalleryModel>(context, listen: false);
-    if (galleryModel != _galleryModel) {
-      _galleryModel = galleryModel;
-      _initData();
-    }
+    // final GalleryModel galleryModel =
+    //     Provider.of<GalleryModel>(context, listen: false);
+    // if (galleryModel != _galleryModel) {
+    //   _galleryModel = galleryModel;
+    //   _initData();
+    // }
 
     _futureBuilderFuture = _loadData();
   }
@@ -58,23 +62,25 @@ class _GalleryDetailPageState extends State<GalleryDetailPage> {
   /// 异步请求数据
   Future<GalleryItem> _loadData({bool refresh = false}) async {
     try {
-      GalleryItem _item = _galleryModel.galleryItem;
+      GalleryItem _item = _galleryItemController.galleryItem;
 
       if (_item.gid != null) {
         Future<void>.delayed(const Duration(milliseconds: 0)).then((_) {
-          historyController.addHistory(_item);
+          _historyController.addHistory(_item);
         });
       }
 
-      _galleryModel.resetHideNavigationBtn();
+      _galleryItemController.resetHideNavigationBtn();
 
       // 检查画廊是否包含在本地收藏中
-      final bool _localFav = _isInLocalFav(_galleryModel.galleryItem.gid);
+      final bool _localFav =
+          _isInLocalFav(_galleryItemController.galleryItem.gid);
       _item.localFav = _localFav;
 
       /// 画廊详情内容未获取完毕 或者 画廊缩略对象列表为空的情况
       /// 需要请求网络获取数据
-      if (!_galleryModel.detailLoadFinish || _item.galleryPreview.isNotEmpty) {
+      if (!_galleryItemController.detailLoadFinish ||
+          _item.galleryPreview.isEmpty) {
         await Future<void>.delayed(const Duration(milliseconds: 200));
 
         if (_item.filecount == null || _item.filecount.isEmpty) {
@@ -88,17 +94,21 @@ class _GalleryDetailPageState extends State<GalleryDetailPage> {
           refresh: refresh,
         );
 
-        _galleryModel.currentPreviewPage = 0;
-        _galleryModel.setGalleryPreviewAfterRequest(_item.galleryPreview);
-        _galleryModel.setFavTitle(_item.favTitle, favcat: _item.favcat);
+        _galleryItemController.currentPreviewPage = 0;
+        _galleryItemController
+            .setGalleryPreviewAfterRequest(_item.galleryPreview);
+        _galleryItemController.setFavTitle(_item.favTitle,
+            favcat: _item.favcat);
 
         _item.imgUrl = _item.imgUrl ?? _item.imgUrlL;
-        /*
+        */
+/*
         _item.tagGroup = _galleryItemFromApi.tagGroup;
         _item.galleryComment = _galleryItemFromApi.galleryComment;
-        _item.showKey = _galleryItemFromApi.showKey;*/
+        _item.showKey = _galleryItemFromApi.showKey;*/ /*
 
-        _galleryModel.detailLoadFinish = true;
+
+        _galleryItemController.detailLoadFinish = true;
       }
       return _item;
     } on DioError catch (e) {
@@ -127,51 +137,46 @@ class _GalleryDetailPageState extends State<GalleryDetailPage> {
   Future<void> _reloadData() async {
     logger.v('_reloadData');
 
-    _galleryModel.detailLoadFinish = false;
-    _galleryModel.isReloading = true;
-    _galleryModel.reset();
+    _galleryItemController.detailLoadFinish = false;
+    _galleryItemController.isReloading = true;
+    _galleryItemController.reset();
     final GalleryItem _reloadRult = await _loadData(refresh: true);
     setState(() {
       _futureBuilderFuture = Future<GalleryItem>.value(_reloadRult);
-      _galleryModel.isReloading = false;
+      _galleryItemController.isReloading = false;
     });
   }
 
   void _controllerLister() {
     if (_controller.offset < kHeaderHeight + kHeaderPaddingTop &&
-        !_galleryModel.hideNavigationBtn) {
-      _galleryModel.hideNavigationBtn = true;
+        !_galleryItemController.hideNavigationBtn) {
+      _galleryItemController.hideNavigationBtn = true;
     } else if (_controller.offset >= kHeaderHeight + kHeaderPaddingTop &&
-        _galleryModel.hideNavigationBtn) {
-      _galleryModel.hideNavigationBtn = false;
+        _galleryItemController.hideNavigationBtn) {
+      _galleryItemController.hideNavigationBtn = false;
     }
   }
 
-  void _initData() {
+*/
+/*  void _initData() {
     _controller.addListener(_controllerLister);
 
-    _galleryModel.resetHideNavigationBtn();
-  }
+    _galleryItemController.resetHideNavigationBtn();
+  }*/ /*
+
 
   @override
   Widget build(BuildContext context) {
-    final EhConfigController ehConfigController = Get.find();
-
     /// 因为 CupertinoNavigationBar的特殊 不能直接用Selector包裹控制build 所以在
     /// CupertinoPageScaffold 外层加了 Selector , hideNavigationBtn变化才会重绘
     /// 内容作为 child 缓存避免重绘
     ///
     /// 增加 oriGalleryPreview 变化时可重绘的控制
-    final Widget cps = Selector<GalleryModel, Tuple3<bool, bool, GalleryItem>>(
-      selector: (context, galleryModel) => Tuple3(
-          galleryModel.hideNavigationBtn,
-          galleryModel.oriGalleryPreview.isNotEmpty,
-          galleryModel.galleryItem),
-      shouldRebuild: (pre, next) =>
-          pre.item1 != next.item1 || pre.item2 != next.item2,
-      builder: (context, _tuple, child) {
-        final bool _hideNavigationBtn = _tuple.item1;
-        final GalleryItem _item = _tuple.item3;
+    final Widget cps = Builder(
+      builder: (_) {
+        final bool _hideNavigationBtn =
+            _galleryItemController.hideNavigationBtn;
+        final GalleryItem _item = _galleryItemController.galleryItem;
         // 主布局
         return CupertinoPageScaffold(
           child: CustomScrollView(
@@ -180,7 +185,7 @@ class _GalleryDetailPageState extends State<GalleryDetailPage> {
             slivers: <Widget>[
               CupertinoSliverNavigationBar(
                 largeTitle: Obx(() => Text(
-                      ehConfigController.isJpnTitle.value
+                      _ehConfigController.isJpnTitle.value
                           ? _item.englishTitle ?? ''
                           : _item.japaneseTitle ?? '',
                       textAlign: TextAlign.left,
@@ -201,7 +206,7 @@ class _GalleryDetailPageState extends State<GalleryDetailPage> {
                         ),
                         onPressed: () {
                           logger.v('tap shareBtn');
-                          Share.share('${_item.url}');
+                          Share.share(' ${_item.url}');
                         },
                       )
                     : _buildNavigationBarReadButton(context),
@@ -211,44 +216,39 @@ class _GalleryDetailPageState extends State<GalleryDetailPage> {
                   await _reloadData();
                 },
               ),
-              child,
+              SliverSafeArea(
+                top: false,
+                bottom: false,
+                sliver: SliverToBoxAdapter(
+                  child: Column(
+                    children: <Widget>[
+                      const GalleryHeader(),
+                      Container(
+                        height: 0.5,
+                        color: CupertinoDynamicColor.resolve(
+                            CupertinoColors.systemGrey4, context),
+                      ),
+                      // 内容
+                      _buildDetail(context),
+                    ],
+                  ),
+                ),
+              ),
             ],
           ),
         );
       },
-      child: SliverSafeArea(
-        top: false,
-        bottom: false,
-        sliver: SliverToBoxAdapter(
-          child: Column(
-            children: <Widget>[
-              const GalleryHeader(),
-              Container(
-                height: 0.5,
-                color: CupertinoDynamicColor.resolve(
-                    CupertinoColors.systemGrey4, context),
-              ),
-              // 内容
-              _buildDetail(context),
-            ],
-          ),
-        ),
-      ),
     );
 
     return cps;
   }
 
   Widget _buildDetail(BuildContext context) {
-    return Selector<GalleryModel, Tuple3<bool, bool, GalleryItem>>(
-      selector: (_, GalleryModel gllaeryModel) => Tuple3(
-          gllaeryModel.detailLoadFinish,
-          gllaeryModel.isReloading,
-          gllaeryModel.galleryItem),
-      builder: (BuildContext context, Tuple3 tuple, Widget child) {
-        final bool loadFinish = tuple.item1;
-        final bool isReloading = tuple.item2;
-        final GalleryItem galleryItem = tuple.item3;
+    return Builder(
+      builder: (_) {
+        final bool loadFinish = _galleryItemController.detailLoadFinish;
+        final bool isReloading = _galleryItemController.isReloading;
+        final GalleryItem galleryItem = _galleryItemController.galleryItem;
 
         return FutureBuilder<GalleryItem>(
             future: _futureBuilderFuture,
@@ -258,9 +258,9 @@ class _GalleryDetailPageState extends State<GalleryDetailPage> {
               if (loadFinish) {
                 Future<void>.delayed(const Duration(milliseconds: 100))
                     .then((_) {
-                  historyController.addHistory(snapshot.data);
+                  _historyController.addHistory(snapshot.data);
                 });
-                return child;
+                return GalleryDetailInfo();
               } else {
                 switch (snapshot.connectionState) {
                   case ConnectionState.none:
@@ -278,16 +278,15 @@ class _GalleryDetailPageState extends State<GalleryDetailPage> {
                     } else {
                       Future<void>.delayed(const Duration(milliseconds: 100))
                           .then((_) {
-                        historyController.addHistory(snapshot.data);
+                        _historyController.addHistory(snapshot.data);
                       });
-                      return child;
+                      return GalleryDetailInfo();
                     }
                 }
                 return null;
               }
             });
       },
-      child: const GalleryDetailInfo(),
     );
   }
 
@@ -305,7 +304,8 @@ class _GalleryDetailPageState extends State<GalleryDetailPage> {
 
   /// 独立出导航栏的阅读按钮
   Widget _buildNavigationBarReadButton(BuildContext context) {
-    final bool _hasPreview = _galleryModel.oriGalleryPreview.isNotEmpty;
+    final bool _hasPreview =
+        _galleryItemController.oriGalleryPreview.isNotEmpty;
 
     return CupertinoButton(
         child: Text(
@@ -318,8 +318,8 @@ class _GalleryDetailPageState extends State<GalleryDetailPage> {
         color: CupertinoColors.activeBlue,
         onPressed: _hasPreview
             ? () async {
-                final GalleryCache _galleryCache = galleryCacheController
-                    .getGalleryCache(_galleryModel.galleryItem.gid);
+                final GalleryCache _galleryCache = _galleryCacheController
+                    .getGalleryCache(_galleryItemController.galleryItem.gid);
                 final int _index = _galleryCache?.lastIndex ?? 0;
                 await showLoadingDialog(context, _index);
                 NavigatorUtil.goGalleryViewPage(context, _index);
@@ -337,10 +337,11 @@ class _GalleryDetailPageState extends State<GalleryDetailPage> {
       },
       child: Container(
         child: CoveTinyImage(
-          imgUrl: _galleryModel.galleryItem.imgUrl,
+          imgUrl: _galleryItemController.galleryItem.imgUrl,
           statusBarHeight: _statusBarHeight,
         ),
       ),
     );
   }
 }
+*/

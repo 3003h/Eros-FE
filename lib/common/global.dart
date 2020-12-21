@@ -47,6 +47,8 @@ class Global {
     // 运行初始
     WidgetsFlutterBinding.ensureInitialized();
 
+    // Logger.level = Level.warning;
+
     // 代理初始化
     if (Platform.isIOS || Platform.isAndroid) {
       await CustomHttpsProxy.instance.init();

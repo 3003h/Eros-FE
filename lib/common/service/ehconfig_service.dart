@@ -1,11 +1,10 @@
 import 'package:enum_to_string/enum_to_string.dart';
 import 'package:fehviewer/common/global.dart';
+import 'package:fehviewer/common/service/base_service.dart';
 import 'package:fehviewer/values/const.dart';
 import 'package:get/get.dart';
 
-import 'base_controller.dart';
-
-class EhConfigController extends ProfileController {
+class EhConfigService extends ProfileService {
   RxBool isJpnTitle = false.obs;
   RxBool isTagTranslat = false.obs;
   RxBool isGalleryImgBlur = false.obs;
@@ -23,12 +22,14 @@ class EhConfigController extends ProfileController {
   RxBool isPureDarkTheme = false.obs;
 
   String get lastShowFavcat => ehConfig.lastShowFavcat;
+
   set lastShowFavcat(String value) {
     ehConfig.lastShowFavcat = value;
     Global.saveProfile();
   }
 
   String get lastShowFavTitle => ehConfig.lastShowFavTitle;
+
   set lastShowFavTitle(String value) {
     ehConfig.lastShowFavTitle = value;
     Global.saveProfile();

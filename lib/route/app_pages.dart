@@ -1,3 +1,6 @@
+import 'package:fehviewer/pages/gallery_detail/comment_page.dart';
+import 'package:fehviewer/pages/gallery_main/gallery_page.dart';
+import 'package:fehviewer/pages/gallery_view/gallery_view_page.dart';
 import 'package:fehviewer/pages/login/login_page.dart';
 import 'package:fehviewer/pages/login/web_login.dart';
 import 'package:fehviewer/pages/setting/about_page.dart';
@@ -64,7 +67,20 @@ class AppPages {
     ),
     GetPage(
       name: EHRoutes.webLogin,
-      page: () => WebLoginView(),
+      page: () => const WebLoginView(),
     ),
+    GetPage(
+        name: EHRoutes.gallery,
+        page: () => GalleryPage(),
+        children: <GetPage>[
+          GetPage(
+            name: EHRoutes.galleryComment,
+            page: () => const CommentPage(),
+          ),
+          GetPage(
+            name: EHRoutes.galleryView,
+            page: () => GalleryViewPage(),
+          ),
+        ]),
   ];
 }

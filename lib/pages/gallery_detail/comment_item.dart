@@ -1,4 +1,4 @@
-import 'package:fehviewer/common/controller/ehconfig_controller.dart';
+import 'package:fehviewer/common/service/ehconfig_service.dart';
 import 'package:fehviewer/models/index.dart';
 import 'package:fehviewer/route/navigator_util.dart';
 import 'package:fehviewer/utils/cust_lib/flutter_linkify.dart' as linkify;
@@ -21,7 +21,7 @@ class CommentItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final EhConfigController ehConfigController = Get.find();
+    final EhConfigService ehConfigController = Get.find();
 
     final Text _fullText = Text(
       galleryComment.context,
@@ -151,8 +151,7 @@ class CommentItem extends StatelessWidget {
     if (await canLaunch(link.url)) {
       if (regExp.hasMatch(link.url)) {
         logger.v('in ${link.url}');
-        NavigatorUtil.goGalleryDetailPr(
-          context,
+        NavigatorUtil.goGalleryPage(
           url: link.url,
         );
       } else {

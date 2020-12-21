@@ -1,11 +1,12 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:dio/dio.dart';
-import 'package:fehviewer/common/controller/ehconfig_controller.dart';
 import 'package:fehviewer/common/controller/gallerycache_controller.dart';
 import 'package:fehviewer/common/global.dart';
-import 'package:fehviewer/common/states/gallery_model.dart';
+import 'package:fehviewer/common/service/ehconfig_service.dart';
 import 'package:fehviewer/generated/l10n.dart';
 import 'package:fehviewer/models/index.dart';
+import 'package:fehviewer/pages/gallery_main/controller/gallery_page_controller.dart';
+import 'package:fehviewer/pages/item/controller/galleryitem_controller.dart';
 import 'package:fehviewer/route/navigator_util.dart';
 import 'package:fehviewer/utils/logger.dart';
 import 'package:fehviewer/utils/network/gallery_request.dart';
@@ -15,8 +16,6 @@ import 'package:fehviewer/widget/rating_bar.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:provider/provider.dart';
-import 'package:tuple/tuple.dart';
 
 import 'comment_item.dart';
 import 'gallery_all_preview_page.dart';
@@ -31,7 +30,9 @@ const double kHeaderPaddingTop = 12.0;
 
 /// 内容
 class GalleryDetailInfo extends StatelessWidget {
-  const GalleryDetailInfo({Key key}) : super(key: key);
+  GalleryDetailInfo({Key key}) : super(key: key);
+
+  final GalleryItemController _galleryItemController = Get.find();
 
   @override
   Widget build(BuildContext context) {
@@ -40,7 +41,7 @@ class GalleryDetailInfo extends StatelessWidget {
 //        mainAxisAlignment: MainAxisAlignment.start,
         children: <Widget>[
           // 标签
-          _buildTagBox(),
+          TagBox(),
           _buildTopComment(),
           Container(
             margin: const EdgeInsets.only(top: 4),
@@ -56,11 +57,12 @@ class GalleryDetailInfo extends StatelessWidget {
   }
 
   CupertinoButton _buildAllPreviewButton(BuildContext context) {
-    final GalleryModel galleryModel =
-        Provider.of<GalleryModel>(context, listen: false);
+    // final GalleryModel galleryModel =
+    //     Provider.of<GalleryModel>(context, listen: false);
+
     final bool hasMorePreview =
-        int.parse(galleryModel?.galleryItem?.filecount ?? '0') >
-            galleryModel.oriGalleryPreview.length;
+        int.parse(_galleryItemController?.galleryItem?.filecount ?? '0') >
+            _galleryItemController.firstPagePreview.length;
     return CupertinoButton(
       minSize: 0,
       padding: const EdgeInsets.fromLTRB(0, 4, 0, 30),
@@ -71,13 +73,14 @@ class GalleryDetailInfo extends StatelessWidget {
         style: const TextStyle(fontSize: 16),
       ),
       onPressed: () {
-        Get.to(
+/*        Get.to(
           ChangeNotifierProvider<GalleryModel>.value(
             value: galleryModel,
             child: const AllPreviewPage(),
           ),
           preventDuplicates: false,
-        );
+        );*/
+        Get.to(const AllPreviewPage());
       },
     );
   }
@@ -94,69 +97,65 @@ class GalleryDetailInfo extends StatelessWidget {
           .toList());
     }
 
-    return Selector<GalleryModel, List<GalleryComment>>(
-        shouldRebuild: (pre, next) => false, // 不进行重绘
-        selector: (context, galleryModel) =>
-            galleryModel.galleryItem.galleryComment,
-//        shouldRebuild: (pre, next) => pre != next,
-        builder: (context, comment, child) {
-          return Column(
-            children: <Widget>[
-              // 评论
-              GestureDetector(
-                onTap: () => NavigatorUtil.goGalleryDetailComment(comment),
-                child: Column(
-                  children: <Widget>[
-                    ..._topComment(comment, max: 2),
-                  ],
-                ),
-              ),
-              // 评论按钮
-              CupertinoButton(
-                minSize: 0,
-                padding: const EdgeInsets.fromLTRB(8, 4, 8, 4),
-                child: Text(
-                  S.of(context).all_comment,
-                  style: const TextStyle(fontSize: 16),
-                ),
-                onPressed: () {
-                  NavigatorUtil.goGalleryDetailComment(comment);
-                },
-              ),
-            ],
-          );
-        });
+    return Builder(builder: (_) {
+      final List<GalleryComment> comment =
+          _galleryItemController.galleryItem.galleryComment;
+      return Column(
+        children: <Widget>[
+          // 评论
+          GestureDetector(
+            onTap: () => NavigatorUtil.goGalleryDetailComment(comment),
+            child: Column(
+              children: <Widget>[
+                ..._topComment(comment, max: 2),
+              ],
+            ),
+          ),
+          // 评论按钮
+          CupertinoButton(
+            minSize: 0,
+            padding: const EdgeInsets.fromLTRB(8, 4, 8, 4),
+            child: Text(
+              S.of(Get.context).all_comment,
+              style: const TextStyle(fontSize: 16),
+            ),
+            onPressed: () {
+              NavigatorUtil.goGalleryDetailComment(comment);
+            },
+          ),
+        ],
+      );
+    });
   }
 
   Widget _buildPreviewGrid() {
-    return Selector<GalleryModel, List<GalleryPreview>>(
-        shouldRebuild: (pre, next) => false, // 不进行重绘
-        selector: (context, galleryModel) => galleryModel.oriGalleryPreview,
-        builder: (context, List<GalleryPreview> previews, child) {
-          return GridView.builder(
-              padding: const EdgeInsets.only(
-                  top: kPadding, right: kPadding, left: kPadding),
-              shrinkWrap: true,
-              //解决无限高度问题
-              physics: const NeverScrollableScrollPhysics(),
-              //禁用滑动事件
-              gridDelegate: const SliverGridDelegateWithMaxCrossAxisExtent(
+    return Builder(builder: (_) {
+      final List<GalleryPreview> previews =
+          _galleryItemController.firstPagePreview;
+      return GridView.builder(
+          padding: const EdgeInsets.only(
+              top: kPadding, right: kPadding, left: kPadding),
+          shrinkWrap: true,
+          //解决无限高度问题
+          physics: const NeverScrollableScrollPhysics(),
+          //禁用滑动事件
+          gridDelegate: const SliverGridDelegateWithMaxCrossAxisExtent(
 //              crossAxisCount: _crossAxisCount, //每行列数
-                  maxCrossAxisExtent: 130,
-                  mainAxisSpacing: 0, //主轴方向的间距
-                  crossAxisSpacing: 4, //交叉轴方向子元素的间距
-                  childAspectRatio: 0.55 //显示区域宽高
-                  ),
-              itemCount: previews.length,
-              itemBuilder: (context, index) {
-                return Center(
-                  child: PreviewContainer(
-                    galleryPreviewList: previews,
-                    index: index,
-                  ),
-                );
-              });
-        });
+              maxCrossAxisExtent: 130,
+              mainAxisSpacing: 0, //主轴方向的间距
+              crossAxisSpacing: 4, //交叉轴方向子元素的间距
+              childAspectRatio: 0.55 //显示区域宽高
+              ),
+          itemCount: previews.length,
+          itemBuilder: (context, index) {
+            return Center(
+              child: PreviewContainer(
+                galleryPreviewList: previews,
+                index: index,
+              ),
+            );
+          });
+    });
   }
 }
 
@@ -229,7 +228,7 @@ class PreviewContainer extends StatelessWidget {
     return GestureDetector(
       behavior: HitTestBehavior.opaque,
       onTap: () {
-        NavigatorUtil.goGalleryViewPage(context, index);
+        NavigatorUtil.goGalleryViewPage(index);
       },
       child: Container(
         child: Column(
@@ -305,30 +304,32 @@ class TagButton extends StatelessWidget {
 }
 
 /// 包含多个 TagGroup
-Widget _buildTagBox() {
-  return Selector<GalleryModel, List<TagGroup>>(
-      selector: (context, galleryModel) => galleryModel.galleryItem.tagGroup,
-      builder: (context, List<TagGroup> listTagGroup, child) {
-        final List<Widget> listGroupWidget = [];
-        for (final TagGroup tagGroupData in listTagGroup) {
-          listGroupWidget.add(TagGroupItem(tagGroupData: tagGroupData));
-        }
+class TagBox extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    final GalleryItemController _galleryItemController = Get.find();
+    final List<TagGroup> listTagGroup =
+        _galleryItemController.galleryItem.tagGroup;
+    final List<Widget> listGroupWidget = <Widget>[];
+    for (final TagGroup tagGroupData in listTagGroup) {
+      listGroupWidget.add(TagGroupItem(tagGroupData: tagGroupData));
+    }
 
-        return Column(
-          children: [
-            Container(
-              margin: const EdgeInsets.fromLTRB(
-                  kPadding, kPadding / 2, kPadding, kPadding / 2),
-              child: Column(children: listGroupWidget),
-            ),
-            Container(
-              height: 0.5,
-              color: CupertinoDynamicColor.resolve(
-                  CupertinoColors.systemGrey4, context),
-            ),
-          ],
-        );
-      });
+    return Column(
+      children: <Widget>[
+        Container(
+          margin: const EdgeInsets.fromLTRB(
+              kPadding, kPadding / 2, kPadding, kPadding / 2),
+          child: Column(children: listGroupWidget),
+        ),
+        Container(
+          height: 0.5,
+          color: CupertinoDynamicColor.resolve(
+              CupertinoColors.systemGrey4, Get.context),
+        ),
+      ],
+    );
+  }
 }
 
 /// 封面小图
@@ -370,7 +371,7 @@ class TagGroupItem extends StatelessWidget {
   final TagGroup tagGroupData;
 
   List<Widget> _initTagBtnList(galleryTags, context) {
-    final EhConfigController ehConfigController = Get.find();
+    final EhConfigService ehConfigController = Get.find();
     final List<Widget> _tagBtnList = <Widget>[];
     galleryTags.forEach((tag) {
       _tagBtnList.add(
@@ -391,7 +392,7 @@ class TagGroupItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final EhConfigController ehConfigController = Get.find();
+    final EhConfigService ehConfigController = Get.find();
 
     final List<Widget> _tagBtnList =
         _initTagBtnList(tagGroupData.galleryTags, context);
@@ -501,85 +502,81 @@ class CoverImage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Selector<GalleryModel, Tuple3<String, GalleryItem, dynamic>>(
-        shouldRebuild: (pre, next) => pre.item1 != next.item1,
-        selector: (_, GalleryModel galleryModel) => Tuple3(
-            galleryModel.galleryItem.imgUrl,
-            galleryModel.galleryItem,
-            galleryModel.tabIndex),
-        builder: (_, tuple, __) {
-          final String _imageUrl = tuple.item1;
-          final dynamic _tabIndex = tuple.item3;
-          final GalleryItem _item = tuple.item2;
+    final GalleryItemController _galleryItemController = Get.find();
+    return Builder(builder: (_) {
+      final String _imageUrl = _galleryItemController.galleryItem.imgUrl;
+      // final dynamic _tabIndex = _galleryItemController.tabIndex;
+      final _tabIndex = '';
+      final GalleryItem _item = _galleryItemController.galleryItem;
 
-          final Map<String, String> _httpHeaders = {
-            'Cookie': Global.profile?.user?.cookie ?? '',
-          };
+      final Map<String, String> _httpHeaders = {
+        'Cookie': Global.profile?.user?.cookie ?? '',
+      };
 
-          if (_imageUrl != null && _imageUrl.isNotEmpty) {
-            return Container(
-              width: kWidth,
-              margin: const EdgeInsets.only(right: 10),
-              child: Center(
-                child: Hero(
-                  tag: '${_item.gid}_${_item.token}_cover_$_tabIndex',
+      if (_imageUrl != null && _imageUrl.isNotEmpty) {
+        return Container(
+          width: kWidth,
+          margin: const EdgeInsets.only(right: 10),
+          child: Center(
+            child: Hero(
+              tag: '${_item.gid}_${_item.token}_cover_$_tabIndex',
+              child: Container(
+                decoration: BoxDecoration(boxShadow: [
+                  //阴影
+                  BoxShadow(
+                    color: CupertinoDynamicColor.resolve(
+                        CupertinoColors.systemGrey4, context),
+                    blurRadius: 10,
+                  )
+                ]),
+                child: ClipRRect(
+                  borderRadius: BorderRadius.circular(6),
                   child: Container(
-                    decoration: BoxDecoration(boxShadow: [
-                      //阴影
-                      BoxShadow(
-                        color: CupertinoDynamicColor.resolve(
-                            CupertinoColors.systemGrey4, context),
-                        blurRadius: 10,
-                      )
-                    ]),
-                    child: ClipRRect(
-                      borderRadius: BorderRadius.circular(6),
-                      child: Container(
-                        height: _item.imgHeight,
-                        width: _item.imgWidth,
-                        color: CupertinoColors.systemBackground,
-                        child: CachedNetworkImage(
-                          placeholder: (_, __) {
-                            return Container(
-                              color: CupertinoDynamicColor.resolve(
-                                  CupertinoColors.systemGrey5, context),
-                            );
-                          },
-                          imageUrl: _imageUrl,
-                          fit: BoxFit.cover,
-                          httpHeaders: _httpHeaders,
-                        ),
-                      ),
+                    height: _item.imgHeight,
+                    width: _item.imgWidth,
+                    color: CupertinoColors.systemBackground,
+                    child: CachedNetworkImage(
+                      placeholder: (_, __) {
+                        return Container(
+                          color: CupertinoDynamicColor.resolve(
+                              CupertinoColors.systemGrey5, context),
+                        );
+                      },
+                      imageUrl: _imageUrl,
+                      fit: BoxFit.cover,
+                      httpHeaders: _httpHeaders,
                     ),
                   ),
                 ),
               ),
-            );
-          } else {
-            return Container(
-              width: kWidth,
-              margin: const EdgeInsets.only(right: 10),
+            ),
+          ),
+        );
+      } else {
+        return Container(
+          width: kWidth,
+          margin: const EdgeInsets.only(right: 10),
+          child: Container(
+            decoration:
+                BoxDecoration(borderRadius: BorderRadius.circular(6.0), //圆角
+                    // ignore: prefer_const_literals_to_create_immutables
+                    boxShadow: [
+                  //阴影
+                  const BoxShadow(
+                    color: CupertinoColors.systemGrey2,
+                    blurRadius: 2.0,
+                  )
+                ]),
+            child: ClipRRect(
+              borderRadius: BorderRadius.circular(6),
               child: Container(
-                decoration:
-                    BoxDecoration(borderRadius: BorderRadius.circular(6.0), //圆角
-                        // ignore: prefer_const_literals_to_create_immutables
-                        boxShadow: [
-                      //阴影
-                      const BoxShadow(
-                        color: CupertinoColors.systemGrey2,
-                        blurRadius: 2.0,
-                      )
-                    ]),
-                child: ClipRRect(
-                  borderRadius: BorderRadius.circular(6),
-                  child: Container(
-                    color: CupertinoColors.systemBackground,
-                  ),
-                ),
+                color: CupertinoColors.systemBackground,
               ),
-            );
-          }
-        });
+            ),
+          ),
+        );
+      }
+    });
   }
 }
 
@@ -590,34 +587,32 @@ class ReadButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final GalleryModel _galleryModel =
-        Provider.of<GalleryModel>(context, listen: false);
-    return Selector<GalleryModel, bool>(
-        selector: (_, GalleryModel provider) =>
-            provider.oriGalleryPreview.isNotEmpty,
-        builder: (BuildContext context, bool value, __) {
-          return CupertinoButton(
-              child: Text(
-                S.of(context).READ,
-                style: const TextStyle(fontSize: 15),
-              ),
-              minSize: 20,
-              padding: const EdgeInsets.fromLTRB(15, 2.5, 15, 2.5),
-              borderRadius: BorderRadius.circular(50),
-              color: CupertinoColors.activeBlue,
-              onPressed: value
-                  ? () async {
-                      final GalleryCacheController galleryCacheController =
-                          Get.find();
-                      final GalleryCache _galleryCache = galleryCacheController
-                          .getGalleryCache(_galleryModel.galleryItem.gid);
-                      final int _index = _galleryCache?.lastIndex ?? 0;
-                      logger.d('lastIndex $_index');
-                      await showLoadingDialog(context, _index);
-                      NavigatorUtil.goGalleryViewPage(context, _index);
-                    }
-                  : null);
-        });
+    // final GalleryModel _galleryModel =
+    //     Provider.of<GalleryModel>(context, listen: false);
+    final GalleryItemController _galleryItemController = Get.find();
+    return Builder(builder: (_) {
+      return CupertinoButton(
+          child: Text(
+            S.of(context).READ,
+            style: const TextStyle(fontSize: 15),
+          ),
+          minSize: 20,
+          padding: const EdgeInsets.fromLTRB(15, 2.5, 15, 2.5),
+          borderRadius: BorderRadius.circular(50),
+          color: CupertinoColors.activeBlue,
+          onPressed: _galleryItemController.firstPagePreview.isNotEmpty
+              ? () async {
+                  final GalleryCacheController galleryCacheController =
+                      Get.find();
+                  final GalleryCache _galleryCache = galleryCacheController
+                      .getGalleryCache(_galleryItemController.galleryItem.gid);
+                  final int _index = _galleryCache?.lastIndex ?? 0;
+                  logger.d('lastIndex $_index');
+                  await showLoadingDialog(context, _index);
+                  NavigatorUtil.goGalleryViewPage(_index);
+                }
+              : null);
+    });
   }
 }
 
@@ -629,36 +624,35 @@ class GalleryCategory extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Selector<GalleryModel, String>(
-        selector: (_, GalleryModel galleryModel) =>
-            galleryModel.galleryItem.category,
-        builder: (BuildContext context, String category, _) {
-          final Color _colorCategory = CupertinoDynamicColor.resolve(
-              ThemeColors.catColor[category ?? 'default'], context);
+    final GalleryItemController _galleryItemController = Get.find();
+    return Builder(builder: (_) {
+      final String category = _galleryItemController.galleryItem.category;
+      final Color _colorCategory = CupertinoDynamicColor.resolve(
+          ThemeColors.catColor[category ?? 'default'], context);
 
-          return GestureDetector(
-            child: ClipRRect(
-              borderRadius: BorderRadius.circular(4),
-              child: Container(
-                padding: const EdgeInsets.fromLTRB(6, 3, 6, 3),
-                color: _colorCategory,
-                child: Text(
-                  category ?? '',
-                  style: const TextStyle(
-                    fontSize: 14.5,
-                    // height: 1.1,
-                    color: CupertinoColors.white,
-                  ),
-                ),
+      return GestureDetector(
+        child: ClipRRect(
+          borderRadius: BorderRadius.circular(4),
+          child: Container(
+            padding: const EdgeInsets.fromLTRB(6, 3, 6, 3),
+            color: _colorCategory,
+            child: Text(
+              category ?? '',
+              style: const TextStyle(
+                fontSize: 14.5,
+                // height: 1.1,
+                color: CupertinoColors.white,
               ),
             ),
-            onTap: () {
-              final int iCat = EHConst.cats[category];
-              final int cats = EHConst.sumCats - iCat;
-              NavigatorUtil.goGalleryList(cats: cats);
-            },
-          );
-        });
+          ),
+        ),
+        onTap: () {
+          final int iCat = EHConst.cats[category];
+          final int cats = EHConst.sumCats - iCat;
+          NavigatorUtil.goGalleryList(cats: cats);
+        },
+      );
+    });
   }
 }
 
@@ -669,24 +663,22 @@ class GalleryRating extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Selector<GalleryModel, double>(
-        selector: (_, GalleryModel galleryModel) =>
-            galleryModel.galleryItem.rating ?? 0.0,
-        builder: (_, double rating, __) {
-          return Row(
-            children: <Widget>[
-              Container(
-                  padding: const EdgeInsets.only(right: 8),
-                  child: Text('$rating')),
-              // 星星
-              StaticRatingBar(
-                size: 18.0,
-                rate: rating,
-                radiusRatio: 1.5,
-              ),
-            ],
-          );
-        });
+    final GalleryItemController _galleryItemController = Get.find();
+    return Builder(builder: (_) {
+      double rating = _galleryItemController.galleryItem.rating;
+      return Row(
+        children: <Widget>[
+          Container(
+              padding: const EdgeInsets.only(right: 8), child: Text('$rating')),
+          // 星星
+          StaticRatingBar(
+            size: 18.0,
+            rate: rating,
+            radiusRatio: 1.5,
+          ),
+        ],
+      );
+    });
   }
 }
 
@@ -698,35 +690,34 @@ class GalleryUploader extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Selector<GalleryModel, String>(
-        selector: (_, GalleryModel galleryModel) =>
-            galleryModel.galleryItem.uploader,
-        builder: (BuildContext context, String uploader, _) {
-          return GestureDetector(
-            behavior: HitTestBehavior.opaque,
-            child: Container(
-              padding: const EdgeInsets.only(top: 8, right: 8, bottom: 4),
-              child: Text(
-                uploader ?? '',
-                maxLines: 1,
-                textAlign: TextAlign.left, // 对齐方式
-                overflow: TextOverflow.ellipsis, // 超出部分省略号
-                style: const TextStyle(
-                  fontSize: 13,
-                  color: Colors.brown,
-                  fontWeight: FontWeight.w500,
-                ),
-              ),
+    final GalleryItemController _galleryItemController = Get.find();
+    return Builder(builder: (_) {
+      final String uploader = _galleryItemController.galleryItem.uploader;
+      return GestureDetector(
+        behavior: HitTestBehavior.opaque,
+        child: Container(
+          padding: const EdgeInsets.only(top: 8, right: 8, bottom: 4),
+          child: Text(
+            uploader ?? '',
+            maxLines: 1,
+            textAlign: TextAlign.left, // 对齐方式
+            overflow: TextOverflow.ellipsis, // 超出部分省略号
+            style: const TextStyle(
+              fontSize: 13,
+              color: Colors.brown,
+              fontWeight: FontWeight.w500,
             ),
-            onTap: () {
-              logger.v('search uploader:$uploader');
-              // NavigatorUtil.goGalleryList(context,
-              //     simpleSearch: 'uploader:$uploader');
-              NavigatorUtil.goGalleryListBySearch(
-                  simpleSearch: 'uploader:$uploader');
-            },
-          );
-        });
+          ),
+        ),
+        onTap: () {
+          logger.v('search uploader:$uploader');
+          // NavigatorUtil.goGalleryList(context,
+          //     simpleSearch: 'uploader:$uploader');
+          NavigatorUtil.goGalleryListBySearch(
+              simpleSearch: 'uploader:$uploader');
+        },
+      );
+    });
   }
 }
 
@@ -738,6 +729,9 @@ class GalleryTitle extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final GalleryItemController _galleryItemController = Get.find();
+    final EhConfigService _ehConfigController = Get.find();
+
     /// 构建标题
     /// [EhConfigModel] eh设置的state 控制显示日文还是英文标题
     /// [GalleryModel] 画廊数据
@@ -748,16 +742,15 @@ class GalleryTitle extends StatelessWidget {
     /// 异常则不会出现
     ///
     /// 暂时放弃使用 SelectableText
-    return Selector<GalleryModel, GalleryItem>(
-      selector: (_, GalleryModel gallery) => gallery.galleryItem,
-      builder: (_, GalleryItem galleryItem, __) {
-        final EhConfigController ehConfigController = Get.find();
+    return Builder(
+      builder: (_) {
+        final GalleryItem galleryItem = _galleryItemController.galleryItem;
         final String _titleEn = galleryItem?.englishTitle ?? '';
         final String _titleJpn = galleryItem?.japaneseTitle ?? '';
 
         return GestureDetector(
           child: Obx(() => Text(
-                ehConfigController.isJpnTitle.value &&
+                _ehConfigController.isJpnTitle.value &&
                         _titleJpn != null &&
                         _titleJpn.isNotEmpty
                     ? _titleJpn
@@ -799,25 +792,25 @@ class GalleryTitle extends StatelessWidget {
 
 /// 显示等待
 Future<void> showLoadingDialog(BuildContext context, int index) async {
-  final GalleryModel _galleryModel =
-      Provider.of<GalleryModel>(context, listen: false);
+  final GalleryPageController _galleryPageController = Get.find();
 
   /// 加载下一页缩略图
   Future<void> _loarMordPriview({CancelToken cancelToken}) async {
     final List<GalleryPreview> _galleryPreviewList =
-        _galleryModel.galleryItem.galleryPreview;
+        _galleryPageController.galleryItem.galleryPreview;
     //
 
     // 增加延时 避免build期间进行 setState
     // await Future<void>.delayed(const Duration(milliseconds: 0));
-    _galleryModel.currentPreviewPageAdd();
-    logger.v(
-        '获取更多预览 ${_galleryModel.galleryItem.url} : ${_galleryModel.currentPreviewPage}');
+    // _galleryPageController.currentPreviewPageAdd();
+    // logger.v(
+    //     '获取更多预览 ${_galleryPageController.galleryItem.url} : ${_galleryPageController.currentPreviewPage}');
 
     final List<GalleryPreview> _moreGalleryPreviewList =
         await Api.getGalleryPreview(
-      _galleryModel.galleryItem.url,
-      page: _galleryModel.currentPreviewPage,
+      _galleryPageController.galleryItem.url,
+      // page: _galleryPageController.currentPreviewPage,
+      page: 0,
       cancelToken: cancelToken,
     );
 
@@ -826,7 +819,7 @@ Future<void> showLoadingDialog(BuildContext context, int index) async {
 
   Future<bool> _loadPriview(int index) async {
     final List<GalleryPreview> _galleryPreviewList =
-        _galleryModel.galleryItem.galleryPreview;
+        _galleryPageController.galleryItem.galleryPreview;
 
     while (index > _galleryPreviewList.length - 1) {
       logger.d(' index = $index ; len = ${_galleryPreviewList.length}');

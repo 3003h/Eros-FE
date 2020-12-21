@@ -1,7 +1,6 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-
 import 'intl/messages_all.dart';
 
 // **************************************************************************
@@ -15,23 +14,22 @@ import 'intl/messages_all.dart';
 
 class S {
   S();
-
+  
   static S current;
-
-  static const AppLocalizationDelegate delegate = AppLocalizationDelegate();
+  
+  static const AppLocalizationDelegate delegate =
+    AppLocalizationDelegate();
 
   static Future<S> load(Locale locale) {
-    final name = (locale.countryCode?.isEmpty ?? false)
-        ? locale.languageCode
-        : locale.toString();
-    final localeName = Intl.canonicalizedLocale(name);
+    final name = (locale.countryCode?.isEmpty ?? false) ? locale.languageCode : locale.toString();
+    final localeName = Intl.canonicalizedLocale(name); 
     return initializeMessages(localeName).then((_) {
       Intl.defaultLocale = localeName;
       S.current = S();
-
+      
       return S.current;
     });
-  }
+  } 
 
   static S of(BuildContext context) {
     return Localizations.of<S>(context, S);
@@ -132,6 +130,16 @@ class S {
     return Intl.message(
       'All Favorites',
       name: 'all_Favorites',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Local Favorites`
+  String get local_favorite {
+    return Intl.message(
+      'Local Favorites',
+      name: 'local_favorite',
       desc: '',
       args: [],
     );
@@ -502,6 +510,206 @@ class S {
     return Intl.message(
       'Clear cache',
       name: 'clear_cache',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Search`
+  String get search {
+    return Intl.message(
+      'Search',
+      name: 'search',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Advanced Options`
+  String get s_Advanced_Options {
+    return Intl.message(
+      'Advanced Options',
+      name: 's_Advanced_Options',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Search Gallery Name`
+  String get s_Search_Gallery_Name {
+    return Intl.message(
+      'Search Gallery Name',
+      name: 's_Search_Gallery_Name',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Search Gallery Tags`
+  String get s_Search_Gallery_Tags {
+    return Intl.message(
+      'Search Gallery Tags',
+      name: 's_Search_Gallery_Tags',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Search Gallery Description`
+  String get s_Search_Gallery_Description {
+    return Intl.message(
+      'Search Gallery Description',
+      name: 's_Search_Gallery_Description',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Search Torrent Filenames`
+  String get s_Search_Torrent_Filenames {
+    return Intl.message(
+      'Search Torrent Filenames',
+      name: 's_Search_Torrent_Filenames',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Only Show Galleries With Torrents`
+  String get s_Only_Show_Galleries_With_Torrents {
+    return Intl.message(
+      'Only Show Galleries With Torrents',
+      name: 's_Only_Show_Galleries_With_Torrents',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Search Low-Power Tags`
+  String get s_Search_Low_Power_Tags {
+    return Intl.message(
+      'Search Low-Power Tags',
+      name: 's_Search_Low_Power_Tags',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Search Downvoted Tags`
+  String get s_Search_Downvoted_Tags {
+    return Intl.message(
+      'Search Downvoted Tags',
+      name: 's_Search_Downvoted_Tags',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Show Expunged Galleries`
+  String get s_Show_Expunged_Galleries {
+    return Intl.message(
+      'Show Expunged Galleries',
+      name: 's_Show_Expunged_Galleries',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Minimum Rating`
+  String get s_Minimum_Rating {
+    return Intl.message(
+      'Minimum Rating',
+      name: 's_Minimum_Rating',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `{rating} ⭐`
+  String s_stars(Object rating) {
+    return Intl.message(
+      '$rating ⭐',
+      name: 's_stars',
+      desc: '',
+      args: [rating],
+    );
+  }
+
+  /// `Between`
+  String get s_Between {
+    return Intl.message(
+      'Between',
+      name: 's_Between',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `and`
+  String get s_and {
+    return Intl.message(
+      'and',
+      name: 's_and',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `pages`
+  String get s_pages {
+    return Intl.message(
+      'pages',
+      name: 's_pages',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Disable default filters`
+  String get s_Disable_default_filters {
+    return Intl.message(
+      'Disable default filters',
+      name: 's_Disable_default_filters',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Uploader`
+  String get uploader {
+    return Intl.message(
+      'Uploader',
+      name: 'uploader',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Tags`
+  String get tags {
+    return Intl.message(
+      'Tags',
+      name: 'tags',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Clear`
+  String get clear_filter {
+    return Intl.message(
+      'Clear',
+      name: 'clear_filter',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Clear all history`
+  String get t_Clear_all_history {
+    return Intl.message(
+      'Clear all history',
+      name: 't_Clear_all_history',
       desc: '',
       args: [],
     );

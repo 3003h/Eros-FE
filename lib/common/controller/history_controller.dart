@@ -1,12 +1,12 @@
-import 'package:fehviewer/common/controller/ehconfig_controller.dart';
 import 'package:fehviewer/common/global.dart';
+import 'package:fehviewer/common/service/ehconfig_service.dart';
 import 'package:fehviewer/models/index.dart';
 import 'package:get/get.dart';
 
 class HistoryController extends GetxController {
   List<GalleryItem> historys = <GalleryItem>[];
 
-  final EhConfigController _ehConfigController = Get.find();
+  final EhConfigService _ehConfigController = Get.find();
 
   void addHistory(GalleryItem galleryItem) {
     // logger.d('start ${DateTime.now()}');

@@ -12,5 +12,6 @@ class History {
 
   factory History.fromJson(Map<String, dynamic> json) =>
       _$HistoryFromJson(json);
+
   Map<String, dynamic> toJson() => _$HistoryToJson(this);
 }

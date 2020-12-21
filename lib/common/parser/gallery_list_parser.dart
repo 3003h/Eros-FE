@@ -1,7 +1,7 @@
 import 'dart:io';
 
-import 'package:fehviewer/common/controller/ehconfig_controller.dart';
 import 'package:fehviewer/common/global.dart';
+import 'package:fehviewer/common/service/ehconfig_service.dart';
 import 'package:fehviewer/common/tag_database.dart';
 import 'package:fehviewer/models/index.dart';
 import 'package:fehviewer/utils/network/gallery_request.dart';
@@ -55,7 +55,7 @@ class GalleryListParser {
   }) async {
     final dom.Document document = parse(response);
 
-    final EhConfigController ehConfigController = Get.find();
+    final EhConfigService ehConfigController = Get.find();
 
     const String _gallerySelector =
         'body > div.ido > div:nth-child(2) > table > tbody > tr';

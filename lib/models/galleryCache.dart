@@ -12,5 +12,6 @@ class GalleryCache {
 
   factory GalleryCache.fromJson(Map<String, dynamic> json) =>
       _$GalleryCacheFromJson(json);
+
   Map<String, dynamic> toJson() => _$GalleryCacheToJson(this);
 }

@@ -1,9 +1,7 @@
-import 'package:fehviewer/models/index.dart';
-import 'package:flutter/material.dart';
-
 import 'base.dart';
 
 class GalleryModel extends ProfileChangeNotifier {
+/*
   GalleryModel();
 
   GalleryModel.initUrl({@required String url}) {
@@ -88,7 +86,8 @@ class GalleryModel extends ProfileChangeNotifier {
 
   List<GalleryPreview> get previews => _galleryItem.galleryPreview;
 
-  List<GalleryPreview> get oriGalleryPreview => _oriGalleryPreview ?? [];
+  List<GalleryPreview> get oriGalleryPreview =>
+      _oriGalleryPreview ?? <GalleryPreview>[];
 
   set detailLoadFinish(bool value) {
     _detailLoadFinish = value;
@@ -129,4 +128,5 @@ class GalleryModel extends ProfileChangeNotifier {
   }
 
   bool get localFav => _galleryItem.localFav;
+*/
 }

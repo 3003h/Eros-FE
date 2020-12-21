@@ -45,8 +45,8 @@ class EHConst {
   static String getBaseSite(bool isEx) => isEx ? EX_BASE_URL : EH_BASE_URL;
 
   // 瀑布流视图参数
-  static const double waterfallFlowCrossAxisSpacing = 10.0;
-  static const double waterfallFlowMainAxisSpacing = 10.0;
+  static const double waterfallFlowCrossAxisSpacing = 4.0;
+  static const double waterfallFlowMainAxisSpacing = 4.0;
   static const double waterfallFlowMaxCrossAxisExtent = 150.0;
 
   static List<int> historyMax = <int>[50, 100, 300, 0];
@@ -123,7 +123,7 @@ class EHConst {
     {'favcat': '7', 'desc': 'Favorites 7'},
     {'favcat': '8', 'desc': 'Favorites 8'},
     {'favcat': '9', 'desc': 'Favorites 9'},
-    {'favcat': 'l', 'desc': '本地收藏'},
+    {'favcat': 'l', 'desc': 'Local Favorites'},
   ];
 
   static const Map prefixToNameSpaceMap = {

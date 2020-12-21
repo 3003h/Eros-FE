@@ -12,5 +12,6 @@ class GalleryTag {
 
   factory GalleryTag.fromJson(Map<String, dynamic> json) =>
       _$GalleryTagFromJson(json);
+
   Map<String, dynamic> toJson() => _$GalleryTagToJson(this);
 }

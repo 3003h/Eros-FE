@@ -13,5 +13,6 @@ class DownloadConfig {
 
   factory DownloadConfig.fromJson(Map<String, dynamic> json) =>
       _$DownloadConfigFromJson(json);
+
   Map<String, dynamic> toJson() => _$DownloadConfigToJson(this);
 }

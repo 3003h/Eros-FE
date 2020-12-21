@@ -1,6 +1,6 @@
 import 'package:dio/dio.dart';
-import 'package:fehviewer/common/controller/dnsconfig_controller.dart';
 import 'package:fehviewer/common/exts.dart';
+import 'package:fehviewer/common/service/dns_service.dart';
 import 'package:fehviewer/utils/logger.dart';
 import 'package:get/get.dart';
 
@@ -11,7 +11,7 @@ class EHInterceptor extends Interceptor {
   Future<dynamic> onRequest(RequestOptions options) async {
     logger.d(
         '${options.baseUrl}  \n${options.path} \n${options.headers['Host'] ?? options.headers['host']} ');
-    final DnsConfigController dnsConfigController = Get.find();
+    final DnsService dnsConfigController = Get.find();
     _paraOptions(options);
     return options;
   }
@@ -48,7 +48,7 @@ class EHInterceptor extends Interceptor {
   }
 
   Future<void> _updateDoHCache(String host) async {
-    final DnsConfigController dnsConfigController = Get.find();
+    final DnsService dnsConfigController = Get.find();
     final bool enableDoH = dnsConfigController.enableDoH.value ?? false;
     // 更新doh
     if (enableDoH) {

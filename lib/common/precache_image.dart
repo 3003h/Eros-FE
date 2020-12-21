@@ -19,6 +19,7 @@ Future<void> _precacheImage(PrecacheMessageProtocol protocol) async {
 
 class PrecacheMessageProtocol {
   PrecacheMessageProtocol({this.context, this.url, this.sendPort});
+
   final BuildContext context;
   final String url;
   final SendPort sendPort;

@@ -1,4 +1,4 @@
-import 'package:fehviewer/common/controller/ehconfig_controller.dart';
+import 'package:fehviewer/common/service/ehconfig_service.dart';
 import 'package:fehviewer/generated/l10n.dart';
 import 'package:fehviewer/pages/item/setting_item.dart';
 import 'package:fehviewer/pages/item/user_item.dart';
@@ -19,7 +19,7 @@ class SettingViewController extends GetxController {
     List _slivers = [];
     for (int _index = 0; _index < _itemTitles.length + 1; _index++) {
       if (_index == 0) {
-        _slivers.add(Get.find<EhConfigController>().isSafeMode.value ?? false
+        _slivers.add(Get.find<EhConfigService>().isSafeMode.value ?? false
             ? Container()
             : UserItem());
       } else {

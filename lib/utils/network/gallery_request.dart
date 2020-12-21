@@ -10,10 +10,10 @@ import 'package:dns_client/dns_client.dart';
 import 'package:enum_to_string/enum_to_string.dart';
 import 'package:extended_image/extended_image.dart';
 import 'package:fehviewer/common/controller/advance_search_controller.dart';
-import 'package:fehviewer/common/controller/ehconfig_controller.dart';
 import 'package:fehviewer/common/global.dart';
 import 'package:fehviewer/common/parser/gallery_detail_parser.dart';
 import 'package:fehviewer/common/parser/gallery_list_parser.dart';
+import 'package:fehviewer/common/service/ehconfig_service.dart';
 import 'package:fehviewer/models/galleryItem.dart';
 import 'package:fehviewer/models/index.dart';
 import 'package:fehviewer/utils/dio_util.dart';
@@ -39,9 +39,10 @@ final Api api = Api();
 class Api {
   Api() {
     final String _baseUrl = EHConst.getBaseSite(
-        Get.find<EhConfigController>().isSiteEx.value ?? false);
+        Get.find<EhConfigService>().isSiteEx.value ?? false);
     httpManager = HttpManager.getInstance(baseUrl: _baseUrl);
   }
+
   HttpManager httpManager;
   String _baseUrl;
 
@@ -70,7 +71,7 @@ class Api {
 
   static HttpManager getHttpManager({bool cache = true}) {
     final String _baseUrl = EHConst.getBaseSite(
-        Get.find<EhConfigController>().isSiteEx.value ?? false);
+        Get.find<EhConfigService>().isSiteEx.value ?? false);
     return HttpManager(_baseUrl, cache: cache);
   }
 
@@ -84,7 +85,7 @@ class Api {
 
   static String getBaseUrl() {
     return EHConst.getBaseSite(
-        Get.find<EhConfigController>().isSiteEx.value ?? false);
+        Get.find<EhConfigService>().isSiteEx.value ?? false);
   }
 
   /// 获取热门画廊列表
@@ -92,8 +93,8 @@ class Api {
       {bool refresh = false}) async {
 //    logger.v("获取热门");
 
-    // const String url = '/popular?inline_set=dm_l';
-    const String url = '/popular';
+    const String url = '/popular?inline_set=dm_l';
+    // const String url = '/popular';
 
     // await CustomHttpsProxy.instance.init();
 
@@ -116,12 +117,12 @@ class Api {
     int cats,
     bool refresh = false,
   }) async {
-    final EhConfigController ehConfigController = Get.find();
+    final EhConfigService ehConfigController = Get.find();
     final AdvanceSearchController searchController = Get.find();
 
     String url = '/';
-    // String qry = '?page=${page ?? 0}&inline_set=dm_l';
-    String qry = '?page=${page ?? 0}';
+    String qry = '?page=${page ?? 0}&inline_set=dm_l';
+    // String qry = '?page=${page ?? 0}';
 
     if (ehConfigController.isSafeMode.value) {
       qry = '$qry&f_cats=767';
@@ -267,8 +268,8 @@ class Api {
     bool refresh = false,
   }) async {
     // final HttpManager httpManager = HttpManager.getInstance();
-    // final String url = inUrl + '?hc=1&inline_set=ts_l&nw=always';
-    final String url = inUrl;
+    final String url = inUrl + '?hc=1&inline_set=ts_l&nw=always';
+    // final String url = inUrl;
 
     // 不显示警告的处理 cookie加上 nw=1
     // 在 url使用 nw=always 未解决 自动写入cookie 暂时搞不懂 先手动设置下
@@ -279,7 +280,7 @@ class Api {
     cookieJar.saveFromResponse(Uri.parse(url), cookies);
 
     logger.i('获取画廊 $url');
-    // await CustomHttpsProxy.instance.init();
+    await CustomHttpsProxy.instance.init();
     final String response = await getHttpManager()
         .get(url, options: getCacheOptions(forceRefresh: refresh));
 

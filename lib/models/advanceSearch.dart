@@ -25,5 +25,6 @@ class AdvanceSearch {
 
   factory AdvanceSearch.fromJson(Map<String, dynamic> json) =>
       _$AdvanceSearchFromJson(json);
+
   Map<String, dynamic> toJson() => _$AdvanceSearchToJson(this);
 }

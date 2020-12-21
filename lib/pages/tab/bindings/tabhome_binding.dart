@@ -1,4 +1,6 @@
+import 'package:fehviewer/common/controller/advance_search_controller.dart';
 import 'package:fehviewer/common/controller/cache_controller.dart';
+import 'package:fehviewer/common/controller/gallerycache_controller.dart';
 import 'package:fehviewer/common/controller/history_controller.dart';
 import 'package:fehviewer/common/controller/localfav_controller.dart';
 import 'package:fehviewer/common/controller/quicksearch_controller.dart';
@@ -26,6 +28,9 @@ class TabHomeBinding extends Bindings {
     Get.put(LocalFavController(), permanent: true);
     Get.put(HistoryController(), permanent: true);
     Get.put(UserController(), permanent: true);
+
+    Get.lazyPut(() => AdvanceSearchController(), fenix: true);
+    Get.lazyPut(() => GalleryCacheController(), fenix: true);
 
     Get.put(CacheController());
   }

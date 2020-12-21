@@ -1,10 +1,10 @@
-import 'package:fehviewer/common/controller/ehconfig_controller.dart';
 import 'package:fehviewer/common/controller/localfav_controller.dart';
 import 'package:fehviewer/common/controller/user_controller.dart';
 import 'package:fehviewer/common/global.dart';
 import 'package:fehviewer/common/parser/gallery_fav_parser.dart';
-import 'package:fehviewer/common/states/gallery_model.dart';
+import 'package:fehviewer/common/service/ehconfig_service.dart';
 import 'package:fehviewer/generated/l10n.dart';
+import 'package:fehviewer/pages/item/controller/galleryitem_controller.dart';
 import 'package:fehviewer/utils/logger.dart';
 import 'package:fehviewer/utils/toast.dart';
 import 'package:fehviewer/utils/vibrate.dart';
@@ -13,8 +13,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
-import 'package:provider/provider.dart';
-import 'package:tuple/tuple.dart';
 
 /// 收藏操作处理类
 class GalleryFavButton extends StatefulWidget {
@@ -30,89 +28,78 @@ class _GalleryFavButtonState extends State<GalleryFavButton> {
   bool _isLoading = false;
   String _favnote;
 
-  GalleryModel _galleryModel;
-
   // 收藏输入框控制器
   final TextEditingController _favnoteController = TextEditingController();
-  final LocalFavController localFavController = Get.find();
-  final UserController userController = Get.find();
-
-  @override
-  void initState() {
-    super.initState();
-  }
+  final LocalFavController _localFavController = Get.find();
+  final UserController _userController = Get.find();
+  final GalleryItemController _galleryItemController = Get.find();
 
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-    final GalleryModel galleryModel =
+    /*final GalleryModel galleryModel =
         Provider.of<GalleryModel>(context, listen: false);
     if (galleryModel != _galleryModel) {
       _galleryModel = galleryModel;
-      _favnote = '';
-    }
+
+    }*/
+    _favnote = '';
   }
 
   @override
   Widget build(BuildContext context) {
     // 收藏按钮图标
     final Widget favIcon = Container(
-      child: Selector<GalleryModel, Tuple3<String, String, bool>>(
-          selector: (context, galleryModel) => Tuple3(
-                galleryModel.galleryItem.favTitle,
-                galleryModel.galleryItem.favcat,
-                galleryModel.localFav,
-              ),
-//          shouldRebuild: (pre, next) =>
-//              pre.favTitle != next.favTitle || pre.favcat != next.favcat,
-          builder: (context, tuple, child) {
-            final bool _localFav = tuple.item3 ?? false;
-            String _favTitle() {
-              if (tuple.item1 != null && tuple.item1.isNotEmpty) {
-                return tuple.item1;
-              } else {
-                return _localFav ? '本地收藏' : '';
-              }
-            }
+      child: Builder(builder: (_) {
+        final bool _localFav = _galleryItemController.localFav ?? false;
+        String _favTitle() {
+          if (_galleryItemController.galleryItem.favTitle != null &&
+              _galleryItemController.galleryItem.favTitle.isNotEmpty) {
+            return _galleryItemController.galleryItem.favTitle;
+          } else {
+            return _localFav ? S.of(context).local_favorite : '';
+          }
+        }
 
-            String _favcat() {
-              if (tuple.item2 != null && tuple.item2.isNotEmpty) {
-                return tuple.item2;
-              } else {
-                return _localFav ? 'l' : '';
-              }
-            }
+        String _favcat() {
+          if (_galleryItemController.galleryItem.favcat != null &&
+              _galleryItemController.galleryItem.favcat.isNotEmpty) {
+            return _galleryItemController.galleryItem.favcat;
+          } else {
+            return _localFav ? 'l' : '';
+          }
+        }
 
-            final bool _isFav = _favcat().isNotEmpty || _localFav;
+        final bool _isFav = _favcat().isNotEmpty || _localFav;
 
-            // logger.v('$tuple');
+        // logger.v('$tuple');
 
-            return Container(
-              child: Column(
-                children: <Widget>[
-                  if (_isFav)
-                    Icon(
-                      FontAwesomeIcons.solidHeart,
-                      color: ThemeColors.favColor[_favcat()],
-                    )
-                  else
-                    const Icon(
-                      FontAwesomeIcons.heart,
-                      color: CupertinoColors.systemGrey,
-                    ),
-                  Container(
-                    height: 14,
-                    child: Text(
-                      _isFav ? _favTitle() : S.of(context).notFav,
-                      style: const TextStyle(
-                        fontSize: 11,
-                      ),
-                    ),
+        return Container(
+          child: Column(
+            children: <Widget>[
+              if (_isFav)
+                Icon(
+                  FontAwesomeIcons.solidHeart,
+                  color: ThemeColors.favColor[_favcat()],
+                )
+              else
+                const Icon(
+                  FontAwesomeIcons.heart,
+                  color: CupertinoColors.systemGrey,
+                ),
+              Container(
+                height: 14,
+                child: Text(
+                  _isFav ? _favTitle() : S.of(context).notFav,
+                  style: const TextStyle(
+                    fontSize: 11,
                   ),
-                ],
+                ),
               ),
-            );
-          }),
+            ],
+          ),
+        );
+      }),
     );
 
     final Widget _loadIcon = Column(
@@ -149,18 +136,18 @@ class _GalleryFavButtonState extends State<GalleryFavButton> {
       _isLoading = true;
     });
     try {
-      logger.v('[${_galleryModel.galleryItem.favcat}]');
-      if (_galleryModel.galleryItem.favcat.isNotEmpty &&
-          _galleryModel.galleryItem.favcat != 'l') {
+      logger.v('[${_galleryItemController.galleryItem.favcat}]');
+      if (_galleryItemController.galleryItem.favcat.isNotEmpty &&
+          _galleryItemController.galleryItem.favcat != 'l') {
         logger.v('取消网络收藏');
         await GalleryFavParser.galleryAddfavorite(
-          _galleryModel.galleryItem.gid,
-          _galleryModel.galleryItem.token,
+          _galleryItemController.galleryItem.gid,
+          _galleryItemController.galleryItem.token,
         );
       } else {
         logger.v('取消本地收藏');
-        _galleryModel.localFav = false;
-        localFavController.removeFav(_galleryModel.galleryItem);
+        _galleryItemController.localFav = false;
+        _localFavController.removeFav(_galleryItemController.galleryItem);
       }
     } catch (e) {
       return true;
@@ -168,7 +155,7 @@ class _GalleryFavButtonState extends State<GalleryFavButton> {
       setState(() {
         _isLoading = false;
       });
-      _galleryModel.setFavTitle('', favcat: '');
+      _galleryItemController.setFavTitle('', favcat: '');
     }
     return false;
   }
@@ -183,8 +170,8 @@ class _GalleryFavButtonState extends State<GalleryFavButton> {
 
     try {
       await GalleryFavParser.galleryAddfavorite(
-        _galleryModel.galleryItem.gid,
-        _galleryModel.galleryItem.token,
+        _galleryItemController.galleryItem.gid,
+        _galleryItemController.galleryItem.token,
         favcat: _lastFavcat,
         favnote: _favnote,
       );
@@ -194,7 +181,7 @@ class _GalleryFavButtonState extends State<GalleryFavButton> {
       setState(() {
         _isLoading = false;
       });
-      _galleryModel.setFavTitle(_favTitle, favcat: _lastFavcat);
+      _galleryItemController.setFavTitle(_favTitle, favcat: _lastFavcat);
     }
     return true;
   }
@@ -202,11 +189,11 @@ class _GalleryFavButtonState extends State<GalleryFavButton> {
   /// 点击收藏按钮处理
   Future<void> _tapFav(context) async {
     logger.v('_tapFav');
-    final EhConfigController ehConfigController = Get.find();
+    final EhConfigService ehConfigController = Get.find();
 
     /// 网络收藏或者本地收藏
-    if (_galleryModel.galleryItem.favcat.isNotEmpty ||
-        _galleryModel.galleryItem.localFav) {
+    if (_galleryItemController.galleryItem.favcat.isNotEmpty ||
+        _galleryItemController.galleryItem.localFav) {
       return _delFav();
     } else {
       final String _lastFavcat = ehConfigController.lastFavcat.value;
@@ -234,20 +221,20 @@ class _GalleryFavButtonState extends State<GalleryFavButton> {
 
   // 选择并收藏
   Future<bool> _showAddFavDialog(context) async {
-    final EhConfigController ehConfigController = Get.find();
+    final EhConfigService ehConfigController = Get.find();
 
-    final bool _isLogin = userController.isLogin;
+    final bool _isLogin = _userController.isLogin;
 
     ///
     /// [{'favId': favId, 'favTitle': favTitle}]
     final List<Map<String, String>> favList = _isLogin
         ? await GalleryFavParser.getFavcat(
-            gid: _galleryModel.galleryItem.gid,
-            token: _galleryModel.galleryItem.token,
+            gid: _galleryItemController.galleryItem.gid,
+            token: _galleryItemController.galleryItem.token,
           )
         : <Map<String, String>>[];
 
-    favList.add({'favId': 'l', 'favTitle': '本地收藏'});
+    favList.add({'favId': 'l', 'favTitle': S.of(context).local_favorite});
 
     // diaolog 获取选择结果
     final Map<String, String> result = ehConfigController.isFavPicker.value
@@ -267,14 +254,14 @@ class _GalleryFavButtonState extends State<GalleryFavButton> {
       try {
         if (_favcat != 'l') {
           await GalleryFavParser.galleryAddfavorite(
-            _galleryModel.galleryItem.gid,
-            _galleryModel.galleryItem.token,
+            _galleryItemController.galleryItem.gid,
+            _galleryItemController.galleryItem.token,
             favcat: _favcat,
             favnote: _favnote,
           );
         } else {
-          _galleryModel.localFav = true;
-          localFavController.addLocalFav(_galleryModel.galleryItem);
+          _galleryItemController.localFav = true;
+          _localFavController.addLocalFav(_galleryItemController.galleryItem);
         }
       } catch (e) {
         return false;
@@ -282,7 +269,7 @@ class _GalleryFavButtonState extends State<GalleryFavButton> {
         setState(() {
           _isLoading = false;
         });
-        _galleryModel.setFavTitle(_favTitle, favcat: _favcat);
+        _galleryItemController.setFavTitle(_favTitle, favcat: _favcat);
       }
       return true;
     } else {
@@ -294,7 +281,7 @@ class _GalleryFavButtonState extends State<GalleryFavButton> {
   Future<Map<String, String>> _showAddFavPicker(
       BuildContext context, List favList) async {
     int _favindex = 0;
-    final EhConfigController ehConfigController = Get.find();
+    final EhConfigService _ehConfigController = Get.find();
 
     final List<Widget> favPicker = List<Widget>.from(favList.map((e) => Row(
           mainAxisAlignment: MainAxisAlignment.center,
@@ -319,7 +306,7 @@ class _GalleryFavButtonState extends State<GalleryFavButton> {
         return CupertinoAlertDialog(
           title: GestureDetector(
             onLongPress: () {
-              ehConfigController.isFavPicker.value = false;
+              _ehConfigController.isFavPicker.value = false;
               showToast('切换样式');
             },
             child: Text('添加收藏'),
@@ -387,7 +374,7 @@ class _GalleryFavButtonState extends State<GalleryFavButton> {
     return showCupertinoDialog<Map<String, String>>(
       context: context,
       builder: (BuildContext context) {
-        final EhConfigController ehConfigController = Get.find();
+        final EhConfigService ehConfigController = Get.find();
 
         final List<Widget> favcatList =
             List<Widget>.from(favList.map((fav) => FavcatAddListItem(

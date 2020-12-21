@@ -1,4 +1,5 @@
 import 'package:fehviewer/common/controller/history_controller.dart';
+import 'package:fehviewer/generated/l10n.dart';
 import 'package:fehviewer/models/index.dart';
 import 'package:fehviewer/utils/logger.dart';
 import 'package:flutter/cupertino.dart';
@@ -39,16 +40,16 @@ class HistoryViewController extends GetxController
       context: Get.context,
       builder: (BuildContext context) {
         return CupertinoAlertDialog(
-          title: const Text('清除所有历史?'),
+          title: Text(S.of(context).t_Clear_all_history),
           actions: <Widget>[
             CupertinoDialogAction(
-              child: const Text('取消'),
+              child: Text(S.of(context).cancel),
               onPressed: () {
                 Get.back();
               },
             ),
             CupertinoDialogAction(
-              child: const Text('确定'),
+              child: Text(S.of(context).ok),
               onPressed: () {
                 historyController.cleanHistory();
                 Get.back();

@@ -14,7 +14,7 @@ class EHRoutes {
   static const String login = '/login';
   static const String webLogin = '/webLogin';
 
-  static const String galleryDetail = '/galleryDetailPage';
-  static const String galleryDetailComment = '/galleryDetailPage/comment';
-  static const String galleryDetailView = '/galleryDetailPage/view';
+  static const String gallery = '/gallery';
+  static const String galleryComment = '/comment';
+  static const String galleryView = '/view';
 }

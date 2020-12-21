@@ -1,11 +1,9 @@
 import 'package:device_preview/device_preview.dart';
-import 'package:fehviewer/common/controller/advance_search_controller.dart';
-import 'package:fehviewer/common/controller/dnsconfig_controller.dart';
-import 'package:fehviewer/common/controller/ehconfig_controller.dart';
-import 'package:fehviewer/common/controller/gallerycache_controller.dart';
-import 'package:fehviewer/common/controller/local_controller.dart';
-import 'package:fehviewer/common/controller/theme_controller.dart';
 import 'package:fehviewer/common/global.dart';
+import 'package:fehviewer/common/service/dns_service.dart';
+import 'package:fehviewer/common/service/ehconfig_service.dart';
+import 'package:fehviewer/common/service/locale_service.dart';
+import 'package:fehviewer/common/service/theme_service.dart';
 import 'package:fehviewer/generated/l10n.dart';
 import 'package:fehviewer/route/app_pages.dart';
 import 'package:fehviewer/route/routes.dart';
@@ -18,16 +16,13 @@ import 'package:oktoast/oktoast.dart';
 
 void main() {
   Global.init().then((_) {
-    Get.lazyPut(() => EhConfigController(), fenix: true);
-    Get.lazyPut(() => AdvanceSearchController(), fenix: true);
+    Get.lazyPut(() => EhConfigService(), fenix: true);
     //LocaleController
-    Get.lazyPut(() => LocaleController(), fenix: true);
+    Get.lazyPut(() => LocaleService(), fenix: true);
     // ThemeController
-    Get.lazyPut(() => ThemeController(), fenix: true);
+    Get.lazyPut(() => ThemeService(), fenix: true);
     // DnsConfigController
-    Get.put(DnsConfigController(), permanent: true);
-
-    Get.put(GalleryCacheController(), permanent: true);
+    Get.put(DnsService(), permanent: true);
 
     runApp(
       DevicePreview(
@@ -47,8 +42,9 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
-  final LocaleController localeController = Get.find();
-  final ThemeController themeController = Get.find();
+  final LocaleService localeController = Get.find();
+  final ThemeService themeController = Get.find();
+
   // Brightness _brightness = WidgetsBinding.instance.window.platformBrightness;
 
   @override
@@ -87,6 +83,7 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
         theme: theme,
         locale: locale,
         builder: DevicePreview.appBuilder,
+        logWriterCallback: loggerGetx,
         // ignore: prefer_const_literals_to_create_immutables
         supportedLocales: <Locale>[
           const Locale('en', ''),
@@ -109,7 +106,7 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
             //如果已经选定语言，则不跟随系统
             return locale;
           } else {
-            logger.d('语言跟随系统语言');
+            // logger.d('语言跟随系统语言');
             Locale locale;
             //APP语言跟随系统语言，如果系统语言不是中文简体或美国英语，
             //则默认使用美国英语

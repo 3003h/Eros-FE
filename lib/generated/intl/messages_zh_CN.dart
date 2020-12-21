@@ -19,6 +19,8 @@ typedef String MessageIfAbsent(String messageStr, List<dynamic> args);
 class MessageLookup extends MessageLookupByLibrary {
   String get localeName => 'zh_CN';
 
+  static m0(rating) => "${rating} ⭐";
+
   final messages = _notInlinedMessages(_notInlinedMessages);
   static _notInlinedMessages(_) => <String, Function> {
     "READ" : MessageLookupByLibrary.simpleMessage("阅读"),
@@ -30,6 +32,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "app_title" : MessageLookupByLibrary.simpleMessage("FEhViewer"),
     "cancel" : MessageLookupByLibrary.simpleMessage("取消"),
     "clear_cache" : MessageLookupByLibrary.simpleMessage("清除缓存"),
+    "clear_filter" : MessageLookupByLibrary.simpleMessage("重置"),
     "custom_hosts" : MessageLookupByLibrary.simpleMessage("自定义hosts"),
     "dark" : MessageLookupByLibrary.simpleMessage("深色模式"),
     "dark_mode_effect" : MessageLookupByLibrary.simpleMessage("深色模式效果"),
@@ -44,6 +47,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "gray_black" : MessageLookupByLibrary.simpleMessage("灰黑"),
     "language" : MessageLookupByLibrary.simpleMessage("语言设置"),
     "light" : MessageLookupByLibrary.simpleMessage("浅色模式"),
+    "local_favorite" : MessageLookupByLibrary.simpleMessage("本地收藏"),
     "login" : MessageLookupByLibrary.simpleMessage("登录"),
     "login_web" : MessageLookupByLibrary.simpleMessage("通过网页登录"),
     "morePreviews" : MessageLookupByLibrary.simpleMessage("更多预览"),
@@ -59,12 +63,31 @@ class MessageLookup extends MessageLookupByLibrary {
     "preload_image" : MessageLookupByLibrary.simpleMessage("预载图片数量"),
     "processing" : MessageLookupByLibrary.simpleMessage("处理中"),
     "pure_black" : MessageLookupByLibrary.simpleMessage("纯黑"),
+    "s_Advanced_Options" : MessageLookupByLibrary.simpleMessage("高级选项"),
+    "s_Between" : MessageLookupByLibrary.simpleMessage("从"),
+    "s_Disable_default_filters" : MessageLookupByLibrary.simpleMessage("禁用默认排除选项"),
+    "s_Minimum_Rating" : MessageLookupByLibrary.simpleMessage("最低评分"),
+    "s_Only_Show_Galleries_With_Torrents" : MessageLookupByLibrary.simpleMessage("仅搜索有种子的画廊"),
+    "s_Search_Downvoted_Tags" : MessageLookupByLibrary.simpleMessage("搜索差评标签"),
+    "s_Search_Gallery_Description" : MessageLookupByLibrary.simpleMessage("搜索画廊描述"),
+    "s_Search_Gallery_Name" : MessageLookupByLibrary.simpleMessage("搜索画廊名字"),
+    "s_Search_Gallery_Tags" : MessageLookupByLibrary.simpleMessage("搜索画廊标签"),
+    "s_Search_Low_Power_Tags" : MessageLookupByLibrary.simpleMessage("搜索低愿力标签"),
+    "s_Search_Torrent_Filenames" : MessageLookupByLibrary.simpleMessage("搜索种子名字"),
+    "s_Show_Expunged_Galleries" : MessageLookupByLibrary.simpleMessage("搜索被删除的画廊"),
+    "s_and" : MessageLookupByLibrary.simpleMessage("到"),
+    "s_pages" : MessageLookupByLibrary.simpleMessage("页数"),
+    "s_stars" : m0,
+    "search" : MessageLookupByLibrary.simpleMessage("搜索"),
+    "t_Clear_all_history" : MessageLookupByLibrary.simpleMessage("清除所有历史"),
     "tab_favorite" : MessageLookupByLibrary.simpleMessage("收藏"),
     "tab_gallery" : MessageLookupByLibrary.simpleMessage("画廊"),
     "tab_history" : MessageLookupByLibrary.simpleMessage("历史"),
     "tab_popular" : MessageLookupByLibrary.simpleMessage("热门"),
     "tab_setting" : MessageLookupByLibrary.simpleMessage("设置"),
+    "tags" : MessageLookupByLibrary.simpleMessage("标签"),
     "theme" : MessageLookupByLibrary.simpleMessage("主题"),
+    "uploader" : MessageLookupByLibrary.simpleMessage("上传者"),
     "user_login" : MessageLookupByLibrary.simpleMessage("用户登录"),
     "user_name" : MessageLookupByLibrary.simpleMessage("用户名"),
     "welcome_text" : MessageLookupByLibrary.simpleMessage("小撸怡情~大撸伤身~强撸灰飞烟灭~~")

@@ -1,4 +1,5 @@
 import 'package:fehviewer/common/controller/advance_search_controller.dart';
+import 'package:fehviewer/generated/l10n.dart';
 import 'package:fehviewer/pages/tab/controller/gallery_filter_controller.dart';
 import 'package:fehviewer/utils/logger.dart';
 import 'package:flutter/cupertino.dart';
@@ -11,6 +12,7 @@ import 'gallery_base.dart';
 const double kHeight = 220.0;
 const double kAdvanceHeight = 500.0;
 
+/// 高级搜索
 class GalleryFilterView extends StatelessWidget {
   GalleryFilterView({
     Key key,
@@ -44,7 +46,7 @@ class GalleryFilterView extends StatelessWidget {
                   Container(
                     child: Row(
                       children: <Widget>[
-                        const Text('高级搜索'),
+                        Text(S.of(context).s_Advanced_Options),
                         Transform.scale(
                           scale: 0.8,
                           child: CupertinoSwitch(
@@ -63,9 +65,9 @@ class GalleryFilterView extends StatelessWidget {
                           child: CupertinoButton(
                               padding: const EdgeInsets.only(right: 8),
                               minSize: 20,
-                              child: const Text(
-                                '重置',
-                                style: TextStyle(height: 1, fontSize: 14),
+                              child: Text(
+                                S.of(context).clear_filter,
+                                style: const TextStyle(height: 1, fontSize: 14),
                               ),
                               onPressed: () {
                                 advanceSearchController.reset();
@@ -85,7 +87,7 @@ class GalleryFilterView extends StatelessWidget {
                       child: Column(
                         children: <Widget>[
                           AdvanceSearchSwitchItem(
-                            title: '搜索画廊名字',
+                            title: S.of(context).s_Search_Gallery_Name,
                             value: advanceSearchController
                                     .advanceSearch.value.searchGalleryName ??
                                 true,
@@ -97,7 +99,7 @@ class GalleryFilterView extends StatelessWidget {
                             },
                           ),
                           AdvanceSearchSwitchItem(
-                            title: '搜索画廊标签',
+                            title: S.of(context).s_Search_Gallery_Tags,
                             value: advanceSearchController
                                     .advanceSearch.value.searchGalleryTags ??
                                 true,
@@ -109,7 +111,7 @@ class GalleryFilterView extends StatelessWidget {
                             },
                           ),
                           AdvanceSearchSwitchItem(
-                            title: '搜索画廊描述',
+                            title: S.of(context).s_Search_Gallery_Description,
                             value: advanceSearchController
                                     .advanceSearch.value.searchGalleryDesc ??
                                 false,
@@ -121,7 +123,7 @@ class GalleryFilterView extends StatelessWidget {
                             },
                           ),
                           AdvanceSearchSwitchItem(
-                            title: '搜索低愿力标签',
+                            title: S.of(context).s_Search_Low_Power_Tags,
                             value: advanceSearchController
                                     .advanceSearch.value.searchLowPowerTags ??
                                 false,
@@ -133,7 +135,7 @@ class GalleryFilterView extends StatelessWidget {
                             },
                           ),
                           AdvanceSearchSwitchItem(
-                            title: '搜索差评标签',
+                            title: S.of(context).s_Search_Downvoted_Tags,
                             value: advanceSearchController
                                     .advanceSearch.value.searchDownvotedTags ??
                                 false,
@@ -145,7 +147,7 @@ class GalleryFilterView extends StatelessWidget {
                             },
                           ),
                           AdvanceSearchSwitchItem(
-                            title: '搜索被删除的画廊',
+                            title: S.of(context).s_Show_Expunged_Galleries,
                             value: advanceSearchController
                                     .advanceSearch.value.searchExpunged ??
                                 false,
@@ -157,7 +159,7 @@ class GalleryFilterView extends StatelessWidget {
                             },
                           ),
                           AdvanceSearchSwitchItem(
-                            title: '最低评分',
+                            title: S.of(context).s_Minimum_Rating,
                             value: advanceSearchController
                                     .advanceSearch.value.searchWithminRating ??
                                 false,
@@ -171,25 +173,25 @@ class GalleryFilterView extends StatelessWidget {
                           CupertinoSlidingSegmentedControl<int>(
                               // ignore: prefer_const_literals_to_create_immutables
                               children: <int, Widget>{
-                                2: const Padding(
-                                  padding:
-                                      EdgeInsets.symmetric(horizontal: 8.0),
-                                  child: Text('2星'),
+                                2: Padding(
+                                  padding: const EdgeInsets.symmetric(
+                                      horizontal: 8.0),
+                                  child: Text(S.of(context).s_stars('2')),
                                 ),
-                                3: const Padding(
-                                  padding:
-                                      EdgeInsets.symmetric(horizontal: 8.0),
-                                  child: Text('3星'),
+                                3: Padding(
+                                  padding: const EdgeInsets.symmetric(
+                                      horizontal: 8.0),
+                                  child: Text(S.of(context).s_stars('3')),
                                 ),
-                                4: const Padding(
-                                  padding:
-                                      EdgeInsets.symmetric(horizontal: 8.0),
-                                  child: Text('4星'),
+                                4: Padding(
+                                  padding: const EdgeInsets.symmetric(
+                                      horizontal: 8.0),
+                                  child: Text(S.of(context).s_stars('4')),
                                 ),
-                                5: const Padding(
-                                  padding:
-                                      EdgeInsets.symmetric(horizontal: 8.0),
-                                  child: Text('5星'),
+                                5: Padding(
+                                  padding: const EdgeInsets.symmetric(
+                                      horizontal: 8.0),
+                                  child: Text(S.of(context).s_stars('5')),
                                 ),
                               },
                               groupValue: advanceSearchController
@@ -204,7 +206,7 @@ class GalleryFilterView extends StatelessWidget {
                           Row(
                             children: <Widget>[
                               AdvanceSearchSwitchItem(
-                                title: '页数',
+                                title: S.of(context).s_pages,
                                 expand: false,
                                 value: advanceSearchController.advanceSearch
                                         .value.searchBetweenpage ??
@@ -235,7 +237,7 @@ class GalleryFilterView extends StatelessWidget {
                                   ),
                                 ),
                               ),
-                              const Text('到'),
+                              Text(S.of(context).s_and),
                               Container(
                                 margin: const EdgeInsets.only(left: 4),
                                 width: 50,
@@ -258,9 +260,10 @@ class GalleryFilterView extends StatelessWidget {
                           ),
                           Container(
                               margin: const EdgeInsets.only(top: 8),
-                              child: const Text('禁用默认排除项')),
+                              child: Text(
+                                  S.of(context).s_Disable_default_filters)),
                           AdvanceSearchSwitchItem(
-                            title: '语言',
+                            title: S.of(context).language,
                             value: advanceSearchController
                                     .advanceSearch.value.disableDFLanguage ??
                                 false,
@@ -272,7 +275,7 @@ class GalleryFilterView extends StatelessWidget {
                             },
                           ),
                           AdvanceSearchSwitchItem(
-                            title: '上传者',
+                            title: S.of(context).uploader,
                             value: advanceSearchController
                                     .advanceSearch.value.disableDFUploader ??
                                 false,
@@ -284,7 +287,7 @@ class GalleryFilterView extends StatelessWidget {
                             },
                           ),
                           AdvanceSearchSwitchItem(
-                            title: '标签',
+                            title: S.of(context).tags,
                             value: advanceSearchController
                                     .advanceSearch.value.disableDFTags ??
                                 false,
