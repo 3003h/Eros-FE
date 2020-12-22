@@ -1,3 +1,4 @@
+/*
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:dio/dio.dart';
 import 'package:fehviewer/common/controller/gallerycache_controller.dart';
@@ -17,10 +18,10 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-import 'comment_item.dart';
-import 'gallery_all_preview_page.dart';
+import '../gallery_main/view/comment_item.dart';
+import '../gallery_main/view/gallery_all_preview_page.dart';
 import 'gallery_favcat.dart';
-import 'gallery_preview_clipper.dart';
+import '../gallery_main/view/gallery_preview_clipper.dart';
 
 const double kHeightPreview = 180.0;
 const double kPadding = 12.0;
@@ -73,13 +74,15 @@ class GalleryDetailInfo extends StatelessWidget {
         style: const TextStyle(fontSize: 16),
       ),
       onPressed: () {
+*/
 /*        Get.to(
           ChangeNotifierProvider<GalleryModel>.value(
             value: galleryModel,
             child: const AllPreviewPage(),
           ),
           preventDuplicates: false,
-        );*/
+        );*/ /*
+
         Get.to(const AllPreviewPage());
       },
     );
@@ -769,7 +772,8 @@ class GalleryTitle extends StatelessWidget {
               )),
         );
 
-        /*return cust.SelectableText(
+        */
+/*return cust.SelectableText(
           title,
           maxLines: 5,
           minLines: 1,
@@ -784,7 +788,8 @@ class GalleryTitle extends StatelessWidget {
 //            fontFamilyFallback: EHConst.FONT_FAMILY_FB,
           ),
           scrollPhysics: ClampingScrollPhysics(),
-        );*/
+        );*/ /*
+
       },
     );
   }
@@ -845,3 +850,4 @@ Future<void> showLoadingDialog(BuildContext context, int index) async {
     },
   );
 }
+*/

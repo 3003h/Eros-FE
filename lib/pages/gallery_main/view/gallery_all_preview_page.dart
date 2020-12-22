@@ -8,7 +8,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-import 'gallery_detail_widget.dart';
+import 'gallery_widget.dart';
 
 const double kMaxCrossAxisExtent = 135.0;
 const double kMainAxisSpacing = 0; //主轴方向的间距

@@ -3,7 +3,7 @@ import 'package:fehviewer/common/controller/history_controller.dart';
 import 'package:fehviewer/common/controller/localfav_controller.dart';
 import 'package:fehviewer/common/service/ehconfig_service.dart';
 import 'package:fehviewer/models/index.dart';
-import 'package:fehviewer/pages/gallery_view/gallery_view_base.dart';
+import 'package:fehviewer/pages/gallery_view/view/gallery_view_base.dart';
 import 'package:fehviewer/utils/logger.dart';
 import 'package:fehviewer/utils/network/gallery_request.dart';
 import 'package:fehviewer/utils/toast.dart';
@@ -120,13 +120,11 @@ class GalleryPageController extends GetxController
   // 添加缩略图对象
   void addAllPreview(List<GalleryPreview> galleryPreview) {
     galleryItem.galleryPreview.addAll(galleryPreview);
-    update();
   }
 
   // 是否存在本地收藏中
   set localFav(bool value) {
     galleryItem.localFav = value;
-    update();
   }
 
   bool get localFav => galleryItem.localFav ?? false;
@@ -286,6 +284,8 @@ class GalleryPageController extends GetxController
     isGetAllImageHref = true;
     final int _filecount = int.parse(galleryItem.filecount);
 
+    logger.d('_filecount : $_filecount');
+
     // 获取画廊所有图片页面的href
     while (previews.length < _filecount) {
       currentPreviewPage++;
@@ -301,7 +301,7 @@ class GalleryPageController extends GetxController
       if (_moreGalleryPreviewList.first.ser >
           galleryItem.galleryPreview.last.ser) {
         logger.d(
-            'getAllImageHref ${_moreGalleryPreviewList.first.ser}  ${_moreGalleryPreviewList.length}');
+            '添加图片对象 起始序号${_moreGalleryPreviewList.first.ser}  数量${_moreGalleryPreviewList.length}');
         addAllPreview(_moreGalleryPreviewList);
       }
     }
