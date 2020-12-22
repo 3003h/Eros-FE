@@ -1,5 +1,5 @@
 import 'package:fehviewer/models/index.dart';
-import 'package:fehviewer/pages/gallery_view/view_widget.dart';
+import 'package:fehviewer/pages/gallery_view/view/view_widget.dart';
 import 'package:fehviewer/route/routes.dart';
 import 'package:fehviewer/utils/logger.dart';
 import 'package:fehviewer/values/const.dart';
@@ -12,7 +12,7 @@ import 'package:get/get.dart';
 import 'package:photo_view/photo_view.dart';
 import 'package:photo_view/photo_view_gallery.dart';
 
-import 'controller/view_controller.dart';
+import '../controller/view_controller.dart';
 
 const double kBottomBarHeight = 44.0;
 const double kTopBarHeight = 40.0;
@@ -198,7 +198,7 @@ class GalleryViewPage extends GetView<ViewController> {
 
   /// 底栏
   Widget _buildBottomBar() {
-    final double _max = int.parse(controller.filecount) - 1.0;
+    final double _max = controller.filecount - 1.0;
     return Container(
       color: const Color.fromARGB(150, 0, 0, 0),
       padding: EdgeInsets.only(
@@ -326,7 +326,8 @@ class GalleryViewPage extends GetView<ViewController> {
     return PhotoViewGallery.builder(
       // scrollPhysics: const BouncingScrollPhysics(),
       reverse: reverse,
-      itemCount: controller.previews.length,
+      // itemCount: controller.previews.length,
+      itemCount: controller.filecount,
       customSize: controller.screensize,
       backgroundDecoration: const BoxDecoration(
         color: null,

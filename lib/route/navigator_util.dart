@@ -1,10 +1,10 @@
 import 'package:fehviewer/models/galleryComment.dart';
 import 'package:fehviewer/models/index.dart';
-import 'package:fehviewer/pages/gallery_detail/comment_page.dart';
 import 'package:fehviewer/pages/gallery_main/controller/gallery_page_controller.dart';
-import 'package:fehviewer/pages/gallery_main/gallery_page.dart';
+import 'package:fehviewer/pages/gallery_main/view/comment_page.dart';
+import 'package:fehviewer/pages/gallery_main/view/gallery_page.dart';
 import 'package:fehviewer/pages/gallery_view/controller/view_controller.dart';
-import 'package:fehviewer/pages/gallery_view/gallery_view_page.dart';
+import 'package:fehviewer/pages/gallery_view/view/gallery_view_page.dart';
 import 'package:fehviewer/pages/item/controller/galleryitem_controller.dart';
 import 'package:fehviewer/pages/tab/controller/gallery_controller.dart';
 import 'package:fehviewer/pages/tab/view/gallery_page.dart';

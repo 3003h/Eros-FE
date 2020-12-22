@@ -1,14 +1,15 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:fehviewer/common/controller/gallerycache_controller.dart';
 import 'package:fehviewer/common/global.dart';
+import 'package:fehviewer/common/service/ehconfig_service.dart';
 import 'package:fehviewer/generated/l10n.dart';
 import 'package:fehviewer/models/galleryItem.dart';
 import 'package:fehviewer/models/index.dart';
-import 'package:fehviewer/pages/gallery_detail/comment_item.dart';
-import 'package:fehviewer/pages/gallery_detail/gallery_all_preview_page.dart';
-import 'package:fehviewer/pages/gallery_detail/gallery_detail_widget.dart';
 import 'package:fehviewer/pages/gallery_main/controller/gallery_page_controller.dart';
-import 'package:fehviewer/pages/gallery_main/gallery_favcat.dart';
+import 'package:fehviewer/pages/gallery_main/view/comment_item.dart';
+import 'package:fehviewer/pages/gallery_main/view/gallery_all_preview_page.dart';
+import 'package:fehviewer/pages/gallery_main/view/gallery_favcat.dart';
+import 'package:fehviewer/pages/gallery_main/view/gallery_preview_clipper.dart';
 import 'package:fehviewer/pages/item/controller/galleryitem_controller.dart';
 import 'package:fehviewer/route/navigator_util.dart';
 import 'package:fehviewer/utils/logger.dart';
@@ -598,6 +599,219 @@ class MorePreviewButton extends StatelessWidget {
       onPressed: () {
         Get.to(const AllPreviewPage(), transition: Transition.cupertino);
       },
+    );
+  }
+}
+
+class PreviewContainer extends StatelessWidget {
+  PreviewContainer({
+    Key key,
+    @required this.index,
+    @required this.galleryPreviewList,
+  })  : galleryPreview = galleryPreviewList[index],
+        hrefs = List<String>.from(
+            galleryPreviewList.map((GalleryPreview e) => e.href).toList()),
+        super(key: key);
+
+  final int index;
+  final List<GalleryPreview> galleryPreviewList;
+  final List<String> hrefs;
+  final GalleryPreview galleryPreview;
+
+  @override
+  Widget build(BuildContext context) {
+    final Map<String, String> _httpHeaders = {
+      'Cookie': Global.profile?.user?.cookie ?? '',
+    };
+    Widget _buildImage() {
+      if (galleryPreview.isLarge ?? false) {
+        // 缩略大图
+        return CachedNetworkImage(
+          httpHeaders: _httpHeaders,
+          imageUrl: galleryPreview.imgUrl,
+        );
+      } else {
+        return LayoutBuilder(
+            builder: (BuildContext context, BoxConstraints constraints) {
+          double _subHeight;
+          double _subWidth;
+          final double _subHeightP = galleryPreview.height *
+              constraints.maxWidth /
+              galleryPreview.width;
+          if (_subHeightP > kHeightPreview) {
+            _subHeight = kHeightPreview;
+            _subWidth =
+                kHeightPreview * galleryPreview.width / galleryPreview.height;
+          } else {
+            _subWidth = constraints.maxWidth;
+            _subHeight = _subHeightP;
+          }
+          return Container(
+            height: _subHeight,
+            width: _subWidth,
+            // 缩略小图
+            child: Stack(
+              alignment: AlignmentDirectional.center,
+              fit: StackFit.expand,
+              children: <Widget>[
+                Container(
+                  child: PreviewImageClipper(
+                    imgUrl: galleryPreview.imgUrl,
+                    offset: galleryPreview.offSet,
+                    height: galleryPreview.height,
+                    width: galleryPreview.width,
+                  ),
+                ),
+              ],
+            ),
+          );
+        });
+      }
+    }
+
+    return GestureDetector(
+      behavior: HitTestBehavior.opaque,
+      onTap: () {
+        NavigatorUtil.goGalleryViewPage(index);
+      },
+      child: Container(
+        child: Column(
+          children: <Widget>[
+            Expanded(
+              child: Center(
+                child: ClipRRect(
+                  borderRadius: BorderRadius.circular(4),
+                  child: Container(
+                    child: _buildImage(),
+                  ),
+                ),
+              ),
+            ),
+            Container(
+              padding: const EdgeInsets.only(top: 4),
+              child: Text(
+                '${galleryPreview.ser ?? ''}',
+                style: TextStyle(
+                  fontSize: 14,
+                  color: CupertinoDynamicColor.resolve(
+                      CupertinoColors.systemGrey, context),
+                ),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+/// 一个标签组 第一个是类型
+class TagGroupItem extends StatelessWidget {
+  const TagGroupItem({
+    @required this.tagGroupData,
+  });
+
+  final TagGroup tagGroupData;
+
+  List<Widget> _initTagBtnList(galleryTags, context) {
+    final EhConfigService ehConfigController = Get.find();
+    final List<Widget> _tagBtnList = <Widget>[];
+    galleryTags.forEach((tag) {
+      _tagBtnList.add(
+        Obx(() => TagButton(
+              text: ehConfigController.isTagTranslat.value
+                  ? tag?.tagTranslat ?? ''
+                  : tag?.title ?? '',
+              onPressed: () {
+                logger.v('search type[${tag.type}] tag[${tag.title}]');
+                NavigatorUtil.goGalleryListBySearch(
+                    simpleSearch: '${tag.type}:${tag.title}');
+              },
+            )),
+      );
+    });
+    return _tagBtnList;
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final EhConfigService ehConfigController = Get.find();
+
+    final List<Widget> _tagBtnList =
+        _initTagBtnList(tagGroupData.galleryTags, context);
+    final String _tagType = tagGroupData.tagType;
+
+    final Container container = Container(
+      padding: const EdgeInsets.fromLTRB(0, 4, 0, 4),
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          // tag 分类
+          Container(
+            padding: const EdgeInsets.only(right: 8),
+            child: Obx(() => TagButton(
+                  color: CupertinoDynamicColor.resolve(
+                      ThemeColors.tagColorTagType[_tagType.trim()], context),
+                  text: ehConfigController.isTagTranslat.value
+                      ? EHConst.translateTagType[_tagType.trim()] ?? _tagType
+                      : _tagType,
+                )),
+          ),
+          Expanded(
+            child: Container(
+              child: Wrap(
+                spacing: 4, //主轴上子控件的间距
+                runSpacing: 4, //交叉轴上子控件之间的间距
+                children: _tagBtnList, //要显示的子控件集合
+              ),
+            ),
+          )
+        ],
+      ),
+    );
+
+    return container;
+  }
+}
+
+/// 标签按钮
+/// onPressed 回调
+class TagButton extends StatelessWidget {
+  const TagButton({
+    @required this.text,
+    this.textColor,
+    this.color,
+    VoidCallback onPressed,
+  }) : _onPressed = onPressed;
+
+  final String text;
+  final Color textColor;
+  final Color color;
+  final VoidCallback _onPressed;
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onTap: _onPressed,
+      child: ClipRRect(
+        borderRadius: BorderRadius.circular(8),
+        child: Container(
+          padding: const EdgeInsets.fromLTRB(6, 3, 6, 4),
+          color: color ??
+              CupertinoDynamicColor.resolve(ThemeColors.tagBackground, context),
+          child: Text(
+            text,
+            style: TextStyle(
+              color: textColor ??
+                  CupertinoDynamicColor.resolve(ThemeColors.tagText, context),
+              fontSize: 13,
+              height: 1.3,
+//              fontWeight: FontWeight.w500,
+            ),
+            strutStyle: const StrutStyle(height: 1),
+          ),
+        ),
+      ),
     );
   }
 }

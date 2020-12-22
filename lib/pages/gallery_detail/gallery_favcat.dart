@@ -1,3 +1,4 @@
+/*
 import 'package:fehviewer/common/controller/localfav_controller.dart';
 import 'package:fehviewer/common/controller/user_controller.dart';
 import 'package:fehviewer/common/global.dart';
@@ -37,12 +38,14 @@ class _GalleryFavButtonState extends State<GalleryFavButton> {
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-    /*final GalleryModel galleryModel =
+    */
+/*final GalleryModel galleryModel =
         Provider.of<GalleryModel>(context, listen: false);
     if (galleryModel != _galleryModel) {
       _galleryModel = galleryModel;
 
-    }*/
+    }*/ /*
+
     _favnote = '';
   }
 
@@ -503,3 +506,4 @@ class _FavcatAddListItemState extends State<FavcatAddListItem> {
     );
   }
 }
+*/

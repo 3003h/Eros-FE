@@ -5,7 +5,7 @@ import 'package:fehviewer/common/controller/gallerycache_controller.dart';
 import 'package:fehviewer/common/service/ehconfig_service.dart';
 import 'package:fehviewer/models/index.dart';
 import 'package:fehviewer/pages/gallery_main/controller/gallery_page_controller.dart';
-import 'package:fehviewer/pages/gallery_view/gallery_view_base.dart';
+import 'package:fehviewer/pages/gallery_view/view/gallery_view_base.dart';
 import 'package:fehviewer/utils/logger.dart';
 import 'package:fehviewer/utils/utility.dart';
 import 'package:fehviewer/values/const.dart';
@@ -90,7 +90,9 @@ class ViewController extends GetxController {
 
   List<GalleryPreview> get previews => _galleryPageController.previews;
 
-  String get filecount => _galleryPageController.galleryItem.filecount;
+  // String get filecount => _galleryPageController.galleryItem.filecount;
+  int get filecount =>
+      int.parse(_galleryPageController.galleryItem.filecount ?? '0');
 
   @override
   void onInit() {

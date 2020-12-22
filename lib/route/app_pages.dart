@@ -1,6 +1,6 @@
-import 'package:fehviewer/pages/gallery_detail/comment_page.dart';
-import 'package:fehviewer/pages/gallery_main/gallery_page.dart';
-import 'package:fehviewer/pages/gallery_view/gallery_view_page.dart';
+import 'package:fehviewer/pages/gallery_main/view/comment_page.dart';
+import 'package:fehviewer/pages/gallery_main/view/gallery_page.dart';
+import 'package:fehviewer/pages/gallery_view/view/gallery_view_page.dart';
 import 'package:fehviewer/pages/login/login_page.dart';
 import 'package:fehviewer/pages/login/web_login.dart';
 import 'package:fehviewer/pages/setting/about_page.dart';

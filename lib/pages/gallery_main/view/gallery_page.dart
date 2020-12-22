@@ -1,6 +1,6 @@
 import 'package:fehviewer/models/index.dart';
 import 'package:fehviewer/pages/gallery_main/controller/gallery_page_controller.dart';
-import 'package:fehviewer/pages/gallery_main/gallery_widget.dart';
+import 'package:fehviewer/pages/gallery_main/view/gallery_widget.dart';
 import 'package:fehviewer/utils/logger.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
