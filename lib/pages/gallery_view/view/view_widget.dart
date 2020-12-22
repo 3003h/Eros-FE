@@ -16,11 +16,13 @@ class GalleryImage extends StatefulWidget {
     Key key,
     @required this.index,
     this.downloadComplete,
+    @required this.gid,
   }) : super(key: key);
 
   @override
   _GalleryImageState createState() => _GalleryImageState();
   final int index;
+  final String gid;
   final ValueChanged<bool> downloadComplete;
 }
 
@@ -28,11 +30,12 @@ class _GalleryImageState extends State<GalleryImage> {
   Future<GalleryPreview> _future;
   final CancelToken _getMoreCancelToken = CancelToken();
 
-  final GalleryPageController _pageController = Get.find();
+  GalleryPageController _pageController;
 
   @override
   void initState() {
     super.initState();
+    _pageController = Get.find(tag: widget.gid);
     _future = _pageController.getImageInfo(widget.index,
         cancelToken: _getMoreCancelToken);
   }

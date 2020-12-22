@@ -19,6 +19,10 @@ class GalleryPageController extends GetxController
     with StateMixin<GalleryItem> {
   GalleryPageController();
 
+  GalleryPageController.initUrl({@required String url}) {
+    galleryItem = GalleryItem()..url = url;
+  }
+
   GalleryPageController.fromItem({
     @required this.galleryItem,
     @required this.tabIndex,

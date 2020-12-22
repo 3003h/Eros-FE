@@ -36,4 +36,13 @@ extension EhString on String {
     }
     return this;
   }
+
+  String get gid {
+    final RegExp urlRex = RegExp(r'/g/(\d+)/(\w+)/$');
+    final RegExpMatch urlRult = urlRex.firstMatch(this);
+
+    final String gid = urlRult.group(1);
+    final String token = urlRult.group(2);
+    return gid;
+  }
 }

@@ -10,11 +10,15 @@ import 'package:get/get.dart';
 class GalleryFavButton extends StatelessWidget {
   const GalleryFavButton({
     Key key,
+    @required this.gid,
   }) : super(key: key);
+
+  final String gid;
 
   @override
   Widget build(BuildContext context) {
-    final GalleryFavController _favController = Get.put(GalleryFavController());
+    final GalleryFavController _favController =
+        Get.put(GalleryFavController(gid));
     // 收藏按钮图标
     final Widget favIcon = Obx(() {
       return Container(

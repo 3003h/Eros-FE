@@ -6,10 +6,6 @@ import 'package:get/get.dart';
 import 'package:meta/meta.dart';
 
 class GalleryItemController extends GetxController {
-  GalleryItemController.initUrl({@required String url}) {
-    galleryItem = GalleryItem()..url = url;
-  }
-
   GalleryItemController.initData(GalleryItem galleryItem,
       {@required String tabIndex}) {
     // ignore: prefer_initializing_formals
