@@ -63,12 +63,12 @@ class GalleryHeader extends StatelessWidget {
                       const Spacer(),
                       Row(
                         crossAxisAlignment: CrossAxisAlignment.end,
-                        children: const <Widget>[
+                        children: <Widget>[
                           // 阅读按钮
-                          ReadButton(),
-                          Spacer(),
+                          ReadButton(gid: galleryItem.gid),
+                          const Spacer(),
                           // 收藏按钮
-                          GalleryFavButton(),
+                          GalleryFavButton(gid: galleryItem.gid),
                         ],
                       )
                     ],
@@ -297,11 +297,13 @@ class GalleryUploader extends StatelessWidget {
 class ReadButton extends StatelessWidget {
   const ReadButton({
     Key key,
+    @required this.gid,
   }) : super(key: key);
+  final String gid;
 
   @override
   Widget build(BuildContext context) {
-    final GalleryPageController _pageController = Get.find();
+    final GalleryPageController _pageController = Get.find(tag: gid);
     return Obx(
       () => CupertinoButton(
           child: Text(
@@ -326,7 +328,7 @@ class ReadButton extends StatelessWidget {
     final int _index = _galleryCache?.lastIndex ?? 0;
     logger.d('lastIndex $_index');
     await _pageController.showLoadingDialog(Get.context, _index);
-    NavigatorUtil.goGalleryViewPage(_index);
+    NavigatorUtil.goGalleryViewPage(_index, _pageController.galleryItem.gid);
   }
 }
 
@@ -416,7 +418,10 @@ class GalleryDetailInfo extends StatelessWidget {
             color: CupertinoDynamicColor.resolve(
                 CupertinoColors.systemGrey4, context),
           ),
-          PreviewGrid(previews: _pageController.firstPagePreview),
+          PreviewGrid(
+            previews: _pageController.firstPagePreview,
+            gid: galleryItem.gid,
+          ),
           _buildAllPreviewButton(),
         ],
       ),
@@ -438,40 +443,13 @@ class GalleryDetailInfo extends StatelessWidget {
       },
     );
   }
-
-  Widget _buildPreviewGrid() {
-    return Builder(builder: (_) {
-      final List<GalleryPreview> previews = _pageController.firstPagePreview;
-      return GridView.builder(
-          padding: const EdgeInsets.only(
-              top: kPadding, right: kPadding, left: kPadding),
-          shrinkWrap: true,
-          //解决无限高度问题
-          physics: const NeverScrollableScrollPhysics(),
-          //禁用滑动事件
-          gridDelegate: const SliverGridDelegateWithMaxCrossAxisExtent(
-//              crossAxisCount: _crossAxisCount, //每行列数
-              maxCrossAxisExtent: 130,
-              mainAxisSpacing: 0, //主轴方向的间距
-              crossAxisSpacing: 4, //交叉轴方向子元素的间距
-              childAspectRatio: 0.55 //显示区域宽高
-              ),
-          itemCount: previews.length,
-          itemBuilder: (context, index) {
-            return Center(
-              child: PreviewContainer(
-                galleryPreviewList: previews,
-                index: index,
-              ),
-            );
-          });
-    });
-  }
 }
 
 class PreviewGrid extends StatelessWidget {
-  const PreviewGrid({Key key, this.previews}) : super(key: key);
+  const PreviewGrid({Key key, this.previews, @required this.gid})
+      : super(key: key);
   final List<GalleryPreview> previews;
+  final String gid;
 
   @override
   Widget build(BuildContext context) {
@@ -495,6 +473,7 @@ class PreviewGrid extends StatelessWidget {
             child: PreviewContainer(
               galleryPreviewList: previews,
               index: index,
+              gid: gid,
             ),
           );
         });
@@ -608,12 +587,14 @@ class PreviewContainer extends StatelessWidget {
     Key key,
     @required this.index,
     @required this.galleryPreviewList,
+    @required this.gid,
   })  : galleryPreview = galleryPreviewList[index],
         hrefs = List<String>.from(
             galleryPreviewList.map((GalleryPreview e) => e.href).toList()),
         super(key: key);
 
   final int index;
+  final String gid;
   final List<GalleryPreview> galleryPreviewList;
   final List<String> hrefs;
   final GalleryPreview galleryPreview;
@@ -672,7 +653,7 @@ class PreviewContainer extends StatelessWidget {
     return GestureDetector(
       behavior: HitTestBehavior.opaque,
       onTap: () {
-        NavigatorUtil.goGalleryViewPage(index);
+        NavigatorUtil.goGalleryViewPage(index, gid);
       },
       child: Container(
         child: Column(

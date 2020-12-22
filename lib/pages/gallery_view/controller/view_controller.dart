@@ -16,7 +16,9 @@ const double kBottomBarHeight = 44.0;
 const double kTopBarHeight = 40.0;
 
 class ViewController extends GetxController {
-  ViewController(this.index);
+  ViewController(this.index, this.gid);
+
+  final String gid;
 
   final int index;
 
@@ -84,7 +86,7 @@ class ViewController extends GetxController {
 
   final EhConfigService _ehConfigController = Get.find();
   final GalleryCacheController _galleryCacheController = Get.find();
-  final GalleryPageController _galleryPageController = Get.find();
+  GalleryPageController _galleryPageController;
 
   ViewMode get viewMode => _ehConfigController.viewMode.value;
 
@@ -97,6 +99,8 @@ class ViewController extends GetxController {
   @override
   void onInit() {
     super.onInit();
+    _galleryPageController = Get.find(tag: gid);
+
     currentIndex = 0;
     showBar = false;
     logger.d('_index $index');

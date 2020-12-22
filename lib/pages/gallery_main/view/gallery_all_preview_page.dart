@@ -135,6 +135,7 @@ class _AllPreviewPageState extends State<AllPreviewPage> {
                         child: PreviewContainer(
                           galleryPreviewList: _galleryPreviewList,
                           index: index,
+                          gid: _pageController.gid,
                         ),
                       );
                     },

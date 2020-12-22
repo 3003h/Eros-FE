@@ -1,3 +1,4 @@
+import 'package:fehviewer/common/exts.dart';
 import 'package:fehviewer/models/galleryComment.dart';
 import 'package:fehviewer/models/index.dart';
 import 'package:fehviewer/pages/gallery_main/controller/gallery_page_controller.dart';
@@ -5,7 +6,6 @@ import 'package:fehviewer/pages/gallery_main/view/comment_page.dart';
 import 'package:fehviewer/pages/gallery_main/view/gallery_page.dart';
 import 'package:fehviewer/pages/gallery_view/controller/view_controller.dart';
 import 'package:fehviewer/pages/gallery_view/view/gallery_view_page.dart';
-import 'package:fehviewer/pages/item/controller/galleryitem_controller.dart';
 import 'package:fehviewer/pages/tab/controller/gallery_controller.dart';
 import 'package:fehviewer/pages/tab/view/gallery_page.dart';
 import 'package:fehviewer/pages/tab/view/search_page.dart';
@@ -34,22 +34,28 @@ class NavigatorUtil {
       {String url, String tabIndex, GalleryItem galleryItem}) {
     if (url != null && url.isNotEmpty) {
       // TODO(honjow): 通过链接直接打开画廊的情况
+      final String gid = url.gid;
       // ignore: always_specify_types
-      Get.to(GalleryPage(), binding: BindingsBuilder(() {
-        Get.lazyPut(() => GalleryItemController.initUrl(url: url));
-      }));
+      Get.to(
+        GalleryPage(gid: gid),
+        transition: Transition.cupertino,
+        preventDuplicates: false,
+        binding: BindingsBuilder(() {
+          Get.put(GalleryPageController.initUrl(url: url), tag: gid);
+        }),
+      );
     } else {
       Get.to(
-        GalleryPage(),
+        GalleryPage(gid: galleryItem.gid),
         transition: Transition.cupertino,
         binding: BindingsBuilder<GalleryPageController>(
           () {
-            // 创建GalleryPageController依赖 不能保留 在退出页面后销毁
-            Get.put(
-              GalleryPageController.fromItem(
+            Get.lazyPut(
+              () => GalleryPageController.fromItem(
                 galleryItem: galleryItem,
                 tabIndex: tabIndex,
               ),
+              tag: galleryItem.gid,
             );
           },
         ),
@@ -60,7 +66,7 @@ class NavigatorUtil {
   static void goGalleryDetailReplace(BuildContext context, {String url}) {
     if (url != null && url.isNotEmpty) {
       Get.off(GalleryPage(), binding: BindingsBuilder(() {
-        Get.create(() => GalleryItemController.initUrl(url: url));
+        Get.put(GalleryPageController.initUrl(url: url));
       }));
     } else {
       Get.to(GalleryPage());
@@ -77,13 +83,13 @@ class NavigatorUtil {
   }
 
   // 转到大图浏览
-  static void goGalleryViewPage(int index) {
+  static void goGalleryViewPage(int index, String gid) {
     logger.d('goGalleryViewPage $index');
     Get.to(
       GalleryViewPage(),
       binding: BindingsBuilder(() {
         // Get.lazyPut(() => ViewController(index));
-        Get.put(ViewController(index));
+        Get.put(ViewController(index, gid));
       }),
     );
   }

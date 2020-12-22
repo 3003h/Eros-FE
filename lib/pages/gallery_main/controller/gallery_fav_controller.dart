@@ -16,6 +16,8 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
 
 class GalleryFavController extends GetxController {
+  GalleryFavController(this.gid);
+  final String gid;
   final RxBool _isLoading = false.obs;
 
   bool get isLoading => _isLoading.value;
@@ -27,14 +29,15 @@ class GalleryFavController extends GetxController {
   final TextEditingController _favnoteController = TextEditingController();
   final LocalFavController _localFavController = Get.find();
   final UserController _userController = Get.find();
-  final GalleryPageController _pageController = Get.find();
-  GalleryItemController _itemController;
   final EhConfigService _ehConfigController = Get.find();
+  GalleryPageController _pageController;
+  GalleryItemController _itemController;
 
   @override
   void onInit() {
     super.onInit();
-    _itemController = Get.find(tag: _pageController.galleryItem.gid);
+    _pageController = Get.find(tag: gid);
+    _itemController = Get.find(tag: gid);
 
     _localFav.value = _pageController.localFav ?? false;
 

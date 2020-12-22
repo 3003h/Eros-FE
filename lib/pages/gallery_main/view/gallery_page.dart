@@ -12,9 +12,13 @@ const double kHeaderHeight = 200.0 + 52;
 const double kPadding = 12.0;
 const double kHeaderPaddingTop = 12.0;
 
-class GalleryPage extends GetView<GalleryPageController> {
+class GalleryPage extends StatelessWidget {
+  const GalleryPage({@required this.gid});
+
+  final String gid;
   @override
   Widget build(BuildContext context) {
+    final GalleryPageController controller = Get.find(tag: gid);
     final GalleryItem _item = controller.galleryItem;
     return CupertinoPageScaffold(
       child: CustomScrollView(
@@ -51,7 +55,7 @@ class GalleryPage extends GetView<GalleryPageController> {
                           Share.share(' ${_item.url}');
                         },
                       )
-                    : const ReadButton(),
+                    : ReadButton(gid: _item.gid),
               )),
           CupertinoSliverRefreshControl(
             onRefresh: controller.handOnRefresh,
@@ -107,7 +111,7 @@ class NavigationBarImage extends StatelessWidget {
 }
 
 // 画廊内容
-class GalleryContainer extends GetView<GalleryPageController> {
+class GalleryContainer extends StatelessWidget {
   const GalleryContainer({Key key, @required this.galleryItem, this.tabIndex})
       : super(key: key);
   final GalleryItem galleryItem;
@@ -115,6 +119,8 @@ class GalleryContainer extends GetView<GalleryPageController> {
 
   @override
   Widget build(BuildContext context) {
+    final GalleryPageController controller = Get.find(tag: galleryItem.gid);
+
     return Container(
       child: Column(
         children: <Widget>[
@@ -140,7 +146,10 @@ class GalleryContainer extends GetView<GalleryPageController> {
                     color: CupertinoDynamicColor.resolve(
                         CupertinoColors.systemGrey4, context),
                   ),
-                  PreviewGrid(previews: controller.firstPagePreview),
+                  PreviewGrid(
+                    previews: controller.firstPagePreview,
+                    gid: galleryItem.gid,
+                  ),
                   MorePreviewButton(hasMorePreview: controller.hasMorePreview),
                 ],
               );
