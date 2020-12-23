@@ -14,6 +14,8 @@ import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:get/get.dart';
 import 'package:oktoast/oktoast.dart';
 
+import 'common/service/depth_service.dart';
+
 void main() {
   Global.init().then((_) {
     Get.lazyPut(() => EhConfigService(), fenix: true);
@@ -23,6 +25,8 @@ void main() {
     Get.lazyPut(() => ThemeService(), fenix: true);
     // DnsConfigController
     Get.put(DnsService(), permanent: true);
+
+    Get.put(DepthService());
 
     runApp(
       DevicePreview(

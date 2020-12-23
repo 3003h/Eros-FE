@@ -25,6 +25,9 @@ class Global {
   static bool inDebugMode = false;
   static bool isFirstReOpenEhSetting = true;
 
+  // pageController的tag
+  static int pageCtrlDepth = 0;
+
   static Profile profile = Profile();
 
   static History history = History();

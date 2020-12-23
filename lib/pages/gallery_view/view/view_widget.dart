@@ -1,6 +1,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:dio/dio.dart';
 import 'package:extended_image/extended_image.dart';
+import 'package:fehviewer/common/service/depth_service.dart';
 import 'package:fehviewer/models/index.dart';
 import 'package:fehviewer/pages/gallery_main/controller/gallery_page_controller.dart';
 import 'package:fehviewer/utils/logger.dart';
@@ -16,13 +17,12 @@ class GalleryImage extends StatefulWidget {
     Key key,
     @required this.index,
     this.downloadComplete,
-    @required this.gid,
   }) : super(key: key);
 
   @override
   _GalleryImageState createState() => _GalleryImageState();
   final int index;
-  final String gid;
+  // final String gid;
   final ValueChanged<bool> downloadComplete;
 }
 
@@ -35,7 +35,8 @@ class _GalleryImageState extends State<GalleryImage> {
   @override
   void initState() {
     super.initState();
-    _pageController = Get.find(tag: widget.gid);
+    _pageController =
+        Get.find(tag: '${Get.find<DepthService>().pageCtrlDepth}');
     _future = _pageController.getImageInfo(widget.index,
         cancelToken: _getMoreCancelToken);
   }

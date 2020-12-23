@@ -1,6 +1,7 @@
 import 'package:dio/dio.dart';
 import 'package:fehviewer/common/controller/history_controller.dart';
 import 'package:fehviewer/common/controller/localfav_controller.dart';
+import 'package:fehviewer/common/service/depth_service.dart';
 import 'package:fehviewer/common/service/ehconfig_service.dart';
 import 'package:fehviewer/models/index.dart';
 import 'package:fehviewer/pages/gallery_view/view/gallery_view_base.dart';
@@ -54,6 +55,8 @@ class GalleryPageController extends GetxController
 
   final HistoryController _historyController = Get.find();
 
+  final DepthService depthService = Get.find();
+
   @override
   void onInit() {
     super.onInit();
@@ -72,6 +75,7 @@ class GalleryPageController extends GetxController
   @override
   void onClose() {
     scrollController.dispose();
+    depthService.popPageCtrl();
     super.onClose();
   }
 

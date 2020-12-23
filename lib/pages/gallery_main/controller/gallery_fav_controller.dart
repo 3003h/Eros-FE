@@ -2,6 +2,7 @@ import 'package:fehviewer/common/controller/localfav_controller.dart';
 import 'package:fehviewer/common/controller/user_controller.dart';
 import 'package:fehviewer/common/global.dart';
 import 'package:fehviewer/common/parser/gallery_fav_parser.dart';
+import 'package:fehviewer/common/service/depth_service.dart';
 import 'package:fehviewer/common/service/ehconfig_service.dart';
 import 'package:fehviewer/generated/l10n.dart';
 import 'package:fehviewer/pages/gallery_main/controller/gallery_page_controller.dart';
@@ -16,8 +17,6 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
 
 class GalleryFavController extends GetxController {
-  GalleryFavController(this.gid);
-  final String gid;
   final RxBool _isLoading = false.obs;
 
   bool get isLoading => _isLoading.value;
@@ -36,8 +35,9 @@ class GalleryFavController extends GetxController {
   @override
   void onInit() {
     super.onInit();
-    _pageController = Get.find(tag: gid);
-    _itemController = Get.find(tag: gid);
+    _pageController =
+        Get.find(tag: '${Get.find<DepthService>().pageCtrlDepth}');
+    _itemController = Get.find(tag: _pageController.gid);
 
     _localFav.value = _pageController.localFav ?? false;
 

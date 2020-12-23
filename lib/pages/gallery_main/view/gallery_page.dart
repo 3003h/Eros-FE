@@ -1,3 +1,4 @@
+import 'package:fehviewer/common/service/depth_service.dart';
 import 'package:fehviewer/models/index.dart';
 import 'package:fehviewer/pages/gallery_main/controller/gallery_page_controller.dart';
 import 'package:fehviewer/pages/gallery_main/view/gallery_widget.dart';
@@ -13,12 +14,13 @@ const double kPadding = 12.0;
 const double kHeaderPaddingTop = 12.0;
 
 class GalleryPage extends StatelessWidget {
-  const GalleryPage({@required this.gid});
+  const GalleryPage({this.tag});
 
-  final String gid;
+  final String tag;
   @override
   Widget build(BuildContext context) {
-    final GalleryPageController controller = Get.find(tag: gid);
+    final GalleryPageController controller =
+        Get.find(tag: '${Get.find<DepthService>().pageCtrlDepth}');
     final GalleryItem _item = controller.galleryItem;
     return CupertinoPageScaffold(
       child: CustomScrollView(
@@ -119,7 +121,8 @@ class GalleryContainer extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final GalleryPageController controller = Get.find(tag: galleryItem.gid);
+    final GalleryPageController controller =
+        Get.find(tag: '${Get.find<DepthService>().pageCtrlDepth}');
 
     return Container(
       child: Column(
