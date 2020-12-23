@@ -14,9 +14,6 @@ import 'package:photo_view/photo_view_gallery.dart';
 
 import '../controller/view_controller.dart';
 
-const double kBottomBarHeight = 44.0;
-const double kTopBarHeight = 40.0;
-
 class GalleryViewPage extends GetView<ViewController> {
   const GalleryViewPage({Key key}) : super(key: key);
 
@@ -116,7 +113,7 @@ class GalleryViewPage extends GetView<ViewController> {
   Widget _buildTopBar(BuildContext context) {
     final List<GalleryPreview> previews = controller.previews;
     return Container(
-        height: kTopBarHeight + controller.paddingTop,
+        // height: kTopBarHeight + controller.paddingTop,
         width: controller.screensize.width,
         color: const Color.fromARGB(150, 0, 0, 0),
         padding: EdgeInsets.fromLTRB(
@@ -156,7 +153,8 @@ class GalleryViewPage extends GetView<ViewController> {
                   ),
                 ),
                 const Spacer(),
-                GestureDetector(
+                // 分享按钮
+                /*GestureDetector(
                   behavior: HitTestBehavior.opaque,
                   onTap: () {
                     logger.v('tap share');
@@ -172,7 +170,8 @@ class GalleryViewPage extends GetView<ViewController> {
                       // size: 24,
                     ),
                   ),
-                ),
+                ),*/
+                // 菜单按钮
                 GestureDetector(
                   behavior: HitTestBehavior.opaque,
                   onTap: () {
@@ -199,6 +198,7 @@ class GalleryViewPage extends GetView<ViewController> {
   /// 底栏
   Widget _buildBottomBar() {
     final double _max = controller.filecount - 1.0;
+    final List<GalleryPreview> previews = controller.previews;
     return Container(
       color: const Color.fromARGB(150, 0, 0, 0),
       padding: EdgeInsets.only(
@@ -207,19 +207,48 @@ class GalleryViewPage extends GetView<ViewController> {
         right: controller.paddingRight,
       ),
       width: controller.screensize.width,
-      height: kBottomBarHeight + controller.paddingBottom,
-      child: Row(
+      // height: kBottomBarHeight + controller.paddingBottom,
+      child: Column(
         children: <Widget>[
-          Expanded(
-            child: Padding(
-              padding: const EdgeInsets.only(left: 8.0, right: 8.0),
-              child: PageSlider(
-                max: _max,
-                sliderValue: controller.sliderValue,
-                onChangedEnd: controller.handOnSliderChangedEnd,
-                onChanged: controller.handOnSliderChanged,
-              ),
+          Padding(
+            padding: const EdgeInsets.only(left: 8.0),
+            child: Row(
+              children: <Widget>[
+                GestureDetector(
+                  behavior: HitTestBehavior.opaque,
+                  onTap: () {
+                    logger.v('tap share');
+                    showShareDialog(Get.context,
+                        previews[controller.currentIndex].largeImageUrl);
+                  },
+                  child: Container(
+                    width: 40,
+                    height: kBottomBarHeight,
+                    child: const Icon(
+                      FontAwesomeIcons.share,
+                      color: CupertinoColors.systemGrey6,
+                      // size: 24,
+                    ),
+                  ),
+                ),
+                const Spacer(),
+              ],
             ),
+          ),
+          Row(
+            children: <Widget>[
+              Expanded(
+                child: Padding(
+                  padding: const EdgeInsets.only(left: 8.0, right: 8.0),
+                  child: PageSlider(
+                    max: _max,
+                    sliderValue: controller.sliderValue,
+                    onChangedEnd: controller.handOnSliderChangedEnd,
+                    onChanged: controller.handOnSliderChanged,
+                  ),
+                ),
+              ),
+            ],
           ),
         ],
       ),
