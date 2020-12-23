@@ -1,4 +1,5 @@
 import 'package:dio/dio.dart';
+import 'package:fehviewer/common/service/depth_service.dart';
 import 'package:fehviewer/generated/l10n.dart';
 import 'package:fehviewer/models/index.dart';
 import 'package:fehviewer/pages/gallery_main/controller/gallery_page_controller.dart';
@@ -37,7 +38,8 @@ class _AllPreviewPageState extends State<AllPreviewPage> {
 
   CancelToken moreGalleryPreviewCancelToken = CancelToken();
 
-  final GalleryPageController _pageController = Get.find();
+  final GalleryPageController _pageController =
+      Get.find(tag: '${Get.find<DepthService>().pageCtrlDepth}');
 
   @override
   void dispose() {

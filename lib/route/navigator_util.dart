@@ -64,6 +64,30 @@ class NavigatorUtil {
           },
         ),
       );
+/*      navigator.push(
+        CupertinoPageRoute<GalleryPage>(builder: (_) {
+          Get.put(
+            GalleryPageController.fromItem(
+              galleryItem: galleryItem,
+              tabIndex: tabIndex,
+            ),
+            tag: '${depthService.pageCtrlDepth}',
+          );
+          return const GalleryPage();
+        }),
+      );*/
+
+/*      Navigator.of(Get.context)
+          .push(CupertinoPageRoute<GalleryPage>(builder: (_) {
+        Get.put(
+          GalleryPageController.fromItem(
+            galleryItem: galleryItem,
+            tabIndex: tabIndex,
+          ),
+          tag: '${depthService.pageCtrlDepth}',
+        );
+        return const GalleryPage();
+      }));*/
     }
   }
 

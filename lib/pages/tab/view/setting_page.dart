@@ -22,7 +22,7 @@ class SettingTab extends GetView<SettingViewController> {
             largeTitle: Text(
               _title,
             ),
-            transitionBetweenRoutes: true,
+            // transitionBetweenRoutes: true,
           ),
           SliverSafeArea(
               top: false,

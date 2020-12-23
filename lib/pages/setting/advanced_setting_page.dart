@@ -16,19 +16,12 @@ import 'package:get/get.dart';
 
 import 'setting_base.dart';
 
-class AdvancedSettingPage extends StatefulWidget {
-  @override
-  State<StatefulWidget> createState() {
-    return AdvancedSettingPageState();
-  }
-}
-
-class AdvancedSettingPageState extends State<AdvancedSettingPage> {
+class AdvancedSettingPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final CupertinoPageScaffold cps = CupertinoPageScaffold(
         navigationBar: CupertinoNavigationBar(
-          transitionBetweenRoutes: true,
+          // transitionBetweenRoutes: true,
           middle: Text(S.of(context).advanced),
         ),
         child: SafeArea(
@@ -65,68 +58,71 @@ class ListViewAdvancedSetting extends StatelessWidget {
       dnsConfigController.enableDomainFronting.value = newValue;
     }
 
-    return Container(
-      child: ListView(
-        children: <Widget>[
-          _buildLanguageItem(context),
-          Divider(
-            height: 38,
-            thickness: 38.5,
-            color: CupertinoDynamicColor.resolve(
-                CupertinoColors.systemGrey5, context),
-          ),
-          _buildThemeItem(context),
-          Obx(() => TextSwitchItem(
-                S.of(context).dark_mode_effect,
-                intValue: ehConfigService.isPureDarkTheme.value,
-                onChanged: _handlePureDarkChanged,
-                desc: S.of(context).gray_black,
-                descOn: S.of(context).pure_black,
-              )),
-          Divider(
-            height: 38,
-            thickness: 38.5,
-            color: CupertinoDynamicColor.resolve(
-                CupertinoColors.systemGrey5, context),
-          ),
-          SelectorSettingItem(
-            title: S.of(context).clear_cache,
-            selector: '',
-            onTap: () {
-              logger.d(' clear_cache');
-              Get.find<CacheController>().clearAllCache();
-            },
-          ),
-          Divider(
-            height: 38,
-            thickness: 38.5,
-            color: CupertinoDynamicColor.resolve(
-                CupertinoColors.systemGrey5, context),
-          ),
-          Obx(() => SelectorSettingItem(
-                title: S.of(context).custom_hosts,
-                selector: dnsConfigController.enableCustomHosts.value
-                    ? S.of(context).on
-                    : S.of(context).off,
-                onTap: () {
-                  Get.to(CustomHostsPage());
-                },
-              )),
-          TextSwitchItem(
-            'DNS-over-HTTPS',
-            intValue: dnsConfigController.enableDoH.value,
-            onChanged: _handleDoHChanged,
-            desc: '优先级低于自定义hosts',
-          ),
-          if (Global.inDebugMode)
-            TextSwitchItem(
-              S.of(context).domain_fronting,
-              intValue: dnsConfigController.enableDomainFronting.value,
-              onChanged: _handleEFChanged,
-              desc: 'pass SNI',
-            ),
-        ],
+    final List<Widget> _list = <Widget>[
+      _buildLanguageItem(context),
+      Divider(
+        height: 38,
+        thickness: 38.5,
+        color:
+            CupertinoDynamicColor.resolve(CupertinoColors.systemGrey5, context),
       ),
+      _buildThemeItem(context),
+      Obx(() => TextSwitchItem(
+            S.of(context).dark_mode_effect,
+            intValue: ehConfigService.isPureDarkTheme.value,
+            onChanged: _handlePureDarkChanged,
+            desc: S.of(context).gray_black,
+            descOn: S.of(context).pure_black,
+          )),
+      Divider(
+        height: 38,
+        thickness: 38.5,
+        color:
+            CupertinoDynamicColor.resolve(CupertinoColors.systemGrey5, context),
+      ),
+      SelectorSettingItem(
+        title: S.of(context).clear_cache,
+        selector: '',
+        onTap: () {
+          logger.d(' clear_cache');
+          Get.find<CacheController>().clearAllCache();
+        },
+      ),
+      Divider(
+        height: 38,
+        thickness: 38.5,
+        color:
+            CupertinoDynamicColor.resolve(CupertinoColors.systemGrey5, context),
+      ),
+      Obx(() => SelectorSettingItem(
+            title: S.of(context).custom_hosts,
+            selector: dnsConfigController.enableCustomHosts.value
+                ? S.of(context).on
+                : S.of(context).off,
+            onTap: () {
+              Get.to(CustomHostsPage(), transition: Transition.cupertino);
+            },
+          )),
+      TextSwitchItem(
+        'DNS-over-HTTPS',
+        intValue: dnsConfigController.enableDoH.value,
+        onChanged: _handleDoHChanged,
+        desc: '优先级低于自定义hosts',
+      ),
+      if (Global.inDebugMode)
+        TextSwitchItem(
+          S.of(context).domain_fronting,
+          intValue: dnsConfigController.enableDomainFronting.value,
+          onChanged: _handleEFChanged,
+          desc: 'pass SNI',
+        ),
+    ];
+
+    return ListView.builder(
+      itemCount: _list.length,
+      itemBuilder: (BuildContext context, int index) {
+        return _list[index];
+      },
     );
   }
 

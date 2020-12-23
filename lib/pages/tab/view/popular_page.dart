@@ -3,7 +3,6 @@ import 'package:fehviewer/pages/tab/controller/popular_controller.dart';
 import 'package:fehviewer/pages/tab/view/gallery_base.dart';
 import 'package:fehviewer/pages/tab/view/tab_base.dart';
 import 'package:fehviewer/utils/logger.dart';
-import 'package:fehviewer/widget/eh_widget.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -22,10 +21,7 @@ class PopularListTab extends GetView<PopularViewController> {
       physics: const AlwaysScrollableScrollPhysics(),
       slivers: <Widget>[
         CupertinoSliverNavigationBar(
-          largeTitle: TabPageTitle(
-            title: _title,
-            isLoading: false,
-          ),
+          largeTitle: Text(_title),
         ),
         CupertinoSliverRefreshControl(
           onRefresh: () async {

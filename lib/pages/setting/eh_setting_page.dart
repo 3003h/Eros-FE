@@ -13,12 +13,7 @@ import 'package:get/get.dart';
 
 import 'setting_base.dart';
 
-class EhSettingPage extends StatefulWidget {
-  @override
-  State<StatefulWidget> createState() => _EhSettingPage();
-}
-
-class _EhSettingPage extends State<EhSettingPage> {
+class EhSettingPage extends StatelessWidget {
   Future<bool> _getDelayed() async {
     final int _delayed = (Global.isFirstReOpenEhSetting ?? true) ? 0 : 0;
     // logger.v('$_delayed');
@@ -204,7 +199,7 @@ Widget _buildListModeItem(BuildContext context) {
                 onPressed: () {
                   Get.back();
                 },
-                child: const Text('取消')),
+                child: Text(S.of(context).cancel)),
             actions: <Widget>[
               ..._getModeList(context),
             ],
@@ -261,7 +256,7 @@ Widget _buildHistoryMaxItem(BuildContext context) {
                 onPressed: () {
                   Get.back();
                 },
-                child: const Text('取消')),
+                child: Text(S.of(context).cancel)),
             actions: <Widget>[
               ..._getModeList(context),
             ],
