@@ -1,4 +1,5 @@
 import 'package:fehviewer/common/exts.dart';
+import 'package:fehviewer/common/service/depth_service.dart';
 import 'package:fehviewer/models/galleryComment.dart';
 import 'package:fehviewer/models/index.dart';
 import 'package:fehviewer/pages/gallery_main/controller/gallery_page_controller.dart';
@@ -32,30 +33,34 @@ class NavigatorUtil {
   /// 转到画廊页面
   static void goGalleryPage(
       {String url, String tabIndex, GalleryItem galleryItem}) {
+    final DepthService depthService = Get.find();
+    depthService.pushPageCtrl();
+
     if (url != null && url.isNotEmpty) {
-      // TODO(honjow): 通过链接直接打开画廊的情况
       final String gid = url.gid;
+      // TODO(honjow): 通过链接直接打开画廊的情况
       // ignore: always_specify_types
       Get.to(
-        GalleryPage(gid: gid),
+        const GalleryPage(),
         transition: Transition.cupertino,
         preventDuplicates: false,
         binding: BindingsBuilder(() {
-          Get.put(GalleryPageController.initUrl(url: url), tag: gid);
+          Get.put(GalleryPageController.initUrl(url: url),
+              tag: '${depthService.pageCtrlDepth}');
         }),
       );
     } else {
       Get.to(
-        GalleryPage(gid: galleryItem.gid),
+        const GalleryPage(),
         transition: Transition.cupertino,
         binding: BindingsBuilder<GalleryPageController>(
           () {
-            Get.lazyPut(
-              () => GalleryPageController.fromItem(
+            Get.put(
+              GalleryPageController.fromItem(
                 galleryItem: galleryItem,
                 tabIndex: tabIndex,
               ),
-              tag: galleryItem.gid,
+              tag: '${depthService.pageCtrlDepth}',
             );
           },
         ),
@@ -89,7 +94,7 @@ class NavigatorUtil {
       GalleryViewPage(),
       binding: BindingsBuilder(() {
         // Get.lazyPut(() => ViewController(index));
-        Get.put(ViewController(index, gid));
+        Get.put(ViewController(index));
       }),
     );
   }

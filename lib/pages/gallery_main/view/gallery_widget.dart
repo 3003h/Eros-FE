@@ -1,6 +1,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:fehviewer/common/controller/gallerycache_controller.dart';
 import 'package:fehviewer/common/global.dart';
+import 'package:fehviewer/common/service/depth_service.dart';
 import 'package:fehviewer/common/service/ehconfig_service.dart';
 import 'package:fehviewer/generated/l10n.dart';
 import 'package:fehviewer/models/galleryItem.dart';
@@ -68,7 +69,7 @@ class GalleryHeader extends StatelessWidget {
                           ReadButton(gid: galleryItem.gid),
                           const Spacer(),
                           // 收藏按钮
-                          GalleryFavButton(gid: galleryItem.gid),
+                          const GalleryFavButton(),
                         ],
                       )
                     ],
@@ -303,7 +304,8 @@ class ReadButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final GalleryPageController _pageController = Get.find(tag: gid);
+    final GalleryPageController _pageController =
+        Get.find(tag: '${Get.find<DepthService>().pageCtrlDepth}');
     return Obx(
       () => CupertinoButton(
           child: Text(

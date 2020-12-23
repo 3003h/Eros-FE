@@ -290,7 +290,6 @@ class GalleryViewPage extends GetView<ViewController> {
                           // width: snapshot.data.largeImageWidth,
                           child: GalleryImage(
                             index: index,
-                            gid: controller.gid,
                           ));
                     }
                   } else {
@@ -339,7 +338,6 @@ class GalleryViewPage extends GetView<ViewController> {
         return PhotoViewGalleryPageOptions.customChild(
           child: GalleryImage(
             index: index,
-            gid: controller.gid,
           ),
           initialScale: PhotoViewComputedScale.covered,
           minScale: PhotoViewComputedScale.contained * 1.0,

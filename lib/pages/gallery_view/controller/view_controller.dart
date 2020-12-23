@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:dio/dio.dart';
 import 'package:fehviewer/common/controller/gallerycache_controller.dart';
+import 'package:fehviewer/common/service/depth_service.dart';
 import 'package:fehviewer/common/service/ehconfig_service.dart';
 import 'package:fehviewer/models/index.dart';
 import 'package:fehviewer/pages/gallery_main/controller/gallery_page_controller.dart';
@@ -16,9 +17,9 @@ const double kBottomBarHeight = 44.0;
 const double kTopBarHeight = 40.0;
 
 class ViewController extends GetxController {
-  ViewController(this.index, this.gid);
+  ViewController(this.index);
 
-  final String gid;
+  // final String gid;
 
   final int index;
 
@@ -99,7 +100,8 @@ class ViewController extends GetxController {
   @override
   void onInit() {
     super.onInit();
-    _galleryPageController = Get.find(tag: gid);
+    _galleryPageController =
+        Get.find(tag: '${Get.find<DepthService>().pageCtrlDepth}');
 
     currentIndex = 0;
     showBar = false;
