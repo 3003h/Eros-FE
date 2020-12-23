@@ -142,22 +142,15 @@ class GalleryPageController extends GetxController
 
   /// 请求数据
   Future<GalleryItem> _loadData({bool refresh = false}) async {
-    await Future<void>.delayed(const Duration(milliseconds: 10));
+    logger.d('fetch data');
+    await Future<void>.delayed(const Duration(milliseconds: 200));
     try {
-      // 加入历史
-      if (galleryItem.gid != null) {
-        Future<void>.delayed(const Duration(milliseconds: 100)).then((_) {
-          _historyController.addHistory(galleryItem);
-        });
-      }
-
       hideNavigationBtn = true;
 
       // 检查画廊是否包含在本地收藏中
-/*      final bool _localFav = _isInLocalFav(galleryItem.gid);
-      _item.localFav = _localFav;*/
+      final bool _localFav = _isInLocalFav(galleryItem.gid);
+      galleryItem.localFav = _localFav;
 
-      logger.d('fetch data');
       await Future<void>.delayed(const Duration(milliseconds: 200));
 
       if (galleryItem.filecount == null || galleryItem.filecount.isEmpty) {
@@ -174,6 +167,13 @@ class GalleryPageController extends GetxController
       setPreviewAfterRequest(galleryItem.galleryPreview);
 
       galleryItem.imgUrl = galleryItem.imgUrl ?? galleryItem.imgUrlL;
+
+      // 加入历史
+      if (galleryItem.gid != null) {
+        Future<void>.delayed(const Duration(milliseconds: 100)).then((_) {
+          _historyController.addHistory(galleryItem);
+        });
+      }
 
       return galleryItem;
     } on DioError catch (e) {

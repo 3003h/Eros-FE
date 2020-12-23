@@ -47,7 +47,7 @@ class ViewController extends GetxController {
     realPaddingBottom = Platform.isAndroid ? 20 + paddingBottom : paddingBottom;
 
     // 底栏隐藏时偏移
-    final double _offsetBottomHide = realPaddingBottom + kBottomBarHeight;
+    final double _offsetBottomHide = realPaddingBottom + kBottomBarHeight * 2;
     if (showBar) {
       return 0;
     } else {
