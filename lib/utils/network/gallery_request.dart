@@ -8,7 +8,6 @@ import 'package:dio/dio.dart';
 import 'package:dio_http_cache/dio_http_cache.dart';
 import 'package:dns_client/dns_client.dart';
 import 'package:enum_to_string/enum_to_string.dart';
-import 'package:extended_image/extended_image.dart';
 import 'package:fehviewer/common/controller/advance_search_controller.dart';
 import 'package:fehviewer/common/global.dart';
 import 'package:fehviewer/common/parser/gallery_detail_parser.dart';
@@ -577,6 +576,7 @@ class Api {
         imageBytes = bytes.buffer.asUint8List();
       } else {
         /// 保存网络图片
+        logger.d('保存网络图片');
         final CachedNetworkImage image = CachedNetworkImage(imageUrl: imageUrl);
         final DefaultCacheManager manager =
             image.cacheManager ?? DefaultCacheManager();
@@ -586,12 +586,6 @@ class Api {
           headers: headers,
         );
         imageBytes = await file.readAsBytes();
-
-        ExtendedNetworkImageProvider _image = ExtendedNetworkImageProvider(
-          imageUrl,
-          cache: true,
-        );
-        Uint8List _imageBytes = await _image.getNetworkImageData();
       }
 
       /// 保存图片

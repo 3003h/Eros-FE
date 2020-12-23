@@ -6,7 +6,7 @@ publish_to: 'none' # Remove this line if you wish to publish to pub.dev
 version: 1.0.2+73
 
 environment:
-  sdk: '>=2.7.0 <3.0.0'
+  sdk: '>=2.9.0 <3.0.0'
 
 dependencies:
   flutter:
@@ -20,7 +20,7 @@ dependencies:
 
   # 图标
   cupertino_icons: ^1.0.0
-  font_awesome_flutter: ^8.10.0
+  font_awesome_flutter: ^8.11.0
 
   # 网络请求
   dio: ^3.0.10
@@ -41,19 +41,19 @@ dependencies:
   # flutter_easyrefresh: ^2.1.1
 
   # 数据库
-  sqflite: ^1.3.2
+  sqflite: ^1.3.2+1
 
   # html反转义
   html_unescape: ^1.0.2
 
-  enum_to_string: ^1.0.13
+  enum_to_string: ^1.0.14
 
   # webview
 #  flutter_webview_plugin: ^0.3.11
   webview_flutter: ^1.0.7
 
   # 文字链接
-  flutter_linkify: ^3.1.3
+  flutter_linkify: ^4.0.2
   url_launcher: ^5.7.8
 
   # 元组
@@ -62,13 +62,13 @@ dependencies:
   # 状态管理
 #  provider: ^4.3.2+2
 
-  get: ^3.22.2
+  get: ^3.24.0
 
   photo_view: ^0.10.3
 
   # 图片相关
-  cached_network_image: ^2.3.3
-  extended_image: ^1.3.0
+  cached_network_image: ^2.5.0
+  extended_image: ^1.5.0
 
   liquid_progress_indicator: ^0.3.2
 
@@ -81,7 +81,7 @@ dependencies:
   waterfall_flow: any
 
   # 生物认证 指纹 面容等
-  local_auth: ^0.6.3+3
+  local_auth: ^0.6.3+4
 
   # 彩蛋
   flutter_egg: ^1.0.3
@@ -89,7 +89,7 @@ dependencies:
   # 从分享菜单打开
   receive_sharing_intent: ^1.4.2
 
-  device_preview: ^0.5.2
+  device_preview: ^0.5.5
 
   # 分享
   share: ^0.6.5+4
@@ -97,10 +97,10 @@ dependencies:
   # 权限检查
   permission_handler: ^5.0.1+1
 
-  flutter_cache_manager: ^2.0.0
+  flutter_cache_manager: ^2.1.0
 
   # 图片保存
-  image_gallery_saver: ^1.6.5
+  image_gallery_saver: ^1.6.7
 
   popup_menu: ^1.0.5
 
@@ -113,7 +113,7 @@ dependencies:
   flutter_vibrate: ^1.0.0
 
   # 文件选择
-  file_picker: ^2.1.0
+  file_picker: ^2.1.4
 
 #  flutter_screenutil:
 #    git:

@@ -86,16 +86,6 @@ SliverFixedExtentList buildGallerySliverListSimpleView(
         Get.create(() => GalleryItemController.initData(gallerItemBeans[index],
             tabIndex: tabIndex));
 
-/*
-        return ChangeNotifierProvider<GalleryModel>.value(
-          value: GalleryModel()
-            ..initData(gallerItemBeans[index], tabIndex: tabIndex),
-          child: GalleryItemSimpleWidget(
-            galleryItem: gallerItemBeans[index],
-            tabIndex: tabIndex,
-          ),
-        );
-*/
         return GalleryItemSimpleWidget(
           galleryItem: gallerItemBeans[index],
           tabIndex: tabIndex,
