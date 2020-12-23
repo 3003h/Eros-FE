@@ -3,6 +3,7 @@ import 'package:logger/logger.dart';
 import 'package:logger_flutter/logger_flutter.dart';
 
 final Logger logger = Logger(
+  filter: EHLogFilter(),
   output: ExampleLogOutput(),
   printer: PrettyPrinter(
     // lineLength: 100,
@@ -11,6 +12,7 @@ final Logger logger = Logger(
 );
 
 final Logger loggerNoStack = Logger(
+  filter: EHLogFilter(),
   output: ExampleLogOutput(),
   printer: PrettyPrinter(
     // lineLength: 100,
@@ -36,12 +38,32 @@ class ExampleLogOutput extends ConsoleOutput {
   }
 }
 
+class EHLogFilter extends LogFilter {
+  @override
+  bool shouldLog(LogEvent event) {
+    if (event.level.index >= level.index) {
+      return true;
+    }
+    return false;
+  }
+}
+
+final Logger loggerForGetx = Logger(
+  printer: GetxPrinter(),
+  filter: EHLogFilter(),
+);
+
 void loggerGetx(String text, {bool isError = false}) {
-  // print('** $text [$isError]');
   if (isError) {
-    loggerNoStack.e('[GETX] $text');
+    logger.e('[GETX] $text');
   } else if (Get.isLogEnable) {
-    // loggerNoStack.d('[GETX] $text');
-    print('[GETX] $text');
+    loggerForGetx.d('[GETX] $text');
+  }
+}
+
+class GetxPrinter extends LogPrinter {
+  @override
+  List<String> log(LogEvent event) {
+    return <String>[event.message];
   }
 }

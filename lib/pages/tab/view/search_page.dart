@@ -50,12 +50,12 @@ class _GallerySearchPageState extends State<GallerySearchPage>
 
   bool _autofocus;
 
-  final EhConfigService ehConfigController = Get.find();
+  final EhConfigService ehConfigService = Get.find();
   final QuickSearchController quickSearchController = Get.find();
 
   void _jumpSearch() {
     final String _searchText = _searchTextController.text.trim();
-    final int _catNum = ehConfigController.catFilter.value;
+    final int _catNum = ehConfigService.catFilter.value;
     if (_searchText.isNotEmpty) {
       // FocusScope.of(context).requestFocus(FocusNode());
       _search = _searchText;
@@ -251,8 +251,10 @@ class _GallerySearchPageState extends State<GallerySearchPage>
             }
             break;
           case SearchMenuEnum.quickSearchList:
-            Get.to<String>(SearchQuickListPage())
-                .then((String value) => _searchTextController.text = value);
+            Get.to<String>(
+              SearchQuickListPage(),
+              transition: Transition.cupertino,
+            ).then((String value) => _searchTextController.text = value);
             break;
         }
       },
@@ -261,7 +263,7 @@ class _GallerySearchPageState extends State<GallerySearchPage>
     Widget _buildListBtns() {
       return GestureDetector(
         onLongPress: () {
-          ehConfigController.isSearchBarComp.value = true;
+          ehConfigService.isSearchBarComp.value = true;
           VibrateUtil.heavy();
         },
         child: Container(
@@ -323,7 +325,7 @@ class _GallerySearchPageState extends State<GallerySearchPage>
     Widget _buildPopMenuBtn() {
       return GestureDetector(
         onLongPress: () {
-          ehConfigController.isSearchBarComp.value = false;
+          ehConfigService.isSearchBarComp.value = false;
           VibrateUtil.heavy();
         },
         child: Container(
@@ -366,7 +368,7 @@ class _GallerySearchPageState extends State<GallerySearchPage>
       } else {
         return AnimatedSwitcher(
             duration: const Duration(milliseconds: 0),
-            child: ehConfigController.isSearchBarComp.value
+            child: ehConfigService.isSearchBarComp.value
                 ? Container(key: UniqueKey(), child: _buildPopMenuBtn())
                 : Container(key: UniqueKey(), child: _buildListBtns()));
       }
@@ -382,7 +384,7 @@ class _GallerySearchPageState extends State<GallerySearchPage>
       _search = '';
     }
 
-    final int _catNum = ehConfigController.catFilter.value;
+    final int _catNum = ehConfigService.catFilter.value;
 
     // 增加延时 避免build期间进行 setState
     await Future<void>.delayed(const Duration(milliseconds: 100));
@@ -408,7 +410,7 @@ class _GallerySearchPageState extends State<GallerySearchPage>
   }
 
   Future<void> _loadData({bool refresh = false}) async {
-    final int _catNum = ehConfigController.catFilter.value;
+    final int _catNum = ehConfigService.catFilter.value;
 
     loggerNoStack.v('_loadDataFirst');
     setState(() {

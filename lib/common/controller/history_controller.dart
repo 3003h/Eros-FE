@@ -6,7 +6,7 @@ import 'package:get/get.dart';
 class HistoryController extends GetxController {
   List<GalleryItem> historys = <GalleryItem>[];
 
-  final EhConfigService _ehConfigController = Get.find();
+  final EhConfigService _ehConfigService = Get.find();
 
   void addHistory(GalleryItem galleryItem) {
     // logger.d('start ${DateTime.now()}');
@@ -20,8 +20,8 @@ class HistoryController extends GetxController {
       // logger.d('end insert obs :${DateTime.now()}');
     } else {
       // 检查数量限制 超限则删除最后一条
-      if (_ehConfigController.maxHistory.value > 0 &&
-          historys.length == _ehConfigController.maxHistory.value) {
+      if (_ehConfigService.maxHistory.value > 0 &&
+          historys.length == _ehConfigService.maxHistory.value) {
         historys.removeLast();
       }
 

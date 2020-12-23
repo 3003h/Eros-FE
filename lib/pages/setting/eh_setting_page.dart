@@ -58,34 +58,34 @@ class _EhSettingPage extends State<EhSettingPage> {
 class ListViewEhSetting extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    final EhConfigService ehConfigController = Get.find();
+    final EhConfigService ehConfigService = Get.find();
     final UserController userController = Get.find();
 
-    final bool _siteEx = ehConfigController.isSiteEx.value;
-    final bool _jpnTitle = ehConfigController.isJpnTitle.value;
-    final bool _tagTranslat = ehConfigController.isTagTranslat.value;
-    final bool _galleryImgBlur = ehConfigController.isGalleryImgBlur.value;
-    final bool _favLongTap = ehConfigController.isFavLongTap.value;
+    final bool _siteEx = ehConfigService.isSiteEx.value;
+    final bool _jpnTitle = ehConfigService.isJpnTitle.value;
+    final bool _tagTranslat = ehConfigService.isTagTranslat.value;
+    final bool _galleryImgBlur = ehConfigService.isGalleryImgBlur.value;
+    final bool _favLongTap = ehConfigService.isFavLongTap.value;
     final bool _favOrder =
-        ehConfigController.favoriteOrder.value == FavoriteOrder.posted;
+        ehConfigService.favoriteOrder.value == FavoriteOrder.posted;
     final bool _isLogin = userController.isLogin;
 
     Future<void> _handleSiteChanged(bool newValue) async {
-      ehConfigController.isSiteEx(newValue);
+      ehConfigService.isSiteEx(newValue);
     }
 
     void _handleJpnTitleChanged(bool newValue) {
-      ehConfigController.isJpnTitle(newValue);
+      ehConfigService.isJpnTitle(newValue);
     }
 
     /// 打开表示按更新时间排序 关闭表示按照收藏时间排序
     void _handleFavOrderChanged(bool newValue) {
-      ehConfigController.favoriteOrder.value =
+      ehConfigService.favoriteOrder.value =
           newValue ? FavoriteOrder.posted : FavoriteOrder.fav;
     }
 
     void _handleTagTranslatChanged(bool newValue) {
-      ehConfigController.isTagTranslat.value = newValue;
+      ehConfigService.isTagTranslat.value = newValue;
       if (newValue) {
         try {
           EhTagDatabase.generateTagTranslat();
@@ -96,11 +96,11 @@ class ListViewEhSetting extends StatelessWidget {
     }
 
     void _handleGalleryListImgBlurChanged(bool newValue) {
-      ehConfigController.isGalleryImgBlur.value = newValue;
+      ehConfigService.isGalleryImgBlur.value = newValue;
     }
 
     void _handleFavLongTapChanged(bool newValue) {
-      ehConfigController.isFavLongTap.value = newValue;
+      ehConfigService.isFavLongTap.value = newValue;
     }
 
     final List<Widget> _list = <Widget>[
@@ -131,7 +131,7 @@ class ListViewEhSetting extends StatelessWidget {
           intValue: _tagTranslat,
           onChanged: _handleTagTranslatChanged,
           desc:
-              '需要下载数据文件,当前版本:${ehConfigController.tagTranslatVer.value ?? "无"}')),
+              '需要下载数据文件,当前版本:${ehConfigService.tagTranslatVer.value ?? "无"}')),
       TextSwitchItem('显示日文标题',
           intValue: _jpnTitle,
           onChanged: _handleJpnTitleChanged,
@@ -176,7 +176,7 @@ class ListViewEhSetting extends StatelessWidget {
 /// 列表模式切换
 Widget _buildListModeItem(BuildContext context) {
   const String _title = '浏览模式';
-  final EhConfigService ehConfigController = Get.find();
+  final EhConfigService ehConfigService = Get.find();
 
   final Map<ListModeEnum, String> modeMap = <ListModeEnum, String>{
     ListModeEnum.list: '列表 - 中',
@@ -215,15 +215,14 @@ Widget _buildListModeItem(BuildContext context) {
 
   return Obx(() => SelectorSettingItem(
         title: _title,
-        selector:
-            modeMap[ehConfigController.listMode.value ?? ListModeEnum.list],
+        selector: modeMap[ehConfigService.listMode.value ?? ListModeEnum.list],
         onTap: () async {
           logger.v('tap ModeItem');
           final ListModeEnum _result = await _showDialog(context);
           if (_result != null) {
             // ignore: unnecessary_string_interpolations
             logger.v('${EnumToString.convertToString(_result)}');
-            ehConfigController.listMode.value = _result;
+            ehConfigService.listMode.value = _result;
           }
         },
       ));
@@ -232,7 +231,7 @@ Widget _buildListModeItem(BuildContext context) {
 /// 历史记录数量切换
 Widget _buildHistoryMaxItem(BuildContext context) {
   const String _title = '最大历史记录数';
-  final EhConfigService ehConfigController = Get.find();
+  final EhConfigService ehConfigService = Get.find();
 
   String _getMaxNumText(int max) {
     if (max == 0) {
@@ -273,12 +272,12 @@ Widget _buildHistoryMaxItem(BuildContext context) {
 
   return Obx(() => SelectorSettingItem(
         title: _title,
-        selector: _getMaxNumText(ehConfigController.maxHistory.value) ?? '',
+        selector: _getMaxNumText(ehConfigService.maxHistory.value) ?? '',
         onTap: () async {
           logger.v('tap ModeItem');
           final int _result = await _showActionSheet(context);
           if (_result != null) {
-            ehConfigController.maxHistory.value = _result;
+            ehConfigService.maxHistory.value = _result;
           }
         },
       ));

@@ -14,6 +14,12 @@ import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:get/get.dart';
 import 'package:oktoast/oktoast.dart';
 
+import 'common/controller/advance_search_controller.dart';
+import 'common/controller/gallerycache_controller.dart';
+import 'common/controller/history_controller.dart';
+import 'common/controller/localfav_controller.dart';
+import 'common/controller/quicksearch_controller.dart';
+import 'common/controller/user_controller.dart';
 import 'common/service/depth_service.dart';
 
 void main() {
@@ -27,6 +33,15 @@ void main() {
     Get.put(DnsService(), permanent: true);
 
     Get.put(DepthService());
+
+    /// 一些全局设置或者控制
+    Get.put(LocalFavController(), permanent: true);
+    Get.put(HistoryController(), permanent: true);
+    Get.put(UserController(), permanent: true);
+    Get.lazyPut(() => GalleryCacheController(), fenix: true);
+
+    Get.put(QuickSearchController(), permanent: true);
+    Get.lazyPut(() => AdvanceSearchController(), fenix: true);
 
     runApp(
       DevicePreview(
@@ -46,10 +61,8 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
-  final LocaleService localeController = Get.find();
-  final ThemeService themeController = Get.find();
-
-  // Brightness _brightness = WidgetsBinding.instance.window.platformBrightness;
+  final LocaleService localeService = Get.find();
+  final ThemeService themeService = Get.find();
 
   @override
   void initState() {
@@ -65,10 +78,7 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
 
   @override
   void didChangePlatformBrightness() {
-    // setState(() {
-    //   _brightness = WidgetsBinding.instance.window.platformBrightness;
-    // });
-    themeController.platformBrightness.value =
+    themeService.platformBrightness.value =
         WidgetsBinding.instance.window.platformBrightness;
   }
 
@@ -137,8 +147,8 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
 
     return OKToast(
       child: Obx(() => cupertinoApp(
-            theme: themeController.themeData,
-            locale: localeController.locale,
+            theme: themeService.themeData,
+            locale: localeService.locale,
           )),
     );
   }

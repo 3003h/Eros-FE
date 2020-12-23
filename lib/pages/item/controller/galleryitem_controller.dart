@@ -13,7 +13,7 @@ class GalleryItemController extends GetxController {
     _tabindex = tabIndex;
   }
 
-  final EhConfigService _ehConfigController = Get.find();
+  final EhConfigService _ehConfigService = Get.find();
 
   @override
   void onInit() {
@@ -42,7 +42,7 @@ class GalleryItemController extends GetxController {
   }
 
   String get title {
-    if (_ehConfigController.isJpnTitle.value &&
+    if (_ehConfigService.isJpnTitle.value &&
         galleryItem.japaneseTitle.isNotEmpty) {
       return galleryItem.japaneseTitle;
     } else {

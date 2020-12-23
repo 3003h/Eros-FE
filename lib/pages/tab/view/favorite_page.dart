@@ -163,7 +163,7 @@ class FavoriteTab extends GetView<FavoriteViewController> {
 
   /// 切换收藏夹
   Widget _buildFavcatButton(BuildContext context) {
-    final EhConfigService ehConfigController = Get.find();
+    final EhConfigService ehConfigService = Get.find();
     return CupertinoButton(
       minSize: 40,
       padding: const EdgeInsets.only(right: 8),
@@ -180,8 +180,8 @@ class FavoriteTab extends GetView<FavoriteViewController> {
               controller.title(fav.title);
               controller.enableDelayedLoad = false;
               controller.curFavcat = fav.favId;
-              ehConfigController.lastShowFavcat = controller.curFavcat;
-              ehConfigController.lastShowFavTitle = fav.title;
+              ehConfigService.lastShowFavcat = controller.curFavcat;
+              ehConfigService.lastShowFavTitle = fav.title;
               controller.reLoadDataFirst();
             } else {
               loggerNoStack.v('未修改favcat');

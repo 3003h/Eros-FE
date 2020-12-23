@@ -55,7 +55,7 @@ class GalleryListParser {
   }) async {
     final dom.Document document = parse(response);
 
-    final EhConfigService ehConfigController = Get.find();
+    final EhConfigService ehConfigService = Get.find();
 
     const String _gallerySelector =
         'body > div.ido > div:nth-child(2) > table > tbody > tr';
@@ -214,7 +214,7 @@ class GalleryListParser {
       }
 
       // safeMode检查
-      if (Platform.isIOS && ehConfigController.isSafeMode.value) {
+      if (Platform.isIOS && ehConfigService.isSafeMode.value) {
         if (category.trim() == 'Non-H') {
           _gallaryItems.add(GalleryItem()
             ..gid = gid

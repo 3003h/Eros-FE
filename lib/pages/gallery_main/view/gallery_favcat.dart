@@ -1,3 +1,4 @@
+import 'package:fehviewer/common/service/depth_service.dart';
 import 'package:fehviewer/generated/l10n.dart';
 import 'package:fehviewer/pages/gallery_main/controller/gallery_fav_controller.dart';
 import 'package:fehviewer/values/theme_colors.dart';
@@ -14,7 +15,8 @@ class GalleryFavButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final GalleryFavController _favController = Get.put(GalleryFavController());
+    final GalleryFavController _favController = Get.put(GalleryFavController(),
+        tag: '${Get.find<DepthService>().pageCtrlDepth}');
     // 收藏按钮图标
     final Widget favIcon = Obx(() {
       return Container(

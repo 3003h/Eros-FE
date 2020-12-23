@@ -15,7 +15,7 @@ class UserItem extends StatefulWidget {
 
 class _UserItem extends State<UserItem> {
   Color _color;
-  final EhConfigService ehConfigController = Get.find();
+  final EhConfigService ehConfigService = Get.find();
   final UserController userController = Get.find();
 
   Future<void> _logOut(BuildContext context) async {
@@ -39,7 +39,7 @@ class _UserItem extends State<UserItem> {
                 (await Api.cookieJar).deleteAll();
                 // userController.user(User());
                 userController.logOut();
-                ehConfigController.isSiteEx.value = false;
+                ehConfigService.isSiteEx.value = false;
                 Get.back();
               },
             ),
