@@ -20,7 +20,7 @@ class _ViewSettingPageState extends State<ViewSettingPage> {
   Widget build(BuildContext context) {
     final CupertinoPageScaffold cps = CupertinoPageScaffold(
         navigationBar: CupertinoNavigationBar(
-          transitionBetweenRoutes: true,
+          // transitionBetweenRoutes: true,
           middle: Text(_title),
         ),
         child: SafeArea(

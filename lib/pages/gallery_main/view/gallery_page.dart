@@ -66,9 +66,7 @@ class GalleryPage extends StatelessWidget {
           const SliverSafeArea(
             top: false,
             bottom: false,
-            sliver: SliverToBoxAdapter(
-              child: GalleryContainer(),
-            ),
+            sliver: GalleryContainer(),
           ),
         ],
       ),
@@ -119,7 +117,7 @@ class GalleryContainer extends StatelessWidget {
     Widget fromItem() {
       final GalleryItem galleryItem = controller.galleryItem;
       final Object tabIndex = controller.tabIndex;
-      return Container(
+      return SliverToBoxAdapter(
         child: Column(
           children: <Widget>[
             GalleryHeader(
@@ -177,10 +175,10 @@ class GalleryContainer extends StatelessWidget {
     }
 
     Widget fromUrl() {
-      return Container(
-        child: controller.obx(
-            (state) {
-              return Column(
+      return controller.obx(
+          (state) {
+            return SliverToBoxAdapter(
+              child: Column(
                 children: <Widget>[
                   GalleryHeader(
                     galleryItem: state,
@@ -211,10 +209,12 @@ class GalleryContainer extends StatelessWidget {
                     ],
                   ),
                 ],
-              );
-            },
-            onLoading: Container(
-              height: Get.size.height - 200,
+              ),
+            );
+          },
+          onLoading: SliverFillRemaining(
+            child: Container(
+              // height: Get.size.height - 200,
               // height: 200,
               alignment: Alignment.center,
               padding: const EdgeInsets.only(bottom: 50),
@@ -222,16 +222,19 @@ class GalleryContainer extends StatelessWidget {
                 radius: 14.0,
               ),
             ),
-            onError: (err) {
-              logger.e(' $err');
-              return Container(
+          ),
+          onError: (err) {
+            logger.e(' $err');
+            return SliverFillRemaining(
+              child: Container(
+                alignment: Alignment.center,
                 padding: const EdgeInsets.only(bottom: 50, top: 50),
                 child: GalleryErrorPage(
                   onTap: controller.handOnRefreshAfterErr,
                 ),
-              );
-            }),
-      );
+              ),
+            );
+          });
     }
 
     return controller.fromUrl ? fromUrl() : fromItem();

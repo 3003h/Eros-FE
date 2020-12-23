@@ -32,7 +32,7 @@ class CustomHostsPage extends StatelessWidget {
       navigationBar: CupertinoNavigationBar(
         padding: const EdgeInsetsDirectional.only(start: 0),
         middle: Text(_title),
-        transitionBetweenRoutes: false,
+        // transitionBetweenRoutes: false,
         trailing: _buildListBtns(context),
       ),
       child: SafeArea(

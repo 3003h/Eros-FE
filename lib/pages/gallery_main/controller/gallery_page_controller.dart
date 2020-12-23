@@ -295,7 +295,10 @@ class GalleryPageController extends GetxController
     );
   }
 
-  Future<void> getAllImageHref({CancelToken cancelToken}) async {
+  /// 解析获取画廊图片链接
+  /// 自动获取下一页直到全部获取
+  /// 缺点比较明显 图片比较多的画廊一次全部获取会导致卡顿等
+  Future<void> _getAllImageHref({CancelToken cancelToken}) async {
     if (isGetAllImageHref) {
       loggerNoStack.d(' isGetAllImageHref return');
       return;
@@ -319,8 +322,37 @@ class GalleryPageController extends GetxController
       // 避免重复添加
       if (_moreGalleryPreviewList.first.ser >
           galleryItem.galleryPreview.last.ser) {
-        logger.d(
-            '添加图片对象 起始序号${_moreGalleryPreviewList.first.ser}  数量${_moreGalleryPreviewList.length}');
+        logger.d('添加图片对象 起始序号${_moreGalleryPreviewList.first.ser}  '
+            '数量${_moreGalleryPreviewList.length}');
+        addAllPreview(_moreGalleryPreviewList);
+      }
+    }
+    isGetAllImageHref = false;
+  }
+
+  /// 懒加载
+  Future<void> _lazyGetImageHref({int index, CancelToken cancelToken}) async {
+    if (isGetAllImageHref) {
+      loggerNoStack.d(' isGetAllImageHref return');
+      return;
+    }
+    isGetAllImageHref = true;
+    logger.v('\n\nlength ${previews.length} ; index $index');
+    if (previews.length - index < 4) {
+      currentPreviewPage++;
+
+      final List<GalleryPreview> _moreGalleryPreviewList =
+          await Api.getGalleryPreview(
+        galleryItem.url,
+        page: currentPreviewPage,
+        cancelToken: cancelToken,
+      );
+
+      // 避免重复添加
+      if (_moreGalleryPreviewList.first.ser >
+          galleryItem.galleryPreview.last.ser) {
+        logger.d('添加图片对象 起始序号${_moreGalleryPreviewList.first.ser}  '
+            '数量${_moreGalleryPreviewList.length}');
         addAllPreview(_moreGalleryPreviewList);
       }
     }
@@ -333,7 +365,8 @@ class GalleryPageController extends GetxController
     CancelToken cancelToken,
   }) async {
     // 数据获取处理
-    getAllImageHref(cancelToken: cancelToken).catchError((e, stack) {
+    _lazyGetImageHref(cancelToken: cancelToken, index: index)
+        .catchError((e, stack) {
       logger.e('$e \n $stack');
     }).whenComplete(() {
       // logger.v('getAllImageHref Complete');

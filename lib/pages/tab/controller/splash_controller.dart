@@ -43,12 +43,12 @@ class SplashController extends GetxController {
   Future<void> startHome(String url) async {
     if (url != null && url.isNotEmpty) {
       logger.i('open $url');
-      await Future<void>.delayed(const Duration(milliseconds: 300), () {
+      await Future<void>.delayed(const Duration(milliseconds: 100), () {
         NavigatorUtil.goGalleryDetailReplace(Get.context, url: url);
       });
     } else {
       logger.i('url is Empty,jump to home');
-      await Future<void>.delayed(const Duration(milliseconds: 500), () {
+      await Future<void>.delayed(const Duration(milliseconds: 800), () {
         Get.offNamed(EHRoutes.home);
       });
     }

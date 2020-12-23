@@ -33,7 +33,15 @@ class TabHomeController extends GetxController {
 
   Locale get locale => _localeService.locale;
 
-  List<BottomNavigationBarItem> listBottomNavigationBarItem;
+  List<BottomNavigationBarItem> get listBottomNavigationBarItem {
+    final List<BottomNavigationBarItem> list = [];
+    for (final tabObj in tabList) {
+      list.add(BottomNavigationBarItem(
+          icon: tabObj['icon'], label: tabObj['title']));
+    }
+
+    return list;
+  }
 
   final BuildContext context = Get.context;
 
@@ -99,8 +107,6 @@ class TabHomeController extends GetxController {
         pageList.add(tabObj['page']);
       }
     }
-
-    listBottomNavigationBarItem = getBottomNavigationBarItem();
   }
 
   ScrollController _getScrollController(String key) {
@@ -108,17 +114,6 @@ class TabHomeController extends GetxController {
       _scrollControllerMap[key] = ScrollController();
     }
     return _scrollControllerMap[key];
-  }
-
-  // 获取BottomNavigationBarItem
-  List<BottomNavigationBarItem> getBottomNavigationBarItem() {
-    final List<BottomNavigationBarItem> list = [];
-    for (final tabObj in tabList) {
-      list.add(BottomNavigationBarItem(
-          icon: tabObj['icon'], label: tabObj['title']));
-    }
-
-    return list;
   }
 
   /// 连按两次返回退出
