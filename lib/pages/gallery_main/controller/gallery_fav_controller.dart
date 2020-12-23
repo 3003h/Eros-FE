@@ -28,7 +28,7 @@ class GalleryFavController extends GetxController {
   final TextEditingController _favnoteController = TextEditingController();
   final LocalFavController _localFavController = Get.find();
   final UserController _userController = Get.find();
-  final EhConfigService _ehConfigController = Get.find();
+  final EhConfigService _ehConfigService = Get.find();
   GalleryPageController _pageController;
   GalleryItemController _itemController;
 
@@ -37,22 +37,24 @@ class GalleryFavController extends GetxController {
     super.onInit();
     _pageController =
         Get.find(tag: '${Get.find<DepthService>().pageCtrlDepth}');
-    _itemController = Get.find(tag: _pageController.gid);
+    if (!_pageController.fromUrl) {
+      _itemController = Get.find(tag: _pageController.gid);
+    }
 
     _localFav.value = _pageController.localFav ?? false;
 
     // _favTitle 初始化
-    if (_itemController.galleryItem.favTitle != null &&
-        _itemController.galleryItem.favTitle.isNotEmpty) {
-      _favTitle.value = _itemController.galleryItem.favTitle;
+    if (_pageController.galleryItem.favTitle != null &&
+        _pageController.galleryItem.favTitle.isNotEmpty) {
+      _favTitle.value = _pageController.galleryItem.favTitle;
     } else {
       _favTitle.value = localFav ? S.of(Get.context).local_favorite : '';
     }
 
     // _favcat初始化
-    if (_itemController.galleryItem.favcat != null &&
-        _itemController.galleryItem.favcat.isNotEmpty) {
-      _favcat.value = _itemController.galleryItem.favcat;
+    if (_pageController.galleryItem.favcat != null &&
+        _pageController.galleryItem.favcat.isNotEmpty) {
+      _favcat.value = _pageController.galleryItem.favcat;
     } else {
       _favcat.value = localFav ? 'l' : '';
     }
@@ -105,10 +107,10 @@ class GalleryFavController extends GetxController {
       return delFav();
     } else {
       logger.d(' add fav');
-      final String _lastFavcat = _ehConfigController.lastFavcat.value;
+      final String _lastFavcat = _ehConfigService.lastFavcat.value;
 
       // 添加到上次收藏夹
-      if ((_ehConfigController.isFavLongTap.value ?? false) &&
+      if ((_ehConfigService.isFavLongTap.value ?? false) &&
           _lastFavcat != null &&
           _lastFavcat.isNotEmpty) {
         logger.v('添加到上次收藏夹');
@@ -138,7 +140,7 @@ class GalleryFavController extends GetxController {
     favList.add({'favId': 'l', 'favTitle': S.of(context).local_favorite});
 
     // diaolog 获取选择结果
-    final Map<String, String> result = _ehConfigController.isFavPicker.value
+    final Map<String, String> result = _ehConfigService.isFavPicker.value
         ? await _showAddFavPicker(context, favList)
         : await _showAddFavList(context, favList);
 
@@ -169,7 +171,9 @@ class GalleryFavController extends GetxController {
         isLoading = false;
         this._favTitle.value = _favTitle;
         this._favcat.value = _favcat;
-        _itemController.setFavTitle(favTitle, favcat: favcat);
+        if (!_pageController.fromUrl) {
+          _itemController.setFavTitle(favTitle, favcat: favcat);
+        }
       }
       return true;
     } else {
@@ -200,8 +204,10 @@ class GalleryFavController extends GetxController {
       isLoading = false;
       _favTitle.value = '';
       _favcat.value = '';
-      logger.d('del fav ${_itemController.galleryItem.gid}');
-      _itemController.setFavTitle('', favcat: '');
+      if (!_pageController.fromUrl) {
+        logger.d('del fav ${_itemController.galleryItem.gid}');
+        _itemController.setFavTitle('', favcat: '');
+      }
     }
     return false;
   }
@@ -217,7 +223,7 @@ class GalleryFavController extends GetxController {
   Future<Map<String, String>> _showAddFavPicker(
       BuildContext context, List favList) async {
     int _favindex = 0;
-    final EhConfigService _ehConfigController = Get.find();
+    final EhConfigService _ehConfigService = Get.find();
 
     final List<Widget> favPicker = List<Widget>.from(favList.map((e) => Row(
           mainAxisAlignment: MainAxisAlignment.center,
@@ -242,7 +248,7 @@ class GalleryFavController extends GetxController {
         return CupertinoAlertDialog(
           title: GestureDetector(
             onLongPress: () {
-              _ehConfigController.isFavPicker.value = false;
+              _ehConfigService.isFavPicker.value = false;
               showToast('切换样式');
             },
             child: Text('添加收藏'),
@@ -310,7 +316,7 @@ class GalleryFavController extends GetxController {
     return showCupertinoDialog<Map<String, String>>(
       context: context,
       builder: (BuildContext context) {
-        final EhConfigService ehConfigController = Get.find();
+        final EhConfigService ehConfigService = Get.find();
 
         final List<Widget> favcatList =
             List<Widget>.from(favList.map((fav) => FavcatAddListItem(
@@ -331,7 +337,7 @@ class GalleryFavController extends GetxController {
         return CupertinoAlertDialog(
           title: GestureDetector(
             onLongPress: () {
-              ehConfigController.isFavPicker.value = true;
+              ehConfigService.isFavPicker.value = true;
               showToast('切换样式');
             },
             child: Text('添加收藏'),

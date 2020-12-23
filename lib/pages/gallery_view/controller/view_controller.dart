@@ -85,11 +85,11 @@ class ViewController extends GetxController {
 
   final CancelToken _getMoreCancelToken = CancelToken();
 
-  final EhConfigService _ehConfigController = Get.find();
+  final EhConfigService _ehConfigService = Get.find();
   final GalleryCacheController _galleryCacheController = Get.find();
   GalleryPageController _galleryPageController;
 
-  ViewMode get viewMode => _ehConfigController.viewMode.value;
+  ViewMode get viewMode => _ehConfigService.viewMode.value;
 
   List<GalleryPreview> get previews => _galleryPageController.previews;
 
@@ -108,8 +108,8 @@ class ViewController extends GetxController {
     logger.d('_index $index');
     pageController = PageController(initialPage: index, viewportFraction: 1.1);
 
-    final int preload = _ehConfigController.preloadImage.value;
-    if (_ehConfigController.viewMode.value != ViewMode.vertical) {
+    final int preload = _ehConfigService.preloadImage.value;
+    if (_ehConfigService.viewMode.value != ViewMode.vertical) {
       // 预载后面5张图
       logger.v('预载后面 $preload 张图 didChangeDependencies');
       GalleryPrecache.instance.precacheImages(
@@ -176,7 +176,7 @@ class ViewController extends GetxController {
       _galleryPageController,
       previews: _galleryPageController.previews,
       index: index,
-      max: _ehConfigController.preloadImage.value,
+      max: _ehConfigService.preloadImage.value,
     );
     currentIndex = index;
     sliderValue = currentIndex / 1.0;

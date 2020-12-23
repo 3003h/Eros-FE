@@ -109,10 +109,10 @@ SliverFixedExtentList buildGallerySliverListSimpleView(
 
 Widget getGalleryList(List<GalleryItem> gallerItemBeans, tabIndex,
     {int maxPage, int curPage, VoidCallback loadMord}) {
-  final EhConfigService ehConfigController = Get.find();
+  final EhConfigService ehConfigService = Get.find();
 
   return Obx(() {
-    switch (ehConfigController.listMode.value) {
+    switch (ehConfigService.listMode.value) {
       case ListModeEnum.list:
         return buildGallerySliverListView(gallerItemBeans, tabIndex,
             maxPage: maxPage, curPage: curPage, loadMord: loadMord);

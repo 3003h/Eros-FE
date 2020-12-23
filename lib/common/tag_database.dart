@@ -19,7 +19,7 @@ class EhTagDatabase {
     final HttpManager httpManager = HttpManager.getInstance(
         baseUrl: 'https://api.github.com', cache: false);
 
-    final EhConfigService ehConfigController = Get.find();
+    final EhConfigService ehConfigService = Get.find();
 
     const String url = '/repos/EhTagTranslation/Database/releases/latest';
 
@@ -34,7 +34,7 @@ class EhTagDatabase {
 
     // 获取当前本地版本
     // final String localVer = Global.profile.ehConfig.tagTranslatVer;
-    final String localVer = ehConfigController.tagTranslatVer.value;
+    final String localVer = ehConfigService.tagTranslatVer.value;
     loggerNoStack.v('localVer $localVer');
 
     if (remoteVer != localVer) {
@@ -60,7 +60,7 @@ class EhTagDatabase {
         final List listDataP = dataAll['data'] as List;
 
         await tagSaveToDB(listDataP);
-        ehConfigController.tagTranslatVer.value = remoteVer;
+        ehConfigService.tagTranslatVer.value = remoteVer;
       }
       showToast('标签翻译库更新完成');
       loggerNoStack.v('tag翻译更新完成');

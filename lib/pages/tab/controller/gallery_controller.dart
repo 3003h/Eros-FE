@@ -21,7 +21,7 @@ class GalleryViewController extends GetxController
 
   RxBool isLoadMore = false.obs;
 
-  final EhConfigService ehConfigController = Get.find();
+  final EhConfigService ehConfigService = Get.find();
 
   String get title {
     // logger.d('${EHConst.cats.entries.length}');
@@ -58,7 +58,7 @@ class GalleryViewController extends GetxController
   Future<Tuple2<List<GalleryItem>, int>> loadData(
       {bool refresh = false}) async {
     logger.v('_loadDataFirst  gallery');
-    final int _catNum = ehConfigController.catFilter.value;
+    final int _catNum = ehConfigService.catFilter.value;
 
     final Future<Tuple2<List<GalleryItem>, int>> tuple = Api.getGallery(
       cats: cats ?? _catNum,
@@ -85,7 +85,7 @@ class GalleryViewController extends GetxController
       return;
     }
 
-    final int _catNum = ehConfigController.catFilter.value;
+    final int _catNum = ehConfigService.catFilter.value;
 
     // 增加延时 避免build期间进行 setState
     await Future<void>.delayed(const Duration(milliseconds: 100));
@@ -120,7 +120,7 @@ class GalleryViewController extends GetxController
   Future<void> loadFromPage(int page) async {
     logger.v('jump to page =>  $page');
 
-    final int _catNum = ehConfigController.catFilter.value;
+    final int _catNum = ehConfigService.catFilter.value;
 
     change(state, status: RxStatus.loading());
     Api.getGallery(

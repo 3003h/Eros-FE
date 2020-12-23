@@ -42,10 +42,10 @@ class AdvancedSettingPageState extends State<AdvancedSettingPage> {
 class ListViewAdvancedSetting extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    final EhConfigService ehConfigController = Get.find();
+    final EhConfigService ehConfigService = Get.find();
     final DnsService dnsConfigController = Get.find();
     void _handlePureDarkChanged(bool newValue) {
-      ehConfigController.isPureDarkTheme.value = newValue;
+      ehConfigService.isPureDarkTheme.value = newValue;
     }
 
     void _handleDoHChanged(bool newValue) {
@@ -78,7 +78,7 @@ class ListViewAdvancedSetting extends StatelessWidget {
           _buildThemeItem(context),
           Obx(() => TextSwitchItem(
                 S.of(context).dark_mode_effect,
-                intValue: ehConfigController.isPureDarkTheme.value,
+                intValue: ehConfigService.isPureDarkTheme.value,
                 onChanged: _handlePureDarkChanged,
                 desc: S.of(context).gray_black,
                 descOn: S.of(context).pure_black,
@@ -132,7 +132,7 @@ class ListViewAdvancedSetting extends StatelessWidget {
 
   /// 语言设置部件
   Widget _buildLanguageItem(BuildContext context) {
-    final LocaleService localeController = Get.find();
+    final LocaleService localeService = Get.find();
     final String _title = S.of(context).language;
 
     final Map<String, String> localeMap = <String, String>{
@@ -171,12 +171,12 @@ class ListViewAdvancedSetting extends StatelessWidget {
 
     return Obx(() => SelectorSettingItem(
           title: _title,
-          selector: localeMap[localeController.localCode.value ?? ''],
+          selector: localeMap[localeService.localCode.value ?? ''],
           onTap: () async {
             logger.v('tap LanguageItem');
             final String _result = await _showDialog(context);
             if (_result is String) {
-              localeController.localCode.value = _result;
+              localeService.localCode.value = _result;
             }
             // logger.v('$_result');
           },
@@ -186,7 +186,7 @@ class ListViewAdvancedSetting extends StatelessWidget {
   /// 主题设置部件
   Widget _buildThemeItem(BuildContext context) {
     final String _title = S.of(context).theme;
-    final ThemeService themeController = Get.find();
+    final ThemeService themeService = Get.find();
 
     final Map<ThemesModeEnum, String> themeMap = <ThemesModeEnum, String>{
       ThemesModeEnum.system: S.of(context).follow_system,
@@ -224,12 +224,12 @@ class ListViewAdvancedSetting extends StatelessWidget {
 
     return SelectorSettingItem(
       title: _title,
-      selector: themeMap[themeController.themeModel],
+      selector: themeMap[themeService.themeModel],
       onTap: () async {
         logger.v('tap ThemeItem');
         final ThemesModeEnum _result = await _showDialog(context);
         if (_result is ThemesModeEnum) {
-          themeController.themeModel = _result;
+          themeService.themeModel = _result;
         }
       },
     );

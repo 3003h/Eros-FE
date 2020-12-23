@@ -3,7 +3,7 @@ description: ..
 
 publish_to: 'none' # Remove this line if you wish to publish to pub.dev
 
-version: 1.0.2+71
+version: 1.0.2+73
 
 environment:
   sdk: '>=2.7.0 <3.0.0'
@@ -60,7 +60,7 @@ dependencies:
   tuple: ^1.0.3
 
   # 状态管理
-  provider: ^4.3.2+2
+#  provider: ^4.3.2+2
 
   get: ^3.22.2
 

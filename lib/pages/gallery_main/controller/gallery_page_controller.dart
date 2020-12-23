@@ -22,6 +22,7 @@ class GalleryPageController extends GetxController
 
   GalleryPageController.initUrl({@required String url}) {
     galleryItem = GalleryItem()..url = url;
+    fromUrl = true;
   }
 
   GalleryPageController.fromItem({
@@ -31,6 +32,8 @@ class GalleryPageController extends GetxController
 
   // 画廊gid 唯一
   String gid;
+
+  bool fromUrl = false;
 
   // 画廊数据对象
   GalleryItem galleryItem;
@@ -51,7 +54,7 @@ class GalleryPageController extends GetxController
   final ScrollController scrollController = ScrollController();
 
   // eh设置
-  final EhConfigService _ehConfigController = Get.find();
+  final EhConfigService _ehConfigService = Get.find();
 
   final HistoryController _historyController = Get.find();
 
@@ -217,8 +220,8 @@ class GalleryPageController extends GetxController
 
   // 另一个语言的标题
   String get topTitle {
-    if (!_ehConfigController.isJpnTitle.value ||
-        galleryItem.japaneseTitle.isNotEmpty) {
+    if (!_ehConfigService.isJpnTitle.value ||
+        (galleryItem.japaneseTitle?.isNotEmpty ?? false)) {
       return galleryItem.englishTitle;
     } else {
       return galleryItem.japaneseTitle;
@@ -227,8 +230,8 @@ class GalleryPageController extends GetxController
 
   // 根据设置的语言显示的标题
   String get title {
-    if (_ehConfigController.isJpnTitle.value &&
-        galleryItem.japaneseTitle.isNotEmpty) {
+    if (_ehConfigService.isJpnTitle.value &&
+        (galleryItem.japaneseTitle?.isNotEmpty ?? false)) {
       return galleryItem.japaneseTitle;
     } else {
       return galleryItem.englishTitle;

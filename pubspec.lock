@@ -749,7 +749,7 @@ packages:
     source: hosted
     version: "3.0.13"
   provider:
-    dependency: "direct main"
+    dependency: transitive
     description:
       name: provider
       url: "https://pub.dartlang.org"
