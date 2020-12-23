@@ -2,6 +2,7 @@ import 'package:fehviewer/common/service/depth_service.dart';
 import 'package:fehviewer/models/index.dart';
 import 'package:fehviewer/pages/gallery_main/controller/gallery_page_controller.dart';
 import 'package:fehviewer/pages/gallery_main/view/gallery_widget.dart';
+import 'package:fehviewer/pages/tab/view/gallery_base.dart';
 import 'package:fehviewer/utils/logger.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -131,37 +132,45 @@ class GalleryContainer extends StatelessWidget {
                   CupertinoColors.systemGrey4, context),
             ),
             controller.obx(
-              (GalleryItem state) {
-                return Column(
-                  children: <Widget>[
-                    // 标签
-                    TagBox(listTagGroup: state.tagGroup),
-                    TopComment(comment: state.galleryComment),
-                    Container(
-                      margin: const EdgeInsets.only(top: 4),
-                      height: 0.5,
-                      color: CupertinoDynamicColor.resolve(
-                          CupertinoColors.systemGrey4, context),
-                    ),
-                    PreviewGrid(
-                      previews: controller.firstPagePreview,
-                      gid: galleryItem.gid,
-                    ),
-                    MorePreviewButton(
-                        hasMorePreview: controller.hasMorePreview),
-                  ],
-                );
-              },
-              onLoading: Container(
-                // height: Get.size.height - _top * 3 - kHeaderHeight,
-                height: 200,
-                alignment: Alignment.center,
-                padding: const EdgeInsets.only(bottom: 50),
-                child: const CupertinoActivityIndicator(
-                  radius: 14.0,
+                (GalleryItem state) {
+                  return Column(
+                    children: <Widget>[
+                      // 标签
+                      TagBox(listTagGroup: state.tagGroup),
+                      TopComment(comment: state.galleryComment),
+                      Container(
+                        margin: const EdgeInsets.only(top: 4),
+                        height: 0.5,
+                        color: CupertinoDynamicColor.resolve(
+                            CupertinoColors.systemGrey4, context),
+                      ),
+                      PreviewGrid(
+                        previews: controller.firstPagePreview,
+                        gid: galleryItem.gid,
+                      ),
+                      MorePreviewButton(
+                          hasMorePreview: controller.hasMorePreview),
+                    ],
+                  );
+                },
+                onLoading: Container(
+                  // height: Get.size.height - _top * 3 - kHeaderHeight,
+                  height: 200,
+                  alignment: Alignment.center,
+                  padding: const EdgeInsets.only(bottom: 50),
+                  child: const CupertinoActivityIndicator(
+                    radius: 14.0,
+                  ),
                 ),
-              ),
-            )
+                onError: (err) {
+                  logger.e(' $err');
+                  return Container(
+                    padding: const EdgeInsets.only(bottom: 50, top: 50),
+                    child: GalleryErrorPage(
+                      onTap: controller.handOnRefreshAfterErr,
+                    ),
+                  );
+                })
           ],
         ),
       );
@@ -169,39 +178,41 @@ class GalleryContainer extends StatelessWidget {
 
     Widget fromUrl() {
       return Container(
-        child: controller.obx((state) {
-          return Column(
-            children: <Widget>[
-              GalleryHeader(
-                galleryItem: state,
-                tabIndex: '',
-              ),
-              Divider(
-                height: 0.5,
-                color: CupertinoDynamicColor.resolve(
-                    CupertinoColors.systemGrey4, context),
-              ),
-              Column(
+        child: controller.obx(
+            (state) {
+              return Column(
                 children: <Widget>[
-                  // 标签
-                  TagBox(listTagGroup: state.tagGroup),
-                  TopComment(comment: state.galleryComment),
-                  Container(
-                    margin: const EdgeInsets.only(top: 4),
+                  GalleryHeader(
+                    galleryItem: state,
+                    tabIndex: '',
+                  ),
+                  Divider(
                     height: 0.5,
                     color: CupertinoDynamicColor.resolve(
                         CupertinoColors.systemGrey4, context),
                   ),
-                  PreviewGrid(
-                    previews: controller.firstPagePreview,
-                    gid: state.gid,
+                  Column(
+                    children: <Widget>[
+                      // 标签
+                      TagBox(listTagGroup: state.tagGroup),
+                      TopComment(comment: state.galleryComment),
+                      Container(
+                        margin: const EdgeInsets.only(top: 4),
+                        height: 0.5,
+                        color: CupertinoDynamicColor.resolve(
+                            CupertinoColors.systemGrey4, context),
+                      ),
+                      PreviewGrid(
+                        previews: controller.firstPagePreview,
+                        gid: state.gid,
+                      ),
+                      MorePreviewButton(
+                          hasMorePreview: controller.hasMorePreview),
+                    ],
                   ),
-                  MorePreviewButton(hasMorePreview: controller.hasMorePreview),
                 ],
-              ),
-            ],
-          );
-        },
+              );
+            },
             onLoading: Container(
               height: Get.size.height - 200,
               // height: 200,
@@ -210,7 +221,16 @@ class GalleryContainer extends StatelessWidget {
               child: const CupertinoActivityIndicator(
                 radius: 14.0,
               ),
-            )),
+            ),
+            onError: (err) {
+              logger.e(' $err');
+              return Container(
+                padding: const EdgeInsets.only(bottom: 50, top: 50),
+                child: GalleryErrorPage(
+                  onTap: controller.handOnRefreshAfterErr,
+                ),
+              );
+            }),
       );
     }
 

@@ -198,6 +198,14 @@ class GalleryPageController extends GetxController
     await _reloadData();
   }
 
+  Future<void> handOnRefreshAfterErr() async {
+    change(null, status: RxStatus.loading());
+    _loadData(refresh: true).then((GalleryItem value) {
+      _enableRead.value = true;
+      change(value, status: RxStatus.success());
+    });
+  }
+
   bool _isInLocalFav(String gid) {
     // 检查是否包含在本地收藏中
     final int index = Get.find<LocalFavController>()
