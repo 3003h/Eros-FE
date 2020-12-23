@@ -167,7 +167,7 @@ class _GalleryCatFilterState extends State<GalleryCatFilter> {
 
   @override
   Widget build(BuildContext context) {
-    final EhConfigService ehConfigController = Get.find();
+    final EhConfigService ehConfigService = Get.find();
     return Container(
       margin: widget.margin,
       padding: widget.padding,
@@ -216,16 +216,16 @@ class AdvanceSearchSwitchItem extends StatelessWidget {
 /// 设置类型筛选
 /// 弹出toast 全局维护cat的值
 Future<void> showFilterSetting() async {
-  final EhConfigService ehConfigController = Get.find();
+  final EhConfigService ehConfigService = Get.find();
   return showCupertinoDialog<void>(
     context: Get.context,
     builder: (BuildContext context) {
       return CupertinoAlertDialog(
         title: Text(S.of(context).search),
         content: GalleryFilterView(
-          catNum: ehConfigController.catFilter.value,
+          catNum: ehConfigService.catFilter.value,
           catNumChanged: (int toNum) {
-            ehConfigController.catFilter.value = toNum;
+            ehConfigService.catFilter.value = toNum;
           },
         ),
         actions: <Widget>[

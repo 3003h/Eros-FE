@@ -27,15 +27,15 @@ class FavoriteViewController extends GetxController
   Future<Tuple2<List<GalleryItem>, int>> futureBuilderFuture;
   Widget lastListWidget;
 
-  final EhConfigService _ehConfigController = Get.find();
+  final EhConfigService _ehConfigService = Get.find();
   final LocalFavController _localFavController = Get.find();
   final UserController _userController = Get.find();
 
   @override
   void onInit() {
     super.onInit();
-    curFavcat = _ehConfigController.lastShowFavcat ?? 'a';
-    title.value = _ehConfigController.lastShowFavTitle;
+    curFavcat = _ehConfigService.lastShowFavcat ?? 'a';
+    title.value = _ehConfigService.lastShowFavTitle;
 
     loadData(first: true).then((Tuple2<List<GalleryItem>, int> tuple) {
       maxPage = tuple.item2;
@@ -71,8 +71,8 @@ class FavoriteViewController extends GetxController
       return tuple;
     } else {
       if (first) {
-        _ehConfigController.lastShowFavcat = 'l';
-        _ehConfigController.lastShowFavTitle = S.of(Get.context).local_favorite;
+        _ehConfigService.lastShowFavcat = 'l';
+        _ehConfigService.lastShowFavTitle = S.of(Get.context).local_favorite;
       }
       // 本地收藏夹
       logger.v('本地收藏');

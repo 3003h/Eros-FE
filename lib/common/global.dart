@@ -12,6 +12,7 @@ import 'package:fehviewer/utils/utility.dart';
 import 'package:fehviewer/values/storages.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:logger/logger.dart';
 import 'package:path/path.dart';
 import 'package:path_provider/path_provider.dart';
 
@@ -50,7 +51,10 @@ class Global {
     // 运行初始
     WidgetsFlutterBinding.ensureInitialized();
 
-    // Logger.level = Level.warning;
+    // 判断是否debug模式
+    inDebugMode = EHUtils().isInDebugMode;
+
+    if (!inDebugMode) Logger.level = Level.info;
 
     // 代理初始化
     if (Platform.isIOS || Platform.isAndroid) {
@@ -71,9 +75,6 @@ class Global {
     _profileInit();
 
     cookieManager = CookieManager(await Api.cookieJar);
-
-    // 判断是否debug模式
-    inDebugMode = EHUtils().isInDebugMode;
 
     // 读取设备第一次打开
     isFirstOpen = !StorageUtil().getBool(STORAGE_DEVICE_ALREADY_OPEN_KEY);

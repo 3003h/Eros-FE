@@ -1,4 +1,3 @@
-import 'package:fehviewer/common/exts.dart';
 import 'package:fehviewer/common/service/depth_service.dart';
 import 'package:fehviewer/models/galleryComment.dart';
 import 'package:fehviewer/models/index.dart';
@@ -27,7 +26,8 @@ class NavigatorUtil {
   static void goGalleryListBySearch({
     String simpleSearch,
   }) {
-    Get.to(GallerySearchPage(searchText: simpleSearch));
+    Get.to(GallerySearchPage(searchText: simpleSearch),
+        transition: Transition.cupertino);
   }
 
   /// 转到画廊页面
@@ -37,14 +37,13 @@ class NavigatorUtil {
     depthService.pushPageCtrl();
 
     if (url != null && url.isNotEmpty) {
-      final String gid = url.gid;
       // TODO(honjow): 通过链接直接打开画廊的情况
       // ignore: always_specify_types
       Get.to(
         const GalleryPage(),
         transition: Transition.cupertino,
         preventDuplicates: false,
-        binding: BindingsBuilder(() {
+        binding: BindingsBuilder<dynamic>(() {
           Get.put(GalleryPageController.initUrl(url: url),
               tag: '${depthService.pageCtrlDepth}');
         }),
@@ -53,7 +52,7 @@ class NavigatorUtil {
       Get.to(
         const GalleryPage(),
         transition: Transition.cupertino,
-        binding: BindingsBuilder<GalleryPageController>(
+        binding: BindingsBuilder<dynamic>(
           () {
             Get.put(
               GalleryPageController.fromItem(
@@ -69,30 +68,39 @@ class NavigatorUtil {
   }
 
   static void goGalleryDetailReplace(BuildContext context, {String url}) {
+    final DepthService depthService = Get.find();
+    depthService.pushPageCtrl();
     if (url != null && url.isNotEmpty) {
-      Get.off(GalleryPage(), binding: BindingsBuilder(() {
-        Get.put(GalleryPageController.initUrl(url: url));
+      Get.off(const GalleryPage(), binding: BindingsBuilder<dynamic>(() {
+        Get.put(
+          GalleryPageController.initUrl(url: url),
+          tag: '${depthService.pageCtrlDepth}',
+        );
       }));
     } else {
-      Get.to(GalleryPage());
+      Get.to(const GalleryPage());
     }
   }
 
   static void showSearch() {
-    Get.to(const GallerySearchPage());
+    Get.to(const GallerySearchPage(), transition: Transition.cupertino);
   }
 
   /// 转到画廊评论页面
   static void goGalleryDetailComment(List<GalleryComment> comments) {
-    Get.to(CommentPage(galleryComments: comments));
+    Get.to(
+      CommentPage(galleryComments: comments),
+      transition: Transition.cupertino,
+    );
   }
 
   // 转到大图浏览
   static void goGalleryViewPage(int index, String gid) {
     logger.d('goGalleryViewPage $index');
     Get.to(
-      GalleryViewPage(),
-      binding: BindingsBuilder(() {
+      const GalleryViewPage(),
+      transition: Transition.cupertino,
+      binding: BindingsBuilder<dynamic>(() {
         // Get.lazyPut(() => ViewController(index));
         Get.put(ViewController(index));
       }),

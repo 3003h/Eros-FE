@@ -39,7 +39,7 @@ class ListViewDownloadSetting extends StatelessWidget {
 /// 预载图片数量
 Widget _buildPreloadImageItem(BuildContext context) {
   String _title = S.of(context).preload_image;
-  final EhConfigService ehConfigController = Get.find();
+  final EhConfigService ehConfigService = Get.find();
 
   List<Widget> _getModeList(BuildContext context) {
     return List<Widget>.from(EHConst.preloadImage.map((int element) {
@@ -71,11 +71,11 @@ Widget _buildPreloadImageItem(BuildContext context) {
 
   return Obx(() => SelectorSettingItem(
         title: _title,
-        selector: ehConfigController.preloadImage?.toString() ?? '',
+        selector: ehConfigService.preloadImage?.toString() ?? '',
         onTap: () async {
           final int _result = await _showActionSheet(context);
           if (_result != null) {
-            ehConfigController.preloadImage(_result);
+            ehConfigService.preloadImage(_result);
           }
         },
       ));

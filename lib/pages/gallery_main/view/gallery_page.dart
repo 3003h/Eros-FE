@@ -30,7 +30,7 @@ class GalleryPage extends StatelessWidget {
           // 导航栏
           Obx(() => CupertinoSliverNavigationBar(
                 largeTitle: Text(
-                  controller.topTitle,
+                  controller.topTitle ?? '',
                   textAlign: TextAlign.left,
                   maxLines: 3,
                   style: const TextStyle(
@@ -62,19 +62,11 @@ class GalleryPage extends StatelessWidget {
           CupertinoSliverRefreshControl(
             onRefresh: controller.handOnRefresh,
           ),
-          SliverSafeArea(
+          const SliverSafeArea(
             top: false,
             bottom: false,
             sliver: SliverToBoxAdapter(
-              child: Column(
-                children: <Widget>[
-                  // 内容
-                  GalleryContainer(
-                    galleryItem: controller.galleryItem,
-                    tabIndex: controller.tabIndex,
-                  ),
-                ],
-              ),
+              child: GalleryContainer(),
             ),
           ),
         ],
@@ -114,31 +106,82 @@ class NavigationBarImage extends StatelessWidget {
 
 // 画廊内容
 class GalleryContainer extends StatelessWidget {
-  const GalleryContainer({Key key, @required this.galleryItem, this.tabIndex})
-      : super(key: key);
-  final GalleryItem galleryItem;
-  final Object tabIndex;
+  const GalleryContainer({
+    Key key,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     final GalleryPageController controller =
         Get.find(tag: '${Get.find<DepthService>().pageCtrlDepth}');
 
-    return Container(
-      child: Column(
-        children: <Widget>[
-          GalleryHeader(
-            galleryItem: galleryItem,
-            tabIndex: tabIndex,
-          ),
-          Divider(
-            height: 0.5,
-            color: CupertinoDynamicColor.resolve(
-                CupertinoColors.systemGrey4, context),
-          ),
-          controller.obx(
-            (GalleryItem state) {
-              return Column(
+    Widget fromItem() {
+      final GalleryItem galleryItem = controller.galleryItem;
+      final Object tabIndex = controller.tabIndex;
+      return Container(
+        child: Column(
+          children: <Widget>[
+            GalleryHeader(
+              galleryItem: galleryItem,
+              tabIndex: tabIndex,
+            ),
+            Divider(
+              height: 0.5,
+              color: CupertinoDynamicColor.resolve(
+                  CupertinoColors.systemGrey4, context),
+            ),
+            controller.obx(
+              (GalleryItem state) {
+                return Column(
+                  children: <Widget>[
+                    // 标签
+                    TagBox(listTagGroup: state.tagGroup),
+                    TopComment(comment: state.galleryComment),
+                    Container(
+                      margin: const EdgeInsets.only(top: 4),
+                      height: 0.5,
+                      color: CupertinoDynamicColor.resolve(
+                          CupertinoColors.systemGrey4, context),
+                    ),
+                    PreviewGrid(
+                      previews: controller.firstPagePreview,
+                      gid: galleryItem.gid,
+                    ),
+                    MorePreviewButton(
+                        hasMorePreview: controller.hasMorePreview),
+                  ],
+                );
+              },
+              onLoading: Container(
+                // height: Get.size.height - _top * 3 - kHeaderHeight,
+                height: 200,
+                alignment: Alignment.center,
+                padding: const EdgeInsets.only(bottom: 50),
+                child: const CupertinoActivityIndicator(
+                  radius: 14.0,
+                ),
+              ),
+            )
+          ],
+        ),
+      );
+    }
+
+    Widget fromUrl() {
+      return Container(
+        child: controller.obx((state) {
+          return Column(
+            children: <Widget>[
+              GalleryHeader(
+                galleryItem: state,
+                tabIndex: '',
+              ),
+              Divider(
+                height: 0.5,
+                color: CupertinoDynamicColor.resolve(
+                    CupertinoColors.systemGrey4, context),
+              ),
+              Column(
                 children: <Widget>[
                   // 标签
                   TagBox(listTagGroup: state.tagGroup),
@@ -151,24 +194,26 @@ class GalleryContainer extends StatelessWidget {
                   ),
                   PreviewGrid(
                     previews: controller.firstPagePreview,
-                    gid: galleryItem.gid,
+                    gid: state.gid,
                   ),
                   MorePreviewButton(hasMorePreview: controller.hasMorePreview),
                 ],
-              );
-            },
+              ),
+            ],
+          );
+        },
             onLoading: Container(
-              // height: Get.size.height - _top * 3 - kHeaderHeight,
-              height: 200,
+              height: Get.size.height - 200,
+              // height: 200,
               alignment: Alignment.center,
               padding: const EdgeInsets.only(bottom: 50),
               child: const CupertinoActivityIndicator(
                 radius: 14.0,
               ),
-            ),
-          )
-        ],
-      ),
-    );
+            )),
+      );
+    }
+
+    return controller.fromUrl ? fromUrl() : fromItem();
   }
 }

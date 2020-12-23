@@ -291,13 +291,13 @@ class CoverImg extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final EhConfigService ehConfigController = Get.find();
+    final EhConfigService ehConfigService = Get.find();
     final Map<String, String> _httpHeaders = {
       'Cookie': Global.profile?.user?.cookie ?? '',
     };
     return imgUrl != null && imgUrl.isNotEmpty
         ? Obx(() {
-            if (ehConfigController.isGalleryImgBlur.value) {
+            if (ehConfigService.isGalleryImgBlur.value) {
               return BlurImage(
                   child: CachedNetworkImage(
                 httpHeaders: _httpHeaders,

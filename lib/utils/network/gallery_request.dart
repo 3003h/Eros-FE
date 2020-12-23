@@ -117,14 +117,14 @@ class Api {
     int cats,
     bool refresh = false,
   }) async {
-    final EhConfigService ehConfigController = Get.find();
+    final EhConfigService ehConfigService = Get.find();
     final AdvanceSearchController searchController = Get.find();
 
     String url = '/';
     String qry = '?page=${page ?? 0}&inline_set=dm_l';
     // String qry = '?page=${page ?? 0}';
 
-    if (ehConfigController.isSafeMode.value) {
+    if (ehConfigService.isSafeMode.value) {
       qry = '$qry&f_cats=767';
     } else if (cats != null) {
       qry = '$qry&f_cats=$cats';
@@ -134,7 +134,7 @@ class Api {
       qry = '$qry&from=$fromGid';
     }
 
-    if (ehConfigController.isSafeMode.value) {
+    if (ehConfigService.isSafeMode.value) {
       serach = 'parody:gundam\$';
     }
 

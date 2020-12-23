@@ -11,7 +11,6 @@ import 'package:fehviewer/pages/gallery_main/view/comment_item.dart';
 import 'package:fehviewer/pages/gallery_main/view/gallery_all_preview_page.dart';
 import 'package:fehviewer/pages/gallery_main/view/gallery_favcat.dart';
 import 'package:fehviewer/pages/gallery_main/view/gallery_preview_clipper.dart';
-import 'package:fehviewer/pages/item/controller/galleryitem_controller.dart';
 import 'package:fehviewer/route/navigator_util.dart';
 import 'package:fehviewer/utils/logger.dart';
 import 'package:fehviewer/values/const.dart';
@@ -58,7 +57,7 @@ class GalleryHeader extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: <Widget>[
                       // 标题
-                      GalleryTitle(gid: galleryItem.gid),
+                      const GalleryTitle(),
                       // 上传用户
                       GalleryUploader(uploader: galleryItem.uploader),
                       const Spacer(),
@@ -223,14 +222,12 @@ class CoverImage extends StatelessWidget {
 class GalleryTitle extends StatelessWidget {
   const GalleryTitle({
     Key key,
-    @required this.gid,
   }) : super(key: key);
-
-  final String gid;
 
   @override
   Widget build(BuildContext context) {
-    final GalleryItemController _itemController = Get.find(tag: gid);
+    final GalleryPageController _pageController =
+        Get.find(tag: '${Get.find<DepthService>().pageCtrlDepth}');
 
     /// 构建标题
     ///
@@ -240,11 +237,10 @@ class GalleryTitle extends StatelessWidget {
     /// 异常则不会出现
     ///
     /// 暂时放弃使用 SelectableText
-    final GalleryItem galleryItem = _itemController.galleryItem;
 
     return GestureDetector(
       child: Text(
-        _itemController.title,
+        _pageController.title ?? '',
         maxLines: 5,
         textAlign: TextAlign.left, // 对齐方式
         overflow: TextOverflow.ellipsis, // 超出部分省略号
@@ -385,7 +381,8 @@ class GalleryRating extends StatelessWidget {
     return Row(
       children: <Widget>[
         Container(
-            padding: const EdgeInsets.only(right: 8), child: Text('$rating')),
+            padding: const EdgeInsets.only(right: 8),
+            child: Text('${rating ?? 0}')),
         // 星星
         StaticRatingBar(
           size: 18.0,
@@ -697,12 +694,12 @@ class TagGroupItem extends StatelessWidget {
   final TagGroup tagGroupData;
 
   List<Widget> _initTagBtnList(galleryTags, context) {
-    final EhConfigService ehConfigController = Get.find();
+    final EhConfigService ehConfigService = Get.find();
     final List<Widget> _tagBtnList = <Widget>[];
     galleryTags.forEach((tag) {
       _tagBtnList.add(
         Obx(() => TagButton(
-              text: ehConfigController.isTagTranslat.value
+              text: ehConfigService.isTagTranslat.value
                   ? tag?.tagTranslat ?? ''
                   : tag?.title ?? '',
               onPressed: () {
@@ -718,7 +715,7 @@ class TagGroupItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final EhConfigService ehConfigController = Get.find();
+    final EhConfigService ehConfigService = Get.find();
 
     final List<Widget> _tagBtnList =
         _initTagBtnList(tagGroupData.galleryTags, context);
@@ -735,7 +732,7 @@ class TagGroupItem extends StatelessWidget {
             child: Obx(() => TagButton(
                   color: CupertinoDynamicColor.resolve(
                       ThemeColors.tagColorTagType[_tagType.trim()], context),
-                  text: ehConfigController.isTagTranslat.value
+                  text: ehConfigService.isTagTranslat.value
                       ? EHConst.translateTagType[_tagType.trim()] ?? _tagType
                       : _tagType,
                 )),
