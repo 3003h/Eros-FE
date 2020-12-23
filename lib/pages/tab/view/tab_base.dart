@@ -86,16 +86,6 @@ SliverFixedExtentList buildGallerySliverListSimpleView(
         Get.create(() => GalleryItemController.initData(gallerItemBeans[index],
             tabIndex: tabIndex));
 
-/*
-        return ChangeNotifierProvider<GalleryModel>.value(
-          value: GalleryModel()
-            ..initData(gallerItemBeans[index], tabIndex: tabIndex),
-          child: GalleryItemSimpleWidget(
-            galleryItem: gallerItemBeans[index],
-            tabIndex: tabIndex,
-          ),
-        );
-*/
         return GalleryItemSimpleWidget(
           galleryItem: gallerItemBeans[index],
           tabIndex: tabIndex,
@@ -109,10 +99,10 @@ SliverFixedExtentList buildGallerySliverListSimpleView(
 
 Widget getGalleryList(List<GalleryItem> gallerItemBeans, tabIndex,
     {int maxPage, int curPage, VoidCallback loadMord}) {
-  final EhConfigService ehConfigController = Get.find();
+  final EhConfigService ehConfigService = Get.find();
 
   return Obx(() {
-    switch (ehConfigController.listMode.value) {
+    switch (ehConfigService.listMode.value) {
       case ListModeEnum.list:
         return buildGallerySliverListView(gallerItemBeans, tabIndex,
             maxPage: maxPage, curPage: curPage, loadMord: loadMord);

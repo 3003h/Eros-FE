@@ -21,7 +21,7 @@ class CommentItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final EhConfigService ehConfigController = Get.find();
+    final EhConfigService ehConfigService = Get.find();
 
     final Text _fullText = Text(
       galleryComment.context,
@@ -81,7 +81,7 @@ class CommentItem extends StatelessWidget {
         // 圆角
         borderRadius: BorderRadius.circular(10),
         child: Container(
-          color: ehConfigController.isPureDarkTheme.value
+          color: ehConfigService.isPureDarkTheme.value
               ? CupertinoDynamicColor.resolve(
                   ThemeColors.commitBackground, context)
               : CupertinoDynamicColor.resolve(

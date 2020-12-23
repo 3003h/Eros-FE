@@ -8,7 +8,7 @@ import 'package:get/get.dart';
 import 'ehconfig_service.dart';
 
 class ThemeService extends ProfileService {
-  final EhConfigService _ehConfigController = Get.find();
+  final EhConfigService _ehConfigService = Get.find();
   final Rx<ThemesModeEnum> _themeModel = ThemesModeEnum.system.obs;
   Rx<Brightness> platformBrightness =
       WidgetsBinding.instance.window.platformBrightness.obs;
@@ -21,10 +21,9 @@ class ThemeService extends ProfileService {
     return _themeModel.value;
   }
 
-  CupertinoThemeData get _getDarkTheme =>
-      _ehConfigController.isPureDarkTheme.value
-          ? ThemeColors.darkPureTheme
-          : ThemeColors.darkGrayTheme;
+  CupertinoThemeData get _getDarkTheme => _ehConfigService.isPureDarkTheme.value
+      ? ThemeColors.darkPureTheme
+      : ThemeColors.darkGrayTheme;
 
   CupertinoThemeData get themeData {
     switch (themeModel) {

@@ -28,10 +28,10 @@ class TabHomeController extends GetxController {
   final Map<String, ScrollController> _scrollControllerMap = {};
   final CupertinoTabController tabController = CupertinoTabController();
 
-  final EhConfigService _ehConfigController = Get.find();
-  final LocaleService _localeController = Get.find();
+  final EhConfigService _ehConfigService = Get.find();
+  final LocaleService _localeService = Get.find();
 
-  Locale get locale => _localeController.locale;
+  Locale get locale => _localeService.locale;
 
   List<BottomNavigationBarItem> listBottomNavigationBarItem;
 
@@ -49,7 +49,7 @@ class TabHomeController extends GetxController {
       {
         'title': S.of(context).tab_popular,
         'icon': const Icon(FontAwesomeIcons.fire, size: _iconSize),
-        'disable': _ehConfigController.isSafeMode.value,
+        'disable': _ehConfigService.isSafeMode.value,
         'page': PopularListTab(
           tabIndex: S.of(context).tab_popular,
           scrollController: _getScrollController(S.of(context).tab_popular),
@@ -66,7 +66,7 @@ class TabHomeController extends GetxController {
       {
         'title': S.of(context).tab_favorite,
         'icon': const Icon(FontAwesomeIcons.solidHeart, size: _iconSize),
-        'disable': _ehConfigController.isSafeMode.value,
+        'disable': _ehConfigService.isSafeMode.value,
         'page': FavoriteTab(
           tabIndex: S.of(context).tab_favorite,
           scrollController: _getScrollController(S.of(context).tab_favorite),
@@ -75,7 +75,7 @@ class TabHomeController extends GetxController {
       {
         'title': S.of(context).tab_history,
         'icon': const Icon(FontAwesomeIcons.history, size: _iconSize),
-        'disable': _ehConfigController.isSafeMode.value,
+        'disable': _ehConfigService.isSafeMode.value,
         'page': HistoryTab(
           tabIndex: S.of(context).tab_history,
           scrollController: _getScrollController(S.of(context).tab_history),
