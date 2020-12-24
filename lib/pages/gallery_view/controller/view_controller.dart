@@ -129,8 +129,6 @@ class ViewController extends GetxController {
       sliderValue = currentIndex / 1.0;
       futureViewGallery = _getImageInfo();
     }
-
-    _initSize(Get.context);
   }
 
   @override
@@ -140,7 +138,7 @@ class ViewController extends GetxController {
     super.onClose();
   }
 
-  void _initSize(BuildContext context) {
+  void initSize(BuildContext context) {
     final MediaQueryData _mq = MediaQuery.of(context);
     screensize = _mq.size;
     paddingLeft = _mq.padding.left;

@@ -17,18 +17,16 @@ import '../controller/view_controller.dart';
 class GalleryViewPage extends GetView<ViewController> {
   const GalleryViewPage({Key key}) : super(key: key);
 
-  // ViewController controller;
-
   /// 画廊图片大图浏览
   @override
   Widget build(BuildContext context) {
-    // controller = Get.find();
-
-    return _buildPage();
+    logger.d(' rebuild GalleryViewPage');
+    controller.initSize(context);
+    return _buildPage(context);
   }
 
   // 页面
-  Widget _buildPage() {
+  Widget _buildPage(BuildContext context) {
     return CupertinoTheme(
       data: const CupertinoThemeData(
         brightness: Brightness.dark,
@@ -368,7 +366,7 @@ class GalleryViewPage extends GetView<ViewController> {
           child: GalleryImage(
             index: index,
           ),
-          initialScale: PhotoViewComputedScale.covered,
+          initialScale: PhotoViewComputedScale.contained,
           minScale: PhotoViewComputedScale.contained * 1.0,
           maxScale: PhotoViewComputedScale.covered * _maxScale,
         );
