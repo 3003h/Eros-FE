@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:fehviewer/common/service/ehconfig_service.dart';
+import 'package:fehviewer/common/service/theme_service.dart';
 import 'package:fehviewer/generated/l10n.dart';
 import 'package:fehviewer/pages/setting/setting_base.dart';
 import 'package:fehviewer/utils/cust_lib/flutter_egg.dart';
@@ -16,8 +17,9 @@ class AboutPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final CupertinoPageScaffold cps = CupertinoPageScaffold(
-        backgroundColor:
-            !Get.isDarkMode ? CupertinoColors.secondarySystemBackground : null,
+        backgroundColor: !ehTheme.isDarkMode
+            ? CupertinoColors.secondarySystemBackground
+            : null,
         navigationBar: CupertinoNavigationBar(
           middle: Text(S.of(context).about),
         ),

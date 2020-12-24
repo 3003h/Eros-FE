@@ -9,7 +9,7 @@ import 'package:fehviewer/common/service/theme_service.dart';
 import 'package:fehviewer/generated/l10n.dart';
 import 'package:fehviewer/pages/setting/custom_hosts_page.dart';
 import 'package:fehviewer/utils/logger.dart';
-import 'package:fehviewer/values/theme_colors.dart';
+import 'package:fehviewer/const/theme_colors.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -20,8 +20,9 @@ class AdvancedSettingPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final CupertinoPageScaffold cps = CupertinoPageScaffold(
-        backgroundColor:
-            !Get.isDarkMode ? CupertinoColors.secondarySystemBackground : null,
+        backgroundColor: !ehTheme.isDarkMode
+            ? CupertinoColors.secondarySystemBackground
+            : null,
         navigationBar: CupertinoNavigationBar(
           // transitionBetweenRoutes: true,
           middle: Text(S.of(context).advanced),

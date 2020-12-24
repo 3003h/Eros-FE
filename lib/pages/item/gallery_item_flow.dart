@@ -4,7 +4,7 @@ import 'package:fehviewer/models/galleryItem.dart';
 import 'package:fehviewer/pages/item/controller/galleryitem_controller.dart';
 import 'package:fehviewer/route/navigator_util.dart';
 import 'package:fehviewer/utils/logger.dart';
-import 'package:fehviewer/values/theme_colors.dart';
+import 'package:fehviewer/const/theme_colors.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';

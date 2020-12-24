@@ -1,7 +1,7 @@
 import 'package:enum_to_string/enum_to_string.dart';
 import 'package:fehviewer/common/global.dart';
 import 'package:fehviewer/common/service/base_service.dart';
-import 'package:fehviewer/values/const.dart';
+import 'package:fehviewer/const/const.dart';
 import 'package:get/get.dart';
 
 class EhConfigService extends ProfileService {

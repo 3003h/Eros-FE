@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:fehviewer/common/global.dart';
 import 'package:fehviewer/common/service/dns_service.dart';
+import 'package:fehviewer/common/service/theme_service.dart';
 import 'package:fehviewer/generated/l10n.dart';
 import 'package:fehviewer/models/dnsCache.dart';
 import 'package:fehviewer/pages/setting/setting_base.dart';
@@ -29,8 +30,9 @@ class CustomHostsPage extends StatelessWidget {
     }
 
     return CupertinoPageScaffold(
-      backgroundColor:
-          !Get.isDarkMode ? CupertinoColors.secondarySystemBackground : null,
+      backgroundColor: !ehTheme.isDarkMode
+          ? CupertinoColors.secondarySystemBackground
+          : null,
       navigationBar: CupertinoNavigationBar(
         padding: const EdgeInsetsDirectional.only(start: 0),
         middle: Text(_title),

@@ -4,7 +4,7 @@ import 'package:fehviewer/models/index.dart';
 import 'package:fehviewer/utils/logger.dart';
 import 'package:fehviewer/utils/network/gallery_request.dart';
 import 'package:fehviewer/utils/toast.dart';
-import 'package:fehviewer/values/const.dart';
+import 'package:fehviewer/const/const.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
