@@ -19,7 +19,9 @@ typedef String MessageIfAbsent(String messageStr, List<dynamic> args);
 class MessageLookup extends MessageLookupByLibrary {
   String get localeName => 'en';
 
-  static m0(rating) => "${rating} ⭐";
+  static m0(site) => "Current ${site}";
+
+  static m1(rating) => "${rating} ⭐";
 
   final messages = _notInlinedMessages(_notInlinedMessages);
   static _notInlinedMessages(_) => <String, Function> {
@@ -33,6 +35,8 @@ class MessageLookup extends MessageLookupByLibrary {
     "cancel" : MessageLookupByLibrary.simpleMessage("Cancel"),
     "clear_cache" : MessageLookupByLibrary.simpleMessage("Clear cache"),
     "clear_filter" : MessageLookupByLibrary.simpleMessage("Clear"),
+    "current_site" : m0,
+    "current_version" : MessageLookupByLibrary.simpleMessage("Current version"),
     "custom_hosts" : MessageLookupByLibrary.simpleMessage("Custom hosts"),
     "dark" : MessageLookupByLibrary.simpleMessage("Dark"),
     "dark_mode_effect" : MessageLookupByLibrary.simpleMessage("Dark mode effect"),
@@ -41,15 +45,25 @@ class MessageLookup extends MessageLookupByLibrary {
     "double_click_back" : MessageLookupByLibrary.simpleMessage("Press again to exit"),
     "download" : MessageLookupByLibrary.simpleMessage("Download"),
     "eh" : MessageLookupByLibrary.simpleMessage("E·H"),
+    "ehentai_settings" : MessageLookupByLibrary.simpleMessage("EHentai settings"),
     "favcat" : MessageLookupByLibrary.simpleMessage("Favorites"),
+    "favorites_order" : MessageLookupByLibrary.simpleMessage("Favorites order"),
+    "favorites_order_Use_favorited" : MessageLookupByLibrary.simpleMessage("Use favorited"),
+    "favorites_order_Use_posted" : MessageLookupByLibrary.simpleMessage("Use posted"),
     "follow_system" : MessageLookupByLibrary.simpleMessage("Follow system"),
+    "galery_site" : MessageLookupByLibrary.simpleMessage("Gallery site"),
     "gallery_comments" : MessageLookupByLibrary.simpleMessage("Gallery Comments"),
     "gray_black" : MessageLookupByLibrary.simpleMessage("Gray black"),
     "language" : MessageLookupByLibrary.simpleMessage("Language"),
     "light" : MessageLookupByLibrary.simpleMessage("Ligth"),
+    "list_mode" : MessageLookupByLibrary.simpleMessage("List mode"),
+    "listmode_medium" : MessageLookupByLibrary.simpleMessage("List - Medium"),
+    "listmode_small" : MessageLookupByLibrary.simpleMessage("List - Small"),
+    "listmode_waterfall" : MessageLookupByLibrary.simpleMessage("Waterfall"),
     "local_favorite" : MessageLookupByLibrary.simpleMessage("Local Favorites"),
     "login" : MessageLookupByLibrary.simpleMessage("Sign"),
     "login_web" : MessageLookupByLibrary.simpleMessage("Sign in on the web"),
+    "max_history" : MessageLookupByLibrary.simpleMessage("Maximum history"),
     "morePreviews" : MessageLookupByLibrary.simpleMessage("More previews"),
     "noMorePreviews" : MessageLookupByLibrary.simpleMessage("No more previews"),
     "notFav" : MessageLookupByLibrary.simpleMessage("Not Favorited"),
@@ -77,8 +91,10 @@ class MessageLookup extends MessageLookupByLibrary {
     "s_Show_Expunged_Galleries" : MessageLookupByLibrary.simpleMessage("Show Expunged Galleries"),
     "s_and" : MessageLookupByLibrary.simpleMessage("and"),
     "s_pages" : MessageLookupByLibrary.simpleMessage("pages"),
-    "s_stars" : m0,
+    "s_stars" : m1,
     "search" : MessageLookupByLibrary.simpleMessage("Search"),
+    "setting_on_website" : MessageLookupByLibrary.simpleMessage("Setting on website"),
+    "show_jpn_title" : MessageLookupByLibrary.simpleMessage("Show japanese title"),
     "t_Clear_all_history" : MessageLookupByLibrary.simpleMessage("Clear all history"),
     "tab_favorite" : MessageLookupByLibrary.simpleMessage("Favorites"),
     "tab_gallery" : MessageLookupByLibrary.simpleMessage("Gallery"),
@@ -87,6 +103,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "tab_setting" : MessageLookupByLibrary.simpleMessage("Settings"),
     "tags" : MessageLookupByLibrary.simpleMessage("Tags"),
     "theme" : MessageLookupByLibrary.simpleMessage("Theme"),
+    "unlimited" : MessageLookupByLibrary.simpleMessage("Unlimited"),
     "uploader" : MessageLookupByLibrary.simpleMessage("Uploader"),
     "user_login" : MessageLookupByLibrary.simpleMessage("User Sign"),
     "user_name" : MessageLookupByLibrary.simpleMessage("Username"),

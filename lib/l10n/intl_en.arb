@@ -66,5 +66,20 @@
   "uploader": "Uploader",
   "tags": "Tags",
   "clear_filter": "Clear",
-  "t_Clear_all_history": "Clear all history"
+  "t_Clear_all_history": "Clear all history",
+  "galery_site": "Gallery site",
+  "current_site": "Current {site}",
+  "ehentai_settings": "EHentai settings",
+  "setting_on_website": "Setting on website",
+  "list_mode": "List mode",
+  "listmode_medium": "List - Medium",
+  "listmode_small": "List - Small",
+  "listmode_waterfall": "Waterfall",
+  "favorites_order": "Favorites order",
+  "favorites_order_Use_posted": "Use posted",
+  "favorites_order_Use_favorited": "Use favorited",
+  "show_jpn_title": "Show japanese title",
+  "current_version": "Current version",
+  "max_history": "Maximum history",
+  "unlimited": "Unlimited"
 }

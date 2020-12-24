@@ -1,4 +1,5 @@
 import 'package:fehviewer/common/service/dns_service.dart';
+import 'package:fehviewer/common/service/theme_service.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -10,10 +11,12 @@ class SelectorSettingItem extends StatefulWidget {
     this.onTap,
     @required this.title,
     @required this.selector,
+    this.hideLine = false,
   }) : super(key: key);
 
   final String title;
   final String selector;
+  final bool hideLine;
 
   // 点击回调
   final VoidCallback onTap;
@@ -24,9 +27,25 @@ class SelectorSettingItem extends StatefulWidget {
 
 class _SelectorSettingItemState extends State<SelectorSettingItem> {
   Color _color;
+  Color _pBackgroundColor;
+
+  @override
+  void initState() {
+    super.initState();
+    _color =
+        CupertinoDynamicColor.resolve(ehTheme.itmeBackgroundColor, Get.context);
+    _pBackgroundColor = _color;
+  }
 
   @override
   Widget build(BuildContext context) {
+    final Color color =
+        CupertinoDynamicColor.resolve(ehTheme.itmeBackgroundColor, context);
+    if (_pBackgroundColor.value != color.value) {
+      _color = color;
+      _pBackgroundColor = color;
+    }
+
     final Container container = Container(
       color: _color,
       child: Column(
@@ -57,12 +76,13 @@ class _SelectorSettingItemState extends State<SelectorSettingItem> {
               ],
             ),
           ),
-          Divider(
-            indent: 20,
-            height: 0.5,
-            color: CupertinoDynamicColor.resolve(
-                CupertinoColors.systemGrey4, context),
-          ),
+          if (!widget.hideLine)
+            Divider(
+              indent: 20,
+              height: 0.5,
+              color: CupertinoDynamicColor.resolve(
+                  CupertinoColors.systemGrey4, context),
+            ),
         ],
       ),
     );
@@ -84,7 +104,8 @@ class _SelectorSettingItemState extends State<SelectorSettingItem> {
 
   void _updateNormalColor() {
     setState(() {
-      _color = null;
+      _color =
+          CupertinoDynamicColor.resolve(ehTheme.itmeBackgroundColor, context);
     });
   }
 
@@ -105,6 +126,7 @@ class TextSwitchItem extends StatefulWidget {
     this.desc,
     this.descOn,
     Key key,
+    this.hideLine = false,
   }) : super(key: key);
 
   final bool intValue;
@@ -112,6 +134,7 @@ class TextSwitchItem extends StatefulWidget {
   final String title;
   final String desc;
   final String descOn;
+  final bool hideLine;
 
   @override
   _TextSwitchItemState createState() => _TextSwitchItemState();
@@ -129,54 +152,62 @@ class _TextSwitchItemState extends State<TextSwitchItem> {
   Widget build(BuildContext context) {
     _switchValue = _switchValue ?? widget.intValue ?? false;
     _desc = _switchValue ? widget.descOn : widget.desc;
-    return Column(
-      children: <Widget>[
-        Container(
-          height: 54.0,
-          alignment: Alignment.centerLeft,
-          padding: const EdgeInsets.fromLTRB(20, 0, 20, 0),
-          child: Row(
-            children: <Widget>[
-              Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: <Widget>[
-                    Text(
-                      widget.title,
-                      style: const TextStyle(
-                        height: 1.0,
-                      ),
-                    ),
-                    if (_desc != null || widget.desc != null)
+    return Container(
+      // color: CupertinoDynamicColor.resolve(
+      //     CupertinoColors.systemBackground, context),
+      color:
+          CupertinoDynamicColor.resolve(ehTheme.itmeBackgroundColor, context),
+      child: Column(
+        children: <Widget>[
+          Container(
+            height: 54.0,
+            alignment: Alignment.centerLeft,
+            padding: const EdgeInsets.fromLTRB(20, 0, 20, 0),
+            child: Row(
+              children: <Widget>[
+                Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: <Widget>[
                       Text(
-                        _desc ?? widget.desc,
+                        widget.title,
                         style: const TextStyle(
-                            fontSize: 12.5, color: CupertinoColors.systemGrey),
+                          height: 1.0,
+                        ),
                       ),
-                  ]),
-              Expanded(
-                child: Container(),
-              ),
-              CupertinoSwitch(
-                onChanged: (bool value) {
-                  setState(() {
-                    _switchValue = value;
-                    _desc = value ? widget.descOn : widget.desc;
-                    _handOnChanged();
-                  });
-                },
-                value: _switchValue,
-              ),
-            ],
+                      if (_desc != null || widget.desc != null)
+                        Text(
+                          _desc ?? widget.desc,
+                          style: const TextStyle(
+                              fontSize: 12.5,
+                              color: CupertinoColors.systemGrey),
+                        ),
+                    ]),
+                Expanded(
+                  child: Container(),
+                ),
+                CupertinoSwitch(
+                  onChanged: (bool value) {
+                    setState(() {
+                      _switchValue = value;
+                      _desc = value ? widget.descOn : widget.desc;
+                      _handOnChanged();
+                    });
+                  },
+                  value: _switchValue,
+                ),
+              ],
+            ),
           ),
-        ),
-        Divider(
-          indent: 20,
-          height: 0.5,
-          color: CupertinoDynamicColor.resolve(
-              CupertinoColors.systemGrey4, context),
-        ),
-      ],
+          if (!widget.hideLine)
+            Divider(
+              indent: 20,
+              height: 0.5,
+              color: CupertinoDynamicColor.resolve(
+                  CupertinoColors.systemGrey4, context),
+            ),
+        ],
+      ),
     );
   }
 }
@@ -189,12 +220,14 @@ class TextItem extends StatefulWidget {
     this.onTap,
     Key key,
     this.height = 54.0,
+    this.hideLine = false,
   }) : super(key: key);
 
   final String title;
   final String desc;
   final VoidCallback onTap;
   final double height;
+  final bool hideLine;
 
   @override
   _TextItemState createState() => _TextItemState();
@@ -202,46 +235,65 @@ class TextItem extends StatefulWidget {
 
 class _TextItemState extends State<TextItem> {
   Color _color;
+  Color _pBackgroundColor;
+
+  @override
+  void initState() {
+    super.initState();
+    _color =
+        CupertinoDynamicColor.resolve(ehTheme.itmeBackgroundColor, Get.context);
+    _pBackgroundColor = _color;
+  }
 
   @override
   Widget build(BuildContext context) {
-    final Widget item = Column(
-      children: <Widget>[
-        Container(
-          color: _color,
-          alignment: Alignment.center,
-          height: widget.height,
-          padding: const EdgeInsets.fromLTRB(20, 0, 20, 0),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.start,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: <Widget>[
-              Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: <Widget>[
-                    Text(
-                      widget.title,
-                      style: const TextStyle(
-                        height: 1.0,
+    final Color color =
+        CupertinoDynamicColor.resolve(ehTheme.itmeBackgroundColor, context);
+    if (_pBackgroundColor.value != color.value) {
+      _color = color;
+      _pBackgroundColor = color;
+    }
+
+    final Widget item = Container(
+      color: _color,
+      child: Column(
+        children: <Widget>[
+          Container(
+            alignment: Alignment.center,
+            height: widget.height,
+            padding: const EdgeInsets.fromLTRB(20, 0, 20, 0),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: <Widget>[
+                Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: <Widget>[
+                      Text(
+                        widget.title,
+                        style: const TextStyle(
+                          height: 1.0,
+                        ),
                       ),
-                    ),
-                    Text(
-                      widget.desc,
-                      style: const TextStyle(
-                          fontSize: 12.5, color: CupertinoColors.systemGrey),
-                    ),
-                  ]),
-            ],
+                      Text(
+                        widget.desc,
+                        style: const TextStyle(
+                            fontSize: 12.5, color: CupertinoColors.systemGrey),
+                      ),
+                    ]),
+              ],
+            ),
           ),
-        ),
-        Divider(
-          indent: 20,
-          height: 0.5,
-          color: CupertinoDynamicColor.resolve(
-              CupertinoColors.systemGrey4, context),
-        ),
-      ],
+          if (!widget.hideLine)
+            Divider(
+              indent: 20,
+              height: 0.5,
+              color: CupertinoDynamicColor.resolve(
+                  CupertinoColors.systemGrey4, context),
+            ),
+        ],
+      ),
     );
 
     return GestureDetector(
@@ -260,7 +312,8 @@ class _TextItemState extends State<TextItem> {
 
   void _updateNormalColor() {
     setState(() {
-      _color = null;
+      _color = CupertinoDynamicColor.resolve(
+          ehTheme.itmeBackgroundColor, Get.context);
     });
   }
 

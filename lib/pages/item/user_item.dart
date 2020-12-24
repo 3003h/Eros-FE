@@ -1,5 +1,6 @@
 import 'package:fehviewer/common/controller/user_controller.dart';
 import 'package:fehviewer/common/service/ehconfig_service.dart';
+import 'package:fehviewer/common/service/theme_service.dart';
 import 'package:fehviewer/generated/l10n.dart';
 import 'package:fehviewer/route/routes.dart';
 import 'package:fehviewer/utils/network/gallery_request.dart';
@@ -15,13 +16,13 @@ class UserItem extends StatefulWidget {
 
 class _UserItem extends State<UserItem> {
   Color _color;
+  Color _pBackgroundColor;
   final EhConfigService ehConfigService = Get.find();
   final UserController userController = Get.find();
 
   Future<void> _logOut(BuildContext context) async {
     return showCupertinoDialog<void>(
       context: context,
-//      barrierDismissible: false, // user must tap button!
       builder: (BuildContext context) {
         return CupertinoAlertDialog(
           title: Text('注销用户'),
@@ -50,7 +51,22 @@ class _UserItem extends State<UserItem> {
   }
 
   @override
+  void initState() {
+    super.initState();
+    _color =
+        CupertinoDynamicColor.resolve(ehTheme.itmeBackgroundColor, Get.context);
+    _pBackgroundColor = _color;
+  }
+
+  @override
   Widget build(BuildContext context) {
+    final Color color =
+        CupertinoDynamicColor.resolve(ehTheme.itmeBackgroundColor, context);
+    if (_pBackgroundColor.value != color.value) {
+      _color = color;
+      _pBackgroundColor = color;
+    }
+
     void _tapItem() {
       if (userController.isLogin) {
         _logOut(context);
@@ -71,30 +87,21 @@ class _UserItem extends State<UserItem> {
       });
     }
 
-    final Widget row = SafeArea(
-      top: false,
-      bottom: false,
-      minimum: const EdgeInsets.only(
-        // left: 16,
-        top: 8,
-        bottom: 8,
-        // right: 16,
-      ),
-      child: Container(
-        color: _color,
-        child: Row(children: <Widget>[
-          const Icon(
-            FontAwesomeIcons.solidUserCircle,
-            size: 55.0,
-            color: CupertinoColors.systemGrey,
-          ),
-          // 头像右侧信息
-          Padding(
-            padding: const EdgeInsets.only(left: 8),
-            child: _buildText(),
-          )
-        ]),
-      ),
+    final Widget row = Container(
+      color: _color,
+      padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 10),
+      child: Row(children: <Widget>[
+        const Icon(
+          FontAwesomeIcons.solidUserCircle,
+          size: 55.0,
+          color: CupertinoColors.systemGrey,
+        ),
+        // 头像右侧信息
+        Padding(
+          padding: const EdgeInsets.only(left: 8),
+          child: _buildText(),
+        )
+      ]),
     );
 
 //    return row;
@@ -117,7 +124,8 @@ class _UserItem extends State<UserItem> {
 
   void _updateNormalColor() {
     setState(() {
-      _color = null;
+      _color = CupertinoDynamicColor.resolve(
+          ehTheme.itmeBackgroundColor, Get.context);
     });
   }
 

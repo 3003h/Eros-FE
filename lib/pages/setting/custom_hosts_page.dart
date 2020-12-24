@@ -29,6 +29,8 @@ class CustomHostsPage extends StatelessWidget {
     }
 
     return CupertinoPageScaffold(
+      backgroundColor:
+          !Get.isDarkMode ? CupertinoColors.secondarySystemBackground : null,
       navigationBar: CupertinoNavigationBar(
         padding: const EdgeInsetsDirectional.only(start: 0),
         middle: Text(_title),
@@ -44,12 +46,7 @@ class CustomHostsPage extends StatelessWidget {
                     intValue: dnsConfigController.enableCustomHosts.value,
                     onChanged: _handleEnableCustomHostDarkChanged,
                   )),
-              Divider(
-                height: 38,
-                thickness: 38.5,
-                color: CupertinoDynamicColor.resolve(
-                    CupertinoColors.systemGrey5, context),
-              ),
+              Container(height: 38),
               CustomHostsListView(),
             ],
           ),

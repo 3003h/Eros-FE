@@ -15,6 +15,8 @@ class SettingTab extends GetView<SettingViewController> {
     controller.initData(context);
     final String _title = S.of(context).tab_setting;
     return CupertinoPageScaffold(
+      backgroundColor:
+          !Get.isDarkMode ? CupertinoColors.secondarySystemBackground : null,
       child: CustomScrollView(
         slivers: <Widget>[
           CupertinoSliverNavigationBar(
@@ -26,7 +28,6 @@ class SettingTab extends GetView<SettingViewController> {
           ),
           SliverSafeArea(
               top: false,
-              minimum: const EdgeInsets.all(8),
               sliver: SliverList(
                 delegate: SliverChildBuilderDelegate((context, index) {
                   List _itemList = controller.getItemList();

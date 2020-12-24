@@ -51,3 +51,28 @@ class ThemeService extends ProfileService {
     });
   }
 }
+
+final EHTheme ehTheme = EHTheme();
+
+class EHTheme {
+  final ThemeService _themeService = Get.find();
+  final EhConfigService _ehConfigService = Get.find();
+  Color get itmeBackgroundColor {
+    switch (_themeService.themeModel) {
+      case ThemesModeEnum.system:
+        return _themeService.platformBrightness.value == Brightness.dark
+            ? _darkColor
+            : ThemeColors.ligthItemBackground;
+      case ThemesModeEnum.ligthMode:
+        return ThemeColors.ligthItemBackground;
+      case ThemesModeEnum.darkMode:
+        return _darkColor;
+      default:
+        return null;
+    }
+  }
+
+  Color get _darkColor => _ehConfigService.isPureDarkTheme.value
+      ? ThemeColors.darkItemBackground
+      : ThemeColors.darkGrayItemBackground;
+}

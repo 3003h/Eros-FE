@@ -19,6 +19,8 @@ class _ViewSettingPageState extends State<ViewSettingPage> {
   @override
   Widget build(BuildContext context) {
     final CupertinoPageScaffold cps = CupertinoPageScaffold(
+        backgroundColor:
+            !Get.isDarkMode ? CupertinoColors.secondarySystemBackground : null,
         navigationBar: CupertinoNavigationBar(
           // transitionBetweenRoutes: true,
           middle: Text(_title),

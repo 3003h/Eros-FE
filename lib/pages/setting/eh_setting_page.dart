@@ -25,6 +25,8 @@ class EhSettingPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final CupertinoPageScaffold cps = CupertinoPageScaffold(
+        backgroundColor:
+            !Get.isDarkMode ? CupertinoColors.secondarySystemBackground : null,
         navigationBar: CupertinoNavigationBar(
           middle: Text(S.of(context).eh),
         ),
@@ -65,6 +67,9 @@ class ListViewEhSetting extends StatelessWidget {
         ehConfigService.favoriteOrder.value == FavoriteOrder.posted;
     final bool _isLogin = userController.isLogin;
 
+    final Color _backgroundColor =
+        CupertinoTheme.of(context).scaffoldBackgroundColor;
+
     Future<void> _handleSiteChanged(bool newValue) async {
       ehConfigService.isSiteEx(newValue);
     }
@@ -101,46 +106,41 @@ class ListViewEhSetting extends StatelessWidget {
     final List<Widget> _list = <Widget>[
       if (_isLogin)
         TextSwitchItem(
-          '站点切换',
+          S.of(context).galery_site,
           intValue: _siteEx,
           onChanged: _handleSiteChanged,
-          desc: '当前E-Hentai',
-          descOn: '当前ExHentai',
+          desc: S.of(context).current_site('E-Hentai'),
+          descOn: S.of(context).current_site('ExHentai'),
         ),
       if (_isLogin)
         SelectorSettingItem(
-          title: 'Ehentai设置',
-          selector: '网站设置',
+          hideLine: true,
+          title: S.of(context).ehentai_settings,
+          selector: S.of(context).setting_on_website,
           onTap: () {
             Get.to(WebMySetting());
           },
         ),
-      if (_isLogin)
-        Divider(
-          height: 38,
-          thickness: 38.5,
-          color: CupertinoDynamicColor.resolve(
-              CupertinoColors.systemGrey5, context),
-        ),
+      if (_isLogin) Container(height: 38),
       Obx(() => TextSwitchItem('显示标签中文翻译',
           intValue: _tagTranslat,
           onChanged: _handleTagTranslatChanged,
           desc:
               '需要下载数据文件,当前版本:${ehConfigService.tagTranslatVer.value ?? "无"}')),
-      TextSwitchItem('显示日文标题',
-          intValue: _jpnTitle,
-          onChanged: _handleJpnTitleChanged,
-          desc: '如果该画廊有日文标题则优先显示'),
-      TextSwitchItem('画廊封面模糊',
-          intValue: _galleryImgBlur,
-          onChanged: _handleGalleryListImgBlurChanged,
-          desc: '画廊列表封面模糊效果'),
-      Divider(
-        height: 38,
-        thickness: 38.5,
-        color:
-            CupertinoDynamicColor.resolve(CupertinoColors.systemGrey5, context),
+      TextSwitchItem(
+        S.of(context).show_jpn_title,
+        intValue: _jpnTitle,
+        onChanged: _handleJpnTitleChanged,
+        // desc: '如果该画廊有日文标题则优先显示',
       ),
+      TextSwitchItem(
+        '画廊封面模糊',
+        intValue: _galleryImgBlur,
+        onChanged: _handleGalleryListImgBlurChanged,
+        hideLine: true,
+        // desc: '画廊列表封面模糊效果',
+      ),
+      Container(height: 38),
       TextSwitchItem(
         '默认收藏夹设置',
         intValue: _favLongTap,
@@ -149,11 +149,11 @@ class ListViewEhSetting extends StatelessWidget {
         descOn: '使用上次选择，长按选择其他',
       ),
       TextSwitchItem(
-        '收藏夹排序方式',
+        S.of(context).favorites_order,
         intValue: _favOrder,
         onChanged: _handleFavOrderChanged,
-        desc: '按收藏时间排序',
-        descOn: '按更新时间排序',
+        desc: S.of(context).favorites_order_Use_favorited,
+        descOn: S.of(context).favorites_order_Use_posted,
       ),
       _buildListModeItem(context),
       _buildHistoryMaxItem(context),
@@ -170,13 +170,13 @@ class ListViewEhSetting extends StatelessWidget {
 
 /// 列表模式切换
 Widget _buildListModeItem(BuildContext context) {
-  const String _title = '浏览模式';
+  final String _title = S.of(context).list_mode;
   final EhConfigService ehConfigService = Get.find();
 
   final Map<ListModeEnum, String> modeMap = <ListModeEnum, String>{
-    ListModeEnum.list: '列表 - 中',
-    ListModeEnum.simpleList: '列表 - 小',
-    ListModeEnum.waterfall: '瀑布流',
+    ListModeEnum.list: S.of(context).listmode_medium,
+    ListModeEnum.simpleList: S.of(context).listmode_small,
+    ListModeEnum.waterfall: S.of(context).listmode_waterfall,
   };
 
   List<Widget> _getModeList(BuildContext context) {
@@ -194,7 +194,6 @@ Widget _buildListModeItem(BuildContext context) {
         context: context,
         builder: (BuildContext context) {
           final CupertinoActionSheet dialog = CupertinoActionSheet(
-            // title: const Text('列表模式选择'),
             cancelButton: CupertinoActionSheetAction(
                 onPressed: () {
                   Get.back();
@@ -225,12 +224,12 @@ Widget _buildListModeItem(BuildContext context) {
 
 /// 历史记录数量切换
 Widget _buildHistoryMaxItem(BuildContext context) {
-  const String _title = '最大历史记录数';
+  final String _title = S.of(context).max_history;
   final EhConfigService ehConfigService = Get.find();
 
   String _getMaxNumText(int max) {
     if (max == 0) {
-      return '无限制';
+      return S.of(context).unlimited;
     } else {
       return '$max';
     }
@@ -268,6 +267,7 @@ Widget _buildHistoryMaxItem(BuildContext context) {
   return Obx(() => SelectorSettingItem(
         title: _title,
         selector: _getMaxNumText(ehConfigService.maxHistory.value) ?? '',
+        hideLine: true,
         onTap: () async {
           logger.v('tap ModeItem');
           final int _result = await _showActionSheet(context);
