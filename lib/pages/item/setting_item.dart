@@ -1,3 +1,4 @@
+import 'package:fehviewer/common/service/theme_service.dart';
 import 'package:fehviewer/utils/logger.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -21,9 +22,25 @@ class SettingItems extends StatefulWidget {
 /// 设置项
 class _SettingItems extends State<SettingItems> {
   Color _color;
+  Color _pBackgroundColor;
+
+  @override
+  void initState() {
+    super.initState();
+    _color =
+        CupertinoDynamicColor.resolve(ehTheme.itmeBackgroundColor, Get.context);
+    _pBackgroundColor = _color;
+  }
 
   @override
   Widget build(BuildContext context) {
+    final Color color =
+        CupertinoDynamicColor.resolve(ehTheme.itmeBackgroundColor, context);
+    if (_pBackgroundColor.value != color.value) {
+      _color = color;
+      _pBackgroundColor = color;
+    }
+
     final Widget container = Container(
         color: _color,
         child: Column(
@@ -33,7 +50,7 @@ class _SettingItems extends State<SettingItems> {
             _settingItemDivider(),
             Container(
               height: 50,
-              padding: const EdgeInsets.fromLTRB(8, 8, 20, 8),
+              padding: const EdgeInsets.fromLTRB(16, 8, 20, 8),
               child: Row(
                 children: <Widget>[
                   Container(
@@ -80,7 +97,8 @@ class _SettingItems extends State<SettingItems> {
 
   void _updateNormalColor() {
     setState(() {
-      _color = null;
+      _color = CupertinoDynamicColor.resolve(
+          ehTheme.itmeBackgroundColor, Get.context);
     });
   }
 

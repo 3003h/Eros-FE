@@ -20,6 +20,8 @@ class AdvancedSettingPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final CupertinoPageScaffold cps = CupertinoPageScaffold(
+        backgroundColor:
+            !Get.isDarkMode ? CupertinoColors.secondarySystemBackground : null,
         navigationBar: CupertinoNavigationBar(
           // transitionBetweenRoutes: true,
           middle: Text(S.of(context).advanced),
@@ -60,12 +62,7 @@ class ListViewAdvancedSetting extends StatelessWidget {
 
     final List<Widget> _list = <Widget>[
       _buildLanguageItem(context),
-      Divider(
-        height: 38,
-        thickness: 38.5,
-        color:
-            CupertinoDynamicColor.resolve(CupertinoColors.systemGrey5, context),
-      ),
+      Container(height: 38),
       _buildThemeItem(context),
       Obx(() => TextSwitchItem(
             S.of(context).dark_mode_effect,
@@ -73,27 +70,19 @@ class ListViewAdvancedSetting extends StatelessWidget {
             onChanged: _handlePureDarkChanged,
             desc: S.of(context).gray_black,
             descOn: S.of(context).pure_black,
+            hideLine: true,
           )),
-      Divider(
-        height: 38,
-        thickness: 38.5,
-        color:
-            CupertinoDynamicColor.resolve(CupertinoColors.systemGrey5, context),
-      ),
+      Container(height: 38),
       SelectorSettingItem(
         title: S.of(context).clear_cache,
         selector: '',
+        hideLine: true,
         onTap: () {
           logger.d(' clear_cache');
           Get.find<CacheController>().clearAllCache();
         },
       ),
-      Divider(
-        height: 38,
-        thickness: 38.5,
-        color:
-            CupertinoDynamicColor.resolve(CupertinoColors.systemGrey5, context),
-      ),
+      Container(height: 38),
       Obx(() => SelectorSettingItem(
             title: S.of(context).custom_hosts,
             selector: dnsConfigController.enableCustomHosts.value
@@ -103,12 +92,6 @@ class ListViewAdvancedSetting extends StatelessWidget {
               Get.to(CustomHostsPage(), transition: Transition.cupertino);
             },
           )),
-      TextSwitchItem(
-        'DNS-over-HTTPS',
-        intValue: dnsConfigController.enableDoH.value,
-        onChanged: _handleDoHChanged,
-        desc: '优先级低于自定义hosts',
-      ),
       if (Global.inDebugMode)
         TextSwitchItem(
           S.of(context).domain_fronting,
@@ -116,6 +99,13 @@ class ListViewAdvancedSetting extends StatelessWidget {
           onChanged: _handleEFChanged,
           desc: 'pass SNI',
         ),
+      TextSwitchItem(
+        'DNS-over-HTTPS',
+        intValue: dnsConfigController.enableDoH.value,
+        onChanged: _handleDoHChanged,
+        hideLine: true,
+        desc: '优先级低于自定义hosts',
+      ),
     ];
 
     return ListView.builder(
@@ -168,6 +158,7 @@ class ListViewAdvancedSetting extends StatelessWidget {
     return Obx(() => SelectorSettingItem(
           title: _title,
           selector: localeMap[localeService.localCode.value ?? ''],
+          hideLine: true,
           onTap: () async {
             logger.v('tap LanguageItem');
             final String _result = await _showDialog(context);

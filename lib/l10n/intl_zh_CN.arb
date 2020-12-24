@@ -66,5 +66,20 @@
   "uploader": "上传者",
   "tags": "标签",
   "clear_filter": "重置",
-  "t_Clear_all_history": "清除所有历史"
+  "t_Clear_all_history": "清除所有历史",
+  "galery_site": "画廊站点",
+  "current_site": "当前 {site}",
+  "ehentai_settings": "EHentai 设置",
+  "setting_on_website": "网站上的设置",
+  "list_mode": "列表浏览模式",
+  "listmode_medium": "列表 - 中",
+  "listmode_small": "列表 - 小",
+  "listmode_waterfall": "瀑布流",
+  "favorites_order": "收藏夹排序",
+  "favorites_order_Use_posted": "按照发布时间",
+  "favorites_order_Use_favorited": "按照收藏时间",
+  "show_jpn_title": "显示日文标题",
+  "current_version": "当前版本",
+  "max_history": "最大历史记录",
+  "unlimited": "不限制"
 }

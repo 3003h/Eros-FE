@@ -9,6 +9,8 @@ class DownloadSettingPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final CupertinoPageScaffold cps = CupertinoPageScaffold(
+        backgroundColor:
+            !Get.isDarkMode ? CupertinoColors.secondarySystemBackground : null,
         navigationBar: CupertinoNavigationBar(
           transitionBetweenRoutes: true,
           middle: Text(S.of(context).download),

@@ -1,6 +1,7 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+
 import 'intl/messages_all.dart';
 
 // **************************************************************************
@@ -14,22 +15,23 @@ import 'intl/messages_all.dart';
 
 class S {
   S();
-  
+
   static S current;
-  
-  static const AppLocalizationDelegate delegate =
-    AppLocalizationDelegate();
+
+  static const AppLocalizationDelegate delegate = AppLocalizationDelegate();
 
   static Future<S> load(Locale locale) {
-    final name = (locale.countryCode?.isEmpty ?? false) ? locale.languageCode : locale.toString();
-    final localeName = Intl.canonicalizedLocale(name); 
+    final name = (locale.countryCode?.isEmpty ?? false)
+        ? locale.languageCode
+        : locale.toString();
+    final localeName = Intl.canonicalizedLocale(name);
     return initializeMessages(localeName).then((_) {
       Intl.defaultLocale = localeName;
       S.current = S();
-      
+
       return S.current;
     });
-  } 
+  }
 
   static S of(BuildContext context) {
     return Localizations.of<S>(context, S);
@@ -710,6 +712,156 @@ class S {
     return Intl.message(
       'Clear all history',
       name: 't_Clear_all_history',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Gallery site`
+  String get galery_site {
+    return Intl.message(
+      'Gallery site',
+      name: 'galery_site',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Current {site}`
+  String current_site(Object site) {
+    return Intl.message(
+      'Current $site',
+      name: 'current_site',
+      desc: '',
+      args: [site],
+    );
+  }
+
+  /// `EHentai settings`
+  String get ehentai_settings {
+    return Intl.message(
+      'EHentai settings',
+      name: 'ehentai_settings',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Setting on website`
+  String get setting_on_website {
+    return Intl.message(
+      'Setting on website',
+      name: 'setting_on_website',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `List mode`
+  String get list_mode {
+    return Intl.message(
+      'List mode',
+      name: 'list_mode',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `List - Medium`
+  String get listmode_medium {
+    return Intl.message(
+      'List - Medium',
+      name: 'listmode_medium',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `List - Small`
+  String get listmode_small {
+    return Intl.message(
+      'List - Small',
+      name: 'listmode_small',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Waterfall`
+  String get listmode_waterfall {
+    return Intl.message(
+      'Waterfall',
+      name: 'listmode_waterfall',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Favorites order`
+  String get favorites_order {
+    return Intl.message(
+      'Favorites order',
+      name: 'favorites_order',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Use posted`
+  String get favorites_order_Use_posted {
+    return Intl.message(
+      'Use posted',
+      name: 'favorites_order_Use_posted',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Use favorited`
+  String get favorites_order_Use_favorited {
+    return Intl.message(
+      'Use favorited',
+      name: 'favorites_order_Use_favorited',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Show japanese title`
+  String get show_jpn_title {
+    return Intl.message(
+      'Show japanese title',
+      name: 'show_jpn_title',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Current version`
+  String get current_version {
+    return Intl.message(
+      'Current version',
+      name: 'current_version',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Maximum history`
+  String get max_history {
+    return Intl.message(
+      'Maximum history',
+      name: 'max_history',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Unlimited`
+  String get unlimited {
+    return Intl.message(
+      'Unlimited',
+      name: 'unlimited',
       desc: '',
       args: [],
     );

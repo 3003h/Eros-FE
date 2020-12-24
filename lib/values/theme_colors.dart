@@ -108,12 +108,21 @@ class ThemeColors {
   static CupertinoThemeData ligthTheme = const CupertinoThemeData(
     brightness: Brightness.light,
     barBackgroundColor: navigationBarBackground,
+    // scaffoldBackgroundColor: CupertinoColors.secondarySystemBackground,
+  );
+
+  /// 浅色主题
+  static CupertinoThemeData ligthThemeSecondary = const CupertinoThemeData(
+    brightness: Brightness.light,
+    barBackgroundColor: navigationBarBackground,
+    scaffoldBackgroundColor: CupertinoColors.secondarySystemBackground,
   );
 
   /// 深色纯黑主题
   static CupertinoThemeData darkPureTheme = const CupertinoThemeData(
     brightness: Brightness.dark,
     barBackgroundColor: navigationBarBackground,
+    // scaffoldBackgroundColor: CupertinoColors.secondarySystemBackground,
   );
 
   /// 深色灰黑
@@ -121,6 +130,27 @@ class ThemeColors {
     brightness: Brightness.dark,
     scaffoldBackgroundColor: Color.fromARGB(255, 30, 30, 30),
     barBackgroundColor: navigationBarBackgroundGray,
+  );
+
+  static const CupertinoDynamicColor ligthItemBackground =
+      CupertinoDynamicColor.withBrightness(
+    debugLabel: 'ligthItemBackground',
+    color: Color.fromARGB(255, 255, 255, 255),
+    darkColor: Color.fromARGB(255, 30, 30, 30),
+  );
+
+  static const CupertinoDynamicColor darkItemBackground =
+      CupertinoDynamicColor.withBrightness(
+    debugLabel: 'darkItemBackground',
+    color: Color.fromARGB(255, 242, 242, 247),
+    darkColor: Color.fromARGB(255, 30, 30, 30),
+  );
+
+  static const CupertinoDynamicColor darkGrayItemBackground =
+      CupertinoDynamicColor.withBrightness(
+    debugLabel: 'darkGrayItemBackground',
+    color: Color.fromARGB(255, 242, 242, 247),
+    darkColor: Color.fromARGB(255, 30, 30, 30),
   );
 
   // 画廊类型主题色

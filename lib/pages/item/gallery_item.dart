@@ -33,17 +33,7 @@ class GalleryItemWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     Get.put<GalleryItemController>(Get.find(tag: galleryItem.gid));
     return GestureDetector(
-      child: Column(
-        children: <Widget>[
-          _buildItem(),
-          Divider(
-            height: 0.5,
-            indent: kPaddingLeft,
-            color: CupertinoDynamicColor.resolve(
-                CupertinoColors.systemGrey4, context),
-          ),
-        ],
-      ),
+      child: _buildItem(),
       // 不可见区域点击有效
       behavior: HitTestBehavior.opaque,
       onTap: () {
@@ -62,70 +52,81 @@ class GalleryItemWidget extends StatelessWidget {
   }
 
   Widget _buildItem() {
-    return Obx(() => Container(
-          color: _galleryItemController.colorTap.value,
-          padding: const EdgeInsets.fromLTRB(kPaddingLeft, 8, 8, 8),
-          child: Column(
-            children: <Widget>[
-              Row(children: <Widget>[
-                // 封面图片
-                _buildCoverImage(),
-                Container(
-                  width: 8,
-                ),
-                // 右侧信息
-                Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: <Widget>[
-                      // 标题 provider
-                      _buildTitle(),
-                      // 上传者
-                      Text(
-                        _galleryItemController.galleryItem?.uploader ?? '',
-                        style: const TextStyle(
-                            fontSize: 12, color: CupertinoColors.systemGrey),
-                      ),
-                      // 标签
-                      TagBox(
-                        simpleTags:
-                            _galleryItemController.galleryItem.simpleTags,
-                      ),
+    return Obx(() => Column(
+          children: [
+            Container(
+              color: _galleryItemController.colorTap.value,
+              padding: const EdgeInsets.fromLTRB(kPaddingLeft, 8, 8, 8),
+              child: Column(
+                children: <Widget>[
+                  Row(children: <Widget>[
+                    // 封面图片
+                    _buildCoverImage(),
+                    Container(
+                      width: 8,
+                    ),
+                    // 右侧信息
+                    Expanded(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: <Widget>[
+                          // 标题 provider
+                          _buildTitle(),
+                          // 上传者
+                          Text(
+                            _galleryItemController.galleryItem?.uploader ?? '',
+                            style: const TextStyle(
+                                fontSize: 12,
+                                color: CupertinoColors.systemGrey),
+                          ),
+                          // 标签
+                          TagBox(
+                            simpleTags:
+                                _galleryItemController.galleryItem.simpleTags,
+                          ),
 
-                      // 评分行
-                      Row(
-                        crossAxisAlignment: CrossAxisAlignment.end,
-                        children: <Widget>[
-                          // 评分
-                          _buildRating(),
-                          // 占位
-                          const Spacer(),
-                          // 收藏图标
-                          _buildFavcatIcon(),
-                          // 图片数量
-                          _buildFilecontWidget(),
+                          // 评分行
+                          Row(
+                            crossAxisAlignment: CrossAxisAlignment.end,
+                            children: <Widget>[
+                              // 评分
+                              _buildRating(),
+                              // 占位
+                              const Spacer(),
+                              // 收藏图标
+                              _buildFavcatIcon(),
+                              // 图片数量
+                              _buildFilecontWidget(),
+                            ],
+                          ),
+                          Container(
+                            height: 4,
+                          ),
+                          // 类型和时间
+                          Row(
+                            crossAxisAlignment: CrossAxisAlignment.end,
+                            children: <Widget>[
+                              // 类型
+                              _buildCategory(),
+                              const Spacer(),
+                              // 上传时间
+                              _buildPostTime(),
+                            ],
+                          ),
                         ],
                       ),
-                      Container(
-                        height: 4,
-                      ),
-                      // 类型和时间
-                      Row(
-                        crossAxisAlignment: CrossAxisAlignment.end,
-                        children: <Widget>[
-                          // 类型
-                          _buildCategory(),
-                          const Spacer(),
-                          // 上传时间
-                          _buildPostTime(),
-                        ],
-                      ),
-                    ],
-                  ),
-                ),
-              ]),
-            ],
-          ),
+                    ),
+                  ]),
+                ],
+              ),
+            ),
+            Divider(
+              height: 0.5,
+              indent: kPaddingLeft,
+              color: CupertinoDynamicColor.resolve(
+                  CupertinoColors.systemGrey4, Get.context),
+            ),
+          ],
         ));
   }
 

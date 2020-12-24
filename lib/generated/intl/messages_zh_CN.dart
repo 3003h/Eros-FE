@@ -19,7 +19,9 @@ typedef String MessageIfAbsent(String messageStr, List<dynamic> args);
 class MessageLookup extends MessageLookupByLibrary {
   String get localeName => 'zh_CN';
 
-  static m0(rating) => "${rating} ⭐";
+  static m0(site) => "当前 ${site}";
+
+  static m1(rating) => "${rating} ⭐";
 
   final messages = _notInlinedMessages(_notInlinedMessages);
   static _notInlinedMessages(_) => <String, Function> {
@@ -33,6 +35,8 @@ class MessageLookup extends MessageLookupByLibrary {
     "cancel" : MessageLookupByLibrary.simpleMessage("取消"),
     "clear_cache" : MessageLookupByLibrary.simpleMessage("清除缓存"),
     "clear_filter" : MessageLookupByLibrary.simpleMessage("重置"),
+    "current_site" : m0,
+    "current_version" : MessageLookupByLibrary.simpleMessage("当前版本"),
     "custom_hosts" : MessageLookupByLibrary.simpleMessage("自定义hosts"),
     "dark" : MessageLookupByLibrary.simpleMessage("深色模式"),
     "dark_mode_effect" : MessageLookupByLibrary.simpleMessage("深色模式效果"),
@@ -41,15 +45,25 @@ class MessageLookup extends MessageLookupByLibrary {
     "double_click_back" : MessageLookupByLibrary.simpleMessage("再按一次返回退出"),
     "download" : MessageLookupByLibrary.simpleMessage("下载"),
     "eh" : MessageLookupByLibrary.simpleMessage("E·H"),
+    "ehentai_settings" : MessageLookupByLibrary.simpleMessage("EHentai 设置"),
     "favcat" : MessageLookupByLibrary.simpleMessage("收藏夹"),
+    "favorites_order" : MessageLookupByLibrary.simpleMessage("收藏夹排序"),
+    "favorites_order_Use_favorited" : MessageLookupByLibrary.simpleMessage("按照收藏时间"),
+    "favorites_order_Use_posted" : MessageLookupByLibrary.simpleMessage("按照发布时间"),
     "follow_system" : MessageLookupByLibrary.simpleMessage("跟随系统"),
+    "galery_site" : MessageLookupByLibrary.simpleMessage("画廊站点"),
     "gallery_comments" : MessageLookupByLibrary.simpleMessage("画廊评论"),
     "gray_black" : MessageLookupByLibrary.simpleMessage("灰黑"),
     "language" : MessageLookupByLibrary.simpleMessage("语言设置"),
     "light" : MessageLookupByLibrary.simpleMessage("浅色模式"),
+    "list_mode" : MessageLookupByLibrary.simpleMessage("列表浏览模式"),
+    "listmode_medium" : MessageLookupByLibrary.simpleMessage("列表 - 中"),
+    "listmode_small" : MessageLookupByLibrary.simpleMessage("列表 - 小"),
+    "listmode_waterfall" : MessageLookupByLibrary.simpleMessage("瀑布流"),
     "local_favorite" : MessageLookupByLibrary.simpleMessage("本地收藏"),
     "login" : MessageLookupByLibrary.simpleMessage("登录"),
     "login_web" : MessageLookupByLibrary.simpleMessage("通过网页登录"),
+    "max_history" : MessageLookupByLibrary.simpleMessage("最大历史记录"),
     "morePreviews" : MessageLookupByLibrary.simpleMessage("更多预览"),
     "noMorePreviews" : MessageLookupByLibrary.simpleMessage("无更多预览"),
     "notFav" : MessageLookupByLibrary.simpleMessage("未收藏"),
@@ -77,8 +91,10 @@ class MessageLookup extends MessageLookupByLibrary {
     "s_Show_Expunged_Galleries" : MessageLookupByLibrary.simpleMessage("搜索被删除的画廊"),
     "s_and" : MessageLookupByLibrary.simpleMessage("到"),
     "s_pages" : MessageLookupByLibrary.simpleMessage("页数"),
-    "s_stars" : m0,
+    "s_stars" : m1,
     "search" : MessageLookupByLibrary.simpleMessage("搜索"),
+    "setting_on_website" : MessageLookupByLibrary.simpleMessage("网站上的设置"),
+    "show_jpn_title" : MessageLookupByLibrary.simpleMessage("显示日文标题"),
     "t_Clear_all_history" : MessageLookupByLibrary.simpleMessage("清除所有历史"),
     "tab_favorite" : MessageLookupByLibrary.simpleMessage("收藏"),
     "tab_gallery" : MessageLookupByLibrary.simpleMessage("画廊"),
@@ -87,6 +103,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "tab_setting" : MessageLookupByLibrary.simpleMessage("设置"),
     "tags" : MessageLookupByLibrary.simpleMessage("标签"),
     "theme" : MessageLookupByLibrary.simpleMessage("主题"),
+    "unlimited" : MessageLookupByLibrary.simpleMessage("不限制"),
     "uploader" : MessageLookupByLibrary.simpleMessage("上传者"),
     "user_login" : MessageLookupByLibrary.simpleMessage("用户登录"),
     "user_name" : MessageLookupByLibrary.simpleMessage("用户名"),
