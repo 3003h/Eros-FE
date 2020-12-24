@@ -20,7 +20,7 @@ import 'package:fehviewer/utils/https_proxy.dart';
 import 'package:fehviewer/utils/logger.dart';
 import 'package:fehviewer/utils/toast.dart';
 import 'package:fehviewer/utils/utility.dart';
-import 'package:fehviewer/values/const.dart';
+import 'package:fehviewer/const/const.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';

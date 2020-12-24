@@ -4,7 +4,7 @@ import 'package:fehviewer/common/service/ehconfig_service.dart';
 import 'package:fehviewer/models/index.dart';
 import 'package:fehviewer/pages/item/controller/galleryitem_controller.dart';
 import 'package:fehviewer/route/navigator_util.dart';
-import 'package:fehviewer/values/theme_colors.dart';
+import 'package:fehviewer/const/theme_colors.dart';
 import 'package:fehviewer/widget/blur_image.dart';
 import 'package:fehviewer/widget/rating_bar.dart';
 import 'package:flutter/cupertino.dart';
