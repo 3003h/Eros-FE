@@ -65,12 +65,18 @@ class GalleryFavController extends GetxController {
   bool get localFav => _pageController.localFav ?? false;
 
   final RxString _favTitle = S.of(Get.context).notFav.obs;
-
   String get favTitle => _favTitle.value;
+  // set favTitle(String val) => _favTitle.value = val;
 
   final RxString _favcat = ''.obs;
-
   String get favcat => _favcat.value;
+  // set favcat(String val) => _favcat.value = val;
+
+  void setFav(String favcat, String favtitle) {
+    _favTitle.value = favtitle;
+    _favcat.value = favcat;
+    _itemController.setFavTitle(favTitle, favcat: favcat);
+  }
 
   bool get isFav => favcat.isNotEmpty || localFav;
 

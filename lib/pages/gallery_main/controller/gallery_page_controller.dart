@@ -12,6 +12,8 @@ import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
 import 'package:meta/meta.dart';
 
+import 'gallery_fav_controller.dart';
+
 const double kHeaderHeight = 200.0 + 52;
 const double kPadding = 12.0;
 const double kHeaderPaddingTop = 12.0;
@@ -33,7 +35,9 @@ class GalleryPageController extends GetxController
   // 画廊gid 唯一
   String gid;
 
-  bool fromUrl = false;
+  final RxBool _fromUrl = false.obs;
+  bool get fromUrl => _fromUrl.value;
+  set fromUrl(bool val) => _fromUrl.value = val;
 
   // 画廊数据对象
   GalleryItem galleryItem;
@@ -166,6 +170,15 @@ class GalleryPageController extends GetxController
       currentPreviewPage = 0;
       setPreviewAfterRequest(galleryItem.galleryPreview);
 
+      /// 通知收藏控制器更新
+      try {
+        final GalleryFavController _favController =
+            Get.find(tag: '${Get.find<DepthService>().pageCtrlDepth}');
+        // _favController.favcat = galleryItem.favcat;
+        _favController.setFav(galleryItem.favcat, galleryItem.favTitle);
+        // ignore: empty_catches
+      } catch (e) {}
+
       galleryItem.imgUrl = galleryItem.imgUrl ?? galleryItem.imgUrlL;
 
       // 加入历史
@@ -190,8 +203,10 @@ class GalleryPageController extends GetxController
   }
 
   Future<void> _reloadData() async {
+    // fromUrl = true;
+    // change(null, status: RxStatus.loading());
     final GalleryItem galleryItem = await _loadData(refresh: true);
-    change(galleryItem);
+    change(galleryItem, status: RxStatus.success());
   }
 
   Future<void> handOnRefresh() async {

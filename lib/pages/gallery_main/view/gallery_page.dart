@@ -47,11 +47,11 @@ class GalleryPage extends StatelessWidget {
                       ),
                 trailing: controller.hideNavigationBtn
                     ? CupertinoButton(
-                        padding: const EdgeInsets.fromLTRB(10, 10, 0, 10),
+                        padding: const EdgeInsets.all(0),
                         minSize: 0,
                         child: const Icon(
-                          FontAwesomeIcons.share,
-                          size: 26,
+                          CupertinoIcons.share,
+                          size: 28,
                         ),
                         onPressed: () {
                           logger.v('share ${_item.url}');
@@ -114,9 +114,68 @@ class GalleryContainer extends StatelessWidget {
     final GalleryPageController controller =
         Get.find(tag: '${Get.find<DepthService>().pageCtrlDepth}');
 
+    Widget _getWidgets(GalleryItem state) {
+      const double minWidth = 100.0;
+      final List _w = <Widget>[
+        Expanded(
+          child: TextBtn(
+            FontAwesomeIcons.star,
+            title: '评分',
+          ),
+        ),
+        Expanded(
+          child: TextBtn(
+            FontAwesomeIcons.arrowAltCircleDown,
+            title: '下载',
+          ),
+        ),
+        Expanded(
+          child: TextBtn(
+            FontAwesomeIcons.lemon,
+            title: '种子',
+          ),
+        ),
+        Expanded(
+          child: TextBtn(
+            FontAwesomeIcons.clone,
+            title: '相似画廊',
+          ),
+        ),
+      ];
+
+      return Column(
+        children: <Widget>[
+          Row(
+            mainAxisSize: MainAxisSize.min,
+            children: _w,
+          ),
+          Divider(
+            height: 0.5,
+            color: CupertinoDynamicColor.resolve(
+                CupertinoColors.systemGrey4, context),
+          ),
+          // 标签
+          TagBox(listTagGroup: state.tagGroup),
+          TopComment(comment: state.galleryComment),
+          Container(
+            margin: const EdgeInsets.only(top: 4),
+            height: 0.5,
+            color: CupertinoDynamicColor.resolve(
+                CupertinoColors.systemGrey4, context),
+          ),
+          PreviewGrid(
+            previews: controller.firstPagePreview,
+            gid: state.gid,
+          ),
+          MorePreviewButton(hasMorePreview: controller.hasMorePreview),
+        ],
+      );
+    }
+
     Widget fromItem() {
       final GalleryItem galleryItem = controller.galleryItem;
       final Object tabIndex = controller.tabIndex;
+
       return SliverToBoxAdapter(
         child: Column(
           children: <Widget>[
@@ -131,25 +190,7 @@ class GalleryContainer extends StatelessWidget {
             ),
             controller.obx(
                 (GalleryItem state) {
-                  return Column(
-                    children: <Widget>[
-                      // 标签
-                      TagBox(listTagGroup: state.tagGroup),
-                      TopComment(comment: state.galleryComment),
-                      Container(
-                        margin: const EdgeInsets.only(top: 4),
-                        height: 0.5,
-                        color: CupertinoDynamicColor.resolve(
-                            CupertinoColors.systemGrey4, context),
-                      ),
-                      PreviewGrid(
-                        previews: controller.firstPagePreview,
-                        gid: galleryItem.gid,
-                      ),
-                      MorePreviewButton(
-                          hasMorePreview: controller.hasMorePreview),
-                    ],
-                  );
+                  return _getWidgets(state);
                 },
                 onLoading: Container(
                   // height: Get.size.height - _top * 3 - kHeaderHeight,
@@ -189,25 +230,7 @@ class GalleryContainer extends StatelessWidget {
                     color: CupertinoDynamicColor.resolve(
                         CupertinoColors.systemGrey4, context),
                   ),
-                  Column(
-                    children: <Widget>[
-                      // 标签
-                      TagBox(listTagGroup: state.tagGroup),
-                      TopComment(comment: state.galleryComment),
-                      Container(
-                        margin: const EdgeInsets.only(top: 4),
-                        height: 0.5,
-                        color: CupertinoDynamicColor.resolve(
-                            CupertinoColors.systemGrey4, context),
-                      ),
-                      PreviewGrid(
-                        previews: controller.firstPagePreview,
-                        gid: state.gid,
-                      ),
-                      MorePreviewButton(
-                          hasMorePreview: controller.hasMorePreview),
-                    ],
-                  ),
+                  _getWidgets(state),
                 ],
               ),
             );
