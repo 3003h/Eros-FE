@@ -795,3 +795,38 @@ class TagButton extends StatelessWidget {
     );
   }
 }
+
+class TextBtn extends StatelessWidget {
+  const TextBtn(this.iconData, {Key key, this.iconSize, this.title, this.onTap})
+      : super(key: key);
+  final IconData iconData;
+  final double iconSize;
+  final String title;
+
+  final VoidCallback onTap;
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      child: Container(
+        padding: const EdgeInsets.all(8.0),
+        child: Column(
+          children: <Widget>[
+            Padding(
+              padding: const EdgeInsets.only(bottom: 8.0),
+              child: Icon(
+                iconData,
+                size: iconSize ?? 30,
+              ),
+            ),
+            Text(
+              title ?? '',
+              style: const TextStyle(fontSize: 12),
+            ),
+          ],
+        ),
+      ),
+      onTap: onTap,
+    );
+  }
+}

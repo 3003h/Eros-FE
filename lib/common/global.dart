@@ -10,11 +10,13 @@ import 'package:fehviewer/utils/network/gallery_request.dart';
 import 'package:fehviewer/utils/storage.dart';
 import 'package:fehviewer/utils/utility.dart';
 import 'package:fehviewer/const/storages.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:logger/logger.dart';
 import 'package:path/path.dart';
 import 'package:path_provider/path_provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 const int kProxyPort = 4041;
 
