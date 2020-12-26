@@ -1,9 +1,13 @@
 import 'package:fehviewer/common/service/depth_service.dart';
+import 'package:fehviewer/generated/l10n.dart';
 import 'package:fehviewer/models/index.dart';
 import 'package:fehviewer/pages/gallery_main/controller/gallery_page_controller.dart';
 import 'package:fehviewer/pages/gallery_main/view/gallery_widget.dart';
+import 'package:fehviewer/pages/gallery_main/view/torrentlist_view.dart';
 import 'package:fehviewer/pages/tab/view/gallery_base.dart';
+import 'package:fehviewer/route/navigator_util.dart';
 import 'package:fehviewer/utils/logger.dart';
+import 'package:fehviewer/network/gallery_request.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -14,8 +18,8 @@ const double kHeaderHeight = 200.0 + 52;
 const double kPadding = 12.0;
 const double kHeaderPaddingTop = 12.0;
 
-class GalleryPage extends StatelessWidget {
-  const GalleryPage({this.tag});
+class GalleryMainPage extends StatelessWidget {
+  const GalleryMainPage({this.tag});
 
   final String tag;
   @override
@@ -120,25 +124,45 @@ class GalleryContainer extends StatelessWidget {
         Expanded(
           child: TextBtn(
             FontAwesomeIcons.star,
-            title: '评分',
+            title: S.of(context).p_Rate,
+            onTap: () {},
           ),
         ),
         Expanded(
           child: TextBtn(
             FontAwesomeIcons.arrowAltCircleDown,
-            title: '下载',
+            title: S.of(context).p_Download,
           ),
         ),
         Expanded(
           child: TextBtn(
             FontAwesomeIcons.lemon,
-            title: '种子',
+            title: S.of(context).p_Torrent('${state.torrentcount ?? 0}'),
+            onTap: () async {
+              /*final String tk =
+                  await Api.getTorrentToken(state.gid, state.token);
+              state.torrents.forEach((GalleryTorrent element) {
+                logger.d('${element.name}\n${element.hash}\n'
+                    'https://ehtracker.org/get/${tk}/${element.hash}.torrent');
+              });*/
+              showTorrentDiaolog();
+            },
           ),
         ),
         Expanded(
           child: TextBtn(
             FontAwesomeIcons.clone,
-            title: '相似画廊',
+            title: S.of(context).p_Similar,
+            onTap: () {
+              final String title = state.englishTitle
+                  .replaceAll(RegExp(r'(\[.*?\]|\(.*?\))'), '')
+                  .trim()
+                  .split('\|')
+                  .first;
+              logger.i(' search "$title"');
+              NavigatorUtil.goGalleryListBySearch(simpleSearch: '"$title"');
+              // NavigatorUtil.goGalleryListBySearch(simpleSearch: title);
+            },
           ),
         ),
       ];

@@ -75,7 +75,12 @@ class GalleryFavController extends GetxController {
   void setFav(String favcat, String favtitle) {
     _favTitle.value = favtitle;
     _favcat.value = favcat;
-    _itemController.setFavTitle(favTitle, favcat: favcat);
+    try {
+      _itemController.setFavTitle(favTitle, favcat: favcat);
+    } catch (e) {}
+    // if (!_pageController.fromUrl) {
+    //   _itemController.setFavTitle(favTitle, favcat: favcat);
+    // }
   }
 
   bool get isFav => favcat.isNotEmpty || localFav;

@@ -864,6 +864,46 @@ class S {
       args: [],
     );
   }
+
+  /// `Download`
+  String get p_Download {
+    return Intl.message(
+      'Download',
+      name: 'p_Download',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Similar`
+  String get p_Similar {
+    return Intl.message(
+      'Similar',
+      name: 'p_Similar',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Torrent ({count})`
+  String p_Torrent(Object count) {
+    return Intl.message(
+      'Torrent ($count)',
+      name: 'p_Torrent',
+      desc: '',
+      args: [count],
+    );
+  }
+
+  /// `Rate`
+  String get p_Rate {
+    return Intl.message(
+      'Rate',
+      name: 'p_Rate',
+      desc: '',
+      args: [],
+    );
+  }
 }
 
 class AppLocalizationDelegate extends LocalizationsDelegate<S> {

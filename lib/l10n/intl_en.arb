@@ -81,5 +81,9 @@
   "show_jpn_title": "Show japanese title",
   "current_version": "Current version",
   "max_history": "Maximum history",
-  "unlimited": "Unlimited"
+  "unlimited": "Unlimited",
+  "p_Download" : "Download",
+  "p_Similar": "Similar",
+  "p_Torrent": "Torrent ({count})",
+  "p_Rate": "Rate"
 }

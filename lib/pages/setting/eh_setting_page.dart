@@ -3,7 +3,7 @@ import 'package:fehviewer/common/controller/user_controller.dart';
 import 'package:fehviewer/common/global.dart';
 import 'package:fehviewer/common/service/ehconfig_service.dart';
 import 'package:fehviewer/common/service/theme_service.dart';
-import 'package:fehviewer/common/tag_database.dart';
+import 'package:fehviewer/store/tag_database.dart';
 import 'package:fehviewer/generated/l10n.dart';
 import 'package:fehviewer/pages/login/web_mysetting.dart';
 import 'package:fehviewer/utils/logger.dart';
