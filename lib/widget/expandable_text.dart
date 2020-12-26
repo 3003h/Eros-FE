@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_linkify/flutter_linkify.dart';
 
 class ExpandableText extends StatefulWidget {
   const ExpandableText(

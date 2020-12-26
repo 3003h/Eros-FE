@@ -1,8 +1,8 @@
 import 'dart:io';
 
+import 'package:fehviewer/const/const.dart';
 import 'package:fehviewer/generated/l10n.dart';
 import 'package:fehviewer/utils/logger.dart';
-import 'package:fehviewer/const/const.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
 import 'package:webview_cookie_manager/webview_cookie_manager.dart';

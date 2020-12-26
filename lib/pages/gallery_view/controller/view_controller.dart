@@ -4,12 +4,12 @@ import 'package:dio/dio.dart';
 import 'package:fehviewer/common/controller/gallerycache_controller.dart';
 import 'package:fehviewer/common/service/depth_service.dart';
 import 'package:fehviewer/common/service/ehconfig_service.dart';
+import 'package:fehviewer/const/const.dart';
 import 'package:fehviewer/models/index.dart';
 import 'package:fehviewer/pages/gallery_main/controller/gallery_page_controller.dart';
 import 'package:fehviewer/pages/gallery_view/view/gallery_view_base.dart';
 import 'package:fehviewer/utils/logger.dart';
 import 'package:fehviewer/utils/utility.dart';
-import 'package:fehviewer/const/const.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
 
