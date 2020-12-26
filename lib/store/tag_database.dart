@@ -2,12 +2,12 @@ import 'dart:convert';
 
 import 'package:dio/dio.dart';
 import 'package:fehviewer/common/service/ehconfig_service.dart';
+import 'package:fehviewer/const/const.dart';
 import 'package:fehviewer/models/entity/tag_translat.dart';
 import 'package:fehviewer/utils/db_util.dart';
 import 'package:fehviewer/utils/dio_util.dart';
 import 'package:fehviewer/utils/logger.dart';
 import 'package:fehviewer/utils/toast.dart';
-import 'package:fehviewer/const/const.dart';
 import 'package:get/get.dart';
 
 const int connectTimeout = 10000;

@@ -13,6 +13,7 @@ import 'package:fehviewer/common/global.dart';
 import 'package:fehviewer/common/parser/gallery_detail_parser.dart';
 import 'package:fehviewer/common/parser/gallery_list_parser.dart';
 import 'package:fehviewer/common/service/ehconfig_service.dart';
+import 'package:fehviewer/const/const.dart';
 import 'package:fehviewer/models/galleryItem.dart';
 import 'package:fehviewer/models/index.dart';
 import 'package:fehviewer/utils/dio_util.dart';
@@ -20,7 +21,6 @@ import 'package:fehviewer/utils/https_proxy.dart';
 import 'package:fehviewer/utils/logger.dart';
 import 'package:fehviewer/utils/toast.dart';
 import 'package:fehviewer/utils/utility.dart';
-import 'package:fehviewer/const/const.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -467,6 +467,29 @@ class Api {
     }
 
     return galleryItems;
+  }
+
+  /// 画廊评分
+  static Future<void> setRating({
+    @required String apikey,
+    @required String apiuid,
+    @required String gid,
+    @required String token,
+    @required int rating,
+  }) async {
+    final Map reqMap = {
+      'apikey': apikey,
+      'method': 'rategallery',
+      'apiuid': int.parse(apiuid),
+      'gid': int.parse(gid),
+      'token': token,
+      'rating': rating,
+    };
+    final String reqJsonStr = jsonEncode(reqMap);
+    logger.d('$reqJsonStr');
+    await CustomHttpsProxy.instance.init();
+    final rult = await getGalleryApi(reqJsonStr, refresh: true);
+    logger.d('$rult');
   }
 
   static Future<void> getMoreGalleryInfoOne(

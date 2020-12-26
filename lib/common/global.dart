@@ -2,21 +2,19 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:dio_cookie_manager/dio_cookie_manager.dart';
+import 'package:fehviewer/const/storages.dart';
 import 'package:fehviewer/models/index.dart';
 import 'package:fehviewer/models/profile.dart';
+import 'package:fehviewer/network/gallery_request.dart';
 import 'package:fehviewer/utils/https_proxy.dart';
 import 'package:fehviewer/utils/logger.dart';
-import 'package:fehviewer/network/gallery_request.dart';
 import 'package:fehviewer/utils/storage.dart';
 import 'package:fehviewer/utils/utility.dart';
-import 'package:fehviewer/const/storages.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:logger/logger.dart';
 import 'package:path/path.dart';
 import 'package:path_provider/path_provider.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 const int kProxyPort = 4041;
 

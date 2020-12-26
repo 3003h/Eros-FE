@@ -3,11 +3,11 @@ import 'package:fehviewer/generated/l10n.dart';
 import 'package:fehviewer/models/index.dart';
 import 'package:fehviewer/pages/gallery_main/controller/gallery_page_controller.dart';
 import 'package:fehviewer/pages/gallery_main/view/gallery_widget.dart';
-import 'package:fehviewer/pages/gallery_main/view/torrentlist_view.dart';
+import 'package:fehviewer/pages/gallery_main/view/rate_dialog.dart';
+import 'package:fehviewer/pages/gallery_main/view/torrent_dialog.dart';
 import 'package:fehviewer/pages/tab/view/gallery_base.dart';
 import 'package:fehviewer/route/navigator_util.dart';
 import 'package:fehviewer/utils/logger.dart';
-import 'package:fehviewer/network/gallery_request.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -122,11 +122,16 @@ class GalleryContainer extends StatelessWidget {
       const double minWidth = 100.0;
       final List _w = <Widget>[
         Expanded(
-          child: TextBtn(
-            FontAwesomeIcons.star,
-            title: S.of(context).p_Rate,
-            onTap: () {},
-          ),
+          child: Obx(() => TextBtn(
+                controller.isRatinged
+                    ? FontAwesomeIcons.solidStar
+                    : FontAwesomeIcons.star,
+                title: S.of(context).p_Rate,
+                onTap: () {
+                  logger.d('${state.isRatinged}');
+                  showRateDialog();
+                },
+              )),
         ),
         Expanded(
           child: TextBtn(
@@ -138,15 +143,11 @@ class GalleryContainer extends StatelessWidget {
           child: TextBtn(
             FontAwesomeIcons.lemon,
             title: S.of(context).p_Torrent('${state.torrentcount ?? 0}'),
-            onTap: () async {
-              /*final String tk =
-                  await Api.getTorrentToken(state.gid, state.token);
-              state.torrents.forEach((GalleryTorrent element) {
-                logger.d('${element.name}\n${element.hash}\n'
-                    'https://ehtracker.org/get/${tk}/${element.hash}.torrent');
-              });*/
-              showTorrentDiaolog();
-            },
+            onTap: state.torrents.isNotEmpty
+                ? () async {
+                    showTorrentDialog();
+                  }
+                : null,
           ),
         ),
         Expanded(
@@ -155,7 +156,7 @@ class GalleryContainer extends StatelessWidget {
             title: S.of(context).p_Similar,
             onTap: () {
               final String title = state.englishTitle
-                  .replaceAll(RegExp(r'(\[.*?\]|\(.*?\))'), '')
+                  .replaceAll(RegExp(r'(\[.*?\]|\(.*?\))|{.*?}'), '')
                   .trim()
                   .split('\|')
                   .first;

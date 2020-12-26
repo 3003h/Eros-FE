@@ -29,5 +29,8 @@
   "translated": "chinese",
   "tagGroup": "$[]tagGroup",
   "galleryComment": "$[]galleryComment",
-  "galleryPreview": "$[]galleryPreview"
+  "galleryPreview": "$[]galleryPreview",
+  "apikey": "",
+  "apiuid": "",
+  "isRatinged": false
 }
