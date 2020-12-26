@@ -1,7 +1,7 @@
 import 'package:enum_to_string/enum_to_string.dart';
 import 'package:fehviewer/common/global.dart';
 import 'package:fehviewer/common/service/base_service.dart';
-import 'package:fehviewer/values/theme_colors.dart';
+import 'package:fehviewer/const/theme_colors.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
 
@@ -75,4 +75,16 @@ class EHTheme {
   Color get _darkColor => _ehConfigService.isPureDarkTheme.value
       ? ThemeColors.darkItemBackground
       : ThemeColors.darkGrayItemBackground;
+
+  bool get _isSeldark => _themeService.themeModel == ThemesModeEnum.darkMode;
+  bool get _isSelLigth => _themeService.themeModel == ThemesModeEnum.ligthMode;
+
+  bool get isDarkMode {
+    if (_isSelLigth) {
+      return false;
+    } else {
+      return _isSeldark ||
+          _themeService.platformBrightness.value == Brightness.dark;
+    }
+  }
 }

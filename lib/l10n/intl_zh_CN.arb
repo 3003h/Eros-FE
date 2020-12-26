@@ -81,5 +81,9 @@
   "show_jpn_title": "显示日文标题",
   "current_version": "当前版本",
   "max_history": "最大历史记录",
-  "unlimited": "不限制"
+  "unlimited": "不限制",
+  "p_Download" : "下载",
+  "p_Similar": "相似",
+  "p_Torrent": "种子 ({count})",
+  "p_Rate": "评分"
 }

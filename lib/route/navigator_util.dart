@@ -3,7 +3,7 @@ import 'package:fehviewer/models/galleryComment.dart';
 import 'package:fehviewer/models/index.dart';
 import 'package:fehviewer/pages/gallery_main/controller/gallery_page_controller.dart';
 import 'package:fehviewer/pages/gallery_main/view/comment_page.dart';
-import 'package:fehviewer/pages/gallery_main/view/gallery_page.dart';
+import 'package:fehviewer/pages/gallery_main/view/main_page.dart';
 import 'package:fehviewer/pages/gallery_view/controller/view_controller.dart';
 import 'package:fehviewer/pages/gallery_view/view/gallery_view_page.dart';
 import 'package:fehviewer/pages/tab/controller/gallery_controller.dart';
@@ -40,7 +40,7 @@ class NavigatorUtil {
       // TODO(honjow): 通过链接直接打开画廊的情况
       // ignore: always_specify_types
       Get.to(
-        const GalleryPage(),
+        const GalleryMainPage(),
         transition: Transition.cupertino,
         preventDuplicates: false,
         binding: BindingsBuilder<dynamic>(() {
@@ -50,7 +50,7 @@ class NavigatorUtil {
       );
     } else {
       Get.to(
-        const GalleryPage(),
+        const GalleryMainPage(),
         transition: Transition.cupertino,
         binding: BindingsBuilder<dynamic>(
           () {
@@ -95,14 +95,14 @@ class NavigatorUtil {
     final DepthService depthService = Get.find();
     depthService.pushPageCtrl();
     if (url != null && url.isNotEmpty) {
-      Get.off(const GalleryPage(), binding: BindingsBuilder<dynamic>(() {
+      Get.off(const GalleryMainPage(), binding: BindingsBuilder<dynamic>(() {
         Get.put(
           GalleryPageController.initUrl(url: url),
           tag: '${depthService.pageCtrlDepth}',
         );
       }));
     } else {
-      Get.to(const GalleryPage());
+      Get.to(const GalleryMainPage());
     }
   }
 

@@ -1,9 +1,13 @@
 import 'package:fehviewer/common/service/depth_service.dart';
+import 'package:fehviewer/generated/l10n.dart';
 import 'package:fehviewer/models/index.dart';
 import 'package:fehviewer/pages/gallery_main/controller/gallery_page_controller.dart';
 import 'package:fehviewer/pages/gallery_main/view/gallery_widget.dart';
+import 'package:fehviewer/pages/gallery_main/view/torrentlist_view.dart';
 import 'package:fehviewer/pages/tab/view/gallery_base.dart';
+import 'package:fehviewer/route/navigator_util.dart';
 import 'package:fehviewer/utils/logger.dart';
+import 'package:fehviewer/network/gallery_request.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -14,8 +18,8 @@ const double kHeaderHeight = 200.0 + 52;
 const double kPadding = 12.0;
 const double kHeaderPaddingTop = 12.0;
 
-class GalleryPage extends StatelessWidget {
-  const GalleryPage({this.tag});
+class GalleryMainPage extends StatelessWidget {
+  const GalleryMainPage({this.tag});
 
   final String tag;
   @override
@@ -47,11 +51,11 @@ class GalleryPage extends StatelessWidget {
                       ),
                 trailing: controller.hideNavigationBtn
                     ? CupertinoButton(
-                        padding: const EdgeInsets.fromLTRB(10, 10, 0, 10),
+                        padding: const EdgeInsets.all(0),
                         minSize: 0,
                         child: const Icon(
-                          FontAwesomeIcons.share,
-                          size: 26,
+                          CupertinoIcons.share,
+                          size: 28,
                         ),
                         onPressed: () {
                           logger.v('share ${_item.url}');
@@ -114,9 +118,88 @@ class GalleryContainer extends StatelessWidget {
     final GalleryPageController controller =
         Get.find(tag: '${Get.find<DepthService>().pageCtrlDepth}');
 
+    Widget _getWidgets(GalleryItem state) {
+      const double minWidth = 100.0;
+      final List _w = <Widget>[
+        Expanded(
+          child: TextBtn(
+            FontAwesomeIcons.star,
+            title: S.of(context).p_Rate,
+            onTap: () {},
+          ),
+        ),
+        Expanded(
+          child: TextBtn(
+            FontAwesomeIcons.arrowAltCircleDown,
+            title: S.of(context).p_Download,
+          ),
+        ),
+        Expanded(
+          child: TextBtn(
+            FontAwesomeIcons.lemon,
+            title: S.of(context).p_Torrent('${state.torrentcount ?? 0}'),
+            onTap: () async {
+              /*final String tk =
+                  await Api.getTorrentToken(state.gid, state.token);
+              state.torrents.forEach((GalleryTorrent element) {
+                logger.d('${element.name}\n${element.hash}\n'
+                    'https://ehtracker.org/get/${tk}/${element.hash}.torrent');
+              });*/
+              showTorrentDiaolog();
+            },
+          ),
+        ),
+        Expanded(
+          child: TextBtn(
+            FontAwesomeIcons.clone,
+            title: S.of(context).p_Similar,
+            onTap: () {
+              final String title = state.englishTitle
+                  .replaceAll(RegExp(r'(\[.*?\]|\(.*?\))'), '')
+                  .trim()
+                  .split('\|')
+                  .first;
+              logger.i(' search "$title"');
+              NavigatorUtil.goGalleryListBySearch(simpleSearch: '"$title"');
+              // NavigatorUtil.goGalleryListBySearch(simpleSearch: title);
+            },
+          ),
+        ),
+      ];
+
+      return Column(
+        children: <Widget>[
+          Row(
+            mainAxisSize: MainAxisSize.min,
+            children: _w,
+          ),
+          Divider(
+            height: 0.5,
+            color: CupertinoDynamicColor.resolve(
+                CupertinoColors.systemGrey4, context),
+          ),
+          // 标签
+          TagBox(listTagGroup: state.tagGroup),
+          TopComment(comment: state.galleryComment),
+          Container(
+            margin: const EdgeInsets.only(top: 4),
+            height: 0.5,
+            color: CupertinoDynamicColor.resolve(
+                CupertinoColors.systemGrey4, context),
+          ),
+          PreviewGrid(
+            previews: controller.firstPagePreview,
+            gid: state.gid,
+          ),
+          MorePreviewButton(hasMorePreview: controller.hasMorePreview),
+        ],
+      );
+    }
+
     Widget fromItem() {
       final GalleryItem galleryItem = controller.galleryItem;
       final Object tabIndex = controller.tabIndex;
+
       return SliverToBoxAdapter(
         child: Column(
           children: <Widget>[
@@ -131,25 +214,7 @@ class GalleryContainer extends StatelessWidget {
             ),
             controller.obx(
                 (GalleryItem state) {
-                  return Column(
-                    children: <Widget>[
-                      // 标签
-                      TagBox(listTagGroup: state.tagGroup),
-                      TopComment(comment: state.galleryComment),
-                      Container(
-                        margin: const EdgeInsets.only(top: 4),
-                        height: 0.5,
-                        color: CupertinoDynamicColor.resolve(
-                            CupertinoColors.systemGrey4, context),
-                      ),
-                      PreviewGrid(
-                        previews: controller.firstPagePreview,
-                        gid: galleryItem.gid,
-                      ),
-                      MorePreviewButton(
-                          hasMorePreview: controller.hasMorePreview),
-                    ],
-                  );
+                  return _getWidgets(state);
                 },
                 onLoading: Container(
                   // height: Get.size.height - _top * 3 - kHeaderHeight,
@@ -189,25 +254,7 @@ class GalleryContainer extends StatelessWidget {
                     color: CupertinoDynamicColor.resolve(
                         CupertinoColors.systemGrey4, context),
                   ),
-                  Column(
-                    children: <Widget>[
-                      // 标签
-                      TagBox(listTagGroup: state.tagGroup),
-                      TopComment(comment: state.galleryComment),
-                      Container(
-                        margin: const EdgeInsets.only(top: 4),
-                        height: 0.5,
-                        color: CupertinoDynamicColor.resolve(
-                            CupertinoColors.systemGrey4, context),
-                      ),
-                      PreviewGrid(
-                        previews: controller.firstPagePreview,
-                        gid: state.gid,
-                      ),
-                      MorePreviewButton(
-                          hasMorePreview: controller.hasMorePreview),
-                    ],
-                  ),
+                  _getWidgets(state),
                 ],
               ),
             );

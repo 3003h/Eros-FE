@@ -1,10 +1,11 @@
 import 'package:enum_to_string/enum_to_string.dart';
 import 'package:fehviewer/common/global.dart';
 import 'package:fehviewer/common/service/ehconfig_service.dart';
+import 'package:fehviewer/common/service/theme_service.dart';
 import 'package:fehviewer/generated/l10n.dart';
 import 'package:fehviewer/pages/setting/setting_base.dart';
 import 'package:fehviewer/utils/logger.dart';
-import 'package:fehviewer/values/const.dart';
+import 'package:fehviewer/const/const.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
 
@@ -19,8 +20,9 @@ class _ViewSettingPageState extends State<ViewSettingPage> {
   @override
   Widget build(BuildContext context) {
     final CupertinoPageScaffold cps = CupertinoPageScaffold(
-        backgroundColor:
-            !Get.isDarkMode ? CupertinoColors.secondarySystemBackground : null,
+        backgroundColor: !ehTheme.isDarkMode
+            ? CupertinoColors.secondarySystemBackground
+            : null,
         navigationBar: CupertinoNavigationBar(
           // transitionBetweenRoutes: true,
           middle: Text(_title),

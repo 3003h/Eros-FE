@@ -13,8 +13,8 @@ import 'package:fehviewer/pages/gallery_main/view/gallery_favcat.dart';
 import 'package:fehviewer/pages/gallery_main/view/gallery_preview_clipper.dart';
 import 'package:fehviewer/route/navigator_util.dart';
 import 'package:fehviewer/utils/logger.dart';
-import 'package:fehviewer/values/const.dart';
-import 'package:fehviewer/values/theme_colors.dart';
+import 'package:fehviewer/const/const.dart';
+import 'package:fehviewer/const/theme_colors.dart';
 import 'package:fehviewer/widget/rating_bar.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -791,6 +791,55 @@ class TagButton extends StatelessWidget {
             strutStyle: const StrutStyle(height: 1),
           ),
         ),
+      ),
+    );
+  }
+}
+
+class TextBtn extends StatelessWidget {
+  const TextBtn(this.iconData, {Key key, this.iconSize, this.title, this.onTap})
+      : super(key: key);
+  final IconData iconData;
+  final double iconSize;
+  final String title;
+
+  final VoidCallback onTap;
+
+  @override
+  Widget build(BuildContext context) {
+    return CupertinoTheme(
+      data: const CupertinoThemeData(primaryColor: CupertinoColors.activeBlue),
+      child: GestureDetector(
+        child: Container(
+          padding: const EdgeInsets.all(8.0),
+          child: Column(
+            children: <Widget>[
+              /*Padding(
+                padding: const EdgeInsets.only(bottom: 8.0),
+                child: Icon(
+                  iconData,
+                  size: iconSize ?? 28,
+                  color: CupertinoColors.systemGrey3,
+                ),
+              ),*/
+              CupertinoButton(
+                padding: const EdgeInsets.only(bottom: 8.0),
+                // color: CupertinoColors.activeBlue,
+                child: Icon(
+                  iconData,
+                  size: iconSize ?? 28,
+                  // color: CupertinoColors.systemGrey3,
+                ),
+                onPressed: onTap,
+              ),
+              Text(
+                title ?? '',
+                style: const TextStyle(fontSize: 12, height: 1),
+              ),
+            ],
+          ),
+        ),
+        onTap: onTap,
       ),
     );
   }

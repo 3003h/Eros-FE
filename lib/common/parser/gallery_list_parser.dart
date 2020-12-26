@@ -2,10 +2,10 @@ import 'dart:io';
 
 import 'package:fehviewer/common/global.dart';
 import 'package:fehviewer/common/service/ehconfig_service.dart';
-import 'package:fehviewer/common/tag_database.dart';
+import 'package:fehviewer/store/tag_database.dart';
 import 'package:fehviewer/models/index.dart';
-import 'package:fehviewer/utils/network/gallery_request.dart';
-import 'package:fehviewer/values/const.dart';
+import 'package:fehviewer/network/gallery_request.dart';
+import 'package:fehviewer/const/const.dart';
 import 'package:get/get.dart';
 import 'package:html/dom.dart' as dom;
 import 'package:html/parser.dart' show parse;

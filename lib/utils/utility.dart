@@ -4,8 +4,8 @@ import 'dart:typed_data';
 import 'package:cookie_jar/cookie_jar.dart';
 import 'package:fehviewer/common/global.dart';
 import 'package:fehviewer/utils/logger.dart';
-import 'package:fehviewer/utils/network/gallery_request.dart';
-import 'package:fehviewer/values/const.dart';
+import 'package:fehviewer/network/gallery_request.dart';
+import 'package:fehviewer/const/const.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 

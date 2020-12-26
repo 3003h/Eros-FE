@@ -7,7 +7,7 @@ import 'package:fehviewer/pages/tab/view/search_text_page.dart';
 import 'package:fehviewer/pages/tab/view/tab_base.dart';
 import 'package:fehviewer/utils/cust_lib/popup_menu.dart';
 import 'package:fehviewer/utils/logger.dart';
-import 'package:fehviewer/utils/network/gallery_request.dart';
+import 'package:fehviewer/network/gallery_request.dart';
 import 'package:fehviewer/utils/vibrate.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';

@@ -1,7 +1,7 @@
 import 'dart:io';
 
 import 'package:fehviewer/common/controller/quicksearch_controller.dart';
-import 'package:fehviewer/common/tag_database.dart';
+import 'package:fehviewer/store/tag_database.dart';
 import 'package:fehviewer/utils/logger.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/cupertino.dart';
