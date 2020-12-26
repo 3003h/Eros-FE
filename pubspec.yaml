@@ -3,7 +3,7 @@ description: ..
 
 publish_to: 'none' # Remove this line if you wish to publish to pub.dev
 
-version: 1.0.3+75
+version: 1.0.3+76
 
 environment:
   sdk: '>=2.9.0 <3.0.0'
@@ -123,6 +123,8 @@ dependencies:
   like_button:
     git:
       url: git://github.com/fluttercandies/like_button.git
+
+  flutter_rating_bar: ^3.2.0+1
 
 dev_dependencies:
 #  build_runner: ^1.0.0

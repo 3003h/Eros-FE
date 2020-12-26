@@ -1,10 +1,10 @@
 import 'package:fehviewer/common/service/ehconfig_service.dart';
+import 'package:fehviewer/const/const.dart';
 import 'package:fehviewer/models/index.dart';
 import 'package:fehviewer/pages/item/controller/galleryitem_controller.dart';
 import 'package:fehviewer/pages/item/gallery_item.dart';
 import 'package:fehviewer/pages/item/gallery_item_flow.dart';
 import 'package:fehviewer/pages/item/gallery_item_simple.dart';
-import 'package:fehviewer/const/const.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';

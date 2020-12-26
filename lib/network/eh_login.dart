@@ -2,11 +2,11 @@ import 'dart:io';
 
 import 'package:cookie_jar/cookie_jar.dart';
 import 'package:dio/dio.dart';
+import 'package:fehviewer/const/const.dart';
 import 'package:fehviewer/models/user.dart';
+import 'package:fehviewer/network/gallery_request.dart';
 import 'package:fehviewer/utils/dio_util.dart';
 import 'package:fehviewer/utils/logger.dart';
-import 'package:fehviewer/network/gallery_request.dart';
-import 'package:fehviewer/const/const.dart';
 
 class EhUserManager {
   factory EhUserManager() => _instance;

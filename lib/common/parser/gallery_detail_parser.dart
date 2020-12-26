@@ -1,7 +1,7 @@
-import 'package:fehviewer/store/tag_database.dart';
 import 'package:fehviewer/models/index.dart';
-import 'package:fehviewer/utils/logger.dart';
 import 'package:fehviewer/network/gallery_request.dart';
+import 'package:fehviewer/store/tag_database.dart';
+import 'package:fehviewer/utils/logger.dart';
 import 'package:html/dom.dart';
 import 'package:html/parser.dart' show parse;
 import 'package:intl/intl.dart';
@@ -151,6 +151,19 @@ class GalleryDetailParser {
     }
     galleryItem.favcat = _favcat;
 
+    // apiuid
+    final String apiuid =
+        RegExp(r'var\s*?apiuid\s*?=\s*?(\d+);').firstMatch(response).group(1);
+    galleryItem.apiuid = apiuid;
+
+    // apikey
+    final String apikey = RegExp(r'var\s*?apikey\s*?=\s*?"([0-9a-f]+)";')
+        .firstMatch(response)
+        .group(1);
+    galleryItem.apikey = apikey;
+
+    galleryItem.isRatinged = response.contains(RegExp(r'"ir\s+ir[a-z]"'));
+
     return galleryItem;
   }
 
@@ -160,6 +173,7 @@ class GalleryDetailParser {
     return parseGalleryPreview(document);
   }
 
+  /// 缩略图处理
   static List<GalleryPreview> parseGalleryPreview(Document document) {
     // 大图 #gdt > div.gdtl  小图 #gdt > div.gdtm
     final List<Element> picLsit = document.querySelectorAll('#gdt > div.gdtm');

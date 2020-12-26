@@ -1,18 +1,19 @@
 import 'package:json_annotation/json_annotation.dart';
-import 'user.dart';
+
+import 'advanceSearch.dart';
 import 'cacheConfig.dart';
+import 'dnsConfig.dart';
+import 'downloadConfig.dart';
 import 'ehConfig.dart';
 import 'galleryItem.dart';
 import 'localFav.dart';
-import 'advanceSearch.dart';
-import 'dnsConfig.dart';
-import 'downloadConfig.dart';
+import 'user.dart';
 
 part 'profile.g.dart';
 
 @JsonSerializable()
 class Profile {
-      Profile();
+  Profile();
 
   User user;
   CacheConfig cache;
@@ -28,6 +29,7 @@ class Profile {
   DnsConfig dnsConfig;
   DownloadConfig downloadConfig;
 
-  factory Profile.fromJson(Map<String,dynamic> json) => _$ProfileFromJson(json);
+  factory Profile.fromJson(Map<String, dynamic> json) =>
+      _$ProfileFromJson(json);
   Map<String, dynamic> toJson() => _$ProfileToJson(this);
 }

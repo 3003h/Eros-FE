@@ -1,15 +1,14 @@
 import 'package:fehviewer/generated/l10n.dart';
-import 'package:fehviewer/models/galleryItem.dart';
 import 'package:fehviewer/models/galleryTorrent.dart';
 import 'package:fehviewer/pages/gallery_main/controller/torrent_controller.dart';
 import 'package:fehviewer/utils/logger.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class TorrentView extends GetView<TorrentController> {
-  const TorrentView({Key key, this.galleryItem}) : super(key: key);
-  final GalleryItem galleryItem;
+  const TorrentView({Key key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -45,15 +44,39 @@ class TorrentView extends GetView<TorrentController> {
         },
         onLoading: Container(
           child: const CupertinoActivityIndicator(
-            radius: 10,
+            radius: 14,
           ),
         ),
+        onError: (err) {
+          return Center(
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                CupertinoButton(
+                  padding: const EdgeInsets.all(0),
+                  child: const Icon(
+                    Icons.refresh,
+                    size: 30,
+                    color: Colors.red,
+                  ),
+                  onPressed: () {
+                    controller.reload();
+                  },
+                ),
+                const Text(
+                  'Error',
+                  style: TextStyle(fontSize: 12),
+                ),
+              ],
+            ),
+          );
+        },
       ),
     );
   }
 }
 
-Future<void> showTorrentDiaolog() {
+Future<void> showTorrentDialog() {
   Get.put(TorrentController());
   return showCupertinoDialog<void>(
       context: Get.overlayContext,
@@ -61,7 +84,6 @@ Future<void> showTorrentDiaolog() {
         return CupertinoAlertDialog(
           title: const Text('Torrent'),
           content: Container(
-            // height: 100,
             child: const TorrentView(),
           ),
           actions: <Widget>[

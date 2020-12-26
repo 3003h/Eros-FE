@@ -222,7 +222,7 @@ class RatingBar extends StatefulWidget {
       this.size = kSize,
       this.count = kNumberOfStarts,
       this.strokeWidth,
-      this.radiusRatio: 1.1,
+      this.radiusRatio = 1.1,
       Color colorDark,
       Color colorLight})
       : colorDark = colorDark ?? const Color(0xffDADBDF),
@@ -304,7 +304,7 @@ class _RatingBarState extends State<RatingBar> {
     super.initState();
   }
 
-  Widget buildItem(int index, double size, count) {
+  Widget buildItem(int index, double size, int count) {
     final bool selected = _value != null && _value > index;
 
     final bool stroke = widget.strokeWidth != null && widget.strokeWidth > 0;
@@ -347,6 +347,7 @@ class _RatingBarState extends State<RatingBar> {
     }
 
     return Row(
+      mainAxisSize: MainAxisSize.min,
       children: list,
     );
   }
