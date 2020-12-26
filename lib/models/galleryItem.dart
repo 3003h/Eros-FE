@@ -1,15 +1,16 @@
 import 'package:json_annotation/json_annotation.dart';
+
+import 'galleryComment.dart';
+import 'galleryPreview.dart';
 import 'galleryTorrent.dart';
 import 'simpleTag.dart';
 import 'tagGroup.dart';
-import 'galleryComment.dart';
-import 'galleryPreview.dart';
 
 part 'galleryItem.g.dart';
 
 @JsonSerializable()
 class GalleryItem {
-      GalleryItem();
+  GalleryItem();
 
   String gid;
   String token;
@@ -42,7 +43,11 @@ class GalleryItem {
   List<TagGroup> tagGroup;
   List<GalleryComment> galleryComment;
   List<GalleryPreview> galleryPreview;
+  String apikey;
+  String apiuid;
+  bool isRatinged;
 
-  factory GalleryItem.fromJson(Map<String,dynamic> json) => _$GalleryItemFromJson(json);
+  factory GalleryItem.fromJson(Map<String, dynamic> json) =>
+      _$GalleryItemFromJson(json);
   Map<String, dynamic> toJson() => _$GalleryItemToJson(this);
 }

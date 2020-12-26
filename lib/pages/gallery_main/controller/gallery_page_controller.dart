@@ -4,9 +4,10 @@ import 'package:fehviewer/common/controller/localfav_controller.dart';
 import 'package:fehviewer/common/service/depth_service.dart';
 import 'package:fehviewer/common/service/ehconfig_service.dart';
 import 'package:fehviewer/models/index.dart';
-import 'package:fehviewer/pages/gallery_view/view/gallery_view_base.dart';
-import 'package:fehviewer/utils/logger.dart';
 import 'package:fehviewer/network/gallery_request.dart';
+import 'package:fehviewer/pages/gallery_view/view/gallery_view_base.dart';
+import 'package:fehviewer/pages/item/controller/galleryitem_controller.dart';
+import 'package:fehviewer/utils/logger.dart';
 import 'package:fehviewer/utils/toast.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
@@ -35,9 +36,21 @@ class GalleryPageController extends GetxController
   // 画廊gid 唯一
   String gid;
 
+  GalleryItemController _itemController;
+
   final RxBool _fromUrl = false.obs;
   bool get fromUrl => _fromUrl.value;
   set fromUrl(bool val) => _fromUrl.value = val;
+
+  final RxBool _isRatinged = false.obs;
+  bool get isRatinged => _isRatinged.value;
+  set isRatinged(bool val) => _isRatinged.value = val;
+
+  void ratinged() {
+    isRatinged = true;
+    galleryItem.isRatinged = true;
+    _itemController.galleryItem.isRatinged = true;
+  }
 
   // 画廊数据对象
   GalleryItem galleryItem;
@@ -71,12 +84,13 @@ class GalleryPageController extends GetxController
     scrollController.addListener(_scrollControllerLister);
     hideNavigationBtn = true;
 
-    _loadData().then((GalleryItem value) {
-      change(value, status: RxStatus.success());
-      _enableRead.value = true;
-    }, onError: (err) {
-      change(null, status: RxStatus.error(err.toString()));
-    });
+    if (!fromUrl) {
+      _itemController = Get.find(tag: gid);
+      logger.d(
+          'isRatinged: i-${_itemController.galleryItem.isRatinged} p-${galleryItem.isRatinged}');
+    }
+
+    _loadData();
   }
 
   @override
@@ -145,7 +159,7 @@ class GalleryPageController extends GetxController
   bool get localFav => galleryItem.localFav ?? false;
 
   /// 请求数据
-  Future<GalleryItem> _loadData({bool refresh = false}) async {
+  Future<GalleryItem> _fetchData({bool refresh = false}) async {
     logger.d('fetch data');
     await Future<void>.delayed(const Duration(milliseconds: 200));
     try {
@@ -177,6 +191,8 @@ class GalleryPageController extends GetxController
               Get.find(tag: '${Get.find<DepthService>().pageCtrlDepth}');
           // _favController.favcat = galleryItem.favcat;
           _favController.setFav(galleryItem.favcat, galleryItem.favTitle);
+
+          isRatinged = galleryItem.isRatinged;
         }
         // ignore: empty_catches
       } catch (e) {}
@@ -204,11 +220,24 @@ class GalleryPageController extends GetxController
     }
   }
 
+  Future<void> _loadData({bool refresh = false, bool showError = true}) async {
+    try {
+      final GalleryItem value = await _fetchData(refresh: refresh);
+      change(value, status: RxStatus.success());
+      _enableRead.value = true;
+      logger.d('${galleryItem.isRatinged} ${value.isRatinged}');
+      isRatinged = galleryItem.isRatinged ||
+          value.isRatinged ||
+          _itemController.galleryItem.isRatinged;
+    } catch (err) {
+      if (showError) {
+        change(null, status: RxStatus.error(err.toString()));
+      }
+    }
+  }
+
   Future<void> _reloadData() async {
-    // fromUrl = true;
-    // change(null, status: RxStatus.loading());
-    final GalleryItem galleryItem = await _loadData(refresh: true);
-    change(galleryItem, status: RxStatus.success());
+    await _loadData(refresh: true, showError: false);
   }
 
   Future<void> handOnRefresh() async {
@@ -217,7 +246,7 @@ class GalleryPageController extends GetxController
 
   Future<void> handOnRefreshAfterErr() async {
     change(null, status: RxStatus.loading());
-    _loadData(refresh: true).then((GalleryItem value) {
+    _fetchData(refresh: true).then((GalleryItem value) {
       _enableRead.value = true;
       change(value, status: RxStatus.success());
     });

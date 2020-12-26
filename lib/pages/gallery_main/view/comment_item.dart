@@ -1,9 +1,9 @@
 import 'package:fehviewer/common/service/ehconfig_service.dart';
+import 'package:fehviewer/const/theme_colors.dart';
 import 'package:fehviewer/models/index.dart';
 import 'package:fehviewer/route/navigator_util.dart';
 import 'package:fehviewer/utils/cust_lib/flutter_linkify.dart' as linkify;
 import 'package:fehviewer/utils/logger.dart';
-import 'package:fehviewer/const/theme_colors.dart';
 import 'package:fehviewer/widget/expandable_linkify.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';

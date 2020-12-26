@@ -57,7 +57,10 @@ GalleryItem _$GalleryItemFromJson(Map<String, dynamic> json) {
         ?.map((e) => e == null
             ? null
             : GalleryPreview.fromJson(e as Map<String, dynamic>))
-        ?.toList();
+        ?.toList()
+    ..apikey = json['apikey'] as String
+    ..apiuid = json['apiuid'] as String
+    ..isRatinged = json['isRatinged'] as bool;
 }
 
 Map<String, dynamic> _$GalleryItemToJson(GalleryItem instance) =>
@@ -93,4 +96,7 @@ Map<String, dynamic> _$GalleryItemToJson(GalleryItem instance) =>
       'tagGroup': instance.tagGroup,
       'galleryComment': instance.galleryComment,
       'galleryPreview': instance.galleryPreview,
+      'apikey': instance.apikey,
+      'apiuid': instance.apiuid,
+      'isRatinged': instance.isRatinged,
     };

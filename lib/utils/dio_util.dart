@@ -4,8 +4,8 @@ import 'package:dio/adapter.dart';
 import 'package:dio/dio.dart';
 import 'package:dio_http_cache/dio_http_cache.dart';
 import 'package:fehviewer/common/global.dart';
-import 'package:fehviewer/utils/toast.dart';
 import 'package:fehviewer/const/const.dart';
+import 'package:fehviewer/utils/toast.dart';
 import 'package:flutter/cupertino.dart';
 
 import 'logger.dart';

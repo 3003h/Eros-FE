@@ -16,6 +16,10 @@ class TorrentController extends GetxController with StateMixin<String> {
     _pageController =
         Get.find(tag: '${Get.find<DepthService>().pageCtrlDepth}');
     torrents = _pageController.galleryItem.torrents;
+    _fetchData();
+  }
+
+  void _fetchData() {
     _fetchTk().then((value) {
       change(value, status: RxStatus.success());
     }, onError: (err) {
@@ -27,5 +31,10 @@ class TorrentController extends GetxController with StateMixin<String> {
     return await Api.getTorrentToken(
         _pageController.gid, _pageController.galleryItem.token,
         refresh: true);
+  }
+
+  Future<void> reload() async {
+    change(null, status: RxStatus.loading());
+    _fetchData();
   }
 }
