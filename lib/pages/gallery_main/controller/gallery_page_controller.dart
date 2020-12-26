@@ -6,7 +6,7 @@ import 'package:fehviewer/common/service/ehconfig_service.dart';
 import 'package:fehviewer/models/index.dart';
 import 'package:fehviewer/pages/gallery_view/view/gallery_view_base.dart';
 import 'package:fehviewer/utils/logger.dart';
-import 'package:fehviewer/utils/network/gallery_request.dart';
+import 'package:fehviewer/network/gallery_request.dart';
 import 'package:fehviewer/utils/toast.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
@@ -172,10 +172,12 @@ class GalleryPageController extends GetxController
 
       /// 通知收藏控制器更新
       try {
-        final GalleryFavController _favController =
-            Get.find(tag: '${Get.find<DepthService>().pageCtrlDepth}');
-        // _favController.favcat = galleryItem.favcat;
-        _favController.setFav(galleryItem.favcat, galleryItem.favTitle);
+        if (refresh) {
+          final GalleryFavController _favController =
+              Get.find(tag: '${Get.find<DepthService>().pageCtrlDepth}');
+          // _favController.favcat = galleryItem.favcat;
+          _favController.setFav(galleryItem.favcat, galleryItem.favTitle);
+        }
         // ignore: empty_catches
       } catch (e) {}
 

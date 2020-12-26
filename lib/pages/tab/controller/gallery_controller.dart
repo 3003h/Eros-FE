@@ -2,7 +2,7 @@ import 'package:fehviewer/common/service/ehconfig_service.dart';
 import 'package:fehviewer/generated/l10n.dart';
 import 'package:fehviewer/models/index.dart';
 import 'package:fehviewer/utils/logger.dart';
-import 'package:fehviewer/utils/network/gallery_request.dart';
+import 'package:fehviewer/network/gallery_request.dart';
 import 'package:fehviewer/utils/toast.dart';
 import 'package:fehviewer/const/const.dart';
 import 'package:flutter/cupertino.dart';

@@ -807,26 +807,40 @@ class TextBtn extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
-      child: Container(
-        padding: const EdgeInsets.all(8.0),
-        child: Column(
-          children: <Widget>[
-            Padding(
-              padding: const EdgeInsets.only(bottom: 8.0),
-              child: Icon(
-                iconData,
-                size: iconSize ?? 30,
+    return CupertinoTheme(
+      data: const CupertinoThemeData(primaryColor: CupertinoColors.activeBlue),
+      child: GestureDetector(
+        child: Container(
+          padding: const EdgeInsets.all(8.0),
+          child: Column(
+            children: <Widget>[
+              /*Padding(
+                padding: const EdgeInsets.only(bottom: 8.0),
+                child: Icon(
+                  iconData,
+                  size: iconSize ?? 28,
+                  color: CupertinoColors.systemGrey3,
+                ),
+              ),*/
+              CupertinoButton(
+                padding: const EdgeInsets.only(bottom: 8.0),
+                // color: CupertinoColors.activeBlue,
+                child: Icon(
+                  iconData,
+                  size: iconSize ?? 28,
+                  // color: CupertinoColors.systemGrey3,
+                ),
+                onPressed: onTap,
               ),
-            ),
-            Text(
-              title ?? '',
-              style: const TextStyle(fontSize: 12),
-            ),
-          ],
+              Text(
+                title ?? '',
+                style: const TextStyle(fontSize: 12, height: 1),
+              ),
+            ],
+          ),
         ),
+        onTap: onTap,
       ),
-      onTap: onTap,
     );
   }
 }

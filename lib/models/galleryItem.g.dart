@@ -24,6 +24,13 @@ GalleryItem _$GalleryItemFromJson(Map<String, dynamic> json) {
     ..language = json['language'] as String
     ..filecount = json['filecount'] as String
     ..rating = (json['rating'] as num)?.toDouble()
+    ..torrentcount = json['torrentcount'] as String
+    ..torrents = (json['torrents'] as List)
+        ?.map((e) => e == null
+            ? null
+            : GalleryTorrent.fromJson(e as Map<String, dynamic>))
+        ?.toList()
+    ..filesize = json['filesize'] as int
     ..ratingFallBack = (json['ratingFallBack'] as num)?.toDouble()
     ..numberOfReviews = json['numberOfReviews'] as String
     ..postTime = json['postTime'] as String
@@ -71,6 +78,9 @@ Map<String, dynamic> _$GalleryItemToJson(GalleryItem instance) =>
       'language': instance.language,
       'filecount': instance.filecount,
       'rating': instance.rating,
+      'torrentcount': instance.torrentcount,
+      'torrents': instance.torrents,
+      'filesize': instance.filesize,
       'ratingFallBack': instance.ratingFallBack,
       'numberOfReviews': instance.numberOfReviews,
       'postTime': instance.postTime,
