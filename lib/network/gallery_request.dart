@@ -20,7 +20,7 @@ import 'package:fehviewer/utils/https_proxy.dart';
 import 'package:fehviewer/utils/logger.dart';
 import 'package:fehviewer/utils/toast.dart';
 import 'package:fehviewer/utils/utility.dart';
-import 'package:fehviewer/values/const.dart';
+import 'package:fehviewer/const/const.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -356,6 +356,24 @@ class Api {
     return showkey;
   }
 
+  static Future<String> getTorrentToken(
+    String gid,
+    String gtoken, {
+    bool refresh = false,
+  }) async {
+    final String url = '${getBaseUrl()}/gallerytorrents.php';
+    final String response = await getHttpManager().get(url,
+        params: <String, dynamic>{
+          'gid': gid,
+          't': gtoken,
+        },
+        options: getCacheOptions(forceRefresh: refresh));
+    // logger.d('$response');
+    final RegExp rTorrentTk = RegExp(r'http://ehtracker.org/(\d{7})/announce');
+    final String torrentToken = rTorrentTk.firstMatch(response)?.group(1) ?? '';
+    return torrentToken;
+  }
+
   /// 通过api请求获取更多信息
   /// 例如
   /// 画廊评分
@@ -424,6 +442,16 @@ class Api {
           rultList[i]['tags'].map((e) => e as String).toList());
       galleryItems[i].tagsFromApi = tags;
 
+      galleryItems[i].filesize = rultList[i]['filesize'] as int;
+      galleryItems[i].torrentcount = rultList[i]['torrentcount'] as String;
+
+      final List<dynamic> torrents = rultList[i]['torrents'];
+      galleryItems[i].torrents = <GalleryTorrent>[];
+      torrents.forEach((element) {
+        // final Map<String, dynamic> e = element as Map<String, dynamic>;
+        galleryItems[i].torrents.add(GalleryTorrent.fromJson(element));
+      });
+
       /// 判断获取语言标识
       // galleryItems[i].translated = '';
       // if (tags.contains('translated')) {
@@ -445,7 +473,7 @@ class Api {
     GalleryItem galleryItem, {
     bool refresh = false,
   }) async {
-    final RegExp urlRex = RegExp(r'http?s://e(-|x)hentai.org/g/(\d+)/(\w+)?/$');
+    final RegExp urlRex = RegExp(r'http?s://e(-|x)hentai.org/g/(\d+)/(\w+)/?$');
     logger.v(galleryItem.url);
     final RegExpMatch urlRult = urlRex.firstMatch(galleryItem.url);
     logger.v(urlRult.groupCount);

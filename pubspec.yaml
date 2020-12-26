@@ -63,6 +63,7 @@ dependencies:
 #  provider: ^4.3.2+2
 
   get: ^3.24.0
+  get_storage: ^1.4.0
 
   photo_view: ^0.10.3
 

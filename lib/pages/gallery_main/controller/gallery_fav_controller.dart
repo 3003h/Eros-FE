@@ -11,7 +11,7 @@ import 'package:fehviewer/pages/item/controller/galleryitem_controller.dart';
 import 'package:fehviewer/utils/logger.dart';
 import 'package:fehviewer/utils/toast.dart';
 import 'package:fehviewer/utils/vibrate.dart';
-import 'package:fehviewer/values/theme_colors.dart';
+import 'package:fehviewer/const/theme_colors.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
@@ -65,12 +65,23 @@ class GalleryFavController extends GetxController {
   bool get localFav => _pageController.localFav ?? false;
 
   final RxString _favTitle = S.of(Get.context).notFav.obs;
-
   String get favTitle => _favTitle.value;
+  // set favTitle(String val) => _favTitle.value = val;
 
   final RxString _favcat = ''.obs;
-
   String get favcat => _favcat.value;
+  // set favcat(String val) => _favcat.value = val;
+
+  void setFav(String favcat, String favtitle) {
+    _favTitle.value = favtitle;
+    _favcat.value = favcat;
+    try {
+      _itemController.setFavTitle(favTitle, favcat: favcat);
+    } catch (e) {}
+    // if (!_pageController.fromUrl) {
+    //   _itemController.setFavTitle(favTitle, favcat: favcat);
+    // }
+  }
 
   bool get isFav => favcat.isNotEmpty || localFav;
 

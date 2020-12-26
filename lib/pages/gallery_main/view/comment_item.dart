@@ -3,14 +3,15 @@ import 'package:fehviewer/models/index.dart';
 import 'package:fehviewer/route/navigator_util.dart';
 import 'package:fehviewer/utils/cust_lib/flutter_linkify.dart' as linkify;
 import 'package:fehviewer/utils/logger.dart';
-import 'package:fehviewer/values/theme_colors.dart';
+import 'package:fehviewer/const/theme_colors.dart';
+import 'package:fehviewer/widget/expandable_linkify.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_linkify/flutter_linkify.dart';
 import 'package:get/get.dart';
 import 'package:url_launcher/url_launcher.dart';
 
-const kMaxline = 4;
+const int kMaxline = 4;
 
 class CommentItem extends StatelessWidget {
   const CommentItem(
@@ -63,6 +64,22 @@ class CommentItem extends StatelessWidget {
       text: galleryComment.context,
       onOpen: (link) => _onOpen(context, link),
       options: LinkifyOptions(humanize: false),
+      maxLines: kMaxline + 1,
+      softWrap: true,
+      textAlign: TextAlign.left,
+      // 对齐方式
+      overflow: TextOverflow.ellipsis,
+      // 超出部分省略号
+      style: TextStyle(
+        fontSize: 13,
+        color: CupertinoDynamicColor.resolve(ThemeColors.commitText, context),
+      ),
+    );
+
+    final ExpandableLinkify _simpleExpTextLinkify = ExpandableLinkify(
+      text: galleryComment.context,
+      onOpen: (link) => _onOpen(context, link),
+      options: LinkifyOptions(humanize: false),
       maxLines: kMaxline,
       softWrap: true,
       textAlign: TextAlign.left,
@@ -107,7 +124,7 @@ class CommentItem extends StatelessWidget {
               ),
               Container(
                 padding: const EdgeInsets.fromLTRB(0, 4, 0, 8),
-                child: simple ? _simpleTextLinkify : _fullTextLinkify,
+                child: simple ? _simpleExpTextLinkify : _fullTextLinkify,
               ),
               Text(
                 galleryComment.time,

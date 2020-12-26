@@ -2,7 +2,7 @@ import 'dart:io';
 import 'dart:ui';
 
 import 'package:fehviewer/common/controller/user_controller.dart';
-import 'package:fehviewer/common/eh_login.dart';
+import 'package:fehviewer/network/eh_login.dart';
 import 'package:fehviewer/generated/l10n.dart';
 import 'package:fehviewer/models/user.dart';
 import 'package:fehviewer/route/routes.dart';
