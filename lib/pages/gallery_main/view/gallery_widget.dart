@@ -378,6 +378,7 @@ class GalleryRating extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    logger.d('rating $rating');
     return Row(
       children: <Widget>[
         Container(
@@ -501,7 +502,7 @@ class TopComment extends StatelessWidget {
       children: <Widget>[
         // 评论
         GestureDetector(
-          onTap: () => NavigatorUtil.goGalleryDetailComment(comment),
+          // onTap: () => NavigatorUtil.goGalleryDetailComment(comment),
           child: Column(
             children: <Widget>[
               ..._topComment(comment, max: 2),

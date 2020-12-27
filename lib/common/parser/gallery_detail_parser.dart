@@ -153,16 +153,19 @@ class GalleryDetailParser {
 
     // apiuid
     final String apiuid =
-        RegExp(r'var\s*?apiuid\s*?=\s*?(\d+);').firstMatch(response).group(1);
+        RegExp(r'var\s*?apiuid\s*?=\s*?(\d+);').firstMatch(response)?.group(1);
     galleryItem.apiuid = apiuid;
 
     // apikey
     final String apikey = RegExp(r'var\s*?apikey\s*?=\s*?"([0-9a-f]+)";')
         .firstMatch(response)
-        .group(1);
+        ?.group(1);
     galleryItem.apikey = apikey;
 
-    galleryItem.isRatinged = response.contains(RegExp(r'"ir\s+ir[a-z]"'));
+    final Element _ratingImage = document.querySelector('#rating_image');
+    final String _ratingImageClass = _ratingImage.attributes['class'];
+    galleryItem.isRatinged =
+        _ratingImageClass.contains(RegExp(r'"ir\s+ir[a-z]"'));
 
     return galleryItem;
   }

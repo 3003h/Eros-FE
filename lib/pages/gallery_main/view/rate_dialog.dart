@@ -67,6 +67,7 @@ Future<void> showRateDialog() {
             CupertinoDialogAction(
               child: Text(S.of(Get.overlayContext).cancel),
               onPressed: () {
+                // Get.delete<RateController>();
                 Get.back();
               },
             ),
@@ -74,6 +75,7 @@ Future<void> showRateDialog() {
               child: Text(S.of(Get.overlayContext).ok),
               onPressed: () {
                 controller.rating();
+                // Get.delete<RateController>();
                 Get.back();
               },
             ),
