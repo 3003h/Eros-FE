@@ -226,10 +226,11 @@ class GalleryPageController extends GetxController
       change(value, status: RxStatus.success());
       _enableRead.value = true;
       logger.d('${galleryItem.isRatinged} ${value.isRatinged}');
-      isRatinged = galleryItem.isRatinged ||
+      isRatinged = (galleryItem.isRatinged ?? false) ||
           value.isRatinged ||
-          _itemController.galleryItem.isRatinged;
-    } catch (err) {
+          (_itemController?.galleryItem?.isRatinged ?? false);
+    } catch (err, stack) {
+      logger.e('$err\n$stack');
       if (showError) {
         change(null, status: RxStatus.error(err.toString()));
       }

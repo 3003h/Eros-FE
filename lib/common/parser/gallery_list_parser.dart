@@ -201,6 +201,14 @@ class GalleryListParser {
               ?.attributes['title'] ??
           '';
 
+      // 评分标志
+      final String ir = tr
+              .querySelector('td.gl2c > div:nth-child(2) > div:nth-child(1)')
+              ?.attributes['class'] ??
+          '';
+      // logger.d(ir);
+      final bool isRatinged = ir.contains(RegExp(r'ir ir[a-z]'));
+
       String favcat = '';
       if (favTitle.isNotEmpty) {
         final String favcatStyle = tr
@@ -216,7 +224,27 @@ class GalleryListParser {
       // safeMode检查
       if (Platform.isIOS && ehConfigService.isSafeMode.value) {
         if (category.trim() == 'Non-H') {
-          _gallaryItems.add(GalleryItem()
+          _gallaryItems.add(
+            GalleryItem()
+              ..gid = gid
+              ..token = token
+              ..englishTitle = title
+              ..imgUrl = imgUrl ?? ''
+              ..imgHeight = imageHeight
+              ..imgWidth = imageWidth
+              ..url = url
+              ..category = category
+              ..simpleTags = simpleTags
+              ..postTime = postTimeLocal
+              ..ratingFallBack = ratingFB
+              ..isRatinged = isRatinged
+              ..favTitle = favTitle
+              ..favcat = favcat,
+          );
+        }
+      } else {
+        _gallaryItems.add(
+          GalleryItem()
             ..gid = gid
             ..token = token
             ..englishTitle = title
@@ -228,24 +256,10 @@ class GalleryListParser {
             ..simpleTags = simpleTags
             ..postTime = postTimeLocal
             ..ratingFallBack = ratingFB
+            ..isRatinged = isRatinged
             ..favTitle = favTitle
-            ..favcat = favcat);
-        }
-      } else {
-        _gallaryItems.add(GalleryItem()
-          ..gid = gid
-          ..token = token
-          ..englishTitle = title
-          ..imgUrl = imgUrl ?? ''
-          ..imgHeight = imageHeight
-          ..imgWidth = imageWidth
-          ..url = url
-          ..category = category
-          ..simpleTags = simpleTags
-          ..postTime = postTimeLocal
-          ..ratingFallBack = ratingFB
-          ..favTitle = favTitle
-          ..favcat = favcat);
+            ..favcat = favcat,
+        );
       }
     }
 

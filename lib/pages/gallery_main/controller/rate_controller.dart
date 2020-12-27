@@ -24,12 +24,13 @@ class RateController extends GetxController {
     logger.i('rating $rate');
     logger.d(
         '${_pageController.galleryItem.apiuid} ${_pageController.galleryItem.apikey}');
+    logger.d('${(rate * 2).round()}');
     await Api.setRating(
       apikey: _item.apikey,
       apiuid: _item.apiuid,
       gid: _item.gid,
       token: _item.token,
-      rating: rate * 2 ~/ 1,
+      rating: (rate * 2).round(),
     );
     _pageController.ratinged();
     showToast('Ratting successfully');

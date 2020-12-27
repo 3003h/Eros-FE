@@ -155,7 +155,7 @@ class ViewController extends GetxController {
 
   void handOnSliderChangedEnd(double value) {
     logger.d('to $value');
-    final int _index = value ~/ 1;
+    final int _index = value.round();
     _galleryPageController.showLoadingDialog(Get.context, _index).then((_) {
       _galleryCacheController.setIndex(
           _galleryPageController.galleryItem.gid, _index);
