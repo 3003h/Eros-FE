@@ -225,7 +225,8 @@ class GalleryPageController extends GetxController
       final GalleryItem value = await _fetchData(refresh: refresh);
       change(value, status: RxStatus.success());
       _enableRead.value = true;
-      logger.d('${galleryItem.isRatinged} ${value.isRatinged}');
+      logger
+          .d('${galleryItem.isRatinged} value.isRatinged:${value.isRatinged}');
       isRatinged = (galleryItem.isRatinged ?? false) ||
           value.isRatinged ||
           (_itemController?.galleryItem?.isRatinged ?? false);

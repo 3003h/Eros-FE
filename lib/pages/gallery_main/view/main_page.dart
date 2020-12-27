@@ -118,7 +118,7 @@ class GalleryContainer extends StatelessWidget {
     final GalleryPageController controller =
         Get.find(tag: '${Get.find<DepthService>().pageCtrlDepth}');
 
-    Widget _getWidgets(GalleryItem state) {
+    Widget _getDetail(GalleryItem state) {
       const double minWidth = 100.0;
       final List _w = <Widget>[
         Expanded(
@@ -127,10 +127,12 @@ class GalleryContainer extends StatelessWidget {
                     ? FontAwesomeIcons.solidStar
                     : FontAwesomeIcons.star,
                 title: S.of(context).p_Rate,
-                onTap: () {
-                  logger.d('${state.isRatinged}');
-                  showRateDialog();
-                },
+                onTap: state.apiuid?.isNotEmpty ?? false
+                    ? () {
+                        logger.d('${state.isRatinged}');
+                        showRateDialog();
+                      }
+                    : null,
               )),
         ),
         Expanded(
@@ -215,7 +217,7 @@ class GalleryContainer extends StatelessWidget {
             ),
             controller.obx(
               (GalleryItem state) {
-                return _getWidgets(state);
+                return _getDetail(state);
               },
               onLoading: Container(
                 // height: Get.size.height - _top * 3 - kHeaderHeight,
@@ -256,7 +258,7 @@ class GalleryContainer extends StatelessWidget {
                     color: CupertinoDynamicColor.resolve(
                         CupertinoColors.systemGrey4, context),
                   ),
-                  _getWidgets(state),
+                  _getDetail(state),
                 ],
               ),
             );

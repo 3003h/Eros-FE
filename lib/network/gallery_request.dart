@@ -32,6 +32,8 @@ import 'package:permission_handler/permission_handler.dart';
 import 'package:share/share.dart';
 import 'package:tuple/tuple.dart';
 
+import 'error.dart';
+
 final Api api = Api();
 
 // ignore: avoid_classes_with_only_static_members
@@ -95,17 +97,23 @@ class Api {
     const String url = '/popular?inline_set=dm_l';
     // const String url = '/popular';
 
-    // await CustomHttpsProxy.instance.init();
-
+    await CustomHttpsProxy.instance.init();
     final Options _cacheOptions = getCacheOptions(forceRefresh: refresh);
 
     final String response =
         await getHttpManager().get(url, options: _cacheOptions);
+    // logger.d('$response');
 
-    final Tuple2<List<GalleryItem>, int> tuple =
-        await GalleryListParser.parseGalleryList(response, refresh: refresh);
+    try {
+      final Tuple2<List<GalleryItem>, int> tuple =
+          await GalleryListParser.parseGalleryList(response, refresh: refresh);
 
-    return tuple;
+      return tuple;
+    } on EhError catch (e) {
+      logger.e('$e');
+      showToast('${e.message}');
+      rethrow;
+    }
   }
 
   /// 获取画廊列表
