@@ -1,15 +1,16 @@
 import 'dart:async';
 import 'dart:io';
 
-import 'package:fehviewer/const/const.dart';
+import 'package:fehviewer/common/global.dart';
+import 'package:fehviewer/generated/l10n.dart';
 import 'package:fehviewer/network/gallery_request.dart';
 import 'package:fehviewer/utils/logger.dart';
-import 'package:fehviewer/utils/utility.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter_inappwebview/flutter_inappwebview.dart'
+    show CookieManager;
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
-import 'package:webview_cookie_manager/webview_cookie_manager.dart';
-import 'package:webview_flutter/webview_flutter.dart';
+import 'package:webview_flutter/webview_flutter.dart' hide CookieManager;
 
 enum ShowType {
   rename,
@@ -24,29 +25,22 @@ class WebMySetting extends StatefulWidget {
 
 class _WebMySettingState extends State<WebMySetting> {
   WebViewController _controller;
-  Future<void> _future;
 
   final TextEditingController _nameController = TextEditingController();
 
-  Future<void> _getCookies() async {
-    if (Api.getBaseUrl() == EHConst.EX_BASE_URL) {
-      await CookieUtil.resetExCookieFromEh();
-    }
-
-    final WebviewCookieManager cookieManager = WebviewCookieManager();
-    final List<Cookie> cookies =
-        (await Api.cookieJar).loadForRequest(Uri.parse(Api.getBaseUrl()));
-    // await cookieManager.clearCookies();
-    logger.d(cookies.join('\n'));
-    await cookieManager?.setCookies(cookies);
-  }
+  final CookieManager _cookieManager = CookieManager.instance();
 
   @override
   void initState() {
     super.initState();
-    _future = _getCookies();
-    // ignore: always_put_control_body_on_new_line
     if (Platform.isAndroid) WebView.platform = SurfaceAndroidWebView();
+    final List<Cookie> cookies =
+        Global.cookieJar.loadForRequest(Uri.parse(Api.getBaseUrl()));
+
+    for (final Cookie cookie in cookies) {
+      _cookieManager.setCookie(
+          url: Api.getBaseUrl(), name: cookie.name, value: cookie.value);
+    }
   }
 
   JavascriptChannel _deleteJavascriptChannel(BuildContext context) {
@@ -189,63 +183,67 @@ class _WebMySettingState extends State<WebMySetting> {
   @override
   Widget build(BuildContext context) {
     final CupertinoPageScaffold cpf = CupertinoPageScaffold(
-        navigationBar: CupertinoNavigationBar(
-          padding: const EdgeInsetsDirectional.only(end: 6),
-          middle: const Text('Ehentai设置'),
-          trailing: Container(
-            width: 90,
-            child: Row(
-              children: <Widget>[
-                CupertinoButton(
-                  padding: const EdgeInsets.all(0),
-                  child: const Icon(
-                    FontAwesomeIcons.redo,
-                    size: 20,
-                  ),
-                  onPressed: () async {
-                    _controller.reload();
-                  },
+      navigationBar: CupertinoNavigationBar(
+        padding: const EdgeInsetsDirectional.only(end: 6),
+        middle: Text(S.of(context).ehentai_settings),
+        trailing: Container(
+          width: 90,
+          child: Row(
+            children: <Widget>[
+              CupertinoButton(
+                padding: const EdgeInsets.all(0),
+                child: const Icon(
+                  FontAwesomeIcons.redo,
+                  size: 20,
                 ),
-                CupertinoButton(
-                  padding: const EdgeInsets.all(0),
-                  child: const Icon(
-                    FontAwesomeIcons.checkCircle,
-                    size: 24,
-                  ),
-                  onPressed: () async {
-                    _controller.evaluateJavascript(
-                        'document.querySelector("#apply > input[type=submit]").click();');
-                  },
+                onPressed: () async {
+                  _controller.reload();
+                },
+              ),
+              CupertinoButton(
+                padding: const EdgeInsets.all(0),
+                child: const Icon(
+                  FontAwesomeIcons.checkCircle,
+                  size: 24,
                 ),
-              ],
-            ),
+                onPressed: () async {
+                  _controller.evaluateJavascript(
+                      'document.querySelector("#apply > input[type=submit]").click();');
+                },
+              ),
+            ],
           ),
         ),
-        child: SafeArea(
-          child: FutureBuilder<void>(
-              future: _future,
-              builder: (context, snapshot) {
-                if (snapshot.connectionState != ConnectionState.done) {
-                  return Container();
-                } else {
-                  return WebView(
-                    initialUrl: '${Api.getBaseUrl()}/uconfig.php',
-                    javascriptMode: JavascriptMode.unrestricted,
-                    javascriptChannels: <JavascriptChannel>{
-                      _promptJavascriptChannel(context),
-                      _deleteJavascriptChannel(context),
-                    },
-                    onWebViewCreated: (WebViewController webViewController) {
-                      _controller = webViewController;
-                    },
-                    onPageStarted: (String url) {
-                      print('Page started loading: $url');
-                    },
-                    onPageFinished: (String url) async {
-                      print('Page Finished loading: $url');
-                      // 重写 window.prompt和 window.confirm方法
-                      try {
-                        const String javascript = '''
+      ),
+      child: SafeArea(
+        child: WebView(
+          initialUrl: '${Api.getBaseUrl()}/uconfig.php',
+          javascriptMode: JavascriptMode.unrestricted,
+          javascriptChannels: <JavascriptChannel>{
+            _promptJavascriptChannel(context),
+            _deleteJavascriptChannel(context),
+          },
+          onWebViewCreated: (WebViewController webViewController) {
+            _controller = webViewController;
+            final List<Cookie> cookies =
+                Global.cookieJar.loadForRequest(Uri.parse(Api.getBaseUrl()));
+            for (final Cookie cookie in cookies) {
+              _controller.evaluateJavascript('document.cookie ="$cookie"');
+            }
+          },
+          onPageStarted: (String url) {
+            print('Page started loading: $url');
+            // final List<Cookie> cookies =
+            //     Global.cookieJar.loadForRequest(Uri.parse(Api.getBaseUrl()));
+            // for (final Cookie cookie in cookies) {
+            //   _controller.evaluateJavascript('document.cookie ="$cookie"');
+            // }
+          },
+          onPageFinished: (String url) async {
+            print('Page Finished loading: $url');
+            // 重写 window.prompt和 window.confirm方法
+            try {
+              const String javascript = '''
                         window.prompt = function (msg,defaultText){
                           Prompt.postMessage(msg + '#@#' + defaultText);
                         }
@@ -253,22 +251,21 @@ class _WebMySettingState extends State<WebMySetting> {
                           Delete.postMessage(msg);
                         }
                         ''';
-                        _controller?.evaluateJavascript(javascript);
-                      } catch (_) {}
-                    },
-                    gestureNavigationEnabled: true,
-                    navigationDelegate: (NavigationRequest request) {
-                      if (!request.url.endsWith('/uconfig.php')) {
-                        print('阻止打开 ${request.url}');
-                        // _controller.loadUrl('${Api.getBaseUrl()}/uconfig.php');
-                        return NavigationDecision.prevent;
-                      }
-                      return NavigationDecision.navigate;
-                    },
-                  );
-                }
-              }),
-        ));
+              _controller?.evaluateJavascript(javascript);
+            } catch (_) {}
+          },
+          gestureNavigationEnabled: true,
+          navigationDelegate: (NavigationRequest request) {
+            if (!request.url.endsWith('/uconfig.php')) {
+              print('阻止打开 ${request.url}');
+              // _controller.loadUrl('${Api.getBaseUrl()}/uconfig.php');
+              return NavigationDecision.prevent;
+            }
+            return NavigationDecision.navigate;
+          },
+        ),
+      ),
+    );
 
     return cpf;
   }

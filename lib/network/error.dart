@@ -4,6 +4,8 @@ enum EhErrorType {
   /// Default error type, Some other Error. In this case, you can
   /// use the DioError.error if it is not null.
   DEFAULT,
+
+  LOGIN,
 }
 
 class EhError implements Exception {

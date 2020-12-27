@@ -1,7 +1,6 @@
 import 'package:fehviewer/common/service/theme_service.dart';
 import 'package:fehviewer/generated/l10n.dart';
 import 'package:fehviewer/pages/tab/controller/setting_controller.dart';
-import 'package:fehviewer/utils/logger.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -16,7 +15,7 @@ class SettingTab extends GetView<SettingViewController> {
   Widget build(BuildContext context) {
     controller.initData(context);
     final String _title = S.of(context).tab_setting;
-    logger.d(' ${ehTheme.isDarkMode}');
+    // logger.d(' ${ehTheme.isDarkMode}');
     return CupertinoPageScaffold(
       backgroundColor: !ehTheme.isDarkMode
           ? CupertinoColors.secondarySystemBackground
