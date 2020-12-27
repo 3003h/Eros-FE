@@ -216,7 +216,7 @@ class _PageSliderState extends State<PageSlider> {
       child: Row(
         children: <Widget>[
           Text(
-            '${widget.sliderValue ~/ 1 + 1}',
+            '${widget.sliderValue.round() + 1}',
             style: const TextStyle(color: CupertinoColors.systemGrey6),
           ),
           Expanded(
@@ -235,7 +235,7 @@ class _PageSliderState extends State<PageSlider> {
                 }),
           ),
           Text(
-            '${widget.max ~/ 1 + 1}',
+            '${widget.max.round() + 1}',
             style: const TextStyle(color: CupertinoColors.systemGrey6),
           ),
         ],

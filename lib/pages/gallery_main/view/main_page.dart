@@ -214,27 +214,28 @@ class GalleryContainer extends StatelessWidget {
                   CupertinoColors.systemGrey4, context),
             ),
             controller.obx(
-                (GalleryItem state) {
-                  return _getWidgets(state);
-                },
-                onLoading: Container(
-                  // height: Get.size.height - _top * 3 - kHeaderHeight,
-                  height: 200,
-                  alignment: Alignment.center,
-                  padding: const EdgeInsets.only(bottom: 50),
-                  child: const CupertinoActivityIndicator(
-                    radius: 14.0,
-                  ),
+              (GalleryItem state) {
+                return _getWidgets(state);
+              },
+              onLoading: Container(
+                // height: Get.size.height - _top * 3 - kHeaderHeight,
+                height: 200,
+                alignment: Alignment.center,
+                padding: const EdgeInsets.only(bottom: 50),
+                child: const CupertinoActivityIndicator(
+                  radius: 14.0,
                 ),
-                onError: (err) {
-                  logger.e(' $err');
-                  return Container(
-                    padding: const EdgeInsets.only(bottom: 50, top: 50),
-                    child: GalleryErrorPage(
-                      onTap: controller.handOnRefreshAfterErr,
-                    ),
-                  );
-                })
+              ),
+              onError: (err) {
+                logger.e(' $err');
+                return Container(
+                  padding: const EdgeInsets.only(bottom: 50, top: 50),
+                  child: GalleryErrorPage(
+                    onTap: controller.handOnRefreshAfterErr,
+                  ),
+                );
+              },
+            )
           ],
         ),
       );
