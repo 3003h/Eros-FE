@@ -49,8 +49,9 @@ dependencies:
   enum_to_string: ^1.0.14
 
   # webview
-#  flutter_webview_plugin: ^0.3.11
+  flutter_webview_plugin: ^0.3.11
   webview_flutter: ^1.0.7
+  flutter_inappwebview: ^4.0.0+4
 
   # 文字链接
   flutter_linkify: ^4.0.2

@@ -47,7 +47,7 @@ class TabHomeController extends GetxController {
 
   void init({BuildContext inContext}) {
     final BuildContext context = inContext ?? Get.context;
-    logger.i(' init tab home');
+    // logger.i(' init tab home');
     scrollControllerList.clear();
     tabList.clear();
     pageList.clear();

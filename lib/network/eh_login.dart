@@ -4,6 +4,7 @@ import 'package:cookie_jar/cookie_jar.dart';
 import 'package:dio/dio.dart';
 import 'package:fehviewer/const/const.dart';
 import 'package:fehviewer/models/user.dart';
+import 'package:fehviewer/network/error.dart';
 import 'package:fehviewer/network/gallery_request.dart';
 import 'package:fehviewer/utils/dio_util.dart';
 import 'package:fehviewer/utils/logger.dart';
@@ -53,6 +54,12 @@ class EhUserManager {
     //  登录异常处理
     final List<String> setcookie = rult.headers['set-cookie'];
 
+    logger.d('${setcookie}');
+
+    if (setcookie.length < 2) {
+      throw EhError(type: EhErrorType.LOGIN);
+    }
+
     final String cookieMemberId = setcookie.firstWhere(
         (String cookieValue) => cookieValue.contains('ipb_member_id'));
     final String cookiePassHash = setcookie.firstWhere(
@@ -71,7 +78,7 @@ class EhUserManager {
         .firstWhere((Cookie cookie) => cookie.name == 'ipb_member_id')
         .value;
     if (_id == null || _id.isEmpty) {
-      throw Exception('login Fail');
+      throw EhError(type: EhErrorType.LOGIN);
     }
 
     final PersistCookieJar cookieJar = await Api.cookieJar;
@@ -217,7 +224,7 @@ class EhUserManager {
 
     // logger.v('$response');
 
-    final RegExp regExp = RegExp(r'Viewing Profile: (\w+)</div');
+    final RegExp regExp = RegExp(r'Viewing Profile: (\S+)</div');
     final String username = regExp.firstMatch('$response').group(1);
 
     logger.v('username $username');
@@ -230,7 +237,9 @@ class EhUserManager {
         HttpManager.getInstance(baseUrl: EHConst.EX_BASE_URL, cache: false);
     const String url = '/uconfig.php';
 
-    await httpManager.getAll(url);
+    final Response<dynamic> response = await httpManager.getAll(url);
+    // logger.d('${response}');
+    return response;
   }
 
   static String getCookieStringFromMap(Map cookie) {

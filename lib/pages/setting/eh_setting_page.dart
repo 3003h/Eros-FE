@@ -5,9 +5,11 @@ import 'package:fehviewer/common/service/ehconfig_service.dart';
 import 'package:fehviewer/common/service/theme_service.dart';
 import 'package:fehviewer/const/const.dart';
 import 'package:fehviewer/generated/l10n.dart';
-import 'package:fehviewer/pages/login/web_mysetting.dart';
+import 'package:fehviewer/pages/login/web_mysetting_ap.dart';
+import 'package:fehviewer/pages/login/web_mysetting_in.dart';
 import 'package:fehviewer/store/tag_database.dart';
 import 'package:fehviewer/utils/logger.dart';
+import 'package:fehviewer/utils/toast.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -120,7 +122,13 @@ class ListViewEhSetting extends StatelessWidget {
           title: S.of(context).ehentai_settings,
           selector: S.of(context).setting_on_website,
           onTap: () {
-            Get.to(WebMySetting());
+            if (GetPlatform.isAndroid) {
+              Get.to(WebMySettingAP());
+            } else if (GetPlatform.isIOS) {
+              Get.to(InWebMySetting());
+            } else {
+              showToast('Not support');
+            }
           },
         ),
       if (_isLogin) Container(height: 38),

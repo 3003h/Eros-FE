@@ -5,6 +5,7 @@ import 'package:fehviewer/common/controller/user_controller.dart';
 import 'package:fehviewer/generated/l10n.dart';
 import 'package:fehviewer/models/user.dart';
 import 'package:fehviewer/network/eh_login.dart';
+import 'package:fehviewer/network/error.dart';
 import 'package:fehviewer/route/routes.dart';
 import 'package:fehviewer/utils/logger.dart';
 import 'package:fehviewer/utils/toast.dart';
@@ -187,8 +188,9 @@ class _LoginPageState extends State<LoginPage> {
                     final User user = await EhUserManager().signInByWeb(result);
                     userController.user(user);
                     Get.back();
-                  } catch (e) {
+                  } catch (e, stack) {
                     showToast(e.toString());
+                    logger.e('$e\n$stack');
                     setState(() {
                       _isWebLogin = false;
                     });
@@ -221,12 +223,16 @@ class _LoginPageState extends State<LoginPage> {
       user = await EhUserManager()
           .signIn(_usernameController.text, _passwdController.text);
       userController.user(user);
-    } catch (e) {
-      showToast(e.toString());
+    } on EhError catch (e, stack) {
+      logger.e('$e\n$stack');
+      if (e.type == EhErrorType.LOGIN) {
+        showToast('login fail');
+      }
+      // rethrow;
+    } finally {
       setState(() {
         _isLogin = false;
       });
-      rethrow;
     }
 
     if (user != null) {

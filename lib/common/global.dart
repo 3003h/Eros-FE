@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:io';
 
+import 'package:cookie_jar/cookie_jar.dart';
 import 'package:dio_cookie_manager/dio_cookie_manager.dart';
 import 'package:fehviewer/const/storages.dart';
 import 'package:fehviewer/models/index.dart';
@@ -35,6 +36,8 @@ class Global {
   static List<GalleryCache> galleryCaches = <GalleryCache>[];
 
   static CookieManager cookieManager;
+
+  static PersistCookieJar cookieJar;
 
   static HttpProxy httpProxy = HttpProxy('localhost', '$kProxyPort');
 
@@ -75,6 +78,7 @@ class Global {
     _profileInit();
 
     cookieManager = CookieManager(await Api.cookieJar);
+    cookieJar = await Api.cookieJar;
 
     // 读取设备第一次打开
     isFirstOpen = !StorageUtil().getBool(STORAGE_DEVICE_ALREADY_OPEN_KEY);
