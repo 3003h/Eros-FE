@@ -83,7 +83,7 @@ dependencies:
   waterfall_flow: any
 
   # 生物认证 指纹 面容等
-  local_auth: ^0.6.3+4
+#  local_auth: ^0.6.3+4
 
   # 彩蛋
   flutter_egg: ^1.0.3
