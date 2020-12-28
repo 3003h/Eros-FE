@@ -378,7 +378,7 @@ class GalleryRating extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    logger.d('rating $rating');
+    // logger.d('rating $rating');
     return Row(
       children: <Widget>[
         Container(

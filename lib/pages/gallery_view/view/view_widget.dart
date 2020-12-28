@@ -22,12 +22,11 @@ class GalleryImage extends StatefulWidget {
   @override
   _GalleryImageState createState() => _GalleryImageState();
   final int index;
-  // final String gid;
   final ValueChanged<bool> downloadComplete;
 }
 
 class _GalleryImageState extends State<GalleryImage> {
-  Future<GalleryPreview> _future;
+  // Future<GalleryPreview> _future;
   final CancelToken _getMoreCancelToken = CancelToken();
 
   GalleryPageController _pageController;
@@ -37,14 +36,14 @@ class _GalleryImageState extends State<GalleryImage> {
     super.initState();
     _pageController =
         Get.find(tag: '${Get.find<DepthService>().pageCtrlDepth}');
-    _future = _pageController.getImageInfo(widget.index,
-        cancelToken: _getMoreCancelToken);
+    // _future = _pageController.getImageInfo(widget.index,
+    //     cancelToken: _getMoreCancelToken);
   }
 
   @override
   void dispose() {
     super.dispose();
-    _getMoreCancelToken.cancel();
+    // _getMoreCancelToken.cancel();
   }
 
   @override
@@ -53,14 +52,14 @@ class _GalleryImageState extends State<GalleryImage> {
         _pageController.galleryItem.galleryPreview[widget.index];
 
     return FutureBuilder<GalleryPreview>(
-      future: _future,
+      future: _pageController.getImageInfo(widget.index,
+          cancelToken: _getMoreCancelToken),
       builder: (_, AsyncSnapshot<GalleryPreview> previewFromApi) {
         if (_currentPreview.largeImageUrl == null ||
             _currentPreview.largeImageHeight == null) {
           if (previewFromApi.connectionState == ConnectionState.done) {
             if (previewFromApi.hasError) {
               // todo 加载异常
-              // showToast('Error: ${previewFromApi.error}');
               logger.e(' ${previewFromApi.error}');
               return Center(child: Text('Error: ${previewFromApi.error}'));
             } else {
@@ -92,7 +91,7 @@ class _GalleryImageState extends State<GalleryImage> {
             );
           }
         } else {
-          // 返回图片部件
+          // 返回图片组件
           final String url = _currentPreview.largeImageUrl;
           return _buildImage(url);
         }
@@ -261,8 +260,7 @@ class ViewChildBuilderDelegate extends SliverChildBuilderDelegate {
   }
 }
 
-/// ShareDialog
-Future<void> showShareDialog(BuildContext context, String imageUrl) {
+Future<void> showShareActionSheet(BuildContext context, String imageUrl) {
   return showCupertinoModalPopup<void>(
       context: context,
       builder: (BuildContext context) {

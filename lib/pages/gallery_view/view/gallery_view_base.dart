@@ -14,39 +14,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 
-class GalleryUtil {
-  static Future<void> getAllImageHref(GalleryPageController controller,
-      {CancelToken cancelToken}) async {
-    if (controller.isGetAllImageHref) {
-      loggerNoStack.d(' isGetAllImageHref return');
-      return;
-    }
-    controller.isGetAllImageHref = true;
-    final int _filecount = int.parse(controller.galleryItem.filecount);
-
-    // 获取画廊所有图片页面的href
-    while (controller.previews.length < _filecount) {
-      controller.currentPreviewPage++;
-
-      final List<GalleryPreview> _moreGalleryPreviewList =
-          await Api.getGalleryPreview(
-        controller.galleryItem.url,
-        page: controller.currentPreviewPage,
-        cancelToken: cancelToken,
-      );
-
-      // 避免重复添加
-      if (_moreGalleryPreviewList.first.ser >
-          controller.galleryItem.galleryPreview.last.ser) {
-        logger.d(
-            'getAllImageHref ${_moreGalleryPreviewList.first.ser}  ${_moreGalleryPreviewList.length}');
-        controller.addAllPreview(_moreGalleryPreviewList);
-      }
-    }
-    controller.isGetAllImageHref = false;
-  }
-}
-
 class GalleryPrecache {
   /// 内部构造方法，可避免外部暴露构造函数，进行实例化
   GalleryPrecache._internal();
@@ -165,18 +132,18 @@ class GalleryPrecache {
 
       final GalleryPreview _preview = controller.previews[_index];
       if (_preview?.isCache ?? false) {
-        loggerNoStack.d('index $_index 已存在缓存中 跳过');
+        // logger.d('index $_index 已存在缓存中 跳过');
         continue;
       }
 
       if (_preview?.startPrecache ?? false) {
-        loggerNoStack.d('index $_index 已开始缓存 跳过');
+        // logger.d('index $_index 已开始缓存 跳过');
         continue;
       }
 
       String _url = '';
       if (_preview.largeImageUrl?.isEmpty ?? true) {
-        logger.d('get $_index from Api');
+        // logger.d('get $_index from Api');
         _curIndexList.add(_index);
         final String _href = previews[_index].href;
         final GalleryPreview _imageFromApi = await GalleryPrecache.instance
@@ -188,9 +155,6 @@ class GalleryPrecache {
           ..largeImageUrl = _url
           ..largeImageWidth = _imageFromApi.largeImageWidth
           ..largeImageHeight = _imageFromApi.largeImageHeight;
-        // logger.d('index $_index\n'
-        //     'largeImageHeight:${_preview.largeImageHeight}\n'
-        //     'largeImageWidth:${_preview.largeImageWidth}');
         _curIndexList.remove(_index);
       }
 
