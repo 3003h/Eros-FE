@@ -5,6 +5,7 @@ import 'package:fehviewer/common/service/depth_service.dart';
 import 'package:fehviewer/common/service/ehconfig_service.dart';
 import 'package:fehviewer/models/index.dart';
 import 'package:fehviewer/network/gallery_request.dart';
+import 'package:fehviewer/pages/gallery_view/controller/view_controller.dart';
 import 'package:fehviewer/pages/gallery_view/view/gallery_view_base.dart';
 import 'package:fehviewer/pages/item/controller/galleryitem_controller.dart';
 import 'package:fehviewer/utils/logger.dart';
@@ -54,6 +55,7 @@ class GalleryPageController extends GetxController
 
   // 画廊数据对象
   GalleryItem galleryItem;
+  List<GalleryPreview> get previews => galleryItem.galleryPreview;
 
   String tabIndex;
 
@@ -64,17 +66,14 @@ class GalleryPageController extends GetxController
 
   // 已获取所有大图页面的 href
   bool isGetAllImageHref = false;
-
-  List<GalleryPreview> get previews => galleryItem.galleryPreview;
+  bool isImageInfoGeting = false;
 
   // 滚动控制器
   final ScrollController scrollController = ScrollController();
 
   // eh设置
   final EhConfigService _ehConfigService = Get.find();
-
   final HistoryController _historyController = Get.find();
-
   final DepthService depthService = Get.find();
 
   @override
@@ -100,8 +99,8 @@ class GalleryPageController extends GetxController
     super.onClose();
   }
 
+  // 阅读按钮开关
   final RxBool _enableRead = false.obs;
-
   bool get enableRead => _enableRead.value;
 
   bool get hasMorePreview {
@@ -112,17 +111,13 @@ class GalleryPageController extends GetxController
 
   // 控制隐藏导航栏按钮和封面
   final RxBool _hideNavigationBtn = true.obs;
-
   bool get hideNavigationBtn => _hideNavigationBtn.value;
-
   set hideNavigationBtn(bool val) => _hideNavigationBtn.value = val;
 
   // 第一页的缩略图对象数组
   List<GalleryPreview> _firstPagePreview;
-
   List<GalleryPreview> get firstPagePreview => _firstPagePreview;
 
-  // TODO(honjow): 首次请求或刷新后执行
   void setPreviewAfterRequest(List<GalleryPreview> galleryPreview) {
     if (galleryPreview.isNotEmpty) {
       galleryItem.galleryPreview = galleryPreview;
@@ -130,25 +125,13 @@ class GalleryPageController extends GetxController
 
     _firstPagePreview =
         galleryItem.galleryPreview.sublist(0, galleryPreview.length);
-    // logger.d(' _firstPagePreview ${_firstPagePreview.length}');
-
-    // final GalleryItemController _itemController =
-    //     Get.find(tag: galleryItem.gid);
-    // _itemController.firstPutPreview(galleryPreview);
-  }
-
-  // TODO(honjow): 清除数据 是否需要保留？
-  void reset() {
-    galleryItem.galleryComment?.clear();
-    galleryItem.galleryPreview?.clear();
-    galleryItem.tagGroup?.clear();
-    _firstPagePreview?.clear();
-    update();
   }
 
   // 添加缩略图对象
   void addAllPreview(List<GalleryPreview> galleryPreview) {
     galleryItem.galleryPreview.addAll(galleryPreview);
+    Get.find<ViewController>().update(['_buildPhotoViewGallery']);
+    update();
   }
 
   // 是否存在本地收藏中
@@ -380,31 +363,41 @@ class GalleryPageController extends GetxController
 
   /// 懒加载
   Future<void> _lazyGetImageHref({int index, CancelToken cancelToken}) async {
-    if (isGetAllImageHref) {
+    if (isImageInfoGeting) {
       loggerNoStack.d(' isGetAllImageHref return');
       return;
     }
-    isGetAllImageHref = true;
-    logger.v('\n\nlength ${previews.length} ; index $index');
+    isImageInfoGeting = true;
+    logger.d('length ${previews.length} ; index $index');
+
+    // todo 好像还有点问题
     if (previews.length - index < 4) {
-      currentPreviewPage++;
+      try {
+        final List<GalleryPreview> _moreGalleryPreviewList =
+            await Api.getGalleryPreview(
+          galleryItem.url,
+          page: currentPreviewPage + 1,
+          cancelToken: cancelToken,
+        );
 
-      final List<GalleryPreview> _moreGalleryPreviewList =
-          await Api.getGalleryPreview(
-        galleryItem.url,
-        page: currentPreviewPage,
-        cancelToken: cancelToken,
-      );
-
-      // 避免重复添加
-      if (_moreGalleryPreviewList.first.ser >
-          galleryItem.galleryPreview.last.ser) {
-        logger.d('添加图片对象 起始序号${_moreGalleryPreviewList.first.ser}  '
-            '数量${_moreGalleryPreviewList.length}');
-        addAllPreview(_moreGalleryPreviewList);
+        // 避免重复添加
+        if (_moreGalleryPreviewList.first.ser >
+            galleryItem.galleryPreview.last.ser) {
+          logger.d('添加图片对象 起始序号${_moreGalleryPreviewList.first.ser}  '
+              '数量${_moreGalleryPreviewList.length}');
+          addAllPreview(_moreGalleryPreviewList);
+        }
+        // 成功后才+1
+        currentPreviewPage++;
+      } catch (e, stack) {
+        showToast('$e');
+        logger.e('$e\n$stack');
+        rethrow;
+      } finally {
+        isImageInfoGeting = false;
       }
     }
-    isGetAllImageHref = false;
+    isImageInfoGeting = false;
   }
 
   /// 获取当前页的图片地址
@@ -413,12 +406,11 @@ class GalleryPageController extends GetxController
     CancelToken cancelToken,
   }) async {
     // 数据获取处理
-    _lazyGetImageHref(cancelToken: cancelToken, index: index)
-        .catchError((e, stack) {
+    try {
+      await _lazyGetImageHref(cancelToken: cancelToken, index: index);
+    } catch (e, stack) {
       logger.e('$e \n $stack');
-    }).whenComplete(() {
-      // logger.v('getAllImageHref Complete');
-    });
+    }
 
     try {
       final GalleryPreview _curPreview = galleryItem.galleryPreview[index];

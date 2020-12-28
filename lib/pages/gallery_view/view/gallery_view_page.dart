@@ -114,12 +114,7 @@ class GalleryViewPage extends GetView<ViewController> {
         // height: kTopBarHeight + controller.paddingTop,
         width: controller.screensize.width,
         color: const Color.fromARGB(150, 0, 0, 0),
-        padding: EdgeInsets.fromLTRB(
-          controller.paddingLeft,
-          controller.realPaddingTop,
-          controller.paddingRight,
-          4.0,
-        ),
+        padding: controller.topBarPadding,
         child: Stack(
           alignment: Alignment.center,
           children: <Widget>[
@@ -151,24 +146,6 @@ class GalleryViewPage extends GetView<ViewController> {
                   ),
                 ),
                 const Spacer(),
-                // 分享按钮
-                /*GestureDetector(
-                  behavior: HitTestBehavior.opaque,
-                  onTap: () {
-                    logger.v('tap share');
-                    showShareDialog(context,
-                        previews[controller.currentIndex].largeImageUrl);
-                  },
-                  child: Container(
-                    width: 40,
-                    height: kBottomBarHeight,
-                    child: const Icon(
-                      FontAwesomeIcons.share,
-                      color: CupertinoColors.systemGrey6,
-                      // size: 24,
-                    ),
-                  ),
-                ),*/
                 // 菜单按钮
                 GestureDetector(
                   behavior: HitTestBehavior.opaque,
@@ -199,11 +176,7 @@ class GalleryViewPage extends GetView<ViewController> {
     final List<GalleryPreview> previews = controller.previews;
     return Container(
       color: const Color.fromARGB(150, 0, 0, 0),
-      padding: EdgeInsets.only(
-        bottom: controller.realPaddingBottom,
-        left: controller.paddingLeft,
-        right: controller.paddingRight,
-      ),
+      padding: controller.bottomBarPadding,
       width: controller.screensize.width,
       // height: kBottomBarHeight + controller.paddingBottom,
       child: Column(
@@ -216,7 +189,7 @@ class GalleryViewPage extends GetView<ViewController> {
                   behavior: HitTestBehavior.opaque,
                   onTap: () {
                     logger.v('tap share');
-                    showShareDialog(Get.context,
+                    showShareActionSheet(Get.context,
                         previews[controller.currentIndex].largeImageUrl);
                   },
                   child: Container(
@@ -253,39 +226,6 @@ class GalleryViewPage extends GetView<ViewController> {
     );
   }
 
-  /*Widget _buildExtendedImageGesturePageView() {
-    final List<GalleryPreview> previews = _galleryModel.previews;
-    return ExtendedImageGesturePageView.builder(
-      itemBuilder: (BuildContext context, int index) {
-        final Widget image = GalleryImage(index: index);
-        if (index == _currentIndex) {
-          return Hero(
-            tag: previews[index].href + index.toString(),
-            child: image,
-          );
-        } else {
-          return image;
-        }
-      },
-      itemCount: previews.length,
-      onPageChanged: (int index) {
-        // 预载
-        GalleryPrecache.instance.precache(
-          context,
-          _galleryModel,
-          previews: _galleryModel.previews,
-          index: index,
-          max: 5,
-        );
-        setState(() {
-          _currentIndex = index;
-        });
-      },
-      controller: widget.pageController,
-      scrollDirection: Axis.horizontal,
-    );
-  }*/
-
   // TODO(honjow): 还没有完全实现 竖直浏览布局
   Widget _buildListView() {
     return ListView.custom(
@@ -297,7 +237,7 @@ class GalleryViewPage extends GetView<ViewController> {
               minHeight: 200.0, //最小高度
             ),
             child: FutureBuilder<GalleryPreview>(
-                future: controller.futureViewGallery,
+                future: controller.getImageInfo(),
                 builder: (BuildContext context,
                     AsyncSnapshot<GalleryPreview> snapshot) {
                   if (snapshot.connectionState == ConnectionState.done) {
@@ -336,69 +276,63 @@ class GalleryViewPage extends GetView<ViewController> {
     );
   }
 
-  // TODO(honjow): 缩放倍数动态化
+  // todo 缩放倍数动态化?
   /// 水平方向浏览部件
   Widget _buildPhotoViewGallery({bool reverse = false}) {
-    double _maxScale = 10;
-    // logger.d('preview ${preview.data.toJson()}');
-    // final double _width = preview.data.largeImageWidth;
-    // final double _height = preview.data.largeImageHeight;
-    //
-    // if (_height / _width > _size.height / _size.width) {
-    //   // 计算缩放到屏幕宽度一致时，图片的高
-    //   final double _tempHeight = _height * _size.width / _width;
-    //   logger.d('_tempHeight $_tempHeight');
-    //   _maxScale = _tempHeight / _size.height;
-    // }
-    // logger.d(' $_maxScale');
+    const double _maxScale = 10;
 
-    return PhotoViewGallery.builder(
-      // scrollPhysics: const BouncingScrollPhysics(),
-      reverse: reverse,
-      // itemCount: controller.previews.length,
-      itemCount: controller.filecount,
-      customSize: controller.screensize,
-      backgroundDecoration: const BoxDecoration(
-        color: null,
-      ),
-      builder: (BuildContext context, int index) {
-        return PhotoViewGalleryPageOptions.customChild(
-          child: GalleryImage(
-            index: index,
+    return GetBuilder<ViewController>(
+      id: '_buildPhotoViewGallery',
+      builder: (controller) {
+        logger.d('lastPreviewLen ${controller.previews.length}');
+        controller.lastPreviewLen = controller.previews.length;
+        return PhotoViewGallery.builder(
+          // scrollPhysics: const BouncingScrollPhysics(),
+          reverse: reverse,
+          // itemCount: controller.previews.length,
+          itemCount: controller.previews.length,
+          customSize: controller.screensize,
+          backgroundDecoration: const BoxDecoration(
+            color: null,
           ),
-          initialScale: PhotoViewComputedScale.contained,
-          minScale: PhotoViewComputedScale.contained * 1.0,
-          maxScale: PhotoViewComputedScale.covered * _maxScale,
+          builder: (BuildContext context, int index) {
+            return PhotoViewGalleryPageOptions.customChild(
+              child: GalleryImage(
+                index: index,
+              ),
+              initialScale: PhotoViewComputedScale.contained,
+              minScale: PhotoViewComputedScale.contained * 1.0,
+              maxScale: PhotoViewComputedScale.covered * _maxScale,
+            );
+          },
+          loadingBuilder: loadingBuilder,
+          // backgroundDecoration: null,
+          pageController: controller.pageController,
+          enableRotation: false,
+          onPageChanged: controller.handOnPageChanged,
         );
       },
-      loadingBuilder: (BuildContext context, progress) {
-        return progress != null
-            ? Container(
-                child: Center(
-                  child: Text(
-                    '${progress.cumulativeBytesLoaded * 100 ~/ progress.expectedTotalBytes} %',
-                    style: const TextStyle(
-                      color: Colors.white,
-                    ),
-                  ),
-                ),
-              )
-            : Container(
-                child: Center(
-                  child: Text(
-                    '获取中 ${controller.currentIndex + 1}',
-                    style: const TextStyle(
-//                          color: Colors.white,
-                        ),
-                  ),
-                ),
-              );
-      },
-      // backgroundDecoration: null,
-      pageController: controller.pageController,
-      enableRotation: false,
-      // 旋转
-      onPageChanged: controller.handOnPageChanged,
     );
+  }
+
+  Widget loadingBuilder(BuildContext context, ImageChunkEvent progress) {
+    return progress != null
+        ? Container(
+            child: Center(
+              child: Text(
+                '${progress.cumulativeBytesLoaded * 100 ~/ progress.expectedTotalBytes} %',
+                style: const TextStyle(
+                  color: Colors.white,
+                ),
+              ),
+            ),
+          )
+        : Container(
+            child: Center(
+              child: Text(
+                'Loading ${controller.currentIndex + 1}',
+              ),
+            ),
+          );
   }
 }
