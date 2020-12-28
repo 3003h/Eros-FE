@@ -81,9 +81,7 @@ class GalleryListTab extends GetView<GalleryViewController> {
           ),
         ),
         CupertinoSliverRefreshControl(
-          onRefresh: () async {
-            await controller.reloadData();
-          },
+          onRefresh: controller.onRefresh,
         ),
         SliverSafeArea(
           top: false,

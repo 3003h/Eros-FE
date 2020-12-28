@@ -76,9 +76,7 @@ class FavoriteTab extends GetView<FavoriteViewController> {
           ),
         ),
         CupertinoSliverRefreshControl(
-          onRefresh: () async {
-            await controller.reloadData();
-          },
+          onRefresh: controller.onRefresh,
         ),
         SliverSafeArea(
           top: false,

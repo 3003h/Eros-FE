@@ -100,6 +100,11 @@ class FavoriteViewController extends GetxController
     }
   }
 
+  Future<void> onRefresh() async {
+    change(state, status: RxStatus.success());
+    await reloadData();
+  }
+
   Future<void> loadFromPage(int page, {bool cleanSearch = false}) async {
     logger.v('jump to page =>  $page');
 
