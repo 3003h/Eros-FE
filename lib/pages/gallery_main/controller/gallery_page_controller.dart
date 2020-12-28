@@ -1,8 +1,6 @@
 import 'package:dio/dio.dart';
-import 'package:dio_http_cache/dio_http_cache.dart' as dio_cache;
 import 'package:fehviewer/common/controller/history_controller.dart';
 import 'package:fehviewer/common/controller/localfav_controller.dart';
-import 'package:fehviewer/common/global.dart';
 import 'package:fehviewer/common/service/depth_service.dart';
 import 'package:fehviewer/common/service/ehconfig_service.dart';
 import 'package:fehviewer/models/index.dart';
@@ -38,6 +36,8 @@ class GalleryPageController extends GetxController
 
   // 画廊gid 唯一
   String gid;
+
+  bool isRefresh = false;
 
   GalleryItemController _itemController;
 
@@ -224,9 +224,7 @@ class GalleryPageController extends GetxController
   }
 
   Future<void> _reloadData() async {
-    dio_cache.DioCacheManager(
-            dio_cache.CacheConfig(databasePath: Global.appSupportPath))
-        .delete(galleryItem.url);
+    isRefresh = true;
     await _loadData(refresh: true, showError: false);
   }
 
@@ -297,6 +295,7 @@ class GalleryPageController extends GetxController
         galleryItem.url,
         page: currentPreviewPage,
         cancelToken: cancelToken,
+        refresh: isRefresh,
       );
 
       previews.addAll(_moreGalleryPreviewList);
@@ -353,6 +352,7 @@ class GalleryPageController extends GetxController
         galleryItem.url,
         page: currentPreviewPage,
         cancelToken: cancelToken,
+        refresh: isRefresh,
       );
 
       // 避免重复添加
@@ -383,6 +383,7 @@ class GalleryPageController extends GetxController
           galleryItem.url,
           page: currentPreviewPage + 1,
           cancelToken: cancelToken,
+          refresh: isRefresh,
         );
 
         // 避免重复添加
