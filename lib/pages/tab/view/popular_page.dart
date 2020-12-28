@@ -24,9 +24,7 @@ class PopularListTab extends GetView<PopularViewController> {
           largeTitle: Text(_title),
         ),
         CupertinoSliverRefreshControl(
-          onRefresh: () async {
-            await controller.reloadData();
-          },
+          onRefresh: controller.onRefresh,
         ),
         SliverSafeArea(
           top: false,

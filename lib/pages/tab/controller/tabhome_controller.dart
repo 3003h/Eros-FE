@@ -10,7 +10,6 @@ import 'package:get/get.dart';
 
 import '../view/favorite_page.dart';
 import '../view/gallery_page.dart';
-import '../view/history_page.dart';
 import '../view/popular_page.dart';
 import '../view/setting_page.dart';
 
@@ -80,15 +79,15 @@ class TabHomeController extends GetxController {
           scrollController: _getScrollController(S.of(context).tab_favorite),
         )
       },
-      {
-        'title': S.of(context).tab_history,
-        'icon': const Icon(FontAwesomeIcons.history, size: _iconSize),
-        'disable': _ehConfigService.isSafeMode.value,
-        'page': HistoryTab(
-          tabIndex: S.of(context).tab_history,
-          scrollController: _getScrollController(S.of(context).tab_history),
-        )
-      },
+      // {
+      //   'title': S.of(context).tab_history,
+      //   'icon': const Icon(FontAwesomeIcons.history, size: _iconSize),
+      //   'disable': _ehConfigService.isSafeMode.value,
+      //   'page': HistoryTab(
+      //     tabIndex: S.of(context).tab_history,
+      //     scrollController: _getScrollController(S.of(context).tab_history),
+      //   )
+      // },
       {
         'title': S.of(context).tab_setting,
         'icon': const Icon(FontAwesomeIcons.cog, size: _iconSize),

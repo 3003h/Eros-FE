@@ -36,8 +36,14 @@ class PopularViewController extends GetxController
   }
 
   Future<void> reloadData() async {
+    //
     final List<GalleryItem> gallerItemBeans = await loadData(refresh: true);
     change(gallerItemBeans);
+  }
+
+  Future<void> onRefresh() async {
+    change(state, status: RxStatus.success());
+    await reloadData();
   }
 
   Future<void> reLoadDataFirst() async {

@@ -1,6 +1,8 @@
 import 'package:dio/dio.dart';
+import 'package:dio_http_cache/dio_http_cache.dart' as dio_cache;
 import 'package:fehviewer/common/controller/history_controller.dart';
 import 'package:fehviewer/common/controller/localfav_controller.dart';
+import 'package:fehviewer/common/global.dart';
 import 'package:fehviewer/common/service/depth_service.dart';
 import 'package:fehviewer/common/service/ehconfig_service.dart';
 import 'package:fehviewer/models/index.dart';
@@ -222,6 +224,9 @@ class GalleryPageController extends GetxController
   }
 
   Future<void> _reloadData() async {
+    dio_cache.DioCacheManager(
+            dio_cache.CacheConfig(databasePath: Global.appSupportPath))
+        .delete(galleryItem.url);
     await _loadData(refresh: true, showError: false);
   }
 

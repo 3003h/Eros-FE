@@ -76,7 +76,13 @@ class GalleryViewController extends GetxController
     change(tuple.item1);
   }
 
+  Future<void> onRefresh() async {
+    change(state, status: RxStatus.success());
+    await reloadData();
+  }
+
   Future<void> reLoadDataFirst() async {
+    change(null, status: RxStatus.loading());
     onInit();
   }
 

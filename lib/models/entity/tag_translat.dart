@@ -1,19 +1,18 @@
-final String dbname = 'eh_database.db';
-final String tableTag = 'tag_translat';
-final String columnNamespace = 'namespace';
-final String columnKey = 'key';
-final String columnName = 'name';
-final String columnIntro = 'intro';
-final String columnLinks = 'links';
+const String dbname = 'eh_database.db';
+const String tableTag = 'tag_translat';
+const String columnNamespace = 'namespace';
+const String columnKey = 'key';
+const String columnName = 'name';
+const String columnIntro = 'intro';
+const String columnLinks = 'links';
 
 class TagTranslat {
+  TagTranslat(this.namespace, this.key, this.name, {this.intro, this.links});
   String namespace;
   String key;
   String name;
   String intro;
   String links;
-
-  TagTranslat(this.namespace, this.key, this.name, {this.intro, this.links});
 
   Map<String, dynamic> toMap() {
     return {
