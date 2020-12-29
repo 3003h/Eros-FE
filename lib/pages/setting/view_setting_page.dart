@@ -1,5 +1,4 @@
 import 'package:enum_to_string/enum_to_string.dart';
-import 'package:fehviewer/common/global.dart';
 import 'package:fehviewer/common/service/ehconfig_service.dart';
 import 'package:fehviewer/common/service/theme_service.dart';
 import 'package:fehviewer/const/const.dart';
@@ -58,7 +57,7 @@ Widget _buildViewModeItem(BuildContext context) {
   final Map<ViewMode, String> modeMap = <ViewMode, String>{
     ViewMode.horizontalLeft: '由左到右',
     ViewMode.horizontalRight: '由右到左',
-    if (Global.inDebugMode) ViewMode.vertical: '由上到下',
+    ViewMode.vertical: '由上到下',
   };
 
   List<Widget> _getModeList() {
