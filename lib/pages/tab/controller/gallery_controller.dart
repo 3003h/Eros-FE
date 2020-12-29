@@ -19,7 +19,9 @@ class GalleryViewController extends GetxController
   RxInt curPage = 0.obs;
   int maxPage = 0;
 
-  RxBool isLoadMore = false.obs;
+  final RxBool _isLoadMore = false.obs;
+  bool get isLoadMore => _isLoadMore.value;
+  set isLoadMore(bool val) => _isLoadMore.value = val;
 
   final EhConfigService ehConfigService = Get.find();
 
@@ -87,7 +89,7 @@ class GalleryViewController extends GetxController
   }
 
   Future<void> loadDataMore() async {
-    if (isLoadMore.value) {
+    if (isLoadMore) {
       return;
     }
 
@@ -96,7 +98,7 @@ class GalleryViewController extends GetxController
     // 增加延时 避免build期间进行 setState
     await Future<void>.delayed(const Duration(milliseconds: 100));
 
-    isLoadMore.value = true;
+    isLoadMore = true;
 
     logger.d('${state.length}');
 
@@ -108,18 +110,18 @@ class GalleryViewController extends GetxController
       refresh: true,
     );
     curPage += 1;
-    final List<GalleryItem> gallerItemBeans = tuple.item1;
+    final List<GalleryItem> galleryItemBeans = tuple.item1;
 
-    if (gallerItemBeans.isNotEmpty &&
+    if (galleryItemBeans.isNotEmpty &&
         state.indexWhere((GalleryItem element) =>
-                element.gid == gallerItemBeans.first.gid) ==
+                element.gid == galleryItemBeans.first.gid) ==
             -1) {
-      state.addAll(gallerItemBeans);
+      state.addAll(galleryItemBeans);
 
       logger.d('${state.length}');
       maxPage = tuple.item2;
     }
-    isLoadMore.value = false;
+    isLoadMore = false;
     update();
   }
 

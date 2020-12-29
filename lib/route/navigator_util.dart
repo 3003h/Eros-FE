@@ -3,10 +3,11 @@ import 'package:fehviewer/models/galleryComment.dart';
 import 'package:fehviewer/models/index.dart';
 import 'package:fehviewer/pages/gallery_main/controller/gallery_page_controller.dart';
 import 'package:fehviewer/pages/gallery_main/view/comment_page.dart';
-import 'package:fehviewer/pages/gallery_main/view/main_page.dart';
+import 'package:fehviewer/pages/gallery_main/view/gallery_page.dart';
 import 'package:fehviewer/pages/gallery_view/controller/view_controller.dart';
-import 'package:fehviewer/pages/gallery_view/view/gallery_view_page.dart';
+import 'package:fehviewer/pages/gallery_view/view/view_page.dart';
 import 'package:fehviewer/pages/tab/controller/gallery_controller.dart';
+import 'package:fehviewer/pages/tab/controller/search_page_controller.dart';
 import 'package:fehviewer/pages/tab/view/gallery_page.dart';
 import 'package:fehviewer/pages/tab/view/search_page.dart';
 import 'package:fehviewer/utils/logger.dart';
@@ -26,8 +27,12 @@ class NavigatorUtil {
   static void goGalleryListBySearch({
     String simpleSearch,
   }) {
-    Get.to(GallerySearchPage(searchText: simpleSearch),
-        transition: Transition.cupertino);
+    Get.to(GallerySearchPage(), transition: Transition.cupertino,
+        binding: BindingsBuilder(() {
+      Get.put(
+        SearchPageController.fromText(simpleSearch),
+      );
+    }));
   }
 
   /// 转到画廊页面
@@ -107,7 +112,12 @@ class NavigatorUtil {
   }
 
   static void showSearch() {
-    Get.to(const GallerySearchPage(), transition: Transition.cupertino);
+    Get.to(GallerySearchPage(), transition: Transition.cupertino,
+        binding: BindingsBuilder(() {
+      Get.put(
+        SearchPageController(),
+      );
+    }));
   }
 
   /// 转到画廊评论页面

@@ -82,16 +82,7 @@ class FavoriteTab extends GetView<FavoriteViewController> {
           top: false,
           sliver: _getGalleryList(),
         ),
-        SliverToBoxAdapter(
-          child: Obx(() => Container(
-                padding: const EdgeInsets.only(bottom: 150),
-                child: controller.isLoadMore.value
-                    ? const CupertinoActivityIndicator(
-                        radius: 14,
-                      )
-                    : Container(),
-              )),
-        ),
+        _endIndicator(),
       ],
     );
   }
@@ -112,17 +103,21 @@ class FavoriteTab extends GetView<FavoriteViewController> {
         top: false,
         sliver: _getGalleryList(),
       ),
-      SliverToBoxAdapter(
-        child: Container(
-          padding: const EdgeInsets.only(bottom: 150),
-          child: controller.isLoadMore.value
-              ? const CupertinoActivityIndicator(
-                  radius: 14,
-                )
-              : Container(),
-        ),
-      ),
+      _endIndicator(),
     ]);
+  }
+
+  Widget _endIndicator() {
+    return SliverToBoxAdapter(
+      child: Obx(() => Container(
+            padding: const EdgeInsets.only(top: 50, bottom: 100),
+            child: controller.isLoadMore
+                ? const CupertinoActivityIndicator(
+                    radius: 14,
+                  )
+                : Container(),
+          )),
+    );
   }
 
   Widget _getGalleryList() {

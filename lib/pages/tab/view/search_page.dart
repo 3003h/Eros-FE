@@ -1,10 +1,7 @@
-import 'package:fehviewer/common/controller/quicksearch_controller.dart';
-import 'package:fehviewer/common/service/ehconfig_service.dart';
 import 'package:fehviewer/generated/l10n.dart';
 import 'package:fehviewer/models/index.dart';
-import 'package:fehviewer/network/gallery_request.dart';
+import 'package:fehviewer/pages/tab/controller/search_page_controller.dart';
 import 'package:fehviewer/pages/tab/view/gallery_base.dart';
-import 'package:fehviewer/pages/tab/view/search_text_page.dart';
 import 'package:fehviewer/pages/tab/view/tab_base.dart';
 import 'package:fehviewer/utils/cust_lib/popup_menu.dart';
 import 'package:fehviewer/utils/logger.dart';
@@ -13,7 +10,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
-import 'package:tuple/tuple.dart';
 
 enum SearchMenuEnum {
   filter,
@@ -21,81 +17,7 @@ enum SearchMenuEnum {
   addToQuickSearch,
 }
 
-class GallerySearchPage extends StatefulWidget {
-  const GallerySearchPage({Key key, this.searchText}) : super(key: key);
-  final String searchText;
-
-  @override
-  _GallerySearchPageState createState() => _GallerySearchPageState();
-}
-
-class _GallerySearchPageState extends State<GallerySearchPage>
-    with SingleTickerProviderStateMixin {
-  final String _index = 'search_idx';
-
-  final GlobalKey _searchMenukey = GlobalKey();
-
-  // 搜索内容的控制器
-  final TextEditingController _searchTextController = TextEditingController();
-
-  int _curPage = 0;
-  int _maxPage = 0;
-  bool _isLoadMore = false;
-  bool _firstLoading = false;
-  final List<GalleryItem> _gallerItemBeans = <GalleryItem>[];
-  String _search = '';
-
-  DateTime _lastInputCompleteAt; //上次输入完成时间
-  String _lastSearchText;
-
-  bool _autofocus;
-
-  final EhConfigService ehConfigService = Get.find();
-  final QuickSearchController quickSearchController = Get.find();
-
-  void _jumpSearch() {
-    final String _searchText = _searchTextController.text.trim();
-    final int _catNum = ehConfigService.catFilter.value;
-    if (_searchText.isNotEmpty) {
-      // FocusScope.of(context).requestFocus(FocusNode());
-      _search = _searchText;
-      _loadData(refresh: true);
-    } else {
-      setState(() {
-        _gallerItemBeans.clear();
-      });
-    }
-  }
-
-  Future<void> _delayedSearch() async {
-    const Duration _duration = Duration(milliseconds: 800);
-    _lastInputCompleteAt = DateTime.now();
-    await Future<void>.delayed(_duration);
-    if (_lastSearchText != _searchTextController.text &&
-        DateTime.now().difference(_lastInputCompleteAt) >= _duration) {
-      _lastSearchText = _searchTextController.text;
-      _jumpSearch();
-    }
-  }
-
-  @override
-  void initState() {
-    super.initState();
-    _searchTextController.addListener(_delayedSearch);
-    if (widget.searchText != null && widget.searchText.trim().isNotEmpty) {
-      _searchTextController.text = widget.searchText.trim();
-      _autofocus = false;
-    } else {
-      _autofocus = true;
-    }
-  }
-
-  @override
-  void dispose() {
-    super.dispose();
-    _searchTextController.dispose();
-  }
-
+class GallerySearchPage extends GetView<SearchPageController> {
   @override
   Widget build(BuildContext context) {
     const BorderSide _kDefaultRoundedBorderSide = BorderSide(
@@ -134,13 +56,10 @@ class _GallerySearchPageState extends State<GallerySearchPage>
           ),
           clearButtonMode: OverlayVisibilityMode.editing,
           padding: const EdgeInsets.fromLTRB(12, 6, 6, 6),
-          controller: _searchTextController,
-          autofocus: _autofocus,
+          controller: controller.searchTextController,
+          autofocus: controller.autofocus,
           textInputAction: TextInputAction.search,
-          onEditingComplete: () {
-            // 点击键盘完成
-            _jumpSearch();
-          },
+          onEditingComplete: controller.onEditingComplete,
         ),
         transitionBetweenRoutes: false,
         leading: Container(
@@ -163,39 +82,65 @@ class _GallerySearchPageState extends State<GallerySearchPage>
             SliverSafeArea(
               // top: false,
               // bottom: false,
-              sliver: _firstLoading
-                  ? SliverFillRemaining(
-                      child: Container(
-                        padding: const EdgeInsets.only(bottom: 50),
-                        child: const CupertinoActivityIndicator(
-                          radius: 14.0,
-                        ),
-                      ),
-                    )
-                  : getGalleryList(
-                      _gallerItemBeans,
-                      _index,
-                      maxPage: _maxPage,
-                      curPage: _curPage,
-                      loadMord: _loadDataMore,
-                    ),
+              sliver: _getGalleryList(),
             ),
-            SliverToBoxAdapter(
-              child: Container(
-                padding: const EdgeInsets.only(top: 50, bottom: 100),
-                child: _isLoadMore
-                    ? const CupertinoActivityIndicator(
-                        radius: 14,
-                      )
-                    : Container(),
-              ),
-            ),
+            _endIndicator(),
           ],
         ),
       ),
     );
 
     return cfp;
+  }
+
+  Widget _endIndicator() {
+    return SliverToBoxAdapter(
+      child: Obx(() => Container(
+            padding: const EdgeInsets.only(top: 50, bottom: 100),
+            child: controller.isLoadMore
+                ? const CupertinoActivityIndicator(
+                    radius: 14,
+                  )
+                : Container(),
+          )),
+    );
+  }
+
+  Widget _getGalleryList() {
+    return controller.obx(
+      (List<GalleryItem> state) {
+        return getGalleryList(
+          state,
+          controller.tabIndex,
+          maxPage: controller.maxPage,
+          curPage: controller.curPage,
+          loadMord: controller.loadDataMore,
+        );
+      },
+      onLoading: SliverFillRemaining(
+        child: Container(
+          alignment: Alignment.center,
+          padding: const EdgeInsets.only(bottom: 50),
+          child: const CupertinoActivityIndicator(
+            radius: 14.0,
+          ),
+        ),
+      ),
+      onError: (err) {
+        logger.e(' $err');
+        return SliverFillRemaining(
+          child: Container(
+            padding: const EdgeInsets.only(bottom: 50),
+            child: GalleryErrorPage(
+              onTap: controller.refresh,
+            ),
+          ),
+        );
+      },
+      onEmpty: SliverFillRemaining(
+        child: Container(),
+      ),
+    );
   }
 
   Widget _buildTrailing(BuildContext context) {
@@ -245,16 +190,10 @@ class _GallerySearchPageState extends State<GallerySearchPage>
             showFilterSetting();
             break;
           case SearchMenuEnum.addToQuickSearch:
-            final String _text = _searchTextController.text;
-            if (_text.isNotEmpty) {
-              quickSearchController.addText(_text);
-            }
+            controller.addToQuickSearch();
             break;
           case SearchMenuEnum.quickSearchList:
-            Get.to<String>(
-              SearchQuickListPage(),
-              transition: Transition.cupertino,
-            ).then((String value) => _searchTextController.text = value);
+            controller.quickSearchList();
             break;
         }
       },
@@ -263,7 +202,7 @@ class _GallerySearchPageState extends State<GallerySearchPage>
     Widget _buildListBtns() {
       return GestureDetector(
         onLongPress: () {
-          ehConfigService.isSearchBarComp.value = true;
+          controller.isSearchBarComp = true;
           VibrateUtil.heavy();
         },
         child: Container(
@@ -298,10 +237,7 @@ class _GallerySearchPageState extends State<GallerySearchPage>
                   size: 20,
                 ),
                 onPressed: () {
-                  final String _text = _searchTextController.text;
-                  if (_text.isNotEmpty) {
-                    quickSearchController.addText(_text);
-                  }
+                  controller.addToQuickSearch();
                 },
               ),
               CupertinoButton(
@@ -312,8 +248,7 @@ class _GallerySearchPageState extends State<GallerySearchPage>
                   size: 20,
                 ),
                 onPressed: () {
-                  Get.to<String>(SearchQuickListPage()).then(
-                      (String value) => _searchTextController.text = value);
+                  controller.quickSearchList();
                 },
               ),
             ],
@@ -325,7 +260,7 @@ class _GallerySearchPageState extends State<GallerySearchPage>
     Widget _buildPopMenuBtn() {
       return GestureDetector(
         onLongPress: () {
-          ehConfigService.isSearchBarComp.value = false;
+          controller.isSearchBarComp = false;
           VibrateUtil.heavy();
         },
         child: Container(
@@ -342,7 +277,7 @@ class _GallerySearchPageState extends State<GallerySearchPage>
                 },
               ),
               CupertinoButton(
-                key: _searchMenukey,
+                key: controller.searchMenukey,
                 minSize: 40,
                 padding: const EdgeInsets.only(right: 4),
                 child: const Icon(
@@ -350,7 +285,7 @@ class _GallerySearchPageState extends State<GallerySearchPage>
                   size: 20,
                 ),
                 onPressed: () {
-                  _menu.show(widgetKey: _searchMenukey);
+                  _menu.show(widgetKey: controller.searchMenukey);
                 },
               ),
             ],
@@ -368,63 +303,10 @@ class _GallerySearchPageState extends State<GallerySearchPage>
       } else {
         return AnimatedSwitcher(
             duration: const Duration(milliseconds: 0),
-            child: ehConfigService.isSearchBarComp.value
+            child: controller.isSearchBarComp
                 ? Container(key: UniqueKey(), child: _buildPopMenuBtn())
                 : Container(key: UniqueKey(), child: _buildListBtns()));
       }
-    });
-  }
-
-  Future<void> _loadDataMore({bool cleanSearch = false}) async {
-    if (_isLoadMore) {
-      return;
-    }
-
-    if (cleanSearch) {
-      _search = '';
-    }
-
-    final int _catNum = ehConfigService.catFilter.value;
-
-    // 增加延时 避免build期间进行 setState
-    await Future<void>.delayed(const Duration(milliseconds: 100));
-    setState(() {
-      _isLoadMore = true;
-    });
-    _curPage += 1;
-    final String fromGid = _gallerItemBeans.last.gid;
-    final Tuple2<List<GalleryItem>, int> tuple = await Api.getGallery(
-      page: _curPage,
-      fromGid: fromGid,
-      cats: _catNum,
-      serach: _search,
-      refresh: true,
-    );
-    final List<GalleryItem> gallerItemBeans = tuple.item1;
-
-    setState(() {
-      _gallerItemBeans.addAll(gallerItemBeans);
-      _maxPage = tuple.item2;
-      _isLoadMore = false;
-    });
-  }
-
-  Future<void> _loadData({bool refresh = false}) async {
-    final int _catNum = ehConfigService.catFilter.value;
-
-    loggerNoStack.v('_loadDataFirst');
-    setState(() {
-      _gallerItemBeans.clear();
-      _firstLoading = true;
-    });
-
-    final Tuple2<List<GalleryItem>, int> tuple =
-        await Api.getGallery(cats: _catNum, serach: _search, refresh: refresh);
-    final List<GalleryItem> gallerItemBeans = tuple.item1;
-    _gallerItemBeans.addAll(gallerItemBeans);
-    _maxPage = tuple.item2;
-    setState(() {
-      _firstLoading = false;
     });
   }
 }

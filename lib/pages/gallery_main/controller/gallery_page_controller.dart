@@ -6,7 +6,7 @@ import 'package:fehviewer/common/service/ehconfig_service.dart';
 import 'package:fehviewer/models/index.dart';
 import 'package:fehviewer/network/gallery_request.dart';
 import 'package:fehviewer/pages/gallery_view/controller/view_controller.dart';
-import 'package:fehviewer/pages/gallery_view/view/gallery_view_base.dart';
+import 'package:fehviewer/pages/gallery_view/view/common.dart';
 import 'package:fehviewer/pages/item/controller/galleryitem_controller.dart';
 import 'package:fehviewer/utils/logger.dart';
 import 'package:fehviewer/utils/toast.dart';
@@ -421,6 +421,7 @@ class GalleryPageController extends GetxController
     try {
       final GalleryPreview _curPreview = galleryItem.galleryPreview[index];
       final String _largeImageUrl = _curPreview.largeImageUrl;
+
       if (_largeImageUrl != null &&
           _largeImageUrl.isNotEmpty &&
           _curPreview.largeImageHeight != null &&

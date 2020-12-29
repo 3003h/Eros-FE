@@ -4,7 +4,6 @@ import 'package:fehviewer/common/service/ehconfig_service.dart';
 import 'package:fehviewer/const/theme_colors.dart';
 import 'package:fehviewer/models/index.dart';
 import 'package:fehviewer/pages/item/controller/galleryitem_controller.dart';
-import 'package:fehviewer/route/navigator_util.dart';
 import 'package:fehviewer/utils/utility.dart';
 import 'package:fehviewer/widget/blur_image.dart';
 import 'package:fehviewer/widget/rating_bar.dart';
@@ -22,6 +21,7 @@ class GalleryItemWidget extends StatelessWidget {
   GalleryItemWidget({@required this.galleryItem, @required this.tabIndex})
       : _galleryItemController = Get.put(
             GalleryItemController.initData(galleryItem, tabIndex: tabIndex),
+            permanent: true,
             tag: galleryItem.gid);
 
   final GalleryItem galleryItem;
@@ -34,26 +34,17 @@ class GalleryItemWidget extends StatelessWidget {
     Get.put<GalleryItemController>(Get.find(tag: galleryItem.gid));
     return GestureDetector(
       child: _buildItem(),
-      // 不可见区域点击有效
       behavior: HitTestBehavior.opaque,
-      onTap: () {
-        NavigatorUtil.goGalleryPage(
-            galleryItem: galleryItem, tabIndex: tabIndex);
-      },
-      // onLongPress: () {},
-      onTapDown: (_) => _galleryItemController.updatePressedColor(),
-      onTapUp: (_) {
-        Future.delayed(const Duration(milliseconds: 150), () {
-          _galleryItemController.updateNormalColor();
-        });
-      },
-      onTapCancel: () => _galleryItemController.updateNormalColor(),
+      onTap: _galleryItemController.onTap,
+      onTapDown: _galleryItemController.onTapDown,
+      onTapUp: _galleryItemController.onTapUp,
+      onTapCancel: _galleryItemController.onTapCancel,
     );
   }
 
   Widget _buildItem() {
     return Obx(() => Column(
-          children: [
+          children: <Widget>[
             Container(
               color: _galleryItemController.colorTap.value,
               padding: const EdgeInsets.fromLTRB(kPaddingLeft, 8, 8, 8),

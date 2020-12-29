@@ -232,42 +232,25 @@ class GalleryViewPage extends GetView<ViewController> {
       childrenDelegate: ViewChildBuilderDelegate(
         (BuildContext context, int index) {
           return ConstrainedBox(
-            constraints: const BoxConstraints(
-              minWidth: double.infinity, //宽度尽可能大
-              minHeight: 200.0, //最小高度
+            constraints: BoxConstraints(
+              minWidth: context.width,
             ),
-            child: FutureBuilder<GalleryPreview>(
-                future: controller.getImageInfo(),
-                builder: (BuildContext context,
-                    AsyncSnapshot<GalleryPreview> snapshot) {
-                  if (snapshot.connectionState == ConnectionState.done) {
-                    if (snapshot.hasError) {
-                      return Container();
-                    } else {
-                      logger.d(
-                          ' h: ${snapshot.data.largeImageHeight}  w: ${snapshot.data.largeImageWidth}  ${snapshot.data.largeImageWidth / controller.screensize.width}');
-                      return Container(
-                          // height: snapshot.data.largeImageHeight *
-                          //     (snapshot.data.largeImageWidth /
-                          //         _screensize.width),
-                          // width: _screensize.width,
-                          height: snapshot.data.largeImageHeight /
-                              (snapshot.data.largeImageWidth /
-                                  controller.screensize.width),
-                          // width: snapshot.data.largeImageWidth,
-                          child: GalleryImage(
-                            index: index,
-                          ));
-                    }
-                  } else {
-                    return Container(
-                      alignment: Alignment.center,
-                      child: const CupertinoActivityIndicator(
-                        radius: 20,
-                      ),
-                    );
-                  }
-                }),
+            child: Container(
+              // color: Colors.grey,
+              height: () {
+                try {
+                  return controller.previews[index].largeImageHeight *
+                      (context.width /
+                          controller.previews[index].largeImageWidth);
+                } catch (e) {
+                  return null;
+                }
+              }(),
+              width: context.width,
+              child: GalleryImage(
+                index: index,
+              ),
+            ),
           );
         },
         childCount: controller.previews.length,

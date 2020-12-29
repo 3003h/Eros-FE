@@ -20,6 +20,7 @@ class GalleryItemFlow extends StatelessWidget {
   GalleryItemFlow({Key key, @required this.tabIndex, this.galleryItem})
       : _galleryItemController = Get.put(
             GalleryItemController.initData(galleryItem, tabIndex: tabIndex),
+            permanent: true,
             tag: galleryItem.gid),
         super(key: key);
 

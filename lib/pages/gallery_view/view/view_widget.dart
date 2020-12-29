@@ -64,29 +64,33 @@ class _GalleryImageState extends State<GalleryImage> {
               return Center(child: Text('Error: ${previewFromApi.error}'));
             } else {
               _currentPreview.largeImageUrl = previewFromApi.data.largeImageUrl;
+              _currentPreview.largeImageHeight =
+                  previewFromApi.data.largeImageHeight;
+              _currentPreview.largeImageWidth =
+                  previewFromApi.data.largeImageWidth;
               return _buildImage(_currentPreview.largeImageUrl);
             }
           } else {
-            return Center(
-              child: Container(
-                height: 100,
-                child: Column(
-                  children: <Widget>[
-                    Text(
-                      '${widget.index + 1}',
-                      style: const TextStyle(
-                        fontSize: 50,
-                        color: CupertinoColors.systemGrey6,
-                      ),
+            return Container(
+              height: 100,
+              margin: const EdgeInsets.all(30.0),
+              alignment: Alignment.center,
+              child: Column(
+                children: <Widget>[
+                  Text(
+                    '${widget.index + 1}',
+                    style: const TextStyle(
+                      fontSize: 50,
+                      color: CupertinoColors.systemGrey6,
                     ),
-                    const Text(
-                      '获取中...',
-                      style: TextStyle(
-                        color: CupertinoColors.systemGrey6,
-                      ),
+                  ),
+                  const Text(
+                    '获取中...',
+                    style: TextStyle(
+                      color: CupertinoColors.systemGrey6,
                     ),
-                  ],
-                ),
+                  ),
+                ],
               ),
             );
           }
@@ -117,7 +121,9 @@ class _GalleryImageState extends State<GalleryImage> {
               fadeOutDuration: const Duration(milliseconds: 0),
               progressIndicatorBuilder: (context, url, downloadProgress) {
                 // 下载进度回调
-                return Center(
+                return Container(
+                  margin: const EdgeInsets.all(20.0),
+                  alignment: Alignment.center,
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: <Widget>[

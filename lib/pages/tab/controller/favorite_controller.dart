@@ -13,11 +13,13 @@ import 'package:tuple/tuple.dart';
 class FavoriteViewController extends GetxController
     with StateMixin<List<GalleryItem>> {
   RxString title = ''.obs;
-  List<GalleryItem> galleryItemBeans = [];
   String curFavcat = '';
   RxInt curPage = 0.obs;
   int maxPage = 0;
-  RxBool isLoadMore = false.obs;
+
+  final RxBool _isLoadMore = false.obs;
+  bool get isLoadMore => _isLoadMore.value;
+  set isLoadMore(bool val) => _isLoadMore.value = val;
 
   bool enableDelayedLoad = true;
 
@@ -116,22 +118,25 @@ class FavoriteViewController extends GetxController
   }
 
   Future<void> loadDataMore() async {
-    if (isLoadMore.value) {
+    if (isLoadMore) {
       return;
     }
 
     // 增加延时 避免build期间进行 setState
     await Future<void>.delayed(const Duration(milliseconds: 100));
-    isLoadMore.value = true;
+    isLoadMore = true;
 
+    logger.d('get add list');
     final Tuple2<List<GalleryItem>, int> tuple = await Api.getFavorite(
       favcat: curFavcat,
       page: curPage.value + 1,
       refresh: true,
     );
     curPage += 1;
-    final List<GalleryItem> gallerItemBeans = tuple.item1;
-    state.addAll(gallerItemBeans);
+    final List<GalleryItem> galleryItemBeans = tuple.item1;
+    logger.d('from $curPage add ${galleryItemBeans.length}');
+    state.addAll(galleryItemBeans);
+    isLoadMore = false;
     update();
   }
 
