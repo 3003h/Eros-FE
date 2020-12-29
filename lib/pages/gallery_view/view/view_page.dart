@@ -1,3 +1,4 @@
+import 'package:fehviewer/common/global.dart';
 import 'package:fehviewer/const/const.dart';
 import 'package:fehviewer/models/index.dart';
 import 'package:fehviewer/pages/gallery_view/view/view_widget.dart';
@@ -11,6 +12,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
 import 'package:photo_view/photo_view.dart';
 import 'package:photo_view/photo_view_gallery.dart';
+import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
 
 import '../controller/view_controller.dart';
 
@@ -94,6 +96,8 @@ class GalleryViewPage extends GetView<ViewController> {
   /// 不同阅读方向不同布局
   Widget _buildView() {
     return Obx(() {
+      logger.d('rebuildView index ${controller.currentIndex}');
+      controller.checkViewModel();
       switch (controller.viewMode) {
         case ViewMode.vertical:
           return _buildListView();
@@ -119,12 +123,7 @@ class GalleryViewPage extends GetView<ViewController> {
           alignment: Alignment.center,
           children: <Widget>[
             // 页码提示
-            Text(
-              '${controller.currentIndex + 1}/${controller.filecount}',
-              style: const TextStyle(
-                color: CupertinoColors.systemGrey6,
-              ),
-            ),
+            _buildPageText(),
             Row(
               crossAxisAlignment: CrossAxisAlignment.center,
               mainAxisAlignment: MainAxisAlignment.center,
@@ -168,6 +167,31 @@ class GalleryViewPage extends GetView<ViewController> {
             ),
           ],
         ));
+  }
+
+  Widget _buildPageText() {
+    if (controller.viewMode != ViewMode.vertical) {
+      return Text(
+        '${controller.currentIndex + 1}/${controller.filecount}',
+        style: const TextStyle(
+          color: CupertinoColors.systemGrey6,
+        ),
+      );
+    } else {
+      return ValueListenableBuilder<Iterable<ItemPosition>>(
+        valueListenable: controller.itemPositionsListener.itemPositions,
+        builder: (_, Iterable<ItemPosition> positions, __) {
+          controller.handItemPositionsChange(positions);
+
+          return Text(
+            '${controller.currentIndex + 1}/${controller.filecount}',
+            style: const TextStyle(
+              color: CupertinoColors.systemGrey6,
+            ),
+          );
+        },
+      );
+    }
   }
 
   /// 底栏
@@ -226,8 +250,8 @@ class GalleryViewPage extends GetView<ViewController> {
     );
   }
 
-  // TODO(honjow): 还没有完全实现 竖直浏览布局
-  Widget _buildListView() {
+  // TODO(honjow): 竖直浏览布局
+  Widget _buildListView_old() {
     return ListView.custom(
       childrenDelegate: ViewChildBuilderDelegate(
         (BuildContext context, int index) {
@@ -235,28 +259,106 @@ class GalleryViewPage extends GetView<ViewController> {
             constraints: BoxConstraints(
               minWidth: context.width,
             ),
-            child: Container(
-              // color: Colors.grey,
-              height: () {
-                try {
-                  return controller.previews[index].largeImageHeight *
-                      (context.width /
-                          controller.previews[index].largeImageWidth);
-                } catch (e) {
-                  return null;
-                }
-              }(),
-              width: context.width,
-              child: GalleryImage(
-                index: index,
-              ),
+            child: Stack(
+              alignment: Alignment.center,
+              children: <Widget>[
+                Container(
+                  height: () {
+                    try {
+                      return controller.previews[index].largeImageHeight *
+                          (context.width /
+                              controller.previews[index].largeImageWidth);
+                    } on Exception catch (_) {
+                      logger.d('${controller.previews[index].toJson()}');
+                      return controller.previews[index].height *
+                          (context.width / controller.previews[index].width);
+                    } catch (e) {
+                      return null;
+                    }
+                  }(),
+                  width: context.width,
+                  child: GalleryImage(
+                    index: index,
+                  ),
+                ),
+                if (Global.inDebugMode)
+                  Positioned(
+                    left: 10,
+                    top: 10,
+                    child: Text(
+                      '$index',
+                      style: const TextStyle(
+                          fontSize: 50,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.white),
+                    ),
+                  ),
+              ],
             ),
           );
         },
         childCount: controller.previews.length,
+        onDidFinishLayout: controller.onDidFinishLayout,
       ),
-      cacheExtent: 0.0,
+      // cacheExtent: 0.0,
     );
+  }
+
+  Widget _buildListView() {
+    return GetBuilder<ViewController>(
+        id: '_buildPhotoViewGallery',
+        builder: (ViewController controller) {
+          return ScrollablePositionedList.builder(
+            padding: EdgeInsets.only(top: Get.context.mediaQueryPadding.top),
+            itemScrollController: controller.itemScrollController,
+            itemPositionsListener: controller.itemPositionsListener,
+            itemCount: controller.previews.length,
+            itemBuilder: (BuildContext context, int index) {
+              return ConstrainedBox(
+                constraints: BoxConstraints(
+                  minWidth: context.width,
+                ),
+                child: Stack(
+                  alignment: Alignment.center,
+                  children: <Widget>[
+                    Container(
+                      height: () {
+                        try {
+                          return controller.previews[index].largeImageHeight *
+                              (context.width /
+                                  controller.previews[index].largeImageWidth);
+                        } on Exception catch (_) {
+                          logger.d('${controller.previews[index].toJson()}');
+                          return controller.previews[index].height *
+                              (context.width /
+                                  controller.previews[index].width);
+                        } catch (e) {
+                          return null;
+                        }
+                      }(),
+                      width: context.width,
+                      child: GalleryImage(
+                        index: index,
+                      ),
+                    ),
+                    if (Global.inDebugMode)
+                      Positioned(
+                        left: 10,
+                        top: 10,
+                        child: Text(
+                          '$index',
+                          style: const TextStyle(
+                              fontSize: 50,
+                              fontWeight: FontWeight.bold,
+                              color: Colors.white),
+                        ),
+                      ),
+                  ],
+                ),
+              );
+            },
+          );
+        });
   }
 
   // todo 缩放倍数动态化?
@@ -266,7 +368,7 @@ class GalleryViewPage extends GetView<ViewController> {
 
     return GetBuilder<ViewController>(
       id: '_buildPhotoViewGallery',
-      builder: (controller) {
+      builder: (ViewController controller) {
         logger.d('lastPreviewLen ${controller.previews.length}');
         controller.lastPreviewLen = controller.previews.length;
         return PhotoViewGallery.builder(

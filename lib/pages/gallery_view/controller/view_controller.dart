@@ -12,6 +12,7 @@ import 'package:fehviewer/utils/logger.dart';
 import 'package:fehviewer/utils/utility.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
+import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
 
 const double kBottomBarHeight = 44.0;
 const double kTopBarHeight = 40.0;
@@ -93,7 +94,11 @@ class ViewController extends GetxController {
   final EhConfigService _ehConfigService = Get.find();
   final GalleryCacheController _galleryCacheController = Get.find();
   GalleryPageController _galleryPageController;
-  ViewMode get viewMode => _ehConfigService.viewMode.value;
+
+  Rx<ViewMode> get _viewMode => _ehConfigService.viewMode;
+  ViewMode get viewMode => _viewMode.value;
+
+  ViewMode lastViewMode;
 
   List<GalleryPreview> get previews => _galleryPageController.previews;
 
@@ -101,6 +106,10 @@ class ViewController extends GetxController {
 
   int get filecount =>
       int.parse(_galleryPageController.galleryItem.filecount ?? '0');
+
+  final ItemScrollController itemScrollController = ItemScrollController();
+  final ItemPositionsListener itemPositionsListener =
+      ItemPositionsListener.create();
 
   @override
   void onInit() {
@@ -112,6 +121,9 @@ class ViewController extends GetxController {
     showBar = false;
     logger.d('_index $index');
     pageController = PageController(initialPage: index, viewportFraction: 1.1);
+
+    Future.delayed(const Duration(milliseconds: 200))
+        .then((value) => itemScrollController.jumpTo(index: index));
 
     final int preload = _ehConfigService.preloadImage.value;
     if (_ehConfigService.viewMode.value != ViewMode.vertical) {
@@ -158,12 +170,19 @@ class ViewController extends GetxController {
   }*/
 
   void handOnSliderChangedEnd(double value) {
-    logger.d('to $value');
     final int _index = value.round();
+    logger.d('to index $_index');
+
     _galleryPageController.showLoadingDialog(Get.context, _index).then((_) {
       _galleryCacheController.setIndex(
           _galleryPageController.galleryItem.gid, _index);
-      pageController.jumpToPage(_index);
+      if (viewMode != ViewMode.vertical) {
+        pageController.jumpToPage(_index);
+      } else {
+        // sliderValue = currentIndex / 1.0;
+        Future.delayed(const Duration(milliseconds: 200))
+            .then((value) => itemScrollController.jumpTo(index: _index));
+      }
     });
   }
 
@@ -206,6 +225,72 @@ class ViewController extends GetxController {
         (_dy < _centRect.top || _dy > _centRect.bottom)) {
       logger.d('onPanDown hide bar');
       showBar = false;
+    }
+  }
+
+  void onDidFinishLayout(int firstIndex, int lastIndex) {
+    // logger.d('firstIndex: $firstIndex, lastIndex: $lastIndex');
+    final int index = (lastIndex + firstIndex) ~/ 2;
+    // logger.d('$index ');
+    if (index != currentIndex) {
+      Future.delayed(const Duration(milliseconds: 300)).then((value) {
+        currentIndex = index;
+        sliderValue = currentIndex / 1.0;
+        _galleryCacheController.setIndex(
+            _galleryPageController.galleryItem.gid, currentIndex);
+      });
+    }
+    // currentIndex = index;
+  }
+
+  void handItemPositionsChange(Iterable<ItemPosition> positions) {
+    int min;
+    int max;
+    if (positions.isNotEmpty) {
+      // Determine the first visible item by finding the item with the
+      // smallest trailing edge that is greater than 0.  i.e. the first
+      // item whose trailing edge in visible in the viewport.
+      min = positions
+          .where((ItemPosition position) => position.itemTrailingEdge > 0)
+          .reduce((ItemPosition min, ItemPosition position) =>
+              position.itemTrailingEdge < min.itemTrailingEdge ? position : min)
+          .index;
+      // Determine the last visible item by finding the item with the
+      // greatest leading edge that is less than 1.  i.e. the last
+      // item whose leading edge in visible in the viewport.
+      max = positions
+          .where((ItemPosition position) => position.itemLeadingEdge < 1)
+          .reduce((ItemPosition max, ItemPosition position) =>
+              position.itemLeadingEdge > max.itemLeadingEdge ? position : max)
+          .index;
+
+      final int index = (min + max) ~/ 2;
+
+      // logger.d('${positions.elementAt(index).itemLeadingEdge} ');
+      if (index != currentIndex) {
+        Future.delayed(const Duration(milliseconds: 300)).then((value) {
+          currentIndex = index;
+          sliderValue = currentIndex / 1.0;
+          _galleryCacheController.setIndex(
+              _galleryPageController.galleryItem.gid, currentIndex);
+        });
+      }
+    }
+    // logger.i('First Item: ${min ?? ''}\nLast Item: ${max ?? ''}');
+  }
+
+  void checkViewModel() {
+    if (viewMode != lastViewMode) {
+      if (viewMode == ViewMode.vertical) {
+        Future.delayed(Duration(milliseconds: 100)).then((value) {
+          itemScrollController.jumpTo(index: currentIndex);
+        });
+      } else {
+        Future.delayed(Duration(milliseconds: 100)).then((value) {
+          pageController.jumpToPage(currentIndex);
+        });
+      }
+      lastViewMode = viewMode;
     }
   }
 }

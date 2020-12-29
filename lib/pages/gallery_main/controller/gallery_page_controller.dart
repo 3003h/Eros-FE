@@ -298,9 +298,11 @@ class GalleryPageController extends GetxController
         refresh: isRefresh,
       );
 
-      previews.addAll(_moreGalleryPreviewList);
+      // previews.addAll(_moreGalleryPreviewList);
+      addAllPreview(_moreGalleryPreviewList);
     }
 
+    // 翻页加载缩略图对象
     Future<bool> _loadPriview(int index) async {
       final List<GalleryPreview> _galleryPreviewList =
           galleryItem.galleryPreview;
@@ -373,7 +375,7 @@ class GalleryPageController extends GetxController
       return;
     }
     isImageInfoGeting = true;
-    logger.d('length ${previews.length} ; index $index');
+    // logger.d('length ${previews.length} ; index $index');
 
     // todo 好像还有点问题
     if (previews.length - index < 4) {

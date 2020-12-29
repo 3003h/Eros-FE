@@ -109,6 +109,8 @@ dependencies:
   # 滑动删除
   flutter_slidable: ^0.5.7
 
+  scrollable_positioned_list: ^0.1.8
+
   dns_client: ^0.1.0+2
 
   # 震动
