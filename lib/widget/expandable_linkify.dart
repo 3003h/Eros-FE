@@ -133,7 +133,7 @@ class _ExpandableLinkifyState extends State<ExpandableLinkify> {
                   });
                 },
                 child: Container(
-                  padding: const EdgeInsets.only(top: 2),
+                  padding: const EdgeInsets.only(top: 6),
                   child: Text(_expand ? '收起' : '全文',
                       style: TextStyle(
                           fontSize: widget.style != null

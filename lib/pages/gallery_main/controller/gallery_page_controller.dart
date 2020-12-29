@@ -408,7 +408,7 @@ class GalleryPageController extends GetxController
     isImageInfoGeting = false;
   }
 
-  /// 获取当前页的图片地址
+  /// 获取当前页的图片地址 宽高信息
   Future<GalleryPreview> getImageInfo(
     int index, {
     CancelToken cancelToken,

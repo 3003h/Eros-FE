@@ -24,11 +24,6 @@ class GalleryViewPage extends GetView<ViewController> {
   Widget build(BuildContext context) {
     logger.d(' rebuild GalleryViewPage');
     controller.initSize(context);
-    return _buildPage(context);
-  }
-
-  // 页面
-  Widget _buildPage(BuildContext context) {
     return CupertinoTheme(
       data: const CupertinoThemeData(
         brightness: Brightness.dark,
@@ -96,7 +91,7 @@ class GalleryViewPage extends GetView<ViewController> {
   /// 不同阅读方向不同布局
   Widget _buildView() {
     return Obx(() {
-      logger.d('rebuildView index ${controller.currentIndex}');
+      // controller.currentIndex;
       controller.checkViewModel();
       switch (controller.viewMode) {
         case ViewMode.vertical:
@@ -290,7 +285,14 @@ class GalleryViewPage extends GetView<ViewController> {
                       style: const TextStyle(
                           fontSize: 50,
                           fontWeight: FontWeight.bold,
-                          color: Colors.white),
+                          color: Colors.white,
+                          shadows: <Shadow>[
+                            Shadow(
+                              color: Colors.black,
+                              offset: Offset(2, 2),
+                              blurRadius: 4,
+                            )
+                          ]),
                     ),
                   ),
               ],
@@ -321,26 +323,34 @@ class GalleryViewPage extends GetView<ViewController> {
                 child: Stack(
                   alignment: Alignment.center,
                   children: <Widget>[
-                    Container(
-                      height: () {
-                        try {
-                          return controller.previews[index].largeImageHeight *
-                              (context.width /
-                                  controller.previews[index].largeImageWidth);
-                        } on Exception catch (_) {
-                          logger.d('${controller.previews[index].toJson()}');
-                          return controller.previews[index].height *
-                              (context.width /
-                                  controller.previews[index].width);
-                        } catch (e) {
-                          return null;
-                        }
-                      }(),
-                      width: context.width,
-                      child: GalleryImage(
-                        index: index,
-                      ),
-                    ),
+                    GetBuilder<ViewController>(
+                        id: 'ScrollablePositionedList_$index',
+                        builder: (ViewController controller) {
+                          logger.d('build list item $index');
+                          return Container(
+                            height: () {
+                              try {
+                                return controller
+                                        .previews[index].largeImageHeight *
+                                    (context.width /
+                                        controller
+                                            .previews[index].largeImageWidth);
+                              } on Exception catch (_) {
+                                logger.d(
+                                    '${controller.previews[index].toJson()}');
+                                return controller.previews[index].height *
+                                    (context.width /
+                                        controller.previews[index].width);
+                              } catch (e) {
+                                return null;
+                              }
+                            }(),
+                            width: context.width,
+                            child: GalleryImage(
+                              index: index,
+                            ),
+                          );
+                        }),
                     if (Global.inDebugMode)
                       Positioned(
                         left: 10,
@@ -350,7 +360,14 @@ class GalleryViewPage extends GetView<ViewController> {
                           style: const TextStyle(
                               fontSize: 50,
                               fontWeight: FontWeight.bold,
-                              color: Colors.white),
+                              color: Colors.white,
+                              shadows: <Shadow>[
+                                Shadow(
+                                  color: Colors.black,
+                                  offset: Offset(2, 2),
+                                  blurRadius: 4,
+                                )
+                              ]),
                         ),
                       ),
                   ],

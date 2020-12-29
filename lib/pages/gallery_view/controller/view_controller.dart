@@ -126,8 +126,8 @@ class ViewController extends GetxController {
         .then((value) => itemScrollController.jumpTo(index: index));
 
     final int preload = _ehConfigService.preloadImage.value;
-    if (_ehConfigService.viewMode.value != ViewMode.vertical) {
-      // 预载后面5张图
+    if (viewMode != ViewMode.vertical) {
+      // 预载
       logger.v('预载后面 $preload 张图 didChangeDependencies');
       GalleryPrecache.instance.precacheImages(
         Get.context,
@@ -164,11 +164,6 @@ class ViewController extends GetxController {
     _realPaddingTop = _paddingTop;
   }
 
-  /*Future<GalleryPreview> getImageInfo() async {
-    return _galleryPageController.getImageInfo(currentIndex,
-        cancelToken: _getMoreCancelToken);
-  }*/
-
   void handOnSliderChangedEnd(double value) {
     final int _index = value.round();
     logger.d('to index $_index');
@@ -204,7 +199,8 @@ class ViewController extends GetxController {
     _galleryCacheController.setIndex(
         _galleryPageController.galleryItem.gid, currentIndex);
 
-    logger.d('${lastPreviewLen - index}');
+    logger.d(
+        'handOnPageChanged: lastPreviewLen - index = ${lastPreviewLen - index}');
     // update(['_buildPhotoViewGallery'], lastPreviewLen - index < 4);
   }
 
@@ -282,11 +278,11 @@ class ViewController extends GetxController {
   void checkViewModel() {
     if (viewMode != lastViewMode) {
       if (viewMode == ViewMode.vertical) {
-        Future.delayed(Duration(milliseconds: 100)).then((value) {
+        Future.delayed(const Duration(milliseconds: 100)).then((value) {
           itemScrollController.jumpTo(index: currentIndex);
         });
       } else {
-        Future.delayed(Duration(milliseconds: 100)).then((value) {
+        Future.delayed(const Duration(milliseconds: 100)).then((value) {
           pageController.jumpToPage(currentIndex);
         });
       }

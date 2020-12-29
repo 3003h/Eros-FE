@@ -5,6 +5,7 @@ import 'package:fehviewer/common/service/depth_service.dart';
 import 'package:fehviewer/models/index.dart';
 import 'package:fehviewer/network/gallery_request.dart';
 import 'package:fehviewer/pages/gallery_main/controller/gallery_page_controller.dart';
+import 'package:fehviewer/pages/gallery_view/controller/view_controller.dart';
 import 'package:fehviewer/utils/logger.dart';
 import 'package:fehviewer/utils/toast.dart';
 import 'package:flutter/cupertino.dart';
@@ -68,15 +69,22 @@ class _GalleryImageState extends State<GalleryImage> {
                   previewFromApi.data.largeImageHeight;
               _currentPreview.largeImageWidth =
                   previewFromApi.data.largeImageWidth;
+
+              Future.delayed(const Duration(milliseconds: 200)).then((value) {
+                Get.find<ViewController>()
+                    .update(['ScrollablePositionedList_${widget.index}']);
+              });
+
               return _buildImage(_currentPreview.largeImageUrl);
             }
           } else {
             return Container(
-              height: 100,
+              height: context.height / 4,
               margin: EdgeInsets.symmetric(
-                  vertical: context.height / 4, horizontal: context.width / 4),
+                  vertical: context.height / 6, horizontal: context.width / 6),
               alignment: Alignment.center,
               child: Column(
+                mainAxisSize: MainAxisSize.min,
                 children: <Widget>[
                   Text(
                     '${widget.index + 1}',
@@ -124,10 +132,11 @@ class _GalleryImageState extends State<GalleryImage> {
                 // 下载进度回调
                 return Container(
                   margin: EdgeInsets.symmetric(
-                      vertical: context.height / 4,
-                      horizontal: context.width / 4),
+                      vertical: context.height / 6,
+                      horizontal: context.width / 6),
                   alignment: Alignment.center,
                   child: Column(
+                    mainAxisSize: MainAxisSize.min,
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: <Widget>[
                       // CircularProgressIndicator(

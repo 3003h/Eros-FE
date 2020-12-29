@@ -306,11 +306,11 @@ class ReadButton extends StatelessWidget {
       () => CupertinoButton(
           child: Text(
             S.of(context).READ,
-            style: const TextStyle(fontSize: 15),
+            style: const TextStyle(fontSize: 15, height: 1.2),
           ),
           minSize: 20,
-          padding: const EdgeInsets.fromLTRB(15, 2.5, 15, 2.5),
-          borderRadius: BorderRadius.circular(50),
+          padding: const EdgeInsets.fromLTRB(16, 4, 16, 4),
+          borderRadius: BorderRadius.circular(20),
           color: CupertinoColors.activeBlue,
           onPressed: _pageController.enableRead ?? false
               ? () => _toViewPage(_pageController)

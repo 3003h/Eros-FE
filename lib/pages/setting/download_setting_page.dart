@@ -42,7 +42,7 @@ class ListViewDownloadSetting extends StatelessWidget {
 
 /// 预载图片数量
 Widget _buildPreloadImageItem(BuildContext context) {
-  String _title = S.of(context).preload_image;
+  final String _title = S.of(context).preload_image;
   final EhConfigService ehConfigService = Get.find();
 
   List<Widget> _getModeList(BuildContext context) {

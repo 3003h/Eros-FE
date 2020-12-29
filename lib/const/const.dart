@@ -1,4 +1,6 @@
 // 列表模式 瀑布流模式
+import 'package:fehviewer/common/global.dart';
+
 enum ListModeEnum {
   list,
   waterfall,
@@ -51,7 +53,16 @@ class EHConst {
 
   static List<int> historyMax = <int>[50, 100, 300, 0];
 
-  static List<int> preloadImage = <int>[3, 5, 7, 9, 11, 13, 17];
+  static List<int> preloadImage = <int>[
+    if (Global.inDebugMode) 0,
+    3,
+    5,
+    7,
+    9,
+    11,
+    13,
+    17,
+  ];
 
   static const Map<FavoriteOrder, String> favoriteOrder =
       <FavoriteOrder, String>{
