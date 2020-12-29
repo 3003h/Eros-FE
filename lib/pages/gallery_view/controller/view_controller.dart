@@ -7,7 +7,7 @@ import 'package:fehviewer/common/service/ehconfig_service.dart';
 import 'package:fehviewer/const/const.dart';
 import 'package:fehviewer/models/index.dart';
 import 'package:fehviewer/pages/gallery_main/controller/gallery_page_controller.dart';
-import 'package:fehviewer/pages/gallery_view/view/gallery_view_base.dart';
+import 'package:fehviewer/pages/gallery_view/view/common.dart';
 import 'package:fehviewer/utils/logger.dart';
 import 'package:fehviewer/utils/utility.dart';
 import 'package:flutter/cupertino.dart';
@@ -152,10 +152,10 @@ class ViewController extends GetxController {
     _realPaddingTop = _paddingTop;
   }
 
-  Future<GalleryPreview> getImageInfo() async {
+  /*Future<GalleryPreview> getImageInfo() async {
     return _galleryPageController.getImageInfo(currentIndex,
         cancelToken: _getMoreCancelToken);
-  }
+  }*/
 
   void handOnSliderChangedEnd(double value) {
     logger.d('to $value');

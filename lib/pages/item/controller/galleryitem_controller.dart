@@ -1,5 +1,6 @@
 import 'package:fehviewer/common/service/ehconfig_service.dart';
 import 'package:fehviewer/models/index.dart';
+import 'package:fehviewer/route/navigator_util.dart';
 import 'package:fehviewer/utils/logger.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
@@ -15,6 +16,20 @@ class GalleryItemController extends GetxController {
 
   final EhConfigService _ehConfigService = Get.find();
 
+  void onTap() {
+    logger.d('${galleryItem.englishTitle}');
+    NavigatorUtil.goGalleryPage(galleryItem: galleryItem, tabIndex: _tabindex);
+  }
+
+  void onTapDown(_) => _updatePressedColor();
+  void onTapUp(_) {
+    Future<void>.delayed(const Duration(milliseconds: 150), () {
+      _updateNormalColor();
+    });
+  }
+
+  void onTapCancel() => _updateNormalColor();
+
   @override
   void onInit() {
     super.onInit();
@@ -24,9 +39,7 @@ class GalleryItemController extends GetxController {
   }
 
   final RxBool _isFav = false.obs;
-
   bool get isFav => _isFav.value;
-
   set isFav(bool val) => _isFav.value = val;
 
   void setFavTitle(String favTitle, {String favcat}) {
@@ -56,11 +69,11 @@ class GalleryItemController extends GetxController {
 
   Rx<Color> colorTap = const Color.fromARGB(0, 0, 0, 0).obs;
 
-  void updateNormalColor() {
+  void _updateNormalColor() {
     colorTap.value = null;
   }
 
-  void updatePressedColor() {
+  void _updatePressedColor() {
     colorTap.value =
         CupertinoDynamicColor.resolve(CupertinoColors.systemGrey4, Get.context);
   }

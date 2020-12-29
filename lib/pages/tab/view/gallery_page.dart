@@ -88,23 +88,25 @@ class GalleryListTab extends GetView<GalleryViewController> {
           bottom: false,
           sliver: _getGalleryList(),
         ),
-        SliverToBoxAdapter(
-          child: GetX<GalleryViewController>(builder: (_) {
-            return Container(
-              padding: const EdgeInsets.only(top: 50, bottom: 100),
-              child: controller.isLoadMore.value
-                  ? const CupertinoActivityIndicator(
-                      radius: 14,
-                    )
-                  : Container(),
-            );
-          }),
-        ),
+        _endIndicator(),
       ],
     );
 
     return CupertinoPageScaffold(
       child: customScrollView,
+    );
+  }
+
+  Widget _endIndicator() {
+    return SliverToBoxAdapter(
+      child: Obx(() => Container(
+            padding: const EdgeInsets.only(top: 50, bottom: 100),
+            child: controller.isLoadMore
+                ? const CupertinoActivityIndicator(
+                    radius: 14,
+                  )
+                : Container(),
+          )),
     );
   }
 
