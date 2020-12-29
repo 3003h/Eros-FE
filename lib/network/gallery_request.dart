@@ -297,6 +297,7 @@ class Api {
       showToast('Offensive For Everyone');
     }
 
+    // 解析画廊数据
     final GalleryItem galleryItem =
         await GalleryDetailParser.parseGalleryDetail(response,
             inGalleryItem: inGalleryItem);

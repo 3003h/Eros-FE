@@ -73,7 +73,8 @@ class _GalleryImageState extends State<GalleryImage> {
           } else {
             return Container(
               height: 100,
-              margin: const EdgeInsets.all(30.0),
+              margin: EdgeInsets.symmetric(
+                  vertical: context.height / 4, horizontal: context.width / 4),
               alignment: Alignment.center,
               child: Column(
                 children: <Widget>[
@@ -122,7 +123,9 @@ class _GalleryImageState extends State<GalleryImage> {
               progressIndicatorBuilder: (context, url, downloadProgress) {
                 // 下载进度回调
                 return Container(
-                  margin: const EdgeInsets.all(20.0),
+                  margin: EdgeInsets.symmetric(
+                      vertical: context.height / 4,
+                      horizontal: context.width / 4),
                   alignment: Alignment.center,
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
@@ -249,20 +252,27 @@ class _PageSliderState extends State<PageSlider> {
   }
 }
 
+typedef DidFinishLayoutCallBack = dynamic Function(
+    int firstIndex, int lastIndex);
+
 class ViewChildBuilderDelegate extends SliverChildBuilderDelegate {
   ViewChildBuilderDelegate(
     Widget Function(BuildContext, int) builder, {
     int childCount,
     bool addAutomaticKeepAlives = true,
     bool addRepaintBoundaries = true,
+    this.onDidFinishLayout,
   }) : super(builder,
             childCount: childCount,
             addAutomaticKeepAlives: addAutomaticKeepAlives,
             addRepaintBoundaries: addRepaintBoundaries);
 
+  final DidFinishLayoutCallBack onDidFinishLayout;
+
   @override
   void didFinishLayout(int firstIndex, int lastIndex) {
-    print('firstIndex: $firstIndex, lastIndex: $lastIndex');
+    onDidFinishLayout(firstIndex, lastIndex);
+    // print('firstIndex: $firstIndex, lastIndex: $lastIndex');
   }
 }
 
