@@ -1,5 +1,7 @@
 // 列表模式 瀑布流模式
 import 'package:fehviewer/common/global.dart';
+import 'package:fehviewer/common/service/ehconfig_service.dart';
+import 'package:get/get.dart';
 
 enum ListModeEnum {
   list,
@@ -44,7 +46,15 @@ class EHConst {
   static const String EH_BASE_URL = 'https://e-hentai.org';
   static const String EX_BASE_URL = 'https://exhentai.org';
 
+  static const String EH_TORRENT_URL = 'https://ehtracker.org/get';
+  static const String EX_TORRENT_URL = 'https://exhentai.org/torrent';
+
   static String getBaseSite(bool isEx) => isEx ? EX_BASE_URL : EH_BASE_URL;
+
+  static String get torrentBaseUrl =>
+      (Get.find<EhConfigService>().isSiteEx.value ?? false)
+          ? EX_TORRENT_URL
+          : EH_TORRENT_URL;
 
   // 瀑布流视图参数
   static const double waterfallFlowCrossAxisSpacing = 4.0;

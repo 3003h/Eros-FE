@@ -391,7 +391,6 @@ class Api {
     String url, {
     bool refresh = false,
   }) async {
-    // final String url = '${getBaseUrl()}/gallerytorrents.php';
     final String response = await getHttpManager()
         .get(url, options: getCacheOptions(forceRefresh: refresh));
     // logger.d('$response');
