@@ -12,8 +12,7 @@ class ArchiverController extends GetxController
   @override
   void onInit() {
     super.onInit();
-    _pageController =
-        Get.find(tag: '${Get.find<DepthService>().pageCtrlDepth}');
+    _pageController = Get.find(tag: pageCtrlDepth);
     _loadData();
   }
 

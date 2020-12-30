@@ -226,8 +226,7 @@ class GalleryTitle extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final GalleryPageController _pageController =
-        Get.find(tag: '${Get.find<DepthService>().pageCtrlDepth}');
+    final GalleryPageController _pageController = Get.find(tag: pageCtrlDepth);
 
     /// 构建标题
     ///
@@ -300,8 +299,7 @@ class ReadButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final GalleryPageController _pageController =
-        Get.find(tag: '${Get.find<DepthService>().pageCtrlDepth}');
+    final GalleryPageController _pageController = Get.find(tag: pageCtrlDepth);
     return Obx(
       () => CupertinoButton(
           child: Text(

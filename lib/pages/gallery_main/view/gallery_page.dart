@@ -26,8 +26,7 @@ class GalleryMainPage extends StatelessWidget {
   final String tag;
   @override
   Widget build(BuildContext context) {
-    final GalleryPageController controller =
-        Get.find(tag: '${Get.find<DepthService>().pageCtrlDepth}');
+    final GalleryPageController controller = Get.find(tag: pageCtrlDepth);
     final GalleryItem _item = controller.galleryItem;
     return CupertinoPageScaffold(
       child: CustomScrollView(
@@ -117,8 +116,7 @@ class GalleryContainer extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final GalleryPageController controller =
-        Get.find(tag: '${Get.find<DepthService>().pageCtrlDepth}');
+    final GalleryPageController controller = Get.find(tag: pageCtrlDepth);
 
     Widget _getDetail(GalleryItem state) {
       const double minWidth = 100.0;
@@ -131,7 +129,6 @@ class GalleryContainer extends StatelessWidget {
                 title: S.of(context).p_Rate,
                 onTap: state.apiuid?.isNotEmpty ?? false
                     ? () {
-                        logger.d('${state.isRatinged}');
                         showRateDialog();
                       }
                     : null,

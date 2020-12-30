@@ -1,18 +1,21 @@
 import 'package:fehviewer/pages/gallery_main/controller/archiver_controller.dart';
-import 'package:fehviewer/utils/logger.dart';
 import 'package:html/dom.dart';
 import 'package:html/parser.dart' show parse;
 
 ArchiverProvider parseArchiver(String response) {
   final Document document = parse(response);
 
+  String gp = '';
+  String credits = '';
   final Element currentFunds = document.querySelector('#db > p:nth-child(4)');
-  // logger.d('${currentFunds.text}');
-  final RegExp fundsRegx = RegExp(r'([0-9,]+?)\s+GP.+?([0-9,]+?)\s+Credits');
-  final RegExpMatch match = fundsRegx.firstMatch(currentFunds.text);
-  logger.d('${match.group(1)}\n${match.group(2)}');
-  final String gp = match.group(1).replaceAll(',', '');
-  final String credits = match.group(2).replaceAll(',', '');
+  if (currentFunds != null) {
+    // logger.d('${currentFunds.text}');
+    final RegExp fundsRegx = RegExp(r'([0-9,]+?)\s+GP.+?([0-9,]+?)\s+Credits');
+    final RegExpMatch match = fundsRegx.firstMatch(currentFunds.text);
+    // logger.d('${match.group(1)}\n${match.group(2)}');
+    gp = match.group(1).replaceAll(',', '');
+    credits = match.group(2).replaceAll(',', '');
+  }
 
   final List<Element> archiverElms = document
       .querySelectorAll('#db > div')

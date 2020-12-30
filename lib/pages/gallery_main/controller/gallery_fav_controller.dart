@@ -35,8 +35,7 @@ class GalleryFavController extends GetxController {
   @override
   void onInit() {
     super.onInit();
-    _pageController =
-        Get.find(tag: '${Get.find<DepthService>().pageCtrlDepth}');
+    _pageController = Get.find(tag: pageCtrlDepth);
     if (!_pageController.fromUrl) {
       _itemController = Get.find(tag: _pageController.gid);
     }

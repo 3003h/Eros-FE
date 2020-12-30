@@ -35,8 +35,7 @@ class _GalleryImageState extends State<GalleryImage> {
   @override
   void initState() {
     super.initState();
-    _pageController =
-        Get.find(tag: '${Get.find<DepthService>().pageCtrlDepth}');
+    _pageController = Get.find(tag: pageCtrlDepth);
     // _future = _pageController.getImageInfo(widget.index,
     //     cancelToken: _getMoreCancelToken);
 
