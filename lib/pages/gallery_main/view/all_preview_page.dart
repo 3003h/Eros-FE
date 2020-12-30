@@ -38,8 +38,7 @@ class _AllPreviewPageState extends State<AllPreviewPage> {
 
   CancelToken moreGalleryPreviewCancelToken = CancelToken();
 
-  final GalleryPageController _pageController =
-      Get.find(tag: '${Get.find<DepthService>().pageCtrlDepth}');
+  final GalleryPageController _pageController = Get.find(tag: pageCtrlDepth);
 
   @override
   void dispose() {

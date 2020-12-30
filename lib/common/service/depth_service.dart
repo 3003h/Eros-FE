@@ -1,5 +1,9 @@
 import 'package:get/get.dart';
 
+String get pageCtrlDepth => Get.find<DepthService>().pageCtrlDepth.toString();
+String get searchPageCtrlDepth =>
+    Get.find<DepthService>().searchPageCtrlDepth.toString();
+
 class DepthService extends GetxService {
   /// [pageCtrlDepth] 画廊页面的路由深度
   /// 用作控制器的唯一标识
@@ -15,5 +19,17 @@ class DepthService extends GetxService {
   // 出栈 深度-1 放在onClose事件中
   void popPageCtrl() {
     pageCtrlDepth--;
+  }
+
+  /// [searchPageCtrlDepth] 搜索页深度
+  /// 作为控制器唯一标识
+  int searchPageCtrlDepth = 0;
+
+  void pushAdvSearchCtrl() {
+    searchPageCtrlDepth++;
+  }
+
+  void popAdvSearchCtrl() {
+    searchPageCtrlDepth--;
   }
 }

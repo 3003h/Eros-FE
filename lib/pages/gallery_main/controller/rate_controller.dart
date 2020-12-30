@@ -15,8 +15,7 @@ class RateController extends GetxController {
   @override
   void onInit() {
     super.onInit();
-    _pageController =
-        Get.find(tag: '${Get.find<DepthService>().pageCtrlDepth}');
+    _pageController = Get.find(tag: pageCtrlDepth);
     rate = _pageController.galleryItem.rating;
   }
 

@@ -1,22 +1,26 @@
+import 'package:fehviewer/common/service/depth_service.dart';
 import 'package:fehviewer/generated/l10n.dart';
 import 'package:fehviewer/pages/gallery_main/controller/archiver_controller.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-class ArchiverView extends GetView<ArchiverController> {
+class ArchiverView extends StatelessWidget {
   const ArchiverView({Key key}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
+    final ArchiverController controller = Get.find(tag: pageCtrlDepth);
     return controller.obx(
       (ArchiverProvider state) {
         return Column(
           children: <Widget>[
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Text(
-                  'Current funds:\n GP: ${state.gp}   Credits: ${state.credits}'),
-            ),
+            if (state.gp.isNotEmpty)
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Text(
+                    'Current funds:\n GP: ${state.gp}   Credits: ${state.credits}'),
+              ),
             const Text(
               'H@H',
               style: TextStyle(fontWeight: FontWeight.bold),
@@ -47,6 +51,7 @@ class ArchiverView extends GetView<ArchiverController> {
                     onPressed: () async {
                       // logger.d('tap $index');
                       controller.download(_item.resolution);
+                      // Get.delete<ArchiverController>(tag: pageCtrlDepth);
                       Get.back();
                     },
                   );
@@ -99,7 +104,7 @@ class ArchiverView extends GetView<ArchiverController> {
 }
 
 Future<void> showArchiverDialog() {
-  Get.put(ArchiverController());
+  Get.put(ArchiverController(), tag: pageCtrlDepth);
   return showCupertinoDialog<void>(
       context: Get.overlayContext,
       builder: (_) {
@@ -112,6 +117,7 @@ Future<void> showArchiverDialog() {
             CupertinoDialogAction(
               child: Text(S.of(Get.overlayContext).cancel),
               onPressed: () {
+                // Get.delete<ArchiverController>(tag: pageCtrlDepth);
                 Get.back();
               },
             ),

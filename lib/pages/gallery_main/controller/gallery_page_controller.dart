@@ -5,6 +5,8 @@ import 'package:fehviewer/common/service/depth_service.dart';
 import 'package:fehviewer/common/service/ehconfig_service.dart';
 import 'package:fehviewer/models/index.dart';
 import 'package:fehviewer/network/gallery_request.dart';
+import 'package:fehviewer/pages/gallery_main/controller/rate_controller.dart';
+import 'package:fehviewer/pages/gallery_main/controller/torrent_controller.dart';
 import 'package:fehviewer/pages/gallery_view/controller/view_controller.dart';
 import 'package:fehviewer/pages/gallery_view/view/common.dart';
 import 'package:fehviewer/pages/item/controller/galleryitem_controller.dart';
@@ -14,6 +16,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
 import 'package:meta/meta.dart';
 
+import 'archiver_controller.dart';
 import 'gallery_fav_controller.dart';
 
 const double kHeaderHeight = 200.0 + 52;
@@ -76,7 +79,6 @@ class GalleryPageController extends GetxController
   // eh设置
   final EhConfigService _ehConfigService = Get.find();
   final HistoryController _historyController = Get.find();
-  final DepthService depthService = Get.find();
 
   @override
   void onInit() {
@@ -87,8 +89,8 @@ class GalleryPageController extends GetxController
 
     if (!fromUrl) {
       _itemController = Get.find(tag: gid);
-      logger.d(
-          'isRatinged: i-${_itemController.galleryItem.isRatinged} p-${galleryItem.isRatinged}');
+      // logger.d(
+      //     'isRatinged: i-${_itemController.galleryItem.isRatinged} p-${galleryItem.isRatinged}');
     }
 
     _loadData();
@@ -97,7 +99,12 @@ class GalleryPageController extends GetxController
   @override
   void onClose() {
     scrollController.dispose();
-    depthService.popPageCtrl();
+
+    // 为了保证能正常关闭
+    Get.delete<RateController>(tag: pageCtrlDepth);
+    Get.delete<TorrentController>(tag: pageCtrlDepth);
+    Get.delete<ArchiverController>(tag: pageCtrlDepth);
+    Get.find<DepthService>().popPageCtrl();
     super.onClose();
   }
 
@@ -173,7 +180,7 @@ class GalleryPageController extends GetxController
       try {
         if (refresh) {
           final GalleryFavController _favController =
-              Get.find(tag: '${Get.find<DepthService>().pageCtrlDepth}');
+              Get.find(tag: pageCtrlDepth);
           // _favController.favcat = galleryItem.favcat;
           _favController.setFav(galleryItem.favcat, galleryItem.favTitle);
 
@@ -210,8 +217,8 @@ class GalleryPageController extends GetxController
       final GalleryItem value = await _fetchData(refresh: refresh);
       change(value, status: RxStatus.success());
       _enableRead.value = true;
-      logger
-          .d('${galleryItem.isRatinged} value.isRatinged:${value.isRatinged}');
+      // logger
+      //     .d('${galleryItem.isRatinged} value.isRatinged:${value.isRatinged}');
       isRatinged = (galleryItem.isRatinged ?? false) ||
           value.isRatinged ||
           (_itemController?.galleryItem?.isRatinged ?? false);
@@ -225,6 +232,11 @@ class GalleryPageController extends GetxController
 
   Future<void> _reloadData() async {
     isRefresh = true;
+    try {
+      Get.find<TorrentController>(tag: pageCtrlDepth).isRefresh = true;
+    } catch (e) {
+      logger.e('$e');
+    }
     await _loadData(refresh: true, showError: false);
   }
 

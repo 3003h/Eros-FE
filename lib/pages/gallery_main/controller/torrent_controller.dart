@@ -9,12 +9,12 @@ class TorrentController extends GetxController with StateMixin<String> {
   String torrentTk;
   GalleryPageController _pageController;
   List<GalleryTorrent> torrents;
+  bool isRefresh = false;
 
   @override
   void onInit() {
     super.onInit();
-    _pageController =
-        Get.find(tag: '${Get.find<DepthService>().pageCtrlDepth}');
+    _pageController = Get.find(tag: pageCtrlDepth);
     torrents = _pageController.galleryItem.torrents;
     _fetchData();
   }
@@ -30,7 +30,7 @@ class TorrentController extends GetxController with StateMixin<String> {
   Future<String> _fetchTk() async {
     return await Api.getTorrentToken(
         _pageController.gid, _pageController.galleryItem.token,
-        refresh: true);
+        refresh: isRefresh);
   }
 
   Future<void> reload() async {

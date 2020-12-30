@@ -1,3 +1,4 @@
+import 'package:fehviewer/common/service/depth_service.dart';
 import 'package:fehviewer/generated/l10n.dart';
 import 'package:fehviewer/pages/gallery_main/controller/rate_controller.dart';
 import 'package:fehviewer/utils/logger.dart';
@@ -7,11 +8,14 @@ import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
 
-class RateView extends GetView<RateController> {
+class RateView extends StatelessWidget {
   const RateView({Key key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
+    final RateController controller = Get.find(tag: pageCtrlDepth);
+    // final RateController controller =
+    //     Get.put(RateController(), tag: pageCtrlDepth);
     return Container(
       height: 80,
       alignment: Alignment.center,
@@ -54,7 +58,9 @@ class RateView extends GetView<RateController> {
 }
 
 Future<void> showRateDialog() {
-  final RateController controller = Get.put(RateController());
+  // final RateController controller = Get.find(tag: pageCtrlDepth);
+  final RateController controller =
+      Get.put(RateController(), tag: pageCtrlDepth);
   return showCupertinoDialog<void>(
       context: Get.overlayContext,
       builder: (_) {
@@ -67,7 +73,7 @@ Future<void> showRateDialog() {
             CupertinoDialogAction(
               child: Text(S.of(Get.overlayContext).cancel),
               onPressed: () {
-                // Get.delete<RateController>();
+                // Get.delete<RateController>(tag: pageCtrlDepth);
                 Get.back();
               },
             ),
@@ -75,7 +81,7 @@ Future<void> showRateDialog() {
               child: Text(S.of(Get.overlayContext).ok),
               onPressed: () {
                 controller.rating();
-                // Get.delete<RateController>();
+                // Get.delete<RateController>(tag: pageCtrlDepth);
                 Get.back();
               },
             ),

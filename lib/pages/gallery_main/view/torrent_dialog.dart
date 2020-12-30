@@ -1,3 +1,4 @@
+import 'package:fehviewer/common/service/depth_service.dart';
 import 'package:fehviewer/generated/l10n.dart';
 import 'package:fehviewer/models/galleryTorrent.dart';
 import 'package:fehviewer/pages/gallery_main/controller/torrent_controller.dart';
@@ -7,11 +8,12 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:url_launcher/url_launcher.dart';
 
-class TorrentView extends GetView<TorrentController> {
+class TorrentView extends StatelessWidget {
   const TorrentView({Key key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
+    final TorrentController controller = Get.find(tag: pageCtrlDepth);
     return Container(
       height: controller.torrents.length * 40.0 + 30,
       child: controller.obx(
@@ -77,7 +79,7 @@ class TorrentView extends GetView<TorrentController> {
 }
 
 Future<void> showTorrentDialog() {
-  Get.put(TorrentController());
+  Get.put(TorrentController(), tag: pageCtrlDepth);
   return showCupertinoDialog<void>(
       context: Get.overlayContext,
       builder: (_) {
@@ -90,6 +92,7 @@ Future<void> showTorrentDialog() {
             CupertinoDialogAction(
               child: Text(S.of(Get.overlayContext).cancel),
               onPressed: () {
+                // Get.delete<TorrentController>(tag: pageCtrlDepth);
                 Get.back();
               },
             ),

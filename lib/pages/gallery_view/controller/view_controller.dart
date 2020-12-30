@@ -114,8 +114,7 @@ class ViewController extends GetxController {
   @override
   void onInit() {
     super.onInit();
-    _galleryPageController =
-        Get.find(tag: '${Get.find<DepthService>().pageCtrlDepth}');
+    _galleryPageController = Get.find(tag: pageCtrlDepth);
 
     currentIndex = 0;
     showBar = false;

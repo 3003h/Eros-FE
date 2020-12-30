@@ -15,8 +15,8 @@ class GalleryFavButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final GalleryFavController _favController = Get.put(GalleryFavController(),
-        tag: '${Get.find<DepthService>().pageCtrlDepth}');
+    final GalleryFavController _favController =
+        Get.put(GalleryFavController(), tag: pageCtrlDepth);
     // 收藏按钮图标
     final Widget favIcon = Obx(() {
       return Container(

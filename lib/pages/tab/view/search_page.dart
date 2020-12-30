@@ -1,3 +1,4 @@
+import 'package:fehviewer/common/service/depth_service.dart';
 import 'package:fehviewer/generated/l10n.dart';
 import 'package:fehviewer/models/index.dart';
 import 'package:fehviewer/pages/tab/controller/search_page_controller.dart';
@@ -17,9 +18,11 @@ enum SearchMenuEnum {
   addToQuickSearch,
 }
 
-class GallerySearchPage extends GetView<SearchPageController> {
+class GallerySearchPage extends StatelessWidget {
+  // final SearchPageController controller = Get.find(tag: searchPageCtrlDepth);
   @override
   Widget build(BuildContext context) {
+    final SearchPageController controller = Get.find(tag: searchPageCtrlDepth);
     const BorderSide _kDefaultRoundedBorderSide = BorderSide(
       color: CupertinoDynamicColor.withBrightness(
         color: Color(0x33000000),
@@ -94,6 +97,7 @@ class GallerySearchPage extends GetView<SearchPageController> {
   }
 
   Widget _endIndicator() {
+    final SearchPageController controller = Get.find(tag: searchPageCtrlDepth);
     return SliverToBoxAdapter(
       child: Obx(() => Container(
             padding: const EdgeInsets.only(top: 50, bottom: 100),
@@ -107,6 +111,7 @@ class GallerySearchPage extends GetView<SearchPageController> {
   }
 
   Widget _getGalleryList() {
+    final SearchPageController controller = Get.find(tag: searchPageCtrlDepth);
     return controller.obx(
       (List<GalleryItem> state) {
         return getGalleryList(
@@ -144,6 +149,7 @@ class GallerySearchPage extends GetView<SearchPageController> {
   }
 
   Widget _buildTrailing(BuildContext context) {
+    final SearchPageController controller = Get.find(tag: searchPageCtrlDepth);
     PopupMenu.context = context;
     final TextStyle _menuTextStyle = TextStyle(
       color: CupertinoDynamicColor.resolve(CupertinoColors.label, context),

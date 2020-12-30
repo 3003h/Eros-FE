@@ -1,4 +1,5 @@
 import 'package:fehviewer/common/controller/quicksearch_controller.dart';
+import 'package:fehviewer/common/service/depth_service.dart';
 import 'package:fehviewer/common/service/ehconfig_service.dart';
 import 'package:fehviewer/models/index.dart';
 import 'package:fehviewer/network/gallery_request.dart';
@@ -13,7 +14,7 @@ class SearchPageController extends GetxController
   SearchPageController();
   SearchPageController.fromText(this.searchText);
   String searchText;
-  final String tabIndex = 'search_idx';
+  final String tabIndex = 'search_$searchPageCtrlDepth';
 
   final GlobalKey searchMenukey = GlobalKey();
 
@@ -156,7 +157,8 @@ class SearchPageController extends GetxController
 
   @override
   void onClose() {
-    super.onClose();
     searchTextController.dispose();
+    Get.find<DepthService>().popAdvSearchCtrl();
+    super.onClose();
   }
 }
