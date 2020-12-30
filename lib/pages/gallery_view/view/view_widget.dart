@@ -39,6 +39,13 @@ class _GalleryImageState extends State<GalleryImage> {
         Get.find(tag: '${Get.find<DepthService>().pageCtrlDepth}');
     // _future = _pageController.getImageInfo(widget.index,
     //     cancelToken: _getMoreCancelToken);
+
+    // 加载完成后 更新item大小
+    // WidgetsBinding.instance.addPostFrameCallback((Duration a) {
+    //   // print('Frame has been rendered ${widget.index}');
+    //   Get.find<ViewController>()
+    //       .update(['ScrollablePositionedList_${widget.index}']);
+    // });
   }
 
   @override
@@ -70,7 +77,7 @@ class _GalleryImageState extends State<GalleryImage> {
               _currentPreview.largeImageWidth =
                   previewFromApi.data.largeImageWidth;
 
-              Future.delayed(const Duration(milliseconds: 200)).then((value) {
+              Future.delayed(const Duration(milliseconds: 100)).then((value) {
                 Get.find<ViewController>()
                     .update(['ScrollablePositionedList_${widget.index}']);
               });

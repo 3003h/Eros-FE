@@ -14,6 +14,8 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
 import 'package:share/share.dart';
 
+import 'archiver_dialog.dart';
+
 const double kHeaderHeight = 200.0 + 52;
 const double kPadding = 12.0;
 const double kHeaderPaddingTop = 12.0;
@@ -150,6 +152,15 @@ class GalleryContainer extends StatelessWidget {
                     showTorrentDialog();
                   }
                 : null,
+          ),
+        ),
+        Expanded(
+          child: TextBtn(
+            FontAwesomeIcons.fileArchive,
+            title: 'Archiver',
+            onTap: () async {
+              showArchiverDialog();
+            },
           ),
         ),
         Expanded(

@@ -10,12 +10,14 @@ import 'package:dns_client/dns_client.dart';
 import 'package:enum_to_string/enum_to_string.dart';
 import 'package:fehviewer/common/controller/advance_search_controller.dart';
 import 'package:fehviewer/common/global.dart';
+import 'package:fehviewer/common/parser/archiver_parser.dart';
 import 'package:fehviewer/common/parser/gallery_detail_parser.dart';
 import 'package:fehviewer/common/parser/gallery_list_parser.dart';
 import 'package:fehviewer/common/service/ehconfig_service.dart';
 import 'package:fehviewer/const/const.dart';
 import 'package:fehviewer/models/galleryItem.dart';
 import 'package:fehviewer/models/index.dart';
+import 'package:fehviewer/pages/gallery_main/controller/archiver_controller.dart';
 import 'package:fehviewer/utils/dio_util.dart';
 import 'package:fehviewer/utils/https_proxy.dart';
 import 'package:fehviewer/utils/logger.dart';
@@ -25,7 +27,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_cache_manager/flutter_cache_manager.dart';
-import 'package:get/get.dart';
+import 'package:get/get.dart' hide Response, FormData;
 import 'package:html_unescape/html_unescape.dart';
 import 'package:image_gallery_saver/image_gallery_saver.dart';
 import 'package:permission_handler/permission_handler.dart';
@@ -365,6 +367,7 @@ class Api {
     return showkey;
   }
 
+  // 获取TorrentToken
   static Future<String> getTorrentToken(
     String gid,
     String gtoken, {
@@ -381,6 +384,28 @@ class Api {
     final RegExp rTorrentTk = RegExp(r'http://ehtracker.org/(\d{7})/announce');
     final String torrentToken = rTorrentTk.firstMatch(response)?.group(1) ?? '';
     return torrentToken;
+  }
+
+  // 获取 Archiver
+  static Future<ArchiverProvider> getArchiver(
+    String url, {
+    bool refresh = false,
+  }) async {
+    // final String url = '${getBaseUrl()}/gallerytorrents.php';
+    final String response = await getHttpManager()
+        .get(url, options: getCacheOptions(forceRefresh: refresh));
+    // logger.d('$response');
+
+    return parseArchiver(response);
+  }
+
+  static Future<String> postArchiverDownload(
+      String url, String resolution) async {
+    final Response response = await getHttpManager(cache: false).postForm(url,
+        data: FormData.fromMap({
+          'hathdl_xres': resolution.trim(),
+        }));
+    return parseArchiverDownload(response.data);
   }
 
   /// 通过api请求获取更多信息
