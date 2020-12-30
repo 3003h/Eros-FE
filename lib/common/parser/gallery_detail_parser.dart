@@ -162,6 +162,13 @@ class GalleryDetailParser {
         ?.group(1);
     galleryItem.apikey = apikey;
 
+    // 20201230 Archiver link
+    final String or = RegExp(r"or=(.*?)'").firstMatch(response)?.group(1);
+    // logger.d('or=$or');
+    galleryItem.archiverLink =
+        '${Api.getBaseUrl()}/archiver.php?gid=${galleryItem.gid}&token=${galleryItem.token}&or=$or';
+    logger.d('archiverLink: ${galleryItem.archiverLink}');
+
     final Element _ratingImage = document.querySelector('#rating_image');
     final String _ratingImageClass = _ratingImage.attributes['class'];
     galleryItem.isRatinged =

@@ -32,5 +32,6 @@
   "galleryPreview": "$[]galleryPreview",
   "apikey": "",
   "apiuid": "",
-  "isRatinged": false
+  "isRatinged": false,
+  "archiverLink": ""
 }

@@ -60,7 +60,8 @@ GalleryItem _$GalleryItemFromJson(Map<String, dynamic> json) {
         ?.toList()
     ..apikey = json['apikey'] as String
     ..apiuid = json['apiuid'] as String
-    ..isRatinged = json['isRatinged'] as bool;
+    ..isRatinged = json['isRatinged'] as bool
+    ..archiverLink = json['archiverLink'] as String;
 }
 
 Map<String, dynamic> _$GalleryItemToJson(GalleryItem instance) =>
@@ -99,4 +100,5 @@ Map<String, dynamic> _$GalleryItemToJson(GalleryItem instance) =>
       'apikey': instance.apikey,
       'apiuid': instance.apiuid,
       'isRatinged': instance.isRatinged,
+      'archiverLink': instance.archiverLink,
     };

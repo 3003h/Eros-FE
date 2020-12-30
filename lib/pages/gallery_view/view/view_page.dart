@@ -91,7 +91,6 @@ class GalleryViewPage extends GetView<ViewController> {
   /// 不同阅读方向不同布局
   Widget _buildView() {
     return Obx(() {
-      // controller.currentIndex;
       controller.checkViewModel();
       switch (controller.viewMode) {
         case ViewMode.vertical:

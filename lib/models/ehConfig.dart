@@ -4,7 +4,7 @@ part 'ehConfig.g.dart';
 
 @JsonSerializable()
 class EhConfig {
-  EhConfig();
+      EhConfig();
 
   bool jpnTitle;
   bool tagTranslat;
@@ -25,7 +25,6 @@ class EhConfig {
   bool pureDarkTheme;
   String viewModel;
 
-  factory EhConfig.fromJson(Map<String, dynamic> json) =>
-      _$EhConfigFromJson(json);
+  factory EhConfig.fromJson(Map<String,dynamic> json) => _$EhConfigFromJson(json);
   Map<String, dynamic> toJson() => _$EhConfigToJson(this);
 }
