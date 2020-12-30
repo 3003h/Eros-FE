@@ -17,6 +17,7 @@ class ArchiverController extends GetxController
   }
 
   Future<ArchiverProvider> _fetch() async {
+    logger.d(_pageController.galleryItem.archiverLink);
     return await Api.getArchiver(_pageController.galleryItem.archiverLink);
   }
 
@@ -35,34 +36,18 @@ class ArchiverController extends GetxController
     await _loadData();
   }
 
-  Future<void> download(String resolution) async {
+  Future<void> download(String dlres) async {
     final String response = await Api.postArchiverDownload(
-        _pageController.galleryItem.archiverLink, resolution);
+        _pageController.galleryItem.archiverLink, dlres);
     showToast(response);
   }
 }
 
 class ArchiverProviderItem {
   String resolution;
+  String dlres;
   String size;
   String price;
-
-  @override
-  bool operator ==(Object other) =>
-      identical(this, other) ||
-      other is ArchiverProviderItem &&
-          runtimeType == other.runtimeType &&
-          resolution == other.resolution &&
-          size == other.size &&
-          price == other.price;
-
-  @override
-  int get hashCode => resolution.hashCode ^ size.hashCode ^ price.hashCode;
-
-  @override
-  String toString() {
-    return 'ArchiverProvider{px: $resolution, size: $size, price: $price}';
-  }
 }
 
 class ArchiverProvider {

@@ -50,7 +50,7 @@ class ArchiverView extends StatelessWidget {
                     ),
                     onPressed: () async {
                       // logger.d('tap $index');
-                      controller.download(_item.resolution);
+                      controller.download(_item.dlres);
                       // Get.delete<ArchiverController>(tag: pageCtrlDepth);
                       Get.back();
                     },

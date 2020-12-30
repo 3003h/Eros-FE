@@ -17,6 +17,8 @@ ArchiverProvider parseArchiver(String response) {
     credits = match.group(2).replaceAll(',', '');
   }
 
+  // logger.d('$response');
+
   final List<Element> archiverElms = document
       .querySelectorAll('#db > div')
       .elementAt(1)
@@ -28,10 +30,15 @@ ArchiverProvider parseArchiver(String response) {
     if (children.length >= 3) {
       // logger.d(
       //     '${children[0].text} \n${children[1].text} \n${children[2].text} ');
+
       if (children[1].text.toUpperCase() != 'N/A') {
+        final String onClick = children[0].children.first.attributes['onclick'];
+        final String res = RegExp(r"\('(\w+)'\)").firstMatch(onClick).group(1);
+        // logger.d('$res');
         _items.add(
           ArchiverProviderItem()
             ..resolution = children[0].text
+            ..dlres = res
             ..size = children[1].text
             ..price = children[2].text,
         );

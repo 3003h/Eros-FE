@@ -1,4 +1,5 @@
 import 'package:fehviewer/common/service/depth_service.dart';
+import 'package:fehviewer/const/const.dart';
 import 'package:fehviewer/generated/l10n.dart';
 import 'package:fehviewer/models/galleryTorrent.dart';
 import 'package:fehviewer/pages/gallery_main/controller/torrent_controller.dart';
@@ -31,7 +32,7 @@ class TorrentView extends StatelessWidget {
                 ),
                 onPressed: () async {
                   final String torrentUrl =
-                      'https://ehtracker.org/get/$state/${torrent.hash}.torrent';
+                      '${EHConst.EH_TORRENT_URL}/$state/${torrent.hash}.torrent';
                   logger.d('${torrent.name}\n${torrent.hash}\ntorrentUrl');
                   if (await canLaunch(torrentUrl)) {
                     await launch(torrentUrl);
