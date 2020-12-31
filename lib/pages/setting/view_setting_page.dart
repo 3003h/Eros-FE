@@ -8,14 +8,7 @@ import 'package:fehviewer/utils/logger.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
 
-class ViewSettingPage extends StatefulWidget {
-  @override
-  _ViewSettingPageState createState() => _ViewSettingPageState();
-}
-
-class _ViewSettingPageState extends State<ViewSettingPage> {
-  final String _title = '浏览设置';
-
+class ViewSettingPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final CupertinoPageScaffold cps = CupertinoPageScaffold(
@@ -24,7 +17,7 @@ class _ViewSettingPageState extends State<ViewSettingPage> {
             : null,
         navigationBar: CupertinoNavigationBar(
           // transitionBetweenRoutes: true,
-          middle: Text(_title),
+          middle: Text(S.of(context).read_setting),
         ),
         child: SafeArea(
           child: ViewSettingList(),
@@ -51,13 +44,13 @@ class ViewSettingList extends StatelessWidget {
 
 /// 阅读方向模式切换
 Widget _buildViewModeItem(BuildContext context) {
-  const String _title = '阅读方向';
+  final String _title = S.of(context).reading_direction;
   final EhConfigService ehConfigService = Get.find();
 
   final Map<ViewMode, String> modeMap = <ViewMode, String>{
-    ViewMode.horizontalLeft: '由左到右',
-    ViewMode.horizontalRight: '由右到左',
-    ViewMode.vertical: '由上到下',
+    ViewMode.horizontalLeft: S.of(context).letf_to_right,
+    ViewMode.horizontalRight: S.of(context).right_to_left,
+    ViewMode.vertical: S.of(context).top_to_bottom,
   };
 
   List<Widget> _getModeList() {

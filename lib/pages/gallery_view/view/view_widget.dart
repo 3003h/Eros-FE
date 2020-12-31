@@ -43,7 +43,7 @@ class _GalleryImageState extends State<GalleryImage> {
     // WidgetsBinding.instance.addPostFrameCallback((Duration a) {
     //   // print('Frame has been rendered ${widget.index}');
     //   Get.find<ViewController>()
-    //       .update(['ScrollablePositionedList_${widget.index}']);
+    //       .update(['GalleryImage_${widget.index}']);
     // });
   }
 
@@ -78,7 +78,7 @@ class _GalleryImageState extends State<GalleryImage> {
 
               Future.delayed(const Duration(milliseconds: 100)).then((value) {
                 Get.find<ViewController>()
-                    .update(['ScrollablePositionedList_${widget.index}']);
+                    .update(['GalleryImage_${widget.index}']);
               });
 
               return _buildImage(_currentPreview.largeImageUrl);
@@ -87,7 +87,7 @@ class _GalleryImageState extends State<GalleryImage> {
             return Container(
               height: context.height / 4,
               margin: EdgeInsets.symmetric(
-                  vertical: context.height / 6, horizontal: context.width / 6),
+                  vertical: context.height / 8, horizontal: context.width / 8),
               alignment: Alignment.center,
               child: Column(
                 mainAxisSize: MainAxisSize.min,
@@ -138,8 +138,8 @@ class _GalleryImageState extends State<GalleryImage> {
                 // 下载进度回调
                 return Container(
                   margin: EdgeInsets.symmetric(
-                      vertical: context.height / 6,
-                      horizontal: context.width / 6),
+                      vertical: context.height / 8,
+                      horizontal: context.width / 8),
                   alignment: Alignment.center,
                   child: Column(
                     mainAxisSize: MainAxisSize.min,

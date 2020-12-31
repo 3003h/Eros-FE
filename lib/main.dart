@@ -7,6 +7,7 @@ import 'package:fehviewer/common/service/theme_service.dart';
 import 'package:fehviewer/generated/l10n.dart';
 import 'package:fehviewer/route/app_pages.dart';
 import 'package:fehviewer/route/routes.dart';
+import 'package:fehviewer/store/gallery_store.dart';
 import 'package:fehviewer/utils/logger.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -42,6 +43,7 @@ void main() {
 
     Get.put(QuickSearchController(), permanent: true);
     Get.lazyPut(() => AdvanceSearchController(), fenix: true);
+    Get.lazyPut(() => GStore());
 
     runApp(
       DevicePreview(

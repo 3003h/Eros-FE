@@ -1,6 +1,7 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+
 import 'intl/messages_all.dart';
 
 // **************************************************************************
@@ -14,22 +15,23 @@ import 'intl/messages_all.dart';
 
 class S {
   S();
-  
+
   static S current;
-  
-  static const AppLocalizationDelegate delegate =
-    AppLocalizationDelegate();
+
+  static const AppLocalizationDelegate delegate = AppLocalizationDelegate();
 
   static Future<S> load(Locale locale) {
-    final name = (locale.countryCode?.isEmpty ?? false) ? locale.languageCode : locale.toString();
-    final localeName = Intl.canonicalizedLocale(name); 
+    final name = (locale.countryCode?.isEmpty ?? false)
+        ? locale.languageCode
+        : locale.toString();
+    final localeName = Intl.canonicalizedLocale(name);
     return initializeMessages(localeName).then((_) {
       Intl.defaultLocale = localeName;
       S.current = S();
-      
+
       return S.current;
     });
-  } 
+  }
 
   static S of(BuildContext context) {
     return Localizations.of<S>(context, S);
@@ -900,6 +902,56 @@ class S {
     return Intl.message(
       'Rate',
       name: 'p_Rate',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Read setting`
+  String get read_setting {
+    return Intl.message(
+      'Read setting',
+      name: 'read_setting',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Reading direction`
+  String get reading_direction {
+    return Intl.message(
+      'Reading direction',
+      name: 'reading_direction',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Letf to right`
+  String get letf_to_right {
+    return Intl.message(
+      'Letf to right',
+      name: 'letf_to_right',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Retf to light`
+  String get right_to_left {
+    return Intl.message(
+      'Retf to light',
+      name: 'right_to_left',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Top to bottom`
+  String get top_to_bottom {
+    return Intl.message(
+      'Top to bottom',
+      name: 'top_to_bottom',
       desc: '',
       args: [],
     );

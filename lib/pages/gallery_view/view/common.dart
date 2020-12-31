@@ -117,11 +117,11 @@ class GalleryPrecache {
     @required int index,
     @required int max,
   }) async {
-    // loggerNoStack.d('当前index $index');
+    // logger.d('当前index $index');
     for (int add = 1; add < max + 1; add++) {
       final int _index = index + add;
 
-      // loggerNoStack.d('开始缓存index $index');
+      // logger.d('开始缓存index $index');
       if (_index > controller.previews.length - 1) {
         return;
       }
