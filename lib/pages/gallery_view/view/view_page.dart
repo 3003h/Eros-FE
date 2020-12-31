@@ -22,8 +22,8 @@ class GalleryViewPage extends GetView<ViewController> {
   /// 画廊图片大图浏览
   @override
   Widget build(BuildContext context) {
-    logger.d(' rebuild GalleryViewPage');
     controller.initSize(context);
+    logger.d('build ${controller.viewMode}  ${controller.columnMode}');
     return CupertinoTheme(
       data: const CupertinoThemeData(
         brightness: Brightness.dark,
@@ -90,6 +90,7 @@ class GalleryViewPage extends GetView<ViewController> {
 
   /// 不同阅读方向不同布局
   Widget _buildView() {
+    logger.v('_buildView ');
     return Obx(() {
       controller.checkViewModel();
       switch (controller.viewMode) {
@@ -166,7 +167,7 @@ class GalleryViewPage extends GetView<ViewController> {
   Widget _buildPageText() {
     if (controller.viewMode != ViewMode.vertical) {
       return Text(
-        '${controller.currentIndex + 1}/${controller.filecount}',
+        '${controller.itemIndex + 1}/${controller.filecount}',
         style: const TextStyle(
           color: CupertinoColors.systemGrey6,
         ),
@@ -178,7 +179,7 @@ class GalleryViewPage extends GetView<ViewController> {
           controller.handItemPositionsChange(positions);
 
           return Text(
-            '${controller.currentIndex + 1}/${controller.filecount}',
+            '${controller.itemIndex + 1}/${controller.filecount}',
             style: const TextStyle(
               color: CupertinoColors.systemGrey6,
             ),
@@ -199,31 +200,6 @@ class GalleryViewPage extends GetView<ViewController> {
       // height: kBottomBarHeight + controller.paddingBottom,
       child: Column(
         children: <Widget>[
-          Padding(
-            padding: const EdgeInsets.only(left: 8.0),
-            child: Row(
-              children: <Widget>[
-                GestureDetector(
-                  behavior: HitTestBehavior.opaque,
-                  onTap: () {
-                    logger.v('tap share');
-                    showShareActionSheet(Get.context,
-                        previews[controller.currentIndex].largeImageUrl);
-                  },
-                  child: Container(
-                    width: 40,
-                    height: kBottomBarHeight,
-                    child: const Icon(
-                      FontAwesomeIcons.share,
-                      color: CupertinoColors.systemGrey6,
-                      // size: 24,
-                    ),
-                  ),
-                ),
-                const Spacer(),
-              ],
-            ),
-          ),
           Row(
             children: <Widget>[
               Expanded(
@@ -238,6 +214,58 @@ class GalleryViewPage extends GetView<ViewController> {
                 ),
               ),
             ],
+          ),
+          Padding(
+            padding: const EdgeInsets.only(left: 10.0),
+            child: Row(
+              children: <Widget>[
+                GestureDetector(
+                  behavior: HitTestBehavior.opaque,
+                  onTap: () {
+                    logger.v('tap share');
+                    showShareActionSheet(Get.context,
+                        previews[controller.itemIndex].largeImageUrl);
+                  },
+                  child: Container(
+                    width: 40,
+                    height: kBottomBarHeight,
+                    child: const Icon(
+                      FontAwesomeIcons.share,
+                      color: CupertinoColors.systemGrey6,
+                      // size: 24,
+                    ),
+                  ),
+                ),
+                const Spacer(),
+                if (controller.viewMode != ViewMode.vertical)
+                  Obx(() => GestureDetector(
+                        behavior: HitTestBehavior.opaque,
+                        onTap: () {
+                          // logger.v('tap doublePage');
+                          controller.switchColumnMode();
+                        },
+                        child: Container(
+                          width: 40,
+                          margin: const EdgeInsets.only(right: 10.0),
+                          height: kBottomBarHeight,
+                          child: Icon(
+                            FontAwesomeIcons.bookOpen,
+                            color: () {
+                              switch (controller.columnMode) {
+                                case ColumnMode.single:
+                                  return CupertinoColors.systemGrey6;
+                                case ColumnMode.odd:
+                                  return CupertinoColors.activeBlue;
+                                case ColumnMode.even:
+                                  return CupertinoColors.activeOrange;
+                              }
+                            }(),
+                            // size: 24,
+                          ),
+                        ),
+                      )),
+              ],
+            ),
           ),
         ],
       ),
@@ -319,57 +347,36 @@ class GalleryViewPage extends GetView<ViewController> {
                 constraints: BoxConstraints(
                   minWidth: context.width,
                 ),
-                child: Stack(
-                  alignment: Alignment.center,
-                  children: <Widget>[
-                    GetBuilder<ViewController>(
-                        id: 'ScrollablePositionedList_$index',
-                        builder: (ViewController controller) {
-                          logger.d('build list item $index');
-                          return Container(
-                            height: () {
-                              try {
-                                return controller
-                                        .previews[index].largeImageHeight *
-                                    (context.width /
-                                        controller
-                                            .previews[index].largeImageWidth);
-                              } on Exception catch (_) {
-                                logger.d(
-                                    '${controller.previews[index].toJson()}');
-                                return controller.previews[index].height *
-                                    (context.width /
-                                        controller.previews[index].width);
-                              } catch (e) {
-                                return null;
-                              }
-                            }(),
-                            width: context.width,
-                            child: GalleryImage(
-                              index: index,
-                            ),
-                          );
-                        }),
-                    if (Global.inDebugMode)
-                      Positioned(
-                        left: 10,
-                        top: 10,
-                        child: Text(
-                          '$index',
-                          style: const TextStyle(
-                              fontSize: 50,
-                              fontWeight: FontWeight.bold,
-                              color: Colors.white,
-                              shadows: <Shadow>[
-                                Shadow(
-                                  color: Colors.black,
-                                  offset: Offset(2, 2),
-                                  blurRadius: 4,
-                                )
-                              ]),
-                        ),
-                      ),
-                  ],
+                child: NumStack(
+                  text: '$index',
+                  child: GetBuilder<ViewController>(
+                      id: 'GalleryImage_$index',
+                      builder: (ViewController controller) {
+                        logger.d('build list item $index');
+                        return Container(
+                          height: () {
+                            try {
+                              return controller
+                                      .previews[index].largeImageHeight *
+                                  (context.width /
+                                      controller
+                                          .previews[index].largeImageWidth);
+                            } on Exception catch (_) {
+                              logger
+                                  .d('${controller.previews[index].toJson()}');
+                              return controller.previews[index].height *
+                                  (context.width /
+                                      controller.previews[index].width);
+                            } catch (e) {
+                              return null;
+                            }
+                          }(),
+                          width: context.width,
+                          child: GalleryImage(
+                            index: index,
+                          ),
+                        );
+                      }),
                 ),
               );
             },
@@ -381,36 +388,80 @@ class GalleryViewPage extends GetView<ViewController> {
   /// 水平方向浏览部件
   Widget _buildPhotoViewGallery({bool reverse = false}) {
     const double _maxScale = 10;
-
+    logger.v('_buildPhotoViewGallery ');
     return GetBuilder<ViewController>(
       id: '_buildPhotoViewGallery',
       builder: (ViewController controller) {
-        logger.d('lastPreviewLen ${controller.previews.length}');
+        // logger.d('lastPreviewLen ${controller.previews.length}');
         controller.lastPreviewLen = controller.previews.length;
-        return PhotoViewGallery.builder(
-          // scrollPhysics: const BouncingScrollPhysics(),
-          reverse: reverse,
-          // itemCount: controller.previews.length,
-          itemCount: controller.previews.length,
-          customSize: controller.screensize,
-          backgroundDecoration: const BoxDecoration(
-            color: null,
+        return Obx(
+          () => PhotoViewGallery.builder(
+            scrollPhysics: const BouncingScrollPhysics(),
+            reverse: reverse,
+            itemCount: controller.pageCount,
+            customSize: controller.screensize,
+            builder: (BuildContext context, int pageIndex) {
+              return PhotoViewGalleryPageOptions.customChild(
+                child: Container(
+                  alignment: Alignment.center,
+                  child: () {
+                    if (controller.columnMode != ColumnMode.single) {
+                      final int indexLeft =
+                          controller.columnMode == ColumnMode.odd
+                              ? pageIndex * 2
+                              : pageIndex * 2 - 1;
+                      return Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: <Widget>[
+                          if (indexLeft >= 0)
+                            Expanded(
+                              child: Container(
+                                alignment: Alignment.centerRight,
+                                child: NumStack(
+                                  text: '$indexLeft',
+                                  child: GalleryImage(
+                                    index: indexLeft,
+                                  ),
+                                ),
+                              ),
+                            ),
+                          if (controller.previews.length > indexLeft + 1)
+                            Expanded(
+                              child: Container(
+                                alignment: indexLeft >= 0
+                                    ? Alignment.centerLeft
+                                    : null,
+                                child: NumStack(
+                                  text: '${indexLeft + 1}',
+                                  child: GalleryImage(
+                                    index: indexLeft + 1,
+                                  ),
+                                ),
+                              ),
+                            ),
+                        ],
+                      );
+                    } else {
+                      return NumStack(
+                        text: '$pageIndex',
+                        child: GalleryImage(
+                          index: pageIndex,
+                        ),
+                      );
+                    }
+                  }(),
+                ),
+                initialScale: PhotoViewComputedScale.covered,
+                minScale: PhotoViewComputedScale.contained * 1.0,
+                maxScale: PhotoViewComputedScale.covered * _maxScale,
+              );
+            },
+            loadingBuilder: loadingBuilder,
+            // backgroundDecoration: null,
+            pageController: controller.pageController,
+            enableRotation: false,
+            onPageChanged: controller.handOnPageChanged,
           ),
-          builder: (BuildContext context, int index) {
-            return PhotoViewGalleryPageOptions.customChild(
-              child: GalleryImage(
-                index: index,
-              ),
-              initialScale: PhotoViewComputedScale.contained,
-              minScale: PhotoViewComputedScale.contained * 1.0,
-              maxScale: PhotoViewComputedScale.covered * _maxScale,
-            );
-          },
-          loadingBuilder: loadingBuilder,
-          // backgroundDecoration: null,
-          pageController: controller.pageController,
-          enableRotation: false,
-          onPageChanged: controller.handOnPageChanged,
         );
       },
     );
@@ -431,9 +482,44 @@ class GalleryViewPage extends GetView<ViewController> {
         : Container(
             child: Center(
               child: Text(
-                'Loading ${controller.currentIndex + 1}',
+                'Loading ${controller.itemIndex + 1}',
               ),
             ),
           );
+  }
+}
+
+class NumStack extends StatelessWidget {
+  const NumStack({Key key, this.text, @required this.child}) : super(key: key);
+  final String text;
+  final Widget child;
+
+  @override
+  Widget build(BuildContext context) {
+    return Stack(
+      alignment: Alignment.center,
+      children: <Widget>[
+        child,
+        if (Global.inDebugMode)
+          Positioned(
+            left: 10,
+            top: 10,
+            child: Text(
+              text ?? '',
+              style: const TextStyle(
+                  fontSize: 50,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.white,
+                  shadows: <Shadow>[
+                    Shadow(
+                      color: Colors.black,
+                      offset: Offset(2, 2),
+                      blurRadius: 4,
+                    )
+                  ]),
+            ),
+          ),
+      ],
+    );
   }
 }

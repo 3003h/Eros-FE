@@ -13,6 +13,7 @@ import 'package:fehviewer/utils/storage.dart';
 import 'package:fehviewer/utils/utility.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:get_storage/get_storage.dart';
 import 'package:logger/logger.dart';
 import 'package:path/path.dart';
 import 'package:path_provider/path_provider.dart';
@@ -74,6 +75,8 @@ class Global {
 
     // SP初始化
     await StorageUtil.init();
+
+    await GetStorage.init('GalleryCache');
 
     _profileInit();
 
@@ -147,7 +150,7 @@ class Global {
   static void _profileInit() {
     _initProfile();
     _initHistory();
-    _initGalleryCaches();
+    // _initGalleryCaches();
 
     if (profile.ehConfig == null) {
       profile.ehConfig = EhConfig()

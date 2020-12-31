@@ -320,7 +320,7 @@ class GalleryPageController extends GetxController
           galleryItem.galleryPreview;
 
       while (index > _galleryPreviewList.length - 1) {
-        logger.d(' index = $index ; len = ${_galleryPreviewList.length}');
+        // logger.d(' index = $index ; len = ${_galleryPreviewList.length}');
         await _loarMordPriview();
       }
       return true;

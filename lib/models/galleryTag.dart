@@ -4,13 +4,12 @@ part 'galleryTag.g.dart';
 
 @JsonSerializable()
 class GalleryTag {
-  GalleryTag();
+      GalleryTag();
 
   String title;
   String type;
   String tagTranslat;
 
-  factory GalleryTag.fromJson(Map<String, dynamic> json) =>
-      _$GalleryTagFromJson(json);
+  factory GalleryTag.fromJson(Map<String,dynamic> json) => _$GalleryTagFromJson(json);
   Map<String, dynamic> toJson() => _$GalleryTagToJson(this);
 }

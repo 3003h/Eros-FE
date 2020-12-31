@@ -85,5 +85,10 @@
   "p_Download" : "Download",
   "p_Similar": "Similar",
   "p_Torrent": "Torrent ({count})",
-  "p_Rate": "Rate"
+  "p_Rate": "Rate",
+  "read_setting": "Read setting",
+  "reading_direction": "Reading direction",
+  "letf_to_right": "Letf to right",
+  "right_to_left": "Retf to light",
+  "top_to_bottom": "Top to bottom"
 }

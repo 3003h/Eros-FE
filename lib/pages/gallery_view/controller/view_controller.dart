@@ -5,28 +5,96 @@ import 'package:fehviewer/common/controller/gallerycache_controller.dart';
 import 'package:fehviewer/common/service/depth_service.dart';
 import 'package:fehviewer/common/service/ehconfig_service.dart';
 import 'package:fehviewer/const/const.dart';
+import 'package:fehviewer/models/base/extension.dart';
 import 'package:fehviewer/models/index.dart';
 import 'package:fehviewer/pages/gallery_main/controller/gallery_page_controller.dart';
 import 'package:fehviewer/pages/gallery_view/view/common.dart';
 import 'package:fehviewer/utils/logger.dart';
 import 'package:fehviewer/utils/utility.dart';
+import 'package:fehviewer/utils/vibrate.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
 
 const double kBottomBarHeight = 44.0;
 const double kTopBarHeight = 40.0;
 
+enum ColumnMode {
+  // 双页 奇数页位于左边
+  odd,
+
+  // 双页 偶数页位于左边
+  even,
+
+  // 单页
+  single,
+}
+
 class ViewController extends GetxController {
-  ViewController(this.index);
+  ViewController(this.initIndex);
+  final int initIndex;
 
-  // final String gid;
+  final Rx<ColumnMode> _columnMode = ColumnMode.single.obs;
+  ColumnMode get columnMode => _columnMode.value;
+  void switchColumnMode() {
+    VibrateUtil.light();
+    logger.v('switchColumnMode');
+    switch (columnMode) {
+      case ColumnMode.single:
+        logger.d('switchColumnMode itemIndex:$itemIndex to double odd');
+        _columnMode.value = ColumnMode.odd;
+        pageController.jumpToPage(pageIndex);
+        break;
+      case ColumnMode.odd:
+        logger.d('switchColumnMode itemIndex:$itemIndex to double even');
+        _columnMode.value = ColumnMode.even;
+        pageController.jumpToPage(pageIndex);
+        break;
+      case ColumnMode.even:
+        logger.d('switchColumnMode itemIndex:$itemIndex to  single');
+        _columnMode.value = ColumnMode.single;
+        Future.delayed(Duration.zero).then((value) {
+          final int _toIndex = pageIndex;
+          pageController.jumpToPage(_toIndex);
+          logger.d('pageIndex $_toIndex');
+          _itemIndex.value = _toIndex;
+          sliderValue = _toIndex.toDouble();
+        });
 
-  final int index;
+        break;
+    }
+  }
 
-  final RxInt _currentIndex = 0.obs;
-  int get currentIndex => _currentIndex.value;
-  set currentIndex(int val) => _currentIndex.value = val;
+  final RxInt _itemIndex = 0.obs;
+  int get itemIndex => _itemIndex.value;
+  // set itemIndex(int val) => _itemIndex.value = val;
+
+  int get pageIndex {
+    switch (columnMode) {
+      case ColumnMode.single:
+        return itemIndex;
+      case ColumnMode.odd:
+        return itemIndex ~/ 2;
+      case ColumnMode.even:
+        return (itemIndex + 1) ~/ 2;
+      default:
+        return itemIndex;
+    }
+  }
+
+  int get pageCount {
+    switch (columnMode) {
+      case ColumnMode.single:
+        return previews.length;
+      case ColumnMode.odd:
+        return (previews.length / 2).round();
+      case ColumnMode.even:
+        return (previews.length / 2).round() + 1;
+      default:
+        return previews.length;
+    }
+  }
 
   final RxDouble _sliderValue = 0.0.obs;
   double get sliderValue => _sliderValue.value;
@@ -61,11 +129,9 @@ class ViewController extends GetxController {
     }
   }
 
-  double _realPaddingBottom;
-
-  double _realPaddingTop;
-
   Size screensize;
+  double _realPaddingBottom;
+  double _realPaddingTop;
   double _paddingLeft;
   double _paddingRight;
   double _paddingTop;
@@ -88,20 +154,17 @@ class ViewController extends GetxController {
 
   PageController pageController;
 
-  // Future<GalleryPreview> futureViewGallery;
-
   final CancelToken _getMoreCancelToken = CancelToken();
+
   final EhConfigService _ehConfigService = Get.find();
   final GalleryCacheController _galleryCacheController = Get.find();
   GalleryPageController _galleryPageController;
 
+  ViewMode lastViewMode;
   Rx<ViewMode> get _viewMode => _ehConfigService.viewMode;
   ViewMode get viewMode => _viewMode.value;
 
-  ViewMode lastViewMode;
-
   List<GalleryPreview> get previews => _galleryPageController.previews;
-
   int lastPreviewLen;
 
   int get filecount =>
@@ -114,42 +177,84 @@ class ViewController extends GetxController {
   @override
   void onInit() {
     super.onInit();
+    logger.d('onInit() start');
     _galleryPageController = Get.find(tag: pageCtrlDepth);
 
-    currentIndex = 0;
-    showBar = false;
-    logger.d('_index $index');
-    pageController = PageController(initialPage: index, viewportFraction: 1.1);
+    if (GetPlatform.isIOS)
+      Future.delayed(const Duration(milliseconds: 200))
+          .then((value) => SystemChrome.setEnabledSystemUIOverlays([]));
 
-    Future.delayed(const Duration(milliseconds: 200))
-        .then((value) => itemScrollController.jumpTo(index: index));
+    if (GetPlatform.isIOS)
+      ever(_showBar, (bool val) {
+        Future.delayed(Duration(milliseconds: 800)).then((value) {
+          if (val) {
+            SystemChrome.setEnabledSystemUIOverlays(SystemUiOverlay.values);
+          } else {
+            SystemChrome.setEnabledSystemUIOverlays([]);
+          }
+        });
+      });
+
+    ever(_itemIndex, (int val) {
+      logger.d('ever _itemIndex to $val');
+      Future<void>.delayed(const Duration(milliseconds: 100)).then((_) {
+        logger.d('delayed ever _itemIndex to $itemIndex');
+        _galleryCacheController.setIndex(
+            _galleryPageController.galleryItem.gid, itemIndex,
+            notify: false);
+      });
+    });
+
+    ever(_columnMode, (ColumnMode val) {
+      Future<void>.delayed(const Duration(milliseconds: 100)).then((_) {
+        logger.d('delayed ever _columnMode to $_columnMode');
+        _galleryCacheController.setColumnMode(
+            _galleryPageController.galleryItem.gid, val);
+      });
+    });
+
+    _columnMode.value = _galleryCacheController
+            .getGalleryCache(_galleryPageController.galleryItem.gid)
+            ?.columnMode ??
+        ColumnMode.single;
+    // logger.d('init ${_columnMode}');
+
+    logger.d('initIndex $itemIndex');
+    _itemIndex.value = initIndex;
+
+    logger.d('initialPage $pageIndex');
+    final int _initialPage = pageIndex;
+    pageController =
+        PageController(initialPage: _initialPage, viewportFraction: 1.1);
+
+    if (viewMode == ViewMode.vertical) {
+      Future.delayed(const Duration(milliseconds: 200))
+          .then((value) => itemScrollController.jumpTo(index: itemIndex));
+    }
 
     final int preload = _ehConfigService.preloadImage.value;
     if (viewMode != ViewMode.vertical) {
       // 预载
-      logger.v('预载后面 $preload 张图 didChangeDependencies');
+      // logger.v('预载后面 $preload 张图 didChangeDependencies');
       GalleryPrecache.instance.precacheImages(
         Get.context,
         _galleryPageController,
         previews: _galleryPageController.previews,
-        index: index,
+        index: itemIndex,
         max: preload,
       );
 
-      currentIndex = index;
-      Future<void>.delayed(const Duration(milliseconds: 100)).then((_) {
-        _galleryCacheController.setIndex(
-            _galleryPageController.galleryItem.gid, currentIndex,
-            notify: false);
-      });
-      sliderValue = currentIndex / 1.0;
+      sliderValue = itemIndex / 1.0;
     }
+
+    logger.d('onInit() end');
   }
 
   @override
   void onClose() {
     pageController.dispose();
     // _getMoreCancelToken.cancel();
+    SystemChrome.setEnabledSystemUIOverlays(SystemUiOverlay.values);
     super.onClose();
   }
 
@@ -164,18 +269,26 @@ class ViewController extends GetxController {
   }
 
   void handOnSliderChangedEnd(double value) {
-    final int _index = value.round();
-    logger.d('to index $_index');
+    _itemIndex.value = value.round();
+    logger.d('slider to _itemIndex $itemIndex');
 
-    _galleryPageController.showLoadingDialog(Get.context, _index).then((_) {
-      _galleryCacheController.setIndex(
-          _galleryPageController.galleryItem.gid, _index);
+    _galleryPageController.showLoadingDialog(Get.context, itemIndex).then((_) {
       if (viewMode != ViewMode.vertical) {
-        pageController.jumpToPage(_index);
+        /*switch (columnMode) {
+          case ColumnMode.single:
+            pageController.jumpToPage(pageIndex);
+            break;
+          case ColumnMode.odd:
+            pageController.jumpToPage(pageIndex);
+            break;
+          case ColumnMode.even:
+            pageController.jumpToPage(pageIndex);
+            break;
+        }*/
+        pageController.jumpToPage(pageIndex);
       } else {
-        // sliderValue = currentIndex / 1.0;
         Future.delayed(const Duration(milliseconds: 200))
-            .then((value) => itemScrollController.jumpTo(index: _index));
+            .then((value) => itemScrollController.jumpTo(index: itemIndex));
       }
     });
   }
@@ -185,22 +298,40 @@ class ViewController extends GetxController {
   }
 
   // 页码切换时的回调
-  void handOnPageChanged(int index) {
+  void handOnPageChanged(int pageIndex) {
+    logger.d('handOnPageChanged  pageIndex:$pageIndex');
+    switch (columnMode) {
+      case ColumnMode.single:
+        _itemIndex.value = pageIndex;
+        break;
+      case ColumnMode.odd:
+        _itemIndex.value = pageIndex * 2;
+        break;
+      case ColumnMode.even:
+        final int index = pageIndex * 2 - 1;
+        _itemIndex.value = index > 0 ? index : 0;
+        break;
+    }
+
+    logger.d('handOnPageChanged  min');
+
     GalleryPrecache.instance.precacheImages(
       Get.context,
       _galleryPageController,
       previews: _galleryPageController.previews,
-      index: index,
+      index: itemIndex,
       max: _ehConfigService.preloadImage.value,
     );
-    currentIndex = index;
-    sliderValue = currentIndex / 1.0;
-    _galleryCacheController.setIndex(
-        _galleryPageController.galleryItem.gid, currentIndex);
+    // logger.d('itemIndex $itemIndex  ${itemIndex.toDouble()}');
+    if (itemIndex >= filecount - 1) {
+      sliderValue = (filecount - 1).toDouble();
+    } else if (itemIndex < 0) {
+      sliderValue = 1.0;
+    } else {
+      sliderValue = itemIndex.toDouble();
+    }
 
-    logger.d(
-        'handOnPageChanged: lastPreviewLen - index = ${lastPreviewLen - index}');
-    // update(['_buildPhotoViewGallery'], lastPreviewLen - index < 4);
+    logger.d('handOnPageChanged  end');
   }
 
   // 点击中间
@@ -227,12 +358,10 @@ class ViewController extends GetxController {
     // logger.d('firstIndex: $firstIndex, lastIndex: $lastIndex');
     final int index = (lastIndex + firstIndex) ~/ 2;
     // logger.d('$index ');
-    if (index != currentIndex) {
+    if (index != itemIndex) {
       Future.delayed(const Duration(milliseconds: 300)).then((value) {
-        currentIndex = index;
-        sliderValue = currentIndex / 1.0;
-        _galleryCacheController.setIndex(
-            _galleryPageController.galleryItem.gid, currentIndex);
+        _itemIndex.value = index;
+        sliderValue = itemIndex / 1.0;
       });
     }
     // currentIndex = index;
@@ -262,12 +391,10 @@ class ViewController extends GetxController {
       final int index = (min + max) ~/ 2;
 
       // logger.d('${positions.elementAt(index).itemLeadingEdge} ');
-      if (index != currentIndex) {
+      if (index != itemIndex) {
         Future.delayed(const Duration(milliseconds: 300)).then((value) {
-          currentIndex = index;
-          sliderValue = currentIndex / 1.0;
-          _galleryCacheController.setIndex(
-              _galleryPageController.galleryItem.gid, currentIndex);
+          _itemIndex.value = index;
+          sliderValue = itemIndex / 1.0;
         });
       }
     }
@@ -275,17 +402,19 @@ class ViewController extends GetxController {
   }
 
   void checkViewModel() {
+    logger.d('checkViewModel start');
     if (viewMode != lastViewMode) {
       if (viewMode == ViewMode.vertical) {
         Future.delayed(const Duration(milliseconds: 100)).then((value) {
-          itemScrollController.jumpTo(index: currentIndex);
+          itemScrollController.jumpTo(index: itemIndex);
         });
       } else {
         Future.delayed(const Duration(milliseconds: 100)).then((value) {
-          pageController.jumpToPage(currentIndex);
+          pageController.jumpToPage(pageIndex);
         });
       }
       lastViewMode = viewMode;
     }
+    logger.d('checkViewModel end');
   }
 }

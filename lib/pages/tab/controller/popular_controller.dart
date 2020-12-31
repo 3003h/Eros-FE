@@ -12,7 +12,7 @@ class PopularViewController extends GetxController
 
     loadData().then((List<GalleryItem> value) {
       change(value, status: RxStatus.success());
-    }, onError: (err) {
+    }).catchError((err) {
       logger.e('$err');
       change(null, status: RxStatus.error(err.toString()));
     });

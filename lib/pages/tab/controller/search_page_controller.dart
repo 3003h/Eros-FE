@@ -47,9 +47,10 @@ class SearchPageController extends GetxController
     final String _searchText = searchTextController.text.trim();
     if (_searchText.isNotEmpty) {
       _search = _searchText;
-      if (state == null || state.isEmpty) {
-        change(state, status: RxStatus.loading());
-      }
+      // if (state == null || state.isEmpty) {
+      //   change(state, status: RxStatus.loading());
+      // }
+      change(state, status: RxStatus.loading());
       try {
         final List<GalleryItem> _list = await _fetchData(refresh: true);
         change(_list, status: RxStatus.success());
@@ -71,7 +72,7 @@ class SearchPageController extends GetxController
     const Duration _duration = Duration(milliseconds: 800);
     _lastInputCompleteAt = DateTime.now();
     await Future<void>.delayed(_duration);
-    if (_lastSearchText != searchTextController.text &&
+    if (_lastSearchText?.trim() != searchTextController.text.trim() &&
         DateTime.now().difference(_lastInputCompleteAt) >= _duration) {
       _lastSearchText = searchTextController.text;
       await _startSearch();

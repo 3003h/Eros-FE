@@ -167,7 +167,7 @@ class GalleryDetailParser {
     // logger.d('or=$or');
     galleryItem.archiverLink =
         '${Api.getBaseUrl()}/archiver.php?gid=${galleryItem.gid}&token=${galleryItem.token}&or=$or';
-    logger.d('archiverLink: ${galleryItem.archiverLink}');
+    // logger.d('archiverLink: ${galleryItem.archiverLink}');
 
     final Element _ratingImage = document.querySelector('#rating_image');
     final String _ratingImageClass = _ratingImage.attributes['class'];
