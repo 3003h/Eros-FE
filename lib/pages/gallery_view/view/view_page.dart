@@ -92,6 +92,7 @@ class GalleryViewPage extends GetView<ViewController> {
   Widget _buildView() {
     logger.v('_buildView ');
     return Obx(() {
+      // 布局切换时进行页码跳转处理
       controller.checkViewModel();
       switch (controller.viewMode) {
         case ViewMode.vertical:
@@ -272,7 +273,7 @@ class GalleryViewPage extends GetView<ViewController> {
     );
   }
 
-  // TODO(honjow): 竖直浏览布局
+  // 竖直浏览布局 不用的方案
   Widget _buildListView_old() {
     return ListView.custom(
       childrenDelegate: ViewChildBuilderDelegate(
@@ -333,6 +334,7 @@ class GalleryViewPage extends GetView<ViewController> {
     );
   }
 
+  /// 竖直浏览布局 利用[ScrollablePositionedList]实现
   Widget _buildListView() {
     return GetBuilder<ViewController>(
         id: '_buildPhotoViewGallery',
@@ -384,8 +386,7 @@ class GalleryViewPage extends GetView<ViewController> {
         });
   }
 
-  // todo 缩放倍数动态化?
-  /// 水平方向浏览部件
+  /// 水平方向浏览部件 使用[PhotoViewGallery] 实现
   Widget _buildPhotoViewGallery({bool reverse = false}) {
     const double _maxScale = 10;
     logger.v('_buildPhotoViewGallery ');
