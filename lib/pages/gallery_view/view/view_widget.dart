@@ -84,28 +84,29 @@ class _GalleryImageState extends State<GalleryImage> {
               return _buildImage(_currentPreview.largeImageUrl);
             }
           } else {
-            return Container(
-              height: context.height / 4,
-              margin: EdgeInsets.symmetric(
-                  vertical: context.height / 8, horizontal: context.width / 8),
-              alignment: Alignment.center,
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: <Widget>[
-                  Text(
-                    '${widget.index + 1}',
-                    style: const TextStyle(
-                      fontSize: 50,
-                      color: CupertinoColors.systemGrey6,
+            return UnconstrainedBox(
+              child: Container(
+                margin:
+                    const EdgeInsets.symmetric(vertical: 40, horizontal: 40),
+                alignment: Alignment.center,
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: <Widget>[
+                    Text(
+                      '${widget.index + 1}',
+                      style: const TextStyle(
+                        fontSize: 50,
+                        color: CupertinoColors.systemGrey6,
+                      ),
                     ),
-                  ),
-                  const Text(
-                    '获取中...',
-                    style: TextStyle(
-                      color: CupertinoColors.systemGrey6,
+                    const Text(
+                      '获取中...',
+                      style: TextStyle(
+                        color: CupertinoColors.systemGrey6,
+                      ),
                     ),
-                  ),
-                ],
+                  ],
+                ),
               ),
             );
           }
@@ -136,54 +137,53 @@ class _GalleryImageState extends State<GalleryImage> {
               fadeOutDuration: const Duration(milliseconds: 0),
               progressIndicatorBuilder: (context, url, downloadProgress) {
                 // 下载进度回调
-                return Container(
-                  margin: EdgeInsets.symmetric(
-                      vertical: context.height / 8,
-                      horizontal: context.width / 8),
-                  alignment: Alignment.center,
-                  child: Column(
-                    mainAxisSize: MainAxisSize.min,
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: <Widget>[
-                      // CircularProgressIndicator(
-                      //     value: downloadProgress.progress),
-                      Container(
-                        height: 70,
-                        width: 70,
-                        child: LiquidCircularProgressIndicator(
-                          value: downloadProgress.progress ?? 0.0,
-                          valueColor: const AlwaysStoppedAnimation<Color>(
-                              Color.fromARGB(255, 163, 199, 100)),
-                          backgroundColor:
-                              const Color.fromARGB(255, 50, 50, 50),
-                          // borderColor: Colors.teal[900],
-                          // borderWidth: 2.0,
-                          direction: Axis.vertical,
-                          center: downloadProgress.progress != null
-                              ? Text(
-                                  '${(downloadProgress.progress ?? 0) * 100 ~/ 1}%',
-                                  style: TextStyle(
-                                    color: downloadProgress.progress < 0.5
-                                        ? CupertinoColors.white
-                                        : CupertinoColors.black,
-                                    fontSize: 12,
-                                    height: 1,
-                                  ),
-                                )
-                              : Container(),
-                        ),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.all(12.0),
-                        child: Text(
-                          '${widget.index + 1}',
-                          style: const TextStyle(
-                            color: CupertinoColors.systemGrey6,
-                            height: 1,
+                return UnconstrainedBox(
+                  child: Container(
+                    alignment: Alignment.center,
+                    margin: const EdgeInsets.symmetric(
+                        vertical: 40, horizontal: 40),
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: <Widget>[
+                        Container(
+                          height: 70,
+                          width: 70,
+                          child: LiquidCircularProgressIndicator(
+                            value: downloadProgress.progress ?? 0.0,
+                            valueColor: const AlwaysStoppedAnimation<Color>(
+                                Color.fromARGB(255, 163, 199, 100)),
+                            backgroundColor:
+                                const Color.fromARGB(255, 50, 50, 50),
+                            // borderColor: Colors.teal[900],
+                            // borderWidth: 2.0,
+                            direction: Axis.vertical,
+                            center: downloadProgress.progress != null
+                                ? Text(
+                                    '${(downloadProgress.progress ?? 0) * 100 ~/ 1}%',
+                                    style: TextStyle(
+                                      color: downloadProgress.progress < 0.5
+                                          ? CupertinoColors.white
+                                          : CupertinoColors.black,
+                                      fontSize: 12,
+                                      height: 1,
+                                    ),
+                                  )
+                                : Container(),
                           ),
                         ),
-                      )
-                    ],
+                        Padding(
+                          padding: const EdgeInsets.all(12.0),
+                          child: Text(
+                            '${widget.index + 1}',
+                            style: const TextStyle(
+                              color: CupertinoColors.systemGrey6,
+                              height: 1,
+                            ),
+                          ),
+                        )
+                      ],
+                    ),
                   ),
                 );
               },
