@@ -212,54 +212,52 @@ class GallerySearchPage extends StatelessWidget {
           controller.isSearchBarComp = true;
           VibrateUtil.heavy();
         },
-        child: Container(
-          width: 165,
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            children: <Widget>[
-              CupertinoButton(
-                minSize: 40,
-                padding: const EdgeInsets.only(left: 4),
-                child: Text(S.of(context).cancel),
-                onPressed: () {
-                  Get.back();
-                },
+        child: Row(
+          mainAxisSize: MainAxisSize.min,
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          children: <Widget>[
+            CupertinoButton(
+              minSize: 40,
+              padding: const EdgeInsets.only(left: 4),
+              child: Text(S.of(context).cancel),
+              onPressed: () {
+                Get.back();
+              },
+            ),
+            CupertinoButton(
+              minSize: 36,
+              padding: const EdgeInsets.all(0),
+              child: const Icon(
+                FontAwesomeIcons.filter,
+                size: 20,
               ),
-              CupertinoButton(
-                minSize: 36,
-                padding: const EdgeInsets.all(0),
-                child: const Icon(
-                  FontAwesomeIcons.filter,
-                  size: 20,
-                ),
-                onPressed: () {
-                  showFilterSetting();
-                },
+              onPressed: () {
+                showFilterSetting();
+              },
+            ),
+            CupertinoButton(
+              minSize: 36,
+              padding: const EdgeInsets.all(0),
+              child: const Icon(
+                FontAwesomeIcons.plusCircle,
+                size: 20,
               ),
-              CupertinoButton(
-                minSize: 36,
-                padding: const EdgeInsets.all(0),
-                child: const Icon(
-                  FontAwesomeIcons.plusCircle,
-                  size: 20,
-                ),
-                onPressed: () {
-                  controller.addToQuickSearch();
-                },
+              onPressed: () {
+                controller.addToQuickSearch();
+              },
+            ),
+            CupertinoButton(
+              minSize: 36,
+              padding: const EdgeInsets.all(0),
+              child: const Icon(
+                FontAwesomeIcons.alignJustify,
+                size: 20,
               ),
-              CupertinoButton(
-                minSize: 36,
-                padding: const EdgeInsets.all(0),
-                child: const Icon(
-                  FontAwesomeIcons.alignJustify,
-                  size: 20,
-                ),
-                onPressed: () {
-                  controller.quickSearchList();
-                },
-              ),
-            ],
-          ),
+              onPressed: () {
+                controller.quickSearchList();
+              },
+            ),
+          ],
         ),
       );
     }
@@ -270,33 +268,31 @@ class GallerySearchPage extends StatelessWidget {
           controller.isSearchBarComp = false;
           VibrateUtil.heavy();
         },
-        child: Container(
-          width: 100,
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            children: <Widget>[
-              CupertinoButton(
-                minSize: 40,
-                padding: const EdgeInsets.all(0),
-                child: Text(S.of(context).cancel),
-                onPressed: () {
-                  Get.back();
-                },
+        child: Row(
+          mainAxisSize: MainAxisSize.min,
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          children: <Widget>[
+            CupertinoButton(
+              minSize: 40,
+              padding: const EdgeInsets.symmetric(horizontal: 8),
+              child: Text(S.of(context).cancel),
+              onPressed: () {
+                Get.back();
+              },
+            ),
+            CupertinoButton(
+              key: controller.searchMenukey,
+              minSize: 40,
+              padding: const EdgeInsets.only(right: 4),
+              child: const Icon(
+                FontAwesomeIcons.ellipsisH,
+                size: 20,
               ),
-              CupertinoButton(
-                key: controller.searchMenukey,
-                minSize: 40,
-                padding: const EdgeInsets.only(right: 4),
-                child: const Icon(
-                  FontAwesomeIcons.th,
-                  size: 20,
-                ),
-                onPressed: () {
-                  _menu.show(widgetKey: controller.searchMenukey);
-                },
-              ),
-            ],
-          ),
+              onPressed: () {
+                _menu.show(widgetKey: controller.searchMenukey);
+              },
+            ),
+          ],
         ),
       );
     }

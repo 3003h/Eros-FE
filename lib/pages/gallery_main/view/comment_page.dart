@@ -1,32 +1,34 @@
 import 'package:fehviewer/generated/l10n.dart';
-import 'package:fehviewer/models/galleryComment.dart';
+import 'package:fehviewer/pages/gallery_main/controller/comment_controller.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:get/get.dart';
 
 import 'comment_item.dart';
 
-class CommentPage extends StatelessWidget {
-  const CommentPage({Key key, this.galleryComments}) : super(key: key);
-  final List<GalleryComment> galleryComments;
-
+class CommentPage extends GetView<CommentController> {
   @override
   Widget build(BuildContext context) {
     final Widget commSliverList = CustomScrollView(
       slivers: <Widget>[
         SliverSafeArea(
-          sliver: SliverList(
-            delegate: SliverChildBuilderDelegate(
-              (BuildContext contex, int index) {
-                if (index < galleryComments.length) {
-                  return CommentItem(
-                    galleryComment: galleryComments[index],
-                  );
-                } else {
-                  return Container(height: 20);
-                }
-              },
-              childCount: galleryComments.length + 1,
-            ),
-          ),
+          sliver: controller.obx(
+              (state) => SliverList(
+                    delegate: SliverChildBuilderDelegate(
+                      (BuildContext contex, int index) {
+                        if (index < state.length) {
+                          return CommentItem(
+                            galleryComment: state[index],
+                          );
+                        } else {
+                          return Container(height: 20);
+                        }
+                      },
+                      childCount: state.length + 1,
+                    ),
+                  ),
+              onLoading: SliverFillRemaining(
+                child: Container(),
+              )),
         )
       ],
     );

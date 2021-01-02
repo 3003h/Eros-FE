@@ -1,9 +1,7 @@
 import 'package:fehviewer/common/service/depth_service.dart';
-import 'package:fehviewer/models/galleryComment.dart';
 import 'package:fehviewer/models/index.dart';
 import 'package:fehviewer/pages/gallery_main/bindings/gallery_page_binding.dart';
 import 'package:fehviewer/pages/gallery_main/controller/gallery_page_controller.dart';
-import 'package:fehviewer/pages/gallery_main/view/comment_page.dart';
 import 'package:fehviewer/pages/gallery_main/view/gallery_page.dart';
 import 'package:fehviewer/pages/gallery_view/controller/view_controller.dart';
 import 'package:fehviewer/pages/gallery_view/view/view_page.dart';
@@ -41,9 +39,9 @@ class NavigatorUtil {
   /// 转到画廊页面
   static void goGalleryPage(
       {String url, String tabIndex, GalleryItem galleryItem}) {
+    Get.find<DepthService>().pushPageCtrl();
     if (url != null && url.isNotEmpty) {
-      // TODO(honjow): 通过链接直接打开画廊的情况
-      // ignore: always_specify_types
+      logger.d('goGalleryPage fromUrl');
       Get.to(
         const GalleryMainPage(),
         transition: Transition.cupertino,
@@ -51,6 +49,7 @@ class NavigatorUtil {
         binding: GalleryBinding.fromUrl(url),
       );
     } else {
+      logger.d('goGalleryPage fromItem');
       Get.to(
         const GalleryMainPage(),
         transition: Transition.cupertino,
@@ -63,14 +62,21 @@ class NavigatorUtil {
     final DepthService depthService = Get.find();
     depthService.pushPageCtrl();
     if (url != null && url.isNotEmpty) {
-      Get.off(const GalleryMainPage(), binding: BindingsBuilder<dynamic>(() {
-        Get.put(
-          GalleryPageController.initUrl(url: url),
-          tag: '${depthService.pageCtrlDepth}',
-        );
-      }));
+      Get.off(
+        const GalleryMainPage(),
+        binding: BindingsBuilder<dynamic>(
+          () {
+            Get.put(
+              GalleryPageController.initUrl(url: url),
+              tag: '${depthService.pageCtrlDepth}',
+            );
+          },
+        ),
+      );
     } else {
-      Get.to(const GalleryMainPage());
+      Get.to(
+        const GalleryMainPage(),
+      );
     }
   }
 
@@ -83,14 +89,6 @@ class NavigatorUtil {
         tag: searchPageCtrlDepth,
       );
     }));
-  }
-
-  /// 转到画廊评论页面
-  static void goGalleryDetailComment(List<GalleryComment> comments) {
-    Get.to(
-      CommentPage(galleryComments: comments),
-      transition: Transition.cupertino,
-    );
   }
 
   // 转到大图浏览

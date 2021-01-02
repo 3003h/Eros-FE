@@ -136,13 +136,13 @@ class GalleryContainer extends StatelessWidget {
         ),
         Expanded(
           child: TextBtn(
-            FontAwesomeIcons.arrowAltCircleDown,
+            FontAwesomeIcons.solidArrowAltCircleDown,
             title: S.of(context).p_Download,
           ),
         ),
         Expanded(
           child: TextBtn(
-            FontAwesomeIcons.lemon,
+            FontAwesomeIcons.magnet,
             title: S.of(context).p_Torrent('${state.torrentcount ?? 0}'),
             onTap: state.torrents.isNotEmpty
                 ? () async {
@@ -153,7 +153,7 @@ class GalleryContainer extends StatelessWidget {
         ),
         Expanded(
           child: TextBtn(
-            FontAwesomeIcons.fileArchive,
+            FontAwesomeIcons.solidFileArchive,
             title: 'Archiver',
             onTap: () async {
               showArchiverDialog();
@@ -162,7 +162,7 @@ class GalleryContainer extends StatelessWidget {
         ),
         Expanded(
           child: TextBtn(
-            FontAwesomeIcons.clone,
+            FontAwesomeIcons.solidImages,
             title: S.of(context).p_Similar,
             onTap: () {
               final String title = state.englishTitle

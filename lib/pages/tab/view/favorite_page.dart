@@ -47,32 +47,52 @@ class FavoriteTab extends GetView<FavoriteViewController> {
           largeTitle: Obx(() => Text(
                 controller.title.value,
               )),
-          trailing: Container(
-            width: 100,
+          leading: CupertinoButton(
+            padding: const EdgeInsets.all(0.0),
             child: Row(
-              mainAxisAlignment: MainAxisAlignment.end,
-              children: [
-                CupertinoButton(
-                  padding: const EdgeInsets.all(0),
-                  child: ClipRRect(
-                    borderRadius: BorderRadius.circular(4),
-                    child: Container(
-                      padding: const EdgeInsets.fromLTRB(4, 2, 4, 2),
-                      color: CupertinoColors.activeBlue,
-                      child: Obx(() => Text(
-                            '${controller.curPage.value + 1}',
-                            style:
-                                const TextStyle(color: CupertinoColors.white),
-                          )),
+              mainAxisSize: MainAxisSize.min,
+              children: <Widget>[
+                const Icon(
+                  FontAwesomeIcons.sortAmountDown,
+                  size: 22,
+                ),
+                Align(
+                  alignment: Alignment.centerLeft,
+                  child: Text(
+                    controller.orderText,
+                    style: const TextStyle(
+                      fontSize: 10,
+                      fontWeight: FontWeight.bold,
                     ),
                   ),
-                  onPressed: () {
-                    controller.jumtToPage(context);
-                  },
-                ),
-                _buildFavcatButton(context),
+                )
               ],
             ),
+            onPressed: controller.setOrder,
+          ),
+          trailing: Row(
+            mainAxisSize: MainAxisSize.min,
+            mainAxisAlignment: MainAxisAlignment.end,
+            children: [
+              CupertinoButton(
+                padding: const EdgeInsets.all(0),
+                child: ClipRRect(
+                  borderRadius: BorderRadius.circular(4),
+                  child: Container(
+                    padding: const EdgeInsets.fromLTRB(4, 2, 4, 2),
+                    color: CupertinoColors.activeBlue,
+                    child: Obx(() => Text(
+                          '${controller.curPage.value + 1}',
+                          style: const TextStyle(color: CupertinoColors.white),
+                        )),
+                  ),
+                ),
+                onPressed: () {
+                  controller.jumtToPage(context);
+                },
+              ),
+              _buildFavcatButton(context),
+            ],
           ),
         ),
         CupertinoSliverRefreshControl(

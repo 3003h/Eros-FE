@@ -1,5 +1,6 @@
 export 'advanceSearch.dart';
 export 'cacheConfig.dart';
+export 'commitVoteRes.dart';
 export 'dnsCache.dart';
 export 'dnsConfig.dart';
 export 'downloadConfig.dart';
