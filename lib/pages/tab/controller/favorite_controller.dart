@@ -1,6 +1,7 @@
 import 'package:fehviewer/common/controller/localfav_controller.dart';
 import 'package:fehviewer/common/controller/user_controller.dart';
 import 'package:fehviewer/common/service/ehconfig_service.dart';
+import 'package:fehviewer/const/const.dart';
 import 'package:fehviewer/generated/l10n.dart';
 import 'package:fehviewer/models/index.dart';
 import 'package:fehviewer/network/gallery_request.dart';
@@ -209,4 +210,15 @@ class FavoriteViewController extends GetxController
       },
     );
   }
+
+  Future<void> setOrder() async {
+    final FavoriteOrder order = await _ehConfigService.showFavOrder();
+    if (order != null) {
+      change(state, status: RxStatus.loading());
+      reloadData();
+    }
+  }
+
+  String get orderText =>
+      _ehConfigService.favoriteOrder.value == FavoriteOrder.fav ? 'F' : 'P';
 }

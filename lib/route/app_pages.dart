@@ -1,3 +1,5 @@
+import 'package:fehviewer/pages/gallery_main/controller/comment_controller.dart';
+import 'package:fehviewer/pages/gallery_main/view/comment_page.dart';
 import 'package:fehviewer/pages/login/login_page.dart';
 import 'package:fehviewer/pages/login/web_login.dart';
 import 'package:fehviewer/pages/setting/about_page.dart';
@@ -10,6 +12,7 @@ import 'package:fehviewer/pages/tab/bindings/tabhome_binding.dart';
 import 'package:fehviewer/pages/tab/view/favorite_sel_page.dart';
 import 'package:fehviewer/pages/tab/view/splash_page.dart';
 import 'package:fehviewer/pages/tab/view/tabhome_page.dart';
+import 'package:fehviewer/utils/logger.dart';
 import 'package:get/get.dart';
 
 import 'routes.dart';
@@ -21,11 +24,13 @@ class AppPages {
       name: EHRoutes.root,
       page: () => SplashPage(),
       binding: SplashBinding(),
+      transition: Transition.fadeIn,
     ),
     GetPage(
       name: EHRoutes.home,
       page: () => TabHome(),
       binding: TabHomeBinding(),
+      transition: Transition.fadeIn,
     ),
     GetPage(
       name: EHRoutes.selFavorie,
@@ -65,6 +70,15 @@ class AppPages {
     GetPage(
       name: EHRoutes.webLogin,
       page: () => const WebLoginView(),
+    ),
+    GetPage(
+      name: EHRoutes.galleryComment,
+      page: () => CommentPage(),
+      transition: Transition.cupertino,
+      binding: BindingsBuilder(() {
+        logger.d('galleryComment binding');
+        Get.put(CommentController());
+      }),
     ),
   ];
 }

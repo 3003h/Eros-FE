@@ -14,6 +14,7 @@ import 'package:fehviewer/pages/gallery_main/view/comment_item.dart';
 import 'package:fehviewer/pages/gallery_main/view/gallery_favcat.dart';
 import 'package:fehviewer/pages/gallery_main/view/preview_clipper.dart';
 import 'package:fehviewer/route/navigator_util.dart';
+import 'package:fehviewer/route/routes.dart';
 import 'package:fehviewer/utils/logger.dart';
 import 'package:fehviewer/widget/rating_bar.dart';
 import 'package:flutter/cupertino.dart';
@@ -360,7 +361,7 @@ class GalleryCategory extends StatelessWidget {
       onTap: () {
         final int iCat = EHConst.cats[category];
         final int cats = EHConst.sumCats - iCat;
-        NavigatorUtil.goGalleryList(cats: cats);
+        // NavigatorUtil.goGalleryList(cats: iCat);
       },
     );
   }
@@ -516,7 +517,8 @@ class TopComment extends StatelessWidget {
             style: const TextStyle(fontSize: 16),
           ),
           onPressed: () {
-            NavigatorUtil.goGalleryDetailComment(comment);
+            // NavigatorUtil.goGalleryDetailComment(comment);
+            Get.toNamed(EHRoutes.galleryComment);
           },
         ),
       ],

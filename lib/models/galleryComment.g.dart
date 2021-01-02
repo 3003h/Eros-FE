@@ -11,7 +11,11 @@ GalleryComment _$GalleryCommentFromJson(Map<String, dynamic> json) {
     ..name = json['name'] as String
     ..time = json['time'] as String
     ..context = json['context'] as String
-    ..score = json['score'] as String;
+    ..score = json['score'] as String
+    ..vote = json['vote'] as int
+    ..id = json['id'] as String
+    ..canEdit = json['canEdit'] as bool
+    ..canVote = json['canVote'] as bool;
 }
 
 Map<String, dynamic> _$GalleryCommentToJson(GalleryComment instance) =>
@@ -20,4 +24,8 @@ Map<String, dynamic> _$GalleryCommentToJson(GalleryComment instance) =>
       'time': instance.time,
       'context': instance.context,
       'score': instance.score,
+      'vote': instance.vote,
+      'id': instance.id,
+      'canEdit': instance.canEdit,
+      'canVote': instance.canVote,
     };

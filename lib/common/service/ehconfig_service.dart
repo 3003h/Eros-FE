@@ -2,6 +2,9 @@ import 'package:enum_to_string/enum_to_string.dart';
 import 'package:fehviewer/common/global.dart';
 import 'package:fehviewer/common/service/base_service.dart';
 import 'package:fehviewer/const/const.dart';
+import 'package:fehviewer/generated/l10n.dart';
+import 'package:fehviewer/utils/logger.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
 
 class EhConfigService extends ProfileService {
@@ -109,5 +112,59 @@ class EhConfigService extends ProfileService {
     isPureDarkTheme.value = ehConfig.pureDarkTheme ?? false;
     everProfile<bool>(
         isPureDarkTheme, (bool value) => ehConfig.pureDarkTheme = value);
+  }
+
+  Future<FavoriteOrder> showFavOrder() async {
+    final BuildContext context = Get.context;
+    final Map<FavoriteOrder, String> _orderMap = <FavoriteOrder, String>{
+      FavoriteOrder.posted: S.of(context).favorites_order_Use_posted,
+      FavoriteOrder.fav: S.of(context).favorites_order_Use_favorited,
+    };
+
+    List<Widget> _getOrderList(BuildContext context) {
+      return List<Widget>.from(_orderMap.keys.map((FavoriteOrder element) {
+        return CupertinoActionSheetAction(
+            onPressed: () {
+              Get.back(result: element);
+            },
+            child: Row(
+              mainAxisSize: MainAxisSize.min,
+              children: <Widget>[
+                if (element == favoriteOrder.value)
+                  const Padding(
+                    padding: EdgeInsets.symmetric(horizontal: 8),
+                    child: Icon(CupertinoIcons.checkmark),
+                  ),
+                Text(_orderMap[element]),
+              ],
+            ));
+      }).toList());
+    }
+
+    final FavoriteOrder _result = await showCupertinoModalPopup<FavoriteOrder>(
+        context: context,
+        builder: (BuildContext context) {
+          return CupertinoActionSheet(
+            title: Text(S.of(context).favorites_order),
+            cancelButton: CupertinoActionSheetAction(
+                onPressed: () {
+                  Get.back();
+                },
+                child: Text(S.of(context).cancel)),
+            actions: <Widget>[
+              ..._getOrderList(context),
+            ],
+          );
+        });
+
+    if (_result != null) {
+      logger.v('to ${EnumToString.convertToString(_result)}');
+      if (favoriteOrder.value != _result) {
+        return favoriteOrder.value = _result;
+      } else {
+        return null;
+      }
+    }
+    return _result;
   }
 }

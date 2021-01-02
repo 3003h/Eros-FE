@@ -2,5 +2,9 @@
   "name" : "",
   "time" : "",
   "context" : "",
-  "score" : "20"
+  "score" : "20",
+  "vote": -1,
+  "id": "4089350",
+  "canEdit": false,
+  "canVote": false
 }

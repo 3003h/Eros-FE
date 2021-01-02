@@ -2,6 +2,7 @@ import 'package:fehviewer/models/index.dart';
 import 'package:fehviewer/pages/filter/filter.dart';
 import 'package:fehviewer/pages/tab/controller/gallery_controller.dart';
 import 'package:fehviewer/pages/tab/view/gallery_base.dart';
+import 'package:fehviewer/pages/tab/view/history_page.dart';
 import 'package:fehviewer/route/navigator_util.dart';
 import 'package:fehviewer/utils/logger.dart';
 import 'package:flutter/cupertino.dart';
@@ -27,58 +28,68 @@ class GalleryListTab extends GetView<GalleryViewController> {
         CupertinoSliverNavigationBar(
           padding: const EdgeInsetsDirectional.only(end: 4),
           largeTitle: Text(controller.title),
-          trailing: Container(
-            width: 130,
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.end,
-              children: [
-                // 搜索按钮
-                CupertinoButton(
-                  minSize: 40,
-                  padding: const EdgeInsets.all(0),
-                  child: const Icon(
-                    FontAwesomeIcons.search,
-                    size: 20,
-                  ),
-                  onPressed: () {
-                    NavigatorUtil.showSearch();
-                  },
-                ),
-                // 筛选按钮
-                CupertinoButton(
-                  minSize: 40,
-                  padding: const EdgeInsets.all(0),
-                  child: const Icon(
-                    FontAwesomeIcons.filter,
-                    size: 20,
-                  ),
-                  onPressed: () {
-                    // logger.v('${EHUtils.convNumToCatMap(1)}');
-                    showFilterSetting();
-                  },
-                ),
-                // 页码跳转按钮
-                CupertinoButton(
-                  minSize: 40,
-                  padding: const EdgeInsets.only(right: 0),
-                  child: ClipRRect(
-                    borderRadius: BorderRadius.circular(4),
-                    child: Container(
-                      padding: const EdgeInsets.fromLTRB(4, 2, 4, 2),
-                      color: CupertinoColors.activeBlue,
-                      child: Obx(() => Text(
-                            '${controller.curPage.value + 1}',
-                            style:
-                                const TextStyle(color: CupertinoColors.white),
-                          )),
-                    ),
-                  ),
-                  onPressed: () {
-                    controller.jumpToPage();
-                  },
-                ),
-              ],
+          leading: CupertinoButton(
+            padding: const EdgeInsets.all(0.0),
+            child: const Icon(
+              FontAwesomeIcons.history,
+              size: 22,
             ),
+            onPressed: () {
+              Get.to(
+                const HistoryTab(),
+                transition: Transition.cupertino,
+              );
+            },
+          ),
+          trailing: Row(
+            mainAxisSize: MainAxisSize.min,
+            mainAxisAlignment: MainAxisAlignment.end,
+            children: [
+              // 搜索按钮
+              CupertinoButton(
+                minSize: 40,
+                padding: const EdgeInsets.all(0),
+                child: const Icon(
+                  FontAwesomeIcons.search,
+                  size: 20,
+                ),
+                onPressed: () {
+                  NavigatorUtil.showSearch();
+                },
+              ),
+              // 筛选按钮
+              CupertinoButton(
+                minSize: 40,
+                padding: const EdgeInsets.all(0),
+                child: const Icon(
+                  FontAwesomeIcons.filter,
+                  size: 20,
+                ),
+                onPressed: () {
+                  // logger.v('${EHUtils.convNumToCatMap(1)}');
+                  showFilterSetting();
+                },
+              ),
+              // 页码跳转按钮
+              CupertinoButton(
+                minSize: 40,
+                padding: const EdgeInsets.only(right: 0),
+                child: ClipRRect(
+                  borderRadius: BorderRadius.circular(4),
+                  child: Container(
+                    padding: const EdgeInsets.fromLTRB(4, 2, 4, 2),
+                    color: CupertinoColors.activeBlue,
+                    child: Obx(() => Text(
+                          '${controller.curPage.value + 1}',
+                          style: const TextStyle(color: CupertinoColors.white),
+                        )),
+                  ),
+                ),
+                onPressed: () {
+                  controller.jumpToPage();
+                },
+              ),
+            ],
           ),
         ),
         CupertinoSliverRefreshControl(

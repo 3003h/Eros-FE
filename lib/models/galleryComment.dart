@@ -10,6 +10,10 @@ class GalleryComment {
   String time;
   String context;
   String score;
+  int vote;
+  String id;
+  bool canEdit;
+  bool canVote;
 
   factory GalleryComment.fromJson(Map<String, dynamic> json) =>
       _$GalleryCommentFromJson(json);

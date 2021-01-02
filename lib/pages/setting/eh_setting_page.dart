@@ -158,13 +158,13 @@ class ListViewEhSetting extends StatelessWidget {
         desc: '无默认,每次进行选择',
         descOn: '使用上次选择，长按选择其他',
       ),
-      TextSwitchItem(
-        S.of(context).favorites_order,
-        intValue: _favOrder,
-        onChanged: _handleFavOrderChanged,
-        desc: S.of(context).favorites_order_Use_favorited,
-        descOn: S.of(context).favorites_order_Use_posted,
-      ),
+      // TextSwitchItem(
+      //   S.of(context).favorites_order,
+      //   intValue: _favOrder,
+      //   onChanged: _handleFavOrderChanged,
+      //   desc: S.of(context).favorites_order_Use_favorited,
+      //   descOn: S.of(context).favorites_order_Use_posted,
+      // ),
       _buildListModeItem(context),
       _buildHistoryMaxItem(context),
     ];

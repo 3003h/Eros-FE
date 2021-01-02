@@ -84,6 +84,8 @@ class GalleryPageController extends GetxController
   void onInit() {
     super.onInit();
 
+    logger.d('GalleryPageController$pageCtrlDepth onInit');
+
     scrollController.addListener(_scrollControllerLister);
     hideNavigationBtn = true;
 

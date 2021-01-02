@@ -508,6 +508,66 @@ class Api {
     logger.d('$rult');
   }
 
+  static Future<CommitVoteRes> commitVote({
+    @required String apikey,
+    @required String apiuid,
+    @required String gid,
+    @required String token,
+    @required String commentId,
+    @required int vote,
+  }) async {
+    final Map reqMap = {
+      'method': 'votecomment',
+      'apikey': apikey,
+      'apiuid': int.parse(apiuid),
+      'gid': int.parse(gid),
+      'token': token,
+      'comment_id': int.parse(commentId),
+      'comment_vote': vote,
+    };
+    final String reqJsonStr = jsonEncode(reqMap);
+    // logger.d('$reqJsonStr');
+    await CustomHttpsProxy.instance.init();
+    final rult = await getGalleryApi(reqJsonStr, refresh: true, cache: false);
+    // logger.d('$rult');
+    // final jsonObj = jsonDecode(rult.toString());
+    return CommitVoteRes.fromJson(jsonDecode(rult.toString()));
+  }
+
+/*  static Future<void> commitVoteUp({
+    @required String apikey,
+    @required String apiuid,
+    @required String gid,
+    @required String token,
+    @required String commentId,
+  }) async {
+    return await _commitVote(
+      apikey: apikey,
+      apiuid: apiuid,
+      gid: gid,
+      token: token,
+      commentId: commentId,
+      vote: 1,
+    );
+  }
+
+  static Future<void> commitVoteDown({
+    @required String apikey,
+    @required String apiuid,
+    @required String gid,
+    @required String token,
+    @required String commentId,
+  }) async {
+    return await _commitVote(
+      apikey: apikey,
+      apiuid: apiuid,
+      gid: gid,
+      token: token,
+      commentId: commentId,
+      vote: -1,
+    );
+  }*/
+
   static Future<void> getMoreGalleryInfoOne(
     GalleryItem galleryItem, {
     bool refresh = false,

@@ -90,7 +90,44 @@ class GalleryDetailParser {
         // 评论评分 (Uploader Comment 没有)
         final Element scoreElem =
             comment.querySelector('div.c2 > div.c5.nosel');
-        final String score = scoreElem?.text?.trim() ?? '';
+        String score = '';
+        if (scoreElem != null) {
+          score = RegExp(r'((\+|-)(\d+))')
+                  .firstMatch(scoreElem.text.trim())
+                  ?.group(1) ??
+              '';
+        }
+
+        bool _canEdit = false;
+        bool _canVote = false;
+        int _vote = 0;
+        String _id = '';
+        final Element _c4 = comment.querySelector('div.c2 > div.c4.nosel');
+        if (_c4 != null) {
+          final Element _hand = _c4.children.first;
+          final String _handText = _hand.attributes['onclick'];
+          if (_handText != null) {
+            _id = RegExp(r'\((\d+)\)').firstMatch(_handText).group(1);
+            _canEdit = _handText.contains('edit_');
+            _canVote = _handText.contains('vote_');
+            // logger.d(
+            //     '$_handText\nid:$_id \n_canEdit:$_canEdit \n_canVote:$_canVote');
+          }
+
+          if (_c4.children.length > 1) {
+            final Element _vUp = _c4.children.elementAt(0);
+            final Element _vDown = _c4.children.elementAt(1);
+            final String _vUpStyle = _vUp.attributes['style'];
+            final String _vDownStyle = _vDown.attributes['style'];
+            // logger.d('id $_id \n$_vUpStyle \n$_vDownStyle');
+            if (_vUpStyle.isNotEmpty) {
+              _vote = 1;
+            }
+            if (_vDownStyle.isNotEmpty) {
+              _vote = -1;
+            }
+          }
+        }
 
         // 解析评论内容
         final Element contextElem = comment.querySelector('div.c6');
@@ -114,6 +151,10 @@ class GalleryDetailParser {
         }).join();
 
         galleryItem.galleryComment.add(GalleryComment()
+          ..id = _id
+          ..canEdit = _canEdit
+          ..canVote = _canVote
+          ..vote = _vote
           ..name = postName
           ..context = context
           ..time = postTimeLocal
