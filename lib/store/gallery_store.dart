@@ -5,6 +5,11 @@ import 'package:get_storage/get_storage.dart';
 
 class GStore {
   static final _cacheStore = () => GetStorage('GalleryCache');
+  static final _hisStore = () => GetStorage('GalleryHistory');
+
+  static Future<void> init() async {
+    await GetStorage.init('GalleryCache');
+  }
 
   GalleryCache getCache(String gid) {
     final val = ReadWriteValue(gid, '', _cacheStore).val;

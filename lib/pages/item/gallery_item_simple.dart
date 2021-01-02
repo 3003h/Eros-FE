@@ -114,160 +114,148 @@ class GalleryItemSimpleWidget extends StatelessWidget {
 
   /// 构建标题
   Widget _buildTitle() {
-    return Builder(
-      builder: (_) {
-        return Obx(() => Text(
-              _galleryItemController.title,
-              maxLines: 2,
-              textAlign: TextAlign.left, // 对齐方式
-              overflow: TextOverflow.ellipsis, // 超出部分省略号
-              style: const TextStyle(
-                fontSize: 13.5,
-                fontWeight: FontWeight.w500,
-              ),
-            ));
-      },
-    );
+    return Obx(() => Text(
+          _galleryItemController.title,
+          maxLines: 2,
+          textAlign: TextAlign.left, // 对齐方式
+          overflow: TextOverflow.ellipsis, // 超出部分省略号
+          style: const TextStyle(
+            fontSize: 13.5,
+            fontWeight: FontWeight.w500,
+          ),
+        ));
   }
 
   /// 构建封面图片
   Widget _buildCoverImage() {
-    return Builder(builder: (_) {
-      final GalleryItem _item = _galleryItemController.galleryItem;
+    final GalleryItem _item = _galleryItemController.galleryItem;
 
-      return Container(
-        width: kCoverImageWidth,
-        height: kItemWidth - 12,
-        child: Center(
-          child: Hero(
-            tag: '${_item.gid}_${_item.token}_cover_$tabIndex',
-            child: Container(
-              decoration: BoxDecoration(boxShadow: [
+    return Container(
+      width: kCoverImageWidth,
+      height: kItemWidth - 12,
+      child: Center(
+        child: Hero(
+          tag: '${_item.gid}_${_item.token}_cover_$tabIndex',
+          child: Container(
+            decoration: BoxDecoration(
+              boxShadow: [
                 //阴影
                 BoxShadow(
                   color: CupertinoDynamicColor.resolve(
                       CupertinoColors.systemGrey4, Get.context),
                   blurRadius: 10,
                 )
-              ]),
-              child: ClipRRect(
-                // 圆角
-                borderRadius: BorderRadius.circular(6),
-                child: CoverImg(
-                    imgUrl: _galleryItemController?.galleryItem?.imgUrl ?? ''),
-              ),
+              ],
+            ),
+            child: ClipRRect(
+              // 圆角
+              borderRadius: BorderRadius.circular(6),
+              child: CoverImg(
+                  height: _item.imgHeight,
+                  width: _item.imgWidth,
+                  imgUrl: _galleryItemController?.galleryItem?.imgUrl ?? ''),
             ),
           ),
         ),
-      );
-    });
+      ),
+    );
   }
 
   Widget _buildRating() {
-    return Builder(builder: (_) {
-      return Row(
-        children: <Widget>[
-          Container(
-            padding: const EdgeInsets.fromLTRB(0, 0, 4, 0),
-            child: StaticRatingBar(
-              size: 20.0,
-              rate: _galleryItemController.galleryItem.rating,
-              radiusRatio: 1.5,
-            ),
+    return Row(
+      children: <Widget>[
+        Container(
+          padding: const EdgeInsets.fromLTRB(0, 0, 4, 0),
+          child: StaticRatingBar(
+            size: 20.0,
+            rate: _galleryItemController.galleryItem.rating,
+            radiusRatio: 1.5,
           ),
-          Text(
-            _galleryItemController?.galleryItem?.rating.toString(),
-            style: const TextStyle(
-              fontSize: 13,
-              color: CupertinoColors.systemGrey,
-            ),
+        ),
+        Text(
+          _galleryItemController?.galleryItem?.rating.toString(),
+          style: const TextStyle(
+            fontSize: 13,
+            color: CupertinoColors.systemGrey,
           ),
-        ],
-      );
-    });
+        ),
+      ],
+    );
   }
 
   Widget _buildFilecontWidget() {
-    return Builder(builder: (_) {
-      return Row(
-        children: <Widget>[
-          Padding(
-            padding: const EdgeInsets.only(right: 4),
-            child: Text(
-              _galleryItemController?.galleryItem?.translated ?? '',
-              style: const TextStyle(
-                  fontSize: 12, color: CupertinoColors.systemGrey),
-            ),
+    return Row(
+      children: <Widget>[
+        Padding(
+          padding: const EdgeInsets.only(right: 4),
+          child: Text(
+            _galleryItemController?.galleryItem?.translated ?? '',
+            style: const TextStyle(
+                fontSize: 12, color: CupertinoColors.systemGrey),
           ),
-          const Icon(
-            Icons.panorama,
-            size: 13,
-            color: CupertinoColors.systemGrey,
+        ),
+        const Icon(
+          Icons.panorama,
+          size: 13,
+          color: CupertinoColors.systemGrey,
+        ),
+        Container(
+          padding: const EdgeInsets.only(left: 2),
+          child: Text(
+            _galleryItemController?.galleryItem?.filecount ?? '',
+            style: const TextStyle(
+                fontSize: 12, color: CupertinoColors.systemGrey),
           ),
-          Container(
-            padding: const EdgeInsets.only(left: 2),
-            child: Text(
-              _galleryItemController?.galleryItem?.filecount ?? '',
-              style: const TextStyle(
-                  fontSize: 12, color: CupertinoColors.systemGrey),
-            ),
-          ),
-        ],
-      );
-    });
+        ),
+      ],
+    );
   }
 
   Widget _buildFavcatIcon() {
-    return Builder(builder: (_) {
-      return Container(
-        child: _galleryItemController.galleryItem.favTitle?.isNotEmpty ?? false
-            ? Container(
-                padding: const EdgeInsets.only(bottom: 2.5, right: 8),
-                child: Icon(
-                  FontAwesomeIcons.solidHeart,
-                  size: 12,
-                  color: ThemeColors
-                      .favColor[_galleryItemController.galleryItem.favcat],
-                ),
-              )
-            : Container(),
-      );
-    });
+    return Container(
+      child: _galleryItemController.galleryItem.favTitle?.isNotEmpty ?? false
+          ? Container(
+              padding: const EdgeInsets.only(bottom: 2.5, right: 8),
+              child: Icon(
+                FontAwesomeIcons.solidHeart,
+                size: 12,
+                color: ThemeColors
+                    .favColor[_galleryItemController.galleryItem.favcat],
+              ),
+            )
+          : Container(),
+    );
   }
 
   Widget _buildPostTime() {
-    return Builder(builder: (_) {
-      return Text(
-        _galleryItemController?.galleryItem?.postTime ?? '',
-        style: const TextStyle(fontSize: 12, color: CupertinoColors.systemGrey),
-      );
-    });
+    return Text(
+      _galleryItemController?.galleryItem?.postTime ?? '',
+      style: const TextStyle(fontSize: 12, color: CupertinoColors.systemGrey),
+    );
   }
 
   Widget _buildCategory() {
-    return Builder(builder: (_) {
-      final Color _colorCategory = CupertinoDynamicColor.resolve(
-          ThemeColors.catColor[
-                  _galleryItemController?.galleryItem?.category ?? 'default'] ??
-              CupertinoColors.systemBackground,
-          Get.context);
+    final Color _colorCategory = CupertinoDynamicColor.resolve(
+        ThemeColors.catColor[
+                _galleryItemController?.galleryItem?.category ?? 'default'] ??
+            CupertinoColors.systemBackground,
+        Get.context);
 
-      return ClipRRect(
-        borderRadius: BorderRadius.circular(4),
-        child: Container(
-          padding: const EdgeInsets.fromLTRB(6, 3, 6, 3),
-          color: _colorCategory,
-          child: Text(
-            _galleryItemController?.galleryItem?.category ?? '',
-            style: const TextStyle(
-              fontSize: 14,
-              height: 1,
-              color: CupertinoColors.white,
-            ),
+    return ClipRRect(
+      borderRadius: BorderRadius.circular(4),
+      child: Container(
+        padding: const EdgeInsets.fromLTRB(6, 3, 6, 3),
+        color: _colorCategory,
+        child: Text(
+          _galleryItemController?.galleryItem?.category ?? '',
+          style: const TextStyle(
+            fontSize: 14,
+            height: 1,
+            color: CupertinoColors.white,
           ),
         ),
-      );
-    });
+      ),
+    );
   }
 }
 
@@ -276,9 +264,13 @@ class CoverImg extends StatelessWidget {
   const CoverImg({
     Key key,
     @required this.imgUrl,
+    this.height,
+    this.width,
   }) : super(key: key);
 
   final String imgUrl;
+  final double height;
+  final double width;
 
   @override
   Widget build(BuildContext context) {
@@ -286,23 +278,36 @@ class CoverImg extends StatelessWidget {
     final Map<String, String> _httpHeaders = {
       'Cookie': Global.profile?.user?.cookie ?? '',
     };
-    return imgUrl != null && imgUrl.isNotEmpty
-        ? Obx(() {
-            if (ehConfigService.isGalleryImgBlur.value) {
-              return BlurImage(
-                  child: CachedNetworkImage(
-                httpHeaders: _httpHeaders,
-                imageUrl: imgUrl,
-                fit: BoxFit.cover,
-              ));
-            } else {
-              return CachedNetworkImage(
-                httpHeaders: _httpHeaders,
-                imageUrl: imgUrl,
-                fit: BoxFit.cover,
-              );
-            }
-          })
-        : Container();
+    if (imgUrl != null && imgUrl.isNotEmpty) {
+      return Obx(() {
+        if (ehConfigService.isGalleryImgBlur.value) {
+          return BlurImage(
+              child: CachedNetworkImage(
+            httpHeaders: _httpHeaders,
+            imageUrl: imgUrl,
+            fit: BoxFit.cover,
+          ));
+        } else {
+          return LayoutBuilder(builder: (context, constraints) {
+            // logger.d('${constraints}');
+            return CachedNetworkImage(
+              placeholder: (_, __) {
+                return Container(
+                  color: CupertinoDynamicColor.resolve(
+                      CupertinoColors.systemGrey5, context),
+                );
+              },
+              height: height * constraints.maxWidth / width,
+              width: constraints.maxWidth,
+              httpHeaders: _httpHeaders,
+              imageUrl: imgUrl,
+              fit: BoxFit.fitWidth,
+            );
+          });
+        }
+      });
+    } else {
+      return Container();
+    }
   }
 }

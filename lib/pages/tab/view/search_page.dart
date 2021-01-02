@@ -1,6 +1,7 @@
 import 'package:fehviewer/common/service/depth_service.dart';
 import 'package:fehviewer/generated/l10n.dart';
 import 'package:fehviewer/models/index.dart';
+import 'package:fehviewer/pages/filter/filter.dart';
 import 'package:fehviewer/pages/tab/controller/search_page_controller.dart';
 import 'package:fehviewer/pages/tab/view/gallery_base.dart';
 import 'package:fehviewer/pages/tab/view/tab_base.dart';
@@ -303,13 +304,13 @@ class GallerySearchPage extends StatelessWidget {
     return Obx(() {
       final Size size = MediaQuery.of(context).size;
       final double width = size.width;
-      // logger.v(width);
+      final bool _isSearchBarComp = controller.isSearchBarComp;
       if (width > 450) {
         return _buildListBtns();
       } else {
         return AnimatedSwitcher(
             duration: const Duration(milliseconds: 0),
-            child: controller.isSearchBarComp
+            child: _isSearchBarComp
                 ? Container(key: UniqueKey(), child: _buildPopMenuBtn())
                 : Container(key: UniqueKey(), child: _buildListBtns()));
       }

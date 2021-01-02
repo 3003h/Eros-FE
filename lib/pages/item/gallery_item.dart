@@ -159,6 +159,7 @@ class GalleryItemWidget extends StatelessWidget {
         margin: const EdgeInsets.only(top: 10, bottom: 10),
         width: kCoverImageWidth,
         height: _item.imgWidth != null ? _getHeigth() : null,
+        alignment: Alignment.center,
         child: Hero(
           tag: '${_item.gid}_${_item.token}_cover_$tabIndex',
           child: Container(
@@ -170,14 +171,12 @@ class GalleryItemWidget extends StatelessWidget {
                 blurRadius: 10,
               )
             ]),
-            child: Center(
-              child: ClipRRect(
-                // 圆角
-                borderRadius: BorderRadius.circular(6),
-                child: CoverImg(
-                  imgUrl: _galleryItemController?.galleryItem?.imgUrl ?? '',
-                  height: _item.imgWidth != null ? _getHeigth() : null,
-                ),
+            child: ClipRRect(
+              // 圆角
+              borderRadius: BorderRadius.circular(6),
+              child: CoverImg(
+                imgUrl: _item.imgUrl ?? '',
+                height: _item.imgWidth != null ? _getHeigth() : null,
               ),
             ),
           ),
@@ -407,11 +406,11 @@ class CoverImg extends StatelessWidget {
                   CupertinoColors.systemGrey5, context),
             );
           },
-          height: height,
+          // height: height,
           width: width,
           httpHeaders: _httpHeaders,
           imageUrl: imgUrl,
-          fit: BoxFit.cover,
+          fit: BoxFit.contain,
         );
       } else {
         return Container();

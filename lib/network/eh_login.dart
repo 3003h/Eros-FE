@@ -32,15 +32,6 @@ class EhUserManager {
       'CookieDate': '1',
     });
 
-    /*
-    final Options options = Options(headers: {
-      'Referer': referer,
-      'Origin': origin
-    }, extra: {
-      'noCache': true, //本接口禁用缓存
-    });
-     */
-
     final Options options =
         Options(headers: {'Referer': referer, 'Origin': origin});
 
@@ -54,7 +45,7 @@ class EhUserManager {
     //  登录异常处理
     final List<String> setcookie = rult.headers['set-cookie'];
 
-    logger.d('${setcookie}');
+    logger.d('set-cookie $setcookie');
 
     if (setcookie.length < 2) {
       throw EhError(type: EhErrorType.LOGIN);
