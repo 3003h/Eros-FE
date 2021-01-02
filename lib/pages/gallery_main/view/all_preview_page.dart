@@ -112,38 +112,34 @@ class _AllPreviewPageState extends State<AllPreviewPage> {
           SliverSafeArea(
             sliver: SliverPadding(
               padding: const EdgeInsets.only(top: 4, left: 4, right: 4),
-              sliver: Builder(builder: (_) {
-//                    logger.v('build SliverGrid');
-                GalleryItem galleryItem = _pageController.galleryItem;
-                return SliverGrid(
-                  gridDelegate: const SliverGridDelegateWithMaxCrossAxisExtent(
-                      maxCrossAxisExtent: kMaxCrossAxisExtent,
-                      mainAxisSpacing: kMainAxisSpacing, //主轴方向的间距
-                      crossAxisSpacing: kCrossAxisSpacing, //交叉轴方向子元素的间距
-                      childAspectRatio: kChildAspectRatio //显示区域宽高比
+              sliver: SliverGrid(
+                gridDelegate: const SliverGridDelegateWithMaxCrossAxisExtent(
+                    maxCrossAxisExtent: kMaxCrossAxisExtent,
+                    mainAxisSpacing: kMainAxisSpacing, //主轴方向的间距
+                    crossAxisSpacing: kCrossAxisSpacing, //交叉轴方向子元素的间距
+                    childAspectRatio: kChildAspectRatio //显示区域宽高比
+                    ),
+                delegate: SliverChildBuilderDelegate(
+                  (context, int index) {
+                    //如果显示到最后一个 获取下一页缩略图
+                    if (index == _galleryPreviewList.length - 1 &&
+                        index < _count - 1) {
+                      _loarMordPriview();
+                    } else if (index >= _count - 1) {
+                      _loadFinsh();
+                    }
+                    return Center(
+                      key: index == 0 ? globalKey : null,
+                      child: PreviewContainer(
+                        galleryPreviewList: _galleryPreviewList,
+                        index: index,
+                        gid: _pageController.gid,
                       ),
-                  delegate: SliverChildBuilderDelegate(
-                    (context, int index) {
-                      //如果显示到最后一个 获取下一页缩略图
-                      if (index == _galleryPreviewList.length - 1 &&
-                          index < _count - 1) {
-                        _loarMordPriview();
-                      } else if (index >= _count - 1) {
-                        _loadFinsh();
-                      }
-                      return Center(
-                        key: index == 0 ? globalKey : null,
-                        child: PreviewContainer(
-                          galleryPreviewList: _galleryPreviewList,
-                          index: index,
-                          gid: _pageController.gid,
-                        ),
-                      );
-                    },
-                    childCount: _galleryPreviewList.length,
-                  ),
-                );
-              }),
+                    );
+                  },
+                  childCount: _galleryPreviewList.length,
+                ),
+              ),
             ),
           ),
           SliverToBoxAdapter(

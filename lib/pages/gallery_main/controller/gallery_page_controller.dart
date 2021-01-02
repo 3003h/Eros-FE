@@ -332,52 +332,20 @@ class GalleryPageController extends GetxController
         Future<void>.delayed(const Duration(milliseconds: 0))
             .then((_) => _loadPriview(index))
             .whenComplete(() => Get.back());
-        return CupertinoAlertDialog(
-          content: Container(
-              width: 40,
-              child: const CupertinoActivityIndicator(
-                radius: 30,
-              )),
-          actions: const <Widget>[],
+
+        return Center(
+          child: CupertinoPopupSurface(
+            child: Container(
+                height: 80,
+                width: 80,
+                alignment: Alignment.center,
+                child: const CupertinoActivityIndicator(
+                  radius: 20,
+                )),
+          ),
         );
       },
     );
-  }
-
-  /// 解析获取画廊图片链接
-  /// 自动获取下一页直到全部获取
-  /// 缺点比较明显 图片比较多的画廊一次全部获取会导致卡顿等
-  Future<void> _getAllImageHref({CancelToken cancelToken}) async {
-    if (isGetAllImageHref) {
-      loggerNoStack.d(' isGetAllImageHref return');
-      return;
-    }
-    isGetAllImageHref = true;
-    final int _filecount = int.parse(galleryItem.filecount);
-
-    logger.d('_filecount : $_filecount');
-
-    // 获取画廊所有图片页面的href
-    while (previews.length < _filecount) {
-      currentPreviewPage++;
-
-      final List<GalleryPreview> _moreGalleryPreviewList =
-          await Api.getGalleryPreview(
-        galleryItem.url,
-        page: currentPreviewPage,
-        cancelToken: cancelToken,
-        refresh: isRefresh,
-      );
-
-      // 避免重复添加
-      if (_moreGalleryPreviewList.first.ser >
-          galleryItem.galleryPreview.last.ser) {
-        logger.d('添加图片对象 起始序号${_moreGalleryPreviewList.first.ser}  '
-            '数量${_moreGalleryPreviewList.length}');
-        addAllPreview(_moreGalleryPreviewList);
-      }
-    }
-    isGetAllImageHref = false;
   }
 
   /// 懒加载

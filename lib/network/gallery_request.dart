@@ -15,6 +15,7 @@ import 'package:fehviewer/common/parser/gallery_detail_parser.dart';
 import 'package:fehviewer/common/parser/gallery_list_parser.dart';
 import 'package:fehviewer/common/service/ehconfig_service.dart';
 import 'package:fehviewer/const/const.dart';
+import 'package:fehviewer/generated/l10n.dart';
 import 'package:fehviewer/models/galleryItem.dart';
 import 'package:fehviewer/models/index.dart';
 import 'package:fehviewer/pages/gallery_main/controller/archiver_controller.dart';
@@ -94,8 +95,6 @@ class Api {
   /// 获取热门画廊列表
   static Future<Tuple2<List<GalleryItem>, int>> getPopular(
       {bool refresh = false}) async {
-//    logger.v("获取热门");
-
     const String url = '/popular?inline_set=dm_l';
     // const String url = '/popular';
 
@@ -131,7 +130,6 @@ class Api {
 
     String url = '/';
     String qry = '?page=${page ?? 0}&inline_set=dm_l';
-    // String qry = '?page=${page ?? 0}';
 
     if (ehConfigService.isSafeMode.value) {
       qry = '$qry&f_cats=767';
@@ -170,25 +168,10 @@ class Api {
     url = '$url$qry';
 
     /// 高级搜索处理
-    if (searchController.enableAdvance.value ?? false) {
+    if (searchController.enableAdvance ?? false) {
       url = '$url&advsearch=1${searchController.getAdvanceSearchText()}';
     }
 
-    // , options: Options(extra: {'refresh': refresh})
-    final Options options = Options(headers: {
-      'Referer': 'https://e-hentai.org',
-    }, extra: {
-      'refresh': refresh
-    });
-
-    // final Options _cacheOptions = buildCacheOptions(
-    //   const Duration(days: 1),
-    //   maxStale: const Duration(hours: 1),
-    //   forceRefresh: refresh,
-    //   options: Options(headers: {
-    //     'Referer': 'https://e-hentai.org',
-    //   }),
-    // );
     final Options _cacheOptions = getCacheOptions(forceRefresh: refresh);
 
     logger.v(url);
@@ -239,7 +222,7 @@ class Api {
     final bool isOrderFav = GalleryListParser.isFavoriteOrder(response);
     if (isOrderFav ^ (order == FavoriteOrder.fav)) {
       // 重设排序方式
-      loggerNoStack.d('$isOrderFav 重设排序方式 $_order');
+      logger.d('$isOrderFav 重设排序方式 $_order');
       final String _urlOrder = _getUrl(inlineSet: _order);
       await getHttpManager()
           .get(_urlOrder, options: getCacheOptions(forceRefresh: true));
@@ -521,7 +504,7 @@ class Api {
     final String reqJsonStr = jsonEncode(reqMap);
     logger.d('$reqJsonStr');
     await CustomHttpsProxy.instance.init();
-    final rult = await getGalleryApi(reqJsonStr, refresh: true);
+    final rult = await getGalleryApi(reqJsonStr, refresh: true, cache: false);
     logger.d('$rult');
   }
 
@@ -549,11 +532,12 @@ class Api {
   static Future getGalleryApi(
     String req, {
     bool refresh = false,
+    bool cache = true,
   }) async {
     const String url = '/api.php';
 
     await CustomHttpsProxy.instance.init();
-    final response = await getHttpManager().postForm(
+    final response = await getHttpManager(cache: cache).postForm(
       url,
       data: req,
       options: getCacheOptions(forceRefresh: refresh),
@@ -585,19 +569,20 @@ class Api {
         context: context,
         builder: (BuildContext context) {
           return CupertinoAlertDialog(
-            title: const Text('页面跳转'),
             content: Container(
-              child: const Text('您禁用了应用的必要权限:\n读写手机存储,是否到设置里允许?'),
+              child: const Text(
+                  'You have disabled the necessary permissions for the application:'
+                  '\nRead and write phone storage, is it allowed in the settings?'),
             ),
             actions: <Widget>[
               CupertinoDialogAction(
-                child: const Text('取消'),
+                child: Text(S.of(context).cancel),
                 onPressed: () {
                   Get.back();
                 },
               ),
               CupertinoDialogAction(
-                child: const Text('确定'),
+                child: Text(S.of(context).ok),
                 onPressed: () {
                   // 跳转
                   openAppSettings();
@@ -621,7 +606,7 @@ class Api {
           return _saveImage(imageUrl);
           // Either the permission was already granted before or the user just granted it.
         } else {
-          throw '无法存储图片,请先授权~';
+          throw 'Unable to save pictures, please authorize first~';
         }
       }
     } else {
@@ -639,7 +624,7 @@ class Api {
           // Either the permission was already granted before or the user just granted it.
           return _saveImage(imageUrl);
         } else {
-          throw '无法存储图片,请先授权~';
+          throw 'Unable to save pictures, please authorize first~';
         }
       }
     }
@@ -649,7 +634,7 @@ class Api {
   static Future<bool> _saveImage(String imageUrl,
       {bool isAsset = false}) async {
     try {
-      if (imageUrl == null) throw '保存失败,图片不存在!';
+      if (imageUrl == null) throw 'Save failed, picture does not exist!';
 
       /// 保存的图片数据
       Uint8List imageBytes;
@@ -675,12 +660,12 @@ class Api {
       /// 保存图片
       final result = await ImageGallerySaver.saveImage(imageBytes);
 
-      if (result == null || result == '') throw '图片保存失败';
+      if (result == null || result == '') throw 'Save image fail';
 
-      print('保存成功');
+      logger.i('保存成功');
       return true;
     } catch (e) {
-      print(e.toString());
+      logger.e(e.toString());
       rethrow;
     }
   }

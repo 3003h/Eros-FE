@@ -3,10 +3,12 @@ import 'dart:io';
 
 import 'package:cookie_jar/cookie_jar.dart';
 import 'package:dio_cookie_manager/dio_cookie_manager.dart';
+import 'package:fehviewer/common/update.dart';
 import 'package:fehviewer/const/storages.dart';
 import 'package:fehviewer/models/index.dart';
 import 'package:fehviewer/models/profile.dart';
 import 'package:fehviewer/network/gallery_request.dart';
+import 'package:fehviewer/store/gallery_store.dart';
 import 'package:fehviewer/utils/https_proxy.dart';
 import 'package:fehviewer/utils/logger.dart';
 import 'package:fehviewer/utils/storage.dart';
@@ -27,9 +29,6 @@ class Global {
   static bool isFirstOpen = false;
   static bool inDebugMode = false;
   static bool isFirstReOpenEhSetting = true;
-
-  // pageController的tag
-  static int pageCtrlDepth = 0;
 
   static Profile profile = Profile();
 
@@ -76,7 +75,7 @@ class Global {
     // SP初始化
     await StorageUtil.init();
 
-    await GetStorage.init('GalleryCache');
+    await GStore.init();
 
     _profileInit();
 
@@ -86,65 +85,22 @@ class Global {
     // 读取设备第一次打开
     isFirstOpen = !StorageUtil().getBool(STORAGE_DEVICE_ALREADY_OPEN_KEY);
     if (isFirstOpen) {
-      _creatDirs();
+      creatDirs();
       StorageUtil().setBool(STORAGE_DEVICE_ALREADY_OPEN_KEY, true);
     }
 
     isDBinappSupportPath = StorageUtil().getBool(IS_DB_IN_SUPPORT_DIR);
-    if (!isFirstOpen && !isDBinappSupportPath) {
-      // 不是第一次打开并且DB不位于 appSupport
-      // 迁移DB数据
-      logger.d('迁移DB数据');
-      await _moveDB();
-      StorageUtil().setBool(IS_DB_IN_SUPPORT_DIR, true);
-    }
+
+    // 数据更新
+    await dataUpdate();
   }
 
-  static void _creatDirs() {
+  static void creatDirs() {
     final Directory downloadDir = Directory(join(appDocPath, 'Download'));
     downloadDir.create();
   }
 
   /// 升级兼容处理 把数据库文件从doc目录移动到appSupport
-  static Future<void> _moveDB() async {
-    final Directory appDocDir = Directory(appDocPath);
-    final Stream<FileSystemEntity> entityList =
-        appDocDir.list(recursive: false, followLinks: false);
-    await for (final FileSystemEntity entity in entityList) {
-      //文件、目录和链接都继承自FileSystemEntity
-      //FileSystemEntity.type静态函数返回值为FileSystemEntityType
-      //FileSystemEntityType有三个常量：
-      //Directory、FILE、LINK、NOT_FOUND
-      //FileSystemEntity.isFile .isLink .isDerectory可用于判断类型
-      // print(entity.path);
-      if (entity.path.endsWith('.db')) {
-        final File _dbFile = File(entity.path);
-        final String fileName =
-            _dbFile.path.substring(_dbFile.path.lastIndexOf(separator) + 1);
-        // print(join(appSupportPath, fileName));
-        _dbFile.copySync(join(Global.appSupportPath, fileName));
-        _dbFile.deleteSync();
-      } else if (entity.path.endsWith('ie0_ps1')) {
-        final Directory _ieDir = Directory(entity.path);
-        final Directory _ieDirNew =
-            Directory(_ieDir.path.replaceAll(appDocPath, appSupportPath));
-        print(_ieDirNew.path);
-        final Stream<FileSystemEntity> _ieList =
-            _ieDir.list(recursive: false, followLinks: false);
-        await for (final FileSystemEntity _ieEntity in _ieList) {
-          // print(_ieEntity.path);
-          final File _cookieFile = File(_ieEntity.path);
-          final String _cookieFileName = _cookieFile.path
-              .substring(_cookieFile.path.lastIndexOf(separator) + 1);
-          // print('to  ' + join(appSupportPath, _cookieFileName));
-          _cookieFile.copySync(join(Global.appSupportPath, _cookieFileName));
-          _cookieFile.deleteSync();
-        }
-        _ieDir.deleteSync();
-      }
-    }
-    _creatDirs();
-  }
 
   /// profile初始化
   static void _profileInit() {

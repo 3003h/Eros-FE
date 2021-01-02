@@ -49,21 +49,21 @@ ehentai 标签汉化项目
 - [x] 标签搜索
 - [x] 登录
 - [x] 搜索
+- [x] 高级搜索
 - [x] 单张图片保存于与分享
+- [x] 缓存优化
+- [x] 高级设置
 
 # TODO
 
-- [ ] 高级搜索
 - [ ] 发表评论 赞和踩
-- [ ] 缓存优化
-- [ ] 高级设置
 - [ ] watched 和用户 tag
 - [ ] 下载功能
 
 # 依赖项目/插件（部分）
 
 - 网络 [dio](https://pub.dev/packages/dio)
-- 状态管理 [provider](https://pub.dev/packages/provider)
+- 状态管理 [getx](https://pub.dev/packages/get)
 - 数据库 [sqflite](https://pub.dev/packages/sqflite)
 - 持久化 [shared_preferences](https://pub.dev/packages/shared_preferences)
 - 国际化 [intl](https://pub.dev/packages/intl)
