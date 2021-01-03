@@ -191,7 +191,7 @@ class GalleryContainer extends StatelessWidget {
           ),
           // 标签
           TagBox(listTagGroup: state.tagGroup),
-          TopComment(comment: state.galleryComment),
+          const TopComment(),
           Container(
             margin: const EdgeInsets.only(top: 4),
             height: 0.5,

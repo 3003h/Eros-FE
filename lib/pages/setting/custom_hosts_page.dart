@@ -66,7 +66,7 @@ class CustomHostsPage extends StatelessWidget {
           size: 20,
         ),
         onPressed: () {
-          SettingBase().showCustomHostEditer(context);
+          showCustomHostEditer(context);
         });
   }
 }
@@ -128,7 +128,7 @@ class CuttomHostItem extends StatelessWidget {
         host,
         desc: addr,
         onTap: () {
-          SettingBase().showCustomHostEditer(context, index: index);
+          showCustomHostEditer(context, index: index);
         },
       ),
     );

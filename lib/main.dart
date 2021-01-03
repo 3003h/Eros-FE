@@ -92,7 +92,6 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
     }) {
       return GetCupertinoApp(
         debugShowCheckedModeBanner: false,
-        // translations: Messages(),
         onGenerateTitle: (BuildContext context) => S.of(context).app_title,
         getPages: AppPages.routes,
         initialRoute: EHRoutes.root,

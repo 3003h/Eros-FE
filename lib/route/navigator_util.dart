@@ -81,6 +81,11 @@ class NavigatorUtil {
     }
   }
 
+  // static void goCommitPage() {
+  //   Navigator.of(Get.context).push(
+  //       CupertinoPageRoute(builder: (BuildContext context) => CommentPage()));
+  // }
+
   static void showSearch() {
     Get.to(GallerySearchPage(), transition: Transition.cupertino,
         binding: BindingsBuilder(() {

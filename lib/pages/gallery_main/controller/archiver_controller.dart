@@ -1,4 +1,3 @@
-import 'package:fehviewer/common/service/depth_service.dart';
 import 'package:fehviewer/network/gallery_request.dart';
 import 'package:fehviewer/utils/logger.dart';
 import 'package:fehviewer/utils/toast.dart';
@@ -8,17 +7,19 @@ import 'gallery_page_controller.dart';
 
 class ArchiverController extends GetxController
     with StateMixin<ArchiverProvider> {
-  GalleryPageController _pageController;
+  ArchiverController({this.pageController});
+
+  final GalleryPageController pageController;
+
   @override
   void onInit() {
     super.onInit();
-    _pageController = Get.find(tag: pageCtrlDepth);
     _loadData();
   }
 
   Future<ArchiverProvider> _fetch() async {
-    logger.d(_pageController.galleryItem.archiverLink);
-    return await Api.getArchiver(_pageController.galleryItem.archiverLink);
+    logger.d(pageController.galleryItem.archiverLink);
+    return await Api.getArchiver(pageController.galleryItem.archiverLink);
   }
 
   Future<void> _loadData() async {
@@ -38,7 +39,7 @@ class ArchiverController extends GetxController
 
   Future<void> download(String dlres) async {
     final String response = await Api.postArchiverDownload(
-        _pageController.galleryItem.archiverLink, dlres);
+        pageController.galleryItem.archiverLink, dlres);
     showToast(response);
   }
 }

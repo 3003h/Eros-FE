@@ -58,9 +58,9 @@ class RateView extends StatelessWidget {
 }
 
 Future<void> showRateDialog() {
-  // final RateController controller = Get.find(tag: pageCtrlDepth);
-  final RateController controller =
-      Get.put(RateController(), tag: pageCtrlDepth);
+  final RateController controller = Get.find(tag: pageCtrlDepth);
+  // final RateController controller =
+  //     Get.put(RateController(), tag: pageCtrlDepth);
   return showCupertinoDialog<void>(
       context: Get.overlayContext,
       builder: (_) {

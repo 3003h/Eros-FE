@@ -12,6 +12,7 @@ import 'package:fehviewer/pages/tab/view/favorite_sel_page.dart';
 import 'package:fehviewer/pages/tab/view/splash_page.dart';
 import 'package:fehviewer/pages/tab/view/tabhome_page.dart';
 import 'package:get/get.dart';
+import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 
 import 'routes.dart';
 
@@ -71,7 +72,7 @@ class AppPages {
     ),
     GetPage(
       name: EHRoutes.galleryComment,
-      page: () => CommentPage(),
+      page: () => CupertinoScaffold(body: CommentPage()),
       transition: Transition.cupertino,
     ),
   ];

@@ -17,6 +17,7 @@ import 'package:get/get.dart';
 import 'package:meta/meta.dart';
 
 import 'archiver_controller.dart';
+import 'comment_controller.dart';
 import 'gallery_fav_controller.dart';
 
 const double kHeaderHeight = 200.0 + 52;
@@ -103,9 +104,13 @@ class GalleryPageController extends GetxController
     scrollController.dispose();
 
     // 为了保证能正常关闭
-    Get.delete<RateController>(tag: pageCtrlDepth);
-    Get.delete<TorrentController>(tag: pageCtrlDepth);
-    Get.delete<ArchiverController>(tag: pageCtrlDepth);
+    try {
+      Get.delete<RateController>(tag: pageCtrlDepth);
+      Get.delete<TorrentController>(tag: pageCtrlDepth);
+      Get.delete<ArchiverController>(tag: pageCtrlDepth);
+      Get.delete<CommentController>(tag: pageCtrlDepth);
+    } catch (_) {}
+
     Get.find<DepthService>().popPageCtrl();
     super.onClose();
   }
