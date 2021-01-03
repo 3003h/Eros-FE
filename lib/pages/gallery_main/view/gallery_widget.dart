@@ -500,13 +500,10 @@ class TopComment extends StatelessWidget {
     return Column(
       children: <Widget>[
         // 评论
-        GestureDetector(
-          // onTap: () => NavigatorUtil.goGalleryDetailComment(comment),
-          child: Column(
-            children: <Widget>[
-              ..._topComment(comment, max: 2),
-            ],
-          ),
+        Column(
+          children: <Widget>[
+            ..._topComment(comment, max: 2),
+          ],
         ),
         // 评论按钮
         CupertinoButton(
@@ -517,7 +514,6 @@ class TopComment extends StatelessWidget {
             style: const TextStyle(fontSize: 16),
           ),
           onPressed: () {
-            // NavigatorUtil.goGalleryDetailComment(comment);
             Get.toNamed(EHRoutes.galleryComment);
           },
         ),

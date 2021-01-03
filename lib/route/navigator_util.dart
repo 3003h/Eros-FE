@@ -53,6 +53,7 @@ class NavigatorUtil {
       Get.to(
         const GalleryMainPage(),
         transition: Transition.cupertino,
+        preventDuplicates: false,
         binding: GalleryBinding.fromItem(tabIndex, galleryItem),
       );
     }
