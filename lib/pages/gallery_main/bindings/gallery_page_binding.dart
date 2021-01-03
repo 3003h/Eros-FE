@@ -1,5 +1,6 @@
 import 'package:fehviewer/common/service/depth_service.dart';
 import 'package:fehviewer/models/index.dart';
+import 'package:fehviewer/pages/gallery_main/controller/comment_controller.dart';
 import 'package:fehviewer/pages/gallery_main/controller/gallery_page_controller.dart';
 import 'package:fehviewer/utils/logger.dart';
 import 'package:get/get.dart';
@@ -27,5 +28,9 @@ class GalleryBinding extends Bindings {
         tag: pageCtrlDepth,
       );
     }
+    Get.lazyPut(
+      () => CommentController(pageController: Get.find(tag: pageCtrlDepth)),
+      tag: pageCtrlDepth,
+    );
   }
 }

@@ -1,3 +1,4 @@
+import 'package:fehviewer/common/service/depth_service.dart';
 import 'package:fehviewer/common/service/ehconfig_service.dart';
 import 'package:fehviewer/const/theme_colors.dart';
 import 'package:fehviewer/models/index.dart';
@@ -26,7 +27,6 @@ class CommentItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final EhConfigService _ehConfigService = Get.find();
-    // final CommentController _commentController = Get.find();
 
     final Text _fullText = Text(
       galleryComment.context,
@@ -98,6 +98,7 @@ class CommentItem extends StatelessWidget {
 
     return GetBuilder<CommentController>(
         init: CommentController(),
+        tag: pageCtrlDepth,
         id: galleryComment.id ?? 'None',
         builder: (CommentController _commentController) {
           return Container(
@@ -119,66 +120,64 @@ class CommentItem extends StatelessWidget {
                       children: <Widget>[
                         _buildUsername(context),
                         const Spacer(),
-                        if (!simple)
-                          CupertinoTheme(
-                            data: const CupertinoThemeData(
-                                primaryColor: ThemeColors.commitText),
-                            child: Row(
-                              children: <Widget>[
-                                if (galleryComment.canVote)
-                                  CupertinoButton(
-                                    padding: const EdgeInsets.symmetric(
-                                        horizontal: 12),
-                                    minSize: 0,
-                                    child: Icon(
-                                      galleryComment.vote > 0
-                                          ? FontAwesomeIcons.solidThumbsUp
-                                          : FontAwesomeIcons.thumbsUp,
-                                      size: 14,
-                                    ),
-                                    onPressed: () {
-                                      VibrateUtil.light();
-                                      logger.i('vote up ${galleryComment.id}');
-                                      _commentController
-                                          .commitVoteUp(galleryComment.id);
-                                    },
+                        CupertinoTheme(
+                          data: const CupertinoThemeData(
+                              primaryColor: ThemeColors.commitText),
+                          child: Row(
+                            children: <Widget>[
+                              if (galleryComment.canVote)
+                                CupertinoButton(
+                                  padding: const EdgeInsets.symmetric(
+                                      horizontal: 12),
+                                  minSize: 0,
+                                  child: Icon(
+                                    galleryComment.vote > 0
+                                        ? FontAwesomeIcons.solidThumbsUp
+                                        : FontAwesomeIcons.thumbsUp,
+                                    size: 14,
                                   ),
-                                if (galleryComment.canVote)
-                                  CupertinoButton(
-                                    padding: const EdgeInsets.symmetric(
-                                        horizontal: 12),
-                                    minSize: 0,
-                                    child: Icon(
-                                      galleryComment.vote < 0
-                                          ? FontAwesomeIcons.solidThumbsDown
-                                          : FontAwesomeIcons.thumbsDown,
-                                      size: 14,
-                                    ),
-                                    onPressed: () {
-                                      VibrateUtil.light();
-                                      logger
-                                          .i('vote down ${galleryComment.id}');
-                                      _commentController
-                                          .commitVoteDown(galleryComment.id);
-                                    },
+                                  onPressed: () {
+                                    VibrateUtil.light();
+                                    logger.i('vote up ${galleryComment.id}');
+                                    _commentController
+                                        .commitVoteUp(galleryComment.id);
+                                  },
+                                ),
+                              if (galleryComment.canVote)
+                                CupertinoButton(
+                                  padding: const EdgeInsets.symmetric(
+                                      horizontal: 12),
+                                  minSize: 0,
+                                  child: Icon(
+                                    galleryComment.vote < 0
+                                        ? FontAwesomeIcons.solidThumbsDown
+                                        : FontAwesomeIcons.thumbsDown,
+                                    size: 14,
                                   ),
-                                if (galleryComment.canEdit)
-                                  CupertinoButton(
-                                    padding: const EdgeInsets.symmetric(
-                                        horizontal: 12),
-                                    minSize: 0,
-                                    child: const Icon(
-                                      FontAwesomeIcons.edit,
-                                      size: 14,
-                                    ),
-                                    onPressed: () {
-                                      VibrateUtil.light();
-                                      logger.i('edit ${galleryComment.id}');
-                                    },
+                                  onPressed: () {
+                                    VibrateUtil.light();
+                                    logger.i('vote down ${galleryComment.id}');
+                                    _commentController
+                                        .commitVoteDown(galleryComment.id);
+                                  },
+                                ),
+                              if (galleryComment.canEdit)
+                                CupertinoButton(
+                                  padding: const EdgeInsets.symmetric(
+                                      horizontal: 12),
+                                  minSize: 0,
+                                  child: const Icon(
+                                    FontAwesomeIcons.edit,
+                                    size: 14,
                                   ),
-                              ],
-                            ),
+                                  onPressed: () {
+                                    VibrateUtil.light();
+                                    logger.i('edit ${galleryComment.id}');
+                                  },
+                                ),
+                            ],
                           ),
+                        ),
                         Text(
                           galleryComment.score,
                           style: TextStyle(

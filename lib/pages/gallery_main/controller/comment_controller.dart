@@ -1,4 +1,3 @@
-import 'package:fehviewer/common/service/depth_service.dart';
 import 'package:fehviewer/models/index.dart';
 import 'package:fehviewer/network/gallery_request.dart';
 import 'package:fehviewer/utils/logger.dart';
@@ -9,15 +8,16 @@ import 'gallery_page_controller.dart';
 
 class CommentController extends GetxController
     with StateMixin<List<GalleryComment>> {
-  GalleryPageController _pageController;
-  GalleryItem get _item => _pageController.galleryItem;
+  CommentController({this.pageController});
+  final GalleryPageController pageController;
+
+  GalleryItem get _item => pageController.galleryItem;
 
   @override
   void onInit() {
     super.onInit();
     logger.d('CommentController onInit');
-    _pageController = Get.find(tag: pageCtrlDepth);
-    change(_pageController.galleryItem.galleryComment,
+    change(pageController.galleryItem.galleryComment,
         status: RxStatus.success());
   }
 
