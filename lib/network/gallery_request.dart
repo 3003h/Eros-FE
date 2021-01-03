@@ -535,7 +535,7 @@ class Api {
   }
 
   /// 发布评论
-  static Future<GalleryItem> postComment({
+  static Future<bool> postComment({
     String gid,
     String token,
     String comment,
@@ -551,19 +551,21 @@ class Api {
     }
 
     try {
-      final Response response = await getHttpManager(cache: false).postForm(url,
-          data: FormData.fromMap({
-            isEdit ? 'commenttext_edit' : 'commenttext_new': comment,
-            if (isEdit) 'edit_comment': int.parse(commentId),
-          }));
+      final Response response = await getHttpManager(cache: false).postForm(
+        url,
+        data: FormData.fromMap({
+          isEdit ? 'commenttext_edit' : 'commenttext_new': comment,
+          if (isEdit) 'edit_comment': int.parse(commentId),
+        }),
+        options: Options(
+            followRedirects: false,
+            validateStatus: (int status) {
+              return status < 500;
+            }),
+      );
 
-      logger.d('${response}');
-
-      // 解析画廊数据
-      final GalleryItem galleryItem =
-          await GalleryDetailParser.parseGalleryDetail(response.data.toString(),
-              inGalleryItem: inGalleryItem);
-      return galleryItem;
+      logger.d('${response.statusCode}');
+      return response.statusCode == 302;
     } catch (e, stack) {
       logger.e('$e\n$stack');
       rethrow;
