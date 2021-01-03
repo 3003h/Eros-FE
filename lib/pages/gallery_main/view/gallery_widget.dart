@@ -8,6 +8,7 @@ import 'package:fehviewer/const/theme_colors.dart';
 import 'package:fehviewer/generated/l10n.dart';
 import 'package:fehviewer/models/galleryItem.dart';
 import 'package:fehviewer/models/index.dart';
+import 'package:fehviewer/pages/gallery_main/controller/comment_controller.dart';
 import 'package:fehviewer/pages/gallery_main/controller/gallery_page_controller.dart';
 import 'package:fehviewer/pages/gallery_main/view/all_preview_page.dart';
 import 'package:fehviewer/pages/gallery_main/view/comment_item.dart';
@@ -411,7 +412,7 @@ class GalleryDetailInfo extends StatelessWidget {
           TagBox(
             listTagGroup: galleryItem.tagGroup,
           ),
-          TopComment(comment: galleryItem.galleryComment),
+          const TopComment(),
           Divider(
             height: 0.5,
             color: CupertinoDynamicColor.resolve(
@@ -481,8 +482,8 @@ class PreviewGrid extends StatelessWidget {
 }
 
 class TopComment extends StatelessWidget {
-  const TopComment({Key key, @required this.comment}) : super(key: key);
-  final List<GalleryComment> comment;
+  const TopComment({Key key}) : super(key: key);
+  // final List<GalleryComment> comment;
 
   @override
   Widget build(BuildContext context) {
@@ -500,11 +501,17 @@ class TopComment extends StatelessWidget {
     return Column(
       children: <Widget>[
         // 评论
-        Column(
-          children: <Widget>[
-            ..._topComment(comment, max: 2),
-          ],
-        ),
+        GetBuilder<CommentController>(
+            init: CommentController(),
+            tag: pageCtrlDepth,
+            id: 'TopComment',
+            builder: (CommentController _commentController) {
+              return Column(
+                children: <Widget>[
+                  ..._topComment(_commentController.state, max: 2),
+                ],
+              );
+            }),
         // 评论按钮
         CupertinoButton(
           minSize: 0,
@@ -515,6 +522,7 @@ class TopComment extends StatelessWidget {
           ),
           onPressed: () {
             Get.toNamed(EHRoutes.galleryComment);
+            // NavigatorUtil.goCommitPage();
           },
         ),
       ],

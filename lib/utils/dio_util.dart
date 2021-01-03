@@ -181,7 +181,7 @@ class HttpManager {
     } else if (e.type == DioErrorType.RECEIVE_TIMEOUT) {
       showToast('响应超时');
     } else if (e.type == DioErrorType.RESPONSE) {
-      showToast('出现异常');
+      showToast('响应异常');
     } else if (e.type == DioErrorType.CANCEL) {
       showToast('请求取消');
     } else {

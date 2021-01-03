@@ -325,76 +325,74 @@ class _TextItemState extends State<TextItem> {
   }
 }
 
-class SettingBase {
-  Future<void> showCustomHostEditer(BuildContext context, {int index}) async {
-    final TextEditingController _hostController = TextEditingController();
-    final TextEditingController _addrController = TextEditingController();
-    final DnsService dnsConfigController = Get.find();
-    final FocusNode _nodeAddr = FocusNode();
-    return showCupertinoDialog<void>(
-      context: context,
-      builder: (BuildContext context) {
-        final bool _isAddNew = index == null;
-        if (!_isAddNew) {
-          _hostController.text = dnsConfigController.hosts[index].host;
-          _addrController.text = dnsConfigController.hosts[index].addr;
-        }
+Future<void> showCustomHostEditer(BuildContext context, {int index}) async {
+  final TextEditingController _hostController = TextEditingController();
+  final TextEditingController _addrController = TextEditingController();
+  final DnsService dnsConfigController = Get.find();
+  final FocusNode _nodeAddr = FocusNode();
+  return showCupertinoDialog<void>(
+    context: context,
+    builder: (BuildContext context) {
+      final bool _isAddNew = index == null;
+      if (!_isAddNew) {
+        _hostController.text = dnsConfigController.hosts[index].host;
+        _addrController.text = dnsConfigController.hosts[index].addr;
+      }
 
-        return CupertinoAlertDialog(
-          content: Container(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: <Widget>[
-                CupertinoTextField(
-                  enabled: _isAddNew,
-                  clearButtonMode: _isAddNew
-                      ? OverlayVisibilityMode.editing
-                      : OverlayVisibilityMode.never,
-                  controller: _hostController,
-                  placeholder: 'Host',
-                  autofocus: _isAddNew,
-                  onEditingComplete: () {
-                    // 点击键盘完成
-                    FocusScope.of(context).requestFocus(_nodeAddr);
-                  },
-                ),
-                Container(
-                  height: 10,
-                ),
-                CupertinoTextField(
-                  clearButtonMode: OverlayVisibilityMode.editing,
-                  controller: _addrController,
-                  placeholder: 'Addr',
-                  focusNode: _nodeAddr,
-                  autofocus: !_isAddNew,
-                  onEditingComplete: () {
-                    // 点击键盘完成
-                    if (dnsConfigController.addCustomHost(
-                        _hostController.text.trim(),
-                        _addrController.text.trim())) Get.back();
-                  },
-                ),
-              ],
-            ),
+      return CupertinoAlertDialog(
+        content: Container(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: <Widget>[
+              CupertinoTextField(
+                enabled: _isAddNew,
+                clearButtonMode: _isAddNew
+                    ? OverlayVisibilityMode.editing
+                    : OverlayVisibilityMode.never,
+                controller: _hostController,
+                placeholder: 'Host',
+                autofocus: _isAddNew,
+                onEditingComplete: () {
+                  // 点击键盘完成
+                  FocusScope.of(context).requestFocus(_nodeAddr);
+                },
+              ),
+              Container(
+                height: 10,
+              ),
+              CupertinoTextField(
+                clearButtonMode: OverlayVisibilityMode.editing,
+                controller: _addrController,
+                placeholder: 'Addr',
+                focusNode: _nodeAddr,
+                autofocus: !_isAddNew,
+                onEditingComplete: () {
+                  // 点击键盘完成
+                  if (dnsConfigController.addCustomHost(
+                      _hostController.text.trim(), _addrController.text.trim()))
+                    Get.back();
+                },
+              ),
+            ],
           ),
-          actions: <Widget>[
-            CupertinoDialogAction(
-              child: const Text('取消'),
-              onPressed: () {
+        ),
+        actions: <Widget>[
+          CupertinoDialogAction(
+            child: const Text('取消'),
+            onPressed: () {
+              Get.back();
+            },
+          ),
+          CupertinoDialogAction(
+            child: const Text('确定'),
+            onPressed: () {
+              if (dnsConfigController.addCustomHost(
+                  _hostController.text.trim(), _addrController.text.trim()))
                 Get.back();
-              },
-            ),
-            CupertinoDialogAction(
-              child: const Text('确定'),
-              onPressed: () {
-                if (dnsConfigController.addCustomHost(
-                    _hostController.text.trim(), _addrController.text.trim()))
-                  Get.back();
-              },
-            ),
-          ],
-        );
-      },
-    );
-  }
+            },
+          ),
+        ],
+      );
+    },
+  );
 }

@@ -1,7 +1,10 @@
 import 'package:fehviewer/common/service/depth_service.dart';
 import 'package:fehviewer/models/index.dart';
+import 'package:fehviewer/pages/gallery_main/controller/archiver_controller.dart';
 import 'package:fehviewer/pages/gallery_main/controller/comment_controller.dart';
 import 'package:fehviewer/pages/gallery_main/controller/gallery_page_controller.dart';
+import 'package:fehviewer/pages/gallery_main/controller/rate_controller.dart';
+import 'package:fehviewer/pages/gallery_main/controller/torrent_controller.dart';
 import 'package:fehviewer/utils/logger.dart';
 import 'package:get/get.dart';
 
@@ -29,8 +32,27 @@ class GalleryBinding extends Bindings {
       );
     }
     Get.lazyPut(
-      () => CommentController(pageController: Get.find(tag: pageCtrlDepth)),
+      () => CommentController(
+          pageController: Get.find<GalleryPageController>(tag: pageCtrlDepth)),
       tag: pageCtrlDepth,
     );
+
+    Get.lazyPut<RateController>(
+        () => RateController(
+            pageController:
+                Get.find<GalleryPageController>(tag: pageCtrlDepth)),
+        tag: pageCtrlDepth);
+
+    Get.lazyPut<TorrentController>(
+        () => TorrentController(
+            pageController:
+                Get.find<GalleryPageController>(tag: pageCtrlDepth)),
+        tag: pageCtrlDepth);
+
+    Get.lazyPut<ArchiverController>(
+        () => ArchiverController(
+            pageController:
+                Get.find<GalleryPageController>(tag: pageCtrlDepth)),
+        tag: pageCtrlDepth);
   }
 }

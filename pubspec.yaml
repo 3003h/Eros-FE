@@ -3,7 +3,7 @@ description: ..
 
 publish_to: 'none' # Remove this line if you wish to publish to pub.dev
 
-version: 1.0.3+86
+version: 1.0.3+87
 
 environment:
   sdk: '>=2.9.0 <3.0.0'
@@ -55,7 +55,7 @@ dependencies:
 
   # 文字链接
   flutter_linkify: ^4.0.2
-  url_launcher: ^5.7.8
+  url_launcher: ^5.7.10
 
   # 元组
   tuple: ^1.0.3
@@ -81,6 +81,8 @@ dependencies:
 
   # 瀑布流
   waterfall_flow: any
+
+  modal_bottom_sheet: ^1.0.0+1
 
   # 生物认证 指纹 面容等
 #  local_auth: ^0.6.3+4

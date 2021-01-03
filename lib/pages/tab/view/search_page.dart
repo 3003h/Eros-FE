@@ -13,6 +13,21 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
 
+const BorderSide _kDefaultRoundedBorderSide = BorderSide(
+  color: CupertinoDynamicColor.withBrightness(
+    color: Color(0x33000000),
+    darkColor: Color(0x33FFFFFF),
+  ),
+  style: BorderStyle.solid,
+  width: 0.0,
+);
+const Border _kDefaultRoundedBorder = Border(
+  top: _kDefaultRoundedBorderSide,
+  bottom: _kDefaultRoundedBorderSide,
+  left: _kDefaultRoundedBorderSide,
+  right: _kDefaultRoundedBorderSide,
+);
+
 enum SearchMenuEnum {
   filter,
   quickSearchList,
@@ -24,20 +39,6 @@ class GallerySearchPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final SearchPageController controller = Get.find(tag: searchPageCtrlDepth);
-    const BorderSide _kDefaultRoundedBorderSide = BorderSide(
-      color: CupertinoDynamicColor.withBrightness(
-        color: Color(0x33000000),
-        darkColor: Color(0x33FFFFFF),
-      ),
-      style: BorderStyle.solid,
-      width: 0.0,
-    );
-    const Border _kDefaultRoundedBorder = Border(
-      top: _kDefaultRoundedBorderSide,
-      bottom: _kDefaultRoundedBorderSide,
-      left: _kDefaultRoundedBorderSide,
-      right: _kDefaultRoundedBorderSide,
-    );
 
     final Widget cfp = CupertinoPageScaffold(
       resizeToAvoidBottomInset: false,

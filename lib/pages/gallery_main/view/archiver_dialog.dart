@@ -104,7 +104,7 @@ class ArchiverView extends StatelessWidget {
 }
 
 Future<void> showArchiverDialog() {
-  Get.put(ArchiverController(), tag: pageCtrlDepth);
+  // Get.put(ArchiverController(), tag: pageCtrlDepth);
   return showCupertinoDialog<void>(
       context: Get.overlayContext,
       builder: (_) {
@@ -117,7 +117,6 @@ Future<void> showArchiverDialog() {
             CupertinoDialogAction(
               child: Text(S.of(Get.overlayContext).cancel),
               onPressed: () {
-                // Get.delete<ArchiverController>(tag: pageCtrlDepth);
                 Get.back();
               },
             ),

@@ -534,39 +534,41 @@ class Api {
     return CommitVoteRes.fromJson(jsonDecode(rult.toString()));
   }
 
-/*  static Future<void> commitVoteUp({
-    @required String apikey,
-    @required String apiuid,
-    @required String gid,
-    @required String token,
-    @required String commentId,
+  /// 发布评论
+  static Future<GalleryItem> postComment({
+    String gid,
+    String token,
+    String comment,
+    String commentId,
+    bool isEdit = false,
+    GalleryItem inGalleryItem,
   }) async {
-    return await _commitVote(
-      apikey: apikey,
-      apiuid: apiuid,
-      gid: gid,
-      token: token,
-      commentId: commentId,
-      vote: 1,
-    );
-  }
+    final String url = '${getBaseUrl()}/g/$gid/$token';
+    if (utf8.encode(comment).length < 10) {
+      showToast('Your comment is too short.');
+      throw EhError(
+          type: EhErrorType.DEFAULT, error: 'Your comment is too short.');
+    }
 
-  static Future<void> commitVoteDown({
-    @required String apikey,
-    @required String apiuid,
-    @required String gid,
-    @required String token,
-    @required String commentId,
-  }) async {
-    return await _commitVote(
-      apikey: apikey,
-      apiuid: apiuid,
-      gid: gid,
-      token: token,
-      commentId: commentId,
-      vote: -1,
-    );
-  }*/
+    try {
+      final Response response = await getHttpManager(cache: false).postForm(url,
+          data: FormData.fromMap({
+            isEdit ? 'commenttext_edit' : 'commenttext_new': comment,
+            if (isEdit) 'edit_comment': int.parse(commentId),
+          }));
+
+      logger.d('${response}');
+
+      // 解析画廊数据
+      final GalleryItem galleryItem =
+          await GalleryDetailParser.parseGalleryDetail(response.data.toString(),
+              inGalleryItem: inGalleryItem);
+      return galleryItem;
+    } catch (e, stack) {
+      logger.e('$e\n$stack');
+      rethrow;
+    }
+  }
 
   static Future<void> getMoreGalleryInfoOne(
     GalleryItem galleryItem, {

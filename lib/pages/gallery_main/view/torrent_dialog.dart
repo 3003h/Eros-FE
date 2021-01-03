@@ -80,7 +80,7 @@ class TorrentView extends StatelessWidget {
 }
 
 Future<void> showTorrentDialog() {
-  Get.put(TorrentController(), tag: pageCtrlDepth);
+  // Get.put(TorrentController(), tag: pageCtrlDepth);
   return showCupertinoDialog<void>(
       context: Get.overlayContext,
       builder: (_) {
@@ -93,7 +93,6 @@ Future<void> showTorrentDialog() {
             CupertinoDialogAction(
               child: Text(S.of(Get.overlayContext).cancel),
               onPressed: () {
-                // Get.delete<TorrentController>(tag: pageCtrlDepth);
                 Get.back();
               },
             ),

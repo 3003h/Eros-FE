@@ -173,6 +173,10 @@ class CommentItem extends StatelessWidget {
                                   onPressed: () {
                                     VibrateUtil.light();
                                     logger.i('edit ${galleryComment.id}');
+                                    _commentController.editComment(
+                                      id: galleryComment.id,
+                                      oriComment: galleryComment.context,
+                                    );
                                   },
                                 ),
                             ],
