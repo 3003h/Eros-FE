@@ -159,7 +159,7 @@ class GalleryPageController extends GetxController
 
   /// 请求数据
   Future<GalleryItem> _fetchData({bool refresh = false}) async {
-    logger.d('fetch data');
+    logger.d('fetch data refresh:$refresh');
     await Future<void>.delayed(const Duration(milliseconds: 200));
     try {
       hideNavigationBtn = true;
@@ -190,6 +190,9 @@ class GalleryPageController extends GetxController
               Get.find(tag: pageCtrlDepth);
           // _favController.favcat = galleryItem.favcat;
           _favController.setFav(galleryItem.favcat, galleryItem.favTitle);
+
+          Get.find<CommentController>(tag: pageCtrlDepth)
+              .change(galleryItem.galleryComment);
 
           isRatinged = galleryItem.isRatinged;
         }

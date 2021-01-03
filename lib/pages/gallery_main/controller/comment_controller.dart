@@ -81,7 +81,7 @@ class CommentController extends GetxController
 
   Future<void> _postComment(String comment,
       {bool isEdit = false, String commentId}) async {
-    final GalleryItem galleryItem = await Api.postComment(
+    final bool rult = await Api.postComment(
       gid: pageController.gid,
       token: pageController.galleryItem.token,
       comment: comment,
@@ -89,10 +89,8 @@ class CommentController extends GetxController
       isEdit: isEdit,
     );
 
-    if (galleryItem != null) {
-      pageController.change(galleryItem);
-      change(pageController.galleryItem.galleryComment,
-          status: RxStatus.success());
+    if (rult) {
+      await pageController.handOnRefresh();
     }
   }
 
@@ -126,17 +124,19 @@ class CommentController extends GetxController
   Future<void> pressSend() async {
     comment = commentTextController.text;
     logger.d('comment: $comment');
+    FocusScope.of(Get.context).requestFocus(FocusNode());
 
-    await _postComment(
-      comment,
-      isEdit: editState == EditState.editComment,
-      commentId: commentId,
-    );
-    pressCancle();
+    showLoadingDialog(Get.context, () async {
+      await _postComment(
+        comment,
+        isEdit: editState == EditState.editComment,
+        commentId: commentId,
+      );
+      pressCancle();
+    });
   }
 
   void pressCancle() {
-    comment = '';
     oriComment = '';
     commentTextController.clear();
     editState = EditState.newComment;
@@ -155,4 +155,28 @@ class CommentController extends GetxController
     editState = EditState.editComment;
     FocusScope.of(Get.context).requestFocus(focusNode);
   }
+}
+
+/// 显示等待
+Future<void> showLoadingDialog(BuildContext context, Function function) async {
+  return showCupertinoDialog<void>(
+    context: context,
+    builder: (BuildContext context) {
+      Future<void>.delayed(const Duration(milliseconds: 0))
+          .then((_) => function())
+          .whenComplete(() => Get.back());
+
+      return Center(
+        child: CupertinoPopupSurface(
+          child: Container(
+              height: 80,
+              width: 80,
+              alignment: Alignment.center,
+              child: const CupertinoActivityIndicator(
+                radius: 20,
+              )),
+        ),
+      );
+    },
+  );
 }

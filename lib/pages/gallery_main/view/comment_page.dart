@@ -4,6 +4,7 @@ import 'package:fehviewer/generated/l10n.dart';
 import 'package:fehviewer/models/galleryComment.dart';
 import 'package:fehviewer/pages/gallery_main/controller/comment_controller.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
 
@@ -52,13 +53,16 @@ class CommentPage extends StatelessWidget {
     final CommentController controller = Get.find(tag: pageCtrlDepth);
 
     final Widget commList =
-        controller.obx((List<GalleryComment> state) => ListView.builder(
-              itemBuilder: (context, index) {
-                return CommentItem(
-                  galleryComment: state[index],
-                );
-              },
-              itemCount: state.length,
+        controller.obx((List<GalleryComment> state) => SafeArea(
+              child: ListView.builder(
+                padding: const EdgeInsets.only(bottom: 60),
+                itemBuilder: (context, index) {
+                  return CommentItem(
+                    galleryComment: state[index],
+                  );
+                },
+                itemCount: state.length,
+              ),
             ));
 
     Widget _buildOriText() {
