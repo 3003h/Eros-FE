@@ -175,7 +175,6 @@ class CoverImage extends StatelessWidget {
                   child: Container(
                     height: imgHeight,
                     width: imgWidth,
-                    color: CupertinoColors.systemBackground,
                     child: CachedNetworkImage(
                       placeholder: (_, __) {
                         return Container(
@@ -330,7 +329,7 @@ class ReadButton extends StatelessWidget {
   }
 }
 
-/// 类别 点击可跳转搜索
+/// 类别
 class GalleryCategory extends StatelessWidget {
   const GalleryCategory({
     Key key,
@@ -502,16 +501,24 @@ class TopComment extends StatelessWidget {
       children: <Widget>[
         // 评论
         GetBuilder<CommentController>(
-            init: CommentController(),
-            tag: pageCtrlDepth,
-            id: 'TopComment',
-            builder: (CommentController _commentController) {
-              return Column(
-                children: <Widget>[
-                  ..._topComment(_commentController.state, max: 2),
-                ],
-              );
-            }),
+          init: CommentController(),
+          tag: pageCtrlDepth,
+          id: 'TopComment',
+          builder: (CommentController _commentController) {
+            return _commentController.obx(
+                (state) => Column(
+                      children: <Widget>[
+                        ..._topComment(state, max: 2),
+                      ],
+                    ),
+                onLoading: Container(
+                  padding: const EdgeInsets.all(8),
+                  child: const CupertinoActivityIndicator(
+                    radius: 10,
+                  ),
+                ));
+          },
+        ),
         // 评论按钮
         CupertinoButton(
           minSize: 0,

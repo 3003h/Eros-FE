@@ -46,6 +46,29 @@ class AdvanceSearchController extends ProfileController {
     return para;
   }
 
+  Map<String, dynamic> get advanceSearchMap {
+    final AdvanceSearch val = advanceSearch.value;
+
+    return <String, dynamic>{
+      if (val.searchGalleryName ?? false) 'f_sname': 'on',
+      if (val.searchGalleryTags ?? false) 'f_stags': 'on',
+      if (val.searchGalleryDesc ?? false) 'f_sdesc': 'on',
+      if (val.searchToreenFilenames ?? false) 'f_storr': 'on',
+      if (val.onlyShowWhithTorrents ?? false) 'f_sto': 'on',
+      if (val.searchLowPowerTags ?? false) 'f_sdt1': 'on',
+      if (val.searchDownvotedTags ?? false) 'f_sdt2': 'on',
+      if (val.searchExpunged ?? false) 'f_sh': 'on',
+      if (val.searchWithminRating ?? false) 'f_sr': 'on',
+      if (val.minRating != null) 'f_srdd': val.minRating,
+      if (val.searchBetweenpage ?? false) 'f_sp': 'on',
+      if (val.startPage?.isNotEmpty ?? false) 'f_spf': val.startPage,
+      if (val.endPage?.isNotEmpty ?? false) 'f_spt': val.endPage,
+      if (val.disableDFTags ?? false) 'f_sfl': 'on',
+      if (val.disableDFTags ?? false) 'f_sfu': 'on',
+      if (val.disableDFTags ?? false) 'f_sft': 'on',
+    };
+  }
+
   @override
   void onInit() {
     super.onInit();

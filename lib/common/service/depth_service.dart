@@ -25,11 +25,11 @@ class DepthService extends GetxService {
   /// 作为控制器唯一标识
   int searchPageCtrlDepth = 0;
 
-  void pushAdvSearchCtrl() {
+  void pushSearchPageCtrl() {
     searchPageCtrlDepth++;
   }
 
-  void popAdvSearchCtrl() {
+  void popSearchPageCtrl() {
     searchPageCtrlDepth--;
   }
 }

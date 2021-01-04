@@ -3,7 +3,7 @@ import 'package:fehviewer/common/service/depth_service.dart';
 import 'package:fehviewer/common/service/ehconfig_service.dart';
 import 'package:fehviewer/models/index.dart';
 import 'package:fehviewer/network/gallery_request.dart';
-import 'package:fehviewer/pages/tab/view/search_text_page.dart';
+import 'package:fehviewer/pages/tab/view/quick_search_page.dart';
 import 'package:fehviewer/utils/logger.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
@@ -137,7 +137,7 @@ class SearchPageController extends GetxController
   /// 打开快速搜索列表
   void quickSearchList() {
     Get.to<String>(
-      SearchQuickListPage(),
+      QuickSearchListPage(),
       transition: Transition.cupertino,
     ).then((String value) => searchTextController.text = value);
   }
@@ -159,7 +159,7 @@ class SearchPageController extends GetxController
   @override
   void onClose() {
     searchTextController.dispose();
-    Get.find<DepthService>().popAdvSearchCtrl();
+    Get.find<DepthService>().popSearchPageCtrl();
     super.onClose();
   }
 }

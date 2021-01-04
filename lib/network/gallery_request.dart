@@ -143,7 +143,7 @@ class Api {
   }
 
   /// 获取画廊列表
-  static Future<Tuple2<List<GalleryItem>, int>> getGallery({
+  static Future<Tuple2<List<GalleryItem>, int>> getGalleryOld({
     int page,
     String fromGid,
     String serach,
@@ -204,6 +204,47 @@ class Api {
     await CustomHttpsProxy.instance.init();
     final String response =
         await getHttpManager().get(url, options: _cacheOptions);
+
+    return await GalleryListParser.parseGalleryList(response, refresh: refresh);
+  }
+
+  /// 获取画廊列表
+  static Future<Tuple2<List<GalleryItem>, int>> getGallery({
+    int page,
+    String fromGid,
+    String serach,
+    int cats,
+    bool refresh = false,
+  }) async {
+    final EhConfigService _ehConfigService = Get.find();
+    final bool safeMode = _ehConfigService.isSafeMode.value;
+    final AdvanceSearchController _searchController = Get.find();
+
+    String url = '/';
+
+    final Map<String, dynamic> params = <String, dynamic>{
+      'page': page ?? 0,
+      'inline_set': 'dm_l',
+      if (safeMode) 'f_cats': 767,
+      if (safeMode) 'parody': 'gundam\$',
+      if (!safeMode && cats != null) 'f_cats': cats,
+      if (fromGid != null) 'from': fromGid,
+      if (serach != null) 'f_search': serach,
+    };
+
+    /// 高级搜索处理
+    if (_searchController.enableAdvance ?? false) {
+      params['advsearch'] = 1;
+      params.addAll(_searchController.advanceSearchMap);
+    }
+
+    final Options _cacheOptions = getCacheOptions(forceRefresh: refresh);
+
+    logger.v(url);
+
+    await CustomHttpsProxy.instance.init();
+    final String response =
+        await getHttpManager().get(url, options: _cacheOptions, params: params);
 
     return await GalleryListParser.parseGalleryList(response, refresh: refresh);
   }

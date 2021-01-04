@@ -26,11 +26,18 @@ class NavigatorUtil {
   static void goGalleryListBySearch({
     String simpleSearch,
   }) {
+    final List<String> searArr = simpleSearch.split(':');
+    String _end = '';
+    if (searArr[0] != 'uploader') {
+      _end = '\$';
+    }
+    final String _search = '${searArr[0]}:"${searArr[1]}$_end"';
+
+    Get.find<DepthService>().pushSearchPageCtrl();
     Get.to(GallerySearchPage(), transition: Transition.cupertino,
         binding: BindingsBuilder(() {
-      Get.find<DepthService>().pushAdvSearchCtrl();
       Get.put(
-        SearchPageController.fromText(simpleSearch),
+        SearchPageController.fromText(_search),
         tag: searchPageCtrlDepth,
       );
     }));
@@ -89,7 +96,7 @@ class NavigatorUtil {
   static void showSearch() {
     Get.to(GallerySearchPage(), transition: Transition.cupertino,
         binding: BindingsBuilder(() {
-      Get.find<DepthService>().pushAdvSearchCtrl();
+      Get.find<DepthService>().pushSearchPageCtrl();
       Get.put(
         SearchPageController(),
         tag: searchPageCtrlDepth,
