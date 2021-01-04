@@ -1,5 +1,6 @@
 import 'package:fehviewer/common/service/ehconfig_service.dart';
 import 'package:fehviewer/generated/l10n.dart';
+import 'package:fehviewer/pages/tab/view/watched_page.dart';
 import 'package:fehviewer/utils/logger.dart';
 import 'package:fehviewer/utils/toast.dart';
 import 'package:flutter/cupertino.dart';
@@ -178,6 +179,7 @@ final TabPages tabPages = TabPages();
 
 class TabPages {
   static const String popular = 'popular';
+  static const String watched = 'watched';
   static const String gallery = 'gallery';
   static const String favorite = 'favorite';
   static const String setting = 'setting';
@@ -195,6 +197,10 @@ class TabPages {
           tabIndex: popular,
           scrollController: _getScrollController(popular),
         ),
+        watched: WatchedListTab(
+          tabIndex: watched,
+          scrollController: _getScrollController(watched),
+        ),
         gallery: GalleryListTab(
           tabIndex: gallery,
           scrollController: _getScrollController(gallery),
@@ -211,6 +217,7 @@ class TabPages {
 
   final Map<String, Widget> tabIcons = <String, Widget>{
     popular: const Icon(FontAwesomeIcons.fire, size: kIconSize),
+    watched: const Icon(FontAwesomeIcons.eye, size: kIconSize),
     gallery: const Icon(FontAwesomeIcons.list, size: kIconSize),
     favorite: const Icon(FontAwesomeIcons.solidHeart, size: kIconSize),
     setting: const Icon(FontAwesomeIcons.cog, size: kIconSize),
@@ -218,6 +225,7 @@ class TabPages {
 
   Map<String, String> get tabTitles => <String, String>{
         popular: S.of(Get.find<TabHomeControllerNew>().tContext).tab_popular,
+        watched: S.of(Get.find<TabHomeControllerNew>().tContext).tab_watched,
         gallery: S.of(Get.find<TabHomeControllerNew>().tContext).tab_gallery,
         favorite: S.of(Get.find<TabHomeControllerNew>().tContext).tab_favorite,
         setting: S.of(Get.find<TabHomeControllerNew>().tContext).tab_setting,
@@ -243,6 +251,7 @@ class TabHomeControllerNew extends GetxController {
         ]
       : <String>[
           TabPages.popular,
+          TabPages.watched,
           TabPages.gallery,
           TabPages.favorite,
           TabPages.setting,

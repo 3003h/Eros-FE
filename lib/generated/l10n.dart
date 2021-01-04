@@ -67,6 +67,16 @@ class S {
     );
   }
 
+  /// `Watched`
+  String get tab_watched {
+    return Intl.message(
+      'Watched',
+      name: 'tab_watched',
+      desc: '',
+      args: [],
+    );
+  }
+
   /// `Gallery`
   String get tab_gallery {
     return Intl.message(

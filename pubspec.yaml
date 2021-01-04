@@ -113,6 +113,8 @@ dependencies:
 
   scrollable_positioned_list: ^0.1.8
 
+  reorderables: ^0.3.2
+
   dns_client: ^0.1.0+2
 
   # 震动
