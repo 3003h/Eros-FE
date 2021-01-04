@@ -3,6 +3,7 @@ import 'package:fehviewer/common/global.dart';
 import 'package:fehviewer/common/service/base_service.dart';
 import 'package:fehviewer/const/const.dart';
 import 'package:fehviewer/generated/l10n.dart';
+import 'package:fehviewer/pages/tab/controller/tabhome_controller.dart';
 import 'package:fehviewer/utils/logger.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
@@ -63,7 +64,13 @@ class EhConfigService extends ProfileService {
 
     //
     isSafeMode.value = ehConfig.safeMode ?? true;
-    everProfile(isSafeMode, (value) => ehConfig.safeMode = value);
+    everProfile(isSafeMode, (value) {
+      ehConfig.safeMode = value;
+      final TabHomeControllerNew _tabController =
+          Get.find<TabHomeControllerNew>();
+      final int last = _tabController.tabs.length;
+      Get.find<TabHomeControllerNew>().tabController.index = last - 1;
+    });
 
     isJpnTitle.value = ehConfig?.jpnTitle ?? false;
     everProfile(isJpnTitle, (value) => ehConfig.jpnTitle = value);

@@ -65,9 +65,8 @@ class Global {
     }
 
     //statusBar设置为透明，去除半透明遮罩
-    const SystemUiOverlayStyle _style =
-        SystemUiOverlayStyle(statusBarColor: Colors.transparent);
-    SystemChrome.setSystemUIOverlayStyle(_style);
+    SystemChrome.setSystemUIOverlayStyle(
+        const SystemUiOverlayStyle(statusBarColor: Colors.transparent));
 
     appSupportPath = (await getApplicationSupportDirectory()).path;
     appDocPath = (await getApplicationDocumentsDirectory()).path;
@@ -99,8 +98,6 @@ class Global {
     final Directory downloadDir = Directory(join(appDocPath, 'Download'));
     downloadDir.create();
   }
-
-  /// 升级兼容处理 把数据库文件从doc目录移动到appSupport
 
   /// profile初始化
   static void _profileInit() {
