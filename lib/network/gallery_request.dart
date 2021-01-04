@@ -117,6 +117,31 @@ class Api {
     }
   }
 
+  /// Watched
+  static Future<Tuple2<List<GalleryItem>, int>> getWatched({
+    int page,
+    String fromGid,
+    String serach,
+    int cats,
+    bool refresh = false,
+  }) async {
+    const String _url = '/watched';
+    final Options _cacheOptions = getCacheOptions(forceRefresh: refresh);
+
+    // todo  Watched 的搜索功能待定
+    await CustomHttpsProxy.instance.init();
+    final String response = await getHttpManager().get(
+      _url,
+      options: _cacheOptions,
+      params: <String, dynamic>{
+        'page': page,
+        if (fromGid != null) 'from': fromGid,
+      },
+    );
+
+    return await GalleryListParser.parseGalleryList(response, refresh: refresh);
+  }
+
   /// 获取画廊列表
   static Future<Tuple2<List<GalleryItem>, int>> getGallery({
     int page,
@@ -125,13 +150,13 @@ class Api {
     int cats,
     bool refresh = false,
   }) async {
-    final EhConfigService ehConfigService = Get.find();
-    final AdvanceSearchController searchController = Get.find();
+    final EhConfigService _ehConfigService = Get.find();
+    final AdvanceSearchController _searchController = Get.find();
 
     String url = '/';
     String qry = '?page=${page ?? 0}&inline_set=dm_l';
 
-    if (ehConfigService.isSafeMode.value) {
+    if (_ehConfigService.isSafeMode.value) {
       qry = '$qry&f_cats=767';
     } else if (cats != null) {
       qry = '$qry&f_cats=$cats';
@@ -141,7 +166,7 @@ class Api {
       qry = '$qry&from=$fromGid';
     }
 
-    if (ehConfigService.isSafeMode.value) {
+    if (_ehConfigService.isSafeMode.value) {
       serach = 'parody:gundam\$';
     }
 
@@ -168,8 +193,8 @@ class Api {
     url = '$url$qry';
 
     /// 高级搜索处理
-    if (searchController.enableAdvance ?? false) {
-      url = '$url&advsearch=1${searchController.getAdvanceSearchText()}';
+    if (_searchController.enableAdvance ?? false) {
+      url = '$url&advsearch=1${_searchController.getAdvanceSearchText()}';
     }
 
     final Options _cacheOptions = getCacheOptions(forceRefresh: refresh);

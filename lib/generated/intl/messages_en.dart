@@ -111,6 +111,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "tab_history" : MessageLookupByLibrary.simpleMessage("History"),
     "tab_popular" : MessageLookupByLibrary.simpleMessage("Popular"),
     "tab_setting" : MessageLookupByLibrary.simpleMessage("Settings"),
+    "tab_watched" : MessageLookupByLibrary.simpleMessage("Watched"),
     "tags" : MessageLookupByLibrary.simpleMessage("Tags"),
     "theme" : MessageLookupByLibrary.simpleMessage("Theme"),
     "top_to_bottom" : MessageLookupByLibrary.simpleMessage("Top to bottom"),
