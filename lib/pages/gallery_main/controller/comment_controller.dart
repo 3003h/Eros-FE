@@ -16,8 +16,9 @@ enum EditState {
 }
 
 class CommentController extends GetxController
-    with StateMixin<List<GalleryComment>> {
+    with StateMixin<List<GalleryComment>>, WidgetsBindingObserver {
   CommentController({this.pageController});
+
   final GalleryPageController pageController;
   final TextEditingController commentTextController = TextEditingController();
 
@@ -26,10 +27,18 @@ class CommentController extends GetxController
   String oriComment;
   String commentId;
   FocusNode focusNode = FocusNode();
+  ScrollController scrollController = ScrollController();
+
+  final WidgetsBinding _widgetsBinding = WidgetsBinding.instance;
+  double _preBottomInset = 0;
+  double _bottomInset = 0;
+  bool _didChangeMetrics = false;
 
   final Rx<EditState> _editState = EditState.newComment.obs;
   EditState get editState => _editState.value;
   set editState(EditState val) => _editState.value = val;
+
+  bool get isEditStat => _editState.value == EditState.editComment;
 
   @override
   void onInit() {
@@ -37,6 +46,46 @@ class CommentController extends GetxController
     logger.d('CommentController onInit');
     change(pageController.galleryItem.galleryComment,
         status: RxStatus.success());
+
+    _bottomInset = _mediaQueryBottomInset();
+    _preBottomInset = _bottomInset;
+    _widgetsBinding.addObserver(this);
+    // _widgetsBinding.addPostFrameCallback((Duration timeStamp) {
+    //   // logger.d('${_mediaQueryBottomInset()}');
+    //   _widgetsBinding.addPersistentFrameCallback((Duration timeStamp) {
+    //     logger.d('${_mediaQueryBottomInset()}');
+    //   });
+    // });
+  }
+
+  @override
+  void didChangeMetrics() {
+    _didChangeMetrics = true;
+    super.didChangeMetrics();
+    // _widgetsBinding.addPostFrameCallback((Duration timeStamp) {
+    //   logger.d(' ${MediaQuery.of(Get.context).viewInsets.bottom}');
+    // });
+    _widgetsBinding.addPostFrameCallback((Duration timeStamp) {
+      _bottomInset = _mediaQueryBottomInset();
+      if (_preBottomInset != _bottomInset) {
+        final double _offset = _bottomInset - _preBottomInset;
+        _preBottomInset = _bottomInset;
+        // logger.d(' ${_bottomInset} $_offset  ${scrollController.offset}');
+
+        // _scrollToBottom();
+      }
+    });
+  }
+
+  @override
+  void onClose() {
+    super.onClose();
+    scrollController.dispose();
+    _widgetsBinding.removeObserver(this);
+  }
+
+  double _mediaQueryBottomInset() {
+    return MediaQueryData.fromWindow(_widgetsBinding.window).viewInsets.bottom;
   }
 
   Future<void> commitVoteUp(String _id) async {
@@ -154,6 +203,58 @@ class CommentController extends GetxController
     );
     editState = EditState.editComment;
     FocusScope.of(Get.context).requestFocus(focusNode);
+    // _scrollToBottom();
+  }
+
+  // 滚动到列表底部
+  void _scrollToBottom() {
+    Future.delayed(const Duration(milliseconds: 400), () {
+      logger.d('${scrollController.position.maxScrollExtent}');
+      // scrollController.jumpTo(scrollController.position.maxScrollExtent);
+      scrollController.animateTo(
+        scrollController.position.maxScrollExtent,
+        duration: Duration(milliseconds: 400),
+        curve: Curves.linear,
+      );
+    });
+  }
+
+  void _scrollView() {
+    _bottomInset = _mediaQueryBottomInset();
+    if (_preBottomInset != _bottomInset) {
+      final double _offset = _bottomInset - _preBottomInset;
+      _preBottomInset = _bottomInset;
+      logger.d(' ${_bottomInset} $_offset  ${scrollController.offset}');
+
+      final double _viewHeigth = Get.context.height -
+          Get.context.mediaQueryViewPadding.top -
+          Get.context.mediaQueryViewPadding.bottom -
+          60 -
+          44;
+
+      logger.d(
+          '_viewHeigth $_viewHeigth,  ${Get.context.height}  ${Get.context.mediaQueryViewPadding.top}  ${Get.context.mediaQueryViewPadding.bottom}');
+
+      if (scrollController.position.maxScrollExtent > _viewHeigth) {
+        if (scrollController.offset > _bottomInset && _offset < 0) {
+          scrollController.animateTo(
+            scrollController.offset + _offset,
+            duration: const Duration(milliseconds: 200),
+            curve: Curves.easeIn,
+          );
+        } else if (_offset > 0) {
+          scrollController.animateTo(
+            scrollController.offset + _offset,
+            duration: const Duration(milliseconds: 200),
+            curve: Curves.easeIn,
+          );
+        }
+      } else {
+        final double _o =
+            _viewHeigth - scrollController.position.maxScrollExtent;
+        logger.d('_o $_o');
+      }
+    }
   }
 }
 

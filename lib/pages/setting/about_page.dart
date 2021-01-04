@@ -34,7 +34,7 @@ class AboutPage extends StatelessWidget {
 class ListViewAbout extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    final EhConfigService ehConfigService = Get.find();
+    final EhConfigService _ehConfigService = Get.find();
 
     return Container(
       child: ListView(
@@ -47,15 +47,15 @@ class ListViewAbout extends StatelessWidget {
             ),
             onTrigger: (int tapNum, int neededNum) {
               if (Platform.isIOS) {
-                if (ehConfigService.isSafeMode.value ?? true) {
+                if (_ehConfigService.isSafeMode.value ?? true) {
                   showToast('你发现了不得了的东西');
                   logger.v('safeMode off');
-                  ehConfigService.isSafeMode.value = false;
+                  _ehConfigService.isSafeMode.value = false;
                   Vibrate.feedback(FeedbackType.success);
                 } else {
                   showToast('ヾ(￣▽￣)Bye~Bye~');
                   logger.v('safeMode on');
-                  ehConfigService.isSafeMode.value = true;
+                  _ehConfigService.isSafeMode.value = true;
                   Vibrate.feedback(FeedbackType.error);
                 }
               }
@@ -66,7 +66,7 @@ class ListViewAbout extends StatelessWidget {
             desc: 'honjow  <honjow311@gmail.com>',
             onTap: () => launch('mailto:honjow311@gmail.com'),
           ),
-          if (!ehConfigService.isSafeMode.value)
+          if (!_ehConfigService.isSafeMode.value)
             TextItem(
               'Github',
               desc: 'https://github.com/honjow/FEhViewer',

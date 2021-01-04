@@ -417,14 +417,9 @@ class CoverImg extends StatelessWidget {
       }
     }
 
-    return Obx(() {
-      if (ehConfigService.isGalleryImgBlur.value) {
-        return BlurImage(
+    return Obx(() => BlurImage(
+          isBlur: ehConfigService.isGalleryImgBlur.value,
           child: image(),
-        );
-      } else {
-        return image();
-      }
-    });
+        ));
   }
 }

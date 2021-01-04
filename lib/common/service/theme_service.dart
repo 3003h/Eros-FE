@@ -72,6 +72,8 @@ class EHTheme {
     }
   }
 
+  CupertinoThemeData get themeData => _themeService.themeData;
+
   Color get _darkColor => _ehConfigService.isPureDarkTheme.value
       ? ThemeColors.darkItemBackground
       : ThemeColors.darkGrayItemBackground;

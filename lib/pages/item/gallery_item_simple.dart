@@ -279,33 +279,24 @@ class CoverImg extends StatelessWidget {
       'Cookie': Global.profile?.user?.cookie ?? '',
     };
     if (imgUrl != null && imgUrl.isNotEmpty) {
-      return Obx(() {
-        if (ehConfigService.isGalleryImgBlur.value) {
-          return BlurImage(
+      return Obx(() => LayoutBuilder(builder: (context, constraints) {
+            return BlurImage(
+              isBlur: ehConfigService.isGalleryImgBlur.value,
               child: CachedNetworkImage(
-            httpHeaders: _httpHeaders,
-            imageUrl: imgUrl,
-            fit: BoxFit.cover,
-          ));
-        } else {
-          return LayoutBuilder(builder: (context, constraints) {
-            // logger.d('${constraints}');
-            return CachedNetworkImage(
-              placeholder: (_, __) {
-                return Container(
-                  color: CupertinoDynamicColor.resolve(
-                      CupertinoColors.systemGrey5, context),
-                );
-              },
-              height: height * constraints.maxWidth / width,
-              width: constraints.maxWidth,
-              httpHeaders: _httpHeaders,
-              imageUrl: imgUrl,
-              fit: BoxFit.fitWidth,
+                placeholder: (_, __) {
+                  return Container(
+                    color: CupertinoDynamicColor.resolve(
+                        CupertinoColors.systemGrey5, context),
+                  );
+                },
+                height: height * constraints.maxWidth / width,
+                width: constraints.maxWidth,
+                httpHeaders: _httpHeaders,
+                imageUrl: imgUrl,
+                fit: BoxFit.fitWidth,
+              ),
             );
-          });
-        }
-      });
+          }));
     } else {
       return Container();
     }

@@ -16,6 +16,7 @@ Future<void> dataUpdate() async {
   }
 }
 
+/// 升级兼容处理 把数据库文件从doc目录移动到appSupport
 Future<void> moveDB() async {
   final Directory appDocDir = Directory(Global.appDocPath);
   final Stream<FileSystemEntity> entityList =

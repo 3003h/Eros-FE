@@ -1,3 +1,5 @@
+import 'dart:ui';
+
 import 'package:fehviewer/common/service/depth_service.dart';
 import 'package:fehviewer/common/service/theme_service.dart';
 import 'package:fehviewer/generated/l10n.dart';
@@ -53,16 +55,17 @@ class CommentPage extends StatelessWidget {
     final CommentController controller = Get.find(tag: pageCtrlDepth);
 
     final Widget commList =
-        controller.obx((List<GalleryComment> state) => SafeArea(
-              child: ListView.builder(
-                padding: const EdgeInsets.only(bottom: 60),
-                itemBuilder: (context, index) {
-                  return CommentItem(
-                    galleryComment: state[index],
-                  );
-                },
-                itemCount: state.length,
-              ),
+        controller.obx((List<GalleryComment> state) => ListView.builder(
+              controller: controller.scrollController,
+              // MediaQuery.of(context).viewInsets.bottom
+              padding: EdgeInsets.only(
+                  bottom: 60 + context.mediaQueryPadding.bottom),
+              itemBuilder: (context, index) {
+                return CommentItem(
+                  galleryComment: state[index],
+                );
+              },
+              itemCount: state.length,
             ));
 
     Widget _buildOriText() {
@@ -120,6 +123,7 @@ class CommentPage extends StatelessWidget {
     }
 
     return CupertinoPageScaffold(
+      // resizeToAvoidBottomInset: false,
       navigationBar: CupertinoNavigationBar(
         middle: Text(S.of(context).gallery_comments),
         // trailing: Container(
@@ -146,7 +150,8 @@ class CommentPage extends StatelessWidget {
       ),
       // child: commList,
       child: SafeArea(
-        minimum: const EdgeInsets.only(bottom: 20),
+        // minimum: const EdgeInsets.only(bottom: 20),
+        bottom: false,
         child: Stack(
           alignment: Alignment.bottomCenter,
           children: <Widget>[
@@ -158,16 +163,20 @@ class CommentPage extends StatelessWidget {
               },
               onPanDown: (DragDownDetails details) {
                 // 滑动收起键盘
-                FocusScope.of(context).requestFocus(FocusNode());
+                // FocusScope.of(context).requestFocus(FocusNode());
               },
               child: commList,
             ),
             SingleChildScrollView(
               child: Container(
+                padding:
+                    EdgeInsets.only(bottom: context.mediaQueryPadding.bottom),
                 decoration: BoxDecoration(
                   border: _kDefaultEditBorder,
                   color: CupertinoDynamicColor.resolve(
-                      ehTheme.itmeBackgroundColor, context),
+                          ehTheme.themeData.barBackgroundColor, context)
+                      .withOpacity(1),
+                  // color: Colors.transparent,
                 ),
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
@@ -176,43 +185,56 @@ class CommentPage extends StatelessWidget {
                     // 编辑原消息时的显示
                     _buildOriText(),
                     // 输入框
-                    Obx(
-                      () => Row(
-                        crossAxisAlignment: CrossAxisAlignment.end,
-                        children: <Widget>[
-                          Expanded(
-                            child: Padding(
-                              padding: const EdgeInsets.fromLTRB(8, 8, 0, 8),
-                              child: CupertinoTextField(
-                                padding: const EdgeInsets.symmetric(
-                                    horizontal: 14.0, vertical: 6.0),
-                                maxLines: null,
-                                keyboardType: TextInputType.multiline,
-                                decoration: _kDefaultRoundedBorderDecoration,
-                                controller: controller.commentTextController,
-                                focusNode: controller.focusNode,
-                              ),
-                            ),
-                          ),
-                          CupertinoTheme(
-                            data: const CupertinoThemeData(
-                              primaryColor: CupertinoColors.activeGreen,
-                            ),
-                            child: CupertinoButton(
+                    Row(
+                      crossAxisAlignment: CrossAxisAlignment.end,
+                      children: <Widget>[
+                        Expanded(
+                          child: Padding(
+                            padding: const EdgeInsets.fromLTRB(8, 8, 0, 8),
+                            child: CupertinoTextField(
                               padding: const EdgeInsets.symmetric(
-                                  horizontal: 6, vertical: 8),
-                              minSize: 0,
-                              child: Icon(
-                                controller.editState == EditState.editComment
-                                    ? FontAwesomeIcons.solidCheckCircle
-                                    : FontAwesomeIcons.arrowCircleUp,
-                                size: 32,
-                              ),
-                              onPressed: controller.pressSend,
+                                  horizontal: 14.0, vertical: 6.0),
+                              maxLines: null,
+                              keyboardType: TextInputType.multiline,
+                              decoration: _kDefaultRoundedBorderDecoration,
+                              controller: controller.commentTextController,
+                              focusNode: controller.focusNode,
                             ),
                           ),
-                        ],
-                      ),
+                        ),
+                        CupertinoTheme(
+                          data: const CupertinoThemeData(
+                            primaryColor: CupertinoColors.activeGreen,
+                          ),
+                          child: CupertinoButton(
+                            padding: const EdgeInsets.symmetric(
+                                horizontal: 6, vertical: 8),
+                            minSize: 0,
+                            child: Obx(
+                              () => AnimatedSwitcher(
+                                duration: const Duration(milliseconds: 200),
+                                switchInCurve: Curves.bounceIn,
+                                // switchOutCurve: Curves.linear,
+                                transitionBuilder: (child, animation) =>
+                                    ScaleTransition(
+                                        scale: animation, child: child),
+                                child: controller.isEditStat
+                                    ? Icon(
+                                        FontAwesomeIcons.solidCheckCircle,
+                                        key: UniqueKey(),
+                                        size: 32,
+                                      )
+                                    : Icon(
+                                        FontAwesomeIcons.arrowCircleUp,
+                                        key: UniqueKey(),
+                                        size: 32,
+                                      ),
+                              ),
+                            ),
+                            onPressed: controller.pressSend,
+                          ),
+                        ),
+                      ],
                     ),
                   ],
                 ),
