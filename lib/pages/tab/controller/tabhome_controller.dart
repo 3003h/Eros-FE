@@ -185,7 +185,7 @@ class TabPages {
   static const String setting = 'setting';
 
   final Map<String, ScrollController> scrollControllerMap = {};
-  ScrollController _getScrollController(String key) {
+  ScrollController _scrollController(String key) {
     if (scrollControllerMap[key] == null) {
       scrollControllerMap[key] = ScrollController();
     }
@@ -195,23 +195,23 @@ class TabPages {
   Map<String, Widget> get tabViews => <String, Widget>{
         popular: PopularListTab(
           tabIndex: popular,
-          scrollController: _getScrollController(popular),
+          scrollController: _scrollController(popular),
         ),
         watched: WatchedListTab(
           tabIndex: watched,
-          scrollController: _getScrollController(watched),
+          scrollController: _scrollController(watched),
         ),
         gallery: GalleryListTab(
           tabIndex: gallery,
-          scrollController: _getScrollController(gallery),
+          scrollController: _scrollController(gallery),
         ),
         favorite: FavoriteTab(
           tabIndex: favorite,
-          scrollController: _getScrollController(favorite),
+          scrollController: _scrollController(favorite),
         ),
         setting: SettingTab(
           tabIndex: setting,
-          scrollController: _getScrollController(setting),
+          scrollController: _scrollController(setting),
         ),
       };
 
@@ -262,9 +262,9 @@ class TabHomeControllerNew extends GetxController {
           icon: tabPages.tabIcons[e], label: tabPages.tabTitles[e]))
       .toList();
 
-  // final BuildContext context = Get.context;
   BuildContext tContext = Get.context;
 
+  /// 需要初始化获取BuildContext 否则修改语言时tabitem的文字不会立即生效
   void init({BuildContext inContext}) {
     logger.d(' rebuild home');
     tContext = inContext;

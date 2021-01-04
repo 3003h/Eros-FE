@@ -1,6 +1,8 @@
 import 'dart:io';
 
 import 'package:fehviewer/common/controller/quicksearch_controller.dart';
+import 'package:fehviewer/common/global.dart';
+import 'package:fehviewer/generated/l10n.dart';
 import 'package:fehviewer/store/tag_database.dart';
 import 'package:fehviewer/utils/logger.dart';
 import 'package:file_picker/file_picker.dart';
@@ -10,17 +12,16 @@ import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
-import 'package:path_provider/path_provider.dart';
 import 'package:share/share.dart';
 
-class SearchQuickListPage extends StatelessWidget {
-  final String _title = '快速搜索';
+class QuickSearchListPage extends StatelessWidget {
+  final String _title = 'Quick search';
 
   Future<String> _getTextTranslate(String text) async {
     final String tranText =
         await EhTagDatabase.getTranTagWithFullNameSpase(text);
     if (tranText.trim() != text) {
-      return '$text / $tranText';
+      return tranText;
     } else {
       return text;
     }
@@ -58,21 +59,36 @@ class SearchQuickListPage extends StatelessWidget {
                           initialData: _datas[position],
                           builder: (context, snapshot) {
                             return Container(
-                              height: 46,
+                              height: 60,
                               width: double.infinity,
                               alignment: Alignment.centerLeft,
-                              child: Text(
-                                snapshot.data,
-                                maxLines: 2,
-                                overflow: TextOverflow.ellipsis,
-                                style: const TextStyle(fontSize: 16),
+                              child: Column(
+                                mainAxisSize: MainAxisSize.min,
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    _datas[position],
+                                    maxLines: 2,
+                                    overflow: TextOverflow.ellipsis,
+                                    style: const TextStyle(fontSize: 16),
+                                  ),
+                                  Text(
+                                    snapshot.data ?? '',
+                                    maxLines: 2,
+                                    overflow: TextOverflow.ellipsis,
+                                    style: const TextStyle(
+                                      fontSize: 12,
+                                      color: CupertinoColors.systemGrey,
+                                    ),
+                                  ),
+                                ],
                               ),
                             );
                           }),
                     ),
                     secondaryActions: <Widget>[
                       IconSlideAction(
-                        caption: '删除',
+                        caption: S.of(context).delete,
                         color: CupertinoDynamicColor.resolve(
                             CupertinoColors.systemRed, context),
                         icon: Icons.delete,
@@ -166,7 +182,6 @@ class SearchQuickListPage extends StatelessWidget {
                 final String _searchText =
                     '#FEhViewer\n${_searchTextList.join('\n')}';
                 logger.v(_searchText);
-                // Share.share(_searchText, subject: 'FEhViewer');
                 final File _tempFlie = await _getLocalFile();
                 _tempFlie.writeAsStringSync(_searchText);
                 Share.shareFiles([_tempFlie.path]);
@@ -179,31 +194,29 @@ class SearchQuickListPage extends StatelessWidget {
   }
 
   Future<File> _getLocalFile() async {
-    // 获取临时目录
-    final String dir = (await getTemporaryDirectory()).path;
     final DateTime _now = DateTime.now();
     final DateFormat formatter = DateFormat('yyyyMMdd_HHmmss');
     final String _fileName = formatter.format(_now);
-    return File('$dir/FEhViewerSearch_$_fileName.txt');
+    return File('${Global.appDocPath}/QSearch_$_fileName.txt');
   }
 
   Future<void> _removeAll() async {
     final QuickSearchController quickSearchController = Get.find();
     return showCupertinoDialog<void>(
       context: Get.context,
-      // barrierDismissible: false, // user must tap button!
+      barrierDismissible: true,
       builder: (BuildContext context) {
         return CupertinoAlertDialog(
-          title: const Text('清除所有?'),
+          title: const Text('Remove all?'),
           actions: <Widget>[
             CupertinoDialogAction(
-              child: const Text('取消'),
+              child: Text(S.of(context).cancel),
               onPressed: () {
                 Get.back();
               },
             ),
             CupertinoDialogAction(
-              child: const Text('确定'),
+              child: Text(S.of(context).ok),
               onPressed: () {
                 quickSearchController.removeAll();
                 Get.back();
