@@ -93,5 +93,7 @@
   "reading_direction": "Reading direction",
   "letf_to_right": "Letf to right",
   "right_to_left": "Retf to light",
-  "top_to_bottom": "Top to bottom"
+  "top_to_bottom": "Top to bottom",
+  "tabbar_setting": "Tabbar setting",
+  "tab_sort": "Long press and drag to sort"
 }

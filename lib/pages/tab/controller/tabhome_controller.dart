@@ -1,6 +1,11 @@
 import 'package:fehviewer/common/service/ehconfig_service.dart';
 import 'package:fehviewer/generated/l10n.dart';
+import 'package:fehviewer/models/base/extension.dart';
+import 'package:fehviewer/models/index.dart';
+import 'package:fehviewer/pages/tab/view/history_page.dart';
 import 'package:fehviewer/pages/tab/view/watched_page.dart';
+import 'package:fehviewer/route/routes.dart';
+import 'package:fehviewer/store/gallery_store.dart';
 import 'package:fehviewer/utils/logger.dart';
 import 'package:fehviewer/utils/toast.dart';
 import 'package:flutter/cupertino.dart';
@@ -13,177 +18,10 @@ import '../view/gallery_page.dart';
 import '../view/popular_page.dart';
 import '../view/setting_page.dart';
 
-class TabHomeController extends GetxController {
-  DateTime lastPressedAt; //上次点击时间
-
-  int currentIndex = 0;
-  bool tapAwait = false;
-
-  // 需要显示的tab
-  List<String> tabs = <String>[
-    TabPages.popular,
-    TabPages.gallery,
-    TabPages.favorite,
-    TabPages.setting,
-  ];
-
-  final List defTabs = [];
-  final List scrollControllerList = [];
-  final List pageList = [];
-  final List tabList = [];
-
-  final Map<String, ScrollController> _scrollControllerMap = {};
-  final CupertinoTabController tabController = CupertinoTabController();
-
-  final EhConfigService _ehConfigService = Get.find();
-
-  List<BottomNavigationBarItem> get listBottomNavigationBarItem {
-    final List<BottomNavigationBarItem> list = [];
-    for (final tabObj in tabList) {
-      list.add(BottomNavigationBarItem(
-          icon: tabObj['icon'], label: tabObj['title']));
-    }
-
-    return list;
-  }
-
-  final BuildContext context = Get.context;
-
-  void init({BuildContext inContext}) {
-    final BuildContext context = inContext ?? Get.context;
-    // logger.i(' init tab home');
-    scrollControllerList.clear();
-    tabList.clear();
-    pageList.clear();
-    defTabs.clear();
-    const double _iconSize = 24.0;
-    defTabs.addAll([
-      {
-        'title': S.of(context).tab_popular,
-        'icon': const Icon(FontAwesomeIcons.fire, size: _iconSize),
-        'disable': _ehConfigService.isSafeMode.value,
-        'page': PopularListTab(
-          tabIndex: S.of(context).tab_popular,
-          scrollController: _getScrollController(S.of(context).tab_popular),
-        )
-      },
-      {
-        'title': S.of(context).tab_gallery,
-        'icon': const Icon(FontAwesomeIcons.list, size: _iconSize),
-        'page': GalleryListTab(
-          tabIndex: S.of(context).tab_gallery,
-          scrollController: _getScrollController(S.of(context).tab_gallery),
-        )
-      },
-      {
-        'title': S.of(context).tab_favorite,
-        'icon': const Icon(FontAwesomeIcons.solidHeart, size: _iconSize),
-        'disable': _ehConfigService.isSafeMode.value,
-        'page': FavoriteTab(
-          tabIndex: S.of(context).tab_favorite,
-          scrollController: _getScrollController(S.of(context).tab_favorite),
-        )
-      },
-      {
-        'title': S.of(context).tab_setting,
-        'icon': const Icon(FontAwesomeIcons.cog, size: _iconSize),
-        'page': SettingTab(
-          tabIndex: S.of(context).tab_setting,
-          scrollController: _getScrollController(S.of(context).tab_setting),
-        )
-      },
-    ]);
-
-    for (final tabObj in defTabs) {
-      if (tabObj['disable'] != null && tabObj['disable']) {
-      } else {
-        scrollControllerList.add(_getScrollController(tabObj['title']));
-        tabList.add(tabObj);
-        pageList.add(tabObj['page']);
-      }
-    }
-  }
-
-  ScrollController _getScrollController(String key) {
-    if (_scrollControllerMap[key] == null) {
-      _scrollControllerMap[key] = ScrollController();
-    }
-    return _scrollControllerMap[key];
-  }
-
-  /// 连按两次返回退出
-  Future<bool> doubleClickBack() async {
-    loggerNoStack.v('click back');
-    if (lastPressedAt == null ||
-        DateTime.now().difference(lastPressedAt) > const Duration(seconds: 1)) {
-      showToast(S.of(context).double_click_back);
-      //两次点击间隔超过1秒则重新计时
-      lastPressedAt = DateTime.now();
-      return false;
-    }
-    return true;
-  }
-
-  /// 双击bar的处理
-  Future<void> doubleTapBar(
-      {VoidCallback onTap,
-      VoidCallback onDoubleTap,
-      Duration duration,
-      bool awaitComplete}) async {
-    final Duration _duration = duration ?? const Duration(milliseconds: 500);
-    if (!tapAwait || tapAwait == null) {
-      tapAwait = true;
-
-      if (awaitComplete ?? false) {
-        await Future<void>.delayed(_duration);
-        if (tapAwait) {
-//        loggerNoStack.v('等待结束 执行单击事件');
-          tapAwait = false;
-          onTap();
-        }
-      } else {
-        onTap();
-        await Future<void>.delayed(_duration);
-        tapAwait = false;
-      }
-    } else if (onDoubleTap != null) {
-//      loggerNoStack.v('等待时间内第二次点击 执行双击事件');
-      tapAwait = false;
-      onDoubleTap();
-    }
-  }
-
-  Future<void> onTap(int index) async {
-    if (index == currentIndex &&
-        index != listBottomNavigationBarItem.length - 1) {
-      await doubleTapBar(
-        duration: const Duration(milliseconds: 800),
-        awaitComplete: false,
-        onTap: () {
-          scrollControllerList[index].animateTo(0.0,
-              duration: const Duration(milliseconds: 500), curve: Curves.ease);
-        },
-        onDoubleTap: () {
-          scrollControllerList[index].animateTo(-100.0,
-              duration: const Duration(milliseconds: 500), curve: Curves.ease);
-        },
-      );
-    } else {
-      currentIndex = index;
-    }
-  }
-}
-
 const double kIconSize = 24.0;
 final TabPages tabPages = TabPages();
 
 class TabPages {
-  static const String popular = 'popular';
-  static const String watched = 'watched';
-  static const String gallery = 'gallery';
-  static const String favorite = 'favorite';
-  static const String setting = 'setting';
-
   final Map<String, ScrollController> scrollControllerMap = {};
   ScrollController _scrollController(String key) {
     if (scrollControllerMap[key] == null) {
@@ -193,71 +31,152 @@ class TabPages {
   }
 
   Map<String, Widget> get tabViews => <String, Widget>{
-        popular: PopularListTab(
-          tabIndex: popular,
-          scrollController: _scrollController(popular),
+        EHRoutes.popular: PopularListTab(
+          tabIndex: EHRoutes.popular,
+          scrollController: _scrollController(EHRoutes.popular),
         ),
-        watched: WatchedListTab(
-          tabIndex: watched,
-          scrollController: _scrollController(watched),
+        EHRoutes.watched: WatchedListTab(
+          tabIndex: EHRoutes.watched,
+          scrollController: _scrollController(EHRoutes.watched),
         ),
-        gallery: GalleryListTab(
-          tabIndex: gallery,
-          scrollController: _scrollController(gallery),
+        EHRoutes.gallery: GalleryListTab(
+          tabIndex: EHRoutes.gallery,
+          scrollController: _scrollController(EHRoutes.gallery),
         ),
-        favorite: FavoriteTab(
-          tabIndex: favorite,
-          scrollController: _scrollController(favorite),
+        EHRoutes.favorite: FavoriteTab(
+          tabIndex: EHRoutes.favorite,
+          scrollController: _scrollController(EHRoutes.favorite),
         ),
-        setting: SettingTab(
-          tabIndex: setting,
-          scrollController: _scrollController(setting),
+        EHRoutes.history: HistoryTab(
+          tabIndex: EHRoutes.history,
+          scrollController: _scrollController(EHRoutes.history),
+        ),
+        EHRoutes.setting: SettingTab(
+          tabIndex: EHRoutes.setting,
+          scrollController: _scrollController(EHRoutes.setting),
         ),
       };
 
-  final Map<String, Widget> tabIcons = <String, Widget>{
-    popular: const Icon(FontAwesomeIcons.fire, size: kIconSize),
-    watched: const Icon(FontAwesomeIcons.eye, size: kIconSize),
-    gallery: const Icon(FontAwesomeIcons.list, size: kIconSize),
-    favorite: const Icon(FontAwesomeIcons.solidHeart, size: kIconSize),
-    setting: const Icon(FontAwesomeIcons.cog, size: kIconSize),
+  final Map<String, IconData> iconDatas = <String, IconData>{
+    EHRoutes.popular: FontAwesomeIcons.fire,
+    EHRoutes.watched: FontAwesomeIcons.eye,
+    EHRoutes.gallery: FontAwesomeIcons.list,
+    EHRoutes.favorite: FontAwesomeIcons.solidHeart,
+    EHRoutes.history: FontAwesomeIcons.history,
+    EHRoutes.setting: FontAwesomeIcons.cog,
   };
 
+  Map<String, Widget> get tabIcons => iconDatas
+      .map((key, value) => MapEntry(key, Icon(value, size: kIconSize)));
+
   Map<String, String> get tabTitles => <String, String>{
-        popular: S.of(Get.find<TabHomeControllerNew>().tContext).tab_popular,
-        watched: S.of(Get.find<TabHomeControllerNew>().tContext).tab_watched,
-        gallery: S.of(Get.find<TabHomeControllerNew>().tContext).tab_gallery,
-        favorite: S.of(Get.find<TabHomeControllerNew>().tContext).tab_favorite,
-        setting: S.of(Get.find<TabHomeControllerNew>().tContext).tab_setting,
+        EHRoutes.popular:
+            S.of(Get.find<TabHomeController>().tContext).tab_popular,
+        EHRoutes.watched:
+            S.of(Get.find<TabHomeController>().tContext).tab_watched,
+        EHRoutes.gallery:
+            S.of(Get.find<TabHomeController>().tContext).tab_gallery,
+        EHRoutes.favorite:
+            S.of(Get.find<TabHomeController>().tContext).tab_favorite,
+        EHRoutes.history:
+            S.of(Get.find<TabHomeController>().tContext).tab_history,
+        EHRoutes.setting:
+            S.of(Get.find<TabHomeController>().tContext).tab_setting,
       };
 }
 
-class TabHomeControllerNew extends GetxController {
+const Map<String, bool> kTabMap = <String, bool>{
+  EHRoutes.popular: true,
+  EHRoutes.watched: true,
+  EHRoutes.gallery: true,
+  EHRoutes.favorite: true,
+  EHRoutes.history: false,
+};
+
+const List<String> kTabNameList = <String>[
+  EHRoutes.popular,
+  EHRoutes.watched,
+  EHRoutes.gallery,
+  EHRoutes.favorite,
+  EHRoutes.history,
+];
+
+class TabHomeController extends GetxController {
   DateTime lastPressedAt; //上次点击时间
 
   int currentIndex = 0;
   bool tapAwait = false;
 
   final EhConfigService _ehConfigService = Get.find();
+  final GStore gStore = Get.find();
   bool get isSafeMode => _ehConfigService.isSafeMode.value;
 
   final CupertinoTabController tabController = CupertinoTabController();
 
   // 需要显示的tab
-  List<String> get tabs => isSafeMode
+  List<String> get _showTabs => isSafeMode
       ? <String>[
-          TabPages.gallery,
-          TabPages.setting,
+          EHRoutes.gallery,
+          EHRoutes.setting,
         ]
-      : <String>[
-          TabPages.popular,
-          TabPages.watched,
-          TabPages.gallery,
-          TabPages.favorite,
-          TabPages.setting,
-        ];
+      : _sortedTabList;
 
-  List<BottomNavigationBarItem> get listBottomNavigationBarItem => tabs
+  List<String> get _sortedTabList {
+    final List<String> _list = <String>[];
+    for (final String key in tabNameList) {
+      if (tabMap[key] ?? false) {
+        _list.add(key);
+      }
+    }
+    // end
+    _list.add(EHRoutes.setting);
+    return _list;
+  }
+
+  // 控制tab项顺序
+  RxList<String> tabNameList = kTabMap.entries.map((e) => e.key).toList().obs;
+
+  // 通过控制该变量控制tab项的开关
+  RxMap<String, bool> tabMap = kTabMap.obs;
+
+  TabConfig _tabConfig;
+
+  @override
+  void onInit() {
+    super.onInit();
+
+    _tabConfig = gStore.tabConfig ?? (TabConfig()..tabItemList = <TabItem>[]);
+
+    // logger.i('get tab config ${_tabConfig.tabItemList.length}');
+
+    if (_tabConfig.tabMap.isNotEmpty) {
+      tabMap(_tabConfig.tabMap);
+    }
+
+    if (_tabConfig.tabNameList.isNotEmpty) {
+      _tabConfig.tabNameList
+          .removeWhere((element) => element == EHRoutes.setting);
+      tabNameList(_tabConfig.tabNameList);
+    }
+
+    logger.d('${tabNameList}');
+
+    ever(tabMap, (map) {
+      _tabConfig.setItemList(map, tabNameList);
+      gStore.tabConfig = _tabConfig;
+      logger.d(
+          '${_tabConfig.tabItemList.map((e) => '${e.name}:${e.enable}').toList().join('\n')}');
+    });
+
+    ever(tabNameList, (nameList) {
+      _tabConfig.setItemList(tabMap, nameList);
+      gStore.tabConfig = _tabConfig;
+      logger.d(
+          '${_tabConfig.tabItemList.map((e) => '${e.name}:${e.enable}').toList().join('\n')}');
+    });
+  }
+
+  List<BottomNavigationBarItem> get listBottomNavigationBarItem => _showTabs
       .map((e) => BottomNavigationBarItem(
           icon: tabPages.tabIcons[e], label: tabPages.tabTitles[e]))
       .toList();
@@ -270,9 +189,10 @@ class TabHomeControllerNew extends GetxController {
     tContext = inContext;
   }
 
-  List<Widget> get viewList => tabs.map((e) => tabPages.tabViews[e]).toList();
+  List<Widget> get viewList =>
+      _showTabs.map((e) => tabPages.tabViews[e]).toList();
   List<ScrollController> get scrollControllerList =>
-      tabs.map((e) => tabPages.scrollControllerMap[e]).toList();
+      _showTabs.map((e) => tabPages.scrollControllerMap[e]).toList();
 
   Future<void> onTap(int index) async {
     if (index == currentIndex &&
@@ -292,6 +212,11 @@ class TabHomeControllerNew extends GetxController {
     } else {
       currentIndex = index;
     }
+  }
+
+  void resetIndex() {
+    final int last = listBottomNavigationBarItem.length;
+    tabController.index = last - 1;
   }
 
   /// 双击bar的处理

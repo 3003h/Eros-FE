@@ -94,6 +94,7 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
         debugShowCheckedModeBanner: false,
         onGenerateTitle: (BuildContext context) => S.of(context).app_title,
         getPages: AppPages.routes,
+        defaultTransition: Transition.cupertino,
         initialRoute: EHRoutes.root,
         theme: theme,
         locale: locale,

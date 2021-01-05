@@ -3,6 +3,8 @@ import 'package:fehviewer/const/const.dart';
 import 'package:fehviewer/generated/l10n.dart';
 import 'package:fehviewer/models/index.dart';
 import 'package:fehviewer/network/gallery_request.dart';
+import 'package:fehviewer/pages/tab/controller/tabhome_controller.dart';
+import 'package:fehviewer/utils/cust_lib/popup_menu.dart';
 import 'package:fehviewer/utils/logger.dart';
 import 'package:fehviewer/utils/toast.dart';
 import 'package:flutter/cupertino.dart';
@@ -23,7 +25,30 @@ class GalleryViewController extends GetxController
   bool get isLoadMore => _isLoadMore.value;
   set isLoadMore(bool val) => _isLoadMore.value = val;
 
-  final EhConfigService ehConfigService = Get.find();
+  final EhConfigService _ehConfigService = Get.find();
+  final TabHomeController _tabHomeController = Get.find();
+
+  final GlobalKey menukey = GlobalKey();
+  List<MenuItemProvider> get menuItems {
+    final List<MenuItemProvider> _menu = <MenuItemProvider>[];
+    final TextStyle _menuTextStyle = TextStyle(
+      color: CupertinoDynamicColor.resolve(CupertinoColors.label, Get.context),
+      fontSize: 12,
+    );
+    for (final MapEntry<String, bool> e in _tabHomeController.tabMap.entries) {
+      if (!e.value) {
+        _menu.add(MenuItem(
+            title: tabPages.tabTitles[e.key],
+            itemKey: e.key,
+            textStyle: _menuTextStyle,
+            image: Icon(
+              tabPages.iconDatas[e.key],
+              size: 20,
+            )));
+      }
+    }
+    return _menu;
+  }
 
   String get title {
     // logger.d('${EHConst.cats.entries.length}');
@@ -60,7 +85,7 @@ class GalleryViewController extends GetxController
   Future<Tuple2<List<GalleryItem>, int>> loadData(
       {bool refresh = false}) async {
     logger.v('_loadDataFirst  gallery');
-    final int _catNum = ehConfigService.catFilter.value;
+    final int _catNum = _ehConfigService.catFilter.value;
 
     final Future<Tuple2<List<GalleryItem>, int>> tuple = Api.getGallery(
       cats: cats ?? _catNum,
@@ -93,7 +118,7 @@ class GalleryViewController extends GetxController
       return;
     }
 
-    final int _catNum = ehConfigService.catFilter.value;
+    final int _catNum = _ehConfigService.catFilter.value;
 
     // 增加延时 避免build期间进行 setState
     await Future<void>.delayed(const Duration(milliseconds: 100));
@@ -128,7 +153,7 @@ class GalleryViewController extends GetxController
   Future<void> loadFromPage(int page) async {
     logger.v('jump to page =>  $page');
 
-    final int _catNum = ehConfigService.catFilter.value;
+    final int _catNum = _ehConfigService.catFilter.value;
 
     change(state, status: RxStatus.loading());
     Api.getGallery(

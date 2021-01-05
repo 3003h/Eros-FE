@@ -127,6 +127,8 @@ class TextSwitchItem extends StatefulWidget {
     this.descOn,
     Key key,
     this.hideLine = false,
+    this.icon,
+    this.iconIndent = 0.0,
   }) : super(key: key);
 
   final bool intValue;
@@ -135,6 +137,8 @@ class TextSwitchItem extends StatefulWidget {
   final String desc;
   final String descOn;
   final bool hideLine;
+  final Widget icon;
+  final double iconIndent;
 
   @override
   _TextSwitchItemState createState() => _TextSwitchItemState();
@@ -153,8 +157,6 @@ class _TextSwitchItemState extends State<TextSwitchItem> {
     _switchValue = _switchValue ?? widget.intValue ?? false;
     _desc = _switchValue ? widget.descOn : widget.desc;
     return Container(
-      // color: CupertinoDynamicColor.resolve(
-      //     CupertinoColors.systemBackground, context),
       color:
           CupertinoDynamicColor.resolve(ehTheme.itmeBackgroundColor, context),
       child: Column(
@@ -165,6 +167,7 @@ class _TextSwitchItemState extends State<TextSwitchItem> {
             padding: const EdgeInsets.fromLTRB(20, 0, 20, 0),
             child: Row(
               children: <Widget>[
+                if (widget.icon != null) widget.icon,
                 Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     mainAxisAlignment: MainAxisAlignment.center,
@@ -186,23 +189,24 @@ class _TextSwitchItemState extends State<TextSwitchItem> {
                 Expanded(
                   child: Container(),
                 ),
-                CupertinoSwitch(
-                  onChanged: (bool value) {
-                    setState(() {
-                      _switchValue = value;
-                      _desc = value ? widget.descOn : widget.desc;
-                      _handOnChanged();
-                    });
-                  },
-                  value: _switchValue,
-                ),
+                if (widget.onChanged != null)
+                  CupertinoSwitch(
+                    onChanged: (bool value) {
+                      setState(() {
+                        _switchValue = value;
+                        _desc = value ? widget.descOn : widget.desc;
+                        _handOnChanged();
+                      });
+                    },
+                    value: _switchValue,
+                  ),
               ],
             ),
           ),
           if (!widget.hideLine)
             Divider(
-              indent: 20,
-              height: 0.5,
+              indent: 20 + widget.iconIndent,
+              height: 0.6,
               color: CupertinoDynamicColor.resolve(
                   CupertinoColors.systemGrey4, context),
             ),

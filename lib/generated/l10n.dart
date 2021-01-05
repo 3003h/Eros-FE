@@ -986,6 +986,26 @@ class S {
       args: [],
     );
   }
+
+  /// `Tabbar setting`
+  String get tabbar_setting {
+    return Intl.message(
+      'Tabbar setting',
+      name: 'tabbar_setting',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Long press and drag to sort`
+  String get tab_sort {
+    return Intl.message(
+      'Long press and drag to sort',
+      name: 'tab_sort',
+      desc: '',
+      args: [],
+    );
+  }
 }
 
 class AppLocalizationDelegate extends LocalizationsDelegate<S> {
