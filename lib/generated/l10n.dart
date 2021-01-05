@@ -767,6 +767,26 @@ class S {
     );
   }
 
+  /// `My tags`
+  String get ehentai_my_tags {
+    return Intl.message(
+      'My tags',
+      name: 'ehentai_my_tags',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `My tags on website`
+  String get mytags_on_website {
+    return Intl.message(
+      'My tags on website',
+      name: 'mytags_on_website',
+      desc: '',
+      args: [],
+    );
+  }
+
   /// `List mode`
   String get list_mode {
     return Intl.message(

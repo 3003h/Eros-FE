@@ -121,7 +121,7 @@ dependencies:
   flutter_vibrate: ^1.0.0
 
   # 文件选择
-  file_picker: ^2.1.4
+  file_picker: ^2.1.5
 
 #  flutter_screenutil:
 #    git:

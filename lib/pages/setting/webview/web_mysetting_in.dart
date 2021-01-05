@@ -25,34 +25,32 @@ class InWebMySetting extends StatelessWidget {
       navigationBar: CupertinoNavigationBar(
         padding: const EdgeInsetsDirectional.only(end: 6),
         middle: Text(S.of(context).ehentai_settings),
-        trailing: Container(
-          width: 90,
-          child: Row(
-            children: <Widget>[
-              CupertinoButton(
-                padding: const EdgeInsets.all(0),
-                child: const Icon(
-                  FontAwesomeIcons.redo,
-                  size: 20,
-                ),
-                onPressed: () async {
-                  _controller.reload();
-                },
+        trailing: Row(
+          mainAxisSize: MainAxisSize.min,
+          children: <Widget>[
+            CupertinoButton(
+              padding: const EdgeInsets.all(0),
+              child: const Icon(
+                FontAwesomeIcons.redo,
+                size: 20,
               ),
-              CupertinoButton(
-                padding: const EdgeInsets.all(0),
-                child: const Icon(
-                  FontAwesomeIcons.checkCircle,
-                  size: 24,
-                ),
-                onPressed: () async {
-                  _controller.evaluateJavascript(
-                      source:
-                          'document.querySelector("#apply > input[type=submit]").click();');
-                },
+              onPressed: () async {
+                _controller.reload();
+              },
+            ),
+            CupertinoButton(
+              padding: const EdgeInsets.all(0),
+              child: const Icon(
+                FontAwesomeIcons.checkCircle,
+                size: 24,
               ),
-            ],
-          ),
+              onPressed: () async {
+                _controller.evaluateJavascript(
+                    source:
+                        'document.querySelector("#apply > input[type=submit]").click();');
+              },
+            ),
+          ],
         ),
       ),
       child: SafeArea(

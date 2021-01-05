@@ -10,12 +10,12 @@ import 'package:flutter_inappwebview/flutter_inappwebview.dart'
 import 'package:flutter_webview_plugin/flutter_webview_plugin.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
-class WebMySettingAP extends StatefulWidget {
+class WebMyTagsAP extends StatefulWidget {
   @override
-  _WebMySettingAPState createState() => _WebMySettingAPState();
+  _WebMyTagsAPState createState() => _WebMyTagsAPState();
 }
 
-class _WebMySettingAPState extends State<WebMySettingAP> {
+class _WebMyTagsAPState extends State<WebMyTagsAP> {
   final CookieManager _cookieManager = CookieManager.instance();
 
   final FlutterWebviewPlugin flutterWebviewPlugin = FlutterWebviewPlugin();
@@ -41,10 +41,8 @@ class _WebMySettingAPState extends State<WebMySettingAP> {
   @override
   Widget build(BuildContext context) {
     flutterWebviewPlugin.onStateChanged.listen((WebViewStateChanged viewState) {
-      // logger.d(
-      //     '${viewState.url}  ${viewState.type}  ${viewState.navigationType}');
       if (viewState.type == WebViewState.shouldStart &&
-          !viewState.url.endsWith('/uconfig.php')) {
+          !viewState.url.endsWith('/mytags')) {
         logger.d('阻止打开 ${viewState.url}');
         flutterWebviewPlugin.stopLoading();
       }
@@ -53,39 +51,37 @@ class _WebMySettingAPState extends State<WebMySettingAP> {
     final CupertinoPageScaffold cpf = CupertinoPageScaffold(
       navigationBar: CupertinoNavigationBar(
         padding: const EdgeInsetsDirectional.only(end: 6),
-        middle: Text(S.of(context).ehentai_settings),
-        trailing: Container(
-          width: 90,
-          child: Row(
-            children: <Widget>[
-              CupertinoButton(
-                padding: const EdgeInsets.all(0),
-                child: const Icon(
-                  FontAwesomeIcons.redo,
-                  size: 20,
-                ),
-                onPressed: () async {
-                  await flutterWebviewPlugin.reload();
-                },
+        middle: Text(S.of(context).ehentai_my_tags),
+        trailing: Row(
+          mainAxisSize: MainAxisSize.min,
+          children: <Widget>[
+            CupertinoButton(
+              padding: const EdgeInsets.all(0),
+              child: const Icon(
+                FontAwesomeIcons.redo,
+                size: 20,
               ),
-              CupertinoButton(
-                padding: const EdgeInsets.all(0),
-                child: const Icon(
-                  FontAwesomeIcons.checkCircle,
-                  size: 24,
-                ),
-                onPressed: () async {
-                  flutterWebviewPlugin.evalJavascript(
-                      'document.querySelector("#apply > input[type=submit]").click();');
-                },
-              ),
-            ],
-          ),
+              onPressed: () async {
+                await flutterWebviewPlugin.reload();
+              },
+            ),
+            // CupertinoButton(
+            //   padding: const EdgeInsets.all(0),
+            //   child: const Icon(
+            //     FontAwesomeIcons.checkCircle,
+            //     size: 24,
+            //   ),
+            //   onPressed: () async {
+            //     flutterWebviewPlugin.evalJavascript(
+            //         'document.querySelector("#apply > input[type=submit]").click();');
+            //   },
+            // ),
+          ],
         ),
       ),
       child: SafeArea(
         child: WebviewScaffold(
-          url: '${Api.getBaseUrl()}/uconfig.php',
+          url: '${Api.getBaseUrl()}/mytags',
           withZoom: true,
           withJavascript: true,
         ),

@@ -5,8 +5,10 @@ import 'package:fehviewer/common/service/ehconfig_service.dart';
 import 'package:fehviewer/common/service/theme_service.dart';
 import 'package:fehviewer/const/const.dart';
 import 'package:fehviewer/generated/l10n.dart';
-import 'package:fehviewer/pages/login/web_mysetting_ap.dart';
-import 'package:fehviewer/pages/login/web_mysetting_in.dart';
+import 'package:fehviewer/pages/setting/webview/mytags_ap.dart';
+import 'package:fehviewer/pages/setting/webview/mytags_in.dart';
+import 'package:fehviewer/pages/setting/webview/web_mysetting_ap.dart';
+import 'package:fehviewer/pages/setting/webview/web_mysetting_in.dart';
 import 'package:fehviewer/store/tag_database.dart';
 import 'package:fehviewer/utils/logger.dart';
 import 'package:fehviewer/utils/toast.dart';
@@ -82,12 +84,6 @@ class ListViewEhSetting extends StatelessWidget {
       ehConfigService.isJpnTitle(newValue);
     }
 
-    /// 打开表示按更新时间排序 关闭表示按照收藏时间排序
-    void _handleFavOrderChanged(bool newValue) {
-      ehConfigService.favoriteOrder.value =
-          newValue ? FavoriteOrder.posted : FavoriteOrder.fav;
-    }
-
     void _handleTagTranslatChanged(bool newValue) {
       ehConfigService.isTagTranslat.value = newValue;
       if (newValue) {
@@ -118,7 +114,6 @@ class ListViewEhSetting extends StatelessWidget {
         ),
       if (_isLogin)
         SelectorSettingItem(
-          hideLine: true,
           title: S.of(context).ehentai_settings,
           selector: S.of(context).setting_on_website,
           onTap: () {
@@ -126,6 +121,21 @@ class ListViewEhSetting extends StatelessWidget {
               Get.to(WebMySettingAP());
             } else if (GetPlatform.isIOS) {
               Get.to(InWebMySetting());
+            } else {
+              showToast('Not support');
+            }
+          },
+        ),
+      if (_isLogin)
+        SelectorSettingItem(
+          hideLine: true,
+          title: S.of(context).ehentai_my_tags,
+          selector: S.of(context).mytags_on_website,
+          onTap: () {
+            if (GetPlatform.isAndroid) {
+              Get.to(WebMyTagsAP());
+            } else if (GetPlatform.isIOS) {
+              Get.to(InWebMyTags());
             } else {
               showToast('Not support');
             }
@@ -158,13 +168,6 @@ class ListViewEhSetting extends StatelessWidget {
         desc: '无默认,每次进行选择',
         descOn: '使用上次选择，长按选择其他',
       ),
-      // TextSwitchItem(
-      //   S.of(context).favorites_order,
-      //   intValue: _favOrder,
-      //   onChanged: _handleFavOrderChanged,
-      //   desc: S.of(context).favorites_order_Use_favorited,
-      //   descOn: S.of(context).favorites_order_Use_posted,
-      // ),
       _buildListModeItem(context),
       _buildHistoryMaxItem(context),
     ];
