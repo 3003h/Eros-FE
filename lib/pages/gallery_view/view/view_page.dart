@@ -109,7 +109,6 @@ class GalleryViewPage extends GetView<ViewController> {
 
   /// 顶栏
   Widget _buildTopBar(BuildContext context) {
-    final List<GalleryPreview> previews = controller.previews;
     return Container(
         // height: kTopBarHeight + controller.paddingTop,
         width: controller.screensize.width,
@@ -190,7 +189,7 @@ class GalleryViewPage extends GetView<ViewController> {
     }
   }
 
-  /// 底栏
+  /// 底栏 todo 高度有点问题 需要重新计算
   Widget _buildBottomBar() {
     final double _max = controller.filecount - 1.0;
     final List<GalleryPreview> previews = controller.previews;
@@ -340,7 +339,6 @@ class GalleryViewPage extends GetView<ViewController> {
         id: '_buildPhotoViewGallery',
         builder: (ViewController controller) {
           return ScrollablePositionedList.builder(
-            padding: EdgeInsets.only(top: Get.context.mediaQueryPadding.top),
             itemScrollController: controller.itemScrollController,
             itemPositionsListener: controller.itemPositionsListener,
             itemCount: controller.previews.length,

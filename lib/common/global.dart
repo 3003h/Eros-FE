@@ -71,6 +71,8 @@ class Global {
     appSupportPath = (await getApplicationSupportDirectory()).path;
     appDocPath = (await getApplicationDocumentsDirectory()).path;
 
+    logger.d('$appDocPath \n$appSupportPath');
+
     // SP初始化
     await StorageUtil.init();
 

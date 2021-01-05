@@ -113,7 +113,7 @@ class EhTagDatabase {
   static Future<String> getTranTagWithFullNameSpase(String tag,
       {String nameSpase}) async {
     if (tag.contains(':')) {
-      final RegExp rpfx = RegExp(r'(\w+):"?([\w ]+)\$?"?');
+      final RegExp rpfx = RegExp(r'(\w+):"?([^\$]+)\$?"?');
       final RegExpMatch rult = rpfx.firstMatch(tag.toLowerCase());
       final String _nameSpase = rult.group(1) ?? '';
       final String _tag = rult.group(2) ?? '';
