@@ -47,37 +47,39 @@ class FavoriteTab extends GetView<FavoriteViewController> {
           largeTitle: Obx(() => Text(
                 controller.title.value,
               )),
-          leading: CupertinoButton(
-            padding: const EdgeInsets.all(0.0),
-            child: Row(
-              mainAxisSize: MainAxisSize.min,
-              children: <Widget>[
-                const Icon(
-                  FontAwesomeIcons.sortAmountDown,
-                  size: 22,
-                ),
-                Align(
-                  alignment: Alignment.centerLeft,
-                  child: Text(
-                    controller.orderText,
-                    style: const TextStyle(
-                      fontSize: 10,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                )
-              ],
-            ),
-            onPressed: controller.setOrder,
-          ),
           trailing: Row(
             mainAxisSize: MainAxisSize.min,
             mainAxisAlignment: MainAxisAlignment.end,
             children: [
               CupertinoButton(
+                padding: const EdgeInsets.all(0.0),
+                minSize: 36,
+                child: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: <Widget>[
+                    const Icon(
+                      FontAwesomeIcons.sortAmountDown,
+                      size: 22,
+                    ),
+                    Align(
+                      alignment: Alignment.centerLeft,
+                      child: Text(
+                        controller.orderText,
+                        style: const TextStyle(
+                          fontSize: 10,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    )
+                  ],
+                ),
+                onPressed: controller.setOrder,
+              ),
+              CupertinoButton(
                 padding: const EdgeInsets.all(0),
+                minSize: 36,
                 child: ClipRRect(
-                  borderRadius: BorderRadius.circular(4),
+                  borderRadius: BorderRadius.circular(8),
                   child: Container(
                     padding: const EdgeInsets.fromLTRB(4, 2, 4, 2),
                     color: CupertinoColors.activeBlue,

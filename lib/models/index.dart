@@ -15,5 +15,7 @@ export 'history.dart';
 export 'localFav.dart';
 export 'profile.dart';
 export 'simpleTag.dart';
+export 'tabConfig.dart';
+export 'tabItem.dart';
 export 'tagGroup.dart';
 export 'user.dart';

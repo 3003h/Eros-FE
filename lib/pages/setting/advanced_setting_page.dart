@@ -9,6 +9,7 @@ import 'package:fehviewer/common/service/theme_service.dart';
 import 'package:fehviewer/const/theme_colors.dart';
 import 'package:fehviewer/generated/l10n.dart';
 import 'package:fehviewer/pages/setting/custom_hosts_page.dart';
+import 'package:fehviewer/route/routes.dart';
 import 'package:fehviewer/utils/logger.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -71,8 +72,16 @@ class ListViewAdvancedSetting extends StatelessWidget {
             onChanged: _handlePureDarkChanged,
             desc: S.of(context).gray_black,
             descOn: S.of(context).pure_black,
-            hideLine: true,
           )),
+      SelectorSettingItem(
+        hideLine: true,
+        title: S.of(context).tabbar_setting,
+        selector: '',
+        onTap: () {
+          // Get.to(TabSettingPage());
+          Get.toNamed(EHRoutes.pageSetting);
+        },
+      ),
       Container(height: 38),
       SelectorSettingItem(
         title: S.of(context).clear_cache,

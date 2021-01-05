@@ -33,7 +33,7 @@ class WatchedListTab extends GetView<WatchedViewController> {
                 minSize: 40,
                 padding: const EdgeInsets.only(right: 0),
                 child: ClipRRect(
-                  borderRadius: BorderRadius.circular(4),
+                  borderRadius: BorderRadius.circular(8),
                   child: Container(
                     padding: const EdgeInsets.fromLTRB(4, 2, 4, 2),
                     color: CupertinoColors.activeBlue,

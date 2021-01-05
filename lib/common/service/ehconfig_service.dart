@@ -66,10 +66,7 @@ class EhConfigService extends ProfileService {
     isSafeMode.value = ehConfig.safeMode ?? true;
     everProfile(isSafeMode, (value) {
       ehConfig.safeMode = value;
-      final TabHomeControllerNew _tabController =
-          Get.find<TabHomeControllerNew>();
-      final int last = _tabController.tabs.length;
-      Get.find<TabHomeControllerNew>().tabController.index = last - 1;
+      Get.find<TabHomeController>().resetIndex();
     });
 
     isJpnTitle.value = ehConfig?.jpnTitle ?? false;

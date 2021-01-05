@@ -2,8 +2,8 @@ import 'package:fehviewer/models/index.dart';
 import 'package:fehviewer/pages/filter/filter.dart';
 import 'package:fehviewer/pages/tab/controller/gallery_controller.dart';
 import 'package:fehviewer/pages/tab/view/gallery_base.dart';
-import 'package:fehviewer/pages/tab/view/history_page.dart';
 import 'package:fehviewer/route/navigator_util.dart';
+import 'package:fehviewer/utils/cust_lib/popup_menu.dart';
 import 'package:fehviewer/utils/logger.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -28,19 +28,7 @@ class GalleryListTab extends GetView<GalleryViewController> {
         CupertinoSliverNavigationBar(
           padding: const EdgeInsetsDirectional.only(end: 4),
           largeTitle: Text(controller.title),
-          leading: CupertinoButton(
-            padding: const EdgeInsets.all(0.0),
-            child: const Icon(
-              FontAwesomeIcons.history,
-              size: 22,
-            ),
-            onPressed: () {
-              Get.to(
-                const HistoryTab(),
-                transition: Transition.cupertino,
-              );
-            },
-          ),
+          leading: _buildLeading(context),
           trailing: Row(
             mainAxisSize: MainAxisSize.min,
             mainAxisAlignment: MainAxisAlignment.end,
@@ -75,7 +63,7 @@ class GalleryListTab extends GetView<GalleryViewController> {
                 minSize: 40,
                 padding: const EdgeInsets.only(right: 0),
                 child: ClipRRect(
-                  borderRadius: BorderRadius.circular(4),
+                  borderRadius: BorderRadius.circular(8),
                   child: Container(
                     padding: const EdgeInsets.fromLTRB(4, 2, 4, 2),
                     color: CupertinoColors.activeBlue,
@@ -107,6 +95,47 @@ class GalleryListTab extends GetView<GalleryViewController> {
     return CupertinoPageScaffold(
       child: customScrollView,
     );
+  }
+
+  Widget _buildLeading(BuildContext context) {
+    final PopupMenu _menu = PopupMenu(
+      context: context,
+      maxColumn: 2,
+      lineColor: CupertinoDynamicColor.resolve(
+          CupertinoColors.systemBackground, context),
+      backgroundColor:
+          CupertinoDynamicColor.resolve(CupertinoColors.systemGrey6, context),
+      items: controller.menuItems,
+      onClickMenu: (MenuItemProvider item) {
+        logger.v('${item.menuKey}');
+        Get.toNamed(item.menuKey);
+      },
+    );
+
+    Widget _buildPopMenuBtn() {
+      return GestureDetector(
+        child: Row(
+          mainAxisSize: MainAxisSize.min,
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          children: <Widget>[
+            CupertinoButton(
+              key: controller.menukey,
+              minSize: 40,
+              // padding: const EdgeInsets.only(right: 4),
+              child: const Icon(
+                FontAwesomeIcons.ellipsisH,
+                size: 20,
+              ),
+              onPressed: () {
+                _menu.show(widgetKey: controller.menukey);
+              },
+            ),
+          ],
+        ),
+      );
+    }
+
+    return _buildPopMenuBtn();
   }
 
   Widget _endIndicator() {
