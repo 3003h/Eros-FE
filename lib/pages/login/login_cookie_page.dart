@@ -22,6 +22,9 @@ class _LoginCookiePageState extends State<LoginCookiePage> {
   // ibp_pass_hash
   final TextEditingController _hashController = TextEditingController();
 
+  // igneous
+  final TextEditingController _igneousController = TextEditingController();
+
   final UserController userController = Get.find();
 
   @override
@@ -54,6 +57,17 @@ class _LoginCookiePageState extends State<LoginCookiePage> {
                   decoration: null,
 //                  prefix: Text('ibp_pass_hash'),
                   placeholder: 'ibp_pass_hash',
+                ),
+                Container(
+                  height: 1,
+                  margin: const EdgeInsets.only(bottom: 10),
+                  color: CupertinoDynamicColor.resolve(
+                      CupertinoColors.systemGrey4, context),
+                ),
+                CupertinoTextField(
+                  controller: _igneousController,
+                  decoration: null,
+                  placeholder: 'igneous',
                 ),
                 Container(
                   height: 1,
@@ -93,7 +107,8 @@ class _LoginCookiePageState extends State<LoginCookiePage> {
   Future<void> _loginCookie() async {
     loggerNoStack.i({
       'ibp_member_id': _idController.text,
-      'ibp_pass_hash': _hashController.text
+      'ibp_pass_hash': _hashController.text,
+      'igneous': _igneousController.text,
     });
 
     if (_idController.text.trim().isEmpty ||
@@ -110,7 +125,10 @@ class _LoginCookiePageState extends State<LoginCookiePage> {
     User user;
     try {
       user = await EhUserManager().signInByCookie(
-          _idController.text.trim(), _hashController.text.trim());
+        _idController.text.trim(),
+        _hashController.text.trim(),
+        igneous: _igneousController.text.trim(),
+      );
       userController.user(user);
     } catch (e) {
       showToast(e.toString());

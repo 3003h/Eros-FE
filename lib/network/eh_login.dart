@@ -162,7 +162,11 @@ class EhUserManager {
 
   /// 通过Cookie登录
   /// 以及获取用户名
-  Future<User> signInByCookie(String id, String hash) async {
+  Future<User> signInByCookie(
+    String id,
+    String hash, {
+    String igneous,
+  }) async {
     final List<Cookie> cookies = <Cookie>[
       Cookie('ipb_member_id', id),
       Cookie('ipb_pass_hash', hash),
@@ -183,6 +187,11 @@ class EhUserManager {
     //获取Ex cookies
     final List<Cookie> cookiesEx =
         cookieJar.loadForRequest(Uri.parse(EHConst.EX_BASE_URL));
+
+    // 手动指定igneous的情况
+    cookiesEx.firstWhere((element) => element.name == 'igneous').value =
+        igneous;
+
     // 处理cookie 存入sp 方便里站图片请求时构建头 否则会403
     final Map<String, String> cookieMapEx = <String, String>{};
 
@@ -193,7 +202,7 @@ class EhUserManager {
     final Map<String, String> cookie = {
       'ipb_member_id': cookieMapEx['ipb_member_id'],
       'ipb_pass_hash': cookieMapEx['ipb_pass_hash'],
-      'igneous': cookieMapEx['igneous'],
+      'igneous': igneous.isNotEmpty ? igneous : cookieMapEx['igneous'],
     };
 
     final String cookieStr = getCookieStringFromMap(cookie);
