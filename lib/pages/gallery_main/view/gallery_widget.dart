@@ -16,10 +16,11 @@ import 'package:fehviewer/pages/gallery_main/view/gallery_favcat.dart';
 import 'package:fehviewer/pages/gallery_main/view/preview_clipper.dart';
 import 'package:fehviewer/route/navigator_util.dart';
 import 'package:fehviewer/route/routes.dart';
+import 'package:fehviewer/utils/cust_lib/selectable_text.dart';
 import 'package:fehviewer/utils/logger.dart';
 import 'package:fehviewer/widget/rating_bar.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:flutter/material.dart';
+import 'package:flutter/material.dart' hide SelectableText;
 import 'package:get/get.dart';
 
 const double kHeightPreview = 180.0;
@@ -239,11 +240,11 @@ class GalleryTitle extends StatelessWidget {
     /// 暂时放弃使用 SelectableText
 
     return GestureDetector(
-      child: Text(
+      child: SelectableText(
         _pageController.title ?? '',
         maxLines: 5,
         textAlign: TextAlign.left, // 对齐方式
-        overflow: TextOverflow.ellipsis, // 超出部分省略号
+        // overflow: TextOverflow.ellipsis, // 超出部分省略号
         style: const TextStyle(
           textBaseline: TextBaseline.alphabetic,
           height: 1.2,
