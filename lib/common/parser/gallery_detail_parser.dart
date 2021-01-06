@@ -168,9 +168,10 @@ class GalleryDetailParser {
     final List<GalleryPreview> previewList = parseGalleryPreview(document);
     galleryItem.galleryPreview = previewList;
 
-    // 画廊 showKey
-    final String _showKey = await Api.getShowkey(previewList[0].href);
-    galleryItem.showKey = _showKey;
+    // todo 待优化 在这里请求showKey会导致等待时间太久
+    //  画廊 showKey
+    // final String _showKey = await Api.getShowkey(previewList[0].href);
+    // galleryItem.showKey = _showKey;
 
     // 收藏夹标题
     String _favTitle = '';

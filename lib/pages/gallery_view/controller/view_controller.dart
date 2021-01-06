@@ -198,7 +198,7 @@ class ViewController extends GetxController {
     ever(_itemIndex, (int val) {
       // logger.d('ever _itemIndex to $val');
       Future<void>.delayed(const Duration(milliseconds: 100)).then((_) {
-        logger.d('delayed ever _itemIndex to $itemIndex');
+        // logger.d('delayed ever _itemIndex to $itemIndex');
         _galleryCacheController.setIndex(
             _galleryPageController.galleryItem.gid, itemIndex,
             notify: false);
@@ -207,7 +207,7 @@ class ViewController extends GetxController {
 
     ever(_columnMode, (ColumnMode val) {
       Future<void>.delayed(const Duration(milliseconds: 100)).then((_) {
-        logger.d('delayed ever _columnMode to $_columnMode');
+        // logger.d('delayed ever _columnMode to $_columnMode');
         _galleryCacheController.setColumnMode(
             _galleryPageController.galleryItem.gid, val);
       });
@@ -331,7 +331,7 @@ class ViewController extends GetxController {
       sliderValue = itemIndex.toDouble();
     }
 
-    logger.d('handOnPageChanged  end');
+    // logger.d('handOnPageChanged  end');
   }
 
   // 点击中间
