@@ -5,6 +5,7 @@ import 'package:fehviewer/common/service/ehconfig_service.dart';
 import 'package:fehviewer/common/service/locale_service.dart';
 import 'package:fehviewer/common/service/theme_service.dart';
 import 'package:fehviewer/generated/l10n.dart';
+import 'package:fehviewer/pages/controller/fav_controller.dart';
 import 'package:fehviewer/route/app_pages.dart';
 import 'package:fehviewer/route/routes.dart';
 import 'package:fehviewer/store/gallery_store.dart';
@@ -43,6 +44,7 @@ void main() {
 
     Get.put(QuickSearchController(), permanent: true);
     Get.lazyPut(() => AdvanceSearchController(), fenix: true);
+    Get.lazyPut(() => FavController());
     Get.lazyPut(() => GStore());
 
     runApp(

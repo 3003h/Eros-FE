@@ -15,23 +15,22 @@ import 'intl/messages_all.dart';
 
 class S {
   S();
-
+  
   static S current;
-
-  static const AppLocalizationDelegate delegate = AppLocalizationDelegate();
+  
+  static const AppLocalizationDelegate delegate =
+    AppLocalizationDelegate();
 
   static Future<S> load(Locale locale) {
-    final name = (locale.countryCode?.isEmpty ?? false)
-        ? locale.languageCode
-        : locale.toString();
-    final localeName = Intl.canonicalizedLocale(name);
+    final name = (locale.countryCode?.isEmpty ?? false) ? locale.languageCode : locale.toString();
+    final localeName = Intl.canonicalizedLocale(name); 
     return initializeMessages(localeName).then((_) {
       Intl.defaultLocale = localeName;
       S.current = S();
-
+      
       return S.current;
     });
-  }
+  } 
 
   static S of(BuildContext context) {
     return Localizations.of<S>(context, S);
@@ -1002,6 +1001,26 @@ class S {
     return Intl.message(
       'Long press and drag to sort',
       name: 'tab_sort',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Add to favorites`
+  String get add_to_favorites {
+    return Intl.message(
+      'Add to favorites',
+      name: 'add_to_favorites',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Remove from favorites`
+  String get remove_from_favorites {
+    return Intl.message(
+      'Remove from favorites',
+      name: 'remove_from_favorites',
       desc: '',
       args: [],
     );

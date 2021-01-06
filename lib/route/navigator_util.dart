@@ -26,12 +26,15 @@ class NavigatorUtil {
   static void goGalleryListBySearch({
     String simpleSearch,
   }) {
-    final List<String> searArr = simpleSearch.split(':');
-    String _end = '';
-    if (searArr[0] != 'uploader') {
-      _end = '\$';
+    String _search = simpleSearch;
+    if (simpleSearch.contains(':')) {
+      final List<String> searArr = simpleSearch.split(':');
+      String _end = '';
+      if (searArr[0] != 'uploader') {
+        _end = '\$';
+      }
+      _search = '${searArr[0]}:"${searArr[1]}$_end"';
     }
-    final String _search = '${searArr[0]}:"${searArr[1]}$_end"';
 
     Get.find<DepthService>().pushSearchPageCtrl();
     Get.to(GallerySearchPage(), transition: Transition.cupertino,

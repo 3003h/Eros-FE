@@ -29,6 +29,7 @@ class MessageLookup extends MessageLookupByLibrary {
   static _notInlinedMessages(_) => <String, Function> {
     "READ" : MessageLookupByLibrary.simpleMessage("阅读"),
     "about" : MessageLookupByLibrary.simpleMessage("关于"),
+    "add_to_favorites" : MessageLookupByLibrary.simpleMessage("添加收藏"),
     "advanced" : MessageLookupByLibrary.simpleMessage("高级"),
     "all_Favorites" : MessageLookupByLibrary.simpleMessage("所有收藏"),
     "all_comment" : MessageLookupByLibrary.simpleMessage("所有评论"),
@@ -88,6 +89,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "pure_black" : MessageLookupByLibrary.simpleMessage("纯黑"),
     "read_setting" : MessageLookupByLibrary.simpleMessage("阅读设置"),
     "reading_direction" : MessageLookupByLibrary.simpleMessage("阅读方向"),
+    "remove_from_favorites" : MessageLookupByLibrary.simpleMessage("从收藏中删除"),
     "right_to_left" : MessageLookupByLibrary.simpleMessage("从右到左"),
     "s_Advanced_Options" : MessageLookupByLibrary.simpleMessage("高级选项"),
     "s_Between" : MessageLookupByLibrary.simpleMessage("从"),

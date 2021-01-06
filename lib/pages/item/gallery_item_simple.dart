@@ -109,6 +109,7 @@ class GalleryItemSimpleWidget extends StatelessWidget {
       onTapDown: _galleryItemController.onTapDown,
       onTapUp: _galleryItemController.onTapUp,
       onTapCancel: _galleryItemController.onTapCancel,
+      onLongPress: _galleryItemController.onLongPress,
     );
   }
 
@@ -142,7 +143,7 @@ class GalleryItemSimpleWidget extends StatelessWidget {
                 //阴影
                 BoxShadow(
                   color: CupertinoDynamicColor.resolve(
-                      CupertinoColors.systemGrey4, Get.context),
+                      CupertinoColors.systemGrey5, Get.context),
                   blurRadius: 10,
                 )
               ],

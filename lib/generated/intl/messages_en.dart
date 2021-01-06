@@ -29,6 +29,7 @@ class MessageLookup extends MessageLookupByLibrary {
   static _notInlinedMessages(_) => <String, Function> {
     "READ" : MessageLookupByLibrary.simpleMessage("READ"),
     "about" : MessageLookupByLibrary.simpleMessage("About"),
+    "add_to_favorites" : MessageLookupByLibrary.simpleMessage("Add to favorites"),
     "advanced" : MessageLookupByLibrary.simpleMessage("Advanced"),
     "all_Favorites" : MessageLookupByLibrary.simpleMessage("All Favorites"),
     "all_comment" : MessageLookupByLibrary.simpleMessage("All Comment"),
@@ -88,6 +89,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "pure_black" : MessageLookupByLibrary.simpleMessage("Pure black"),
     "read_setting" : MessageLookupByLibrary.simpleMessage("Read setting"),
     "reading_direction" : MessageLookupByLibrary.simpleMessage("Reading direction"),
+    "remove_from_favorites" : MessageLookupByLibrary.simpleMessage("Remove from favorites"),
     "right_to_left" : MessageLookupByLibrary.simpleMessage("Retf to light"),
     "s_Advanced_Options" : MessageLookupByLibrary.simpleMessage("Advanced Options"),
     "s_Between" : MessageLookupByLibrary.simpleMessage("Between"),

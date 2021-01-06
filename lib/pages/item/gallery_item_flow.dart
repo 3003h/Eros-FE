@@ -7,6 +7,7 @@ import 'package:fehviewer/route/navigator_util.dart';
 import 'package:fehviewer/utils/logger.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
 
 import 'gallery_clipper.dart';
@@ -27,6 +28,24 @@ class GalleryItemFlow extends StatelessWidget {
   final String tabIndex;
   final GalleryItem galleryItem;
   final GalleryItemController _galleryItemController;
+
+  Widget _buildFavcatIcon() {
+    return Obx(() {
+      // logger.d('${_galleryItemController.isFav}');
+      return Container(
+        child: _galleryItemController.isFav ?? false
+            ? Container(
+                child: Icon(
+                  FontAwesomeIcons.solidHeart,
+                  size: 12,
+                  color: ThemeColors
+                      .favColor[_galleryItemController.galleryItem.favcat],
+                ),
+              )
+            : Container(),
+      );
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -88,6 +107,8 @@ class GalleryItemFlow extends StatelessWidget {
                           color: _colorCategory,
                         ),
                       ),
+                      Positioned(
+                          bottom: 4, right: 4, child: _buildFavcatIcon()),
                       Container(
                         height: (kHeight + kRadius) / 2,
                         width: (kWidth + kRadius) / 2,
@@ -118,6 +139,7 @@ class GalleryItemFlow extends StatelessWidget {
           NavigatorUtil.goGalleryPage(
               galleryItem: galleryItem, tabIndex: tabIndex);
         },
+        onLongPress: _galleryItemController.onLongPress,
       );
     });
 

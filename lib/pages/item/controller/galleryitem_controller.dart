@@ -1,10 +1,15 @@
 import 'package:fehviewer/common/service/ehconfig_service.dart';
+import 'package:fehviewer/generated/l10n.dart';
 import 'package:fehviewer/models/index.dart';
+import 'package:fehviewer/pages/controller/fav_controller.dart';
 import 'package:fehviewer/route/navigator_util.dart';
 import 'package:fehviewer/utils/logger.dart';
+import 'package:fehviewer/utils/toast.dart';
+import 'package:fehviewer/utils/vibrate.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
 import 'package:meta/meta.dart';
+import 'package:tuple/tuple.dart';
 
 class GalleryItemController extends GetxController {
   GalleryItemController.initData(GalleryItem galleryItem,
@@ -15,6 +20,7 @@ class GalleryItemController extends GetxController {
   }
 
   final EhConfigService _ehConfigService = Get.find();
+  final FavController _favController = Get.find();
 
   void onTap() {
     logger.d('${galleryItem.englishTitle}');
@@ -42,7 +48,7 @@ class GalleryItemController extends GetxController {
   bool get isFav => _isFav.value;
   set isFav(bool val) => _isFav.value = val;
 
-  void setFavTitle(String favTitle, {String favcat}) {
+  void setFavTitle({String favTitle, String favcat}) {
     galleryItem.favTitle = favTitle;
     isFav = favTitle.isNotEmpty;
     if (favcat != null) {
@@ -70,6 +76,8 @@ class GalleryItemController extends GetxController {
   Rx<Color> colorTap = const Color.fromARGB(0, 0, 0, 0).obs;
 
   void _updateNormalColor() {
+    // colorTap.value = CupertinoDynamicColor.resolve(
+    //     ehTheme.themeData.barBackgroundColor, Get.context);
     colorTap.value = null;
   }
 
@@ -93,5 +101,57 @@ class GalleryItemController extends GetxController {
     firstPagePreview =
         galleryItem.galleryPreview.sublist(0, galleryPreview.length);
     // logger.d(' _firstPagePreview ${firstPagePreview.length}');
+  }
+
+  /// 长按菜单
+  Future<void> _showLongPressSheet() async {
+    final BuildContext context = Get.context;
+
+    await showCupertinoModalPopup<void>(
+        context: context,
+        builder: (BuildContext context) {
+          return CupertinoActionSheet(
+            title: Text(title),
+            cancelButton: CupertinoActionSheetAction(
+                onPressed: () {
+                  Get.back();
+                },
+                child: Text(S.of(context).cancel)),
+            actions: <Widget>[
+              if (galleryItem.favcat == null || galleryItem.favcat.isEmpty)
+                CupertinoActionSheetAction(
+                  onPressed: () {
+                    _favController
+                        .addFav(galleryItem.gid, galleryItem.token)
+                        .then((Tuple2<String, String> value) {
+                      setFavTitle(favTitle: value.item2, favcat: value.item1);
+                      showToast('successfully add');
+                    });
+                    Get.back();
+                  },
+                  child: Text(S.of(context).add_to_favorites),
+                ),
+              if (galleryItem.favcat != null && galleryItem.favcat.isNotEmpty)
+                CupertinoActionSheetAction(
+                  onPressed: () {
+                    _favController
+                        .delFav(galleryItem.favcat, galleryItem.gid,
+                            galleryItem.token)
+                        .then((_) {
+                      setFavTitle(favTitle: '', favcat: '');
+                      showToast('successfully deleted');
+                    });
+                    Get.back();
+                  },
+                  child: Text(S.of(context).remove_from_favorites),
+                ),
+            ],
+          );
+        });
+  }
+
+  void onLongPress() {
+    VibrateUtil.heavy();
+    _showLongPressSheet();
   }
 }

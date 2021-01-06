@@ -33,12 +33,15 @@ class GalleryItemWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     Get.put<GalleryItemController>(Get.find(tag: galleryItem.gid));
     return GestureDetector(
-      child: _buildItem(),
+      child: Center(
+        child: _buildItem(),
+      ),
       behavior: HitTestBehavior.opaque,
       onTap: _galleryItemController.onTap,
       onTapDown: _galleryItemController.onTapDown,
       onTapUp: _galleryItemController.onTapUp,
       onTapCancel: _galleryItemController.onTapCancel,
+      onLongPress: _galleryItemController.onLongPress,
     );
   }
 
