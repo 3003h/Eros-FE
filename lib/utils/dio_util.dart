@@ -5,6 +5,7 @@ import 'package:dio/dio.dart';
 import 'package:dio_http_cache/dio_http_cache.dart';
 import 'package:fehviewer/common/global.dart';
 import 'package:fehviewer/const/const.dart';
+import 'package:fehviewer/utils/time.dart';
 import 'package:fehviewer/utils/toast.dart';
 import 'package:flutter/cupertino.dart';
 
@@ -81,6 +82,7 @@ class HttpManager {
   }) async {
     Response<String> response;
 
+    time.showTime('get $url start');
     try {
       response = await _dio.get<String>(url,
           queryParameters: params, options: options, cancelToken: cancelToken);
@@ -89,6 +91,8 @@ class HttpManager {
       formatError(e);
       rethrow;
     }
+    time.showTime('get $url end');
+
     // print('getHttp statusCode: ${response.statusCode}');
     return response.data;
   }

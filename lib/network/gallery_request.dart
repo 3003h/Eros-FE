@@ -22,6 +22,7 @@ import 'package:fehviewer/pages/gallery_main/controller/archiver_controller.dart
 import 'package:fehviewer/utils/dio_util.dart';
 import 'package:fehviewer/utils/https_proxy.dart';
 import 'package:fehviewer/utils/logger.dart';
+import 'package:fehviewer/utils/time.dart';
 import 'package:fehviewer/utils/toast.dart';
 import 'package:fehviewer/utils/utility.dart';
 import 'package:flutter/cupertino.dart';
@@ -338,11 +339,14 @@ class Api {
     cookieJar.saveFromResponse(Uri.parse(url), cookies);
 
     logger.i('获取画廊 $url');
+    time.showTime('获取画廊');
     await CustomHttpsProxy.instance.init();
+    time.showTime('设置代理');
     final String response = await getHttpManager()
         .get(url, options: getCacheOptions(forceRefresh: refresh));
+    time.showTime('获取到响应');
 
-    // TODO 画廊警告问题 使用 nw=always 未解决 待处理 怀疑和Session有关
+    // todo 画廊警告问题 使用 nw=always 未解决 待处理 怀疑和Session有关
     if ('$response'.contains(r'<strong>Offensive For Everyone</strong>')) {
       logger.v('Offensive For Everyone');
       showToast('Offensive For Everyone');
@@ -471,7 +475,7 @@ class Api {
     }
 
     // 通过api获取画廊详细信息
-    List _gidlist = [];
+    final List<List<String>> _gidlist = <List<String>>[];
 
     galleryItems.forEach((GalleryItem galleryItem) {
       _gidlist.add([galleryItem.gid, galleryItem.token]);

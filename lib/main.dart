@@ -42,7 +42,7 @@ void main() {
     Get.put(UserController(), permanent: true);
     Get.lazyPut(() => GalleryCacheController(), fenix: true);
 
-    Get.put(QuickSearchController(), permanent: true);
+    Get.lazyPut(() => QuickSearchController(), fenix: true);
     Get.lazyPut(() => AdvanceSearchController(), fenix: true);
     Get.lazyPut(() => FavController());
     Get.lazyPut(() => GStore());

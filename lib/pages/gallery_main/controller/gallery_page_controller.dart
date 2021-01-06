@@ -11,6 +11,7 @@ import 'package:fehviewer/pages/gallery_view/controller/view_controller.dart';
 import 'package:fehviewer/pages/gallery_view/view/common.dart';
 import 'package:fehviewer/pages/item/controller/galleryitem_controller.dart';
 import 'package:fehviewer/utils/logger.dart';
+import 'package:fehviewer/utils/time.dart';
 import 'package:fehviewer/utils/toast.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
@@ -70,8 +71,7 @@ class GalleryPageController extends GetxController
   // 当前缩略图页码
   int currentPreviewPage;
 
-  // 已获取所有大图页面的 href
-  bool isGetAllImageHref = false;
+  // 正在获取href
   bool isImageInfoGeting = false;
 
   // 滚动控制器
@@ -85,7 +85,7 @@ class GalleryPageController extends GetxController
   void onInit() {
     super.onInit();
 
-    logger.d('GalleryPageController$pageCtrlDepth onInit');
+    // logger.d('GalleryPageController$pageCtrlDepth onInit');
 
     scrollController.addListener(_scrollControllerLister);
     hideNavigationBtn = true;
@@ -96,7 +96,7 @@ class GalleryPageController extends GetxController
       //     'isRatinged: i-${_itemController.galleryItem.isRatinged} p-${galleryItem.isRatinged}');
     }
 
-    _loadData();
+    _loadData().then((value) => getShowKey());
   }
 
   @override
@@ -160,7 +160,6 @@ class GalleryPageController extends GetxController
   /// 请求数据
   Future<GalleryItem> _fetchData({bool refresh = false}) async {
     logger.d('fetch data refresh:$refresh');
-    await Future<void>.delayed(const Duration(milliseconds: 200));
     try {
       hideNavigationBtn = true;
 
@@ -174,30 +173,33 @@ class GalleryPageController extends GetxController
         await Api.getMoreGalleryInfoOne(galleryItem, refresh: refresh);
       }
 
+      time.showTime('start get galleryItem');
       galleryItem = await Api.getGalleryDetail(
         inUrl: galleryItem.url,
         inGalleryItem: galleryItem,
         refresh: refresh,
       );
+      time.showTime('fetch galleryItem end');
 
       currentPreviewPage = 0;
       setPreviewAfterRequest(galleryItem.galleryPreview);
 
-      /// 通知收藏控制器更新
+      /// 控制器更新
       try {
         if (refresh) {
+          // 收藏更新
           final GalleryFavController _favController =
               Get.find(tag: pageCtrlDepth);
-          // _favController.favcat = galleryItem.favcat;
           _favController.setFav(galleryItem.favcat, galleryItem.favTitle);
 
+          // 评论更新
           Get.find<CommentController>(tag: pageCtrlDepth)
               .change(galleryItem.galleryComment);
 
+          // 评分状态更新
           isRatinged = galleryItem.isRatinged;
         }
-        // ignore: empty_catches
-      } catch (e) {}
+      } catch (_) {}
 
       galleryItem.imgUrl = galleryItem.imgUrl ?? galleryItem.imgUrlL;
 
@@ -222,10 +224,16 @@ class GalleryPageController extends GetxController
     }
   }
 
+  Future<void> getShowKey() async {
+    final String _showKey = await Api.getShowkey(previews[0].href);
+    galleryItem.showKey = _showKey;
+  }
+
   Future<void> _loadData({bool refresh = false, bool showError = true}) async {
     try {
       final GalleryItem value = await _fetchData(refresh: refresh);
       change(value, status: RxStatus.success());
+      time.showTime('change end');
       _enableRead.value = true;
       // logger
       //     .d('${galleryItem.isRatinged} value.isRatinged:${value.isRatinged}');
