@@ -196,7 +196,7 @@ class ViewController extends GetxController {
       });
 
     ever(_itemIndex, (int val) {
-      logger.d('ever _itemIndex to $val');
+      // logger.d('ever _itemIndex to $val');
       Future<void>.delayed(const Duration(milliseconds: 100)).then((_) {
         logger.d('delayed ever _itemIndex to $itemIndex');
         _galleryCacheController.setIndex(
@@ -299,7 +299,7 @@ class ViewController extends GetxController {
 
   // 页码切换时的回调
   void handOnPageChanged(int pageIndex) {
-    logger.d('handOnPageChanged  pageIndex:$pageIndex');
+    logger.d('页码切换时的回调 handOnPageChanged  pageIndex:$pageIndex');
     switch (columnMode) {
       case ColumnMode.single:
         _itemIndex.value = pageIndex;
@@ -416,5 +416,25 @@ class ViewController extends GetxController {
       lastViewMode = viewMode;
     }
     logger.d('checkViewModel end');
+  }
+
+  void tapLeft() {
+    if (viewMode == ViewMode.horizontalLeft) {
+      if (pageIndex > 0) {
+        pageController.jumpToPage(pageIndex - 1);
+      }
+    } else if (viewMode == ViewMode.horizontalRight) {
+      pageController.jumpToPage(pageIndex + 1);
+    }
+  }
+
+  void tapRight() {
+    if (viewMode == ViewMode.horizontalLeft) {
+      pageController.jumpToPage(pageIndex + 1);
+    } else if (viewMode == ViewMode.horizontalRight) {
+      if (pageIndex > 0) {
+        pageController.jumpToPage(pageIndex - 1);
+      }
+    }
   }
 }

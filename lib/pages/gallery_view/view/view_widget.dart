@@ -133,8 +133,8 @@ class _GalleryImageState extends State<GalleryImage> {
           : CachedNetworkImage(
               imageUrl: url,
               fit: BoxFit.contain,
-              fadeInDuration: const Duration(milliseconds: 0),
-              fadeOutDuration: const Duration(milliseconds: 0),
+              fadeInDuration: const Duration(milliseconds: 100),
+              fadeOutDuration: const Duration(milliseconds: 100),
               progressIndicatorBuilder: (context, url, downloadProgress) {
                 // 下载进度回调
                 return UnconstrainedBox(
