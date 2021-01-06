@@ -118,6 +118,7 @@ class EhConfigService extends ProfileService {
         isPureDarkTheme, (bool value) => ehConfig.pureDarkTheme = value);
   }
 
+  /// 收藏排序
   Future<FavoriteOrder> showFavOrder() async {
     final BuildContext context = Get.context;
     final Map<FavoriteOrder, String> _orderMap = <FavoriteOrder, String>{

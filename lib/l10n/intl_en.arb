@@ -95,5 +95,7 @@
   "right_to_left": "Retf to light",
   "top_to_bottom": "Top to bottom",
   "tabbar_setting": "Tabbar setting",
-  "tab_sort": "Long press and drag to sort"
+  "tab_sort": "Long press and drag to sort",
+  "add_to_favorites": "Add to favorites",
+  "remove_from_favorites": "Remove from favorites"
 }

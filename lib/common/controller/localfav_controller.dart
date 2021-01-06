@@ -23,6 +23,10 @@ class LocalFavController extends ProfileController {
         .removeWhere((GalleryItem element) => element.gid == galleryItem.gid);
   }
 
+  void removeFavByGid(String gid) {
+    loacalFavs.removeWhere((GalleryItem element) => element.gid == gid);
+  }
+
   @override
   void onInit() {
     super.onInit();
