@@ -37,13 +37,31 @@ class GalleryViewPage extends GetView<ViewController> {
               // 内容部件
               _buildView(),
               // 外沿触摸区
-              GestureDetector(
-                behavior: HitTestBehavior.translucent,
-                child: Container(),
-                onPanDown: controller.handOnPanDown,
-                onPanStart: (DragStartDetails details) {
-                  logger.d('${details.localPosition} ');
-                },
+              Row(
+                children: [
+                  Expanded(
+                    child: GestureDetector(
+                      behavior: HitTestBehavior.translucent,
+                      // child: Container(),
+                      onPanDown: controller.handOnPanDown,
+                      onPanStart: (DragStartDetails details) {
+                        logger.d('${details.localPosition} ');
+                      },
+                      onTap: controller.tapLeft,
+                    ),
+                  ),
+                  Expanded(
+                    child: GestureDetector(
+                      behavior: HitTestBehavior.translucent,
+                      // child: Container(),
+                      onPanDown: controller.handOnPanDown,
+                      onPanStart: (DragStartDetails details) {
+                        logger.d('${details.localPosition} ');
+                      },
+                      onTap: controller.tapRight,
+                    ),
+                  ),
+                ],
               ),
               // 中心触摸区
               GestureDetector(
