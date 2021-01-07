@@ -97,5 +97,8 @@
   "tabbar_setting": "主页标签设置",
   "tab_sort": "长按并拖动以进行排序",
   "add_to_favorites": "添加收藏",
-  "remove_from_favorites": "从收藏中删除"
+  "remove_from_favorites": "从收藏中删除",
+  "quick_search": "快速搜索",
+  "add_quick_search": "添加搜索",
+  "show_filter": "显示筛选"
 }

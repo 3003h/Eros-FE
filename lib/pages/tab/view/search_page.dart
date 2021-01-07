@@ -1,3 +1,4 @@
+import 'package:custom_pop_up_menu/custom_pop_up_menu.dart';
 import 'package:fehviewer/common/service/depth_service.dart';
 import 'package:fehviewer/generated/l10n.dart';
 import 'package:fehviewer/models/index.dart';
@@ -5,7 +6,6 @@ import 'package:fehviewer/pages/filter/filter.dart';
 import 'package:fehviewer/pages/tab/controller/search_page_controller.dart';
 import 'package:fehviewer/pages/tab/view/gallery_base.dart';
 import 'package:fehviewer/pages/tab/view/tab_base.dart';
-import 'package:fehviewer/utils/cust_lib/popup_menu.dart';
 import 'package:fehviewer/utils/logger.dart';
 import 'package:fehviewer/utils/vibrate.dart';
 import 'package:flutter/cupertino.dart';
@@ -152,60 +152,6 @@ class GallerySearchPage extends StatelessWidget {
 
   Widget _buildTrailing(BuildContext context) {
     final SearchPageController controller = Get.find(tag: searchPageCtrlDepth);
-    PopupMenu.context = context;
-    final TextStyle _menuTextStyle = TextStyle(
-      color: CupertinoDynamicColor.resolve(CupertinoColors.label, context),
-      fontSize: 12,
-    );
-    final PopupMenu _menu = PopupMenu(
-      maxColumn: 2,
-      lineColor: CupertinoDynamicColor.resolve(
-          CupertinoColors.systemBackground, context),
-      backgroundColor:
-          CupertinoDynamicColor.resolve(CupertinoColors.systemGrey6, context),
-      // highlightColor:
-      //     CupertinoDynamicColor.resolve(CupertinoColors.label, context),
-      items: <MenuItemProvider>[
-        MenuItem(
-            title: '筛选',
-            itemKey: SearchMenuEnum.filter,
-            textStyle: _menuTextStyle,
-            image: const Icon(
-              FontAwesomeIcons.filter,
-              size: 20,
-            )),
-        MenuItem(
-            title: '添加',
-            itemKey: SearchMenuEnum.addToQuickSearch,
-            textStyle: _menuTextStyle,
-            image: const Icon(
-              FontAwesomeIcons.plusCircle,
-              size: 20,
-            )),
-        MenuItem(
-            title: '列表',
-            itemKey: SearchMenuEnum.quickSearchList,
-            textStyle: _menuTextStyle,
-            image: const Icon(
-              FontAwesomeIcons.alignJustify,
-              size: 20,
-            )),
-      ],
-      onClickMenu: (MenuItemProvider item) {
-        logger.v('${item.menuKey}');
-        switch (item.menuKey) {
-          case SearchMenuEnum.filter:
-            showFilterSetting();
-            break;
-          case SearchMenuEnum.addToQuickSearch:
-            controller.addToQuickSearch();
-            break;
-          case SearchMenuEnum.quickSearchList:
-            controller.quickSearchList();
-            break;
-        }
-      },
-    );
 
     Widget _buildListBtns() {
       return GestureDetector(
@@ -263,6 +209,98 @@ class GallerySearchPage extends StatelessWidget {
       );
     }
 
+    Widget _menuItem({IconData icon, String title, VoidCallback onTap}) {
+      return GestureDetector(
+        behavior: HitTestBehavior.translucent,
+        onTap: () {
+          VibrateUtil.light();
+          controller.customPopupMenuController.hideMenu();
+          onTap();
+        },
+        child: Container(
+          padding:
+              const EdgeInsets.only(left: 14, right: 18, top: 5, bottom: 5),
+          child: Row(
+            mainAxisSize: MainAxisSize.min,
+            children: <Widget>[
+              Icon(
+                icon,
+                size: 20,
+                // color: CupertinoDynamicColor.resolve(
+                //     CupertinoColors.secondaryLabel, Get.context),
+              ),
+              Expanded(
+                child: Container(
+                  margin: const EdgeInsets.only(left: 10),
+                  padding: const EdgeInsets.symmetric(vertical: 10),
+                  child: Text(
+                    title ?? '',
+                    style: TextStyle(
+                      color: CupertinoDynamicColor.resolve(
+                          CupertinoColors.label, Get.context),
+                      // fontWeight: FontWeight.w500,
+                      // fontSize: 12,
+                    ),
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ),
+      );
+    }
+
+    Widget _buildMenu() {
+      final Color _color =
+          CupertinoDynamicColor.resolve(CupertinoColors.systemGrey6, context)
+              .withOpacity(0.95);
+      return CustomPopupMenu(
+        child: Container(
+          padding: const EdgeInsets.only(right: 14),
+          child: const Icon(
+            FontAwesomeIcons.ellipsisH,
+            size: 20,
+          ),
+        ),
+        arrowColor: _color,
+        showArrow: false,
+        menuBuilder: () {
+          VibrateUtil.light();
+          return ClipRRect(
+            borderRadius: BorderRadius.circular(8),
+            child: Container(
+              color: _color,
+              child: IntrinsicWidth(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    _menuItem(
+                      icon: FontAwesomeIcons.filter,
+                      title: S.of(context).show_filter,
+                      onTap: showFilterSetting,
+                    ),
+                    _menuItem(
+                      icon: FontAwesomeIcons.plusCircle,
+                      title: S.of(context).add_quick_search,
+                      onTap: controller.addToQuickSearch,
+                    ),
+                    _menuItem(
+                      icon: FontAwesomeIcons.alignJustify,
+                      title: S.of(context).quick_search,
+                      onTap: controller.quickSearchList,
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          );
+        },
+        pressType: PressType.singleClick,
+        controller: controller.customPopupMenuController,
+      );
+    }
+
     Widget _buildPopMenuBtn() {
       return GestureDetector(
         onLongPress: () {
@@ -281,18 +319,19 @@ class GallerySearchPage extends StatelessWidget {
                 Get.back();
               },
             ),
-            CupertinoButton(
-              key: controller.searchMenukey,
-              minSize: 40,
-              padding: const EdgeInsets.only(right: 4),
-              child: const Icon(
-                FontAwesomeIcons.ellipsisH,
-                size: 20,
-              ),
-              onPressed: () {
-                _menu.show(widgetKey: controller.searchMenukey);
-              },
-            ),
+            // CupertinoButton(
+            //   key: controller.searchMenukey,
+            //   minSize: 40,
+            //   padding: const EdgeInsets.only(right: 4),
+            //   child: const Icon(
+            //     FontAwesomeIcons.ellipsisH,
+            //     size: 20,
+            //   ),
+            //   onPressed: () {
+            //     _menu.show(widgetKey: controller.searchMenukey);
+            //   },
+            // ),
+            _buildMenu(),
           ],
         ),
       );

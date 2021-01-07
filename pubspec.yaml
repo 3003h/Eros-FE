@@ -20,12 +20,13 @@ dependencies:
   intl: ^0.16.1
 
   # 图标
-#  cupertino_icons: ^1.0.2
+  cupertino_icons: ^1.0.0
   font_awesome_flutter: ^8.11.0
 
   # 网络请求
   dio: ^3.0.10
   dio_http_cache: ^0.2.11
+  dio_http2_adapter: ^1.0.1
 
   # cookie
   cookie_jar: ^1.0.1
@@ -158,6 +159,8 @@ dependencies:
       url: git://github.com/fluttercandies/like_button.git
 
   flutter_rating_bar: ^3.2.0+1
+
+  custom_pop_up_menu: ^1.1.0
 
 dev_dependencies:
 #  build_runner: ^1.0.0

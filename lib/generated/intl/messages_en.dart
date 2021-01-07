@@ -29,6 +29,7 @@ class MessageLookup extends MessageLookupByLibrary {
   static _notInlinedMessages(_) => <String, Function> {
     "READ" : MessageLookupByLibrary.simpleMessage("READ"),
     "about" : MessageLookupByLibrary.simpleMessage("About"),
+    "add_quick_search" : MessageLookupByLibrary.simpleMessage("Add to search"),
     "add_to_favorites" : MessageLookupByLibrary.simpleMessage("Add to favorites"),
     "advanced" : MessageLookupByLibrary.simpleMessage("Advanced"),
     "all_Favorites" : MessageLookupByLibrary.simpleMessage("All Favorites"),
@@ -87,6 +88,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "preload_image" : MessageLookupByLibrary.simpleMessage("Preload image"),
     "processing" : MessageLookupByLibrary.simpleMessage("Processing"),
     "pure_black" : MessageLookupByLibrary.simpleMessage("Pure black"),
+    "quick_search" : MessageLookupByLibrary.simpleMessage("Quick search"),
     "read_setting" : MessageLookupByLibrary.simpleMessage("Read setting"),
     "reading_direction" : MessageLookupByLibrary.simpleMessage("Reading direction"),
     "remove_from_favorites" : MessageLookupByLibrary.simpleMessage("Remove from favorites"),
@@ -108,6 +110,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "s_stars" : m2,
     "search" : MessageLookupByLibrary.simpleMessage("Search"),
     "setting_on_website" : MessageLookupByLibrary.simpleMessage("Setting on website"),
+    "show_filter" : MessageLookupByLibrary.simpleMessage("Show filter"),
     "show_jpn_title" : MessageLookupByLibrary.simpleMessage("Show japanese title"),
     "t_Clear_all_history" : MessageLookupByLibrary.simpleMessage("Clear all history"),
     "tab_favorite" : MessageLookupByLibrary.simpleMessage("Favorites"),

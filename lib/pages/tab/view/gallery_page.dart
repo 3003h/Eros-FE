@@ -1,10 +1,11 @@
+import 'package:custom_pop_up_menu/custom_pop_up_menu.dart';
 import 'package:fehviewer/models/index.dart';
 import 'package:fehviewer/pages/filter/filter.dart';
 import 'package:fehviewer/pages/tab/controller/gallery_controller.dart';
 import 'package:fehviewer/pages/tab/view/gallery_base.dart';
 import 'package:fehviewer/route/navigator_util.dart';
-import 'package:fehviewer/utils/cust_lib/popup_menu.dart';
 import 'package:fehviewer/utils/logger.dart';
+import 'package:fehviewer/utils/vibrate.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -28,7 +29,9 @@ class GalleryListTab extends GetView<GalleryViewController> {
         CupertinoSliverNavigationBar(
           padding: const EdgeInsetsDirectional.only(end: 4),
           largeTitle: Text(controller.title),
-          leading: _buildLeading(context),
+          leading: controller.enablePopupMenu
+              ? _buildLeading(context)
+              : const SizedBox(),
           trailing: Row(
             mainAxisSize: MainAxisSize.min,
             mainAxisAlignment: MainAxisAlignment.end,
@@ -98,44 +101,36 @@ class GalleryListTab extends GetView<GalleryViewController> {
   }
 
   Widget _buildLeading(BuildContext context) {
-    final PopupMenu _menu = PopupMenu(
-      context: context,
-      maxColumn: 2,
-      lineColor: CupertinoDynamicColor.resolve(
-          CupertinoColors.systemBackground, context),
-      backgroundColor:
-          CupertinoDynamicColor.resolve(CupertinoColors.systemGrey6, context),
-      items: controller.menuItems,
-      onClickMenu: (MenuItemProvider item) {
-        logger.v('${item.menuKey}');
-        Get.toNamed(item.menuKey);
-      },
-    );
-
-    Widget _buildPopMenuBtn() {
-      return GestureDetector(
-        child: Row(
-          mainAxisSize: MainAxisSize.min,
-          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-          children: <Widget>[
-            CupertinoButton(
-              key: controller.menukey,
-              minSize: 40,
-              // padding: const EdgeInsets.only(right: 4),
-              child: const Icon(
-                FontAwesomeIcons.ellipsisH,
-                size: 20,
-              ),
-              onPressed: () {
-                _menu.show(widgetKey: controller.menukey);
-              },
-            ),
-          ],
+    final Color _color =
+        CupertinoDynamicColor.resolve(CupertinoColors.systemGrey5, context)
+            .withOpacity(0.98);
+    return CustomPopupMenu(
+      child: Container(
+        padding: const EdgeInsets.only(left: 14),
+        child: const Icon(
+          FontAwesomeIcons.ellipsisH,
+          size: 20,
         ),
-      );
-    }
-
-    return _buildPopMenuBtn();
+      ),
+      arrowColor: _color,
+      showArrow: false,
+      menuBuilder: () {
+        VibrateUtil.light();
+        return ClipRRect(
+          borderRadius: BorderRadius.circular(8),
+          child: Container(
+            color: _color,
+            child: IntrinsicWidth(
+              child: controller.popupMenu,
+            ),
+          ),
+        );
+      },
+      pressType: PressType.singleClick,
+      verticalMargin: -5,
+      horizontalMargin: 5,
+      controller: controller.customPopupMenuController,
+    );
   }
 
   Widget _endIndicator() {
@@ -183,4 +178,10 @@ class GalleryListTab extends GetView<GalleryViewController> {
           );
         });
   }
+}
+
+class ItemModel {
+  String title;
+  IconData icon;
+  ItemModel(this.title, this.icon);
 }

@@ -42,7 +42,15 @@ class HttpManager {
       )).interceptor);
     }
 
-    // _dio.interceptors.add(ehInterceptor);
+    // _dio.httpClientAdapter = Http2Adapter(
+    //   ConnectionManager(
+    //     idleTimeout: 10000,
+    //
+    //     /// Ignore bad certificate
+    //     onClientCreate: (_, clientSetting) =>
+    //         clientSetting.onBadCertificate = (_) => true,
+    //   ),
+    // );
 
     (_dio.httpClientAdapter as DefaultHttpClientAdapter).onHttpClientCreate =
         (HttpClient client) {
