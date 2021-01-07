@@ -29,6 +29,7 @@ class MessageLookup extends MessageLookupByLibrary {
   static _notInlinedMessages(_) => <String, Function> {
     "READ" : MessageLookupByLibrary.simpleMessage("阅读"),
     "about" : MessageLookupByLibrary.simpleMessage("关于"),
+    "add_quick_search" : MessageLookupByLibrary.simpleMessage("添加搜索"),
     "add_to_favorites" : MessageLookupByLibrary.simpleMessage("添加收藏"),
     "advanced" : MessageLookupByLibrary.simpleMessage("高级"),
     "all_Favorites" : MessageLookupByLibrary.simpleMessage("所有收藏"),
@@ -87,6 +88,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "preload_image" : MessageLookupByLibrary.simpleMessage("预载图片数量"),
     "processing" : MessageLookupByLibrary.simpleMessage("处理中"),
     "pure_black" : MessageLookupByLibrary.simpleMessage("纯黑"),
+    "quick_search" : MessageLookupByLibrary.simpleMessage("快速搜索"),
     "read_setting" : MessageLookupByLibrary.simpleMessage("阅读设置"),
     "reading_direction" : MessageLookupByLibrary.simpleMessage("阅读方向"),
     "remove_from_favorites" : MessageLookupByLibrary.simpleMessage("从收藏中删除"),
@@ -108,6 +110,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "s_stars" : m2,
     "search" : MessageLookupByLibrary.simpleMessage("搜索"),
     "setting_on_website" : MessageLookupByLibrary.simpleMessage("网页上的设置"),
+    "show_filter" : MessageLookupByLibrary.simpleMessage("显示筛选"),
     "show_jpn_title" : MessageLookupByLibrary.simpleMessage("显示日文标题"),
     "t_Clear_all_history" : MessageLookupByLibrary.simpleMessage("清除所有历史"),
     "tab_favorite" : MessageLookupByLibrary.simpleMessage("收藏"),

@@ -1,3 +1,4 @@
+import 'package:custom_pop_up_menu/custom_pop_up_menu.dart';
 import 'package:fehviewer/common/controller/quicksearch_controller.dart';
 import 'package:fehviewer/common/service/depth_service.dart';
 import 'package:fehviewer/common/service/ehconfig_service.dart';
@@ -15,8 +16,8 @@ class SearchPageController extends GetxController
   SearchPageController.fromText(this.searchText);
   String searchText;
   final String tabIndex = 'search_$searchPageCtrlDepth';
-
-  final GlobalKey searchMenukey = GlobalKey();
+  final CustomPopupMenuController customPopupMenuController =
+      CustomPopupMenuController();
 
   // 搜索内容的控制器
   final TextEditingController searchTextController = TextEditingController();

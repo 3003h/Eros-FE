@@ -238,6 +238,8 @@ class GalleryTitle extends StatelessWidget {
     /// 异常则不会出现
     ///
     /// 暂时放弃使用 SelectableText
+    ///
+    /// 20210107 改用SelectableText测试
 
     return GestureDetector(
       child: SelectableText(
@@ -706,12 +708,13 @@ class TagGroupItem extends StatelessWidget {
 
   final TagGroup tagGroupData;
 
-  List<Widget> _initTagBtnList(galleryTags, context) {
+  List<Widget> _initTagBtnList(List<GalleryTag> galleryTags, context) {
     final EhConfigService ehConfigService = Get.find();
     final List<Widget> _tagBtnList = <Widget>[];
-    galleryTags.forEach((tag) {
+    galleryTags.forEach((GalleryTag tag) {
       _tagBtnList.add(
         Obx(() => TagButton(
+              key: GlobalKey(),
               text: ehConfigService.isTagTranslat.value
                   ? tag?.tagTranslat ?? ''
                   : tag?.title ?? '',
@@ -771,22 +774,27 @@ class TagGroupItem extends StatelessWidget {
 /// onPressed 回调
 class TagButton extends StatelessWidget {
   const TagButton({
+    Key key,
     @required this.text,
     this.textColor,
     this.color,
-    VoidCallback onPressed,
-  }) : _onPressed = onPressed;
+    this.onPressed,
+    this.onLongPress,
+  }) : super(key: key);
 
   final String text;
   final Color textColor;
   final Color color;
-  final VoidCallback _onPressed;
+  final VoidCallback onPressed;
+  final VoidCallback onLongPress;
 
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: _onPressed,
+      onTap: onPressed,
+      onLongPress: onLongPress,
       child: ClipRRect(
+        key: key,
         borderRadius: BorderRadius.circular(8),
         child: Container(
           padding: const EdgeInsets.fromLTRB(6, 3, 6, 4),

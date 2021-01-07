@@ -15,8 +15,6 @@ import 'package:intl/intl.dart';
 import 'package:share/share.dart';
 
 class QuickSearchListPage extends StatelessWidget {
-  final String _title = 'Quick search';
-
   Future<String> _getTextTranslate(String text) async {
     final String tranText =
         await EhTagDatabase.getTranTagWithFullNameSpase(text);
@@ -33,7 +31,7 @@ class QuickSearchListPage extends StatelessWidget {
     final CupertinoPageScaffold sca = CupertinoPageScaffold(
         navigationBar: CupertinoNavigationBar(
           padding: const EdgeInsetsDirectional.only(start: 0),
-          middle: Text(_title),
+          middle: Text(S.of(context).quick_search),
           transitionBetweenRoutes: false,
           trailing: _buildListBtns(context),
         ),

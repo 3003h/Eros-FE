@@ -9,6 +9,7 @@ class GalleryTag {
   String title;
   String type;
   String tagTranslat;
+  String intro;
 
   factory GalleryTag.fromJson(Map<String, dynamic> json) =>
       _$GalleryTagFromJson(json);
