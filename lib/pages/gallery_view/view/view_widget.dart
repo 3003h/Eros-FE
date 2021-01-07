@@ -1,6 +1,5 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:dio/dio.dart';
-import 'package:extended_image/extended_image.dart';
 import 'package:fehviewer/common/service/depth_service.dart';
 import 'package:fehviewer/models/index.dart';
 import 'package:fehviewer/network/gallery_request.dart';
@@ -119,82 +118,71 @@ class _GalleryImageState extends State<GalleryImage> {
     );
   }
 
-  Widget _buildImage(String url, {bool extendedImage = false}) {
+  Widget _buildImage(String url) {
     return Container(
-      child: extendedImage
-          ? ExtendedImage.network(
-              url,
-              // height: previewFromApi.data.largeImageHeight,
-              // width: previewFromApi.data.largeImageWidth,
-              fit: BoxFit.contain,
-              mode: ExtendedImageMode.gesture,
-              cache: true,
-            )
-          : CachedNetworkImage(
-              imageUrl: url,
-              fit: BoxFit.contain,
-              fadeInDuration: const Duration(milliseconds: 100),
-              fadeOutDuration: const Duration(milliseconds: 100),
-              progressIndicatorBuilder: (context, url, downloadProgress) {
-                // 下载进度回调
-                return UnconstrainedBox(
-                  child: Container(
-                    alignment: Alignment.center,
-                    margin: const EdgeInsets.symmetric(
-                        vertical: 40, horizontal: 40),
-                    child: Column(
-                      mainAxisSize: MainAxisSize.min,
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: <Widget>[
-                        Container(
-                          height: 70,
-                          width: 70,
-                          child: LiquidCircularProgressIndicator(
-                            value: downloadProgress.progress ?? 0.0,
-                            valueColor: const AlwaysStoppedAnimation<Color>(
-                                Color.fromARGB(255, 163, 199, 100)),
-                            backgroundColor:
-                                const Color.fromARGB(255, 50, 50, 50),
-                            // borderColor: Colors.teal[900],
-                            // borderWidth: 2.0,
-                            direction: Axis.vertical,
-                            center: downloadProgress.progress != null
-                                ? Text(
-                                    '${(downloadProgress.progress ?? 0) * 100 ~/ 1}%',
-                                    style: TextStyle(
-                                      color: downloadProgress.progress < 0.5
-                                          ? CupertinoColors.white
-                                          : CupertinoColors.black,
-                                      fontSize: 12,
-                                      height: 1,
-                                    ),
-                                  )
-                                : Container(),
-                          ),
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.all(12.0),
-                          child: Text(
-                            '${widget.index + 1}',
-                            style: const TextStyle(
-                              color: CupertinoColors.systemGrey6,
-                              height: 1,
-                            ),
-                          ),
-                        )
-                      ],
+      child: CachedNetworkImage(
+        imageUrl: url,
+        fit: BoxFit.contain,
+        fadeInDuration: const Duration(milliseconds: 100),
+        fadeOutDuration: const Duration(milliseconds: 100),
+        progressIndicatorBuilder: (context, url, downloadProgress) {
+          // 下载进度回调
+          return UnconstrainedBox(
+            child: Container(
+              alignment: Alignment.center,
+              margin: const EdgeInsets.symmetric(vertical: 40, horizontal: 40),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: <Widget>[
+                  Container(
+                    height: 70,
+                    width: 70,
+                    child: LiquidCircularProgressIndicator(
+                      value: downloadProgress.progress ?? 0.0,
+                      valueColor: const AlwaysStoppedAnimation<Color>(
+                          Color.fromARGB(255, 163, 199, 100)),
+                      backgroundColor: const Color.fromARGB(255, 50, 50, 50),
+                      // borderColor: Colors.teal[900],
+                      // borderWidth: 2.0,
+                      direction: Axis.vertical,
+                      center: downloadProgress.progress != null
+                          ? Text(
+                              '${(downloadProgress.progress ?? 0) * 100 ~/ 1}%',
+                              style: TextStyle(
+                                color: downloadProgress.progress < 0.5
+                                    ? CupertinoColors.white
+                                    : CupertinoColors.black,
+                                fontSize: 12,
+                                height: 1,
+                              ),
+                            )
+                          : Container(),
                     ),
                   ),
-                );
-              },
-              errorWidget: (context, url, error) => const Center(
-                child: Icon(
-                  Icons.error,
-                  size: 50,
-                  color: Colors.red,
-                ),
+                  Padding(
+                    padding: const EdgeInsets.all(12.0),
+                    child: Text(
+                      '${widget.index + 1}',
+                      style: const TextStyle(
+                        color: CupertinoColors.systemGrey6,
+                        height: 1,
+                      ),
+                    ),
+                  )
+                ],
               ),
             ),
+          );
+        },
+        errorWidget: (context, url, error) => const Center(
+          child: Icon(
+            Icons.error,
+            size: 50,
+            color: Colors.red,
+          ),
+        ),
+      ),
     );
   }
 }
