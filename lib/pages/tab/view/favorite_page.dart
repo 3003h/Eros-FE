@@ -22,18 +22,21 @@ class FavoriteTab extends GetView<FavoriteViewController> {
   @override
   Widget build(BuildContext context) {
     final UserController userController = Get.find();
-    return CupertinoPageScaffold(
-      child: Obx(() {
-        if (userController.isLogin) {
-          if (controller.title.value == null ||
-              controller.title.value.isEmpty) {
-            controller.title.value = S.of(context).all_Favorites;
+    return CupertinoTheme(
+      data: const CupertinoThemeData(primaryColor: CupertinoColors.activeBlue),
+      child: CupertinoPageScaffold(
+        child: Obx(() {
+          if (userController.isLogin) {
+            if (controller.title.value == null ||
+                controller.title.value.isEmpty) {
+              controller.title.value = S.of(context).all_Favorites;
+            }
+            return _buildNetworkFavView(context);
+          } else {
+            return _buildLocalFavView();
           }
-          return _buildNetworkFavView(context);
-        } else {
-          return _buildLocalFavView();
-        }
-      }),
+        }),
+      ),
     );
   }
 
@@ -82,10 +85,14 @@ class FavoriteTab extends GetView<FavoriteViewController> {
                   borderRadius: BorderRadius.circular(8),
                   child: Container(
                     padding: const EdgeInsets.fromLTRB(4, 2, 4, 2),
-                    color: CupertinoColors.activeBlue,
+                    color: CupertinoDynamicColor.resolve(
+                        CupertinoColors.activeBlue, context),
                     child: Obx(() => Text(
                           '${controller.curPage.value + 1}',
-                          style: const TextStyle(color: CupertinoColors.white),
+                          style: TextStyle(
+                              color: CupertinoDynamicColor.resolve(
+                                  CupertinoColors.secondarySystemBackground,
+                                  context)),
                         )),
                   ),
                 ),

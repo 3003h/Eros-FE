@@ -714,7 +714,6 @@ class TagGroupItem extends StatelessWidget {
     galleryTags.forEach((GalleryTag tag) {
       _tagBtnList.add(
         Obx(() => TagButton(
-              key: GlobalKey(),
               text: ehConfigService.isTagTranslat.value
                   ? tag?.tagTranslat ?? ''
                   : tag?.title ?? '',

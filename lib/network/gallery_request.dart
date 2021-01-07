@@ -96,8 +96,8 @@ class Api {
   /// 获取热门画廊列表
   static Future<Tuple2<List<GalleryItem>, int>> getPopular(
       {bool refresh = false}) async {
-    const String url = '/popular?inline_set=dm_l';
-    // const String url = '/popular';
+    // const String url = '/popular?inline_set=dm_l';
+    const String url = '/popular';
 
     await CustomHttpsProxy.instance.init();
     final Options _cacheOptions = getCacheOptions(forceRefresh: refresh);
@@ -144,72 +144,6 @@ class Api {
   }
 
   /// 获取画廊列表
-  static Future<Tuple2<List<GalleryItem>, int>> getGalleryOld({
-    int page,
-    String fromGid,
-    String serach,
-    int cats,
-    bool refresh = false,
-  }) async {
-    final EhConfigService _ehConfigService = Get.find();
-    final AdvanceSearchController _searchController = Get.find();
-
-    String url = '/';
-    String qry = '?page=${page ?? 0}&inline_set=dm_l';
-
-    if (_ehConfigService.isSafeMode.value) {
-      qry = '$qry&f_cats=767';
-    } else if (cats != null) {
-      qry = '$qry&f_cats=$cats';
-    }
-
-    if (fromGid != null) {
-      qry = '$qry&from=$fromGid';
-    }
-
-    if (_ehConfigService.isSafeMode.value) {
-      serach = 'parody:gundam\$';
-    }
-
-    /// 搜索词处理
-    if (serach != null) {
-      final List<String> searArr = serach.split(':');
-      if (searArr.length == 2 &&
-          !serach.trim().contains('\$') &&
-          !serach.trim().contains('"')) {
-        String _end = '';
-        if (searArr[0] != 'uploader') {
-          _end = '\$';
-        }
-        final String _search =
-            Uri.encodeQueryComponent('${searArr[0]}:"${searArr[1]}$_end"');
-        qry = '$qry&f_search=$_search';
-      } else {
-        logger.d('原始处理');
-        final String _search = Uri.encodeQueryComponent(serach.trim());
-        qry = '$qry&f_search=$_search';
-      }
-    }
-
-    url = '$url$qry';
-
-    /// 高级搜索处理
-    if (_searchController.enableAdvance ?? false) {
-      url = '$url&advsearch=1${_searchController.getAdvanceSearchText()}';
-    }
-
-    final Options _cacheOptions = getCacheOptions(forceRefresh: refresh);
-
-    logger.v(url);
-
-    await CustomHttpsProxy.instance.init();
-    final String response =
-        await getHttpManager().get(url, options: _cacheOptions);
-
-    return await GalleryListParser.parseGalleryList(response, refresh: refresh);
-  }
-
-  /// 获取画廊列表
   static Future<Tuple2<List<GalleryItem>, int>> getGallery({
     int page,
     String fromGid,
@@ -221,11 +155,11 @@ class Api {
     final bool safeMode = _ehConfigService.isSafeMode.value;
     final AdvanceSearchController _searchController = Get.find();
 
-    String url = '/';
+    const String url = '/';
 
     final Map<String, dynamic> params = <String, dynamic>{
       'page': page ?? 0,
-      'inline_set': 'dm_l',
+      // 'inline_set': 'dm_l',
       if (safeMode) 'f_cats': 767,
       if (safeMode) 'parody': 'gundam\$',
       if (!safeMode && cats != null) 'f_cats': cats,
@@ -247,37 +181,41 @@ class Api {
     final String response =
         await getHttpManager().get(url, options: _cacheOptions, params: params);
 
-    return await GalleryListParser.parseGalleryList(response, refresh: refresh);
+    // 列表样式检查 不符合则重新设置
+    final bool isDml = GalleryListParser.isGalleryListDmL(response);
+    if (!isDml) {
+      logger.i(' inline_set dml');
+      params['inline_set'] = 'dm_l';
+      final String response = await getHttpManager()
+          .get(url, options: _cacheOptions, params: params);
+      return await GalleryListParser.parseGalleryList(response,
+          refresh: refresh);
+    } else {
+      return await GalleryListParser.parseGalleryList(response,
+          refresh: refresh);
+    }
   }
 
   /// 获取收藏
+  /// inline_set 不能和页码同时使用 会默认定向到第一页
   static Future<Tuple2<List<GalleryItem>, int>> getFavorite({
     String favcat,
     int page,
     bool refresh = false,
   }) async {
-    /// inline_set不能和页码同时使用 会默认定向到第一页
-    String _getUrl({String inlineSet}) {
-      String url = '/favorites.php/';
-      String qry = '?page=${page ?? 0}';
-      if (favcat != null && favcat != 'a' && favcat.isNotEmpty) {
-        qry = '$qry&favcat=$favcat';
-      }
-      if (inlineSet != null && inlineSet.isNotEmpty) {
-        qry = "$qry&inline_set=${inlineSet ?? ''}";
-      }
-      url = '$url$qry';
+    const String url = '/favorites.php';
 
-      logger.v(url);
-      return url;
-    }
-
-    final String url = _getUrl();
+    final Map<String, dynamic> params = <String, dynamic>{
+      'page': page ?? 0,
+      if (favcat != null && favcat != 'a' && favcat.isNotEmpty)
+        'favcat': favcat,
+    };
 
     final Options _cacheOptions = getCacheOptions(forceRefresh: refresh);
 
     await CustomHttpsProxy.instance.init();
-    String response = await getHttpManager().get(url, options: _cacheOptions);
+    String response =
+        await getHttpManager().get(url, options: _cacheOptions, params: params);
 
     // 排序方式检查 不符合则设置 然后重新请求
     // 获取收藏排序设置
@@ -289,10 +227,10 @@ class Api {
     final bool isOrderFav = GalleryListParser.isFavoriteOrder(response);
     if (isOrderFav ^ (order == FavoriteOrder.fav)) {
       // 重设排序方式
-      logger.d('$isOrderFav 重设排序方式 $_order');
-      final String _urlOrder = _getUrl(inlineSet: _order);
-      await getHttpManager()
-          .get(_urlOrder, options: getCacheOptions(forceRefresh: true));
+      logger.d('重设排序方式为 $_order');
+      params['inline_set'] = _order;
+      await getHttpManager().get(url,
+          options: getCacheOptions(forceRefresh: true), params: params);
       response = await getHttpManager().get(url, options: _cacheOptions);
     }
 
@@ -305,9 +243,10 @@ class Api {
         refresh: refresh,
       );
     } else {
-      final String url = _getUrl(inlineSet: 'dm_l');
-      final String response =
-          await getHttpManager().get(url, options: _cacheOptions);
+      logger.d('列表样式重设 inline_set=dm_l');
+      params['inline_set'] = 'dm_l';
+      final String response = await getHttpManager()
+          .get(url, options: _cacheOptions, params: params);
       return await GalleryListParser.parseGalleryList(
         response,
         isFavorite: true,
@@ -319,16 +258,16 @@ class Api {
   /// 获取画廊详细信息
   /// ?inline_set=ts_m 小图,40一页
   /// ?inline_set=ts_l 大图,20一页
-  /// c=1#comments 显示全部评论
+  /// hc=1#comments 显示全部评论
   /// nw=always 不显示警告
   static Future<GalleryItem> getGalleryDetail({
     String inUrl,
     GalleryItem inGalleryItem,
     bool refresh = false,
   }) async {
-    // final HttpManager httpManager = HttpManager.getInstance();
-    final String url = inUrl + '?hc=1&inline_set=ts_l&nw=always';
-    // final String url = inUrl;
+    /// 使用 inline_set 和 nw 参数会重定向，导致请求时间过长 默认不使用
+    /// final String url = inUrl + '?hc=1&inline_set=ts_l&nw=always';
+    final String url = inUrl + '?hc=1';
 
     // 不显示警告的处理 cookie加上 nw=1
     // 在 url使用 nw=always 未解决 自动写入cookie 暂时搞不懂 先手动设置下

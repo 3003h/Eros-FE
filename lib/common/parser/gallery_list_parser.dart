@@ -34,7 +34,7 @@ class GalleryListParser {
     return true;
   }
 
-  ///  收藏夹，检查返回结果的排序方式
+  ///  收藏夹 检查返回结果的排序方式
   static bool isFavoriteOrder(String response) {
     final dom.Document document = parse(response);
 

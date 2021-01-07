@@ -142,6 +142,10 @@ class GalleryPrecache {
 
       String _url = '';
       if (_preview.largeImageUrl?.isEmpty ?? true) {
+        if (controller.showKey == null) {
+          await controller.getShowKey(index: index);
+        }
+
         // logger.d('get $_index from Api');
         _curIndexList.add(_index);
         final String _href = previews[_index].href;

@@ -73,15 +73,16 @@ class ListViewAdvancedSetting extends StatelessWidget {
             desc: S.of(context).gray_black,
             descOn: S.of(context).pure_black,
           )),
-      SelectorSettingItem(
-        hideLine: true,
-        title: S.of(context).tabbar_setting,
-        selector: '',
-        onTap: () {
-          // Get.to(TabSettingPage());
-          Get.toNamed(EHRoutes.pageSetting);
-        },
-      ),
+      if (!Get.find<EhConfigService>().isSafeMode.value)
+        SelectorSettingItem(
+          hideLine: true,
+          title: S.of(context).tabbar_setting,
+          selector: '',
+          onTap: () {
+            // Get.to(TabSettingPage());
+            Get.toNamed(EHRoutes.pageSetting);
+          },
+        ),
       Container(height: 38),
       SelectorSettingItem(
         title: S.of(context).clear_cache,
@@ -107,7 +108,7 @@ class ListViewAdvancedSetting extends StatelessWidget {
           S.of(context).domain_fronting,
           intValue: dnsConfigController.enableDomainFronting.value,
           onChanged: _handleEFChanged,
-          desc: 'pass SNI',
+          desc: 'SNI',
         ),
       TextSwitchItem(
         'DNS-over-HTTPS',

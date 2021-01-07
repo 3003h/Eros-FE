@@ -1,4 +1,5 @@
 import 'package:custom_pop_up_menu/custom_pop_up_menu.dart';
+import 'package:fehviewer/common/service/ehconfig_service.dart';
 import 'package:fehviewer/models/index.dart';
 import 'package:fehviewer/pages/filter/filter.dart';
 import 'package:fehviewer/pages/tab/controller/gallery_controller.dart';
@@ -29,7 +30,8 @@ class GalleryListTab extends GetView<GalleryViewController> {
         CupertinoSliverNavigationBar(
           padding: const EdgeInsetsDirectional.only(end: 4),
           largeTitle: Text(controller.title),
-          leading: controller.enablePopupMenu
+          leading: controller.enablePopupMenu &&
+                  (!Get.find<EhConfigService>().isSafeMode.value)
               ? _buildLeading(context)
               : const SizedBox(),
           trailing: Row(
@@ -69,10 +71,14 @@ class GalleryListTab extends GetView<GalleryViewController> {
                   borderRadius: BorderRadius.circular(8),
                   child: Container(
                     padding: const EdgeInsets.fromLTRB(4, 2, 4, 2),
-                    color: CupertinoColors.activeBlue,
+                    color: CupertinoDynamicColor.resolve(
+                        CupertinoColors.activeBlue, context),
                     child: Obx(() => Text(
                           '${controller.curPage.value + 1}',
-                          style: const TextStyle(color: CupertinoColors.white),
+                          style: TextStyle(
+                              color: CupertinoDynamicColor.resolve(
+                                  CupertinoColors.secondarySystemBackground,
+                                  context)),
                         )),
                   ),
                 ),
