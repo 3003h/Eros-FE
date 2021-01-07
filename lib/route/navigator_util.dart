@@ -97,7 +97,7 @@ class NavigatorUtil {
   // }
 
   static void showSearch() {
-    Get.to(GallerySearchPage(), transition: Transition.cupertino,
+    Get.to(GallerySearchPage(), transition: Transition.fadeIn,
         binding: BindingsBuilder(() {
       Get.find<DepthService>().pushSearchPageCtrl();
       Get.put(

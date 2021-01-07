@@ -36,7 +36,8 @@ class SearchPageController extends GetxController
   DateTime _lastInputCompleteAt; //上次输入完成时间
   String _lastSearchText;
 
-  bool autofocus;
+  /// 自动获取焦点
+  bool autofocus = false;
 
   final EhConfigService _ehConfigService = Get.find();
   final QuickSearchController quickSearchController = Get.find();
@@ -152,7 +153,7 @@ class SearchPageController extends GetxController
       searchTextController.text = searchText.trim();
       autofocus = false;
     } else {
-      autofocus = true;
+      // autofocus = true;
     }
     change(<GalleryItem>[], status: RxStatus.empty());
   }

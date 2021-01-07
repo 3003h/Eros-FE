@@ -39,7 +39,7 @@ class GalleryPageController extends GetxController
     @required this.tabIndex,
   }) : gid = galleryItem.gid;
 
-  // 画廊gid 唯一
+  /// 画廊gid 唯一
   String gid;
 
   bool isRefresh = false;
@@ -60,7 +60,7 @@ class GalleryPageController extends GetxController
     _itemController.galleryItem.isRatinged = true;
   }
 
-  // 画廊数据对象
+  /// 画廊数据对象
   GalleryItem galleryItem;
   List<GalleryPreview> get previews => galleryItem.galleryPreview;
 
@@ -68,7 +68,7 @@ class GalleryPageController extends GetxController
 
   String get showKey => galleryItem.showKey;
 
-  // 当前缩略图页码
+  /// 当前缩略图页码
   int currentPreviewPage;
 
   // 正在获取href
@@ -96,7 +96,7 @@ class GalleryPageController extends GetxController
       //     'isRatinged: i-${_itemController.galleryItem.isRatinged} p-${galleryItem.isRatinged}');
     }
 
-    _loadData().then((value) => getShowKey());
+    _loadData().then((_) => getShowKey());
   }
 
   @override
@@ -143,14 +143,14 @@ class GalleryPageController extends GetxController
         galleryItem.galleryPreview.sublist(0, galleryPreview.length);
   }
 
-  // 添加缩略图对象
+  /// 添加缩略图对象
   void addAllPreview(List<GalleryPreview> galleryPreview) {
     galleryItem.galleryPreview.addAll(galleryPreview);
     Get.find<ViewController>().update(['_buildPhotoViewGallery']);
     update();
   }
 
-  // 是否存在本地收藏中
+  /// 是否存在本地收藏中
   set localFav(bool value) {
     galleryItem.localFav = value;
   }
@@ -167,7 +167,7 @@ class GalleryPageController extends GetxController
       final bool _localFav = _isInLocalFav(galleryItem.gid);
       galleryItem.localFav = _localFav;
 
-      await Future<void>.delayed(const Duration(milliseconds: 200));
+      await Future<void>.delayed(const Duration(milliseconds: 150));
 
       if (galleryItem.filecount == null || galleryItem.filecount.isEmpty) {
         await Api.getMoreGalleryInfoOne(galleryItem, refresh: refresh);
@@ -205,7 +205,7 @@ class GalleryPageController extends GetxController
 
       // 加入历史
       if (galleryItem.gid != null) {
-        Future<void>.delayed(const Duration(milliseconds: 100)).then((_) {
+        Future<void>.delayed(const Duration(milliseconds: 700)).then((_) {
           _historyController.addHistory(galleryItem);
         });
       }
@@ -224,8 +224,8 @@ class GalleryPageController extends GetxController
     }
   }
 
-  Future<void> getShowKey() async {
-    final String _showKey = await Api.getShowkey(previews[0].href);
+  Future<void> getShowKey({int index = 0}) async {
+    final String _showKey = await Api.getShowkey(previews[index].href);
     galleryItem.showKey = _showKey;
   }
 
@@ -416,6 +416,10 @@ class GalleryPageController extends GetxController
       await _lazyGetImageHref(cancelToken: cancelToken, index: index);
     } catch (e, stack) {
       logger.e('$e \n $stack');
+    }
+
+    if (showKey == null) {
+      await getShowKey(index: index);
     }
 
     try {

@@ -370,7 +370,7 @@ class GalleryViewPage extends GetView<ViewController> {
                   child: GetBuilder<ViewController>(
                       id: 'GalleryImage_$index',
                       builder: (ViewController controller) {
-                        logger.d('build list item $index');
+                        // logger.d('build list item $index');
                         return Container(
                           height: () {
                             try {

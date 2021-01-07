@@ -36,10 +36,14 @@ class WatchedListTab extends GetView<WatchedViewController> {
                   borderRadius: BorderRadius.circular(8),
                   child: Container(
                     padding: const EdgeInsets.fromLTRB(4, 2, 4, 2),
-                    color: CupertinoColors.activeBlue,
+                    color: CupertinoDynamicColor.resolve(
+                        CupertinoColors.activeBlue, context),
                     child: Obx(() => Text(
                           '${controller.curPage.value + 1}',
-                          style: const TextStyle(color: CupertinoColors.white),
+                          style: TextStyle(
+                              color: CupertinoDynamicColor.resolve(
+                                  CupertinoColors.secondarySystemBackground,
+                                  context)),
                         )),
                   ),
                 ),

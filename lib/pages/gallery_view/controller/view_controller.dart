@@ -182,11 +182,11 @@ class ViewController extends GetxController {
 
     if (GetPlatform.isIOS)
       Future.delayed(const Duration(milliseconds: 200))
-          .then((value) => SystemChrome.setEnabledSystemUIOverlays([]));
+          .then((_) => SystemChrome.setEnabledSystemUIOverlays([]));
 
     if (GetPlatform.isIOS)
       ever(_showBar, (bool val) {
-        Future.delayed(Duration(milliseconds: 800)).then((value) {
+        Future.delayed(const Duration(milliseconds: 100)).then((_) {
           if (val) {
             SystemChrome.setEnabledSystemUIOverlays(SystemUiOverlay.values);
           } else {
@@ -253,7 +253,7 @@ class ViewController extends GetxController {
   @override
   void onClose() {
     pageController.dispose();
-    // _getMoreCancelToken.cancel();
+    _getMoreCancelToken.cancel();
     SystemChrome.setEnabledSystemUIOverlays(SystemUiOverlay.values);
     super.onClose();
   }
@@ -274,17 +274,6 @@ class ViewController extends GetxController {
 
     _galleryPageController.showLoadingDialog(Get.context, itemIndex).then((_) {
       if (viewMode != ViewMode.vertical) {
-        /*switch (columnMode) {
-          case ColumnMode.single:
-            pageController.jumpToPage(pageIndex);
-            break;
-          case ColumnMode.odd:
-            pageController.jumpToPage(pageIndex);
-            break;
-          case ColumnMode.even:
-            pageController.jumpToPage(pageIndex);
-            break;
-        }*/
         pageController.jumpToPage(pageIndex);
       } else {
         Future.delayed(const Duration(milliseconds: 200))
@@ -402,7 +391,7 @@ class ViewController extends GetxController {
   }
 
   void checkViewModel() {
-    logger.d('checkViewModel start');
+    // logger.d('checkViewModel start');
     if (viewMode != lastViewMode) {
       if (viewMode == ViewMode.vertical) {
         Future.delayed(const Duration(milliseconds: 100)).then((value) {
@@ -415,7 +404,7 @@ class ViewController extends GetxController {
       }
       lastViewMode = viewMode;
     }
-    logger.d('checkViewModel end');
+    // logger.d('checkViewModel end');
   }
 
   void tapLeft() {

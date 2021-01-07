@@ -7,6 +7,24 @@ import 'package:html/parser.dart' show parse;
 import 'package:intl/intl.dart';
 
 class GalleryDetailParser {
+  /// todo 检查预览图是否是l视图
+  static bool isGalleryPreviewDmL(String response) {
+    final Document document = parse(response);
+    final List<Element> domList =
+        document.querySelectorAll('#dms > div > select > option');
+
+    for (final Element elm in domList) {
+      // logger.v('${elm.attributes["value"]}  ${elm.attributes.keys}');
+      final Map<dynamic, String> attributes = elm.attributes;
+      if (attributes.keys.contains('selected')) {
+        return attributes['value'] == 'l';
+      } else {
+        return true;
+      }
+    }
+    return true;
+  }
+
   /// 解析画廊详情数据
   static Future<GalleryItem> parseGalleryDetail(String response,
       {GalleryItem inGalleryItem}) async {
