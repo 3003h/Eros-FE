@@ -16,7 +16,7 @@ import 'package:fehviewer/pages/gallery_main/view/gallery_favcat.dart';
 import 'package:fehviewer/pages/gallery_main/view/preview_clipper.dart';
 import 'package:fehviewer/route/navigator_util.dart';
 import 'package:fehviewer/route/routes.dart';
-import 'package:fehviewer/utils/cust_lib/selectable_text.dart';
+import 'package:fehviewer/utils/cust_lib/selectable_text_s.dart';
 import 'package:fehviewer/utils/logger.dart';
 import 'package:fehviewer/widget/rating_bar.dart';
 import 'package:flutter/cupertino.dart';

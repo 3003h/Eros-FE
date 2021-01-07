@@ -1,7 +1,7 @@
 import 'dart:async';
 import 'dart:ui' as ui;
 
-import 'package:extended_image/extended_image.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:fehviewer/common/global.dart';
 import 'package:flutter/cupertino.dart';
 
@@ -57,10 +57,9 @@ class _PreviewImageClipperState extends State<PreviewImageClipper> {
     final Map<String, String> _httpHeaders = {
       'Cookie': Global.profile?.user?.cookie ?? '',
     };
-    final ImageStream imageStream = ExtendedNetworkImageProvider(
+    final ImageStream imageStream = CachedNetworkImageProvider(
       imgUrl,
       scale: kScale,
-      cache: true,
       headers: _httpHeaders,
     ).resolve(const ImageConfiguration());
 //    imageStream =

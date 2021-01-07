@@ -1,10 +1,8 @@
 import 'package:get/get.dart';
 import 'package:logger/logger.dart';
-import 'package:logger_flutter/logger_flutter.dart';
 
 final Logger logger = Logger(
   filter: EHLogFilter(),
-  output: ExampleLogOutput(),
   printer: PrettyPrinter(
     // lineLength: 100,
     colors: false,
@@ -13,7 +11,6 @@ final Logger logger = Logger(
 
 final Logger loggerNoStack = Logger(
   filter: EHLogFilter(),
-  output: ExampleLogOutput(),
   printer: PrettyPrinter(
     // lineLength: 100,
     methodCount: 0,
@@ -22,21 +19,12 @@ final Logger loggerNoStack = Logger(
 );
 
 final Logger loggerNoStackTime = Logger(
-  output: ExampleLogOutput(),
   printer: PrettyPrinter(
     methodCount: 0,
     colors: false,
     printTime: true,
   ),
 );
-
-class ExampleLogOutput extends ConsoleOutput {
-  @override
-  void output(OutputEvent event) {
-    super.output(event);
-    LogConsole.add(event);
-  }
-}
 
 class EHLogFilter extends LogFilter {
   @override

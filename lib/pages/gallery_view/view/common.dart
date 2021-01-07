@@ -3,7 +3,6 @@ import 'dart:convert';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:dio/dio.dart';
 import 'package:dio_http_cache/dio_http_cache.dart';
-import 'package:extended_image/extended_image.dart';
 import 'package:fehviewer/common/global.dart';
 import 'package:fehviewer/models/index.dart';
 import 'package:fehviewer/network/gallery_request.dart';
@@ -177,12 +176,6 @@ class GalleryPrecache {
 
   Future<bool> _precacheSingleImage(
       BuildContext context, String url, GalleryPreview preview) async {
-    final ImageProvider imageProviderExt = ExtendedNetworkImageProvider(
-      url,
-      cache: true,
-      retries: 5,
-    );
-
     final ImageProvider imageProvider = CachedNetworkImageProvider(url);
 
     /// 预缓存图片

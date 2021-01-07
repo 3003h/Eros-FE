@@ -1,6 +1,6 @@
-import 'package:fehviewer/utils/cust_lib/selectable_text.dart' as cust;
+import 'package:fehviewer/utils/cust_lib/selectable_text_s.dart';
 import 'package:flutter/gestures.dart';
-import 'package:flutter/material.dart';
+import 'package:flutter/material.dart' hide SelectableText;
 import 'package:linkify/linkify.dart';
 
 export 'package:linkify/linkify.dart'
@@ -238,7 +238,7 @@ class SelectableLinkify extends StatelessWidget {
       linkifiers: linkifiers,
     );
 
-    return cust.SelectableText.rich(
+    return SelectableText.rich(
       buildTextSpan(
         elements,
         style: Theme.of(context).textTheme.bodyText2.merge(style),

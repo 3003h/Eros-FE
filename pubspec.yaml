@@ -6,7 +6,7 @@ publish_to: 'none' # Remove this line if you wish to publish to pub.dev
 version: 1.0.3+91
 
 environment:
-  sdk: '>=2.9.0 <3.0.0'
+  sdk: '>=2.10.0 <3.0.0'
 
 dependencies:
   flutter:
@@ -16,10 +16,11 @@ dependencies:
   flutter_localizations:
     sdk: flutter
 
+#  intl: ^0.17.0-nullsafety.2
   intl: ^0.16.1
 
   # 图标
-  cupertino_icons: ^1.0.0
+#  cupertino_icons: ^1.0.2
   font_awesome_flutter: ^8.11.0
 
   # 网络请求
@@ -33,6 +34,10 @@ dependencies:
 
   #shared_preferences插件 持久化
   shared_preferences: '>=0.5.7+3'
+#  shared_preferences:
+#    git:
+#      url: https://github.com/flutter/plugins.git
+#      path: packages/shared_preferences/shared_preferences
 
   # toast
   oktoast: ^2.3.2
@@ -50,8 +55,16 @@ dependencies:
 
   # webview
   flutter_webview_plugin: ^0.3.11
+#  webview_flutter:
+#    git:
+#      url: https://github.com/flutter/plugins.git
+#      path: packages/webview_flutter
   webview_flutter: ^1.0.7
   flutter_inappwebview: ^4.0.0+4
+#  flutter_inappwebview:
+#    path: /Users/honjow/git/flutter_inappwebview
+
+  html: ^0.14.0+4
 
   # 文字链接
   flutter_linkify: ^4.0.2
@@ -70,14 +83,14 @@ dependencies:
 
   # 图片相关
   cached_network_image: ^2.5.0
-  extended_image: ^1.5.0
+  #extended_image: ^1.5.0
 
   liquid_progress_indicator: ^0.3.2
 
   logger: ^0.9.4
-  logger_flutter:
-    git:
-      url: https://github.com/ewertonrp/logger_flutter.git
+#  logger_flutter:
+#    git:
+#      url: https://github.com/ewertonrp/logger_flutter.git
 
   # 瀑布流
   waterfall_flow: any
@@ -93,13 +106,26 @@ dependencies:
   # 从分享菜单打开
   receive_sharing_intent: ^1.4.2
 
-  device_preview: ^0.5.5
+  #device_preview: ^0.5.5
 
   # 分享
   share: ^0.6.5+4
+#  share:
+#    git:
+#      url: https://github.com/flutter/plugins.git
+#      path: packages/share
+
+  sensors:
+    git:
+      url: https://github.com/flutter/plugins.git
+      path: packages/sensors
 
   # 权限检查
-  permission_handler: ^5.0.1+1
+#  permission_handler: ^5.0.1+1
+  permission_handler:
+    git:
+      url: https://github.com/Baseflow/flutter-permission-handler.git
+      path: permission_handler
 
   flutter_cache_manager: ^2.1.0
 
@@ -141,9 +167,13 @@ dev_dependencies:
   json_to_model: #flutter pub run json_to_model   ### json_model太久不更新了 依赖版本太低
     git:
       url: git://github.com/fadhilx/json_to_model.git
-  build_runner: ^1.9.0
-  json_serializable: ^3.3.0
-  json_annotation: ^3.0.1
+#  json_to_model:
+#    path: /Users/honjow/git/json_to_model
+#  build_runner: ^1.9.0
+#  build_runner:
+#    path: /Users/honjow/git/build/build_runner
+#  json_serializable: ^3.3.0
+#  json_annotation: ^3.0.1
 
 #  intl_translation: ^0.17.10
 

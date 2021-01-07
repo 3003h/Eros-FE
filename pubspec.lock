@@ -72,7 +72,7 @@ packages:
     source: hosted
     version: "1.3.11"
   build_runner:
-    dependency: "direct dev"
+    dependency: transitive
     description:
       name: build_runner
       url: "https://pub.dartlang.org"
@@ -183,13 +183,6 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "0.16.2"
-  cupertino_icons:
-    dependency: "direct main"
-    description:
-      name: cupertino_icons
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "1.0.0"
   dart_style:
     dependency: transitive
     description:
@@ -197,20 +190,6 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "1.3.6"
-  device_frame:
-    dependency: transitive
-    description:
-      name: device_frame
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "0.3.0"
-  device_preview:
-    dependency: "direct main"
-    description:
-      name: device_preview
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "0.5.5"
   dio:
     dependency: "direct main"
     description:
@@ -253,20 +232,6 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "0.1.5"
-  extended_image:
-    dependency: "direct main"
-    description:
-      name: extended_image
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "1.5.0"
-  extended_image_library:
-    dependency: transitive
-    description:
-      name: extended_image_library
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "0.3.1"
   extended_list_library:
     dependency: transitive
     description:
@@ -375,13 +340,6 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "0.5.7"
-  flutter_svg:
-    dependency: transitive
-    description:
-      name: flutter_svg
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "0.19.1"
   flutter_test:
     dependency: "direct dev"
     description: flutter
@@ -449,7 +407,7 @@ packages:
     source: hosted
     version: "0.2.0"
   html:
-    dependency: transitive
+    dependency: "direct main"
     description:
       name: html
       url: "https://pub.dartlang.org"
@@ -469,13 +427,6 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "0.12.2"
-  http_client_helper:
-    dependency: transitive
-    description:
-      name: http_client_helper
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "0.2.1"
   http_multi_server:
     dependency: transitive
     description:
@@ -526,14 +477,14 @@ packages:
     source: hosted
     version: "0.6.2"
   json_annotation:
-    dependency: "direct dev"
+    dependency: transitive
     description:
       name: json_annotation
       url: "https://pub.dartlang.org"
     source: hosted
     version: "3.1.1"
   json_serializable:
-    dependency: "direct dev"
+    dependency: transitive
     description:
       name: json_serializable
       url: "https://pub.dartlang.org"
@@ -578,15 +529,6 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "0.9.4"
-  logger_flutter:
-    dependency: "direct main"
-    description:
-      path: "."
-      ref: HEAD
-      resolved-ref: "3872e8d9261ec70663725aca24591ff9636a3861"
-      url: "https://github.com/ewertonrp/logger_flutter.git"
-    source: git
-    version: "0.9.0"
   logging:
     dependency: transitive
     description:
@@ -622,13 +564,6 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "1.0.0+1"
-  nested:
-    dependency: transitive
-    description:
-      name: nested
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "0.0.4"
   node_interop:
     dependency: transitive
     description:
@@ -671,20 +606,6 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "1.8.0-nullsafety.1"
-  path_drawing:
-    dependency: transitive
-    description:
-      name: path_drawing
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "0.4.1+1"
-  path_parsing:
-    dependency: transitive
-    description:
-      name: path_parsing
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "0.1.4"
   path_provider:
     dependency: transitive
     description:
@@ -730,9 +651,11 @@ packages:
   permission_handler:
     dependency: "direct main"
     description:
-      name: permission_handler
-      url: "https://pub.dartlang.org"
-    source: hosted
+      path: permission_handler
+      ref: HEAD
+      resolved-ref: eb7ef50a35be6023948147c08178844a317430d5
+      url: "https://github.com/Baseflow/flutter-permission-handler.git"
+    source: git
     version: "5.0.1+1"
   permission_handler_platform_interface:
     dependency: transitive
@@ -790,13 +713,6 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "3.0.13"
-  provider:
-    dependency: transitive
-    description:
-      name: provider
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "4.3.2+3"
   pub_semver:
     dependency: transitive
     description:
@@ -847,12 +763,14 @@ packages:
     source: hosted
     version: "0.1.8"
   sensors:
-    dependency: transitive
+    dependency: "direct main"
     description:
-      name: sensors
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "0.4.2+6"
+      path: "packages/sensors"
+      ref: HEAD
+      resolved-ref: "43ee609f0262ac3c74712971b2bf73160216f520"
+      url: "https://github.com/flutter/plugins.git"
+    source: git
+    version: "0.4.2+8"
   share:
     dependency: "direct main"
     description:

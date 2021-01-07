@@ -1,4 +1,3 @@
-import 'package:device_preview/device_preview.dart';
 import 'package:fehviewer/common/global.dart';
 import 'package:fehviewer/common/service/dns_service.dart';
 import 'package:fehviewer/common/service/ehconfig_service.dart';
@@ -47,13 +46,7 @@ void main() {
     Get.lazyPut(() => FavController());
     Get.lazyPut(() => GStore());
 
-    runApp(
-      DevicePreview(
-        // enabled: Global.inDebugMode,
-        enabled: false,
-        builder: (BuildContext context) => MyApp(), // Wrap your app
-      ),
-    );
+    runApp(MyApp());
   }).catchError((e, stack) {
     logger.e('$e \n $stack');
   });
@@ -100,7 +93,6 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
         initialRoute: EHRoutes.root,
         theme: theme,
         locale: locale,
-        builder: DevicePreview.appBuilder,
         logWriterCallback: loggerGetx,
         // ignore: prefer_const_literals_to_create_immutables
         supportedLocales: <Locale>[
