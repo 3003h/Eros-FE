@@ -116,8 +116,12 @@ class GalleryDetailParser {
               '';
         }
 
+        // 可编辑
         bool _canEdit = false;
+
+        // 可评论
         bool _canVote = false;
+
         int _vote = 0;
         String _id = '';
         final Element _c4 = comment.querySelector('div.c2 > div.c4.nosel');
@@ -233,6 +237,31 @@ class GalleryDetailParser {
     final String _ratingImageClass = _ratingImage.attributes['class'];
     galleryItem.isRatinged =
         _ratingImageClass.contains(RegExp(r'"ir\s+ir[a-z]"'));
+
+    // 收藏次数
+    final String _favCount =
+        document.querySelector('#favcount').text.replaceFirstMapped(
+              RegExp(r'(\d+).+'),
+              (Match m) => m.group(1),
+            );
+    galleryItem.favoritedCount = _favCount;
+
+    final String _ratingCount = document.querySelector('#rating_count').text;
+    galleryItem.ratingCount = _ratingCount;
+
+    final String _language = document
+        .querySelector('#gdd > table > tbody > tr:nth-child(3) > td.gdt2')
+        .text
+        .replaceFirstMapped(
+          RegExp(r'(\w+).*'),
+          (Match m) => m.group(1),
+        );
+    galleryItem.language = _language;
+
+    final String _fileSize = document
+        .querySelector('#gdd > table > tbody > tr:nth-child(4) > td.gdt2')
+        .text;
+    galleryItem.filesizeText = _fileSize;
 
     return galleryItem;
   }

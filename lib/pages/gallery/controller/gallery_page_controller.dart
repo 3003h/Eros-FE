@@ -210,6 +210,7 @@ class GalleryPageController extends GetxController
         });
       }
 
+      update(['header']);
       return galleryItem;
     } on DioError catch (e) {
       if (e.type == DioErrorType.RESPONSE && e.response.statusCode == 404) {

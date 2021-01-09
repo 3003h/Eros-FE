@@ -430,8 +430,12 @@ class Api {
       Map reqMap = {'gidlist': _group[i], 'method': 'gdata'};
       final String reqJsonStr = jsonEncode(reqMap);
 
+      logger.d(reqJsonStr);
+
       await CustomHttpsProxy.instance.init();
       final rult = await getGalleryApi(reqJsonStr, refresh: refresh);
+
+      // logger.d('$rult');
 
       final jsonObj = jsonDecode(rult.toString());
       final tempList = jsonObj['gmetadata'];
@@ -478,11 +482,6 @@ class Api {
       });
 
       /// 判断获取语言标识
-      // galleryItems[i].translated = '';
-      // if (tags.contains('translated')) {
-      //   logger.v('hase translated');
-      //   galleryItems[i].translated = EHUtils.getLangeage(tags[0]);
-      // }
       if (tags.isNotEmpty) {
         galleryItems[i].translated = EHUtils.getLangeage(tags[0]) ?? '';
       }

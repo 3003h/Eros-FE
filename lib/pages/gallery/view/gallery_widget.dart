@@ -21,6 +21,7 @@ import 'package:fehviewer/utils/logger.dart';
 import 'package:fehviewer/widget/rating_bar.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart' hide SelectableText;
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
 
 const double kHeightPreview = 180.0;
@@ -41,6 +42,11 @@ class GalleryHeader extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final TextStyle _hearTextStyle = TextStyle(
+      fontSize: 13,
+      color: CupertinoDynamicColor.resolve(CupertinoColors.label, context),
+    );
+
     return Container(
       margin: const EdgeInsets.all(kPadding),
       child: Column(
@@ -80,19 +86,96 @@ class GalleryHeader extends StatelessWidget {
               ],
             ),
           ),
-          Container(
-            padding: const EdgeInsets.only(top: 8.0),
-            child: Row(
-              // ignore: prefer_const_literals_to_create_immutables
-              children: <Widget>[
-                // 评分
-                GalleryRating(rating: galleryItem.rating),
-                const Spacer(),
-                // 类型
-                GalleryCategory(category: galleryItem.category),
-              ],
-            ),
-          ),
+          GetBuilder<GalleryPageController>(
+              init: GalleryPageController(),
+              tag: pageCtrlDepth,
+              id: 'header',
+              builder: (GalleryPageController controller) {
+                return GestureDetector(
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: <Widget>[
+                      Container(
+                        padding: const EdgeInsets.symmetric(vertical: 8.0),
+                        child: Row(
+                          crossAxisAlignment: CrossAxisAlignment.end,
+                          // ignore: prefer_const_literals_to_create_immutables
+                          children: <Widget>[
+                            // 评分
+                            GalleryRating(rating: galleryItem.rating),
+                            // 收藏次数
+                            Padding(
+                              padding:
+                                  const EdgeInsets.symmetric(horizontal: 4),
+                              child:
+                                  Text(controller.galleryItem.ratingCount ?? '',
+                                      style: TextStyle(
+                                        fontSize: 10,
+                                        color: CupertinoDynamicColor.resolve(
+                                            CupertinoColors.secondaryLabel,
+                                            context),
+                                      )),
+                            ),
+                            const Spacer(),
+                            // 类型
+                            GalleryCategory(category: galleryItem.category),
+                          ],
+                        ),
+                      ),
+                      Row(
+                        children: [
+                          Text(
+                            controller.galleryItem.language ?? '',
+                            style: _hearTextStyle,
+                          ),
+                          const Spacer(),
+                          Icon(
+                            FontAwesomeIcons.images,
+                            size: 14,
+                            color: CupertinoDynamicColor.resolve(
+                                CupertinoColors.secondaryLabel, context),
+                          ),
+                          const SizedBox(width: 6),
+                          Text(
+                            controller.galleryItem.filecount ?? '',
+                            style: _hearTextStyle,
+                          ),
+                          const Spacer(),
+                          Text(
+                            controller.galleryItem.filesizeText ?? '',
+                            style: _hearTextStyle,
+                          ),
+                        ],
+                      ).marginSymmetric(vertical: 4),
+                      Row(
+                        children: <Widget>[
+                          const Text('❤️', style: TextStyle(fontSize: 14)),
+                          GetBuilder(
+                              init: GalleryPageController(),
+                              tag: pageCtrlDepth,
+                              id: 'header',
+                              builder: (GalleryPageController controller) {
+                                return Padding(
+                                  padding:
+                                      const EdgeInsets.symmetric(horizontal: 4),
+                                  child: Text(
+                                      controller.galleryItem.favoritedCount ??
+                                          '',
+                                      style: _hearTextStyle),
+                                );
+                              }),
+                          const Spacer(),
+                          Text(
+                            galleryItem.postTime,
+                            style: _hearTextStyle,
+                          ),
+                        ],
+                      ),
+                      // const Text('...'),
+                    ],
+                  ),
+                ).paddingSymmetric(horizontal: 8);
+              }),
         ],
       ),
     );
