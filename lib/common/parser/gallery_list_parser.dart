@@ -231,28 +231,7 @@ class GalleryListParser {
         favcat = EHConst.favCat[favcatColor] ?? '';
       }
 
-      // safeMode检查
-      if (Platform.isIOS && ehConfigService.isSafeMode.value) {
-        if (category.trim() == 'Non-H') {
-          _gallaryItems.add(
-            GalleryItem()
-              ..gid = gid
-              ..token = token
-              ..englishTitle = title
-              ..imgUrl = imgUrl ?? ''
-              ..imgHeight = imageHeight
-              ..imgWidth = imageWidth
-              ..url = url
-              ..category = category
-              ..simpleTags = simpleTags
-              ..postTime = postTimeLocal
-              ..ratingFallBack = ratingFB
-              ..isRatinged = isRatinged
-              ..favTitle = favTitle
-              ..favcat = favcat,
-          );
-        }
-      } else {
+      void _addIiem() {
         _gallaryItems.add(
           GalleryItem()
             ..gid = gid
@@ -270,6 +249,15 @@ class GalleryListParser {
             ..favTitle = favTitle
             ..favcat = favcat,
         );
+      }
+
+      // safeMode检查
+      if (Platform.isIOS && ehConfigService.isSafeMode.value) {
+        if (category.trim() == 'Non-H') {
+          _addIiem();
+        }
+      } else {
+        _addIiem();
       }
     }
 

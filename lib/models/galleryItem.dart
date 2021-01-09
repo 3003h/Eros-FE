@@ -28,12 +28,17 @@ class GalleryItem {
   String language;
   String filecount;
   double rating;
+  String ratingCount;
   String torrentcount;
   List<GalleryTorrent> torrents;
   int filesize;
+  String filesizeText;
+  String visible;
+  String parent;
   double ratingFallBack;
   String numberOfReviews;
   String postTime;
+  String favoritedCount;
   String favTitle;
   String favcat;
   bool localFav;
