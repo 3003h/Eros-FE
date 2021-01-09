@@ -1,6 +1,6 @@
 import 'package:fehviewer/models/base/extension.dart';
 import 'package:fehviewer/models/index.dart';
-import 'package:fehviewer/pages/gallery_view/controller/view_controller.dart';
+import 'package:fehviewer/pages/image_view/controller/view_controller.dart';
 import 'package:fehviewer/store/gallery_store.dart';
 import 'package:get/get.dart';
 

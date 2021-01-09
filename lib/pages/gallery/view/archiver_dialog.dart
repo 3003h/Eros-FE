@@ -1,6 +1,6 @@
 import 'package:fehviewer/common/service/depth_service.dart';
 import 'package:fehviewer/generated/l10n.dart';
-import 'package:fehviewer/pages/gallery_main/controller/archiver_controller.dart';
+import 'package:fehviewer/pages/gallery/controller/archiver_controller.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -109,7 +109,7 @@ Future<void> showArchiverDialog() {
       context: Get.overlayContext,
       builder: (_) {
         return CupertinoAlertDialog(
-          title: const Text('Archiver'),
+          title: Text(S.of(Get.context).p_Archiver),
           content: Container(
             child: const ArchiverView(),
           ),

@@ -1,10 +1,10 @@
 import 'package:fehviewer/common/service/depth_service.dart';
 import 'package:fehviewer/models/index.dart';
-import 'package:fehviewer/pages/gallery_main/controller/archiver_controller.dart';
-import 'package:fehviewer/pages/gallery_main/controller/comment_controller.dart';
-import 'package:fehviewer/pages/gallery_main/controller/gallery_page_controller.dart';
-import 'package:fehviewer/pages/gallery_main/controller/rate_controller.dart';
-import 'package:fehviewer/pages/gallery_main/controller/torrent_controller.dart';
+import 'package:fehviewer/pages/gallery/controller/archiver_controller.dart';
+import 'package:fehviewer/pages/gallery/controller/comment_controller.dart';
+import 'package:fehviewer/pages/gallery/controller/gallery_page_controller.dart';
+import 'package:fehviewer/pages/gallery/controller/rate_controller.dart';
+import 'package:fehviewer/pages/gallery/controller/torrent_controller.dart';
 import 'package:get/get.dart';
 
 class GalleryBinding extends Bindings {

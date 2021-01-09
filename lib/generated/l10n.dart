@@ -896,6 +896,16 @@ class S {
     );
   }
 
+  /// `Archiver`
+  String get p_Archiver {
+    return Intl.message(
+      'Archiver',
+      name: 'p_Archiver',
+      desc: '',
+      args: [],
+    );
+  }
+
   /// `Download`
   String get p_Download {
     return Intl.message(
@@ -916,13 +926,13 @@ class S {
     );
   }
 
-  /// `Torrent ({count})`
-  String p_Torrent(Object count) {
+  /// `Torrent`
+  String get p_Torrent {
     return Intl.message(
-      'Torrent ($count)',
+      'Torrent',
       name: 'p_Torrent',
       desc: '',
-      args: [count],
+      args: [],
     );
   }
 

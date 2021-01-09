@@ -21,9 +21,7 @@ class MessageLookup extends MessageLookupByLibrary {
 
   static m0(site) => "当前 ${site}";
 
-  static m1(count) => "种子 (${count})";
-
-  static m2(rating) => "${rating} ⭐";
+  static m1(rating) => "${rating} ⭐";
 
   final messages = _notInlinedMessages(_notInlinedMessages);
   static _notInlinedMessages(_) => <String, Function> {
@@ -78,10 +76,11 @@ class MessageLookup extends MessageLookupByLibrary {
     "off" : MessageLookupByLibrary.simpleMessage("关闭"),
     "ok" : MessageLookupByLibrary.simpleMessage("确定"),
     "on" : MessageLookupByLibrary.simpleMessage("打开"),
+    "p_Archiver" : MessageLookupByLibrary.simpleMessage("归档"),
     "p_Download" : MessageLookupByLibrary.simpleMessage("下载"),
     "p_Rate" : MessageLookupByLibrary.simpleMessage("评分"),
     "p_Similar" : MessageLookupByLibrary.simpleMessage("相似"),
-    "p_Torrent" : m1,
+    "p_Torrent" : MessageLookupByLibrary.simpleMessage("种子"),
     "passwd" : MessageLookupByLibrary.simpleMessage("密码"),
     "pls_i_passwd" : MessageLookupByLibrary.simpleMessage("请输入密码"),
     "pls_i_username" : MessageLookupByLibrary.simpleMessage("请输入用户名"),
@@ -107,7 +106,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "s_Show_Expunged_Galleries" : MessageLookupByLibrary.simpleMessage("搜索被删除的画廊"),
     "s_and" : MessageLookupByLibrary.simpleMessage("到"),
     "s_pages" : MessageLookupByLibrary.simpleMessage("页数"),
-    "s_stars" : m2,
+    "s_stars" : m1,
     "search" : MessageLookupByLibrary.simpleMessage("搜索"),
     "setting_on_website" : MessageLookupByLibrary.simpleMessage("网页上的设置"),
     "show_filter" : MessageLookupByLibrary.simpleMessage("显示筛选"),

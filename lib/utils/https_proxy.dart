@@ -154,16 +154,17 @@ class ClientConnectionHandler {
           hex.contains(EHUtils.stringToHex('ehgt.org')) ||
           hex.contains(EHUtils.stringToHex('hath.network'))) {
         logger.i('client hello [$hex]');
-        final String _newHex = hex;
-        // .replaceFirst(EHUtils.stringToHex('e-hentai.org'),
-        //     EHUtils.stringToHex('xxxxxxxxxxxx'))
+        // final String _newHex = hex.replaceFirst(
+        //     EHUtils.stringToHex('e-hentai.org'),
+        //     EHUtils.stringToHex('12345678.org'));
         // .replaceFirst(EHUtils.stringToHex('exhentai.org'),
-        //     EHUtils.stringToHex('xxxxxxxxxxxx'));
+        //     EHUtils.stringToHex('xxxxxxxxxxxx'))
         // .replaceFirst(EHUtils.stringToHex('ehgt.org'),
         //     EHUtils.stringToHex('xxxxxxxx'))
         // .replaceFirst(EHUtils.stringToHex('hath.network'),
         //     EHUtils.stringToHex('xxxxxxxxxxxx'));
-        data = EHUtils.createUint8ListFromHexString(_newHex);
+
+        data = EHUtils.createUint8ListFromHexString(hex);
       }
 
       try {

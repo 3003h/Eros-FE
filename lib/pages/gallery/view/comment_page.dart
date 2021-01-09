@@ -4,7 +4,7 @@ import 'package:fehviewer/common/service/depth_service.dart';
 import 'package:fehviewer/common/service/theme_service.dart';
 import 'package:fehviewer/generated/l10n.dart';
 import 'package:fehviewer/models/galleryComment.dart';
-import 'package:fehviewer/pages/gallery_main/controller/comment_controller.dart';
+import 'package:fehviewer/pages/gallery/controller/comment_controller.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';

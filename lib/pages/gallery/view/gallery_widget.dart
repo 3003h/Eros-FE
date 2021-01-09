@@ -8,12 +8,12 @@ import 'package:fehviewer/const/theme_colors.dart';
 import 'package:fehviewer/generated/l10n.dart';
 import 'package:fehviewer/models/galleryItem.dart';
 import 'package:fehviewer/models/index.dart';
-import 'package:fehviewer/pages/gallery_main/controller/comment_controller.dart';
-import 'package:fehviewer/pages/gallery_main/controller/gallery_page_controller.dart';
-import 'package:fehviewer/pages/gallery_main/view/all_preview_page.dart';
-import 'package:fehviewer/pages/gallery_main/view/comment_item.dart';
-import 'package:fehviewer/pages/gallery_main/view/gallery_favcat.dart';
-import 'package:fehviewer/pages/gallery_main/view/preview_clipper.dart';
+import 'package:fehviewer/pages/gallery/controller/comment_controller.dart';
+import 'package:fehviewer/pages/gallery/controller/gallery_page_controller.dart';
+import 'package:fehviewer/pages/gallery/view/all_preview_page.dart';
+import 'package:fehviewer/pages/gallery/view/comment_item.dart';
+import 'package:fehviewer/pages/gallery/view/gallery_favcat.dart';
+import 'package:fehviewer/pages/gallery/view/preview_clipper.dart';
 import 'package:fehviewer/route/navigator_util.dart';
 import 'package:fehviewer/route/routes.dart';
 import 'package:fehviewer/utils/cust_lib/selectable_text_s.dart';
@@ -391,6 +391,8 @@ class GalleryRating extends StatelessWidget {
           size: 18.0,
           rate: rating ?? 0,
           radiusRatio: 1.5,
+          colorDark: CupertinoDynamicColor.resolve(
+              CupertinoColors.systemGrey3, context),
         ),
       ],
     );
@@ -525,14 +527,13 @@ class TopComment extends StatelessWidget {
         // 评论按钮
         CupertinoButton(
           minSize: 0,
-          padding: const EdgeInsets.fromLTRB(8, 4, 8, 4),
+          padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 8),
           child: Text(
             S.of(Get.context).all_comment,
             style: const TextStyle(fontSize: 16),
           ),
           onPressed: () {
             Get.toNamed(EHRoutes.galleryComment);
-            // NavigatorUtil.goCommitPage();
           },
         ),
       ],
@@ -582,7 +583,7 @@ class MorePreviewButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return CupertinoButton(
       minSize: 0,
-      padding: const EdgeInsets.fromLTRB(0, 4, 0, 30),
+      padding: const EdgeInsets.symmetric(vertical: 40, horizontal: 20),
       child: Text(
         hasMorePreview
             ? S.of(Get.context).morePreviews
@@ -590,7 +591,10 @@ class MorePreviewButton extends StatelessWidget {
         style: const TextStyle(fontSize: 16),
       ),
       onPressed: () {
-        Get.to(const AllPreviewPage(), transition: Transition.cupertino);
+        Get.to(
+          const AllPreviewPage(),
+          transition: Transition.cupertino,
+        );
       },
     );
   }

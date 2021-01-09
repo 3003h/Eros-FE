@@ -110,7 +110,7 @@ class EhUserManager {
 
   /// 通过网页登录的处理
   /// 处理cookie
-  /// 以及获取用户名
+  /// 以及获取名字等
   Future<User> signInByWeb(Map cookieMap) async {
     // key value去空格
     cookieMap = cookieMap.map((key, value) {
@@ -132,7 +132,7 @@ class EhUserManager {
     cookieJar.saveFromResponse(Uri.parse(EHConst.EX_BASE_URL), cookies);
     await _getExIgneous();
 
-    final String username = await _getUserName(cookieMap['ipb_member_id']);
+    final String nickame = await _getUserName(cookieMap['ipb_member_id']);
 
     //获取Ex cookies
     final List<Cookie> cookiesEx =
@@ -155,7 +155,7 @@ class EhUserManager {
 
     final User user = User()
       ..cookie = cookieStr
-      ..username = username;
+      ..username = nickame;
 
     return user;
   }
@@ -224,7 +224,7 @@ class EhUserManager {
 
     // logger.v('$response');
 
-    final RegExp regExp = RegExp(r'Viewing Profile: (\S+)</div');
+    final RegExp regExp = RegExp(r'Viewing Profile: (.+?)</div');
     final String username = regExp.firstMatch('$response').group(1);
 
     logger.v('username $username');

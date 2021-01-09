@@ -6,7 +6,7 @@ import 'package:fehviewer/common/service/depth_service.dart';
 import 'package:fehviewer/common/service/ehconfig_service.dart';
 import 'package:fehviewer/generated/l10n.dart';
 import 'package:fehviewer/pages/controller/fav_controller.dart';
-import 'package:fehviewer/pages/gallery_main/controller/gallery_page_controller.dart';
+import 'package:fehviewer/pages/gallery/controller/gallery_page_controller.dart';
 import 'package:fehviewer/pages/item/controller/galleryitem_controller.dart';
 import 'package:fehviewer/utils/logger.dart';
 import 'package:fehviewer/utils/vibrate.dart';

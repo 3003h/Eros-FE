@@ -18,7 +18,7 @@ import 'package:fehviewer/const/const.dart';
 import 'package:fehviewer/generated/l10n.dart';
 import 'package:fehviewer/models/galleryItem.dart';
 import 'package:fehviewer/models/index.dart';
-import 'package:fehviewer/pages/gallery_main/controller/archiver_controller.dart';
+import 'package:fehviewer/pages/gallery/controller/archiver_controller.dart';
 import 'package:fehviewer/utils/dio_util.dart';
 import 'package:fehviewer/utils/https_proxy.dart';
 import 'package:fehviewer/utils/logger.dart';
