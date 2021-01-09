@@ -1,10 +1,10 @@
 import 'package:fehviewer/common/service/depth_service.dart';
 import 'package:fehviewer/generated/l10n.dart';
 import 'package:fehviewer/models/index.dart';
-import 'package:fehviewer/pages/gallery_main/controller/gallery_page_controller.dart';
-import 'package:fehviewer/pages/gallery_main/view/gallery_widget.dart';
-import 'package:fehviewer/pages/gallery_main/view/rate_dialog.dart';
-import 'package:fehviewer/pages/gallery_main/view/torrent_dialog.dart';
+import 'package:fehviewer/pages/gallery/controller/gallery_page_controller.dart';
+import 'package:fehviewer/pages/gallery/view/gallery_widget.dart';
+import 'package:fehviewer/pages/gallery/view/rate_dialog.dart';
+import 'package:fehviewer/pages/gallery/view/torrent_dialog.dart';
 import 'package:fehviewer/pages/tab/view/gallery_base.dart';
 import 'package:fehviewer/route/navigator_util.dart';
 import 'package:fehviewer/utils/logger.dart';
@@ -119,7 +119,6 @@ class GalleryContainer extends StatelessWidget {
     final GalleryPageController controller = Get.find(tag: pageCtrlDepth);
 
     Widget _getDetail(GalleryItem state) {
-      const double minWidth = 100.0;
       final List _w = <Widget>[
         Expanded(
           child: Obx(() => TextBtn(
@@ -143,7 +142,7 @@ class GalleryContainer extends StatelessWidget {
         Expanded(
           child: TextBtn(
             FontAwesomeIcons.magnet,
-            title: S.of(context).p_Torrent('${state.torrentcount ?? 0}'),
+            title: '${S.of(context).p_Torrent}(${state.torrentcount ?? 0})',
             onTap: state.torrents.isNotEmpty
                 ? () async {
                     showTorrentDialog();
@@ -154,7 +153,7 @@ class GalleryContainer extends StatelessWidget {
         Expanded(
           child: TextBtn(
             FontAwesomeIcons.solidFileArchive,
-            title: 'Archiver',
+            title: S.of(Get.context).p_Archiver,
             onTap: () async {
               showArchiverDialog();
             },

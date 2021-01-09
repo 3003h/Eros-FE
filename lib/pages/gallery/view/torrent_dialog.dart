@@ -2,7 +2,7 @@ import 'package:fehviewer/common/service/depth_service.dart';
 import 'package:fehviewer/const/const.dart';
 import 'package:fehviewer/generated/l10n.dart';
 import 'package:fehviewer/models/galleryTorrent.dart';
-import 'package:fehviewer/pages/gallery_main/controller/torrent_controller.dart';
+import 'package:fehviewer/pages/gallery/controller/torrent_controller.dart';
 import 'package:fehviewer/utils/logger.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -85,7 +85,7 @@ Future<void> showTorrentDialog() {
       context: Get.overlayContext,
       builder: (_) {
         return CupertinoAlertDialog(
-          title: const Text('Torrent'),
+          title: Text(S.of(Get.context).p_Torrent),
           content: Container(
             child: const TorrentView(),
           ),

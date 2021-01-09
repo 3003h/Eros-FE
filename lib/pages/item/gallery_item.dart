@@ -198,13 +198,16 @@ class GalleryItemWidget extends StatelessWidget {
               size: 20.0,
               rate: _galleryItemController.galleryItem.rating,
               radiusRatio: 1.5,
+              colorDark: CupertinoDynamicColor.resolve(
+                  CupertinoColors.systemGrey3, Get.context),
             ),
           ),
           Text(
             _galleryItemController?.galleryItem?.rating.toString(),
-            style: const TextStyle(
+            style: TextStyle(
               fontSize: 13,
-              color: CupertinoColors.systemGrey,
+              color: CupertinoDynamicColor.resolve(
+                  CupertinoColors.systemGrey, Get.context),
             ),
           ),
         ],

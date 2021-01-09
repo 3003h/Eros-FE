@@ -1,4 +1,4 @@
-import 'package:fehviewer/pages/gallery_main/view/comment_page.dart';
+import 'package:fehviewer/pages/gallery/view/comment_page.dart';
 import 'package:fehviewer/pages/login/login_page.dart';
 import 'package:fehviewer/pages/login/web_login.dart';
 import 'package:fehviewer/pages/setting/about_page.dart';

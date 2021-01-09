@@ -65,7 +65,7 @@ class _GalleryCatButtonState extends State<GalleryCatButton> {
       child: GestureDetector(
         onLongPress: () => widget.onLongPress(),
         child: CupertinoButton(
-          padding: const EdgeInsets.all(0.0),
+          padding: const EdgeInsets.all(2.0),
           onPressed: _pressBtn,
           pressedOpacity: 1.0,
           child: Text(
@@ -102,7 +102,12 @@ class _GalleryCatButtonState extends State<GalleryCatButton> {
 /// 最终控制搜索的cat字段
 class GalleryCatFilter extends StatefulWidget {
   const GalleryCatFilter(
-      {Key key, this.value, this.onChanged, this.margin, this.padding})
+      {Key key,
+      this.value,
+      this.onChanged,
+      this.margin,
+      this.padding,
+      this.crossAxisCount = 2})
       : super(key: key);
 
   final EdgeInsetsGeometry margin;
@@ -114,6 +119,8 @@ class GalleryCatFilter extends StatefulWidget {
 
   /// 值变化的回调
   final ValueChanged<int> onChanged;
+
+  final int crossAxisCount;
 
   @override
   _GalleryCatFilterState createState() => _GalleryCatFilterState();
@@ -171,7 +178,7 @@ class _GalleryCatFilterState extends State<GalleryCatFilter> {
       child: GridView.count(
         shrinkWrap: true,
         physics: const NeverScrollableScrollPhysics(),
-        crossAxisCount: 2,
+        crossAxisCount: widget.crossAxisCount,
         childAspectRatio: 3.6,
         mainAxisSpacing: 4.0,
         crossAxisSpacing: 4.0,
@@ -212,28 +219,40 @@ class AdvanceSearchSwitchItem extends StatelessWidget {
 /// 设置类型筛选
 /// 弹出toast 全局维护cat的值
 Future<void> showFilterSetting() async {
-  final EhConfigService ehConfigService = Get.find();
+  final EhConfigService _ehConfigService = Get.find();
   return showCupertinoModalPopup<void>(
     context: Get.overlayContext,
     builder: (BuildContext context) {
       return CupertinoAlertDialog(
         title: Text(S.of(context).search),
         content: GalleryFilterView(
-          catNum: ehConfigService.catFilter.value,
+          catNum: _ehConfigService.catFilter.value,
           catNumChanged: (int toNum) {
-            ehConfigService.catFilter.value = toNum;
+            _ehConfigService.catFilter.value = toNum;
           },
         ),
-        // actions: <Widget>[
-        //   CupertinoDialogAction(
-        //     child: Text(S.of(context).ok),
-        //     onPressed: () {
-        //       Get.back();
-        //     },
-        //   ),
-        // ],
         actions: [],
       );
+      // return CupertinoActionSheet(
+      //   title: Text(S.of(context).search),
+      //   actions: [
+      //     Padding(
+      //       padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 30),
+      //       child: GalleryFilterView(
+      //         catCrossAxisCount: 3,
+      //         catNum: _ehConfigService.catFilter.value,
+      //         catNumChanged: (int toNum) {
+      //           _ehConfigService.catFilter.value = toNum;
+      //         },
+      //       ),
+      //     ),
+      //   ],
+      //   cancelButton: CupertinoActionSheetAction(
+      //       onPressed: () {
+      //         Get.back();
+      //       },
+      //       child: Text(S.of(context).cancel)),
+      // );
     },
   );
 }

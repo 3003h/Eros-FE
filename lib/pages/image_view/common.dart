@@ -6,7 +6,7 @@ import 'package:dio_http_cache/dio_http_cache.dart';
 import 'package:fehviewer/common/global.dart';
 import 'package:fehviewer/models/index.dart';
 import 'package:fehviewer/network/gallery_request.dart';
-import 'package:fehviewer/pages/gallery_main/controller/gallery_page_controller.dart';
+import 'package:fehviewer/pages/gallery/controller/gallery_page_controller.dart';
 import 'package:fehviewer/utils/https_proxy.dart';
 import 'package:fehviewer/utils/logger.dart';
 import 'package:flutter/cupertino.dart';

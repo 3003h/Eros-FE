@@ -43,7 +43,7 @@ void main() {
 
     Get.lazyPut(() => QuickSearchController(), fenix: true);
     Get.lazyPut(() => AdvanceSearchController(), fenix: true);
-    Get.lazyPut(() => FavController());
+    Get.lazyPut(() => FavController(), fenix: true);
     Get.lazyPut(() => GStore());
 
     runApp(MyApp());

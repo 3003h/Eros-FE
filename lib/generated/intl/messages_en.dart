@@ -21,9 +21,7 @@ class MessageLookup extends MessageLookupByLibrary {
 
   static m0(site) => "Current ${site}";
 
-  static m1(count) => "Torrent (${count})";
-
-  static m2(rating) => "${rating} ⭐";
+  static m1(rating) => "${rating} ⭐";
 
   final messages = _notInlinedMessages(_notInlinedMessages);
   static _notInlinedMessages(_) => <String, Function> {
@@ -78,10 +76,11 @@ class MessageLookup extends MessageLookupByLibrary {
     "off" : MessageLookupByLibrary.simpleMessage("Off"),
     "ok" : MessageLookupByLibrary.simpleMessage("OK"),
     "on" : MessageLookupByLibrary.simpleMessage("On"),
+    "p_Archiver" : MessageLookupByLibrary.simpleMessage("Archiver"),
     "p_Download" : MessageLookupByLibrary.simpleMessage("Download"),
     "p_Rate" : MessageLookupByLibrary.simpleMessage("Rate"),
     "p_Similar" : MessageLookupByLibrary.simpleMessage("Similar"),
-    "p_Torrent" : m1,
+    "p_Torrent" : MessageLookupByLibrary.simpleMessage("Torrent"),
     "passwd" : MessageLookupByLibrary.simpleMessage("Password"),
     "pls_i_passwd" : MessageLookupByLibrary.simpleMessage("Please enter your password"),
     "pls_i_username" : MessageLookupByLibrary.simpleMessage("Please enter user name"),
@@ -107,7 +106,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "s_Show_Expunged_Galleries" : MessageLookupByLibrary.simpleMessage("Show Expunged Galleries"),
     "s_and" : MessageLookupByLibrary.simpleMessage("and"),
     "s_pages" : MessageLookupByLibrary.simpleMessage("pages"),
-    "s_stars" : m2,
+    "s_stars" : m1,
     "search" : MessageLookupByLibrary.simpleMessage("Search"),
     "setting_on_website" : MessageLookupByLibrary.simpleMessage("Setting on website"),
     "show_filter" : MessageLookupByLibrary.simpleMessage("Show filter"),

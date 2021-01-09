@@ -2,7 +2,7 @@ import 'package:fehviewer/common/service/depth_service.dart';
 import 'package:fehviewer/common/service/ehconfig_service.dart';
 import 'package:fehviewer/const/theme_colors.dart';
 import 'package:fehviewer/models/index.dart';
-import 'package:fehviewer/pages/gallery_main/controller/comment_controller.dart';
+import 'package:fehviewer/pages/gallery/controller/comment_controller.dart';
 import 'package:fehviewer/route/navigator_util.dart';
 import 'package:fehviewer/utils/cust_lib/flutter_linkify.dart' as linkify;
 import 'package:fehviewer/utils/logger.dart';
