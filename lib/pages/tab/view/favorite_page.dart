@@ -22,21 +22,18 @@ class FavoriteTab extends GetView<FavoriteViewController> {
   @override
   Widget build(BuildContext context) {
     final UserController userController = Get.find();
-    return CupertinoTheme(
-      data: const CupertinoThemeData(primaryColor: CupertinoColors.activeBlue),
-      child: CupertinoPageScaffold(
-        child: Obx(() {
-          if (userController.isLogin) {
-            if (controller.title.value == null ||
-                controller.title.value.isEmpty) {
-              controller.title.value = S.of(context).all_Favorites;
-            }
-            return _buildNetworkFavView(context);
-          } else {
-            return _buildLocalFavView();
+    return CupertinoPageScaffold(
+      child: Obx(() {
+        if (userController.isLogin) {
+          if (controller.title.value == null ||
+              controller.title.value.isEmpty) {
+            controller.title.value = S.of(context).all_Favorites;
           }
-        }),
-      ),
+          return _buildNetworkFavView(context);
+        } else {
+          return _buildLocalFavView();
+        }
+      }),
     );
   }
 
