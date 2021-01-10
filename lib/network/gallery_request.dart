@@ -213,6 +213,7 @@ class Api {
 
     final Options _cacheOptions = getCacheOptions(forceRefresh: refresh);
 
+    logger.d('${params}');
     await CustomHttpsProxy.instance.init();
     String response =
         await getHttpManager().get(url, options: _cacheOptions, params: params);
@@ -229,9 +230,9 @@ class Api {
       // 重设排序方式
       logger.d('重设排序方式为 $_order');
       params['inline_set'] = _order;
-      await getHttpManager().get(url,
+      params.removeWhere((key, value) => key == 'page');
+      response = await getHttpManager().get(url,
           options: getCacheOptions(forceRefresh: true), params: params);
-      response = await getHttpManager().get(url, options: _cacheOptions);
     }
 
     // 列表样式检查 不符合则重新设置
@@ -245,12 +246,13 @@ class Api {
     } else {
       logger.d('列表样式重设 inline_set=dm_l');
       params['inline_set'] = 'dm_l';
-      final String response = await getHttpManager()
-          .get(url, options: _cacheOptions, params: params);
+      params.removeWhere((key, value) => key == 'page');
+      final String response = await getHttpManager().get(url,
+          options: getCacheOptions(forceRefresh: true), params: params);
       return await GalleryListParser.parseGalleryList(
         response,
         isFavorite: true,
-        refresh: refresh,
+        refresh: true,
       );
     }
   }
