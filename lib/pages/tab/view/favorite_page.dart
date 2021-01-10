@@ -5,8 +5,11 @@ import 'package:fehviewer/models/entity/favorite.dart';
 import 'package:fehviewer/models/index.dart';
 import 'package:fehviewer/pages/tab/controller/enum.dart';
 import 'package:fehviewer/pages/tab/controller/favorite_controller.dart';
+import 'package:fehviewer/pages/tab/controller/search_page_controller.dart';
+import 'package:fehviewer/pages/tab/controller/tabhome_controller.dart';
 import 'package:fehviewer/pages/tab/view/gallery_base.dart';
 import 'package:fehviewer/pages/tab/view/tab_base.dart';
+import 'package:fehviewer/route/navigator_util.dart';
 import 'package:fehviewer/route/routes.dart';
 import 'package:fehviewer/utils/logger.dart';
 import 'package:flutter/cupertino.dart';
@@ -52,6 +55,22 @@ class FavoriteTab extends GetView<FavoriteViewController> {
             mainAxisSize: MainAxisSize.min,
             mainAxisAlignment: MainAxisAlignment.end,
             children: [
+              // 搜索按钮
+              CupertinoButton(
+                minSize: 40,
+                padding: const EdgeInsets.all(0),
+                child: const Icon(
+                  FontAwesomeIcons.search,
+                  size: 20,
+                ),
+                onPressed: () {
+                  final bool fromTabItem =
+                      Get.find<TabHomeController>().tabMap[tabIndex] ?? false;
+                  NavigatorUtil.showSearch(
+                      searchType: SearchType.favorite,
+                      fromTabItem: fromTabItem);
+                },
+              ),
               CupertinoButton(
                 padding: const EdgeInsets.all(0.0),
                 minSize: 36,
@@ -151,7 +170,7 @@ class FavoriteTab extends GetView<FavoriteViewController> {
                   return GestureDetector(
                     onTap: controller.loadDataMore,
                     child: Column(
-                      children:  <Widget>[
+                      children: <Widget>[
                         const Icon(
                           Icons.error,
                           size: 40,

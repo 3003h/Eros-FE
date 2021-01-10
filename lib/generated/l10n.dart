@@ -1,7 +1,6 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-
 import 'intl/messages_all.dart';
 
 // **************************************************************************
@@ -681,6 +680,36 @@ class S {
     return Intl.message(
       'Disable default filters',
       name: 's_Disable_default_filters',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Search Name`
+  String get s_Search_Fav_Name {
+    return Intl.message(
+      'Search Name',
+      name: 's_Search_Fav_Name',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Search Tags`
+  String get s_Search_Fav_Tags {
+    return Intl.message(
+      'Search Tags',
+      name: 's_Search_Fav_Tags',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Search Note`
+  String get s_Search_Fav_Note {
+    return Intl.message(
+      'Search Note',
+      name: 's_Search_Fav_Note',
       desc: '',
       args: [],
     );

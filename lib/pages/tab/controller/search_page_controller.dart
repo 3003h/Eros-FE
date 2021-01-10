@@ -12,10 +12,12 @@ import 'package:get/get.dart';
 import 'package:tuple/tuple.dart';
 
 import 'enum.dart';
+import 'favorite_controller.dart';
 
 enum SearchType {
   normal,
   watched,
+  favorite,
 }
 
 class SearchPageController extends GetxController
@@ -41,10 +43,6 @@ class SearchPageController extends GetxController
   int get curPage => _curPage.value;
   set curPage(int val) => _curPage.value = val;
 
-  // final RxBool _isLoadMore = false.obs;
-  // bool get isLoadMore => _isLoadMore.value;
-  // set isLoadMore(bool val) => _isLoadMore.value = val;
-
   final Rx<PageState> _pageState = PageState.None.obs;
   PageState get pageState => _pageState.value;
   set pageState(PageState val) => _pageState.value = val;
@@ -60,6 +58,8 @@ class SearchPageController extends GetxController
 
   final EhConfigService _ehConfigService = Get.find();
   final QuickSearchController quickSearchController = Get.find();
+
+  final FavoriteViewController _favoriteViewController = Get.find();
 
   bool get isSearchBarComp => _ehConfigService.isSearchBarComp.value;
   set isSearchBarComp(bool val) => _ehConfigService.isSearchBarComp.value = val;
@@ -118,14 +118,22 @@ class SearchPageController extends GetxController
       pageState = PageState.Loading;
 
       final String fromGid = state.last.gid;
-      final Tuple2<List<GalleryItem>, int> tuple = await Api.getGallery(
-        page: curPage + 1,
-        fromGid: fromGid,
-        cats: _catNum,
-        serach: _search,
-        searchType: searchType,
-        refresh: true,
-      );
+      final Tuple2<List<GalleryItem>, int> tuple =
+          searchType != SearchType.favorite
+              ? await Api.getGallery(
+                  page: curPage + 1,
+                  fromGid: fromGid,
+                  cats: _catNum,
+                  serach: _search,
+                  searchType: searchType,
+                  refresh: true,
+                )
+              : await Api.getFavorite(
+                  page: curPage + 1,
+                  favcat: _favoriteViewController.curFavcat,
+                  serach: _search,
+                  refresh: true,
+                );
       final List<GalleryItem> gallerItemBeans = tuple.item1;
 
       state.addAll(gallerItemBeans);
@@ -145,12 +153,19 @@ class SearchPageController extends GetxController
 
     logger.v('_loadDataFirst');
 
-    final Tuple2<List<GalleryItem>, int> tuple = await Api.getGallery(
-      cats: _catNum,
-      serach: _search,
-      refresh: refresh,
-      searchType: searchType,
-    );
+    final Tuple2<List<GalleryItem>, int> tuple =
+        searchType != SearchType.favorite
+            ? await Api.getGallery(
+                cats: _catNum,
+                serach: _search,
+                refresh: refresh,
+                searchType: searchType,
+              )
+            : await Api.getFavorite(
+                favcat: _favoriteViewController.curFavcat,
+                serach: _search,
+                refresh: refresh,
+              );
     final List<GalleryItem> gallerItemBeans = tuple.item1;
     maxPage = tuple.item2;
     return gallerItemBeans;
@@ -162,16 +177,34 @@ class SearchPageController extends GetxController
     final int _catNum = _ehConfigService.catFilter.value;
 
     change(state, status: RxStatus.loading());
-    Api.getGallery(
-      page: page,
-      cats: _catNum,
-      serach: _search,
-      refresh: true,
-      searchType: searchType,
-    ).then((tuple) {
-      curPage = page;
-      change(tuple.item1, status: RxStatus.success());
-    });
+    final Tuple2<List<GalleryItem>, int> tuple =
+        searchType != SearchType.favorite
+            ? await Api.getGallery(
+                page: page,
+                cats: _catNum,
+                serach: _search,
+                refresh: true,
+                searchType: searchType,
+              )
+            : await Api.getFavorite(
+                page: page,
+                favcat: _favoriteViewController.curFavcat,
+                serach: _search,
+                refresh: true,
+              );
+    curPage = page;
+    change(tuple.item1, status: RxStatus.success());
+
+    // Api.getGallery(
+    //   page: page,
+    //   cats: _catNum,
+    //   serach: _search,
+    //   refresh: true,
+    //   searchType: searchType,
+    // ).then((Tuple2<List<GalleryItem>, int> tuple) {
+    //   curPage = page;
+    //   change(tuple.item1, status: RxStatus.success());
+    // });
   }
 
   /// 页码跳转的控制器

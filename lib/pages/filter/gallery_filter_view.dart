@@ -28,11 +28,12 @@ class GalleryFilterView extends StatelessWidget {
   final ValueChanged<int> catNumChanged;
   final GalleryFilterController filterController;
   final AdvanceSearchController advanceSearchController = Get.find();
-  SearchPageController _searchPageController;
+
   final int catCrossAxisCount;
 
   @override
   Widget build(BuildContext context) {
+    SearchPageController _searchPageController;
     if (int.parse(searchPageCtrlDepth) > 0) {
       _searchPageController = Get.find(tag: searchPageCtrlDepth);
     }
@@ -42,22 +43,18 @@ class GalleryFilterView extends StatelessWidget {
           advanceSearchController.advanceSearch;
 
       final List<Widget> _listDft = <Widget>[
-        GalleryCatFilter(
-          // padding: const EdgeInsets.symmetric(vertical: 4.0),
-          value: catNum,
-          onChanged: catNumChanged,
-          crossAxisCount: catCrossAxisCount,
-          padding: const EdgeInsets.symmetric(vertical: 8),
-        ),
         if (int.parse(searchPageCtrlDepth) > 0)
-          Row(
+          Column(
+            mainAxisSize: MainAxisSize.min,
             children: [
-              Text(S.of(context).search_type),
-              const Spacer(),
               CupertinoSlidingSegmentedControl<SearchType>(
                 children: <SearchType, Widget>{
-                  SearchType.normal: Text(S.of(context).tab_gallery),
-                  SearchType.watched: Text(S.of(context).tab_watched),
+                  SearchType.normal: Text(S.of(context).tab_gallery)
+                      .marginSymmetric(horizontal: 8),
+                  SearchType.watched: Text(S.of(context).tab_watched)
+                      .marginSymmetric(horizontal: 8),
+                  SearchType.favorite: Text(S.of(context).tab_favorite)
+                      .marginSymmetric(horizontal: 8),
                 },
                 groupValue:
                     _searchPageController.searchType ?? SearchType.normal,
@@ -67,36 +64,75 @@ class GalleryFilterView extends StatelessWidget {
               ),
             ],
           ),
-        Container(
-          child: Row(
-            children: <Widget>[
-              Text(S.of(context).s_Advanced_Options),
-              Transform.scale(
-                scale: 0.8,
-                child: CupertinoSwitch(
-                  value: advanceSearchController.enableAdvance,
-                  onChanged: (bool value) {
-                    logger.d(' onChanged to $value');
-                    advanceSearchController.enableAdvance = value;
-                  },
-                ),
-              ),
-              const Spacer(),
-              Offstage(
-                offstage: !advanceSearchController.enableAdvance,
-                child: CupertinoButton(
-                    // padding: const EdgeInsets.only(right: 8),
-                    // minSize: 20,
-                    child: Text(
-                      S.of(context).clear_filter,
-                      style: const TextStyle(height: 1, fontSize: 14),
-                    ),
-                    onPressed: () {
-                      advanceSearchController.reset();
-                    }),
-              ),
-            ],
+        if (_searchPageController?.searchType != SearchType.favorite ?? true)
+          GalleryCatFilter(
+            // padding: const EdgeInsets.symmetric(vertical: 4.0),
+            value: catNum,
+            onChanged: catNumChanged,
+            crossAxisCount: catCrossAxisCount,
+            padding: const EdgeInsets.symmetric(vertical: 8),
           ),
+        if (_searchPageController?.searchType != SearchType.favorite ?? true)
+          Container(
+            child: Row(
+              children: <Widget>[
+                Text(S.of(context).s_Advanced_Options),
+                Transform.scale(
+                  scale: 0.8,
+                  child: CupertinoSwitch(
+                    value: advanceSearchController.enableAdvance,
+                    onChanged: (bool value) {
+                      logger.d(' onChanged to $value');
+                      advanceSearchController.enableAdvance = value;
+                    },
+                  ),
+                ),
+                const Spacer(),
+                Offstage(
+                  offstage: !advanceSearchController.enableAdvance,
+                  child: CupertinoButton(
+                      // padding: const EdgeInsets.only(right: 8),
+                      // minSize: 20,
+                      child: Text(
+                        S.of(context).clear_filter,
+                        style: const TextStyle(height: 1, fontSize: 14),
+                      ),
+                      onPressed: () {
+                        advanceSearchController.reset();
+                      }),
+                ),
+              ],
+            ),
+          ),
+      ];
+
+      final List<Widget> _listFav = <Widget>[
+        AdvanceSearchSwitchItem(
+          title: S.of(context).s_Search_Fav_Name,
+          value: _advanceSearch.value.favSearchName ?? true,
+          onChanged: (bool value) {
+            _advanceSearch.update((_advanceSearch) {
+              _advanceSearch.favSearchName = value;
+            });
+          },
+        ),
+        AdvanceSearchSwitchItem(
+          title: S.of(context).s_Search_Fav_Tags,
+          value: _advanceSearch.value.favSearchTags ?? true,
+          onChanged: (bool value) {
+            _advanceSearch.update((_advanceSearch) {
+              _advanceSearch.favSearchTags = value;
+            });
+          },
+        ),
+        AdvanceSearchSwitchItem(
+          title: S.of(context).s_Search_Fav_Note,
+          value: _advanceSearch.value.favSearchNote ?? true,
+          onChanged: (bool value) {
+            _advanceSearch.update((_advanceSearch) {
+              _advanceSearch.favSearchNote = value;
+            });
+          },
         ),
       ];
 
@@ -292,13 +328,21 @@ class GalleryFilterView extends StatelessWidget {
         // const SizedBox(height: 50)
       ];
 
-      if (advanceSearchController.enableAdvance) {
+      if (advanceSearchController.enableAdvance &&
+              _searchPageController?.searchType != SearchType.favorite ??
+          true) {
         _listDft.addAll(_listAdv);
+      } else if (_searchPageController?.searchType == SearchType.favorite ??
+          false) {
+        _listDft.addAll(_listFav);
       }
 
       return AnimatedContainer(
-        height:
-            advanceSearchController.enableAdvance ? kAdvanceHeight : kHeight,
+        height: advanceSearchController.enableAdvance &&
+                    _searchPageController?.searchType != SearchType.favorite ??
+                true
+            ? kAdvanceHeight
+            : kHeight,
         // height: context.height / 2,
         duration: const Duration(milliseconds: 500),
         curve: Curves.ease,

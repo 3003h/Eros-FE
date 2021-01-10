@@ -14,5 +14,8 @@
   "endPage": "",
   "disableDFLanguage": false,
   "disableDFUploader": false,
-  "disableDFTags": false
+  "disableDFTags": false,
+  "favSearchName": true,
+  "favSearchTags": true,
+  "favSearchNote": true
 }
