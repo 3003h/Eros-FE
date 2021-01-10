@@ -1,15 +1,17 @@
 import 'package:fehviewer/common/controller/advance_search_controller.dart';
+import 'package:fehviewer/common/service/depth_service.dart';
 import 'package:fehviewer/generated/l10n.dart';
 import 'package:fehviewer/models/index.dart';
 import 'package:fehviewer/pages/filter/filter.dart';
 import 'package:fehviewer/pages/tab/controller/gallery_filter_controller.dart';
+import 'package:fehviewer/pages/tab/controller/search_page_controller.dart';
 import 'package:fehviewer/utils/logger.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
 
-const double kHeight = 220.0;
+const double kHeight = 260.0;
 const double kAdvanceHeight = 480.0;
 
 /// 高级搜索
@@ -26,10 +28,15 @@ class GalleryFilterView extends StatelessWidget {
   final ValueChanged<int> catNumChanged;
   final GalleryFilterController filterController;
   final AdvanceSearchController advanceSearchController = Get.find();
+  SearchPageController _searchPageController;
   final int catCrossAxisCount;
 
   @override
   Widget build(BuildContext context) {
+    if (int.parse(searchPageCtrlDepth) > 0) {
+      _searchPageController = Get.find(tag: searchPageCtrlDepth);
+    }
+
     return Obx(() {
       final Rx<AdvanceSearch> _advanceSearch =
           advanceSearchController.advanceSearch;
@@ -40,7 +47,26 @@ class GalleryFilterView extends StatelessWidget {
           value: catNum,
           onChanged: catNumChanged,
           crossAxisCount: catCrossAxisCount,
+          padding: const EdgeInsets.symmetric(vertical: 8),
         ),
+        if (int.parse(searchPageCtrlDepth) > 0)
+          Row(
+            children: [
+              Text(S.of(context).search_type),
+              const Spacer(),
+              CupertinoSlidingSegmentedControl<SearchType>(
+                children: <SearchType, Widget>{
+                  SearchType.normal: Text(S.of(context).tab_gallery),
+                  SearchType.watched: Text(S.of(context).tab_watched),
+                },
+                groupValue:
+                    _searchPageController.searchType ?? SearchType.normal,
+                onValueChanged: (SearchType value) {
+                  _searchPageController.searchType = value;
+                },
+              ),
+            ],
+          ),
         Container(
           child: Row(
             children: <Widget>[
@@ -152,31 +178,32 @@ class GalleryFilterView extends StatelessWidget {
                       .advanceSearch.value.searchWithminRating ??
                   false)
                 CupertinoSlidingSegmentedControl<int>(
-                    // ignore: prefer_const_literals_to_create_immutables
-                    children: <int, Widget>{
-                      2: Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                        child: Text(S.of(context).s_stars('2')),
-                      ),
-                      3: Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                        child: Text(S.of(context).s_stars('3')),
-                      ),
-                      4: Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                        child: Text(S.of(context).s_stars('4')),
-                      ),
-                      5: Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                        child: Text(S.of(context).s_stars('5')),
-                      ),
-                    },
-                    groupValue: _advanceSearch.value.minRating ?? 2,
-                    onValueChanged: (int value) {
-                      _advanceSearch.update((_advanceSearch) {
-                        _advanceSearch.minRating = value;
-                      });
-                    }),
+                  // ignore: prefer_const_literals_to_create_immutables
+                  children: <int, Widget>{
+                    2: Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                      child: Text(S.of(context).s_stars('2')),
+                    ),
+                    3: Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                      child: Text(S.of(context).s_stars('3')),
+                    ),
+                    4: Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                      child: Text(S.of(context).s_stars('4')),
+                    ),
+                    5: Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                      child: Text(S.of(context).s_stars('5')),
+                    ),
+                  },
+                  groupValue: _advanceSearch.value.minRating ?? 2,
+                  onValueChanged: (int value) {
+                    _advanceSearch.update((_advanceSearch) {
+                      _advanceSearch.minRating = value;
+                    });
+                  },
+                ),
             ],
           ),
         ),

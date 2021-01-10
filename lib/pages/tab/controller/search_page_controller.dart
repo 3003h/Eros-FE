@@ -6,13 +6,21 @@ import 'package:fehviewer/models/index.dart';
 import 'package:fehviewer/network/gallery_request.dart';
 import 'package:fehviewer/pages/tab/view/quick_search_page.dart';
 import 'package:fehviewer/utils/logger.dart';
+import 'package:fehviewer/utils/toast.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
 import 'package:tuple/tuple.dart';
 
+enum SearchType {
+  normal,
+  watched,
+}
+
 class SearchPageController extends GetxController
     with StateMixin<List<GalleryItem>> {
-  SearchPageController();
+  SearchPageController({SearchType searchType = SearchType.normal}) {
+    this.searchType = searchType;
+  }
   SearchPageController.fromText(this.searchText);
   String searchText;
   final String tabIndex = 'search_$searchPageCtrlDepth';
@@ -21,6 +29,11 @@ class SearchPageController extends GetxController
 
   // 搜索内容的控制器
   final TextEditingController searchTextController = TextEditingController();
+
+  // 搜索类型
+  final Rx<SearchType> _searchType = SearchType.normal.obs;
+  SearchType get searchType => _searchType.value;
+  set searchType(SearchType val) => _searchType.value = val;
 
   final RxInt _curPage = 0.obs;
   int get curPage => _curPage.value;
@@ -104,6 +117,7 @@ class SearchPageController extends GetxController
       fromGid: fromGid,
       cats: _catNum,
       serach: _search,
+      searchType: searchType,
       refresh: true,
     );
     final List<GalleryItem> gallerItemBeans = tuple.item1;
@@ -120,28 +134,106 @@ class SearchPageController extends GetxController
 
     logger.v('_loadDataFirst');
 
-    final Tuple2<List<GalleryItem>, int> tuple =
-        await Api.getGallery(cats: _catNum, serach: _search, refresh: refresh);
+    final Tuple2<List<GalleryItem>, int> tuple = await Api.getGallery(
+      cats: _catNum,
+      serach: _search,
+      refresh: refresh,
+      searchType: searchType,
+    );
     final List<GalleryItem> gallerItemBeans = tuple.item1;
-    // state.addAll(gallerItemBeans);
     maxPage = tuple.item2;
     return gallerItemBeans;
   }
 
-  /// 添加当前搜索框内容到快速搜索
-  void addToQuickSearch() {
-    final String _text = searchTextController.text;
-    if (_text.isNotEmpty) {
-      quickSearchController.addText(_text);
-    }
+  Future<void> _loadFromPage(int page) async {
+    logger.v('jump to page =>  $page');
+
+    final int _catNum = _ehConfigService.catFilter.value;
+
+    change(state, status: RxStatus.loading());
+    Api.getGallery(
+      page: page,
+      cats: _catNum,
+      serach: _search,
+      refresh: true,
+      searchType: searchType,
+    ).then((tuple) {
+      curPage = page;
+      change(tuple.item1, status: RxStatus.success());
+    });
   }
 
-  /// 打开快速搜索列表
-  void quickSearchList() {
-    Get.to<String>(
-      QuickSearchListPage(),
-      transition: Transition.cupertino,
-    ).then((String value) => searchTextController.text = value);
+  /// 页码跳转的控制器
+  final TextEditingController _pageController = TextEditingController();
+
+  /// 跳转页码
+  Future<void> jumpToPage() async {
+    void _jump() {
+      final String _input = _pageController.text.trim();
+
+      if (_input.isEmpty) {
+        showToast('输入为空');
+      }
+
+      // 数字检查
+      if (!RegExp(r'(^\d+$)').hasMatch(_input)) {
+        showToast('输入格式有误');
+      }
+
+      final int _toPage = int.parse(_input) - 1;
+      if (_toPage >= 0 && _toPage <= maxPage) {
+        FocusScope.of(Get.context).requestFocus(FocusNode());
+        _loadFromPage(_toPage);
+        Get.back();
+      } else {
+        showToast('输入范围有误');
+      }
+    }
+
+    return showCupertinoDialog<void>(
+      context: Get.overlayContext,
+      // barrierDismissible: false, // user must tap button!
+      builder: (BuildContext context) {
+        return CupertinoAlertDialog(
+          title: const Text('页面跳转'),
+          content: Container(
+            child: Column(
+              children: <Widget>[
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Text('跳转范围 1~$maxPage'),
+                ),
+                CupertinoTextField(
+                  controller: _pageController,
+                  autofocus: true,
+                  keyboardType: TextInputType.number,
+                  onEditingComplete: () {
+                    // 点击键盘完成
+                    // 画廊跳转
+                    _jump();
+                  },
+                )
+              ],
+            ),
+          ),
+          actions: <Widget>[
+            CupertinoDialogAction(
+              child: const Text('取消'),
+              onPressed: () {
+                Get.back();
+              },
+            ),
+            CupertinoDialogAction(
+              child: const Text('确定'),
+              onPressed: () {
+                // 画廊跳转
+                _jump();
+              },
+            ),
+          ],
+        );
+      },
+    );
   }
 
   @override
@@ -163,5 +255,21 @@ class SearchPageController extends GetxController
     searchTextController.dispose();
     Get.find<DepthService>().popSearchPageCtrl();
     super.onClose();
+  }
+
+  /// 添加当前搜索框内容到快速搜索
+  void addToQuickSearch() {
+    final String _text = searchTextController.text;
+    if (_text.isNotEmpty) {
+      quickSearchController.addText(_text);
+    }
+  }
+
+  /// 打开快速搜索列表
+  void quickSearchList() {
+    Get.to<String>(
+      QuickSearchListPage(),
+      transition: Transition.cupertino,
+    ).then((String value) => searchTextController.text = value);
   }
 }

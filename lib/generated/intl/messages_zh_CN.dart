@@ -108,6 +108,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "s_pages" : MessageLookupByLibrary.simpleMessage("页数"),
     "s_stars" : m1,
     "search" : MessageLookupByLibrary.simpleMessage("搜索"),
+    "search_type" : MessageLookupByLibrary.simpleMessage("搜索类型"),
     "setting_on_website" : MessageLookupByLibrary.simpleMessage("网页上的设置"),
     "show_filter" : MessageLookupByLibrary.simpleMessage("显示筛选"),
     "show_jpn_title" : MessageLookupByLibrary.simpleMessage("显示日文标题"),
