@@ -236,14 +236,22 @@ class Api {
     String favcat,
     int page,
     bool refresh = false,
+    String serach,
   }) async {
+    final AdvanceSearchController _searchController = Get.find();
+
     const String url = '/favorites.php';
 
     final Map<String, dynamic> params = <String, dynamic>{
       'page': page ?? 0,
       if (favcat != null && favcat != 'a' && favcat.isNotEmpty)
         'favcat': favcat,
+      if (serach != null) 'f_search': serach,
     };
+
+    if (serach != null) {
+      params.addAll(_searchController.favSearchMap);
+    }
 
     final Options _cacheOptions = getCacheOptions(forceRefresh: refresh);
 

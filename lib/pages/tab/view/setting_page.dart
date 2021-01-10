@@ -27,20 +27,6 @@ class SettingTab extends GetView<SettingViewController> {
             largeTitle: Text(
               _title,
             ),
-            // trailing: CupertinoButton(
-            //   padding: const EdgeInsets.all(0.0),
-            //   child: const Icon(
-            //     FontAwesomeIcons.history,
-            //     size: 22,
-            //   ),
-            //   onPressed: () {
-            //     Get.to(
-            //       const HistoryTab(),
-            //       transition: Transition.cupertino,
-            //     );
-            //   },
-            // ),
-            // transitionBetweenRoutes: true,
           ),
           SliverSafeArea(
               top: false,

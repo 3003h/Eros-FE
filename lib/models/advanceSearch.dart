@@ -22,6 +22,9 @@ class AdvanceSearch {
   bool disableDFLanguage;
   bool disableDFUploader;
   bool disableDFTags;
+  bool favSearchName;
+  bool favSearchTags;
+  bool favSearchNote;
 
   factory AdvanceSearch.fromJson(Map<String, dynamic> json) =>
       _$AdvanceSearchFromJson(json);

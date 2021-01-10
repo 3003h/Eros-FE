@@ -69,6 +69,16 @@ class AdvanceSearchController extends ProfileController {
     };
   }
 
+  Map<String, dynamic> get favSearchMap {
+    final AdvanceSearch val = advanceSearch.value;
+
+    return <String, dynamic>{
+      if (val.favSearchName ?? true) 'sn': 'on',
+      if (val.favSearchTags ?? true) 'st': 'on',
+      if (val.favSearchNote ?? true) 'sf': 'on',
+    };
+  }
+
   @override
   void onInit() {
     super.onInit();
