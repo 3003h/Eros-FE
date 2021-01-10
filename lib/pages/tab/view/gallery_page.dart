@@ -1,5 +1,6 @@
 import 'package:custom_pop_up_menu/custom_pop_up_menu.dart';
 import 'package:fehviewer/common/service/ehconfig_service.dart';
+import 'package:fehviewer/generated/l10n.dart';
 import 'package:fehviewer/models/index.dart';
 import 'package:fehviewer/pages/filter/filter.dart';
 import 'package:fehviewer/pages/tab/controller/enum.dart';
@@ -158,15 +159,15 @@ class GalleryListTab extends GetView<GalleryViewController> {
                 return GestureDetector(
                   onTap: controller.loadDataMore,
                   child: Column(
-                    children: const <Widget>[
-                      Icon(
+                    children:  <Widget>[
+                      const Icon(
                         Icons.error,
                         size: 40,
                         color: CupertinoColors.systemRed,
                       ),
                       Text(
-                        'Load failed, tap to retry',
-                        style: TextStyle(
+                        S.of(Get.context).list_load_more_fail,
+                        style: const TextStyle(
                           fontSize: 12,
                         ),
                       ),

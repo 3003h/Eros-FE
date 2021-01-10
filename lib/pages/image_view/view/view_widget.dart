@@ -1,6 +1,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:dio/dio.dart';
 import 'package:fehviewer/common/service/depth_service.dart';
+import 'package:fehviewer/generated/l10n.dart';
 import 'package:fehviewer/models/index.dart';
 import 'package:fehviewer/network/gallery_request.dart';
 import 'package:fehviewer/pages/gallery/controller/gallery_page_controller.dart';
@@ -16,17 +17,15 @@ class GalleryImage extends StatefulWidget {
   const GalleryImage({
     Key key,
     @required this.index,
-    this.downloadComplete,
   }) : super(key: key);
 
   @override
   _GalleryImageState createState() => _GalleryImageState();
   final int index;
-  final ValueChanged<bool> downloadComplete;
 }
 
 class _GalleryImageState extends State<GalleryImage> {
-  // Future<GalleryPreview> _future;
+  Future<GalleryPreview> _future;
   final CancelToken _getMoreCancelToken = CancelToken();
 
   GalleryPageController _pageController;
@@ -35,15 +34,8 @@ class _GalleryImageState extends State<GalleryImage> {
   void initState() {
     super.initState();
     _pageController = Get.find(tag: pageCtrlDepth);
-    // _future = _pageController.getImageInfo(widget.index,
-    //     cancelToken: _getMoreCancelToken);
-
-    // 加载完成后 更新item大小
-    // WidgetsBinding.instance.addPostFrameCallback((Duration a) {
-    //   // print('Frame has been rendered ${widget.index}');
-    //   Get.find<ViewController>()
-    //       .update(['GalleryImage_${widget.index}']);
-    // });
+    _future = _pageController.getImageInfo(widget.index,
+        cancelToken: _getMoreCancelToken);
   }
 
   @override
@@ -57,64 +49,101 @@ class _GalleryImageState extends State<GalleryImage> {
     final GalleryPreview _currentPreview =
         _pageController.galleryItem.galleryPreview[widget.index];
 
-    return FutureBuilder<GalleryPreview>(
-      future: _pageController.getImageInfo(widget.index,
-          cancelToken: _getMoreCancelToken),
-      builder: (_, AsyncSnapshot<GalleryPreview> previewFromApi) {
-        if (_currentPreview.largeImageUrl == null ||
-            _currentPreview.largeImageHeight == null) {
-          if (previewFromApi.connectionState == ConnectionState.done) {
-            if (previewFromApi.hasError) {
-              // todo 加载异常
-              logger.e(' ${previewFromApi.error}');
-              return Center(child: Text('Error: ${previewFromApi.error}'));
+    return GestureDetector(
+      behavior: HitTestBehavior.opaque,
+      onLongPress: () {
+        logger.d('long press');
+
+        showImageSheet(context, _currentPreview.largeImageUrl, () {
+          setState(() {
+            _future = _pageController.getImageInfo(widget.index,
+                cancelToken: _getMoreCancelToken);
+          });
+        });
+      },
+      child: FutureBuilder<GalleryPreview>(
+        future: _future,
+        builder: (_, AsyncSnapshot<GalleryPreview> previewFromApi) {
+          if (_currentPreview.largeImageUrl == null ||
+              _currentPreview.largeImageHeight == null) {
+            if (previewFromApi.connectionState == ConnectionState.done) {
+              if (previewFromApi.hasError) {
+                // todo 加载异常
+                logger.e(' ${previewFromApi.error}');
+                return Container(
+                  alignment: Alignment.center,
+                  constraints: BoxConstraints(
+                    maxHeight: context.width * 0.8,
+                  ),
+                  // padding: const EdgeInsets.symmetric(vertical: 50),
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      const Icon(
+                        Icons.error,
+                        size: 50,
+                        color: Colors.red,
+                      ),
+                      Text(
+                        '${widget.index + 1}',
+                        style: const TextStyle(
+                            color: CupertinoColors.secondarySystemBackground),
+                      ),
+                    ],
+                  ),
+                );
+              } else {
+                _currentPreview.largeImageUrl =
+                    previewFromApi.data.largeImageUrl;
+                _currentPreview.largeImageHeight =
+                    previewFromApi.data.largeImageHeight;
+                _currentPreview.largeImageWidth =
+                    previewFromApi.data.largeImageWidth;
+
+                Future.delayed(const Duration(milliseconds: 100)).then((value) {
+                  Get.find<ViewController>()
+                      .update(['GalleryImage_${widget.index}']);
+                });
+
+                return _buildImage(_currentPreview.largeImageUrl);
+              }
             } else {
-              _currentPreview.largeImageUrl = previewFromApi.data.largeImageUrl;
-              _currentPreview.largeImageHeight =
-                  previewFromApi.data.largeImageHeight;
-              _currentPreview.largeImageWidth =
-                  previewFromApi.data.largeImageWidth;
-
-              Future.delayed(const Duration(milliseconds: 100)).then((value) {
-                Get.find<ViewController>()
-                    .update(['GalleryImage_${widget.index}']);
-              });
-
-              return _buildImage(_currentPreview.largeImageUrl);
+              return UnconstrainedBox(
+                child: Container(
+                  constraints: BoxConstraints(
+                    maxHeight: context.width,
+                  ),
+                  // margin:
+                  //     const EdgeInsets.symmetric(vertical: 50, horizontal: 50),
+                  alignment: Alignment.center,
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: <Widget>[
+                      Text(
+                        '${widget.index + 1}',
+                        style: const TextStyle(
+                          fontSize: 50,
+                          color: CupertinoColors.systemGrey6,
+                        ),
+                      ),
+                      const Text(
+                        '获取中...',
+                        style: TextStyle(
+                          color: CupertinoColors.systemGrey6,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              );
             }
           } else {
-            return UnconstrainedBox(
-              child: Container(
-                margin:
-                    const EdgeInsets.symmetric(vertical: 40, horizontal: 40),
-                alignment: Alignment.center,
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  children: <Widget>[
-                    Text(
-                      '${widget.index + 1}',
-                      style: const TextStyle(
-                        fontSize: 50,
-                        color: CupertinoColors.systemGrey6,
-                      ),
-                    ),
-                    const Text(
-                      '获取中...',
-                      style: TextStyle(
-                        color: CupertinoColors.systemGrey6,
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-            );
+            // 返回图片组件
+            final String url = _currentPreview.largeImageUrl;
+            return _buildImage(url);
           }
-        } else {
-          // 返回图片组件
-          final String url = _currentPreview.largeImageUrl;
-          return _buildImage(url);
-        }
-      },
+        },
+      ),
     );
   }
 
@@ -129,8 +158,12 @@ class _GalleryImageState extends State<GalleryImage> {
           // 下载进度回调
           return UnconstrainedBox(
             child: Container(
+              // height: context.width,
+              constraints: BoxConstraints(
+                maxHeight: context.width,
+              ),
               alignment: Alignment.center,
-              margin: const EdgeInsets.symmetric(vertical: 40, horizontal: 40),
+              // margin: const EdgeInsets.symmetric(vertical: 50, horizontal: 50),
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 mainAxisAlignment: MainAxisAlignment.center,
@@ -284,12 +317,11 @@ Future<void> showShareActionSheet(BuildContext context, String imageUrl) {
       context: context,
       builder: (BuildContext context) {
         final CupertinoActionSheet dialog = CupertinoActionSheet(
-          // title: const Text('分享方式'),
           cancelButton: CupertinoActionSheetAction(
               onPressed: () {
                 Get.back();
               },
-              child: const Text('取消')),
+              child: Text(S.of(context).cancel)),
           actions: <Widget>[
             CupertinoActionSheetAction(
                 onPressed: () {
@@ -310,6 +342,36 @@ Future<void> showShareActionSheet(BuildContext context, String imageUrl) {
                   Api.shareImage(imageUrl);
                 },
                 child: const Text('系统分享')),
+          ],
+        );
+        return dialog;
+      });
+}
+
+Future<void> showImageSheet(
+    BuildContext context, String imageUrl, VoidCallback reload) {
+  return showCupertinoModalPopup<void>(
+      context: context,
+      builder: (BuildContext context) {
+        final CupertinoActionSheet dialog = CupertinoActionSheet(
+          cancelButton: CupertinoActionSheetAction(
+              onPressed: () {
+                Get.back();
+              },
+              child: Text(S.of(context).cancel)),
+          actions: <Widget>[
+            CupertinoActionSheetAction(
+                onPressed: () {
+                  reload();
+                  Get.back();
+                },
+                child: Text(S.of(context).reload_image)),
+            CupertinoActionSheetAction(
+                onPressed: () {
+                  Get.back();
+                  showShareActionSheet(context, imageUrl);
+                },
+                child: Text(S.of(context).share_image)),
           ],
         );
         return dialog;

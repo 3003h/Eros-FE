@@ -15,23 +15,22 @@ import 'intl/messages_all.dart';
 
 class S {
   S();
-
+  
   static S current;
-
-  static const AppLocalizationDelegate delegate = AppLocalizationDelegate();
+  
+  static const AppLocalizationDelegate delegate =
+    AppLocalizationDelegate();
 
   static Future<S> load(Locale locale) {
-    final name = (locale.countryCode?.isEmpty ?? false)
-        ? locale.languageCode
-        : locale.toString();
-    final localeName = Intl.canonicalizedLocale(name);
+    final name = (locale.countryCode?.isEmpty ?? false) ? locale.languageCode : locale.toString();
+    final localeName = Intl.canonicalizedLocale(name); 
     return initializeMessages(localeName).then((_) {
       Intl.defaultLocale = localeName;
       S.current = S();
-
+      
       return S.current;
     });
-  }
+  } 
 
   static S of(BuildContext context) {
     return Localizations.of<S>(context, S);
@@ -1072,6 +1071,36 @@ class S {
     return Intl.message(
       'Search type',
       name: 'search_type',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Reload image`
+  String get reload_image {
+    return Intl.message(
+      'Reload image',
+      name: 'reload_image',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Share image`
+  String get share_image {
+    return Intl.message(
+      'Share image',
+      name: 'share_image',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Load failed, tap to retry`
+  String get list_load_more_fail {
+    return Intl.message(
+      'Load failed, tap to retry',
+      name: 'list_load_more_fail',
       desc: '',
       args: [],
     );

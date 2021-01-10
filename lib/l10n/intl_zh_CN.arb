@@ -102,5 +102,8 @@
   "quick_search": "快速搜索",
   "add_quick_search": "添加搜索",
   "show_filter": "显示筛选",
-  "search_type": "搜索类型"
+  "search_type": "搜索类型",
+  "reload_image": "重新载入图片",
+  "share_image": "分享图片",
+  "list_load_more_fail": "加载失败, 点击重试"
 }

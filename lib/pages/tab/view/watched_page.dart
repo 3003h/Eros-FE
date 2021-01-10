@@ -1,3 +1,4 @@
+import 'package:fehviewer/generated/l10n.dart';
 import 'package:fehviewer/models/index.dart';
 import 'package:fehviewer/pages/filter/filter.dart';
 import 'package:fehviewer/pages/tab/controller/enum.dart';
@@ -122,15 +123,15 @@ class WatchedListTab extends GetView<WatchedViewController> {
                   return GestureDetector(
                     onTap: controller.loadDataMore,
                     child: Column(
-                      children: const <Widget>[
-                        Icon(
+                      children:  <Widget>[
+                        const Icon(
                           Icons.error,
                           size: 40,
                           color: CupertinoColors.systemRed,
                         ),
                         Text(
-                          'Load failed, tap to retry',
-                          style: TextStyle(
+                          S.of(Get.context).list_load_more_fail,
+                          style: const TextStyle(
                             fontSize: 12,
                           ),
                         ),
