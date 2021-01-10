@@ -11,6 +11,8 @@ import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
 import 'package:tuple/tuple.dart';
 
+import 'enum.dart';
+
 enum SearchType {
   normal,
   watched,
@@ -39,9 +41,13 @@ class SearchPageController extends GetxController
   int get curPage => _curPage.value;
   set curPage(int val) => _curPage.value = val;
 
-  final RxBool _isLoadMore = false.obs;
-  bool get isLoadMore => _isLoadMore.value;
-  set isLoadMore(bool val) => _isLoadMore.value = val;
+  // final RxBool _isLoadMore = false.obs;
+  // bool get isLoadMore => _isLoadMore.value;
+  // set isLoadMore(bool val) => _isLoadMore.value = val;
+
+  final Rx<PageState> _pageState = PageState.None.obs;
+  PageState get pageState => _pageState.value;
+  set pageState(PageState val) => _pageState.value = val;
 
   int maxPage = 0;
   String _search = '';
@@ -95,7 +101,7 @@ class SearchPageController extends GetxController
   }
 
   Future<void> loadDataMore({bool cleanSearch = false}) async {
-    if (isLoadMore) {
+    if (pageState == PageState.Loading) {
       return;
     }
 
@@ -108,25 +114,30 @@ class SearchPageController extends GetxController
     // 增加延时 避免build期间进行 setState
     await Future<void>.delayed(const Duration(milliseconds: 100));
 
-    isLoadMore = true;
+    try {
+      pageState = PageState.Loading;
 
-    curPage += 1;
-    final String fromGid = state.last.gid;
-    final Tuple2<List<GalleryItem>, int> tuple = await Api.getGallery(
-      page: curPage,
-      fromGid: fromGid,
-      cats: _catNum,
-      serach: _search,
-      searchType: searchType,
-      refresh: true,
-    );
-    final List<GalleryItem> gallerItemBeans = tuple.item1;
+      final String fromGid = state.last.gid;
+      final Tuple2<List<GalleryItem>, int> tuple = await Api.getGallery(
+        page: curPage + 1,
+        fromGid: fromGid,
+        cats: _catNum,
+        serach: _search,
+        searchType: searchType,
+        refresh: true,
+      );
+      final List<GalleryItem> gallerItemBeans = tuple.item1;
 
-    state.addAll(gallerItemBeans);
+      state.addAll(gallerItemBeans);
 
-    maxPage = tuple.item2;
-    isLoadMore = false;
-    update();
+      maxPage = tuple.item2;
+      curPage += 1;
+      pageState = PageState.None;
+      update();
+    } catch (e, stack) {
+      pageState = PageState.LoadingException;
+      rethrow;
+    }
   }
 
   Future<List<GalleryItem>> _fetchData({bool refresh = false}) async {

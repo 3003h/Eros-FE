@@ -21,7 +21,7 @@ class GalleryItemWidget extends StatelessWidget {
   GalleryItemWidget({@required this.galleryItem, @required this.tabIndex})
       : _galleryItemController = Get.put(
             GalleryItemController.initData(galleryItem, tabIndex: tabIndex),
-            permanent: true,
+            // permanent: true,
             tag: galleryItem.gid);
 
   final GalleryItem galleryItem;

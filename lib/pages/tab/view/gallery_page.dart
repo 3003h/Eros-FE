@@ -2,6 +2,7 @@ import 'package:custom_pop_up_menu/custom_pop_up_menu.dart';
 import 'package:fehviewer/common/service/ehconfig_service.dart';
 import 'package:fehviewer/models/index.dart';
 import 'package:fehviewer/pages/filter/filter.dart';
+import 'package:fehviewer/pages/tab/controller/enum.dart';
 import 'package:fehviewer/pages/tab/controller/gallery_controller.dart';
 import 'package:fehviewer/pages/tab/view/gallery_base.dart';
 import 'package:fehviewer/route/navigator_util.dart';
@@ -142,13 +143,40 @@ class GalleryListTab extends GetView<GalleryViewController> {
   Widget _endIndicator() {
     return SliverToBoxAdapter(
       child: Obx(() => Container(
-            padding: const EdgeInsets.only(top: 50, bottom: 100),
-            child: controller.isLoadMore
-                ? const CupertinoActivityIndicator(
-                    radius: 14,
-                  )
-                : Container(),
-          )),
+          alignment: Alignment.center,
+          padding: const EdgeInsets.only(top: 50, bottom: 100),
+          child: () {
+            switch (controller.pageState) {
+              case PageState.None:
+                return Container();
+              case PageState.Loading:
+                return const CupertinoActivityIndicator(
+                  radius: 14,
+                );
+              case PageState.LoadingException:
+              case PageState.LoadingError:
+                return GestureDetector(
+                  onTap: controller.loadDataMore,
+                  child: Column(
+                    children: const <Widget>[
+                      Icon(
+                        Icons.error,
+                        size: 40,
+                        color: CupertinoColors.systemRed,
+                      ),
+                      Text(
+                        'Load failed, tap to retry',
+                        style: TextStyle(
+                          fontSize: 12,
+                        ),
+                      ),
+                    ],
+                  ),
+                );
+              default:
+                return Container();
+            }
+          }())),
     );
   }
 
