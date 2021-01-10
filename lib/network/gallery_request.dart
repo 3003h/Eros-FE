@@ -97,7 +97,6 @@ class Api {
   /// 获取热门画廊列表
   static Future<Tuple2<List<GalleryItem>, int>> getPopular(
       {bool refresh = false}) async {
-    // const String url = '/popular?inline_set=dm_l';
     const String url = '/popular';
 
     await CustomHttpsProxy.instance.init();
@@ -107,15 +106,22 @@ class Api {
         await getHttpManager().get(url, options: _cacheOptions);
     // logger.d('$response');
 
-    try {
-      final Tuple2<List<GalleryItem>, int> tuple =
-          await GalleryListParser.parseGalleryList(response, refresh: refresh);
-
-      return tuple;
-    } on EhError catch (e) {
-      logger.e('$e');
-      showToast('${e.message}');
-      rethrow;
+    // 列表样式检查 不符合则重新设置
+    final bool isDml = GalleryListParser.isGalleryListDmL(response);
+    if (!isDml) {
+      logger.d('reset inline_set');
+      final String response = await getHttpManager().get(
+        url,
+        options: getCacheOptions(forceRefresh: true),
+        params: <String, dynamic>{
+          'inline_set': 'dm_l',
+        },
+      );
+      return await GalleryListParser.parseGalleryList(response,
+          refresh: refresh);
+    } else {
+      return await GalleryListParser.parseGalleryList(response,
+          refresh: refresh);
     }
   }
 
@@ -150,7 +156,21 @@ class Api {
       params: params,
     );
 
-    return await GalleryListParser.parseGalleryList(response, refresh: refresh);
+    // 列表样式检查 不符合则重新设置
+    final bool isDml = GalleryListParser.isGalleryListDmL(response);
+    if (!isDml) {
+      params['inline_set'] = 'dm_l';
+      final String response = await getHttpManager().get(
+        _url,
+        options: getCacheOptions(forceRefresh: true),
+        params: params,
+      );
+      return await GalleryListParser.parseGalleryList(response,
+          refresh: refresh);
+    } else {
+      return await GalleryListParser.parseGalleryList(response,
+          refresh: refresh);
+    }
   }
 
   /// 获取画廊列表

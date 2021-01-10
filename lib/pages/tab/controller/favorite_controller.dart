@@ -11,6 +11,8 @@ import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
 import 'package:tuple/tuple.dart';
 
+import 'enum.dart';
+
 class FavoriteViewController extends GetxController
     with StateMixin<List<GalleryItem>> {
   RxString title = ''.obs;
@@ -18,9 +20,13 @@ class FavoriteViewController extends GetxController
   RxInt curPage = 0.obs;
   int maxPage = 0;
 
-  final RxBool _isLoadMore = false.obs;
-  bool get isLoadMore => _isLoadMore.value;
-  set isLoadMore(bool val) => _isLoadMore.value = val;
+  // final RxBool _isLoadMore = false.obs;
+  // bool get isLoadMore => _isLoadMore.value;
+  // set isLoadMore(bool val) => _isLoadMore.value = val;
+
+  final Rx<PageState> _pageState = PageState.None.obs;
+  PageState get pageState => _pageState.value;
+  set pageState(PageState val) => _pageState.value = val;
 
   bool enableDelayedLoad = true;
 
@@ -119,26 +125,33 @@ class FavoriteViewController extends GetxController
   }
 
   Future<void> loadDataMore() async {
-    if (isLoadMore) {
+    if (pageState == PageState.Loading) {
       return;
     }
 
     // 增加延时 避免build期间进行 setState
     await Future<void>.delayed(const Duration(milliseconds: 100));
-    isLoadMore = true;
 
-    logger.d('get add list');
-    final Tuple2<List<GalleryItem>, int> tuple = await Api.getFavorite(
-      favcat: curFavcat,
-      page: curPage.value + 1,
-      refresh: true,
-    );
-    curPage += 1;
-    final List<GalleryItem> galleryItemBeans = tuple.item1;
-    logger.d('from $curPage add ${galleryItemBeans.length}');
-    state.addAll(galleryItemBeans);
-    isLoadMore = false;
-    update();
+    try {
+      pageState = PageState.Loading;
+
+      logger.d('get add list');
+      final Tuple2<List<GalleryItem>, int> tuple = await Api.getFavorite(
+        favcat: curFavcat,
+        page: curPage.value + 1,
+        refresh: true,
+      );
+
+      final List<GalleryItem> galleryItemBeans = tuple.item1;
+      logger.d('from $curPage add ${galleryItemBeans.length}');
+      state.addAll(galleryItemBeans);
+      curPage += 1;
+      pageState = PageState.None;
+      update();
+    } catch (e, stack) {
+      pageState = PageState.LoadingException;
+      rethrow;
+    }
   }
 
   /// 跳转页码

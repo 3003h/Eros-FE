@@ -9,6 +9,8 @@ import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
 import 'package:tuple/tuple.dart';
 
+import 'enum.dart';
+
 class WatchedViewController extends GetxController
     with StateMixin<List<GalleryItem>> {
   WatchedViewController({this.cats});
@@ -18,9 +20,13 @@ class WatchedViewController extends GetxController
   RxInt curPage = 0.obs;
   int maxPage = 0;
 
-  final RxBool _isLoadMore = false.obs;
-  bool get isLoadMore => _isLoadMore.value;
-  set isLoadMore(bool val) => _isLoadMore.value = val;
+  // final RxBool _isLoadMore = false.obs;
+  // bool get isLoadMore => _isLoadMore.value;
+  // set isLoadMore(bool val) => _isLoadMore.value = val;
+
+  final Rx<PageState> _pageState = PageState.None.obs;
+  PageState get pageState => _pageState.value;
+  set pageState(PageState val) => _pageState.value = val;
 
   final EhConfigService ehConfigService = Get.find();
 
@@ -77,7 +83,7 @@ class WatchedViewController extends GetxController
   }
 
   Future<void> loadDataMore() async {
-    if (isLoadMore) {
+    if (pageState == PageState.Loading) {
       return;
     }
 
@@ -86,31 +92,36 @@ class WatchedViewController extends GetxController
     // 增加延时 避免build期间进行 setState
     await Future<void>.delayed(const Duration(milliseconds: 100));
 
-    isLoadMore = true;
-
-    logger.d('${state.length}');
-
-    final String fromGid = state.last.gid;
-    final Tuple2<List<GalleryItem>, int> tuple = await Api.getWatched(
-      page: curPage.value + 1,
-      fromGid: fromGid,
-      cats: cats ?? _catNum,
-      refresh: true,
-    );
-    curPage += 1;
-    final List<GalleryItem> galleryItemBeans = tuple.item1;
-
-    if (galleryItemBeans.isNotEmpty &&
-        state.indexWhere((GalleryItem element) =>
-                element.gid == galleryItemBeans.first.gid) ==
-            -1) {
-      state.addAll(galleryItemBeans);
+    try {
+      pageState = PageState.Loading;
 
       logger.d('${state.length}');
-      maxPage = tuple.item2;
+
+      final String fromGid = state.last.gid;
+      final Tuple2<List<GalleryItem>, int> tuple = await Api.getWatched(
+        page: curPage.value + 1,
+        fromGid: fromGid,
+        cats: cats ?? _catNum,
+        refresh: true,
+      );
+      curPage += 1;
+      final List<GalleryItem> galleryItemBeans = tuple.item1;
+
+      if (galleryItemBeans.isNotEmpty &&
+          state.indexWhere((GalleryItem element) =>
+                  element.gid == galleryItemBeans.first.gid) ==
+              -1) {
+        state.addAll(galleryItemBeans);
+
+        logger.d('${state.length}');
+        maxPage = tuple.item2;
+      }
+      pageState = PageState.None;
+      update();
+    } catch (e, stack) {
+      pageState = PageState.LoadingException;
+      rethrow;
     }
-    isLoadMore = false;
-    update();
   }
 
   Future<void> loadFromPage(int page) async {

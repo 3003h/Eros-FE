@@ -23,12 +23,12 @@ class GalleryListParser {
         document.querySelectorAll('#dms > div > select > option');
 
     for (final dom.Element elm in domList) {
-      // logger.v('${elm.attributes["value"]}  ${elm.attributes.keys}');
+      // logger.v('${elm.attributes["value"]} —— ${elm.attributes.keys}');
       final Map<dynamic, String> attributes = elm.attributes;
       if (attributes.keys.contains('selected')) {
         return attributes['value'] == 'l';
       } else {
-        return true;
+        continue;
       }
     }
     return true;

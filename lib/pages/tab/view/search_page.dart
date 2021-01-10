@@ -3,6 +3,7 @@ import 'package:fehviewer/common/service/depth_service.dart';
 import 'package:fehviewer/generated/l10n.dart';
 import 'package:fehviewer/models/index.dart';
 import 'package:fehviewer/pages/filter/filter.dart';
+import 'package:fehviewer/pages/tab/controller/enum.dart';
 import 'package:fehviewer/pages/tab/controller/search_page_controller.dart';
 import 'package:fehviewer/pages/tab/view/gallery_base.dart';
 import 'package:fehviewer/pages/tab/view/tab_base.dart';
@@ -103,11 +104,38 @@ class GallerySearchPage extends StatelessWidget {
     return SliverToBoxAdapter(
       child: Obx(() => Container(
             padding: const EdgeInsets.only(top: 50, bottom: 100),
-            child: controller.isLoadMore
-                ? const CupertinoActivityIndicator(
+            child: () {
+              switch (controller.pageState) {
+                case PageState.None:
+                  return Container();
+                case PageState.Loading:
+                  return const CupertinoActivityIndicator(
                     radius: 14,
-                  )
-                : Container(),
+                  );
+                case PageState.LoadingException:
+                case PageState.LoadingError:
+                  return GestureDetector(
+                    onTap: controller.loadDataMore,
+                    child: Column(
+                      children: const <Widget>[
+                        Icon(
+                          Icons.error,
+                          size: 40,
+                          color: CupertinoColors.systemRed,
+                        ),
+                        Text(
+                          'Load failed, tap to retry',
+                          style: TextStyle(
+                            fontSize: 12,
+                          ),
+                        ),
+                      ],
+                    ),
+                  );
+                default:
+                  return Container();
+              }
+            }(),
           )),
     );
   }
