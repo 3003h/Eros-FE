@@ -108,6 +108,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "s_pages" : MessageLookupByLibrary.simpleMessage("pages"),
     "s_stars" : m1,
     "search" : MessageLookupByLibrary.simpleMessage("Search"),
+    "search_type" : MessageLookupByLibrary.simpleMessage("Search type"),
     "setting_on_website" : MessageLookupByLibrary.simpleMessage("Setting on website"),
     "show_filter" : MessageLookupByLibrary.simpleMessage("Show filter"),
     "show_jpn_title" : MessageLookupByLibrary.simpleMessage("Show japanese title"),

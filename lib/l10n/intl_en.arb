@@ -101,5 +101,6 @@
   "remove_from_favorites": "Remove from favorites",
   "quick_search": "Quick search",
   "add_quick_search": "Add to search",
-  "show_filter": "Show filter"
+  "show_filter": "Show filter",
+  "search_type": "Search type"
 }

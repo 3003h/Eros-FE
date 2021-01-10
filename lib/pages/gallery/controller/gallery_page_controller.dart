@@ -159,6 +159,7 @@ class GalleryPageController extends GetxController
 
   /// 请求数据
   Future<GalleryItem> _fetchData({bool refresh = false}) async {
+    await Future<void>.delayed(const Duration(milliseconds: 200));
     logger.d('fetch data refresh:$refresh');
     try {
       hideNavigationBtn = true;
@@ -166,8 +167,6 @@ class GalleryPageController extends GetxController
       // 检查画廊是否包含在本地收藏中
       final bool _localFav = _isInLocalFav(galleryItem.gid);
       galleryItem.localFav = _localFav;
-
-      await Future<void>.delayed(const Duration(milliseconds: 150));
 
       if (galleryItem.filecount == null || galleryItem.filecount.isEmpty) {
         await Api.getMoreGalleryInfoOne(galleryItem, refresh: refresh);

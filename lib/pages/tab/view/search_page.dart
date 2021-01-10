@@ -173,6 +173,28 @@ class GallerySearchPage extends StatelessWidget {
             ),
             CupertinoButton(
               minSize: 36,
+              padding: const EdgeInsets.only(right: 0),
+              child: ClipRRect(
+                borderRadius: BorderRadius.circular(8),
+                child: Container(
+                  padding: const EdgeInsets.fromLTRB(4, 2, 4, 2),
+                  color: CupertinoDynamicColor.resolve(
+                      CupertinoColors.activeBlue, context),
+                  child: Obx(() => Text(
+                        '${controller.curPage + 1}',
+                        style: TextStyle(
+                            color: CupertinoDynamicColor.resolve(
+                                CupertinoColors.secondarySystemBackground,
+                                context)),
+                      )),
+                ),
+              ),
+              onPressed: () {
+                controller.jumpToPage();
+              },
+            ),
+            CupertinoButton(
+              minSize: 36,
               padding: const EdgeInsets.all(0),
               child: const Icon(
                 FontAwesomeIcons.filter,
@@ -256,7 +278,7 @@ class GallerySearchPage extends StatelessWidget {
               .withOpacity(0.95);
       return CustomPopupMenu(
         child: Container(
-          padding: const EdgeInsets.only(right: 14),
+          padding: const EdgeInsets.only(right: 14, left: 4),
           child: const Icon(
             FontAwesomeIcons.ellipsisH,
             size: 20,
@@ -313,24 +335,34 @@ class GallerySearchPage extends StatelessWidget {
           children: <Widget>[
             CupertinoButton(
               minSize: 40,
-              padding: const EdgeInsets.symmetric(horizontal: 8),
+              padding: const EdgeInsets.only(left: 4),
               child: Text(S.of(context).cancel),
               onPressed: () {
                 Get.back();
               },
             ),
-            // CupertinoButton(
-            //   key: controller.searchMenukey,
-            //   minSize: 40,
-            //   padding: const EdgeInsets.only(right: 4),
-            //   child: const Icon(
-            //     FontAwesomeIcons.ellipsisH,
-            //     size: 20,
-            //   ),
-            //   onPressed: () {
-            //     _menu.show(widgetKey: controller.searchMenukey);
-            //   },
-            // ),
+            CupertinoButton(
+              minSize: 36,
+              padding: const EdgeInsets.only(right: 0),
+              child: ClipRRect(
+                borderRadius: BorderRadius.circular(8),
+                child: Container(
+                  padding: const EdgeInsets.fromLTRB(4, 2, 4, 2),
+                  color: CupertinoDynamicColor.resolve(
+                      CupertinoColors.activeBlue, context),
+                  child: Obx(() => Text(
+                        '${controller.curPage + 1}',
+                        style: TextStyle(
+                            color: CupertinoDynamicColor.resolve(
+                                CupertinoColors.secondarySystemBackground,
+                                context)),
+                      )),
+                ),
+              ),
+              onPressed: () {
+                controller.jumpToPage();
+              },
+            ),
             _buildMenu(),
           ],
         ),

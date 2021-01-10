@@ -19,6 +19,7 @@ import 'package:fehviewer/generated/l10n.dart';
 import 'package:fehviewer/models/galleryItem.dart';
 import 'package:fehviewer/models/index.dart';
 import 'package:fehviewer/pages/gallery/controller/archiver_controller.dart';
+import 'package:fehviewer/pages/tab/controller/search_page_controller.dart';
 import 'package:fehviewer/utils/dio_util.dart';
 import 'package:fehviewer/utils/https_proxy.dart';
 import 'package:fehviewer/utils/logger.dart';
@@ -129,15 +130,24 @@ class Api {
     const String _url = '/watched';
     final Options _cacheOptions = getCacheOptions(forceRefresh: refresh);
 
-    // todo  Watched 的搜索功能待定
+    final Map<String, dynamic> params = <String, dynamic>{
+      'page': page,
+      if (fromGid != null) 'from': fromGid,
+      'f_cats': cats,
+    };
+
+    /// 复用筛选
+    final AdvanceSearchController _searchController = Get.find();
+    if (_searchController.enableAdvance ?? false) {
+      params['advsearch'] = 1;
+      params.addAll(_searchController.advanceSearchMap);
+    }
+
     await CustomHttpsProxy.instance.init();
     final String response = await getHttpManager().get(
       _url,
       options: _cacheOptions,
-      params: <String, dynamic>{
-        'page': page,
-        if (fromGid != null) 'from': fromGid,
-      },
+      params: params,
     );
 
     return await GalleryListParser.parseGalleryList(response, refresh: refresh);
@@ -150,18 +160,22 @@ class Api {
     String serach,
     int cats,
     bool refresh = false,
+    SearchType searchType = SearchType.normal,
   }) async {
     final EhConfigService _ehConfigService = Get.find();
     final bool safeMode = _ehConfigService.isSafeMode.value;
     final AdvanceSearchController _searchController = Get.find();
 
-    const String url = '/';
+    logger.d('${searchType}');
+
+    final String url = searchType == SearchType.watched ? '/watched' : '/';
 
     final Map<String, dynamic> params = <String, dynamic>{
       'page': page ?? 0,
       // 'inline_set': 'dm_l',
       if (safeMode) 'f_cats': 767,
-      if (safeMode) 'parody': 'gundam\$',
+      // 换版本的时候才加上高达限制
+      // if (safeMode) 'f_search': 'parody:gundam\$',
       if (!safeMode && cats != null) 'f_cats': cats,
       if (fromGid != null) 'from': fromGid,
       if (serach != null) 'f_search': serach,

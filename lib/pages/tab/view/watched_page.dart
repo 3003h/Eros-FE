@@ -1,9 +1,14 @@
 import 'package:fehviewer/models/index.dart';
+import 'package:fehviewer/pages/filter/filter.dart';
+import 'package:fehviewer/pages/tab/controller/search_page_controller.dart';
+import 'package:fehviewer/pages/tab/controller/tabhome_controller.dart';
 import 'package:fehviewer/pages/tab/controller/watched_controller.dart';
 import 'package:fehviewer/pages/tab/view/gallery_base.dart';
+import 'package:fehviewer/route/navigator_util.dart';
 import 'package:fehviewer/utils/logger.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
 
 import 'tab_base.dart';
@@ -28,6 +33,34 @@ class WatchedListTab extends GetView<WatchedViewController> {
             mainAxisSize: MainAxisSize.min,
             mainAxisAlignment: MainAxisAlignment.end,
             children: [
+              // 搜索按钮
+              CupertinoButton(
+                minSize: 40,
+                padding: const EdgeInsets.all(0),
+                child: const Icon(
+                  FontAwesomeIcons.search,
+                  size: 20,
+                ),
+                onPressed: () {
+                  final bool fromTabItem =
+                      Get.find<TabHomeController>().tabMap[tabIndex] ?? false;
+                  NavigatorUtil.showSearch(
+                      searchType: SearchType.watched, fromTabItem: fromTabItem);
+                },
+              ),
+              // 筛选按钮
+              CupertinoButton(
+                minSize: 40,
+                padding: const EdgeInsets.all(0),
+                child: const Icon(
+                  FontAwesomeIcons.filter,
+                  size: 20,
+                ),
+                onPressed: () {
+                  // logger.v('${EHUtils.convNumToCatMap(1)}');
+                  showFilterSetting();
+                },
+              ),
               // 页码跳转按钮
               CupertinoButton(
                 minSize: 40,

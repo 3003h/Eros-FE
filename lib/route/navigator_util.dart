@@ -96,12 +96,15 @@ class NavigatorUtil {
   //       CupertinoPageRoute(builder: (BuildContext context) => CommentPage()));
   // }
 
-  static void showSearch() {
-    Get.to(GallerySearchPage(), transition: Transition.fadeIn,
+  /// 打开搜索页面 搜索画廊 搜索关注
+  static void showSearch({SearchType searchType, bool fromTabItem = true}) {
+    logger.d('fromTabItem $fromTabItem');
+    Get.to(GallerySearchPage(),
+        transition: fromTabItem ? Transition.fadeIn : Transition.cupertino,
         binding: BindingsBuilder(() {
       Get.find<DepthService>().pushSearchPageCtrl();
       Get.put(
-        SearchPageController(),
+        SearchPageController(searchType: searchType),
         tag: searchPageCtrlDepth,
       );
     }));

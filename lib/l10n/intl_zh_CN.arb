@@ -101,5 +101,6 @@
   "remove_from_favorites": "从收藏中删除",
   "quick_search": "快速搜索",
   "add_quick_search": "添加搜索",
-  "show_filter": "显示筛选"
+  "show_filter": "显示筛选",
+  "search_type": "搜索类型"
 }
