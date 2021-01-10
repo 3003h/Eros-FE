@@ -207,7 +207,7 @@ class GalleryViewPage extends GetView<ViewController> {
     }
   }
 
-  /// 底栏 todo 高度有点问题 需要重新计算
+  /// 底栏
   Widget _buildBottomBar() {
     final double _max = controller.filecount - 1.0;
     final List<GalleryPreview> previews = controller.previews;
@@ -237,6 +237,7 @@ class GalleryViewPage extends GetView<ViewController> {
             padding: const EdgeInsets.only(left: 10.0),
             child: Row(
               children: <Widget>[
+                // 分享按钮
                 GestureDetector(
                   behavior: HitTestBehavior.opaque,
                   onTap: () {
@@ -287,67 +288,6 @@ class GalleryViewPage extends GetView<ViewController> {
           ),
         ],
       ),
-    );
-  }
-
-  // 竖直浏览布局 不用的方案
-  Widget _buildListView_old() {
-    return ListView.custom(
-      childrenDelegate: ViewChildBuilderDelegate(
-        (BuildContext context, int index) {
-          return ConstrainedBox(
-            constraints: BoxConstraints(
-              minWidth: context.width,
-            ),
-            child: Stack(
-              alignment: Alignment.center,
-              children: <Widget>[
-                Container(
-                  height: () {
-                    try {
-                      return controller.previews[index].largeImageHeight *
-                          (context.width /
-                              controller.previews[index].largeImageWidth);
-                    } on Exception catch (_) {
-                      logger.d('${controller.previews[index].toJson()}');
-                      return controller.previews[index].height *
-                          (context.width / controller.previews[index].width);
-                    } catch (e) {
-                      return null;
-                    }
-                  }(),
-                  width: context.width,
-                  child: GalleryImage(
-                    index: index,
-                  ),
-                ),
-                if (Global.inDebugMode)
-                  Positioned(
-                    left: 10,
-                    top: 10,
-                    child: Text(
-                      '$index',
-                      style: const TextStyle(
-                          fontSize: 50,
-                          fontWeight: FontWeight.bold,
-                          color: Colors.white,
-                          shadows: <Shadow>[
-                            Shadow(
-                              color: Colors.black,
-                              offset: Offset(2, 2),
-                              blurRadius: 4,
-                            )
-                          ]),
-                    ),
-                  ),
-              ],
-            ),
-          );
-        },
-        childCount: controller.previews.length,
-        onDidFinishLayout: controller.onDidFinishLayout,
-      ),
-      // cacheExtent: 0.0,
     );
   }
 

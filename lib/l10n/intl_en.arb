@@ -102,5 +102,8 @@
   "quick_search": "Quick search",
   "add_quick_search": "Add to search",
   "show_filter": "Show filter",
-  "search_type": "Search type"
+  "search_type": "Search type",
+  "reload_image": "Reload image",
+  "share_image": "Share image",
+  "list_load_more_fail": "Load failed, tap to retry"
 }
