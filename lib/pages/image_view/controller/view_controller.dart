@@ -236,7 +236,7 @@ class ViewController extends GetxController {
     if (viewMode != ViewMode.vertical) {
       // 预载
       // logger.v('预载后面 $preload 张图 didChangeDependencies');
-      GalleryPrecache.instance.precacheImages(
+      GalleryPara.instance.precacheImages(
         Get.context,
         _galleryPageController,
         previews: _galleryPageController.previews,
@@ -304,7 +304,7 @@ class ViewController extends GetxController {
 
     logger.d('handOnPageChanged  min');
 
-    GalleryPrecache.instance.precacheImages(
+    GalleryPara.instance.precacheImages(
       Get.context,
       _galleryPageController,
       previews: _galleryPageController.previews,

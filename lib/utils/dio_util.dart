@@ -34,23 +34,14 @@ class HttpManager {
     _dio.interceptors.add(Global.cookieManager);
 
     //添加拦截器
-    // _dio.interceptors.add(Global.netCache);
     if (cache) {
-      _dio.interceptors.add(DioCacheManager(CacheConfig(
-        databasePath: Global.appSupportPath,
-        baseUrl: _baseUrl,
-      )).interceptor);
+      _dio.interceptors.add(DioCacheManager(
+        CacheConfig(
+          databasePath: Global.appSupportPath,
+          baseUrl: _baseUrl,
+        ),
+      ).interceptor);
     }
-
-    // _dio.httpClientAdapter = Http2Adapter(
-    //   ConnectionManager(
-    //     idleTimeout: 10000,
-    //
-    //     /// Ignore bad certificate
-    //     onClientCreate: (_, clientSetting) =>
-    //         clientSetting.onBadCertificate = (_) => true,
-    //   ),
-    // );
 
     (_dio.httpClientAdapter as DefaultHttpClientAdapter).onHttpClientCreate =
         (HttpClient client) {
@@ -63,7 +54,7 @@ class HttpManager {
     };
   }
 
-  final int connectTimeout = 10000;
+  final int connectTimeout = 20000;
   final int receiveTimeout = 10000;
 
   //单例模式

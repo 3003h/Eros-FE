@@ -94,6 +94,10 @@ class Api {
         Get.find<EhConfigService>().isSiteEx.value ?? false);
   }
 
+  static String getSiteFlg() {
+    return (Get.find<EhConfigService>().isSiteEx.value ?? false) ? 'EH' : 'EX';
+  }
+
   /// 获取热门画廊列表
   static Future<Tuple2<List<GalleryItem>, int>> getPopular(
       {bool refresh = false}) async {
@@ -319,7 +323,7 @@ class Api {
     final PersistCookieJar cookieJar = await Api.cookieJar;
     final List<Cookie> cookies = cookieJar.loadForRequest(Uri.parse(inUrl));
     cookies.add(Cookie('nw', '1'));
-    cookieJar.saveFromResponse(Uri.parse(url), cookies);
+    cookieJar.saveFromResponse(Uri.parse(Api.getBaseUrl()), cookies);
 
     logger.i('获取画廊 $url');
     time.showTime('获取画廊');
@@ -784,5 +788,123 @@ class Api {
       logger.e(e.toString());
       rethrow;
     }
+  }
+
+  /// 由api获取画廊图片的信息
+  /// [href] 爬取的页面地址 用来解析gid 和 imgkey
+  /// [showKey] api必须
+  /// [index] 索引 从 1 开始
+  static Future<GalleryPreview> paraImageLageInfoFromApi(
+    String href,
+    String showKey, {
+    int index,
+  }) async {
+    const String url = '/api.php';
+
+    final String cookie = Global.profile?.user?.cookie ?? '';
+
+    final Options options = Options(headers: {
+      'Cookie': cookie,
+    });
+
+//    logger.v('href = $href');
+
+    final RegExp regExp =
+        RegExp(r'https://e[-x]hentai.org/s/([0-9a-z]+)/(\d+)-(\d+)');
+    final RegExpMatch regRult = regExp.firstMatch(href);
+    final int gid = int.parse(regRult.group(2));
+    final String imgkey = regRult.group(1);
+    final int page = int.parse(regRult.group(3));
+
+    final Map<String, Object> reqMap = {
+      'method': 'showpage',
+      'gid': gid,
+      'page': page,
+      'imgkey': imgkey,
+      'showkey': showKey,
+    };
+    final String reqJsonStr = jsonEncode(reqMap);
+
+    // logger.d('$reqJsonStr');
+
+    final Options _cacheOptinos = buildCacheOptions(
+      const Duration(days: 1),
+      maxStale: const Duration(minutes: 1),
+      options: options,
+      subKey: reqJsonStr,
+    );
+
+    await CustomHttpsProxy.instance.init();
+    final Response<dynamic> response = await Api.getHttpManager().postForm(
+      url,
+      options: _cacheOptinos,
+      data: reqJsonStr,
+    );
+
+    // logger.d('$response');
+
+    final dynamic rultJson = jsonDecode('$response');
+
+    final RegExp regImageUrl = RegExp('<img[^>]*src=\"([^\"]+)\" style');
+    final String imageUrl = regImageUrl.firstMatch(rultJson['i3']).group(1);
+    final double width = double.parse(rultJson['x'].toString());
+    final double height = double.parse(rultJson['y'].toString());
+
+//    logger.v('$imageUrl');
+
+    final GalleryPreview _rePreview = GalleryPreview()
+      ..largeImageUrl = imageUrl
+      ..ser = index + 1
+      ..largeImageWidth = width
+      ..largeImageHeight = height;
+    // logger.v('${_rePreview.toJson()}');
+
+    return _rePreview;
+  }
+
+  /// 由api获取画廊图片的信息
+  /// [href] 爬取的页面地址 用来解析gid 和 imgkey
+  /// [index] 索引 从 1 开始
+  static Future<GalleryPreview> paraImageLageInfoFromHtml(
+    String href, {
+    int index,
+    bool refresh,
+  }) async {
+    final String url = href;
+
+    // logger.d('$reqJsonStr');
+
+    final Options _cacheOptinos = buildCacheOptions(
+      const Duration(days: 1),
+      maxStale: const Duration(minutes: 1),
+    );
+
+    await CustomHttpsProxy.instance.init();
+    final String response = await Api.getHttpManager()
+        .get(url, options: getCacheOptions(forceRefresh: refresh));
+
+    // logger.d('$response');
+
+    // final dynamic rultJson = jsonDecode('$response');
+
+    final RegExp regImageUrl = RegExp('<img[^>]*src=\"([^\"]+)\" style');
+    final String imageUrl = regImageUrl.firstMatch(response).group(1);
+
+    logger.d('imageUrl $imageUrl');
+
+    final RegExpMatch _xy =
+        RegExp(r'::\s+(\d+)\s+x\s+(\d+)\s+::').firstMatch(response);
+    final double width = double.parse(_xy.group(1));
+    final double height = double.parse(_xy.group(2));
+
+//    logger.v('$imageUrl');
+
+    final GalleryPreview _rePreview = GalleryPreview()
+      ..largeImageUrl = imageUrl
+      ..ser = index + 1
+      ..largeImageWidth = width
+      ..largeImageHeight = height;
+
+    return _rePreview;
   }
 }

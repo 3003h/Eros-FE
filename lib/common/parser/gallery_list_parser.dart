@@ -136,6 +136,8 @@ class GalleryListParser {
 
       final String url =
           tr.querySelector('td.gl3c.glname > a')?.attributes['href'] ?? '';
+      final String _path = Uri.parse(url).path;
+      // logger.d('url $url   path $_path');
 
       final RegExp urlRex = RegExp(r'/g/(\d+)/(\w+)/$');
       final RegExpMatch urlRult = urlRex.firstMatch(url);
@@ -240,7 +242,7 @@ class GalleryListParser {
             ..imgUrl = imgUrl ?? ''
             ..imgHeight = imageHeight
             ..imgWidth = imageWidth
-            ..url = url
+            ..url = _path
             ..category = category
             ..simpleTags = simpleTags
             ..postTime = postTimeLocal
