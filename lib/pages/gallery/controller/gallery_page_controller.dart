@@ -7,7 +7,6 @@ import 'package:fehviewer/models/index.dart';
 import 'package:fehviewer/network/gallery_request.dart';
 import 'package:fehviewer/pages/gallery/controller/rate_controller.dart';
 import 'package:fehviewer/pages/gallery/controller/torrent_controller.dart';
-import 'package:fehviewer/pages/image_view/common.dart';
 import 'package:fehviewer/pages/image_view/controller/view_controller.dart';
 import 'package:fehviewer/pages/item/controller/galleryitem_controller.dart';
 import 'package:fehviewer/utils/logger.dart';
@@ -96,7 +95,7 @@ class GalleryPageController extends GetxController
       //     'isRatinged: i-${_itemController.galleryItem.isRatinged} p-${galleryItem.isRatinged}');
     }
 
-    _loadData().then((_) => getShowKey());
+    _loadData();
   }
 
   @override
@@ -224,10 +223,10 @@ class GalleryPageController extends GetxController
     }
   }
 
-  Future<void> getShowKey({int index = 0}) async {
-    final String _showKey = await Api.getShowkey(previews[index].href);
-    galleryItem.showKey = _showKey;
-  }
+  // Future<void> getShowKey({int index = 0}) async {
+  //   final String _showKey = await Api.getShowkey(previews[index].href);
+  //   galleryItem.showKey = _showKey;
+  // }
 
   Future<void> _loadData({bool refresh = false, bool showError = true}) async {
     try {
@@ -418,9 +417,9 @@ class GalleryPageController extends GetxController
       logger.e('$e \n $stack');
     }
 
-    if (showKey == null) {
-      await getShowKey(index: index);
-    }
+    // if (showKey == null) {
+    //   await getShowKey(index: index);
+    // }
 
     try {
       final GalleryPreview _curPreview = galleryItem.galleryPreview[index];
@@ -432,10 +431,15 @@ class GalleryPageController extends GetxController
           _curPreview.largeImageWidth != null) {
         return galleryItem.galleryPreview[index];
       } else {
-        final GalleryPreview _preview = await GalleryPrecache.instance
-            .paraImageLageInfoFromApi(
-                galleryItem.galleryPreview[index].href, showKey,
-                index: index);
+        // final GalleryPreview _preview = await Api.paraImageLageInfoFromApi(
+        //     galleryItem.galleryPreview[index].href, showKey,
+        //     index: index);
+        // return _preview;
+
+        // paraImageLageInfoFromHtml
+        final GalleryPreview _preview = await Api.paraImageLageInfoFromHtml(
+            galleryItem.galleryPreview[index].href,
+            index: index);
         return _preview;
       }
     } catch (e, stack) {

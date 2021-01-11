@@ -147,7 +147,7 @@ class GalleryViewController extends GetxController
       refresh: true,
     );
     // _frontGallerItemBeans = tuple.item1;
-    change(tuple.item1);
+    change(tuple.item1, status: RxStatus.success());
   }
 
   Future<void> onRefresh() async {

@@ -31,7 +31,6 @@ class GalleryItemWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    Get.put<GalleryItemController>(Get.find(tag: galleryItem.gid));
     return GestureDetector(
       child: Center(
         child: _buildItem(),
