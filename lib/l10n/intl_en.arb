@@ -108,5 +108,9 @@
   "search_type": "Search type",
   "reload_image": "Reload image",
   "share_image": "Share image",
-  "list_load_more_fail": "Load failed, tap to retry"
+  "list_load_more_fail": "Load failed, tap to retry",
+  "copy": "Copy",
+  "copied_to_clipboard": "Copied to clipboard",
+  "KEEP_IT_SAFE": "KEEP IT SAFE",
+  "share": "Share"
 }

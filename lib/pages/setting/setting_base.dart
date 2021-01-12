@@ -1,7 +1,14 @@
+import 'dart:io';
+
+import 'package:fehviewer/common/global.dart';
 import 'package:fehviewer/common/service/dns_service.dart';
 import 'package:fehviewer/common/service/theme_service.dart';
+import 'package:fehviewer/generated/l10n.dart';
+import 'package:fehviewer/utils/logger.dart';
+import 'package:fehviewer/utils/toast.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 
 /// 选择类型的设置项
@@ -382,17 +389,73 @@ Future<void> showCustomHostEditer(BuildContext context, {int index}) async {
         ),
         actions: <Widget>[
           CupertinoDialogAction(
-            child: const Text('取消'),
+            child: Text(S.of(context).cancel),
             onPressed: () {
               Get.back();
             },
           ),
           CupertinoDialogAction(
-            child: const Text('确定'),
+            child: Text(S.of(context).ok),
             onPressed: () {
               if (dnsConfigController.addCustomHost(
                   _hostController.text.trim(), _addrController.text.trim()))
                 Get.back();
+            },
+          ),
+        ],
+      );
+    },
+  );
+}
+
+Future<void> showUserCookie() async {
+  final List<String> _c = Global.profile.user.cookie.split(';');
+
+  final List<Cookie> _cookies =
+      _c.map((e) => Cookie.fromSetCookieValue(e)).toList();
+
+  final String _cookieString =
+      _cookies.map((e) => '${e.name}: ${e.value}').join('\n');
+  logger.d('$_cookieString ');
+
+  return showCupertinoDialog<void>(
+    context: Get.context,
+    builder: (BuildContext context) {
+      return CupertinoAlertDialog(
+        title: const Text('Cookie'),
+        content: Container(
+          child: Column(
+            children: [
+              Text(
+                S.of(context).KEEP_IT_SAFE,
+                style: const TextStyle(
+                  fontSize: 14,
+                  fontWeight: FontWeight.bold,
+                ),
+              ).paddingOnly(bottom: 4),
+              Text(
+                _cookieString,
+                textAlign: TextAlign.justify,
+                style: const TextStyle(
+                  fontSize: 14,
+                ),
+              ),
+            ],
+          ).paddingSymmetric(vertical: 8),
+        ),
+        actions: <Widget>[
+          CupertinoDialogAction(
+            child: Text(S.of(context).cancel),
+            onPressed: () {
+              Get.back();
+            },
+          ),
+          CupertinoDialogAction(
+            child: Text(S.of(context).copy),
+            onPressed: () {
+              Clipboard.setData(ClipboardData(text: _cookieString));
+              Get.back();
+              showToast(S.of(context).copied_to_clipboard);
             },
           ),
         ],

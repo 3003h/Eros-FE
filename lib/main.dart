@@ -1,3 +1,5 @@
+import 'dart:ui';
+
 import 'package:fehviewer/common/global.dart';
 import 'package:fehviewer/common/service/dns_service.dart';
 import 'package:fehviewer/common/service/ehconfig_service.dart';
@@ -108,20 +110,22 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
           GlobalCupertinoLocalizations.delegate,
           GlobalWidgetsLocalizations.delegate,
         ],
-        localeResolutionCallback:
-            (Locale _locale, Iterable<Locale> supportedLocales) {
+        localeResolutionCallback: (_, Iterable<Locale> supportedLocales) {
+          final Locale _locale = window.locale;
           logger.v(
               'Locale \n${_locale?.languageCode}  ${_locale?.scriptCode}  ${_locale?.countryCode}');
+          logger.d('${_locale} ${supportedLocales}');
           if (locale != null) {
             //如果已经选定语言，则不跟随系统
             return locale;
           } else {
-            // logger.d('语言跟随系统语言');
+            // logger.d('语言跟随系统语言  ${window.locale}');
+
             Locale locale;
             //APP语言跟随系统语言，如果系统语言不是中文简体或美国英语，
             //则默认使用美国英语
             if (supportedLocales.contains(_locale)) {
-              // logger.d('语言跟随系统语言');
+              // logger.d('系统语言在支持列表中');
               locale = _locale;
             } else {
               locale = const Locale('en', 'US');
@@ -135,7 +139,8 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
                 locale = const Locale('zh', 'CN'); //简体
               }
             }
-            return locale;
+            logger.d('$locale');
+            return Locale(locale.languageCode, locale.countryCode);
           }
         },
       );

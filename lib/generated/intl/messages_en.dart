@@ -25,6 +25,7 @@ class MessageLookup extends MessageLookupByLibrary {
 
   final messages = _notInlinedMessages(_notInlinedMessages);
   static _notInlinedMessages(_) => <String, Function> {
+    "KEEP_IT_SAFE" : MessageLookupByLibrary.simpleMessage("KEEP IT SAFE"),
     "READ" : MessageLookupByLibrary.simpleMessage("READ"),
     "about" : MessageLookupByLibrary.simpleMessage("About"),
     "add_quick_search" : MessageLookupByLibrary.simpleMessage("Add to search"),
@@ -37,6 +38,8 @@ class MessageLookup extends MessageLookupByLibrary {
     "cancel" : MessageLookupByLibrary.simpleMessage("Cancel"),
     "clear_cache" : MessageLookupByLibrary.simpleMessage("Clear cache"),
     "clear_filter" : MessageLookupByLibrary.simpleMessage("Clear"),
+    "copied_to_clipboard" : MessageLookupByLibrary.simpleMessage("Copied to clipboard"),
+    "copy" : MessageLookupByLibrary.simpleMessage("Copy"),
     "current_site" : m0,
     "current_version" : MessageLookupByLibrary.simpleMessage("Current version"),
     "custom_hosts" : MessageLookupByLibrary.simpleMessage("Custom hosts"),
@@ -115,6 +118,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "search" : MessageLookupByLibrary.simpleMessage("Search"),
     "search_type" : MessageLookupByLibrary.simpleMessage("Search type"),
     "setting_on_website" : MessageLookupByLibrary.simpleMessage("Setting on website"),
+    "share" : MessageLookupByLibrary.simpleMessage("Share"),
     "share_image" : MessageLookupByLibrary.simpleMessage("Share image"),
     "show_filter" : MessageLookupByLibrary.simpleMessage("Show filter"),
     "show_jpn_title" : MessageLookupByLibrary.simpleMessage("Show japanese title"),
