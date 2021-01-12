@@ -54,7 +54,7 @@
   "s_Search_Gallery_Tags": "搜索画廊标签",
   "s_Search_Gallery_Description": "搜索画廊描述",
   "s_Search_Torrent_Filenames": "搜索种子名字",
-  "s_Only_Show_Galleries_With_Torrents": "仅搜索有种子的画廊",
+  "s_Only_Show_Galleries_With_Torrents": "仅显示有种子的画廊",
   "s_Search_Low_Power_Tags": "搜索低愿力标签",
   "s_Search_Downvoted_Tags": "搜索差评标签",
   "s_Show_Expunged_Galleries": "搜索被删除的画廊",

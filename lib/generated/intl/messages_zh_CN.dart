@@ -98,7 +98,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "s_Between" : MessageLookupByLibrary.simpleMessage("从"),
     "s_Disable_default_filters" : MessageLookupByLibrary.simpleMessage("禁用默认排除选项"),
     "s_Minimum_Rating" : MessageLookupByLibrary.simpleMessage("最低评分"),
-    "s_Only_Show_Galleries_With_Torrents" : MessageLookupByLibrary.simpleMessage("仅搜索有种子的画廊"),
+    "s_Only_Show_Galleries_With_Torrents" : MessageLookupByLibrary.simpleMessage("仅显示有种子的画廊"),
     "s_Search_Downvoted_Tags" : MessageLookupByLibrary.simpleMessage("搜索差评标签"),
     "s_Search_Fav_Name" : MessageLookupByLibrary.simpleMessage("搜索名称"),
     "s_Search_Fav_Note" : MessageLookupByLibrary.simpleMessage("搜索标注"),

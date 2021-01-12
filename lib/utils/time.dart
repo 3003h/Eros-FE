@@ -8,7 +8,7 @@ class Time {
   void showTime(String tag) {
     final int nowTime = DateTime.now().millisecondsSinceEpoch;
     if (lastTime != null) {
-      loggerNoStackTime.i('showTime $tag ${nowTime - lastTime}');
+      loggerNoStackTime.v('showTime $tag ${nowTime - lastTime}');
     }
     lastTime = nowTime;
   }

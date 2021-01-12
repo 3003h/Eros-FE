@@ -170,6 +170,24 @@ class GalleryFilterView extends StatelessWidget {
           },
         ),
         AdvanceSearchSwitchItem(
+          title: S.of(context).s_Search_Torrent_Filenames,
+          value: _advanceSearch.value.searchToreenFilenames ?? false,
+          onChanged: (bool value) {
+            _advanceSearch.update((_advanceSearch) {
+              _advanceSearch.searchToreenFilenames = value;
+            });
+          },
+        ),
+        AdvanceSearchSwitchItem(
+          title: S.of(context).s_Only_Show_Galleries_With_Torrents,
+          value: _advanceSearch.value.onlyShowWhithTorrents ?? false,
+          onChanged: (bool value) {
+            _advanceSearch.update((_advanceSearch) {
+              _advanceSearch.onlyShowWhithTorrents = value;
+            });
+          },
+        ),
+        AdvanceSearchSwitchItem(
           title: S.of(context).s_Search_Low_Power_Tags,
           value: _advanceSearch.value.searchLowPowerTags ?? false,
           onChanged: (bool value) {
