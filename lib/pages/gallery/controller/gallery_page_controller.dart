@@ -316,8 +316,7 @@ class GalleryPageController extends GetxController
       // 增加延时 避免build期间进行 setState
       await Future<void>.delayed(const Duration(milliseconds: 0));
       currentPreviewPage++;
-      // logger.v(
-      //     '获取更多预览 ${_galleryPageController.galleryItem.url} : ${_galleryPageController.currentPreviewPage}');
+      logger.v('获取更多预览 ${galleryItem.url} : ${currentPreviewPage}');
 
       final List<GalleryPreview> _moreGalleryPreviewList =
           await Api.getGalleryPreview(
