@@ -148,8 +148,9 @@ class GalleryHeader extends StatelessWidget {
                         ],
                       ).marginSymmetric(vertical: 4),
                       Row(
+                        crossAxisAlignment: CrossAxisAlignment.end,
                         children: <Widget>[
-                          const Text('❤️', style: TextStyle(fontSize: 14)),
+                          const Text('❤️', style: TextStyle(fontSize: 13)),
                           GetBuilder(
                               init: GalleryPageController(),
                               tag: pageCtrlDepth,

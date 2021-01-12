@@ -3,7 +3,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-class TabHome extends GetView<TabHomeController> {
+class TabHomeSmall extends GetView<TabHomeController> {
   @override
   Widget build(BuildContext context) {
     controller.init(inContext: context);

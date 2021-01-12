@@ -6,7 +6,9 @@ import 'package:fehviewer/pages/gallery/controller/torrent_controller.dart';
 import 'package:fehviewer/utils/logger.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
+import 'package:share/share.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class TorrentView extends StatelessWidget {
@@ -19,27 +21,61 @@ class TorrentView extends StatelessWidget {
       height: controller.torrents.length * 40.0 + 30,
       child: controller.obx(
         (String state) {
-          return ListView.builder(
+          return ListView.separated(
             padding: const EdgeInsets.all(0),
             itemBuilder: (_, int index) {
               final GalleryTorrent torrent = controller.torrents[index];
-              return CupertinoButton(
-                padding: const EdgeInsets.symmetric(vertical: 8.0),
-                child: Text(
-                  torrent.name,
-                  textAlign: TextAlign.start,
-                  style: const TextStyle(fontSize: 14, height: 1),
-                ),
-                onPressed: () async {
-                  final String torrentUrl =
-                      '${EHConst.EH_TORRENT_URL}/$state/${torrent.hash}.torrent';
-                  logger.d('${torrent.name}\n${torrent.hash}\ntorrentUrl');
-                  if (await canLaunch(torrentUrl)) {
-                    await launch(torrentUrl);
-                  } else {
-                    throw 'Could not launch $torrentUrl';
-                  }
-                },
+              return Row(
+                children: [
+                  Expanded(
+                    child: CupertinoButton(
+                      padding: const EdgeInsets.symmetric(vertical: 8.0),
+                      child: Text(
+                        torrent.name,
+                        textAlign: TextAlign.center,
+                        maxLines: 2,
+                        overflow: TextOverflow.ellipsis,
+                        style: const TextStyle(fontSize: 14, height: 1),
+                      ),
+                      onPressed: () async {
+                        final String torrentUrl =
+                            '${EHConst.EH_TORRENT_URL}/$state/${torrent.hash}.torrent';
+                        logger
+                            .d('${torrent.name}\n${torrent.hash}\ntorrentUrl');
+                        if (await canLaunch(torrentUrl)) {
+                          await launch(torrentUrl);
+                        } else {
+                          throw 'Could not launch $torrentUrl';
+                        }
+                      },
+                    ),
+                  ),
+                  CupertinoTheme(
+                    data: const CupertinoThemeData(
+                        primaryColor: CupertinoColors.systemRed),
+                    child: CupertinoButton(
+                      padding: const EdgeInsets.only(left: 0),
+                      minSize: 30,
+                      child: const Icon(
+                        FontAwesomeIcons.magnet,
+                        size: 16,
+                      ),
+                      onPressed: () {
+                        final String _magnet =
+                            'magnet:?xt=urn:btih:${torrent.hash}';
+                        logger.v(_magnet);
+                        Share.share(_magnet);
+                      },
+                    ),
+                  )
+                ],
+              );
+            },
+            separatorBuilder: (_, __) {
+              return Divider(
+                height: 0.5,
+                color: CupertinoDynamicColor.resolve(
+                    CupertinoColors.systemGrey4, context),
               );
             },
             itemCount: controller.torrents.length,
