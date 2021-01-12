@@ -185,7 +185,7 @@ class TabHomeController extends GetxController {
 
   /// 需要初始化获取BuildContext 否则修改语言时tabitem的文字不会立即生效
   void init({BuildContext inContext}) {
-    logger.d(' rebuild home');
+    // logger.d(' rebuild home');
     tContext = inContext;
   }
 

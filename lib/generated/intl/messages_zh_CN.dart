@@ -25,6 +25,7 @@ class MessageLookup extends MessageLookupByLibrary {
 
   final messages = _notInlinedMessages(_notInlinedMessages);
   static _notInlinedMessages(_) => <String, Function> {
+    "KEEP_IT_SAFE" : MessageLookupByLibrary.simpleMessage("注意数据安全"),
     "READ" : MessageLookupByLibrary.simpleMessage("阅读"),
     "about" : MessageLookupByLibrary.simpleMessage("关于"),
     "add_quick_search" : MessageLookupByLibrary.simpleMessage("添加搜索"),
@@ -37,6 +38,8 @@ class MessageLookup extends MessageLookupByLibrary {
     "cancel" : MessageLookupByLibrary.simpleMessage("取消"),
     "clear_cache" : MessageLookupByLibrary.simpleMessage("清除缓存"),
     "clear_filter" : MessageLookupByLibrary.simpleMessage("重置"),
+    "copied_to_clipboard" : MessageLookupByLibrary.simpleMessage("已复制到剪贴板"),
+    "copy" : MessageLookupByLibrary.simpleMessage("复制"),
     "current_site" : m0,
     "current_version" : MessageLookupByLibrary.simpleMessage("当前版本"),
     "custom_hosts" : MessageLookupByLibrary.simpleMessage("自定义hosts"),
@@ -115,6 +118,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "search" : MessageLookupByLibrary.simpleMessage("搜索"),
     "search_type" : MessageLookupByLibrary.simpleMessage("搜索类型"),
     "setting_on_website" : MessageLookupByLibrary.simpleMessage("网页上的设置"),
+    "share" : MessageLookupByLibrary.simpleMessage("分享"),
     "share_image" : MessageLookupByLibrary.simpleMessage("分享图片"),
     "show_filter" : MessageLookupByLibrary.simpleMessage("显示筛选"),
     "show_jpn_title" : MessageLookupByLibrary.simpleMessage("显示日文标题"),

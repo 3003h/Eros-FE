@@ -108,5 +108,9 @@
   "search_type": "搜索类型",
   "reload_image": "重新载入图片",
   "share_image": "分享图片",
-  "list_load_more_fail": "加载失败, 点击重试"
+  "list_load_more_fail": "加载失败, 点击重试",
+  "copy": "复制",
+  "copied_to_clipboard": "已复制到剪贴板",
+  "KEEP_IT_SAFE": "注意数据安全",
+  "share": "分享"
 }

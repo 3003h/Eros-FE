@@ -113,6 +113,12 @@ class ListViewEhSetting extends StatelessWidget {
           descOn: S.of(context).current_site('ExHentai'),
         ),
       if (_isLogin)
+        const SelectorSettingItem(
+          title: 'Cookie',
+          selector: '',
+          onTap: showUserCookie,
+        ),
+      if (_isLogin)
         SelectorSettingItem(
           title: S.of(context).ehentai_settings,
           selector: S.of(context).setting_on_website,
