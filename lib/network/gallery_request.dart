@@ -321,7 +321,8 @@ class Api {
     // 在 url使用 nw=always 未解决 自动写入cookie 暂时搞不懂 先手动设置下
     // todo 待优化
     final PersistCookieJar cookieJar = await Api.cookieJar;
-    final List<Cookie> cookies = cookieJar.loadForRequest(Uri.parse(inUrl));
+    final List<Cookie> cookies =
+        cookieJar.loadForRequest(Uri.parse(Api.getBaseUrl()));
     cookies.add(Cookie('nw', '1'));
     cookieJar.saveFromResponse(Uri.parse(Api.getBaseUrl()), cookies);
 
@@ -372,9 +373,10 @@ class Api {
     // 在 url使用 nw=always 未解决 自动写入cookie 暂时搞不懂 先手动设置下
     // todo 待优化
     final PersistCookieJar cookieJar = await Api.cookieJar;
-    final List<Cookie> cookies = cookieJar.loadForRequest(Uri.parse(inUrl));
+    final List<Cookie> cookies =
+        cookieJar.loadForRequest(Uri.parse(Api.getBaseUrl()));
     cookies.add(Cookie('nw', '1'));
-    cookieJar.saveFromResponse(Uri.parse(url), cookies);
+    cookieJar.saveFromResponse(Uri.parse(Api.getBaseUrl()), cookies);
 
     await CustomHttpsProxy.instance.init();
     final String response = await getHttpManager().get(

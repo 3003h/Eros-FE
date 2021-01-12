@@ -177,7 +177,7 @@ class _AllPreviewPageState extends State<AllPreviewPage> {
       return;
     }
     //
-    // logger.v('获取更多预览 ${_pageController.galleryItem.url}');
+    logger.v('获取更多预览 ${_pageController.galleryItem.url}');
     // 增加延时 避免build期间进行 setState
     await Future<void>.delayed(const Duration(milliseconds: 100));
     _pageController.currentPreviewPage++;
