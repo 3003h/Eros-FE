@@ -31,4 +31,9 @@ class TagTranslat {
     intro = map[columnIntro];
     links = map[columnLinks];
   }
+
+  @override
+  String toString() {
+    return 'TagTranslat{namespace: $namespace, key: $key, name: $name, intro: $intro, links: $links}';
+  }
 }

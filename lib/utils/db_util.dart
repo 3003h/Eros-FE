@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:fehviewer/common/global.dart';
 import 'package:fehviewer/models/entity/tag_translat.dart';
+import 'package:fehviewer/utils/logger.dart';
 import 'package:path/path.dart';
 import 'package:sqflite/sqflite.dart';
 
@@ -12,6 +13,8 @@ const String columnKey = 'key';
 const String columnName = 'name';
 const String columnIntro = 'intro';
 const String columnLinks = 'links';
+
+final DataBaseUtil dbUtil = DataBaseUtil();
 
 class DataBaseUtil {
   factory DataBaseUtil() => _instance;
@@ -83,21 +86,56 @@ class DataBaseUtil {
         : '$columnKey = ? ';
     final List<String> _args = _isNameSpace ? [namespace, key] : [key];
 
-//    debugPrint('$_where  $_args');
-
-    final List<Map> maps = await db.query(tableTag,
-        columns: [
-          columnNamespace,
-          columnKey,
-          columnName,
-          columnIntro,
-          columnLinks
-        ],
-        where: _where,
-        whereArgs: _args);
-//    debugPrint('qryMaps $maps');
+    final List<Map<String, dynamic>> maps = await db.query(
+      tableTag,
+      columns: [
+        columnNamespace,
+        columnKey,
+        columnName,
+        columnIntro,
+        columnLinks
+      ],
+      where: _where,
+      whereArgs: _args,
+    );
     if (maps.isNotEmpty) {
       return TagTranslat.fromMap(maps.first);
+    }
+    return null;
+  }
+
+  Future<List<TagTranslat>> getTagTransFuzzy(String key,
+      {int limit = 100}) async {
+    final Database db = await _getDataBase();
+
+    const String _where = '$columnKey like ? or $columnName like ?';
+    // const String _where = "$columnKey like  ";
+
+    final List<String> _args = <String>['%$key%', '%$key%'];
+
+    final List<Map<String, dynamic>> maps = await db.query(
+      tableTag,
+      columns: [
+        columnNamespace,
+        columnKey,
+        columnName,
+        columnIntro,
+        columnLinks
+      ],
+      where: _where,
+      whereArgs: _args,
+      limit: limit,
+    );
+
+    // final List<Map<String, dynamic>> mapsr = await db.rawQuery(
+    //     "select * from $tableTag where key like'%$key%' or name like '%$key%' limit $limit");
+
+    logger.d('${maps.length}');
+
+    if (maps?.isNotEmpty ?? false) {
+      return List<TagTranslat>.from(maps
+          .map((Map<String, dynamic> e) => TagTranslat.fromMap(e))
+          .toList());
     }
     return null;
   }

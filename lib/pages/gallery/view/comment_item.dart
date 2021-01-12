@@ -96,6 +96,8 @@ class CommentItem extends StatelessWidget {
       ),
     );
 
+    const double kSizeVote = 14.0;
+    const double kSizeNotVote = 13.0;
     return GetBuilder<CommentController>(
         init: CommentController(),
         tag: pageCtrlDepth,
@@ -134,7 +136,13 @@ class CommentItem extends StatelessWidget {
                                     galleryComment.vote > 0
                                         ? FontAwesomeIcons.solidThumbsUp
                                         : FontAwesomeIcons.thumbsUp,
-                                    size: 14,
+                                    size: galleryComment.vote > 0
+                                        ? kSizeVote
+                                        : kSizeNotVote,
+                                    color: CupertinoDynamicColor.resolve(
+                                      ThemeColors.commitText,
+                                      context,
+                                    ),
                                   ),
                                   onPressed: () {
                                     VibrateUtil.light();
@@ -152,7 +160,13 @@ class CommentItem extends StatelessWidget {
                                     galleryComment.vote < 0
                                         ? FontAwesomeIcons.solidThumbsDown
                                         : FontAwesomeIcons.thumbsDown,
-                                    size: 14,
+                                    size: galleryComment.vote < 0
+                                        ? kSizeVote
+                                        : kSizeNotVote,
+                                    color: CupertinoDynamicColor.resolve(
+                                      ThemeColors.commitText,
+                                      context,
+                                    ),
                                   ),
                                   onPressed: () {
                                     VibrateUtil.light();
@@ -166,9 +180,13 @@ class CommentItem extends StatelessWidget {
                                   padding: const EdgeInsets.symmetric(
                                       horizontal: 12),
                                   minSize: 0,
-                                  child: const Icon(
+                                  child: Icon(
                                     FontAwesomeIcons.edit,
-                                    size: 14,
+                                    size: kSizeNotVote,
+                                    color: CupertinoDynamicColor.resolve(
+                                      ThemeColors.commitText,
+                                      context,
+                                    ),
                                   ),
                                   onPressed: () {
                                     VibrateUtil.light();

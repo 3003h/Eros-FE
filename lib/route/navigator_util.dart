@@ -40,7 +40,7 @@ class NavigatorUtil {
     Get.to(GallerySearchPage(), transition: Transition.cupertino,
         binding: BindingsBuilder(() {
       Get.put(
-        SearchPageController.fromText(_search),
+        SearchPageController(initSearchText: _search),
         tag: searchPageCtrlDepth,
       );
     }));
