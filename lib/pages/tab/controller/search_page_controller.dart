@@ -2,9 +2,11 @@ import 'package:custom_pop_up_menu/custom_pop_up_menu.dart';
 import 'package:fehviewer/common/controller/quicksearch_controller.dart';
 import 'package:fehviewer/common/service/depth_service.dart';
 import 'package:fehviewer/common/service/ehconfig_service.dart';
+import 'package:fehviewer/models/entity/tag_translat.dart';
 import 'package:fehviewer/models/index.dart';
 import 'package:fehviewer/network/gallery_request.dart';
 import 'package:fehviewer/pages/tab/view/quick_search_page.dart';
+import 'package:fehviewer/utils/db_util.dart';
 import 'package:fehviewer/utils/logger.dart';
 import 'package:fehviewer/utils/toast.dart';
 import 'package:flutter/cupertino.dart';
@@ -20,18 +22,28 @@ enum SearchType {
   favorite,
 }
 
+enum ListType {
+  gallery,
+  tag,
+}
+
 class SearchPageController extends GetxController
     with StateMixin<List<GalleryItem>> {
-  SearchPageController({SearchType searchType = SearchType.normal}) {
+  SearchPageController(
+      {SearchType searchType = SearchType.normal, this.initSearchText}) {
     this.searchType = searchType;
   }
-  SearchPageController.fromText(this.searchText);
+
+  final String initSearchText;
+
   String searchText;
+  bool _autoComplete = true;
+
   final String tabIndex = 'search_$searchPageCtrlDepth';
   final CustomPopupMenuController customPopupMenuController =
       CustomPopupMenuController();
 
-  // 搜索内容的控制器
+  // 搜索输入框的控制器
   final TextEditingController searchTextController = TextEditingController();
 
   // 搜索类型
@@ -47,6 +59,15 @@ class SearchPageController extends GetxController
   PageState get pageState => _pageState.value;
   set pageState(PageState val) => _pageState.value = val;
 
+  final Rx<ListType> _listType = ListType.tag.obs;
+  ListType get listType => _listType.value;
+  set listType(ListType val) => _listType.value = val;
+
+  final RxList<TagTranslat> qryTags = <TagTranslat>[].obs;
+  String _currQry;
+
+  FocusNode focusNode = FocusNode();
+
   int maxPage = 0;
   String _search = '';
 
@@ -58,19 +79,18 @@ class SearchPageController extends GetxController
 
   final EhConfigService _ehConfigService = Get.find();
   final QuickSearchController quickSearchController = Get.find();
-
   final FavoriteViewController _favoriteViewController = Get.find();
 
+  /// 控制右侧按钮展开折叠
   bool get isSearchBarComp => _ehConfigService.isSearchBarComp.value;
   set isSearchBarComp(bool val) => _ehConfigService.isSearchBarComp.value = val;
 
+  /// 执行搜索
   Future<void> _startSearch() async {
     final String _searchText = searchTextController.text.trim();
     if (_searchText.isNotEmpty) {
       _search = _searchText;
-      // if (state == null || state.isEmpty) {
-      //   change(state, status: RxStatus.loading());
-      // }
+
       change(state, status: RxStatus.loading());
       try {
         final List<GalleryItem> _list = await _fetchData(refresh: true);
@@ -84,22 +104,52 @@ class SearchPageController extends GetxController
     }
   }
 
+  /// 点击键盘完成
   Future<void> onEditingComplete() async {
-    // 点击键盘完成
+    listType = ListType.gallery;
     await _startSearch();
   }
 
+  /// 延迟搜索
   Future<void> _delayedSearch() async {
     const Duration _duration = Duration(milliseconds: 800);
     _lastInputCompleteAt = DateTime.now();
     await Future<void>.delayed(_duration);
     if (_lastSearchText?.trim() != searchTextController.text.trim() &&
         DateTime.now().difference(_lastInputCompleteAt) >= _duration) {
-      _lastSearchText = searchTextController.text;
-      await _startSearch();
+      if (_autoComplete) {
+        listType = ListType.gallery;
+        _autoComplete = false;
+        return await _startSearch();
+      }
+
+      listType = ListType.tag;
+
+      _lastSearchText = searchTextController.text.trim();
+
+      _currQry = searchTextController.text.trim().split(RegExp(r'[ ;"]')).last;
+      if (_currQry.isEmpty) {
+        qryTags([]);
+        return;
+      }
+
+      try {
+        dbUtil
+            .getTagTransFuzzy(_currQry, limit: 200)
+            .then((List<TagTranslat> qryTags) {
+          this.qryTags(qryTags);
+        });
+      } catch (_) {}
+
+      logger.d('$_autoComplete');
+      if (_autoComplete) {
+        listType = ListType.gallery;
+        await _startSearch();
+      }
     }
   }
 
+  /// 加载更多
   Future<void> loadDataMore({bool cleanSearch = false}) async {
     if (pageState == PageState.Loading) {
       return;
@@ -148,6 +198,7 @@ class SearchPageController extends GetxController
     }
   }
 
+  /// 获取数据
   Future<List<GalleryItem>> _fetchData({bool refresh = false}) async {
     final int _catNum = _ehConfigService.catFilter.value;
 
@@ -171,6 +222,7 @@ class SearchPageController extends GetxController
     return gallerItemBeans;
   }
 
+  /// 从指定页数开始
   Future<void> _loadFromPage(int page) async {
     logger.v('jump to page =>  $page');
 
@@ -194,17 +246,6 @@ class SearchPageController extends GetxController
               );
     curPage = page;
     change(tuple.item1, status: RxStatus.success());
-
-    // Api.getGallery(
-    //   page: page,
-    //   cats: _catNum,
-    //   serach: _search,
-    //   refresh: true,
-    //   searchType: searchType,
-    // ).then((Tuple2<List<GalleryItem>, int> tuple) {
-    //   curPage = page;
-    //   change(tuple.item1, status: RxStatus.success());
-    // });
   }
 
   /// 页码跳转的控制器
@@ -284,9 +325,9 @@ class SearchPageController extends GetxController
   void onInit() {
     super.onInit();
     searchTextController.addListener(_delayedSearch);
-    if (searchText != null && searchText.trim().isNotEmpty) {
+    if (initSearchText != null && initSearchText.trim().isNotEmpty) {
       logger.d('$searchText');
-      searchTextController.text = searchText.trim();
+      searchTextController.text = initSearchText.trim();
       autofocus = false;
     } else {
       // autofocus = true;
@@ -314,6 +355,48 @@ class SearchPageController extends GetxController
     Get.to<String>(
       QuickSearchListPage(),
       transition: Transition.cupertino,
-    ).then((String value) => searchTextController.text = value);
+    ).then((String value) {
+      // return searchTextController.text = value;
+      searchTextController.value = TextEditingValue(
+        text: '$value ',
+        selection: TextSelection.fromPosition(TextPosition(
+            affinity: TextAffinity.downstream, offset: '$value '.length)),
+      );
+
+      FocusScope.of(Get.context).requestFocus(focusNode);
+    });
+  }
+
+  void addQryTag(int index) {
+    final TagTranslat _qry = qryTags[index];
+    final String _add = _qry.key.contains(' ')
+        ? '${_qry.namespace.trim().shortName}:"${_qry.key}\$"'
+        : '${_qry.namespace.trim().shortName}:${_qry.key}\$';
+    logger.i('_add $_add ');
+
+    final String _lastSearchText = this._lastSearchText;
+    final String _newSearch =
+        _lastSearchText.replaceAll(RegExp('$_currQry\$'), _add);
+    logger.i(
+        '_lastSearchText $_lastSearchText \n_currQry $_currQry\n_newSearch $_newSearch ');
+
+    _autoComplete = false;
+    searchTextController.value = TextEditingValue(
+      text: '$_newSearch ',
+      selection: TextSelection.fromPosition(TextPosition(
+          affinity: TextAffinity.downstream, offset: '$_newSearch '.length)),
+    );
+
+    FocusScope.of(Get.context).requestFocus(focusNode);
+  }
+}
+
+extension ExSearch on String {
+  String get shortName {
+    if (this != 'misc') {
+      return substring(0, 1);
+    } else {
+      return this;
+    }
   }
 }

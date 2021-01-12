@@ -66,6 +66,7 @@ class GallerySearchPage extends StatelessWidget {
           autofocus: controller.autofocus,
           textInputAction: TextInputAction.search,
           onEditingComplete: controller.onEditingComplete,
+          focusNode: controller.focusNode,
         ),
         transitionBetweenRoutes: false,
         leading: Container(
@@ -85,11 +86,13 @@ class GallerySearchPage extends StatelessWidget {
         },
         child: CustomScrollView(
           slivers: <Widget>[
-            SliverSafeArea(
-              // top: false,
-              // bottom: false,
-              sliver: _getGalleryList(),
-            ),
+            Obx(() => SliverSafeArea(
+                  // top: false,
+                  // bottom: false,
+                  sliver: controller.listType == ListType.gallery
+                      ? _getGalleryList()
+                      : _getTagQryList(),
+                )),
             _endIndicator(),
           ],
         ),
@@ -97,6 +100,42 @@ class GallerySearchPage extends StatelessWidget {
     );
 
     return cfp;
+  }
+
+  Widget _getTagQryList() {
+    final SearchPageController controller = Get.find(tag: searchPageCtrlDepth);
+    return SliverList(
+      delegate: SliverChildBuilderDelegate(
+        (BuildContext context, int index) {
+          return GestureDetector(
+            behavior: HitTestBehavior.opaque,
+            onTap: () {
+              controller.addQryTag(index);
+            },
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  '${controller.qryTags[index].namespace.shortName}:${controller.qryTags[index].key}',
+                  style: const TextStyle(
+                    fontSize: 16,
+                  ),
+                ),
+                Text(controller.qryTags[index].name,
+                    style: TextStyle(
+                      fontSize: 14,
+                      color: CupertinoDynamicColor.resolve(
+                          CupertinoColors.secondaryLabel, Get.context),
+                    )),
+              ],
+            ).paddingSymmetric(vertical: 4, horizontal: 20),
+          );
+        },
+        childCount: controller.qryTags.length,
+      ),
+    );
   }
 
   Widget _endIndicator() {
@@ -117,7 +156,7 @@ class GallerySearchPage extends StatelessWidget {
                   return GestureDetector(
                     onTap: controller.loadDataMore,
                     child: Column(
-                      children:  <Widget>[
+                      children: <Widget>[
                         const Icon(
                           Icons.error,
                           size: 40,

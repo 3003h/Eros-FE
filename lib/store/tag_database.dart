@@ -14,7 +14,7 @@ const int connectTimeout = 10000;
 const int receiveTimeout = 30000;
 
 class EhTagDatabase {
-  ///tag翻译
+  /// tag翻译
   static Future<String> generateTagTranslat() async {
     final HttpManager httpManager = HttpManager.getInstance(
         baseUrl: 'https://api.github.com', cache: false);
