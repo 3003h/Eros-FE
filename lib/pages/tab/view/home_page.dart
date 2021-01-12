@@ -1,3 +1,4 @@
+import 'package:fehviewer/common/global.dart';
 import 'package:fehviewer/pages/tab/controller/tabhome_controller.dart';
 import 'package:fehviewer/utils/logger.dart';
 import 'package:flutter/cupertino.dart';
@@ -16,12 +17,12 @@ class TabHome extends GetView<TabHomeController> {
       onWillPop: controller.doubleClickBack,
       child: LayoutBuilder(
         builder: (context, constraints) {
-          if (constraints.maxWidth < 800) {
-            logger.d('TabHomeSmall');
-            return TabHomeSmall();
-          } else {
+          if (constraints.maxWidth > 800 && Global.inDebugMode) {
             logger.d('TabHomeLarge');
             return TabHomeLarge();
+          } else {
+            logger.d('TabHomeSmall');
+            return TabHomeSmall();
           }
         },
       ),
