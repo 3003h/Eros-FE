@@ -8,6 +8,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter_inappwebview/flutter_inappwebview.dart' hide WebView;
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
+/// iOS使用
 class InWebMySetting extends StatelessWidget {
   final CookieManager _cookieManager = CookieManager.instance();
 
@@ -45,9 +46,11 @@ class InWebMySetting extends StatelessWidget {
                 size: 24,
               ),
               onPressed: () async {
+                // 保存配置
                 _controller.evaluateJavascript(
                     source:
                         'document.querySelector("#apply > input[type=submit]").click();');
+                // 写入cookie到dio
               },
             ),
           ],
@@ -69,6 +72,20 @@ class InWebMySetting extends StatelessWidget {
           },
           onLoadStop: (InAppWebViewController controller, String url) async {
             logger.d('Page Finished loading: $url');
+            // 写入cookie到dio
+            _cookieManager.getCookies(url: url).then((value) {
+              // List<Cookie> _cookies = value.forEach((key, value) { });
+              final List<io.Cookie> _cookies = value
+                  .map((Cookie e) =>
+                      io.Cookie(e.name, e.value)..domain = e.domain)
+                  .toList();
+
+              logger.d('${_cookies.map((e) => e.toString()).join('\n')} ');
+
+              Global.cookieJar.delete(Uri.parse(Api.getBaseUrl()), true);
+              Global.cookieJar
+                  .saveFromResponse(Uri.parse(Api.getBaseUrl()), _cookies);
+            });
           },
         ),
       ),

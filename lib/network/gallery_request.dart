@@ -190,6 +190,11 @@ class Api {
     final bool safeMode = _ehConfigService.isSafeMode.value;
     final AdvanceSearchController _searchController = Get.find();
 
+    final List<Cookie> cookies =
+        Global.cookieJar.loadForRequest(Uri.parse(Api.getBaseUrl()));
+
+    logger.d('${cookies.map((e) => e).join('\n')}');
+
     logger.d('${searchType}');
 
     final String url = searchType == SearchType.watched ? '/watched' : '/';
