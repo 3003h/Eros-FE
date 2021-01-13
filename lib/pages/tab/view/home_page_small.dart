@@ -8,25 +8,20 @@ class TabHomeSmall extends GetView<TabHomeController> {
   Widget build(BuildContext context) {
     controller.init(inContext: context);
 
-    final WillPopScope willPopScope = WillPopScope(
-      onWillPop: controller.doubleClickBack,
-      child: Obx(() => CupertinoTabScaffold(
-            controller: controller.tabController,
-            tabBar: CupertinoTabBar(
-              items: controller.listBottomNavigationBarItem,
-              onTap: controller.onTap,
-            ),
-            tabBuilder: (BuildContext context, int index) {
-              // return controller.pageList[index];
-              return CupertinoTabView(
-                builder: (BuildContext context) {
-                  return controller.viewList[index];
-                },
-              );
-            },
-          )),
-    );
-
-    return willPopScope;
+    return Obx(() => CupertinoTabScaffold(
+          controller: controller.tabController,
+          tabBar: CupertinoTabBar(
+            items: controller.listBottomNavigationBarItem,
+            onTap: controller.onTap,
+          ),
+          tabBuilder: (BuildContext context, int index) {
+            // return controller.pageList[index];
+            return CupertinoTabView(
+              builder: (BuildContext context) {
+                return controller.viewList[index];
+              },
+            );
+          },
+        ));
   }
 }

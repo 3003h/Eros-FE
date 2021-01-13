@@ -24,6 +24,7 @@ import 'common/controller/localfav_controller.dart';
 import 'common/controller/quicksearch_controller.dart';
 import 'common/controller/user_controller.dart';
 import 'common/service/depth_service.dart';
+import 'common/service/layout_service.dart';
 
 void main() {
   Global.init().then((_) {
@@ -36,6 +37,8 @@ void main() {
     Get.put(DnsService(), permanent: true);
 
     Get.put(DepthService());
+
+    Get.lazyPut(() => LayoutServices());
 
     /// 一些全局设置或者控制
     Get.put(LocalFavController(), permanent: true);

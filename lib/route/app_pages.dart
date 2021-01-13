@@ -33,7 +33,7 @@ class AppPages {
     ),
     GetPage(
       name: EHRoutes.home,
-      page: () => TabHome(),
+      page: () => HomePage(),
       binding: TabHomeBinding(),
       transition: Transition.fadeIn,
     ),
