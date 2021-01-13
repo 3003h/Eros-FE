@@ -82,6 +82,19 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
   }
 
   @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    super.didChangeAppLifecycleState(state);
+    if (state == AppLifecycleState.paused) {
+      // went to Background
+    }
+    if (state == AppLifecycleState.resumed) {
+      // came back to Foreground
+      logger.d('resumed');
+      Get.find<EhConfigService>().chkClipboardLink();
+    }
+  }
+
+  @override
   Widget build(BuildContext context) {
     Widget cupertinoApp({
       CupertinoThemeData theme,

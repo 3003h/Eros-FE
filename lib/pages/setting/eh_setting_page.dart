@@ -61,31 +61,33 @@ class EhSettingPage extends StatelessWidget {
 class ListViewEhSetting extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    final EhConfigService ehConfigService = Get.find();
+    final EhConfigService _ehConfigService = Get.find();
     final UserController userController = Get.find();
 
-    final bool _siteEx = ehConfigService.isSiteEx.value;
-    final bool _jpnTitle = ehConfigService.isJpnTitle.value;
-    final bool _tagTranslat = ehConfigService.isTagTranslat.value;
-    final bool _galleryImgBlur = ehConfigService.isGalleryImgBlur.value;
-    final bool _favLongTap = ehConfigService.isFavLongTap.value;
+    final bool _siteEx = _ehConfigService.isSiteEx.value;
+    final bool _jpnTitle = _ehConfigService.isJpnTitle.value;
+    final bool _tagTranslat = _ehConfigService.isTagTranslat.value;
+    final bool _galleryImgBlur = _ehConfigService.isGalleryImgBlur.value;
+    final bool _favLongTap = _ehConfigService.isFavLongTap.value;
     final bool _favOrder =
-        ehConfigService.favoriteOrder.value == FavoriteOrder.posted;
+        _ehConfigService.favoriteOrder.value == FavoriteOrder.posted;
     final bool _isLogin = userController.isLogin;
+
+    final bool _isClipboar = _ehConfigService.isClipboardLink.value;
 
     final Color _backgroundColor =
         CupertinoTheme.of(context).scaffoldBackgroundColor;
 
     Future<void> _handleSiteChanged(bool newValue) async {
-      ehConfigService.isSiteEx(newValue);
+      _ehConfigService.isSiteEx(newValue);
     }
 
     void _handleJpnTitleChanged(bool newValue) {
-      ehConfigService.isJpnTitle(newValue);
+      _ehConfigService.isJpnTitle(newValue);
     }
 
     void _handleTagTranslatChanged(bool newValue) {
-      ehConfigService.isTagTranslat.value = newValue;
+      _ehConfigService.isTagTranslat.value = newValue;
       if (newValue) {
         try {
           EhTagDatabase.generateTagTranslat();
@@ -96,11 +98,15 @@ class ListViewEhSetting extends StatelessWidget {
     }
 
     void _handleGalleryListImgBlurChanged(bool newValue) {
-      ehConfigService.isGalleryImgBlur.value = newValue;
+      _ehConfigService.isGalleryImgBlur.value = newValue;
     }
 
     void _handleFavLongTapChanged(bool newValue) {
-      ehConfigService.isFavLongTap.value = newValue;
+      _ehConfigService.isFavLongTap.value = newValue;
+    }
+
+    void _handleClipboarLinkTapChange(bool val) {
+      _ehConfigService.isClipboardLink.value = val;
     }
 
     final List<Widget> _list = <Widget>[
@@ -151,7 +157,7 @@ class ListViewEhSetting extends StatelessWidget {
       Obx(() => TextSwitchItem('显示标签中文翻译',
           intValue: _tagTranslat,
           onChanged: _handleTagTranslatChanged,
-          desc: '当前版本:${ehConfigService.tagTranslatVer.value ?? "无"}')),
+          desc: '当前版本:${_ehConfigService.tagTranslatVer.value ?? "无"}')),
       TextSwitchItem(
         S.of(context).show_jpn_title,
         intValue: _jpnTitle,
@@ -172,6 +178,13 @@ class ListViewEhSetting extends StatelessWidget {
         onChanged: _handleFavLongTapChanged,
         desc: '无默认,每次进行选择',
         descOn: '使用上次选择，长按选择其他',
+      ),
+      TextSwitchItem(
+        '剪贴板链接检测',
+        intValue: _isClipboar,
+        onChanged: _handleClipboarLinkTapChange,
+        desc: '关闭',
+        descOn: '自动检测剪贴板画廊链接',
       ),
       _buildListModeItem(context),
       _buildHistoryMaxItem(context),

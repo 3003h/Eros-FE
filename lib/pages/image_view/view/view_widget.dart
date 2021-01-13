@@ -111,7 +111,8 @@ class _GalleryImageState extends State<GalleryImage> {
               return UnconstrainedBox(
                 child: Container(
                   constraints: BoxConstraints(
-                    maxHeight: context.width,
+                    maxHeight: context.mediaQueryShortestSide,
+                    minWidth: context.width / 2,
                   ),
                   // margin:
                   //     const EdgeInsets.symmetric(vertical: 50, horizontal: 50),
@@ -158,9 +159,9 @@ class _GalleryImageState extends State<GalleryImage> {
           // 下载进度回调
           return UnconstrainedBox(
             child: Container(
-              // height: context.width,
               constraints: BoxConstraints(
-                maxHeight: context.width,
+                maxHeight: context.mediaQueryShortestSide,
+                minWidth: context.width / 2,
               ),
               alignment: Alignment.center,
               // margin: const EdgeInsets.symmetric(vertical: 50, horizontal: 50),

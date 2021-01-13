@@ -3,7 +3,7 @@ description: ..
 
 publish_to: 'none' # Remove this line if you wish to publish to pub.dev
 
-version: 1.0.3+103
+version: 1.0.3+104
 
 environment:
   sdk: '>=2.10.0 <3.0.0'
@@ -172,13 +172,13 @@ dev_dependencies:
       url: git://github.com/fadhilx/json_to_model.git
 #  json_to_model:
 #    path: /Users/honjow/git/json_to_model
-#  build_runner: ^1.9.0
+  build_runner: ^1.9.0
 #  build_runner:
 #    path: /Users/honjow/git/build/build_runner
-#  json_serializable: ^3.3.0
-#  json_annotation: ^3.0.1
-
-#  intl_translation: ^0.17.10
+  json_serializable: ^3.3.0
+  json_annotation: ^3.0.1
+#
+  intl_translation: ^0.17.10
 
   flutter_test:
     sdk: flutter
