@@ -1,4 +1,5 @@
 import 'package:fehviewer/common/service/depth_service.dart';
+import 'package:fehviewer/common/service/layout_service.dart';
 import 'package:fehviewer/models/index.dart';
 import 'package:fehviewer/pages/gallery/bindings/gallery_page_binding.dart';
 import 'package:fehviewer/pages/gallery/controller/gallery_page_controller.dart';
@@ -61,12 +62,28 @@ class NavigatorUtil {
       );
     } else {
       logger.d('goGalleryPage fromItem');
-      Get.to(
-        const GalleryMainPage(),
-        transition: Transition.cupertino,
-        preventDuplicates: false,
-        binding: GalleryBinding.fromItem(tabIndex, galleryItem),
-      );
+
+      // Get.to(
+      //   const GalleryMainPage(),
+      //   transition: Transition.cupertino,
+      //   preventDuplicates: false,
+      //   binding: GalleryBinding.fromItem(tabIndex, galleryItem),
+      // );
+
+      isLayoutLarge
+          ? Get.to(
+              const GalleryMainPage(),
+              id: 2,
+              transition: Transition.fadeIn,
+              preventDuplicates: false,
+              binding: GalleryBinding.fromItem(tabIndex, galleryItem),
+            )
+          : Get.to(
+              const GalleryMainPage(),
+              transition: Transition.cupertino,
+              preventDuplicates: false,
+              binding: GalleryBinding.fromItem(tabIndex, galleryItem),
+            );
     }
   }
 
