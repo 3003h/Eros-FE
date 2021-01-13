@@ -194,7 +194,7 @@ class GalleryItemWidget extends StatelessWidget {
           Container(
             padding: const EdgeInsets.fromLTRB(0, 0, 4, 0),
             child: StaticRatingBar(
-              size: 20.0,
+              size: 16.0,
               rate: _galleryItemController.galleryItem.rating,
               radiusRatio: 1.5,
               colorDark: CupertinoDynamicColor.resolve(

@@ -22,6 +22,7 @@ class GalleryItemController extends GetxController {
   final EhConfigService _ehConfigService = Get.find();
   final FavController _favController = Get.find();
 
+  /// 点击item
   void onTap() {
     logger.d('${galleryItem.englishTitle}');
     NavigatorUtil.goGalleryPage(galleryItem: galleryItem, tabIndex: _tabindex);
