@@ -4,8 +4,10 @@ import 'package:fehviewer/common/service/base_service.dart';
 import 'package:fehviewer/const/const.dart';
 import 'package:fehviewer/generated/l10n.dart';
 import 'package:fehviewer/pages/tab/controller/tabhome_controller.dart';
+import 'package:fehviewer/route/navigator_util.dart';
 import 'package:fehviewer/utils/logger.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 
 class EhConfigService extends ProfileService {
@@ -24,6 +26,7 @@ class EhConfigService extends ProfileService {
   RxString lastFavcat = '0'.obs;
   RxBool isFavPicker = false.obs;
   RxBool isPureDarkTheme = false.obs;
+  RxBool isClipboardLink = false.obs;
 
   String get lastShowFavcat => ehConfig.lastShowFavcat;
 
@@ -116,6 +119,10 @@ class EhConfigService extends ProfileService {
     isPureDarkTheme.value = ehConfig.pureDarkTheme ?? false;
     everProfile<bool>(
         isPureDarkTheme, (bool value) => ehConfig.pureDarkTheme = value);
+
+    isClipboardLink.value = ehConfig.clipboardLink ?? false;
+    everProfile<bool>(
+        isClipboardLink, (bool value) => ehConfig.clipboardLink = value);
   }
 
   /// 收藏排序
@@ -171,5 +178,47 @@ class EhConfigService extends ProfileService {
       }
     }
     return _result;
+  }
+
+  Future<void> chkClipboardLink() async {
+    if (!isClipboardLink.value) {
+      return;
+    }
+    final String _text =
+        (await Clipboard.getData(Clipboard.kTextPlain))?.text ?? '';
+    logger.d('Clipboard ' + _text);
+    final RegExp _reg =
+        RegExp(r'https?://e[-|x]hentai.org/g/\d+/[0-9a-f]{10}/?');
+    final RegExpMatch _mach = _reg.firstMatch(_text);
+    if (_mach != null && _mach.group(0).isNotEmpty) {
+      logger.d('${_mach.group(0)} ');
+      _showClipboardLinkDialog(_mach.group(0));
+    }
+  }
+
+  Future<void> _showClipboardLinkDialog(String url) async {
+    showCupertinoDialog(
+        context: Get.context,
+        builder: (BuildContext context) {
+          return CupertinoAlertDialog(
+            title: const Text('画廊跳转'),
+            content: const Text('检测到剪贴板中包含画廊链接, 是否打开'),
+            actions: [
+              CupertinoDialogAction(
+                child: Text(S.of(context).cancel),
+                onPressed: () {
+                  Get.back();
+                },
+              ),
+              CupertinoDialogAction(
+                child: Text(S.of(context).ok),
+                onPressed: () {
+                  Get.back();
+                  NavigatorUtil.goGalleryPage(url: url);
+                },
+              ),
+            ],
+          );
+        });
   }
 }

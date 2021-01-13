@@ -10,7 +10,8 @@ GalleryTag _$GalleryTagFromJson(Map<String, dynamic> json) {
   return GalleryTag()
     ..title = json['title'] as String
     ..type = json['type'] as String
-    ..tagTranslat = json['tagTranslat'] as String;
+    ..tagTranslat = json['tagTranslat'] as String
+    ..intro = json['intro'] as String;
 }
 
 Map<String, dynamic> _$GalleryTagToJson(GalleryTag instance) =>
@@ -18,4 +19,5 @@ Map<String, dynamic> _$GalleryTagToJson(GalleryTag instance) =>
       'title': instance.title,
       'type': instance.type,
       'tagTranslat': instance.tagTranslat,
+      'intro': instance.intro,
     };

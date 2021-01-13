@@ -23,7 +23,10 @@ AdvanceSearch _$AdvanceSearchFromJson(Map<String, dynamic> json) {
     ..endPage = json['endPage'] as String
     ..disableDFLanguage = json['disableDFLanguage'] as bool
     ..disableDFUploader = json['disableDFUploader'] as bool
-    ..disableDFTags = json['disableDFTags'] as bool;
+    ..disableDFTags = json['disableDFTags'] as bool
+    ..favSearchName = json['favSearchName'] as bool
+    ..favSearchTags = json['favSearchTags'] as bool
+    ..favSearchNote = json['favSearchNote'] as bool;
 }
 
 Map<String, dynamic> _$AdvanceSearchToJson(AdvanceSearch instance) =>
@@ -44,4 +47,7 @@ Map<String, dynamic> _$AdvanceSearchToJson(AdvanceSearch instance) =>
       'disableDFLanguage': instance.disableDFLanguage,
       'disableDFUploader': instance.disableDFUploader,
       'disableDFTags': instance.disableDFTags,
+      'favSearchName': instance.favSearchName,
+      'favSearchTags': instance.favSearchTags,
+      'favSearchNote': instance.favSearchNote,
     };

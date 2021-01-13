@@ -167,7 +167,7 @@ class GalleryHeader extends StatelessWidget {
                               }),
                           const Spacer(),
                           Text(
-                            galleryItem.postTime,
+                            galleryItem.postTime ?? '',
                             style: _hearTextStyle,
                           ),
                         ],
