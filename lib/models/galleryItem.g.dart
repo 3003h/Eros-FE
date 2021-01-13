@@ -24,6 +24,7 @@ GalleryItem _$GalleryItemFromJson(Map<String, dynamic> json) {
     ..language = json['language'] as String
     ..filecount = json['filecount'] as String
     ..rating = (json['rating'] as num)?.toDouble()
+    ..ratingCount = json['ratingCount'] as String
     ..torrentcount = json['torrentcount'] as String
     ..torrents = (json['torrents'] as List)
         ?.map((e) => e == null
@@ -31,9 +32,13 @@ GalleryItem _$GalleryItemFromJson(Map<String, dynamic> json) {
             : GalleryTorrent.fromJson(e as Map<String, dynamic>))
         ?.toList()
     ..filesize = json['filesize'] as int
+    ..filesizeText = json['filesizeText'] as String
+    ..visible = json['visible'] as String
+    ..parent = json['parent'] as String
     ..ratingFallBack = (json['ratingFallBack'] as num)?.toDouble()
     ..numberOfReviews = json['numberOfReviews'] as String
     ..postTime = json['postTime'] as String
+    ..favoritedCount = json['favoritedCount'] as String
     ..favTitle = json['favTitle'] as String
     ..favcat = json['favcat'] as String
     ..localFav = json['localFav'] as bool
@@ -82,12 +87,17 @@ Map<String, dynamic> _$GalleryItemToJson(GalleryItem instance) =>
       'language': instance.language,
       'filecount': instance.filecount,
       'rating': instance.rating,
+      'ratingCount': instance.ratingCount,
       'torrentcount': instance.torrentcount,
       'torrents': instance.torrents,
       'filesize': instance.filesize,
+      'filesizeText': instance.filesizeText,
+      'visible': instance.visible,
+      'parent': instance.parent,
       'ratingFallBack': instance.ratingFallBack,
       'numberOfReviews': instance.numberOfReviews,
       'postTime': instance.postTime,
+      'favoritedCount': instance.favoritedCount,
       'favTitle': instance.favTitle,
       'favcat': instance.favcat,
       'localFav': instance.localFav,

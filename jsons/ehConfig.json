@@ -16,5 +16,6 @@
   "maxHistory": 100,
   "searchBarComp": false,
   "pureDarkTheme": false,
-  "viewModel": "vertical"
+  "viewModel": "vertical",
+  "clipboardLink": false
 }

@@ -25,7 +25,8 @@ EhConfig _$EhConfigFromJson(Map<String, dynamic> json) {
     ..maxHistory = json['maxHistory'] as int
     ..searchBarComp = json['searchBarComp'] as bool
     ..pureDarkTheme = json['pureDarkTheme'] as bool
-    ..viewModel = json['viewModel'] as String;
+    ..viewModel = json['viewModel'] as String
+    ..clipboardLink = json['clipboardLink'] as bool;
 }
 
 Map<String, dynamic> _$EhConfigToJson(EhConfig instance) => <String, dynamic>{
@@ -47,4 +48,5 @@ Map<String, dynamic> _$EhConfigToJson(EhConfig instance) => <String, dynamic>{
       'searchBarComp': instance.searchBarComp,
       'pureDarkTheme': instance.pureDarkTheme,
       'viewModel': instance.viewModel,
+      'clipboardLink': instance.clipboardLink,
     };
