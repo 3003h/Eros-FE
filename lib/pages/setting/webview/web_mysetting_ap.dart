@@ -5,18 +5,18 @@ import 'package:fehviewer/generated/l10n.dart';
 import 'package:fehviewer/network/gallery_request.dart';
 import 'package:fehviewer/utils/logger.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:flutter_inappwebview/flutter_inappwebview.dart'
-    show CookieManager;
+import 'package:flutter_inappwebview/flutter_inappwebview.dart' as inw;
 import 'package:flutter_webview_plugin/flutter_webview_plugin.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
+/// 安卓使用
 class WebMySettingAP extends StatefulWidget {
   @override
   _WebMySettingAPState createState() => _WebMySettingAPState();
 }
 
 class _WebMySettingAPState extends State<WebMySettingAP> {
-  final CookieManager _cookieManager = CookieManager.instance();
+  final inw.CookieManager _cookieManager = inw.CookieManager.instance();
 
   final FlutterWebviewPlugin flutterWebviewPlugin = FlutterWebviewPlugin();
 
@@ -34,19 +34,35 @@ class _WebMySettingAPState extends State<WebMySettingAP> {
 
   @override
   void dispose() {
-    super.dispose();
     flutterWebviewPlugin.close();
+
+    super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
     flutterWebviewPlugin.onStateChanged.listen((WebViewStateChanged viewState) {
-      // logger.d(
-      //     '${viewState.url}  ${viewState.type}  ${viewState.navigationType}');
+      logger.d(
+          '${viewState.url}  ${viewState.type}  ${viewState.navigationType}');
       if (viewState.type == WebViewState.shouldStart &&
           !viewState.url.endsWith('/uconfig.php')) {
         logger.d('阻止打开 ${viewState.url}');
         flutterWebviewPlugin.stopLoading();
+      } else if (viewState.type == WebViewState.finishLoad &&
+          viewState.url.endsWith('/uconfig.php')) {
+        // 写入cookie到dio
+        _cookieManager.getCookies(url: viewState.url).then((value) {
+          // List<Cookie> _cookies = value.forEach((key, value) { });
+          final List<Cookie> _cookies = value
+              .map((inw.Cookie e) => Cookie(e.name, e.value)..domain = e.domain)
+              .toList();
+
+          logger.d('${_cookies.map((e) => e.toString()).join('\n')} ');
+
+          Global.cookieJar.delete(Uri.parse(Api.getBaseUrl()), true);
+          Global.cookieJar
+              .saveFromResponse(Uri.parse(Api.getBaseUrl()), _cookies);
+        });
       }
     });
 
@@ -74,8 +90,16 @@ class _WebMySettingAPState extends State<WebMySettingAP> {
                 size: 24,
               ),
               onPressed: () async {
+                // 保存配置
                 flutterWebviewPlugin.evalJavascript(
                     'document.querySelector("#apply > input[type=submit]").click();');
+                // flutterWebviewPlugin
+                //     .getCookies()
+                //     .then((Map<String, String> value) {
+                //   value.forEach((key, value) {
+                //     logger.d('$key  $value');
+                //   });
+                // });
               },
             ),
           ],
