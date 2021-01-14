@@ -168,7 +168,7 @@ class GalleryItemSimpleWidget extends StatelessWidget {
         Container(
           padding: const EdgeInsets.fromLTRB(0, 0, 4, 0),
           child: StaticRatingBar(
-            size: 20.0,
+            size: 16.0,
             rate: _galleryItemController.galleryItem.rating,
             radiusRatio: 1.5,
             colorDark: CupertinoDynamicColor.resolve(
@@ -178,7 +178,7 @@ class GalleryItemSimpleWidget extends StatelessWidget {
         Text(
           _galleryItemController?.galleryItem?.rating.toString(),
           style: TextStyle(
-            fontSize: 13,
+            fontSize: 12,
             color: CupertinoDynamicColor.resolve(
                 CupertinoColors.systemGrey, Get.context),
           ),
@@ -278,14 +278,17 @@ class CoverImg extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final EhConfigService ehConfigService = Get.find();
+    final EhConfigService _ehConfigService = Get.find();
     final Map<String, String> _httpHeaders = {
       'Cookie': Global.profile?.user?.cookie ?? '',
     };
     if (imgUrl != null && imgUrl.isNotEmpty) {
-      return Obx(() => LayoutBuilder(builder: (context, constraints) {
+      return Obx(() {
+        final bool _isBlur = _ehConfigService.isGalleryImgBlur.value;
+        return LayoutBuilder(
+          builder: (context, constraints) {
             return BlurImage(
-              isBlur: ehConfigService.isGalleryImgBlur.value,
+              isBlur: _isBlur,
               child: CachedNetworkImage(
                 placeholder: (_, __) {
                   return Container(
@@ -300,7 +303,9 @@ class CoverImg extends StatelessWidget {
                 fit: BoxFit.fitWidth,
               ),
             );
-          }));
+          },
+        );
+      });
     } else {
       return Container();
     }

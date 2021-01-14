@@ -84,6 +84,7 @@ class ListViewAdvancedSetting extends StatelessWidget {
           },
         ),
       Container(height: 38),
+      // 清除缓存
       SelectorSettingItem(
         title: S.of(context).clear_cache,
         selector: '',
@@ -232,7 +233,4 @@ class ListViewAdvancedSetting extends StatelessWidget {
       },
     );
   }
-
-  /// 清除缓存
-
 }
