@@ -4,7 +4,7 @@ import 'package:fehviewer/common/global.dart';
 import 'package:fehviewer/const/storages.dart';
 import 'package:fehviewer/utils/logger.dart';
 import 'package:fehviewer/utils/storage.dart';
-import 'package:path/path.dart';
+import 'package:path/path.dart' as path;
 
 Future<void> dataUpdate() async {
   if (!Global.isFirstOpen && !Global.isDBinappSupportPath) {
@@ -31,9 +31,9 @@ Future<void> moveDB() async {
     if (entity.path.endsWith('.db')) {
       final File _dbFile = File(entity.path);
       final String fileName =
-          _dbFile.path.substring(_dbFile.path.lastIndexOf(separator) + 1);
+          _dbFile.path.substring(_dbFile.path.lastIndexOf(path.separator) + 1);
 // print(join(appSupportPath, fileName));
-      _dbFile.copySync(join(Global.appSupportPath, fileName));
+      _dbFile.copySync(path.join(Global.appSupportPath, fileName));
       _dbFile.deleteSync();
     } else if (entity.path.endsWith('ie0_ps1')) {
       final Directory _ieDir = Directory(entity.path);
@@ -46,9 +46,9 @@ Future<void> moveDB() async {
 // print(_ieEntity.path);
         final File _cookieFile = File(_ieEntity.path);
         final String _cookieFileName = _cookieFile.path
-            .substring(_cookieFile.path.lastIndexOf(separator) + 1);
+            .substring(_cookieFile.path.lastIndexOf(path.separator) + 1);
 // print('to  ' + join(appSupportPath, _cookieFileName));
-        _cookieFile.copySync(join(Global.appSupportPath, _cookieFileName));
+        _cookieFile.copySync(path.join(Global.appSupportPath, _cookieFileName));
         _cookieFile.deleteSync();
       }
       _ieDir.deleteSync();

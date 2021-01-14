@@ -1,4 +1,3 @@
-import 'package:fehviewer/common/controller/cache_controller.dart';
 import 'package:fehviewer/pages/tab/controller/favorite_controller.dart';
 import 'package:fehviewer/pages/tab/controller/gallery_controller.dart';
 import 'package:fehviewer/pages/tab/controller/history_controller.dart';
@@ -19,7 +18,5 @@ class TabHomeBinding extends Bindings {
     Get.lazyPut(() => SettingViewController(), fenix: true);
 
     Get.lazyPut(() => HistoryViewController(), fenix: true);
-
-    Get.put(CacheController());
   }
 }

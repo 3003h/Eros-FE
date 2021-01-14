@@ -43,6 +43,7 @@ class Global {
 
   static String appSupportPath;
   static String appDocPath;
+  static String tempPath;
 
   static bool isDBinappSupportPath = false;
 
@@ -70,8 +71,9 @@ class Global {
 
     appSupportPath = (await getApplicationSupportDirectory()).path;
     appDocPath = (await getApplicationDocumentsDirectory()).path;
+    tempPath = (await getTemporaryDirectory()).path;
 
-    logger.d('$appDocPath \n$appSupportPath');
+    logger.d('doc $appDocPath \napps $appSupportPath \ntemp $tempPath');
 
     // SP初始化
     await StorageUtil.init();
