@@ -39,17 +39,15 @@ class AdvancedSettingPage extends StatelessWidget {
 class ListViewAdvancedSetting extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    final EhConfigService _ehConfigService = Get.find();
-    final DnsService _dnsConfigController = Get.find();
-    final CacheController _cacheController = Get.find();
-
+    final EhConfigService ehConfigService = Get.find();
+    final DnsService dnsConfigController = Get.find();
     void _handlePureDarkChanged(bool newValue) {
-      _ehConfigService.isPureDarkTheme.value = newValue;
+      ehConfigService.isPureDarkTheme.value = newValue;
     }
 
     void _handleDoHChanged(bool newValue) {
       if (!newValue &&
-          !(_dnsConfigController.enableCustomHosts.value ?? false)) {
+          !(dnsConfigController.enableCustomHosts.value ?? false)) {
         /// 清除hosts 关闭代理
         logger.d(' 关闭代理');
         HttpOverrides.global = null;
@@ -57,11 +55,11 @@ class ListViewAdvancedSetting extends StatelessWidget {
         /// 设置全局本地代理
         HttpOverrides.global = Global.httpProxy;
       }
-      _dnsConfigController.enableDoH.value = newValue;
+      dnsConfigController.enableDoH.value = newValue;
     }
 
     void _handleEFChanged(bool newValue) {
-      _dnsConfigController.enableDomainFronting.value = newValue;
+      dnsConfigController.enableDomainFronting.value = newValue;
     }
 
     final List<Widget> _list = <Widget>[
@@ -70,7 +68,7 @@ class ListViewAdvancedSetting extends StatelessWidget {
       _buildThemeItem(context),
       Obx(() => TextSwitchItem(
             S.of(context).dark_mode_effect,
-            intValue: _ehConfigService.isPureDarkTheme.value,
+            intValue: ehConfigService.isPureDarkTheme.value,
             onChanged: _handlePureDarkChanged,
             desc: S.of(context).gray_black,
             descOn: S.of(context).pure_black,
@@ -87,29 +85,19 @@ class ListViewAdvancedSetting extends StatelessWidget {
         ),
       Container(height: 38),
       // 清除缓存
-      _cacheController.obx(
-          (String state) => SelectorSettingItem(
-                title: S.of(context).clear_cache,
-                selector: state ?? '',
-                hideLine: true,
-                onTap: () {
-                  logger.d(' clear_cache');
-                  _cacheController.clearAllCache();
-                },
-              ),
-          onLoading: SelectorSettingItem(
-            title: S.of(context).clear_cache,
-            selector: '',
-            hideLine: true,
-            onTap: () {
-              logger.d(' clear_cache');
-              _cacheController.clearAllCache();
-            },
-          )),
+      SelectorSettingItem(
+        title: S.of(context).clear_cache,
+        selector: '',
+        hideLine: true,
+        onTap: () {
+          logger.d(' clear_cache');
+          Get.find<CacheController>().clearAllCache();
+        },
+      ),
       Container(height: 38),
       Obx(() => SelectorSettingItem(
             title: S.of(context).custom_hosts,
-            selector: _dnsConfigController.enableCustomHosts.value
+            selector: dnsConfigController.enableCustomHosts.value
                 ? S.of(context).on
                 : S.of(context).off,
             onTap: () {
@@ -119,13 +107,13 @@ class ListViewAdvancedSetting extends StatelessWidget {
       if (Global.inDebugMode)
         TextSwitchItem(
           S.of(context).domain_fronting,
-          intValue: _dnsConfigController.enableDomainFronting.value,
+          intValue: dnsConfigController.enableDomainFronting.value,
           onChanged: _handleEFChanged,
           desc: 'SNI',
         ),
       TextSwitchItem(
         'DNS-over-HTTPS',
-        intValue: _dnsConfigController.enableDoH.value,
+        intValue: dnsConfigController.enableDoH.value,
         onChanged: _handleDoHChanged,
         hideLine: true,
         desc: '优先级低于自定义hosts',
