@@ -28,6 +28,8 @@ class EhConfigService extends ProfileService {
   RxBool isPureDarkTheme = false.obs;
   RxBool isClipboardLink = false.obs;
 
+  String _lastClipboardLink = '';
+
   String get lastShowFavcat => ehConfig.lastShowFavcat;
 
   set lastShowFavcat(String value) {
@@ -190,8 +192,11 @@ class EhConfigService extends ProfileService {
     final RegExp _reg =
         RegExp(r'https?://e[-|x]hentai.org/g/\d+/[0-9a-f]{10}/?');
     final RegExpMatch _mach = _reg.firstMatch(_text);
-    if (_mach != null && _mach.group(0).isNotEmpty) {
+    if (_mach != null &&
+        _mach.group(0).isNotEmpty &&
+        _lastClipboardLink != _mach.group(0)) {
       logger.d('${_mach.group(0)} ');
+      _lastClipboardLink = _mach.group(0);
       _showClipboardLinkDialog(_mach.group(0));
     }
   }
