@@ -75,10 +75,10 @@ class Api {
     }
   }
 
-  static HttpManager getHttpManager({bool cache = true}) {
+  static HttpManager getHttpManager({bool cache = true, String baseUrl}) {
     final String _baseUrl = EHConst.getBaseSite(
         Get.find<EhConfigService>().isSiteEx.value ?? false);
-    return HttpManager(_baseUrl, cache: cache);
+    return HttpManager(baseUrl ?? _baseUrl, cache: cache);
   }
 
   static Options getCacheOptions({bool forceRefresh = false}) {
@@ -664,7 +664,10 @@ class Api {
     const String url = '/api.php';
 
     await CustomHttpsProxy.instance.init();
-    final response = await getHttpManager(cache: cache).postForm(
+    final response = await getHttpManager(
+      cache: cache,
+      baseUrl: EHConst.getBaseSite(),
+    ).postForm(
       url,
       data: req,
       options: getCacheOptions(forceRefresh: refresh),
