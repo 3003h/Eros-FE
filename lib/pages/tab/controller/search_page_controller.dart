@@ -357,6 +357,10 @@ class SearchPageController extends GetxController
       transition: Transition.cupertino,
     ).then((String value) {
       // return searchTextController.text = value;
+      // final String _text = value ?? '';
+      if (value == null) {
+        return;
+      }
       searchTextController.value = TextEditingValue(
         text: '$value ',
         selection: TextSelection.fromPosition(TextPosition(
