@@ -75,6 +75,7 @@ class GalleryFavController extends GetxController {
 
   bool get isFav => favcat.isNotEmpty || localFav;
 
+  /// 添加到上次
   Future<bool> _addToLastFavcat(String _lastFavcat) async {
     isLoading = true;
 
@@ -92,8 +93,12 @@ class GalleryFavController extends GetxController {
       return false;
     } finally {
       isLoading = false;
+
       this._favTitle.value = _favTitle;
       _favcat.value = _lastFavcat;
+      if (!_pageController.fromUrl) {
+        _itemController.setFavTitle(favTitle: favTitle, favcat: favcat);
+      }
     }
     return true;
   }
@@ -114,7 +119,7 @@ class GalleryFavController extends GetxController {
       if ((_ehConfigService.isFavLongTap.value ?? false) &&
           _lastFavcat != null &&
           _lastFavcat.isNotEmpty) {
-        logger.v('添加到上次收藏夹');
+        logger.v('添加到上次收藏夹 $_lastFavcat');
         return _addToLastFavcat(_lastFavcat);
       } else {
         // 手选收藏夹
@@ -152,6 +157,9 @@ class GalleryFavController extends GetxController {
       final String _favcat = result['favcat'];
       final String _favnote = result['favnode'];
       final String _favTitle = result['favTitle'];
+
+      _ehConfigService.lastFavcat.value = _favcat;
+
       try {
         if (_favcat != 'l') {
           await GalleryFavParser.galleryAddfavorite(
