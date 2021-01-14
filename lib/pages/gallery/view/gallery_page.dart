@@ -1,6 +1,7 @@
 import 'package:fehviewer/common/service/depth_service.dart';
 import 'package:fehviewer/generated/l10n.dart';
 import 'package:fehviewer/models/index.dart';
+import 'package:fehviewer/network/gallery_request.dart';
 import 'package:fehviewer/pages/gallery/controller/gallery_page_controller.dart';
 import 'package:fehviewer/pages/gallery/view/gallery_widget.dart';
 import 'package:fehviewer/pages/gallery/view/rate_dialog.dart';
@@ -59,8 +60,10 @@ class GalleryMainPage extends StatelessWidget {
                           size: 28,
                         ),
                         onPressed: () {
-                          logger.v('share ${_item.url}');
-                          Share.share(' ${_item.url}');
+                          final String _url =
+                              '${Api.getBaseUrl()}/g/${_item.gid}/${_item.token}';
+                          logger.v('share $_url');
+                          Share.share(_url);
                         },
                       )
                     : ReadButton(gid: _item.gid),

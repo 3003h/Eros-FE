@@ -49,7 +49,8 @@ class EHConst {
   static const String EH_TORRENT_URL = 'https://ehtracker.org/get';
   static const String EX_TORRENT_URL = 'https://exhentai.org/torrent';
 
-  static String getBaseSite(bool isEx) => isEx ? EX_BASE_URL : EH_BASE_URL;
+  static String getBaseSite([bool isEx = false]) =>
+      isEx ? EX_BASE_URL : EH_BASE_URL;
 
   static String get torrentBaseUrl =>
       (Get.find<EhConfigService>().isSiteEx.value ?? false)
