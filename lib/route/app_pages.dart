@@ -1,3 +1,4 @@
+import 'package:fehviewer/common/controller/cache_controller.dart';
 import 'package:fehviewer/pages/gallery/view/comment_page.dart';
 import 'package:fehviewer/pages/login/login_page.dart';
 import 'package:fehviewer/pages/login/web_login.dart';
@@ -51,6 +52,7 @@ class AppPages {
       name: EHRoutes.advancedSetting,
       page: () => AdvancedSettingPage(),
       transition: Transition.cupertino,
+      binding: BindingsBuilder(() => Get.lazyPut(() => CacheController())),
     ),
     GetPage(
       name: EHRoutes.about,

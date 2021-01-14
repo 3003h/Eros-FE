@@ -1,5 +1,3 @@
-import 'logger.dart';
-
 final Time time = Time();
 
 class Time {
@@ -8,7 +6,7 @@ class Time {
   void showTime(String tag) {
     final int nowTime = DateTime.now().millisecondsSinceEpoch;
     if (lastTime != null) {
-      loggerNoStackTime.v('showTime $tag ${nowTime - lastTime}');
+      // loggerNoStackTime.v('showTime $tag ${nowTime - lastTime}');
     }
     lastTime = nowTime;
   }
