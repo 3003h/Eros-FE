@@ -39,9 +39,10 @@ class NavigatorUtil {
     Get.find<DepthService>().pushSearchPageCtrl();
     Get.to(GallerySearchPage(), transition: Transition.cupertino,
         binding: BindingsBuilder(() {
-      Get.put(
-        SearchPageController(initSearchText: _search),
+      Get.lazyPut(
+        () => SearchPageController(initSearchText: _search),
         tag: searchPageCtrlDepth,
+        fenix: true,
       );
     }));
   }
@@ -103,9 +104,10 @@ class NavigatorUtil {
         transition: fromTabItem ? Transition.fadeIn : Transition.cupertino,
         binding: BindingsBuilder(() {
       Get.find<DepthService>().pushSearchPageCtrl();
-      Get.put(
-        SearchPageController(searchType: searchType),
+      Get.lazyPut(
+        () => SearchPageController(searchType: searchType),
         tag: searchPageCtrlDepth,
+        fenix: true,
       );
     }));
   }

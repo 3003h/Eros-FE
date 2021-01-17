@@ -15,6 +15,7 @@ import 'package:fehviewer/utils/storage.dart';
 import 'package:fehviewer/utils/utility.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_downloader/flutter_downloader.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:logger/logger.dart';
 import 'package:path/path.dart';
@@ -57,6 +58,8 @@ class Global {
 
     // 判断是否debug模式
     inDebugMode = EHUtils().isInDebugMode;
+
+    await FlutterDownloader.initialize(debug: Global.inDebugMode);
 
     if (!inDebugMode) Logger.level = Level.info;
 

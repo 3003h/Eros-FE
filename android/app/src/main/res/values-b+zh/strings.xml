@@ -1,0 +1,8 @@
+<resources>
+    <string name="flutter_downloader_notification_started">下载开始</string>
+    <string name="flutter_downloader_notification_in_progress">下载中</string>
+    <string name="flutter_downloader_notification_canceled">下载取消</string>
+    <string name="flutter_downloader_notification_failed">下载失败</string>
+    <string name="flutter_downloader_notification_complete">下载完成</string>
+    <string name="flutter_downloader_notification_paused">下载暂停</string>
+</resources>

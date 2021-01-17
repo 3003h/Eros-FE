@@ -1,4 +1,5 @@
 import 'package:fehviewer/pages/gallery/controller/archiver_controller.dart';
+import 'package:fehviewer/utils/logger.dart';
 import 'package:html/dom.dart';
 import 'package:html/parser.dart' show parse;
 
@@ -19,12 +20,40 @@ ArchiverProvider parseArchiver(String response) {
 
   // logger.d('$response');
 
+  final List<ArchiverProviderItem> _dlItems = <ArchiverProviderItem>[];
+
+  final List<Element> dlElms =
+      document.querySelectorAll('#db > div').elementAt(0).children;
+  dlElms.removeLast();
+  logger.d('${dlElms.length} ');
+  for (final Element dlElm in dlElms) {
+    final String _price = RegExp(r':\s+([\w,. ]+)!?$')
+            .firstMatch(dlElm.children[0].text ?? '')
+            ?.group(1) ??
+        dlElm.children[0].text;
+
+    final String _size = RegExp(r':\s+([\w,. ]+)!?$')
+            .firstMatch(dlElm.children[2].text ?? '')
+            ?.group(1) ??
+        dlElm.children[2].text;
+
+    final String _dltype = dlElm.children[1].children.first.attributes['value'];
+
+    logger.d('price: $_price  size: $_size dltype: $_dltype');
+    _dlItems.add(
+      ArchiverProviderItem()
+        ..dltype = _dltype
+        ..size = _size
+        ..price = _price,
+    );
+  }
+
+  final List<ArchiverProviderItem> _hItems = <ArchiverProviderItem>[];
   final List<Element> archiverElms = document
       .querySelectorAll('#db > div')
       .elementAt(1)
       .querySelectorAll('table > tbody > tr > td');
 
-  final List<ArchiverProviderItem> _items = <ArchiverProviderItem>[];
   for (final Element archiverElm in archiverElms) {
     final List<Element> children = archiverElm.children;
     if (children.length >= 3) {
@@ -35,8 +64,9 @@ ArchiverProvider parseArchiver(String response) {
         final String onClick = children[0].children.first.attributes['onclick'];
         final String res = RegExp(r"\('(\w+)'\)").firstMatch(onClick).group(1);
         // logger.d('$res');
-        _items.add(
+        _hItems.add(
           ArchiverProviderItem()
+            ..dltype = 'h'
             ..resolution = children[0].text
             ..dlres = res
             ..size = children[1].text
@@ -47,7 +77,8 @@ ArchiverProvider parseArchiver(String response) {
   }
 
   return ArchiverProvider()
-    ..items = _items
+    ..hItems = _hItems
+    ..dlItems = _dlItems
     ..gp = gp
     ..credits = credits;
 }

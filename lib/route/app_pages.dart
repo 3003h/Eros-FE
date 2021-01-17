@@ -11,6 +11,7 @@ import 'package:fehviewer/pages/setting/tab_setting.dart';
 import 'package:fehviewer/pages/setting/view_setting_page.dart';
 import 'package:fehviewer/pages/tab/bindings/splash_binding.dart';
 import 'package:fehviewer/pages/tab/bindings/tabhome_binding.dart';
+import 'package:fehviewer/pages/tab/view/download_page.dart';
 import 'package:fehviewer/pages/tab/view/favorite_page.dart';
 import 'package:fehviewer/pages/tab/view/favorite_sel_page.dart';
 import 'package:fehviewer/pages/tab/view/history_page.dart';
@@ -103,6 +104,11 @@ class AppPages {
     GetPage(
       name: EHRoutes.popular,
       page: () => const PopularListTab(tabIndex: EHRoutes.popular),
+    ),
+    GetPage(
+      name: EHRoutes.download,
+      page: () => const DownloadTab(tabIndex: EHRoutes.download),
+      transition: Transition.cupertino,
     ),
   ];
 }
