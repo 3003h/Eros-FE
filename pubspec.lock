@@ -317,10 +317,12 @@ packages:
   flutter_downloader:
     dependency: "direct main"
     description:
-      path: "/Users/honjow/git/flutter_downloader_honjow"
-      relative: false
-    source: path
-    version: "1.5.2"
+      path: "."
+      ref: HEAD
+      resolved-ref: a8e2473c16e4ed841f2d937a13c58ecacff12b18
+      url: "https://github.com/nimisis/flutter_downloader.git"
+    source: git
+    version: "1.4.4"
   flutter_egg:
     dependency: "direct main"
     description:
