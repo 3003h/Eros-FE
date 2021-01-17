@@ -1,3 +1,4 @@
+import 'package:fehviewer/common/controller/download_controller.dart';
 import 'package:fehviewer/network/gallery_request.dart';
 import 'package:fehviewer/utils/logger.dart';
 import 'package:fehviewer/utils/toast.dart';
@@ -10,6 +11,7 @@ class ArchiverController extends GetxController
   ArchiverController({this.pageController});
 
   final GalleryPageController pageController;
+  final DownloadController _downloadController = Get.find();
 
   @override
   void onInit() {
@@ -37,14 +39,32 @@ class ArchiverController extends GetxController
     await _loadData();
   }
 
-  Future<void> download(String dlres) async {
-    final String response = await Api.postArchiverDownload(
+  Future<void> downloadRemote(String dlres) async {
+    final String response = await Api.postArchiverRemoteDownload(
         pageController.galleryItem.archiverLink, dlres);
     showToast(response);
+  }
+
+  Future<void> downloadLoacal({
+    String dltype,
+    String dlcheck,
+  }) async {
+    Get.back();
+    final String _url = await Api.postArchiverLocalDownload(
+        pageController.galleryItem.archiverLink,
+        dltype: dltype,
+        dlcheck: dlcheck);
+    _downloadController.downloadArchiverFile(
+      gid: pageController.galleryItem.gid,
+      title: pageController.title,
+      dlType: dltype,
+      url: _url,
+    );
   }
 }
 
 class ArchiverProviderItem {
+  String dltype;
   String resolution;
   String dlres;
   String size;
@@ -54,5 +74,6 @@ class ArchiverProviderItem {
 class ArchiverProvider {
   String gp;
   String credits;
-  List<ArchiverProviderItem> items;
+  List<ArchiverProviderItem> hItems;
+  List<ArchiverProviderItem> dlItems;
 }

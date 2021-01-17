@@ -123,6 +123,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "show_filter" : MessageLookupByLibrary.simpleMessage("显示筛选"),
     "show_jpn_title" : MessageLookupByLibrary.simpleMessage("显示日文标题"),
     "t_Clear_all_history" : MessageLookupByLibrary.simpleMessage("清除所有历史"),
+    "tab_download" : MessageLookupByLibrary.simpleMessage("下载"),
     "tab_favorite" : MessageLookupByLibrary.simpleMessage("收藏"),
     "tab_gallery" : MessageLookupByLibrary.simpleMessage("画廊"),
     "tab_history" : MessageLookupByLibrary.simpleMessage("历史"),

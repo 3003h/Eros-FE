@@ -3,7 +3,7 @@ description: ..
 
 publish_to: 'none' # Remove this line if you wish to publish to pub.dev
 
-version: 1.0.3+108
+version: 1.0.3+109
 
 environment:
   sdk: '>=2.10.0 <3.0.0'
@@ -122,11 +122,11 @@ dependencies:
       path: packages/sensors
 
   # 权限检查
-#  permission_handler: ^5.0.1+1
-  permission_handler:
-    git:
-      url: https://github.com/Baseflow/flutter-permission-handler.git
-      path: permission_handler
+  permission_handler: ^5.0.1+1
+#  permission_handler:
+#    git:
+#      url: https://github.com/Baseflow/flutter-permission-handler.git
+#      path: permission_handler
 
   flutter_cache_manager: ^2.1.0
 
@@ -161,6 +161,16 @@ dependencies:
   flutter_rating_bar: ^3.2.0+1
 
   custom_pop_up_menu: ^1.1.0
+
+  # flutter_downloader: ^1.5.2
+
+  # 自定义进度步进
+  flutter_downloader:
+    git:
+      url: https://github.com/nimisis/flutter_downloader.git
+
+#  multi_downloader: ^1.0.6
+
 
 dev_dependencies:
 #  build_runner: ^1.0.0

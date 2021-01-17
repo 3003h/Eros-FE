@@ -11,6 +11,12 @@ class ArchiverView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final ArchiverController controller = Get.find(tag: pageCtrlDepth);
+
+    final Map<String, String> typedesc = {
+      'res': 'Resample Archive',
+      'org': 'Original Archive',
+    };
+
     return controller.obx(
       (ArchiverProvider state) {
         return Column(
@@ -22,23 +28,23 @@ class ArchiverView extends StatelessWidget {
                     'Current funds:\n GP: ${state.gp}   Credits: ${state.credits}'),
               ),
             const Text(
-              'H@H',
+              'Download',
               style: TextStyle(fontWeight: FontWeight.bold),
             ),
             Container(
-              padding: const EdgeInsets.only(top: 8.0),
-              height: (state.items?.length ?? 0) * 40 + 50.0,
+              padding: const EdgeInsets.only(top: 4.0),
+              height: 100,
               child: ListView.separated(
                 padding: const EdgeInsets.all(0),
                 itemBuilder: (_, int index) {
-                  final ArchiverProviderItem _item = state.items[index];
+                  final ArchiverProviderItem _item = state.dlItems[index];
                   return CupertinoButton(
                     padding: const EdgeInsets.symmetric(vertical: 8.0),
                     child: Column(
                       children: <Widget>[
-                        Text(_item.resolution),
+                        Text(typedesc[_item.dltype]).paddingOnly(bottom: 2.0),
                         Text(
-                          '${_item.size}, ${_item.price}',
+                          '${_item.size}    ${_item.price}',
                           textAlign: TextAlign.start,
                           style: const TextStyle(
                             fontSize: 10,
@@ -49,9 +55,51 @@ class ArchiverView extends StatelessWidget {
                       ],
                     ),
                     onPressed: () async {
-                      // logger.d('tap $index');
-                      controller.download(_item.dlres);
-                      // Get.delete<ArchiverController>(tag: pageCtrlDepth);
+                      controller.downloadLoacal(
+                          dltype: _item.dltype,
+                          dlcheck: typedesc[_item.dltype]);
+                    },
+                  );
+                },
+                separatorBuilder: (_, __) {
+                  return Divider(
+                    height: 0.5,
+                    color: CupertinoDynamicColor.resolve(
+                        CupertinoColors.systemGrey4, context),
+                  );
+                },
+                itemCount: state.dlItems?.length ?? 0,
+              ),
+            ),
+            const Text(
+              'H@H',
+              style: TextStyle(fontWeight: FontWeight.bold),
+            ).paddingOnly(top: 8.0),
+            Container(
+              padding: const EdgeInsets.only(top: 4.0),
+              height: (state.hItems?.length ?? 0) * 40 + 50.0,
+              child: ListView.separated(
+                padding: const EdgeInsets.all(0),
+                itemBuilder: (_, int index) {
+                  final ArchiverProviderItem _item = state.hItems[index];
+                  return CupertinoButton(
+                    padding: const EdgeInsets.symmetric(vertical: 8.0),
+                    child: Column(
+                      children: <Widget>[
+                        Text(_item.resolution).paddingOnly(bottom: 2.0),
+                        Text(
+                          '${_item.size}    ${_item.price}',
+                          textAlign: TextAlign.start,
+                          style: const TextStyle(
+                            fontSize: 10,
+                            height: 1,
+                            color: CupertinoColors.systemGrey,
+                          ),
+                        ),
+                      ],
+                    ),
+                    onPressed: () {
+                      controller.downloadRemote(_item.dlres);
                       Get.back();
                     },
                   );
@@ -63,7 +111,7 @@ class ArchiverView extends StatelessWidget {
                         CupertinoColors.systemGrey4, context),
                   );
                 },
-                itemCount: state.items?.length ?? 0,
+                itemCount: state.hItems?.length ?? 0,
               ),
             ),
           ],
