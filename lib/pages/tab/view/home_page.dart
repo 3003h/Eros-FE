@@ -5,7 +5,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-import 'home_page_large.dart';
 import 'home_page_small.dart';
 
 class TabHome extends GetView<TabHomeController> {
@@ -19,9 +18,10 @@ class TabHome extends GetView<TabHomeController> {
         builder: (context, constraints) {
           if (constraints.maxWidth > 800 && Global.inDebugMode) {
             logger.d('TabHomeLarge');
-            return TabHomeLarge();
+            // return TabHomeLarge();
+            return TabHomeSmall();
           } else {
-            logger.d('TabHomeSmall');
+            // logger.d('TabHomeSmall');
             return TabHomeSmall();
           }
         },

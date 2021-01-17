@@ -2,6 +2,7 @@ import 'package:fehviewer/common/service/ehconfig_service.dart';
 import 'package:fehviewer/generated/l10n.dart';
 import 'package:fehviewer/models/base/extension.dart';
 import 'package:fehviewer/models/index.dart';
+import 'package:fehviewer/pages/tab/view/download_page.dart';
 import 'package:fehviewer/pages/tab/view/history_page.dart';
 import 'package:fehviewer/pages/tab/view/watched_page.dart';
 import 'package:fehviewer/route/routes.dart';
@@ -51,6 +52,10 @@ class TabPages {
           tabIndex: EHRoutes.history,
           scrollController: _scrollController(EHRoutes.history),
         ),
+        EHRoutes.download: DownloadTab(
+          tabIndex: EHRoutes.download,
+          scrollController: _scrollController(EHRoutes.download),
+        ),
         EHRoutes.setting: SettingTab(
           tabIndex: EHRoutes.setting,
           scrollController: _scrollController(EHRoutes.setting),
@@ -63,6 +68,7 @@ class TabPages {
     EHRoutes.gallery: FontAwesomeIcons.list,
     EHRoutes.favorite: FontAwesomeIcons.solidHeart,
     EHRoutes.history: FontAwesomeIcons.history,
+    EHRoutes.download: FontAwesomeIcons.download,
     EHRoutes.setting: FontAwesomeIcons.cog,
   };
 
@@ -80,6 +86,8 @@ class TabPages {
             S.of(Get.find<TabHomeController>().tContext).tab_favorite,
         EHRoutes.history:
             S.of(Get.find<TabHomeController>().tContext).tab_history,
+        EHRoutes.download:
+            S.of(Get.find<TabHomeController>().tContext).tab_download,
         EHRoutes.setting:
             S.of(Get.find<TabHomeController>().tContext).tab_setting,
       };
@@ -90,6 +98,7 @@ const Map<String, bool> kTabMap = <String, bool>{
   EHRoutes.watched: true,
   EHRoutes.gallery: true,
   EHRoutes.favorite: true,
+  EHRoutes.download: true,
   EHRoutes.history: false,
 };
 
@@ -98,6 +107,7 @@ const List<String> kTabNameList = <String>[
   EHRoutes.watched,
   EHRoutes.gallery,
   EHRoutes.favorite,
+  EHRoutes.download,
   EHRoutes.history,
 ];
 
@@ -147,9 +157,26 @@ class TabHomeController extends GetxController {
 
     _tabConfig = gStore.tabConfig ?? (TabConfig()..tabItemList = <TabItem>[]);
 
-    // logger.i('get tab config ${_tabConfig.tabItemList.length}');
+    logger.i('get tab config ${_tabConfig.tabItemList.length}');
 
     if (_tabConfig.tabMap.isNotEmpty) {
+      if (_tabConfig.tabItemList.length < kTabNameList.length) {
+        final List<String> _tabConfigNames =
+            _tabConfig.tabItemList.map((e) => e.name).toList();
+        final List<String> _newTabs = kTabNameList
+            .where((String element) => !_tabConfigNames.contains(element))
+            .toList();
+
+        // 新增tab页的处理
+        logger.d('add tab $_newTabs');
+
+        _newTabs.forEach((String element) {
+          _tabConfig.tabItemList.add(TabItem()
+            ..name = element
+            ..enable = false);
+        });
+      }
+
       tabMap(_tabConfig.tabMap);
     }
 

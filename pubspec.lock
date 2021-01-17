@@ -314,6 +314,15 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "2.1.0"
+  flutter_downloader:
+    dependency: "direct main"
+    description:
+      path: "."
+      ref: HEAD
+      resolved-ref: a8e2473c16e4ed841f2d937a13c58ecacff12b18
+      url: "https://github.com/nimisis/flutter_downloader.git"
+    source: git
+    version: "1.4.4"
   flutter_egg:
     dependency: "direct main"
     description:
@@ -686,11 +695,9 @@ packages:
   permission_handler:
     dependency: "direct main"
     description:
-      path: permission_handler
-      ref: HEAD
-      resolved-ref: eb7ef50a35be6023948147c08178844a317430d5
-      url: "https://github.com/Baseflow/flutter-permission-handler.git"
-    source: git
+      name: permission_handler
+      url: "https://pub.dartlang.org"
+    source: hosted
     version: "5.0.1+1"
   permission_handler_platform_interface:
     dependency: transitive

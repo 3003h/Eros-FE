@@ -193,9 +193,9 @@ class Api {
     final List<Cookie> cookies =
         Global.cookieJar.loadForRequest(Uri.parse(Api.getBaseUrl()));
 
-    logger.d('${cookies.map((e) => e).join('\n')}');
+    // logger.d('${cookies.map((e) => e).join('\n')}');
 
-    logger.d('${searchType}');
+    // logger.d('${searchType}');
 
     final String url = searchType == SearchType.watched ? '/watched' : '/';
 
@@ -218,7 +218,7 @@ class Api {
 
     final Options _cacheOptions = getCacheOptions(forceRefresh: refresh);
 
-    logger.v(url);
+    // logger.v(url);
 
     await CustomHttpsProxy.instance.init();
     final String response =
@@ -331,7 +331,7 @@ class Api {
     cookies.add(Cookie('nw', '1'));
     cookieJar.saveFromResponse(Uri.parse(Api.getBaseUrl()), cookies);
 
-    logger.i('获取画廊 $url');
+    // logger.i('获取画廊 $url');
     time.showTime('获取画廊');
     await CustomHttpsProxy.instance.init();
     time.showTime('设置代理');
@@ -436,7 +436,7 @@ class Api {
   // 获取 Archiver
   static Future<ArchiverProvider> getArchiver(
     String url, {
-    bool refresh = false,
+    bool refresh = true,
   }) async {
     final String response = await getHttpManager()
         .get(url, options: getCacheOptions(forceRefresh: refresh));
@@ -445,13 +445,33 @@ class Api {
     return parseArchiver(response);
   }
 
-  static Future<String> postArchiverDownload(
-      String url, String resolution) async {
+  static Future<String> postArchiverRemoteDownload(
+    String url,
+    String resolution,
+  ) async {
     final Response response = await getHttpManager(cache: false).postForm(url,
         data: FormData.fromMap({
           'hathdl_xres': resolution.trim(),
         }));
     return parseArchiverDownload(response.data);
+  }
+
+  static Future<String> postArchiverLocalDownload(
+    String url, {
+    String dltype,
+    String dlcheck,
+  }) async {
+    final Response response = await getHttpManager(cache: false).postForm(url,
+        data: FormData.fromMap({
+          if (dltype != null) 'dltype': dltype.trim(),
+          if (dlcheck != null) 'dlcheck': dlcheck.trim(),
+        }));
+    // logger.d('${response.data} ');
+    final String _href = RegExp(r'document.location = "(.+)"')
+        .firstMatch(response.data)
+        .group(1);
+
+    return '$_href?start=1';
   }
 
   /// 通过api请求获取更多信息
@@ -485,7 +505,7 @@ class Api {
       Map reqMap = {'gidlist': _group[i], 'method': 'gdata'};
       final String reqJsonStr = jsonEncode(reqMap);
 
-      logger.d(reqJsonStr);
+      // logger.d(reqJsonStr);
 
       await CustomHttpsProxy.instance.init();
       final rult = await getGalleryApi(reqJsonStr, refresh: refresh);
@@ -893,9 +913,7 @@ class Api {
     final String response = await Api.getHttpManager()
         .get(url, options: getCacheOptions(forceRefresh: refresh));
 
-    // logger.d('$response');
-
-    // final dynamic rultJson = jsonDecode('$response');
+    // logger.d('$response ');
 
     final RegExp regImageUrl = RegExp('<img[^>]*src=\"([^\"]+)\" style');
     final String imageUrl = regImageUrl.firstMatch(response).group(1);

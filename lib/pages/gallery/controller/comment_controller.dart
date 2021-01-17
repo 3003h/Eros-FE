@@ -43,7 +43,7 @@ class CommentController extends GetxController
   @override
   void onInit() {
     super.onInit();
-    logger.d('CommentController onInit');
+    // logger.d('CommentController onInit');
     change(pageController.galleryItem.galleryComment,
         status: RxStatus.success());
 
