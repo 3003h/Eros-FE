@@ -4,6 +4,7 @@ export 'commitVoteRes.dart';
 export 'dnsCache.dart';
 export 'dnsConfig.dart';
 export 'downloadConfig.dart';
+export 'downloadTaskInfo.dart';
 export 'ehConfig.dart';
 export 'galleryCache.dart';
 export 'galleryComment.dart';

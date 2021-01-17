@@ -1,5 +1,6 @@
 import 'dart:ui';
 
+import 'package:fehviewer/common/controller/download_controller.dart';
 import 'package:fehviewer/common/global.dart';
 import 'package:fehviewer/common/service/dns_service.dart';
 import 'package:fehviewer/common/service/ehconfig_service.dart';
@@ -7,12 +8,14 @@ import 'package:fehviewer/common/service/locale_service.dart';
 import 'package:fehviewer/common/service/theme_service.dart';
 import 'package:fehviewer/generated/l10n.dart';
 import 'package:fehviewer/pages/controller/fav_controller.dart';
+import 'package:fehviewer/pages/tab/controller/download_view_controller.dart';
 import 'package:fehviewer/route/app_pages.dart';
 import 'package:fehviewer/route/routes.dart';
 import 'package:fehviewer/store/gallery_store.dart';
 import 'package:fehviewer/utils/logger.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+// import 'package:flutter_downloader/flutter_downloader.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:get/get.dart';
 import 'package:oktoast/oktoast.dart';
@@ -45,6 +48,17 @@ void main() {
     Get.put(HistoryController(), permanent: true);
     Get.put(UserController(), permanent: true);
     Get.lazyPut(() => GalleryCacheController(), fenix: true);
+
+    // Get.putAsync<FlutterDownloader>(() async {
+    //   try {
+    //     return await FlutterDownloader.initialize(debug: Global.inDebugMode);
+    //   } catch (e, stack) {
+    //     logger.e('$e\n$stack');
+    //     rethrow;
+    //   }
+    // });
+    Get.lazyPut(() => DownloadController(), fenix: true);
+    Get.lazyPut(() => DownloadViewController());
 
     Get.lazyPut(() => QuickSearchController(), fenix: true);
     Get.lazyPut(() => AdvanceSearchController(), fenix: true);
@@ -128,9 +142,9 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
         ],
         localeResolutionCallback: (_, Iterable<Locale> supportedLocales) {
           final Locale _locale = window.locale;
-          logger.v(
-              'Locale \n${_locale?.languageCode}  ${_locale?.scriptCode}  ${_locale?.countryCode}');
-          logger.d('${_locale} ${supportedLocales}');
+          // logger.v(
+          //     'Locale \n${_locale?.languageCode}  ${_locale?.scriptCode}  ${_locale?.countryCode}');
+          // logger.d('${_locale} ${supportedLocales}');
           if (locale != null) {
             //如果已经选定语言，则不跟随系统
             return locale;
@@ -155,7 +169,7 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
                 locale = const Locale('zh', 'CN'); //简体
               }
             }
-            logger.d('$locale');
+            // logger.d('$locale');
             return Locale(locale.languageCode, locale.countryCode);
           }
         },

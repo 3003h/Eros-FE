@@ -123,6 +123,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "show_filter" : MessageLookupByLibrary.simpleMessage("Show filter"),
     "show_jpn_title" : MessageLookupByLibrary.simpleMessage("Show japanese title"),
     "t_Clear_all_history" : MessageLookupByLibrary.simpleMessage("Clear all history"),
+    "tab_download" : MessageLookupByLibrary.simpleMessage("Download"),
     "tab_favorite" : MessageLookupByLibrary.simpleMessage("Favorites"),
     "tab_gallery" : MessageLookupByLibrary.simpleMessage("Gallery"),
     "tab_history" : MessageLookupByLibrary.simpleMessage("History"),

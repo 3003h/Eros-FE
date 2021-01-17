@@ -4,7 +4,7 @@ part 'galleryComment.g.dart';
 
 @JsonSerializable()
 class GalleryComment {
-  GalleryComment();
+      GalleryComment();
 
   String name;
   String time;
@@ -15,7 +15,6 @@ class GalleryComment {
   bool canEdit;
   bool canVote;
 
-  factory GalleryComment.fromJson(Map<String, dynamic> json) =>
-      _$GalleryCommentFromJson(json);
+  factory GalleryComment.fromJson(Map<String,dynamic> json) => _$GalleryCommentFromJson(json);
   Map<String, dynamic> toJson() => _$GalleryCommentToJson(this);
 }
