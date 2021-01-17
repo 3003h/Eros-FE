@@ -42,20 +42,20 @@ class GStore {
     return val.isNotEmpty ? TabConfig.fromJson(jsonDecode(val)) : null;
   }
 
-  set archiverTaskMap(Map<String, DownloadTaskInfo> taskInfoMap) {
+  set archiverTaskMap(Map<String, DownloadTaskInfo> dlMap) {
     logger.d(
-        'set archiverDlMap \n${taskInfoMap.entries.map((e) => '${e.key} = ${e.value.toJson().toString().split(', ').join('\n')}').join('\n')} ');
+        'set archiverDlMap \n${dlMap.entries.map((e) => '${e.key} = ${e.value.toJson()}').join('\n')} ');
 
     // logger.d('jsonEncode(dlMap) => ${jsonEncode(dlMap)}');
     // logger.d(
     //     'jsonEncode() => ${jsonEncode(dlMap.entries.map((e) => e.value).toList())}');
 
-    ReadWriteValue('archiverTaskMap', '', _downloadStore).val =
-        jsonEncode(taskInfoMap.entries.map((e) => e.value).toList());
+    ReadWriteValue('archiverDlMap', '', _downloadStore).val =
+        jsonEncode(dlMap.entries.map((e) => e.value).toList());
   }
 
   Map<String, DownloadTaskInfo> get archiverTaskMap {
-    final val = ReadWriteValue('archiverTaskMap', '', _downloadStore).val;
+    final val = ReadWriteValue('archiverDlMap', '', _downloadStore).val;
 
     if (val.isEmpty) {
       return null;

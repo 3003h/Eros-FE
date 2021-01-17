@@ -6,11 +6,10 @@ part 'tabConfig.g.dart';
 
 @JsonSerializable()
 class TabConfig {
-  TabConfig();
+      TabConfig();
 
   List<TabItem> tabItemList;
 
-  factory TabConfig.fromJson(Map<String, dynamic> json) =>
-      _$TabConfigFromJson(json);
+  factory TabConfig.fromJson(Map<String,dynamic> json) => _$TabConfigFromJson(json);
   Map<String, dynamic> toJson() => _$TabConfigToJson(this);
 }
