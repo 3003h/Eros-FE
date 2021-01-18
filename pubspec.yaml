@@ -165,9 +165,11 @@ dependencies:
   # flutter_downloader: ^1.5.2
 
   # 自定义进度步进
+#  flutter_downloader:
+#    git:
+#      url: https://github.com/nimisis/flutter_downloader.git
   flutter_downloader:
-    git:
-      url: https://github.com/nimisis/flutter_downloader.git
+    path: /Users/honjow/git/flutter_downloader_honjow
 
 #  multi_downloader: ^1.0.6
 
