@@ -4,7 +4,7 @@ part 'downloadTaskInfo.g.dart';
 
 @JsonSerializable()
 class DownloadTaskInfo {
-      DownloadTaskInfo();
+  DownloadTaskInfo();
 
   String tag;
   String gid;
@@ -15,6 +15,7 @@ class DownloadTaskInfo {
   int status;
   int progress;
 
-  factory DownloadTaskInfo.fromJson(Map<String,dynamic> json) => _$DownloadTaskInfoFromJson(json);
+  factory DownloadTaskInfo.fromJson(Map<String, dynamic> json) =>
+      _$DownloadTaskInfoFromJson(json);
   Map<String, dynamic> toJson() => _$DownloadTaskInfoToJson(this);
 }
