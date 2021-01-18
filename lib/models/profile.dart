@@ -13,7 +13,7 @@ part 'profile.g.dart';
 
 @JsonSerializable()
 class Profile {
-      Profile();
+  Profile();
 
   User user;
   CacheConfig cache;
@@ -29,6 +29,7 @@ class Profile {
   DnsConfig dnsConfig;
   DownloadConfig downloadConfig;
 
-  factory Profile.fromJson(Map<String,dynamic> json) => _$ProfileFromJson(json);
+  factory Profile.fromJson(Map<String, dynamic> json) =>
+      _$ProfileFromJson(json);
   Map<String, dynamic> toJson() => _$ProfileToJson(this);
 }
