@@ -14,7 +14,7 @@ import 'package:path/path.dart' as path;
 import 'package:path_provider/path_provider.dart';
 
 class DownloadController extends GetxController {
-  /// <dlId,DownloadItem>
+  // key DownloadTaskInfo.tag
   final RxMap<String, DownloadTaskInfo> archiverTaskMap =
       <String, DownloadTaskInfo>{}.obs;
 
@@ -112,7 +112,8 @@ class DownloadController extends GetxController {
   /// 不在 archiverDlMap 中的任务
   Future<void> _prepare() async {
     final List<DownloadTask> tasks = await FlutterDownloader.loadTasks();
-    logger.d('loadTasks \n${tasks.map((e) => e.toString()).join('\n')} ');
+    logger.d(
+        'loadTasks \n${tasks.map((DownloadTask e) => e.toString().split(', ').join('\n')).join('\n----------\n')} ');
 
     for (final DownloadTask downloadTask in tasks) {
       final int _index = archiverTaskMap.entries.toList().indexWhere(
@@ -121,9 +122,10 @@ class DownloadController extends GetxController {
 
       // 不在 archiverTaskMap 中的任务 直接删除
       if (_index < 0) {
-        logger.d('remove task ${downloadTask.toString()}');
-        // FlutterDownloader.remove(
-        //     taskId: downloadTask.taskId, shouldDeleteContent: true);
+        logger.d(
+            'remove task \n${downloadTask.toString().split(', ').join('\n')}');
+        FlutterDownloader.remove(
+            taskId: downloadTask.taskId, shouldDeleteContent: true);
       } else {
         // 否则更新
         final DownloadTaskInfo _taskInfo = archiverTaskMap.entries

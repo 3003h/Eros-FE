@@ -15,7 +15,6 @@ import 'package:fehviewer/store/gallery_store.dart';
 import 'package:fehviewer/utils/logger.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-// import 'package:flutter_downloader/flutter_downloader.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:get/get.dart';
 import 'package:oktoast/oktoast.dart';
@@ -38,32 +37,23 @@ void main() {
     Get.lazyPut(() => ThemeService(), fenix: true);
     // DnsConfigController
     Get.put(DnsService(), permanent: true);
-
     Get.put(DepthService());
 
     Get.lazyPut(() => LayoutServices());
 
     /// 一些全局设置或者控制
+    Get.lazyPut(() => GStore());
     Get.put(LocalFavController(), permanent: true);
     Get.put(HistoryController(), permanent: true);
     Get.put(UserController(), permanent: true);
     Get.lazyPut(() => GalleryCacheController(), fenix: true);
 
-    // Get.putAsync<FlutterDownloader>(() async {
-    //   try {
-    //     return await FlutterDownloader.initialize(debug: Global.inDebugMode);
-    //   } catch (e, stack) {
-    //     logger.e('$e\n$stack');
-    //     rethrow;
-    //   }
-    // });
-    Get.lazyPut(() => DownloadController(), fenix: true);
+    Get.put(DownloadController(), permanent: true);
     Get.lazyPut(() => DownloadViewController());
 
     Get.lazyPut(() => QuickSearchController(), fenix: true);
     Get.lazyPut(() => AdvanceSearchController(), fenix: true);
     Get.lazyPut(() => FavController(), fenix: true);
-    Get.lazyPut(() => GStore());
 
     runApp(MyApp());
   }).catchError((e, stack) {
