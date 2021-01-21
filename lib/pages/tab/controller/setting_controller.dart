@@ -1,7 +1,5 @@
-import 'package:fehviewer/common/service/ehconfig_service.dart';
 import 'package:fehviewer/generated/l10n.dart';
 import 'package:fehviewer/pages/item/setting_item.dart';
-import 'package:fehviewer/pages/item/user_item.dart';
 import 'package:fehviewer/route/routes.dart';
 import 'package:flutter/widgets.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -19,9 +17,10 @@ class SettingViewController extends GetxController {
     List _slivers = [];
     for (int _index = 0; _index < _itemTitles.length + 1; _index++) {
       if (_index == 0) {
-        _slivers.add(Get.find<EhConfigService>().isSafeMode.value ?? false
-            ? Container()
-            : UserItem());
+        // _slivers.add(Get.find<EhConfigService>().isSafeMode.value ?? false
+        //     ? Container()
+        //     : UserItem());
+        _slivers.add(const SizedBox());
       } else {
         _slivers.add(SettingItems(
           text: _itemTitles[_index - 1],

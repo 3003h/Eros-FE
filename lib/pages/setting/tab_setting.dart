@@ -28,11 +28,11 @@ class TabSettingPage extends StatelessWidget {
                 alignment: Alignment.bottomLeft,
                 child: Text(
                   S.of(context).tab_sort,
-                  style: TextStyle(fontSize: 14),
+                  style: const TextStyle(fontSize: 14),
                 ),
               ),
             ),
-            TablistView(),
+            const TablistView(),
           ],
         ),
       ),
@@ -47,9 +47,9 @@ class TablistView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return GetBuilder(
+    return GetBuilder<TabSettingController>(
         init: TabSettingController(),
-        builder: (controller) {
+        builder: (TabSettingController controller) {
           return ReorderableSliverList(
             delegate: ReorderableSliverChildListDelegate(controller.rows),
             onReorder: controller.onReorder,
