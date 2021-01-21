@@ -155,14 +155,18 @@ class HttpManager {
   //下载文件
   Future<Response<dynamic>> downLoadFile(
       String urlPath, String savePath) async {
-    //设置Cookie管理
-    // _dio.interceptors.add(CookieManager(await Api.cookieJar));
     Response<dynamic> response;
     try {
-      response = await _dio.download(urlPath, savePath,
-          onReceiveProgress: (int count, int total) {
-        print('$count $total');
-      });
+      response = await _dio.download(
+        urlPath,
+        savePath,
+        onReceiveProgress: (int count, int total) {
+          print('$count $total');
+        },
+        options: Options(
+          receiveTimeout: 0,
+        ),
+      );
       print('downLoadFile response: $response');
     } on DioError catch (e) {
       print('downLoadFile exception: $e');

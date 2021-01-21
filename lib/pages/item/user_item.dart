@@ -1,9 +1,9 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:fehviewer/common/controller/user_controller.dart';
-import 'package:fehviewer/common/service/ehconfig_service.dart';
 import 'package:fehviewer/common/service/theme_service.dart';
 import 'package:fehviewer/generated/l10n.dart';
-import 'package:fehviewer/network/gallery_request.dart';
 import 'package:fehviewer/route/routes.dart';
+import 'package:fehviewer/utils/logger.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -17,38 +17,8 @@ class UserItem extends StatefulWidget {
 class _UserItem extends State<UserItem> {
   Color _color;
   Color _pBackgroundColor;
-  final EhConfigService ehConfigService = Get.find();
-  final UserController userController = Get.find();
 
-  Future<void> _logOut(BuildContext context) async {
-    return showCupertinoDialog<void>(
-      context: context,
-      builder: (BuildContext context) {
-        return CupertinoAlertDialog(
-          title: Text('注销用户'),
-          content: Text('确定注销?'),
-          actions: <Widget>[
-            CupertinoDialogAction(
-              child: Text(S.of(context).cancel),
-              onPressed: () {
-                Get.back();
-              },
-            ),
-            CupertinoDialogAction(
-              child: Text(S.of(context).ok),
-              onPressed: () async {
-                (await Api.cookieJar).deleteAll();
-                // userController.user(User());
-                userController.logOut();
-                ehConfigService.isSiteEx.value = false;
-                Get.back();
-              },
-            ),
-          ],
-        );
-      },
-    );
-  }
+  final UserController _userController = Get.find();
 
   @override
   void initState() {
@@ -68,8 +38,8 @@ class _UserItem extends State<UserItem> {
     }
 
     void _tapItem() {
-      if (userController.isLogin) {
-        _logOut(context);
+      if (_userController.isLogin) {
+        _userController.showLogOutDialog(context);
       } else {
         // NavigatorUtil.jump(context, EHRoutes.login, rootNavigator: true);
         Get.toNamed(EHRoutes.login);
@@ -78,8 +48,8 @@ class _UserItem extends State<UserItem> {
 
     Widget _buildText() {
       return Obx(() {
-        if (userController.isLogin) {
-          final String _userName = userController.user().username;
+        if (_userController.isLogin) {
+          final String _userName = _userController.user().username;
           return Text(_userName);
         } else {
           return Text(S.of(context).login);
@@ -87,15 +57,36 @@ class _UserItem extends State<UserItem> {
       });
     }
 
+    Widget _buildAvastat() {
+      const Widget _defAvatar = Icon(
+        FontAwesomeIcons.solidUserCircle,
+        size: 55.0,
+        color: CupertinoColors.systemGrey,
+      );
+
+      logger.d('${_userController.user().avatarUrl} ');
+      final String _avatarUrl = _userController.user().avatarUrl;
+      if (_userController.isLogin && _avatarUrl.isNotEmpty) {
+        return ClipOval(
+          child: CachedNetworkImage(
+            imageUrl: _avatarUrl,
+            width: 55,
+            height: 55,
+            fit: BoxFit.cover,
+            errorWidget: (_, __, ___) => _defAvatar,
+            placeholder: (_, __) => _defAvatar,
+          ),
+        );
+      } else {
+        return _defAvatar;
+      }
+    }
+
     final Widget row = Container(
       color: _color,
       padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 10),
       child: Row(children: <Widget>[
-        const Icon(
-          FontAwesomeIcons.solidUserCircle,
-          size: 55.0,
-          color: CupertinoColors.systemGrey,
-        ),
+        _buildAvastat(),
         // 头像右侧信息
         Padding(
           padding: const EdgeInsets.only(left: 8),
@@ -103,8 +94,6 @@ class _UserItem extends State<UserItem> {
         )
       ]),
     );
-
-//    return row;
 
     return GestureDetector(
       child: row,
@@ -134,5 +123,74 @@ class _UserItem extends State<UserItem> {
       _color =
           CupertinoDynamicColor.resolve(CupertinoColors.systemGrey4, context);
     });
+  }
+}
+
+const double kAvatarSize = 30.0;
+const double kNameTextSize = 11.0;
+
+class UserWidget extends GetView<UserController> {
+  Widget _buildAvastat() {
+    const Widget _defAvatar = Icon(
+      FontAwesomeIcons.solidUserCircle,
+      size: kAvatarSize,
+      color: CupertinoColors.systemGrey,
+    );
+
+    logger.d('${controller.user().avatarUrl} ');
+    final String _avatarUrl = controller.user().avatarUrl ?? '';
+    if (controller.isLogin && _avatarUrl.isNotEmpty) {
+      return ClipOval(
+        child: CachedNetworkImage(
+          imageUrl: _avatarUrl,
+          width: kAvatarSize,
+          height: kAvatarSize,
+          fit: BoxFit.cover,
+          errorWidget: (_, __, ___) => _defAvatar,
+          placeholder: (_, __) => _defAvatar,
+        ),
+      );
+    } else {
+      return _defAvatar;
+    }
+  }
+
+  Widget _buildText() {
+    return Obx(() {
+      if (controller.isLogin) {
+        final String _userName = controller.user().username;
+        return Text(
+          _userName ?? '',
+          style: TextStyle(
+              fontSize: kNameTextSize,
+              color: CupertinoDynamicColor.resolve(
+                CupertinoColors.label,
+                Get.context,
+              )),
+        ).paddingOnly(right: 6);
+      } else {
+        return const SizedBox();
+      }
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onTap: () {
+        if (controller.isLogin) {
+          controller.showLogOutDialog(context);
+        } else {
+          Get.toNamed(EHRoutes.login);
+        }
+      },
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: <Widget>[
+          _buildText(),
+          _buildAvastat(),
+        ],
+      ),
+    );
   }
 }
