@@ -1,3 +1,4 @@
+import 'package:fehviewer/common/global.dart';
 import 'package:fehviewer/common/service/ehconfig_service.dart';
 import 'package:fehviewer/generated/l10n.dart';
 import 'package:fehviewer/models/base/extension.dart';
@@ -93,12 +94,12 @@ class TabPages {
       };
 }
 
-const Map<String, bool> kTabMap = <String, bool>{
+const Map<String, bool> kDefTabMap = <String, bool>{
   EHRoutes.popular: true,
   EHRoutes.watched: true,
   EHRoutes.gallery: true,
   EHRoutes.favorite: true,
-  EHRoutes.download: true,
+  EHRoutes.download: false,
   EHRoutes.history: false,
 };
 
@@ -144,10 +145,11 @@ class TabHomeController extends GetxController {
   }
 
   // 控制tab项顺序
-  RxList<String> tabNameList = kTabMap.entries.map((e) => e.key).toList().obs;
+  RxList<String> tabNameList =
+      kDefTabMap.entries.map((e) => e.key).toList().obs;
 
   // 通过控制该变量控制tab项的开关
-  RxMap<String, bool> tabMap = kTabMap.obs;
+  RxMap<String, bool> tabMap = kDefTabMap.obs;
 
   TabConfig _tabConfig;
 
@@ -178,6 +180,9 @@ class TabHomeController extends GetxController {
       }
 
       tabMap(_tabConfig.tabMap);
+      if (!Global.inDebugMode) {
+        tabMap.remove(EHRoutes.download);
+      }
     }
 
     if (_tabConfig.tabNameList.isNotEmpty) {

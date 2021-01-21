@@ -8,6 +8,8 @@ import 'package:fehviewer/network/error.dart';
 import 'package:fehviewer/network/gallery_request.dart';
 import 'package:fehviewer/utils/dio_util.dart';
 import 'package:fehviewer/utils/logger.dart';
+import 'package:html/dom.dart';
+import 'package:html/parser.dart' show parse;
 
 class EhUserManager {
   factory EhUserManager() => _instance;
@@ -97,13 +99,23 @@ class EhUserManager {
       'igneous': cookieMapEx['igneous'],
     };
 
-    final String cookieStr = getCookieStringFromMap(cookie);
+    String nickame = username.replaceFirstMapped(
+        RegExp('(^.)'), (Match match) => match[1].toUpperCase());
+
+    String _avatarUrl = '';
+    try {
+      final User userinfo = await _getUserInfo(cookie['ipb_member_id']);
+      nickame = userinfo.username;
+      _avatarUrl = userinfo.avatarUrl;
+    } catch (_) {}
+
+    final String cookieStr = _getCookieStringFromMap(cookie);
     logger.v(cookieStr);
 
     final User user = User()
       ..cookie = cookieStr
-      ..username = username.replaceFirstMapped(
-          RegExp('(^.)'), (Match match) => match[1].toUpperCase());
+      ..avatarUrl = _avatarUrl
+      ..username = nickame;
 
     return user;
   }
@@ -132,7 +144,7 @@ class EhUserManager {
     cookieJar.saveFromResponse(Uri.parse(EHConst.EX_BASE_URL), cookies);
     await _getExIgneous();
 
-    final String nickame = await _getUserName(cookieMap['ipb_member_id']);
+    final User userinfo = await _getUserInfo(cookieMap['ipb_member_id']);
 
     //获取Ex cookies
     final List<Cookie> cookiesEx =
@@ -150,12 +162,13 @@ class EhUserManager {
       'igneous': cookieMapEx['igneous'],
     };
 
-    final String cookieStr = getCookieStringFromMap(cookie);
+    final String cookieStr = _getCookieStringFromMap(cookie);
     logger.v(cookieStr);
 
     final User user = User()
       ..cookie = cookieStr
-      ..username = nickame;
+      ..avatarUrl = userinfo.avatarUrl
+      ..username = userinfo.username;
 
     return user;
   }
@@ -182,7 +195,7 @@ class EhUserManager {
     cookieJar.saveFromResponse(Uri.parse(EHConst.EX_BASE_URL), cookies);
     await _getExIgneous();
 
-    final String username = await _getUserName(id);
+    final User userinfo = await _getUserInfo(id);
 
     //获取Ex cookies
     final List<Cookie> cookiesEx =
@@ -205,17 +218,19 @@ class EhUserManager {
       'igneous': igneous.isNotEmpty ? igneous : cookieMapEx['igneous'],
     };
 
-    final String cookieStr = getCookieStringFromMap(cookie);
+    final String cookieStr = _getCookieStringFromMap(cookie);
     logger.v(cookieStr);
 
     final User user = User()
       ..cookie = cookieStr
-      ..username = username;
+      ..avatarUrl = userinfo.avatarUrl
+      ..username = userinfo.username;
 
     return user;
   }
 
-  Future<String> _getUserName(String id) async {
+  /// 获取用户信息等
+  Future<User> _getUserInfo(String id) async {
     final HttpManager httpManager = HttpManager.getInstance(
         baseUrl: 'https://forums.e-hentai.org', cache: false);
     final String url = '/index.php?showuser=$id';
@@ -224,14 +239,34 @@ class EhUserManager {
 
     // logger.v('$response');
 
-    final RegExp regExp = RegExp(r'Viewing Profile: (.+?)</div');
-    final String username = regExp.firstMatch('$response').group(1);
+    // final RegExp regExp = RegExp(r'Viewing Profile: (.+?)</div');
+    // final String username = regExp.firstMatch('$response').group(1);
 
-    logger.v('username $username');
+    final Document document = parse(response);
 
-    return username;
+    final Element profilenameElm = document.querySelector('#profilename');
+    final String username = profilenameElm.text;
+
+    final Element avatarElm =
+        profilenameElm.nextElementSibling.nextElementSibling;
+
+    String _avatarUrl = '';
+    if (avatarElm.children.isNotEmpty) {
+      final Element imageElm = avatarElm.children.first;
+      _avatarUrl = imageElm.attributes['src'];
+      if (!_avatarUrl.startsWith('http')) {
+        _avatarUrl = 'https://forums.e-hentai.org/$_avatarUrl';
+      }
+    }
+
+    logger.v('username $username   ${avatarElm.outerHtml}');
+
+    return User()
+      ..username = username
+      ..avatarUrl = _avatarUrl;
   }
 
+  /// 获取里站cookie
   Future<void> _getExIgneous() async {
     final HttpManager httpManager =
         HttpManager.getInstance(baseUrl: EHConst.EX_BASE_URL, cache: false);
@@ -242,7 +277,7 @@ class EhUserManager {
     return response;
   }
 
-  static String getCookieStringFromMap(Map cookie) {
+  static String _getCookieStringFromMap(Map cookie) {
     final List texts = [];
     cookie.forEach((key, value) {
       texts.add('$key=$value');

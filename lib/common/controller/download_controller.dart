@@ -28,6 +28,10 @@ class DownloadController extends GetxController {
     @required String title,
     @required String url,
   }) async {
+    // final _path = await _getDownloadPath();
+    // Api.getHttpManager().downLoadFile(url, path.join(_path, 'a.zip'));
+    // return;
+
     final String _tag = '$gid$dlType';
 
     logger.d('$url');
@@ -37,16 +41,7 @@ class DownloadController extends GetxController {
       return;
     }
 
-    // url =
-    //     'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4';
-
-    String fileName;
-    // if (GetPlatform.isIOS) {
-    //   fileName = '${title}_$dlType.zip';
-    // }
-
-    final String _taskId =
-        await _downloadFile(url, await _getDownloadPath(), fileName: fileName);
+    final String _taskId = await _downloadFile(url, await _getDownloadPath());
 
     archiverTaskMap[_tag] = DownloadTaskInfo()
       ..tag = _tag

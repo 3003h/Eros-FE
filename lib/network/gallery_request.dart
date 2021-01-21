@@ -935,4 +935,9 @@ class Api {
 
     return _rePreview;
   }
+
+  static Future<void> download(String url, String path) async {
+    await CustomHttpsProxy.instance.init();
+    Api.getHttpManager().downLoadFile(url, path);
+  }
 }

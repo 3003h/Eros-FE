@@ -58,6 +58,25 @@ class DownloadViewController extends GetxController {
     }
   }
 
+  // 重试任务
+  Future<void> retryArchiverDownload(int index) async {
+    final String _oriTaskid = archiverTasks[index].taskId;
+    final int _oriStatus = archiverTasks[index].status;
+
+    String _newTaskId = '';
+    if (_oriStatus == DownloadTaskStatus.paused.value) {
+      _newTaskId = await FlutterDownloader.retry(taskId: _oriTaskid);
+    } else if (_oriStatus == DownloadTaskStatus.failed.value) {
+      await FlutterDownloader.retry(taskId: _oriTaskid);
+    }
+
+    logger.d('oritaskid $_oriTaskid,  newID $_newTaskId');
+    if (_newTaskId != null) {
+      _downloadController.archiverTaskMap[archiverTasks[index].tag].taskId =
+          _newTaskId;
+    }
+  }
+
   // 移除任务
   void removeTask(int index) {
     final String _oriTaskid = archiverTasks[index].taskId;

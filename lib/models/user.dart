@@ -8,6 +8,7 @@ class User {
 
   String username;
   String cookie;
+  String avatarUrl;
   List<dynamic> favcat;
 
   factory User.fromJson(Map<String, dynamic> json) => _$UserFromJson(json);
