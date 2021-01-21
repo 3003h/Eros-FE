@@ -47,26 +47,6 @@ class DownloadTab extends GetView<DownloadViewController> {
             },
           ),
         ),
-        // trailing: Container(
-        //   width: 40,
-        //   child: Row(
-        //     mainAxisAlignment: MainAxisAlignment.end,
-        //     children: [
-        //       // 清除按钮
-        //       CupertinoButton(
-        //         minSize: 40,
-        //         padding: const EdgeInsets.all(0),
-        //         child: const Icon(
-        //           FontAwesomeIcons.solidTrashAlt,
-        //           size: 20,
-        //         ),
-        //         onPressed: () {
-        //           FlutterDownloader.cancelAll();
-        //         },
-        //       ),
-        //     ],
-        //   ),
-        // ),
       ),
       child: SafeArea(
         child: CustomScrollView(
@@ -100,17 +80,6 @@ class DownloadArchiverView extends GetView<DownloadViewController> {
       itemBuilder: (_, int index) {
         final DownloadTaskInfo _taskInfo = controller.archiverTasks[index];
 
-        void handOnonStatusChange(DownloadTaskStatus status) {
-          final Map<DownloadTaskStatus, Function> _handMap = {
-            DownloadTaskStatus.running: () =>
-                controller.resumeArchiverDownload(index),
-            DownloadTaskStatus.paused: () =>
-                FlutterDownloader.pause(taskId: _taskInfo.taskId),
-          };
-
-          _handMap[status]();
-        }
-
         return GetBuilder<DownloadController>(
             init: DownloadController(),
             id: _taskInfo.tag,
@@ -122,7 +91,7 @@ class DownloadArchiverView extends GetView<DownloadViewController> {
                   title: _taskInfo.title ?? '',
                   progress: _taskInfo.progress ?? 0,
                   status: DownloadTaskStatus(_taskInfo.status ?? 0),
-                  onStatusChange: handOnonStatusChange,
+                  index: index,
                 ),
               );
             });

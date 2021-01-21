@@ -1,5 +1,7 @@
+import 'package:fehviewer/common/service/ehconfig_service.dart';
 import 'package:fehviewer/common/service/theme_service.dart';
 import 'package:fehviewer/generated/l10n.dart';
+import 'package:fehviewer/pages/item/user_item.dart';
 import 'package:fehviewer/pages/tab/controller/setting_controller.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -27,6 +29,9 @@ class SettingTab extends GetView<SettingViewController> {
             largeTitle: Text(
               _title,
             ),
+            trailing: Get.find<EhConfigService>().isSafeMode.value ?? false
+                ? Container()
+                : UserWidget(),
           ),
           SliverSafeArea(
               top: false,

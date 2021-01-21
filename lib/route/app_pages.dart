@@ -15,7 +15,7 @@ import 'package:fehviewer/pages/tab/view/download_page.dart';
 import 'package:fehviewer/pages/tab/view/favorite_page.dart';
 import 'package:fehviewer/pages/tab/view/favorite_sel_page.dart';
 import 'package:fehviewer/pages/tab/view/history_page.dart';
-import 'package:fehviewer/pages/tab/view/home_page.dart';
+import 'package:fehviewer/pages/tab/view/home_page_small.dart';
 import 'package:fehviewer/pages/tab/view/popular_page.dart';
 import 'package:fehviewer/pages/tab/view/splash_page.dart';
 import 'package:fehviewer/pages/tab/view/watched_page.dart';
@@ -35,7 +35,7 @@ class AppPages {
     ),
     GetPage(
       name: EHRoutes.home,
-      page: () => HomePage(),
+      page: () => TabHomeSmall(),
       binding: TabHomeBinding(),
       transition: Transition.fadeIn,
     ),

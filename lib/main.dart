@@ -139,7 +139,7 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
             //如果已经选定语言，则不跟随系统
             return locale;
           } else {
-            // logger.d('语言跟随系统语言  ${window.locale}');
+            logger.d('语言跟随系统语言  ${window.locale}');
 
             Locale locale;
             //APP语言跟随系统语言，如果系统语言不是中文简体或美国英语，

@@ -1,21 +1,24 @@
+import 'package:fehviewer/models/index.dart';
+import 'package:fehviewer/pages/tab/controller/download_view_controller.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_downloader/flutter_downloader.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
+import 'package:get/get_utils/src/platform/platform_io.dart';
 
-class DownloadArchiverItem extends StatelessWidget {
+class DownloadArchiverItem extends GetView<DownloadViewController> {
   const DownloadArchiverItem({
     Key key,
     @required this.title,
     this.progress = 0,
     @required this.status,
-    @required this.onStatusChange,
+    @required this.index,
   }) : super(key: key);
   final String title;
   final int progress;
   final DownloadTaskStatus status;
-  final ValueChanged<DownloadTaskStatus> onStatusChange;
+  final int index;
 
   @override
   Widget build(BuildContext context) {
@@ -63,27 +66,38 @@ class DownloadArchiverItem extends StatelessWidget {
   }
 
   Widget _getIcon() {
-    // logger.d('$status');
+    final DownloadTaskInfo _taskInfo = controller.archiverTasks[index];
 
     final Map<DownloadTaskStatus, Widget> statusMap = {
       // 下载时，显示暂停按钮
       DownloadTaskStatus.running: CupertinoTheme(
         data: const CupertinoThemeData(primaryColor: CupertinoColors.systemRed),
-        child: CupertinoButton(
-          padding: const EdgeInsets.all(0),
-          child: const Icon(
-            FontAwesomeIcons.pause,
-            size: 14,
-          ),
-          onPressed: () {
-            onStatusChange(DownloadTaskStatus.paused);
-          },
-        ),
+        child: !GeneralPlatform.isIOS
+            ? CupertinoButton(
+                padding: const EdgeInsets.all(0),
+                child: const Icon(
+                  FontAwesomeIcons.pause,
+                  size: 14,
+                ),
+                onPressed: () {
+                  FlutterDownloader.pause(taskId: _taskInfo.taskId);
+                },
+              )
+            : CupertinoButton(
+                padding: const EdgeInsets.all(0),
+                child: const Icon(
+                  FontAwesomeIcons.stop,
+                  size: 14,
+                ),
+                onPressed: () {
+                  FlutterDownloader.cancel(taskId: _taskInfo.taskId);
+                },
+              ),
       ),
-      // 完成时 显示打钩按钮 按下无动作
+      // 完成时 按下无动作
       DownloadTaskStatus.complete: CupertinoTheme(
         data:
-            const CupertinoThemeData(primaryColor: CupertinoColors.activeGreen),
+            const CupertinoThemeData(primaryColor: CupertinoColors.activeBlue),
         child: CupertinoButton(
           padding: const EdgeInsets.all(0),
           child: const Icon(
@@ -94,15 +108,19 @@ class DownloadArchiverItem extends StatelessWidget {
         ),
       ),
       // 暂停时 显示继续按钮。按下恢复任务
-      DownloadTaskStatus.paused: CupertinoButton(
-        padding: const EdgeInsets.all(0),
-        child: const Icon(
-          FontAwesomeIcons.play,
-          size: 14,
+      DownloadTaskStatus.paused: CupertinoTheme(
+        data:
+            const CupertinoThemeData(primaryColor: CupertinoColors.activeGreen),
+        child: CupertinoButton(
+          padding: const EdgeInsets.all(0),
+          child: const Icon(
+            FontAwesomeIcons.play,
+            size: 14,
+          ),
+          onPressed: () {
+            controller.resumeArchiverDownload(index);
+          },
         ),
-        onPressed: () {
-          onStatusChange(DownloadTaskStatus.running);
-        },
       ),
       // 失败时 显示重试按钮。按下重试任务
       DownloadTaskStatus.failed: CupertinoButton(
@@ -112,8 +130,26 @@ class DownloadArchiverItem extends StatelessWidget {
           size: 14,
         ),
         onPressed: () {
-          onStatusChange(DownloadTaskStatus.running);
+          controller.retryArchiverDownload(index);
         },
+      ),
+      // 取消状态 显示重试按钮。按下重试任务
+      DownloadTaskStatus.canceled: CupertinoButton(
+        padding: const EdgeInsets.all(0),
+        child: const Icon(
+          FontAwesomeIcons.redo,
+          size: 14,
+        ),
+        onPressed: () {
+          controller.retryArchiverDownload(index);
+        },
+      ).paddingSymmetric(),
+      DownloadTaskStatus.enqueued: Container(
+        width: 40,
+        height: 40,
+        child: const CupertinoActivityIndicator(
+          radius: 10,
+        ),
       ),
       DownloadTaskStatus.undefined: Container(
         width: 40,
