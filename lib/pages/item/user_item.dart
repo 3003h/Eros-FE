@@ -126,7 +126,7 @@ class _UserItem extends State<UserItem> {
   }
 }
 
-const double kAvatarSize = 30.0;
+const double kAvatarSize = 40.0;
 const double kNameTextSize = 11.0;
 
 class UserWidget extends GetView<UserController> {
@@ -163,6 +163,7 @@ class UserWidget extends GetView<UserController> {
           _userName ?? '',
           style: TextStyle(
               fontSize: kNameTextSize,
+              fontWeight: FontWeight.normal,
               color: CupertinoDynamicColor.resolve(
                 CupertinoColors.label,
                 Get.context,
