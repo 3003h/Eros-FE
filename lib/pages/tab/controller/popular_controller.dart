@@ -6,6 +6,10 @@ import 'package:tuple/tuple.dart';
 
 class PopularViewController extends GetxController
     with StateMixin<List<GalleryItem>> {
+  final RxBool _isBackgroundRefresh = false.obs;
+  bool get isBackgroundRefresh => _isBackgroundRefresh.value;
+  set isBackgroundRefresh(bool val) => _isBackgroundRefresh.value = val;
+
   @override
   void onInit() {
     super.onInit();
@@ -15,11 +19,15 @@ class PopularViewController extends GetxController
     }).catchError((err) {
       logger.e('$err');
       change(null, status: RxStatus.error(err.toString()));
+    }).then((value) {
+      isBackgroundRefresh = true;
+      reloadData().then((_) => isBackgroundRefresh = false);
     });
 
-    Future<void>.delayed(const Duration(milliseconds: 500)).then((_) {
-      reloadData();
-    });
+    // Future<void>.delayed(const Duration(milliseconds: 400)).then((_) {
+    //   isBackgroundRefresh = true;
+    //   reloadData().then((_) => isBackgroundRefresh = false);
+    // });
   }
 
   Future<List<GalleryItem>> loadData({bool refresh = false}) async {

@@ -8,9 +8,10 @@ import 'package:fehviewer/pages/gallery/view/rate_dialog.dart';
 import 'package:fehviewer/pages/gallery/view/torrent_dialog.dart';
 import 'package:fehviewer/pages/tab/view/gallery_base.dart';
 import 'package:fehviewer/route/navigator_util.dart';
+import 'package:fehviewer/utils/cust_lib/selectable_text_s.dart';
 import 'package:fehviewer/utils/logger.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:flutter/material.dart';
+import 'package:flutter/material.dart' hide SelectableText;
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
 import 'package:share/share.dart';
@@ -36,13 +37,16 @@ class GalleryMainPage extends StatelessWidget {
         slivers: <Widget>[
           // 导航栏
           Obx(() => CupertinoSliverNavigationBar(
-                largeTitle: Text(
+                largeTitle: SelectableText(
                   controller.topTitle ?? '',
                   textAlign: TextAlign.left,
                   maxLines: 3,
-                  style: const TextStyle(
+                  minLines: 1,
+                  style: TextStyle(
                     fontSize: 12,
-                    color: CupertinoColors.systemGrey,
+                    color: CupertinoDynamicColor.resolve(
+                        CupertinoColors.secondaryLabel, context),
+                    fontWeight: FontWeight.normal,
                   ),
                 ),
                 middle: controller.hideNavigationBtn

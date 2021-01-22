@@ -9,11 +9,15 @@ class SettingItems extends StatefulWidget {
     this.text,
     this.icon,
     this.route,
+    this.topDivider = false,
+    this.bottomDivider = true,
   });
 
   final String text;
   final IconData icon;
   final String route;
+  final bool topDivider;
+  final bool bottomDivider;
 
   @override
   _SettingItems createState() => _SettingItems();
@@ -47,7 +51,7 @@ class _SettingItems extends State<SettingItems> {
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
-            _settingItemDivider(),
+            if (widget.topDivider) _settingItemDivider(),
             Container(
               height: 50,
               padding: const EdgeInsets.fromLTRB(16, 8, 20, 8),
@@ -73,6 +77,7 @@ class _SettingItems extends State<SettingItems> {
                 ],
               ),
             ),
+            if (widget.bottomDivider) _settingItemDivider(),
           ],
         ));
 
