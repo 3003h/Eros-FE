@@ -223,6 +223,7 @@ class TabHomeController extends GetxController {
 
   List<Widget> get viewList =>
       _showTabs.map((e) => tabPages.tabViews[e]).toList();
+
   List<ScrollController> get scrollControllerList =>
       _showTabs.map((e) => tabPages.scrollControllerMap[e]).toList();
 

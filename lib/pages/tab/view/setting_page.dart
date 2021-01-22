@@ -17,21 +17,34 @@ class SettingTab extends GetView<SettingViewController> {
   Widget build(BuildContext context) {
     controller.initData(context);
     final String _title = S.of(context).tab_setting;
-    // logger.d(' ${ehTheme.isDarkMode}');
     return CupertinoPageScaffold(
       backgroundColor: !ehTheme.isDarkMode
           ? CupertinoColors.secondarySystemBackground
           : null,
       child: CustomScrollView(
+        controller: scrollController,
+        physics: const AlwaysScrollableScrollPhysics(),
         slivers: <Widget>[
           CupertinoSliverNavigationBar(
             heroTag: 'setting',
-            largeTitle: Text(
-              _title,
+            middle: FadeTransition(
+              opacity: controller.animation,
+              child: Text(
+                _title,
+              ),
             ),
-            trailing: Get.find<EhConfigService>().isSafeMode.value ?? false
-                ? Container()
-                : UserWidget(),
+            largeTitle: Row(
+              children: [
+                Text(
+                  _title,
+                ),
+                const Spacer(),
+                if (Get.find<EhConfigService>().isSafeMode.value ?? false)
+                  Container()
+                else
+                  UserWidget().paddingOnly(right: 20),
+              ],
+            ),
           ),
           SliverSafeArea(
               top: false,
