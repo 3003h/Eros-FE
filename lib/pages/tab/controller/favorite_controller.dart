@@ -20,9 +20,9 @@ class FavoriteViewController extends GetxController
   RxInt curPage = 0.obs;
   int maxPage = 0;
 
-  // final RxBool _isLoadMore = false.obs;
-  // bool get isLoadMore => _isLoadMore.value;
-  // set isLoadMore(bool val) => _isLoadMore.value = val;
+  final RxBool _isBackgroundRefresh = false.obs;
+  bool get isBackgroundRefresh => _isBackgroundRefresh.value;
+  set isBackgroundRefresh(bool val) => _isBackgroundRefresh.value = val;
 
   final Rx<PageState> _pageState = PageState.None.obs;
   PageState get pageState => _pageState.value;
@@ -51,13 +51,15 @@ class FavoriteViewController extends GetxController
       change(tuple.item1, status: RxStatus.success());
     }, onError: (err) {
       change(null, status: RxStatus.error(err.toString()));
+    }).then((_) {
+      isBackgroundRefresh = true;
+      reloadData(delayed: true).then((_) => isBackgroundRefresh = false);
     });
 
-    Future<void>.delayed(const Duration(milliseconds: 500)).then((_) {
-      if (enableDelayedLoad) {
-        reloadData(delayed: true);
-      }
-    });
+    // Future<void>.delayed(const Duration(milliseconds: 500)).then((_) {
+    //   isBackgroundRefresh = true;
+    //   reloadData(delayed: true).then((_) => isBackgroundRefresh = false);
+    // });
   }
 
   Future<Tuple2<List<GalleryItem>, int>> loadData({

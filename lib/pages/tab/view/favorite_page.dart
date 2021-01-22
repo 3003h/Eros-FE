@@ -48,9 +48,25 @@ class FavoriteTab extends GetView<FavoriteViewController> {
       slivers: <Widget>[
         CupertinoSliverNavigationBar(
           padding: const EdgeInsetsDirectional.only(end: 4),
-          largeTitle: Obx(() => Text(
+          // largeTitle: Obx(() => Text(
+          //       controller.title.value,
+          //     )),
+          largeTitle: Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Text(
                 controller.title.value,
-              )),
+              ),
+              Obx(() {
+                if (controller.isBackgroundRefresh)
+                  return const CupertinoActivityIndicator(
+                    radius: 10,
+                  ).paddingSymmetric(horizontal: 8);
+                else
+                  return const SizedBox();
+              }),
+            ],
+          ),
           trailing: Row(
             mainAxisSize: MainAxisSize.min,
             mainAxisAlignment: MainAxisAlignment.end,

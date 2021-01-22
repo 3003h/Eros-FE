@@ -329,11 +329,12 @@ class GalleryTitle extends StatelessWidget {
       child: SelectableText(
         _pageController.title ?? '',
         maxLines: 5,
+        minLines: 1,
         textAlign: TextAlign.left, // 对齐方式
         // overflow: TextOverflow.ellipsis, // 超出部分省略号
         style: const TextStyle(
           textBaseline: TextBaseline.alphabetic,
-          height: 1.2,
+          height: 1.15,
           fontSize: 16,
           fontWeight: FontWeight.w500,
         ),
