@@ -23,7 +23,7 @@ class TabSettingController extends GetxController {
     for (int index = 0; index < _tabList.length; index++) {
       final String key = _tabList[index];
       if (_tabMap[key] != null) {
-        if (Global.inDebugMode && key == EHRoutes.download) {
+        if (!Global.inDebugMode && key == EHRoutes.download) {
           continue;
         }
 
