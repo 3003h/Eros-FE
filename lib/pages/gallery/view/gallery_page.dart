@@ -123,13 +123,14 @@ class GalleryContainer extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final GalleryPageController controller = Get.find(tag: pageCtrlDepth);
+    final GalleryPageController _controller = Get.find(tag: pageCtrlDepth);
 
     Widget _getDetail(GalleryItem state) {
-      final List _w = <Widget>[
+      final List<Widget> _w = <Widget>[
+        // 进行评分
         Expanded(
           child: Obx(() => TextBtn(
-                controller.isRatinged
+                _controller.isRatinged
                     ? FontAwesomeIcons.solidStar
                     : FontAwesomeIcons.star,
                 title: S.of(context).p_Rate,
@@ -140,12 +141,15 @@ class GalleryContainer extends StatelessWidget {
                     : null,
               )),
         ),
+        // 画廊下载
         Expanded(
           child: TextBtn(
             FontAwesomeIcons.solidArrowAltCircleDown,
             title: S.of(context).p_Download,
+            onTap: _controller.downloadGallery,
           ),
         ),
+        // 种子下载
         Expanded(
           child: TextBtn(
             FontAwesomeIcons.magnet,
@@ -157,6 +161,7 @@ class GalleryContainer extends StatelessWidget {
                 : null,
           ),
         ),
+        // archiver
         Expanded(
           child: TextBtn(
             FontAwesomeIcons.solidFileArchive,
@@ -166,6 +171,7 @@ class GalleryContainer extends StatelessWidget {
             },
           ),
         ),
+        // 相似画廊
         Expanded(
           child: TextBtn(
             FontAwesomeIcons.solidImages,
@@ -205,17 +211,17 @@ class GalleryContainer extends StatelessWidget {
                 CupertinoColors.systemGrey4, context),
           ),
           PreviewGrid(
-            previews: controller.firstPagePreview,
+            previews: _controller.firstPagePreview,
             gid: state.gid,
           ),
-          MorePreviewButton(hasMorePreview: controller.hasMorePreview),
+          MorePreviewButton(hasMorePreview: _controller.hasMorePreview),
         ],
       );
     }
 
     Widget fromItem() {
-      final GalleryItem galleryItem = controller.galleryItem;
-      final Object tabIndex = controller.tabIndex;
+      final GalleryItem galleryItem = _controller.galleryItem;
+      final Object tabIndex = _controller.tabIndex;
 
       return SliverToBoxAdapter(
         child: Column(
@@ -229,7 +235,7 @@ class GalleryContainer extends StatelessWidget {
               color: CupertinoDynamicColor.resolve(
                   CupertinoColors.systemGrey4, context),
             ),
-            controller.obx(
+            _controller.obx(
               (GalleryItem state) {
                 return _getDetail(state);
               },
@@ -247,7 +253,7 @@ class GalleryContainer extends StatelessWidget {
                 return Container(
                   padding: const EdgeInsets.only(bottom: 50, top: 50),
                   child: GalleryErrorPage(
-                    onTap: controller.handOnRefreshAfterErr,
+                    onTap: _controller.handOnRefreshAfterErr,
                   ),
                 );
               },
@@ -258,7 +264,7 @@ class GalleryContainer extends StatelessWidget {
     }
 
     Widget fromUrl() {
-      return controller.obx(
+      return _controller.obx(
           (state) {
             return SliverToBoxAdapter(
               child: Column(
@@ -295,13 +301,13 @@ class GalleryContainer extends StatelessWidget {
                 alignment: Alignment.center,
                 padding: const EdgeInsets.only(bottom: 50, top: 50),
                 child: GalleryErrorPage(
-                  onTap: controller.handOnRefreshAfterErr,
+                  onTap: _controller.handOnRefreshAfterErr,
                 ),
               ),
             );
           });
     }
 
-    return controller.fromUrl ? fromUrl() : fromItem();
+    return _controller.fromUrl ? fromUrl() : fromItem();
   }
 }

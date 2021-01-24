@@ -83,8 +83,8 @@ class Api {
 
   static Options getCacheOptions({bool forceRefresh = false}) {
     return buildCacheOptions(
-      const Duration(days: 3),
-      maxStale: const Duration(days: 1),
+      const Duration(days: 5),
+      maxStale: const Duration(days: 7),
       forceRefresh: forceRefresh,
     );
   }

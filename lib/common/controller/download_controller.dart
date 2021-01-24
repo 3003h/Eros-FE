@@ -4,6 +4,9 @@ import 'dart:ui';
 
 import 'package:fehviewer/common/global.dart';
 import 'package:fehviewer/models/index.dart';
+import 'package:fehviewer/store/db/dao/gallery_task_dao.dart';
+import 'package:fehviewer/store/db/database.dart';
+import 'package:fehviewer/store/db/entity/gallery_task.dart';
 import 'package:fehviewer/store/gallery_store.dart';
 import 'package:fehviewer/utils/logger.dart';
 import 'package:fehviewer/utils/toast.dart';
@@ -21,6 +24,11 @@ class DownloadController extends GetxController {
   final List<String> _archiverDlIdList = <String>[];
 
   final GStore _gStore = Get.find();
+
+  Future<AppDatabase> _getDatabase() async =>
+      await $FloorAppDatabase.databaseBuilder('gallery_task.db').build();
+  Future<GalleryTaskDao> _getGalleryTaskDao() async =>
+      (await _getDatabase()).galleryTaskDao;
 
   Future<void> downloadArchiverFile({
     @required String gid,
@@ -53,6 +61,47 @@ class DownloadController extends GetxController {
     _archiverDlIdList.add(_tag);
 
     showToast('下载任务已添加');
+  }
+
+  Future<void> downloadGallery({
+    @required String url,
+    @required int fileCount,
+    @required String title,
+    int gid,
+    String token,
+  }) async {
+    final GalleryTaskDao _galleryTaskDao = await _getGalleryTaskDao();
+    int _gid;
+    String _token;
+    if (gid == null || token == null) {
+      final RegExpMatch _match =
+          RegExp(r'/g/(\d+)/([0-9a-f]{10})/?').firstMatch(url);
+      _gid = int.parse(_match.group(1));
+      _token = _match.group(2);
+    }
+
+    // 先查询任务是否已存在
+    final GalleryTask _oriTask =
+        await _galleryTaskDao.findGalleryTaskByGid(gid);
+    if (_oriTask != null) {
+      logger.e('$gid 任务已存在');
+      showToast('下载任务已存在');
+      logger.d('${_oriTask.toString()} ');
+      return;
+    }
+
+    // 登记主任务表
+    final GalleryTask galleryTask = GalleryTask(
+      gid: gid ?? _gid,
+      token: token ?? _token,
+      url: url,
+      title: title,
+      fileCount: fileCount,
+    );
+    logger.d('add task ${galleryTask.toString()}');
+    _galleryTaskDao.insertTask(galleryTask);
+
+    // 翻页, 获取所有大图页的href
   }
 
   final ReceivePort _port = ReceivePort();
@@ -203,6 +252,7 @@ class DownloadController extends GetxController {
   }
 }
 
+/// 下载进度回调顶级函数
 void _downloadCallback(String id, DownloadTaskStatus status, int progress) {
   final SendPort send =
       IsolateNameServer.lookupPortByName('downloader_send_port');

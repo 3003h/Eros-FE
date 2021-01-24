@@ -11,7 +11,6 @@ export 'galleryComment.dart';
 export 'galleryItem.dart';
 export 'galleryPreview.dart';
 export 'galleryTag.dart';
-export 'galleryTask.dart';
 export 'galleryTorrent.dart';
 export 'history.dart';
 export 'localFav.dart';
