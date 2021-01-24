@@ -1,4 +1,5 @@
 import 'package:dio/dio.dart';
+import 'package:fehviewer/common/controller/download_controller.dart';
 import 'package:fehviewer/common/controller/history_controller.dart';
 import 'package:fehviewer/common/controller/localfav_controller.dart';
 import 'package:fehviewer/common/service/depth_service.dart';
@@ -445,5 +446,17 @@ class GalleryPageController extends GetxController
       logger.e('$e \n $stack');
       rethrow;
     }
+  }
+
+  void downloadGallery() {
+    final DownloadController _downloadController =
+        Get.find<DownloadController>();
+    _downloadController.downloadGallery(
+      gid: int.parse(gid),
+      token: galleryItem.token,
+      url: galleryItem.url,
+      fileCount: int.parse(galleryItem.filecount),
+      title: title,
+    );
   }
 }

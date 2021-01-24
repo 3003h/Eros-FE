@@ -1,14 +1,14 @@
-import 'package:fehviewer/store/db/entity/gallery_image_task.dart';
+import 'package:fehviewer/store/db/entity/gallery_task.dart';
 import 'package:floor/floor.dart';
 
 @dao
 abstract class GalleryTaskDao {
   @Query('SELECT * FROM GalleryTask')
-  Future<List<GalleryImageTask>> findAllGalleryTasks();
+  Future<List<GalleryTask>> findAllGalleryTasks();
 
   @Query('SELECT * FROM GalleryTask WHERE gid = :gid')
-  Stream<GalleryImageTask> findGalleryTaskById(int gid);
+  Future<GalleryTask> findGalleryTaskByGid(int gid);
 
   @insert
-  Future<void> insertPerson(GalleryImageTask galleryImageTask);
+  Future<void> insertTask(GalleryTask galleryTask);
 }

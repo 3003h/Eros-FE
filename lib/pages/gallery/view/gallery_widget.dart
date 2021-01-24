@@ -328,15 +328,19 @@ class GalleryTitle extends StatelessWidget {
     return GestureDetector(
       child: SelectableText(
         _pageController.title ?? '',
-        maxLines: 5,
+        maxLines: 6,
         minLines: 1,
         textAlign: TextAlign.left, // 对齐方式
         // overflow: TextOverflow.ellipsis, // 超出部分省略号
         style: const TextStyle(
           textBaseline: TextBaseline.alphabetic,
-          height: 1.15,
+          // height: 1.2,
           fontSize: 16,
           fontWeight: FontWeight.w500,
+        ),
+        strutStyle: const StrutStyle(
+          height: 1.2,
+          forceStrutHeight: true,
         ),
       ),
     );
