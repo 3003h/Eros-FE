@@ -17,4 +17,9 @@ class GalleryImageTask {
   final String href;
   final String imageUrl;
   final String filePath;
+
+  @override
+  String toString() {
+    return 'GalleryImageTask{gid: $gid, ser: $ser, token: $token, href: $href, imageUrl: $imageUrl, filePath: $filePath}';
+  }
 }

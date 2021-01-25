@@ -13,5 +13,8 @@ abstract class ImageTaskDao {
   Future<GalleryImageTask> findGalleryTaskByKey(int gid, int ser);
 
   @insert
-  Future<void> insertPerson(GalleryImageTask galleryImageTask);
+  Future<void> insertImageTask(GalleryImageTask galleryImageTask);
+
+  @insert
+  Future<void> insertImageTasks(List<GalleryImageTask> galleryImageTasks);
 }
