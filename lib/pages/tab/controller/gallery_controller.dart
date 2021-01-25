@@ -23,7 +23,7 @@ class GalleryViewController extends GetxController
   int cats;
 
   RxInt curPage = 0.obs;
-  int maxPage = 0;
+  int maxPage = 1;
 
   final RxBool _isBackgroundRefresh = false.obs;
   bool get isBackgroundRefresh => _isBackgroundRefresh.value;
@@ -150,7 +150,7 @@ class GalleryViewController extends GetxController
     final Tuple2<List<GalleryItem>, int> tuple = await loadData(
       refresh: true,
     );
-    // _frontGallerItemBeans = tuple.item1;
+    maxPage = tuple.item2;
     change(tuple.item1, status: RxStatus.success());
   }
 
