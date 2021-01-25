@@ -22,7 +22,7 @@ class WatchedViewController extends GetxController
   int cats;
 
   RxInt curPage = 0.obs;
-  int maxPage = 0;
+  int maxPage = 1;
 
   final Rx<PageState> _pageState = PageState.None.obs;
   PageState get pageState => _pageState.value;
@@ -44,15 +44,10 @@ class WatchedViewController extends GetxController
       change(tuple.item1, status: RxStatus.success());
     }, onError: (err) {
       change(null, status: RxStatus.error(err.toString()));
-    }).then((value) {
+    }).then((_) {
       isBackgroundRefresh = true;
       reloadData().then((_) => isBackgroundRefresh = false);
     });
-
-    // Future<void>.delayed(const Duration(milliseconds: 400)).then((_) {
-    //   isBackgroundRefresh = true;
-    //   reloadData().then((_) => isBackgroundRefresh = false);
-    // });
   }
 
   Future<Tuple2<List<GalleryItem>, int>> loadData(
@@ -72,7 +67,7 @@ class WatchedViewController extends GetxController
     final Tuple2<List<GalleryItem>, int> tuple = await loadData(
       refresh: true,
     );
-    // _frontGallerItemBeans = tuple.item1;
+    maxPage = tuple.item2;
     change(tuple.item1);
   }
 

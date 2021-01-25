@@ -18,7 +18,7 @@ class FavoriteViewController extends GetxController
   RxString title = ''.obs;
   String curFavcat = '';
   RxInt curPage = 0.obs;
-  int maxPage = 0;
+  int maxPage = 1;
 
   final RxBool _isBackgroundRefresh = false.obs;
   bool get isBackgroundRefresh => _isBackgroundRefresh.value;
