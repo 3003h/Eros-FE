@@ -226,8 +226,15 @@ class _$ImageTaskDao extends ImageTaskDao {
   }
 
   @override
-  Future<void> insertPerson(GalleryImageTask galleryImageTask) async {
+  Future<void> insertImageTask(GalleryImageTask galleryImageTask) async {
     await _galleryImageTaskInsertionAdapter.insert(
         galleryImageTask, OnConflictStrategy.abort);
+  }
+
+  @override
+  Future<void> insertImageTasks(
+      List<GalleryImageTask> galleryImageTasks) async {
+    await _galleryImageTaskInsertionAdapter.insertList(
+        galleryImageTasks, OnConflictStrategy.abort);
   }
 }
