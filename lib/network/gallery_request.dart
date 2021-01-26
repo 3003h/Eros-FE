@@ -89,9 +89,9 @@ class Api {
     );
   }
 
-  static String getBaseUrl() {
+  static String getBaseUrl({bool isSiteEx}) {
     return EHConst.getBaseSite(
-        Get.find<EhConfigService>().isSiteEx.value ?? false);
+        isSiteEx ?? Get.find<EhConfigService>().isSiteEx.value ?? false);
   }
 
   static String getSiteFlg() {
