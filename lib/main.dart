@@ -25,6 +25,7 @@ import 'common/controller/history_controller.dart';
 import 'common/controller/localfav_controller.dart';
 import 'common/controller/quicksearch_controller.dart';
 import 'common/controller/user_controller.dart';
+import 'common/isolate/download.dart';
 import 'common/service/depth_service.dart';
 import 'common/service/layout_service.dart';
 
@@ -48,6 +49,7 @@ void main() {
     Get.put(UserController(), permanent: true);
     Get.lazyPut(() => GalleryCacheController(), fenix: true);
 
+    Get.putAsync(() => downloadManager.init());
     Get.put(DownloadController(), permanent: true);
     Get.lazyPut(() => DownloadViewController());
 

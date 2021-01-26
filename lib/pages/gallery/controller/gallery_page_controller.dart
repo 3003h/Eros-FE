@@ -451,7 +451,7 @@ class GalleryPageController extends GetxController
   void downloadGallery() {
     final DownloadController _downloadController =
         Get.find<DownloadController>();
-    _downloadController.downloadGallery(
+    _downloadController.downloadGalleryIsolate(
       gid: int.parse(gid),
       token: galleryItem.token,
       url: galleryItem.url,
