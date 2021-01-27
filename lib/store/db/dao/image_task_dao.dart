@@ -17,4 +17,7 @@ abstract class ImageTaskDao {
 
   @insert
   Future<void> insertImageTasks(List<GalleryImageTask> galleryImageTasks);
+
+  @update
+  Future<void> updateImageTask(GalleryImageTask galleryImageTask);
 }

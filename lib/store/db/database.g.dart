@@ -175,6 +175,18 @@ class _$ImageTaskDao extends ImageTaskDao {
                   'href': item.href,
                   'imageUrl': item.imageUrl,
                   'filePath': item.filePath
+                }),
+        _galleryImageTaskUpdateAdapter = UpdateAdapter(
+            database,
+            'GalleryImageTask',
+            ['gid', 'ser'],
+            (GalleryImageTask item) => <String, dynamic>{
+                  'gid': item.gid,
+                  'ser': item.ser,
+                  'token': item.token,
+                  'href': item.href,
+                  'imageUrl': item.imageUrl,
+                  'filePath': item.filePath
                 });
 
   final sqflite.DatabaseExecutor database;
@@ -184,6 +196,8 @@ class _$ImageTaskDao extends ImageTaskDao {
   final QueryAdapter _queryAdapter;
 
   final InsertionAdapter<GalleryImageTask> _galleryImageTaskInsertionAdapter;
+
+  final UpdateAdapter<GalleryImageTask> _galleryImageTaskUpdateAdapter;
 
   @override
   Future<List<GalleryImageTask>> findAllImageTasks() async {
@@ -236,5 +250,11 @@ class _$ImageTaskDao extends ImageTaskDao {
       List<GalleryImageTask> galleryImageTasks) async {
     await _galleryImageTaskInsertionAdapter.insertList(
         galleryImageTasks, OnConflictStrategy.abort);
+  }
+
+  @override
+  Future<void> updateImageTask(GalleryImageTask galleryImageTask) async {
+    await _galleryImageTaskUpdateAdapter.update(
+        galleryImageTask, OnConflictStrategy.abort);
   }
 }

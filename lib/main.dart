@@ -51,7 +51,7 @@ void main() {
 
     Get.putAsync(() => downloadManager.init());
     Get.put(DownloadController(), permanent: true);
-    Get.lazyPut(() => DownloadViewController());
+    Get.lazyPut(() => DownloadViewController(), fenix: true);
 
     Get.lazyPut(() => QuickSearchController(), fenix: true);
     Get.lazyPut(() => AdvanceSearchController(), fenix: true);

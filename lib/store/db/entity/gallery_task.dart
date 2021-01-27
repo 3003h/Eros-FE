@@ -1,5 +1,9 @@
+import 'package:copy_with_extension/copy_with_extension.dart';
 import 'package:floor/floor.dart';
 
+part 'gallery_task.g.dart';
+
+@CopyWith()
 @Entity(tableName: 'GalleryTask')
 class GalleryTask {
   GalleryTask(

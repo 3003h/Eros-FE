@@ -31,11 +31,14 @@ class DownloadController extends GetxController {
 
   final GStore _gStore = Get.find();
 
-  Future<AppDatabase> _getDatabase() async =>
-      await $FloorAppDatabase.databaseBuilder('gallery_task.db').build();
-  Future<GalleryTaskDao> _getGalleryTaskDao() async =>
+  static final String _dbPath = Global.inDebugMode
+      ? path.join(Global.appDocPath, 'gallery_task.db')
+      : path.join(Global.appSupportPath, 'gallery_task.db');
+  static Future<AppDatabase> _getDatabase() async =>
+      await $FloorAppDatabase.databaseBuilder(_dbPath).build();
+  static Future<GalleryTaskDao> getGalleryTaskDao() async =>
       (await _getDatabase()).galleryTaskDao;
-  Future<ImageTaskDao> _getImageTaskDao() async =>
+  static Future<ImageTaskDao> getImageTaskDao() async =>
       (await _getDatabase()).imageTaskDao;
 
   Future<void> downloadArchiverFile({
@@ -77,8 +80,8 @@ class DownloadController extends GetxController {
     GalleryTaskDao _galleryTaskDao;
     ImageTaskDao _imageTaskDao;
     try {
-      _galleryTaskDao = await _getGalleryTaskDao();
-      _imageTaskDao = await _getImageTaskDao();
+      _galleryTaskDao = await getGalleryTaskDao();
+      _imageTaskDao = await getImageTaskDao();
     } catch (e, stack) {
       logger.e('$e\n$stack ');
       rethrow;
@@ -168,8 +171,8 @@ class DownloadController extends GetxController {
     GalleryTaskDao _galleryTaskDao;
     ImageTaskDao _imageTaskDao;
     try {
-      _galleryTaskDao = await _getGalleryTaskDao();
-      _imageTaskDao = await _getImageTaskDao();
+      _galleryTaskDao = await getGalleryTaskDao();
+      _imageTaskDao = await getImageTaskDao();
     } catch (e, stack) {
       logger.e('$e\n$stack ');
       rethrow;

@@ -18,16 +18,18 @@ const double kPaddingLeft = 8.0;
 /// 画廊列表项
 /// 标题和tag需要随设置变化重构ui
 class GalleryItemWidget extends StatelessWidget {
-  GalleryItemWidget({@required this.galleryItem, @required this.tabIndex})
-      : _galleryItemController = Get.put(
-            GalleryItemController.initData(galleryItem, tabIndex: tabIndex),
-            // permanent: true,
-            tag: galleryItem.gid);
+  GalleryItemWidget({@required this.galleryItem, @required this.tabIndex}) {
+    Get.lazyPut(
+      () => GalleryItemController.initData(galleryItem, tabIndex: tabIndex),
+      tag: galleryItem.gid,
+    );
+  }
 
   final GalleryItem galleryItem;
   final String tabIndex;
 
-  final GalleryItemController _galleryItemController;
+  GalleryItemController get _galleryItemController =>
+      Get.find(tag: galleryItem.gid);
 
   @override
   Widget build(BuildContext context) {

@@ -431,11 +431,6 @@ class GalleryPageController extends GetxController
           _curPreview.largeImageWidth != null) {
         return galleryItem.galleryPreview[index];
       } else {
-        // final GalleryPreview _preview = await Api.paraImageLageInfoFromApi(
-        //     galleryItem.galleryPreview[index].href, showKey,
-        //     index: index);
-        // return _preview;
-
         // paraImageLageInfoFromHtml
         final GalleryPreview _preview = await Api.paraImageLageInfoFromHtml(
             galleryItem.galleryPreview[index].href,
