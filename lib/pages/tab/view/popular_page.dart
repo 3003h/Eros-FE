@@ -21,7 +21,20 @@ class PopularListTab extends GetView<PopularViewController> {
       physics: const AlwaysScrollableScrollPhysics(),
       slivers: <Widget>[
         CupertinoSliverNavigationBar(
-          largeTitle: Text(_title),
+          largeTitle: Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Text(_title),
+              Obx(() {
+                if (controller.isBackgroundRefresh)
+                  return const CupertinoActivityIndicator(
+                    radius: 10,
+                  ).paddingSymmetric(horizontal: 8);
+                else
+                  return const SizedBox();
+              }),
+            ],
+          ),
         ),
         CupertinoSliverRefreshControl(
           onRefresh: controller.onRefresh,

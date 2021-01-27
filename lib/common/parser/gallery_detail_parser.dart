@@ -281,6 +281,7 @@ class GalleryDetailParser {
 
     if (picLsit.isNotEmpty) {
       // 小图的处理
+      // logger.d('小图的处理');
       for (final Element pic in picLsit) {
         final String picHref = pic.querySelector('a').attributes['href'];
         final String style = pic.querySelector('div').attributes['style'];
@@ -295,7 +296,6 @@ class GalleryDetailParser {
 
         final Element imgElem = pic.querySelector('img');
         final String picSer = imgElem.attributes['alt'].trim();
-        // logger.v('小图$picSer  $picSrcUrl');
 
         galleryPreview.add(GalleryPreview()
           ..ser = int.parse(picSer)
@@ -310,6 +310,7 @@ class GalleryDetailParser {
       final List<Element> picLsit =
           document.querySelectorAll('#gdt > div.gdtl');
       // 大图的处理
+      // logger.d('大图的处理');
       for (final Element pic in picLsit) {
         final String picHref = pic.querySelector('a').attributes['href'];
         final Element imgElem = pic.querySelector('img');

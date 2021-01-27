@@ -18,15 +18,18 @@ const double kPaddingLeft = 8.0;
 /// 画廊列表项
 /// 简单模式 精简显示信息 固定高度
 class GalleryItemSimpleWidget extends StatelessWidget {
-  GalleryItemSimpleWidget({@required this.galleryItem, @required this.tabIndex})
-      : _galleryItemController = Get.put(
-            GalleryItemController.initData(galleryItem, tabIndex: tabIndex),
-            // permanent: true,
-            tag: galleryItem.gid);
+  GalleryItemSimpleWidget(
+      {@required this.galleryItem, @required this.tabIndex}) {
+    Get.lazyPut(
+      () => GalleryItemController.initData(galleryItem, tabIndex: tabIndex),
+      tag: galleryItem.gid,
+    );
+  }
 
   final GalleryItem galleryItem;
   final String tabIndex;
-  final GalleryItemController _galleryItemController;
+  GalleryItemController get _galleryItemController =>
+      Get.find(tag: galleryItem.gid);
 
   @override
   Widget build(BuildContext context) {

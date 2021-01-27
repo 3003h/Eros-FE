@@ -137,7 +137,7 @@ class UserWidget extends GetView<UserController> {
       color: CupertinoColors.systemGrey,
     );
 
-    logger.d('${controller.user().avatarUrl} ');
+    // logger.d('${controller.user().avatarUrl} ');
     final String _avatarUrl = controller.user().avatarUrl ?? '';
     if (controller.isLogin && _avatarUrl.isNotEmpty) {
       return ClipOval(

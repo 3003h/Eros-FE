@@ -15,14 +15,14 @@ class WatchedViewController extends GetxController
     with StateMixin<List<GalleryItem>> {
   WatchedViewController({this.cats});
 
+  final RxBool _isBackgroundRefresh = false.obs;
+  bool get isBackgroundRefresh => _isBackgroundRefresh.value;
+  set isBackgroundRefresh(bool val) => _isBackgroundRefresh.value = val;
+
   int cats;
 
   RxInt curPage = 0.obs;
-  int maxPage = 0;
-
-  // final RxBool _isLoadMore = false.obs;
-  // bool get isLoadMore => _isLoadMore.value;
-  // set isLoadMore(bool val) => _isLoadMore.value = val;
+  int maxPage = 1;
 
   final Rx<PageState> _pageState = PageState.None.obs;
   PageState get pageState => _pageState.value;
@@ -44,10 +44,9 @@ class WatchedViewController extends GetxController
       change(tuple.item1, status: RxStatus.success());
     }, onError: (err) {
       change(null, status: RxStatus.error(err.toString()));
-    });
-
-    Future<void>.delayed(const Duration(milliseconds: 500)).then((_) {
-      reloadData();
+    }).then((_) {
+      isBackgroundRefresh = true;
+      reloadData().then((_) => isBackgroundRefresh = false);
     });
   }
 
@@ -68,7 +67,7 @@ class WatchedViewController extends GetxController
     final Tuple2<List<GalleryItem>, int> tuple = await loadData(
       refresh: true,
     );
-    // _frontGallerItemBeans = tuple.item1;
+    maxPage = tuple.item2;
     change(tuple.item1);
   }
 

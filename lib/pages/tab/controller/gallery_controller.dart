@@ -23,11 +23,11 @@ class GalleryViewController extends GetxController
   int cats;
 
   RxInt curPage = 0.obs;
-  int maxPage = 0;
+  int maxPage = 1;
 
-  // final RxBool _isLoadMore = false.obs;
-  // bool get isLoadMore => _isLoadMore.value;
-  // set isLoadMore(bool val) => _isLoadMore.value = val;
+  final RxBool _isBackgroundRefresh = false.obs;
+  bool get isBackgroundRefresh => _isBackgroundRefresh.value;
+  set isBackgroundRefresh(bool val) => _isBackgroundRefresh.value = val;
 
   final Rx<PageState> _pageState = PageState.None.obs;
   PageState get pageState => _pageState.value;
@@ -122,11 +122,15 @@ class GalleryViewController extends GetxController
       change(tuple.item1, status: RxStatus.success());
     }, onError: (err) {
       change(null, status: RxStatus.error(err.toString()));
+    }).then((_) {
+      isBackgroundRefresh = true;
+      reloadData().then((_) => isBackgroundRefresh = false);
     });
 
-    Future<void>.delayed(const Duration(milliseconds: 500)).then((_) {
-      reloadData();
-    });
+    // Future<void>.delayed(const Duration(milliseconds: 500)).then((_) {
+    //   isBackgroundRefresh = true;
+    //   reloadData().then((_) => isBackgroundRefresh = false);
+    // });
   }
 
   Future<Tuple2<List<GalleryItem>, int>> loadData(
@@ -146,7 +150,7 @@ class GalleryViewController extends GetxController
     final Tuple2<List<GalleryItem>, int> tuple = await loadData(
       refresh: true,
     );
-    // _frontGallerItemBeans = tuple.item1;
+    maxPage = tuple.item2;
     change(tuple.item1, status: RxStatus.success());
   }
 
