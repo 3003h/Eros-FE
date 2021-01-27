@@ -18,16 +18,17 @@ const double kWidth = 28.0;
 const double kHeight = 18.0;
 
 class GalleryItemFlow extends StatelessWidget {
-  GalleryItemFlow({Key key, @required this.tabIndex, this.galleryItem})
-      : _galleryItemController = Get.put(
-            GalleryItemController.initData(galleryItem, tabIndex: tabIndex),
-            // permanent: true,
-            tag: galleryItem.gid),
-        super(key: key);
+  GalleryItemFlow({@required this.tabIndex, this.galleryItem}) {
+    Get.lazyPut(
+      () => GalleryItemController.initData(galleryItem, tabIndex: tabIndex),
+      tag: galleryItem.gid,
+    );
+  }
 
   final String tabIndex;
   final GalleryItem galleryItem;
-  final GalleryItemController _galleryItemController;
+  GalleryItemController get _galleryItemController =>
+      Get.find(tag: galleryItem.gid);
 
   Widget _buildFavcatIcon() {
     return Obx(() {
