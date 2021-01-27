@@ -30,7 +30,21 @@ class WatchedListTab extends GetView<WatchedViewController> {
       slivers: <Widget>[
         CupertinoSliverNavigationBar(
           padding: const EdgeInsetsDirectional.only(end: 4),
-          largeTitle: Text(controller.title),
+          // largeTitle: Text(controller.title),
+          largeTitle: Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Text(controller.title),
+              Obx(() {
+                if (controller.isBackgroundRefresh)
+                  return const CupertinoActivityIndicator(
+                    radius: 10,
+                  ).paddingSymmetric(horizontal: 8);
+                else
+                  return const SizedBox();
+              }),
+            ],
+          ),
           trailing: Row(
             mainAxisSize: MainAxisSize.min,
             mainAxisAlignment: MainAxisAlignment.end,
@@ -123,7 +137,7 @@ class WatchedListTab extends GetView<WatchedViewController> {
                   return GestureDetector(
                     onTap: controller.loadDataMore,
                     child: Column(
-                      children:  <Widget>[
+                      children: <Widget>[
                         const Icon(
                           Icons.error,
                           size: 40,

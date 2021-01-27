@@ -1,4 +1,5 @@
 import 'package:dio/dio.dart';
+import 'package:fehviewer/common/controller/download_controller.dart';
 import 'package:fehviewer/common/controller/history_controller.dart';
 import 'package:fehviewer/common/controller/localfav_controller.dart';
 import 'package:fehviewer/common/service/depth_service.dart';
@@ -291,7 +292,7 @@ class GalleryPageController extends GetxController
 
   // 另一个语言的标题
   String get topTitle {
-    if (!_ehConfigService.isJpnTitle.value ||
+    if (_ehConfigService.isJpnTitle.value &&
         (galleryItem.japaneseTitle?.isNotEmpty ?? false)) {
       return galleryItem.englishTitle;
     } else {
@@ -430,11 +431,6 @@ class GalleryPageController extends GetxController
           _curPreview.largeImageWidth != null) {
         return galleryItem.galleryPreview[index];
       } else {
-        // final GalleryPreview _preview = await Api.paraImageLageInfoFromApi(
-        //     galleryItem.galleryPreview[index].href, showKey,
-        //     index: index);
-        // return _preview;
-
         // paraImageLageInfoFromHtml
         final GalleryPreview _preview = await Api.paraImageLageInfoFromHtml(
             galleryItem.galleryPreview[index].href,
@@ -445,5 +441,17 @@ class GalleryPageController extends GetxController
       logger.e('$e \n $stack');
       rethrow;
     }
+  }
+
+  void downloadGallery() {
+    final DownloadController _downloadController =
+        Get.find<DownloadController>();
+    _downloadController.downloadGalleryIsolate(
+      gid: int.parse(gid),
+      token: galleryItem.token,
+      url: galleryItem.url,
+      fileCount: int.parse(galleryItem.filecount),
+      title: title,
+    );
   }
 }

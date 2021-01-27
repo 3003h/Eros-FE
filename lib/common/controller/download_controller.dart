@@ -3,7 +3,16 @@ import 'dart:isolate';
 import 'dart:ui';
 
 import 'package:fehviewer/common/global.dart';
+import 'package:fehviewer/common/isolate/download.dart';
+import 'package:fehviewer/common/service/depth_service.dart';
 import 'package:fehviewer/models/index.dart';
+import 'package:fehviewer/network/gallery_request.dart';
+import 'package:fehviewer/pages/gallery/controller/gallery_page_controller.dart';
+import 'package:fehviewer/store/db/dao/gallery_task_dao.dart';
+import 'package:fehviewer/store/db/dao/image_task_dao.dart';
+import 'package:fehviewer/store/db/database.dart';
+import 'package:fehviewer/store/db/entity/gallery_image_task.dart';
+import 'package:fehviewer/store/db/entity/gallery_task.dart';
 import 'package:fehviewer/store/gallery_store.dart';
 import 'package:fehviewer/utils/logger.dart';
 import 'package:fehviewer/utils/toast.dart';
@@ -22,16 +31,22 @@ class DownloadController extends GetxController {
 
   final GStore _gStore = Get.find();
 
+  static final String _dbPath = Global.inDebugMode
+      ? path.join(Global.appDocPath, 'gallery_task.db')
+      : path.join(Global.appSupportPath, 'gallery_task.db');
+  static Future<AppDatabase> _getDatabase() async =>
+      await $FloorAppDatabase.databaseBuilder(_dbPath).build();
+  static Future<GalleryTaskDao> getGalleryTaskDao() async =>
+      (await _getDatabase()).galleryTaskDao;
+  static Future<ImageTaskDao> getImageTaskDao() async =>
+      (await _getDatabase()).imageTaskDao;
+
   Future<void> downloadArchiverFile({
     @required String gid,
     @required String dlType,
     @required String title,
     @required String url,
   }) async {
-    // final _path = await _getDownloadPath();
-    // Api.getHttpManager().downLoadFile(url, path.join(_path, 'a.zip'));
-    // return;
-
     final String _tag = '$gid$dlType';
 
     logger.d('$url');
@@ -53,6 +68,195 @@ class DownloadController extends GetxController {
     _archiverDlIdList.add(_tag);
 
     showToast('下载任务已添加');
+  }
+
+  Future<void> downloadGallery({
+    @required String url,
+    @required int fileCount,
+    @required String title,
+    int gid,
+    String token,
+  }) async {
+    GalleryTaskDao _galleryTaskDao;
+    ImageTaskDao _imageTaskDao;
+    try {
+      _galleryTaskDao = await getGalleryTaskDao();
+      _imageTaskDao = await getImageTaskDao();
+    } catch (e, stack) {
+      logger.e('$e\n$stack ');
+      rethrow;
+    }
+
+    int _gid;
+    String _token;
+    if (gid == null || token == null) {
+      final RegExpMatch _match =
+          RegExp(r'/g/(\d+)/([0-9a-f]{10})/?').firstMatch(url);
+      _gid = int.parse(_match.group(1));
+      _token = _match.group(2);
+    }
+
+    // 先查询任务是否已存在
+    final GalleryTask _oriTask =
+        await _galleryTaskDao.findGalleryTaskByGid(gid);
+    if (_oriTask != null) {
+      logger.e('$gid 任务已存在');
+      showToast('下载任务已存在');
+      logger.d('${_oriTask.toString()} ');
+      return;
+    }
+
+    // 登记主任务表
+    final GalleryTask galleryTask = GalleryTask(
+      gid: gid ?? _gid,
+      token: token ?? _token,
+      url: url,
+      title: title,
+      fileCount: fileCount,
+    );
+    logger.d('add task ${galleryTask.toString()}');
+    try {
+      _galleryTaskDao.insertTask(galleryTask);
+    } catch (e, stack) {
+      logger.e('$e\n$stack ');
+      rethrow;
+    }
+
+    showToast('${galleryTask.gid} 下载任务已入队');
+
+    // 翻页, 获取所有大图页的href
+    final GalleryPageController _pageController = Get.find(tag: pageCtrlDepth);
+    final List<GalleryPreview> _allPreview = await _getAllPreviews(
+        url: url,
+        fileCount: fileCount,
+        initPreviews: _pageController.firstPagePreview);
+
+    logger.d('${_allPreview.length}');
+
+    // 插入任务明细
+    final List<GalleryImageTask> _galleryImageTasks = _allPreview
+        .map((GalleryPreview e) => GalleryImageTask(
+              gid: galleryTask.gid,
+              token: galleryTask.token,
+              href: e.href,
+              ser: e.ser,
+            ))
+        .toList();
+    _imageTaskDao.insertImageTasks(_galleryImageTasks);
+
+    final List<GalleryImageTask> _list =
+        await _imageTaskDao.findAllGalleryTaskByGid(galleryTask.gid);
+    logger.d('${_list.map((e) => e.toString()).join('\n')} ');
+
+    // test
+    final String _downloadPath =
+        path.join(await _getDownloadPath(), galleryTask.title);
+    // 不存在就新建路径
+    if (!Directory(_downloadPath).existsSync()) {
+      Directory(_downloadPath).createSync(recursive: true);
+    }
+
+    for (final GalleryImageTask imageTask in _list) {
+      FlutterDownloader.enqueue(url: null, savedDir: _downloadPath);
+    }
+  }
+
+  Future<void> downloadGalleryIsolate({
+    @required String url,
+    @required int fileCount,
+    @required String title,
+    int gid,
+    String token,
+  }) async {
+    GalleryTaskDao _galleryTaskDao;
+    ImageTaskDao _imageTaskDao;
+    try {
+      _galleryTaskDao = await getGalleryTaskDao();
+      _imageTaskDao = await getImageTaskDao();
+    } catch (e, stack) {
+      logger.e('$e\n$stack ');
+      rethrow;
+    }
+
+    int _gid;
+    String _token;
+    if (gid == null || token == null) {
+      final RegExpMatch _match =
+          RegExp(r'/g/(\d+)/([0-9a-f]{10})/?').firstMatch(url);
+      _gid = int.parse(_match.group(1));
+      _token = _match.group(2);
+    }
+
+    // 先查询任务是否已存在
+    final GalleryTask _oriTask =
+        await _galleryTaskDao.findGalleryTaskByGid(gid);
+    if (_oriTask != null) {
+      logger.e('$gid 任务已存在');
+      showToast('下载任务已存在');
+      logger.d('${_oriTask.toString()} ');
+      return;
+    }
+
+    // 登记主任务表
+    final GalleryTask galleryTask = GalleryTask(
+      gid: gid ?? _gid,
+      token: token ?? _token,
+      url: url,
+      title: title,
+      fileCount: fileCount,
+    );
+    logger.d('add task ${galleryTask.toString()}');
+    try {
+      // _galleryTaskDao.insertTask(galleryTask);
+    } catch (e, stack) {
+      logger.e('$e\n$stack ');
+      rethrow;
+    }
+
+    showToast('${galleryTask.gid} 下载任务已入队');
+    downloadManager.addTask(galleryTask: galleryTask);
+  }
+
+  Future<List<GalleryPreview>> _getAllPreviews({
+    String url,
+    List<GalleryPreview> initPreviews,
+    int fileCount,
+  }) async {
+    if (initPreviews != null &&
+        initPreviews.isNotEmpty &&
+        initPreviews.length == fileCount) {
+      return initPreviews;
+    }
+
+    final List<GalleryPreview> _rultList = [];
+    _rultList.addAll(initPreviews);
+    int _curPage = 0;
+    while (_rultList.length < fileCount) {
+      try {
+        final List<GalleryPreview> _moreGalleryPreviewList =
+            await Api.getGalleryPreview(
+          url,
+          page: _curPage + 1,
+          // cancelToken: cancelToken,
+          refresh: true,
+        );
+
+        // 避免重复添加
+        if (_moreGalleryPreviewList.first.ser > _rultList.last.ser) {
+          logger.d('下载任务 添加图片对象 起始序号${_moreGalleryPreviewList.first.ser}  '
+              '数量${_moreGalleryPreviewList.length}');
+          _rultList.addAll(_moreGalleryPreviewList);
+        }
+        // 成功后才+1
+        _curPage++;
+      } catch (e, stack) {
+        showToast('$e');
+        logger.e('$e\n$stack');
+        rethrow;
+      }
+    }
+
+    return _rultList;
   }
 
   final ReceivePort _port = ReceivePort();
@@ -80,6 +284,7 @@ class DownloadController extends GetxController {
   @override
   void onClose() {
     _unbindBackgroundIsolate();
+    downloadManager.close();
     super.onClose();
   }
 
@@ -203,6 +408,7 @@ class DownloadController extends GetxController {
   }
 }
 
+/// 下载进度回调顶级函数
 void _downloadCallback(String id, DownloadTaskStatus status, int progress) {
   final SendPort send =
       IsolateNameServer.lookupPortByName('downloader_send_port');

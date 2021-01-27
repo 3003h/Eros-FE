@@ -83,15 +83,15 @@ class Api {
 
   static Options getCacheOptions({bool forceRefresh = false}) {
     return buildCacheOptions(
-      const Duration(days: 3),
-      maxStale: const Duration(days: 1),
+      const Duration(days: 5),
+      maxStale: const Duration(days: 7),
       forceRefresh: forceRefresh,
     );
   }
 
-  static String getBaseUrl() {
+  static String getBaseUrl({bool isSiteEx}) {
     return EHConst.getBaseSite(
-        Get.find<EhConfigService>().isSiteEx.value ?? false);
+        isSiteEx ?? Get.find<EhConfigService>().isSiteEx.value ?? false);
   }
 
   static String getSiteFlg() {
@@ -894,7 +894,7 @@ class Api {
 
   /// 由api获取画廊图片的信息
   /// [href] 爬取的页面地址 用来解析gid 和 imgkey
-  /// [index] 索引 从 1 开始
+  /// [index] 索引
   static Future<GalleryPreview> paraImageLageInfoFromHtml(
     String href, {
     int index,
@@ -918,7 +918,7 @@ class Api {
     final RegExp regImageUrl = RegExp('<img[^>]*src=\"([^\"]+)\" style');
     final String imageUrl = regImageUrl.firstMatch(response).group(1);
 
-    logger.d('imageUrl $imageUrl');
+    // logger.d('imageUrl $imageUrl');
 
     final RegExpMatch _xy =
         RegExp(r'::\s+(\d+)\s+x\s+(\d+)\s+::').firstMatch(response);

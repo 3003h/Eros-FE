@@ -3,7 +3,7 @@ description: ..
 
 publish_to: 'none' # Remove this line if you wish to publish to pub.dev
 
-version: 1.0.3+111
+version: 1.0.4+115
 
 environment:
   sdk: '>=2.10.0 <3.0.0'
@@ -105,7 +105,7 @@ dependencies:
   flutter_egg: ^1.0.3
 
   # 从分享菜单打开
-  receive_sharing_intent: ^1.4.2
+  receive_sharing_intent: ^1.4.3
 
   #device_preview: ^0.5.5
 
@@ -171,7 +171,8 @@ dependencies:
   flutter_downloader:
     path: /Users/honjow/git/flutter_downloader_honjow
 
-#  multi_downloader: ^1.0.6
+  floor: ^0.18.0
+  copy_with_extension: ^1.4.0
 
 
 dev_dependencies:
@@ -184,16 +185,23 @@ dev_dependencies:
       url: git://github.com/fadhilx/json_to_model.git
 #  json_to_model:
 #    path: /Users/honjow/git/json_to_model
-  build_runner: ^1.9.0
+  build_runner: ^1.10.3
 #  build_runner:
 #    path: /Users/honjow/git/build/build_runner
   json_serializable: ^3.3.0
   json_annotation: ^3.0.1
 #
   intl_translation: ^0.17.10+1
+  floor_generator: ^0.18.0
+  copy_with_extension_gen: ^1.4.0
 
   flutter_test:
     sdk: flutter
+
+dependency_overrides:
+  build_runner: ^1.11.0
+  analyzer: ^0.41.2
+  build: ^1.5.0
 
 flutter_intl:
   enabled: true

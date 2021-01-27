@@ -47,17 +47,20 @@ class SettingTab extends GetView<SettingViewController> {
             ),
           ),
           SliverSafeArea(
-              top: false,
-              sliver: SliverList(
-                delegate: SliverChildBuilderDelegate((context, index) {
-                  List _itemList = controller.getItemList();
+            top: false,
+            sliver: SliverList(
+              delegate: SliverChildBuilderDelegate(
+                (context, index) {
+                  final List _itemList = controller.getItemList();
                   if (index < _itemList.length) {
                     return _itemList[index];
                   } else {
                     return null;
                   }
-                }),
-              ))
+                },
+              ),
+            ),
+          ),
         ],
       ),
     );

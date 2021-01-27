@@ -60,21 +60,16 @@ class SettingViewController extends GetxController
 
   List getItemList() {
     List _slivers = [];
-    for (int _index = 0; _index < _itemTitles.length + 1; _index++) {
-      if (_index == 0) {
-        // _slivers.add(Get.find<EhConfigService>().isSafeMode.value ?? false
-        //     ? Container()
-        //     : UserItem());
-        _slivers.add(const SizedBox());
-      } else {
-        _slivers.add(SettingItems(
-          text: _itemTitles[_index - 1],
-          icon: _icons[_index - 1],
-          route: _routes[_index - 1],
-        ));
-      }
+    for (int _index = 0; _index < _itemTitles.length; _index++) {
+      _slivers.add(
+        SettingItems(
+          bottomDivider: _index != _itemTitles.length - 1,
+          text: _itemTitles[_index],
+          icon: _icons[_index],
+          route: _routes[_index],
+        ),
+      );
     }
-//    logger.v('${_slivers.length}');
     return _slivers;
   }
 

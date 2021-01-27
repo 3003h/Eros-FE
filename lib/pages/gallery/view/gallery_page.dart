@@ -8,9 +8,10 @@ import 'package:fehviewer/pages/gallery/view/rate_dialog.dart';
 import 'package:fehviewer/pages/gallery/view/torrent_dialog.dart';
 import 'package:fehviewer/pages/tab/view/gallery_base.dart';
 import 'package:fehviewer/route/navigator_util.dart';
+import 'package:fehviewer/utils/cust_lib/selectable_text_s.dart';
 import 'package:fehviewer/utils/logger.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:flutter/material.dart';
+import 'package:flutter/material.dart' hide SelectableText;
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
 import 'package:share/share.dart';
@@ -36,13 +37,16 @@ class GalleryMainPage extends StatelessWidget {
         slivers: <Widget>[
           // 导航栏
           Obx(() => CupertinoSliverNavigationBar(
-                largeTitle: Text(
+                largeTitle: SelectableText(
                   controller.topTitle ?? '',
                   textAlign: TextAlign.left,
                   maxLines: 3,
-                  style: const TextStyle(
+                  minLines: 1,
+                  style: TextStyle(
                     fontSize: 12,
-                    color: CupertinoColors.systemGrey,
+                    color: CupertinoDynamicColor.resolve(
+                        CupertinoColors.secondaryLabel, context),
+                    fontWeight: FontWeight.normal,
                   ),
                 ),
                 middle: controller.hideNavigationBtn
@@ -119,13 +123,14 @@ class GalleryContainer extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final GalleryPageController controller = Get.find(tag: pageCtrlDepth);
+    final GalleryPageController _controller = Get.find(tag: pageCtrlDepth);
 
     Widget _getDetail(GalleryItem state) {
-      final List _w = <Widget>[
+      final List<Widget> _w = <Widget>[
+        // 进行评分
         Expanded(
           child: Obx(() => TextBtn(
-                controller.isRatinged
+                _controller.isRatinged
                     ? FontAwesomeIcons.solidStar
                     : FontAwesomeIcons.star,
                 title: S.of(context).p_Rate,
@@ -136,12 +141,15 @@ class GalleryContainer extends StatelessWidget {
                     : null,
               )),
         ),
+        // 画廊下载
         Expanded(
           child: TextBtn(
             FontAwesomeIcons.solidArrowAltCircleDown,
             title: S.of(context).p_Download,
+            onTap: _controller.downloadGallery,
           ),
         ),
+        // 种子下载
         Expanded(
           child: TextBtn(
             FontAwesomeIcons.magnet,
@@ -153,6 +161,7 @@ class GalleryContainer extends StatelessWidget {
                 : null,
           ),
         ),
+        // archiver
         Expanded(
           child: TextBtn(
             FontAwesomeIcons.solidFileArchive,
@@ -162,6 +171,7 @@ class GalleryContainer extends StatelessWidget {
             },
           ),
         ),
+        // 相似画廊
         Expanded(
           child: TextBtn(
             FontAwesomeIcons.solidImages,
@@ -201,17 +211,17 @@ class GalleryContainer extends StatelessWidget {
                 CupertinoColors.systemGrey4, context),
           ),
           PreviewGrid(
-            previews: controller.firstPagePreview,
+            previews: _controller.firstPagePreview,
             gid: state.gid,
           ),
-          MorePreviewButton(hasMorePreview: controller.hasMorePreview),
+          MorePreviewButton(hasMorePreview: _controller.hasMorePreview),
         ],
       );
     }
 
     Widget fromItem() {
-      final GalleryItem galleryItem = controller.galleryItem;
-      final Object tabIndex = controller.tabIndex;
+      final GalleryItem galleryItem = _controller.galleryItem;
+      final Object tabIndex = _controller.tabIndex;
 
       return SliverToBoxAdapter(
         child: Column(
@@ -225,7 +235,7 @@ class GalleryContainer extends StatelessWidget {
               color: CupertinoDynamicColor.resolve(
                   CupertinoColors.systemGrey4, context),
             ),
-            controller.obx(
+            _controller.obx(
               (GalleryItem state) {
                 return _getDetail(state);
               },
@@ -243,7 +253,7 @@ class GalleryContainer extends StatelessWidget {
                 return Container(
                   padding: const EdgeInsets.only(bottom: 50, top: 50),
                   child: GalleryErrorPage(
-                    onTap: controller.handOnRefreshAfterErr,
+                    onTap: _controller.handOnRefreshAfterErr,
                   ),
                 );
               },
@@ -254,7 +264,7 @@ class GalleryContainer extends StatelessWidget {
     }
 
     Widget fromUrl() {
-      return controller.obx(
+      return _controller.obx(
           (state) {
             return SliverToBoxAdapter(
               child: Column(
@@ -291,13 +301,13 @@ class GalleryContainer extends StatelessWidget {
                 alignment: Alignment.center,
                 padding: const EdgeInsets.only(bottom: 50, top: 50),
                 child: GalleryErrorPage(
-                  onTap: controller.handOnRefreshAfterErr,
+                  onTap: _controller.handOnRefreshAfterErr,
                 ),
               ),
             );
           });
     }
 
-    return controller.fromUrl ? fromUrl() : fromItem();
+    return _controller.fromUrl ? fromUrl() : fromItem();
   }
 }
