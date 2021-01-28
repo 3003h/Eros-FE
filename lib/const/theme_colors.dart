@@ -228,4 +228,11 @@ class ThemeColors {
     // darkColor: Color(0xc0303030),
     darkColor: Color.fromARGB(200, 35, 35, 35),
   );
+
+  static const Map<String, Color> colorRatingMap = <String, Color>{
+    'ir': Color.fromARGB(255, 255, 150, 46),
+    'ir irr': Color.fromARGB(255, 255, 100, 120),
+    'ir irg': Color.fromARGB(255, 50, 200, 50),
+    'ir irb': Color.fromARGB(255, 126, 120, 255),
+  };
 }

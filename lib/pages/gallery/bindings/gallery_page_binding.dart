@@ -10,10 +10,9 @@ import 'package:get/get.dart';
 
 class GalleryBinding extends Bindings {
   GalleryBinding.fromUrl(this.url);
-  GalleryBinding.fromItem(this.tabIndex, this.galleryItem);
+  GalleryBinding.fromItem(this.galleryItem);
   String url;
 
-  String tabIndex;
   GalleryItem galleryItem;
 
   @override
@@ -24,10 +23,7 @@ class GalleryBinding extends Bindings {
       Get.put(GalleryPageController.initUrl(url: url), tag: pageCtrlDepth);
     } else if (galleryItem != null) {
       Get.put(
-        GalleryPageController.fromItem(
-          galleryItem: galleryItem,
-          tabIndex: tabIndex,
-        ),
+        GalleryPageController.fromItem(galleryItem: galleryItem),
         tag: pageCtrlDepth,
       );
     }

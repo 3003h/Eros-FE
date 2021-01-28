@@ -4,6 +4,7 @@ import 'package:fehviewer/common/service/ehconfig_service.dart';
 import 'package:fehviewer/const/theme_colors.dart';
 import 'package:fehviewer/models/index.dart';
 import 'package:fehviewer/pages/item/controller/galleryitem_controller.dart';
+import 'package:fehviewer/utils/logger.dart';
 import 'package:fehviewer/utils/utility.dart';
 import 'package:fehviewer/widget/blur_image.dart';
 import 'package:fehviewer/widget/rating_bar.dart';
@@ -18,27 +19,39 @@ const double kPaddingLeft = 8.0;
 /// 画廊列表项
 /// 标题和tag需要随设置变化重构ui
 class GalleryItemWidget extends StatelessWidget {
-  GalleryItemWidget({@required this.galleryItem, @required this.tabIndex}) {
-    Get.lazyPut(
-      () => GalleryItemController.initData(galleryItem, tabIndex: tabIndex),
-      tag: galleryItem.gid,
-    );
-  }
+  const GalleryItemWidget({
+    Key key,
+    this.galleryItem,
+    this.tabTag,
+    this.controller,
+  }) : super(key: key);
+
+  // GalleryItemWidget({@required this.galleryItem, @required this.tabIndex}) {
+  //   Get.lazyPut(
+  //     () => GalleryItemController.initData(galleryItem, tabTag: tabIndex),
+  //     tag: galleryItem.gid,
+  //   );
+  // }
 
   final GalleryItem galleryItem;
-  final String tabIndex;
+  final String tabTag;
+  final GalleryItemController controller;
 
-  GalleryItemController get _galleryItemController =>
-      Get.find(tag: galleryItem.gid);
+  // GalleryItemController get _galleryItemController =>
+  //     Get.find(tag: galleryItem.gid);
+  GalleryItemController get _galleryItemController => controller;
 
   @override
   Widget build(BuildContext context) {
+    // logger.d(
+    //     'ratingFallBack ${_galleryItemController.galleryItem.ratingFallBack} ');
+
     return GestureDetector(
       child: Center(
         child: _buildItem(),
       ),
       behavior: HitTestBehavior.opaque,
-      onTap: _galleryItemController.onTap,
+      onTap: () => _galleryItemController.onTap(tabTag),
       onTapDown: _galleryItemController.onTapDown,
       onTapUp: _galleryItemController.onTapUp,
       onTapCancel: _galleryItemController.onTapCancel,
@@ -127,123 +140,118 @@ class GalleryItemWidget extends StatelessWidget {
 
   /// 构建标题
   Widget _buildTitle() {
-    return Builder(
-      builder: (_) {
-        return Obx(() => Text(
-              _galleryItemController.title,
-              maxLines: 4,
-              textAlign: TextAlign.left, // 对齐方式
-              overflow: TextOverflow.ellipsis, // 超出部分省略号
-              style: const TextStyle(
-                fontSize: 14.5,
-                fontWeight: FontWeight.w500,
-              ),
-            ));
-      },
-    );
+    return Obx(() => Text(
+          _galleryItemController.title,
+          maxLines: 4,
+          textAlign: TextAlign.left, // 对齐方式
+          overflow: TextOverflow.ellipsis, // 超出部分省略号
+          style: const TextStyle(
+            fontSize: 14.5,
+            fontWeight: FontWeight.w500,
+          ),
+        ));
   }
 
   /// 构建封面图片
   Widget _buildCoverImage() {
-    return Builder(builder: (_) {
-      final GalleryItem _item = _galleryItemController.galleryItem;
+    final GalleryItem _item = _galleryItemController.galleryItem;
 
-      // 获取图片高度 用于占位
-      double _getHeigth() {
-        if (_item.imgWidth >= kCoverImageWidth) {
-          return _item.imgHeight * kCoverImageWidth / _item.imgWidth;
-        } else {
-          return _item.imgHeight;
-        }
+    // 获取图片高度 用于占位
+    double _getHeigth() {
+      if (_item.imgWidth >= kCoverImageWidth) {
+        return _item.imgHeight * kCoverImageWidth / _item.imgWidth;
+      } else {
+        return _item.imgHeight;
       }
+    }
 
-      // logger.d('${_item.englishTitle} ${_getHeigth()}');
+    logger.v('hero item => ${galleryItem.gid}_cover_$tabTag');
+    // logger.d('${_item.englishTitle} ${_getHeigth()}');
 
-      return Container(
-        margin: const EdgeInsets.only(top: 10, bottom: 10),
-        width: kCoverImageWidth,
-        height: _item.imgWidth != null ? _getHeigth() : null,
-        alignment: Alignment.center,
-        child: Hero(
-          tag: '${_item.gid}_${_item.token}_cover_$tabIndex',
-          child: Container(
-            decoration: BoxDecoration(boxShadow: [
-              //阴影
-              BoxShadow(
-                color: CupertinoDynamicColor.resolve(
-                    CupertinoColors.systemGrey4, Get.context),
-                blurRadius: 10,
-              )
-            ]),
-            child: ClipRRect(
-              // 圆角
-              borderRadius: BorderRadius.circular(6),
-              child: CoverImg(
-                imgUrl: _item.imgUrl ?? '',
-                height: _item.imgWidth != null ? _getHeigth() : null,
-              ),
+    return Container(
+      margin: const EdgeInsets.only(top: 10, bottom: 10),
+      width: kCoverImageWidth,
+      height: _item.imgWidth != null ? _getHeigth() : null,
+      alignment: Alignment.center,
+      child: Hero(
+        tag: '${_item.gid}_cover_$tabTag',
+        child: Container(
+          decoration: BoxDecoration(boxShadow: [
+            //阴影
+            BoxShadow(
+              color: CupertinoDynamicColor.resolve(
+                  CupertinoColors.systemGrey4, Get.context),
+              blurRadius: 10,
+            )
+          ]),
+          child: ClipRRect(
+            // 圆角
+            borderRadius: BorderRadius.circular(6),
+            child: CoverImg(
+              imgUrl: _item.imgUrl ?? '',
+              height: _item.imgWidth != null ? _getHeigth() : null,
             ),
           ),
         ),
-      );
-    });
+      ),
+    );
   }
 
   Widget _buildRating() {
-    return Builder(builder: (_) {
-      return Row(
-        children: <Widget>[
-          Container(
-            padding: const EdgeInsets.fromLTRB(0, 0, 4, 0),
-            child: StaticRatingBar(
-              size: 16.0,
-              rate: _galleryItemController.galleryItem.rating,
-              radiusRatio: 1.5,
-              colorDark: CupertinoDynamicColor.resolve(
-                  CupertinoColors.systemGrey3, Get.context),
-            ),
+    // logger.d(
+    //     'ratingFallBack ${_galleryItemController.galleryItem.ratingFallBack} ');
+    return Row(
+      children: <Widget>[
+        Container(
+          padding: const EdgeInsets.fromLTRB(0, 0, 4, 0),
+          child: StaticRatingBar(
+            size: 16.0,
+            rate: _galleryItemController.galleryItem.ratingFallBack,
+            radiusRatio: 1.5,
+            colorLight: ThemeColors.colorRatingMap[
+                _galleryItemController.galleryItem.colorRating.trim()],
+            colorDark: CupertinoDynamicColor.resolve(
+                CupertinoColors.systemGrey3, Get.context),
           ),
-          Text(
-            _galleryItemController?.galleryItem?.rating.toString(),
-            style: TextStyle(
-              fontSize: 11,
-              color: CupertinoDynamicColor.resolve(
-                  CupertinoColors.systemGrey, Get.context),
-            ),
+        ),
+        Text(
+          _galleryItemController?.galleryItem?.rating.toString(),
+          style: TextStyle(
+            fontSize: 11,
+            color: CupertinoDynamicColor.resolve(
+                CupertinoColors.systemGrey, Get.context),
           ),
-        ],
-      );
-    });
+        ),
+      ],
+    );
   }
 
   Widget _buildFilecontWidget() {
-    return Builder(builder: (_) {
-      return Row(
-        children: <Widget>[
-          Padding(
-            padding: const EdgeInsets.only(right: 4),
-            child: Text(
-              _galleryItemController?.galleryItem?.translated ?? '',
-              style: const TextStyle(
-                  fontSize: 12, color: CupertinoColors.systemGrey),
-            ),
+    return Row(
+      children: <Widget>[
+        Padding(
+          padding: const EdgeInsets.only(right: 4),
+          child: Text(
+            _galleryItemController?.galleryItem?.translated ?? '',
+            style: const TextStyle(
+                fontSize: 12, color: CupertinoColors.systemGrey),
           ),
-          const Icon(
-            Icons.panorama,
-            size: 13,
-            color: CupertinoColors.systemGrey,
+        ),
+        const Icon(
+          Icons.panorama,
+          size: 13,
+          color: CupertinoColors.systemGrey,
+        ),
+        Container(
+          padding: const EdgeInsets.only(left: 2),
+          child: Text(
+            _galleryItemController?.galleryItem?.filecount ?? '',
+            style: const TextStyle(
+                fontSize: 12, color: CupertinoColors.systemGrey),
           ),
-          Container(
-            padding: const EdgeInsets.only(left: 2),
-            child: Text(
-              _galleryItemController?.galleryItem?.filecount ?? '',
-              style: const TextStyle(
-                  fontSize: 12, color: CupertinoColors.systemGrey),
-            ),
-          ),
-        ],
-      );
-    });
+        ),
+      ],
+    );
   }
 
   Widget _buildFavcatIcon() {
@@ -266,38 +274,34 @@ class GalleryItemWidget extends StatelessWidget {
   }
 
   Widget _buildPostTime() {
-    return Builder(builder: (_) {
-      return Text(
-        _galleryItemController?.galleryItem?.postTime ?? '',
-        style: const TextStyle(fontSize: 12, color: CupertinoColors.systemGrey),
-      );
-    });
+    return Text(
+      _galleryItemController?.galleryItem?.postTime ?? '',
+      style: const TextStyle(fontSize: 12, color: CupertinoColors.systemGrey),
+    );
   }
 
   Widget _buildCategory() {
-    return Builder(builder: (_) {
-      final Color _colorCategory = CupertinoDynamicColor.resolve(
-          ThemeColors.catColor[
-                  _galleryItemController?.galleryItem?.category ?? 'default'] ??
-              CupertinoColors.systemBackground,
-          Get.context);
+    final Color _colorCategory = CupertinoDynamicColor.resolve(
+        ThemeColors.catColor[
+                _galleryItemController?.galleryItem?.category ?? 'default'] ??
+            CupertinoColors.systemBackground,
+        Get.context);
 
-      return ClipRRect(
-        borderRadius: BorderRadius.circular(4),
-        child: Container(
-          padding: const EdgeInsets.fromLTRB(6, 3, 6, 3),
-          color: _colorCategory,
-          child: Text(
-            _galleryItemController?.galleryItem?.category ?? '',
-            style: const TextStyle(
-              fontSize: 14,
-              height: 1,
-              color: CupertinoColors.white,
-            ),
+    return ClipRRect(
+      borderRadius: BorderRadius.circular(4),
+      child: Container(
+        padding: const EdgeInsets.fromLTRB(6, 3, 6, 3),
+        color: _colorCategory,
+        child: Text(
+          _galleryItemController?.galleryItem?.category ?? '',
+          style: const TextStyle(
+            fontSize: 14,
+            height: 1,
+            color: CupertinoColors.white,
           ),
         ),
-      );
-    });
+      ),
+    );
   }
 }
 

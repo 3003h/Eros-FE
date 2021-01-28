@@ -18,9 +18,9 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
 
 class FavoriteTab extends GetView<FavoriteViewController> {
-  const FavoriteTab({Key key, this.tabIndex, this.scrollController})
+  const FavoriteTab({Key key, this.tabTag, this.scrollController})
       : super(key: key);
-  final String tabIndex;
+  final String tabTag;
   final ScrollController scrollController;
 
   @override
@@ -48,9 +48,6 @@ class FavoriteTab extends GetView<FavoriteViewController> {
       slivers: <Widget>[
         CupertinoSliverNavigationBar(
           padding: const EdgeInsetsDirectional.only(end: 4),
-          // largeTitle: Obx(() => Text(
-          //       controller.title.value,
-          //     )),
           largeTitle: Row(
             mainAxisSize: MainAxisSize.min,
             children: [
@@ -81,7 +78,7 @@ class FavoriteTab extends GetView<FavoriteViewController> {
                 ),
                 onPressed: () {
                   final bool fromTabItem =
-                      Get.find<TabHomeController>().tabMap[tabIndex] ?? false;
+                      Get.find<TabHomeController>().tabMap[tabTag] ?? false;
                   NavigatorUtil.showSearch(
                       searchType: SearchType.favorite,
                       fromTabItem: fromTabItem);
@@ -210,11 +207,12 @@ class FavoriteTab extends GetView<FavoriteViewController> {
   }
 
   Widget _getGalleryList() {
+    logger.d(' _getGalleryList');
     return controller.obx(
         (List<GalleryItem> state) {
           return getGalleryList(
             state,
-            tabIndex,
+            tabTag,
             maxPage: controller.maxPage,
             curPage: controller.curPage.value,
             loadMord: controller.loadDataMore,

@@ -91,7 +91,7 @@ class AppPages {
     ),
     GetPage(
       name: EHRoutes.history,
-      page: () => const HistoryTab(tabIndex: EHRoutes.history),
+      page: () => const HistoryTab(tabTag: EHRoutes.history),
     ),
     GetPage(
       name: EHRoutes.watched,
@@ -99,11 +99,11 @@ class AppPages {
     ),
     GetPage(
       name: EHRoutes.favorite,
-      page: () => const FavoriteTab(tabIndex: EHRoutes.favorite),
+      page: () => const FavoriteTab(tabTag: EHRoutes.favorite),
     ),
     GetPage(
       name: EHRoutes.popular,
-      page: () => const PopularListTab(tabIndex: EHRoutes.popular),
+      page: () => const PopularListTab(tabTag: EHRoutes.popular),
     ),
     GetPage(
       name: EHRoutes.download,

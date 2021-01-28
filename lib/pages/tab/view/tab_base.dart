@@ -10,7 +10,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:waterfall_flow/waterfall_flow.dart';
 
-SliverPadding buildWaterfallFlow(List<GalleryItem> gallerItemBeans, tabIndex,
+SliverPadding buildWaterfallFlow(List<GalleryItem> gallerItemBeans, tabTag,
     {int maxPage, int curPage, VoidCallback loadMord}) {
   const double _padding = EHConst.waterfallFlowCrossAxisSpacing;
   return SliverPadding(
@@ -35,11 +35,11 @@ SliverPadding buildWaterfallFlow(List<GalleryItem> gallerItemBeans, tabIndex,
           }
           Get.create(() => GalleryItemController.initData(
               gallerItemBeans[index],
-              tabIndex: tabIndex));
+              tabTag: tabTag));
 
           return GalleryItemFlow(
             galleryItem: gallerItemBeans[index],
-            tabIndex: tabIndex,
+            tabTag: tabTag,
           );
         },
         childCount: gallerItemBeans.length,
@@ -48,8 +48,7 @@ SliverPadding buildWaterfallFlow(List<GalleryItem> gallerItemBeans, tabIndex,
   );
 }
 
-SliverList buildGallerySliverListView(
-    List<GalleryItem> gallerItemBeans, tabIndex,
+SliverList buildGallerySliverListView(List<GalleryItem> gallerItemBeans, tabTag,
     {int maxPage, int curPage, VoidCallback loadMord}) {
   return SliverList(
     delegate: SliverChildBuilderDelegate(
@@ -61,10 +60,22 @@ SliverList buildGallerySliverListView(
           }
         }
 
-        return GalleryItemWidget(
-          galleryItem: gallerItemBeans[index],
-          tabIndex: tabIndex,
-        );
+        // logger.d('buildGallerySliverListView ');
+
+        return GetBuilder<GalleryItemController>(
+            init: GalleryItemController.initData(
+              gallerItemBeans[index],
+              tabTag: tabTag,
+            ),
+            tag: gallerItemBeans[index].gid,
+            id: gallerItemBeans[index].gid,
+            builder: (constoller) {
+              return GalleryItemWidget(
+                galleryItem: gallerItemBeans[index],
+                tabTag: tabTag,
+                controller: constoller,
+              );
+            });
       },
       childCount: gallerItemBeans.length,
     ),
@@ -72,7 +83,7 @@ SliverList buildGallerySliverListView(
 }
 
 SliverFixedExtentList buildGallerySliverListSimpleView(
-    List<GalleryItem> gallerItemBeans, tabIndex,
+    List<GalleryItem> gallerItemBeans, tabTag,
     {int maxPage, int curPage, VoidCallback loadMord}) {
   return SliverFixedExtentList(
     delegate: SliverChildBuilderDelegate(
@@ -84,11 +95,11 @@ SliverFixedExtentList buildGallerySliverListSimpleView(
           }
         }
         Get.create(() => GalleryItemController.initData(gallerItemBeans[index],
-            tabIndex: tabIndex));
+            tabTag: tabTag));
 
         return GalleryItemSimpleWidget(
           galleryItem: gallerItemBeans[index],
-          tabIndex: tabIndex,
+          tabTag: tabTag,
         );
       },
       childCount: gallerItemBeans.length,
@@ -97,22 +108,24 @@ SliverFixedExtentList buildGallerySliverListSimpleView(
   );
 }
 
-Widget getGalleryList(List<GalleryItem> gallerItemBeans, tabIndex,
+Widget getGalleryList(List<GalleryItem> gallerItemBeans, tabTag,
     {int maxPage, int curPage, VoidCallback loadMord}) {
   final EhConfigService ehConfigService = Get.find();
+
+  // logger.d(' getGalleryList');
 
   return Obx(() {
     switch (ehConfigService.listMode.value) {
       case ListModeEnum.list:
-        return buildGallerySliverListView(gallerItemBeans, tabIndex,
+        return buildGallerySliverListView(gallerItemBeans, tabTag,
             maxPage: maxPage, curPage: curPage, loadMord: loadMord);
         break;
       case ListModeEnum.waterfall:
-        return buildWaterfallFlow(gallerItemBeans, tabIndex,
+        return buildWaterfallFlow(gallerItemBeans, tabTag,
             maxPage: maxPage, curPage: curPage, loadMord: loadMord);
         break;
       case ListModeEnum.simpleList:
-        return buildGallerySliverListSimpleView(gallerItemBeans, tabIndex,
+        return buildGallerySliverListSimpleView(gallerItemBeans, tabTag,
             maxPage: maxPage, curPage: curPage, loadMord: loadMord);
         break;
     }

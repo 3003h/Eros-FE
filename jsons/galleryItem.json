@@ -38,5 +38,6 @@
   "apikey": "",
   "apiuid": "",
   "isRatinged": false,
+  "colorRating": "r",
   "archiverLink": ""
 }

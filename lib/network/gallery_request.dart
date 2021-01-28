@@ -569,7 +569,7 @@ class Api {
   }
 
   /// 画廊评分
-  static Future<void> setRating({
+  static Future<Map<String, dynamic>> setRating({
     @required String apikey,
     @required String apiuid,
     @required String gid,
@@ -589,6 +589,8 @@ class Api {
     await CustomHttpsProxy.instance.init();
     final rult = await getGalleryApi(reqJsonStr, refresh: true, cache: false);
     logger.d('$rult');
+    final Map<String, dynamic> rultMap = jsonDecode(rult.toString());
+    return rultMap;
   }
 
   static Future<CommitVoteRes> commitVote({

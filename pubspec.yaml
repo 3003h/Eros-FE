@@ -173,7 +173,7 @@ dependencies:
 
   floor: ^0.18.0
   copy_with_extension: ^1.4.0
-  package_info: ^0.4.3+2
+  package_info: '>=0.4.3+2 <2.0.0'
 
 
 dev_dependencies:

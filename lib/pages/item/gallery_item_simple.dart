@@ -18,16 +18,15 @@ const double kPaddingLeft = 8.0;
 /// 画廊列表项
 /// 简单模式 精简显示信息 固定高度
 class GalleryItemSimpleWidget extends StatelessWidget {
-  GalleryItemSimpleWidget(
-      {@required this.galleryItem, @required this.tabIndex}) {
+  GalleryItemSimpleWidget({@required this.galleryItem, @required this.tabTag}) {
     Get.lazyPut(
-      () => GalleryItemController.initData(galleryItem, tabIndex: tabIndex),
+      () => GalleryItemController.initData(galleryItem, tabTag: tabTag),
       tag: galleryItem.gid,
     );
   }
 
   final GalleryItem galleryItem;
-  final String tabIndex;
+  final String tabTag;
   GalleryItemController get _galleryItemController =>
       Get.find(tag: galleryItem.gid);
 
@@ -108,7 +107,7 @@ class GalleryItemSimpleWidget extends StatelessWidget {
       ),
       // 不可见区域点击有效
       behavior: HitTestBehavior.opaque,
-      onTap: _galleryItemController.onTap,
+      onTap: () => _galleryItemController.onTap(tabTag),
       onTapDown: _galleryItemController.onTapDown,
       onTapUp: _galleryItemController.onTapUp,
       onTapCancel: _galleryItemController.onTapCancel,
@@ -139,7 +138,7 @@ class GalleryItemSimpleWidget extends StatelessWidget {
       height: kItemWidth - 12,
       child: Center(
         child: Hero(
-          tag: '${_item.gid}_${_item.token}_cover_$tabIndex',
+          tag: '${_item.gid}_cover_$tabTag',
           child: Container(
             decoration: BoxDecoration(
               boxShadow: [
@@ -172,8 +171,10 @@ class GalleryItemSimpleWidget extends StatelessWidget {
           padding: const EdgeInsets.fromLTRB(0, 0, 4, 0),
           child: StaticRatingBar(
             size: 16.0,
-            rate: _galleryItemController.galleryItem.rating,
+            rate: _galleryItemController.galleryItem.ratingFallBack,
             radiusRatio: 1.5,
+            colorLight: ThemeColors.colorRatingMap[
+                _galleryItemController.galleryItem.colorRating.trim()],
             colorDark: CupertinoDynamicColor.resolve(
                 CupertinoColors.systemGrey3, Get.context),
           ),

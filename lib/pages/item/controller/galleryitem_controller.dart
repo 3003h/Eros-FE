@@ -13,19 +13,19 @@ import 'package:tuple/tuple.dart';
 
 class GalleryItemController extends GetxController {
   GalleryItemController.initData(GalleryItem galleryItem,
-      {@required String tabIndex}) {
+      {@required String tabTag}) {
     // ignore: prefer_initializing_formals
     this.galleryItem = galleryItem;
-    _tabindex = tabIndex;
+    _tabindex = tabTag;
   }
 
   final EhConfigService _ehConfigService = Get.find();
   final FavController _favController = Get.find();
 
   /// 点击item
-  void onTap() {
+  void onTap(String tabTag) {
     logger.d('${galleryItem.englishTitle}');
-    NavigatorUtil.goGalleryPage(galleryItem: galleryItem, tabIndex: _tabindex);
+    NavigatorUtil.goGalleryPage(galleryItem: galleryItem, tabTag: tabTag);
   }
 
   void onTapDown(_) => _updatePressedColor();
