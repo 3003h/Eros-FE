@@ -49,17 +49,23 @@ class _GalleryImageState extends State<GalleryImage> {
     final GalleryPreview _currentPreview =
         _pageController.galleryItem.galleryPreview[widget.index];
 
+    // 重载当前图片
+    Future<void> _reloadImage() async {
+      await CachedNetworkImage.evictFromCache(_currentPreview.largeImageUrl);
+      _currentPreview.largeImageUrl = null;
+
+      setState(() {
+        _future = _pageController.getImageInfo(widget.index,
+            cancelToken: _getMoreCancelToken);
+      });
+    }
+
     return GestureDetector(
       behavior: HitTestBehavior.opaque,
       onLongPress: () {
         logger.d('long press');
 
-        showImageSheet(context, _currentPreview.largeImageUrl, () {
-          setState(() {
-            _future = _pageController.getImageInfo(widget.index,
-                cancelToken: _getMoreCancelToken);
-          });
-        });
+        showImageSheet(context, _currentPreview.largeImageUrl, _reloadImage);
       },
       child: FutureBuilder<GalleryPreview>(
         future: _future,
@@ -67,15 +73,14 @@ class _GalleryImageState extends State<GalleryImage> {
           if (_currentPreview.largeImageUrl == null ||
               _currentPreview.largeImageHeight == null) {
             if (previewFromApi.connectionState == ConnectionState.done) {
+              // 获取图片url等信息 异常
               if (previewFromApi.hasError) {
-                // todo 加载异常
                 logger.e(' ${previewFromApi.error}');
                 return Container(
                   alignment: Alignment.center,
                   constraints: BoxConstraints(
                     maxHeight: context.width * 0.8,
                   ),
-                  // padding: const EdgeInsets.symmetric(vertical: 50),
                   child: Column(
                     mainAxisSize: MainAxisSize.min,
                     children: [
@@ -93,6 +98,7 @@ class _GalleryImageState extends State<GalleryImage> {
                   ),
                 );
               } else {
+                // 更新状态 显示 CachedNetworkImage 组件
                 _currentPreview.largeImageUrl =
                     previewFromApi.data.largeImageUrl;
                 _currentPreview.largeImageHeight =
@@ -114,8 +120,6 @@ class _GalleryImageState extends State<GalleryImage> {
                     maxHeight: context.mediaQueryShortestSide,
                     minWidth: context.width / 2,
                   ),
-                  // margin:
-                  //     const EdgeInsets.symmetric(vertical: 50, horizontal: 50),
                   alignment: Alignment.center,
                   child: Column(
                     mainAxisSize: MainAxisSize.min,
@@ -128,7 +132,7 @@ class _GalleryImageState extends State<GalleryImage> {
                         ),
                       ),
                       const Text(
-                        '获取中...',
+                        'Loading...',
                         style: TextStyle(
                           color: CupertinoColors.systemGrey6,
                         ),

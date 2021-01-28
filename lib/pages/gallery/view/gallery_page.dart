@@ -1,3 +1,4 @@
+import 'package:fehviewer/common/global.dart';
 import 'package:fehviewer/common/service/depth_service.dart';
 import 'package:fehviewer/generated/l10n.dart';
 import 'package:fehviewer/models/index.dart';
@@ -146,7 +147,7 @@ class GalleryContainer extends StatelessWidget {
           child: TextBtn(
             FontAwesomeIcons.solidArrowAltCircleDown,
             title: S.of(context).p_Download,
-            onTap: _controller.downloadGallery,
+            onTap: Global.inDebugMode ? _controller.downloadGallery : null,
           ),
         ),
         // 种子下载
