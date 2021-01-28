@@ -55,11 +55,6 @@ class FavoriteViewController extends GetxController
       isBackgroundRefresh = true;
       reloadData(delayed: true).then((_) => isBackgroundRefresh = false);
     });
-
-    // Future<void>.delayed(const Duration(milliseconds: 500)).then((_) {
-    //   isBackgroundRefresh = true;
-    //   reloadData(delayed: true).then((_) => isBackgroundRefresh = false);
-    // });
   }
 
   Future<Tuple2<List<GalleryItem>, int>> loadData({
@@ -107,6 +102,7 @@ class FavoriteViewController extends GetxController
       change(tuple.item1, status: RxStatus.success());
     } else {
       maxPage = tuple.item2;
+      logger.d('${tuple.item1.map((e) => e.ratingFallBack).join('\n')} ');
       change(tuple.item1, status: RxStatus.success());
     }
   }

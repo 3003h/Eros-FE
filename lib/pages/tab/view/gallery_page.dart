@@ -17,10 +17,10 @@ import 'package:get/get.dart';
 import 'tab_base.dart';
 
 class GalleryListTab extends GetView<GalleryViewController> {
-  const GalleryListTab({Key key, this.tabIndex, this.scrollController})
+  const GalleryListTab({Key key, this.tabTag, this.scrollController})
       : super(key: key);
 
-  final String tabIndex;
+  final String tabTag;
   final ScrollController scrollController;
 
   @override
@@ -199,7 +199,7 @@ class GalleryListTab extends GetView<GalleryViewController> {
         (List<GalleryItem> state) {
           return getGalleryList(
             state,
-            tabIndex,
+            tabTag,
             maxPage: controller.maxPage,
             curPage: controller.curPage.value,
             loadMord: controller.loadDataMore,

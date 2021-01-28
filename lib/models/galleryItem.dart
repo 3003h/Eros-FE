@@ -51,6 +51,7 @@ class GalleryItem {
   String apikey;
   String apiuid;
   bool isRatinged;
+  String colorRating;
   String archiverLink;
 
   factory GalleryItem.fromJson(Map<String, dynamic> json) =>

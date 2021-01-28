@@ -25,14 +25,19 @@ class RateController extends GetxController {
     logger.d(
         '${pageController.galleryItem.apiuid} ${pageController.galleryItem.apikey}');
     logger.d('${(rate * 2).round()}');
-    await Api.setRating(
+    final Map<String, dynamic> rultMap = await Api.setRating(
       apikey: _item.apikey,
       apiuid: _item.apiuid,
       gid: _item.gid,
       token: _item.token,
       rating: (rate * 2).round(),
     );
-    pageController.ratinged();
+    pageController.ratinged(
+      ratingUsr: double.parse(rultMap['rating_usr'].toString()),
+      ratingAvg: double.parse(rultMap['rating_avg'].toString()),
+      ratingCnt: rultMap['rating_cnt'],
+      colorRating: rultMap['rating_cls'],
+    );
     showToast('Ratting successfully');
   }
 }

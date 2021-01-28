@@ -186,18 +186,25 @@ class GalleryListParser {
       final double imageHeight = double.parse(match[1]);
       final double imageWidth = double.parse(match[2]);
 
-      // 评分星级计算 (api获取不到评分时用)
+      // 评分星级计算
       final String ratPx = tr
           .querySelector('td.gl2c > div:nth-child(2) > div.ir')
           .attributes['style'];
       final RegExp pxA = RegExp(r'-?(\d+)px\s+-?(\d+)px');
       final RegExpMatch px = pxA.firstMatch(ratPx);
 
-      //
       final double ratingFB = (80.0 - double.parse(px.group(1))) / 16.0 -
           (px.group(2) == '21' ? 0.5 : 0.0);
 
-//      loggerNoStack.i('ratingFB $ratingFB');
+      // logger.i('ratingFB $ratingFB');
+
+      // 评分颜色
+      final String _colorRating = tr
+              .querySelector('td.gl2c')
+              .children[2]
+              .children[1]
+              ?.attributes['class'] ??
+          'ir';
 
       final String postTime =
           tr.querySelector('td.gl2c > div:nth-child(2) > div')?.text?.trim() ??
@@ -247,6 +254,7 @@ class GalleryListParser {
             ..simpleTags = simpleTags
             ..postTime = postTimeLocal
             ..ratingFallBack = ratingFB
+            ..colorRating = _colorRating
             ..isRatinged = isRatinged
             ..favTitle = favTitle
             ..favcat = favcat,

@@ -8,9 +8,9 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
 
 class HistoryTab extends GetView<HistoryViewController> {
-  const HistoryTab({Key key, this.tabIndex, this.scrollController})
+  const HistoryTab({Key key, this.tabTag, this.scrollController})
       : super(key: key);
-  final String tabIndex;
+  final String tabTag;
   final ScrollController scrollController;
 
   @override
@@ -54,7 +54,7 @@ class HistoryTab extends GetView<HistoryViewController> {
             sliver: GetBuilder<HistoryController>(
               init: HistoryController(),
               builder: (_) {
-                return getGalleryList(_.historys, tabIndex);
+                return getGalleryList(_.historys, tabTag);
               },
             )
             // sliver: _getGalleryList(),

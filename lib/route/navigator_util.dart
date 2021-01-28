@@ -50,18 +50,18 @@ class NavigatorUtil {
 
   /// 转到画廊页面
   static void goGalleryPage(
-      {String url, String tabIndex, GalleryItem galleryItem}) {
+      {String url, String tabTag, GalleryItem galleryItem}) {
     Get.find<DepthService>().pushPageCtrl();
     if (url != null && url.isNotEmpty) {
       logger.d('goGalleryPage fromUrl');
       Get.to(
-        const GalleryMainPage(),
+        GalleryMainPage(tabTag: tabTag),
         transition: Transition.cupertino,
         preventDuplicates: false,
         binding: GalleryBinding.fromUrl(url),
       );
     } else {
-      logger.d('goGalleryPage fromItem');
+      logger.d('goGalleryPage fromItem tabTag=$tabTag');
 
       // Get.to(
       //   const GalleryMainPage(),
@@ -72,17 +72,17 @@ class NavigatorUtil {
 
       isLayoutLarge
           ? Get.to(
-              const GalleryMainPage(),
+              GalleryMainPage(tabTag: tabTag),
               id: 2,
               transition: Transition.fadeIn,
               preventDuplicates: false,
-              binding: GalleryBinding.fromItem(tabIndex, galleryItem),
+              binding: GalleryBinding.fromItem(galleryItem),
             )
           : Get.to(
-              const GalleryMainPage(),
+              GalleryMainPage(tabTag: tabTag),
               transition: Transition.cupertino,
               preventDuplicates: false,
-              binding: GalleryBinding.fromItem(tabIndex, galleryItem),
+              binding: GalleryBinding.fromItem(galleryItem),
             );
     }
   }

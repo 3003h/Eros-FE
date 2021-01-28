@@ -66,6 +66,7 @@ GalleryItem _$GalleryItemFromJson(Map<String, dynamic> json) {
     ..apikey = json['apikey'] as String
     ..apiuid = json['apiuid'] as String
     ..isRatinged = json['isRatinged'] as bool
+    ..colorRating = json['colorRating'] as String
     ..archiverLink = json['archiverLink'] as String;
 }
 
@@ -110,5 +111,6 @@ Map<String, dynamic> _$GalleryItemToJson(GalleryItem instance) =>
       'apikey': instance.apikey,
       'apiuid': instance.apiuid,
       'isRatinged': instance.isRatinged,
+      'colorRating': instance.colorRating,
       'archiverLink': instance.archiverLink,
     };

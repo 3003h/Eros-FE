@@ -36,7 +36,6 @@ class GalleryPageController extends GetxController
 
   GalleryPageController.fromItem({
     @required this.galleryItem,
-    @required this.tabIndex,
   }) : gid = galleryItem.gid;
 
   /// 画廊gid 唯一
@@ -54,17 +53,32 @@ class GalleryPageController extends GetxController
   bool get isRatinged => _isRatinged.value;
   set isRatinged(bool val) => _isRatinged.value = val;
 
-  void ratinged() {
+  void ratinged({
+    double ratingUsr,
+    double ratingAvg,
+    int ratingCnt,
+    String colorRating,
+  }) {
     isRatinged = true;
     galleryItem.isRatinged = true;
     _itemController.galleryItem.isRatinged = true;
+
+    galleryItem.ratingFallBack = ratingUsr;
+    galleryItem.rating = ratingAvg;
+    galleryItem.ratingCount = ratingCnt.toString();
+    galleryItem.colorRating = colorRating;
+    update(['header']);
+
+    _itemController.galleryItem.ratingFallBack = ratingUsr;
+    _itemController.galleryItem.rating = ratingAvg;
+    _itemController.galleryItem.ratingCount = ratingCnt.toString();
+    _itemController.galleryItem.colorRating = colorRating;
+    _itemController.update();
   }
 
   /// 画廊数据对象
   GalleryItem galleryItem;
   List<GalleryPreview> get previews => galleryItem.galleryPreview;
-
-  String tabIndex;
 
   String get showKey => galleryItem.showKey;
 
@@ -197,6 +211,9 @@ class GalleryPageController extends GetxController
 
           // 评分状态更新
           isRatinged = galleryItem.isRatinged;
+
+          _itemController?.galleryItem = galleryItem;
+          _itemController?.update();
         }
       } catch (_) {}
 
@@ -204,7 +221,7 @@ class GalleryPageController extends GetxController
 
       // 加入历史
       if (galleryItem.gid != null) {
-        Future<void>.delayed(const Duration(milliseconds: 700)).then((_) {
+        Future<void>.delayed(const Duration(seconds: 1)).then((_) {
           _historyController.addHistory(galleryItem);
         });
       }
@@ -231,14 +248,14 @@ class GalleryPageController extends GetxController
 
   Future<void> _loadData({bool refresh = false, bool showError = true}) async {
     try {
-      final GalleryItem value = await _fetchData(refresh: refresh);
-      change(value, status: RxStatus.success());
+      final GalleryItem _fetchItem = await _fetchData(refresh: refresh);
+      change(_fetchItem, status: RxStatus.success());
       time.showTime('change end');
       _enableRead.value = true;
-      // logger
-      //     .d('${galleryItem.isRatinged} value.isRatinged:${value.isRatinged}');
+      logger.d('galleryItem.isRatinged:${galleryItem.isRatinged}\n'
+          '_fetchItem.isRatinged:${_fetchItem.isRatinged}');
       isRatinged = (galleryItem.isRatinged ?? false) ||
-          value.isRatinged ||
+          _fetchItem.isRatinged ||
           (_itemController?.galleryItem?.isRatinged ?? false);
     } catch (err, stack) {
       logger.e('$err\n$stack');

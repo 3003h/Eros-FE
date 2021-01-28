@@ -24,9 +24,9 @@ const double kPadding = 12.0;
 const double kHeaderPaddingTop = 12.0;
 
 class GalleryMainPage extends StatelessWidget {
-  const GalleryMainPage({this.tag});
+  const GalleryMainPage({this.tabTag});
 
-  final String tag;
+  final String tabTag;
   @override
   Widget build(BuildContext context) {
     final GalleryPageController controller = Get.find(tag: pageCtrlDepth);
@@ -76,10 +76,10 @@ class GalleryMainPage extends StatelessWidget {
           CupertinoSliverRefreshControl(
             onRefresh: controller.handOnRefresh,
           ),
-          const SliverSafeArea(
+          SliverSafeArea(
             top: false,
             bottom: false,
-            sliver: GalleryContainer(),
+            sliver: GalleryContainer(tabTag: tabTag),
           ),
         ],
       ),
@@ -120,7 +120,10 @@ class NavigationBarImage extends StatelessWidget {
 class GalleryContainer extends StatelessWidget {
   const GalleryContainer({
     Key key,
+    this.tabTag,
   }) : super(key: key);
+
+  final String tabTag;
 
   @override
   Widget build(BuildContext context) {
@@ -222,14 +225,13 @@ class GalleryContainer extends StatelessWidget {
 
     Widget fromItem() {
       final GalleryItem galleryItem = _controller.galleryItem;
-      final Object tabIndex = _controller.tabIndex;
 
       return SliverToBoxAdapter(
         child: Column(
           children: <Widget>[
             GalleryHeader(
               galleryItem: galleryItem,
-              tabIndex: tabIndex,
+              tabTag: tabTag,
             ),
             Divider(
               height: 0.5,
@@ -272,7 +274,7 @@ class GalleryContainer extends StatelessWidget {
                 children: <Widget>[
                   GalleryHeader(
                     galleryItem: state,
-                    tabIndex: '',
+                    tabTag: '',
                   ),
                   Divider(
                     height: 0.5,
