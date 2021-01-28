@@ -18,6 +18,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_downloader/flutter_downloader.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:logger/logger.dart';
+import 'package:package_info/package_info.dart';
 import 'package:path/path.dart';
 import 'package:path_provider/path_provider.dart';
 
@@ -45,6 +46,8 @@ class Global {
   static String appSupportPath;
   static String appDocPath;
   static String tempPath;
+
+  static PackageInfo packageInfo;
 
   static bool isDBinappSupportPath = false;
 
@@ -75,6 +78,8 @@ class Global {
     appSupportPath = (await getApplicationSupportDirectory()).path;
     appDocPath = (await getApplicationDocumentsDirectory()).path;
     tempPath = (await getTemporaryDirectory()).path;
+
+    packageInfo = await PackageInfo.fromPlatform();
 
     logger.d('doc $appDocPath \napps $appSupportPath \ntemp $tempPath');
 
