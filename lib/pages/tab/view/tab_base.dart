@@ -1,7 +1,6 @@
 import 'package:fehviewer/common/service/ehconfig_service.dart';
 import 'package:fehviewer/const/const.dart';
 import 'package:fehviewer/models/index.dart';
-import 'package:fehviewer/pages/item/controller/galleryitem_controller.dart';
 import 'package:fehviewer/pages/item/gallery_item.dart';
 import 'package:fehviewer/pages/item/gallery_item_flow.dart';
 import 'package:fehviewer/pages/item/gallery_item_simple.dart';
@@ -33,16 +32,13 @@ SliverPadding buildWaterfallFlow(List<GalleryItem> gallerItemBeans, tabTag,
               loadMord();
             }
           }
-          Get.create(() => GalleryItemController.initData(
-              gallerItemBeans[index],
-              tabTag: tabTag));
 
           return GalleryItemFlow(
             galleryItem: gallerItemBeans[index],
             tabTag: tabTag,
           );
         },
-        childCount: gallerItemBeans.length,
+        childCount: gallerItemBeans?.length ?? 0,
       ),
     ),
   );
@@ -60,24 +56,26 @@ SliverList buildGallerySliverListView(List<GalleryItem> gallerItemBeans, tabTag,
           }
         }
 
-        // logger.d('buildGallerySliverListView ');
+        final GalleryItem _item = gallerItemBeans[index];
 
-        return GetBuilder<GalleryItemController>(
-            init: GalleryItemController.initData(
-              gallerItemBeans[index],
-              tabTag: tabTag,
-            ),
-            tag: gallerItemBeans[index].gid,
-            id: gallerItemBeans[index].gid,
-            builder: (constoller) {
-              return GalleryItemWidget(
-                galleryItem: gallerItemBeans[index],
-                tabTag: tabTag,
-                controller: constoller,
-              );
-            });
+        // return GetBuilder<GalleryItemController>(
+        //     init: GalleryItemController.initData(
+        //       _item,
+        //       tabTag: tabTag,
+        //     ),
+        //     tag: _item.gid,
+        //     id: _item.gid,
+        //     builder: (constoller) {
+        //       return GalleryItemWidget(
+        //         galleryItem: _item,
+        //         tabTag: tabTag,
+        //         controller: constoller,
+        //       );
+        //     });
+
+        return GalleryItemWidget(galleryItem: _item, tabTag: tabTag);
       },
-      childCount: gallerItemBeans.length,
+      childCount: gallerItemBeans?.length ?? 0,
     ),
   );
 }
@@ -94,15 +92,13 @@ SliverFixedExtentList buildGallerySliverListSimpleView(
             loadMord();
           }
         }
-        Get.create(() => GalleryItemController.initData(gallerItemBeans[index],
-            tabTag: tabTag));
 
         return GalleryItemSimpleWidget(
           galleryItem: gallerItemBeans[index],
           tabTag: tabTag,
         );
       },
-      childCount: gallerItemBeans.length,
+      childCount: gallerItemBeans?.length ?? 0,
     ),
     itemExtent: kItemWidth + 1,
   );

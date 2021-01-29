@@ -100,7 +100,7 @@ class Api {
 
   /// 获取热门画廊列表
   static Future<Tuple2<List<GalleryItem>, int>> getPopular(
-      {bool refresh = false}) async {
+      {bool refresh = false, CancelToken cancelToken}) async {
     const String url = '/popular';
 
     await CustomHttpsProxy.instance.init();
@@ -120,6 +120,7 @@ class Api {
         params: <String, dynamic>{
           'inline_set': 'dm_l',
         },
+        cancelToken: cancelToken,
       );
       return await GalleryListParser.parseGalleryList(response,
           refresh: refresh);
@@ -136,6 +137,7 @@ class Api {
     String serach,
     int cats,
     bool refresh = false,
+    CancelToken cancelToken,
   }) async {
     const String _url = '/watched';
     final Options _cacheOptions = getCacheOptions(forceRefresh: refresh);
@@ -185,6 +187,7 @@ class Api {
     int cats,
     bool refresh = false,
     SearchType searchType = SearchType.normal,
+    CancelToken cancelToken,
   }) async {
     final EhConfigService _ehConfigService = Get.find();
     final bool safeMode = _ehConfigService.isSafeMode.value;
@@ -246,6 +249,7 @@ class Api {
     int page,
     bool refresh = false,
     String serach,
+    CancelToken cancelToken,
   }) async {
     final AdvanceSearchController _searchController = Get.find();
 
@@ -317,6 +321,7 @@ class Api {
     String inUrl,
     GalleryItem inGalleryItem,
     bool refresh = false,
+    CancelToken cancelToken,
   }) async {
     /// 使用 inline_set 和 nw 参数会重定向，导致请求时间过长 默认不使用
     /// final String url = inUrl + '?hc=1&inline_set=ts_l&nw=always';

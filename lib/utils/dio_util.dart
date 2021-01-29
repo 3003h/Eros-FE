@@ -190,7 +190,7 @@ class HttpManager {
     } else if (e.type == DioErrorType.RESPONSE) {
       showToast('响应异常');
     } else if (e.type == DioErrorType.CANCEL) {
-      showToast('请求取消');
+      // showToast('请求取消');
     } else {
       showToast('网络好像出问题了');
     }

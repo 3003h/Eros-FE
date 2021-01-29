@@ -1,3 +1,4 @@
+import 'package:dio/dio.dart';
 import 'package:fehviewer/common/service/ehconfig_service.dart';
 import 'package:fehviewer/generated/l10n.dart';
 import 'package:fehviewer/models/index.dart';
@@ -32,6 +33,8 @@ class WatchedViewController extends GetxController
 
   String get title => S.of(Get.context).tab_watched;
 
+  final CancelToken _cancelToken = CancelToken();
+
   //页码跳转的控制器
   final TextEditingController _pageController = TextEditingController();
 
@@ -39,18 +42,32 @@ class WatchedViewController extends GetxController
   void onInit() {
     super.onInit();
 
-    loadData().then((Tuple2<List<GalleryItem>, int> tuple) {
-      maxPage = tuple.item2;
-      change(tuple.item1, status: RxStatus.success());
-    }, onError: (err) {
-      change(null, status: RxStatus.error(err.toString()));
-    }).then((_) {
-      isBackgroundRefresh = true;
-      reloadData().then((_) => isBackgroundRefresh = false);
-    });
+    _firstLoad();
   }
 
-  Future<Tuple2<List<GalleryItem>, int>> loadData(
+  Future<void> _firstLoad() async {
+    try {
+      final Tuple2<List<GalleryItem>, int> tuple = await _fetchData();
+      final List<GalleryItem> _listItem = tuple.item1;
+      maxPage = tuple.item2;
+      change(_listItem, status: RxStatus.success());
+    } catch (err) {
+      logger.e('$err');
+      change(null, status: RxStatus.error(err.toString()));
+    }
+
+    try {
+      if (_cancelToken.isCancelled) {
+        return;
+      }
+      isBackgroundRefresh = true;
+      await reloadData();
+    } catch (_) {} finally {
+      isBackgroundRefresh = false;
+    }
+  }
+
+  Future<Tuple2<List<GalleryItem>, int>> _fetchData(
       {bool refresh = false}) async {
     logger.v('_loadDataFirst  gallery');
     final int _catNum = ehConfigService.catFilter.value;
@@ -58,13 +75,14 @@ class WatchedViewController extends GetxController
     final Future<Tuple2<List<GalleryItem>, int>> tuple = Api.getWatched(
       cats: cats ?? _catNum,
       refresh: refresh,
+      cancelToken: _cancelToken,
     );
     return tuple;
   }
 
   Future<void> reloadData() async {
     curPage.value = 0;
-    final Tuple2<List<GalleryItem>, int> tuple = await loadData(
+    final Tuple2<List<GalleryItem>, int> tuple = await _fetchData(
       refresh: true,
     );
     maxPage = tuple.item2;
@@ -72,6 +90,10 @@ class WatchedViewController extends GetxController
   }
 
   Future<void> onRefresh() async {
+    isBackgroundRefresh = false;
+    if (!_cancelToken.isCancelled) {
+      _cancelToken.cancel();
+    }
     change(state, status: RxStatus.success());
     await reloadData();
   }
@@ -102,6 +124,7 @@ class WatchedViewController extends GetxController
         fromGid: fromGid,
         cats: cats ?? _catNum,
         refresh: true,
+        cancelToken: _cancelToken,
       );
       curPage += 1;
       final List<GalleryItem> galleryItemBeans = tuple.item1;
@@ -133,6 +156,7 @@ class WatchedViewController extends GetxController
       page: page,
       cats: cats ?? _catNum,
       refresh: true,
+      cancelToken: _cancelToken,
     ).then((tuple) {
       curPage.value = page;
       change(tuple.item1, status: RxStatus.success());

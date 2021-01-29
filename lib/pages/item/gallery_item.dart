@@ -18,27 +18,27 @@ const double kPaddingLeft = 8.0;
 /// 画廊列表项
 /// 标题和tag需要随设置变化重构ui
 class GalleryItemWidget extends StatelessWidget {
-  const GalleryItemWidget({
-    Key key,
-    this.galleryItem,
-    this.tabTag,
-    this.controller,
-  }) : super(key: key);
+  // const GalleryItemWidget({
+  //   Key key,
+  //   this.galleryItem,
+  //   this.tabTag,
+  //   this.controller,
+  // }) : super(key: key);
 
-  // GalleryItemWidget({@required this.galleryItem, @required this.tabIndex}) {
-  //   Get.lazyPut(
-  //     () => GalleryItemController.initData(galleryItem, tabTag: tabIndex),
-  //     tag: galleryItem.gid,
-  //   );
-  // }
+  GalleryItemWidget({@required this.galleryItem, @required this.tabTag}) {
+    Get.lazyPut(
+      () => GalleryItemController.initData(galleryItem, tabTag: tabTag),
+      tag: galleryItem.gid,
+    );
+  }
 
   final GalleryItem galleryItem;
   final String tabTag;
-  final GalleryItemController controller;
+  // final GalleryItemController controller;
 
-  // GalleryItemController get _galleryItemController =>
-  //     Get.find(tag: galleryItem.gid);
-  GalleryItemController get _galleryItemController => controller;
+  GalleryItemController get _galleryItemController =>
+      Get.find(tag: galleryItem.gid);
+  // GalleryItemController get _galleryItemController => controller;
 
   @override
   Widget build(BuildContext context) {
@@ -93,18 +93,22 @@ class GalleryItemWidget extends StatelessWidget {
                           ),
 
                           // 评分行
-                          Row(
-                            crossAxisAlignment: CrossAxisAlignment.end,
-                            children: <Widget>[
-                              // 评分
-                              _buildRating(),
-                              // 占位
-                              const Spacer(),
-                              // 收藏图标
-                              _buildFavcatIcon(),
-                              // 图片数量
-                              _buildFilecontWidget(),
-                            ],
+                          GetBuilder(
+                            init: _galleryItemController,
+                            tag: _galleryItemController.galleryItem.gid,
+                            builder: (_) => Row(
+                              crossAxisAlignment: CrossAxisAlignment.end,
+                              children: <Widget>[
+                                // 评分
+                                _buildRating(),
+                                // 占位
+                                const Spacer(),
+                                // 收藏图标
+                                _buildFavcatIcon(),
+                                // 图片数量
+                                _buildFilecontWidget(),
+                              ],
+                            ),
                           ),
                           Container(
                             height: 4,
