@@ -21,6 +21,7 @@ class PopularListTab extends GetView<PopularViewController> {
       physics: const AlwaysScrollableScrollPhysics(),
       slivers: <Widget>[
         CupertinoSliverNavigationBar(
+          transitionBetweenRoutes: false,
           largeTitle: Row(
             mainAxisSize: MainAxisSize.min,
             children: [

@@ -25,6 +25,7 @@ class FavoriteTab extends GetView<FavoriteViewController> {
 
   @override
   Widget build(BuildContext context) {
+    logger.d(' FavoriteTab BuildContext');
     final UserController userController = Get.find();
     return CupertinoPageScaffold(
       child: Obx(() {
@@ -47,6 +48,7 @@ class FavoriteTab extends GetView<FavoriteViewController> {
       physics: const AlwaysScrollableScrollPhysics(),
       slivers: <Widget>[
         CupertinoSliverNavigationBar(
+          transitionBetweenRoutes: false,
           padding: const EdgeInsetsDirectional.only(end: 4),
           largeTitle: Row(
             mainAxisSize: MainAxisSize.min,
@@ -207,7 +209,6 @@ class FavoriteTab extends GetView<FavoriteViewController> {
   }
 
   Widget _getGalleryList() {
-    logger.d(' _getGalleryList');
     return controller.obx(
         (List<GalleryItem> state) {
           return getGalleryList(

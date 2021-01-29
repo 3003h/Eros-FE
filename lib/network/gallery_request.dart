@@ -311,7 +311,7 @@ class Api {
   /// 获取画廊详细信息
   /// ?inline_set=ts_m 小图,40一页
   /// ?inline_set=ts_l 大图,20一页
-  /// hc=1#comments 显示全部评论
+  /// hc=1 显示全部评论
   /// nw=always 不显示警告
   static Future<GalleryItem> getGalleryDetail({
     String inUrl,
@@ -324,7 +324,6 @@ class Api {
 
     // 不显示警告的处理 cookie加上 nw=1
     // 在 url使用 nw=always 未解决 自动写入cookie 暂时搞不懂 先手动设置下
-    // todo 待优化
     final PersistCookieJar cookieJar = await Api.cookieJar;
     final List<Cookie> cookies =
         cookieJar.loadForRequest(Uri.parse(Api.getBaseUrl()));

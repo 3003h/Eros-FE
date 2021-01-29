@@ -21,6 +21,7 @@ class HistoryTab extends GetView<HistoryViewController> {
       physics: const AlwaysScrollableScrollPhysics(),
       slivers: <Widget>[
         CupertinoSliverNavigationBar(
+          transitionBetweenRoutes: false,
           largeTitle: Text(_title),
           trailing: Container(
             width: 40,

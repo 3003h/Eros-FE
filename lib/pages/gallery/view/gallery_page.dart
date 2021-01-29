@@ -140,10 +140,18 @@ class GalleryContainer extends StatelessWidget {
                 title: S.of(context).p_Rate,
                 onTap: state.apiuid?.isNotEmpty ?? false
                     ? () {
-                        showRateDialog();
+                        // logger.d(' showRateDialog');
+                        showRateDialog(context);
                       }
                     : null,
               )),
+          // child: TextBtn(
+          //   FontAwesomeIcons.star,
+          //   title: 'rat',
+          //   onTap: () {
+          //     logger.d('showRateDialog');
+          //   },
+          // ),
         ),
         // 画廊下载
         Expanded(

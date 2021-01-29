@@ -25,11 +25,13 @@ class GalleryListTab extends GetView<GalleryViewController> {
 
   @override
   Widget build(BuildContext context) {
+    logger.d(' GalleryListTab BuildContext');
     final CustomScrollView customScrollView = CustomScrollView(
       controller: scrollController,
       physics: const AlwaysScrollableScrollPhysics(),
       slivers: <Widget>[
         CupertinoSliverNavigationBar(
+          transitionBetweenRoutes: false,
           padding: const EdgeInsetsDirectional.only(end: 4),
           largeTitle: Row(
             mainAxisSize: MainAxisSize.min,

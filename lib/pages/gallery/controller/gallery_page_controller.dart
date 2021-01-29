@@ -53,6 +53,7 @@ class GalleryPageController extends GetxController
   bool get isRatinged => _isRatinged.value;
   set isRatinged(bool val) => _isRatinged.value = val;
 
+  // 评分后更新ui和数据
   void ratinged({
     double ratingUsr,
     double ratingAvg,
@@ -61,7 +62,6 @@ class GalleryPageController extends GetxController
   }) {
     isRatinged = true;
     galleryItem.isRatinged = true;
-    _itemController.galleryItem.isRatinged = true;
 
     galleryItem.ratingFallBack = ratingUsr;
     galleryItem.rating = ratingAvg;
@@ -69,11 +69,7 @@ class GalleryPageController extends GetxController
     galleryItem.colorRating = colorRating;
     update(['header']);
 
-    _itemController.galleryItem.ratingFallBack = ratingUsr;
-    _itemController.galleryItem.rating = ratingAvg;
-    _itemController.galleryItem.ratingCount = ratingCnt.toString();
-    _itemController.galleryItem.colorRating = colorRating;
-    _itemController.update();
+    _itemController.update([gid]);
   }
 
   /// 画廊数据对象
@@ -106,8 +102,10 @@ class GalleryPageController extends GetxController
 
     if (!fromUrl) {
       _itemController = Get.find(tag: gid);
-      // logger.d(
-      //     'isRatinged: i-${_itemController.galleryItem.isRatinged} p-${galleryItem.isRatinged}');
+      logger.d('isRatinged: i-${_itemController.galleryItem.isRatinged}'
+          ' p-${galleryItem.isRatinged}');
+      logger.d('colorRating i-[${_itemController?.galleryItem?.colorRating}] '
+          ' p-[${galleryItem.colorRating}]');
     }
 
     _loadData();
@@ -174,7 +172,7 @@ class GalleryPageController extends GetxController
   /// 请求数据
   Future<GalleryItem> _fetchData({bool refresh = false}) async {
     await Future<void>.delayed(const Duration(milliseconds: 200));
-    // logger.d('fetch data refresh:$refresh');
+    logger.d('fetch data refresh:$refresh');
     try {
       hideNavigationBtn = true;
 
@@ -185,6 +183,13 @@ class GalleryPageController extends GetxController
       if (galleryItem.filecount == null || galleryItem.filecount.isEmpty) {
         await Api.getMoreGalleryInfoOne(galleryItem, refresh: refresh);
       }
+
+      logger.d('colorRating i-[${_itemController?.galleryItem?.colorRating}] '
+          ' p-[${galleryItem.colorRating}]');
+
+      final String _oriColorRating = galleryItem.colorRating;
+      final String _oriRatingCount = galleryItem.ratingCount;
+      final double _oriRatingFallBack = galleryItem.ratingFallBack;
 
       time.showTime('start get galleryItem');
       galleryItem = await Api.getGalleryDetail(
@@ -197,23 +202,28 @@ class GalleryPageController extends GetxController
       currentPreviewPage = 0;
       setPreviewAfterRequest(galleryItem.galleryPreview);
 
-      /// 控制器更新
+      //
+      logger.d('colorRating i-[${_itemController?.galleryItem?.colorRating}] '
+          ' p-[${galleryItem.colorRating}]');
+
       try {
+        // 页面内刷新时的处理
         if (refresh) {
-          // 收藏更新
+          // 收藏控制器状态更新
           final GalleryFavController _favController =
               Get.find(tag: pageCtrlDepth);
           _favController.setFav(galleryItem.favcat, galleryItem.favTitle);
 
-          // 评论更新
+          // 评论控制器状态数据更新
           Get.find<CommentController>(tag: pageCtrlDepth)
               .change(galleryItem.galleryComment);
 
           // 评分状态更新
           isRatinged = galleryItem.isRatinged;
-
-          _itemController?.galleryItem = galleryItem;
-          _itemController?.update();
+        } else {
+          galleryItem.ratingFallBack = _oriRatingFallBack;
+          galleryItem.ratingCount = _oriRatingCount;
+          galleryItem.colorRating = _oriColorRating;
         }
       } catch (_) {}
 
@@ -221,12 +231,13 @@ class GalleryPageController extends GetxController
 
       // 加入历史
       if (galleryItem.gid != null) {
-        Future<void>.delayed(const Duration(seconds: 1)).then((_) {
+        Future<void>.delayed(const Duration(milliseconds: 700)).then((_) {
           _historyController.addHistory(galleryItem);
         });
       }
 
       update(['header']);
+      _itemController?.update([gid]);
       return galleryItem;
     } on DioError catch (e) {
       if (e.type == DioErrorType.RESPONSE && e.response.statusCode == 404) {
@@ -252,8 +263,6 @@ class GalleryPageController extends GetxController
       change(_fetchItem, status: RxStatus.success());
       time.showTime('change end');
       _enableRead.value = true;
-      logger.d('galleryItem.isRatinged:${galleryItem.isRatinged}\n'
-          '_fetchItem.isRatinged:${_fetchItem.isRatinged}');
       isRatinged = (galleryItem.isRatinged ?? false) ||
           _fetchItem.isRatinged ||
           (_itemController?.galleryItem?.isRatinged ?? false);

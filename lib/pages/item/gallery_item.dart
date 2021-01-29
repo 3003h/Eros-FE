@@ -4,7 +4,6 @@ import 'package:fehviewer/common/service/ehconfig_service.dart';
 import 'package:fehviewer/const/theme_colors.dart';
 import 'package:fehviewer/models/index.dart';
 import 'package:fehviewer/pages/item/controller/galleryitem_controller.dart';
-import 'package:fehviewer/utils/logger.dart';
 import 'package:fehviewer/utils/utility.dart';
 import 'package:fehviewer/widget/blur_image.dart';
 import 'package:fehviewer/widget/rating_bar.dart';
@@ -165,7 +164,7 @@ class GalleryItemWidget extends StatelessWidget {
       }
     }
 
-    logger.v('hero item => ${galleryItem.gid}_cover_$tabTag');
+    // logger.v('hero item => ${galleryItem.gid}_cover_$tabTag');
     // logger.d('${_item.englishTitle} ${_getHeigth()}');
 
     return Container(
