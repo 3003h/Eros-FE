@@ -57,13 +57,11 @@ class RateView extends StatelessWidget {
   }
 }
 
-Future<void> showRateDialog() {
+Future<void> showRateDialog(BuildContext context) {
   final RateController controller = Get.find(tag: pageCtrlDepth);
-  // final RateController controller =
-  //     Get.put(RateController(), tag: pageCtrlDepth);
   return showCupertinoDialog<void>(
-      context: Get.overlayContext,
-      builder: (_) {
+      context: context,
+      builder: (BuildContext context) {
         return CupertinoAlertDialog(
           title: const Text('Rate'),
           content: Container(
@@ -71,17 +69,15 @@ Future<void> showRateDialog() {
           ),
           actions: <Widget>[
             CupertinoDialogAction(
-              child: Text(S.of(Get.overlayContext).cancel),
+              child: Text(S.of(context).cancel),
               onPressed: () {
-                // Get.delete<RateController>(tag: pageCtrlDepth);
                 Get.back();
               },
             ),
             CupertinoDialogAction(
-              child: Text(S.of(Get.overlayContext).ok),
+              child: Text(S.of(context).ok),
               onPressed: () {
                 controller.rating();
-                // Get.delete<RateController>(tag: pageCtrlDepth);
                 Get.back();
               },
             ),

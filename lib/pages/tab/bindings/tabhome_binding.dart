@@ -6,11 +6,13 @@ import 'package:fehviewer/pages/tab/controller/popular_controller.dart';
 import 'package:fehviewer/pages/tab/controller/setting_controller.dart';
 import 'package:fehviewer/pages/tab/controller/tabhome_controller.dart';
 import 'package:fehviewer/pages/tab/controller/watched_controller.dart';
+import 'package:fehviewer/utils/logger.dart';
 import 'package:get/get.dart';
 
 class TabHomeBinding extends Bindings {
   @override
   void dependencies() {
+    logger.d('TabHomeBinding');
     Get.lazyPut(() => TabHomeController(), fenix: true);
     Get.lazyPut(() => PopularViewController(), fenix: true);
     Get.lazyPut(() => WatchedViewController(), fenix: true);

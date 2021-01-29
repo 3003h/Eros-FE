@@ -15,6 +15,7 @@ class SettingTab extends GetView<SettingViewController> {
 
   @override
   Widget build(BuildContext context) {
+    // logger.d(' SettingTab BuildContext');
     controller.initData(context);
     final String _title = S.of(context).tab_setting;
     return CupertinoPageScaffold(

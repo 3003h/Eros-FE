@@ -236,7 +236,7 @@ class GalleryDetailParser {
     final Element _ratingImage = document.querySelector('#rating_image');
     final String _ratingImageClass = _ratingImage.attributes['class'];
     galleryItem.colorRating = _ratingImageClass ?? '';
-    logger.d('${galleryItem.colorRating} ');
+    // logger.d('${galleryItem.colorRating} ');
     galleryItem.isRatinged =
         _ratingImageClass.contains(RegExp(r'ir(r|g|b|y)')) ?? false;
 
