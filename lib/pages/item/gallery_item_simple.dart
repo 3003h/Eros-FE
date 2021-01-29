@@ -58,18 +58,22 @@ class GalleryItemSimpleWidget extends StatelessWidget {
                         fontSize: 12, color: CupertinoColors.systemGrey),
                   ),
                   // 评分行
-                  Row(
-                    crossAxisAlignment: CrossAxisAlignment.end,
-                    children: <Widget>[
-                      // 评分
-                      _buildRating(),
-                      // 占位
-                      const Spacer(),
-                      // 收藏图标
-                      _buildFavcatIcon(),
-                      // 图片数量
-                      _buildFilecontWidget(),
-                    ],
+                  GetBuilder(
+                    init: _galleryItemController,
+                    tag: _galleryItemController.galleryItem.gid,
+                    builder: (_) => Row(
+                      crossAxisAlignment: CrossAxisAlignment.end,
+                      children: <Widget>[
+                        // 评分
+                        _buildRating(),
+                        // 占位
+                        const Spacer(),
+                        // 收藏图标
+                        _buildFavcatIcon(),
+                        // 图片数量
+                        _buildFilecontWidget(),
+                      ],
+                    ),
                   ),
                   Container(
                     height: 4,

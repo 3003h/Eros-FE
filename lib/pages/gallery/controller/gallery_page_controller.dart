@@ -69,7 +69,7 @@ class GalleryPageController extends GetxController
     galleryItem.colorRating = colorRating;
     update(['header']);
 
-    _itemController.update([gid]);
+    _itemController.update();
   }
 
   /// 画廊数据对象

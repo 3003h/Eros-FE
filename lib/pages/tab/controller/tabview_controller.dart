@@ -1,23 +1,21 @@
 import 'package:dio/dio.dart';
-import 'package:fehviewer/common/controller/localfav_controller.dart';
-import 'package:fehviewer/common/controller/user_controller.dart';
 import 'package:fehviewer/common/service/ehconfig_service.dart';
-import 'package:fehviewer/const/const.dart';
-import 'package:fehviewer/generated/l10n.dart';
 import 'package:fehviewer/models/index.dart';
 import 'package:fehviewer/network/gallery_request.dart';
 import 'package:fehviewer/utils/logger.dart';
 import 'package:fehviewer/utils/toast.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
 import 'package:tuple/tuple.dart';
 
 import 'enum.dart';
 
-class FavoriteViewController extends GetxController
+class TabViewController extends GetxController
     with StateMixin<List<GalleryItem>> {
-  RxString title = ''.obs;
-  String curFavcat = '';
+  int cats;
+
   RxInt curPage = 0.obs;
   int maxPage = 1;
 
@@ -29,26 +27,16 @@ class FavoriteViewController extends GetxController
   PageState get pageState => _pageState.value;
   set pageState(PageState val) => _pageState.value = val;
 
-  bool enableDelayedLoad = true;
+  final EhConfigService _ehConfigService = Get.find();
 
   final CancelToken _cancelToken = CancelToken();
 
-  //页码跳转的控制器
-  final TextEditingController pageController = TextEditingController();
-
-  Future<Tuple2<List<GalleryItem>, int>> futureBuilderFuture;
-  Widget lastListWidget;
-
-  final EhConfigService _ehConfigService = Get.find();
-  final LocalFavController _localFavController = Get.find();
-  final UserController _userController = Get.find();
+  // 页码跳转输入框的控制器
+  final TextEditingController _pageController = TextEditingController();
 
   @override
   void onInit() {
     super.onInit();
-    curFavcat = _ehConfigService.lastShowFavcat ?? 'a';
-    title.value = _ehConfigService.lastShowFavTitle;
-
     _firstLoad();
   }
 
@@ -74,56 +62,26 @@ class FavoriteViewController extends GetxController
     }
   }
 
-  Future<Tuple2<List<GalleryItem>, int>> _fetchData({
-    bool refresh = false,
-    bool first = false,
-  }) async {
-    logger.v('_loadDataFirst  fav');
+  Future<Tuple2<List<GalleryItem>, int>> _fetchData(
+      {bool refresh = false}) async {
+    logger.v('_loadDataFirst  gallery');
+    final int _catNum = _ehConfigService.catFilter.value;
 
-    final bool _isLogin = _userController.isLogin;
-    if (!_isLogin) {
-      curFavcat = 'l';
-    }
-
-    if (curFavcat != 'l') {
-      // 网络收藏夹
-      final Future<Tuple2<List<GalleryItem>, int>> tuple = Api.getFavorite(
-        favcat: curFavcat,
-        refresh: refresh,
-        cancelToken: _cancelToken,
-      );
-      return tuple;
-    } else {
-      if (first) {
-        _ehConfigService.lastShowFavcat = 'l';
-        _ehConfigService.lastShowFavTitle = S.of(Get.context).local_favorite;
-      }
-      // 本地收藏夹
-      logger.v('本地收藏');
-      final List<GalleryItem> localFav = _localFavController.loacalFavs;
-
-      return Future<Tuple2<List<GalleryItem>, int>>.value(Tuple2(localFav, 1));
-    }
+    final Future<Tuple2<List<GalleryItem>, int>> tuple = Api.getGallery(
+      cats: cats ?? _catNum,
+      refresh: refresh,
+      cancelToken: _cancelToken,
+    );
+    return tuple;
   }
 
-  Future<void> reLoadDataFirst() async {
-    change(null, status: RxStatus.loading());
-    reloadData();
-  }
-
-  Future<void> reloadData({bool delayed = false}) async {
+  Future<void> reloadData() async {
     curPage.value = 0;
-    final Tuple2<List<GalleryItem>, int> tuple =
-        await _fetchData(refresh: true);
-    if (delayed && enableDelayedLoad) {
-      logger.d(' delayed reload');
-      maxPage = tuple.item2;
-      change(tuple.item1, status: RxStatus.success());
-    } else {
-      maxPage = tuple.item2;
-      logger.d('${tuple.item1.map((e) => e.ratingFallBack).join('\n')} ');
-      change(tuple.item1, status: RxStatus.success());
-    }
+    final Tuple2<List<GalleryItem>, int> tuple = await _fetchData(
+      refresh: true,
+    );
+    maxPage = tuple.item2;
+    change(tuple.item1, status: RxStatus.success());
   }
 
   Future<void> onRefresh() async {
@@ -135,19 +93,13 @@ class FavoriteViewController extends GetxController
     await reloadData();
   }
 
-  Future<void> loadFromPage(int page, {bool cleanSearch = false}) async {
-    logger.v('jump to page =>  $page');
-
-    change(state, status: RxStatus.loading());
-    Api.getFavorite(
-      favcat: curFavcat,
-      page: page,
-      refresh: true,
-      cancelToken: _cancelToken,
-    ).then((tuple) {
-      curPage.value = page;
-      change(tuple.item1, status: RxStatus.success());
-    });
+  Future<void> reLoadDataFirst() async {
+    isBackgroundRefresh = false;
+    if (!_cancelToken.isCancelled) {
+      _cancelToken.cancel();
+    }
+    change(null, status: RxStatus.loading());
+    onInit();
   }
 
   Future<void> loadDataMore() async {
@@ -155,23 +107,36 @@ class FavoriteViewController extends GetxController
       return;
     }
 
+    final int _catNum = _ehConfigService.catFilter.value;
+
     // 增加延时 避免build期间进行 setState
     await Future<void>.delayed(const Duration(milliseconds: 100));
 
+    logger.d('${curPage.value + 1}');
+
+    final String fromGid = state.last.gid;
     try {
       pageState = PageState.Loading;
-
-      logger.d('get add list');
-      final Tuple2<List<GalleryItem>, int> tuple = await Api.getFavorite(
-        favcat: curFavcat,
+      final Tuple2<List<GalleryItem>, int> tuple = await Api.getGallery(
         page: curPage.value + 1,
+        fromGid: fromGid,
+        cats: cats ?? _catNum,
         refresh: true,
         cancelToken: _cancelToken,
       );
 
       final List<GalleryItem> galleryItemBeans = tuple.item1;
-      logger.d('from $curPage add ${galleryItemBeans.length}');
-      state.addAll(galleryItemBeans);
+
+      if (galleryItemBeans.isNotEmpty &&
+          state.indexWhere((GalleryItem element) =>
+                  element.gid == galleryItemBeans.first.gid) ==
+              -1) {
+        state.addAll(galleryItemBeans);
+
+        logger.d('${state.length}');
+        maxPage = tuple.item2;
+      }
+      // 成功才+1
       curPage += 1;
       pageState = PageState.None;
       update();
@@ -181,10 +146,27 @@ class FavoriteViewController extends GetxController
     }
   }
 
+  Future<void> loadFromPage(int page) async {
+    logger.v('jump to page =>  $page');
+
+    final int _catNum = _ehConfigService.catFilter.value;
+
+    change(state, status: RxStatus.loading());
+    Api.getGallery(
+      page: page,
+      cats: cats ?? _catNum,
+      refresh: true,
+      cancelToken: _cancelToken,
+    ).then((tuple) {
+      curPage.value = page;
+      change(tuple.item1, status: RxStatus.success());
+    });
+  }
+
   /// 跳转页码
-  Future<void> jumtToPage(BuildContext context) async {
-    void _jump(BuildContext context) {
-      final String _input = pageController.text.trim();
+  Future<void> jumpToPage() async {
+    void _jump() {
+      final String _input = _pageController.text.trim();
 
       if (_input.isEmpty) {
         showToast('输入为空');
@@ -197,7 +179,7 @@ class FavoriteViewController extends GetxController
 
       final int _toPage = int.parse(_input) - 1;
       if (_toPage >= 0 && _toPage <= maxPage) {
-        FocusScope.of(context).requestFocus(FocusNode());
+        FocusScope.of(Get.context).requestFocus(FocusNode());
         loadFromPage(_toPage);
         Get.back();
       } else {
@@ -206,7 +188,7 @@ class FavoriteViewController extends GetxController
     }
 
     return showCupertinoDialog<void>(
-      context: context,
+      context: Get.overlayContext,
       // barrierDismissible: false, // user must tap button!
       builder: (BuildContext context) {
         return CupertinoAlertDialog(
@@ -219,13 +201,13 @@ class FavoriteViewController extends GetxController
                   child: Text('跳转范围 1~$maxPage'),
                 ),
                 CupertinoTextField(
-                  controller: pageController,
+                  controller: _pageController,
                   autofocus: true,
                   keyboardType: TextInputType.number,
                   onEditingComplete: () {
                     // 点击键盘完成
                     // 画廊跳转
-                    _jump(context);
+                    _jump();
                   },
                 )
               ],
@@ -242,7 +224,7 @@ class FavoriteViewController extends GetxController
               child: const Text('确定'),
               onPressed: () {
                 // 画廊跳转
-                _jump(context);
+                _jump();
               },
             ),
           ],
@@ -250,15 +232,4 @@ class FavoriteViewController extends GetxController
       },
     );
   }
-
-  Future<void> setOrder() async {
-    final FavoriteOrder order = await _ehConfigService.showFavOrder();
-    if (order != null) {
-      change(state, status: RxStatus.loading());
-      reloadData();
-    }
-  }
-
-  String get orderText =>
-      _ehConfigService.favoriteOrder.value == FavoriteOrder.fav ? 'F' : 'P';
 }
