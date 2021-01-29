@@ -99,8 +99,17 @@ class Api {
   }
 
   /// 获取热门画廊列表
-  static Future<Tuple2<List<GalleryItem>, int>> getPopular(
-      {bool refresh = false, CancelToken cancelToken}) async {
+  static Future<Tuple2<List<GalleryItem>, int>> getPopular({
+    int page,
+    String fromGid,
+    String serach,
+    int cats,
+    bool refresh = false,
+    SearchType searchType = SearchType.normal,
+    CancelToken cancelToken,
+    String favcat,
+  }) async {
+    logger.d('getPopular');
     const String url = '/popular';
 
     await CustomHttpsProxy.instance.init();
@@ -137,8 +146,11 @@ class Api {
     String serach,
     int cats,
     bool refresh = false,
+    SearchType searchType = SearchType.normal,
     CancelToken cancelToken,
+    String favcat,
   }) async {
+    logger.d('getWatched');
     const String _url = '/watched';
     final Options _cacheOptions = getCacheOptions(forceRefresh: refresh);
 
@@ -188,6 +200,7 @@ class Api {
     bool refresh = false,
     SearchType searchType = SearchType.normal,
     CancelToken cancelToken,
+    String favcat,
   }) async {
     final EhConfigService _ehConfigService = Get.find();
     final bool safeMode = _ehConfigService.isSafeMode.value;
@@ -247,8 +260,11 @@ class Api {
   static Future<Tuple2<List<GalleryItem>, int>> getFavorite({
     String favcat,
     int page,
-    bool refresh = false,
+    String fromGid,
     String serach,
+    int cats,
+    bool refresh = false,
+    SearchType searchType = SearchType.normal,
     CancelToken cancelToken,
   }) async {
     final AdvanceSearchController _searchController = Get.find();
