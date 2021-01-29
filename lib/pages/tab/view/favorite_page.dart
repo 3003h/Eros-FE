@@ -129,7 +129,7 @@ class FavoriteTab extends GetView<FavoriteViewController> {
                   ),
                 ),
                 onPressed: () {
-                  controller.jumtToPage(context);
+                  controller.jumpToPage();
                 },
               ),
               _buildFavcatButton(context),

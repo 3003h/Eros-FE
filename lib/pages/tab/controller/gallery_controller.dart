@@ -1,6 +1,7 @@
 import 'package:custom_pop_up_menu/custom_pop_up_menu.dart';
 import 'package:fehviewer/const/const.dart';
 import 'package:fehviewer/generated/l10n.dart';
+import 'package:fehviewer/network/gallery_request.dart';
 import 'package:fehviewer/pages/tab/controller/tabhome_controller.dart';
 import 'package:fehviewer/utils/vibrate.dart';
 import 'package:flutter/cupertino.dart';
@@ -92,7 +93,7 @@ class GalleryViewController extends TabViewController {
 
   @override
   void onInit() {
-    super.cats = cats;
+    fetchNormal = Api.getGallery;
     super.onInit();
   }
 }

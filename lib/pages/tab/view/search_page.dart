@@ -187,7 +187,7 @@ class GallerySearchPage extends StatelessWidget {
           state,
           controller.tabIndex,
           maxPage: controller.maxPage,
-          curPage: controller.curPage,
+          curPage: controller.curPage.value,
           loadMord: controller.loadDataMore,
         );
       },
@@ -418,7 +418,7 @@ class GallerySearchPage extends StatelessWidget {
                   color: CupertinoDynamicColor.resolve(
                       CupertinoColors.activeBlue, context),
                   child: Obx(() => Text(
-                        '${controller.curPage + 1}',
+                        '${controller.curPage.value + 1}',
                         style: TextStyle(
                             color: CupertinoDynamicColor.resolve(
                                 CupertinoColors.secondarySystemBackground,

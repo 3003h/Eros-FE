@@ -1,7 +1,7 @@
 import 'package:dio/dio.dart';
 import 'package:fehviewer/common/service/ehconfig_service.dart';
 import 'package:fehviewer/models/index.dart';
-import 'package:fehviewer/network/gallery_request.dart';
+import 'package:fehviewer/pages/tab/controller/search_page_controller.dart';
 import 'package:fehviewer/utils/logger.dart';
 import 'package:fehviewer/utils/toast.dart';
 import 'package:flutter/cupertino.dart';
@@ -11,6 +11,16 @@ import 'package:get/get.dart';
 import 'package:tuple/tuple.dart';
 
 import 'enum.dart';
+
+typedef FetchCallBack = Future<Tuple2<List<GalleryItem>, int>> Function({
+  int page,
+  bool refresh,
+  int cats,
+  String fromGid,
+  String favcat,
+  SearchType searchType,
+  CancelToken cancelToken,
+});
 
 class TabViewController extends GetxController
     with StateMixin<List<GalleryItem>> {
@@ -29,20 +39,23 @@ class TabViewController extends GetxController
 
   final EhConfigService _ehConfigService = Get.find();
 
-  final CancelToken _cancelToken = CancelToken();
+  final CancelToken cancelToken = CancelToken();
 
   // 页码跳转输入框的控制器
   final TextEditingController _pageController = TextEditingController();
 
+  FetchCallBack fetchNormal;
+
   @override
   void onInit() {
     super.onInit();
-    _firstLoad();
+
+    firstLoad();
   }
 
-  Future<void> _firstLoad() async {
+  Future<void> firstLoad() async {
     try {
-      final Tuple2<List<GalleryItem>, int> tuple = await _fetchData();
+      final Tuple2<List<GalleryItem>, int> tuple = await fetchData();
       final List<GalleryItem> _listItem = tuple.item1;
       maxPage = tuple.item2;
       change(_listItem, status: RxStatus.success());
@@ -52,7 +65,7 @@ class TabViewController extends GetxController
     }
 
     try {
-      if (_cancelToken.isCancelled) {
+      if (cancelToken.isCancelled) {
         return;
       }
       isBackgroundRefresh = true;
@@ -62,22 +75,21 @@ class TabViewController extends GetxController
     }
   }
 
-  Future<Tuple2<List<GalleryItem>, int>> _fetchData(
+  Future<Tuple2<List<GalleryItem>, int>> fetchData(
       {bool refresh = false}) async {
-    logger.v('_loadDataFirst  gallery');
     final int _catNum = _ehConfigService.catFilter.value;
 
-    final Future<Tuple2<List<GalleryItem>, int>> tuple = Api.getGallery(
+    final Future<Tuple2<List<GalleryItem>, int>> tuple = fetchNormal(
       cats: cats ?? _catNum,
       refresh: refresh,
-      cancelToken: _cancelToken,
+      cancelToken: cancelToken,
     );
     return tuple;
   }
 
   Future<void> reloadData() async {
     curPage.value = 0;
-    final Tuple2<List<GalleryItem>, int> tuple = await _fetchData(
+    final Tuple2<List<GalleryItem>, int> tuple = await fetchData(
       refresh: true,
     );
     maxPage = tuple.item2;
@@ -86,8 +98,8 @@ class TabViewController extends GetxController
 
   Future<void> onRefresh() async {
     isBackgroundRefresh = false;
-    if (!_cancelToken.isCancelled) {
-      _cancelToken.cancel();
+    if (!cancelToken.isCancelled) {
+      cancelToken.cancel();
     }
     change(state, status: RxStatus.success());
     await reloadData();
@@ -95,8 +107,8 @@ class TabViewController extends GetxController
 
   Future<void> reLoadDataFirst() async {
     isBackgroundRefresh = false;
-    if (!_cancelToken.isCancelled) {
-      _cancelToken.cancel();
+    if (!cancelToken.isCancelled) {
+      cancelToken.cancel();
     }
     change(null, status: RxStatus.loading());
     onInit();
@@ -117,12 +129,12 @@ class TabViewController extends GetxController
     final String fromGid = state.last.gid;
     try {
       pageState = PageState.Loading;
-      final Tuple2<List<GalleryItem>, int> tuple = await Api.getGallery(
+      final Tuple2<List<GalleryItem>, int> tuple = await fetchNormal(
         page: curPage.value + 1,
         fromGid: fromGid,
         cats: cats ?? _catNum,
         refresh: true,
-        cancelToken: _cancelToken,
+        cancelToken: cancelToken,
       );
 
       final List<GalleryItem> galleryItemBeans = tuple.item1;
@@ -152,11 +164,11 @@ class TabViewController extends GetxController
     final int _catNum = _ehConfigService.catFilter.value;
 
     change(state, status: RxStatus.loading());
-    Api.getGallery(
+    fetchNormal(
       page: page,
       cats: cats ?? _catNum,
       refresh: true,
-      cancelToken: _cancelToken,
+      cancelToken: cancelToken,
     ).then((tuple) {
       curPage.value = page;
       change(tuple.item1, status: RxStatus.success());

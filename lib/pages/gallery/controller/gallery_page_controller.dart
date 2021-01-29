@@ -102,10 +102,10 @@ class GalleryPageController extends GetxController
 
     if (!fromUrl) {
       _itemController = Get.find(tag: gid);
-      logger.d('isRatinged: i-${_itemController.galleryItem.isRatinged}'
-          ' p-${galleryItem.isRatinged}');
-      logger.d('colorRating i-[${_itemController?.galleryItem?.colorRating}] '
-          ' p-[${galleryItem.colorRating}]');
+      // logger.d('isRatinged: i-${_itemController.galleryItem.isRatinged}'
+      //     ' p-${galleryItem.isRatinged}');
+      // logger.d('colorRating i-[${_itemController?.galleryItem?.colorRating}] '
+      //     ' p-[${galleryItem.colorRating}]');
     }
 
     _loadData();
@@ -184,12 +184,13 @@ class GalleryPageController extends GetxController
         await Api.getMoreGalleryInfoOne(galleryItem, refresh: refresh);
       }
 
-      logger.d('colorRating i-[${_itemController?.galleryItem?.colorRating}] '
-          ' p-[${galleryItem.colorRating}]');
+      // logger.d('colorRating i-[${_itemController?.galleryItem?.colorRating}] '
+      //     ' p-[${galleryItem.colorRating}]');
 
       final String _oriColorRating = galleryItem.colorRating;
       final String _oriRatingCount = galleryItem.ratingCount;
       final double _oriRatingFallBack = galleryItem.ratingFallBack;
+      final bool _oriIsRatinged = galleryItem.isRatinged;
 
       time.showTime('start get galleryItem');
       galleryItem = await Api.getGalleryDetail(
@@ -203,8 +204,8 @@ class GalleryPageController extends GetxController
       setPreviewAfterRequest(galleryItem.galleryPreview);
 
       //
-      logger.d('colorRating i-[${_itemController?.galleryItem?.colorRating}] '
-          ' p-[${galleryItem.colorRating}]');
+      // logger.d('colorRating i-[${_itemController?.galleryItem?.colorRating}] '
+      //     ' p-[${galleryItem.colorRating}]');
 
       try {
         // 页面内刷新时的处理
@@ -224,6 +225,7 @@ class GalleryPageController extends GetxController
           galleryItem.ratingFallBack = _oriRatingFallBack;
           galleryItem.ratingCount = _oriRatingCount;
           galleryItem.colorRating = _oriColorRating;
+          galleryItem.isRatinged = _oriIsRatinged;
         }
       } catch (_) {}
 

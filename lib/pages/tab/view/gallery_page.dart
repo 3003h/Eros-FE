@@ -199,7 +199,6 @@ class GalleryListTab extends GetView<GalleryViewController> {
   Widget _getGalleryList() {
     return controller.obx(
         (List<GalleryItem> state) {
-          logger.d('${state.first.gid}');
           return getGalleryList(
             state,
             tabTag,

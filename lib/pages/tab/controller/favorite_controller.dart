@@ -7,27 +7,15 @@ import 'package:fehviewer/generated/l10n.dart';
 import 'package:fehviewer/models/index.dart';
 import 'package:fehviewer/network/gallery_request.dart';
 import 'package:fehviewer/utils/logger.dart';
-import 'package:fehviewer/utils/toast.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
 import 'package:tuple/tuple.dart';
 
-import 'enum.dart';
+import 'tabview_controller.dart';
 
-class FavoriteViewController extends GetxController
-    with StateMixin<List<GalleryItem>> {
+class FavoriteViewController extends TabViewController {
   RxString title = ''.obs;
   String curFavcat = '';
-  RxInt curPage = 0.obs;
-  int maxPage = 1;
-
-  final RxBool _isBackgroundRefresh = false.obs;
-  bool get isBackgroundRefresh => _isBackgroundRefresh.value;
-  set isBackgroundRefresh(bool val) => _isBackgroundRefresh.value = val;
-
-  final Rx<PageState> _pageState = PageState.None.obs;
-  PageState get pageState => _pageState.value;
-  set pageState(PageState val) => _pageState.value = val;
 
   bool enableDelayedLoad = true;
 
@@ -45,36 +33,15 @@ class FavoriteViewController extends GetxController
 
   @override
   void onInit() {
-    super.onInit();
+    fetchNormal = Api.getFavorite;
     curFavcat = _ehConfigService.lastShowFavcat ?? 'a';
     title.value = _ehConfigService.lastShowFavTitle;
 
-    _firstLoad();
+    super.onInit();
   }
 
-  Future<void> _firstLoad() async {
-    try {
-      final Tuple2<List<GalleryItem>, int> tuple = await _fetchData();
-      final List<GalleryItem> _listItem = tuple.item1;
-      maxPage = tuple.item2;
-      change(_listItem, status: RxStatus.success());
-    } catch (err) {
-      logger.e('$err');
-      change(null, status: RxStatus.error(err.toString()));
-    }
-
-    try {
-      if (_cancelToken.isCancelled) {
-        return;
-      }
-      isBackgroundRefresh = true;
-      await reloadData();
-    } catch (_) {} finally {
-      isBackgroundRefresh = false;
-    }
-  }
-
-  Future<Tuple2<List<GalleryItem>, int>> _fetchData({
+  @override
+  Future<Tuple2<List<GalleryItem>, int>> fetchData({
     bool refresh = false,
     bool first = false,
   }) async {
@@ -104,151 +71,6 @@ class FavoriteViewController extends GetxController
 
       return Future<Tuple2<List<GalleryItem>, int>>.value(Tuple2(localFav, 1));
     }
-  }
-
-  Future<void> reLoadDataFirst() async {
-    change(null, status: RxStatus.loading());
-    reloadData();
-  }
-
-  Future<void> reloadData({bool delayed = false}) async {
-    curPage.value = 0;
-    final Tuple2<List<GalleryItem>, int> tuple =
-        await _fetchData(refresh: true);
-    if (delayed && enableDelayedLoad) {
-      logger.d(' delayed reload');
-      maxPage = tuple.item2;
-      change(tuple.item1, status: RxStatus.success());
-    } else {
-      maxPage = tuple.item2;
-      logger.d('${tuple.item1.map((e) => e.ratingFallBack).join('\n')} ');
-      change(tuple.item1, status: RxStatus.success());
-    }
-  }
-
-  Future<void> onRefresh() async {
-    isBackgroundRefresh = false;
-    if (!_cancelToken.isCancelled) {
-      _cancelToken.cancel();
-    }
-    change(state, status: RxStatus.success());
-    await reloadData();
-  }
-
-  Future<void> loadFromPage(int page, {bool cleanSearch = false}) async {
-    logger.v('jump to page =>  $page');
-
-    change(state, status: RxStatus.loading());
-    Api.getFavorite(
-      favcat: curFavcat,
-      page: page,
-      refresh: true,
-      cancelToken: _cancelToken,
-    ).then((tuple) {
-      curPage.value = page;
-      change(tuple.item1, status: RxStatus.success());
-    });
-  }
-
-  Future<void> loadDataMore() async {
-    if (pageState == PageState.Loading) {
-      return;
-    }
-
-    // 增加延时 避免build期间进行 setState
-    await Future<void>.delayed(const Duration(milliseconds: 100));
-
-    try {
-      pageState = PageState.Loading;
-
-      logger.d('get add list');
-      final Tuple2<List<GalleryItem>, int> tuple = await Api.getFavorite(
-        favcat: curFavcat,
-        page: curPage.value + 1,
-        refresh: true,
-        cancelToken: _cancelToken,
-      );
-
-      final List<GalleryItem> galleryItemBeans = tuple.item1;
-      logger.d('from $curPage add ${galleryItemBeans.length}');
-      state.addAll(galleryItemBeans);
-      curPage += 1;
-      pageState = PageState.None;
-      update();
-    } catch (e, stack) {
-      pageState = PageState.LoadingException;
-      rethrow;
-    }
-  }
-
-  /// 跳转页码
-  Future<void> jumtToPage(BuildContext context) async {
-    void _jump(BuildContext context) {
-      final String _input = pageController.text.trim();
-
-      if (_input.isEmpty) {
-        showToast('输入为空');
-      }
-
-      // 数字检查
-      if (!RegExp(r'(^\d+$)').hasMatch(_input)) {
-        showToast('输入格式有误');
-      }
-
-      final int _toPage = int.parse(_input) - 1;
-      if (_toPage >= 0 && _toPage <= maxPage) {
-        FocusScope.of(context).requestFocus(FocusNode());
-        loadFromPage(_toPage);
-        Get.back();
-      } else {
-        showToast('输入范围有误');
-      }
-    }
-
-    return showCupertinoDialog<void>(
-      context: context,
-      // barrierDismissible: false, // user must tap button!
-      builder: (BuildContext context) {
-        return CupertinoAlertDialog(
-          title: const Text('页面跳转'),
-          content: Container(
-            child: Column(
-              children: <Widget>[
-                Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Text('跳转范围 1~$maxPage'),
-                ),
-                CupertinoTextField(
-                  controller: pageController,
-                  autofocus: true,
-                  keyboardType: TextInputType.number,
-                  onEditingComplete: () {
-                    // 点击键盘完成
-                    // 画廊跳转
-                    _jump(context);
-                  },
-                )
-              ],
-            ),
-          ),
-          actions: <Widget>[
-            CupertinoDialogAction(
-              child: const Text('取消'),
-              onPressed: () {
-                Get.back();
-              },
-            ),
-            CupertinoDialogAction(
-              child: const Text('确定'),
-              onPressed: () {
-                // 画廊跳转
-                _jump(context);
-              },
-            ),
-          ],
-        );
-      },
-    );
   }
 
   Future<void> setOrder() async {
