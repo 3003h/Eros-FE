@@ -105,7 +105,7 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
 
   @override
   Widget build(BuildContext context) {
-    logger.d(' MyApp build');
+    // logger.d(' MyApp build');
     Widget cupertinoApp({
       CupertinoThemeData theme,
       Locale locale,

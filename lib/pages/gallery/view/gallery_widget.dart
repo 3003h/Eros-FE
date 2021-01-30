@@ -109,7 +109,7 @@ class GalleryHeader extends StatelessWidget {
                               color: ThemeColors.colorRatingMap[
                                   galleryItem.colorRating.trim()],
                             ),
-                            // 收藏次数
+                            // 评分人次
                             Padding(
                               padding:
                                   const EdgeInsets.symmetric(horizontal: 4),

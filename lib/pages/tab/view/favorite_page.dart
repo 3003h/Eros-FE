@@ -25,7 +25,7 @@ class FavoriteTab extends GetView<FavoriteViewController> {
 
   @override
   Widget build(BuildContext context) {
-    logger.d(' FavoriteTab BuildContext');
+    // logger.d(' FavoriteTab BuildContext');
     final UserController userController = Get.find();
     return CupertinoPageScaffold(
       child: Obx(() {

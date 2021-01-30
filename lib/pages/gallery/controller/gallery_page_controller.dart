@@ -46,11 +46,15 @@ class GalleryPageController extends GetxController
   GalleryItemController _itemController;
 
   final RxBool _fromUrl = false.obs;
+
   bool get fromUrl => _fromUrl.value;
+
   set fromUrl(bool val) => _fromUrl.value = val;
 
   final RxBool _isRatinged = false.obs;
+
   bool get isRatinged => _isRatinged.value;
+
   set isRatinged(bool val) => _isRatinged.value = val;
 
   // 评分后更新ui和数据
@@ -74,6 +78,7 @@ class GalleryPageController extends GetxController
 
   /// 画廊数据对象
   GalleryItem galleryItem;
+
   List<GalleryPreview> get previews => galleryItem.galleryPreview;
 
   String get showKey => galleryItem.showKey;
@@ -129,6 +134,7 @@ class GalleryPageController extends GetxController
 
   // 阅读按钮开关
   final RxBool _enableRead = false.obs;
+
   bool get enableRead => _enableRead.value;
 
   bool get hasMorePreview {
@@ -139,11 +145,14 @@ class GalleryPageController extends GetxController
 
   // 控制隐藏导航栏按钮和封面
   final RxBool _hideNavigationBtn = true.obs;
+
   bool get hideNavigationBtn => _hideNavigationBtn.value;
+
   set hideNavigationBtn(bool val) => _hideNavigationBtn.value = val;
 
   // 第一页的缩略图对象数组
   List<GalleryPreview> _firstPagePreview;
+
   List<GalleryPreview> get firstPagePreview => _firstPagePreview;
 
   void setPreviewAfterRequest(List<GalleryPreview> galleryPreview) {
@@ -172,7 +181,7 @@ class GalleryPageController extends GetxController
   /// 请求数据
   Future<GalleryItem> _fetchData({bool refresh = false}) async {
     await Future<void>.delayed(const Duration(milliseconds: 200));
-    logger.d('fetch data refresh:$refresh');
+    // logger.d('fetch data refresh:$refresh');
     try {
       hideNavigationBtn = true;
 
@@ -203,9 +212,7 @@ class GalleryPageController extends GetxController
       currentPreviewPage = 0;
       setPreviewAfterRequest(galleryItem.galleryPreview);
 
-      //
-      // logger.d('colorRating i-[${_itemController?.galleryItem?.colorRating}] '
-      //     ' p-[${galleryItem.colorRating}]');
+      // logger.d('ratingCount ${galleryItem.ratingCount} ');
 
       try {
         // 页面内刷新时的处理
@@ -223,9 +230,9 @@ class GalleryPageController extends GetxController
           isRatinged = galleryItem.isRatinged;
         } else {
           galleryItem.ratingFallBack = _oriRatingFallBack;
-          galleryItem.ratingCount = _oriRatingCount;
           galleryItem.colorRating = _oriColorRating;
           galleryItem.isRatinged = _oriIsRatinged;
+          galleryItem.ratingCount ??= _oriRatingCount;
         }
       } catch (_) {}
 
@@ -237,6 +244,8 @@ class GalleryPageController extends GetxController
           _historyController.addHistory(galleryItem);
         });
       }
+
+      // logger.d('ratingCount ${galleryItem.ratingCount} ');
 
       update(['header']);
       _itemController?.update([gid]);
