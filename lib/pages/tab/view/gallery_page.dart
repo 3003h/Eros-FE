@@ -25,7 +25,7 @@ class GalleryListTab extends GetView<GalleryViewController> {
 
   @override
   Widget build(BuildContext context) {
-    logger.d(' GalleryListTab BuildContext');
+    // logger.d(' GalleryListTab BuildContext');
     final CustomScrollView customScrollView = CustomScrollView(
       controller: scrollController,
       physics: const AlwaysScrollableScrollPhysics(),

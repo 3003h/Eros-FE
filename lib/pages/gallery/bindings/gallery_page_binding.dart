@@ -5,7 +5,6 @@ import 'package:fehviewer/pages/gallery/controller/comment_controller.dart';
 import 'package:fehviewer/pages/gallery/controller/gallery_page_controller.dart';
 import 'package:fehviewer/pages/gallery/controller/rate_controller.dart';
 import 'package:fehviewer/pages/gallery/controller/torrent_controller.dart';
-import 'package:fehviewer/utils/logger.dart';
 import 'package:get/get.dart';
 
 class GalleryBinding extends Bindings {
@@ -17,7 +16,7 @@ class GalleryBinding extends Bindings {
 
   @override
   void dependencies() {
-    logger.d('GalleryBinding dependencies');
+    // logger.d('GalleryBinding dependencies');
 
     if (url != null) {
       Get.put(GalleryPageController.initUrl(url: url), tag: pageCtrlDepth);
