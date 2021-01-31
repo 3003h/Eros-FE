@@ -4,6 +4,7 @@ import 'package:fehviewer/common/controller/history_controller.dart';
 import 'package:fehviewer/common/controller/localfav_controller.dart';
 import 'package:fehviewer/common/service/depth_service.dart';
 import 'package:fehviewer/common/service/ehconfig_service.dart';
+import 'package:fehviewer/main.dart';
 import 'package:fehviewer/models/index.dart';
 import 'package:fehviewer/network/gallery_request.dart';
 import 'package:fehviewer/pages/gallery/controller/rate_controller.dart';
@@ -277,6 +278,13 @@ class GalleryPageController extends GetxController
       isRatinged = (galleryItem.isRatinged ?? false) ||
           _fetchItem.isRatinged ||
           (_itemController?.galleryItem?.isRatinged ?? false);
+
+      await analytics.logViewItem(
+        itemId: galleryItem.gid,
+        itemName: galleryItem.englishTitle,
+        itemCategory: galleryItem.category,
+        destination: galleryItem.japaneseTitle,
+      );
     } catch (err, stack) {
       logger.e('$err\n$stack');
       if (showError) {
