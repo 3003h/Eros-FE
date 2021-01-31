@@ -22,7 +22,7 @@ class RateView extends StatelessWidget {
         builder: (_, BoxConstraints constraints) {
           return Container(
             child: RatingBar.builder(
-              initialRating: (controller.rate * 2).round() / 2.0,
+              initialRating: (controller.rate ?? 0 * 2).round() / 2.0,
               minRating: 0.5,
               glow: false,
               direction: Axis.horizontal,

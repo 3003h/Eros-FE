@@ -248,8 +248,27 @@ class GalleryDetailParser {
             );
     galleryItem.favoritedCount = _favCount;
 
+    // 评分人次
     final String _ratingCount = document.querySelector('#rating_count').text;
     galleryItem.ratingCount = _ratingCount;
+
+    // 平均分
+    final String _rating = RegExp(r'([\d.]+)')
+        .firstMatch(document.querySelector('#rating_label').text)
+        .group(1);
+    galleryItem.rating = double.parse(_rating);
+
+    // 英语标题
+    galleryItem.englishTitle = document.querySelector('#gn').text;
+
+    // 日语标题
+    galleryItem.japaneseTitle = document.querySelector('#gj').text;
+
+    final Element _elmTorrent =
+        document.querySelector('#gd5').children[2].children[1];
+    // 种子数量
+    galleryItem.torrentcount ??=
+        RegExp(r'\d+').firstMatch(_elmTorrent.text).group(0) ?? '0';
 
     final String _language = document
         .querySelector('#gdd > table > tbody > tr:nth-child(3) > td.gdt2')

@@ -10,15 +10,14 @@ import 'package:dns_client/dns_client.dart';
 import 'package:enum_to_string/enum_to_string.dart';
 import 'package:fehviewer/common/controller/advance_search_controller.dart';
 import 'package:fehviewer/common/global.dart';
-import 'package:fehviewer/common/parser/archiver_parser.dart';
-import 'package:fehviewer/common/parser/gallery_detail_parser.dart';
-import 'package:fehviewer/common/parser/gallery_list_parser.dart';
+import 'package:fehviewer/common/parser/eh_parser.dart';
 import 'package:fehviewer/common/service/ehconfig_service.dart';
 import 'package:fehviewer/const/const.dart';
 import 'package:fehviewer/generated/l10n.dart';
 import 'package:fehviewer/models/galleryItem.dart';
 import 'package:fehviewer/models/index.dart';
 import 'package:fehviewer/pages/gallery/controller/archiver_controller.dart';
+import 'package:fehviewer/pages/gallery/controller/torrent_controller.dart';
 import 'package:fehviewer/pages/tab/controller/search_page_controller.dart';
 import 'package:fehviewer/utils/dio_util.dart';
 import 'package:fehviewer/utils/https_proxy.dart';
@@ -453,6 +452,18 @@ class Api {
     return torrentToken;
   }
 
+  // 获取 Torrent
+  static Future<TorrentProvider> getTorrent(
+    String url, {
+    bool refresh = true,
+  }) async {
+    final String response = await getHttpManager()
+        .get(url, options: getCacheOptions(forceRefresh: refresh));
+    // logger.d('$response');
+
+    return parseTorrent(response);
+  }
+
   // 获取 Archiver
   static Future<ArchiverProvider> getArchiver(
     String url, {
@@ -540,35 +551,42 @@ class Api {
     final HtmlUnescape unescape = HtmlUnescape();
 
     for (int i = 0; i < galleryItems.length; i++) {
+      // 标题
       galleryItems[i].englishTitle = unescape.convert(rultList[i]['title']);
+
+      // 日语标题
       galleryItems[i].japaneseTitle =
           unescape.convert(rultList[i]['title_jpn']);
 
+      // 详细评分
       final rating = rultList[i]['rating'];
       galleryItems[i].rating = rating != null
           ? double.parse(rating)
           : galleryItems[i].ratingFallBack;
 
+      // 封面图片
       final String thumb = rultList[i]['thumb'];
       galleryItems[i].imgUrlL = thumb;
-      /*final String imageUrl = thumb.endsWith('-jpg_l.jpg')
-          ? thumb.replaceFirst('-jpg_l.jpg', '-jpg_250.jpg')
-          : thumb;
 
-      galleryItems[i].imgUrl = imageUrl;*/
-
-      // logger.v('${rultList[i]["tags"]}');
-
+      // 文件数量
       galleryItems[i].filecount = rultList[i]['filecount'] as String;
+
+      // 上传者
       galleryItems[i].uploader = rultList[i]['uploader'] as String;
       galleryItems[i].category = rultList[i]['category'] as String;
+
+      // 标签
       final List<String> tags = List<String>.from(
           rultList[i]['tags'].map((e) => e as String).toList());
       galleryItems[i].tagsFromApi = tags;
 
+      // 大小
       galleryItems[i].filesize = rultList[i]['filesize'] as int;
+
+      // 种子数量
       galleryItems[i].torrentcount = rultList[i]['torrentcount'] as String;
 
+      // 种子列表
       final List<dynamic> torrents = rultList[i]['torrents'];
       galleryItems[i].torrents = <GalleryTorrent>[];
       torrents.forEach((element) {
@@ -580,9 +598,6 @@ class Api {
       if (tags.isNotEmpty) {
         galleryItems[i].translated = EHUtils.getLangeage(tags[0]) ?? '';
       }
-
-      // Global.logger
-      //     .v('${galleryItems[i].translated}   ${galleryItems[i].tagsFromApi}');
     }
 
     return galleryItems;
@@ -681,13 +696,14 @@ class Api {
     GalleryItem galleryItem, {
     bool refresh = false,
   }) async {
-    final RegExp urlRex = RegExp(r'http?s://e(-|x)hentai.org/g/(\d+)/(\w+)/?$');
+    final RegExp urlRex =
+        RegExp(r'(http?s://e(-|x)hentai.org)?/g/(\d+)/(\w+)/?$');
     logger.v(galleryItem.url);
     final RegExpMatch urlRult = urlRex.firstMatch(galleryItem.url);
     logger.v(urlRult.groupCount);
 
-    final String gid = urlRult.group(2);
-    final String token = urlRult.group(3);
+    final String gid = urlRult.group(3);
+    final String token = urlRult.group(4);
 
     galleryItem.gid = gid;
     galleryItem.token = token;
@@ -708,7 +724,7 @@ class Api {
     await CustomHttpsProxy.instance.init();
     final response = await getHttpManager(
       cache: cache,
-      baseUrl: EHConst.getBaseSite(),
+      // baseUrl: EHConst.getBaseSite(),
     ).postForm(
       url,
       data: req,

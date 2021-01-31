@@ -57,7 +57,8 @@ class Global {
   // init
   static Future<void> init() async {
     // 运行初始
-    WidgetsFlutterBinding.ensureInitialized();
+    // WidgetsFlutterBinding.ensureInitialized();
+    // await Firebase.initializeApp();
 
     // 判断是否debug模式
     inDebugMode = EHUtils().isInDebugMode;

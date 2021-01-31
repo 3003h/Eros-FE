@@ -329,6 +329,8 @@ class GalleryPageController extends GetxController
 
   // 另一个语言的标题
   String get topTitle {
+    logger.d('${galleryItem.japaneseTitle} ${galleryItem.englishTitle}');
+
     if (_ehConfigService.isJpnTitle.value &&
         (galleryItem.japaneseTitle?.isNotEmpty ?? false)) {
       return galleryItem.englishTitle;

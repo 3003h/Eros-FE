@@ -173,7 +173,14 @@ dependencies:
 
   floor: ^0.18.0
   copy_with_extension: ^1.4.0
-  package_info: '>=0.4.3+2 <2.0.0'
+  package_info: ^0.4.3+4
+
+  firebase_core: any
+  firebase_analytics: any
+  firebase_crashlytics: any
+  firebase_performance: any
+  dio_firebase_performance: ^0.3.0
+
 
 
 dev_dependencies:
