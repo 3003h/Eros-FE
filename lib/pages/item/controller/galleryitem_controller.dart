@@ -63,7 +63,7 @@ class GalleryItemController extends GetxController {
 
   String get title {
     if (_ehConfigService.isJpnTitle.value &&
-        galleryItem.japaneseTitle.isNotEmpty) {
+        (galleryItem.japaneseTitle?.isNotEmpty ?? false)) {
       return galleryItem.japaneseTitle;
     } else {
       return galleryItem.englishTitle;

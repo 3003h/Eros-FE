@@ -1,31 +1,43 @@
-import 'package:fehviewer/models/galleryTorrent.dart';
 import 'package:fehviewer/network/gallery_request.dart';
+import 'package:fehviewer/utils/logger.dart';
 import 'package:get/get.dart';
 
 import 'gallery_page_controller.dart';
 
-class TorrentController extends GetxController with StateMixin<String> {
+class TorrentController extends GetxController
+    with StateMixin<TorrentProvider> {
   TorrentController({this.pageController});
 
   final GalleryPageController pageController;
   String torrentTk;
-  List<GalleryTorrent> torrents;
   bool isRefresh = false;
 
   @override
   void onInit() {
     super.onInit();
-    // pageController = Get.find(tag: pageCtrlDepth);
-    torrents = pageController.galleryItem.torrents;
-    _fetchData();
+    _loadData();
   }
 
-  void _fetchData() {
-    _fetchTk().then((value) {
-      change(value, status: RxStatus.success());
-    }, onError: (err) {
-      change(null, status: RxStatus.error());
-    });
+  Future<TorrentProvider> _fetch() async {
+    final _torrentLink = '${Api.getBaseUrl()}/gallerytorrents.php'
+        '?gid=${pageController.gid}&t=${pageController.galleryItem.token}';
+    logger.d(_torrentLink);
+    return await Api.getTorrent(_torrentLink);
+  }
+
+  Future<void> _loadData() async {
+    try {
+      final TorrentProvider provider = await _fetch();
+      change(provider, status: RxStatus.success());
+    } catch (e, stack) {
+      logger.e('$e\n$stack');
+      change(null, status: RxStatus.error(e.toString()));
+    }
+  }
+
+  Future<void> reload() async {
+    change(state, status: RxStatus.loading());
+    await _loadData();
   }
 
   Future<String> _fetchTk() async {
@@ -33,9 +45,14 @@ class TorrentController extends GetxController with StateMixin<String> {
         pageController.gid, pageController.galleryItem.token,
         refresh: isRefresh);
   }
+}
 
-  Future<void> reload() async {
-    change(null, status: RxStatus.loading());
-    _fetchData();
-  }
+class TorrentProvider {
+  List<TorrentBean> torrents;
+  String torrentToken;
+}
+
+class TorrentBean {
+  String fileName;
+  String hash;
 }

@@ -144,7 +144,7 @@ class GalleryItemWidget extends StatelessWidget {
   /// 构建标题
   Widget _buildTitle() {
     return Obx(() => Text(
-          _galleryItemController.title,
+          _galleryItemController.title ?? '',
           maxLines: 4,
           textAlign: TextAlign.left, // 对齐方式
           overflow: TextOverflow.ellipsis, // 超出部分省略号
@@ -212,13 +212,13 @@ class GalleryItemWidget extends StatelessWidget {
             rate: _galleryItemController.galleryItem.ratingFallBack,
             radiusRatio: 1.5,
             colorLight: ThemeColors.colorRatingMap[
-                _galleryItemController.galleryItem.colorRating.trim()],
+                _galleryItemController.galleryItem.colorRating?.trim() ?? 'ir'],
             colorDark: CupertinoDynamicColor.resolve(
                 CupertinoColors.systemGrey3, Get.context),
           ),
         ),
         Text(
-          _galleryItemController?.galleryItem?.rating.toString(),
+          _galleryItemController?.galleryItem?.rating?.toString() ?? '',
           style: TextStyle(
             fontSize: 11,
             color: CupertinoDynamicColor.resolve(

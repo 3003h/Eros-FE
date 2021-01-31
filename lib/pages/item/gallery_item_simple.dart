@@ -178,13 +178,13 @@ class GalleryItemSimpleWidget extends StatelessWidget {
             rate: _galleryItemController.galleryItem.ratingFallBack,
             radiusRatio: 1.5,
             colorLight: ThemeColors.colorRatingMap[
-                _galleryItemController.galleryItem.colorRating.trim()],
+                _galleryItemController.galleryItem.colorRating?.trim() ?? 'ir'],
             colorDark: CupertinoDynamicColor.resolve(
                 CupertinoColors.systemGrey3, Get.context),
           ),
         ),
         Text(
-          _galleryItemController?.galleryItem?.rating.toString(),
+          _galleryItemController?.galleryItem?.rating?.toString() ?? '',
           style: TextStyle(
             fontSize: 12,
             color: CupertinoDynamicColor.resolve(

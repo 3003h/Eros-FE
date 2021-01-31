@@ -145,13 +145,6 @@ class GalleryContainer extends StatelessWidget {
                       }
                     : null,
               )),
-          // child: TextBtn(
-          //   FontAwesomeIcons.star,
-          //   title: 'rat',
-          //   onTap: () {
-          //     logger.d('showRateDialog');
-          //   },
-          // ),
         ),
         // 画廊下载
         Expanded(
@@ -166,7 +159,7 @@ class GalleryContainer extends StatelessWidget {
           child: TextBtn(
             FontAwesomeIcons.magnet,
             title: '${S.of(context).p_Torrent}(${state.torrentcount ?? 0})',
-            onTap: state.torrents.isNotEmpty
+            onTap: state.torrentcount != '0'
                 ? () async {
                     showTorrentDialog();
                   }

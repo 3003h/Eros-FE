@@ -1,7 +1,6 @@
 import 'package:fehviewer/common/service/depth_service.dart';
 import 'package:fehviewer/const/const.dart';
 import 'package:fehviewer/generated/l10n.dart';
-import 'package:fehviewer/models/galleryTorrent.dart';
 import 'package:fehviewer/pages/gallery/controller/torrent_controller.dart';
 import 'package:fehviewer/utils/logger.dart';
 import 'package:flutter/cupertino.dart';
@@ -17,21 +16,21 @@ class TorrentView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final TorrentController controller = Get.find(tag: pageCtrlDepth);
-    return Container(
-      height: controller.torrents.length * 40.0 + 30,
-      child: controller.obx(
-        (String state) {
-          return ListView.separated(
+    return controller.obx(
+      (TorrentProvider state) {
+        return Container(
+          height: state.torrents.length * 40.0 + 30,
+          child: ListView.separated(
             padding: const EdgeInsets.all(0),
             itemBuilder: (_, int index) {
-              final GalleryTorrent torrent = controller.torrents[index];
+              final torrent = state.torrents[index];
               return Row(
                 children: [
                   Expanded(
                     child: CupertinoButton(
                       padding: const EdgeInsets.symmetric(vertical: 8.0),
                       child: Text(
-                        torrent.name,
+                        torrent.fileName,
                         textAlign: TextAlign.center,
                         maxLines: 2,
                         overflow: TextOverflow.ellipsis,
@@ -39,9 +38,9 @@ class TorrentView extends StatelessWidget {
                       ),
                       onPressed: () async {
                         final String torrentUrl =
-                            '${EHConst.EH_TORRENT_URL}/$state/${torrent.hash}.torrent';
-                        logger
-                            .d('${torrent.name}\n${torrent.hash}\ntorrentUrl');
+                            '${EHConst.EH_TORRENT_URL}/${state.torrentToken}/${torrent.hash}.torrent';
+                        logger.d(
+                            '${torrent.fileName}\n${torrent.hash}\ntorrentUrl');
                         if (await canLaunch(torrentUrl)) {
                           await launch(torrentUrl);
                         } else {
@@ -78,45 +77,44 @@ class TorrentView extends StatelessWidget {
                     CupertinoColors.systemGrey4, context),
               );
             },
-            itemCount: controller.torrents.length,
-          );
-        },
-        onLoading: Container(
-          child: const CupertinoActivityIndicator(
-            radius: 14,
+            itemCount: state.torrents.length,
           ),
+        );
+      },
+      onLoading: Container(
+        child: const CupertinoActivityIndicator(
+          radius: 14,
         ),
-        onError: (err) {
-          return Center(
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                CupertinoButton(
-                  padding: const EdgeInsets.all(0),
-                  child: const Icon(
-                    Icons.refresh,
-                    size: 30,
-                    color: Colors.red,
-                  ),
-                  onPressed: () {
-                    controller.reload();
-                  },
-                ),
-                const Text(
-                  'Error',
-                  style: TextStyle(fontSize: 12),
-                ),
-              ],
-            ),
-          );
-        },
       ),
+      onError: (err) {
+        return Center(
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              CupertinoButton(
+                padding: const EdgeInsets.all(0),
+                child: const Icon(
+                  Icons.refresh,
+                  size: 30,
+                  color: Colors.red,
+                ),
+                onPressed: () {
+                  controller.reload();
+                },
+              ),
+              const Text(
+                'Error',
+                style: TextStyle(fontSize: 12),
+              ),
+            ],
+          ),
+        );
+      },
     );
   }
 }
 
 Future<void> showTorrentDialog() {
-  // Get.put(TorrentController(), tag: pageCtrlDepth);
   return showCupertinoDialog<void>(
       context: Get.overlayContext,
       builder: (_) {

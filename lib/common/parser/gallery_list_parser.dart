@@ -5,10 +5,10 @@ import 'package:fehviewer/common/service/ehconfig_service.dart';
 import 'package:fehviewer/const/const.dart';
 import 'package:fehviewer/models/index.dart';
 import 'package:fehviewer/network/error.dart';
-import 'package:fehviewer/network/gallery_request.dart';
 import 'package:fehviewer/store/tag_database.dart';
 import 'package:fehviewer/utils/logger.dart';
 import 'package:fehviewer/utils/toast.dart';
+import 'package:fehviewer/utils/utility.dart';
 import 'package:get/get.dart';
 import 'package:html/dom.dart' as dom;
 import 'package:html/parser.dart' show parse;
@@ -173,6 +173,21 @@ class GalleryListParser {
           ..backgrondColor = backgroundColor);
       }
 
+      /// 判断获取语言标识
+      String _translated = '';
+      try {
+        if (simpleTags.isNotEmpty) {
+          // logger.d('${simpleTags.map((e) => e.text).join(',')}');
+          final _langTag = simpleTags.firstWhere(
+              (element) => EHConst.iso936.keys.contains(element.text),
+              orElse: () => null);
+
+          _translated = EHUtils.getLangeage(_langTag?.text ?? '') ?? '';
+        }
+      } catch (e, stack) {
+        logger.d('$e\n$stack');
+      }
+
       // 封面图片
       final dom.Element img = tr.querySelector('td.gl2c > div > div > img');
       final String imgDataSrc = img.attributes['data-src'];
@@ -198,14 +213,6 @@ class GalleryListParser {
 
       // logger.i('ratingFB $ratingFB');
 
-      // 评分颜色
-      final String _colorRating = tr
-              .querySelector('td.gl2c')
-              .children[2]
-              .children[1]
-              ?.attributes['class'] ??
-          'ir';
-
       final String postTime =
           tr.querySelector('td.gl2c > div:nth-child(2) > div')?.text?.trim() ??
               '';
@@ -220,14 +227,22 @@ class GalleryListParser {
               ?.attributes['title'] ??
           '';
 
+      // 评分颜色
+      final String _colorRating = tr
+              .querySelector('td.gl2c')
+              .children[2]
+              .children[1]
+              ?.attributes['class'] ??
+          'ir';
+
       // 评分标志
       final String ir = tr
               .querySelector('td.gl2c > div:nth-child(2) > div:nth-child(1)')
               ?.attributes['class'] ??
           '';
-      // logger.d(ir);
       final bool isRatinged = ir.contains(RegExp(r'ir ir[a-z]'));
 
+      // 收藏夹
       String favcat = '';
       if (favTitle.isNotEmpty) {
         final String favcatStyle = tr
@@ -240,25 +255,34 @@ class GalleryListParser {
         favcat = EHConst.favCat[favcatColor] ?? '';
       }
 
+      final dom.Element elmGl4c = tr.children[3];
+      // 上传者
+      final String _uplader = elmGl4c.children[0].text;
+
+      // 文件数量
+      final String _filecount =
+          RegExp(r'\d+').firstMatch(elmGl4c.children[1].text).group(0);
+
       void _addIiem() {
-        _gallaryItems.add(
-          GalleryItem()
-            ..gid = gid
-            ..token = token
-            ..englishTitle = title
-            ..imgUrl = imgUrl ?? ''
-            ..imgHeight = imageHeight
-            ..imgWidth = imageWidth
-            ..url = _path
-            ..category = category
-            ..simpleTags = simpleTags
-            ..postTime = postTimeLocal
-            ..ratingFallBack = ratingFB
-            ..colorRating = _colorRating
-            ..isRatinged = isRatinged
-            ..favTitle = favTitle
-            ..favcat = favcat,
-        );
+        _gallaryItems.add(GalleryItem()
+          ..gid = gid
+          ..token = token
+          ..englishTitle = title
+          ..imgUrl = imgUrl ?? ''
+          ..imgHeight = imageHeight
+          ..imgWidth = imageWidth
+          ..url = _path
+          ..category = category
+          ..simpleTags = simpleTags
+          ..postTime = postTimeLocal
+          ..ratingFallBack = ratingFB
+          ..colorRating = _colorRating
+          ..isRatinged = isRatinged
+          ..favTitle = favTitle
+          ..favcat = favcat
+          ..uploader = _uplader
+          ..filecount = _filecount
+          ..translated = _translated);
       }
 
       // safeMode检查
@@ -273,7 +297,7 @@ class GalleryListParser {
 
     // 通过api请求获取更多信息
     if (_gallaryItems.isNotEmpty) {
-      await Api.getMoreGalleryInfo(_gallaryItems, refresh: refresh);
+      // await Api.getMoreGalleryInfo(_gallaryItems, refresh: refresh);
     }
 
     return Tuple2(_gallaryItems, _maxPage);
