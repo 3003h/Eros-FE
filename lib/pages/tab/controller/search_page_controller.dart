@@ -2,6 +2,7 @@ import 'package:custom_pop_up_menu/custom_pop_up_menu.dart';
 import 'package:fehviewer/common/controller/quicksearch_controller.dart';
 import 'package:fehviewer/common/service/depth_service.dart';
 import 'package:fehviewer/common/service/ehconfig_service.dart';
+import 'package:fehviewer/main.dart';
 import 'package:fehviewer/models/entity/tag_translat.dart';
 import 'package:fehviewer/models/index.dart';
 import 'package:fehviewer/network/gallery_request.dart';
@@ -80,6 +81,8 @@ class SearchPageController extends TabViewController {
     final String _searchText = searchTextController.text.trim();
     if (_searchText.isNotEmpty) {
       _search = _searchText;
+
+      await analytics.logSearch(searchTerm: _search);
 
       change(state, status: RxStatus.loading());
       try {

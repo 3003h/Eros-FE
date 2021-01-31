@@ -175,7 +175,6 @@ dependencies:
   copy_with_extension: ^1.4.0
   package_info: ^0.4.3+4
 
-  firebase_core: any
   firebase_analytics: any
   firebase_crashlytics: any
   firebase_performance: any
