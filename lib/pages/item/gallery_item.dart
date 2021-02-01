@@ -423,7 +423,7 @@ class CoverImg extends StatelessWidget {
           // height: height,
           width: width,
           httpHeaders: _httpHeaders,
-          imageUrl: imgUrl,
+          imageUrl: imgUrl ?? '',
           fit: BoxFit.contain,
         );
       } else {

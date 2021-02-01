@@ -14,6 +14,7 @@ import 'package:fehviewer/pages/item/controller/galleryitem_controller.dart';
 import 'package:fehviewer/utils/logger.dart';
 import 'package:fehviewer/utils/time.dart';
 import 'package:fehviewer/utils/toast.dart';
+import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
 import 'package:meta/meta.dart';
@@ -452,21 +453,21 @@ class GalleryPageController extends GetxController
     isImageInfoGeting = false;
   }
 
-  /// 获取当前页的图片地址 宽高信息
+  /// 获取当前页的图片url 宽高信息
   Future<GalleryPreview> getImageInfo(
     int index, {
     CancelToken cancelToken,
+    bool refresh,
   }) async {
     // 数据获取处理
     try {
-      await _lazyGetImageHref(cancelToken: cancelToken, index: index);
+      await _lazyGetImageHref(
+        cancelToken: cancelToken,
+        index: index,
+      );
     } catch (e, stack) {
       logger.e('$e \n $stack');
     }
-
-    // if (showKey == null) {
-    //   await getShowKey(index: index);
-    // }
 
     try {
       final GalleryPreview _curPreview = galleryItem.galleryPreview[index];
@@ -481,11 +482,13 @@ class GalleryPageController extends GetxController
         // paraImageLageInfoFromHtml
         final GalleryPreview _preview = await Api.paraImageLageInfoFromHtml(
             galleryItem.galleryPreview[index].href,
-            index: index);
+            index: index,
+            refresh: refresh);
         return _preview;
       }
     } catch (e, stack) {
       logger.e('$e \n $stack');
+      FirebaseCrashlytics.instance.recordError(e, stack);
       rethrow;
     }
   }

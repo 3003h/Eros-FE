@@ -212,7 +212,7 @@ class CoveTinyImage extends StatelessWidget {
           width: 44,
           height: 44,
           fit: BoxFit.cover,
-          imageUrl: imgUrl,
+          imageUrl: imgUrl ?? '',
         ),
       ),
     );
@@ -273,7 +273,7 @@ class CoverImage extends StatelessWidget {
                               CupertinoColors.systemGrey5, context),
                         );
                       },
-                      imageUrl: imageUrl,
+                      imageUrl: imageUrl ?? '',
                       fit: BoxFit.cover,
                       httpHeaders: _httpHeaders,
                     ),

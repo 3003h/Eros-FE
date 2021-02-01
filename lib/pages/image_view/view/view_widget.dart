@@ -34,8 +34,10 @@ class _GalleryImageState extends State<GalleryImage> {
   void initState() {
     super.initState();
     _pageController = Get.find(tag: pageCtrlDepth);
-    _future = _pageController.getImageInfo(widget.index,
-        cancelToken: _getMoreCancelToken);
+    _future = _pageController.getImageInfo(
+      widget.index,
+      cancelToken: _getMoreCancelToken,
+    );
   }
 
   @override
@@ -51,12 +53,19 @@ class _GalleryImageState extends State<GalleryImage> {
 
     // 重载当前图片
     Future<void> _reloadImage() async {
-      await CachedNetworkImage.evictFromCache(_currentPreview.largeImageUrl);
+      try {
+        await CachedNetworkImage.evictFromCache(
+            _currentPreview.largeImageUrl ?? '');
+      } catch (_) {}
+
       _currentPreview.largeImageUrl = null;
 
       setState(() {
-        _future = _pageController.getImageInfo(widget.index,
-            cancelToken: _getMoreCancelToken);
+        _future = _pageController.getImageInfo(
+          widget.index,
+          cancelToken: _getMoreCancelToken,
+          refresh: true,
+        );
       });
     }
 
@@ -73,9 +82,16 @@ class _GalleryImageState extends State<GalleryImage> {
           if (_currentPreview.largeImageUrl == null ||
               _currentPreview.largeImageHeight == null) {
             if (previewFromApi.connectionState == ConnectionState.done) {
+              String _errInfo = '';
               // 获取图片url等信息 异常
               if (previewFromApi.hasError) {
                 logger.e(' ${previewFromApi.error}');
+                if (previewFromApi.error is DioError) {
+                  DioError dioErr = previewFromApi.error as DioError;
+                  logger.e('${dioErr.error}');
+
+                  _errInfo = dioErr.type.toString();
+                }
                 return Container(
                   alignment: Alignment.center,
                   constraints: BoxConstraints(
@@ -88,6 +104,12 @@ class _GalleryImageState extends State<GalleryImage> {
                         Icons.error,
                         size: 50,
                         color: Colors.red,
+                      ),
+                      Text(
+                        _errInfo,
+                        style: const TextStyle(
+                            fontSize: 10,
+                            color: CupertinoColors.secondarySystemBackground),
                       ),
                       Text(
                         '${widget.index + 1}',
@@ -155,7 +177,7 @@ class _GalleryImageState extends State<GalleryImage> {
   Widget _buildImage(String url) {
     return Container(
       child: CachedNetworkImage(
-        imageUrl: url,
+        imageUrl: url ?? '',
         fit: BoxFit.contain,
         fadeInDuration: const Duration(milliseconds: 100),
         fadeOutDuration: const Duration(milliseconds: 100),
