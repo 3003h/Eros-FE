@@ -1,6 +1,7 @@
 import 'package:dio/dio.dart';
 import 'package:fehviewer/common/service/ehconfig_service.dart';
 import 'package:fehviewer/models/index.dart';
+import 'package:fehviewer/network/gallery_request.dart';
 import 'package:fehviewer/pages/tab/controller/search_page_controller.dart';
 import 'package:fehviewer/utils/logger.dart';
 import 'package:fehviewer/utils/toast.dart';
@@ -57,6 +58,9 @@ class TabViewController extends GetxController
     try {
       final Tuple2<List<GalleryItem>, int> tuple = await fetchData();
       final List<GalleryItem> _listItem = tuple.item1;
+
+      Api.getMoreGalleryInfo(_listItem);
+
       maxPage = tuple.item2;
       change(_listItem, status: RxStatus.success());
     } catch (err) {
@@ -92,6 +96,9 @@ class TabViewController extends GetxController
     final Tuple2<List<GalleryItem>, int> tuple = await fetchData(
       refresh: true,
     );
+
+    Api.getMoreGalleryInfo(tuple.item1, refresh: true);
+
     maxPage = tuple.item2;
     change(tuple.item1, status: RxStatus.success());
   }

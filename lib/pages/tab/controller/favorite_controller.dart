@@ -45,7 +45,7 @@ class FavoriteViewController extends TabViewController {
     bool refresh = false,
     bool first = false,
   }) async {
-    logger.v('_loadDataFirst  fav');
+    // logger.v('_loadDataFirst  fav');
 
     final bool _isLogin = _userController.isLogin;
     if (!_isLogin) {

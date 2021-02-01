@@ -1,9 +1,6 @@
 # Uncomment this line to define a global platform for your project
 # platform :ios, '11.0'
 
-# Add the Firebase pod for Google Analytics
-# pod 'Firebase/Analytics'
-
 # CocoaPods analytics sends network stats synchronously affecting flutter build latency.
 ENV['COCOAPODS_DISABLE_STATS'] = 'true'
 

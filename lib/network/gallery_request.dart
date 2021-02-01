@@ -283,7 +283,7 @@ class Api {
 
     final Options _cacheOptions = getCacheOptions(forceRefresh: refresh);
 
-    logger.d('${params}');
+    // logger.d('${params}');
     await CustomHttpsProxy.instance.init();
     String response =
         await getHttpManager().get(url, options: _cacheOptions, params: params);
