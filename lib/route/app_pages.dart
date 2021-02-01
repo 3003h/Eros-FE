@@ -1,5 +1,9 @@
 import 'package:fehviewer/common/controller/cache_controller.dart';
+import 'package:fehviewer/pages/gallery/bindings/gallery_page_binding.dart';
 import 'package:fehviewer/pages/gallery/view/comment_page.dart';
+import 'package:fehviewer/pages/gallery/view/gallery_page.dart';
+import 'package:fehviewer/pages/image_view/controller/view_controller.dart';
+import 'package:fehviewer/pages/image_view/view/view_page.dart';
 import 'package:fehviewer/pages/login/login_page.dart';
 import 'package:fehviewer/pages/login/web_login.dart';
 import 'package:fehviewer/pages/setting/about_page.dart';
@@ -87,7 +91,11 @@ class AppPages {
     GetPage(
       name: EHRoutes.pageSetting,
       page: () => TabSettingPage(),
-      binding: BindingsBuilder(() => Get.lazyPut(() => TabSettingController())),
+      binding: BindingsBuilder(
+        () => Get.lazyPut(
+          () => TabSettingController(),
+        ),
+      ),
     ),
     GetPage(
       name: EHRoutes.history,
@@ -109,6 +117,18 @@ class AppPages {
       name: EHRoutes.download,
       page: () => const DownloadTab(tabIndex: EHRoutes.download),
       transition: Transition.cupertino,
+    ),
+    GetPage(
+      name: EHRoutes.galleryView,
+      page: () => const GalleryViewPage(),
+      binding: BindingsBuilder<dynamic>(() {
+        Get.lazyPut(() => ViewController());
+      }),
+    ),
+    GetPage(
+      name: EHRoutes.galleryPage,
+      page: () => const GalleryMainPage(),
+      binding: GalleryBinding(),
     ),
   ];
 }

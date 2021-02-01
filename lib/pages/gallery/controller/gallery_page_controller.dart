@@ -17,7 +17,6 @@ import 'package:fehviewer/utils/toast.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
-import 'package:meta/meta.dart';
 
 import 'archiver_controller.dart';
 import 'comment_controller.dart';
@@ -31,21 +30,29 @@ class GalleryPageController extends GetxController
     with StateMixin<GalleryItem> {
   GalleryPageController();
 
-  GalleryPageController.initUrl({@required String url}) {
-    galleryItem = GalleryItem()..url = url;
-    fromUrl = true;
+  // GalleryPageController.initUrl({@required String url}) {
+  //   galleryItem = GalleryItem()..url = url;
+  //   fromUrl = true;
+  // }
+  //
+  // GalleryPageController.fromItem({
+  //   @required this.galleryItem,
+  // }) : gid = galleryItem.gid;
+
+  /// 画廊数据对象
+  GalleryItem _galleryItem;
+
+  GalleryItem get galleryItem => _galleryItem;
+
+  set galleryItem(GalleryItem val) {
+    _galleryItem = val;
+    // _itemController = Get.find(tag: gid);
   }
 
-  GalleryPageController.fromItem({
-    @required this.galleryItem,
-  }) : gid = galleryItem.gid;
-
   /// 画廊gid 唯一
-  String gid;
+  String get gid => galleryItem.gid;
 
   bool isRefresh = false;
-
-  GalleryItemController _itemController;
 
   final RxBool _fromUrl = false.obs;
 
@@ -78,8 +85,7 @@ class GalleryPageController extends GetxController
     _itemController.update();
   }
 
-  /// 画廊数据对象
-  GalleryItem galleryItem;
+  GalleryItemController get _itemController => Get.find(tag: gid);
 
   List<GalleryPreview> get previews => galleryItem.galleryPreview;
 
@@ -107,13 +113,9 @@ class GalleryPageController extends GetxController
     scrollController.addListener(_scrollControllerLister);
     hideNavigationBtn = true;
 
-    if (!fromUrl) {
-      _itemController = Get.find(tag: gid);
-      // logger.d('isRatinged: i-${_itemController.galleryItem.isRatinged}'
-      //     ' p-${galleryItem.isRatinged}');
-      // logger.d('colorRating i-[${_itemController?.galleryItem?.colorRating}] '
-      //     ' p-[${galleryItem.colorRating}]');
-    }
+    // if (!fromUrl) {
+    //   _itemController = Get.find(tag: gid);
+    // }
 
     _loadData();
   }
@@ -338,7 +340,7 @@ class GalleryPageController extends GetxController
 
   // 另一个语言的标题
   String get topTitle {
-    logger.d('${galleryItem.japaneseTitle} ${galleryItem.englishTitle}');
+    // logger.d('${galleryItem.japaneseTitle} ${galleryItem.englishTitle}');
 
     if (_ehConfigService.isJpnTitle.value &&
         (galleryItem.japaneseTitle?.isNotEmpty ?? false)) {
@@ -458,6 +460,7 @@ class GalleryPageController extends GetxController
     int index, {
     CancelToken cancelToken,
     bool refresh,
+    bool changeSource = false,
   }) async {
     // 数据获取处理
     try {
@@ -479,11 +482,21 @@ class GalleryPageController extends GetxController
           _curPreview.largeImageWidth != null) {
         return galleryItem.galleryPreview[index];
       } else {
+        final _sourceId =
+            changeSource ? galleryItem.galleryPreview[index].sourceId : '';
+
         // paraImageLageInfoFromHtml
-        final GalleryPreview _preview = await Api.paraImageLageInfoFromHtml(
-            galleryItem.galleryPreview[index].href,
-            index: index,
-            refresh: refresh);
+        final GalleryPreview _preview = await Api.ftchImageInfo(
+          galleryItem.galleryPreview[index].href,
+          index: index,
+          refresh: refresh,
+          sourceId: _sourceId,
+        );
+
+        if (changeSource) {
+          logger.d('changeSource ${_preview.largeImageUrl}');
+        }
+
         return _preview;
       }
     } catch (e, stack) {

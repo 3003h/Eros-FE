@@ -22,6 +22,9 @@ class GalleryViewPage extends GetView<ViewController> {
   /// 画廊图片大图浏览
   @override
   Widget build(BuildContext context) {
+    final _iniIndex = Get.arguments as int;
+    controller.itemIndex = _iniIndex;
+
     controller.initSize(context);
     logger.d('build ${controller.viewMode}  ${controller.columnMode}');
     return CupertinoTheme(

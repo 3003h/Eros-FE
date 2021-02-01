@@ -32,8 +32,7 @@ enum ColumnMode {
 }
 
 class ViewController extends GetxController {
-  ViewController(this.initIndex);
-  final int initIndex;
+  ViewController();
 
   final Rx<ColumnMode> _columnMode = ColumnMode.single.obs;
   ColumnMode get columnMode => _columnMode.value;
@@ -68,7 +67,7 @@ class ViewController extends GetxController {
 
   final RxInt _itemIndex = 0.obs;
   int get itemIndex => _itemIndex.value;
-  // set itemIndex(int val) => _itemIndex.value = val;
+  set itemIndex(int val) => _itemIndex.value = val;
 
   int get pageIndex {
     switch (columnMode) {
@@ -218,9 +217,6 @@ class ViewController extends GetxController {
             ?.columnMode ??
         ColumnMode.single;
     // logger.d('init ${_columnMode}');
-
-    logger.d('initIndex $itemIndex');
-    _itemIndex.value = initIndex;
 
     logger.d('initialPage $pageIndex');
     final int _initialPage = pageIndex;

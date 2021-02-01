@@ -1,3 +1,4 @@
+import 'package:fehviewer/common/service/depth_service.dart';
 import 'package:fehviewer/models/galleryItem.dart';
 import 'package:fehviewer/network/gallery_request.dart';
 import 'package:fehviewer/utils/logger.dart';
@@ -7,10 +8,10 @@ import 'package:get/get.dart';
 import 'gallery_page_controller.dart';
 
 class RateController extends GetxController {
-  RateController({this.pageController});
+  RateController();
 
   double rate;
-  final GalleryPageController pageController;
+  GalleryPageController get pageController => Get.find(tag: pageCtrlDepth);
 
   GalleryItem get _item => pageController.galleryItem;
 

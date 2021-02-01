@@ -1,3 +1,4 @@
+import 'package:fehviewer/common/service/depth_service.dart';
 import 'package:fehviewer/models/index.dart';
 import 'package:fehviewer/network/gallery_request.dart';
 import 'package:fehviewer/pages/gallery/view/comment_page.dart';
@@ -17,9 +18,9 @@ enum EditState {
 
 class CommentController extends GetxController
     with StateMixin<List<GalleryComment>>, WidgetsBindingObserver {
-  CommentController({this.pageController});
+  CommentController();
 
-  final GalleryPageController pageController;
+  GalleryPageController get pageController => Get.find(tag: pageCtrlDepth);
   final TextEditingController commentTextController = TextEditingController();
 
   GalleryItem get _item => pageController.galleryItem;

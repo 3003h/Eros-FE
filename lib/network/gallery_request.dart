@@ -932,13 +932,14 @@ class Api {
     return _rePreview;
   }
 
-  /// 由api获取画廊图片的信息
+  /// 获取画廊图片的信息
   /// [href] 爬取的页面地址 用来解析gid 和 imgkey
   /// [index] 索引
-  static Future<GalleryPreview> paraImageLageInfoFromHtml(
+  static Future<GalleryPreview> ftchImageInfo(
     String href, {
     int index,
     bool refresh,
+    String sourceId,
   }) async {
     final String url = href;
 
@@ -949,31 +950,20 @@ class Api {
       maxStale: const Duration(minutes: 1),
     );
 
+    final Map<String, dynamic> _params = {
+      if (sourceId != null && sourceId.trim().isNotEmpty) 'nl': sourceId,
+    };
+
     await CustomHttpsProxy.instance.init();
-    final String response = await Api.getHttpManager()
-        .get(url, options: getCacheOptions(forceRefresh: refresh));
+    final String response = await Api.getHttpManager().get(
+      url,
+      options: getCacheOptions(forceRefresh: refresh),
+      params: _params,
+    );
 
     // logger.d('$response ');
 
-    final RegExp regImageUrl = RegExp('<img[^>]*src=\"([^\"]+)\" style');
-    final String imageUrl = regImageUrl.firstMatch(response).group(1);
-
-    // logger.d('imageUrl $imageUrl');
-
-    final RegExpMatch _xy =
-        RegExp(r'::\s+(\d+)\s+x\s+(\d+)\s+::').firstMatch(response);
-    final double width = double.parse(_xy.group(1));
-    final double height = double.parse(_xy.group(2));
-
-//    logger.v('$imageUrl');
-
-    final GalleryPreview _rePreview = GalleryPreview()
-      ..largeImageUrl = imageUrl
-      ..ser = index + 1
-      ..largeImageWidth = width
-      ..largeImageHeight = height;
-
-    return _rePreview;
+    return paraImage(response)..ser = index + 1;
   }
 
   static Future<void> download(String url, String path) async {

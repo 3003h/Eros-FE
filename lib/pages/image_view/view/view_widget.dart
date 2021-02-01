@@ -65,6 +65,7 @@ class _GalleryImageState extends State<GalleryImage> {
           widget.index,
           cancelToken: _getMoreCancelToken,
           refresh: true,
+          changeSource: true,
         );
       });
     }
@@ -127,6 +128,7 @@ class _GalleryImageState extends State<GalleryImage> {
                     previewFromApi.data.largeImageHeight;
                 _currentPreview.largeImageWidth =
                     previewFromApi.data.largeImageWidth;
+                _currentPreview.sourceId = previewFromApi.data.sourceId;
 
                 Future.delayed(const Duration(milliseconds: 100)).then((value) {
                   Get.find<ViewController>()
