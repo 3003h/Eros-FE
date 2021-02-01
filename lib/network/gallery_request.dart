@@ -736,7 +736,8 @@ class Api {
 
   /// 分享图片
   static Future<void> shareImage(String imageUrl) async {
-    final CachedNetworkImage image = CachedNetworkImage(imageUrl: imageUrl);
+    final CachedNetworkImage image =
+        CachedNetworkImage(imageUrl: imageUrl ?? '');
     final DefaultCacheManager manager =
         image.cacheManager ?? DefaultCacheManager();
     final Map<String, String> headers = image.httpHeaders;
@@ -834,7 +835,8 @@ class Api {
       } else {
         /// 保存网络图片
         logger.d('保存网络图片');
-        final CachedNetworkImage image = CachedNetworkImage(imageUrl: imageUrl);
+        final CachedNetworkImage image =
+            CachedNetworkImage(imageUrl: imageUrl ?? '');
         final DefaultCacheManager manager =
             image.cacheManager ?? DefaultCacheManager();
         final Map<String, String> headers = image.httpHeaders;
