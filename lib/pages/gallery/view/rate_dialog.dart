@@ -14,7 +14,7 @@ class RateView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final RateController controller = Get.find(tag: pageCtrlDepth);
-    logger.d('controller.rate ${controller.rate}');
+    logger.d('controller.rate ${controller.rate}  ');
     return Container(
       height: 80,
       alignment: Alignment.center,
@@ -22,7 +22,7 @@ class RateView extends StatelessWidget {
         builder: (_, BoxConstraints constraints) {
           return Container(
             child: RatingBar.builder(
-              initialRating: (controller.rate ?? 0 * 2).round() / 2.0,
+              initialRating: ((controller.rate ?? 0) * 2).round() / 2.0,
               minRating: 0.5,
               glow: false,
               direction: Axis.horizontal,

@@ -24,6 +24,7 @@ class EHRoutes {
 
   static const String galleryComment = '/comment';
   static const String galleryView = '/view';
+  static const String galleryPage = '/galleryPage';
 
   static const String pageSetting = '/pageSetting';
 }

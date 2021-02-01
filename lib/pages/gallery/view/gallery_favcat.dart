@@ -13,10 +13,12 @@ class GalleryFavButton extends StatelessWidget {
     Key key,
   }) : super(key: key);
 
+  GalleryFavController get _favController => Get.find(tag: pageCtrlDepth);
+
   @override
   Widget build(BuildContext context) {
-    final GalleryFavController _favController =
-        Get.put(GalleryFavController(), tag: pageCtrlDepth);
+    // final GalleryFavController _favController =
+    //     Get.put(GalleryFavController(), tag: pageCtrlDepth);
     // 收藏按钮图标
     final Widget favIcon = Obx(() {
       return Container(

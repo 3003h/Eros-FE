@@ -25,16 +25,17 @@ class GalleryFavController extends GetxController {
   final UserController _userController = Get.find();
   final EhConfigService _ehConfigService = Get.find();
   final FavController _favController = Get.find();
-  GalleryPageController _pageController;
-  GalleryItemController _itemController;
+  GalleryPageController get _pageController => Get.find(tag: pageCtrlDepth);
+  GalleryItemController get _itemController =>
+      Get.find(tag: _pageController.gid);
 
   @override
   void onInit() {
     super.onInit();
-    _pageController = Get.find(tag: pageCtrlDepth);
-    if (!_pageController.fromUrl) {
-      _itemController = Get.find(tag: _pageController.gid);
-    }
+    // _pageController = Get.find(tag: pageCtrlDepth);
+    // if (!_pageController.fromUrl) {
+    //   _itemController = Get.find(tag: _pageController.gid);
+    // }
 
     _localFav.value = _pageController.localFav ?? false;
 
@@ -97,7 +98,7 @@ class GalleryFavController extends GetxController {
       this._favTitle.value = _favTitle;
       _favcat.value = _lastFavcat;
       if (!_pageController.fromUrl) {
-        _itemController.setFavTitle(favTitle: favTitle, favcat: favcat);
+        _itemController?.setFavTitle(favTitle: favTitle, favcat: favcat);
       }
     }
     return true;
@@ -179,7 +180,7 @@ class GalleryFavController extends GetxController {
         this._favTitle.value = _favTitle;
         this._favcat.value = _favcat;
         if (!_pageController.fromUrl) {
-          _itemController.setFavTitle(favTitle: favTitle, favcat: favcat);
+          _itemController?.setFavTitle(favTitle: favTitle, favcat: favcat);
         }
       }
       return true;
