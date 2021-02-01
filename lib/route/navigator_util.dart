@@ -43,7 +43,6 @@ class NavigatorUtil {
       Get.lazyPut(
         () => SearchPageController(initSearchText: _search),
         tag: searchPageCtrlDepth,
-        fenix: true,
       );
     }));
   }
@@ -124,7 +123,6 @@ class NavigatorUtil {
       Get.lazyPut(
         () => SearchPageController(searchType: searchType),
         tag: searchPageCtrlDepth,
-        fenix: true,
       );
     }));
   }

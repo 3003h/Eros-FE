@@ -255,13 +255,23 @@ class GalleryListParser {
         favcat = EHConst.favCat[favcatColor] ?? '';
       }
 
-      final dom.Element elmGl4c = tr.children[3];
-      // 上传者
-      final String _uplader = elmGl4c.children[0].text;
+      String _uplader = '';
+      String _filecount = '';
+      if (!isFavorite) {
+        final dom.Element elmGl4c = tr.children[3];
+        // 上传者
+        _uplader = elmGl4c.children[0].text;
 
-      // 文件数量
-      final String _filecount =
-          RegExp(r'\d+').firstMatch(elmGl4c.children[1].text).group(0);
+        // 文件数量
+        _filecount =
+            RegExp(r'\d+').firstMatch(elmGl4c.children[1].text).group(0);
+      } else {
+        final dom.Element elmGl2c = tr.children[1];
+        _filecount = RegExp(r'\d+')
+            .firstMatch(
+                elmGl2c.children[1].children[1].children[1].children[1].text)
+            .group(0);
+      }
 
       void _addIiem() {
         _gallaryItems.add(GalleryItem()

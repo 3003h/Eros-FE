@@ -197,7 +197,7 @@ class SearchPageController extends TabViewController {
   Future<List<GalleryItem>> _fetchData({bool refresh = false}) async {
     final int _catNum = _ehConfigService.catFilter.value;
 
-    logger.v('_loadDataFirst');
+    // logger.v('_loadDataFirst');
 
     final Tuple2<List<GalleryItem>, int> tuple =
         searchType != SearchType.favorite
