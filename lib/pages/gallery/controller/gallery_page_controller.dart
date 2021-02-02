@@ -196,7 +196,7 @@ class GalleryPageController extends GetxController
   /// 请求数据
   Future<GalleryItem> _fetchData({bool refresh = false}) async {
     await Future<void>.delayed(const Duration(milliseconds: 200));
-    logger.d('fetch data refresh:$refresh');
+    // logger.d('fetch data refresh:$refresh');
     try {
       hideNavigationBtn = true;
 
@@ -261,7 +261,7 @@ class GalleryPageController extends GetxController
         });
       }
 
-      logger.d('fb ${galleryItem.ratingFallBack} ');
+      // logger.d('fb ${galleryItem.ratingFallBack} ');
 
       // logger.d('ratingCount ${galleryItem.ratingCount} ');
 
