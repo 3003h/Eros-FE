@@ -700,7 +700,7 @@ class Api {
         RegExp(r'(http?s://e(-|x)hentai.org)?/g/(\d+)/(\w+)/?$');
     logger.v(galleryItem.url);
     final RegExpMatch urlRult = urlRex.firstMatch(galleryItem.url);
-    logger.v(urlRult.groupCount);
+    // logger.v(urlRult.groupCount);
 
     final String gid = urlRult.group(3);
     final String token = urlRult.group(4);

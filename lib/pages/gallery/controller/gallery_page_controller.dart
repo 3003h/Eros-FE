@@ -9,6 +9,7 @@ import 'package:fehviewer/models/index.dart';
 import 'package:fehviewer/network/gallery_request.dart';
 import 'package:fehviewer/pages/gallery/controller/rate_controller.dart';
 import 'package:fehviewer/pages/gallery/controller/torrent_controller.dart';
+import 'package:fehviewer/pages/gallery/view/gallery_page.dart';
 import 'package:fehviewer/pages/image_view/controller/view_controller.dart';
 import 'package:fehviewer/pages/item/controller/galleryitem_controller.dart';
 import 'package:fehviewer/utils/logger.dart';
@@ -28,7 +29,9 @@ const double kHeaderPaddingTop = 12.0;
 
 class GalleryPageController extends GetxController
     with StateMixin<GalleryItem> {
-  GalleryPageController();
+  GalleryPageController({this.galleryRepository});
+
+  final GalleryRepository galleryRepository;
 
   // GalleryPageController.initUrl({@required String url}) {
   //   galleryItem = GalleryItem()..url = url;
@@ -46,11 +49,10 @@ class GalleryPageController extends GetxController
 
   set galleryItem(GalleryItem val) {
     _galleryItem = val;
-    // _itemController = Get.find(tag: gid);
   }
 
   /// 画廊gid 唯一
-  String get gid => galleryItem.gid;
+  String get gid => galleryItem?.gid ?? '';
 
   bool isRefresh = false;
 
@@ -85,7 +87,13 @@ class GalleryPageController extends GetxController
     _itemController.update();
   }
 
-  GalleryItemController get _itemController => Get.find(tag: gid);
+  GalleryItemController get _itemController {
+    try {
+      return Get.find(tag: gid);
+    } catch (_) {
+      return null;
+    }
+  }
 
   List<GalleryPreview> get previews => galleryItem.galleryPreview;
 
@@ -108,16 +116,19 @@ class GalleryPageController extends GetxController
   void onInit() {
     super.onInit();
 
-    // logger.d('GalleryPageController$pageCtrlDepth onInit');
+    logger.d('GalleryPageController$pageCtrlDepth onInit');
 
     scrollController.addListener(_scrollControllerLister);
     hideNavigationBtn = true;
 
-    // if (!fromUrl) {
-    //   _itemController = Get.find(tag: gid);
-    // }
+    if (galleryRepository.url != null && galleryRepository.url.isNotEmpty) {
+      fromUrl = true;
+      galleryItem = GalleryItem()..url = galleryRepository.url;
+    } else {
+      _galleryItem = galleryRepository.item;
+    }
 
-    _loadData();
+    _firstLoadData();
   }
 
   @override
@@ -185,17 +196,18 @@ class GalleryPageController extends GetxController
   /// 请求数据
   Future<GalleryItem> _fetchData({bool refresh = false}) async {
     await Future<void>.delayed(const Duration(milliseconds: 200));
-    // logger.d('fetch data refresh:$refresh');
+    logger.d('fetch data refresh:$refresh');
     try {
       hideNavigationBtn = true;
+
+      if (galleryItem?.filecount == null ||
+          (galleryItem?.filecount?.isEmpty ?? true)) {
+        await Api.getMoreGalleryInfoOne(galleryItem, refresh: refresh);
+      }
 
       // 检查画廊是否包含在本地收藏中
       final bool _localFav = _isInLocalFav(galleryItem.gid);
       galleryItem.localFav = _localFav;
-
-      if (galleryItem.filecount == null || galleryItem.filecount.isEmpty) {
-        await Api.getMoreGalleryInfoOne(galleryItem, refresh: refresh);
-      }
 
       // logger.d('colorRating i-[${_itemController?.galleryItem?.colorRating}] '
       //     ' p-[${galleryItem.colorRating}]');
@@ -233,10 +245,10 @@ class GalleryPageController extends GetxController
           // 评分状态更新
           isRatinged = galleryItem.isRatinged;
         } else {
-          galleryItem.ratingFallBack = _oriRatingFallBack;
+          galleryItem.ratingFallBack ??= _oriRatingFallBack;
+          galleryItem.ratingCount ??= _oriRatingCount;
           galleryItem.colorRating = _oriColorRating;
           galleryItem.isRatinged = _oriIsRatinged;
-          galleryItem.ratingCount ??= _oriRatingCount;
         }
       } catch (_) {}
 
@@ -248,6 +260,8 @@ class GalleryPageController extends GetxController
           _historyController.addHistory(galleryItem);
         });
       }
+
+      logger.d('fb ${galleryItem.ratingFallBack} ');
 
       // logger.d('ratingCount ${galleryItem.ratingCount} ');
 
@@ -272,15 +286,16 @@ class GalleryPageController extends GetxController
   //   galleryItem.showKey = _showKey;
   // }
 
-  Future<void> _loadData({bool refresh = false, bool showError = true}) async {
+  Future<void> _firstLoadData(
+      {bool refresh = false, bool showError = true}) async {
     try {
       final GalleryItem _fetchItem = await _fetchData(refresh: refresh);
       change(_fetchItem, status: RxStatus.success());
       time.showTime('change end');
       _enableRead.value = true;
-      isRatinged = (galleryItem.isRatinged ?? false) ||
-          _fetchItem.isRatinged ||
-          (_itemController?.galleryItem?.isRatinged ?? false);
+      // isRatinged = (galleryItem?.isRatinged ?? false) ||
+      //     (_fetchItem?.isRatinged ?? false) ||
+      //     (_itemController?.galleryItem?.isRatinged ?? false);
 
       await analytics.logViewItem(
         itemId: galleryItem.gid,
@@ -303,7 +318,7 @@ class GalleryPageController extends GetxController
     } catch (e) {
       logger.e('$e');
     }
-    await _loadData(refresh: true, showError: false);
+    await _firstLoadData(refresh: true, showError: false);
   }
 
   Future<void> handOnRefresh() async {
@@ -329,13 +344,15 @@ class GalleryPageController extends GetxController
   }
 
   void _scrollControllerLister() {
-    if (scrollController.offset < kHeaderHeight + kHeaderPaddingTop &&
-        !hideNavigationBtn) {
-      hideNavigationBtn = true;
-    } else if (scrollController.offset >= kHeaderHeight + kHeaderPaddingTop &&
-        hideNavigationBtn) {
-      hideNavigationBtn = false;
-    }
+    try {
+      if (scrollController.offset < kHeaderHeight + kHeaderPaddingTop &&
+          !hideNavigationBtn) {
+        hideNavigationBtn = true;
+      } else if (scrollController.offset >= kHeaderHeight + kHeaderPaddingTop &&
+          hideNavigationBtn) {
+        hideNavigationBtn = false;
+      }
+    } catch (_) {}
   }
 
   // 另一个语言的标题
@@ -343,20 +360,20 @@ class GalleryPageController extends GetxController
     // logger.d('${galleryItem.japaneseTitle} ${galleryItem.englishTitle}');
 
     if (_ehConfigService.isJpnTitle.value &&
-        (galleryItem.japaneseTitle?.isNotEmpty ?? false)) {
-      return galleryItem.englishTitle;
+        (galleryItem?.japaneseTitle?.isNotEmpty ?? false)) {
+      return galleryItem?.englishTitle ?? '';
     } else {
-      return galleryItem.japaneseTitle;
+      return galleryItem?.japaneseTitle ?? '';
     }
   }
 
   // 根据设置的语言显示的标题
   String get title {
     if (_ehConfigService.isJpnTitle.value &&
-        (galleryItem.japaneseTitle?.isNotEmpty ?? false)) {
-      return galleryItem.japaneseTitle;
+        (galleryItem?.japaneseTitle?.isNotEmpty ?? false)) {
+      return galleryItem?.japaneseTitle ?? '';
     } else {
-      return galleryItem.englishTitle;
+      return galleryItem?.englishTitle ?? '';
     }
   }
 

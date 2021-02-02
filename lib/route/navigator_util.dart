@@ -49,6 +49,10 @@ class NavigatorUtil {
     Get.find<DepthService>().pushPageCtrl();
     if (url != null && url.isNotEmpty) {
       logger.d('goGalleryPage fromUrl');
+      Get.lazyPut(
+        () => GalleryRepository(url: url, tabTag: tabTag),
+        tag: pageCtrlDepth,
+      );
       // Get.to(
       //   GalleryMainPage(tabTag: tabTag),
       //   transition: Transition.cupertino,
@@ -58,7 +62,6 @@ class NavigatorUtil {
       Get.toNamed(
         EHRoutes.galleryPage,
         preventDuplicates: false,
-        arguments: GalleryArg(url: url, tabTag: tabTag),
       );
     } else {
       logger.d('goGalleryPage fromItem tabTag=$tabTag');
@@ -78,10 +81,14 @@ class NavigatorUtil {
       //         binding: GalleryBinding.fromItem(galleryItem),
       //       );
 
+      Get.lazyPut(
+        () => GalleryRepository(item: galleryItem, tabTag: tabTag),
+        tag: pageCtrlDepth,
+      );
+
       Get.toNamed(
         EHRoutes.galleryPage,
         preventDuplicates: false,
-        arguments: GalleryArg(item: galleryItem, tabTag: tabTag),
       );
     }
   }
@@ -101,7 +108,8 @@ class NavigatorUtil {
       //     },
       //   ),
       // );
-      Get.offNamed(EHRoutes.galleryPage, arguments: GalleryArg(url: url));
+      Get.offNamed(EHRoutes.galleryPage,
+          arguments: GalleryRepository(url: url));
     } else {
       Get.to(
         const GalleryMainPage(),

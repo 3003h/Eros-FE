@@ -258,6 +258,18 @@ class GalleryDetailParser {
         .group(1);
     galleryItem.rating = double.parse(_rating);
 
+    //
+    final String ratPx =
+        document.querySelector('#rating_image').attributes['style'];
+    final RegExp pxA = RegExp(r'-?(\d+)px\s+-?(\d+)px');
+    final RegExpMatch px = pxA.firstMatch(ratPx);
+
+    final double ratingFB = (80.0 - double.parse(px.group(1))) / 16.0 -
+        (px.group(2) == '21' ? 0.5 : 0.0);
+    galleryItem.ratingFallBack = ratingFB;
+
+    logger.i('ratingFB $ratingFB');
+
     // 英语标题
     galleryItem.englishTitle = document.querySelector('#gn').text;
 
