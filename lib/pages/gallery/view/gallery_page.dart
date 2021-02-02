@@ -23,8 +23,8 @@ const double kHeaderHeight = 200.0 + 52;
 const double kPadding = 12.0;
 const double kHeaderPaddingTop = 12.0;
 
-class GalleryArg {
-  GalleryArg({this.tabTag, this.item, this.url});
+class GalleryRepository {
+  GalleryRepository({this.tabTag, this.item, this.url});
   final String tabTag;
   final GalleryItem item;
   final String url;
@@ -37,17 +37,6 @@ class GalleryMainPage extends StatelessWidget {
   Widget build(BuildContext context) {
     String tabTag;
     final GalleryPageController controller = Get.find(tag: pageCtrlDepth);
-    // 解析路由参数
-    final dynamic arguments = Get.arguments;
-    if (arguments is GalleryArg) {
-      tabTag = arguments.tabTag;
-
-      if (arguments.url != null && arguments.url.isNotEmpty) {
-        controller.fromUrl = true;
-      } else {
-        controller.galleryItem = arguments.item;
-      }
-    }
 
     final GalleryItem _item = controller.galleryItem;
     return CupertinoPageScaffold(

@@ -10,7 +10,11 @@ import 'package:get/get.dart';
 class GalleryBinding extends Bindings {
   @override
   void dependencies() {
-    Get.lazyPut(() => GalleryPageController(), tag: pageCtrlDepth);
+    Get.lazyPut(
+        () => GalleryPageController(
+              galleryRepository: Get.find(tag: pageCtrlDepth),
+            ),
+        tag: pageCtrlDepth);
 
     Get.lazyPut(() => CommentController(), tag: pageCtrlDepth);
 

@@ -107,7 +107,7 @@ class GalleryHeader extends StatelessWidget {
                               rating: galleryItem.rating,
                               ratingFB: galleryItem.ratingFallBack,
                               color: ThemeColors.colorRatingMap[
-                                  galleryItem.colorRating.trim()],
+                                  galleryItem.colorRating?.trim() ?? 'ir'],
                             ),
                             // 评分人次
                             Padding(
