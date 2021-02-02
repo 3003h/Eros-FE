@@ -268,7 +268,7 @@ class GalleryDetailParser {
         (px.group(2) == '21' ? 0.5 : 0.0);
     galleryItem.ratingFallBack = ratingFB;
 
-    logger.i('ratingFB $ratingFB');
+    // logger.i('ratingFB $ratingFB');
 
     // 英语标题
     galleryItem.englishTitle = document.querySelector('#gn').text;

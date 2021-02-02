@@ -3,7 +3,7 @@ description: ..
 
 publish_to: 'none' # Remove this line if you wish to publish to pub.dev
 
-version: 1.0.4+121
+version: 1.0.4+122
 
 environment:
   sdk: '>=2.10.0 <3.0.0'
@@ -179,6 +179,8 @@ dependencies:
   firebase_crashlytics: any
   firebase_performance: any
   dio_firebase_performance: ^0.3.0
+  pretty_dio_logger: ^1.1.1
+  dio_retry: ^0.1.9-beta
 
 
 

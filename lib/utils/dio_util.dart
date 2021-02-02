@@ -4,11 +4,14 @@ import 'package:dio/adapter.dart';
 import 'package:dio/dio.dart';
 import 'package:dio_firebase_performance/dio_firebase_performance.dart';
 import 'package:dio_http_cache/dio_http_cache.dart';
+import 'package:dio_retry/dio_retry.dart';
 import 'package:fehviewer/common/global.dart';
 import 'package:fehviewer/const/const.dart';
 import 'package:fehviewer/utils/time.dart';
 import 'package:fehviewer/utils/toast.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:logging/logging.dart' as logging;
+import 'package:pretty_dio_logger/pretty_dio_logger.dart';
 
 import 'logger.dart';
 
@@ -46,6 +49,29 @@ class HttpManager {
 
     _dio.interceptors.add(DioFirebasePerformanceInterceptor());
 
+    if (Global.inDebugMode) {
+      _dio.interceptors.add(PrettyDioLogger(
+        requestBody: true,
+        responseHeader: false,
+        responseBody: false,
+        maxWidth: 100,
+      ));
+    }
+
+    _dio.interceptors.add(RetryInterceptor(
+        dio: _dio..options.extra.addAll({DIO_CACHE_KEY_FORCE_REFRESH: true}),
+        logger: logging.Logger('Retry '),
+        options: RetryOptions(
+          retries: 3, // Number of retries before a failure
+          retryInterval:
+              const Duration(seconds: 1), // Interval between each retry
+          retryEvaluator: (error) =>
+              error.type != DioErrorType.CANCEL &&
+              error.type !=
+                  DioErrorType
+                      .RESPONSE, // Evaluating if a retry is necessary regarding the error. It is a good candidate for updating authentication token in case of a unauthorized error (be careful with concurrency though)
+        )));
+
     (_dio.httpClientAdapter as DefaultHttpClientAdapter).onHttpClientCreate =
         (HttpClient client) {
       final HttpClient httpClient = HttpClient();
@@ -57,13 +83,14 @@ class HttpManager {
     };
   }
 
-  final int connectTimeout = 20000;
+  final int connectTimeout = 10000;
   final int receiveTimeout = 10000;
 
   //单例模式
   static final Map<String, HttpManager> _instanceMap = <String, HttpManager>{};
 
   Dio _dio;
+  Dio get dio => _dio;
   BaseOptions _options;
 
   //单例模式，一个baseUrl只创建一次实例
