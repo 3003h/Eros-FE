@@ -8,9 +8,9 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 class PopularListTab extends GetView<PopularViewController> {
-  const PopularListTab({Key key, this.tabIndex, this.scrollController})
+  const PopularListTab({Key key, this.tabTag, this.scrollController})
       : super(key: key);
-  final String tabIndex;
+  final String tabTag;
   final ScrollController scrollController;
 
   @override
@@ -21,6 +21,7 @@ class PopularListTab extends GetView<PopularViewController> {
       physics: const AlwaysScrollableScrollPhysics(),
       slivers: <Widget>[
         CupertinoSliverNavigationBar(
+          transitionBetweenRoutes: false,
           largeTitle: Row(
             mainAxisSize: MainAxisSize.min,
             children: [
@@ -50,7 +51,7 @@ class PopularListTab extends GetView<PopularViewController> {
   }
 
   Widget _getGalleryList() {
-    return controller.obx((state) => getGalleryList(state, tabIndex),
+    return controller.obx((state) => getGalleryList(state, tabTag),
         onLoading: SliverFillRemaining(
           child: Container(
             alignment: Alignment.center,

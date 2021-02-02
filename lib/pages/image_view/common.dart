@@ -77,7 +77,7 @@ class GalleryPara {
 
         // paraImageLageInfoFromHtml
         final GalleryPreview _imageFromApi =
-            await Api.paraImageLageInfoFromHtml(_href, index: _index);
+            await Api.ftchImageInfo(_href, index: _index);
 
         _url = _imageFromApi.largeImageUrl;
 

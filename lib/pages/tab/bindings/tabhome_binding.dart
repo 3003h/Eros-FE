@@ -11,6 +11,7 @@ import 'package:get/get.dart';
 class TabHomeBinding extends Bindings {
   @override
   void dependencies() {
+    // logger.d('TabHomeBinding');
     Get.lazyPut(() => TabHomeController(), fenix: true);
     Get.lazyPut(() => PopularViewController(), fenix: true);
     Get.lazyPut(() => WatchedViewController(), fenix: true);

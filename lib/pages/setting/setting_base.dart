@@ -11,6 +11,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 
+const double kItemHeight = 50.0;
+
 /// 选择类型的设置项
 class SelectorSettingItem extends StatefulWidget {
   const SelectorSettingItem({
@@ -58,7 +60,7 @@ class _SelectorSettingItemState extends State<SelectorSettingItem> {
       child: Column(
         children: <Widget>[
           Container(
-            height: 54,
+            height: kItemHeight,
             alignment: Alignment.centerLeft,
             padding: const EdgeInsets.fromLTRB(20, 0, 20, 0),
             child: Row(
@@ -169,9 +171,9 @@ class _TextSwitchItemState extends State<TextSwitchItem> {
       child: Column(
         children: <Widget>[
           Container(
-            height: 54.0,
+            height: kItemHeight,
             alignment: Alignment.centerLeft,
-            padding: const EdgeInsets.fromLTRB(20, 0, 20, 0),
+            padding: const EdgeInsets.symmetric(horizontal: 20.0),
             child: Row(
               children: <Widget>[
                 if (widget.icon != null) widget.icon,
@@ -191,7 +193,7 @@ class _TextSwitchItemState extends State<TextSwitchItem> {
                           style: const TextStyle(
                               fontSize: 12.5,
                               color: CupertinoColors.systemGrey),
-                        ),
+                        ).paddingOnly(top: 2.0),
                     ]),
                 Expanded(
                   child: Container(),
@@ -230,7 +232,7 @@ class TextItem extends StatefulWidget {
     this.desc,
     this.onTap,
     Key key,
-    this.height = 54.0,
+    this.height = kItemHeight,
     this.hideLine = false,
   }) : super(key: key);
 
@@ -270,31 +272,26 @@ class _TextItemState extends State<TextItem> {
       child: Column(
         children: <Widget>[
           Container(
-            alignment: Alignment.center,
+            alignment: Alignment.centerLeft,
             height: widget.height,
-            padding: const EdgeInsets.fromLTRB(20, 0, 20, 0),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.start,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: <Widget>[
-                Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: <Widget>[
-                      Text(
-                        widget.title,
-                        style: const TextStyle(
-                          height: 1.0,
-                        ),
-                      ),
-                      Text(
-                        widget.desc,
-                        style: const TextStyle(
-                            fontSize: 12.5, color: CupertinoColors.systemGrey),
-                      ),
-                    ]),
-              ],
-            ),
+            padding: const EdgeInsets.symmetric(horizontal: 20),
+            child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisAlignment: MainAxisAlignment.start,
+                mainAxisSize: MainAxisSize.min,
+                children: <Widget>[
+                  Text(
+                    widget.title,
+                    style: const TextStyle(
+                      height: 1.0,
+                    ),
+                  ),
+                  Text(
+                    widget.desc,
+                    style: const TextStyle(
+                        fontSize: 12.5, color: CupertinoColors.systemGrey),
+                  ).paddingOnly(top: 2.0),
+                ]),
           ),
           if (!widget.hideLine)
             Divider(

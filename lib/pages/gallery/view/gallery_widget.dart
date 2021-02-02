@@ -34,11 +34,11 @@ class GalleryHeader extends StatelessWidget {
   const GalleryHeader({
     Key key,
     @required this.galleryItem,
-    @required this.tabIndex,
+    @required this.tabTag,
   }) : super(key: key);
 
   final GalleryItem galleryItem;
-  final Object tabIndex;
+  final Object tabTag;
 
   @override
   Widget build(BuildContext context) {
@@ -46,6 +46,8 @@ class GalleryHeader extends StatelessWidget {
       fontSize: 13,
       color: CupertinoDynamicColor.resolve(CupertinoColors.label, context),
     );
+
+    // logger.v('hero dtl => ${galleryItem.gid}_cover_$tabTag');
 
     return Container(
       margin: const EdgeInsets.all(kPadding),
@@ -58,8 +60,7 @@ class GalleryHeader extends StatelessWidget {
                 // 封面
                 CoverImage(
                   imageUrl: galleryItem.imgUrl,
-                  heroTag:
-                      '${galleryItem.gid}_${galleryItem.token}_cover_$tabIndex',
+                  heroTag: '${galleryItem.gid}_cover_$tabTag',
                 ),
                 Expanded(
                   child: Column(
@@ -102,8 +103,13 @@ class GalleryHeader extends StatelessWidget {
                           // ignore: prefer_const_literals_to_create_immutables
                           children: <Widget>[
                             // 评分
-                            GalleryRating(rating: galleryItem.rating),
-                            // 收藏次数
+                            GalleryRating(
+                              rating: galleryItem.rating,
+                              ratingFB: galleryItem.ratingFallBack,
+                              color: ThemeColors.colorRatingMap[
+                                  galleryItem.colorRating?.trim() ?? 'ir'],
+                            ),
+                            // 评分人次
                             Padding(
                               padding:
                                   const EdgeInsets.symmetric(horizontal: 4),
@@ -206,7 +212,7 @@ class CoveTinyImage extends StatelessWidget {
           width: 44,
           height: 44,
           fit: BoxFit.cover,
-          imageUrl: imgUrl,
+          imageUrl: imgUrl ?? '',
         ),
       ),
     );
@@ -267,7 +273,7 @@ class CoverImage extends StatelessWidget {
                               CupertinoColors.systemGrey5, context),
                         );
                       },
-                      imageUrl: imageUrl,
+                      imageUrl: imageUrl ?? '',
                       fit: BoxFit.cover,
                       httpHeaders: _httpHeaders,
                     ),
@@ -463,9 +469,13 @@ class GalleryRating extends StatelessWidget {
   const GalleryRating({
     Key key,
     this.rating,
+    this.ratingFB,
+    this.color,
   }) : super(key: key);
 
   final double rating;
+  final double ratingFB;
+  final Color color;
 
   @override
   Widget build(BuildContext context) {
@@ -478,8 +488,9 @@ class GalleryRating extends StatelessWidget {
         // 星星
         StaticRatingBar(
           size: 18.0,
-          rate: rating ?? 0,
+          rate: ratingFB ?? 0,
           radiusRatio: 1.5,
+          colorLight: color,
           colorDark: CupertinoDynamicColor.resolve(
               CupertinoColors.systemGrey3, context),
         ),

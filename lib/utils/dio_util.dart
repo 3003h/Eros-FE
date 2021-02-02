@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:dio/adapter.dart';
 import 'package:dio/dio.dart';
+import 'package:dio_firebase_performance/dio_firebase_performance.dart';
 import 'package:dio_http_cache/dio_http_cache.dart';
 import 'package:fehviewer/common/global.dart';
 import 'package:fehviewer/const/const.dart';
@@ -42,6 +43,8 @@ class HttpManager {
         ),
       ).interceptor);
     }
+
+    _dio.interceptors.add(DioFirebasePerformanceInterceptor());
 
     (_dio.httpClientAdapter as DefaultHttpClientAdapter).onHttpClientCreate =
         (HttpClient client) {
@@ -190,7 +193,7 @@ class HttpManager {
     } else if (e.type == DioErrorType.RESPONSE) {
       showToast('响应异常');
     } else if (e.type == DioErrorType.CANCEL) {
-      showToast('请求取消');
+      // showToast('请求取消');
     } else {
       showToast('网络好像出问题了');
     }

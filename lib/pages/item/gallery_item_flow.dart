@@ -3,8 +3,6 @@ import 'dart:ui';
 import 'package:fehviewer/const/theme_colors.dart';
 import 'package:fehviewer/models/galleryItem.dart';
 import 'package:fehviewer/pages/item/controller/galleryitem_controller.dart';
-import 'package:fehviewer/route/navigator_util.dart';
-import 'package:fehviewer/utils/logger.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -18,14 +16,14 @@ const double kWidth = 28.0;
 const double kHeight = 18.0;
 
 class GalleryItemFlow extends StatelessWidget {
-  GalleryItemFlow({@required this.tabIndex, this.galleryItem}) {
+  GalleryItemFlow({@required this.tabTag, this.galleryItem}) {
     Get.lazyPut(
-      () => GalleryItemController.initData(galleryItem, tabIndex: tabIndex),
+      () => GalleryItemController.initData(galleryItem, tabTag: tabTag),
       tag: galleryItem.gid,
     );
   }
 
-  final String tabIndex;
+  final String tabTag;
   final GalleryItem galleryItem;
   GalleryItemController get _galleryItemController =>
       Get.find(tag: galleryItem.gid);
@@ -75,7 +73,7 @@ class GalleryItemFlow extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
             Hero(
-              tag: '${galleryItem.gid}_${galleryItem.token}_cover_$tabIndex',
+              tag: '${galleryItem.gid}_cover_$tabTag',
               child: Container(
                 decoration: BoxDecoration(
                     // borderRadius: BorderRadius.circular(kRadius), //圆角
@@ -135,11 +133,7 @@ class GalleryItemFlow extends StatelessWidget {
       return GestureDetector(
         behavior: HitTestBehavior.opaque,
         child: container,
-        onTap: () {
-          logger.v(galleryItem.englishTitle);
-          NavigatorUtil.goGalleryPage(
-              galleryItem: galleryItem, tabIndex: tabIndex);
-        },
+        onTap: () => _galleryItemController.onTap(tabTag),
         onLongPress: _galleryItemController.onLongPress,
       );
     });

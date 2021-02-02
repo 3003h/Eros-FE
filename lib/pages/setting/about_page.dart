@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:fehviewer/common/global.dart';
 import 'package:fehviewer/common/service/ehconfig_service.dart';
 import 'package:fehviewer/common/service/theme_service.dart';
 import 'package:fehviewer/generated/l10n.dart';
@@ -40,9 +41,9 @@ class ListViewAbout extends StatelessWidget {
       child: ListView(
         children: <Widget>[
           Egg(
-            child: const TextItem(
-              'FEhViewer',
-              desc: '一个兴趣使然的e-hentai客户端',
+            child: TextItem(
+              '${Global.packageInfo.appName} ',
+              desc: ' 一个兴趣使然的e-hentai客户端',
               onTap: null,
             ),
             onTrigger: (int tapNum, int neededNum) {
@@ -60,6 +61,12 @@ class ListViewAbout extends StatelessWidget {
                 }
               }
             },
+          ),
+          TextItem(
+            'Version',
+            desc:
+                '${Global.packageInfo.version}(${Global.packageInfo.buildNumber})',
+            onTap: null,
           ),
           TextItem(
             '作者',

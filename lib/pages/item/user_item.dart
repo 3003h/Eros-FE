@@ -142,7 +142,7 @@ class UserWidget extends GetView<UserController> {
     if (controller.isLogin && _avatarUrl.isNotEmpty) {
       return ClipOval(
         child: CachedNetworkImage(
-          imageUrl: _avatarUrl,
+          imageUrl: _avatarUrl ?? '',
           width: kAvatarSize,
           height: kAvatarSize,
           fit: BoxFit.cover,

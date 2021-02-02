@@ -10,5 +10,6 @@
   "width": 2.0,
   "largeImageHeight": 2000.0,
   "largeImageWidth": 1280.0,
-  "offSet" : 200.0
+  "offSet" : 200.0,
+  "sourceId": "1234"
 }

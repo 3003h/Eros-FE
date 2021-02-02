@@ -18,6 +18,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_downloader/flutter_downloader.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:logger/logger.dart';
+import 'package:package_info/package_info.dart';
 import 'package:path/path.dart';
 import 'package:path_provider/path_provider.dart';
 
@@ -46,6 +47,8 @@ class Global {
   static String appDocPath;
   static String tempPath;
 
+  static PackageInfo packageInfo;
+
   static bool isDBinappSupportPath = false;
 
   // 网络缓存对象
@@ -54,7 +57,8 @@ class Global {
   // init
   static Future<void> init() async {
     // 运行初始
-    WidgetsFlutterBinding.ensureInitialized();
+    // WidgetsFlutterBinding.ensureInitialized();
+    // await Firebase.initializeApp();
 
     // 判断是否debug模式
     inDebugMode = EHUtils().isInDebugMode;
@@ -75,6 +79,8 @@ class Global {
     appSupportPath = (await getApplicationSupportDirectory()).path;
     appDocPath = (await getApplicationDocumentsDirectory()).path;
     tempPath = (await getTemporaryDirectory()).path;
+
+    packageInfo = await PackageInfo.fromPlatform();
 
     logger.d('doc $appDocPath \napps $appSupportPath \ntemp $tempPath');
 
