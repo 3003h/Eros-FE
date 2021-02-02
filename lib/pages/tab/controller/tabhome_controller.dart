@@ -34,7 +34,7 @@ class TabPages {
 
   Map<String, Widget> get tabViews => <String, Widget>{
         EHRoutes.popular: PopularListTab(
-          tabIndex: EHRoutes.popular,
+          tabTag: EHRoutes.popular,
           scrollController: _scrollController(EHRoutes.popular),
         ),
         EHRoutes.watched: WatchedListTab(
@@ -42,15 +42,15 @@ class TabPages {
           scrollController: _scrollController(EHRoutes.watched),
         ),
         EHRoutes.gallery: GalleryListTab(
-          tabIndex: EHRoutes.gallery,
+          tabTag: EHRoutes.gallery,
           scrollController: _scrollController(EHRoutes.gallery),
         ),
         EHRoutes.favorite: FavoriteTab(
-          tabIndex: EHRoutes.favorite,
+          tabTag: EHRoutes.favorite,
           scrollController: _scrollController(EHRoutes.favorite),
         ),
         EHRoutes.history: HistoryTab(
-          tabIndex: EHRoutes.history,
+          tabTag: EHRoutes.history,
           scrollController: _scrollController(EHRoutes.history),
         ),
         EHRoutes.download: DownloadTab(

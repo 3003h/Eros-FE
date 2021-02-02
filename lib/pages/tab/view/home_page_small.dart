@@ -15,9 +15,10 @@ class TabHomeSmall extends GetView<TabHomeController> {
             onTap: controller.onTap,
           ),
           tabBuilder: (BuildContext context, int index) {
-            // return controller.pageList[index];
+            // return controller.viewList[index];
             return CupertinoTabView(
               builder: (BuildContext context) {
+                // logger.d('build CupertinoTabView');
                 return controller.viewList[index];
               },
             );

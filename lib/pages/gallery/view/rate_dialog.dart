@@ -14,8 +14,7 @@ class RateView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final RateController controller = Get.find(tag: pageCtrlDepth);
-    // final RateController controller =
-    //     Get.put(RateController(), tag: pageCtrlDepth);
+    logger.d('controller.rate ${controller.rate}  ');
     return Container(
       height: 80,
       alignment: Alignment.center,
@@ -23,7 +22,7 @@ class RateView extends StatelessWidget {
         builder: (_, BoxConstraints constraints) {
           return Container(
             child: RatingBar.builder(
-              initialRating: controller.rate,
+              initialRating: ((controller.rate ?? 0) * 2).round() / 2.0,
               minRating: 0.5,
               glow: false,
               direction: Axis.horizontal,
@@ -57,13 +56,11 @@ class RateView extends StatelessWidget {
   }
 }
 
-Future<void> showRateDialog() {
+Future<void> showRateDialog(BuildContext context) {
   final RateController controller = Get.find(tag: pageCtrlDepth);
-  // final RateController controller =
-  //     Get.put(RateController(), tag: pageCtrlDepth);
   return showCupertinoDialog<void>(
-      context: Get.overlayContext,
-      builder: (_) {
+      context: context,
+      builder: (BuildContext context) {
         return CupertinoAlertDialog(
           title: const Text('Rate'),
           content: Container(
@@ -71,17 +68,15 @@ Future<void> showRateDialog() {
           ),
           actions: <Widget>[
             CupertinoDialogAction(
-              child: Text(S.of(Get.overlayContext).cancel),
+              child: Text(S.of(context).cancel),
               onPressed: () {
-                // Get.delete<RateController>(tag: pageCtrlDepth);
                 Get.back();
               },
             ),
             CupertinoDialogAction(
-              child: Text(S.of(Get.overlayContext).ok),
+              child: Text(S.of(context).ok),
               onPressed: () {
                 controller.rating();
-                // Get.delete<RateController>(tag: pageCtrlDepth);
                 Get.back();
               },
             ),

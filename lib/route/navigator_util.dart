@@ -1,15 +1,11 @@
 import 'package:fehviewer/common/service/depth_service.dart';
-import 'package:fehviewer/common/service/layout_service.dart';
 import 'package:fehviewer/models/index.dart';
-import 'package:fehviewer/pages/gallery/bindings/gallery_page_binding.dart';
-import 'package:fehviewer/pages/gallery/controller/gallery_page_controller.dart';
 import 'package:fehviewer/pages/gallery/view/gallery_page.dart';
-import 'package:fehviewer/pages/image_view/controller/view_controller.dart';
-import 'package:fehviewer/pages/image_view/view/view_page.dart';
 import 'package:fehviewer/pages/tab/controller/gallery_controller.dart';
 import 'package:fehviewer/pages/tab/controller/search_page_controller.dart';
 import 'package:fehviewer/pages/tab/view/gallery_page.dart';
 import 'package:fehviewer/pages/tab/view/search_page.dart';
+import 'package:fehviewer/route/routes.dart';
 import 'package:fehviewer/utils/logger.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -43,47 +39,57 @@ class NavigatorUtil {
       Get.lazyPut(
         () => SearchPageController(initSearchText: _search),
         tag: searchPageCtrlDepth,
-        fenix: true,
       );
     }));
   }
 
   /// 转到画廊页面
   static void goGalleryPage(
-      {String url, String tabIndex, GalleryItem galleryItem}) {
+      {String url, String tabTag, GalleryItem galleryItem}) {
     Get.find<DepthService>().pushPageCtrl();
     if (url != null && url.isNotEmpty) {
       logger.d('goGalleryPage fromUrl');
-      Get.to(
-        const GalleryMainPage(),
-        transition: Transition.cupertino,
-        preventDuplicates: false,
-        binding: GalleryBinding.fromUrl(url),
+      Get.lazyPut(
+        () => GalleryRepository(url: url, tabTag: tabTag),
+        tag: pageCtrlDepth,
       );
-    } else {
-      logger.d('goGalleryPage fromItem');
-
       // Get.to(
-      //   const GalleryMainPage(),
+      //   GalleryMainPage(tabTag: tabTag),
       //   transition: Transition.cupertino,
       //   preventDuplicates: false,
-      //   binding: GalleryBinding.fromItem(tabIndex, galleryItem),
+      //   binding: GalleryBinding.fromUrl(url),
       // );
+      Get.toNamed(
+        EHRoutes.galleryPage,
+        preventDuplicates: false,
+      );
+    } else {
+      logger.d('goGalleryPage fromItem tabTag=$tabTag');
 
-      isLayoutLarge
-          ? Get.to(
-              const GalleryMainPage(),
-              id: 2,
-              transition: Transition.fadeIn,
-              preventDuplicates: false,
-              binding: GalleryBinding.fromItem(tabIndex, galleryItem),
-            )
-          : Get.to(
-              const GalleryMainPage(),
-              transition: Transition.cupertino,
-              preventDuplicates: false,
-              binding: GalleryBinding.fromItem(tabIndex, galleryItem),
-            );
+      // isLayoutLarge
+      //     ? Get.to(
+      //         GalleryMainPage(tabTag: tabTag),
+      //         id: 2,
+      //         transition: Transition.fadeIn,
+      //         preventDuplicates: false,
+      //         binding: GalleryBinding.fromItem(galleryItem),
+      //       )
+      //     : Get.to(
+      //         GalleryMainPage(tabTag: tabTag),
+      //         transition: Transition.cupertino,
+      //         preventDuplicates: false,
+      //         binding: GalleryBinding.fromItem(galleryItem),
+      //       );
+
+      Get.lazyPut(
+        () => GalleryRepository(item: galleryItem, tabTag: tabTag),
+        tag: pageCtrlDepth,
+      );
+
+      Get.toNamed(
+        EHRoutes.galleryPage,
+        preventDuplicates: false,
+      );
     }
   }
 
@@ -91,17 +97,19 @@ class NavigatorUtil {
     final DepthService depthService = Get.find();
     depthService.pushPageCtrl();
     if (url != null && url.isNotEmpty) {
-      Get.off(
-        const GalleryMainPage(),
-        binding: BindingsBuilder<dynamic>(
-          () {
-            Get.put(
-              GalleryPageController.initUrl(url: url),
-              tag: '${depthService.pageCtrlDepth}',
-            );
-          },
-        ),
-      );
+      // Get.off(
+      //   const GalleryMainPage(),
+      //   binding: BindingsBuilder<dynamic>(
+      //     () {
+      //       Get.put(
+      //         GalleryPageController.initUrl(url: url),
+      //         tag: '${depthService.pageCtrlDepth}',
+      //       );
+      //     },
+      //   ),
+      // );
+      Get.offNamed(EHRoutes.galleryPage,
+          arguments: GalleryRepository(url: url));
     } else {
       Get.to(
         const GalleryMainPage(),
@@ -124,7 +132,6 @@ class NavigatorUtil {
       Get.lazyPut(
         () => SearchPageController(searchType: searchType),
         tag: searchPageCtrlDepth,
-        fenix: true,
       );
     }));
   }
@@ -132,13 +139,6 @@ class NavigatorUtil {
   // 转到大图浏览
   static void goGalleryViewPage(int index, String gid) {
     logger.d('goGalleryViewPage $index');
-    Get.to(
-      const GalleryViewPage(),
-      transition: Transition.cupertino,
-      binding: BindingsBuilder<dynamic>(() {
-        // Get.lazyPut(() => ViewController(index));
-        Get.put(ViewController(index));
-      }),
-    );
+    Get.toNamed(EHRoutes.galleryView, arguments: index);
   }
 }

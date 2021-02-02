@@ -4,18 +4,20 @@ import 'package:fehviewer/common/controller/history_controller.dart';
 import 'package:fehviewer/common/controller/localfav_controller.dart';
 import 'package:fehviewer/common/service/depth_service.dart';
 import 'package:fehviewer/common/service/ehconfig_service.dart';
+import 'package:fehviewer/main.dart';
 import 'package:fehviewer/models/index.dart';
 import 'package:fehviewer/network/gallery_request.dart';
 import 'package:fehviewer/pages/gallery/controller/rate_controller.dart';
 import 'package:fehviewer/pages/gallery/controller/torrent_controller.dart';
+import 'package:fehviewer/pages/gallery/view/gallery_page.dart';
 import 'package:fehviewer/pages/image_view/controller/view_controller.dart';
 import 'package:fehviewer/pages/item/controller/galleryitem_controller.dart';
 import 'package:fehviewer/utils/logger.dart';
 import 'package:fehviewer/utils/time.dart';
 import 'package:fehviewer/utils/toast.dart';
+import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
-import 'package:meta/meta.dart';
 
 import 'archiver_controller.dart';
 import 'comment_controller.dart';
@@ -27,44 +29,73 @@ const double kHeaderPaddingTop = 12.0;
 
 class GalleryPageController extends GetxController
     with StateMixin<GalleryItem> {
-  GalleryPageController();
+  GalleryPageController({this.galleryRepository});
 
-  GalleryPageController.initUrl({@required String url}) {
-    galleryItem = GalleryItem()..url = url;
-    fromUrl = true;
+  final GalleryRepository galleryRepository;
+
+  // GalleryPageController.initUrl({@required String url}) {
+  //   galleryItem = GalleryItem()..url = url;
+  //   fromUrl = true;
+  // }
+  //
+  // GalleryPageController.fromItem({
+  //   @required this.galleryItem,
+  // }) : gid = galleryItem.gid;
+
+  /// 画廊数据对象
+  GalleryItem _galleryItem;
+
+  GalleryItem get galleryItem => _galleryItem;
+
+  set galleryItem(GalleryItem val) {
+    _galleryItem = val;
   }
 
-  GalleryPageController.fromItem({
-    @required this.galleryItem,
-    @required this.tabIndex,
-  }) : gid = galleryItem.gid;
-
   /// 画廊gid 唯一
-  String gid;
+  String get gid => galleryItem?.gid ?? '';
 
   bool isRefresh = false;
 
-  GalleryItemController _itemController;
-
   final RxBool _fromUrl = false.obs;
+
   bool get fromUrl => _fromUrl.value;
+
   set fromUrl(bool val) => _fromUrl.value = val;
 
   final RxBool _isRatinged = false.obs;
+
   bool get isRatinged => _isRatinged.value;
+
   set isRatinged(bool val) => _isRatinged.value = val;
 
-  void ratinged() {
+  // 评分后更新ui和数据
+  void ratinged({
+    double ratingUsr,
+    double ratingAvg,
+    int ratingCnt,
+    String colorRating,
+  }) {
     isRatinged = true;
     galleryItem.isRatinged = true;
-    _itemController.galleryItem.isRatinged = true;
+
+    galleryItem.ratingFallBack = ratingUsr;
+    galleryItem.rating = ratingAvg;
+    galleryItem.ratingCount = ratingCnt.toString();
+    galleryItem.colorRating = colorRating;
+    update(['header']);
+
+    _itemController.update();
   }
 
-  /// 画廊数据对象
-  GalleryItem galleryItem;
-  List<GalleryPreview> get previews => galleryItem.galleryPreview;
+  GalleryItemController get _itemController {
+    try {
+      return Get.find(tag: gid);
+    } catch (_) {
+      return null;
+    }
+  }
 
-  String tabIndex;
+  List<GalleryPreview> get previews => galleryItem.galleryPreview;
 
   String get showKey => galleryItem.showKey;
 
@@ -85,18 +116,19 @@ class GalleryPageController extends GetxController
   void onInit() {
     super.onInit();
 
-    // logger.d('GalleryPageController$pageCtrlDepth onInit');
+    logger.d('GalleryPageController$pageCtrlDepth onInit');
 
     scrollController.addListener(_scrollControllerLister);
     hideNavigationBtn = true;
 
-    if (!fromUrl) {
-      _itemController = Get.find(tag: gid);
-      // logger.d(
-      //     'isRatinged: i-${_itemController.galleryItem.isRatinged} p-${galleryItem.isRatinged}');
+    if (galleryRepository.url != null && galleryRepository.url.isNotEmpty) {
+      fromUrl = true;
+      galleryItem = GalleryItem()..url = galleryRepository.url;
+    } else {
+      _galleryItem = galleryRepository.item;
     }
 
-    _loadData();
+    _firstLoadData();
   }
 
   @override
@@ -117,6 +149,7 @@ class GalleryPageController extends GetxController
 
   // 阅读按钮开关
   final RxBool _enableRead = false.obs;
+
   bool get enableRead => _enableRead.value;
 
   bool get hasMorePreview {
@@ -127,11 +160,14 @@ class GalleryPageController extends GetxController
 
   // 控制隐藏导航栏按钮和封面
   final RxBool _hideNavigationBtn = true.obs;
+
   bool get hideNavigationBtn => _hideNavigationBtn.value;
+
   set hideNavigationBtn(bool val) => _hideNavigationBtn.value = val;
 
   // 第一页的缩略图对象数组
   List<GalleryPreview> _firstPagePreview;
+
   List<GalleryPreview> get firstPagePreview => _firstPagePreview;
 
   void setPreviewAfterRequest(List<GalleryPreview> galleryPreview) {
@@ -160,17 +196,26 @@ class GalleryPageController extends GetxController
   /// 请求数据
   Future<GalleryItem> _fetchData({bool refresh = false}) async {
     await Future<void>.delayed(const Duration(milliseconds: 200));
-    // logger.d('fetch data refresh:$refresh');
+    logger.d('fetch data refresh:$refresh');
     try {
       hideNavigationBtn = true;
+
+      if (galleryItem?.filecount == null ||
+          (galleryItem?.filecount?.isEmpty ?? true)) {
+        await Api.getMoreGalleryInfoOne(galleryItem, refresh: refresh);
+      }
 
       // 检查画廊是否包含在本地收藏中
       final bool _localFav = _isInLocalFav(galleryItem.gid);
       galleryItem.localFav = _localFav;
 
-      if (galleryItem.filecount == null || galleryItem.filecount.isEmpty) {
-        await Api.getMoreGalleryInfoOne(galleryItem, refresh: refresh);
-      }
+      // logger.d('colorRating i-[${_itemController?.galleryItem?.colorRating}] '
+      //     ' p-[${galleryItem.colorRating}]');
+
+      final String _oriColorRating = galleryItem.colorRating;
+      final String _oriRatingCount = galleryItem.ratingCount;
+      final double _oriRatingFallBack = galleryItem.ratingFallBack;
+      final bool _oriIsRatinged = galleryItem.isRatinged;
 
       time.showTime('start get galleryItem');
       galleryItem = await Api.getGalleryDetail(
@@ -183,20 +228,27 @@ class GalleryPageController extends GetxController
       currentPreviewPage = 0;
       setPreviewAfterRequest(galleryItem.galleryPreview);
 
-      /// 控制器更新
+      // logger.d('ratingCount ${galleryItem.ratingCount} ');
+
       try {
+        // 页面内刷新时的处理
         if (refresh) {
-          // 收藏更新
+          // 收藏控制器状态更新
           final GalleryFavController _favController =
               Get.find(tag: pageCtrlDepth);
           _favController.setFav(galleryItem.favcat, galleryItem.favTitle);
 
-          // 评论更新
+          // 评论控制器状态数据更新
           Get.find<CommentController>(tag: pageCtrlDepth)
               .change(galleryItem.galleryComment);
 
           // 评分状态更新
           isRatinged = galleryItem.isRatinged;
+        } else {
+          galleryItem.ratingFallBack ??= _oriRatingFallBack;
+          galleryItem.ratingCount ??= _oriRatingCount;
+          galleryItem.colorRating = _oriColorRating;
+          galleryItem.isRatinged = _oriIsRatinged;
         }
       } catch (_) {}
 
@@ -209,7 +261,12 @@ class GalleryPageController extends GetxController
         });
       }
 
+      logger.d('fb ${galleryItem.ratingFallBack} ');
+
+      // logger.d('ratingCount ${galleryItem.ratingCount} ');
+
       update(['header']);
+      _itemController?.update([gid]);
       return galleryItem;
     } on DioError catch (e) {
       if (e.type == DioErrorType.RESPONSE && e.response.statusCode == 404) {
@@ -229,17 +286,23 @@ class GalleryPageController extends GetxController
   //   galleryItem.showKey = _showKey;
   // }
 
-  Future<void> _loadData({bool refresh = false, bool showError = true}) async {
+  Future<void> _firstLoadData(
+      {bool refresh = false, bool showError = true}) async {
     try {
-      final GalleryItem value = await _fetchData(refresh: refresh);
-      change(value, status: RxStatus.success());
+      final GalleryItem _fetchItem = await _fetchData(refresh: refresh);
+      change(_fetchItem, status: RxStatus.success());
       time.showTime('change end');
       _enableRead.value = true;
-      // logger
-      //     .d('${galleryItem.isRatinged} value.isRatinged:${value.isRatinged}');
-      isRatinged = (galleryItem.isRatinged ?? false) ||
-          value.isRatinged ||
-          (_itemController?.galleryItem?.isRatinged ?? false);
+      // isRatinged = (galleryItem?.isRatinged ?? false) ||
+      //     (_fetchItem?.isRatinged ?? false) ||
+      //     (_itemController?.galleryItem?.isRatinged ?? false);
+
+      await analytics.logViewItem(
+        itemId: galleryItem.gid,
+        itemName: galleryItem.englishTitle,
+        itemCategory: galleryItem.category,
+        destination: galleryItem.japaneseTitle,
+      );
     } catch (err, stack) {
       logger.e('$err\n$stack');
       if (showError) {
@@ -255,7 +318,7 @@ class GalleryPageController extends GetxController
     } catch (e) {
       logger.e('$e');
     }
-    await _loadData(refresh: true, showError: false);
+    await _firstLoadData(refresh: true, showError: false);
   }
 
   Future<void> handOnRefresh() async {
@@ -281,32 +344,36 @@ class GalleryPageController extends GetxController
   }
 
   void _scrollControllerLister() {
-    if (scrollController.offset < kHeaderHeight + kHeaderPaddingTop &&
-        !hideNavigationBtn) {
-      hideNavigationBtn = true;
-    } else if (scrollController.offset >= kHeaderHeight + kHeaderPaddingTop &&
-        hideNavigationBtn) {
-      hideNavigationBtn = false;
-    }
+    try {
+      if (scrollController.offset < kHeaderHeight + kHeaderPaddingTop &&
+          !hideNavigationBtn) {
+        hideNavigationBtn = true;
+      } else if (scrollController.offset >= kHeaderHeight + kHeaderPaddingTop &&
+          hideNavigationBtn) {
+        hideNavigationBtn = false;
+      }
+    } catch (_) {}
   }
 
   // 另一个语言的标题
   String get topTitle {
+    // logger.d('${galleryItem.japaneseTitle} ${galleryItem.englishTitle}');
+
     if (_ehConfigService.isJpnTitle.value &&
-        (galleryItem.japaneseTitle?.isNotEmpty ?? false)) {
-      return galleryItem.englishTitle;
+        (galleryItem?.japaneseTitle?.isNotEmpty ?? false)) {
+      return galleryItem?.englishTitle ?? '';
     } else {
-      return galleryItem.japaneseTitle;
+      return galleryItem?.japaneseTitle ?? '';
     }
   }
 
   // 根据设置的语言显示的标题
   String get title {
     if (_ehConfigService.isJpnTitle.value &&
-        (galleryItem.japaneseTitle?.isNotEmpty ?? false)) {
-      return galleryItem.japaneseTitle;
+        (galleryItem?.japaneseTitle?.isNotEmpty ?? false)) {
+      return galleryItem?.japaneseTitle ?? '';
     } else {
-      return galleryItem.englishTitle;
+      return galleryItem?.englishTitle ?? '';
     }
   }
 
@@ -405,21 +472,22 @@ class GalleryPageController extends GetxController
     isImageInfoGeting = false;
   }
 
-  /// 获取当前页的图片地址 宽高信息
+  /// 获取当前页的图片url 宽高信息
   Future<GalleryPreview> getImageInfo(
     int index, {
     CancelToken cancelToken,
+    bool refresh,
+    bool changeSource = false,
   }) async {
     // 数据获取处理
     try {
-      await _lazyGetImageHref(cancelToken: cancelToken, index: index);
+      await _lazyGetImageHref(
+        cancelToken: cancelToken,
+        index: index,
+      );
     } catch (e, stack) {
       logger.e('$e \n $stack');
     }
-
-    // if (showKey == null) {
-    //   await getShowKey(index: index);
-    // }
 
     try {
       final GalleryPreview _curPreview = galleryItem.galleryPreview[index];
@@ -431,14 +499,26 @@ class GalleryPageController extends GetxController
           _curPreview.largeImageWidth != null) {
         return galleryItem.galleryPreview[index];
       } else {
+        final _sourceId =
+            changeSource ? galleryItem.galleryPreview[index].sourceId : '';
+
         // paraImageLageInfoFromHtml
-        final GalleryPreview _preview = await Api.paraImageLageInfoFromHtml(
-            galleryItem.galleryPreview[index].href,
-            index: index);
+        final GalleryPreview _preview = await Api.ftchImageInfo(
+          galleryItem.galleryPreview[index].href,
+          index: index,
+          refresh: refresh,
+          sourceId: _sourceId,
+        );
+
+        if (changeSource) {
+          logger.d('changeSource ${_preview.largeImageUrl}');
+        }
+
         return _preview;
       }
     } catch (e, stack) {
       logger.e('$e \n $stack');
+      FirebaseCrashlytics.instance.recordError(e, stack);
       rethrow;
     }
   }

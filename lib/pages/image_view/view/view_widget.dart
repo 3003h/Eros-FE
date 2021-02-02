@@ -34,8 +34,10 @@ class _GalleryImageState extends State<GalleryImage> {
   void initState() {
     super.initState();
     _pageController = Get.find(tag: pageCtrlDepth);
-    _future = _pageController.getImageInfo(widget.index,
-        cancelToken: _getMoreCancelToken);
+    _future = _pageController.getImageInfo(
+      widget.index,
+      cancelToken: _getMoreCancelToken,
+    );
   }
 
   @override
@@ -49,17 +51,31 @@ class _GalleryImageState extends State<GalleryImage> {
     final GalleryPreview _currentPreview =
         _pageController.galleryItem.galleryPreview[widget.index];
 
+    // 重载当前图片
+    Future<void> _reloadImage() async {
+      try {
+        await CachedNetworkImage.evictFromCache(
+            _currentPreview.largeImageUrl ?? '');
+      } catch (_) {}
+
+      _currentPreview.largeImageUrl = null;
+
+      setState(() {
+        _future = _pageController.getImageInfo(
+          widget.index,
+          cancelToken: _getMoreCancelToken,
+          refresh: true,
+          changeSource: true,
+        );
+      });
+    }
+
     return GestureDetector(
       behavior: HitTestBehavior.opaque,
       onLongPress: () {
         logger.d('long press');
 
-        showImageSheet(context, _currentPreview.largeImageUrl, () {
-          setState(() {
-            _future = _pageController.getImageInfo(widget.index,
-                cancelToken: _getMoreCancelToken);
-          });
-        });
+        showImageSheet(context, _currentPreview.largeImageUrl, _reloadImage);
       },
       child: FutureBuilder<GalleryPreview>(
         future: _future,
@@ -67,15 +83,21 @@ class _GalleryImageState extends State<GalleryImage> {
           if (_currentPreview.largeImageUrl == null ||
               _currentPreview.largeImageHeight == null) {
             if (previewFromApi.connectionState == ConnectionState.done) {
+              String _errInfo = '';
+              // 获取图片url等信息 异常
               if (previewFromApi.hasError) {
-                // todo 加载异常
                 logger.e(' ${previewFromApi.error}');
+                if (previewFromApi.error is DioError) {
+                  DioError dioErr = previewFromApi.error as DioError;
+                  logger.e('${dioErr.error}');
+
+                  _errInfo = dioErr.type.toString();
+                }
                 return Container(
                   alignment: Alignment.center,
                   constraints: BoxConstraints(
                     maxHeight: context.width * 0.8,
                   ),
-                  // padding: const EdgeInsets.symmetric(vertical: 50),
                   child: Column(
                     mainAxisSize: MainAxisSize.min,
                     children: [
@@ -83,6 +105,12 @@ class _GalleryImageState extends State<GalleryImage> {
                         Icons.error,
                         size: 50,
                         color: Colors.red,
+                      ),
+                      Text(
+                        _errInfo,
+                        style: const TextStyle(
+                            fontSize: 10,
+                            color: CupertinoColors.secondarySystemBackground),
                       ),
                       Text(
                         '${widget.index + 1}',
@@ -93,12 +121,14 @@ class _GalleryImageState extends State<GalleryImage> {
                   ),
                 );
               } else {
+                // 更新状态 显示 CachedNetworkImage 组件
                 _currentPreview.largeImageUrl =
                     previewFromApi.data.largeImageUrl;
                 _currentPreview.largeImageHeight =
                     previewFromApi.data.largeImageHeight;
                 _currentPreview.largeImageWidth =
                     previewFromApi.data.largeImageWidth;
+                _currentPreview.sourceId = previewFromApi.data.sourceId;
 
                 Future.delayed(const Duration(milliseconds: 100)).then((value) {
                   Get.find<ViewController>()
@@ -114,8 +144,6 @@ class _GalleryImageState extends State<GalleryImage> {
                     maxHeight: context.mediaQueryShortestSide,
                     minWidth: context.width / 2,
                   ),
-                  // margin:
-                  //     const EdgeInsets.symmetric(vertical: 50, horizontal: 50),
                   alignment: Alignment.center,
                   child: Column(
                     mainAxisSize: MainAxisSize.min,
@@ -128,7 +156,7 @@ class _GalleryImageState extends State<GalleryImage> {
                         ),
                       ),
                       const Text(
-                        '获取中...',
+                        'Loading...',
                         style: TextStyle(
                           color: CupertinoColors.systemGrey6,
                         ),
@@ -151,7 +179,7 @@ class _GalleryImageState extends State<GalleryImage> {
   Widget _buildImage(String url) {
     return Container(
       child: CachedNetworkImage(
-        imageUrl: url,
+        imageUrl: url ?? '',
         fit: BoxFit.contain,
         fadeInDuration: const Duration(milliseconds: 100),
         fadeOutDuration: const Duration(milliseconds: 100),

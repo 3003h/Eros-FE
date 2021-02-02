@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:ui';
 
 import 'package:fehviewer/common/controller/download_controller.dart';
@@ -13,6 +14,10 @@ import 'package:fehviewer/route/app_pages.dart';
 import 'package:fehviewer/route/routes.dart';
 import 'package:fehviewer/store/gallery_store.dart';
 import 'package:fehviewer/utils/logger.dart';
+import 'package:firebase_analytics/firebase_analytics.dart';
+import 'package:firebase_analytics/observer.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
@@ -29,8 +34,16 @@ import 'common/isolate/download.dart';
 import 'common/service/depth_service.dart';
 import 'common/service/layout_service.dart';
 
-void main() {
-  Global.init().then((_) {
+final FirebaseAnalytics analytics = FirebaseAnalytics();
+
+Future<void> main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await _initializeFlutterFire();
+  runZonedGuarded<Future<void>>(() async {
+    await Global.init();
+
+    await _initializeFlutterFire();
+
     Get.lazyPut(() => EhConfigService(), fenix: true);
     //LocaleController
     Get.lazyPut(() => LocaleService(), fenix: true);
@@ -56,11 +69,28 @@ void main() {
     Get.lazyPut(() => QuickSearchController(), fenix: true);
     Get.lazyPut(() => AdvanceSearchController(), fenix: true);
     Get.lazyPut(() => FavController(), fenix: true);
-
     runApp(MyApp());
-  }).catchError((e, stack) {
-    logger.e('$e \n $stack');
+  }, (Object error, StackTrace stackTrace) {
+    logger.e('runZonedGuarded: Caught error in my root zone.');
+    FirebaseCrashlytics.instance.recordError(error, stackTrace);
   });
+}
+
+Future<void> _initializeFlutterFire() async {
+  // Wait for Firebase to initialize
+  await Firebase.initializeApp();
+
+  // await FirebaseCrashlytics.instance
+  //     .setCrashlyticsCollectionEnabled(!Global.inDebugMode);
+  await FirebaseCrashlytics.instance.setCrashlyticsCollectionEnabled(true);
+
+  // Pass all uncaught errors to Crashlytics.
+  final Function originalOnError = FlutterError.onError;
+  FlutterError.onError = (FlutterErrorDetails errorDetails) async {
+    await FirebaseCrashlytics.instance.recordFlutterError(errorDetails);
+    // Forward to original handler.
+    originalOnError(errorDetails);
+  };
 }
 
 class MyApp extends StatefulWidget {
@@ -105,6 +135,7 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
 
   @override
   Widget build(BuildContext context) {
+    // logger.d(' MyApp build');
     Widget cupertinoApp({
       CupertinoThemeData theme,
       Locale locale,
@@ -112,6 +143,9 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
       return GetCupertinoApp(
         debugShowCheckedModeBanner: false,
         onGenerateTitle: (BuildContext context) => S.of(context).app_title,
+        navigatorObservers: [
+          FirebaseAnalyticsObserver(analytics: analytics),
+        ],
         getPages: AppPages.routes,
         defaultTransition: Transition.cupertino,
         initialRoute: EHRoutes.root,

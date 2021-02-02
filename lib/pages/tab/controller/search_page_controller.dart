@@ -2,19 +2,20 @@ import 'package:custom_pop_up_menu/custom_pop_up_menu.dart';
 import 'package:fehviewer/common/controller/quicksearch_controller.dart';
 import 'package:fehviewer/common/service/depth_service.dart';
 import 'package:fehviewer/common/service/ehconfig_service.dart';
+import 'package:fehviewer/main.dart';
 import 'package:fehviewer/models/entity/tag_translat.dart';
 import 'package:fehviewer/models/index.dart';
 import 'package:fehviewer/network/gallery_request.dart';
 import 'package:fehviewer/pages/tab/view/quick_search_page.dart';
 import 'package:fehviewer/utils/db_util.dart';
 import 'package:fehviewer/utils/logger.dart';
-import 'package:fehviewer/utils/toast.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
 import 'package:tuple/tuple.dart';
 
 import 'enum.dart';
 import 'favorite_controller.dart';
+import 'tabview_controller.dart';
 
 enum SearchType {
   normal,
@@ -27,8 +28,7 @@ enum ListType {
   tag,
 }
 
-class SearchPageController extends GetxController
-    with StateMixin<List<GalleryItem>> {
+class SearchPageController extends TabViewController {
   SearchPageController(
       {SearchType searchType = SearchType.normal, this.initSearchText}) {
     this.searchType = searchType;
@@ -51,14 +51,6 @@ class SearchPageController extends GetxController
   SearchType get searchType => _searchType.value;
   set searchType(SearchType val) => _searchType.value = val;
 
-  final RxInt _curPage = 0.obs;
-  int get curPage => _curPage.value;
-  set curPage(int val) => _curPage.value = val;
-
-  final Rx<PageState> _pageState = PageState.None.obs;
-  PageState get pageState => _pageState.value;
-  set pageState(PageState val) => _pageState.value = val;
-
   final Rx<ListType> _listType = ListType.tag.obs;
   ListType get listType => _listType.value;
   set listType(ListType val) => _listType.value = val;
@@ -68,7 +60,6 @@ class SearchPageController extends GetxController
 
   FocusNode focusNode = FocusNode();
 
-  int maxPage = 0;
   String _search = '';
 
   DateTime _lastInputCompleteAt; //上次输入完成时间
@@ -91,6 +82,8 @@ class SearchPageController extends GetxController
     if (_searchText.isNotEmpty) {
       _search = _searchText;
 
+      await analytics.logSearch(searchTerm: _search);
+
       change(state, status: RxStatus.loading());
       try {
         final List<GalleryItem> _list = await _fetchData(refresh: true);
@@ -112,6 +105,7 @@ class SearchPageController extends GetxController
 
   /// 延迟搜索
   Future<void> _delayedSearch() async {
+    logger.d(' _delayedSearch');
     const Duration _duration = Duration(milliseconds: 800);
     _lastInputCompleteAt = DateTime.now();
     await Future<void>.delayed(_duration);
@@ -150,6 +144,7 @@ class SearchPageController extends GetxController
   }
 
   /// 加载更多
+  @override
   Future<void> loadDataMore({bool cleanSearch = false}) async {
     if (pageState == PageState.Loading) {
       return;
@@ -171,7 +166,7 @@ class SearchPageController extends GetxController
       final Tuple2<List<GalleryItem>, int> tuple =
           searchType != SearchType.favorite
               ? await Api.getGallery(
-                  page: curPage + 1,
+                  page: curPage.value + 1,
                   fromGid: fromGid,
                   cats: _catNum,
                   serach: _search,
@@ -179,7 +174,7 @@ class SearchPageController extends GetxController
                   refresh: true,
                 )
               : await Api.getFavorite(
-                  page: curPage + 1,
+                  page: curPage.value + 1,
                   favcat: _favoriteViewController.curFavcat,
                   serach: _search,
                   refresh: true,
@@ -202,7 +197,7 @@ class SearchPageController extends GetxController
   Future<List<GalleryItem>> _fetchData({bool refresh = false}) async {
     final int _catNum = _ehConfigService.catFilter.value;
 
-    logger.v('_loadDataFirst');
+    // logger.v('_loadDataFirst');
 
     final Tuple2<List<GalleryItem>, int> tuple =
         searchType != SearchType.favorite
@@ -223,7 +218,8 @@ class SearchPageController extends GetxController
   }
 
   /// 从指定页数开始
-  Future<void> _loadFromPage(int page) async {
+  @override
+  Future<void> loadFromPage(int page) async {
     logger.v('jump to page =>  $page');
 
     final int _catNum = _ehConfigService.catFilter.value;
@@ -244,86 +240,18 @@ class SearchPageController extends GetxController
                 serach: _search,
                 refresh: true,
               );
-    curPage = page;
+    curPage.value = page;
     change(tuple.item1, status: RxStatus.success());
-  }
-
-  /// 页码跳转的控制器
-  final TextEditingController _pageController = TextEditingController();
-
-  /// 跳转页码
-  Future<void> jumpToPage() async {
-    void _jump() {
-      final String _input = _pageController.text.trim();
-
-      if (_input.isEmpty) {
-        showToast('输入为空');
-      }
-
-      // 数字检查
-      if (!RegExp(r'(^\d+$)').hasMatch(_input)) {
-        showToast('输入格式有误');
-      }
-
-      final int _toPage = int.parse(_input) - 1;
-      if (_toPage >= 0 && _toPage <= maxPage) {
-        FocusScope.of(Get.context).requestFocus(FocusNode());
-        _loadFromPage(_toPage);
-        Get.back();
-      } else {
-        showToast('输入范围有误');
-      }
-    }
-
-    return showCupertinoDialog<void>(
-      context: Get.overlayContext,
-      // barrierDismissible: false, // user must tap button!
-      builder: (BuildContext context) {
-        return CupertinoAlertDialog(
-          title: const Text('页面跳转'),
-          content: Container(
-            child: Column(
-              children: <Widget>[
-                Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Text('跳转范围 1~$maxPage'),
-                ),
-                CupertinoTextField(
-                  controller: _pageController,
-                  autofocus: true,
-                  keyboardType: TextInputType.number,
-                  onEditingComplete: () {
-                    // 点击键盘完成
-                    // 画廊跳转
-                    _jump();
-                  },
-                )
-              ],
-            ),
-          ),
-          actions: <Widget>[
-            CupertinoDialogAction(
-              child: const Text('取消'),
-              onPressed: () {
-                Get.back();
-              },
-            ),
-            CupertinoDialogAction(
-              child: const Text('确定'),
-              onPressed: () {
-                // 画廊跳转
-                _jump();
-              },
-            ),
-          ],
-        );
-      },
-    );
   }
 
   @override
   void onInit() {
+    fetchNormal = Api.getGallery;
     super.onInit();
+  }
+
+  @override
+  Future<void> firstLoad() async {
     searchTextController.addListener(_delayedSearch);
     if (initSearchText != null && initSearchText.trim().isNotEmpty) {
       logger.d('$searchText');

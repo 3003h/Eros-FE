@@ -10,15 +10,14 @@ import 'package:dns_client/dns_client.dart';
 import 'package:enum_to_string/enum_to_string.dart';
 import 'package:fehviewer/common/controller/advance_search_controller.dart';
 import 'package:fehviewer/common/global.dart';
-import 'package:fehviewer/common/parser/archiver_parser.dart';
-import 'package:fehviewer/common/parser/gallery_detail_parser.dart';
-import 'package:fehviewer/common/parser/gallery_list_parser.dart';
+import 'package:fehviewer/common/parser/eh_parser.dart';
 import 'package:fehviewer/common/service/ehconfig_service.dart';
 import 'package:fehviewer/const/const.dart';
 import 'package:fehviewer/generated/l10n.dart';
 import 'package:fehviewer/models/galleryItem.dart';
 import 'package:fehviewer/models/index.dart';
 import 'package:fehviewer/pages/gallery/controller/archiver_controller.dart';
+import 'package:fehviewer/pages/gallery/controller/torrent_controller.dart';
 import 'package:fehviewer/pages/tab/controller/search_page_controller.dart';
 import 'package:fehviewer/utils/dio_util.dart';
 import 'package:fehviewer/utils/https_proxy.dart';
@@ -99,8 +98,17 @@ class Api {
   }
 
   /// 获取热门画廊列表
-  static Future<Tuple2<List<GalleryItem>, int>> getPopular(
-      {bool refresh = false}) async {
+  static Future<Tuple2<List<GalleryItem>, int>> getPopular({
+    int page,
+    String fromGid,
+    String serach,
+    int cats,
+    bool refresh = false,
+    SearchType searchType = SearchType.normal,
+    CancelToken cancelToken,
+    String favcat,
+  }) async {
+    logger.d('getPopular');
     const String url = '/popular';
 
     await CustomHttpsProxy.instance.init();
@@ -120,6 +128,7 @@ class Api {
         params: <String, dynamic>{
           'inline_set': 'dm_l',
         },
+        cancelToken: cancelToken,
       );
       return await GalleryListParser.parseGalleryList(response,
           refresh: refresh);
@@ -136,7 +145,11 @@ class Api {
     String serach,
     int cats,
     bool refresh = false,
+    SearchType searchType = SearchType.normal,
+    CancelToken cancelToken,
+    String favcat,
   }) async {
+    logger.d('getWatched');
     const String _url = '/watched';
     final Options _cacheOptions = getCacheOptions(forceRefresh: refresh);
 
@@ -185,6 +198,8 @@ class Api {
     int cats,
     bool refresh = false,
     SearchType searchType = SearchType.normal,
+    CancelToken cancelToken,
+    String favcat,
   }) async {
     final EhConfigService _ehConfigService = Get.find();
     final bool safeMode = _ehConfigService.isSafeMode.value;
@@ -244,8 +259,12 @@ class Api {
   static Future<Tuple2<List<GalleryItem>, int>> getFavorite({
     String favcat,
     int page,
-    bool refresh = false,
+    String fromGid,
     String serach,
+    int cats,
+    bool refresh = false,
+    SearchType searchType = SearchType.normal,
+    CancelToken cancelToken,
   }) async {
     final AdvanceSearchController _searchController = Get.find();
 
@@ -264,7 +283,7 @@ class Api {
 
     final Options _cacheOptions = getCacheOptions(forceRefresh: refresh);
 
-    logger.d('${params}');
+    // logger.d('${params}');
     await CustomHttpsProxy.instance.init();
     String response =
         await getHttpManager().get(url, options: _cacheOptions, params: params);
@@ -311,12 +330,13 @@ class Api {
   /// 获取画廊详细信息
   /// ?inline_set=ts_m 小图,40一页
   /// ?inline_set=ts_l 大图,20一页
-  /// hc=1#comments 显示全部评论
+  /// hc=1 显示全部评论
   /// nw=always 不显示警告
   static Future<GalleryItem> getGalleryDetail({
     String inUrl,
     GalleryItem inGalleryItem,
     bool refresh = false,
+    CancelToken cancelToken,
   }) async {
     /// 使用 inline_set 和 nw 参数会重定向，导致请求时间过长 默认不使用
     /// final String url = inUrl + '?hc=1&inline_set=ts_l&nw=always';
@@ -324,7 +344,6 @@ class Api {
 
     // 不显示警告的处理 cookie加上 nw=1
     // 在 url使用 nw=always 未解决 自动写入cookie 暂时搞不懂 先手动设置下
-    // todo 待优化
     final PersistCookieJar cookieJar = await Api.cookieJar;
     final List<Cookie> cookies =
         cookieJar.loadForRequest(Uri.parse(Api.getBaseUrl()));
@@ -433,6 +452,18 @@ class Api {
     return torrentToken;
   }
 
+  // 获取 Torrent
+  static Future<TorrentProvider> getTorrent(
+    String url, {
+    bool refresh = true,
+  }) async {
+    final String response = await getHttpManager()
+        .get(url, options: getCacheOptions(forceRefresh: refresh));
+    // logger.d('$response');
+
+    return parseTorrent(response);
+  }
+
   // 获取 Archiver
   static Future<ArchiverProvider> getArchiver(
     String url, {
@@ -520,35 +551,42 @@ class Api {
     final HtmlUnescape unescape = HtmlUnescape();
 
     for (int i = 0; i < galleryItems.length; i++) {
+      // 标题
       galleryItems[i].englishTitle = unescape.convert(rultList[i]['title']);
+
+      // 日语标题
       galleryItems[i].japaneseTitle =
           unescape.convert(rultList[i]['title_jpn']);
 
+      // 详细评分
       final rating = rultList[i]['rating'];
       galleryItems[i].rating = rating != null
           ? double.parse(rating)
           : galleryItems[i].ratingFallBack;
 
+      // 封面图片
       final String thumb = rultList[i]['thumb'];
       galleryItems[i].imgUrlL = thumb;
-      /*final String imageUrl = thumb.endsWith('-jpg_l.jpg')
-          ? thumb.replaceFirst('-jpg_l.jpg', '-jpg_250.jpg')
-          : thumb;
 
-      galleryItems[i].imgUrl = imageUrl;*/
-
-      // logger.v('${rultList[i]["tags"]}');
-
+      // 文件数量
       galleryItems[i].filecount = rultList[i]['filecount'] as String;
+
+      // 上传者
       galleryItems[i].uploader = rultList[i]['uploader'] as String;
       galleryItems[i].category = rultList[i]['category'] as String;
+
+      // 标签
       final List<String> tags = List<String>.from(
           rultList[i]['tags'].map((e) => e as String).toList());
       galleryItems[i].tagsFromApi = tags;
 
+      // 大小
       galleryItems[i].filesize = rultList[i]['filesize'] as int;
+
+      // 种子数量
       galleryItems[i].torrentcount = rultList[i]['torrentcount'] as String;
 
+      // 种子列表
       final List<dynamic> torrents = rultList[i]['torrents'];
       galleryItems[i].torrents = <GalleryTorrent>[];
       torrents.forEach((element) {
@@ -560,16 +598,13 @@ class Api {
       if (tags.isNotEmpty) {
         galleryItems[i].translated = EHUtils.getLangeage(tags[0]) ?? '';
       }
-
-      // Global.logger
-      //     .v('${galleryItems[i].translated}   ${galleryItems[i].tagsFromApi}');
     }
 
     return galleryItems;
   }
 
   /// 画廊评分
-  static Future<void> setRating({
+  static Future<Map<String, dynamic>> setRating({
     @required String apikey,
     @required String apiuid,
     @required String gid,
@@ -589,6 +624,8 @@ class Api {
     await CustomHttpsProxy.instance.init();
     final rult = await getGalleryApi(reqJsonStr, refresh: true, cache: false);
     logger.d('$rult');
+    final Map<String, dynamic> rultMap = jsonDecode(rult.toString());
+    return rultMap;
   }
 
   static Future<CommitVoteRes> commitVote({
@@ -659,13 +696,14 @@ class Api {
     GalleryItem galleryItem, {
     bool refresh = false,
   }) async {
-    final RegExp urlRex = RegExp(r'http?s://e(-|x)hentai.org/g/(\d+)/(\w+)/?$');
+    final RegExp urlRex =
+        RegExp(r'(http?s://e(-|x)hentai.org)?/g/(\d+)/(\w+)/?$');
     logger.v(galleryItem.url);
     final RegExpMatch urlRult = urlRex.firstMatch(galleryItem.url);
-    logger.v(urlRult.groupCount);
+    // logger.v(urlRult.groupCount);
 
-    final String gid = urlRult.group(2);
-    final String token = urlRult.group(3);
+    final String gid = urlRult.group(3);
+    final String token = urlRult.group(4);
 
     galleryItem.gid = gid;
     galleryItem.token = token;
@@ -686,7 +724,7 @@ class Api {
     await CustomHttpsProxy.instance.init();
     final response = await getHttpManager(
       cache: cache,
-      baseUrl: EHConst.getBaseSite(),
+      // baseUrl: EHConst.getBaseSite(),
     ).postForm(
       url,
       data: req,
@@ -698,7 +736,8 @@ class Api {
 
   /// 分享图片
   static Future<void> shareImage(String imageUrl) async {
-    final CachedNetworkImage image = CachedNetworkImage(imageUrl: imageUrl);
+    final CachedNetworkImage image =
+        CachedNetworkImage(imageUrl: imageUrl ?? '');
     final DefaultCacheManager manager =
         image.cacheManager ?? DefaultCacheManager();
     final Map<String, String> headers = image.httpHeaders;
@@ -796,7 +835,8 @@ class Api {
       } else {
         /// 保存网络图片
         logger.d('保存网络图片');
-        final CachedNetworkImage image = CachedNetworkImage(imageUrl: imageUrl);
+        final CachedNetworkImage image =
+            CachedNetworkImage(imageUrl: imageUrl ?? '');
         final DefaultCacheManager manager =
             image.cacheManager ?? DefaultCacheManager();
         final Map<String, String> headers = image.httpHeaders;
@@ -892,13 +932,14 @@ class Api {
     return _rePreview;
   }
 
-  /// 由api获取画廊图片的信息
+  /// 获取画廊图片的信息
   /// [href] 爬取的页面地址 用来解析gid 和 imgkey
   /// [index] 索引
-  static Future<GalleryPreview> paraImageLageInfoFromHtml(
+  static Future<GalleryPreview> ftchImageInfo(
     String href, {
     int index,
     bool refresh,
+    String sourceId,
   }) async {
     final String url = href;
 
@@ -909,31 +950,20 @@ class Api {
       maxStale: const Duration(minutes: 1),
     );
 
+    final Map<String, dynamic> _params = {
+      if (sourceId != null && sourceId.trim().isNotEmpty) 'nl': sourceId,
+    };
+
     await CustomHttpsProxy.instance.init();
-    final String response = await Api.getHttpManager()
-        .get(url, options: getCacheOptions(forceRefresh: refresh));
+    final String response = await Api.getHttpManager().get(
+      url,
+      options: getCacheOptions(forceRefresh: refresh),
+      params: _params,
+    );
 
     // logger.d('$response ');
 
-    final RegExp regImageUrl = RegExp('<img[^>]*src=\"([^\"]+)\" style');
-    final String imageUrl = regImageUrl.firstMatch(response).group(1);
-
-    // logger.d('imageUrl $imageUrl');
-
-    final RegExpMatch _xy =
-        RegExp(r'::\s+(\d+)\s+x\s+(\d+)\s+::').firstMatch(response);
-    final double width = double.parse(_xy.group(1));
-    final double height = double.parse(_xy.group(2));
-
-//    logger.v('$imageUrl');
-
-    final GalleryPreview _rePreview = GalleryPreview()
-      ..largeImageUrl = imageUrl
-      ..ser = index + 1
-      ..largeImageWidth = width
-      ..largeImageHeight = height;
-
-    return _rePreview;
+    return paraImage(response)..ser = index + 1;
   }
 
   static Future<void> download(String url, String path) async {

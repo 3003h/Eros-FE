@@ -18,13 +18,14 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
 
 class FavoriteTab extends GetView<FavoriteViewController> {
-  const FavoriteTab({Key key, this.tabIndex, this.scrollController})
+  const FavoriteTab({Key key, this.tabTag, this.scrollController})
       : super(key: key);
-  final String tabIndex;
+  final String tabTag;
   final ScrollController scrollController;
 
   @override
   Widget build(BuildContext context) {
+    // logger.d(' FavoriteTab BuildContext');
     final UserController userController = Get.find();
     return CupertinoPageScaffold(
       child: Obx(() {
@@ -47,10 +48,8 @@ class FavoriteTab extends GetView<FavoriteViewController> {
       physics: const AlwaysScrollableScrollPhysics(),
       slivers: <Widget>[
         CupertinoSliverNavigationBar(
+          transitionBetweenRoutes: false,
           padding: const EdgeInsetsDirectional.only(end: 4),
-          // largeTitle: Obx(() => Text(
-          //       controller.title.value,
-          //     )),
           largeTitle: Row(
             mainAxisSize: MainAxisSize.min,
             children: [
@@ -81,7 +80,7 @@ class FavoriteTab extends GetView<FavoriteViewController> {
                 ),
                 onPressed: () {
                   final bool fromTabItem =
-                      Get.find<TabHomeController>().tabMap[tabIndex] ?? false;
+                      Get.find<TabHomeController>().tabMap[tabTag] ?? false;
                   NavigatorUtil.showSearch(
                       searchType: SearchType.favorite,
                       fromTabItem: fromTabItem);
@@ -130,7 +129,7 @@ class FavoriteTab extends GetView<FavoriteViewController> {
                   ),
                 ),
                 onPressed: () {
-                  controller.jumtToPage(context);
+                  controller.jumpToPage();
                 },
               ),
               _buildFavcatButton(context),
@@ -214,7 +213,7 @@ class FavoriteTab extends GetView<FavoriteViewController> {
         (List<GalleryItem> state) {
           return getGalleryList(
             state,
-            tabIndex,
+            tabTag,
             maxPage: controller.maxPage,
             curPage: controller.curPage.value,
             loadMord: controller.loadDataMore,

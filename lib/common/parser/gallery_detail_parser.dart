@@ -235,8 +235,10 @@ class GalleryDetailParser {
 
     final Element _ratingImage = document.querySelector('#rating_image');
     final String _ratingImageClass = _ratingImage.attributes['class'];
+    galleryItem.colorRating = _ratingImageClass ?? '';
+    // logger.d('${galleryItem.colorRating} ');
     galleryItem.isRatinged =
-        _ratingImageClass.contains(RegExp(r'"ir\s+ir[a-z]"'));
+        _ratingImageClass.contains(RegExp(r'ir(r|g|b|y)')) ?? false;
 
     // 收藏次数
     final String _favCount =
@@ -246,8 +248,39 @@ class GalleryDetailParser {
             );
     galleryItem.favoritedCount = _favCount;
 
+    // 评分人次
     final String _ratingCount = document.querySelector('#rating_count').text;
     galleryItem.ratingCount = _ratingCount;
+
+    // 平均分
+    final String _rating = RegExp(r'([\d.]+)')
+        .firstMatch(document.querySelector('#rating_label').text)
+        .group(1);
+    galleryItem.rating = double.parse(_rating);
+
+    //
+    final String ratPx =
+        document.querySelector('#rating_image').attributes['style'];
+    final RegExp pxA = RegExp(r'-?(\d+)px\s+-?(\d+)px');
+    final RegExpMatch px = pxA.firstMatch(ratPx);
+
+    final double ratingFB = (80.0 - double.parse(px.group(1))) / 16.0 -
+        (px.group(2) == '21' ? 0.5 : 0.0);
+    galleryItem.ratingFallBack = ratingFB;
+
+    logger.i('ratingFB $ratingFB');
+
+    // 英语标题
+    galleryItem.englishTitle = document.querySelector('#gn').text;
+
+    // 日语标题
+    galleryItem.japaneseTitle = document.querySelector('#gj').text;
+
+    final Element _elmTorrent =
+        document.querySelector('#gd5').children[2].children[1];
+    // 种子数量
+    galleryItem.torrentcount ??=
+        RegExp(r'\d+').firstMatch(_elmTorrent.text).group(0) ?? '0';
 
     final String _language = document
         .querySelector('#gdd > table > tbody > tr:nth-child(3) > td.gdt2')

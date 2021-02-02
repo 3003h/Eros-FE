@@ -213,8 +213,19 @@ class DownloadController extends GetxController {
       rethrow;
     }
 
+    final List<GalleryImageTask> _imageTasks =
+        await _imageTaskDao.findAllGalleryTaskByGid(galleryTask.gid);
+
     showToast('${galleryTask.gid} 下载任务已入队');
-    downloadManager.addTask(galleryTask: galleryTask);
+
+    final String _downloadPath = galleryTask.title;
+    _getGalleryDownloadPath(_downloadPath);
+
+    downloadManager.addTask(
+      galleryTask: galleryTask,
+      imageTasks: _imageTasks,
+      downloadPath: _downloadPath,
+    );
   }
 
   Future<List<GalleryPreview>> _getAllPreviews({
@@ -382,6 +393,25 @@ class DownloadController extends GetxController {
     final String _dirPath = GetPlatform.isAndroid
         ? path.join((await getExternalStorageDirectory()).path, 'Download')
         : path.join(Global.appDocPath, 'Download', 'Archiver');
+    // : Global.appDocPath;
+
+    final Directory savedDir = Directory(_dirPath);
+    // 判断下载路径是否存在
+    final bool hasExisted = savedDir.existsSync();
+    // 不存在就新建路径
+    if (!hasExisted) {
+      savedDir.createSync(recursive: true);
+    }
+
+    return _dirPath;
+  }
+
+  /// 获取下载路径
+  Future<String> _getGalleryDownloadPath(String custpath) async {
+    final String _dirPath = GetPlatform.isAndroid
+        ? path.join(
+            (await getExternalStorageDirectory()).path, 'Download', custpath)
+        : path.join(Global.appDocPath, 'Download', custpath);
     // : Global.appDocPath;
 
     final Directory savedDir = Directory(_dirPath);

@@ -1,3 +1,4 @@
+import 'package:fehviewer/common/global.dart';
 import 'package:fehviewer/common/service/depth_service.dart';
 import 'package:fehviewer/generated/l10n.dart';
 import 'package:fehviewer/models/index.dart';
@@ -22,13 +23,21 @@ const double kHeaderHeight = 200.0 + 52;
 const double kPadding = 12.0;
 const double kHeaderPaddingTop = 12.0;
 
-class GalleryMainPage extends StatelessWidget {
-  const GalleryMainPage({this.tag});
+class GalleryRepository {
+  GalleryRepository({this.tabTag, this.item, this.url});
+  final String tabTag;
+  final GalleryItem item;
+  final String url;
+}
 
-  final String tag;
+class GalleryMainPage extends StatelessWidget {
+  const GalleryMainPage();
+
   @override
   Widget build(BuildContext context) {
+    String tabTag;
     final GalleryPageController controller = Get.find(tag: pageCtrlDepth);
+
     final GalleryItem _item = controller.galleryItem;
     return CupertinoPageScaffold(
       child: CustomScrollView(
@@ -75,10 +84,10 @@ class GalleryMainPage extends StatelessWidget {
           CupertinoSliverRefreshControl(
             onRefresh: controller.handOnRefresh,
           ),
-          const SliverSafeArea(
+          SliverSafeArea(
             top: false,
             bottom: false,
-            sliver: GalleryContainer(),
+            sliver: GalleryContainer(tabTag: tabTag),
           ),
         ],
       ),
@@ -119,7 +128,10 @@ class NavigationBarImage extends StatelessWidget {
 class GalleryContainer extends StatelessWidget {
   const GalleryContainer({
     Key key,
+    this.tabTag,
   }) : super(key: key);
+
+  final String tabTag;
 
   @override
   Widget build(BuildContext context) {
@@ -136,7 +148,8 @@ class GalleryContainer extends StatelessWidget {
                 title: S.of(context).p_Rate,
                 onTap: state.apiuid?.isNotEmpty ?? false
                     ? () {
-                        showRateDialog();
+                        // logger.d(' showRateDialog');
+                        showRateDialog(context);
                       }
                     : null,
               )),
@@ -146,7 +159,7 @@ class GalleryContainer extends StatelessWidget {
           child: TextBtn(
             FontAwesomeIcons.solidArrowAltCircleDown,
             title: S.of(context).p_Download,
-            onTap: _controller.downloadGallery,
+            onTap: Global.inDebugMode ? _controller.downloadGallery : null,
           ),
         ),
         // 种子下载
@@ -154,7 +167,7 @@ class GalleryContainer extends StatelessWidget {
           child: TextBtn(
             FontAwesomeIcons.magnet,
             title: '${S.of(context).p_Torrent}(${state.torrentcount ?? 0})',
-            onTap: state.torrents.isNotEmpty
+            onTap: state.torrentcount != '0'
                 ? () async {
                     showTorrentDialog();
                   }
@@ -221,14 +234,13 @@ class GalleryContainer extends StatelessWidget {
 
     Widget fromItem() {
       final GalleryItem galleryItem = _controller.galleryItem;
-      final Object tabIndex = _controller.tabIndex;
 
       return SliverToBoxAdapter(
         child: Column(
           children: <Widget>[
             GalleryHeader(
               galleryItem: galleryItem,
-              tabIndex: tabIndex,
+              tabTag: tabTag,
             ),
             Divider(
               height: 0.5,
@@ -271,7 +283,7 @@ class GalleryContainer extends StatelessWidget {
                 children: <Widget>[
                   GalleryHeader(
                     galleryItem: state,
-                    tabIndex: '',
+                    tabTag: '',
                   ),
                   Divider(
                     height: 0.5,
