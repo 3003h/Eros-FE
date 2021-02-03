@@ -1,5 +1,5 @@
 import 'package:enum_to_string/enum_to_string.dart';
-import 'package:fehviewer/pages/image_view/controller/view_controller.dart';
+import 'package:fehviewer/pages/image_view/controller/view_state.dart';
 
 import '../index.dart';
 
