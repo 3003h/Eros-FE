@@ -20,7 +20,7 @@ import '../controller/view_controller.dart';
 class GalleryViewPage extends GetView<ViewController> {
   const GalleryViewPage({Key key}) : super(key: key);
 
-  ViewState get state => controller?.state;
+  ViewState get state => controller?.vState;
 
   /// 画廊图片大图浏览
   @override
@@ -247,7 +247,7 @@ class GalleryViewPage extends GetView<ViewController> {
                   onTap: () {
                     logger.v('tap share');
                     showShareActionSheet(Get.context,
-                        previews[controller.state.itemIndex].largeImageUrl);
+                        previews[controller.vState.itemIndex].largeImageUrl);
                   },
                   child: Container(
                     width: 40,
@@ -300,7 +300,7 @@ class GalleryViewPage extends GetView<ViewController> {
     return GetBuilder<ViewController>(
         id: '_buildPhotoViewGallery',
         builder: (ViewController controller) {
-          final state = controller.state;
+          final state = controller.vState;
           return ScrollablePositionedList.builder(
             itemScrollController: controller.itemScrollController,
             itemPositionsListener: controller.itemPositionsListener,
@@ -351,7 +351,7 @@ class GalleryViewPage extends GetView<ViewController> {
       id: '_buildPhotoViewGallery',
       builder: (ViewController controller) {
         // logger.d('lastPreviewLen ${controller.previews.length}');
-        final state = controller.state;
+        final state = controller.vState;
         controller.lastPreviewLen = state.previews.length;
 
         return Obx(
@@ -380,6 +380,7 @@ class GalleryViewPage extends GetView<ViewController> {
                                 text: '$indexLeft',
                                 child: GalleryImage(
                                   index: indexLeft,
+                                  fade: state.fade,
                                 ),
                               ),
                             ),
@@ -393,6 +394,7 @@ class GalleryViewPage extends GetView<ViewController> {
                                 text: '${indexLeft + 1}',
                                 child: GalleryImage(
                                   index: indexLeft + 1,
+                                  fade: state.fade,
                                 ),
                               ),
                             ),
@@ -410,12 +412,13 @@ class GalleryViewPage extends GetView<ViewController> {
                         text: '$pageIndex',
                         child: GalleryImage(
                           index: pageIndex,
+                          fade: state.fade,
                         ),
                       );
                     }
                   }(),
                 ),
-                initialScale: PhotoViewComputedScale.covered,
+                initialScale: PhotoViewComputedScale.contained,
                 minScale: PhotoViewComputedScale.contained * 1.0,
                 maxScale: PhotoViewComputedScale.covered * _maxScale,
               );

@@ -20,33 +20,34 @@ class ViewController extends GetxController {
   ViewController();
 
   // 状态
-  final ViewState state = ViewState();
+  final ViewState vState = ViewState();
 
   /// 切换单页双页模式
   void switchColumnMode() {
     VibrateUtil.light();
     logger.v('switchColumnMode');
-    switch (state.columnMode) {
+    switch (vState.columnMode) {
       case ColumnMode.single:
-        logger.d('switchColumnMode itemIndex:${state.itemIndex} to double odd');
-        state.columnMode = ColumnMode.odd;
-        pageController.jumpToPage(state.pageIndex);
+        logger
+            .d('switchColumnMode itemIndex:${vState.itemIndex} to double odd');
+        vState.columnMode = ColumnMode.odd;
+        pageController.jumpToPage(vState.pageIndex);
         break;
       case ColumnMode.odd:
         logger
-            .d('switchColumnMode itemIndex:${state.itemIndex} to double even');
-        state.columnMode = ColumnMode.even;
-        pageController.jumpToPage(state.pageIndex);
+            .d('switchColumnMode itemIndex:${vState.itemIndex} to double even');
+        vState.columnMode = ColumnMode.even;
+        pageController.jumpToPage(vState.pageIndex);
         break;
       case ColumnMode.even:
-        logger.d('switchColumnMode itemIndex:${state.itemIndex} to  single');
-        state.columnMode = ColumnMode.single;
+        logger.d('switchColumnMode itemIndex:${vState.itemIndex} to  single');
+        vState.columnMode = ColumnMode.single;
         Future.delayed(Duration.zero).then((_) {
-          final int _toIndex = state.pageIndex;
+          final int _toIndex = vState.pageIndex;
           pageController.jumpToPage(_toIndex);
           logger.d('pageIndex $_toIndex');
-          state.itemIndex = _toIndex;
-          state.sliderValue = _toIndex.toDouble();
+          vState.itemIndex = _toIndex;
+          vState.sliderValue = _toIndex.toDouble();
         });
 
         break;
@@ -74,34 +75,34 @@ class ViewController extends GetxController {
       Future.delayed(const Duration(milliseconds: 200))
           .then((_) => SystemChrome.setEnabledSystemUIOverlays([]));
 
-    logger.d('初始化page页码 ${state.pageIndex}');
-    final int _initialPage = state.pageIndex;
+    logger.d('初始化page页码 ${vState.pageIndex}');
+    final int _initialPage = vState.pageIndex;
 
     // 横屏模式pageview控制器初始化
     pageController =
         PageController(initialPage: _initialPage, viewportFraction: 1.1);
 
     // 竖屏模式初始页码
-    if (state.viewMode == ViewMode.vertical) {
-      loggerNoStack.v('竖屏模式初始页码: ${state.itemIndex}');
-      Future.delayed(const Duration(milliseconds: 200))
-          .then((value) => itemScrollController.jumpTo(index: state.itemIndex));
+    if (vState.viewMode == ViewMode.vertical) {
+      loggerNoStack.v('竖屏模式初始页码: ${vState.itemIndex}');
+      Future.delayed(const Duration(milliseconds: 200)).then(
+          (value) => itemScrollController.jumpTo(index: vState.itemIndex));
     }
 
     /// 初始预载
     /// 后续的预载触发放在翻页事件中
     final int _preload = _ehConfigService.preloadImage.value;
-    if (state.viewMode != ViewMode.vertical) {
+    if (vState.viewMode != ViewMode.vertical) {
       // 预载
       GalleryPara.instance.precacheImages(
         Get.context,
-        previews: state.previews,
-        index: state.itemIndex,
+        previews: vState.previews,
+        index: vState.itemIndex,
         max: _preload,
       );
     }
 
-    state.sliderValue = state.itemIndex / 1.0;
+    vState.sliderValue = vState.itemIndex / 1.0;
 
     logger.d('onInit() end');
   }
@@ -109,64 +110,64 @@ class ViewController extends GetxController {
   @override
   void onClose() {
     pageController.dispose();
-    state.getMoreCancelToken.cancel();
+    vState.getMoreCancelToken.cancel();
     SystemChrome.setEnabledSystemUIOverlays(SystemUiOverlay.values);
     super.onClose();
   }
 
   void handOnSliderChangedEnd(double value) {
-    state.itemIndex = value.round();
-    logger.d('slider to _itemIndex ${state.itemIndex}');
+    vState.itemIndex = value.round();
+    logger.d('slider to _itemIndex ${vState.itemIndex}');
 
     _galleryPageController
-        .showLoadingDialog(Get.context, state.itemIndex)
+        .showLoadingDialog(Get.context, vState.itemIndex)
         .then((_) {
-      if (state.viewMode != ViewMode.vertical) {
-        pageController.jumpToPage(state.pageIndex);
+      if (vState.viewMode != ViewMode.vertical) {
+        pageController.jumpToPage(vState.pageIndex);
       } else {
         Future.delayed(const Duration(milliseconds: 200)).then(
-            (value) => itemScrollController.jumpTo(index: state.itemIndex));
+            (value) => itemScrollController.jumpTo(index: vState.itemIndex));
       }
     });
   }
 
   void handOnSliderChanged(double value) {
-    state.sliderValue = value;
+    vState.sliderValue = value;
   }
 
   // 页码切换时的回调
   void handOnPageChanged(int pageIndex) {
     // 根据columnMode的不同设置不同的itemIndex值
-    switch (state.columnMode) {
+    switch (vState.columnMode) {
       case ColumnMode.single:
-        state.itemIndex = pageIndex;
+        vState.itemIndex = pageIndex;
         break;
       case ColumnMode.odd:
-        state.itemIndex = pageIndex * 2;
+        vState.itemIndex = pageIndex * 2;
         break;
       case ColumnMode.even:
         final int index = pageIndex * 2 - 1;
-        state.itemIndex = index > 0 ? index : 0;
+        vState.itemIndex = index > 0 ? index : 0;
         break;
     }
 
     logger.d(
-        '页码切换时的回调 handOnPageChanged  pageIndex:$pageIndex itemIndex${state.itemIndex}');
+        '页码切换时的回调 handOnPageChanged  pageIndex:$pageIndex itemIndex${vState.itemIndex}');
 
     // 预载图片
     GalleryPara.instance.precacheImages(
       Get.context,
       previews: _galleryPageController.previews,
-      index: state.itemIndex,
+      index: vState.itemIndex,
       max: _ehConfigService.preloadImage.value,
     );
     // logger.d('itemIndex $itemIndex  ${itemIndex.toDouble()}');
-    if (state.itemIndex >= state.filecount - 1) {
-      state.sliderValue = (state.filecount - 1).toDouble();
-    } else if (state.itemIndex < 0) {
-      state.sliderValue = 1.0;
+    if (vState.itemIndex >= vState.filecount - 1) {
+      vState.sliderValue = (vState.filecount - 1).toDouble();
+    } else if (vState.itemIndex < 0) {
+      vState.sliderValue = 1.0;
     } else {
-      state.sliderValue = state.itemIndex.toDouble();
+      vState.sliderValue = vState.itemIndex.toDouble();
     }
 
     // logger.d('handOnPageChanged  end');
@@ -176,22 +177,22 @@ class ViewController extends GetxController {
   Future<void> handOnTapCent() async {
     if (GetPlatform.isIOS) {
       // 会rebuild GalleryViewPage
-      if (!state.showBar) {
+      if (!vState.showBar) {
         await SystemChrome.setEnabledSystemUIOverlays(SystemUiOverlay.values);
-        state.showBar = !state.showBar;
+        vState.showBar = !vState.showBar;
       } else {
-        state.showBar = !state.showBar;
+        vState.showBar = !vState.showBar;
         await Future.delayed(Duration(milliseconds: 200));
         SystemChrome.setEnabledSystemUIOverlays([]);
       }
     } else {
-      state.showBar = !state.showBar;
+      vState.showBar = !vState.showBar;
     }
   }
 
   // 点击周围
   void handOnPanDown(DragDownDetails details) {
-    final Rect _centRect = WidgetUtil.getWidgetGlobalRect(state.centkey);
+    final Rect _centRect = WidgetUtil.getWidgetGlobalRect(vState.centkey);
 
     final double _dx = details.globalPosition.dx;
     final double _dy = details.globalPosition.dy;
@@ -200,7 +201,7 @@ class ViewController extends GetxController {
     if ((_dx < _centRect.left || _dx > _centRect.right) &&
         (_dy < _centRect.top || _dy > _centRect.bottom)) {
       logger.d('onPanDown hide bar');
-      state.showBar = false;
+      vState.showBar = false;
     }
   }
 
@@ -208,10 +209,10 @@ class ViewController extends GetxController {
     // logger.d('firstIndex: $firstIndex, lastIndex: $lastIndex');
     final int index = (lastIndex + firstIndex) ~/ 2;
     // logger.d('$index ');
-    if (index != state.itemIndex) {
+    if (index != vState.itemIndex) {
       Future.delayed(const Duration(milliseconds: 300)).then((_) {
-        state.itemIndex = index;
-        state.sliderValue = state.itemIndex / 1.0;
+        vState.itemIndex = index;
+        vState.sliderValue = vState.itemIndex / 1.0;
       });
     }
     // currentIndex = index;
@@ -242,10 +243,10 @@ class ViewController extends GetxController {
       final int index = (min + max) ~/ 2;
 
       // logger.d('${positions.elementAt(index).itemLeadingEdge} ');
-      if (index != state.itemIndex) {
+      if (index != vState.itemIndex) {
         Future.delayed(const Duration(milliseconds: 300)).then((value) {
-          state.itemIndex = index;
-          state.sliderValue = state.itemIndex / 1.0;
+          vState.itemIndex = index;
+          vState.sliderValue = vState.itemIndex / 1.0;
         });
       }
     }
@@ -255,39 +256,41 @@ class ViewController extends GetxController {
   /// 检查模式 及处理
   void checkViewModel() {
     // logger.d('checkViewModel start');
-    if (state.viewMode != state.lastViewMode) {
-      if (state.viewMode == ViewMode.vertical) {
+    if (vState.viewMode != vState.lastViewMode) {
+      if (vState.viewMode == ViewMode.vertical) {
         Future.delayed(const Duration(milliseconds: 100)).then((_) {
-          itemScrollController.jumpTo(index: state.itemIndex);
+          itemScrollController.jumpTo(index: vState.itemIndex);
         });
       } else {
         Future.delayed(const Duration(milliseconds: 100)).then((_) {
-          pageController.jumpToPage(state.pageIndex);
+          pageController.jumpToPage(vState.pageIndex);
         });
       }
-      state.lastViewMode = state.viewMode;
+      vState.lastViewMode = vState.viewMode;
     }
     // logger.d('checkViewModel end');
   }
 
   // 点击左半边
   void tapLeft() {
-    if (state.viewMode == ViewMode.horizontalLeft) {
-      if (state.pageIndex > 0) {
-        pageController.jumpToPage(state.pageIndex - 1);
+    vState.fade = false;
+    if (vState.viewMode == ViewMode.horizontalLeft) {
+      if (vState.pageIndex > 0) {
+        pageController.jumpToPage(vState.pageIndex - 1);
       }
-    } else if (state.viewMode == ViewMode.horizontalRight) {
-      pageController.jumpToPage(state.pageIndex + 1);
+    } else if (vState.viewMode == ViewMode.horizontalRight) {
+      pageController.jumpToPage(vState.pageIndex + 1);
     }
   }
 
   // 点击右半边
   void tapRight() {
-    if (state.viewMode == ViewMode.horizontalLeft) {
-      pageController.jumpToPage(state.pageIndex + 1);
-    } else if (state.viewMode == ViewMode.horizontalRight) {
-      if (state.pageIndex > 0) {
-        pageController.jumpToPage(state.pageIndex - 1);
+    vState.fade = false;
+    if (vState.viewMode == ViewMode.horizontalLeft) {
+      pageController.jumpToPage(vState.pageIndex + 1);
+    } else if (vState.viewMode == ViewMode.horizontalRight) {
+      if (vState.pageIndex > 0) {
+        pageController.jumpToPage(vState.pageIndex - 1);
       }
     }
   }

@@ -182,4 +182,6 @@ class ViewState {
   Rx<ViewMode> get _viewMode => _ehConfigService.viewMode;
   ViewMode get viewMode => _viewMode.value;
   set viewMode(val) => _viewMode.value = val;
+
+  bool fade = true;
 }
