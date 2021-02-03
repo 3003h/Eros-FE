@@ -47,7 +47,7 @@ class GalleryHeader extends StatelessWidget {
       color: CupertinoDynamicColor.resolve(CupertinoColors.label, context),
     );
 
-    // logger.v('hero dtl => ${galleryItem.gid}_cover_$tabTag');
+    logger.v('hero dtl => ${galleryItem.gid}_cover_$tabTag');
 
     return Container(
       margin: const EdgeInsets.all(kPadding),

@@ -47,9 +47,9 @@ class GalleryViewPage extends GetView<ViewController> {
                       behavior: HitTestBehavior.translucent,
                       // child: Container(),
                       onPanDown: controller.handOnPanDown,
-                      onPanStart: (DragStartDetails details) {
-                        logger.d('${details.localPosition} ');
-                      },
+                      // onPanStart: (DragStartDetails details) {
+                      //   logger.d('${details.localPosition} ');
+                      // },
                       onTap: controller.tapLeft,
                     ),
                   ),
@@ -58,9 +58,9 @@ class GalleryViewPage extends GetView<ViewController> {
                       behavior: HitTestBehavior.translucent,
                       // child: Container(),
                       onPanDown: controller.handOnPanDown,
-                      onPanStart: (DragStartDetails details) {
-                        logger.d('${details.localPosition} ');
-                      },
+                      // onPanStart: (DragStartDetails details) {
+                      //   logger.d('${details.localPosition} ');
+                      // },
                       onTap: controller.tapRight,
                     ),
                   ),
