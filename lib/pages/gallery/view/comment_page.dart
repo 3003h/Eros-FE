@@ -216,8 +216,10 @@ class CommentPage extends StatelessWidget {
                                 switchInCurve: Curves.bounceIn,
                                 // switchOutCurve: Curves.linear,
                                 transitionBuilder: (child, animation) =>
-                                    ScaleTransition(
-                                        scale: animation, child: child),
+                                    // ScaleTransition(
+                                    //     scale: animation, child: child),
+                                    FadeTransition(
+                                        child: child, opacity: animation),
                                 child: controller.isEditStat
                                     ? Icon(
                                         FontAwesomeIcons.solidCheckCircle,

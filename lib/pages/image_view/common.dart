@@ -1,4 +1,4 @@
-import 'package:cached_network_image/cached_network_image.dart';
+import 'package:extended_image/extended_image.dart';
 import 'package:fehviewer/models/index.dart';
 import 'package:fehviewer/network/gallery_request.dart';
 import 'package:fehviewer/utils/logger.dart';
@@ -105,7 +105,11 @@ class GalleryPara {
 
   Future<bool> _precacheSingleImage(
       BuildContext context, String url, GalleryPreview preview) async {
-    final ImageProvider imageProvider = CachedNetworkImageProvider(url);
+    // final ImageProvider imageProvider = CachedNetworkImageProvider(url);
+    final ImageProvider imageProvider = ExtendedNetworkImageProvider(
+      url,
+      cache: true,
+    );
 
     /// 预缓存图片
     precacheImage(imageProvider, context).then((_) {
