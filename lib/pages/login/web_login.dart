@@ -21,7 +21,6 @@ class _WebLoginViewState extends State<WebLoginView> {
   @override
   void initState() {
     super.initState();
-    if (Platform.isAndroid) WebView.platform = SurfaceAndroidWebView();
   }
 
   @override
