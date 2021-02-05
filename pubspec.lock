@@ -850,14 +850,14 @@ packages:
       name: permission_handler
       url: "https://pub.flutter-io.cn"
     source: hosted
-    version: "5.0.1+1"
+    version: "5.1.0+2"
   permission_handler_platform_interface:
     dependency: transitive
     description:
       name: permission_handler_platform_interface
       url: "https://pub.flutter-io.cn"
     source: hosted
-    version: "2.0.1"
+    version: "2.0.2"
   petitparser:
     dependency: transitive
     description:
@@ -968,7 +968,7 @@ packages:
     description:
       path: "packages/sensors"
       ref: HEAD
-      resolved-ref: a45557608af1c6aada64705884101cada1d6c6d2
+      resolved-ref: ad308e54ce39cfa91b6f93e7c407d828fd465ebc
       url: "https://github.com/flutter/plugins.git"
     source: git
     version: "0.4.2+8"
@@ -1020,7 +1020,7 @@ packages:
       name: shared_preferences_windows
       url: "https://pub.flutter-io.cn"
     source: hosted
-    version: "0.0.2+2"
+    version: "0.0.2+3"
   shelf:
     dependency: transitive
     description:
@@ -1060,7 +1060,7 @@ packages:
       name: sqflite
       url: "https://pub.flutter-io.cn"
     source: hosted
-    version: "1.3.2+2"
+    version: "1.3.2+3"
   sqflite_common:
     dependency: transitive
     description:

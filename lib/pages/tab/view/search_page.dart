@@ -1,8 +1,11 @@
+import 'dart:math';
+
 import 'package:custom_pop_up_menu/custom_pop_up_menu.dart';
 import 'package:fehviewer/common/service/depth_service.dart';
 import 'package:fehviewer/generated/l10n.dart';
 import 'package:fehviewer/models/index.dart';
 import 'package:fehviewer/pages/filter/filter.dart';
+import 'package:fehviewer/pages/gallery/view/gallery_widget.dart';
 import 'package:fehviewer/pages/tab/controller/enum.dart';
 import 'package:fehviewer/pages/tab/controller/search_page_controller.dart';
 import 'package:fehviewer/pages/tab/view/gallery_base.dart';
@@ -36,11 +39,10 @@ enum SearchMenuEnum {
 }
 
 class GallerySearchPage extends StatelessWidget {
-  // final SearchPageController controller = Get.find(tag: searchPageCtrlDepth);
+  SearchPageController get controller => Get.find(tag: searchPageCtrlDepth);
+
   @override
   Widget build(BuildContext context) {
-    final SearchPageController controller = Get.find(tag: searchPageCtrlDepth);
-
     final Widget cfp = CupertinoPageScaffold(
       resizeToAvoidBottomInset: false,
       navigationBar: CupertinoNavigationBar(
@@ -87,11 +89,16 @@ class GallerySearchPage extends StatelessWidget {
         child: CustomScrollView(
           slivers: <Widget>[
             Obx(() => SliverSafeArea(
-                  // top: false,
-                  // bottom: false,
-                  sliver: controller.listType == ListType.gallery
-                      ? _getGalleryList()
-                      : _getTagQryList(),
+                  sliver: () {
+                    switch (controller.listType) {
+                      case ListType.gallery:
+                        return _getGalleryList();
+                      case ListType.tag:
+                        return _getTagQryList();
+                      case ListType.init:
+                        return _getInitView();
+                    }
+                  }(),
                 )),
             _endIndicator(),
           ],
@@ -103,7 +110,6 @@ class GallerySearchPage extends StatelessWidget {
   }
 
   Widget _getTagQryList() {
-    final SearchPageController controller = Get.find(tag: searchPageCtrlDepth);
     return SliverList(
       delegate: SliverChildBuilderDelegate(
         (BuildContext context, int index) {
@@ -138,8 +144,79 @@ class GallerySearchPage extends StatelessWidget {
     );
   }
 
+  Widget _getInitView() {
+    return GetBuilder<SearchPageController>(
+      tag: searchPageCtrlDepth,
+      id: 'InitView',
+      builder: (controller) {
+        final List<Widget> _btnList = List<Widget>.from(controller.seaechHistory
+            .map((e) => TagButton(
+                  text: e,
+                  padding:
+                      const EdgeInsets.symmetric(vertical: 6, horizontal: 6),
+                  onPressed: () {
+                    controller.appendTextToSearch(e);
+                  },
+                ))
+            .toList());
+
+        return SliverToBoxAdapter(
+          child: Container(
+            padding:
+                const EdgeInsets.symmetric(vertical: 8.0, horizontal: 20.0),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                const Text(
+                  'Search History',
+                  style: TextStyle(
+                    fontSize: 14,
+                  ),
+                ),
+                const SizedBox(height: 8),
+                Container(
+                  child: Wrap(
+                    spacing: 8, //主轴上子控件的间距
+                    runSpacing: 10, //交叉轴上子控件之间的间距
+                    children: _btnList.sublist(
+                        0, min<int>(20, _btnList.length)), //要显示的子控件集合
+                  ),
+                ),
+                const SizedBox(height: 8),
+                GestureDetector(
+                  onTap: controller.clearHistory,
+                  child: Container(
+                    alignment: Alignment.center,
+                    padding: const EdgeInsets.symmetric(vertical: 4.0),
+                    child: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        const Icon(
+                          Icons.delete,
+                          size: 17,
+                          color: Colors.red,
+                        ),
+                        Text(
+                          'Clear search history',
+                          style: TextStyle(
+                            fontSize: 15,
+                            color: CupertinoDynamicColor.resolve(
+                                CupertinoColors.secondaryLabel, Get.context),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                )
+              ],
+            ),
+          ),
+        );
+      },
+    );
+  }
+
   Widget _endIndicator() {
-    final SearchPageController controller = Get.find(tag: searchPageCtrlDepth);
     return SliverToBoxAdapter(
       child: Obx(() => Container(
             padding: const EdgeInsets.only(top: 50, bottom: 100),
@@ -180,7 +257,6 @@ class GallerySearchPage extends StatelessWidget {
   }
 
   Widget _getGalleryList() {
-    final SearchPageController controller = Get.find(tag: searchPageCtrlDepth);
     return controller.obx(
       (List<GalleryItem> state) {
         return getGalleryList(
@@ -218,8 +294,6 @@ class GallerySearchPage extends StatelessWidget {
   }
 
   Widget _buildTrailing(BuildContext context) {
-    final SearchPageController controller = Get.find(tag: searchPageCtrlDepth);
-
     Widget _buildListBtns() {
       return GestureDetector(
         onLongPress: () {
