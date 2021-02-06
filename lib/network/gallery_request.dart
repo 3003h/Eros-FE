@@ -108,7 +108,7 @@ class Api {
     CancelToken cancelToken,
     String favcat,
   }) async {
-    logger.d('getPopular');
+    // logger.d('getPopular');
     const String url = '/popular';
 
     await CustomHttpsProxy.instance.init();
@@ -149,7 +149,7 @@ class Api {
     CancelToken cancelToken,
     String favcat,
   }) async {
-    logger.d('getWatched');
+    // logger.d('getWatched');
     const String _url = '/watched';
     final Options _cacheOptions = getCacheOptions(forceRefresh: refresh);
 

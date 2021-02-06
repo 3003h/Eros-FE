@@ -1,7 +1,6 @@
-import 'package:cached_network_image/cached_network_image.dart';
+import 'package:extended_image/extended_image.dart';
 import 'package:fehviewer/models/index.dart';
 import 'package:fehviewer/network/gallery_request.dart';
-import 'package:fehviewer/pages/gallery/controller/gallery_page_controller.dart';
 import 'package:fehviewer/utils/logger.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -32,8 +31,7 @@ class GalleryPara {
 
   /// 一个很傻的预载功能 需要优化
   Future<void> precacheImages(
-    BuildContext context,
-    GalleryPageController controller, {
+    BuildContext context, {
     @required List<GalleryPreview> previews,
     @required int index,
     @required int max,
@@ -43,7 +41,7 @@ class GalleryPara {
       final int _index = index + add;
 
       // logger.d('开始缓存index $index');
-      if (_index > controller.previews.length - 1) {
+      if (_index > previews.length - 1) {
         return;
       }
 
@@ -51,7 +49,7 @@ class GalleryPara {
         continue;
       }
 
-      final GalleryPreview _preview = controller.previews[_index];
+      final GalleryPreview _preview = previews[_index];
       if (_preview?.isCache ?? false) {
         // logger.d('index $_index 已存在缓存中 跳过');
         continue;
@@ -107,7 +105,11 @@ class GalleryPara {
 
   Future<bool> _precacheSingleImage(
       BuildContext context, String url, GalleryPreview preview) async {
-    final ImageProvider imageProvider = CachedNetworkImageProvider(url);
+    // final ImageProvider imageProvider = CachedNetworkImageProvider(url);
+    final ImageProvider imageProvider = ExtendedNetworkImageProvider(
+      url,
+      cache: true,
+    );
 
     /// 预缓存图片
     precacheImage(imageProvider, context).then((_) {

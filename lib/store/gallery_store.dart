@@ -70,4 +70,26 @@ class GStore {
 
     return _map;
   }
+
+  set searchHistory(List<String> val) {
+    logger.d('set searchHistory ${val.join(',')}');
+    ReadWriteValue('searchHistory', '', _hisStore).val = jsonEncode(val);
+  }
+
+  List<String> get searchHistory {
+    final String val = ReadWriteValue('searchHistory', '', _hisStore).val;
+
+    logger.d('get searchHistory $val');
+
+    List<String> rult = <String>[];
+    if (val == null || val.trim().isEmpty) {
+      return rult;
+    }
+    for (final dynamic his in jsonDecode(val) as List<dynamic>) {
+      final String _his = his;
+      rult.add(_his);
+    }
+
+    return rult;
+  }
 }

@@ -44,10 +44,7 @@ android {
         targetSdkVersion 30
         versionCode flutterVersionCode.toInteger()
         versionName flutterVersionName
-//        multiDexEnabled true
-        dexOptions {
-            javaMaxHeapSize "4g"
-        }
+        archivesBaseName = "fehviewer-v$versionName($versionCode)"
     }
 
     buildTypes {
@@ -57,6 +54,7 @@ android {
             shrinkResources true
         }
     }
+
 }
 
 flutter {
