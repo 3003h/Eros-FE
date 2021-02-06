@@ -1,5 +1,6 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:dio/dio.dart';
+import 'package:extended_image/extended_image.dart';
 import 'package:fehviewer/common/service/depth_service.dart';
 import 'package:fehviewer/generated/l10n.dart';
 import 'package:fehviewer/models/index.dart';
@@ -17,16 +18,23 @@ class GalleryImage extends StatefulWidget {
   const GalleryImage({
     Key key,
     @required this.index,
+    this.fade = true,
   }) : super(key: key);
+
+  final int index;
+  final bool fade;
 
   @override
   _GalleryImageState createState() => _GalleryImageState();
-  final int index;
 }
 
-class _GalleryImageState extends State<GalleryImage> {
+class _GalleryImageState extends State<GalleryImage>
+    with SingleTickerProviderStateMixin {
   Future<GalleryPreview> _future;
   final CancelToken _getMoreCancelToken = CancelToken();
+
+  AnimationController _controller;
+  Animation _animation;
 
   GalleryPageController _pageController;
 
@@ -34,41 +42,59 @@ class _GalleryImageState extends State<GalleryImage> {
   void initState() {
     super.initState();
     _pageController = Get.find(tag: pageCtrlDepth);
+
+    logger.v('${widget.fade}');
+
     _future = _pageController.getImageInfo(
       widget.index,
       cancelToken: _getMoreCancelToken,
     );
+
+    _controller = AnimationController(
+      vsync: this,
+      duration: Duration(milliseconds: widget.fade ? 200 : 0),
+    );
+    _animation = Tween(
+      begin: 0.0,
+      end: 1.0,
+    ).animate(_controller);
+
+    Get.find<ViewController>().vState.fade = true;
   }
 
   @override
   void dispose() {
     super.dispose();
+    _controller.dispose();
     // _getMoreCancelToken.cancel();
+  }
+
+  Future<void> _reloadImage() async {
+    final GalleryPreview _currentPreview =
+        _pageController.galleryItem.galleryPreview[widget.index];
+    // 清除CachedNetworkImage的缓存
+    try {
+      await CachedNetworkImage.evictFromCache(
+          _currentPreview.largeImageUrl ?? '');
+    } catch (_) {}
+
+    _currentPreview.largeImageUrl = null;
+
+    setState(() {
+      // 换源重载
+      _future = _pageController.getImageInfo(
+        widget.index,
+        cancelToken: _getMoreCancelToken,
+        refresh: true,
+        changeSource: true,
+      );
+    });
   }
 
   @override
   Widget build(BuildContext context) {
     final GalleryPreview _currentPreview =
         _pageController.galleryItem.galleryPreview[widget.index];
-
-    // 重载当前图片
-    Future<void> _reloadImage() async {
-      try {
-        await CachedNetworkImage.evictFromCache(
-            _currentPreview.largeImageUrl ?? '');
-      } catch (_) {}
-
-      _currentPreview.largeImageUrl = null;
-
-      setState(() {
-        _future = _pageController.getImageInfo(
-          widget.index,
-          cancelToken: _getMoreCancelToken,
-          refresh: true,
-          changeSource: true,
-        );
-      });
-    }
 
     return GestureDetector(
       behavior: HitTestBehavior.opaque,
@@ -135,7 +161,7 @@ class _GalleryImageState extends State<GalleryImage> {
                       .update(['GalleryImage_${widget.index}']);
                 });
 
-                return _buildImage(_currentPreview.largeImageUrl);
+                return _buildImageExtend(_currentPreview.largeImageUrl);
               }
             } else {
               return UnconstrainedBox(
@@ -155,11 +181,18 @@ class _GalleryImageState extends State<GalleryImage> {
                           color: CupertinoColors.systemGrey6,
                         ),
                       ),
-                      const Text(
-                        'Loading...',
-                        style: TextStyle(
-                          color: CupertinoColors.systemGrey6,
-                        ),
+                      Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: const <Widget>[
+                          CupertinoActivityIndicator(),
+                          SizedBox(width: 5),
+                          Text(
+                            'Loading...',
+                            style: TextStyle(
+                              color: CupertinoColors.systemGrey6,
+                            ),
+                          ),
+                        ],
                       ),
                     ],
                   ),
@@ -169,10 +202,142 @@ class _GalleryImageState extends State<GalleryImage> {
           } else {
             // 返回图片组件
             final String url = _currentPreview.largeImageUrl;
-            return _buildImage(url);
+            return _buildImageExtend(url);
           }
         },
       ),
+    );
+  }
+
+  Widget _buildImageExtend(String url) {
+    return ExtendedImage.network(
+      url ?? '',
+      cache: true,
+      fit: BoxFit.contain,
+      handleLoadingProgress: true,
+      clearMemoryCacheIfFailed: true,
+      timeLimit: const Duration(seconds: 10),
+      loadStateChanged: (ExtendedImageState state) {
+        switch (state.extendedImageLoadState) {
+          case LoadState.loading:
+            _controller.reset();
+            final loadingProgress = state.loadingProgress;
+            final progress = loadingProgress?.expectedTotalBytes != null
+                ? loadingProgress.cumulativeBytesLoaded /
+                    loadingProgress.expectedTotalBytes
+                : null;
+
+            // logger.v('$progress');
+
+            // 下载进度回调
+            return UnconstrainedBox(
+              child: Container(
+                constraints: BoxConstraints(
+                  maxHeight: context.mediaQueryShortestSide,
+                  minWidth: context.width / 2,
+                ),
+                alignment: Alignment.center,
+                // margin: const EdgeInsets.symmetric(vertical: 50, horizontal: 50),
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: <Widget>[
+                    Container(
+                      height: 70,
+                      width: 70,
+                      child: LiquidCircularProgressIndicator(
+                        value: progress ?? 0.0,
+                        valueColor: const AlwaysStoppedAnimation<Color>(
+                            Color.fromARGB(255, 163, 199, 100)),
+                        backgroundColor: const Color.fromARGB(255, 50, 50, 50),
+                        // borderColor: Colors.teal[900],
+                        // borderWidth: 2.0,
+                        direction: Axis.vertical,
+                        center: progress != null
+                            ? Text(
+                                '${(progress ?? 0) * 100 ~/ 1}%',
+                                style: TextStyle(
+                                  color: progress < 0.5
+                                      ? CupertinoColors.white
+                                      : CupertinoColors.black,
+                                  fontSize: 12,
+                                  height: 1,
+                                ),
+                              )
+                            : Container(),
+                      ),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.all(12.0),
+                      child: Text(
+                        '${widget.index + 1}',
+                        style: const TextStyle(
+                          color: CupertinoColors.systemGrey6,
+                          height: 1,
+                        ),
+                      ),
+                    )
+                  ],
+                ),
+              ),
+            );
+            break;
+
+          ///if you don't want override completed widget
+          ///please return null or state.completedWidget
+          //return null;
+          //return state.completedWidget;
+          case LoadState.completed:
+            _controller.forward();
+            return FadeTransition(
+              opacity: _controller,
+              child: ExtendedRawImage(
+                image: state.extendedImageInfo?.image,
+              ),
+            );
+
+            break;
+          case LoadState.failed:
+            _controller.reset();
+            return Container(
+              alignment: Alignment.center,
+              constraints: BoxConstraints(
+                maxHeight: context.width * 0.8,
+              ),
+              child: GestureDetector(
+                behavior: HitTestBehavior.opaque,
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    const Icon(
+                      Icons.error,
+                      size: 50,
+                      color: Colors.red,
+                    ),
+                    const Text(
+                      'Load image failed',
+                      style: TextStyle(
+                          fontSize: 10,
+                          color: CupertinoColors.secondarySystemBackground),
+                    ),
+                    Text(
+                      '${widget.index + 1}',
+                      style: const TextStyle(
+                          color: CupertinoColors.secondarySystemBackground),
+                    ),
+                  ],
+                ),
+                onTap: () {
+                  // state.reLoadImage();
+                  _reloadImage();
+                },
+              ),
+            );
+            break;
+          default:
+            return null;
+        }
+      },
     );
   }
 

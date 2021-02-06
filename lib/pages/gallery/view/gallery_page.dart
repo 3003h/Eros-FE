@@ -35,8 +35,8 @@ class GalleryMainPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    String tabTag;
     final GalleryPageController controller = Get.find(tag: pageCtrlDepth);
+    final String tabTag = controller.galleryRepository.tabTag;
 
     final GalleryItem _item = controller.galleryItem;
     return CupertinoPageScaffold(

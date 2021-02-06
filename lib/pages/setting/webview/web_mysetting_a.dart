@@ -22,7 +22,6 @@ class _WebMySettingAState extends State<WebMySettingA> {
   @override
   void initState() {
     super.initState();
-    if (Platform.isAndroid) WebView.platform = SurfaceAndroidWebView();
     final List<Cookie> cookies =
         Global.cookieJar.loadForRequest(Uri.parse(Api.getBaseUrl()));
 

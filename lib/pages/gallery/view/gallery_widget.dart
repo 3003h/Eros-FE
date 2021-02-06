@@ -14,6 +14,7 @@ import 'package:fehviewer/pages/gallery/view/all_preview_page.dart';
 import 'package:fehviewer/pages/gallery/view/comment_item.dart';
 import 'package:fehviewer/pages/gallery/view/gallery_favcat.dart';
 import 'package:fehviewer/pages/gallery/view/preview_clipper.dart';
+import 'package:fehviewer/pages/gallery/view/tabinfo_dialog.dart';
 import 'package:fehviewer/route/navigator_util.dart';
 import 'package:fehviewer/route/routes.dart';
 import 'package:fehviewer/utils/cust_lib/selectable_text_s.dart';
@@ -499,55 +500,55 @@ class GalleryRating extends StatelessWidget {
   }
 }
 
-class GalleryDetailInfo extends StatelessWidget {
-  GalleryDetailInfo({Key key, this.galleryItem}) : super(key: key);
-
-  final GalleryItem galleryItem;
-
-  final GalleryPageController _pageController = Get.find();
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      child: Column(
-//        mainAxisAlignment: MainAxisAlignment.start,
-        children: <Widget>[
-          // 标签
-          TagBox(
-            listTagGroup: galleryItem.tagGroup,
-          ),
-          const TopComment(),
-          Divider(
-            height: 0.5,
-            color: CupertinoDynamicColor.resolve(
-                CupertinoColors.systemGrey4, context),
-          ),
-          PreviewGrid(
-            previews: _pageController.firstPagePreview,
-            gid: galleryItem.gid,
-          ),
-          _buildAllPreviewButton(),
-        ],
-      ),
-    );
-  }
-
-  CupertinoButton _buildAllPreviewButton() {
-    return CupertinoButton(
-      minSize: 0,
-      padding: const EdgeInsets.fromLTRB(0, 4, 0, 30),
-      child: Text(
-        _pageController.hasMorePreview
-            ? S.of(Get.context).morePreviews
-            : S.of(Get.context).noMorePreviews,
-        style: const TextStyle(fontSize: 16),
-      ),
-      onPressed: () {
-        Get.to(const AllPreviewPage(), transition: Transition.cupertino);
-      },
-    );
-  }
-}
+// class GalleryDetailInfo extends StatelessWidget {
+//   GalleryDetailInfo({Key key, this.galleryItem}) : super(key: key);
+//
+//   final GalleryItem galleryItem;
+//
+//   final GalleryPageController _pageController = Get.find();
+//
+//   @override
+//   Widget build(BuildContext context) {
+//     return Container(
+//       child: Column(
+// //        mainAxisAlignment: MainAxisAlignment.start,
+//         children: <Widget>[
+//           // 标签
+//           TagBox(
+//             listTagGroup: galleryItem.tagGroup,
+//           ),
+//           const TopComment(),
+//           Divider(
+//             height: 0.5,
+//             color: CupertinoDynamicColor.resolve(
+//                 CupertinoColors.systemGrey4, context),
+//           ),
+//           PreviewGrid(
+//             previews: _pageController.firstPagePreview,
+//             gid: galleryItem.gid,
+//           ),
+//           _buildAllPreviewButton(),
+//         ],
+//       ),
+//     );
+//   }
+//
+//   CupertinoButton _buildAllPreviewButton() {
+//     return CupertinoButton(
+//       minSize: 0,
+//       padding: const EdgeInsets.fromLTRB(0, 4, 0, 30),
+//       child: Text(
+//         _pageController.hasMorePreview
+//             ? S.of(Get.context).morePreviews
+//             : S.of(Get.context).noMorePreviews,
+//         style: const TextStyle(fontSize: 16),
+//       ),
+//       onPressed: () {
+//         Get.to(const AllPreviewPage(), transition: Transition.cupertino);
+//       },
+//     );
+//   }
+// }
 
 class PreviewGrid extends StatelessWidget {
   const PreviewGrid({Key key, this.previews, @required this.gid})
@@ -826,6 +827,11 @@ class TagGroupItem extends StatelessWidget {
                 NavigatorUtil.goGalleryListBySearch(
                     simpleSearch: '${tag.type}:${tag.title}');
               },
+              onLongPress: () {
+                if (ehConfigService.isTagTranslat.value) {
+                  showTagInfoDialog(tag.title, type: tag.type);
+                }
+              },
             )),
       );
     });
@@ -883,6 +889,7 @@ class TagButton extends StatelessWidget {
     this.color,
     this.onPressed,
     this.onLongPress,
+    this.padding,
   }) : super(key: key);
 
   final String text;
@@ -890,6 +897,7 @@ class TagButton extends StatelessWidget {
   final Color color;
   final VoidCallback onPressed;
   final VoidCallback onLongPress;
+  final EdgeInsets padding;
 
   @override
   Widget build(BuildContext context) {
@@ -900,7 +908,7 @@ class TagButton extends StatelessWidget {
         key: key,
         borderRadius: BorderRadius.circular(8),
         child: Container(
-          padding: const EdgeInsets.fromLTRB(6, 3, 6, 4),
+          padding: padding ?? const EdgeInsets.fromLTRB(6, 3, 6, 4),
           color: color ??
               CupertinoDynamicColor.resolve(ThemeColors.tagBackground, context),
           child: Text(

@@ -54,7 +54,7 @@ class GalleryItemController extends GetxController {
     isFav = favTitle.isNotEmpty;
     if (favcat != null) {
       galleryItem.favcat = favcat;
-      logger.d('item show fav');
+      // logger.d('item show fav');
     } else {
       galleryItem.favcat = '';
       galleryItem.favTitle = '';

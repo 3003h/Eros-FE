@@ -1,6 +1,7 @@
 import 'package:fehviewer/common/global.dart';
 import 'package:fehviewer/const/const.dart';
 import 'package:fehviewer/models/index.dart';
+import 'package:fehviewer/pages/image_view/controller/view_state.dart';
 import 'package:fehviewer/pages/image_view/view/view_widget.dart';
 import 'package:fehviewer/route/routes.dart';
 import 'package:fehviewer/utils/logger.dart';
@@ -19,14 +20,14 @@ import '../controller/view_controller.dart';
 class GalleryViewPage extends GetView<ViewController> {
   const GalleryViewPage({Key key}) : super(key: key);
 
+  ViewState get state => controller?.vState;
+
   /// 画廊图片大图浏览
   @override
   Widget build(BuildContext context) {
-    final _iniIndex = Get.arguments as int;
-    controller.itemIndex = _iniIndex;
-
-    controller.initSize(context);
-    logger.d('build ${controller.viewMode}  ${controller.columnMode}');
+    logger.d('rebuild GalleryViewPage');
+    state.initSize(context);
+    logger.d('build ${state.viewMode}  ${state.columnMode}');
     return CupertinoTheme(
       data: const CupertinoThemeData(
         brightness: Brightness.dark,
@@ -47,9 +48,9 @@ class GalleryViewPage extends GetView<ViewController> {
                       behavior: HitTestBehavior.translucent,
                       // child: Container(),
                       onPanDown: controller.handOnPanDown,
-                      onPanStart: (DragStartDetails details) {
-                        logger.d('${details.localPosition} ');
-                      },
+                      // onPanStart: (DragStartDetails details) {
+                      //   logger.d('${details.localPosition} ');
+                      // },
                       onTap: controller.tapLeft,
                     ),
                   ),
@@ -58,9 +59,9 @@ class GalleryViewPage extends GetView<ViewController> {
                       behavior: HitTestBehavior.translucent,
                       // child: Container(),
                       onPanDown: controller.handOnPanDown,
-                      onPanStart: (DragStartDetails details) {
-                        logger.d('${details.localPosition} ');
-                      },
+                      // onPanStart: (DragStartDetails details) {
+                      //   logger.d('${details.localPosition} ');
+                      // },
                       onTap: controller.tapRight,
                     ),
                   ),
@@ -70,9 +71,9 @@ class GalleryViewPage extends GetView<ViewController> {
               GestureDetector(
                 behavior: HitTestBehavior.translucent,
                 child: Container(
-                  key: controller.centkey,
-                  height: controller.screensize.height / 4,
-                  width: controller.screensize.width / 2.5,
+                  key: state.centkey,
+                  height: state.screensize.height / 4,
+                  width: state.screensize.width / 2.5,
                 ),
                 onTap: controller.handOnTapCent,
               ),
@@ -89,14 +90,14 @@ class GalleryViewPage extends GetView<ViewController> {
                         AnimatedPositioned(
                           curve: Curves.fastOutSlowIn,
                           duration: const Duration(milliseconds: 300),
-                          top: controller.topBarOffset,
+                          top: state.topBarOffset,
                           child: _buildTopBar(Get.context),
                         ),
                         // 底栏
                         AnimatedPositioned(
                           curve: Curves.fastOutSlowIn,
                           duration: const Duration(milliseconds: 300),
-                          bottom: controller.bottomBarOffset,
+                          bottom: state.bottomBarOffset,
                           child: _buildBottomBar(),
                         ),
                       ],
@@ -115,7 +116,7 @@ class GalleryViewPage extends GetView<ViewController> {
     return Obx(() {
       // 布局切换时进行页码跳转处理
       controller.checkViewModel();
-      switch (controller.viewMode) {
+      switch (state.viewMode) {
         case ViewMode.vertical:
           return _buildListView();
         case ViewMode.horizontalLeft:
@@ -132,9 +133,9 @@ class GalleryViewPage extends GetView<ViewController> {
   Widget _buildTopBar(BuildContext context) {
     return Container(
         // height: kTopBarHeight + controller.paddingTop,
-        width: controller.screensize.width,
+        width: state.screensize.width,
         color: const Color.fromARGB(150, 0, 0, 0),
-        padding: controller.topBarPadding,
+        padding: state.topBarPadding,
         child: Stack(
           alignment: Alignment.center,
           children: <Widget>[
@@ -147,7 +148,6 @@ class GalleryViewPage extends GetView<ViewController> {
                 GestureDetector(
                   behavior: HitTestBehavior.opaque,
                   onTap: () {
-                    logger.v('back');
                     Get.back();
                   },
                   child: Container(
@@ -186,9 +186,10 @@ class GalleryViewPage extends GetView<ViewController> {
   }
 
   Widget _buildPageText() {
-    if (controller.viewMode != ViewMode.vertical) {
+    if (state.viewMode != ViewMode.vertical) {
+      // logger.v('${state?.itemIndex}');
       return Text(
-        '${controller.itemIndex + 1}/${controller.filecount}',
+        '${((state?.itemIndex) ?? 0) + 1}/${state.filecount}',
         style: const TextStyle(
           color: CupertinoColors.systemGrey6,
         ),
@@ -200,7 +201,7 @@ class GalleryViewPage extends GetView<ViewController> {
           controller.handItemPositionsChange(positions);
 
           return Text(
-            '${controller.itemIndex + 1}/${controller.filecount}',
+            '${((state?.itemIndex) ?? 0) + 1}/${state.filecount}',
             style: const TextStyle(
               color: CupertinoColors.systemGrey6,
             ),
@@ -212,12 +213,12 @@ class GalleryViewPage extends GetView<ViewController> {
 
   /// 底栏
   Widget _buildBottomBar() {
-    final double _max = controller.filecount - 1.0;
-    final List<GalleryPreview> previews = controller.previews;
+    final double _max = state.filecount - 1.0;
+    final List<GalleryPreview> previews = state.previews;
     return Container(
       color: const Color.fromARGB(150, 0, 0, 0),
-      padding: controller.bottomBarPadding,
-      width: controller.screensize.width,
+      padding: state.bottomBarPadding,
+      width: state.screensize.width,
       // height: kBottomBarHeight + controller.paddingBottom,
       child: Column(
         children: <Widget>[
@@ -228,7 +229,7 @@ class GalleryViewPage extends GetView<ViewController> {
                   padding: const EdgeInsets.only(left: 8.0, right: 8.0),
                   child: PageSlider(
                     max: _max,
-                    sliderValue: controller.sliderValue,
+                    sliderValue: state.sliderValue,
                     onChangedEnd: controller.handOnSliderChangedEnd,
                     onChanged: controller.handOnSliderChanged,
                   ),
@@ -246,7 +247,7 @@ class GalleryViewPage extends GetView<ViewController> {
                   onTap: () {
                     logger.v('tap share');
                     showShareActionSheet(Get.context,
-                        previews[controller.itemIndex].largeImageUrl);
+                        previews[controller.vState.itemIndex].largeImageUrl);
                   },
                   child: Container(
                     width: 40,
@@ -259,7 +260,7 @@ class GalleryViewPage extends GetView<ViewController> {
                   ),
                 ),
                 const Spacer(),
-                if (controller.viewMode != ViewMode.vertical)
+                if (state.viewMode != ViewMode.vertical)
                   Obx(() => GestureDetector(
                         behavior: HitTestBehavior.opaque,
                         onTap: () {
@@ -273,7 +274,7 @@ class GalleryViewPage extends GetView<ViewController> {
                           child: Icon(
                             FontAwesomeIcons.bookOpen,
                             color: () {
-                              switch (controller.columnMode) {
+                              switch (state.columnMode) {
                                 case ColumnMode.single:
                                   return CupertinoColors.systemGrey6;
                                 case ColumnMode.odd:
@@ -299,10 +300,11 @@ class GalleryViewPage extends GetView<ViewController> {
     return GetBuilder<ViewController>(
         id: '_buildPhotoViewGallery',
         builder: (ViewController controller) {
+          final state = controller.vState;
           return ScrollablePositionedList.builder(
             itemScrollController: controller.itemScrollController,
             itemPositionsListener: controller.itemPositionsListener,
-            itemCount: controller.previews.length,
+            itemCount: state.previews.length,
             itemBuilder: (BuildContext context, int index) {
               return ConstrainedBox(
                 constraints: BoxConstraints(
@@ -317,17 +319,13 @@ class GalleryViewPage extends GetView<ViewController> {
                         return Container(
                           height: () {
                             try {
-                              return controller
-                                      .previews[index].largeImageHeight *
+                              return state.previews[index].largeImageHeight *
                                   (context.width /
-                                      controller
-                                          .previews[index].largeImageWidth);
+                                      state.previews[index].largeImageWidth);
                             } on Exception catch (_) {
-                              logger
-                                  .d('${controller.previews[index].toJson()}');
-                              return controller.previews[index].height *
-                                  (context.width /
-                                      controller.previews[index].width);
+                              logger.d('${state.previews[index].toJson()}');
+                              return state.previews[index].height *
+                                  (context.width / state.previews[index].width);
                             } catch (e) {
                               return null;
                             }
@@ -353,65 +351,74 @@ class GalleryViewPage extends GetView<ViewController> {
       id: '_buildPhotoViewGallery',
       builder: (ViewController controller) {
         // logger.d('lastPreviewLen ${controller.previews.length}');
-        controller.lastPreviewLen = controller.previews.length;
+        final state = controller.vState;
+        controller.lastPreviewLen = state.previews.length;
+
         return Obx(
           () => PhotoViewGallery.builder(
             scrollPhysics: const BouncingScrollPhysics(),
             reverse: reverse,
-            itemCount: controller.pageCount,
-            customSize: controller.screensize,
+            itemCount: state.pageCount,
+            customSize: state.screensize,
             builder: (BuildContext context, int pageIndex) {
               return PhotoViewGalleryPageOptions.customChild(
                 child: Container(
                   alignment: Alignment.center,
                   child: () {
-                    if (controller.columnMode != ColumnMode.single) {
-                      final int indexLeft =
-                          controller.columnMode == ColumnMode.odd
-                              ? pageIndex * 2
-                              : pageIndex * 2 - 1;
+                    if (state.columnMode != ColumnMode.single) {
+                      // 双页阅读
+                      final int indexLeft = state.columnMode == ColumnMode.odd
+                          ? pageIndex * 2
+                          : pageIndex * 2 - 1;
+
+                      final List<Widget> _pageList = <Widget>[
+                        if (indexLeft >= 0)
+                          Expanded(
+                            child: Container(
+                              alignment: Alignment.centerRight,
+                              child: NumStack(
+                                text: '$indexLeft',
+                                child: GalleryImage(
+                                  index: indexLeft,
+                                  fade: state.fade,
+                                ),
+                              ),
+                            ),
+                          ),
+                        if (state.previews.length > indexLeft + 1)
+                          Expanded(
+                            child: Container(
+                              alignment:
+                                  indexLeft >= 0 ? Alignment.centerLeft : null,
+                              child: NumStack(
+                                text: '${indexLeft + 1}',
+                                child: GalleryImage(
+                                  index: indexLeft + 1,
+                                  fade: state.fade,
+                                ),
+                              ),
+                            ),
+                          ),
+                      ];
+
                       return Row(
                         mainAxisSize: MainAxisSize.min,
-                        children: <Widget>[
-                          if (indexLeft >= 0)
-                            Expanded(
-                              child: Container(
-                                alignment: Alignment.centerRight,
-                                child: NumStack(
-                                  text: '$indexLeft',
-                                  child: GalleryImage(
-                                    index: indexLeft,
-                                  ),
-                                ),
-                              ),
-                            ),
-                          if (controller.previews.length > indexLeft + 1)
-                            Expanded(
-                              child: Container(
-                                alignment: indexLeft >= 0
-                                    ? Alignment.centerLeft
-                                    : null,
-                                child: NumStack(
-                                  text: '${indexLeft + 1}',
-                                  child: GalleryImage(
-                                    index: indexLeft + 1,
-                                  ),
-                                ),
-                              ),
-                            ),
-                        ],
+                        children:
+                            reverse ? _pageList.reversed.toList() : _pageList,
                       );
                     } else {
+                      // 单页阅读
                       return NumStack(
                         text: '$pageIndex',
                         child: GalleryImage(
                           index: pageIndex,
+                          fade: state.fade,
                         ),
                       );
                     }
                   }(),
                 ),
-                initialScale: PhotoViewComputedScale.covered,
+                initialScale: PhotoViewComputedScale.contained,
                 minScale: PhotoViewComputedScale.contained * 1.0,
                 maxScale: PhotoViewComputedScale.covered * _maxScale,
               );
@@ -442,7 +449,7 @@ class GalleryViewPage extends GetView<ViewController> {
         : Container(
             child: Center(
               child: Text(
-                'Loading ${controller.itemIndex + 1}',
+                'Loading ${state.itemIndex + 1}',
               ),
             ),
           );

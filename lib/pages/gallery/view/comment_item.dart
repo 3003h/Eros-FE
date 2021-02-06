@@ -3,6 +3,7 @@ import 'package:fehviewer/common/service/ehconfig_service.dart';
 import 'package:fehviewer/const/theme_colors.dart';
 import 'package:fehviewer/models/index.dart';
 import 'package:fehviewer/pages/gallery/controller/comment_controller.dart';
+import 'package:fehviewer/pages/gallery/view/translator_dialog.dart';
 import 'package:fehviewer/route/navigator_util.dart';
 import 'package:fehviewer/utils/cust_lib/flutter_linkify.dart' as linkify;
 import 'package:fehviewer/utils/logger.dart';
@@ -127,6 +128,23 @@ class CommentItem extends StatelessWidget {
                               primaryColor: ThemeColors.commitText),
                           child: Row(
                             children: <Widget>[
+                              CupertinoButton(
+                                padding:
+                                    const EdgeInsets.symmetric(horizontal: 12),
+                                minSize: 0,
+                                child: Icon(
+                                  FontAwesomeIcons.language,
+                                  size: kSizeVote,
+                                  color: CupertinoDynamicColor.resolve(
+                                    ThemeColors.commitText,
+                                    context,
+                                  ),
+                                ),
+                                onPressed: () {
+                                  VibrateUtil.light();
+                                  showTranslatorDialog(galleryComment.context);
+                                },
+                              ),
                               if (galleryComment.canVote)
                                 CupertinoButton(
                                   padding: const EdgeInsets.symmetric(

@@ -6,6 +6,8 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
+const double kIconSize = 16.5;
+
 class ArchiverView extends StatelessWidget {
   const ArchiverView({Key key}) : super(key: key);
 
@@ -25,8 +27,64 @@ class ArchiverView extends StatelessWidget {
             if (state.gp.isNotEmpty)
               Padding(
                 padding: const EdgeInsets.all(8.0),
-                child: Text(
-                    'Current funds:\n GP: ${state.gp}   Credits: ${state.credits}'),
+                // child: Text('G ${state.gp}   C ${state.credits}'),
+                child: Wrap(
+                  alignment: WrapAlignment.center,
+                  children: [
+                    Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        ClipOval(
+                          child: Container(
+                            child: Text(
+                              'G',
+                              style: TextStyle(
+                                color: CupertinoDynamicColor.resolve(
+                                    CupertinoColors.secondarySystemBackground,
+                                    context),
+                                fontWeight: FontWeight.bold,
+                                height: 1,
+                              ),
+                            ),
+                            color: CupertinoDynamicColor.resolve(
+                                CupertinoColors.secondaryLabel, context),
+                            width: kIconSize,
+                            height: kIconSize,
+                            alignment: Alignment.center,
+                          ),
+                        ).paddingSymmetric(horizontal: 4.0),
+                        Text(state.gp ?? ''),
+                      ],
+                    ),
+                    const SizedBox(width: 10),
+                    Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        ClipOval(
+                          child: Container(
+                            child: Text(
+                              'C',
+                              style: TextStyle(
+                                color: CupertinoDynamicColor.resolve(
+                                    CupertinoColors.secondarySystemBackground,
+                                    context),
+                                fontWeight: FontWeight.bold,
+                                height: 1,
+                                // fontSize: 14,
+                              ),
+                            ),
+                            color: CupertinoDynamicColor.resolve(
+                                CupertinoColors.secondaryLabel, context),
+                            width: kIconSize,
+                            height: kIconSize,
+                            alignment: Alignment.center,
+                          ),
+                        ).paddingSymmetric(horizontal: 4.0),
+                        Text(state.credits ?? ''),
+                      ],
+                    ),
+                  ],
+                ),
               ),
             if (Global.inDebugMode)
               const Text(
@@ -38,6 +96,7 @@ class ArchiverView extends StatelessWidget {
                 padding: const EdgeInsets.only(top: 4.0),
                 height: 100,
                 child: ListView.separated(
+                  physics: const NeverScrollableScrollPhysics(),
                   padding: const EdgeInsets.all(0),
                   itemBuilder: (_, int index) {
                     final ArchiverProviderItem _item = state.dlItems[index];
@@ -78,44 +137,9 @@ class ArchiverView extends StatelessWidget {
               'H@H',
               style: TextStyle(fontWeight: FontWeight.bold),
             ).paddingOnly(top: 8.0),
-            Container(
-              padding: const EdgeInsets.only(top: 4.0),
-              height: (state.hItems?.length ?? 0) * 40 + 50.0,
-              child: ListView.separated(
-                padding: const EdgeInsets.all(0),
-                itemBuilder: (_, int index) {
-                  final ArchiverProviderItem _item = state.hItems[index];
-                  return CupertinoButton(
-                    padding: const EdgeInsets.symmetric(vertical: 8.0),
-                    child: Column(
-                      children: <Widget>[
-                        Text(_item.resolution).paddingOnly(bottom: 2.0),
-                        Text(
-                          '${_item.size}    ${_item.price}',
-                          textAlign: TextAlign.start,
-                          style: const TextStyle(
-                            fontSize: 10,
-                            height: 1,
-                            color: CupertinoColors.systemGrey,
-                          ),
-                        ),
-                      ],
-                    ),
-                    onPressed: () {
-                      controller.downloadRemote(_item.dlres);
-                      Get.back();
-                    },
-                  );
-                },
-                separatorBuilder: (_, __) {
-                  return Divider(
-                    height: 0.5,
-                    color: CupertinoDynamicColor.resolve(
-                        CupertinoColors.systemGrey4, context),
-                  );
-                },
-                itemCount: state.hItems?.length ?? 0,
-              ),
+            HatHGridView(
+              controller: controller,
+              state: state,
             ),
           ],
         );
@@ -150,6 +174,110 @@ class ArchiverView extends StatelessWidget {
           ),
         );
       },
+    );
+  }
+}
+
+class HatHListView extends StatelessWidget {
+  const HatHListView({
+    Key key,
+    @required this.controller,
+    @required this.state,
+  }) : super(key: key);
+
+  final ArchiverController controller;
+  final ArchiverProvider state;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: const EdgeInsets.only(top: 4.0),
+      height: (state.hItems?.length ?? 0) * 40 + 50.0,
+      child: ListView.separated(
+        padding: const EdgeInsets.all(0),
+        itemBuilder: (_, int index) {
+          final ArchiverProviderItem _item = state.hItems[index];
+          return CupertinoButton(
+            padding: const EdgeInsets.symmetric(vertical: 8.0),
+            child: Column(
+              children: <Widget>[
+                Text(_item.resolution).paddingOnly(bottom: 2.0),
+                Text(
+                  '${_item.size}    ${_item.price}',
+                  textAlign: TextAlign.start,
+                  style: const TextStyle(
+                    fontSize: 10,
+                    height: 1,
+                    color: CupertinoColors.systemGrey,
+                  ),
+                ),
+              ],
+            ),
+            onPressed: () {
+              controller.downloadRemote(_item.dlres);
+              Get.back();
+            },
+          );
+        },
+        separatorBuilder: (_, __) {
+          return Divider(
+            height: 0.5,
+            color: CupertinoDynamicColor.resolve(
+                CupertinoColors.systemGrey4, context),
+          );
+        },
+        itemCount: state.hItems?.length ?? 0,
+      ),
+    );
+  }
+}
+
+class HatHGridView extends StatelessWidget {
+  const HatHGridView({
+    Key key,
+    @required this.controller,
+    @required this.state,
+  }) : super(key: key);
+
+  final ArchiverController controller;
+  final ArchiverProvider state;
+
+  @override
+  Widget build(BuildContext context) {
+    final List<Widget> _items = state.hItems
+        .map((_item) => CupertinoButton(
+              padding: const EdgeInsets.symmetric(vertical: 8.0),
+              child: Column(
+                children: <Widget>[
+                  Text(_item.resolution).paddingOnly(bottom: 2.0),
+                  Text(
+                    '${_item.size}   ${_item.price}',
+                    textAlign: TextAlign.start,
+                    style: const TextStyle(
+                      fontSize: 10,
+                      height: 1,
+                      color: CupertinoColors.systemGrey,
+                    ),
+                  ),
+                ],
+              ),
+              onPressed: () {
+                controller.downloadRemote(_item.dlres);
+                Get.back();
+              },
+            ))
+        .toList();
+
+    return Container(
+      padding: const EdgeInsets.only(top: 4.0),
+      height: ((state.hItems?.length ?? 0) / 2).round() * 50.0,
+      child: GridView.count(
+        physics: const NeverScrollableScrollPhysics(),
+        padding: const EdgeInsets.all(0),
+        crossAxisCount: 2,
+        childAspectRatio: 2.2,
+        children: _items,
+      ),
     );
   }
 }

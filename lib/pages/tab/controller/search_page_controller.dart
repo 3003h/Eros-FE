@@ -1,3 +1,5 @@
+import 'dart:collection';
+
 import 'package:custom_pop_up_menu/custom_pop_up_menu.dart';
 import 'package:fehviewer/common/controller/quicksearch_controller.dart';
 import 'package:fehviewer/common/service/depth_service.dart';
@@ -7,6 +9,7 @@ import 'package:fehviewer/models/entity/tag_translat.dart';
 import 'package:fehviewer/models/index.dart';
 import 'package:fehviewer/network/gallery_request.dart';
 import 'package:fehviewer/pages/tab/view/quick_search_page.dart';
+import 'package:fehviewer/store/gallery_store.dart';
 import 'package:fehviewer/utils/db_util.dart';
 import 'package:fehviewer/utils/logger.dart';
 import 'package:flutter/cupertino.dart';
@@ -26,6 +29,7 @@ enum SearchType {
 enum ListType {
   gallery,
   tag,
+  init,
 }
 
 class SearchPageController extends TabViewController {
@@ -37,7 +41,7 @@ class SearchPageController extends TabViewController {
   final String initSearchText;
 
   String searchText;
-  bool _autoComplete = true;
+  bool _autoComplete = false;
 
   final String tabIndex = 'search_$searchPageCtrlDepth';
   final CustomPopupMenuController customPopupMenuController =
@@ -46,12 +50,14 @@ class SearchPageController extends TabViewController {
   // 搜索输入框的控制器
   final TextEditingController searchTextController = TextEditingController();
 
+  final GStore _gStore = Get.find();
+
   // 搜索类型
   final Rx<SearchType> _searchType = SearchType.normal.obs;
   SearchType get searchType => _searchType.value;
   set searchType(SearchType val) => _searchType.value = val;
 
-  final Rx<ListType> _listType = ListType.tag.obs;
+  final Rx<ListType> _listType = ListType.init.obs;
   ListType get listType => _listType.value;
   set listType(ListType val) => _listType.value = val;
 
@@ -82,7 +88,9 @@ class SearchPageController extends TabViewController {
     if (_searchText.isNotEmpty) {
       _search = _searchText;
 
-      await analytics.logSearch(searchTerm: _search);
+      analytics.logSearch(searchTerm: _search);
+
+      addHistory();
 
       change(state, status: RxStatus.loading());
       try {
@@ -111,6 +119,12 @@ class SearchPageController extends TabViewController {
     await Future<void>.delayed(_duration);
     if (_lastSearchText?.trim() != searchTextController.text.trim() &&
         DateTime.now().difference(_lastInputCompleteAt) >= _duration) {
+      logger.d('_autoComplete $_autoComplete');
+      if (searchTextController.text.trim().isEmpty) {
+        listType = ListType.init;
+        return;
+      }
+
       if (_autoComplete) {
         listType = ListType.gallery;
         _autoComplete = false;
@@ -244,9 +258,27 @@ class SearchPageController extends TabViewController {
     change(tuple.item1, status: RxStatus.success());
   }
 
+  List<String> seaechHistory = <String>[].obs;
+  void addHistory() {
+    seaechHistory.insert(0, searchTextController.text.trim());
+    seaechHistory = LinkedHashSet<String>.from(seaechHistory).toList();
+    if (seaechHistory.length > 100) {
+      seaechHistory.removeRange(100, seaechHistory.length);
+    }
+    _gStore.searchHistory = seaechHistory;
+  }
+
+  void clearHistory() {
+    seaechHistory.clear();
+    update(['InitView']);
+    _gStore.searchHistory = seaechHistory;
+  }
+
   @override
   void onInit() {
     fetchNormal = Api.getGallery;
+    seaechHistory = _gStore.searchHistory;
+    _autoComplete = initSearchText?.trim()?.isNotEmpty ?? false;
     super.onInit();
   }
 
@@ -306,12 +338,25 @@ class SearchPageController extends TabViewController {
         : '${_qry.namespace.trim().shortName}:${_qry.key}\$';
     logger.i('_add $_add ');
 
-    final String _lastSearchText = this._lastSearchText;
+    final String _lastSearchText = this._lastSearchText ?? '';
     final String _newSearch =
         _lastSearchText.replaceAll(RegExp('$_currQry\$'), _add);
     logger.i(
         '_lastSearchText $_lastSearchText \n_currQry $_currQry\n_newSearch $_newSearch ');
 
+    _autoComplete = false;
+    searchTextController.value = TextEditingValue(
+      text: '$_newSearch ',
+      selection: TextSelection.fromPosition(TextPosition(
+          affinity: TextAffinity.downstream, offset: '$_newSearch '.length)),
+    );
+
+    FocusScope.of(Get.context).requestFocus(focusNode);
+  }
+
+  void appendTextToSearch(String text) {
+    final String _lastSearchText = searchTextController.text ?? '';
+    final String _newSearch = '$_lastSearchText $text';
     _autoComplete = false;
     searchTextController.value = TextEditingValue(
       text: '$_newSearch ',
