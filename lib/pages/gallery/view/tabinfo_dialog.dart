@@ -1,10 +1,12 @@
 import 'package:fehviewer/models/entity/tag_translat.dart';
 import 'package:fehviewer/utils/db_util.dart';
+import 'package:fehviewer/utils/vibrate.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 Future<void> showTagInfoDialog(String text, {String type}) {
+  VibrateUtil.medium();
   return showCupertinoDialog<void>(
       context: Get.context,
       barrierDismissible: true,
@@ -28,7 +30,7 @@ class TagDialogView extends StatefulWidget {
 }
 
 class _TagDialogViewState extends State<TagDialogView> {
-  Future<void> _future;
+  Future<TagTranslat> _future;
 
   Future<TagTranslat> _getTaginfo() async {
     final TagTranslat _taginfo =
@@ -68,11 +70,15 @@ class _TagDialogViewState extends State<TagDialogView> {
                 child: Text(
                   _taginfo?.intro ?? '',
                   textAlign: TextAlign.start,
+                  style: const TextStyle(
+                    height: 1.5,
+                  ),
                 ),
               );
             }
           } else {
             return Container(
+              padding: const EdgeInsets.symmetric(vertical: 10),
               child: const CupertinoActivityIndicator(),
             );
           }
