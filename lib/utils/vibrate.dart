@@ -9,6 +9,12 @@ class VibrateUtil {
     }
   }
 
+  static void medium() {
+    if (Platform.isIOS) {
+      Vibrate.feedback(FeedbackType.medium);
+    }
+  }
+
   static void heavy() {
     if (Platform.isIOS) {
       Vibrate.feedback(FeedbackType.heavy);

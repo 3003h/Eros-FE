@@ -3,7 +3,7 @@ description: ..
 
 publish_to: 'none' # Remove this line if you wish to publish to pub.dev
 
-version: 1.0.4+126
+version: 1.0.4+128
 
 environment:
   sdk: '>=2.10.0 <3.0.0'
@@ -182,6 +182,7 @@ dependencies:
   pretty_dio_logger: ^1.1.1
   dio_retry: ^0.1.9-beta
   extended_image: ^1.5.0
+  translator: ^0.1.5
 
 
 

@@ -1145,6 +1145,13 @@ packages:
       url: "https://pub.flutter-io.cn"
     source: hosted
     version: "0.1.1+3"
+  translator:
+    dependency: "direct main"
+    description:
+      name: translator
+      url: "https://pub.flutter-io.cn"
+    source: hosted
+    version: "0.1.5"
   tuple:
     dependency: "direct main"
     description:
