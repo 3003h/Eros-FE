@@ -50,10 +50,10 @@ class NavigatorUtil {
     Get.find<DepthService>().pushPageCtrl();
     if (url != null && url.isNotEmpty) {
       logger.d('goGalleryPage fromUrl');
-      Get.lazyPut(
-        () => GalleryRepository(url: url, tabTag: tabTag),
-        tag: pageCtrlDepth,
-      );
+      // Get.lazyPut(
+      //   () => GalleryRepository(url: url, tabTag: tabTag),
+      //   tag: pageCtrlDepth,
+      // );
 
       // Get.toNamed(
       //   EHRoutes.galleryPage,
@@ -63,16 +63,19 @@ class NavigatorUtil {
 
       Get.to(
         const GalleryMainPage(),
-        binding: GalleryBinding(),
+        binding: GalleryBinding(
+          galleryRepository: GalleryRepository(url: url, tabTag: tabTag),
+        ),
+        preventDuplicates: false,
         // arguments: GalleryRepository(url: url, tabTag: tabTag),
       );
     } else {
       logger.d('goGalleryPage fromItem tabTag=$tabTag');
 
-      Get.lazyPut(
-        () => GalleryRepository(item: galleryItem, tabTag: tabTag),
-        tag: pageCtrlDepth,
-      );
+      // Get.lazyPut(
+      //   () => GalleryRepository(item: galleryItem, tabTag: tabTag),
+      //   tag: pageCtrlDepth,
+      // );
 
       // Get.toNamed(
       //   EHRoutes.galleryPage,
@@ -82,7 +85,11 @@ class NavigatorUtil {
 
       Get.to(
         const GalleryMainPage(),
-        binding: GalleryBinding(),
+        binding: GalleryBinding(
+          galleryRepository:
+              GalleryRepository(item: galleryItem, tabTag: tabTag),
+        ),
+        preventDuplicates: false,
         // arguments: GalleryRepository(item: galleryItem, tabTag: tabTag),
       );
     }
@@ -92,20 +99,24 @@ class NavigatorUtil {
     final DepthService depthService = Get.find();
     depthService.pushPageCtrl();
     if (url != null && url.isNotEmpty) {
-      Get.lazyPut(
-        () => GalleryRepository(url: url),
-        tag: pageCtrlDepth,
-      );
+      // Get.lazyPut(
+      //   () => GalleryRepository(url: url),
+      //   tag: pageCtrlDepth,
+      // );
       // Get.offNamed(EHRoutes.galleryPage,
       //     arguments: GalleryRepository(url: url));
       Get.to(
         const GalleryMainPage(),
-        binding: GalleryBinding(),
+        binding: GalleryBinding(
+          galleryRepository: GalleryRepository(url: url),
+        ),
+        preventDuplicates: false,
         // arguments: GalleryRepository(url: url),
       );
     } else {
       Get.to(
         const GalleryMainPage(),
+        preventDuplicates: false,
       );
     }
   }

@@ -31,7 +31,7 @@ class ViewState {
     logger.v('初始化ViewState');
 
     ever(_itemIndex, (int val) {
-      logger.d('ever _itemIndex to $val');
+      // logger.d('ever _itemIndex to $val');
       Future<void>.delayed(const Duration(milliseconds: 100)).then((_) {
         // logger.d('delayed ever _itemIndex to $itemIndex');
         _galleryCacheController.setIndex(
@@ -88,7 +88,7 @@ class ViewState {
   final RxInt _itemIndex = 0.obs;
   int get itemIndex => _itemIndex.value;
   set itemIndex(int val) {
-    logger.d('set itemIndex to $val');
+    // logger.d('set itemIndex to $val');
     _itemIndex.value = val;
   }
 
