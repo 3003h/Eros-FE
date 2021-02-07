@@ -116,7 +116,7 @@ class GalleryPageController extends GetxController
   void onInit() {
     super.onInit();
 
-    logger.d('GalleryPageController$pageCtrlDepth onInit');
+    // logger.d('GalleryPageController$pageCtrlDepth onInit');
 
     scrollController.addListener(_scrollControllerLister);
     hideNavigationBtn = true;
@@ -143,6 +143,7 @@ class GalleryPageController extends GetxController
       Get.delete<CommentController>(tag: pageCtrlDepth);
     } catch (_) {}
 
+    logger.d('onClose GalleryPageController $pageCtrlDepth');
     Get.find<DepthService>().popPageCtrl();
     super.onClose();
   }

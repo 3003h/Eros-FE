@@ -128,23 +128,25 @@ class CommentItem extends StatelessWidget {
                               primaryColor: ThemeColors.commitText),
                           child: Row(
                             children: <Widget>[
-                              CupertinoButton(
-                                padding:
-                                    const EdgeInsets.symmetric(horizontal: 12),
-                                minSize: 0,
-                                child: Icon(
-                                  FontAwesomeIcons.language,
-                                  size: kSizeVote,
-                                  color: CupertinoDynamicColor.resolve(
-                                    ThemeColors.commitText,
-                                    context,
+                              if (_ehConfigService.commentTrans.value)
+                                CupertinoButton(
+                                  padding: const EdgeInsets.symmetric(
+                                      horizontal: 12),
+                                  minSize: 0,
+                                  child: Icon(
+                                    FontAwesomeIcons.language,
+                                    size: kSizeVote,
+                                    color: CupertinoDynamicColor.resolve(
+                                      ThemeColors.commitText,
+                                      context,
+                                    ),
                                   ),
+                                  onPressed: () {
+                                    VibrateUtil.light();
+                                    showTranslatorDialog(
+                                        galleryComment.context);
+                                  },
                                 ),
-                                onPressed: () {
-                                  VibrateUtil.light();
-                                  showTranslatorDialog(galleryComment.context);
-                                },
-                              ),
                               if (galleryComment.canVote)
                                 CupertinoButton(
                                   padding: const EdgeInsets.symmetric(
@@ -270,7 +272,7 @@ class CommentItem extends StatelessWidget {
   }
 
   Future<void> _onOpen(BuildContext context, LinkableElement link) async {
-    logger.v(' ${link.url}');
+    // logger.v(' ${link.url}');
     final RegExp regExp =
         RegExp(r'https?://e[-x]hentai.org/g/[0-9]+/[0-9a-z]+');
     if (await canLaunch(link.url)) {

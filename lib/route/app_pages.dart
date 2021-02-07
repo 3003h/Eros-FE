@@ -125,6 +125,10 @@ class AppPages {
         Get.lazyPut(() => ViewController());
       }),
     ),
+
+    // 使用命名路由跳转 EHRoutes.galleryPage 的话
+    // 有多个page时，关闭页面的时候 会全部close
+    // 先停用
     GetPage(
       name: EHRoutes.galleryPage,
       page: () => const GalleryMainPage(),
