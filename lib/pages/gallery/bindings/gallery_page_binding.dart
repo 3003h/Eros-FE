@@ -9,11 +9,15 @@ import 'package:fehviewer/pages/gallery/view/gallery_page.dart';
 import 'package:get/get.dart';
 
 class GalleryBinding extends Bindings {
+  GalleryBinding({this.galleryRepository});
+  final GalleryRepository galleryRepository;
+
   @override
   void dependencies() {
     Get.lazyPut(
         () => GalleryPageController(
-            galleryRepository: Get.find<GalleryRepository>(tag: pageCtrlDepth)),
+            galleryRepository: galleryRepository ??
+                Get.find<GalleryRepository>(tag: pageCtrlDepth)),
         tag: pageCtrlDepth);
 
     // Get.lazyPut(() => GalleryPageController(), tag: pageCtrlDepth);

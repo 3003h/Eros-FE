@@ -443,7 +443,7 @@ class GalleryPageController extends GetxController
     // logger.d('length ${previews.length} ; index $index');
 
     // todo 好像还有点问题
-    if (previews.length - index < 4) {
+    if (previews.length - index < 10) {
       try {
         final List<GalleryPreview> _moreGalleryPreviewList =
             await Api.getGalleryPreview(

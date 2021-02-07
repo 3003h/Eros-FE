@@ -23,6 +23,8 @@ import 'package:fehviewer/utils/utility.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/widgets.dart';
 import 'package:get/get.dart' hide Response;
+import 'package:html/dom.dart';
+import 'package:html/parser.dart' show parse;
 
 part 'child.dart';
 
@@ -177,7 +179,7 @@ class DownloadManager {
 
               break;
             case _ResponseType.progress: // 进度更新
-              // 更新明细大图url
+              // 更新 大图 相关信息
               final ProgessBean _progess = _resBean.progess;
               final GalleryTask _galleryTask = _resBean.galleryTask;
 
@@ -186,21 +188,23 @@ class DownloadManager {
 
               logger.v('parent progess '
                   '${_progess.updateImages.map((e) => e.toString()).join('\n')}');
-              for (final GalleryImageTask _uptImageTask
-                  in _progess.updateImages) {
-                final GalleryImageTask _oriImageTask = await _imageTaskDao
-                    .findGalleryTaskByKey(_uptImageTask.gid, _uptImageTask.ser);
+              for (final _uptImageTask in _progess.updateImages) {
+                final _oriImageTask = await _imageTaskDao.findGalleryTaskByKey(
+                    _uptImageTask.gid, _uptImageTask.ser);
 
-                final GalleryImageTask _uptTask = _oriImageTask.copyWith(
+                final GalleryImageTask _uptTask = _oriImageTask?.copyWith(
                   imageUrl: _uptImageTask.imageUrl,
                   filePath: _uptImageTask.filePath,
+                  sourceId: _uptImageTask.sourceId,
                 );
-                await _imageTaskDao.updateImageTask(_uptTask);
+                if (_uptTask != null) {
+                  await _imageTaskDao.updateImageTask(_uptTask);
 
-                _pageController.previews
-                    .firstWhere((GalleryPreview element) =>
-                        element.ser == _uptImageTask.ser)
-                    .largeImageUrl = _uptImageTask.imageUrl;
+                  _pageController.previews
+                      .firstWhere((GalleryPreview element) =>
+                          element.ser == _uptImageTask.ser)
+                      .largeImageUrl = _uptImageTask.imageUrl;
+                }
               }
 
               break;
@@ -217,6 +221,7 @@ class DownloadManager {
         }
       } catch (e, stack) {
         logger.e('$e\n$stack');
+        rethrow;
       }
     });
   }
@@ -230,6 +235,7 @@ class DownloadManager {
       {GalleryTask galleryTask,
       List<GalleryImageTask> imageTasks,
       String downloadPath}) {
+    logger.d('addTask ${galleryTask.gid} ${galleryTask.title}');
     final GalleryPageController _pageController = Get.find(tag: pageCtrlDepth);
     final _RequestBean _requestBean = _RequestBean(
       galleryTask: galleryTask,

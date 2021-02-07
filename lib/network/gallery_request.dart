@@ -74,17 +74,20 @@ class Api {
     }
   }
 
-  static HttpManager getHttpManager({bool cache = true, String baseUrl}) {
+  static HttpManager getHttpManager(
+      {bool cache = true, String baseUrl, int connectTimeout}) {
     final String _baseUrl = EHConst.getBaseSite(
         Get.find<EhConfigService>().isSiteEx.value ?? false);
-    return HttpManager(baseUrl ?? _baseUrl, cache: cache);
+    return HttpManager(baseUrl ?? _baseUrl,
+        cache: cache, connectTimeout: connectTimeout);
   }
 
-  static Options getCacheOptions({bool forceRefresh = false}) {
+  static Options getCacheOptions({bool forceRefresh = false, Options options}) {
     return buildCacheOptions(
       const Duration(days: 5),
       maxStale: const Duration(days: 7),
       forceRefresh: forceRefresh,
+      options: options,
     );
   }
 
@@ -955,9 +958,12 @@ class Api {
     };
 
     await CustomHttpsProxy.instance.init();
-    final String response = await Api.getHttpManager().get(
+    final String response = await Api.getHttpManager(connectTimeout: 5000).get(
       url,
-      options: getCacheOptions(forceRefresh: refresh),
+      options: getCacheOptions(
+        forceRefresh: refresh,
+        options: Options(receiveTimeout: 8000),
+      ),
       params: _params,
     );
 
