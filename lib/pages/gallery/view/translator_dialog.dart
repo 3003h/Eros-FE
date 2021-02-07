@@ -12,21 +12,21 @@ Future<void> showTranslatorDialog(String inputText, {String from, String to}) {
       context: Get.context,
       // barrierDismissible: true,
       builder: (_) {
-        // return CupertinoAlertDialog(
-        //   title: const Text('Translator'),
-        //   content: TranslatorDialogView(inputText, from: from, to: to),
-        //   actions: <Widget>[],
-        // );
-        return CupertinoActionSheet(
-          title: Column(
-            children: [
-              const Text('Translator',
-                  style: TextStyle(fontWeight: FontWeight.bold)),
-              TranslatorDialogView(inputText, from: from, to: to)
-            ],
-          ),
-          actions: const <Widget>[],
+        return CupertinoAlertDialog(
+          title: const Text('Translator'),
+          content: TranslatorDialogView(inputText, from: from, to: to),
+          actions: <Widget>[],
         );
+        // return CupertinoActionSheet(
+        //   title: Column(
+        //     children: [
+        //       const Text('Translator',
+        //           style: TextStyle(fontWeight: FontWeight.bold)),
+        //       TranslatorDialogView(inputText, from: from, to: to)
+        //     ],
+        //   ),
+        //   actions: const <Widget>[],
+        // );
       });
 }
 

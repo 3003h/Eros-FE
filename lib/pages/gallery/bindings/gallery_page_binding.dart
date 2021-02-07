@@ -5,6 +5,7 @@ import 'package:fehviewer/pages/gallery/controller/gallery_fav_controller.dart';
 import 'package:fehviewer/pages/gallery/controller/gallery_page_controller.dart';
 import 'package:fehviewer/pages/gallery/controller/rate_controller.dart';
 import 'package:fehviewer/pages/gallery/controller/torrent_controller.dart';
+import 'package:fehviewer/pages/gallery/view/gallery_page.dart';
 import 'package:get/get.dart';
 
 class GalleryBinding extends Bindings {
@@ -12,21 +13,24 @@ class GalleryBinding extends Bindings {
   void dependencies() {
     Get.lazyPut(
         () => GalleryPageController(
-              galleryRepository: Get.find(tag: pageCtrlDepth),
-            ),
+            galleryRepository: Get.find<GalleryRepository>(tag: pageCtrlDepth)),
         tag: pageCtrlDepth);
+
+    // Get.lazyPut(() => GalleryPageController(), tag: pageCtrlDepth);
+
+    // Get.put(
+    //     GalleryPageController(
+    //         galleryRepository: Get.find<GalleryRepository>(tag: pageCtrlDepth)),
+    //     tag: pageCtrlDepth);
 
     Get.lazyPut(() => CommentController(), tag: pageCtrlDepth);
 
-    Get.lazyPut<RateController>(() => RateController(), tag: pageCtrlDepth);
+    Get.lazyPut(() => RateController(), tag: pageCtrlDepth);
 
-    Get.lazyPut<TorrentController>(() => TorrentController(),
-        tag: pageCtrlDepth);
+    Get.lazyPut(() => TorrentController(), tag: pageCtrlDepth);
 
-    Get.lazyPut<ArchiverController>(() => ArchiverController(),
-        tag: pageCtrlDepth);
+    Get.lazyPut(() => ArchiverController(), tag: pageCtrlDepth);
 
-    Get.lazyPut<GalleryFavController>(() => GalleryFavController(),
-        tag: pageCtrlDepth);
+    Get.lazyPut(() => GalleryFavController(), tag: pageCtrlDepth);
   }
 }

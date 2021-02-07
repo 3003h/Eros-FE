@@ -17,5 +17,6 @@
   "searchBarComp": false,
   "pureDarkTheme": false,
   "viewModel": "vertical",
-  "clipboardLink": false
+  "clipboardLink": false,
+  "commentTrans": false
 }

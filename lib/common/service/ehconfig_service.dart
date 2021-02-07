@@ -27,6 +27,7 @@ class EhConfigService extends ProfileService {
   RxBool isFavPicker = false.obs;
   RxBool isPureDarkTheme = false.obs;
   RxBool isClipboardLink = false.obs;
+  RxBool commentTrans = false.obs;
 
   String _lastClipboardLink = '';
 
@@ -125,6 +126,10 @@ class EhConfigService extends ProfileService {
     isClipboardLink.value = ehConfig.clipboardLink ?? false;
     everProfile<bool>(
         isClipboardLink, (bool value) => ehConfig.clipboardLink = value);
+
+    commentTrans.value = ehConfig.commentTrans ?? false;
+    everProfile<bool>(
+        commentTrans, (bool value) => ehConfig.commentTrans = value);
   }
 
   /// 收藏排序

@@ -698,7 +698,7 @@ class Api {
   }) async {
     final RegExp urlRex =
         RegExp(r'(http?s://e(-|x)hentai.org)?/g/(\d+)/(\w+)/?$');
-    logger.v(galleryItem.url);
+    // logger.v(galleryItem.url);
     final RegExpMatch urlRult = urlRex.firstMatch(galleryItem.url);
     // logger.v(urlRult.groupCount);
 
