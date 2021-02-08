@@ -10,6 +10,7 @@ import 'package:fehviewer/pages/tab/controller/enum.dart';
 import 'package:fehviewer/pages/tab/controller/search_page_controller.dart';
 import 'package:fehviewer/pages/tab/view/gallery_base.dart';
 import 'package:fehviewer/pages/tab/view/tab_base.dart';
+import 'package:fehviewer/store/tag_database.dart';
 import 'package:fehviewer/utils/logger.dart';
 import 'package:fehviewer/utils/vibrate.dart';
 import 'package:flutter/cupertino.dart';
@@ -145,20 +146,46 @@ class GallerySearchPage extends StatelessWidget {
   }
 
   Widget _getInitView() {
+    Future<String> _getTextTranslate(String text) async {
+      final String tranText =
+          await EhTagDatabase.getTranTagWithFullNameSpase(text);
+      if (tranText != null && tranText.trim() != text) {
+        return tranText;
+      } else {
+        return null;
+      }
+    }
+
+    Widget _btn(String text) {
+      return TagButton(
+        text: text,
+        padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 6),
+        onPressed: () {
+          controller.appendTextToSearch(text);
+        },
+        onLongPress: () async {
+          final tranText = await _getTextTranslate(text);
+          if (tranText != null) {
+            VibrateUtil.medium();
+            showCupertinoDialog(
+                context: Get.overlayContext,
+                barrierDismissible: true,
+                builder: (_) {
+                  return CupertinoAlertDialog(
+                    content: Text(tranText),
+                  );
+                });
+          }
+        },
+      );
+    }
+
     return GetBuilder<SearchPageController>(
       tag: searchPageCtrlDepth,
       id: 'InitView',
       builder: (controller) {
-        final List<Widget> _btnList = List<Widget>.from(controller.seaechHistory
-            .map((e) => TagButton(
-                  text: e,
-                  padding:
-                      const EdgeInsets.symmetric(vertical: 6, horizontal: 6),
-                  onPressed: () {
-                    controller.appendTextToSearch(e);
-                  },
-                ))
-            .toList());
+        final List<Widget> _btnList = List<Widget>.from(
+            controller.seaechHistory.map((String text) => _btn(text)).toList());
 
         return SliverToBoxAdapter(
           child: Container(
@@ -177,7 +204,7 @@ class GallerySearchPage extends StatelessWidget {
                 Container(
                   child: Wrap(
                     spacing: 8, //主轴上子控件的间距
-                    runSpacing: 10, //交叉轴上子控件之间的间距
+                    runSpacing: 8, //交叉轴上子控件之间的间距
                     children: _btnList.sublist(
                         0, min<int>(20, _btnList.length)), //要显示的子控件集合
                   ),
