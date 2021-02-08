@@ -3,8 +3,10 @@ import 'package:fehviewer/common/global.dart';
 import 'package:fehviewer/common/service/base_service.dart';
 import 'package:fehviewer/const/const.dart';
 import 'package:fehviewer/generated/l10n.dart';
+import 'package:fehviewer/pages/gallery/view/gallery_page.dart';
 import 'package:fehviewer/pages/tab/controller/tabhome_controller.dart';
 import 'package:fehviewer/route/navigator_util.dart';
+import 'package:fehviewer/route/routes.dart';
 import 'package:fehviewer/utils/logger.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/services.dart';
@@ -191,19 +193,37 @@ class EhConfigService extends ProfileService {
     if (!isClipboardLink.value) {
       return;
     }
+
+    final currentRoute = Get.currentRoute;
+    logger.d('currentRoute $currentRoute');
+
+    final pageNames = <String>[
+      '/${const GalleryMainPage().runtimeType.toString()}',
+      EHRoutes.galleryPage,
+    ];
+
+    logger.d('pageNames $pageNames');
+    final bool _curGalleryPage = pageNames.contains(currentRoute);
+
     final String _text =
         (await Clipboard.getData(Clipboard.kTextPlain))?.text ?? '';
     logger.d('Clipboard ' + _text);
     final RegExp _reg =
         RegExp(r'https?://e[-|x]hentai.org/g/\d+/[0-9a-f]{10}/?');
     final RegExpMatch _mach = _reg.firstMatch(_text);
-    if (_mach != null &&
-        _mach.group(0).isNotEmpty &&
-        _lastClipboardLink != _mach.group(0)) {
-      logger.d('${_mach.group(0)} ');
-      _lastClipboardLink = _mach.group(0);
-      _showClipboardLinkDialog(_mach.group(0));
+
+    if (_mach == null && (_mach?.group(0)?.isEmpty ?? true)) {
+      return;
     }
+
+    if (_curGalleryPage && _lastClipboardLink == _mach.group(0)) {
+      logger.v('剪贴板链接为当前展示的画廊 返回');
+      return;
+    }
+
+    logger.d('${_mach.group(0)} ');
+    _lastClipboardLink = _mach.group(0);
+    _showClipboardLinkDialog(_mach.group(0));
   }
 
   Future<void> _showClipboardLinkDialog(String url) async {
