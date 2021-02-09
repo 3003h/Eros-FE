@@ -18,5 +18,6 @@
   "pureDarkTheme": false,
   "viewModel": "vertical",
   "clipboardLink": false,
-  "commentTrans": false
+  "commentTrans": false,
+  "autoLockTimeOut": -1
 }

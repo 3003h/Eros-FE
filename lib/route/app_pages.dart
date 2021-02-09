@@ -11,6 +11,7 @@ import 'package:fehviewer/pages/setting/advanced_setting_page.dart';
 import 'package:fehviewer/pages/setting/controller/tab_setting_controller.dart';
 import 'package:fehviewer/pages/setting/download_setting_page.dart';
 import 'package:fehviewer/pages/setting/eh_setting_page.dart';
+import 'package:fehviewer/pages/setting/security_setting_page.dart';
 import 'package:fehviewer/pages/setting/tab_setting.dart';
 import 'package:fehviewer/pages/setting/view_setting_page.dart';
 import 'package:fehviewer/pages/tab/bindings/splash_binding.dart';
@@ -22,6 +23,7 @@ import 'package:fehviewer/pages/tab/view/history_page.dart';
 import 'package:fehviewer/pages/tab/view/home_page_small.dart';
 import 'package:fehviewer/pages/tab/view/popular_page.dart';
 import 'package:fehviewer/pages/tab/view/splash_page.dart';
+import 'package:fehviewer/pages/tab/view/unlock_page.dart';
 import 'package:fehviewer/pages/tab/view/watched_page.dart';
 import 'package:get/get.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
@@ -36,6 +38,11 @@ class AppPages {
       page: () => SplashPage(),
       binding: SplashBinding(),
       transition: Transition.fadeIn,
+    ),
+    GetPage(
+      name: EHRoutes.unlockPage,
+      page: () => UnLockPage(),
+      transition: Transition.noTransition,
     ),
     GetPage(
       name: EHRoutes.home,
@@ -67,6 +74,11 @@ class AppPages {
     GetPage(
       name: EHRoutes.downloadSetting,
       page: () => DownloadSettingPage(),
+      transition: Transition.cupertino,
+    ),
+    GetPage(
+      name: EHRoutes.securitySetting,
+      page: () => SecuritySettingPage(),
       transition: Transition.cupertino,
     ),
     GetPage(

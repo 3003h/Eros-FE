@@ -64,9 +64,10 @@ class _GalleryImageState extends State<GalleryImage>
 
   @override
   void dispose() {
-    super.dispose();
+    clearGestureDetailsCache();
     _controller.dispose();
     // _getMoreCancelToken.cancel();
+    super.dispose();
   }
 
   Future<void> _reloadImage({bool changeSource = true}) async {
@@ -212,7 +213,6 @@ class _GalleryImageState extends State<GalleryImage>
   Widget _buildImageExtend(String url) {
     return ExtendedImage.network(
       url ?? '',
-      cache: true,
       fit: BoxFit.contain,
       handleLoadingProgress: true,
       clearMemoryCacheIfFailed: true,

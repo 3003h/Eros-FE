@@ -113,5 +113,13 @@
   "copy": "Copy",
   "copied_to_clipboard": "Copied to clipboard",
   "KEEP_IT_SAFE": "KEEP IT SAFE",
-  "share": "Share"
+  "share": "Share",
+  "security": "Security",
+  "security_blurredInRecentTasks": "Blurring in recent tasks",
+  "autoLock": "Auto-lock",
+  "disabled": "Disabled",
+  "instantly": "Instantly",
+  "hours": "hours",
+  "min": "min",
+  "second": "second"
 }
