@@ -5,9 +5,12 @@ class EHRoutes {
 
   static const String selFavorie = '/selFavoriePage';
 
+  static const String unlockPage = '/unlockPage';
+
   static const String ehSetting = '/setting/ehSetting';
   static const String downloadSetting = '/setting/downloadSetting';
   static const String advancedSetting = '/setting/advancedSetting';
+  static const String securitySetting = '/setting/securitySetting';
   static const String viewSeting = '/setting/viewSetting';
   static const String about = '/setting/about';
 

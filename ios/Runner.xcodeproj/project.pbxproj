@@ -17,6 +17,7 @@
 		BA0498C22553F1EA008DE488 /* ShareViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = BA0498C12553F1EA008DE488 /* ShareViewController.swift */; };
 		BA0498C52553F1EA008DE488 /* MainInterface.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = BA0498C32553F1EA008DE488 /* MainInterface.storyboard */; };
 		BA0498C92553F1EA008DE488 /* EHShareExtension.appex in Embed App Extensions */ = {isa = PBXBuildFile; fileRef = BA0498BF2553F1EA008DE488 /* EHShareExtension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		BA373B2925D2A11600C042FA /* SecurityBlurEffect.swift in Sources */ = {isa = PBXBuildFile; fileRef = BA373B2825D2A11600C042FA /* SecurityBlurEffect.swift */; };
 		BA91606F25C6CC5F001EA128 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = BA91606E25C6CC5F001EA128 /* GoogleService-Info.plist */; };
 /* End PBXBuildFile section */
 
@@ -78,6 +79,7 @@
 		BA0498C42553F1EA008DE488 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/MainInterface.storyboard; sourceTree = "<group>"; };
 		BA0498C62553F1EA008DE488 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		BA1D4D5225B3FC6E00264936 /* libsqlite3.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libsqlite3.tbd; path = usr/lib/libsqlite3.tbd; sourceTree = SDKROOT; };
+		BA373B2825D2A11600C042FA /* SecurityBlurEffect.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SecurityBlurEffect.swift; sourceTree = "<group>"; };
 		BA91606E25C6CC5F001EA128 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		BADC7A7924A9198200AFDF67 /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/Main.strings"; sourceTree = "<group>"; };
 		BADC7A7A24A9198200AFDF67 /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/LaunchScreen.strings"; sourceTree = "<group>"; };
@@ -159,6 +161,7 @@
 				1498D2331E8E89220040F4C2 /* GeneratedPluginRegistrant.m */,
 				74858FAE1ED2DC5600515810 /* AppDelegate.swift */,
 				74858FAD1ED2DC5600515810 /* Runner-Bridging-Header.h */,
+				BA373B2825D2A11600C042FA /* SecurityBlurEffect.swift */,
 			);
 			path = Runner;
 			sourceTree = "<group>";
@@ -334,7 +337,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "/bin/sh \"$FLUTTER_ROOT/packages/flutter_tools/bin/xcode_backend.sh\" build\n";
+			shellScript = "/bin/sh \"$FLUTTER_ROOT/packages/flutter_tools/bin/xcode_backend.sh\" build\n\"${PODS_ROOT}/FirebaseCrashlytics/run\"\n\"${PODS_ROOT}/FirebaseCrashlytics/upload-symbols\" -gsp \"${PROJECT_DIR}/Runner/GoogleService-Info.plist\" -p ios \"${DWARF_DSYM_FOLDER_PATH}/${DWARF_DSYM_FILE_NAME}\"\n\n";
 		};
 		AAC4936C2A80B98BD3EFA3DB /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -367,6 +370,7 @@
 			files = (
 				74858FAF1ED2DC5600515810 /* AppDelegate.swift in Sources */,
 				1498D2341E8E89220040F4C2 /* GeneratedPluginRegistrant.m in Sources */,
+				BA373B2925D2A11600C042FA /* SecurityBlurEffect.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -704,7 +708,7 @@
 				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 129;
+				CURRENT_PROJECT_VERSION = 131;
 				DEVELOPMENT_TEAM = T7YU25UBLS;
 				GCC_C_LANGUAGE_STANDARD = gnu11;
 				INFOPLIST_FILE = EHShareExtension/Info.plist;
@@ -738,7 +742,7 @@
 				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
 				CODE_SIGN_IDENTITY = "iPhone Distribution";
 				CODE_SIGN_STYLE = Manual;
-				CURRENT_PROJECT_VERSION = 129;
+				CURRENT_PROJECT_VERSION = 131;
 				DEVELOPMENT_TEAM = T7YU25UBLS;
 				GCC_C_LANGUAGE_STANDARD = gnu11;
 				INFOPLIST_FILE = EHShareExtension/Info.plist;
@@ -770,7 +774,7 @@
 				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 129;
+				CURRENT_PROJECT_VERSION = 131;
 				DEVELOPMENT_TEAM = T7YU25UBLS;
 				GCC_C_LANGUAGE_STANDARD = gnu11;
 				INFOPLIST_FILE = EHShareExtension/Info.plist;

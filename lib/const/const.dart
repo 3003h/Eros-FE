@@ -75,6 +75,18 @@ class EHConst {
     17,
   ];
 
+  static List<int> autoLockTime = <int>[
+    -1,
+    0,
+    30,
+    60 * 1,
+    60 * 5,
+    60 * 10,
+    60 * 30,
+    60 * 60,
+    60 * 60 * 5,
+  ];
+
   static const Map<FavoriteOrder, String> favoriteOrder =
       <FavoriteOrder, String>{
     FavoriteOrder.fav: FAV_ORDER_FAV,

@@ -729,6 +729,9 @@ class PreviewContainer extends StatelessWidget {
         return CachedNetworkImage(
           httpHeaders: _httpHeaders,
           imageUrl: galleryPreview.imgUrl,
+          progressIndicatorBuilder: (_, __, ___) {
+            return const CupertinoActivityIndicator();
+          },
         );
       } else {
         return LayoutBuilder(
@@ -754,13 +757,11 @@ class PreviewContainer extends StatelessWidget {
               alignment: AlignmentDirectional.center,
               fit: StackFit.expand,
               children: <Widget>[
-                Container(
-                  child: PreviewImageClipper(
-                    imgUrl: galleryPreview.imgUrl,
-                    offset: galleryPreview.offSet,
-                    height: galleryPreview.height,
-                    width: galleryPreview.width,
-                  ),
+                PreviewImageClipper(
+                  imgUrl: galleryPreview.imgUrl,
+                  offset: galleryPreview.offSet,
+                  height: galleryPreview.height,
+                  width: galleryPreview.width,
                 ),
               ],
             ),

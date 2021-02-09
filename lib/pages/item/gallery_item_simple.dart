@@ -300,8 +300,10 @@ class CoverImg extends StatelessWidget {
               child: CachedNetworkImage(
                 placeholder: (_, __) {
                   return Container(
+                    alignment: Alignment.center,
                     color: CupertinoDynamicColor.resolve(
                         CupertinoColors.systemGrey5, context),
+                    child: const CupertinoActivityIndicator(),
                   );
                 },
                 height: height * constraints.maxWidth / width,

@@ -12,3 +12,5 @@ const String IS_DB_IN_SUPPORT_DIR = 'isDBinappSupportPath';
 const String GS_HISTORY = 'history';
 const String GS_GALLERY_CACHE = 'galleryCache';
 const String GS_LOCAL_FAV = 'loaclFav';
+
+const String BLURRED_IN_RECENT_TASK = 'blurredInRecentTasks';

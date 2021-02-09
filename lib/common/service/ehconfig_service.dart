@@ -2,12 +2,14 @@ import 'package:enum_to_string/enum_to_string.dart';
 import 'package:fehviewer/common/global.dart';
 import 'package:fehviewer/common/service/base_service.dart';
 import 'package:fehviewer/const/const.dart';
+import 'package:fehviewer/const/storages.dart';
 import 'package:fehviewer/generated/l10n.dart';
 import 'package:fehviewer/pages/gallery/view/gallery_page.dart';
 import 'package:fehviewer/pages/tab/controller/tabhome_controller.dart';
 import 'package:fehviewer/route/navigator_util.dart';
 import 'package:fehviewer/route/routes.dart';
 import 'package:fehviewer/utils/logger.dart';
+import 'package:fehviewer/utils/storage.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
@@ -30,6 +32,7 @@ class EhConfigService extends ProfileService {
   RxBool isPureDarkTheme = false.obs;
   RxBool isClipboardLink = false.obs;
   RxBool commentTrans = false.obs;
+  RxBool blurredInRecentTasks = true.obs;
 
   String _lastClipboardLink = '';
 
@@ -52,6 +55,9 @@ class EhConfigService extends ProfileService {
 
   /// 阅读方向
   Rx<ViewMode> viewMode = ViewMode.horizontalLeft.obs;
+
+  /// 自动锁定时间
+  RxInt autoLockTimeOut = (-1).obs;
 
   @override
   void onInit() {
@@ -132,6 +138,17 @@ class EhConfigService extends ProfileService {
     commentTrans.value = ehConfig.commentTrans ?? false;
     everProfile<bool>(
         commentTrans, (bool value) => ehConfig.commentTrans = value);
+
+    // blurredInRecentTasks
+    blurredInRecentTasks.value =
+        storageUtil.getBool(BLURRED_IN_RECENT_TASK) ?? true;
+    everProfile<bool>(blurredInRecentTasks,
+        (bool value) => storageUtil.setBool(BLURRED_IN_RECENT_TASK, value));
+
+    // autoLockTimeOut
+    autoLockTimeOut.value = ehConfig.autoLockTimeOut ?? -1;
+    everProfile<int>(
+        autoLockTimeOut, (int value) => ehConfig.autoLockTimeOut = value);
   }
 
   /// 收藏排序

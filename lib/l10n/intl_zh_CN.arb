@@ -113,5 +113,13 @@
   "copy": "复制",
   "copied_to_clipboard": "已复制到剪贴板",
   "KEEP_IT_SAFE": "注意数据安全",
-  "share": "分享"
+  "share": "分享",
+  "security": "安全",
+  "security_blurredInRecentTasks": "最近任务中模糊处理",
+  "autoLock": "自动锁定",
+  "disabled": "停用",
+  "instantly": "立即",
+  "hours": "小时",
+  "min": "分钟",
+  "second": "秒"
 }

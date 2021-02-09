@@ -64,7 +64,7 @@ Widget _buildPreloadImageItem(BuildContext context) {
                 onPressed: () {
                   Get.back();
                 },
-                child: const Text('取消')),
+                child: Text(S.of(context).cancel)),
             actions: <Widget>[
               ..._getModeList(context),
             ],
