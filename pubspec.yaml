@@ -3,7 +3,7 @@ description: ..
 
 publish_to: 'none' # Remove this line if you wish to publish to pub.dev
 
-version: 1.0.4+131
+version: 1.0.4+132
 
 environment:
   sdk: '>=2.10.0 <3.0.0'
@@ -116,10 +116,10 @@ dependencies:
 #      url: https://github.com/flutter/plugins.git
 #      path: packages/share
 
-  sensors:
-    git:
-      url: https://github.com/flutter/plugins.git
-      path: packages/sensors
+#  sensors:
+#    git:
+#      url: https://github.com/flutter/plugins.git
+#      path: packages/sensors
 
   # 权限检查
   permission_handler: ^5.1.0+2
@@ -183,6 +183,8 @@ dependencies:
   dio_retry: ^0.1.9-beta
   extended_image: ^1.5.0
   translator: ^0.1.5
+#  flutter_screen_lock: ^1.2.6
+  pattern_lock: ^1.0.3
 
 
 

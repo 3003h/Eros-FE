@@ -127,32 +127,40 @@ class GalleryListTab extends GetView<GalleryViewController> {
     final Color _color =
         CupertinoDynamicColor.resolve(CupertinoColors.systemGrey5, context)
             .withOpacity(0.98);
-    return CustomPopupMenu(
-      child: Container(
-        padding: const EdgeInsets.only(left: 14),
-        child: const Icon(
-          FontAwesomeIcons.ellipsisH,
-          size: 20,
-        ),
-      ),
-      arrowColor: _color,
-      showArrow: false,
-      menuBuilder: () {
-        VibrateUtil.light();
-        return ClipRRect(
-          borderRadius: BorderRadius.circular(8),
+
+    // CustomPopupMenu 更新改用了inkwell 要包一层Scaffold 否则会报错。 并且更新偏移值
+    return Scaffold(
+      backgroundColor: Colors.transparent,
+      body: Container(
+        alignment: Alignment.centerLeft,
+        child: CustomPopupMenu(
           child: Container(
-            color: _color,
-            child: IntrinsicWidth(
-              child: controller.popupMenu,
+            padding: const EdgeInsets.only(left: 14),
+            child: const Icon(
+              FontAwesomeIcons.ellipsisH,
+              size: 20,
             ),
           ),
-        );
-      },
-      pressType: PressType.singleClick,
-      verticalMargin: -5,
-      horizontalMargin: 5,
-      controller: controller.customPopupMenuController,
+          arrowColor: _color,
+          showArrow: false,
+          menuBuilder: () {
+            VibrateUtil.light();
+            return ClipRRect(
+              borderRadius: BorderRadius.circular(8),
+              child: Container(
+                color: _color,
+                child: IntrinsicWidth(
+                  child: controller.popupMenu,
+                ),
+              ),
+            );
+          },
+          pressType: PressType.singleClick,
+          verticalMargin: 8,
+          horizontalMargin: 8,
+          controller: controller.customPopupMenuController,
+        ),
+      ),
     );
   }
 
