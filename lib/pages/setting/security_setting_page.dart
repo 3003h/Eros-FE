@@ -1,4 +1,4 @@
-import 'package:fehviewer/common/service/auto_lock_controller.dart';
+import 'package:fehviewer/common/controller/auto_lock_controller.dart';
 import 'package:fehviewer/common/service/ehconfig_service.dart';
 import 'package:fehviewer/common/service/theme_service.dart';
 import 'package:fehviewer/const/const.dart';

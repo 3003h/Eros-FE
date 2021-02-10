@@ -21,7 +21,7 @@ class AutoLockController extends GetxController {
   static final AndroidAuthMessages androidStrings = AndroidAuthMessages(
     cancelButton: S.of(Get.context).cancel,
     signInTitle: '指纹认证',
-    fingerprintHint: '输入指纹',
+    fingerprintHint: '触摸指纹传感器',
   );
 
   /// 最后离开时间
@@ -86,9 +86,6 @@ class AutoLockController extends GetxController {
         .v('离开时间为: ${subTime}ms  锁定超时为: $autoLockTimeOut  需要解锁: $_needUnLock');
 
     if (_needUnLock && !_isResumed) {
-      // final bool rult = await localAuth.authenticateWithBiometrics(
-      //     localizedReason: 'Please authenticate to show account balance');
-
       _isLocking = true;
 
       final rult = await Get.toNamed(EHRoutes.unlockPage);
