@@ -697,6 +697,13 @@ packages:
       url: "git://github.com/fluttercandies/like_button.git"
     source: git
     version: "1.0.4"
+  line_icons:
+    dependency: "direct main"
+    description:
+      name: line_icons
+      url: "https://pub.flutter-io.cn"
+    source: hosted
+    version: "1.3.2"
   linkify:
     dependency: transitive
     description:

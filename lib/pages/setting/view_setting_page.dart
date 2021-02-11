@@ -48,7 +48,7 @@ Widget _buildViewModeItem(BuildContext context) {
   final EhConfigService ehConfigService = Get.find();
 
   final Map<ViewMode, String> modeMap = <ViewMode, String>{
-    ViewMode.horizontalLeft: S.of(context).letf_to_right,
+    ViewMode.horizontalLeft: S.of(context).left_to_right,
     ViewMode.horizontalRight: S.of(context).right_to_left,
     ViewMode.vertical: S.of(context).top_to_bottom,
   };

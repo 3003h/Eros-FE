@@ -65,7 +65,6 @@ class MessageLookup extends MessageLookupByLibrary {
     "hours" : MessageLookupByLibrary.simpleMessage("小时"),
     "instantly" : MessageLookupByLibrary.simpleMessage("立即"),
     "language" : MessageLookupByLibrary.simpleMessage("语言设置"),
-    "letf_to_right" : MessageLookupByLibrary.simpleMessage("从左到右"),
     "light" : MessageLookupByLibrary.simpleMessage("浅色模式"),
     "list_load_more_fail" : MessageLookupByLibrary.simpleMessage("加载失败, 点击重试"),
     "list_mode" : MessageLookupByLibrary.simpleMessage("列表浏览模式"),

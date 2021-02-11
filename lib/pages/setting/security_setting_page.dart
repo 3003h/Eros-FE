@@ -117,6 +117,7 @@ Widget _buildAutoLockItem(BuildContext context) {
           .then((_) =>
               autoLockController.checkBiometrics(localizedReason: '认证以进行修改'))
           .then((bool value) {
+        autoLockController.resetLastLeaveTime();
         if (value) {
           ehConfigService.autoLockTimeOut(timeOut);
         }

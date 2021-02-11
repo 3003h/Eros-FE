@@ -1,5 +1,6 @@
 import 'package:fehviewer/common/global.dart';
 import 'package:fehviewer/generated/l10n.dart';
+import 'package:fehviewer/route/app_pages.dart';
 import 'package:fehviewer/utils/logger.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/services.dart';
@@ -46,7 +47,7 @@ class UnlockPageController extends GetxController {
   }
 
   Future<void> unlockAndback({BuildContext context}) async {
-    Future.delayed(const Duration(milliseconds: 500));
+    await Future.delayed(kUnLockPageTransitionDuration);
     final didAuthenticate = await _unlock(context: context);
     if (didAuthenticate) {
       Get.back(result: didAuthenticate);

@@ -1,3 +1,4 @@
+import 'package:fehviewer/common/global.dart';
 import 'package:fehviewer/pages/tab/controller/unlock_page_controller.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -27,25 +28,27 @@ class _UnLockPageState extends State<UnLockPage> {
     return WillPopScope(
         onWillPop: () async => false,
         child: CupertinoPageScaffold(
-          child: Container(
-            alignment: Alignment.center,
-            child: context.isPortrait
-                ? Column(
-                    // mainAxisSize: MainAxisSize.min,
-                    children: [
-                      const Spacer(flex: 2),
-                      _buildPatternLock(context),
-                      Expanded(flex: 3, child: _buildUnlock(context)),
-                    ],
-                  )
-                : Row(
-                    // mainAxisSize: MainAxisSize.min,
-                    children: [
-                      const Spacer(flex: 2),
-                      _buildPatternLock(context),
-                      Expanded(flex: 3, child: _buildUnlock(context)),
-                    ],
-                  ),
+          child: SafeArea(
+            child: Container(
+              alignment: Alignment.center,
+              child: context.isPortrait
+                  ? Column(
+                      // mainAxisSize: MainAxisSize.min,
+                      children: [
+                        const Spacer(flex: 2),
+                        if (Global.inDebugMode) _buildPatternLock(context),
+                        Expanded(flex: 1, child: _buildUnlock(context)),
+                      ],
+                    )
+                  : Row(
+                      // mainAxisSize: MainAxisSize.min,
+                      children: [
+                        const Spacer(flex: 2),
+                        if (Global.inDebugMode) _buildPatternLock(context),
+                        Expanded(flex: 3, child: _buildUnlock(context)),
+                      ],
+                    ),
+            ),
           ),
         ));
   }
@@ -84,44 +87,26 @@ class _UnLockPageState extends State<UnLockPage> {
     );
   }
 
-  GestureDetector _buildUnlock(BuildContext context) {
+  Widget _buildText(BuildContext context) {
+    return Obx(() => Text(
+          controller.infoText,
+          style: TextStyle(
+              color: CupertinoDynamicColor.resolve(
+                  CupertinoColors.systemRed, context)),
+        ));
+  }
+
+  Widget _buildUnlock(BuildContext context) {
+    final Widget _unlockIcon = Icon(
+      CupertinoIcons.lock_fill,
+      size: 50,
+      color: CupertinoDynamicColor.resolve(
+          CupertinoColors.secondaryLabel, context),
+    ).paddingSymmetric(vertical: 20);
+
     return GestureDetector(
       onTap: () => controller.unlockAndback(context: context),
-      child: Obx(() {
-        final Widget _errText = Container(
-          child: Text(
-            controller.infoText,
-            style: TextStyle(
-                color: CupertinoDynamicColor.resolve(
-                    CupertinoColors.systemRed, context)),
-          ),
-        );
-
-        final Widget _unlockIcon = Icon(
-          CupertinoIcons.lock_fill,
-          size: 50,
-          color: CupertinoDynamicColor.resolve(
-              CupertinoColors.secondaryLabel, context),
-        ).paddingSymmetric(vertical: 20);
-
-        if (context.isPortrait) {
-          return Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              _unlockIcon,
-              Expanded(child: _errText),
-            ],
-          );
-        } else {
-          return Row(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              _unlockIcon,
-              Expanded(child: _errText),
-            ],
-          );
-        }
-      }),
+      child: _unlockIcon,
     );
   }
 }

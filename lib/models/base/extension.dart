@@ -41,3 +41,13 @@ extension ExtTabList on TabConfig {
     }
   }
 }
+
+extension ExtComment on GalleryComment {
+  // 提取评论纯文字部分内容
+  String get text => span.map((GalleryCommentSpan e) {
+        if (e.imageUrl?.isNotEmpty ?? false) {
+          return '[image]${e.href ?? ''} ';
+        }
+        return e?.text ?? '';
+      }).join();
+}

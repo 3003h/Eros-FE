@@ -11,8 +11,8 @@ import 'package:fehviewer/utils/logger.dart';
 import 'package:fehviewer/utils/vibrate.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
+import 'package:line_icons/line_icons.dart';
 
 import 'tab_base.dart';
 
@@ -60,8 +60,8 @@ class GalleryListTab extends GetView<GalleryViewController> {
                 minSize: 40,
                 padding: const EdgeInsets.all(0),
                 child: const Icon(
-                  FontAwesomeIcons.search,
-                  size: 20,
+                  LineIcons.search,
+                  size: 26,
                 ),
                 onPressed: () {
                   NavigatorUtil.showSearch();
@@ -72,8 +72,8 @@ class GalleryListTab extends GetView<GalleryViewController> {
                 minSize: 40,
                 padding: const EdgeInsets.all(0),
                 child: const Icon(
-                  FontAwesomeIcons.filter,
-                  size: 20,
+                  LineIcons.filter,
+                  size: 26,
                 ),
                 onPressed: () {
                   // logger.v('${EHUtils.convNumToCatMap(1)}');
@@ -83,8 +83,8 @@ class GalleryListTab extends GetView<GalleryViewController> {
               // 页码跳转按钮
               CupertinoButton(
                 minSize: 40,
-                padding: const EdgeInsets.only(right: 0),
-                child: ClipRRect(
+                padding: const EdgeInsets.only(right: 6),
+                /*child: ClipRRect(
                   borderRadius: BorderRadius.circular(8),
                   child: Container(
                     padding: const EdgeInsets.fromLTRB(4, 2, 4, 2),
@@ -98,6 +98,23 @@ class GalleryListTab extends GetView<GalleryViewController> {
                                   context)),
                         )),
                   ),
+                ),*/
+                child: Container(
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 4, vertical: 0),
+                  decoration: BoxDecoration(
+                      border: Border.all(
+                        color: CupertinoDynamicColor.resolve(
+                            CupertinoColors.activeBlue, context),
+                        width: 1.5,
+                      ),
+                      borderRadius: const BorderRadius.all(Radius.circular(8))),
+                  child: Obx(() => Text(
+                        '${controller.curPage.value + 1}',
+                        style: TextStyle(
+                            color: CupertinoDynamicColor.resolve(
+                                CupertinoColors.activeBlue, context)),
+                      )),
                 ),
                 onPressed: () {
                   controller.jumpToPage();
@@ -137,8 +154,8 @@ class GalleryListTab extends GetView<GalleryViewController> {
           child: Container(
             padding: const EdgeInsets.only(left: 14),
             child: const Icon(
-              FontAwesomeIcons.ellipsisH,
-              size: 20,
+              LineIcons.horizontalEllipsis,
+              size: 26,
             ),
           ),
           arrowColor: _color,
