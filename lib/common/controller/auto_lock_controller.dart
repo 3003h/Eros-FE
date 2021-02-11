@@ -33,6 +33,10 @@ class AutoLockController extends GetxController {
     Global.saveProfile();
   }
 
+  void resetLastLeaveTime() {
+    lastLeaveTime = DateTime.now().millisecondsSinceEpoch + 1000;
+  }
+
   bool _isLocking;
   bool get isLocking => _isLocking;
   set isLocking(bool val) {
@@ -68,7 +72,7 @@ class AutoLockController extends GetxController {
 
   void paused() {
     if (!_isLocking) {
-      lastLeaveTime = DateTime.now().millisecondsSinceEpoch;
+      resetLastLeaveTime();
       _isResumed = false;
       logger.v('更新最后离开时间 $lastLeaveTime');
     } else {

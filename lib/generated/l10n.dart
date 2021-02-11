@@ -1,6 +1,7 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+
 import 'intl/messages_all.dart';
 
 // **************************************************************************
@@ -14,22 +15,23 @@ import 'intl/messages_all.dart';
 
 class S {
   S();
-  
+
   static S current;
-  
-  static const AppLocalizationDelegate delegate =
-    AppLocalizationDelegate();
+
+  static const AppLocalizationDelegate delegate = AppLocalizationDelegate();
 
   static Future<S> load(Locale locale) {
-    final name = (locale.countryCode?.isEmpty ?? false) ? locale.languageCode : locale.toString();
-    final localeName = Intl.canonicalizedLocale(name); 
+    final name = (locale.countryCode?.isEmpty ?? false)
+        ? locale.languageCode
+        : locale.toString();
+    final localeName = Intl.canonicalizedLocale(name);
     return initializeMessages(localeName).then((_) {
       Intl.defaultLocale = localeName;
       S.current = S();
-      
+
       return S.current;
     });
-  } 
+  }
 
   static S of(BuildContext context) {
     return Localizations.of<S>(context, S);
@@ -1005,20 +1007,20 @@ class S {
     );
   }
 
-  /// `Letf to right`
-  String get letf_to_right {
+  /// `Left to right`
+  String get left_to_right {
     return Intl.message(
-      'Letf to right',
-      name: 'letf_to_right',
+      'Left to right',
+      name: 'left_to_right',
       desc: '',
       args: [],
     );
   }
 
-  /// `Retf to light`
+  /// `Right to left`
   String get right_to_left {
     return Intl.message(
-      'Retf to light',
+      'Right to left',
       name: 'right_to_left',
       desc: '',
       args: [],

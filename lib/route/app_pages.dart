@@ -30,6 +30,8 @@ import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 
 import 'routes.dart';
 
+const Duration kUnLockPageTransitionDuration = Duration(milliseconds: 200);
+
 // ignore: avoid_classes_with_only_static_members
 class AppPages {
   static final List<GetPage> routes = <GetPage>[
@@ -42,7 +44,8 @@ class AppPages {
     GetPage(
       name: EHRoutes.unlockPage,
       page: () => const UnLockPage(),
-      transition: Transition.fadeIn,
+      transition: Transition.noTransition,
+      transitionDuration: kUnLockPageTransitionDuration,
     ),
     GetPage(
       name: EHRoutes.home,
