@@ -342,21 +342,6 @@ class GallerySearchPage extends StatelessWidget {
             CupertinoButton(
               minSize: 36,
               padding: const EdgeInsets.all(0),
-              // child: ClipRRect(
-              //   borderRadius: BorderRadius.circular(8),
-              //   child: Container(
-              //     padding: const EdgeInsets.fromLTRB(4, 2, 4, 2),
-              //     color: CupertinoDynamicColor.resolve(
-              //         CupertinoColors.activeBlue, context),
-              //     child: Text(
-              //       '${controller.curPage.value + 1}',
-              //       style: TextStyle(
-              //           color: CupertinoDynamicColor.resolve(
-              //               CupertinoColors.secondarySystemBackground,
-              //               context)),
-              //     ),
-              //   ),
-              // ),
               child: Container(
                 padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 0),
                 decoration: BoxDecoration(
@@ -529,21 +514,6 @@ class GallerySearchPage extends StatelessWidget {
             CupertinoButton(
               minSize: 36,
               padding: const EdgeInsets.all(0),
-              // child: ClipRRect(
-              //   borderRadius: BorderRadius.circular(8),
-              //   child: Container(
-              //     padding: const EdgeInsets.fromLTRB(4, 2, 4, 2),
-              //     color: CupertinoDynamicColor.resolve(
-              //         CupertinoColors.activeBlue, context),
-              //     child: Text(
-              //       '${controller.curPage.value + 1}',
-              //       style: TextStyle(
-              //           color: CupertinoDynamicColor.resolve(
-              //               CupertinoColors.secondarySystemBackground,
-              //               context)),
-              //     ),
-              //   ),
-              // ),
               child: Container(
                 padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 0),
                 decoration: BoxDecoration(

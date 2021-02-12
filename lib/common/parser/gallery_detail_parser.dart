@@ -248,29 +248,35 @@ class GalleryDetailParser {
               continue;
             }
 
-            // a标签下面带img的情况 取a的href
+            // a标签带href
             if ((node as Element).localName == 'a') {
               final Element _nodeElm = node as Element;
 
               final String _nodeHref = _nodeElm.attributes['href'];
 
-              String _nodeImageUrl;
               if (_nodeElm.children.isNotEmpty) {
                 final _imgElm = _nodeElm.children
                     .firstWhere((element) => element.localName == 'img');
-                _nodeImageUrl = _imgElm?.attributes['src'];
+                final _nodeImageUrl = _imgElm?.attributes['src'];
+                final GalleryCommentSpan _commentSpan = GalleryCommentSpan()
+                  ..sType = CommentSpanType.linkImage
+                  ..text = _nodeElm.text?.trim() ?? _nodeHref
+                  ..href = _nodeHref
+                  ..imageUrl = _nodeImageUrl;
+
+                commentSpansf.add(_commentSpan);
+                continue;
+              } else {
+                // 如果数组最后一个是纯文本 直接追加文本
+                if (commentSpansf.isNotEmpty &&
+                    (commentSpansf.last.sType == CommentSpanType.text)) {
+                  commentSpansf.last.text += _nodeElm.text;
+                } else {
+                  commentSpansf.add(GalleryCommentSpan()
+                    ..sType = CommentSpanType.text
+                    ..text = _nodeElm.text ?? _nodeHref);
+                }
               }
-
-              final GalleryCommentSpan _commentSpan = GalleryCommentSpan()
-                ..sType = CommentSpanType.linkImage
-                ..text = _nodeElm.text?.trim() ?? _nodeHref
-                ..href = _nodeHref
-                ..imageUrl = _nodeImageUrl;
-
-              // logger.v('${_commentSpan.toJson()}');
-
-              commentSpansf.add(_commentSpan);
-              continue;
             }
 
             // 只有一个img的情况 无href
@@ -372,8 +378,9 @@ class GalleryDetailParser {
 
     // 平均分
     final String _rating = RegExp(r'([\d.]+)')
-        .firstMatch(document.querySelector('#rating_label').text)
-        .group(1);
+            .firstMatch(document.querySelector('#rating_label').text)
+            ?.group(1) ??
+        '0';
     galleryItem.rating = double.parse(_rating);
 
     //
