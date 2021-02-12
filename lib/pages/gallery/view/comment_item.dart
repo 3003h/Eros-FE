@@ -261,22 +261,22 @@ class CommentItem extends StatelessWidget {
         final bool _curSpanEndWithBr = (_span?.imageUrl?.isEmpty ?? true) &&
             (_span?.text?.endsWith('\n') ?? false);
 
-        // logger.v('${_span.toJson()} '
-        //     '\n-----\n'
-        //     '下一个类型不同$_nextOthType  当前为文本并且结尾换行$_curSpanEndWithBr\n'
-        //     '前一个类型不同$_preOthType 当前为最后一个$_curIsLast');
+        logger.v('${_span.toJson()} '
+            '\n-----\n'
+            '下一个类型不同$_nextOthType  当前为文本并且结尾换行$_curSpanEndWithBr\n'
+            '前一个类型不同$_preOthType 当前为最后一个$_curIsLast');
 
         if ((!_preIsText && _nextOthType && _curSpanEndWithBr) ||
             (_preIsText && _preEndWithBr) ||
             (_preOthType && _curIsLast)) {
-          // logger.v('新分组 -> ${_curIsText ? _span.text : '[image]'} ');
+          logger.v('新分组 -> ${_curIsText ? _span.text : '[image]'} ');
           _groups.add([_span]);
         } else {
           if (_groups.isNotEmpty) {
-            // logger.v('追加到末尾分组 -> ${_curIsText ? _span.text : '[image]'} ');
+            logger.v('追加到末尾分组 -> ${_curIsText ? _span.text : '[image]'} ');
             _groups.last.add(_span);
           } else {
-            // logger.v('新分组 -> ${_curIsText ? _span.text : '[image]'} ');
+            logger.v('新分组 -> ${_curIsText ? _span.text : '[image]'} ');
             _groups.add([_span]);
           }
         }
@@ -340,7 +340,7 @@ class CommentItem extends StatelessWidget {
                           const BoxConstraints(maxWidth: 100, maxHeight: 140),
                       child: CachedNetworkImage(
                         httpHeaders: _httpHeaders,
-                        imageUrl: e.imageUrl,
+                        imageUrl: e.imageUrl ?? '',
                         placeholder: (_, __) =>
                             const CupertinoActivityIndicator(),
                       ),
@@ -548,14 +548,17 @@ class CommentItem extends StatelessWidget {
 
   Future<void> _onOpen(BuildContext context,
       {LinkableElement link, String url}) async {
+    VibrateUtil.light();
+
     final _openUrl = url ?? link?.url;
     final RegExp regExp =
-        RegExp(r'https?://e[-x]hentai.org/g/[0-9]+/[0-9a-z]+');
+        RegExp(r'https?://e[-x]hentai.org/g/[0-9]+/[0-9a-z]+/?');
     if (await canLaunch(_openUrl)) {
       if (regExp.hasMatch(_openUrl)) {
-        logger.v('in $_openUrl');
+        final _realUrl = regExp.firstMatch(_openUrl).group(0);
+        logger.v('in $_realUrl');
         NavigatorUtil.goGalleryPage(
-          url: _openUrl,
+          url: _realUrl,
         );
       } else {
         await launch(_openUrl);
