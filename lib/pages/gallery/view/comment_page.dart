@@ -50,10 +50,10 @@ const Border _kDefaultEditBorder = Border(
 );
 
 class CommentPage extends StatelessWidget {
+  final CommentController controller = Get.find(tag: pageCtrlDepth);
+
   @override
   Widget build(BuildContext context) {
-    final CommentController controller = Get.find(tag: pageCtrlDepth);
-
     final Widget commList =
         controller.obx((List<GalleryComment> state) => ListView.builder(
               controller: controller.scrollController,
@@ -65,7 +65,7 @@ class CommentPage extends StatelessWidget {
                   galleryComment: state[index],
                 );
               },
-              itemCount: state.length,
+              itemCount: state?.length ?? 0,
             ));
 
     Widget _buildOriText() {

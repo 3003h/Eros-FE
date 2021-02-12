@@ -1,3 +1,4 @@
+import 'package:fehviewer/const/const.dart';
 import 'package:fehviewer/models/base/eh_models.dart';
 import 'package:fehviewer/network/gallery_request.dart';
 import 'package:fehviewer/store/tag_database.dart';
@@ -154,30 +155,8 @@ class GalleryDetailParser {
         // 解析评论内容
         final Element contextElem = comment.querySelector('div.c6');
 
-        // br回车以及引号的处理
-        /*final String commentText = contextElem.nodes.map((Node node) {
-          if (node.nodeType == Node.TEXT_NODE) {
-            return RegExp(r'^"?(.+)"?$')
-                    .firstMatch(node.text.trim())
-                    ?.group(1) ??
-                node.text;
-          } else if (node.nodeType == Node.ELEMENT_NODE &&
-              (node as Element).localName == 'br') {
-            // logger
-            //     .v('${(node as Element).localName}  ${(node as Element).text}');
-            return '\n';
-          } else if (node.nodeType == Node.ELEMENT_NODE) {
-            logger
-                .v('${(node as Element).localName}  ${(node as Element).text}');
-            // 通常是链接 前后加空格便于和内容分开
-            return ' ' + (node as Element).text.trim() + ' ';
-          }
-        }).join();
-
-        final commentSpan = GalleryCommentSpan()..text = commentText;*/
-
         /// map的方式处理
-        final commentSpans = contextElem.nodes.map((Node node) {
+        /*final commentSpans = contextElem.nodes.map((Node node) {
           if (node.nodeType == Node.TEXT_NODE) {
             final _nodeText =
                 RegExp(r'^"?(.+)"?$').firstMatch(node.text.trim())?.group(1) ??
@@ -220,67 +199,94 @@ class GalleryDetailParser {
 
             return _commentSpan;
           }
-        }).toList();
+        }).toList();*/
 
-        /// forin遍历的方式处理
+        /// for in遍历的方式处理
         final List<GalleryCommentSpan> commentSpansf = [];
         for (Node node in contextElem.nodes) {
           if (node.nodeType == Node.TEXT_NODE) {
-            final _nodeText = RegExp(r'^"?(.+)"?$')
+            final String _nodeText = RegExp(r'^"?(.+)"?$')
                     .firstMatch(node.text.trim())
                     ?.group(1)
                     ?.trim() ??
                 node.text.trim();
 
-            // 数组最后一个不是图片类型的 直接追加文本
+            // 如果数组最后一个是纯文本 直接追加文本
             if (commentSpansf.isNotEmpty &&
-                (commentSpansf.last.imageUrl?.isEmpty ?? true)) {
+                (commentSpansf.last.sType == CommentSpanType.text)) {
               commentSpansf.last.text += _nodeText;
             } else {
-              commentSpansf.add(GalleryCommentSpan()..text = _nodeText);
+              commentSpansf.add(GalleryCommentSpan()
+                ..text = _nodeText
+                ..sType = CommentSpanType.text);
             }
-          } else if (node.nodeType == Node.ELEMENT_NODE &&
-              (node as Element).localName == 'br') {
-            // 数组最后一个不是图片类型的 直接追加文本
-            if (commentSpansf.isNotEmpty &&
-                (commentSpansf.last.imageUrl?.isEmpty ?? true)) {
-              commentSpansf.last.text += '\n';
-            } else {
-              commentSpansf.add(GalleryCommentSpan()..text = '\n');
-            }
-          } else if (node.nodeType == Node.ELEMENT_NODE &&
-              (node as Element).localName == 'a') {
-            final Element _nodeElm = node as Element;
-
-            final _nodeHref = _nodeElm.attributes['href'];
-
-            String _nodeImageUrl;
-            if (_nodeElm.children.isNotEmpty) {
-              final _imgElm = _nodeElm.children
-                  .firstWhere((element) => element.localName == 'img');
-              _nodeImageUrl = _imgElm?.attributes['src'];
+          } else if (node.nodeType == Node.ELEMENT_NODE) {
+            // br标签 换行
+            if ((node as Element).localName == 'br') {
+              // 如果数组最后一个是纯文本 直接追加文本
+              if (commentSpansf.isNotEmpty &&
+                  (commentSpansf.last.sType == CommentSpanType.text)) {
+                commentSpansf.last.text += '\n';
+              } else {
+                commentSpansf.add(GalleryCommentSpan()
+                  ..text = '\n'
+                  ..sType = CommentSpanType.text);
+              }
+              continue;
             }
 
-            final _commentSpan = GalleryCommentSpan()
-              ..text = _nodeElm.text?.trim() ?? _nodeHref
-              ..href = _nodeHref
-              ..imageUrl = _nodeImageUrl;
+            // span带a href
+            if ((node as Element).localName == 'span' &&
+                node.children.isNotEmpty) {
+              final Element _nodeElm = (node as Element).children.first;
+              final String _nodeHref = _nodeElm.attributes['href'];
+              final GalleryCommentSpan _commentSpan = GalleryCommentSpan()
+                ..sType = CommentSpanType.linkText
+                ..text = _nodeElm.text?.trim() ?? _nodeHref
+                ..href = _nodeHref;
+              commentSpansf.add(_commentSpan);
+              continue;
+            }
 
-            logger.v('${_commentSpan.toJson()}');
+            // a标签下面带img的情况 取a的href
+            if ((node as Element).localName == 'a') {
+              final Element _nodeElm = node as Element;
 
-            commentSpansf.add(_commentSpan);
-          } else if (node.nodeType == Node.ELEMENT_NODE &&
-              (node as Element).localName == 'img') {
-            final Element _nodeElm = node as Element;
-            final String _nodeImageUrl = _nodeElm.attributes['src'];
+              final String _nodeHref = _nodeElm.attributes['href'];
 
-            final _commentSpan = GalleryCommentSpan()
-              ..text = _nodeElm.text?.trim() ?? _nodeImageUrl
-              ..imageUrl = _nodeImageUrl;
+              String _nodeImageUrl;
+              if (_nodeElm.children.isNotEmpty) {
+                final _imgElm = _nodeElm.children
+                    .firstWhere((element) => element.localName == 'img');
+                _nodeImageUrl = _imgElm?.attributes['src'];
+              }
 
-            logger.v('${_commentSpan.toJson()}');
+              final GalleryCommentSpan _commentSpan = GalleryCommentSpan()
+                ..sType = CommentSpanType.linkImage
+                ..text = _nodeElm.text?.trim() ?? _nodeHref
+                ..href = _nodeHref
+                ..imageUrl = _nodeImageUrl;
 
-            commentSpansf.add(_commentSpan);
+              // logger.v('${_commentSpan.toJson()}');
+
+              commentSpansf.add(_commentSpan);
+              continue;
+            }
+
+            // 只有一个img的情况 无href
+            if ((node as Element).localName == 'img') {
+              final Element _nodeElm = node as Element;
+              final String _nodeImageUrl = _nodeElm.attributes['src'];
+
+              final _commentSpan = GalleryCommentSpan()
+                ..sType = CommentSpanType.image
+                ..text = _nodeElm.text?.trim() ?? _nodeImageUrl
+                ..imageUrl = _nodeImageUrl;
+
+              logger.v('${_commentSpan.toJson()}');
+
+              commentSpansf.add(_commentSpan);
+            }
           }
         }
 

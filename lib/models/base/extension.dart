@@ -1,4 +1,5 @@
 import 'package:enum_to_string/enum_to_string.dart';
+import 'package:fehviewer/const/const.dart';
 import 'package:fehviewer/pages/image_view/controller/view_state.dart';
 
 import '../index.dart';
@@ -50,4 +51,10 @@ extension ExtComment on GalleryComment {
         }
         return e?.text ?? '';
       }).join();
+}
+
+extension ExtCommentSpan on GalleryCommentSpan {
+  CommentSpanType get sType =>
+      EnumToString.fromString(CommentSpanType.values, type);
+  set sType(CommentSpanType val) => type = EnumToString.convertToString(val);
 }

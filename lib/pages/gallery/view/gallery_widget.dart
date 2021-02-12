@@ -594,7 +594,7 @@ class TopComment extends StatelessWidget {
   Widget build(BuildContext context) {
     // 显示最前面两条
     List<Widget> _topComment(List<GalleryComment> comments, {int max = 2}) {
-      final Iterable<GalleryComment> _comments = comments.take(max);
+      final Iterable<GalleryComment> _comments = comments?.take(max) ?? [];
       return List<Widget>.from(_comments
           .map((GalleryComment comment) => CommentItem(
                 galleryComment: comment,
@@ -612,7 +612,7 @@ class TopComment extends StatelessWidget {
           id: 'TopComment',
           builder: (CommentController _commentController) {
             return _commentController.obx(
-                (state) => Column(
+                (List<GalleryComment> state) => Column(
                       children: <Widget>[
                         ..._topComment(state, max: 2),
                       ],

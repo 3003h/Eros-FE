@@ -2,6 +2,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:fehviewer/common/global.dart';
 import 'package:fehviewer/common/service/depth_service.dart';
 import 'package:fehviewer/common/service/ehconfig_service.dart';
+import 'package:fehviewer/const/const.dart';
 import 'package:fehviewer/const/theme_colors.dart';
 import 'package:fehviewer/models/base/eh_models.dart';
 import 'package:fehviewer/pages/gallery/controller/comment_controller.dart';
@@ -26,6 +27,8 @@ class CommentItem extends StatelessWidget {
       : super(key: key);
   final GalleryComment galleryComment;
   final bool simple;
+
+  CommentController get controller => Get.find(tag: pageCtrlDepth);
 
   @override
   Widget build(BuildContext context) {
@@ -199,7 +202,7 @@ class CommentItem extends StatelessWidget {
         final _nextSpan = i < galleryComment.span.length - 1
             ? galleryComment.span[i + 1]
             : null;
-        final _pSpan = i < galleryComment.span.length - 1 && i != 0
+        final _preSpan = i < galleryComment.span.length - 1 && i != 0
             ? galleryComment.span[i - 1]
             : null;
 
@@ -209,7 +212,7 @@ class CommentItem extends StatelessWidget {
             (_span.imageUrl?.isEmpty ?? true) && _span.text == ' ';
 
         final bool _pSpace =
-            (_pSpan?.imageUrl?.isEmpty ?? true) && _pSpan?.text == ' ';
+            (_preSpan?.imageUrl?.isEmpty ?? true) && _preSpan?.text == ' ';
 
         logger.v('${_span.toJson()} \n-----\n$_nextOthType  $_curSpace');
 
@@ -225,50 +228,55 @@ class CommentItem extends StatelessWidget {
       }*/
 
       for (int i = 0; i < galleryComment.span.length; i++) {
+        // 当前片段
         final _span = galleryComment.span[i];
+
+        // 下一个片段
         final _nextSpan = i < galleryComment.span.length - 1
             ? galleryComment.span[i + 1]
             : null;
-        final _pSpan = i <= galleryComment.span.length - 1 && i != 0
+
+        // 前一个片段
+        final _preSpan = i <= galleryComment.span.length - 1 && i != 0
             ? galleryComment.span[i - 1]
             : null;
 
+        final bool _curIsText = _span?.imageUrl?.isEmpty ?? true;
+        final bool _preIsText = _preSpan?.imageUrl?.isEmpty ?? true;
+        final bool _curIsLast = i == galleryComment.span.length - 1;
+
         // 前一个是不同类型
-        final bool _pOthType = (_span.imageUrl?.isEmpty ?? true) !=
-            (_pSpan?.imageUrl?.isEmpty ?? true);
+        final bool _preOthType = (_span.imageUrl?.isEmpty ?? true) !=
+            (_preSpan?.imageUrl?.isEmpty ?? true);
 
         // 下一个是不同类型
         final bool _nextOthType = (_span.imageUrl?.isEmpty ?? true) !=
             (_nextSpan?.imageUrl?.isEmpty ?? true);
 
         // 前一个是文本并且换行结尾
-        final bool _pSpanEndWithBr = (_pSpan?.imageUrl?.isEmpty ?? true) &&
-            (_pSpan?.text?.endsWith('\n') ?? false);
+        final bool _preEndWithBr = (_preSpan?.imageUrl?.isEmpty ?? true) &&
+            (_preSpan?.text?.endsWith('\n') ?? false);
 
         // 当前span为文本并且换行结尾
         final bool _curSpanEndWithBr = (_span?.imageUrl?.isEmpty ?? true) &&
             (_span?.text?.endsWith('\n') ?? false);
 
-        final bool _curSpanIsText = _span?.imageUrl?.isEmpty ?? true;
-        final bool _pSpanIsText = _pSpan?.imageUrl?.isEmpty ?? true;
-        final bool _curIsLast = i == galleryComment.span.length - 1;
+        // logger.v('${_span.toJson()} '
+        //     '\n-----\n'
+        //     '下一个类型不同$_nextOthType  当前为文本并且结尾换行$_curSpanEndWithBr\n'
+        //     '前一个类型不同$_preOthType 当前为最后一个$_curIsLast');
 
-        logger.v('${_span.toJson()} '
-            '\n-----\n'
-            '下一个类型不同$_nextOthType  当前为文本并且结尾换行$_curSpanEndWithBr\n'
-            '前一个类型不同$_pOthType 当前为最后一个$_curIsLast');
-
-        if ((!_pSpanIsText && _nextOthType && _curSpanEndWithBr) ||
-            (_pSpanIsText && _pSpanEndWithBr) ||
-            (_pOthType && _curIsLast)) {
-          logger.v('新分组 -> ${_curSpanIsText ? _span.text : '[image]'} ');
+        if ((!_preIsText && _nextOthType && _curSpanEndWithBr) ||
+            (_preIsText && _preEndWithBr) ||
+            (_preOthType && _curIsLast)) {
+          // logger.v('新分组 -> ${_curIsText ? _span.text : '[image]'} ');
           _groups.add([_span]);
         } else {
           if (_groups.isNotEmpty) {
-            logger.v('追加到末尾分组 -> ${_curSpanIsText ? _span.text : '[image]'} ');
+            // logger.v('追加到末尾分组 -> ${_curIsText ? _span.text : '[image]'} ');
             _groups.last.add(_span);
           } else {
-            logger.v('新分组 -> ${_curSpanIsText ? _span.text : '[image]'} ');
+            // logger.v('新分组 -> ${_curIsText ? _span.text : '[image]'} ');
             _groups.add([_span]);
           }
         }
@@ -276,14 +284,51 @@ class CommentItem extends StatelessWidget {
 
       // logger.v('${_groups.length}');
 
-      return Container(
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children:
-              List<Widget>.from(_groups.map((List<GalleryCommentSpan> spans) {
-            return Wrap(
-              children: List<Widget>.from(spans.map((GalleryCommentSpan e) {
-                if (e?.imageUrl != null) {
+      final TextStyle _commentTextStyle = TextStyle(
+        fontSize: 14,
+        color: CupertinoDynamicColor.resolve(ThemeColors.commitText, context),
+      );
+
+      return Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children:
+            List<Widget>.from(_groups.map((List<GalleryCommentSpan> spans) {
+          return Wrap(
+            crossAxisAlignment: WrapCrossAlignment.center,
+            children: List<Widget>.from(spans.map((GalleryCommentSpan e) {
+              switch (e.sType) {
+                case CommentSpanType.linkText:
+                  return Text.rich(TextSpan(
+                    text: e.text,
+                    style: Theme.of(context)
+                        .textTheme
+                        .bodyText2
+                        .merge(_commentTextStyle)
+                        .copyWith(
+                          color: Colors.blueAccent,
+                          decoration: TextDecoration.underline,
+                        ),
+                    recognizer: controller.genTapGestureRecognizer()
+                      ..onTap = () => _onOpen(context, url: e.href),
+                  )).marginOnly(right: 2);
+                case CommentSpanType.text:
+                  final oriText = e?.text ?? '';
+                  String _text = oriText.endsWith('\n')
+                      ? oriText.substring(0, oriText.length - 1)
+                      : oriText;
+
+                  _text = _text.startsWith('\n') ? _text.substring(1) : _text;
+
+                  return clif.SelectableLinkify(
+                    onOpen: (link) => _onOpen(context, link: link),
+                    text: _text,
+                    textAlign: TextAlign.left,
+                    // 对齐方式
+                    style: _commentTextStyle,
+                    options: LinkifyOptions(humanize: false),
+                  );
+                case CommentSpanType.image:
+                case CommentSpanType.linkImage:
                   final Map<String, String> _httpHeaders = {
                     'Cookie': Global.profile?.user?.cookie ?? '',
                   };
@@ -301,31 +346,12 @@ class CommentItem extends StatelessWidget {
                       ),
                     ),
                   );
-                } else {
-                  final oriText = e?.text ?? '';
-                  String _text = oriText.endsWith('\n')
-                      ? oriText.substring(0, oriText.length - 1)
-                      : oriText;
-
-                  _text = _text.startsWith('\n') ? _text.substring(1) : _text;
-
-                  return clif.SelectableLinkify(
-                    onOpen: (link) => _onOpen(context, link: link),
-                    text: _text,
-                    textAlign: TextAlign.left,
-                    // 对齐方式
-                    style: TextStyle(
-                      fontSize: 14,
-                      color: CupertinoDynamicColor.resolve(
-                          ThemeColors.commitText, context),
-                    ),
-                    options: LinkifyOptions(humanize: false),
-                  );
-                }
-              }).toList()),
-            );
-          }).toList()),
-        ),
+                default:
+                  return const SizedBox();
+              }
+            }).toList()),
+          );
+        }).toList()),
       );
     }
 
@@ -527,7 +553,7 @@ class CommentItem extends StatelessWidget {
         RegExp(r'https?://e[-x]hentai.org/g/[0-9]+/[0-9a-z]+');
     if (await canLaunch(_openUrl)) {
       if (regExp.hasMatch(_openUrl)) {
-        logger.v('in ${_openUrl}');
+        logger.v('in $_openUrl');
         NavigatorUtil.goGalleryPage(
           url: _openUrl,
         );

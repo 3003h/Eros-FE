@@ -20,6 +20,13 @@ enum ViewMode {
   horizontalRight,
 }
 
+enum CommentSpanType {
+  text,
+  linkText,
+  image,
+  linkImage,
+}
+
 // ignore: avoid_classes_with_only_static_members
 class EHConst {
   // 网页登陆页面
