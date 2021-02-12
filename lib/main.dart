@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:ui';
 
+import 'package:fehviewer/common/controller/auto_lock_controller.dart';
 import 'package:fehviewer/common/controller/download_controller.dart';
 import 'package:fehviewer/common/global.dart';
 import 'package:fehviewer/common/service/dns_service.dart';
@@ -14,7 +15,6 @@ import 'package:fehviewer/route/app_pages.dart';
 import 'package:fehviewer/route/routes.dart';
 import 'package:fehviewer/store/gallery_store.dart';
 import 'package:fehviewer/utils/logger.dart';
-import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:firebase_analytics/observer.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
@@ -33,8 +33,7 @@ import 'common/controller/user_controller.dart';
 import 'common/isolate/download.dart';
 import 'common/service/depth_service.dart';
 import 'common/service/layout_service.dart';
-
-final FirebaseAnalytics analytics = FirebaseAnalytics();
+import 'pages/tab/controller/unlock_page_controller.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -57,6 +56,7 @@ Future<void> main() async {
 
     /// 一些全局设置或者控制
     Get.lazyPut(() => GStore());
+    Get.lazyPut(() => AutoLockController(), fenix: true);
     Get.put(LocalFavController(), permanent: true);
     Get.put(HistoryController(), permanent: true);
     Get.put(UserController(), permanent: true);
@@ -69,6 +69,9 @@ Future<void> main() async {
     Get.lazyPut(() => QuickSearchController(), fenix: true);
     Get.lazyPut(() => AdvanceSearchController(), fenix: true);
     Get.lazyPut(() => FavController(), fenix: true);
+
+    Get.lazyPut(() => UnlockPageController(), fenix: true);
+
     runApp(MyApp());
   }, (Object error, StackTrace stackTrace) {
     logger.e('runZonedGuarded: Caught error in my root zone.');
@@ -101,11 +104,14 @@ class MyApp extends StatefulWidget {
 class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
   final LocaleService localeService = Get.find();
   final ThemeService themeService = Get.find();
+  final EhConfigService _ehConfigService = Get.find();
+  final AutoLockController _autoLockController = Get.find();
 
   @override
   void initState() {
     super.initState();
     WidgetsBinding.instance.addObserver(this);
+    _autoLockController.resumed();
   }
 
   @override
@@ -125,11 +131,14 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
     super.didChangeAppLifecycleState(state);
     if (state == AppLifecycleState.paused) {
       // went to Background
+      _autoLockController.paused();
     }
     if (state == AppLifecycleState.resumed) {
       // came back to Foreground
       logger.d('resumed');
-      Get.find<EhConfigService>().chkClipboardLink();
+      _autoLockController.resumed();
+
+      _ehConfigService.chkClipboardLink();
     }
   }
 

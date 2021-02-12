@@ -1,5 +1,6 @@
 import 'package:fehviewer/common/service/depth_service.dart';
 import 'package:fehviewer/models/index.dart';
+import 'package:fehviewer/pages/gallery/bindings/gallery_page_binding.dart';
 import 'package:fehviewer/pages/gallery/view/gallery_page.dart';
 import 'package:fehviewer/pages/tab/controller/gallery_controller.dart';
 import 'package:fehviewer/pages/tab/controller/search_page_controller.dart';
@@ -49,46 +50,47 @@ class NavigatorUtil {
     Get.find<DepthService>().pushPageCtrl();
     if (url != null && url.isNotEmpty) {
       logger.d('goGalleryPage fromUrl');
-      Get.lazyPut(
-        () => GalleryRepository(url: url, tabTag: tabTag),
-        tag: pageCtrlDepth,
-      );
-      // Get.to(
-      //   GalleryMainPage(tabTag: tabTag),
-      //   transition: Transition.cupertino,
-      //   preventDuplicates: false,
-      //   binding: GalleryBinding.fromUrl(url),
+      // Get.lazyPut(
+      //   () => GalleryRepository(url: url, tabTag: tabTag),
+      //   tag: pageCtrlDepth,
       // );
-      Get.toNamed(
-        EHRoutes.galleryPage,
+
+      // Get.toNamed(
+      //   EHRoutes.galleryPage,
+      //   preventDuplicates: false,
+      //   arguments: GalleryRepository(url: url, tabTag: tabTag),
+      // );
+
+      Get.to(
+        const GalleryMainPage(),
+        binding: GalleryBinding(
+          galleryRepository: GalleryRepository(url: url, tabTag: tabTag),
+        ),
         preventDuplicates: false,
+        // arguments: GalleryRepository(url: url, tabTag: tabTag),
       );
     } else {
       logger.d('goGalleryPage fromItem tabTag=$tabTag');
 
-      // isLayoutLarge
-      //     ? Get.to(
-      //         GalleryMainPage(tabTag: tabTag),
-      //         id: 2,
-      //         transition: Transition.fadeIn,
-      //         preventDuplicates: false,
-      //         binding: GalleryBinding.fromItem(galleryItem),
-      //       )
-      //     : Get.to(
-      //         GalleryMainPage(tabTag: tabTag),
-      //         transition: Transition.cupertino,
-      //         preventDuplicates: false,
-      //         binding: GalleryBinding.fromItem(galleryItem),
-      //       );
+      // Get.lazyPut(
+      //   () => GalleryRepository(item: galleryItem, tabTag: tabTag),
+      //   tag: pageCtrlDepth,
+      // );
 
-      Get.lazyPut(
-        () => GalleryRepository(item: galleryItem, tabTag: tabTag),
-        tag: pageCtrlDepth,
-      );
+      // Get.toNamed(
+      //   EHRoutes.galleryPage,
+      //   preventDuplicates: false,
+      //   arguments: GalleryRepository(item: galleryItem, tabTag: tabTag),
+      // );
 
-      Get.toNamed(
-        EHRoutes.galleryPage,
+      Get.to(
+        const GalleryMainPage(),
+        binding: GalleryBinding(
+          galleryRepository:
+              GalleryRepository(item: galleryItem, tabTag: tabTag),
+        ),
         preventDuplicates: false,
+        // arguments: GalleryRepository(item: galleryItem, tabTag: tabTag),
       );
     }
   }
@@ -97,30 +99,27 @@ class NavigatorUtil {
     final DepthService depthService = Get.find();
     depthService.pushPageCtrl();
     if (url != null && url.isNotEmpty) {
-      // Get.off(
-      //   const GalleryMainPage(),
-      //   binding: BindingsBuilder<dynamic>(
-      //     () {
-      //       Get.put(
-      //         GalleryPageController.initUrl(url: url),
-      //         tag: '${depthService.pageCtrlDepth}',
-      //       );
-      //     },
-      //   ),
+      // Get.lazyPut(
+      //   () => GalleryRepository(url: url),
+      //   tag: pageCtrlDepth,
       // );
-      Get.offNamed(EHRoutes.galleryPage,
-          arguments: GalleryRepository(url: url));
+      // Get.offNamed(EHRoutes.galleryPage,
+      //     arguments: GalleryRepository(url: url));
+      Get.to(
+        const GalleryMainPage(),
+        binding: GalleryBinding(
+          galleryRepository: GalleryRepository(url: url),
+        ),
+        preventDuplicates: false,
+        // arguments: GalleryRepository(url: url),
+      );
     } else {
       Get.to(
         const GalleryMainPage(),
+        preventDuplicates: false,
       );
     }
   }
-
-  // static void goCommitPage() {
-  //   Navigator.of(Get.context).push(
-  //       CupertinoPageRoute(builder: (BuildContext context) => CommentPage()));
-  // }
 
   /// 打开搜索页面 搜索画廊 搜索关注
   static void showSearch({SearchType searchType, bool fromTabItem = true}) {

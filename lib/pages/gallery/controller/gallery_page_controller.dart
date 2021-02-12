@@ -2,9 +2,9 @@ import 'package:dio/dio.dart';
 import 'package:fehviewer/common/controller/download_controller.dart';
 import 'package:fehviewer/common/controller/history_controller.dart';
 import 'package:fehviewer/common/controller/localfav_controller.dart';
+import 'package:fehviewer/common/global.dart';
 import 'package:fehviewer/common/service/depth_service.dart';
 import 'package:fehviewer/common/service/ehconfig_service.dart';
-import 'package:fehviewer/main.dart';
 import 'package:fehviewer/models/index.dart';
 import 'package:fehviewer/network/gallery_request.dart';
 import 'package:fehviewer/pages/gallery/controller/rate_controller.dart';
@@ -116,7 +116,7 @@ class GalleryPageController extends GetxController
   void onInit() {
     super.onInit();
 
-    logger.d('GalleryPageController$pageCtrlDepth onInit');
+    // logger.d('GalleryPageController$pageCtrlDepth onInit');
 
     scrollController.addListener(_scrollControllerLister);
     hideNavigationBtn = true;
@@ -143,6 +143,7 @@ class GalleryPageController extends GetxController
       Get.delete<CommentController>(tag: pageCtrlDepth);
     } catch (_) {}
 
+    logger.d('onClose GalleryPageController $pageCtrlDepth');
     Get.find<DepthService>().popPageCtrl();
     super.onClose();
   }
@@ -442,7 +443,7 @@ class GalleryPageController extends GetxController
     // logger.d('length ${previews.length} ; index $index');
 
     // todo 好像还有点问题
-    if (previews.length - index < 4) {
+    if (previews.length - index < 10) {
       try {
         final List<GalleryPreview> _moreGalleryPreviewList =
             await Api.getGalleryPreview(

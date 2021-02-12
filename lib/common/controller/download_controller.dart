@@ -31,15 +31,21 @@ class DownloadController extends GetxController {
 
   final GStore _gStore = Get.find();
 
-  static final String _dbPath = Global.inDebugMode
+  static final String _dbPath = GetPlatform.isIOS && Global.inDebugMode
       ? path.join(Global.appDocPath, 'gallery_task.db')
       : path.join(Global.appSupportPath, 'gallery_task.db');
-  static Future<AppDatabase> _getDatabase() async =>
-      await $FloorAppDatabase.databaseBuilder(_dbPath).build();
-  static Future<GalleryTaskDao> getGalleryTaskDao() async =>
-      (await _getDatabase()).galleryTaskDao;
-  static Future<ImageTaskDao> getImageTaskDao() async =>
-      (await _getDatabase()).imageTaskDao;
+
+  static Future<AppDatabase> _getDatabase() async {
+    return await $FloorAppDatabase.databaseBuilder(_dbPath).build();
+  }
+
+  static Future<GalleryTaskDao> getGalleryTaskDao() async {
+    return (await _getDatabase()).galleryTaskDao;
+  }
+
+  static Future<ImageTaskDao> getImageTaskDao() async {
+    return (await _getDatabase()).imageTaskDao;
+  }
 
   Future<void> downloadArchiverFile({
     @required String gid,
@@ -188,13 +194,18 @@ class DownloadController extends GetxController {
     }
 
     // 先查询任务是否已存在
-    final GalleryTask _oriTask =
-        await _galleryTaskDao.findGalleryTaskByGid(gid);
-    if (_oriTask != null) {
-      logger.e('$gid 任务已存在');
-      showToast('下载任务已存在');
-      logger.d('${_oriTask.toString()} ');
-      return;
+    try {
+      final GalleryTask _oriTask =
+          await _galleryTaskDao.findGalleryTaskByGid(gid);
+      if (_oriTask != null) {
+        logger.e('$gid 任务已存在');
+        showToast('下载任务已存在');
+        logger.d('${_oriTask.toString()} ');
+        return;
+      }
+    } catch (e, stack) {
+      logger.e('$e\n$stack');
+      rethrow;
     }
 
     // 登记主任务表

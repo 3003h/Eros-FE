@@ -1,4 +1,5 @@
-import 'package:fehviewer/models/index.dart';
+import 'package:fehviewer/const/const.dart';
+import 'package:fehviewer/models/base/eh_models.dart';
 import 'package:fehviewer/network/gallery_request.dart';
 import 'package:fehviewer/store/tag_database.dart';
 import 'package:fehviewer/utils/logger.dart';
@@ -154,23 +155,146 @@ class GalleryDetailParser {
         // 解析评论内容
         final Element contextElem = comment.querySelector('div.c6');
 
-        // br回车以及引号的处理
-        final String context = contextElem.nodes.map((Node node) {
+        /// map的方式处理
+        /*final commentSpans = contextElem.nodes.map((Node node) {
           if (node.nodeType == Node.TEXT_NODE) {
-            return RegExp(r'^"?(.+)"?$')
-                    .firstMatch(node.text.trim())
-                    ?.group(1) ??
-                node.text;
+            final _nodeText =
+                RegExp(r'^"?(.+)"?$').firstMatch(node.text.trim())?.group(1) ??
+                    node.text;
+            return GalleryCommentSpan()..text = _nodeText;
           } else if (node.nodeType == Node.ELEMENT_NODE &&
               (node as Element).localName == 'br') {
-//          logger.v('${(node as Element).localName}  ${(node as Element).text}');
-            return '\n';
-          } else if (node.nodeType == Node.ELEMENT_NODE) {
-//          logger.v('${(node as Element).localName}  ${(node as Element).text}');
-            // 通常是链接 前后加空格便于和内容分开
-            return ' ' + (node as Element).text.trim() + ' ';
+            return GalleryCommentSpan()..text = '\n';
+          } else if (node.nodeType == Node.ELEMENT_NODE &&
+              (node as Element).localName == 'a') {
+            final Element _nodeElm = node as Element;
+
+            final _nodeHref = _nodeElm.attributes['href'];
+
+            String _nodeImageUrl;
+            if (_nodeElm.children.isNotEmpty) {
+              final _imgElm = _nodeElm.children
+                  .firstWhere((element) => element.localName == 'img');
+              _nodeImageUrl = _imgElm?.attributes['src'];
+            }
+
+            final _commentSpan = GalleryCommentSpan()
+              ..text = _nodeElm.text?.trim() ?? _nodeHref
+              ..href = _nodeHref
+              ..imageUrl = _nodeImageUrl;
+
+            logger.v('${_commentSpan.toJson()}');
+
+            return _commentSpan;
+          } else if (node.nodeType == Node.ELEMENT_NODE &&
+              (node as Element).localName == 'img') {
+            final Element _nodeElm = node as Element;
+            final String _nodeImageUrl = _nodeElm.attributes['src'];
+
+            final _commentSpan = GalleryCommentSpan()
+              ..text = _nodeElm.text?.trim() ?? _nodeImageUrl
+              ..imageUrl = _nodeImageUrl;
+
+            logger.v('${_commentSpan.toJson()}');
+
+            return _commentSpan;
           }
-        }).join();
+        }).toList();*/
+
+        /// for in遍历的方式处理
+        final List<GalleryCommentSpan> commentSpansf = [];
+        for (Node node in contextElem.nodes) {
+          if (node.nodeType == Node.TEXT_NODE) {
+            final String _nodeText = RegExp(r'^"?(.+)"?$')
+                    .firstMatch(node.text.trim())
+                    ?.group(1)
+                    ?.trim() ??
+                node.text.trim();
+
+            // 如果数组最后一个是纯文本 直接追加文本
+            if (commentSpansf.isNotEmpty &&
+                (commentSpansf.last.sType == CommentSpanType.text)) {
+              commentSpansf.last.text += _nodeText;
+            } else {
+              commentSpansf.add(GalleryCommentSpan()
+                ..text = _nodeText
+                ..sType = CommentSpanType.text);
+            }
+          } else if (node.nodeType == Node.ELEMENT_NODE) {
+            // br标签 换行
+            if ((node as Element).localName == 'br') {
+              // 如果数组最后一个是纯文本 直接追加文本
+              if (commentSpansf.isNotEmpty &&
+                  (commentSpansf.last.sType == CommentSpanType.text)) {
+                commentSpansf.last.text += '\n';
+              } else {
+                commentSpansf.add(GalleryCommentSpan()
+                  ..text = '\n'
+                  ..sType = CommentSpanType.text);
+              }
+              continue;
+            }
+
+            // span带a href
+            if ((node as Element).localName == 'span' &&
+                node.children.isNotEmpty) {
+              final Element _nodeElm = (node as Element).children.first;
+              final String _nodeHref = _nodeElm.attributes['href'];
+              final GalleryCommentSpan _commentSpan = GalleryCommentSpan()
+                ..sType = CommentSpanType.linkText
+                ..text = _nodeElm.text?.trim() ?? _nodeHref
+                ..href = _nodeHref;
+              commentSpansf.add(_commentSpan);
+              continue;
+            }
+
+            // a标签带href
+            if ((node as Element).localName == 'a') {
+              final Element _nodeElm = node as Element;
+
+              final String _nodeHref = _nodeElm.attributes['href'];
+
+              if (_nodeElm.children.isNotEmpty) {
+                final _imgElm = _nodeElm.children
+                    .firstWhere((element) => element.localName == 'img');
+                final _nodeImageUrl = _imgElm?.attributes['src'];
+                final GalleryCommentSpan _commentSpan = GalleryCommentSpan()
+                  ..sType = CommentSpanType.linkImage
+                  ..text = _nodeElm.text?.trim() ?? _nodeHref
+                  ..href = _nodeHref
+                  ..imageUrl = _nodeImageUrl;
+
+                commentSpansf.add(_commentSpan);
+                continue;
+              } else {
+                // 如果数组最后一个是纯文本 直接追加文本
+                if (commentSpansf.isNotEmpty &&
+                    (commentSpansf.last.sType == CommentSpanType.text)) {
+                  commentSpansf.last.text += _nodeElm.text;
+                } else {
+                  commentSpansf.add(GalleryCommentSpan()
+                    ..sType = CommentSpanType.text
+                    ..text = _nodeElm.text ?? _nodeHref);
+                }
+              }
+            }
+
+            // 只有一个img的情况 无href
+            if ((node as Element).localName == 'img') {
+              final Element _nodeElm = node as Element;
+              final String _nodeImageUrl = _nodeElm.attributes['src'];
+
+              final _commentSpan = GalleryCommentSpan()
+                ..sType = CommentSpanType.image
+                ..text = _nodeElm.text?.trim() ?? _nodeImageUrl
+                ..imageUrl = _nodeImageUrl;
+
+              logger.v('${_commentSpan.toJson()}');
+
+              commentSpansf.add(_commentSpan);
+            }
+          }
+        }
 
         galleryItem.galleryComment.add(GalleryComment()
           ..id = _id
@@ -178,7 +302,7 @@ class GalleryDetailParser {
           ..canVote = _canVote
           ..vote = _vote
           ..name = postName
-          ..context = context
+          ..span = commentSpansf
           ..time = postTimeLocal
           ..score = score);
       } catch (e, stack) {
@@ -254,8 +378,9 @@ class GalleryDetailParser {
 
     // 平均分
     final String _rating = RegExp(r'([\d.]+)')
-        .firstMatch(document.querySelector('#rating_label').text)
-        .group(1);
+            .firstMatch(document.querySelector('#rating_label').text)
+            ?.group(1) ??
+        '0';
     galleryItem.rating = double.parse(_rating);
 
     //

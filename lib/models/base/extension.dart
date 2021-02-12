@@ -1,4 +1,5 @@
 import 'package:enum_to_string/enum_to_string.dart';
+import 'package:fehviewer/const/const.dart';
 import 'package:fehviewer/pages/image_view/controller/view_state.dart';
 
 import '../index.dart';
@@ -40,4 +41,20 @@ extension ExtTabList on TabConfig {
         ..enable = map[name] ?? false);
     }
   }
+}
+
+extension ExtComment on GalleryComment {
+  // 提取评论纯文字部分内容
+  String get text => span.map((GalleryCommentSpan e) {
+        if (e.imageUrl?.isNotEmpty ?? false) {
+          return '[image]${e.href ?? ''} ';
+        }
+        return e?.text ?? '';
+      }).join();
+}
+
+extension ExtCommentSpan on GalleryCommentSpan {
+  CommentSpanType get sType =>
+      EnumToString.fromString(CommentSpanType.values, type);
+  set sType(CommentSpanType val) => type = EnumToString.convertToString(val);
 }

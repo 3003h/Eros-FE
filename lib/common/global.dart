@@ -13,16 +13,21 @@ import 'package:fehviewer/utils/https_proxy.dart';
 import 'package:fehviewer/utils/logger.dart';
 import 'package:fehviewer/utils/storage.dart';
 import 'package:fehviewer/utils/utility.dart';
+import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_downloader/flutter_downloader.dart';
 import 'package:get_storage/get_storage.dart';
+import 'package:local_auth/local_auth.dart';
 import 'package:logger/logger.dart';
 import 'package:package_info/package_info.dart';
 import 'package:path/path.dart';
 import 'package:path_provider/path_provider.dart';
 
 const int kProxyPort = 4041;
+
+final FirebaseAnalytics analytics = FirebaseAnalytics();
+final LocalAuthentication localAuth = LocalAuthentication();
 
 // 全局配置
 // ignore: avoid_classes_with_only_static_members
@@ -51,6 +56,8 @@ class Global {
 
   static bool isDBinappSupportPath = false;
 
+  static bool canCheckBiometrics;
+
   // 网络缓存对象
   // static NetCache netCache = NetCache();
 
@@ -66,6 +73,8 @@ class Global {
     await FlutterDownloader.initialize(debug: Global.inDebugMode);
 
     if (!inDebugMode) Logger.level = Level.info;
+
+    canCheckBiometrics = await localAuth.canCheckBiometrics;
 
     // 代理初始化
     if (Platform.isIOS || Platform.isAndroid) {

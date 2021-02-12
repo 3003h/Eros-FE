@@ -43,7 +43,8 @@ class ArchiverView extends StatelessWidget {
                                     CupertinoColors.secondarySystemBackground,
                                     context),
                                 fontWeight: FontWeight.bold,
-                                height: 1,
+                                height: 1.1,
+                                fontSize: 10,
                               ),
                             ),
                             color: CupertinoDynamicColor.resolve(
@@ -69,8 +70,8 @@ class ArchiverView extends StatelessWidget {
                                     CupertinoColors.secondarySystemBackground,
                                     context),
                                 fontWeight: FontWeight.bold,
-                                height: 1,
-                                // fontSize: 14,
+                                height: 1.1,
+                                fontSize: 10,
                               ),
                             ),
                             color: CupertinoDynamicColor.resolve(

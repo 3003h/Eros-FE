@@ -43,7 +43,7 @@ class _GalleryImageState extends State<GalleryImage>
     super.initState();
     _pageController = Get.find(tag: pageCtrlDepth);
 
-    logger.v('${widget.fade}');
+    // logger.v('${widget.fade}');
 
     _future = _pageController.getImageInfo(
       widget.index,
@@ -64,12 +64,13 @@ class _GalleryImageState extends State<GalleryImage>
 
   @override
   void dispose() {
-    super.dispose();
+    clearGestureDetailsCache();
     _controller.dispose();
     // _getMoreCancelToken.cancel();
+    super.dispose();
   }
 
-  Future<void> _reloadImage() async {
+  Future<void> _reloadImage({bool changeSource = true}) async {
     final GalleryPreview _currentPreview =
         _pageController.galleryItem.galleryPreview[widget.index];
     // 清除CachedNetworkImage的缓存
@@ -86,7 +87,7 @@ class _GalleryImageState extends State<GalleryImage>
         widget.index,
         cancelToken: _getMoreCancelToken,
         refresh: true,
-        changeSource: true,
+        changeSource: changeSource,
       );
     });
   }
@@ -114,7 +115,7 @@ class _GalleryImageState extends State<GalleryImage>
               if (previewFromApi.hasError) {
                 logger.e(' ${previewFromApi.error}');
                 if (previewFromApi.error is DioError) {
-                  DioError dioErr = previewFromApi.error as DioError;
+                  final DioError dioErr = previewFromApi.error as DioError;
                   logger.e('${dioErr.error}');
 
                   _errInfo = dioErr.type.toString();
@@ -156,7 +157,7 @@ class _GalleryImageState extends State<GalleryImage>
                     previewFromApi.data.largeImageWidth;
                 _currentPreview.sourceId = previewFromApi.data.sourceId;
 
-                Future.delayed(const Duration(milliseconds: 100)).then((value) {
+                Future.delayed(const Duration(milliseconds: 100)).then((_) {
                   Get.find<ViewController>()
                       .update(['GalleryImage_${widget.index}']);
                 });
@@ -212,7 +213,6 @@ class _GalleryImageState extends State<GalleryImage>
   Widget _buildImageExtend(String url) {
     return ExtendedImage.network(
       url ?? '',
-      cache: true,
       fit: BoxFit.contain,
       handleLoadingProgress: true,
       clearMemoryCacheIfFailed: true,
@@ -298,6 +298,7 @@ class _GalleryImageState extends State<GalleryImage>
 
             break;
           case LoadState.failed:
+            logger.d('Failed $url');
             _controller.reset();
             return Container(
               alignment: Alignment.center,

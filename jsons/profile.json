@@ -11,5 +11,6 @@
   "enableAdvanceSearch": false,
   "advanceSearch": "$advanceSearch",
   "dnsConfig": "$dnsConfig",
-  "downloadConfig": "$downloadConfig"
+  "downloadConfig": "$downloadConfig",
+  "autoLock": "$autoLock"
 }

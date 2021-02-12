@@ -15,13 +15,16 @@ import 'package:pretty_dio_logger/pretty_dio_logger.dart';
 
 import 'logger.dart';
 
+const int kDefconnectTimeout = 10000;
+const int kDefreceiveTimeout = 10000;
+
 class HttpManager {
   //构造函数
-  HttpManager(String _baseUrl, {bool cache = true}) {
+  HttpManager(String _baseUrl, {bool cache = true, int connectTimeout}) {
     _options = BaseOptions(
         baseUrl: _baseUrl,
-        connectTimeout: connectTimeout,
-        receiveTimeout: receiveTimeout,
+        connectTimeout: connectTimeout ?? kDefconnectTimeout,
+        receiveTimeout: kDefreceiveTimeout,
         //设置请求头
         headers: <String, String>{
           'User-Agent': EHConst.CHROME_USER_AGENT,
@@ -82,9 +85,6 @@ class HttpManager {
       return httpClient;
     };
   }
-
-  final int connectTimeout = 10000;
-  final int receiveTimeout = 10000;
 
   //单例模式
   static final Map<String, HttpManager> _instanceMap = <String, HttpManager>{};

@@ -69,14 +69,8 @@ class ListViewEhSetting extends StatelessWidget {
     final bool _tagTranslat = _ehConfigService.isTagTranslat.value;
     final bool _galleryImgBlur = _ehConfigService.isGalleryImgBlur.value;
     final bool _favLongTap = _ehConfigService.isFavLongTap.value;
-    final bool _favOrder =
-        _ehConfigService.favoriteOrder.value == FavoriteOrder.posted;
     final bool _isLogin = userController.isLogin;
-
     final bool _isClipboar = _ehConfigService.isClipboardLink.value;
-
-    final Color _backgroundColor =
-        CupertinoTheme.of(context).scaffoldBackgroundColor;
 
     Future<void> _handleSiteChanged(bool newValue) async {
       _ehConfigService.isSiteEx(newValue);
@@ -185,6 +179,14 @@ class ListViewEhSetting extends StatelessWidget {
         onChanged: _handleClipboarLinkTapChange,
         desc: '关闭',
         descOn: '自动检测剪贴板画廊链接',
+      ),
+      TextSwitchItem(
+        '评论机翻按钮',
+        intValue: _ehConfigService.commentTrans.value,
+        onChanged: (bool newValue) =>
+            _ehConfigService.commentTrans.value = newValue,
+        desc: '关闭',
+        descOn: '用谷歌翻译将评论翻译为简体中文',
       ),
       _buildListModeItem(context),
       _buildHistoryMaxItem(context),

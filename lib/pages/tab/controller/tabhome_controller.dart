@@ -1,8 +1,7 @@
 import 'package:fehviewer/common/global.dart';
 import 'package:fehviewer/common/service/ehconfig_service.dart';
 import 'package:fehviewer/generated/l10n.dart';
-import 'package:fehviewer/models/base/extension.dart';
-import 'package:fehviewer/models/index.dart';
+import 'package:fehviewer/models/base/eh_models.dart';
 import 'package:fehviewer/pages/tab/view/download_page.dart';
 import 'package:fehviewer/pages/tab/view/history_page.dart';
 import 'package:fehviewer/pages/tab/view/watched_page.dart';
