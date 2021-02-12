@@ -594,7 +594,7 @@ class TopComment extends StatelessWidget {
   Widget build(BuildContext context) {
     // 显示最前面两条
     List<Widget> _topComment(List<GalleryComment> comments, {int max = 2}) {
-      final Iterable<GalleryComment> _comments = comments.take(max);
+      final Iterable<GalleryComment> _comments = comments?.take(max) ?? [];
       return List<Widget>.from(_comments
           .map((GalleryComment comment) => CommentItem(
                 galleryComment: comment,
@@ -612,7 +612,7 @@ class TopComment extends StatelessWidget {
           id: 'TopComment',
           builder: (CommentController _commentController) {
             return _commentController.obx(
-                (state) => Column(
+                (List<GalleryComment> state) => Column(
                       children: <Widget>[
                         ..._topComment(state, max: 2),
                       ],
@@ -729,6 +729,9 @@ class PreviewContainer extends StatelessWidget {
         return CachedNetworkImage(
           httpHeaders: _httpHeaders,
           imageUrl: galleryPreview.imgUrl,
+          progressIndicatorBuilder: (_, __, ___) {
+            return const CupertinoActivityIndicator();
+          },
         );
       } else {
         return LayoutBuilder(
@@ -754,13 +757,11 @@ class PreviewContainer extends StatelessWidget {
               alignment: AlignmentDirectional.center,
               fit: StackFit.expand,
               children: <Widget>[
-                Container(
-                  child: PreviewImageClipper(
-                    imgUrl: galleryPreview.imgUrl,
-                    offset: galleryPreview.offSet,
-                    height: galleryPreview.height,
-                    width: galleryPreview.width,
-                  ),
+                PreviewImageClipper(
+                  imgUrl: galleryPreview.imgUrl,
+                  offset: galleryPreview.offSet,
+                  height: galleryPreview.height,
+                  width: galleryPreview.width,
                 ),
               ],
             ),

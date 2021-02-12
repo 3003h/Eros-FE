@@ -5,8 +5,7 @@ import 'package:fehviewer/common/controller/gallerycache_controller.dart';
 import 'package:fehviewer/common/service/depth_service.dart';
 import 'package:fehviewer/common/service/ehconfig_service.dart';
 import 'package:fehviewer/const/const.dart';
-import 'package:fehviewer/models/base/extension.dart';
-import 'package:fehviewer/models/index.dart';
+import 'package:fehviewer/models/base/eh_models.dart';
 import 'package:fehviewer/pages/gallery/controller/gallery_page_controller.dart';
 import 'package:fehviewer/utils/logger.dart';
 import 'package:flutter/cupertino.dart';
@@ -31,7 +30,7 @@ class ViewState {
     logger.v('初始化ViewState');
 
     ever(_itemIndex, (int val) {
-      logger.d('ever _itemIndex to $val');
+      // logger.d('ever _itemIndex to $val');
       Future<void>.delayed(const Duration(milliseconds: 100)).then((_) {
         // logger.d('delayed ever _itemIndex to $itemIndex');
         _galleryCacheController.setIndex(
@@ -88,7 +87,7 @@ class ViewState {
   final RxInt _itemIndex = 0.obs;
   int get itemIndex => _itemIndex.value;
   set itemIndex(int val) {
-    logger.d('set itemIndex to $val');
+    // logger.d('set itemIndex to $val');
     _itemIndex.value = val;
   }
 

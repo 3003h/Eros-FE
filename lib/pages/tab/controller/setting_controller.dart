@@ -78,7 +78,7 @@ class SettingViewController extends GetxController
       S.of(context).eh,
       S.of(context).download,
       S.of(context).advanced,
-      // '安全设置',
+      S.of(context).security,
       S.of(context).about,
     ];
 
@@ -86,7 +86,7 @@ class SettingViewController extends GetxController
       FontAwesomeIcons.cookieBite,
       FontAwesomeIcons.download,
       FontAwesomeIcons.tools,
-      // FontAwesomeIcons.shieldAlt,
+      FontAwesomeIcons.shieldAlt,
       FontAwesomeIcons.infoCircle,
     ];
 
@@ -94,7 +94,7 @@ class SettingViewController extends GetxController
       EHRoutes.ehSetting,
       EHRoutes.downloadSetting,
       EHRoutes.advancedSetting,
-      // '',
+      EHRoutes.securitySetting,
       EHRoutes.about,
     ];
   }

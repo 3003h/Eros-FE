@@ -11,6 +11,7 @@ import 'package:fehviewer/pages/setting/advanced_setting_page.dart';
 import 'package:fehviewer/pages/setting/controller/tab_setting_controller.dart';
 import 'package:fehviewer/pages/setting/download_setting_page.dart';
 import 'package:fehviewer/pages/setting/eh_setting_page.dart';
+import 'package:fehviewer/pages/setting/security_setting_page.dart';
 import 'package:fehviewer/pages/setting/tab_setting.dart';
 import 'package:fehviewer/pages/setting/view_setting_page.dart';
 import 'package:fehviewer/pages/tab/bindings/splash_binding.dart';
@@ -19,14 +20,17 @@ import 'package:fehviewer/pages/tab/view/download_page.dart';
 import 'package:fehviewer/pages/tab/view/favorite_page.dart';
 import 'package:fehviewer/pages/tab/view/favorite_sel_page.dart';
 import 'package:fehviewer/pages/tab/view/history_page.dart';
-import 'package:fehviewer/pages/tab/view/home_page_small.dart';
+import 'package:fehviewer/pages/tab/view/home_page.dart';
 import 'package:fehviewer/pages/tab/view/popular_page.dart';
 import 'package:fehviewer/pages/tab/view/splash_page.dart';
+import 'package:fehviewer/pages/tab/view/unlock_page.dart';
 import 'package:fehviewer/pages/tab/view/watched_page.dart';
 import 'package:get/get.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 
 import 'routes.dart';
+
+const Duration kUnLockPageTransitionDuration = Duration(milliseconds: 200);
 
 // ignore: avoid_classes_with_only_static_members
 class AppPages {
@@ -38,8 +42,14 @@ class AppPages {
       transition: Transition.fadeIn,
     ),
     GetPage(
+      name: EHRoutes.unlockPage,
+      page: () => const UnLockPage(),
+      transition: Transition.noTransition,
+      transitionDuration: kUnLockPageTransitionDuration,
+    ),
+    GetPage(
       name: EHRoutes.home,
-      page: () => TabHomeSmall(),
+      page: () => HomePage(),
       binding: TabHomeBinding(),
       transition: Transition.fadeIn,
     ),
@@ -67,6 +77,11 @@ class AppPages {
     GetPage(
       name: EHRoutes.downloadSetting,
       page: () => DownloadSettingPage(),
+      transition: Transition.cupertino,
+    ),
+    GetPage(
+      name: EHRoutes.securitySetting,
+      page: () => SecuritySettingPage(),
       transition: Transition.cupertino,
     ),
     GetPage(
@@ -125,6 +140,10 @@ class AppPages {
         Get.lazyPut(() => ViewController());
       }),
     ),
+
+    // 使用命名路由跳转 EHRoutes.galleryPage 的话
+    // 有多个page时，关闭页面的时候 会全部close
+    // 先停用
     GetPage(
       name: EHRoutes.galleryPage,
       page: () => const GalleryMainPage(),

@@ -5,6 +5,7 @@ import 'package:fehviewer/pages/gallery/view/comment_page.dart';
 import 'package:fehviewer/utils/logger.dart';
 import 'package:fehviewer/utils/toast.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
@@ -44,45 +45,46 @@ class CommentController extends GetxController
   @override
   void onInit() {
     super.onInit();
-    // logger.d('CommentController onInit');
-    change(pageController.galleryItem.galleryComment,
-        status: RxStatus.success());
+    logger.d('CommentController onInit');
+
+    _loadComment();
 
     _bottomInset = _mediaQueryBottomInset();
     _preBottomInset = _bottomInset;
     _widgetsBinding.addObserver(this);
-    // _widgetsBinding.addPostFrameCallback((Duration timeStamp) {
-    //   // logger.d('${_mediaQueryBottomInset()}');
-    //   _widgetsBinding.addPersistentFrameCallback((Duration timeStamp) {
-    //     logger.d('${_mediaQueryBottomInset()}');
-    //   });
-    // });
+  }
+
+  Future<void> _loadComment() async {
+    await Future.delayed(const Duration(milliseconds: 200));
+    change(pageController.galleryItem.galleryComment,
+        status: RxStatus.success());
   }
 
   @override
   void didChangeMetrics() {
     _didChangeMetrics = true;
     super.didChangeMetrics();
-    // _widgetsBinding.addPostFrameCallback((Duration timeStamp) {
-    //   logger.d(' ${MediaQuery.of(Get.context).viewInsets.bottom}');
-    // });
     _widgetsBinding.addPostFrameCallback((Duration timeStamp) {
       _bottomInset = _mediaQueryBottomInset();
       if (_preBottomInset != _bottomInset) {
         final double _offset = _bottomInset - _preBottomInset;
         _preBottomInset = _bottomInset;
-        // logger.d(' ${_bottomInset} $_offset  ${scrollController.offset}');
-
-        // _scrollToBottom();
       }
     });
   }
 
   @override
   void onClose() {
-    super.onClose();
+    _tgr.forEach((element) => element.dispose());
     scrollController.dispose();
     _widgetsBinding.removeObserver(this);
+    super.onClose();
+  }
+
+  final List<TapGestureRecognizer> _tgr = [];
+  TapGestureRecognizer genTapGestureRecognizer() {
+    _tgr.add(TapGestureRecognizer());
+    return _tgr.last;
   }
 
   double _mediaQueryBottomInset() {

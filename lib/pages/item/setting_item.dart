@@ -117,7 +117,7 @@ class _SettingItems extends State<SettingItems> {
   /// 设置项分隔线
   Widget _settingItemDivider() {
     return Divider(
-      height: 0.5,
+      height: 0.8,
       indent: 45.0,
       color:
           CupertinoDynamicColor.resolve(CupertinoColors.systemGrey4, context),

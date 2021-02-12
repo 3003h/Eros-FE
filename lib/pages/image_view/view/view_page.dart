@@ -300,7 +300,7 @@ class GalleryViewPage extends GetView<ViewController> {
     return GetBuilder<ViewController>(
         id: '_buildPhotoViewGallery',
         builder: (ViewController controller) {
-          final state = controller.vState;
+          final ViewState state = controller.vState;
           return ScrollablePositionedList.builder(
             itemScrollController: controller.itemScrollController,
             itemPositionsListener: controller.itemPositionsListener,

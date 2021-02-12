@@ -27,7 +27,7 @@ void _isolateDownload(SendPort sendPort) {
                 await _updateDtl(_requestBean, sendPort);
 
             // 更新大图url 通知父线程
-            await _fetchAllImageUrl(_requestBean, sendPort, _previews);
+            await _fetchAllImageInfo(_requestBean, sendPort, _previews);
 
             // 发送消息回父isolate
             sendPort.send(
@@ -74,7 +74,7 @@ Future<List<GalleryPreview>> _updateDtl(
   return _previews;
 }
 
-Future<void> _fetchAllImageUrl(
+Future<void> _fetchAllImageInfo(
   _RequestBean _requestBean,
   SendPort sendPort,
   List<GalleryPreview> _previews,
@@ -112,6 +112,7 @@ Future<void> _fetchAllImageUrl(
             gid: _requestBean.galleryTask.gid,
             ser: preview.ser,
             imageUrl: _info.largeImageUrl,
+            sourceId: _info.sourceId,
             filePath: _fileName,
           ),
         ]);
@@ -288,12 +289,18 @@ Future<GalleryPreview> _isoParaImageLageInfoFromHtml(
     rethrow;
   }
 
+  final Document document = parse(response.data);
+
   // logger.d('res $response');
 
   final RegExp regImageUrl = RegExp('<img[^>]*src=\"([^\"]+)\" style');
   final String imageUrl = regImageUrl.firstMatch(response.data).group(1);
 
   // logger.d('imageUrl $imageUrl');
+
+  final String _sourceId = RegExp(r"nl\('(.*?)'\)")
+      .firstMatch(document.querySelector('#loadfail').attributes['onclick'])
+      .group(1);
 
   final RegExpMatch _xy =
       RegExp(r'::\s+(\d+)\s+x\s+(\d+)\s+::').firstMatch(response.data);
@@ -302,6 +309,7 @@ Future<GalleryPreview> _isoParaImageLageInfoFromHtml(
 
   final GalleryPreview _rePreview = GalleryPreview()
     ..largeImageUrl = imageUrl
+    ..sourceId = _sourceId
     ..largeImageWidth = width
     ..largeImageHeight = height;
 

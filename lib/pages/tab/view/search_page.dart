@@ -10,12 +10,13 @@ import 'package:fehviewer/pages/tab/controller/enum.dart';
 import 'package:fehviewer/pages/tab/controller/search_page_controller.dart';
 import 'package:fehviewer/pages/tab/view/gallery_base.dart';
 import 'package:fehviewer/pages/tab/view/tab_base.dart';
+import 'package:fehviewer/store/tag_database.dart';
 import 'package:fehviewer/utils/logger.dart';
 import 'package:fehviewer/utils/vibrate.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
+import 'package:line_icons/line_icons.dart';
 
 const BorderSide _kDefaultRoundedBorderSide = BorderSide(
   color: CupertinoDynamicColor.withBrightness(
@@ -145,20 +146,46 @@ class GallerySearchPage extends StatelessWidget {
   }
 
   Widget _getInitView() {
+    Future<String> _getTextTranslate(String text) async {
+      final String tranText =
+          await EhTagDatabase.getTranTagWithFullNameSpase(text);
+      if (tranText != null && tranText.trim() != text) {
+        return tranText;
+      } else {
+        return null;
+      }
+    }
+
+    Widget _btn(String text) {
+      return TagButton(
+        text: text,
+        padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 6),
+        onPressed: () {
+          controller.appendTextToSearch(text);
+        },
+        onLongPress: () async {
+          final tranText = await _getTextTranslate(text);
+          if (tranText != null) {
+            VibrateUtil.medium();
+            showCupertinoDialog(
+                context: Get.overlayContext,
+                barrierDismissible: true,
+                builder: (_) {
+                  return CupertinoAlertDialog(
+                    content: Text(tranText),
+                  );
+                });
+          }
+        },
+      );
+    }
+
     return GetBuilder<SearchPageController>(
       tag: searchPageCtrlDepth,
       id: 'InitView',
       builder: (controller) {
-        final List<Widget> _btnList = List<Widget>.from(controller.seaechHistory
-            .map((e) => TagButton(
-                  text: e,
-                  padding:
-                      const EdgeInsets.symmetric(vertical: 6, horizontal: 6),
-                  onPressed: () {
-                    controller.appendTextToSearch(e);
-                  },
-                ))
-            .toList());
+        final List<Widget> _btnList = List<Widget>.from(
+            controller.seaechHistory.map((String text) => _btn(text)).toList());
 
         return SliverToBoxAdapter(
           child: Container(
@@ -177,7 +204,7 @@ class GallerySearchPage extends StatelessWidget {
                 Container(
                   child: Wrap(
                     spacing: 8, //主轴上子控件的间距
-                    runSpacing: 10, //交叉轴上子控件之间的间距
+                    runSpacing: 8, //交叉轴上子控件之间的间距
                     children: _btnList.sublist(
                         0, min<int>(20, _btnList.length)), //要显示的子控件集合
                   ),
@@ -314,21 +341,22 @@ class GallerySearchPage extends StatelessWidget {
             ),
             CupertinoButton(
               minSize: 36,
-              padding: const EdgeInsets.only(right: 0),
-              child: ClipRRect(
-                borderRadius: BorderRadius.circular(8),
-                child: Container(
-                  padding: const EdgeInsets.fromLTRB(4, 2, 4, 2),
-                  color: CupertinoDynamicColor.resolve(
-                      CupertinoColors.activeBlue, context),
-                  child: Obx(() => Text(
-                        '${controller.curPage + 1}',
-                        style: TextStyle(
-                            color: CupertinoDynamicColor.resolve(
-                                CupertinoColors.secondarySystemBackground,
-                                context)),
-                      )),
-                ),
+              padding: const EdgeInsets.all(0),
+              child: Container(
+                padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 0),
+                decoration: BoxDecoration(
+                    border: Border.all(
+                      color: CupertinoDynamicColor.resolve(
+                          CupertinoColors.activeBlue, context),
+                      width: 1.5,
+                    ),
+                    borderRadius: const BorderRadius.all(Radius.circular(8))),
+                child: Obx(() => Text(
+                      '${controller.curPage.value + 1}',
+                      style: TextStyle(
+                          color: CupertinoDynamicColor.resolve(
+                              CupertinoColors.activeBlue, context)),
+                    )),
               ),
               onPressed: () {
                 controller.jumpToPage();
@@ -338,8 +366,8 @@ class GallerySearchPage extends StatelessWidget {
               minSize: 36,
               padding: const EdgeInsets.all(0),
               child: const Icon(
-                FontAwesomeIcons.filter,
-                size: 20,
+                LineIcons.filter,
+                size: 26,
               ),
               onPressed: () {
                 showFilterSetting();
@@ -349,8 +377,8 @@ class GallerySearchPage extends StatelessWidget {
               minSize: 36,
               padding: const EdgeInsets.all(0),
               child: const Icon(
-                FontAwesomeIcons.plusCircle,
-                size: 20,
+                LineIcons.plusCircle,
+                size: 26,
               ),
               onPressed: () {
                 controller.addToQuickSearch();
@@ -360,8 +388,8 @@ class GallerySearchPage extends StatelessWidget {
               minSize: 36,
               padding: const EdgeInsets.all(0),
               child: const Icon(
-                FontAwesomeIcons.alignJustify,
-                size: 20,
+                LineIcons.alignJustify,
+                size: 26,
               ),
               onPressed: () {
                 controller.quickSearchList();
@@ -388,7 +416,7 @@ class GallerySearchPage extends StatelessWidget {
             children: <Widget>[
               Icon(
                 icon,
-                size: 20,
+                size: 24,
                 // color: CupertinoDynamicColor.resolve(
                 //     CupertinoColors.secondaryLabel, Get.context),
               ),
@@ -419,10 +447,11 @@ class GallerySearchPage extends StatelessWidget {
               .withOpacity(0.95);
       return CustomPopupMenu(
         child: Container(
+          width: 40,
           padding: const EdgeInsets.only(right: 14, left: 4),
           child: const Icon(
-            FontAwesomeIcons.ellipsisH,
-            size: 20,
+            LineIcons.horizontalEllipsis,
+            size: 26,
           ),
         ),
         arrowColor: _color,
@@ -439,17 +468,17 @@ class GallerySearchPage extends StatelessWidget {
                   mainAxisSize: MainAxisSize.min,
                   children: [
                     _menuItem(
-                      icon: FontAwesomeIcons.filter,
+                      icon: LineIcons.filter,
                       title: S.of(context).show_filter,
                       onTap: showFilterSetting,
                     ),
                     _menuItem(
-                      icon: FontAwesomeIcons.plusCircle,
+                      icon: LineIcons.plusCircle,
                       title: S.of(context).add_quick_search,
                       onTap: controller.addToQuickSearch,
                     ),
                     _menuItem(
-                      icon: FontAwesomeIcons.alignJustify,
+                      icon: LineIcons.alignJustify,
                       title: S.of(context).quick_search,
                       onTap: controller.quickSearchList,
                     ),
@@ -484,27 +513,33 @@ class GallerySearchPage extends StatelessWidget {
             ),
             CupertinoButton(
               minSize: 36,
-              padding: const EdgeInsets.only(right: 0),
-              child: ClipRRect(
-                borderRadius: BorderRadius.circular(8),
-                child: Container(
-                  padding: const EdgeInsets.fromLTRB(4, 2, 4, 2),
-                  color: CupertinoDynamicColor.resolve(
-                      CupertinoColors.activeBlue, context),
-                  child: Obx(() => Text(
-                        '${controller.curPage.value + 1}',
-                        style: TextStyle(
-                            color: CupertinoDynamicColor.resolve(
-                                CupertinoColors.secondarySystemBackground,
-                                context)),
-                      )),
-                ),
+              padding: const EdgeInsets.all(0),
+              child: Container(
+                padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 0),
+                decoration: BoxDecoration(
+                    border: Border.all(
+                      color: CupertinoDynamicColor.resolve(
+                          CupertinoColors.activeBlue, context),
+                      width: 1.5,
+                    ),
+                    borderRadius: const BorderRadius.all(Radius.circular(8))),
+                child: Obx(() => Text(
+                      '${controller.curPage.value + 1}',
+                      style: TextStyle(
+                          color: CupertinoDynamicColor.resolve(
+                              CupertinoColors.activeBlue, context)),
+                    )),
               ),
               onPressed: () {
                 controller.jumpToPage();
               },
             ),
-            _buildMenu(),
+            Card(
+              margin: const EdgeInsets.all(0),
+              child: _buildMenu(),
+              color: Colors.transparent,
+              shadowColor: Colors.transparent,
+            ),
           ],
         ),
       );

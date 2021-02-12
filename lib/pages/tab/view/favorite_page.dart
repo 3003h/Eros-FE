@@ -14,8 +14,8 @@ import 'package:fehviewer/route/routes.dart';
 import 'package:fehviewer/utils/logger.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
+import 'package:line_icons/line_icons.dart';
 
 class FavoriteTab extends GetView<FavoriteViewController> {
   const FavoriteTab({Key key, this.tabTag, this.scrollController})
@@ -75,8 +75,8 @@ class FavoriteTab extends GetView<FavoriteViewController> {
                 minSize: 40,
                 padding: const EdgeInsets.all(0),
                 child: const Icon(
-                  FontAwesomeIcons.search,
-                  size: 20,
+                  LineIcons.search,
+                  size: 26,
                 ),
                 onPressed: () {
                   final bool fromTabItem =
@@ -93,8 +93,8 @@ class FavoriteTab extends GetView<FavoriteViewController> {
                   mainAxisSize: MainAxisSize.min,
                   children: <Widget>[
                     const Icon(
-                      FontAwesomeIcons.sortAmountDown,
-                      size: 22,
+                      LineIcons.sortAmountDown,
+                      size: 26,
                     ),
                     Align(
                       alignment: Alignment.centerLeft,
@@ -113,20 +113,37 @@ class FavoriteTab extends GetView<FavoriteViewController> {
               CupertinoButton(
                 padding: const EdgeInsets.all(0),
                 minSize: 36,
-                child: ClipRRect(
-                  borderRadius: BorderRadius.circular(8),
-                  child: Container(
-                    padding: const EdgeInsets.fromLTRB(4, 2, 4, 2),
-                    color: CupertinoDynamicColor.resolve(
-                        CupertinoColors.activeBlue, context),
-                    child: Obx(() => Text(
-                          '${controller.curPage.value + 1}',
-                          style: TextStyle(
-                              color: CupertinoDynamicColor.resolve(
-                                  CupertinoColors.secondarySystemBackground,
-                                  context)),
-                        )),
-                  ),
+                // child: ClipRRect(
+                //   borderRadius: BorderRadius.circular(8),
+                //   child: Container(
+                //     padding: const EdgeInsets.fromLTRB(4, 2, 4, 2),
+                //     color: CupertinoDynamicColor.resolve(
+                //         CupertinoColors.activeBlue, context),
+                //     child: Obx(() => Text(
+                //           '${controller.curPage.value + 1}',
+                //           style: TextStyle(
+                //               color: CupertinoDynamicColor.resolve(
+                //                   CupertinoColors.secondarySystemBackground,
+                //                   context)),
+                //         )),
+                //   ),
+                // ),
+                child: Container(
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 4, vertical: 0),
+                  decoration: BoxDecoration(
+                      border: Border.all(
+                        color: CupertinoDynamicColor.resolve(
+                            CupertinoColors.activeBlue, context),
+                        width: 1.5,
+                      ),
+                      borderRadius: const BorderRadius.all(Radius.circular(8))),
+                  child: Obx(() => Text(
+                        '${controller.curPage.value + 1}',
+                        style: TextStyle(
+                            color: CupertinoDynamicColor.resolve(
+                                CupertinoColors.activeBlue, context)),
+                      )),
                 ),
                 onPressed: () {
                   controller.jumpToPage();
@@ -248,7 +265,8 @@ class FavoriteTab extends GetView<FavoriteViewController> {
       minSize: 40,
       padding: const EdgeInsets.only(right: 8),
       child: const Icon(
-        FontAwesomeIcons.star,
+        LineIcons.star,
+        size: 26,
       ),
       onPressed: () async {
         // 跳转收藏夹选择页

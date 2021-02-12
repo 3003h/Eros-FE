@@ -4,15 +4,11 @@ import 'dart:ui' as ui;
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:fehviewer/common/global.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 
-const kScale = 1.0;
+const double kScale = 1.0;
 
-class PreviewImageClipper extends StatefulWidget {
-  final String imgUrl;
-  final double offset;
-  final double width;
-  final double height;
-
+class PreviewImageClipper extends StatelessWidget {
   const PreviewImageClipper(
       {Key key,
       @required this.imgUrl,
@@ -21,35 +17,33 @@ class PreviewImageClipper extends StatefulWidget {
       @required this.height})
       : super(key: key);
 
-  @override
-  _PreviewImageClipperState createState() => _PreviewImageClipperState();
-}
-
-class _PreviewImageClipperState extends State<PreviewImageClipper> {
-  ImageClipper clipper;
-
-  @override
-  void initState() {
-    super.initState();
-    _clip();
-  }
+  final String imgUrl;
+  final double offset;
+  final double width;
+  final double height;
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      child: CustomPaint(
-        painter: clipper,
-        size: Size(widget.width * kScale, widget.height * kScale),
-      ),
-    );
-  }
-
-  void _clip() async {
-    final ui.Image uiImage = await _loadPreviewImge(widget.imgUrl);
-    setState(() {
-      clipper = ImageClipper(uiImage,
-          width: widget.width, height: widget.height, offset: widget.offset);
-    });
+    return FutureBuilder<ui.Image>(
+        future: _loadPreviewImge(imgUrl),
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.done) {
+            if (snapshot.hasError) {
+              return const Center(child: Icon(Icons.error, color: Colors.red));
+            } else {
+              final ui.Image uiImage = snapshot.data;
+              return Container(
+                child: CustomPaint(
+                  painter: ImageClipper(uiImage,
+                      width: width, height: height, offset: offset),
+                  size: Size(width * kScale, height * kScale),
+                ),
+              );
+            }
+          } else {
+            return const Center(child: CupertinoActivityIndicator());
+          }
+        });
   }
 
   /// 监听图片加载

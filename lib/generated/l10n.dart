@@ -1005,20 +1005,20 @@ class S {
     );
   }
 
-  /// `Letf to right`
-  String get letf_to_right {
+  /// `Left to right`
+  String get left_to_right {
     return Intl.message(
-      'Letf to right',
-      name: 'letf_to_right',
+      'Left to right',
+      name: 'left_to_right',
       desc: '',
       args: [],
     );
   }
 
-  /// `Retf to light`
+  /// `Right to left`
   String get right_to_left {
     return Intl.message(
-      'Retf to light',
+      'Right to left',
       name: 'right_to_left',
       desc: '',
       args: [],
@@ -1180,6 +1180,86 @@ class S {
     return Intl.message(
       'Share',
       name: 'share',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Security`
+  String get security {
+    return Intl.message(
+      'Security',
+      name: 'security',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Blurring in recent tasks`
+  String get security_blurredInRecentTasks {
+    return Intl.message(
+      'Blurring in recent tasks',
+      name: 'security_blurredInRecentTasks',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Auto-lock`
+  String get autoLock {
+    return Intl.message(
+      'Auto-lock',
+      name: 'autoLock',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Disabled`
+  String get disabled {
+    return Intl.message(
+      'Disabled',
+      name: 'disabled',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Instantly`
+  String get instantly {
+    return Intl.message(
+      'Instantly',
+      name: 'instantly',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `hours`
+  String get hours {
+    return Intl.message(
+      'hours',
+      name: 'hours',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `min`
+  String get min {
+    return Intl.message(
+      'min',
+      name: 'min',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `second`
+  String get second {
+    return Intl.message(
+      'second',
+      name: 'second',
       desc: '',
       args: [],
     );

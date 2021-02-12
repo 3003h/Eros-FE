@@ -39,6 +39,7 @@ class GalleryMainPage extends StatelessWidget {
     final String tabTag = controller.galleryRepository.tabTag;
 
     final GalleryItem _item = controller.galleryItem;
+
     return CupertinoPageScaffold(
       child: CustomScrollView(
         controller: controller.scrollController,

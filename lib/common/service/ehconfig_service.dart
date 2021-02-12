@@ -2,10 +2,14 @@ import 'package:enum_to_string/enum_to_string.dart';
 import 'package:fehviewer/common/global.dart';
 import 'package:fehviewer/common/service/base_service.dart';
 import 'package:fehviewer/const/const.dart';
+import 'package:fehviewer/const/storages.dart';
 import 'package:fehviewer/generated/l10n.dart';
+import 'package:fehviewer/pages/gallery/view/gallery_page.dart';
 import 'package:fehviewer/pages/tab/controller/tabhome_controller.dart';
 import 'package:fehviewer/route/navigator_util.dart';
+import 'package:fehviewer/route/routes.dart';
 import 'package:fehviewer/utils/logger.dart';
+import 'package:fehviewer/utils/storage.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
@@ -27,6 +31,8 @@ class EhConfigService extends ProfileService {
   RxBool isFavPicker = false.obs;
   RxBool isPureDarkTheme = false.obs;
   RxBool isClipboardLink = false.obs;
+  RxBool commentTrans = false.obs;
+  RxBool blurredInRecentTasks = true.obs;
 
   String _lastClipboardLink = '';
 
@@ -49,6 +55,9 @@ class EhConfigService extends ProfileService {
 
   /// 阅读方向
   Rx<ViewMode> viewMode = ViewMode.horizontalLeft.obs;
+
+  /// 自动锁定时间
+  RxInt autoLockTimeOut = (-1).obs;
 
   @override
   void onInit() {
@@ -125,6 +134,21 @@ class EhConfigService extends ProfileService {
     isClipboardLink.value = ehConfig.clipboardLink ?? false;
     everProfile<bool>(
         isClipboardLink, (bool value) => ehConfig.clipboardLink = value);
+
+    commentTrans.value = ehConfig.commentTrans ?? false;
+    everProfile<bool>(
+        commentTrans, (bool value) => ehConfig.commentTrans = value);
+
+    // blurredInRecentTasks
+    blurredInRecentTasks.value =
+        storageUtil.getBool(BLURRED_IN_RECENT_TASK) ?? true;
+    everProfile<bool>(blurredInRecentTasks,
+        (bool value) => storageUtil.setBool(BLURRED_IN_RECENT_TASK, value));
+
+    // autoLockTimeOut
+    autoLockTimeOut.value = ehConfig.autoLockTimeOut ?? -1;
+    everProfile<int>(
+        autoLockTimeOut, (int value) => ehConfig.autoLockTimeOut = value);
   }
 
   /// 收藏排序
@@ -186,19 +210,37 @@ class EhConfigService extends ProfileService {
     if (!isClipboardLink.value) {
       return;
     }
+
+    final currentRoute = Get.currentRoute;
+    logger.d('currentRoute $currentRoute');
+
+    final pageNames = <String>[
+      '/${const GalleryMainPage().runtimeType.toString()}',
+      EHRoutes.galleryPage,
+    ];
+
+    logger.d('pageNames $pageNames');
+    final bool _curGalleryPage = pageNames.contains(currentRoute);
+
     final String _text =
         (await Clipboard.getData(Clipboard.kTextPlain))?.text ?? '';
     logger.d('Clipboard ' + _text);
     final RegExp _reg =
         RegExp(r'https?://e[-|x]hentai.org/g/\d+/[0-9a-f]{10}/?');
     final RegExpMatch _mach = _reg.firstMatch(_text);
-    if (_mach != null &&
-        _mach.group(0).isNotEmpty &&
-        _lastClipboardLink != _mach.group(0)) {
-      logger.d('${_mach.group(0)} ');
-      _lastClipboardLink = _mach.group(0);
-      _showClipboardLinkDialog(_mach.group(0));
+
+    if (_mach == null && (_mach?.group(0)?.isEmpty ?? true)) {
+      return;
     }
+
+    if (_curGalleryPage && _lastClipboardLink == _mach.group(0)) {
+      logger.v('剪贴板链接为当前展示的画廊 返回');
+      return;
+    }
+
+    logger.d('${_mach.group(0)} ');
+    _lastClipboardLink = _mach.group(0);
+    _showClipboardLinkDialog(_mach.group(0));
   }
 
   Future<void> _showClipboardLinkDialog(String url) async {

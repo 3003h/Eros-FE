@@ -20,6 +20,13 @@ enum ViewMode {
   horizontalRight,
 }
 
+enum CommentSpanType {
+  text,
+  linkText,
+  image,
+  linkImage,
+}
+
 // ignore: avoid_classes_with_only_static_members
 class EHConst {
   // 网页登陆页面
@@ -73,6 +80,18 @@ class EHConst {
     11,
     13,
     17,
+  ];
+
+  static List<int> autoLockTime = <int>[
+    -1,
+    0,
+    30,
+    60 * 1,
+    60 * 5,
+    60 * 10,
+    60 * 30,
+    60 * 60,
+    60 * 60 * 5,
   ];
 
   static const Map<FavoriteOrder, String> favoriteOrder =
