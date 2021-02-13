@@ -115,12 +115,13 @@ class ViewController extends GetxController {
     super.onClose();
   }
 
+  /// SliderChangedEnd
   void handOnSliderChangedEnd(double value) {
     vState.itemIndex = value.round();
     logger.d('slider to _itemIndex ${vState.itemIndex}');
 
-    _galleryPageController
-        .showLoadingDialog(Get.context, vState.itemIndex)
+    /*_galleryPageController
+        .fetchPreviewUntilIndex(Get.context, vState.itemIndex)
         .then((_) {
       if (vState.viewMode != ViewMode.vertical) {
         pageController.jumpToPage(vState.pageIndex);
@@ -128,7 +129,17 @@ class ViewController extends GetxController {
         Future.delayed(const Duration(milliseconds: 200)).then(
             (value) => itemScrollController.jumpTo(index: vState.itemIndex));
       }
-    });
+    });*/
+    if (vState.viewMode != ViewMode.vertical) {
+      pageController.jumpToPage(vState.pageIndex);
+    } else {
+      Future.delayed(const Duration(milliseconds: 200)).then(
+          (value) => itemScrollController.jumpTo(index: vState.itemIndex));
+      _galleryPageController
+          .fetchPreviewUntilIndex(Get.context, vState.itemIndex)
+          .then((_) => Future.delayed(const Duration(milliseconds: 200)))
+          .then((_) => itemScrollController.jumpTo(index: vState.itemIndex));
+    }
   }
 
   void handOnSliderChanged(double value) {
@@ -151,8 +162,8 @@ class ViewController extends GetxController {
         break;
     }
 
-    logger.d(
-        '页码切换时的回调 handOnPageChanged  pageIndex:$pageIndex itemIndex${vState.itemIndex}');
+    // logger.d(
+    //     '页码切换时的回调 handOnPageChanged  pageIndex:$pageIndex itemIndex${vState.itemIndex}');
 
     // 预载图片
     GalleryPara.instance.precacheImages(

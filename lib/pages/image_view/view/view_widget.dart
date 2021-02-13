@@ -184,12 +184,12 @@ class _GalleryImageState extends State<GalleryImage>
                       ),
                       Row(
                         mainAxisSize: MainAxisSize.min,
-                        children: const <Widget>[
-                          CupertinoActivityIndicator(),
-                          SizedBox(width: 5),
+                        children: <Widget>[
+                          const CupertinoActivityIndicator(),
+                          const SizedBox(width: 5),
                           Text(
-                            'Loading...',
-                            style: TextStyle(
+                            '${S.of(context).loading}...',
+                            style: const TextStyle(
                               color: CupertinoColors.systemGrey6,
                             ),
                           ),
