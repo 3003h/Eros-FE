@@ -72,6 +72,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "listmode_medium" : MessageLookupByLibrary.simpleMessage("List - Medium"),
     "listmode_small" : MessageLookupByLibrary.simpleMessage("List - Small"),
     "listmode_waterfall" : MessageLookupByLibrary.simpleMessage("Waterfall"),
+    "loading" : MessageLookupByLibrary.simpleMessage("Loading"),
     "local_favorite" : MessageLookupByLibrary.simpleMessage("Local Favorites"),
     "login" : MessageLookupByLibrary.simpleMessage("Sign"),
     "login_web" : MessageLookupByLibrary.simpleMessage("Sign in on the web"),

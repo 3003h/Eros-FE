@@ -121,5 +121,6 @@
   "instantly": "Instantly",
   "hours": "hours",
   "min": "min",
-  "second": "second"
+  "second": "second",
+  "loading": "Loading"
 }

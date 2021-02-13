@@ -121,5 +121,6 @@
   "instantly": "立即",
   "hours": "小时",
   "min": "分钟",
-  "second": "秒"
+  "second": "秒",
+  "loading": "载入中"
 }

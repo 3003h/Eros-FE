@@ -11,7 +11,6 @@ import 'package:fehviewer/utils/time.dart';
 import 'package:fehviewer/utils/toast.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:logging/logging.dart' as logging;
-import 'package:pretty_dio_logger/pretty_dio_logger.dart';
 
 import 'logger.dart';
 
@@ -52,14 +51,14 @@ class HttpManager {
 
     _dio.interceptors.add(DioFirebasePerformanceInterceptor());
 
-    if (Global.inDebugMode) {
-      _dio.interceptors.add(PrettyDioLogger(
-        requestBody: true,
-        responseHeader: false,
-        responseBody: false,
-        maxWidth: 100,
-      ));
-    }
+    // if (Global.inDebugMode) {
+    //   _dio.interceptors.add(PrettyDioLogger(
+    //     requestBody: true,
+    //     responseHeader: false,
+    //     responseBody: false,
+    //     maxWidth: 100,
+    //   ));
+    // }
 
     _dio.interceptors.add(RetryInterceptor(
         dio: _dio..options.extra.addAll({DIO_CACHE_KEY_FORCE_REFRESH: true}),

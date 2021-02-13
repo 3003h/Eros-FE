@@ -108,6 +108,7 @@ class ViewState {
   /// pageview下实际能翻页的总数
   int get pageCount {
     final int imageCount = previews.length;
+    // final int imageCount = filecount;
     switch (columnMode) {
       case ColumnMode.single:
         return imageCount;

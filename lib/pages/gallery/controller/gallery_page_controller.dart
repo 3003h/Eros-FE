@@ -183,7 +183,10 @@ class GalleryPageController extends GetxController
   /// 添加缩略图对象
   void addAllPreview(List<GalleryPreview> galleryPreview) {
     galleryItem.galleryPreview.addAll(galleryPreview);
-    Get.find<ViewController>().update(['_buildPhotoViewGallery']);
+    try {
+      Get.find<ViewController>().update(['_buildPhotoViewGallery']);
+    } catch (_) {}
+
     update();
   }
 
@@ -378,39 +381,8 @@ class GalleryPageController extends GetxController
     }
   }
 
-  /// 显示等待
-  Future<void> showLoadingDialog(BuildContext context, int index) async {
-    /// 加载下一页缩略图
-    Future<void> _loarMordPriview({CancelToken cancelToken}) async {
-      // 增加延时 避免build期间进行 setState
-      await Future<void>.delayed(const Duration(milliseconds: 0));
-      currentPreviewPage++;
-      logger.v('获取更多预览 ${galleryItem.url} : ${currentPreviewPage}');
-
-      final List<GalleryPreview> _moreGalleryPreviewList =
-          await Api.getGalleryPreview(
-        galleryItem.url,
-        page: currentPreviewPage,
-        cancelToken: cancelToken,
-        refresh: isRefresh,
-      );
-
-      // previews.addAll(_moreGalleryPreviewList);
-      addAllPreview(_moreGalleryPreviewList);
-    }
-
-    // 翻页加载缩略图对象
-    Future<bool> _loadPriview(int index) async {
-      final List<GalleryPreview> _galleryPreviewList =
-          galleryItem.galleryPreview;
-
-      while (index > _galleryPreviewList.length - 1) {
-        // logger.d(' index = $index ; len = ${_galleryPreviewList.length}');
-        await _loarMordPriview();
-      }
-      return true;
-    }
-
+  /// 拉取直到index的缩略图信息
+  Future<void> fetchPreviewUntilIndex(BuildContext context, int index) async {
     return showCupertinoDialog<void>(
       context: context,
       builder: (BuildContext context) {
@@ -431,6 +403,36 @@ class GalleryPageController extends GetxController
         );
       },
     );
+  }
+
+  /// 加载下一页缩略图
+  Future<void> _loarMordPriview({CancelToken cancelToken}) async {
+    // 增加延时 避免build期间进行 setState
+    await Future<void>.delayed(const Duration(milliseconds: 0));
+    currentPreviewPage++;
+    logger.v('获取更多预览 ${galleryItem.url} : $currentPreviewPage');
+
+    final List<GalleryPreview> _moreGalleryPreviewList =
+        await Api.getGalleryPreview(
+      galleryItem.url,
+      page: currentPreviewPage,
+      cancelToken: cancelToken,
+      refresh: isRefresh,
+    );
+
+    // previews.addAll(_moreGalleryPreviewList);
+    addAllPreview(_moreGalleryPreviewList);
+  }
+
+  // 翻页加载缩略图对象
+  Future<bool> _loadPriview(int index) async {
+    final List<GalleryPreview> _galleryPreviewList = galleryItem.galleryPreview;
+
+    while (index > _galleryPreviewList.length - 1) {
+      logger.d(' index = $index ; len = ${_galleryPreviewList.length}');
+      await _loarMordPriview();
+    }
+    return true;
   }
 
   /// 懒加载

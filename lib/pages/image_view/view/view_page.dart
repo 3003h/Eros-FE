@@ -2,6 +2,7 @@ import 'package:fehviewer/common/global.dart';
 import 'package:fehviewer/const/const.dart';
 import 'package:fehviewer/models/index.dart';
 import 'package:fehviewer/pages/image_view/controller/view_state.dart';
+import 'package:fehviewer/pages/image_view/view/view_image.dart';
 import 'package:fehviewer/pages/image_view/view/view_widget.dart';
 import 'package:fehviewer/route/routes.dart';
 import 'package:fehviewer/utils/logger.dart';
@@ -25,9 +26,9 @@ class GalleryViewPage extends GetView<ViewController> {
   /// 画廊图片大图浏览
   @override
   Widget build(BuildContext context) {
-    logger.d('rebuild GalleryViewPage');
+    // logger.d('rebuild GalleryViewPage');
     state.initSize(context);
-    logger.d('build ${state.viewMode}  ${state.columnMode}');
+    // logger.d('build ${state.viewMode}  ${state.columnMode}');
     return CupertinoTheme(
       data: const CupertinoThemeData(
         brightness: Brightness.dark,
@@ -112,7 +113,7 @@ class GalleryViewPage extends GetView<ViewController> {
 
   /// 不同阅读方向不同布局
   Widget _buildView() {
-    logger.v('_buildView ');
+    // logger.v('_buildView ');
     return Obx(() {
       // 布局切换时进行页码跳转处理
       controller.checkViewModel();
@@ -346,7 +347,7 @@ class GalleryViewPage extends GetView<ViewController> {
   /// 水平方向浏览部件 使用[PhotoViewGallery] 实现
   Widget _buildPhotoViewGallery({bool reverse = false}) {
     const double _maxScale = 10;
-    logger.v('_buildPhotoViewGallery ');
+    // logger.v('_buildPhotoViewGallery ');
     return GetBuilder<ViewController>(
       id: '_buildPhotoViewGallery',
       builder: (ViewController controller) {
@@ -408,21 +409,24 @@ class GalleryViewPage extends GetView<ViewController> {
                       );
                     } else {
                       // 单页阅读
+                      if (!Global.inDebugMode || true) {
+                        return NumStack(
+                          text: '$pageIndex',
+                          child: GalleryImage(
+                            index: pageIndex,
+                            fade: state.fade,
+                          ),
+                        );
+                      }
+
                       return NumStack(
                         text: '$pageIndex',
-                        child: GalleryImage(
+                        child: ViewImage(
                           index: pageIndex,
                           fade: state.fade,
+                          previews: state.previews,
                         ),
                       );
-                      // return NumStack(
-                      //   text: '$pageIndex',
-                      //   child: ViewImage(
-                      //     index: pageIndex,
-                      //     fade: state.fade,
-                      //     previews: state.previews,
-                      //   ),
-                      // );
                     }
                   }(),
                 ),
