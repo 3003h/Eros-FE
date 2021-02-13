@@ -8,25 +8,15 @@ import 'package:translator/translator.dart';
 
 Future<void> showTranslatorDialog(String inputText, {String from, String to}) {
   VibrateUtil.medium();
-  return showCupertinoModalPopup<void>(
+  return showCupertinoDialog<void>(
       context: Get.context,
-      // barrierDismissible: true,
+      barrierDismissible: true,
       builder: (_) {
         return CupertinoAlertDialog(
           title: const Text('Translator'),
           content: TranslatorDialogView(inputText, from: from, to: to),
           actions: <Widget>[],
         );
-        // return CupertinoActionSheet(
-        //   title: Column(
-        //     children: [
-        //       const Text('Translator',
-        //           style: TextStyle(fontWeight: FontWeight.bold)),
-        //       TranslatorDialogView(inputText, from: from, to: to)
-        //     ],
-        //   ),
-        //   actions: const <Widget>[],
-        // );
       });
 }
 

@@ -12,7 +12,7 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
 
-const double kCoverImageWidth = 120.0;
+// const double kCoverImageWidth = 120.0;
 const double kPaddingLeft = 8.0;
 
 /// 画廊列表项
@@ -159,10 +159,13 @@ class GalleryItemWidget extends StatelessWidget {
   Widget _buildCoverImage() {
     final GalleryItem _item = _galleryItemController.galleryItem;
 
+    final double coverImageWidth =
+        Get.context.isPhone ? Get.context.mediaQueryShortestSide / 3 : 120;
+
     // 获取图片高度 用于占位
     double _getHeigth() {
-      if (_item.imgWidth >= kCoverImageWidth) {
-        return _item.imgHeight * kCoverImageWidth / _item.imgWidth;
+      if (_item.imgWidth >= coverImageWidth) {
+        return _item.imgHeight * coverImageWidth / _item.imgWidth;
       } else {
         return _item.imgHeight;
       }
@@ -173,7 +176,7 @@ class GalleryItemWidget extends StatelessWidget {
 
     return Container(
       margin: const EdgeInsets.only(top: 10, bottom: 10),
-      width: kCoverImageWidth,
+      width: coverImageWidth,
       height: _item.imgWidth != null ? _getHeigth() : null,
       alignment: Alignment.center,
       child: Hero(
@@ -263,7 +266,7 @@ class GalleryItemWidget extends StatelessWidget {
       return Container(
         child: _galleryItemController.isFav ?? false
             ? Container(
-                padding: const EdgeInsets.only(bottom: 2.5, right: 8),
+                padding: const EdgeInsets.only(bottom: 2, right: 2, left: 2),
                 child: Icon(
                   FontAwesomeIcons.solidHeart,
                   size: 12,
@@ -308,12 +311,6 @@ class GalleryItemWidget extends StatelessWidget {
   }
 }
 
-///
-///
-///
-///
-///
-///
 class TagItem extends StatelessWidget {
   const TagItem({
     Key key,
@@ -363,10 +360,6 @@ class TagBox extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final EhConfigService _ehConfigService = Get.find();
-    // final GalleryItemController _galleryItemController = Get.find();
-
-    // final List<SimpleTag> simpleTags =
-    //     _galleryItemController.galleryItem.simpleTags;
     return simpleTags != null && simpleTags.isNotEmpty
         ? Obx(() => Container(
               padding: const EdgeInsets.fromLTRB(0, 4, 0, 8),

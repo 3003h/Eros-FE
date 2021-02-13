@@ -107,15 +107,16 @@ class ViewState {
 
   /// pageview下实际能翻页的总数
   int get pageCount {
+    final int imageCount = previews.length;
     switch (columnMode) {
       case ColumnMode.single:
-        return previews.length;
+        return imageCount;
       case ColumnMode.odd:
-        return (previews.length / 2).round();
+        return (imageCount / 2).round();
       case ColumnMode.even:
-        return (previews.length / 2).round() + ((previews.length + 1) % 2);
+        return (imageCount / 2).round() + ((imageCount + 1) % 2);
       default:
-        return previews.length;
+        return imageCount;
     }
   }
 

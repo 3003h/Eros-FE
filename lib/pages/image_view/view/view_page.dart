@@ -415,6 +415,14 @@ class GalleryViewPage extends GetView<ViewController> {
                           fade: state.fade,
                         ),
                       );
+                      // return NumStack(
+                      //   text: '$pageIndex',
+                      //   child: ViewImage(
+                      //     index: pageIndex,
+                      //     fade: state.fade,
+                      //     previews: state.previews,
+                      //   ),
+                      // );
                     }
                   }(),
                 ),
