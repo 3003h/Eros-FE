@@ -5,6 +5,7 @@ import 'package:fehviewer/generated/l10n.dart';
 import 'package:fehviewer/pages/filter/gallery_filter_view.dart';
 import 'package:fehviewer/utils/logger.dart';
 import 'package:fehviewer/utils/utility.dart';
+import 'package:fehviewer/utils/vibrate.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -80,6 +81,7 @@ class _GalleryCatButtonState extends State<GalleryCatButton> {
 
   void _pressBtn() {
     // logger.v('_pressBtn ${widget.text}');
+    VibrateUtil.light();
     _value = !_value;
     _textColor = _value ? widget.onTextColor : widget.offTextColor;
     _color = _value ? widget.onColor : widget.offColor;

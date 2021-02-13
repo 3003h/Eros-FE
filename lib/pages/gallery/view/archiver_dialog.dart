@@ -276,7 +276,7 @@ class HatHGridView extends StatelessWidget {
         physics: const NeverScrollableScrollPhysics(),
         padding: const EdgeInsets.all(0),
         crossAxisCount: 2,
-        childAspectRatio: 2.2,
+        childAspectRatio: 2.0,
         children: _items,
       ),
     );

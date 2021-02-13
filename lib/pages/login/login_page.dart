@@ -48,10 +48,12 @@ class _LoginPageState extends State<LoginPage> {
           middle: Text(S.of(context).user_login),
         ),
         child: SafeArea(
-          child: Center(
+          child: SingleChildScrollView(
             child: Container(
-              width: 350,
+              alignment: Alignment.center,
+              constraints: const BoxConstraints(maxWidth: 350),
               padding: const EdgeInsets.only(top: 50),
+              margin: const EdgeInsets.symmetric(horizontal: 20),
               child: Column(
                 children: <Widget>[
                   Container(
