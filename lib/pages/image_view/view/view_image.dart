@@ -3,6 +3,7 @@ import 'package:dio/dio.dart';
 import 'package:extended_image/extended_image.dart';
 import 'package:fehviewer/common/global.dart';
 import 'package:fehviewer/common/service/depth_service.dart';
+import 'package:fehviewer/common/service/ehconfig_service.dart';
 import 'package:fehviewer/generated/l10n.dart';
 import 'package:fehviewer/models/base/eh_models.dart';
 import 'package:fehviewer/pages/gallery/controller/gallery_page_controller.dart';
@@ -13,6 +14,8 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:liquid_progress_indicator/liquid_progress_indicator.dart';
+
+import '../common.dart';
 
 class ViewImage extends StatefulWidget {
   const ViewImage({Key key, this.index, this.fade = true}) : super(key: key);
@@ -29,6 +32,8 @@ class _ViewImageState extends State<ViewImage>
   AnimationController _animationController;
 
   final GalleryPageController _pageController = Get.find(tag: pageCtrlDepth);
+  final ViewController _viewController = Get.find();
+  final EhConfigService _ehConfigService = Get.find();
   final CancelToken _getMoreCancelToken = CancelToken();
 
   ViewController get controller => Get.find();
@@ -46,6 +51,14 @@ class _ViewImageState extends State<ViewImage>
 
       // 直接获取需要的
       await _pageController.loadPriviewsWhereIndex(itemIndex);
+
+      logger.v('获取缩略结束后 预载图片');
+      GalleryPara.instance.precacheImages(
+        Get.context,
+        previewMap: _pageController.previewMap,
+        index: _viewController.vState.itemIndex,
+        max: _ehConfigService.preloadImage.value,
+      );
 
       // 依次按顺序获取缩略图对象
       // await _pageController.loadPriviewUntilIndex(itemIndex);
@@ -85,13 +98,13 @@ class _ViewImageState extends State<ViewImage>
   @override
   void initState() {
     super.initState();
-    // _imageFuture = fetchImage(widget.index);
+    _imageFuture = fetchImage(widget.index);
     _animationController = AnimationController(
       vsync: this,
       duration: Duration(milliseconds: widget.fade ? 200 : 0),
     );
 
-    Get.find<ViewController>().vState.fade = true;
+    _viewController.vState.fade = true;
   }
 
   @override
@@ -103,7 +116,10 @@ class _ViewImageState extends State<ViewImage>
   @override
   Widget build(BuildContext context) {
     // logger.v('_ViewImageState ${widget.index}');
-    _imageFuture = fetchImage(widget.index);
+    if (_viewController.vState.needRebuild) {
+      _imageFuture = fetchImage(widget.index);
+      _viewController.vState.needRebuild = false;
+    }
 
     return GestureDetector(
       onLongPress: () async {

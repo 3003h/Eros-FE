@@ -1,10 +1,13 @@
 import 'package:extended_image/extended_image.dart';
+import 'package:fehviewer/common/service/depth_service.dart';
 import 'package:fehviewer/models/index.dart';
 import 'package:fehviewer/network/gallery_request.dart';
+import 'package:fehviewer/pages/gallery/controller/gallery_page_controller.dart';
 import 'package:fehviewer/utils/logger.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:get/get.dart';
 
 class GalleryPara {
   /// 内部构造方法，可避免外部暴露构造函数，进行实例化
@@ -25,53 +28,48 @@ class GalleryPara {
   /// 单例对象
   static GalleryPara _instance;
 
-  final List<int> _curIndexList = <int>[];
+  final Set<int> _processingSerSet = <int>{};
 
   final Map<String, Future<bool>> _map = <String, Future<bool>>{};
 
   /// 一个很傻的预载功能 需要优化
   Future<void> precacheImages(
     BuildContext context, {
-    @required List<GalleryPreview> previews,
+    @required Map<int, GalleryPreview> previewMap,
     @required int index,
     @required int max,
   }) async {
     // logger.d('当前index $index');
     for (int add = 1; add < max + 1; add++) {
       final int _index = index + add;
+      final int ser = _index + 1;
 
-      // logger.d('开始缓存index $index');
-      if (_index > previews.length - 1) {
+      // logger.d('开始缓存 ser $ser');
+      if (previewMap[ser] == null) {
+        Get.find<GalleryPageController>(tag: pageCtrlDepth)
+            .loadPriviewsWhereIndex(_index);
         return;
       }
 
-      if (_curIndexList.contains(_index)) {
+      if (_processingSerSet.contains(ser)) {
         continue;
       }
 
-      final GalleryPreview _preview = previews[_index];
+      final GalleryPreview _preview = previewMap[ser];
       if (_preview?.isCache ?? false) {
-        // logger.d('index $_index 已存在缓存中 跳过');
+        // logger.d('ser $ser 已存在缓存中 跳过');
         continue;
       }
 
       if (_preview?.startPrecache ?? false) {
-        // logger.d('index $_index 已开始缓存 跳过');
+        logger.d('ser $ser 已开始缓存 跳过');
         continue;
       }
 
       String _url = '';
       if (_preview.largeImageUrl?.isEmpty ?? true) {
-        // if (controller.showKey == null) {
-        //   await controller.getShowKey(index: index);
-        // }
-
-        // logger.d('get $_index from Api');
-        _curIndexList.add(_index);
-        final String _href = previews[_index].href;
-        // final GalleryPreview _imageFromApi = await Api.paraImageLageInfoFromApi(
-        //     _href, controller.showKey,
-        //     index: _index);
+        _processingSerSet.add(ser);
+        final String _href = previewMap[ser].href;
 
         // paraImageLageInfoFromHtml
         final GalleryPreview _imageFromApi =
@@ -83,11 +81,11 @@ class GalleryPara {
           ..largeImageUrl = _url
           ..largeImageWidth = _imageFromApi.largeImageWidth
           ..largeImageHeight = _imageFromApi.largeImageHeight;
-        _curIndexList.remove(_index);
+        _processingSerSet.remove(ser);
       }
 
       _url = _preview.largeImageUrl;
-      // logger.v('$_index : $_url');
+      logger.v('$ser : $_url');
 
       final Future<bool> _future = _map[_url] ??
           (() {

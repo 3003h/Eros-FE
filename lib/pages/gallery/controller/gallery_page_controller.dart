@@ -466,7 +466,7 @@ class GalleryPageController extends GetxController
     // logger.d('length ${previews.length} ; index $index');
 
     // todo 好像还有点问题
-    if (previews.length - index < 10) {
+    if (previews.last.ser - index < 10) {
       try {
         final List<GalleryPreview> _moreGalleryPreviewList =
             await Api.getGalleryPreview(
@@ -504,14 +504,14 @@ class GalleryPageController extends GetxController
     bool changeSource = false,
   }) async {
     // 数据获取处理
-    try {
-      await _lazyGetImageHref(
-        cancelToken: cancelToken,
-        index: index,
-      );
-    } catch (e, stack) {
-      logger.e('$e \n $stack');
-    }
+    // try {
+    //   await _lazyGetImageHref(
+    //     cancelToken: cancelToken,
+    //     index: index,
+    //   );
+    // } catch (e, stack) {
+    //   logger.e('$e \n $stack');
+    // }
 
     final int ser = index + 1;
 

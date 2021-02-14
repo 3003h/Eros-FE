@@ -35,6 +35,7 @@ class ViewController extends GetxController {
       case ColumnMode.odd:
         logger.d('双页1 => 双页2, itemIndex:${vState.itemIndex}');
         vState.columnMode = ColumnMode.even;
+        vState.needRebuild = true;
         pageController.jumpToPage(vState.pageIndex);
         break;
       case ColumnMode.even:
@@ -92,9 +93,10 @@ class ViewController extends GetxController {
     final int _preload = _ehConfigService.preloadImage.value;
     if (vState.viewMode != ViewMode.vertical) {
       // 预载
+      logger.v('初始预载');
       GalleryPara.instance.precacheImages(
         Get.context,
-        previews: vState.previews,
+        previewMap: vState.previewMap,
         index: vState.itemIndex,
         max: _preload,
       );
@@ -159,9 +161,10 @@ class ViewController extends GetxController {
     //     '页码切换时的回调 handOnPageChanged  pageIndex:$pageIndex itemIndex${vState.itemIndex}');
 
     // 预载图片
+    // logger.v('页码切换时的回调 预载图片');
     GalleryPara.instance.precacheImages(
       Get.context,
-      previews: _galleryPageController.previews,
+      previewMap: _galleryPageController.previewMap,
       index: vState.itemIndex,
       max: _ehConfigService.preloadImage.value,
     );
