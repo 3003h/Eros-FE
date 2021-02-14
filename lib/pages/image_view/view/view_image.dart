@@ -76,7 +76,7 @@ class _ViewImageState extends State<ViewImage>
   /// 重载图片数据，重构部件
   Future<void> _reloadImage({bool changeSource = true}) async {
     final GalleryPreview _currentPreview =
-        _pageController.galleryItem.galleryPreview[widget.index];
+        _pageController.galleryItem.previewMap[widget.index + 1];
     // 清除CachedNetworkImage的缓存
     try {
       await CachedNetworkImage.evictFromCache(
@@ -149,6 +149,10 @@ class _ViewImageState extends State<ViewImage>
                   return ErrorWidget(index: widget.index, errInfo: _errInfo);
                 } else {
                   final GalleryPreview preview = snapshot.data;
+                  Future.delayed(const Duration(milliseconds: 100)).then((_) {
+                    Get.find<ViewController>()
+                        .update(['GalleryImage_${widget.index}']);
+                  });
                   return Container(
                     alignment: Alignment.center,
                     child: Stack(

@@ -306,11 +306,11 @@ class GalleryViewPage extends GetView<ViewController> {
     return GetBuilder<ViewController>(
         id: '_buildPhotoViewGallery',
         builder: (ViewController controller) {
-          final ViewState state = controller.vState;
+          final ViewState vState = controller.vState;
           return ScrollablePositionedList.builder(
             itemScrollController: controller.itemScrollController,
             itemPositionsListener: controller.itemPositionsListener,
-            itemCount: state.filecount,
+            itemCount: vState.filecount,
             itemBuilder: (BuildContext context, int index) {
               return ConstrainedBox(
                 constraints: BoxConstraints(
@@ -325,13 +325,14 @@ class GalleryViewPage extends GetView<ViewController> {
                         return Container(
                           height: () {
                             try {
-                              return state.previews[index].largeImageHeight *
-                                  (context.width /
-                                      state.previews[index].largeImageWidth);
+                              final _curPreview = vState.previewMap[index + 1];
+                              return _curPreview.largeImageHeight *
+                                  (context.width / _curPreview.largeImageWidth);
                             } on Exception catch (_) {
-                              logger.d('${state.previews[index].toJson()}');
-                              return state.previews[index].height *
-                                  (context.width / state.previews[index].width);
+                              final _curPreview = vState.previewMap[index + 1];
+                              logger.d('${_curPreview.toJson()}');
+                              return _curPreview.height *
+                                  (context.width / _curPreview.width);
                             } catch (e) {
                               return null;
                             }
