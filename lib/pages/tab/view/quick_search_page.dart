@@ -9,9 +9,9 @@ import 'package:file_picker/file_picker.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
+import 'package:line_icons/line_icons.dart';
 import 'package:share/share.dart';
 
 class QuickSearchListPage extends StatelessWidget {
@@ -135,8 +135,8 @@ class QuickSearchListPage extends StatelessWidget {
             minSize: 40,
             padding: const EdgeInsets.all(0),
             child: const Icon(
-              FontAwesomeIcons.solidTrashAlt,
-              size: 20,
+              LineIcons.alternateTrash,
+              size: 26,
             ),
             onPressed: () {
               _removeAll();
@@ -146,8 +146,8 @@ class QuickSearchListPage extends StatelessWidget {
             minSize: 40,
             padding: const EdgeInsets.all(0),
             child: const Icon(
-              FontAwesomeIcons.fileImport,
-              size: 20,
+              LineIcons.fileImport,
+              size: 26,
             ),
             onPressed: () async {
               final FilePickerResult result =
@@ -170,8 +170,8 @@ class QuickSearchListPage extends StatelessWidget {
             minSize: 40,
             padding: const EdgeInsets.all(0),
             child: const Icon(
-              FontAwesomeIcons.fileExport,
-              size: 20,
+              LineIcons.fileExport,
+              size: 26,
             ),
             onPressed: () async {
               final List<String> _searchTextList =

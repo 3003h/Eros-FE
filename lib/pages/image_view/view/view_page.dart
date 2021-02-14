@@ -228,12 +228,17 @@ class GalleryViewPage extends GetView<ViewController> {
               Expanded(
                 child: Padding(
                   padding: const EdgeInsets.only(left: 8.0, right: 8.0),
-                  child: PageSlider(
-                    max: _max,
-                    sliderValue: state.sliderValue,
-                    onChangedEnd: controller.handOnSliderChangedEnd,
-                    onChanged: controller.handOnSliderChanged,
-                  ),
+                  child: GetBuilder<ViewController>(
+                      id: 'PageSlider',
+                      builder: (ViewController controller) {
+                        final ViewState vState = controller.vState;
+                        return PageSlider(
+                          max: _max,
+                          sliderValue: vState.sliderValue,
+                          onChangedEnd: controller.handOnSliderChangedEnd,
+                          onChanged: controller.handOnSliderChanged,
+                        );
+                      }),
                 ),
               ),
             ],
@@ -305,7 +310,7 @@ class GalleryViewPage extends GetView<ViewController> {
           return ScrollablePositionedList.builder(
             itemScrollController: controller.itemScrollController,
             itemPositionsListener: controller.itemPositionsListener,
-            itemCount: state.previews.length,
+            itemCount: state.filecount,
             itemBuilder: (BuildContext context, int index) {
               return ConstrainedBox(
                 constraints: BoxConstraints(
@@ -332,7 +337,7 @@ class GalleryViewPage extends GetView<ViewController> {
                             }
                           }(),
                           width: context.width,
-                          child: GalleryImage(
+                          child: ViewImage(
                             index: index,
                           ),
                         );
@@ -347,7 +352,6 @@ class GalleryViewPage extends GetView<ViewController> {
   /// 水平方向浏览部件 使用[PhotoViewGallery] 实现
   Widget _buildPhotoViewGallery({bool reverse = false}) {
     const double _maxScale = 10;
-    // logger.v('_buildPhotoViewGallery ');
     return GetBuilder<ViewController>(
       id: '_buildPhotoViewGallery',
       builder: (ViewController controller) {
@@ -362,6 +366,7 @@ class GalleryViewPage extends GetView<ViewController> {
             itemCount: state.pageCount,
             customSize: state.screensize,
             builder: (BuildContext context, int pageIndex) {
+              // logger.v('PhotoViewGallery.builder');
               return PhotoViewGalleryPageOptions.customChild(
                 child: Container(
                   alignment: Alignment.center,
@@ -379,21 +384,21 @@ class GalleryViewPage extends GetView<ViewController> {
                               alignment: Alignment.centerRight,
                               child: NumStack(
                                 text: '$indexLeft',
-                                child: GalleryImage(
+                                child: ViewImage(
                                   index: indexLeft,
                                   fade: state.fade,
                                 ),
                               ),
                             ),
                           ),
-                        if (state.previews.length > indexLeft + 1)
+                        if (state.filecount > indexLeft + 1)
                           Expanded(
                             child: Container(
                               alignment:
                                   indexLeft >= 0 ? Alignment.centerLeft : null,
                               child: NumStack(
                                 text: '${indexLeft + 1}',
-                                child: GalleryImage(
+                                child: ViewImage(
                                   index: indexLeft + 1,
                                   fade: state.fade,
                                 ),
@@ -408,23 +413,11 @@ class GalleryViewPage extends GetView<ViewController> {
                             reverse ? _pageList.reversed.toList() : _pageList,
                       );
                     } else {
-                      // 单页阅读
-                      if (!Global.inDebugMode || true) {
-                        return NumStack(
-                          text: '$pageIndex',
-                          child: GalleryImage(
-                            index: pageIndex,
-                            fade: state.fade,
-                          ),
-                        );
-                      }
-
                       return NumStack(
                         text: '$pageIndex',
                         child: ViewImage(
                           index: pageIndex,
                           fade: state.fade,
-                          previews: state.previews,
                         ),
                       );
                     }

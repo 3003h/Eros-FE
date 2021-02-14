@@ -246,13 +246,6 @@ packages:
       url: "https://pub.flutter-io.cn"
     source: hosted
     version: "0.3.0"
-  dio_http2_adapter:
-    dependency: "direct main"
-    description:
-      name: dio_http2_adapter
-      url: "https://pub.flutter-io.cn"
-    source: hosted
-    version: "1.0.1"
   dio_http_cache:
     dependency: "direct main"
     description:
@@ -595,13 +588,6 @@ packages:
       url: "https://pub.flutter-io.cn"
     source: hosted
     version: "0.12.2"
-  http2:
-    dependency: transitive
-    description:
-      name: http2
-      url: "https://pub.flutter-io.cn"
-    source: hosted
-    version: "1.0.1"
   http_client_helper:
     dependency: transitive
     description:

@@ -25,22 +25,20 @@ class ViewController extends GetxController {
   /// 切换单页双页模式
   void switchColumnMode() {
     VibrateUtil.light();
-    logger.v('switchColumnMode');
+    logger.v('切换单页双页模式');
     switch (vState.columnMode) {
       case ColumnMode.single:
-        logger
-            .d('switchColumnMode itemIndex:${vState.itemIndex} to double odd');
+        logger.d('单页 => 双页1. itemIndex:${vState.itemIndex},');
         vState.columnMode = ColumnMode.odd;
         pageController.jumpToPage(vState.pageIndex);
         break;
       case ColumnMode.odd:
-        logger
-            .d('switchColumnMode itemIndex:${vState.itemIndex} to double even');
+        logger.d('双页1 => 双页2, itemIndex:${vState.itemIndex}');
         vState.columnMode = ColumnMode.even;
         pageController.jumpToPage(vState.pageIndex);
         break;
       case ColumnMode.even:
-        logger.d('switchColumnMode itemIndex:${vState.itemIndex} to  single');
+        logger.d('双页2 => 单页, itemIndex:${vState.itemIndex}');
         vState.columnMode = ColumnMode.single;
         Future.delayed(Duration.zero).then((_) {
           final int _toIndex = vState.pageIndex;
@@ -116,34 +114,29 @@ class ViewController extends GetxController {
   }
 
   /// SliderChangedEnd
-  void handOnSliderChangedEnd(double value) {
+  Future<void> handOnSliderChangedEnd(double value) async {
     vState.itemIndex = value.round();
     logger.d('slider to _itemIndex ${vState.itemIndex}');
 
-    /*_galleryPageController
-        .fetchPreviewUntilIndex(Get.context, vState.itemIndex)
-        .then((_) {
-      if (vState.viewMode != ViewMode.vertical) {
-        pageController.jumpToPage(vState.pageIndex);
-      } else {
-        Future.delayed(const Duration(milliseconds: 200)).then(
-            (value) => itemScrollController.jumpTo(index: vState.itemIndex));
-      }
-    });*/
     if (vState.viewMode != ViewMode.vertical) {
+      // await _galleryPageController.fetchPreviewUntilIndex(
+      //     Get.context, vState.itemIndex);
+      // await Future.delayed(const Duration(milliseconds: 200));
       pageController.jumpToPage(vState.pageIndex);
     } else {
-      Future.delayed(const Duration(milliseconds: 200)).then(
-          (value) => itemScrollController.jumpTo(index: vState.itemIndex));
-      _galleryPageController
-          .fetchPreviewUntilIndex(Get.context, vState.itemIndex)
-          .then((_) => Future.delayed(const Duration(milliseconds: 200)))
-          .then((_) => itemScrollController.jumpTo(index: vState.itemIndex));
+      // await _galleryPageController.fetchPreviewUntilIndex(
+      //     Get.context, vState.itemIndex);
+      // await Future.delayed(const Duration(milliseconds: 200));
+      itemScrollController.jumpTo(index: vState.itemIndex);
     }
+
+    await Future.delayed(const Duration(milliseconds: 200));
+    update(['PageSlider']);
   }
 
   void handOnSliderChanged(double value) {
     vState.sliderValue = value;
+    update(['PageSlider']);
   }
 
   // 页码切换时的回调
@@ -258,6 +251,7 @@ class ViewController extends GetxController {
         Future.delayed(const Duration(milliseconds: 300)).then((value) {
           vState.itemIndex = index;
           vState.sliderValue = vState.itemIndex / 1.0;
+          update(['PageSlider']);
         });
       }
     }

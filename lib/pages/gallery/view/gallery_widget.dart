@@ -254,14 +254,16 @@ class CoverImage extends StatelessWidget {
             child: Hero(
               tag: heroTag,
               child: Container(
-                decoration: BoxDecoration(boxShadow: [
-                  //阴影
-                  BoxShadow(
-                    color: CupertinoDynamicColor.resolve(
-                        CupertinoColors.systemGrey4, context),
-                    blurRadius: 10,
-                  )
-                ]),
+                decoration: BoxDecoration(
+                  boxShadow: [
+                    //阴影
+                    BoxShadow(
+                      color: CupertinoDynamicColor.resolve(
+                          CupertinoColors.systemGrey4, context),
+                      blurRadius: 10,
+                    )
+                  ],
+                ),
                 child: ClipRRect(
                   borderRadius: BorderRadius.circular(6),
                   child: Container(
@@ -270,8 +272,10 @@ class CoverImage extends StatelessWidget {
                     child: CachedNetworkImage(
                       placeholder: (_, __) {
                         return Container(
+                          alignment: Alignment.center,
                           color: CupertinoDynamicColor.resolve(
                               CupertinoColors.systemGrey5, context),
+                          child: const CupertinoActivityIndicator(),
                         );
                       },
                       imageUrl: imageUrl ?? '',
@@ -423,7 +427,7 @@ class ReadButton extends StatelessWidget {
         galleryCacheController.getGalleryCache(_pageController.galleryItem.gid);
     final int _index = _galleryCache?.lastIndex ?? 0;
     logger.d('lastIndex $_index');
-    await _pageController.fetchPreviewUntilIndex(Get.context, _index);
+    // await _pageController.fetchPreviewUntilIndex(Get.context, _index);
     NavigatorUtil.goGalleryViewPage(_index, _pageController.galleryItem.gid);
   }
 }
@@ -499,56 +503,6 @@ class GalleryRating extends StatelessWidget {
     );
   }
 }
-
-// class GalleryDetailInfo extends StatelessWidget {
-//   GalleryDetailInfo({Key key, this.galleryItem}) : super(key: key);
-//
-//   final GalleryItem galleryItem;
-//
-//   final GalleryPageController _pageController = Get.find();
-//
-//   @override
-//   Widget build(BuildContext context) {
-//     return Container(
-//       child: Column(
-// //        mainAxisAlignment: MainAxisAlignment.start,
-//         children: <Widget>[
-//           // 标签
-//           TagBox(
-//             listTagGroup: galleryItem.tagGroup,
-//           ),
-//           const TopComment(),
-//           Divider(
-//             height: 0.5,
-//             color: CupertinoDynamicColor.resolve(
-//                 CupertinoColors.systemGrey4, context),
-//           ),
-//           PreviewGrid(
-//             previews: _pageController.firstPagePreview,
-//             gid: galleryItem.gid,
-//           ),
-//           _buildAllPreviewButton(),
-//         ],
-//       ),
-//     );
-//   }
-//
-//   CupertinoButton _buildAllPreviewButton() {
-//     return CupertinoButton(
-//       minSize: 0,
-//       padding: const EdgeInsets.fromLTRB(0, 4, 0, 30),
-//       child: Text(
-//         _pageController.hasMorePreview
-//             ? S.of(Get.context).morePreviews
-//             : S.of(Get.context).noMorePreviews,
-//         style: const TextStyle(fontSize: 16),
-//       ),
-//       onPressed: () {
-//         Get.to(const AllPreviewPage(), transition: Transition.cupertino);
-//       },
-//     );
-//   }
-// }
 
 class PreviewGrid extends StatelessWidget {
   const PreviewGrid({Key key, this.previews, @required this.gid})

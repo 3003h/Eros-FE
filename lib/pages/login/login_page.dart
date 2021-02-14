@@ -49,72 +49,73 @@ class _LoginPageState extends State<LoginPage> {
         ),
         child: SafeArea(
           child: SingleChildScrollView(
-            child: Container(
-              alignment: Alignment.center,
-              constraints: const BoxConstraints(maxWidth: 350),
-              padding: const EdgeInsets.only(top: 50),
-              margin: const EdgeInsets.symmetric(horizontal: 20),
-              child: Column(
-                children: <Widget>[
-                  Container(
-                    height: 38,
-                    child: CupertinoTextField(
-                      selectionHeightStyle: BoxHeightStyle.max,
-                      style: const TextStyle(
-                          textBaseline: TextBaseline.alphabetic),
-                      controller: _usernameController,
-                      placeholder: S.of(context).pls_i_username,
-                      prefix: ConstrainedBox(
-                          constraints: const BoxConstraints(minWidth: 50),
-                          child: Text(S.of(context).user_name)),
-                      // prefixMode: OverlayVisibilityMode.never,
-                      decoration: null,
-                      // autofocus 自动获得焦点
+            child: Center(
+              child: Container(
+                constraints: const BoxConstraints(maxWidth: 350),
+                padding: const EdgeInsets.only(top: 50),
+                margin: const EdgeInsets.symmetric(horizontal: 20),
+                child: Column(
+                  children: <Widget>[
+                    Container(
+                      height: 38,
+                      child: CupertinoTextField(
+                        selectionHeightStyle: BoxHeightStyle.max,
+                        style: const TextStyle(
+                            textBaseline: TextBaseline.alphabetic),
+                        controller: _usernameController,
+                        placeholder: S.of(context).pls_i_username,
+                        prefix: ConstrainedBox(
+                            constraints: const BoxConstraints(minWidth: 50),
+                            child: Text(S.of(context).user_name)),
+                        // prefixMode: OverlayVisibilityMode.never,
+                        decoration: null,
+                        // autofocus 自动获得焦点
 //                    autofocus: true,
-                      onEditingComplete: () {
-                        // 点击键盘完成 焦点跳转密码输入框
-                        FocusScope.of(context).requestFocus(_nodePwd);
-                      },
+                        onEditingComplete: () {
+                          // 点击键盘完成 焦点跳转密码输入框
+                          FocusScope.of(context).requestFocus(_nodePwd);
+                        },
+                      ),
                     ),
-                  ),
-                  Container(
-                    height: 1,
-                    color: CupertinoDynamicColor.resolve(
-                        CupertinoColors.systemGrey4, context),
-                  ),
-                  Container(
-                    height: 48,
-                    padding: const EdgeInsets.only(top: 10, bottom: 0),
-                    child: CupertinoTextField(
-                      style: const TextStyle(
-                          textBaseline: TextBaseline.alphabetic),
-                      controller: _passwdController,
-                      placeholder: S.of(context).pls_i_passwd,
-                      prefix: ConstrainedBox(
-                          constraints: const BoxConstraints(minWidth: 50),
-                          child: Text(S.of(context).passwd)),
-                      // prefixMode: OverlayVisibilityMode.never,
-                      decoration: null,
-                      obscureText: true,
-                      focusNode: _nodePwd,
-                      onEditingComplete: () {
-                        // 点击键盘完成 帐号密码都非空的情况 直接登录
-                        _login();
-                      },
+                    Container(
+                      height: 1,
+                      color: CupertinoDynamicColor.resolve(
+                          CupertinoColors.systemGrey4, context),
                     ),
-                  ),
-                  Container(
-                    height: 1,
-                    color: CupertinoDynamicColor.resolve(
-                        CupertinoColors.systemGrey4, context),
-                  ),
-                  // 直接登录按钮
-                  _buildLoginButton(),
-                  // 网页登录按钮
-                  _buildWebLoginButton(context),
-                  // Cookie登录按钮
-                  _buildCookieLoginButton(context),
-                ],
+                    Container(
+                      height: 48,
+                      padding: const EdgeInsets.only(top: 10, bottom: 0),
+                      child: CupertinoTextField(
+                        style: const TextStyle(
+                            textBaseline: TextBaseline.alphabetic),
+                        controller: _passwdController,
+                        placeholder: S.of(context).pls_i_passwd,
+                        prefix: ConstrainedBox(
+                            constraints: const BoxConstraints(minWidth: 50),
+                            child: Text(S.of(context).passwd)),
+                        // prefixMode: OverlayVisibilityMode.never,
+                        decoration: null,
+                        obscureText: true,
+                        focusNode: _nodePwd,
+                        onEditingComplete: () {
+                          // 点击键盘完成 帐号密码都非空的情况 直接登录
+                          _login();
+                        },
+                      ),
+                    ),
+                    Container(
+                      height: 1,
+                      color: CupertinoDynamicColor.resolve(
+                          CupertinoColors.systemGrey4, context),
+                    ),
+                    // 直接登录按钮
+                    _buildLoginButton(),
+                    // 网页登录按钮
+                    _buildWebLoginButton(context),
+                    // Cookie登录按钮
+                    _buildCookieLoginButton(context),
+                  ],
+                ),
               ),
             ),
           ),
