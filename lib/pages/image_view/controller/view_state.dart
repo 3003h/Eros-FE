@@ -75,6 +75,7 @@ class ViewState {
   final CancelToken getMoreCancelToken = CancelToken();
 
   List<GalleryPreview> get previews => _galleryPageController.previews;
+  Map<int, GalleryPreview> get previewMap => _galleryPageController.previewMap;
   int get filecount =>
       int.parse(_galleryPageController.galleryItem.filecount ?? '0');
 
@@ -183,4 +184,5 @@ class ViewState {
   set viewMode(val) => _viewMode.value = val;
 
   bool fade = true;
+  bool needRebuild = false;
 }
