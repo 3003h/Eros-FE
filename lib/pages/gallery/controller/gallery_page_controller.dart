@@ -517,7 +517,6 @@ class GalleryPageController extends GetxController
 
     try {
       /// 当前缩略图对象
-      // final GalleryPreview _curPreview = galleryItem.galleryPreview[index];
       final GalleryPreview _curPreview = galleryItem.previewMap[ser];
 
       final String _largeImageUrl = _curPreview?.largeImageUrl;
@@ -527,21 +526,11 @@ class GalleryPageController extends GetxController
           _largeImageUrl.isNotEmpty &&
           _curPreview.largeImageHeight != null &&
           _curPreview.largeImageWidth != null) {
-        // return galleryItem.galleryPreview[index];
         return galleryItem.previewMap[ser];
       } else {
-        // final _sourceId =
-        //     changeSource ? galleryItem.galleryPreview[index].sourceId : '';
-        final _sourceId =
+        final String _sourceId =
             changeSource ? galleryItem.previewMap[ser].sourceId : '';
 
-        // paraImageLageInfoFromHtml
-        // final GalleryPreview _preview = await Api.ftchImageInfo(
-        //   galleryItem.galleryPreview[index].href,
-        //   index: index,
-        //   refresh: refresh,
-        //   sourceId: _sourceId,
-        // );
         final GalleryPreview _preview = await Api.ftchImageInfo(
           galleryItem.previewMap[ser].href,
           index: index,
@@ -555,6 +544,7 @@ class GalleryPageController extends GetxController
         }
 
         _curPreview
+          ..sourceId = _preview.sourceId
           ..largeImageUrl = _preview.largeImageUrl
           ..largeImageWidth = _preview.largeImageWidth
           ..largeImageHeight = _preview.largeImageHeight;

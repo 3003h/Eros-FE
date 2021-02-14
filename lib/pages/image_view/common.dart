@@ -1,13 +1,10 @@
 import 'package:extended_image/extended_image.dart';
-import 'package:fehviewer/common/service/depth_service.dart';
 import 'package:fehviewer/models/index.dart';
 import 'package:fehviewer/network/gallery_request.dart';
-import 'package:fehviewer/pages/gallery/controller/gallery_page_controller.dart';
 import 'package:fehviewer/utils/logger.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
-import 'package:get/get.dart';
 
 class GalleryPara {
   /// 内部构造方法，可避免外部暴露构造函数，进行实例化
@@ -46,8 +43,6 @@ class GalleryPara {
 
       // logger.d('开始缓存 ser $ser');
       if (previewMap[ser] == null) {
-        Get.find<GalleryPageController>(tag: pageCtrlDepth)
-            .loadPriviewsWhereIndex(_index);
         return;
       }
 
