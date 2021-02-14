@@ -3,7 +3,7 @@ description: ..
 
 publish_to: 'none' # Remove this line if you wish to publish to pub.dev
 
-version: 1.0.4+136
+version: 1.0.4+137
 
 environment:
   sdk: '>=2.10.0 <3.0.0'
@@ -27,7 +27,6 @@ dependencies:
   # 网络请求
   dio: ^3.0.10
   dio_http_cache: ^0.2.11
-  dio_http2_adapter: ^1.0.1
 
   # cookie
   cookie_jar: ^1.0.1

@@ -58,3 +58,8 @@ extension ExtCommentSpan on GalleryCommentSpan {
       EnumToString.fromString(CommentSpanType.values, type);
   set sType(CommentSpanType val) => type = EnumToString.convertToString(val);
 }
+
+extension ExtItem on GalleryItem {
+  Map<int, GalleryPreview> get previewMap =>
+      {for (GalleryPreview v in galleryPreview) v.ser: v};
+}

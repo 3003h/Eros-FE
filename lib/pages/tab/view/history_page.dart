@@ -4,8 +4,8 @@ import 'package:fehviewer/pages/tab/controller/history_controller.dart';
 import 'package:fehviewer/pages/tab/view/tab_base.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
+import 'package:line_icons/line_icons.dart';
 
 class HistoryTab extends GetView<HistoryViewController> {
   const HistoryTab({Key key, this.tabTag, this.scrollController})
@@ -33,8 +33,8 @@ class HistoryTab extends GetView<HistoryViewController> {
                   minSize: 40,
                   padding: const EdgeInsets.all(0),
                   child: const Icon(
-                    FontAwesomeIcons.solidTrashAlt,
-                    size: 20,
+                    LineIcons.alternateTrash,
+                    size: 26,
                   ),
                   onPressed: () {
                     controller.clearHistory();

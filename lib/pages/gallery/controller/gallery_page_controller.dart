@@ -5,12 +5,11 @@ import 'package:fehviewer/common/controller/localfav_controller.dart';
 import 'package:fehviewer/common/global.dart';
 import 'package:fehviewer/common/service/depth_service.dart';
 import 'package:fehviewer/common/service/ehconfig_service.dart';
-import 'package:fehviewer/models/index.dart';
+import 'package:fehviewer/models/base/eh_models.dart';
 import 'package:fehviewer/network/gallery_request.dart';
 import 'package:fehviewer/pages/gallery/controller/rate_controller.dart';
 import 'package:fehviewer/pages/gallery/controller/torrent_controller.dart';
 import 'package:fehviewer/pages/gallery/view/gallery_page.dart';
-import 'package:fehviewer/pages/image_view/controller/view_controller.dart';
 import 'package:fehviewer/pages/item/controller/galleryitem_controller.dart';
 import 'package:fehviewer/utils/logger.dart';
 import 'package:fehviewer/utils/time.dart';
@@ -96,6 +95,8 @@ class GalleryPageController extends GetxController
   }
 
   List<GalleryPreview> get previews => galleryItem.galleryPreview;
+  Map<int, GalleryPreview> get previewMap => galleryItem.previewMap;
+  int get filecount => int.parse(galleryItem.filecount ?? '0');
 
   String get showKey => galleryItem.showKey;
 
@@ -183,9 +184,9 @@ class GalleryPageController extends GetxController
   /// 添加缩略图对象
   void addAllPreview(List<GalleryPreview> galleryPreview) {
     galleryItem.galleryPreview.addAll(galleryPreview);
-    try {
-      Get.find<ViewController>().update(['_buildPhotoViewGallery']);
-    } catch (_) {}
+    // try {
+    //   Get.find<ViewController>().update(['_buildPhotoViewGallery']);
+    // } catch (_) {}
 
     update();
   }
@@ -382,12 +383,13 @@ class GalleryPageController extends GetxController
   }
 
   /// 拉取直到index的缩略图信息
-  Future<void> fetchPreviewUntilIndex(BuildContext context, int index) async {
+  Future<void> showDialogFetchPreviewUntilIndex(
+      BuildContext context, int index) async {
     return showCupertinoDialog<void>(
       context: context,
       builder: (BuildContext context) {
         Future<void>.delayed(const Duration(milliseconds: 0))
-            .then((_) => _loadPriview(index))
+            .then((_) => loadPriviewUntilIndex(index))
             .whenComplete(() => Get.back());
 
         return Center(
@@ -417,15 +419,35 @@ class GalleryPageController extends GetxController
       galleryItem.url,
       page: currentPreviewPage,
       cancelToken: cancelToken,
-      refresh: isRefresh,
+      // refresh: isRefresh,
     );
 
-    // previews.addAll(_moreGalleryPreviewList);
     addAllPreview(_moreGalleryPreviewList);
   }
 
-  // 翻页加载缩略图对象
-  Future<bool> _loadPriview(int index) async {
+  // 直接请求目的index所在的缩略图页
+  Future<void> loadPriviewsWhereIndex(int index,
+      {CancelToken cancelToken}) async {
+    //  计算index所在的页码
+    final int flen = firstPagePreview.length;
+    if (filecount <= flen) {
+      return;
+    }
+
+    final int page = index ~/ flen;
+    logger.v('index$index 所在页码为$page');
+
+    final List<GalleryPreview> _morePreviewList = await Api.getGalleryPreview(
+      galleryItem.url,
+      page: page,
+      cancelToken: cancelToken,
+    );
+
+    previews.addAll(_morePreviewList);
+  }
+
+  // 按顺序翻页加载缩略图对象
+  Future<bool> loadPriviewUntilIndex(int index) async {
     final List<GalleryPreview> _galleryPreviewList = galleryItem.galleryPreview;
 
     while (index > _galleryPreviewList.length - 1) {
@@ -438,7 +460,6 @@ class GalleryPageController extends GetxController
   /// 懒加载
   Future<void> _lazyGetImageHref({int index, CancelToken cancelToken}) async {
     if (isImageInfoGeting) {
-      loggerNoStack.d(' isGetAllImageHref return');
       return;
     }
     isImageInfoGeting = true;
@@ -492,31 +513,51 @@ class GalleryPageController extends GetxController
       logger.e('$e \n $stack');
     }
 
-    try {
-      final GalleryPreview _curPreview = galleryItem.galleryPreview[index];
-      final String _largeImageUrl = _curPreview.largeImageUrl;
+    final int ser = index + 1;
 
+    try {
+      /// 当前缩略图对象
+      // final GalleryPreview _curPreview = galleryItem.galleryPreview[index];
+      final GalleryPreview _curPreview = galleryItem.previewMap[ser];
+
+      final String _largeImageUrl = _curPreview?.largeImageUrl;
+
+      // 大图url为空或者宽高信息为空的时候 都会解析获取
       if (_largeImageUrl != null &&
           _largeImageUrl.isNotEmpty &&
           _curPreview.largeImageHeight != null &&
           _curPreview.largeImageWidth != null) {
-        return galleryItem.galleryPreview[index];
+        // return galleryItem.galleryPreview[index];
+        return galleryItem.previewMap[ser];
       } else {
+        // final _sourceId =
+        //     changeSource ? galleryItem.galleryPreview[index].sourceId : '';
         final _sourceId =
-            changeSource ? galleryItem.galleryPreview[index].sourceId : '';
+            changeSource ? galleryItem.previewMap[ser].sourceId : '';
 
         // paraImageLageInfoFromHtml
+        // final GalleryPreview _preview = await Api.ftchImageInfo(
+        //   galleryItem.galleryPreview[index].href,
+        //   index: index,
+        //   refresh: refresh,
+        //   sourceId: _sourceId,
+        // );
         final GalleryPreview _preview = await Api.ftchImageInfo(
-          galleryItem.galleryPreview[index].href,
+          galleryItem.previewMap[ser].href,
           index: index,
           refresh: refresh,
           sourceId: _sourceId,
         );
 
+        // 换源加载
         if (changeSource) {
           logger.d('changeSource ${_preview.largeImageUrl}');
         }
 
+        _curPreview
+          ..largeImageUrl = _preview.largeImageUrl
+          ..largeImageWidth = _preview.largeImageWidth
+          ..largeImageHeight = _preview.largeImageHeight;
         return _preview;
       }
     } catch (e, stack) {

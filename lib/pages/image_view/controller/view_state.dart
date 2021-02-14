@@ -107,8 +107,8 @@ class ViewState {
 
   /// pageview下实际能翻页的总数
   int get pageCount {
-    final int imageCount = previews.length;
-    // final int imageCount = filecount;
+    // final int imageCount = previews.length;
+    final int imageCount = filecount;
     switch (columnMode) {
       case ColumnMode.single:
         return imageCount;
@@ -122,9 +122,7 @@ class ViewState {
   }
 
   /// 滑条的值
-  final RxDouble _sliderValue = 0.0.obs;
-  double get sliderValue => _sliderValue.value;
-  set sliderValue(double val) => _sliderValue.value = val;
+  double sliderValue = 0.0;
 
   Size screensize;
   double _realPaddingBottom;
