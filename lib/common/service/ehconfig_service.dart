@@ -61,6 +61,7 @@ class EhConfigService extends ProfileService {
   RxInt autoLockTimeOut = (-1).obs;
 
   /// 屏幕方向
+  Rx<ReadOrientation> orientation = ReadOrientation.system.obs;
 
   /// 显示页面间隔
   RxBool showPageInterval = true.obs;
@@ -160,6 +161,12 @@ class EhConfigService extends ProfileService {
     showPageInterval.value = ehConfig.showPageInterval ?? true;
     everProfile<bool>(
         showPageInterval, (bool value) => ehConfig.showPageInterval = value);
+
+    // orientation
+    orientation.value = EnumToString.fromString(
+            ReadOrientation.values, ehConfig?.favoritesOrder) ??
+        ReadOrientation.system;
+    everFromEunm(orientation, (String value) => ehConfig.orientation = value);
   }
 
   /// 收藏排序

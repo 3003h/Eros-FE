@@ -126,6 +126,13 @@ class ViewController extends GetxController {
     //   OrientationHelper.forceOrientation(value);
     // });
     // OrientationPlugin.forceOrientation(DeviceOrientation.landscapeLeft);
+    final _orientation = _ehConfigService.orientation.value;
+    if (_orientation != ReadOrientation.system ||
+        _orientation != ReadOrientation.auto) {
+      OrientationPlugin.setPreferredOrientations(
+          [orientationMap[_orientation]]);
+      OrientationPlugin.forceOrientation(orientationMap[_orientation]);
+    }
 
     logger.d('onInit() end');
   }
@@ -135,8 +142,9 @@ class ViewController extends GetxController {
     pageController.dispose();
     vState.getMoreCancelToken.cancel();
     SystemChrome.setEnabledSystemUIOverlays(SystemUiOverlay.values);
-    subscription?.cancel();
+    // 恢复系统旋转设置
     OrientationPlugin.setPreferredOrientations(DeviceOrientation.values);
+    OrientationPlugin.forceOrientation(DeviceOrientation.portraitUp);
     super.onClose();
   }
 

@@ -20,5 +20,6 @@
   "clipboardLink": false,
   "commentTrans": false,
   "autoLockTimeOut": -1,
-  "showPageInterval": true
+  "showPageInterval": true,
+  "orientation": ""
 }

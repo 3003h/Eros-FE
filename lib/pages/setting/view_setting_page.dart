@@ -6,7 +6,9 @@ import 'package:fehviewer/generated/l10n.dart';
 import 'package:fehviewer/pages/setting/setting_base.dart';
 import 'package:fehviewer/utils/logger.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/services.dart';
 import 'package:get/get.dart';
+import 'package:orientation/orientation.dart';
 
 class ViewSettingPage extends StatelessWidget {
   @override
@@ -32,8 +34,12 @@ class ViewSettingList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // iPad不显示旋转设置
+    final bool _hideOrientationItem = GetPlatform.isIOS && context.isTablet;
+
     final List<Widget> _list = <Widget>[
       _buildViewModeItem(context),
+      if (!_hideOrientationItem) ReadOrientationItem(),
       TextSwitchItem(
         S.of(context).show_page_interval,
         intValue: ehConfigService.showPageInterval.value,
@@ -102,4 +108,74 @@ Widget _buildViewModeItem(BuildContext context) {
           }
         },
       ));
+}
+
+class ReadOrientationItem extends StatelessWidget {
+  final String _title = S.of(Get.context).screen_orientation;
+  final EhConfigService ehConfigService = Get.find();
+
+  final Map<ReadOrientation, String> modeMap = <ReadOrientation, String>{
+    ReadOrientation.system: S.of(Get.context).orientation_system,
+    ReadOrientation.portraitUp: S.of(Get.context).orientation_portraitUp,
+    ReadOrientation.landscapeLeft: S.of(Get.context).orientation_landscapeLeft,
+    ReadOrientation.landscapeRight:
+        S.of(Get.context).orientation_landscapeRight,
+  };
+
+  List<Widget> get modeList {
+    return List<Widget>.from(modeMap.keys.map((ReadOrientation element) {
+      return CupertinoActionSheetAction(
+          onPressed: () {
+            Get.back(result: element);
+          },
+          child: Text(modeMap[element]));
+    }).toList());
+  }
+
+  Future<ReadOrientation> _showDialog(BuildContext context) {
+    return showCupertinoModalPopup<ReadOrientation>(
+        context: context,
+        builder: (BuildContext context) {
+          final CupertinoActionSheet dialog = CupertinoActionSheet(
+            cancelButton: CupertinoActionSheetAction(
+                onPressed: () {
+                  Get.back();
+                },
+                child: Text(S.of(context).cancel)),
+            actions: <Widget>[
+              ...modeList,
+            ],
+          );
+          return dialog;
+        });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Obx(() => SelectorSettingItem(
+          title: _title,
+          selector: modeMap[
+              ehConfigService.orientation.value ?? ReadOrientation.system],
+          onTap: () async {
+            logger.v('tap ModeItem');
+            final ReadOrientation _result = await _showDialog(context);
+            if (_result != null) {
+              // ignore: unnecessary_string_interpolations
+              // logger.v('${EnumToString.convertToString(_result)}');
+              ehConfigService.orientation.value = _result;
+              if (_result != ReadOrientation.system &&
+                  _result != ReadOrientation.auto) {
+                OrientationPlugin.setPreferredOrientations(
+                    [orientationMap[_result]]);
+                OrientationPlugin.forceOrientation(orientationMap[_result]);
+              } else if (_result == ReadOrientation.system) {
+                OrientationPlugin.setPreferredOrientations(
+                    DeviceOrientation.values);
+                OrientationPlugin.forceOrientation(
+                    DeviceOrientation.portraitUp);
+              }
+            }
+          },
+        ));
+  }
 }
