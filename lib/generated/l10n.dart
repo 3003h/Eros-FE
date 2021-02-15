@@ -1006,6 +1006,66 @@ class S {
     );
   }
 
+  /// `Screen orientation`
+  String get screen_orientation {
+    return Intl.message(
+      'Screen orientation',
+      name: 'screen_orientation',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Follow system`
+  String get orientation_system {
+    return Intl.message(
+      'Follow system',
+      name: 'orientation_system',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Portrait up`
+  String get orientation_portraitUp {
+    return Intl.message(
+      'Portrait up',
+      name: 'orientation_portraitUp',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Landscape left`
+  String get orientation_landscapeLeft {
+    return Intl.message(
+      'Landscape left',
+      name: 'orientation_landscapeLeft',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Landscape right`
+  String get orientation_landscapeRight {
+    return Intl.message(
+      'Landscape right',
+      name: 'orientation_landscapeRight',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Auto`
+  String get orientation_auto {
+    return Intl.message(
+      'Auto',
+      name: 'orientation_auto',
+      desc: '',
+      args: [],
+    );
+  }
+
   /// `Show page interval`
   String get show_page_interval {
     return Intl.message(

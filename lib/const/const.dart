@@ -1,5 +1,6 @@
 import 'package:fehviewer/common/global.dart';
 import 'package:fehviewer/common/service/ehconfig_service.dart';
+import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 
 enum ListModeEnum {
@@ -25,6 +26,22 @@ enum CommentSpanType {
   image,
   linkImage,
 }
+
+enum ReadOrientation {
+  system,
+  auto,
+  portraitUp,
+  landscapeLeft,
+  portraitDown,
+  landscapeRight,
+}
+
+const Map<ReadOrientation, DeviceOrientation> orientationMap = {
+  ReadOrientation.landscapeRight: DeviceOrientation.landscapeRight,
+  ReadOrientation.landscapeLeft: DeviceOrientation.landscapeLeft,
+  ReadOrientation.portraitUp: DeviceOrientation.portraitUp,
+  ReadOrientation.portraitDown: DeviceOrientation.portraitDown,
+};
 
 // ignore: avoid_classes_with_only_static_members
 class EHConst {

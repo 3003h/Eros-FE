@@ -1,3 +1,4 @@
+import 'dart:math';
 
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:dio/dio.dart';
@@ -9,6 +10,7 @@ import 'package:fehviewer/generated/l10n.dart';
 import 'package:fehviewer/models/base/eh_models.dart';
 import 'package:fehviewer/pages/gallery/controller/gallery_page_controller.dart';
 import 'package:fehviewer/pages/image_view/controller/view_controller.dart';
+import 'package:fehviewer/pages/image_view/view/view_page.dart';
 import 'package:fehviewer/pages/image_view/view/view_widget.dart';
 import 'package:fehviewer/utils/logger.dart';
 import 'package:flutter/cupertino.dart';
@@ -24,12 +26,16 @@ class ViewImage extends StatefulWidget {
       this.index,
       this.fade = true,
       this.enableSlideOutPage = false,
-      this.expand = false})
+      this.expand = false,
+      this.imageHeight,
+      this.imageWidth})
       : super(key: key);
   final int index;
   final bool fade;
   final bool enableSlideOutPage;
   final bool expand;
+  final double imageHeight;
+  final double imageWidth;
 
   @override
   _ViewImageState createState() => _ViewImageState();
@@ -170,6 +176,8 @@ class _ViewImageState extends State<ViewImage>
                     index: widget.index,
                     animationController: _animationController,
                     reloadImage: _reloadImage,
+                    imageWidth: snapshot.data.largeImageWidth,
+                    imageHeight: snapshot.data.largeImageHeight,
                   );
 
                   image = Stack(
@@ -215,12 +223,16 @@ class ImageExtend extends StatelessWidget {
     this.index,
     this.animationController,
     this.reloadImage,
+    this.imageHeight,
+    this.imageWidth,
   }) : super(key: key);
 
   final String url;
   final int index;
   final AnimationController animationController;
   final VoidCallback reloadImage;
+  final double imageHeight;
+  final double imageWidth;
 
   @override
   Widget build(BuildContext context) {
@@ -241,13 +253,16 @@ class ImageExtend extends StatelessWidget {
                 : null;
 
             // logger.v('$progress');
+            // logger.v('$imageHeight $imageWidth');
 
             // 下载进度回调
             return UnconstrainedBox(
               child: Container(
                 constraints: BoxConstraints(
-                  maxHeight: context.mediaQueryShortestSide,
-                  minWidth: context.width / 2,
+                  maxHeight: min(context.mediaQueryShortestSide,
+                      imageHeight ?? context.mediaQueryShortestSide),
+                  minWidth: min(context.width / 2 - kPageViewPadding,
+                      imageWidth ?? (context.width / 2)),
                 ),
                 alignment: Alignment.center,
                 // margin: const EdgeInsets.symmetric(vertical: 50, horizontal: 50),
@@ -367,7 +382,7 @@ class LoadingWidget extends StatelessWidget {
       child: Container(
         constraints: BoxConstraints(
           maxHeight: context.mediaQueryShortestSide,
-          minWidth: context.width / 2,
+          minWidth: context.width / 2 - kPageViewPadding,
         ),
         alignment: Alignment.center,
         child: Column(

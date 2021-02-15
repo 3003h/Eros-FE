@@ -19,6 +19,8 @@ import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
 
 import '../controller/view_controller.dart';
 
+double kPageViewPadding = 4.0;
+
 class GalleryViewPage extends GetView<ViewController> {
   const GalleryViewPage({Key key}) : super(key: key);
 
@@ -380,9 +382,10 @@ class GalleryViewPage extends GetView<ViewController> {
               builder: (BuildContext context, int pageIndex) {
                 return PhotoViewGalleryPageOptions.customChild(
                   child: Container(
-                    alignment: Alignment.center,
+                    // alignment: Alignment.center,
                     padding: EdgeInsets.symmetric(
-                        horizontal: vState.showPageInterval ? 3 : 0),
+                        horizontal:
+                            vState.showPageInterval ? kPageViewPadding : 0),
                     child: () {
                       if (vState.columnMode != ColumnMode.single) {
                         // 双页阅读
@@ -399,6 +402,7 @@ class GalleryViewPage extends GetView<ViewController> {
                                 child: ViewImage(
                                   index: indexLeft,
                                   fade: vState.fade,
+                                  // expand: true,
                                 ),
                               ),
                             ),
@@ -411,6 +415,7 @@ class GalleryViewPage extends GetView<ViewController> {
                                 child: ViewImage(
                                   index: indexLeft + 1,
                                   fade: vState.fade,
+                                  // expand: true,
                                 ),
                               ),
                             ),
@@ -425,6 +430,7 @@ class GalleryViewPage extends GetView<ViewController> {
                         return ViewImage(
                           index: pageIndex,
                           fade: vState.fade,
+                          expand: true,
                         );
                       }
                     }(),
