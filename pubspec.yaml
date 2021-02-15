@@ -185,6 +185,7 @@ dependencies:
   translator: ^0.1.5
 #  flutter_screen_lock: ^1.2.6
   pattern_lock: ^1.0.3
+  orientation: ^1.2.0
 
 
 

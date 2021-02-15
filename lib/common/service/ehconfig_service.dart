@@ -53,11 +53,17 @@ class EhConfigService extends ProfileService {
   /// 预载图片数量
   RxInt preloadImage = 5.obs;
 
+  /// 阅读相关设置
   /// 阅读方向
-  Rx<ViewMode> viewMode = ViewMode.horizontalLeft.obs;
+  Rx<ViewMode> viewMode = ViewMode.LeftToRight.obs;
 
   /// 自动锁定时间
   RxInt autoLockTimeOut = (-1).obs;
+
+  /// 屏幕方向
+
+  /// 显示页面间隔
+  RxBool showPageInterval = true.obs;
 
   @override
   void onInit() {
@@ -73,7 +79,7 @@ class EhConfigService extends ProfileService {
     /// 阅读方向
     viewMode.value =
         EnumToString.fromString(ViewMode.values, ehConfig?.viewModel) ??
-            ViewMode.horizontalLeft;
+            ViewMode.LeftToRight;
     everFromEunm(viewMode, (String value) => ehConfig.viewModel = value);
 
     //
@@ -149,6 +155,11 @@ class EhConfigService extends ProfileService {
     autoLockTimeOut.value = ehConfig.autoLockTimeOut ?? -1;
     everProfile<int>(
         autoLockTimeOut, (int value) => ehConfig.autoLockTimeOut = value);
+
+    // showPageInterval
+    showPageInterval.value = ehConfig.showPageInterval ?? true;
+    everProfile<bool>(
+        showPageInterval, (bool value) => ehConfig.showPageInterval = value);
   }
 
   /// 收藏排序

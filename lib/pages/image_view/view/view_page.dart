@@ -1,3 +1,4 @@
+import 'package:extended_image/extended_image.dart';
 import 'package:fehviewer/common/global.dart';
 import 'package:fehviewer/const/const.dart';
 import 'package:fehviewer/models/index.dart';
@@ -21,13 +22,13 @@ import '../controller/view_controller.dart';
 class GalleryViewPage extends GetView<ViewController> {
   const GalleryViewPage({Key key}) : super(key: key);
 
-  ViewState get state => controller?.vState;
+  ViewState get vState => controller?.vState;
 
   /// 画廊图片大图浏览
   @override
   Widget build(BuildContext context) {
     // logger.d('rebuild GalleryViewPage');
-    state.initSize(context);
+    vState.initSize(context);
     // logger.d('build ${state.viewMode}  ${state.columnMode}');
     return CupertinoTheme(
       data: const CupertinoThemeData(
@@ -72,9 +73,9 @@ class GalleryViewPage extends GetView<ViewController> {
               GestureDetector(
                 behavior: HitTestBehavior.translucent,
                 child: Container(
-                  key: state.centkey,
-                  height: state.screensize.height / 4,
-                  width: state.screensize.width / 2.5,
+                  key: vState.centkey,
+                  height: vState.screensize.height / 4,
+                  width: vState.screensize.width / 2.5,
                 ),
                 onTap: controller.handOnTapCent,
               ),
@@ -91,14 +92,14 @@ class GalleryViewPage extends GetView<ViewController> {
                         AnimatedPositioned(
                           curve: Curves.fastOutSlowIn,
                           duration: const Duration(milliseconds: 300),
-                          top: state.topBarOffset,
+                          top: vState.topBarOffset,
                           child: _buildTopBar(Get.context),
                         ),
                         // 底栏
                         AnimatedPositioned(
                           curve: Curves.fastOutSlowIn,
                           duration: const Duration(milliseconds: 300),
-                          bottom: state.bottomBarOffset,
+                          bottom: vState.bottomBarOffset,
                           child: _buildBottomBar(),
                         ),
                       ],
@@ -117,14 +118,15 @@ class GalleryViewPage extends GetView<ViewController> {
     return Obx(() {
       // 布局切换时进行页码跳转处理
       controller.checkViewModel();
-      switch (state.viewMode) {
-        case ViewMode.vertical:
+      switch (vState.viewMode) {
+        case ViewMode.topToBottom:
           return _buildListView();
-        case ViewMode.horizontalLeft:
+        case ViewMode.LeftToRight:
           return _buildPhotoViewGallery();
-        case ViewMode.horizontalRight:
+        case ViewMode.rightToLeft:
           return _buildPhotoViewGallery(reverse: true);
         default:
+          // return _buildPhotoViewGallery();
           return _buildPhotoViewGallery();
       }
     });
@@ -134,9 +136,9 @@ class GalleryViewPage extends GetView<ViewController> {
   Widget _buildTopBar(BuildContext context) {
     return Container(
         // height: kTopBarHeight + controller.paddingTop,
-        width: state.screensize.width,
+        width: vState.screensize.width,
         color: const Color.fromARGB(150, 0, 0, 0),
-        padding: state.topBarPadding,
+        padding: vState.topBarPadding,
         child: Stack(
           alignment: Alignment.center,
           children: <Widget>[
@@ -166,7 +168,6 @@ class GalleryViewPage extends GetView<ViewController> {
                 GestureDetector(
                   behavior: HitTestBehavior.opaque,
                   onTap: () {
-                    logger.v('menu');
                     Get.toNamed(EHRoutes.viewSeting);
                   },
                   child: Container(
@@ -187,10 +188,10 @@ class GalleryViewPage extends GetView<ViewController> {
   }
 
   Widget _buildPageText() {
-    if (state.viewMode != ViewMode.vertical) {
+    if (vState.viewMode != ViewMode.topToBottom) {
       // logger.v('${state?.itemIndex}');
       return Text(
-        '${((state?.itemIndex) ?? 0) + 1}/${state.filecount}',
+        '${((vState?.itemIndex) ?? 0) + 1}/${vState.filecount}',
         style: const TextStyle(
           color: CupertinoColors.systemGrey6,
         ),
@@ -202,7 +203,7 @@ class GalleryViewPage extends GetView<ViewController> {
           controller.handItemPositionsChange(positions);
 
           return Text(
-            '${((state?.itemIndex) ?? 0) + 1}/${state.filecount}',
+            '${((vState?.itemIndex) ?? 0) + 1}/${vState.filecount}',
             style: const TextStyle(
               color: CupertinoColors.systemGrey6,
             ),
@@ -214,12 +215,12 @@ class GalleryViewPage extends GetView<ViewController> {
 
   /// 底栏
   Widget _buildBottomBar() {
-    final double _max = state.filecount - 1.0;
-    final List<GalleryPreview> previews = state.previews;
+    final double _max = vState.filecount - 1.0;
+    final List<GalleryPreview> previews = vState.previews;
     return Container(
       color: const Color.fromARGB(150, 0, 0, 0),
-      padding: state.bottomBarPadding,
-      width: state.screensize.width,
+      padding: vState.bottomBarPadding,
+      width: vState.screensize.width,
       // height: kBottomBarHeight + controller.paddingBottom,
       child: Column(
         children: <Widget>[
@@ -266,7 +267,7 @@ class GalleryViewPage extends GetView<ViewController> {
                   ),
                 ),
                 const Spacer(),
-                if (state.viewMode != ViewMode.vertical)
+                if (vState.viewMode != ViewMode.topToBottom)
                   Obx(() => GestureDetector(
                         behavior: HitTestBehavior.opaque,
                         onTap: () {
@@ -280,7 +281,7 @@ class GalleryViewPage extends GetView<ViewController> {
                           child: Icon(
                             FontAwesomeIcons.bookOpen,
                             color: () {
-                              switch (state.columnMode) {
+                              switch (vState.columnMode) {
                                 case ColumnMode.single:
                                   return CupertinoColors.systemGrey6;
                                 case ColumnMode.odd:
@@ -301,7 +302,7 @@ class GalleryViewPage extends GetView<ViewController> {
     );
   }
 
-  /// 竖直浏览布局 利用[ScrollablePositionedList]实现
+  /// 上下浏览布局 利用[ScrollablePositionedList]实现
   Widget _buildListView() {
     return GetBuilder<ViewController>(
         id: '_buildPhotoViewGallery',
@@ -316,127 +317,163 @@ class GalleryViewPage extends GetView<ViewController> {
                 constraints: BoxConstraints(
                   minWidth: context.width,
                 ),
-                child: NumStack(
-                  text: '$index',
-                  child: GetBuilder<ViewController>(
-                      id: 'GalleryImage_$index',
-                      builder: (ViewController controller) {
-                        // logger.d('build list item $index');
-                        return Container(
-                          height: () {
-                            try {
-                              final _curPreview = vState.previewMap[index + 1];
-                              return _curPreview.largeImageHeight *
-                                  (context.width / _curPreview.largeImageWidth);
-                            } on Exception catch (_) {
-                              final _curPreview = vState.previewMap[index + 1];
-                              logger.d('${_curPreview.toJson()}');
-                              return _curPreview.height *
-                                  (context.width / _curPreview.width);
-                            } catch (e) {
-                              return null;
-                            }
-                          }(),
-                          width: context.width,
-                          child: ViewImage(
-                            index: index,
-                          ),
-                        );
-                      }),
-                ),
+                child: GetBuilder<ViewController>(
+                    id: 'GalleryImage_$index',
+                    builder: (ViewController controller) {
+                      // logger.d('build list item $index');
+
+                      double _height = () {
+                        try {
+                          final _curPreview = vState.previewMap[index + 1];
+                          return _curPreview.largeImageHeight *
+                              (context.width / _curPreview.largeImageWidth);
+                        } on Exception catch (_) {
+                          final _curPreview = vState.previewMap[index + 1];
+                          logger.d('${_curPreview.toJson()}');
+                          return _curPreview.height *
+                              (context.width / _curPreview.width);
+                        } catch (e) {
+                          return null;
+                        }
+                      }();
+
+                      if (_height != null) {
+                        _height += vState.showPageInterval ? 8 : 0;
+                      }
+
+                      return Container(
+                        padding: EdgeInsets.only(
+                            bottom: vState.showPageInterval ? 8 : 0),
+                        height: _height,
+                        // width: context.width,
+                        child: ViewImage(
+                          index: index,
+                          expand: _height != null,
+                        ),
+                      );
+                    }),
               );
             },
           );
         });
   }
 
-  /// 水平方向浏览部件 使用[PhotoViewGallery] 实现
+  /// 左右方向浏览部件 使用[PhotoViewGallery] 实现
   Widget _buildPhotoViewGallery({bool reverse = false}) {
     const double _maxScale = 10;
+
     return GetBuilder<ViewController>(
       id: '_buildPhotoViewGallery',
       builder: (ViewController controller) {
         // logger.d('lastPreviewLen ${controller.previews.length}');
-        final state = controller.vState;
-        controller.lastPreviewLen = state.previews.length;
+        final ViewState vState = controller.vState;
+        controller.lastPreviewLen = vState.previews.length;
 
         return Obx(
-          () => PhotoViewGallery.builder(
-            scrollPhysics: const BouncingScrollPhysics(),
-            reverse: reverse,
-            itemCount: state.pageCount,
-            customSize: state.screensize,
-            builder: (BuildContext context, int pageIndex) {
-              // logger.v('PhotoViewGallery.builder');
-              return PhotoViewGalleryPageOptions.customChild(
-                child: Container(
-                  alignment: Alignment.center,
-                  child: () {
-                    if (state.columnMode != ColumnMode.single) {
-                      // 双页阅读
-                      final int indexLeft = state.columnMode == ColumnMode.odd
-                          ? pageIndex * 2
-                          : pageIndex * 2 - 1;
+          () {
+            logger.v('PhotoViewGallery.builder 1');
+            return PhotoViewGallery.builder(
+              scrollPhysics: const BouncingScrollPhysics(),
+              reverse: reverse,
+              itemCount: vState.pageCount,
+              customSize: vState.screensize,
+              builder: (BuildContext context, int pageIndex) {
+                return PhotoViewGalleryPageOptions.customChild(
+                  child: Container(
+                    alignment: Alignment.center,
+                    padding: EdgeInsets.symmetric(
+                        horizontal: vState.showPageInterval ? 3 : 0),
+                    child: () {
+                      if (vState.columnMode != ColumnMode.single) {
+                        // 双页阅读
+                        final int indexLeft =
+                            vState.columnMode == ColumnMode.odd
+                                ? pageIndex * 2
+                                : pageIndex * 2 - 1;
 
-                      final List<Widget> _pageList = <Widget>[
-                        if (indexLeft >= 0)
-                          Expanded(
-                            child: Container(
-                              alignment: Alignment.centerRight,
-                              child: NumStack(
-                                text: '$indexLeft',
+                        final List<Widget> _pageList = <Widget>[
+                          if (indexLeft >= 0)
+                            Expanded(
+                              child: Container(
+                                alignment: Alignment.centerRight,
                                 child: ViewImage(
                                   index: indexLeft,
-                                  fade: state.fade,
+                                  fade: vState.fade,
                                 ),
                               ),
                             ),
-                          ),
-                        if (state.filecount > indexLeft + 1)
-                          Expanded(
-                            child: Container(
-                              alignment:
-                                  indexLeft >= 0 ? Alignment.centerLeft : null,
-                              child: NumStack(
-                                text: '${indexLeft + 1}',
+                          if (vState.filecount > indexLeft + 1)
+                            Expanded(
+                              child: Container(
+                                alignment: indexLeft >= 0
+                                    ? Alignment.centerLeft
+                                    : null,
                                 child: ViewImage(
                                   index: indexLeft + 1,
-                                  fade: state.fade,
+                                  fade: vState.fade,
                                 ),
                               ),
                             ),
-                          ),
-                      ];
+                        ];
 
-                      return Row(
-                        mainAxisSize: MainAxisSize.min,
-                        children:
-                            reverse ? _pageList.reversed.toList() : _pageList,
-                      );
-                    } else {
-                      return NumStack(
-                        text: '$pageIndex',
-                        child: ViewImage(
+                        return Row(
+                          mainAxisSize: MainAxisSize.min,
+                          children:
+                              reverse ? _pageList.reversed.toList() : _pageList,
+                        );
+                      } else {
+                        return ViewImage(
                           index: pageIndex,
-                          fade: state.fade,
-                        ),
-                      );
-                    }
-                  }(),
-                ),
-                initialScale: PhotoViewComputedScale.contained,
-                minScale: PhotoViewComputedScale.contained * 1.0,
-                maxScale: PhotoViewComputedScale.covered * _maxScale,
-              );
-            },
-            loadingBuilder: loadingBuilder,
-            // backgroundDecoration: null,
-            pageController: controller.pageController,
-            enableRotation: false,
-            onPageChanged: controller.handOnPageChanged,
-          ),
+                          fade: vState.fade,
+                        );
+                      }
+                    }(),
+                  ),
+                  initialScale: PhotoViewComputedScale.contained,
+                  minScale: PhotoViewComputedScale.contained * 1.0,
+                  maxScale: PhotoViewComputedScale.covered * _maxScale,
+                );
+              },
+              loadingBuilder: loadingBuilder,
+              // backgroundDecoration: null,
+              pageController: controller.pageController,
+              enableRotation: false,
+              onPageChanged: controller.handOnPageChanged,
+            );
+          },
         );
       },
+    );
+  }
+
+  /// 左右方向浏览部件 使用[ExtendedImageGesturePageView] 实现
+  /// 缩放的处理有点问题
+  Widget _buildExtendedImageGesturePageView({bool reverse = false}) {
+    final ViewState vState = controller.vState;
+    return ExtendedImageGesturePageView.builder(
+      itemBuilder: (BuildContext context, int pageIndex) {
+        Widget image = ViewImage(
+          index: pageIndex,
+          fade: vState.fade,
+          enableSlideOutPage: true,
+        );
+        image = Container(
+          child: image,
+          padding: const EdgeInsets.all(5.0),
+        );
+
+        image = ExtendedImageSlidePage(
+          child: image,
+          slideAxis: SlideAxis.vertical,
+          slideType: SlideType.onlyImage,
+        );
+
+        return image;
+      },
+      itemCount: vState.filecount,
+      onPageChanged: controller.handOnPageChanged,
+      controller: controller.pageController,
+      reverse: reverse,
     );
   }
 
@@ -455,7 +492,7 @@ class GalleryViewPage extends GetView<ViewController> {
         : Container(
             child: Center(
               child: Text(
-                'Loading ${state.itemIndex + 1}',
+                'Loading ${vState.itemIndex + 1}',
               ),
             ),
           );

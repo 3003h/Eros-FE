@@ -80,7 +80,7 @@ class GalleryPara {
       }
 
       _url = _preview.largeImageUrl;
-      logger.v('$ser : $_url');
+      // logger.v('$ser : $_url');
 
       final Future<bool> _future = _map[_url] ??
           (() {

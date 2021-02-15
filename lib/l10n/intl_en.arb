@@ -96,6 +96,7 @@
   "p_Rate": "Rate",
   "read_setting": "Read setting",
   "reading_direction": "Reading direction",
+  "show_page_interval": "Show page interval",
   "left_to_right": "Left to right",
   "right_to_left": "Right to left",
   "top_to_bottom": "Top to bottom",

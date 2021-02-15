@@ -1,3 +1,4 @@
+
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:dio/dio.dart';
 import 'package:extended_image/extended_image.dart';
@@ -18,9 +19,17 @@ import 'package:liquid_progress_indicator/liquid_progress_indicator.dart';
 import '../common.dart';
 
 class ViewImage extends StatefulWidget {
-  const ViewImage({Key key, this.index, this.fade = true}) : super(key: key);
+  const ViewImage(
+      {Key key,
+      this.index,
+      this.fade = true,
+      this.enableSlideOutPage = false,
+      this.expand = false})
+      : super(key: key);
   final int index;
   final bool fade;
+  final bool enableSlideOutPage;
+  final bool expand;
 
   @override
   _ViewImageState createState() => _ViewImageState();
@@ -52,7 +61,7 @@ class _ViewImageState extends State<ViewImage>
       // 直接获取需要的
       await _pageController.loadPriviewsWhereIndex(itemIndex);
 
-      logger.v('获取缩略结束后 预载图片');
+      // logger.v('获取缩略结束后 预载图片');
       GalleryPara.instance.precacheImages(
         Get.context,
         previewMap: _pageController.previewMap,
@@ -150,21 +159,29 @@ class _ViewImageState extends State<ViewImage>
                 } else {
                   final GalleryPreview preview = snapshot.data;
                   Future.delayed(const Duration(milliseconds: 100)).then((_) {
-                    Get.find<ViewController>()
-                        .update(['GalleryImage_${widget.index}']);
+                    try {
+                      Get.find<ViewController>()
+                          .update(['GalleryImage_${widget.index}']);
+                    } catch (_) {}
                   });
-                  return Container(
+
+                  Widget image = ImageExtend(
+                    url: preview.largeImageUrl,
+                    index: widget.index,
+                    animationController: _animationController,
+                    reloadImage: _reloadImage,
+                  );
+
+                  image = Stack(
                     alignment: Alignment.center,
-                    child: Stack(
-                      children: [
-                        ImageExtend(
-                          url: preview.largeImageUrl,
-                          index: widget.index,
-                          animationController: _animationController,
-                          reloadImage: _reloadImage,
-                        ),
-                        if (Global.inDebugMode)
-                          Text('${preview.ser}',
+                    fit: widget.expand ? StackFit.expand : StackFit.loose,
+                    children: [
+                      image,
+                      if (Global.inDebugMode)
+                        Positioned(
+                          top: 4,
+                          left: 4,
+                          child: Text('${preview.ser}',
                               style: const TextStyle(
                                   fontSize: 12,
                                   color:
@@ -176,9 +193,11 @@ class _ViewImageState extends State<ViewImage>
                                       blurRadius: 2,
                                     )
                                   ])),
-                      ],
-                    ),
+                        ),
+                    ],
                   );
+
+                  return image;
                 }
                 break;
               default:
@@ -190,13 +209,13 @@ class _ViewImageState extends State<ViewImage>
 }
 
 class ImageExtend extends StatelessWidget {
-  const ImageExtend(
-      {Key key,
-      this.url,
-      this.index,
-      this.animationController,
-      this.reloadImage})
-      : super(key: key);
+  const ImageExtend({
+    Key key,
+    this.url,
+    this.index,
+    this.animationController,
+    this.reloadImage,
+  }) : super(key: key);
 
   final String url;
   final int index;
@@ -286,6 +305,7 @@ class ImageExtend extends StatelessWidget {
             return FadeTransition(
               opacity: animationController,
               child: ExtendedRawImage(
+                fit: BoxFit.contain,
                 image: state.extendedImageInfo?.image,
               ),
             );
@@ -414,4 +434,24 @@ class ErrorWidget extends StatelessWidget {
       ),
     );
   }
+}
+
+double initScale({Size imageSize, Size size, double initialScale}) {
+  final double n1 = imageSize.height / imageSize.width;
+  final double n2 = size.height / size.width;
+  if (n1 > n2) {
+    final FittedSizes fittedSizes =
+        applyBoxFit(BoxFit.contain, imageSize, size);
+    //final Size sourceSize = fittedSizes.source;
+    final Size destinationSize = fittedSizes.destination;
+    return size.width / destinationSize.width;
+  } else if (n1 / n2 < 1 / 4) {
+    final FittedSizes fittedSizes =
+        applyBoxFit(BoxFit.contain, imageSize, size);
+    //final Size sourceSize = fittedSizes.source;
+    final Size destinationSize = fittedSizes.destination;
+    return size.height / destinationSize.height;
+  }
+
+  return initialScale;
 }

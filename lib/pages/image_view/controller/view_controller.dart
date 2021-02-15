@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:fehviewer/common/service/depth_service.dart';
 import 'package:fehviewer/common/service/ehconfig_service.dart';
 import 'package:fehviewer/const/const.dart';
@@ -9,6 +11,7 @@ import 'package:fehviewer/utils/vibrate.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
+import 'package:orientation/orientation.dart';
 import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
 
 import 'view_state.dart';
@@ -54,6 +57,8 @@ class ViewController extends GetxController {
   }
 
   PageController pageController;
+  PageController _pageControllerNotInv;
+  PageController _pageControllerInv;
 
   final EhConfigService _ehConfigService = Get.find();
   final GalleryPageController _galleryPageController =
@@ -64,6 +69,9 @@ class ViewController extends GetxController {
   final ItemScrollController itemScrollController = ItemScrollController();
   final ItemPositionsListener itemPositionsListener =
       ItemPositionsListener.create();
+
+  DeviceOrientation _deviceOrientation;
+  StreamSubscription<DeviceOrientation> subscription;
 
   @override
   void onInit() {
@@ -79,10 +87,10 @@ class ViewController extends GetxController {
 
     // 横屏模式pageview控制器初始化
     pageController =
-        PageController(initialPage: _initialPage, viewportFraction: 1.1);
+        PageController(initialPage: _initialPage, viewportFraction: 1.0);
 
     // 竖屏模式初始页码
-    if (vState.viewMode == ViewMode.vertical) {
+    if (vState.viewMode == ViewMode.topToBottom) {
       loggerNoStack.v('竖屏模式初始页码: ${vState.itemIndex}');
       Future.delayed(const Duration(milliseconds: 200)).then(
           (value) => itemScrollController.jumpTo(index: vState.itemIndex));
@@ -91,7 +99,7 @@ class ViewController extends GetxController {
     /// 初始预载
     /// 后续的预载触发放在翻页事件中
     final int _preload = _ehConfigService.preloadImage.value;
-    if (vState.viewMode != ViewMode.vertical) {
+    if (vState.viewMode != ViewMode.topToBottom) {
       // 预载
       logger.v('初始预载');
       GalleryPara.instance.precacheImages(
@@ -104,6 +112,21 @@ class ViewController extends GetxController {
 
     vState.sliderValue = vState.itemIndex / 1.0;
 
+    // subscription = OrientationHelper.onOrientationChange.listen((value) {
+    //   // If the widget was removed from the tree while the asynchronous platform
+    //   // message was in flight, we want to discard the reply rather than calling
+    //   // setState to update our non-existent appearance.
+    //
+    //   // setState(() {
+    //   //   _deviceOrientation = value;
+    //   // });
+    //
+    //   _deviceOrientation = value;
+    //
+    //   OrientationHelper.forceOrientation(value);
+    // });
+    // OrientationPlugin.forceOrientation(DeviceOrientation.landscapeLeft);
+
     logger.d('onInit() end');
   }
 
@@ -112,6 +135,8 @@ class ViewController extends GetxController {
     pageController.dispose();
     vState.getMoreCancelToken.cancel();
     SystemChrome.setEnabledSystemUIOverlays(SystemUiOverlay.values);
+    subscription?.cancel();
+    OrientationPlugin.setPreferredOrientations(DeviceOrientation.values);
     super.onClose();
   }
 
@@ -120,7 +145,7 @@ class ViewController extends GetxController {
     vState.itemIndex = value.round();
     logger.d('slider to _itemIndex ${vState.itemIndex}');
 
-    if (vState.viewMode != ViewMode.vertical) {
+    if (vState.viewMode != ViewMode.topToBottom) {
       // await _galleryPageController.fetchPreviewUntilIndex(
       //     Get.context, vState.itemIndex);
       // await Future.delayed(const Duration(milliseconds: 200));
@@ -265,7 +290,7 @@ class ViewController extends GetxController {
   void checkViewModel() {
     // logger.d('checkViewModel start');
     if (vState.viewMode != vState.lastViewMode) {
-      if (vState.viewMode == ViewMode.vertical) {
+      if (vState.viewMode == ViewMode.topToBottom) {
         Future.delayed(const Duration(milliseconds: 100)).then((_) {
           itemScrollController.jumpTo(index: vState.itemIndex);
         });
@@ -282,11 +307,11 @@ class ViewController extends GetxController {
   // 点击左半边
   void tapLeft() {
     vState.fade = false;
-    if (vState.viewMode == ViewMode.horizontalLeft) {
+    if (vState.viewMode == ViewMode.LeftToRight) {
       if (vState.pageIndex > 0) {
         pageController.jumpToPage(vState.pageIndex - 1);
       }
-    } else if (vState.viewMode == ViewMode.horizontalRight) {
+    } else if (vState.viewMode == ViewMode.rightToLeft) {
       pageController.jumpToPage(vState.pageIndex + 1);
     }
   }
@@ -294,9 +319,9 @@ class ViewController extends GetxController {
   // 点击右半边
   void tapRight() {
     vState.fade = false;
-    if (vState.viewMode == ViewMode.horizontalLeft) {
+    if (vState.viewMode == ViewMode.LeftToRight) {
       pageController.jumpToPage(vState.pageIndex + 1);
-    } else if (vState.viewMode == ViewMode.horizontalRight) {
+    } else if (vState.viewMode == ViewMode.rightToLeft) {
       if (vState.pageIndex > 0) {
         pageController.jumpToPage(vState.pageIndex - 1);
       }

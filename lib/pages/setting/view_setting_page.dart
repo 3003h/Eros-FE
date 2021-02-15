@@ -28,10 +28,17 @@ class ViewSettingPage extends StatelessWidget {
 }
 
 class ViewSettingList extends StatelessWidget {
+  final EhConfigService ehConfigService = Get.find();
+
   @override
   Widget build(BuildContext context) {
     final List<Widget> _list = <Widget>[
       _buildViewModeItem(context),
+      TextSwitchItem(
+        S.of(context).show_page_interval,
+        intValue: ehConfigService.showPageInterval.value,
+        onChanged: (bool val) => ehConfigService.showPageInterval.value = val,
+      )
     ];
     return ListView.builder(
       itemCount: _list.length,
@@ -48,9 +55,9 @@ Widget _buildViewModeItem(BuildContext context) {
   final EhConfigService ehConfigService = Get.find();
 
   final Map<ViewMode, String> modeMap = <ViewMode, String>{
-    ViewMode.horizontalLeft: S.of(context).left_to_right,
-    ViewMode.horizontalRight: S.of(context).right_to_left,
-    ViewMode.vertical: S.of(context).top_to_bottom,
+    ViewMode.LeftToRight: S.of(context).left_to_right,
+    ViewMode.rightToLeft: S.of(context).right_to_left,
+    ViewMode.topToBottom: S.of(context).top_to_bottom,
   };
 
   List<Widget> _getModeList() {
@@ -84,7 +91,7 @@ Widget _buildViewModeItem(BuildContext context) {
   return Obx(() => SelectorSettingItem(
         title: _title,
         selector:
-            modeMap[ehConfigService.viewMode.value ?? ViewMode.horizontalLeft],
+            modeMap[ehConfigService.viewMode.value ?? ViewMode.LeftToRight],
         onTap: () async {
           logger.v('tap ModeItem');
           final ViewMode _result = await _showDialog(context);
