@@ -96,6 +96,7 @@
   "p_Rate": "评分",
   "read_setting": "阅读设置",
   "reading_direction": "阅读方向",
+  "show_page_interval": "Show page interval",
   "left_to_right": "从左到右",
   "right_to_left": "从右到左",
   "top_to_bottom": "从上到下",

@@ -183,6 +183,12 @@ class ViewState {
   ViewMode get viewMode => _viewMode.value;
   set viewMode(val) => _viewMode.value = val;
 
+  /// 显示页面间隔
+
+  RxBool get _showPageInterval => _ehConfigService.showPageInterval;
+  bool get showPageInterval => _showPageInterval.value;
+  set showPageInterval(bool val) => _showPageInterval.value = val;
+
   bool fade = true;
   bool needRebuild = false;
 }

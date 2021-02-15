@@ -1,6 +1,7 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+
 import 'intl/messages_all.dart';
 
 // **************************************************************************
@@ -1000,6 +1001,16 @@ class S {
     return Intl.message(
       'Reading direction',
       name: 'reading_direction',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Show page interval`
+  String get show_page_interval {
+    return Intl.message(
+      'Show page interval',
+      name: 'show_page_interval',
       desc: '',
       args: [],
     );

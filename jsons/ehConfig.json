@@ -19,5 +19,6 @@
   "viewModel": "vertical",
   "clipboardLink": false,
   "commentTrans": false,
-  "autoLockTimeOut": -1
+  "autoLockTimeOut": -1,
+  "showPageInterval": true
 }

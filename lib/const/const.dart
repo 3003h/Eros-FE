@@ -1,4 +1,3 @@
-// 列表模式 瀑布流模式
 import 'package:fehviewer/common/global.dart';
 import 'package:fehviewer/common/service/ehconfig_service.dart';
 import 'package:get/get.dart';
@@ -15,9 +14,9 @@ enum FavoriteOrder {
 }
 
 enum ViewMode {
-  vertical,
-  horizontalLeft,
-  horizontalRight,
+  topToBottom,
+  LeftToRight,
+  rightToLeft,
 }
 
 enum CommentSpanType {

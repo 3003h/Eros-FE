@@ -131,6 +131,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "share_image" : MessageLookupByLibrary.simpleMessage("Share image"),
     "show_filter" : MessageLookupByLibrary.simpleMessage("Show filter"),
     "show_jpn_title" : MessageLookupByLibrary.simpleMessage("Show japanese title"),
+    "show_page_interval" : MessageLookupByLibrary.simpleMessage("Show page interval"),
     "t_Clear_all_history" : MessageLookupByLibrary.simpleMessage("Clear all history"),
     "tab_download" : MessageLookupByLibrary.simpleMessage("Download"),
     "tab_favorite" : MessageLookupByLibrary.simpleMessage("Favorites"),
