@@ -105,7 +105,7 @@ class ViewController extends GetxController {
       GalleryPara.instance.precacheImages(
         Get.context,
         previewMap: vState.previewMap,
-        index: vState.itemIndex,
+        itemSer: vState.itemIndex,
         max: _preload,
       );
     }
@@ -198,7 +198,7 @@ class ViewController extends GetxController {
     GalleryPara.instance.precacheImages(
       Get.context,
       previewMap: _galleryPageController.previewMap,
-      index: vState.itemIndex,
+      itemSer: vState.itemIndex,
       max: _ehConfigService.preloadImage.value,
     );
     // logger.d('itemIndex $itemIndex  ${itemIndex.toDouble()}');

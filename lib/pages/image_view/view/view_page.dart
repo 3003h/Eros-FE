@@ -315,22 +315,22 @@ class GalleryViewPage extends GetView<ViewController> {
             itemPositionsListener: controller.itemPositionsListener,
             itemCount: vState.filecount,
             itemBuilder: (BuildContext context, int index) {
+              final int itemSer = index + 1;
+
               return ConstrainedBox(
                 constraints: BoxConstraints(
                   minWidth: context.width,
                 ),
                 child: GetBuilder<ViewController>(
-                    id: 'GalleryImage_$index',
+                    id: 'GalleryImage_$itemSer',
                     builder: (ViewController controller) {
-                      // logger.d('build list item $index');
-
                       double _height = () {
                         try {
-                          final _curPreview = vState.previewMap[index + 1];
+                          final _curPreview = vState.previewMap[itemSer];
                           return _curPreview.largeImageHeight *
                               (context.width / _curPreview.largeImageWidth);
                         } on Exception catch (_) {
-                          final _curPreview = vState.previewMap[index + 1];
+                          final _curPreview = vState.previewMap[itemSer];
                           logger.d('${_curPreview.toJson()}');
                           return _curPreview.height *
                               (context.width / _curPreview.width);
@@ -347,9 +347,8 @@ class GalleryViewPage extends GetView<ViewController> {
                         padding: EdgeInsets.only(
                             bottom: vState.showPageInterval ? 8 : 0),
                         height: _height,
-                        // width: context.width,
                         child: ViewImage(
-                          index: index,
+                          ser: itemSer,
                           expand: _height != null,
                         ),
                       );
@@ -389,31 +388,29 @@ class GalleryViewPage extends GetView<ViewController> {
                     child: () {
                       if (vState.columnMode != ColumnMode.single) {
                         // 双页阅读
-                        final int indexLeft =
-                            vState.columnMode == ColumnMode.odd
-                                ? pageIndex * 2
-                                : pageIndex * 2 - 1;
+                        final int serLeft = vState.columnMode == ColumnMode.odd
+                            ? pageIndex * 2 + 1
+                            : pageIndex * 2;
 
                         final List<Widget> _pageList = <Widget>[
-                          if (indexLeft >= 0)
+                          if (serLeft > 0)
                             Expanded(
                               child: Container(
                                 alignment: Alignment.centerRight,
                                 child: ViewImage(
-                                  index: indexLeft,
+                                  ser: serLeft,
                                   fade: vState.fade,
                                   // expand: true,
                                 ),
                               ),
                             ),
-                          if (vState.filecount > indexLeft + 1)
+                          if (vState.filecount > serLeft)
                             Expanded(
                               child: Container(
-                                alignment: indexLeft >= 0
-                                    ? Alignment.centerLeft
-                                    : null,
+                                alignment:
+                                    serLeft >= 0 ? Alignment.centerLeft : null,
                                 child: ViewImage(
-                                  index: indexLeft + 1,
+                                  ser: serLeft + 1,
                                   fade: vState.fade,
                                   // expand: true,
                                 ),
@@ -428,7 +425,7 @@ class GalleryViewPage extends GetView<ViewController> {
                         );
                       } else {
                         return ViewImage(
-                          index: pageIndex,
+                          ser: pageIndex + 1,
                           fade: vState.fade,
                           expand: true,
                         );
@@ -459,7 +456,7 @@ class GalleryViewPage extends GetView<ViewController> {
     return ExtendedImageGesturePageView.builder(
       itemBuilder: (BuildContext context, int pageIndex) {
         Widget image = ViewImage(
-          index: pageIndex,
+          ser: pageIndex,
           fade: vState.fade,
           enableSlideOutPage: true,
         );

@@ -33,42 +33,41 @@ class GalleryPara {
   Future<void> precacheImages(
     BuildContext context, {
     @required Map<int, GalleryPreview> previewMap,
-    @required int index,
+    @required int itemSer,
     @required int max,
   }) async {
     // logger.d('当前index $index');
     for (int add = 1; add < max + 1; add++) {
-      final int _index = index + add;
-      final int ser = _index + 1;
+      final int _ser = itemSer + add;
 
       // logger.d('开始缓存 ser $ser');
-      if (previewMap[ser] == null) {
+      if (previewMap[_ser] == null) {
         return;
       }
 
-      if (_processingSerSet.contains(ser)) {
+      if (_processingSerSet.contains(_ser)) {
         continue;
       }
 
-      final GalleryPreview _preview = previewMap[ser];
+      final GalleryPreview _preview = previewMap[_ser];
       if (_preview?.isCache ?? false) {
         // logger.d('ser $ser 已存在缓存中 跳过');
         continue;
       }
 
       if (_preview?.startPrecache ?? false) {
-        logger.d('ser $ser 已开始缓存 跳过');
+        logger.d('ser $_ser 已开始缓存 跳过');
         continue;
       }
 
       String _url = '';
       if (_preview.largeImageUrl?.isEmpty ?? true) {
-        _processingSerSet.add(ser);
-        final String _href = previewMap[ser].href;
+        _processingSerSet.add(_ser);
+        final String _href = previewMap[_ser].href;
 
         // paraImageLageInfoFromHtml
         final GalleryPreview _imageFromApi =
-            await Api.ftchImageInfo(_href, index: _index);
+            await Api.ftchImageInfo(_href, ser: _ser);
 
         _url = _imageFromApi.largeImageUrl;
 
@@ -76,7 +75,7 @@ class GalleryPara {
           ..largeImageUrl = _url
           ..largeImageWidth = _imageFromApi.largeImageWidth
           ..largeImageHeight = _imageFromApi.largeImageHeight;
-        _processingSerSet.remove(ser);
+        _processingSerSet.remove(_ser);
       }
 
       _url = _preview.largeImageUrl;

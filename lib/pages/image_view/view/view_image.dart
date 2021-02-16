@@ -23,14 +23,14 @@ import '../common.dart';
 class ViewImage extends StatefulWidget {
   const ViewImage(
       {Key key,
-      this.index,
+      this.ser,
       this.fade = true,
       this.enableSlideOutPage = false,
       this.expand = false,
       this.imageHeight,
       this.imageWidth})
       : super(key: key);
-  final int index;
+  final int ser;
   final bool fade;
   final bool enableSlideOutPage;
   final bool expand;
@@ -55,23 +55,22 @@ class _ViewImageState extends State<ViewImage>
 
   /// 拉取图片信息
   Future<GalleryPreview> fetchImage(
-    int itemIndex, {
+    int itemSer, {
     bool refresh,
     bool changeSource = false,
   }) async {
-    final int ser = itemIndex + 1;
-    final GalleryPreview tPreview = _pageController.previewMap[ser];
+    final GalleryPreview tPreview = _pageController.previewMap[itemSer];
     if (tPreview == null) {
-      logger.v('idx:$itemIndex 所在页尚未获取， 开始获取');
+      logger.v('ser:$itemSer 所在页尚未获取， 开始获取');
 
       // 直接获取需要的
-      await _pageController.loadPriviewsWhereIndex(itemIndex);
+      await _pageController.loadPriviewsForSer(itemSer);
 
       // logger.v('获取缩略结束后 预载图片');
       GalleryPara.instance.precacheImages(
         Get.context,
         previewMap: _pageController.previewMap,
-        index: _viewController.vState.itemIndex,
+        itemSer: itemSer,
         max: _ehConfigService.preloadImage.value,
       );
 
@@ -80,7 +79,7 @@ class _ViewImageState extends State<ViewImage>
     }
 
     final GalleryPreview preview = await _pageController.getImageInfo(
-      widget.index,
+      widget.ser,
       cancelToken: _getMoreCancelToken,
       refresh: refresh,
       changeSource: changeSource,
@@ -91,7 +90,7 @@ class _ViewImageState extends State<ViewImage>
   /// 重载图片数据，重构部件
   Future<void> _reloadImage({bool changeSource = true}) async {
     final GalleryPreview _currentPreview =
-        _pageController.galleryItem.previewMap[widget.index + 1];
+        _pageController.galleryItem.previewMap[widget.ser];
     // 清除CachedNetworkImage的缓存
     try {
       await CachedNetworkImage.evictFromCache(
@@ -103,7 +102,7 @@ class _ViewImageState extends State<ViewImage>
     setState(() {
       // 换源重载
       _imageFuture = fetchImage(
-        widget.index,
+        widget.ser,
         refresh: true,
         changeSource: changeSource,
       );
@@ -113,7 +112,7 @@ class _ViewImageState extends State<ViewImage>
   @override
   void initState() {
     super.initState();
-    _imageFuture = fetchImage(widget.index);
+    _imageFuture = fetchImage(widget.ser);
     _animationController = AnimationController(
       vsync: this,
       duration: Duration(milliseconds: widget.fade ? 200 : 0),
@@ -132,7 +131,7 @@ class _ViewImageState extends State<ViewImage>
   Widget build(BuildContext context) {
     // logger.v('_ViewImageState ${widget.index}');
     if (_viewController.vState.needRebuild) {
-      _imageFuture = fetchImage(widget.index);
+      _imageFuture = fetchImage(widget.ser);
       _viewController.vState.needRebuild = false;
     }
 
@@ -149,7 +148,7 @@ class _ViewImageState extends State<ViewImage>
               case ConnectionState.none:
               case ConnectionState.waiting:
               case ConnectionState.active:
-                return LoadingWidget(index: widget.index);
+                return LoadingWidget(ser: widget.ser);
                 break;
               case ConnectionState.done:
                 if (snapshot.hasError) {
@@ -161,19 +160,19 @@ class _ViewImageState extends State<ViewImage>
                   } else {
                     _errInfo = snapshot.error.toString();
                   }
-                  return ErrorWidget(index: widget.index, errInfo: _errInfo);
+                  return ErrorWidget(ser: widget.ser, errInfo: _errInfo);
                 } else {
                   final GalleryPreview preview = snapshot.data;
                   Future.delayed(const Duration(milliseconds: 100)).then((_) {
                     try {
                       Get.find<ViewController>()
-                          .update(['GalleryImage_${widget.index}']);
+                          .update(['GalleryImage_${widget.ser}']);
                     } catch (_) {}
                   });
 
                   Widget image = ImageExtend(
                     url: preview.largeImageUrl,
-                    index: widget.index,
+                    ser: widget.ser,
                     animationController: _animationController,
                     reloadImage: _reloadImage,
                     imageWidth: snapshot.data.largeImageWidth,
@@ -187,7 +186,6 @@ class _ViewImageState extends State<ViewImage>
                       image,
                       if (Global.inDebugMode)
                         Positioned(
-                          top: 4,
                           left: 4,
                           child: Text('${preview.ser}',
                               style: const TextStyle(
@@ -220,7 +218,7 @@ class ImageExtend extends StatelessWidget {
   const ImageExtend({
     Key key,
     this.url,
-    this.index,
+    this.ser,
     this.animationController,
     this.reloadImage,
     this.imageHeight,
@@ -228,7 +226,7 @@ class ImageExtend extends StatelessWidget {
   }) : super(key: key);
 
   final String url;
-  final int index;
+  final int ser;
   final AnimationController animationController;
   final VoidCallback reloadImage;
   final double imageHeight;
@@ -298,7 +296,7 @@ class ImageExtend extends StatelessWidget {
                     Padding(
                       padding: const EdgeInsets.all(12.0),
                       child: Text(
-                        '${index + 1}',
+                        '$ser',
                         style: const TextStyle(
                           color: CupertinoColors.systemGrey6,
                           height: 1,
@@ -351,7 +349,7 @@ class ImageExtend extends StatelessWidget {
                           color: CupertinoColors.secondarySystemBackground),
                     ),
                     Text(
-                      '${index + 1}',
+                      '${ser + 1}',
                       style: const TextStyle(
                           color: CupertinoColors.secondarySystemBackground),
                     ),
@@ -373,8 +371,8 @@ class ImageExtend extends StatelessWidget {
 }
 
 class LoadingWidget extends StatelessWidget {
-  const LoadingWidget({Key key, this.index}) : super(key: key);
-  final int index;
+  const LoadingWidget({Key key, this.ser}) : super(key: key);
+  final int ser;
 
   @override
   Widget build(BuildContext context) {
@@ -389,7 +387,7 @@ class LoadingWidget extends StatelessWidget {
           mainAxisSize: MainAxisSize.min,
           children: <Widget>[
             Text(
-              '${index + 1}',
+              '$ser',
               style: const TextStyle(
                 fontSize: 50,
                 color: CupertinoColors.systemGrey6,
@@ -416,8 +414,8 @@ class LoadingWidget extends StatelessWidget {
 }
 
 class ErrorWidget extends StatelessWidget {
-  const ErrorWidget({Key key, this.index, this.errInfo}) : super(key: key);
-  final int index;
+  const ErrorWidget({Key key, this.ser, this.errInfo}) : super(key: key);
+  final int ser;
   final String errInfo;
 
   @override
@@ -441,7 +439,7 @@ class ErrorWidget extends StatelessWidget {
                 fontSize: 10, color: CupertinoColors.secondarySystemBackground),
           ),
           Text(
-            '${index + 1}',
+            '$ser',
             style: const TextStyle(
                 color: CupertinoColors.secondarySystemBackground),
           ),

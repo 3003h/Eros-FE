@@ -937,10 +937,10 @@ class Api {
 
   /// 获取画廊图片的信息
   /// [href] 爬取的页面地址 用来解析gid 和 imgkey
-  /// [index] 索引
+  /// [ser] 序号
   static Future<GalleryPreview> ftchImageInfo(
     String href, {
-    int index,
+    int ser,
     bool refresh,
     String sourceId,
   }) async {
@@ -969,7 +969,7 @@ class Api {
 
     // logger.d('$response ');
 
-    return paraImage(response)..ser = index + 1;
+    return paraImage(response)..ser = ser;
   }
 
   static Future<void> download(String url, String path) async {
