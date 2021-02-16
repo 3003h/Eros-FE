@@ -657,6 +657,33 @@ class Api {
     return CommitVoteRes.fromJson(jsonDecode(rult.toString()));
   }
 
+  /// 给画廊添加tag
+  static Future<Map<String, dynamic>> tagGallery({
+    @required String apikey,
+    @required String apiuid,
+    @required String gid,
+    @required String token,
+    String tags,
+    int vote = 1,
+  }) async {
+    final Map reqMap = {
+      'apikey': apikey,
+      'method': 'taggallery',
+      'apiuid': int.parse(apiuid),
+      'gid': int.parse(gid),
+      'token': token,
+      'tags': tags,
+      'vote': vote,
+    };
+    final String reqJsonStr = jsonEncode(reqMap);
+    logger.d('$reqJsonStr');
+    await CustomHttpsProxy.instance.init();
+    final rult = await getGalleryApi(reqJsonStr, refresh: true, cache: false);
+    logger.d('$rult');
+    final Map<String, dynamic> rultMap = jsonDecode(rult.toString());
+    return rultMap;
+  }
+
   /// 发布评论
   static Future<bool> postComment({
     String gid,

@@ -1,4 +1,5 @@
 import 'package:fehviewer/common/service/depth_service.dart';
+import 'package:fehviewer/generated/l10n.dart';
 import 'package:fehviewer/models/index.dart';
 import 'package:fehviewer/network/gallery_request.dart';
 import 'package:fehviewer/pages/gallery/view/comment_page.dart';
@@ -104,7 +105,9 @@ class CommentController extends GetxController
       vote: 1,
     );
     _paraRes(rult);
-    showToast('commitVoteUp successfully');
+    if (rult.commentVote != 0) {
+      showToast(S.of(Get.context).vote_up_successfully);
+    }
   }
 
   Future<void> commitVoteDown(String _id) async {
@@ -120,7 +123,9 @@ class CommentController extends GetxController
       vote: -1,
     );
     _paraRes(rult);
-    showToast('commitVoteDown successfully');
+    if (rult.commentVote != 0) {
+      showToast(S.of(Get.context).vote_down_successfully);
+    }
   }
 
   void _paraRes(CommitVoteRes rult) {
@@ -235,8 +240,9 @@ class CommentController extends GetxController
           60 -
           44;
 
-      logger.d(
-          '_viewHeigth $_viewHeigth,  ${Get.context.height}  ${Get.context.mediaQueryViewPadding.top}  ${Get.context.mediaQueryViewPadding.bottom}');
+      logger.d('_viewHeigth $_viewHeigth,  ${Get.context.height} '
+          ' ${Get.context.mediaQueryViewPadding.top}  '
+          '${Get.context.mediaQueryViewPadding.bottom}');
 
       if (scrollController.position.maxScrollExtent > _viewHeigth) {
         if (scrollController.offset > _bottomInset && _offset < 0) {

@@ -232,7 +232,7 @@ class GalleryViewPage extends GetView<ViewController> {
                 child: Padding(
                   padding: const EdgeInsets.only(left: 8.0, right: 8.0),
                   child: GetBuilder<ViewController>(
-                      id: 'PageSlider',
+                      id: GetIds.IMAGE_VIEW_SLIDER,
                       builder: (ViewController controller) {
                         final ViewState vState = controller.vState;
                         return PageSlider(
@@ -307,7 +307,7 @@ class GalleryViewPage extends GetView<ViewController> {
   /// 上下浏览布局 利用[ScrollablePositionedList]实现
   Widget _buildListView() {
     return GetBuilder<ViewController>(
-        id: '_buildPhotoViewGallery',
+        id: GetIds.IMAGE_VIEW,
         builder: (ViewController controller) {
           final ViewState vState = controller.vState;
           return ScrollablePositionedList.builder(
@@ -322,7 +322,7 @@ class GalleryViewPage extends GetView<ViewController> {
                   minWidth: context.width,
                 ),
                 child: GetBuilder<ViewController>(
-                    id: 'GalleryImage_$itemSer',
+                    id: '${GetIds.IMAGE_VIEW_SER}$itemSer',
                     builder: (ViewController controller) {
                       double _height = () {
                         try {
@@ -364,7 +364,7 @@ class GalleryViewPage extends GetView<ViewController> {
     const double _maxScale = 10;
 
     return GetBuilder<ViewController>(
-      id: '_buildPhotoViewGallery',
+      id: GetIds.IMAGE_VIEW,
       builder: (ViewController controller) {
         // logger.d('lastPreviewLen ${controller.previews.length}');
         final ViewState vState = controller.vState;

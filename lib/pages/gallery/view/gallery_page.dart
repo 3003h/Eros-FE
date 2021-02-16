@@ -15,6 +15,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart' hide SelectableText;
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
+import 'package:line_icons/line_icons.dart';
 import 'package:share/share.dart';
 
 import 'archiver_dialog.dart';
@@ -47,6 +48,7 @@ class GalleryMainPage extends StatelessWidget {
         slivers: <Widget>[
           // 导航栏
           Obx(() => CupertinoSliverNavigationBar(
+                padding: const EdgeInsetsDirectional.only(end: 10),
                 largeTitle: SelectableText(
                   controller.topTitle ?? '',
                   textAlign: TextAlign.left,
@@ -66,21 +68,37 @@ class GalleryMainPage extends StatelessWidget {
                         scrollController: controller.scrollController,
                       ),
                 trailing: controller.hideNavigationBtn
-                    ? CupertinoButton(
-                        padding: const EdgeInsets.all(0),
-                        minSize: 0,
-                        child: const Icon(
-                          CupertinoIcons.share,
-                          size: 28,
-                        ),
-                        onPressed: () {
-                          final String _url =
-                              '${Api.getBaseUrl()}/g/${_item.gid}/${_item.token}';
-                          logger.v('share $_url');
-                          Share.share(_url);
-                        },
+                    ? Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          CupertinoButton(
+                            padding: const EdgeInsets.all(0),
+                            minSize: 38,
+                            child: const Icon(
+                              LineIcons.tags,
+                              size: 26,
+                            ),
+                            onPressed: () {
+                              controller.addTag();
+                            },
+                          ),
+                          CupertinoButton(
+                            padding: const EdgeInsets.all(0),
+                            minSize: 38,
+                            child: const Icon(
+                              LineIcons.share,
+                              size: 26,
+                            ),
+                            onPressed: () {
+                              final String _url =
+                                  '${Api.getBaseUrl()}/g/${_item.gid}/${_item.token}';
+                              logger.v('share $_url');
+                              Share.share(_url);
+                            },
+                          ),
+                        ],
                       )
-                    : ReadButton(gid: _item.gid),
+                    : ReadButton(gid: _item.gid).paddingOnly(right: 4),
               )),
           CupertinoSliverRefreshControl(
             onRefresh: controller.handOnRefresh,

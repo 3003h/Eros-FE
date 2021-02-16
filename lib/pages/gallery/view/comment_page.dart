@@ -126,27 +126,7 @@ class CommentPage extends StatelessWidget {
       // resizeToAvoidBottomInset: false,
       navigationBar: CupertinoNavigationBar(
         middle: Text(S.of(context).gallery_comments),
-        // trailing: Container(
-        //   width: 40,
-        //   child: Row(
-        //     mainAxisSize: MainAxisSize.min,
-        //     mainAxisAlignment: MainAxisAlignment.end,
-        //     children: [
-        //       // 评论按钮
-        //       CupertinoButton(
-        //         minSize: 40,
-        //         padding: const EdgeInsets.all(0),
-        //         child: const Icon(
-        //           FontAwesomeIcons.edit,
-        //           size: 20,
-        //         ),
-        //         onPressed: () {
-        //           controller.showCommentModal(context);
-        //         },
-        //       ),
-        //     ],
-        //   ),
-        // ),
+        previousPageTitle: S.of(context).back,
       ),
       // child: commList,
       child: SafeArea(

@@ -235,4 +235,19 @@ class ThemeColors {
     'ir irg': Color.fromARGB(255, 50, 200, 50),
     'ir irb': Color.fromARGB(255, 126, 120, 255),
   };
+
+  // tup
+  static const CupertinoDynamicColor tagUpColor =
+      CupertinoDynamicColor.withBrightness(
+    debugLabel: 'tagUpColor',
+    color: Color.fromARGB(255, 32, 186, 64),
+    darkColor: Color.fromARGB(255, 110, 210, 110),
+  );
+
+  static const CupertinoDynamicColor tagDownColor =
+      CupertinoDynamicColor.withBrightness(
+    debugLabel: 'tagDownColor',
+    color: Color.fromARGB(255, 250, 70, 70),
+    darkColor: Color.fromARGB(255, 250, 107, 125),
+  );
 }

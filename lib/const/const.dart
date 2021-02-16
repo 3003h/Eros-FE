@@ -43,6 +43,17 @@ const Map<ReadOrientation, DeviceOrientation> orientationMap = {
   ReadOrientation.portraitDown: DeviceOrientation.portraitDown,
 };
 
+class GetIds {
+  static const String SEARCH_INIT_VIEW = 'InitView';
+  static const String SEARCH_CLEAR_BTN = 'SEARCH_CLEAR_BTN';
+  static const String IMAGE_VIEW_SLIDER = 'PageSlider';
+  static const String IMAGE_VIEW = '_buildPhotoViewGallery';
+  static const String IMAGE_VIEW_SER = 'GalleryImage_';
+  static const String PAGE_VIEW_TOP_COMMENT = 'TopComment';
+  static const String PAGE_VIEW_HEADER = 'header';
+  static const String TAG_ADD_CLEAR_BTN = 'TAG_ADD_CLEAR_BTN';
+}
+
 // ignore: avoid_classes_with_only_static_members
 class EHConst {
   // 网页登陆页面
