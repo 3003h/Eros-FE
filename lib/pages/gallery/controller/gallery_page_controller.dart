@@ -419,31 +419,35 @@ class GalleryPageController extends GetxController
       galleryItem.url,
       page: currentPreviewPage,
       cancelToken: cancelToken,
-      // refresh: isRefresh,
+      refresh: isRefresh,
     );
 
     addAllPreview(_moreGalleryPreviewList);
   }
 
   // 直接请求目的index所在的缩略图页
-  Future<void> loadPriviewsWhereIndex(int index,
-      {CancelToken cancelToken}) async {
+  Future<void> loadPriviewsForSer(int ser, {CancelToken cancelToken}) async {
     //  计算index所在的页码
     final int flen = firstPagePreview.length;
     if (filecount <= flen) {
       return;
     }
 
-    final int page = index ~/ flen;
-    logger.v('index$index 所在页码为$page');
+    final int page = (ser - 1) ~/ flen;
+    logger.v('ser:$ser 所在页码为$page');
 
     final List<GalleryPreview> _morePreviewList = await Api.getGalleryPreview(
       galleryItem.url,
       page: page,
       cancelToken: cancelToken,
+      refresh: isRefresh, // 刷新画廊后加载缩略图不能从缓存读取，否则在改变每页数量后加载画廊会出错
     );
 
+    logger.v(
+        '添加的图片序号: ${_morePreviewList.map((GalleryPreview e) => e.ser).join(',')}');
+
     previews.addAll(_morePreviewList);
+    logger.v('previews len： ${previews.length}');
   }
 
   // 按顺序翻页加载缩略图对象
@@ -498,7 +502,7 @@ class GalleryPageController extends GetxController
 
   /// 获取当前页的图片url 宽高信息
   Future<GalleryPreview> getImageInfo(
-    int index, {
+    int itemSer, {
     CancelToken cancelToken,
     bool refresh,
     bool changeSource = false,
@@ -513,11 +517,9 @@ class GalleryPageController extends GetxController
     //   logger.e('$e \n $stack');
     // }
 
-    final int ser = index + 1;
-
     try {
       /// 当前缩略图对象
-      final GalleryPreview _curPreview = galleryItem.previewMap[ser];
+      final GalleryPreview _curPreview = galleryItem.previewMap[itemSer];
 
       final String _largeImageUrl = _curPreview?.largeImageUrl;
 
@@ -526,29 +528,32 @@ class GalleryPageController extends GetxController
           _largeImageUrl.isNotEmpty &&
           _curPreview.largeImageHeight != null &&
           _curPreview.largeImageWidth != null) {
-        return galleryItem.previewMap[ser];
+        return galleryItem.previewMap[itemSer];
       } else {
         final String _sourceId =
-            changeSource ? galleryItem.previewMap[ser].sourceId : '';
+            changeSource ? galleryItem.previewMap[itemSer].sourceId : '';
 
-        final GalleryPreview _preview = await Api.ftchImageInfo(
-          galleryItem.previewMap[ser].href,
-          index: index,
-          refresh: refresh,
-          sourceId: _sourceId,
-        );
+        try {
+          final GalleryPreview _preview = await Api.ftchImageInfo(
+            galleryItem.previewMap[itemSer].href,
+            ser: itemSer,
+            refresh: refresh,
+            sourceId: _sourceId,
+          );
+          // 换源加载
+          if (changeSource) {
+            logger.d('changeSource ${_preview.largeImageUrl}');
+          }
 
-        // 换源加载
-        if (changeSource) {
-          logger.d('changeSource ${_preview.largeImageUrl}');
+          _curPreview
+            ..sourceId = _preview.sourceId
+            ..largeImageUrl = _preview.largeImageUrl
+            ..largeImageWidth = _preview.largeImageWidth
+            ..largeImageHeight = _preview.largeImageHeight;
+          return _preview;
+        } catch (_) {
+          rethrow;
         }
-
-        _curPreview
-          ..sourceId = _preview.sourceId
-          ..largeImageUrl = _preview.largeImageUrl
-          ..largeImageWidth = _preview.largeImageWidth
-          ..largeImageHeight = _preview.largeImageHeight;
-        return _preview;
       }
     } catch (e, stack) {
       logger.e('$e \n $stack');

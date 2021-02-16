@@ -1,20 +1,13 @@
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:dio/dio.dart';
-import 'package:extended_image/extended_image.dart';
-import 'package:fehviewer/common/service/depth_service.dart';
 import 'package:fehviewer/generated/l10n.dart';
-import 'package:fehviewer/models/index.dart';
 import 'package:fehviewer/network/gallery_request.dart';
-import 'package:fehviewer/pages/gallery/controller/gallery_page_controller.dart';
-import 'package:fehviewer/pages/image_view/controller/view_controller.dart';
 import 'package:fehviewer/utils/logger.dart';
 import 'package:fehviewer/utils/toast.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:liquid_progress_indicator/liquid_progress_indicator.dart';
 
-class GalleryImage extends StatefulWidget {
+/*class GalleryImage extends StatefulWidget {
   const GalleryImage({
     Key key,
     @required this.index,
@@ -413,7 +406,7 @@ class _GalleryImageState extends State<GalleryImage>
       ),
     );
   }
-}
+}*/
 
 /// 页面滑条
 class PageSlider extends StatefulWidget {
