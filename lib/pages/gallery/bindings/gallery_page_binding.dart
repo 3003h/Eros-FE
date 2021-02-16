@@ -4,6 +4,7 @@ import 'package:fehviewer/pages/gallery/controller/comment_controller.dart';
 import 'package:fehviewer/pages/gallery/controller/gallery_fav_controller.dart';
 import 'package:fehviewer/pages/gallery/controller/gallery_page_controller.dart';
 import 'package:fehviewer/pages/gallery/controller/rate_controller.dart';
+import 'package:fehviewer/pages/gallery/controller/taginfo_controller.dart';
 import 'package:fehviewer/pages/gallery/controller/torrent_controller.dart';
 import 'package:fehviewer/pages/gallery/view/gallery_page.dart';
 import 'package:get/get.dart';
@@ -36,5 +37,8 @@ class GalleryBinding extends Bindings {
     Get.lazyPut(() => ArchiverController(), tag: pageCtrlDepth);
 
     Get.lazyPut(() => GalleryFavController(), tag: pageCtrlDepth);
+
+    // TagInfoController
+    Get.lazyPut(() => TagInfoController(), tag: pageCtrlDepth);
   }
 }

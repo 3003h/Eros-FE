@@ -5,6 +5,7 @@ import 'package:fehviewer/common/controller/quicksearch_controller.dart';
 import 'package:fehviewer/common/global.dart';
 import 'package:fehviewer/common/service/depth_service.dart';
 import 'package:fehviewer/common/service/ehconfig_service.dart';
+import 'package:fehviewer/const/const.dart';
 import 'package:fehviewer/models/entity/tag_translat.dart';
 import 'package:fehviewer/models/index.dart';
 import 'package:fehviewer/network/gallery_request.dart';
@@ -12,6 +13,7 @@ import 'package:fehviewer/pages/tab/view/quick_search_page.dart';
 import 'package:fehviewer/store/gallery_store.dart';
 import 'package:fehviewer/utils/db_util.dart';
 import 'package:fehviewer/utils/logger.dart';
+import 'package:fehviewer/utils/vibrate.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
 import 'package:tuple/tuple.dart';
@@ -49,6 +51,8 @@ class SearchPageController extends TabViewController {
 
   // 搜索输入框的控制器
   final TextEditingController searchTextController = TextEditingController();
+
+  bool get showClearButton => searchTextController.text.isNotEmpty ?? false;
 
   final GStore _gStore = Get.find();
 
@@ -113,6 +117,7 @@ class SearchPageController extends TabViewController {
 
   /// 延迟搜索
   Future<void> _delayedSearch() async {
+    update([GetIds.SEARCH_CLEAR_BTN]);
     logger.d(' _delayedSearch');
     const Duration _duration = Duration(milliseconds: 800);
     _lastInputCompleteAt = DateTime.now();
@@ -270,7 +275,7 @@ class SearchPageController extends TabViewController {
 
   void clearHistory() {
     seaechHistory.clear();
-    update(['InitView']);
+    update([GetIds.SEARCH_INIT_VIEW]);
     _gStore.searchHistory = seaechHistory;
   }
 
@@ -365,6 +370,11 @@ class SearchPageController extends TabViewController {
     );
 
     FocusScope.of(Get.context).requestFocus(focusNode);
+  }
+
+  void clear() {
+    VibrateUtil.light();
+    searchTextController.clear();
   }
 }
 

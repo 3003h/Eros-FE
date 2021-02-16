@@ -15,23 +15,22 @@ import 'intl/messages_all.dart';
 
 class S {
   S();
-
+  
   static S current;
-
-  static const AppLocalizationDelegate delegate = AppLocalizationDelegate();
+  
+  static const AppLocalizationDelegate delegate =
+    AppLocalizationDelegate();
 
   static Future<S> load(Locale locale) {
-    final name = (locale.countryCode?.isEmpty ?? false)
-        ? locale.languageCode
-        : locale.toString();
-    final localeName = Intl.canonicalizedLocale(name);
+    final name = (locale.countryCode?.isEmpty ?? false) ? locale.languageCode : locale.toString();
+    final localeName = Intl.canonicalizedLocale(name); 
     return initializeMessages(localeName).then((_) {
       Intl.defaultLocale = localeName;
       S.current = S();
-
+      
       return S.current;
     });
-  }
+  } 
 
   static S of(BuildContext context) {
     return Localizations.of<S>(context, S);
@@ -452,6 +451,26 @@ class S {
     return Intl.message(
       'OK',
       name: 'ok',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Back`
+  String get back {
+    return Intl.message(
+      'Back',
+      name: 'back',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Done`
+  String get done {
+    return Intl.message(
+      'Done',
+      name: 'done',
       desc: '',
       args: [],
     );
@@ -1342,6 +1361,106 @@ class S {
     return Intl.message(
       'Loading',
       name: 'loading',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Search history`
+  String get search_history {
+    return Intl.message(
+      'Search history',
+      name: 'search_history',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Clear search history`
+  String get clear_search_history {
+    return Intl.message(
+      'Clear search history',
+      name: 'clear_search_history',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Vote Up`
+  String get tag_vote_up {
+    return Intl.message(
+      'Vote Up',
+      name: 'tag_vote_up',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Vote Down`
+  String get tag_vote_down {
+    return Intl.message(
+      'Vote Down',
+      name: 'tag_vote_down',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Withdraw Vote`
+  String get tag_withdraw_vote {
+    return Intl.message(
+      'Withdraw Vote',
+      name: 'tag_withdraw_vote',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Add tags`
+  String get add_tags {
+    return Intl.message(
+      'Add tags',
+      name: 'add_tags',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Enter new tags, separated with comma`
+  String get add_tag_placeholder {
+    return Intl.message(
+      'Enter new tags, separated with comma',
+      name: 'add_tag_placeholder',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Vote successfully`
+  String get vote_successfully {
+    return Intl.message(
+      'Vote successfully',
+      name: 'vote_successfully',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Vote up successfully`
+  String get vote_up_successfully {
+    return Intl.message(
+      'Vote up successfully',
+      name: 'vote_up_successfully',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Vote down successfully`
+  String get vote_down_successfully {
+    return Intl.message(
+      'Vote down successfully',
+      name: 'vote_down_successfully',
       desc: '',
       args: [],
     );

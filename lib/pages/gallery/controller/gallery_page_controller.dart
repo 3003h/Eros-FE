@@ -5,12 +5,15 @@ import 'package:fehviewer/common/controller/localfav_controller.dart';
 import 'package:fehviewer/common/global.dart';
 import 'package:fehviewer/common/service/depth_service.dart';
 import 'package:fehviewer/common/service/ehconfig_service.dart';
+import 'package:fehviewer/const/const.dart';
 import 'package:fehviewer/models/base/eh_models.dart';
 import 'package:fehviewer/network/gallery_request.dart';
 import 'package:fehviewer/pages/gallery/controller/rate_controller.dart';
+import 'package:fehviewer/pages/gallery/controller/taginfo_controller.dart';
 import 'package:fehviewer/pages/gallery/controller/torrent_controller.dart';
 import 'package:fehviewer/pages/gallery/view/gallery_page.dart';
 import 'package:fehviewer/pages/item/controller/galleryitem_controller.dart';
+import 'package:fehviewer/route/routes.dart';
 import 'package:fehviewer/utils/logger.dart';
 import 'package:fehviewer/utils/time.dart';
 import 'package:fehviewer/utils/toast.dart';
@@ -81,7 +84,7 @@ class GalleryPageController extends GetxController
     galleryItem.rating = ratingAvg;
     galleryItem.ratingCount = ratingCnt.toString();
     galleryItem.colorRating = colorRating;
-    update(['header']);
+    update([GetIds.PAGE_VIEW_HEADER]);
 
     _itemController.update();
   }
@@ -142,6 +145,7 @@ class GalleryPageController extends GetxController
       Get.delete<TorrentController>(tag: pageCtrlDepth);
       Get.delete<ArchiverController>(tag: pageCtrlDepth);
       Get.delete<CommentController>(tag: pageCtrlDepth);
+      Get.delete<TagInfoController>(tag: pageCtrlDepth);
     } catch (_) {}
 
     logger.d('onClose GalleryPageController $pageCtrlDepth');
@@ -185,7 +189,7 @@ class GalleryPageController extends GetxController
   void addAllPreview(List<GalleryPreview> galleryPreview) {
     galleryItem.galleryPreview.addAll(galleryPreview);
     // try {
-    //   Get.find<ViewController>().update(['_buildPhotoViewGallery']);
+    //   Get.find<ViewController>().update([GetID.IMAGE_VIEW]);
     // } catch (_) {}
 
     update();
@@ -270,7 +274,7 @@ class GalleryPageController extends GetxController
 
       // logger.d('ratingCount ${galleryItem.ratingCount} ');
 
-      update(['header']);
+      update([GetIds.PAGE_VIEW_HEADER]);
       _itemController?.update([gid]);
       return galleryItem;
     } on DioError catch (e) {
@@ -572,5 +576,15 @@ class GalleryPageController extends GetxController
       fileCount: int.parse(galleryItem.filecount),
       title: title,
     );
+  }
+
+  Future<void> addTag() async {
+    final dynamic _rult = await Get.toNamed(EHRoutes.addTag);
+    if (_rult != null && _rult is String) {
+      logger.v('addTag $_rult');
+      final TagInfoController controller =
+          Get.put(TagInfoController(), tag: pageCtrlDepth);
+      controller.tagVoteUp(_rult);
+    }
   }
 }

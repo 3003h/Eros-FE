@@ -41,6 +41,8 @@
   "custom_hosts": "Custom hosts",
   "cancel": "Cancel",
   "ok": "OK",
+  "back": "Back",
+  "done": "Done",
   "delete": "Delete",
   "on": "On",
   "off": "Off",
@@ -129,5 +131,15 @@
   "hours": "hours",
   "min": "min",
   "second": "second",
-  "loading": "Loading"
+  "loading": "Loading",
+  "search_history": "Search history",
+  "clear_search_history": "Clear search history",
+  "tag_vote_up": "Vote Up",
+  "tag_vote_down": "Vote Down",
+  "tag_withdraw_vote": "Withdraw Vote",
+  "add_tags": "Add tags",
+  "add_tag_placeholder": "Enter new tags, separated with comma",
+  "vote_successfully": "Vote successfully",
+  "vote_up_successfully": "Vote up successfully",
+  "vote_down_successfully": "Vote down successfully"
 }

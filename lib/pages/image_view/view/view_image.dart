@@ -6,6 +6,7 @@ import 'package:extended_image/extended_image.dart';
 import 'package:fehviewer/common/global.dart';
 import 'package:fehviewer/common/service/depth_service.dart';
 import 'package:fehviewer/common/service/ehconfig_service.dart';
+import 'package:fehviewer/const/const.dart';
 import 'package:fehviewer/generated/l10n.dart';
 import 'package:fehviewer/models/base/eh_models.dart';
 import 'package:fehviewer/pages/gallery/controller/gallery_page_controller.dart';
@@ -166,7 +167,7 @@ class _ViewImageState extends State<ViewImage>
                   Future.delayed(const Duration(milliseconds: 100)).then((_) {
                     try {
                       Get.find<ViewController>()
-                          .update(['GalleryImage_${widget.ser}']);
+                          .update(['${GetIds.IMAGE_VIEW_SER}${widget.ser}']);
                     } catch (_) {}
                   });
 

@@ -63,10 +63,19 @@ class GalleryDetailParser {
           final String tagTranslat =
               await EhTagDatabase.getTranTag(title, nameSpase: type) ?? title;
 
+          int tagVote = 0;
+          final String tagclass = tagElm.attributes['class'];
+          if (tagclass == 'tup') {
+            tagVote = 1;
+          } else if (tagclass == 'tdn') {
+            tagVote = -1;
+          }
+
 //        logger.v('$type:$title $tagTranslat');
           galleryTags.add(GalleryTag()
             ..title = title
             ..type = type
+            ..vote = tagVote
             ..tagTranslat = tagTranslat);
         }
 

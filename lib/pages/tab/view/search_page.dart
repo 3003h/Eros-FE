@@ -2,6 +2,7 @@ import 'dart:math';
 
 import 'package:custom_pop_up_menu/custom_pop_up_menu.dart';
 import 'package:fehviewer/common/service/depth_service.dart';
+import 'package:fehviewer/const/const.dart';
 import 'package:fehviewer/generated/l10n.dart';
 import 'package:fehviewer/models/index.dart';
 import 'package:fehviewer/pages/filter/filter.dart';
@@ -31,6 +32,12 @@ const Border _kDefaultRoundedBorder = Border(
   bottom: _kDefaultRoundedBorderSide,
   left: _kDefaultRoundedBorderSide,
   right: _kDefaultRoundedBorderSide,
+);
+
+const CupertinoDynamicColor _kClearButtonColor =
+    CupertinoDynamicColor.withBrightness(
+  color: Color(0xFF636366),
+  darkColor: Color(0xFFAEAEB2),
 );
 
 enum SearchMenuEnum {
@@ -63,7 +70,24 @@ class GallerySearchPage extends StatelessWidget {
             border: _kDefaultRoundedBorder,
             borderRadius: BorderRadius.all(Radius.circular(12.0)),
           ),
-          clearButtonMode: OverlayVisibilityMode.editing,
+          // clearButtonMode: OverlayVisibilityMode.editing,
+          suffix: GetBuilder<SearchPageController>(
+            id: GetIds.SEARCH_CLEAR_BTN,
+            tag: searchPageCtrlDepth,
+            builder: (SearchPageController controller) {
+              return controller.showClearButton
+                  ? GestureDetector(
+                      onTap: controller.clear,
+                      child: Icon(
+                        LineIcons.timesCircle,
+                        size: 18.0,
+                        color: CupertinoDynamicColor.resolve(
+                            _kClearButtonColor, context),
+                      ).paddingSymmetric(horizontal: 6),
+                    )
+                  : const SizedBox();
+            },
+          ),
           padding: const EdgeInsets.fromLTRB(12, 6, 6, 6),
           controller: controller.searchTextController,
           autofocus: controller.autofocus,
@@ -110,6 +134,7 @@ class GallerySearchPage extends StatelessWidget {
     return cfp;
   }
 
+  // tag搜索结果页面
   Widget _getTagQryList() {
     return SliverList(
       delegate: SliverChildBuilderDelegate(
@@ -130,7 +155,8 @@ class GallerySearchPage extends StatelessWidget {
                     fontSize: 16,
                   ),
                 ),
-                Text(controller.qryTags[index].name,
+                Text(
+                    '${EHConst.translateTagType[controller.qryTags[index].namespace] ?? controller.qryTags[index].namespace}:${controller.qryTags[index].name}',
                     style: TextStyle(
                       fontSize: 14,
                       color: CupertinoDynamicColor.resolve(
@@ -145,6 +171,7 @@ class GallerySearchPage extends StatelessWidget {
     );
   }
 
+  // 初始化页面
   Widget _getInitView() {
     Future<String> _getTextTranslate(String text) async {
       final String tranText =
@@ -164,7 +191,7 @@ class GallerySearchPage extends StatelessWidget {
           controller.appendTextToSearch(text);
         },
         onLongPress: () async {
-          final tranText = await _getTextTranslate(text);
+          final String tranText = await _getTextTranslate(text);
           if (tranText != null) {
             VibrateUtil.medium();
             showCupertinoDialog(
@@ -182,8 +209,8 @@ class GallerySearchPage extends StatelessWidget {
 
     return GetBuilder<SearchPageController>(
       tag: searchPageCtrlDepth,
-      id: 'InitView',
-      builder: (controller) {
+      id: GetIds.SEARCH_INIT_VIEW,
+      builder: (SearchPageController controller) {
         final List<Widget> _btnList = List<Widget>.from(
             controller.seaechHistory.map((String text) => _btn(text)).toList());
 

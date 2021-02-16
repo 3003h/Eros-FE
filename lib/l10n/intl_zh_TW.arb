@@ -41,6 +41,8 @@
   "custom_hosts": "自定义hosts",
   "cancel": "取消",
   "ok": "確定",
+  "back": "Back",
+  "done": "Done",
   "delete": "刪除",
   "on": "打開",
   "off": "關閉",
@@ -129,5 +131,15 @@
   "hours": "小时",
   "min": "分钟",
   "second": "秒",
-  "loading": "Loading"
+  "loading": "Loading",
+  "search_history": "Search history",
+  "clear_search_history": "Clear search history",
+  "tag_vote_up": "Vote Up",
+  "tag_vote_down": "Vote Down",
+  "tag_withdraw_vote": "Withdraw Vote",
+  "add_tags": "Add tags",
+  "add_tag_placeholder": "Enter new tags, separated with comma",
+  "vote_successfully": "Vote successfully",
+  "vote_up_successfully": "Vote up successfully",
+  "vote_down_successfully": "Vote down successfully"
 }

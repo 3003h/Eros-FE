@@ -166,12 +166,12 @@ class ViewController extends GetxController {
     }
 
     await Future.delayed(const Duration(milliseconds: 200));
-    update(['PageSlider']);
+    update([GetIds.IMAGE_VIEW_SLIDER]);
   }
 
   void handOnSliderChanged(double value) {
     vState.sliderValue = value;
-    update(['PageSlider']);
+    update([GetIds.IMAGE_VIEW_SLIDER]);
   }
 
   // 页码切换时的回调
@@ -287,7 +287,7 @@ class ViewController extends GetxController {
         Future.delayed(const Duration(milliseconds: 300)).then((value) {
           vState.itemIndex = index;
           vState.sliderValue = vState.itemIndex / 1.0;
-          update(['PageSlider']);
+          update([GetIds.IMAGE_VIEW_SLIDER]);
         });
       }
     }

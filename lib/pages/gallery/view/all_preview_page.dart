@@ -105,6 +105,7 @@ class _AllPreviewPageState extends State<AllPreviewPage> {
     return CupertinoPageScaffold(
       navigationBar: CupertinoNavigationBar(
         middle: Text(S.of(context).all_preview),
+        previousPageTitle: S.of(context).back,
       ),
       child: CustomScrollView(
         controller: _scrollController,

@@ -14,7 +14,7 @@ import 'package:fehviewer/pages/gallery/view/all_preview_page.dart';
 import 'package:fehviewer/pages/gallery/view/comment_item.dart';
 import 'package:fehviewer/pages/gallery/view/gallery_favcat.dart';
 import 'package:fehviewer/pages/gallery/view/preview_clipper.dart';
-import 'package:fehviewer/pages/gallery/view/tabinfo_dialog.dart';
+import 'package:fehviewer/pages/gallery/view/taginfo_dialog.dart';
 import 'package:fehviewer/route/navigator_util.dart';
 import 'package:fehviewer/route/routes.dart';
 import 'package:fehviewer/utils/cust_lib/selectable_text_s.dart';
@@ -91,7 +91,7 @@ class GalleryHeader extends StatelessWidget {
           GetBuilder<GalleryPageController>(
               init: GalleryPageController(),
               tag: pageCtrlDepth,
-              id: 'header',
+              id: GetIds.PAGE_VIEW_HEADER,
               builder: (GalleryPageController controller) {
                 return GestureDetector(
                   child: Column(
@@ -161,7 +161,7 @@ class GalleryHeader extends StatelessWidget {
                           GetBuilder(
                               init: GalleryPageController(),
                               tag: pageCtrlDepth,
-                              id: 'header',
+                              id: GetIds.PAGE_VIEW_HEADER,
                               builder: (GalleryPageController controller) {
                                 return Padding(
                                   padding:
@@ -563,7 +563,7 @@ class TopComment extends StatelessWidget {
         GetBuilder<CommentController>(
           init: CommentController(),
           tag: pageCtrlDepth,
-          id: 'TopComment',
+          id: GetIds.PAGE_VIEW_TOP_COMMENT,
           builder: (CommentController _commentController) {
             return _commentController.obx(
                 (List<GalleryComment> state) => Column(
@@ -777,6 +777,18 @@ class TagGroupItem extends StatelessWidget {
               text: ehConfigService.isTagTranslat.value
                   ? tag?.tagTranslat ?? ''
                   : tag?.title ?? '',
+              textColor: () {
+                switch (tag?.vote) {
+                  case 0:
+                    return null;
+                  case 1:
+                    return CupertinoDynamicColor.resolve(
+                        ThemeColors.tagUpColor, context);
+                  case -1:
+                    return CupertinoDynamicColor.resolve(
+                        ThemeColors.tagDownColor, context);
+                }
+              }(),
               onPressed: () {
                 logger.v('search type[${tag.type}] tag[${tag.title}]');
                 NavigatorUtil.goGalleryListBySearch(
@@ -784,7 +796,11 @@ class TagGroupItem extends StatelessWidget {
               },
               onLongPress: () {
                 if (ehConfigService.isTagTranslat.value) {
-                  showTagInfoDialog(tag.title, type: tag.type);
+                  showTagInfoDialog(
+                    tag.title,
+                    type: tag.type,
+                    vote: tag.vote,
+                  );
                 }
               },
             )),
@@ -872,6 +888,7 @@ class TagButton extends StatelessWidget {
               color: textColor ??
                   CupertinoDynamicColor.resolve(ThemeColors.tagText, context),
               fontSize: 13,
+              fontWeight: textColor != null ? FontWeight.w500 : null,
               height: 1.3,
 //              fontWeight: FontWeight.w500,
             ),

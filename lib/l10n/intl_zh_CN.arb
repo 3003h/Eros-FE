@@ -41,6 +41,8 @@
   "custom_hosts": "自定义hosts",
   "cancel": "取消",
   "ok": "确定",
+  "back": "返回",
+  "done": "完成",
   "delete": "删除",
   "on": "打开",
   "off": "关闭",
@@ -129,5 +131,15 @@
   "hours": "小时",
   "min": "分钟",
   "second": "秒",
-  "loading": "载入中"
+  "loading": "载入中",
+  "search_history": "搜索历史",
+  "clear_search_history": "清空搜索历史",
+  "tag_vote_up": "顶",
+  "tag_vote_down": "踩",
+  "tag_withdraw_vote": "撤销投票",
+  "add_tags": "添加标签",
+  "add_tag_placeholder": "输入新标签, 用逗号分隔",
+  "vote_successfully": "投票成功",
+  "vote_up_successfully": "点赞成功",
+  "vote_down_successfully": "点踩成功"
 }

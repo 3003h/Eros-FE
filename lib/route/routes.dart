@@ -25,9 +25,10 @@ class EHRoutes {
   static const String download = '/download';
   static const String setting = '/setting';
 
-  static const String galleryComment = '/comment';
-  static const String galleryView = '/view';
+  static const String galleryComment = '/galleryPage/comment';
+  static const String galleryView = '/galleryPage/view';
   static const String galleryPage = '/galleryPage';
+  static const String addTag = '/galleryPage/AddTag';
 
   static const String pageSetting = '/pageSetting';
 }
