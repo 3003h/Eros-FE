@@ -415,7 +415,7 @@ class GallerySearchPage extends StatelessWidget {
               minSize: 36,
               padding: const EdgeInsets.all(0),
               child: const Icon(
-                LineIcons.alignJustify,
+                LineIcons.listUl,
                 size: 26,
               ),
               onPressed: () {
@@ -477,7 +477,8 @@ class GallerySearchPage extends StatelessWidget {
           width: 40,
           padding: const EdgeInsets.only(right: 14, left: 4),
           child: const Icon(
-            LineIcons.horizontalEllipsis,
+            // LineIcons.horizontalEllipsis,
+            CupertinoIcons.ellipsis_circle,
             size: 26,
           ),
         ),
@@ -505,7 +506,7 @@ class GallerySearchPage extends StatelessWidget {
                       onTap: controller.addToQuickSearch,
                     ),
                     _menuItem(
-                      icon: LineIcons.alignJustify,
+                      icon: LineIcons.listUl,
                       title: S.of(context).quick_search,
                       onTap: controller.quickSearchList,
                     ),

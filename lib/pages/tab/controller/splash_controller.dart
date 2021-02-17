@@ -32,9 +32,9 @@ class SplashController extends GetxController {
 
       // For sharing or opening urls/text coming from outside the app while the app is closed
       ReceiveSharingIntent.getInitialText().then((String value) {
-        logger.i('value(closed): $value');
+        // logger.i('value(closed): $value');
         sharedText = value;
-        logger.i('Shared: $sharedText');
+        // logger.i('Shared: $sharedText');
         startHome(sharedText);
       });
     }
@@ -47,7 +47,7 @@ class SplashController extends GetxController {
         NavigatorUtil.goGalleryDetailReplace(Get.context, url: url);
       });
     } else {
-      logger.i('url is Empty,jump to home');
+      // logger.i('url is Empty,jump to home');
       await Future<void>.delayed(const Duration(milliseconds: 800), () {
         Get.offNamed(EHRoutes.home);
       });

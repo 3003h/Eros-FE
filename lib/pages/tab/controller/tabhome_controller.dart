@@ -158,7 +158,7 @@ class TabHomeController extends GetxController {
 
     _tabConfig = gStore.tabConfig ?? (TabConfig()..tabItemList = <TabItem>[]);
 
-    logger.i('get tab config ${_tabConfig.tabItemList.length}');
+    // logger.i('get tab config ${_tabConfig.tabItemList.length}');
 
     if (_tabConfig.tabMap.isNotEmpty) {
       if (_tabConfig.tabItemList.length < kTabNameList.length) {
@@ -190,7 +190,7 @@ class TabHomeController extends GetxController {
       tabNameList(_tabConfig.tabNameList);
     }
 
-    logger.d('${tabNameList}');
+    // logger.d('${tabNameList}');
 
     ever(tabMap, (map) {
       _tabConfig.setItemList(map, tabNameList);

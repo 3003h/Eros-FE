@@ -2,7 +2,7 @@ part of 'download.dart';
 
 /// isoload下载入口函数
 void _isolateDownload(SendPort sendPort) {
-  logger.d('init _isolateDownload');
+  // logger.d('init _isolateDownload');
   // 创建一个消息接收器
   final ReceivePort _receivePort = ReceivePort();
   sendPort.send(_receivePort.sendPort);

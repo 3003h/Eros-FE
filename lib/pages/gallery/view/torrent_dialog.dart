@@ -117,6 +117,7 @@ class TorrentView extends StatelessWidget {
 Future<void> showTorrentDialog() {
   return showCupertinoDialog<void>(
       context: Get.overlayContext,
+      barrierDismissible: true,
       builder: (_) {
         return CupertinoAlertDialog(
           title: Text(S.of(Get.context).p_Torrent),

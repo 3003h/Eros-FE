@@ -155,7 +155,8 @@ class GalleryListTab extends GetView<GalleryViewController> {
           child: Container(
             padding: const EdgeInsets.only(left: 14),
             child: const Icon(
-              LineIcons.horizontalEllipsis,
+              // LineIcons.horizontalEllipsis,
+              CupertinoIcons.ellipsis_circle,
               size: 26,
             ),
           ),

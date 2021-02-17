@@ -1,4 +1,3 @@
-import 'dart:math';
 
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:dio/dio.dart';
@@ -14,6 +13,7 @@ import 'package:fehviewer/pages/image_view/controller/view_controller.dart';
 import 'package:fehviewer/pages/image_view/view/view_page.dart';
 import 'package:fehviewer/pages/image_view/view/view_widget.dart';
 import 'package:fehviewer/utils/logger.dart';
+import 'package:fehviewer/utils/vibrate.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -29,7 +29,8 @@ class ViewImage extends StatefulWidget {
       this.enableSlideOutPage = false,
       this.expand = false,
       this.imageHeight,
-      this.imageWidth})
+      this.imageWidth,
+      this.retry = 4})
       : super(key: key);
   final int ser;
   final bool fade;
@@ -37,6 +38,7 @@ class ViewImage extends StatefulWidget {
   final bool expand;
   final double imageHeight;
   final double imageWidth;
+  final int retry;
 
   @override
   _ViewImageState createState() => _ViewImageState();
@@ -55,9 +57,9 @@ class _ViewImageState extends State<ViewImage>
   ViewController get controller => Get.find();
 
   /// 拉取图片信息
-  Future<GalleryPreview> fetchImage(
+  Future<GalleryPreview> _fetchImage(
     int itemSer, {
-    bool refresh,
+    bool refresh = false,
     bool changeSource = false,
   }) async {
     final GalleryPreview tPreview = _pageController.previewMap[itemSer];
@@ -94,15 +96,19 @@ class _ViewImageState extends State<ViewImage>
         _pageController.galleryItem.previewMap[widget.ser];
     // 清除CachedNetworkImage的缓存
     try {
+      // CachedNetworkImage 清除指定缓存
       await CachedNetworkImage.evictFromCache(
           _currentPreview.largeImageUrl ?? '');
+      // extended_image 清除指定缓存
+      await clearDiskCachedImage(_currentPreview.largeImageUrl ?? '');
+      clearMemoryImageCache();
     } catch (_) {}
 
     _currentPreview.largeImageUrl = null;
 
     setState(() {
       // 换源重载
-      _imageFuture = fetchImage(
+      _imageFuture = _fetchImage(
         widget.ser,
         refresh: true,
         changeSource: changeSource,
@@ -113,7 +119,7 @@ class _ViewImageState extends State<ViewImage>
   @override
   void initState() {
     super.initState();
-    _imageFuture = fetchImage(widget.ser);
+    _imageFuture = _fetchImage(widget.ser);
     _animationController = AnimationController(
       vsync: this,
       duration: Duration(milliseconds: widget.fade ? 200 : 0),
@@ -130,17 +136,20 @@ class _ViewImageState extends State<ViewImage>
 
   @override
   Widget build(BuildContext context) {
-    // logger.v('_ViewImageState ${widget.index}');
     if (_viewController.vState.needRebuild) {
-      _imageFuture = fetchImage(widget.ser);
+      _imageFuture = _fetchImage(widget.ser);
       _viewController.vState.needRebuild = false;
     }
 
     return GestureDetector(
+      behavior: HitTestBehavior.opaque,
       onLongPress: () async {
         logger.d('long press');
-        final GalleryPreview _currentPreview = await _imageFuture;
-        showImageSheet(context, _currentPreview.largeImageUrl, _reloadImage);
+        VibrateUtil.medium();
+        final GalleryPreview _currentPreview =
+            _pageController.previewMap[widget.ser];
+        showImageSheet(context, _currentPreview?.largeImageUrl, _reloadImage,
+            title: '${_pageController.title} [${_currentPreview.ser}]');
       },
       child: FutureBuilder<GalleryPreview>(
           future: _imageFuture,
@@ -161,6 +170,20 @@ class _ViewImageState extends State<ViewImage>
                   } else {
                     _errInfo = snapshot.error.toString();
                   }
+
+                  if ((_pageController.errCountMap[widget.ser] ?? 0) <
+                      widget.retry) {
+                    Future.delayed(const Duration(milliseconds: 100))
+                        .then((_) => _reloadImage(changeSource: true));
+                    _pageController.errCountMap.update(
+                        widget.ser, (int value) => value + 1,
+                        ifAbsent: () => 1);
+
+                    logger.v('${_pageController.errCountMap}');
+                    logger.d(
+                        '${widget.ser} 重试 第 ${_pageController.errCountMap[widget.ser]} 次');
+                  }
+
                   return ErrorWidget(ser: widget.ser, errInfo: _errInfo);
                 } else {
                   final GalleryPreview preview = snapshot.data;
@@ -171,6 +194,8 @@ class _ViewImageState extends State<ViewImage>
                     } catch (_) {}
                   });
 
+                  // logger.v('${widget.ser} ${preview.largeImageUrl}');
+
                   Widget image = ImageExtend(
                     url: preview.largeImageUrl,
                     ser: widget.ser,
@@ -178,6 +203,7 @@ class _ViewImageState extends State<ViewImage>
                     reloadImage: _reloadImage,
                     imageWidth: snapshot.data.largeImageWidth,
                     imageHeight: snapshot.data.largeImageHeight,
+                    retry: widget.retry,
                   );
 
                   image = Stack(
@@ -216,7 +242,7 @@ class _ViewImageState extends State<ViewImage>
 }
 
 class ImageExtend extends StatelessWidget {
-  const ImageExtend({
+  ImageExtend({
     Key key,
     this.url,
     this.ser,
@@ -224,6 +250,7 @@ class ImageExtend extends StatelessWidget {
     this.reloadImage,
     this.imageHeight,
     this.imageWidth,
+    this.retry = 5,
   }) : super(key: key);
 
   final String url;
@@ -232,6 +259,9 @@ class ImageExtend extends StatelessWidget {
   final VoidCallback reloadImage;
   final double imageHeight;
   final double imageWidth;
+  final int retry;
+
+  final GalleryPageController _pageController = Get.find(tag: pageCtrlDepth);
 
   @override
   Widget build(BuildContext context) {
@@ -240,6 +270,7 @@ class ImageExtend extends StatelessWidget {
       fit: BoxFit.contain,
       handleLoadingProgress: true,
       clearMemoryCacheIfFailed: true,
+      cache: true,
       timeLimit: const Duration(seconds: 10),
       loadStateChanged: (ExtendedImageState state) {
         switch (state.extendedImageLoadState) {
@@ -258,10 +289,8 @@ class ImageExtend extends StatelessWidget {
             return UnconstrainedBox(
               child: Container(
                 constraints: BoxConstraints(
-                  maxHeight: min(context.mediaQueryShortestSide,
-                      imageHeight ?? context.mediaQueryShortestSide),
-                  minWidth: min(context.width / 2 - kPageViewPadding,
-                      imageWidth ?? (context.width / 2)),
+                  maxHeight: context.mediaQueryShortestSide,
+                  minWidth: context.width / 2 - kPageViewPadding,
                 ),
                 alignment: Alignment.center,
                 // margin: const EdgeInsets.symmetric(vertical: 50, horizontal: 50),
@@ -328,6 +357,15 @@ class ImageExtend extends StatelessWidget {
           case LoadState.failed:
             logger.d('Failed $url');
             animationController.reset();
+
+            if ((_pageController.errCountMap[ser] ?? 0) < retry) {
+              Future.delayed(const Duration(milliseconds: 100))
+                  .then((_) => reloadImage());
+              _pageController.errCountMap
+                  .update(ser, (int value) => value + 1, ifAbsent: () => 1);
+              logger.d('${ser} 重试 第 ${_pageController.errCountMap[ser]} 次');
+            }
+
             return Container(
               alignment: Alignment.center,
               constraints: BoxConstraints(
