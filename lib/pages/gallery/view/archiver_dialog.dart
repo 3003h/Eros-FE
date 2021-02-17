@@ -271,7 +271,7 @@ class HatHGridView extends StatelessWidget {
 
     return Container(
       padding: const EdgeInsets.only(top: 4.0),
-      height: ((state.hItems?.length ?? 0) / 2).round() * 50.0,
+      height: ((state.hItems?.length ?? 0) / 2).round() * 55.0,
       child: GridView.count(
         physics: const NeverScrollableScrollPhysics(),
         padding: const EdgeInsets.all(0),
@@ -287,6 +287,7 @@ Future<void> showArchiverDialog() {
   // Get.put(ArchiverController(), tag: pageCtrlDepth);
   return showCupertinoDialog<void>(
       context: Get.overlayContext,
+      barrierDismissible: true,
       builder: (_) {
         return CupertinoAlertDialog(
           title: Text(S.of(Get.context).p_Archiver),

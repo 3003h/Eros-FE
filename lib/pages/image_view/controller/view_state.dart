@@ -7,7 +7,6 @@ import 'package:fehviewer/common/service/ehconfig_service.dart';
 import 'package:fehviewer/const/const.dart';
 import 'package:fehviewer/models/base/eh_models.dart';
 import 'package:fehviewer/pages/gallery/controller/gallery_page_controller.dart';
-import 'package:fehviewer/utils/logger.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
 
@@ -27,7 +26,7 @@ enum ColumnMode {
 class ViewState {
   ViewState() {
     // 初始化 设置Rx变量的ever事件
-    logger.v('初始化ViewState');
+    // logger.v('初始化ViewState');
 
     ever(_itemIndex, (int val) {
       // logger.d('ever _itemIndex to $val');

@@ -60,6 +60,7 @@ Future<void> showRateDialog(BuildContext context) {
   final RateController controller = Get.find(tag: pageCtrlDepth);
   return showCupertinoDialog<void>(
       context: context,
+      barrierDismissible: true,
       builder: (BuildContext context) {
         return CupertinoAlertDialog(
           title: const Text('Rate'),

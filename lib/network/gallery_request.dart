@@ -8,6 +8,7 @@ import 'package:dio/dio.dart';
 import 'package:dio_http_cache/dio_http_cache.dart';
 import 'package:dns_client/dns_client.dart';
 import 'package:enum_to_string/enum_to_string.dart';
+import 'package:extended_image/extended_image.dart';
 import 'package:fehviewer/common/controller/advance_search_controller.dart';
 import 'package:fehviewer/common/global.dart';
 import 'package:fehviewer/common/parser/eh_parser.dart';
@@ -32,6 +33,7 @@ import 'package:flutter_cache_manager/flutter_cache_manager.dart';
 import 'package:get/get.dart' hide Response, FormData;
 import 'package:html_unescape/html_unescape.dart';
 import 'package:image_gallery_saver/image_gallery_saver.dart';
+import 'package:path/path.dart' as path;
 import 'package:permission_handler/permission_handler.dart';
 import 'package:share/share.dart';
 import 'package:tuple/tuple.dart';
@@ -778,8 +780,15 @@ class Api {
     Share.shareFiles(<String>[file.path]);
   }
 
+  static Future<void> shareImageExtended(String imageUrl) async {
+    final File file = await getCachedImageFile(imageUrl);
+    final String _name = imageUrl.substring(imageUrl.lastIndexOf('/') + 1);
+    logger.v('_name $_name url $imageUrl');
+    final File newFile = file.copySync(path.join(Global.tempPath, _name));
+    Share.shareFiles(<String>[newFile.path], text: 'save image');
+  }
+
   /// 保存图片到相册
-  ///
   /// 默认为下载网络图片，如需下载资源图片，需要指定 [isAsset] 为 `true`。
   static Future<bool> saveImage(BuildContext context, String imageUrl,
       {bool isAsset = false}) async {
@@ -822,7 +831,8 @@ class Api {
         return false;
       } else {
         if (await Permission.photos.request().isGranted) {
-          return _saveImage(imageUrl);
+          // return _saveImage(imageUrl);
+          return _saveImageExtended(imageUrl);
           // Either the permission was already granted before or the user just granted it.
         } else {
           throw 'Unable to save pictures, please authorize first~';
@@ -833,7 +843,8 @@ class Api {
       logger.v(status);
       if (await Permission.storage.status.isPermanentlyDenied) {
         if (await Permission.storage.request().isGranted) {
-          _saveImage(imageUrl);
+          // _saveImage(imageUrl);
+          return _saveImageExtended(imageUrl);
         } else {
           await _jumpToAppSettings(context);
           return false;
@@ -841,7 +852,8 @@ class Api {
       } else {
         if (await Permission.storage.request().isGranted) {
           // Either the permission was already granted before or the user just granted it.
-          return _saveImage(imageUrl);
+          // return _saveImage(imageUrl);
+          return _saveImageExtended(imageUrl);
         } else {
           throw 'Unable to save pictures, please authorize first~';
         }
@@ -853,7 +865,9 @@ class Api {
   static Future<bool> _saveImage(String imageUrl,
       {bool isAsset = false}) async {
     try {
-      if (imageUrl == null) throw 'Save failed, picture does not exist!';
+      if (imageUrl == null) {
+        throw 'Save failed, picture does not exist!';
+      }
 
       /// 保存的图片数据
       Uint8List imageBytes;
@@ -880,12 +894,65 @@ class Api {
       /// 保存图片
       final result = await ImageGallerySaver.saveImage(imageBytes);
 
-      if (result == null || result == '') throw 'Save image fail';
+      if (result == null || result == '') {
+        throw 'Save image fail';
+      }
 
       logger.i('保存成功');
       return true;
     } catch (e) {
       logger.e(e.toString());
+      rethrow;
+    }
+  }
+
+  static Future<bool> _saveImageExtended(String imageUrl,
+      {bool isAsset = false}) async {
+    try {
+      if (imageUrl == null) {
+        throw 'Save failed, picture does not exist!';
+      }
+
+      /// 保存的图片数据
+      Uint8List imageBytes;
+      File file;
+
+      if (isAsset == true) {
+        /// 保存资源图片
+        final ByteData bytes = await rootBundle.load(imageUrl);
+        imageBytes = bytes.buffer.asUint8List();
+      } else {
+        /// 保存网络图片
+        logger.d('保存网络图片');
+        file = await getCachedImageFile(imageUrl);
+
+        logger.v('file path ${file.path}');
+
+        imageBytes = await file.readAsBytes();
+      }
+
+      /// 保存图片
+      // final result = await ImageGallerySaver.saveImage(
+      //   imageBytes,
+      //   quality: 100,
+      //   name: _name,
+      // );
+
+      final _name = imageUrl.substring(imageUrl.lastIndexOf('/') + 1);
+      logger.v('_name $_name url $imageUrl');
+      final File newFile = file.copySync(path.join(Global.tempPath, _name));
+      logger.v('${newFile.path} ${file.lengthSync()} ${newFile.lengthSync()}');
+
+      final result = await ImageGallerySaver.saveFile(newFile.path);
+
+      if (result == null || result == '') {
+        throw 'Save image fail';
+      }
+
+      logger.i('保存成功');
+      return true;
+    } catch (e, stack) {
+      logger.e('$e\n$stack');
       rethrow;
     }
   }

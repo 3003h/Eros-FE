@@ -3,7 +3,7 @@ description: ..
 
 publish_to: 'none' # Remove this line if you wish to publish to pub.dev
 
-version: 1.0.4+140
+version: 1.0.4+141
 
 environment:
   sdk: '>=2.10.0 <3.0.0'
@@ -84,7 +84,7 @@ dependencies:
 
   # 图片相关
   cached_network_image: ^2.5.0
-  #extended_image: ^1.5.0
+  extended_image: ^1.5.0
 
   liquid_progress_indicator: ^0.3.2
 
@@ -181,7 +181,6 @@ dependencies:
   dio_firebase_performance: ^0.3.0
   pretty_dio_logger: ^1.1.1
   dio_retry: ^0.1.9-beta
-  extended_image: ^1.5.0
   translator: ^0.1.5
 #  flutter_screen_lock: ^1.2.6
   pattern_lock: ^1.0.3

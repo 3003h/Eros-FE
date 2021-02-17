@@ -101,6 +101,8 @@ class GalleryPageController extends GetxController
   Map<int, GalleryPreview> get previewMap => galleryItem.previewMap;
   int get filecount => int.parse(galleryItem.filecount ?? '0');
 
+  final Map<int, int> errCountMap = {};
+
   String get showKey => galleryItem.showKey;
 
   /// 当前缩略图页码
@@ -187,12 +189,20 @@ class GalleryPageController extends GetxController
 
   /// 添加缩略图对象
   void addAllPreview(List<GalleryPreview> galleryPreview) {
-    galleryItem.galleryPreview.addAll(galleryPreview);
     // try {
     //   Get.find<ViewController>().update([GetID.IMAGE_VIEW]);
     // } catch (_) {}
 
-    update();
+    // update();
+    for (final GalleryPreview _preview in galleryPreview) {
+      final int index =
+          previews.indexWhere((GalleryPreview e) => e.ser == _preview.ser);
+      if (index != -1) {
+        previews[index] = _preview;
+      } else {
+        previews.add(_preview);
+      }
+    }
   }
 
   /// 是否存在本地收藏中
@@ -447,11 +457,12 @@ class GalleryPageController extends GetxController
       refresh: isRefresh, // 刷新画廊后加载缩略图不能从缓存读取，否则在改变每页数量后加载画廊会出错
     );
 
-    logger.v(
-        '添加的图片序号: ${_morePreviewList.map((GalleryPreview e) => e.ser).join(',')}');
+    // logger.v(
+    //     '添加的图片序号: ${_morePreviewList.map((GalleryPreview e) => e.ser).join(',')}');
 
-    previews.addAll(_morePreviewList);
-    logger.v('previews len： ${previews.length}');
+    // previews.addAll(_morePreviewList);
+    addAllPreview(_morePreviewList);
+    // logger.v('previews len： ${previews.length}');
   }
 
   // 按顺序翻页加载缩略图对象

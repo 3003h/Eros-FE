@@ -372,7 +372,6 @@ class GalleryViewPage extends GetView<ViewController> {
 
         return Obx(
           () {
-            logger.v('PhotoViewGallery.builder 1');
             return PhotoViewGallery.builder(
               scrollPhysics: const BouncingScrollPhysics(),
               reverse: reverse,

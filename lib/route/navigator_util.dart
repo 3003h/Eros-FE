@@ -137,7 +137,7 @@ class NavigatorUtil {
 
   // 转到大图浏览
   static void goGalleryViewPage(int index, String gid) {
-    logger.d('goGalleryViewPage $index');
+    // logger.d('goGalleryViewPage $index');
     Get.toNamed(EHRoutes.galleryView, arguments: index);
   }
 }

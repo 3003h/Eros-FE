@@ -76,13 +76,13 @@ class ViewController extends GetxController {
   @override
   void onInit() {
     super.onInit();
-    logger.d('ViewController onInit() start');
+    // logger.d('ViewController onInit() start');
 
     if (GetPlatform.isIOS)
       Future.delayed(const Duration(milliseconds: 200))
           .then((_) => SystemChrome.setEnabledSystemUIOverlays([]));
 
-    logger.d('初始化page页码 ${vState.pageIndex}');
+    // logger.d('初始化page页码 ${vState.pageIndex}');
     final int _initialPage = vState.pageIndex;
 
     // 横屏模式pageview控制器初始化
@@ -91,7 +91,7 @@ class ViewController extends GetxController {
 
     // 竖屏模式初始页码
     if (vState.viewMode == ViewMode.topToBottom) {
-      loggerNoStack.v('竖屏模式初始页码: ${vState.itemIndex}');
+      // logger.v('竖屏模式初始页码: ${vState.itemIndex}');
       Future.delayed(const Duration(milliseconds: 200)).then(
           (value) => itemScrollController.jumpTo(index: vState.itemIndex));
     }
@@ -134,7 +134,7 @@ class ViewController extends GetxController {
       OrientationPlugin.forceOrientation(orientationMap[_orientation]);
     }
 
-    logger.d('onInit() end');
+    // logger.d('onInit() end');
   }
 
   @override

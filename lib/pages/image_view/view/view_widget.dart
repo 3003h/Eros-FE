@@ -126,7 +126,8 @@ Future<void> showShareActionSheet(BuildContext context, String imageUrl) {
             CupertinoActionSheetAction(
                 onPressed: () {
                   logger.v('系统分享');
-                  Api.shareImage(imageUrl);
+                  // Api.shareImage(imageUrl);
+                  Api.shareImageExtended(imageUrl);
                 },
                 child: const Text('系统分享')),
           ],
@@ -136,11 +137,13 @@ Future<void> showShareActionSheet(BuildContext context, String imageUrl) {
 }
 
 Future<void> showImageSheet(
-    BuildContext context, String imageUrl, VoidCallback reload) {
+    BuildContext context, String imageUrl, VoidCallback reload,
+    {String title}) {
   return showCupertinoModalPopup<void>(
       context: context,
       builder: (BuildContext context) {
         final CupertinoActionSheet dialog = CupertinoActionSheet(
+          title: title != null ? Text(title) : null,
           cancelButton: CupertinoActionSheetAction(
               onPressed: () {
                 Get.back();
