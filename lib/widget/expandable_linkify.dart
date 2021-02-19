@@ -2,25 +2,28 @@ import 'package:flutter/material.dart';
 import 'package:flutter_linkify/flutter_linkify.dart';
 
 class ExpandableLinkify extends StatefulWidget {
-  const ExpandableLinkify(
-      {Key key,
-      @required this.text,
-      this.maxLines,
-      this.style,
-      this.expand = false,
-      this.linkifiers,
-      this.onOpen,
-      this.options,
-      this.linkStyle,
-      this.textAlign,
-      this.textDirection,
-      this.overflow,
-      this.textScaleFactor,
-      this.softWrap,
-      this.strutStyle,
-      this.locale,
-      this.textWidthBasis})
-      : super(key: key);
+  const ExpandableLinkify({
+    Key key,
+    @required this.text,
+    this.maxLines,
+    this.style,
+    this.expand = false,
+    this.linkifiers,
+    this.onOpen,
+    this.options,
+    this.linkStyle,
+    this.textAlign,
+    this.textDirection,
+    this.overflow,
+    this.textScaleFactor,
+    this.softWrap,
+    this.strutStyle,
+    this.locale,
+    this.textWidthBasis,
+    this.colorExpandText = Colors.blueAccent,
+    this.expandText = 'expand',
+    this.collapseText = 'compress',
+  }) : super(key: key);
 
   final bool expand;
 
@@ -73,6 +76,12 @@ class ExpandableLinkify extends StatefulWidget {
 
   /// Defines how to measure the width of the rendered text.
   final TextWidthBasis textWidthBasis;
+
+  final Color colorExpandText;
+
+  final String expandText;
+
+  final String collapseText;
 
   @override
   State<StatefulWidget> createState() {
@@ -133,13 +142,13 @@ class _ExpandableLinkifyState extends State<ExpandableLinkify> {
                   });
                 },
                 child: Container(
-                  padding: const EdgeInsets.only(top: 6),
-                  child: Text(_expand ? '收起' : '全文',
+                  padding: const EdgeInsets.symmetric(vertical: 8),
+                  child: Text(_expand ? widget.collapseText : widget.expandText,
                       style: TextStyle(
                           fontSize: widget.style != null
                               ? widget.style.fontSize
                               : null,
-                          color: Colors.blue)),
+                          color: widget.colorExpandText)),
                 ),
               ),
             ],

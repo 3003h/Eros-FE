@@ -369,6 +369,10 @@ class CommentItem extends StatelessWidget {
         fontSize: 13,
         color: CupertinoDynamicColor.resolve(ThemeColors.commitText, context),
       ),
+      expandText: '展开',
+      collapseText: '收起',
+      colorExpandText:
+          CupertinoDynamicColor.resolve(CupertinoColors.activeBlue, context),
     );
 
     const double kSizeVote = 14.0;

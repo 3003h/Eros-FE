@@ -16,8 +16,7 @@ import 'package:share/share.dart';
 
 class QuickSearchListPage extends StatelessWidget {
   Future<String> _getTextTranslate(String text) async {
-    final String tranText =
-        await EhTagDatabase.getTranTagWithFullNameSpase(text);
+    final String tranText = await EhTagDatabase.getTranTagWithNameSpase(text);
     if (tranText.trim() != text) {
       return tranText;
     } else {

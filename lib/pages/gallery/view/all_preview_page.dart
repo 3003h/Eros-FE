@@ -35,6 +35,7 @@ class _AllPreviewPageState extends State<AllPreviewPage> {
   final GlobalKey globalKey = GlobalKey();
   final ScrollController _scrollController =
       ScrollController(keepScrollOffset: true);
+  // ScrollController _scrollController;
 
   CancelToken moreGalleryPreviewCancelToken = CancelToken();
 
@@ -48,55 +49,67 @@ class _AllPreviewPageState extends State<AllPreviewPage> {
   }
 
   @override
-  void didChangeDependencies() {
-    super.didChangeDependencies();
+  void initState() {
+    super.initState();
+
     _galleryPreviewList = _pageController.galleryItem.galleryPreview;
     _pageController.currentPreviewPage = 0;
 
-    Future<void>.delayed(const Duration(milliseconds: 100)).then((_) {
-      //获取position
-      final RenderBox box = globalKey.currentContext.findRenderObject();
-
-      //获取size
-      final Size size = box.size;
-
-      final MediaQueryData _mq = MediaQuery.of(context);
-      final Size _screensize = _mq.size;
-      final double _paddingLeft = _mq.padding.left;
-      final double _paddingRight = _mq.padding.right;
-      final double _paddingTop = _mq.padding.top;
-
-      // 每行数量
-      final int itemCountCross = (_screensize.width -
-              kCrossAxisSpacing -
-              _paddingRight -
-              _paddingLeft) ~/
-          size.width;
-
-      // 单屏幕列数
-      final int itemCountCrossMain = (_screensize.height -
-              _paddingTop -
-              kMinInteractiveDimensionCupertino) ~/
-          size.height;
-
-      final int _toLine =
-          _pageController.firstPagePreview.length ~/ itemCountCross + 1;
-
-      // 计算滚动距离
-      final double _offset = (_toLine - itemCountCrossMain) * size.height;
-
-      // 滚动
-      _scrollController.animateTo(
-        _offset,
-        duration: Duration(milliseconds: _offset ~/ 6),
-        curve: Curves.ease,
-      );
-      // _scrollController.jumpTo(_offset);
-
-      logger.d('toLine:$_toLine  _offset:$_offset');
-    }).catchError((e, stack) {
-      logger.e('$stack');
+    WidgetsBinding.instance.addPostFrameCallback((Duration callback) {
+      logger.v('addPostFrameCallback be invoke');
+      _jumpTo();
     });
+  }
+
+  Future<void> _jumpTo() async {
+    //获取position
+    final RenderBox box = globalKey.currentContext.findRenderObject();
+
+    //获取size
+    final Size size = box.size;
+
+    final MediaQueryData _mq = MediaQuery.of(context);
+    final Size _screensize = _mq.size;
+    final double _paddingLeft = _mq.padding.left;
+    final double _paddingRight = _mq.padding.right;
+    final double _paddingTop = _mq.padding.top;
+
+    // 每行数量
+    final int itemCountCross = (_screensize.width -
+            kCrossAxisSpacing -
+            _paddingRight -
+            _paddingLeft) ~/
+        size.width;
+
+    // 单屏幕列数
+    final int itemCountCrossMain = (_screensize.height -
+            _paddingTop -
+            kMinInteractiveDimensionCupertino) ~/
+        size.height;
+
+    final int _toLine =
+        _pageController.firstPagePreview.length ~/ itemCountCross + 1;
+
+    // 计算滚动距离
+    final double _offset = (_toLine - itemCountCrossMain) * size.height;
+
+    // 滚动
+    // _scrollController.animateTo(
+    //   _offset,
+    //   duration: Duration(milliseconds: _offset ~/ 6),
+    //   curve: Curves.ease,
+    // );
+    _scrollController.jumpTo(_offset);
+
+    logger.d('toLine:$_toLine  _offset:$_offset');
+  }
+
+  void _scrollToTop() {
+    _scrollController.animateTo(
+      0,
+      duration: const Duration(milliseconds: 200),
+      curve: Curves.ease,
+    );
   }
 
   @override
@@ -104,7 +117,10 @@ class _AllPreviewPageState extends State<AllPreviewPage> {
     final int _count = int.parse(_pageController.galleryItem.filecount);
     return CupertinoPageScaffold(
       navigationBar: CupertinoNavigationBar(
-        middle: Text(S.of(context).all_preview),
+        middle: GestureDetector(
+          onTap: _scrollToTop,
+          child: Text(S.of(context).all_preview),
+        ),
         previousPageTitle: S.of(context).back,
       ),
       child: CustomScrollView(
