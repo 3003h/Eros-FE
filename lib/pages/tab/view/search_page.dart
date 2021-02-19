@@ -174,8 +174,7 @@ class GallerySearchPage extends StatelessWidget {
   // 初始化页面
   Widget _getInitView() {
     Future<String> _getTextTranslate(String text) async {
-      final String tranText =
-          await EhTagDatabase.getTranTagWithFullNameSpase(text);
+      final String tranText = await EhTagDatabase.getTranTagWithNameSpase(text);
       if (tranText != null && tranText.trim() != text) {
         return tranText;
       } else {
@@ -212,22 +211,22 @@ class GallerySearchPage extends StatelessWidget {
       id: GetIds.SEARCH_INIT_VIEW,
       builder: (SearchPageController controller) {
         final List<Widget> _btnList = List<Widget>.from(
-            controller.seaechHistory.map((String text) => _btn(text)).toList());
+            controller.searchHistory.map((String text) => _btn(text)).toList());
 
-        return SliverToBoxAdapter(
+        final Widget _searchHistory = SliverToBoxAdapter(
           child: Container(
             padding:
                 const EdgeInsets.symmetric(vertical: 8.0, horizontal: 20.0),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                const Text(
-                  'Search History',
-                  style: TextStyle(
-                    fontSize: 14,
+                if (controller.searchHistory.isNotEmpty)
+                  Text(
+                    S.of(Get.context).search_history,
+                    style: const TextStyle(
+                      fontSize: 14,
+                    ),
                   ),
-                ),
-                const SizedBox(height: 8),
                 Container(
                   child: Wrap(
                     spacing: 8, //主轴上子控件的间距
@@ -235,37 +234,38 @@ class GallerySearchPage extends StatelessWidget {
                     children: _btnList.sublist(
                         0, min<int>(20, _btnList.length)), //要显示的子控件集合
                   ),
-                ),
-                const SizedBox(height: 8),
-                GestureDetector(
-                  onTap: controller.clearHistory,
-                  child: Container(
-                    alignment: Alignment.center,
-                    padding: const EdgeInsets.symmetric(vertical: 4.0),
-                    child: Row(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        const Icon(
-                          Icons.delete,
-                          size: 17,
-                          color: Colors.red,
-                        ),
-                        Text(
-                          'Clear search history',
-                          style: TextStyle(
-                            fontSize: 15,
-                            color: CupertinoDynamicColor.resolve(
-                                CupertinoColors.secondaryLabel, Get.context),
+                ).paddingSymmetric(vertical: 8.0),
+                if (controller.searchHistory.isNotEmpty)
+                  GestureDetector(
+                    onTap: controller.clearHistory,
+                    child: Container(
+                      alignment: Alignment.center,
+                      padding: const EdgeInsets.symmetric(vertical: 4.0),
+                      child: Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          const Icon(
+                            Icons.delete,
+                            size: 17,
+                            color: Colors.red,
                           ),
-                        ),
-                      ],
+                          Text(
+                            S.of(Get.context).clear_search_history,
+                            style: TextStyle(
+                              fontSize: 15,
+                              color: CupertinoDynamicColor.resolve(
+                                  CupertinoColors.secondaryLabel, Get.context),
+                            ),
+                          ),
+                        ],
+                      ),
                     ),
-                  ),
-                )
+                  )
               ],
             ),
           ),
         );
+        return _searchHistory;
       },
     );
   }

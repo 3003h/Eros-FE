@@ -95,7 +95,7 @@ class EhTagDatabase {
 
   static Future<String> getTranTag(String tag, {String nameSpase}) async {
     if (tag.contains(':')) {
-      final RegExp rpfx = RegExp(r'(\w:)(.+)');
+      final RegExp rpfx = RegExp(r'(\w):(.+)');
       final RegExpMatch rult = rpfx.firstMatch(tag.toLowerCase());
       final String pfx = rult.group(1) ?? '';
       final String _nameSpase = EHConst.prefixToNameSpaceMap[pfx] as String;
@@ -103,19 +103,23 @@ class EhTagDatabase {
       final String _transTag =
           await DataBaseUtil().getTagTransStr(_tag, namespace: _nameSpase);
 
-      return _transTag != null ? '$pfx$_transTag' : tag;
+      return _transTag != null ? '$pfx:$_transTag' : tag;
     } else {
       return await DataBaseUtil()
           .getTagTransStr(tag.toLowerCase(), namespace: nameSpase);
     }
   }
 
-  static Future<String> getTranTagWithFullNameSpase(String tag,
+  static Future<String> getTranTagWithNameSpase(String tag,
       {String nameSpase}) async {
     if (tag.contains(':')) {
       final RegExp rpfx = RegExp(r'(\w+):"?([^\$]+)\$?"?');
       final RegExpMatch rult = rpfx.firstMatch(tag.toLowerCase());
-      final String _nameSpase = rult.group(1) ?? '';
+      String _nameSpase = rult.group(1) ?? '';
+      if (_nameSpase.length == 1) {
+        _nameSpase = EHConst.prefixToNameSpaceMap[_nameSpase] ?? _nameSpase;
+      }
+
       final String _tag = rult.group(2) ?? '';
       final String _nameSpaseTran =
           EHConst.translateTagType[_nameSpase] ?? _nameSpase;

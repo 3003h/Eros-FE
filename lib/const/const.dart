@@ -195,14 +195,14 @@ class EHConst {
   ];
 
   static const Map prefixToNameSpaceMap = {
-    'a:': 'artist',
-    'c:': 'character',
-    'f:': 'female',
-    'g:': 'group',
-    'l:': 'language',
-    'm:': 'male',
-    'p:': 'parody',
-    'r:': 'reclass',
+    'a': 'artist',
+    'c': 'character',
+    'f': 'female',
+    'g': 'group',
+    'l': 'language',
+    'm': 'male',
+    'p': 'parody',
+    'r': 'reclass',
   };
 
   /// iso936语言对应缩写

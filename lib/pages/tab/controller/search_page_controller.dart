@@ -263,26 +263,26 @@ class SearchPageController extends TabViewController {
     change(tuple.item1, status: RxStatus.success());
   }
 
-  List<String> seaechHistory = <String>[].obs;
+  List<String> searchHistory = <String>[].obs;
   void addHistory() {
-    seaechHistory.insert(0, searchTextController.text.trim());
-    seaechHistory = LinkedHashSet<String>.from(seaechHistory).toList();
-    if (seaechHistory.length > 100) {
-      seaechHistory.removeRange(100, seaechHistory.length);
+    searchHistory.insert(0, searchTextController.text.trim());
+    searchHistory = LinkedHashSet<String>.from(searchHistory).toList();
+    if (searchHistory.length > 100) {
+      searchHistory.removeRange(100, searchHistory.length);
     }
-    _gStore.searchHistory = seaechHistory;
+    _gStore.searchHistory = searchHistory;
   }
 
   void clearHistory() {
-    seaechHistory.clear();
+    searchHistory.clear();
     update([GetIds.SEARCH_INIT_VIEW]);
-    _gStore.searchHistory = seaechHistory;
+    _gStore.searchHistory = searchHistory;
   }
 
   @override
   void onInit() {
     fetchNormal = Api.getGallery;
-    seaechHistory = _gStore.searchHistory;
+    searchHistory = _gStore.searchHistory;
     _autoComplete = initSearchText?.trim()?.isNotEmpty ?? false;
     super.onInit();
   }
