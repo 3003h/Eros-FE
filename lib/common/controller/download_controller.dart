@@ -31,9 +31,8 @@ class DownloadController extends GetxController {
 
   final GStore _gStore = Get.find();
 
-  static final String _dbPath = GetPlatform.isIOS && Global.inDebugMode
-      ? path.join(Global.appDocPath, 'gallery_task.db')
-      : path.join(Global.appSupportPath, 'gallery_task.db');
+  static final String _dbPath =
+      path.join(Global.appSupportPath, 'gallery_task.db');
 
   static Future<AppDatabase> _getDatabase() async {
     return await $FloorAppDatabase.databaseBuilder(_dbPath).build();
