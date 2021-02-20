@@ -222,7 +222,7 @@ class GalleryFavController extends GetxController {
 
   // 长按事件
   Future<void> longTapFav() async {
-    VibrateUtil.heavy();
+    vibrateUtil.heavy();
     // 手选收藏夹
     await _showAddFavDialog();
   }

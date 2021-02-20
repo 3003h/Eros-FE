@@ -81,7 +81,7 @@ class _GalleryCatButtonState extends State<GalleryCatButton> {
 
   void _pressBtn() {
     // logger.v('_pressBtn ${widget.text}');
-    VibrateUtil.light();
+    vibrateUtil.light();
     _value = !_value;
     _textColor = _value ? widget.onTextColor : widget.offTextColor;
     _color = _value ? widget.onColor : widget.offColor;

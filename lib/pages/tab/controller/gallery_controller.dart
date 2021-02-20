@@ -34,7 +34,7 @@ class GalleryViewController extends TabViewController {
         _menu.add(GestureDetector(
           behavior: HitTestBehavior.translucent,
           onTap: () {
-            VibrateUtil.light();
+            vibrateUtil.light();
             customPopupMenuController.hideMenu();
             Get.toNamed(elem.key);
           },

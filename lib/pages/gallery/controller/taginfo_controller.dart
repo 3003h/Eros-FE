@@ -124,7 +124,7 @@ class TagInfoController extends GetxController {
   }
 
   void clear() {
-    VibrateUtil.light();
+    vibrateUtil.light();
     tagsTextController.clear();
   }
 }

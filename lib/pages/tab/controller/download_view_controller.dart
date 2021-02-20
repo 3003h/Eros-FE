@@ -86,7 +86,7 @@ class DownloadViewController extends GetxController {
   }
 
   void onLongPress(int index) {
-    VibrateUtil.heavy();
+    vibrateUtil.heavy();
     _showLongPressSheet(index);
   }
 

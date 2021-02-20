@@ -108,7 +108,7 @@ class GalleryListTab extends GetView<GalleryViewController> {
                           CupertinoColors.activeBlue, context),
                       width: 1.5,
                     ),
-                    borderRadius: BorderRadius.circular(6),
+                    borderRadius: BorderRadius.circular(8),
                   ),
                   child: Obx(() => Text(
                         '${controller.curPage.value + 1}',
@@ -153,7 +153,7 @@ class GalleryListTab extends GetView<GalleryViewController> {
         alignment: Alignment.centerLeft,
         child: CustomPopupMenu(
           child: Container(
-            padding: const EdgeInsets.only(left: 14),
+            padding: const EdgeInsets.only(left: 14, bottom: 2),
             child: const Icon(
               // LineIcons.horizontalEllipsis,
               CupertinoIcons.ellipsis_circle,
@@ -163,7 +163,7 @@ class GalleryListTab extends GetView<GalleryViewController> {
           arrowColor: _color,
           showArrow: false,
           menuBuilder: () {
-            VibrateUtil.light();
+            vibrateUtil.light();
             return ClipRRect(
               borderRadius: BorderRadius.circular(8),
               child: Container(
@@ -258,7 +258,7 @@ class GalleryListTab extends GetView<GalleryViewController> {
 }
 
 class ItemModel {
+  ItemModel(this.title, this.icon);
   String title;
   IconData icon;
-  ItemModel(this.title, this.icon);
 }

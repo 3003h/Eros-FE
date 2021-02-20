@@ -373,7 +373,7 @@ class SearchPageController extends TabViewController {
   }
 
   void clear() {
-    VibrateUtil.light();
+    vibrateUtil.light();
     searchTextController.clear();
   }
 }

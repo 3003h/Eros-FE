@@ -3,7 +3,7 @@ description: ..
 
 publish_to: 'none' # Remove this line if you wish to publish to pub.dev
 
-version: 1.0.4+143
+version: 1.0.4+144
 
 environment:
   sdk: '>=2.10.0 <3.0.0'
@@ -185,6 +185,7 @@ dependencies:
 #  flutter_screen_lock: ^1.2.6
   pattern_lock: ^1.0.3
   orientation: ^1.2.0
+  vibration: ^1.7.3
 
 
 

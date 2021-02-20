@@ -20,7 +20,7 @@ const double kPaddingLeft = 8.0;
 class GalleryItemSimpleWidget extends StatelessWidget {
   GalleryItemSimpleWidget({@required this.galleryItem, @required this.tabTag}) {
     Get.lazyPut(
-      () => GalleryItemController.initData(galleryItem, tabTag: tabTag),
+      () => GalleryItemController(galleryItem),
       tag: galleryItem.gid,
     );
   }
