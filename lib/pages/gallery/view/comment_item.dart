@@ -420,7 +420,7 @@ class CommentItem extends StatelessWidget {
                                     ),
                                   ),
                                   onPressed: () {
-                                    VibrateUtil.light();
+                                    vibrateUtil.light();
                                     showTranslatorDialog(galleryComment.text);
                                   },
                                 ),
@@ -442,7 +442,7 @@ class CommentItem extends StatelessWidget {
                                     ),
                                   ),
                                   onPressed: () {
-                                    VibrateUtil.light();
+                                    vibrateUtil.light();
                                     logger.i('vote up ${galleryComment.id}');
                                     _commentController
                                         .commitVoteUp(galleryComment.id);
@@ -466,7 +466,7 @@ class CommentItem extends StatelessWidget {
                                     ),
                                   ),
                                   onPressed: () {
-                                    VibrateUtil.light();
+                                    vibrateUtil.light();
                                     logger.i('vote down ${galleryComment.id}');
                                     _commentController
                                         .commitVoteDown(galleryComment.id);
@@ -486,7 +486,7 @@ class CommentItem extends StatelessWidget {
                                     ),
                                   ),
                                   onPressed: () {
-                                    VibrateUtil.light();
+                                    vibrateUtil.light();
                                     logger.i('edit ${galleryComment.id}');
                                     _commentController.editComment(
                                       id: galleryComment.id,
@@ -552,7 +552,7 @@ class CommentItem extends StatelessWidget {
 
   Future<void> _onOpen(BuildContext context,
       {LinkableElement link, String url}) async {
-    VibrateUtil.light();
+    vibrateUtil.light();
 
     final _openUrl = url ?? link?.url;
     final RegExp regExp =

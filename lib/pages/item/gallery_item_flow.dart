@@ -18,7 +18,7 @@ const double kHeight = 18.0;
 class GalleryItemFlow extends StatelessWidget {
   GalleryItemFlow({@required this.tabTag, this.galleryItem}) {
     Get.lazyPut(
-      () => GalleryItemController.initData(galleryItem, tabTag: tabTag),
+      () => GalleryItemController(galleryItem),
       tag: galleryItem.gid,
     );
   }

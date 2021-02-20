@@ -192,7 +192,7 @@ class GallerySearchPage extends StatelessWidget {
         onLongPress: () async {
           final String tranText = await _getTextTranslate(text);
           if (tranText != null) {
-            VibrateUtil.medium();
+            vibrateUtil.medium();
             showCupertinoDialog(
                 context: Get.overlayContext,
                 barrierDismissible: true,
@@ -352,7 +352,7 @@ class GallerySearchPage extends StatelessWidget {
       return GestureDetector(
         onLongPress: () {
           controller.isSearchBarComp = true;
-          VibrateUtil.heavy();
+          vibrateUtil.heavy();
         },
         child: Row(
           mainAxisSize: MainAxisSize.min,
@@ -372,12 +372,13 @@ class GallerySearchPage extends StatelessWidget {
               child: Container(
                 padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 0),
                 decoration: BoxDecoration(
-                    border: Border.all(
-                      color: CupertinoDynamicColor.resolve(
-                          CupertinoColors.activeBlue, context),
-                      width: 1.5,
-                    ),
-                    borderRadius: const BorderRadius.all(Radius.circular(8))),
+                  border: Border.all(
+                    color: CupertinoDynamicColor.resolve(
+                        CupertinoColors.activeBlue, context),
+                    width: 1.5,
+                  ),
+                  borderRadius: BorderRadius.circular(8),
+                ),
                 child: Obx(() => Text(
                       '${controller.curPage.value + 1}',
                       style: TextStyle(
@@ -431,7 +432,7 @@ class GallerySearchPage extends StatelessWidget {
       return GestureDetector(
         behavior: HitTestBehavior.translucent,
         onTap: () {
-          VibrateUtil.light();
+          vibrateUtil.light();
           controller.customPopupMenuController.hideMenu();
           onTap();
         },
@@ -475,7 +476,7 @@ class GallerySearchPage extends StatelessWidget {
       return CustomPopupMenu(
         child: Container(
           width: 40,
-          padding: const EdgeInsets.only(right: 14, left: 4),
+          padding: const EdgeInsets.only(right: 14, left: 4, bottom: 2),
           child: const Icon(
             // LineIcons.horizontalEllipsis,
             CupertinoIcons.ellipsis_circle,
@@ -485,7 +486,7 @@ class GallerySearchPage extends StatelessWidget {
         arrowColor: _color,
         showArrow: false,
         menuBuilder: () {
-          VibrateUtil.light();
+          vibrateUtil.light();
           return ClipRRect(
             borderRadius: BorderRadius.circular(8),
             child: Container(
@@ -525,7 +526,7 @@ class GallerySearchPage extends StatelessWidget {
       return GestureDetector(
         onLongPress: () {
           controller.isSearchBarComp = false;
-          VibrateUtil.heavy();
+          vibrateUtil.heavy();
         },
         child: Row(
           mainAxisSize: MainAxisSize.min,
@@ -545,12 +546,13 @@ class GallerySearchPage extends StatelessWidget {
               child: Container(
                 padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 0),
                 decoration: BoxDecoration(
-                    border: Border.all(
-                      color: CupertinoDynamicColor.resolve(
-                          CupertinoColors.activeBlue, context),
-                      width: 1.5,
-                    ),
-                    borderRadius: const BorderRadius.all(Radius.circular(8))),
+                  border: Border.all(
+                    color: CupertinoDynamicColor.resolve(
+                        CupertinoColors.activeBlue, context),
+                    width: 1.5,
+                  ),
+                  borderRadius: BorderRadius.circular(8),
+                ),
                 child: Obx(() => Text(
                       '${controller.curPage.value + 1}',
                       style: TextStyle(

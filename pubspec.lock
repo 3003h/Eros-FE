@@ -1227,6 +1227,20 @@ packages:
       url: "https://pub.flutter-io.cn"
     source: hosted
     version: "2.1.0-nullsafety.3"
+  vibration:
+    dependency: "direct main"
+    description:
+      name: vibration
+      url: "https://pub.flutter-io.cn"
+    source: hosted
+    version: "1.7.3"
+  vibration_web:
+    dependency: transitive
+    description:
+      name: vibration_web
+      url: "https://pub.flutter-io.cn"
+    source: hosted
+    version: "1.6.2"
   watcher:
     dependency: transitive
     description:

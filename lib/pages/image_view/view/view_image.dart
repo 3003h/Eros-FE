@@ -144,7 +144,7 @@ class _ViewImageState extends State<ViewImage>
       behavior: HitTestBehavior.opaque,
       onLongPress: () async {
         logger.d('long press');
-        VibrateUtil.medium();
+        vibrateUtil.medium();
         final GalleryPreview _currentPreview =
             _pageController.previewMap[widget.ser];
         showImageSheet(context, _currentPreview?.largeImageUrl, _reloadImage,

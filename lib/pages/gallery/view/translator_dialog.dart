@@ -7,7 +7,7 @@ import 'package:get/get.dart';
 import 'package:translator/translator.dart';
 
 Future<void> showTranslatorDialog(String inputText, {String from, String to}) {
-  VibrateUtil.medium();
+  vibrateUtil.medium();
   return showCupertinoDialog<void>(
       context: Get.context,
       barrierDismissible: true,

@@ -8,23 +8,17 @@ import 'package:fehviewer/utils/toast.dart';
 import 'package:fehviewer/utils/vibrate.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
-import 'package:meta/meta.dart';
 import 'package:tuple/tuple.dart';
 
 class GalleryItemController extends GetxController {
-  GalleryItemController.initData(GalleryItem galleryItem,
-      {@required String tabTag}) {
-    // ignore: prefer_initializing_formals
-    this.galleryItem = galleryItem;
-    _tabindex = tabTag;
-  }
+  GalleryItemController(this.galleryItem);
 
   final EhConfigService _ehConfigService = Get.find();
   final FavController _favController = Get.find();
 
   /// 点击item
   void onTap(String tabTag) {
-    logger.d('${galleryItem.englishTitle}');
+    logger.d('${galleryItem.englishTitle} ');
     NavigatorUtil.goGalleryPage(galleryItem: galleryItem, tabTag: tabTag);
   }
 
@@ -70,15 +64,12 @@ class GalleryItemController extends GetxController {
     }
   }
 
-  String _tabindex;
   List<GalleryPreview> firstPagePreview;
-  GalleryItem galleryItem;
+  final GalleryItem galleryItem;
 
   Rx<Color> colorTap = const Color.fromARGB(0, 0, 0, 0).obs;
 
   void _updateNormalColor() {
-    // colorTap.value = CupertinoDynamicColor.resolve(
-    //     ehTheme.themeData.barBackgroundColor, Get.context);
     colorTap.value = null;
   }
 
@@ -152,7 +143,7 @@ class GalleryItemController extends GetxController {
   }
 
   void onLongPress() {
-    VibrateUtil.heavy();
+    vibrateUtil.heavy();
     _showLongPressSheet();
   }
 }

@@ -13,6 +13,7 @@ import 'package:fehviewer/utils/https_proxy.dart';
 import 'package:fehviewer/utils/logger.dart';
 import 'package:fehviewer/utils/storage.dart';
 import 'package:fehviewer/utils/utility.dart';
+import 'package:fehviewer/utils/vibrate.dart';
 import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -97,6 +98,8 @@ class Global {
     await StorageUtil.init();
 
     await GStore.init();
+
+    await vibrateUtil.init();
 
     _profileInit();
 

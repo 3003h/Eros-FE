@@ -10,7 +10,7 @@ import 'package:get/get.dart';
 import 'package:line_icons/line_icons.dart';
 
 Future<void> showTagInfoDialog(String text, {String type, int vote = 0}) {
-  VibrateUtil.medium();
+  vibrateUtil.medium();
   Get.lazyPut(() => TagInfoController(), tag: pageCtrlDepth);
   final TagInfoController controller = Get.find(tag: pageCtrlDepth);
 

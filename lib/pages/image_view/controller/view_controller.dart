@@ -27,7 +27,7 @@ class ViewController extends GetxController {
 
   /// 切换单页双页模式
   void switchColumnMode() {
-    VibrateUtil.light();
+    vibrateUtil.light();
     logger.v('切换单页双页模式');
     switch (vState.columnMode) {
       case ColumnMode.single:

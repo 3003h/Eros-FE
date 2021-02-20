@@ -26,19 +26,23 @@ class GalleryItemWidget extends StatelessWidget {
   // }) : super(key: key);
 
   GalleryItemWidget({@required this.galleryItem, @required this.tabTag}) {
-    Get.lazyPut(
-      () => GalleryItemController.initData(galleryItem, tabTag: tabTag),
-      tag: galleryItem.gid,
-    );
+    // Get.lazyPut(
+    //   () => GalleryItemController(galleryItem),
+    //   tag: galleryItem.gid,
+    // );
+    _galleryItemController =
+        Get.put(GalleryItemController(galleryItem), tag: galleryItem.gid);
   }
 
   final GalleryItem galleryItem;
   final String tabTag;
   // final GalleryItemController controller;
 
-  GalleryItemController get _galleryItemController =>
-      Get.find(tag: galleryItem.gid);
+  // GalleryItemController get _galleryItemController =>
+  //     Get.find(tag: galleryItem.gid);
   // GalleryItemController get _galleryItemController => controller;
+
+  GalleryItemController _galleryItemController;
 
   @override
   Widget build(BuildContext context) {
