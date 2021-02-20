@@ -6,6 +6,7 @@ import 'package:fehviewer/common/global.dart';
 import 'package:fehviewer/common/service/depth_service.dart';
 import 'package:fehviewer/common/service/ehconfig_service.dart';
 import 'package:fehviewer/const/const.dart';
+import 'package:fehviewer/generated/l10n.dart';
 import 'package:fehviewer/models/entity/tag_translat.dart';
 import 'package:fehviewer/models/index.dart';
 import 'package:fehviewer/network/gallery_request.dart';
@@ -58,7 +59,25 @@ class SearchPageController extends TabViewController {
 
   // 搜索类型
   final Rx<SearchType> _searchType = SearchType.normal.obs;
-  SearchType get searchType => _searchType.value;
+  SearchType get searchType => _searchType.value ?? SearchType.normal;
+
+  String get placeholderText {
+    final BuildContext context = Get.context;
+    logger.v('$searchType');
+    switch (searchType) {
+      case SearchType.favorite:
+        return '${S.of(context).search} ${S.of(context).tab_favorite}';
+        break;
+      case SearchType.watched:
+        return '${S.of(context).search} ${S.of(context).tab_watched}';
+        break;
+      case SearchType.normal:
+      default:
+        return '${S.of(context).search} ${S.of(context).tab_gallery}';
+        break;
+    }
+  }
+
   set searchType(SearchType val) => _searchType.value = val;
 
   final Rx<ListType> _listType = ListType.init.obs;

@@ -1,5 +1,6 @@
 import 'package:fehviewer/common/controller/advance_search_controller.dart';
 import 'package:fehviewer/common/service/depth_service.dart';
+import 'package:fehviewer/common/service/theme_service.dart';
 import 'package:fehviewer/generated/l10n.dart';
 import 'package:fehviewer/models/index.dart';
 import 'package:fehviewer/pages/filter/filter.dart';
@@ -281,6 +282,10 @@ class GalleryFilterView extends StatelessWidget {
               width: 50,
               height: 28,
               child: CupertinoTextField(
+                decoration: BoxDecoration(
+                  color: ehTheme.textFieldBackgroundColor,
+                  borderRadius: const BorderRadius.all(Radius.circular(8.0)),
+                ),
                 controller: filterController.statrPageCtrl,
                 keyboardType: TextInputType.number,
                 cursorHeight: 14,
@@ -299,6 +304,10 @@ class GalleryFilterView extends StatelessWidget {
               width: 50,
               height: 28,
               child: CupertinoTextField(
+                decoration: BoxDecoration(
+                  color: ehTheme.textFieldBackgroundColor,
+                  borderRadius: const BorderRadius.all(Radius.circular(8.0)),
+                ),
                 controller: filterController.endPageCtrl,
                 keyboardType: TextInputType.number,
                 cursorHeight: 14,

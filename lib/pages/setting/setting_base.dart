@@ -42,14 +42,14 @@ class _SelectorSettingItemState extends State<SelectorSettingItem> {
   void initState() {
     super.initState();
     _color =
-        CupertinoDynamicColor.resolve(ehTheme.itmeBackgroundColor, Get.context);
+        CupertinoDynamicColor.resolve(ehTheme.itemBackgroundColor, Get.context);
     _pBackgroundColor = _color;
   }
 
   @override
   Widget build(BuildContext context) {
     final Color color =
-        CupertinoDynamicColor.resolve(ehTheme.itmeBackgroundColor, context);
+        CupertinoDynamicColor.resolve(ehTheme.itemBackgroundColor, context);
     if (_pBackgroundColor.value != color.value) {
       _color = color;
       _pBackgroundColor = color;
@@ -114,7 +114,7 @@ class _SelectorSettingItemState extends State<SelectorSettingItem> {
   void _updateNormalColor() {
     setState(() {
       _color =
-          CupertinoDynamicColor.resolve(ehTheme.itmeBackgroundColor, context);
+          CupertinoDynamicColor.resolve(ehTheme.itemBackgroundColor, context);
     });
   }
 
@@ -167,7 +167,7 @@ class _TextSwitchItemState extends State<TextSwitchItem> {
     _desc = _switchValue ? widget.descOn : widget.desc;
     return Container(
       color:
-          CupertinoDynamicColor.resolve(ehTheme.itmeBackgroundColor, context),
+          CupertinoDynamicColor.resolve(ehTheme.itemBackgroundColor, context),
       child: Column(
         children: <Widget>[
           Container(
@@ -254,14 +254,14 @@ class _TextItemState extends State<TextItem> {
   void initState() {
     super.initState();
     _color =
-        CupertinoDynamicColor.resolve(ehTheme.itmeBackgroundColor, Get.context);
+        CupertinoDynamicColor.resolve(ehTheme.itemBackgroundColor, Get.context);
     _pBackgroundColor = _color;
   }
 
   @override
   Widget build(BuildContext context) {
     final Color color =
-        CupertinoDynamicColor.resolve(ehTheme.itmeBackgroundColor, context);
+        CupertinoDynamicColor.resolve(ehTheme.itemBackgroundColor, context);
     if (_pBackgroundColor.value != color.value) {
       _color = color;
       _pBackgroundColor = color;
@@ -321,7 +321,7 @@ class _TextItemState extends State<TextItem> {
   void _updateNormalColor() {
     setState(() {
       _color = CupertinoDynamicColor.resolve(
-          ehTheme.itmeBackgroundColor, Get.context);
+          ehTheme.itemBackgroundColor, Get.context);
     });
   }
 
@@ -353,6 +353,10 @@ Future<void> showCustomHostEditer(BuildContext context, {int index}) async {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
               CupertinoTextField(
+                decoration: BoxDecoration(
+                  color: ehTheme.textFieldBackgroundColor,
+                  borderRadius: const BorderRadius.all(Radius.circular(8.0)),
+                ),
                 enabled: _isAddNew,
                 clearButtonMode: _isAddNew
                     ? OverlayVisibilityMode.editing
@@ -369,6 +373,10 @@ Future<void> showCustomHostEditer(BuildContext context, {int index}) async {
                 height: 10,
               ),
               CupertinoTextField(
+                decoration: BoxDecoration(
+                  color: ehTheme.textFieldBackgroundColor,
+                  borderRadius: const BorderRadius.all(Radius.circular(8.0)),
+                ),
                 clearButtonMode: OverlayVisibilityMode.editing,
                 controller: _addrController,
                 placeholder: 'Addr',

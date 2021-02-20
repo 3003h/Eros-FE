@@ -57,16 +57,31 @@ final EHTheme ehTheme = EHTheme();
 class EHTheme {
   final ThemeService _themeService = Get.find();
   final EhConfigService _ehConfigService = Get.find();
-  Color get itmeBackgroundColor {
+  Color get itemBackgroundColor {
     switch (_themeService.themeModel) {
       case ThemesModeEnum.system:
         return _themeService.platformBrightness.value == Brightness.dark
-            ? _darkColor
+            ? _darkItemColor
             : ThemeColors.ligthItemBackground;
       case ThemesModeEnum.ligthMode:
         return ThemeColors.ligthItemBackground;
       case ThemesModeEnum.darkMode:
-        return _darkColor;
+        return _darkItemColor;
+      default:
+        return null;
+    }
+  }
+
+  Color get textFieldBackgroundColor {
+    switch (_themeService.themeModel) {
+      case ThemesModeEnum.system:
+        return _themeService.platformBrightness.value == Brightness.dark
+            ? _darkTextFieldColor
+            : ThemeColors.ligthTextFieldBackground;
+      case ThemesModeEnum.ligthMode:
+        return ThemeColors.ligthTextFieldBackground;
+      case ThemesModeEnum.darkMode:
+        return _darkTextFieldColor;
       default:
         return null;
     }
@@ -74,9 +89,13 @@ class EHTheme {
 
   CupertinoThemeData get themeData => _themeService.themeData;
 
-  Color get _darkColor => _ehConfigService.isPureDarkTheme.value
+  Color get _darkItemColor => _ehConfigService.isPureDarkTheme.value
       ? ThemeColors.darkItemBackground
       : ThemeColors.darkGrayItemBackground;
+
+  Color get _darkTextFieldColor => _ehConfigService.isPureDarkTheme.value
+      ? ThemeColors.darkTextFieldBackground
+      : ThemeColors.darkGrayTextFieldBackground;
 
   bool get _isSeldark => _themeService.themeModel == ThemesModeEnum.darkMode;
   bool get _isSelLigth => _themeService.themeModel == ThemesModeEnum.ligthMode;
