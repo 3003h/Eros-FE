@@ -2,6 +2,7 @@ import 'dart:math';
 
 import 'package:custom_pop_up_menu/custom_pop_up_menu.dart';
 import 'package:fehviewer/common/service/depth_service.dart';
+import 'package:fehviewer/common/service/theme_service.dart';
 import 'package:fehviewer/const/const.dart';
 import 'package:fehviewer/generated/l10n.dart';
 import 'package:fehviewer/models/index.dart';
@@ -18,21 +19,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:line_icons/line_icons.dart';
-
-const BorderSide _kDefaultRoundedBorderSide = BorderSide(
-  color: CupertinoDynamicColor.withBrightness(
-    color: Color(0x33000000),
-    darkColor: Color(0x33FFFFFF),
-  ),
-  style: BorderStyle.solid,
-  width: 0.0,
-);
-const Border _kDefaultRoundedBorder = Border(
-  top: _kDefaultRoundedBorderSide,
-  bottom: _kDefaultRoundedBorderSide,
-  left: _kDefaultRoundedBorderSide,
-  right: _kDefaultRoundedBorderSide,
-);
 
 const CupertinoDynamicColor _kClearButtonColor =
     CupertinoDynamicColor.withBrightness(
@@ -57,44 +43,43 @@ class GallerySearchPage extends StatelessWidget {
         padding: const EdgeInsetsDirectional.only(start: 0),
 //        border: null,
 
-        middle: CupertinoTextField(
-          style: const TextStyle(
-            height: 1,
-            textBaseline: TextBaseline.alphabetic,
-          ),
-          decoration: const BoxDecoration(
-            color: CupertinoDynamicColor.withBrightness(
-              color: CupertinoColors.white,
-              darkColor: CupertinoColors.black,
-            ),
-            border: _kDefaultRoundedBorder,
-            borderRadius: BorderRadius.all(Radius.circular(12.0)),
-          ),
-          // clearButtonMode: OverlayVisibilityMode.editing,
-          suffix: GetBuilder<SearchPageController>(
-            id: GetIds.SEARCH_CLEAR_BTN,
-            tag: searchPageCtrlDepth,
-            builder: (SearchPageController controller) {
-              return controller.showClearButton
-                  ? GestureDetector(
-                      onTap: controller.clear,
-                      child: Icon(
-                        LineIcons.timesCircle,
-                        size: 18.0,
-                        color: CupertinoDynamicColor.resolve(
-                            _kClearButtonColor, context),
-                      ).paddingSymmetric(horizontal: 6),
-                    )
-                  : const SizedBox();
-            },
-          ),
-          padding: const EdgeInsets.fromLTRB(12, 6, 6, 6),
-          controller: controller.searchTextController,
-          autofocus: controller.autofocus,
-          textInputAction: TextInputAction.search,
-          onEditingComplete: controller.onEditingComplete,
-          focusNode: controller.focusNode,
-        ),
+        middle: Obx(() => CupertinoTextField(
+              style: const TextStyle(height: 1.25),
+              decoration: BoxDecoration(
+                color: ehTheme.textFieldBackgroundColor,
+                borderRadius: const BorderRadius.all(Radius.circular(8.0)),
+              ),
+              placeholder: controller.placeholderText,
+              placeholderStyle: const TextStyle(
+                fontWeight: FontWeight.w400,
+                color: CupertinoColors.placeholderText,
+                height: 1.25,
+              ),
+              // clearButtonMode: OverlayVisibilityMode.editing,
+              suffix: GetBuilder<SearchPageController>(
+                id: GetIds.SEARCH_CLEAR_BTN,
+                tag: searchPageCtrlDepth,
+                builder: (SearchPageController controller) {
+                  return controller.showClearButton
+                      ? GestureDetector(
+                          onTap: controller.clear,
+                          child: Icon(
+                            LineIcons.timesCircle,
+                            size: 18.0,
+                            color: CupertinoDynamicColor.resolve(
+                                _kClearButtonColor, context),
+                          ).paddingSymmetric(horizontal: 6),
+                        )
+                      : const SizedBox();
+                },
+              ),
+              padding: const EdgeInsets.fromLTRB(12, 6, 6, 6),
+              controller: controller.searchTextController,
+              autofocus: controller.autofocus,
+              textInputAction: TextInputAction.search,
+              onEditingComplete: controller.onEditingComplete,
+              focusNode: controller.focusNode,
+            )),
         transitionBetweenRoutes: false,
         leading: Container(
           width: 0,

@@ -153,6 +153,27 @@ class ThemeColors {
     darkColor: Color.fromARGB(255, 30, 30, 30),
   );
 
+  static const CupertinoDynamicColor ligthTextFieldBackground =
+      CupertinoDynamicColor.withBrightness(
+    debugLabel: 'ligthTextFieldBackground',
+    color: Color.fromARGB(255, 226, 226, 226),
+    darkColor: Color.fromARGB(255, 239, 239, 240),
+  );
+
+  static const CupertinoDynamicColor darkTextFieldBackground =
+      CupertinoDynamicColor.withBrightness(
+    debugLabel: 'darkTextFieldBackground',
+    color: Color.fromARGB(255, 29, 29, 29),
+    darkColor: Color.fromARGB(255, 28, 28, 31),
+  );
+
+  static const CupertinoDynamicColor darkGrayTextFieldBackground =
+      CupertinoDynamicColor.withBrightness(
+    debugLabel: 'darkGrayTextFieldBackground',
+    color: Color.fromARGB(255, 47, 47, 47),
+    darkColor: Color.fromARGB(255, 47, 47, 47),
+  );
+
   // 画廊类型主题色
   static const Map<String, Color> catColor = <String, Color>{
     'Doujinshi': CupertinoDynamicColor.withBrightness(
@@ -218,7 +239,7 @@ class ThemeColors {
       CupertinoDynamicColor.withBrightness(
     debugLabel: 'navigationBarBackground',
     color: Color(0xd0f9f9f9),
-    darkColor: Color(0xc01b1b1b),
+    darkColor: Color.fromARGB(230, 20, 20, 20),
   );
 
   static const CupertinoDynamicColor navigationBarBackgroundGray =
@@ -226,7 +247,7 @@ class ThemeColors {
     debugLabel: 'navigationBarBackground',
     color: Color(0xd0f9f9f9),
     // darkColor: Color(0xc0303030),
-    darkColor: Color.fromARGB(200, 35, 35, 35),
+    darkColor: Color.fromARGB(230, 35, 35, 35),
   );
 
   static const Map<String, Color> colorRatingMap = <String, Color>{

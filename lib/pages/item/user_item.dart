@@ -24,14 +24,14 @@ class _UserItem extends State<UserItem> {
   void initState() {
     super.initState();
     _color =
-        CupertinoDynamicColor.resolve(ehTheme.itmeBackgroundColor, Get.context);
+        CupertinoDynamicColor.resolve(ehTheme.itemBackgroundColor, Get.context);
     _pBackgroundColor = _color;
   }
 
   @override
   Widget build(BuildContext context) {
     final Color color =
-        CupertinoDynamicColor.resolve(ehTheme.itmeBackgroundColor, context);
+        CupertinoDynamicColor.resolve(ehTheme.itemBackgroundColor, context);
     if (_pBackgroundColor.value != color.value) {
       _color = color;
       _pBackgroundColor = color;
@@ -114,7 +114,7 @@ class _UserItem extends State<UserItem> {
   void _updateNormalColor() {
     setState(() {
       _color = CupertinoDynamicColor.resolve(
-          ehTheme.itmeBackgroundColor, Get.context);
+          ehTheme.itemBackgroundColor, Get.context);
     });
   }
 

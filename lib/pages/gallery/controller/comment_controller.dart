@@ -2,14 +2,12 @@ import 'package:fehviewer/common/service/depth_service.dart';
 import 'package:fehviewer/generated/l10n.dart';
 import 'package:fehviewer/models/index.dart';
 import 'package:fehviewer/network/gallery_request.dart';
-import 'package:fehviewer/pages/gallery/view/comment_page.dart';
 import 'package:fehviewer/utils/logger.dart';
 import 'package:fehviewer/utils/toast.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 
 import 'gallery_page_controller.dart';
 
@@ -149,33 +147,6 @@ class CommentController extends GetxController
     if (rult) {
       await pageController.handOnRefresh();
     }
-  }
-
-  void showCommentModal(context) {
-    CupertinoScaffold.showCupertinoModalBottomSheet(
-      context: context,
-      enableDrag: false,
-      backgroundColor: Colors.transparent,
-      animationCurve: Curves.linearToEaseOut.flipped,
-      builder: (context) => CommentEditView(),
-    );
-
-/*    showCupertinoModalPopup(
-        context: context,
-        builder: (BuildContext context) {
-          return CupertinoAlertDialog(
-            title: Text('comment'),
-            content: Container(),
-            actions: <Widget>[
-              CupertinoDialogAction(
-                child: Text(S.of(context).ok),
-                onPressed: () {
-                  Get.back();
-                },
-              ),
-            ],
-          );
-        });*/
   }
 
   Future<void> pressSend() async {

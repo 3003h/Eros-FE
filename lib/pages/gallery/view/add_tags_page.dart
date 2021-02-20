@@ -1,4 +1,5 @@
 import 'package:fehviewer/common/service/depth_service.dart';
+import 'package:fehviewer/common/service/theme_service.dart';
 import 'package:fehviewer/const/const.dart';
 import 'package:fehviewer/generated/l10n.dart';
 import 'package:fehviewer/pages/gallery/controller/taginfo_controller.dart';
@@ -6,43 +7,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:line_icons/line_icons.dart';
-
-const BorderSide _kDefaultRoundedBorderSide = BorderSide(
-  color: CupertinoDynamicColor.withBrightness(
-    color: Color(0x33000000),
-    darkColor: Color(0x33FFFFFF),
-  ),
-  style: BorderStyle.solid,
-  width: 0.0,
-);
-const Border _kDefaultRoundedBorder = Border(
-  top: _kDefaultRoundedBorderSide,
-  bottom: _kDefaultRoundedBorderSide,
-  left: _kDefaultRoundedBorderSide,
-  right: _kDefaultRoundedBorderSide,
-);
-
-const BoxDecoration _kDefaultRoundedBorderDecoration = BoxDecoration(
-  color: CupertinoDynamicColor.withBrightness(
-    color: CupertinoColors.white,
-    darkColor: CupertinoColors.black,
-  ),
-  border: _kDefaultRoundedBorder,
-  borderRadius: BorderRadius.all(Radius.circular(18.0)),
-);
-
-const Color _kDefaultNavBarBorderColor = CupertinoDynamicColor.withBrightness(
-  color: Color(0x33000000),
-  darkColor: Color(0x33FFFFFF),
-);
-
-const Border _kDefaultEditBorder = Border(
-  top: BorderSide(
-    color: _kDefaultNavBarBorderColor,
-    width: 0.5, // One physical pixel.
-    style: BorderStyle.solid,
-  ),
-);
 
 const CupertinoDynamicColor _kClearButtonColor =
     CupertinoDynamicColor.withBrightness(
@@ -77,7 +41,10 @@ class AddTagPage extends StatelessWidget {
                 maxLines: null,
                 // keyboardType: TextInputType.multiline,
                 textInputAction: TextInputAction.done,
-                decoration: _kDefaultRoundedBorderDecoration,
+                decoration: BoxDecoration(
+                  color: ehTheme.textFieldBackgroundColor,
+                  borderRadius: const BorderRadius.all(Radius.circular(8.0)),
+                ),
                 controller: controller.tagsTextController,
                 focusNode: controller.focusNode,
                 placeholder: S.of(context).add_tag_placeholder,

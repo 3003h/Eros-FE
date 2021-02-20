@@ -1,5 +1,6 @@
 import 'package:dio/dio.dart';
 import 'package:fehviewer/common/service/ehconfig_service.dart';
+import 'package:fehviewer/common/service/theme_service.dart';
 import 'package:fehviewer/models/index.dart';
 import 'package:fehviewer/network/gallery_request.dart';
 import 'package:fehviewer/pages/tab/controller/search_page_controller.dart';
@@ -220,6 +221,10 @@ class TabViewController extends GetxController
                   child: Text('跳转范围 1~$maxPage'),
                 ),
                 CupertinoTextField(
+                  decoration: BoxDecoration(
+                    color: ehTheme.textFieldBackgroundColor,
+                    borderRadius: const BorderRadius.all(Radius.circular(8.0)),
+                  ),
                   controller: _pageController,
                   autofocus: true,
                   keyboardType: TextInputType.number,

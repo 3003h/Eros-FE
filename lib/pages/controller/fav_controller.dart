@@ -3,6 +3,7 @@ import 'package:fehviewer/common/controller/user_controller.dart';
 import 'package:fehviewer/common/global.dart';
 import 'package:fehviewer/common/parser/gallery_fav_parser.dart';
 import 'package:fehviewer/common/service/ehconfig_service.dart';
+import 'package:fehviewer/common/service/theme_service.dart';
 import 'package:fehviewer/const/theme_colors.dart';
 import 'package:fehviewer/generated/l10n.dart';
 import 'package:fehviewer/pages/gallery/view/gallery_favcat.dart';
@@ -77,6 +78,10 @@ class FavController extends GetxController {
                 CupertinoTextField(
                   controller: _favnoteController,
 //                  autofocus: true,
+                  decoration: BoxDecoration(
+                    color: ehTheme.textFieldBackgroundColor,
+                    borderRadius: const BorderRadius.all(Radius.circular(8.0)),
+                  ),
                   onEditingComplete: () {
                     // 点击键盘完成
                     // 添加收藏
@@ -147,7 +152,7 @@ class FavController extends GetxController {
               _ehConfigService.isFavPicker.value = true;
               showToast('切换样式');
             },
-            child: Text('添加收藏'),
+            child: const Text('添加收藏'),
           ),
           content: Container(
             child: Column(
@@ -156,6 +161,11 @@ class FavController extends GetxController {
                 CupertinoTextField(
                   controller: _favnoteController,
 //                  autofocus: true,
+                  decoration: BoxDecoration(
+                    color: ehTheme.textFieldBackgroundColor,
+                    borderRadius: const BorderRadius.all(Radius.circular(8.0)),
+                  ),
+                  placeholder: 'Favorites note',
                   onEditingComplete: () {
                     // 点击键盘完成
                   },

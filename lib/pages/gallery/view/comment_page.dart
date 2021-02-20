@@ -12,30 +12,6 @@ import 'package:get/get.dart';
 
 import 'comment_item.dart';
 
-const BorderSide _kDefaultRoundedBorderSide = BorderSide(
-  color: CupertinoDynamicColor.withBrightness(
-    color: Color(0x33000000),
-    darkColor: Color(0x33FFFFFF),
-  ),
-  style: BorderStyle.solid,
-  width: 0.0,
-);
-const Border _kDefaultRoundedBorder = Border(
-  top: _kDefaultRoundedBorderSide,
-  bottom: _kDefaultRoundedBorderSide,
-  left: _kDefaultRoundedBorderSide,
-  right: _kDefaultRoundedBorderSide,
-);
-
-const BoxDecoration _kDefaultRoundedBorderDecoration = BoxDecoration(
-  color: CupertinoDynamicColor.withBrightness(
-    color: CupertinoColors.white,
-    darkColor: CupertinoColors.black,
-  ),
-  border: _kDefaultRoundedBorder,
-  borderRadius: BorderRadius.all(Radius.circular(18.0)),
-);
-
 const Color _kDefaultNavBarBorderColor = CupertinoDynamicColor.withBrightness(
   color: Color(0x33000000),
   darkColor: Color(0x33FFFFFF),
@@ -176,7 +152,11 @@ class CommentPage extends StatelessWidget {
                                   horizontal: 14.0, vertical: 6.0),
                               maxLines: null,
                               keyboardType: TextInputType.multiline,
-                              decoration: _kDefaultRoundedBorderDecoration,
+                              decoration: BoxDecoration(
+                                color: ehTheme.textFieldBackgroundColor,
+                                borderRadius: const BorderRadius.all(
+                                    Radius.circular(18.0)),
+                              ),
                               controller: controller.commentTextController,
                               focusNode: controller.focusNode,
                             ),
@@ -223,41 +203,6 @@ class CommentPage extends StatelessWidget {
               ),
             ),
           ],
-        ),
-      ),
-    );
-  }
-}
-
-class CommentEditView extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return CupertinoPageScaffold(
-      navigationBar: CupertinoNavigationBar(
-        middle: const Text('New comment'),
-        leading: CupertinoButton(
-          padding: const EdgeInsets.all(0),
-          child: Text(S.of(context).cancel),
-          onPressed: () {
-            Get.back();
-          },
-        ),
-        trailing: CupertinoButton(
-          padding: const EdgeInsets.all(0),
-          child: Text(S.of(context).ok),
-          onPressed: () {
-            Get.back();
-          },
-        ),
-      ),
-      child: SafeArea(
-        child: Container(
-          child: const CupertinoTextField(
-            decoration: null,
-            // maxLines: null,
-            maxLines: 100,
-            keyboardType: TextInputType.multiline,
-          ),
         ),
       ),
     );
