@@ -1,3 +1,4 @@
+import 'package:fehviewer/common/colors.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
@@ -9,6 +10,32 @@ enum ThemesModeEnum {
 
 class CustTheme {
   CupertinoThemeData themeData;
+}
+
+class EhDynamicColors {
+  static const EhDynamicColor textFieldBackground = EhDynamicColor(
+    color: Color.fromARGB(255, 239, 239, 240),
+    darkColor: Color.fromARGB(255, 28, 28, 31),
+    darkGrayColor: Color.fromARGB(255, 47, 47, 47),
+  );
+
+  static const EhDynamicColor commentTextFieldBackground = EhDynamicColor(
+    color: Color.fromARGB(255, 233, 233, 233),
+    darkColor: Color.fromARGB(255, 28, 28, 31),
+    darkGrayColor: Color.fromARGB(255, 47, 47, 47),
+  );
+
+  static const EhDynamicColor favnoteTextFieldBackground = EhDynamicColor(
+    color: Color.fromARGB(255, 250, 250, 250),
+    darkColor: Color.fromARGB(255, 28, 28, 31),
+    darkGrayColor: Color.fromARGB(255, 47, 47, 47),
+  );
+
+  static const EhDynamicColor itemBackground = EhDynamicColor(
+    color: Color.fromARGB(255, 255, 255, 255),
+    darkColor: Color.fromARGB(255, 30, 30, 30),
+    darkGrayColor: Color.fromARGB(255, 30, 30, 30),
+  );
 }
 
 // ignore: avoid_classes_with_only_static_members
@@ -132,48 +159,6 @@ class ThemeColors {
     barBackgroundColor: navigationBarBackgroundGray,
   );
 
-  static const CupertinoDynamicColor ligthItemBackground =
-      CupertinoDynamicColor.withBrightness(
-    debugLabel: 'ligthItemBackground',
-    color: Color.fromARGB(255, 255, 255, 255),
-    darkColor: Color.fromARGB(255, 30, 30, 30),
-  );
-
-  static const CupertinoDynamicColor darkItemBackground =
-      CupertinoDynamicColor.withBrightness(
-    debugLabel: 'darkItemBackground',
-    color: Color.fromARGB(255, 242, 242, 247),
-    darkColor: Color.fromARGB(255, 30, 30, 30),
-  );
-
-  static const CupertinoDynamicColor darkGrayItemBackground =
-      CupertinoDynamicColor.withBrightness(
-    debugLabel: 'darkGrayItemBackground',
-    color: Color.fromARGB(255, 242, 242, 247),
-    darkColor: Color.fromARGB(255, 30, 30, 30),
-  );
-
-  static const CupertinoDynamicColor ligthTextFieldBackground =
-      CupertinoDynamicColor.withBrightness(
-    debugLabel: 'ligthTextFieldBackground',
-    color: Color.fromARGB(255, 226, 226, 226),
-    darkColor: Color.fromARGB(255, 239, 239, 240),
-  );
-
-  static const CupertinoDynamicColor darkTextFieldBackground =
-      CupertinoDynamicColor.withBrightness(
-    debugLabel: 'darkTextFieldBackground',
-    color: Color.fromARGB(255, 29, 29, 29),
-    darkColor: Color.fromARGB(255, 28, 28, 31),
-  );
-
-  static const CupertinoDynamicColor darkGrayTextFieldBackground =
-      CupertinoDynamicColor.withBrightness(
-    debugLabel: 'darkGrayTextFieldBackground',
-    color: Color.fromARGB(255, 47, 47, 47),
-    darkColor: Color.fromARGB(255, 47, 47, 47),
-  );
-
   // 画廊类型主题色
   static const Map<String, Color> catColor = <String, Color>{
     'Doujinshi': CupertinoDynamicColor.withBrightness(
@@ -238,15 +223,14 @@ class ThemeColors {
   static const CupertinoDynamicColor navigationBarBackground =
       CupertinoDynamicColor.withBrightness(
     debugLabel: 'navigationBarBackground',
-    color: Color(0xd0f9f9f9),
+    color: Color.fromARGB(222, 249, 249, 249),
     darkColor: Color.fromARGB(230, 20, 20, 20),
   );
 
   static const CupertinoDynamicColor navigationBarBackgroundGray =
       CupertinoDynamicColor.withBrightness(
     debugLabel: 'navigationBarBackground',
-    color: Color(0xd0f9f9f9),
-    // darkColor: Color(0xc0303030),
+    color: Color.fromARGB(222, 249, 249, 249),
     darkColor: Color.fromARGB(230, 35, 35, 35),
   );
 
