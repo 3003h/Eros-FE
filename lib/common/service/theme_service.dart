@@ -1,4 +1,5 @@
 import 'package:enum_to_string/enum_to_string.dart';
+import 'package:fehviewer/common/colors.dart';
 import 'package:fehviewer/common/global.dart';
 import 'package:fehviewer/common/service/base_service.dart';
 import 'package:fehviewer/const/theme_colors.dart';
@@ -57,31 +58,21 @@ final EHTheme ehTheme = EHTheme();
 class EHTheme {
   final ThemeService _themeService = Get.find();
   final EhConfigService _ehConfigService = Get.find();
-  Color get itemBackgroundColor {
-    switch (_themeService.themeModel) {
-      case ThemesModeEnum.system:
-        return _themeService.platformBrightness.value == Brightness.dark
-            ? _darkItemColor
-            : ThemeColors.ligthItemBackground;
-      case ThemesModeEnum.ligthMode:
-        return ThemeColors.ligthItemBackground;
-      case ThemesModeEnum.darkMode:
-        return _darkItemColor;
-      default:
-        return null;
-    }
-  }
 
-  Color get textFieldBackgroundColor {
+  Color _getColorWithTheme(EhDynamicColor ehcolor) {
+    final Color effDarkColor = _ehConfigService.isPureDarkTheme.value
+        ? ehcolor.darkColor
+        : ehcolor.darkGrayColor;
+
     switch (_themeService.themeModel) {
       case ThemesModeEnum.system:
         return _themeService.platformBrightness.value == Brightness.dark
-            ? _darkTextFieldColor
-            : ThemeColors.ligthTextFieldBackground;
+            ? effDarkColor
+            : ehcolor.color;
       case ThemesModeEnum.ligthMode:
-        return ThemeColors.ligthTextFieldBackground;
+        return ehcolor.color;
       case ThemesModeEnum.darkMode:
-        return _darkTextFieldColor;
+        return effDarkColor;
       default:
         return null;
     }
@@ -89,13 +80,21 @@ class EHTheme {
 
   CupertinoThemeData get themeData => _themeService.themeData;
 
-  Color get _darkItemColor => _ehConfigService.isPureDarkTheme.value
-      ? ThemeColors.darkItemBackground
-      : ThemeColors.darkGrayItemBackground;
+  /// 文本输入框的背景色
+  Color get textFieldBackgroundColor =>
+      _getColorWithTheme(EhDynamicColors.textFieldBackground);
 
-  Color get _darkTextFieldColor => _ehConfigService.isPureDarkTheme.value
-      ? ThemeColors.darkTextFieldBackground
-      : ThemeColors.darkGrayTextFieldBackground;
+  /// 评论输入框颜色
+  Color get commentTextFieldBackgroundColor =>
+      _getColorWithTheme(EhDynamicColors.commentTextFieldBackground);
+
+  // 收藏备注输入框颜色
+  Color get favnoteTextFieldBackgroundColor =>
+      _getColorWithTheme(EhDynamicColors.favnoteTextFieldBackground);
+
+  /// item 背景色
+  Color get itemBackgroundColor =>
+      _getColorWithTheme(EhDynamicColors.itemBackground);
 
   bool get _isSeldark => _themeService.themeModel == ThemesModeEnum.darkMode;
   bool get _isSelLigth => _themeService.themeModel == ThemesModeEnum.ligthMode;

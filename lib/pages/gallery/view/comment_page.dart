@@ -153,12 +153,13 @@ class CommentPage extends StatelessWidget {
                               maxLines: null,
                               keyboardType: TextInputType.multiline,
                               decoration: BoxDecoration(
-                                color: ehTheme.textFieldBackgroundColor,
+                                color: ehTheme.commentTextFieldBackgroundColor,
                                 borderRadius: const BorderRadius.all(
                                     Radius.circular(18.0)),
                               ),
                               controller: controller.commentTextController,
                               focusNode: controller.focusNode,
+                              placeholder: 'New comment',
                             ),
                           ),
                         ),

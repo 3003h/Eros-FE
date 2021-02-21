@@ -79,7 +79,7 @@ class FavController extends GetxController {
                   controller: _favnoteController,
 //                  autofocus: true,
                   decoration: BoxDecoration(
-                    color: ehTheme.textFieldBackgroundColor,
+                    color: ehTheme.favnoteTextFieldBackgroundColor,
                     borderRadius: const BorderRadius.all(Radius.circular(8.0)),
                   ),
                   onEditingComplete: () {
@@ -162,7 +162,7 @@ class FavController extends GetxController {
                   controller: _favnoteController,
 //                  autofocus: true,
                   decoration: BoxDecoration(
-                    color: ehTheme.textFieldBackgroundColor,
+                    color: ehTheme.favnoteTextFieldBackgroundColor,
                     borderRadius: const BorderRadius.all(Radius.circular(8.0)),
                   ),
                   placeholder: 'Favorites note',
