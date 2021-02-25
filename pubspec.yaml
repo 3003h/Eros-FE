@@ -3,7 +3,7 @@ description: ..
 
 publish_to: 'none' # Remove this line if you wish to publish to pub.dev
 
-version: 1.0.4+145
+version: 1.0.4+146
 
 environment:
   sdk: '>=2.10.0 <3.0.0'
@@ -77,7 +77,7 @@ dependencies:
   # 状态管理
 #  provider: ^4.3.2+2
 
-  get: ^3.24.0
+  get: 3.24.0
   get_storage: ^1.4.0
 
   photo_view: ^0.10.3
