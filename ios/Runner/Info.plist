@@ -53,7 +53,7 @@
 	<key>NSPhotoLibraryUsageDescription</key>
 	<string>用于保存图片</string>
 	<key>NSPhotoLibraryAddUsageDescription</key>
-	<string>Add Photos</string>
+	<string>用于保存图片 add photos</string>
 	<key>UIBackgroundModes</key>
 	<array>
 		<string>fetch</string>
