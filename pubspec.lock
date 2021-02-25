@@ -545,7 +545,7 @@ packages:
       name: get
       url: "https://pub.flutter-io.cn"
     source: hosted
-    version: "3.25.4"
+    version: "3.24.0"
   get_storage:
     dependency: "direct main"
     description:
