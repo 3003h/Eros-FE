@@ -792,6 +792,7 @@ class Api {
   /// 默认为下载网络图片，如需下载资源图片，需要指定 [isAsset] 为 `true`。
   static Future<bool> saveImage(BuildContext context, String imageUrl,
       {bool isAsset = false}) async {
+    /// 跳转权限设置
     Future<void> _jumpToAppSettings(context) async {
       return showCupertinoDialog<bool>(
         context: context,
@@ -824,13 +825,24 @@ class Api {
 
     if (Platform.isIOS) {
       logger.v('check ios photos Permission');
-      final PermissionStatus status = await Permission.photos.status;
-      logger.v(status);
-      if (status.isPermanentlyDenied) {
+      final PermissionStatus statusPhotos = await Permission.photos.status;
+      final PermissionStatus statusPhotosAdd =
+          await Permission.photosAddOnly.status;
+
+      logger.d('statusPhotos $statusPhotos , photosAddOnly $statusPhotosAdd');
+
+      if (statusPhotos.isPermanentlyDenied &&
+          statusPhotosAdd.isPermanentlyDenied) {
         _jumpToAppSettings(context);
         return false;
       } else {
-        if (await Permission.photos.request().isGranted) {
+        final requestAddOnly = await Permission.photosAddOnly.request();
+        final requestAll = await Permission.photos.request();
+
+        if (requestAddOnly.isGranted ||
+            requestAddOnly.isLimited ||
+            requestAll.isGranted ||
+            requestAll.isLimited) {
           // return _saveImage(imageUrl);
           return _saveImageExtended(imageUrl);
           // Either the permission was already granted before or the user just granted it.
