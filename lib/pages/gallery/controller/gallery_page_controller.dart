@@ -122,7 +122,7 @@ class GalleryPageController extends GetxController
   void onInit() {
     super.onInit();
 
-    // logger.d('GalleryPageController$pageCtrlDepth onInit');
+    logger.d('GalleryPageController $pageCtrlDepth onInit');
 
     scrollController.addListener(_scrollControllerLister);
     hideNavigationBtn = true;
@@ -135,6 +135,8 @@ class GalleryPageController extends GetxController
     }
 
     _firstLoadData();
+
+    logger.d('GalleryPageController $pageCtrlDepth onInit end');
   }
 
   @override
@@ -307,9 +309,12 @@ class GalleryPageController extends GetxController
 
   Future<void> _firstLoadData(
       {bool refresh = false, bool showError = true}) async {
+    logger.d('_firstLoadData');
+
     try {
       final GalleryItem _fetchItem = await _fetchData(refresh: refresh);
       change(_fetchItem, status: RxStatus.success());
+      logger.d('change end');
       time.showTime('change end');
       _enableRead.value = true;
       // isRatinged = (galleryItem?.isRatinged ?? false) ||
