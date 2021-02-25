@@ -81,7 +81,7 @@ class ListViewAdvancedSetting extends StatelessWidget {
           title: S.of(context).tabbar_setting,
           selector: '',
           onTap: () {
-            // Get.to(TabSettingPage());
+            // Get.to( TabSettingPage());
             Get.toNamed(EHRoutes.pageSetting);
           },
         ),

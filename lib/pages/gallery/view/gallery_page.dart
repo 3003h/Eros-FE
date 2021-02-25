@@ -157,7 +157,7 @@ class GalleryContainer extends StatelessWidget {
     final GalleryPageController _controller = Get.find(tag: pageCtrlDepth);
 
     Widget _getDetail(GalleryItem state) {
-      final List<Widget> _w = <Widget>[
+      final List<Widget> _btns = <Widget>[
         // 进行评分
         Expanded(
           child: Obx(() => TextBtn(
@@ -226,7 +226,7 @@ class GalleryContainer extends StatelessWidget {
         children: <Widget>[
           Row(
             mainAxisSize: MainAxisSize.min,
-            children: _w,
+            children: _btns,
           ),
           Divider(
             height: 0.5,
@@ -268,17 +268,21 @@ class GalleryContainer extends StatelessWidget {
             ),
             _controller.obx(
               (GalleryItem state) {
+                logger.d('_controller.obx complte');
                 return _getDetail(state);
               },
-              onLoading: Container(
-                // height: Get.size.height - _top * 3 - kHeaderHeight,
-                height: 200,
-                alignment: Alignment.center,
-                padding: const EdgeInsets.only(bottom: 50),
-                child: const CupertinoActivityIndicator(
-                  radius: 14.0,
-                ),
-              ),
+              onLoading: () {
+                logger.d('_controller.obx onLoading');
+                return Container(
+                  // height: Get.size.height - _top * 3 - kHeaderHeight,
+                  height: 200,
+                  alignment: Alignment.center,
+                  padding: const EdgeInsets.only(bottom: 50),
+                  child: const CupertinoActivityIndicator(
+                    radius: 14.0,
+                  ),
+                );
+              }(),
               onError: (err) {
                 logger.e(' $err');
                 return Container(
