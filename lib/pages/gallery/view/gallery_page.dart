@@ -32,25 +32,24 @@ class GalleryRepository {
 }
 
 class GalleryMainPage extends StatelessWidget {
-  const GalleryMainPage();
+  final GalleryPageController _controller = Get.find(tag: pageCtrlDepth);
 
   @override
   Widget build(BuildContext context) {
-    final GalleryPageController controller = Get.find(tag: pageCtrlDepth);
-    final String tabTag = controller.galleryRepository.tabTag;
+    final String tabTag = _controller.galleryRepository.tabTag;
 
-    final GalleryItem _item = controller.galleryItem;
+    final GalleryItem _item = _controller.galleryItem;
 
     return CupertinoPageScaffold(
       child: CustomScrollView(
-        controller: controller.scrollController,
+        controller: _controller.scrollController,
         physics: const AlwaysScrollableScrollPhysics(),
         slivers: <Widget>[
           // 导航栏
           Obx(() => CupertinoSliverNavigationBar(
                 padding: const EdgeInsetsDirectional.only(end: 10),
                 largeTitle: SelectableText(
-                  controller.topTitle ?? '',
+                  _controller.topTitle ?? '',
                   textAlign: TextAlign.left,
                   maxLines: 3,
                   minLines: 1,
@@ -61,13 +60,13 @@ class GalleryMainPage extends StatelessWidget {
                     fontWeight: FontWeight.normal,
                   ),
                 ),
-                middle: controller.hideNavigationBtn
+                middle: _controller.hideNavigationBtn
                     ? null
                     : NavigationBarImage(
                         imageUrl: _item.imgUrl,
-                        scrollController: controller.scrollController,
+                        scrollController: _controller.scrollController,
                       ),
-                trailing: controller.hideNavigationBtn
+                trailing: _controller.hideNavigationBtn
                     ? Row(
                         mainAxisSize: MainAxisSize.min,
                         children: [
@@ -79,7 +78,7 @@ class GalleryMainPage extends StatelessWidget {
                               size: 26,
                             ),
                             onPressed: () {
-                              controller.addTag();
+                              _controller.addTag();
                             },
                           ),
                           CupertinoButton(
@@ -101,12 +100,12 @@ class GalleryMainPage extends StatelessWidget {
                     : ReadButton(gid: _item.gid).paddingOnly(right: 4),
               )),
           CupertinoSliverRefreshControl(
-            onRefresh: controller.handOnRefresh,
+            onRefresh: _controller.handOnRefresh,
           ),
           SliverSafeArea(
             top: false,
             bottom: false,
-            sliver: GalleryContainer(tabTag: tabTag),
+            sliver: GalleryDetail(tabTag: tabTag),
           ),
         ],
       ),
@@ -144,205 +143,233 @@ class NavigationBarImage extends StatelessWidget {
 }
 
 // 画廊内容
-class GalleryContainer extends StatelessWidget {
-  const GalleryContainer({
+class GalleryDetail extends StatelessWidget {
+  const GalleryDetail({
     Key key,
     this.tabTag,
   }) : super(key: key);
 
   final String tabTag;
+  GalleryPageController get _controller => Get.find(tag: pageCtrlDepth);
 
   @override
   Widget build(BuildContext context) {
-    final GalleryPageController _controller = Get.find(tag: pageCtrlDepth);
+    return _controller.fromUrl
+        ? _DetailFromUrl()
+        : _DetailFromItem(tabTag: tabTag);
+  }
+}
 
-    Widget _getDetail(GalleryItem state) {
-      final List<Widget> _btns = <Widget>[
-        // 进行评分
-        Expanded(
-          child: Obx(() => TextBtn(
-                _controller.isRatinged
-                    ? FontAwesomeIcons.solidStar
-                    : FontAwesomeIcons.star,
-                title: S.of(context).p_Rate,
-                onTap: state.apiuid?.isNotEmpty ?? false
-                    ? () {
-                        // logger.d(' showRateDialog');
-                        showRateDialog(context);
-                      }
-                    : null,
-              )),
-        ),
-        // 画廊下载
-        Expanded(
-          child: TextBtn(
-            FontAwesomeIcons.solidArrowAltCircleDown,
-            title: S.of(context).p_Download,
-            onTap: Global.inDebugMode ? _controller.downloadGallery : null,
-          ),
-        ),
-        // 种子下载
-        Expanded(
-          child: TextBtn(
-            FontAwesomeIcons.magnet,
-            title: '${S.of(context).p_Torrent}(${state.torrentcount ?? 0})',
-            onTap: state.torrentcount != '0'
-                ? () async {
-                    showTorrentDialog();
-                  }
-                : null,
-          ),
-        ),
-        // archiver
-        Expanded(
-          child: TextBtn(
-            FontAwesomeIcons.solidFileArchive,
-            title: S.of(Get.context).p_Archiver,
-            onTap: () async {
-              showArchiverDialog();
-            },
-          ),
-        ),
-        // 相似画廊
-        Expanded(
-          child: TextBtn(
-            FontAwesomeIcons.solidImages,
-            title: S.of(context).p_Similar,
-            onTap: () {
-              final String title = state.englishTitle
-                  .replaceAll(RegExp(r'(\[.*?\]|\(.*?\))|{.*?}'), '')
-                  .trim()
-                  .split('\|')
-                  .first;
-              logger.i(' search "$title"');
-              NavigatorUtil.goGalleryListBySearch(simpleSearch: '"$title"');
-              // NavigatorUtil.goGalleryListBySearch(simpleSearch: title);
-            },
-          ),
-        ),
-      ];
+class _DetailFromUrl extends StatelessWidget {
+  final GalleryPageController _controller = Get.find(tag: pageCtrlDepth);
 
-      return Column(
+  @override
+  Widget build(BuildContext context) {
+    return _controller.obx(
+      (GalleryItem state) {
+        return SliverToBoxAdapter(
+          child: Column(
+            children: <Widget>[
+              GalleryHeader(
+                galleryItem: state,
+                tabTag: '',
+              ),
+              Divider(
+                height: 0.5,
+                color: CupertinoDynamicColor.resolve(
+                    CupertinoColors.systemGrey4, context),
+              ),
+              _DatailWidget(state: state),
+            ],
+          ),
+        );
+      },
+      onLoading: SliverFillRemaining(
+        child: Container(
+          // height: Get.size.height - 200,
+          // height: 200,
+          alignment: Alignment.center,
+          padding: const EdgeInsets.only(bottom: 50),
+          child: const CupertinoActivityIndicator(
+            radius: 14.0,
+          ),
+        ),
+      ),
+      onError: (String err) {
+        logger.e(' $err');
+        return SliverFillRemaining(
+          child: Container(
+            alignment: Alignment.center,
+            padding: const EdgeInsets.only(bottom: 50, top: 50),
+            child: GalleryErrorPage(
+              onTap: _controller.handOnRefreshAfterErr,
+            ),
+          ),
+        );
+      },
+    );
+  }
+}
+
+class _DatailWidget extends StatelessWidget {
+  const _DatailWidget({
+    Key key,
+    @required this.state,
+  }) : super(key: key);
+
+  final GalleryItem state;
+
+  GalleryPageController get _controller => Get.find(tag: pageCtrlDepth);
+
+  @override
+  Widget build(BuildContext context) {
+    final List<Widget> _btns = <Widget>[
+      // 进行评分
+      Expanded(
+        child: Obx(() => TextBtn(
+              _controller.isRatinged
+                  ? FontAwesomeIcons.solidStar
+                  : FontAwesomeIcons.star,
+              title: S.of(context).p_Rate,
+              onTap: state.apiuid?.isNotEmpty ?? false
+                  ? () {
+                      // logger.d(' showRateDialog');
+                      showRateDialog(context);
+                    }
+                  : null,
+            )),
+      ),
+      // 画廊下载
+      Expanded(
+        child: TextBtn(
+          FontAwesomeIcons.solidArrowAltCircleDown,
+          title: S.of(context).p_Download,
+          onTap: Global.inDebugMode ? _controller.downloadGallery : null,
+        ),
+      ),
+      // 种子下载
+      Expanded(
+        child: TextBtn(
+          FontAwesomeIcons.magnet,
+          title: '${S.of(context).p_Torrent}(${state.torrentcount ?? 0})',
+          onTap: state.torrentcount != '0'
+              ? () async {
+                  showTorrentDialog();
+                }
+              : null,
+        ),
+      ),
+      // archiver
+      Expanded(
+        child: TextBtn(
+          FontAwesomeIcons.solidFileArchive,
+          title: S.of(Get.context).p_Archiver,
+          onTap: () async {
+            showArchiverDialog();
+          },
+        ),
+      ),
+      // 相似画廊
+      Expanded(
+        child: TextBtn(
+          FontAwesomeIcons.solidImages,
+          title: S.of(context).p_Similar,
+          onTap: () {
+            final String title = state.englishTitle
+                .replaceAll(RegExp(r'(\[.*?\]|\(.*?\))|{.*?}'), '')
+                .trim()
+                .split('\|')
+                .first;
+            logger.i(' search "$title"');
+            NavigatorUtil.goGalleryListBySearch(simpleSearch: '"$title"');
+            // NavigatorUtil.goGalleryListBySearch(simpleSearch: title);
+          },
+        ),
+      ),
+    ];
+
+    return Column(
+      children: <Widget>[
+        Row(
+          mainAxisSize: MainAxisSize.min,
+          children: _btns,
+        ),
+        Divider(
+          height: 0.5,
+          color: CupertinoDynamicColor.resolve(
+              CupertinoColors.systemGrey4, context),
+        ),
+        // 标签
+        TagBox(listTagGroup: state.tagGroup),
+        const TopComment(),
+        Container(
+          margin: const EdgeInsets.only(top: 4),
+          height: 0.5,
+          color: CupertinoDynamicColor.resolve(
+              CupertinoColors.systemGrey4, context),
+        ),
+        PreviewGrid(
+          previews: _controller.firstPagePreview,
+          gid: state.gid,
+        ),
+        MorePreviewButton(hasMorePreview: _controller.hasMorePreview),
+      ],
+    );
+  }
+}
+
+class _DetailFromItem extends StatelessWidget {
+  const _DetailFromItem({Key key, this.tabTag}) : super(key: key);
+
+  final String tabTag;
+
+  GalleryPageController get _controller => Get.find(tag: pageCtrlDepth);
+
+  @override
+  Widget build(BuildContext context) {
+    final GalleryItem galleryItem = _controller.galleryItem;
+
+    return SliverToBoxAdapter(
+      child: Column(
         children: <Widget>[
-          Row(
-            mainAxisSize: MainAxisSize.min,
-            children: _btns,
+          GalleryHeader(
+            galleryItem: galleryItem,
+            tabTag: tabTag,
           ),
           Divider(
             height: 0.5,
             color: CupertinoDynamicColor.resolve(
                 CupertinoColors.systemGrey4, context),
           ),
-          // 标签
-          TagBox(listTagGroup: state.tagGroup),
-          const TopComment(),
-          Container(
-            margin: const EdgeInsets.only(top: 4),
-            height: 0.5,
-            color: CupertinoDynamicColor.resolve(
-                CupertinoColors.systemGrey4, context),
-          ),
-          PreviewGrid(
-            previews: _controller.firstPagePreview,
-            gid: state.gid,
-          ),
-          MorePreviewButton(hasMorePreview: _controller.hasMorePreview),
-        ],
-      );
-    }
-
-    Widget fromItem() {
-      final GalleryItem galleryItem = _controller.galleryItem;
-
-      return SliverToBoxAdapter(
-        child: Column(
-          children: <Widget>[
-            GalleryHeader(
-              galleryItem: galleryItem,
-              tabTag: tabTag,
-            ),
-            Divider(
-              height: 0.5,
-              color: CupertinoDynamicColor.resolve(
-                  CupertinoColors.systemGrey4, context),
-            ),
-            _controller.obx(
-              (GalleryItem state) {
-                logger.d('_controller.obx complte');
-                return _getDetail(state);
-              },
-              onLoading: () {
-                logger.d('_controller.obx onLoading');
-                return Container(
-                  // height: Get.size.height - _top * 3 - kHeaderHeight,
-                  height: 200,
-                  alignment: Alignment.center,
-                  padding: const EdgeInsets.only(bottom: 50),
-                  child: const CupertinoActivityIndicator(
-                    radius: 14.0,
-                  ),
-                );
-              }(),
-              onError: (err) {
-                logger.e(' $err');
-                return Container(
-                  padding: const EdgeInsets.only(bottom: 50, top: 50),
-                  child: GalleryErrorPage(
-                    onTap: _controller.handOnRefreshAfterErr,
-                  ),
-                );
-              },
-            )
-          ],
-        ),
-      );
-    }
-
-    Widget fromUrl() {
-      return _controller.obx(
-          (state) {
-            return SliverToBoxAdapter(
-              child: Column(
-                children: <Widget>[
-                  GalleryHeader(
-                    galleryItem: state,
-                    tabTag: '',
-                  ),
-                  Divider(
-                    height: 0.5,
-                    color: CupertinoDynamicColor.resolve(
-                        CupertinoColors.systemGrey4, context),
-                  ),
-                  _getDetail(state),
-                ],
-              ),
-            );
-          },
-          onLoading: SliverFillRemaining(
-            child: Container(
-              // height: Get.size.height - 200,
-              // height: 200,
-              alignment: Alignment.center,
-              padding: const EdgeInsets.only(bottom: 50),
-              child: const CupertinoActivityIndicator(
-                radius: 14.0,
-              ),
-            ),
-          ),
-          onError: (err) {
-            logger.e(' $err');
-            return SliverFillRemaining(
-              child: Container(
+          _controller.obx(
+            (GalleryItem state) {
+              logger.d('_controller.obx complte');
+              return _DatailWidget(state: state);
+            },
+            onLoading: () {
+              logger.d('_controller.obx onLoading');
+              return Container(
+                // height: Get.size.height - _top * 3 - kHeaderHeight,
+                height: 200,
                 alignment: Alignment.center,
+                padding: const EdgeInsets.only(bottom: 50),
+                child: const CupertinoActivityIndicator(
+                  radius: 14.0,
+                ),
+              );
+            }(),
+            onError: (err) {
+              logger.e(' $err');
+              return Container(
                 padding: const EdgeInsets.only(bottom: 50, top: 50),
                 child: GalleryErrorPage(
                   onTap: _controller.handOnRefreshAfterErr,
                 ),
-              ),
-            );
-          });
-    }
-
-    return _controller.fromUrl ? fromUrl() : fromItem();
+              );
+            },
+          )
+        ],
+      ),
+    );
   }
 }

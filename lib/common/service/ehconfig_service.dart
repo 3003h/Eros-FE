@@ -233,7 +233,7 @@ class EhConfigService extends ProfileService {
     logger.d('currentRoute $currentRoute');
 
     final pageNames = <String>[
-      '/${const GalleryMainPage().runtimeType.toString()}',
+      '/${GalleryMainPage().runtimeType.toString()}',
       EHRoutes.galleryPage,
     ];
 

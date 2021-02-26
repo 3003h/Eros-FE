@@ -124,9 +124,9 @@ class ListViewEhSetting extends StatelessWidget {
           selector: S.of(context).setting_on_website,
           onTap: () {
             if (GetPlatform.isAndroid) {
-              Get.to(WebMySettingAP());
+              Get.to(() => WebMySettingAP());
             } else if (GetPlatform.isIOS) {
-              Get.to(InWebMySetting());
+              Get.to(() => InWebMySetting());
             } else {
               showToast('Not support');
             }
@@ -139,9 +139,9 @@ class ListViewEhSetting extends StatelessWidget {
           selector: S.of(context).mytags_on_website,
           onTap: () {
             if (GetPlatform.isAndroid) {
-              Get.to(WebMyTagsAP());
+              Get.to(() => WebMyTagsAP());
             } else if (GetPlatform.isIOS) {
-              Get.to(InWebMyTags());
+              Get.to(() => InWebMyTags());
             } else {
               showToast('Not support');
             }

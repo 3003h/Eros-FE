@@ -157,7 +157,7 @@ class AppPages {
     // 先停用
     GetPage(
       name: EHRoutes.galleryPage,
-      page: () => const GalleryMainPage(),
+      page: () => GalleryMainPage(),
       binding: GalleryBinding(),
     ),
   ];
