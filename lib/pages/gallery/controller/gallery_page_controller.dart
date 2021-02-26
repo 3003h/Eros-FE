@@ -134,7 +134,7 @@ class GalleryPageController extends GetxController
       _galleryItem = galleryRepository.item;
     }
 
-    _firstLoadData();
+    _loadData();
 
     logger.d('GalleryPageController $pageCtrlDepth onInit end');
   }
@@ -302,13 +302,7 @@ class GalleryPageController extends GetxController
     }
   }
 
-  // Future<void> getShowKey({int index = 0}) async {
-  //   final String _showKey = await Api.getShowkey(previews[index].href);
-  //   galleryItem.showKey = _showKey;
-  // }
-
-  Future<void> _firstLoadData(
-      {bool refresh = false, bool showError = true}) async {
+  Future<void> _loadData({bool refresh = false, bool showError = true}) async {
     logger.d('_firstLoadData');
 
     try {
@@ -316,12 +310,10 @@ class GalleryPageController extends GetxController
       change(_fetchItem, status: RxStatus.success());
       logger.d('change end');
       time.showTime('change end');
-      _enableRead.value = true;
-      // isRatinged = (galleryItem?.isRatinged ?? false) ||
-      //     (_fetchItem?.isRatinged ?? false) ||
-      //     (_itemController?.galleryItem?.isRatinged ?? false);
 
-      await analytics.logViewItem(
+      _enableRead.value = true;
+
+      analytics.logViewItem(
         itemId: galleryItem.gid,
         itemName: galleryItem.englishTitle,
         itemCategory: galleryItem.category,
@@ -342,7 +334,7 @@ class GalleryPageController extends GetxController
     } catch (e) {
       logger.e('$e');
     }
-    await _firstLoadData(refresh: true, showError: false);
+    await _loadData(refresh: true, showError: false);
   }
 
   Future<void> handOnRefresh() async {

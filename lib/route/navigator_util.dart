@@ -15,7 +15,7 @@ import 'package:get/get.dart';
 class NavigatorUtil {
   /// 转到画廊列表页面
   static void goGalleryList({int cats = 0}) {
-    Get.to(const GalleryListTab(),
+    Get.to(() => const GalleryListTab(),
         binding: BindingsBuilder<GalleryViewController>(() {
       Get.put(GalleryViewController(cats: cats));
     }));
@@ -35,7 +35,7 @@ class NavigatorUtil {
     }
 
     Get.find<DepthService>().pushSearchPageCtrl();
-    Get.to(GallerySearchPage(), transition: Transition.cupertino,
+    Get.to(() => GallerySearchPage(), transition: Transition.cupertino,
         binding: BindingsBuilder(() {
       Get.lazyPut(
         () => SearchPageController(initSearchText: _search),
@@ -62,7 +62,7 @@ class NavigatorUtil {
       // );
 
       Get.to(
-        const GalleryMainPage(),
+        () => GalleryMainPage(),
         binding: GalleryBinding(
           galleryRepository: GalleryRepository(url: url, tabTag: tabTag),
         ),
@@ -84,7 +84,7 @@ class NavigatorUtil {
       // );
 
       Get.to(
-        const GalleryMainPage(),
+        () => GalleryMainPage(),
         binding: GalleryBinding(
           galleryRepository:
               GalleryRepository(item: galleryItem, tabTag: tabTag),
@@ -106,7 +106,7 @@ class NavigatorUtil {
       // Get.offNamed(EHRoutes.galleryPage,
       //     arguments: GalleryRepository(url: url));
       Get.to(
-        const GalleryMainPage(),
+        () => GalleryMainPage(),
         binding: GalleryBinding(
           galleryRepository: GalleryRepository(url: url),
         ),
@@ -115,7 +115,7 @@ class NavigatorUtil {
       );
     } else {
       Get.to(
-        const GalleryMainPage(),
+        () => GalleryMainPage(),
         preventDuplicates: false,
       );
     }
@@ -124,7 +124,7 @@ class NavigatorUtil {
   /// 打开搜索页面 搜索画廊 搜索关注
   static void showSearch({SearchType searchType, bool fromTabItem = true}) {
     logger.d('fromTabItem $fromTabItem');
-    Get.to(GallerySearchPage(),
+    Get.to(() => GallerySearchPage(),
         transition: fromTabItem ? Transition.fadeIn : Transition.cupertino,
         binding: BindingsBuilder(() {
       Get.find<DepthService>().pushSearchPageCtrl();

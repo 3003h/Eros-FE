@@ -48,8 +48,6 @@ class GalleryHeader extends StatelessWidget {
       color: CupertinoDynamicColor.resolve(CupertinoColors.label, context),
     );
 
-    // logger.v('hero dtl => ${galleryItem.gid}_cover_$tabTag');
-
     return Container(
       margin: const EdgeInsets.all(kPadding),
       child: Column(
@@ -647,7 +645,7 @@ class MorePreviewButton extends StatelessWidget {
       ),
       onPressed: () {
         Get.to(
-          const AllPreviewPage(),
+          () => const AllPreviewPage(),
           transition: Transition.cupertino,
         );
       },

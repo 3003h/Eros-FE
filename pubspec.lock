@@ -540,12 +540,14 @@ packages:
     source: hosted
     version: "0.12.0"
   get:
-    dependency: "direct main"
+    dependency: "direct overridden"
     description:
-      name: get
-      url: "https://pub.flutter-io.cn"
-    source: hosted
-    version: "3.24.0"
+      path: "."
+      ref: HEAD
+      resolved-ref: "47f0ff447eb8cb5d70f9c8ad8bdeb38c8cb8e853"
+      url: "git://github.com/jonataslaw/getx.git"
+    source: git
+    version: "3.25.4"
   get_storage:
     dependency: "direct main"
     description:
@@ -622,7 +624,7 @@ packages:
       name: image_gallery_saver
       url: "https://pub.flutter-io.cn"
     source: hosted
-    version: "1.6.7"
+    version: "1.6.8"
   intl:
     dependency: "direct main"
     description:
@@ -643,7 +645,7 @@ packages:
       name: io
       url: "https://pub.flutter-io.cn"
     source: hosted
-    version: "0.3.4"
+    version: "0.3.5"
   js:
     dependency: transitive
     description:

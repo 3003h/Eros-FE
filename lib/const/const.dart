@@ -51,6 +51,7 @@ class GetIds {
   static const String IMAGE_VIEW_SER = 'GalleryImage_';
   static const String PAGE_VIEW_TOP_COMMENT = 'TopComment';
   static const String PAGE_VIEW_HEADER = 'header';
+  static const String PAGE_VIEW_BODY = 'body';
   static const String TAG_ADD_CLEAR_BTN = 'TAG_ADD_CLEAR_BTN';
 }
 
