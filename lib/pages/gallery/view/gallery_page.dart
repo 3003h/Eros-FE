@@ -32,7 +32,7 @@ class GalleryRepository {
 }
 
 class GalleryMainPage extends StatelessWidget {
-  final GalleryPageController _controller = Get.find(tag: pageCtrlDepth);
+  GalleryPageController get _controller => Get.find(tag: pageCtrlDepth);
 
   @override
   Widget build(BuildContext context) {

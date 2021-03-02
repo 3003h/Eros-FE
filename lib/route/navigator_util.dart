@@ -124,10 +124,10 @@ class NavigatorUtil {
   /// 打开搜索页面 搜索画廊 搜索关注
   static void showSearch({SearchType searchType, bool fromTabItem = true}) {
     logger.d('fromTabItem $fromTabItem');
+    Get.find<DepthService>().pushSearchPageCtrl();
     Get.to(() => GallerySearchPage(),
         transition: fromTabItem ? Transition.fadeIn : Transition.cupertino,
         binding: BindingsBuilder(() {
-      Get.find<DepthService>().pushSearchPageCtrl();
       Get.lazyPut(
         () => SearchPageController(searchType: searchType),
         tag: searchPageCtrlDepth,
