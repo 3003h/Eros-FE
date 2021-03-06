@@ -7,12 +7,13 @@ const String columnIntro = 'intro';
 const String columnLinks = 'links';
 
 class TagTranslat {
-  TagTranslat(this.namespace, this.key, this.name, {this.intro, this.links});
-  String namespace;
-  String key;
-  String name;
-  String intro;
-  String links;
+  TagTranslat(this.namespace, this.key, this.name,
+      {this.intro = '', this.links = ''});
+  late String namespace;
+  late String key;
+  late String name;
+  late String intro;
+  late String links;
 
   Map<String, dynamic> toMap() {
     return {

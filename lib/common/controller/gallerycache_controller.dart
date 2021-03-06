@@ -1,4 +1,3 @@
-import 'package:fehviewer/models/base/extension.dart';
 import 'package:fehviewer/models/index.dart';
 import 'package:fehviewer/pages/image_view/controller/view_state.dart';
 import 'package:fehviewer/store/gallery_store.dart';
@@ -26,7 +25,7 @@ class GalleryCacheController extends GetxController {
     }
   }
 
-  void setColumnMode(String gid, ColumnMode columnMode) {
+  void setColumnMode(String gid, ViewColumnMode columnMode) {
     final GalleryCache _ori = getGalleryCache(gid);
     if (_ori == null) {
       gStore.saveCache(

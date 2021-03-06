@@ -12,8 +12,8 @@ TorrentProvider parseTorrent(String response) {
   final List<Element> _elmTorrents =
       document.querySelectorAll('#torrentinfo > div:nth-child(1) > form');
   for (final torrent in _elmTorrents) {
-    final _elm = torrent.querySelector('div > table > tbody');
-    final _flieElm = _elm.children[2].querySelector('td > a');
+    final Element? _elm = torrent.querySelector('div > table > tbody');
+    final Element? _flieElm = _elm?.children[2].querySelector('td > a');
 
     if (_flieElm == null) {
       continue;
@@ -21,12 +21,13 @@ TorrentProvider parseTorrent(String response) {
 
     final String _fileName = _flieElm.text;
 
-    final String _href = _flieElm.attributes['href'];
-    final String _hash = RegExp(r'([0-9a-f]{40})').firstMatch(_href).group(1);
+    final String _href = _flieElm.attributes['href'] ?? '';
+    final String _hash =
+        RegExp(r'([0-9a-f]{40})').firstMatch(_href)?.group(1) ?? '';
 
     if (_torrentToken.isEmpty) {
       _torrentToken =
-          RegExp(r'/(get|torrent)/(\d+)/').firstMatch(_href).group(2);
+          RegExp(r'/(get|torrent)/(\d+)/').firstMatch(_href)?.group(2) ?? '';
     }
 
     // logger.d('$_fileName $_hash');

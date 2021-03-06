@@ -28,7 +28,7 @@ class GalleryDetailParser {
 
   /// 解析画廊详情数据
   static Future<GalleryItem> parseGalleryDetail(String response,
-      {GalleryItem inGalleryItem}) async {
+      {GalleryItem? inGalleryItem}) async {
     // 解析响应信息dom
     final Document document = parse(response);
 

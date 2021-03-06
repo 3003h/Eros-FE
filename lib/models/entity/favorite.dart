@@ -8,5 +8,5 @@ class FavcatItemBean {
 
   final String title;
   final Color color;
-  final String favId;
+  final String? favId;
 }

@@ -12,7 +12,7 @@ import 'package:get/get.dart';
 
 import 'view_controller.dart';
 
-enum ColumnMode {
+enum ViewColumnMode {
   // 双页 奇数页位于左边
   odd,
 
@@ -38,7 +38,7 @@ class ViewState {
       });
     });
 
-    ever(_columnMode, (ColumnMode val) {
+    ever(_columnMode, (ViewColumnMode val) {
       Future<void>.delayed(const Duration(milliseconds: 100)).then((_) {
         // logger.d('delayed ever _columnMode to $_columnMode');
         _galleryCacheController.setColumnMode(
@@ -49,7 +49,7 @@ class ViewState {
     _columnMode.value = _galleryCacheController
             .getGalleryCache(_galleryPageController.galleryItem.gid)
             ?.columnMode ??
-        ColumnMode.single;
+        ViewColumnMode.single;
 
     final _iniIndex = Get.arguments as int;
     itemIndex = _iniIndex;
@@ -79,8 +79,8 @@ class ViewState {
       int.parse(_galleryPageController.galleryItem.filecount ?? '0');
 
   /// 横屏翻页模式
-  final Rx<ColumnMode> _columnMode = ColumnMode.single.obs;
-  ColumnMode get columnMode => _columnMode.value;
+  final Rx<ViewColumnMode> _columnMode = ViewColumnMode.single.obs;
+  ViewColumnMode get columnMode => _columnMode.value;
   set columnMode(val) => _columnMode.value = val;
 
   /// 当前查看的图片inde
@@ -94,11 +94,11 @@ class ViewState {
   /// pageview下实际的index
   int get pageIndex {
     switch (columnMode) {
-      case ColumnMode.single:
+      case ViewColumnMode.single:
         return itemIndex;
-      case ColumnMode.odd:
+      case ViewColumnMode.odd:
         return itemIndex ~/ 2;
-      case ColumnMode.even:
+      case ViewColumnMode.even:
         return (itemIndex + 1) ~/ 2;
       default:
         return itemIndex;
@@ -110,11 +110,11 @@ class ViewState {
     // final int imageCount = previews.length;
     final int imageCount = filecount;
     switch (columnMode) {
-      case ColumnMode.single:
+      case ViewColumnMode.single:
         return imageCount;
-      case ColumnMode.odd:
+      case ViewColumnMode.odd:
         return (imageCount / 2).round();
-      case ColumnMode.even:
+      case ViewColumnMode.even:
         return (imageCount / 2).round() + ((imageCount + 1) % 2);
       default:
         return imageCount;

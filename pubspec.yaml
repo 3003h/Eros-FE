@@ -3,7 +3,7 @@ description: ..
 
 publish_to: 'none' # Remove this line if you wish to publish to pub.dev
 
-version: 1.1.0+150
+version: 1.1.0+152
 
 environment:
   sdk: '>=2.12.0 <3.0.0'
@@ -77,11 +77,11 @@ dependencies:
 
   # 图片相关
   cached_network_image: ^3.0.0-nullsafety
-#  extended_image: ^2.0.0
-  extended_image:
-    git:
-      url: git://github.com/fluttercandies/extended_image.git
-      ref: dev
+  extended_image: ^3.0.0
+#  extended_image:
+#    git:
+#      url: git://github.com/fluttercandies/extended_image.git
+#      ref: dev
 
   liquid_progress_indicator: ^0.3.2
 
@@ -178,16 +178,13 @@ dependencies:
 
 
 dev_dependencies:
-#  # flutter packages pub run json_model src=json_files  dist=data # will save in lib/data dir
-#  json_model: ^0.0.2
-  json_to_model: #flutter pub run json_to_model   ### json_model太久不更新了 依赖版本太低
-    git:
-      url: git://github.com/fadhilx/json_to_model.git
-#  json_to_model:
-#    path: /Users/honjow/git/json_to_model
+#  json_to_model: #flutter pub run json_to_model   ### json_model太久不更新了 依赖版本太低
+#    git:
+#      url: git://github.com/fadhilx/json_to_model.git
+
+  # flutter pub run apn_json2model
+  apn_json2model: ^2.1.0-nullsafety
   build_runner: ^1.10.3
-#  build_runner:
-#    path: /Users/honjow/git/build/build_runner
   json_serializable: ^4.0.2
   json_annotation: ^4.0.0
 #

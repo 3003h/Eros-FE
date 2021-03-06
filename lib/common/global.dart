@@ -30,6 +30,28 @@ const int kProxyPort = 4041;
 final FirebaseAnalytics analytics = FirebaseAnalytics();
 final LocalAuthentication localAuth = LocalAuthentication();
 
+const AdvanceSearch kDefAdvanceSearch = AdvanceSearch(
+  searchGalleryName: true,
+  searchGalleryTags: true,
+  searchGalleryDesc: false,
+  searchToreenFilenames: false,
+  onlyShowWhithTorrents: false,
+  searchLowPowerTags: false,
+  searchDownvotedTags: false,
+  searchExpunged: false,
+  searchWithminRating: false,
+  minRating: 2,
+  searchBetweenpage: false,
+  startPage: '',
+  endPage: '',
+  disableDFLanguage: false,
+  disableDFUploader: false,
+  disableDFTags: false,
+  favSearchName: true,
+  favSearchTags: true,
+  favSearchNote: true,
+);
+
 // 全局配置
 // ignore: avoid_classes_with_only_static_members
 class Global {
@@ -38,9 +60,57 @@ class Global {
   static bool inDebugMode = false;
   static bool isFirstReOpenEhSetting = true;
 
-  static Profile profile = Profile();
+  static Profile profile = Profile(
+    user: const User(username: '', cookie: '', avatarUrl: '', favcat: []),
+    locale: '',
+    lastLogin: '',
+    theme: '',
+    searchText: [],
+    localFav: const LocalFav(gallerys: []),
+    enableAdvanceSearch: false,
+    autoLock: const AutoLock(lastLeaveTime: -1, isLocking: false),
+    dnsConfig: const DnsConfig(
+      enableDoH: false,
+      enableCustomHosts: false,
+      enableDomainFronting: false,
+      hosts: [],
+      dohCache: [],
+    ),
+    downloadConfig: const DownloadConfig(
+      preloadImage: 5,
+      multiDownload: -1,
+      downloadLocatino: '',
+      downloadOrigImage: false,
+    ),
+    ehConfig: EhConfig(
+      jpnTitle: false,
+      tagTranslat: false,
+      tagTranslatVer: '',
+      favoritesOrder: '',
+      siteEx: false,
+      galleryImgBlur: false,
+      favPicker: false,
+      favLongTap: false,
+      lastFavcat: '',
+      lastShowFavcat: '',
+      lastShowFavTitle: '',
+      listMode: '',
+      safeMode: Platform.isIOS,
+      catFilter: 0,
+      maxHistory: 100,
+      searchBarComp: true,
+      pureDarkTheme: false,
+      viewModel: '',
+      clipboardLink: false,
+      commentTrans: false,
+      autoLockTimeOut: -1,
+      showPageInterval: true,
+      orientation: '',
+    ),
+    advanceSearch: kDefAdvanceSearch,
+  );
 
-  static History history = History();
+  static History history = const History(history: []);
   static List<GalleryCache> galleryCaches = <GalleryCache>[];
 
   static CookieManager? cookieManager;
@@ -64,10 +134,6 @@ class Global {
 
   // init
   static Future<void> init() async {
-    // 运行初始
-    // WidgetsFlutterBinding.ensureInitialized();
-    // await Firebase.initializeApp();
-
     // 判断是否debug模式
     inDebugMode = EHUtils().isInDebugMode;
 
@@ -128,53 +194,12 @@ class Global {
   static void _profileInit() {
     _initProfile();
     _initHistory();
-    // _initGalleryCaches();
 
-    if (profile.ehConfig == null) {
-      profile.ehConfig = EhConfig()
-        ..safeMode = Platform.isIOS
-        ..maxHistory = 100
-        ..siteEx = false
-        ..tagTranslat = false
-        ..jpnTitle = false
-        ..favLongTap = false
-        ..favPicker = false
-        ..galleryImgBlur = false;
-      saveProfile();
-    }
-
-    if (profile.advanceSearch == null) {
-      profile.advanceSearch = AdvanceSearch()
-        ..searchGalleryName = true
-        ..searchGalleryTags = true;
-      saveProfile();
-    }
-
-    profile.cache ??= CacheConfig()
-      ..enable = true
-      ..maxAge = 3600
-      ..maxCount = 200;
-
-    profile.searchText ??= <String>[];
-
-    profile.localFav ??= LocalFav()..gallerys = <GalleryItem>[];
-
-    profile.dnsConfig ??= DnsConfig()
-      ..hosts = <DnsCache>[]
-      ..enableDoH = false
-      ..dohCache = <DnsCache>[];
-
-    profile.dnsConfig.dohCache = <DnsCache>[];
-
-    if ((profile.dnsConfig.enableCustomHosts ?? false) ||
-        (profile.dnsConfig.enableDoH ?? false)) {
+    if ((profile.dnsConfig.enableCustomHosts) ||
+        (profile.dnsConfig.enableDoH)) {
       logger.v('${profile.dnsConfig.enableCustomHosts}');
       HttpOverrides.global = httpProxy;
     }
-
-    history.history ??= <GalleryItem>[];
-
-    profile.downloadConfig ??= DownloadConfig()..preloadImage = 5;
   }
 
   static void _initProfile() {

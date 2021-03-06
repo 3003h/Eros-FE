@@ -1,12 +1,10 @@
 {
   "user": "$user",
-  "cache": "$cacheConfig",
   "ehConfig": "$ehConfig",
   "lastLogin": "",
   "locale": "",
   "theme": "",
   "searchText": [""],
-  "history": "$[]galleryItem",
   "localFav": "$localFav",
   "enableAdvanceSearch": false,
   "advanceSearch": "$advanceSearch",
