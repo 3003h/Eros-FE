@@ -1,7 +1,7 @@
 final Time time = Time();
 
 class Time {
-  int lastTime;
+  int? lastTime;
 
   void showTime(String tag) {
     final int nowTime = DateTime.now().millisecondsSinceEpoch;

@@ -27,7 +27,7 @@ extension EhString on String {
       Get.find<DnsService>().updateDoHCache(host);
       final int _dohDnsCacheIndex = dnsConfigController.dohCache
           .indexWhere((DnsCache element) => element.host == host);
-      final DnsCache dohDnsCache =
+      final DnsCache? dohDnsCache =
           _dohDnsCacheIndex > -1 ? _dohDnsCacheList[_dohDnsCacheIndex] : null;
       realHost = dohDnsCache?.addr ?? host;
       final String realUrl = replaceFirst(host, realHost);
@@ -39,10 +39,10 @@ extension EhString on String {
 
   String get gid {
     final RegExp urlRex = RegExp(r'/g/(\d+)/(\w+)/$');
-    final RegExpMatch urlRult = urlRex.firstMatch(this);
+    final RegExpMatch? urlRult = urlRex.firstMatch(this);
 
-    final String gid = urlRult.group(1);
-    final String token = urlRult.group(2);
+    final String gid = urlRult?.group(1) ?? '';
+    final String token = urlRult?.group(2) ?? '';
     return gid;
   }
 }

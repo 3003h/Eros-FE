@@ -15,8 +15,10 @@ class VibrateUtil {
   bool _hasAmplitudeControl = false;
 
   Future<void> init() async {
-    _hasCustomVibrationsSupport = await Vibration.hasAmplitudeControl();
-    _hasAmplitudeControl = await Vibration.hasCustomVibrationsSupport();
+    _hasCustomVibrationsSupport =
+        (await Vibration.hasAmplitudeControl()) ?? false;
+    _hasAmplitudeControl =
+        (await Vibration.hasCustomVibrationsSupport()) ?? false;
   }
 
   void light() {

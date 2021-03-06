@@ -3,9 +3,9 @@ import 'package:flutter/cupertino.dart';
 @immutable
 class EhDynamicColor {
   const EhDynamicColor({
-    @required Color color,
-    @required Color darkColor,
-    @required Color darkGrayColor,
+    required Color color,
+    required Color darkColor,
+    required Color darkGrayColor,
   }) : this._(
           color,
           darkColor,

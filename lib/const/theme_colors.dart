@@ -9,7 +9,7 @@ enum ThemesModeEnum {
 }
 
 class CustTheme {
-  CupertinoThemeData themeData;
+  late CupertinoThemeData themeData;
 }
 
 class EhDynamicColors {
