@@ -30,20 +30,20 @@ class ViewController extends GetxController {
     vibrateUtil.light();
     logger.v('切换单页双页模式');
     switch (vState.columnMode) {
-      case ColumnMode.single:
+      case ViewColumnMode.single:
         logger.d('单页 => 双页1. itemIndex:${vState.itemIndex},');
-        vState.columnMode = ColumnMode.odd;
+        vState.columnMode = ViewColumnMode.odd;
         pageController.jumpToPage(vState.pageIndex);
         break;
-      case ColumnMode.odd:
+      case ViewColumnMode.odd:
         logger.d('双页1 => 双页2, itemIndex:${vState.itemIndex}');
-        vState.columnMode = ColumnMode.even;
+        vState.columnMode = ViewColumnMode.even;
         vState.needRebuild = true;
         pageController.jumpToPage(vState.pageIndex);
         break;
-      case ColumnMode.even:
+      case ViewColumnMode.even:
         logger.d('双页2 => 单页, itemIndex:${vState.itemIndex}');
-        vState.columnMode = ColumnMode.single;
+        vState.columnMode = ViewColumnMode.single;
         Future.delayed(Duration.zero).then((_) {
           final int _toIndex = vState.pageIndex;
           pageController.jumpToPage(_toIndex);
@@ -178,13 +178,13 @@ class ViewController extends GetxController {
   void handOnPageChanged(int pageIndex) {
     // 根据columnMode的不同设置不同的itemIndex值
     switch (vState.columnMode) {
-      case ColumnMode.single:
+      case ViewColumnMode.single:
         vState.itemIndex = pageIndex;
         break;
-      case ColumnMode.odd:
+      case ViewColumnMode.odd:
         vState.itemIndex = pageIndex * 2;
         break;
-      case ColumnMode.even:
+      case ViewColumnMode.even:
         final int index = pageIndex * 2 - 1;
         vState.itemIndex = index > 0 ? index : 0;
         break;

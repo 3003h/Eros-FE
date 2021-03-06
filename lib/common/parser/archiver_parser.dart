@@ -8,14 +8,14 @@ ArchiverProvider parseArchiver(String response) {
 
   String gp = '';
   String credits = '';
-  final Element currentFunds = document.querySelector('#db > p:nth-child(4)');
+  final Element? currentFunds = document.querySelector('#db > p:nth-child(4)');
   if (currentFunds != null) {
     // logger.d('${currentFunds.text}');
     final RegExp fundsRegx = RegExp(r'([0-9,]+?)\s+GP.+?([0-9,]+?)\s+Credits');
-    final RegExpMatch match = fundsRegx.firstMatch(currentFunds.text);
+    final RegExpMatch? match = fundsRegx.firstMatch(currentFunds.text);
     // logger.d('${match.group(1)}\n${match.group(2)}');
-    gp = match.group(1).replaceAll(',', '');
-    credits = match.group(2).replaceAll(',', '');
+    gp = match?.group(1)?.replaceAll(',', '') ?? '';
+    credits = match?.group(2)?.replaceAll(',', '') ?? '';
   }
 
   // logger.d('$response');
@@ -37,7 +37,8 @@ ArchiverProvider parseArchiver(String response) {
             ?.group(1) ??
         dlElm.children[2].text;
 
-    final String _dltype = dlElm.children[1].children.first.attributes['value'];
+    final String _dltype =
+        dlElm.children[1].children.first.attributes['value'] ?? '';
 
     logger.d('price: $_price  size: $_size dltype: $_dltype');
     _dlItems.add(
@@ -61,8 +62,10 @@ ArchiverProvider parseArchiver(String response) {
       //     '${children[0].text} \n${children[1].text} \n${children[2].text} ');
 
       if (children[1].text.toUpperCase() != 'N/A') {
-        final String onClick = children[0].children.first.attributes['onclick'];
-        final String res = RegExp(r"\('(\w+)'\)").firstMatch(onClick).group(1);
+        final String onClick =
+            children[0].children.first.attributes['onclick'] ?? '';
+        final String res =
+            RegExp(r"\('(\w+)'\)").firstMatch(onClick)?.group(1) ?? '';
         // logger.d('$res');
         _hItems.add(
           ArchiverProviderItem()
@@ -85,5 +88,5 @@ ArchiverProvider parseArchiver(String response) {
 
 String parseArchiverDownload(String response) {
   final Document document = parse(response);
-  return document.querySelector('#db > p').text;
+  return document.querySelector('#db > p')?.text ?? '';
 }

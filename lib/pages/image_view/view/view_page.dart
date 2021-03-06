@@ -284,11 +284,11 @@ class GalleryViewPage extends GetView<ViewController> {
                             FontAwesomeIcons.bookOpen,
                             color: () {
                               switch (vState.columnMode) {
-                                case ColumnMode.single:
+                                case ViewColumnMode.single:
                                   return CupertinoColors.systemGrey6;
-                                case ColumnMode.odd:
+                                case ViewColumnMode.odd:
                                   return CupertinoColors.activeBlue;
-                                case ColumnMode.even:
+                                case ViewColumnMode.even:
                                   return CupertinoColors.activeOrange;
                               }
                             }(),
@@ -385,11 +385,12 @@ class GalleryViewPage extends GetView<ViewController> {
                         horizontal:
                             vState.showPageInterval ? kPageViewPadding : 0),
                     child: () {
-                      if (vState.columnMode != ColumnMode.single) {
+                      if (vState.columnMode != ViewColumnMode.single) {
                         // 双页阅读
-                        final int serLeft = vState.columnMode == ColumnMode.odd
-                            ? pageIndex * 2 + 1
-                            : pageIndex * 2;
+                        final int serLeft =
+                            vState.columnMode == ViewColumnMode.odd
+                                ? pageIndex * 2 + 1
+                                : pageIndex * 2;
 
                         final List<Widget> _pageList = <Widget>[
                           if (serLeft > 0)

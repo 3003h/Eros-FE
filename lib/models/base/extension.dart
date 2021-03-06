@@ -5,10 +5,11 @@ import 'package:fehviewer/pages/image_view/controller/view_state.dart';
 import '../index.dart';
 
 extension ExtGC on GalleryCache {
-  ColumnMode get columnMode =>
-      EnumToString.fromString(ColumnMode.values, columnModeVal ?? '');
-  set columnMode(ColumnMode val) =>
-      columnModeVal = EnumToString.convertToString(val);
+  ViewColumnMode get columnMode =>
+      EnumToString.fromString(ViewColumnMode.values, columnModeVal ?? '') ??
+      ViewColumnMode.single;
+  // set columnMode(ViewColumnMode val) =>
+  //     columnModeVal = EnumToString.convertToString(val);
 }
 
 extension ExtTabList on TabConfig {
@@ -24,21 +25,10 @@ extension ExtTabList on TabConfig {
     return tabItemList.map((e) => e.name).toList();
   }
 
-  // set tabMap(Map<String, bool> map) {
-  //   tabItemList.clear();
-  //   for (MapEntry<String, bool> element in map.entries) {
-  //     tabItemList.add(TabItem()
-  //       ..name = element.key
-  //       ..enable = element.value);
-  //   }
-  // }
-
   void setItemList(Map<String, bool> map, List<String> nameList) {
     tabItemList.clear();
     for (final String name in nameList) {
-      tabItemList.add(TabItem()
-        ..name = name
-        ..enable = map[name] ?? false);
+      tabItemList.add(TabItem(name: name, enable: map[name] ?? false));
     }
   }
 }
@@ -55,8 +45,9 @@ extension ExtComment on GalleryComment {
 
 extension ExtCommentSpan on GalleryCommentSpan {
   CommentSpanType get sType =>
-      EnumToString.fromString(CommentSpanType.values, type ?? '');
-  set sType(CommentSpanType val) => type = EnumToString.convertToString(val);
+      EnumToString.fromString(CommentSpanType.values, type ?? '') ??
+      CommentSpanType.text;
+  // set sType(CommentSpanType val) => type = EnumToString.convertToString(val);
 }
 
 extension ExtItem on GalleryItem {
