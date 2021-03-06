@@ -19,7 +19,8 @@ const int kDefreceiveTimeout = 10000;
 
 class HttpManager {
   //构造函数
-  HttpManager(String _baseUrl, {bool cache = true, int connectTimeout}) {
+  HttpManager(String _baseUrl,
+      {bool cache = true, int connectTimeout = kDefconnectTimeout}) {
     _options = BaseOptions(
         baseUrl: _baseUrl,
         connectTimeout: connectTimeout ?? kDefconnectTimeout,
@@ -37,7 +38,7 @@ class HttpManager {
     _dio = Dio(_options);
 
     //设置Cookie管理
-    _dio.interceptors.add(Global.cookieManager);
+    _dio.interceptors.add(Global.cookieManager!);
 
     //添加拦截器
     if (cache) {
@@ -88,9 +89,9 @@ class HttpManager {
   //单例模式
   static final Map<String, HttpManager> _instanceMap = <String, HttpManager>{};
 
-  Dio _dio;
+  late Dio _dio;
   Dio get dio => _dio;
-  BaseOptions _options;
+  late BaseOptions _options;
 
   //单例模式，一个baseUrl只创建一次实例
   static HttpManager getInstance({String baseUrl = '', bool cache = true}) {

@@ -88,11 +88,14 @@ Future<void> _initializeFlutterFire() async {
   await FirebaseCrashlytics.instance.setCrashlyticsCollectionEnabled(true);
 
   // Pass all uncaught errors to Crashlytics.
-  final Function originalOnError = FlutterError.onError;
+  final Function? originalOnError = FlutterError.onError;
   FlutterError.onError = (FlutterErrorDetails errorDetails) async {
     await FirebaseCrashlytics.instance.recordFlutterError(errorDetails);
     // Forward to original handler.
-    originalOnError(errorDetails);
+    // if (originalOnError != null) {
+    //   originalOnError(errorDetails);
+    // }
+    originalOnError?.call(errorDetails);
   };
 }
 
@@ -110,20 +113,20 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
   @override
   void initState() {
     super.initState();
-    WidgetsBinding.instance.addObserver(this);
+    WidgetsBinding.instance?.addObserver(this);
     _autoLockController.resumed();
   }
 
   @override
   void dispose() {
-    WidgetsBinding.instance.removeObserver(this);
+    WidgetsBinding.instance?.removeObserver(this);
     super.dispose();
   }
 
   @override
   void didChangePlatformBrightness() {
     themeService.platformBrightness.value =
-        WidgetsBinding.instance.window.platformBrightness;
+        WidgetsBinding.instance?.window.platformBrightness;
   }
 
   @override
@@ -146,8 +149,8 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
   Widget build(BuildContext context) {
     // logger.d(' MyApp build');
     Widget cupertinoApp({
-      CupertinoThemeData theme,
-      Locale locale,
+      required CupertinoThemeData theme,
+      required Locale locale,
     }) {
       return GetCupertinoApp(
         debugShowCheckedModeBanner: false,

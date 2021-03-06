@@ -43,21 +43,21 @@ class Global {
   static History history = History();
   static List<GalleryCache> galleryCaches = <GalleryCache>[];
 
-  static CookieManager cookieManager;
+  static CookieManager? cookieManager;
 
-  static PersistCookieJar cookieJar;
+  static PersistCookieJar? cookieJar;
 
   static HttpProxy httpProxy = HttpProxy('localhost', '$kProxyPort');
 
-  static String appSupportPath;
-  static String appDocPath;
-  static String tempPath;
+  static String appSupportPath = '';
+  static String appDocPath = '';
+  static String tempPath = '';
 
-  static PackageInfo packageInfo;
+  static PackageInfo? packageInfo;
 
   static bool isDBinappSupportPath = false;
 
-  static bool canCheckBiometrics;
+  static bool canCheckBiometrics = false;
 
   // 网络缓存对象
   // static NetCache netCache = NetCache();

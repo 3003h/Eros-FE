@@ -73,7 +73,7 @@ class EHUtils {
   static String getLangeage(String value) {
     for (final String key in EHConst.iso936.keys) {
       if (key.toUpperCase().trim() == value.toUpperCase().trim()) {
-        return EHConst.iso936[key];
+        return EHConst.iso936[key] ?? EHConst.iso936.values.first;
       }
     }
     return '';
@@ -121,10 +121,10 @@ class EHUtils {
 
   static int convCatMapToNum(Map<String, bool> catMap) {
     int totCatNum = 0;
-    final Map catsNumMaps = EHConst.cats;
+    final Map<String, int> catsNumMaps = EHConst.cats;
     catMap.forEach((String key, bool value) {
       if (!value) {
-        totCatNum += catsNumMaps[key];
+        totCatNum += catsNumMaps[key] ?? 0;
       }
     });
     return totCatNum;
@@ -161,7 +161,7 @@ class ColorsUtil {
         (hex & 0x0000FF) >> 0, alpha);
   }
 
-  static Color hexStringToColor(String hexString, {double alpha = 1}) {
+  static Color? hexStringToColor(String? hexString, {double alpha = 1}) {
     // 如果传入的十六进制颜色值不符合要求，返回默认值
     if (hexString == null ||
         hexString.length != 7 ||
@@ -176,7 +176,7 @@ class ColorsUtil {
     return hexColor(_hex, alpha: alpha);
   }
 
-  static Color getTagColor(String hexColor) {
+  static Color? getTagColor(String? hexColor) {
     if (hexColor != null && hexColor.isNotEmpty) {
       // logger.d(' $hexColor');
       return hexStringToColor(hexColor);
@@ -187,10 +187,11 @@ class ColorsUtil {
 
 class WidgetUtil {
   static Rect getWidgetGlobalRect(GlobalKey key) {
-    final RenderBox renderBox = key.currentContext.findRenderObject();
-    final Offset offset = renderBox.localToGlobal(Offset.zero);
-    return Rect.fromLTWH(
-        offset.dx, offset.dy, renderBox.size.width, renderBox.size.height);
+    final RenderBox? renderBox =
+        key.currentContext!.findRenderObject() as RenderBox;
+    final Offset offset = renderBox?.localToGlobal(Offset.zero) ?? Offset.zero;
+    return Rect.fromLTWH(offset.dx, offset.dy, renderBox?.size.width ?? 0.0,
+        renderBox?.size.height ?? 0.0);
   }
 }
 
