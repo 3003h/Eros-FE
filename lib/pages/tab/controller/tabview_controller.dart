@@ -26,17 +26,18 @@ typedef FetchCallBack = Future<Tuple2<List<GalleryItem>, int>> Function({
 
 class TabViewController extends GetxController
     with StateMixin<List<GalleryItem>> {
-  int cats;
+  TabViewController({this.cats});
+  int? cats;
 
   RxInt curPage = 0.obs;
   int maxPage = 1;
 
   final RxBool _isBackgroundRefresh = false.obs;
-  bool get isBackgroundRefresh => _isBackgroundRefresh.value;
+  bool get isBackgroundRefresh => _isBackgroundRefresh.value ?? false;
   set isBackgroundRefresh(bool val) => _isBackgroundRefresh.value = val;
 
   final Rx<PageState> _pageState = PageState.None.obs;
-  PageState get pageState => _pageState.value;
+  PageState get pageState => _pageState.value ?? PageState.None;
   set pageState(PageState val) => _pageState.value = val;
 
   final EhConfigService _ehConfigService = Get.find();
@@ -46,7 +47,7 @@ class TabViewController extends GetxController
   // 页码跳转输入框的控制器
   final TextEditingController _pageController = TextEditingController();
 
-  FetchCallBack fetchNormal;
+  late FetchCallBack fetchNormal;
 
   @override
   void onInit() {
@@ -134,7 +135,7 @@ class TabViewController extends GetxController
 
     logger.d('${curPage.value + 1}');
 
-    final String fromGid = state.last.gid;
+    final String fromGid = state?.last.gid ?? '0';
     try {
       pageState = PageState.Loading;
       final Tuple2<List<GalleryItem>, int> tuple = await fetchNormal(
@@ -148,12 +149,11 @@ class TabViewController extends GetxController
       final List<GalleryItem> galleryItemBeans = tuple.item1;
 
       if (galleryItemBeans.isNotEmpty &&
-          state.indexWhere((GalleryItem element) =>
+          state?.indexWhere((GalleryItem element) =>
                   element.gid == galleryItemBeans.first.gid) ==
               -1) {
-        state.addAll(galleryItemBeans);
+        state?.addAll(galleryItemBeans);
 
-        logger.d('${state.length}');
         maxPage = tuple.item2;
       }
       // 成功才+1
@@ -199,7 +199,7 @@ class TabViewController extends GetxController
 
       final int _toPage = int.parse(_input) - 1;
       if (_toPage >= 0 && _toPage <= maxPage) {
-        FocusScope.of(Get.context).requestFocus(FocusNode());
+        FocusScope.of(Get.context!).requestFocus(FocusNode());
         loadFromPage(_toPage);
         Get.back();
       } else {
@@ -208,7 +208,7 @@ class TabViewController extends GetxController
     }
 
     return showCupertinoDialog<void>(
-      context: Get.overlayContext,
+      context: Get.overlayContext!,
       // barrierDismissible: false, // user must tap button!
       builder: (BuildContext context) {
         return CupertinoAlertDialog(

@@ -77,7 +77,7 @@ class DataBaseUtil {
   }
 
   /// 获取翻译对象
-  Future<TagTranslat> getTagTrans(String key, {String namespace}) async {
+  Future<TagTranslat?> getTagTrans(String key, {String namespace = ''}) async {
     final Database db = await _getDataBase();
 
     final bool _isNameSpace = namespace != null && namespace.isNotEmpty;
@@ -104,7 +104,7 @@ class DataBaseUtil {
     return null;
   }
 
-  Future<List<TagTranslat>> getTagTransFuzzy(String key,
+  Future<List<TagTranslat>?> getTagTransFuzzy(String key,
       {int limit = 100}) async {
     final Database db = await _getDataBase();
 
@@ -132,7 +132,7 @@ class DataBaseUtil {
 
     logger.d('${maps.length}');
 
-    if (maps?.isNotEmpty ?? false) {
+    if (maps.isNotEmpty ?? false) {
       return List<TagTranslat>.from(maps
           .map((Map<String, dynamic> e) => TagTranslat.fromMap(e))
           .toList());
@@ -141,9 +141,9 @@ class DataBaseUtil {
   }
 
   /// 获取翻译结果
-  Future<String> getTagTransStr(String key, {String namespace}) async {
-    final TagTranslat tr =
-        await getTagTrans(key?.trim(), namespace: namespace?.trim());
-    return tr?.name;
+  Future<String?> getTagTransStr(String key, {String namespace = ''}) async {
+    final TagTranslat? tr =
+        await getTagTrans(key.trim(), namespace: namespace.trim());
+    return tr?.name ?? key;
   }
 }

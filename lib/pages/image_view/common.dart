@@ -19,37 +19,40 @@ class GalleryPara {
   static GalleryPara _getInstance() {
     // 只能有一个实例
     _instance ??= GalleryPara._internal();
-    return _instance;
+    return _instance!;
   }
 
   /// 单例对象
-  static GalleryPara _instance;
+  static GalleryPara? _instance;
 
   final Set<int> _processingSerSet = <int>{};
 
-  final Map<String, Future<bool>> _map = <String, Future<bool>>{};
+  final Map<String, Future<GalleryPreview?>> _map =
+      <String, Future<GalleryPreview?>>{};
 
   /// 一个很傻的预载功能 需要优化
-  Future<void> precacheImages(
+  Stream<GalleryPreview?> precacheImages(
     BuildContext context, {
-    @required Map<int, GalleryPreview> previewMap,
-    @required int itemSer,
-    @required int max,
-  }) async {
+    required Map<int, GalleryPreview> previewMap,
+    required int itemSer,
+    required int max,
+  }) async* {
     // logger.d('当前index $index');
     for (int add = 1; add < max + 1; add++) {
+      GalleryPreview? _rultPreview;
+
       final int _ser = itemSer + add;
 
       // logger.d('开始缓存 ser $ser');
       if (previewMap[_ser] == null) {
-        return;
+        yield _rultPreview;
       }
 
       if (_processingSerSet.contains(_ser)) {
         continue;
       }
 
-      final GalleryPreview _preview = previewMap[_ser];
+      final GalleryPreview? _preview = previewMap[_ser];
       if (_preview?.isCache ?? false) {
         // logger.d('ser $ser 已存在缓存中 跳过');
         continue;
@@ -61,43 +64,55 @@ class GalleryPara {
       }
 
       String _url = '';
-      if (_preview.largeImageUrl?.isEmpty ?? true) {
+      if (_preview?.largeImageUrl?.isEmpty ?? true) {
         _processingSerSet.add(_ser);
-        final String _href = previewMap[_ser].href;
+        final String _href = previewMap[_ser]?.href ?? '';
 
         // paraImageLageInfoFromHtml
         final GalleryPreview _imageFromApi =
             await Api.ftchImageInfo(_href, ser: _ser);
 
-        _url = _imageFromApi.largeImageUrl;
+        _url = _imageFromApi.largeImageUrl ?? '';
 
-        _preview
-          ..largeImageUrl = _url
-          ..largeImageWidth = _imageFromApi.largeImageWidth
-          ..largeImageHeight = _imageFromApi.largeImageHeight;
+        // _preview
+        //   ..largeImageUrl = _url
+        //   ..largeImageWidth = _imageFromApi.largeImageWidth
+        //   ..largeImageHeight = _imageFromApi.largeImageHeight;
+
+        _rultPreview = _preview?.copyWith(
+          largeImageUrl: _url,
+          largeImageWidth: _imageFromApi.largeImageWidth,
+          largeImageHeight: _imageFromApi.largeImageHeight,
+        );
+
         _processingSerSet.remove(_ser);
       }
 
-      _url = _preview.largeImageUrl;
-      // logger.v('$ser : $_url');
+      _url = _rultPreview?.largeImageUrl ?? '';
 
-      final Future<bool> _future = _map[_url] ??
+      final Future<GalleryPreview?>? _future = _map[_url] ??
           (() {
-            // logger.d(' new _future $_url');
-            _map[_url] = _precacheSingleImage(context, _url, _preview);
-            // logger.d(' $_map');
+            _map[_url] = _precacheSingleImage(context, _url, _rultPreview);
             return _map[_url];
           })();
 
-      _future
-          .then((bool value) => _preview.isCache = value)
-          .whenComplete(() => _map.remove(_url));
+      // _future
+      //     .then((GalleryPreview? value) => _preview.isCache = value.isCache)
+      //     .whenComplete(() => _map.remove(_url));
+
+      if (_future != null) {
+        final GalleryPreview? value = await _future;
+        yield value?.copyWith(isCache: true);
+        _map.remove(_url);
+      }
     }
   }
 
-  Future<bool> _precacheSingleImage(
-      BuildContext context, String url, GalleryPreview preview) async {
-    // final ImageProvider imageProvider = CachedNetworkImageProvider(url);
+  Future<GalleryPreview?> _precacheSingleImage(
+    BuildContext context,
+    String url,
+    GalleryPreview? preview,
+  ) async {
     final ImageProvider imageProvider = ExtendedNetworkImageProvider(
       url,
       cache: true,
@@ -105,12 +120,12 @@ class GalleryPara {
 
     /// 预缓存图片
     precacheImage(imageProvider, context).then((_) {
-      preview.isCache = true;
-      return true;
+      // preview.isCache = true;
+      return preview?.copyWith(isCache: true);
     }).catchError((e, stack) {
       logger.e('$e /n $stack');
-      return false;
+      return null;
     });
-    return false;
+    return null;
   }
 }

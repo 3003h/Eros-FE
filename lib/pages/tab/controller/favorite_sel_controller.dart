@@ -42,8 +42,8 @@ class FavoriteSelectorController extends GetxController
           (await getFavList()) ?? EHConst.favList;
 
       for (final Map<String, String> catmap in favList) {
-        final String favTitle = catmap['favTitle'];
-        final String favId = catmap['favId'];
+        final String favTitle = catmap['favTitle'] ?? '';
+        final String favId = catmap['favId'] ?? '';
 
         _favItemBeans.add(
           FavcatItemBean(favTitle, ThemeColors.favColor[favId], favId: favId),
@@ -51,11 +51,11 @@ class FavoriteSelectorController extends GetxController
       }
 
       _favItemBeans.add(FavcatItemBean(
-          S.of(Get.context).all_Favorites, ThemeColors.favColor['a'],
+          S.of(Get.context!)!.all_Favorites, ThemeColors.favColor['a'],
           favId: 'a'));
 
       _favItemBeans.add(FavcatItemBean(
-          S.of(Get.context).local_favorite, ThemeColors.favColor['l'],
+          S.of(Get.context!)!.local_favorite, ThemeColors.favColor['l'],
           favId: 'l'));
       return _favItemBeans;
     } catch (e, stack) {
@@ -67,8 +67,8 @@ class FavoriteSelectorController extends GetxController
   List<FavcatItemBean> initFavItemBeans() {
     final List<FavcatItemBean> _favItemBeans = <FavcatItemBean>[];
     for (final Map<String, String> catmap in EHConst.favList) {
-      final String favTitle = catmap['favTitle'];
-      final String favId = catmap['favId'];
+      final String favTitle = catmap['favTitle'] ?? '';
+      final String favId = catmap['favId'] ?? '';
 
       _favItemBeans.add(
         FavcatItemBean(favTitle, ThemeColors.favColor[favId], favId: favId),
@@ -76,11 +76,11 @@ class FavoriteSelectorController extends GetxController
     }
 
     _favItemBeans.add(FavcatItemBean(
-        S.of(Get.context).all_Favorites, ThemeColors.favColor['a'],
+        S.of(Get.context!)!.all_Favorites, ThemeColors.favColor['a'],
         favId: 'a'));
 
     _favItemBeans.add(FavcatItemBean(
-        S.of(Get.context).local_favorite, ThemeColors.favColor['l'],
+        S.of(Get.context!)!.local_favorite, ThemeColors.favColor['l'],
         favId: 'l'));
     return _favItemBeans;
   }
@@ -94,7 +94,7 @@ class FavSelectorItemController extends GetxController {
   }
 
   void updatePressedColor() {
-    colorTap.value =
-        CupertinoDynamicColor.resolve(CupertinoColors.systemGrey4, Get.context);
+    colorTap.value = CupertinoDynamicColor.resolve(
+        CupertinoColors.systemGrey4, Get.context!);
   }
 }

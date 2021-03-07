@@ -26,7 +26,7 @@ class DownloadViewController extends GetxController {
   ];
 
   final Rx<DownloadType> _viewType = DownloadType.gallery.obs;
-  DownloadType get viewType => _viewType.value;
+  DownloadType get viewType => _viewType.value ?? DownloadType.gallery;
   set viewType(DownloadType val) {
     final int _index = pageList.indexOf(val);
     pageController.animateToPage(_index,
@@ -41,10 +41,10 @@ class DownloadViewController extends GetxController {
 
   // 恢复任务
   Future<void> resumeArchiverDownload(int index) async {
-    final String _oriTaskid = archiverTasks[index].taskId;
-    final int _oriStatus = archiverTasks[index].status;
+    final String? _oriTaskid = archiverTasks[index].taskId;
+    final int? _oriStatus = archiverTasks[index].status;
 
-    String _newTaskId = '';
+    String? _newTaskId = '';
     if (_oriStatus == DownloadTaskStatus.paused.value) {
       _newTaskId = await FlutterDownloader.resume(taskId: _oriTaskid);
     } else if (_oriStatus == DownloadTaskStatus.failed.value) {
@@ -52,16 +52,20 @@ class DownloadViewController extends GetxController {
     }
 
     logger.d('oritaskid $_oriTaskid,  newID $_newTaskId');
-    if (_newTaskId != null) {
-      _downloadController.archiverTaskMap[archiverTasks[index].tag].taskId =
-          _newTaskId;
+    if (_newTaskId != null && archiverTasks[index].tag != null) {
+      // _downloadController.archiverTaskMap[archiverTasks[index].tag]?.taskId =
+      //     _newTaskId;
+
+      _downloadController.archiverTaskMap[archiverTasks[index].tag!] =
+          _downloadController.archiverTaskMap[archiverTasks[index].tag!]!
+              .copyWith(taskId: _newTaskId);
     }
   }
 
   // 重试任务
   Future<void> retryArchiverDownload(int index) async {
-    final String _oriTaskid = archiverTasks[index].taskId;
-    final int _oriStatus = archiverTasks[index].status;
+    final String? _oriTaskid = archiverTasks[index].taskId;
+    final int? _oriStatus = archiverTasks[index].status;
 
     String _newTaskId = '';
     if (_oriStatus == DownloadTaskStatus.paused.value) {
@@ -71,16 +75,19 @@ class DownloadViewController extends GetxController {
     }
 
     logger.d('oritaskid $_oriTaskid,  newID $_newTaskId');
-    if (_newTaskId != null) {
-      _downloadController.archiverTaskMap[archiverTasks[index].tag].taskId =
-          _newTaskId;
+    if (_newTaskId != null && archiverTasks[index].tag != null) {
+      // _downloadController.archiverTaskMap[archiverTasks[index].tag].taskId =
+      //     _newTaskId;
+      _downloadController.archiverTaskMap[archiverTasks[index].tag!] =
+          _downloadController.archiverTaskMap[archiverTasks[index].tag!]!
+              .copyWith(taskId: _newTaskId);
     }
   }
 
   // 移除任务
   void removeTask(int index) {
-    final String _oriTaskid = archiverTasks[index].taskId;
-    final String _tag = archiverTasks[index].tag;
+    final String? _oriTaskid = archiverTasks[index].taskId;
+    final String? _tag = archiverTasks[index].tag;
     _downloadController.archiverTaskMap.remove(_tag);
     FlutterDownloader.remove(taskId: _oriTaskid, shouldDeleteContent: true);
   }
@@ -92,7 +99,7 @@ class DownloadViewController extends GetxController {
 
   /// 长按菜单
   Future<void> _showLongPressSheet(int index) async {
-    final BuildContext context = Get.context;
+    final BuildContext context = Get.context!;
 
     await showCupertinoModalPopup<void>(
         context: context,
@@ -102,7 +109,7 @@ class DownloadViewController extends GetxController {
                 onPressed: () {
                   Get.back();
                 },
-                child: Text(S.of(context).cancel)),
+                child: Text(S.of(context)!.cancel)),
             actions: <Widget>[
               CupertinoActionSheetAction(
                 onPressed: () {

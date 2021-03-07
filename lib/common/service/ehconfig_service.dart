@@ -36,17 +36,20 @@ class EhConfigService extends ProfileService {
 
   String _lastClipboardLink = '';
 
-  String get lastShowFavcat => ehConfig.lastShowFavcat;
+  String? get lastShowFavcat => ehConfig.lastShowFavcat;
 
-  set lastShowFavcat(String value) {
-    ehConfig.lastShowFavcat = value;
-    Global.saveProfile();
+  set lastShowFavcat(String? value) {
+    // ehConfig.lastShowFavcat = value;
+    ehConfig = ehConfig.copyWith(lastShowFavcat: value);
+    // logger.d('${ehConfig.toJson()}');
+    // Global.saveProfile();
   }
 
-  String get lastShowFavTitle => ehConfig.lastShowFavTitle;
+  String? get lastShowFavTitle => ehConfig.lastShowFavTitle;
 
-  set lastShowFavTitle(String value) {
-    ehConfig.lastShowFavTitle = value;
+  set lastShowFavTitle(String? value) {
+    // ehConfig.lastShowFavTitle = value;
+    ehConfig = ehConfig.copyWith(lastShowFavTitle: value);
     Global.saveProfile();
   }
 
@@ -70,114 +73,132 @@ class EhConfigService extends ProfileService {
   void onInit() {
     super.onInit();
 
-    ehConfig = Global.profile.ehConfig;
-    downloadConfig = Global.profile.downloadConfig;
-
     /// 预载图片数量
     preloadImage.value = downloadConfig.preloadImage ?? 5;
-    everProfile(preloadImage, (value) => downloadConfig.preloadImage = value);
+    everProfile<int>(preloadImage, (value) {
+      // downloadConfig.preloadImage = value;
+      downloadConfig = downloadConfig.copyWith(preloadImage: value);
+    });
 
     /// 阅读方向
     viewMode.value =
-        EnumToString.fromString(ViewMode.values, ehConfig?.viewModel ?? '') ??
+        EnumToString.fromString(ViewMode.values, ehConfig.viewModel) ??
             ViewMode.LeftToRight;
-    everFromEunm(viewMode, (String value) => ehConfig.viewModel = value);
+    everFromEunm(viewMode, (String value) {
+      ehConfig = ehConfig.copyWith(viewModel: value);
+    });
 
     //
-    isSafeMode.value = ehConfig.safeMode ?? true;
+    isSafeMode.value = ehConfig.safeMode;
     everProfile(isSafeMode, (value) {
-      ehConfig.safeMode = value;
+      // ehConfig.safeMode = value;
+      ehConfig = ehConfig.copyWith(safeMode: value as bool);
       Get.find<TabHomeController>().resetIndex();
     });
 
-    isJpnTitle.value = ehConfig?.jpnTitle ?? false;
-    everProfile(isJpnTitle, (value) => ehConfig.jpnTitle = value);
+    isJpnTitle.value = ehConfig.jpnTitle;
+    everProfile(isJpnTitle, (value) {
+      ehConfig = ehConfig.copyWith(jpnTitle: value as bool);
+      // logger.v('new ehConfig ${ehConfig.toJson()}');
+    });
 
-    isTagTranslat.value = ehConfig?.tagTranslat ?? false;
-    everProfile(isTagTranslat, (value) => ehConfig.tagTranslat = value);
+    isTagTranslat.value = ehConfig.tagTranslat;
+    everProfile(isTagTranslat,
+        (value) => ehConfig = ehConfig.copyWith(tagTranslat: value as bool));
 
-    isGalleryImgBlur.value = ehConfig?.galleryImgBlur ?? false;
-    everProfile(isGalleryImgBlur, (value) => ehConfig.galleryImgBlur = value);
+    isGalleryImgBlur.value = ehConfig.galleryImgBlur;
+    everProfile(isGalleryImgBlur,
+        (value) => ehConfig = ehConfig.copyWith(galleryImgBlur: value as bool));
 
-    isSiteEx.value = ehConfig?.siteEx ?? false;
-    everProfile(isSiteEx, (value) => ehConfig.siteEx = value);
+    isSiteEx.value = ehConfig.siteEx;
+    everProfile(isSiteEx,
+        (value) => ehConfig = ehConfig.copyWith(siteEx: value as bool));
 
-    isFavLongTap.value = ehConfig?.favLongTap ?? false;
-    everProfile(isFavLongTap, (value) => ehConfig.favLongTap = value);
+    isFavLongTap.value = ehConfig.favLongTap;
+    everProfile(isFavLongTap,
+        (value) => ehConfig = ehConfig.copyWith(favLongTap: value as bool));
 
-    catFilter.value = ehConfig.catFilter ?? 0;
-    everProfile(catFilter, (value) => ehConfig.catFilter = value);
+    catFilter.value = ehConfig.catFilter;
+    everProfile(catFilter,
+        (value) => ehConfig = ehConfig.copyWith(catFilter: value as int));
 
-    listMode.value = EnumToString.fromString(
-            ListModeEnum.values, ehConfig?.listMode ?? '') ??
-        ListModeEnum.list;
-    everFromEunm(listMode, (String value) => ehConfig.listMode = value);
+    listMode.value =
+        EnumToString.fromString(ListModeEnum.values, ehConfig.listMode) ??
+            ListModeEnum.list;
+    everFromEunm(listMode,
+        (String value) => ehConfig = ehConfig.copyWith(listMode: value));
 
-    maxHistory.value = ehConfig.maxHistory ?? 100;
-    everProfile(maxHistory, (value) => ehConfig.maxHistory = value);
+    maxHistory.value = ehConfig.maxHistory;
+    everProfile(maxHistory,
+        (value) => ehConfig = ehConfig.copyWith(maxHistory: value as int));
 
-    isSearchBarComp.value = ehConfig.searchBarComp ?? true;
-    everProfile(isSearchBarComp, (value) => ehConfig.searchBarComp = value);
+    isSearchBarComp.value = ehConfig.searchBarComp;
+    everProfile(isSearchBarComp,
+        (value) => ehConfig = ehConfig.copyWith(searchBarComp: value as bool));
 
     favoriteOrder.value = EnumToString.fromString(
-            FavoriteOrder.values, ehConfig?.favoritesOrder ?? '') ??
+            FavoriteOrder.values, ehConfig.favoritesOrder) ??
         FavoriteOrder.fav;
-    everFromEunm(
-        favoriteOrder, (String value) => ehConfig.favoritesOrder = value);
+    everFromEunm(favoriteOrder,
+        (String value) => ehConfig = ehConfig.copyWith(favoritesOrder: value));
 
-    tagTranslatVer.value = ehConfig.tagTranslatVer ?? '';
-    everProfile(tagTranslatVer, (value) => ehConfig.tagTranslatVer = value);
+    tagTranslatVer.value = ehConfig.tagTranslatVer;
+    everProfile(
+        tagTranslatVer,
+        (value) =>
+            ehConfig = ehConfig.copyWith(tagTranslatVer: value as String));
 
-    lastFavcat.value = ehConfig.lastFavcat ?? '0';
-    everProfile(lastFavcat, (value) => ehConfig.lastFavcat);
+    lastFavcat.value = ehConfig.lastFavcat;
+    everProfile(lastFavcat,
+        (value) => ehConfig = ehConfig.copyWith(lastFavcat: value as String));
 
-    isFavPicker.value = ehConfig.favPicker ?? false;
-    everProfile(isFavPicker, (value) => ehConfig.favPicker);
+    isFavPicker.value = ehConfig.favPicker;
+    everProfile(isFavPicker,
+        (value) => ehConfig = ehConfig.copyWith(favPicker: value as bool));
 
-    isPureDarkTheme.value = ehConfig.pureDarkTheme ?? false;
-    everProfile<bool>(
-        isPureDarkTheme, (bool value) => ehConfig.pureDarkTheme = value);
+    isPureDarkTheme.value = ehConfig.pureDarkTheme;
+    everProfile<bool>(isPureDarkTheme as RxInterface<bool>,
+        (bool value) => ehConfig = ehConfig.copyWith(pureDarkTheme: value));
 
-    isClipboardLink.value = ehConfig.clipboardLink ?? false;
-    everProfile<bool>(
-        isClipboardLink, (bool value) => ehConfig.clipboardLink = value);
+    isClipboardLink.value = ehConfig.clipboardLink;
+    everProfile<bool>(isClipboardLink as RxInterface<bool>,
+        (bool value) => ehConfig = ehConfig.copyWith(clipboardLink: value));
 
-    commentTrans.value = ehConfig.commentTrans ?? false;
-    everProfile<bool>(
-        commentTrans, (bool value) => ehConfig.commentTrans = value);
+    commentTrans.value = ehConfig.commentTrans;
+    everProfile<bool>(commentTrans as RxInterface<bool>,
+        (bool value) => ehConfig = ehConfig.copyWith(commentTrans: value));
 
     // blurredInRecentTasks
-    blurredInRecentTasks.value =
-        storageUtil.getBool(BLURRED_IN_RECENT_TASK) ?? true;
-    everProfile<bool>(blurredInRecentTasks,
+    blurredInRecentTasks.value = storageUtil.getBool(BLURRED_IN_RECENT_TASK);
+    everProfile<bool>(blurredInRecentTasks as RxInterface<bool>,
         (bool value) => storageUtil.setBool(BLURRED_IN_RECENT_TASK, value));
 
     // autoLockTimeOut
     autoLockTimeOut.value = ehConfig.autoLockTimeOut ?? -1;
-    everProfile<int>(
-        autoLockTimeOut, (int value) => ehConfig.autoLockTimeOut = value);
+    everProfile<int>(autoLockTimeOut,
+        (int value) => ehConfig = ehConfig.copyWith(autoLockTimeOut: value));
 
     // showPageInterval
-    showPageInterval.value = ehConfig.showPageInterval ?? true;
-    everProfile<bool>(
-        showPageInterval, (bool value) => ehConfig.showPageInterval = value);
+    showPageInterval.value = ehConfig.showPageInterval;
+    everProfile<bool>(showPageInterval as RxInterface<bool>,
+        (bool value) => ehConfig = ehConfig.copyWith(showPageInterval: value));
 
     // orientation
     orientation.value = EnumToString.fromString(
-            ReadOrientation.values, ehConfig?.favoritesOrder ?? '') ??
+            ReadOrientation.values, ehConfig.favoritesOrder) ??
         ReadOrientation.system;
-    everFromEunm(orientation, (String value) => ehConfig.orientation = value);
+    everFromEunm(orientation,
+        (String value) => ehConfig = ehConfig.copyWith(orientation: value));
   }
 
   /// 收藏排序
-  Future<FavoriteOrder> showFavOrder() async {
-    final BuildContext context = Get.context;
-    final Map<FavoriteOrder, String> _orderMap = <FavoriteOrder, String>{
-      FavoriteOrder.posted: S.of(context).favorites_order_Use_posted,
-      FavoriteOrder.fav: S.of(context).favorites_order_Use_favorited,
-    };
-
+  Future<FavoriteOrder?> showFavOrder(BuildContext context) async {
     List<Widget> _getOrderList(BuildContext context) {
+      final Map<FavoriteOrder, String> _orderMap = <FavoriteOrder, String>{
+        FavoriteOrder.posted: S.of(context)!.favorites_order_Use_posted,
+        FavoriteOrder.fav: S.of(context)!.favorites_order_Use_favorited,
+      };
+
       return List<Widget>.from(_orderMap.keys.map((FavoriteOrder element) {
         return CupertinoActionSheetAction(
             onPressed: () {
@@ -191,22 +212,22 @@ class EhConfigService extends ProfileService {
                     padding: EdgeInsets.symmetric(horizontal: 8),
                     child: Icon(CupertinoIcons.checkmark),
                   ),
-                Text(_orderMap[element]),
+                Text(_orderMap[element] ?? ''),
               ],
             ));
       }).toList());
     }
 
-    final FavoriteOrder _result = await showCupertinoModalPopup<FavoriteOrder>(
+    final FavoriteOrder? _result = await showCupertinoModalPopup<FavoriteOrder>(
         context: context,
         builder: (BuildContext context) {
           return CupertinoActionSheet(
-            title: Text(S.of(context).favorites_order),
+            title: Text(S.of(context)!.favorites_order),
             cancelButton: CupertinoActionSheetAction(
                 onPressed: () {
                   Get.back();
                 },
-                child: Text(S.of(context).cancel)),
+                child: Text(S.of(context)!.cancel)),
             actions: <Widget>[
               ..._getOrderList(context),
             ],
@@ -224,15 +245,15 @@ class EhConfigService extends ProfileService {
     return _result;
   }
 
-  Future<void> chkClipboardLink() async {
-    if (!isClipboardLink.value) {
+  Future<void> chkClipboardLink(BuildContext context) async {
+    if (!(isClipboardLink.value ?? false)) {
       return;
     }
 
-    final currentRoute = Get.currentRoute;
+    final String currentRoute = Get.currentRoute;
     logger.d('currentRoute $currentRoute');
 
-    final pageNames = <String>[
+    final List<String> pageNames = <String>[
       '/${GalleryMainPage().runtimeType.toString()}',
       EHRoutes.galleryPage,
     ];
@@ -245,38 +266,41 @@ class EhConfigService extends ProfileService {
     logger.d('Clipboard ' + _text);
     final RegExp _reg =
         RegExp(r'https?://e[-|x]hentai.org/g/\d+/[0-9a-f]{10}/?');
-    final RegExpMatch _mach = _reg.firstMatch(_text);
+    final RegExpMatch? _mach = _reg.firstMatch(_text);
 
     if (_mach == null && (_mach?.group(0)?.isEmpty ?? true)) {
       return;
     }
 
-    if (_curGalleryPage && _lastClipboardLink == _mach.group(0)) {
+    if (_curGalleryPage && _lastClipboardLink == _mach?.group(0)) {
       logger.v('剪贴板链接为当前展示的画廊 返回');
       return;
     }
 
-    logger.d('${_mach.group(0)} ');
-    _lastClipboardLink = _mach.group(0);
-    _showClipboardLinkDialog(_mach.group(0));
+    logger.d('${_mach?.group(0)} ');
+    _lastClipboardLink = _mach?.group(0) ?? '';
+    if (_lastClipboardLink.isNotEmpty) {
+      _showClipboardLinkDialog(_lastClipboardLink, context);
+    }
   }
 
-  Future<void> _showClipboardLinkDialog(String url) async {
+  Future<void> _showClipboardLinkDialog(
+      String url, BuildContext context) async {
     showCupertinoDialog(
-        context: Get.context,
+        context: context,
         builder: (BuildContext context) {
           return CupertinoAlertDialog(
             title: const Text('画廊跳转'),
             content: const Text('检测到剪贴板中包含画廊链接, 是否打开'),
             actions: [
               CupertinoDialogAction(
-                child: Text(S.of(context).cancel),
+                child: Text(S.of(context)!.cancel),
                 onPressed: () {
                   Get.back();
                 },
               ),
               CupertinoDialogAction(
-                child: Text(S.of(context).ok),
+                child: Text(S.of(context)!.ok),
                 onPressed: () {
                   Get.back();
                   NavigatorUtil.goGalleryPage(url: url);

@@ -15,9 +15,9 @@ import 'package:line_icons/line_icons.dart';
 import 'package:share/share.dart';
 
 class QuickSearchListPage extends StatelessWidget {
-  Future<String> _getTextTranslate(String text) async {
-    final String tranText = await EhTagDatabase.getTranTagWithNameSpase(text);
-    if (tranText.trim() != text) {
+  Future<String?> _getTextTranslate(String text) async {
+    final String? tranText = await EhTagDatabase.getTranTagWithNameSpase(text);
+    if (tranText?.trim() != text) {
       return tranText;
     } else {
       return text;
@@ -30,7 +30,7 @@ class QuickSearchListPage extends StatelessWidget {
     final CupertinoPageScaffold sca = CupertinoPageScaffold(
         navigationBar: CupertinoNavigationBar(
           padding: const EdgeInsetsDirectional.only(start: 0),
-          middle: Text(S.of(context).quick_search),
+          middle: Text(S.of(context)!.quick_search),
           transitionBetweenRoutes: false,
           trailing: _buildListBtns(context),
         ),
@@ -51,7 +51,7 @@ class QuickSearchListPage extends StatelessWidget {
                         Get.back<String>(result: _datas[position]);
                       },
                       behavior: HitTestBehavior.opaque,
-                      child: FutureBuilder<String>(
+                      child: FutureBuilder<String?>(
                           future: _getTextTranslate(_datas[position]),
                           initialData: _datas[position],
                           builder: (context, snapshot) {
@@ -85,7 +85,7 @@ class QuickSearchListPage extends StatelessWidget {
                     ),
                     secondaryActions: <Widget>[
                       IconSlideAction(
-                        caption: S.of(context).delete,
+                        caption: S.of(context)!.delete,
                         color: CupertinoDynamicColor.resolve(
                             CupertinoColors.systemRed, context),
                         icon: Icons.delete,
@@ -149,10 +149,10 @@ class QuickSearchListPage extends StatelessWidget {
               size: 26,
             ),
             onPressed: () async {
-              final FilePickerResult result =
+              final FilePickerResult? result =
                   await FilePicker.platform.pickFiles();
               if (result != null) {
-                final File _file = File(result.files.single.path);
+                final File _file = File(result.files.single.path!);
                 final String _fileText = _file.readAsStringSync();
                 if (_fileText.contains('#FEhViewer')) {
                   logger.v('$_fileText');
@@ -200,20 +200,20 @@ class QuickSearchListPage extends StatelessWidget {
   Future<void> _removeAll() async {
     final QuickSearchController quickSearchController = Get.find();
     return showCupertinoDialog<void>(
-      context: Get.context,
+      context: Get.context!,
       barrierDismissible: true,
       builder: (BuildContext context) {
         return CupertinoAlertDialog(
           title: const Text('Remove all?'),
           actions: <Widget>[
             CupertinoDialogAction(
-              child: Text(S.of(context).cancel),
+              child: Text(S.of(context)!.cancel),
               onPressed: () {
                 Get.back();
               },
             ),
             CupertinoDialogAction(
-              child: Text(S.of(context).ok),
+              child: Text(S.of(context)!.ok),
               onPressed: () {
                 quickSearchController.removeAll();
                 Get.back();

@@ -18,7 +18,7 @@ const double kPaddingLeft = 8.0;
 /// 画廊列表项
 /// 简单模式 精简显示信息 固定高度
 class GalleryItemSimpleWidget extends StatelessWidget {
-  GalleryItemSimpleWidget({@required this.galleryItem, @required this.tabTag}) {
+  GalleryItemSimpleWidget({required this.galleryItem, required this.tabTag}) {
     Get.lazyPut(
       () => GalleryItemController(galleryItem),
       tag: galleryItem.gid,
@@ -149,7 +149,7 @@ class GalleryItemSimpleWidget extends StatelessWidget {
                 //阴影
                 BoxShadow(
                   color: CupertinoDynamicColor.resolve(
-                      CupertinoColors.systemGrey5, Get.context),
+                      CupertinoColors.systemGrey5, Get.context!),
                   blurRadius: 10,
                 )
               ],
@@ -175,12 +175,12 @@ class GalleryItemSimpleWidget extends StatelessWidget {
           padding: const EdgeInsets.fromLTRB(0, 0, 4, 0),
           child: StaticRatingBar(
             size: 16.0,
-            rate: _galleryItemController.galleryItem.ratingFallBack,
+            rate: _galleryItemController.galleryItem.ratingFallBack ?? 0,
             radiusRatio: 1.5,
             colorLight: ThemeColors.colorRatingMap[
                 _galleryItemController.galleryItem.colorRating?.trim() ?? 'ir'],
             colorDark: CupertinoDynamicColor.resolve(
-                CupertinoColors.systemGrey3, Get.context),
+                CupertinoColors.systemGrey3, Get.context!),
           ),
         ),
         Text(
@@ -188,7 +188,7 @@ class GalleryItemSimpleWidget extends StatelessWidget {
           style: TextStyle(
             fontSize: 12,
             color: CupertinoDynamicColor.resolve(
-                CupertinoColors.systemGrey, Get.context),
+                CupertinoColors.systemGrey, Get.context!),
           ),
         ),
       ],
@@ -251,7 +251,7 @@ class GalleryItemSimpleWidget extends StatelessWidget {
         ThemeColors.catColor[
                 _galleryItemController?.galleryItem?.category ?? 'default'] ??
             CupertinoColors.systemBackground,
-        Get.context);
+        Get.context!);
 
     return ClipRRect(
       borderRadius: BorderRadius.circular(4),
@@ -274,15 +274,15 @@ class GalleryItemSimpleWidget extends StatelessWidget {
 /// 封面图片Widget
 class CoverImg extends StatelessWidget {
   const CoverImg({
-    Key key,
-    @required this.imgUrl,
+    Key? key,
+    required this.imgUrl,
     this.height,
     this.width,
   }) : super(key: key);
 
   final String imgUrl;
-  final double height;
-  final double width;
+  final double? height;
+  final double? width;
 
   @override
   Widget build(BuildContext context) {
@@ -292,7 +292,7 @@ class CoverImg extends StatelessWidget {
     };
     if (imgUrl != null && imgUrl.isNotEmpty) {
       return Obx(() {
-        final bool _isBlur = _ehConfigService.isGalleryImgBlur.value;
+        final bool _isBlur = _ehConfigService.isGalleryImgBlur.value ?? false;
         return LayoutBuilder(
           builder: (context, constraints) {
             return BlurImage(
@@ -306,7 +306,7 @@ class CoverImg extends StatelessWidget {
                     child: const CupertinoActivityIndicator(),
                   );
                 },
-                height: height * constraints.maxWidth / width,
+                height: (height ?? 0) * constraints.maxWidth / (width ?? 0),
                 width: constraints.maxWidth,
                 httpHeaders: _httpHeaders,
                 imageUrl: imgUrl,

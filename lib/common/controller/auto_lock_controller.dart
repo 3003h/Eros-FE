@@ -1,7 +1,6 @@
 import 'package:fehviewer/common/service/ehconfig_service.dart';
 import 'package:fehviewer/generated/l10n.dart';
 import 'package:fehviewer/models/index.dart';
-import 'package:fehviewer/route/routes.dart';
 import 'package:fehviewer/utils/logger.dart';
 import 'package:get/get.dart';
 import 'package:local_auth/auth_strings.dart';
@@ -10,26 +9,29 @@ import '../global.dart';
 
 class AutoLockController extends GetxController {
   AutoLock get autoLock => Global.profile.autoLock;
+  set autoLock(AutoLock val) =>
+      Global.profile = Global.profile.copyWith(autoLock: val);
   final EhConfigService _ehConfigService = Get.find();
 
   static final IOSAuthMessages iosStrings = IOSAuthMessages(
-      cancelButton: S.of(Get.context).cancel,
-      goToSettingsButton: S.of(Get.context).tab_setting,
+      cancelButton: S.of(Get.context!)!.cancel,
+      goToSettingsButton: S.of(Get.context!)!.tab_setting,
       goToSettingsDescription: 'Please set up your Touch & Face ID.',
       lockOut: 'Please reenable your Touch & Face ID');
 
   static final AndroidAuthMessages androidStrings = AndroidAuthMessages(
-    cancelButton: S.of(Get.context).cancel,
-    signInTitle: '指纹认证',
-    biometricHint: '触摸指纹传感器',
+    cancelButton: S.of(Get.context!)!.cancel,
+    // signInTitle: '指纹认证',
+    // biometricHint: '触摸指纹传感器',
   );
 
   /// 最后离开时间
-  int _lastLeaveTime;
+  int _lastLeaveTime = DateTime.now().millisecondsSinceEpoch;
   int get lastLeaveTime => _lastLeaveTime;
   set lastLeaveTime(int val) {
     _lastLeaveTime = val;
-    autoLock.lastLeaveTime = val;
+    // autoLock.lastLeaveTime = val;
+    autoLock = autoLock.copyWith(lastLeaveTime: val);
     Global.saveProfile();
   }
 
@@ -37,11 +39,12 @@ class AutoLockController extends GetxController {
     lastLeaveTime = DateTime.now().millisecondsSinceEpoch + 1000;
   }
 
-  bool _isLocking;
+  bool _isLocking = false;
   bool get isLocking => _isLocking;
   set isLocking(bool val) {
     _isLocking = val;
-    autoLock.isLocking = val;
+    // autoLock.isLocking = val;
+    autoLock = autoLock.copyWith(isLocking: val);
     Global.saveProfile();
   }
 
@@ -50,19 +53,10 @@ class AutoLockController extends GetxController {
   @override
   void onInit() {
     super.onInit();
-    if (autoLock == null) {
-      Global.profile.autoLock = AutoLock();
-      Global.saveProfile();
-    }
-
-    _lastLeaveTime =
-        autoLock.lastLeaveTime ?? DateTime.now().millisecondsSinceEpoch;
-
-    _isLocking = autoLock.isLocking ?? false;
   }
 
-  Future<bool> checkBiometrics({String localizedReason}) async {
-    final bool didAuthenticate = await localAuth.authenticateWithBiometrics(
+  Future<bool> checkBiometrics({String? localizedReason}) async {
+    final bool didAuthenticate = await localAuth.authenticate(
       localizedReason: localizedReason ?? '验证以解锁应用',
       iOSAuthStrings: AutoLockController.iosStrings,
       androidAuthStrings: AutoLockController.androidStrings,
@@ -89,7 +83,7 @@ class AutoLockController extends GetxController {
     logger
         .v('离开时间为: ${subTime}ms  锁定超时为: $autoLockTimeOut  需要解锁: $_needUnLock');
 
-    if (_needUnLock && !_isResumed) {
+    /*if (_needUnLock && !_isResumed) {
       _isLocking = true;
 
       final rult = await Get.toNamed(EHRoutes.unlockPage);
@@ -101,6 +95,6 @@ class AutoLockController extends GetxController {
           _isLocking = false;
         }
       }
-    }
+    }*/
   }
 }

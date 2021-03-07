@@ -133,7 +133,7 @@ class EHUtils {
   static List<Map<String, String>> getFavListFromProfile() {
     final List<Map<String, String>> favcatList = <Map<String, String>>[];
     if (Global.profile.user.favcat != null) {
-      for (final dynamic mapObj in Global.profile.user.favcat) {
+      for (final dynamic mapObj in Global.profile.user.favcat ?? []) {
         // logger.v('$mapObj');
         final Map<String, String> map = <String, String>{
           'favId': mapObj['favId'],

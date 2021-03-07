@@ -1,4 +1,5 @@
 import 'package:fehviewer/generated/l10n.dart';
+import 'package:fehviewer/models/base/eh_models.dart';
 import 'package:fehviewer/pages/tab/controller/popular_controller.dart';
 import 'package:fehviewer/pages/tab/view/gallery_base.dart';
 import 'package:fehviewer/pages/tab/view/tab_base.dart';
@@ -8,14 +9,17 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 class PopularListTab extends GetView<PopularViewController> {
-  const PopularListTab({Key key, this.tabTag, this.scrollController})
-      : super(key: key);
-  final String tabTag;
-  final ScrollController scrollController;
+  const PopularListTab({
+    Key? key,
+    this.tabTag,
+    this.scrollController,
+  }) : super(key: key);
+  final String? tabTag;
+  final ScrollController? scrollController;
 
   @override
   Widget build(BuildContext context) {
-    final String _title = S.of(context).tab_popular;
+    final String _title = S.of(context)!.tab_popular;
     final CustomScrollView customScrollView = CustomScrollView(
       controller: scrollController,
       physics: const AlwaysScrollableScrollPhysics(),
@@ -51,16 +55,17 @@ class PopularListTab extends GetView<PopularViewController> {
   }
 
   Widget _getGalleryList() {
-    return controller.obx((state) => getGalleryList(state, tabTag),
-        onLoading: SliverFillRemaining(
-          child: Container(
-            alignment: Alignment.center,
-            padding: const EdgeInsets.only(bottom: 50),
-            child: const CupertinoActivityIndicator(
-              radius: 14.0,
-            ),
-          ),
-        ), onError: (err) {
+    return controller
+        .obx((List<GalleryItem>? state) => getGalleryList(state, tabTag),
+            onLoading: SliverFillRemaining(
+              child: Container(
+                alignment: Alignment.center,
+                padding: const EdgeInsets.only(bottom: 50),
+                child: const CupertinoActivityIndicator(
+                  radius: 14.0,
+                ),
+              ),
+            ), onError: (err) {
       logger.e(' $err');
       return SliverFillRemaining(
         child: Container(

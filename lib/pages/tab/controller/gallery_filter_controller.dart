@@ -1,5 +1,4 @@
 import 'package:fehviewer/common/controller/advance_search_controller.dart';
-import 'package:fehviewer/models/index.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
 
@@ -16,18 +15,20 @@ class GalleryFilterController extends GetxController {
   void onInit() {
     super.onInit();
 
-    statrPageCtrl.text = _advanceSearchController.advanceSearch.value.startPage;
-    endPageCtrl.text = _advanceSearchController.advanceSearch.value.endPage;
+    statrPageCtrl.text =
+        _advanceSearchController.advanceSearch.value?.startPage ?? '';
+    endPageCtrl.text =
+        _advanceSearchController.advanceSearch.value?.endPage ?? '';
 
     statrPageCtrl.addListener(() {
-      _advanceSearchController.advanceSearch.update((AdvanceSearch val) {
-        val.startPage = statrPageCtrl.text.trim();
-      });
+      _advanceSearchController.advanceSearch(_advanceSearchController
+          .advanceSearch.value
+          ?.copyWith(startPage: statrPageCtrl.text.trim()));
     });
     endPageCtrl.addListener(() {
-      _advanceSearchController.advanceSearch.update((AdvanceSearch val) {
-        val.endPage = endPageCtrl.text.trim();
-      });
+      _advanceSearchController.advanceSearch(_advanceSearchController
+          .advanceSearch.value
+          ?.copyWith(endPage: endPageCtrl.text.trim()));
     });
   }
 }

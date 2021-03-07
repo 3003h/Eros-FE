@@ -4,7 +4,7 @@ import 'package:fehviewer/common/global.dart';
 import 'package:fehviewer/common/service/dns_service.dart';
 import 'package:fehviewer/common/service/theme_service.dart';
 import 'package:fehviewer/generated/l10n.dart';
-import 'package:fehviewer/models/dnsCache.dart';
+import 'package:fehviewer/models/base/eh_models.dart';
 import 'package:fehviewer/pages/setting/setting_base.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -15,7 +15,7 @@ import 'package:get/get.dart';
 class CustomHostsPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    final String _title = S.of(context).custom_hosts;
+    final String _title = S.of(context)!.custom_hosts;
     final DnsService dnsConfigController = Get.find();
 
     void _handleEnableCustomHostDarkChanged(bool value) {
@@ -87,7 +87,7 @@ class CustomHostsListView extends StatelessWidget {
                 actionExtentRatio: 0.25,
                 secondaryActions: <Widget>[
                   IconSlideAction(
-                    caption: S.of(context).delete,
+                    caption: S.of(context)!.delete,
                     color: CupertinoDynamicColor.resolve(
                         CupertinoColors.systemRed, context),
                     icon: Icons.delete,
@@ -99,8 +99,8 @@ class CustomHostsListView extends StatelessWidget {
                 ],
                 child: CuttomHostItem(
                   index: index,
-                  host: _dnsCache.host,
-                  addr: _dnsCache.addr,
+                  host: _dnsCache.host ?? '',
+                  addr: _dnsCache.addr ?? '',
                 ),
               );
             },
@@ -112,10 +112,10 @@ class CustomHostsListView extends StatelessWidget {
 
 class CuttomHostItem extends StatelessWidget {
   const CuttomHostItem({
-    Key key,
-    @required this.host,
-    @required this.addr,
-    @required this.index,
+    Key? key,
+    required this.host,
+    required this.addr,
+    required this.index,
   }) : super(key: key);
   final String host;
   final String addr;

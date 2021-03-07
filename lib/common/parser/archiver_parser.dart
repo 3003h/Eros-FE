@@ -28,12 +28,12 @@ ArchiverProvider parseArchiver(String response) {
   logger.d('${dlElms.length} ');
   for (final Element dlElm in dlElms) {
     final String _price = RegExp(r':\s+([\w,. ]+)!?$')
-            .firstMatch(dlElm.children[0].text ?? '')
+            .firstMatch(dlElm.children[0].text)
             ?.group(1) ??
         dlElm.children[0].text;
 
     final String _size = RegExp(r':\s+([\w,. ]+)!?$')
-            .firstMatch(dlElm.children[2].text ?? '')
+            .firstMatch(dlElm.children[2].text)
             ?.group(1) ??
         dlElm.children[2].text;
 

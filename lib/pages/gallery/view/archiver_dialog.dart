@@ -9,7 +9,7 @@ import 'package:get/get.dart';
 const double kIconSize = 16.5;
 
 class ArchiverView extends StatelessWidget {
-  const ArchiverView({Key key}) : super(key: key);
+  const ArchiverView({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -21,10 +21,10 @@ class ArchiverView extends StatelessWidget {
     };
 
     return controller.obx(
-      (ArchiverProvider state) {
+      (ArchiverProvider? state) {
         return Column(
           children: <Widget>[
-            if (state.gp.isNotEmpty)
+            if (state?.gp?.isNotEmpty ?? false)
               Padding(
                 padding: const EdgeInsets.all(8.0),
                 // child: Text('G ${state.gp}   C ${state.credits}'),
@@ -54,7 +54,7 @@ class ArchiverView extends StatelessWidget {
                             alignment: Alignment.center,
                           ),
                         ).paddingSymmetric(horizontal: 4.0),
-                        Text(state.gp ?? ''),
+                        Text(state?.gp ?? ''),
                       ],
                     ),
                     const SizedBox(width: 10),
@@ -81,7 +81,7 @@ class ArchiverView extends StatelessWidget {
                             alignment: Alignment.center,
                           ),
                         ).paddingSymmetric(horizontal: 4.0),
-                        Text(state.credits ?? ''),
+                        Text(state?.credits ?? ''),
                       ],
                     ),
                   ],
@@ -100,14 +100,15 @@ class ArchiverView extends StatelessWidget {
                   physics: const NeverScrollableScrollPhysics(),
                   padding: const EdgeInsets.all(0),
                   itemBuilder: (_, int index) {
-                    final ArchiverProviderItem _item = state.dlItems[index];
+                    final ArchiverProviderItem? _item = state?.dlItems?[index];
                     return CupertinoButton(
                       padding: const EdgeInsets.symmetric(vertical: 8.0),
                       child: Column(
                         children: <Widget>[
-                          Text(typedesc[_item.dltype]).paddingOnly(bottom: 2.0),
+                          Text(typedesc[_item?.dltype] ?? '')
+                              .paddingOnly(bottom: 2.0),
                           Text(
-                            '${_item.size}    ${_item.price}',
+                            '${_item?.size ?? ''}    ${_item?.price ?? ''}',
                             textAlign: TextAlign.start,
                             style: const TextStyle(
                               fontSize: 10,
@@ -118,9 +119,12 @@ class ArchiverView extends StatelessWidget {
                         ],
                       ),
                       onPressed: () async {
+                        if (_item == null) {
+                          return;
+                        }
                         controller.downloadLoacal(
-                            dltype: _item.dltype,
-                            dlcheck: typedesc[_item.dltype]);
+                            dltype: _item.dltype ?? '',
+                            dlcheck: typedesc[_item.dltype] ?? '');
                       },
                     );
                   },
@@ -131,7 +135,7 @@ class ArchiverView extends StatelessWidget {
                           CupertinoColors.systemGrey4, context),
                     );
                   },
-                  itemCount: state.dlItems?.length ?? 0,
+                  itemCount: state?.dlItems?.length ?? 0,
                 ),
               ),
             const Text(
@@ -181,30 +185,30 @@ class ArchiverView extends StatelessWidget {
 
 class HatHListView extends StatelessWidget {
   const HatHListView({
-    Key key,
-    @required this.controller,
-    @required this.state,
+    Key? key,
+    required this.controller,
+    required this.state,
   }) : super(key: key);
 
   final ArchiverController controller;
-  final ArchiverProvider state;
+  final ArchiverProvider? state;
 
   @override
   Widget build(BuildContext context) {
     return Container(
       padding: const EdgeInsets.only(top: 4.0),
-      height: (state.hItems?.length ?? 0) * 40 + 50.0,
+      height: (state?.hItems?.length ?? 0) * 40 + 50.0,
       child: ListView.separated(
         padding: const EdgeInsets.all(0),
         itemBuilder: (_, int index) {
-          final ArchiverProviderItem _item = state.hItems[index];
+          final ArchiverProviderItem? _item = state?.hItems?[index];
           return CupertinoButton(
             padding: const EdgeInsets.symmetric(vertical: 8.0),
             child: Column(
               children: <Widget>[
-                Text(_item.resolution).paddingOnly(bottom: 2.0),
+                Text(_item?.resolution ?? '').paddingOnly(bottom: 2.0),
                 Text(
-                  '${_item.size}    ${_item.price}',
+                  '${_item?.size ?? ''}    ${_item?.price ?? ''}',
                   textAlign: TextAlign.start,
                   style: const TextStyle(
                     fontSize: 10,
@@ -215,7 +219,7 @@ class HatHListView extends StatelessWidget {
               ],
             ),
             onPressed: () {
-              controller.downloadRemote(_item.dlres);
+              controller.downloadRemote(_item!.dlres!);
               Get.back();
             },
           );
@@ -227,7 +231,7 @@ class HatHListView extends StatelessWidget {
                 CupertinoColors.systemGrey4, context),
           );
         },
-        itemCount: state.hItems?.length ?? 0,
+        itemCount: state?.hItems?.length ?? 0,
       ),
     );
   }
@@ -235,22 +239,22 @@ class HatHListView extends StatelessWidget {
 
 class HatHGridView extends StatelessWidget {
   const HatHGridView({
-    Key key,
-    @required this.controller,
-    @required this.state,
+    Key? key,
+    required this.controller,
+    required this.state,
   }) : super(key: key);
 
   final ArchiverController controller;
-  final ArchiverProvider state;
+  final ArchiverProvider? state;
 
   @override
   Widget build(BuildContext context) {
-    final List<Widget> _items = state.hItems
+    final List<Widget>? _items = state?.hItems!
         .map((_item) => CupertinoButton(
               padding: const EdgeInsets.symmetric(vertical: 8.0),
               child: Column(
                 children: <Widget>[
-                  Text(_item.resolution).paddingOnly(bottom: 2.0),
+                  Text(_item.resolution ?? '').paddingOnly(bottom: 2.0),
                   Text(
                     '${_item.size}   ${_item.price}',
                     textAlign: TextAlign.start,
@@ -263,7 +267,7 @@ class HatHGridView extends StatelessWidget {
                 ],
               ),
               onPressed: () {
-                controller.downloadRemote(_item.dlres);
+                controller.downloadRemote(_item.dlres!);
                 Get.back();
               },
             ))
@@ -271,13 +275,13 @@ class HatHGridView extends StatelessWidget {
 
     return Container(
       padding: const EdgeInsets.only(top: 4.0),
-      height: ((state.hItems?.length ?? 0) / 2).round() * 55.0,
+      height: ((state?.hItems?.length ?? 0) / 2).round() * 55.0,
       child: GridView.count(
         physics: const NeverScrollableScrollPhysics(),
         padding: const EdgeInsets.all(0),
         crossAxisCount: 2,
         childAspectRatio: 2.0,
-        children: _items,
+        children: _items!,
       ),
     );
   }
@@ -286,17 +290,17 @@ class HatHGridView extends StatelessWidget {
 Future<void> showArchiverDialog() {
   // Get.put(ArchiverController(), tag: pageCtrlDepth);
   return showCupertinoDialog<void>(
-      context: Get.overlayContext,
+      context: Get.overlayContext!,
       barrierDismissible: true,
       builder: (_) {
         return CupertinoAlertDialog(
-          title: Text(S.of(Get.context).p_Archiver),
+          title: Text(S.of(Get.context!)!.p_Archiver),
           content: Container(
             child: const ArchiverView(),
           ),
           actions: <Widget>[
             CupertinoDialogAction(
-              child: Text(S.of(Get.overlayContext).cancel),
+              child: Text(S.of(Get.context!)!.cancel),
               onPressed: () {
                 Get.back();
               },

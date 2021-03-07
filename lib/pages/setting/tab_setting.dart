@@ -14,7 +14,7 @@ class TabSettingPage extends StatelessWidget {
           ? CupertinoColors.secondarySystemBackground
           : null,
       navigationBar: CupertinoNavigationBar(
-        middle: Text(S.of(context).tabbar_setting),
+        middle: Text(S.of(context)!.tabbar_setting),
       ),
       child: SafeArea(
         child: CustomScrollView(
@@ -27,7 +27,7 @@ class TabSettingPage extends StatelessWidget {
                 padding: const EdgeInsets.only(left: 20, bottom: 4),
                 alignment: Alignment.bottomLeft,
                 child: Text(
-                  S.of(context).tab_sort,
+                  S.of(context)!.tab_sort,
                   style: const TextStyle(fontSize: 14),
                 ),
               ),
@@ -42,7 +42,7 @@ class TabSettingPage extends StatelessWidget {
 
 class TablistView extends StatelessWidget {
   const TablistView({
-    Key key,
+    Key? key,
   }) : super(key: key);
 
   @override

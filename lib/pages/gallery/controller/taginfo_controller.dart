@@ -21,10 +21,10 @@ class TagInfoController extends GetxController {
   FocusNode focusNode = FocusNode();
 
   String get tags => tagsTextController.text;
-  DateTime _lastInputCompleteAt; //上次输入完成时间
-  String _lastSearchText;
+  late DateTime _lastInputCompleteAt; //上次输入完成时间
+  String _lastSearchText = '';
   final RxList<TagTranslat> qryTags = <TagTranslat>[].obs;
-  String _currQry;
+  late String _currQry;
 
   bool get showClearButton => tagsTextController.text.isNotEmpty ?? false;
 
@@ -54,7 +54,7 @@ class TagInfoController extends GetxController {
       try {
         dbUtil
             .getTagTransFuzzy(_currQry, limit: 200)
-            .then((List<TagTranslat> qryTags) {
+            .then((List<TagTranslat>? qryTags) {
           // ignore: unnecessary_string_interpolations
           // logger.d('${qryTags.map((TagTranslat e) => e.name).join('\n')}');
           this.qryTags(qryTags);
@@ -82,17 +82,17 @@ class TagInfoController extends GetxController {
           affinity: TextAffinity.downstream, offset: '$_newSearch, '.length)),
     );
 
-    FocusScope.of(Get.context).requestFocus(focusNode);
+    FocusScope.of(Get.context!).requestFocus(focusNode);
   }
 
   Future<void> tagVoteDown(String tags) async {
     logger.d('tags down id $tags');
 
     final Map<String, dynamic> rult = await Api.tagGallery(
-      apikey: _item.apikey,
-      apiuid: _item.apiuid,
-      gid: _item.gid,
-      token: _item.token,
+      apikey: _item.apikey!,
+      apiuid: _item.apiuid!,
+      gid: _item.gid!,
+      token: _item.token!,
       tags: tags,
       vote: -1,
     );
@@ -100,7 +100,7 @@ class TagInfoController extends GetxController {
     if (errorInfo != null) {
       showToast('$errorInfo');
     } else {
-      showToast(S.of(Get.context).vote_successfully);
+      showToast(S.of(Get.context!)!.vote_successfully);
     }
   }
 
@@ -108,10 +108,10 @@ class TagInfoController extends GetxController {
     logger.d('tags down id $tags');
 
     final Map<String, dynamic> rult = await Api.tagGallery(
-      apikey: _item.apikey,
-      apiuid: _item.apiuid,
-      gid: _item.gid,
-      token: _item.token,
+      apikey: _item.apikey!,
+      apiuid: _item.apiuid!,
+      gid: _item.gid!,
+      token: _item.token!,
       tags: tags,
       vote: 1,
     );
@@ -119,7 +119,7 @@ class TagInfoController extends GetxController {
     if (errorInfo != null) {
       showToast('$errorInfo');
     } else {
-      showToast(S.of(Get.context).vote_successfully);
+      showToast(S.of(Get.context!)!.vote_successfully);
     }
   }
 

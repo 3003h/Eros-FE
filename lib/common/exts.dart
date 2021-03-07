@@ -6,10 +6,10 @@ import 'package:get/get.dart';
 extension EhString on String {
   String toRealUrl() {
     final DnsService dnsConfigController = Get.find();
-    final bool enableDoH = dnsConfigController.enableDoH.value;
-    final bool enableCustomHosts = dnsConfigController.enableCustomHosts.value;
-    final List<DnsCache> _dohDnsCacheList =
-        dnsConfigController.dohCache ?? <DnsCache>[];
+    final bool enableDoH = dnsConfigController.enableDoH.value ?? false;
+    final bool enableCustomHosts =
+        dnsConfigController.enableCustomHosts.value ?? false;
+    final List<DnsCache> _dohDnsCacheList = dnsConfigController.dohCache;
     final String host = Uri.parse(this).host;
     if (host.isEmpty) {
       return this;

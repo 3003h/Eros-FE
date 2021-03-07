@@ -22,7 +22,7 @@ class NavigatorUtil {
   }
 
   static void goGalleryListBySearch({
-    String simpleSearch,
+    required String simpleSearch,
   }) {
     String _search = simpleSearch;
     if (simpleSearch.contains(':')) {
@@ -46,7 +46,7 @@ class NavigatorUtil {
 
   /// 转到画廊页面
   static void goGalleryPage(
-      {String url, String tabTag, GalleryItem galleryItem}) {
+      {String? url, String? tabTag, GalleryItem? galleryItem}) {
     Get.find<DepthService>().pushPageCtrl();
     if (url != null && url.isNotEmpty) {
       logger.d('goGalleryPage fromUrl');
@@ -95,7 +95,7 @@ class NavigatorUtil {
     }
   }
 
-  static void goGalleryDetailReplace(BuildContext context, {String url}) {
+  static void goGalleryDetailReplace(BuildContext context, {String? url}) {
     final DepthService depthService = Get.find();
     depthService.pushPageCtrl();
     if (url != null && url.isNotEmpty) {
@@ -122,7 +122,8 @@ class NavigatorUtil {
   }
 
   /// 打开搜索页面 搜索画廊 搜索关注
-  static void showSearch({SearchType searchType, bool fromTabItem = true}) {
+  static void showSearch(
+      {SearchType searchType = SearchType.normal, bool fromTabItem = true}) {
     logger.d('fromTabItem $fromTabItem');
     Get.find<DepthService>().pushSearchPageCtrl();
     Get.to(() => GallerySearchPage(),

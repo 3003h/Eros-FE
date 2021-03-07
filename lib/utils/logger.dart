@@ -29,7 +29,7 @@ final Logger loggerNoStackTime = Logger(
 class EHLogFilter extends LogFilter {
   @override
   bool shouldLog(LogEvent event) {
-    if (event.level.index >= level.index) {
+    if (event.level.index >= level!.index) {
       return true;
     }
     return false;

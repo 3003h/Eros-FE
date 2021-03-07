@@ -14,7 +14,6 @@ import 'package:fehviewer/common/parser/eh_parser.dart';
 import 'package:fehviewer/common/service/ehconfig_service.dart';
 import 'package:fehviewer/const/const.dart';
 import 'package:fehviewer/generated/l10n.dart';
-import 'package:fehviewer/models/galleryItem.dart';
 import 'package:fehviewer/models/index.dart';
 import 'package:fehviewer/pages/gallery/controller/archiver_controller.dart';
 import 'package:fehviewer/pages/gallery/controller/torrent_controller.dart';
@@ -49,12 +48,12 @@ class Api {
     httpManager = HttpManager.getInstance(baseUrl: _baseUrl);
   }
 
-  HttpManager httpManager;
-  String _baseUrl;
+  late HttpManager httpManager;
+  late String _baseUrl;
 
   //改为使用 PersistCookieJar，在文档中有介绍，PersistCookieJar将cookie保留在文件中，
   // 因此，如果应用程序退出，则cookie始终存在，除非显式调用delete
-  static PersistCookieJar _cookieJar;
+  static PersistCookieJar? _cookieJar;
 
   static Future<PersistCookieJar> get cookieJar async {
     // print(_cookieJar);
@@ -63,11 +62,14 @@ class Api {
       _cookieJar =
           PersistCookieJar(storage: FileStorage(Global.appSupportPath));
     }
-    return _cookieJar;
+    return _cookieJar!;
   }
 
-  static HttpManager getHttpManager(
-      {bool cache = true, String baseUrl, int connectTimeout}) {
+  static HttpManager getHttpManager({
+    bool cache = true,
+    String? baseUrl,
+    int? connectTimeout,
+  }) {
     final String _baseUrl = EHConst.getBaseSite(
         Get.find<EhConfigService>().isSiteEx.value ?? false);
     return HttpManager(baseUrl ?? _baseUrl,
@@ -75,7 +77,7 @@ class Api {
   }
 
   static dio.Options getCacheOptions(
-      {bool forceRefresh = false, dio.Options options}) {
+      {bool forceRefresh = false, dio.Options? options}) {
     return buildCacheOptions(
       const Duration(days: 5),
       maxStale: const Duration(days: 7),
@@ -84,7 +86,7 @@ class Api {
     );
   }
 
-  static String getBaseUrl({bool isSiteEx}) {
+  static String getBaseUrl({bool? isSiteEx}) {
     return EHConst.getBaseSite(
         isSiteEx ?? Get.find<EhConfigService>().isSiteEx.value ?? false);
   }
@@ -95,14 +97,14 @@ class Api {
 
   /// 获取热门画廊列表
   static Future<Tuple2<List<GalleryItem>, int>> getPopular({
-    int page,
-    String fromGid,
-    String serach,
-    int cats,
+    int? page,
+    String? fromGid,
+    String? serach,
+    int? cats,
     bool refresh = false,
     SearchType searchType = SearchType.normal,
-    dio.CancelToken cancelToken,
-    String favcat,
+    dio.CancelToken? cancelToken,
+    String? favcat,
   }) async {
     // logger.d('getPopular');
     const String url = '/popular';
@@ -111,7 +113,7 @@ class Api {
     final dio.Options _cacheOptions = getCacheOptions(forceRefresh: refresh);
 
     final String response =
-        await getHttpManager().get(url, options: _cacheOptions);
+        await getHttpManager().get(url, options: _cacheOptions) ?? '';
     // logger.d('$response');
 
     // 列表样式检查 不符合则重新设置
@@ -119,13 +121,14 @@ class Api {
     if (!isDml) {
       logger.d('reset inline_set');
       final String response = await getHttpManager().get(
-        url,
-        options: getCacheOptions(forceRefresh: true),
-        params: <String, dynamic>{
-          'inline_set': 'dm_l',
-        },
-        cancelToken: cancelToken,
-      );
+            url,
+            options: getCacheOptions(forceRefresh: true),
+            params: <String, dynamic>{
+              'inline_set': 'dm_l',
+            },
+            cancelToken: cancelToken,
+          ) ??
+          '';
       return await GalleryListParser.parseGalleryList(response,
           refresh: refresh);
     } else {
@@ -136,14 +139,14 @@ class Api {
 
   /// Watched
   static Future<Tuple2<List<GalleryItem>, int>> getWatched({
-    int page,
-    String fromGid,
-    String serach,
-    int cats,
+    int? page,
+    String? fromGid,
+    String? serach,
+    int? cats,
     bool refresh = false,
     SearchType searchType = SearchType.normal,
-    dio.CancelToken cancelToken,
-    String favcat,
+    dio.CancelToken? cancelToken,
+    String? favcat,
   }) async {
     // logger.d('getWatched');
     const String _url = '/watched';
@@ -157,27 +160,29 @@ class Api {
 
     /// 复用筛选
     final AdvanceSearchController _searchController = Get.find();
-    if (_searchController.enableAdvance ?? false) {
+    if (_searchController.enableAdvance) {
       params['advsearch'] = 1;
       params.addAll(_searchController.advanceSearchMap);
     }
 
     await CustomHttpsProxy.instance.init();
     final String response = await getHttpManager().get(
-      _url,
-      options: _cacheOptions,
-      params: params,
-    );
+          _url,
+          options: _cacheOptions,
+          params: params,
+        ) ??
+        '';
 
     // 列表样式检查 不符合则重新设置
     final bool isDml = GalleryListParser.isGalleryListDmL(response);
     if (!isDml) {
       params['inline_set'] = 'dm_l';
       final String response = await getHttpManager().get(
-        _url,
-        options: getCacheOptions(forceRefresh: true),
-        params: params,
-      );
+            _url,
+            options: getCacheOptions(forceRefresh: true),
+            params: params,
+          ) ??
+          '';
       return await GalleryListParser.parseGalleryList(response,
           refresh: refresh);
     } else {
@@ -188,25 +193,18 @@ class Api {
 
   /// 获取画廊列表
   static Future<Tuple2<List<GalleryItem>, int>> getGallery({
-    int page,
-    String fromGid,
-    String serach,
-    int cats,
+    int? page,
+    String? fromGid,
+    String? serach,
+    int? cats,
     bool refresh = false,
     SearchType searchType = SearchType.normal,
-    dio.CancelToken cancelToken,
-    String favcat,
+    dio.CancelToken? cancelToken,
+    String? favcat,
   }) async {
     final EhConfigService _ehConfigService = Get.find();
-    final bool safeMode = _ehConfigService.isSafeMode.value;
+    final bool safeMode = _ehConfigService.isSafeMode.value ?? false;
     final AdvanceSearchController _searchController = Get.find();
-
-    final List<Cookie> cookies =
-        await Global.cookieJar.loadForRequest(Uri.parse(Api.getBaseUrl()));
-
-    // logger.d('${cookies.map((e) => e).join('\n')}');
-
-    // logger.d('${searchType}');
 
     final String url = searchType == SearchType.watched ? '/watched' : '/';
 
@@ -222,7 +220,7 @@ class Api {
     };
 
     /// 高级搜索处理
-    if (_searchController.enableAdvance ?? false) {
+    if (_searchController.enableAdvance) {
       params['advsearch'] = 1;
       params.addAll(_searchController.advanceSearchMap);
     }
@@ -232,8 +230,9 @@ class Api {
     // logger.v(url);
 
     await CustomHttpsProxy.instance.init();
-    final String response =
-        await getHttpManager().get(url, options: _cacheOptions, params: params);
+    final String response = await getHttpManager()
+            .get(url, options: _cacheOptions, params: params) ??
+        '';
 
     // 列表样式检查 不符合则重新设置
     final bool isDml = GalleryListParser.isGalleryListDmL(response);
@@ -241,7 +240,8 @@ class Api {
       logger.i(' inline_set dml');
       params['inline_set'] = 'dm_l';
       final String response = await getHttpManager()
-          .get(url, options: _cacheOptions, params: params);
+              .get(url, options: _cacheOptions, params: params) ??
+          '';
       return await GalleryListParser.parseGalleryList(response,
           refresh: refresh);
     } else {
@@ -253,14 +253,14 @@ class Api {
   /// 获取收藏
   /// inline_set 不能和页码同时使用 会默认定向到第一页
   static Future<Tuple2<List<GalleryItem>, int>> getFavorite({
-    String favcat,
-    int page,
-    String fromGid,
-    String serach,
-    int cats,
+    String? favcat,
+    int? page,
+    String? fromGid,
+    String? serach,
+    int? cats,
     bool refresh = false,
     SearchType searchType = SearchType.normal,
-    dio.CancelToken cancelToken,
+    dio.CancelToken? cancelToken,
   }) async {
     final AdvanceSearchController _searchController = Get.find();
 
@@ -279,15 +279,16 @@ class Api {
 
     final dio.Options _cacheOptions = getCacheOptions(forceRefresh: refresh);
 
-    // logger.d('${params}');
+    logger.d('${params}');
     await CustomHttpsProxy.instance.init();
-    String response =
-        await getHttpManager().get(url, options: _cacheOptions, params: params);
+    String response = await getHttpManager()
+            .get(url, options: _cacheOptions, params: params) ??
+        '';
 
     // 排序方式检查 不符合则设置 然后重新请求
     // 获取收藏排序设置
-    final FavoriteOrder order = EnumToString.fromString(FavoriteOrder.values,
-            Global?.profile?.ehConfig?.favoritesOrder ?? '') ??
+    final FavoriteOrder order = EnumToString.fromString(
+            FavoriteOrder.values, Global?.profile.ehConfig.favoritesOrder) ??
         FavoriteOrder.fav;
     // 排序参数
     final String _order = EHConst.favoriteOrder[order] ?? EHConst.FAV_ORDER_FAV;
@@ -298,7 +299,8 @@ class Api {
       params['inline_set'] = _order;
       params.removeWhere((key, value) => key == 'page');
       response = await getHttpManager().get(url,
-          options: getCacheOptions(forceRefresh: true), params: params);
+              options: getCacheOptions(forceRefresh: true), params: params) ??
+          '';
     }
 
     // 列表样式检查 不符合则重新设置
@@ -314,7 +316,8 @@ class Api {
       params['inline_set'] = 'dm_l';
       params.removeWhere((key, value) => key == 'page');
       final String response = await getHttpManager().get(url,
-          options: getCacheOptions(forceRefresh: true), params: params);
+              options: getCacheOptions(forceRefresh: true), params: params) ??
+          '';
       return await GalleryListParser.parseGalleryList(
         response,
         isFavorite: true,
@@ -329,10 +332,10 @@ class Api {
   /// hc=1 显示全部评论
   /// nw=always 不显示警告
   static Future<GalleryItem> getGalleryDetail({
-    String inUrl,
-    GalleryItem inGalleryItem,
+    required String inUrl,
+    GalleryItem? inGalleryItem,
     bool refresh = false,
-    dio.CancelToken cancelToken,
+    dio.CancelToken? cancelToken,
   }) async {
     /// 使用 inline_set 和 nw 参数会重定向，导致请求时间过长 默认不使用
     /// final String url = inUrl + '?hc=1&inline_set=ts_l&nw=always';
@@ -351,7 +354,8 @@ class Api {
     await CustomHttpsProxy.instance.init();
     time.showTime('设置代理');
     final String response = await getHttpManager()
-        .get(url, options: getCacheOptions(forceRefresh: refresh));
+            .get(url, options: getCacheOptions(forceRefresh: refresh)) ??
+        '';
     time.showTime('获取到响应');
 
     // todo 画廊警告问题 使用 nw=always 未解决 待处理 怀疑和Session有关
@@ -375,9 +379,9 @@ class Api {
   /// [page] 缩略图页码
   static Future<List<GalleryPreview>> getGalleryPreview(
     String inUrl, {
-    int page,
+    int? page,
     bool refresh = false,
-    dio.CancelToken cancelToken,
+    dio.CancelToken? cancelToken,
   }) async {
     //?inline_set=ts_m 小图,40一页
     //?inline_set=ts_l 大图,20一页
@@ -400,10 +404,11 @@ class Api {
 
     await CustomHttpsProxy.instance.init();
     final String response = await getHttpManager().get(
-      url,
-      options: getCacheOptions(forceRefresh: refresh),
-      cancelToken: cancelToken,
-    );
+          url,
+          options: getCacheOptions(forceRefresh: refresh),
+          cancelToken: cancelToken,
+        ) ??
+        '';
 
     return GalleryDetailParser.parseGalleryPreviewFromHtml(response);
   }
@@ -418,7 +423,8 @@ class Api {
 
     await CustomHttpsProxy.instance.init();
     final String response = await getHttpManager()
-        .get(url, options: getCacheOptions(forceRefresh: refresh));
+            .get(url, options: getCacheOptions(forceRefresh: refresh)) ??
+        '';
 
     final RegExp regShowKey = RegExp(r'var showkey="([0-9a-z]+)";');
 
@@ -437,11 +443,12 @@ class Api {
   }) async {
     final String url = '${getBaseUrl()}/gallerytorrents.php';
     final String response = await getHttpManager().get(url,
-        params: <String, dynamic>{
-          'gid': gid,
-          't': gtoken,
-        },
-        options: getCacheOptions(forceRefresh: refresh));
+            params: <String, dynamic>{
+              'gid': gid,
+              't': gtoken,
+            },
+            options: getCacheOptions(forceRefresh: refresh)) ??
+        '';
     // logger.d('$response');
     final RegExp rTorrentTk = RegExp(r'http://ehtracker.org/(\d{7})/announce');
     final String torrentToken = rTorrentTk.firstMatch(response)?.group(1) ?? '';
@@ -454,7 +461,8 @@ class Api {
     bool refresh = true,
   }) async {
     final String response = await getHttpManager()
-        .get(url, options: getCacheOptions(forceRefresh: refresh));
+            .get(url, options: getCacheOptions(forceRefresh: refresh)) ??
+        '';
     // logger.d('$response');
 
     return parseTorrent(response);
@@ -466,7 +474,8 @@ class Api {
     bool refresh = true,
   }) async {
     final String response = await getHttpManager()
-        .get(url, options: getCacheOptions(forceRefresh: refresh));
+            .get(url, options: getCacheOptions(forceRefresh: refresh)) ??
+        '';
     // logger.d('$response');
 
     return parseArchiver(response);
@@ -486,8 +495,8 @@ class Api {
 
   static Future<String> postArchiverLocalDownload(
     String url, {
-    String dltype,
-    String dlcheck,
+    String? dltype,
+    String? dlcheck,
   }) async {
     final dio.Response response =
         await getHttpManager(cache: false).postForm(url,
@@ -497,8 +506,9 @@ class Api {
             }));
     // logger.d('${response.data} ');
     final String _href = RegExp(r'document.location = "(.+)"')
-        .firstMatch(response.data)
-        .group(1);
+            .firstMatch(response.data)
+            ?.group(1) ??
+        '';
 
     return '$_href?start=1';
   }
@@ -521,7 +531,7 @@ class Api {
     final List<List<String>> _gidlist = <List<String>>[];
 
     galleryItems.forEach((GalleryItem galleryItem) {
-      _gidlist.add([galleryItem.gid, galleryItem.token]);
+      _gidlist.add([galleryItem.gid!, galleryItem.token!]);
     });
 
     // 25个一组分割
@@ -550,52 +560,67 @@ class Api {
 
     for (int i = 0; i < galleryItems.length; i++) {
       // 标题
-      galleryItems[i].englishTitle = unescape.convert(rultList[i]['title']);
+      final _englishTitle = unescape.convert(rultList[i]['title']);
 
       // 日语标题
-      galleryItems[i].japaneseTitle =
-          unescape.convert(rultList[i]['title_jpn']);
+      final _japaneseTitle = unescape.convert(rultList[i]['title_jpn']);
 
       // 详细评分
       final rating = rultList[i]['rating'];
-      galleryItems[i].rating = rating != null
+      final _rating = rating != null
           ? double.parse(rating)
           : galleryItems[i].ratingFallBack;
 
       // 封面图片
       final String thumb = rultList[i]['thumb'];
-      galleryItems[i].imgUrlL = thumb;
+      final _imgUrlL = thumb;
 
       // 文件数量
-      galleryItems[i].filecount = rultList[i]['filecount'] as String;
+      final _filecount = rultList[i]['filecount'] as String;
 
       // 上传者
-      galleryItems[i].uploader = rultList[i]['uploader'] as String;
-      galleryItems[i].category = rultList[i]['category'] as String;
+      final _uploader = rultList[i]['uploader'] as String;
+      final _category = rultList[i]['category'] as String;
 
       // 标签
       final List<String> tags = List<String>.from(
           rultList[i]['tags'].map((e) => e as String).toList());
-      galleryItems[i].tagsFromApi = tags;
+      final _tagsFromApi = tags;
 
       // 大小
-      galleryItems[i].filesize = rultList[i]['filesize'] as int;
+      final _filesize = rultList[i]['filesize'] as int;
 
       // 种子数量
-      galleryItems[i].torrentcount = rultList[i]['torrentcount'] as String;
+      final _torrentcount = rultList[i]['torrentcount'] as String;
 
       // 种子列表
       final List<dynamic> torrents = rultList[i]['torrents'];
-      galleryItems[i].torrents = <GalleryTorrent>[];
+      final _torrents = <GalleryTorrent>[];
       torrents.forEach((element) {
         // final Map<String, dynamic> e = element as Map<String, dynamic>;
-        galleryItems[i].torrents.add(GalleryTorrent.fromJson(element));
+        _torrents.add(GalleryTorrent.fromJson(element));
       });
 
       /// 判断获取语言标识
+      String _translated = '';
       if (tags.isNotEmpty) {
-        galleryItems[i].translated = EHUtils.getLangeage(tags[0]) ?? '';
+        _translated = EHUtils.getLangeage(tags[0]) ?? '';
       }
+
+      galleryItems[i] = galleryItems[i].copyWith(
+        englishTitle: _englishTitle,
+        japaneseTitle: _japaneseTitle,
+        rating: _rating,
+        imgUrlL: _imgUrlL,
+        filecount: _filecount,
+        uploader: _uploader,
+        category: _category,
+        tagsFromApi: _tagsFromApi,
+        filesize: _filesize,
+        torrentcount: _torrentcount,
+        torrents: _torrents,
+        translated: _translated,
+      );
     }
 
     return galleryItems;
@@ -603,11 +628,11 @@ class Api {
 
   /// 画廊评分
   static Future<Map<String, dynamic>> setRating({
-    @required String apikey,
-    @required String apiuid,
-    @required String gid,
-    @required String token,
-    @required int rating,
+    required String apikey,
+    required String apiuid,
+    required String gid,
+    required String token,
+    required int rating,
   }) async {
     final Map reqMap = {
       'apikey': apikey,
@@ -627,12 +652,12 @@ class Api {
   }
 
   static Future<CommitVoteRes> commitVote({
-    @required String apikey,
-    @required String apiuid,
-    @required String gid,
-    @required String token,
-    @required String commentId,
-    @required int vote,
+    required String apikey,
+    required String apiuid,
+    required String gid,
+    required String token,
+    required String commentId,
+    required int vote,
   }) async {
     final Map reqMap = {
       'method': 'votecomment',
@@ -654,11 +679,11 @@ class Api {
 
   /// 给画廊添加tag
   static Future<Map<String, dynamic>> tagGallery({
-    @required String apikey,
-    @required String apiuid,
-    @required String gid,
-    @required String token,
-    String tags,
+    required String apikey,
+    required String apiuid,
+    required String gid,
+    required String token,
+    String? tags,
     int vote = 1,
   }) async {
     final Map reqMap = {
@@ -681,12 +706,12 @@ class Api {
 
   /// 发布评论
   static Future<bool> postComment({
-    String gid,
-    String token,
-    String comment,
-    String commentId,
+    required String gid,
+    required String token,
+    required String comment,
+    required String commentId,
     bool isEdit = false,
-    GalleryItem inGalleryItem,
+    GalleryItem? inGalleryItem,
   }) async {
     final String url = '${getBaseUrl()}/g/$gid/$token';
     if (utf8.encode(comment).length < 10) {
@@ -704,8 +729,8 @@ class Api {
         }),
         options: dio.Options(
             followRedirects: false,
-            validateStatus: (int status) {
-              return status < 500;
+            validateStatus: (int? status) {
+              return (status ?? 0) < 500;
             }),
       );
 
@@ -717,25 +742,27 @@ class Api {
     }
   }
 
-  static Future<void> getMoreGalleryInfoOne(
+  static Future<GalleryItem> getMoreGalleryInfoOne(
     GalleryItem galleryItem, {
     bool refresh = false,
   }) async {
     final RegExp urlRex =
         RegExp(r'(http?s://e(-|x)hentai.org)?/g/(\d+)/(\w+)/?$');
     // logger.v(galleryItem.url);
-    final RegExpMatch urlRult = urlRex.firstMatch(galleryItem.url);
+    final RegExpMatch? urlRult = urlRex.firstMatch(galleryItem.url ?? '');
     // logger.v(urlRult.groupCount);
 
-    final String gid = urlRult.group(3);
-    final String token = urlRult.group(4);
+    final String gid = urlRult?.group(3) ?? '';
+    final String token = urlRult?.group(4) ?? '';
 
-    galleryItem.gid = gid;
-    galleryItem.token = token;
+    // galleryItem.gid = gid;
+    // galleryItem.token = token;
 
-    final List<GalleryItem> reqGalleryItems = <GalleryItem>[galleryItem];
+    final tempGalleryItem = galleryItem.copyWith(gid: gid, token: token);
 
-    await getMoreGalleryInfo(reqGalleryItems, refresh: refresh);
+    final List<GalleryItem> reqGalleryItems = <GalleryItem>[tempGalleryItem];
+
+    return (await getMoreGalleryInfo(reqGalleryItems, refresh: refresh)).first;
   }
 
   /// 获取api
@@ -764,8 +791,8 @@ class Api {
     final CachedNetworkImage image =
         CachedNetworkImage(imageUrl: imageUrl ?? '');
     final DefaultCacheManager manager =
-        image.cacheManager ?? DefaultCacheManager();
-    final Map<String, String> headers = image.httpHeaders;
+        image.cacheManager as DefaultCacheManager? ?? DefaultCacheManager();
+    final Map<String, String>? headers = image.httpHeaders;
     final File file = await manager.getSingleFile(
       image.imageUrl,
       headers: headers,
@@ -774,7 +801,10 @@ class Api {
   }
 
   static Future<void> shareImageExtended(String imageUrl) async {
-    final File file = await getCachedImageFile(imageUrl);
+    final File? file = await getCachedImageFile(imageUrl);
+    if (file == null) {
+      throw 'get file error';
+    }
     final String _name = imageUrl.substring(imageUrl.lastIndexOf('/') + 1);
     logger.v('_name $_name url $imageUrl');
     final File newFile = file.copySync(path.join(Global.tempPath, _name));
@@ -786,7 +816,7 @@ class Api {
   static Future<bool> saveImage(BuildContext context, String imageUrl,
       {bool isAsset = false}) async {
     /// 跳转权限设置
-    Future<void> _jumpToAppSettings(context) async {
+    Future<bool?> _jumpToAppSettings(context) async {
       return showCupertinoDialog<bool>(
         context: context,
         builder: (BuildContext context) {
@@ -798,13 +828,13 @@ class Api {
             ),
             actions: <Widget>[
               CupertinoDialogAction(
-                child: Text(S.of(context).cancel),
+                child: Text(S.of(context)!.cancel),
                 onPressed: () {
                   Get.back();
                 },
               ),
               CupertinoDialogAction(
-                child: Text(S.of(context).ok),
+                child: Text(S.of(context)!.ok),
                 onPressed: () {
                   // 跳转
                   openAppSettings();
@@ -887,8 +917,8 @@ class Api {
         final CachedNetworkImage image =
             CachedNetworkImage(imageUrl: imageUrl ?? '');
         final DefaultCacheManager manager =
-            image.cacheManager ?? DefaultCacheManager();
-        final Map<String, String> headers = image.httpHeaders;
+            image.cacheManager as DefaultCacheManager? ?? DefaultCacheManager();
+        final Map<String, String>? headers = image.httpHeaders;
         final File file = await manager.getSingleFile(
           image.imageUrl,
           headers: headers,
@@ -920,7 +950,7 @@ class Api {
 
       /// 保存的图片数据
       Uint8List imageBytes;
-      File file;
+      File? file;
 
       if (isAsset == true) {
         /// 保存资源图片
@@ -930,6 +960,10 @@ class Api {
         /// 保存网络图片
         logger.d('保存网络图片');
         file = await getCachedImageFile(imageUrl);
+
+        if (file == null) {
+          throw 'read file error';
+        }
 
         logger.v('file path ${file.path}');
 
@@ -942,6 +976,10 @@ class Api {
       //   quality: 100,
       //   name: _name,
       // );
+
+      if (file == null) {
+        throw 'read file error';
+      }
 
       final _name = imageUrl.substring(imageUrl.lastIndexOf('/') + 1);
       logger.v('_name $_name url $imageUrl');
@@ -969,11 +1007,11 @@ class Api {
   static Future<GalleryPreview> paraImageLageInfoFromApi(
     String href,
     String showKey, {
-    int index,
+    required int index,
   }) async {
     const String url = '/api.php';
 
-    final String cookie = Global.profile?.user?.cookie ?? '';
+    final String cookie = Global.profile.user.cookie ?? '';
 
     final dio.Options options = dio.Options(headers: {
       'Cookie': cookie,
@@ -983,10 +1021,10 @@ class Api {
 
     final RegExp regExp =
         RegExp(r'https://e[-x]hentai.org/s/([0-9a-z]+)/(\d+)-(\d+)');
-    final RegExpMatch regRult = regExp.firstMatch(href);
-    final int gid = int.parse(regRult.group(2));
-    final String imgkey = regRult.group(1);
-    final int page = int.parse(regRult.group(3));
+    final RegExpMatch? regRult = regExp.firstMatch(href);
+    final int gid = int.parse(regRult?.group(2) ?? '0');
+    final String imgkey = regRult?.group(1) ?? '';
+    final int page = int.parse(regRult?.group(3) ?? '0');
 
     final Map<String, Object> reqMap = {
       'method': 'showpage',
@@ -1018,18 +1056,19 @@ class Api {
     final dynamic rultJson = jsonDecode('$response');
 
     final RegExp regImageUrl = RegExp('<img[^>]*src=\"([^\"]+)\" style');
-    final String imageUrl = regImageUrl.firstMatch(rultJson['i3']).group(1);
+    final String imageUrl =
+        regImageUrl.firstMatch(rultJson['i3'])?.group(1) ?? '';
     final double width = double.parse(rultJson['x'].toString());
     final double height = double.parse(rultJson['y'].toString());
 
 //    logger.v('$imageUrl');
 
-    final GalleryPreview _rePreview = GalleryPreview()
-      ..largeImageUrl = imageUrl
-      ..ser = index + 1
-      ..largeImageWidth = width
-      ..largeImageHeight = height;
-    // logger.v('${_rePreview.toJson()}');
+    final GalleryPreview _rePreview = GalleryPreview(
+      largeImageUrl: imageUrl,
+      ser: index + 1,
+      largeImageWidth: width,
+      largeImageHeight: height,
+    );
 
     return _rePreview;
   }
@@ -1039,9 +1078,9 @@ class Api {
   /// [ser] 序号
   static Future<GalleryPreview> ftchImageInfo(
     String href, {
-    int ser,
-    bool refresh,
-    String sourceId,
+    required int ser,
+    bool refresh = false,
+    String? sourceId,
   }) async {
     final String url = href;
 
@@ -1058,17 +1097,17 @@ class Api {
 
     await CustomHttpsProxy.instance.init();
     final String response = await Api.getHttpManager(connectTimeout: 5000).get(
-      url,
-      options: getCacheOptions(
-        forceRefresh: refresh,
-        options: dio.Options(receiveTimeout: 8000),
-      ),
-      params: _params,
-    );
+          url,
+          options: getCacheOptions(
+            forceRefresh: refresh,
+          ),
+          params: _params,
+        ) ??
+        '';
 
     // logger.d('$response ');
 
-    return paraImage(response)..ser = ser;
+    return paraImage(response).copyWith(ser: ser);
   }
 
   static Future<void> download(String url, String path) async {

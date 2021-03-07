@@ -29,10 +29,11 @@ class QuickSearchController extends ProfileController {
   void onInit() {
     super.onInit();
     final Profile _profile = Global.profile;
-    searchTextList(_profile.searchText ?? <String>[]);
+    searchTextList(_profile.searchText.map((e) => e.toString()).toList());
 
     everProfile<List<String>>(searchTextList, (List<String> value) {
-      _profile.searchText = value;
+      // _profile.searchText = value;
+      Global.profile = Global.profile.copyWith(searchText: value);
     });
   }
 }

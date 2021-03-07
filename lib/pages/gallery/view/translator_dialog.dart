@@ -6,10 +6,11 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:translator/translator.dart';
 
-Future<void> showTranslatorDialog(String inputText, {String from, String to}) {
+Future<void> showTranslatorDialog(String inputText,
+    {String? from, String? to}) {
   vibrateUtil.medium();
   return showCupertinoDialog<void>(
-      context: Get.context,
+      context: Get.context!,
       barrierDismissible: true,
       builder: (_) {
         return CupertinoAlertDialog(
@@ -21,12 +22,12 @@ Future<void> showTranslatorDialog(String inputText, {String from, String to}) {
 }
 
 class TranslatorDialogView extends StatefulWidget {
-  const TranslatorDialogView(this.inputText, {Key key, this.from, this.to})
+  const TranslatorDialogView(this.inputText, {Key? key, this.from, this.to})
       : super(key: key);
 
   final String inputText;
-  final String from;
-  final String to;
+  final String? from;
+  final String? to;
 
   @override
   _TranslatorDialogViewState createState() => _TranslatorDialogViewState();
@@ -35,9 +36,9 @@ class TranslatorDialogView extends StatefulWidget {
 class _TranslatorDialogViewState extends State<TranslatorDialogView> {
   final GoogleTranslator _translator = GoogleTranslator();
 
-  Future<Translation> _future;
+  late Future<Translation?> _future;
 
-  Future<Translation> _getTrans() async {
+  Future<Translation?> _getTrans() async {
     try {
       final Translation _trans =
           await _translator.translate(widget.inputText, to: 'zh-cn');
@@ -56,7 +57,7 @@ class _TranslatorDialogViewState extends State<TranslatorDialogView> {
 
   @override
   Widget build(BuildContext context) {
-    return FutureBuilder<Translation>(
+    return FutureBuilder<Translation?>(
         future: _future,
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.done) {

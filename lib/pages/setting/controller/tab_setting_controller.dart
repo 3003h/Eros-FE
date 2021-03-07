@@ -9,13 +9,13 @@ class TabSettingController extends GetxController {
   List<Widget> rows = <Widget>[];
   final TabHomeController _tabHomeController = Get.find();
 
-  ScrollController scrollController;
+  ScrollController? scrollController;
 
   @override
   void onInit() {
     super.onInit();
     scrollController =
-        PrimaryScrollController.of(Get.context) ?? ScrollController();
+        PrimaryScrollController.of(Get.context!) ?? ScrollController();
 
     final RxList<String> _tabList = _tabHomeController.tabNameList;
     final RxMap<String, bool> _tabMap = _tabHomeController.tabMap;
@@ -29,14 +29,14 @@ class TabSettingController extends GetxController {
 
         rows.add(
           TextSwitchItem(
-            tabPages.tabTitles[key],
+            tabPages.tabTitles[key] ?? '',
             key: UniqueKey(),
             icon: Padding(
               padding: const EdgeInsets.only(right: 18.0),
               child: Icon(
                 tabPages.iconDatas[key],
                 color: CupertinoDynamicColor.resolve(
-                    CupertinoColors.systemGrey, Get.context),
+                    CupertinoColors.systemGrey, Get.context!),
               ),
             ),
             iconIndent: 32,

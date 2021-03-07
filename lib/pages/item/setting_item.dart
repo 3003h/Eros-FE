@@ -6,9 +6,9 @@ import 'package:get/get.dart';
 
 class SettingItems extends StatefulWidget {
   const SettingItems({
-    this.text,
-    this.icon,
-    this.route,
+    required this.text,
+    required this.icon,
+    required this.route,
     this.topDivider = false,
     this.bottomDivider = true,
   });
@@ -25,22 +25,22 @@ class SettingItems extends StatefulWidget {
 
 /// 设置项
 class _SettingItems extends State<SettingItems> {
-  Color _color;
-  Color _pBackgroundColor;
+  Color? _color;
+  Color? _pBackgroundColor;
 
   @override
   void initState() {
     super.initState();
-    _color =
-        CupertinoDynamicColor.resolve(ehTheme.itemBackgroundColor, Get.context);
+    _color = CupertinoDynamicColor.resolve(
+        ehTheme.itemBackgroundColor!, Get.context!);
     _pBackgroundColor = _color;
   }
 
   @override
   Widget build(BuildContext context) {
     final Color color =
-        CupertinoDynamicColor.resolve(ehTheme.itemBackgroundColor, context);
-    if (_pBackgroundColor.value != color.value) {
+        CupertinoDynamicColor.resolve(ehTheme.itemBackgroundColor!, context);
+    if (_pBackgroundColor?.value != color.value) {
       _color = color;
       _pBackgroundColor = color;
     }
@@ -103,7 +103,7 @@ class _SettingItems extends State<SettingItems> {
   void _updateNormalColor() {
     setState(() {
       _color = CupertinoDynamicColor.resolve(
-          ehTheme.itemBackgroundColor, Get.context);
+          ehTheme.itemBackgroundColor!, Get.context!);
     });
   }
 

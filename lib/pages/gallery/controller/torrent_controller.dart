@@ -10,7 +10,7 @@ class TorrentController extends GetxController
   TorrentController();
 
   GalleryPageController get pageController => Get.find(tag: pageCtrlDepth);
-  String torrentTk;
+  late String torrentTk;
   bool isRefresh = false;
 
   @override
@@ -43,17 +43,17 @@ class TorrentController extends GetxController
 
   Future<String> _fetchTk() async {
     return await Api.getTorrentToken(
-        pageController.gid, pageController.galleryItem.token,
+        pageController.gid, pageController.galleryItem.token!,
         refresh: isRefresh);
   }
 }
 
 class TorrentProvider {
-  List<TorrentBean> torrents;
-  String torrentToken;
+  late List<TorrentBean> torrents;
+  late String torrentToken;
 }
 
 class TorrentBean {
-  String fileName;
-  String hash;
+  late String fileName;
+  late String hash;
 }

@@ -42,9 +42,9 @@ class GalleryListParser {
         document.querySelectorAll('body > div.ido > div');
 
     if (domList.length > 2) {
-      final dom.Element orderElm = domList[2].querySelector('div > span');
+      final dom.Element? orderElm = domList[2].querySelector('div > span');
       // logger.d('${orderElm.text}');
-      return orderElm.text?.trim() == 'Favorited';
+      return orderElm?.text.trim() == 'Favorited';
     }
 
     return false;
@@ -59,7 +59,8 @@ class GalleryListParser {
     final dom.Document document = parse(response);
 
     // logger.v('${document.body.children.length}');
-    if (document.body.children.isEmpty && response.contains('banned')) {
+    if ((document.body?.children.isEmpty ?? false) &&
+        response.contains('banned')) {
       logger.e('banned');
       showToast('$response');
       throw EhError(type: EhErrorType.BANNED, error: response);
@@ -81,7 +82,7 @@ class GalleryListParser {
     final String _pageSelector =
         isFavorite ? _favPageSelector : _galleryPageSelector;
 
-    const _favoritesSelector = 'body > div.ido > div.nosel > div';
+    const String _favoritesSelector = 'body > div.ido > div.nosel > div';
 
     if (isFavorite) {
       /// 收藏夹列表
@@ -95,16 +96,16 @@ class GalleryListParser {
         if (divs.isNotEmpty && divs.length >= 3) {
           final Map<String, String> map = <String, String>{
             'favId': '$_favId',
-            'favTitle': divs[2].text ?? ''
+            'favTitle': divs[2].text,
           };
           favcatList.add(map);
           _favId += 1;
         }
       }
       if (favcatList.isNotEmpty) {
-        Global.profile.user.favcat = favcatList;
+        // Global.profile.user.favcat = favcatList;
+        global.user = global.user.copyWith(favcat: favcatList);
         Global.saveProfile();
-        // logger.v('$favcatList');
       }
     }
 
@@ -114,17 +115,15 @@ class GalleryListParser {
     if (_pages.length > 2) {
       final dom.Element _maxPageElem = _pages[_pages.length - 2];
       _maxPage = int.parse(_maxPageElem.text.trim());
-//      logger.v('_maxPage $_maxPage');
     }
 
     // 画廊列表
     List<dom.Element> gallerys = document.querySelectorAll(_listSelector);
-//    logger.v('gallerys ${gallerys.length}');
 
     final List<GalleryItem> _gallaryItems = [];
     for (final dom.Element tr in gallerys) {
-      final String category =
-          tr.querySelector('td.gl1c.glcat > div')?.text?.trim();
+      final String? category =
+          tr.querySelector('td.gl1c.glcat > div')?.text.trim();
 
       // 表头或者广告
       if (category == null || category.isEmpty) {
@@ -132,7 +131,7 @@ class GalleryListParser {
       }
 
       final String title =
-          tr.querySelector('td.gl3c.glname > a > div.glink')?.text?.trim();
+          tr.querySelector('td.gl3c.glname > a > div.glink')?.text.trim() ?? '';
 
       final String url =
           tr.querySelector('td.gl3c.glname > a')?.attributes['href'] ?? '';
@@ -140,10 +139,10 @@ class GalleryListParser {
       // logger.d('url $url   path $_path');
 
       final RegExp urlRex = RegExp(r'/g/(\d+)/(\w+)/$');
-      final RegExpMatch urlRult = urlRex.firstMatch(url);
+      final RegExpMatch? urlRult = urlRex.firstMatch(url);
 
-      final String gid = urlRult.group(1);
-      final String token = urlRult.group(2);
+      final String gid = urlRult?.group(1) ?? '';
+      final String token = urlRult?.group(2) ?? '';
 
       // tags
       final List<dom.Element> tags = tr.querySelectorAll('div.gt');
@@ -156,65 +155,67 @@ class GalleryListParser {
         final String translate =
             await EhTagDatabase.getTranTag(tagText) ?? tagText;
 
-        final String style = tag.attributes['style'];
+        final String? style = tag.attributes['style'];
         String color = '';
         String backgroundColor = '';
         if (style != null) {
           final Iterable<RegExpMatch> matches = colorRex.allMatches(style);
-          color = matches.elementAt(0)[0];
-          backgroundColor = matches.elementAt(3)[0];
-          // Global.logger
-          //     .d('$translate ${matches.length} $color  $backgroundColor');
+          color = matches.elementAt(0)[0] ?? '';
+          backgroundColor = matches.elementAt(3)[0] ?? '';
         }
-        simpleTags.add(SimpleTag()
-          ..text = tagText
-          ..translat = translate
-          ..color = color
-          ..backgrondColor = backgroundColor);
+        simpleTags.add(SimpleTag(
+            text: tagText,
+            translat: translate,
+            color: color,
+            backgrondColor: backgroundColor));
       }
 
       /// 判断获取语言标识
       String _translated = '';
       try {
         if (simpleTags.isNotEmpty) {
-          // logger.d('${simpleTags.map((e) => e.text).join(',')}');
-          final _langTag = simpleTags.firstWhere(
-              (element) => EHConst.iso936.keys.contains(element.text),
-              orElse: () => null);
+          final SimpleTag? _langTag = simpleTags.firstWhere(
+              (SimpleTag element) => EHConst.iso936.keys.contains(element.text),
+              orElse: () => const SimpleTag(
+                    text: '',
+                    translat: '',
+                    color: '',
+                    backgrondColor: '',
+                  ));
 
-          _translated = EHUtils.getLangeage(_langTag?.text ?? '') ?? '';
+          _translated = EHUtils.getLangeage(_langTag?.text ?? '');
         }
       } catch (e, stack) {
         logger.d('$e\n$stack');
       }
 
       // 封面图片
-      final dom.Element img = tr.querySelector('td.gl2c > div > div > img');
-      final String imgDataSrc = img.attributes['data-src'];
-      final String imgSrc = img.attributes['src'];
+      final dom.Element? img = tr.querySelector('td.gl2c > div > div > img');
+      final String? imgDataSrc = img?.attributes['data-src'];
+      final String? imgSrc = img?.attributes['src'];
       final String imgUrl = imgDataSrc ?? imgSrc ?? '';
 
       // 图片宽高
-      final String imageStyle = img.attributes['style'];
-      final RegExpMatch match =
+      final String imageStyle = img?.attributes['style'] ?? '';
+      final RegExpMatch? match =
           RegExp(r'height:(\d+)px;width:(\d+)px').firstMatch(imageStyle);
-      final double imageHeight = double.parse(match[1]);
-      final double imageWidth = double.parse(match[2]);
+      final double imageHeight = double.parse(match?[1] ?? '0');
+      final double imageWidth = double.parse(match?[2] ?? '0');
 
       // 评分星级计算
       final String ratPx = tr
-          .querySelector('td.gl2c > div:nth-child(2) > div.ir')
-          .attributes['style'];
+          .querySelector('td.gl2c > div:nth-child(2) > div.ir')!
+          .attributes['style']!;
       final RegExp pxA = RegExp(r'-?(\d+)px\s+-?(\d+)px');
-      final RegExpMatch px = pxA.firstMatch(ratPx);
+      final RegExpMatch px = pxA.firstMatch(ratPx)!;
 
-      final double ratingFB = (80.0 - double.parse(px.group(1))) / 16.0 -
+      final double ratingFB = (80.0 - double.parse(px.group(1)!)) / 16.0 -
           (px.group(2) == '21' ? 0.5 : 0.0);
 
       // logger.i('ratingFB $ratingFB');
 
       final String postTime =
-          tr.querySelector('td.gl2c > div:nth-child(2) > div')?.text?.trim() ??
+          tr.querySelector('td.gl2c > div:nth-child(2) > div')?.text.trim() ??
               '';
       final DateTime time =
           DateFormat('yyyy-MM-dd HH:mm').parseUtc(postTime).toLocal();
@@ -229,10 +230,10 @@ class GalleryListParser {
 
       // 评分颜色
       final String _colorRating = tr
-              .querySelector('td.gl2c')
+              .querySelector('td.gl2c')!
               .children[2]
               .children[1]
-              ?.attributes['class'] ??
+              .attributes['class'] ??
           'ir';
 
       // 评分标志
@@ -246,10 +247,10 @@ class GalleryListParser {
       String favcat = '';
       if (favTitle.isNotEmpty) {
         final String favcatStyle = tr
-            .querySelector('td.gl2c > div:nth-child(2) > div')
-            ?.attributes['style'];
+            .querySelector('td.gl2c > div:nth-child(2) > div')!
+            .attributes['style']!;
         final String favcatColor = RegExp(r'border-color:(#\w{3});')
-                ?.firstMatch(favcatStyle)
+                .firstMatch(favcatStyle)
                 ?.group(1) ??
             '';
         favcat = EHConst.favCat[favcatColor] ?? '';
@@ -264,39 +265,40 @@ class GalleryListParser {
 
         // 文件数量
         _filecount =
-            RegExp(r'\d+').firstMatch(elmGl4c.children[1].text).group(0);
+            RegExp(r'\d+').firstMatch(elmGl4c.children[1].text)!.group(0) ?? '';
       } else {
         final dom.Element elmGl2c = tr.children[1];
         _filecount = RegExp(r'\d+')
             .firstMatch(
-                elmGl2c.children[1].children[1].children[1].children[1].text)
-            .group(0);
+                elmGl2c.children[1].children[1].children[1].children[1].text)!
+            .group(0)!;
       }
 
       void _addIiem() {
-        _gallaryItems.add(GalleryItem()
-          ..gid = gid
-          ..token = token
-          ..englishTitle = title
-          ..imgUrl = imgUrl ?? ''
-          ..imgHeight = imageHeight
-          ..imgWidth = imageWidth
-          ..url = _path
-          ..category = category
-          ..simpleTags = simpleTags
-          ..postTime = postTimeLocal
-          ..ratingFallBack = ratingFB
-          ..colorRating = _colorRating
-          ..isRatinged = isRatinged
-          ..favTitle = favTitle
-          ..favcat = favcat
-          ..uploader = _uplader
-          ..filecount = _filecount
-          ..translated = _translated);
+        _gallaryItems.add(GalleryItem(
+          gid: gid,
+          token: token,
+          englishTitle: title,
+          imgUrl: imgUrl,
+          imgHeight: imageHeight,
+          imgWidth: imageWidth,
+          url: _path,
+          category: category,
+          simpleTags: simpleTags,
+          postTime: postTimeLocal,
+          ratingFallBack: ratingFB,
+          colorRating: _colorRating,
+          isRatinged: isRatinged,
+          favTitle: favTitle,
+          favcat: favcat,
+          uploader: _uplader,
+          filecount: _filecount,
+          translated: _translated,
+        ));
       }
 
       // safeMode检查
-      if (Platform.isIOS && ehConfigService.isSafeMode.value) {
+      if (Platform.isIOS && (ehConfigService.isSafeMode.value ?? false)) {
         if (category.trim() == 'Non-H') {
           _addIiem();
         }

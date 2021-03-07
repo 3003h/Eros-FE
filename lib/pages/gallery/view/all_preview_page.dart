@@ -17,7 +17,7 @@ const double kCrossAxisSpacing = 4; //交叉轴方向子元素的间距
 const double kChildAspectRatio = 0.55; //显示区域宽高比
 
 class AllPreviewPage extends StatefulWidget {
-  const AllPreviewPage({Key key}) : super(key: key);
+  const AllPreviewPage({Key? key}) : super(key: key);
 
   @override
   _AllPreviewPageState createState() => _AllPreviewPageState();
@@ -52,10 +52,10 @@ class _AllPreviewPageState extends State<AllPreviewPage> {
   void initState() {
     super.initState();
 
-    _galleryPreviewList = _pageController.galleryItem.galleryPreview;
+    _galleryPreviewList = _pageController.galleryItem.galleryPreview ?? [];
     _pageController.currentPreviewPage = 0;
 
-    WidgetsBinding.instance.addPostFrameCallback((Duration callback) {
+    WidgetsBinding.instance?.addPostFrameCallback((Duration callback) {
       logger.v('addPostFrameCallback be invoke');
       _jumpTo();
     });
@@ -63,10 +63,11 @@ class _AllPreviewPageState extends State<AllPreviewPage> {
 
   Future<void> _jumpTo() async {
     //获取position
-    final RenderBox box = globalKey.currentContext.findRenderObject();
+    final RenderBox? box =
+        globalKey.currentContext!.findRenderObject() as RenderBox?;
 
     //获取size
-    final Size size = box.size;
+    final Size size = box!.size;
 
     final MediaQueryData _mq = MediaQuery.of(context);
     final Size _screensize = _mq.size;
@@ -114,14 +115,14 @@ class _AllPreviewPageState extends State<AllPreviewPage> {
 
   @override
   Widget build(BuildContext context) {
-    final int _count = int.parse(_pageController.galleryItem.filecount);
+    final int _count = int.parse(_pageController.galleryItem.filecount ?? '0');
     return CupertinoPageScaffold(
       navigationBar: CupertinoNavigationBar(
         middle: GestureDetector(
           onTap: _scrollToTop,
-          child: Text(S.of(context).all_preview),
+          child: Text(S.of(context)!.all_preview),
         ),
-        previousPageTitle: S.of(context).back,
+        previousPageTitle: S.of(context)!.back,
       ),
       child: CustomScrollView(
         controller: _scrollController,
@@ -174,7 +175,7 @@ class _AllPreviewPageState extends State<AllPreviewPage> {
                     Container(
                       padding: const EdgeInsets.only(top: 0),
                       child: Text(
-                        S.of(context).noMorePreviews,
+                        S.of(context)!.noMorePreviews,
                         style: const TextStyle(fontSize: 14),
                       ),
                     )
@@ -204,7 +205,7 @@ class _AllPreviewPageState extends State<AllPreviewPage> {
 
     final List<GalleryPreview> _moreGalleryPreviewList =
         await Api.getGalleryPreview(
-      _pageController.galleryItem.url,
+      _pageController.galleryItem.url!,
       page: _pageController.currentPreviewPage,
       cancelToken: moreGalleryPreviewCancelToken,
       refresh: _pageController.isRefresh,

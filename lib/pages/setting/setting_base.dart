@@ -16,10 +16,10 @@ const double kItemHeight = 50.0;
 /// 选择类型的设置项
 class SelectorSettingItem extends StatefulWidget {
   const SelectorSettingItem({
-    Key key,
+    Key? key,
     this.onTap,
-    @required this.title,
-    @required this.selector,
+    required this.title,
+    required this.selector,
     this.hideLine = false,
   }) : super(key: key);
 
@@ -28,28 +28,28 @@ class SelectorSettingItem extends StatefulWidget {
   final bool hideLine;
 
   // 点击回调
-  final VoidCallback onTap;
+  final VoidCallback? onTap;
 
   @override
   _SelectorSettingItemState createState() => _SelectorSettingItemState();
 }
 
 class _SelectorSettingItemState extends State<SelectorSettingItem> {
-  Color _color;
-  Color _pBackgroundColor;
+  late Color _color;
+  late Color _pBackgroundColor;
 
   @override
   void initState() {
     super.initState();
-    _color =
-        CupertinoDynamicColor.resolve(ehTheme.itemBackgroundColor, Get.context);
+    _color = CupertinoDynamicColor.resolve(
+        ehTheme.itemBackgroundColor!, Get.context!);
     _pBackgroundColor = _color;
   }
 
   @override
   Widget build(BuildContext context) {
     final Color color =
-        CupertinoDynamicColor.resolve(ehTheme.itemBackgroundColor, context);
+        CupertinoDynamicColor.resolve(ehTheme.itemBackgroundColor!, context);
     if (_pBackgroundColor.value != color.value) {
       _color = color;
       _pBackgroundColor = color;
@@ -114,7 +114,7 @@ class _SelectorSettingItemState extends State<SelectorSettingItem> {
   void _updateNormalColor() {
     setState(() {
       _color =
-          CupertinoDynamicColor.resolve(ehTheme.itemBackgroundColor, context);
+          CupertinoDynamicColor.resolve(ehTheme.itemBackgroundColor!, context);
     });
   }
 
@@ -134,19 +134,19 @@ class TextSwitchItem extends StatefulWidget {
     this.onChanged,
     this.desc,
     this.descOn,
-    Key key,
+    Key? key,
     this.hideLine = false,
     this.icon,
     this.iconIndent = 0.0,
   }) : super(key: key);
 
-  final bool intValue;
-  final ValueChanged<bool> onChanged;
+  final bool? intValue;
+  final ValueChanged<bool>? onChanged;
   final String title;
-  final String desc;
-  final String descOn;
+  final String? desc;
+  final String? descOn;
   final bool hideLine;
-  final Widget icon;
+  final Widget? icon;
   final double iconIndent;
 
   @override
@@ -154,20 +154,22 @@ class TextSwitchItem extends StatefulWidget {
 }
 
 class _TextSwitchItemState extends State<TextSwitchItem> {
-  bool _switchValue;
-  String _desc;
+  bool? _switchValue;
+  String? _desc;
 
   void _handOnChanged() {
-    widget.onChanged(_switchValue);
+    if (_switchValue != null && widget.onChanged != null) {
+      widget.onChanged!(_switchValue!);
+    }
   }
 
   @override
   Widget build(BuildContext context) {
     _switchValue = _switchValue ?? widget.intValue ?? false;
-    _desc = _switchValue ? widget.descOn : widget.desc;
+    _desc = (_switchValue ?? false) ? widget.descOn : widget.desc;
     return Container(
       color:
-          CupertinoDynamicColor.resolve(ehTheme.itemBackgroundColor, context),
+          CupertinoDynamicColor.resolve(ehTheme.itemBackgroundColor!, context),
       child: Column(
         children: <Widget>[
           Container(
@@ -176,7 +178,7 @@ class _TextSwitchItemState extends State<TextSwitchItem> {
             padding: const EdgeInsets.symmetric(horizontal: 20.0),
             child: Row(
               children: <Widget>[
-                if (widget.icon != null) widget.icon,
+                if (widget.icon != null) widget.icon!,
                 Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     mainAxisAlignment: MainAxisAlignment.center,
@@ -189,7 +191,7 @@ class _TextSwitchItemState extends State<TextSwitchItem> {
                       ),
                       if (_desc != null || widget.desc != null)
                         Text(
-                          _desc ?? widget.desc,
+                          _desc ?? widget.desc ?? '',
                           style: const TextStyle(
                               fontSize: 12.5,
                               color: CupertinoColors.systemGrey),
@@ -207,7 +209,7 @@ class _TextSwitchItemState extends State<TextSwitchItem> {
                         _handOnChanged();
                       });
                     },
-                    value: _switchValue,
+                    value: _switchValue ?? false,
                   ),
               ],
             ),
@@ -231,14 +233,14 @@ class TextItem extends StatefulWidget {
     this.title, {
     this.desc,
     this.onTap,
-    Key key,
+    Key? key,
     this.height = kItemHeight,
     this.hideLine = false,
   }) : super(key: key);
 
   final String title;
-  final String desc;
-  final VoidCallback onTap;
+  final String? desc;
+  final VoidCallback? onTap;
   final double height;
   final bool hideLine;
 
@@ -247,22 +249,22 @@ class TextItem extends StatefulWidget {
 }
 
 class _TextItemState extends State<TextItem> {
-  Color _color;
-  Color _pBackgroundColor;
+  Color? _color;
+  Color? _pBackgroundColor;
 
   @override
   void initState() {
     super.initState();
-    _color =
-        CupertinoDynamicColor.resolve(ehTheme.itemBackgroundColor, Get.context);
+    _color = CupertinoDynamicColor.resolve(
+        ehTheme.itemBackgroundColor!, Get.context!);
     _pBackgroundColor = _color;
   }
 
   @override
   Widget build(BuildContext context) {
     final Color color =
-        CupertinoDynamicColor.resolve(ehTheme.itemBackgroundColor, context);
-    if (_pBackgroundColor.value != color.value) {
+        CupertinoDynamicColor.resolve(ehTheme.itemBackgroundColor!, context);
+    if (_pBackgroundColor?.value != color.value) {
       _color = color;
       _pBackgroundColor = color;
     }
@@ -287,7 +289,7 @@ class _TextItemState extends State<TextItem> {
                     ),
                   ),
                   Text(
-                    widget.desc,
+                    widget.desc ?? '',
                     style: const TextStyle(
                         fontSize: 12.5, color: CupertinoColors.systemGrey),
                   ).paddingOnly(top: 2.0),
@@ -321,7 +323,7 @@ class _TextItemState extends State<TextItem> {
   void _updateNormalColor() {
     setState(() {
       _color = CupertinoDynamicColor.resolve(
-          ehTheme.itemBackgroundColor, Get.context);
+          ehTheme.itemBackgroundColor!, Get.context!);
     });
   }
 
@@ -333,7 +335,7 @@ class _TextItemState extends State<TextItem> {
   }
 }
 
-Future<void> showCustomHostEditer(BuildContext context, {int index}) async {
+Future<void> showCustomHostEditer(BuildContext context, {int? index}) async {
   final TextEditingController _hostController = TextEditingController();
   final TextEditingController _addrController = TextEditingController();
   final DnsService dnsConfigController = Get.find();
@@ -343,8 +345,8 @@ Future<void> showCustomHostEditer(BuildContext context, {int index}) async {
     builder: (BuildContext context) {
       final bool _isAddNew = index == null;
       if (!_isAddNew) {
-        _hostController.text = dnsConfigController.hosts[index].host;
-        _addrController.text = dnsConfigController.hosts[index].addr;
+        _hostController.text = dnsConfigController.hosts[index].host ?? '';
+        _addrController.text = dnsConfigController.hosts[index].addr ?? '';
       }
 
       return CupertinoAlertDialog(
@@ -394,13 +396,13 @@ Future<void> showCustomHostEditer(BuildContext context, {int index}) async {
         ),
         actions: <Widget>[
           CupertinoDialogAction(
-            child: Text(S.of(context).cancel),
+            child: Text(S.of(context)!.cancel),
             onPressed: () {
               Get.back();
             },
           ),
           CupertinoDialogAction(
-            child: Text(S.of(context).ok),
+            child: Text(S.of(context)!.ok),
             onPressed: () {
               if (dnsConfigController.addCustomHost(
                   _hostController.text.trim(), _addrController.text.trim()))
@@ -414,7 +416,7 @@ Future<void> showCustomHostEditer(BuildContext context, {int index}) async {
 }
 
 Future<void> showUserCookie() async {
-  final List<String> _c = Global.profile.user.cookie.split(';');
+  final List<String> _c = Global.profile.user.cookie?.split(';') ?? [];
 
   final List<Cookie> _cookies =
       _c.map((e) => Cookie.fromSetCookieValue(e)).toList();
@@ -424,7 +426,7 @@ Future<void> showUserCookie() async {
   logger.d('$_cookieString ');
 
   return showCupertinoDialog<void>(
-    context: Get.context,
+    context: Get.context!,
     builder: (BuildContext context) {
       return CupertinoAlertDialog(
         title: const Text('Cookie'),
@@ -432,7 +434,7 @@ Future<void> showUserCookie() async {
           child: Column(
             children: [
               Text(
-                S.of(context).KEEP_IT_SAFE,
+                S.of(context)!.KEEP_IT_SAFE,
                 style: const TextStyle(
                   fontSize: 14,
                   fontWeight: FontWeight.bold,
@@ -450,17 +452,17 @@ Future<void> showUserCookie() async {
         ),
         actions: <Widget>[
           CupertinoDialogAction(
-            child: Text(S.of(context).cancel),
+            child: Text(S.of(context)!.cancel),
             onPressed: () {
               Get.back();
             },
           ),
           CupertinoDialogAction(
-            child: Text(S.of(context).copy),
+            child: Text(S.of(context)!.copy),
             onPressed: () {
               Clipboard.setData(ClipboardData(text: _cookieString));
               Get.back();
-              showToast(S.of(context).copied_to_clipboard);
+              showToast(S.of(context)!.copied_to_clipboard);
             },
           ),
         ],

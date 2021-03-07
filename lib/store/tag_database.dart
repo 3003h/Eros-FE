@@ -23,9 +23,9 @@ class EhTagDatabase {
 
     const String url = '/repos/EhTagTranslation/Database/releases/latest';
 
-    final String urlJsonString = await httpManager.get(url);
+    final String? urlJsonString = await httpManager.get(url);
     final Map<String, dynamic> urlJson =
-        jsonDecode(urlJsonString) as Map<String, dynamic>;
+        jsonDecode(urlJsonString ?? '{}') as Map<String, dynamic>;
 
     // 获取发布时间 作为远程版本号
     final String remoteVer =
@@ -34,7 +34,7 @@ class EhTagDatabase {
 
     // 获取当前本地版本
     // final String localVer = Global.profile.ehConfig.tagTranslatVer;
-    final String localVer = ehConfigService.tagTranslatVer.value;
+    final String localVer = ehConfigService.tagTranslatVer.value ?? '';
     loggerNoStack.v('localVer $localVer');
 
     if (remoteVer != localVer) {
@@ -46,7 +46,7 @@ class EhTagDatabase {
       for (final dynamic assets in assList) {
         assMap[assets['name']] = assets['browser_download_url'];
       }
-      final String dbUrl = assMap['db.text.json'];
+      final String dbUrl = assMap['db.text.json'] ?? '';
 
       loggerNoStack.v(dbUrl);
 
@@ -54,7 +54,7 @@ class EhTagDatabase {
 
       final Options options = Options(receiveTimeout: receiveTimeout);
 
-      final String dbJson = await httpDB.get(dbUrl, options: options);
+      final String? dbJson = await httpDB.get(dbUrl, options: options);
       if (dbJson != null) {
         final Map dataAll = jsonDecode(dbJson.toString()) as Map;
         final List listDataP = dataAll['data'] as List;
@@ -93,14 +93,14 @@ class EhTagDatabase {
     loggerNoStack.v('tag中文翻译数量 ${tags.length}');
   }
 
-  static Future<String> getTranTag(String tag, {String nameSpase}) async {
+  static Future<String?> getTranTag(String tag, {String nameSpase = ''}) async {
     if (tag.contains(':')) {
       final RegExp rpfx = RegExp(r'(\w):(.+)');
-      final RegExpMatch rult = rpfx.firstMatch(tag.toLowerCase());
-      final String pfx = rult.group(1) ?? '';
+      final RegExpMatch? rult = rpfx.firstMatch(tag.toLowerCase());
+      final String pfx = rult?.group(1) ?? '';
       final String _nameSpase = EHConst.prefixToNameSpaceMap[pfx] as String;
-      final String _tag = rult.group(2) ?? '';
-      final String _transTag =
+      final String _tag = rult?.group(2) ?? '';
+      final String? _transTag =
           await DataBaseUtil().getTagTransStr(_tag, namespace: _nameSpase);
 
       return _transTag != null ? '$pfx:$_transTag' : tag;
@@ -110,17 +110,17 @@ class EhTagDatabase {
     }
   }
 
-  static Future<String> getTranTagWithNameSpase(String tag,
-      {String nameSpase}) async {
+  static Future<String?> getTranTagWithNameSpase(String tag,
+      {String nameSpase = ''}) async {
     if (tag.contains(':')) {
       final RegExp rpfx = RegExp(r'(\w+):"?([^\$]+)\$?"?');
-      final RegExpMatch rult = rpfx.firstMatch(tag.toLowerCase());
-      String _nameSpase = rult.group(1) ?? '';
+      final RegExpMatch? rult = rpfx.firstMatch(tag.toLowerCase());
+      String _nameSpase = rult?.group(1) ?? '';
       if (_nameSpase.length == 1) {
         _nameSpase = EHConst.prefixToNameSpaceMap[_nameSpase] ?? _nameSpase;
       }
 
-      final String _tag = rult.group(2) ?? '';
+      final String _tag = rult?.group(2) ?? '';
       final String _nameSpaseTran =
           EHConst.translateTagType[_nameSpase] ?? _nameSpase;
       final String _transTag =

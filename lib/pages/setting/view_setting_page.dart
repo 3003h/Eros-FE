@@ -19,7 +19,7 @@ class ViewSettingPage extends StatelessWidget {
             : null,
         navigationBar: CupertinoNavigationBar(
           // transitionBetweenRoutes: true,
-          middle: Text(S.of(context).read_setting),
+          middle: Text(S.of(context)!.read_setting),
         ),
         child: SafeArea(
           child: ViewSettingList(),
@@ -41,8 +41,8 @@ class ViewSettingList extends StatelessWidget {
       _buildViewModeItem(context),
       if (!_hideOrientationItem) ReadOrientationItem(),
       TextSwitchItem(
-        S.of(context).show_page_interval,
-        intValue: ehConfigService.showPageInterval.value,
+        S.of(context)!.show_page_interval,
+        intValue: ehConfigService.showPageInterval.value ?? true,
         onChanged: (bool val) => ehConfigService.showPageInterval.value = val,
       )
     ];
@@ -57,13 +57,13 @@ class ViewSettingList extends StatelessWidget {
 
 /// 阅读方向模式切换
 Widget _buildViewModeItem(BuildContext context) {
-  final String _title = S.of(context).reading_direction;
+  final String _title = S.of(context)!.reading_direction;
   final EhConfigService ehConfigService = Get.find();
 
   final Map<ViewMode, String> modeMap = <ViewMode, String>{
-    ViewMode.LeftToRight: S.of(context).left_to_right,
-    ViewMode.rightToLeft: S.of(context).right_to_left,
-    ViewMode.topToBottom: S.of(context).top_to_bottom,
+    ViewMode.LeftToRight: S.of(context)!.left_to_right,
+    ViewMode.rightToLeft: S.of(context)!.right_to_left,
+    ViewMode.topToBottom: S.of(context)!.top_to_bottom,
   };
 
   List<Widget> _getModeList() {
@@ -72,11 +72,11 @@ Widget _buildViewModeItem(BuildContext context) {
           onPressed: () {
             Get.back(result: element);
           },
-          child: Text(modeMap[element]));
+          child: Text(modeMap[element] ?? ''));
     }).toList());
   }
 
-  Future<ViewMode> _showDialog(BuildContext context) {
+  Future<ViewMode?> _showDialog(BuildContext context) {
     return showCupertinoModalPopup<ViewMode>(
         context: context,
         builder: (BuildContext context) {
@@ -85,7 +85,7 @@ Widget _buildViewModeItem(BuildContext context) {
                 onPressed: () {
                   Get.back();
                 },
-                child: Text(S.of(context).cancel)),
+                child: Text(S.of(context)!.cancel)),
             actions: <Widget>[
               ..._getModeList(),
             ],
@@ -97,10 +97,11 @@ Widget _buildViewModeItem(BuildContext context) {
   return Obx(() => SelectorSettingItem(
         title: _title,
         selector:
-            modeMap[ehConfigService.viewMode.value ?? ViewMode.LeftToRight],
+            modeMap[ehConfigService.viewMode.value ?? ViewMode.LeftToRight] ??
+                '',
         onTap: () async {
           logger.v('tap ModeItem');
-          final ViewMode _result = await _showDialog(context);
+          final ViewMode? _result = await _showDialog(context);
           if (_result != null) {
             // ignore: unnecessary_string_interpolations
             logger.v('${EnumToString.convertToString(_result)}');
@@ -111,15 +112,16 @@ Widget _buildViewModeItem(BuildContext context) {
 }
 
 class ReadOrientationItem extends StatelessWidget {
-  final String _title = S.of(Get.context).screen_orientation;
+  final String _title = S.of(Get.context!)!.screen_orientation;
   final EhConfigService ehConfigService = Get.find();
 
   final Map<ReadOrientation, String> modeMap = <ReadOrientation, String>{
-    ReadOrientation.system: S.of(Get.context).orientation_system,
-    ReadOrientation.portraitUp: S.of(Get.context).orientation_portraitUp,
-    ReadOrientation.landscapeLeft: S.of(Get.context).orientation_landscapeLeft,
+    ReadOrientation.system: S.of(Get.context!)!.orientation_system,
+    ReadOrientation.portraitUp: S.of(Get.context!)!.orientation_portraitUp,
+    ReadOrientation.landscapeLeft:
+        S.of(Get.context!)!.orientation_landscapeLeft,
     ReadOrientation.landscapeRight:
-        S.of(Get.context).orientation_landscapeRight,
+        S.of(Get.context!)!.orientation_landscapeRight,
   };
 
   List<Widget> get modeList {
@@ -128,11 +130,11 @@ class ReadOrientationItem extends StatelessWidget {
           onPressed: () {
             Get.back(result: element);
           },
-          child: Text(modeMap[element]));
+          child: Text(modeMap[element] ?? ''));
     }).toList());
   }
 
-  Future<ReadOrientation> _showDialog(BuildContext context) {
+  Future<ReadOrientation?> _showDialog(BuildContext context) {
     return showCupertinoModalPopup<ReadOrientation>(
         context: context,
         builder: (BuildContext context) {
@@ -141,7 +143,7 @@ class ReadOrientationItem extends StatelessWidget {
                 onPressed: () {
                   Get.back();
                 },
-                child: Text(S.of(context).cancel)),
+                child: Text(S.of(context)!.cancel)),
             actions: <Widget>[
               ...modeList,
             ],
@@ -154,11 +156,12 @@ class ReadOrientationItem extends StatelessWidget {
   Widget build(BuildContext context) {
     return Obx(() => SelectorSettingItem(
           title: _title,
-          selector: modeMap[
-              ehConfigService.orientation.value ?? ReadOrientation.system],
+          selector: modeMap[ehConfigService.orientation.value ??
+                  ReadOrientation.system] ??
+              '',
           onTap: () async {
             logger.v('tap ModeItem');
-            final ReadOrientation _result = await _showDialog(context);
+            final ReadOrientation? _result = await _showDialog(context);
             if (_result != null) {
               // ignore: unnecessary_string_interpolations
               // logger.v('${EnumToString.convertToString(_result)}');
@@ -166,7 +169,7 @@ class ReadOrientationItem extends StatelessWidget {
               if (_result != ReadOrientation.system &&
                   _result != ReadOrientation.auto) {
                 OrientationPlugin.setPreferredOrientations(
-                    [orientationMap[_result]]);
+                    [orientationMap[_result] ?? DeviceOrientation.portraitUp]);
                 OrientationPlugin.forceOrientation(orientationMap[_result]);
               } else if (_result == ReadOrientation.system) {
                 OrientationPlugin.setPreferredOrientations(

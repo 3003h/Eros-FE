@@ -1,5 +1,5 @@
 import 'package:fehviewer/common/service/depth_service.dart';
-import 'package:fehviewer/models/galleryItem.dart';
+import 'package:fehviewer/models/base/eh_models.dart';
 import 'package:fehviewer/network/gallery_request.dart';
 import 'package:fehviewer/utils/logger.dart';
 import 'package:fehviewer/utils/toast.dart';
@@ -10,7 +10,7 @@ import 'gallery_page_controller.dart';
 class RateController extends GetxController {
   RateController();
 
-  double rate;
+  late double rate;
   GalleryPageController get pageController => Get.find(tag: pageCtrlDepth);
 
   GalleryItem get _item => pageController.galleryItem;
@@ -18,7 +18,7 @@ class RateController extends GetxController {
   @override
   void onInit() {
     super.onInit();
-    rate = pageController.galleryItem.rating;
+    rate = pageController.galleryItem.rating ?? 0;
   }
 
   Future<void> rating() async {
@@ -27,10 +27,10 @@ class RateController extends GetxController {
         '${pageController.galleryItem.apiuid} ${pageController.galleryItem.apikey}');
     logger.d('${(rate * 2).round()}');
     final Map<String, dynamic> rultMap = await Api.setRating(
-      apikey: _item.apikey,
-      apiuid: _item.apiuid,
-      gid: _item.gid,
-      token: _item.token,
+      apikey: _item.apikey!,
+      apiuid: _item.apiuid!,
+      gid: _item.gid!,
+      token: _item.token!,
       rating: (rate * 2).round(),
     );
     pageController.ratinged(

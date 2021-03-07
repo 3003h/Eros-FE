@@ -17,7 +17,7 @@ class GalleryItemController extends GetxController {
   final FavController _favController = Get.find();
 
   /// 点击item
-  void onTap(String tabTag) {
+  void onTap(String? tabTag) {
     logger.d('${galleryItem.englishTitle} ');
     NavigatorUtil.goGalleryPage(galleryItem: galleryItem, tabTag: tabTag);
   }
@@ -34,38 +34,41 @@ class GalleryItemController extends GetxController {
   @override
   void onInit() {
     super.onInit();
-    if (galleryItem.favTitle != null && galleryItem.favTitle.isNotEmpty) {
+    if (galleryItem.favTitle != null && galleryItem.favTitle!.isNotEmpty) {
       isFav = true;
     }
   }
 
   final RxBool _isFav = false.obs;
-  bool get isFav => _isFav.value;
+  bool get isFav => _isFav.value ?? false;
   set isFav(bool val) => _isFav.value = val;
 
-  void setFavTitle({String favTitle, String favcat}) {
-    galleryItem.favTitle = favTitle;
+  void setFavTitle({String favTitle = '', String? favcat}) {
+    // galleryItem.favTitle = favTitle;
+    galleryItem.copyWith(favTitle: favTitle);
     isFav = favTitle.isNotEmpty;
     if (favcat != null) {
-      galleryItem.favcat = favcat;
+      // galleryItem.favcat = favcat;
+      galleryItem.copyWith(favcat: favcat);
       // logger.d('item show fav');
     } else {
-      galleryItem.favcat = '';
-      galleryItem.favTitle = '';
+      // galleryItem.favcat = '';
+      // galleryItem.favTitle = '';
+      galleryItem.copyWith(favcat: '', favTitle: '');
     }
   }
 
   String get title {
-    if (_ehConfigService.isJpnTitle.value &&
+    if ((_ehConfigService.isJpnTitle.value ?? false) &&
         (galleryItem.japaneseTitle?.isNotEmpty ?? false)) {
-      return galleryItem.japaneseTitle;
+      return galleryItem.japaneseTitle ?? '';
     } else {
-      return galleryItem.englishTitle;
+      return galleryItem.englishTitle ?? '';
     }
   }
 
-  List<GalleryPreview> firstPagePreview;
-  final GalleryItem galleryItem;
+  late List<GalleryPreview> firstPagePreview;
+  GalleryItem galleryItem;
 
   Rx<Color> colorTap = const Color.fromARGB(0, 0, 0, 0).obs;
 
@@ -74,30 +77,32 @@ class GalleryItemController extends GetxController {
   }
 
   void _updatePressedColor() {
-    colorTap.value =
-        CupertinoDynamicColor.resolve(CupertinoColors.systemGrey4, Get.context);
+    colorTap.value = CupertinoDynamicColor.resolve(
+        CupertinoColors.systemGrey4, Get.context!);
   }
 
   set localFav(bool value) {
-    galleryItem.localFav = value;
+    // galleryItem.localFav = value;
+    galleryItem = galleryItem.copyWith(localFav: localFav);
     update();
   }
 
-  bool get localFav => galleryItem.localFav;
+  bool get localFav => galleryItem.localFav ?? false;
 
   void firstPutPreview(List<GalleryPreview> galleryPreview) {
     if (galleryPreview.isNotEmpty) {
-      galleryItem.galleryPreview = galleryPreview;
+      // galleryItem.galleryPreview = galleryPreview;
+      galleryItem.copyWith(galleryPreview: galleryPreview);
     }
 
     firstPagePreview =
-        galleryItem.galleryPreview.sublist(0, galleryPreview.length);
+        galleryItem.galleryPreview?.sublist(0, galleryPreview.length) ?? [];
     // logger.d(' _firstPagePreview ${firstPagePreview.length}');
   }
 
   /// 长按菜单
   Future<void> _showLongPressSheet() async {
-    final BuildContext context = Get.context;
+    final BuildContext context = Get.context!;
 
     await showCupertinoModalPopup<void>(
         context: context,
@@ -108,34 +113,42 @@ class GalleryItemController extends GetxController {
                 onPressed: () {
                   Get.back();
                 },
-                child: Text(S.of(context).cancel)),
+                child: Text(S.of(context)!.cancel)),
             actions: <Widget>[
-              if (galleryItem.favcat == null || galleryItem.favcat.isEmpty)
+              if (galleryItem.favcat == null ||
+                  (galleryItem.favcat?.isEmpty ?? false))
                 CupertinoActionSheetAction(
                   onPressed: () {
+                    if (galleryItem.gid == null || galleryItem.token == null) {
+                      return;
+                    }
                     _favController
-                        .addFav(galleryItem.gid, galleryItem.token)
-                        .then((Tuple2<String, String> value) {
-                      setFavTitle(favTitle: value.item2, favcat: value.item1);
+                        .addFav(galleryItem.gid!, galleryItem.token!)
+                        .then((Tuple2<String, String>? value) {
+                      setFavTitle(favTitle: value!.item2, favcat: value.item1);
                       showToast('successfully add');
                     });
                     Get.back();
                   },
-                  child: Text(S.of(context).add_to_favorites),
+                  child: Text(S.of(context)!.add_to_favorites),
                 ),
-              if (galleryItem.favcat != null && galleryItem.favcat.isNotEmpty)
+              if (galleryItem.favcat != null &&
+                  (galleryItem.favcat?.isNotEmpty ?? false))
                 CupertinoActionSheetAction(
                   onPressed: () {
+                    if (galleryItem.gid == null || galleryItem.token == null) {
+                      return;
+                    }
                     _favController
-                        .delFav(galleryItem.favcat, galleryItem.gid,
-                            galleryItem.token)
+                        .delFav(galleryItem.favcat!, galleryItem.gid!,
+                            galleryItem.token!)
                         .then((_) {
                       setFavTitle(favTitle: '', favcat: '');
                       showToast('successfully deleted');
                     });
                     Get.back();
                   },
-                  child: Text(S.of(context).remove_from_favorites),
+                  child: Text(S.of(context)!.remove_from_favorites),
                 ),
             ],
           );

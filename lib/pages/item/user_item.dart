@@ -15,24 +15,24 @@ class UserItem extends StatefulWidget {
 }
 
 class _UserItem extends State<UserItem> {
-  Color _color;
-  Color _pBackgroundColor;
+  Color? _color;
+  Color? _pBackgroundColor;
 
   final UserController _userController = Get.find();
 
   @override
   void initState() {
     super.initState();
-    _color =
-        CupertinoDynamicColor.resolve(ehTheme.itemBackgroundColor, Get.context);
+    _color = CupertinoDynamicColor.resolve(
+        ehTheme.itemBackgroundColor!, Get.context!);
     _pBackgroundColor = _color;
   }
 
   @override
   Widget build(BuildContext context) {
     final Color color =
-        CupertinoDynamicColor.resolve(ehTheme.itemBackgroundColor, context);
-    if (_pBackgroundColor.value != color.value) {
+        CupertinoDynamicColor.resolve(ehTheme.itemBackgroundColor!, context);
+    if (_pBackgroundColor?.value != color.value) {
       _color = color;
       _pBackgroundColor = color;
     }
@@ -49,10 +49,10 @@ class _UserItem extends State<UserItem> {
     Widget _buildText() {
       return Obx(() {
         if (_userController.isLogin) {
-          final String _userName = _userController.user().username;
+          final String _userName = _userController.user()?.username ?? '';
           return Text(_userName);
         } else {
-          return Text(S.of(context).login);
+          return Text(S.of(context)!.login);
         }
       });
     }
@@ -64,8 +64,8 @@ class _UserItem extends State<UserItem> {
         color: CupertinoColors.systemGrey,
       );
 
-      logger.d('${_userController.user().avatarUrl} ');
-      final String _avatarUrl = _userController.user().avatarUrl;
+      logger.d('${_userController.user()?.avatarUrl} ');
+      final String _avatarUrl = _userController.user()?.avatarUrl ?? '';
       if (_userController.isLogin && _avatarUrl.isNotEmpty) {
         return ClipOval(
           child: CachedNetworkImage(
@@ -114,7 +114,7 @@ class _UserItem extends State<UserItem> {
   void _updateNormalColor() {
     setState(() {
       _color = CupertinoDynamicColor.resolve(
-          ehTheme.itemBackgroundColor, Get.context);
+          ehTheme.itemBackgroundColor!, Get.context!);
     });
   }
 
@@ -138,7 +138,7 @@ class UserWidget extends GetView<UserController> {
     );
 
     // logger.d('${controller.user().avatarUrl} ');
-    final String _avatarUrl = controller.user().avatarUrl ?? '';
+    final String _avatarUrl = controller.user()?.avatarUrl ?? '';
     if (controller.isLogin && _avatarUrl.isNotEmpty) {
       return ClipOval(
         child: CachedNetworkImage(
@@ -158,7 +158,7 @@ class UserWidget extends GetView<UserController> {
   Widget _buildText() {
     return Obx(() {
       if (controller.isLogin) {
-        final String _userName = controller.user().username;
+        final String? _userName = controller.user()?.username ?? '';
         return Text(
           _userName ?? '',
           style: TextStyle(
@@ -166,7 +166,7 @@ class UserWidget extends GetView<UserController> {
               fontWeight: FontWeight.normal,
               color: CupertinoDynamicColor.resolve(
                 CupertinoColors.label,
-                Get.context,
+                Get.context!,
               )),
         ).paddingOnly(right: 6);
       } else {

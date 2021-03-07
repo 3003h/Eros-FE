@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:fehviewer/common/service/depth_service.dart';
 import 'package:fehviewer/common/service/ehconfig_service.dart';
 import 'package:fehviewer/const/const.dart';
+import 'package:fehviewer/models/base/eh_models.dart';
 import 'package:fehviewer/pages/gallery/controller/gallery_page_controller.dart';
 import 'package:fehviewer/pages/image_view/common.dart';
 import 'package:fehviewer/utils/logger.dart';
@@ -56,22 +57,22 @@ class ViewController extends GetxController {
     }
   }
 
-  PageController pageController;
-  PageController _pageControllerNotInv;
-  PageController _pageControllerInv;
+  late PageController pageController;
+  late PageController _pageControllerNotInv;
+  late PageController _pageControllerInv;
 
   final EhConfigService _ehConfigService = Get.find();
   final GalleryPageController _galleryPageController =
       Get.find(tag: pageCtrlDepth);
 
-  int lastPreviewLen;
+  late int lastPreviewLen;
 
   final ItemScrollController itemScrollController = ItemScrollController();
   final ItemPositionsListener itemPositionsListener =
       ItemPositionsListener.create();
 
-  DeviceOrientation _deviceOrientation;
-  StreamSubscription<DeviceOrientation> subscription;
+  late DeviceOrientation _deviceOrientation;
+  late StreamSubscription<DeviceOrientation> subscription;
 
   @override
   void onInit() {
@@ -102,12 +103,18 @@ class ViewController extends GetxController {
     if (vState.viewMode != ViewMode.topToBottom) {
       // 预载
       logger.v('初始预载');
-      GalleryPara.instance.precacheImages(
-        Get.context,
+      GalleryPara.instance
+          .precacheImages(
+        Get.context!,
         previewMap: vState.previewMap,
         itemSer: vState.itemIndex,
         max: _preload,
-      );
+      )
+          .listen((GalleryPreview? event) {
+        if (event != null) {
+          vState.previewMap[event.ser] = event;
+        }
+      });
     }
 
     vState.sliderValue = vState.itemIndex / 1.0;
@@ -130,7 +137,7 @@ class ViewController extends GetxController {
     if (_orientation != ReadOrientation.system ||
         _orientation != ReadOrientation.auto) {
       OrientationPlugin.setPreferredOrientations(
-          [orientationMap[_orientation]]);
+          [orientationMap[_orientation] ?? DeviceOrientation.portraitUp]);
       OrientationPlugin.forceOrientation(orientationMap[_orientation]);
     }
 
@@ -155,12 +162,12 @@ class ViewController extends GetxController {
 
     if (vState.viewMode != ViewMode.topToBottom) {
       // await _galleryPageController.fetchPreviewUntilIndex(
-      //     Get.context, vState.itemIndex);
+      //     Get.context!, vState.itemIndex);
       // await Future.delayed(const Duration(milliseconds: 200));
       pageController.jumpToPage(vState.pageIndex);
     } else {
       // await _galleryPageController.fetchPreviewUntilIndex(
-      //     Get.context, vState.itemIndex);
+      //     Get.context!, vState.itemIndex);
       // await Future.delayed(const Duration(milliseconds: 200));
       itemScrollController.jumpTo(index: vState.itemIndex);
     }
@@ -195,12 +202,18 @@ class ViewController extends GetxController {
 
     // 预载图片
     // logger.v('页码切换时的回调 预载图片');
-    GalleryPara.instance.precacheImages(
-      Get.context,
+    GalleryPara.instance
+        .precacheImages(
+      Get.context!,
       previewMap: _galleryPageController.previewMap,
       itemSer: vState.itemIndex,
       max: _ehConfigService.preloadImage.value,
-    );
+    )
+        .listen((GalleryPreview? event) {
+      if (event != null) {
+        vState.previewMap[event.ser] = event;
+      }
+    });
     // logger.d('itemIndex $itemIndex  ${itemIndex.toDouble()}');
     if (vState.itemIndex >= vState.filecount - 1) {
       vState.sliderValue = (vState.filecount - 1).toDouble();

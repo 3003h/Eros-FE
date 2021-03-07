@@ -10,11 +10,11 @@ const double kScale = 1.0;
 
 class PreviewImageClipper extends StatelessWidget {
   const PreviewImageClipper(
-      {Key key,
-      @required this.imgUrl,
-      @required this.offset,
-      @required this.width,
-      @required this.height})
+      {Key? key,
+      required this.imgUrl,
+      required this.offset,
+      required this.width,
+      required this.height})
       : super(key: key);
 
   final String imgUrl;
@@ -31,7 +31,7 @@ class PreviewImageClipper extends StatelessWidget {
             if (snapshot.hasError) {
               return const Center(child: Icon(Icons.error, color: Colors.red));
             } else {
-              final ui.Image uiImage = snapshot.data;
+              final ui.Image uiImage = snapshot.data!;
               return Container(
                 child: CustomPaint(
                   painter: ImageClipper(uiImage,
@@ -107,7 +107,7 @@ class PreviewClipper extends CustomClipper<Path> {
 
   /// 构造函数，接收传递过来的宽高
   PreviewClipper(
-      {this.offset = 0.0, @required this.width, @required this.height});
+      {this.offset = 0.0, required this.width, required this.height});
 
   /// 获取剪裁区域的接口
   /// 返回一个矩形 path

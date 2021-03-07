@@ -13,22 +13,22 @@ class UnlockPageController extends GetxController {
   get infoText => _infoText.value;
   set infoText(val) => _infoText.value = val;
 
-  Future<bool> _unlock({BuildContext context}) async {
+  Future<bool> _unlock({required BuildContext context}) async {
     final IOSAuthMessages iosStrings = IOSAuthMessages(
-        cancelButton: S.of(context ?? Get.context).cancel,
-        goToSettingsButton: S.of(context ?? Get.context).tab_setting,
+        cancelButton: S.of(context ?? Get.context!)!.cancel,
+        goToSettingsButton: S.of(context)!.tab_setting,
         goToSettingsDescription: 'Please set up your Touch & Face ID.',
         lockOut: 'Please reenable your Touch & Face ID');
 
     final AndroidAuthMessages androidStrings = AndroidAuthMessages(
-      cancelButton: S.of(context ?? Get.context).cancel,
-      signInTitle: '指纹认证',
+      cancelButton: S.of(context ?? Get.context!)!.cancel,
+      // signInTitle: '指纹认证',
       biometricHint: '',
     );
 
     infoText = '';
     try {
-      final bool didAuthenticate = await localAuth.authenticateWithBiometrics(
+      final bool didAuthenticate = await localAuth.authenticate(
         localizedReason: '验证以解锁应用',
         iOSAuthStrings: iosStrings,
         androidAuthStrings: androidStrings,
@@ -46,7 +46,7 @@ class UnlockPageController extends GetxController {
     }
   }
 
-  Future<void> unlockAndback({BuildContext context}) async {
+  Future<void> unlockAndback({required BuildContext context}) async {
     await Future.delayed(kUnLockPageTransitionDuration);
     final didAuthenticate = await _unlock(context: context);
     if (didAuthenticate) {

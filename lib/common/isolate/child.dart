@@ -13,12 +13,12 @@ void _isolateDownload(SendPort sendPort) {
   _receivePort.listen((dynamic message) async {
     try {
       if (message is _RequestProtocol) {
-        final _RequestType _requestType = message.requestType;
+        final _RequestType _requestType = message.requestType!;
         final _RequestBean _requestBean = message.data;
 
         switch (_requestType) {
           case _RequestType.addTask: // 添加下载任务
-            final GalleryTask _initGalleryTask = _requestBean.galleryTask;
+            final GalleryTask _initGalleryTask = _requestBean.galleryTask!;
             logger.d(
                 'isolate add task ${_initGalleryTask.gid} ${_initGalleryTask.title}');
 
@@ -55,10 +55,10 @@ Future<List<GalleryPreview>> _updateDtl(
     _RequestBean _requestBean, SendPort sendPort) async {
   // 获取所有图片页的href
   final List<GalleryPreview> _previews = await _fetchAllPreviews(
-    url: _requestBean.galleryTask.url,
-    fileCount: _requestBean.galleryTask.fileCount,
-    appSupportPath: _requestBean.appSupportPath,
-    isSiteEx: _requestBean.isSiteEx,
+    url: _requestBean.galleryTask!.url!,
+    fileCount: _requestBean.galleryTask!.fileCount,
+    appSupportPath: _requestBean.appSupportPath!,
+    isSiteEx: _requestBean.isSiteEx!,
     initPreviews: _requestBean.initPreviews,
   );
 
@@ -86,34 +86,35 @@ Future<void> _fetchAllImageInfo(
   for (final GalleryPreview preview in _previews) {
     //
     bool _imageTaskUrlIsNotExist = true;
-    if (_imageTasks.isNotEmpty) {
-      final _imageTask =
+    if (_imageTasks!.isNotEmpty) {
+      final GalleryImageTask _imageTask =
           _imageTasks.firstWhere((element) => element.ser == preview.ser);
       _imageTaskUrlIsNotExist =
-          _imageTask.imageUrl == null || _imageTask.imageUrl.isEmpty;
+          _imageTask.imageUrl == null || _imageTask.imageUrl!.isEmpty;
     }
 
     try {
-      if ((preview.largeImageUrl == null || preview.largeImageUrl.isEmpty) &&
+      if ((preview.largeImageUrl == null || preview.largeImageUrl!.isEmpty) &&
           _imageTaskUrlIsNotExist) {
         // logger.d('get imageUrl ${preview.ser} \n${preview.toJson()}');
         final GalleryPreview _info = await _isoParaImageLageInfoFromHtml(
-          preview.href,
-          isSiteEx: _requestBean.isSiteEx,
-          appSupportPath: _requestBean.appSupportPath,
+          preview.href!,
+          isSiteEx: _requestBean.isSiteEx!,
+          appSupportPath: _requestBean.appSupportPath!,
         );
         logger.d('iso ${preview.ser} => ${_info.largeImageUrl}');
-        final _fileName = _info.largeImageUrl
-            .substring(_info.largeImageUrl.lastIndexOf('/') + 1);
+        final String _fileName = _info.largeImageUrl!
+            .substring(_info.largeImageUrl!.lastIndexOf('/') + 1);
         logger.d('iso ${preview.ser} => _fileName $_fileName');
 
         final ProgessBean _progessBean = ProgessBean(updateImages: [
           GalleryImageTask(
-            gid: _requestBean.galleryTask.gid,
+            gid: _requestBean.galleryTask!.gid,
             ser: preview.ser,
             imageUrl: _info.largeImageUrl,
             sourceId: _info.sourceId,
             filePath: _fileName,
+            token: '',
           ),
         ]);
         // 发送消息回父isolate 更新数据库记录
@@ -134,11 +135,11 @@ Future<void> _fetchAllImageInfo(
 
 /// 获取所有href
 Future<List<GalleryPreview>> _fetchAllPreviews({
-  String url,
-  List<GalleryPreview> initPreviews,
-  int fileCount,
-  @required String appSupportPath,
-  @required bool isSiteEx,
+  required String url,
+  List<GalleryPreview>? initPreviews,
+  int? fileCount,
+  required String appSupportPath,
+  required bool isSiteEx,
 }) async {
   if (initPreviews != null &&
       initPreviews.isNotEmpty &&
@@ -149,7 +150,7 @@ Future<List<GalleryPreview>> _fetchAllPreviews({
   final List<GalleryPreview> _rultList = [];
   _rultList.addAll(initPreviews ?? []);
   int _curPage = 0;
-  while (_rultList.length < fileCount) {
+  while (_rultList.length < (fileCount ?? 0)) {
     try {
       final List<GalleryPreview> _moreGalleryPreviewList =
           await _isoFetchGalleryPreview(
@@ -185,11 +186,12 @@ Future<List<GalleryPreview>> _fetchAllPreviews({
 const int _connectTimeout = 20000;
 const int _receiveTimeout = 10000;
 
-Future<Dio> _getIsolateDio({bool isSiteEx, String appSupportPath}) async {
+Future<Dio> _getIsolateDio(
+    {bool isSiteEx = false, required String appSupportPath}) async {
   Dio _dio;
   BaseOptions _options;
 
-  final String _baseUrl = EHConst.getBaseSite(isSiteEx ?? false);
+  final String _baseUrl = EHConst.getBaseSite(isSiteEx);
   _options = BaseOptions(
       baseUrl: _baseUrl,
       connectTimeout: _connectTimeout,
@@ -231,15 +233,15 @@ Future<Dio> _getIsolateDio({bool isSiteEx, String appSupportPath}) async {
 /// [page] 缩略图页码
 Future<List<GalleryPreview>> _isoFetchGalleryPreview(
   String inUrl, {
-  @required String appSupportPath,
-  bool isSiteEx,
-  int page,
+  required String appSupportPath,
+  bool isSiteEx = false,
+  int page = 0,
   bool refresh = false,
-  CancelToken cancelToken,
+  CancelToken? cancelToken,
 }) async {
   final PersistCookieJar cookieJar =
       PersistCookieJar(storage: FileStorage(appSupportPath));
-  final String _baseUrl = EHConst.getBaseSite(isSiteEx ?? false);
+  final String _baseUrl = EHConst.getBaseSite(isSiteEx);
   final String url = inUrl + '?p=$page';
 
   final List<Cookie> cookies =
@@ -264,7 +266,7 @@ Future<List<GalleryPreview>> _isoFetchGalleryPreview(
 
   // logger.d('${response.data}');
 
-  return GalleryDetailParser.parseGalleryPreviewFromHtml(response.data);
+  return GalleryDetailParser.parseGalleryPreviewFromHtml(response.data!);
 }
 
 /// 获取画廊图片的信息
@@ -273,8 +275,8 @@ Future<List<GalleryPreview>> _isoFetchGalleryPreview(
 Future<GalleryPreview> _isoParaImageLageInfoFromHtml(
   String href, {
   bool refresh = false,
-  bool isSiteEx,
-  @required String appSupportPath,
+  bool isSiteEx = false,
+  required String appSupportPath,
 }) async {
   final String url = href;
 
@@ -297,24 +299,28 @@ Future<GalleryPreview> _isoParaImageLageInfoFromHtml(
   // logger.d('res $response');
 
   final RegExp regImageUrl = RegExp('<img[^>]*src=\"([^\"]+)\" style');
-  final String imageUrl = regImageUrl.firstMatch(response.data).group(1);
+  final String imageUrl =
+      regImageUrl.firstMatch(response.data!)?.group(1) ?? '';
 
   // logger.d('imageUrl $imageUrl');
 
   final String _sourceId = RegExp(r"nl\('(.*?)'\)")
-      .firstMatch(document.querySelector('#loadfail').attributes['onclick'])
-      .group(1);
+          .firstMatch(
+              document.querySelector('#loadfail')!.attributes['onclick']!)
+          ?.group(1) ??
+      '';
 
-  final RegExpMatch _xy =
-      RegExp(r'::\s+(\d+)\s+x\s+(\d+)\s+::').firstMatch(response.data);
-  final double width = double.parse(_xy.group(1));
-  final double height = double.parse(_xy.group(2));
+  final RegExpMatch? _xy =
+      RegExp(r'::\s+(\d+)\s+x\s+(\d+)\s+::').firstMatch(response.data!);
+  final double? width = double.parse(_xy?.group(1) ?? '0');
+  final double? height = double.parse(_xy?.group(2) ?? '0');
 
-  final GalleryPreview _rePreview = GalleryPreview()
-    ..largeImageUrl = imageUrl
-    ..sourceId = _sourceId
-    ..largeImageWidth = width
-    ..largeImageHeight = height;
+  final GalleryPreview _rePreview = GalleryPreview(
+      largeImageUrl: imageUrl,
+      sourceId: _sourceId,
+      largeImageWidth: width,
+      largeImageHeight: height,
+      ser: -1);
 
   return _rePreview;
 }

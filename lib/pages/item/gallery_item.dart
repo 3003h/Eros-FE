@@ -18,37 +18,18 @@ const double kPaddingLeft = 8.0;
 /// 画廊列表项
 /// 标题和tag需要随设置变化重构ui
 class GalleryItemWidget extends StatelessWidget {
-  // const GalleryItemWidget({
-  //   Key key,
-  //   this.galleryItem,
-  //   this.tabTag,
-  //   this.controller,
-  // }) : super(key: key);
-
-  GalleryItemWidget({@required this.galleryItem, @required this.tabTag}) {
-    // Get.lazyPut(
-    //   () => GalleryItemController(galleryItem),
-    //   tag: galleryItem.gid,
-    // );
+  GalleryItemWidget({required this.galleryItem, required this.tabTag}) {
     _galleryItemController =
-        Get.put(GalleryItemController(galleryItem), tag: galleryItem.gid);
+        Get.put(GalleryItemController(galleryItem), tag: galleryItem.gid)!;
   }
 
   final GalleryItem galleryItem;
   final String tabTag;
-  // final GalleryItemController controller;
 
-  // GalleryItemController get _galleryItemController =>
-  //     Get.find(tag: galleryItem.gid);
-  // GalleryItemController get _galleryItemController => controller;
-
-  GalleryItemController _galleryItemController;
+  late GalleryItemController _galleryItemController;
 
   @override
   Widget build(BuildContext context) {
-    // logger.d(
-    //     'ratingFallBack ${_galleryItemController.galleryItem.ratingFallBack} ');
-
     return GestureDetector(
       child: Center(
         child: _buildItem(),
@@ -93,7 +74,8 @@ class GalleryItemWidget extends StatelessWidget {
                           // 标签
                           TagBox(
                             simpleTags:
-                                _galleryItemController.galleryItem.simpleTags,
+                                _galleryItemController.galleryItem.simpleTags ??
+                                    [],
                           ),
 
                           // 评分行
@@ -139,7 +121,7 @@ class GalleryItemWidget extends StatelessWidget {
               height: 0.5,
               indent: kPaddingLeft,
               color: CupertinoDynamicColor.resolve(
-                  CupertinoColors.systemGrey4, Get.context),
+                  CupertinoColors.systemGrey4, Get.context!),
             ),
           ],
         ));
@@ -164,12 +146,12 @@ class GalleryItemWidget extends StatelessWidget {
     final GalleryItem _item = _galleryItemController.galleryItem;
 
     final double coverImageWidth =
-        Get.context.isPhone ? Get.context.mediaQueryShortestSide / 3 : 120;
+        Get.context!.isPhone ? Get.context!.mediaQueryShortestSide / 3 : 120;
 
     // 获取图片高度 用于占位
-    double _getHeigth() {
-      if (_item.imgWidth >= coverImageWidth) {
-        return _item.imgHeight * coverImageWidth / _item.imgWidth;
+    double? _getHeigth() {
+      if ((_item.imgWidth ?? 0) >= coverImageWidth) {
+        return (_item.imgHeight ?? 0) * coverImageWidth / (_item.imgWidth ?? 0);
       } else {
         return _item.imgHeight;
       }
@@ -190,7 +172,7 @@ class GalleryItemWidget extends StatelessWidget {
             //阴影
             BoxShadow(
               color: CupertinoDynamicColor.resolve(
-                  CupertinoColors.systemGrey4, Get.context),
+                  CupertinoColors.systemGrey4, Get.context!),
               blurRadius: 10,
             )
           ]),
@@ -216,12 +198,12 @@ class GalleryItemWidget extends StatelessWidget {
           padding: const EdgeInsets.fromLTRB(0, 0, 4, 0),
           child: StaticRatingBar(
             size: 16.0,
-            rate: _galleryItemController.galleryItem.ratingFallBack,
+            rate: _galleryItemController.galleryItem.ratingFallBack ?? 0,
             radiusRatio: 1.5,
             colorLight: ThemeColors.colorRatingMap[
                 _galleryItemController.galleryItem.colorRating?.trim() ?? 'ir'],
             colorDark: CupertinoDynamicColor.resolve(
-                CupertinoColors.systemGrey3, Get.context),
+                CupertinoColors.systemGrey3, Get.context!),
           ),
         ),
         Text(
@@ -229,7 +211,7 @@ class GalleryItemWidget extends StatelessWidget {
           style: TextStyle(
             fontSize: 11,
             color: CupertinoDynamicColor.resolve(
-                CupertinoColors.systemGrey, Get.context),
+                CupertinoColors.systemGrey, Get.context!),
           ),
         ),
       ],
@@ -295,7 +277,7 @@ class GalleryItemWidget extends StatelessWidget {
         ThemeColors.catColor[
                 _galleryItemController?.galleryItem?.category ?? 'default'] ??
             CupertinoColors.systemBackground,
-        Get.context);
+        Get.context!);
 
     return ClipRRect(
       borderRadius: BorderRadius.circular(4),
@@ -317,15 +299,15 @@ class GalleryItemWidget extends StatelessWidget {
 
 class TagItem extends StatelessWidget {
   const TagItem({
-    Key key,
+    Key? key,
     this.text,
     this.color,
     this.backgrondColor,
   }) : super(key: key);
 
-  final String text;
-  final Color color;
-  final Color backgrondColor;
+  final String? text;
+  final Color? color;
+  final Color? backgrondColor;
 
   @override
   Widget build(BuildContext context) {
@@ -357,24 +339,25 @@ class TagItem extends StatelessWidget {
 /// 传入原始标签和翻译标签
 /// 用于设置切换的时候变更
 class TagBox extends StatelessWidget {
-  const TagBox({Key key, this.simpleTags}) : super(key: key);
+  const TagBox({Key? key, this.simpleTags}) : super(key: key);
 
-  final List<SimpleTag> simpleTags;
+  final List<SimpleTag>? simpleTags;
 
   @override
   Widget build(BuildContext context) {
     final EhConfigService _ehConfigService = Get.find();
-    return simpleTags != null && simpleTags.isNotEmpty
+    return simpleTags != null && simpleTags!.isNotEmpty
         ? Obx(() => Container(
               padding: const EdgeInsets.fromLTRB(0, 4, 0, 8),
               child: Wrap(
                 spacing: 4, //主轴上子控件的间距
                 runSpacing: 4, //交叉轴上子控件之间的间距
                 children:
-                    List<Widget>.from(simpleTags.map((SimpleTag _simpleTag) {
-                  final String _text = _ehConfigService.isTagTranslat.value
-                      ? _simpleTag.translat
-                      : _simpleTag.text;
+                    List<Widget>.from(simpleTags!.map((SimpleTag _simpleTag) {
+                  final String? _text =
+                      _ehConfigService.isTagTranslat.value ?? false
+                          ? _simpleTag.translat
+                          : _simpleTag.text;
                   return TagItem(
                     text: _text,
                     color: ColorsUtil.getTagColor(_simpleTag.color),
@@ -391,15 +374,15 @@ class TagBox extends StatelessWidget {
 /// 封面图片Widget
 class CoverImg extends StatelessWidget {
   const CoverImg({
-    Key key,
-    @required this.imgUrl,
+    Key? key,
+    required this.imgUrl,
     this.height,
     this.width,
   }) : super(key: key);
 
   final String imgUrl;
-  final double height;
-  final double width;
+  final double? height;
+  final double? width;
 
   @override
   Widget build(BuildContext context) {
@@ -431,7 +414,7 @@ class CoverImg extends StatelessWidget {
     }
 
     return Obx(() => BlurImage(
-          isBlur: ehConfigService.isGalleryImgBlur.value,
+          isBlur: ehConfigService.isGalleryImgBlur.value ?? false,
           child: image(),
         ));
   }

@@ -22,15 +22,15 @@ class FavController extends GetxController {
   // 收藏输入框控制器
   final TextEditingController _favnoteController = TextEditingController();
 
-  Future<Map<String, String>> showFav(
+  Future<Map<String, String>?> showFav(
       BuildContext context, List favList) async {
-    return _ehConfigService.isFavPicker.value
+    return _ehConfigService.isFavPicker.value ?? false
         ? await _showAddFavPicker(context, favList)
         : await _showAddFavList(context, favList);
   }
 
   /// 添加收藏 Picker 形式
-  Future<Map<String, String>> _showAddFavPicker(
+  Future<Map<String, String>?> _showAddFavPicker(
       BuildContext context, List favList) async {
     int _favindex = 0;
 
@@ -60,7 +60,7 @@ class FavController extends GetxController {
               _ehConfigService.isFavPicker.value = false;
               showToast('切换样式');
             },
-            child: Text(S.of(context).add_to_favorites),
+            child: Text(S.of(context)!.add_to_favorites),
           ),
           content: Container(
             child: Column(
@@ -99,13 +99,13 @@ class FavController extends GetxController {
           ),
           actions: <Widget>[
             CupertinoDialogAction(
-              child: Text(S.of(context).cancel),
+              child: Text(S.of(context)!.cancel),
               onPressed: () {
                 Get.back();
               },
             ),
             CupertinoDialogAction(
-              child: Text(S.of(context).ok),
+              child: Text(S.of(context)!.ok),
               onPressed: () {
                 // 添加收藏
                 final Map<String, String> favMap = <String, String>{
@@ -124,7 +124,7 @@ class FavController extends GetxController {
   }
 
   /// 添加收藏 List形式
-  Future<Map<String, String>> _showAddFavList(
+  Future<Map<String, String>?> _showAddFavList(
       BuildContext context, List favList) async {
     return showCupertinoDialog<Map<String, String>>(
       barrierDismissible: true,
@@ -175,7 +175,7 @@ class FavController extends GetxController {
           ),
           actions: <Widget>[
             CupertinoDialogAction(
-              child: Text(S.of(context).cancel),
+              child: Text(S.of(context)!.cancel),
               onPressed: () {
                 Get.back();
               },
@@ -187,9 +187,9 @@ class FavController extends GetxController {
   }
 
   /// 点击收藏按钮处理
-  Future<Tuple2<String, String>> addFav(String gid, String token) async {
+  Future<Tuple2<String, String>?> addFav(String gid, String token) async {
     logger.d(' add fav');
-    final String _lastFavcat = _ehConfigService.lastFavcat.value;
+    final String? _lastFavcat = _ehConfigService.lastFavcat.value;
 
     // 添加到上次收藏夹
     if ((_ehConfigService.isFavLongTap.value ?? false) &&
@@ -205,9 +205,9 @@ class FavController extends GetxController {
   }
 
   // 选择并收藏
-  Future<Tuple2<String, String>> _showAddFavDialog(
+  Future<Tuple2<String, String>?> _showAddFavDialog(
       String gid, String token) async {
-    final BuildContext context = Get.context;
+    final BuildContext context = Get.context!;
     final bool _isLogin = _userController.isLogin;
 
     /// [{'favId': favId, 'favTitle': favTitle}]
@@ -218,19 +218,19 @@ class FavController extends GetxController {
           )
         : <Map<String, String>>[];
 
-    favList.add({'favId': 'l', 'favTitle': S.of(context).local_favorite});
+    favList.add({'favId': 'l', 'favTitle': S.of(context)!.local_favorite});
 
     // diaolog 获取选择结果
-    final Map<String, String> result = await showFav(context, favList);
+    final Map<String, String>? result = await showFav(context, favList);
 
     // logger.v('$result  ${result.runtimeType}');
 
     if (result != null && result is Map) {
       logger.v('add fav $result');
 
-      final String _favcat = result['favcat'];
-      final String _favnote = result['favnode'];
-      final String _favTitle = result['favTitle'];
+      final String _favcat = result['favcat'] ?? '';
+      final String _favnote = result['favnode'] ?? '';
+      final String _favTitle = result['favTitle'] ?? '';
       try {
         if (_favcat != 'l') {
           await GalleryFavParser.galleryAddfavorite(
@@ -257,7 +257,7 @@ class FavController extends GetxController {
 
   Future<Tuple2<String, String>> _addToLastFavcat(
       String gid, String token, String _lastFavcat) async {
-    final String _favTitle = Global.profile.user.favcat[int.parse(_lastFavcat)]
+    final String _favTitle = Global.profile.user.favcat?[int.parse(_lastFavcat)]
         ['favTitle'] as String;
 
     try {

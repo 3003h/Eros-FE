@@ -31,8 +31,10 @@ class LocalFavController extends ProfileController {
   void onInit() {
     super.onInit();
     loacalFavs(Global.profile.localFav.gallerys);
-    everProfile(loacalFavs, (value) {
-      Global.profile.localFav.gallerys = value;
+    everProfile<List<GalleryItem>>(loacalFavs, (List<GalleryItem> value) {
+      // Global.profile.localFav.gallerys = value;
+      Global.profile = Global.profile.copyWith(
+          localFav: Global.profile.localFav.copyWith(gallerys: value));
     });
   }
 }

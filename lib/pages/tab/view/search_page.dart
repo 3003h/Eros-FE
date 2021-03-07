@@ -83,7 +83,7 @@ class GallerySearchPage extends StatelessWidget {
                       LineIcons.timesCircle,
                       size: 18.0,
                       color: CupertinoDynamicColor.resolve(
-                          _kClearButtonColor, Get.context),
+                          _kClearButtonColor, Get.context!),
                     ).paddingSymmetric(horizontal: 6),
                   )
                 : const SizedBox();
@@ -170,7 +170,7 @@ class GallerySearchPage extends StatelessWidget {
                     style: TextStyle(
                       fontSize: 14,
                       color: CupertinoDynamicColor.resolve(
-                          CupertinoColors.secondaryLabel, Get.context),
+                          CupertinoColors.secondaryLabel, Get.context!),
                     )),
               ],
             ).paddingSymmetric(vertical: 4, horizontal: 20),
@@ -183,8 +183,9 @@ class GallerySearchPage extends StatelessWidget {
 
   // 初始化页面
   Widget _getInitView() {
-    Future<String> _getTextTranslate(String text) async {
-      final String tranText = await EhTagDatabase.getTranTagWithNameSpase(text);
+    Future<String?> _getTextTranslate(String text) async {
+      final String? tranText =
+          await EhTagDatabase.getTranTagWithNameSpase(text);
       if (tranText != null && tranText.trim() != text) {
         return tranText;
       } else {
@@ -200,11 +201,11 @@ class GallerySearchPage extends StatelessWidget {
           controller.appendTextToSearch(text);
         },
         onLongPress: () async {
-          final String tranText = await _getTextTranslate(text);
+          final String? tranText = await _getTextTranslate(text);
           if (tranText != null) {
             vibrateUtil.medium();
             showCupertinoDialog(
-                context: Get.overlayContext,
+                context: Get.overlayContext!,
                 barrierDismissible: true,
                 builder: (_) {
                   return CupertinoAlertDialog(
@@ -232,7 +233,7 @@ class GallerySearchPage extends StatelessWidget {
               children: [
                 if (controller.searchHistory.isNotEmpty)
                   Text(
-                    S.of(Get.context).search_history,
+                    S.of(Get.context!)!.search_history,
                     style: const TextStyle(
                       fontSize: 14,
                     ),
@@ -260,11 +261,11 @@ class GallerySearchPage extends StatelessWidget {
                             color: Colors.red,
                           ),
                           Text(
-                            S.of(Get.context).clear_search_history,
+                            S.of(Get.context!)!.clear_search_history,
                             style: TextStyle(
                               fontSize: 15,
                               color: CupertinoDynamicColor.resolve(
-                                  CupertinoColors.secondaryLabel, Get.context),
+                                  CupertinoColors.secondaryLabel, Get.context!),
                             ),
                           ),
                         ],
@@ -304,7 +305,7 @@ class GallerySearchPage extends StatelessWidget {
                           color: CupertinoColors.systemRed,
                         ),
                         Text(
-                          S.of(Get.context).list_load_more_fail,
+                          S.of(Get.context!)!.list_load_more_fail,
                           style: const TextStyle(
                             fontSize: 12,
                           ),
@@ -322,7 +323,7 @@ class GallerySearchPage extends StatelessWidget {
 
   Widget _getGalleryList() {
     return controller.obx(
-      (List<GalleryItem> state) {
+      (List<GalleryItem>? state) {
         return getGalleryList(
           state,
           controller.tabIndex,
@@ -371,7 +372,7 @@ class GallerySearchPage extends StatelessWidget {
             CupertinoButton(
               minSize: 40,
               padding: const EdgeInsets.only(left: 4),
-              child: Text(S.of(context).cancel),
+              child: Text(S.of(context)!.cancel),
               onPressed: () {
                 Get.back();
               },
@@ -438,7 +439,11 @@ class GallerySearchPage extends StatelessWidget {
       );
     }
 
-    Widget _menuItem({IconData icon, String title, VoidCallback onTap}) {
+    Widget _menuItem({
+      required IconData icon,
+      required String title,
+      required VoidCallback onTap,
+    }) {
       return GestureDetector(
         behavior: HitTestBehavior.translucent,
         onTap: () {
@@ -456,7 +461,7 @@ class GallerySearchPage extends StatelessWidget {
                 icon,
                 size: 24,
                 // color: CupertinoDynamicColor.resolve(
-                //     CupertinoColors.secondaryLabel, Get.context),
+                //     CupertinoColors.secondaryLabel, Get.context!),
               ),
               Expanded(
                 child: Container(
@@ -466,7 +471,7 @@ class GallerySearchPage extends StatelessWidget {
                     title ?? '',
                     style: TextStyle(
                       color: CupertinoDynamicColor.resolve(
-                          CupertinoColors.label, Get.context),
+                          CupertinoColors.label, Get.context!),
                       // fontWeight: FontWeight.w500,
                       // fontSize: 12,
                     ),
@@ -508,17 +513,17 @@ class GallerySearchPage extends StatelessWidget {
                   children: [
                     _menuItem(
                       icon: LineIcons.filter,
-                      title: S.of(context).show_filter,
+                      title: S.of(context)!.show_filter,
                       onTap: showFilterSetting,
                     ),
                     _menuItem(
                       icon: LineIcons.plusCircle,
-                      title: S.of(context).add_quick_search,
+                      title: S.of(context)!.add_quick_search,
                       onTap: controller.addToQuickSearch,
                     ),
                     _menuItem(
                       icon: LineIcons.listUl,
-                      title: S.of(context).quick_search,
+                      title: S.of(context)!.quick_search,
                       onTap: controller.quickSearchList,
                     ),
                   ],
@@ -545,7 +550,7 @@ class GallerySearchPage extends StatelessWidget {
             CupertinoButton(
               minSize: 40,
               padding: const EdgeInsets.only(left: 4),
-              child: Text(S.of(context).cancel),
+              child: Text(S.of(context)!.cancel),
               onPressed: () {
                 Get.back();
               },

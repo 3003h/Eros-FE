@@ -17,11 +17,11 @@ import 'package:line_icons/line_icons.dart';
 import 'tab_base.dart';
 
 class GalleryListTab extends GetView<GalleryViewController> {
-  const GalleryListTab({Key key, this.tabTag, this.scrollController})
+  const GalleryListTab({Key? key, this.tabTag, this.scrollController})
       : super(key: key);
 
-  final String tabTag;
-  final ScrollController scrollController;
+  final String? tabTag;
+  final ScrollController? scrollController;
 
   @override
   Widget build(BuildContext context) {
@@ -48,7 +48,7 @@ class GalleryListTab extends GetView<GalleryViewController> {
             ],
           ),
           leading: controller.enablePopupMenu &&
-                  (!Get.find<EhConfigService>().isSafeMode.value)
+                  (!(Get.find<EhConfigService>().isSafeMode.value ?? false))
               ? _buildLeading(context)
               : const SizedBox(),
           trailing: Row(
@@ -84,21 +84,6 @@ class GalleryListTab extends GetView<GalleryViewController> {
               CupertinoButton(
                 minSize: 40,
                 padding: const EdgeInsets.only(right: 6),
-                /*child: ClipRRect(
-                  borderRadius: BorderRadius.circular(8),
-                  child: Container(
-                    padding: const EdgeInsets.fromLTRB(4, 2, 4, 2),
-                    color: CupertinoDynamicColor.resolve(
-                        CupertinoColors.activeBlue, context),
-                    child: Obx(() => Text(
-                          '${controller.curPage.value + 1}',
-                          style: TextStyle(
-                              color: CupertinoDynamicColor.resolve(
-                                  CupertinoColors.secondarySystemBackground,
-                                  context)),
-                        )),
-                  ),
-                ),*/
                 child: Container(
                   padding:
                       const EdgeInsets.symmetric(horizontal: 4, vertical: 0),
@@ -208,7 +193,7 @@ class GalleryListTab extends GetView<GalleryViewController> {
                         color: CupertinoColors.systemRed,
                       ),
                       Text(
-                        S.of(Get.context).list_load_more_fail,
+                        S.of(Get.context!)!.list_load_more_fail,
                         style: const TextStyle(
                           fontSize: 12,
                         ),
@@ -225,7 +210,7 @@ class GalleryListTab extends GetView<GalleryViewController> {
 
   Widget _getGalleryList() {
     return controller.obx(
-        (List<GalleryItem> state) {
+        (List<GalleryItem>? state) {
           return getGalleryList(
             state,
             tabTag,

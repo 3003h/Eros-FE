@@ -20,7 +20,7 @@ const int kDefreceiveTimeout = 10000;
 class HttpManager {
   //构造函数
   HttpManager(String _baseUrl,
-      {bool cache = true, int connectTimeout = kDefconnectTimeout}) {
+      {bool cache = true, int? connectTimeout = kDefconnectTimeout}) {
     _options = BaseOptions(
         baseUrl: _baseUrl,
         connectTimeout: connectTimeout ?? kDefconnectTimeout,
@@ -99,15 +99,15 @@ class HttpManager {
     if (null == _instanceMap[_key]) {
       _instanceMap[_key] = HttpManager(baseUrl, cache: cache);
     }
-    return _instanceMap[_key];
+    return _instanceMap[_key]!;
   }
 
   //get请求方法
-  Future<String> get(
+  Future<String?> get(
     String url, {
-    Map<String, dynamic> params,
-    Options options,
-    CancelToken cancelToken,
+    Map<String, dynamic>? params,
+    Options? options,
+    CancelToken? cancelToken,
   }) async {
     Response<String> response;
 
@@ -126,11 +126,13 @@ class HttpManager {
     return response.data;
   }
 
-  Future<Response<dynamic>> getAll(String url,
-      {Map<String, dynamic> params,
-      Options options,
-      CancelToken cancelToken}) async {
-    Response<dynamic> response;
+  Future<Response<dynamic>> getAll(
+    String url, {
+    Map<String, dynamic>? params,
+    Options? options,
+    CancelToken? cancelToken,
+  }) async {
+    late Response<dynamic> response;
     try {
       response = await _dio.get<dynamic>(url,
           queryParameters: params, options: options, cancelToken: cancelToken);
@@ -144,11 +146,13 @@ class HttpManager {
   }
 
   //post请求
-  Future<Response<dynamic>> post(String url,
-      {Map<String, dynamic> params,
-      Options options,
-      CancelToken cancelToken}) async {
-    Response<dynamic> response;
+  Future<Response<dynamic>> post(
+    String url, {
+    Map<String, dynamic>? params,
+    Options? options,
+    CancelToken? cancelToken,
+  }) async {
+    late Response<dynamic> response;
     try {
       response = await _dio.post<dynamic>(url,
           queryParameters: params, options: options, cancelToken: cancelToken);
@@ -164,11 +168,11 @@ class HttpManager {
   //post Form请求
   Future<Response<dynamic>> postForm(
     String url, {
-    Object data,
-    Options options,
-    CancelToken cancelToken,
+    Object? data,
+    Options? options,
+    CancelToken? cancelToken,
   }) async {
-    Response<dynamic> response;
+    late Response<dynamic> response;
     try {
       response = await _dio.post<dynamic>(url,
           options: options, cancelToken: cancelToken, data: data);
@@ -185,7 +189,7 @@ class HttpManager {
   //下载文件
   Future<Response<dynamic>> downLoadFile(
       String urlPath, String savePath) async {
-    Response<dynamic> response;
+    late Response<dynamic> response;
     try {
       response = await _dio.download(
         urlPath,

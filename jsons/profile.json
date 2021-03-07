@@ -1,14 +1,14 @@
 {
+  "ehConfig": "$eh_config",
   "user": "$user",
-  "ehConfig": "$ehConfig",
   "lastLogin": "",
   "locale": "",
   "theme": "",
-  "searchText": [""],
-  "localFav": "$localFav",
+  "searchText": [],
+  "localFav": "$local_fav",
   "enableAdvanceSearch": false,
-  "advanceSearch": "$advanceSearch",
-  "dnsConfig": "$dnsConfig",
-  "downloadConfig": "$downloadConfig",
-  "autoLock": "$autoLock"
+  "advanceSearch": "$advance_search",
+  "dnsConfig": "$dns_config",
+  "downloadConfig": "$download_config",
+  "autoLock": "$auto_lock"
 }
