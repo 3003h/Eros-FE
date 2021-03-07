@@ -3,7 +3,7 @@ import 'dart:ui';
 import 'package:fehviewer/common/service/depth_service.dart';
 import 'package:fehviewer/common/service/theme_service.dart';
 import 'package:fehviewer/generated/l10n.dart';
-import 'package:fehviewer/models/galleryComment.dart';
+import 'package:fehviewer/models/base/eh_models.dart';
 import 'package:fehviewer/pages/gallery/controller/comment_controller.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -31,14 +31,14 @@ class CommentPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final Widget commList =
-        controller.obx((List<GalleryComment> state) => ListView.builder(
+        controller.obx((List<GalleryComment>? state) => ListView.builder(
               controller: controller.scrollController,
               // MediaQuery.of(context).viewInsets.bottom
               padding: EdgeInsets.only(
                   bottom: 60 + context.mediaQueryPadding.bottom),
               itemBuilder: (context, index) {
                 return CommentItem(
-                  galleryComment: state[index],
+                  galleryComment: state![index],
                 );
               },
               itemCount: state?.length ?? 0,
@@ -101,8 +101,8 @@ class CommentPage extends StatelessWidget {
     return CupertinoPageScaffold(
       // resizeToAvoidBottomInset: false,
       navigationBar: CupertinoNavigationBar(
-        middle: Text(S.of(context).gallery_comments),
-        previousPageTitle: S.of(context).back,
+        middle: Text(S.of(context)!.gallery_comments),
+        previousPageTitle: S.of(context)!.back,
       ),
       // child: commList,
       child: SafeArea(
@@ -130,7 +130,7 @@ class CommentPage extends StatelessWidget {
                 decoration: BoxDecoration(
                   border: _kDefaultEditBorder,
                   color: CupertinoDynamicColor.resolve(
-                          ehTheme.themeData.barBackgroundColor, context)
+                          ehTheme.themeData!.barBackgroundColor, context)
                       .withOpacity(1),
                   // color: Colors.transparent,
                 ),

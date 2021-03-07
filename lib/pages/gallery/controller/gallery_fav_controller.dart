@@ -15,8 +15,7 @@ import 'package:get/get.dart';
 
 class GalleryFavController extends GetxController {
   final RxBool _isLoading = false.obs;
-
-  bool get isLoading => _isLoading.value;
+  bool get isLoading => _isLoading.value ?? false;
 
   set isLoading(bool value) => _isLoading.value = value;
   String favnote = '';
@@ -41,15 +40,15 @@ class GalleryFavController extends GetxController {
 
     // _favTitle 初始化
     if (_pageController.galleryItem.favTitle != null &&
-        _pageController.galleryItem.favTitle.isNotEmpty) {
+        _pageController.galleryItem.favTitle!.isNotEmpty) {
       _favTitle.value = _pageController.galleryItem.favTitle;
     } else {
-      _favTitle.value = localFav ? S.of(Get.context).local_favorite : '';
+      _favTitle.value = localFav ? S.of(Get.context!)!.local_favorite : '';
     }
 
     // _favcat初始化
     if (_pageController.galleryItem.favcat != null &&
-        _pageController.galleryItem.favcat.isNotEmpty) {
+        _pageController.galleryItem.favcat!.isNotEmpty) {
       _favcat.value = _pageController.galleryItem.favcat;
     } else {
       _favcat.value = localFav ? 'l' : '';
@@ -60,11 +59,11 @@ class GalleryFavController extends GetxController {
 
   bool get localFav => _pageController.localFav ?? false;
 
-  final RxString _favTitle = S.of(Get.context).notFav.obs;
-  String get favTitle => _favTitle.value;
+  final RxString _favTitle = S.of(Get.context!)!.notFav.obs;
+  String get favTitle => _favTitle.value ?? '';
 
   final RxString _favcat = ''.obs;
-  String get favcat => _favcat.value;
+  String get favcat => _favcat.value ?? '';
 
   void setFav(String favcat, String favtitle) {
     _favTitle.value = favtitle;
@@ -80,13 +79,13 @@ class GalleryFavController extends GetxController {
   Future<bool> _addToLastFavcat(String _lastFavcat) async {
     isLoading = true;
 
-    final String _favTitle = Global.profile.user.favcat[int.parse(_lastFavcat)]
+    final String _favTitle = Global.profile.user.favcat![int.parse(_lastFavcat)]
         ['favTitle'] as String;
 
     try {
       await GalleryFavParser.galleryAddfavorite(
-        _pageController.galleryItem.gid,
-        _pageController.galleryItem.token,
+        _pageController.galleryItem.gid!,
+        _pageController.galleryItem.token!,
         favcat: _lastFavcat,
         favnote: favnote,
       );
@@ -105,7 +104,7 @@ class GalleryFavController extends GetxController {
   }
 
   /// 点击收藏按钮处理
-  Future<void> tapFav() async {
+  Future<bool?> tapFav() async {
     logger.v('tapFav');
 
     /// 网络收藏或者本地收藏
@@ -114,7 +113,7 @@ class GalleryFavController extends GetxController {
       return delFav();
     } else {
       logger.d(' add fav');
-      final String _lastFavcat = _ehConfigService.lastFavcat.value;
+      final String _lastFavcat = _ehConfigService.lastFavcat.value ?? '';
 
       // 添加到上次收藏夹
       if ((_ehConfigService.isFavLongTap.value ?? false) &&
@@ -131,8 +130,8 @@ class GalleryFavController extends GetxController {
   }
 
   // 选择并收藏
-  Future<bool> _showAddFavDialog() async {
-    final BuildContext context = Get.context;
+  Future<bool?> _showAddFavDialog() async {
+    final BuildContext context = Get.context!;
     final bool _isLogin = _userController.isLogin;
 
     /// [{'favId': favId, 'favTitle': favTitle}]
@@ -143,10 +142,10 @@ class GalleryFavController extends GetxController {
           )
         : <Map<String, String>>[];
 
-    favList.add({'favId': 'l', 'favTitle': S.of(context).local_favorite});
+    favList.add({'favId': 'l', 'favTitle': S.of(context)!.local_favorite});
 
     // diaolog 获取选择结果
-    final Map<String, String> result =
+    final Map<String, String>? result =
         await _favController.showFav(context, favList);
 
     // logger.v('$result  ${result.runtimeType}');
@@ -155,17 +154,17 @@ class GalleryFavController extends GetxController {
       logger.v('add fav $result');
 
       isLoading = true;
-      final String _favcat = result['favcat'];
-      final String _favnote = result['favnode'];
-      final String _favTitle = result['favTitle'];
+      final String _favcat = result['favcat'] ?? '';
+      final String _favnote = result['favnode'] ?? '';
+      final String _favTitle = result['favTitle'] ?? '';
 
       _ehConfigService.lastFavcat.value = _favcat;
 
       try {
         if (_favcat != 'l') {
           await GalleryFavParser.galleryAddfavorite(
-            _pageController.galleryItem.gid,
-            _pageController.galleryItem.token,
+            _pageController.galleryItem.gid!,
+            _pageController.galleryItem.token!,
             favcat: _favcat,
             favnote: _favnote,
           );
@@ -198,8 +197,8 @@ class GalleryFavController extends GetxController {
       if (favcat.isNotEmpty && favcat != 'l') {
         logger.v('取消网络收藏');
         await GalleryFavParser.galleryAddfavorite(
-          _pageController.galleryItem.gid,
-          _pageController.galleryItem.token,
+          _pageController.galleryItem.gid!,
+          _pageController.galleryItem.token!,
         );
       } else {
         logger.v('取消本地收藏');

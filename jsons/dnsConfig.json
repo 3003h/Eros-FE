@@ -1,7 +1,0 @@
-{
-  "enableDoH": false,
-  "enableCustomHosts": false,
-  "enableDomainFronting": false,
-  "hosts": "$[]dnsCache",
-  "dohCache": "$[]dnsCache"
-}

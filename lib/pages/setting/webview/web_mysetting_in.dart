@@ -13,10 +13,10 @@ class InWebMySetting extends StatelessWidget {
   final CookieManager _cookieManager = CookieManager.instance();
 
   Future<void> _setCookie() async {
-    final List<io.Cookie> cookies =
-        await Global.cookieJar.loadForRequest(Uri.parse(Api.getBaseUrl()));
+    final List<io.Cookie>? cookies =
+        await Global.cookieJar?.loadForRequest(Uri.parse(Api.getBaseUrl()));
 
-    for (final io.Cookie cookie in cookies) {
+    for (final io.Cookie cookie in cookies ?? []) {
       _cookieManager.setCookie(
           url: Uri.parse(Api.getBaseUrl()),
           name: cookie.name,
@@ -26,12 +26,12 @@ class InWebMySetting extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    InAppWebViewController _controller;
+    InAppWebViewController? _controller;
 
     final CupertinoPageScaffold cpf = CupertinoPageScaffold(
       navigationBar: CupertinoNavigationBar(
         padding: const EdgeInsetsDirectional.only(end: 6),
-        middle: Text(S.of(context).ehentai_settings),
+        middle: Text(S.of(context)!.ehentai_settings),
         trailing: Row(
           mainAxisSize: MainAxisSize.min,
           children: <Widget>[
@@ -42,7 +42,7 @@ class InWebMySetting extends StatelessWidget {
                 size: 20,
               ),
               onPressed: () async {
-                _controller.reload();
+                _controller?.reload();
               },
             ),
             CupertinoButton(
@@ -53,7 +53,7 @@ class InWebMySetting extends StatelessWidget {
               ),
               onPressed: () async {
                 // 保存配置
-                _controller.evaluateJavascript(
+                _controller?.evaluateJavascript(
                     source:
                         'document.querySelector("#apply > input[type=submit]").click();');
                 // 写入cookie到dio
@@ -70,7 +70,7 @@ class InWebMySetting extends StatelessWidget {
           onWebViewCreated: (InAppWebViewController controller) {
             _controller = controller;
           },
-          onLoadStart: (InAppWebViewController controller, Uri url) {
+          onLoadStart: (InAppWebViewController controller, Uri? url) {
             logger.d('Page started loading: $url');
 
             if (!url.toString().endsWith('/uconfig.php')) {
@@ -78,8 +78,12 @@ class InWebMySetting extends StatelessWidget {
               controller.stopLoading();
             }
           },
-          onLoadStop: (InAppWebViewController controller, Uri url) async {
+          onLoadStop: (InAppWebViewController controller, Uri? url) async {
             logger.d('Page Finished loading: $url');
+            if (url == null) {
+              return;
+            }
+
             // 写入cookie到dio
             _cookieManager.getCookies(url: url).then((value) {
               // List<Cookie> _cookies = value.forEach((key, value) { });
@@ -90,9 +94,9 @@ class InWebMySetting extends StatelessWidget {
 
               logger.d('${_cookies.map((e) => e.toString()).join('\n')} ');
 
-              Global.cookieJar.delete(Uri.parse(Api.getBaseUrl()), true);
+              Global.cookieJar?.delete(Uri.parse(Api.getBaseUrl()), true);
               Global.cookieJar
-                  .saveFromResponse(Uri.parse(Api.getBaseUrl()), _cookies);
+                  ?.saveFromResponse(Uri.parse(Api.getBaseUrl()), _cookies);
             });
           },
         ),

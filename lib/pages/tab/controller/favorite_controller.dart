@@ -14,8 +14,20 @@ import 'package:tuple/tuple.dart';
 import 'tabview_controller.dart';
 
 class FavoriteViewController extends TabViewController {
-  RxString title = ''.obs;
-  String curFavcat = '';
+  final _title = ''.obs;
+  get title => _ehConfigService.lastShowFavTitle ?? _title.value ?? '';
+  set title(val) => _title.value = val;
+
+  String? _curFavcat;
+  String get curFavcat {
+    logger.d(' get curFavcat ${_ehConfigService.lastShowFavcat}');
+    return _curFavcat ?? _ehConfigService.lastShowFavcat ?? 'a';
+  }
+
+  set curFavcat(String? val) {
+    logger.d('set curFavcat $val');
+    _curFavcat = val;
+  }
 
   bool enableDelayedLoad = true;
 
@@ -24,8 +36,8 @@ class FavoriteViewController extends TabViewController {
   //页码跳转的控制器
   final TextEditingController pageController = TextEditingController();
 
-  Future<Tuple2<List<GalleryItem>, int>> futureBuilderFuture;
-  Widget lastListWidget;
+  late Future<Tuple2<List<GalleryItem>, int>> futureBuilderFuture;
+  Widget? lastListWidget;
 
   final EhConfigService _ehConfigService = Get.find();
   final LocalFavController _localFavController = Get.find();
@@ -34,9 +46,6 @@ class FavoriteViewController extends TabViewController {
   @override
   void onInit() {
     fetchNormal = Api.getFavorite;
-    curFavcat = _ehConfigService.lastShowFavcat ?? 'a';
-    title.value = _ehConfigService.lastShowFavTitle;
-
     super.onInit();
   }
 
@@ -45,7 +54,7 @@ class FavoriteViewController extends TabViewController {
     bool refresh = false,
     bool first = false,
   }) async {
-    // logger.v('_loadDataFirst  fav');
+    logger.d('FavoriteViewController fetchData $curFavcat');
 
     final bool _isLogin = _userController.isLogin;
     if (!_isLogin) {
@@ -63,7 +72,7 @@ class FavoriteViewController extends TabViewController {
     } else {
       if (first) {
         _ehConfigService.lastShowFavcat = 'l';
-        _ehConfigService.lastShowFavTitle = S.of(Get.context).local_favorite;
+        _ehConfigService.lastShowFavTitle = S.of(Get.context!)!.local_favorite;
       }
       // 本地收藏夹
       logger.v('本地收藏');
@@ -73,8 +82,8 @@ class FavoriteViewController extends TabViewController {
     }
   }
 
-  Future<void> setOrder() async {
-    final FavoriteOrder order = await _ehConfigService.showFavOrder();
+  Future<void> setOrder(BuildContext context) async {
+    final FavoriteOrder? order = await _ehConfigService.showFavOrder(context);
     if (order != null) {
       change(state, status: RxStatus.loading());
       reloadData();

@@ -22,7 +22,7 @@ class AboutPage extends StatelessWidget {
             ? CupertinoColors.secondarySystemBackground
             : null,
         navigationBar: CupertinoNavigationBar(
-          middle: Text(S.of(context).about),
+          middle: Text(S.of(context)!.about),
         ),
         child: SafeArea(
           child: ListViewAbout(),
@@ -42,7 +42,7 @@ class ListViewAbout extends StatelessWidget {
         children: <Widget>[
           Egg(
             child: TextItem(
-              '${Global.packageInfo.appName} ',
+              '${Global.packageInfo?.appName ?? ''} ',
               desc: ' 一个兴趣使然的e-hentai客户端',
               onTap: null,
             ),
@@ -65,7 +65,7 @@ class ListViewAbout extends StatelessWidget {
           TextItem(
             'Version',
             desc:
-                '${Global.packageInfo.version}(${Global.packageInfo.buildNumber})',
+                '${Global.packageInfo?.version ?? ''}(${Global.packageInfo?.buildNumber ?? ''})',
             onTap: null,
           ),
           TextItem(
@@ -73,7 +73,7 @@ class ListViewAbout extends StatelessWidget {
             desc: 'honjow  <honjow311@gmail.com>',
             onTap: () => launch('mailto:honjow311@gmail.com'),
           ),
-          if (!_ehConfigService.isSafeMode.value)
+          if (!(_ehConfigService.isSafeMode.value ?? false))
             TextItem(
               'Github',
               desc: 'https://github.com/honjow/FEhViewer',

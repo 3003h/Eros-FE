@@ -12,14 +12,14 @@ import 'package:get/get.dart';
 class FavoriteSelectorPage extends StatelessWidget {
   FavoriteSelectorPage({this.favcatItemBean});
 
-  final FavcatItemBean favcatItemBean;
+  final FavcatItemBean? favcatItemBean;
 
   final FavoriteSelectorController favoriteSelectorController =
-      Get.put(FavoriteSelectorController());
+      Get.put(FavoriteSelectorController())!;
 
   @override
   Widget build(BuildContext context) {
-    final String _title = S.of(context).favcat;
+    final String _title = S.of(context)!.favcat;
     final CupertinoPageScaffold sca = CupertinoPageScaffold(
         navigationBar: CupertinoNavigationBar(
           middle: Text(_title),
@@ -34,8 +34,8 @@ class FavoriteSelectorPage extends StatelessWidget {
 
   Widget _buildFavoriteSelectorListView() {
     return favoriteSelectorController.obx(
-        (List<FavcatItemBean> state) {
-          return ListViewFavorite(state);
+        (List<FavcatItemBean>? state) {
+          return ListViewFavorite(state ?? []);
         },
         onLoading: Container(
           alignment: Alignment.center,
@@ -86,7 +86,7 @@ class ListViewFavorite extends StatelessWidget {
 
 /// 收藏夹选择单项
 class FavSelItemWidget extends StatelessWidget {
-  const FavSelItemWidget({this.index, this.favcatItemBean});
+  const FavSelItemWidget({required this.index, required this.favcatItemBean});
 
   final int index;
   final FavcatItemBean favcatItemBean;
@@ -94,13 +94,11 @@ class FavSelItemWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     // 每个Item单独的依赖
-    // Get.create(() => FavSelectorItemController());
-    // final FavSelectorItemController favoriteSelectorItemController = Get.find();
     final FavSelectorItemController favoriteSelectorItemController =
-        Get.put(FavSelectorItemController(), tag: '$index');
+        Get.put(FavSelectorItemController(), tag: '$index')!;
 
     final Widget container = Obx(() => Container(
-          color: favoriteSelectorItemController.colorTap?.value,
+          color: favoriteSelectorItemController.colorTap.value,
           padding: const EdgeInsets.fromLTRB(24, 8, 12, 8),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
@@ -117,7 +115,7 @@ class FavSelItemWidget extends StatelessWidget {
                   width: 8,
                 ), // 占位 宽度8
                 Text(
-                  favcatItemBean?.title ?? '',
+                  favcatItemBean.title ?? '',
                   style: const TextStyle(
                     fontSize: 20,
                   ),
@@ -166,7 +164,7 @@ class FavSelItemWidget extends StatelessWidget {
       height: 1.0,
       indent: 48,
       color: CupertinoDynamicColor.resolve(
-          CupertinoColors.systemGrey4, Get.context),
+          CupertinoColors.systemGrey4, Get.context!),
     );
   }
 }

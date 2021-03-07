@@ -9,7 +9,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
 
 class RateView extends StatelessWidget {
-  const RateView({Key key}) : super(key: key);
+  const RateView({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -69,13 +69,13 @@ Future<void> showRateDialog(BuildContext context) {
           ),
           actions: <Widget>[
             CupertinoDialogAction(
-              child: Text(S.of(context).cancel),
+              child: Text(S.of(context)!.cancel),
               onPressed: () {
                 Get.back();
               },
             ),
             CupertinoDialogAction(
-              child: Text(S.of(context).ok),
+              child: Text(S.of(context)!.ok),
               onPressed: () {
                 controller.rating();
                 Get.back();

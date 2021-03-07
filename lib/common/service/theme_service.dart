@@ -12,21 +12,22 @@ class ThemeService extends ProfileService {
   final EhConfigService _ehConfigService = Get.find();
   final Rx<ThemesModeEnum> _themeModel = ThemesModeEnum.system.obs;
   Rx<Brightness> platformBrightness =
-      WidgetsBinding.instance.window.platformBrightness.obs;
+      WidgetsBinding.instance!.window.platformBrightness.obs;
 
   set themeModel(ThemesModeEnum value) {
     _themeModel.value = value;
   }
 
   ThemesModeEnum get themeModel {
-    return _themeModel.value;
+    return _themeModel.value ?? ThemesModeEnum.system;
   }
 
-  CupertinoThemeData get _getDarkTheme => _ehConfigService.isPureDarkTheme.value
-      ? ThemeColors.darkPureTheme
-      : ThemeColors.darkGrayTheme;
+  CupertinoThemeData get _getDarkTheme =>
+      _ehConfigService.isPureDarkTheme.value ?? false
+          ? ThemeColors.darkPureTheme
+          : ThemeColors.darkGrayTheme;
 
-  CupertinoThemeData get themeData {
+  CupertinoThemeData? get themeData {
     switch (themeModel) {
       case ThemesModeEnum.system:
         return platformBrightness.value == Brightness.dark
@@ -44,11 +45,12 @@ class ThemeService extends ProfileService {
   @override
   void onInit() {
     super.onInit();
-    _themeModel.value = EnumToString.fromString(
-            ThemesModeEnum.values, Global.profile.theme ?? '') ??
-        ThemesModeEnum.system;
+    _themeModel.value =
+        EnumToString.fromString(ThemesModeEnum.values, Global.profile.theme) ??
+            ThemesModeEnum.system;
     everFromEunm(_themeModel, (String value) {
-      Global.profile.theme = value;
+      // Global.profile.theme = value;
+      Global.profile = Global.profile.copyWith(theme: value);
     });
   }
 }
@@ -59,8 +61,8 @@ class EHTheme {
   final ThemeService _themeService = Get.find();
   final EhConfigService _ehConfigService = Get.find();
 
-  Color _getColorWithTheme(EhDynamicColor ehcolor) {
-    final Color effDarkColor = _ehConfigService.isPureDarkTheme.value
+  Color? _getColorWithTheme(EhDynamicColor ehcolor) {
+    final Color effDarkColor = _ehConfigService.isPureDarkTheme.value ?? false
         ? ehcolor.darkColor
         : ehcolor.darkGrayColor;
 
@@ -78,22 +80,22 @@ class EHTheme {
     }
   }
 
-  CupertinoThemeData get themeData => _themeService.themeData;
+  CupertinoThemeData? get themeData => _themeService.themeData;
 
   /// 文本输入框的背景色
-  Color get textFieldBackgroundColor =>
+  Color? get textFieldBackgroundColor =>
       _getColorWithTheme(EhDynamicColors.textFieldBackground);
 
   /// 评论输入框颜色
-  Color get commentTextFieldBackgroundColor =>
+  Color? get commentTextFieldBackgroundColor =>
       _getColorWithTheme(EhDynamicColors.commentTextFieldBackground);
 
   // 收藏备注输入框颜色
-  Color get favnoteTextFieldBackgroundColor =>
+  Color? get favnoteTextFieldBackgroundColor =>
       _getColorWithTheme(EhDynamicColors.favnoteTextFieldBackground);
 
   /// item 背景色
-  Color get itemBackgroundColor =>
+  Color? get itemBackgroundColor =>
       _getColorWithTheme(EhDynamicColors.itemBackground);
 
   bool get _isSeldark => _themeService.themeModel == ThemesModeEnum.darkMode;

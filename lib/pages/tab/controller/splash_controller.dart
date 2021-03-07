@@ -8,8 +8,8 @@ import 'package:get/get.dart';
 import 'package:receive_sharing_intent/receive_sharing_intent.dart';
 
 class SplashController extends GetxController {
-  StreamSubscription _intentDataStreamSubscription;
-  String sharedText;
+  late StreamSubscription _intentDataStreamSubscription;
+  late String? sharedText = '';
 
   @override
   void onInit() {
@@ -25,17 +25,17 @@ class SplashController extends GetxController {
         logger.i('value(memory): $value');
         sharedText = value;
         logger.i('Shared: $sharedText');
-        startHome(sharedText);
+        startHome(sharedText ?? '');
       }, onError: (err) {
         logger.e('getLinkStream error: $err');
       });
 
       // For sharing or opening urls/text coming from outside the app while the app is closed
-      ReceiveSharingIntent.getInitialText().then((String value) {
+      ReceiveSharingIntent.getInitialText().then((String? value) {
         // logger.i('value(closed): $value');
-        sharedText = value;
+        sharedText = value ?? '';
         // logger.i('Shared: $sharedText');
-        startHome(sharedText);
+        startHome(sharedText ?? '');
       });
     }
   }
@@ -44,7 +44,7 @@ class SplashController extends GetxController {
     if (url != null && url.isNotEmpty) {
       logger.i('open $url');
       await Future<void>.delayed(const Duration(milliseconds: 100), () {
-        NavigatorUtil.goGalleryDetailReplace(Get.context, url: url);
+        NavigatorUtil.goGalleryDetailReplace(Get.context!, url: url);
       });
     } else {
       // logger.i('url is Empty,jump to home');

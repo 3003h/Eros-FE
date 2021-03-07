@@ -1,7 +1,7 @@
 import 'dart:ui';
 
 import 'package:fehviewer/const/theme_colors.dart';
-import 'package:fehviewer/models/galleryItem.dart';
+import 'package:fehviewer/models/base/eh_models.dart';
 import 'package:fehviewer/pages/item/controller/galleryitem_controller.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -16,14 +16,14 @@ const double kWidth = 28.0;
 const double kHeight = 18.0;
 
 class GalleryItemFlow extends StatelessWidget {
-  GalleryItemFlow({@required this.tabTag, this.galleryItem}) {
+  GalleryItemFlow({@required this.tabTag, required this.galleryItem}) {
     Get.lazyPut(
       () => GalleryItemController(galleryItem),
       tag: galleryItem.gid,
     );
   }
 
-  final String tabTag;
+  final String? tabTag;
   final GalleryItem galleryItem;
   GalleryItemController get _galleryItemController =>
       Get.find(tag: galleryItem.gid);
@@ -58,11 +58,11 @@ class GalleryItemFlow extends StatelessWidget {
           context);
 
       // 获取图片高度
-      num _getHeigth() {
-        if (galleryItem.imgWidth >= constraints.maxWidth) {
-          return galleryItem.imgHeight *
+      double? _getHeigth() {
+        if ((galleryItem.imgWidth ?? 0) >= constraints.maxWidth) {
+          return (galleryItem.imgHeight ?? 0) *
               constraints.maxWidth /
-              galleryItem.imgWidth;
+              (galleryItem.imgWidth ?? 0);
         } else {
           return galleryItem.imgHeight;
         }
@@ -95,7 +95,7 @@ class GalleryItemFlow extends StatelessWidget {
                         alignment: Alignment.center,
                         height:
                             galleryItem.imgWidth != null ? _getHeigth() : null,
-                        child: CoverImg(imgUrl: galleryItem.imgUrl),
+                        child: CoverImg(imgUrl: galleryItem.imgUrl!),
                       ),
                       ClipPath(
                         clipper:

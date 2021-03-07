@@ -48,10 +48,11 @@ app.*.map.json
 /android/app/google-services.json
 /android/app/asd.json
 
-*.g.dart
+#*.g.dart
 
-/lib/models/*.dart
+#/lib/models/*.dart
 /windows/
 /web/
 /test/
 /linux/
+.fvm/flutter_sdk

@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 class CategoryClipper extends CustomClipper<Path> {
   /// 构造函数，接收传递过来的宽高
-  CategoryClipper({@required this.width, @required this.height});
+  CategoryClipper({required this.width, required this.height});
 
   // 三角形底和高
   final double width;

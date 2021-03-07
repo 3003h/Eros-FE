@@ -48,6 +48,6 @@ class HistoryController extends GetxController {
     super.onInit();
 
     final History _history = Global.history;
-    historys = _history.history;
+    historys = _history.history ?? [];
   }
 }

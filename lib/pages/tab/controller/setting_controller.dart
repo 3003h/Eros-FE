@@ -10,15 +10,15 @@ class SettingViewController extends GetxController
     with SingleGetTickerProviderMixin {
   // 控制middle显示
   final RxBool _showMiddle = false.obs;
-  bool get showMidle => _showMiddle.value;
+  bool get showMidle => _showMiddle.value ?? false;
   set showMidle(bool val) => _showMiddle.value = val;
 
   //
-  Animation<double> animation;
-  AnimationController _animationController;
+  late Animation<double> animation;
+  late AnimationController _animationController;
 
   final ScrollController _scrollController =
-      tabPages.scrollControllerMap[EHRoutes.setting];
+      tabPages.scrollControllerMap[EHRoutes.setting]!;
 
   @override
   void onInit() {
@@ -75,11 +75,11 @@ class SettingViewController extends GetxController
 
   void initData(BuildContext context) {
     _itemTitles = <String>[
-      S.of(context).eh,
-      S.of(context).download,
-      S.of(context).advanced,
-      S.of(context).security,
-      S.of(context).about,
+      S.of(context)!.eh,
+      S.of(context)!.download,
+      S.of(context)!.advanced,
+      S.of(context)!.security,
+      S.of(context)!.about,
     ];
 
     _icons = <IconData>[

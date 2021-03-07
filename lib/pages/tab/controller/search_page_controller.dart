@@ -41,10 +41,10 @@ class SearchPageController extends TabViewController {
     this.searchType = searchType;
   }
 
-  final String initSearchText;
+  final String? initSearchText;
 
-  String searchText;
-  bool _autoComplete = false;
+  String searchText = '';
+  late bool _autoComplete = false;
 
   final String tabIndex = 'search_$searchPageCtrlDepth';
   final CustomPopupMenuController customPopupMenuController =
@@ -62,18 +62,18 @@ class SearchPageController extends TabViewController {
   SearchType get searchType => _searchType.value ?? SearchType.normal;
 
   String get placeholderText {
-    final BuildContext context = Get.context;
+    final BuildContext context = Get.context!;
     logger.v('$searchType');
     switch (searchType) {
       case SearchType.favorite:
-        return '${S.of(context).search} ${S.of(context).tab_favorite}';
+        return '${S.of(context)!.search} ${S.of(context)!.tab_favorite}';
         break;
       case SearchType.watched:
-        return '${S.of(context).search} ${S.of(context).tab_watched}';
+        return '${S.of(context)!.search} ${S.of(context)!.tab_watched}';
         break;
       case SearchType.normal:
       default:
-        return '${S.of(context).search} ${S.of(context).tab_gallery}';
+        return '${S.of(context)!.search} ${S.of(context)!.tab_gallery}';
         break;
     }
   }
@@ -81,18 +81,18 @@ class SearchPageController extends TabViewController {
   set searchType(SearchType val) => _searchType.value = val;
 
   final Rx<ListType> _listType = ListType.init.obs;
-  ListType get listType => _listType.value;
+  ListType get listType => _listType.value ?? ListType.init;
   set listType(ListType val) => _listType.value = val;
 
   final RxList<TagTranslat> qryTags = <TagTranslat>[].obs;
-  String _currQry;
+  late String _currQry;
 
   FocusNode focusNode = FocusNode();
 
-  String _search = '';
+  late String _search = '';
 
-  DateTime _lastInputCompleteAt; //上次输入完成时间
-  String _lastSearchText;
+  late DateTime _lastInputCompleteAt; //上次输入完成时间
+  String _lastSearchText = '';
 
   /// 自动获取焦点
   bool autofocus = false;
@@ -102,7 +102,7 @@ class SearchPageController extends TabViewController {
   final FavoriteViewController _favoriteViewController = Get.find();
 
   /// 控制右侧按钮展开折叠
-  bool get isSearchBarComp => _ehConfigService.isSearchBarComp.value;
+  bool get isSearchBarComp => _ehConfigService.isSearchBarComp.value ?? true;
   set isSearchBarComp(bool val) => _ehConfigService.isSearchBarComp.value = val;
 
   /// 执行搜索
@@ -170,7 +170,7 @@ class SearchPageController extends TabViewController {
       try {
         dbUtil
             .getTagTransFuzzy(_currQry, limit: 200)
-            .then((List<TagTranslat> qryTags) {
+            .then((List<TagTranslat>? qryTags) {
           this.qryTags(qryTags);
         });
       } catch (_) {}
@@ -202,7 +202,7 @@ class SearchPageController extends TabViewController {
     try {
       pageState = PageState.Loading;
 
-      final String fromGid = state.last.gid;
+      final String? fromGid = state?.last.gid;
       final Tuple2<List<GalleryItem>, int> tuple =
           searchType != SearchType.favorite
               ? await Api.getGallery(
@@ -221,7 +221,7 @@ class SearchPageController extends TabViewController {
                 );
       final List<GalleryItem> gallerItemBeans = tuple.item1;
 
-      state.addAll(gallerItemBeans);
+      state?.addAll(gallerItemBeans);
 
       maxPage = tuple.item2;
       curPage += 1;
@@ -304,16 +304,16 @@ class SearchPageController extends TabViewController {
   void onInit() {
     fetchNormal = Api.getGallery;
     searchHistory = _gStore.searchHistory;
-    _autoComplete = initSearchText?.trim()?.isNotEmpty ?? false;
+    _autoComplete = initSearchText?.trim().isNotEmpty ?? false;
     super.onInit();
   }
 
   @override
   Future<void> firstLoad() async {
     searchTextController.addListener(_delayedSearch);
-    if (initSearchText != null && initSearchText.trim().isNotEmpty) {
+    if (initSearchText != null && initSearchText!.trim().isNotEmpty) {
       logger.d('$searchText');
-      searchTextController.text = initSearchText.trim();
+      searchTextController.text = initSearchText!.trim();
       autofocus = false;
     } else {
       // autofocus = true;
@@ -339,11 +339,9 @@ class SearchPageController extends TabViewController {
   /// 打开快速搜索列表
   void quickSearchList() {
     Get.to<String>(
-      QuickSearchListPage(),
+      () => QuickSearchListPage(),
       transition: Transition.cupertino,
-    ).then((String value) {
-      // return searchTextController.text = value;
-      // final String _text = value ?? '';
+    )?.then((String? value) {
       if (value == null) {
         return;
       }
@@ -353,7 +351,7 @@ class SearchPageController extends TabViewController {
             affinity: TextAffinity.downstream, offset: '$value '.length)),
       );
 
-      FocusScope.of(Get.context).requestFocus(focusNode);
+      FocusScope.of(Get.context!).requestFocus(focusNode);
     });
   }
 
@@ -377,7 +375,7 @@ class SearchPageController extends TabViewController {
           affinity: TextAffinity.downstream, offset: '$_newSearch '.length)),
     );
 
-    FocusScope.of(Get.context).requestFocus(focusNode);
+    FocusScope.of(Get.context!).requestFocus(focusNode);
   }
 
   void appendTextToSearch(String text) {
@@ -390,7 +388,7 @@ class SearchPageController extends TabViewController {
           affinity: TextAffinity.downstream, offset: '$_newSearch '.length)),
     );
 
-    FocusScope.of(Get.context).requestFocus(focusNode);
+    FocusScope.of(Get.context!).requestFocus(focusNode);
   }
 
   void clear() {

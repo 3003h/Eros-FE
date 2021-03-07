@@ -16,21 +16,21 @@ class GalleryViewParser {
         '/' +
         urlTemp[urlTemp.length - 1];
 
-    final String cookie = Global.profile?.user?.cookie ?? '';
+    final String cookie = Global.profile.user.cookie ?? '';
 
     final Options options = Options(headers: {
       'Cookie': cookie,
     });
 
-    final String response = await httpManager.get(
+    final String? response = await httpManager.get(
       url,
       options: options,
     );
 
     final Document document = parse(response);
 
-    final Element imageElem = document.querySelector('#sm');
-    final String imageSrc = imageElem.attributes['src'];
+    final Element? imageElem = document.querySelector('#sm');
+    final String imageSrc = imageElem?.attributes['src'] ?? '';
 
     logger.v(' $imageSrc');
 

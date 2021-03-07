@@ -10,8 +10,8 @@ import 'base_service.dart';
 class LocaleService extends ProfileService {
   RxString localCode = window.locale.toString().obs;
 
-  Locale get locale {
-    final String localeSt = localCode.value;
+  Locale? get locale {
+    final String localeSt = localCode.value ?? window.locale.toString();
     if (localeSt == null ||
         localeSt.isEmpty ||
         localeSt == '_' ||
@@ -29,8 +29,9 @@ class LocaleService extends ProfileService {
     final Profile _profile = Global.profile;
 
     localCode.value = _profile.locale;
-    everProfile<String>(localCode, (String value) {
-      _profile.locale = value;
+    everProfile<String>(localCode as RxInterface<String>, (String value) {
+      // _profile.locale = value;
+      Global.profile = _profile.copyWith(locale: value);
     });
   }
 }

@@ -16,11 +16,14 @@ import 'package:line_icons/line_icons.dart';
 import 'tab_base.dart';
 
 class WatchedListTab extends GetView<WatchedViewController> {
-  const WatchedListTab({Key key, this.tabIndex, this.scrollController})
-      : super(key: key);
+  const WatchedListTab({
+    Key? key,
+    this.tabIndex,
+    this.scrollController,
+  }) : super(key: key);
 
-  final String tabIndex;
-  final ScrollController scrollController;
+  final String? tabIndex;
+  final ScrollController? scrollController;
 
   @override
   Widget build(BuildContext context) {
@@ -162,7 +165,7 @@ class WatchedListTab extends GetView<WatchedViewController> {
                           color: CupertinoColors.systemRed,
                         ),
                         Text(
-                          S.of(Get.context).list_load_more_fail,
+                          S.of(Get.context!)!.list_load_more_fail,
                           style: const TextStyle(
                             fontSize: 12,
                           ),
@@ -180,7 +183,7 @@ class WatchedListTab extends GetView<WatchedViewController> {
 
   Widget _getGalleryList() {
     return controller.obx(
-        (List<GalleryItem> state) {
+        (List<GalleryItem>? state) {
           return getGalleryList(
             state,
             tabIndex,

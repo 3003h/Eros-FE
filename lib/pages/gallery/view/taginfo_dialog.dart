@@ -9,7 +9,8 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:line_icons/line_icons.dart';
 
-Future<void> showTagInfoDialog(String text, {String type, int vote = 0}) {
+Future<void> showTagInfoDialog(String text,
+    {required String type, int vote = 0}) {
   vibrateUtil.medium();
   Get.lazyPut(() => TagInfoController(), tag: pageCtrlDepth);
   final TagInfoController controller = Get.find(tag: pageCtrlDepth);
@@ -22,7 +23,7 @@ Future<void> showTagInfoDialog(String text, {String type, int vote = 0}) {
             mainAxisSize: MainAxisSize.min,
             children: [
               const Icon(LineIcons.thumbsUp).paddingOnly(right: 8),
-              Text(S.of(Get.context).tag_vote_up),
+              Text(S.of(Get.context!)!.tag_vote_up),
             ],
           ),
           onPressed: () {
@@ -35,7 +36,7 @@ Future<void> showTagInfoDialog(String text, {String type, int vote = 0}) {
               mainAxisSize: MainAxisSize.min,
               children: [
                 const Icon(LineIcons.thumbsDown).paddingOnly(right: 8),
-                Text(S.of(Get.context).tag_vote_down),
+                Text(S.of(Get.context!)!.tag_vote_down),
               ],
             ),
             onPressed: () {
@@ -50,7 +51,7 @@ Future<void> showTagInfoDialog(String text, {String type, int vote = 0}) {
             mainAxisSize: MainAxisSize.min,
             children: [
               const Icon(LineIcons.undo).paddingOnly(right: 8),
-              Text(S.of(Get.context).tag_withdraw_vote),
+              Text(S.of(Get.context!)!.tag_withdraw_vote),
             ],
           ),
           onPressed: () {
@@ -66,7 +67,7 @@ Future<void> showTagInfoDialog(String text, {String type, int vote = 0}) {
             mainAxisSize: MainAxisSize.min,
             children: [
               const Icon(LineIcons.undo).paddingOnly(right: 8),
-              Text(S.of(Get.context).tag_vote_down),
+              Text(S.of(Get.context!)!.tag_vote_down),
             ],
           ),
           onPressed: () {
@@ -81,7 +82,7 @@ Future<void> showTagInfoDialog(String text, {String type, int vote = 0}) {
   }
 
   return showCupertinoDialog<void>(
-      context: Get.context,
+      context: Get.context!,
       barrierDismissible: true,
       builder: (_) {
         return CupertinoAlertDialog(
@@ -93,7 +94,8 @@ Future<void> showTagInfoDialog(String text, {String type, int vote = 0}) {
 }
 
 class TagDialogView extends StatefulWidget {
-  const TagDialogView({Key key, this.type, this.text}) : super(key: key);
+  const TagDialogView({Key? key, required this.type, required this.text})
+      : super(key: key);
 
   final String type;
   final String text;
@@ -103,10 +105,10 @@ class TagDialogView extends StatefulWidget {
 }
 
 class _TagDialogViewState extends State<TagDialogView> {
-  Future<TagTranslat> _future;
+  late Future<TagTranslat?> _future;
 
-  Future<TagTranslat> _getTaginfo() async {
-    final TagTranslat _taginfo =
+  Future<TagTranslat?> _getTaginfo() async {
+    final TagTranslat? _taginfo =
         await dbUtil.getTagTrans(widget.text, namespace: widget.type);
     return _taginfo;
   }
@@ -119,7 +121,7 @@ class _TagDialogViewState extends State<TagDialogView> {
 
   @override
   Widget build(BuildContext context) {
-    return FutureBuilder<TagTranslat>(
+    return FutureBuilder<TagTranslat?>(
         future: _future,
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.done) {
@@ -138,7 +140,7 @@ class _TagDialogViewState extends State<TagDialogView> {
                 },
               );
             } else {
-              final TagTranslat _taginfo = snapshot.data;
+              final TagTranslat? _taginfo = snapshot.data;
               return Container(
                 child: Text(
                   _taginfo?.intro ?? '',

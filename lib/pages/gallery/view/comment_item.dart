@@ -8,12 +8,13 @@ import 'package:fehviewer/models/base/eh_models.dart';
 import 'package:fehviewer/pages/gallery/controller/comment_controller.dart';
 import 'package:fehviewer/pages/gallery/view/translator_dialog.dart';
 import 'package:fehviewer/route/navigator_util.dart';
-import 'package:fehviewer/utils/cust_lib/flutter_linkify.dart' as clif;
+// import 'package:fehviewer/utils/cust_lib/flutter_linkify.dart' as clif;
 import 'package:fehviewer/utils/logger.dart';
 import 'package:fehviewer/utils/vibrate.dart';
 import 'package:fehviewer/widget/expandable_linkify.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart' hide SelectableText;
+import 'package:flutter_linkify/flutter_linkify.dart' as clif;
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
 import 'package:linkify/linkify.dart';
@@ -23,7 +24,7 @@ const int kMaxline = 4;
 
 class CommentItem extends StatelessWidget {
   const CommentItem(
-      {Key key, @required this.galleryComment, this.simple = false})
+      {Key? key, required this.galleryComment, this.simple = false})
       : super(key: key);
   final GalleryComment galleryComment;
   final bool simple;
@@ -37,7 +38,7 @@ class CommentItem extends StatelessWidget {
     Widget _fullText() {
       return clif.SelectableLinkify(
         onOpen: (link) => _onOpen(context, link: link),
-        text: galleryComment.text,
+        text: galleryComment?.text ?? '',
 //      softWrap: true,
         textAlign: TextAlign.left,
         // 对齐方式
@@ -55,19 +56,19 @@ class CommentItem extends StatelessWidget {
       return Text.rich(TextSpan(
         children: List<InlineSpan>.from(
             galleryComment.span.map((GalleryCommentSpan e) {
-          if (e?.imageUrl != null) {
+          if (e.imageUrl != null) {
             final Map<String, String> _httpHeaders = {
               'Cookie': Global.profile?.user?.cookie ?? '',
             };
             return WidgetSpan(
               child: GestureDetector(
-                onTap: () => _onOpen(context, url: e.href),
+                onTap: () => _onOpen(context, url: e.href!),
                 child: Container(
                   constraints:
                       const BoxConstraints(maxWidth: 100, maxHeight: 140),
                   child: CachedNetworkImage(
                     httpHeaders: _httpHeaders,
-                    imageUrl: e.imageUrl,
+                    imageUrl: e.imageUrl!,
                     placeholder: (_, __) => const CupertinoActivityIndicator(),
                   ),
                 ),
@@ -75,8 +76,8 @@ class CommentItem extends StatelessWidget {
             );
           } else {
             final elements = linkify(
-              e?.text ?? '',
-              options: LinkifyOptions(humanize: false),
+              e.text ?? '',
+              options: const LinkifyOptions(humanize: false),
               linkifiers: defaultLinkifiers,
             );
 
@@ -88,11 +89,11 @@ class CommentItem extends StatelessWidget {
 
             return clif.buildTextSpan(
               elements,
-              style: Theme.of(context).textTheme.bodyText2.merge(_custStyle),
+              style: Theme.of(context).textTheme.bodyText2!.merge(_custStyle),
               onOpen: (link) => _onOpen(context, link: link),
               linkStyle: Theme.of(context)
                   .textTheme
-                  .bodyText2
+                  .bodyText2!
                   .merge(_custStyle)
                   .copyWith(
                     color: Colors.blueAccent,
@@ -139,7 +140,7 @@ class CommentItem extends StatelessWidget {
           _groups.add(_group);
         } else {
           // 空行
-          _groups.add([GalleryCommentSpan()..text = '']);
+          _groups.add([const GalleryCommentSpan(text: '')]);
         }
       }
 
@@ -158,13 +159,13 @@ class CommentItem extends StatelessWidget {
                   };
 
                   return GestureDetector(
-                    onTap: () => _onOpen(context, url: e.href),
+                    onTap: () => _onOpen(context, url: e.href!),
                     child: Container(
                       constraints:
                           const BoxConstraints(maxWidth: 100, maxHeight: 140),
                       child: CachedNetworkImage(
                         httpHeaders: _httpHeaders,
-                        imageUrl: e.imageUrl,
+                        imageUrl: e.imageUrl!,
                         placeholder: (_, __) =>
                             const CupertinoActivityIndicator(),
                       ),
@@ -181,7 +182,7 @@ class CommentItem extends StatelessWidget {
                       color: CupertinoDynamicColor.resolve(
                           ThemeColors.commitText, context),
                     ),
-                    options: LinkifyOptions(humanize: false),
+                    options: const LinkifyOptions(humanize: false),
                   );
                 }
               }).toList()),
@@ -302,17 +303,17 @@ class CommentItem extends StatelessWidget {
                     text: e.text,
                     style: Theme.of(context)
                         .textTheme
-                        .bodyText2
+                        .bodyText2!
                         .merge(_commentTextStyle)
                         .copyWith(
                           color: Colors.blueAccent,
                           decoration: TextDecoration.underline,
                         ),
                     recognizer: controller.genTapGestureRecognizer()
-                      ..onTap = () => _onOpen(context, url: e.href),
+                      ..onTap = () => _onOpen(context, url: e.href!),
                   )).marginOnly(right: 2);
                 case CommentSpanType.text:
-                  final oriText = e?.text ?? '';
+                  final String oriText = e.text ?? '';
                   String _text = oriText.endsWith('\n')
                       ? oriText.substring(0, oriText.length - 1)
                       : oriText;
@@ -334,7 +335,7 @@ class CommentItem extends StatelessWidget {
                   };
 
                   return GestureDetector(
-                    onTap: () => _onOpen(context, url: e.href),
+                    onTap: () => _onOpen(context, url: e.href!),
                     child: Container(
                       constraints:
                           const BoxConstraints(maxWidth: 100, maxHeight: 140),
@@ -388,7 +389,7 @@ class CommentItem extends StatelessWidget {
               // 圆角
               borderRadius: BorderRadius.circular(10),
               child: Container(
-                color: _ehConfigService.isPureDarkTheme.value
+                color: _ehConfigService.isPureDarkTheme.value ?? false
                     ? CupertinoDynamicColor.resolve(
                         ThemeColors.commitBackground, context)
                     : CupertinoDynamicColor.resolve(
@@ -406,7 +407,7 @@ class CommentItem extends StatelessWidget {
                               primaryColor: ThemeColors.commitText),
                           child: Row(
                             children: <Widget>[
-                              if (_ehConfigService.commentTrans.value)
+                              if (_ehConfigService.commentTrans.value ?? false)
                                 CupertinoButton(
                                   padding: const EdgeInsets.symmetric(
                                       horizontal: 12),
@@ -424,16 +425,16 @@ class CommentItem extends StatelessWidget {
                                     showTranslatorDialog(galleryComment.text);
                                   },
                                 ),
-                              if (galleryComment.canVote)
+                              if (galleryComment.canVote ?? false)
                                 CupertinoButton(
                                   padding: const EdgeInsets.symmetric(
                                       horizontal: 12),
                                   minSize: 0,
                                   child: Icon(
-                                    galleryComment.vote > 0
+                                    galleryComment.vote! > 0
                                         ? FontAwesomeIcons.solidThumbsUp
                                         : FontAwesomeIcons.thumbsUp,
-                                    size: galleryComment.vote > 0
+                                    size: galleryComment.vote! > 0
                                         ? kSizeVote
                                         : kSizeNotVote,
                                     color: CupertinoDynamicColor.resolve(
@@ -445,19 +446,19 @@ class CommentItem extends StatelessWidget {
                                     vibrateUtil.light();
                                     logger.i('vote up ${galleryComment.id}');
                                     _commentController
-                                        .commitVoteUp(galleryComment.id);
+                                        .commitVoteUp(galleryComment.id!);
                                   },
                                 ),
-                              if (galleryComment.canVote)
+                              if (galleryComment.canVote ?? false)
                                 CupertinoButton(
                                   padding: const EdgeInsets.symmetric(
                                       horizontal: 12),
                                   minSize: 0,
                                   child: Icon(
-                                    galleryComment.vote < 0
+                                    galleryComment.vote! < 0
                                         ? FontAwesomeIcons.solidThumbsDown
                                         : FontAwesomeIcons.thumbsDown,
-                                    size: galleryComment.vote < 0
+                                    size: galleryComment.vote! < 0
                                         ? kSizeVote
                                         : kSizeNotVote,
                                     color: CupertinoDynamicColor.resolve(
@@ -469,10 +470,10 @@ class CommentItem extends StatelessWidget {
                                     vibrateUtil.light();
                                     logger.i('vote down ${galleryComment.id}');
                                     _commentController
-                                        .commitVoteDown(galleryComment.id);
+                                        .commitVoteDown(galleryComment.id!);
                                   },
                                 ),
-                              if (galleryComment.canEdit)
+                              if (galleryComment.canEdit ?? false)
                                 CupertinoButton(
                                   padding: const EdgeInsets.symmetric(
                                       horizontal: 12),
@@ -489,7 +490,7 @@ class CommentItem extends StatelessWidget {
                                     vibrateUtil.light();
                                     logger.i('edit ${galleryComment.id}');
                                     _commentController.editComment(
-                                      id: galleryComment.id,
+                                      id: galleryComment.id!,
                                       oriComment: galleryComment.text,
                                     );
                                   },
@@ -551,15 +552,15 @@ class CommentItem extends StatelessWidget {
   }
 
   Future<void> _onOpen(BuildContext context,
-      {LinkableElement link, String url}) async {
+      {LinkableElement? link, String? url}) async {
     vibrateUtil.light();
 
-    final _openUrl = url ?? link?.url;
+    final String? _openUrl = url ?? link?.url;
     final RegExp regExp =
         RegExp(r'https?://e[-x]hentai.org/g/[0-9]+/[0-9a-z]+/?');
-    if (await canLaunch(_openUrl)) {
+    if (await canLaunch(_openUrl!)) {
       if (regExp.hasMatch(_openUrl)) {
-        final _realUrl = regExp.firstMatch(_openUrl).group(0);
+        final String? _realUrl = regExp.firstMatch(_openUrl)?.group(0);
         logger.v('in $_realUrl');
         NavigatorUtil.goGalleryPage(
           url: _realUrl,

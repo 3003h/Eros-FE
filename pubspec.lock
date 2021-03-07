@@ -9,7 +9,7 @@ packages:
     source: hosted
     version: "17.0.0"
   analyzer:
-    dependency: "direct overridden"
+    dependency: transitive
     description:
       name: analyzer
       url: "https://pub.flutter-io.cn"
@@ -58,14 +58,14 @@ packages:
     source: hosted
     version: "2.1.0"
   build:
-    dependency: "direct overridden"
+    dependency: transitive
     description:
       name: build
       url: "https://pub.flutter-io.cn"
     source: hosted
     version: "1.6.3"
   build_config:
-    dependency: "direct overridden"
+    dependency: transitive
     description:
       name: build_config
       url: "https://pub.flutter-io.cn"
@@ -170,7 +170,7 @@ packages:
     source: hosted
     version: "1.15.0"
   convert:
-    dependency: "direct overridden"
+    dependency: transitive
     description:
       name: convert
       url: "https://pub.flutter-io.cn"
@@ -189,16 +189,16 @@ packages:
       name: copy_with_extension
       url: "https://pub.flutter-io.cn"
     source: hosted
-    version: "2.0.0-nullsafety.1"
+    version: "2.0.0"
   copy_with_extension_gen:
     dependency: "direct dev"
     description:
       name: copy_with_extension_gen
       url: "https://pub.flutter-io.cn"
     source: hosted
-    version: "2.0.0-nullsafety.1"
+    version: "2.0.0"
   crypto:
-    dependency: "direct overridden"
+    dependency: transitive
     description:
       name: crypto
       url: "https://pub.flutter-io.cn"
@@ -221,9 +221,11 @@ packages:
   custom_pop_up_menu:
     dependency: "direct main"
     description:
-      name: custom_pop_up_menu
-      url: "https://pub.flutter-io.cn"
-    source: hosted
+      path: "."
+      ref: nullsafety
+      resolved-ref: "1b933c63fb7689baa07f348199435c9642af859f"
+      url: "https://github.com/honjow/custom_pop_up_menu.git"
+    source: git
     version: "1.1.2"
   dart_style:
     dependency: transitive
@@ -238,7 +240,7 @@ packages:
       name: dio
       url: "https://pub.flutter-io.cn"
     source: hosted
-    version: "4.0.0-beta5"
+    version: "4.0.0-beta6"
   dio_cookie_manager:
     dependency: "direct main"
     description:
@@ -296,7 +298,7 @@ packages:
       name: extended_image_library
       url: "https://pub.flutter-io.cn"
     source: hosted
-    version: "2.0.1"
+    version: "2.0.2"
   extended_list_library:
     dependency: transitive
     description:
@@ -415,21 +417,21 @@ packages:
       name: floor
       url: "https://pub.flutter-io.cn"
     source: hosted
-    version: "1.0.0-nullsafety.0"
+    version: "1.0.0"
   floor_annotation:
     dependency: transitive
     description:
       name: floor_annotation
       url: "https://pub.flutter-io.cn"
     source: hosted
-    version: "1.0.0-nullsafety.0"
+    version: "1.0.0"
   floor_generator:
     dependency: "direct dev"
     description:
       name: floor_generator
       url: "https://pub.flutter-io.cn"
     source: hosted
-    version: "1.0.0-nullsafety.0"
+    version: "1.0.0"
   flutter:
     dependency: "direct main"
     description: flutter
@@ -441,7 +443,7 @@ packages:
       name: flutter_blurhash
       url: "https://pub.flutter-io.cn"
     source: hosted
-    version: "0.5.2-nullsafety.0"
+    version: "0.5.4-nullsafety.0"
   flutter_cache_manager:
     dependency: "direct main"
     description:
@@ -469,14 +471,16 @@ packages:
       name: flutter_inappwebview
       url: "https://pub.flutter-io.cn"
     source: hosted
-    version: "5.1.0"
+    version: "5.1.0+4"
   flutter_linkify:
     dependency: "direct main"
     description:
-      name: flutter_linkify
-      url: "https://pub.flutter-io.cn"
-    source: hosted
-    version: "4.1.0"
+      path: "."
+      ref: HEAD
+      resolved-ref: "2259c36ba24b2b5cdf2b99b29466a8da322e92e6"
+      url: "https://github.com/MohamedEL-Torky/flutter_linkify"
+    source: git
+    version: "5.0.1"
   flutter_localizations:
     dependency: "direct main"
     description: flutter
@@ -533,7 +537,7 @@ packages:
       name: get
       url: "https://pub.flutter-io.cn"
     source: hosted
-    version: "3.26.0"
+    version: "4.0.0-nullsafety.2"
   get_storage:
     dependency: "direct main"
     description:
@@ -542,7 +546,7 @@ packages:
     source: hosted
     version: "1.4.0"
   glob:
-    dependency: "direct overridden"
+    dependency: transitive
     description:
       name: glob
       url: "https://pub.flutter-io.cn"
@@ -618,13 +622,13 @@ packages:
       url: "https://pub.flutter-io.cn"
     source: hosted
     version: "0.17.0"
-  intl_translation:
+  intl_utils:
     dependency: "direct dev"
     description:
-      name: intl_translation
+      name: intl_utils
       url: "https://pub.flutter-io.cn"
     source: hosted
-    version: "0.17.10+1"
+    version: "2.0.0"
   io:
     dependency: transitive
     description:
@@ -653,15 +657,6 @@ packages:
       url: "https://pub.flutter-io.cn"
     source: hosted
     version: "4.0.2"
-  like_button:
-    dependency: "direct main"
-    description:
-      path: "."
-      ref: HEAD
-      resolved-ref: "8ecb015abba463e34fb323f9e13f8a76eb54270b"
-      url: "git://github.com/fluttercandies/like_button.git"
-    source: git
-    version: "1.0.4"
   line_icons:
     dependency: "direct main"
     description:
@@ -675,7 +670,7 @@ packages:
       name: linkify
       url: "https://pub.flutter-io.cn"
     source: hosted
-    version: "3.0.0"
+    version: "4.0.0"
   liquid_progress_indicator:
     dependency: "direct main"
     description:
@@ -731,7 +726,21 @@ packages:
       name: modal_bottom_sheet
       url: "https://pub.flutter-io.cn"
     source: hosted
-    version: "2.0.0-nullsafety.1"
+    version: "2.0.0"
+  moor:
+    dependency: transitive
+    description:
+      name: moor
+      url: "https://pub.flutter-io.cn"
+    source: hosted
+    version: "4.1.0"
+  moor_flutter:
+    dependency: "direct main"
+    description:
+      name: moor_flutter
+      url: "https://pub.flutter-io.cn"
+    source: hosted
+    version: "4.0.0-nullsafety"
   octo_image:
     dependency: transitive
     description:
@@ -754,7 +763,7 @@ packages:
     source: hosted
     version: "1.2.0"
   package_config:
-    dependency: "direct overridden"
+    dependency: transitive
     description:
       name: package_config
       url: "https://pub.flutter-io.cn"
@@ -815,7 +824,7 @@ packages:
       name: pattern_lock
       url: "https://pub.flutter-io.cn"
     source: hosted
-    version: "2.0.0-nullsafety.1"
+    version: "2.0.0"
   pedantic:
     dependency: transitive
     description:
@@ -829,16 +838,16 @@ packages:
       name: permission_handler
       url: "https://pub.flutter-io.cn"
     source: hosted
-    version: "5.1.0+2"
+    version: "6.0.1"
   permission_handler_platform_interface:
     dependency: transitive
     description:
       name: permission_handler_platform_interface
       url: "https://pub.flutter-io.cn"
     source: hosted
-    version: "2.0.2"
+    version: "3.0.0+1"
   petitparser:
-    dependency: "direct overridden"
+    dependency: transitive
     description:
       name: petitparser
       url: "https://pub.flutter-io.cn"
@@ -850,7 +859,7 @@ packages:
       name: photo_view
       url: "https://pub.flutter-io.cn"
     source: hosted
-    version: "0.10.3"
+    version: "0.11.0"
   platform:
     dependency: transitive
     description:
@@ -859,7 +868,7 @@ packages:
     source: hosted
     version: "3.0.0"
   plugin_platform_interface:
-    dependency: "direct overridden"
+    dependency: transitive
     description:
       name: plugin_platform_interface
       url: "https://pub.flutter-io.cn"
@@ -879,20 +888,13 @@ packages:
       url: "https://pub.flutter-io.cn"
     source: hosted
     version: "1.5.0"
-  popup_menu:
-    dependency: "direct main"
-    description:
-      name: popup_menu
-      url: "https://pub.flutter-io.cn"
-    source: hosted
-    version: "1.0.5"
   pretty_dio_logger:
     dependency: "direct main"
     description:
       name: pretty_dio_logger
       url: "https://pub.flutter-io.cn"
     source: hosted
-    version: "1.1.1"
+    version: "1.2.0-beta"
   process:
     dependency: transitive
     description:
@@ -1179,7 +1181,7 @@ packages:
     source: hosted
     version: "2.0.0"
   uuid:
-    dependency: "direct overridden"
+    dependency: transitive
     description:
       name: uuid
       url: "https://pub.flutter-io.cn"
@@ -1207,7 +1209,7 @@ packages:
     source: hosted
     version: "1.6.3-nullsafety.0"
   watcher:
-    dependency: "direct overridden"
+    dependency: transitive
     description:
       name: watcher
       url: "https://pub.flutter-io.cn"
@@ -1256,7 +1258,7 @@ packages:
     source: hosted
     version: "5.0.2"
   yaml:
-    dependency: "direct overridden"
+    dependency: transitive
     description:
       name: yaml
       url: "https://pub.flutter-io.cn"

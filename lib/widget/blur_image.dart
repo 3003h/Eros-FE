@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 
 class BlurImage extends StatelessWidget {
-  const BlurImage({this.child, this.isBlur = true});
+  const BlurImage({required this.child, this.isBlur = true});
 
   final Widget child;
   final bool isBlur;

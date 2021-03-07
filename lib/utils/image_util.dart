@@ -1,10 +1,10 @@
 import 'package:flutter/widgets.dart';
 
 class ImageUtil {
-  static Rect getImageSize(
+  static Rect? getImageSize(
     ImageProvider imageProvider,
   ) {
-    Rect _rect;
+    Rect? _rect;
     imageProvider
         .resolve(const ImageConfiguration())
         .addListener(ImageStreamListener((ImageInfo info, _) {

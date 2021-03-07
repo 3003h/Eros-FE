@@ -9,7 +9,7 @@ import 'package:fehviewer/pages/gallery/view/rate_dialog.dart';
 import 'package:fehviewer/pages/gallery/view/torrent_dialog.dart';
 import 'package:fehviewer/pages/tab/view/gallery_base.dart';
 import 'package:fehviewer/route/navigator_util.dart';
-import 'package:fehviewer/utils/cust_lib/selectable_text_s.dart';
+import 'package:fehviewer/utils/cust_lib/selectable_text.dart';
 import 'package:fehviewer/utils/logger.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart' hide SelectableText;
@@ -26,9 +26,9 @@ const double kHeaderPaddingTop = 12.0;
 
 class GalleryRepository {
   GalleryRepository({this.tabTag, this.item, this.url});
-  final String tabTag;
-  final GalleryItem item;
-  final String url;
+  final String? tabTag;
+  final GalleryItem? item;
+  final String? url;
 }
 
 class GalleryMainPage extends StatelessWidget {
@@ -36,7 +36,7 @@ class GalleryMainPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final String tabTag = _controller.galleryRepository.tabTag;
+    final String? tabTag = _controller.galleryRepository?.tabTag;
 
     final GalleryItem _item = _controller.galleryItem;
 
@@ -63,7 +63,7 @@ class GalleryMainPage extends StatelessWidget {
                 middle: _controller.hideNavigationBtn
                     ? null
                     : NavigationBarImage(
-                        imageUrl: _item.imgUrl,
+                        imageUrl: _item.imgUrl!,
                         scrollController: _controller.scrollController,
                       ),
                 trailing: _controller.hideNavigationBtn
@@ -97,7 +97,7 @@ class GalleryMainPage extends StatelessWidget {
                           ),
                         ],
                       )
-                    : ReadButton(gid: _item.gid).paddingOnly(right: 4),
+                    : ReadButton(gid: _item.gid ?? '').paddingOnly(right: 4),
               )),
           CupertinoSliverRefreshControl(
             onRefresh: _controller.handOnRefresh,
@@ -116,9 +116,9 @@ class GalleryMainPage extends StatelessWidget {
 // 导航栏封面小图
 class NavigationBarImage extends StatelessWidget {
   const NavigationBarImage({
-    Key key,
-    @required this.imageUrl,
-    @required this.scrollController,
+    Key? key,
+    required this.imageUrl,
+    required this.scrollController,
   }) : super(key: key);
 
   final String imageUrl;
@@ -126,7 +126,7 @@ class NavigationBarImage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final double _statusBarHeight = MediaQuery.of(Get.context).padding.top;
+    final double _statusBarHeight = MediaQuery.of(Get.context!).padding.top;
     return GestureDetector(
       onTap: () {
         scrollController.animateTo(0,
@@ -145,11 +145,11 @@ class NavigationBarImage extends StatelessWidget {
 // 画廊内容
 class GalleryDetail extends StatelessWidget {
   const GalleryDetail({
-    Key key,
+    Key? key,
     this.tabTag,
   }) : super(key: key);
 
-  final String tabTag;
+  final String? tabTag;
   GalleryPageController get _controller => Get.find(tag: pageCtrlDepth);
 
   @override
@@ -166,20 +166,21 @@ class _DetailFromUrl extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return _controller.obx(
-      (GalleryItem state) {
+      (GalleryItem? state) {
         return SliverToBoxAdapter(
           child: Column(
             children: <Widget>[
-              GalleryHeader(
-                galleryItem: state,
-                tabTag: '',
-              ),
+              if (state != null)
+                GalleryHeader(
+                  galleryItem: state,
+                  tabTag: '',
+                ),
               Divider(
                 height: 0.5,
                 color: CupertinoDynamicColor.resolve(
                     CupertinoColors.systemGrey4, context),
               ),
-              _DatailWidget(state: state),
+              if (state != null) _DatailWidget(state: state),
             ],
           ),
         );
@@ -195,7 +196,7 @@ class _DetailFromUrl extends StatelessWidget {
           ),
         ),
       ),
-      onError: (String err) {
+      onError: (String? err) {
         logger.e(' $err');
         return SliverFillRemaining(
           child: Container(
@@ -213,8 +214,8 @@ class _DetailFromUrl extends StatelessWidget {
 
 class _DatailWidget extends StatelessWidget {
   const _DatailWidget({
-    Key key,
-    @required this.state,
+    Key? key,
+    required this.state,
   }) : super(key: key);
 
   final GalleryItem state;
@@ -230,10 +231,9 @@ class _DatailWidget extends StatelessWidget {
               _controller.isRatinged
                   ? FontAwesomeIcons.solidStar
                   : FontAwesomeIcons.star,
-              title: S.of(context).p_Rate,
-              onTap: state.apiuid?.isNotEmpty ?? false
+              title: S.of(context)!.p_Rate,
+              onTap: state?.apiuid?.isNotEmpty ?? false
                   ? () {
-                      // logger.d(' showRateDialog');
                       showRateDialog(context);
                     }
                   : null,
@@ -243,7 +243,7 @@ class _DatailWidget extends StatelessWidget {
       Expanded(
         child: TextBtn(
           FontAwesomeIcons.solidArrowAltCircleDown,
-          title: S.of(context).p_Download,
+          title: S.of(context)!.p_Download,
           onTap: Global.inDebugMode ? _controller.downloadGallery : null,
         ),
       ),
@@ -251,8 +251,8 @@ class _DatailWidget extends StatelessWidget {
       Expanded(
         child: TextBtn(
           FontAwesomeIcons.magnet,
-          title: '${S.of(context).p_Torrent}(${state.torrentcount ?? 0})',
-          onTap: state.torrentcount != '0'
+          title: '${S.of(context)!.p_Torrent}(${state?.torrentcount ?? 0})',
+          onTap: state?.torrentcount != '0'
               ? () async {
                   showTorrentDialog();
                 }
@@ -263,7 +263,7 @@ class _DatailWidget extends StatelessWidget {
       Expanded(
         child: TextBtn(
           FontAwesomeIcons.solidFileArchive,
-          title: S.of(Get.context).p_Archiver,
+          title: S.of(Get.context!)!.p_Archiver,
           onTap: () async {
             showArchiverDialog();
           },
@@ -273,13 +273,14 @@ class _DatailWidget extends StatelessWidget {
       Expanded(
         child: TextBtn(
           FontAwesomeIcons.solidImages,
-          title: S.of(context).p_Similar,
+          title: S.of(context)!.p_Similar,
           onTap: () {
-            final String title = state.englishTitle
-                .replaceAll(RegExp(r'(\[.*?\]|\(.*?\))|{.*?}'), '')
-                .trim()
-                .split('\|')
-                .first;
+            final String title = state?.englishTitle ??
+                ''
+                    .replaceAll(RegExp(r'(\[.*?\]|\(.*?\))|{.*?}'), '')
+                    .trim()
+                    .split('\|')
+                    .first;
             logger.i(' search "$title"');
             NavigatorUtil.goGalleryListBySearch(simpleSearch: '"$title"');
             // NavigatorUtil.goGalleryListBySearch(simpleSearch: title);
@@ -300,7 +301,7 @@ class _DatailWidget extends StatelessWidget {
               CupertinoColors.systemGrey4, context),
         ),
         // 标签
-        TagBox(listTagGroup: state.tagGroup),
+        TagBox(listTagGroup: state!.tagGroup!),
         const TopComment(),
         Container(
           margin: const EdgeInsets.only(top: 4),
@@ -310,7 +311,7 @@ class _DatailWidget extends StatelessWidget {
         ),
         PreviewGrid(
           previews: _controller.firstPagePreview,
-          gid: state.gid,
+          gid: state!.gid!,
         ),
         MorePreviewButton(hasMorePreview: _controller.hasMorePreview),
       ],
@@ -319,9 +320,9 @@ class _DatailWidget extends StatelessWidget {
 }
 
 class _DetailFromItem extends StatelessWidget {
-  const _DetailFromItem({Key key, this.tabTag}) : super(key: key);
+  const _DetailFromItem({Key? key, this.tabTag}) : super(key: key);
 
-  final String tabTag;
+  final String? tabTag;
 
   GalleryPageController get _controller => Get.find(tag: pageCtrlDepth);
 
@@ -342,12 +343,12 @@ class _DetailFromItem extends StatelessWidget {
                 CupertinoColors.systemGrey4, context),
           ),
           _controller.obx(
-            (GalleryItem state) {
-              logger.d('_controller.obx complte');
-              return _DatailWidget(state: state);
+            (GalleryItem? state) {
+              return state != null
+                  ? _DatailWidget(state: state)
+                  : const SizedBox.shrink();
             },
             onLoading: () {
-              logger.d('_controller.obx onLoading');
               return Container(
                 // height: Get.size.height - _top * 3 - kHeaderHeight,
                 height: 200,

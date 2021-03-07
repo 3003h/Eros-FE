@@ -10,19 +10,21 @@ extension ExtGC on GalleryCache {
       ViewColumnMode.single;
   // set columnMode(ViewColumnMode val) =>
   //     columnModeVal = EnumToString.convertToString(val);
+  GalleryCache copyWithMode(ViewColumnMode val) =>
+      copyWith(columnModeVal: EnumToString.convertToString(val));
 }
 
 extension ExtTabList on TabConfig {
   Map<String, bool> get tabMap {
     final Map<String, bool> _map = <String, bool>{};
     for (final TabItem item in tabItemList) {
-      _map[item.name] = item.enable;
+      _map[item.name] = item.enable ?? false;
     }
     return _map;
   }
 
   List<String> get tabNameList {
-    return tabItemList.map((e) => e.name).toList();
+    return tabItemList.map((TabItem e) => e.name).toList();
   }
 
   void setItemList(Map<String, bool> map, List<String> nameList) {
@@ -39,7 +41,7 @@ extension ExtComment on GalleryComment {
         if (e.imageUrl?.isNotEmpty ?? false) {
           return '[image]${e.href ?? ''} ';
         }
-        return e?.text ?? '';
+        return e.text ?? '';
       }).join();
 }
 
@@ -48,9 +50,11 @@ extension ExtCommentSpan on GalleryCommentSpan {
       EnumToString.fromString(CommentSpanType.values, type ?? '') ??
       CommentSpanType.text;
   // set sType(CommentSpanType val) => type = EnumToString.convertToString(val);
+  GalleryCommentSpan copyWithSpanType(CommentSpanType val) =>
+      copyWith(type: EnumToString.convertToString(val));
 }
 
 extension ExtItem on GalleryItem {
   Map<int, GalleryPreview> get previewMap =>
-      {for (GalleryPreview v in galleryPreview) v.ser: v};
+      {for (GalleryPreview v in galleryPreview ?? []) v.ser: v};
 }

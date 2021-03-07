@@ -22,7 +22,7 @@ class ArchiverController extends GetxController
 
   Future<ArchiverProvider> _fetch() async {
     logger.d(pageController.galleryItem.archiverLink);
-    return await Api.getArchiver(pageController.galleryItem.archiverLink);
+    return await Api.getArchiver(pageController.galleryItem.archiverLink ?? '');
   }
 
   Future<void> _loadData() async {
@@ -42,21 +42,21 @@ class ArchiverController extends GetxController
 
   Future<void> downloadRemote(String dlres) async {
     final String response = await Api.postArchiverRemoteDownload(
-        pageController.galleryItem.archiverLink, dlres);
+        pageController.galleryItem.archiverLink ?? '', dlres);
     showToast(response);
   }
 
   Future<void> downloadLoacal({
-    String dltype,
-    String dlcheck,
+    required String dltype,
+    required String dlcheck,
   }) async {
     Get.back();
     final String _url = await Api.postArchiverLocalDownload(
-        pageController.galleryItem.archiverLink,
+        pageController.galleryItem.archiverLink ?? '',
         dltype: dltype,
         dlcheck: dlcheck);
     _downloadController.downloadArchiverFile(
-      gid: pageController.galleryItem.gid,
+      gid: pageController.galleryItem.gid ?? '',
       title: pageController.title,
       dlType: dltype,
       url: _url,
@@ -65,16 +65,16 @@ class ArchiverController extends GetxController
 }
 
 class ArchiverProviderItem {
-  String dltype;
-  String resolution;
-  String dlres;
-  String size;
-  String price;
+  String? dltype;
+  String? resolution;
+  String? dlres;
+  String? size;
+  String? price;
 }
 
 class ArchiverProvider {
-  String gp;
-  String credits;
-  List<ArchiverProviderItem> hItems;
-  List<ArchiverProviderItem> dlItems;
+  String? gp;
+  String? credits;
+  List<ArchiverProviderItem>? hItems;
+  List<ArchiverProviderItem>? dlItems;
 }

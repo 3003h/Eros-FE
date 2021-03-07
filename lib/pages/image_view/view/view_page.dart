@@ -22,9 +22,9 @@ import '../controller/view_controller.dart';
 double kPageViewPadding = 4.0;
 
 class GalleryViewPage extends GetView<ViewController> {
-  const GalleryViewPage({Key key}) : super(key: key);
+  const GalleryViewPage({Key? key}) : super(key: key);
 
-  ViewState get vState => controller?.vState;
+  ViewState get vState => controller.vState;
 
   /// 画廊图片大图浏览
   @override
@@ -95,7 +95,7 @@ class GalleryViewPage extends GetView<ViewController> {
                           curve: Curves.fastOutSlowIn,
                           duration: const Duration(milliseconds: 300),
                           top: vState.topBarOffset,
-                          child: _buildTopBar(Get.context),
+                          child: _buildTopBar(Get.context!),
                         ),
                         // 底栏
                         AnimatedPositioned(
@@ -255,8 +255,8 @@ class GalleryViewPage extends GetView<ViewController> {
                   behavior: HitTestBehavior.opaque,
                   onTap: () {
                     logger.v('tap share');
-                    showShareActionSheet(Get.context,
-                        previews[controller.vState.itemIndex].largeImageUrl);
+                    showShareActionSheet(Get.context!,
+                        previews[controller.vState.itemIndex].largeImageUrl!);
                   },
                   child: Container(
                     width: 40,
@@ -324,16 +324,15 @@ class GalleryViewPage extends GetView<ViewController> {
                 child: GetBuilder<ViewController>(
                     id: '${GetIds.IMAGE_VIEW_SER}$itemSer',
                     builder: (ViewController controller) {
-                      double _height = () {
+                      double? _height = () {
                         try {
                           final _curPreview = vState.previewMap[itemSer];
-                          return _curPreview.largeImageHeight *
-                              (context.width / _curPreview.largeImageWidth);
+                          return _curPreview!.largeImageHeight! *
+                              (context.width / _curPreview.largeImageWidth!);
                         } on Exception catch (_) {
                           final _curPreview = vState.previewMap[itemSer];
-                          logger.d('${_curPreview.toJson()}');
-                          return _curPreview.height *
-                              (context.width / _curPreview.width);
+                          return _curPreview!.height! *
+                              (context.width / _curPreview.width!);
                         } catch (e) {
                           return null;
                         }
@@ -480,12 +479,12 @@ class GalleryViewPage extends GetView<ViewController> {
     );
   }
 
-  Widget loadingBuilder(BuildContext context, ImageChunkEvent progress) {
+  Widget loadingBuilder(BuildContext context, ImageChunkEvent? progress) {
     return progress != null
         ? Container(
             child: Center(
               child: Text(
-                '${progress.cumulativeBytesLoaded * 100 ~/ progress.expectedTotalBytes} %',
+                '${progress.cumulativeBytesLoaded * 100 ~/ (progress.expectedTotalBytes ?? 1)} %',
                 style: const TextStyle(
                   color: Colors.white,
                 ),
@@ -503,8 +502,8 @@ class GalleryViewPage extends GetView<ViewController> {
 }
 
 class NumStack extends StatelessWidget {
-  const NumStack({Key key, this.text, @required this.child}) : super(key: key);
-  final String text;
+  const NumStack({Key? key, this.text, required this.child}) : super(key: key);
+  final String? text;
   final Widget child;
 
   @override

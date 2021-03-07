@@ -22,7 +22,7 @@ class GStore {
     await _getStore('Download').initStorage;
   }
 
-  GalleryCache getCache(String gid) {
+  GalleryCache? getCache(String gid) {
     final val = ReadWriteValue(gid, '', _cacheStore).val;
     return val.isNotEmpty ? GalleryCache.fromJson(jsonDecode(val)) : null;
   }
@@ -32,29 +32,35 @@ class GStore {
     ReadWriteValue(cache.gid, '', _cacheStore).val = jsonEncode(cache);
   }
 
-  set tabConfig(TabConfig tabConfig) {
-    logger.d('set tabConfig ${tabConfig.toJson()}');
+  set tabConfig(TabConfig? tabConfig) {
+    logger.d('set tabConfig ${tabConfig?.toJson()}');
     ReadWriteValue('tabConfig', '', _profileStore).val = jsonEncode(tabConfig);
   }
 
-  TabConfig get tabConfig {
-    final val = ReadWriteValue('tabConfig', '', _profileStore).val;
-    return val.isNotEmpty ? TabConfig.fromJson(jsonDecode(val)) : null;
+  TabConfig? get tabConfig {
+    final String val =
+        ReadWriteValue('tabConfig', '{"tab_item_list": []}', _profileStore).val;
+    // logger.v('${jsonDecode(val)}');
+    final _config = jsonDecode(val);
+    if (_config['tab_item_list'] == null) {
+      _config['tab_item_list'] = _config['tabItemList'];
+    }
+    return val.isNotEmpty ? TabConfig.fromJson(_config) : null;
   }
 
-  set archiverTaskMap(Map<String, DownloadTaskInfo> taskInfoMap) {
-    logger.d(
-        'set archiverDlMap \n${taskInfoMap.entries.map((e) => '${e.key} = ${e.value.toJson().toString().split(', ').join('\n')}').join('\n')} ');
+  set archiverTaskMap(Map<String, DownloadTaskInfo>? taskInfoMap) {
+    logger.d('set archiverDlMap \n'
+        '${taskInfoMap?.entries.map((e) => '${e.key} = ${e.value.toJson().toString().split(', ').join('\n')}').join('\n')} ');
 
-    // logger.d('jsonEncode(dlMap) => ${jsonEncode(dlMap)}');
-    // logger.d(
-    //     'jsonEncode() => ${jsonEncode(dlMap.entries.map((e) => e.value).toList())}');
+    if (taskInfoMap == null) {
+      return;
+    }
 
     ReadWriteValue('archiverTaskMap', '', _downloadStore).val =
         jsonEncode(taskInfoMap.entries.map((e) => e.value).toList());
   }
 
-  Map<String, DownloadTaskInfo> get archiverTaskMap {
+  Map<String, DownloadTaskInfo>? get archiverTaskMap {
     final val = ReadWriteValue('archiverTaskMap', '', _downloadStore).val;
 
     if (val.isEmpty) {
@@ -65,7 +71,9 @@ class GStore {
     final Map<String, DownloadTaskInfo> _map = <String, DownloadTaskInfo>{};
     for (final dynamic dlItemJson in jsonDecode(val) as List<dynamic>) {
       final DownloadTaskInfo _takInfo = DownloadTaskInfo.fromJson(dlItemJson);
-      _map[_takInfo.tag] = _takInfo;
+      if (_takInfo.tag != null) {
+        _map[_takInfo.tag!] = _takInfo;
+      }
     }
 
     return _map;

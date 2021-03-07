@@ -8,14 +8,14 @@ import 'package:webview_cookie_manager/webview_cookie_manager.dart';
 
 class WebLoginViewIn extends StatelessWidget {
   WebLoginViewIn({
-    Key key,
+    Key? key,
   }) : super(key: key);
 
   final CookieManager _cookieManager = CookieManager.instance();
 
   @override
   Widget build(BuildContext context) {
-    final String title = S.of(context).login_web;
+    final String title = S.of(context)!.login_web;
     InAppWebViewController _controller;
     final WebviewCookieManager cookieManager = WebviewCookieManager();
 
@@ -30,16 +30,24 @@ class WebLoginViewIn extends StatelessWidget {
           onWebViewCreated: (InAppWebViewController webViewController) {
             _controller = webViewController;
           },
-          onLoadStart: (InAppWebViewController controller, Uri url) {
+          onLoadStart: (InAppWebViewController controller, Uri? url) {
             logger.d('Page started loading: $url');
+
+            if (url == null) {
+              return;
+            }
 
             if (!(url.path == '/uconfig.php') && !(url.path == '/index.php')) {
               logger.d('阻止打开 $url');
               controller.stopLoading();
             }
           },
-          onLoadStop: (InAppWebViewController controller, Uri url) async {
+          onLoadStop: (InAppWebViewController controller, Uri? url) async {
             logger.d('Page Finished loading: $url');
+
+            if (url == null) {
+              return;
+            }
 
             if (url.path == '/index.php' && url.queryParameters.isEmpty) {
               final Map<String, String> cookieMap = <String, String>{};

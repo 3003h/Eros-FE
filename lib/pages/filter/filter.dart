@@ -13,14 +13,14 @@ import 'package:get/get.dart';
 /// 筛选画廊类型的按钮
 class GalleryCatButton extends StatefulWidget {
   const GalleryCatButton({
-    Key key,
-    @required this.value,
-    @required this.onChanged,
-    @required this.onColor,
-    Color offColor,
+    Key? key,
+    required this.value,
+    required this.onChanged,
+    this.onColor,
+    Color? offColor,
     this.onTextColor,
-    Color offTextColor,
-    @required this.text,
+    Color? offTextColor,
+    required this.text,
     this.onLongPress,
   })  : offColor = offColor ?? onColor,
         offTextColor = offTextColor ?? onTextColor,
@@ -33,38 +33,38 @@ class GalleryCatButton extends StatefulWidget {
   final ValueChanged<bool> onChanged;
 
   /// 长按回调
-  final VoidCallback onLongPress;
+  final VoidCallback? onLongPress;
 
   /// 显示文本
   final String text;
 
   /// 开启时按钮色
-  final Color onColor;
+  final Color? onColor;
 
   /// 关闭时按钮色
-  final Color offColor;
+  final Color? offColor;
 
   /// 开启时文本颜色
-  final Color onTextColor;
+  final Color? onTextColor;
 
   /// 关闭时文本颜色
-  final Color offTextColor;
+  final Color? offTextColor;
 
   @override
   _GalleryCatButtonState createState() => _GalleryCatButtonState();
 }
 
 class _GalleryCatButtonState extends State<GalleryCatButton> {
-  bool _value;
-  Color _textColor;
-  Color _color;
+  bool _value = false;
+  Color? _textColor;
+  Color? _color;
 
   @override
   Widget build(BuildContext context) {
     // logger.v('GalleryCatButton build');
     return Container(
       child: GestureDetector(
-        onLongPress: () => widget.onLongPress(),
+        onLongPress: () => widget.onLongPress?.call(),
         child: CupertinoButton(
           padding: const EdgeInsets.all(2.0),
           onPressed: _pressBtn,
@@ -103,18 +103,18 @@ class _GalleryCatButtonState extends State<GalleryCatButton> {
 /// 内含十个开关按钮 控制筛选的类型
 /// 最终控制搜索的cat字段
 class GalleryCatFilter extends StatefulWidget {
-  const GalleryCatFilter(
-      {Key key,
-      this.value,
-      this.onChanged,
-      this.margin,
-      this.padding,
-      this.crossAxisCount = 2})
-      : super(key: key);
+  const GalleryCatFilter({
+    Key? key,
+    required this.value,
+    required this.onChanged,
+    this.margin,
+    this.padding,
+    this.crossAxisCount = 2,
+  }) : super(key: key);
 
-  final EdgeInsetsGeometry margin;
+  final EdgeInsetsGeometry? margin;
 
-  final EdgeInsetsGeometry padding;
+  final EdgeInsetsGeometry? padding;
 
   /// cat值
   final int value;
@@ -129,14 +129,15 @@ class GalleryCatFilter extends StatefulWidget {
 }
 
 class _GalleryCatFilterState extends State<GalleryCatFilter> {
-  int _catNum;
-  Map<String, bool> _catMap;
+  int _catNum = 0;
+  Map<String, bool> _catMap = {};
   final List<Widget> _catButttonListWidget = <Widget>[];
 
-  Widget _getCatButton(
-      {@required String catName,
-      Map<String, bool> catMap,
-      ValueChanged<int> onChanged}) {
+  Widget _getCatButton({
+    required String catName,
+    required Map<String, bool> catMap,
+    required ValueChanged<int> onChanged,
+  }) {
     return GalleryCatButton(
       text: catName,
       onChanged: (bool value) {
@@ -151,7 +152,7 @@ class _GalleryCatFilterState extends State<GalleryCatFilter> {
       onTextColor: CupertinoColors.systemGrey6,
       offColor: CupertinoColors.systemGrey4,
       offTextColor: CupertinoColors.systemGrey,
-      value: catMap[catName],
+      value: catMap[catName] ?? true,
     );
   }
 
@@ -192,9 +193,13 @@ class _GalleryCatFilterState extends State<GalleryCatFilter> {
 }
 
 class AdvanceSearchSwitchItem extends StatelessWidget {
-  const AdvanceSearchSwitchItem(
-      {Key key, this.value, this.onChanged, this.title, this.expand = true})
-      : super(key: key);
+  const AdvanceSearchSwitchItem({
+    Key? key,
+    required this.value,
+    required this.onChanged,
+    required this.title,
+    this.expand = true,
+  }) : super(key: key);
 
   final String title;
   final bool value;
@@ -223,10 +228,10 @@ class AdvanceSearchSwitchItem extends StatelessWidget {
 Future<void> showFilterSetting() async {
   final EhConfigService _ehConfigService = Get.find();
   return showCupertinoModalPopup<void>(
-    context: Get.overlayContext,
+    context: Get.overlayContext!,
     builder: (BuildContext context) {
       return CupertinoAlertDialog(
-        title: Text(S.of(context).search),
+        title: Text(S.of(context)!.search),
         content: GalleryFilterView(
           catNum: _ehConfigService.catFilter.value,
           catNumChanged: (int toNum) {
@@ -236,7 +241,7 @@ Future<void> showFilterSetting() async {
         actions: [],
       );
       // return CupertinoActionSheet(
-      //   title: Text(S.of(context).search),
+      //   title: Text(S.of(context)!.search),
       //   actions: [
       //     Padding(
       //       padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 30),
@@ -253,7 +258,7 @@ Future<void> showFilterSetting() async {
       //       onPressed: () {
       //         Get.back();
       //       },
-      //       child: Text(S.of(context).cancel)),
+      //       child: Text(S.of(context)!.cancel)),
       // );
     },
   );

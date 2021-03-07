@@ -6,11 +6,12 @@ import 'package:get/get.dart';
 import 'package:pattern_lock/pattern_lock.dart';
 
 class UnLockPage extends StatefulWidget {
-  const UnLockPage({Key key, this.context}) : super(key: key);
+  const UnLockPage({
+    Key? key,
+  }) : super(key: key);
 
   @override
   _UnLockPageState createState() => _UnLockPageState();
-  final BuildContext context;
 }
 
 class _UnLockPageState extends State<UnLockPage> {
@@ -19,8 +20,8 @@ class _UnLockPageState extends State<UnLockPage> {
   @override
   void initState() {
     super.initState();
-    WidgetsBinding.instance.addPostFrameCallback(
-        (_) => controller.unlockAndback(context: widget.context));
+    WidgetsBinding.instance?.addPostFrameCallback(
+        (_) => controller.unlockAndback(context: context));
   }
 
   @override
@@ -36,7 +37,8 @@ class _UnLockPageState extends State<UnLockPage> {
                       // mainAxisSize: MainAxisSize.min,
                       children: [
                         const Spacer(flex: 2),
-                        if (Global.inDebugMode) _buildPatternLock(context),
+                        if (Global.inDebugMode && false)
+                          _buildPatternLock(context),
                         Expanded(flex: 1, child: _buildUnlock(context)),
                       ],
                     )
@@ -44,7 +46,8 @@ class _UnLockPageState extends State<UnLockPage> {
                       // mainAxisSize: MainAxisSize.min,
                       children: [
                         const Spacer(flex: 2),
-                        if (Global.inDebugMode) _buildPatternLock(context),
+                        if (Global.inDebugMode && false)
+                          _buildPatternLock(context),
                         Expanded(flex: 3, child: _buildUnlock(context)),
                       ],
                     ),

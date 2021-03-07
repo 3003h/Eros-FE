@@ -11,7 +11,7 @@ class SplashPage extends GetView<SplashController> {
   @override
   Widget build(BuildContext context) {
     final Widget container = (controller.sharedText != null &&
-            controller.sharedText.isNotEmpty)
+            (controller.sharedText?.isNotEmpty ?? false))
         ? Container(
             child:
                 const Center(child: CupertinoActivityIndicator(radius: 20.0)),
@@ -28,11 +28,11 @@ class SplashPage extends GetView<SplashController> {
                     color: Colors.grey,
                   ),
                   // Text(
-                  //   S.of(context).welcome_text,
+                  //   S.of(context)!.welcome_text,
                   //   style: const TextStyle(color: Colors.grey),
                   // ),
                   Text(
-                    S.of(context).app_title,
+                    S.of(context)!.app_title,
                     style: const TextStyle(color: Colors.grey),
                   )
                 ],

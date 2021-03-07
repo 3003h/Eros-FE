@@ -40,11 +40,16 @@ class DnsService extends ProfileService {
       final int index =
           _hosts.indexWhere((DnsCache element) => element.host == host);
       if (index < 0) {
-        _hosts.add(DnsCache()
-          ..host = host
-          ..addr = addr);
+        _hosts.add(DnsCache(
+          host: host,
+          addr: addr,
+          ttl: 0,
+          lastResolve: 0,
+          addrs: [],
+        ));
       } else {
-        _hosts[index].addr = addr;
+        // _hosts[index].addr = addr;
+        _hosts[index] = _hosts[index].copyWith(addr: addr);
       }
 
       logger.v('add $host => $addr');
@@ -65,57 +70,73 @@ class DnsService extends ProfileService {
 
     final int index =
         dohCache.indexWhere((DnsCache element) => element.host == host);
-    final DnsCache dnsCache = index >= 0 ? dohCache[index] : null;
+    final DnsCache? dnsCache = index >= 0 ? dohCache[index] : null;
     final int nowTime = DateTime.now().millisecondsSinceEpoch;
     if (dnsCache != null) {
       if (dnsCache.lastResolve != null &&
-          nowTime - dnsCache.lastResolve > updateInterval) {
+          nowTime - (dnsCache.lastResolve ?? -1) > updateInterval) {
         logger.wtf(' updateDoHCache $host');
         // get new and cache
         final String _addr = await DnsUtil.doh(host);
-        dnsCache
-          ..lastResolve = nowTime
-          ..addr = _addr;
+        // dnsCache
+        //   ..lastResolve = nowTime
+        //   ..addr = _addr;
+        dohCache[index] = dnsCache.copyWith(lastResolve: nowTime, addr: _addr);
       }
     } else {
       // get new
       logger.wtf(' get new doh $host');
       final String _addr = await DnsUtil.doh(host);
       // logger.d(' get new doh $host  addr=$_addr');
-      dohCache.add(DnsCache()
-        ..host = host
-        ..lastResolve = nowTime
-        ..addr = _addr);
+      dohCache.add(DnsCache(
+        host: host,
+        lastResolve: nowTime,
+        addr: _addr,
+        ttl: -1,
+        addrs: [],
+      ));
     }
   }
 
   @override
   void onInit() {
     super.onInit();
-    final DnsConfig _dnsConfig = Global.profile.dnsConfig ?? <DnsCache>[];
-    enableCustomHosts.value = _dnsConfig.enableCustomHosts ?? false;
+    final DnsConfig _dnsConfig = Global.profile.dnsConfig;
+    enableCustomHosts.value = _dnsConfig.enableCustomHosts;
     _hosts(_dnsConfig.hosts);
     _dohCache(_dnsConfig.dohCache);
 
-    ever<bool>(enableCustomHosts, (bool value) {
-      _dnsConfig.enableCustomHosts = value;
+    ever<bool>(enableCustomHosts as RxInterface<bool>, (bool value) {
+      // _dnsConfig.enableCustomHosts = value;
+      Global.profile = Global.profile
+          .copyWith(dnsConfig: _dnsConfig.copyWith(enableCustomHosts: value));
       Global.saveProfile();
     });
     ever<List<DnsCache>>(_hosts, (List<DnsCache> value) {
-      _dnsConfig.hosts = value;
+      // _dnsConfig.hosts = value;
+      Global.profile =
+          Global.profile.copyWith(dnsConfig: _dnsConfig.copyWith(hosts: value));
       Global.saveProfile();
     });
 
-    ever<bool>(enableDoH, (bool value) {
-      _dnsConfig.enableDoH = value;
+    ever<bool>(enableDoH as RxInterface<bool>, (bool value) {
+      // _dnsConfig.enableDoH = value;
+      Global.profile = Global.profile
+          .copyWith(dnsConfig: _dnsConfig.copyWith(enableDoH: value));
       Global.saveProfile();
     });
-    enableDoH.value = _dnsConfig.enableDoH ?? false;
-    everProfile<List<DnsCache>>(
-        _dohCache, (List<DnsCache> value) => _dnsConfig.dohCache = value);
+    enableDoH.value = _dnsConfig.enableDoH;
+    everProfile<List<DnsCache>>(_dohCache, (List<DnsCache> value) {
+      // _dnsConfig.dohCache = value;
+      Global.profile = Global.profile
+          .copyWith(dnsConfig: _dnsConfig.copyWith(dohCache: value));
+    });
 
-    enableDomainFronting.value = _dnsConfig.enableDomainFronting ?? false;
-    everProfile<bool>(enableDomainFronting,
-        (bool value) => _dnsConfig.enableDomainFronting = value);
+    enableDomainFronting.value = _dnsConfig.enableDomainFronting;
+    everProfile<bool>(enableDomainFronting as RxInterface<bool>, (bool value) {
+      // _dnsConfig.enableDomainFronting = value;
+      Global.profile = Global.profile.copyWith(
+          dnsConfig: _dnsConfig.copyWith(enableDomainFronting: value));
+    });
   }
 }

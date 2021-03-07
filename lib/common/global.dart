@@ -4,6 +4,7 @@ import 'dart:io';
 import 'package:cookie_jar/cookie_jar.dart';
 import 'package:dio_cookie_manager/dio_cookie_manager.dart';
 import 'package:fehviewer/common/update.dart';
+import 'package:fehviewer/const/const.dart';
 import 'package:fehviewer/const/storages.dart';
 import 'package:fehviewer/models/index.dart';
 import 'package:fehviewer/models/profile.dart';
@@ -52,6 +53,94 @@ const AdvanceSearch kDefAdvanceSearch = AdvanceSearch(
   favSearchNote: true,
 );
 
+const User kDefUser = User(
+  username: '',
+  cookie: '',
+  avatarUrl: '',
+  favcat: [],
+);
+
+const DownloadTaskInfo kDefDownloadTaskInfo = DownloadTaskInfo(
+  tag: '',
+  gid: '',
+  type: '',
+  title: '',
+  taskId: '',
+  dowmloadType: '',
+  status: 0,
+  progress: 0,
+);
+
+const GalleryPreview kDefGalleryPreview = GalleryPreview(
+  isLarge: false,
+  isCache: false,
+  startPrecache: false,
+  ser: -1,
+  href: '',
+  largeImageUrl: '',
+  imgUrl: '',
+  height: -1,
+  width: -1,
+  largeImageHeight: -1,
+  largeImageWidth: -1,
+  offSet: -1,
+  sourceId: '',
+);
+
+const EhConfig kDefEhConfig = EhConfig(
+  jpnTitle: false,
+  tagTranslat: false,
+  tagTranslatVer: '',
+  favoritesOrder: '',
+  siteEx: false,
+  galleryImgBlur: false,
+  favPicker: false,
+  favLongTap: false,
+  lastFavcat: '0',
+  lastShowFavcat: 'a',
+  lastShowFavTitle: '',
+  listMode: '',
+  safeMode: false,
+  catFilter: 0,
+  maxHistory: 100,
+  searchBarComp: true,
+  pureDarkTheme: false,
+  viewModel: '',
+  clipboardLink: false,
+  commentTrans: false,
+  autoLockTimeOut: -1,
+  showPageInterval: true,
+  orientation: '',
+);
+
+const Profile kDefProfile = Profile(
+  user: kDefUser,
+  locale: '',
+  lastLogin: '',
+  theme: '',
+  searchText: [],
+  localFav: LocalFav(gallerys: []),
+  enableAdvanceSearch: false,
+  autoLock: AutoLock(lastLeaveTime: -1, isLocking: false),
+  dnsConfig: DnsConfig(
+    enableDoH: false,
+    enableCustomHosts: false,
+    enableDomainFronting: false,
+    hosts: [],
+    dohCache: [],
+  ),
+  downloadConfig: DownloadConfig(
+    preloadImage: 5,
+    multiDownload: -1,
+    downloadLocatino: '',
+    downloadOrigImage: false,
+  ),
+  ehConfig: kDefEhConfig,
+  advanceSearch: kDefAdvanceSearch,
+);
+
+final Global global = Global();
+
 // 全局配置
 // ignore: avoid_classes_with_only_static_members
 class Global {
@@ -60,55 +149,8 @@ class Global {
   static bool inDebugMode = false;
   static bool isFirstReOpenEhSetting = true;
 
-  static Profile profile = Profile(
-    user: const User(username: '', cookie: '', avatarUrl: '', favcat: []),
-    locale: '',
-    lastLogin: '',
-    theme: '',
-    searchText: [],
-    localFav: const LocalFav(gallerys: []),
-    enableAdvanceSearch: false,
-    autoLock: const AutoLock(lastLeaveTime: -1, isLocking: false),
-    dnsConfig: const DnsConfig(
-      enableDoH: false,
-      enableCustomHosts: false,
-      enableDomainFronting: false,
-      hosts: [],
-      dohCache: [],
-    ),
-    downloadConfig: const DownloadConfig(
-      preloadImage: 5,
-      multiDownload: -1,
-      downloadLocatino: '',
-      downloadOrigImage: false,
-    ),
-    ehConfig: EhConfig(
-      jpnTitle: false,
-      tagTranslat: false,
-      tagTranslatVer: '',
-      favoritesOrder: '',
-      siteEx: false,
-      galleryImgBlur: false,
-      favPicker: false,
-      favLongTap: false,
-      lastFavcat: '',
-      lastShowFavcat: '',
-      lastShowFavTitle: '',
-      listMode: '',
-      safeMode: Platform.isIOS,
-      catFilter: 0,
-      maxHistory: 100,
-      searchBarComp: true,
-      pureDarkTheme: false,
-      viewModel: '',
-      clipboardLink: false,
-      commentTrans: false,
-      autoLockTimeOut: -1,
-      showPageInterval: true,
-      orientation: '',
-    ),
-    advanceSearch: kDefAdvanceSearch,
-  );
+  static Profile profile = kDefProfile.copyWith(
+      ehConfig: kDefEhConfig.copyWith(safeMode: Platform.isIOS));
 
   static History history = const History(history: []);
   static List<GalleryCache> galleryCaches = <GalleryCache>[];
@@ -129,8 +171,8 @@ class Global {
 
   static bool canCheckBiometrics = false;
 
-  // 网络缓存对象
-  // static NetCache netCache = NetCache();
+  User get user => profile.user;
+  set user(User val) => profile = profile.copyWith(user: val);
 
   // init
   static Future<void> init() async {
@@ -191,12 +233,14 @@ class Global {
   }
 
   /// profile初始化
-  static void _profileInit() {
+  static Future<void> _profileInit() async {
+    await _checkReset();
+
     _initProfile();
     _initHistory();
 
-    if ((profile.dnsConfig.enableCustomHosts) ||
-        (profile.dnsConfig.enableDoH)) {
+    if ((profile.dnsConfig.enableCustomHosts ?? false) ||
+        (profile.dnsConfig.enableDoH ?? false)) {
       logger.v('${profile.dnsConfig.enableCustomHosts}');
       HttpOverrides.global = httpProxy;
     }
@@ -206,7 +250,21 @@ class Global {
     final dynamic _profile = StorageUtil().getJSON(PROFILE);
     if (_profile != null) {
       try {
-        profile = Profile.fromJson(jsonDecode(_profile));
+        final Profile _profileObj = Profile.fromJson(jsonDecode(_profile));
+        // logger.v('${_profileObj.toJson()}');
+        profile = kDefProfile.copyWith(
+            user: _profileObj.user,
+            ehConfig: _profileObj.ehConfig,
+            lastLogin: _profileObj.lastLogin,
+            locale: _profileObj.locale,
+            theme: _profileObj.theme,
+            searchText: _profileObj.searchText,
+            localFav: _profileObj.localFav,
+            enableAdvanceSearch: _profileObj.enableAdvanceSearch,
+            advanceSearch: _profileObj.advanceSearch,
+            dnsConfig: _profileObj.dnsConfig,
+            downloadConfig: _profileObj.downloadConfig,
+            autoLock: _profileObj.autoLock);
       } catch (e) {
         print('get profile $e');
         rethrow;
@@ -215,9 +273,24 @@ class Global {
   }
 
   // 持久化Profile信息
-  static Future<bool> saveProfile() {
+  static Future<bool>? saveProfile() {
     // logger.v(profile.toJson());
     return StorageUtil().setJSON(PROFILE, profile);
+  }
+
+  static Future<void> _checkReset() async {
+    final int buildNum = int.parse(packageInfo?.buildNumber ?? '0');
+    logger.d('buildNum $buildNum');
+    final String cleanVer = StorageUtil().getString(CLEAN_VER) ?? '0';
+    logger.d('buildNum $buildNum  , cleanVer $cleanVer');
+    bool cleanFlg = EHConst.cleanDataVer.any(
+        (int element) => buildNum < element && int.parse(cleanVer) < buildNum);
+    if (cleanFlg) {
+      logger.d('clean');
+      profile = kDefProfile;
+      saveProfile();
+      StorageUtil().setString(CLEAN_VER, '$buildNum');
+    }
   }
 
   static void _initGalleryCaches() {
@@ -233,7 +306,7 @@ class Global {
     }
   }
 
-  static Future<bool> saveGalleryCaches() {
+  static Future<bool>? saveGalleryCaches() {
     galleryCaches.forEach((GalleryCache element) {
       // logger.d(' ${element.toJson()}');
     });
@@ -251,7 +324,7 @@ class Global {
     }
   }
 
-  static Future<bool> saveHistory() async {
+  static Future<bool>? saveHistory() {
     return StorageUtil().setJSON(HISTORY, history);
   }
 }

@@ -21,12 +21,12 @@ class AddTagPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return CupertinoPageScaffold(
         navigationBar: CupertinoNavigationBar(
-          middle: Text(S.of(context).add_tags),
-          previousPageTitle: S.of(context).cancel,
+          middle: Text(S.of(context)!.add_tags),
+          previousPageTitle: S.of(context)!.cancel,
           trailing: CupertinoButton(
             minSize: 40,
             padding: const EdgeInsets.only(left: 4),
-            child: Text(S.of(context).done),
+            child: Text(S.of(context)!.done),
             onPressed: () {
               Get.back(result: controller.tags);
             },
@@ -47,7 +47,7 @@ class AddTagPage extends StatelessWidget {
                 ),
                 controller: controller.tagsTextController,
                 focusNode: controller.focusNode,
-                placeholder: S.of(context).add_tag_placeholder,
+                placeholder: S.of(context)!.add_tag_placeholder,
                 placeholderStyle: const TextStyle(
                   fontWeight: FontWeight.w400,
                   color: CupertinoColors.placeholderText,
@@ -131,7 +131,7 @@ class QryTagSliverList extends StatelessWidget {
                         style: TextStyle(
                           fontSize: 14,
                           color: CupertinoDynamicColor.resolve(
-                              CupertinoColors.secondaryLabel, Get.context),
+                              CupertinoColors.secondaryLabel, Get.context!),
                         )),
                   ],
                 ).paddingSymmetric(vertical: 4, horizontal: 20),

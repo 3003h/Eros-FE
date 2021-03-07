@@ -8,16 +8,19 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 class SettingTab extends GetView<SettingViewController> {
-  const SettingTab({Key key, this.tabIndex, this.scrollController})
-      : super(key: key);
-  final String tabIndex;
-  final ScrollController scrollController;
+  const SettingTab({
+    Key? key,
+    this.tabIndex,
+    this.scrollController,
+  }) : super(key: key);
+  final String? tabIndex;
+  final ScrollController? scrollController;
 
   @override
   Widget build(BuildContext context) {
     // logger.d(' SettingTab BuildContext');
     controller.initData(context);
-    final String _title = S.of(context).tab_setting;
+    final String _title = S.of(context)!.tab_setting;
     return CupertinoPageScaffold(
       backgroundColor: !ehTheme.isDarkMode
           ? CupertinoColors.secondarySystemBackground

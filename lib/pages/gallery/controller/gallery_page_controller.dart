@@ -33,7 +33,7 @@ class GalleryPageController extends GetxController
     with StateMixin<GalleryItem> {
   GalleryPageController({this.galleryRepository});
 
-  final GalleryRepository galleryRepository;
+  final GalleryRepository? galleryRepository;
 
   // GalleryPageController.initUrl({@required String url}) {
   //   galleryItem = GalleryItem()..url = url;
@@ -45,7 +45,7 @@ class GalleryPageController extends GetxController
   // }) : gid = galleryItem.gid;
 
   /// 画廊数据对象
-  GalleryItem _galleryItem;
+  late GalleryItem _galleryItem;
 
   GalleryItem get galleryItem => _galleryItem;
 
@@ -59,37 +59,42 @@ class GalleryPageController extends GetxController
   bool isRefresh = false;
 
   final RxBool _fromUrl = false.obs;
-
-  bool get fromUrl => _fromUrl.value;
-
+  bool get fromUrl => _fromUrl.value ?? false;
   set fromUrl(bool val) => _fromUrl.value = val;
 
   final RxBool _isRatinged = false.obs;
-
-  bool get isRatinged => _isRatinged.value;
-
+  bool get isRatinged => _isRatinged.value ?? false;
   set isRatinged(bool val) => _isRatinged.value = val;
 
   // 评分后更新ui和数据
   void ratinged({
-    double ratingUsr,
-    double ratingAvg,
-    int ratingCnt,
-    String colorRating,
+    required double ratingUsr,
+    required double ratingAvg,
+    required int ratingCnt,
+    required String colorRating,
   }) {
     isRatinged = true;
-    galleryItem.isRatinged = true;
+    // galleryItem.isRatinged = true;
+    //
+    // galleryItem.ratingFallBack = ratingUsr;
+    // galleryItem.rating = ratingAvg;
+    // galleryItem.ratingCount = ratingCnt.toString();
+    // galleryItem.colorRating = colorRating;
 
-    galleryItem.ratingFallBack = ratingUsr;
-    galleryItem.rating = ratingAvg;
-    galleryItem.ratingCount = ratingCnt.toString();
-    galleryItem.colorRating = colorRating;
+    galleryItem = galleryItem.copyWith(
+      isRatinged: true,
+      ratingFallBack: ratingUsr,
+      rating: ratingAvg,
+      ratingCount: ratingCnt.toString(),
+      colorRating: colorRating,
+    );
+
     update([GetIds.PAGE_VIEW_HEADER]);
 
-    _itemController.update();
+    _itemController?.update();
   }
 
-  GalleryItemController get _itemController {
+  GalleryItemController? get _itemController {
     try {
       return Get.find(tag: gid);
     } catch (_) {
@@ -97,16 +102,16 @@ class GalleryPageController extends GetxController
     }
   }
 
-  List<GalleryPreview> get previews => galleryItem.galleryPreview;
+  List<GalleryPreview> get previews => galleryItem.galleryPreview ?? [];
   Map<int, GalleryPreview> get previewMap => galleryItem.previewMap;
   int get filecount => int.parse(galleryItem.filecount ?? '0');
 
   final Map<int, int> errCountMap = {};
 
-  String get showKey => galleryItem.showKey;
+  String get showKey => galleryItem.showKey ?? '';
 
   /// 当前缩略图页码
-  int currentPreviewPage;
+  late int currentPreviewPage;
 
   // 正在获取href
   bool isImageInfoGeting = false;
@@ -127,11 +132,14 @@ class GalleryPageController extends GetxController
     scrollController.addListener(_scrollControllerLister);
     hideNavigationBtn = true;
 
-    if (galleryRepository.url != null && galleryRepository.url.isNotEmpty) {
+    if (galleryRepository != null &&
+        galleryRepository!.url != null &&
+        galleryRepository!.url!.isNotEmpty) {
       fromUrl = true;
-      galleryItem = GalleryItem()..url = galleryRepository.url;
+      // galleryItem = GalleryItem()..url = galleryRepository.url;
+      galleryItem = GalleryItem(url: galleryRepository!.url);
     } else {
-      _galleryItem = galleryRepository.item;
+      _galleryItem = galleryRepository!.item!;
     }
 
     _loadData();
@@ -159,34 +167,31 @@ class GalleryPageController extends GetxController
 
   // 阅读按钮开关
   final RxBool _enableRead = false.obs;
-
-  bool get enableRead => _enableRead.value;
+  bool get enableRead => _enableRead.value ?? false;
 
   bool get hasMorePreview {
-    return int.parse(galleryItem?.filecount ?? '0') >
-            firstPagePreview?.length ??
-        0;
+    return int.parse(galleryItem.filecount ?? '0') >
+        (firstPagePreview?.length ?? 0);
   }
 
   // 控制隐藏导航栏按钮和封面
   final RxBool _hideNavigationBtn = true.obs;
-
-  bool get hideNavigationBtn => _hideNavigationBtn.value;
-
+  bool get hideNavigationBtn => _hideNavigationBtn.value ?? true;
   set hideNavigationBtn(bool val) => _hideNavigationBtn.value = val;
 
   // 第一页的缩略图对象数组
-  List<GalleryPreview> _firstPagePreview;
+  late List<GalleryPreview> _firstPagePreview;
 
   List<GalleryPreview> get firstPagePreview => _firstPagePreview;
 
-  void setPreviewAfterRequest(List<GalleryPreview> galleryPreview) {
-    if (galleryPreview.isNotEmpty) {
-      galleryItem.galleryPreview = galleryPreview;
+  void setPreviewAfterRequest(List<GalleryPreview>? galleryPreview) {
+    if (galleryPreview?.isNotEmpty ?? false) {
+      // galleryItem.galleryPreview = galleryPreview;
+      galleryItem = galleryItem.copyWith(galleryPreview: galleryPreview);
     }
 
     _firstPagePreview =
-        galleryItem.galleryPreview.sublist(0, galleryPreview.length);
+        galleryItem.galleryPreview!.sublist(0, galleryPreview?.length);
   }
 
   /// 添加缩略图对象
@@ -209,7 +214,8 @@ class GalleryPageController extends GetxController
 
   /// 是否存在本地收藏中
   set localFav(bool value) {
-    galleryItem.localFav = value;
+    // galleryItem.localFav = value;
+    galleryItem = galleryItem.copyWith(localFav: value);
   }
 
   bool get localFav => galleryItem.localFav ?? false;
@@ -227,20 +233,18 @@ class GalleryPageController extends GetxController
       }
 
       // 检查画廊是否包含在本地收藏中
-      final bool _localFav = _isInLocalFav(galleryItem.gid);
-      galleryItem.localFav = _localFav;
+      final bool _localFav = _isInLocalFav(galleryItem.gid!);
+      // galleryItem.localFav = _localFav;
+      galleryItem = galleryItem.copyWith(localFav: _localFav);
 
-      // logger.d('colorRating i-[${_itemController?.galleryItem?.colorRating}] '
-      //     ' p-[${galleryItem.colorRating}]');
-
-      final String _oriColorRating = galleryItem.colorRating;
-      final String _oriRatingCount = galleryItem.ratingCount;
-      final double _oriRatingFallBack = galleryItem.ratingFallBack;
-      final bool _oriIsRatinged = galleryItem.isRatinged;
+      final String? _oriColorRating = galleryItem.colorRating;
+      final String? _oriRatingCount = galleryItem.ratingCount;
+      final double? _oriRatingFallBack = galleryItem.ratingFallBack;
+      final bool? _oriIsRatinged = galleryItem.isRatinged;
 
       time.showTime('start get galleryItem');
       galleryItem = await Api.getGalleryDetail(
-        inUrl: galleryItem.url,
+        inUrl: galleryItem.url!,
         inGalleryItem: galleryItem,
         refresh: refresh,
       );
@@ -257,23 +261,32 @@ class GalleryPageController extends GetxController
           // 收藏控制器状态更新
           final GalleryFavController _favController =
               Get.find(tag: pageCtrlDepth);
-          _favController.setFav(galleryItem.favcat, galleryItem.favTitle);
+          _favController.setFav(galleryItem.favcat!, galleryItem.favTitle!);
 
           // 评论控制器状态数据更新
           Get.find<CommentController>(tag: pageCtrlDepth)
               .change(galleryItem.galleryComment);
 
           // 评分状态更新
-          isRatinged = galleryItem.isRatinged;
+          isRatinged = galleryItem.isRatinged ?? false;
         } else {
-          galleryItem.ratingFallBack ??= _oriRatingFallBack;
-          galleryItem.ratingCount ??= _oriRatingCount;
-          galleryItem.colorRating = _oriColorRating;
-          galleryItem.isRatinged = _oriIsRatinged;
+          // galleryItem.ratingFallBack ??= _oriRatingFallBack;
+          // galleryItem.ratingCount ??= _oriRatingCount;
+          // galleryItem.colorRating = _oriColorRating;
+          // galleryItem.isRatinged = _oriIsRatinged;
+
+          galleryItem = galleryItem.copyWith(
+            ratingFallBack: galleryItem.ratingFallBack ?? _oriRatingFallBack,
+            ratingCount: galleryItem.ratingCount ?? _oriRatingCount,
+            colorRating: _oriColorRating,
+            isRatinged: _oriIsRatinged,
+          );
         }
       } catch (_) {}
 
-      galleryItem.imgUrl = galleryItem.imgUrl ?? galleryItem.imgUrlL;
+      // galleryItem.imgUrl = galleryItem.imgUrl ?? galleryItem.imgUrlL;
+      galleryItem = galleryItem.copyWith(
+          imgUrl: galleryItem.imgUrl ?? galleryItem.imgUrlL);
 
       // 加入历史
       if (galleryItem.gid != null) {
@@ -290,7 +303,7 @@ class GalleryPageController extends GetxController
       _itemController?.update([gid]);
       return galleryItem;
     } on DioError catch (e) {
-      if (e.type == DioErrorType.response && e.response.statusCode == 404) {
+      if (e.type == DioErrorType.response && e.response?.statusCode == 404) {
         showToast('画廊已被删除');
         rethrow;
       }
@@ -308,7 +321,6 @@ class GalleryPageController extends GetxController
     try {
       final GalleryItem _fetchItem = await _fetchData(refresh: refresh);
       change(_fetchItem, status: RxStatus.success());
-      logger.d('change end');
       time.showTime('change end');
 
       _enableRead.value = true;
@@ -375,7 +387,7 @@ class GalleryPageController extends GetxController
   String get topTitle {
     // logger.d('${galleryItem.japaneseTitle} ${galleryItem.englishTitle}');
 
-    if (_ehConfigService.isJpnTitle.value &&
+    if ((_ehConfigService.isJpnTitle.value ?? false) &&
         (galleryItem?.japaneseTitle?.isNotEmpty ?? false)) {
       return galleryItem?.englishTitle ?? '';
     } else {
@@ -385,7 +397,7 @@ class GalleryPageController extends GetxController
 
   // 根据设置的语言显示的标题
   String get title {
-    if (_ehConfigService.isJpnTitle.value &&
+    if ((_ehConfigService.isJpnTitle.value ?? false) &&
         (galleryItem?.japaneseTitle?.isNotEmpty ?? false)) {
       return galleryItem?.japaneseTitle ?? '';
     } else {
@@ -419,7 +431,7 @@ class GalleryPageController extends GetxController
   }
 
   /// 加载下一页缩略图
-  Future<void> _loarMordPriview({CancelToken cancelToken}) async {
+  Future<void> _loarMordPriview({CancelToken? cancelToken}) async {
     // 增加延时 避免build期间进行 setState
     await Future<void>.delayed(const Duration(milliseconds: 0));
     currentPreviewPage++;
@@ -427,7 +439,7 @@ class GalleryPageController extends GetxController
 
     final List<GalleryPreview> _moreGalleryPreviewList =
         await Api.getGalleryPreview(
-      galleryItem.url,
+      galleryItem.url!,
       page: currentPreviewPage,
       cancelToken: cancelToken,
       refresh: isRefresh,
@@ -437,7 +449,7 @@ class GalleryPageController extends GetxController
   }
 
   // 直接请求目的index所在的缩略图页
-  Future<void> loadPriviewsForSer(int ser, {CancelToken cancelToken}) async {
+  Future<void> loadPriviewsForSer(int ser, {CancelToken? cancelToken}) async {
     //  计算index所在的页码
     final int flen = firstPagePreview.length;
     if (filecount <= flen) {
@@ -448,7 +460,7 @@ class GalleryPageController extends GetxController
     logger.v('ser:$ser 所在页码为$page');
 
     final List<GalleryPreview> _morePreviewList = await Api.getGalleryPreview(
-      galleryItem.url,
+      galleryItem.url!,
       page: page,
       cancelToken: cancelToken,
       refresh: isRefresh, // 刷新画廊后加载缩略图不能从缓存读取，否则在改变每页数量后加载画廊会出错
@@ -464,7 +476,12 @@ class GalleryPageController extends GetxController
 
   // 按顺序翻页加载缩略图对象
   Future<bool> loadPriviewUntilIndex(int index) async {
-    final List<GalleryPreview> _galleryPreviewList = galleryItem.galleryPreview;
+    final List<GalleryPreview>? _galleryPreviewList =
+        galleryItem.galleryPreview;
+
+    if (_galleryPreviewList == null) {
+      return true;
+    }
 
     while (index > _galleryPreviewList.length - 1) {
       logger.d(' index = $index ; len = ${_galleryPreviewList.length}');
@@ -473,67 +490,22 @@ class GalleryPageController extends GetxController
     return true;
   }
 
-  /// 懒加载
-  Future<void> _lazyGetImageHref({int index, CancelToken cancelToken}) async {
-    if (isImageInfoGeting) {
-      return;
-    }
-    isImageInfoGeting = true;
-    // logger.d('length ${previews.length} ; index $index');
-
-    // todo 好像还有点问题
-    if (previews.last.ser - index < 10) {
-      try {
-        final List<GalleryPreview> _moreGalleryPreviewList =
-            await Api.getGalleryPreview(
-          galleryItem.url,
-          page: currentPreviewPage + 1,
-          cancelToken: cancelToken,
-          refresh: isRefresh,
-        );
-
-        // 避免重复添加
-        if (_moreGalleryPreviewList.first.ser >
-            galleryItem.galleryPreview.last.ser) {
-          logger.d('添加图片对象 起始序号${_moreGalleryPreviewList.first.ser}  '
-              '数量${_moreGalleryPreviewList.length}');
-          addAllPreview(_moreGalleryPreviewList);
-        }
-        // 成功后才+1
-        currentPreviewPage++;
-      } catch (e, stack) {
-        showToast('$e');
-        logger.e('$e\n$stack');
-        rethrow;
-      } finally {
-        isImageInfoGeting = false;
-      }
-    }
-    isImageInfoGeting = false;
-  }
-
   /// 获取当前页的图片url 宽高信息
-  Future<GalleryPreview> getImageInfo(
+  Future<GalleryPreview?> getImageInfo(
     int itemSer, {
-    CancelToken cancelToken,
-    bool refresh,
+    CancelToken? cancelToken,
+    bool refresh = false,
     bool changeSource = false,
   }) async {
-    // 数据获取处理
-    // try {
-    //   await _lazyGetImageHref(
-    //     cancelToken: cancelToken,
-    //     index: index,
-    //   );
-    // } catch (e, stack) {
-    //   logger.e('$e \n $stack');
-    // }
-
     try {
       /// 当前缩略图对象
-      final GalleryPreview _curPreview = galleryItem.previewMap[itemSer];
+      final GalleryPreview? _curPreview = galleryItem.previewMap[itemSer];
 
-      final String _largeImageUrl = _curPreview?.largeImageUrl;
+      if (_curPreview == null) {
+        return null;
+      }
+
+      final String? _largeImageUrl = _curPreview.largeImageUrl;
 
       // 大图url为空或者宽高信息为空的时候 都会解析获取
       if (_largeImageUrl != null &&
@@ -542,12 +514,12 @@ class GalleryPageController extends GetxController
           _curPreview.largeImageWidth != null) {
         return galleryItem.previewMap[itemSer];
       } else {
-        final String _sourceId =
-            changeSource ? galleryItem.previewMap[itemSer].sourceId : '';
+        final String? _sourceId =
+            changeSource ? galleryItem.previewMap[itemSer]?.sourceId : '';
 
         try {
           final GalleryPreview _preview = await Api.ftchImageInfo(
-            galleryItem.previewMap[itemSer].href,
+            galleryItem.previewMap[itemSer]!.href!,
             ser: itemSer,
             refresh: refresh,
             sourceId: _sourceId,
@@ -557,11 +529,19 @@ class GalleryPageController extends GetxController
             logger.d('changeSource ${_preview.largeImageUrl}');
           }
 
-          _curPreview
-            ..sourceId = _preview.sourceId
-            ..largeImageUrl = _preview.largeImageUrl
-            ..largeImageWidth = _preview.largeImageWidth
-            ..largeImageHeight = _preview.largeImageHeight;
+          // _curPreview
+          //   ..sourceId = _preview.sourceId
+          //   ..largeImageUrl = _preview.largeImageUrl
+          //   ..largeImageWidth = _preview.largeImageWidth
+          //   ..largeImageHeight = _preview.largeImageHeight;
+
+          galleryItem.previewMap[itemSer] = _curPreview.copyWith(
+            sourceId: _preview.sourceId,
+            largeImageUrl: _preview.largeImageUrl,
+            largeImageWidth: _preview.largeImageWidth,
+            largeImageHeight: _preview.largeImageHeight,
+          );
+
           return _preview;
         } catch (_) {
           rethrow;
@@ -580,8 +560,8 @@ class GalleryPageController extends GetxController
     _downloadController.downloadGalleryIsolate(
       gid: int.parse(gid),
       token: galleryItem.token,
-      url: galleryItem.url,
-      fileCount: int.parse(galleryItem.filecount),
+      url: galleryItem.url!,
+      fileCount: int.parse(galleryItem.filecount ?? '0'),
       title: title,
     );
   }
@@ -590,9 +570,9 @@ class GalleryPageController extends GetxController
     final dynamic _rult = await Get.toNamed(EHRoutes.addTag);
     if (_rult != null && _rult is String) {
       logger.v('addTag $_rult');
-      final TagInfoController controller =
+      final TagInfoController? controller =
           Get.put(TagInfoController(), tag: pageCtrlDepth);
-      controller.tagVoteUp(_rult);
+      controller?.tagVoteUp(_rult);
     }
   }
 }

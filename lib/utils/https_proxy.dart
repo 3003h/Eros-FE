@@ -4,7 +4,7 @@ import 'dart:typed_data';
 
 import 'package:fehviewer/common/global.dart';
 import 'package:fehviewer/common/service/dns_service.dart';
-import 'package:fehviewer/models/dnsCache.dart';
+import 'package:fehviewer/models/base/eh_models.dart';
 import 'package:fehviewer/utils/logger.dart';
 import 'package:fehviewer/utils/utility.dart';
 import 'package:get/get.dart';
@@ -22,15 +22,15 @@ class CustomHttpsProxy {
   static CustomHttpsProxy _getInstance() {
     // 只能有一个实例
     _instance ??= CustomHttpsProxy._internal();
-    return _instance;
+    return _instance!;
   }
 
   /// 单例对象
-  static CustomHttpsProxy _instance;
+  static CustomHttpsProxy? _instance;
 
-  ServerSocket serverSocket;
+  ServerSocket? serverSocket;
 
-  Future<ServerSocket> init() async {
+  Future<ServerSocket?> init() async {
     if (serverSocket == null) {
       await ServerSocket.bind(InternetAddress.anyIPv4, kProxyPort)
           .then((ServerSocket serverSocket) {
@@ -52,7 +52,7 @@ class CustomHttpsProxy {
 
   void close() {
     if (serverSocket != null) {
-      serverSocket.close();
+      serverSocket?.close();
     }
   }
 }
@@ -62,18 +62,18 @@ class ClientConnectionHandler {
 
   final RegExp regx = RegExp(r'CONNECT ([^ :]+)(?::([0-9]+))? HTTP/1.1\r\n');
 
-  Socket server;
+  Socket? server;
   Socket client;
   String content = '';
-  String _oriHost;
-  int port;
+  late String _oriHost;
+  late int port;
 
   final DnsService dnsConfigController = Get.find();
 
   void closeSockets() {
 //    print('socket is going to destroy');
     if (server != null) {
-      server.destroy();
+      server?.destroy();
     }
     client.destroy();
   }
@@ -88,10 +88,10 @@ class ClientConnectionHandler {
       // 建立连接
       content += utf8.decode(data);
       logger.d('\n$content');
-      final RegExpMatch m = regx.firstMatch(content);
+      final RegExpMatch? m = regx.firstMatch(content);
       if (m != null) {
-        _oriHost = m.group(1);
-        port = m.group(2) == null ? 443 : int.parse(m.group(2));
+        _oriHost = m.group(1)!;
+        port = m.group(2) == null ? 443 : int.parse(m.group(2)!);
 
         // 更新doh
         if (enableDoH) {
@@ -107,15 +107,15 @@ class ClientConnectionHandler {
           // 查询自定义hosts
           final int customDnsCacheIndex = _customHosts
               .indexWhere((DnsCache element) => element.host == _oriHost);
-          final DnsCache customDnsCache = customDnsCacheIndex > -1
+          final DnsCache? customDnsCache = customDnsCacheIndex > -1
               ? _customHosts[customDnsCacheIndex]
               : null;
 
           if (enableDoH) {
             final int _dohDnsCacheIndex = dnsConfigController.dohCache
                 .indexWhere((DnsCache element) => element.host == _oriHost);
-            // logger.d('$_oriHost $_dohDnsCacheIndex');
-            final DnsCache dohDnsCache = _dohDnsCacheIndex > -1
+
+            final DnsCache? dohDnsCache = _dohDnsCacheIndex > -1
                 ? _dohDnsCacheList[_dohDnsCacheIndex]
                 : null;
             if (dnsConfigController.enableCustomHosts.value ?? false) {
@@ -168,7 +168,7 @@ class ClientConnectionHandler {
       }
 
       try {
-        server.add(data);
+        server?.add(data);
       } catch (e) {
         print('sever has been shut down');
         closeSockets();
@@ -199,14 +199,14 @@ class ServerConnectionHandler {
   final String host;
   final int port;
   final ClientConnectionHandler handler;
-  Socket server;
-  Socket client;
+  Socket? server;
+  Socket? client;
   String content = '';
 
   //接收报文
   void dataHandler(Uint8List data) {
     try {
-      client.add(data);
+      client?.add(data);
     } on Exception catch (e) {
       print('client has been shut down $e');
       handler.closeSockets();
@@ -227,21 +227,21 @@ class ServerConnectionHandler {
     // print('尝试建立连接： $host:$port');
     server = await Socket.connect(host, port,
         timeout: const Duration(milliseconds: 10000));
-    server.listen(dataHandler,
+    server?.listen(dataHandler,
         onError: errorHandler, onDone: doneHandler, cancelOnError: true);
     handler.server = server;
-    client.write(responce);
+    client?.write(responce);
   }
 }
 
 class HttpProxy extends HttpOverrides {
   HttpProxy(this.host, this.port);
 
-  String host;
-  String port;
+  String? host;
+  String? port;
 
   @override
-  HttpClient createHttpClient(SecurityContext context) {
+  HttpClient createHttpClient(SecurityContext? context) {
     final HttpClient client = super.createHttpClient(context);
     client.badCertificateCallback =
         (X509Certificate cert, String host, int port) {
@@ -251,7 +251,7 @@ class HttpProxy extends HttpOverrides {
   }
 
   @override
-  String findProxyFromEnvironment(Uri url, Map<String, String> environment) {
+  String findProxyFromEnvironment(Uri url, Map<String, String>? environment) {
     if (host == null) {
       return super.findProxyFromEnvironment(url, environment);
     }

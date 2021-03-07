@@ -18,10 +18,10 @@ import 'package:get/get.dart';
 import 'package:line_icons/line_icons.dart';
 
 class FavoriteTab extends GetView<FavoriteViewController> {
-  const FavoriteTab({Key key, this.tabTag, this.scrollController})
+  const FavoriteTab({Key? key, this.tabTag, this.scrollController})
       : super(key: key);
-  final String tabTag;
-  final ScrollController scrollController;
+  final String? tabTag;
+  final ScrollController? scrollController;
 
   @override
   Widget build(BuildContext context) {
@@ -30,9 +30,9 @@ class FavoriteTab extends GetView<FavoriteViewController> {
     return CupertinoPageScaffold(
       child: Obx(() {
         if (userController.isLogin) {
-          if (controller.title.value == null ||
-              controller.title.value.isEmpty) {
-            controller.title.value = S.of(context).all_Favorites;
+          if (controller.title == null ||
+              (controller.title?.isEmpty ?? false)) {
+            controller.title = S.of(context)!.all_Favorites;
           }
           return _buildNetworkFavView(context);
         } else {
@@ -54,7 +54,7 @@ class FavoriteTab extends GetView<FavoriteViewController> {
             mainAxisSize: MainAxisSize.min,
             children: [
               Text(
-                controller.title.value,
+                controller.title ?? '',
               ),
               Obx(() {
                 if (controller.isBackgroundRefresh)
@@ -108,26 +108,11 @@ class FavoriteTab extends GetView<FavoriteViewController> {
                     )
                   ],
                 ),
-                onPressed: controller.setOrder,
+                onPressed: () => controller.setOrder(context),
               ),
               CupertinoButton(
                 padding: const EdgeInsets.all(0),
                 minSize: 36,
-                // child: ClipRRect(
-                //   borderRadius: BorderRadius.circular(8),
-                //   child: Container(
-                //     padding: const EdgeInsets.fromLTRB(4, 2, 4, 2),
-                //     color: CupertinoDynamicColor.resolve(
-                //         CupertinoColors.activeBlue, context),
-                //     child: Obx(() => Text(
-                //           '${controller.curPage.value + 1}',
-                //           style: TextStyle(
-                //               color: CupertinoDynamicColor.resolve(
-                //                   CupertinoColors.secondarySystemBackground,
-                //                   context)),
-                //         )),
-                //   ),
-                // ),
                 child: Container(
                   padding:
                       const EdgeInsets.symmetric(horizontal: 4, vertical: 0),
@@ -168,7 +153,7 @@ class FavoriteTab extends GetView<FavoriteViewController> {
   Widget _buildLocalFavView() {
     return CustomScrollView(slivers: <Widget>[
       CupertinoSliverNavigationBar(
-        largeTitle: Text(S.of(Get.context).local_favorite),
+        largeTitle: Text(S.of(Get.context!)!.local_favorite),
         transitionBetweenRoutes: false,
       ),
       CupertinoSliverRefreshControl(
@@ -209,7 +194,7 @@ class FavoriteTab extends GetView<FavoriteViewController> {
                           color: CupertinoColors.systemRed,
                         ),
                         Text(
-                          S.of(Get.context).list_load_more_fail,
+                          S.of(Get.context!)!.list_load_more_fail,
                           style: const TextStyle(
                             fontSize: 12,
                           ),
@@ -227,7 +212,7 @@ class FavoriteTab extends GetView<FavoriteViewController> {
 
   Widget _getGalleryList() {
     return controller.obx(
-        (List<GalleryItem> state) {
+        (List<GalleryItem>? state) {
           return getGalleryList(
             state,
             tabTag,
@@ -270,22 +255,21 @@ class FavoriteTab extends GetView<FavoriteViewController> {
       ),
       onPressed: () async {
         // 跳转收藏夹选择页
-        Get.toNamed(EHRoutes.selFavorie).then((result) async {
-          if (result.runtimeType == FavcatItemBean) {
-            final FavcatItemBean fav = result;
-            if (controller.curFavcat != fav.favId) {
-              loggerNoStack.v('set fav to ${fav.title}');
-              controller.title(fav.title);
-              controller.enableDelayedLoad = false;
-              controller.curFavcat = fav.favId;
-              ehConfigService.lastShowFavcat = controller.curFavcat;
-              ehConfigService.lastShowFavTitle = fav.title;
-              controller.reLoadDataFirst();
-            } else {
-              loggerNoStack.v('未修改favcat');
-            }
+        final dynamic? result = await Get.toNamed(EHRoutes.selFavorie);
+        if (result != null && result is FavcatItemBean) {
+          final FavcatItemBean fav = result;
+          if (controller.curFavcat != fav.favId) {
+            ehConfigService.lastShowFavcat = fav.favId;
+            ehConfigService.lastShowFavTitle = fav.title;
+            loggerNoStack.v('set fav to ${fav.title}  favId ${fav.favId}');
+            controller.title = fav.title;
+            controller.enableDelayedLoad = false;
+            controller.curFavcat = fav.favId;
+            controller.reLoadDataFirst();
+          } else {
+            loggerNoStack.v('未修改favcat');
           }
-        });
+        }
       },
     );
   }

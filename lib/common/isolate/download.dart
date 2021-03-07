@@ -14,14 +14,12 @@ import 'package:fehviewer/const/const.dart';
 import 'package:fehviewer/models/index.dart' hide CacheConfig;
 import 'package:fehviewer/network/gallery_request.dart';
 import 'package:fehviewer/pages/gallery/controller/gallery_page_controller.dart';
-import 'package:fehviewer/store/db/dao/image_task_dao.dart';
-import 'package:fehviewer/store/db/entity/gallery_image_task.dart';
-import 'package:fehviewer/store/db/entity/gallery_task.dart';
+import 'package:fehviewer/store/floor/dao/image_task_dao.dart';
+import 'package:fehviewer/store/floor/entity/gallery_image_task.dart';
+import 'package:fehviewer/store/floor/entity/gallery_task.dart';
 import 'package:fehviewer/utils/logger.dart';
 import 'package:fehviewer/utils/toast.dart';
 import 'package:fehviewer/utils/utility.dart';
-import 'package:flutter/foundation.dart';
-import 'package:flutter/widgets.dart';
 import 'package:get/get.dart' hide Response;
 import 'package:html/dom.dart';
 import 'package:html/parser.dart' show parse;
@@ -48,9 +46,9 @@ class ProgessBean {
     this.updateImages,
   });
 
-  final int totCount;
-  final int completCount;
-  final List<GalleryImageTask> updateImages;
+  final int? totCount;
+  final int? completCount;
+  final List<GalleryImageTask>? updateImages;
 }
 
 class _RequestBean {
@@ -64,22 +62,22 @@ class _RequestBean {
     this.imageTasks,
   });
 
-  final String appSupportPath;
-  final String appDocPath;
-  final bool isSiteEx;
-  final String downloadPath;
-  final List<GalleryPreview> initPreviews;
-  final GalleryTask galleryTask;
-  final List<GalleryImageTask> imageTasks;
+  final String? appSupportPath;
+  final String? appDocPath;
+  final bool? isSiteEx;
+  final String? downloadPath;
+  final List<GalleryPreview>? initPreviews;
+  final GalleryTask? galleryTask;
+  final List<GalleryImageTask>? imageTasks;
 }
 
 class _ResponseBean {
   _ResponseBean({this.previews, this.progess, this.galleryTask, this.msg});
 
-  final List<GalleryPreview> previews;
-  final ProgessBean progess;
-  final GalleryTask galleryTask;
-  final String msg;
+  final List<GalleryPreview>? previews;
+  final ProgessBean? progess;
+  final GalleryTask? galleryTask;
+  final String? msg;
 }
 
 class _RequestProtocol {
@@ -88,7 +86,7 @@ class _RequestProtocol {
   const _RequestProtocol.addTask(this.data)
       : requestType = _RequestType.addTask;
 
-  final _RequestType requestType;
+  final _RequestType? requestType;
 
   final dynamic data;
 }
@@ -107,15 +105,15 @@ class _ResponseProtocol {
 
   const _ResponseProtocol.error(this.data) : responseType = _ResponseType.error;
 
-  final _ResponseType responseType;
+  final _ResponseType? responseType;
 
   final dynamic data;
 }
 
 class DownloadManager {
   final ReceivePort _receivePort = ReceivePort();
-  SendPort _sendPortToChild;
-  Isolate _isolate;
+  SendPort? _sendPortToChild;
+  Isolate? _isolate;
 
   /// 初始化
   Future<void> init() async {
@@ -140,12 +138,12 @@ class DownloadManager {
         }
 
         if (message is _ResponseProtocol) {
-          final _ResponseType _responseType = message.responseType;
+          final _ResponseType _responseType = message.responseType!;
           final _ResponseBean _resBean = message.data;
           switch (_responseType) {
             case _ResponseType.initDtl: // 明细更新
-              final List<GalleryPreview> _rultPreviews = _resBean.previews;
-              final GalleryTask _galleryTask = _resBean.galleryTask;
+              final List<GalleryPreview> _rultPreviews = _resBean.previews!;
+              final GalleryTask _galleryTask = _resBean.galleryTask!;
               // 更新状态
               final GalleryPageController _pageController =
                   Get.find(tag: pageCtrlDepth);
@@ -180,30 +178,36 @@ class DownloadManager {
               break;
             case _ResponseType.progress: // 进度更新
               // 更新 大图 相关信息
-              final ProgessBean _progess = _resBean.progess;
-              final GalleryTask _galleryTask = _resBean.galleryTask;
+              final ProgessBean _progess = _resBean.progess!;
+              final GalleryTask _galleryTask = _resBean.galleryTask!;
 
               final GalleryPageController _pageController =
                   Get.find(tag: pageCtrlDepth);
 
               logger.v('parent progess '
-                  '${_progess.updateImages.map((e) => e.toString()).join('\n')}');
-              for (final _uptImageTask in _progess.updateImages) {
+                  '${_progess.updateImages!.map((e) => e.toString()).join('\n')}');
+              for (final _uptImageTask in _progess.updateImages!) {
                 final _oriImageTask = await _imageTaskDao.findGalleryTaskByKey(
                     _uptImageTask.gid, _uptImageTask.ser);
 
-                final GalleryImageTask _uptTask = _oriImageTask?.copyWith(
-                  imageUrl: _uptImageTask.imageUrl,
-                  filePath: _uptImageTask.filePath,
-                  sourceId: _uptImageTask.sourceId,
+                final GalleryImageTask _uptTask = _oriImageTask!.copyWith(
+                  imageUrl: _uptImageTask.imageUrl!,
+                  filePath: _uptImageTask.filePath!,
+                  sourceId: _uptImageTask.sourceId!,
                 );
                 if (_uptTask != null) {
                   await _imageTaskDao.updateImageTask(_uptTask);
 
-                  _pageController.previews
-                      .firstWhere((GalleryPreview element) =>
-                          element.ser == _uptImageTask.ser)
-                      .largeImageUrl = _uptImageTask.imageUrl;
+                  // _pageController.previews
+                  //     .firstWhere((GalleryPreview element) =>
+                  //         element.ser == _uptImageTask.ser)
+                  //     .largeImageUrl = _uptImageTask.imageUrl;
+                  final _preIndex = _pageController.previews.indexWhere(
+                      (GalleryPreview element) =>
+                          element.ser == _uptImageTask.ser);
+                  _pageController.previews[_preIndex] = _pageController
+                      .previews[_preIndex]
+                      .copyWith(largeImageUrl: _uptImageTask.imageUrl);
                 }
               }
 
@@ -232,9 +236,9 @@ class DownloadManager {
   }
 
   void addTask(
-      {GalleryTask galleryTask,
-      List<GalleryImageTask> imageTasks,
-      String downloadPath}) {
+      {required GalleryTask galleryTask,
+      List<GalleryImageTask>? imageTasks,
+      String? downloadPath}) {
     logger.d('addTask ${galleryTask.gid} ${galleryTask.title}');
     final GalleryPageController _pageController = Get.find(tag: pageCtrlDepth);
     final _RequestBean _requestBean = _RequestBean(

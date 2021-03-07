@@ -9,11 +9,10 @@ import 'package:html/parser.dart' show parse;
 class GalleryFavParser {
   /// 收藏操作
   static Future<void> galleryAddfavorite(String gid, String token,
-      {String favcat = 'favdel', String favnote}) async {
+      {String favcat = 'favdel', String favnote = ''}) async {
     final HttpManager httpManager = Api.getHttpManager(cache: false);
 
     final String url = '/gallerypopups.php?gid=$gid&t=$token&act=addfav';
-    final String cookie = Global.profile?.user?.cookie ?? '';
 
     final Options _cacheOptions = Api.getCacheOptions(forceRefresh: true);
 
@@ -32,15 +31,12 @@ class GalleryFavParser {
   static Future<List<Map<String, String>>> gallerySelfavcat(
       String gid, String token) async {
     final HttpManager httpManager = Api.getHttpManager(cache: false);
-    // final HttpManager httpManager = HttpManager.getInstance(
-    //     EHConst.getBaseSite(Global.profile.ehConfig.siteEx ?? false));
 
     final String url = '/gallerypopups.php?gid=$gid&t=$token&act=addfav';
-    final String cookie = Global.profile?.user?.cookie ?? '';
 
     final Options _cacheOptions = Api.getCacheOptions(forceRefresh: true);
 
-    final String response = await httpManager.get(
+    final String? response = await httpManager.get(
       url,
       options: _cacheOptions,
     );
@@ -48,7 +44,7 @@ class GalleryFavParser {
     return parserAddFavPage(response);
   }
 
-  static List<Map<String, String>> parserAddFavPage(String response) {
+  static List<Map<String, String>> parserAddFavPage(String? response) {
     // 解析响应信息dom
     final Document document = parse(response);
 
@@ -56,29 +52,33 @@ class GalleryFavParser {
 
     final List<Map<String, String>> favList = <Map<String, String>>[];
 
-    List<Element> favcats =
+    final List<Element> favcats =
         document.querySelectorAll('#galpop > div > div.nosel > div');
     for (final Element fav in favcats) {
       final List<Element> divs = fav.querySelectorAll('div');
       final String favId =
-          divs[0].querySelector('input').attributes['value'].trim();
+          divs[0].querySelector('input')?.attributes['value']?.trim() ?? '';
       final String favTitle = divs[2].text.trim();
-//      logger.v('$favId  $favTitle');
       favList.add(<String, String>{'favId': favId, 'favTitle': favTitle});
     }
 
     return favList.sublist(0, 10);
   }
 
-  static Future<List<Map<String, String>>> getFavcat(
-      {String gid, String token, bool cache = true}) async {
+  static Future<List<Map<String, String>>> getFavcat({
+    String? gid,
+    String? token,
+    bool cache = true,
+  }) async {
     // profile为空或者cache标志否
     if (Global.profile.user.favcat == null ||
-        Global.profile.user.favcat.isEmpty ||
+        Global.profile.user.favcat!.isEmpty ||
         !cache) {
-      if (gid != null && gid.isNotEmpty && token.isNotEmpty) {
-        // logger.v('$gid  $token');
-        Global.profile.user.favcat = await gallerySelfavcat(gid, token);
+      if (gid != null && gid.isNotEmpty && token != null && token.isNotEmpty) {
+        // Global.profile.user.favcat = await gallerySelfavcat(gid, token);
+        final favcat = await gallerySelfavcat(gid, token);
+        Global.profile = Global.profile
+            .copyWith(user: Global.profile.user.copyWith(favcat: favcat));
       }
     }
 
@@ -88,6 +88,9 @@ class GalleryFavParser {
   }
 
   static Future<void> saveFavcat(String gid, String token) async {
-    Global.profile.user.favcat = await gallerySelfavcat(gid, token);
+    // Global.profile.user.favcat = await gallerySelfavcat(gid, token);
+    final favcat = await gallerySelfavcat(gid, token);
+    Global.profile = Global.profile
+        .copyWith(user: Global.profile.user.copyWith(favcat: favcat));
   }
 }

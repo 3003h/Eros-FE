@@ -1,15 +1,19 @@
 import 'package:flutter/material.dart';
 
 class ExpandableText extends StatefulWidget {
-  const ExpandableText(
-      {Key key, this.text, this.maxLines, this.style, this.expand})
-      : super(key: key);
+  const ExpandableText({
+    Key? key,
+    required this.text,
+    this.maxLines,
+    this.style,
+    this.expand = false,
+  }) : super(key: key);
 
   final String text;
 
-  final int maxLines;
+  final int? maxLines;
 
-  final TextStyle style;
+  final TextStyle? style;
 
   final bool expand;
 
@@ -20,14 +24,12 @@ class ExpandableText extends StatefulWidget {
 }
 
 class _ExpandableTextState extends State<ExpandableText> {
-  _ExpandableTextState(this.text, this.maxLines, this.style, this.expand) {
-    expand ??= false;
-  }
+  _ExpandableTextState(this.text, this.maxLines, this.style, this.expand);
   final String text;
 
-  final int maxLines;
+  final int? maxLines;
 
-  final TextStyle style;
+  final TextStyle? style;
 
   bool expand;
 
@@ -64,8 +66,7 @@ class _ExpandableTextState extends State<ExpandableText> {
                   padding: const EdgeInsets.only(top: 2),
                   child: Text(expand ? '收起' : '全文',
                       style: TextStyle(
-                          fontSize: style != null ? style.fontSize : null,
-                          color: Colors.blue)),
+                          fontSize: style?.fontSize, color: Colors.blue)),
                 ),
               ),
             ],

@@ -1,6 +1,5 @@
 import 'package:enum_to_string/enum_to_string.dart';
 import 'package:fehviewer/common/controller/user_controller.dart';
-import 'package:fehviewer/common/global.dart';
 import 'package:fehviewer/common/service/ehconfig_service.dart';
 import 'package:fehviewer/common/service/theme_service.dart';
 import 'package:fehviewer/const/const.dart';
@@ -17,14 +16,6 @@ import 'package:get/get.dart';
 import 'setting_base.dart';
 
 class EhSettingPage extends StatelessWidget {
-  Future<bool> _getDelayed() async {
-    final int _delayed = (Global.isFirstReOpenEhSetting ?? true) ? 0 : 0;
-    // logger.v('$_delayed');
-    await Future<void>.delayed(Duration(milliseconds: _delayed));
-    Global.isFirstReOpenEhSetting = false;
-    return Future<bool>.value(true);
-  }
-
   @override
   Widget build(BuildContext context) {
     final CupertinoPageScaffold cps = CupertinoPageScaffold(
@@ -32,24 +23,10 @@ class EhSettingPage extends StatelessWidget {
             ? CupertinoColors.secondarySystemBackground
             : null,
         navigationBar: CupertinoNavigationBar(
-          middle: Text(S.of(context).eh),
+          middle: Text(S.of(context)!.eh),
         ),
         child: SafeArea(
-          child: FutureBuilder<bool>(
-              future: _getDelayed(),
-              builder: (_, AsyncSnapshot<bool> snapshot) {
-                if (snapshot.connectionState == ConnectionState.done) {
-                  return ListViewEhSetting();
-                  // return Container();
-                } else {
-                  return Container(
-                      alignment: Alignment.center,
-                      padding: const EdgeInsets.only(top: 50, bottom: 100),
-                      child: const CupertinoActivityIndicator(
-                        radius: 14,
-                      ));
-                }
-              }),
+          child: ListViewEhSetting(),
         ));
 
     return cps;
@@ -62,13 +39,14 @@ class ListViewEhSetting extends StatelessWidget {
     final EhConfigService _ehConfigService = Get.find();
     final UserController userController = Get.find();
 
-    final bool _siteEx = _ehConfigService.isSiteEx.value;
-    final bool _jpnTitle = _ehConfigService.isJpnTitle.value;
-    final bool _tagTranslat = _ehConfigService.isTagTranslat.value;
-    final bool _galleryImgBlur = _ehConfigService.isGalleryImgBlur.value;
-    final bool _favLongTap = _ehConfigService.isFavLongTap.value;
+    final bool _siteEx = _ehConfigService.isSiteEx.value ?? false;
+    final bool _jpnTitle = _ehConfigService.isJpnTitle.value ?? false;
+    final bool _tagTranslat = _ehConfigService.isTagTranslat.value ?? false;
+    final bool _galleryImgBlur =
+        _ehConfigService.isGalleryImgBlur.value ?? false;
+    final bool _favLongTap = _ehConfigService.isFavLongTap.value ?? false;
     final bool _isLogin = userController.isLogin;
-    final bool _isClipboar = _ehConfigService.isClipboardLink.value;
+    final bool _isClipboar = _ehConfigService.isClipboardLink.value ?? false;
 
     Future<void> _handleSiteChanged(bool newValue) async {
       _ehConfigService.isSiteEx(newValue);
@@ -104,11 +82,11 @@ class ListViewEhSetting extends StatelessWidget {
     final List<Widget> _list = <Widget>[
       if (_isLogin)
         TextSwitchItem(
-          S.of(context).galery_site,
+          S.of(context)!.galery_site,
           intValue: _siteEx,
           onChanged: _handleSiteChanged,
-          desc: S.of(context).current_site('E-Hentai'),
-          descOn: S.of(context).current_site('ExHentai'),
+          desc: S.of(context)!.current_site('E-Hentai'),
+          descOn: S.of(context)!.current_site('ExHentai'),
         ),
       if (_isLogin)
         const SelectorSettingItem(
@@ -118,8 +96,8 @@ class ListViewEhSetting extends StatelessWidget {
         ),
       if (_isLogin)
         SelectorSettingItem(
-          title: S.of(context).ehentai_settings,
-          selector: S.of(context).setting_on_website,
+          title: S.of(context)!.ehentai_settings,
+          selector: S.of(context)!.setting_on_website,
           onTap: () {
             if (GetPlatform.isAndroid) {
               // Get.to(() => WebMySettingAP());
@@ -134,8 +112,8 @@ class ListViewEhSetting extends StatelessWidget {
       if (_isLogin)
         SelectorSettingItem(
           hideLine: true,
-          title: S.of(context).ehentai_my_tags,
-          selector: S.of(context).mytags_on_website,
+          title: S.of(context)!.ehentai_my_tags,
+          selector: S.of(context)!.mytags_on_website,
           onTap: () {
             if (GetPlatform.isAndroid) {
               // Get.to(() => WebMyTagsAP());
@@ -153,7 +131,7 @@ class ListViewEhSetting extends StatelessWidget {
           onChanged: _handleTagTranslatChanged,
           desc: '当前版本:${_ehConfigService.tagTranslatVer.value ?? "无"}')),
       TextSwitchItem(
-        S.of(context).show_jpn_title,
+        S.of(context)!.show_jpn_title,
         intValue: _jpnTitle,
         onChanged: _handleJpnTitleChanged,
         // desc: '如果该画廊有日文标题则优先显示',
@@ -203,13 +181,13 @@ class ListViewEhSetting extends StatelessWidget {
 
 /// 列表模式切换
 Widget _buildListModeItem(BuildContext context) {
-  final String _title = S.of(context).list_mode;
+  final String _title = S.of(context)!.list_mode;
   final EhConfigService ehConfigService = Get.find();
 
   final Map<ListModeEnum, String> modeMap = <ListModeEnum, String>{
-    ListModeEnum.list: S.of(context).listmode_medium,
-    ListModeEnum.simpleList: S.of(context).listmode_small,
-    ListModeEnum.waterfall: S.of(context).listmode_waterfall,
+    ListModeEnum.list: S.of(context)!.listmode_medium,
+    ListModeEnum.simpleList: S.of(context)!.listmode_small,
+    ListModeEnum.waterfall: S.of(context)!.listmode_waterfall,
   };
 
   List<Widget> _getModeList(BuildContext context) {
@@ -218,11 +196,11 @@ Widget _buildListModeItem(BuildContext context) {
           onPressed: () {
             Get.back(result: element);
           },
-          child: Text(modeMap[element]));
+          child: Text(modeMap[element] ?? ''));
     }).toList());
   }
 
-  Future<ListModeEnum> _showDialog(BuildContext context) {
+  Future<ListModeEnum?> _showDialog(BuildContext context) {
     return showCupertinoModalPopup<ListModeEnum>(
         context: context,
         builder: (BuildContext context) {
@@ -231,7 +209,7 @@ Widget _buildListModeItem(BuildContext context) {
                 onPressed: () {
                   Get.back();
                 },
-                child: Text(S.of(context).cancel)),
+                child: Text(S.of(context)!.cancel)),
             actions: <Widget>[
               ..._getModeList(context),
             ],
@@ -242,10 +220,11 @@ Widget _buildListModeItem(BuildContext context) {
 
   return Obx(() => SelectorSettingItem(
         title: _title,
-        selector: modeMap[ehConfigService.listMode.value ?? ListModeEnum.list],
+        selector:
+            modeMap[ehConfigService.listMode.value ?? ListModeEnum.list] ?? '',
         onTap: () async {
           logger.v('tap ModeItem');
-          final ListModeEnum _result = await _showDialog(context);
+          final ListModeEnum? _result = await _showDialog(context);
           if (_result != null) {
             // ignore: unnecessary_string_interpolations
             logger.v('${EnumToString.convertToString(_result)}');
@@ -257,12 +236,12 @@ Widget _buildListModeItem(BuildContext context) {
 
 /// 历史记录数量切换
 Widget _buildHistoryMaxItem(BuildContext context) {
-  final String _title = S.of(context).max_history;
+  final String _title = S.of(context)!.max_history;
   final EhConfigService ehConfigService = Get.find();
 
   String _getMaxNumText(int max) {
     if (max == 0) {
-      return S.of(context).unlimited;
+      return S.of(context)!.unlimited;
     } else {
       return '$max';
     }
@@ -278,7 +257,7 @@ Widget _buildHistoryMaxItem(BuildContext context) {
     }).toList());
   }
 
-  Future<int> _showActionSheet(BuildContext context) {
+  Future<int?> _showActionSheet(BuildContext context) {
     return showCupertinoModalPopup<int>(
         context: context,
         builder: (BuildContext context) {
@@ -288,7 +267,7 @@ Widget _buildHistoryMaxItem(BuildContext context) {
                 onPressed: () {
                   Get.back();
                 },
-                child: Text(S.of(context).cancel)),
+                child: Text(S.of(context)!.cancel)),
             actions: <Widget>[
               ..._getModeList(context),
             ],
@@ -303,7 +282,7 @@ Widget _buildHistoryMaxItem(BuildContext context) {
         hideLine: true,
         onTap: () async {
           logger.v('tap ModeItem');
-          final int _result = await _showActionSheet(context);
+          final int? _result = await _showActionSheet(context);
           if (_result != null) {
             ehConfigService.maxHistory.value = _result;
           }

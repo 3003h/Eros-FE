@@ -9,11 +9,11 @@ import 'package:get/get_utils/src/platform/platform_io.dart';
 
 class DownloadArchiverItem extends GetView<DownloadViewController> {
   const DownloadArchiverItem({
-    Key key,
-    @required this.title,
+    Key? key,
+    required this.title,
     this.progress = 0,
-    @required this.status,
-    @required this.index,
+    required this.status,
+    required this.index,
   }) : super(key: key);
   final String title;
   final int progress;
@@ -44,10 +44,9 @@ class DownloadArchiverItem extends GetView<DownloadViewController> {
                         value: (progress ?? 0.0) / 100.0,
                         backgroundColor: CupertinoDynamicColor.resolve(
                             CupertinoColors.secondarySystemFill, context),
-                        valueColor:
-                            AlwaysStoppedAnimation<CupertinoDynamicColor>(
-                                CupertinoDynamicColor.resolve(
-                                    CupertinoColors.activeBlue, context)),
+                        valueColor: AlwaysStoppedAnimation<Color>(
+                            CupertinoDynamicColor.resolve(
+                                CupertinoColors.activeBlue, context)),
                       ).paddingOnly(right: 8.0),
                     ),
                     Text('${progress ?? 0} %',

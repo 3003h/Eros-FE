@@ -10,7 +10,7 @@ import 'package:get/get.dart';
 /// 收藏操作处理类
 class GalleryFavButton extends StatelessWidget {
   const GalleryFavButton({
-    Key key,
+    Key? key,
   }) : super(key: key);
 
   GalleryFavController get _favController => Get.find(tag: pageCtrlDepth);
@@ -39,7 +39,7 @@ class GalleryFavButton extends StatelessWidget {
               child: Text(
                 _favController.isFav
                     ? _favController.favTitle
-                    : S.of(context).notFav,
+                    : S.of(context)!.notFav,
                 style: const TextStyle(
                   fontSize: 11,
                 ),
@@ -58,7 +58,7 @@ class GalleryFavButton extends StatelessWidget {
         Container(
           height: 14,
           child: Text(
-            S.of(context).processing,
+            S.of(context)!.processing,
             style: const TextStyle(
               fontSize: 11,
             ),
@@ -81,23 +81,23 @@ class GalleryFavButton extends StatelessWidget {
 
 class FavcatAddListItem extends StatefulWidget {
   const FavcatAddListItem({
-    Key key,
-    @required VoidCallback onTap,
-    @required this.text,
+    Key? key,
+    required VoidCallback onTap,
+    required this.text,
     this.favcat,
   })  : _onTap = onTap,
         super(key: key);
 
   final VoidCallback _onTap;
   final String text;
-  final String favcat;
+  final String? favcat;
 
   @override
   _FavcatAddListItemState createState() => _FavcatAddListItemState();
 }
 
 class _FavcatAddListItemState extends State<FavcatAddListItem> {
-  Color _color;
+  Color? _color;
 
   @override
   Widget build(BuildContext context) {
@@ -124,7 +124,7 @@ class _FavcatAddListItemState extends State<FavcatAddListItem> {
                     child: Icon(
                       FontAwesomeIcons.solidHeart,
                       color: CupertinoDynamicColor.resolve(
-                          ThemeColors.favColor[widget.favcat], context),
+                          ThemeColors.favColor[widget.favcat]!, context),
                       size: 18,
                     ),
                   ),

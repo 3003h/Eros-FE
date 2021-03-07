@@ -10,16 +10,13 @@ const double kSize = 50.0;
 /// 静态控件
 class StaticRatingBar extends StatelessWidget {
   const StaticRatingBar({
-    double rate,
-    Color colorLight,
-    Color colorDark,
-    int count,
+    this.rate = kMaxRate,
+    this.colorLight = const Color(0xffeeeeee),
+    this.colorDark = const Color(0xffFF962E),
+    this.count = kNumberOfStarts,
     this.size = kSize,
     this.radiusRatio = 1.1,
-  })  : rate = rate ?? kMaxRate,
-        count = count ?? kNumberOfStarts,
-        colorDark = colorDark ?? const Color(0xffeeeeee),
-        colorLight = colorLight ?? const Color(0xffFF962E);
+  });
 
   /// 星星数量
   final int count;
@@ -32,9 +29,9 @@ class StaticRatingBar extends StatelessWidget {
 
   final double radiusRatio;
 
-  final Color colorLight;
+  final Color? colorLight;
 
-  final Color colorDark;
+  final Color? colorDark;
 
   Widget buildStar() {
     return SizedBox(
@@ -43,7 +40,7 @@ class StaticRatingBar extends StatelessWidget {
         child: CustomPaint(
           painter: _PainterStars(
               size: size / 2,
-              color: colorLight,
+              color: colorLight ?? const Color(0xffeeeeee),
               radiusRatio: radiusRatio,
               style: PaintingStyle.fill,
               strokeWidth: 0.0),
@@ -57,7 +54,7 @@ class StaticRatingBar extends StatelessWidget {
         child: CustomPaint(
           painter: _PainterStars(
               size: size / 2,
-              color: colorDark,
+              color: colorDark ?? const Color(0xffFF962E),
               radiusRatio: radiusRatio,
               style: PaintingStyle.fill,
               strokeWidth: 0.0),
@@ -79,7 +76,7 @@ class StaticRatingBar extends StatelessWidget {
 }
 
 class _RatingBarClipper extends CustomClipper<Rect> {
-  _RatingBarClipper({this.width}) : assert(width != null);
+  _RatingBarClipper({required this.width});
   final double width;
 
   @override
@@ -171,7 +168,11 @@ class _Point {
 
 class _PainterStars extends CustomPainter {
   _PainterStars(
-      {this.size, this.color, this.strokeWidth, this.style, this.radiusRatio});
+      {required this.size,
+      required this.color,
+      required this.strokeWidth,
+      required this.style,
+      required this.radiusRatio});
 
   final double size;
   final Color color;
@@ -216,20 +217,19 @@ class _PainterStars extends CustomPainter {
 }
 
 class RatingBar extends StatefulWidget {
-  const RatingBar(
-      {this.onChange,
-      this.value,
-      this.size = kSize,
-      this.count = kNumberOfStarts,
-      this.strokeWidth,
-      this.radiusRatio = 1.1,
-      Color colorDark,
-      Color colorLight})
-      : colorDark = colorDark ?? const Color(0xffDADBDF),
-        colorLight = colorLight ?? const Color(0xffFF962E);
+  const RatingBar({
+    this.onChange,
+    required this.value,
+    this.size = kSize,
+    this.count = kNumberOfStarts,
+    this.strokeWidth = 0,
+    this.radiusRatio = 1.1,
+    this.colorDark = const Color(0xffDADBDF),
+    this.colorLight = const Color(0xffFF962E),
+  });
 
   /// 回调
-  final ValueChanged<int> onChange;
+  final ValueChanged<int>? onChange;
 
   /// 大小， 默认 50
   final double size;
@@ -247,7 +247,7 @@ class RatingBar extends StatefulWidget {
   final Color colorDark;
 
   /// 如果有值，那么就是空心的
-  final double strokeWidth;
+  final double? strokeWidth;
 
   /// 越大，五角星越圆
   final double radiusRatio;
@@ -259,8 +259,13 @@ class RatingBar extends StatefulWidget {
 }
 
 class _PainterStar extends CustomPainter {
-  _PainterStar(
-      {this.size, this.color, this.strokeWidth, this.style, this.radiusRatio});
+  _PainterStar({
+    required this.size,
+    required this.color,
+    required this.strokeWidth,
+    required this.style,
+    required this.radiusRatio,
+  });
 
   final double size;
   final Color color;
@@ -296,7 +301,7 @@ class _PainterStar extends CustomPainter {
 }
 
 class _RatingBarState extends State<RatingBar> {
-  int _value;
+  int? _value;
 
   @override
   void initState() {
@@ -305,14 +310,14 @@ class _RatingBarState extends State<RatingBar> {
   }
 
   Widget buildItem(int index, double size, int count) {
-    final bool selected = _value != null && _value > index;
+    final bool selected = _value != null && _value! > index;
 
-    final bool stroke = widget.strokeWidth != null && widget.strokeWidth > 0;
+    final bool stroke = widget.strokeWidth != null && widget.strokeWidth! > 0;
 
     return GestureDetector(
       onTap: () {
         if (widget.onChange != null) {
-          widget.onChange(index + 1);
+          widget.onChange!(index + 1);
         }
 
         setState(() {
@@ -331,7 +336,8 @@ class _RatingBarState extends State<RatingBar> {
                 style: !selected && stroke
                     ? PaintingStyle.stroke
                     : PaintingStyle.fill,
-                strokeWidth: !selected && stroke ? widget.strokeWidth : 0.0),
+                strokeWidth:
+                    !selected && stroke ? (widget.strokeWidth ?? 0.0) : 0.0),
           )),
     );
   }

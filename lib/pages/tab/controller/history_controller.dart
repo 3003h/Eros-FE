@@ -37,19 +37,19 @@ class HistoryViewController extends GetxController
   // 清除历史记录 Dialog
   Future<void> clearHistory() async {
     return showCupertinoDialog<void>(
-      context: Get.context,
+      context: Get.context!,
       builder: (BuildContext context) {
         return CupertinoAlertDialog(
-          title: Text(S.of(context).t_Clear_all_history),
+          title: Text(S.of(context)!.t_Clear_all_history),
           actions: <Widget>[
             CupertinoDialogAction(
-              child: Text(S.of(context).cancel),
+              child: Text(S.of(context)!.cancel),
               onPressed: () {
                 Get.back();
               },
             ),
             CupertinoDialogAction(
-              child: Text(S.of(context).ok),
+              child: Text(S.of(context)!.ok),
               onPressed: () {
                 historyController.cleanHistory();
                 Get.back();

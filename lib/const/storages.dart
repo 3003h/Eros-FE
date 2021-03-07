@@ -14,3 +14,5 @@ const String GS_GALLERY_CACHE = 'galleryCache';
 const String GS_LOCAL_FAV = 'loaclFav';
 
 const String BLURRED_IN_RECENT_TASK = 'blurredInRecentTasks';
+
+const String CLEAN_VER = 'cleanVer';

@@ -8,15 +8,14 @@ import 'package:fehviewer/common/service/depth_service.dart';
 import 'package:fehviewer/models/index.dart';
 import 'package:fehviewer/network/gallery_request.dart';
 import 'package:fehviewer/pages/gallery/controller/gallery_page_controller.dart';
-import 'package:fehviewer/store/db/dao/gallery_task_dao.dart';
-import 'package:fehviewer/store/db/dao/image_task_dao.dart';
-import 'package:fehviewer/store/db/database.dart';
-import 'package:fehviewer/store/db/entity/gallery_image_task.dart';
-import 'package:fehviewer/store/db/entity/gallery_task.dart';
+import 'package:fehviewer/store/floor/dao/gallery_task_dao.dart';
+import 'package:fehviewer/store/floor/dao/image_task_dao.dart';
+import 'package:fehviewer/store/floor/database.dart';
+import 'package:fehviewer/store/floor/entity/gallery_image_task.dart';
+import 'package:fehviewer/store/floor/entity/gallery_task.dart';
 import 'package:fehviewer/store/gallery_store.dart';
 import 'package:fehviewer/utils/logger.dart';
 import 'package:fehviewer/utils/toast.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter_downloader/flutter_downloader.dart';
 import 'package:get/get.dart';
 import 'package:path/path.dart' as path;
@@ -34,8 +33,8 @@ class DownloadController extends GetxController {
   static final String _dbPath =
       path.join(Global.appSupportPath, 'gallery_task.db');
 
-  static Future<AppDatabase> _getDatabase() async {
-    return await $FloorAppDatabase.databaseBuilder(_dbPath).build();
+  static Future<EhDatabase> _getDatabase() async {
+    return await $FloorEhDatabase.databaseBuilder(_dbPath).build();
   }
 
   static Future<GalleryTaskDao> getGalleryTaskDao() async {
@@ -47,10 +46,10 @@ class DownloadController extends GetxController {
   }
 
   Future<void> downloadArchiverFile({
-    @required String gid,
-    @required String dlType,
-    @required String title,
-    @required String url,
+    required String gid,
+    required String dlType,
+    required String title,
+    required String url,
   }) async {
     final String _tag = '$gid$dlType';
 
@@ -63,12 +62,13 @@ class DownloadController extends GetxController {
 
     final String _taskId = await _downloadFile(url, await _getDownloadPath());
 
-    archiverTaskMap[_tag] = DownloadTaskInfo()
-      ..tag = _tag
-      ..gid = gid
-      ..type = dlType
-      ..taskId = _taskId
-      ..title = title;
+    archiverTaskMap[_tag] = kDefDownloadTaskInfo.copyWith(
+      tag: _tag,
+      gid: gid,
+      type: dlType,
+      taskId: _taskId,
+      title: title,
+    );
 
     _archiverDlIdList.add(_tag);
 
@@ -76,11 +76,11 @@ class DownloadController extends GetxController {
   }
 
   Future<void> downloadGallery({
-    @required String url,
-    @required int fileCount,
-    @required String title,
-    int gid,
-    String token,
+    required String url,
+    required int fileCount,
+    required String title,
+    int? gid,
+    String? token,
   }) async {
     GalleryTaskDao _galleryTaskDao;
     ImageTaskDao _imageTaskDao;
@@ -92,18 +92,18 @@ class DownloadController extends GetxController {
       rethrow;
     }
 
-    int _gid;
-    String _token;
+    int _gid = 0;
+    String _token = '';
     if (gid == null || token == null) {
       final RegExpMatch _match =
-          RegExp(r'/g/(\d+)/([0-9a-f]{10})/?').firstMatch(url);
-      _gid = int.parse(_match.group(1));
-      _token = _match.group(2);
+          RegExp(r'/g/(\d+)/([0-9a-f]{10})/?').firstMatch(url)!;
+      _gid = int.parse(_match.group(1)!);
+      _token = _match.group(2)!;
     }
 
     // 先查询任务是否已存在
-    final GalleryTask _oriTask =
-        await _galleryTaskDao.findGalleryTaskByGid(gid);
+    final GalleryTask? _oriTask =
+        await _galleryTaskDao.findGalleryTaskByGid(gid ?? -1);
     if (_oriTask != null) {
       logger.e('$gid 任务已存在');
       showToast('下载任务已存在');
@@ -167,11 +167,11 @@ class DownloadController extends GetxController {
   }
 
   Future<void> downloadGalleryIsolate({
-    @required String url,
-    @required int fileCount,
-    @required String title,
-    int gid,
-    String token,
+    required String url,
+    required int fileCount,
+    required String title,
+    int? gid,
+    String? token,
   }) async {
     GalleryTaskDao _galleryTaskDao;
     ImageTaskDao _imageTaskDao;
@@ -183,19 +183,19 @@ class DownloadController extends GetxController {
       rethrow;
     }
 
-    int _gid;
-    String _token;
+    int _gid = 0;
+    String _token = '';
     if (gid == null || token == null) {
       final RegExpMatch _match =
-          RegExp(r'/g/(\d+)/([0-9a-f]{10})/?').firstMatch(url);
-      _gid = int.parse(_match.group(1));
-      _token = _match.group(2);
+          RegExp(r'/g/(\d+)/([0-9a-f]{10})/?').firstMatch(url)!;
+      _gid = int.parse(_match.group(1)!);
+      _token = _match.group(2)!;
     }
 
     // 先查询任务是否已存在
     try {
-      final GalleryTask _oriTask =
-          await _galleryTaskDao.findGalleryTaskByGid(gid);
+      final GalleryTask? _oriTask =
+          await _galleryTaskDao.findGalleryTaskByGid(gid ?? -1);
       if (_oriTask != null) {
         logger.e('$gid 任务已存在');
         showToast('下载任务已存在');
@@ -239,9 +239,9 @@ class DownloadController extends GetxController {
   }
 
   Future<List<GalleryPreview>> _getAllPreviews({
-    String url,
-    List<GalleryPreview> initPreviews,
-    int fileCount,
+    required String url,
+    List<GalleryPreview>? initPreviews,
+    int? fileCount,
   }) async {
     if (initPreviews != null &&
         initPreviews.isNotEmpty &&
@@ -250,9 +250,9 @@ class DownloadController extends GetxController {
     }
 
     final List<GalleryPreview> _rultList = [];
-    _rultList.addAll(initPreviews);
+    _rultList.addAll(initPreviews ?? []);
     int _curPage = 0;
-    while (_rultList.length < fileCount) {
+    while (_rultList.length < (fileCount ?? 0)) {
       try {
         final List<GalleryPreview> _moreGalleryPreviewList =
             await Api.getGalleryPreview(
@@ -355,11 +355,12 @@ class DownloadController extends GetxController {
             .value;
 
         // 触发ever 保存到GS中
-        archiverTaskMap[_taskInfo.tag] = _taskInfo
-          ..status = downloadTask.status.value
-          ..progress = downloadTask.progress;
+        archiverTaskMap[_taskInfo.tag!] = _taskInfo.copyWith(
+          status: downloadTask.status.value,
+          progress: downloadTask.progress,
+        );
 
-        update([_taskInfo.tag]);
+        update([_taskInfo.tag!]);
       }
     }
   }
@@ -375,33 +376,35 @@ class DownloadController extends GetxController {
     logger.d(
         'Background Isolate Callback: _task ($id) is in status ($status) and process ($progress)');
 
-    final DownloadTaskInfo _taskInfo = archiverTaskMap.entries
+    DownloadTaskInfo _taskInfo = archiverTaskMap.entries
         .firstWhere((MapEntry<String, DownloadTaskInfo> element) =>
             element.value.taskId == id)
         .value;
 
-    _taskInfo
-      ..progress = progress
-      ..status = status.value;
+    // _taskInfo
+    //   ..progress = progress
+    //   ..status = status.value;
+    _taskInfo = _taskInfo.copyWith(progress: progress, status: status.value);
 
     if (_task.filename != null &&
         _task.filename != 'null' &&
         _task.filename != '<null>' &&
         _task.filename.trim().isNotEmpty) {
       logger.d('${_task.filename} ');
-      _taskInfo.title = _task.filename;
+      // _taskInfo.title = _task.filename;
+      _taskInfo = _taskInfo.copyWith(title: _task.filename);
     }
 
     // 触发ever 保存到GS中
-    archiverTaskMap[_taskInfo.tag] = _taskInfo;
+    archiverTaskMap[_taskInfo.tag!] = _taskInfo;
 
-    update([_taskInfo.tag]);
+    update([_taskInfo.tag!]);
   }
 
   /// 获取下载路径
   Future<String> _getDownloadPath() async {
     final String _dirPath = GetPlatform.isAndroid
-        ? path.join((await getExternalStorageDirectory()).path, 'Download')
+        ? path.join((await getExternalStorageDirectory())!.path, 'Download')
         : path.join(Global.appDocPath, 'Download', 'Archiver');
     // : Global.appDocPath;
 
@@ -420,7 +423,7 @@ class DownloadController extends GetxController {
   Future<String> _getGalleryDownloadPath(String custpath) async {
     final String _dirPath = GetPlatform.isAndroid
         ? path.join(
-            (await getExternalStorageDirectory()).path, 'Download', custpath)
+            (await getExternalStorageDirectory())!.path, 'Download', custpath)
         : path.join(Global.appDocPath, 'Download', custpath);
     // : Global.appDocPath;
 
@@ -437,11 +440,11 @@ class DownloadController extends GetxController {
 
   // 根据 downloadUrl 和 savePath 下载文件
   Future<String> _downloadFile(String downloadUrl, String savePath,
-      {String fileName}) async {
+      {String? fileName}) async {
     return await FlutterDownloader.enqueue(
       url: downloadUrl,
       savedDir: savePath,
-      fileName: fileName,
+      fileName: fileName ?? '',
       showNotification: false,
       openFileFromNotification: false,
     );
@@ -451,6 +454,6 @@ class DownloadController extends GetxController {
 /// 下载进度回调顶级函数
 void _downloadCallback(String id, DownloadTaskStatus status, int progress) {
   final SendPort send =
-      IsolateNameServer.lookupPortByName('downloader_send_port');
+      IsolateNameServer.lookupPortByName('downloader_send_port')!;
   send.send([id, status, progress]);
 }

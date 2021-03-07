@@ -141,7 +141,7 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
       logger.d('resumed');
       _autoLockController.resumed();
 
-      _ehConfigService.chkClipboardLink();
+      _ehConfigService.chkClipboardLink(context);
     }
   }
 
@@ -149,12 +149,12 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
   Widget build(BuildContext context) {
     // logger.d(' MyApp build');
     Widget cupertinoApp({
-      required CupertinoThemeData theme,
-      required Locale locale,
+      CupertinoThemeData? theme,
+      Locale? locale,
     }) {
       return GetCupertinoApp(
         debugShowCheckedModeBanner: false,
-        onGenerateTitle: (BuildContext context) => S.of(context).app_title,
+        onGenerateTitle: (BuildContext context) => S.of(context)!.app_title,
         navigatorObservers: [
           FirebaseAnalyticsObserver(analytics: analytics),
         ],
@@ -200,8 +200,8 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
             }
 
             // 中文 简繁体处理
-            if (_locale?.languageCode == 'zh') {
-              if (_locale?.scriptCode == 'Hant') {
+            if (_locale.languageCode == 'zh') {
+              if (_locale.scriptCode == 'Hant') {
                 locale = const Locale('zh', 'HK'); //繁体
               } else {
                 locale = const Locale('zh', 'CN'); //简体

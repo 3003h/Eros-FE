@@ -12,9 +12,7 @@ import 'package:get/get.dart';
 import 'tabview_controller.dart';
 
 class GalleryViewController extends TabViewController {
-  GalleryViewController({this.cats});
-
-  int cats;
+  GalleryViewController({int? cats}) : super(cats: cats);
 
   final TabHomeController _tabHomeController = Get.find();
 
@@ -48,17 +46,17 @@ class GalleryViewController extends TabViewController {
                   tabPages.iconDatas[elem.key],
                   size: 20,
                   // color: CupertinoDynamicColor.resolve(
-                  //     CupertinoColors.secondaryLabel, Get.context),
+                  //     CupertinoColors.secondaryLabel, Get.context!),
                 ),
                 Expanded(
                   child: Container(
                     margin: const EdgeInsets.only(left: 10),
                     padding: const EdgeInsets.symmetric(vertical: 10),
                     child: Text(
-                      tabPages.tabTitles[elem.key],
+                      tabPages.tabTitles[elem.key] ?? '',
                       style: TextStyle(
                         color: CupertinoDynamicColor.resolve(
-                            CupertinoColors.label, Get.context),
+                            CupertinoColors.label, Get.context!),
                         fontWeight: FontWeight.w500,
                         // fontSize: 12,
                       ),
@@ -83,11 +81,11 @@ class GalleryViewController extends TabViewController {
     if (cats != null) {
       return EHConst.cats.entries
               ?.firstWhere((MapEntry<String, int> element) =>
-                  element.value == EHConst.sumCats - cats)
+                  element.value == EHConst.sumCats - (cats ?? 0))
               ?.key ??
-          S.of(Get.context).tab_gallery;
+          S.of(Get.context!)!.tab_gallery;
     } else {
-      return S.of(Get.context).tab_gallery;
+      return S.of(Get.context!)!.tab_gallery;
     }
   }
 

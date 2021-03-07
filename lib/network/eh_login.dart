@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:cookie_jar/cookie_jar.dart';
 import 'package:dio/dio.dart';
+import 'package:fehviewer/common/global.dart';
 import 'package:fehviewer/const/const.dart';
 import 'package:fehviewer/models/user.dart';
 import 'package:fehviewer/network/error.dart';
@@ -37,7 +38,7 @@ class EhUserManager {
     final Options options =
         Options(headers: {'Referer': referer, 'Origin': origin});
 
-    Response rult;
+    Response? rult;
     try {
       rult = await httpManager.postForm(url, data: formData, options: options);
     } catch (e) {
@@ -45,7 +46,7 @@ class EhUserManager {
     }
 
     //  登录异常处理
-    final List<String> setcookie = rult.headers['set-cookie'];
+    final List<String> setcookie = rult?.headers['set-cookie'] ?? [];
 
     logger.d('set-cookie $setcookie');
 
@@ -94,28 +95,29 @@ class EhUserManager {
     });
 
     final Map<String, String> cookie = <String, String>{
-      'ipb_member_id': cookieMapEx['ipb_member_id'],
-      'ipb_pass_hash': cookieMapEx['ipb_pass_hash'],
-      'igneous': cookieMapEx['igneous'],
+      'ipb_member_id': cookieMapEx['ipb_member_id'] ?? '',
+      'ipb_pass_hash': cookieMapEx['ipb_pass_hash'] ?? '',
+      'igneous': cookieMapEx['igneous'] ?? '',
     };
 
     String nickame = username.replaceFirstMapped(
-        RegExp('(^.)'), (Match match) => match[1].toUpperCase());
+        RegExp('(^.)'), (Match match) => match[1]?.toUpperCase() ?? '');
 
     String _avatarUrl = '';
     try {
-      final User userinfo = await _getUserInfo(cookie['ipb_member_id']);
-      nickame = userinfo.username;
-      _avatarUrl = userinfo.avatarUrl;
+      final User userinfo = await _getUserInfo(cookie['ipb_member_id'] ?? '');
+      nickame = userinfo.username ?? '';
+      _avatarUrl = userinfo.avatarUrl ?? '';
     } catch (_) {}
 
     final String cookieStr = _getCookieStringFromMap(cookie);
     logger.v(cookieStr);
 
-    final User user = User()
-      ..cookie = cookieStr
-      ..avatarUrl = _avatarUrl
-      ..username = nickame;
+    final User user = kDefUser.copyWith(
+      cookie: cookieStr,
+      avatarUrl: _avatarUrl,
+      username: nickame,
+    );
 
     return user;
   }
@@ -157,18 +159,19 @@ class EhUserManager {
     }
 
     final Map<String, String> cookie = {
-      'ipb_member_id': cookieMapEx['ipb_member_id'],
-      'ipb_pass_hash': cookieMapEx['ipb_pass_hash'],
-      'igneous': cookieMapEx['igneous'],
+      'ipb_member_id': cookieMapEx['ipb_member_id'] ?? '',
+      'ipb_pass_hash': cookieMapEx['ipb_pass_hash'] ?? '',
+      'igneous': cookieMapEx['igneous'] ?? '',
     };
 
     final String cookieStr = _getCookieStringFromMap(cookie);
     logger.v(cookieStr);
 
-    final User user = User()
-      ..cookie = cookieStr
-      ..avatarUrl = userinfo.avatarUrl
-      ..username = userinfo.username;
+    final User user = kDefUser.copyWith(
+      cookie: cookieStr,
+      avatarUrl: userinfo.avatarUrl,
+      username: userinfo.username,
+    );
 
     return user;
   }
@@ -178,7 +181,7 @@ class EhUserManager {
   Future<User> signInByCookie(
     String id,
     String hash, {
-    String igneous,
+    required String igneous,
   }) async {
     final List<Cookie> cookies = <Cookie>[
       Cookie('ipb_member_id', id),
@@ -213,18 +216,19 @@ class EhUserManager {
     }
 
     final Map<String, String> cookie = {
-      'ipb_member_id': cookieMapEx['ipb_member_id'],
-      'ipb_pass_hash': cookieMapEx['ipb_pass_hash'],
-      'igneous': igneous.isNotEmpty ? igneous : cookieMapEx['igneous'],
+      'ipb_member_id': cookieMapEx['ipb_member_id'] ?? '',
+      'ipb_pass_hash': cookieMapEx['ipb_pass_hash'] ?? '',
+      'igneous': igneous.isNotEmpty ? igneous : cookieMapEx['igneous'] ?? '',
     };
 
     final String cookieStr = _getCookieStringFromMap(cookie);
     logger.v(cookieStr);
 
-    final User user = User()
-      ..cookie = cookieStr
-      ..avatarUrl = userinfo.avatarUrl
-      ..username = userinfo.username;
+    final User user = kDefUser.copyWith(
+      cookie: cookieStr,
+      avatarUrl: userinfo.avatarUrl,
+      username: userinfo.username,
+    );
 
     return user;
   }
@@ -235,7 +239,7 @@ class EhUserManager {
         baseUrl: 'https://forums.e-hentai.org', cache: false);
     final String url = '/index.php?showuser=$id';
 
-    final String response = await httpManager.get(url);
+    final String response = await httpManager.get(url) ?? '';
 
     // logger.v('$response');
 
@@ -244,26 +248,27 @@ class EhUserManager {
 
     final Document document = parse(response);
 
-    final Element profilenameElm = document.querySelector('#profilename');
-    final String username = profilenameElm.text;
+    final Element? profilenameElm = document.querySelector('#profilename');
+    final String username = profilenameElm?.text ?? '';
 
-    final Element avatarElm =
-        profilenameElm.nextElementSibling.nextElementSibling;
+    final Element? avatarElm =
+        profilenameElm?.nextElementSibling?.nextElementSibling;
 
     String _avatarUrl = '';
-    if (avatarElm.children.isNotEmpty) {
-      final Element imageElm = avatarElm.children.first;
-      _avatarUrl = imageElm.attributes['src'];
+    if (avatarElm?.children.isNotEmpty ?? false) {
+      final Element? imageElm = avatarElm?.children.first;
+      _avatarUrl = imageElm?.attributes['src'] ?? '';
       if (!_avatarUrl.startsWith('http')) {
         _avatarUrl = 'https://forums.e-hentai.org/$_avatarUrl';
       }
     }
 
-    logger.v('username $username   ${avatarElm.outerHtml}');
+    logger.v('username $username   ${avatarElm?.outerHtml}');
 
-    return User()
-      ..username = username
-      ..avatarUrl = _avatarUrl;
+    return kDefUser.copyWith(
+      avatarUrl: _avatarUrl,
+      username: username,
+    );
   }
 
   /// 获取里站cookie
@@ -274,7 +279,6 @@ class EhUserManager {
 
     final Response<dynamic> response = await httpManager.getAll(url);
     // logger.d('${response}');
-    return response;
   }
 
   static String _getCookieStringFromMap(Map cookie) {

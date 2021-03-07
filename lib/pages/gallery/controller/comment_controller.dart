@@ -24,19 +24,19 @@ class CommentController extends GetxController
   final TextEditingController commentTextController = TextEditingController();
 
   GalleryItem get _item => pageController.galleryItem;
-  String comment;
-  String oriComment;
-  String commentId;
+  late String comment;
+  late String oriComment;
+  late String commentId;
   FocusNode focusNode = FocusNode();
   ScrollController scrollController = ScrollController();
 
-  final WidgetsBinding _widgetsBinding = WidgetsBinding.instance;
+  final WidgetsBinding? _widgetsBinding = WidgetsBinding.instance;
   double _preBottomInset = 0;
   double _bottomInset = 0;
   bool _didChangeMetrics = false;
 
   final Rx<EditState> _editState = EditState.newComment.obs;
-  EditState get editState => _editState.value;
+  EditState get editState => _editState.value ?? EditState.newComment;
   set editState(EditState val) => _editState.value = val;
 
   bool get isEditStat => _editState.value == EditState.editComment;
@@ -50,7 +50,7 @@ class CommentController extends GetxController
 
     _bottomInset = _mediaQueryBottomInset();
     _preBottomInset = _bottomInset;
-    _widgetsBinding.addObserver(this);
+    _widgetsBinding?.addObserver(this);
   }
 
   Future<void> _loadComment() async {
@@ -63,7 +63,7 @@ class CommentController extends GetxController
   void didChangeMetrics() {
     _didChangeMetrics = true;
     super.didChangeMetrics();
-    _widgetsBinding.addPostFrameCallback((Duration timeStamp) {
+    _widgetsBinding?.addPostFrameCallback((Duration timeStamp) {
       _bottomInset = _mediaQueryBottomInset();
       if (_preBottomInset != _bottomInset) {
         final double _offset = _bottomInset - _preBottomInset;
@@ -76,7 +76,7 @@ class CommentController extends GetxController
   void onClose() {
     _tgr.forEach((element) => element.dispose());
     scrollController.dispose();
-    _widgetsBinding.removeObserver(this);
+    _widgetsBinding?.removeObserver(this);
     super.onClose();
   }
 
@@ -87,58 +87,75 @@ class CommentController extends GetxController
   }
 
   double _mediaQueryBottomInset() {
-    return MediaQueryData.fromWindow(_widgetsBinding.window).viewInsets.bottom;
+    return MediaQueryData.fromWindow(_widgetsBinding!.window).viewInsets.bottom;
   }
 
   Future<void> commitVoteUp(String _id) async {
+    if (state == null) {
+      return;
+    }
+
     logger.d('commit up id $_id');
-    state.firstWhere((element) => element.id == _id.toString()).vote = 1;
-    update(['$_id']);
+    // state?.firstWhere((element) => element.id == _id.toString()).vote = 1;
+    final int? _commentIndex =
+        state?.indexWhere((element) => element.id == _id.toString());
+    state![_commentIndex!] = state![_commentIndex].copyWith(vote: 1);
+
+    update([_id]);
     final CommitVoteRes rult = await Api.commitVote(
-      apikey: _item.apikey,
-      apiuid: _item.apiuid,
-      gid: _item.gid,
-      token: _item.token,
+      apikey: _item.apikey!,
+      apiuid: _item.apiuid!,
+      gid: _item.gid!,
+      token: _item.token!,
       commentId: _id,
       vote: 1,
     );
     _paraRes(rult);
     if (rult.commentVote != 0) {
-      showToast(S.of(Get.context).vote_up_successfully);
+      showToast(S.of(Get.context!)!.vote_up_successfully);
     }
   }
 
   Future<void> commitVoteDown(String _id) async {
     logger.d('commit down id $_id');
-    state.firstWhere((element) => element.id == _id.toString()).vote = -1;
-    update(['$_id']);
+    // state.firstWhere((element) => element.id == _id.toString()).vote = -1;
+    final int? _commentIndex =
+        state?.indexWhere((element) => element.id == _id.toString());
+    state![_commentIndex!] = state![_commentIndex].copyWith(vote: -1);
+    update([_id]);
     final CommitVoteRes rult = await Api.commitVote(
-      apikey: _item.apikey,
-      apiuid: _item.apiuid,
-      gid: _item.gid,
-      token: _item.token,
+      apikey: _item.apikey!,
+      apiuid: _item.apiuid!,
+      gid: _item.gid!,
+      token: _item.token!,
       commentId: _id,
       vote: -1,
     );
     _paraRes(rult);
     if (rult.commentVote != 0) {
-      showToast(S.of(Get.context).vote_down_successfully);
+      showToast(S.of(Get.context!)!.vote_down_successfully);
     }
   }
 
   void _paraRes(CommitVoteRes rult) {
     logger.d('${rult.toJson()}');
-    state.firstWhere((element) => element.id == rult.commentId.toString())
-      ..vote = rult.commentVote
-      ..score = '${rult.commentScore}';
+    // state.firstWhere((element) => element.id == rult.commentId.toString())
+    //   ..vote = rult.commentVote
+    //   ..score = '${rult.commentScore}';
+
+    final int? _commentIndex =
+        state?.indexWhere((element) => element.id == rult.commentId.toString());
+    state![_commentIndex!] = state![_commentIndex]
+        .copyWith(vote: rult.commentVote, score: '${rult.commentScore}');
+
     update(['${rult.commentId}']);
   }
 
   Future<void> _postComment(String comment,
-      {bool isEdit = false, String commentId}) async {
+      {bool isEdit = false, required String commentId}) async {
     final bool rult = await Api.postComment(
       gid: pageController.gid,
-      token: pageController.galleryItem.token,
+      token: pageController.galleryItem.token!,
       comment: comment,
       commentId: commentId,
       isEdit: isEdit,
@@ -152,9 +169,9 @@ class CommentController extends GetxController
   Future<void> pressSend() async {
     comment = commentTextController.text;
     logger.d('comment: $comment');
-    FocusScope.of(Get.context).requestFocus(FocusNode());
+    FocusScope.of(Get.context!).requestFocus(FocusNode());
 
-    showLoadingDialog(Get.context, () async {
+    showLoadingDialog(Get.context!, () async {
       await _postComment(
         comment,
         isEdit: editState == EditState.editComment,
@@ -168,10 +185,10 @@ class CommentController extends GetxController
     oriComment = '';
     commentTextController.clear();
     editState = EditState.newComment;
-    // FocusScope.of(Get.context).requestFocus(FocusNode());
+    // FocusScope.of(Get.context!).requestFocus(FocusNode());
   }
 
-  void editComment({String id, String oriComment}) {
+  void editComment({required String id, required String oriComment}) {
     comment = oriComment;
     commentId = id;
     this.oriComment = oriComment;
@@ -181,7 +198,7 @@ class CommentController extends GetxController
           affinity: TextAffinity.downstream, offset: comment.length)),
     );
     editState = EditState.editComment;
-    FocusScope.of(Get.context).requestFocus(focusNode);
+    FocusScope.of(Get.context!).requestFocus(focusNode);
     // _scrollToBottom();
   }
 
@@ -205,15 +222,15 @@ class CommentController extends GetxController
       _preBottomInset = _bottomInset;
       logger.d(' ${_bottomInset} $_offset  ${scrollController.offset}');
 
-      final double _viewHeigth = Get.context.height -
-          Get.context.mediaQueryViewPadding.top -
-          Get.context.mediaQueryViewPadding.bottom -
+      final double _viewHeigth = Get.context!.height -
+          Get.context!.mediaQueryViewPadding.top -
+          Get.context!.mediaQueryViewPadding.bottom -
           60 -
           44;
 
-      logger.d('_viewHeigth $_viewHeigth,  ${Get.context.height} '
-          ' ${Get.context.mediaQueryViewPadding.top}  '
-          '${Get.context.mediaQueryViewPadding.bottom}');
+      logger.d('_viewHeigth $_viewHeigth,  ${Get.context!.height} '
+          ' ${Get.context!.mediaQueryViewPadding.top}  '
+          '${Get.context!.mediaQueryViewPadding.bottom}');
 
       if (scrollController.position.maxScrollExtent > _viewHeigth) {
         if (scrollController.offset > _bottomInset && _offset < 0) {

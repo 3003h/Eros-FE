@@ -6,7 +6,6 @@ import 'package:fehviewer/common/service/ehconfig_service.dart';
 import 'package:fehviewer/const/const.dart';
 import 'package:fehviewer/const/theme_colors.dart';
 import 'package:fehviewer/generated/l10n.dart';
-import 'package:fehviewer/models/galleryItem.dart';
 import 'package:fehviewer/models/index.dart';
 import 'package:fehviewer/pages/gallery/controller/comment_controller.dart';
 import 'package:fehviewer/pages/gallery/controller/gallery_page_controller.dart';
@@ -17,7 +16,7 @@ import 'package:fehviewer/pages/gallery/view/preview_clipper.dart';
 import 'package:fehviewer/pages/gallery/view/taginfo_dialog.dart';
 import 'package:fehviewer/route/navigator_util.dart';
 import 'package:fehviewer/route/routes.dart';
-import 'package:fehviewer/utils/cust_lib/selectable_text_s.dart';
+import 'package:fehviewer/utils/cust_lib/selectable_text.dart';
 import 'package:fehviewer/utils/logger.dart';
 import 'package:fehviewer/widget/rating_bar.dart';
 import 'package:flutter/cupertino.dart';
@@ -33,13 +32,13 @@ const double kHeaderPaddingTop = 12.0;
 
 class GalleryHeader extends StatelessWidget {
   const GalleryHeader({
-    Key key,
-    @required this.galleryItem,
-    @required this.tabTag,
+    Key? key,
+    required this.galleryItem,
+    this.tabTag,
   }) : super(key: key);
 
   final GalleryItem galleryItem;
-  final Object tabTag;
+  final Object? tabTag;
 
   @override
   Widget build(BuildContext context) {
@@ -58,7 +57,7 @@ class GalleryHeader extends StatelessWidget {
               children: <Widget>[
                 // 封面
                 CoverImage(
-                  imageUrl: galleryItem.imgUrl,
+                  imageUrl: galleryItem.imgUrl!,
                   heroTag: '${galleryItem.gid}_cover_$tabTag',
                 ),
                 Expanded(
@@ -68,13 +67,13 @@ class GalleryHeader extends StatelessWidget {
                       // 标题
                       const GalleryTitle(),
                       // 上传用户
-                      GalleryUploader(uploader: galleryItem.uploader),
+                      GalleryUploader(uploader: galleryItem.uploader ?? ''),
                       const Spacer(),
                       Row(
                         crossAxisAlignment: CrossAxisAlignment.end,
                         children: <Widget>[
                           // 阅读按钮
-                          ReadButton(gid: galleryItem.gid),
+                          ReadButton(gid: galleryItem.gid ?? ''),
                           const Spacer(),
                           // 收藏按钮
                           const GalleryFavButton(),
@@ -103,10 +102,10 @@ class GalleryHeader extends StatelessWidget {
                           children: <Widget>[
                             // 评分
                             GalleryRating(
-                              rating: galleryItem.rating,
-                              ratingFB: galleryItem.ratingFallBack,
+                              rating: galleryItem.rating ?? 0,
+                              ratingFB: galleryItem.ratingFallBack ?? 0,
                               color: ThemeColors.colorRatingMap[
-                                  galleryItem.colorRating?.trim() ?? 'ir'],
+                                  galleryItem.colorRating?.trim() ?? 'ir']!,
                             ),
                             // 评分人次
                             Padding(
@@ -123,7 +122,8 @@ class GalleryHeader extends StatelessWidget {
                             ),
                             const Spacer(),
                             // 类型
-                            GalleryCategory(category: galleryItem.category),
+                            GalleryCategory(
+                                category: galleryItem.category ?? ''),
                           ],
                         ),
                       ),
@@ -190,7 +190,8 @@ class GalleryHeader extends StatelessWidget {
 
 /// 封面小图 纯StatelessWidget
 class CoveTinyImage extends StatelessWidget {
-  const CoveTinyImage({Key key, this.imgUrl, this.statusBarHeight})
+  const CoveTinyImage(
+      {Key? key, required this.imgUrl, required this.statusBarHeight})
       : super(key: key);
 
   final String imgUrl;
@@ -221,21 +222,21 @@ class CoveTinyImage extends StatelessWidget {
 // 画廊封面
 class CoverImage extends StatelessWidget {
   const CoverImage({
-    Key key,
-    @required this.imageUrl,
-    this.heroTag,
+    Key? key,
+    required this.imageUrl,
+    required this.heroTag,
     this.imgHeight,
     this.imgWidth,
   }) : super(key: key);
 
   static const double kWidth = 145.0;
-  final String imageUrl;
+  final String? imageUrl;
 
   // ${_item.gid}_${_item.token}_cover_$_tabIndex
   final Object heroTag;
 
-  final double imgHeight;
-  final double imgWidth;
+  final double? imgHeight;
+  final double? imgWidth;
 
   @override
   Widget build(BuildContext context) {
@@ -244,7 +245,7 @@ class CoverImage extends StatelessWidget {
         'Cookie': Global.profile?.user?.cookie ?? '',
       };
 
-      if (imageUrl != null && imageUrl.isNotEmpty) {
+      if (imageUrl != null && imageUrl!.isNotEmpty) {
         return Container(
           width: kWidth,
           margin: const EdgeInsets.only(right: 10),
@@ -316,7 +317,7 @@ class CoverImage extends StatelessWidget {
 
 class GalleryTitle extends StatelessWidget {
   const GalleryTitle({
-    Key key,
+    Key? key,
   }) : super(key: key);
 
   @override
@@ -359,8 +360,8 @@ class GalleryTitle extends StatelessWidget {
 /// 上传用户
 class GalleryUploader extends StatelessWidget {
   const GalleryUploader({
-    Key key,
-    @required this.uploader,
+    Key? key,
+    required this.uploader,
   }) : super(key: key);
 
   final String uploader;
@@ -394,8 +395,8 @@ class GalleryUploader extends StatelessWidget {
 
 class ReadButton extends StatelessWidget {
   const ReadButton({
-    Key key,
-    @required this.gid,
+    Key? key,
+    required this.gid,
   }) : super(key: key);
   final String gid;
 
@@ -405,7 +406,7 @@ class ReadButton extends StatelessWidget {
     return Obx(
       () => CupertinoButton(
           child: Text(
-            S.of(context).READ,
+            S.of(context)!.READ,
             style: const TextStyle(fontSize: 15, height: 1.2),
           ),
           minSize: 20,
@@ -421,28 +422,29 @@ class ReadButton extends StatelessWidget {
   Future<void> _toViewPage(GalleryPageController _pageController) async {
     final GalleryCacheController galleryCacheController = Get.find();
 
-    final GalleryCache _galleryCache =
-        galleryCacheController.getGalleryCache(_pageController.galleryItem.gid);
+    final GalleryCache? _galleryCache = galleryCacheController
+        .getGalleryCache(_pageController.galleryItem.gid ?? '');
     final int _index = _galleryCache?.lastIndex ?? 0;
     logger.d('lastIndex $_index');
-    // await _pageController.fetchPreviewUntilIndex(Get.context, _index);
-    NavigatorUtil.goGalleryViewPage(_index, _pageController.galleryItem.gid);
+    // await _pageController.fetchPreviewUntilIndex(Get.context!, _index);
+    NavigatorUtil.goGalleryViewPage(
+        _index, _pageController.galleryItem.gid ?? '');
   }
 }
 
 /// 类别
 class GalleryCategory extends StatelessWidget {
   const GalleryCategory({
-    Key key,
-    this.category,
+    Key? key,
+    required this.category,
   }) : super(key: key);
 
-  final String category;
+  final String? category;
 
   @override
   Widget build(BuildContext context) {
     final Color _colorCategory = CupertinoDynamicColor.resolve(
-        ThemeColors.catColor[category ?? 'default'], context);
+        ThemeColors.catColor[category ?? 'default']!, context);
     return GestureDetector(
       child: ClipRRect(
         borderRadius: BorderRadius.circular(4),
@@ -460,7 +462,7 @@ class GalleryCategory extends StatelessWidget {
         ),
       ),
       onTap: () {
-        final int iCat = EHConst.cats[category];
+        final int iCat = EHConst.cats[category]!;
         final int cats = EHConst.sumCats - iCat;
         // NavigatorUtil.goGalleryList(cats: iCat);
       },
@@ -470,15 +472,15 @@ class GalleryCategory extends StatelessWidget {
 
 class GalleryRating extends StatelessWidget {
   const GalleryRating({
-    Key key,
+    Key? key,
     this.rating,
     this.ratingFB,
     this.color,
   }) : super(key: key);
 
-  final double rating;
-  final double ratingFB;
-  final Color color;
+  final double? rating;
+  final double? ratingFB;
+  final Color? color;
 
   @override
   Widget build(BuildContext context) {
@@ -503,7 +505,7 @@ class GalleryRating extends StatelessWidget {
 }
 
 class PreviewGrid extends StatelessWidget {
-  const PreviewGrid({Key key, this.previews, @required this.gid})
+  const PreviewGrid({Key? key, required this.previews, required this.gid})
       : super(key: key);
   final List<GalleryPreview> previews;
   final String gid;
@@ -539,13 +541,13 @@ class PreviewGrid extends StatelessWidget {
 }
 
 class TopComment extends StatelessWidget {
-  const TopComment({Key key}) : super(key: key);
+  const TopComment({Key? key}) : super(key: key);
   // final List<GalleryComment> comment;
 
   @override
   Widget build(BuildContext context) {
     // 显示最前面两条
-    List<Widget> _topComment(List<GalleryComment> comments, {int max = 2}) {
+    List<Widget> _topComment(List<GalleryComment>? comments, {int max = 2}) {
       final Iterable<GalleryComment> _comments = comments?.take(max) ?? [];
       return List<Widget>.from(_comments
           .map((GalleryComment comment) => CommentItem(
@@ -564,7 +566,7 @@ class TopComment extends StatelessWidget {
           id: GetIds.PAGE_VIEW_TOP_COMMENT,
           builder: (CommentController _commentController) {
             return _commentController.obx(
-                (List<GalleryComment> state) => Column(
+                (List<GalleryComment>? state) => Column(
                       children: <Widget>[
                         ..._topComment(state, max: 2),
                       ],
@@ -582,7 +584,7 @@ class TopComment extends StatelessWidget {
           minSize: 0,
           padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 8),
           child: Text(
-            S.of(Get.context).all_comment,
+            S.of(Get.context!)!.all_comment,
             style: const TextStyle(fontSize: 16),
           ),
           onPressed: () {
@@ -596,7 +598,7 @@ class TopComment extends StatelessWidget {
 
 /// 包含多个 TagGroup
 class TagBox extends StatelessWidget {
-  const TagBox({Key key, @required this.listTagGroup}) : super(key: key);
+  const TagBox({Key? key, required this.listTagGroup}) : super(key: key);
 
   final List<TagGroup> listTagGroup;
 
@@ -617,7 +619,7 @@ class TagBox extends StatelessWidget {
         Container(
           height: 0.5,
           color: CupertinoDynamicColor.resolve(
-              CupertinoColors.systemGrey4, Get.context),
+              CupertinoColors.systemGrey4, Get.context!),
         ),
       ],
     );
@@ -626,8 +628,8 @@ class TagBox extends StatelessWidget {
 
 class MorePreviewButton extends StatelessWidget {
   const MorePreviewButton({
-    Key key,
-    @required this.hasMorePreview,
+    Key? key,
+    required this.hasMorePreview,
   }) : super(key: key);
 
   final bool hasMorePreview;
@@ -639,8 +641,8 @@ class MorePreviewButton extends StatelessWidget {
       padding: const EdgeInsets.symmetric(vertical: 40, horizontal: 20),
       child: Text(
         hasMorePreview
-            ? S.of(Get.context).morePreviews
-            : S.of(Get.context).noMorePreviews,
+            ? S.of(Get.context!)!.morePreviews
+            : S.of(Get.context!)!.noMorePreviews,
         style: const TextStyle(fontSize: 16),
       ),
       onPressed: () {
@@ -655,11 +657,11 @@ class MorePreviewButton extends StatelessWidget {
 
 class PreviewContainer extends StatelessWidget {
   PreviewContainer({
-    Key key,
-    @required this.index,
-    @required this.galleryPreviewList,
-    @required this.gid,
-  })  : galleryPreview = galleryPreviewList[index],
+    Key? key,
+    required this.index,
+    required this.galleryPreviewList,
+    required this.gid,
+  })   : galleryPreview = galleryPreviewList[index],
         hrefs = List<String>.from(
             galleryPreviewList.map((GalleryPreview e) => e.href).toList()),
         super(key: key);
@@ -680,7 +682,7 @@ class PreviewContainer extends StatelessWidget {
         // 缩略大图
         return CachedNetworkImage(
           httpHeaders: _httpHeaders,
-          imageUrl: galleryPreview.imgUrl,
+          imageUrl: galleryPreview.imgUrl ?? '',
           progressIndicatorBuilder: (_, __, ___) {
             return const CupertinoActivityIndicator();
           },
@@ -690,13 +692,14 @@ class PreviewContainer extends StatelessWidget {
             builder: (BuildContext context, BoxConstraints constraints) {
           double _subHeight;
           double _subWidth;
-          final double _subHeightP = galleryPreview.height *
+          final double _subHeightP = (galleryPreview.height ?? 0) *
               constraints.maxWidth /
-              galleryPreview.width;
+              (galleryPreview.width ?? 0);
           if (_subHeightP > kHeightPreview) {
             _subHeight = kHeightPreview;
-            _subWidth =
-                kHeightPreview * galleryPreview.width / galleryPreview.height;
+            _subWidth = kHeightPreview *
+                (galleryPreview.width ?? 0) /
+                (galleryPreview.height ?? 0);
           } else {
             _subWidth = constraints.maxWidth;
             _subHeight = _subHeightP;
@@ -710,10 +713,10 @@ class PreviewContainer extends StatelessWidget {
               fit: StackFit.expand,
               children: <Widget>[
                 PreviewImageClipper(
-                  imgUrl: galleryPreview.imgUrl,
-                  offset: galleryPreview.offSet,
-                  height: galleryPreview.height,
-                  width: galleryPreview.width,
+                  imgUrl: galleryPreview.imgUrl!,
+                  offset: galleryPreview.offSet!,
+                  height: galleryPreview.height!,
+                  width: galleryPreview.width!,
                 ),
               ],
             ),
@@ -761,7 +764,7 @@ class PreviewContainer extends StatelessWidget {
 /// 一个标签组 第一个是类型
 class TagGroupItem extends StatelessWidget {
   const TagGroupItem({
-    @required this.tagGroupData,
+    required this.tagGroupData,
   });
 
   final TagGroup tagGroupData;
@@ -772,7 +775,7 @@ class TagGroupItem extends StatelessWidget {
     galleryTags.forEach((GalleryTag tag) {
       _tagBtnList.add(
         Obx(() => TagButton(
-              text: ehConfigService.isTagTranslat.value
+              text: ehConfigService.isTagTranslat.value ?? false
                   ? tag?.tagTranslat ?? ''
                   : tag?.title ?? '',
               textColor: () {
@@ -793,11 +796,11 @@ class TagGroupItem extends StatelessWidget {
                     simpleSearch: '${tag.type}:${tag.title}');
               },
               onLongPress: () {
-                if (ehConfigService.isTagTranslat.value) {
+                if (ehConfigService.isTagTranslat.value ?? false) {
                   showTagInfoDialog(
                     tag.title,
                     type: tag.type,
-                    vote: tag.vote,
+                    vote: tag.vote ?? 0,
                   );
                 }
               },
@@ -813,7 +816,7 @@ class TagGroupItem extends StatelessWidget {
 
     final List<Widget> _tagBtnList =
         _initTagBtnList(tagGroupData.galleryTags, context);
-    final String _tagType = tagGroupData.tagType;
+    final String _tagType = tagGroupData.tagType ?? '';
 
     final Container container = Container(
       padding: const EdgeInsets.fromLTRB(0, 4, 0, 4),
@@ -825,8 +828,8 @@ class TagGroupItem extends StatelessWidget {
             padding: const EdgeInsets.only(right: 8),
             child: Obx(() => TagButton(
                   color: CupertinoDynamicColor.resolve(
-                      ThemeColors.tagColorTagType[_tagType.trim()], context),
-                  text: ehConfigService.isTagTranslat.value
+                      ThemeColors.tagColorTagType[_tagType.trim()]!, context),
+                  text: ehConfigService.isTagTranslat.value ?? false
                       ? EHConst.translateTagType[_tagType.trim()] ?? _tagType
                       : _tagType,
                 )),
@@ -852,8 +855,8 @@ class TagGroupItem extends StatelessWidget {
 /// onPressed 回调
 class TagButton extends StatelessWidget {
   const TagButton({
-    Key key,
-    @required this.text,
+    Key? key,
+    required this.text,
     this.textColor,
     this.color,
     this.onPressed,
@@ -862,11 +865,11 @@ class TagButton extends StatelessWidget {
   }) : super(key: key);
 
   final String text;
-  final Color textColor;
-  final Color color;
-  final VoidCallback onPressed;
-  final VoidCallback onLongPress;
-  final EdgeInsets padding;
+  final Color? textColor;
+  final Color? color;
+  final VoidCallback? onPressed;
+  final VoidCallback? onLongPress;
+  final EdgeInsets? padding;
 
   @override
   Widget build(BuildContext context) {
@@ -899,13 +902,14 @@ class TagButton extends StatelessWidget {
 }
 
 class TextBtn extends StatelessWidget {
-  const TextBtn(this.iconData, {Key key, this.iconSize, this.title, this.onTap})
+  const TextBtn(this.iconData,
+      {Key? key, this.iconSize, this.title, this.onTap})
       : super(key: key);
   final IconData iconData;
-  final double iconSize;
-  final String title;
+  final double? iconSize;
+  final String? title;
 
-  final VoidCallback onTap;
+  final VoidCallback? onTap;
 
   @override
   Widget build(BuildContext context) {

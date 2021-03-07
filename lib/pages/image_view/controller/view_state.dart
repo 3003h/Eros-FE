@@ -33,25 +33,25 @@ class ViewState {
       Future<void>.delayed(const Duration(milliseconds: 100)).then((_) {
         // logger.d('delayed ever _itemIndex to $itemIndex');
         _galleryCacheController.setIndex(
-            _galleryPageController.galleryItem.gid, itemIndex,
+            _galleryPageController.galleryItem.gid ?? '', itemIndex,
             notify: false);
       });
     });
 
-    ever(_columnMode, (ViewColumnMode val) {
+    ever<ViewColumnMode>(_columnMode as RxInterface<ViewColumnMode>,
+        (ViewColumnMode val) {
       Future<void>.delayed(const Duration(milliseconds: 100)).then((_) {
-        // logger.d('delayed ever _columnMode to $_columnMode');
         _galleryCacheController.setColumnMode(
-            _galleryPageController.galleryItem.gid, val);
+            _galleryPageController.galleryItem.gid ?? '', val);
       });
     });
 
     _columnMode.value = _galleryCacheController
-            .getGalleryCache(_galleryPageController.galleryItem.gid)
+            .getGalleryCache(_galleryPageController.galleryItem.gid ?? '')
             ?.columnMode ??
         ViewColumnMode.single;
 
-    final _iniIndex = Get.arguments as int;
+    final int _iniIndex = Get.arguments as int;
     itemIndex = _iniIndex;
   }
 
@@ -80,7 +80,7 @@ class ViewState {
 
   /// 横屏翻页模式
   final Rx<ViewColumnMode> _columnMode = ViewColumnMode.single.obs;
-  ViewColumnMode get columnMode => _columnMode.value;
+  ViewColumnMode get columnMode => _columnMode.value ?? ViewColumnMode.single;
   set columnMode(val) => _columnMode.value = val;
 
   /// 当前查看的图片inde
@@ -124,13 +124,13 @@ class ViewState {
   /// 滑条的值
   double sliderValue = 0.0;
 
-  Size screensize;
-  double _realPaddingBottom;
-  double _realPaddingTop;
-  double _paddingLeft;
-  double _paddingRight;
-  double _paddingTop;
-  double _paddingBottom;
+  late Size screensize;
+  late double _realPaddingBottom;
+  late double _realPaddingTop;
+  late double _paddingLeft;
+  late double _paddingRight;
+  late double _paddingTop;
+  late double _paddingBottom;
 
   EdgeInsets get topBarPadding => EdgeInsets.fromLTRB(
         _paddingLeft,
@@ -147,7 +147,7 @@ class ViewState {
 
   /// 是否显示bar
   final RxBool _showBar = false.obs;
-  bool get showBar => _showBar.value;
+  bool get showBar => _showBar.value ?? false;
   set showBar(bool val) => _showBar.value = val;
 
   // 底栏偏移
@@ -175,17 +175,17 @@ class ViewState {
     }
   }
 
-  ViewMode lastViewMode;
+  ViewMode lastViewMode = ViewMode.LeftToRight;
 
   /// 阅读模式
   Rx<ViewMode> get _viewMode => _ehConfigService.viewMode;
-  ViewMode get viewMode => _viewMode.value;
+  ViewMode get viewMode => _viewMode.value ?? ViewMode.LeftToRight;
   set viewMode(val) => _viewMode.value = val;
 
   /// 显示页面间隔
 
   RxBool get _showPageInterval => _ehConfigService.showPageInterval;
-  bool get showPageInterval => _showPageInterval.value;
+  bool get showPageInterval => _showPageInterval.value ?? true;
   set showPageInterval(bool val) => _showPageInterval.value = val;
 
   bool fade = true;

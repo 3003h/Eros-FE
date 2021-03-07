@@ -10,11 +10,11 @@ import 'package:get/get.dart';
 /// 页面滑条
 class PageSlider extends StatefulWidget {
   const PageSlider({
-    Key key,
-    @required this.max,
-    @required this.sliderValue,
-    @required this.onChangedEnd,
-    @required this.onChanged,
+    Key? key,
+    required this.max,
+    required this.sliderValue,
+    required this.onChangedEnd,
+    required this.onChanged,
   }) : super(key: key);
 
   final double max;
@@ -27,7 +27,7 @@ class PageSlider extends StatefulWidget {
 }
 
 class _PageSliderState extends State<PageSlider> {
-  double _value;
+  late double _value;
 
   @override
   void initState() {
@@ -81,7 +81,7 @@ typedef DidFinishLayoutCallBack = dynamic Function(
 class ViewChildBuilderDelegate extends SliverChildBuilderDelegate {
   ViewChildBuilderDelegate(
     Widget Function(BuildContext, int) builder, {
-    int childCount,
+    int? childCount,
     bool addAutomaticKeepAlives = true,
     bool addRepaintBoundaries = true,
     this.onDidFinishLayout,
@@ -90,12 +90,11 @@ class ViewChildBuilderDelegate extends SliverChildBuilderDelegate {
             addAutomaticKeepAlives: addAutomaticKeepAlives,
             addRepaintBoundaries: addRepaintBoundaries);
 
-  final DidFinishLayoutCallBack onDidFinishLayout;
+  final DidFinishLayoutCallBack? onDidFinishLayout;
 
   @override
   void didFinishLayout(int firstIndex, int lastIndex) {
-    onDidFinishLayout(firstIndex, lastIndex);
-    // print('firstIndex: $firstIndex, lastIndex: $lastIndex');
+    onDidFinishLayout?.call(firstIndex, lastIndex);
   }
 }
 
@@ -108,7 +107,7 @@ Future<void> showShareActionSheet(BuildContext context, String imageUrl) {
               onPressed: () {
                 Get.back();
               },
-              child: Text(S.of(context).cancel)),
+              child: Text(S.of(context)!.cancel)),
           actions: <Widget>[
             CupertinoActionSheetAction(
                 onPressed: () {
@@ -138,7 +137,7 @@ Future<void> showShareActionSheet(BuildContext context, String imageUrl) {
 
 Future<void> showImageSheet(
     BuildContext context, String imageUrl, VoidCallback reload,
-    {String title}) {
+    {String? title}) {
   return showCupertinoModalPopup<void>(
       context: context,
       builder: (BuildContext context) {
@@ -148,20 +147,20 @@ Future<void> showImageSheet(
               onPressed: () {
                 Get.back();
               },
-              child: Text(S.of(context).cancel)),
+              child: Text(S.of(context)!.cancel)),
           actions: <Widget>[
             CupertinoActionSheetAction(
                 onPressed: () {
                   reload();
                   Get.back();
                 },
-                child: Text(S.of(context).reload_image)),
+                child: Text(S.of(context)!.reload_image)),
             CupertinoActionSheetAction(
                 onPressed: () {
                   Get.back();
                   showShareActionSheet(context, imageUrl);
                 },
-                child: Text(S.of(context).share_image)),
+                child: Text(S.of(context)!.share_image)),
           ],
         );
         return dialog;

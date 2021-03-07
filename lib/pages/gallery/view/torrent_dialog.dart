@@ -11,19 +11,22 @@ import 'package:share/share.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class TorrentView extends StatelessWidget {
-  const TorrentView({Key key}) : super(key: key);
+  const TorrentView({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     final TorrentController controller = Get.find(tag: pageCtrlDepth);
     return controller.obx(
-      (TorrentProvider state) {
+      (TorrentProvider? state) {
+        if (state == null) {
+          return const SizedBox.shrink();
+        }
         return Container(
           height: state.torrents.length * 40.0 + 30,
           child: ListView.separated(
             padding: const EdgeInsets.all(0),
             itemBuilder: (_, int index) {
-              final torrent = state.torrents[index];
+              final TorrentBean torrent = state.torrents[index];
               return Row(
                 children: [
                   Expanded(
@@ -116,17 +119,17 @@ class TorrentView extends StatelessWidget {
 
 Future<void> showTorrentDialog() {
   return showCupertinoDialog<void>(
-      context: Get.overlayContext,
+      context: Get.overlayContext!,
       barrierDismissible: true,
       builder: (_) {
         return CupertinoAlertDialog(
-          title: Text(S.of(Get.context).p_Torrent),
+          title: Text(S.of(Get.context!)!.p_Torrent),
           content: Container(
             child: const TorrentView(),
           ),
           actions: <Widget>[
             CupertinoDialogAction(
-              child: Text(S.of(Get.overlayContext).cancel),
+              child: Text(S.of(Get.context!)!.cancel),
               onPressed: () {
                 Get.back();
               },

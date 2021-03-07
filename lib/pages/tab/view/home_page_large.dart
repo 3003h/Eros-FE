@@ -8,7 +8,7 @@ import 'package:get/get.dart';
 import 'home_page_small.dart';
 
 class TabHomeLarge extends GetView<TabHomeController> {
-  const TabHomeLarge({Key key, this.wide = false}) : super(key: key);
+  const TabHomeLarge({Key? key, this.wide = false}) : super(key: key);
   final bool wide;
 
   @override

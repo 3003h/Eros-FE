@@ -1,25 +1,38 @@
+// import 'package:fehviewer/utils/cust_lib/flutter_linkify.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_linkify/flutter_linkify.dart';
+import 'package:linkify/linkify.dart'
+    show
+        LinkifyElement,
+        LinkifyOptions,
+        LinkableElement,
+        TextElement,
+        Linkifier,
+        UrlElement,
+        UrlLinkifier,
+        EmailElement,
+        defaultLinkifiers,
+        EmailLinkifier;
 
 class ExpandableLinkify extends StatefulWidget {
   const ExpandableLinkify({
-    Key key,
-    @required this.text,
+    Key? key,
+    required this.text,
     this.maxLines,
     this.style,
     this.expand = false,
-    this.linkifiers,
+    this.linkifiers = defaultLinkifiers,
     this.onOpen,
-    this.options,
+    this.options = const LinkifyOptions(),
     this.linkStyle,
-    this.textAlign,
+    this.textAlign = TextAlign.start,
     this.textDirection,
-    this.overflow,
-    this.textScaleFactor,
-    this.softWrap,
+    this.overflow = TextOverflow.clip,
+    this.textScaleFactor = 1.0,
+    this.softWrap = true,
     this.strutStyle,
     this.locale,
-    this.textWidthBasis,
+    this.textWidthBasis = TextWidthBasis.parent,
     this.colorExpandText = Colors.blueAccent,
     this.expandText = 'expand',
     this.collapseText = 'compress',
@@ -34,7 +47,7 @@ class ExpandableLinkify extends StatefulWidget {
   final List<Linkifier> linkifiers;
 
   /// Callback for tapping a link
-  final LinkCallback onOpen;
+  final LinkCallback? onOpen;
 
   /// linkify's options.
   final LinkifyOptions options;
@@ -42,10 +55,10 @@ class ExpandableLinkify extends StatefulWidget {
   // TextSpan
 
   /// Style for non-link text
-  final TextStyle style;
+  final TextStyle? style;
 
   /// Style of link text
-  final TextStyle linkStyle;
+  final TextStyle? linkStyle;
 
   // RichText
 
@@ -53,29 +66,29 @@ class ExpandableLinkify extends StatefulWidget {
   final TextAlign textAlign;
 
   /// Text direction of the text
-  final TextDirection textDirection;
+  final TextDirection? textDirection;
 
   /// The maximum number of lines for the text to span, wrapping if necessary
-  final int maxLines;
+  final int? maxLines;
 
   /// How visual overflow should be handled.
   final TextOverflow overflow;
 
   /// The number of font pixels for each logical pixel
-  final double textScaleFactor;
+  final double? textScaleFactor;
 
   /// Whether the text should break at soft line breaks.
   final bool softWrap;
 
   /// The strut style used for the vertical layout
-  final StrutStyle strutStyle;
+  final StrutStyle? strutStyle;
 
   /// Used to select a font when the same Unicode character can
   /// be rendered differently, depending on the locale
-  final Locale locale;
+  final Locale? locale;
 
   /// Defines how to measure the width of the rendered text.
-  final TextWidthBasis textWidthBasis;
+  final TextWidthBasis? textWidthBasis;
 
   final Color colorExpandText;
 
@@ -145,9 +158,7 @@ class _ExpandableLinkifyState extends State<ExpandableLinkify> {
                   padding: const EdgeInsets.symmetric(vertical: 8),
                   child: Text(_expand ? widget.collapseText : widget.expandText,
                       style: TextStyle(
-                          fontSize: widget.style != null
-                              ? widget.style.fontSize
-                              : null,
+                          fontSize: widget.style?.fontSize,
                           color: widget.colorExpandText)),
                 ),
               ),

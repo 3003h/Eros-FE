@@ -9,13 +9,13 @@ import 'package:get/get.dart';
 import 'package:webview_cookie_manager/webview_cookie_manager.dart';
 
 class UserController extends ProfileController {
-  bool get isLogin => user().username != null;
-  Rx<User> user = User().obs;
+  bool get isLogin => user.value?.username?.isNotEmpty ?? false;
+  Rx<User> user = kDefUser.obs;
 
   final EhConfigService _ehConfigService = Get.find();
 
   void _logOut() {
-    user(User());
+    user(kDefUser);
     final WebviewCookieManager cookieManager = WebviewCookieManager();
     cookieManager.clearCookies();
   }
@@ -23,8 +23,14 @@ class UserController extends ProfileController {
   @override
   void onInit() {
     super.onInit();
-    user(Global.profile.user ?? User());
-    everProfile<User>(user, (User value) => Global.profile.user = value);
+    user(Global.profile.user);
+    everProfile<User>(
+      user as RxInterface<User>,
+      (User value) {
+        // Global.profile.user = value;
+        Global.profile = Global.profile.copyWith(user: value);
+      },
+    );
   }
 
   Future<void> showLogOutDialog(BuildContext context) async {
@@ -36,13 +42,13 @@ class UserController extends ProfileController {
           content: const Text('确定注销?'),
           actions: <Widget>[
             CupertinoDialogAction(
-              child: Text(S.of(context).cancel),
+              child: Text(S.of(context)!.cancel),
               onPressed: () {
                 Get.back();
               },
             ),
             CupertinoDialogAction(
-              child: Text(S.of(context).ok),
+              child: Text(S.of(context)!.ok),
               onPressed: () async {
                 (await Api.cookieJar).deleteAll();
                 // userController.user(User());

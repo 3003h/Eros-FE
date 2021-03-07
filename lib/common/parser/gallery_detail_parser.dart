@@ -8,14 +8,12 @@ import 'package:html/parser.dart' show parse;
 import 'package:intl/intl.dart';
 
 class GalleryDetailParser {
-  /// todo 检查预览图是否是l视图
   static bool isGalleryPreviewDmL(String response) {
     final Document document = parse(response);
     final List<Element> domList =
         document.querySelectorAll('#dms > div > select > option');
 
     for (final Element elm in domList) {
-      // logger.v('${elm.attributes["value"]}  ${elm.attributes.keys}');
       final Map<dynamic, String> attributes = elm.attributes;
       if (attributes.keys.contains('selected')) {
         return attributes['value'] == 'l';
@@ -32,31 +30,34 @@ class GalleryDetailParser {
     // 解析响应信息dom
     final Document document = parse(response);
 
-    final GalleryItem galleryItem = inGalleryItem ?? GalleryItem();
+    GalleryItem galleryItem = inGalleryItem ?? const GalleryItem();
 
     // 封面图片
-    final Element imageElem = document.querySelector('#gd1 > div');
-    final String _imageElemStyle = imageElem.attributes['style'];
-    final RegExpMatch _match =
+    final Element? imageElem = document.querySelector('#gd1 > div');
+    final String _imageElemStyle = imageElem?.attributes['style'] ?? '';
+    final RegExpMatch? _match =
         RegExp(r'url\((.+)\)').firstMatch(_imageElemStyle);
-    final String _imageUrl = _match.group(1);
-    if (galleryItem.imgUrl?.isEmpty ?? true) {
-      galleryItem.imgUrl = _imageUrl;
-    }
+    final String _imageUrl = _match?.group(1) ?? '';
+    // if (galleryItem.imgUrl?.isEmpty ?? true) {
+    //   // galleryItem.imgUrl = _imageUrl;
+    //   galleryItem = galleryItem.copyWith(imgUrl: _imageUrl);
+    // }
 
     // 完整的标签信息
-    galleryItem.tagGroup = [];
+    // galleryItem.tagGroup = [];
+    final List<TagGroup> _tagGroup = [];
     const String tagGroupSelect = '#taglist > table > tbody > tr';
-    final List<Element> tagGroups = document.querySelectorAll(tagGroupSelect);
-    for (final Element tagGroup in tagGroups) {
+    final List<Element> elmTagGroups =
+        document.querySelectorAll(tagGroupSelect);
+    for (final Element elmTagGroup in elmTagGroups) {
       try {
-        String type = tagGroup.querySelector('td.tc').text.trim();
-        type = RegExp(r'(\w+):?$').firstMatch(type).group(1);
+        String type = elmTagGroup.querySelector('td.tc')?.text.trim() ?? '';
+        type = RegExp(r'(\w+):?$').firstMatch(type)?.group(1) ?? '';
 
-        final List<Element> tags = tagGroup.querySelectorAll('td > div > a');
+        final List<Element> tags = elmTagGroup.querySelectorAll('td > div > a');
         final List<GalleryTag> galleryTags = [];
         for (final Element tagElm in tags) {
-          String title = tagElm.text.trim() ?? '';
+          String title = tagElm.text.trim();
           if (title.contains('|')) {
             title = title.split('|')[0];
           }
@@ -64,7 +65,7 @@ class GalleryDetailParser {
               await EhTagDatabase.getTranTag(title, nameSpase: type) ?? title;
 
           int tagVote = 0;
-          final String tagclass = tagElm.attributes['class'];
+          final String? tagclass = tagElm.attributes['class'];
           if (tagclass == 'tup') {
             tagVote = 1;
           } else if (tagclass == 'tdn') {
@@ -72,41 +73,41 @@ class GalleryDetailParser {
           }
 
 //        logger.v('$type:$title $tagTranslat');
-          galleryTags.add(GalleryTag()
-            ..title = title
-            ..type = type
-            ..vote = tagVote
-            ..tagTranslat = tagTranslat);
+          galleryTags.add(GalleryTag(
+            title: title,
+            type: type,
+            vote: tagVote,
+            tagTranslat: tagTranslat,
+          ));
         }
 
-        galleryItem.tagGroup.add(TagGroup()
-          ..tagType = type
-          ..galleryTags = galleryTags);
+        _tagGroup.add(TagGroup(tagType: type, galleryTags: galleryTags));
       } catch (e, stack) {
         logger.e('解析tag数据异常\n' + e.toString() + '\n' + stack.toString());
       }
     }
 
     // 全部评论数据
-    galleryItem.galleryComment = [];
+    final List<GalleryComment> _galleryComment = [];
     const String commentSelect = '#cdiv > div.c1';
     final List<Element> commentList = document.querySelectorAll(commentSelect);
 //    logger.v('${commentList.length}');
     for (final Element comment in commentList) {
       try {
         // 评论人
-        final Element postElem = comment.querySelector('div.c2 > div.c3 > a');
-        final String postName = postElem.text.trim();
+        final Element? postElem = comment.querySelector('div.c2 > div.c3 > a');
+        final String postName = postElem?.text.trim() ?? '';
 
         // 解析时间
-        final Element timeElem = comment.querySelector('div.c2 > div.c3');
-        final String postTime = timeElem.text.trim();
+        final Element? timeElem = comment.querySelector('div.c2 > div.c3');
+        final String postTime = timeElem?.text.trim() ?? '';
         // logger.v(postTime);
         // 示例: Posted on 29 June 2020, 05:41 UTC by:
         // 20201027 修复评论问题
         // Posted on 29 June 2020, 05:41 by:
         final String postTimeUTC =
-            RegExp(r'Posted on (.+, .+) by').firstMatch(postTime).group(1);
+            RegExp(r'Posted on (.+, .+) by').firstMatch(postTime)?.group(1) ??
+                '';
 
         // 时间由utc转为本地时间
         final DateTime time = DateFormat('dd MMMM yyyy, HH:mm', 'en_US')
@@ -116,7 +117,7 @@ class GalleryDetailParser {
             DateFormat('yyyy-MM-dd HH:mm').format(time);
 
         // 评论评分 (Uploader Comment 没有)
-        final Element scoreElem =
+        final Element? scoreElem =
             comment.querySelector('div.c2 > div.c5.nosel');
         String score = '';
         if (scoreElem != null) {
@@ -134,12 +135,12 @@ class GalleryDetailParser {
 
         int _vote = 0;
         String _id = '';
-        final Element _c4 = comment.querySelector('div.c2 > div.c4.nosel');
+        final Element? _c4 = comment.querySelector('div.c2 > div.c4.nosel');
         if (_c4 != null) {
           final Element _hand = _c4.children.first;
-          final String _handText = _hand.attributes['onclick'];
+          final String _handText = _hand.attributes['onclick'] ?? '';
           if (_handText != null) {
-            _id = RegExp(r'\((\d+)\)').firstMatch(_handText).group(1);
+            _id = RegExp(r'\((\d+)\)').firstMatch(_handText)?.group(1) ?? '';
             _canEdit = _handText.contains('edit_');
             _canVote = _handText.contains('vote_');
             // logger.d(
@@ -149,8 +150,8 @@ class GalleryDetailParser {
           if (_c4.children.length > 1) {
             final Element _vUp = _c4.children.elementAt(0);
             final Element _vDown = _c4.children.elementAt(1);
-            final String _vUpStyle = _vUp.attributes['style'];
-            final String _vDownStyle = _vDown.attributes['style'];
+            final String _vUpStyle = _vUp.attributes['style'] ?? '';
+            final String _vDownStyle = _vDown.attributes['style'] ?? '';
             // logger.d('id $_id \n$_vUpStyle \n$_vDownStyle');
             if (_vUpStyle.isNotEmpty) {
               _vote = 1;
@@ -162,72 +163,28 @@ class GalleryDetailParser {
         }
 
         // 解析评论内容
-        final Element contextElem = comment.querySelector('div.c6');
-
-        /// map的方式处理
-        /*final commentSpans = contextElem.nodes.map((Node node) {
-          if (node.nodeType == Node.TEXT_NODE) {
-            final _nodeText =
-                RegExp(r'^"?(.+)"?$').firstMatch(node.text.trim())?.group(1) ??
-                    node.text;
-            return GalleryCommentSpan()..text = _nodeText;
-          } else if (node.nodeType == Node.ELEMENT_NODE &&
-              (node as Element).localName == 'br') {
-            return GalleryCommentSpan()..text = '\n';
-          } else if (node.nodeType == Node.ELEMENT_NODE &&
-              (node as Element).localName == 'a') {
-            final Element _nodeElm = node as Element;
-
-            final _nodeHref = _nodeElm.attributes['href'];
-
-            String _nodeImageUrl;
-            if (_nodeElm.children.isNotEmpty) {
-              final _imgElm = _nodeElm.children
-                  .firstWhere((element) => element.localName == 'img');
-              _nodeImageUrl = _imgElm?.attributes['src'];
-            }
-
-            final _commentSpan = GalleryCommentSpan()
-              ..text = _nodeElm.text?.trim() ?? _nodeHref
-              ..href = _nodeHref
-              ..imageUrl = _nodeImageUrl;
-
-            logger.v('${_commentSpan.toJson()}');
-
-            return _commentSpan;
-          } else if (node.nodeType == Node.ELEMENT_NODE &&
-              (node as Element).localName == 'img') {
-            final Element _nodeElm = node as Element;
-            final String _nodeImageUrl = _nodeElm.attributes['src'];
-
-            final _commentSpan = GalleryCommentSpan()
-              ..text = _nodeElm.text?.trim() ?? _nodeImageUrl
-              ..imageUrl = _nodeImageUrl;
-
-            logger.v('${_commentSpan.toJson()}');
-
-            return _commentSpan;
-          }
-        }).toList();*/
+        final Element? contextElem = comment.querySelector('div.c6');
 
         /// for in遍历的方式处理
         final List<GalleryCommentSpan> commentSpansf = [];
-        for (Node node in contextElem.nodes) {
+        for (Node node in contextElem?.nodes ?? []) {
           if (node.nodeType == Node.TEXT_NODE) {
             final String _nodeText = RegExp(r'^"?(.+)"?$')
-                    .firstMatch(node.text.trim())
+                    .firstMatch(node.text?.trim() ?? '')
                     ?.group(1)
                     ?.trim() ??
-                node.text.trim();
+                node.text?.trim() ??
+                '';
 
             // 如果数组最后一个是纯文本 直接追加文本
             if (commentSpansf.isNotEmpty &&
                 (commentSpansf.last.sType == CommentSpanType.text)) {
-              commentSpansf.last.text += _nodeText;
+              // commentSpansf.last.text += _nodeText;
+              commentSpansf.last = commentSpansf.last
+                  .copyWith(text: '${commentSpansf.last.text ?? ''}$_nodeText');
             } else {
-              commentSpansf.add(GalleryCommentSpan()
-                ..text = _nodeText
-                ..sType = CommentSpanType.text);
+              commentSpansf.add(GalleryCommentSpan(text: _nodeText)
+                  .copyWithSpanType(CommentSpanType.text));
             }
           } else if (node.nodeType == Node.ELEMENT_NODE) {
             // br标签 换行
@@ -235,11 +192,15 @@ class GalleryDetailParser {
               // 如果数组最后一个是纯文本 直接追加文本
               if (commentSpansf.isNotEmpty &&
                   (commentSpansf.last.sType == CommentSpanType.text)) {
-                commentSpansf.last.text += '\n';
+                // commentSpansf.last.text += '\n';
+                commentSpansf.last = commentSpansf.last
+                    .copyWith(text: '${commentSpansf.last.text ?? ''}\n');
               } else {
-                commentSpansf.add(GalleryCommentSpan()
-                  ..text = '\n'
-                  ..sType = CommentSpanType.text);
+                // commentSpansf.add(GalleryCommentSpan()
+                //   ..text = '\n'
+                //   ..sType = CommentSpanType.text);
+                commentSpansf.add(const GalleryCommentSpan(text: '\n')
+                    .copyWithSpanType(CommentSpanType.text));
               }
               continue;
             }
@@ -247,31 +208,32 @@ class GalleryDetailParser {
             // span带a href
             if ((node as Element).localName == 'span' &&
                 node.children.isNotEmpty) {
-              final Element _nodeElm = (node as Element).children.first;
-              final String _nodeHref = _nodeElm.attributes['href'];
-              final GalleryCommentSpan _commentSpan = GalleryCommentSpan()
-                ..sType = CommentSpanType.linkText
-                ..text = _nodeElm.text?.trim() ?? _nodeHref
-                ..href = _nodeHref;
+              final Element? _nodeElm = (node as Element).children.first;
+              final String _nodeHref = _nodeElm?.attributes['href'] ?? '';
+              final GalleryCommentSpan _commentSpan = GalleryCommentSpan(
+                text: _nodeElm?.text.trim() ?? _nodeHref,
+                href: _nodeHref,
+              ).copyWithSpanType(CommentSpanType.linkText);
+
               commentSpansf.add(_commentSpan);
               continue;
             }
 
             // a标签带href
             if ((node as Element).localName == 'a') {
-              final Element _nodeElm = node as Element;
+              final Element? _nodeElm = node as Element;
 
-              final String _nodeHref = _nodeElm.attributes['href'];
+              final String _nodeHref = _nodeElm?.attributes['href'] ?? '';
 
-              if (_nodeElm.children.isNotEmpty) {
-                final _imgElm = _nodeElm.children
+              if (_nodeElm?.children.isNotEmpty ?? false) {
+                final Element? _imgElm = _nodeElm?.children
                     .firstWhere((element) => element.localName == 'img');
                 final _nodeImageUrl = _imgElm?.attributes['src'];
-                final GalleryCommentSpan _commentSpan = GalleryCommentSpan()
-                  ..sType = CommentSpanType.linkImage
-                  ..text = _nodeElm.text?.trim() ?? _nodeHref
-                  ..href = _nodeHref
-                  ..imageUrl = _nodeImageUrl;
+                final GalleryCommentSpan _commentSpan = GalleryCommentSpan(
+                  text: _nodeElm?.text.trim() ?? _nodeHref,
+                  href: _nodeHref,
+                  imageUrl: _nodeImageUrl,
+                ).copyWithSpanType(CommentSpanType.linkImage);
 
                 commentSpansf.add(_commentSpan);
                 continue;
@@ -279,24 +241,27 @@ class GalleryDetailParser {
                 // 如果数组最后一个是纯文本 直接追加文本
                 if (commentSpansf.isNotEmpty &&
                     (commentSpansf.last.sType == CommentSpanType.text)) {
-                  commentSpansf.last.text += _nodeElm.text;
+                  // commentSpansf.last.text += _nodeElm.text;
+                  commentSpansf.last = commentSpansf.last.copyWith(
+                      text:
+                          '${commentSpansf.last.text}${_nodeElm?.text ?? ''}');
                 } else {
-                  commentSpansf.add(GalleryCommentSpan()
-                    ..sType = CommentSpanType.text
-                    ..text = _nodeElm.text ?? _nodeHref);
+                  commentSpansf.add(
+                      GalleryCommentSpan(text: _nodeElm?.text ?? _nodeHref)
+                          .copyWithSpanType(CommentSpanType.text));
                 }
               }
             }
 
             // 只有一个img的情况 无href
             if ((node as Element).localName == 'img') {
-              final Element _nodeElm = node as Element;
-              final String _nodeImageUrl = _nodeElm.attributes['src'];
+              final Element? _nodeElm = node as Element;
+              final String _nodeImageUrl = _nodeElm?.attributes['src'] ?? '';
 
-              final _commentSpan = GalleryCommentSpan()
-                ..sType = CommentSpanType.image
-                ..text = _nodeElm.text?.trim() ?? _nodeImageUrl
-                ..imageUrl = _nodeImageUrl;
+              final _commentSpan = GalleryCommentSpan(
+                text: _nodeElm?.text.trim() ?? _nodeImageUrl,
+                imageUrl: _nodeImageUrl,
+              ).copyWithSpanType(CommentSpanType.image);
 
               logger.v('${_commentSpan.toJson()}');
 
@@ -305,23 +270,22 @@ class GalleryDetailParser {
           }
         }
 
-        galleryItem.galleryComment.add(GalleryComment()
-          ..id = _id
-          ..canEdit = _canEdit
-          ..canVote = _canVote
-          ..vote = _vote
-          ..name = postName
-          ..span = commentSpansf
-          ..time = postTimeLocal
-          ..score = score);
+        _galleryComment.add(GalleryComment(
+            id: _id,
+            canEdit: _canEdit,
+            canVote: _canVote,
+            vote: _vote,
+            name: postName,
+            span: commentSpansf,
+            time: postTimeLocal,
+            score: score));
       } catch (e, stack) {
         logger.e('解析评论异常\n' + e.toString() + '\n' + stack.toString());
       }
     }
 
     // 画廊缩略图
-    final List<GalleryPreview> previewList = parseGalleryPreview(document);
-    galleryItem.galleryPreview = previewList;
+    final List<GalleryPreview> _galleryPreviews = parseGalleryPreview(document);
 
     // todo 待优化 在这里请求showKey会导致等待时间太久
     //  画廊 showKey
@@ -330,105 +294,133 @@ class GalleryDetailParser {
 
     // 收藏夹标题
     String _favTitle = '';
-    final Element fav = document.querySelector('#favoritelink');
-    if (fav?.nodes?.length == 1) {
-      _favTitle = fav.text.trim();
+    final Element? fav = document.querySelector('#favoritelink');
+    if (fav?.nodes.length == 1) {
+      _favTitle = fav?.text.trim() ?? '';
     }
-    galleryItem.favTitle = _favTitle;
+    // galleryItem.favTitle = _favTitle;
 
     // 收藏夹序号
     String _favcat = '';
-    final Element _favcatElm = document.querySelector('#fav');
-    if (_favcatElm.nodes.isNotEmpty) {
-      final Element _div = _favcatElm.querySelector('div');
-      final String _catStyle = _div?.attributes['style'];
-      final String _catPosition =
-          RegExp(r'background-position:0px -(\d+)px;').firstMatch(_catStyle)[1];
+    final Element? _favcatElm = document.querySelector('#fav');
+    if (_favcatElm?.nodes.isNotEmpty ?? false) {
+      final Element? _div = _favcatElm?.querySelector('div');
+      final String _catStyle = _div?.attributes['style'] ?? '';
+      final String _catPosition = RegExp(r'background-position:0px -(\d+)px;')
+              .firstMatch(_catStyle)?[1] ??
+          '';
       _favcat = '${(int.parse(_catPosition) - 2) ~/ 19}';
     }
-    galleryItem.favcat = _favcat;
+    // galleryItem.favcat = _favcat;
 
     // apiuid
-    final String apiuid =
-        RegExp(r'var\s*?apiuid\s*?=\s*?(\d+);').firstMatch(response)?.group(1);
-    galleryItem.apiuid = apiuid;
+    final String _apiuid = RegExp(r'var\s*?apiuid\s*?=\s*?(\d+);')
+            .firstMatch(response)
+            ?.group(1) ??
+        '';
+    // galleryItem.apiuid = apiuid;
 
     // apikey
-    final String apikey = RegExp(r'var\s*?apikey\s*?=\s*?"([0-9a-f]+)";')
-        .firstMatch(response)
-        ?.group(1);
-    galleryItem.apikey = apikey;
+    final String _apikey = RegExp(r'var\s*?apikey\s*?=\s*?"([0-9a-f]+)";')
+            .firstMatch(response)
+            ?.group(1) ??
+        '';
+    // galleryItem.apikey = apikey;
 
     // 20201230 Archiver link
-    final String or = RegExp(r"or=(.*?)'").firstMatch(response)?.group(1);
+    final String or = RegExp(r"or=(.*?)'").firstMatch(response)?.group(1) ?? '';
     // logger.d('or=$or');
-    galleryItem.archiverLink =
+    final _archiverLink =
         '${Api.getBaseUrl()}/archiver.php?gid=${galleryItem.gid}&token=${galleryItem.token}&or=$or';
     // logger.d('archiverLink: ${galleryItem.archiverLink}');
 
-    final Element _ratingImage = document.querySelector('#rating_image');
-    final String _ratingImageClass = _ratingImage.attributes['class'];
-    galleryItem.colorRating = _ratingImageClass ?? '';
-    // logger.d('${galleryItem.colorRating} ');
-    galleryItem.isRatinged =
-        _ratingImageClass.contains(RegExp(r'ir(r|g|b|y)')) ?? false;
+    final Element? _ratingImage = document.querySelector('#rating_image');
+    final String _ratingImageClass = _ratingImage?.attributes['class'] ?? '';
+    final _colorRating = _ratingImageClass;
+    final _isRatinged = _ratingImageClass.contains(RegExp(r'ir(r|g|b|y)'));
 
     // 收藏次数
     final String _favCount =
-        document.querySelector('#favcount').text.replaceFirstMapped(
-              RegExp(r'(\d+).+'),
-              (Match m) => m.group(1),
-            );
-    galleryItem.favoritedCount = _favCount;
+        document.querySelector('#favcount')?.text.replaceFirstMapped(
+                  RegExp(r'(\d+).+'),
+                  (Match m) => m.group(1) ?? '',
+                ) ??
+            '';
+    final _favoritedCount = _favCount;
 
     // 评分人次
-    final String _ratingCount = document.querySelector('#rating_count').text;
-    galleryItem.ratingCount = _ratingCount;
+    final String _ratingCount =
+        document.querySelector('#rating_count')?.text ?? '';
 
     // 平均分
     final String _rating = RegExp(r'([\d.]+)')
-            .firstMatch(document.querySelector('#rating_label').text)
+            .firstMatch(document.querySelector('#rating_label')?.text ?? '')
             ?.group(1) ??
         '0';
-    galleryItem.rating = double.parse(_rating);
+    final _ratingNum = double.parse(_rating);
 
     //
     final String ratPx =
-        document.querySelector('#rating_image').attributes['style'];
+        document.querySelector('#rating_image')?.attributes['style'] ?? '';
     final RegExp pxA = RegExp(r'-?(\d+)px\s+-?(\d+)px');
-    final RegExpMatch px = pxA.firstMatch(ratPx);
+    final RegExpMatch? px = pxA.firstMatch(ratPx);
 
-    final double ratingFB = (80.0 - double.parse(px.group(1))) / 16.0 -
-        (px.group(2) == '21' ? 0.5 : 0.0);
-    galleryItem.ratingFallBack = ratingFB;
+    final double _ratingFB = (80.0 - double.parse(px?.group(1) ?? '0')) / 16.0 -
+        (px?.group(2) == '21' ? 0.5 : 0.0);
+    // galleryItem.ratingFallBack = _ratingFB;
 
-    // logger.i('ratingFB $ratingFB');
+    // logger.i('_ratingFB $_ratingFB');
 
     // 英语标题
-    galleryItem.englishTitle = document.querySelector('#gn').text;
+    final _englishTitle = document.querySelector('#gn')?.text ?? '';
 
     // 日语标题
-    galleryItem.japaneseTitle = document.querySelector('#gj').text;
+    final _japaneseTitle = document.querySelector('#gj')?.text ?? '';
 
-    final Element _elmTorrent =
-        document.querySelector('#gd5').children[2].children[1];
+    final Element? _elmTorrent =
+        document.querySelector('#gd5')?.children[2].children[1];
     // 种子数量
-    galleryItem.torrentcount ??=
-        RegExp(r'\d+').firstMatch(_elmTorrent.text).group(0) ?? '0';
+    final _torrentcount =
+        RegExp(r'\d+').firstMatch(_elmTorrent?.text ?? '')?.group(0) ?? '0';
 
     final String _language = document
-        .querySelector('#gdd > table > tbody > tr:nth-child(3) > td.gdt2')
-        .text
-        .replaceFirstMapped(
-          RegExp(r'(\w+).*'),
-          (Match m) => m.group(1),
-        );
-    galleryItem.language = _language;
+            .querySelector('#gdd > table > tbody > tr:nth-child(3) > td.gdt2')
+            ?.text
+            .replaceFirstMapped(
+              RegExp(r'(\w+).*'),
+              (Match m) => m.group(1) ?? '',
+            ) ??
+        '';
+    // galleryItem.language = _language;
 
     final String _fileSize = document
-        .querySelector('#gdd > table > tbody > tr:nth-child(4) > td.gdt2')
-        .text;
-    galleryItem.filesizeText = _fileSize;
+            .querySelector('#gdd > table > tbody > tr:nth-child(4) > td.gdt2')
+            ?.text ??
+        '';
+    // galleryItem.filesizeText = _fileSize;
+
+    galleryItem = galleryItem.copyWith(
+      imgUrl: _imageUrl,
+      tagGroup: _tagGroup,
+      galleryComment: _galleryComment,
+      galleryPreview: _galleryPreviews,
+      favTitle: _favTitle,
+      favcat: _favcat,
+      apiuid: _apiuid,
+      apikey: _apikey,
+      archiverLink: _archiverLink,
+      colorRating: _colorRating,
+      isRatinged: _isRatinged,
+      favoritedCount: _favoritedCount,
+      ratingCount: _ratingCount,
+      ratingFallBack: _ratingFB,
+      rating: _ratingNum,
+      englishTitle: _englishTitle,
+      japaneseTitle: _japaneseTitle,
+      torrentcount: _torrentcount,
+      language: _language,
+      filesizeText: _fileSize,
+    );
 
     return galleryItem;
   }
@@ -450,28 +442,30 @@ class GalleryDetailParser {
       // 小图的处理
       // logger.d('小图的处理');
       for (final Element pic in picLsit) {
-        final String picHref = pic.querySelector('a').attributes['href'];
-        final String style = pic.querySelector('div').attributes['style'];
+        final String picHref = pic.querySelector('a')?.attributes['href'] ?? '';
+        final String style =
+            pic.querySelector('div')?.attributes['style'] ?? '';
         final String picSrcUrl =
-            RegExp(r'url\((.+)\)').firstMatch(style).group(1);
+            RegExp(r'url\((.+)\)').firstMatch(style)?.group(1) ?? '';
         final String height =
-            RegExp(r'height:(\d+)?px').firstMatch(style).group(1);
+            RegExp(r'height:(\d+)?px').firstMatch(style)?.group(1) ?? '';
         final String width =
-            RegExp(r'width:(\d+)?px').firstMatch(style).group(1);
+            RegExp(r'width:(\d+)?px').firstMatch(style)?.group(1) ?? '';
         final String offSet =
-            RegExp(r'\) -(\d+)?px ').firstMatch(style).group(1);
+            RegExp(r'\) -(\d+)?px ').firstMatch(style)?.group(1) ?? '';
 
-        final Element imgElem = pic.querySelector('img');
-        final String picSer = imgElem.attributes['alt'].trim();
+        final Element? imgElem = pic.querySelector('img');
+        final String picSer = imgElem?.attributes['alt']?.trim() ?? '';
 
-        galleryPreview.add(GalleryPreview()
-          ..ser = int.parse(picSer)
-          ..isLarge = false
-          ..href = picHref
-          ..imgUrl = picSrcUrl
-          ..height = double.parse(height)
-          ..width = double.parse(width)
-          ..offSet = double.parse(offSet));
+        galleryPreview.add(GalleryPreview(
+          ser: int.parse(picSer),
+          isLarge: false,
+          href: picHref,
+          imgUrl: picSrcUrl,
+          height: double.parse(height),
+          width: double.parse(width),
+          offSet: double.parse(offSet),
+        ));
       }
     } else {
       final List<Element> picLsit =
@@ -479,16 +473,16 @@ class GalleryDetailParser {
       // 大图的处理
       // logger.d('大图的处理');
       for (final Element pic in picLsit) {
-        final String picHref = pic.querySelector('a').attributes['href'];
-        final Element imgElem = pic.querySelector('img');
-        final String picSer = imgElem.attributes['alt'].trim();
-        final String picSrcUrl = imgElem.attributes['src'].trim();
+        final String picHref = pic.querySelector('a')?.attributes['href'] ?? '';
+        final Element? imgElem = pic.querySelector('img');
+        final String picSer = imgElem?.attributes['alt']?.trim() ?? '';
+        final String picSrcUrl = imgElem?.attributes['src']?.trim() ?? '';
 
-        galleryPreview.add(GalleryPreview()
-          ..ser = int.parse(picSer)
-          ..isLarge = true
-          ..href = picHref
-          ..imgUrl = picSrcUrl);
+        galleryPreview.add(GalleryPreview(
+            ser: int.parse(picSer),
+            isLarge: true,
+            href: picHref,
+            imgUrl: picSrcUrl));
       }
     }
 

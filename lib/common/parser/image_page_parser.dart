@@ -2,6 +2,8 @@ import 'package:fehviewer/models/index.dart';
 import 'package:html/dom.dart';
 import 'package:html/parser.dart' show parse;
 
+import '../global.dart';
+
 GalleryPreview paraImage(String htmlText) {
   // logger.d('htmlText $htmlText');
   final Document document = parse(htmlText);
@@ -32,11 +34,11 @@ GalleryPreview paraImage(String htmlText) {
 
   // logger.v('$_sourceId ');
 
-  final GalleryPreview _rePreview = GalleryPreview(
+  final GalleryPreview _rePreview = kDefGalleryPreview.copyWith(
     largeImageUrl: imageUrl,
     sourceId: _sourceId,
-    largeImageWidth: width ?? 0,
-    largeImageHeight: height ?? 0,
+    largeImageWidth: width,
+    largeImageHeight: height,
   );
 
   return _rePreview;

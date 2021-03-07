@@ -24,7 +24,7 @@ final TabPages tabPages = TabPages();
 
 class TabPages {
   final Map<String, ScrollController> scrollControllerMap = {};
-  ScrollController _scrollController(String key) {
+  ScrollController? _scrollController(String key) {
     if (scrollControllerMap[key] == null) {
       scrollControllerMap[key] = ScrollController();
     }
@@ -77,19 +77,19 @@ class TabPages {
 
   Map<String, String> get tabTitles => <String, String>{
         EHRoutes.popular:
-            S.of(Get.find<TabHomeController>().tContext).tab_popular,
+            S.of(Get.find<TabHomeController>().tContext)!.tab_popular,
         EHRoutes.watched:
-            S.of(Get.find<TabHomeController>().tContext).tab_watched,
+            S.of(Get.find<TabHomeController>().tContext)!.tab_watched,
         EHRoutes.gallery:
-            S.of(Get.find<TabHomeController>().tContext).tab_gallery,
+            S.of(Get.find<TabHomeController>().tContext)!.tab_gallery,
         EHRoutes.favorite:
-            S.of(Get.find<TabHomeController>().tContext).tab_favorite,
+            S.of(Get.find<TabHomeController>().tContext)!.tab_favorite,
         EHRoutes.history:
-            S.of(Get.find<TabHomeController>().tContext).tab_history,
+            S.of(Get.find<TabHomeController>().tContext)!.tab_history,
         EHRoutes.download:
-            S.of(Get.find<TabHomeController>().tContext).tab_download,
+            S.of(Get.find<TabHomeController>().tContext)!.tab_download,
         EHRoutes.setting:
-            S.of(Get.find<TabHomeController>().tContext).tab_setting,
+            S.of(Get.find<TabHomeController>().tContext)!.tab_setting,
       };
 }
 
@@ -112,14 +112,14 @@ const List<String> kTabNameList = <String>[
 ];
 
 class TabHomeController extends GetxController {
-  DateTime lastPressedAt; //上次点击时间
+  late DateTime lastPressedAt; //上次点击时间
 
   int currentIndex = 0;
   bool tapAwait = false;
 
   final EhConfigService _ehConfigService = Get.find();
   final GStore gStore = Get.find();
-  bool get isSafeMode => _ehConfigService.isSafeMode.value;
+  bool get isSafeMode => _ehConfigService.isSafeMode.value ?? false;
 
   final CupertinoTabController tabController = CupertinoTabController();
 
@@ -150,13 +150,13 @@ class TabHomeController extends GetxController {
   // 通过控制该变量控制tab项的开关
   RxMap<String, bool> tabMap = kDefTabMap.obs;
 
-  TabConfig _tabConfig;
+  late TabConfig _tabConfig;
 
   @override
   void onInit() {
     super.onInit();
 
-    _tabConfig = gStore.tabConfig ?? (TabConfig()..tabItemList = <TabItem>[]);
+    _tabConfig = gStore.tabConfig ?? (TabConfig(tabItemList: []));
 
     // logger.i('get tab config ${_tabConfig.tabItemList.length}');
 
@@ -172,9 +172,7 @@ class TabHomeController extends GetxController {
         logger.d('add tab $_newTabs');
 
         _newTabs.forEach((String element) {
-          _tabConfig.tabItemList.add(TabItem()
-            ..name = element
-            ..enable = false);
+          _tabConfig.tabItemList.add(TabItem(name: element, enable: false));
         });
       }
 
@@ -192,14 +190,14 @@ class TabHomeController extends GetxController {
 
     // logger.d('${tabNameList}');
 
-    ever(tabMap, (map) {
+    ever(tabMap, (Map<String, bool> map) {
       _tabConfig.setItemList(map, tabNameList);
       gStore.tabConfig = _tabConfig;
       logger.d(
           '${_tabConfig.tabItemList.map((e) => '${e.name}:${e.enable}').toList().join('\n')}');
     });
 
-    ever(tabNameList, (nameList) {
+    ever(tabNameList, (List<String> nameList) {
       _tabConfig.setItemList(tabMap, nameList);
       gStore.tabConfig = _tabConfig;
       logger.d(
@@ -209,21 +207,23 @@ class TabHomeController extends GetxController {
 
   List<BottomNavigationBarItem> get listBottomNavigationBarItem => _showTabs
       .map((e) => BottomNavigationBarItem(
-          icon: tabPages.tabIcons[e], label: tabPages.tabTitles[e]))
+            icon: (tabPages.tabIcons[e])!,
+            label: tabPages.tabTitles[e],
+          ))
       .toList();
 
-  BuildContext tContext = Get.context;
+  BuildContext tContext = Get.context!;
 
   /// 需要初始化获取BuildContext 否则修改语言时tabitem的文字不会立即生效
-  void init({BuildContext inContext}) {
+  void init({required BuildContext inContext}) {
     // logger.d(' rebuild home');
     tContext = inContext;
   }
 
   List<Widget> get viewList =>
-      _showTabs.map((e) => tabPages.tabViews[e]).toList();
+      _showTabs.map((e) => tabPages.tabViews[e]!).toList();
 
-  List<ScrollController> get scrollControllerList =>
+  List<ScrollController?> get scrollControllerList =>
       _showTabs.map((e) => tabPages.scrollControllerMap[e]).toList();
 
   Future<void> onTap(int index) async {
@@ -233,11 +233,11 @@ class TabHomeController extends GetxController {
         duration: const Duration(milliseconds: 800),
         awaitComplete: false,
         onTap: () {
-          scrollControllerList[index].animateTo(0.0,
+          scrollControllerList[index]?.animateTo(0.0,
               duration: const Duration(milliseconds: 500), curve: Curves.ease);
         },
         onDoubleTap: () {
-          scrollControllerList[index].animateTo(-100.0,
+          scrollControllerList[index]?.animateTo(-100.0,
               duration: const Duration(milliseconds: 500), curve: Curves.ease);
         },
       );
@@ -252,11 +252,12 @@ class TabHomeController extends GetxController {
   }
 
   /// 双击bar的处理
-  Future<void> doubleTapBar(
-      {VoidCallback onTap,
-      VoidCallback onDoubleTap,
-      Duration duration,
-      bool awaitComplete}) async {
+  Future<void> doubleTapBar({
+    required VoidCallback onTap,
+    required VoidCallback onDoubleTap,
+    required Duration duration,
+    required bool awaitComplete,
+  }) async {
     final Duration _duration = duration ?? const Duration(milliseconds: 500);
     if (!tapAwait || tapAwait == null) {
       tapAwait = true;
@@ -285,7 +286,7 @@ class TabHomeController extends GetxController {
     loggerNoStack.v('click back');
     if (lastPressedAt == null ||
         DateTime.now().difference(lastPressedAt) > const Duration(seconds: 1)) {
-      showToast(S.of(tContext).double_click_back);
+      showToast(S.of(tContext)!.double_click_back);
       //两次点击间隔超过1秒则重新计时
       lastPressedAt = DateTime.now();
       return false;

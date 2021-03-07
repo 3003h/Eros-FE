@@ -8,14 +8,14 @@ import 'package:get/get.dart';
 import 'package:line_icons/line_icons.dart';
 
 class HistoryTab extends GetView<HistoryViewController> {
-  const HistoryTab({Key key, this.tabTag, this.scrollController})
+  const HistoryTab({Key? key, this.tabTag, this.scrollController})
       : super(key: key);
-  final String tabTag;
-  final ScrollController scrollController;
+  final String? tabTag;
+  final ScrollController? scrollController;
 
   @override
   Widget build(BuildContext context) {
-    final String _title = S.of(context).tab_history;
+    final String _title = S.of(context)!.tab_history;
     final CustomScrollView customScrollView = CustomScrollView(
       controller: scrollController,
       physics: const AlwaysScrollableScrollPhysics(),

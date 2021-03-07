@@ -12,10 +12,10 @@ class InWebMyTags extends StatelessWidget {
   final CookieManager _cookieManager = CookieManager.instance();
 
   Future<void> _setCookie() async {
-    final List<io.Cookie> cookies =
-        await Global.cookieJar.loadForRequest(Uri.parse(Api.getBaseUrl()));
+    final List<io.Cookie>? cookies =
+        await Global.cookieJar?.loadForRequest(Uri.parse(Api.getBaseUrl()));
 
-    for (final io.Cookie cookie in cookies) {
+    for (final io.Cookie cookie in cookies ?? []) {
       _cookieManager.setCookie(
           url: Uri.parse(Api.getBaseUrl()),
           name: cookie.name,
@@ -25,12 +25,12 @@ class InWebMyTags extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    InAppWebViewController _controller;
+    InAppWebViewController? _controller;
 
     final CupertinoPageScaffold cpf = CupertinoPageScaffold(
       navigationBar: CupertinoNavigationBar(
         padding: const EdgeInsetsDirectional.only(end: 6),
-        middle: Text(S.of(context).ehentai_my_tags),
+        middle: Text(S.of(context)!.ehentai_my_tags),
         trailing: Row(
           mainAxisSize: MainAxisSize.min,
           children: <Widget>[
@@ -41,7 +41,7 @@ class InWebMyTags extends StatelessWidget {
                 size: 20,
               ),
               onPressed: () async {
-                _controller.reload();
+                _controller?.reload();
               },
             ),
           ],
@@ -54,7 +54,7 @@ class InWebMyTags extends StatelessWidget {
           onWebViewCreated: (InAppWebViewController controller) {
             _controller = controller;
           },
-          onLoadStart: (InAppWebViewController controller, Uri url) {
+          onLoadStart: (InAppWebViewController controller, Uri? url) {
             logger.d('Page started loading: $url');
 
             if (!url.toString().endsWith('/mytags')) {
@@ -62,7 +62,7 @@ class InWebMyTags extends StatelessWidget {
               controller.stopLoading();
             }
           },
-          onLoadStop: (InAppWebViewController controller, Uri url) async {
+          onLoadStop: (InAppWebViewController controller, Uri? url) async {
             logger.d('Page Finished loading: $url');
           },
         ),

@@ -9,8 +9,13 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:waterfall_flow/waterfall_flow.dart';
 
-SliverPadding buildWaterfallFlow(List<GalleryItem> gallerItemBeans, tabTag,
-    {int maxPage, int curPage, VoidCallback loadMord}) {
+SliverPadding buildWaterfallFlow(
+  List<GalleryItem> gallerItemBeans,
+  tabTag, {
+  int? maxPage,
+  required int curPage,
+  VoidCallback? loadMord,
+}) {
   const double _padding = EHConst.waterfallFlowCrossAxisSpacing;
   return SliverPadding(
     padding: const EdgeInsets.all(_padding),
@@ -29,7 +34,7 @@ SliverPadding buildWaterfallFlow(List<GalleryItem> gallerItemBeans, tabTag,
           if (maxPage != null) {
             if (index == gallerItemBeans.length - 1 && curPage < maxPage - 1) {
 //            加载更多数据的回调
-              loadMord();
+              loadMord?.call();
             }
           }
 
@@ -44,34 +49,24 @@ SliverPadding buildWaterfallFlow(List<GalleryItem> gallerItemBeans, tabTag,
   );
 }
 
-SliverList buildGallerySliverListView(List<GalleryItem> gallerItemBeans, tabTag,
-    {int maxPage, int curPage, VoidCallback loadMord}) {
+SliverList buildGallerySliverListView(
+  List<GalleryItem> gallerItemBeans,
+  tabTag, {
+  int? maxPage,
+  int curPage = 0,
+  VoidCallback? loadMord,
+}) {
   return SliverList(
     delegate: SliverChildBuilderDelegate(
       (BuildContext context, int index) {
         if (maxPage != null) {
           if (index == gallerItemBeans.length - 1 && curPage < maxPage - 1) {
 //            加载更多数据的回调
-            loadMord();
+            loadMord?.call();
           }
         }
 
         final GalleryItem _item = gallerItemBeans[index];
-
-        // return GetBuilder<GalleryItemController>(
-        //     init: GalleryItemController.initData(
-        //       _item,
-        //       tabTag: tabTag,
-        //     ),
-        //     tag: _item.gid,
-        //     id: _item.gid,
-        //     builder: (constoller) {
-        //       return GalleryItemWidget(
-        //         galleryItem: _item,
-        //         tabTag: tabTag,
-        //         controller: constoller,
-        //       );
-        //     });
 
         return GalleryItemWidget(galleryItem: _item, tabTag: tabTag);
       },
@@ -81,15 +76,19 @@ SliverList buildGallerySliverListView(List<GalleryItem> gallerItemBeans, tabTag,
 }
 
 SliverFixedExtentList buildGallerySliverListSimpleView(
-    List<GalleryItem> gallerItemBeans, tabTag,
-    {int maxPage, int curPage, VoidCallback loadMord}) {
+  List<GalleryItem> gallerItemBeans,
+  tabTag, {
+  int? maxPage,
+  required int curPage,
+  VoidCallback? loadMord,
+}) {
   return SliverFixedExtentList(
     delegate: SliverChildBuilderDelegate(
       (BuildContext context, int index) {
         if (maxPage != null) {
           if (index == gallerItemBeans.length - 1 && curPage < maxPage - 1) {
 //            加载更多数据的回调
-            loadMord();
+            loadMord?.call();
           }
         }
 
@@ -104,26 +103,29 @@ SliverFixedExtentList buildGallerySliverListSimpleView(
   );
 }
 
-Widget getGalleryList(List<GalleryItem> gallerItemBeans, tabTag,
-    {int maxPage, int curPage, VoidCallback loadMord}) {
+Widget getGalleryList(
+  List<GalleryItem>? gallerItemBeans,
+  tabTag, {
+  int? maxPage,
+  int? curPage,
+  VoidCallback? loadMord,
+}) {
   final EhConfigService ehConfigService = Get.find();
 
   // logger.d(' getGalleryList');
 
   return Obx(() {
+    // ignore: missing_enum_constant_in_switch
     switch (ehConfigService.listMode.value) {
       case ListModeEnum.list:
-        return buildGallerySliverListView(gallerItemBeans, tabTag,
-            maxPage: maxPage, curPage: curPage, loadMord: loadMord);
-        break;
+        return buildGallerySliverListView(gallerItemBeans ?? [], tabTag,
+            maxPage: maxPage, curPage: curPage ?? 0, loadMord: loadMord);
       case ListModeEnum.waterfall:
-        return buildWaterfallFlow(gallerItemBeans, tabTag,
-            maxPage: maxPage, curPage: curPage, loadMord: loadMord);
-        break;
+        return buildWaterfallFlow(gallerItemBeans ?? [], tabTag,
+            maxPage: maxPage, curPage: curPage ?? 0, loadMord: loadMord);
       case ListModeEnum.simpleList:
-        return buildGallerySliverListSimpleView(gallerItemBeans, tabTag,
-            maxPage: maxPage, curPage: curPage, loadMord: loadMord);
-        break;
+        return buildGallerySliverListSimpleView(gallerItemBeans ?? [], tabTag,
+            maxPage: maxPage, curPage: curPage ?? 0, loadMord: loadMord);
     }
     return Container();
   });
