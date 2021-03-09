@@ -18,17 +18,6 @@ class FavoriteViewController extends TabViewController {
   get title => _ehConfigService.lastShowFavTitle ?? _title.value ?? '';
   set title(val) => _title.value = val;
 
-  // String? _curFavcat;
-  // String get curFavcat {
-  //   logger.d(' get curFavcat ${_ehConfigService.lastShowFavcat}');
-  //   return _curFavcat ?? _ehConfigService.lastShowFavcat ?? 'a';
-  // }
-  //
-  // set curFavcat(String? val) {
-  //   logger.d('set curFavcat $val');
-  //   _curFavcat = val;
-  // }
-
   bool enableDelayedLoad = true;
 
   final CancelToken _cancelToken = CancelToken();

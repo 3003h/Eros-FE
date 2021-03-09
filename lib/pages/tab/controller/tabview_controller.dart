@@ -189,6 +189,7 @@ class TabViewController extends GetxController
       cats: cats ?? _catNum,
       refresh: true,
       cancelToken: cancelToken,
+      favcat: curFavcat,
     ).then((tuple) {
       curPage.value = page;
       change(tuple.item1, status: RxStatus.success());
