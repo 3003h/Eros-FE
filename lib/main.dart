@@ -39,6 +39,7 @@ Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await _initializeFlutterFire();
   runZonedGuarded<Future<void>>(() async {
+    Get.lazyPut(() => GStore());
     await Global.init();
 
     await _initializeFlutterFire();
@@ -55,7 +56,6 @@ Future<void> main() async {
     Get.lazyPut(() => LayoutServices());
 
     /// 一些全局设置或者控制
-    Get.lazyPut(() => GStore());
     Get.lazyPut(() => AutoLockController(), fenix: true);
     Get.put(LocalFavController(), permanent: true);
     Get.put(HistoryController(), permanent: true);

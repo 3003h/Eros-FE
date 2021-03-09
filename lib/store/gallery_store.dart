@@ -40,7 +40,6 @@ class GStore {
   TabConfig? get tabConfig {
     final String val =
         ReadWriteValue('tabConfig', '{"tab_item_list": []}', _profileStore).val;
-    // logger.v('${jsonDecode(val)}');
     final _config = jsonDecode(val);
     if (_config['tab_item_list'] == null) {
       _config['tab_item_list'] = _config['tabItemList'];
@@ -99,5 +98,29 @@ class GStore {
     }
 
     return rult;
+  }
+
+  Profile get profile {
+    final String val = ReadWriteValue('profile', '{}', _profileStore).val;
+    final Profile _profileObj = Profile.fromJson(jsonDecode(val));
+    logger.v('_initProfile \n${_profileObj.toJson()}');
+    final Profile _profile = kDefProfile.copyWith(
+        user: _profileObj.user,
+        ehConfig: _profileObj.ehConfig,
+        lastLogin: _profileObj.lastLogin,
+        locale: _profileObj.locale,
+        theme: _profileObj.theme,
+        searchText: _profileObj.searchText,
+        localFav: _profileObj.localFav,
+        enableAdvanceSearch: _profileObj.enableAdvanceSearch,
+        advanceSearch: _profileObj.advanceSearch,
+        dnsConfig: _profileObj.dnsConfig,
+        downloadConfig: _profileObj.downloadConfig,
+        autoLock: _profileObj.autoLock);
+    return _profile;
+  }
+
+  set profile(Profile val) {
+    ReadWriteValue('profile', '{}', _profileStore).val = jsonEncode(val);
   }
 }
