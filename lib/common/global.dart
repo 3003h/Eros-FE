@@ -279,17 +279,14 @@ class Global {
   }
 
   static Future<void> _checkReset() async {
-    final int buildNum = int.parse(packageInfo?.buildNumber ?? '0');
-    logger.d('buildNum $buildNum');
+    // StorageUtil().setString(CLEAN_VER, '0');
     final String cleanVer = StorageUtil().getString(CLEAN_VER) ?? '0';
-    logger.d('buildNum $buildNum  , cleanVer $cleanVer');
-    bool cleanFlg = EHConst.cleanDataVer.any(
-        (int element) => buildNum < element && int.parse(cleanVer) < buildNum);
-    if (cleanFlg) {
+
+    if (double.parse(cleanVer) < EHConst.cleanDataVer) {
       logger.d('clean');
       profile = kDefProfile;
       saveProfile();
-      StorageUtil().setString(CLEAN_VER, '$buildNum');
+      StorageUtil().setString(CLEAN_VER, '${EHConst.cleanDataVer}');
     }
   }
 
