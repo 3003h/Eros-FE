@@ -110,7 +110,7 @@ class EHConst {
     17,
   ];
 
-  static List<int> cleanDataVer = [155];
+  static int cleanDataVer = 1;
 
   static List<int> autoLockTime = <int>[
     -1,
