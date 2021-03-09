@@ -9,15 +9,12 @@ class HistoryController extends GetxController {
   final EhConfigService _ehConfigService = Get.find();
 
   void addHistory(GalleryItem galleryItem) {
-    // logger.d('start ${DateTime.now()}');
     final int _index = historys.indexWhere((GalleryItem element) {
       return element.gid == galleryItem.gid;
     });
     if (_index >= 0) {
       historys.removeAt(_index);
-      // logger.d('end removeAt: ${DateTime.now()}');
       historys.insert(0, galleryItem);
-      // logger.d('end insert obs :${DateTime.now()}');
     } else {
       // 检查数量限制 超限则删除最后一条
       if (_ehConfigService.maxHistory.value > 0 &&
@@ -48,6 +45,6 @@ class HistoryController extends GetxController {
     super.onInit();
 
     final History _history = Global.history;
-    historys = _history.history ?? [];
+    historys = _history.history ?? <GalleryItem>[];
   }
 }

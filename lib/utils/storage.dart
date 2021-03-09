@@ -22,8 +22,8 @@ class StorageUtil {
     return _prefs?.setString(key, jsonString);
   }
 
-  dynamic getJSON(String key) {
-    final String jsonString = _prefs?.getString(key) ?? '';
+  dynamic? getJSON(String key) {
+    final String? jsonString = _prefs?.getString(key);
     return jsonString;
   }
 

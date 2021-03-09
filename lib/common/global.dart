@@ -19,6 +19,7 @@ import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_downloader/flutter_downloader.dart';
+import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:local_auth/local_auth.dart';
 import 'package:logger/logger.dart';
@@ -247,39 +248,18 @@ class Global {
   }
 
   static void _initProfile() {
-    final dynamic _profile = StorageUtil().getJSON(PROFILE);
-    if (_profile != null) {
-      try {
-        final Profile _profileObj = Profile.fromJson(jsonDecode(_profile));
-        // logger.v('${_profileObj.toJson()}');
-        profile = kDefProfile.copyWith(
-            user: _profileObj.user,
-            ehConfig: _profileObj.ehConfig,
-            lastLogin: _profileObj.lastLogin,
-            locale: _profileObj.locale,
-            theme: _profileObj.theme,
-            searchText: _profileObj.searchText,
-            localFav: _profileObj.localFav,
-            enableAdvanceSearch: _profileObj.enableAdvanceSearch,
-            advanceSearch: _profileObj.advanceSearch,
-            dnsConfig: _profileObj.dnsConfig,
-            downloadConfig: _profileObj.downloadConfig,
-            autoLock: _profileObj.autoLock);
-      } catch (e) {
-        print('get profile $e');
-        rethrow;
-      }
-    }
+    final GStore gStore = Get.find<GStore>();
+    profile = gStore.profile;
   }
 
   // 持久化Profile信息
-  static Future<bool>? saveProfile() {
+  static Future<void>? saveProfile() {
     // logger.v(profile.toJson());
-    return StorageUtil().setJSON(PROFILE, profile);
+    final GStore gStore = Get.find<GStore>();
+    gStore.profile = profile;
   }
 
   static Future<void> _checkReset() async {
-    // StorageUtil().setString(CLEAN_VER, '0');
     final String cleanVer = StorageUtil().getString(CLEAN_VER) ?? '0';
 
     if (double.parse(cleanVer) < EHConst.cleanDataVer) {
@@ -290,28 +270,8 @@ class Global {
     }
   }
 
-  static void _initGalleryCaches() {
-    final dynamic _galleryCachesStr = StorageUtil().getJSON(GALLERY_CACHE);
-    // logger.d('$_galleryCaches');
-    if (_galleryCachesStr != null) {
-      // logger.d(' $_galleryCachesStr');
-      final List<dynamic> _galleryCaches = json.decode(_galleryCachesStr);
-      for (final dynamic cache in _galleryCaches) {
-        // logger.d('$cache');
-        galleryCaches.add(GalleryCache.fromJson(cache));
-      }
-    }
-  }
-
-  static Future<bool>? saveGalleryCaches() {
-    galleryCaches.forEach((GalleryCache element) {
-      // logger.d(' ${element.toJson()}');
-    });
-    return StorageUtil().setJSON(GALLERY_CACHE, galleryCaches);
-  }
-
   static void _initHistory() {
-    final dynamic _history = StorageUtil().getJSON(HISTORY);
+    final dynamic _history = StorageUtil().getJSON(HISTORY) ?? '{}';
     if (_history != null) {
       try {
         history = History.fromJson(jsonDecode(_history));
