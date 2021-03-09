@@ -47,7 +47,18 @@ class TabViewController extends GetxController
   // 页码跳转输入框的控制器
   final TextEditingController _pageController = TextEditingController();
 
-  late FetchCallBack fetchNormal;
+  late final FetchCallBack fetchNormal;
+
+  String? _curFavcat;
+  String get curFavcat {
+    logger.d(' get curFavcat ${_ehConfigService.lastShowFavcat}');
+    return _curFavcat ?? _ehConfigService.lastShowFavcat ?? 'a';
+  }
+
+  set curFavcat(String? val) {
+    logger.d('set curFavcat $val');
+    _curFavcat = val;
+  }
 
   @override
   void onInit() {
@@ -144,6 +155,7 @@ class TabViewController extends GetxController
         cats: cats ?? _catNum,
         refresh: true,
         cancelToken: cancelToken,
+        favcat: curFavcat,
       );
 
       final List<GalleryItem> galleryItemBeans = tuple.item1;
