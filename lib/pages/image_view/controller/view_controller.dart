@@ -112,7 +112,9 @@ class ViewController extends GetxController {
       )
           .listen((GalleryPreview? event) {
         if (event != null) {
-          vState.previewMap[event.ser] = event;
+          logger5.d('preloadImage upt previewMap ${event.ser}');
+          _galleryPageController.uptPreviewBySer(
+              ser: event.ser, preview: event);
         }
       });
     }
@@ -211,7 +213,7 @@ class ViewController extends GetxController {
     )
         .listen((GalleryPreview? event) {
       if (event != null) {
-        vState.previewMap[event.ser] = event;
+        _galleryPageController.uptPreviewBySer(ser: event.ser, preview: event);
       }
     });
     // logger.d('itemIndex $itemIndex  ${itemIndex.toDouble()}');

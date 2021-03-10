@@ -39,32 +39,35 @@ class GalleryPara {
   }) async* {
     // logger.d('当前index $index');
     for (int add = 1; add < max + 1; add++) {
-      GalleryPreview? _rultPreview;
-
       final int _ser = itemSer + add;
 
-      // logger.d('开始缓存 ser $ser');
+      // logger.d('开始缓存 ser $_ser');
       if (previewMap[_ser] == null) {
-        yield _rultPreview;
+        yield null;
       }
 
       if (_processingSerSet.contains(_ser)) {
         continue;
       }
 
-      final GalleryPreview? _preview = previewMap[_ser];
-      if (_preview?.isCache ?? false) {
-        // logger.d('ser $ser 已存在缓存中 跳过');
+      if (previewMap[_ser] == null) {
+        yield null;
+      }
+
+      GalleryPreview _preview = previewMap[_ser]!;
+
+      if (_preview.isCache ?? false) {
+        // logger.d('ser $_ser 已存在缓存中 跳过');
         continue;
       }
 
-      if (_preview?.startPrecache ?? false) {
-        logger.d('ser $_ser 已开始缓存 跳过');
+      if (_preview.startPrecache ?? false) {
+        // logger.d('ser $_ser 已开始缓存 跳过');
         continue;
       }
 
       String _url = '';
-      if (_preview?.largeImageUrl?.isEmpty ?? true) {
+      if (_preview.largeImageUrl?.isEmpty ?? true) {
         _processingSerSet.add(_ser);
         final String _href = previewMap[_ser]?.href ?? '';
 
@@ -74,12 +77,7 @@ class GalleryPara {
 
         _url = _imageFromApi.largeImageUrl ?? '';
 
-        // _preview
-        //   ..largeImageUrl = _url
-        //   ..largeImageWidth = _imageFromApi.largeImageWidth
-        //   ..largeImageHeight = _imageFromApi.largeImageHeight;
-
-        _rultPreview = _preview?.copyWith(
+        _preview = _preview.copyWith(
           largeImageUrl: _url,
           largeImageWidth: _imageFromApi.largeImageWidth,
           largeImageHeight: _imageFromApi.largeImageHeight,
@@ -88,20 +86,21 @@ class GalleryPara {
         _processingSerSet.remove(_ser);
       }
 
-      _url = _rultPreview?.largeImageUrl ?? '';
+      _url = _preview.largeImageUrl ?? '';
+
+      if (_url.isEmpty) {
+        yield null;
+      }
 
       final Future<GalleryPreview?>? _future = _map[_url] ??
           (() {
-            _map[_url] = _precacheSingleImage(context, _url, _rultPreview);
+            _map[_url] = _precacheSingleImage(context, _url, _preview);
             return _map[_url];
           })();
 
-      // _future
-      //     .then((GalleryPreview? value) => _preview.isCache = value.isCache)
-      //     .whenComplete(() => _map.remove(_url));
-
       if (_future != null) {
         final GalleryPreview? value = await _future;
+        logger.d('yield rult ser ${value?.ser}  ${value?.toJson()}');
         yield value?.copyWith(isCache: true);
         _map.remove(_url);
       }
@@ -111,7 +110,7 @@ class GalleryPara {
   Future<GalleryPreview?> _precacheSingleImage(
     BuildContext context,
     String url,
-    GalleryPreview? preview,
+    GalleryPreview preview,
   ) async {
     final ImageProvider imageProvider = ExtendedNetworkImageProvider(
       url,
@@ -119,13 +118,12 @@ class GalleryPara {
     );
 
     /// 预缓存图片
-    precacheImage(imageProvider, context).then((_) {
-      // preview.isCache = true;
-      return preview?.copyWith(isCache: true);
-    }).catchError((e, stack) {
+    try {
+      await precacheImage(imageProvider, context);
+      return preview.copyWith(isCache: true);
+    } catch (e, stack) {
       logger.e('$e /n $stack');
       return null;
-    });
-    return null;
+    }
   }
 }

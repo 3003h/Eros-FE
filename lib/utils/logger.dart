@@ -9,6 +9,15 @@ final Logger logger = Logger(
   ),
 );
 
+final Logger logger5 = Logger(
+  filter: EHLogFilter(),
+  printer: PrettyPrinter(
+    // lineLength: 100,
+    methodCount: 5,
+    colors: false,
+  ),
+);
+
 final Logger loggerNoStack = Logger(
   filter: EHLogFilter(),
   printer: PrettyPrinter(

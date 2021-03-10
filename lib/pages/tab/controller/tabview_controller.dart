@@ -47,7 +47,7 @@ class TabViewController extends GetxController
   // 页码跳转输入框的控制器
   final TextEditingController _pageController = TextEditingController();
 
-  late final FetchCallBack fetchNormal;
+  late FetchCallBack fetchNormal;
 
   String? _curFavcat;
   String get curFavcat {
@@ -126,6 +126,7 @@ class TabViewController extends GetxController
   }
 
   Future<void> reLoadDataFirst() async {
+    logger.d('reLoadDataFirst ');
     isBackgroundRefresh = false;
     if (!cancelToken.isCancelled) {
       cancelToken.cancel();

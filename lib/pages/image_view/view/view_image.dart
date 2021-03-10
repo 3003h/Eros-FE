@@ -78,12 +78,9 @@ class _ViewImageState extends State<ViewImage>
       )
           .listen((GalleryPreview? event) {
         if (event != null) {
-          _pageController.previewMap[event.ser] = event;
+          _pageController.uptPreviewBySer(ser: event.ser, preview: event);
         }
       });
-
-      // 依次按顺序获取缩略图对象
-      // await _pageController.loadPriviewUntilIndex(itemIndex);
     }
 
     final GalleryPreview? preview = await _pageController.getImageInfo(
@@ -92,6 +89,10 @@ class _ViewImageState extends State<ViewImage>
       refresh: refresh,
       changeSource: changeSource,
     );
+    if (preview != null) {
+      _pageController.uptPreviewBySer(ser: preview.ser, preview: preview);
+    }
+
     return preview;
   }
 
@@ -109,8 +110,12 @@ class _ViewImageState extends State<ViewImage>
       clearMemoryImageCache();
     } catch (_) {}
 
-    // _currentPreview.largeImageUrl = null;
-    _currentPreview = _currentPreview?.copyWith(largeImageUrl: null);
+    if (_currentPreview == null) {
+      return;
+    }
+    _pageController.uptPreviewBySer(
+        ser: _currentPreview.ser,
+        preview: _currentPreview.copyWith(largeImageUrl: null));
 
     setState(() {
       // 换源重载
@@ -166,7 +171,6 @@ class _ViewImageState extends State<ViewImage>
               case ConnectionState.waiting:
               case ConnectionState.active:
                 return LoadingWidget(ser: widget.ser);
-                break;
               case ConnectionState.done:
                 if (snapshot.hasError) {
                   String _errInfo = '';
@@ -193,18 +197,34 @@ class _ViewImageState extends State<ViewImage>
 
                   return ErrorWidget(ser: widget.ser, errInfo: _errInfo);
                 } else {
-                  final GalleryPreview? preview = snapshot.data;
+                  final GalleryPreview? _preview = snapshot.data;
+
+                  // 100ms 后更新 TODO 会循环刷新，需要修改
                   Future.delayed(const Duration(milliseconds: 100)).then((_) {
+                    if (_preview == null || _preview.ser == 1) {
+                      return;
+                    }
+
+                    final GalleryPreview? _tmpPreview =
+                        _pageController.previewMap[_preview.ser];
+                    if (_tmpPreview == null ||
+                        (_tmpPreview.completeHeight ?? false)) {
+                      return;
+                    }
                     try {
-                      Get.find<ViewController>()
-                          .update(['${GetIds.IMAGE_VIEW_SER}${widget.ser}']);
+                      final _id = '${GetIds.IMAGE_VIEW_SER}${widget.ser}';
+                      logger.d('update id $_id');
+                      _pageController.uptPreviewBySer(
+                          ser: _preview.ser,
+                          preview: _tmpPreview.copyWith(completeHeight: true));
+                      Get.find<ViewController>().update([_id]);
                     } catch (_) {}
                   });
 
-                  // logger.v('${widget.ser} ${preview.largeImageUrl}');
+                  // logger.v('${widget.ser} ${_preview.largeImageUrl}');
 
                   Widget image = ImageExtend(
-                    url: preview?.largeImageUrl ?? '',
+                    url: _preview?.largeImageUrl ?? '',
                     ser: widget.ser,
                     animationController: _animationController,
                     reloadImage: _reloadImage,
@@ -221,7 +241,7 @@ class _ViewImageState extends State<ViewImage>
                       if (Global.inDebugMode)
                         Positioned(
                           left: 4,
-                          child: Text('${preview?.ser ?? ''}',
+                          child: Text('${_preview?.ser ?? ''}',
                               style: const TextStyle(
                                   fontSize: 12,
                                   color:
@@ -239,7 +259,6 @@ class _ViewImageState extends State<ViewImage>
 
                   return image;
                 }
-                break;
               default:
                 return Container();
             }
