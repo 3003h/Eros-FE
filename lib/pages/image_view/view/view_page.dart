@@ -29,7 +29,7 @@ class GalleryViewPage extends GetView<ViewController> {
   /// 画廊图片大图浏览
   @override
   Widget build(BuildContext context) {
-    // logger.d('rebuild GalleryViewPage');
+    logger.d('rebuild GalleryViewPage');
     vState.initSize(context);
     // logger.d('build ${state.viewMode}  ${state.columnMode}');
     return CupertinoTheme(
@@ -50,22 +50,14 @@ class GalleryViewPage extends GetView<ViewController> {
                   Expanded(
                     child: GestureDetector(
                       behavior: HitTestBehavior.translucent,
-                      // child: Container(),
                       onPanDown: controller.handOnPanDown,
-                      // onPanStart: (DragStartDetails details) {
-                      //   logger.d('${details.localPosition} ');
-                      // },
                       onTap: controller.tapLeft,
                     ),
                   ),
                   Expanded(
                     child: GestureDetector(
                       behavior: HitTestBehavior.translucent,
-                      // child: Container(),
                       onPanDown: controller.handOnPanDown,
-                      // onPanStart: (DragStartDetails details) {
-                      //   logger.d('${details.localPosition} ');
-                      // },
                       onTap: controller.tapRight,
                     ),
                   ),
@@ -193,7 +185,7 @@ class GalleryViewPage extends GetView<ViewController> {
     if (vState.viewMode != ViewMode.topToBottom) {
       // logger.v('${state?.itemIndex}');
       return Text(
-        '${((vState?.itemIndex) ?? 0) + 1}/${vState.filecount}',
+        '${vState.itemIndex + 1}/${vState.filecount}',
         style: const TextStyle(
           color: CupertinoColors.systemGrey6,
         ),
@@ -205,7 +197,7 @@ class GalleryViewPage extends GetView<ViewController> {
           controller.handItemPositionsChange(positions);
 
           return Text(
-            '${((vState?.itemIndex) ?? 0) + 1}/${vState.filecount}',
+            '${vState.itemIndex + 1}/${vState.filecount}',
             style: const TextStyle(
               color: CupertinoColors.systemGrey6,
             ),

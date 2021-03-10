@@ -280,14 +280,13 @@ class EhConfigService extends ProfileService {
     logger.d('${_mach?.group(0)} ');
     _lastClipboardLink = _mach?.group(0) ?? '';
     if (_lastClipboardLink.isNotEmpty) {
-      _showClipboardLinkDialog(_lastClipboardLink, context);
+      _showClipboardLinkDialog(_lastClipboardLink);
     }
   }
 
-  Future<void> _showClipboardLinkDialog(
-      String url, BuildContext context) async {
+  Future<void> _showClipboardLinkDialog(String url) async {
     showCupertinoDialog(
-        context: context,
+        context: Get.overlayContext!,
         builder: (BuildContext context) {
           return CupertinoAlertDialog(
             title: const Text('画廊跳转'),

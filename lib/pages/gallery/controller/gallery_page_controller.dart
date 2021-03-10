@@ -106,6 +106,14 @@ class GalleryPageController extends GetxController
   Map<int, GalleryPreview> get previewMap => galleryItem.previewMap;
   int get filecount => int.parse(galleryItem.filecount ?? '0');
 
+  void uptPreviewBySer({required int ser, required GalleryPreview preview}) {
+    final _index = galleryItem.galleryPreview
+        ?.indexWhere((GalleryPreview element) => element.ser == ser);
+    if (_index != null && _index > 0) {
+      galleryItem.galleryPreview?[_index] = preview;
+    }
+  }
+
   final Map<int, int> errCountMap = {};
 
   String get showKey => galleryItem.showKey ?? '';

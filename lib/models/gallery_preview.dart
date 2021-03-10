@@ -18,6 +18,7 @@ class GalleryPreview {
     this.largeImageWidth,
     this.offSet,
     this.sourceId,
+    this.completeHeight,
   });
 
   final bool? isLarge;
@@ -33,6 +34,7 @@ class GalleryPreview {
   final double? largeImageWidth;
   final double? offSet;
   final String? sourceId;
+  final bool? completeHeight;
 
   factory GalleryPreview.fromJson(Map<String,dynamic> json) => GalleryPreview(
     isLarge: json['is_large'] != null ? json['is_large'] as bool : null,
@@ -47,7 +49,8 @@ class GalleryPreview {
     largeImageHeight: json['large_image_height'] != null ? json['large_image_height'] as double : null,
     largeImageWidth: json['large_image_width'] != null ? json['large_image_width'] as double : null,
     offSet: json['off_set'] != null ? json['off_set'] as double : null,
-    sourceId: json['source_id'] != null ? json['source_id'] as String : null
+    sourceId: json['source_id'] != null ? json['source_id'] as String : null,
+    completeHeight: json['complete_height'] != null ? json['complete_height'] as bool : null
   );
   
   Map<String, dynamic> toJson() => {
@@ -63,7 +66,8 @@ class GalleryPreview {
     'large_image_height': largeImageHeight,
     'large_image_width': largeImageWidth,
     'off_set': offSet,
-    'source_id': sourceId
+    'source_id': sourceId,
+    'complete_height': completeHeight
   };
 
   GalleryPreview clone() => GalleryPreview(
@@ -79,7 +83,8 @@ class GalleryPreview {
     largeImageHeight: largeImageHeight,
     largeImageWidth: largeImageWidth,
     offSet: offSet,
-    sourceId: sourceId
+    sourceId: sourceId,
+    completeHeight: completeHeight
   );
 
     
@@ -96,7 +101,8 @@ class GalleryPreview {
     double? largeImageHeight,
     double? largeImageWidth,
     double? offSet,
-    String? sourceId
+    String? sourceId,
+    bool? completeHeight
   }) => GalleryPreview(
     isLarge: isLarge ?? this.isLarge,
     isCache: isCache ?? this.isCache,
@@ -111,12 +117,13 @@ class GalleryPreview {
     largeImageWidth: largeImageWidth ?? this.largeImageWidth,
     offSet: offSet ?? this.offSet,
     sourceId: sourceId ?? this.sourceId,
+    completeHeight: completeHeight ?? this.completeHeight,
   );  
 
   @override
   bool operator ==(Object other) => identical(this, other) 
-    || other is GalleryPreview && isLarge == other.isLarge && isCache == other.isCache && startPrecache == other.startPrecache && ser == other.ser && href == other.href && largeImageUrl == other.largeImageUrl && imgUrl == other.imgUrl && height == other.height && width == other.width && largeImageHeight == other.largeImageHeight && largeImageWidth == other.largeImageWidth && offSet == other.offSet && sourceId == other.sourceId;
+    || other is GalleryPreview && isLarge == other.isLarge && isCache == other.isCache && startPrecache == other.startPrecache && ser == other.ser && href == other.href && largeImageUrl == other.largeImageUrl && imgUrl == other.imgUrl && height == other.height && width == other.width && largeImageHeight == other.largeImageHeight && largeImageWidth == other.largeImageWidth && offSet == other.offSet && sourceId == other.sourceId && completeHeight == other.completeHeight;
 
   @override
-  int get hashCode => isLarge.hashCode ^ isCache.hashCode ^ startPrecache.hashCode ^ ser.hashCode ^ href.hashCode ^ largeImageUrl.hashCode ^ imgUrl.hashCode ^ height.hashCode ^ width.hashCode ^ largeImageHeight.hashCode ^ largeImageWidth.hashCode ^ offSet.hashCode ^ sourceId.hashCode;
+  int get hashCode => isLarge.hashCode ^ isCache.hashCode ^ startPrecache.hashCode ^ ser.hashCode ^ href.hashCode ^ largeImageUrl.hashCode ^ imgUrl.hashCode ^ height.hashCode ^ width.hashCode ^ largeImageHeight.hashCode ^ largeImageWidth.hashCode ^ offSet.hashCode ^ sourceId.hashCode ^ completeHeight.hashCode;
 }

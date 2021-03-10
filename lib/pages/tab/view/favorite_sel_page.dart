@@ -54,7 +54,6 @@ class FavoriteSelectorPage extends StatelessWidget {
                     favcat: 'a',
                     refresh: true,
                   );
-                  // setState(() {});
                 },
               ),
             ),
