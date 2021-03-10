@@ -1,4 +1,3 @@
-import 'dart:convert';
 import 'dart:io';
 
 import 'package:cookie_jar/cookie_jar.dart';
@@ -153,7 +152,7 @@ class Global {
   static Profile profile = kDefProfile.copyWith(
       ehConfig: kDefEhConfig.copyWith(safeMode: Platform.isIOS));
 
-  static History history = const History(history: []);
+  // static History history = const History(history: []);
   static List<GalleryCache> galleryCaches = <GalleryCache>[];
 
   static CookieManager? cookieManager;
@@ -238,7 +237,7 @@ class Global {
     await _checkReset();
 
     _initProfile();
-    _initHistory();
+    // _initHistory();
 
     if ((profile.dnsConfig.enableCustomHosts ?? false) ||
         (profile.dnsConfig.enableDoH ?? false)) {
@@ -270,18 +269,18 @@ class Global {
     }
   }
 
-  static void _initHistory() {
-    final dynamic _history = StorageUtil().getJSON(HISTORY) ?? '{}';
-    if (_history != null) {
-      try {
-        history = History.fromJson(jsonDecode(_history));
-      } catch (e) {
-        print('getHistoryFromSP $e');
-      }
-    }
-  }
-
-  static Future<bool>? saveHistory() {
-    return StorageUtil().setJSON(HISTORY, history);
-  }
+  // static void _initHistory() {
+  //   final dynamic _history = StorageUtil().getJSON(HISTORY) ?? '{}';
+  //   if (_history != null) {
+  //     try {
+  //       history = History.fromJson(jsonDecode(_history));
+  //     } catch (e) {
+  //       print('getHistoryFromSP $e');
+  //     }
+  //   }
+  // }
+  //
+  // static Future<bool>? saveHistory() {
+  //   return StorageUtil().setJSON(HISTORY, history);
+  // }
 }
