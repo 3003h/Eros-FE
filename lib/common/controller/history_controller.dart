@@ -1,12 +1,13 @@
-import 'package:fehviewer/common/global.dart';
 import 'package:fehviewer/common/service/ehconfig_service.dart';
 import 'package:fehviewer/models/index.dart';
+import 'package:fehviewer/store/gallery_store.dart';
 import 'package:get/get.dart';
 
 class HistoryController extends GetxController {
   List<GalleryItem> historys = <GalleryItem>[];
 
   final EhConfigService _ehConfigService = Get.find();
+  final GStore _gStore = Get.find<GStore>();
 
   void addHistory(GalleryItem galleryItem) {
     final int _index = historys.indexWhere((GalleryItem element) {
@@ -25,26 +26,25 @@ class HistoryController extends GetxController {
       historys.insert(0, galleryItem);
     }
     update();
-    Global.saveHistory();
+    _gStore.historys = historys;
   }
 
   void removeHistory(int index) {
     historys.removeAt(index);
     update();
-    Global.saveHistory();
+    _gStore.historys = historys;
   }
 
   void cleanHistory() {
     historys.clear();
     update();
-    Global.saveHistory();
+    _gStore.historys = historys;
   }
 
   @override
   void onInit() {
     super.onInit();
 
-    final History _history = Global.history;
-    historys = _history.history ?? <GalleryItem>[];
+    historys = _gStore.historys;
   }
 }

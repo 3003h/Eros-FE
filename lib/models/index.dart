@@ -14,7 +14,6 @@ export 'gallery_item.dart';
 export 'gallery_preview.dart';
 export 'gallery_tag.dart';
 export 'gallery_torrent.dart';
-export 'history.dart';
 export 'local_fav.dart';
 export 'profile.dart';
 export 'simple_tag.dart';
