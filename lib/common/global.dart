@@ -111,6 +111,7 @@ const EhConfig kDefEhConfig = EhConfig(
   autoLockTimeOut: -1,
   showPageInterval: true,
   orientation: '',
+  vibrate: true,
 );
 
 const Profile kDefProfile = Profile(

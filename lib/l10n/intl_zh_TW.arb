@@ -141,5 +141,6 @@
   "add_tag_placeholder": "Enter new tags, separated with comma",
   "vote_successfully": "Vote successfully",
   "vote_up_successfully": "Vote up successfully",
-  "vote_down_successfully": "Vote down successfully"
+  "vote_down_successfully": "Vote down successfully",
+  "vibrate_feedback": "Vibrate"
 }
