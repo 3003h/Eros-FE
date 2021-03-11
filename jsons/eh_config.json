@@ -21,5 +21,6 @@
   "commentTrans?": false,
   "autoLockTimeOut?": -1,
   "showPageInterval?": true,
-  "orientation?": ""
+  "orientation?": "",
+  "vibrate?": true
 }

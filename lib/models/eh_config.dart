@@ -28,6 +28,7 @@ class EhConfig {
     this.autoLockTimeOut,
     this.showPageInterval,
     this.orientation,
+    this.vibrate,
   });
 
   final bool jpnTitle;
@@ -53,6 +54,7 @@ class EhConfig {
   final int? autoLockTimeOut;
   final bool? showPageInterval;
   final String? orientation;
+  final bool? vibrate;
 
   factory EhConfig.fromJson(Map<String,dynamic> json) => EhConfig(
     jpnTitle: json['jpn_title'] as bool,
@@ -77,7 +79,8 @@ class EhConfig {
     commentTrans: json['comment_trans'] != null ? json['comment_trans'] as bool : null,
     autoLockTimeOut: json['auto_lock_time_out'] != null ? json['auto_lock_time_out'] as int : null,
     showPageInterval: json['show_page_interval'] != null ? json['show_page_interval'] as bool : null,
-    orientation: json['orientation'] != null ? json['orientation'] as String : null
+    orientation: json['orientation'] != null ? json['orientation'] as String : null,
+    vibrate: json['vibrate'] != null ? json['vibrate'] as bool : null
   );
   
   Map<String, dynamic> toJson() => {
@@ -103,7 +106,8 @@ class EhConfig {
     'comment_trans': commentTrans,
     'auto_lock_time_out': autoLockTimeOut,
     'show_page_interval': showPageInterval,
-    'orientation': orientation
+    'orientation': orientation,
+    'vibrate': vibrate
   };
 
   EhConfig clone() => EhConfig(
@@ -129,7 +133,8 @@ class EhConfig {
     commentTrans: commentTrans,
     autoLockTimeOut: autoLockTimeOut,
     showPageInterval: showPageInterval,
-    orientation: orientation
+    orientation: orientation,
+    vibrate: vibrate
   );
 
     
@@ -156,7 +161,8 @@ class EhConfig {
     bool? commentTrans,
     int? autoLockTimeOut,
     bool? showPageInterval,
-    String? orientation
+    String? orientation,
+    bool? vibrate
   }) => EhConfig(
     jpnTitle: jpnTitle ?? this.jpnTitle,
     tagTranslat: tagTranslat ?? this.tagTranslat,
@@ -181,12 +187,13 @@ class EhConfig {
     autoLockTimeOut: autoLockTimeOut ?? this.autoLockTimeOut,
     showPageInterval: showPageInterval ?? this.showPageInterval,
     orientation: orientation ?? this.orientation,
+    vibrate: vibrate ?? this.vibrate,
   );  
 
   @override
   bool operator ==(Object other) => identical(this, other) 
-    || other is EhConfig && jpnTitle == other.jpnTitle && tagTranslat == other.tagTranslat && tagTranslatVer == other.tagTranslatVer && favoritesOrder == other.favoritesOrder && siteEx == other.siteEx && galleryImgBlur == other.galleryImgBlur && favPicker == other.favPicker && favLongTap == other.favLongTap && lastFavcat == other.lastFavcat && lastShowFavcat == other.lastShowFavcat && lastShowFavTitle == other.lastShowFavTitle && listMode == other.listMode && safeMode == other.safeMode && catFilter == other.catFilter && maxHistory == other.maxHistory && searchBarComp == other.searchBarComp && pureDarkTheme == other.pureDarkTheme && viewModel == other.viewModel && clipboardLink == other.clipboardLink && commentTrans == other.commentTrans && autoLockTimeOut == other.autoLockTimeOut && showPageInterval == other.showPageInterval && orientation == other.orientation;
+    || other is EhConfig && jpnTitle == other.jpnTitle && tagTranslat == other.tagTranslat && tagTranslatVer == other.tagTranslatVer && favoritesOrder == other.favoritesOrder && siteEx == other.siteEx && galleryImgBlur == other.galleryImgBlur && favPicker == other.favPicker && favLongTap == other.favLongTap && lastFavcat == other.lastFavcat && lastShowFavcat == other.lastShowFavcat && lastShowFavTitle == other.lastShowFavTitle && listMode == other.listMode && safeMode == other.safeMode && catFilter == other.catFilter && maxHistory == other.maxHistory && searchBarComp == other.searchBarComp && pureDarkTheme == other.pureDarkTheme && viewModel == other.viewModel && clipboardLink == other.clipboardLink && commentTrans == other.commentTrans && autoLockTimeOut == other.autoLockTimeOut && showPageInterval == other.showPageInterval && orientation == other.orientation && vibrate == other.vibrate;
 
   @override
-  int get hashCode => jpnTitle.hashCode ^ tagTranslat.hashCode ^ tagTranslatVer.hashCode ^ favoritesOrder.hashCode ^ siteEx.hashCode ^ galleryImgBlur.hashCode ^ favPicker.hashCode ^ favLongTap.hashCode ^ lastFavcat.hashCode ^ lastShowFavcat.hashCode ^ lastShowFavTitle.hashCode ^ listMode.hashCode ^ safeMode.hashCode ^ catFilter.hashCode ^ maxHistory.hashCode ^ searchBarComp.hashCode ^ pureDarkTheme.hashCode ^ viewModel.hashCode ^ clipboardLink.hashCode ^ commentTrans.hashCode ^ autoLockTimeOut.hashCode ^ showPageInterval.hashCode ^ orientation.hashCode;
+  int get hashCode => jpnTitle.hashCode ^ tagTranslat.hashCode ^ tagTranslatVer.hashCode ^ favoritesOrder.hashCode ^ siteEx.hashCode ^ galleryImgBlur.hashCode ^ favPicker.hashCode ^ favLongTap.hashCode ^ lastFavcat.hashCode ^ lastShowFavcat.hashCode ^ lastShowFavTitle.hashCode ^ listMode.hashCode ^ safeMode.hashCode ^ catFilter.hashCode ^ maxHistory.hashCode ^ searchBarComp.hashCode ^ pureDarkTheme.hashCode ^ viewModel.hashCode ^ clipboardLink.hashCode ^ commentTrans.hashCode ^ autoLockTimeOut.hashCode ^ showPageInterval.hashCode ^ orientation.hashCode ^ vibrate.hashCode;
 }

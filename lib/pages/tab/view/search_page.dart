@@ -447,7 +447,7 @@ class GallerySearchPage extends StatelessWidget {
       return GestureDetector(
         behavior: HitTestBehavior.translucent,
         onTap: () {
-          vibrateUtil.light();
+          // vibrateUtil.light();
           controller.customPopupMenuController.hideMenu();
           onTap();
         },
@@ -541,7 +541,7 @@ class GallerySearchPage extends StatelessWidget {
       return GestureDetector(
         onLongPress: () {
           controller.isSearchBarComp = false;
-          vibrateUtil.heavy();
+          vibrateUtil.medium();
         },
         child: Row(
           mainAxisSize: MainAxisSize.min,

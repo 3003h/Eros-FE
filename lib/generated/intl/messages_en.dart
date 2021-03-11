@@ -164,6 +164,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "uploader" : MessageLookupByLibrary.simpleMessage("Uploader"),
     "user_login" : MessageLookupByLibrary.simpleMessage("User Sign"),
     "user_name" : MessageLookupByLibrary.simpleMessage("Username"),
+    "vibrate_feedback" : MessageLookupByLibrary.simpleMessage("Vibrate feedback"),
     "vote_down_successfully" : MessageLookupByLibrary.simpleMessage("Vote down successfully"),
     "vote_successfully" : MessageLookupByLibrary.simpleMessage("Vote successfully"),
     "vote_up_successfully" : MessageLookupByLibrary.simpleMessage("Vote up successfully"),

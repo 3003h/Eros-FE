@@ -39,16 +39,12 @@ class EhConfigService extends ProfileService {
   String? get lastShowFavcat => ehConfig.lastShowFavcat;
 
   set lastShowFavcat(String? value) {
-    // ehConfig.lastShowFavcat = value;
     ehConfig = ehConfig.copyWith(lastShowFavcat: value);
-    // logger.d('${ehConfig.toJson()}');
-    // Global.saveProfile();
   }
 
   String? get lastShowFavTitle => ehConfig.lastShowFavTitle;
 
   set lastShowFavTitle(String? value) {
-    // ehConfig.lastShowFavTitle = value;
     ehConfig = ehConfig.copyWith(lastShowFavTitle: value);
     Global.saveProfile();
   }
@@ -68,6 +64,9 @@ class EhConfigService extends ProfileService {
 
   /// 显示页面间隔
   RxBool showPageInterval = true.obs;
+
+  // 震动总开关
+  RxBool vibrate = true.obs;
 
   @override
   void onInit() {
@@ -189,6 +188,11 @@ class EhConfigService extends ProfileService {
         ReadOrientation.system;
     everFromEunm(orientation,
         (String value) => ehConfig = ehConfig.copyWith(orientation: value));
+
+    // vibrate
+    vibrate.value = ehConfig.vibrate ?? true;
+    everProfile<bool>(vibrate as RxInterface<bool>,
+        (bool value) => ehConfig = ehConfig.copyWith(vibrate: value));
   }
 
   /// 收藏排序

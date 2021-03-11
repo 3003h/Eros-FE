@@ -1466,6 +1466,16 @@ class S {
       args: [],
     );
   }
+
+  /// `Vibrate feedback`
+  String get vibrate_feedback {
+    return Intl.message(
+      'Vibrate feedback',
+      name: 'vibrate_feedback',
+      desc: '',
+      args: [],
+    );
+  }
 }
 
 class AppLocalizationDelegate extends LocalizationsDelegate<S> {

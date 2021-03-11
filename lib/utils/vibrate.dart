@@ -1,6 +1,8 @@
 import 'dart:io';
 
+import 'package:fehviewer/common/service/ehconfig_service.dart';
 import 'package:flutter_vibrate/flutter_vibrate.dart';
+import 'package:get/get.dart';
 import 'package:vibration/vibration.dart';
 
 final VibrateUtil vibrateUtil = VibrateUtil();
@@ -14,6 +16,8 @@ class VibrateUtil {
   /// 设备是否能够按照自定义的持续时间，模式或强度振动
   bool _hasAmplitudeControl = false;
 
+  EhConfigService get _ehConfigService => Get.find();
+
   Future<void> init() async {
     _hasCustomVibrationsSupport =
         (await Vibration.hasAmplitudeControl()) ?? false;
@@ -22,6 +26,9 @@ class VibrateUtil {
   }
 
   void light() {
+    if (!(_ehConfigService.vibrate.value ?? true)) {
+      return;
+    }
     if (Platform.isIOS) {
       Vibrate.feedback(FeedbackType.light);
     } else if (Platform.isAndroid) {
@@ -30,6 +37,9 @@ class VibrateUtil {
   }
 
   void medium() {
+    if (!(_ehConfigService.vibrate.value ?? true)) {
+      return;
+    }
     if (Platform.isIOS) {
       Vibrate.feedback(FeedbackType.medium);
     } else if (Platform.isAndroid) {
@@ -38,6 +48,9 @@ class VibrateUtil {
   }
 
   void heavy() {
+    if (!(_ehConfigService.vibrate.value ?? true)) {
+      return;
+    }
     if (Platform.isIOS) {
       Vibrate.feedback(FeedbackType.heavy);
     } else if (Platform.isAndroid) {
@@ -46,12 +59,18 @@ class VibrateUtil {
   }
 
   void success() {
+    if (!(_ehConfigService.vibrate.value ?? true)) {
+      return;
+    }
     if (Platform.isIOS) {
       Vibrate.feedback(FeedbackType.success);
     }
   }
 
   void error() {
+    if (!(_ehConfigService.vibrate.value ?? true)) {
+      return;
+    }
     if (Platform.isIOS) {
       Vibrate.feedback(FeedbackType.error);
     }

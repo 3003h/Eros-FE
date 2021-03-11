@@ -3,7 +3,6 @@ import 'package:fehviewer/const/const.dart';
 import 'package:fehviewer/generated/l10n.dart';
 import 'package:fehviewer/network/gallery_request.dart';
 import 'package:fehviewer/pages/tab/controller/tabhome_controller.dart';
-import 'package:fehviewer/utils/vibrate.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
@@ -32,7 +31,7 @@ class GalleryViewController extends TabViewController {
         _menu.add(GestureDetector(
           behavior: HitTestBehavior.translucent,
           onTap: () {
-            vibrateUtil.light();
+            // vibrateUtil.light();
             customPopupMenuController.hideMenu();
             Get.toNamed(elem.key);
           },

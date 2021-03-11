@@ -141,5 +141,6 @@
   "add_tag_placeholder": "输入新标签, 用逗号分隔",
   "vote_successfully": "投票成功",
   "vote_up_successfully": "点赞成功",
-  "vote_down_successfully": "点踩成功"
+  "vote_down_successfully": "点踩成功",
+  "vibrate_feedback": "震动反馈"
 }
