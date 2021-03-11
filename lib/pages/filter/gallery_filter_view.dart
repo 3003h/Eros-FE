@@ -36,7 +36,9 @@ class GalleryFilterView extends StatelessWidget {
   Widget build(BuildContext context) {
     SearchPageController? _searchPageController;
     if (int.parse(searchPageCtrlDepth) > 0) {
-      _searchPageController = Get.find(tag: searchPageCtrlDepth);
+      logger.d('searchPageCtrlDepth $searchPageCtrlDepth');
+      _searchPageController =
+          Get.find<SearchPageController>(tag: searchPageCtrlDepth);
     }
 
     return Obx(() {
@@ -66,7 +68,7 @@ class GalleryFilterView extends StatelessWidget {
               ),
             ],
           ),
-        if (_searchPageController?.searchType != SearchType.favorite ?? true)
+        if (_searchPageController?.searchType != SearchType.favorite)
           GalleryCatFilter(
             // padding: const EdgeInsets.symmetric(vertical: 4.0),
             value: catNum,
@@ -74,7 +76,7 @@ class GalleryFilterView extends StatelessWidget {
             crossAxisCount: catCrossAxisCount,
             padding: const EdgeInsets.symmetric(vertical: 8),
           ),
-        if (_searchPageController?.searchType != SearchType.favorite ?? true)
+        if (_searchPageController?.searchType != SearchType.favorite)
           Container(
             child: Row(
               children: <Widget>[
@@ -340,18 +342,15 @@ class GalleryFilterView extends StatelessWidget {
       ];
 
       if (advanceSearchController.enableAdvance &&
-              _searchPageController?.searchType != SearchType.favorite ??
-          true) {
+          _searchPageController?.searchType != SearchType.favorite) {
         _listDft.addAll(_listAdv);
-      } else if (_searchPageController?.searchType == SearchType.favorite ??
-          false) {
+      } else if (_searchPageController?.searchType == SearchType.favorite) {
         _listDft.addAll(_listFav);
       }
 
       return AnimatedContainer(
         height: advanceSearchController.enableAdvance &&
-                    _searchPageController?.searchType != SearchType.favorite ??
-                true
+                _searchPageController?.searchType != SearchType.favorite
             ? kAdvanceHeight
             : kHeight,
         // height: context.height / 2,

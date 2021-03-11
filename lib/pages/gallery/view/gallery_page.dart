@@ -49,7 +49,7 @@ class GalleryMainPage extends StatelessWidget {
           Obx(() => CupertinoSliverNavigationBar(
                 padding: const EdgeInsetsDirectional.only(end: 10),
                 largeTitle: SelectableText(
-                  _controller.topTitle ?? '',
+                  _controller.topTitle,
                   textAlign: TextAlign.left,
                   maxLines: 3,
                   minLines: 1,
@@ -232,7 +232,7 @@ class _DatailWidget extends StatelessWidget {
                   ? FontAwesomeIcons.solidStar
                   : FontAwesomeIcons.star,
               title: S.of(context)!.p_Rate,
-              onTap: state?.apiuid?.isNotEmpty ?? false
+              onTap: state.apiuid?.isNotEmpty ?? false
                   ? () {
                       showRateDialog(context);
                     }
@@ -251,8 +251,8 @@ class _DatailWidget extends StatelessWidget {
       Expanded(
         child: TextBtn(
           FontAwesomeIcons.magnet,
-          title: '${S.of(context)!.p_Torrent}(${state?.torrentcount ?? 0})',
-          onTap: state?.torrentcount != '0'
+          title: '${S.of(context)!.p_Torrent}(${state.torrentcount ?? 0})',
+          onTap: state.torrentcount != '0'
               ? () async {
                   showTorrentDialog();
                 }
@@ -275,7 +275,7 @@ class _DatailWidget extends StatelessWidget {
           FontAwesomeIcons.solidImages,
           title: S.of(context)!.p_Similar,
           onTap: () {
-            final String title = state?.englishTitle ??
+            final String title = state.englishTitle ??
                 ''
                     .replaceAll(RegExp(r'(\[.*?\]|\(.*?\))|{.*?}'), '')
                     .trim()
@@ -301,7 +301,7 @@ class _DatailWidget extends StatelessWidget {
               CupertinoColors.systemGrey4, context),
         ),
         // 标签
-        TagBox(listTagGroup: state!.tagGroup!),
+        TagBox(listTagGroup: state.tagGroup!),
         const TopComment(),
         Container(
           margin: const EdgeInsets.only(top: 4),
@@ -311,7 +311,7 @@ class _DatailWidget extends StatelessWidget {
         ),
         PreviewGrid(
           previews: _controller.firstPagePreview,
-          gid: state!.gid!,
+          gid: state.gid!,
         ),
         MorePreviewButton(hasMorePreview: _controller.hasMorePreview),
       ],

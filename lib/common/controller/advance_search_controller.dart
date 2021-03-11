@@ -78,6 +78,7 @@ class AdvanceSearchController extends ProfileController {
   @override
   void onInit() {
     super.onInit();
+    _enableAdvance.value = Global.profile.enableAdvanceSearch;
     everProfile<bool>(
         _enableAdvance as RxInterface<bool>,
         (bool value) => Global.profile =

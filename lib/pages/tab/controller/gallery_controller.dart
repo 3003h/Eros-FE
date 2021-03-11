@@ -80,10 +80,9 @@ class GalleryViewController extends TabViewController {
   String get title {
     if (cats != null) {
       return EHConst.cats.entries
-              ?.firstWhere((MapEntry<String, int> element) =>
-                  element.value == EHConst.sumCats - (cats ?? 0))
-              ?.key ??
-          S.of(Get.context!)!.tab_gallery;
+          .firstWhere((MapEntry<String, int> element) =>
+              element.value == EHConst.sumCats - (cats ?? 0))
+          .key;
     } else {
       return S.of(Get.context!)!.tab_gallery;
     }

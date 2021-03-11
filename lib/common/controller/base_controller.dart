@@ -5,9 +5,6 @@ import 'package:flutter/foundation.dart';
 import 'package:get/get.dart';
 
 class ProfileController extends GetxController {
-  // EhConfig ehConfig;
-  // DownloadConfig downloadConfig;
-
   EhConfig get ehConfig => Global.profile.ehConfig;
   set ehConfig(EhConfig val) =>
       Global.profile = Global.profile.copyWith(ehConfig: val);

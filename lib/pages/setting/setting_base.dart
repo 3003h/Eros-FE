@@ -73,7 +73,7 @@ class _SelectorSettingItemState extends State<SelectorSettingItem> {
                 ),
                 const Spacer(),
                 Text(
-                  widget.selector ?? '',
+                  widget.selector,
                   style: const TextStyle(
                     color: CupertinoColors.systemGrey2,
                   ),
@@ -440,12 +440,30 @@ Future<void> showUserCookie() async {
                   fontWeight: FontWeight.bold,
                 ),
               ).paddingOnly(bottom: 4),
-              Text(
-                _cookieString,
-                textAlign: TextAlign.justify,
-                style: const TextStyle(
-                  fontSize: 14,
-                ),
+              // Text(
+              //   _cookieString,
+              //   textAlign: TextAlign.justify,
+              //   style: const TextStyle(
+              //     fontSize: 14,
+              //   ),
+              // ),
+              CupertinoFormSection.insetGrouped(
+                margin: const EdgeInsetsDirectional.fromSTEB(0, 0.0, 0, 5.0),
+                backgroundColor: Colors.transparent,
+                children: _cookies
+                    .map((e) => CupertinoTextFormFieldRow(
+                          prefix: Text(
+                            e.name,
+                            style: const TextStyle(fontSize: 14),
+                          ),
+                          style: const TextStyle(fontSize: 14),
+                          initialValue: e.value,
+                          readOnly: true,
+                          maxLines: 2,
+                          minLines: 1,
+                          textAlign: TextAlign.right,
+                        ))
+                    .toList(),
               ),
             ],
           ).paddingSymmetric(vertical: 8),

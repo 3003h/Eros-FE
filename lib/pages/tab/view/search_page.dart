@@ -468,7 +468,7 @@ class GallerySearchPage extends StatelessWidget {
                   margin: const EdgeInsets.only(left: 10),
                   padding: const EdgeInsets.symmetric(vertical: 10),
                   child: Text(
-                    title ?? '',
+                    title,
                     style: TextStyle(
                       color: CupertinoDynamicColor.resolve(
                           CupertinoColors.label, Get.context!),

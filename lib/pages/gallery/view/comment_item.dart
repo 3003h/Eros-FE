@@ -38,7 +38,7 @@ class CommentItem extends StatelessWidget {
     Widget _fullText() {
       return clif.SelectableLinkify(
         onOpen: (link) => _onOpen(context, link: link),
-        text: galleryComment?.text ?? '',
+        text: galleryComment.text,
 //      softWrap: true,
         textAlign: TextAlign.left,
         // 对齐方式
@@ -58,7 +58,7 @@ class CommentItem extends StatelessWidget {
             galleryComment.span.map((GalleryCommentSpan e) {
           if (e.imageUrl != null) {
             final Map<String, String> _httpHeaders = {
-              'Cookie': Global.profile?.user?.cookie ?? '',
+              'Cookie': Global.profile.user.cookie ?? '',
             };
             return WidgetSpan(
               child: GestureDetector(
@@ -113,7 +113,7 @@ class CommentItem extends StatelessWidget {
       final separates = <int>[];
       for (int i = 0; i < galleryComment.span.length; i++) {
         final _span = galleryComment.span[i];
-        if (_span?.text == '\n') {
+        if (_span.text == '\n') {
           separates.add(i);
         }
       }
@@ -153,9 +153,9 @@ class CommentItem extends StatelessWidget {
               List<Widget>.from(_groups.map((List<GalleryCommentSpan> spans) {
             return Wrap(
               children: List<Widget>.from(spans.map((GalleryCommentSpan e) {
-                if (e?.imageUrl != null) {
+                if (e.imageUrl != null) {
                   final Map<String, String> _httpHeaders = {
-                    'Cookie': Global.profile?.user?.cookie ?? '',
+                    'Cookie': Global.profile.user.cookie ?? '',
                   };
 
                   return GestureDetector(
@@ -174,7 +174,7 @@ class CommentItem extends StatelessWidget {
                 } else {
                   return clif.SelectableLinkify(
                     onOpen: (link) => _onOpen(context, link: link),
-                    text: e?.text ?? '',
+                    text: e.text ?? '',
                     textAlign: TextAlign.left,
                     // 对齐方式
                     style: TextStyle(
@@ -242,7 +242,7 @@ class CommentItem extends StatelessWidget {
             ? galleryComment.span[i - 1]
             : null;
 
-        final bool _curIsText = _span?.imageUrl?.isEmpty ?? true;
+        final bool _curIsText = _span.imageUrl?.isEmpty ?? true;
         final bool _preIsText = _preSpan?.imageUrl?.isEmpty ?? true;
         final bool _curIsLast = i == galleryComment.span.length - 1;
 
@@ -259,8 +259,8 @@ class CommentItem extends StatelessWidget {
             (_preSpan?.text?.endsWith('\n') ?? false);
 
         // 当前span为文本并且换行结尾
-        final bool _curSpanEndWithBr = (_span?.imageUrl?.isEmpty ?? true) &&
-            (_span?.text?.endsWith('\n') ?? false);
+        final bool _curSpanEndWithBr = (_span.imageUrl?.isEmpty ?? true) &&
+            (_span.text?.endsWith('\n') ?? false);
 
         // logger.v('${_span.toJson()} '
         //     '\n-----\n'
@@ -331,7 +331,7 @@ class CommentItem extends StatelessWidget {
                 case CommentSpanType.image:
                 case CommentSpanType.linkImage:
                   final Map<String, String> _httpHeaders = {
-                    'Cookie': Global.profile?.user?.cookie ?? '',
+                    'Cookie': Global.profile.user.cookie ?? '',
                   };
 
                   return GestureDetector(

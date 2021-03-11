@@ -53,7 +53,7 @@ class SearchPageController extends TabViewController {
   // 搜索输入框的控制器
   final TextEditingController searchTextController = TextEditingController();
 
-  bool get showClearButton => searchTextController.text.isNotEmpty ?? false;
+  bool get showClearButton => searchTextController.text.isNotEmpty;
 
   final GStore _gStore = Get.find();
 
@@ -115,7 +115,7 @@ class SearchPageController extends TabViewController {
 
       analytics.logSearch(searchTerm: _search);
 
-      addHistory();
+      _addHistory();
 
       change(state, status: RxStatus.loading());
       try {
@@ -143,13 +143,19 @@ class SearchPageController extends TabViewController {
     const Duration _duration = Duration(milliseconds: 800);
     _lastInputCompleteAt = DateTime.now();
     await Future<void>.delayed(_duration);
-    if (_lastSearchText?.trim() != searchTextController.text.trim() &&
+
+    // logger.d('$_lastSearchText\n${searchTextController.text}');
+
+    if (_lastSearchText.trim() != searchTextController.text.trim() &&
         DateTime.now().difference(_lastInputCompleteAt) >= _duration) {
       logger.d('_autoComplete $_autoComplete');
       if (searchTextController.text.trim().isEmpty) {
+        logger.d('ListType to ListType.init');
         listType = ListType.init;
         return;
       }
+
+      _lastSearchText = searchTextController.text.trim();
 
       if (_autoComplete) {
         listType = ListType.gallery;
@@ -158,8 +164,6 @@ class SearchPageController extends TabViewController {
       }
 
       listType = ListType.tag;
-
-      _lastSearchText = searchTextController.text.trim();
 
       _currQry = searchTextController.text.trim().split(RegExp(r'[ ;"]')).last;
       if (_currQry.isEmpty) {
@@ -285,7 +289,7 @@ class SearchPageController extends TabViewController {
   }
 
   List<String> searchHistory = <String>[].obs;
-  void addHistory() {
+  void _addHistory() {
     searchHistory.insert(0, searchTextController.text.trim());
     searchHistory = LinkedHashSet<String>.from(searchHistory).toList();
     if (searchHistory.length > 100) {
@@ -323,7 +327,7 @@ class SearchPageController extends TabViewController {
 
   @override
   void onClose() {
-    searchTextController.dispose();
+    // searchTextController.dispose();
     Get.find<DepthService>().popSearchPageCtrl();
     super.onClose();
   }
@@ -362,7 +366,7 @@ class SearchPageController extends TabViewController {
         : '${_qry.namespace.trim().shortName}:${_qry.key}\$';
     logger.i('_add $_add ');
 
-    final String _lastSearchText = this._lastSearchText ?? '';
+    final String _lastSearchText = this._lastSearchText;
     final String _newSearch =
         _lastSearchText.replaceAll(RegExp('$_currQry\$'), _add);
     logger.i(
@@ -379,7 +383,7 @@ class SearchPageController extends TabViewController {
   }
 
   void appendTextToSearch(String text) {
-    final String _lastSearchText = searchTextController.text ?? '';
+    final String _lastSearchText = searchTextController.text;
     final String _newSearch = '$_lastSearchText $text';
     _autoComplete = false;
     searchTextController.value = TextEditingValue(

@@ -104,7 +104,7 @@ class ExpandableLinkify extends StatefulWidget {
 
 class _ExpandableLinkifyState extends State<ExpandableLinkify> {
   _ExpandableLinkifyState(this._expand) {
-    _expand ??= false;
+    _expand;
   }
 
   bool _expand;
@@ -113,8 +113,7 @@ class _ExpandableLinkifyState extends State<ExpandableLinkify> {
   Widget build(BuildContext context) {
     return LayoutBuilder(
       builder: (context, size) {
-        final TextSpan span =
-            TextSpan(text: widget.text ?? '', style: widget.style);
+        final TextSpan span = TextSpan(text: widget.text, style: widget.style);
 
         final TextPainter tp = TextPainter(
             text: span,
@@ -129,7 +128,7 @@ class _ExpandableLinkifyState extends State<ExpandableLinkify> {
             children: <Widget>[
               if (_expand)
                 Linkify(
-                  text: widget.text ?? '',
+                  text: widget.text,
                   style: widget.style,
                   onOpen: widget.onOpen,
                   options: widget.options,
@@ -138,7 +137,7 @@ class _ExpandableLinkifyState extends State<ExpandableLinkify> {
                 )
               else
                 Linkify(
-                  text: widget.text ?? '',
+                  text: widget.text,
                   maxLines: widget.maxLines,
                   overflow: widget.overflow,
                   style: widget.style,
@@ -165,7 +164,7 @@ class _ExpandableLinkifyState extends State<ExpandableLinkify> {
             ],
           );
         } else {
-          return Linkify(text: widget.text ?? '', style: widget.style);
+          return Linkify(text: widget.text, style: widget.style);
         }
       },
     );

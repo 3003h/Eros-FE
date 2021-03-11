@@ -80,8 +80,7 @@ class ClientConnectionHandler {
 
   Future<void> dataHandler(dynamic data) async {
     // 自定义hosts
-    final List<DnsCache> _customHosts =
-        dnsConfigController.hosts ?? <DnsCache>[];
+    final List<DnsCache> _customHosts = dnsConfigController.hosts;
     final bool enableDoH = dnsConfigController.enableDoH.value ?? false;
 
     if (server == null) {
@@ -101,8 +100,7 @@ class ClientConnectionHandler {
 
         String realHost = _oriHost;
         try {
-          final List<DnsCache> _dohDnsCacheList =
-              dnsConfigController.dohCache ?? <DnsCache>[];
+          final List<DnsCache> _dohDnsCacheList = dnsConfigController.dohCache;
 
           // 查询自定义hosts
           final int customDnsCacheIndex = _customHosts

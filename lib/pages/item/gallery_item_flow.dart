@@ -32,7 +32,7 @@ class GalleryItemFlow extends StatelessWidget {
     return Obx(() {
       // logger.d('${_galleryItemController.isFav}');
       return Container(
-        child: _galleryItemController.isFav ?? false
+        child: _galleryItemController.isFav
             ? Container(
                 child: Icon(
                   FontAwesomeIcons.solidHeart,
@@ -53,7 +53,7 @@ class GalleryItemFlow extends StatelessWidget {
       final GalleryItem galleryItem = _galleryItemController.galleryItem;
 
       final Color _colorCategory = CupertinoDynamicColor.resolve(
-          ThemeColors.catColor[galleryItem?.category ?? 'default'] ??
+          ThemeColors.catColor[galleryItem.category ?? 'default'] ??
               CupertinoColors.systemBackground,
           context);
 
@@ -113,7 +113,7 @@ class GalleryItemFlow extends StatelessWidget {
                         width: (kWidth + kRadius) / 2,
                         alignment: Alignment.center,
                         child: Text(
-                          galleryItem?.translated ?? '',
+                          galleryItem.translated ?? '',
                           style: const TextStyle(
                               fontSize: 8,
                               color: CupertinoColors.white,

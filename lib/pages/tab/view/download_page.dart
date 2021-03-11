@@ -41,7 +41,7 @@ class DownloadTab extends GetView<DownloadViewController> {
                 style: const TextStyle(fontSize: 14),
               ).marginSymmetric(horizontal: 6),
             },
-            groupValue: controller.viewType ?? DownloadType.gallery,
+            groupValue: controller.viewType,
             onValueChanged: (DownloadType? value) {
               controller.viewType = value ?? DownloadType.gallery;
             },

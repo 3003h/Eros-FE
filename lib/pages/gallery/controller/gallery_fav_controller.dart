@@ -36,7 +36,7 @@ class GalleryFavController extends GetxController {
     //   _itemController = Get.find(tag: _pageController.gid);
     // }
 
-    _localFav.value = _pageController.localFav ?? false;
+    _localFav.value = _pageController.localFav;
 
     // _favTitle 初始化
     if (_pageController.galleryItem.favTitle != null &&
@@ -57,7 +57,7 @@ class GalleryFavController extends GetxController {
 
   final RxBool _localFav = false.obs;
 
-  bool get localFav => _pageController.localFav ?? false;
+  bool get localFav => _pageController.localFav;
 
   final RxString _favTitle = S.of(Get.context!)!.notFav.obs;
   String get favTitle => _favTitle.value ?? '';
@@ -97,7 +97,7 @@ class GalleryFavController extends GetxController {
       this._favTitle.value = _favTitle;
       _favcat.value = _lastFavcat;
       if (!_pageController.fromUrl) {
-        _itemController?.setFavTitle(favTitle: favTitle, favcat: favcat);
+        _itemController.setFavTitle(favTitle: favTitle, favcat: favcat);
       }
     }
     return true;
@@ -179,7 +179,7 @@ class GalleryFavController extends GetxController {
         this._favTitle.value = _favTitle;
         this._favcat.value = _favcat;
         if (!_pageController.fromUrl) {
-          _itemController?.setFavTitle(favTitle: favTitle, favcat: favcat);
+          _itemController.setFavTitle(favTitle: favTitle, favcat: favcat);
         }
       }
       return true;

@@ -54,7 +54,7 @@ class GalleryPageController extends GetxController
   }
 
   /// 画廊gid 唯一
-  String get gid => galleryItem?.gid ?? '';
+  String get gid => galleryItem.gid ?? '';
 
   bool isRefresh = false;
 
@@ -178,8 +178,7 @@ class GalleryPageController extends GetxController
   bool get enableRead => _enableRead.value ?? false;
 
   bool get hasMorePreview {
-    return int.parse(galleryItem.filecount ?? '0') >
-        (firstPagePreview?.length ?? 0);
+    return int.parse(galleryItem.filecount ?? '0') > (firstPagePreview.length);
   }
 
   // 控制隐藏导航栏按钮和封面
@@ -235,8 +234,8 @@ class GalleryPageController extends GetxController
     try {
       hideNavigationBtn = true;
 
-      if (galleryItem?.filecount == null ||
-          (galleryItem?.filecount?.isEmpty ?? true)) {
+      if (galleryItem.filecount == null ||
+          (galleryItem.filecount?.isEmpty ?? true)) {
         await Api.getMoreGalleryInfoOne(galleryItem, refresh: refresh);
       }
 
@@ -396,20 +395,20 @@ class GalleryPageController extends GetxController
     // logger.d('${galleryItem.japaneseTitle} ${galleryItem.englishTitle}');
 
     if ((_ehConfigService.isJpnTitle.value ?? false) &&
-        (galleryItem?.japaneseTitle?.isNotEmpty ?? false)) {
-      return galleryItem?.englishTitle ?? '';
+        (galleryItem.japaneseTitle?.isNotEmpty ?? false)) {
+      return galleryItem.englishTitle ?? '';
     } else {
-      return galleryItem?.japaneseTitle ?? '';
+      return galleryItem.japaneseTitle ?? '';
     }
   }
 
   // 根据设置的语言显示的标题
   String get title {
     if ((_ehConfigService.isJpnTitle.value ?? false) &&
-        (galleryItem?.japaneseTitle?.isNotEmpty ?? false)) {
-      return galleryItem?.japaneseTitle ?? '';
+        (galleryItem.japaneseTitle?.isNotEmpty ?? false)) {
+      return galleryItem.japaneseTitle ?? '';
     } else {
-      return galleryItem?.englishTitle ?? '';
+      return galleryItem.englishTitle ?? '';
     }
   }
 

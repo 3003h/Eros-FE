@@ -53,7 +53,7 @@ class GalleryItemSimpleWidget extends StatelessWidget {
                   _buildTitle(),
                   // 上传者
                   Text(
-                    _galleryItemController?.galleryItem?.uploader ?? '',
+                    _galleryItemController.galleryItem.uploader ?? '',
                     style: const TextStyle(
                         fontSize: 12, color: CupertinoColors.systemGrey),
                   ),
@@ -160,7 +160,7 @@ class GalleryItemSimpleWidget extends StatelessWidget {
               child: CoverImg(
                   height: _item.imgHeight,
                   width: _item.imgWidth,
-                  imgUrl: _galleryItemController?.galleryItem?.imgUrl ?? ''),
+                  imgUrl: _galleryItemController.galleryItem.imgUrl ?? ''),
             ),
           ),
         ),
@@ -184,7 +184,7 @@ class GalleryItemSimpleWidget extends StatelessWidget {
           ),
         ),
         Text(
-          _galleryItemController?.galleryItem?.rating?.toString() ?? '',
+          _galleryItemController.galleryItem.rating?.toString() ?? '',
           style: TextStyle(
             fontSize: 12,
             color: CupertinoDynamicColor.resolve(
@@ -201,7 +201,7 @@ class GalleryItemSimpleWidget extends StatelessWidget {
         Padding(
           padding: const EdgeInsets.only(right: 4),
           child: Text(
-            _galleryItemController?.galleryItem?.translated ?? '',
+            _galleryItemController.galleryItem.translated ?? '',
             style: const TextStyle(
                 fontSize: 12, color: CupertinoColors.systemGrey),
           ),
@@ -214,7 +214,7 @@ class GalleryItemSimpleWidget extends StatelessWidget {
         Container(
           padding: const EdgeInsets.only(left: 2),
           child: Text(
-            _galleryItemController?.galleryItem?.filecount ?? '',
+            _galleryItemController.galleryItem.filecount ?? '',
             style: const TextStyle(
                 fontSize: 12, color: CupertinoColors.systemGrey),
           ),
@@ -241,7 +241,7 @@ class GalleryItemSimpleWidget extends StatelessWidget {
 
   Widget _buildPostTime() {
     return Text(
-      _galleryItemController?.galleryItem?.postTime ?? '',
+      _galleryItemController.galleryItem.postTime ?? '',
       style: const TextStyle(fontSize: 12, color: CupertinoColors.systemGrey),
     );
   }
@@ -249,7 +249,7 @@ class GalleryItemSimpleWidget extends StatelessWidget {
   Widget _buildCategory() {
     final Color _colorCategory = CupertinoDynamicColor.resolve(
         ThemeColors.catColor[
-                _galleryItemController?.galleryItem?.category ?? 'default'] ??
+                _galleryItemController.galleryItem.category ?? 'default'] ??
             CupertinoColors.systemBackground,
         Get.context!);
 
@@ -259,7 +259,7 @@ class GalleryItemSimpleWidget extends StatelessWidget {
         padding: const EdgeInsets.fromLTRB(6, 3, 6, 3),
         color: _colorCategory,
         child: Text(
-          _galleryItemController?.galleryItem?.category ?? '',
+          _galleryItemController.galleryItem.category ?? '',
           style: const TextStyle(
             fontSize: 14,
             height: 1,
@@ -288,7 +288,7 @@ class CoverImg extends StatelessWidget {
   Widget build(BuildContext context) {
     final EhConfigService _ehConfigService = Get.find();
     final Map<String, String> _httpHeaders = {
-      'Cookie': Global.profile?.user?.cookie ?? '',
+      'Cookie': Global.profile.user.cookie ?? '',
     };
     if (imgUrl != null && imgUrl.isNotEmpty) {
       return Obx(() {

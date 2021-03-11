@@ -279,7 +279,6 @@ class Api {
 
     final dio.Options _cacheOptions = getCacheOptions(forceRefresh: refresh);
 
-    logger.d('${params}');
     await CustomHttpsProxy.instance.init();
     String response = await getHttpManager()
             .get(url, options: _cacheOptions, params: params) ??
@@ -288,7 +287,7 @@ class Api {
     // 排序方式检查 不符合则设置 然后重新请求
     // 获取收藏排序设置
     final FavoriteOrder order = EnumToString.fromString(
-            FavoriteOrder.values, Global?.profile.ehConfig.favoritesOrder) ??
+            FavoriteOrder.values, Global.profile.ehConfig.favoritesOrder) ??
         FavoriteOrder.fav;
     // 排序参数
     final String _order = EHConst.favoriteOrder[order] ?? EHConst.FAV_ORDER_FAV;
@@ -604,7 +603,7 @@ class Api {
       /// 判断获取语言标识
       String _translated = '';
       if (tags.isNotEmpty) {
-        _translated = EHUtils.getLangeage(tags[0]) ?? '';
+        _translated = EHUtils.getLangeage(tags[0]);
       }
 
       galleryItems[i] = galleryItems[i].copyWith(
@@ -788,8 +787,7 @@ class Api {
 
   /// 分享图片
   static Future<void> shareImage(String imageUrl) async {
-    final CachedNetworkImage image =
-        CachedNetworkImage(imageUrl: imageUrl ?? '');
+    final CachedNetworkImage image = CachedNetworkImage(imageUrl: imageUrl);
     final DefaultCacheManager manager =
         image.cacheManager as DefaultCacheManager? ?? DefaultCacheManager();
     final Map<String, String>? headers = image.httpHeaders;
@@ -914,8 +912,7 @@ class Api {
       } else {
         /// 保存网络图片
         logger.d('保存网络图片');
-        final CachedNetworkImage image =
-            CachedNetworkImage(imageUrl: imageUrl ?? '');
+        final CachedNetworkImage image = CachedNetworkImage(imageUrl: imageUrl);
         final DefaultCacheManager manager =
             image.cacheManager as DefaultCacheManager? ?? DefaultCacheManager();
         final Map<String, String>? headers = image.httpHeaders;

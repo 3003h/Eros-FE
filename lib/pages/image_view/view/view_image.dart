@@ -199,7 +199,7 @@ class _ViewImageState extends State<ViewImage>
                 } else {
                   final GalleryPreview? _preview = snapshot.data;
 
-                  // 100ms 后更新 TODO 会循环刷新，需要修改
+                  // 100ms 后更新
                   Future.delayed(const Duration(milliseconds: 100)).then((_) {
                     if (_preview == null || _preview.ser == 1) {
                       return;
@@ -337,7 +337,7 @@ class ImageExtend extends StatelessWidget {
                         direction: Axis.vertical,
                         center: progress != null
                             ? Text(
-                                '${(progress ?? 0) * 100 ~/ 1}%',
+                                '${(progress) * 100 ~/ 1}%',
                                 style: TextStyle(
                                   color: progress < 0.5
                                       ? CupertinoColors.white

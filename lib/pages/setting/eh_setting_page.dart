@@ -278,7 +278,7 @@ Widget _buildHistoryMaxItem(BuildContext context) {
 
   return Obx(() => SelectorSettingItem(
         title: _title,
-        selector: _getMaxNumText(ehConfigService.maxHistory.value) ?? '',
+        selector: _getMaxNumText(ehConfigService.maxHistory.value),
         hideLine: true,
         onTap: () async {
           logger.v('tap ModeItem');
