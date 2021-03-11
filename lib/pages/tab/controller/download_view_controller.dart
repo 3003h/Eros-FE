@@ -109,7 +109,7 @@ class DownloadViewController extends GetxController {
                 onPressed: () {
                   Get.back();
                 },
-                child: Text(S.of(context)!.cancel)),
+                child: Text(S.of(context).cancel)),
             actions: <Widget>[
               CupertinoActionSheetAction(
                 onPressed: () {

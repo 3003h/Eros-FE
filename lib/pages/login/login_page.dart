@@ -45,7 +45,7 @@ class _LoginPageState extends State<LoginPage> {
   Widget build(BuildContext context) {
     return CupertinoPageScaffold(
         navigationBar: CupertinoNavigationBar(
-          middle: Text(S.of(context)!.user_login),
+          middle: Text(S.of(context).user_login),
         ),
         child: SafeArea(
           child: SingleChildScrollView(
@@ -63,10 +63,10 @@ class _LoginPageState extends State<LoginPage> {
                         style: const TextStyle(
                             textBaseline: TextBaseline.alphabetic),
                         controller: _usernameController,
-                        placeholder: S.of(context)!.pls_i_username,
+                        placeholder: S.of(context).pls_i_username,
                         prefix: ConstrainedBox(
                             constraints: const BoxConstraints(minWidth: 50),
-                            child: Text(S.of(context)!.user_name)),
+                            child: Text(S.of(context).user_name)),
                         // prefixMode: OverlayVisibilityMode.never,
                         decoration: null,
                         // autofocus 自动获得焦点
@@ -89,10 +89,10 @@ class _LoginPageState extends State<LoginPage> {
                         style: const TextStyle(
                             textBaseline: TextBaseline.alphabetic),
                         controller: _passwdController,
-                        placeholder: S.of(context)!.pls_i_passwd,
+                        placeholder: S.of(context).pls_i_passwd,
                         prefix: ConstrainedBox(
                             constraints: const BoxConstraints(minWidth: 50),
-                            child: Text(S.of(context)!.passwd)),
+                            child: Text(S.of(context).passwd)),
                         // prefixMode: OverlayVisibilityMode.never,
                         decoration: null,
                         obscureText: true,
@@ -133,7 +133,7 @@ class _LoginPageState extends State<LoginPage> {
               ),
             )
           : CupertinoButton(
-              child: Text(S.of(context)!.login),
+              child: Text(S.of(context).login),
 //             color: CupertinoColors.activeBlue,
               onPressed: () {
                 _login();
@@ -167,7 +167,7 @@ class _LoginPageState extends State<LoginPage> {
               ),
             )
           : CupertinoButton(
-              child: Text(S.of(context)!.login_web),
+              child: Text(S.of(context).login_web),
               onPressed: () async {
                 if (!Platform.isIOS && !Platform.isAndroid) {
                   showToast('平台尚未支持');

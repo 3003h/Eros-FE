@@ -232,7 +232,7 @@ Future<void> showFilterSetting() async {
     barrierDismissible: true,
     builder: (BuildContext context) {
       return CupertinoAlertDialog(
-        title: Text(S.of(context)!.search),
+        title: Text(S.of(context).search),
         content: GalleryFilterView(
           catNum: _ehConfigService.catFilter.value,
           catNumChanged: (int toNum) {

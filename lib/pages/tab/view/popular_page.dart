@@ -19,7 +19,7 @@ class PopularListTab extends GetView<PopularViewController> {
 
   @override
   Widget build(BuildContext context) {
-    final String _title = S.of(context)!.tab_popular;
+    final String _title = S.of(context).tab_popular;
     final CustomScrollView customScrollView = CustomScrollView(
       controller: scrollController,
       physics: const AlwaysScrollableScrollPhysics(),

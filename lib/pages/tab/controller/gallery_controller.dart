@@ -83,7 +83,7 @@ class GalleryViewController extends TabViewController {
               element.value == EHConst.sumCats - (cats ?? 0))
           .key;
     } else {
-      return S.of(Get.context!)!.tab_gallery;
+      return S.of(Get.context!).tab_gallery;
     }
   }
 

@@ -14,13 +14,13 @@ class AutoLockController extends GetxController {
   final EhConfigService _ehConfigService = Get.find();
 
   static final IOSAuthMessages iosStrings = IOSAuthMessages(
-      cancelButton: S.of(Get.context!)!.cancel,
-      goToSettingsButton: S.of(Get.context!)!.tab_setting,
+      cancelButton: S.of(Get.context!).cancel,
+      goToSettingsButton: S.of(Get.context!).tab_setting,
       goToSettingsDescription: 'Please set up your Touch & Face ID.',
       lockOut: 'Please reenable your Touch & Face ID');
 
   static final AndroidAuthMessages androidStrings = AndroidAuthMessages(
-    cancelButton: S.of(Get.context!)!.cancel,
+    cancelButton: S.of(Get.context!).cancel,
     // signInTitle: '指纹认证',
     // biometricHint: '触摸指纹传感器',
   );

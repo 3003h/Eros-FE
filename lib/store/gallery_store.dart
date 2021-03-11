@@ -28,8 +28,9 @@ class GStore {
   }
 
   void saveCache(GalleryCache cache) {
-    // logger.d('save cache ${jsonEncode(cache)}');
-    ReadWriteValue(cache.gid, '', _cacheStore).val = jsonEncode(cache);
+    if (cache.gid != null) {
+      ReadWriteValue(cache.gid!, '', _cacheStore).val = jsonEncode(cache);
+    }
   }
 
   set tabConfig(TabConfig? tabConfig) {

@@ -140,7 +140,7 @@ class ViewController extends GetxController {
         _orientation != ReadOrientation.auto) {
       OrientationPlugin.setPreferredOrientations(
           [orientationMap[_orientation] ?? DeviceOrientation.portraitUp]);
-      OrientationPlugin.forceOrientation(orientationMap[_orientation]);
+      OrientationPlugin.forceOrientation(orientationMap[_orientation]!);
     }
 
     // logger.d('onInit() end');

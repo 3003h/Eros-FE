@@ -23,7 +23,7 @@ Future<void> showTagInfoDialog(String text,
             mainAxisSize: MainAxisSize.min,
             children: [
               const Icon(LineIcons.thumbsUp).paddingOnly(right: 8),
-              Text(S.of(Get.context!)!.tag_vote_up),
+              Text(S.of(Get.context!).tag_vote_up),
             ],
           ),
           onPressed: () {
@@ -36,7 +36,7 @@ Future<void> showTagInfoDialog(String text,
               mainAxisSize: MainAxisSize.min,
               children: [
                 const Icon(LineIcons.thumbsDown).paddingOnly(right: 8),
-                Text(S.of(Get.context!)!.tag_vote_down),
+                Text(S.of(Get.context!).tag_vote_down),
               ],
             ),
             onPressed: () {
@@ -51,7 +51,7 @@ Future<void> showTagInfoDialog(String text,
             mainAxisSize: MainAxisSize.min,
             children: [
               const Icon(LineIcons.undo).paddingOnly(right: 8),
-              Text(S.of(Get.context!)!.tag_withdraw_vote),
+              Text(S.of(Get.context!).tag_withdraw_vote),
             ],
           ),
           onPressed: () {
@@ -67,7 +67,7 @@ Future<void> showTagInfoDialog(String text,
             mainAxisSize: MainAxisSize.min,
             children: [
               const Icon(LineIcons.undo).paddingOnly(right: 8),
-              Text(S.of(Get.context!)!.tag_vote_down),
+              Text(S.of(Get.context!).tag_vote_down),
             ],
           ),
           onPressed: () {

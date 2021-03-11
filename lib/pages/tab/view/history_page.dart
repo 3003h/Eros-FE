@@ -15,7 +15,7 @@ class HistoryTab extends GetView<HistoryViewController> {
 
   @override
   Widget build(BuildContext context) {
-    final String _title = S.of(context)!.tab_history;
+    final String _title = S.of(context).tab_history;
     final CustomScrollView customScrollView = CustomScrollView(
       controller: scrollController,
       physics: const AlwaysScrollableScrollPhysics(),

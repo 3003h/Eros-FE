@@ -294,13 +294,13 @@ Future<void> showArchiverDialog() {
       barrierDismissible: true,
       builder: (_) {
         return CupertinoAlertDialog(
-          title: Text(S.of(Get.context!)!.p_Archiver),
+          title: Text(S.of(Get.context!).p_Archiver),
           content: Container(
             child: const ArchiverView(),
           ),
           actions: <Widget>[
             CupertinoDialogAction(
-              child: Text(S.of(Get.context!)!.cancel),
+              child: Text(S.of(Get.context!).cancel),
               onPressed: () {
                 Get.back();
               },

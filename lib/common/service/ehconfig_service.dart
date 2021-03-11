@@ -199,8 +199,8 @@ class EhConfigService extends ProfileService {
   Future<FavoriteOrder?> showFavOrder(BuildContext context) async {
     List<Widget> _getOrderList(BuildContext context) {
       final Map<FavoriteOrder, String> _orderMap = <FavoriteOrder, String>{
-        FavoriteOrder.posted: S.of(context)!.favorites_order_Use_posted,
-        FavoriteOrder.fav: S.of(context)!.favorites_order_Use_favorited,
+        FavoriteOrder.posted: S.of(context).favorites_order_Use_posted,
+        FavoriteOrder.fav: S.of(context).favorites_order_Use_favorited,
       };
 
       return List<Widget>.from(_orderMap.keys.map((FavoriteOrder element) {
@@ -226,12 +226,12 @@ class EhConfigService extends ProfileService {
         context: context,
         builder: (BuildContext context) {
           return CupertinoActionSheet(
-            title: Text(S.of(context)!.favorites_order),
+            title: Text(S.of(context).favorites_order),
             cancelButton: CupertinoActionSheetAction(
                 onPressed: () {
                   Get.back();
                 },
-                child: Text(S.of(context)!.cancel)),
+                child: Text(S.of(context).cancel)),
             actions: <Widget>[
               ..._getOrderList(context),
             ],
@@ -297,13 +297,13 @@ class EhConfigService extends ProfileService {
             content: const Text('检测到剪贴板中包含画廊链接, 是否打开'),
             actions: [
               CupertinoDialogAction(
-                child: Text(S.of(context)!.cancel),
+                child: Text(S.of(context).cancel),
                 onPressed: () {
                   Get.back();
                 },
               ),
               CupertinoDialogAction(
-                child: Text(S.of(context)!.ok),
+                child: Text(S.of(context).ok),
                 onPressed: () {
                   Get.back();
                   NavigatorUtil.goGalleryPage(url: url);

@@ -52,11 +52,11 @@ class GalleryFilterView extends StatelessWidget {
             children: [
               CupertinoSlidingSegmentedControl<SearchType>(
                 children: <SearchType, Widget>{
-                  SearchType.normal: Text(S.of(context)!.tab_gallery)
+                  SearchType.normal: Text(S.of(context).tab_gallery)
                       .marginSymmetric(horizontal: 8),
-                  SearchType.watched: Text(S.of(context)!.tab_watched)
+                  SearchType.watched: Text(S.of(context).tab_watched)
                       .marginSymmetric(horizontal: 8),
-                  SearchType.favorite: Text(S.of(context)!.tab_favorite)
+                  SearchType.favorite: Text(S.of(context).tab_favorite)
                       .marginSymmetric(horizontal: 8),
                 },
                 groupValue:
@@ -80,7 +80,7 @@ class GalleryFilterView extends StatelessWidget {
           Container(
             child: Row(
               children: <Widget>[
-                Text(S.of(context)!.s_Advanced_Options),
+                Text(S.of(context).s_Advanced_Options),
                 Transform.scale(
                   scale: 0.8,
                   child: CupertinoSwitch(
@@ -98,7 +98,7 @@ class GalleryFilterView extends StatelessWidget {
                       // padding: const EdgeInsets.only(right: 8),
                       // minSize: 20,
                       child: Text(
-                        S.of(context)!.clear_filter,
+                        S.of(context).clear_filter,
                         style: const TextStyle(height: 1, fontSize: 14),
                       ),
                       onPressed: () {
@@ -112,7 +112,7 @@ class GalleryFilterView extends StatelessWidget {
 
       final List<Widget> _listFav = <Widget>[
         AdvanceSearchSwitchItem(
-          title: S.of(context)!.s_Search_Fav_Name,
+          title: S.of(context).s_Search_Fav_Name,
           value: _advanceSearch.value?.favSearchName ?? true,
           onChanged: (bool value) {
             _advanceSearch(
@@ -120,7 +120,7 @@ class GalleryFilterView extends StatelessWidget {
           },
         ),
         AdvanceSearchSwitchItem(
-          title: S.of(context)!.s_Search_Fav_Tags,
+          title: S.of(context).s_Search_Fav_Tags,
           value: _advanceSearch.value?.favSearchTags ?? true,
           onChanged: (bool value) {
             _advanceSearch(
@@ -128,7 +128,7 @@ class GalleryFilterView extends StatelessWidget {
           },
         ),
         AdvanceSearchSwitchItem(
-          title: S.of(context)!.s_Search_Fav_Note,
+          title: S.of(context).s_Search_Fav_Note,
           value: _advanceSearch.value?.favSearchNote ?? true,
           onChanged: (bool value) {
             _advanceSearch(
@@ -144,7 +144,7 @@ class GalleryFilterView extends StatelessWidget {
               CupertinoColors.systemGrey4, context),
         ),
         AdvanceSearchSwitchItem(
-          title: S.of(context)!.s_Search_Gallery_Name,
+          title: S.of(context).s_Search_Gallery_Name,
           value: _advanceSearch.value?.searchGalleryName ?? true,
           onChanged: (bool value) {
             _advanceSearch(
@@ -152,7 +152,7 @@ class GalleryFilterView extends StatelessWidget {
           },
         ),
         AdvanceSearchSwitchItem(
-          title: S.of(context)!.s_Search_Gallery_Tags,
+          title: S.of(context).s_Search_Gallery_Tags,
           value: _advanceSearch.value?.searchGalleryTags ?? true,
           onChanged: (bool value) {
             _advanceSearch(
@@ -160,7 +160,7 @@ class GalleryFilterView extends StatelessWidget {
           },
         ),
         AdvanceSearchSwitchItem(
-          title: S.of(context)!.s_Search_Gallery_Description,
+          title: S.of(context).s_Search_Gallery_Description,
           value: _advanceSearch.value?.searchGalleryDesc ?? false,
           onChanged: (bool value) {
             _advanceSearch(
@@ -168,7 +168,7 @@ class GalleryFilterView extends StatelessWidget {
           },
         ),
         AdvanceSearchSwitchItem(
-          title: S.of(context)!.s_Search_Torrent_Filenames,
+          title: S.of(context).s_Search_Torrent_Filenames,
           value: _advanceSearch.value?.searchToreenFilenames ?? false,
           onChanged: (bool value) {
             _advanceSearch(
@@ -176,7 +176,7 @@ class GalleryFilterView extends StatelessWidget {
           },
         ),
         AdvanceSearchSwitchItem(
-          title: S.of(context)!.s_Only_Show_Galleries_With_Torrents,
+          title: S.of(context).s_Only_Show_Galleries_With_Torrents,
           value: _advanceSearch.value?.onlyShowWhithTorrents ?? false,
           onChanged: (bool value) {
             _advanceSearch(
@@ -184,7 +184,7 @@ class GalleryFilterView extends StatelessWidget {
           },
         ),
         AdvanceSearchSwitchItem(
-          title: S.of(context)!.s_Search_Low_Power_Tags,
+          title: S.of(context).s_Search_Low_Power_Tags,
           value: _advanceSearch.value?.searchLowPowerTags ?? false,
           onChanged: (bool value) {
             _advanceSearch(
@@ -192,7 +192,7 @@ class GalleryFilterView extends StatelessWidget {
           },
         ),
         AdvanceSearchSwitchItem(
-          title: S.of(context)!.s_Search_Downvoted_Tags,
+          title: S.of(context).s_Search_Downvoted_Tags,
           value: _advanceSearch.value?.searchDownvotedTags ?? false,
           onChanged: (bool value) {
             _advanceSearch(
@@ -200,7 +200,7 @@ class GalleryFilterView extends StatelessWidget {
           },
         ),
         AdvanceSearchSwitchItem(
-          title: S.of(context)!.s_Show_Expunged_Galleries,
+          title: S.of(context).s_Show_Expunged_Galleries,
           value: _advanceSearch.value?.searchExpunged ?? false,
           onChanged: (bool value) {
             _advanceSearch(
@@ -208,7 +208,7 @@ class GalleryFilterView extends StatelessWidget {
           },
         ),
         AdvanceSearchSwitchItem(
-          title: S.of(context)!.s_Minimum_Rating,
+          title: S.of(context).s_Minimum_Rating,
           value: _advanceSearch.value?.searchWithminRating ?? false,
           onChanged: (bool value) {
             _advanceSearch(
@@ -228,19 +228,19 @@ class GalleryFilterView extends StatelessWidget {
                   children: <int, Widget>{
                     2: Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                      child: Text(S.of(context)!.s_stars('2')),
+                      child: Text(S.of(context).s_stars('2')),
                     ),
                     3: Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                      child: Text(S.of(context)!.s_stars('3')),
+                      child: Text(S.of(context).s_stars('3')),
                     ),
                     4: Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                      child: Text(S.of(context)!.s_stars('4')),
+                      child: Text(S.of(context).s_stars('4')),
                     ),
                     5: Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                      child: Text(S.of(context)!.s_stars('5')),
+                      child: Text(S.of(context).s_stars('5')),
                     ),
                   },
                   groupValue: _advanceSearch.value?.minRating ?? 2,
@@ -255,7 +255,7 @@ class GalleryFilterView extends StatelessWidget {
         Row(
           children: <Widget>[
             AdvanceSearchSwitchItem(
-              title: S.of(context)!.s_pages,
+              title: S.of(context).s_pages,
               expand: false,
               value: advanceSearchController
                       .advanceSearch.value?.searchBetweenpage ??
@@ -287,7 +287,7 @@ class GalleryFilterView extends StatelessWidget {
                 ),
               ),
             ),
-            Text(S.of(context)!.s_and),
+            Text(S.of(context).s_and),
             Container(
               margin: const EdgeInsets.only(left: 4),
               width: 50,
@@ -313,9 +313,9 @@ class GalleryFilterView extends StatelessWidget {
         ),
         Container(
             margin: const EdgeInsets.only(top: 8),
-            child: Text(S.of(context)!.s_Disable_default_filters)),
+            child: Text(S.of(context).s_Disable_default_filters)),
         AdvanceSearchSwitchItem(
-          title: S.of(context)!.language,
+          title: S.of(context).language,
           value: _advanceSearch.value?.disableDFLanguage ?? false,
           onChanged: (bool value) {
             _advanceSearch(
@@ -323,7 +323,7 @@ class GalleryFilterView extends StatelessWidget {
           },
         ),
         AdvanceSearchSwitchItem(
-          title: S.of(context)!.uploader,
+          title: S.of(context).uploader,
           value: _advanceSearch.value?.disableDFUploader ?? false,
           onChanged: (bool value) {
             _advanceSearch(
@@ -331,7 +331,7 @@ class GalleryFilterView extends StatelessWidget {
           },
         ),
         AdvanceSearchSwitchItem(
-          title: S.of(context)!.tags,
+          title: S.of(context).tags,
           value: _advanceSearch.value?.disableDFTags ?? false,
           onChanged: (bool value) {
             _advanceSearch(
