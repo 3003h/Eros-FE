@@ -30,7 +30,7 @@ class QuickSearchListPage extends StatelessWidget {
     final CupertinoPageScaffold sca = CupertinoPageScaffold(
         navigationBar: CupertinoNavigationBar(
           padding: const EdgeInsetsDirectional.only(start: 0),
-          middle: Text(S.of(context)!.quick_search),
+          middle: Text(S.of(context).quick_search),
           transitionBetweenRoutes: false,
           trailing: _buildListBtns(context),
         ),
@@ -85,7 +85,7 @@ class QuickSearchListPage extends StatelessWidget {
                     ),
                     secondaryActions: <Widget>[
                       IconSlideAction(
-                        caption: S.of(context)!.delete,
+                        caption: S.of(context).delete,
                         color: CupertinoDynamicColor.resolve(
                             CupertinoColors.systemRed, context),
                         icon: Icons.delete,
@@ -207,13 +207,13 @@ class QuickSearchListPage extends StatelessWidget {
           title: const Text('Remove all?'),
           actions: <Widget>[
             CupertinoDialogAction(
-              child: Text(S.of(context)!.cancel),
+              child: Text(S.of(context).cancel),
               onPressed: () {
                 Get.back();
               },
             ),
             CupertinoDialogAction(
-              child: Text(S.of(context)!.ok),
+              child: Text(S.of(context).ok),
               onPressed: () {
                 quickSearchController.removeAll();
                 Get.back();

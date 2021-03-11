@@ -23,7 +23,7 @@ class EhSettingPage extends StatelessWidget {
             ? CupertinoColors.secondarySystemBackground
             : null,
         navigationBar: CupertinoNavigationBar(
-          middle: Text(S.of(context)!.eh),
+          middle: Text(S.of(context).eh),
         ),
         child: SafeArea(
           child: ListViewEhSetting(),
@@ -82,11 +82,11 @@ class ListViewEhSetting extends StatelessWidget {
     final List<Widget> _list = <Widget>[
       if (_isLogin)
         TextSwitchItem(
-          S.of(context)!.galery_site,
+          S.of(context).galery_site,
           intValue: _siteEx,
           onChanged: _handleSiteChanged,
-          desc: S.of(context)!.current_site('E-Hentai'),
-          descOn: S.of(context)!.current_site('ExHentai'),
+          desc: S.of(context).current_site('E-Hentai'),
+          descOn: S.of(context).current_site('ExHentai'),
         ),
       if (_isLogin)
         const SelectorSettingItem(
@@ -96,8 +96,8 @@ class ListViewEhSetting extends StatelessWidget {
         ),
       if (_isLogin)
         SelectorSettingItem(
-          title: S.of(context)!.ehentai_settings,
-          selector: S.of(context)!.setting_on_website,
+          title: S.of(context).ehentai_settings,
+          selector: S.of(context).setting_on_website,
           onTap: () {
             if (GetPlatform.isAndroid) {
               // Get.to(() => WebMySettingAP());
@@ -112,8 +112,8 @@ class ListViewEhSetting extends StatelessWidget {
       if (_isLogin)
         SelectorSettingItem(
           hideLine: true,
-          title: S.of(context)!.ehentai_my_tags,
-          selector: S.of(context)!.mytags_on_website,
+          title: S.of(context).ehentai_my_tags,
+          selector: S.of(context).mytags_on_website,
           onTap: () {
             if (GetPlatform.isAndroid) {
               // Get.to(() => WebMyTagsAP());
@@ -131,7 +131,7 @@ class ListViewEhSetting extends StatelessWidget {
           onChanged: _handleTagTranslatChanged,
           desc: '当前版本:${_ehConfigService.tagTranslatVer.value ?? "无"}')),
       TextSwitchItem(
-        S.of(context)!.show_jpn_title,
+        S.of(context).show_jpn_title,
         intValue: _jpnTitle,
         onChanged: _handleJpnTitleChanged,
         // desc: '如果该画廊有日文标题则优先显示',
@@ -181,13 +181,13 @@ class ListViewEhSetting extends StatelessWidget {
 
 /// 列表模式切换
 Widget _buildListModeItem(BuildContext context) {
-  final String _title = S.of(context)!.list_mode;
+  final String _title = S.of(context).list_mode;
   final EhConfigService ehConfigService = Get.find();
 
   final Map<ListModeEnum, String> modeMap = <ListModeEnum, String>{
-    ListModeEnum.list: S.of(context)!.listmode_medium,
-    ListModeEnum.simpleList: S.of(context)!.listmode_small,
-    ListModeEnum.waterfall: S.of(context)!.listmode_waterfall,
+    ListModeEnum.list: S.of(context).listmode_medium,
+    ListModeEnum.simpleList: S.of(context).listmode_small,
+    ListModeEnum.waterfall: S.of(context).listmode_waterfall,
   };
 
   List<Widget> _getModeList(BuildContext context) {
@@ -209,7 +209,7 @@ Widget _buildListModeItem(BuildContext context) {
                 onPressed: () {
                   Get.back();
                 },
-                child: Text(S.of(context)!.cancel)),
+                child: Text(S.of(context).cancel)),
             actions: <Widget>[
               ..._getModeList(context),
             ],
@@ -236,12 +236,12 @@ Widget _buildListModeItem(BuildContext context) {
 
 /// 历史记录数量切换
 Widget _buildHistoryMaxItem(BuildContext context) {
-  final String _title = S.of(context)!.max_history;
+  final String _title = S.of(context).max_history;
   final EhConfigService ehConfigService = Get.find();
 
   String _getMaxNumText(int max) {
     if (max == 0) {
-      return S.of(context)!.unlimited;
+      return S.of(context).unlimited;
     } else {
       return '$max';
     }
@@ -267,7 +267,7 @@ Widget _buildHistoryMaxItem(BuildContext context) {
                 onPressed: () {
                   Get.back();
                 },
-                child: Text(S.of(context)!.cancel)),
+                child: Text(S.of(context).cancel)),
             actions: <Widget>[
               ..._getModeList(context),
             ],

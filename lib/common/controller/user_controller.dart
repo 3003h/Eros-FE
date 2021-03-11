@@ -44,13 +44,13 @@ class UserController extends ProfileController {
           content: const Text('确定注销?'),
           actions: <Widget>[
             CupertinoDialogAction(
-              child: Text(S.of(context)!.cancel),
+              child: Text(S.of(context).cancel),
               onPressed: () {
                 Get.back();
               },
             ),
             CupertinoDialogAction(
-              child: Text(S.of(context)!.ok),
+              child: Text(S.of(context).ok),
               onPressed: () async {
                 (await Api.cookieJar).deleteAll();
                 // userController.user(User());

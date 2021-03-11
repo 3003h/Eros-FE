@@ -406,7 +406,7 @@ class ReadButton extends StatelessWidget {
     return Obx(
       () => CupertinoButton(
           child: Text(
-            S.of(context)!.READ,
+            S.of(context).READ,
             style: const TextStyle(fontSize: 15, height: 1.2),
           ),
           minSize: 20,
@@ -584,7 +584,7 @@ class TopComment extends StatelessWidget {
           minSize: 0,
           padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 8),
           child: Text(
-            S.of(Get.context!)!.all_comment,
+            S.of(Get.context!).all_comment,
             style: const TextStyle(fontSize: 16),
           ),
           onPressed: () {
@@ -641,8 +641,8 @@ class MorePreviewButton extends StatelessWidget {
       padding: const EdgeInsets.symmetric(vertical: 40, horizontal: 20),
       child: Text(
         hasMorePreview
-            ? S.of(Get.context!)!.morePreviews
-            : S.of(Get.context!)!.noMorePreviews,
+            ? S.of(Get.context!).morePreviews
+            : S.of(Get.context!).noMorePreviews,
         style: const TextStyle(fontSize: 16),
       ),
       onPressed: () {

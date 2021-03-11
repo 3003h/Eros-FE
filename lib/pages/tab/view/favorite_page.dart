@@ -32,7 +32,7 @@ class FavoriteTab extends GetView<FavoriteViewController> {
         if (userController.isLogin) {
           if (controller.title == null ||
               (controller.title?.isEmpty ?? false)) {
-            controller.title = S.of(context)!.all_Favorites;
+            controller.title = S.of(context).all_Favorites;
           }
           return _buildNetworkFavView(context);
         } else {
@@ -153,7 +153,7 @@ class FavoriteTab extends GetView<FavoriteViewController> {
   Widget _buildLocalFavView() {
     return CustomScrollView(slivers: <Widget>[
       CupertinoSliverNavigationBar(
-        largeTitle: Text(S.of(Get.context!)!.local_favorite),
+        largeTitle: Text(S.of(Get.context!).local_favorite),
         transitionBetweenRoutes: false,
       ),
       CupertinoSliverRefreshControl(
@@ -194,7 +194,7 @@ class FavoriteTab extends GetView<FavoriteViewController> {
                           color: CupertinoColors.systemRed,
                         ),
                         Text(
-                          S.of(Get.context!)!.list_load_more_fail,
+                          S.of(Get.context!).list_load_more_fail,
                           style: const TextStyle(
                             fontSize: 12,
                           ),

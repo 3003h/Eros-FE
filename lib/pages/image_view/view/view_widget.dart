@@ -107,7 +107,7 @@ Future<void> showShareActionSheet(BuildContext context, String imageUrl) {
               onPressed: () {
                 Get.back();
               },
-              child: Text(S.of(context)!.cancel)),
+              child: Text(S.of(context).cancel)),
           actions: <Widget>[
             CupertinoActionSheetAction(
                 onPressed: () {
@@ -147,20 +147,20 @@ Future<void> showImageSheet(
               onPressed: () {
                 Get.back();
               },
-              child: Text(S.of(context)!.cancel)),
+              child: Text(S.of(context).cancel)),
           actions: <Widget>[
             CupertinoActionSheetAction(
                 onPressed: () {
                   reload();
                   Get.back();
                 },
-                child: Text(S.of(context)!.reload_image)),
+                child: Text(S.of(context).reload_image)),
             CupertinoActionSheetAction(
                 onPressed: () {
                   Get.back();
                   showShareActionSheet(context, imageUrl);
                 },
-                child: Text(S.of(context)!.share_image)),
+                child: Text(S.of(context).share_image)),
           ],
         );
         return dialog;

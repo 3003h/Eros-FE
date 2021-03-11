@@ -113,7 +113,7 @@ class GalleryItemController extends GetxController {
                 onPressed: () {
                   Get.back();
                 },
-                child: Text(S.of(context)!.cancel)),
+                child: Text(S.of(context).cancel)),
             actions: <Widget>[
               if (galleryItem.favcat == null ||
                   (galleryItem.favcat?.isEmpty ?? false))
@@ -130,7 +130,7 @@ class GalleryItemController extends GetxController {
                     });
                     Get.back();
                   },
-                  child: Text(S.of(context)!.add_to_favorites),
+                  child: Text(S.of(context).add_to_favorites),
                 ),
               if (galleryItem.favcat != null &&
                   (galleryItem.favcat?.isNotEmpty ?? false))
@@ -148,7 +148,7 @@ class GalleryItemController extends GetxController {
                     });
                     Get.back();
                   },
-                  child: Text(S.of(context)!.remove_from_favorites),
+                  child: Text(S.of(context).remove_from_favorites),
                 ),
             ],
           );

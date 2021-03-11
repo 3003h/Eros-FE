@@ -62,7 +62,7 @@ class FavoriteViewController extends TabViewController {
     } else {
       if (first) {
         _ehConfigService.lastShowFavcat = 'l';
-        _ehConfigService.lastShowFavTitle = S.of(Get.context!)!.local_favorite;
+        _ehConfigService.lastShowFavTitle = S.of(Get.context!).local_favorite;
       }
       // 本地收藏夹
       logger.v('本地收藏');

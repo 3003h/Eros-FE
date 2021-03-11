@@ -120,9 +120,9 @@ class _AllPreviewPageState extends State<AllPreviewPage> {
       navigationBar: CupertinoNavigationBar(
         middle: GestureDetector(
           onTap: _scrollToTop,
-          child: Text(S.of(context)!.all_preview),
+          child: Text(S.of(context).all_preview),
         ),
-        previousPageTitle: S.of(context)!.back,
+        previousPageTitle: S.of(context).back,
       ),
       child: CustomScrollView(
         controller: _scrollController,
@@ -175,7 +175,7 @@ class _AllPreviewPageState extends State<AllPreviewPage> {
                     Container(
                       padding: const EdgeInsets.only(top: 0),
                       child: Text(
-                        S.of(context)!.noMorePreviews,
+                        S.of(context).noMorePreviews,
                         style: const TextStyle(fontSize: 14),
                       ),
                     )

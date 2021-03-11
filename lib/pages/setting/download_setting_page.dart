@@ -15,7 +15,7 @@ class DownloadSettingPage extends StatelessWidget {
             : null,
         navigationBar: CupertinoNavigationBar(
           transitionBetweenRoutes: true,
-          middle: Text(S.of(context)!.download),
+          middle: Text(S.of(context).download),
         ),
         child: SafeArea(
           child: ListViewDownloadSetting(),
@@ -42,7 +42,7 @@ class ListViewDownloadSetting extends StatelessWidget {
 
 /// 预载图片数量
 Widget _buildPreloadImageItem(BuildContext context) {
-  final String _title = S.of(context)!.preload_image;
+  final String _title = S.of(context).preload_image;
   final EhConfigService ehConfigService = Get.find();
 
   List<Widget> _getModeList(BuildContext context) {
@@ -64,7 +64,7 @@ Widget _buildPreloadImageItem(BuildContext context) {
                 onPressed: () {
                   Get.back();
                 },
-                child: Text(S.of(context)!.cancel)),
+                child: Text(S.of(context).cancel)),
             actions: <Widget>[
               ..._getModeList(context),
             ],

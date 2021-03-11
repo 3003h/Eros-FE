@@ -123,13 +123,13 @@ Future<void> showTorrentDialog() {
       barrierDismissible: true,
       builder: (_) {
         return CupertinoAlertDialog(
-          title: Text(S.of(Get.context!)!.p_Torrent),
+          title: Text(S.of(Get.context!).p_Torrent),
           content: Container(
             child: const TorrentView(),
           ),
           actions: <Widget>[
             CupertinoDialogAction(
-              child: Text(S.of(Get.context!)!.cancel),
+              child: Text(S.of(Get.context!).cancel),
               onPressed: () {
                 Get.back();
               },

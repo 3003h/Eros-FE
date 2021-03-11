@@ -154,7 +154,7 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
     }) {
       return GetCupertinoApp(
         debugShowCheckedModeBanner: false,
-        onGenerateTitle: (BuildContext context) => S.of(context)!.app_title,
+        onGenerateTitle: (BuildContext context) => S.of(context).app_title,
         navigatorObservers: [
           FirebaseAnalyticsObserver(analytics: analytics),
         ],

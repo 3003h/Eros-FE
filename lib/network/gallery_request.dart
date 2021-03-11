@@ -826,13 +826,13 @@ class Api {
             ),
             actions: <Widget>[
               CupertinoDialogAction(
-                child: Text(S.of(context)!.cancel),
+                child: Text(S.of(context).cancel),
                 onPressed: () {
                   Get.back();
                 },
               ),
               CupertinoDialogAction(
-                child: Text(S.of(context)!.ok),
+                child: Text(S.of(context).ok),
                 onPressed: () {
                   // 跳转
                   openAppSettings();

@@ -112,7 +112,7 @@ class CommentController extends GetxController
     );
     _paraRes(rult);
     if (rult.commentVote != 0) {
-      showToast(S.of(Get.context!)!.vote_up_successfully);
+      showToast(S.of(Get.context!).vote_up_successfully);
     }
   }
 
@@ -133,7 +133,7 @@ class CommentController extends GetxController
     );
     _paraRes(rult);
     if (rult.commentVote != 0) {
-      showToast(S.of(Get.context!)!.vote_down_successfully);
+      showToast(S.of(Get.context!).vote_down_successfully);
     }
   }
 

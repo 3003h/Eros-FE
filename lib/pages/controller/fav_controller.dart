@@ -60,7 +60,7 @@ class FavController extends GetxController {
               _ehConfigService.isFavPicker.value = false;
               showToast('切换样式');
             },
-            child: Text(S.of(context)!.add_to_favorites),
+            child: Text(S.of(context).add_to_favorites),
           ),
           content: Container(
             child: Column(
@@ -99,13 +99,13 @@ class FavController extends GetxController {
           ),
           actions: <Widget>[
             CupertinoDialogAction(
-              child: Text(S.of(context)!.cancel),
+              child: Text(S.of(context).cancel),
               onPressed: () {
                 Get.back();
               },
             ),
             CupertinoDialogAction(
-              child: Text(S.of(context)!.ok),
+              child: Text(S.of(context).ok),
               onPressed: () {
                 // 添加收藏
                 final Map<String, String> favMap = <String, String>{
@@ -175,7 +175,7 @@ class FavController extends GetxController {
           ),
           actions: <Widget>[
             CupertinoDialogAction(
-              child: Text(S.of(context)!.cancel),
+              child: Text(S.of(context).cancel),
               onPressed: () {
                 Get.back();
               },
@@ -218,7 +218,7 @@ class FavController extends GetxController {
           )
         : <Map<String, String>>[];
 
-    favList.add({'favId': 'l', 'favTitle': S.of(context)!.local_favorite});
+    favList.add({'favId': 'l', 'favTitle': S.of(context).local_favorite});
 
     // diaolog 获取选择结果
     final Map<String, String>? result = await showFav(context, favList);

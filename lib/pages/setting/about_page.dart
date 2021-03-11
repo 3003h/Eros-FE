@@ -22,7 +22,7 @@ class AboutPage extends StatelessWidget {
             ? CupertinoColors.secondarySystemBackground
             : null,
         navigationBar: CupertinoNavigationBar(
-          middle: Text(S.of(context)!.about),
+          middle: Text(S.of(context).about),
         ),
         child: SafeArea(
           child: ListViewAbout(),

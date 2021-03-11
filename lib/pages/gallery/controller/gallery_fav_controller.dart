@@ -43,7 +43,7 @@ class GalleryFavController extends GetxController {
         _pageController.galleryItem.favTitle!.isNotEmpty) {
       _favTitle.value = _pageController.galleryItem.favTitle;
     } else {
-      _favTitle.value = localFav ? S.of(Get.context!)!.local_favorite : '';
+      _favTitle.value = localFav ? S.of(Get.context!).local_favorite : '';
     }
 
     // _favcat初始化
@@ -59,7 +59,7 @@ class GalleryFavController extends GetxController {
 
   bool get localFav => _pageController.localFav;
 
-  final RxString _favTitle = S.of(Get.context!)!.notFav.obs;
+  final RxString _favTitle = S.of(Get.context!).notFav.obs;
   String get favTitle => _favTitle.value ?? '';
 
   final RxString _favcat = ''.obs;
@@ -142,7 +142,7 @@ class GalleryFavController extends GetxController {
           )
         : <Map<String, String>>[];
 
-    favList.add({'favId': 'l', 'favTitle': S.of(context)!.local_favorite});
+    favList.add({'favId': 'l', 'favTitle': S.of(context).local_favorite});
 
     // diaolog 获取选择结果
     final Map<String, String>? result =

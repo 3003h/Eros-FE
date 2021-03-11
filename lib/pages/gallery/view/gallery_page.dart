@@ -231,7 +231,7 @@ class _DatailWidget extends StatelessWidget {
               _controller.isRatinged
                   ? FontAwesomeIcons.solidStar
                   : FontAwesomeIcons.star,
-              title: S.of(context)!.p_Rate,
+              title: S.of(context).p_Rate,
               onTap: state.apiuid?.isNotEmpty ?? false
                   ? () {
                       showRateDialog(context);
@@ -243,7 +243,7 @@ class _DatailWidget extends StatelessWidget {
       Expanded(
         child: TextBtn(
           FontAwesomeIcons.solidArrowAltCircleDown,
-          title: S.of(context)!.p_Download,
+          title: S.of(context).p_Download,
           onTap: Global.inDebugMode ? _controller.downloadGallery : null,
         ),
       ),
@@ -251,7 +251,7 @@ class _DatailWidget extends StatelessWidget {
       Expanded(
         child: TextBtn(
           FontAwesomeIcons.magnet,
-          title: '${S.of(context)!.p_Torrent}(${state.torrentcount ?? 0})',
+          title: '${S.of(context).p_Torrent}(${state.torrentcount ?? 0})',
           onTap: state.torrentcount != '0'
               ? () async {
                   showTorrentDialog();
@@ -263,7 +263,7 @@ class _DatailWidget extends StatelessWidget {
       Expanded(
         child: TextBtn(
           FontAwesomeIcons.solidFileArchive,
-          title: S.of(Get.context!)!.p_Archiver,
+          title: S.of(Get.context!).p_Archiver,
           onTap: () async {
             showArchiverDialog();
           },
@@ -273,7 +273,7 @@ class _DatailWidget extends StatelessWidget {
       Expanded(
         child: TextBtn(
           FontAwesomeIcons.solidImages,
-          title: S.of(context)!.p_Similar,
+          title: S.of(context).p_Similar,
           onTap: () {
             final String title = state.englishTitle ??
                 ''

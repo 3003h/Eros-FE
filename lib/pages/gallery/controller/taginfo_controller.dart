@@ -100,7 +100,7 @@ class TagInfoController extends GetxController {
     if (errorInfo != null) {
       showToast('$errorInfo');
     } else {
-      showToast(S.of(Get.context!)!.vote_successfully);
+      showToast(S.of(Get.context!).vote_successfully);
     }
   }
 
@@ -119,7 +119,7 @@ class TagInfoController extends GetxController {
     if (errorInfo != null) {
       showToast('$errorInfo');
     } else {
-      showToast(S.of(Get.context!)!.vote_successfully);
+      showToast(S.of(Get.context!).vote_successfully);
     }
   }
 

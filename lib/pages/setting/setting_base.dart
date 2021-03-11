@@ -396,13 +396,13 @@ Future<void> showCustomHostEditer(BuildContext context, {int? index}) async {
         ),
         actions: <Widget>[
           CupertinoDialogAction(
-            child: Text(S.of(context)!.cancel),
+            child: Text(S.of(context).cancel),
             onPressed: () {
               Get.back();
             },
           ),
           CupertinoDialogAction(
-            child: Text(S.of(context)!.ok),
+            child: Text(S.of(context).ok),
             onPressed: () {
               if (dnsConfigController.addCustomHost(
                   _hostController.text.trim(), _addrController.text.trim()))
@@ -434,7 +434,7 @@ Future<void> showUserCookie() async {
           child: Column(
             children: [
               Text(
-                S.of(context)!.KEEP_IT_SAFE,
+                S.of(context).KEEP_IT_SAFE,
                 style: const TextStyle(
                   fontSize: 14,
                   fontWeight: FontWeight.bold,
@@ -470,17 +470,17 @@ Future<void> showUserCookie() async {
         ),
         actions: <Widget>[
           CupertinoDialogAction(
-            child: Text(S.of(context)!.cancel),
+            child: Text(S.of(context).cancel),
             onPressed: () {
               Get.back();
             },
           ),
           CupertinoDialogAction(
-            child: Text(S.of(context)!.copy),
+            child: Text(S.of(context).copy),
             onPressed: () {
               Clipboard.setData(ClipboardData(text: _cookieString));
               Get.back();
-              showToast(S.of(context)!.copied_to_clipboard);
+              showToast(S.of(context).copied_to_clipboard);
             },
           ),
         ],

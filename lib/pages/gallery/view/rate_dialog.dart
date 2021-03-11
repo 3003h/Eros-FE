@@ -69,13 +69,13 @@ Future<void> showRateDialog(BuildContext context) {
           ),
           actions: <Widget>[
             CupertinoDialogAction(
-              child: Text(S.of(context)!.cancel),
+              child: Text(S.of(context).cancel),
               onPressed: () {
                 Get.back();
               },
             ),
             CupertinoDialogAction(
-              child: Text(S.of(context)!.ok),
+              child: Text(S.of(context).ok),
               onPressed: () {
                 controller.rating();
                 Get.back();

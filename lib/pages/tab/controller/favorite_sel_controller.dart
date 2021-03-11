@@ -50,11 +50,11 @@ class FavoriteSelectorController extends GetxController
       }
 
       _favItemBeans.add(FavcatItemBean(
-          S.of(Get.context!)!.all_Favorites, ThemeColors.favColor['a'],
+          S.of(Get.context!).all_Favorites, ThemeColors.favColor['a'],
           favId: 'a'));
 
       _favItemBeans.add(FavcatItemBean(
-          S.of(Get.context!)!.local_favorite, ThemeColors.favColor['l'],
+          S.of(Get.context!).local_favorite, ThemeColors.favColor['l'],
           favId: 'l'));
       return _favItemBeans;
     } catch (e, stack) {
@@ -75,11 +75,11 @@ class FavoriteSelectorController extends GetxController
     }
 
     _favItemBeans.add(FavcatItemBean(
-        S.of(Get.context!)!.all_Favorites, ThemeColors.favColor['a'],
+        S.of(Get.context!).all_Favorites, ThemeColors.favColor['a'],
         favId: 'a'));
 
     _favItemBeans.add(FavcatItemBean(
-        S.of(Get.context!)!.local_favorite, ThemeColors.favColor['l'],
+        S.of(Get.context!).local_favorite, ThemeColors.favColor['l'],
         favId: 'l'));
     return _favItemBeans;
   }
