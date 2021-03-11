@@ -43,7 +43,7 @@ SliverPadding buildWaterfallFlow(
             tabTag: tabTag,
           );
         },
-        childCount: gallerItemBeans?.length ?? 0,
+        childCount: gallerItemBeans.length,
       ),
     ),
   );
@@ -70,7 +70,7 @@ SliverList buildGallerySliverListView(
 
         return GalleryItemWidget(galleryItem: _item, tabTag: tabTag);
       },
-      childCount: gallerItemBeans?.length ?? 0,
+      childCount: gallerItemBeans.length,
     ),
   );
 }
@@ -97,7 +97,7 @@ SliverFixedExtentList buildGallerySliverListSimpleView(
           tabTag: tabTag,
         );
       },
-      childCount: gallerItemBeans?.length ?? 0,
+      childCount: gallerItemBeans.length,
     ),
     itemExtent: kItemWidth + 1,
   );

@@ -49,7 +49,7 @@ class PreviewImageClipper extends StatelessWidget {
   /// 监听图片加载
   Future<ui.Image> _loadPreviewImge(String imgUrl) async {
     final Map<String, String> _httpHeaders = {
-      'Cookie': Global.profile?.user?.cookie ?? '',
+      'Cookie': Global.profile.user.cookie ?? '',
     };
     final ImageStream imageStream = CachedNetworkImageProvider(
       imgUrl,

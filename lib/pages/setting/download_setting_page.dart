@@ -75,7 +75,7 @@ Widget _buildPreloadImageItem(BuildContext context) {
 
   return Obx(() => SelectorSettingItem(
         title: _title,
-        selector: ehConfigService.preloadImage?.toString() ?? '',
+        selector: ehConfigService.preloadImage.toString(),
         onTap: () async {
           final int? _result = await _showActionSheet(context);
           if (_result != null) {

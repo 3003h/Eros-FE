@@ -38,8 +38,7 @@ class FavoriteSelectorController extends GetxController
     final List<FavcatItemBean> _favItemBeans = <FavcatItemBean>[];
 
     try {
-      final List<Map<String, String>> favList =
-          (await getFavList()) ?? EHConst.favList;
+      final List<Map<String, String>> favList = (await getFavList());
 
       for (final Map<String, String> catmap in favList) {
         final String favTitle = catmap['favTitle'] ?? '';

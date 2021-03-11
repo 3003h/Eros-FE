@@ -200,7 +200,7 @@ class CoveTinyImage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final Map<String, String> _httpHeaders = {
-      'Cookie': Global.profile?.user?.cookie ?? '',
+      'Cookie': Global.profile.user.cookie ?? '',
     };
     return Container(
       padding: const EdgeInsets.all(4),
@@ -212,7 +212,7 @@ class CoveTinyImage extends StatelessWidget {
           width: 44,
           height: 44,
           fit: BoxFit.cover,
-          imageUrl: imgUrl ?? '',
+          imageUrl: imgUrl,
         ),
       ),
     );
@@ -242,7 +242,7 @@ class CoverImage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Builder(builder: (_) {
       final Map<String, String> _httpHeaders = {
-        'Cookie': Global.profile?.user?.cookie ?? '',
+        'Cookie': Global.profile.user.cookie ?? '',
       };
 
       if (imageUrl != null && imageUrl!.isNotEmpty) {
@@ -337,7 +337,7 @@ class GalleryTitle extends StatelessWidget {
 
     return GestureDetector(
       child: SelectableText(
-        _pageController.title ?? '',
+        _pageController.title,
         maxLines: 6,
         minLines: 1,
         textAlign: TextAlign.left, // 对齐方式
@@ -373,7 +373,7 @@ class GalleryUploader extends StatelessWidget {
       child: Container(
         padding: const EdgeInsets.only(top: 8, right: 8, bottom: 4),
         child: Text(
-          uploader ?? '',
+          uploader,
           maxLines: 1,
           textAlign: TextAlign.left, // 对齐方式
           overflow: TextOverflow.ellipsis, // 超出部分省略号
@@ -413,7 +413,7 @@ class ReadButton extends StatelessWidget {
           padding: const EdgeInsets.fromLTRB(16, 4, 16, 4),
           borderRadius: BorderRadius.circular(20),
           color: CupertinoColors.activeBlue,
-          onPressed: _pageController.enableRead ?? false
+          onPressed: _pageController.enableRead
               ? () => _toViewPage(_pageController)
               : null),
     );
@@ -675,7 +675,7 @@ class PreviewContainer extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final Map<String, String> _httpHeaders = {
-      'Cookie': Global.profile?.user?.cookie ?? '',
+      'Cookie': Global.profile.user.cookie ?? '',
     };
     Widget _buildImage() {
       if (galleryPreview.isLarge ?? false) {
@@ -746,7 +746,7 @@ class PreviewContainer extends StatelessWidget {
             Container(
               padding: const EdgeInsets.only(top: 4),
               child: Text(
-                '${galleryPreview.ser ?? ''}',
+                '${galleryPreview.ser}',
                 style: TextStyle(
                   fontSize: 14,
                   color: CupertinoDynamicColor.resolve(
@@ -776,10 +776,10 @@ class TagGroupItem extends StatelessWidget {
       _tagBtnList.add(
         Obx(() => TagButton(
               text: ehConfigService.isTagTranslat.value ?? false
-                  ? tag?.tagTranslat ?? ''
-                  : tag?.title ?? '',
+                  ? tag.tagTranslat
+                  : tag.title,
               textColor: () {
-                switch (tag?.vote) {
+                switch (tag.vote) {
                   case 0:
                     return null;
                   case 1:

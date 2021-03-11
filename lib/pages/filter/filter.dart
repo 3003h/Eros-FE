@@ -227,8 +227,9 @@ class AdvanceSearchSwitchItem extends StatelessWidget {
 /// 弹出toast 全局维护cat的值
 Future<void> showFilterSetting() async {
   final EhConfigService _ehConfigService = Get.find();
-  return showCupertinoModalPopup<void>(
+  return showCupertinoDialog<void>(
     context: Get.overlayContext!,
+    barrierDismissible: true,
     builder: (BuildContext context) {
       return CupertinoAlertDialog(
         title: Text(S.of(context)!.search),
@@ -240,26 +241,6 @@ Future<void> showFilterSetting() async {
         ),
         actions: [],
       );
-      // return CupertinoActionSheet(
-      //   title: Text(S.of(context)!.search),
-      //   actions: [
-      //     Padding(
-      //       padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 30),
-      //       child: GalleryFilterView(
-      //         catCrossAxisCount: 3,
-      //         catNum: _ehConfigService.catFilter.value,
-      //         catNumChanged: (int toNum) {
-      //           _ehConfigService.catFilter.value = toNum;
-      //         },
-      //       ),
-      //     ),
-      //   ],
-      //   cancelButton: CupertinoActionSheetAction(
-      //       onPressed: () {
-      //         Get.back();
-      //       },
-      //       child: Text(S.of(context)!.cancel)),
-      // );
     },
   );
 }

@@ -3,26 +3,28 @@ import 'dart:io' as io;
 import 'package:fehviewer/common/global.dart';
 import 'package:fehviewer/generated/l10n.dart';
 import 'package:fehviewer/network/gallery_request.dart';
+import 'package:fehviewer/pages/setting/controller/web_setting_controller.dart';
 import 'package:fehviewer/utils/logger.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_inappwebview/flutter_inappwebview.dart' hide WebView;
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:get/get.dart';
 
 /// iOS使用
 class InWebMySetting extends StatelessWidget {
   final CookieManager _cookieManager = CookieManager.instance();
 
-  Future<void> _setCookie() async {
-    final List<io.Cookie>? cookies =
-        await Global.cookieJar?.loadForRequest(Uri.parse(Api.getBaseUrl()));
-
-    for (final io.Cookie cookie in cookies ?? []) {
-      _cookieManager.setCookie(
-          url: Uri.parse(Api.getBaseUrl()),
-          name: cookie.name,
-          value: cookie.value);
-    }
-  }
+  // Future<void> _setCookie() async {
+  //   final List<io.Cookie>? cookies =
+  //       await Global.cookieJar?.loadForRequest(Uri.parse(Api.getBaseUrl()));
+  //
+  //   for (final io.Cookie cookie in cookies ?? []) {
+  //     _cookieManager.setCookie(
+  //         url: Uri.parse(Api.getBaseUrl()),
+  //         name: cookie.name,
+  //         value: cookie.value);
+  //   }
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -103,13 +105,17 @@ class InWebMySetting extends StatelessWidget {
       ),
     );
 
-    return FutureBuilder<void>(
-        future: _setCookie(),
-        builder: (context, snapshot) {
-          if (snapshot.connectionState != ConnectionState.done) {
-            return const Center(child: CupertinoActivityIndicator());
-          }
-          return cpf;
+    return GetBuilder<WebSettingController>(
+        init: WebSettingController(),
+        builder: (controller) {
+          return FutureBuilder<void>(
+              future: controller.setcookieFuture,
+              builder: (context, snapshot) {
+                if (snapshot.connectionState != ConnectionState.done) {
+                  return const Center(child: CupertinoActivityIndicator());
+                }
+                return cpf;
+              });
         });
   }
 }

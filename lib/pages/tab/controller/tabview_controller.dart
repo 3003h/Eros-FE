@@ -51,7 +51,7 @@ class TabViewController extends GetxController
 
   String? _curFavcat;
   String get curFavcat {
-    logger.d(' get curFavcat ${_ehConfigService.lastShowFavcat}');
+    // logger.d(' get curFavcat ${_ehConfigService.lastShowFavcat}');
     return _curFavcat ?? _ehConfigService.lastShowFavcat ?? 'a';
   }
 

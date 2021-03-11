@@ -66,7 +66,7 @@ class GalleryItemWidget extends StatelessWidget {
                           _buildTitle(),
                           // 上传者
                           Text(
-                            _galleryItemController.galleryItem?.uploader ?? '',
+                            _galleryItemController.galleryItem.uploader ?? '',
                             style: const TextStyle(
                                 fontSize: 12,
                                 color: CupertinoColors.systemGrey),
@@ -130,7 +130,7 @@ class GalleryItemWidget extends StatelessWidget {
   /// 构建标题
   Widget _buildTitle() {
     return Obx(() => Text(
-          _galleryItemController.title ?? '',
+          _galleryItemController.title,
           maxLines: 4,
           textAlign: TextAlign.left, // 对齐方式
           overflow: TextOverflow.ellipsis, // 超出部分省略号
@@ -207,7 +207,7 @@ class GalleryItemWidget extends StatelessWidget {
           ),
         ),
         Text(
-          _galleryItemController?.galleryItem?.rating?.toString() ?? '',
+          _galleryItemController.galleryItem.rating?.toString() ?? '',
           style: TextStyle(
             fontSize: 11,
             color: CupertinoDynamicColor.resolve(
@@ -224,7 +224,7 @@ class GalleryItemWidget extends StatelessWidget {
         Padding(
           padding: const EdgeInsets.only(right: 4),
           child: Text(
-            _galleryItemController?.galleryItem?.translated ?? '',
+            _galleryItemController.galleryItem.translated ?? '',
             style: const TextStyle(
                 fontSize: 12, color: CupertinoColors.systemGrey),
           ),
@@ -237,7 +237,7 @@ class GalleryItemWidget extends StatelessWidget {
         Container(
           padding: const EdgeInsets.only(left: 2),
           child: Text(
-            _galleryItemController?.galleryItem?.filecount ?? '',
+            _galleryItemController.galleryItem.filecount ?? '',
             style: const TextStyle(
                 fontSize: 12, color: CupertinoColors.systemGrey),
           ),
@@ -250,7 +250,7 @@ class GalleryItemWidget extends StatelessWidget {
     return Obx(() {
       // logger.d('${_galleryItemController.isFav}');
       return Container(
-        child: _galleryItemController.isFav ?? false
+        child: _galleryItemController.isFav
             ? Container(
                 padding: const EdgeInsets.only(bottom: 2, right: 2, left: 2),
                 child: Icon(
@@ -267,7 +267,7 @@ class GalleryItemWidget extends StatelessWidget {
 
   Widget _buildPostTime() {
     return Text(
-      _galleryItemController?.galleryItem?.postTime ?? '',
+      _galleryItemController.galleryItem.postTime ?? '',
       style: const TextStyle(fontSize: 12, color: CupertinoColors.systemGrey),
     );
   }
@@ -275,7 +275,7 @@ class GalleryItemWidget extends StatelessWidget {
   Widget _buildCategory() {
     final Color _colorCategory = CupertinoDynamicColor.resolve(
         ThemeColors.catColor[
-                _galleryItemController?.galleryItem?.category ?? 'default'] ??
+                _galleryItemController.galleryItem.category ?? 'default'] ??
             CupertinoColors.systemBackground,
         Get.context!);
 
@@ -285,7 +285,7 @@ class GalleryItemWidget extends StatelessWidget {
         padding: const EdgeInsets.fromLTRB(6, 3, 6, 3),
         color: _colorCategory,
         child: Text(
-          _galleryItemController?.galleryItem?.category ?? '',
+          _galleryItemController.galleryItem.category ?? '',
           style: const TextStyle(
             fontSize: 14,
             height: 1,
@@ -388,7 +388,7 @@ class CoverImg extends StatelessWidget {
   Widget build(BuildContext context) {
     final EhConfigService ehConfigService = Get.find();
     final Map<String, String> _httpHeaders = {
-      'Cookie': Global.profile?.user?.cookie ?? '',
+      'Cookie': Global.profile.user.cookie ?? '',
     };
 
     Widget image() {
@@ -405,7 +405,7 @@ class CoverImg extends StatelessWidget {
           // height: height,
           width: width,
           httpHeaders: _httpHeaders,
-          imageUrl: imgUrl ?? '',
+          imageUrl: imgUrl,
           fit: BoxFit.contain,
         );
       } else {

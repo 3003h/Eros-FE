@@ -66,7 +66,7 @@ class CommentPage extends StatelessWidget {
                           ),
                         ),
                         Text(
-                          controller.oriComment ?? '',
+                          controller.oriComment,
                           maxLines: 3,
                           overflow: TextOverflow.ellipsis,
                           style: const TextStyle(

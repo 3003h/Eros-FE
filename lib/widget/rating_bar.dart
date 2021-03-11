@@ -192,15 +192,15 @@ class _PainterStars extends CustomPainter {
 
     final double offset = strokeWidth > 0 ? strokeWidth + 2 : 0.0;
 
-    path = createStarPath(this.size - offset, radiusRatio ?? 1.0, path);
+    path = createStarPath(this.size - offset, radiusRatio, path);
     path = path.shift(Offset(this.size * 2, 0.0));
-    path = createStarPath(this.size - offset, radiusRatio ?? 1.0, path);
+    path = createStarPath(this.size - offset, radiusRatio, path);
     path = path.shift(Offset(this.size * 2, 0.0));
-    path = createStarPath(this.size - offset, radiusRatio ?? 1.0, path);
+    path = createStarPath(this.size - offset, radiusRatio, path);
     path = path.shift(Offset(this.size * 2, 0.0));
-    path = createStarPath(this.size - offset, radiusRatio ?? 1.0, path);
+    path = createStarPath(this.size - offset, radiusRatio, path);
     path = path.shift(Offset(this.size * 2, 0.0));
-    path = createStarPath(this.size - offset, radiusRatio ?? 1.0, path);
+    path = createStarPath(this.size - offset, radiusRatio, path);
 
     if (offset > 0) {
       path = path.shift(Offset(offset, offset));

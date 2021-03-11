@@ -258,11 +258,11 @@ class TabHomeController extends GetxController {
     required Duration duration,
     required bool awaitComplete,
   }) async {
-    final Duration _duration = duration ?? const Duration(milliseconds: 500);
+    final Duration _duration = duration;
     if (!tapAwait || tapAwait == null) {
       tapAwait = true;
 
-      if (awaitComplete ?? false) {
+      if (awaitComplete) {
         await Future<void>.delayed(_duration);
         if (tapAwait) {
 //        loggerNoStack.v('等待结束 执行单击事件');

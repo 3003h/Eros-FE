@@ -132,7 +132,7 @@ class DataBaseUtil {
 
     logger.d('${maps.length}');
 
-    if (maps.isNotEmpty ?? false) {
+    if (maps.isNotEmpty) {
       return List<TagTranslat>.from(maps
           .map((Map<String, dynamic> e) => TagTranslat.fromMap(e))
           .toList());

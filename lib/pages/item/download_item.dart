@@ -31,7 +31,7 @@ class DownloadArchiverItem extends GetView<DownloadViewController> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  title ?? '',
+                  title,
                   style: const TextStyle(
                     fontSize: 13,
                     height: 1.2,
@@ -41,7 +41,7 @@ class DownloadArchiverItem extends GetView<DownloadViewController> {
                   children: [
                     Expanded(
                       child: LinearProgressIndicator(
-                        value: (progress ?? 0.0) / 100.0,
+                        value: (progress) / 100.0,
                         backgroundColor: CupertinoDynamicColor.resolve(
                             CupertinoColors.secondarySystemFill, context),
                         valueColor: AlwaysStoppedAnimation<Color>(
@@ -49,7 +49,7 @@ class DownloadArchiverItem extends GetView<DownloadViewController> {
                                 CupertinoColors.activeBlue, context)),
                       ).paddingOnly(right: 8.0),
                     ),
-                    Text('${progress ?? 0} %',
+                    Text('${progress} %',
                         style: const TextStyle(
                           fontSize: 13,
                         )),

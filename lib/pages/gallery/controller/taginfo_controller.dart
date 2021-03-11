@@ -26,7 +26,7 @@ class TagInfoController extends GetxController {
   final RxList<TagTranslat> qryTags = <TagTranslat>[].obs;
   late String _currQry;
 
-  bool get showClearButton => tagsTextController.text.isNotEmpty ?? false;
+  bool get showClearButton => tagsTextController.text.isNotEmpty;
 
   @override
   void onInit() {
@@ -41,7 +41,7 @@ class TagInfoController extends GetxController {
     const Duration _duration = Duration(milliseconds: 800);
     _lastInputCompleteAt = DateTime.now();
     await Future<void>.delayed(_duration);
-    if (_lastSearchText?.trim() != tagsTextController.text.trim() &&
+    if (_lastSearchText.trim() != tagsTextController.text.trim() &&
         DateTime.now().difference(_lastInputCompleteAt) >= _duration) {
       _lastSearchText = tagsTextController.text.trim();
 
@@ -70,7 +70,7 @@ class TagInfoController extends GetxController {
         : '${_qry.namespace.trim().shortName}:${_qry.key}\$';
     logger.i('_add $_add ');
 
-    final String _lastSearchText = this._lastSearchText ?? '';
+    final String _lastSearchText = this._lastSearchText;
     final String _newSearch =
         _lastSearchText.replaceAll(RegExp('$_currQry\$'), _add);
     logger.i(
