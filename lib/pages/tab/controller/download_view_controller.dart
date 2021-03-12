@@ -46,9 +46,9 @@ class DownloadViewController extends GetxController {
 
     String? _newTaskId = '';
     if (_oriStatus == DownloadTaskStatus.paused.value) {
-      _newTaskId = await FlutterDownloader.resume(taskId: _oriTaskid);
+      _newTaskId = await FlutterDownloader.resume(taskId: _oriTaskid ?? '');
     } else if (_oriStatus == DownloadTaskStatus.failed.value) {
-      await FlutterDownloader.retry(taskId: _oriTaskid);
+      await FlutterDownloader.retry(taskId: _oriTaskid ?? '');
     }
 
     logger.d('oritaskid $_oriTaskid,  newID $_newTaskId');
@@ -67,11 +67,11 @@ class DownloadViewController extends GetxController {
     final String? _oriTaskid = archiverTasks[index].taskId;
     final int? _oriStatus = archiverTasks[index].status;
 
-    String _newTaskId = '';
+    String? _newTaskId = '';
     if (_oriStatus == DownloadTaskStatus.paused.value) {
-      _newTaskId = await FlutterDownloader.retry(taskId: _oriTaskid);
+      _newTaskId = await FlutterDownloader.retry(taskId: _oriTaskid ?? '');
     } else if (_oriStatus == DownloadTaskStatus.failed.value) {
-      await FlutterDownloader.retry(taskId: _oriTaskid);
+      await FlutterDownloader.retry(taskId: _oriTaskid ?? '');
     }
 
     logger.d('oritaskid $_oriTaskid,  newID $_newTaskId');
@@ -89,7 +89,8 @@ class DownloadViewController extends GetxController {
     final String? _oriTaskid = archiverTasks[index].taskId;
     final String? _tag = archiverTasks[index].tag;
     _downloadController.archiverTaskMap.remove(_tag);
-    FlutterDownloader.remove(taskId: _oriTaskid, shouldDeleteContent: true);
+    FlutterDownloader.remove(
+        taskId: _oriTaskid ?? '', shouldDeleteContent: true);
   }
 
   void onLongPress(int index) {
