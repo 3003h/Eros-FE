@@ -60,7 +60,7 @@ class DownloadController extends GetxController {
       return;
     }
 
-    final String _taskId = await _downloadFile(url, await _getDownloadPath());
+    final String? _taskId = await _downloadFile(url, await _getDownloadPath());
 
     archiverTaskMap[_tag] = kDefDownloadTaskInfo.copyWith(
       tag: _tag,
@@ -162,7 +162,8 @@ class DownloadController extends GetxController {
     }
 
     for (final GalleryImageTask imageTask in _list) {
-      FlutterDownloader.enqueue(url: null, savedDir: _downloadPath);
+      FlutterDownloader.enqueue(
+          url: imageTask.imageUrl ?? '', savedDir: _downloadPath);
     }
   }
 
@@ -287,7 +288,7 @@ class DownloadController extends GetxController {
     super.onInit();
 
     _bindBackgroundIsolate();
-    FlutterDownloader.registerCallback(_downloadCallback, stepSize: 2);
+    FlutterDownloader.registerCallback(_downloadCallback);
 
     // 从GS中初始化 archiverDlMap
     final Map<String, DownloadTaskInfo> _archivermap =
@@ -332,7 +333,7 @@ class DownloadController extends GetxController {
 
   /// 不在 archiverDlMap 中的任务
   Future<void> _prepare() async {
-    final List<DownloadTask> tasks = await FlutterDownloader.loadTasks();
+    final List<DownloadTask> tasks = await FlutterDownloader.loadTasks() ?? [];
     // logger.d(
     //     'loadTasks \n${tasks.map((DownloadTask e) => e.toString().split(', ').join('\n')).join('\n----------\n')} ');
 
@@ -368,10 +369,13 @@ class DownloadController extends GetxController {
   /// 更新任务状态
   Future<void> _updateItem(
       String id, DownloadTaskStatus status, int progress) async {
+    final List<DownloadTask> _tasks =
+        await FlutterDownloader.loadTasksWithRawQuery(
+                query: "SELECT * FROM task WHERE task_id='$id'") ??
+            [];
+
     // 根据taskid 从数据库中 获取任务数据
-    final DownloadTask _task = (await FlutterDownloader.loadTasksWithRawQuery(
-            query: "SELECT * FROM task WHERE task_id='$id'"))
-        .first;
+    final DownloadTask? _task = _tasks.isNotEmpty ? _tasks.first : null;
 
     logger.d(
         'Background Isolate Callback: _task ($id) is in status ($status) and process ($progress)');
@@ -386,7 +390,7 @@ class DownloadController extends GetxController {
     //   ..status = status.value;
     _taskInfo = _taskInfo.copyWith(progress: progress, status: status.value);
 
-    if (_task.filename != null &&
+    if (_task != null &&
         _task.filename != 'null' &&
         _task.filename != '<null>' &&
         _task.filename.trim().isNotEmpty) {
@@ -439,7 +443,7 @@ class DownloadController extends GetxController {
   }
 
   // 根据 downloadUrl 和 savePath 下载文件
-  Future<String> _downloadFile(String downloadUrl, String savePath,
+  Future<String?> _downloadFile(String downloadUrl, String savePath,
       {String? fileName}) async {
     return await FlutterDownloader.enqueue(
       url: downloadUrl,

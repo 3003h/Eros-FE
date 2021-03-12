@@ -251,9 +251,11 @@ packages:
   dio_firebase_performance:
     dependency: "direct main"
     description:
-      name: dio_firebase_performance
-      url: "https://pub.flutter-io.cn"
-    source: hosted
+      path: "."
+      ref: HEAD
+      resolved-ref: "9ef178011891f721f4d8e0f66863d4ce5dba5572"
+      url: "https://github.com/honjow/dio_firebase_performance.git"
+    source: git
     version: "0.3.0"
   dio_http_cache:
     dependency: "direct main"
@@ -307,7 +309,7 @@ packages:
       name: extended_list_library
       url: "https://pub.flutter-io.cn"
     source: hosted
-    version: "2.0.0"
+    version: "3.0.0"
   fake_async:
     dependency: transitive
     description:
@@ -372,7 +374,7 @@ packages:
     source: hosted
     version: "1.0.1"
   firebase_core_platform_interface:
-    dependency: "direct overridden"
+    dependency: transitive
     description:
       name: firebase_core_platform_interface
       url: "https://pub.flutter-io.cn"
@@ -456,16 +458,18 @@ packages:
   flutter_downloader:
     dependency: "direct main"
     description:
-      path: "/Users/honjow/git/flutter_downloader_honjow"
-      relative: false
-    source: path
-    version: "1.5.2"
+      name: flutter_downloader
+      url: "https://pub.flutter-io.cn"
+    source: hosted
+    version: "1.6.0-nullsafety.0"
   flutter_egg:
     dependency: "direct main"
     description:
-      name: flutter_egg
-      url: "https://pub.flutter-io.cn"
-    source: hosted
+      path: "."
+      ref: HEAD
+      resolved-ref: d5520ca7422aa7a6a31ed9bea7aa9a4efc40014d
+      url: "https://github.com/honjow/flutter_egg.git"
+    source: git
     version: "1.0.3"
   flutter_inappwebview:
     dependency: "direct main"
@@ -517,9 +521,11 @@ packages:
   flutter_vibrate:
     dependency: "direct main"
     description:
-      name: flutter_vibrate
-      url: "https://pub.flutter-io.cn"
-    source: hosted
+      path: "."
+      ref: HEAD
+      resolved-ref: "8f34ad419e446909fa6a9f823bf76fc028f29d00"
+      url: "https://github.com/honjow/flutter_vibrate.git"
+    source: git
     version: "1.0.0"
   flutter_web_plugins:
     dependency: transitive
@@ -597,7 +603,7 @@ packages:
     source: hosted
     version: "2.2.0"
   http_parser:
-    dependency: "direct overridden"
+    dependency: transitive
     description:
       name: http_parser
       url: "https://pub.flutter-io.cn"
@@ -786,7 +792,7 @@ packages:
     source: hosted
     version: "1.8.0"
   path_provider:
-    dependency: "direct overridden"
+    dependency: transitive
     description:
       name: path_provider
       url: "https://pub.flutter-io.cn"
@@ -935,10 +941,12 @@ packages:
   reorderables:
     dependency: "direct main"
     description:
-      name: reorderables
-      url: "https://pub.flutter-io.cn"
-    source: hosted
-    version: "0.3.2"
+      path: "."
+      ref: "beta/nullsafety_migration"
+      resolved-ref: c5225b1745ed8c11c112f5d12bc1206f0cccc744
+      url: "https://github.com/Three-Horsemen-of-Software-Engineering/reorderables.git"
+    source: git
+    version: "0.4.0-nullsafety.0"
   rxdart:
     dependency: transitive
     description:
@@ -1048,7 +1056,7 @@ packages:
       name: sqflite_common
       url: "https://pub.flutter-io.cn"
     source: hosted
-    version: "2.0.0+1"
+    version: "2.0.0+2"
   sqflite_common_ffi:
     dependency: transitive
     description:
@@ -1132,7 +1140,7 @@ packages:
       name: tuple
       url: "https://pub.flutter-io.cn"
     source: hosted
-    version: "2.0.0-nullsafety.0"
+    version: "2.0.0"
   typed_data:
     dependency: transitive
     description:
@@ -1220,9 +1228,9 @@ packages:
   waterfall_flow:
     dependency: "direct main"
     description:
-      name: waterfall_flow
-      url: "https://pub.flutter-io.cn"
-    source: hosted
+      path: "/Users/honjow/git/waterfall_flow"
+      relative: false
+    source: path
     version: "2.0.5"
   web_socket_channel:
     dependency: transitive
@@ -1244,7 +1252,7 @@ packages:
       name: win32
       url: "https://pub.flutter-io.cn"
     source: hosted
-    version: "2.0.0"
+    version: "2.0.2"
   xdg_directories:
     dependency: transitive
     description:

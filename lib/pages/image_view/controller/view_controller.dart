@@ -121,21 +121,7 @@ class ViewController extends GetxController {
 
     vState.sliderValue = vState.itemIndex / 1.0;
 
-    // subscription = OrientationHelper.onOrientationChange.listen((value) {
-    //   // If the widget was removed from the tree while the asynchronous platform
-    //   // message was in flight, we want to discard the reply rather than calling
-    //   // setState to update our non-existent appearance.
-    //
-    //   // setState(() {
-    //   //   _deviceOrientation = value;
-    //   // });
-    //
-    //   _deviceOrientation = value;
-    //
-    //   OrientationHelper.forceOrientation(value);
-    // });
-    // OrientationPlugin.forceOrientation(DeviceOrientation.landscapeLeft);
-    final _orientation = _ehConfigService.orientation.value;
+    final ReadOrientation? _orientation = _ehConfigService.orientation.value;
     if (_orientation != ReadOrientation.system ||
         _orientation != ReadOrientation.auto) {
       OrientationPlugin.setPreferredOrientations(
