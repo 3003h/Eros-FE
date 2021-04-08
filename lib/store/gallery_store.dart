@@ -134,7 +134,7 @@ class GStore {
   }
 
   set historys(List<GalleryItem> val) {
-    logger.d('set his ${jsonEncode(val)}');
+    // logger.d('set his ${jsonEncode(val)}');
     ReadWriteValue('galleryHistory', '{}', _hisStore).val = jsonEncode(val);
   }
 }

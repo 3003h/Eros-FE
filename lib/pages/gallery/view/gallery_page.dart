@@ -62,10 +62,12 @@ class GalleryMainPage extends StatelessWidget {
                 ),
                 middle: _controller.hideNavigationBtn
                     ? null
-                    : NavigationBarImage(
-                        imageUrl: _item.imgUrl!,
-                        scrollController: _controller.scrollController,
-                      ),
+                    : (_item.imgUrl?.isNotEmpty ?? false
+                        ? NavigationBarImage(
+                            imageUrl: _item.imgUrl ?? '',
+                            scrollController: _controller.scrollController,
+                          )
+                        : null),
                 trailing: _controller.hideNavigationBtn
                     ? Row(
                         mainAxisSize: MainAxisSize.min,
@@ -310,7 +312,7 @@ class _DatailWidget extends StatelessWidget {
         ),
         PreviewGrid(
           previews: _controller.firstPagePreview,
-          gid: state.gid!,
+          gid: state.gid ?? '',
         ),
         MorePreviewButton(hasMorePreview: _controller.hasMorePreview),
       ],
