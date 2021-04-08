@@ -292,7 +292,7 @@ class CoverImg extends StatelessWidget {
     };
     if (imgUrl != null && imgUrl.isNotEmpty) {
       return Obx(() {
-        final bool _isBlur = _ehConfigService.isGalleryImgBlur.value ?? false;
+        final bool _isBlur = _ehConfigService.isGalleryImgBlur.value;
         return LayoutBuilder(
           builder: (context, constraints) {
             return BlurImage(

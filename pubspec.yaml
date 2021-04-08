@@ -19,38 +19,39 @@ dependencies:
   cupertino_icons: ^1.0.2
 
   intl: ^0.17.0
-  font_awesome_flutter: ^9.0.0-nullsafety
+  font_awesome_flutter: ^9.0.0
   line_icons: ^2.0.1
 
   # 网络请求
-  dio: ^4.0.0-beta7
+  dio: ^4.0.0
 #  dio_http_cache: ^0.2.11
   # 临时 空安全版本
   dio_http_cache:
     git:
-      url: git://github.com/shinayser/dio-http-cache.git
+      url: https://github.com/vrtdev/dio-http-cache.git
+      ref: feature/nullsafety-dio4
 
   # cookie
-  cookie_jar: ^3.0.0-beta2
-  dio_cookie_manager: ^2.0.0-beta1
-  webview_cookie_manager: ^2.0.0-nullsafety.0
+  cookie_jar: ^3.0.1
+  dio_cookie_manager: ^2.0.0
+  webview_cookie_manager: ^2.0.0
 
   #shared_preferences插件 持久化
-  shared_preferences: ^2.0.4
+  shared_preferences: ^2.0.5
 
   # toast
   oktoast: ^3.0.0
 
   # 数据库
-  sqflite: ^2.0.0+1
+  sqflite: ^2.0.0+3
 
   # html反转义
-  html_unescape: ^2.0.0-nullsafety.0
+  html_unescape: ^2.0.0
 
-  enum_to_string: ^2.0.0-nullsafety.1
+  enum_to_string: ^2.0.1
 
   # webview
-  flutter_inappwebview: ^5.1.0+1
+  flutter_inappwebview: ^5.3.2
 
   html: ^0.15.0
 
@@ -59,36 +60,38 @@ dependencies:
   flutter_linkify:
     git:
       url: https://github.com/MohamedEL-Torky/flutter_linkify
-  url_launcher: ^6.0.2
+  url_launcher: ^6.0.3
 
   # 元组
   tuple: ^2.0.0
 
-  get: ^4.0.0-nullsafety.2
-  get_storage: ^2.0.1
+  get: ^4.1.3
+  get_storage: ^2.0.2
 
   photo_view: ^0.11.1
 
   # 图片相关
-  cached_network_image: ^3.0.0-nullsafety
-  extended_image: ^3.0.0
+  cached_network_image: ^3.0.0
+  extended_image: ^4.0.1
 #  extended_image:
 #    git:
 #      url: git://github.com/fluttercandies/extended_image.git
 #      ref: dev
 
-  liquid_progress_indicator: ^0.3.2
+#  liquid_progress_indicator: #^0.3.2
+#    git: https://github.com/6h4n3m/liquid_progress_indicator.git
+  liquid_progress_indicator_ns: ^1.0.0
 
   logger: ^1.0.0-nullsafety.0
 
   # 瀑布流
-  waterfall_flow:
-    path: /Users/honjow/git/waterfall_flow
+  waterfall_flow: 3.0.1
+#    path: /Users/honjow/git/waterfall_flow
 
-  modal_bottom_sheet: ^2.0.0-nullsafety.1
+  modal_bottom_sheet: ^2.0.0
 
   # 生物认证 指纹 面容等
-  local_auth: ^1.1.0
+  local_auth: ^1.1.3
 
   # 彩蛋
   flutter_egg:
@@ -96,32 +99,33 @@ dependencies:
       url: https://github.com/honjow/flutter_egg.git
 
   # 从分享菜单打开
-  receive_sharing_intent: ^1.4.3
+  receive_sharing_intent: ^1.4.5
 
   # 分享
   share: ^2.0.1
 
   # 权限检查
-  permission_handler: ^6.0.1+1
+  permission_handler: ^6.1.1
 
   # 缓存
-  flutter_cache_manager: ^3.0.0-nullsafety.1
+  flutter_cache_manager: ^3.0.1
 
   # 图片保存
-  image_gallery_saver: ^1.6.8
+  image_gallery_saver: #^1.6.8
+    git: https://github.com/dvaldivia/image_gallery_saver.git
 
   # 滑动删除
   flutter_slidable: ^0.6.0-nullsafety.0
 
   scrollable_positioned_list: ^0.2.0-nullsafety.0
 
-  # reorderables: ^0.3.2
-  reorderables:
-    git: 
-      url: https://github.com/Three-Horsemen-of-Software-Engineering/reorderables.git
-      ref: beta/nullsafety_migration
+  reorderables: ^0.4.0
+#  reorderables:
+#    git:
+#      url: https://github.com/Three-Horsemen-of-Software-Engineering/reorderables.git
+#      ref: beta/nullsafety_migration
 
-  basic_utils: ^3.0.0-nullsafety.0
+  basic_utils: ^3.0.0-nullsafety.1
 
   # 震动
   flutter_vibrate:
@@ -129,20 +133,16 @@ dependencies:
       url: https://github.com/honjow/flutter_vibrate.git
 
   # 文件选择
-  file_picker: ^3.0.0-nullsafety.3
-
-#  like_button:
-#    git:
-#      url: git://github.com/fluttercandies/like_button.git
+  file_picker: ^3.0.0
 
   # 评星
   flutter_rating_bar: ^4.0.0
 
-#  custom_pop_up_menu: ^1.1.0
-  custom_pop_up_menu:
-    git:
-      url: https://github.com/honjow/custom_pop_up_menu.git
-      ref: nullsafety
+  custom_pop_up_menu: ^1.2.0
+#  custom_pop_up_menu:
+#    git:
+#      url: https://github.com/honjow/custom_pop_up_menu.git
+#      ref: nullsafety
 
   flutter_downloader: ^1.6.0-nullsafety.0
 
@@ -153,26 +153,29 @@ dependencies:
   # flutter_downloader:
   #   path: /Users/honjow/git/flutter_downloader_honjow
 
-  floor: ^1.0.0-nullsafety.0
-  copy_with_extension: ^2.0.0-nullsafety.1
+  floor: ^1.0.0
+  copy_with_extension: ^2.0.0
   package_info: ^2.0.0
 
-  firebase_analytics: ^7.1.0
-  firebase_crashlytics: ^1.0.0
+  firebase_analytics: ^7.1.1
+  firebase_crashlytics: ^2.0.0
   firebase_performance: ^0.6.0
-  dio_firebase_performance:
-    git:
-     url: https://github.com/honjow/dio_firebase_performance.git
+  dio_firebase_performance: ^0.3.1-dev.2
+#    git:
+#     url: https://github.com/honjow/dio_firebase_performance.git
   pretty_dio_logger: ^1.2.0-beta
+#  dio_retry_fixed: ^0.1.15-beta-null-safety
 #  dio_retry: ^0.1.9-beta
   dio_retry:
     git:
       url: https://github.com/honjow/dio_retry.git
       path: dio_retry
-#    path: /Users/honjow/git/dio_retry/dio_retry
 
-  translator: ^0.1.5
-  pattern_lock: ^2.0.0-nullsafety.1
+  translator: ^0.1.6+1
+  #  translator:
+#    git:
+#      url: https://github.com/honjow/google-translator.git
+  pattern_lock: ^2.0.0
   orientation: ^1.3.0
   vibration: ^1.7.4-nullsafety.0
 
@@ -183,24 +186,18 @@ dev_dependencies:
   # flutter pub run apn_json2model
   apn_json2model: ^2.1.0-nullsafety
   build_runner: ^1.10.3
-  json_serializable: ^4.0.2
+  json_serializable: ^4.1.0
   json_annotation: ^4.0.0
 
-  floor_generator: ^1.0.0-nullsafety.0
-  copy_with_extension_gen: ^2.0.0-nullsafety.1
+  floor_generator: ^1.0.0
+  copy_with_extension_gen: ^2.0.0
 
   flutter_test:
     sdk: flutter
 
 dependency_overrides:
   args: ^2.0.0
-  http: ^0.13.0
-  # path_provider: ^2.0.1
-  # dio: ^4.0.0-beta7
   expressions: ^0.2.0-nullsafety.1
-  # firebase_performance: ^0.6.0
-  # firebase_core_platform_interface: ^4.0.0
-  # http_parser: ^4.0.0
   logging: ^1.0.0
 
 flutter_intl:

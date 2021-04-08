@@ -244,7 +244,7 @@ class DownloadManager {
     final _RequestBean _requestBean = _RequestBean(
       galleryTask: galleryTask,
       imageTasks: imageTasks,
-      isSiteEx: Get.find<EhConfigService>().isSiteEx.value ?? false,
+      isSiteEx: Get.find<EhConfigService>().isSiteEx.value,
       appSupportPath: Global.appSupportPath,
       appDocPath: Global.appDocPath,
       initPreviews: _pageController.firstPagePreview,

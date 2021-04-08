@@ -33,11 +33,11 @@ class TabViewController extends GetxController
   int maxPage = 1;
 
   final RxBool _isBackgroundRefresh = false.obs;
-  bool get isBackgroundRefresh => _isBackgroundRefresh.value ?? false;
+  bool get isBackgroundRefresh => _isBackgroundRefresh.value;
   set isBackgroundRefresh(bool val) => _isBackgroundRefresh.value = val;
 
   final Rx<PageState> _pageState = PageState.None.obs;
-  PageState get pageState => _pageState.value ?? PageState.None;
+  PageState get pageState => _pageState.value;
   set pageState(PageState val) => _pageState.value = val;
 
   final EhConfigService _ehConfigService = Get.find();
@@ -170,7 +170,7 @@ class TabViewController extends GetxController
         maxPage = tuple.item2;
       }
       // 成功才+1
-      curPage += 1;
+      curPage.value += 1;
       pageState = PageState.None;
       update();
     } catch (e, stack) {

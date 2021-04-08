@@ -34,7 +34,7 @@ class EhTagDatabase {
 
     // 获取当前本地版本
     // final String localVer = Global.profile.ehConfig.tagTranslatVer;
-    final String localVer = ehConfigService.tagTranslatVer.value ?? '';
+    final String localVer = ehConfigService.tagTranslatVer.value;
     loggerNoStack.v('localVer $localVer');
 
     if (remoteVer != localVer) {

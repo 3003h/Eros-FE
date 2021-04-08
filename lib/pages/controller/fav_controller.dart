@@ -24,7 +24,7 @@ class FavController extends GetxController {
 
   Future<Map<String, String>?> showFav(
       BuildContext context, List favList) async {
-    return _ehConfigService.isFavPicker.value ?? false
+    return _ehConfigService.isFavPicker.value
         ? await _showAddFavPicker(context, favList)
         : await _showAddFavList(context, favList);
   }
@@ -192,7 +192,7 @@ class FavController extends GetxController {
     final String? _lastFavcat = _ehConfigService.lastFavcat.value;
 
     // 添加到上次收藏夹
-    if ((_ehConfigService.isFavLongTap.value ?? false) &&
+    if ((_ehConfigService.isFavLongTap.value) &&
         _lastFavcat != null &&
         _lastFavcat.isNotEmpty) {
       logger.v('添加到上次收藏夹');

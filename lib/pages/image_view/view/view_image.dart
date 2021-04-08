@@ -16,7 +16,7 @@ import 'package:fehviewer/utils/vibrate.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:liquid_progress_indicator/liquid_progress_indicator.dart';
+import 'package:liquid_progress_indicator_ns/liquid_progress_indicator.dart';
 
 import '../common.dart';
 
@@ -337,7 +337,7 @@ class ImageExtend extends StatelessWidget {
                         direction: Axis.vertical,
                         center: progress != null
                             ? Text(
-                                '${(progress) * 100 ~/ 1}%',
+                                '${progress * 100 ~/ 1}%',
                                 style: TextStyle(
                                   color: progress < 0.5
                                       ? CupertinoColors.white
@@ -347,6 +347,8 @@ class ImageExtend extends StatelessWidget {
                                 ),
                               )
                             : Container(),
+                        borderColor: Colors.transparent,
+                        borderWidth: 0.0,
                       ),
                     ),
                     Padding(

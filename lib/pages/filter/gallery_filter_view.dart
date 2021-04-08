@@ -113,26 +113,23 @@ class GalleryFilterView extends StatelessWidget {
       final List<Widget> _listFav = <Widget>[
         AdvanceSearchSwitchItem(
           title: S.of(context).s_Search_Fav_Name,
-          value: _advanceSearch.value?.favSearchName ?? true,
+          value: _advanceSearch.value.favSearchName,
           onChanged: (bool value) {
-            _advanceSearch(
-                _advanceSearch.value?.copyWith(favSearchName: value));
+            _advanceSearch(_advanceSearch.value.copyWith(favSearchName: value));
           },
         ),
         AdvanceSearchSwitchItem(
           title: S.of(context).s_Search_Fav_Tags,
-          value: _advanceSearch.value?.favSearchTags ?? true,
+          value: _advanceSearch.value.favSearchTags,
           onChanged: (bool value) {
-            _advanceSearch(
-                _advanceSearch.value?.copyWith(favSearchTags: value));
+            _advanceSearch(_advanceSearch.value.copyWith(favSearchTags: value));
           },
         ),
         AdvanceSearchSwitchItem(
           title: S.of(context).s_Search_Fav_Note,
-          value: _advanceSearch.value?.favSearchNote ?? true,
+          value: _advanceSearch.value.favSearchNote,
           onChanged: (bool value) {
-            _advanceSearch(
-                _advanceSearch.value?.copyWith(favSearchNote: value));
+            _advanceSearch(_advanceSearch.value.copyWith(favSearchNote: value));
           },
         ),
       ];
@@ -145,84 +142,83 @@ class GalleryFilterView extends StatelessWidget {
         ),
         AdvanceSearchSwitchItem(
           title: S.of(context).s_Search_Gallery_Name,
-          value: _advanceSearch.value?.searchGalleryName ?? true,
+          value: _advanceSearch.value.searchGalleryName,
           onChanged: (bool value) {
             _advanceSearch(
-                _advanceSearch.value?.copyWith(searchGalleryName: value));
+                _advanceSearch.value.copyWith(searchGalleryName: value));
           },
         ),
         AdvanceSearchSwitchItem(
           title: S.of(context).s_Search_Gallery_Tags,
-          value: _advanceSearch.value?.searchGalleryTags ?? true,
+          value: _advanceSearch.value.searchGalleryTags,
           onChanged: (bool value) {
             _advanceSearch(
-                _advanceSearch.value?.copyWith(searchGalleryTags: value));
+                _advanceSearch.value.copyWith(searchGalleryTags: value));
           },
         ),
         AdvanceSearchSwitchItem(
           title: S.of(context).s_Search_Gallery_Description,
-          value: _advanceSearch.value?.searchGalleryDesc ?? false,
+          value: _advanceSearch.value.searchGalleryDesc,
           onChanged: (bool value) {
             _advanceSearch(
-                _advanceSearch.value?.copyWith(searchGalleryDesc: value));
+                _advanceSearch.value.copyWith(searchGalleryDesc: value));
           },
         ),
         AdvanceSearchSwitchItem(
           title: S.of(context).s_Search_Torrent_Filenames,
-          value: _advanceSearch.value?.searchToreenFilenames ?? false,
+          value: _advanceSearch.value.searchToreenFilenames,
           onChanged: (bool value) {
             _advanceSearch(
-                _advanceSearch.value?.copyWith(searchToreenFilenames: value));
+                _advanceSearch.value.copyWith(searchToreenFilenames: value));
           },
         ),
         AdvanceSearchSwitchItem(
           title: S.of(context).s_Only_Show_Galleries_With_Torrents,
-          value: _advanceSearch.value?.onlyShowWhithTorrents ?? false,
+          value: _advanceSearch.value.onlyShowWhithTorrents,
           onChanged: (bool value) {
             _advanceSearch(
-                _advanceSearch.value?.copyWith(onlyShowWhithTorrents: value));
+                _advanceSearch.value.copyWith(onlyShowWhithTorrents: value));
           },
         ),
         AdvanceSearchSwitchItem(
           title: S.of(context).s_Search_Low_Power_Tags,
-          value: _advanceSearch.value?.searchLowPowerTags ?? false,
+          value: _advanceSearch.value.searchLowPowerTags,
           onChanged: (bool value) {
             _advanceSearch(
-                _advanceSearch.value?.copyWith(searchLowPowerTags: value));
+                _advanceSearch.value.copyWith(searchLowPowerTags: value));
           },
         ),
         AdvanceSearchSwitchItem(
           title: S.of(context).s_Search_Downvoted_Tags,
-          value: _advanceSearch.value?.searchDownvotedTags ?? false,
+          value: _advanceSearch.value.searchDownvotedTags,
           onChanged: (bool value) {
             _advanceSearch(
-                _advanceSearch.value?.copyWith(searchDownvotedTags: value));
+                _advanceSearch.value.copyWith(searchDownvotedTags: value));
           },
         ),
         AdvanceSearchSwitchItem(
           title: S.of(context).s_Show_Expunged_Galleries,
-          value: _advanceSearch.value?.searchExpunged ?? false,
+          value: _advanceSearch.value.searchExpunged,
           onChanged: (bool value) {
             _advanceSearch(
-                _advanceSearch.value?.copyWith(searchExpunged: value));
+                _advanceSearch.value.copyWith(searchExpunged: value));
           },
         ),
         AdvanceSearchSwitchItem(
           title: S.of(context).s_Minimum_Rating,
-          value: _advanceSearch.value?.searchWithminRating ?? false,
+          value: _advanceSearch.value.searchWithminRating,
           onChanged: (bool value) {
             _advanceSearch(
-                _advanceSearch.value?.copyWith(searchWithminRating: value));
+                _advanceSearch.value.copyWith(searchWithminRating: value));
           },
         ),
         AnimatedContainer(
-          height: (_advanceSearch.value?.searchWithminRating ?? false) ? 50 : 0,
+          height: (_advanceSearch.value.searchWithminRating) ? 50 : 0,
           duration: const Duration(milliseconds: 200),
           child: Column(
             children: [
               if (advanceSearchController
-                      .advanceSearch.value?.searchWithminRating ??
-                  false)
+                  .advanceSearch.value.searchWithminRating)
                 CupertinoSlidingSegmentedControl<int>(
                   // ignore: prefer_const_literals_to_create_immutables
                   children: <int, Widget>{
@@ -243,10 +239,10 @@ class GalleryFilterView extends StatelessWidget {
                       child: Text(S.of(context).s_stars('5')),
                     ),
                   },
-                  groupValue: _advanceSearch.value?.minRating ?? 2,
+                  groupValue: _advanceSearch.value.minRating,
                   onValueChanged: (int? value) {
                     _advanceSearch(
-                        _advanceSearch.value?.copyWith(minRating: value));
+                        _advanceSearch.value.copyWith(minRating: value));
                   },
                 ),
             ],
@@ -257,12 +253,11 @@ class GalleryFilterView extends StatelessWidget {
             AdvanceSearchSwitchItem(
               title: S.of(context).s_pages,
               expand: false,
-              value: advanceSearchController
-                      .advanceSearch.value?.searchBetweenpage ??
-                  false,
+              value:
+                  advanceSearchController.advanceSearch.value.searchBetweenpage,
               onChanged: (bool value) {
                 _advanceSearch(
-                    _advanceSearch.value?.copyWith(searchBetweenpage: value));
+                    _advanceSearch.value.copyWith(searchBetweenpage: value));
               },
             ),
             const Spacer(),
@@ -279,8 +274,7 @@ class GalleryFilterView extends StatelessWidget {
                 keyboardType: TextInputType.number,
                 cursorHeight: 14,
                 enabled: advanceSearchController
-                        .advanceSearch.value?.searchBetweenpage ??
-                    false,
+                    .advanceSearch.value.searchBetweenpage,
                 style: const TextStyle(
                   height: 1,
                   textBaseline: TextBaseline.alphabetic,
@@ -301,8 +295,7 @@ class GalleryFilterView extends StatelessWidget {
                 keyboardType: TextInputType.number,
                 cursorHeight: 14,
                 enabled: advanceSearchController
-                        .advanceSearch.value?.searchBetweenpage ??
-                    false,
+                    .advanceSearch.value.searchBetweenpage,
                 style: const TextStyle(
                   height: 1,
                   textBaseline: TextBaseline.alphabetic,
@@ -316,26 +309,25 @@ class GalleryFilterView extends StatelessWidget {
             child: Text(S.of(context).s_Disable_default_filters)),
         AdvanceSearchSwitchItem(
           title: S.of(context).language,
-          value: _advanceSearch.value?.disableDFLanguage ?? false,
+          value: _advanceSearch.value.disableDFLanguage,
           onChanged: (bool value) {
             _advanceSearch(
-                _advanceSearch.value?.copyWith(disableDFLanguage: value));
+                _advanceSearch.value.copyWith(disableDFLanguage: value));
           },
         ),
         AdvanceSearchSwitchItem(
           title: S.of(context).uploader,
-          value: _advanceSearch.value?.disableDFUploader ?? false,
+          value: _advanceSearch.value.disableDFUploader,
           onChanged: (bool value) {
             _advanceSearch(
-                _advanceSearch.value?.copyWith(disableDFUploader: value));
+                _advanceSearch.value.copyWith(disableDFUploader: value));
           },
         ),
         AdvanceSearchSwitchItem(
           title: S.of(context).tags,
-          value: _advanceSearch.value?.disableDFTags ?? false,
+          value: _advanceSearch.value.disableDFTags,
           onChanged: (bool value) {
-            _advanceSearch(
-                _advanceSearch.value?.copyWith(disableDFTags: value));
+            _advanceSearch(_advanceSearch.value.copyWith(disableDFTags: value));
           },
         ),
         // const SizedBox(height: 50)

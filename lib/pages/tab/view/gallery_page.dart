@@ -48,7 +48,7 @@ class GalleryListTab extends GetView<GalleryViewController> {
             ],
           ),
           leading: controller.enablePopupMenu &&
-                  (!(Get.find<EhConfigService>().isSafeMode.value ?? false))
+                  (!(Get.find<EhConfigService>().isSafeMode.value))
               ? _buildLeading(context)
               : const SizedBox(),
           trailing: Row(

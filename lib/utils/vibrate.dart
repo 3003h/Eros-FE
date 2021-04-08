@@ -26,7 +26,7 @@ class VibrateUtil {
   }
 
   void light() {
-    if (!(_ehConfigService.vibrate.value ?? true)) {
+    if (!(_ehConfigService.vibrate.value)) {
       return;
     }
     if (Platform.isIOS) {
@@ -37,7 +37,7 @@ class VibrateUtil {
   }
 
   void medium() {
-    if (!(_ehConfigService.vibrate.value ?? true)) {
+    if (!(_ehConfigService.vibrate.value)) {
       return;
     }
     if (Platform.isIOS) {
@@ -48,7 +48,7 @@ class VibrateUtil {
   }
 
   void heavy() {
-    if (!(_ehConfigService.vibrate.value ?? true)) {
+    if (!_ehConfigService.vibrate.value) {
       return;
     }
     if (Platform.isIOS) {
@@ -59,7 +59,7 @@ class VibrateUtil {
   }
 
   void success() {
-    if (!(_ehConfigService.vibrate.value ?? true)) {
+    if (!_ehConfigService.vibrate.value) {
       return;
     }
     if (Platform.isIOS) {
@@ -68,7 +68,7 @@ class VibrateUtil {
   }
 
   void error() {
-    if (!(_ehConfigService.vibrate.value ?? true)) {
+    if (!_ehConfigService.vibrate.value) {
       return;
     }
     if (Platform.isIOS) {

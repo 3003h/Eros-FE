@@ -8,7 +8,8 @@ final EHInterceptor ehInterceptor = EHInterceptor();
 
 class EHInterceptor extends Interceptor {
   @override
-  Future<dynamic> onRequest(RequestOptions options) async {
+  Future<dynamic> onRequest(
+      RequestOptions options, RequestInterceptorHandler handler) async {
     logger.d(
         '${options.baseUrl}  \n${options.path} \n${options.headers['Host'] ?? options.headers['host']} ');
     final DnsService dnsConfigController = Get.find();
@@ -49,7 +50,7 @@ class EHInterceptor extends Interceptor {
 
   Future<void> _updateDoHCache(String host) async {
     final DnsService dnsConfigController = Get.find();
-    final bool enableDoH = dnsConfigController.enableDoH.value ?? false;
+    final bool enableDoH = dnsConfigController.enableDoH.value;
     // 更新doh
     if (enableDoH) {
       await dnsConfigController.updateDoHCache(host);

@@ -35,7 +35,7 @@ class ListViewSecuritySetting extends StatelessWidget {
       if (GetPlatform.isIOS)
         TextSwitchItem(
           S.of(context).security_blurredInRecentTasks,
-          intValue: _ehConfigService.blurredInRecentTasks.value ?? false,
+          intValue: _ehConfigService.blurredInRecentTasks.value,
           onChanged: (val) => _ehConfigService.blurredInRecentTasks.value = val,
         ),
       _buildAutoLockItem(context),

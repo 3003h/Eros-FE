@@ -15,7 +15,7 @@ import 'package:get/get.dart';
 
 class GalleryFavController extends GetxController {
   final RxBool _isLoading = false.obs;
-  bool get isLoading => _isLoading.value ?? false;
+  bool get isLoading => _isLoading.value;
 
   set isLoading(bool value) => _isLoading.value = value;
   String favnote = '';
@@ -41,7 +41,7 @@ class GalleryFavController extends GetxController {
     // _favTitle 初始化
     if (_pageController.galleryItem.favTitle != null &&
         _pageController.galleryItem.favTitle!.isNotEmpty) {
-      _favTitle.value = _pageController.galleryItem.favTitle;
+      _favTitle.value = _pageController.galleryItem.favTitle ?? '';
     } else {
       _favTitle.value = localFav ? S.of(Get.context!).local_favorite : '';
     }
@@ -49,7 +49,7 @@ class GalleryFavController extends GetxController {
     // _favcat初始化
     if (_pageController.galleryItem.favcat != null &&
         _pageController.galleryItem.favcat!.isNotEmpty) {
-      _favcat.value = _pageController.galleryItem.favcat;
+      _favcat.value = _pageController.galleryItem.favcat ?? '';
     } else {
       _favcat.value = localFav ? 'l' : '';
     }
@@ -60,10 +60,10 @@ class GalleryFavController extends GetxController {
   bool get localFav => _pageController.localFav;
 
   final RxString _favTitle = S.of(Get.context!).notFav.obs;
-  String get favTitle => _favTitle.value ?? '';
+  String get favTitle => _favTitle.value;
 
   final RxString _favcat = ''.obs;
-  String get favcat => _favcat.value ?? '';
+  String get favcat => _favcat.value;
 
   void setFav(String favcat, String favtitle) {
     _favTitle.value = favtitle;
@@ -113,10 +113,10 @@ class GalleryFavController extends GetxController {
       return delFav();
     } else {
       logger.d(' add fav');
-      final String _lastFavcat = _ehConfigService.lastFavcat.value ?? '';
+      final String _lastFavcat = _ehConfigService.lastFavcat.value;
 
       // 添加到上次收藏夹
-      if ((_ehConfigService.isFavLongTap.value ?? false) &&
+      if ((_ehConfigService.isFavLongTap.value) &&
           _lastFavcat != null &&
           _lastFavcat.isNotEmpty) {
         logger.v('添加到上次收藏夹 $_lastFavcat');

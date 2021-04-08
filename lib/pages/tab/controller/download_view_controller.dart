@@ -26,7 +26,7 @@ class DownloadViewController extends GetxController {
   ];
 
   final Rx<DownloadType> _viewType = DownloadType.gallery.obs;
-  DownloadType get viewType => _viewType.value ?? DownloadType.gallery;
+  DownloadType get viewType => _viewType.value;
   set viewType(DownloadType val) {
     final int _index = pageList.indexOf(val);
     pageController.animateToPage(_index,

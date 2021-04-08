@@ -49,7 +49,7 @@ class _UserItem extends State<UserItem> {
     Widget _buildText() {
       return Obx(() {
         if (_userController.isLogin) {
-          final String _userName = _userController.user()?.username ?? '';
+          final String _userName = _userController.user().username ?? '';
           return Text(_userName);
         } else {
           return Text(S.of(context).login);
@@ -64,8 +64,8 @@ class _UserItem extends State<UserItem> {
         color: CupertinoColors.systemGrey,
       );
 
-      logger.d('${_userController.user()?.avatarUrl} ');
-      final String _avatarUrl = _userController.user()?.avatarUrl ?? '';
+      logger.d('${_userController.user().avatarUrl} ');
+      final String _avatarUrl = _userController.user().avatarUrl ?? '';
       if (_userController.isLogin && _avatarUrl.isNotEmpty) {
         return ClipOval(
           child: CachedNetworkImage(
@@ -138,7 +138,7 @@ class UserWidget extends GetView<UserController> {
     );
 
     // logger.d('${controller.user().avatarUrl} ');
-    final String _avatarUrl = controller.user()?.avatarUrl ?? '';
+    final String _avatarUrl = controller.user().avatarUrl ?? '';
     if (controller.isLogin && _avatarUrl.isNotEmpty) {
       return ClipOval(
         child: CachedNetworkImage(
@@ -158,7 +158,7 @@ class UserWidget extends GetView<UserController> {
   Widget _buildText() {
     return Obx(() {
       if (controller.isLogin) {
-        final String? _userName = controller.user()?.username ?? '';
+        final String? _userName = controller.user().username ?? '';
         return Text(
           _userName ?? '',
           style: TextStyle(

@@ -88,7 +88,7 @@ class EhConfigService extends ProfileService {
     });
 
     //
-    isSafeMode.value = ehConfig.safeMode;
+    isSafeMode.value = ehConfig.safeMode ?? false;
     everProfile(isSafeMode, (value) {
       // ehConfig.safeMode = value;
       ehConfig = ehConfig.copyWith(safeMode: value as bool);
@@ -101,19 +101,19 @@ class EhConfigService extends ProfileService {
       // logger.v('new ehConfig ${ehConfig.toJson()}');
     });
 
-    isTagTranslat.value = ehConfig.tagTranslat;
+    isTagTranslat.value = ehConfig.tagTranslat ?? false;
     everProfile(isTagTranslat,
         (value) => ehConfig = ehConfig.copyWith(tagTranslat: value as bool));
 
-    isGalleryImgBlur.value = ehConfig.galleryImgBlur;
+    isGalleryImgBlur.value = ehConfig.galleryImgBlur ?? false;
     everProfile(isGalleryImgBlur,
         (value) => ehConfig = ehConfig.copyWith(galleryImgBlur: value as bool));
 
-    isSiteEx.value = ehConfig.siteEx;
+    isSiteEx.value = ehConfig.siteEx ?? false;
     everProfile(isSiteEx,
         (value) => ehConfig = ehConfig.copyWith(siteEx: value as bool));
 
-    isFavLongTap.value = ehConfig.favLongTap;
+    isFavLongTap.value = ehConfig.favLongTap ?? false;
     everProfile(isFavLongTap,
         (value) => ehConfig = ehConfig.copyWith(favLongTap: value as bool));
 
@@ -131,7 +131,7 @@ class EhConfigService extends ProfileService {
     everProfile(maxHistory,
         (value) => ehConfig = ehConfig.copyWith(maxHistory: value as int));
 
-    isSearchBarComp.value = ehConfig.searchBarComp;
+    isSearchBarComp.value = ehConfig.searchBarComp ?? false;
     everProfile(isSearchBarComp,
         (value) => ehConfig = ehConfig.copyWith(searchBarComp: value as bool));
 
@@ -141,29 +141,29 @@ class EhConfigService extends ProfileService {
     everFromEunm(favoriteOrder,
         (String value) => ehConfig = ehConfig.copyWith(favoritesOrder: value));
 
-    tagTranslatVer.value = ehConfig.tagTranslatVer;
+    tagTranslatVer.value = ehConfig.tagTranslatVer ?? '';
     everProfile(
         tagTranslatVer,
         (value) =>
             ehConfig = ehConfig.copyWith(tagTranslatVer: value as String));
 
-    lastFavcat.value = ehConfig.lastFavcat;
+    lastFavcat.value = ehConfig.lastFavcat ?? '';
     everProfile(lastFavcat,
         (value) => ehConfig = ehConfig.copyWith(lastFavcat: value as String));
 
-    isFavPicker.value = ehConfig.favPicker;
+    isFavPicker.value = ehConfig.favPicker ?? false;
     everProfile(isFavPicker,
         (value) => ehConfig = ehConfig.copyWith(favPicker: value as bool));
 
-    isPureDarkTheme.value = ehConfig.pureDarkTheme;
+    isPureDarkTheme.value = ehConfig.pureDarkTheme ?? false;
     everProfile<bool>(isPureDarkTheme as RxInterface<bool>,
         (bool value) => ehConfig = ehConfig.copyWith(pureDarkTheme: value));
 
-    isClipboardLink.value = ehConfig.clipboardLink;
+    isClipboardLink.value = ehConfig.clipboardLink ?? false;
     everProfile<bool>(isClipboardLink as RxInterface<bool>,
         (bool value) => ehConfig = ehConfig.copyWith(clipboardLink: value));
 
-    commentTrans.value = ehConfig.commentTrans;
+    commentTrans.value = ehConfig.commentTrans ?? false;
     everProfile<bool>(commentTrans as RxInterface<bool>,
         (bool value) => ehConfig = ehConfig.copyWith(commentTrans: value));
 
@@ -178,7 +178,7 @@ class EhConfigService extends ProfileService {
         (int value) => ehConfig = ehConfig.copyWith(autoLockTimeOut: value));
 
     // showPageInterval
-    showPageInterval.value = ehConfig.showPageInterval;
+    showPageInterval.value = ehConfig.showPageInterval ?? false;
     everProfile<bool>(showPageInterval as RxInterface<bool>,
         (bool value) => ehConfig = ehConfig.copyWith(showPageInterval: value));
 
@@ -250,7 +250,7 @@ class EhConfigService extends ProfileService {
   }
 
   Future<void> chkClipboardLink(BuildContext context) async {
-    if (!(isClipboardLink.value ?? false)) {
+    if (!isClipboardLink.value) {
       return;
     }
 

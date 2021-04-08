@@ -102,7 +102,7 @@ class DnsService extends ProfileService {
   void onInit() {
     super.onInit();
     final DnsConfig _dnsConfig = Global.profile.dnsConfig;
-    enableCustomHosts.value = _dnsConfig.enableCustomHosts;
+    enableCustomHosts.value = _dnsConfig.enableCustomHosts ?? false;
     _hosts(_dnsConfig.hosts);
     _dohCache(_dnsConfig.dohCache);
 
@@ -125,14 +125,14 @@ class DnsService extends ProfileService {
           .copyWith(dnsConfig: _dnsConfig.copyWith(enableDoH: value));
       Global.saveProfile();
     });
-    enableDoH.value = _dnsConfig.enableDoH;
+    enableDoH.value = _dnsConfig.enableDoH ?? false;
     everProfile<List<DnsCache>>(_dohCache, (List<DnsCache> value) {
       // _dnsConfig.dohCache = value;
       Global.profile = Global.profile
           .copyWith(dnsConfig: _dnsConfig.copyWith(dohCache: value));
     });
 
-    enableDomainFronting.value = _dnsConfig.enableDomainFronting;
+    enableDomainFronting.value = _dnsConfig.enableDomainFronting ?? false;
     everProfile<bool>(enableDomainFronting as RxInterface<bool>, (bool value) {
       // _dnsConfig.enableDomainFronting = value;
       Global.profile = Global.profile.copyWith(

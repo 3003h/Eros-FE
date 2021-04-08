@@ -86,7 +86,7 @@ class FavoriteSelectorController extends GetxController
 }
 
 class FavSelectorItemController extends GetxController {
-  Rx<Color> colorTap = const Color.fromARGB(0, 0, 0, 0).obs;
+  Rx<Color?> colorTap = const Color.fromARGB(0, 0, 0, 0).obs;
 
   void updateNormalColor() {
     colorTap.value = null;

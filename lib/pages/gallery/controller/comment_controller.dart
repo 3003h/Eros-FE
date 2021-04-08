@@ -36,7 +36,7 @@ class CommentController extends GetxController
   bool _didChangeMetrics = false;
 
   final Rx<EditState> _editState = EditState.newComment.obs;
-  EditState get editState => _editState.value ?? EditState.newComment;
+  EditState get editState => _editState.value;
   set editState(EditState val) => _editState.value = val;
 
   bool get isEditStat => _editState.value == EditState.editComment;
