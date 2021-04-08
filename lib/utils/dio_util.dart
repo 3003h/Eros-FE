@@ -10,7 +10,6 @@ import 'package:fehviewer/const/const.dart';
 import 'package:fehviewer/utils/time.dart';
 import 'package:fehviewer/utils/toast.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:logging/logging.dart' as logging;
 
 import 'logger.dart';
 
@@ -63,7 +62,6 @@ class HttpManager {
 
     _dio.interceptors.add(RetryInterceptor(
         dio: _dio..options.extra.addAll({DIO_CACHE_KEY_FORCE_REFRESH: true}),
-        logger: logging.Logger('Retry '),
         options: RetryOptions(
           retries: 3, // Number of retries before a failure
           retryInterval:

@@ -119,7 +119,7 @@ class TabHomeController extends GetxController {
 
   final EhConfigService _ehConfigService = Get.find();
   final GStore gStore = Get.find();
-  bool get isSafeMode => _ehConfigService.isSafeMode.value ?? false;
+  bool get isSafeMode => _ehConfigService.isSafeMode.value;
 
   final CupertinoTabController tabController = CupertinoTabController();
 

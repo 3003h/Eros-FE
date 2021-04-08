@@ -11,11 +11,8 @@ class LocaleService extends ProfileService {
   RxString localCode = window.locale.toString().obs;
 
   Locale? get locale {
-    final String localeSt = localCode.value ?? window.locale.toString();
-    if (localeSt == null ||
-        localeSt.isEmpty ||
-        localeSt == '_' ||
-        !localeSt.contains('_')) {
+    final String localeSt = localCode.value;
+    if (localeSt.isEmpty || localeSt == '_' || !localeSt.contains('_')) {
       // return window.locale;
       return null;
     }

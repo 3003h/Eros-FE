@@ -81,7 +81,7 @@ class ClientConnectionHandler {
   Future<void> dataHandler(dynamic data) async {
     // 自定义hosts
     final List<DnsCache> _customHosts = dnsConfigController.hosts;
-    final bool enableDoH = dnsConfigController.enableDoH.value ?? false;
+    final bool enableDoH = dnsConfigController.enableDoH.value;
 
     if (server == null) {
       // 建立连接
@@ -116,7 +116,7 @@ class ClientConnectionHandler {
             final DnsCache? dohDnsCache = _dohDnsCacheIndex > -1
                 ? _dohDnsCacheList[_dohDnsCacheIndex]
                 : null;
-            if (dnsConfigController.enableCustomHosts.value ?? false) {
+            if (dnsConfigController.enableCustomHosts.value) {
               realHost = customDnsCache?.addr ?? dohDnsCache?.addr ?? _oriHost;
             } else {
               realHost = dohDnsCache?.addr ?? _oriHost;

@@ -43,7 +43,7 @@ class SettingTab extends GetView<SettingViewController> {
                   _title,
                 ),
                 const Spacer(),
-                if (Get.find<EhConfigService>().isSafeMode.value ?? false)
+                if (Get.find<EhConfigService>().isSafeMode.value)
                   Container()
                 else
                   UserWidget().paddingOnly(right: 20),

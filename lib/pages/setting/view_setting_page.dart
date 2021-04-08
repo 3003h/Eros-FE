@@ -42,7 +42,7 @@ class ViewSettingList extends StatelessWidget {
       if (!_hideOrientationItem) ReadOrientationItem(),
       TextSwitchItem(
         S.of(context).show_page_interval,
-        intValue: ehConfigService.showPageInterval.value ?? true,
+        intValue: ehConfigService.showPageInterval.value,
         onChanged: (bool val) => ehConfigService.showPageInterval.value = val,
       )
     ];
@@ -96,9 +96,7 @@ Widget _buildViewModeItem(BuildContext context) {
 
   return Obx(() => SelectorSettingItem(
         title: _title,
-        selector:
-            modeMap[ehConfigService.viewMode.value ?? ViewMode.LeftToRight] ??
-                '',
+        selector: modeMap[ehConfigService.viewMode.value] ?? '',
         onTap: () async {
           logger.v('tap ModeItem');
           final ViewMode? _result = await _showDialog(context);
@@ -155,9 +153,7 @@ class ReadOrientationItem extends StatelessWidget {
   Widget build(BuildContext context) {
     return Obx(() => SelectorSettingItem(
           title: _title,
-          selector: modeMap[ehConfigService.orientation.value ??
-                  ReadOrientation.system] ??
-              '',
+          selector: modeMap[ehConfigService.orientation.value] ?? '',
           onTap: () async {
             logger.v('tap ModeItem');
             final ReadOrientation? _result = await _showDialog(context);

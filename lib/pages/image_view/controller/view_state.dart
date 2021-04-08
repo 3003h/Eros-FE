@@ -80,7 +80,7 @@ class ViewState {
 
   /// 横屏翻页模式
   final Rx<ViewColumnMode> _columnMode = ViewColumnMode.single.obs;
-  ViewColumnMode get columnMode => _columnMode.value ?? ViewColumnMode.single;
+  ViewColumnMode get columnMode => _columnMode.value;
   set columnMode(val) => _columnMode.value = val;
 
   /// 当前查看的图片inde
@@ -147,7 +147,7 @@ class ViewState {
 
   /// 是否显示bar
   final RxBool _showBar = false.obs;
-  bool get showBar => _showBar.value ?? false;
+  bool get showBar => _showBar.value;
   set showBar(bool val) => _showBar.value = val;
 
   // 底栏偏移
@@ -179,13 +179,13 @@ class ViewState {
 
   /// 阅读模式
   Rx<ViewMode> get _viewMode => _ehConfigService.viewMode;
-  ViewMode get viewMode => _viewMode.value ?? ViewMode.LeftToRight;
+  ViewMode get viewMode => _viewMode.value;
   set viewMode(val) => _viewMode.value = val;
 
   /// 显示页面间隔
 
   RxBool get _showPageInterval => _ehConfigService.showPageInterval;
-  bool get showPageInterval => _showPageInterval.value ?? true;
+  bool get showPageInterval => _showPageInterval.value;
   set showPageInterval(bool val) => _showPageInterval.value = val;
 
   bool fade = true;

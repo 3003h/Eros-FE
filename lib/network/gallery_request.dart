@@ -43,8 +43,8 @@ final Api api = Api();
 // ignore: avoid_classes_with_only_static_members
 class Api {
   Api() {
-    final String _baseUrl = EHConst.getBaseSite(
-        Get.find<EhConfigService>().isSiteEx.value ?? false);
+    final String _baseUrl =
+        EHConst.getBaseSite(Get.find<EhConfigService>().isSiteEx.value);
     httpManager = HttpManager.getInstance(baseUrl: _baseUrl);
   }
 
@@ -70,8 +70,8 @@ class Api {
     String? baseUrl,
     int? connectTimeout,
   }) {
-    final String _baseUrl = EHConst.getBaseSite(
-        Get.find<EhConfigService>().isSiteEx.value ?? false);
+    final String _baseUrl =
+        EHConst.getBaseSite(Get.find<EhConfigService>().isSiteEx.value);
     return HttpManager(baseUrl ?? _baseUrl,
         cache: cache, connectTimeout: connectTimeout);
   }
@@ -88,11 +88,11 @@ class Api {
 
   static String getBaseUrl({bool? isSiteEx}) {
     return EHConst.getBaseSite(
-        isSiteEx ?? Get.find<EhConfigService>().isSiteEx.value ?? false);
+        isSiteEx ?? Get.find<EhConfigService>().isSiteEx.value);
   }
 
   static String getSiteFlg() {
-    return (Get.find<EhConfigService>().isSiteEx.value ?? false) ? 'EH' : 'EX';
+    return (Get.find<EhConfigService>().isSiteEx.value) ? 'EH' : 'EX';
   }
 
   /// 获取热门画廊列表
@@ -203,7 +203,7 @@ class Api {
     String? favcat,
   }) async {
     final EhConfigService _ehConfigService = Get.find();
-    final bool safeMode = _ehConfigService.isSafeMode.value ?? false;
+    final bool safeMode = _ehConfigService.isSafeMode.value;
     final AdvanceSearchController _searchController = Get.find();
 
     final String url = searchType == SearchType.watched ? '/watched' : '/';

@@ -389,7 +389,7 @@ class CommentItem extends StatelessWidget {
               // 圆角
               borderRadius: BorderRadius.circular(10),
               child: Container(
-                color: _ehConfigService.isPureDarkTheme.value ?? false
+                color: _ehConfigService.isPureDarkTheme.value
                     ? CupertinoDynamicColor.resolve(
                         ThemeColors.commitBackground, context)
                     : CupertinoDynamicColor.resolve(
@@ -407,7 +407,7 @@ class CommentItem extends StatelessWidget {
                               primaryColor: ThemeColors.commitText),
                           child: Row(
                             children: <Widget>[
-                              if (_ehConfigService.commentTrans.value ?? false)
+                              if (_ehConfigService.commentTrans.value)
                                 CupertinoButton(
                                   padding: const EdgeInsets.symmetric(
                                       horizontal: 12),

@@ -39,14 +39,13 @@ class ListViewEhSetting extends StatelessWidget {
     final EhConfigService _ehConfigService = Get.find();
     final UserController userController = Get.find();
 
-    final bool _siteEx = _ehConfigService.isSiteEx.value ?? false;
-    final bool _jpnTitle = _ehConfigService.isJpnTitle.value ?? false;
-    final bool _tagTranslat = _ehConfigService.isTagTranslat.value ?? false;
-    final bool _galleryImgBlur =
-        _ehConfigService.isGalleryImgBlur.value ?? false;
-    final bool _favLongTap = _ehConfigService.isFavLongTap.value ?? false;
+    final bool _siteEx = _ehConfigService.isSiteEx.value;
+    final bool _jpnTitle = _ehConfigService.isJpnTitle.value;
+    final bool _tagTranslat = _ehConfigService.isTagTranslat.value;
+    final bool _galleryImgBlur = _ehConfigService.isGalleryImgBlur.value;
+    final bool _favLongTap = _ehConfigService.isFavLongTap.value;
     final bool _isLogin = userController.isLogin;
-    final bool _isClipboar = _ehConfigService.isClipboardLink.value ?? false;
+    final bool _isClipboar = _ehConfigService.isClipboardLink.value;
 
     Future<void> _handleSiteChanged(bool newValue) async {
       _ehConfigService.isSiteEx(newValue);
@@ -129,7 +128,7 @@ class ListViewEhSetting extends StatelessWidget {
       Obx(() => TextSwitchItem('显示标签中文翻译',
           intValue: _tagTranslat,
           onChanged: _handleTagTranslatChanged,
-          desc: '当前版本:${_ehConfigService.tagTranslatVer.value ?? "无"}')),
+          desc: '当前版本:${_ehConfigService.tagTranslatVer.value}')),
       TextSwitchItem(
         S.of(context).show_jpn_title,
         intValue: _jpnTitle,
@@ -220,8 +219,7 @@ Widget _buildListModeItem(BuildContext context) {
 
   return Obx(() => SelectorSettingItem(
         title: _title,
-        selector:
-            modeMap[ehConfigService.listMode.value ?? ListModeEnum.list] ?? '',
+        selector: modeMap[ehConfigService.listMode.value] ?? '',
         onTap: () async {
           logger.v('tap ModeItem');
           final ListModeEnum? _result = await _showDialog(context);

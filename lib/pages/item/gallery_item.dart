@@ -354,10 +354,9 @@ class TagBox extends StatelessWidget {
                 runSpacing: 4, //交叉轴上子控件之间的间距
                 children:
                     List<Widget>.from(simpleTags!.map((SimpleTag _simpleTag) {
-                  final String? _text =
-                      _ehConfigService.isTagTranslat.value ?? false
-                          ? _simpleTag.translat
-                          : _simpleTag.text;
+                  final String? _text = _ehConfigService.isTagTranslat.value
+                      ? _simpleTag.translat
+                      : _simpleTag.text;
                   return TagItem(
                     text: _text,
                     color: ColorsUtil.getTagColor(_simpleTag.color),
@@ -414,7 +413,7 @@ class CoverImg extends StatelessWidget {
     }
 
     return Obx(() => BlurImage(
-          isBlur: ehConfigService.isGalleryImgBlur.value ?? false,
+          isBlur: ehConfigService.isGalleryImgBlur.value,
           child: image(),
         ));
   }

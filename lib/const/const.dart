@@ -88,7 +88,7 @@ class EHConst {
       isEx ? EX_BASE_URL : EH_BASE_URL;
 
   static String get torrentBaseUrl =>
-      (Get.find<EhConfigService>().isSiteEx.value ?? false)
+      (Get.find<EhConfigService>().isSiteEx.value)
           ? EX_TORRENT_URL
           : EH_TORRENT_URL;
 

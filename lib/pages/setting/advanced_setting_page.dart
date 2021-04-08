@@ -48,8 +48,7 @@ class ListViewAdvancedSetting extends StatelessWidget {
     }
 
     void _handleDoHChanged(bool newValue) {
-      if (!newValue &&
-          !(_dnsConfigController.enableCustomHosts.value ?? false)) {
+      if (!newValue && !(_dnsConfigController.enableCustomHosts.value)) {
         /// 清除hosts 关闭代理
         logger.d(' 关闭代理');
         HttpOverrides.global = null;
@@ -75,7 +74,7 @@ class ListViewAdvancedSetting extends StatelessWidget {
             desc: S.of(context).gray_black,
             descOn: S.of(context).pure_black,
           )),
-      if (!(Get.find<EhConfigService>().isSafeMode.value ?? false))
+      if (!(Get.find<EhConfigService>().isSafeMode.value))
         SelectorSettingItem(
           hideLine: true,
           title: S.of(context).tabbar_setting,
@@ -109,7 +108,7 @@ class ListViewAdvancedSetting extends StatelessWidget {
       Container(height: 38),
       Obx(() => SelectorSettingItem(
             title: S.of(context).custom_hosts,
-            selector: _dnsConfigController.enableCustomHosts.value ?? false
+            selector: _dnsConfigController.enableCustomHosts.value
                 ? S.of(context).on
                 : S.of(context).off,
             onTap: () {
@@ -186,7 +185,7 @@ class ListViewAdvancedSetting extends StatelessWidget {
 
     return Obx(() => SelectorSettingItem(
           title: _title,
-          selector: localeMap[localeService.localCode.value ?? ''] ?? '',
+          selector: localeMap[localeService.localCode.value] ?? '',
           hideLine: true,
           onTap: () async {
             logger.v('tap LanguageItem');

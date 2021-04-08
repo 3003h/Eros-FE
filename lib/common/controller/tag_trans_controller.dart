@@ -46,7 +46,7 @@ class TagTransController extends GetxController {
         (_urlJson != null ? _urlJson['published_at']?.trim() : '') as String;
 
     // 获取当前本地版本
-    final String localVer = ehConfigService.tagTranslatVer.value ?? '';
+    final String localVer = ehConfigService.tagTranslatVer.value;
 
     if (_remoteVer == localVer) {
       return;

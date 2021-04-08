@@ -6,7 +6,7 @@ import 'base_controller.dart';
 
 class AdvanceSearchController extends ProfileController {
   final RxBool _enableAdvance = false.obs;
-  bool get enableAdvance => _enableAdvance.value ?? false;
+  bool get enableAdvance => _enableAdvance.value;
   set enableAdvance(bool val) => _enableAdvance.value = val;
 
   Rx<AdvanceSearch> advanceSearch = kDefAdvanceSearch.obs;
@@ -18,8 +18,7 @@ class AdvanceSearchController extends ProfileController {
 
   /// 高级搜索参数拼接
   String getAdvanceSearchText() {
-    final AdvanceSearch advanceSearchValue =
-        advanceSearch.value ?? kDefAdvanceSearch;
+    final AdvanceSearch advanceSearchValue = advanceSearch.value;
 
     final String para =
         '&f_sname=${advanceSearchValue.searchGalleryName ? "on" : ""}'
@@ -43,7 +42,7 @@ class AdvanceSearchController extends ProfileController {
   }
 
   Map<String, dynamic> get advanceSearchMap {
-    final AdvanceSearch val = advanceSearch.value ?? kDefAdvanceSearch;
+    final AdvanceSearch val = advanceSearch.value;
 
     return <String, dynamic>{
       if (val.searchGalleryName) 'f_sname': 'on',
@@ -66,7 +65,7 @@ class AdvanceSearchController extends ProfileController {
   }
 
   Map<String, dynamic> get favSearchMap {
-    final AdvanceSearch val = advanceSearch.value ?? kDefAdvanceSearch;
+    final AdvanceSearch val = advanceSearch.value;
 
     return <String, dynamic>{
       if (val.favSearchName) 'sn': 'on',

@@ -48,7 +48,7 @@ class ListViewAbout extends StatelessWidget {
             ),
             onTrigger: (int tapNum, int neededNum) {
               if (Platform.isIOS) {
-                if (_ehConfigService.isSafeMode.value ?? true) {
+                if (_ehConfigService.isSafeMode.value) {
                   showToast('你发现了不得了的东西');
                   logger.v('safeMode off');
                   _ehConfigService.isSafeMode.value = false;
@@ -73,7 +73,7 @@ class ListViewAbout extends StatelessWidget {
             desc: 'honjow  <honjow311@gmail.com>',
             onTap: () => launch('mailto:honjow311@gmail.com'),
           ),
-          if (!(_ehConfigService.isSafeMode.value ?? false))
+          if (!(_ehConfigService.isSafeMode.value))
             TextItem(
               'Github',
               desc: 'https://github.com/honjow/FEhViewer',

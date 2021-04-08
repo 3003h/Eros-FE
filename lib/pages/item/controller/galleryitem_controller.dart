@@ -40,7 +40,7 @@ class GalleryItemController extends GetxController {
   }
 
   final RxBool _isFav = false.obs;
-  bool get isFav => _isFav.value ?? false;
+  bool get isFav => _isFav.value;
   set isFav(bool val) => _isFav.value = val;
 
   void setFavTitle({String favTitle = '', String? favcat}) {
@@ -59,7 +59,7 @@ class GalleryItemController extends GetxController {
   }
 
   String get title {
-    if ((_ehConfigService.isJpnTitle.value ?? false) &&
+    if ((_ehConfigService.isJpnTitle.value) &&
         (galleryItem.japaneseTitle?.isNotEmpty ?? false)) {
       return galleryItem.japaneseTitle ?? '';
     } else {
@@ -70,7 +70,7 @@ class GalleryItemController extends GetxController {
   late List<GalleryPreview> firstPagePreview;
   GalleryItem galleryItem;
 
-  Rx<Color> colorTap = const Color.fromARGB(0, 0, 0, 0).obs;
+  Rx<Color?> colorTap = const Color.fromARGB(0, 0, 0, 0).obs;
 
   void _updateNormalColor() {
     colorTap.value = null;

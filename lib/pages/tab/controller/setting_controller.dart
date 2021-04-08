@@ -10,7 +10,7 @@ class SettingViewController extends GetxController
     with SingleGetTickerProviderMixin {
   // 控制middle显示
   final RxBool _showMiddle = false.obs;
-  bool get showMidle => _showMiddle.value ?? false;
+  bool get showMidle => _showMiddle.value;
   set showMidle(bool val) => _showMiddle.value = val;
 
   //

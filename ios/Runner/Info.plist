@@ -50,10 +50,10 @@
 	</dict>
 	<key>NSFaceIDUsageDescription</key>
 	<string>用于锁定和验证app</string>
-	<key>NSPhotoLibraryUsageDescription</key>
-	<string>用于保存图片</string>
 	<key>NSPhotoLibraryAddUsageDescription</key>
 	<string>用于保存图片 add photos</string>
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string>用于保存图片</string>
 	<key>UIBackgroundModes</key>
 	<array>
 		<string>fetch</string>

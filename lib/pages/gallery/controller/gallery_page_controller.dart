@@ -59,11 +59,11 @@ class GalleryPageController extends GetxController
   bool isRefresh = false;
 
   final RxBool _fromUrl = false.obs;
-  bool get fromUrl => _fromUrl.value ?? false;
+  bool get fromUrl => _fromUrl.value;
   set fromUrl(bool val) => _fromUrl.value = val;
 
   final RxBool _isRatinged = false.obs;
-  bool get isRatinged => _isRatinged.value ?? false;
+  bool get isRatinged => _isRatinged.value;
   set isRatinged(bool val) => _isRatinged.value = val;
 
   // 评分后更新ui和数据
@@ -175,7 +175,7 @@ class GalleryPageController extends GetxController
 
   // 阅读按钮开关
   final RxBool _enableRead = false.obs;
-  bool get enableRead => _enableRead.value ?? false;
+  bool get enableRead => _enableRead.value;
 
   bool get hasMorePreview {
     return int.parse(galleryItem.filecount ?? '0') > (firstPagePreview.length);
@@ -183,7 +183,7 @@ class GalleryPageController extends GetxController
 
   // 控制隐藏导航栏按钮和封面
   final RxBool _hideNavigationBtn = true.obs;
-  bool get hideNavigationBtn => _hideNavigationBtn.value ?? true;
+  bool get hideNavigationBtn => _hideNavigationBtn.value;
   set hideNavigationBtn(bool val) => _hideNavigationBtn.value = val;
 
   // 第一页的缩略图对象数组
@@ -394,7 +394,7 @@ class GalleryPageController extends GetxController
   String get topTitle {
     // logger.d('${galleryItem.japaneseTitle} ${galleryItem.englishTitle}');
 
-    if ((_ehConfigService.isJpnTitle.value ?? false) &&
+    if ((_ehConfigService.isJpnTitle.value) &&
         (galleryItem.japaneseTitle?.isNotEmpty ?? false)) {
       return galleryItem.englishTitle ?? '';
     } else {
@@ -404,7 +404,7 @@ class GalleryPageController extends GetxController
 
   // 根据设置的语言显示的标题
   String get title {
-    if ((_ehConfigService.isJpnTitle.value ?? false) &&
+    if ((_ehConfigService.isJpnTitle.value) &&
         (galleryItem.japaneseTitle?.isNotEmpty ?? false)) {
       return galleryItem.japaneseTitle ?? '';
     } else {

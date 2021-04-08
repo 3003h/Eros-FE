@@ -59,7 +59,7 @@ class SearchPageController extends TabViewController {
 
   // 搜索类型
   final Rx<SearchType> _searchType = SearchType.normal.obs;
-  SearchType get searchType => _searchType.value ?? SearchType.normal;
+  SearchType get searchType => _searchType.value;
 
   String get placeholderText {
     final BuildContext context = Get.context!;
@@ -81,7 +81,7 @@ class SearchPageController extends TabViewController {
   set searchType(SearchType val) => _searchType.value = val;
 
   final Rx<ListType> _listType = ListType.init.obs;
-  ListType get listType => _listType.value ?? ListType.init;
+  ListType get listType => _listType.value;
   set listType(ListType val) => _listType.value = val;
 
   final RxList<TagTranslat> qryTags = <TagTranslat>[].obs;
@@ -102,7 +102,7 @@ class SearchPageController extends TabViewController {
   final FavoriteViewController _favoriteViewController = Get.find();
 
   /// 控制右侧按钮展开折叠
-  bool get isSearchBarComp => _ehConfigService.isSearchBarComp.value ?? true;
+  bool get isSearchBarComp => _ehConfigService.isSearchBarComp.value;
   set isSearchBarComp(bool val) => _ehConfigService.isSearchBarComp.value = val;
 
   /// 执行搜索
@@ -228,7 +228,7 @@ class SearchPageController extends TabViewController {
       state?.addAll(gallerItemBeans);
 
       maxPage = tuple.item2;
-      curPage += 1;
+      curPage.value += 1;
       pageState = PageState.None;
       update();
     } catch (e, stack) {

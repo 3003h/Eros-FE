@@ -775,7 +775,7 @@ class TagGroupItem extends StatelessWidget {
     galleryTags.forEach((GalleryTag tag) {
       _tagBtnList.add(
         Obx(() => TagButton(
-              text: ehConfigService.isTagTranslat.value ?? false
+              text: ehConfigService.isTagTranslat.value
                   ? tag.tagTranslat
                   : tag.title,
               textColor: () {
@@ -796,7 +796,7 @@ class TagGroupItem extends StatelessWidget {
                     simpleSearch: '${tag.type}:${tag.title}');
               },
               onLongPress: () {
-                if (ehConfigService.isTagTranslat.value ?? false) {
+                if (ehConfigService.isTagTranslat.value) {
                   showTagInfoDialog(
                     tag.title,
                     type: tag.type,
@@ -829,7 +829,7 @@ class TagGroupItem extends StatelessWidget {
             child: Obx(() => TagButton(
                   color: CupertinoDynamicColor.resolve(
                       ThemeColors.tagColorTagType[_tagType.trim()]!, context),
-                  text: ehConfigService.isTagTranslat.value ?? false
+                  text: ehConfigService.isTagTranslat.value
                       ? EHConst.translateTagType[_tagType.trim()] ?? _tagType
                       : _tagType,
                 )),
