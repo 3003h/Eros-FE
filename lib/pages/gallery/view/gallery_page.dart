@@ -275,13 +275,12 @@ class _DatailWidget extends StatelessWidget {
           FontAwesomeIcons.solidImages,
           title: S.of(context).p_Similar,
           onTap: () {
-            final String title = state.englishTitle ??
-                ''
-                    .replaceAll(RegExp(r'(\[.*?\]|\(.*?\))|{.*?}'), '')
-                    .trim()
-                    .split('\|')
-                    .first;
-            logger.i(' search "$title"');
+            final String title = (state.englishTitle ?? '')
+                .replaceAll(RegExp(r'(\[.*?\]|\(.*?\))|{.*?}'), '')
+                .trim()
+                .split('\|')
+                .first;
+            logger.i('处理后标题 "$title"');
             NavigatorUtil.goGalleryListBySearch(simpleSearch: '"$title"');
             // NavigatorUtil.goGalleryListBySearch(simpleSearch: title);
           },

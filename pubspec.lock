@@ -262,15 +262,6 @@ packages:
       url: "https://github.com/vrtdev/dio-http-cache.git"
     source: git
     version: "0.3.0-nullsafety.0"
-  dio_retry:
-    dependency: "direct main"
-    description:
-      path: dio_retry
-      ref: HEAD
-      resolved-ref: "704cc2b17b40f93b8a3c246fb463ec0bf96846dd"
-      url: "https://github.com/honjow/dio_retry.git"
-    source: git
-    version: "0.1.10-beta"
   enum_to_string:
     dependency: "direct main"
     description:
@@ -1192,7 +1183,7 @@ packages:
       name: uuid
       url: "https://pub.flutter-io.cn"
     source: hosted
-    version: "3.0.3"
+    version: "3.0.4"
   vector_math:
     dependency: transitive
     description:

@@ -98,7 +98,7 @@ class _ViewImageState extends State<ViewImage>
 
   /// 重载图片数据，重构部件
   Future<void> _reloadImage({bool changeSource = true}) async {
-    GalleryPreview? _currentPreview =
+    final GalleryPreview? _currentPreview =
         _pageController.galleryItem.previewMap[widget.ser];
     // 清除CachedNetworkImage的缓存
     try {
@@ -114,8 +114,7 @@ class _ViewImageState extends State<ViewImage>
       return;
     }
     _pageController.uptPreviewBySer(
-        ser: _currentPreview.ser,
-        preview: _currentPreview.copyWith(largeImageUrl: null));
+        ser: widget.ser, preview: _currentPreview.copyWith(largeImageUrl: ''));
 
     setState(() {
       // 换源重载
@@ -213,7 +212,7 @@ class _ViewImageState extends State<ViewImage>
                     }
                     try {
                       final _id = '${GetIds.IMAGE_VIEW_SER}${widget.ser}';
-                      logger.d('update id $_id');
+                      // logger.d('update id $_id');
                       _pageController.uptPreviewBySer(
                           ser: _preview.ser,
                           preview: _tmpPreview.copyWith(completeHeight: true));

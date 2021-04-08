@@ -1,4 +1,5 @@
 import 'package:fehviewer/common/service/depth_service.dart';
+import 'package:fehviewer/const/const.dart';
 import 'package:fehviewer/models/index.dart';
 import 'package:fehviewer/pages/gallery/bindings/gallery_page_binding.dart';
 import 'package:fehviewer/pages/gallery/view/gallery_page.dart';
@@ -25,7 +26,9 @@ class NavigatorUtil {
     required String simpleSearch,
   }) {
     String _search = simpleSearch;
-    if (simpleSearch.contains(':')) {
+    if (simpleSearch.contains(':') &&
+        EHConst.translateTagType.keys
+            .contains(simpleSearch.split(':')[0].trim())) {
       final List<String> searArr = simpleSearch.split(':');
       String _end = '';
       if (searArr[0] != 'uploader') {

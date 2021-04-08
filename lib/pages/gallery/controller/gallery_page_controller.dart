@@ -514,6 +514,8 @@ class GalleryPageController extends GetxController
 
       final String? _largeImageUrl = _curPreview.largeImageUrl;
 
+      logger.d('_largeImageUrl $_largeImageUrl');
+
       // 大图url为空或者宽高信息为空的时候 都会解析获取
       if (_largeImageUrl != null &&
           _largeImageUrl.isNotEmpty &&
@@ -524,23 +526,20 @@ class GalleryPageController extends GetxController
         final String? _sourceId =
             changeSource ? galleryItem.previewMap[itemSer]?.sourceId : '';
 
+        logger.v(
+            'href: ${galleryItem.previewMap[itemSer]?.href} , _sourceId: $_sourceId');
+
         try {
           final GalleryPreview _preview = await Api.ftchImageInfo(
-            galleryItem.previewMap[itemSer]!.href!,
+            galleryItem.previewMap[itemSer]?.href ?? '',
             ser: itemSer,
-            refresh: refresh,
+            refresh: changeSource,
             sourceId: _sourceId,
           );
           // 换源加载
           if (changeSource) {
-            logger.d('changeSource ${_preview.largeImageUrl}');
+            logger.d('换源加载 ${_preview.largeImageUrl}');
           }
-
-          // _curPreview
-          //   ..sourceId = _preview.sourceId
-          //   ..largeImageUrl = _preview.largeImageUrl
-          //   ..largeImageWidth = _preview.largeImageWidth
-          //   ..largeImageHeight = _preview.largeImageHeight;
 
           galleryItem.previewMap[itemSer] = _curPreview.copyWith(
             sourceId: _preview.sourceId,

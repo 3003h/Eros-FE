@@ -126,10 +126,9 @@ class ViewController extends GetxController {
         _orientation != ReadOrientation.auto) {
       OrientationPlugin.setPreferredOrientations(
           [orientationMap[_orientation] ?? DeviceOrientation.portraitUp]);
-      OrientationPlugin.forceOrientation(orientationMap[_orientation]!);
+      OrientationPlugin.forceOrientation(
+          orientationMap[_orientation] ?? DeviceOrientation.portraitUp);
     }
-
-    // logger.d('onInit() end');
   }
 
   @override
@@ -138,6 +137,7 @@ class ViewController extends GetxController {
     vState.getMoreCancelToken.cancel();
     SystemChrome.setEnabledSystemUIOverlays(SystemUiOverlay.values);
     // 恢复系统旋转设置
+    logger.d('恢复系统旋转设置');
     OrientationPlugin.setPreferredOrientations(DeviceOrientation.values);
     OrientationPlugin.forceOrientation(DeviceOrientation.portraitUp);
     super.onClose();
