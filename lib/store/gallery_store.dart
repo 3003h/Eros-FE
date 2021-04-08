@@ -80,14 +80,14 @@ class GStore {
   }
 
   set searchHistory(List<String> val) {
-    logger.d('set searchHistory ${val.join(',')}');
+    // logger.d('set searchHistory ${val.join(',')}');
     ReadWriteValue('searchHistory', '', _hisStore).val = jsonEncode(val);
   }
 
   List<String> get searchHistory {
     final String val = ReadWriteValue('searchHistory', '', _hisStore).val;
 
-    logger.d('get searchHistory $val');
+    // logger.d('get searchHistory $val');
 
     List<String> rult = <String>[];
     if (val == null || val.trim().isEmpty) {

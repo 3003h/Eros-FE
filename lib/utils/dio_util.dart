@@ -2,15 +2,15 @@ import 'dart:io';
 
 import 'package:dio/adapter.dart';
 import 'package:dio/dio.dart';
-import 'package:dio_firebase_performance/dio_firebase_performance.dart';
 import 'package:dio_http_cache/dio_http_cache.dart';
-import 'package:dio_retry/dio_retry.dart';
 import 'package:fehviewer/common/global.dart';
 import 'package:fehviewer/const/const.dart';
 import 'package:fehviewer/utils/time.dart';
 import 'package:fehviewer/utils/toast.dart';
 import 'package:flutter/cupertino.dart';
 
+import 'dio_retry/options.dart';
+import 'dio_retry/retry_interceptor.dart';
 import 'logger.dart';
 
 const int kDefconnectTimeout = 10000;
@@ -49,7 +49,7 @@ class HttpManager {
       ).interceptor);
     }
 
-    _dio.interceptors.add(DioFirebasePerformanceInterceptor());
+    // _dio.interceptors.add(DioFirebasePerformanceInterceptor());
 
     // if (Global.inDebugMode) {
     //   _dio.interceptors.add(PrettyDioLogger(

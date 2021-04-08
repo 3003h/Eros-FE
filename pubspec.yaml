@@ -3,7 +3,7 @@ description: ..
 
 publish_to: 'none' # Remove this line if you wish to publish to pub.dev
 
-version: 1.1.6+161
+version: 1.1.7+162
 
 environment:
   sdk: '>=2.12.0-0 <3.0.0'
@@ -73,13 +73,6 @@ dependencies:
   # 图片相关
   cached_network_image: ^3.0.0
   extended_image: ^4.0.1
-#  extended_image:
-#    git:
-#      url: git://github.com/fluttercandies/extended_image.git
-#      ref: dev
-
-#  liquid_progress_indicator: #^0.3.2
-#    git: https://github.com/6h4n3m/liquid_progress_indicator.git
   liquid_progress_indicator_ns: ^1.0.0
 
   logger: ^1.0.0-nullsafety.0
@@ -120,10 +113,6 @@ dependencies:
   scrollable_positioned_list: ^0.2.0-nullsafety.0
 
   reorderables: ^0.4.0
-#  reorderables:
-#    git:
-#      url: https://github.com/Three-Horsemen-of-Software-Engineering/reorderables.git
-#      ref: beta/nullsafety_migration
 
   basic_utils: ^3.0.0-nullsafety.1
 
@@ -139,10 +128,6 @@ dependencies:
   flutter_rating_bar: ^4.0.0
 
   custom_pop_up_menu: ^1.2.0
-#  custom_pop_up_menu:
-#    git:
-#      url: https://github.com/honjow/custom_pop_up_menu.git
-#      ref: nullsafety
 
   flutter_downloader: ^1.6.0-nullsafety.0
 
@@ -166,10 +151,10 @@ dependencies:
   pretty_dio_logger: ^1.2.0-beta
 #  dio_retry_fixed: ^0.1.15-beta-null-safety
 #  dio_retry: ^0.1.9-beta
-  dio_retry:
-    git:
-      url: https://github.com/honjow/dio_retry.git
-      path: dio_retry
+#  dio_retry:
+#    git:
+#      url: https://github.com/honjow/dio_retry.git
+#      path: dio_retry
 
   translator: ^0.1.6+1
   #  translator:

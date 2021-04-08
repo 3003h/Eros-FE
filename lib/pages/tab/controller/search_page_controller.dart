@@ -108,7 +108,7 @@ class SearchPageController extends TabViewController {
   /// 执行搜索
   Future<void> _startSearch() async {
     final String _searchText = searchTextController.text.trim();
-    logger.d('_searchText $_searchText');
+    // logger.d('_searchText $_searchText');
 
     if (_searchText.isNotEmpty) {
       _search = _searchText;
@@ -139,7 +139,7 @@ class SearchPageController extends TabViewController {
   /// 延迟搜索
   Future<void> _delayedSearch() async {
     update([GetIds.SEARCH_CLEAR_BTN]);
-    logger.d(' _delayedSearch');
+    // logger.d(' _delayedSearch');
     const Duration _duration = Duration(milliseconds: 800);
     _lastInputCompleteAt = DateTime.now();
     await Future<void>.delayed(_duration);
@@ -148,7 +148,7 @@ class SearchPageController extends TabViewController {
 
     if (_lastSearchText.trim() != searchTextController.text.trim() &&
         DateTime.now().difference(_lastInputCompleteAt) >= _duration) {
-      logger.d('_autoComplete $_autoComplete');
+      // logger.d('_autoComplete $_autoComplete');
       if (searchTextController.text.trim().isEmpty) {
         logger.d('ListType to ListType.init');
         listType = ListType.init;
@@ -316,7 +316,7 @@ class SearchPageController extends TabViewController {
   Future<void> firstLoad() async {
     searchTextController.addListener(_delayedSearch);
     if (initSearchText != null && initSearchText!.trim().isNotEmpty) {
-      logger.d('$searchText');
+      // logger.d('$searchText');
       searchTextController.text = initSearchText!.trim();
       autofocus = false;
     } else {

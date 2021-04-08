@@ -100,7 +100,7 @@ class GalleryPara {
 
       if (_future != null) {
         final GalleryPreview? value = await _future;
-        logger.d('yield rult ser ${value?.ser}  ${value?.toJson()}');
+        // logger.d('yield rult ser ${value?.ser}  ${value?.toJson()}');
         yield value?.copyWith(isCache: true);
         _map.remove(_url);
       }
