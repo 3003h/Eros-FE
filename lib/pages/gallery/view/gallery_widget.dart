@@ -90,6 +90,8 @@ class GalleryHeader extends StatelessWidget {
               tag: pageCtrlDepth,
               id: GetIds.PAGE_VIEW_HEADER,
               builder: (GalleryPageController controller) {
+                logger.d(
+                    'GalleryPageController GetBuilder GetIds.PAGE_VIEW_HEADER');
                 return GestureDetector(
                   child: Column(
                     mainAxisSize: MainAxisSize.min,
@@ -123,7 +125,8 @@ class GalleryHeader extends StatelessWidget {
                             const Spacer(),
                             // 类型
                             GalleryCategory(
-                                category: galleryItem.category ?? ''),
+                                category:
+                                    controller.galleryItem.category ?? ''),
                           ],
                         ),
                       ),
@@ -157,7 +160,7 @@ class GalleryHeader extends StatelessWidget {
                         children: <Widget>[
                           const Text('❤️', style: TextStyle(fontSize: 13)),
                           GetBuilder(
-                              init: GalleryPageController(),
+                              // init: GalleryPageController(),
                               tag: pageCtrlDepth,
                               id: GetIds.PAGE_VIEW_HEADER,
                               builder: (GalleryPageController controller) {
@@ -172,7 +175,7 @@ class GalleryHeader extends StatelessWidget {
                               }),
                           const Spacer(),
                           Text(
-                            galleryItem.postTime ?? '',
+                            controller.galleryItem.postTime ?? '',
                             style: _hearTextStyle,
                           ),
                         ],
@@ -444,7 +447,11 @@ class GalleryCategory extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final Color _colorCategory = CupertinoDynamicColor.resolve(
-        ThemeColors.catColor[category ?? 'default']!, context);
+        ThemeColors.catColor[category ?? 'default'] ??
+            CupertinoColors.systemGrey4,
+        context);
+    // final Color _colorCategory = CupertinoDynamicColor.resolve(
+    //     ThemeColors.catColor[category ?? 'default']!, context);
     return GestureDetector(
       child: ClipRRect(
         borderRadius: BorderRadius.circular(4),

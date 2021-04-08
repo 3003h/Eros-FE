@@ -89,6 +89,7 @@ class GalleryPageController extends GetxController
       colorRating: colorRating,
     );
 
+    logger.d('update GetIds.PAGE_VIEW_HEADER');
     update([GetIds.PAGE_VIEW_HEADER]);
 
     _itemController?.update();
@@ -228,9 +229,9 @@ class GalleryPageController extends GetxController
   bool get localFav => galleryItem.localFav ?? false;
 
   /// 请求数据
+  ///
   Future<GalleryItem> _fetchData({bool refresh = false}) async {
     await Future<void>.delayed(const Duration(milliseconds: 200));
-    // logger.d('fetch data refresh:$refresh');
     try {
       hideNavigationBtn = true;
 
@@ -240,7 +241,7 @@ class GalleryPageController extends GetxController
       }
 
       // 检查画廊是否包含在本地收藏中
-      final bool _localFav = _isInLocalFav(galleryItem.gid!);
+      final bool _localFav = _isInLocalFav(galleryItem.gid ?? '');
       // galleryItem.localFav = _localFav;
       galleryItem = galleryItem.copyWith(localFav: _localFav);
 
@@ -260,6 +261,8 @@ class GalleryPageController extends GetxController
       currentPreviewPage = 0;
       setPreviewAfterRequest(galleryItem.galleryPreview);
 
+      logger.v('category ${galleryItem.category}');
+
       // logger.d('ratingCount ${galleryItem.ratingCount} ');
 
       try {
@@ -277,11 +280,6 @@ class GalleryPageController extends GetxController
           // 评分状态更新
           isRatinged = galleryItem.isRatinged ?? false;
         } else {
-          // galleryItem.ratingFallBack ??= _oriRatingFallBack;
-          // galleryItem.ratingCount ??= _oriRatingCount;
-          // galleryItem.colorRating = _oriColorRating;
-          // galleryItem.isRatinged = _oriIsRatinged;
-
           galleryItem = galleryItem.copyWith(
             ratingFallBack: galleryItem.ratingFallBack ?? _oriRatingFallBack,
             ratingCount: galleryItem.ratingCount ?? _oriRatingCount,
@@ -306,6 +304,7 @@ class GalleryPageController extends GetxController
 
       // logger.d('ratingCount ${galleryItem.ratingCount} ');
 
+      logger.d('update GetIds.PAGE_VIEW_HEADER');
       update([GetIds.PAGE_VIEW_HEADER]);
       _itemController?.update([gid]);
       return galleryItem;

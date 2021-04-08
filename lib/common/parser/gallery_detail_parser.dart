@@ -38,10 +38,6 @@ class GalleryDetailParser {
     final RegExpMatch? _match =
         RegExp(r'url\((.+)\)').firstMatch(_imageElemStyle);
     final String _imageUrl = _match?.group(1) ?? '';
-    // if (galleryItem.imgUrl?.isEmpty ?? true) {
-    //   // galleryItem.imgUrl = _imageUrl;
-    //   galleryItem = galleryItem.copyWith(imgUrl: _imageUrl);
-    // }
 
     // 完整的标签信息
     // galleryItem.tagGroup = [];
@@ -399,6 +395,15 @@ class GalleryDetailParser {
         '';
     // galleryItem.filesizeText = _fileSize;
 
+    String _category = galleryItem.category ?? '';
+    if (galleryItem.category == null) {
+      final Element? elmCategory = document.querySelector('#gdc > div');
+      // 详情页解析 category
+      _category = elmCategory?.text ?? '';
+    }
+
+    // todo url跳转的情况部分数据需要解析获取
+
     galleryItem = galleryItem.copyWith(
       imgUrl: _imageUrl,
       tagGroup: _tagGroup,
@@ -420,6 +425,7 @@ class GalleryDetailParser {
       torrentcount: _torrentcount,
       language: _language,
       filesizeText: _fileSize,
+      category: _category,
     );
 
     return galleryItem;
