@@ -6,6 +6,7 @@ import 'package:fehviewer/network/gallery_request.dart';
 import 'package:fehviewer/utils/logger.dart';
 import 'package:fehviewer/utils/utility.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 class FavoriteSelectorController extends GetxController
@@ -89,7 +90,7 @@ class FavSelectorItemController extends GetxController {
   Rx<Color?> colorTap = const Color.fromARGB(0, 0, 0, 0).obs;
 
   void updateNormalColor() {
-    colorTap.value = null;
+    colorTap.value = Colors.transparent;
   }
 
   void updatePressedColor() {
