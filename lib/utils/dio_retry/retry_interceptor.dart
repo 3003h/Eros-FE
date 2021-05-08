@@ -13,7 +13,13 @@ class RetryInterceptor extends Interceptor {
 
   @override
   Future onError(DioError err, ErrorInterceptorHandler handler) async {
-    RetryOptions? retryOptions = RetryOptions.fromExtra(err.requestOptions);
+    RetryOptions? retryOptions;
+    try {
+      retryOptions = RetryOptions.fromExtra(err.requestOptions);
+    } catch (e) {
+      logger.e('retryOptions error');
+      return;
+    }
 
     if (retryOptions == null) {
       return;
