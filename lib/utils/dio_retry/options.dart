@@ -11,8 +11,8 @@ class RetryOptions {
       this.retryInterval = const Duration(seconds: 1)})
       : _retryEvaluator = retryEvaluator;
 
-  factory RetryOptions.fromExtra(RequestOptions request) {
-    return request.extra[extraKey];
+  factory RetryOptions.fromExtra(RequestOptions? request) {
+    return request?.extra[extraKey];
   }
 
   factory RetryOptions.noRetry() {
