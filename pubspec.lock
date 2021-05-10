@@ -461,11 +461,9 @@ packages:
   flutter_linkify:
     dependency: "direct main"
     description:
-      path: "."
-      ref: HEAD
-      resolved-ref: dff5ae9714c8990ac140c41947ca9fc37dd53507
-      url: "https://github.com/MohamedEL-Torky/flutter_linkify"
-    source: git
+      name: flutter_linkify
+      url: "https://pub.flutter-io.cn"
+    source: hosted
     version: "5.0.2"
   flutter_localizations:
     dependency: "direct main"

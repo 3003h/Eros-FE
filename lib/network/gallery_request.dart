@@ -577,6 +577,8 @@ class Api {
       // 文件数量
       final _filecount = rultList[i]['filecount'] as String;
 
+      logger.d('_filecount $_filecount');
+
       // 上传者
       final _uploader = rultList[i]['uploader'] as String;
       final _category = rultList[i]['category'] as String;
@@ -754,10 +756,8 @@ class Api {
     final String gid = urlRult?.group(3) ?? '';
     final String token = urlRult?.group(4) ?? '';
 
-    // galleryItem.gid = gid;
-    // galleryItem.token = token;
-
-    final tempGalleryItem = galleryItem.copyWith(gid: gid, token: token);
+    final GalleryItem tempGalleryItem =
+        galleryItem.copyWith(gid: gid, token: token);
 
     final List<GalleryItem> reqGalleryItems = <GalleryItem>[tempGalleryItem];
 

@@ -210,6 +210,7 @@ class GalleryViewPage extends GetView<ViewController> {
   /// 底栏
   Widget _buildBottomBar() {
     final double _max = vState.filecount - 1.0;
+    // logger.d('max = $_max');
     final List<GalleryPreview> previews = vState.previews;
     return Container(
       color: const Color.fromARGB(150, 0, 0, 0),

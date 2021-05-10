@@ -90,8 +90,8 @@ class GalleryHeader extends StatelessWidget {
               tag: pageCtrlDepth,
               id: GetIds.PAGE_VIEW_HEADER,
               builder: (GalleryPageController controller) {
-                logger.d(
-                    'GalleryPageController GetBuilder GetIds.PAGE_VIEW_HEADER');
+                // logger.d(
+                //     'GalleryPageController GetBuilder GetIds.PAGE_VIEW_HEADER');
                 return GestureDetector(
                   child: Column(
                     mainAxisSize: MainAxisSize.min,
