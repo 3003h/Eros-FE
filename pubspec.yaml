@@ -56,10 +56,10 @@ dependencies:
   html: ^0.15.0
 
   # 文字链接
-#  flutter_linkify: ^5.0.0
-  flutter_linkify:
-    git:
-      url: https://github.com/MohamedEL-Torky/flutter_linkify
+  flutter_linkify: ^5.0.2
+#  flutter_linkify:
+#    git:
+#      url: https://github.com/MohamedEL-Torky/flutter_linkify
   url_launcher: ^6.0.3
 
   # 元组

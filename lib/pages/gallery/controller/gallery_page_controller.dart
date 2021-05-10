@@ -144,9 +144,19 @@ class GalleryPageController extends GetxController
     if (galleryRepository != null &&
         galleryRepository!.url != null &&
         galleryRepository!.url!.isNotEmpty) {
+      // url跳转
       fromUrl = true;
       // galleryItem = GalleryItem()..url = galleryRepository.url;
-      galleryItem = GalleryItem(url: galleryRepository!.url);
+
+      final RegExp urlRex =
+          RegExp(r'(http?s://e(-|x)hentai.org)?/g/(\d+)/(\w+)/?$');
+      final RegExpMatch? urlRult =
+          urlRex.firstMatch(galleryRepository!.url ?? '');
+      final String gid = urlRult?.group(3) ?? '';
+      final String token = urlRult?.group(4) ?? '';
+
+      galleryItem =
+          GalleryItem(url: galleryRepository!.url, gid: gid, token: token);
     } else {
       _galleryItem = galleryRepository!.item!;
     }
@@ -229,7 +239,6 @@ class GalleryPageController extends GetxController
   bool get localFav => galleryItem.localFav ?? false;
 
   /// 请求数据
-  ///
   Future<GalleryItem> _fetchData({bool refresh = false}) async {
     await Future<void>.delayed(const Duration(milliseconds: 200));
     try {
@@ -237,8 +246,11 @@ class GalleryPageController extends GetxController
 
       if (galleryItem.filecount == null ||
           (galleryItem.filecount?.isEmpty ?? true)) {
-        await Api.getMoreGalleryInfoOne(galleryItem, refresh: refresh);
+        galleryItem =
+            await Api.getMoreGalleryInfoOne(galleryItem, refresh: refresh);
       }
+
+      // logger.d('filecount ${galleryItem.filecount}');
 
       // 检查画廊是否包含在本地收藏中
       final bool _localFav = _isInLocalFav(galleryItem.gid ?? '');
@@ -257,6 +269,8 @@ class GalleryPageController extends GetxController
         refresh: refresh,
       );
       time.showTime('fetch galleryItem end');
+
+      // logger.d('filecount ${galleryItem.filecount}');
 
       currentPreviewPage = 0;
       setPreviewAfterRequest(galleryItem.galleryPreview);
@@ -304,7 +318,7 @@ class GalleryPageController extends GetxController
 
       // logger.d('ratingCount ${galleryItem.ratingCount} ');
 
-      logger.d('update GetIds.PAGE_VIEW_HEADER');
+      // logger.d('update GetIds.PAGE_VIEW_HEADER');
       update([GetIds.PAGE_VIEW_HEADER]);
       _itemController?.update([gid]);
       return galleryItem;
@@ -322,7 +336,7 @@ class GalleryPageController extends GetxController
   }
 
   Future<void> _loadData({bool refresh = false, bool showError = true}) async {
-    logger.d('_firstLoadData');
+    // logger.d('_firstLoadData');
 
     try {
       final GalleryItem _fetchItem = await _fetchData(refresh: refresh);
