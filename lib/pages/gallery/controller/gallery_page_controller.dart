@@ -108,9 +108,10 @@ class GalleryPageController extends GetxController
   int get filecount => int.parse(galleryItem.filecount ?? '0');
 
   void uptPreviewBySer({required int ser, required GalleryPreview preview}) {
-    final _index = galleryItem.galleryPreview
+    final int? _index = galleryItem.galleryPreview
         ?.indexWhere((GalleryPreview element) => element.ser == ser);
-    if (_index != null && _index > 0) {
+    logger.v(_index);
+    if (_index != null && _index >= 0) {
       galleryItem.galleryPreview?[_index] = preview;
     }
   }
@@ -540,7 +541,7 @@ class GalleryPageController extends GetxController
             changeSource ? galleryItem.previewMap[itemSer]?.sourceId : '';
 
         logger.v(
-            'href: ${galleryItem.previewMap[itemSer]?.href} , _sourceId: $_sourceId');
+            'ser:$itemSer ,href: ${galleryItem.previewMap[itemSer]?.href} , _sourceId: $_sourceId');
 
         try {
           final GalleryPreview _preview = await Api.ftchImageInfo(
@@ -549,18 +550,21 @@ class GalleryPageController extends GetxController
             refresh: changeSource,
             sourceId: _sourceId,
           );
+
+          logger.v('fetch _preview ${_preview.toJson()}');
+
           // 换源加载
           if (changeSource) {
-            logger.d('换源加载 ${_preview.largeImageUrl}');
+            logger.d('itemSer$itemSer 换源加载 ${_preview.largeImageUrl}');
           }
 
-          galleryItem.previewMap[itemSer] = _curPreview.copyWith(
+          final GalleryPreview _previewCopyWith = _curPreview.copyWith(
             sourceId: _preview.sourceId,
             largeImageUrl: _preview.largeImageUrl,
             largeImageWidth: _preview.largeImageWidth,
             largeImageHeight: _preview.largeImageHeight,
           );
-
+          uptPreviewBySer(ser: itemSer, preview: _previewCopyWith);
           return _preview;
         } catch (_) {
           rethrow;

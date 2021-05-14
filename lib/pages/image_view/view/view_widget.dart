@@ -112,9 +112,9 @@ Future<void> showShareActionSheet(BuildContext context, String imageUrl) {
             CupertinoActionSheetAction(
                 onPressed: () {
                   logger.v('保存到相册');
-                  Api.saveImage(context, imageUrl).then((rult) {
+                  Api.saveImage(context, imageUrl).then((bool rult) {
                     Get.back();
-                    if (rult != null && rult) {
+                    if (rult) {
                       showToast('保存成功');
                     }
                   }).catchError((e) {
