@@ -804,9 +804,17 @@ class Api {
   }
 
   static Future<void> shareImageExtended(String imageUrl) async {
-    final File? file = await getCachedImageFile(imageUrl);
+    logger.d('imageUrl => $imageUrl');
+    File? file = await getCachedImageFile(imageUrl);
     if (file == null) {
-      throw 'get file error';
+      try {
+        final DefaultCacheManager manager = DefaultCacheManager();
+        file = await manager.getSingleFile(
+          imageUrl,
+        );
+      } catch (e) {
+        throw 'get file error';
+      }
     }
     final String _name = imageUrl.substring(imageUrl.lastIndexOf('/') + 1);
     logger.v('_name $_name url $imageUrl');

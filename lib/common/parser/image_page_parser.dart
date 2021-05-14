@@ -12,7 +12,7 @@ GalleryPreview paraImage(String htmlText, String href) {
   final RegExp regImageUrl = RegExp('<img[^>]*src=\"([^\"]+)\" style');
   final String imageUrl = regImageUrl.firstMatch(htmlText)?.group(1) ?? '';
 
-  logger.d('imageUrl $imageUrl');
+  logger.d('largeImageUrl $imageUrl');
 
   final Element? elmI2 = document.querySelector('#i2 > div:nth-child(1)');
   final RegExpMatch? _xy =

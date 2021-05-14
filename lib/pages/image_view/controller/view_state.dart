@@ -38,8 +38,7 @@ class ViewState {
       });
     });
 
-    ever<ViewColumnMode>(_columnMode as RxInterface<ViewColumnMode>,
-        (ViewColumnMode val) {
+    ever<ViewColumnMode>(_columnMode, (ViewColumnMode val) {
       Future<void>.delayed(const Duration(milliseconds: 100)).then((_) {
         _galleryCacheController.setColumnMode(
             _galleryPageController.galleryItem.gid ?? '', val);

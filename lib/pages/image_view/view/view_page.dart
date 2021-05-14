@@ -94,7 +94,7 @@ class GalleryViewPage extends GetView<ViewController> {
                           curve: Curves.fastOutSlowIn,
                           duration: const Duration(milliseconds: 300),
                           bottom: vState.bottomBarOffset,
-                          child: _buildBottomBar(),
+                          child: _buildBottomBar(context),
                         ),
                       ],
                     )),
@@ -208,10 +208,10 @@ class GalleryViewPage extends GetView<ViewController> {
   }
 
   /// 底栏
-  Widget _buildBottomBar() {
+  Widget _buildBottomBar(BuildContext context) {
     final double _max = vState.filecount - 1.0;
     // logger.d('max = $_max');
-    final List<GalleryPreview> previews = vState.previews;
+    final Map<int, GalleryPreview> previewMap = vState.previewMap;
     return Container(
       color: const Color.fromARGB(150, 0, 0, 0),
       padding: vState.bottomBarPadding,
@@ -248,8 +248,10 @@ class GalleryViewPage extends GetView<ViewController> {
                   behavior: HitTestBehavior.opaque,
                   onTap: () {
                     logger.v('tap share');
-                    showShareActionSheet(Get.context!,
-                        previews[controller.vState.itemIndex].largeImageUrl!);
+                    final GalleryPreview? p =
+                        previewMap[controller.vState.itemIndex + 1];
+                    logger.v(p?.toJson());
+                    showShareActionSheet(context, p?.largeImageUrl! ?? '');
                   },
                   child: Container(
                     width: 40,
