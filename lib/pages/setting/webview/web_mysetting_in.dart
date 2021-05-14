@@ -96,9 +96,9 @@ class InWebMySetting extends StatelessWidget {
 
               logger.d('${_cookies.map((e) => e.toString()).join('\n')} ');
 
-              Global.cookieJar?.delete(Uri.parse(Api.getBaseUrl()), true);
+              Global.cookieJar.delete(Uri.parse(Api.getBaseUrl()), true);
               Global.cookieJar
-                  ?.saveFromResponse(Uri.parse(Api.getBaseUrl()), _cookies);
+                  .saveFromResponse(Uri.parse(Api.getBaseUrl()), _cookies);
             });
           },
         ),

@@ -12,7 +12,7 @@ class WebSettingController extends GetxController {
 
   Future<void> _setCookie() async {
     final List<io.Cookie>? cookies =
-        await Global.cookieJar?.loadForRequest(Uri.parse(Api.getBaseUrl()));
+        await Global.cookieJar.loadForRequest(Uri.parse(Api.getBaseUrl()));
 
     for (final io.Cookie cookie in cookies ?? []) {
       _cookieManager.setCookie(

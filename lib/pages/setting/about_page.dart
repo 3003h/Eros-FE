@@ -42,7 +42,7 @@ class ListViewAbout extends StatelessWidget {
         children: <Widget>[
           Egg(
             child: TextItem(
-              '${Global.packageInfo?.appName ?? ''} ',
+              '${Global.packageInfo.appName} ',
               desc: ' 一个兴趣使然的e-hentai客户端',
               onTap: null,
             ),
@@ -65,15 +65,15 @@ class ListViewAbout extends StatelessWidget {
           TextItem(
             'Version',
             desc:
-                '${Global.packageInfo?.version ?? ''}(${Global.packageInfo?.buildNumber ?? ''})',
+                '${Global.packageInfo.version}(${Global.packageInfo.buildNumber})',
             onTap: null,
           ),
           TextItem(
-            '作者',
+            'Author',
             desc: 'honjow  <honjow311@gmail.com>',
             onTap: () => launch('mailto:honjow311@gmail.com'),
           ),
-          if (!(_ehConfigService.isSafeMode.value))
+          if (!_ehConfigService.isSafeMode.value)
             TextItem(
               'Github',
               desc: 'https://github.com/honjow/FEhViewer',
@@ -85,9 +85,19 @@ class ListViewAbout extends StatelessWidget {
             onTap: () => launch('https://t.me/f_ehviewer'),
           ),
           TextItem(
-            '频道',
+            'Channel',
             desc: 'https://t.me/fehviewer',
             onTap: () => launch('https://t.me/fehviewer'),
+            // hideLine: true,
+          ),
+          // 1004027581
+          TextItem(
+            'QQ Group',
+            desc: '1004027581',
+            onTap: () {
+              launch(
+                  'https://qm.qq.com/cgi-bin/qm/qr?k=9-NpE21HILIKnnQTo-M0OyRWSgUjFtPR&jump_from=webapi');
+            },
             hideLine: true,
           ),
         ],

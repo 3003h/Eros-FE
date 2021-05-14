@@ -145,7 +145,7 @@ class ClientConnectionHandler {
     } else {
       // debugPrint('${data.runtimeType}');
       final String hex = EHUtils.formatBytesAsHexString(data);
-      // print(hex);
+      // logger.v(hex);
       // print(EHUtils.stringToHex('e-hentai.org'));
       if (hex.contains(EHUtils.stringToHex('e-hentai.org')) ||
           hex.contains(EHUtils.stringToHex('exhentai.org')) ||

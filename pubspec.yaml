@@ -3,7 +3,7 @@ description: ..
 
 publish_to: 'none' # Remove this line if you wish to publish to pub.dev
 
-version: 1.1.8+167
+version: 1.1.8+168
 
 environment:
   sdk: '>=2.12.0-0 <3.0.0'
@@ -30,6 +30,7 @@ dependencies:
     git:
       url: https://github.com/vrtdev/dio-http-cache.git
       ref: feature/nullsafety-dio4
+#  dio_cache_interceptor: 2.3.1
 
   # cookie
   cookie_jar: ^3.0.1
@@ -161,7 +162,7 @@ dev_dependencies:
   intl_utils: ^2.2.0
   # flutter pub run apn_json2model
   apn_json2model: ^2.2.7
-  build_runner: ^2.0.2
+  build_runner: ^2.0.3
   json_serializable: ^4.1.1
   json_annotation: ^4.0.1
 

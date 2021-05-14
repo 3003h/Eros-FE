@@ -20,27 +20,48 @@ class PopularListTab extends GetView<PopularViewController> {
   @override
   Widget build(BuildContext context) {
     final String _title = S.of(context).tab_popular;
-    final CustomScrollView customScrollView = CustomScrollView(
+
+    final Widget sliverNavigationBar = CupertinoSliverNavigationBar(
+      transitionBetweenRoutes: false,
+      largeTitle: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Text(_title),
+          Obx(() {
+            if (controller.isBackgroundRefresh)
+              return const CupertinoActivityIndicator(
+                radius: 10,
+              ).paddingSymmetric(horizontal: 8);
+            else
+              return const SizedBox();
+          }),
+        ],
+      ),
+    );
+
+    final CupertinoNavigationBar navigationBar = CupertinoNavigationBar(
+      transitionBetweenRoutes: false,
+      middle: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Text(_title),
+          Obx(() {
+            if (controller.isBackgroundRefresh)
+              return const CupertinoActivityIndicator(
+                radius: 10,
+              ).paddingSymmetric(horizontal: 8);
+            else
+              return const SizedBox();
+          }),
+        ],
+      ),
+    );
+
+    final Widget customScrollView = CustomScrollView(
       controller: scrollController,
       physics: const AlwaysScrollableScrollPhysics(),
       slivers: <Widget>[
-        CupertinoSliverNavigationBar(
-          transitionBetweenRoutes: false,
-          largeTitle: Row(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Text(_title),
-              Obx(() {
-                if (controller.isBackgroundRefresh)
-                  return const CupertinoActivityIndicator(
-                    radius: 10,
-                  ).paddingSymmetric(horizontal: 8);
-                else
-                  return const SizedBox();
-              }),
-            ],
-          ),
-        ),
+        // sliverNavigationBar,
         CupertinoSliverRefreshControl(
           onRefresh: controller.onRefresh,
         ),
@@ -51,7 +72,15 @@ class PopularListTab extends GetView<PopularViewController> {
       ],
     );
 
-    return CupertinoPageScaffold(child: customScrollView);
+    return CupertinoPageScaffold(
+      navigationBar: navigationBar,
+      child: SafeArea(
+        child: CupertinoScrollbar(
+          controller: scrollController,
+          child: customScrollView,
+        ),
+      ),
+    );
   }
 
   Widget _getGalleryList() {

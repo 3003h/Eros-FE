@@ -153,12 +153,11 @@ class Global {
   static Profile profile = kDefProfile.copyWith(
       ehConfig: kDefEhConfig.copyWith(safeMode: Platform.isIOS));
 
-  // static History history = const History(history: []);
   static List<GalleryCache> galleryCaches = <GalleryCache>[];
 
-  static CookieManager? cookieManager;
+  static late CookieManager cookieManager;
 
-  static PersistCookieJar? cookieJar;
+  static late PersistCookieJar cookieJar;
 
   static HttpProxy httpProxy = HttpProxy('localhost', '$kProxyPort');
 
@@ -166,7 +165,7 @@ class Global {
   static String appDocPath = '';
   static String tempPath = '';
 
-  static PackageInfo? packageInfo;
+  static late PackageInfo packageInfo;
 
   static bool isDBinappSupportPath = false;
 
@@ -238,7 +237,6 @@ class Global {
     await _checkReset();
 
     _initProfile();
-    // _initHistory();
 
     if ((profile.dnsConfig.enableCustomHosts ?? false) ||
         (profile.dnsConfig.enableDoH ?? false)) {
@@ -269,19 +267,4 @@ class Global {
       StorageUtil().setString(CLEAN_VER, '${EHConst.cleanDataVer}');
     }
   }
-
-  // static void _initHistory() {
-  //   final dynamic _history = StorageUtil().getJSON(HISTORY) ?? '{}';
-  //   if (_history != null) {
-  //     try {
-  //       history = History.fromJson(jsonDecode(_history));
-  //     } catch (e) {
-  //       print('getHistoryFromSP $e');
-  //     }
-  //   }
-  // }
-  //
-  // static Future<bool>? saveHistory() {
-  //   return StorageUtil().setJSON(HISTORY, history);
-  // }
 }

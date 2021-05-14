@@ -124,73 +124,76 @@ class _AllPreviewPageState extends State<AllPreviewPage> {
         ),
         previousPageTitle: S.of(context).back,
       ),
-      child: CustomScrollView(
+      child: CupertinoScrollbar(
         controller: _scrollController,
-        slivers: <Widget>[
-          SliverSafeArea(
-            sliver: SliverPadding(
-              padding: const EdgeInsets.only(top: 4, left: 4, right: 4),
-              sliver: SliverGrid(
-                gridDelegate: const SliverGridDelegateWithMaxCrossAxisExtent(
-                    maxCrossAxisExtent: kMaxCrossAxisExtent,
-                    mainAxisSpacing: kMainAxisSpacing, //主轴方向的间距
-                    crossAxisSpacing: kCrossAxisSpacing, //交叉轴方向子元素的间距
-                    childAspectRatio: kChildAspectRatio //显示区域宽高比
-                    ),
-                delegate: SliverChildBuilderDelegate(
-                  (context, int index) {
-                    //如果显示到最后一个 获取下一页缩略图
-                    if (index == _galleryPreviewList.length - 1 &&
-                        index < _count - 1) {
-                      _loarMordPriview();
-                    } else if (index >= _count - 1) {
-                      _loadFinsh();
-                    }
-                    return Center(
-                      key: index == 0 ? globalKey : null,
-                      child: PreviewContainer(
-                        galleryPreviewList: _galleryPreviewList,
-                        index: index,
-                        gid: _pageController.gid,
+        child: CustomScrollView(
+          controller: _scrollController,
+          slivers: <Widget>[
+            SliverSafeArea(
+              sliver: SliverPadding(
+                padding: const EdgeInsets.only(top: 4, left: 4, right: 4),
+                sliver: SliverGrid(
+                  gridDelegate: const SliverGridDelegateWithMaxCrossAxisExtent(
+                      maxCrossAxisExtent: kMaxCrossAxisExtent,
+                      mainAxisSpacing: kMainAxisSpacing, //主轴方向的间距
+                      crossAxisSpacing: kCrossAxisSpacing, //交叉轴方向子元素的间距
+                      childAspectRatio: kChildAspectRatio //显示区域宽高比
                       ),
-                    );
-                  },
-                  childCount: _galleryPreviewList.length,
+                  delegate: SliverChildBuilderDelegate(
+                    (BuildContext context, int index) {
+                      //如果显示到最后一个 获取下一页缩略图
+                      if (index == _galleryPreviewList.length - 1 &&
+                          index < _count - 1) {
+                        _fetchNextPriviews();
+                      } else if (index >= _count - 1) {
+                        _fetchFinsh();
+                      }
+                      return Center(
+                        key: index == 0 ? globalKey : null,
+                        child: PreviewContainer(
+                          galleryPreviewList: _galleryPreviewList,
+                          index: index,
+                          gid: _pageController.gid,
+                        ),
+                      );
+                    },
+                    childCount: _galleryPreviewList.length,
+                  ),
                 ),
               ),
             ),
-          ),
-          SliverToBoxAdapter(
-            child: Container(
-              padding: const EdgeInsets.only(bottom: 50, top: 10),
-              child: Column(
-                children: <Widget>[
-                  if (_isLoading)
-                    const CupertinoActivityIndicator(
-                      radius: 14,
-                    )
-                  else
-                    Container(),
-                  if (_isLoadFinsh)
-                    Container(
-                      padding: const EdgeInsets.only(top: 0),
-                      child: Text(
-                        S.of(context).noMorePreviews,
-                        style: const TextStyle(fontSize: 14),
-                      ),
-                    )
-                  else
-                    Container(),
-                ],
+            SliverToBoxAdapter(
+              child: Container(
+                padding: const EdgeInsets.only(bottom: 50, top: 10),
+                child: Column(
+                  children: <Widget>[
+                    if (_isLoading)
+                      const CupertinoActivityIndicator(
+                        radius: 14,
+                      )
+                    else
+                      Container(),
+                    if (_isLoadFinsh)
+                      Container(
+                        padding: const EdgeInsets.only(top: 0),
+                        child: Text(
+                          S.of(context).noMorePreviews,
+                          style: const TextStyle(fontSize: 14),
+                        ),
+                      )
+                    else
+                      Container(),
+                  ],
+                ),
               ),
-            ),
-          )
-        ],
+            )
+          ],
+        ),
       ),
     );
   }
 
-  Future<void> _loarMordPriview() async {
+  Future<void> _fetchNextPriviews() async {
     if (_isLoading) {
       return;
     }
@@ -203,7 +206,7 @@ class _AllPreviewPageState extends State<AllPreviewPage> {
       _isLoading = true;
     });
 
-    final List<GalleryPreview> _moreGalleryPreviewList =
+    final List<GalleryPreview> _nextGalleryPreviewList =
         await Api.getGalleryPreview(
       _pageController.galleryItem.url!,
       page: _pageController.currentPreviewPage,
@@ -211,13 +214,13 @@ class _AllPreviewPageState extends State<AllPreviewPage> {
       refresh: _pageController.isRefresh,
     );
 
-    _galleryPreviewList.addAll(_moreGalleryPreviewList);
+    _galleryPreviewList.addAll(_nextGalleryPreviewList);
     setState(() {
       _isLoading = false;
     });
   }
 
-  Future<void> _loadFinsh() async {
+  Future<void> _fetchFinsh() async {
     if (_isLoadFinsh) {
       return;
     }

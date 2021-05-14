@@ -25,90 +25,169 @@ class GalleryListTab extends GetView<GalleryViewController> {
 
   @override
   Widget build(BuildContext context) {
-    // logger.d(' GalleryListTab BuildContext');
-    final CustomScrollView customScrollView = CustomScrollView(
+    final Widget sliverNavigationBar = CupertinoSliverNavigationBar(
+      transitionBetweenRoutes: false,
+      padding: const EdgeInsetsDirectional.only(end: 4),
+      largeTitle: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Text(controller.title),
+          Obx(() {
+            if (controller.isBackgroundRefresh)
+              return const CupertinoActivityIndicator(
+                radius: 10,
+              ).paddingSymmetric(horizontal: 8);
+            else
+              return const SizedBox();
+          }),
+        ],
+      ),
+      leading: controller.enablePopupMenu &&
+              (!Get.find<EhConfigService>().isSafeMode.value)
+          ? _buildLeading(context)
+          : const SizedBox(),
+      trailing: Row(
+        mainAxisSize: MainAxisSize.min,
+        mainAxisAlignment: MainAxisAlignment.end,
+        children: [
+          // 搜索按钮
+          CupertinoButton(
+            minSize: 40,
+            padding: const EdgeInsets.all(0),
+            child: const Icon(
+              LineIcons.search,
+              size: 26,
+            ),
+            onPressed: () {
+              NavigatorUtil.showSearch();
+            },
+          ),
+          // 筛选按钮
+          CupertinoButton(
+            minSize: 40,
+            padding: const EdgeInsets.all(0),
+            child: const Icon(
+              LineIcons.filter,
+              size: 26,
+            ),
+            onPressed: () {
+              // logger.v('${EHUtils.convNumToCatMap(1)}');
+              showFilterSetting();
+            },
+          ),
+          // 页码跳转按钮
+          CupertinoButton(
+            minSize: 40,
+            padding: const EdgeInsets.only(right: 6),
+            child: Container(
+              padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 0),
+              decoration: BoxDecoration(
+                border: Border.all(
+                  color: CupertinoDynamicColor.resolve(
+                      CupertinoColors.activeBlue, context),
+                  width: 1.5,
+                ),
+                borderRadius: BorderRadius.circular(8),
+              ),
+              child: Obx(() => Text(
+                    '${controller.curPage.value + 1}',
+                    style: TextStyle(
+                        color: CupertinoDynamicColor.resolve(
+                            CupertinoColors.activeBlue, context)),
+                  )),
+            ),
+            onPressed: () {
+              controller.jumpToPage();
+            },
+          ),
+        ],
+      ),
+    );
+
+    final CupertinoNavigationBar navigationBar = CupertinoNavigationBar(
+      transitionBetweenRoutes: false,
+      padding: const EdgeInsetsDirectional.only(end: 4),
+      middle: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Text(controller.title),
+          Obx(() {
+            if (controller.isBackgroundRefresh)
+              return const CupertinoActivityIndicator(
+                radius: 10,
+              ).paddingSymmetric(horizontal: 8);
+            else
+              return const SizedBox();
+          }),
+        ],
+      ),
+      leading: controller.enablePopupMenu &&
+              (!Get.find<EhConfigService>().isSafeMode.value)
+          ? _buildLeading(context)
+          : const SizedBox(),
+      trailing: Row(
+        mainAxisSize: MainAxisSize.min,
+        mainAxisAlignment: MainAxisAlignment.end,
+        children: [
+          // 搜索按钮
+          CupertinoButton(
+            minSize: 40,
+            padding: const EdgeInsets.all(0),
+            child: const Icon(
+              LineIcons.search,
+              size: 26,
+            ),
+            onPressed: () {
+              NavigatorUtil.showSearch();
+            },
+          ),
+          // 筛选按钮
+          CupertinoButton(
+            minSize: 40,
+            padding: const EdgeInsets.all(0),
+            child: const Icon(
+              LineIcons.filter,
+              size: 26,
+            ),
+            onPressed: () {
+              // logger.v('${EHUtils.convNumToCatMap(1)}');
+              showFilterSetting();
+            },
+          ),
+          // 页码跳转按钮
+          CupertinoButton(
+            minSize: 40,
+            padding: const EdgeInsets.only(right: 6),
+            child: Container(
+              padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 0),
+              decoration: BoxDecoration(
+                border: Border.all(
+                  color: CupertinoDynamicColor.resolve(
+                      CupertinoColors.activeBlue, context),
+                  width: 1.5,
+                ),
+                borderRadius: BorderRadius.circular(8),
+              ),
+              child: Obx(() => Text(
+                    '${controller.curPage.value + 1}',
+                    style: TextStyle(
+                        color: CupertinoDynamicColor.resolve(
+                            CupertinoColors.activeBlue, context)),
+                  )),
+            ),
+            onPressed: () {
+              controller.jumpToPage();
+            },
+          ),
+        ],
+      ),
+    );
+
+    final Widget customScrollView = CustomScrollView(
       controller: scrollController,
       physics: const AlwaysScrollableScrollPhysics(),
       slivers: <Widget>[
-        CupertinoSliverNavigationBar(
-          transitionBetweenRoutes: false,
-          padding: const EdgeInsetsDirectional.only(end: 4),
-          largeTitle: Row(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Text(controller.title),
-              Obx(() {
-                if (controller.isBackgroundRefresh)
-                  return const CupertinoActivityIndicator(
-                    radius: 10,
-                  ).paddingSymmetric(horizontal: 8);
-                else
-                  return const SizedBox();
-              }),
-            ],
-          ),
-          leading: controller.enablePopupMenu &&
-                  (!(Get.find<EhConfigService>().isSafeMode.value))
-              ? _buildLeading(context)
-              : const SizedBox(),
-          trailing: Row(
-            mainAxisSize: MainAxisSize.min,
-            mainAxisAlignment: MainAxisAlignment.end,
-            children: [
-              // 搜索按钮
-              CupertinoButton(
-                minSize: 40,
-                padding: const EdgeInsets.all(0),
-                child: const Icon(
-                  LineIcons.search,
-                  size: 26,
-                ),
-                onPressed: () {
-                  NavigatorUtil.showSearch();
-                },
-              ),
-              // 筛选按钮
-              CupertinoButton(
-                minSize: 40,
-                padding: const EdgeInsets.all(0),
-                child: const Icon(
-                  LineIcons.filter,
-                  size: 26,
-                ),
-                onPressed: () {
-                  // logger.v('${EHUtils.convNumToCatMap(1)}');
-                  showFilterSetting();
-                },
-              ),
-              // 页码跳转按钮
-              CupertinoButton(
-                minSize: 40,
-                padding: const EdgeInsets.only(right: 6),
-                child: Container(
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 4, vertical: 0),
-                  decoration: BoxDecoration(
-                    border: Border.all(
-                      color: CupertinoDynamicColor.resolve(
-                          CupertinoColors.activeBlue, context),
-                      width: 1.5,
-                    ),
-                    borderRadius: BorderRadius.circular(8),
-                  ),
-                  child: Obx(() => Text(
-                        '${controller.curPage.value + 1}',
-                        style: TextStyle(
-                            color: CupertinoDynamicColor.resolve(
-                                CupertinoColors.activeBlue, context)),
-                      )),
-                ),
-                onPressed: () {
-                  controller.jumpToPage();
-                },
-              ),
-            ],
-          ),
-        ),
+        // sliverNavigationBar,
         CupertinoSliverRefreshControl(
           onRefresh: controller.onRefresh,
         ),
@@ -122,7 +201,13 @@ class GalleryListTab extends GetView<GalleryViewController> {
     );
 
     return CupertinoPageScaffold(
-      child: customScrollView,
+      navigationBar: navigationBar,
+      child: SafeArea(
+        child: CupertinoScrollbar(
+          child: customScrollView,
+          controller: scrollController,
+        ),
+      ),
     );
   }
 

@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:dio/adapter.dart';
 import 'package:dio/dio.dart';
+import 'package:dio_firebase_performance/dio_firebase_performance.dart';
 import 'package:dio_http_cache/dio_http_cache.dart';
 import 'package:fehviewer/common/global.dart';
 import 'package:fehviewer/const/const.dart';
@@ -36,10 +37,10 @@ class HttpManager {
         responseType: ResponseType.json);
     _dio = Dio(_options);
 
-    //设置Cookie管理
-    _dio.interceptors.add(Global.cookieManager!);
+    // Cookie管理拦截器
+    _dio.interceptors.add(Global.cookieManager);
 
-    //添加拦截器
+    // 缓存拦截器
     if (cache) {
       _dio.interceptors.add(DioCacheManager(
         CacheConfig(
@@ -49,7 +50,7 @@ class HttpManager {
       ).interceptor);
     }
 
-    // _dio.interceptors.add(DioFirebasePerformanceInterceptor());
+    _dio.interceptors.add(DioFirebasePerformanceInterceptor());
 
     // if (Global.inDebugMode) {
     //   _dio.interceptors.add(PrettyDioLogger(
