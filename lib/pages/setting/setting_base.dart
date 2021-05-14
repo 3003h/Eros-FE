@@ -298,7 +298,7 @@ class _TextItemState extends State<TextItem> {
           if (!widget.hideLine)
             Divider(
               indent: 20,
-              height: 0.5,
+              height: 0.6,
               color: CupertinoDynamicColor.resolve(
                   CupertinoColors.systemGrey4, context),
             ),

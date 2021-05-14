@@ -84,6 +84,11 @@ class Api {
       forceRefresh: forceRefresh,
       options: options,
     );
+
+    // return defCacheOptions
+    //     .copyWith(
+    //         policy: forceRefresh ? CachePolicy.refresh : CachePolicy.request)
+    //     .toOptions();
   }
 
   static String getBaseUrl({bool? isSiteEx}) {
@@ -577,7 +582,7 @@ class Api {
       // 文件数量
       final _filecount = rultList[i]['filecount'] as String;
 
-      logger.d('_filecount $_filecount');
+      // logger.d('_filecount $_filecount');
 
       // 上传者
       final _uploader = rultList[i]['uploader'] as String;
@@ -1041,6 +1046,15 @@ class Api {
       subKey: reqJsonStr,
     );
 
+    // final dio.Options _cacheOptinos = defCacheOptions
+    //     .copyWith(
+    //         maxStale: const Duration(days: 1),
+    //         keyBuilder: (RequestOptions request) {
+    //           return const Uuid().v5(Uuid.NAMESPACE_URL,
+    //               '${request.uri.toString()}${request.data.toString()}');
+    //         })
+    //     .toOptions();
+
     await CustomHttpsProxy.instance.init();
     final dio.Response<dynamic> response = await Api.getHttpManager().postForm(
       url,
@@ -1082,11 +1096,6 @@ class Api {
     final String url = href;
 
     // logger.d('$reqJsonStr');
-
-    final dio.Options _cacheOptinos = buildCacheOptions(
-      const Duration(days: 1),
-      maxStale: const Duration(minutes: 1),
-    );
 
     final Map<String, dynamic> _params = {
       if (sourceId != null && sourceId.trim().isNotEmpty) 'nl': sourceId,

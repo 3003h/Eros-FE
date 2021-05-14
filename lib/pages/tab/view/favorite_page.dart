@@ -27,147 +27,257 @@ class FavoriteTab extends GetView<FavoriteViewController> {
   Widget build(BuildContext context) {
     // logger.d(' FavoriteTab BuildContext');
     final UserController userController = Get.find();
-    return CupertinoPageScaffold(
-      child: Obx(() {
-        if (userController.isLogin) {
-          if (controller.title == null ||
-              (controller.title?.isEmpty ?? false)) {
-            controller.title = S.of(context).all_Favorites;
-          }
-          return _buildNetworkFavView(context);
-        } else {
-          return _buildLocalFavView();
+    return Obx(() {
+      if (userController.isLogin) {
+        if (controller.title == null || (controller.title?.isEmpty ?? false)) {
+          controller.title = S.of(context).all_Favorites;
         }
-      }),
-    );
+        return _buildNetworkFavView(context);
+      } else {
+        return _buildLocalFavView();
+      }
+    });
   }
 
   Widget _buildNetworkFavView(BuildContext context) {
-    return CustomScrollView(
-      controller: scrollController,
-      physics: const AlwaysScrollableScrollPhysics(),
-      slivers: <Widget>[
-        CupertinoSliverNavigationBar(
-          transitionBetweenRoutes: false,
-          padding: const EdgeInsetsDirectional.only(end: 4),
-          largeTitle: Row(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Text(
-                controller.title ?? '',
-              ),
-              Obx(() {
-                if (controller.isBackgroundRefresh)
-                  return const CupertinoActivityIndicator(
-                    radius: 10,
-                  ).paddingSymmetric(horizontal: 8);
-                else
-                  return const SizedBox();
-              }),
-            ],
+    final Widget sliverNavigationBar = CupertinoSliverNavigationBar(
+      transitionBetweenRoutes: false,
+      padding: const EdgeInsetsDirectional.only(end: 4),
+      largeTitle: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Text(
+            controller.title ?? '...',
           ),
-          trailing: Row(
-            mainAxisSize: MainAxisSize.min,
-            mainAxisAlignment: MainAxisAlignment.end,
-            children: [
-              // 搜索按钮
-              CupertinoButton(
-                minSize: 40,
-                padding: const EdgeInsets.all(0),
-                child: const Icon(
-                  LineIcons.search,
+          Obx(() {
+            if (controller.isBackgroundRefresh)
+              return const CupertinoActivityIndicator(
+                radius: 10,
+              ).paddingSymmetric(horizontal: 8);
+            else
+              return const SizedBox();
+          }),
+        ],
+      ),
+      trailing: Row(
+        mainAxisSize: MainAxisSize.min,
+        mainAxisAlignment: MainAxisAlignment.end,
+        children: [
+          // 搜索按钮
+          CupertinoButton(
+            minSize: 40,
+            padding: const EdgeInsets.all(0),
+            child: const Icon(
+              LineIcons.search,
+              size: 26,
+            ),
+            onPressed: () {
+              final bool fromTabItem =
+                  Get.find<TabHomeController>().tabMap[tabTag] ?? false;
+              NavigatorUtil.showSearch(
+                  searchType: SearchType.favorite, fromTabItem: fromTabItem);
+            },
+          ),
+          CupertinoButton(
+            padding: const EdgeInsets.all(0.0),
+            minSize: 36,
+            child: Row(
+              mainAxisSize: MainAxisSize.min,
+              children: <Widget>[
+                const Icon(
+                  LineIcons.sortAmountDown,
                   size: 26,
                 ),
-                onPressed: () {
-                  final bool fromTabItem =
-                      Get.find<TabHomeController>().tabMap[tabTag] ?? false;
-                  NavigatorUtil.showSearch(
-                      searchType: SearchType.favorite,
-                      fromTabItem: fromTabItem);
-                },
-              ),
-              CupertinoButton(
-                padding: const EdgeInsets.all(0.0),
-                minSize: 36,
-                child: Row(
-                  mainAxisSize: MainAxisSize.min,
-                  children: <Widget>[
-                    const Icon(
-                      LineIcons.sortAmountDown,
-                      size: 26,
+                Align(
+                  alignment: Alignment.centerLeft,
+                  child: Text(
+                    controller.orderText,
+                    style: const TextStyle(
+                      fontSize: 10,
+                      fontWeight: FontWeight.bold,
                     ),
-                    Align(
-                      alignment: Alignment.centerLeft,
-                      child: Text(
-                        controller.orderText,
-                        style: const TextStyle(
-                          fontSize: 10,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                    )
-                  ],
-                ),
-                onPressed: () => controller.setOrder(context),
-              ),
-              CupertinoButton(
-                padding: const EdgeInsets.all(0),
-                minSize: 36,
-                child: Container(
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 4, vertical: 0),
-                  decoration: BoxDecoration(
-                      border: Border.all(
+                  ),
+                )
+              ],
+            ),
+            onPressed: () => controller.setOrder(context),
+          ),
+          CupertinoButton(
+            padding: const EdgeInsets.all(0),
+            minSize: 36,
+            child: Container(
+              padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 0),
+              decoration: BoxDecoration(
+                  border: Border.all(
+                    color: CupertinoDynamicColor.resolve(
+                        CupertinoColors.activeBlue, context),
+                    width: 1.5,
+                  ),
+                  borderRadius: const BorderRadius.all(Radius.circular(8))),
+              child: Obx(() => Text(
+                    '${controller.curPage.value + 1}',
+                    style: TextStyle(
                         color: CupertinoDynamicColor.resolve(
-                            CupertinoColors.activeBlue, context),
-                        width: 1.5,
-                      ),
-                      borderRadius: const BorderRadius.all(Radius.circular(8))),
-                  child: Obx(() => Text(
-                        '${controller.curPage.value + 1}',
-                        style: TextStyle(
-                            color: CupertinoDynamicColor.resolve(
-                                CupertinoColors.activeBlue, context)),
-                      )),
+                            CupertinoColors.activeBlue, context)),
+                  )),
+            ),
+            onPressed: () {
+              controller.jumpToPage();
+            },
+          ),
+          _buildFavcatButton(context),
+        ],
+      ),
+    );
+
+    final CupertinoNavigationBar navigationBar = CupertinoNavigationBar(
+      transitionBetweenRoutes: false,
+      padding: const EdgeInsetsDirectional.only(end: 4),
+      middle: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Text(
+            controller.title ?? '...',
+          ),
+          Obx(() {
+            if (controller.isBackgroundRefresh)
+              return const CupertinoActivityIndicator(
+                radius: 10,
+              ).paddingSymmetric(horizontal: 8);
+            else
+              return const SizedBox();
+          }),
+        ],
+      ),
+      trailing: Row(
+        mainAxisSize: MainAxisSize.min,
+        mainAxisAlignment: MainAxisAlignment.end,
+        children: [
+          // 搜索按钮
+          CupertinoButton(
+            minSize: 40,
+            padding: const EdgeInsets.all(0),
+            child: const Icon(
+              LineIcons.search,
+              size: 26,
+            ),
+            onPressed: () {
+              final bool fromTabItem =
+                  Get.find<TabHomeController>().tabMap[tabTag] ?? false;
+              NavigatorUtil.showSearch(
+                  searchType: SearchType.favorite, fromTabItem: fromTabItem);
+            },
+          ),
+          CupertinoButton(
+            padding: const EdgeInsets.all(0.0),
+            minSize: 36,
+            child: Row(
+              mainAxisSize: MainAxisSize.min,
+              children: <Widget>[
+                const Icon(
+                  LineIcons.sortAmountDown,
+                  size: 26,
                 ),
-                onPressed: () {
-                  controller.jumpToPage();
-                },
+                Align(
+                  alignment: Alignment.centerLeft,
+                  child: Text(
+                    controller.orderText,
+                    style: const TextStyle(
+                      fontSize: 10,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                )
+              ],
+            ),
+            onPressed: () => controller.setOrder(context),
+          ),
+          CupertinoButton(
+            padding: const EdgeInsets.all(0),
+            minSize: 36,
+            child: Container(
+              padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 0),
+              decoration: BoxDecoration(
+                  border: Border.all(
+                    color: CupertinoDynamicColor.resolve(
+                        CupertinoColors.activeBlue, context),
+                    width: 1.5,
+                  ),
+                  borderRadius: const BorderRadius.all(Radius.circular(8))),
+              child: Obx(() => Text(
+                    '${controller.curPage.value + 1}',
+                    style: TextStyle(
+                        color: CupertinoDynamicColor.resolve(
+                            CupertinoColors.activeBlue, context)),
+                  )),
+            ),
+            onPressed: () {
+              controller.jumpToPage();
+            },
+          ),
+          _buildFavcatButton(context),
+        ],
+      ),
+    );
+
+    return CupertinoPageScaffold(
+      navigationBar: navigationBar,
+      child: SafeArea(
+        child: CupertinoScrollbar(
+          controller: scrollController,
+          child: CustomScrollView(
+            controller: scrollController,
+            physics: const AlwaysScrollableScrollPhysics(),
+            slivers: <Widget>[
+              // sliverNavigationBar,
+              CupertinoSliverRefreshControl(
+                onRefresh: controller.onRefresh,
               ),
-              _buildFavcatButton(context),
+              SliverSafeArea(
+                top: false,
+                sliver: _getGalleryList(),
+              ),
+              _endIndicator(),
             ],
           ),
         ),
-        CupertinoSliverRefreshControl(
-          onRefresh: controller.onRefresh,
-        ),
-        SliverSafeArea(
-          top: false,
-          sliver: _getGalleryList(),
-        ),
-        _endIndicator(),
-      ],
+      ),
     );
   }
 
   Widget _buildLocalFavView() {
-    return CustomScrollView(slivers: <Widget>[
-      CupertinoSliverNavigationBar(
-        largeTitle: Text(S.of(Get.context!).local_favorite),
-        transitionBetweenRoutes: false,
+    final Widget sliverNavigationBar = CupertinoSliverNavigationBar(
+      largeTitle: Text(S.of(Get.context!).local_favorite),
+      transitionBetweenRoutes: false,
+    );
+
+    final CupertinoNavigationBar navigationBar = CupertinoNavigationBar(
+      middle: Text(S.of(Get.context!).local_favorite),
+      transitionBetweenRoutes: false,
+    );
+
+    return CupertinoPageScaffold(
+      navigationBar: navigationBar,
+      child: SafeArea(
+        child: CupertinoScrollbar(
+          controller: scrollController,
+          child: CustomScrollView(slivers: <Widget>[
+            // sliverNavigationBar,
+            CupertinoSliverRefreshControl(
+              onRefresh: () async {
+                await controller.reloadData();
+              },
+            ),
+            // todo 可能要设置刷新？
+            SliverSafeArea(
+              top: false,
+              sliver: _getGalleryList(),
+            ),
+            _endIndicator(),
+          ]),
+        ),
       ),
-      CupertinoSliverRefreshControl(
-        onRefresh: () async {
-          await controller.reloadData();
-        },
-      ),
-      // todo 可能要设置刷新？
-      SliverSafeArea(
-        top: false,
-        sliver: _getGalleryList(),
-      ),
-      _endIndicator(),
-    ]);
+    );
   }
 
   Widget _endIndicator() {

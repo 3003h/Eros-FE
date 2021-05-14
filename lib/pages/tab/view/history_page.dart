@@ -16,34 +16,61 @@ class HistoryTab extends GetView<HistoryViewController> {
   @override
   Widget build(BuildContext context) {
     final String _title = S.of(context).tab_history;
-    final CustomScrollView customScrollView = CustomScrollView(
+
+    final Widget sliverNavigationBar = CupertinoSliverNavigationBar(
+      transitionBetweenRoutes: false,
+      largeTitle: Text(_title),
+      trailing: Container(
+        width: 40,
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.end,
+          children: [
+            // 清除按钮
+            CupertinoButton(
+              minSize: 40,
+              padding: const EdgeInsets.all(0),
+              child: const Icon(
+                LineIcons.alternateTrash,
+                size: 26,
+              ),
+              onPressed: () {
+                controller.clearHistory();
+              },
+            ),
+          ],
+        ),
+      ),
+    );
+
+    final CupertinoNavigationBar navigationBar = CupertinoNavigationBar(
+      transitionBetweenRoutes: false,
+      middle: Text(_title),
+      trailing: Container(
+        width: 40,
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.end,
+          children: [
+            // 清除按钮
+            CupertinoButton(
+              minSize: 40,
+              padding: const EdgeInsets.all(0),
+              child: const Icon(
+                LineIcons.alternateTrash,
+                size: 26,
+              ),
+              onPressed: () {
+                controller.clearHistory();
+              },
+            ),
+          ],
+        ),
+      ),
+    );
+    final Widget customScrollView = CustomScrollView(
       controller: scrollController,
       physics: const AlwaysScrollableScrollPhysics(),
       slivers: <Widget>[
-        CupertinoSliverNavigationBar(
-          transitionBetweenRoutes: false,
-          largeTitle: Text(_title),
-          trailing: Container(
-            width: 40,
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.end,
-              children: [
-                // 清除按钮
-                CupertinoButton(
-                  minSize: 40,
-                  padding: const EdgeInsets.all(0),
-                  child: const Icon(
-                    LineIcons.alternateTrash,
-                    size: 26,
-                  ),
-                  onPressed: () {
-                    controller.clearHistory();
-                  },
-                ),
-              ],
-            ),
-          ),
-        ),
+        // sliverNavigationBar,
         CupertinoSliverRefreshControl(
           onRefresh: () async {
             await controller.reloadData();
@@ -63,6 +90,11 @@ class HistoryTab extends GetView<HistoryViewController> {
       ],
     );
 
-    return CupertinoPageScaffold(child: customScrollView);
+    return CupertinoPageScaffold(
+        navigationBar: navigationBar,
+        child: SafeArea(
+          child: CupertinoScrollbar(
+              controller: scrollController, child: customScrollView),
+        ));
   }
 }

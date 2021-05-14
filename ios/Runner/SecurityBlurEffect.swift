@@ -9,8 +9,7 @@ import Foundation
 import UIKit
 
 
-public class SecurityBlurEffect
-{
+public class SecurityBlurEffect {
      class func addBlurEffect(){
         
         let blurEffect = UIBlurEffect(style: UIBlurEffect.Style.regular)
