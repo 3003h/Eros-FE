@@ -26,7 +26,7 @@ class CommentController extends GetxController
   GalleryItem get _item => pageController.galleryItem;
   late String comment;
   late String oriComment;
-  late String commentId;
+  String? commentId;
   FocusNode focusNode = FocusNode();
   ScrollController scrollController = ScrollController();
 
@@ -143,16 +143,18 @@ class CommentController extends GetxController
     //   ..vote = rult.commentVote
     //   ..score = '${rult.commentScore}';
 
-    final int? _commentIndex =
-        state?.indexWhere((element) => element.id == rult.commentId.toString());
+    final int? _commentIndex = state?.indexWhere(
+        (GalleryComment element) => element.id == rult.commentId.toString());
     state![_commentIndex!] = state![_commentIndex]
         .copyWith(vote: rult.commentVote, score: '${rult.commentScore}');
 
-    update(['${rult.commentId}']);
+    // update(['${rult.commentId}']);
+    update();
+    logger.v('update CommentController id ${rult.commentId}');
   }
 
   Future<void> _postComment(String comment,
-      {bool isEdit = false, required String commentId}) async {
+      {bool isEdit = false, String? commentId}) async {
     final bool rult = await Api.postComment(
       gid: pageController.gid,
       token: pageController.galleryItem.token!,

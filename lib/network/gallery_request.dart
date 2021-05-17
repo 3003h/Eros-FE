@@ -715,7 +715,7 @@ class Api {
     required String gid,
     required String token,
     required String comment,
-    required String commentId,
+    String? commentId,
     bool isEdit = false,
     GalleryItem? inGalleryItem,
   }) async {
@@ -731,7 +731,7 @@ class Api {
         url,
         data: dio.FormData.fromMap({
           isEdit ? 'commenttext_edit' : 'commenttext_new': comment,
-          if (isEdit) 'edit_comment': int.parse(commentId),
+          if (isEdit && commentId != null) 'edit_comment': int.parse(commentId),
         }),
         options: dio.Options(
             followRedirects: false,

@@ -2,11 +2,11 @@ import 'package:fehviewer/common/service/depth_service.dart';
 import 'package:fehviewer/pages/gallery/controller/archiver_controller.dart';
 import 'package:fehviewer/pages/gallery/controller/comment_controller.dart';
 import 'package:fehviewer/pages/gallery/controller/gallery_fav_controller.dart';
-import 'package:fehviewer/pages/gallery/controller/gallery_page_controller.dart';
 import 'package:fehviewer/pages/gallery/controller/rate_controller.dart';
 import 'package:fehviewer/pages/gallery/controller/taginfo_controller.dart';
 import 'package:fehviewer/pages/gallery/controller/torrent_controller.dart';
 import 'package:fehviewer/pages/gallery/view/gallery_page.dart';
+import 'package:fehviewer/utils/logger.dart';
 import 'package:get/get.dart';
 
 class GalleryBinding extends Bindings {
@@ -15,11 +15,12 @@ class GalleryBinding extends Bindings {
 
   @override
   void dependencies() {
-    Get.lazyPut(
-        () => GalleryPageController(
-            galleryRepository: galleryRepository ??
-                Get.find<GalleryRepository>(tag: pageCtrlDepth)),
-        tag: pageCtrlDepth);
+    logger.d('GalleryBinding dependencies');
+    // Get.lazyPut(
+    //     () => GalleryPageController(
+    //         galleryRepository: galleryRepository ??
+    //             Get.find<GalleryRepository>(tag: pageCtrlDepth)),
+    //     tag: pageCtrlDepth);
 
     // Get.lazyPut(() => GalleryPageController(), tag: pageCtrlDepth);
 

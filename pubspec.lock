@@ -651,7 +651,7 @@ packages:
       name: json_serializable
       url: "https://pub.flutter-io.cn"
     source: hosted
-    version: "4.1.1"
+    version: "4.1.2"
   line_icons:
     dependency: "direct main"
     description:
@@ -728,7 +728,7 @@ packages:
       name: moor
       url: "https://pub.flutter-io.cn"
     source: hosted
-    version: "4.2.1"
+    version: "4.3.0"
   moor_flutter:
     dependency: "direct main"
     description:

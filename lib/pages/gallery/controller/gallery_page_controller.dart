@@ -110,7 +110,6 @@ class GalleryPageController extends GetxController
   void uptPreviewBySer({required int ser, required GalleryPreview preview}) {
     final int? _index = galleryItem.galleryPreview
         ?.indexWhere((GalleryPreview element) => element.ser == ser);
-    logger.v(_index);
     if (_index != null && _index >= 0) {
       galleryItem.galleryPreview?[_index] = preview;
     }
@@ -169,6 +168,7 @@ class GalleryPageController extends GetxController
 
   @override
   void onClose() {
+    super.onClose();
     scrollController.dispose();
 
     // 为了保证能正常关闭
@@ -182,7 +182,6 @@ class GalleryPageController extends GetxController
 
     logger.d('onClose GalleryPageController $pageCtrlDepth');
     Get.find<DepthService>().popPageCtrl();
-    super.onClose();
   }
 
   // 阅读按钮开关

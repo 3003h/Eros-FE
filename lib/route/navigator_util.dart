@@ -87,7 +87,10 @@ class NavigatorUtil {
       // );
 
       Get.to(
-        () => GalleryMainPage(),
+        () => GalleryMainPage(
+          galleryRepository:
+              GalleryRepository(item: galleryItem, tabTag: tabTag),
+        ),
         binding: GalleryBinding(
           galleryRepository:
               GalleryRepository(item: galleryItem, tabTag: tabTag),
