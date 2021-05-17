@@ -3,7 +3,7 @@ description: ..
 
 publish_to: 'none' # Remove this line if you wish to publish to pub.dev
 
-version: 1.1.8+169
+version: 1.1.9+170
 
 environment:
   sdk: '>=2.12.0-0 <3.0.0'
@@ -102,7 +102,7 @@ dependencies:
   permission_handler: ^7.1.0
 
   # 缓存
-  flutter_cache_manager: ^3.0.1
+  flutter_cache_manager: ^3.0.2
 
   # 图片保存
   image_gallery_saver: #^1.6.8
@@ -143,8 +143,8 @@ dependencies:
   copy_with_extension: ^2.0.0
   package_info: ^2.0.0
 
-  firebase_analytics: ^8.0.3
-  firebase_crashlytics: ^2.0.2
+  firebase_analytics: ^8.0.4
+  firebase_crashlytics: ^2.0.3
   firebase_performance: ^0.7.0+2
   dio_firebase_performance: ^0.3.1-dev.3
 #    git:
@@ -163,7 +163,7 @@ dev_dependencies:
   # flutter pub run apn_json2model
   apn_json2model: ^2.2.7
   build_runner: ^2.0.3
-  json_serializable: ^4.1.1
+  json_serializable: ^4.1.2
   json_annotation: ^4.0.1
 
   floor_generator: ^1.1.0

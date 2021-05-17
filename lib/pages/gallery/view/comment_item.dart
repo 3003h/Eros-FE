@@ -407,6 +407,7 @@ class CommentItem extends StatelessWidget {
                               primaryColor: ThemeColors.commitText),
                           child: Row(
                             children: <Widget>[
+                              // 翻译
                               if (_ehConfigService.commentTrans.value)
                                 CupertinoButton(
                                   padding: const EdgeInsets.symmetric(
@@ -425,6 +426,7 @@ class CommentItem extends StatelessWidget {
                                     showTranslatorDialog(galleryComment.text);
                                   },
                                 ),
+                              // 点赞
                               if (galleryComment.canVote ?? false)
                                 CupertinoButton(
                                   padding: const EdgeInsets.symmetric(
@@ -449,6 +451,7 @@ class CommentItem extends StatelessWidget {
                                         .commitVoteUp(galleryComment.id!);
                                   },
                                 ),
+                              // 点踩
                               if (galleryComment.canVote ?? false)
                                 CupertinoButton(
                                   padding: const EdgeInsets.symmetric(
@@ -473,6 +476,7 @@ class CommentItem extends StatelessWidget {
                                         .commitVoteDown(galleryComment.id!);
                                   },
                                 ),
+                              // 编辑回复
                               if (galleryComment.canEdit ?? false)
                                 CupertinoButton(
                                   padding: const EdgeInsets.symmetric(
@@ -498,6 +502,7 @@ class CommentItem extends StatelessWidget {
                             ],
                           ),
                         ),
+                        // 分值
                         Text(
                           galleryComment.score,
                           style: TextStyle(

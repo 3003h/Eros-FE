@@ -32,10 +32,21 @@ class GalleryRepository {
 }
 
 class GalleryMainPage extends StatelessWidget {
-  GalleryPageController get _controller => Get.find(tag: pageCtrlDepth);
+  const GalleryMainPage({this.galleryRepository});
+
+  // GalleryPageController get _controller => Get.find(tag: pageCtrlDepth);
+  // late final GalleryPageController _controller;
+
+  final GalleryRepository? galleryRepository;
 
   @override
   Widget build(BuildContext context) {
+    final GalleryPageController _controller = Get.put(
+        GalleryPageController(
+            galleryRepository: galleryRepository ??
+                Get.find<GalleryRepository>(tag: pageCtrlDepth)),
+        tag: pageCtrlDepth);
+
     final String? tabTag = _controller.galleryRepository?.tabTag;
 
     final GalleryItem _item = _controller.galleryItem;
@@ -107,7 +118,10 @@ class GalleryMainPage extends StatelessWidget {
           SliverSafeArea(
             top: false,
             bottom: false,
-            sliver: GalleryDetail(tabTag: tabTag),
+            sliver: GalleryDetail(
+              tabTag: tabTag,
+              controller: _controller,
+            ),
           ),
         ],
       ),
@@ -149,16 +163,21 @@ class GalleryDetail extends StatelessWidget {
   const GalleryDetail({
     Key? key,
     this.tabTag,
+    required this.controller,
   }) : super(key: key);
 
   final String? tabTag;
+  final GalleryPageController controller;
   GalleryPageController get _controller => Get.find(tag: pageCtrlDepth);
 
   @override
   Widget build(BuildContext context) {
     return _controller.fromUrl
         ? _DetailFromUrl()
-        : _DetailFromItem(tabTag: tabTag);
+        : _DetailFromItem(
+            tabTag: tabTag,
+            controller: _controller,
+          );
   }
 }
 
@@ -182,7 +201,11 @@ class _DetailFromUrl extends StatelessWidget {
                 color: CupertinoDynamicColor.resolve(
                     CupertinoColors.systemGrey4, context),
               ),
-              if (state != null) _DatailWidget(state: state),
+              if (state != null)
+                _DatailWidget(
+                  state: state,
+                  controller: _controller,
+                ),
             ],
           ),
         );
@@ -218,11 +241,13 @@ class _DatailWidget extends StatelessWidget {
   const _DatailWidget({
     Key? key,
     required this.state,
+    required this.controller,
   }) : super(key: key);
 
   final GalleryItem state;
+  final GalleryPageController controller;
 
-  GalleryPageController get _controller => Get.find(tag: pageCtrlDepth);
+  // GalleryPageController get _controller => Get.find(tag: pageCtrlDepth);
 
   @override
   Widget build(BuildContext context) {
@@ -230,7 +255,7 @@ class _DatailWidget extends StatelessWidget {
       // 进行评分
       Expanded(
         child: Obx(() => TextBtn(
-              _controller.isRatinged
+              controller.isRatinged
                   ? FontAwesomeIcons.solidStar
                   : FontAwesomeIcons.star,
               title: S.of(context).p_Rate,
@@ -246,7 +271,7 @@ class _DatailWidget extends StatelessWidget {
         child: TextBtn(
           FontAwesomeIcons.solidArrowAltCircleDown,
           title: S.of(context).p_Download,
-          onTap: Global.inDebugMode ? _controller.downloadGallery : null,
+          onTap: Global.inDebugMode ? controller.downloadGallery : null,
         ),
       ),
       // 种子下载
@@ -311,25 +336,27 @@ class _DatailWidget extends StatelessWidget {
               CupertinoColors.systemGrey4, context),
         ),
         PreviewGrid(
-          previews: _controller.firstPagePreview,
+          previews: controller.firstPagePreview,
           gid: state.gid ?? '',
         ),
-        MorePreviewButton(hasMorePreview: _controller.hasMorePreview),
+        MorePreviewButton(hasMorePreview: controller.hasMorePreview),
       ],
     );
   }
 }
 
 class _DetailFromItem extends StatelessWidget {
-  const _DetailFromItem({Key? key, this.tabTag}) : super(key: key);
+  const _DetailFromItem({Key? key, this.tabTag, required this.controller})
+      : super(key: key);
 
   final String? tabTag;
+  final GalleryPageController controller;
 
-  GalleryPageController get _controller => Get.find(tag: pageCtrlDepth);
+  // GalleryPageController get _controller => Get.find(tag: pageCtrlDepth);
 
   @override
   Widget build(BuildContext context) {
-    final GalleryItem galleryItem = _controller.galleryItem;
+    final GalleryItem galleryItem = controller.galleryItem;
 
     return SliverToBoxAdapter(
       child: Column(
@@ -343,10 +370,13 @@ class _DetailFromItem extends StatelessWidget {
             color: CupertinoDynamicColor.resolve(
                 CupertinoColors.systemGrey4, context),
           ),
-          _controller.obx(
+          controller.obx(
             (GalleryItem? state) {
               return state != null
-                  ? _DatailWidget(state: state)
+                  ? _DatailWidget(
+                      state: state,
+                      controller: controller,
+                    )
                   : const SizedBox.shrink();
             },
             onLoading: () {
@@ -365,7 +395,7 @@ class _DetailFromItem extends StatelessWidget {
               return Container(
                 padding: const EdgeInsets.only(bottom: 50, top: 50),
                 child: GalleryErrorPage(
-                  onTap: _controller.handOnRefreshAfterErr,
+                  onTap: controller.handOnRefreshAfterErr,
                 ),
               );
             },
