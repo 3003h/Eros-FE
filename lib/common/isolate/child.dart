@@ -1,6 +1,7 @@
 part of 'download.dart';
 
 /// isoload下载入口函数
+/// 在这里进行实际的链接解析，图片文件下载
 void _isolateDownload(SendPort sendPort) {
   // logger.d('init _isolateDownload');
   // 创建一个消息接收器
@@ -17,19 +18,26 @@ void _isolateDownload(SendPort sendPort) {
         final _RequestBean _requestBean = message.data;
 
         switch (_requestType) {
-          case _RequestType.addTask: // 添加下载任务
+
+          /// 添加下载任务
+          /// 接收父线程发过来的画廊信息
+          /// 开始获取解析画廊web页面
+          /// 解析画廊图片url
+          case _RequestType.addTask:
             final GalleryTask _initGalleryTask = _requestBean.galleryTask!;
             logger.d(
                 'isolate add task ${_initGalleryTask.gid} ${_initGalleryTask.title}');
 
             // 获取所有图片页的href链接 通知父线程
+            logger.v('获取所有图片页的href链接 通知父线程 start');
             final List<GalleryPreview> _previews =
                 await _updateDtl(_requestBean, sendPort);
 
-            // 更新大图url 通知父线程
+            // 更新大图url 下载图片 通知父线程
+            logger.v('更新大图url 下载图片 通知父线程 start');
             await _fetchAllImageInfo(_requestBean, sendPort, _previews);
 
-            // 发送消息回父isolate
+            // 测试 发送消息回父isolate
             sendPort.send(
               _ResponseProtocol.complete(
                 _ResponseBean(
@@ -80,15 +88,17 @@ Future<void> _fetchAllImageInfo(
   List<GalleryPreview> _previews,
 ) async {
   // 初始化的明细任务 可为空
-  final _imageTasks = _requestBean.imageTasks;
+  final List<GalleryImageTask>? _imageTasks = _requestBean.imageTasks;
 
   // 依次获取大图url 更新明细
+  logger.v('循环处理 依次获取大图url 更新明细');
   for (final GalleryPreview preview in _previews) {
     //
     bool _imageTaskUrlIsNotExist = true;
+    late final GalleryImageTask _imageTask;
     if (_imageTasks!.isNotEmpty) {
-      final GalleryImageTask _imageTask =
-          _imageTasks.firstWhere((element) => element.ser == preview.ser);
+      _imageTask = _imageTasks
+          .firstWhere((GalleryImageTask element) => element.ser == preview.ser);
       _imageTaskUrlIsNotExist =
           _imageTask.imageUrl == null || _imageTask.imageUrl!.isEmpty;
     }
@@ -96,16 +106,16 @@ Future<void> _fetchAllImageInfo(
     try {
       if ((preview.largeImageUrl == null || preview.largeImageUrl!.isEmpty) &&
           _imageTaskUrlIsNotExist) {
-        // logger.d('get imageUrl ${preview.ser} \n${preview.toJson()}');
+        logger.d('new get imageUrl ${preview.ser} ');
         final GalleryPreview _info = await _isoParaImageLageInfoFromHtml(
           preview.href!,
-          isSiteEx: _requestBean.isSiteEx!,
+          isSiteEx: _requestBean.isSiteEx ?? false,
           appSupportPath: _requestBean.appSupportPath!,
         );
-        logger.d('iso ${preview.ser} => ${_info.largeImageUrl}');
+        logger.d('isolate ${preview.ser} => ${_info.largeImageUrl}');
         final String _fileName = _info.largeImageUrl!
             .substring(_info.largeImageUrl!.lastIndexOf('/') + 1);
-        logger.d('iso ${preview.ser} => _fileName $_fileName');
+        logger.d('isolate ${preview.ser} => _fileName $_fileName');
 
         final ProgessBean _progessBean = ProgessBean(updateImages: [
           GalleryImageTask(
@@ -117,7 +127,7 @@ Future<void> _fetchAllImageInfo(
             token: '',
           ),
         ]);
-        // 发送消息回父isolate 更新数据库记录
+        // 发送消息回父 isolate, 更新明细中的largeImageUrl,sourceId,_fileName
         sendPort.send(
           _ResponseProtocol.progress(
             _ResponseBean(
@@ -126,11 +136,61 @@ Future<void> _fetchAllImageInfo(
             ),
           ),
         );
+
+        _downloadImage(
+          _requestBean,
+          sendPort,
+          _info.largeImageUrl!,
+          _fileName,
+          _requestBean.appDocPath!,
+          _requestBean.extStorePath!,
+          _requestBean.downloadPath!,
+        );
+      } else if (_imageTask.imageUrl != null &&
+          _imageTask.imageUrl!.isNotEmpty) {
+        logger.v('re _downloadImage');
+
+        try {
+          _downloadImage(
+            _requestBean,
+            sendPort,
+            _imageTask.imageUrl!,
+            _imageTask.filePath ?? '',
+            _requestBean.appDocPath!,
+            _requestBean.extStorePath!,
+            _requestBean.downloadPath!,
+          );
+        } catch (e) {
+          logger.e('$e');
+        }
       }
-    } catch (e) {
-      logger.d('$e');
+    } catch (e, stack) {
+      logger.d('$e\n$stack');
+      // rethrow;
     }
   }
+}
+
+Future<void> _downloadImage(
+  _RequestBean _requestBean,
+  SendPort sendPort,
+  String largeImageUrl,
+  String fileName,
+  String appDocPath,
+  String extStorePath,
+  String downloadPath,
+) async {
+  final String dlPath = await _getDownloadPath(appDocPath, extStorePath);
+  // 下载图片
+  final String savePath = path.join(downloadPath, fileName);
+  logger.v('savePath $savePath');
+  _downLoadFile(
+      appSupportPath: _requestBean.appSupportPath!,
+      urlPath: largeImageUrl,
+      savePath: savePath,
+      isSiteEx: _requestBean.isSiteEx ?? false);
+
+  // 发送消息回父 isolate, 更新明细中的下载状态
 }
 
 /// 获取所有href
@@ -323,4 +383,54 @@ Future<GalleryPreview> _isoParaImageLageInfoFromHtml(
       ser: -1);
 
   return _rePreview;
+}
+
+//下载文件
+Future<Response<dynamic>?> _downLoadFile(
+    {required String appSupportPath,
+    bool isSiteEx = false,
+    required String urlPath,
+    required String savePath}) async {
+  late Response<dynamic> response;
+
+  final Dio _isolateDio = await _getIsolateDio(
+    isSiteEx: isSiteEx,
+    appSupportPath: appSupportPath,
+  );
+
+  try {
+    response = await _isolateDio.download(
+      urlPath,
+      savePath,
+      onReceiveProgress: (int count, int total) {
+        // print('$count / $total');
+      },
+      options: Options(
+        receiveTimeout: 0,
+      ),
+    );
+    print('downLoadFile response: $response');
+  } on DioError catch (e) {
+    print('downLoadFile exception: $e');
+    rethrow;
+  }
+  return response;
+}
+
+/// 获取下载路径
+Future<String> _getDownloadPath(String appDocPath, String extStorePath) async {
+  final String _dirPath = GetPlatform.isAndroid
+      ? path.join(extStorePath, 'Download')
+      : path.join(appDocPath, 'Download');
+  // : Global.appDocPath;
+
+  final Directory savedDir = Directory(_dirPath);
+  // 判断下载路径是否存在
+  final bool hasExisted = savedDir.existsSync();
+  // 不存在就新建路径
+  if (!hasExisted) {
+    savedDir.createSync(recursive: true);
+  }
+
+  return _dirPath;
 }

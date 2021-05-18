@@ -23,6 +23,7 @@ import 'package:fehviewer/utils/utility.dart';
 import 'package:get/get.dart' hide Response;
 import 'package:html/dom.dart';
 import 'package:html/parser.dart' show parse;
+import 'package:path/path.dart' as path;
 
 part 'child.dart';
 
@@ -55,6 +56,7 @@ class _RequestBean {
   _RequestBean({
     this.appSupportPath,
     this.appDocPath,
+    this.extStorePath,
     this.isSiteEx,
     this.downloadPath,
     this.initPreviews,
@@ -64,6 +66,7 @@ class _RequestBean {
 
   final String? appSupportPath;
   final String? appDocPath;
+  final String? extStorePath;
   final bool? isSiteEx;
   final String? downloadPath;
   final List<GalleryPreview>? initPreviews;
@@ -170,7 +173,7 @@ class DownloadManager {
 
               logger.v('insert end');
 
-              // 测试插入结果
+              // 测试 插入结果
               final List<GalleryImageTask> _list =
                   await _imageTaskDao.findAllGalleryTaskByGid(_galleryTask.gid);
               logger.d('${_list.map((e) => e.toString()).join('\n')} ');
@@ -186,9 +189,10 @@ class DownloadManager {
 
               logger.v('parent progess '
                   '${_progess.updateImages!.map((e) => e.toString()).join('\n')}');
-              for (final _uptImageTask in _progess.updateImages!) {
-                final _oriImageTask = await _imageTaskDao.findGalleryTaskByKey(
-                    _uptImageTask.gid, _uptImageTask.ser);
+              for (final GalleryImageTask _uptImageTask
+                  in _progess.updateImages!) {
+                final GalleryImageTask? _oriImageTask = await _imageTaskDao
+                    .findGalleryTaskByKey(_uptImageTask.gid, _uptImageTask.ser);
 
                 final GalleryImageTask _uptTask = _oriImageTask!.copyWith(
                   imageUrl: _uptImageTask.imageUrl!,
@@ -202,7 +206,7 @@ class DownloadManager {
                   //     .firstWhere((GalleryPreview element) =>
                   //         element.ser == _uptImageTask.ser)
                   //     .largeImageUrl = _uptImageTask.imageUrl;
-                  final _preIndex = _pageController.previews.indexWhere(
+                  final int _preIndex = _pageController.previews.indexWhere(
                       (GalleryPreview element) =>
                           element.ser == _uptImageTask.ser);
                   _pageController.previews[_preIndex] = _pageController
@@ -247,6 +251,7 @@ class DownloadManager {
       isSiteEx: Get.find<EhConfigService>().isSiteEx.value,
       appSupportPath: Global.appSupportPath,
       appDocPath: Global.appDocPath,
+      extStorePath: Global.extStorePath,
       initPreviews: _pageController.firstPagePreview,
       downloadPath: downloadPath,
     );

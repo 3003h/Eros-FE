@@ -229,13 +229,13 @@ class DownloadController extends GetxController {
 
     showToast('${galleryTask.gid} 下载任务已入队');
 
-    final String _downloadPath = galleryTask.title;
-    _getGalleryDownloadPath(_downloadPath);
+    final String _downloadPath = path.join(galleryTask.gid.toString());
+    final String _fullPath = await _getGalleryDownloadPath(_downloadPath);
 
     downloadManager.addTask(
       galleryTask: galleryTask,
       imageTasks: _imageTasks,
-      downloadPath: _downloadPath,
+      downloadPath: _fullPath,
     );
   }
 
