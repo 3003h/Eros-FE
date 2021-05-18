@@ -164,6 +164,7 @@ class Global {
   static String appSupportPath = '';
   static String appDocPath = '';
   static String tempPath = '';
+  static late String extStorePath;
 
   static late PackageInfo packageInfo;
 
@@ -197,6 +198,9 @@ class Global {
     appSupportPath = (await getApplicationSupportDirectory()).path;
     appDocPath = (await getApplicationDocumentsDirectory()).path;
     tempPath = (await getTemporaryDirectory()).path;
+    extStorePath = !Platform.isIOS
+        ? (await getExternalStorageDirectory())?.path ?? ''
+        : '';
 
     packageInfo = await PackageInfo.fromPlatform();
 
