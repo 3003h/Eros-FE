@@ -112,7 +112,7 @@ class ViewController extends GetxController {
       )
           .listen((GalleryPreview? event) {
         if (event != null) {
-          logger5.d('preloadImage upt previewMap ${event.ser}');
+          // logger5.d('preloadImage upt previewMap ${event.ser}');
           _galleryPageController.uptPreviewBySer(
               ser: event.ser, preview: event);
         }

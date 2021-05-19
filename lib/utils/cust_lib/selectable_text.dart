@@ -1,3 +1,4 @@
+/*
 // Copyright 2014 The Flutter Authors. All rights reserved.
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
@@ -5,31 +6,26 @@
 import 'dart:ui';
 
 import 'package:flutter/cupertino.dart';
-import 'package:flutter/foundation.dart';
-import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
-import 'package:flutter/services.dart';
-import 'package:flutter/widgets.dart';
+import 'package:flutter/foundation.dart';
+import 'package:flutter/gestures.dart';
 
-/// An eyeballed value that moves the cursor slightly left of where it is
-/// rendered for text on Android so its positioning more accurately matches the
-/// native iOS text cursor positioning.
-///
-/// This value is in device pixels, not logical pixels as is typically used
-/// throughout the codebase.
 const int iOSHorizontalOffset = -2;
 
 class _TextSpanEditingController extends TextEditingController {
   _TextSpanEditingController({required TextSpan textSpan})
       : assert(textSpan != null),
         _textSpan = textSpan,
-        super(text: textSpan.toPlainText());
+        super(text: textSpan.toPlainText(includeSemanticsLabels: false));
 
   final TextSpan _textSpan;
 
   @override
-  TextSpan buildTextSpan({TextStyle? style, bool? withComposing}) {
+  TextSpan buildTextSpan(
+      {required BuildContext context,
+      TextStyle? style,
+      required bool withComposing}) {
     // This does not care about composing.
     return TextSpan(
       style: style,
@@ -94,7 +90,7 @@ class _SelectableTextSelectionGestureDetectorBuilder
           break;
       }
     }
-    if (_state.widget.onTap != null) _state.widget.onTap!();
+    _state.widget.onTap?.call();
   }
 
   @override
@@ -124,7 +120,7 @@ class _SelectableTextSelectionGestureDetectorBuilder
 /// {@tool snippet}
 ///
 /// ```dart
-/// SelectableText(
+/// const SelectableText(
 ///   'Hello! How are you?',
 ///   textAlign: TextAlign.center,
 ///   style: TextStyle(fontWeight: FontWeight.bold),
@@ -480,7 +476,8 @@ class _SelectableTextState extends State<SelectableText>
     _selectionGestureDetectorBuilder =
         _SelectableTextSelectionGestureDetectorBuilder(state: this);
     _controller = _TextSpanEditingController(
-        textSpan: widget.textSpan ?? TextSpan(text: widget.data));
+      textSpan: widget.textSpan ?? TextSpan(text: widget.data),
+    );
     _controller.addListener(_onControllerChanged);
   }
 
@@ -491,7 +488,8 @@ class _SelectableTextState extends State<SelectableText>
         widget.textSpan != oldWidget.textSpan) {
       _controller.removeListener(_onControllerChanged);
       _controller = _TextSpanEditingController(
-          textSpan: widget.textSpan ?? TextSpan(text: widget.data));
+        textSpan: widget.textSpan ?? TextSpan(text: widget.data),
+      );
       _controller.addListener(_onControllerChanged);
     }
     if (_effectiveFocusNode.hasFocus && _controller.selection.isCollapsed) {
@@ -519,6 +517,8 @@ class _SelectableTextState extends State<SelectableText>
     });
   }
 
+  TextSelection? _lastSeenTextSelection;
+
   void _handleSelectionChanged(
       TextSelection selection, SelectionChangedCause? cause) {
     final bool willShowSelectionHandles = _shouldShowSelectionHandles(cause);
@@ -527,10 +527,13 @@ class _SelectableTextState extends State<SelectableText>
         _showSelectionHandles = willShowSelectionHandles;
       });
     }
-
-    if (widget.onSelectionChanged != null) {
+    // TODO(chunhtai): The selection may be the same. We should remove this
+    // check once this is fixed https://github.com/flutter/flutter/issues/76349.
+    if (widget.onSelectionChanged != null &&
+        _lastSeenTextSelection != selection) {
       widget.onSelectionChanged!(selection, cause);
     }
+    _lastSeenTextSelection = selection;
 
     switch (Theme.of(context).platform) {
       case TargetPlatform.iOS:
@@ -721,3 +724,4 @@ class _SelectableTextState extends State<SelectableText>
     );
   }
 }
+*/

@@ -840,7 +840,7 @@ packages:
       name: permission_handler_platform_interface
       url: "https://pub.flutter-io.cn"
     source: hosted
-    version: "3.3.0"
+    version: "3.4.0"
   petitparser:
     dependency: transitive
     description:

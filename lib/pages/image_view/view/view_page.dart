@@ -29,7 +29,7 @@ class GalleryViewPage extends GetView<ViewController> {
   /// 画廊图片大图浏览
   @override
   Widget build(BuildContext context) {
-    logger.d('rebuild GalleryViewPage');
+    // logger.d('rebuild GalleryViewPage');
     vState.initSize(context);
     // logger.d('build ${state.viewMode}  ${state.columnMode}');
     return CupertinoTheme(

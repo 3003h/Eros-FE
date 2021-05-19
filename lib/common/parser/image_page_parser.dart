@@ -1,5 +1,4 @@
 import 'package:fehviewer/models/index.dart';
-import 'package:fehviewer/utils/logger.dart';
 import 'package:html/dom.dart';
 import 'package:html/parser.dart' show parse;
 
@@ -12,7 +11,7 @@ GalleryPreview paraImage(String htmlText, String href) {
   final RegExp regImageUrl = RegExp('<img[^>]*src=\"([^\"]+)\" style');
   final String imageUrl = regImageUrl.firstMatch(htmlText)?.group(1) ?? '';
 
-  logger.d('largeImageUrl $imageUrl');
+  // logger.d('largeImageUrl $imageUrl');
 
   final Element? elmI2 = document.querySelector('#i2 > div:nth-child(1)');
   final RegExpMatch? _xy =
@@ -26,7 +25,7 @@ GalleryPreview paraImage(String htmlText, String href) {
           .group(1) ??
       '';
 
-  logger.v('para_sourceId: $_sourceId ');
+  // logger.v('para_sourceId: $_sourceId ');
 
   final GalleryPreview _rePreview = kDefGalleryPreview.copyWith(
     largeImageUrl: imageUrl,
