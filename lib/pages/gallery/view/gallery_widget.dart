@@ -9,20 +9,22 @@ import 'package:fehviewer/generated/l10n.dart';
 import 'package:fehviewer/models/index.dart';
 import 'package:fehviewer/pages/gallery/controller/comment_controller.dart';
 import 'package:fehviewer/pages/gallery/controller/gallery_page_controller.dart';
-import 'package:fehviewer/pages/gallery/view/all_preview_page.dart';
 import 'package:fehviewer/pages/gallery/view/comment_item.dart';
 import 'package:fehviewer/pages/gallery/view/gallery_favcat.dart';
 import 'package:fehviewer/pages/gallery/view/preview_clipper.dart';
 import 'package:fehviewer/pages/gallery/view/taginfo_dialog.dart';
 import 'package:fehviewer/route/navigator_util.dart';
 import 'package:fehviewer/route/routes.dart';
-import 'package:fehviewer/utils/cust_lib/selectable_text.dart';
+// import 'package:fehviewer/utils/cust_lib/selectable_text.dart';
 import 'package:fehviewer/utils/logger.dart';
 import 'package:fehviewer/widget/rating_bar.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:flutter/material.dart' hide SelectableText;
+import 'package:flutter/material.dart';
+// import 'package:flutter/material.dart' hide SelectableText;
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
+
+import 'all_preview_page_new.dart';
 
 const double kHeightPreview = 180.0;
 const double kPadding = 12.0;
@@ -654,7 +656,7 @@ class MorePreviewButton extends StatelessWidget {
       ),
       onPressed: () {
         Get.to(
-          () => const AllPreviewPage(),
+          () => AllPreviewPageNew(),
           transition: Transition.cupertino,
         );
       },

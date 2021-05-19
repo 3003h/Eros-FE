@@ -1118,7 +1118,7 @@ class Api {
           params: _params,
         ) ??
         '';
-    logger.d('url:$url _params:$_params');
+    // logger.d('url:$url _params:$_params');
 
     // logger.d('$response ');
 

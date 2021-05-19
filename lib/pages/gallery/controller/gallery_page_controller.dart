@@ -52,6 +52,7 @@ class GalleryPageController extends GetxController
   set galleryItem(GalleryItem val) {
     _galleryItem = val;
   }
+
   // void initItem(GalleryItem val) {
   //   _galleryItem = val;
   // }
@@ -62,11 +63,15 @@ class GalleryPageController extends GetxController
   bool isRefresh = false;
 
   final RxBool _fromUrl = false.obs;
+
   bool get fromUrl => _fromUrl.value;
+
   set fromUrl(bool val) => _fromUrl.value = val;
 
   final RxBool _isRatinged = false.obs;
+
   bool get isRatinged => _isRatinged.value;
+
   set isRatinged(bool val) => _isRatinged.value = val;
 
   // 评分后更新ui和数据
@@ -107,18 +112,20 @@ class GalleryPageController extends GetxController
   }
 
   List<GalleryPreview> get previews => galleryItem.galleryPreview ?? [];
+
   Map<int, GalleryPreview> get previewMap => galleryItem.previewMap;
+
   int get filecount => int.parse(galleryItem.filecount ?? '0');
 
-  // List<GalleryPreview> get previewsFromMap {
-  //   List<MapEntry<int, GalleryPreview>> list = previewMap.entries
-  //       .map((MapEntry<int, GalleryPreview> e) => MapEntry(e.key, e.value))
-  //       .toList();
-  //   logger.d('previewsFromMap len ${list.length}');
-  //   list.sort((a, b) => a.key.compareTo(b.key));
-  //
-  //   return list.map((e) => e.value).toList();
-  // }
+  List<GalleryPreview> get previewsFromMap {
+    List<MapEntry<int, GalleryPreview>> list = previewMap.entries
+        .map((MapEntry<int, GalleryPreview> e) => MapEntry(e.key, e.value))
+        .toList();
+    logger.d('previewsFromMap len ${list.length}');
+    list.sort((a, b) => a.key.compareTo(b.key));
+
+    return list.map((e) => e.value).toList();
+  }
 
   void uptPreviewBySer({required int ser, required GalleryPreview preview}) {
     final int? _index = galleryItem.galleryPreview
@@ -199,6 +206,7 @@ class GalleryPageController extends GetxController
 
   // 阅读按钮开关
   final RxBool _enableRead = false.obs;
+
   bool get enableRead => _enableRead.value;
 
   bool get hasMorePreview {
@@ -207,7 +215,9 @@ class GalleryPageController extends GetxController
 
   // 控制隐藏导航栏按钮和封面
   final RxBool _hideNavigationBtn = true.obs;
+
   bool get hideNavigationBtn => _hideNavigationBtn.value;
+
   set hideNavigationBtn(bool val) => _hideNavigationBtn.value = val;
 
   // 第一页的缩略图对象数组
@@ -230,6 +240,9 @@ class GalleryPageController extends GetxController
     // try {
     //   Get.find<ViewController>().update([GetID.IMAGE_VIEW]);
     // } catch (_) {}
+
+    logger.v(
+        'addAllPreview ${galleryPreview.first.ser}~${galleryPreview.last.ser} ');
 
     // update();
     for (final GalleryPreview _preview in galleryPreview) {
@@ -540,7 +553,7 @@ class GalleryPageController extends GetxController
 
       final String? _largeImageUrl = _curPreview.largeImageUrl;
 
-      logger.d('_largeImageUrl $_largeImageUrl');
+      // logger.d('_largeImageUrl $_largeImageUrl');
 
       // 大图url为空或者宽高信息为空的时候 都会解析获取
       if (_largeImageUrl != null &&
