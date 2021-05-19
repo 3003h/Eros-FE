@@ -52,6 +52,9 @@ class GalleryPageController extends GetxController
   set galleryItem(GalleryItem val) {
     _galleryItem = val;
   }
+  // void initItem(GalleryItem val) {
+  //   _galleryItem = val;
+  // }
 
   /// 画廊gid 唯一
   String get gid => galleryItem.gid ?? '';
@@ -106,6 +109,16 @@ class GalleryPageController extends GetxController
   List<GalleryPreview> get previews => galleryItem.galleryPreview ?? [];
   Map<int, GalleryPreview> get previewMap => galleryItem.previewMap;
   int get filecount => int.parse(galleryItem.filecount ?? '0');
+
+  // List<GalleryPreview> get previewsFromMap {
+  //   List<MapEntry<int, GalleryPreview>> list = previewMap.entries
+  //       .map((MapEntry<int, GalleryPreview> e) => MapEntry(e.key, e.value))
+  //       .toList();
+  //   logger.d('previewsFromMap len ${list.length}');
+  //   list.sort((a, b) => a.key.compareTo(b.key));
+  //
+  //   return list.map((e) => e.value).toList();
+  // }
 
   void uptPreviewBySer({required int ser, required GalleryPreview preview}) {
     final int? _index = galleryItem.galleryPreview

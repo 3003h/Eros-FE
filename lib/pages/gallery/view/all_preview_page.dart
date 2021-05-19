@@ -52,7 +52,7 @@ class _AllPreviewPageState extends State<AllPreviewPage> {
   void initState() {
     super.initState();
 
-    _galleryPreviewList = _pageController.galleryItem.galleryPreview ?? [];
+    _galleryPreviewList = _pageController.previews;
     _pageController.currentPreviewPage = 0;
 
     WidgetsBinding.instance?.addPostFrameCallback((Duration callback) {
@@ -214,7 +214,8 @@ class _AllPreviewPageState extends State<AllPreviewPage> {
       refresh: _pageController.isRefresh,
     );
 
-    _galleryPreviewList.addAll(_nextGalleryPreviewList);
+    // _galleryPreviewList.addAll(_nextGalleryPreviewList);
+    _pageController.addAllPreview(_nextGalleryPreviewList);
     setState(() {
       _isLoading = false;
     });
