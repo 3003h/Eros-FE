@@ -11,12 +11,12 @@ class TabConfig {
   final List<TabItem> tabItemList;
 
   factory TabConfig.fromJson(Map<String, dynamic> json) => TabConfig(
-      tabItemList: (json['tab_item_list'] as List)
+      tabItemList: (json['tabItemList'] as List? ?? [])
           .map((e) => TabItem.fromJson(e as Map<String, dynamic>))
           .toList());
 
   Map<String, dynamic> toJson() =>
-      {'tab_item_list': tabItemList.map((e) => e.toJson()).toList()};
+      {'tabItemList': tabItemList.map((e) => e.toJson()).toList()};
 
   TabConfig clone() =>
       TabConfig(tabItemList: tabItemList.map((e) => e.clone()).toList());

@@ -17,17 +17,17 @@ class DownloadConfig {
   final bool? downloadOrigImage;
 
   factory DownloadConfig.fromJson(Map<String,dynamic> json) => DownloadConfig(
-    preloadImage: json['preload_image'] != null ? json['preload_image'] as int : null,
-    multiDownload: json['multi_download'] != null ? json['multi_download'] as int : null,
-    downloadLocatino: json['download_locatino'] != null ? json['download_locatino'] as String : null,
-    downloadOrigImage: json['download_orig_image'] != null ? json['download_orig_image'] as bool : null
+    preloadImage: json['preloadImage'] != null ? json['preloadImage'] as int : null,
+    multiDownload: json['multiDownload'] != null ? json['multiDownload'] as int : null,
+    downloadLocatino: json['downloadLocatino'] != null ? json['downloadLocatino'] as String : null,
+    downloadOrigImage: json['downloadOrigImage'] != null ? json['downloadOrigImage'] as bool : null
   );
   
   Map<String, dynamic> toJson() => {
-    'preload_image': preloadImage,
-    'multi_download': multiDownload,
-    'download_locatino': downloadLocatino,
-    'download_orig_image': downloadOrigImage
+    'preloadImage': preloadImage,
+    'multiDownload': multiDownload,
+    'downloadLocatino': downloadLocatino,
+    'downloadOrigImage': downloadOrigImage
   };
 
   DownloadConfig clone() => DownloadConfig(

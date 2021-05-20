@@ -21,7 +21,7 @@ class GalleryTag {
   factory GalleryTag.fromJson(Map<String,dynamic> json) => GalleryTag(
     title: json['title'] as String,
     type: json['type'] as String,
-    tagTranslat: json['tag_translat'] as String,
+    tagTranslat: json['tagTranslat'] as String,
     intro: json['intro'] != null ? json['intro'] as String : null,
     vote: json['vote'] != null ? json['vote'] as int : null
   );
@@ -29,7 +29,7 @@ class GalleryTag {
   Map<String, dynamic> toJson() => {
     'title': title,
     'type': type,
-    'tag_translat': tagTranslat,
+    'tagTranslat': tagTranslat,
     'intro': intro,
     'vote': vote
   };

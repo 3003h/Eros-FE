@@ -29,8 +29,8 @@ class DownloadTaskInfo {
     gid: json['gid'] != null ? json['gid'] as String : null,
     type: json['type'] != null ? json['type'] as String : null,
     title: json['title'] != null ? json['title'] as String : null,
-    taskId: json['task_id'] != null ? json['task_id'] as String : null,
-    dowmloadType: json['dowmload_type'] != null ? json['dowmload_type'] as String : null,
+    taskId: json['taskId'] != null ? json['taskId'] as String : null,
+    dowmloadType: json['dowmloadType'] != null ? json['dowmloadType'] as String : null,
     status: json['status'] != null ? json['status'] as int : null,
     progress: json['progress'] != null ? json['progress'] as int : null
   );
@@ -40,8 +40,8 @@ class DownloadTaskInfo {
     'gid': gid,
     'type': type,
     'title': title,
-    'task_id': taskId,
-    'dowmload_type': dowmloadType,
+    'taskId': taskId,
+    'dowmloadType': dowmloadType,
     'status': status,
     'progress': progress
   };

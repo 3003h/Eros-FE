@@ -18,16 +18,16 @@ class GalleryCache {
 
   factory GalleryCache.fromJson(Map<String,dynamic> json) => GalleryCache(
     gid: json['gid'] != null ? json['gid'] as String : null,
-    lastIndex: json['last_index'] != null ? json['last_index'] as int : null,
-    lastOffset: json['last_offset'] != null ? json['last_offset'] as double : null,
-    columnModeVal: json['column_mode_val'] != null ? json['column_mode_val'] as String : null
+    lastIndex: json['lastIndex'] != null ? json['lastIndex'] as int : null,
+    lastOffset: json['lastOffset'] != null ? json['lastOffset'] as double : null,
+    columnModeVal: json['columnModeVal'] != null ? json['columnModeVal'] as String : null
   );
   
   Map<String, dynamic> toJson() => {
     'gid': gid,
-    'last_index': lastIndex,
-    'last_offset': lastOffset,
-    'column_mode_val': columnModeVal
+    'lastIndex': lastIndex,
+    'lastOffset': lastOffset,
+    'columnModeVal': columnModeVal
   };
 
   GalleryCache clone() => GalleryCache(

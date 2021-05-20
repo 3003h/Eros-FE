@@ -13,13 +13,13 @@ class AutoLock {
   final bool? isLocking;
 
   factory AutoLock.fromJson(Map<String,dynamic> json) => AutoLock(
-    lastLeaveTime: json['last_leave_time'] != null ? json['last_leave_time'] as int : null,
-    isLocking: json['is_locking'] != null ? json['is_locking'] as bool : null
+    lastLeaveTime: json['lastLeaveTime'] != null ? json['lastLeaveTime'] as int : null,
+    isLocking: json['isLocking'] != null ? json['isLocking'] as bool : null
   );
   
   Map<String, dynamic> toJson() => {
-    'last_leave_time': lastLeaveTime,
-    'is_locking': isLocking
+    'lastLeaveTime': lastLeaveTime,
+    'isLocking': isLocking
   };
 
   AutoLock clone() => AutoLock(

@@ -12,7 +12,7 @@ class LocalFav {
 
   factory LocalFav.fromJson(Map<String, dynamic> json) => LocalFav(
       gallerys: json['gallerys'] != null
-          ? (json['gallerys'] as List)
+          ? (json['gallerys'] as List? ?? [])
               .map((e) => GalleryItem.fromJson(e as Map<String, dynamic>))
               .toList()
           : null);

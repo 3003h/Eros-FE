@@ -48,9 +48,10 @@ class AllPreviewPageNew extends StatelessWidget {
                       delegate: SliverChildBuilderDelegate(
                         (BuildContext context, int index) {
                           //如果显示到最后一个 获取下一页缩略图
-                          if ((index == state.length - 1 &&
-                                  index < _count - 1) ||
-                              state[index + 1].ser - state[index].ser > 1) {
+                          if ((index == state.length - 1 ||
+                                  state[index + 1].ser - state[index].ser >
+                                      1) &&
+                              index < _count - 1) {
                             controller.fetchPriviews();
                           } else if (index >= _count - 1) {
                             controller.fetchFinsh();

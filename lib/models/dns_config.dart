@@ -19,31 +19,30 @@ class DnsConfig {
   final List<DnsCache>? dohCache;
 
   factory DnsConfig.fromJson(Map<String, dynamic> json) => DnsConfig(
-      enableDoH:
-          json['enable_do_h'] != null ? json['enable_do_h'] as bool : null,
-      enableCustomHosts: json['enable_custom_hosts'] != null
-          ? json['enable_custom_hosts'] as bool
+      enableDoH: json['enableDoH'] != null ? json['enableDoH'] as bool : null,
+      enableCustomHosts: json['enableCustomHosts'] != null
+          ? json['enableCustomHosts'] as bool
           : null,
-      enableDomainFronting: json['enable_domain_fronting'] != null
-          ? json['enable_domain_fronting'] as bool
+      enableDomainFronting: json['enableDomainFronting'] != null
+          ? json['enableDomainFronting'] as bool
           : null,
       hosts: json['hosts'] != null
-          ? (json['hosts'] as List)
+          ? (json['hosts'] as List? ?? [])
               .map((e) => DnsCache.fromJson(e as Map<String, dynamic>))
               .toList()
           : null,
-      dohCache: json['doh_cache'] != null
-          ? (json['doh_cache'] as List)
+      dohCache: json['dohCache'] != null
+          ? (json['dohCache'] as List? ?? [])
               .map((e) => DnsCache.fromJson(e as Map<String, dynamic>))
               .toList()
           : null);
 
   Map<String, dynamic> toJson() => {
-        'enable_do_h': enableDoH,
-        'enable_custom_hosts': enableCustomHosts,
-        'enable_domain_fronting': enableDomainFronting,
+        'enableDoH': enableDoH,
+        'enableCustomHosts': enableCustomHosts,
+        'enableDomainFronting': enableDomainFronting,
         'hosts': hosts?.map((e) => e.toJson()).toList(),
-        'doh_cache': dohCache?.map((e) => e.toJson()).toList()
+        'dohCache': dohCache?.map((e) => e.toJson()).toList()
       };
 
   DnsConfig clone() => DnsConfig(

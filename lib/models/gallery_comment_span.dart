@@ -23,7 +23,7 @@ class GalleryCommentSpan {
     style: json['style'] != null ? json['style'] as String : null,
     text: json['text'] != null ? json['text'] as String : null,
     href: json['href'] != null ? json['href'] as String : null,
-    imageUrl: json['image_url'] != null ? json['image_url'] as String : null
+    imageUrl: json['imageUrl'] != null ? json['imageUrl'] as String : null
   );
   
   Map<String, dynamic> toJson() => {
@@ -31,7 +31,7 @@ class GalleryCommentSpan {
     'style': style,
     'text': text,
     'href': href,
-    'image_url': imageUrl
+    'imageUrl': imageUrl
   };
 
   GalleryCommentSpan clone() => GalleryCommentSpan(

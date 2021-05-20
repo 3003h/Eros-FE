@@ -99,19 +99,17 @@ class GalleryItem {
   factory GalleryItem.fromJson(Map<String, dynamic> json) => GalleryItem(
       gid: json['gid'] != null ? json['gid'] as String : null,
       token: json['token'] != null ? json['token'] as String : null,
-      showKey: json['show_key'] != null ? json['show_key'] as String : null,
+      showKey: json['showKey'] != null ? json['showKey'] as String : null,
       url: json['url'] != null ? json['url'] as String : null,
-      imgUrl: json['img_url'] != null ? json['img_url'] as String : null,
-      imgUrlL: json['img_url_l'] != null ? json['img_url_l'] as String : null,
-      imgHeight:
-          json['img_height'] != null ? json['img_height'] as double : null,
-      imgWidth: json['img_width'] != null ? json['img_width'] as double : null,
-      japaneseTitle: json['japanese_title'] != null
-          ? json['japanese_title'] as String
+      imgUrl: json['imgUrl'] != null ? json['imgUrl'] as String : null,
+      imgUrlL: json['imgUrlL'] != null ? json['imgUrlL'] as String : null,
+      imgHeight: json['imgHeight'] != null ? json['imgHeight'] as double : null,
+      imgWidth: json['imgWidth'] != null ? json['imgWidth'] as double : null,
+      japaneseTitle: json['japaneseTitle'] != null
+          ? json['japaneseTitle'] as String
           : null,
-      englishTitle: json['english_title'] != null
-          ? json['english_title'] as String
-          : null,
+      englishTitle:
+          json['englishTitle'] != null ? json['englishTitle'] as String : null,
       category: json['category'] != null ? json['category'] as String : null,
       uploader: json['uploader'] != null ? json['uploader'] as String : null,
       posted: json['posted'] != null ? json['posted'] as String : null,
@@ -119,113 +117,113 @@ class GalleryItem {
       filecount: json['filecount'] != null ? json['filecount'] as String : null,
       rating: json['rating'] != null ? json['rating'] as double : null,
       ratingCount:
-          json['rating_count'] != null ? json['rating_count'] as String : null,
+          json['ratingCount'] != null ? json['ratingCount'] as String : null,
       torrentcount:
           json['torrentcount'] != null ? json['torrentcount'] as String : null,
       torrents: json['torrents'] != null
-          ? (json['torrents'] as List)
+          ? (json['torrents'] as List? ?? [])
               .map((e) => GalleryTorrent.fromJson(e as Map<String, dynamic>))
               .toList()
           : null,
       filesize: json['filesize'] != null ? json['filesize'] as int : null,
-      filesizeText: json['filesize_text'] != null
-          ? json['filesize_text'] as String
-          : null,
+      filesizeText:
+          json['filesizeText'] != null ? json['filesizeText'] as String : null,
       visible: json['visible'] != null ? json['visible'] as String : null,
       parent: json['parent'] != null ? json['parent'] as String : null,
-      ratingFallBack: json['rating_fall_back'] != null
-          ? json['rating_fall_back'] as double
+      ratingFallBack: json['ratingFallBack'] != null
+          ? json['ratingFallBack'] as double
           : null,
-      numberOfReviews: json['number_of_reviews'] != null
-          ? json['number_of_reviews'] as String
+      numberOfReviews: json['numberOfReviews'] != null
+          ? json['numberOfReviews'] as String
           : null,
-      postTime: json['post_time'] != null ? json['post_time'] as String : null,
-      favoritedCount: json['favorited_count'] != null
-          ? json['favorited_count'] as String
+      postTime: json['postTime'] != null ? json['postTime'] as String : null,
+      favoritedCount: json['favoritedCount'] != null
+          ? json['favoritedCount'] as String
           : null,
-      favTitle: json['fav_title'] != null ? json['fav_title'] as String : null,
+      favTitle: json['favTitle'] != null ? json['favTitle'] as String : null,
       favcat: json['favcat'] != null ? json['favcat'] as String : null,
-      localFav: json['local_fav'] != null ? json['local_fav'] as bool : null,
-      simpleTags: json['simple_tags'] != null
-          ? (json['simple_tags'] as List)
+      localFav: json['localFav'] != null ? json['localFav'] as bool : null,
+      simpleTags: json['simpleTags'] != null
+          ? (json['simpleTags'] as List? ?? [])
               .map((e) => SimpleTag.fromJson(e as Map<String, dynamic>))
               .toList()
           : null,
-      tagsFromApi: json['tags_from_api'] != null
-          ? json['tags_from_api'] as List<dynamic>
+      tagsFromApi: json['tagsFromApi'] != null
+          ? (json['tagsFromApi'] as List? ?? [])
+              .map((e) => e as dynamic)
+              .toList()
           : null,
       translated:
           json['translated'] != null ? json['translated'] as String : null,
-      tagGroup: json['tag_group'] != null
-          ? (json['tag_group'] as List)
+      tagGroup: json['tagGroup'] != null
+          ? (json['tagGroup'] as List? ?? [])
               .map((e) => TagGroup.fromJson(e as Map<String, dynamic>))
               .toList()
           : null,
-      galleryComment: json['gallery_comment'] != null
-          ? (json['gallery_comment'] as List)
+      galleryComment: json['galleryComment'] != null
+          ? (json['galleryComment'] as List? ?? [])
               .map((e) => GalleryComment.fromJson(e as Map<String, dynamic>))
               .toList()
           : null,
-      galleryPreview: json['gallery_preview'] != null
-          ? (json['gallery_preview'] as List)
+      galleryPreview: json['galleryPreview'] != null
+          ? (json['galleryPreview'] as List? ?? [])
               .map((e) => GalleryPreview.fromJson(e as Map<String, dynamic>))
               .toList()
           : null,
       apikey: json['apikey'] != null ? json['apikey'] as String : null,
       apiuid: json['apiuid'] != null ? json['apiuid'] as String : null,
       isRatinged:
-          json['is_ratinged'] != null ? json['is_ratinged'] as bool : null,
+          json['isRatinged'] != null ? json['isRatinged'] as bool : null,
       colorRating:
-          json['color_rating'] != null ? json['color_rating'] as String : null,
-      archiverLink: json['archiver_link'] != null
-          ? json['archiver_link'] as String
-          : null,
+          json['colorRating'] != null ? json['colorRating'] as String : null,
+      archiverLink:
+          json['archiverLink'] != null ? json['archiverLink'] as String : null,
       torrentLink:
-          json['torrent_link'] != null ? json['torrent_link'] as String : null);
+          json['torrentLink'] != null ? json['torrentLink'] as String : null);
 
   Map<String, dynamic> toJson() => {
         'gid': gid,
         'token': token,
-        'show_key': showKey,
+        'showKey': showKey,
         'url': url,
-        'img_url': imgUrl,
-        'img_url_l': imgUrlL,
-        'img_height': imgHeight,
-        'img_width': imgWidth,
-        'japanese_title': japaneseTitle,
-        'english_title': englishTitle,
+        'imgUrl': imgUrl,
+        'imgUrlL': imgUrlL,
+        'imgHeight': imgHeight,
+        'imgWidth': imgWidth,
+        'japaneseTitle': japaneseTitle,
+        'englishTitle': englishTitle,
         'category': category,
         'uploader': uploader,
         'posted': posted,
         'language': language,
         'filecount': filecount,
         'rating': rating,
-        'rating_count': ratingCount,
+        'ratingCount': ratingCount,
         'torrentcount': torrentcount,
         'torrents': torrents?.map((e) => e.toJson()).toList(),
         'filesize': filesize,
-        'filesize_text': filesizeText,
+        'filesizeText': filesizeText,
         'visible': visible,
         'parent': parent,
-        'rating_fall_back': ratingFallBack,
-        'number_of_reviews': numberOfReviews,
-        'post_time': postTime,
-        'favorited_count': favoritedCount,
-        'fav_title': favTitle,
+        'ratingFallBack': ratingFallBack,
+        'numberOfReviews': numberOfReviews,
+        'postTime': postTime,
+        'favoritedCount': favoritedCount,
+        'favTitle': favTitle,
         'favcat': favcat,
-        'local_fav': localFav,
-        'simple_tags': simpleTags?.map((e) => e.toJson()).toList(),
-        'tags_from_api': tagsFromApi,
+        'localFav': localFav,
+        'simpleTags': simpleTags?.map((e) => e.toJson()).toList(),
+        'tagsFromApi': tagsFromApi?.map((e) => e.toString()).toList(),
         'translated': translated,
-        'tag_group': tagGroup?.map((e) => e.toJson()).toList(),
-        'gallery_comment': galleryComment?.map((e) => e.toJson()).toList(),
-        'gallery_preview': galleryPreview?.map((e) => e.toJson()).toList(),
+        'tagGroup': tagGroup?.map((e) => e.toJson()).toList(),
+        'galleryComment': galleryComment?.map((e) => e.toJson()).toList(),
+        'galleryPreview': galleryPreview?.map((e) => e.toJson()).toList(),
         'apikey': apikey,
         'apiuid': apiuid,
-        'is_ratinged': isRatinged,
-        'color_rating': colorRating,
-        'archiver_link': archiverLink,
-        'torrent_link': torrentLink
+        'isRatinged': isRatinged,
+        'colorRating': colorRating,
+        'archiverLink': archiverLink,
+        'torrentLink': torrentLink
       };
 
   GalleryItem clone() => GalleryItem(
@@ -260,7 +258,7 @@ class GalleryItem {
       favcat: favcat,
       localFav: localFav,
       simpleTags: simpleTags?.map((e) => e.clone()).toList(),
-      tagsFromApi: tagsFromApi,
+      tagsFromApi: tagsFromApi?.toList(),
       translated: translated,
       tagGroup: tagGroup?.map((e) => e.clone()).toList(),
       galleryComment: galleryComment?.map((e) => e.clone()).toList(),

@@ -9,6 +9,7 @@ const String columnLinks = 'links';
 class TagTranslat {
   TagTranslat(this.namespace, this.key, this.name,
       {this.intro = '', this.links = ''});
+
   late String namespace;
   late String key;
   late String name;

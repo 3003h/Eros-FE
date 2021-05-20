@@ -18,16 +18,16 @@ class SimpleTag {
 
   factory SimpleTag.fromJson(Map<String,dynamic> json) => SimpleTag(
     text: json['text'] != null ? json['text'] as String : null,
-    translat: json['translat'] != null ? json['translat'] as String : null,
+    translat: json['Translat'] != null ? json['Translat'] as String : null,
     color: json['color'] != null ? json['color'] as String : null,
-    backgrondColor: json['backgrond_color'] != null ? json['backgrond_color'] as String : null
+    backgrondColor: json['backgrondColor'] != null ? json['backgrondColor'] as String : null
   );
   
   Map<String, dynamic> toJson() => {
     'text': text,
-    'translat': translat,
+    'Translat': translat,
     'color': color,
-    'backgrond_color': backgrondColor
+    'backgrondColor': backgrondColor
   };
 
   SimpleTag clone() => SimpleTag(
