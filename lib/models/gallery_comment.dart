@@ -27,14 +27,14 @@ class GalleryComment {
   factory GalleryComment.fromJson(Map<String, dynamic> json) => GalleryComment(
       name: json['name'] as String,
       time: json['time'] as String,
-      span: (json['span'] as List)
+      span: (json['span'] as List? ?? [])
           .map((e) => GalleryCommentSpan.fromJson(e as Map<String, dynamic>))
           .toList(),
       score: json['score'] as String,
       vote: json['vote'] != null ? json['vote'] as int : null,
       id: json['id'] != null ? json['id'] as String : null,
-      canEdit: json['can_edit'] != null ? json['can_edit'] as bool : null,
-      canVote: json['can_vote'] != null ? json['can_vote'] as bool : null);
+      canEdit: json['canEdit'] != null ? json['canEdit'] as bool : null,
+      canVote: json['canVote'] != null ? json['canVote'] as bool : null);
 
   Map<String, dynamic> toJson() => {
         'name': name,
@@ -43,8 +43,8 @@ class GalleryComment {
         'score': score,
         'vote': vote,
         'id': id,
-        'can_edit': canEdit,
-        'can_vote': canVote
+        'canEdit': canEdit,
+        'canVote': canVote
       };
 
   GalleryComment clone() => GalleryComment(

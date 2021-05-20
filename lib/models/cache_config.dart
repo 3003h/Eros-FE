@@ -16,14 +16,14 @@ class CacheConfig {
 
   factory CacheConfig.fromJson(Map<String,dynamic> json) => CacheConfig(
     enable: json['enable'] != null ? json['enable'] as bool : null,
-    maxAge: json['max_age'] != null ? json['max_age'] as int : null,
-    maxCount: json['max_count'] != null ? json['max_count'] as int : null
+    maxAge: json['maxAge'] != null ? json['maxAge'] as int : null,
+    maxCount: json['maxCount'] != null ? json['maxCount'] as int : null
   );
   
   Map<String, dynamic> toJson() => {
     'enable': enable,
-    'max_age': maxAge,
-    'max_count': maxCount
+    'maxAge': maxAge,
+    'maxCount': maxCount
   };
 
   CacheConfig clone() => CacheConfig(

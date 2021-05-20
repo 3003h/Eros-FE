@@ -19,22 +19,22 @@ class User {
   factory User.fromJson(Map<String,dynamic> json) => User(
     username: json['username'] != null ? json['username'] as String : null,
     cookie: json['cookie'] != null ? json['cookie'] as String : null,
-    avatarUrl: json['avatar_url'] != null ? json['avatar_url'] as String : null,
-    favcat: json['favcat'] != null ? json['favcat'] as List<dynamic> : null
+    avatarUrl: json['avatarUrl'] != null ? json['avatarUrl'] as String : null,
+    favcat: json['favcat'] != null ? (json['favcat'] as List? ?? []).map((e) => e as dynamic).toList() : null
   );
   
   Map<String, dynamic> toJson() => {
     'username': username,
     'cookie': cookie,
-    'avatar_url': avatarUrl,
-    'favcat': favcat
+    'avatarUrl': avatarUrl,
+    'favcat': favcat?.map((e) => e.toString()).toList()
   };
 
   User clone() => User(
     username: username,
     cookie: cookie,
     avatarUrl: avatarUrl,
-    favcat: favcat
+    favcat: favcat?.toList()
   );
 
     

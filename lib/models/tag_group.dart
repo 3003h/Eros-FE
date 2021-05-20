@@ -13,14 +13,14 @@ class TagGroup {
   final List<GalleryTag> galleryTags;
 
   factory TagGroup.fromJson(Map<String, dynamic> json) => TagGroup(
-      tagType: json['tag_type'] != null ? json['tag_type'] as String : null,
-      galleryTags: (json['gallery_tags'] as List)
+      tagType: json['tagType'] != null ? json['tagType'] as String : null,
+      galleryTags: (json['galleryTags'] as List? ?? [])
           .map((e) => GalleryTag.fromJson(e as Map<String, dynamic>))
           .toList());
 
   Map<String, dynamic> toJson() => {
-        'tag_type': tagType,
-        'gallery_tags': galleryTags.map((e) => e.toJson()).toList()
+        'tagType': tagType,
+        'galleryTags': galleryTags.map((e) => e.toJson()).toList()
       };
 
   TagGroup clone() => TagGroup(

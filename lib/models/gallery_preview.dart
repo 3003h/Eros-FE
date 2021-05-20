@@ -37,37 +37,37 @@ class GalleryPreview {
   final bool? completeHeight;
 
   factory GalleryPreview.fromJson(Map<String,dynamic> json) => GalleryPreview(
-    isLarge: json['is_large'] != null ? json['is_large'] as bool : null,
-    isCache: json['is_cache'] != null ? json['is_cache'] as bool : null,
-    startPrecache: json['start_precache'] != null ? json['start_precache'] as bool : null,
+    isLarge: json['isLarge'] != null ? json['isLarge'] as bool : null,
+    isCache: json['isCache'] != null ? json['isCache'] as bool : null,
+    startPrecache: json['startPrecache'] != null ? json['startPrecache'] as bool : null,
     ser: json['ser'] as int,
     href: json['href'] != null ? json['href'] as String : null,
-    largeImageUrl: json['large_image_url'] != null ? json['large_image_url'] as String : null,
-    imgUrl: json['img_url'] != null ? json['img_url'] as String : null,
+    largeImageUrl: json['largeImageUrl'] != null ? json['largeImageUrl'] as String : null,
+    imgUrl: json['imgUrl'] != null ? json['imgUrl'] as String : null,
     height: json['height'] != null ? json['height'] as double : null,
     width: json['width'] != null ? json['width'] as double : null,
-    largeImageHeight: json['large_image_height'] != null ? json['large_image_height'] as double : null,
-    largeImageWidth: json['large_image_width'] != null ? json['large_image_width'] as double : null,
-    offSet: json['off_set'] != null ? json['off_set'] as double : null,
-    sourceId: json['source_id'] != null ? json['source_id'] as String : null,
-    completeHeight: json['complete_height'] != null ? json['complete_height'] as bool : null
+    largeImageHeight: json['largeImageHeight'] != null ? json['largeImageHeight'] as double : null,
+    largeImageWidth: json['largeImageWidth'] != null ? json['largeImageWidth'] as double : null,
+    offSet: json['offSet'] != null ? json['offSet'] as double : null,
+    sourceId: json['sourceId'] != null ? json['sourceId'] as String : null,
+    completeHeight: json['completeHeight'] != null ? json['completeHeight'] as bool : null
   );
   
   Map<String, dynamic> toJson() => {
-    'is_large': isLarge,
-    'is_cache': isCache,
-    'start_precache': startPrecache,
+    'isLarge': isLarge,
+    'isCache': isCache,
+    'startPrecache': startPrecache,
     'ser': ser,
     'href': href,
-    'large_image_url': largeImageUrl,
-    'img_url': imgUrl,
+    'largeImageUrl': largeImageUrl,
+    'imgUrl': imgUrl,
     'height': height,
     'width': width,
-    'large_image_height': largeImageHeight,
-    'large_image_width': largeImageWidth,
-    'off_set': offSet,
-    'source_id': sourceId,
-    'complete_height': completeHeight
+    'largeImageHeight': largeImageHeight,
+    'largeImageWidth': largeImageWidth,
+    'offSet': offSet,
+    'sourceId': sourceId,
+    'completeHeight': completeHeight
   };
 
   GalleryPreview clone() => GalleryPreview(

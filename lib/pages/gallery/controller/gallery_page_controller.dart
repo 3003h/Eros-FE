@@ -21,6 +21,7 @@ import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
 
+import 'all_previews_controller.dart';
 import 'archiver_controller.dart';
 import 'comment_controller.dart';
 import 'gallery_fav_controller.dart';
@@ -492,6 +493,7 @@ class GalleryPageController extends GetxController
     );
 
     addAllPreview(_moreGalleryPreviewList);
+    Get.find<AllPreviewsPageController>().update();
   }
 
   // 直接请求目的index所在的缩略图页
@@ -517,6 +519,7 @@ class GalleryPageController extends GetxController
 
     // previews.addAll(_morePreviewList);
     addAllPreview(_morePreviewList);
+    Get.find<AllPreviewsPageController>().update();
     // logger.v('previews len： ${previews.length}');
   }
 

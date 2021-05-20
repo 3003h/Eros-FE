@@ -39,34 +39,35 @@ class Profile {
   final AutoLock autoLock;
 
   factory Profile.fromJson(Map<String, dynamic> json) => Profile(
-      ehConfig: EhConfig.fromJson(json['eh_config'] as Map<String, dynamic>),
+      ehConfig: EhConfig.fromJson(json['ehConfig'] as Map<String, dynamic>),
       user: User.fromJson(json['user'] as Map<String, dynamic>),
-      lastLogin: json['last_login'] as String,
+      lastLogin: json['lastLogin'] as String,
       locale: json['locale'] as String,
       theme: json['theme'] as String,
-      searchText: json['search_text'] as List<dynamic>,
-      localFav: LocalFav.fromJson(json['local_fav'] as Map<String, dynamic>),
-      enableAdvanceSearch: json['enable_advance_search'] as bool,
-      advanceSearch: AdvanceSearch.fromJson(
-          json['advance_search'] as Map<String, dynamic>),
-      dnsConfig: DnsConfig.fromJson(json['dns_config'] as Map<String, dynamic>),
+      searchText:
+          (json['searchText'] as List? ?? []).map((e) => e as dynamic).toList(),
+      localFav: LocalFav.fromJson(json['localFav'] as Map<String, dynamic>),
+      enableAdvanceSearch: json['enableAdvanceSearch'] as bool,
+      advanceSearch:
+          AdvanceSearch.fromJson(json['advanceSearch'] as Map<String, dynamic>),
+      dnsConfig: DnsConfig.fromJson(json['dnsConfig'] as Map<String, dynamic>),
       downloadConfig: DownloadConfig.fromJson(
-          json['download_config'] as Map<String, dynamic>),
-      autoLock: AutoLock.fromJson(json['auto_lock'] as Map<String, dynamic>));
+          json['downloadConfig'] as Map<String, dynamic>),
+      autoLock: AutoLock.fromJson(json['autoLock'] as Map<String, dynamic>));
 
   Map<String, dynamic> toJson() => {
-        'eh_config': ehConfig.toJson(),
+        'ehConfig': ehConfig.toJson(),
         'user': user.toJson(),
-        'last_login': lastLogin,
+        'lastLogin': lastLogin,
         'locale': locale,
         'theme': theme,
-        'search_text': searchText,
-        'local_fav': localFav.toJson(),
-        'enable_advance_search': enableAdvanceSearch,
-        'advance_search': advanceSearch.toJson(),
-        'dns_config': dnsConfig.toJson(),
-        'download_config': downloadConfig.toJson(),
-        'auto_lock': autoLock.toJson()
+        'searchText': searchText.map((e) => e.toString()).toList(),
+        'localFav': localFav.toJson(),
+        'enableAdvanceSearch': enableAdvanceSearch,
+        'advanceSearch': advanceSearch.toJson(),
+        'dnsConfig': dnsConfig.toJson(),
+        'downloadConfig': downloadConfig.toJson(),
+        'autoLock': autoLock.toJson()
       };
 
   Profile clone() => Profile(
@@ -75,7 +76,7 @@ class Profile {
       lastLogin: lastLogin,
       locale: locale,
       theme: theme,
-      searchText: searchText,
+      searchText: searchText.toList(),
       localFav: localFav.clone(),
       enableAdvanceSearch: enableAdvanceSearch,
       advanceSearch: advanceSearch.clone(),

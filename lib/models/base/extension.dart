@@ -8,6 +8,7 @@ extension ExtGC on GalleryCache {
   ViewColumnMode get columnMode =>
       EnumToString.fromString(ViewColumnMode.values, columnModeVal ?? '') ??
       ViewColumnMode.single;
+
   // set columnMode(ViewColumnMode val) =>
   //     columnModeVal = EnumToString.convertToString(val);
   GalleryCache copyWithMode(ViewColumnMode val) =>
@@ -49,6 +50,7 @@ extension ExtCommentSpan on GalleryCommentSpan {
   CommentSpanType get sType =>
       EnumToString.fromString(CommentSpanType.values, type ?? '') ??
       CommentSpanType.text;
+
   // set sType(CommentSpanType val) => type = EnumToString.convertToString(val);
   GalleryCommentSpan copyWithSpanType(CommentSpanType val) =>
       copyWith(type: EnumToString.convertToString(val));
