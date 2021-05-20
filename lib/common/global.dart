@@ -1,6 +1,8 @@
 import 'dart:io';
 
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:cookie_jar/cookie_jar.dart';
+import 'package:device_info/device_info.dart';
 import 'package:dio_cookie_manager/dio_cookie_manager.dart';
 import 'package:fehviewer/common/update.dart';
 import 'package:fehviewer/const/const.dart';
@@ -29,7 +31,9 @@ import 'package:path_provider/path_provider.dart';
 const int kProxyPort = 4041;
 
 final FirebaseAnalytics analytics = FirebaseAnalytics();
+FirebaseFirestore firestore = FirebaseFirestore.instance;
 final LocalAuthentication localAuth = LocalAuthentication();
+DeviceInfoPlugin deviceInfo = DeviceInfoPlugin();
 
 const AdvanceSearch kDefAdvanceSearch = AdvanceSearch(
   searchGalleryName: true,

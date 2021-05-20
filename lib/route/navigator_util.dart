@@ -111,8 +111,10 @@ class NavigatorUtil {
       // );
       // Get.offNamed(EHRoutes.galleryPage,
       //     arguments: GalleryRepository(url: url));
-      Get.to(
-        () => GalleryMainPage(),
+      Get.off(
+        () => GalleryMainPage(
+          galleryRepository: GalleryRepository(url: url),
+        ),
         binding: GalleryBinding(
           galleryRepository: GalleryRepository(url: url),
         ),
@@ -120,7 +122,7 @@ class NavigatorUtil {
         // arguments: GalleryRepository(url: url),
       );
     } else {
-      Get.to(
+      Get.off(
         () => GalleryMainPage(),
         preventDuplicates: false,
       );

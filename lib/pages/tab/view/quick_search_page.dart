@@ -1,10 +1,14 @@
 import 'dart:io';
 
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:device_info/device_info.dart';
+import 'package:device_info_platform_interface/model/ios_device_info.dart';
 import 'package:fehviewer/common/controller/quicksearch_controller.dart';
 import 'package:fehviewer/common/global.dart';
 import 'package:fehviewer/generated/l10n.dart';
 import 'package:fehviewer/store/tag_database.dart';
 import 'package:fehviewer/utils/logger.dart';
+import 'package:fehviewer/utils/toast.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -123,11 +127,83 @@ class QuickSearchListPage extends StatelessWidget {
   Widget _buildListBtns(BuildContext context) {
     final QuickSearchController quickSearchController = Get.find();
 
+    Future<void> showCloud() async {
+      return showCupertinoDialog<void>(
+        context: Get.overlayContext!,
+        barrierDismissible: true,
+        builder: (BuildContext context) {
+          return CupertinoAlertDialog(
+            title: Text('Cloud Backup'),
+            content: Text('Backup to Google Cloud Firestore'),
+            actions: [
+              CupertinoDialogAction(
+                  onPressed: () async {
+                    final List<String> _searchTextList =
+                        quickSearchController.searchTextList;
+                    final String _searchText = _searchTextList.join('\n');
+                    logger.v(_searchText);
+
+                    final CollectionReference qSearchs =
+                        firestore.collection('fehviewer');
+
+                    final DateTime _now = DateTime.now();
+                    final DateFormat formatter = DateFormat('yyyyMMdd_HHmmss');
+                    final String _time = formatter.format(_now);
+
+                    qSearchs
+                        .doc(await getUniqueId())
+                        .collection('quick_search')
+                        .doc('default')
+                        .set({
+                      'time': _time,
+                      'list': _searchTextList,
+                    });
+
+                    Get.back();
+                    showToast('Upload success');
+                  },
+                  child: Text('Upload')),
+              CupertinoDialogAction(
+                  onPressed: () async {
+                    final CollectionReference qSearchs =
+                        firestore.collection('fehviewer');
+
+                    final DocumentSnapshot<Object?> docById = await qSearchs
+                        .doc(await getUniqueId())
+                        .collection('quick_search')
+                        .doc('default')
+                        .get();
+                    if (docById.exists) {
+                      final List _importTexts = docById.get('list') as List;
+
+                      print(_importTexts);
+
+                      _importTexts.forEach((dynamic element) {
+                        if (element.trim().isNotEmpty &&
+                            !element.startsWith('#'))
+                          quickSearchController.addText(element.toString(),
+                              silent: true);
+                      });
+                    }
+                    Get.back();
+                  },
+                  child: Text('Download')),
+              CupertinoDialogAction(
+                  onPressed: () {
+                    Get.back();
+                  },
+                  child: Text(S.of(context).cancel)),
+            ],
+          );
+        },
+      );
+    }
+
     return Container(
       margin: const EdgeInsets.only(right: 6),
-      width: 130,
       child: Row(
         mainAxisAlignment: MainAxisAlignment.end,
+        mainAxisSize: MainAxisSize.min,
         children: <Widget>[
           // 清除按钮
           CupertinoButton(
@@ -141,6 +217,7 @@ class QuickSearchListPage extends StatelessWidget {
               _removeAll();
             },
           ),
+          // 本地导入
           CupertinoButton(
             minSize: 40,
             padding: const EdgeInsets.all(0),
@@ -155,7 +232,7 @@ class QuickSearchListPage extends StatelessWidget {
                 final File _file = File(result.files.single.path!);
                 final String _fileText = _file.readAsStringSync();
                 if (_fileText.contains('#FEhViewer')) {
-                  logger.v('$_fileText');
+                  logger.v(_fileText);
                   final List<String> _importTexts = _fileText.split('\n');
                   _importTexts.forEach((String element) {
                     if (element.trim().isNotEmpty && !element.startsWith('#'))
@@ -165,6 +242,7 @@ class QuickSearchListPage extends StatelessWidget {
               }
             },
           ),
+          // 本地导出
           CupertinoButton(
             minSize: 40,
             padding: const EdgeInsets.all(0),
@@ -179,15 +257,37 @@ class QuickSearchListPage extends StatelessWidget {
                 final String _searchText =
                     '#FEhViewer\n${_searchTextList.join('\n')}';
                 logger.v(_searchText);
+
                 final File _tempFlie = await _getLocalFile();
                 _tempFlie.writeAsStringSync(_searchText);
                 Share.shareFiles([_tempFlie.path]);
               }
             },
           ),
+          CupertinoButton(
+            minSize: 40,
+            padding: const EdgeInsets.all(0),
+            child: const Icon(
+              LineIcons.cloud,
+              size: 26,
+            ),
+            onPressed: showCloud,
+          ),
         ],
       ),
     );
+  }
+
+  Future<String> getUniqueId() async {
+    if (Platform.isIOS) {
+      final IosDeviceInfo iosDeviceInfo = await deviceInfo.iosInfo;
+      print('ios唯一设备码：' + iosDeviceInfo.identifierForVendor);
+      return iosDeviceInfo.identifierForVendor; // unique ID on iOS
+    } else {
+      final AndroidDeviceInfo androidDeviceInfo = await deviceInfo.androidInfo;
+      print('android唯一设备码：' + androidDeviceInfo.androidId);
+      return androidDeviceInfo.androidId; // unique ID on Android
+    }
   }
 
   Future<File> _getLocalFile() async {
