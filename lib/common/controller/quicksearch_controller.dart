@@ -8,12 +8,12 @@ import 'base_controller.dart';
 class QuickSearchController extends ProfileController {
   RxList<String> searchTextList = <String>[].obs;
 
-  void addText(String text) {
+  void addText(String text, {bool silent = false}) {
     if (searchTextList.contains(text.trim())) {
-      showToast('搜索词已存在');
+      if (!silent) showToast('搜索词已存在');
     } else {
       searchTextList.add(text);
-      showToast('保存成功');
+      if (!silent) showToast('保存成功');
     }
   }
 

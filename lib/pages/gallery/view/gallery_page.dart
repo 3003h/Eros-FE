@@ -42,10 +42,21 @@ class GalleryMainPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    GalleryRepository? _galleryRepository() {
+      if (galleryRepository != null) {
+        return galleryRepository;
+      }
+
+      GalleryRepository? repository;
+      try {
+        repository = Get.find<GalleryRepository>(tag: pageCtrlDepth);
+      } catch (_) {}
+
+      return galleryRepository ?? repository;
+    }
+
     final GalleryPageController _controller = Get.put(
-        GalleryPageController(
-            galleryRepository: galleryRepository ??
-                Get.find<GalleryRepository>(tag: pageCtrlDepth)),
+        GalleryPageController(galleryRepository: _galleryRepository()),
         tag: pageCtrlDepth);
 
     final String? tabTag = _controller.galleryRepository?.tabTag;
