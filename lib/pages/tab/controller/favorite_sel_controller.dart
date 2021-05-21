@@ -2,6 +2,7 @@ import 'package:fehviewer/const/const.dart';
 import 'package:fehviewer/const/theme_colors.dart';
 import 'package:fehviewer/generated/l10n.dart';
 import 'package:fehviewer/models/entity/favorite.dart';
+import 'package:fehviewer/models/favcat.dart';
 import 'package:fehviewer/network/gallery_request.dart';
 import 'package:fehviewer/utils/logger.dart';
 import 'package:fehviewer/utils/utility.dart';
@@ -23,8 +24,8 @@ class FavoriteSelectorController extends GetxController
     });
   }
 
-  Future<List<Map<String, String>>> getFavList() async {
-    final List<Map<String, String>> favList = EHUtils.getFavListFromProfile();
+  Future<List<Favcat>> getFavList() async {
+    final List<Favcat> favList = EHUtils.getFavListFromProfile();
     if (favList == null || favList.isEmpty) {
       await Api.getFavorite(
         favcat: 'a',
@@ -39,11 +40,11 @@ class FavoriteSelectorController extends GetxController
     final List<FavcatItemBean> _favItemBeans = <FavcatItemBean>[];
 
     try {
-      final List<Map<String, String>> favList = (await getFavList());
+      final List<Favcat> favList = await getFavList();
 
-      for (final Map<String, String> catmap in favList) {
-        final String favTitle = catmap['favTitle'] ?? '';
-        final String favId = catmap['favId'] ?? '';
+      for (final Favcat favcat in favList) {
+        final String favTitle = favcat.favTitle;
+        final String favId = favcat.favId;
 
         _favItemBeans.add(
           FavcatItemBean(favTitle, ThemeColors.favColor[favId], favId: favId),

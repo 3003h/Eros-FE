@@ -1,5 +1,6 @@
 import 'package:dio/dio.dart';
 import 'package:fehviewer/common/global.dart';
+import 'package:fehviewer/models/base/eh_models.dart';
 import 'package:fehviewer/network/gallery_request.dart';
 import 'package:fehviewer/utils/dio_util.dart';
 import 'package:fehviewer/utils/utility.dart';
@@ -28,8 +29,7 @@ class GalleryFavParser {
     saveFavcat(gid, token);
   }
 
-  static Future<List<Map<String, String>>> gallerySelfavcat(
-      String gid, String token) async {
+  static Future<List<Favcat>> gallerySelfavcat(String gid, String token) async {
     final HttpManager httpManager = Api.getHttpManager(cache: false);
 
     final String url = '/gallerypopups.php?gid=$gid&t=$token&act=addfav';
@@ -44,13 +44,13 @@ class GalleryFavParser {
     return parserAddFavPage(response);
   }
 
-  static List<Map<String, String>> parserAddFavPage(String? response) {
+  static List<Favcat> parserAddFavPage(String? response) {
     // 解析响应信息dom
     final Document document = parse(response);
 
     print('frome parserAddFavPage');
 
-    final List<Map<String, String>> favList = <Map<String, String>>[];
+    final List<Favcat> favList = <Favcat>[];
 
     final List<Element> favcats =
         document.querySelectorAll('#galpop > div > div.nosel > div');
@@ -59,13 +59,13 @@ class GalleryFavParser {
       final String favId =
           divs[0].querySelector('input')?.attributes['value']?.trim() ?? '';
       final String favTitle = divs[2].text.trim();
-      favList.add(<String, String>{'favId': favId, 'favTitle': favTitle});
+      favList.add(Favcat(favId: favId, favTitle: favTitle));
     }
 
     return favList.sublist(0, 10);
   }
 
-  static Future<List<Map<String, String>>> getFavcat({
+  static Future<List<Favcat>> getFavcat({
     String? gid,
     String? token,
     bool cache = true,
@@ -82,9 +82,8 @@ class GalleryFavParser {
       }
     }
 
-    final List<Map<String, String>> favcatList =
-        EHUtils.getFavListFromProfile();
-    return Future<List<Map<String, String>>>.value(favcatList);
+    final List<Favcat> favcatList = EHUtils.getFavListFromProfile();
+    return Future<List<Favcat>>.value(favcatList);
   }
 
   static Future<void> saveFavcat(String gid, String token) async {

@@ -5,6 +5,7 @@ import 'package:fehviewer/common/parser/gallery_fav_parser.dart';
 import 'package:fehviewer/common/service/depth_service.dart';
 import 'package:fehviewer/common/service/ehconfig_service.dart';
 import 'package:fehviewer/generated/l10n.dart';
+import 'package:fehviewer/models/favcat.dart';
 import 'package:fehviewer/pages/controller/fav_controller.dart';
 import 'package:fehviewer/pages/gallery/controller/gallery_page_controller.dart';
 import 'package:fehviewer/pages/item/controller/galleryitem_controller.dart';
@@ -79,8 +80,8 @@ class GalleryFavController extends GetxController {
   Future<bool> _addToLastFavcat(String _lastFavcat) async {
     isLoading = true;
 
-    final String _favTitle = Global.profile.user.favcat![int.parse(_lastFavcat)]
-        ['favTitle'] as String;
+    final String _favTitle =
+        Global.profile.user.favcat![int.parse(_lastFavcat)].favTitle;
 
     try {
       await GalleryFavParser.galleryAddfavorite(
@@ -135,14 +136,15 @@ class GalleryFavController extends GetxController {
     final bool _isLogin = _userController.isLogin;
 
     /// [{'favId': favId, 'favTitle': favTitle}]
-    final List<Map<String, String>> favList = _isLogin
+    final List<Favcat> favList = _isLogin
         ? await GalleryFavParser.getFavcat(
             gid: _pageController.galleryItem.gid,
             token: _pageController.galleryItem.token,
           )
-        : <Map<String, String>>[];
+        : <Favcat>[];
 
-    favList.add({'favId': 'l', 'favTitle': S.of(context).local_favorite});
+    // favList.add({'favId': 'l', 'favTitle': S.of(context).local_favorite});
+    favList.add(Favcat(favId: 'l', favTitle: S.of(context).local_favorite));
 
     // diaolog 获取选择结果
     final Map<String, String>? result =

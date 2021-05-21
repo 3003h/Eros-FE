@@ -4,6 +4,7 @@ import 'dart:typed_data';
 import 'package:cookie_jar/cookie_jar.dart';
 import 'package:fehviewer/common/global.dart';
 import 'package:fehviewer/const/const.dart';
+import 'package:fehviewer/models/favcat.dart';
 import 'package:fehviewer/network/gallery_request.dart';
 import 'package:fehviewer/utils/logger.dart';
 import 'package:flutter/cupertino.dart';
@@ -130,16 +131,11 @@ class EHUtils {
     return totCatNum;
   }
 
-  static List<Map<String, String>> getFavListFromProfile() {
-    final List<Map<String, String>> favcatList = <Map<String, String>>[];
+  static List<Favcat> getFavListFromProfile() {
+    final List<Favcat> favcatList = <Favcat>[];
     if (Global.profile.user.favcat != null) {
       for (final dynamic mapObj in Global.profile.user.favcat ?? []) {
-        // logger.v('$mapObj');
-        final Map<String, String> map = <String, String>{
-          'favId': mapObj['favId'],
-          'favTitle': mapObj['favTitle']
-        };
-        favcatList.add(map);
+        favcatList.add(mapObj as Favcat);
       }
     }
 

@@ -89,16 +89,16 @@ class GalleryListParser {
       final List<dom.Element> favorites =
           document.querySelectorAll(_favoritesSelector);
       int _favId = 0;
-      final List<Map<String, String>> favcatList = <Map<String, String>>[];
+      final List<Favcat> favcatList = <Favcat>[];
       for (final dom.Element elm in favorites) {
         final List<dom.Element> divs = elm.querySelectorAll('div');
         // logger.v('${divs}');
         if (divs.isNotEmpty && divs.length >= 3) {
-          final Map<String, String> map = <String, String>{
-            'favId': '$_favId',
-            'favTitle': divs[2].text,
-          };
-          favcatList.add(map);
+          final Favcat favcat = Favcat(
+            favId: '$_favId',
+            favTitle: divs[2].text,
+          );
+          favcatList.add(favcat);
           _favId += 1;
         }
       }

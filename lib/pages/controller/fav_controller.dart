@@ -6,6 +6,7 @@ import 'package:fehviewer/common/service/ehconfig_service.dart';
 import 'package:fehviewer/common/service/theme_service.dart';
 import 'package:fehviewer/const/theme_colors.dart';
 import 'package:fehviewer/generated/l10n.dart';
+import 'package:fehviewer/models/favcat.dart';
 import 'package:fehviewer/pages/gallery/view/gallery_favcat.dart';
 import 'package:fehviewer/pages/item/controller/galleryitem_controller.dart';
 import 'package:fehviewer/utils/logger.dart';
@@ -23,7 +24,7 @@ class FavController extends GetxController {
   final TextEditingController _favnoteController = TextEditingController();
 
   Future<Map<String, String>?> showFav(
-      BuildContext context, List favList) async {
+      BuildContext context, List<Favcat> favList) async {
     return _ehConfigService.isFavPicker.value
         ? await _showAddFavPicker(context, favList)
         : await _showAddFavList(context, favList);
@@ -31,24 +32,25 @@ class FavController extends GetxController {
 
   /// 添加收藏 Picker 形式
   Future<Map<String, String>?> _showAddFavPicker(
-      BuildContext context, List favList) async {
+      BuildContext context, List<Favcat> favList) async {
     int _favindex = 0;
 
-    final List<Widget> favPicker = List<Widget>.from(favList.map((e) => Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            Padding(
-              padding: const EdgeInsets.only(right: 4, bottom: 4),
-              child: Icon(
-                FontAwesomeIcons.solidHeart,
-                color: ThemeColors.favColor[e['favId']],
-                size: 18,
-              ),
-            ),
-            Text(e['favTitle']),
-          ],
-        ))).toList();
+    final List<Widget> favPicker =
+        List<Widget>.from(favList.map((Favcat e) => Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                Padding(
+                  padding: const EdgeInsets.only(right: 4, bottom: 4),
+                  child: Icon(
+                    FontAwesomeIcons.solidHeart,
+                    color: ThemeColors.favColor[e.favId],
+                    size: 18,
+                  ),
+                ),
+                Text(e.favTitle),
+              ],
+            ))).toList();
 
     return showCupertinoDialog<Map<String, String>>(
       context: context,
@@ -87,7 +89,7 @@ class FavController extends GetxController {
                     // 添加收藏
                     final Map<String, String> favMap = <String, String>{
                       'favcat': '$_favindex',
-                      'favTitle': favList[_favindex]['favTitle'],
+                      'favTitle': favList[_favindex].favTitle,
                       'favnode': _favnoteController.text
                     };
                     // 返回数据
@@ -110,7 +112,7 @@ class FavController extends GetxController {
                 // 添加收藏
                 final Map<String, String> favMap = <String, String>{
                   'favcat': '$_favindex',
-                  'favTitle': favList[_favindex]['favTitle'],
+                  'favTitle': favList[_favindex].favTitle,
                   'favnode': _favnoteController.text
                 };
                 // 返回数据
@@ -125,19 +127,19 @@ class FavController extends GetxController {
 
   /// 添加收藏 List形式
   Future<Map<String, String>?> _showAddFavList(
-      BuildContext context, List favList) async {
+      BuildContext context, List<Favcat> favList) async {
     return showCupertinoDialog<Map<String, String>>(
       barrierDismissible: true,
       context: context,
       builder: (BuildContext context) {
         final List<Widget> favcatList =
-            List<Widget>.from(favList.map((fav) => FavcatAddListItem(
-                  text: fav['favTitle'],
-                  favcat: fav['favId'],
+            List<Widget>.from(favList.map((Favcat fav) => FavcatAddListItem(
+                  text: fav.favTitle,
+                  favcat: fav.favId,
                   onTap: () {
                     final Map<String, String> favMap = <String, String>{
-                      'favcat': fav['favId'],
-                      'favTitle': fav['favTitle'],
+                      'favcat': fav.favId,
+                      'favTitle': fav.favTitle,
                       'favnode': _favnoteController.text
                     };
                     logger.v(' ${favMap}');
@@ -211,14 +213,15 @@ class FavController extends GetxController {
     final bool _isLogin = _userController.isLogin;
 
     /// [{'favId': favId, 'favTitle': favTitle}]
-    final List<Map<String, String>> favList = _isLogin
+    final List<Favcat> favList = _isLogin
         ? await GalleryFavParser.getFavcat(
             gid: gid,
             token: token,
           )
-        : <Map<String, String>>[];
+        : <Favcat>[];
 
-    favList.add({'favId': 'l', 'favTitle': S.of(context).local_favorite});
+    // favList.add({'favId': 'l', 'favTitle': S.of(context).local_favorite});
+    favList.add(Favcat(favId: 'l', favTitle: S.of(context).local_favorite));
 
     // diaolog 获取选择结果
     final Map<String, String>? result = await showFav(context, favList);
@@ -257,8 +260,8 @@ class FavController extends GetxController {
 
   Future<Tuple2<String, String>> _addToLastFavcat(
       String gid, String token, String _lastFavcat) async {
-    final String _favTitle = Global.profile.user.favcat?[int.parse(_lastFavcat)]
-        ['favTitle'] as String;
+    final String _favTitle =
+        Global.profile.user.favcat?[int.parse(_lastFavcat)].favTitle ?? '...';
 
     try {
       await GalleryFavParser.galleryAddfavorite(gid, token,
