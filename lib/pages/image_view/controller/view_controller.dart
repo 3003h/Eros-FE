@@ -11,6 +11,7 @@ import 'package:fehviewer/utils/utility.dart';
 import 'package:fehviewer/utils/vibrate.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_statusbar_manager/flutter_statusbar_manager.dart';
 import 'package:get/get.dart';
 import 'package:orientation/orientation.dart';
 import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
@@ -79,9 +80,13 @@ class ViewController extends GetxController {
     super.onInit();
     // logger.d('ViewController onInit() start');
 
+    // if (GetPlatform.isIOS)
+    //   Future.delayed(const Duration(milliseconds: 200))
+    //       .then((_) => SystemChrome.setEnabledSystemUIOverlays([]));
+
     if (GetPlatform.isIOS)
       Future.delayed(const Duration(milliseconds: 200))
-          .then((_) => SystemChrome.setEnabledSystemUIOverlays([]));
+          .then((_) => FlutterStatusbarManager.setFullscreen(true));
 
     // logger.d('初始化page页码 ${vState.pageIndex}');
     final int _initialPage = vState.pageIndex;
@@ -135,7 +140,8 @@ class ViewController extends GetxController {
   void onClose() {
     pageController.dispose();
     vState.getMoreCancelToken.cancel();
-    SystemChrome.setEnabledSystemUIOverlays(SystemUiOverlay.values);
+    // SystemChrome.setEnabledSystemUIOverlays(SystemUiOverlay.values);
+    FlutterStatusbarManager.setFullscreen(false);
     // 恢复系统旋转设置
     logger.d('恢复系统旋转设置');
     OrientationPlugin.setPreferredOrientations(DeviceOrientation.values);
@@ -219,12 +225,18 @@ class ViewController extends GetxController {
     if (GetPlatform.isIOS) {
       // 会rebuild GalleryViewPage
       if (!vState.showBar) {
-        await SystemChrome.setEnabledSystemUIOverlays(SystemUiOverlay.values);
+        // await SystemChrome.setEnabledSystemUIOverlays(SystemUiOverlay.values);
+        // await FlutterStatusbarManager.setHidden(false,
+        //     animation: StatusBarAnimation.SLIDE);
+        await FlutterStatusbarManager.setFullscreen(false);
         vState.showBar = !vState.showBar;
       } else {
         vState.showBar = !vState.showBar;
         await Future.delayed(Duration(milliseconds: 200));
-        SystemChrome.setEnabledSystemUIOverlays([]);
+        // SystemChrome.setEnabledSystemUIOverlays([]);
+        // await FlutterStatusbarManager.setHidden(true,
+        //     animation: StatusBarAnimation.SLIDE);
+        await FlutterStatusbarManager.setFullscreen(true);
       }
     } else {
       vState.showBar = !vState.showBar;

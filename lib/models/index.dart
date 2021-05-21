@@ -7,6 +7,7 @@ export 'dns_config.dart';
 export 'download_config.dart';
 export 'download_task_info.dart';
 export 'eh_config.dart';
+export 'favcat.dart';
 export 'gallery_cache.dart';
 export 'gallery_comment.dart';
 export 'gallery_comment_span.dart';
