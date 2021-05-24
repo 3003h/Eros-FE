@@ -13,12 +13,14 @@ import 'package:fehviewer/route/navigator_util.dart';
 import 'package:fehviewer/utils/logger.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_easyrefresh/easy_refresh.dart';
 // import 'package:flutter/material.dart' hide SelectableText;
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
 import 'package:line_icons/line_icons.dart';
 import 'package:share/share.dart';
 
+import 'all_preview_page_new.dart';
 import 'archiver_dialog.dart';
 
 const double kHeaderHeight = 200.0 + 52;
@@ -64,78 +66,94 @@ class GalleryMainPage extends StatelessWidget {
     final GalleryItem _item = _controller.galleryItem;
 
     return CupertinoPageScaffold(
-      child: CustomScrollView(
-        controller: _controller.scrollController,
-        physics: const AlwaysScrollableScrollPhysics(),
-        slivers: <Widget>[
-          // 导航栏
-          Obx(() => CupertinoSliverNavigationBar(
-                padding: const EdgeInsetsDirectional.only(end: 10),
-                largeTitle: SelectableText(
-                  _controller.topTitle,
-                  textAlign: TextAlign.left,
-                  maxLines: 3,
-                  minLines: 1,
-                  style: TextStyle(
-                    fontSize: 12,
-                    color: CupertinoDynamicColor.resolve(
-                        CupertinoColors.secondaryLabel, context),
-                    fontWeight: FontWeight.normal,
+      child: EasyRefresh(
+        enableControlFinishRefresh: false,
+        enableControlFinishLoad: false,
+        onLoad: () async {
+          if (_controller.previews.isNotEmpty) {
+            Get.to(
+              () => AllPreviewPageNew(),
+              transition: Transition.cupertino,
+            );
+          }
+        },
+        footer: BezierBounceFooter(
+          backgroundColor: Colors.transparent,
+          color: CupertinoColors.inactiveGray,
+        ),
+        child: CustomScrollView(
+          controller: _controller.scrollController,
+          physics: const AlwaysScrollableScrollPhysics(),
+          slivers: <Widget>[
+            // 导航栏
+            Obx(() => CupertinoSliverNavigationBar(
+                  padding: const EdgeInsetsDirectional.only(end: 10),
+                  largeTitle: SelectableText(
+                    _controller.topTitle,
+                    textAlign: TextAlign.left,
+                    maxLines: 3,
+                    minLines: 1,
+                    style: TextStyle(
+                      fontSize: 12,
+                      color: CupertinoDynamicColor.resolve(
+                          CupertinoColors.secondaryLabel, context),
+                      fontWeight: FontWeight.normal,
+                    ),
                   ),
-                ),
-                middle: _controller.hideNavigationBtn
-                    ? null
-                    : (_item.imgUrl?.isNotEmpty ?? false
-                        ? NavigationBarImage(
-                            imageUrl: _item.imgUrl ?? '',
-                            scrollController: _controller.scrollController,
-                          )
-                        : null),
-                trailing: _controller.hideNavigationBtn
-                    ? Row(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          CupertinoButton(
-                            padding: const EdgeInsets.all(0),
-                            minSize: 38,
-                            child: const Icon(
-                              LineIcons.tags,
-                              size: 26,
+                  middle: _controller.hideNavigationBtn
+                      ? null
+                      : (_item.imgUrl?.isNotEmpty ?? false
+                          ? NavigationBarImage(
+                              imageUrl: _item.imgUrl ?? '',
+                              scrollController: _controller.scrollController,
+                            )
+                          : null),
+                  trailing: _controller.hideNavigationBtn
+                      ? Row(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            CupertinoButton(
+                              padding: const EdgeInsets.all(0),
+                              minSize: 38,
+                              child: const Icon(
+                                LineIcons.tags,
+                                size: 26,
+                              ),
+                              onPressed: () {
+                                _controller.addTag();
+                              },
                             ),
-                            onPressed: () {
-                              _controller.addTag();
-                            },
-                          ),
-                          CupertinoButton(
-                            padding: const EdgeInsets.all(0),
-                            minSize: 38,
-                            child: const Icon(
-                              LineIcons.share,
-                              size: 26,
+                            CupertinoButton(
+                              padding: const EdgeInsets.all(0),
+                              minSize: 38,
+                              child: const Icon(
+                                LineIcons.share,
+                                size: 26,
+                              ),
+                              onPressed: () {
+                                final String _url =
+                                    '${Api.getBaseUrl()}/g/${_item.gid}/${_item.token}';
+                                logger.v('share $_url');
+                                Share.share(_url);
+                              },
                             ),
-                            onPressed: () {
-                              final String _url =
-                                  '${Api.getBaseUrl()}/g/${_item.gid}/${_item.token}';
-                              logger.v('share $_url');
-                              Share.share(_url);
-                            },
-                          ),
-                        ],
-                      )
-                    : ReadButton(gid: _item.gid ?? '').paddingOnly(right: 4),
-              )),
-          CupertinoSliverRefreshControl(
-            onRefresh: _controller.handOnRefresh,
-          ),
-          SliverSafeArea(
-            top: false,
-            bottom: false,
-            sliver: GalleryDetail(
-              tabTag: tabTag,
-              controller: _controller,
+                          ],
+                        )
+                      : ReadButton(gid: _item.gid ?? '').paddingOnly(right: 4),
+                )),
+            CupertinoSliverRefreshControl(
+              onRefresh: _controller.handOnRefresh,
             ),
-          ),
-        ],
+            SliverSafeArea(
+              top: false,
+              bottom: false,
+              sliver: GalleryDetail(
+                tabTag: tabTag,
+                controller: _controller,
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }
@@ -205,7 +223,7 @@ class _DetailFromUrl extends StatelessWidget {
             children: <Widget>[
               if (state != null)
                 GalleryHeader(
-                  galleryItem: state,
+                  initGalleryItem: state,
                   tabTag: '',
                 ),
               Divider(
@@ -374,7 +392,7 @@ class _DetailFromItem extends StatelessWidget {
       child: Column(
         children: <Widget>[
           GalleryHeader(
-            galleryItem: galleryItem,
+            initGalleryItem: galleryItem,
             tabTag: tabTag,
           ),
           Divider(

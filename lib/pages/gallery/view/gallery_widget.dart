@@ -35,11 +35,11 @@ const double kHeaderPaddingTop = 12.0;
 class GalleryHeader extends StatelessWidget {
   const GalleryHeader({
     Key? key,
-    required this.galleryItem,
+    required this.initGalleryItem,
     this.tabTag,
   }) : super(key: key);
 
-  final GalleryItem galleryItem;
+  final GalleryItem initGalleryItem;
   final Object? tabTag;
 
   @override
@@ -59,8 +59,8 @@ class GalleryHeader extends StatelessWidget {
               children: <Widget>[
                 // 封面
                 CoverImage(
-                  imageUrl: galleryItem.imgUrl!,
-                  heroTag: '${galleryItem.gid}_cover_$tabTag',
+                  imageUrl: initGalleryItem.imgUrl!,
+                  heroTag: '${initGalleryItem.gid}_cover_$tabTag',
                 ),
                 Expanded(
                   child: Column(
@@ -69,13 +69,13 @@ class GalleryHeader extends StatelessWidget {
                       // 标题
                       const GalleryTitle(),
                       // 上传用户
-                      GalleryUploader(uploader: galleryItem.uploader ?? ''),
+                      GalleryUploader(uploader: initGalleryItem.uploader ?? ''),
                       const Spacer(),
                       Row(
                         crossAxisAlignment: CrossAxisAlignment.end,
                         children: <Widget>[
                           // 阅读按钮
-                          ReadButton(gid: galleryItem.gid ?? ''),
+                          ReadButton(gid: initGalleryItem.gid ?? ''),
                           const Spacer(),
                           // 收藏按钮
                           const GalleryFavButton(),
@@ -106,10 +106,12 @@ class GalleryHeader extends StatelessWidget {
                           children: <Widget>[
                             // 评分
                             GalleryRating(
-                              rating: galleryItem.rating ?? 0,
-                              ratingFB: galleryItem.ratingFallBack ?? 0,
+                              rating: controller.galleryItem.rating ?? 0,
+                              ratingFB:
+                                  controller.galleryItem.ratingFallBack ?? 0,
                               color: ThemeColors.colorRatingMap[
-                                  galleryItem.colorRating?.trim() ?? 'ir']!,
+                                  controller.galleryItem.colorRating?.trim() ??
+                                      'ir']!,
                             ),
                             // 评分人次
                             Padding(
