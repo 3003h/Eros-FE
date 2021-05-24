@@ -116,7 +116,7 @@ class _FavcatAddListItemState extends State<FavcatAddListItem> {
               width: double.infinity,
               padding: const EdgeInsets.fromLTRB(0, 8, 0, 8),
               child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
+                // mainAxisAlignment: MainAxisAlignment.center,
                 crossAxisAlignment: CrossAxisAlignment.end,
                 children: [
                   Padding(
@@ -126,7 +126,7 @@ class _FavcatAddListItemState extends State<FavcatAddListItem> {
                       color: CupertinoDynamicColor.resolve(
                           ThemeColors.favColor[widget.favcat]!, context),
                       size: 18,
-                    ),
+                    ).paddingOnly(left: 12, right: 5),
                   ),
                   Text(
                     widget.text,

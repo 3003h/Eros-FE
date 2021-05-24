@@ -158,6 +158,7 @@ class FavController extends GetxController {
           ),
           content: Container(
             child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
                 ...favcatList,
                 CupertinoTextField(
