@@ -32,6 +32,7 @@ class _AllPreviewPageState extends State<AllPreviewPage> {
   final GlobalKey globalKey = GlobalKey();
   final ScrollController _scrollController =
       ScrollController(keepScrollOffset: true);
+
   // ScrollController _scrollController;
 
   CancelToken moreGalleryPreviewCancelToken = CancelToken();

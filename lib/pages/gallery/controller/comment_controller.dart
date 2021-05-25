@@ -36,7 +36,9 @@ class CommentController extends GetxController
   bool _didChangeMetrics = false;
 
   final Rx<EditState> _editState = EditState.newComment.obs;
+
   EditState get editState => _editState.value;
+
   set editState(EditState val) => _editState.value = val;
 
   bool get isEditStat => _editState.value == EditState.editComment;
@@ -81,6 +83,7 @@ class CommentController extends GetxController
   }
 
   final List<TapGestureRecognizer> _tgr = [];
+
   TapGestureRecognizer genTapGestureRecognizer() {
     _tgr.add(TapGestureRecognizer());
     return _tgr.last;

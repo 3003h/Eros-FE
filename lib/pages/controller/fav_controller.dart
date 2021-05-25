@@ -20,6 +20,7 @@ class FavController extends GetxController {
   final EhConfigService _ehConfigService = Get.find();
   final UserController _userController = Get.find();
   final LocalFavController _localFavController = Get.find();
+
   // 收藏输入框控制器
   final TextEditingController _favnoteController = TextEditingController();
 

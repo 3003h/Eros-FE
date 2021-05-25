@@ -27,17 +27,22 @@ typedef FetchCallBack = Future<Tuple2<List<GalleryItem>, int>> Function({
 class TabViewController extends GetxController
     with StateMixin<List<GalleryItem>> {
   TabViewController({this.cats});
+
   int? cats;
 
   RxInt curPage = 0.obs;
   int maxPage = 1;
 
   final RxBool _isBackgroundRefresh = false.obs;
+
   bool get isBackgroundRefresh => _isBackgroundRefresh.value;
+
   set isBackgroundRefresh(bool val) => _isBackgroundRefresh.value = val;
 
   final Rx<PageState> _pageState = PageState.None.obs;
+
   PageState get pageState => _pageState.value;
+
   set pageState(PageState val) => _pageState.value = val;
 
   final EhConfigService _ehConfigService = Get.find();
@@ -50,6 +55,7 @@ class TabViewController extends GetxController
   late FetchCallBack fetchNormal;
 
   String? _curFavcat;
+
   String get curFavcat {
     // logger.d(' get curFavcat ${_ehConfigService.lastShowFavcat}');
     return _curFavcat ?? _ehConfigService.lastShowFavcat ?? 'a';

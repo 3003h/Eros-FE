@@ -15,6 +15,7 @@ import 'gallery_page_controller.dart';
 
 class TagInfoController extends GetxController {
   GalleryPageController get pageController => Get.find(tag: pageCtrlDepth);
+
   GalleryItem get _item => pageController.galleryItem;
 
   final TextEditingController tagsTextController = TextEditingController();

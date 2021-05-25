@@ -24,6 +24,7 @@ final TabPages tabPages = TabPages();
 
 class TabPages {
   final Map<String, ScrollController> scrollControllerMap = {};
+
   ScrollController? _scrollController(String key) {
     if (scrollControllerMap[key] == null) {
       scrollControllerMap[key] = ScrollController();
@@ -119,6 +120,7 @@ class TabHomeController extends GetxController {
 
   final EhConfigService _ehConfigService = Get.find();
   final GStore gStore = Get.find();
+
   bool get isSafeMode => _ehConfigService.isSafeMode.value;
 
   final CupertinoTabController tabController = CupertinoTabController();

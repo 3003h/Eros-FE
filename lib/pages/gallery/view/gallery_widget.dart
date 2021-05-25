@@ -347,7 +347,8 @@ class GalleryTitle extends StatelessWidget {
         _pageController.title,
         maxLines: 6,
         minLines: 1,
-        textAlign: TextAlign.left, // 对齐方式
+        textAlign: TextAlign.left,
+        // 对齐方式
         // overflow: TextOverflow.ellipsis, // 超出部分省略号
         style: const TextStyle(
           textBaseline: TextBaseline.alphabetic,
@@ -553,6 +554,7 @@ class PreviewGrid extends StatelessWidget {
 
 class TopComment extends StatelessWidget {
   const TopComment({Key? key}) : super(key: key);
+
   // final List<GalleryComment> comment;
 
   @override

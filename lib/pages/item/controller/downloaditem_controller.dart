@@ -3,6 +3,7 @@ import 'package:get/get.dart';
 
 class DownloadArchiverController extends GetxController {
   DownloadArchiverController(this.taskid);
+
   final String taskid;
 
   @override

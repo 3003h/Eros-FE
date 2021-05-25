@@ -16,6 +16,7 @@ import 'package:get/get.dart';
 
 class GalleryFavController extends GetxController {
   final RxBool _isLoading = false.obs;
+
   bool get isLoading => _isLoading.value;
 
   set isLoading(bool value) => _isLoading.value = value;
@@ -25,7 +26,9 @@ class GalleryFavController extends GetxController {
   final UserController _userController = Get.find();
   final EhConfigService _ehConfigService = Get.find();
   final FavController _favController = Get.find();
+
   GalleryPageController get _pageController => Get.find(tag: pageCtrlDepth);
+
   GalleryItemController get _itemController =>
       Get.find(tag: _pageController.gid);
 
@@ -61,9 +64,11 @@ class GalleryFavController extends GetxController {
   bool get localFav => _pageController.localFav;
 
   final RxString _favTitle = S.of(Get.context!).notFav.obs;
+
   String get favTitle => _favTitle.value;
 
   final RxString _favcat = ''.obs;
+
   String get favcat => _favcat.value;
 
   void setFav(String favcat, String favtitle) {
