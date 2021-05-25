@@ -13,6 +13,7 @@ class TagTranslat {
     this.intro,
     this.links,
   });
+
   final String namespace;
   final String key;
   final String? name;

@@ -23,6 +23,7 @@ class GalleryViewController extends TabViewController {
 
   final CustomPopupMenuController customPopupMenuController =
       CustomPopupMenuController();
+
   Widget get popupMenu {
     final List<Widget> _menu = <Widget>[];
     for (final MapEntry<String, bool> elem

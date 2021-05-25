@@ -25,6 +25,7 @@ class GalleryItemFlow extends StatelessWidget {
 
   final String? tabTag;
   final GalleryItem galleryItem;
+
   GalleryItemController get _galleryItemController =>
       Get.find(tag: galleryItem.gid);
 

@@ -15,6 +15,8 @@ part 'database.g.dart';
 @Database(version: 1, entities: [GalleryTask, GalleryImageTask, TagTranslat])
 abstract class EhDatabase extends FloorDatabase {
   GalleryTaskDao get galleryTaskDao;
+
   ImageTaskDao get imageTaskDao;
+
   TagTranslatDao get tagTranslatDao;
 }

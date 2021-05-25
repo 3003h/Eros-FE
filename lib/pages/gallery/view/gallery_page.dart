@@ -29,6 +29,7 @@ const double kHeaderPaddingTop = 12.0;
 
 class GalleryRepository {
   GalleryRepository({this.tabTag, this.item, this.url});
+
   final String? tabTag;
   final GalleryItem? item;
   final String? url;
@@ -198,6 +199,7 @@ class GalleryDetail extends StatelessWidget {
 
   final String? tabTag;
   final GalleryPageController controller;
+
   GalleryPageController get _controller => Get.find(tag: pageCtrlDepth);
 
   @override

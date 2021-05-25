@@ -59,6 +59,7 @@ class SearchPageController extends TabViewController {
 
   // 搜索类型
   final Rx<SearchType> _searchType = SearchType.normal.obs;
+
   SearchType get searchType => _searchType.value;
 
   String get placeholderText {
@@ -81,7 +82,9 @@ class SearchPageController extends TabViewController {
   set searchType(SearchType val) => _searchType.value = val;
 
   final Rx<ListType> _listType = ListType.init.obs;
+
   ListType get listType => _listType.value;
+
   set listType(ListType val) => _listType.value = val;
 
   final RxList<TagTranslat> qryTags = <TagTranslat>[].obs;
@@ -103,6 +106,7 @@ class SearchPageController extends TabViewController {
 
   /// 控制右侧按钮展开折叠
   bool get isSearchBarComp => _ehConfigService.isSearchBarComp.value;
+
   set isSearchBarComp(bool val) => _ehConfigService.isSearchBarComp.value = val;
 
   /// 执行搜索
@@ -289,6 +293,7 @@ class SearchPageController extends TabViewController {
   }
 
   List<String> searchHistory = <String>[].obs;
+
   void _addHistory() {
     searchHistory.insert(0, searchTextController.text.trim());
     searchHistory = LinkedHashSet<String>.from(searchHistory).toList();

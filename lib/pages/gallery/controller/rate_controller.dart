@@ -11,6 +11,7 @@ class RateController extends GetxController {
   RateController();
 
   late double rate;
+
   GalleryPageController get pageController => Get.find(tag: pageCtrlDepth);
 
   GalleryItem get _item => pageController.galleryItem;

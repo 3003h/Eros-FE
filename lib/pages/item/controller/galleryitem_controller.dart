@@ -24,6 +24,7 @@ class GalleryItemController extends GetxController {
   }
 
   void onTapDown(_) => _updatePressedColor();
+
   void onTapUp(_) {
     Future<void>.delayed(const Duration(milliseconds: 150), () {
       _updateNormalColor();
@@ -41,7 +42,9 @@ class GalleryItemController extends GetxController {
   }
 
   final RxBool _isFav = false.obs;
+
   bool get isFav => _isFav.value;
+
   set isFav(bool val) => _isFav.value = val;
 
   void setFavTitle({String favTitle = '', String? favcat}) {

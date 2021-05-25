@@ -10,7 +10,9 @@ import 'package:local_auth/error_codes.dart' as auth_error;
 
 class UnlockPageController extends GetxController {
   final _infoText = ''.obs;
+
   get infoText => _infoText.value;
+
   set infoText(val) => _infoText.value = val;
 
   Future<bool> _unlock({required BuildContext context}) async {

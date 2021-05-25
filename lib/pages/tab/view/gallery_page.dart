@@ -329,6 +329,7 @@ class GalleryListTab extends GetView<GalleryViewController> {
 
 class ItemModel {
   ItemModel(this.title, this.icon);
+
   String title;
   IconData icon;
 }

@@ -15,7 +15,9 @@ import 'tabview_controller.dart';
 
 class FavoriteViewController extends TabViewController {
   final _title = ''.obs;
+
   get title => _ehConfigService.lastShowFavTitle ?? _title.value;
+
   set title(val) => _title.value = val;
 
   bool enableDelayedLoad = true;

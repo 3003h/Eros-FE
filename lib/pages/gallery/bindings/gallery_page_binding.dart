@@ -11,6 +11,7 @@ import 'package:get/get.dart';
 
 class GalleryBinding extends Bindings {
   GalleryBinding({this.galleryRepository});
+
   final GalleryRepository? galleryRepository;
 
   @override

@@ -105,6 +105,7 @@ class AddTagPage extends StatelessWidget {
 
 class QryTagSliverList extends StatelessWidget {
   final TagInfoController controller = Get.find(tag: pageCtrlDepth);
+
   @override
   Widget build(BuildContext context) {
     return Obx(() => SliverList(

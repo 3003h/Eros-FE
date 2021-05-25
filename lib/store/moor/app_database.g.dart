@@ -13,11 +13,13 @@ class GalleryImageTaskData extends DataClass
   final String token;
   final int ser;
   final String href;
+
   GalleryImageTaskData(
       {required this.gid,
       required this.token,
       required this.ser,
       required this.href});
+
   factory GalleryImageTaskData.fromData(
       Map<String, dynamic> data, GeneratedDatabase db,
       {String? prefix}) {
@@ -32,6 +34,7 @@ class GalleryImageTaskData extends DataClass
       href: stringType.mapFromDatabaseResponse(data['${effectivePrefix}href'])!,
     );
   }
+
   @override
   Map<String, Expression> toColumns(bool nullToAbsent) {
     final map = <String, Expression>{};
@@ -61,6 +64,7 @@ class GalleryImageTaskData extends DataClass
       href: serializer.fromJson<String>(json['href']),
     );
   }
+
   @override
   Map<String, dynamic> toJson({ValueSerializer? serializer}) {
     serializer ??= moorRuntimeOptions.defaultSerializer;
@@ -80,6 +84,7 @@ class GalleryImageTaskData extends DataClass
         ser: ser ?? this.ser,
         href: href ?? this.href,
       );
+
   @override
   String toString() {
     return (StringBuffer('GalleryImageTaskData(')
@@ -94,6 +99,7 @@ class GalleryImageTaskData extends DataClass
   @override
   int get hashCode => $mrjf($mrjc(
       gid.hashCode, $mrjc(token.hashCode, $mrjc(ser.hashCode, href.hashCode))));
+
   @override
   bool operator ==(dynamic other) =>
       identical(this, other) ||
@@ -109,12 +115,14 @@ class GalleryImageTaskCompanion extends UpdateCompanion<GalleryImageTaskData> {
   final Value<String> token;
   final Value<int> ser;
   final Value<String> href;
+
   const GalleryImageTaskCompanion({
     this.gid = const Value.absent(),
     this.token = const Value.absent(),
     this.ser = const Value.absent(),
     this.href = const Value.absent(),
   });
+
   GalleryImageTaskCompanion.insert({
     required int gid,
     required String token,
@@ -124,6 +132,7 @@ class GalleryImageTaskCompanion extends UpdateCompanion<GalleryImageTaskData> {
         token = Value(token),
         ser = Value(ser),
         href = Value(href);
+
   static Insertable<GalleryImageTaskData> custom({
     Expression<int>? gid,
     Expression<String>? token,
@@ -185,10 +194,13 @@ class $GalleryImageTaskTable extends GalleryImageTask
     with TableInfo<$GalleryImageTaskTable, GalleryImageTaskData> {
   final GeneratedDatabase _db;
   final String? _alias;
+
   $GalleryImageTaskTable(this._db, [this._alias]);
+
   final VerificationMeta _gidMeta = const VerificationMeta('gid');
   @override
   late final GeneratedIntColumn gid = _constructGid();
+
   GeneratedIntColumn _constructGid() {
     return GeneratedIntColumn(
       'gid',
@@ -200,6 +212,7 @@ class $GalleryImageTaskTable extends GalleryImageTask
   final VerificationMeta _tokenMeta = const VerificationMeta('token');
   @override
   late final GeneratedTextColumn token = _constructToken();
+
   GeneratedTextColumn _constructToken() {
     return GeneratedTextColumn(
       'token',
@@ -211,6 +224,7 @@ class $GalleryImageTaskTable extends GalleryImageTask
   final VerificationMeta _serMeta = const VerificationMeta('ser');
   @override
   late final GeneratedIntColumn ser = _constructSer();
+
   GeneratedIntColumn _constructSer() {
     return GeneratedIntColumn(
       'ser',
@@ -222,6 +236,7 @@ class $GalleryImageTaskTable extends GalleryImageTask
   final VerificationMeta _hrefMeta = const VerificationMeta('href');
   @override
   late final GeneratedTextColumn href = _constructHref();
+
   GeneratedTextColumn _constructHref() {
     return GeneratedTextColumn(
       'href',
@@ -232,12 +247,15 @@ class $GalleryImageTaskTable extends GalleryImageTask
 
   @override
   List<GeneratedColumn> get $columns => [gid, token, ser, href];
+
   @override
   $GalleryImageTaskTable get asDslTable => this;
+
   @override
   String get $tableName => _alias ?? 'gallery_image_task';
   @override
   final String actualTableName = 'gallery_image_task';
+
   @override
   VerificationContext validateIntegrity(
       Insertable<GalleryImageTaskData> instance,
@@ -273,6 +291,7 @@ class $GalleryImageTaskTable extends GalleryImageTask
 
   @override
   Set<GeneratedColumn> get $primaryKey => <GeneratedColumn>{};
+
   @override
   GalleryImageTaskData map(Map<String, dynamic> data, {String? tablePrefix}) {
     final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : null;
@@ -289,8 +308,10 @@ abstract class _$AppDatabase extends GeneratedDatabase {
   _$AppDatabase(QueryExecutor e) : super(SqlTypeSystem.defaultInstance, e);
   late final $GalleryImageTaskTable galleryImageTask =
       $GalleryImageTaskTable(this);
+
   @override
   Iterable<TableInfo> get allTables => allSchemaEntities.whereType<TableInfo>();
+
   @override
   List<DatabaseSchemaEntity> get allSchemaEntities => [galleryImageTask];
 }
