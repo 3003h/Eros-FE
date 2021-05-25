@@ -117,6 +117,7 @@ class GalleryViewPage extends GetView<ViewController> {
           return _buildListView();
         case ViewMode.LeftToRight:
           return _buildPhotoViewGallery();
+        // return _buildExtendedImageGesturePageView();
         case ViewMode.rightToLeft:
           return _buildPhotoViewGallery(reverse: true);
         default:
@@ -373,6 +374,7 @@ class GalleryViewPage extends GetView<ViewController> {
               customSize: vState.screensize,
               builder: (BuildContext context, int pageIndex) {
                 return PhotoViewGalleryPageOptions.customChild(
+                  // disableGestures: true,
                   child: Container(
                     // alignment: Alignment.center,
                     padding: EdgeInsets.symmetric(
@@ -444,7 +446,7 @@ class GalleryViewPage extends GetView<ViewController> {
   }
 
   /// 左右方向浏览部件 使用[ExtendedImageGesturePageView] 实现
-  /// 缩放的处理有点问题
+  /// todo 缩放的处理有点问题
   Widget _buildExtendedImageGesturePageView({bool reverse = false}) {
     final ViewState vState = controller.vState;
     return ExtendedImageGesturePageView.builder(

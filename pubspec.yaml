@@ -167,6 +167,7 @@ dependencies:
   flutter_easyrefresh: ^2.2.1
 
 dev_dependencies:
+  # flutter pub run intl_utils:generate
   intl_utils: ^2.2.0
   # flutter pub run apn_json2model
   apn_json2model: ^2.3.0
@@ -176,6 +177,10 @@ dev_dependencies:
 
   floor_generator: ^1.1.0
   copy_with_extension_gen: ^2.0.1
+
+  # git hook 相关
+  process_run: ^0.11.2+8
+  git_hooks: ^0.1.0
 
   flutter_test:
     sdk: flutter

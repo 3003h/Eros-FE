@@ -111,24 +111,24 @@ Future<void> showShareActionSheet(BuildContext context, String imageUrl) {
           actions: <Widget>[
             CupertinoActionSheetAction(
                 onPressed: () {
-                  logger.v('保存到相册');
+                  logger.v('保存到手机');
                   Api.saveImage(context, imageUrl).then((bool rult) {
                     Get.back();
                     if (rult) {
-                      showToast('保存成功');
+                      showToast(S.of(context).saved_successfully);
                     }
                   }).catchError((e) {
                     showToast(e);
                   });
                 },
-                child: const Text('保存到相册')),
+                child: Text(S.of(context).save_into_album)),
             CupertinoActionSheetAction(
                 onPressed: () {
                   logger.v('系统分享');
                   // Api.shareImage(imageUrl);
                   Api.shareImageExtended(imageUrl);
                 },
-                child: const Text('系统分享')),
+                child: Text(S.of(context).system_share)),
           ],
         );
         return dialog;
