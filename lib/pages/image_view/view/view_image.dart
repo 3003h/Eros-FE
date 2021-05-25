@@ -292,6 +292,20 @@ class ImageExtend extends StatelessWidget {
   Widget build(BuildContext context) {
     return ExtendedImage.network(
       url ?? '',
+      // mode: ExtendedImageMode.editor,
+      // initGestureConfigHandler: (ExtendedImageState state) {
+      //   return GestureConfig(
+      //     minScale: 0.9,
+      //     animationMinScale: 0.7,
+      //     maxScale: 3.0,
+      //     animationMaxScale: 3.5,
+      //     speed: 1.0,
+      //     inertialSpeed: 100.0,
+      //     initialScale: 1.0,
+      //     inPageView: true,
+      //     initialAlignment: InitialAlignment.center,
+      //   );
+      // },
       fit: BoxFit.contain,
       handleLoadingProgress: true,
       clearMemoryCacheIfFailed: true,

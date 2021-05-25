@@ -11,7 +11,7 @@ import 'intl/messages_all.dart';
 
 // ignore_for_file: non_constant_identifier_names, lines_longer_than_80_chars
 // ignore_for_file: join_return_with_assignment, prefer_final_in_for_each
-// ignore_for_file: avoid_redundant_argument_values
+// ignore_for_file: avoid_redundant_argument_values, avoid_escaping_inner_quotes
 
 class S {
   S();
@@ -1236,6 +1236,36 @@ class S {
     return Intl.message(
       'Share image',
       name: 'share_image',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Saved successfully`
+  String get saved_successfully {
+    return Intl.message(
+      'Saved successfully',
+      name: 'saved_successfully',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Save into the album`
+  String get save_into_album {
+    return Intl.message(
+      'Save into the album',
+      name: 'save_into_album',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `System share`
+  String get system_share {
+    return Intl.message(
+      'System share',
+      name: 'system_share',
       desc: '',
       args: [],
     );
