@@ -54,14 +54,14 @@ class SettingViewController extends GetxController
   }
 
   // 菜单文案
-  var _itemTitles = [];
+  List _itemTitles = [];
 
-  var _icons = [];
+  List _icons = [];
 
-  var _routes = [];
+  List _routes = [];
 
-  List getItemList() {
-    List _slivers = [];
+  List get itemList {
+    final List _slivers = [];
     for (int _index = 0; _index < _itemTitles.length; _index++) {
       _slivers.add(
         SettingItems(
@@ -79,6 +79,7 @@ class SettingViewController extends GetxController
     _itemTitles = <String>[
       S.of(context).eh,
       S.of(context).download,
+      S.of(context).search,
       S.of(context).advanced,
       S.of(context).security,
       S.of(context).about,
@@ -87,6 +88,7 @@ class SettingViewController extends GetxController
     _icons = <IconData>[
       FontAwesomeIcons.cookieBite,
       FontAwesomeIcons.download,
+      FontAwesomeIcons.search,
       FontAwesomeIcons.tools,
       FontAwesomeIcons.shieldAlt,
       FontAwesomeIcons.infoCircle,
@@ -95,6 +97,7 @@ class SettingViewController extends GetxController
     _routes = <String>[
       EHRoutes.ehSetting,
       EHRoutes.downloadSetting,
+      EHRoutes.searchSetting,
       EHRoutes.advancedSetting,
       EHRoutes.securitySetting,
       EHRoutes.about,

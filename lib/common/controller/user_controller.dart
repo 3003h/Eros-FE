@@ -27,9 +27,8 @@ class UserController extends ProfileController {
     user(Global.profile.user);
     logger.d('${user.toJson()}');
     everProfile<User>(
-      user as RxInterface<User>,
+      user,
       (User value) {
-        // Global.profile.user = value;
         Global.profile = Global.profile.copyWith(user: value);
       },
     );

@@ -4,8 +4,10 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:device_info/device_info.dart';
 import 'package:device_info_platform_interface/model/ios_device_info.dart';
 import 'package:fehviewer/common/controller/quicksearch_controller.dart';
+import 'package:fehviewer/common/controller/user_controller.dart';
 import 'package:fehviewer/common/global.dart';
 import 'package:fehviewer/generated/l10n.dart';
+import 'package:fehviewer/models/base/eh_models.dart';
 import 'package:fehviewer/store/tag_database.dart';
 import 'package:fehviewer/utils/logger.dart';
 import 'package:fehviewer/utils/toast.dart';
@@ -19,6 +21,10 @@ import 'package:line_icons/line_icons.dart';
 import 'package:share/share.dart';
 
 class QuickSearchListPage extends StatelessWidget {
+  const QuickSearchListPage({this.autoSearch = true});
+
+  final bool autoSearch;
+
   Future<String?> _getTextTranslate(String text) async {
     final String? tranText = await EhTagDatabase.getTranTagWithNameSpase(text);
     if (tranText?.trim() != text) {
@@ -52,7 +58,9 @@ class QuickSearchListPage extends StatelessWidget {
                     actionExtentRatio: 0.25,
                     child: GestureDetector(
                       onTap: () {
-                        Get.back<String>(result: _datas[position]);
+                        if (autoSearch) {
+                          Get.back<String>(result: _datas[position]);
+                        }
                       },
                       behavior: HitTestBehavior.opaque,
                       child: FutureBuilder<String?>(
@@ -151,7 +159,7 @@ class QuickSearchListPage extends StatelessWidget {
                     final String _time = formatter.format(_now);
 
                     qSearchs
-                        .doc(await getUniqueId())
+                        .doc(await _getUniqueId())
                         .collection('quick_search')
                         .doc('default')
                         .set({
@@ -169,7 +177,7 @@ class QuickSearchListPage extends StatelessWidget {
                         firestore.collection('fehviewer');
 
                     final DocumentSnapshot<Object?> docById = await qSearchs
-                        .doc(await getUniqueId())
+                        .doc(await _getUniqueId())
                         .collection('quick_search')
                         .doc('default')
                         .get();
@@ -278,7 +286,18 @@ class QuickSearchListPage extends StatelessWidget {
     );
   }
 
-  Future<String> getUniqueId() async {
+  Future<String> _getUniqueId() async {
+    final UserController _userController = Get.find();
+
+    final User _user = _userController.user.value;
+    print(_user.cookie);
+
+    final String memberId = _user.memberIdFB;
+    if (memberId.isNotEmpty) {
+      print('memberId $memberId');
+      return memberId;
+    }
+
     if (Platform.isIOS) {
       final IosDeviceInfo iosDeviceInfo = await deviceInfo.iosInfo;
       print('ios唯一设备码：' + iosDeviceInfo.identifierForVendor);
