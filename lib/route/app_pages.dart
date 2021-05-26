@@ -14,6 +14,7 @@ import 'package:fehviewer/pages/setting/advanced_setting_page.dart';
 import 'package:fehviewer/pages/setting/controller/tab_setting_controller.dart';
 import 'package:fehviewer/pages/setting/download_setting_page.dart';
 import 'package:fehviewer/pages/setting/eh_setting_page.dart';
+import 'package:fehviewer/pages/setting/search_setting_page.dart';
 import 'package:fehviewer/pages/setting/security_setting_page.dart';
 import 'package:fehviewer/pages/setting/tab_setting.dart';
 import 'package:fehviewer/pages/setting/view_setting_page.dart';
@@ -80,6 +81,11 @@ class AppPages {
     GetPage(
       name: EHRoutes.downloadSetting,
       page: () => DownloadSettingPage(),
+      transition: Transition.cupertino,
+    ),
+    GetPage(
+      name: EHRoutes.searchSetting,
+      page: () => SearchSettingPage(),
       transition: Transition.cupertino,
     ),
     GetPage(

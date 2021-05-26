@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:enum_to_string/enum_to_string.dart';
 import 'package:fehviewer/const/const.dart';
 import 'package:fehviewer/pages/image_view/controller/view_state.dart';
@@ -59,4 +61,29 @@ extension ExtCommentSpan on GalleryCommentSpan {
 extension ExtItem on GalleryItem {
   Map<int, GalleryPreview> get previewMap =>
       {for (GalleryPreview v in galleryPreview ?? []) v.ser: v};
+}
+
+extension ExtUser on User {
+  List<String> get _cookieStrList => cookie?.split(';') ?? [];
+  List<Cookie> get _cookies =>
+      _cookieStrList.map((e) => Cookie.fromSetCookieValue(e)).toList();
+
+  String get memberIdFromCookie => _cookies
+      .where((Cookie element) => element.name == 'ipb_member_id')
+      .first
+      .value;
+
+  String get passHashFromCookie => _cookies
+      .where((Cookie element) => element.name == 'ipb_pass_hash')
+      .first
+      .value;
+
+  String get igneousFromCookie =>
+      _cookies.where((Cookie element) => element.name == 'igneous').first.value;
+
+  String get memberIdFB => memberId ?? memberIdFromCookie;
+
+  String get passHashFB => passHash ?? passHashFromCookie;
+
+  String get igneousFB => igneous ?? igneousFromCookie;
 }

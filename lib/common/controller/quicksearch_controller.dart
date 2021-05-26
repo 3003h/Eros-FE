@@ -1,5 +1,6 @@
 import 'package:fehviewer/common/global.dart';
 import 'package:fehviewer/models/profile.dart';
+import 'package:fehviewer/utils/logger.dart';
 import 'package:fehviewer/utils/toast.dart';
 import 'package:get/get.dart';
 
@@ -8,11 +9,15 @@ import 'base_controller.dart';
 class QuickSearchController extends ProfileController {
   RxList<String> searchTextList = <String>[].obs;
 
+  List<String> get _trimList =>
+      searchTextList.map((element) => element.trim()).toList();
+
   void addText(String text, {bool silent = false}) {
-    if (searchTextList.contains(text.trim())) {
+    if (_trimList.contains(text.trim())) {
+      logger.e('搜索词已存在');
       if (!silent) showToast('搜索词已存在');
     } else {
-      searchTextList.add(text);
+      searchTextList.add(text.trim());
       if (!silent) showToast('保存成功');
     }
   }

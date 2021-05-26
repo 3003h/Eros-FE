@@ -20,7 +20,7 @@ import 'package:get/get.dart';
 import 'package:line_icons/line_icons.dart';
 import 'package:share/share.dart';
 
-import 'all_preview_page_new.dart';
+import 'all_preview_page.dart';
 import 'archiver_dialog.dart';
 
 const double kHeaderHeight = 200.0 + 52;
@@ -73,7 +73,7 @@ class GalleryMainPage extends StatelessWidget {
         onLoad: () async {
           if (_controller.previews.isNotEmpty) {
             Get.to(
-              () => AllPreviewPageNew(),
+              () => AllPreviewPage(),
               transition: Transition.cupertino,
             );
           }

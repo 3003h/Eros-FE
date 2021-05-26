@@ -15,7 +15,7 @@ UI 界面方面不少都参考的[E-HentaiViewer](https://github.com/kayanouriko
 
 因为是 flutter 所以也是跨平台支持的，测试的平台主要有\
 iOS 14 : iPhone XR / 12 / iPad Pro 2018\
-Android 10 : MIUI12/ MI K30
+Android 10 : MIUI12/ MI K40
 
 现有问题:
 

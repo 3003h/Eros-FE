@@ -24,7 +24,7 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
 
-import 'all_preview_page_new.dart';
+import 'all_preview_page.dart';
 
 const double kHeightPreview = 180.0;
 const double kPadding = 12.0;
@@ -660,7 +660,7 @@ class MorePreviewButton extends StatelessWidget {
       ),
       onPressed: () {
         Get.to(
-          () => AllPreviewPageNew(),
+          () => AllPreviewPage(),
           transition: Transition.cupertino,
         );
       },
