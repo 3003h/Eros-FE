@@ -1,5 +1,6 @@
 import 'package:fehviewer/const/theme_colors.dart';
 import 'package:fehviewer/utils/logger.dart';
+import 'package:fehviewer/utils/openl/translator_helper.dart';
 import 'package:fehviewer/utils/vibrate.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -36,13 +37,22 @@ class TranslatorDialogView extends StatefulWidget {
 class _TranslatorDialogViewState extends State<TranslatorDialogView> {
   final GoogleTranslator _translator = GoogleTranslator();
 
-  late Future<Translation?> _future;
+  late Future<String?> _future;
 
-  Future<Translation?> _getTrans() async {
+  Future<String?> _getTrans() async {
     try {
       final Translation _trans =
           await _translator.translate(widget.inputText, to: 'zh-cn');
-      return _trans;
+      return _trans.text;
+    } catch (e, stack) {
+      logger.e('$e\n$stack');
+      return null;
+    }
+  }
+
+  Future<String?> _getTransOpenL() async {
+    try {
+      return await TranslatorHelper.translateText(widget.inputText, to: 'zh');
     } catch (e, stack) {
       logger.e('$e\n$stack');
       return null;
@@ -52,12 +62,13 @@ class _TranslatorDialogViewState extends State<TranslatorDialogView> {
   @override
   void initState() {
     super.initState();
-    _future = _getTrans();
+    // _future = _getTrans();
+    _future = _getTransOpenL();
   }
 
   @override
   Widget build(BuildContext context) {
-    return FutureBuilder<Translation?>(
+    return FutureBuilder<String?>(
         future: _future,
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.done) {
@@ -81,7 +92,7 @@ class _TranslatorDialogViewState extends State<TranslatorDialogView> {
                 child: Container(
                   width: double.infinity,
                   child: Text(
-                    _trans?.text ?? '',
+                    _trans ?? '',
                     textAlign: TextAlign.start,
                     style: TextStyle(
                       height: 1.5,

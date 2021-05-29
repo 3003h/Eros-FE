@@ -3,7 +3,7 @@ description: ..
 
 publish_to: 'none' # Remove this line if you wish to publish to pub.dev
 
-version: 1.1.13+178
+version: 1.1.14+179
 
 environment:
   sdk: '>=2.12.0-0 <3.0.0'
@@ -199,3 +199,6 @@ flutter:
   #   - family: SourceHanSansSC
   #     fonts:
   #       - asset: fonts/SourceHanSansSC-Regular.otf
+
+  assets:
+    - assets/openl.json
