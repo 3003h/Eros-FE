@@ -1,5 +1,4 @@
 import 'package:flutter/foundation.dart';
-
 import 'gallery_comment_span.dart';
 
 @immutable

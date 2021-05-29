@@ -1,10 +1,9 @@
 import 'package:flutter/foundation.dart';
-
-import 'gallery_comment.dart';
-import 'gallery_preview.dart';
 import 'gallery_torrent.dart';
 import 'simple_tag.dart';
 import 'tag_group.dart';
+import 'gallery_comment.dart';
+import 'gallery_preview.dart';
 
 @immutable
 class GalleryItem {

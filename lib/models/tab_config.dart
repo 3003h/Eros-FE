@@ -1,5 +1,4 @@
 import 'package:flutter/foundation.dart';
-
 import 'tab_item.dart';
 
 @immutable

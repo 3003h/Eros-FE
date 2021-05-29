@@ -1,5 +1,5 @@
 import 'package:flutter/foundation.dart';
-
+import 'dns_cache.dart';
 import 'dns_cache.dart';
 
 @immutable
