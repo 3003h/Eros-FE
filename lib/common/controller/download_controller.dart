@@ -393,7 +393,8 @@ class DownloadController extends GetxController {
     if (_task != null &&
         _task.filename != 'null' &&
         _task.filename != '<null>' &&
-        _task.filename.trim().isNotEmpty) {
+        _task.filename != null &&
+        _task.filename!.trim().isNotEmpty) {
       logger.d('${_task.filename} ');
       // _taskInfo.title = _task.filename;
       _taskInfo = _taskInfo.copyWith(title: _task.filename);

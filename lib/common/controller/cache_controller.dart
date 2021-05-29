@@ -1,4 +1,4 @@
-import 'dart:io';
+import 'dart:io' as io;
 
 import 'package:dio_http_cache/dio_http_cache.dart';
 import 'package:fehviewer/common/global.dart';
@@ -47,7 +47,7 @@ class CacheController extends GetxController with StateMixin<String> {
     final String _dioCachePath =
         path.join(Global.appSupportPath, _dioCacheName);
     try {
-      final File _dioCacheFile = File(_dioCachePath);
+      final io.File _dioCacheFile = io.File(_dioCachePath);
       final int _dioCacheLength = await _dioCacheFile.length();
       logger.d('_dioCacheFile size ${_dioCacheLength - 20480}');
       return _dioCacheLength - 20480;
@@ -60,7 +60,7 @@ class CacheController extends GetxController with StateMixin<String> {
   ///加载缓存
   Future<int> _loadCache() async {
     try {
-      final Directory tempDir = Directory(Global.tempPath);
+      final io.Directory tempDir = io.Directory(Global.tempPath);
       final int value = await _getTotalSizeOfFilesInDir(tempDir);
       /*tempDir.list(followLinks: false, recursive: true).listen((file) {
         //打印每个缓存文件的路径
@@ -75,16 +75,16 @@ class CacheController extends GetxController with StateMixin<String> {
   }
 
   /// 递归方式 计算文件的大小
-  Future<int> _getTotalSizeOfFilesInDir(final FileSystemEntity file) async {
+  Future<int> _getTotalSizeOfFilesInDir(final io.FileSystemEntity file) async {
     try {
       if (file is File) {
         return await file.length();
       }
-      if (file is Directory) {
-        final List<FileSystemEntity> children = file.listSync();
+      if (file is io.Directory) {
+        final List<io.FileSystemEntity> children = file.listSync();
         int total = 0;
         if (children != null)
-          for (final FileSystemEntity child in children)
+          for (final io.FileSystemEntity child in children)
             total += await _getTotalSizeOfFilesInDir(child);
         return total;
       }
@@ -98,7 +98,7 @@ class CacheController extends GetxController with StateMixin<String> {
   Future<void> _clearCache() async {
     //此处展示加载loading
     try {
-      final Directory tempDir = Directory(Global.tempPath);
+      final io.Directory tempDir = io.Directory(Global.tempPath);
       //删除缓存目录
       await delDir(tempDir);
     } catch (e) {
@@ -107,11 +107,11 @@ class CacheController extends GetxController with StateMixin<String> {
   }
 
   ///递归方式删除目录
-  Future<void> delDir(FileSystemEntity file) async {
+  Future<void> delDir(io.FileSystemEntity file) async {
     try {
-      if (file is Directory) {
-        final List<FileSystemEntity> children = file.listSync();
-        for (final FileSystemEntity child in children) {
+      if (file is io.Directory) {
+        final List<io.FileSystemEntity> children = file.listSync();
+        for (final io.FileSystemEntity child in children) {
           await delDir(child);
         }
       }

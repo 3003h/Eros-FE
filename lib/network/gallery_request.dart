@@ -1,5 +1,5 @@
 import 'dart:convert';
-import 'dart:io';
+import 'dart:io' as io;
 import 'dart:typed_data';
 
 import 'package:cached_network_image/cached_network_image.dart';
@@ -348,9 +348,9 @@ class Api {
     // 不显示警告的处理 cookie加上 nw=1
     // 在 url使用 nw=always 未解决 自动写入cookie 暂时搞不懂 先手动设置下
     final PersistCookieJar cookieJar = await Api.cookieJar;
-    final List<Cookie> cookies =
+    final List<io.Cookie> cookies =
         await cookieJar.loadForRequest(Uri.parse(Api.getBaseUrl()));
-    cookies.add(Cookie('nw', '1'));
+    cookies.add(io.Cookie('nw', '1'));
     cookieJar.saveFromResponse(Uri.parse(Api.getBaseUrl()), cookies);
 
     // logger.i('获取画廊 $url');
@@ -401,9 +401,9 @@ class Api {
     // 在 url使用 nw=always 未解决 自动写入cookie 暂时搞不懂 先手动设置下
     // todo 待优化
     final PersistCookieJar cookieJar = await Api.cookieJar;
-    final List<Cookie> cookies =
+    final List<io.Cookie> cookies =
         await cookieJar.loadForRequest(Uri.parse(Api.getBaseUrl()));
-    cookies.add(Cookie('nw', '1'));
+    cookies.add(io.Cookie('nw', '1'));
     cookieJar.saveFromResponse(Uri.parse(Api.getBaseUrl()), cookies);
 
     await CustomHttpsProxy.instance.init();
@@ -805,7 +805,7 @@ class Api {
 
   static Future<void> shareImageExtended(String imageUrl) async {
     logger.d('imageUrl => $imageUrl');
-    File? file = await getCachedImageFile(imageUrl);
+    io.File? file = await getCachedImageFile(imageUrl);
     if (file == null) {
       try {
         final DefaultCacheManager manager = DefaultCacheManager();
@@ -818,7 +818,7 @@ class Api {
     }
     final String _name = imageUrl.substring(imageUrl.lastIndexOf('/') + 1);
     logger.v('_name $_name url $imageUrl');
-    final File newFile = file.copySync(path.join(Global.tempPath, _name));
+    final io.File newFile = file.copySync(path.join(Global.tempPath, _name));
     Share.shareFiles(<String>[newFile.path], text: 'save image');
   }
 
@@ -857,7 +857,7 @@ class Api {
       );
     }
 
-    if (Platform.isIOS) {
+    if (io.Platform.isIOS) {
       logger.v('check ios photos Permission');
       final PermissionStatus statusPhotos = await Permission.photos.status;
       final PermissionStatus statusPhotosAdd =
@@ -960,7 +960,7 @@ class Api {
 
       /// 保存的图片数据
       Uint8List imageBytes;
-      File? file;
+      io.File? file;
 
       if (isAsset == true) {
         /// 保存资源图片
@@ -993,7 +993,7 @@ class Api {
 
       final _name = imageUrl.substring(imageUrl.lastIndexOf('/') + 1);
       logger.v('_name $_name url $imageUrl');
-      final File newFile = file.copySync(path.join(Global.tempPath, _name));
+      final io.File newFile = file.copySync(path.join(Global.tempPath, _name));
       logger.v('${newFile.path} ${file.lengthSync()} ${newFile.lengthSync()}');
 
       final result = await ImageGallerySaver.saveFile(newFile.path);
