@@ -163,7 +163,7 @@ class ListViewEhSetting extends StatelessWidget {
         onChanged: (bool newValue) =>
             _ehConfigService.commentTrans.value = newValue,
         desc: '关闭',
-        descOn: '用谷歌翻译将评论翻译为简体中文',
+        descOn: '用机器翻译将评论翻译为简体中文',
       ),
       _buildListModeItem(context),
       _buildHistoryMaxItem(context),
