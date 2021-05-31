@@ -6,5 +6,6 @@
   "vote?": -1,
   "id?": "4089350",
   "canEdit?": false,
-  "canVote?": false
+  "canVote?": false,
+  "showTranslate?": false
 }
