@@ -3,6 +3,7 @@ import 'package:fehviewer/generated/l10n.dart';
 import 'package:fehviewer/models/index.dart';
 import 'package:fehviewer/network/gallery_request.dart';
 import 'package:fehviewer/utils/logger.dart';
+import 'package:fehviewer/utils/openl/translator_helper.dart';
 import 'package:fehviewer/utils/toast.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/gestures.dart';
@@ -93,6 +94,32 @@ class CommentController extends GetxController
     return MediaQueryData.fromWindow(_widgetsBinding!.window).viewInsets.bottom;
   }
 
+  Future<void> commitTranslate(String _id) async {
+    logger.v('commitTranslate');
+    final int? _commentIndex =
+        state?.indexWhere((element) => element.id == _id.toString());
+    final List<GalleryCommentSpan>? spans = state?[_commentIndex!].span;
+
+    if (spans != null) {
+      for (int i = 0; i < spans.length; i++) {
+        String? translate = spans[i].translate;
+        if (translate?.isEmpty ?? true) {
+          translate = await TranslatorHelper.translateText(spans[i].text ?? '',
+              to: 'zh');
+        }
+
+        spans[i] = spans[i].copyWith(translate: translate);
+      }
+    }
+
+    state![_commentIndex!] = state![_commentIndex].copyWith(
+      showTranslate: !(state![_commentIndex].showTranslate ?? false),
+    );
+    // update([_id]);
+    update();
+  }
+
+  // 点赞
   Future<void> commitVoteUp(String _id) async {
     if (state == null) {
       return;
@@ -119,6 +146,7 @@ class CommentController extends GetxController
     }
   }
 
+  // 点踩
   Future<void> commitVoteDown(String _id) async {
     logger.d('commit down id $_id');
     // state.firstWhere((element) => element.id == _id.toString()).vote = -1;
@@ -140,6 +168,7 @@ class CommentController extends GetxController
     }
   }
 
+  // 点赞和踩的响应处理
   void _paraRes(CommitVoteRes rult) {
     logger.d('${rult.toJson()}');
     // state.firstWhere((element) => element.id == rult.commentId.toString())
@@ -156,6 +185,7 @@ class CommentController extends GetxController
     logger.v('update CommentController id ${rult.commentId}');
   }
 
+  // 推送评论
   Future<void> _postComment(String comment,
       {bool isEdit = false, String? commentId}) async {
     final bool rult = await Api.postComment(
@@ -193,6 +223,7 @@ class CommentController extends GetxController
     // FocusScope.of(Get.context!).requestFocus(FocusNode());
   }
 
+  // 编辑评论
   void editComment({required String id, required String oriComment}) {
     comment = oriComment;
     commentId = id;

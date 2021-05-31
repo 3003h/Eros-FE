@@ -46,7 +46,7 @@ class CommentItem extends StatelessWidget {
           fontSize: 14,
           color: CupertinoDynamicColor.resolve(ThemeColors.commitText, context),
         ),
-        options: LinkifyOptions(humanize: false),
+        options: const LinkifyOptions(humanize: false),
       );
     }
 
@@ -194,57 +194,25 @@ class CommentItem extends StatelessWidget {
 
     /// 分段实现混排
     /// 合并文字
-    Widget _fullTextCustMergeText() {
+    Widget _fullTextCustMergeText(List<GalleryCommentSpan> span,
+        {bool showTranslate = false}) {
+      logger.d('showTranslate $showTranslate');
       // 首先进行分组
-
       final List<List<GalleryCommentSpan>> _groups = [];
-      /*for (int i = 0; i < galleryComment.span.length; i++) {
-        final _span = galleryComment.span[i];
-        final _nextSpan = i < galleryComment.span.length - 1
-            ? galleryComment.span[i + 1]
-            : null;
-        final _preSpan = i < galleryComment.span.length - 1 && i != 0
-            ? galleryComment.span[i - 1]
-            : null;
 
-        final bool _nextOthType = (_span.imageUrl?.isEmpty ?? true) !=
-            (_nextSpan?.imageUrl?.isEmpty ?? true);
-        final bool _curSpace =
-            (_span.imageUrl?.isEmpty ?? true) && _span.text == ' ';
-
-        final bool _pSpace =
-            (_preSpan?.imageUrl?.isEmpty ?? true) && _preSpan?.text == ' ';
-
-        logger.v('${_span.toJson()} \n-----\n$_nextOthType  $_curSpace');
-
-        if (_nextSpan != null && _nextOthType && !_curSpace && !_pSpace) {
-          _groups.add([_span]);
-        } else {
-          if (_groups.isNotEmpty) {
-            _groups.last.add(_span);
-          } else {
-            _groups.add([_span]);
-          }
-        }
-      }*/
-
-      for (int i = 0; i < galleryComment.span.length; i++) {
+      for (int i = 0; i < span.length; i++) {
         // 当前片段
-        final _span = galleryComment.span[i];
+        final _span = span[i];
 
         // 下一个片段
-        final _nextSpan = i < galleryComment.span.length - 1
-            ? galleryComment.span[i + 1]
-            : null;
+        final _nextSpan = i < span.length - 1 ? span[i + 1] : null;
 
         // 前一个片段
-        final _preSpan = i <= galleryComment.span.length - 1 && i != 0
-            ? galleryComment.span[i - 1]
-            : null;
+        final _preSpan = i <= span.length - 1 && i != 0 ? span[i - 1] : null;
 
         final bool _curIsText = _span.imageUrl?.isEmpty ?? true;
         final bool _preIsText = _preSpan?.imageUrl?.isEmpty ?? true;
-        final bool _curIsLast = i == galleryComment.span.length - 1;
+        final bool _curIsLast = i == span.length - 1;
 
         // 前一个是不同类型
         final bool _preOthType = (_span.imageUrl?.isEmpty ?? true) !=
@@ -296,11 +264,12 @@ class CommentItem extends StatelessWidget {
             List<Widget>.from(_groups.map((List<GalleryCommentSpan> spans) {
           return Wrap(
             crossAxisAlignment: WrapCrossAlignment.center,
-            children: List<Widget>.from(spans.map((GalleryCommentSpan e) {
-              switch (e.sType) {
-                case CommentSpanType.linkText:
+            children:
+                List<Widget>.from(spans.map((GalleryCommentSpan commentSpan) {
+              switch (commentSpan.sType) {
+                case CommentSpanType.linkText: // 链接文字
                   return Text.rich(TextSpan(
-                    text: e.text,
+                    text: commentSpan.text,
                     style: Theme.of(context)
                         .textTheme
                         .bodyText2!
@@ -310,10 +279,14 @@ class CommentItem extends StatelessWidget {
                           decoration: TextDecoration.underline,
                         ),
                     recognizer: controller.genTapGestureRecognizer()
-                      ..onTap = () => _onOpen(context, url: e.href!),
+                      ..onTap = () => _onOpen(context, url: commentSpan.href!),
                   )).marginOnly(right: 2);
-                case CommentSpanType.text:
-                  final String oriText = e.text ?? '';
+                case CommentSpanType.text: // 普通文字
+
+                  final String oriText = (showTranslate
+                          ? commentSpan.translate
+                          : commentSpan.text) ??
+                      '';
                   String _text = oriText.endsWith('\n')
                       ? oriText.substring(0, oriText.length - 1)
                       : oriText;
@@ -323,25 +296,25 @@ class CommentItem extends StatelessWidget {
                   return clif.SelectableLinkify(
                     onOpen: (link) => _onOpen(context, link: link),
                     text: _text,
-                    textAlign: TextAlign.left,
+                    textAlign: TextAlign.start,
                     // 对齐方式
                     style: _commentTextStyle,
-                    options: LinkifyOptions(humanize: false),
+                    options: const LinkifyOptions(humanize: false),
                   );
-                case CommentSpanType.image:
-                case CommentSpanType.linkImage:
+                case CommentSpanType.image: // 图片
+                case CommentSpanType.linkImage: // 带链接图片
                   final Map<String, String> _httpHeaders = {
                     'Cookie': Global.profile.user.cookie ?? '',
                   };
 
                   return GestureDetector(
-                    onTap: () => _onOpen(context, url: e.href!),
+                    onTap: () => _onOpen(context, url: commentSpan.href!),
                     child: Container(
                       constraints:
                           const BoxConstraints(maxWidth: 100, maxHeight: 140),
                       child: CachedNetworkImage(
                         httpHeaders: _httpHeaders,
-                        imageUrl: e.imageUrl ?? '',
+                        imageUrl: commentSpan.imageUrl ?? '',
                         placeholder: (_, __) =>
                             const CupertinoActivityIndicator(),
                       ),
@@ -356,25 +329,30 @@ class CommentItem extends StatelessWidget {
       );
     }
 
-    final ExpandableLinkify _simpleExpTextLinkify = ExpandableLinkify(
-      text: galleryComment.text,
-      onOpen: (link) => _onOpen(context, link: link),
-      options: LinkifyOptions(humanize: false),
-      maxLines: kMaxline,
-      softWrap: true,
-      textAlign: TextAlign.left,
-      // 对齐方式
-      overflow: TextOverflow.ellipsis,
-      // 超出部分省略号
-      style: TextStyle(
-        fontSize: 13,
-        color: CupertinoDynamicColor.resolve(ThemeColors.commitText, context),
-      ),
-      expandText: '展开',
-      collapseText: '收起',
-      colorExpandText:
-          CupertinoDynamicColor.resolve(CupertinoColors.activeBlue, context),
-    );
+    ExpandableLinkify _simpleExpTextLinkify({bool showTranslate = false}) {
+      return ExpandableLinkify(
+        text:
+            showTranslate ? galleryComment.textTranslate : galleryComment.text,
+        onOpen: (link) => _onOpen(context, link: link),
+        options: const LinkifyOptions(humanize: false),
+        maxLines: kMaxline,
+        softWrap: true,
+        textAlign: TextAlign.left,
+        // 对齐方式
+        overflow: TextOverflow.ellipsis,
+        // 超出部分省略号
+        style: TextStyle(
+          fontSize: 13,
+          color: CupertinoDynamicColor.resolve(ThemeColors.commitText, context),
+        ),
+        expandText: '展开',
+        collapseText: '收起',
+        colorExpandText:
+            CupertinoDynamicColor.resolve(CupertinoColors.activeBlue, context),
+      );
+    }
+
+    ;
 
     const double kSizeVote = 14.0;
     const double kSizeNotVote = 13.0;
@@ -409,7 +387,7 @@ class CommentItem extends StatelessWidget {
                             children: <Widget>[
                               // 翻译
                               if (_ehConfigService.commentTrans.value)
-                                CupertinoButton(
+                                /*CupertinoButton(
                                   padding: const EdgeInsets.symmetric(
                                       horizontal: 12),
                                   minSize: 0,
@@ -424,6 +402,30 @@ class CommentItem extends StatelessWidget {
                                   onPressed: () {
                                     vibrateUtil.light();
                                     showTranslatorDialog(galleryComment.text);
+                                  },
+                                ),*/
+
+                                CupertinoButton(
+                                  padding: const EdgeInsets.symmetric(
+                                      horizontal: 12),
+                                  minSize: 0,
+                                  child: Icon(
+                                    FontAwesomeIcons.language,
+                                    size: kSizeVote,
+                                    color: galleryComment.showTranslate ?? false
+                                        ? CupertinoDynamicColor.resolve(
+                                            CupertinoColors.activeBlue,
+                                            context,
+                                          )
+                                        : CupertinoDynamicColor.resolve(
+                                            ThemeColors.commitText,
+                                            context,
+                                          ),
+                                  ),
+                                  onPressed: () {
+                                    vibrateUtil.light();
+                                    _commentController
+                                        .commitTranslate(galleryComment.id!);
                                   },
                                 ),
                               // 点赞
@@ -517,8 +519,12 @@ class CommentItem extends StatelessWidget {
                     Container(
                       padding: const EdgeInsets.fromLTRB(0, 4, 0, 8),
                       child: simple
-                          ? _simpleExpTextLinkify
-                          : _fullTextCustMergeText(),
+                          ? _simpleExpTextLinkify(
+                              showTranslate:
+                                  galleryComment.showTranslate ?? false)
+                          : _fullTextCustMergeText(galleryComment.span,
+                              showTranslate:
+                                  galleryComment.showTranslate ?? false),
                     ),
                     Text(
                       galleryComment.time,

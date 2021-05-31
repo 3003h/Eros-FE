@@ -46,6 +46,13 @@ extension ExtComment on GalleryComment {
         }
         return e.text ?? '';
       }).join();
+
+  String get textTranslate => span.map((GalleryCommentSpan e) {
+        if (e.imageUrl?.isNotEmpty ?? false) {
+          return '[image]${e.href ?? ''} ';
+        }
+        return e.translate ?? '';
+      }).join();
 }
 
 extension ExtCommentSpan on GalleryCommentSpan {
