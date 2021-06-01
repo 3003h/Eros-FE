@@ -7,9 +7,9 @@ import 'package:fehviewer/const/const.dart';
 import 'package:fehviewer/generated/l10n.dart';
 import 'package:fehviewer/pages/setting/webview/mytags_in.dart';
 import 'package:fehviewer/pages/setting/webview/web_mysetting_in.dart';
-import 'package:fehviewer/store/tag_database.dart';
 import 'package:fehviewer/utils/logger.dart';
 import 'package:fehviewer/utils/toast.dart';
+import 'package:fehviewer/utils/vibrate.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -39,6 +39,7 @@ class ListViewEhSetting extends StatelessWidget {
   Widget build(BuildContext context) {
     final EhConfigService _ehConfigService = Get.find();
     final UserController userController = Get.find();
+    final TagTransController transController = Get.find();
 
     final bool _siteEx = _ehConfigService.isSiteEx.value;
     final bool _jpnTitle = _ehConfigService.isJpnTitle.value;
@@ -60,10 +61,10 @@ class ListViewEhSetting extends StatelessWidget {
       _ehConfigService.isTagTranslat.value = newValue;
       if (newValue) {
         try {
-          // EhTagDatabase.generateTagTranslat();
-          final TagTransController transController = Get.find();
           if (await transController.checkUpdate()) {
+            showToast('更新开始');
             await transController.updateDB();
+            showToast('更新完成');
           } else {
             logger.v('do not need update');
           }
@@ -133,10 +134,21 @@ class ListViewEhSetting extends StatelessWidget {
           },
         ),
       if (_isLogin) Container(height: 38),
-      Obx(() => TextSwitchItem('显示标签中文翻译',
-          intValue: _tagTranslat,
-          onChanged: _handleTagTranslatChanged,
-          desc: '当前版本:${_ehConfigService.tagTranslatVer.value}')),
+      Obx(() => GestureDetector(
+            behavior: HitTestBehavior.opaque,
+            onLongPress: () async {
+              vibrateUtil.light();
+              showToast('强制更新开始');
+              if (await transController.checkUpdate(force: true)) {
+                await transController.updateDB();
+                showToast('更新完成');
+              }
+            },
+            child: TextSwitchItem('显示标签中文翻译',
+                intValue: _tagTranslat,
+                onChanged: _handleTagTranslatChanged,
+                desc: '当前版本:${_ehConfigService.tagTranslatVer.value}'),
+          )),
       TextSwitchItem(
         S.of(context).show_jpn_title,
         intValue: _jpnTitle,
