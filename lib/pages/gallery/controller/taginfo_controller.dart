@@ -1,10 +1,10 @@
+import 'package:fehviewer/common/controller/tag_trans_controller.dart';
 import 'package:fehviewer/common/service/depth_service.dart';
 import 'package:fehviewer/const/const.dart';
 import 'package:fehviewer/generated/l10n.dart';
 import 'package:fehviewer/models/base/eh_models.dart';
-import 'package:fehviewer/models/entity/tag_translat.dart';
 import 'package:fehviewer/network/gallery_request.dart';
-import 'package:fehviewer/utils/db_util.dart';
+import 'package:fehviewer/store/floor/entity/tag_translat.dart';
 import 'package:fehviewer/utils/logger.dart';
 import 'package:fehviewer/utils/toast.dart';
 import 'package:fehviewer/utils/vibrate.dart';
@@ -52,7 +52,7 @@ class TagInfoController extends GetxController {
         return;
       }
 
-      try {
+      /*try {
         dbUtil
             .getTagTransFuzzy(_currQry, limit: 200)
             .then((List<TagTranslat>? qryTags) {
@@ -60,6 +60,12 @@ class TagInfoController extends GetxController {
           // logger.d('${qryTags.map((TagTranslat e) => e.name).join('\n')}');
           this.qryTags(qryTags);
         });
+      } catch (_) {}*/
+
+      try {
+        Get.find<TagTransController>()
+            .getTagTranslatesLike(text: _currQry, limit: 200)
+            .then((List<TagTranslat> value) => qryTags(value));
       } catch (_) {}
     }
   }

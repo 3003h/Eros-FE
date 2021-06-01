@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:enum_to_string/enum_to_string.dart';
 import 'package:fehviewer/const/const.dart';
 import 'package:fehviewer/pages/image_view/controller/view_state.dart';
+import 'package:fehviewer/store/floor/entity/tag_translat.dart';
 
 import '../index.dart';
 
@@ -11,8 +12,6 @@ extension ExtGC on GalleryCache {
       EnumToString.fromString(ViewColumnMode.values, columnModeVal ?? '') ??
       ViewColumnMode.single;
 
-  // set columnMode(ViewColumnMode val) =>
-  //     columnModeVal = EnumToString.convertToString(val);
   GalleryCache copyWithMode(ViewColumnMode val) =>
       copyWith(columnModeVal: EnumToString.convertToString(val));
 }
@@ -93,4 +92,17 @@ extension ExtUser on User {
   String get passHashFB => passHash ?? passHashFromCookie;
 
   String get igneousFB => igneous ?? igneousFromCookie;
+}
+
+extension Ext on TagTranslat {
+  String? get nameNotMD {
+    final reg = RegExp(r'!\[\S+\]\(.+?\)(\S+)');
+    final match = reg.allMatches(name ?? '');
+    if (match.isNotEmpty) {
+      return name?.replaceAllMapped(reg, (match) => match.group(1) ?? '') ??
+          name;
+    } else {
+      return name;
+    }
+  }
 }

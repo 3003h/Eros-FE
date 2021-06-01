@@ -2,6 +2,7 @@ import 'dart:collection';
 
 import 'package:custom_pop_up_menu/custom_pop_up_menu.dart';
 import 'package:fehviewer/common/controller/quicksearch_controller.dart';
+import 'package:fehviewer/common/controller/tag_trans_controller.dart';
 import 'package:fehviewer/common/global.dart';
 import 'package:fehviewer/common/service/depth_service.dart';
 import 'package:fehviewer/common/service/ehconfig_service.dart';
@@ -11,6 +12,7 @@ import 'package:fehviewer/models/entity/tag_translat.dart';
 import 'package:fehviewer/models/index.dart';
 import 'package:fehviewer/network/gallery_request.dart';
 import 'package:fehviewer/pages/tab/view/quick_search_page.dart';
+import 'package:fehviewer/store/floor/entity/tag_translat.dart';
 import 'package:fehviewer/store/gallery_store.dart';
 import 'package:fehviewer/utils/db_util.dart';
 import 'package:fehviewer/utils/logger.dart';
@@ -175,12 +177,18 @@ class SearchPageController extends TabViewController {
         return;
       }
 
+      // try {
+      //   dbUtil
+      //       .getTagTransFuzzy(_currQry, limit: 200)
+      //       .then((List<TagTranslatOld>? qryTags) {
+      //     this.qryTags(qryTags);
+      //   });
+      // } catch (_) {}
+
       try {
-        dbUtil
-            .getTagTransFuzzy(_currQry, limit: 200)
-            .then((List<TagTranslat>? qryTags) {
-          this.qryTags(qryTags);
-        });
+        Get.find<TagTransController>()
+            .getTagTranslatesLike(text: _currQry, limit: 200)
+            .then((List<TagTranslat> value) => qryTags(value));
       } catch (_) {}
 
       logger.d('$_autoComplete');

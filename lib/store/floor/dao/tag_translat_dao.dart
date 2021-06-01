@@ -19,6 +19,9 @@ abstract class TagTranslatDao {
   Future<List<TagTranslat>> findTagTranslatsWithLike(
       String key, String name, int limit);
 
+  @Query('SELECT * FROM TagTranslat WHERE key = :key')
+  Future<List<TagTranslat>> findAllTagTranslatsByKey(String key);
+
   @insert
   Future<void> insertTagTranslat(TagTranslat tagTranslat);
 

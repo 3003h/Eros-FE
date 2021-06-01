@@ -1,4 +1,5 @@
 import 'package:enum_to_string/enum_to_string.dart';
+import 'package:fehviewer/common/controller/tag_trans_controller.dart';
 import 'package:fehviewer/common/controller/user_controller.dart';
 import 'package:fehviewer/common/service/ehconfig_service.dart';
 import 'package:fehviewer/common/service/theme_service.dart';
@@ -55,13 +56,20 @@ class ListViewEhSetting extends StatelessWidget {
       _ehConfigService.isJpnTitle(newValue);
     }
 
-    void _handleTagTranslatChanged(bool newValue) {
+    Future<void> _handleTagTranslatChanged(bool newValue) async {
       _ehConfigService.isTagTranslat.value = newValue;
       if (newValue) {
         try {
-          EhTagDatabase.generateTagTranslat();
+          // EhTagDatabase.generateTagTranslat();
+          final TagTransController transController = Get.find();
+          if (await transController.checkUpdate()) {
+            await transController.updateDB();
+          } else {
+            logger.v('do not need update');
+          }
         } catch (e) {
           debugPrint('更新翻译异常 $e');
+          rethrow;
         }
       }
     }

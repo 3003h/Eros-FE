@@ -1,3 +1,4 @@
+/*
 import 'dart:async';
 
 import 'package:fehviewer/common/global.dart';
@@ -51,7 +52,7 @@ class DataBaseUtil {
   }
 
   // 单条插入
-  Future<void> insertTag(TagTranslat translat) async {
+  Future<void> insertTag(TagTranslatOld translat) async {
     final Database db = await _getDataBase();
     await db.insert(
       tableTag,
@@ -61,10 +62,10 @@ class DataBaseUtil {
   }
 
   // 批量插入
-  Future<void> insertTagAll(List<TagTranslat> translats) async {
+  Future<void> insertTagAll(List<TagTranslatOld> translats) async {
     final Database db = await _getDataBase();
     final Batch batch = db.batch();
-    translats.forEach((TagTranslat translat) {
+    translats.forEach((TagTranslatOld translat) {
       batch.insert(
         tableTag,
         translat.toMap(),
@@ -77,7 +78,8 @@ class DataBaseUtil {
   }
 
   /// 获取翻译对象
-  Future<TagTranslat?> getTagTrans(String key, {String namespace = ''}) async {
+  Future<TagTranslatOld?> getTagTrans(String key,
+      {String namespace = ''}) async {
     final Database db = await _getDataBase();
 
     final bool _isNameSpace = namespace != null && namespace.isNotEmpty;
@@ -99,12 +101,12 @@ class DataBaseUtil {
       whereArgs: _args,
     );
     if (maps.isNotEmpty) {
-      return TagTranslat.fromMap(maps.first);
+      return TagTranslatOld.fromMap(maps.first);
     }
     return null;
   }
 
-  Future<List<TagTranslat>?> getTagTransFuzzy(String key,
+  Future<List<TagTranslatOld>?> getTagTransFuzzy(String key,
       {int limit = 100}) async {
     final Database db = await _getDataBase();
 
@@ -133,8 +135,8 @@ class DataBaseUtil {
     logger.d('${maps.length}');
 
     if (maps.isNotEmpty) {
-      return List<TagTranslat>.from(maps
-          .map((Map<String, dynamic> e) => TagTranslat.fromMap(e))
+      return List<TagTranslatOld>.from(maps
+          .map((Map<String, dynamic> e) => TagTranslatOld.fromMap(e))
           .toList());
     }
     return null;
@@ -142,8 +144,9 @@ class DataBaseUtil {
 
   /// 获取翻译结果
   Future<String?> getTagTransStr(String key, {String namespace = ''}) async {
-    final TagTranslat? tr =
+    final TagTranslatOld? tr =
         await getTagTrans(key.trim(), namespace: namespace.trim());
     return tr?.nameNotMD ?? key;
   }
 }
+*/

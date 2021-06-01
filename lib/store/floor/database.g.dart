@@ -72,6 +72,7 @@ class _$EhDatabase extends EhDatabase {
       version: 1,
       onConfigure: (database) async {
         await database.execute('PRAGMA foreign_keys = ON');
+        await callback?.onConfigure?.call(database);
       },
       onOpen: (database) async {
         await callback?.onOpen?.call(database);
@@ -120,7 +121,7 @@ class _$GalleryTaskDao extends GalleryTaskDao {
         _galleryTaskInsertionAdapter = InsertionAdapter(
             database,
             'GalleryTask',
-            (GalleryTask item) => <String, dynamic>{
+            (GalleryTask item) => <String, Object?>{
                   'gid': item.gid,
                   'token': item.token,
                   'url': item.url,
@@ -141,7 +142,7 @@ class _$GalleryTaskDao extends GalleryTaskDao {
   @override
   Future<List<GalleryTask>> findAllGalleryTasks() async {
     return _queryAdapter.queryList('SELECT * FROM GalleryTask',
-        mapper: (Map<String, dynamic> row) => GalleryTask(
+        mapper: (Map<String, Object?> row) => GalleryTask(
             gid: row['gid'] as int,
             token: row['token'] as String,
             url: row['url'] as String?,
@@ -153,16 +154,16 @@ class _$GalleryTaskDao extends GalleryTaskDao {
 
   @override
   Future<GalleryTask?> findGalleryTaskByGid(int gid) async {
-    return _queryAdapter.query('SELECT * FROM GalleryTask WHERE gid = ?',
-        arguments: [gid],
-        mapper: (Map<String, dynamic> row) => GalleryTask(
+    return _queryAdapter.query('SELECT * FROM GalleryTask WHERE gid = ?1',
+        mapper: (Map<String, Object?> row) => GalleryTask(
             gid: row['gid'] as int,
             token: row['token'] as String,
             url: row['url'] as String?,
             title: row['title'] as String,
             fileCount: row['fileCount'] as int?,
             completCount: row['completCount'] as int?,
-            status: row['status'] as int?));
+            status: row['status'] as int?),
+        arguments: [gid]);
   }
 
   @override
@@ -178,7 +179,7 @@ class _$ImageTaskDao extends ImageTaskDao {
         _galleryImageTaskInsertionAdapter = InsertionAdapter(
             database,
             'GalleryImageTask',
-            (GalleryImageTask item) => <String, dynamic>{
+            (GalleryImageTask item) => <String, Object?>{
                   'gid': item.gid,
                   'ser': item.ser,
                   'token': item.token,
@@ -191,7 +192,7 @@ class _$ImageTaskDao extends ImageTaskDao {
             database,
             'GalleryImageTask',
             ['gid', 'ser'],
-            (GalleryImageTask item) => <String, dynamic>{
+            (GalleryImageTask item) => <String, Object?>{
                   'gid': item.gid,
                   'ser': item.ser,
                   'token': item.token,
@@ -214,7 +215,7 @@ class _$ImageTaskDao extends ImageTaskDao {
   @override
   Future<List<GalleryImageTask>> findAllImageTasks() async {
     return _queryAdapter.queryList('SELECT * FROM GalleryImageTask',
-        mapper: (Map<String, dynamic> row) => GalleryImageTask(
+        mapper: (Map<String, Object?> row) => GalleryImageTask(
             gid: row['gid'] as int,
             token: row['token'] as String,
             href: row['href'] as String?,
@@ -227,31 +228,31 @@ class _$ImageTaskDao extends ImageTaskDao {
   @override
   Future<List<GalleryImageTask>> findAllGalleryTaskByGid(int gid) async {
     return _queryAdapter.queryList(
-        'SELECT * FROM GalleryImageTask WHERE gid = ?',
-        arguments: [gid],
-        mapper: (Map<String, dynamic> row) => GalleryImageTask(
+        'SELECT * FROM GalleryImageTask WHERE gid = ?1',
+        mapper: (Map<String, Object?> row) => GalleryImageTask(
             gid: row['gid'] as int,
             token: row['token'] as String,
             href: row['href'] as String?,
             sourceId: row['sourceId'] as String?,
             imageUrl: row['imageUrl'] as String?,
             ser: row['ser'] as int,
-            filePath: row['filePath'] as String?));
+            filePath: row['filePath'] as String?),
+        arguments: [gid]);
   }
 
   @override
   Future<GalleryImageTask?> findGalleryTaskByKey(int gid, int ser) async {
     return _queryAdapter.query(
-        'SELECT * FROM GalleryImageTask WHERE gid = ? and ser = ?',
-        arguments: [gid, ser],
-        mapper: (Map<String, dynamic> row) => GalleryImageTask(
+        'SELECT * FROM GalleryImageTask WHERE gid = ?1 and ser = ?2',
+        mapper: (Map<String, Object?> row) => GalleryImageTask(
             gid: row['gid'] as int,
             token: row['token'] as String,
             href: row['href'] as String?,
             sourceId: row['sourceId'] as String?,
             imageUrl: row['imageUrl'] as String?,
             ser: row['ser'] as int,
-            filePath: row['filePath'] as String?));
+            filePath: row['filePath'] as String?),
+        arguments: [gid, ser]);
   }
 
   @override
@@ -280,7 +281,7 @@ class _$TagTranslatDao extends TagTranslatDao {
         _tagTranslatInsertionAdapter = InsertionAdapter(
             database,
             'TagTranslat',
-            (TagTranslat item) => <String, dynamic>{
+            (TagTranslat item) => <String, Object?>{
                   'namespace': item.namespace,
                   'key': item.key,
                   'name': item.name,
@@ -291,7 +292,7 @@ class _$TagTranslatDao extends TagTranslatDao {
             database,
             'TagTranslat',
             ['namespace', 'key'],
-            (TagTranslat item) => <String, dynamic>{
+            (TagTranslat item) => <String, Object?>{
                   'namespace': item.namespace,
                   'key': item.key,
                   'name': item.name,
@@ -312,7 +313,7 @@ class _$TagTranslatDao extends TagTranslatDao {
   @override
   Future<List<TagTranslat>?> findAllTagTranslats() async {
     return _queryAdapter.queryList('SELECT * FROM TagTranslat',
-        mapper: (Map<String, dynamic> row) => TagTranslat(
+        mapper: (Map<String, Object?> row) => TagTranslat(
             namespace: row['namespace'] as String,
             key: row['key'] as String,
             name: row['name'] as String?,
@@ -322,42 +323,54 @@ class _$TagTranslatDao extends TagTranslatDao {
 
   @override
   Future<List<TagTranslat>?> findAllTagTranslatByKey(String key) async {
-    return _queryAdapter.queryList('SELECT * FROM TagTranslat WHERE key = ?',
-        arguments: [key],
-        mapper: (Map<String, dynamic> row) => TagTranslat(
+    return _queryAdapter.queryList('SELECT * FROM TagTranslat WHERE key = ?1',
+        mapper: (Map<String, Object?> row) => TagTranslat(
             namespace: row['namespace'] as String,
             key: row['key'] as String,
             name: row['name'] as String?,
             intro: row['intro'] as String?,
-            links: row['links'] as String?));
+            links: row['links'] as String?),
+        arguments: [key]);
   }
 
   @override
   Future<TagTranslat?> findTagTranslatByKey(
       String key, String namespace) async {
     return _queryAdapter.query(
-        'SELECT * FROM TagTranslat WHERE key = ? and namespace = ?',
-        arguments: [key, namespace],
-        mapper: (Map<String, dynamic> row) => TagTranslat(
+        'SELECT * FROM TagTranslat WHERE key = ?1 and namespace = ?2',
+        mapper: (Map<String, Object?> row) => TagTranslat(
             namespace: row['namespace'] as String,
             key: row['key'] as String,
             name: row['name'] as String?,
             intro: row['intro'] as String?,
-            links: row['links'] as String?));
+            links: row['links'] as String?),
+        arguments: [key, namespace]);
   }
 
   @override
   Future<List<TagTranslat>> findTagTranslatsWithLike(
       String key, String name, int limit) async {
     return _queryAdapter.queryList(
-        'SELECT * FROM TagTranslat WHERE key like ? or name like ? limit ?',
-        arguments: [key, name, limit],
-        mapper: (Map<String, dynamic> row) => TagTranslat(
+        'SELECT * FROM TagTranslat WHERE key like ?1 or name like ?2 limit ?3',
+        mapper: (Map<String, Object?> row) => TagTranslat(
             namespace: row['namespace'] as String,
             key: row['key'] as String,
             name: row['name'] as String?,
             intro: row['intro'] as String?,
-            links: row['links'] as String?));
+            links: row['links'] as String?),
+        arguments: [key, name, limit]);
+  }
+
+  @override
+  Future<List<TagTranslat>> findAllTagTranslatsByKey(String key) async {
+    return _queryAdapter.queryList('SELECT * FROM TagTranslat WHERE key = ?1',
+        mapper: (Map<String, Object?> row) => TagTranslat(
+            namespace: row['namespace'] as String,
+            key: row['key'] as String,
+            name: row['name'] as String?,
+            intro: row['intro'] as String?,
+            links: row['links'] as String?),
+        arguments: [key]);
   }
 
   @override

@@ -5,6 +5,7 @@ import 'dart:ui';
 import 'package:fehviewer/common/global.dart';
 import 'package:fehviewer/common/isolate/download.dart';
 import 'package:fehviewer/common/service/depth_service.dart';
+import 'package:fehviewer/const/const.dart';
 import 'package:fehviewer/models/index.dart';
 import 'package:fehviewer/network/gallery_request.dart';
 import 'package:fehviewer/pages/gallery/controller/gallery_page_controller.dart';
@@ -31,7 +32,7 @@ class DownloadController extends GetxController {
   final GStore _gStore = Get.find();
 
   static final String _dbPath =
-      path.join(Global.appSupportPath, 'gallery_task.db');
+      path.join(Global.appSupportPath, EHConst.DB_NAME);
 
   static Future<EhDatabase> _getDatabase() async {
     return await $FloorEhDatabase.databaseBuilder(_dbPath).build();

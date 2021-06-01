@@ -1,3 +1,4 @@
+/*
 const String dbname = 'eh_database.db';
 const String tableTag = 'tag_translat';
 const String columnNamespace = 'namespace';
@@ -6,8 +7,8 @@ const String columnName = 'name';
 const String columnIntro = 'intro';
 const String columnLinks = 'links';
 
-class TagTranslat {
-  TagTranslat(this.namespace, this.key, this.name,
+class TagTranslatOld {
+  TagTranslatOld(this.namespace, this.key, this.name,
       {this.intro = '', this.links = ''});
 
   late String namespace;
@@ -36,7 +37,7 @@ class TagTranslat {
     };
   }
 
-  TagTranslat.fromMap(Map<String, dynamic> map) {
+  TagTranslatOld.fromMap(Map<String, dynamic> map) {
     namespace = map[columnNamespace];
     key = map[columnKey];
     name = map[columnName];
@@ -49,3 +50,4 @@ class TagTranslat {
     return 'TagTranslat{namespace: $namespace, key: $key, name: $name, intro: $intro, links: $links}';
   }
 }
+*/
