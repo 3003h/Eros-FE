@@ -4,6 +4,7 @@ import 'package:enum_to_string/enum_to_string.dart';
 import 'package:fehviewer/const/const.dart';
 import 'package:fehviewer/pages/image_view/controller/view_state.dart';
 import 'package:fehviewer/store/floor/entity/tag_translat.dart';
+import 'package:fehviewer/utils/logger.dart';
 
 import '../index.dart';
 
@@ -103,6 +104,20 @@ extension Ext on TagTranslat {
           name;
     } else {
       return name;
+    }
+  }
+
+  String? get introMDimage {
+    final reg = RegExp(r'!\[((\S+)?)\]\(#\s+?"(.+?)"\)');
+    final match = reg.allMatches(intro ?? '');
+    if (match.isNotEmpty) {
+      final rult = intro?.replaceAllMapped(
+              reg, (match) => '![${match.group(2)}](${match.group(3)})') ??
+          intro;
+      logger.v(rult);
+      return rult;
+    } else {
+      return intro;
     }
   }
 }

@@ -3,11 +3,9 @@ import 'package:fehviewer/common/controller/tag_trans_controller.dart';
 import 'package:fehviewer/common/global.dart';
 import 'package:fehviewer/common/service/depth_service.dart';
 import 'package:fehviewer/generated/l10n.dart';
-import 'package:fehviewer/models/entity/tag_translat.dart';
 import 'package:fehviewer/pages/gallery/controller/taginfo_controller.dart';
 import 'package:fehviewer/route/navigator_util.dart';
 import 'package:fehviewer/store/floor/entity/tag_translat.dart';
-import 'package:fehviewer/utils/db_util.dart';
 import 'package:fehviewer/utils/logger.dart';
 import 'package:fehviewer/utils/vibrate.dart';
 import 'package:flutter/cupertino.dart';
@@ -16,6 +14,7 @@ import 'package:flutter_markdown/flutter_markdown.dart';
 import 'package:get/get.dart';
 import 'package:line_icons/line_icons.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:fehviewer/models/base/extension.dart';
 
 Future<void> showTagInfoDialog(String text,
     {required String type, int vote = 0}) {
@@ -149,6 +148,7 @@ class _TagDialogViewState extends State<TagDialogView> {
               );
             } else {
               final TagTranslat? _taginfo = snapshot.data;
+              logger.v('${_taginfo?.intro}');
               logger.v('${_taginfo?.links}');
               final CupertinoThemeData theme = CupertinoTheme.of(context);
               final CupertinoThemeData lTheme = theme.copyWith(
@@ -170,7 +170,7 @@ class _TagDialogViewState extends State<TagDialogView> {
                       //   ),
                       // ),
                       MarkdownBody(
-                        data: _taginfo?.intro ?? '',
+                        data: _taginfo?.introMDimage ?? '',
                         selectable: true,
                         onTapLink: (String text, String? href, String title) {
                           _onOpen(context, href);
