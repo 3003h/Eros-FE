@@ -2,6 +2,7 @@ import 'package:fehviewer/common/service/depth_service.dart';
 import 'package:fehviewer/common/service/theme_service.dart';
 import 'package:fehviewer/const/const.dart';
 import 'package:fehviewer/generated/l10n.dart';
+import 'package:fehviewer/models/base/extension.dart';
 import 'package:fehviewer/pages/gallery/controller/taginfo_controller.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';

@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:fehviewer/common/controller/tag_trans_controller.dart';
 import 'package:fehviewer/common/global.dart';
 import 'package:fehviewer/common/service/ehconfig_service.dart';
 import 'package:fehviewer/const/const.dart';
@@ -153,7 +154,8 @@ class GalleryListParser {
       for (final dom.Element tag in tags) {
         final String tagText = tag.text.trim();
         final String translate =
-            await EhTagDatabase.getTranTag(tagText) ?? tagText;
+            await Get.find<TagTransController>().getTagTranslateText(tagText) ??
+                tagText;
 
         final String? style = tag.attributes['style'];
         String color = '';

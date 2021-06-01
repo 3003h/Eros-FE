@@ -1,10 +1,12 @@
 import 'dart:math';
 
 import 'package:custom_pop_up_menu/custom_pop_up_menu.dart';
+import 'package:fehviewer/common/controller/tag_trans_controller.dart';
 import 'package:fehviewer/common/service/depth_service.dart';
 import 'package:fehviewer/common/service/theme_service.dart';
 import 'package:fehviewer/const/const.dart';
 import 'package:fehviewer/generated/l10n.dart';
+import 'package:fehviewer/models/base/extension.dart';
 import 'package:fehviewer/models/index.dart';
 import 'package:fehviewer/pages/filter/filter.dart';
 import 'package:fehviewer/pages/gallery/view/gallery_widget.dart';
@@ -12,7 +14,6 @@ import 'package:fehviewer/pages/tab/controller/enum.dart';
 import 'package:fehviewer/pages/tab/controller/search_page_controller.dart';
 import 'package:fehviewer/pages/tab/view/gallery_base.dart';
 import 'package:fehviewer/pages/tab/view/tab_base.dart';
-import 'package:fehviewer/store/tag_database.dart';
 import 'package:fehviewer/utils/logger.dart';
 import 'package:fehviewer/utils/vibrate.dart';
 import 'package:flutter/cupertino.dart';
@@ -185,7 +186,7 @@ class GallerySearchPage extends StatelessWidget {
   Widget _getInitView() {
     Future<String?> _getTextTranslate(String text) async {
       final String? tranText =
-          await EhTagDatabase.getTranTagWithNameSpase(text);
+          await Get.find<TagTransController>().getTranTagWithNameSpase(text);
       if (tranText != null && tranText.trim() != text) {
         return tranText;
       } else {

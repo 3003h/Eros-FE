@@ -29,6 +29,7 @@ import 'common/controller/gallerycache_controller.dart';
 import 'common/controller/history_controller.dart';
 import 'common/controller/localfav_controller.dart';
 import 'common/controller/quicksearch_controller.dart';
+import 'common/controller/tag_trans_controller.dart';
 import 'common/controller/user_controller.dart';
 import 'common/isolate/download.dart';
 import 'common/service/depth_service.dart';
@@ -72,6 +73,7 @@ Future<void> main() async {
     Get.lazyPut(() => FavController(), fenix: true);
 
     Get.lazyPut(() => UnlockPageController(), fenix: true);
+    Get.lazyPut(() => TagTransController(), fenix: true);
 
     runApp(MyApp());
   }, (Object error, StackTrace stackTrace) {

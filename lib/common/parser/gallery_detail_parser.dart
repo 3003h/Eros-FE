@@ -1,8 +1,9 @@
+import 'package:fehviewer/common/controller/tag_trans_controller.dart';
 import 'package:fehviewer/const/const.dart';
 import 'package:fehviewer/models/base/eh_models.dart';
 import 'package:fehviewer/network/gallery_request.dart';
-import 'package:fehviewer/store/tag_database.dart';
 import 'package:fehviewer/utils/logger.dart';
+import 'package:get/get.dart' hide Node;
 import 'package:html/dom.dart';
 import 'package:html/parser.dart' show parse;
 import 'package:intl/intl.dart';
@@ -57,8 +58,11 @@ class GalleryDetailParser {
           if (title.contains('|')) {
             title = title.split('|')[0];
           }
-          final String tagTranslat =
-              await EhTagDatabase.getTranTag(title, nameSpase: type) ?? title;
+          // final String tagTranslat =
+          //     await EhTagDatabase.getTranTag(title, nameSpase: type) ?? title;
+          final String tagTranslat = await Get.find<TagTransController>()
+                  .getTagTranslateText(title, namespace: type) ??
+              title;
 
           int tagVote = 0;
           final String? tagclass = tagElm.attributes['class'];

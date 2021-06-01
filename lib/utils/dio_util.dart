@@ -19,8 +19,12 @@ const int kDefreceiveTimeout = 10000;
 
 class HttpManager {
   //构造函数
-  HttpManager(String _baseUrl,
-      {bool cache = true, int? connectTimeout = kDefconnectTimeout}) {
+  HttpManager(
+    String _baseUrl, {
+    bool cache = true,
+    bool retry = false,
+    int? connectTimeout = kDefconnectTimeout,
+  }) {
     _options = BaseOptions(
         baseUrl: _baseUrl,
         connectTimeout: connectTimeout ?? kDefconnectTimeout,
@@ -61,18 +65,20 @@ class HttpManager {
     //   ));
     // }
 
-    _dio.interceptors.add(RetryInterceptor(
-        dio: _dio..options.extra.addAll({DIO_CACHE_KEY_FORCE_REFRESH: true}),
-        options: RetryOptions(
-          retries: 3, // Number of retries before a failure
-          retryInterval:
-              const Duration(seconds: 1), // Interval between each retry
-          retryEvaluator: (error) =>
-              error.type != DioErrorType.cancel &&
-              error.type !=
-                  DioErrorType
-                      .response, // Evaluating if a retry is necessary regarding the error. It is a good candidate for updating authentication token in case of a unauthorized error (be careful with concurrency though)
-        )));
+    if (retry) {
+      _dio.interceptors.add(RetryInterceptor(
+          dio: _dio..options.extra.addAll({DIO_CACHE_KEY_FORCE_REFRESH: true}),
+          options: RetryOptions(
+            retries: 3, // Number of retries before a failure
+            retryInterval:
+                const Duration(seconds: 1), // Interval between each retry
+            retryEvaluator: (error) =>
+                error.type != DioErrorType.cancel &&
+                error.type !=
+                    DioErrorType
+                        .response, // Evaluating if a retry is necessary regarding the error. It is a good candidate for updating authentication token in case of a unauthorized error (be careful with concurrency though)
+          )));
+    }
 
     (_dio.httpClientAdapter as DefaultHttpClientAdapter).onHttpClientCreate =
         (HttpClient client) {
@@ -93,10 +99,11 @@ class HttpManager {
   late BaseOptions _options;
 
   //单例模式，一个baseUrl只创建一次实例
-  static HttpManager getInstance({String baseUrl = '', bool cache = true}) {
+  static HttpManager getInstance(
+      {String baseUrl = '', bool cache = true, bool retry = false}) {
     final String _key = '${baseUrl}_$cache';
     if (null == _instanceMap[_key]) {
-      _instanceMap[_key] = HttpManager(baseUrl, cache: cache);
+      _instanceMap[_key] = HttpManager(baseUrl, cache: cache, retry: retry);
     }
     return _instanceMap[_key]!;
   }

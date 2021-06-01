@@ -1,10 +1,12 @@
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:fehviewer/common/controller/tag_trans_controller.dart';
 import 'package:fehviewer/common/global.dart';
 import 'package:fehviewer/common/service/depth_service.dart';
 import 'package:fehviewer/generated/l10n.dart';
 import 'package:fehviewer/models/entity/tag_translat.dart';
 import 'package:fehviewer/pages/gallery/controller/taginfo_controller.dart';
 import 'package:fehviewer/route/navigator_util.dart';
+import 'package:fehviewer/store/floor/entity/tag_translat.dart';
 import 'package:fehviewer/utils/db_util.dart';
 import 'package:fehviewer/utils/logger.dart';
 import 'package:fehviewer/utils/vibrate.dart';
@@ -114,8 +116,8 @@ class _TagDialogViewState extends State<TagDialogView> {
   late Future<TagTranslat?> _future;
 
   Future<TagTranslat?> _getTaginfo() async {
-    final TagTranslat? _taginfo =
-        await dbUtil.getTagTrans(widget.text, namespace: widget.type);
+    final TagTranslat? _taginfo = await Get.find<TagTransController>()
+        .getTagTranslate(widget.text, widget.type);
     return _taginfo;
   }
 

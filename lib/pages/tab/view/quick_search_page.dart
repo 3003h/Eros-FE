@@ -4,6 +4,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:device_info/device_info.dart';
 import 'package:device_info_platform_interface/model/ios_device_info.dart';
 import 'package:fehviewer/common/controller/quicksearch_controller.dart';
+import 'package:fehviewer/common/controller/tag_trans_controller.dart';
 import 'package:fehviewer/common/controller/user_controller.dart';
 import 'package:fehviewer/common/global.dart';
 import 'package:fehviewer/generated/l10n.dart';
@@ -26,7 +27,8 @@ class QuickSearchListPage extends StatelessWidget {
   final bool autoSearch;
 
   Future<String?> _getTextTranslate(String text) async {
-    final String? tranText = await EhTagDatabase.getTranTagWithNameSpase(text);
+    final String? tranText =
+        await Get.find<TagTransController>().getTranTagWithNameSpase(text);
     if (tranText?.trim() != text) {
       return tranText;
     } else {

@@ -84,6 +84,8 @@ class EHConst {
   static const String EH_TORRENT_URL = 'https://ehtracker.org/get';
   static const String EX_TORRENT_URL = 'https://exhentai.org/torrent';
 
+  static const String DB_NAME = 'feh.db';
+
   static String getBaseSite([bool isEx = false]) =>
       isEx ? EX_BASE_URL : EH_BASE_URL;
 
