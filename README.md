@@ -15,7 +15,7 @@ UI 界面方面不少都参考的[E-HentaiViewer](https://github.com/kayanouriko
 
 因为是 flutter 所以也是跨平台支持的，测试的平台主要有\
 iOS 14 : iPhone XR / 12 / iPad Pro 2018\
-Android 10 : MIUI12/ MI K40
+Android 11 : MIUI12.5/ MI K40
 
 现有问题:
 
@@ -30,9 +30,9 @@ Android 10 : MIUI12/ MI K40
 - [E-HentaiViewer](https://github.com/kayanouriko/E-HentaiViewer)
 - [EhViewer](https://github.com/seven332/EhViewer)
 
-ehentai 标签汉化项目
+ehentai译文数据库
 
-- [EhTagTranslator](https://github.com/Mapaler/EhTagTranslator)
+- [EhTagTranslation/Database](https://github.com/EhTagTranslation/Database)
 
 # 应用截图
 
@@ -59,7 +59,7 @@ ehentai 标签汉化项目
 # TODO
 
 
-- [ ] 下载功能
+- [ ] 下载功能(开发中)
 
 # 依赖项目/插件（部分）
 
@@ -69,3 +69,7 @@ ehentai 标签汉化项目
 - 持久化 [shared_preferences](https://pub.dev/packages/shared_preferences)
 - 国际化 [intl](https://pub.dev/packages/intl)
 - 图片 [cached_network_image](https://pub.dev/packages/cached_network_image)、[extended_image](https://pub.dev/packages/extended_image)
+
+# 编译相关
+flutter版本为最新release版本
+因项目引入firebase, 需要放置自己的google-services.json文件等
