@@ -165,6 +165,8 @@ dependencies:
       url: https://github.com/NarHakobyan/flutter_statusbar_manager
       ref: master
   flutter_easyrefresh: ^2.2.1
+  flutter_markdown: ^0.6.2
+  archive: ^3.1.2
 
 dev_dependencies:
   # flutter pub run intl_utils:generate

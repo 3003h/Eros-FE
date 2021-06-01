@@ -144,6 +144,6 @@ class DataBaseUtil {
   Future<String?> getTagTransStr(String key, {String namespace = ''}) async {
     final TagTranslat? tr =
         await getTagTrans(key.trim(), namespace: namespace.trim());
-    return tr?.name ?? key;
+    return tr?.nameNotMD ?? key;
   }
 }

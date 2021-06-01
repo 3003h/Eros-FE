@@ -1,6 +1,9 @@
 import 'dart:convert';
+import 'dart:io';
 
+import 'package:archive/archive.dart';
 import 'package:dio/dio.dart';
+import 'package:fehviewer/common/global.dart';
 import 'package:fehviewer/common/service/ehconfig_service.dart';
 import 'package:fehviewer/const/const.dart';
 import 'package:fehviewer/models/entity/tag_translat.dart';
@@ -9,6 +12,7 @@ import 'package:fehviewer/utils/dio_util.dart';
 import 'package:fehviewer/utils/logger.dart';
 import 'package:fehviewer/utils/toast.dart';
 import 'package:get/get.dart';
+import 'package:path/path.dart' as path;
 
 const int connectTimeout = 10000;
 const int receiveTimeout = 30000;
@@ -46,7 +50,7 @@ class EhTagDatabase {
       for (final dynamic assets in assList) {
         assMap[assets['name']] = assets['browser_download_url'];
       }
-      final String dbUrl = assMap['db.text.json'] ?? '';
+      final String dbUrl = assMap['db.raw.json.gz'] ?? '';
 
       loggerNoStack.v(dbUrl);
 
@@ -54,7 +58,17 @@ class EhTagDatabase {
 
       final Options options = Options(receiveTimeout: receiveTimeout);
 
-      final String? dbJson = await httpDB.get(dbUrl, options: options);
+      // final String? dbJson = await httpDB.get(dbUrl, options: options);
+
+      final gzFilePath = path.join(Global.appDocPath, 'db.raw.json.gz');
+      await httpDB.downLoadFile(dbUrl, gzFilePath);
+      List<int> bytes = File(gzFilePath).readAsBytesSync();
+      List<int> data = GZipDecoder().decodeBytes(bytes);
+      // File(path.join(Global.appDocPath, 'db.raw.json'))
+      //   ..createSync(recursive: true)
+      //   ..writeAsBytesSync(data);
+      final String dbJson = utf8.decode(data);
+
       if (dbJson != null) {
         final Map dataAll = jsonDecode(dbJson.toString()) as Map;
         final List listDataP = dataAll['data'] as List;
@@ -73,7 +87,7 @@ class EhTagDatabase {
   static Future<void> tagSaveToDB(List listDataP) async {
     final List<TagTranslat> tags = <TagTranslat>[];
 
-    listDataP.forEach((objC) {
+    for (final objC in listDataP) {
       loggerNoStack.v('${objC['namespace']}  ${objC['count']}');
       final String _namespace = objC['namespace'] as String;
       Map mapC = objC['data'] as Map;
@@ -86,7 +100,7 @@ class EhTagDatabase {
         tags.add(
             TagTranslat(_namespace, _key, _name, intro: _intro, links: _links));
       });
-    });
+    }
 
     await DataBaseUtil().insertTagAll(tags);
 

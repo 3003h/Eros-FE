@@ -1,13 +1,19 @@
+import 'package:cached_network_image/cached_network_image.dart';
+import 'package:fehviewer/common/global.dart';
 import 'package:fehviewer/common/service/depth_service.dart';
 import 'package:fehviewer/generated/l10n.dart';
 import 'package:fehviewer/models/entity/tag_translat.dart';
 import 'package:fehviewer/pages/gallery/controller/taginfo_controller.dart';
+import 'package:fehviewer/route/navigator_util.dart';
 import 'package:fehviewer/utils/db_util.dart';
+import 'package:fehviewer/utils/logger.dart';
 import 'package:fehviewer/utils/vibrate.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_markdown/flutter_markdown.dart';
 import 'package:get/get.dart';
 import 'package:line_icons/line_icons.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 Future<void> showTagInfoDialog(String text,
     {required String type, int vote = 0}) {
@@ -141,12 +147,65 @@ class _TagDialogViewState extends State<TagDialogView> {
               );
             } else {
               final TagTranslat? _taginfo = snapshot.data;
+              logger.v('${_taginfo?.links}');
+              final CupertinoThemeData theme = CupertinoTheme.of(context);
+              final CupertinoThemeData lTheme = theme.copyWith(
+                  textTheme: theme.textTheme.copyWith(
+                      textStyle: theme.textTheme.textStyle.copyWith(
+                fontSize: 14.5,
+              )));
               return Container(
-                child: Text(
-                  _taginfo?.intro ?? '',
-                  textAlign: TextAlign.start,
-                  style: const TextStyle(
-                    height: 1.5,
+                child: CupertinoTheme(
+                  data: lTheme,
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      // SelectableText(
+                      //   _taginfo?.intro ?? '',
+                      //   textAlign: TextAlign.start,
+                      //   style: const TextStyle(
+                      //     height: 1.5,
+                      //   ),
+                      // ),
+                      MarkdownBody(
+                        data: _taginfo?.intro ?? '',
+                        selectable: true,
+                        onTapLink: (String text, String? href, String title) {
+                          _onOpen(context, href);
+                        },
+                        styleSheetTheme: MarkdownStyleSheetBaseTheme.cupertino,
+                        styleSheet: MarkdownStyleSheet(
+                          code: theme.textTheme.textStyle.copyWith(
+                            backgroundColor: Colors.transparent,
+                            fontFamily: 'monospace',
+                            fontSize:
+                                theme.textTheme.textStyle.fontSize! * 0.85,
+                          ),
+                        ),
+                        imageBuilder: (Uri uri, String? title, String? alt) {
+                          return CachedNetworkImage(
+                              imageUrl: uri.toString(),
+                              httpHeaders: {
+                                'Cookie': Global.profile.user.cookie ?? '',
+                              },
+                              placeholder: (_, __) {
+                                return const Padding(
+                                  padding: EdgeInsets.all(8.0),
+                                  child: CupertinoActivityIndicator(),
+                                );
+                              });
+                        },
+                      ),
+                      const SizedBox(height: 12),
+                      MarkdownBody(
+                        data: _taginfo?.links ?? '',
+                        selectable: true,
+                        onTapLink: (String text, String? href, String title) {
+                          _onOpen(context, href);
+                        },
+                        styleSheetTheme: MarkdownStyleSheetBaseTheme.cupertino,
+                      ),
+                    ],
                   ),
                 ),
               );
@@ -158,5 +217,26 @@ class _TagDialogViewState extends State<TagDialogView> {
             );
           }
         });
+  }
+
+  Future<void> _onOpen(BuildContext context, String? url) async {
+    vibrateUtil.light();
+
+    final String? _openUrl = url;
+    final RegExp regExp =
+        RegExp(r'https?://e[-x]hentai.org/g/[0-9]+/[0-9a-z]+/?');
+    if (await canLaunch(_openUrl!)) {
+      if (regExp.hasMatch(_openUrl)) {
+        final String? _realUrl = regExp.firstMatch(_openUrl)?.group(0);
+        logger.v('in $_realUrl');
+        NavigatorUtil.goGalleryPage(
+          url: _realUrl,
+        );
+      } else {
+        await launch(_openUrl);
+      }
+    } else {
+      throw 'Could not launch $_openUrl';
+    }
   }
 }
