@@ -16,6 +16,16 @@ class TagTranslat {
   late String intro;
   late String links;
 
+  String get nameNotMD {
+    final match = RegExp(r'!\[\S+\]\(\S+\)(\S+)').allMatches(name);
+    if (match.isNotEmpty) {
+      return name.replaceAllMapped(
+          RegExp(r'!\[\S+\]\(\S+\)(\S+)'), (match) => match.group(1) ?? '');
+    } else {
+      return name;
+    }
+  }
+
   Map<String, dynamic> toMap() {
     return {
       'namespace': namespace,

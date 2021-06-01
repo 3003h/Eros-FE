@@ -6,7 +6,6 @@ import 'package:fehviewer/const/const.dart';
 import 'package:fehviewer/const/theme_colors.dart';
 import 'package:fehviewer/models/base/eh_models.dart';
 import 'package:fehviewer/pages/gallery/controller/comment_controller.dart';
-import 'package:fehviewer/pages/gallery/view/translator_dialog.dart';
 import 'package:fehviewer/route/navigator_util.dart';
 // import 'package:fehviewer/utils/cust_lib/flutter_linkify.dart' as clif;
 import 'package:fehviewer/utils/logger.dart';

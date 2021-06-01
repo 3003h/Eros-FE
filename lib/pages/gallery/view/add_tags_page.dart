@@ -128,7 +128,7 @@ class QryTagSliverList extends StatelessWidget {
                       ),
                     ),
                     Text(
-                        '${EHConst.translateTagType[controller.qryTags[index].namespace] ?? controller.qryTags[index].namespace}:${controller.qryTags[index].name}',
+                        '${EHConst.translateTagType[controller.qryTags[index].namespace] ?? controller.qryTags[index].namespace}:${controller.qryTags[index].nameNotMD}',
                         style: TextStyle(
                           fontSize: 14,
                           color: CupertinoDynamicColor.resolve(
