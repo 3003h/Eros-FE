@@ -40,7 +40,7 @@ class TagTransController extends GetxController {
   }
 
   /// 检查更新
-  Future<bool> checkUpdate() async {
+  Future<bool> checkUpdate({bool force = false}) async {
     final String urlJsonString = await _httpManager.get(kUrl) ?? '';
     final dynamic _urlJson = jsonDecode(urlJsonString);
     // 获取发布时间 作为远程版本号
@@ -50,7 +50,7 @@ class TagTransController extends GetxController {
     // 获取当前本地版本
     final String localVer = ehConfigService.tagTranslatVer.value;
 
-    if (_remoteVer == localVer) {
+    if (_remoteVer == localVer && force == false) {
       return false;
     }
 
