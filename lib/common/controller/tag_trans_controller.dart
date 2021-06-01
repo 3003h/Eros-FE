@@ -186,6 +186,7 @@ class TagTransController extends GetxController {
     final TagTranslatDao tagTranslatDao = await _getTagTranslatDao();
     final TagTranslat? _translates =
         await tagTranslatDao.findTagTranslatByKey(text, namespace);
+    return _translates;
   }
 
   Future<List<TagTranslat>> getTagTranslatesLike(
