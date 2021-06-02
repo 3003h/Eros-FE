@@ -62,10 +62,12 @@ class CacheController extends GetxController with StateMixin<String> {
     try {
       final io.Directory tempDir = io.Directory(Global.tempPath);
       final int value = await _getTotalSizeOfFilesInDir(tempDir);
-      /*tempDir.list(followLinks: false, recursive: true).listen((file) {
-        //打印每个缓存文件的路径
-        print(file.path);
-      });*/
+      // tempDir
+      //     .list(followLinks: false, recursive: true)
+      //     .listen((io.FileSystemEntity file) {
+      //   //打印每个缓存文件的路径
+      //   print(file.path);
+      // });
       logger.d('临时目录大小: ' + value.toString());
       return value;
     } catch (err) {
@@ -77,10 +79,12 @@ class CacheController extends GetxController with StateMixin<String> {
   /// 递归方式 计算文件的大小
   Future<int> _getTotalSizeOfFilesInDir(final io.FileSystemEntity file) async {
     try {
-      if (file is File) {
+      if (file is io.File) {
+        // print('is file');
         return await file.length();
       }
       if (file is io.Directory) {
+        // print('is Directory');
         final List<io.FileSystemEntity> children = file.listSync();
         int total = 0;
         if (children != null)
@@ -115,7 +119,7 @@ class CacheController extends GetxController with StateMixin<String> {
           await delDir(child);
         }
       }
-      if (file is File) {
+      if (file is io.File) {
         await file.delete();
       }
     } catch (e) {

@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:io';
 
+import 'package:fehviewer/common/controller/auto_lock_controller.dart';
 import 'package:fehviewer/route/navigator_util.dart';
 import 'package:fehviewer/route/routes.dart';
 import 'package:fehviewer/utils/logger.dart';
@@ -10,6 +11,7 @@ import 'package:receive_sharing_intent/receive_sharing_intent.dart';
 class SplashController extends GetxController {
   late StreamSubscription _intentDataStreamSubscription;
   late String? sharedText = '';
+  final AutoLockController _autoLockController = Get.find();
 
   @override
   void onInit() {
@@ -41,6 +43,8 @@ class SplashController extends GetxController {
   }
 
   Future<void> startHome(String url) async {
+    await _autoLockController.resumed(instantly: true);
+
     if (url != null && url.isNotEmpty) {
       logger.i('open $url');
       await Future<void>.delayed(const Duration(milliseconds: 100), () {

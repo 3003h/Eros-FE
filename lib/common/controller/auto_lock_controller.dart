@@ -1,6 +1,7 @@
 import 'package:fehviewer/common/service/ehconfig_service.dart';
 import 'package:fehviewer/generated/l10n.dart';
 import 'package:fehviewer/models/index.dart';
+import 'package:fehviewer/route/routes.dart';
 import 'package:fehviewer/utils/logger.dart';
 import 'package:get/get.dart';
 import 'package:local_auth/auth_strings.dart';
@@ -21,29 +22,26 @@ class AutoLockController extends GetxController {
 
   static final AndroidAuthMessages androidStrings = AndroidAuthMessages(
     cancelButton: S.of(Get.context!).cancel,
-    // signInTitle: '指纹认证',
-    // biometricHint: '触摸指纹传感器',
+    // signInTitle: '验证',
   );
 
-  /// 最后离开时间
+  /// 最后挂起时间
   int _lastLeaveTime = DateTime.now().millisecondsSinceEpoch;
   int get lastLeaveTime => _lastLeaveTime;
   set lastLeaveTime(int val) {
     _lastLeaveTime = val;
-    // autoLock.lastLeaveTime = val;
     autoLock = autoLock.copyWith(lastLeaveTime: val);
     Global.saveProfile();
   }
 
   void resetLastLeaveTime() {
-    lastLeaveTime = DateTime.now().millisecondsSinceEpoch + 1000;
+    lastLeaveTime = DateTime.now().millisecondsSinceEpoch + 500;
   }
 
   bool _isLocking = false;
   bool get isLocking => _isLocking;
   set isLocking(bool val) {
     _isLocking = val;
-    // autoLock.isLocking = val;
     autoLock = autoLock.copyWith(isLocking: val);
     Global.saveProfile();
   }
@@ -74,16 +72,17 @@ class AutoLockController extends GetxController {
     }
   }
 
-  Future<void> resumed() async {
+  Future<void> resumed({bool instantly = false}) async {
     final nowTime = DateTime.now().millisecondsSinceEpoch;
     final subTime = nowTime - lastLeaveTime;
-    final autoLockTimeOut = _ehConfigService.autoLockTimeOut.value;
+    final autoLockTimeOut =
+        instantly ? 0 : _ehConfigService.autoLockTimeOut.value;
     final _needUnLock =
         autoLockTimeOut >= 0 && subTime / 1000 > autoLockTimeOut;
     logger
         .v('离开时间为: ${subTime}ms  锁定超时为: $autoLockTimeOut  需要解锁: $_needUnLock');
 
-    /*if (_needUnLock && !_isResumed) {
+    if (_needUnLock && !_isResumed) {
       _isLocking = true;
 
       final rult = await Get.toNamed(EHRoutes.unlockPage);
@@ -95,6 +94,6 @@ class AutoLockController extends GetxController {
           _isLocking = false;
         }
       }
-    }*/
+    }
   }
 }

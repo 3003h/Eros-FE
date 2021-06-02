@@ -1,4 +1,3 @@
-import 'package:fehviewer/common/global.dart';
 import 'package:fehviewer/pages/tab/controller/unlock_page_controller.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -32,14 +31,14 @@ class _UnLockPageState extends State<UnLockPage> {
           child: SafeArea(
             child: Container(
               alignment: Alignment.center,
-              child: context.isPortrait
+/*              child: context.isPortrait
                   ? Column(
                       // mainAxisSize: MainAxisSize.min,
                       children: [
                         const Spacer(flex: 2),
                         if (Global.inDebugMode && false)
                           _buildPatternLock(context),
-                        Expanded(flex: 1, child: _buildUnlock(context)),
+                        Expanded(flex: 1, child: _buildUnlockButton(context)),
                       ],
                     )
                   : Row(
@@ -48,9 +47,10 @@ class _UnLockPageState extends State<UnLockPage> {
                         const Spacer(flex: 2),
                         if (Global.inDebugMode && false)
                           _buildPatternLock(context),
-                        Expanded(flex: 3, child: _buildUnlock(context)),
+                        Expanded(flex: 3, child: _buildUnlockButton(context)),
                       ],
-                    ),
+                    )*/
+              child: _buildUnlockButton(context),
             ),
           ),
         ));
@@ -103,13 +103,23 @@ class _UnLockPageState extends State<UnLockPage> {
     final Widget _unlockIcon = Icon(
       CupertinoIcons.lock_fill,
       size: 50,
-      color: CupertinoDynamicColor.resolve(
-          CupertinoColors.secondaryLabel, context),
+      color: CupertinoDynamicColor.resolve(CupertinoColors.systemRed, context),
     ).paddingSymmetric(vertical: 20);
 
     return GestureDetector(
       onTap: () => controller.unlockAndback(context: context),
       child: _unlockIcon,
     );
+  }
+
+  Widget _buildUnlockButton(BuildContext context) {
+    return CupertinoButton(
+        child: const Icon(
+          CupertinoIcons.lock_fill,
+          size: 50,
+        ),
+        borderRadius: BorderRadius.circular(100),
+        color: CupertinoColors.activeOrange,
+        onPressed: () => controller.unlockAndback(context: context));
   }
 }

@@ -148,8 +148,6 @@ class _TagDialogViewState extends State<TagDialogView> {
               );
             } else {
               final TagTranslat? _taginfo = snapshot.data;
-              logger.v('${_taginfo?.intro}');
-              logger.v('${_taginfo?.links}');
               final CupertinoThemeData theme = CupertinoTheme.of(context);
               final CupertinoThemeData lTheme = theme.copyWith(
                   textTheme: theme.textTheme.copyWith(
