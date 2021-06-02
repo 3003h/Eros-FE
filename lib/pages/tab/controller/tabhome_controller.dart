@@ -113,7 +113,7 @@ const List<String> kTabNameList = <String>[
 ];
 
 class TabHomeController extends GetxController {
-  late DateTime lastPressedAt; //上次点击时间
+  DateTime? lastPressedAt; //上次点击时间
 
   int currentIndex = 0;
   bool tapAwait = false;
@@ -285,9 +285,10 @@ class TabHomeController extends GetxController {
 
   /// 连按两次返回退出
   Future<bool> doubleClickBack() async {
-    loggerNoStack.v('click back');
+    logger.v('click back');
     if (lastPressedAt == null ||
-        DateTime.now().difference(lastPressedAt) > const Duration(seconds: 1)) {
+        DateTime.now().difference(lastPressedAt ?? DateTime.now()) >
+            const Duration(seconds: 1)) {
       showToast(S.of(tContext).double_click_back);
       //两次点击间隔超过1秒则重新计时
       lastPressedAt = DateTime.now();
