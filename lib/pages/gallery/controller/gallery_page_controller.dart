@@ -568,8 +568,8 @@ class GalleryPageController extends GetxController
         final String? _sourceId =
             changeSource ? galleryItem.previewMap[itemSer]?.sourceId : '';
 
-        logger.v(
-            'ser:$itemSer ,href: ${galleryItem.previewMap[itemSer]?.href} , _sourceId: $_sourceId');
+        // logger.v(
+        //     'ser:$itemSer ,href: ${galleryItem.previewMap[itemSer]?.href} , _sourceId: $_sourceId');
 
         try {
           final GalleryPreview _preview = await Api.ftchImageInfo(
@@ -579,7 +579,7 @@ class GalleryPageController extends GetxController
             sourceId: _sourceId,
           );
 
-          logger.v('fetch _preview ${_preview.toJson()}');
+          // logger.v('fetch _preview ${_preview.toJson()}');
 
           // 换源加载
           if (changeSource) {
