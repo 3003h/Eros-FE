@@ -17,7 +17,7 @@ import 'package:line_icons/line_icons.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 Future<void> showTagInfoDialog(String text,
-    {required String type, int vote = 0}) {
+    {required String type, required String translate, int vote = 0}) {
   vibrateUtil.medium();
   Get.lazyPut(() => TagInfoController(), tag: pageCtrlDepth);
   final TagInfoController controller = Get.find(tag: pageCtrlDepth);
@@ -92,8 +92,31 @@ Future<void> showTagInfoDialog(String text,
       context: Get.context!,
       barrierDismissible: true,
       builder: (_) {
+        Widget _title() {
+          if (translate != text) {
+            return Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(translate),
+                Text('$type:$text', style: const TextStyle(fontSize: 12)),
+              ],
+            );
+          } else {
+            return Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text('$type:$text'),
+                const Text(
+                  '未提供翻译',
+                  style: TextStyle(fontSize: 12),
+                ),
+              ],
+            );
+          }
+        }
+
         return CupertinoAlertDialog(
-          title: Text('$type:$text'),
+          title: _title(),
           content: TagDialogView(text: text, type: type),
           actions: _getActions(),
         );
@@ -152,7 +175,7 @@ class _TagDialogViewState extends State<TagDialogView> {
               final CupertinoThemeData lTheme = theme.copyWith(
                   textTheme: theme.textTheme.copyWith(
                       textStyle: theme.textTheme.textStyle.copyWith(
-                fontSize: 14.5,
+                fontSize: 14,
               )));
               return Container(
                 child: CupertinoTheme(

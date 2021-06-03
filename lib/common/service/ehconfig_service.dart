@@ -33,6 +33,7 @@ class EhConfigService extends ProfileService {
   RxBool isClipboardLink = false.obs;
   RxBool commentTrans = false.obs;
   RxBool blurredInRecentTasks = true.obs;
+  Rx<TagIntroImgLv> tagIntroImgLv = TagIntroImgLv.nonh.obs;
 
   String _lastClipboardLink = '';
 
@@ -156,20 +157,20 @@ class EhConfigService extends ProfileService {
         (value) => ehConfig = ehConfig.copyWith(favPicker: value as bool));
 
     isPureDarkTheme.value = ehConfig.pureDarkTheme ?? false;
-    everProfile<bool>(isPureDarkTheme as RxInterface<bool>,
+    everProfile<bool>(isPureDarkTheme,
         (bool value) => ehConfig = ehConfig.copyWith(pureDarkTheme: value));
 
     isClipboardLink.value = ehConfig.clipboardLink ?? false;
-    everProfile<bool>(isClipboardLink as RxInterface<bool>,
+    everProfile<bool>(isClipboardLink,
         (bool value) => ehConfig = ehConfig.copyWith(clipboardLink: value));
 
     commentTrans.value = ehConfig.commentTrans ?? false;
-    everProfile<bool>(commentTrans as RxInterface<bool>,
+    everProfile<bool>(commentTrans,
         (bool value) => ehConfig = ehConfig.copyWith(commentTrans: value));
 
     // blurredInRecentTasks
     blurredInRecentTasks.value = storageUtil.getBool(BLURRED_IN_RECENT_TASK);
-    everProfile<bool>(blurredInRecentTasks as RxInterface<bool>,
+    everProfile<bool>(blurredInRecentTasks,
         (bool value) => storageUtil.setBool(BLURRED_IN_RECENT_TASK, value));
 
     // autoLockTimeOut
@@ -179,7 +180,7 @@ class EhConfigService extends ProfileService {
 
     // showPageInterval
     showPageInterval.value = ehConfig.showPageInterval ?? false;
-    everProfile<bool>(showPageInterval as RxInterface<bool>,
+    everProfile<bool>(showPageInterval,
         (bool value) => ehConfig = ehConfig.copyWith(showPageInterval: value));
 
     // orientation
@@ -191,8 +192,15 @@ class EhConfigService extends ProfileService {
 
     // vibrate
     vibrate.value = ehConfig.vibrate ?? true;
-    everProfile<bool>(vibrate as RxInterface<bool>,
-        (bool value) => ehConfig = ehConfig.copyWith(vibrate: value));
+    everProfile<bool>(
+        vibrate, (bool value) => ehConfig = ehConfig.copyWith(vibrate: value));
+
+    // tagIntroImgLv
+    tagIntroImgLv.value = EnumToString.fromString(
+            TagIntroImgLv.values, ehConfig.tagIntroImgLv ?? 'nonh') ??
+        TagIntroImgLv.nonh;
+    everFromEunm(tagIntroImgLv,
+        (String value) => ehConfig = ehConfig.copyWith(tagIntroImgLv: value));
   }
 
   /// 收藏排序
