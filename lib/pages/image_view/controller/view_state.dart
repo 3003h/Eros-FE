@@ -7,6 +7,7 @@ import 'package:fehviewer/common/service/ehconfig_service.dart';
 import 'package:fehviewer/const/const.dart';
 import 'package:fehviewer/models/base/eh_models.dart';
 import 'package:fehviewer/pages/gallery/controller/gallery_page_controller.dart';
+import 'package:fehviewer/utils/logger.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
 
@@ -30,13 +31,24 @@ class ViewState {
 
     ever(_itemIndex, (int val) {
       // logger.d('ever _itemIndex to $val');
-      Future<void>.delayed(const Duration(milliseconds: 100)).then((_) {
-        // logger.d('delayed ever _itemIndex to $itemIndex');
+      if (_galleryPageController.galleryItem.gid != null) {
         _galleryCacheController.setIndex(
-            _galleryPageController.galleryItem.gid ?? '', itemIndex,
-            notify: false);
-      });
+            _galleryPageController.galleryItem.gid ?? '', itemIndex);
+      }
     });
+
+    debounce(
+      _itemIndex,
+      (int val) {
+        if (_galleryPageController.galleryItem.gid != null) {
+          logger.d('debounce _itemIndex $_itemIndex');
+          _galleryCacheController.setIndex(
+              _galleryPageController.galleryItem.gid ?? '', itemIndex,
+              saveToStore: true);
+        }
+      },
+      time: const Duration(seconds: 5),
+    );
 
     ever<ViewColumnMode>(_columnMode, (ViewColumnMode val) {
       Future<void>.delayed(const Duration(milliseconds: 100)).then((_) {

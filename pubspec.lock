@@ -35,7 +35,7 @@ packages:
       name: args
       url: "https://pub.flutter-io.cn"
     source: hosted
-    version: "2.1.0"
+    version: "2.1.1"
   async:
     dependency: transitive
     description:
@@ -489,10 +489,10 @@ packages:
     description:
       path: "."
       ref: HEAD
-      resolved-ref: d5520ca7422aa7a6a31ed9bea7aa9a4efc40014d
+      resolved-ref: ddd13887e8eccd1a92ae2afb9cc1ca952448d601
       url: "https://github.com/honjow/flutter_egg.git"
     source: git
-    version: "1.0.3"
+    version: "1.0.4"
   flutter_inappwebview:
     dependency: "direct main"
     description:
@@ -1127,7 +1127,7 @@ packages:
       name: sqflite_common_ffi
       url: "https://pub.flutter-io.cn"
     source: hosted
-    version: "2.0.0"
+    version: "2.0.0+1"
   sqlite3:
     dependency: transitive
     description:
@@ -1218,7 +1218,7 @@ packages:
       name: url_launcher
       url: "https://pub.flutter-io.cn"
     source: hosted
-    version: "6.0.4"
+    version: "6.0.6"
   url_launcher_linux:
     dependency: transitive
     description:
@@ -1246,7 +1246,7 @@ packages:
       name: url_launcher_web
       url: "https://pub.flutter-io.cn"
     source: hosted
-    version: "2.0.0"
+    version: "2.0.1"
   url_launcher_windows:
     dependency: transitive
     description:

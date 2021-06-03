@@ -72,13 +72,13 @@ class AutoLockController extends GetxController {
     }
   }
 
-  Future<void> resumed({bool instantly = false}) async {
+  Future<void> resumed({bool forceLock = false}) async {
     final nowTime = DateTime.now().millisecondsSinceEpoch;
     final subTime = nowTime - lastLeaveTime;
-    final autoLockTimeOut =
-        instantly ? 0 : _ehConfigService.autoLockTimeOut.value;
+    final autoLockTimeOut = _ehConfigService.autoLockTimeOut.value;
+
     final _needUnLock =
-        autoLockTimeOut >= 0 && subTime / 1000 > autoLockTimeOut;
+        autoLockTimeOut >= 0 && (subTime / 1000 > autoLockTimeOut || forceLock);
     logger
         .v('离开时间为: ${subTime}ms  锁定超时为: $autoLockTimeOut  需要解锁: $_needUnLock');
 
