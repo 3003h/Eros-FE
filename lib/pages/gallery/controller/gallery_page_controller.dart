@@ -1,5 +1,6 @@
 import 'package:dio/dio.dart';
 import 'package:fehviewer/common/controller/download_controller.dart';
+import 'package:fehviewer/common/controller/gallerycache_controller.dart';
 import 'package:fehviewer/common/controller/history_controller.dart';
 import 'package:fehviewer/common/controller/localfav_controller.dart';
 import 'package:fehviewer/common/global.dart';
@@ -75,6 +76,10 @@ class GalleryPageController extends GetxController
 
   set isRatinged(bool val) => _isRatinged.value = val;
 
+  final RxInt _lastIndex = 0.obs;
+  int get lastIndex => _lastIndex.value;
+  set lastIndex(int val) => _lastIndex.value = val;
+
   // 评分后更新ui和数据
   void ratinged({
     required double ratingUsr,
@@ -83,12 +88,6 @@ class GalleryPageController extends GetxController
     required String colorRating,
   }) {
     isRatinged = true;
-    // galleryItem.isRatinged = true;
-    //
-    // galleryItem.ratingFallBack = ratingUsr;
-    // galleryItem.rating = ratingAvg;
-    // galleryItem.ratingCount = ratingCnt.toString();
-    // galleryItem.colorRating = colorRating;
 
     galleryItem = galleryItem.copyWith(
       isRatinged: true,
@@ -152,6 +151,7 @@ class GalleryPageController extends GetxController
   // eh设置
   final EhConfigService _ehConfigService = Get.find();
   final HistoryController _historyController = Get.find();
+  final GalleryCacheController _galleryCacheController = Get.find();
 
   @override
   void onInit() {
@@ -183,6 +183,11 @@ class GalleryPageController extends GetxController
     }
 
     _loadData();
+
+    // 初始
+    final GalleryCache? _galleryCache =
+        _galleryCacheController.getGalleryCache(galleryItem.gid ?? '');
+    lastIndex = _galleryCache?.lastIndex ?? 0;
 
     logger.d('GalleryPageController $pageCtrlDepth onInit end');
   }

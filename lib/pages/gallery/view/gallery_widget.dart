@@ -1,5 +1,4 @@
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:fehviewer/common/controller/gallerycache_controller.dart';
 import 'package:fehviewer/common/global.dart';
 import 'package:fehviewer/common/service/depth_service.dart';
 import 'package:fehviewer/common/service/ehconfig_service.dart';
@@ -411,10 +410,13 @@ class ReadButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final GalleryPageController _pageController = Get.find(tag: pageCtrlDepth);
+
     return Obx(
       () => CupertinoButton(
           child: Text(
-            S.of(context).READ,
+            (_pageController.lastIndex != null && _pageController.lastIndex > 0)
+                ? '${S.of(context).READ} ${_pageController.lastIndex + 1}'
+                : S.of(context).READ,
             style: const TextStyle(fontSize: 15, height: 1.2),
           ),
           minSize: 20,
@@ -422,22 +424,15 @@ class ReadButton extends StatelessWidget {
           borderRadius: BorderRadius.circular(20),
           color: CupertinoColors.activeBlue,
           onPressed: _pageController.enableRead
-              ? () => _toViewPage(_pageController)
+              ? () => _toViewPage(
+                  _pageController.galleryItem.gid, _pageController.lastIndex)
               : null),
     );
   }
 
-  Future<void> _toViewPage(GalleryPageController _pageController) async {
-    final GalleryCacheController galleryCacheController = Get.find();
-
-    final GalleryCache _galleryCache = galleryCacheController
-        .getGalleryCache(_pageController.galleryItem.gid ?? '');
-    logger.d('_toViewPage ${_galleryCache.toJson()}');
-    final int _index = _galleryCache.lastIndex ?? 0;
+  Future<void> _toViewPage(String? gid, int _index) async {
     logger.d('_toViewPage lastIndex $_index');
-    // await _pageController.fetchPreviewUntilIndex(Get.context!, _index);
-    NavigatorUtil.goGalleryViewPage(
-        _index, _pageController.galleryItem.gid ?? '');
+    NavigatorUtil.goGalleryViewPage(_index, gid ?? '');
   }
 }
 

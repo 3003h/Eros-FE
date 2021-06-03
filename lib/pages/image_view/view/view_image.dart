@@ -136,6 +136,11 @@ class _ViewImageState extends State<ViewImage>
     );
 
     _viewController.vState.fade = true;
+
+    WidgetsBinding.instance?.addPostFrameCallback((_) {
+      print('单次Frame绘制回调'); //只回调一次
+      _viewController.vState.needRebuild = false;
+    });
   }
 
   @override
@@ -146,9 +151,11 @@ class _ViewImageState extends State<ViewImage>
 
   @override
   Widget build(BuildContext context) {
+    logger.d('build ${widget.ser}');
+
     if (_viewController.vState.needRebuild) {
       _imageFuture = _fetchImage(widget.ser);
-      _viewController.vState.needRebuild = false;
+      // _viewController.vState.needRebuild = false;
     }
 
     return GestureDetector(

@@ -11,12 +11,14 @@ class GalleryCacheController extends GetxController {
   final GStore gStore = Get.find<GStore>();
   LinkedHashMap<String, GalleryCache> gCacheMap = LinkedHashMap();
 
-  GalleryCache getGalleryCache(String gid) {
-    if (!gCacheMap.containsKey(gid)) {
+  GalleryCache? getGalleryCache(String gid) {
+    final _cache = gStore.getCache(gid);
+    if (!gCacheMap.containsKey(gid) && _cache != null) {
       print('get from store');
-      gCacheMap[gid] = gStore.getCache(gid);
+      gCacheMap[gid] = _cache;
     }
-    return gCacheMap[gid] ?? const GalleryCache();
+
+    return gCacheMap[gid];
   }
 
   void setIndex(String gid, int index, {bool saveToStore = false}) {
@@ -45,8 +47,10 @@ class GalleryCacheController extends GetxController {
   void setColumnMode(String gid, ViewColumnMode columnMode) {
     final GalleryCache? _ori = getGalleryCache(gid);
     if (_ori == null) {
+      gCacheMap[gid] = GalleryCache(gid: gid).copyWithMode(columnMode);
       gStore.saveCache(GalleryCache(gid: gid).copyWithMode(columnMode));
     } else {
+      gCacheMap[gid] = _ori.copyWithMode(columnMode);
       gStore.saveCache(_ori.copyWithMode(columnMode));
     }
   }

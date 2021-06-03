@@ -33,6 +33,7 @@ class ViewState {
       if (_galleryPageController.galleryItem.gid != null &&
           conditionItemIndex) {
         logger.d('debounce 300 _itemIndex to $val');
+        _galleryPageController.lastIndex = itemIndex;
         _galleryCacheController.setIndex(
             _galleryPageController.galleryItem.gid ?? '', itemIndex);
       }
@@ -59,8 +60,9 @@ class ViewState {
     });
 
     _columnMode.value = _galleryCacheController
-        .getGalleryCache(_galleryPageController.galleryItem.gid ?? '')
-        .columnMode;
+            .getGalleryCache(_galleryPageController.galleryItem.gid ?? '')
+            ?.columnMode ??
+        ViewColumnMode.single;
 
     // 初始页码
     final int _iniIndex = Get.arguments as int;
