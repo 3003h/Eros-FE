@@ -145,7 +145,7 @@ class ViewController extends GetxController {
     // SystemChrome.setEnabledSystemUIOverlays(SystemUiOverlay.values);
     FlutterStatusbarManager.setFullscreen(false);
     // 恢复系统旋转设置
-    logger.d('恢复系统旋转设置');
+    // logger.d('恢复系统旋转设置');
     OrientationPlugin.setPreferredOrientations(DeviceOrientation.values);
     OrientationPlugin.forceOrientation(DeviceOrientation.portraitUp);
     super.onClose();
@@ -153,23 +153,19 @@ class ViewController extends GetxController {
 
   /// SliderChangedEnd
   Future<void> handOnSliderChangedEnd(double value) async {
+    vState.conditionItemIndex = false;
     vState.itemIndex = value.round();
     logger.d('slider to _itemIndex ${vState.itemIndex}');
 
     if (vState.viewMode != ViewMode.topToBottom) {
-      // await _galleryPageController.fetchPreviewUntilIndex(
-      //     Get.context!, vState.itemIndex);
-      // await Future.delayed(const Duration(milliseconds: 200));
       pageController.jumpToPage(vState.pageIndex);
     } else {
-      // await _galleryPageController.fetchPreviewUntilIndex(
-      //     Get.context!, vState.itemIndex);
-      // await Future.delayed(const Duration(milliseconds: 200));
       itemScrollController.jumpTo(index: vState.itemIndex);
     }
 
     await Future.delayed(const Duration(milliseconds: 200));
     update([GetIds.IMAGE_VIEW_SLIDER]);
+    vState.conditionItemIndex = true;
   }
 
   void handOnSliderChanged(double value) {
@@ -295,12 +291,14 @@ class ViewController extends GetxController {
               position.itemLeadingEdge > max.itemLeadingEdge ? position : max)
           .index;
 
-      final int index = (min + max) ~/ 2;
+      vState.tempIndex = (min + max) ~/ 2;
+      // logger.v('max $max  min $min tempIndex ${vState.tempIndex}');
 
       // logger.d('${positions.elementAt(index).itemLeadingEdge} ');
-      if (index != vState.itemIndex) {
+      if (vState.tempIndex != vState.itemIndex && vState.conditionItemIndex) {
         Future.delayed(const Duration(milliseconds: 300)).then((value) {
-          vState.itemIndex = index;
+          logger.v('tempIndex ${vState.tempIndex}');
+          vState.itemIndex = vState.tempIndex;
           vState.sliderValue = vState.itemIndex / 1.0;
           update([GetIds.IMAGE_VIEW_SLIDER]);
         });

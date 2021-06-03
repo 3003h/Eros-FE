@@ -430,10 +430,11 @@ class ReadButton extends StatelessWidget {
   Future<void> _toViewPage(GalleryPageController _pageController) async {
     final GalleryCacheController galleryCacheController = Get.find();
 
-    final GalleryCache? _galleryCache = galleryCacheController
+    final GalleryCache _galleryCache = galleryCacheController
         .getGalleryCache(_pageController.galleryItem.gid ?? '');
-    final int _index = _galleryCache?.lastIndex ?? 0;
-    logger.d('lastIndex $_index');
+    logger.d('_toViewPage ${_galleryCache.toJson()}');
+    final int _index = _galleryCache.lastIndex ?? 0;
+    logger.d('_toViewPage lastIndex $_index');
     // await _pageController.fetchPreviewUntilIndex(Get.context!, _index);
     NavigatorUtil.goGalleryViewPage(
         _index, _pageController.galleryItem.gid ?? '');

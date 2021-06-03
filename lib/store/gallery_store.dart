@@ -22,9 +22,11 @@ class GStore {
     await _getStore('Download').initStorage;
   }
 
-  GalleryCache? getCache(String gid) {
+  GalleryCache getCache(String gid) {
     final val = ReadWriteValue(gid, '', _cacheStore).val;
-    return val.isNotEmpty ? GalleryCache.fromJson(jsonDecode(val)) : null;
+    return val.isNotEmpty
+        ? GalleryCache.fromJson(jsonDecode(val))
+        : GalleryCache();
   }
 
   void saveCache(GalleryCache cache) {

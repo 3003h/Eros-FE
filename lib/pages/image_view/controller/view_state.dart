@@ -29,19 +29,20 @@ class ViewState {
     // 初始化 设置Rx变量的ever事件
     // logger.v('初始化ViewState');
 
-    ever(_itemIndex, (int val) {
-      // logger.d('ever _itemIndex to $val');
-      if (_galleryPageController.galleryItem.gid != null) {
+    debounce(_itemIndex, (int val) {
+      if (_galleryPageController.galleryItem.gid != null &&
+          conditionItemIndex) {
+        logger.d('debounce 300 _itemIndex to $val');
         _galleryCacheController.setIndex(
             _galleryPageController.galleryItem.gid ?? '', itemIndex);
       }
-    });
+    }, time: const Duration(milliseconds: 300));
 
     debounce(
       _itemIndex,
       (int val) {
         if (_galleryPageController.galleryItem.gid != null) {
-          logger.d('debounce _itemIndex $_itemIndex');
+          logger.d('debounce 5000 _itemIndex $_itemIndex');
           _galleryCacheController.setIndex(
               _galleryPageController.galleryItem.gid ?? '', itemIndex,
               saveToStore: true);
@@ -58,12 +59,14 @@ class ViewState {
     });
 
     _columnMode.value = _galleryCacheController
-            .getGalleryCache(_galleryPageController.galleryItem.gid ?? '')
-            ?.columnMode ??
-        ViewColumnMode.single;
+        .getGalleryCache(_galleryPageController.galleryItem.gid ?? '')
+        .columnMode;
 
+    // 初始页码
     final int _iniIndex = Get.arguments as int;
+    // conditionItemIndex = false;
     itemIndex = _iniIndex;
+    // conditionItemIndex = true;
   }
 
   void initSize(BuildContext context) {
@@ -104,9 +107,12 @@ class ViewState {
   int get itemIndex => _itemIndex.value;
 
   set itemIndex(int val) {
-    // logger.d('set itemIndex to $val');
+    logger5.d('will set itemIndex to $val');
     _itemIndex.value = val;
   }
+
+  bool conditionItemIndex = true;
+  int tempIndex = 0;
 
   /// pageview下实际的index
   int get pageIndex {
