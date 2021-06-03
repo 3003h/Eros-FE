@@ -9,6 +9,13 @@ enum ListModeEnum {
   simpleList,
 }
 
+enum TagIntroImgLv {
+  disable,
+  nonh,
+  r18,
+  r18g,
+}
+
 enum FavoriteOrder {
   fav,
   posted,

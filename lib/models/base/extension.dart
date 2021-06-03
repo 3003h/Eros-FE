@@ -1,10 +1,12 @@
 import 'dart:io';
 
 import 'package:enum_to_string/enum_to_string.dart';
+import 'package:fehviewer/common/service/ehconfig_service.dart';
 import 'package:fehviewer/const/const.dart';
 import 'package:fehviewer/pages/image_view/controller/view_state.dart';
 import 'package:fehviewer/store/floor/entity/tag_translat.dart';
 import 'package:fehviewer/utils/logger.dart';
+import 'package:get/get.dart';
 
 import '../index.dart';
 
@@ -95,7 +97,7 @@ extension ExtUser on User {
   String get igneousFB => igneous ?? igneousFromCookie;
 }
 
-extension Ext on TagTranslat {
+extension ExtTagTranlat on TagTranslat {
   String? get nameNotMD {
     final reg = RegExp(r'!\[\S+\]\(.+?\)(\S+)');
     final match = reg.allMatches(name ?? '');
@@ -108,16 +110,60 @@ extension Ext on TagTranslat {
   }
 
   String? get introMDimage {
-    final reg = RegExp(r'!\[((\S+)?)\]\(#\s+?"(.+?)"\)');
-    final match = reg.allMatches(intro ?? '');
-    if (match.isNotEmpty) {
-      final rult = intro?.replaceAllMapped(
-              reg, (match) => '![${match.group(2)}](${match.group(3)})') ??
-          intro;
-      logger.v(rult);
-      return rult;
-    } else {
-      return intro;
+    final EhConfigService ehConfigService = Get.find();
+
+    // 匹配R18g
+    final regR18g = RegExp(r'!\[((\S+)?)\]\(##\s+?"(.+?)"\)');
+
+    // 匹配R18和R18g
+    final regR18And18g = RegExp(r'!\[((\S+)?)\]\(##?\s+?"(.+?)"\)');
+
+    // 匹配所有级别图片
+    final regAll = RegExp(r'!\[((\S+)?)\]\((.+?)\)');
+
+    final lv = ehConfigService.tagIntroImgLv.value;
+
+    String? _remove(RegExp regExp, String? text) {
+      final match = regExp.allMatches(text ?? '');
+      if (match.isNotEmpty) {
+        final rult = text?.replaceAllMapped(regExp, (match) => '') ?? text;
+        logger.v(rult);
+        return rult;
+      } else {
+        return text;
+      }
+    }
+
+    String? _fix(RegExp regExp, String? text) {
+      final match = regExp.allMatches(text ?? '');
+      if (match.isNotEmpty) {
+        final rult = text?.replaceAllMapped(
+                regExp, (match) => '![${match.group(2)}](${match.group(3)})') ??
+            text;
+        logger.v(rult);
+        return rult;
+      } else {
+        return text;
+      }
+    }
+
+    logger.d(lv);
+    switch (lv) {
+      case TagIntroImgLv.disable:
+        // 去除所有
+        return _remove(regAll, intro);
+      case TagIntroImgLv.nonh:
+        // 去除R18和r18g
+        return _remove(regR18And18g, intro);
+      case TagIntroImgLv.r18:
+        // 去除R18g, 把r18的格式修正
+        return _fix(regR18And18g, _remove(regR18g, intro));
+        break;
+      case TagIntroImgLv.r18g:
+        // 把r18和r18g的格式修正
+        return _fix(regR18And18g, intro);
     }
   }
 }
+
+extension ExtString on String {}

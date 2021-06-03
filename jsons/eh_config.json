@@ -22,5 +22,6 @@
   "autoLockTimeOut?": -1,
   "showPageInterval?": true,
   "orientation?": "",
-  "vibrate?": true
+  "vibrate?": true,
+  "tagIntroImgLv?": ""
 }

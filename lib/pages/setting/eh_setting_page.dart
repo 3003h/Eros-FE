@@ -149,6 +149,13 @@ class ListViewEhSetting extends StatelessWidget {
                 onChanged: _handleTagTranslatChanged,
                 desc: '当前版本:${_ehConfigService.tagTranslatVer.value}'),
           )),
+      Obx(() {
+        if (_ehConfigService.isTagTranslat.value) {
+          return _buildTagIntroImgLvItem(context);
+        } else {
+          return const SizedBox();
+        }
+      }),
       TextSwitchItem(
         S.of(context).show_jpn_title,
         intValue: _jpnTitle,
@@ -303,6 +310,61 @@ Widget _buildHistoryMaxItem(BuildContext context) {
           final int? _result = await _showActionSheet(context);
           if (_result != null) {
             ehConfigService.maxHistory.value = _result;
+          }
+        },
+      ));
+}
+
+/// 标签介绍图片切换
+Widget _buildTagIntroImgLvItem(BuildContext context) {
+  final String _title = '标签介绍图片';
+  final EhConfigService ehConfigService = Get.find();
+
+  final Map<TagIntroImgLv, String> descMap = <TagIntroImgLv, String>{
+    TagIntroImgLv.disable: '禁用',
+    TagIntroImgLv.nonh: '隐藏H图片',
+    TagIntroImgLv.r18: '隐藏引起不适的图片',
+    TagIntroImgLv.r18g: '全部显示',
+  };
+
+  List<Widget> _getModeList(BuildContext context) {
+    return List<Widget>.from(descMap.keys.map((TagIntroImgLv element) {
+      return CupertinoActionSheetAction(
+          onPressed: () {
+            Get.back(result: element);
+          },
+          child: Text(descMap[element] ?? ''));
+    }).toList());
+  }
+
+  Future<TagIntroImgLv?> _showDialog(BuildContext context) {
+    return showCupertinoModalPopup<TagIntroImgLv>(
+        context: context,
+        builder: (BuildContext context) {
+          final CupertinoActionSheet dialog = CupertinoActionSheet(
+            cancelButton: CupertinoActionSheetAction(
+                onPressed: () {
+                  Get.back();
+                },
+                child: Text(S.of(context).cancel)),
+            actions: <Widget>[
+              ..._getModeList(context),
+            ],
+          );
+          return dialog;
+        });
+  }
+
+  return Obx(() => SelectorSettingItem(
+        title: _title,
+        selector: descMap[ehConfigService.tagIntroImgLv.value] ?? '',
+        onTap: () async {
+          logger.v('tap TagIntroImgLvItem');
+          final TagIntroImgLv? _result = await _showDialog(context);
+          if (_result != null) {
+            // ignore: unnecessary_string_interpolations
+            logger.v('${EnumToString.convertToString(_result)}');
+            ehConfigService.tagIntroImgLv.value = _result;
           }
         },
       ));
