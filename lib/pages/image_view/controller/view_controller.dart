@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:fehviewer/common/controller/gallerycache_controller.dart';
 import 'package:fehviewer/common/service/depth_service.dart';
 import 'package:fehviewer/common/service/ehconfig_service.dart';
 import 'package:fehviewer/const/const.dart';
@@ -138,6 +139,7 @@ class ViewController extends GetxController {
 
   @override
   void onClose() {
+    Get.find<GalleryCacheController>().saveAll();
     pageController.dispose();
     vState.getMoreCancelToken.cancel();
     // SystemChrome.setEnabledSystemUIOverlays(SystemUiOverlay.values);

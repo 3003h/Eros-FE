@@ -43,7 +43,7 @@ class SplashController extends GetxController {
   }
 
   Future<void> startHome(String url) async {
-    await _autoLockController.resumed(instantly: true);
+    await _autoLockController.resumed(forceLock: true);
 
     if (url != null && url.isNotEmpty) {
       logger.i('open $url');
