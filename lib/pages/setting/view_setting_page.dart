@@ -22,6 +22,7 @@ class ViewSettingPage extends StatelessWidget {
           middle: Text(S.of(context).read_setting),
         ),
         child: SafeArea(
+          bottom: false,
           child: ViewSettingList(),
         ));
 

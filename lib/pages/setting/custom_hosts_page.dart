@@ -40,6 +40,7 @@ class CustomHostsPage extends StatelessWidget {
         trailing: _buildListBtns(context),
       ),
       child: SafeArea(
+        bottom: false,
         child: Container(
           child: ListView(
             children: <Widget>[

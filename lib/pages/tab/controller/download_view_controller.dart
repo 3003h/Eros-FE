@@ -42,6 +42,16 @@ class DownloadViewController extends GetxController {
           .map((MapEntry<String, DownloadTaskInfo> e) => e.value)
           .toList();
 
+  // 暂停任务
+  Future<void> pauseArchiverDownload({required String? taskId}) async {
+    if (taskId != null) FlutterDownloader.pause(taskId: taskId);
+  }
+
+  // 取消任务
+  Future<void> cancelArchiverDownload({required String? taskId}) async {
+    if (taskId != null) FlutterDownloader.cancel(taskId: taskId);
+  }
+
   // 恢复任务
   Future<void> resumeArchiverDownload(int index) async {
     final String? _oriTaskid = archiverTasks[index].taskId;

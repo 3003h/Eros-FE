@@ -79,9 +79,7 @@ class DownloadArchiverItem extends GetView<DownloadViewController> {
                   size: 14,
                 ),
                 onPressed: () {
-                  if (_taskInfo.taskId != null) {
-                    FlutterDownloader.pause(taskId: _taskInfo.taskId!);
-                  }
+                  controller.pauseArchiverDownload(taskId: _taskInfo.taskId);
                 },
               )
             : CupertinoButton(
@@ -91,9 +89,7 @@ class DownloadArchiverItem extends GetView<DownloadViewController> {
                   size: 14,
                 ),
                 onPressed: () {
-                  if (_taskInfo.taskId != null) {
-                    FlutterDownloader.cancel(taskId: _taskInfo.taskId!);
-                  }
+                  controller.cancelArchiverDownload(taskId: _taskInfo.taskId);
                 },
               ),
       ),

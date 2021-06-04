@@ -28,6 +28,7 @@ class EhSettingPage extends StatelessWidget {
         ),
         child: SafeArea(
           child: ListViewEhSetting(),
+          bottom: false,
         ));
 
     return cps;

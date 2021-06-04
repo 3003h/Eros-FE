@@ -18,6 +18,7 @@ class DownloadSettingPage extends StatelessWidget {
           middle: Text(S.of(context).download),
         ),
         child: SafeArea(
+          bottom: false,
           child: ListViewDownloadSetting(),
         ));
 

@@ -20,6 +20,7 @@ class SecuritySettingPage extends StatelessWidget {
         ),
         child: SafeArea(
           child: ListViewSecuritySetting(),
+          bottom: false,
         ));
 
     return cps;

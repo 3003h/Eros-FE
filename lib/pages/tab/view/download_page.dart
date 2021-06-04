@@ -78,14 +78,16 @@ class DownloadArchiverView extends GetView<DownloadViewController> {
   Widget build(BuildContext context) {
     return ListView.separated(
       itemBuilder: (_, int index) {
-        final DownloadTaskInfo _taskInfo = controller.archiverTasks[index];
+        final _id = controller.archiverTasks[index].tag;
 
-        return GetBuilder<DownloadController>(
-            init: DownloadController(),
-            id: _taskInfo.tag,
-            builder: (DownloadController dowloadController) {
+        return GetBuilder<DownloadViewController>(
+            id: _id,
+            builder: (DownloadViewController _controller) {
+              final DownloadTaskInfo _taskInfo =
+                  _controller.archiverTasks[index];
+
               return GestureDetector(
-                onLongPress: () => controller.onLongPress(index),
+                onLongPress: () => _controller.onLongPress(index),
                 behavior: HitTestBehavior.opaque,
                 child: DownloadArchiverItem(
                   title: _taskInfo.title ?? '',
