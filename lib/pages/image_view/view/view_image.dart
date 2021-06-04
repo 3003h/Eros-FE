@@ -151,7 +151,7 @@ class _ViewImageState extends State<ViewImage>
 
   @override
   Widget build(BuildContext context) {
-    logger.d('build ${widget.ser}');
+    // logger.d('build ${widget.ser}');
 
     if (_viewController.vState.needRebuild) {
       _imageFuture = _fetchImage(widget.ser);

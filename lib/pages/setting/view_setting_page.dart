@@ -165,12 +165,12 @@ class ReadOrientationItem extends StatelessWidget {
                   _result != ReadOrientation.auto) {
                 OrientationPlugin.setPreferredOrientations(
                     [orientationMap[_result] ?? DeviceOrientation.portraitUp]);
-                OrientationPlugin.forceOrientation(orientationMap[_result]!);
+                // OrientationPlugin.forceOrientation(orientationMap[_result]!);
               } else if (_result == ReadOrientation.system) {
+                // OrientationPlugin.forceOrientation(
+                //     DeviceOrientation.portraitUp);
                 OrientationPlugin.setPreferredOrientations(
                     DeviceOrientation.values);
-                OrientationPlugin.forceOrientation(
-                    DeviceOrientation.portraitUp);
               }
             }
           },

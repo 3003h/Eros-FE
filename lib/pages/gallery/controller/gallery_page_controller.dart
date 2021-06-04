@@ -307,7 +307,7 @@ class GalleryPageController extends GetxController
       currentPreviewPage = 0;
       setPreviewAfterRequest(galleryItem.galleryPreview);
 
-      logger.v('category ${galleryItem.category}');
+      // logger.v('category ${galleryItem.category}');
 
       // logger.d('ratingCount ${galleryItem.ratingCount} ');
 

@@ -109,7 +109,7 @@ class ViewState {
   int get itemIndex => _itemIndex.value;
 
   set itemIndex(int val) {
-    logger5.d('will set itemIndex to $val');
+    // logger5.d('will set itemIndex to $val');
     _itemIndex.value = val;
   }
 

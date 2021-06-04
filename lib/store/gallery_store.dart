@@ -104,7 +104,7 @@ class GStore {
   Profile get profile {
     final String val = ReadWriteValue('profile', '{}', _profileStore).val;
     final Profile _profileObj = Profile.fromJson(jsonDecode(val));
-    logger.v('_initProfile \n${_profileObj.toJson()}');
+    // logger.v('_initProfile \n${_profileObj.toJson()}');
     final Profile _profile = kDefProfile.copyWith(
         user: _profileObj.user,
         ehConfig: _profileObj.ehConfig,
