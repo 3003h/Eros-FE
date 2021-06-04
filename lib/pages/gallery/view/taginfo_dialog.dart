@@ -201,6 +201,8 @@ class _TagDialogViewState extends State<TagDialogView> {
                           code: theme.textTheme.textStyle.copyWith(
                             backgroundColor: Colors.transparent,
                             fontFamily: 'monospace',
+                            decoration: TextDecoration.underline,
+                            decorationStyle: TextDecorationStyle.dashed,
                             fontSize:
                                 theme.textTheme.textStyle.fontSize! * 0.85,
                           ),
