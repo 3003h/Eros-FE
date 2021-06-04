@@ -108,7 +108,7 @@ class ViewController extends GetxController {
     final int _preload = _ehConfigService.preloadImage.value;
     if (vState.viewMode != ViewMode.topToBottom) {
       // 预载
-      logger.v('初始预载');
+      // logger.v('初始预载');
       GalleryPara.instance
           .precacheImages(
         Get.context!,
@@ -127,13 +127,15 @@ class ViewController extends GetxController {
 
     vState.sliderValue = vState.itemIndex / 1.0;
 
+    logger.d('旋转设置');
     final ReadOrientation? _orientation = _ehConfigService.orientation.value;
-    if (_orientation != ReadOrientation.system ||
+    logger.d(' $_orientation');
+    if (_orientation != ReadOrientation.system &&
         _orientation != ReadOrientation.auto) {
       OrientationPlugin.setPreferredOrientations(
           [orientationMap[_orientation] ?? DeviceOrientation.portraitUp]);
-      OrientationPlugin.forceOrientation(
-          orientationMap[_orientation] ?? DeviceOrientation.portraitUp);
+      // OrientationPlugin.forceOrientation(
+      //     orientationMap[_orientation] ?? DeviceOrientation.portraitUp);
     }
   }
 
@@ -145,9 +147,9 @@ class ViewController extends GetxController {
     // SystemChrome.setEnabledSystemUIOverlays(SystemUiOverlay.values);
     FlutterStatusbarManager.setFullscreen(false);
     // 恢复系统旋转设置
-    // logger.d('恢复系统旋转设置');
+    logger.d('恢复系统旋转设置');
     OrientationPlugin.setPreferredOrientations(DeviceOrientation.values);
-    OrientationPlugin.forceOrientation(DeviceOrientation.portraitUp);
+    // OrientationPlugin.forceOrientation(DeviceOrientation.portraitUp);
     super.onClose();
   }
 

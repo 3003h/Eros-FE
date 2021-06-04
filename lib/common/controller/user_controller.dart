@@ -25,7 +25,7 @@ class UserController extends ProfileController {
   void onInit() {
     super.onInit();
     user(Global.profile.user);
-    logger.d('${user.toJson()}');
+    // logger.d('${user.toJson()}');
     everProfile<User>(
       user,
       (User value) {

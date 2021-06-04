@@ -431,7 +431,7 @@ class ReadButton extends StatelessWidget {
   }
 
   Future<void> _toViewPage(String? gid, int _index) async {
-    logger.d('_toViewPage lastIndex $_index');
+    // logger.d('_toViewPage lastIndex $_index');
     NavigatorUtil.goGalleryViewPage(_index, gid ?? '');
   }
 }
