@@ -187,7 +187,27 @@ class TagTransController extends GetxController {
     final TagTranslatDao tagTranslatDao = await _getTagTranslatDao();
     final TagTranslat? _translates =
         await tagTranslatDao.findTagTranslatByKey(text, namespace);
-    return _translates;
+
+    logger.v(_translates?.intro);
+    // 查询code字段
+    final qryMap = {};
+    final RegExp regCode = RegExp(r'`((\w+\s+?)*\w+)`');
+    final matchs = regCode.allMatches(_translates?.intro ?? '');
+    for (final match in matchs) {
+      final _ori = match.group(1);
+      if (_ori != null) {
+        final _translateCode = await getTagTranslateText(_ori);
+        if (_translateCode != null && _translateCode != _ori) {
+          qryMap[_ori] = _translateCode;
+        }
+      }
+    }
+
+    final _intro = _translates?.intro?.replaceAllMapped(
+        regCode, (match) => ' `${qryMap[match.group(1)]}(${match.group(1)})` ');
+    logger.v(_intro);
+
+    return _translates?.copyWith(intro: _intro);
   }
 
   Future<List<TagTranslat>> getTagTranslatesLike(

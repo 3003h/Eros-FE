@@ -5,7 +5,6 @@ import 'package:fehviewer/common/service/ehconfig_service.dart';
 import 'package:fehviewer/const/const.dart';
 import 'package:fehviewer/pages/image_view/controller/view_state.dart';
 import 'package:fehviewer/store/floor/entity/tag_translat.dart';
-import 'package:fehviewer/utils/logger.dart';
 import 'package:get/get.dart';
 
 import '../index.dart';
@@ -127,7 +126,6 @@ extension ExtTagTranlat on TagTranslat {
       final match = regExp.allMatches(text ?? '');
       if (match.isNotEmpty) {
         final rult = text?.replaceAllMapped(regExp, (match) => '') ?? text;
-        logger.v(rult);
         return rult;
       } else {
         return text;
@@ -140,14 +138,12 @@ extension ExtTagTranlat on TagTranslat {
         final rult = text?.replaceAllMapped(
                 regExp, (match) => '![${match.group(2)}](${match.group(3)})') ??
             text;
-        logger.v(rult);
         return rult;
       } else {
         return text;
       }
     }
 
-    logger.d(lv);
     switch (lv) {
       case TagIntroImgLv.disable:
         // 去除所有
