@@ -29,6 +29,7 @@ class AdvancedSettingPage extends StatelessWidget {
           middle: Text(S.of(context).advanced),
         ),
         child: SafeArea(
+          bottom: false,
           child: ListViewAdvancedSetting(),
         ));
 

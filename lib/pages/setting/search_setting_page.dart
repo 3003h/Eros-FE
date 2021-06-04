@@ -18,6 +18,7 @@ class SearchSettingPage extends StatelessWidget {
         ),
         child: SafeArea(
           child: ListViewSearchSetting(),
+          bottom: false,
         ));
 
     return cps;

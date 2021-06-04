@@ -1,4 +1,3 @@
-import 'package:fehviewer/common/global.dart';
 import 'package:fehviewer/common/service/ehconfig_service.dart';
 import 'package:fehviewer/generated/l10n.dart';
 import 'package:fehviewer/models/base/eh_models.dart';
@@ -179,9 +178,9 @@ class TabHomeController extends GetxController {
       }
 
       tabMap(_tabConfig.tabMap);
-      if (!Global.inDebugMode) {
-        tabMap.remove(EHRoutes.download);
-      }
+      // if (!Global.inDebugMode) {
+      //   tabMap.remove(EHRoutes.download);
+      // }
     }
 
     if (_tabConfig.tabNameList.isNotEmpty) {
@@ -196,7 +195,7 @@ class TabHomeController extends GetxController {
       _tabConfig.setItemList(map, tabNameList);
       gStore.tabConfig = _tabConfig;
       logger.d(
-          '${_tabConfig.tabItemList.map((e) => '${e.name}:${e.enable}').toList().join('\n')}');
+          '${_tabConfig.tabItemList.map((e) => '${e.name}:${e.enable}').toList().join('\n')} ');
     });
 
     ever(tabNameList, (List<String> nameList) {

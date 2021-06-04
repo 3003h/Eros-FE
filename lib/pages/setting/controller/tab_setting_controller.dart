@@ -1,4 +1,3 @@
-import 'package:fehviewer/common/global.dart';
 import 'package:fehviewer/pages/setting/setting_base.dart';
 import 'package:fehviewer/pages/tab/controller/tabhome_controller.dart';
 import 'package:fehviewer/route/routes.dart';
@@ -23,9 +22,9 @@ class TabSettingController extends GetxController {
     for (int index = 0; index < _tabList.length; index++) {
       final String key = _tabList[index];
       if (_tabMap[key] != null) {
-        if (!Global.inDebugMode && key == EHRoutes.download) {
-          continue;
-        }
+        // if (!Global.inDebugMode && key == EHRoutes.download) {
+        //   continue;
+        // }
 
         rows.add(
           TextSwitchItem(

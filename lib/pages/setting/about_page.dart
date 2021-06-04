@@ -25,6 +25,7 @@ class AboutPage extends StatelessWidget {
           middle: Text(S.of(context).about),
         ),
         child: SafeArea(
+          bottom: false,
           child: ListViewAbout(),
         ));
 

@@ -9,6 +9,7 @@ import 'package:fehviewer/const/const.dart';
 import 'package:fehviewer/models/index.dart';
 import 'package:fehviewer/network/gallery_request.dart';
 import 'package:fehviewer/pages/gallery/controller/gallery_page_controller.dart';
+import 'package:fehviewer/pages/tab/controller/download_view_controller.dart';
 import 'package:fehviewer/store/floor/dao/gallery_task_dao.dart';
 import 'package:fehviewer/store/floor/dao/image_task_dao.dart';
 import 'package:fehviewer/store/floor/database.dart';
@@ -324,7 +325,7 @@ class DownloadController extends GetxController {
       final String id = data[0];
       final DownloadTaskStatus status = data[1];
       final int progress = data[2];
-      _updateItem(id, status, progress);
+      _updateTask(id, status, progress);
     });
   }
 
@@ -362,13 +363,14 @@ class DownloadController extends GetxController {
           progress: downloadTask.progress,
         );
 
-        update([_taskInfo.tag!]);
+        // 更新视图
+        Get.find<DownloadViewController>().update([_taskInfo.tag ?? '']);
       }
     }
   }
 
   /// 更新任务状态
-  Future<void> _updateItem(
+  Future<void> _updateTask(
       String id, DownloadTaskStatus status, int progress) async {
     final List<DownloadTask> _tasks =
         await FlutterDownloader.loadTasksWithRawQuery(
@@ -381,14 +383,18 @@ class DownloadController extends GetxController {
     logger.d(
         'Background Isolate Callback: _task ($id) is in status ($status) and process ($progress)');
 
-    DownloadTaskInfo _taskInfo = archiverTaskMap.entries
-        .firstWhere((MapEntry<String, DownloadTaskInfo> element) =>
-            element.value.taskId == id)
+    final exist =
+        archiverTaskMap.entries.any((element) => element.value.taskId == id);
+
+    if (!exist) {
+      return;
+    }
+
+    DownloadTaskInfo? _taskInfo = archiverTaskMap.entries
+        .firstWhere((MapEntry<String, DownloadTaskInfo?> element) =>
+            element.value?.taskId == id)
         .value;
 
-    // _taskInfo
-    //   ..progress = progress
-    //   ..status = status.value;
     _taskInfo = _taskInfo.copyWith(progress: progress, status: status.value);
 
     if (_task != null &&
@@ -404,13 +410,14 @@ class DownloadController extends GetxController {
     // 触发ever 保存到GS中
     archiverTaskMap[_taskInfo.tag!] = _taskInfo;
 
-    update([_taskInfo.tag!]);
+    // 更新视图
+    Get.find<DownloadViewController>().update([_taskInfo.tag ?? '']);
   }
 
   /// 获取下载路径
   Future<String> _getDownloadPath() async {
     final String _dirPath = GetPlatform.isAndroid
-        ? path.join((await getExternalStorageDirectory())!.path, 'Download')
+        ? path.join((await getExternalStorageDirectory())!.path, '')
         : path.join(Global.appDocPath, 'Download', 'Archiver');
     // : Global.appDocPath;
 
@@ -447,12 +454,16 @@ class DownloadController extends GetxController {
   // 根据 downloadUrl 和 savePath 下载文件
   Future<String?> _downloadFile(String downloadUrl, String savePath,
       {String? fileName}) async {
+    final Map<String, String> _httpHeaders = {
+      'Cookie': Global.profile.user.cookie ?? '',
+    };
     return await FlutterDownloader.enqueue(
       url: downloadUrl,
       savedDir: savePath,
-      fileName: fileName ?? '',
+      fileName: fileName,
       showNotification: false,
       openFileFromNotification: false,
+      headers: _httpHeaders,
     );
   }
 }

@@ -17,6 +17,7 @@ class TabSettingPage extends StatelessWidget {
         middle: Text(S.of(context).tabbar_setting),
       ),
       child: SafeArea(
+        bottom: false,
         child: CustomScrollView(
           controller: Get.find<TabSettingController>().scrollController,
           physics: const AlwaysScrollableScrollPhysics(),
