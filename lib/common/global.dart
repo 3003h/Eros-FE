@@ -17,6 +17,7 @@ import 'package:fehviewer/utils/storage.dart';
 import 'package:fehviewer/utils/utility.dart';
 import 'package:fehviewer/utils/vibrate.dart';
 import 'package:firebase_analytics/firebase_analytics.dart';
+import 'package:firebase_mlkit_language/firebase_mlkit_language.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_downloader/flutter_downloader.dart';
@@ -35,6 +36,8 @@ final FirebaseAnalytics analytics = FirebaseAnalytics();
 FirebaseFirestore firestore = FirebaseFirestore.instance;
 final LocalAuthentication localAuth = LocalAuthentication();
 DeviceInfoPlugin deviceInfo = DeviceInfoPlugin();
+final LanguageIdentifier languageIdentifier =
+    FirebaseLanguage.instance.languageIdentifier();
 
 const AdvanceSearch kDefAdvanceSearch = AdvanceSearch(
   searchGalleryName: true,
