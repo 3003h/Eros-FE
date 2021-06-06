@@ -20,6 +20,8 @@ import 'package:linkify/linkify.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 const int kMaxline = 4;
+const double kSizeVote = 14.0;
+const double kSizeNotVote = 13.0;
 
 class CommentItem extends StatelessWidget {
   const CommentItem(
@@ -195,7 +197,7 @@ class CommentItem extends StatelessWidget {
     /// 合并文字
     Widget _fullTextCustMergeText(List<GalleryCommentSpan> span,
         {bool showTranslate = false}) {
-      logger.d('showTranslate $showTranslate');
+      // logger.d('showTranslate $showTranslate');
       // 首先进行分组
       final List<List<GalleryCommentSpan>> _groups = [];
 
@@ -351,10 +353,6 @@ class CommentItem extends StatelessWidget {
       );
     }
 
-    ;
-
-    const double kSizeVote = 14.0;
-    const double kSizeNotVote = 13.0;
     return GetBuilder<CommentController>(
         init: CommentController(),
         tag: pageCtrlDepth,
@@ -404,28 +402,9 @@ class CommentItem extends StatelessWidget {
                                   },
                                 ),*/
 
-                                CupertinoButton(
-                                  padding: const EdgeInsets.symmetric(
-                                      horizontal: 12),
-                                  minSize: 0,
-                                  child: Icon(
-                                    FontAwesomeIcons.language,
-                                    size: kSizeVote,
-                                    color: galleryComment.showTranslate ?? false
-                                        ? CupertinoDynamicColor.resolve(
-                                            CupertinoColors.activeBlue,
-                                            context,
-                                          )
-                                        : CupertinoDynamicColor.resolve(
-                                            ThemeColors.commitText,
-                                            context,
-                                          ),
-                                  ),
-                                  onPressed: () {
-                                    vibrateUtil.light();
-                                    _commentController
-                                        .commitTranslate(galleryComment.id!);
-                                  },
+                                TranslateButton(
+                                  galleryComment: galleryComment,
+                                  commentController: _commentController,
                                 ),
                               // 点赞
                               if (galleryComment.canVote ?? false)
@@ -581,5 +560,61 @@ class CommentItem extends StatelessWidget {
     } else {
       throw 'Could not launch $_openUrl';
     }
+  }
+}
+
+class TranslateButton extends StatefulWidget {
+  const TranslateButton({
+    Key? key,
+    this.sizeVote = kSizeVote,
+    required this.galleryComment,
+    required this.commentController,
+  }) : super(key: key);
+
+  final double sizeVote;
+  final GalleryComment galleryComment;
+  final CommentController commentController;
+
+  @override
+  _TranslateButtonState createState() => _TranslateButtonState();
+}
+
+class _TranslateButtonState extends State<TranslateButton> {
+  bool translating = false;
+
+  @override
+  Widget build(BuildContext context) {
+    final _icon = Icon(
+      FontAwesomeIcons.language,
+      size: widget.sizeVote,
+      color: widget.galleryComment.showTranslate ?? false
+          ? CupertinoDynamicColor.resolve(
+              CupertinoColors.activeBlue,
+              context,
+            )
+          : CupertinoDynamicColor.resolve(
+              ThemeColors.commitText,
+              context,
+            ),
+    );
+
+    const _w = CupertinoActivityIndicator(radius: kSizeVote / 2);
+
+    return CupertinoButton(
+      padding: const EdgeInsets.symmetric(horizontal: 12),
+      minSize: 0,
+      child: translating ? _w : _icon,
+      onPressed: () async {
+        vibrateUtil.light();
+        setState(() {
+          translating = true;
+        });
+        await widget.commentController
+            .commitTranslate(widget.galleryComment.id!);
+        setState(() {
+          translating = false;
+        });
+      },
+    );
   }
 }

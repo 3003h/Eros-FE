@@ -214,8 +214,8 @@ class TagTransController extends GetxController {
       {String text = '', int limit = 100}) async {
     final TagTranslatDao tagTranslatDao = await _getTagTranslatDao();
 
-    final List<TagTranslat> _translates =
-        await tagTranslatDao.findTagTranslatsWithLike(text, text, limit);
+    final List<TagTranslat> _translates = await tagTranslatDao
+        .findTagTranslatsWithLike('%$text%', '%$text%', limit);
     return _translates;
   }
 }
