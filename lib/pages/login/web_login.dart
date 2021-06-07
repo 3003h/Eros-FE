@@ -1,7 +1,7 @@
 /*
 import 'dart:io';
 
-import 'package:fehviewer/const/const.dart';
+import 'package:fehviewer/const/constants.dart';
 import 'package:fehviewer/generated/l10n.dart';
 import 'package:fehviewer/utils/logger.dart';
 import 'package:flutter/cupertino.dart';

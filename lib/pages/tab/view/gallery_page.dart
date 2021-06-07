@@ -11,9 +11,11 @@ import 'package:fehviewer/utils/logger.dart';
 import 'package:fehviewer/utils/vibrate.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_easyrefresh/easy_refresh.dart';
 import 'package:get/get.dart';
 import 'package:line_icons/line_icons.dart';
 
+import 'constants.dart';
 import 'tab_base.dart';
 
 class GalleryListTab extends GetView<GalleryViewController> {
@@ -188,8 +190,13 @@ class GalleryListTab extends GetView<GalleryViewController> {
       physics: const AlwaysScrollableScrollPhysics(),
       slivers: <Widget>[
         // sliverNavigationBar,
-        CupertinoSliverRefreshControl(
-          onRefresh: controller.onRefresh,
+        SliverPadding(
+          padding: EdgeInsets.only(
+              top: context.mediaQueryPadding.top +
+                  kMinInteractiveDimensionCupertino),
+          sliver: CupertinoSliverRefreshControl(
+            onRefresh: controller.onRefresh,
+          ),
         ),
         SliverSafeArea(
           top: false,
@@ -203,6 +210,8 @@ class GalleryListTab extends GetView<GalleryViewController> {
     return CupertinoPageScaffold(
       navigationBar: navigationBar,
       child: SafeArea(
+        top: false,
+        bottom: false,
         child: CupertinoScrollbar(
           child: customScrollView,
           controller: scrollController,
