@@ -223,6 +223,8 @@ class FavoriteTab extends GetView<FavoriteViewController> {
     return CupertinoPageScaffold(
       navigationBar: navigationBar,
       child: SafeArea(
+        top: false,
+        bottom: false,
         child: CupertinoScrollbar(
           controller: scrollController,
           child: CustomScrollView(
@@ -230,8 +232,13 @@ class FavoriteTab extends GetView<FavoriteViewController> {
             physics: const AlwaysScrollableScrollPhysics(),
             slivers: <Widget>[
               // sliverNavigationBar,
-              CupertinoSliverRefreshControl(
-                onRefresh: controller.onRefresh,
+              SliverPadding(
+                padding: EdgeInsets.only(
+                    top: context.mediaQueryPadding.top +
+                        kMinInteractiveDimensionCupertino),
+                sliver: CupertinoSliverRefreshControl(
+                  onRefresh: controller.onRefresh,
+                ),
               ),
               SliverSafeArea(
                 top: false,
@@ -259,14 +266,21 @@ class FavoriteTab extends GetView<FavoriteViewController> {
     return CupertinoPageScaffold(
       navigationBar: navigationBar,
       child: SafeArea(
+        top: false,
+        bottom: false,
         child: CupertinoScrollbar(
           controller: scrollController,
           child: CustomScrollView(slivers: <Widget>[
             // sliverNavigationBar,
-            CupertinoSliverRefreshControl(
-              onRefresh: () async {
-                await controller.reloadData();
-              },
+            SliverPadding(
+              padding: EdgeInsets.only(
+                  top: Get.context?.mediaQueryPadding.top ??
+                      0 + kMinInteractiveDimensionCupertino),
+              sliver: CupertinoSliverRefreshControl(
+                onRefresh: () async {
+                  await controller.reloadData();
+                },
+              ),
             ),
             // todo 可能要设置刷新？
             SliverSafeArea(

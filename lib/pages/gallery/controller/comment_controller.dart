@@ -6,11 +6,12 @@ import 'package:fehviewer/network/gallery_request.dart';
 import 'package:fehviewer/utils/logger.dart';
 import 'package:fehviewer/utils/openl/translator_helper.dart';
 import 'package:fehviewer/utils/toast.dart';
-import 'package:firebase_mlkit_language/firebase_mlkit_language.dart';
+// import 'package:firebase_language_identifier/firebase_language_identifier.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+// import 'package:learning_language/learning_language.dart';
 
 import 'gallery_page_controller.dart';
 
@@ -106,17 +107,19 @@ class CommentController extends GetxController
       for (int i = 0; i < spans.length; i++) {
         String? translate = spans[i].translate;
         if (translate?.isEmpty ?? true) {
-          final List<LanguageLabel> labels =
-              await languageIdentifier.processText(spans[i].text ?? '');
-          for (LanguageLabel label in labels) {
-            final String languageCode = label.languageCode;
-            final double confidence = label.confidence;
-            logger.v('$languageCode  $confidence');
-          }
-
-          if (labels.first.languageCode == 'zh') {
-            return;
-          }
+          // final List<IdentifiedLanguage> possibleLanguages =
+          //     await identifier.idenfityPossibleLanguages(spans[i].text ?? '');
+          //
+          // final String languages = possibleLanguages
+          //     .map((item) => item.language)
+          //     .toList()
+          //     .join(', ');
+          //
+          // print('Possible Languages: $languages');
+          //
+          // if (possibleLanguages.first.language == 'zh') {
+          //   return;
+          // }
 
           translate = await TranslatorHelper.translateText(spans[i].text ?? '',
               to: 'zh');

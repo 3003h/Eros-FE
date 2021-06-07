@@ -71,10 +71,15 @@ class HistoryTab extends GetView<HistoryViewController> {
       physics: const AlwaysScrollableScrollPhysics(),
       slivers: <Widget>[
         // sliverNavigationBar,
-        CupertinoSliverRefreshControl(
-          onRefresh: () async {
-            await controller.reloadData();
-          },
+        SliverPadding(
+          padding: EdgeInsets.only(
+              top: context.mediaQueryPadding.top +
+                  kMinInteractiveDimensionCupertino),
+          sliver: CupertinoSliverRefreshControl(
+            onRefresh: () async {
+              await controller.reloadData();
+            },
+          ),
         ),
         SliverSafeArea(
             top: false,
@@ -93,6 +98,8 @@ class HistoryTab extends GetView<HistoryViewController> {
     return CupertinoPageScaffold(
         navigationBar: navigationBar,
         child: SafeArea(
+          top: false,
+          bottom: false,
           child: CupertinoScrollbar(
               controller: scrollController, child: customScrollView),
         ));

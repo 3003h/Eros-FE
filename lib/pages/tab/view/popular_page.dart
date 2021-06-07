@@ -62,8 +62,13 @@ class PopularListTab extends GetView<PopularViewController> {
       physics: const AlwaysScrollableScrollPhysics(),
       slivers: <Widget>[
         // sliverNavigationBar,
-        CupertinoSliverRefreshControl(
-          onRefresh: controller.onRefresh,
+        SliverPadding(
+          padding: EdgeInsets.only(
+              top: context.mediaQueryPadding.top +
+                  kMinInteractiveDimensionCupertino),
+          sliver: CupertinoSliverRefreshControl(
+            onRefresh: controller.onRefresh,
+          ),
         ),
         SliverSafeArea(
           top: false,
@@ -75,6 +80,8 @@ class PopularListTab extends GetView<PopularViewController> {
     return CupertinoPageScaffold(
       navigationBar: navigationBar,
       child: SafeArea(
+        top: false,
+        bottom: false,
         child: CupertinoScrollbar(
           controller: scrollController,
           child: customScrollView,

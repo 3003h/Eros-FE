@@ -3,7 +3,7 @@ description: fehviewer
 
 publish_to: 'none' # Remove this line if you wish to publish to pub.dev
 
-version: 1.1.15+194
+version: 1.1.15+195
 
 environment:
   sdk: '>=2.12.0-0 <3.0.0'
@@ -167,7 +167,13 @@ dependencies:
   flutter_easyrefresh: ^2.2.1
   flutter_markdown: ^0.6.2
   archive: ^3.1.2
-  firebase_mlkit_language: ^1.1.3
+#  google_ml_kit: ^0.6.0
+#  learning_language: #^0.0.3+2
+#    git:
+#      url: https://github.com/honjow/learning.git
+#      path: packages/learning_language
+#  firebase_language_identifier:
+#    path: /Users/honjow/flutter/firebase_language_identifier
 
 dev_dependencies:
   # flutter packages pub run build_runner build --delete-conflicting-outputs
@@ -195,6 +201,11 @@ dependency_overrides:
   #args: ^2.1.0
   #expressions: ^0.2.2
   #logging: ^1.0.1
+
+  # google_ml_kit pod 依赖冲突 降低firebase版本处理
+#  firebase_core: 1.1.0
+#  firebase_crashlytics: 2.0.0
+#  cloud_firestore: 2.0.0
 
 flutter_intl:
   enabled: true

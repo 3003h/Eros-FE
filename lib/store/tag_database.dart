@@ -6,7 +6,7 @@ import 'package:archive/archive.dart';
 import 'package:dio/dio.dart';
 import 'package:fehviewer/common/global.dart';
 import 'package:fehviewer/common/service/ehconfig_service.dart';
-import 'package:fehviewer/const/const.dart';
+import 'package:fehviewer/const/constants.dart';
 import 'package:fehviewer/models/entity/tag_translat.dart';
 import 'package:fehviewer/utils/db_util.dart';
 import 'package:fehviewer/utils/dio_util.dart';

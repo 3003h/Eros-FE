@@ -17,13 +17,13 @@ import 'package:fehviewer/utils/storage.dart';
 import 'package:fehviewer/utils/utility.dart';
 import 'package:fehviewer/utils/vibrate.dart';
 import 'package:firebase_analytics/firebase_analytics.dart';
-import 'package:firebase_mlkit_language/firebase_mlkit_language.dart';
+// import 'package:firebase_language_identifier/firebase_language_identifier.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_downloader/flutter_downloader.dart';
 import 'package:flutter_statusbar_manager/flutter_statusbar_manager.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
+// import 'package:learning_language/learning_language.dart';
 import 'package:local_auth/local_auth.dart';
 import 'package:logger/logger.dart';
 import 'package:package_info/package_info.dart';
@@ -36,8 +36,9 @@ final FirebaseAnalytics analytics = FirebaseAnalytics();
 FirebaseFirestore firestore = FirebaseFirestore.instance;
 final LocalAuthentication localAuth = LocalAuthentication();
 DeviceInfoPlugin deviceInfo = DeviceInfoPlugin();
-final LanguageIdentifier languageIdentifier =
-    FirebaseLanguage.instance.languageIdentifier();
+// final LanguageIdentifier identifier = LanguageIdentifier();
+// final LanguageIdentifier identifier =
+//     FirebaseLanguage.instance.languageIdentifier();
 
 const AdvanceSearch kDefAdvanceSearch = AdvanceSearch(
   searchGalleryName: true,

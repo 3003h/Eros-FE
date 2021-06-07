@@ -188,8 +188,13 @@ class WatchedListTab extends GetView<WatchedViewController> {
       physics: const AlwaysScrollableScrollPhysics(),
       slivers: <Widget>[
         // sliverNavigationBar,
-        CupertinoSliverRefreshControl(
-          onRefresh: controller.onRefresh,
+        SliverPadding(
+          padding: EdgeInsets.only(
+              top: context.mediaQueryPadding.top +
+                  kMinInteractiveDimensionCupertino),
+          sliver: CupertinoSliverRefreshControl(
+            onRefresh: controller.onRefresh,
+          ),
         ),
         SliverSafeArea(
           top: false,
@@ -203,6 +208,8 @@ class WatchedListTab extends GetView<WatchedViewController> {
     return CupertinoPageScaffold(
       navigationBar: navigationBar,
       child: SafeArea(
+        top: false,
+        bottom: false,
         child: CupertinoScrollbar(
             controller: scrollController, child: customScrollView),
       ),
