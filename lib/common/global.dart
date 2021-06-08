@@ -10,7 +10,8 @@ import 'package:fehviewer/const/storages.dart';
 import 'package:fehviewer/models/index.dart';
 import 'package:fehviewer/models/profile.dart';
 import 'package:fehviewer/network/gallery_request.dart';
-import 'package:fehviewer/store/gallery_store.dart';
+import 'package:fehviewer/store/get_store.dart';
+import 'package:fehviewer/store/hive/hive.dart';
 import 'package:fehviewer/utils/https_proxy.dart';
 import 'package:fehviewer/utils/logger.dart';
 import 'package:fehviewer/utils/storage.dart';
@@ -23,6 +24,8 @@ import 'package:flutter_downloader/flutter_downloader.dart';
 import 'package:flutter_statusbar_manager/flutter_statusbar_manager.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
+import 'package:hive/hive.dart';
+import 'package:hive_flutter/hive_flutter.dart';
 // import 'package:learning_language/learning_language.dart';
 import 'package:local_auth/local_auth.dart';
 import 'package:logger/logger.dart';
@@ -39,6 +42,8 @@ DeviceInfoPlugin deviceInfo = DeviceInfoPlugin();
 // final LanguageIdentifier identifier = LanguageIdentifier();
 // final LanguageIdentifier identifier =
 //     FirebaseLanguage.instance.languageIdentifier();
+
+final HiveHelper hiveHelper = HiveHelper();
 
 const AdvanceSearch kDefAdvanceSearch = AdvanceSearch(
   searchGalleryName: true,
@@ -223,6 +228,8 @@ class Global {
     await StorageUtil.init();
 
     await GStore.init();
+
+    await HiveHelper.init();
 
     await vibrateUtil.init();
 

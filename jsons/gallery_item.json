@@ -40,5 +40,6 @@
   "isRatinged?": false,
   "colorRating?": "r",
   "archiverLink?": "",
-  "torrentLink?": ""
+  "torrentLink?": "",
+  "lastViewTime?": 123
 }

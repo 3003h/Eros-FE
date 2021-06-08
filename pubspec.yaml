@@ -3,10 +3,10 @@ description: fehviewer
 
 publish_to: 'none' # Remove this line if you wish to publish to pub.dev
 
-version: 1.1.15+195
+version: 1.1.15+196
 
 environment:
-  sdk: '>=2.12.0-0 <3.0.0'
+  sdk: '>=2.12.0 <3.0.0'
 
 dependencies:
   flutter:
@@ -167,6 +167,8 @@ dependencies:
   flutter_easyrefresh: ^2.2.1
   flutter_markdown: ^0.6.2
   archive: ^3.1.2
+  hive: ^2.0.4
+  hive_flutter: ^1.0.0
 #  google_ml_kit: ^0.6.0
 #  learning_language: #^0.0.3+2
 #    git:

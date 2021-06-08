@@ -5,7 +5,7 @@ import 'package:fehviewer/pages/tab/view/download_page.dart';
 import 'package:fehviewer/pages/tab/view/history_page.dart';
 import 'package:fehviewer/pages/tab/view/watched_page.dart';
 import 'package:fehviewer/route/routes.dart';
-import 'package:fehviewer/store/gallery_store.dart';
+import 'package:fehviewer/store/get_store.dart';
 import 'package:fehviewer/utils/logger.dart';
 import 'package:fehviewer/utils/toast.dart';
 import 'package:flutter/cupertino.dart';
