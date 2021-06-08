@@ -215,6 +215,7 @@ Widget _buildListModeItem(BuildContext context) {
     ListModeEnum.list: S.of(context).listmode_medium,
     ListModeEnum.simpleList: S.of(context).listmode_small,
     ListModeEnum.waterfall: S.of(context).listmode_waterfall,
+    ListModeEnum.waterfallLarge: 'waterfall Large',
   };
 
   List<Widget> _getModeList(BuildContext context) {
