@@ -247,7 +247,7 @@ class _TagDialogViewState extends State<TagDialogView> {
   Future<void> _onOpen(BuildContext context, String? url) async {
     vibrateUtil.light();
 
-    final String? _openUrl = url;
+    final String? _openUrl = Uri.encodeFull(url ?? '');
     final RegExp regExp =
         RegExp(r'https?://e[-x]hentai.org/g/[0-9]+/[0-9a-z]+/?');
     if (await canLaunch(_openUrl!)) {
