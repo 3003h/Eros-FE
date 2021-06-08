@@ -17,6 +17,7 @@ const double kPaddingLeft = 8.0;
 
 /// 画廊列表项
 /// 标题和tag需要随设置变化重构ui
+// ignore: must_be_immutable
 class GalleryItemWidget extends StatelessWidget {
   GalleryItemWidget({required this.galleryItem, required this.tabTag}) {
     _galleryItemController =
@@ -363,6 +364,38 @@ class TagBox extends StatelessWidget {
                     backgrondColor:
                         ColorsUtil.getTagColor(_simpleTag.backgrondColor),
                   );
+                }).toList()), //要显示的子控件集合
+              ),
+            ))
+        : Container();
+  }
+}
+
+class TagListViewBox extends StatelessWidget {
+  const TagListViewBox({Key? key, this.simpleTags}) : super(key: key);
+
+  final List<SimpleTag>? simpleTags;
+
+  @override
+  Widget build(BuildContext context) {
+    final EhConfigService _ehConfigService = Get.find();
+    return simpleTags != null && simpleTags!.isNotEmpty
+        ? Obx(() => Container(
+              height: 30,
+              padding: const EdgeInsets.fromLTRB(0, 4, 0, 8),
+              child: ListView(
+                scrollDirection: Axis.horizontal,
+                children:
+                    List<Widget>.from(simpleTags!.map((SimpleTag _simpleTag) {
+                  final String? _text = _ehConfigService.isTagTranslat.value
+                      ? _simpleTag.translat
+                      : _simpleTag.text;
+                  return TagItem(
+                    text: _text,
+                    color: ColorsUtil.getTagColor(_simpleTag.color),
+                    backgrondColor:
+                        ColorsUtil.getTagColor(_simpleTag.backgrondColor),
+                  ).paddingOnly(right: 4.0);
                 }).toList()), //要显示的子控件集合
               ),
             ))
