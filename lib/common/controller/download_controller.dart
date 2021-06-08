@@ -15,7 +15,7 @@ import 'package:fehviewer/store/floor/dao/image_task_dao.dart';
 import 'package:fehviewer/store/floor/database.dart';
 import 'package:fehviewer/store/floor/entity/gallery_image_task.dart';
 import 'package:fehviewer/store/floor/entity/gallery_task.dart';
-import 'package:fehviewer/store/gallery_store.dart';
+import 'package:fehviewer/store/get_store.dart';
 import 'package:fehviewer/utils/logger.dart';
 import 'package:fehviewer/utils/toast.dart';
 import 'package:flutter_downloader/flutter_downloader.dart';
