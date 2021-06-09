@@ -84,6 +84,7 @@
   "listmode_medium": "List - Medium",
   "listmode_small": "List - Small",
   "listmode_waterfall": "Waterfall",
+  "listmode_waterfall_large": "WaterfallFlow - Large",
   "favorites_order": "Favorites order",
   "favorites_order_Use_posted": "Use posted",
   "favorites_order_Use_favorited": "Use favorited",

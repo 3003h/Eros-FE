@@ -148,6 +148,9 @@ class _GalleryCatFilterState extends State<GalleryCatFilter> {
           // logger.v('$catMap');
         });
       },
+      onLongPress: () {
+        logger.v('onLongPress $catName');
+      },
       onColor: ThemeColors.catColor[catName],
       onTextColor: CupertinoColors.systemGrey6,
       offColor: CupertinoColors.systemGrey4,

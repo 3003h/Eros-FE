@@ -21,6 +21,19 @@ if (flutterVersionName == null) {
     flutterVersionName = '1.0'
 }
 
+def keystorePropertiesFile = rootProject.file("keystore.properties")
+def keystoreProperties = new Properties()
+if (keystorePropertiesFile.exists()) {
+    keystorePropertiesFile.withReader('UTF-8') { reader ->
+        keystoreProperties.load(reader)
+    }
+}
+def _keyAlias = keystoreProperties.getProperty("keyAlias")
+def _keyPassword = keystoreProperties.getProperty("keyPassword")
+def _storeFile = keystoreProperties.getProperty("storeFile")
+def _storePassword = keystoreProperties.getProperty("storePassword")
+
+
 apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
 apply from: "$flutterRoot/packages/flutter_tools/gradle/flutter.gradle"
@@ -46,15 +59,32 @@ android {
         versionName flutterVersionName
         archivesBaseName = "feh-v$versionName+$versionCode"
     }
+    signingConfigs {
+        debug {
+            storeFile file(_storeFile)
+            storePassword _storePassword
+            keyAlias _keyAlias
+            keyPassword _keyPassword
+            v1SigningEnabled true
+            v2SigningEnabled true
+        }
+        release {
+            storeFile file(_storeFile)
+            storePassword _storePassword
+            keyAlias _keyAlias
+            keyPassword _keyPassword
+            v1SigningEnabled true
+            v2SigningEnabled true
+        }
+    }
 
     buildTypes {
         release {
-            signingConfig signingConfigs.debug
+            signingConfig signingConfigs.release
             minifyEnabled true
             shrinkResources true
         }
     }
-
 }
 
 flutter {
