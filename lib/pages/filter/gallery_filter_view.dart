@@ -71,8 +71,8 @@ class GalleryFilterView extends StatelessWidget {
         if (_searchPageController?.searchType != SearchType.favorite)
           GalleryCatFilter(
             // padding: const EdgeInsets.symmetric(vertical: 4.0),
-            value: catNum,
-            onChanged: catNumChanged,
+            catNum: catNum,
+            onCatNumChanged: catNumChanged,
             crossAxisCount: catCrossAxisCount,
             padding: const EdgeInsets.symmetric(vertical: 8),
           ),
