@@ -26,7 +26,7 @@ class VibrateUtil {
   }
 
   void light() {
-    if (!(_ehConfigService.vibrate.value)) {
+    if (!_ehConfigService.vibrate.value) {
       return;
     }
     if (Platform.isIOS) {
@@ -37,7 +37,7 @@ class VibrateUtil {
   }
 
   void medium() {
-    if (!(_ehConfigService.vibrate.value)) {
+    if (!_ehConfigService.vibrate.value) {
       return;
     }
     if (Platform.isIOS) {

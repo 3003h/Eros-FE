@@ -60,14 +60,22 @@ class _GalleryCatButtonState extends State<GalleryCatButton> {
   Color? _color;
 
   @override
+  void initState() {
+    super.initState();
+    _value = widget.value;
+    _textColor = _value ? widget.onTextColor : widget.offTextColor;
+    _color = _value ? widget.onColor : widget.offColor;
+  }
+
+  @override
   Widget build(BuildContext context) {
-    // logger.v('GalleryCatButton build');
+    // loggerNoStack.v('GalleryCatButton build [${widget.text}] [$_value]');
     return Container(
       child: GestureDetector(
-        onLongPress: () => widget.onLongPress?.call(),
+        onLongPress: _onLongPress,
         child: CupertinoButton(
           padding: const EdgeInsets.all(2.0),
-          onPressed: _pressBtn,
+          onPressed: _onPressed,
           pressedOpacity: 1.0,
           child: Text(
             widget.text,
@@ -79,7 +87,12 @@ class _GalleryCatButtonState extends State<GalleryCatButton> {
     );
   }
 
-  void _pressBtn() {
+  void _onLongPress() {
+    vibrateUtil.medium();
+    widget.onLongPress?.call();
+  }
+
+  void _onPressed() {
     // logger.v('_pressBtn ${widget.text}');
     vibrateUtil.light();
     _value = !_value;
@@ -89,14 +102,6 @@ class _GalleryCatButtonState extends State<GalleryCatButton> {
       widget.onChanged(!_value);
     });
   }
-
-  @override
-  void initState() {
-    super.initState();
-    _value = widget.value;
-    _textColor = _value ? widget.onTextColor : widget.offTextColor;
-    _color = _value ? widget.onColor : widget.offColor;
-  }
 }
 
 /// 画廊类型筛选器
@@ -105,8 +110,8 @@ class _GalleryCatButtonState extends State<GalleryCatButton> {
 class GalleryCatFilter extends StatefulWidget {
   const GalleryCatFilter({
     Key? key,
-    required this.value,
-    required this.onChanged,
+    required this.catNum,
+    required this.onCatNumChanged,
     this.margin,
     this.padding,
     this.crossAxisCount = 2,
@@ -117,10 +122,10 @@ class GalleryCatFilter extends StatefulWidget {
   final EdgeInsetsGeometry? padding;
 
   /// cat值
-  final int value;
+  final int catNum;
 
   /// 值变化的回调
-  final ValueChanged<int> onChanged;
+  final ValueChanged<int> onCatNumChanged;
 
   final int crossAxisCount;
 
@@ -130,54 +135,54 @@ class GalleryCatFilter extends StatefulWidget {
 
 class _GalleryCatFilterState extends State<GalleryCatFilter> {
   int _catNum = 0;
-  Map<String, bool> _catMap = {};
-  final List<Widget> _catButttonListWidget = <Widget>[];
 
-  Widget _getCatButton({
-    required String catName,
-    required Map<String, bool> catMap,
-    required ValueChanged<int> onChanged,
-  }) {
-    return GalleryCatButton(
-      text: catName,
-      onChanged: (bool value) {
-        logger.v('$catName changed to ${!value}');
-        setState(() {
-          catMap[catName] = !value;
-          onChanged(EHUtils.convCatMapToNum(catMap));
-          // logger.v('$catMap');
-        });
-      },
-      onLongPress: () {
-        logger.v('onLongPress $catName');
-      },
-      onColor: ThemeColors.catColor[catName],
-      onTextColor: CupertinoColors.systemGrey6,
-      offColor: CupertinoColors.systemGrey4,
-      offTextColor: CupertinoColors.systemGrey,
-      value: catMap[catName] ?? true,
-    );
-  }
+  Map<String, bool> get _catMap => EHUtils.convNumToCatMap(_catNum);
+  List<Widget> get _catButttonListWidget => EHConst.cats.keys
+      .map((String catName) => GalleryCatButton(
+            key: UniqueKey(),
+            text: catName,
+            onColor: ThemeColors.catColor[catName],
+            onTextColor: CupertinoColors.systemGrey6,
+            offColor: CupertinoColors.systemGrey4,
+            offTextColor: CupertinoColors.systemGrey,
+            value: _catMap[catName] ?? true,
+            onChanged: (bool value) {
+              logger.v('$catName changed to ${!value}');
+              setState(() {
+                final tempMap = _catMap;
+                tempMap[catName] = !value;
+                _catNum = EHUtils.convCatMapToNum(tempMap);
+                widget.onCatNumChanged(_catNum);
+              });
+            },
+            onLongPress: () {
+              final tempMap = _catMap;
+              final bool _selState = tempMap[catName] ?? true;
+              logger.v('onLongPress [$catName] [$_selState]');
 
+              tempMap.forEach((key, value) {
+                if (key != catName) {
+                  tempMap[key] = !_selState;
+                }
+              });
+
+              setState(() {
+                _catNum = EHUtils.convCatMapToNum(tempMap);
+                widget.onCatNumChanged(_catNum);
+              });
+            },
+          ))
+      .toList();
   @override
   void initState() {
     super.initState();
-    _catNum = widget.value;
-    _catMap = EHUtils.convNumToCatMap(_catNum);
-
-    for (final String cat in EHConst.cats.keys) {
-      _catButttonListWidget.add(
-        _getCatButton(
-          catName: cat,
-          catMap: _catMap,
-          onChanged: widget.onChanged,
-        ),
-      );
-    }
+    _catNum = widget.catNum;
   }
 
   @override
   Widget build(BuildContext context) {
+    logger.v('build GalleryCatFilter $_catNum');
+
     return Container(
       margin: widget.margin,
       padding: widget.padding,
@@ -189,7 +194,7 @@ class _GalleryCatFilterState extends State<GalleryCatFilter> {
         mainAxisSpacing: 4.0,
         crossAxisSpacing: 4.0,
         padding: const EdgeInsets.all(0.0),
-        children: <Widget>[..._catButttonListWidget],
+        children: _catButttonListWidget,
       ),
     );
   }
