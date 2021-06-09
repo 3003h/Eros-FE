@@ -215,7 +215,7 @@ Widget _buildListModeItem(BuildContext context) {
     ListModeEnum.list: S.of(context).listmode_medium,
     ListModeEnum.simpleList: S.of(context).listmode_small,
     ListModeEnum.waterfall: S.of(context).listmode_waterfall,
-    ListModeEnum.waterfallLarge: 'waterfall Large',
+    ListModeEnum.waterfallLarge: S.of(context).listmode_waterfall_large,
   };
 
   List<Widget> _getModeList(BuildContext context) {
@@ -233,6 +233,7 @@ Widget _buildListModeItem(BuildContext context) {
         context: context,
         builder: (BuildContext context) {
           final CupertinoActionSheet dialog = CupertinoActionSheet(
+            title: Text(_title),
             cancelButton: CupertinoActionSheetAction(
                 onPressed: () {
                   Get.back();
@@ -289,7 +290,7 @@ Widget _buildHistoryMaxItem(BuildContext context) {
         context: context,
         builder: (BuildContext context) {
           final CupertinoActionSheet dialog = CupertinoActionSheet(
-            // title: const Text('列表模式选择'),
+            title: Text(_title),
             cancelButton: CupertinoActionSheetAction(
                 onPressed: () {
                   Get.back();
@@ -344,6 +345,7 @@ Widget _buildTagIntroImgLvItem(BuildContext context) {
         context: context,
         builder: (BuildContext context) {
           final CupertinoActionSheet dialog = CupertinoActionSheet(
+            title: Text(_title),
             cancelButton: CupertinoActionSheetAction(
                 onPressed: () {
                   Get.back();

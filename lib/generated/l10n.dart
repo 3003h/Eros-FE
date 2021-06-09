@@ -900,6 +900,16 @@ class S {
     );
   }
 
+  /// `WaterfallFlow - Large`
+  String get listmode_waterfall_large {
+    return Intl.message(
+      'WaterfallFlow - Large',
+      name: 'listmode_waterfall_large',
+      desc: '',
+      args: [],
+    );
+  }
+
   /// `Favorites order`
   String get favorites_order {
     return Intl.message(

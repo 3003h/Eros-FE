@@ -82,6 +82,8 @@ class MessageLookup extends MessageLookupByLibrary {
         "listmode_medium": MessageLookupByLibrary.simpleMessage("列表 - 中"),
         "listmode_small": MessageLookupByLibrary.simpleMessage("列表 - 小"),
         "listmode_waterfall": MessageLookupByLibrary.simpleMessage("瀑布流"),
+        "listmode_waterfall_large":
+            MessageLookupByLibrary.simpleMessage("WaterfallFlow - Large"),
         "loading": MessageLookupByLibrary.simpleMessage("Loading"),
         "local_favorite": MessageLookupByLibrary.simpleMessage("本地收藏"),
         "login": MessageLookupByLibrary.simpleMessage("login"),
