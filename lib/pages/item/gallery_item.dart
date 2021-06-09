@@ -381,8 +381,7 @@ class TagListViewBox extends StatelessWidget {
     final EhConfigService _ehConfigService = Get.find();
     return simpleTags != null && simpleTags!.isNotEmpty
         ? Obx(() => Container(
-              height: 30,
-              padding: const EdgeInsets.fromLTRB(0, 4, 0, 8),
+              height: 18,
               child: ListView(
                 scrollDirection: Axis.horizontal,
                 children:

@@ -1,5 +1,6 @@
 import 'dart:ui';
 
+import 'package:fehviewer/common/service/theme_service.dart';
 import 'package:fehviewer/const/theme_colors.dart';
 import 'package:fehviewer/models/base/eh_models.dart';
 import 'package:fehviewer/pages/item/controller/galleryitem_controller.dart';
@@ -106,14 +107,14 @@ class GalleryItemFlowLarge extends StatelessWidget {
       final Widget container = Container(
         child: Container(
           decoration: BoxDecoration(
-              color: CupertinoColors.systemBackground,
+              color: ehTheme.itemBackgroundColor,
               borderRadius: BorderRadius.circular(kRadius), //圆角
               // ignore: prefer_const_literals_to_create_immutables
               boxShadow: [
                 //阴影
                 BoxShadow(
                   color: CupertinoDynamicColor.resolve(
-                      CupertinoColors.systemGrey4, context),
+                      CupertinoColors.systemGrey5, context),
                   blurRadius: 5,
                 )
               ]),
@@ -182,9 +183,15 @@ class GalleryItemFlowLarge extends StatelessWidget {
                   ),
                   const SizedBox(height: 4),
                   _buildTitle(),
-                  TagListViewBox(
-                    simpleTags:
-                        _galleryItemController.galleryItem.simpleTags ?? [],
+                  Container(
+                    padding: const EdgeInsets.fromLTRB(0, 8, 0, 8),
+                    child: ClipRRect(
+                      borderRadius: BorderRadius.circular(4),
+                      child: TagListViewBox(
+                        simpleTags:
+                            _galleryItemController.galleryItem.simpleTags ?? [],
+                      ),
+                    ),
                   ),
                 ],
               ).paddingAll(8.0),
