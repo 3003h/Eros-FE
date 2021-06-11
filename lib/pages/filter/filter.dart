@@ -137,6 +137,7 @@ class _GalleryCatFilterState extends State<GalleryCatFilter> {
   int _catNum = 0;
 
   Map<String, bool> get _catMap => EHUtils.convNumToCatMap(_catNum);
+
   List<Widget> get _catButttonListWidget => EHConst.cats.keys
       .map((String catName) => GalleryCatButton(
             key: UniqueKey(),
@@ -173,6 +174,7 @@ class _GalleryCatFilterState extends State<GalleryCatFilter> {
             },
           ))
       .toList();
+
   @override
   void initState() {
     super.initState();

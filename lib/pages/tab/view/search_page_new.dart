@@ -1,5 +1,6 @@
 import 'dart:math';
 
+import 'package:extended_sliver/extended_sliver.dart';
 import 'package:fehviewer/common/controller/tag_trans_controller.dart';
 import 'package:fehviewer/common/service/depth_service.dart';
 import 'package:fehviewer/common/service/theme_service.dart';
@@ -13,6 +14,8 @@ import 'package:fehviewer/pages/tab/controller/enum.dart';
 import 'package:fehviewer/pages/tab/controller/search_page_controller.dart';
 import 'package:fehviewer/pages/tab/view/gallery_base.dart';
 import 'package:fehviewer/pages/tab/view/tab_base.dart';
+import 'package:fehviewer/utils/cust_lib/persistent_header_builder.dart';
+import 'package:fehviewer/utils/cust_lib/sliver/sliver_persistent_header.dart';
 import 'package:fehviewer/utils/logger.dart';
 import 'package:fehviewer/utils/vibrate.dart';
 import 'package:flutter/cupertino.dart';
@@ -114,7 +117,8 @@ class GallerySearchPageNew extends StatelessWidget {
         ));
   }
 
-  Widget getSearchTextFieldIn({bool multiline = false}) {
+  Widget getSearchTextFieldIn(
+      {bool multiline = false, double iconOpacity = 0.0}) {
     return Obx(() => CupertinoTextField(
           style: const TextStyle(height: 1.25),
           decoration: BoxDecoration(
@@ -131,9 +135,9 @@ class GallerySearchPageNew extends StatelessWidget {
           prefix: CupertinoButton(
             padding: const EdgeInsets.symmetric(horizontal: 4),
             minSize: 0,
-            child: const Icon(
+            child: Icon(
               LineIcons.search,
-              color: CupertinoColors.systemGrey,
+              color: CupertinoColors.systemGrey.withOpacity(iconOpacity),
             ),
             onPressed: () {},
           ),
@@ -148,7 +152,8 @@ class GallerySearchPageNew extends StatelessWidget {
                         LineIcons.timesCircle,
                         size: 24.0,
                         color: CupertinoDynamicColor.resolve(
-                            _kClearButtonColor, Get.context!),
+                                _kClearButtonColor, Get.context!)
+                            .withOpacity(iconOpacity),
                       ).paddingSymmetric(horizontal: 6),
                     )
                   : const SizedBox();
@@ -171,10 +176,8 @@ class GallerySearchPageNew extends StatelessWidget {
     return CupertinoNavigationBar(
       padding: const EdgeInsetsDirectional.only(start: 0),
       border: null,
-      // middle: getSearchTextField(),
-      // middle: searchTextField,
+      middle: Text(S.of(context).search),
       transitionBetweenRoutes: false,
-      // leading: const SizedBox.shrink(),
       trailing: _buildTrailing(context),
     );
   }
@@ -190,7 +193,7 @@ class GallerySearchPageNew extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             // _buildTrailing(context).paddingSymmetric(horizontal: 12),
-            _buildSearchBar(context),
+            // _buildSearchBar(context),
             Expanded(
               child: _buildSearchRult(context),
             ),
@@ -203,6 +206,7 @@ class GallerySearchPageNew extends StatelessWidget {
   }
 
   Widget _buildSearchRult(BuildContext context) {
+    const _b = false;
     return GestureDetector(
       behavior: HitTestBehavior.opaque,
       onTap: () {
@@ -215,6 +219,31 @@ class GallerySearchPageNew extends StatelessWidget {
       },
       child: CustomScrollView(
         slivers: <Widget>[
+          if (_b)
+            SliverPersistentHeader(
+              pinned: true,
+              floating: true,
+              delegate: PersistentHeaderBuilder(
+                min: 0.5,
+                max: 100,
+                builder: _buildSearchBar,
+              ),
+            ),
+          if (_b)
+            SliverPinnedPersistentHeader(
+              delegate: SliverPinnedPersistentHeaderBuilder(
+                minExtentProtoType: const SizedBox(height: 1),
+                maxExtentProtoType: _buildSearchBar(context, 1.0),
+                builder: _buildSearchBar,
+              ),
+            ),
+          SliverFloatingPinnedPersistentHeader(
+            delegate: SliverFloatingPinnedPersistentHeaderBuilder(
+              minExtentProtoType: const SizedBox(height: 1),
+              maxExtentProtoType: _buildSearchBar(context, 1.0),
+              builder: _buildSearchBar,
+            ),
+          ),
           Obx(() {
             return CupertinoSliverRefreshControl(
                 onRefresh: controller.listType == ListType.gallery
@@ -267,8 +296,14 @@ class GallerySearchPageNew extends StatelessWidget {
     );
   }
 
-  Widget _buildSearchBar(BuildContext context) {
-    final _showbar = false;
+  Widget _buildSearchBar(BuildContext context, double offset,
+      {double maxExtent = 0}) {
+    // logger.v('offset $offset');
+    double iconOpacity = 0.0;
+    final transparentOffset = maxExtent - 30;
+    if (offset < transparentOffset) {
+      iconOpacity = 1 - offset / transparentOffset;
+    }
     return Container(
       decoration: BoxDecoration(
         color: CupertinoDynamicColor.resolve(
@@ -282,35 +317,10 @@ class GallerySearchPageNew extends StatelessWidget {
           Expanded(
             child: Padding(
               padding: const EdgeInsets.only(left: 4, top: 4, bottom: 4),
-              child: getSearchTextFieldIn(multiline: true),
+              child: getSearchTextFieldIn(
+                  multiline: true, iconOpacity: iconOpacity),
             ),
           ),
-          if (_showbar)
-            GetBuilder<SearchPageController>(
-              id: GetIds.SEARCH_CLEAR_BTN,
-              tag: searchPageCtrlDepth,
-              builder: (SearchPageController sPageController) {
-                return sPageController.textIsNotEmpty
-                    ? CupertinoButton(
-                        minSize: 36,
-                        padding: const EdgeInsets.all(0),
-                        onPressed: sPageController.clearText,
-                        child: const Icon(
-                          LineIcons.timesCircle,
-                          size: 26.0,
-                        ),
-                      )
-                    : CupertinoButton(
-                        minSize: 36,
-                        padding: const EdgeInsets.all(0),
-                        onPressed: () => Get.back(),
-                        child: const Icon(
-                          LineIcons.arrowLeft,
-                          size: 26,
-                        ),
-                      );
-              },
-            ),
         ],
       ),
     );
@@ -619,5 +629,29 @@ class GallerySearchPageNew extends StatelessWidget {
     }
 
     return _buildListBtns();
+  }
+}
+
+class SearchSliverPinnedPersistentHeaderDelegate
+    extends SliverPinnedPersistentHeaderDelegate {
+  SearchSliverPinnedPersistentHeaderDelegate(
+      {required this.child,
+      required Widget minExtentProtoType,
+      required Widget maxExtentProtoType})
+      : super(
+            minExtentProtoType: minExtentProtoType,
+            maxExtentProtoType: maxExtentProtoType);
+  final Widget child;
+
+  @override
+  Widget build(BuildContext context, double shrinkOffset, double? minExtent,
+      double maxExtent, bool overlapsContent) {
+    return child;
+  }
+
+  @override
+  bool shouldRebuild(
+      covariant SliverPinnedPersistentHeaderDelegate oldDelegate) {
+    return false;
   }
 }

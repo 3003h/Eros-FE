@@ -1,6 +1,7 @@
 /// Language object with name and code (ISO)
 class Language {
   Language(this.code, this.name);
+
   final String name;
   final String code;
 

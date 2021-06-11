@@ -95,6 +95,7 @@ class HttpManager {
   static final Map<String, HttpManager> _instanceMap = <String, HttpManager>{};
 
   late Dio _dio;
+
   Dio get dio => _dio;
   late BaseOptions _options;
 
