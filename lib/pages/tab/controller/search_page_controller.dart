@@ -43,7 +43,12 @@ class SearchPageController extends TabViewController {
 
   final String? initSearchText;
 
-  String searchText = '';
+  // String searchText = '';
+
+  final _searchText = ''.obs;
+  get searchText => _searchText.value;
+  set searchText(val) => _searchText.value = val;
+
   late bool _autoComplete = false;
 
   final String tabIndex = 'search_$searchPageCtrlDepth';
@@ -53,7 +58,7 @@ class SearchPageController extends TabViewController {
   // 搜索输入框的控制器
   final TextEditingController searchTextController = TextEditingController();
 
-  bool get showClearButton => searchTextController.text.isNotEmpty;
+  bool get textIsNotEmpty => searchTextController.text.isNotEmpty;
 
   final GStore _gStore = Get.find();
 
@@ -95,7 +100,11 @@ class SearchPageController extends TabViewController {
   late String _search = '';
 
   late DateTime _lastInputCompleteAt; //上次输入完成时间
-  String _lastSearchText = '';
+  // String lastSearchText = '';
+
+  final _lastSearchText = ''.obs;
+  get lastSearchText => _lastSearchText.value;
+  set lastSearchText(val) => _lastSearchText.value = val;
 
   /// 自动获取焦点
   bool autofocus = false;
@@ -110,18 +119,24 @@ class SearchPageController extends TabViewController {
   set isSearchBarComp(bool val) => _ehConfigService.isSearchBarComp.value = val;
 
   /// 执行搜索
-  Future<void> _startSearch() async {
-    final String _searchText = searchTextController.text.trim();
-    // logger.d('_searchText $_searchText');
+  Future<void> _startSearch({bool clear = true}) async {
+    curPage.value = 0;
+    searchText = searchTextController.text.trim();
 
     if (_searchText.isNotEmpty) {
-      _search = _searchText;
+      _search = searchText;
 
       analytics.logSearch(searchTerm: _search);
 
       _addHistory();
 
-      change(state, status: RxStatus.loading());
+      logger.d('${state?.length}');
+
+      if (clear) {
+        logger.v('clear $clear');
+        change(state, status: RxStatus.loading());
+      }
+
       try {
         final List<GalleryItem> _list = await _fetchData(refresh: true);
         change(_list, status: RxStatus.success());
@@ -135,13 +150,14 @@ class SearchPageController extends TabViewController {
   }
 
   /// 点击键盘完成
-  Future<void> onEditingComplete() async {
+  Future<void> onEditingComplete({bool clear = true}) async {
     listType = ListType.gallery;
-    await _startSearch();
+    await _startSearch(clear: clear);
   }
 
   /// 延迟搜索
   Future<void> _delayedSearch() async {
+    searchText = searchTextController.text.trim();
     update([GetIds.SEARCH_CLEAR_BTN]);
     // logger.d(' _delayedSearch');
     const Duration _duration = Duration(milliseconds: 800);
@@ -150,7 +166,7 @@ class SearchPageController extends TabViewController {
 
     // logger.d('$_lastSearchText\n${searchTextController.text}');
 
-    if (_lastSearchText.trim() != searchTextController.text.trim() &&
+    if (lastSearchText.trim() != searchTextController.text.trim() &&
         DateTime.now().difference(_lastInputCompleteAt) >= _duration) {
       // logger.d('_autoComplete $_autoComplete');
       if (searchTextController.text.trim().isEmpty) {
@@ -159,7 +175,7 @@ class SearchPageController extends TabViewController {
         return;
       }
 
-      _lastSearchText = searchTextController.text.trim();
+      lastSearchText = searchTextController.text.trim();
 
       if (_autoComplete) {
         listType = ListType.gallery;
@@ -175,21 +191,13 @@ class SearchPageController extends TabViewController {
         return;
       }
 
-      // try {
-      //   dbUtil
-      //       .getTagTransFuzzy(_currQry, limit: 200)
-      //       .then((List<TagTranslatOld>? qryTags) {
-      //     this.qryTags(qryTags);
-      //   });
-      // } catch (_) {}
-
       try {
         Get.find<TagTransController>()
             .getTagTranslatesLike(text: _currQry, limit: 200)
             .then((List<TagTranslat> value) => qryTags(value));
       } catch (_) {}
 
-      logger.d('$_autoComplete');
+      logger.d('_autoComplete $_autoComplete');
       if (_autoComplete) {
         listType = ListType.gallery;
         await _startSearch();
@@ -331,7 +339,7 @@ class SearchPageController extends TabViewController {
       searchTextController.text = initSearchText!.trim();
       autofocus = false;
     } else {
-      // autofocus = true;
+      autofocus = true;
     }
     change(<GalleryItem>[], status: RxStatus.empty());
   }
@@ -377,7 +385,7 @@ class SearchPageController extends TabViewController {
         : '${_qry.namespace.trim().shortName}:${_qry.key}\$';
     logger.i('_add $_add ');
 
-    final String _lastSearchText = this._lastSearchText;
+    final String _lastSearchText = this.lastSearchText;
     final String _newSearch =
         _lastSearchText.replaceAll(RegExp('$_currQry\$'), _add);
     logger.i(
@@ -406,9 +414,10 @@ class SearchPageController extends TabViewController {
     FocusScope.of(Get.context!).requestFocus(focusNode);
   }
 
-  void clear() {
+  void clearText() {
     vibrateUtil.light();
     searchTextController.clear();
+    curPage.value = 0;
   }
 }
 

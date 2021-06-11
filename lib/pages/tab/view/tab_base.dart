@@ -27,7 +27,9 @@ SliverPadding buildWaterfallFlow(
       gridDelegate: SliverWaterfallFlowDelegateWithMaxCrossAxisExtent(
         maxCrossAxisExtent: large
             ? EHConst.waterfallFlowLargeMaxCrossAxisExtent
-            : EHConst.waterfallFlowMaxCrossAxisExtent,
+            : (!Get.context!.isPhone
+                ? EHConst.waterfallFlowMaxCrossAxisExtentTablet
+                : EHConst.waterfallFlowMaxCrossAxisExtent),
         crossAxisSpacing: large
             ? EHConst.waterfallFlowLargeCrossAxisSpacing
             : EHConst.waterfallFlowCrossAxisSpacing,

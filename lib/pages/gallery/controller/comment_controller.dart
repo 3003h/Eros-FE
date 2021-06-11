@@ -1,4 +1,3 @@
-import 'package:fehviewer/common/global.dart';
 import 'package:fehviewer/common/service/depth_service.dart';
 import 'package:fehviewer/generated/l10n.dart';
 import 'package:fehviewer/models/index.dart';
@@ -11,6 +10,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+
 // import 'package:learning_language/learning_language.dart';
 
 import 'gallery_page_controller.dart';

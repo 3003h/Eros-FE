@@ -181,7 +181,7 @@ class _GalleryCatFilterState extends State<GalleryCatFilter> {
 
   @override
   Widget build(BuildContext context) {
-    logger.v('build GalleryCatFilter $_catNum');
+    // logger.v('build GalleryCatFilter $_catNum');
 
     return Container(
       margin: widget.margin,

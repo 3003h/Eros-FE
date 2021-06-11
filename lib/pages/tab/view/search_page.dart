@@ -77,9 +77,9 @@ class GallerySearchPage extends StatelessWidget {
           id: GetIds.SEARCH_CLEAR_BTN,
           tag: searchPageCtrlDepth,
           builder: (SearchPageController controller) {
-            return controller.showClearButton
+            return controller.textIsNotEmpty
                 ? GestureDetector(
-                    onTap: controller.clear,
+                    onTap: controller.clearText,
                     child: Icon(
                       LineIcons.timesCircle,
                       size: 18.0,
