@@ -7,6 +7,7 @@ import 'package:fehviewer/pages/tab/controller/gallery_controller.dart';
 import 'package:fehviewer/pages/tab/controller/search_page_controller.dart';
 import 'package:fehviewer/pages/tab/view/gallery_page.dart';
 import 'package:fehviewer/pages/tab/view/search_page.dart';
+import 'package:fehviewer/pages/tab/view/search_page_new.dart';
 import 'package:fehviewer/route/routes.dart';
 import 'package:fehviewer/utils/logger.dart';
 import 'package:flutter/cupertino.dart';
@@ -38,13 +39,17 @@ class NavigatorUtil {
     }
 
     Get.find<DepthService>().pushSearchPageCtrl();
-    Get.to(() => GallerySearchPage(), transition: Transition.cupertino,
-        binding: BindingsBuilder(() {
-      Get.lazyPut(
-        () => SearchPageController(initSearchText: _search),
-        tag: searchPageCtrlDepth,
-      );
-    }));
+    Get.to(
+      // () => GallerySearchPage(),
+      () => GallerySearchPageNew(),
+      transition: Transition.cupertino,
+      binding: BindingsBuilder(() {
+        Get.lazyPut(
+          () => SearchPageController(initSearchText: _search),
+          tag: searchPageCtrlDepth,
+        );
+      }),
+    );
   }
 
   /// 转到画廊页面
@@ -134,14 +139,17 @@ class NavigatorUtil {
       {SearchType searchType = SearchType.normal, bool fromTabItem = true}) {
     logger.d('fromTabItem $fromTabItem');
     Get.find<DepthService>().pushSearchPageCtrl();
-    Get.to(() => GallerySearchPage(),
-        transition: fromTabItem ? Transition.fadeIn : Transition.cupertino,
-        binding: BindingsBuilder(() {
-      Get.lazyPut(
-        () => SearchPageController(searchType: searchType),
-        tag: searchPageCtrlDepth,
-      );
-    }));
+    Get.to(
+      // () => GallerySearchPage(),
+      () => GallerySearchPageNew(),
+      transition: fromTabItem ? Transition.fadeIn : Transition.cupertino,
+      binding: BindingsBuilder(() {
+        Get.lazyPut(
+          () => SearchPageController(searchType: searchType),
+          tag: searchPageCtrlDepth,
+        );
+      }),
+    );
   }
 
   // 转到大图浏览

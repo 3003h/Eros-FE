@@ -106,6 +106,7 @@ class EHConst {
   static const double waterfallFlowCrossAxisSpacing = 4.0;
   static const double waterfallFlowMainAxisSpacing = 4.0;
   static const double waterfallFlowMaxCrossAxisExtent = 150.0;
+  static const double waterfallFlowMaxCrossAxisExtentTablet = 240.0;
 
   // 瀑布流视图参数 large
   static const double waterfallFlowLargeCrossAxisSpacing = 12.0;
