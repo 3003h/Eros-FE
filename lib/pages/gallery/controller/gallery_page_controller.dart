@@ -77,7 +77,9 @@ class GalleryPageController extends GetxController
   set isRatinged(bool val) => _isRatinged.value = val;
 
   final RxInt _lastIndex = 0.obs;
+
   int get lastIndex => _lastIndex.value;
+
   set lastIndex(int val) => _lastIndex.value = val;
 
   // 评分后更新ui和数据

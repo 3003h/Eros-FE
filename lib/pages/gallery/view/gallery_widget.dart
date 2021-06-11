@@ -670,7 +670,7 @@ class PreviewContainer extends StatelessWidget {
     required this.index,
     required this.galleryPreviewList,
     required this.gid,
-  })  : galleryPreview = galleryPreviewList[index],
+  })   : galleryPreview = galleryPreviewList[index],
         hrefs = List<String>.from(
             galleryPreviewList.map((GalleryPreview e) => e.href).toList()),
         super(key: key);

@@ -46,7 +46,9 @@ class SearchPageController extends TabViewController {
   // String searchText = '';
 
   final _searchText = ''.obs;
+
   get searchText => _searchText.value;
+
   set searchText(val) => _searchText.value = val;
 
   late bool _autoComplete = false;
@@ -69,18 +71,15 @@ class SearchPageController extends TabViewController {
 
   String get placeholderText {
     final BuildContext context = Get.context!;
-    logger.v('$searchType');
+    // logger.v('$searchType');
     switch (searchType) {
       case SearchType.favorite:
         return '${S.of(context).search} ${S.of(context).tab_favorite}';
-        break;
       case SearchType.watched:
         return '${S.of(context).search} ${S.of(context).tab_watched}';
-        break;
       case SearchType.normal:
       default:
         return '${S.of(context).search} ${S.of(context).tab_gallery}';
-        break;
     }
   }
 
@@ -103,7 +102,9 @@ class SearchPageController extends TabViewController {
   // String lastSearchText = '';
 
   final _lastSearchText = ''.obs;
+
   get lastSearchText => _lastSearchText.value;
+
   set lastSearchText(val) => _lastSearchText.value = val;
 
   /// 自动获取焦点

@@ -11,11 +11,9 @@ import 'package:fehviewer/utils/logger.dart';
 import 'package:fehviewer/utils/vibrate.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_easyrefresh/easy_refresh.dart';
 import 'package:get/get.dart';
 import 'package:line_icons/line_icons.dart';
 
-import 'constants.dart';
 import 'tab_base.dart';
 
 class GalleryListTab extends GetView<GalleryViewController> {
