@@ -7,6 +7,8 @@ import 'package:fehviewer/pages/tab/controller/tabhome_controller.dart';
 import 'package:fehviewer/pages/tab/controller/watched_controller.dart';
 import 'package:fehviewer/pages/tab/view/gallery_base.dart';
 import 'package:fehviewer/route/navigator_util.dart';
+import 'package:fehviewer/utils/cust_lib/persistent_header_builder.dart';
+import 'package:fehviewer/utils/cust_lib/sliver/sliver_persistent_header.dart';
 import 'package:fehviewer/utils/logger.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -188,13 +190,15 @@ class WatchedListTab extends GetView<WatchedViewController> {
       physics: const AlwaysScrollableScrollPhysics(),
       slivers: <Widget>[
         // sliverNavigationBar,
-        SliverPadding(
-          padding: EdgeInsets.only(
-              top: context.mediaQueryPadding.top +
-                  kMinInteractiveDimensionCupertino),
-          sliver: CupertinoSliverRefreshControl(
-            onRefresh: controller.onRefresh,
+        SliverFloatingPinnedPersistentHeader(
+          delegate: SliverFloatingPinnedPersistentHeaderBuilder(
+            minExtentProtoType: const SizedBox(),
+            maxExtentProtoType: navigationBar,
+            builder: (_, __, ___) => navigationBar,
           ),
+        ),
+        CupertinoSliverRefreshControl(
+          onRefresh: controller.onRefresh,
         ),
         SliverSafeArea(
           top: false,
@@ -206,13 +210,9 @@ class WatchedListTab extends GetView<WatchedViewController> {
     );
 
     return CupertinoPageScaffold(
-      navigationBar: navigationBar,
-      child: SafeArea(
-        top: false,
-        bottom: false,
-        child: CupertinoScrollbar(
-            controller: scrollController, child: customScrollView),
-      ),
+      // navigationBar: navigationBar,
+      child: CupertinoScrollbar(
+          controller: scrollController, child: customScrollView),
     );
   }
 

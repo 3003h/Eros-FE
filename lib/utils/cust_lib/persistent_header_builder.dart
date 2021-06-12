@@ -41,13 +41,13 @@ class SliverPinnedPersistentHeaderBuilder
             minExtentProtoType: minExtentProtoType,
             maxExtentProtoType: maxExtentProtoType);
 
-  final Widget Function(BuildContext context, double offset, {double maxExtent})
+  final Widget Function(BuildContext context, double offset, double? maxExtent)
       builder;
 
   @override
   Widget build(BuildContext context, double shrinkOffset, double? minExtent,
       double maxExtent, bool overlapsContent) {
-    return builder(context, shrinkOffset, maxExtent: maxExtent);
+    return builder(context, shrinkOffset, maxExtent);
   }
 
   @override
@@ -67,13 +67,13 @@ class SliverFloatingPinnedPersistentHeaderBuilder
             minExtentProtoType: minExtentProtoType,
             maxExtentProtoType: maxExtentProtoType);
 
-  final Widget Function(BuildContext context, double offset, {double maxExtent})
+  final Widget Function(BuildContext context, double offset, double maxExtent)
       builder;
 
   @override
   Widget build(BuildContext context, double shrinkOffset, double? minExtent,
       double maxExtent, bool overlapsContent) {
-    return builder(context, shrinkOffset, maxExtent: maxExtent);
+    return builder(context, shrinkOffset, maxExtent);
   }
 
   @override

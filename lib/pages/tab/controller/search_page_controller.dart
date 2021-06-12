@@ -152,6 +152,11 @@ class SearchPageController extends TabViewController {
 
   /// 点击键盘完成
   Future<void> onEditingComplete({bool clear = true}) async {
+    isBackgroundRefresh = false;
+    if (!cancelToken.isCancelled) {
+      cancelToken.cancel();
+    }
+    change(state, status: RxStatus.success());
     listType = ListType.gallery;
     await _startSearch(clear: clear);
   }

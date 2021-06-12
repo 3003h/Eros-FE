@@ -2,6 +2,8 @@ import 'package:fehviewer/common/controller/history_controller.dart';
 import 'package:fehviewer/generated/l10n.dart';
 import 'package:fehviewer/pages/tab/controller/history_controller.dart';
 import 'package:fehviewer/pages/tab/view/tab_base.dart';
+import 'package:fehviewer/utils/cust_lib/persistent_header_builder.dart';
+import 'package:fehviewer/utils/cust_lib/sliver/sliver_persistent_header.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -70,17 +72,24 @@ class HistoryTab extends GetView<HistoryViewController> {
       controller: scrollController,
       physics: const AlwaysScrollableScrollPhysics(),
       slivers: <Widget>[
-        // sliverNavigationBar,
-        SliverPadding(
-          padding: EdgeInsets.only(
-              top: context.mediaQueryPadding.top +
-                  kMinInteractiveDimensionCupertino),
-          sliver: CupertinoSliverRefreshControl(
-            onRefresh: () async {
-              await controller.reloadData();
-            },
+        SliverFloatingPinnedPersistentHeader(
+          delegate: SliverFloatingPinnedPersistentHeaderBuilder(
+            minExtentProtoType: const SizedBox(),
+            maxExtentProtoType: navigationBar,
+            builder: (_, __, ___) => navigationBar,
           ),
         ),
+        // sliverNavigationBar,
+        // SliverPadding(
+        //   padding: EdgeInsets.only(
+        //       top: context.mediaQueryPadding.top +
+        //           kMinInteractiveDimensionCupertino),
+        //   sliver: CupertinoSliverRefreshControl(
+        //     onRefresh: () async {
+        //       await controller.reloadData();
+        //     },
+        //   ),
+        // ),
         SliverSafeArea(
             top: false,
             // sliver: _getGalleryList(),
@@ -96,12 +105,8 @@ class HistoryTab extends GetView<HistoryViewController> {
     );
 
     return CupertinoPageScaffold(
-        navigationBar: navigationBar,
-        child: SafeArea(
-          top: false,
-          bottom: false,
-          child: CupertinoScrollbar(
-              controller: scrollController, child: customScrollView),
-        ));
+        // navigationBar: navigationBar,
+        child: CupertinoScrollbar(
+            controller: scrollController, child: customScrollView));
   }
 }

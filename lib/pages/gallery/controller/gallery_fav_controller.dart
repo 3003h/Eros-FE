@@ -111,7 +111,7 @@ class GalleryFavController extends GetxController {
 
   /// 点击收藏按钮处理
   Future<bool?> tapFav() async {
-    logger.v('tapFav');
+    // logger.v('tapFav');
 
     /// 网络收藏或者本地收藏
     if (favcat.isNotEmpty || _pageController.localFav) {
@@ -148,14 +148,11 @@ class GalleryFavController extends GetxController {
           )
         : <Favcat>[];
 
-    // favList.add({'favId': 'l', 'favTitle': S.of(context).local_favorite});
     favList.add(Favcat(favId: 'l', favTitle: S.of(context).local_favorite));
 
     // diaolog 获取选择结果
     final Map<String, String>? result =
         await _favController.showFav(context, favList);
-
-    // logger.v('$result  ${result.runtimeType}');
 
     if (result != null && result is Map) {
       logger.v('add fav $result');
@@ -200,9 +197,8 @@ class GalleryFavController extends GetxController {
     isLoading = true;
 
     try {
-      logger.v('[${_pageController.galleryItem.favcat}]');
       if (favcat.isNotEmpty && favcat != 'l') {
-        logger.v('取消网络收藏');
+        logger.v('删除网络收藏');
         await GalleryFavParser.galleryAddfavorite(
           _pageController.galleryItem.gid!,
           _pageController.galleryItem.token!,

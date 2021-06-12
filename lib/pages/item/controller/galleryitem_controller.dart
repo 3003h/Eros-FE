@@ -48,17 +48,14 @@ class GalleryItemController extends GetxController {
   set isFav(bool val) => _isFav.value = val;
 
   void setFavTitle({String favTitle = '', String? favcat}) {
-    // galleryItem.favTitle = favTitle;
-    galleryItem.copyWith(favTitle: favTitle);
+    // logger.d('setFavTitle ');
+    galleryItem = galleryItem.copyWith(favTitle: favTitle);
     isFav = favTitle.isNotEmpty;
-    if (favcat != null) {
-      // galleryItem.favcat = favcat;
-      galleryItem.copyWith(favcat: favcat);
-      // logger.d('item show fav');
+    if (favcat != null || (favcat?.isNotEmpty ?? false)) {
+      galleryItem = galleryItem.copyWith(favcat: favcat);
+      logger.d('item set favcat $favcat');
     } else {
-      // galleryItem.favcat = '';
-      // galleryItem.favTitle = '';
-      galleryItem.copyWith(favcat: '', favTitle: '');
+      galleryItem = galleryItem.copyWith(favcat: '', favTitle: '');
     }
   }
 
@@ -96,7 +93,7 @@ class GalleryItemController extends GetxController {
   void firstPutPreview(List<GalleryPreview> galleryPreview) {
     if (galleryPreview.isNotEmpty) {
       // galleryItem.galleryPreview = galleryPreview;
-      galleryItem.copyWith(galleryPreview: galleryPreview);
+      galleryItem = galleryItem.copyWith(galleryPreview: galleryPreview);
     }
 
     firstPagePreview =
