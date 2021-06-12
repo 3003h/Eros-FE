@@ -114,8 +114,8 @@ class GalleryItemFlowLarge extends StatelessWidget {
                 //阴影
                 BoxShadow(
                   color: CupertinoDynamicColor.resolve(
-                      CupertinoColors.systemGrey5, context),
-                  blurRadius: 5,
+                      CupertinoColors.systemGrey4, context),
+                  blurRadius: 10,
                 )
               ]),
           child: Column(
