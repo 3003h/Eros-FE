@@ -6,7 +6,8 @@ import 'package:fehviewer/common/service/depth_service.dart';
 import 'package:fehviewer/common/service/ehconfig_service.dart';
 import 'package:fehviewer/generated/l10n.dart';
 import 'package:fehviewer/models/favcat.dart';
-import 'package:fehviewer/pages/controller/fav_controller.dart';
+import 'package:fehviewer/pages/controller/fav_dialog_controller.dart';
+import 'package:fehviewer/pages/controller/favorite_sel_controller.dart';
 import 'package:fehviewer/pages/gallery/controller/gallery_page_controller.dart';
 import 'package:fehviewer/pages/item/controller/galleryitem_controller.dart';
 import 'package:fehviewer/utils/logger.dart';
@@ -25,7 +26,8 @@ class GalleryFavController extends GetxController {
   final LocalFavController _localFavController = Get.find();
   final UserController _userController = Get.find();
   final EhConfigService _ehConfigService = Get.find();
-  final FavController _favController = Get.find();
+  final FavDialogController _favDialogController = Get.find();
+  final FavoriteSelectorController _favoriteSelectorController = Get.find();
 
   GalleryPageController get _pageController => Get.find(tag: pageCtrlDepth);
 
@@ -35,10 +37,6 @@ class GalleryFavController extends GetxController {
   @override
   void onInit() {
     super.onInit();
-    // _pageController = Get.find(tag: pageCtrlDepth);
-    // if (!_pageController.fromUrl) {
-    //   _itemController = Get.find(tag: _pageController.gid);
-    // }
 
     _localFav.value = _pageController.localFav;
 
@@ -141,26 +139,29 @@ class GalleryFavController extends GetxController {
     final bool _isLogin = _userController.isLogin;
 
     /// [{'favId': favId, 'favTitle': favTitle}]
-    final List<Favcat> favList = _isLogin
-        ? await GalleryFavParser.getFavcat(
-            gid: _pageController.galleryItem.gid,
-            token: _pageController.galleryItem.token,
-          )
-        : <Favcat>[];
+    // final List<Favcat> favList = _isLogin
+    //     ? await GalleryFavParser.getFavcat(
+    //         gid: _pageController.galleryItem.gid,
+    //         token: _pageController.galleryItem.token,
+    //       )
+    //     : <Favcat>[];
+    //
+    // favList.add(Favcat(favId: 'l', favTitle: S.of(context).local_favorite));
 
-    favList.add(Favcat(favId: 'l', favTitle: S.of(context).local_favorite));
+    final List<Favcat> favList = _favoriteSelectorController.favcatList;
 
     // diaolog 获取选择结果
-    final Map<String, String>? result =
-        await _favController.showFav(context, favList);
+    final Favcat? result = await _favDialogController.showFav(context, favList);
 
-    if (result != null && result is Map) {
-      logger.v('add fav $result');
+    logger.v('$result  ${result.runtimeType}');
+
+    if (result != null && result is Favcat) {
+      logger.v('add fav ${result.favId}');
 
       isLoading = true;
-      final String _favcat = result['favcat'] ?? '';
-      final String _favnote = result['favnode'] ?? '';
-      final String _favTitle = result['favTitle'] ?? '';
+      final String _favcat = result.favId;
+      final String _favnote = result.note ?? '';
+      final String _favTitle = result.favTitle;
 
       _ehConfigService.lastFavcat.value = _favcat;
 

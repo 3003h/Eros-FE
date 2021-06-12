@@ -85,12 +85,14 @@ class FavcatAddListItem extends StatefulWidget {
     required VoidCallback onTap,
     required this.text,
     this.favcat,
+    this.totNum,
   })  : _onTap = onTap,
         super(key: key);
 
   final VoidCallback _onTap;
   final String text;
   final String? favcat;
+  final int? totNum;
 
   @override
   _FavcatAddListItemState createState() => _FavcatAddListItemState();
@@ -132,6 +134,13 @@ class _FavcatAddListItemState extends State<FavcatAddListItem> {
                     widget.text,
                     style: const TextStyle(
                       fontSize: 18,
+                    ),
+                  ),
+                  const Spacer(),
+                  Text(
+                    '${widget.totNum ?? 0}',
+                    style: const TextStyle(
+                      fontSize: 14,
                     ),
                   ),
                 ],

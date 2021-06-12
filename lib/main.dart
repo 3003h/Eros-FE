@@ -9,7 +9,8 @@ import 'package:fehviewer/common/service/ehconfig_service.dart';
 import 'package:fehviewer/common/service/locale_service.dart';
 import 'package:fehviewer/common/service/theme_service.dart';
 import 'package:fehviewer/generated/l10n.dart';
-import 'package:fehviewer/pages/controller/fav_controller.dart';
+import 'package:fehviewer/pages/controller/fav_dialog_controller.dart';
+import 'package:fehviewer/pages/controller/favorite_sel_controller.dart';
 import 'package:fehviewer/pages/tab/controller/download_view_controller.dart';
 import 'package:fehviewer/route/app_pages.dart';
 import 'package:fehviewer/route/routes.dart';
@@ -70,7 +71,8 @@ Future<void> main() async {
 
     Get.lazyPut(() => QuickSearchController(), fenix: true);
     Get.lazyPut(() => AdvanceSearchController(), fenix: true);
-    Get.lazyPut(() => FavController(), fenix: true);
+    Get.lazyPut(() => FavDialogController(), fenix: true);
+    Get.lazyPut(() => FavoriteSelectorController(), fenix: true);
 
     Get.lazyPut(() => UnlockPageController(), fenix: true);
     Get.lazyPut(() => TagTransController(), fenix: true);
