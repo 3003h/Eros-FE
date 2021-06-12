@@ -1,7 +1,6 @@
 import 'package:fehviewer/common/controller/user_controller.dart';
 import 'package:fehviewer/common/service/ehconfig_service.dart';
 import 'package:fehviewer/generated/l10n.dart';
-import 'package:fehviewer/models/entity/favorite.dart';
 import 'package:fehviewer/models/index.dart';
 import 'package:fehviewer/pages/tab/controller/enum.dart';
 import 'package:fehviewer/pages/tab/controller/favorite_controller.dart';
@@ -376,13 +375,13 @@ class FavoriteTab extends GetView<FavoriteViewController> {
       onPressed: () async {
         // 跳转收藏夹选择页
         final dynamic? result = await Get.toNamed(EHRoutes.selFavorie);
-        if (result != null && result is FavcatItemBean) {
-          final FavcatItemBean fav = result;
+        if (result != null && result is Favcat) {
+          final Favcat fav = result;
           if (controller.curFavcat != fav.favId) {
             ehConfigService.lastShowFavcat = fav.favId;
-            ehConfigService.lastShowFavTitle = fav.title;
-            loggerNoStack.v('set fav to ${fav.title}  favId ${fav.favId}');
-            controller.title = fav.title;
+            ehConfigService.lastShowFavTitle = fav.favTitle;
+            loggerNoStack.v('set fav to ${fav.favTitle}  favId ${fav.favId}');
+            controller.title = fav.favTitle;
             controller.enableDelayedLoad = false;
             controller.curFavcat = fav.favId;
             controller.reLoadDataFirst();

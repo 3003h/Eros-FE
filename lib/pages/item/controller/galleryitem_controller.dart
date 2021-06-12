@@ -1,7 +1,7 @@
 import 'package:fehviewer/common/service/ehconfig_service.dart';
 import 'package:fehviewer/generated/l10n.dart';
 import 'package:fehviewer/models/index.dart';
-import 'package:fehviewer/pages/controller/fav_controller.dart';
+import 'package:fehviewer/pages/controller/fav_dialog_controller.dart';
 import 'package:fehviewer/route/navigator_util.dart';
 import 'package:fehviewer/utils/logger.dart';
 import 'package:fehviewer/utils/toast.dart';
@@ -15,7 +15,7 @@ class GalleryItemController extends GetxController {
   GalleryItemController(this.galleryItem);
 
   final EhConfigService _ehConfigService = Get.find();
-  final FavController _favController = Get.find();
+  final FavDialogController _favDialogController = Get.find();
 
   /// 点击item
   void onTap(String? tabTag) {
@@ -103,7 +103,7 @@ class GalleryItemController extends GetxController {
 
   /// 长按菜单
   Future<void> _showLongPressSheet() async {
-    final BuildContext context = Get.context!;
+    final BuildContext context = Get.overlayContext!;
 
     await showCupertinoModalPopup<void>(
         context: context,
@@ -123,13 +123,16 @@ class GalleryItemController extends GetxController {
                     if (galleryItem.gid == null || galleryItem.token == null) {
                       return;
                     }
-                    _favController
-                        .addFav(galleryItem.gid!, galleryItem.token!)
-                        .then((Tuple2<String, String>? value) {
-                      setFavTitle(favTitle: value!.item2, favcat: value.item1);
-                      showToast('successfully add');
-                    });
                     Get.back();
+                    _favDialogController
+                        .addFav(galleryItem.gid!, galleryItem.token!)
+                        .then((Favcat? value) {
+                      if (value != null) {
+                        setFavTitle(
+                            favTitle: value.favTitle, favcat: value.favId);
+                        showToast('successfully add');
+                      }
+                    });
                   },
                   child: Text(S.of(context).add_to_favorites),
                 ),
@@ -140,7 +143,7 @@ class GalleryItemController extends GetxController {
                     if (galleryItem.gid == null || galleryItem.token == null) {
                       return;
                     }
-                    _favController
+                    _favDialogController
                         .delFav(galleryItem.favcat!, galleryItem.gid!,
                             galleryItem.token!)
                         .then((_) {

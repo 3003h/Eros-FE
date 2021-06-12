@@ -16,7 +16,9 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
 import 'package:tuple/tuple.dart';
 
-class FavController extends GetxController {
+import 'favorite_sel_controller.dart';
+
+class FavDialogController extends GetxController {
   final EhConfigService _ehConfigService = Get.find();
   final UserController _userController = Get.find();
   final LocalFavController _localFavController = Get.find();
@@ -24,20 +26,21 @@ class FavController extends GetxController {
   // 收藏输入框控制器
   final TextEditingController _favnoteController = TextEditingController();
 
-  Future<Map<String, String>?> showFav(
-      BuildContext context, List<Favcat> favList) async {
+  final FavoriteSelectorController _favoriteSelectorController = Get.find();
+
+  Future<Favcat?> showFav(BuildContext context, List<Favcat> favList) async {
     return _ehConfigService.isFavPicker.value
         ? await _showAddFavPicker(context, favList)
         : await _showAddFavList(context, favList);
   }
 
   /// 添加收藏 Picker 形式
-  Future<Map<String, String>?> _showAddFavPicker(
+  Future<Favcat?> _showAddFavPicker(
       BuildContext context, List<Favcat> favList) async {
     int _favindex = 0;
 
-    final List<Widget> favPicker =
-        List<Widget>.from(favList.map((Favcat e) => Row(
+    final List<Widget> _favPickerList = List<Widget>.from(
+        favList.where((value) => value.favId != 'a').map((Favcat e) => Row(
               mainAxisAlignment: MainAxisAlignment.center,
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
@@ -53,7 +56,7 @@ class FavController extends GetxController {
               ],
             ))).toList();
 
-    return showCupertinoDialog<Map<String, String>>(
+    return showCupertinoDialog<Favcat>(
       context: context,
       barrierDismissible: true,
       builder: (BuildContext context) {
@@ -75,7 +78,7 @@ class FavController extends GetxController {
                     onSelectedItemChanged: (int index) {
                       _favindex = index;
                     },
-                    children: <Widget>[...favPicker],
+                    children: _favPickerList,
                   ),
                 ),
                 CupertinoTextField(
@@ -86,15 +89,10 @@ class FavController extends GetxController {
                     borderRadius: const BorderRadius.all(Radius.circular(8.0)),
                   ),
                   onEditingComplete: () {
-                    // 点击键盘完成
-                    // 添加收藏
-                    final Map<String, String> favMap = <String, String>{
-                      'favcat': '$_favindex',
-                      'favTitle': favList[_favindex].favTitle,
-                      'favnode': _favnoteController.text
-                    };
                     // 返回数据
-                    Get.back(result: favMap);
+                    Get.back(
+                        result: favList[_favindex]
+                            .copyWith(note: _favnoteController.text));
                   },
                 )
               ],
@@ -117,7 +115,9 @@ class FavController extends GetxController {
                   'favnode': _favnoteController.text
                 };
                 // 返回数据
-                Get.back(result: favMap);
+                Get.back(
+                    result: favList[_favindex]
+                        .copyWith(note: _favnoteController.text));
               },
             ),
           ],
@@ -127,28 +127,27 @@ class FavController extends GetxController {
   }
 
   /// 添加收藏 List形式
-  Future<Map<String, String>?> _showAddFavList(
+  Future<Favcat?> _showAddFavList(
       BuildContext context, List<Favcat> favList) async {
-    return showCupertinoDialog<Map<String, String>>(
+    logger.v('33');
+    final List<Widget> _favcatList = List<Widget>.from(favList
+        .where((value) => value.favId != 'a')
+        .map((Favcat fav) => FavcatAddListItem(
+              text: fav.favTitle,
+              favcat: fav.favId,
+              totNum: fav.totNum,
+              onTap: () {
+                // 返回数据
+                Get.back(result: fav.copyWith(note: _favnoteController.text));
+              },
+            ))).toList();
+
+    logger.v(_favcatList.length);
+
+    return showCupertinoDialog<Favcat?>(
       barrierDismissible: true,
       context: context,
       builder: (BuildContext context) {
-        final List<Widget> favcatList =
-            List<Widget>.from(favList.map((Favcat fav) => FavcatAddListItem(
-                  text: fav.favTitle,
-                  favcat: fav.favId,
-                  onTap: () {
-                    final Map<String, String> favMap = <String, String>{
-                      'favcat': fav.favId,
-                      'favTitle': fav.favTitle,
-                      'favnode': _favnoteController.text
-                    };
-                    logger.v(' ${favMap}');
-                    // 返回数据
-                    Get.back(result: favMap);
-                  },
-                ))).toList();
-
         return CupertinoAlertDialog(
           title: GestureDetector(
             onLongPress: () {
@@ -161,10 +160,9 @@ class FavController extends GetxController {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
-                ...favcatList,
+                ..._favcatList,
                 CupertinoTextField(
                   controller: _favnoteController,
-//                  autofocus: true,
                   decoration: BoxDecoration(
                     color: ehTheme.favnoteTextFieldBackgroundColor,
                     borderRadius: const BorderRadius.all(Radius.circular(8.0)),
@@ -191,8 +189,8 @@ class FavController extends GetxController {
   }
 
   /// 点击收藏按钮处理
-  Future<Tuple2<String, String>?> addFav(String gid, String token) async {
-    logger.d(' add fav');
+  Future<Favcat?> addFav(String gid, String token) async {
+    logger.d(' add fav $gid $token');
     final String? _lastFavcat = _ehConfigService.lastFavcat.value;
 
     // 添加到上次收藏夹
@@ -209,33 +207,40 @@ class FavController extends GetxController {
   }
 
   // 选择并收藏
-  Future<Tuple2<String, String>?> _showAddFavDialog(
-      String gid, String token) async {
+  Future<Favcat?> _showAddFavDialog(String gid, String token) async {
     final BuildContext context = Get.context!;
     final bool _isLogin = _userController.isLogin;
 
     /// [{'favId': favId, 'favTitle': favTitle}]
-    final List<Favcat> favList = _isLogin
-        ? await GalleryFavParser.getFavcat(
-            gid: gid,
-            token: token,
-          )
-        : <Favcat>[];
+    // final List<Favcat> favList = _isLogin
+    //     ? await GalleryFavParser.getFavcat(
+    //         gid: gid,
+    //         token: token,
+    //       )
+    //     : <Favcat>[];
+    //
+    // // favList.add({'favId': 'l', 'favTitle': S.of(context).local_favorite});
+    // favList.add(Favcat(favId: 'l', favTitle: S.of(context).local_favorite));
 
-    // favList.add({'favId': 'l', 'favTitle': S.of(context).local_favorite});
-    favList.add(Favcat(favId: 'l', favTitle: S.of(context).local_favorite));
+    final List<Favcat> favList = _favoriteSelectorController.favcatList;
+    logger.d(' ${favList.length}');
 
     // diaolog 获取选择结果
-    final Map<String, String>? result = await showFav(context, favList);
+    Favcat? result;
+    try {
+      result = await showFav(context, favList);
+    } catch (e, stack) {
+      print('$e\n$stack');
+    }
 
-    // logger.v('$result  ${result.runtimeType}');
+    logger.v('$result  ${result.runtimeType}');
 
-    if (result != null && result is Map) {
+    if (result != null && result is Favcat) {
       logger.v('add fav $result');
 
-      final String _favcat = result['favcat'] ?? '';
-      final String _favnote = result['favnode'] ?? '';
-      final String _favTitle = result['favTitle'] ?? '';
+      final String _favcat = result.favId;
+      final String _favnote = result.note ?? '';
+      final String _favTitle = result.favTitle;
       try {
         if (_favcat != 'l') {
           await GalleryFavParser.galleryAddfavorite(
@@ -254,13 +259,13 @@ class FavController extends GetxController {
       } catch (e) {
         rethrow;
       }
-      return Tuple2(_favcat, _favTitle);
+      return result;
     } else {
       return null;
     }
   }
 
-  Future<Tuple2<String, String>> _addToLastFavcat(
+  Future<Favcat> _addToLastFavcat(
       String gid, String token, String _lastFavcat) async {
     final String _favTitle =
         Global.profile.user.favcat?[int.parse(_lastFavcat)].favTitle ?? '...';
@@ -271,7 +276,7 @@ class FavController extends GetxController {
     } catch (e) {
       rethrow;
     }
-    return Tuple2(_lastFavcat, _favTitle);
+    return Favcat(favTitle: _favTitle, favId: _lastFavcat);
   }
 
   /// 删除收藏

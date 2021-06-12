@@ -266,6 +266,7 @@ class Api {
     bool refresh = false,
     SearchType searchType = SearchType.normal,
     dio.CancelToken? cancelToken,
+    ValueChanged<List<Favcat>>? favCatList,
   }) async {
     final AdvanceSearchController _searchController = Get.find();
 
@@ -314,6 +315,7 @@ class Api {
         response,
         isFavorite: true,
         refresh: refresh,
+        favCatList: favCatList,
       );
     } else {
       logger.d('列表样式重设 inline_set=dm_l');
@@ -326,6 +328,7 @@ class Api {
         response,
         isFavorite: true,
         refresh: true,
+        favCatList: favCatList,
       );
     }
   }

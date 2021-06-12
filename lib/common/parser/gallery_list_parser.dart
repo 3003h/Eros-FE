@@ -6,10 +6,12 @@ import 'package:fehviewer/common/service/ehconfig_service.dart';
 import 'package:fehviewer/const/const.dart';
 import 'package:fehviewer/models/index.dart';
 import 'package:fehviewer/network/error.dart';
+import 'package:fehviewer/pages/controller/favorite_sel_controller.dart';
 import 'package:fehviewer/store/tag_database.dart';
 import 'package:fehviewer/utils/logger.dart';
 import 'package:fehviewer/utils/toast.dart';
 import 'package:fehviewer/utils/utility.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
 import 'package:html/dom.dart' as dom;
 import 'package:html/parser.dart' show parse;
@@ -56,6 +58,7 @@ class GalleryListParser {
     String response, {
     bool isFavorite = false,
     bool refresh = false,
+    ValueChanged<List<Favcat>>? favCatList,
   }) async {
     final dom.Document document = parse(response);
 
@@ -63,11 +66,12 @@ class GalleryListParser {
     if ((document.body?.children.isEmpty ?? false) &&
         response.contains('banned')) {
       logger.e('banned');
-      showToast('$response');
+      showToast(response);
       throw EhError(type: EhErrorType.BANNED, error: response);
     }
 
     final EhConfigService ehConfigService = Get.find();
+    // final FavoriteSelectorController favoriteSelectorController = Get.find();
 
     const String _gallerySelector =
         'body > div.ido > div:nth-child(2) > table > tbody > tr';
@@ -96,17 +100,15 @@ class GalleryListParser {
         // logger.v('${divs}');
         if (divs.isNotEmpty && divs.length >= 3) {
           final Favcat favcat = Favcat(
-            favId: '$_favId',
-            favTitle: divs[2].text,
-          );
+              favId: '$_favId',
+              favTitle: divs[2].text,
+              totNum: int.parse(divs[0].text));
           favcatList.add(favcat);
           _favId += 1;
         }
       }
       if (favcatList.isNotEmpty) {
-        // Global.profile.user.favcat = favcatList;
-        global.user = global.user.copyWith(favcat: favcatList);
-        Global.saveProfile();
+        favCatList?.call(favcatList);
       }
     }
 

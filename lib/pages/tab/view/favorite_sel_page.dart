@@ -1,7 +1,8 @@
+import 'package:fehviewer/const/theme_colors.dart';
 import 'package:fehviewer/generated/l10n.dart';
-import 'package:fehviewer/models/entity/favorite.dart';
+import 'package:fehviewer/models/base/eh_models.dart';
 import 'package:fehviewer/network/gallery_request.dart';
-import 'package:fehviewer/pages/tab/controller/favorite_sel_controller.dart';
+import 'package:fehviewer/pages/controller/favorite_sel_controller.dart';
 import 'package:fehviewer/pages/tab/view/gallery_base.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -12,10 +13,9 @@ import 'package:get/get.dart';
 class FavoriteSelectorPage extends StatelessWidget {
   FavoriteSelectorPage({this.favcatItemBean});
 
-  final FavcatItemBean? favcatItemBean;
+  final Favcat? favcatItemBean;
 
-  final FavoriteSelectorController favoriteSelectorController =
-      Get.put(FavoriteSelectorController())!;
+  final FavoriteSelectorController favoriteSelectorController = Get.find();
 
   @override
   Widget build(BuildContext context) {
@@ -34,7 +34,7 @@ class FavoriteSelectorPage extends StatelessWidget {
 
   Widget _buildFavoriteSelectorListView() {
     return favoriteSelectorController.obx(
-        (List<FavcatItemBean>? state) {
+        (List<Favcat>? state) {
           return ListViewFavorite(state ?? []);
         },
         onLoading: Container(
@@ -65,7 +65,7 @@ class FavoriteSelectorPage extends StatelessWidget {
 class ListViewFavorite extends StatelessWidget {
   const ListViewFavorite(this.favItemBeans);
 
-  final List<FavcatItemBean> favItemBeans;
+  final List<Favcat> favItemBeans;
 
   @override
   Widget build(BuildContext context) {
@@ -74,7 +74,7 @@ class ListViewFavorite extends StatelessWidget {
 
       //列表项构造器
       itemBuilder: (BuildContext context, int index) {
-        return FavSelItemWidget(
+        return _FavSelItemWidget(
           favcatItemBean: favItemBeans[index],
           index: index,
         );
@@ -84,11 +84,11 @@ class ListViewFavorite extends StatelessWidget {
 }
 
 /// 收藏夹选择单项
-class FavSelItemWidget extends StatelessWidget {
-  const FavSelItemWidget({required this.index, required this.favcatItemBean});
+class _FavSelItemWidget extends StatelessWidget {
+  const _FavSelItemWidget({required this.index, required this.favcatItemBean});
 
   final int index;
-  final FavcatItemBean favcatItemBean;
+  final Favcat favcatItemBean;
 
   @override
   Widget build(BuildContext context) {
@@ -106,28 +106,29 @@ class FavSelItemWidget extends StatelessWidget {
               Row(children: <Widget>[
                 // 图标
                 Icon(
-//              EHCupertinoIcons.heart_solid,
                   FontAwesomeIcons.solidHeart,
-                  color: favcatItemBean.color,
+                  color: ThemeColors.favColor[favcatItemBean.favId],
                 ),
                 Container(
                   width: 8,
                 ), // 占位 宽度8
                 Text(
-                  favcatItemBean.title ?? '',
+                  favcatItemBean.favTitle,
                   style: const TextStyle(
                     fontSize: 20,
                   ),
                 ),
-                const Expanded(
-                  child: Align(
-                    alignment: Alignment.centerRight,
-                    child: Icon(
-                      CupertinoIcons.forward,
-                      size: 24.0,
-                      color: CupertinoColors.systemGrey,
-                    ),
+                const Spacer(),
+                Text(
+                  '${favcatItemBean.totNum ?? 0}',
+                  style: const TextStyle(
+                    fontSize: 18,
                   ),
+                ),
+                const Icon(
+                  CupertinoIcons.forward,
+                  size: 24.0,
+                  color: CupertinoColors.systemGrey,
                 ),
               ]),
             ],

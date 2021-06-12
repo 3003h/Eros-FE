@@ -26,7 +26,7 @@ class GalleryFavParser {
       data: formData,
     );
 
-    saveFavcat(gid, token);
+    saveFavcatToProfile(gid, token);
   }
 
   static Future<List<Favcat>> gallerySelfavcat(String gid, String token) async {
@@ -86,7 +86,7 @@ class GalleryFavParser {
     return Future<List<Favcat>>.value(favcatList);
   }
 
-  static Future<void> saveFavcat(String gid, String token) async {
+  static Future<void> saveFavcatToProfile(String gid, String token) async {
     // Global.profile.user.favcat = await gallerySelfavcat(gid, token);
     final favcat = await gallerySelfavcat(gid, token);
     Global.profile = Global.profile

@@ -6,6 +6,7 @@ import 'package:fehviewer/const/const.dart';
 import 'package:fehviewer/generated/l10n.dart';
 import 'package:fehviewer/models/index.dart';
 import 'package:fehviewer/network/gallery_request.dart';
+import 'package:fehviewer/pages/controller/favorite_sel_controller.dart';
 import 'package:fehviewer/utils/logger.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
@@ -34,6 +35,8 @@ class FavoriteViewController extends TabViewController {
   final LocalFavController _localFavController = Get.find();
   final UserController _userController = Get.find();
 
+  final FavoriteSelectorController _favoriteSelectorController = Get.find();
+
   @override
   void onInit() {
     fetchNormal = Api.getFavorite;
@@ -59,7 +62,11 @@ class FavoriteViewController extends TabViewController {
         favcat: curFavcat,
         refresh: refresh,
         cancelToken: _cancelToken,
+        favCatList: (List<Favcat> list) {
+          _favoriteSelectorController.addAllFavList(list);
+        },
       );
+
       return tuple;
     } else {
       if (first) {
