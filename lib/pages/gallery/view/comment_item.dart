@@ -384,24 +384,6 @@ class CommentItem extends StatelessWidget {
                             children: <Widget>[
                               // 翻译
                               if (_ehConfigService.commentTrans.value)
-                                /*CupertinoButton(
-                                  padding: const EdgeInsets.symmetric(
-                                      horizontal: 12),
-                                  minSize: 0,
-                                  child: Icon(
-                                    FontAwesomeIcons.language,
-                                    size: kSizeVote,
-                                    color: CupertinoDynamicColor.resolve(
-                                      ThemeColors.commitText,
-                                      context,
-                                    ),
-                                  ),
-                                  onPressed: () {
-                                    vibrateUtil.light();
-                                    showTranslatorDialog(galleryComment.text);
-                                  },
-                                ),*/
-
                                 TranslateButton(
                                   galleryComment: galleryComment,
                                   commentController: _commentController,
@@ -457,7 +439,7 @@ class CommentItem extends StatelessWidget {
                                   },
                                 ),
                               // 编辑回复
-                              if (galleryComment.canEdit ?? false)
+                              if ((galleryComment.canEdit ?? false) && !simple)
                                 CupertinoButton(
                                   padding: const EdgeInsets.symmetric(
                                       horizontal: 12),

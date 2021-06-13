@@ -9,6 +9,7 @@ import 'package:fehviewer/utils/toast.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:get/get.dart';
 
 // import 'package:learning_language/learning_language.dart';
@@ -50,7 +51,7 @@ class CommentController extends GetxController
   @override
   void onInit() {
     super.onInit();
-    // logger.d('CommentController onInit');
+    logger.d('CommentController onInit');
 
     _loadComment();
 
@@ -221,19 +222,60 @@ class CommentController extends GetxController
     }
   }
 
-  Future<void> pressSend() async {
+  // 会有重复执行的问题 弃用
+  Future<void> pressSend_Old() async {
     comment = commentTextController.text;
     logger.d('comment: $comment');
     FocusScope.of(Get.context!).requestFocus(FocusNode());
 
-    showLoadingDialog(Get.context!, () async {
-      await _postComment(
-        comment,
-        isEdit: editState == EditState.editComment,
-        commentId: commentId,
-      );
-      pressCancle();
+    showLoadingDialog(Get.overlayContext!, () async {
+      // await _postComment(
+      //   comment,
+      //   isEdit: editState == EditState.editComment,
+      //   commentId: commentId,
+      // );
+      await Future.delayed(const Duration(seconds: 3));
+      logger.v('_postComment $comment');
     });
+  }
+
+  Future<void> pressSend() async {
+    comment = commentTextController.text;
+    logger.d('comment: $comment');
+    FocusScope.of(Get.context!).requestFocus(FocusNode());
+    EasyLoading.instance
+      ..loadingStyle = EasyLoadingStyle.custom
+      ..indicatorColor = Colors.transparent
+      ..backgroundColor = Colors.transparent
+      ..textColor = Colors.transparent
+      ..maskType = EasyLoadingMaskType.custom
+      ..maskColor = Colors.black.withOpacity(0.25)
+      ..userInteractions = false
+      ..indicatorType = EasyLoadingIndicatorType.fadingCircle;
+    EasyLoading.show(
+      indicator: Center(
+        child: CupertinoPopupSurface(
+          child: Container(
+              height: 80,
+              width: 80,
+              alignment: Alignment.center,
+              child: const CupertinoActivityIndicator(
+                radius: 20,
+              )),
+        ),
+      ),
+    );
+
+    // await Future.delayed(const Duration(seconds: 3));
+    // logger.v('_postComment $comment');
+    await _postComment(
+      comment,
+      isEdit: editState == EditState.editComment,
+      commentId: commentId,
+    );
+    pressCancle();
+
+    EasyLoading.dismiss();
   }
 
   void pressCancle() {
@@ -313,12 +355,18 @@ class CommentController extends GetxController
 
 /// 显示等待
 Future<void> showLoadingDialog(BuildContext context, Function function) async {
+  logger.v('showLoadingDialog');
   return showCupertinoDialog<void>(
-    context: context,
+    context: Get.overlayContext!,
     builder: (BuildContext context) {
-      Future<void>.delayed(const Duration(milliseconds: 0))
-          .then((_) => function())
-          .whenComplete(() => Get.back());
+      logger5.v('builder showLoadingDialog');
+
+      Future<void> runFunc() async {
+        await function();
+        Get.back();
+      }
+
+      runFunc();
 
       return Center(
         child: CupertinoPopupSurface(
