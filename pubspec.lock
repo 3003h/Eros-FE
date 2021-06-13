@@ -491,6 +491,13 @@ packages:
       url: "https://pub.flutter-io.cn"
     source: hosted
     version: "1.6.1"
+  flutter_easyloading:
+    dependency: "direct main"
+    description:
+      name: flutter_easyloading
+      url: "https://pub.flutter-io.cn"
+    source: hosted
+    version: "3.0.0"
   flutter_easyrefresh:
     dependency: "direct main"
     description:
@@ -554,6 +561,13 @@ packages:
       url: "https://pub.flutter-io.cn"
     source: hosted
     version: "0.6.0"
+  flutter_spinkit:
+    dependency: transitive
+    description:
+      name: flutter_spinkit
+      url: "https://pub.flutter-io.cn"
+    source: hosted
+    version: "5.0.0"
   flutter_statusbar_manager:
     dependency: "direct main"
     description:
