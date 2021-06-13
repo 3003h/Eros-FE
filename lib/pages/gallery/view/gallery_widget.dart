@@ -521,8 +521,7 @@ class PreviewGrid extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GridView.builder(
-        padding: const EdgeInsets.only(
-            top: kPadding, right: kPadding, left: kPadding),
+        padding: const EdgeInsets.only(top: 0),
         shrinkWrap: true,
         //解决无限高度问题
         physics: const NeverScrollableScrollPhysics(),
@@ -544,14 +543,14 @@ class PreviewGrid extends StatelessWidget {
             ),
           );
         });
-    ;
   }
 }
 
 class TopComment extends StatelessWidget {
-  const TopComment({Key? key}) : super(key: key);
+  const TopComment({Key? key, this.showBtn = true}) : super(key: key);
 
   // final List<GalleryComment> comment;
+  final bool showBtn;
 
   @override
   Widget build(BuildContext context) {
@@ -589,17 +588,18 @@ class TopComment extends StatelessWidget {
           },
         ),
         // 评论按钮
-        CupertinoButton(
-          minSize: 0,
-          padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 8),
-          child: Text(
-            S.of(Get.context!).all_comment,
-            style: const TextStyle(fontSize: 16),
+        if (showBtn)
+          CupertinoButton(
+            minSize: 0,
+            padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 8),
+            child: Text(
+              S.of(Get.context!).all_comment,
+              style: const TextStyle(fontSize: 16),
+            ),
+            onPressed: () {
+              Get.toNamed(EHRoutes.galleryComment);
+            },
           ),
-          onPressed: () {
-            Get.toNamed(EHRoutes.galleryComment);
-          },
-        ),
       ],
     );
   }
@@ -618,20 +618,7 @@ class TagBox extends StatelessWidget {
       listGroupWidget.add(TagGroupItem(tagGroupData: tagGroupData));
     }
 
-    return Column(
-      children: <Widget>[
-        Container(
-          margin: const EdgeInsets.fromLTRB(
-              kPadding, kPadding / 2, kPadding, kPadding / 2),
-          child: Column(children: listGroupWidget),
-        ),
-        Container(
-          height: 0.5,
-          color: CupertinoDynamicColor.resolve(
-              CupertinoColors.systemGrey4, Get.context!),
-        ),
-      ],
-    );
+    return Column(children: listGroupWidget);
   }
 }
 

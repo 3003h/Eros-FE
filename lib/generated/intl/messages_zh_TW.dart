@@ -118,6 +118,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "pls_i_passwd": MessageLookupByLibrary.simpleMessage("請輸入密碼"),
         "pls_i_username": MessageLookupByLibrary.simpleMessage("請輸入用戶名"),
         "preload_image": MessageLookupByLibrary.simpleMessage("预载图片数量"),
+        "previews": MessageLookupByLibrary.simpleMessage("Previews"),
         "processing": MessageLookupByLibrary.simpleMessage("處理中"),
         "pure_black": MessageLookupByLibrary.simpleMessage("純黑"),
         "quick_search": MessageLookupByLibrary.simpleMessage("快速搜索"),
