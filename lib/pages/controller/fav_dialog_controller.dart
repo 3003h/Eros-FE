@@ -14,7 +14,6 @@ import 'package:fehviewer/utils/toast.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
-import 'package:tuple/tuple.dart';
 
 import 'favorite_sel_controller.dart';
 
@@ -28,7 +27,8 @@ class FavDialogController extends GetxController {
 
   final FavoriteSelectorController _favoriteSelectorController = Get.find();
 
-  Future<Favcat?> showFav(BuildContext context, List<Favcat> favList) async {
+  Future<Favcat?> showFavListDialog(
+      BuildContext context, List<Favcat> favList) async {
     return _ehConfigService.isFavPicker.value
         ? await _showAddFavPicker(context, favList)
         : await _showAddFavList(context, favList);
@@ -189,7 +189,8 @@ class FavDialogController extends GetxController {
   }
 
   /// 点击收藏按钮处理
-  Future<Favcat?> addFav(String gid, String token) async {
+  Future<Favcat?> tapAddFav(String gid, String token,
+      {String oriFavcat = ''}) async {
     logger.d(' add fav $gid $token');
     final String? _lastFavcat = _ehConfigService.lastFavcat.value;
 
@@ -198,16 +199,17 @@ class FavDialogController extends GetxController {
         _lastFavcat != null &&
         _lastFavcat.isNotEmpty) {
       logger.v('添加到上次收藏夹');
-      return _addToLastFavcat(gid, token, _lastFavcat);
+      return _addToLastFavcat(gid, token, _lastFavcat, oriFavcat: oriFavcat);
     } else {
       // 手选收藏夹
       logger.v('手选收藏夹');
-      return await _showAddFavDialog(gid, token);
+      return await _showAddFavDialog(gid, token, oriFavcat: oriFavcat);
     }
   }
 
   // 选择并收藏
-  Future<Favcat?> _showAddFavDialog(String gid, String token) async {
+  Future<Favcat?> _showAddFavDialog(String gid, String token,
+      {String oriFavcat = ''}) async {
     final BuildContext context = Get.context!;
     final bool _isLogin = _userController.isLogin;
 
@@ -228,7 +230,7 @@ class FavDialogController extends GetxController {
     // diaolog 获取选择结果
     Favcat? result;
     try {
-      result = await showFav(context, favList);
+      result = await showFavListDialog(context, favList);
     } catch (e, stack) {
       print('$e\n$stack');
     }
@@ -254,19 +256,24 @@ class FavDialogController extends GetxController {
           // todo
           _localFavController.addLocalFav(
               Get.find<GalleryItemController>(tag: gid).galleryItem);
-          logger.d('add loc');
+          logger.d('addLocalFav');
         }
       } catch (e) {
         rethrow;
       }
+      if (oriFavcat.isNotEmpty) {
+        _favoriteSelectorController.decrease(oriFavcat);
+      }
+      _favoriteSelectorController.increase(_favcat);
+
       return result;
     } else {
       return null;
     }
   }
 
-  Future<Favcat> _addToLastFavcat(
-      String gid, String token, String _lastFavcat) async {
+  Future<Favcat> _addToLastFavcat(String gid, String token, String _lastFavcat,
+      {String oriFavcat = ''}) async {
     final String _favTitle =
         Global.profile.user.favcat?[int.parse(_lastFavcat)].favTitle ?? '...';
 
@@ -276,6 +283,10 @@ class FavDialogController extends GetxController {
     } catch (e) {
       rethrow;
     }
+    if (oriFavcat.isNotEmpty) {
+      _favoriteSelectorController.decrease(oriFavcat);
+    }
+    _favoriteSelectorController.increase(_lastFavcat);
     return Favcat(favTitle: _favTitle, favId: _lastFavcat);
   }
 
@@ -288,5 +299,6 @@ class FavDialogController extends GetxController {
       logger.v('取消本地收藏');
       _localFavController.removeFavByGid(gid);
     }
+    _favoriteSelectorController.decrease(favcat);
   }
 }

@@ -151,7 +151,8 @@ class GalleryFavController extends GetxController {
     final List<Favcat> favList = _favoriteSelectorController.favcatList;
 
     // diaolog 获取选择结果
-    final Favcat? result = await _favDialogController.showFav(context, favList);
+    final Favcat? result =
+        await _favDialogController.showFavListDialog(context, favList);
 
     logger.v('$result  ${result.runtimeType}');
 
@@ -177,6 +178,13 @@ class GalleryFavController extends GetxController {
           _pageController.localFav = true;
           _localFavController.addLocalFav(_pageController.galleryItem);
         }
+        final _oriFavcat = this._favcat.value;
+        logger.v(' ${_pageController.galleryItem.toJson()}');
+        if (_oriFavcat.isNotEmpty) {
+          _favoriteSelectorController.decrease(_oriFavcat);
+        }
+
+        _favoriteSelectorController.increase(_favcat);
       } catch (e) {
         return false;
       } finally {
@@ -209,6 +217,7 @@ class GalleryFavController extends GetxController {
         _pageController.localFav = false;
         _localFavController.removeFav(_pageController.galleryItem);
       }
+      _favoriteSelectorController.decrease(favcat);
     } catch (e) {
       return true;
     } finally {

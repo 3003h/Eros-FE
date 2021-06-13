@@ -30,7 +30,7 @@ class FavoriteTab extends GetView<FavoriteViewController> {
     final UserController userController = Get.find();
     return Obx(() {
       if (userController.isLogin) {
-        if (controller.title == null || (controller.title?.isEmpty ?? false)) {
+        if (controller.title == null || (controller.title?.isEmpty ?? true)) {
           controller.title = S.of(context).all_Favorites;
         }
         return _buildNetworkFavView(context);
@@ -137,9 +137,11 @@ class FavoriteTab extends GetView<FavoriteViewController> {
       middle: Row(
         mainAxisSize: MainAxisSize.min,
         children: [
-          Text(
-            controller.title ?? '...',
-          ),
+          Obx(() {
+            return Text(
+              controller.title ?? '...',
+            );
+          }),
           Obx(() {
             if (controller.isBackgroundRefresh)
               return const CupertinoActivityIndicator(
@@ -380,7 +382,7 @@ class FavoriteTab extends GetView<FavoriteViewController> {
           if (controller.curFavcat != fav.favId) {
             ehConfigService.lastShowFavcat = fav.favId;
             ehConfigService.lastShowFavTitle = fav.favTitle;
-            loggerNoStack.v('set fav to ${fav.favTitle}  favId ${fav.favId}');
+            logger.v('set fav to ${fav.favTitle}  favId ${fav.favId}');
             controller.title = fav.favTitle;
             controller.enableDelayedLoad = false;
             controller.curFavcat = fav.favId;

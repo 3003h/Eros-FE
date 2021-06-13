@@ -32,7 +32,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "add_tag_placeholder":
             MessageLookupByLibrary.simpleMessage("输入新标签, 用逗号分隔"),
         "add_tags": MessageLookupByLibrary.simpleMessage("添加标签"),
-        "add_to_favorites": MessageLookupByLibrary.simpleMessage("添加收藏"),
+        "add_to_favorites": MessageLookupByLibrary.simpleMessage("添加收藏夹"),
         "advanced": MessageLookupByLibrary.simpleMessage("高级"),
         "all_Favorites": MessageLookupByLibrary.simpleMessage("所有收藏"),
         "all_comment": MessageLookupByLibrary.simpleMessage("所有评论"),
@@ -41,6 +41,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "autoLock": MessageLookupByLibrary.simpleMessage("自动锁定"),
         "back": MessageLookupByLibrary.simpleMessage("返回"),
         "cancel": MessageLookupByLibrary.simpleMessage("取消"),
+        "change_to_favorites": MessageLookupByLibrary.simpleMessage("修改收藏夹"),
         "clear_cache": MessageLookupByLibrary.simpleMessage("清除缓存"),
         "clear_filter": MessageLookupByLibrary.simpleMessage("重置"),
         "clear_search_history": MessageLookupByLibrary.simpleMessage("清空搜索历史"),
@@ -119,7 +120,8 @@ class MessageLookup extends MessageLookupByLibrary {
         "read_setting": MessageLookupByLibrary.simpleMessage("阅读设置"),
         "reading_direction": MessageLookupByLibrary.simpleMessage("阅读方向"),
         "reload_image": MessageLookupByLibrary.simpleMessage("重新载入图片"),
-        "remove_from_favorites": MessageLookupByLibrary.simpleMessage("从收藏中删除"),
+        "remove_from_favorites":
+            MessageLookupByLibrary.simpleMessage("从收藏夹中删除"),
         "right_to_left": MessageLookupByLibrary.simpleMessage("从右到左"),
         "s_Advanced_Options": MessageLookupByLibrary.simpleMessage("高级选项"),
         "s_Between": MessageLookupByLibrary.simpleMessage("从"),

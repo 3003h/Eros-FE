@@ -43,6 +43,8 @@ class MessageLookup extends MessageLookupByLibrary {
         "autoLock": MessageLookupByLibrary.simpleMessage("Auto-lock"),
         "back": MessageLookupByLibrary.simpleMessage("Back"),
         "cancel": MessageLookupByLibrary.simpleMessage("Cancel"),
+        "change_to_favorites":
+            MessageLookupByLibrary.simpleMessage("Change to favorites"),
         "clear_cache": MessageLookupByLibrary.simpleMessage("Clear cache"),
         "clear_filter": MessageLookupByLibrary.simpleMessage("Clear"),
         "clear_search_history":
