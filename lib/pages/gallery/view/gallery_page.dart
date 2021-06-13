@@ -9,6 +9,7 @@ import 'package:fehviewer/pages/gallery/view/rate_dialog.dart';
 import 'package:fehviewer/pages/gallery/view/torrent_dialog.dart';
 import 'package:fehviewer/pages/tab/view/gallery_base.dart';
 import 'package:fehviewer/route/navigator_util.dart';
+import 'package:fehviewer/route/routes.dart';
 // import 'package:fehviewer/utils/cust_lib/selectable_text.dart';
 import 'package:fehviewer/utils/logger.dart';
 import 'package:flutter/cupertino.dart';
@@ -228,11 +229,11 @@ class _DetailFromUrl extends StatelessWidget {
                   initGalleryItem: state,
                   tabTag: '',
                 ),
-              Divider(
-                height: 0.5,
-                color: CupertinoDynamicColor.resolve(
-                    CupertinoColors.systemGrey4, context),
-              ),
+              // Divider(
+              //   height: 0.5,
+              //   color: CupertinoDynamicColor.resolve(
+              //       CupertinoColors.systemGrey4, context),
+              // ),
               if (state != null)
                 _DatailWidget(
                   state: state,
@@ -346,8 +347,7 @@ class _DatailWidget extends StatelessWidget {
         ),
       ),
     ];
-
-    return Column(
+    final Widget columnWhithDivider = Column(
       children: <Widget>[
         Row(
           mainAxisSize: MainAxisSize.min,
@@ -374,6 +374,56 @@ class _DatailWidget extends StatelessWidget {
         MorePreviewButton(hasMorePreview: controller.hasMorePreview),
       ],
     );
+
+    final Widget columnWhithSpacer = Column(
+      children: <Widget>[
+        Row(
+          mainAxisSize: MainAxisSize.min,
+          children: _btns,
+        ).paddingSymmetric(vertical: 4),
+        const SizedBox(height: 10),
+        // 标签
+        Row(children: [_getminiTitle(S.of(context).tags)]),
+        TagBox(listTagGroup: state.tagGroup!).paddingSymmetric(vertical: 4),
+        const SizedBox(height: 26),
+        Row(
+          children: [
+            _getminiTitle(S.of(context).gallery_comments),
+            const Spacer(),
+            GestureDetector(
+              child: Text(
+                S.of(context).all_comment,
+                style: TextStyle(
+                    fontSize: 14,
+                    color: CupertinoDynamicColor.resolve(
+                        CupertinoColors.link, context)),
+              ),
+              onTap: () => Get.toNamed(EHRoutes.galleryComment),
+            ).marginOnly(right: 4),
+          ],
+        ),
+        const TopComment(showBtn: false),
+        const SizedBox(height: 30),
+        // Row(children: [_getminiTitle(S.of(context).previews)]),
+        PreviewGrid(
+          previews: controller.firstPagePreview,
+          gid: state.gid ?? '',
+        ),
+        MorePreviewButton(hasMorePreview: controller.hasMorePreview),
+      ],
+    ).paddingSymmetric(horizontal: kPadding);
+
+    return columnWhithSpacer;
+  }
+
+  Widget _getminiTitle(String title) {
+    return Text(
+      title,
+      style: const TextStyle(
+        fontSize: 14,
+        fontWeight: FontWeight.bold,
+      ),
+    ).paddingSymmetric(horizontal: 2);
   }
 }
 
@@ -397,11 +447,11 @@ class _DetailFromItem extends StatelessWidget {
             initGalleryItem: galleryItem,
             tabTag: tabTag,
           ),
-          Divider(
-            height: 0.5,
-            color: CupertinoDynamicColor.resolve(
-                CupertinoColors.systemGrey4, context),
-          ),
+          // Divider(
+          //   height: 0.5,
+          //   color: CupertinoDynamicColor.resolve(
+          //       CupertinoColors.systemGrey4, context),
+          // ),
           controller.obx(
             (GalleryItem? state) {
               return state != null

@@ -43,7 +43,7 @@ class CommentPage extends StatelessWidget {
                 );
               },
               itemCount: state?.length ?? 0,
-            ));
+            ).paddingSymmetric(horizontal: 12));
 
     Widget _buildOriText() {
       return Obx(

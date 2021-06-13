@@ -359,7 +359,7 @@ class CommentItem extends StatelessWidget {
         id: galleryComment.id ?? 'None',
         builder: (CommentController _commentController) {
           return Container(
-            margin: const EdgeInsets.fromLTRB(12, 8, 12, 0),
+            margin: const EdgeInsets.only(top: 8),
             child: ClipRRect(
               // 圆角
               borderRadius: BorderRadius.circular(10),

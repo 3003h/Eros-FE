@@ -134,6 +134,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "pls_i_username":
             MessageLookupByLibrary.simpleMessage("Please enter user name"),
         "preload_image": MessageLookupByLibrary.simpleMessage("Preload image"),
+        "previews": MessageLookupByLibrary.simpleMessage("Previews"),
         "processing": MessageLookupByLibrary.simpleMessage("Processing"),
         "pure_black": MessageLookupByLibrary.simpleMessage("Pure black"),
         "quick_search": MessageLookupByLibrary.simpleMessage("Quick search"),

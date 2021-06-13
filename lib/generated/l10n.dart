@@ -340,6 +340,16 @@ class S {
     );
   }
 
+  /// `Previews`
+  String get previews {
+    return Intl.message(
+      'Previews',
+      name: 'previews',
+      desc: '',
+      args: [],
+    );
+  }
+
   /// `E·H`
   String get eh {
     return Intl.message(
