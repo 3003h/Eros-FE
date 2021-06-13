@@ -1190,6 +1190,16 @@ class S {
     );
   }
 
+  /// `Change to favorites`
+  String get change_to_favorites {
+    return Intl.message(
+      'Change to favorites',
+      name: 'change_to_favorites',
+      desc: '',
+      args: [],
+    );
+  }
+
   /// `Quick search`
   String get quick_search {
     return Intl.message(

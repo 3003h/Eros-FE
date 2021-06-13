@@ -2,6 +2,7 @@ import 'package:fehviewer/common/service/ehconfig_service.dart';
 import 'package:fehviewer/generated/l10n.dart';
 import 'package:fehviewer/models/index.dart';
 import 'package:fehviewer/pages/controller/fav_dialog_controller.dart';
+import 'package:fehviewer/pages/controller/favorite_sel_controller.dart';
 import 'package:fehviewer/route/navigator_util.dart';
 import 'package:fehviewer/utils/logger.dart';
 import 'package:fehviewer/utils/toast.dart';
@@ -125,7 +126,7 @@ class GalleryItemController extends GetxController {
                     }
                     Get.back();
                     _favDialogController
-                        .addFav(galleryItem.gid!, galleryItem.token!)
+                        .tapAddFav(galleryItem.gid!, galleryItem.token!)
                         .then((Favcat? value) {
                       if (value != null) {
                         setFavTitle(
@@ -154,6 +155,26 @@ class GalleryItemController extends GetxController {
                   },
                   child: Text(S.of(context).remove_from_favorites),
                 ),
+              CupertinoActionSheetAction(
+                onPressed: () {
+                  if (galleryItem.gid == null || galleryItem.token == null) {
+                    return;
+                  }
+                  Get.back();
+                  _favDialogController
+                      .tapAddFav(galleryItem.gid!, galleryItem.token!,
+                          oriFavcat: galleryItem.favcat!)
+                      .then((Favcat? value) {
+                    if (value != null) {
+                      setFavTitle(favTitle: '', favcat: '');
+                      setFavTitle(
+                          favTitle: value.favTitle, favcat: value.favId);
+                      showToast('successfully changed');
+                    }
+                  });
+                },
+                child: Text(S.of(context).change_to_favorites),
+              ),
             ],
           );
         });

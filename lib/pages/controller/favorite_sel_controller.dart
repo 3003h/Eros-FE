@@ -41,6 +41,21 @@ class FavoriteSelectorController extends GetxController
     });
   }
 
+  void increase(String favId) {
+    final _index = _favcatList.indexWhere((element) => element.favId == favId);
+    final int _num = (_favcatList[_index].totNum ?? 0) + 1;
+    _favcatList[_index] = _favcatList[_index].copyWith(totNum: _num);
+    logger.v(' $_num');
+    change(_favcatList, status: RxStatus.success());
+  }
+
+  void decrease(String favId) {
+    final _index = _favcatList.indexWhere((element) => element.favId == favId);
+    final int _num = (_favcatList[_index].totNum ?? 1) - 1;
+    _favcatList[_index] = _favcatList[_index].copyWith(totNum: _num);
+    change(_favcatList, status: RxStatus.success());
+  }
+
   void addAllFavList(List<Favcat> list, {bool isUpdate = true}) {
     // logger.v('len ${list.length}');
     // logger.v('list  \n${list.map((e) => jsonEncode(e)).join('\n')}');

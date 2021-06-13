@@ -113,6 +113,7 @@
   "tab_sort": "Long press and drag to sort",
   "add_to_favorites": "Add to favorites",
   "remove_from_favorites": "Remove from favorites",
+  "change_to_favorites": "Change to favorites",
   "quick_search": "Quick search",
   "add_quick_search": "Add to search",
   "show_filter": "Show filter",

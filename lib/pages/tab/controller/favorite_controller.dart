@@ -15,9 +15,15 @@ import 'package:tuple/tuple.dart';
 import 'tabview_controller.dart';
 
 class FavoriteViewController extends TabViewController {
-  final _title = ''.obs;
+  final RxString _title = ''.obs;
 
-  get title => _ehConfigService.lastShowFavTitle ?? _title.value;
+  String? get title {
+    if (_title.value.isNotEmpty) {
+      return _title.value;
+    } else {
+      return _ehConfigService.lastShowFavTitle;
+    }
+  }
 
   set title(val) => _title.value = val;
 
