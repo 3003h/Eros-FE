@@ -8,6 +8,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:line_icons/line_icons.dart';
+import 'package:fehviewer/models/base/eh_models.dart';
 
 const CupertinoDynamicColor _kClearButtonColor =
     CupertinoDynamicColor.withBrightness(
@@ -123,18 +124,18 @@ class QryTagSliverList extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      '${controller.qryTags[index].namespace.shortName}:${controller.qryTags[index].key}',
+                      controller.qryTags[index].fullTagText ?? '',
                       style: const TextStyle(
                         fontSize: 16,
                       ),
                     ),
-                    Text(
-                        '${EHConst.translateTagType[controller.qryTags[index].namespace] ?? controller.qryTags[index].namespace}:${controller.qryTags[index].nameNotMD}',
-                        style: TextStyle(
-                          fontSize: 14,
-                          color: CupertinoDynamicColor.resolve(
-                              CupertinoColors.secondaryLabel, Get.context!),
-                        )),
+                    if (controller.isTagTranslat)
+                      Text(controller.qryTags[index].fullTagTranslate ?? '',
+                          style: TextStyle(
+                            fontSize: 14,
+                            color: CupertinoDynamicColor.resolve(
+                                CupertinoColors.secondaryLabel, Get.context!),
+                          )),
                   ],
                 ).paddingSymmetric(vertical: 4, horizontal: 20),
               );

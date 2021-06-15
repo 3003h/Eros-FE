@@ -24,175 +24,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
 
 import 'all_preview_page.dart';
-
-const double kHeightPreview = 180.0;
-const double kPadding = 12.0;
-
-const double kHeaderHeight = 200.0;
-const double kHeaderPaddingTop = 12.0;
-
-class GalleryHeader extends StatelessWidget {
-  const GalleryHeader({
-    Key? key,
-    required this.initGalleryItem,
-    this.tabTag,
-  }) : super(key: key);
-
-  final GalleryItem initGalleryItem;
-  final Object? tabTag;
-
-  @override
-  Widget build(BuildContext context) {
-    final TextStyle _hearTextStyle = TextStyle(
-      fontSize: 13,
-      color: CupertinoDynamicColor.resolve(CupertinoColors.label, context),
-    );
-
-    return Container(
-      margin: const EdgeInsets.all(kPadding),
-      child: Column(
-        children: <Widget>[
-          Container(
-            height: kHeaderHeight,
-            child: Row(
-              children: <Widget>[
-                // 封面
-                CoverImage(
-                  imageUrl: initGalleryItem.imgUrl!,
-                  heroTag: '${initGalleryItem.gid}_cover_$tabTag',
-                ),
-                Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: <Widget>[
-                      // 标题
-                      const GalleryTitle(),
-                      // 上传用户
-                      GalleryUploader(uploader: initGalleryItem.uploader ?? ''),
-                      const Spacer(),
-                      Row(
-                        crossAxisAlignment: CrossAxisAlignment.end,
-                        children: <Widget>[
-                          // 阅读按钮
-                          ReadButton(gid: initGalleryItem.gid ?? ''),
-                          const Spacer(),
-                          // 收藏按钮
-                          const GalleryFavButton(),
-                        ],
-                      )
-                    ],
-                  ),
-                )
-              ],
-            ),
-          ),
-          GetBuilder<GalleryPageController>(
-              init: GalleryPageController(),
-              tag: pageCtrlDepth,
-              id: GetIds.PAGE_VIEW_HEADER,
-              builder: (GalleryPageController controller) {
-                // logger.d(
-                //     'GalleryPageController GetBuilder GetIds.PAGE_VIEW_HEADER');
-                return GestureDetector(
-                  child: Column(
-                    mainAxisSize: MainAxisSize.min,
-                    children: <Widget>[
-                      Container(
-                        padding: const EdgeInsets.symmetric(vertical: 8.0),
-                        child: Row(
-                          crossAxisAlignment: CrossAxisAlignment.end,
-                          // ignore: prefer_const_literals_to_create_immutables
-                          children: <Widget>[
-                            // 评分
-                            GalleryRating(
-                              rating: controller.galleryItem.rating ?? 0,
-                              ratingFB:
-                                  controller.galleryItem.ratingFallBack ?? 0,
-                              color: ThemeColors.colorRatingMap[
-                                  controller.galleryItem.colorRating?.trim() ??
-                                      'ir']!,
-                            ),
-                            // 评分人次
-                            Padding(
-                              padding:
-                                  const EdgeInsets.symmetric(horizontal: 4),
-                              child:
-                                  Text(controller.galleryItem.ratingCount ?? '',
-                                      style: TextStyle(
-                                        fontSize: 10,
-                                        color: CupertinoDynamicColor.resolve(
-                                            CupertinoColors.secondaryLabel,
-                                            context),
-                                      )),
-                            ),
-                            const Spacer(),
-                            // 类型
-                            GalleryCategory(
-                                category:
-                                    controller.galleryItem.category ?? ''),
-                          ],
-                        ),
-                      ),
-                      Row(
-                        children: [
-                          Text(
-                            controller.galleryItem.language ?? '',
-                            style: _hearTextStyle,
-                          ),
-                          const Spacer(),
-                          Icon(
-                            FontAwesomeIcons.images,
-                            size: 14,
-                            color: CupertinoDynamicColor.resolve(
-                                CupertinoColors.secondaryLabel, context),
-                          ),
-                          const SizedBox(width: 6),
-                          Text(
-                            controller.galleryItem.filecount ?? '',
-                            style: _hearTextStyle,
-                          ),
-                          const Spacer(),
-                          Text(
-                            controller.galleryItem.filesizeText ?? '',
-                            style: _hearTextStyle,
-                          ),
-                        ],
-                      ).marginSymmetric(vertical: 4),
-                      Row(
-                        crossAxisAlignment: CrossAxisAlignment.end,
-                        children: <Widget>[
-                          const Text('❤️', style: TextStyle(fontSize: 13)),
-                          GetBuilder(
-                              // init: GalleryPageController(),
-                              tag: pageCtrlDepth,
-                              id: GetIds.PAGE_VIEW_HEADER,
-                              builder: (GalleryPageController controller) {
-                                return Padding(
-                                  padding:
-                                      const EdgeInsets.symmetric(horizontal: 4),
-                                  child: Text(
-                                      controller.galleryItem.favoritedCount ??
-                                          '',
-                                      style: _hearTextStyle),
-                                );
-                              }),
-                          const Spacer(),
-                          Text(
-                            controller.galleryItem.postTime ?? '',
-                            style: _hearTextStyle,
-                          ),
-                        ],
-                      ),
-                      // const Text('...'),
-                    ],
-                  ),
-                ).paddingSymmetric(horizontal: 8);
-              }),
-        ],
-      ),
-    );
-  }
-}
+import 'const.dart';
 
 /// 封面小图 纯StatelessWidget
 class CoveTinyImage extends StatelessWidget {
@@ -771,9 +603,7 @@ class TagGroupItem extends StatelessWidget {
     galleryTags.forEach((GalleryTag tag) {
       _tagBtnList.add(
         Obx(() => TagButton(
-              text: ehConfigService.isTagTranslat.value
-                  ? tag.tagTranslat
-                  : tag.title,
+              text: ehConfigService.isTagTranslat ? tag.tagTranslat : tag.title,
               textColor: () {
                 switch (tag.vote) {
                   case 0:
@@ -792,7 +622,7 @@ class TagGroupItem extends StatelessWidget {
                     simpleSearch: '${tag.type}:${tag.title}');
               },
               onLongPress: () {
-                if (ehConfigService.isTagTranslat.value) {
+                if (ehConfigService.isTagTranslat) {
                   showTagInfoDialog(
                     tag.title,
                     translate: tag.tagTranslat,
@@ -826,7 +656,7 @@ class TagGroupItem extends StatelessWidget {
             child: Obx(() => TagButton(
                   color: CupertinoDynamicColor.resolve(
                       ThemeColors.tagColorTagType[_tagType.trim()]!, context),
-                  text: ehConfigService.isTagTranslat.value
+                  text: ehConfigService.isTagTranslat
                       ? EHConst.translateTagType[_tagType.trim()] ?? _tagType
                       : _tagType,
                 )),
@@ -914,7 +744,7 @@ class TextBtn extends StatelessWidget {
       data: const CupertinoThemeData(primaryColor: CupertinoColors.systemGrey),
       child: GestureDetector(
         child: Container(
-          padding: const EdgeInsets.all(8.0),
+          // padding: const EdgeInsets.all(8.0),
           child: Column(
             children: <Widget>[
               /*Padding(

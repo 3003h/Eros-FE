@@ -27,24 +27,13 @@ import 'archiver_controller.dart';
 import 'comment_controller.dart';
 import 'gallery_fav_controller.dart';
 
-const double kHeaderHeight = 200.0 + 52;
-const double kPadding = 12.0;
-const double kHeaderPaddingTop = 12.0;
+const double kHeaderHeightOffset = kHeaderHeight;
 
 class GalleryPageController extends GetxController
     with StateMixin<GalleryItem> {
   GalleryPageController({this.galleryRepository});
 
   final GalleryRepository? galleryRepository;
-
-  // GalleryPageController.initUrl({@required String url}) {
-  //   galleryItem = GalleryItem()..url = url;
-  //   fromUrl = true;
-  // }
-  //
-  // GalleryPageController.fromItem({
-  //   @required this.galleryItem,
-  // }) : gid = galleryItem.gid;
 
   /// 画廊数据对象
   late GalleryItem _galleryItem;
@@ -427,10 +416,11 @@ class GalleryPageController extends GetxController
 
   void _scrollControllerLister() {
     try {
-      if (scrollController.offset < kHeaderHeight + kHeaderPaddingTop &&
+      if (scrollController.offset < kHeaderHeightOffset + kHeaderPaddingTop &&
           !hideNavigationBtn) {
         hideNavigationBtn = true;
-      } else if (scrollController.offset >= kHeaderHeight + kHeaderPaddingTop &&
+      } else if (scrollController.offset >=
+              kHeaderHeightOffset + kHeaderPaddingTop &&
           hideNavigationBtn) {
         hideNavigationBtn = false;
       }
@@ -448,6 +438,10 @@ class GalleryPageController extends GetxController
       return galleryItem.japaneseTitle ?? '';
     }
   }
+
+  final _topTitle = ''.obs;
+  // get topTitle => _topTitle.value;
+  set topTitle(val) => _topTitle.value = val;
 
   // 根据设置的语言显示的标题
   String get title {

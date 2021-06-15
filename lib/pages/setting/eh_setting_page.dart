@@ -2,6 +2,7 @@ import 'package:enum_to_string/enum_to_string.dart';
 import 'package:fehviewer/common/controller/tag_trans_controller.dart';
 import 'package:fehviewer/common/controller/user_controller.dart';
 import 'package:fehviewer/common/service/ehconfig_service.dart';
+import 'package:fehviewer/common/service/locale_service.dart';
 import 'package:fehviewer/common/service/theme_service.dart';
 import 'package:fehviewer/const/const.dart';
 import 'package:fehviewer/generated/l10n.dart';
@@ -41,10 +42,11 @@ class ListViewEhSetting extends StatelessWidget {
     final EhConfigService _ehConfigService = Get.find();
     final UserController userController = Get.find();
     final TagTransController transController = Get.find();
+    final LocaleService localeService = Get.find();
 
     final bool _siteEx = _ehConfigService.isSiteEx.value;
     final bool _jpnTitle = _ehConfigService.isJpnTitle.value;
-    final bool _tagTranslat = _ehConfigService.isTagTranslat.value;
+    final bool _tagTranslat = _ehConfigService.isTagTranslat;
     final bool _galleryImgBlur = _ehConfigService.isGalleryImgBlur.value;
     final bool _favLongTap = _ehConfigService.isFavLongTap.value;
     final bool _isLogin = userController.isLogin;
@@ -59,7 +61,7 @@ class ListViewEhSetting extends StatelessWidget {
     }
 
     Future<void> _handleTagTranslatChanged(bool newValue) async {
-      _ehConfigService.isTagTranslat.value = newValue;
+      _ehConfigService.isTagTranslat = newValue;
       if (newValue) {
         try {
           if (await transController.checkUpdate()) {
@@ -135,23 +137,24 @@ class ListViewEhSetting extends StatelessWidget {
           },
         ),
       if (_isLogin) Container(height: 38),
-      Obx(() => GestureDetector(
-            behavior: HitTestBehavior.opaque,
-            onLongPress: () async {
-              vibrateUtil.light();
-              showToast('强制更新开始');
-              if (await transController.checkUpdate(force: true)) {
-                await transController.updateDB();
-                showToast('更新完成');
-              }
-            },
-            child: TextSwitchItem('显示标签中文翻译',
-                intValue: _tagTranslat,
-                onChanged: _handleTagTranslatChanged,
-                desc: '当前版本:${_ehConfigService.tagTranslatVer.value}'),
-          )),
+      if (localeService.isLanguageCodeZh)
+        Obx(() => GestureDetector(
+              behavior: HitTestBehavior.opaque,
+              onLongPress: () async {
+                vibrateUtil.light();
+                showToast('强制更新开始');
+                if (await transController.checkUpdate(force: true)) {
+                  await transController.updateDB();
+                  showToast('更新完成');
+                }
+              },
+              child: TextSwitchItem('显示标签中文翻译',
+                  intValue: _tagTranslat,
+                  onChanged: _handleTagTranslatChanged,
+                  desc: '当前版本:${_ehConfigService.tagTranslatVer.value}'),
+            )),
       Obx(() {
-        if (_ehConfigService.isTagTranslat.value) {
+        if (_ehConfigService.isTagTranslat) {
           return _buildTagIntroImgLvItem(context);
         } else {
           return const SizedBox();
@@ -163,13 +166,14 @@ class ListViewEhSetting extends StatelessWidget {
         onChanged: _handleJpnTitleChanged,
         // desc: '如果该画廊有日文标题则优先显示',
       ),
-      TextSwitchItem(
-        '画廊封面模糊',
-        intValue: _galleryImgBlur,
-        onChanged: _handleGalleryListImgBlurChanged,
-        hideLine: true,
-        // desc: '画廊列表封面模糊效果',
-      ),
+      if (localeService.isLanguageCodeZh)
+        TextSwitchItem(
+          '画廊封面模糊',
+          intValue: _galleryImgBlur,
+          onChanged: _handleGalleryListImgBlurChanged,
+          hideLine: true,
+          // desc: '画廊列表封面模糊效果',
+        ),
       Container(height: 38),
       TextSwitchItem(
         '默认收藏夹设置',

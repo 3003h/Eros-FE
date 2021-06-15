@@ -18,6 +18,7 @@ import 'package:fehviewer/utils/vibrate.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
 import 'package:tuple/tuple.dart';
+import 'package:fehviewer/models/base/eh_models.dart';
 
 import 'enum.dart';
 import 'favorite_controller.dart';
@@ -113,6 +114,8 @@ class SearchPageController extends TabViewController {
   final EhConfigService _ehConfigService = Get.find();
   final QuickSearchController quickSearchController = Get.find();
   final FavoriteViewController _favoriteViewController = Get.find();
+
+  bool get isTagTranslat => _ehConfigService.isTagTranslat;
 
   /// 控制右侧按钮展开折叠
   bool get isSearchBarComp => _ehConfigService.isSearchBarComp.value;
@@ -424,15 +427,5 @@ class SearchPageController extends TabViewController {
     vibrateUtil.light();
     searchTextController.clear();
     curPage.value = 0;
-  }
-}
-
-extension ExSearch on String {
-  String get shortName {
-    if (this != 'misc') {
-      return substring(0, 1);
-    } else {
-      return this;
-    }
   }
 }

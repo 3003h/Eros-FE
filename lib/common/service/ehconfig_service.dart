@@ -14,9 +14,11 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 
+import 'locale_service.dart';
+
 class EhConfigService extends ProfileService {
   RxBool isJpnTitle = false.obs;
-  RxBool isTagTranslat = false.obs;
+  // RxBool isTagTranslat = false.obs;
   RxBool isGalleryImgBlur = false.obs;
   RxBool isSiteEx = false.obs;
   RxBool isFavLongTap = false.obs;
@@ -34,6 +36,15 @@ class EhConfigService extends ProfileService {
   RxBool commentTrans = false.obs;
   RxBool blurredInRecentTasks = true.obs;
   Rx<TagIntroImgLv> tagIntroImgLv = TagIntroImgLv.nonh.obs;
+
+  final LocaleService localeService = Get.find();
+
+  final _isTagTranslat = false.obs;
+  bool get isTagTranslat {
+    return localeService.isLanguageCodeZh && _isTagTranslat.value;
+  }
+
+  set isTagTranslat(val) => _isTagTranslat.value = val;
 
   String _lastClipboardLink = '';
 
@@ -102,8 +113,8 @@ class EhConfigService extends ProfileService {
       // logger.v('new ehConfig ${ehConfig.toJson()}');
     });
 
-    isTagTranslat.value = ehConfig.tagTranslat ?? false;
-    everProfile(isTagTranslat,
+    isTagTranslat = ehConfig.tagTranslat ?? false;
+    everProfile(_isTagTranslat,
         (value) => ehConfig = ehConfig.copyWith(tagTranslat: value as bool));
 
     isGalleryImgBlur.value = ehConfig.galleryImgBlur ?? false;

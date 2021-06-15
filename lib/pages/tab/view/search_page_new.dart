@@ -166,8 +166,6 @@ class GallerySearchPageNew extends StatelessWidget {
           // textInputAction: TextInputAction.search,
           onEditingComplete: controller.onEditingComplete,
           focusNode: controller.focusNode,
-          // keyboardType:
-          //     multiline ? TextInputType.multiline : TextInputType.text,
           maxLines: multiline ? null : 1,
           textInputAction: TextInputAction.search,
         ));
@@ -194,6 +192,7 @@ class GallerySearchPageNew extends StatelessWidget {
   }
 
   Widget _buildSearchRult(BuildContext context) {
+    logger.v('_buildSearchRult');
     return GestureDetector(
       behavior: HitTestBehavior.opaque,
       onTap: () {
@@ -206,6 +205,8 @@ class GallerySearchPageNew extends StatelessWidget {
       },
       child: CustomScrollView(
         slivers: <Widget>[
+          // SliverToBoxAdapter(child: getSearchTextFieldIn(multiline: true)),
+          // SliverToBoxAdapter(child: _maxExtentProtoTypeBar(context)),
           SliverFloatingPinnedPersistentHeader(
             delegate: SliverFloatingPinnedPersistentHeaderBuilder(
               minExtentProtoType: const SizedBox(),
@@ -340,6 +341,7 @@ class GallerySearchPageNew extends StatelessWidget {
   }
 
   Widget _maxExtentProtoTypeBar(BuildContext context) {
+    logger.v(' _maxExtentProtoTypeBar');
     return Container(
       child: Column(
         mainAxisSize: MainAxisSize.min,
@@ -370,7 +372,7 @@ class GallerySearchPageNew extends StatelessWidget {
     );
   }
 
-  Widget _tagItem(String text, String translate) {
+  Widget _tagItem(String text, String? translate) {
     return Row(
       mainAxisSize: MainAxisSize.min,
       children: [
@@ -391,17 +393,18 @@ class GallerySearchPageNew extends StatelessWidget {
                   fontSize: 16,
                 ),
               ),
-              Text(translate,
-                  style: TextStyle(
-                    fontSize: 14,
-                    color: CupertinoDynamicColor.resolve(
-                        CupertinoColors.secondaryLabel, Get.context!),
-                  )),
+              if (translate != null)
+                Text(translate,
+                    style: TextStyle(
+                      fontSize: 14,
+                      color: CupertinoDynamicColor.resolve(
+                          CupertinoColors.secondaryLabel, Get.context!),
+                    )),
             ],
           ),
         ),
       ],
-    ).paddingSymmetric(vertical: 4, horizontal: 12);
+    ).paddingSymmetric(vertical: 8, horizontal: 12);
   }
 
   // tag搜索结果页面
@@ -409,10 +412,11 @@ class GallerySearchPageNew extends StatelessWidget {
     return SliverList(
       delegate: SliverChildBuilderDelegate(
         (BuildContext context, int index) {
-          final _text =
-              '${controller.qryTags[index].namespace.shortName}:${controller.qryTags[index].key}';
-          final _translate =
-              '${EHConst.translateTagType[controller.qryTags[index].namespace] ?? controller.qryTags[index].namespace}:${controller.qryTags[index].nameNotMD}';
+          final _text = controller.qryTags[index].fullTagText ?? '';
+          final _translate = controller.isTagTranslat
+              ? controller.qryTags[index].fullTagTranslate
+              : null;
+
           return GestureDetector(
             behavior: HitTestBehavior.opaque,
             onTap: () {

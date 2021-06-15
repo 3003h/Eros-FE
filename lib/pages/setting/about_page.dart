@@ -44,7 +44,7 @@ class ListViewAbout extends StatelessWidget {
           Egg(
             child: TextItem(
               '${Global.packageInfo.appName} ',
-              desc: ' 一个兴趣使然的e-hentai客户端',
+              desc: 'an e-hentai app',
               onTap: null,
             ),
             onTrigger: (int tapNum, int neededNum) {
@@ -89,16 +89,6 @@ class ListViewAbout extends StatelessWidget {
             'Channel',
             desc: 'https://t.me/fehviewer',
             onTap: () => launch('https://t.me/fehviewer'),
-            // hideLine: true,
-          ),
-          // 1004027581
-          TextItem(
-            'QQ Group',
-            desc: '1004027581',
-            onTap: () {
-              launch(
-                  'https://qm.qq.com/cgi-bin/qm/qr?k=9-NpE21HILIKnnQTo-M0OyRWSgUjFtPR&jump_from=webapi');
-            },
             hideLine: true,
           ),
         ],

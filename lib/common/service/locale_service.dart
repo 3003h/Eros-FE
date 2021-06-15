@@ -20,13 +20,17 @@ class LocaleService extends ProfileService {
     return Locale(t[0], t[1]);
   }
 
+  bool get isLanguageCodeZh =>
+      locale?.languageCode.startsWith('zh') ??
+      window.locale.languageCode.startsWith('zh');
+
   @override
   void onInit() {
     super.onInit();
     final Profile _profile = Global.profile;
 
     localCode.value = _profile.locale;
-    everProfile<String>(localCode as RxInterface<String>, (String value) {
+    everProfile<String>(localCode, (String value) {
       // _profile.locale = value;
       Global.profile = _profile.copyWith(locale: value);
     });

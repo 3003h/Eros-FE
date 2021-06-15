@@ -160,6 +160,24 @@ extension ExtTagTranlat on TagTranslat {
         return _fix(regR18And18g, intro);
     }
   }
+
+  String? get fullTagTranslate {
+    return '${EHConst.translateTagType[namespace] ?? namespace}:$nameNotMD';
+  }
+
+  String? get fullTagText {
+    return '${namespace.shortName}:$key';
+  }
 }
 
 extension ExtString on String {}
+
+extension ExSearch on String {
+  String get shortName {
+    if (this != 'misc') {
+      return substring(0, 1);
+    } else {
+      return this;
+    }
+  }
+}
