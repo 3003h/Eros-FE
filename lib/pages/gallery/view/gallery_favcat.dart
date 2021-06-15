@@ -106,11 +106,11 @@ class _FavcatAddListItemState extends State<FavcatAddListItem> {
     return Container(
       child: Column(
         children: [
-          Container(
-            color: CupertinoDynamicColor.resolve(
-                CupertinoColors.systemGrey4, context),
-            height: 0.5,
-          ),
+          // Container(
+          //   color: CupertinoDynamicColor.resolve(
+          //       CupertinoColors.systemGrey4, context),
+          //   height: 0.5,
+          // ),
           GestureDetector(
             behavior: HitTestBehavior.opaque,
             child: Container(

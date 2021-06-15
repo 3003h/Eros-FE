@@ -1,5 +1,6 @@
 import 'package:fehviewer/common/controller/tag_trans_controller.dart';
 import 'package:fehviewer/common/service/depth_service.dart';
+import 'package:fehviewer/common/service/ehconfig_service.dart';
 import 'package:fehviewer/const/const.dart';
 import 'package:fehviewer/generated/l10n.dart';
 import 'package:fehviewer/models/base/eh_models.dart';
@@ -28,6 +29,9 @@ class TagInfoController extends GetxController {
   late String _currQry;
 
   bool get showClearButton => tagsTextController.text.isNotEmpty;
+
+  final EhConfigService _ehConfigService = Get.find();
+  bool get isTagTranslat => _ehConfigService.isTagTranslat;
 
   @override
   void onInit() {
@@ -133,15 +137,5 @@ class TagInfoController extends GetxController {
   void clear() {
     vibrateUtil.light();
     tagsTextController.clear();
-  }
-}
-
-extension ExSearch on String {
-  String get shortName {
-    if (this != 'misc') {
-      return substring(0, 1);
-    } else {
-      return this;
-    }
   }
 }

@@ -123,12 +123,12 @@ class ListViewAdvancedSetting extends StatelessWidget {
           onChanged: _handleEFChanged,
           desc: 'SNI',
         ),
-      TextSwitchItem(
-        'DNS-over-HTTPS',
-        intValue: _dnsConfigController.enableDoH.value,
-        onChanged: _handleDoHChanged,
-        desc: '优先级低于自定义hosts',
-      ),
+      // TextSwitchItem(
+      //   'DNS-over-HTTPS',
+      //   intValue: _dnsConfigController.enableDoH.value,
+      //   onChanged: _handleDoHChanged,
+      //   desc: '优先级低于自定义hosts',
+      // ),
       TextSwitchItem(
         S.of(context).vibrate_feedback,
         intValue: _ehConfigService.vibrate.value,
