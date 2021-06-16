@@ -368,12 +368,12 @@ class GalleryPageController extends GetxController
 
       _enableRead.value = true;
 
-      analytics.logViewItem(
-        itemId: galleryItem.gid ?? '',
-        itemName: galleryItem.englishTitle ?? '',
-        itemCategory: galleryItem.category ?? '',
-        destination: galleryItem.japaneseTitle,
-      );
+      // analytics.logViewItem(
+      //   itemId: galleryItem.gid ?? '',
+      //   itemName: galleryItem.englishTitle ?? '',
+      //   itemCategory: galleryItem.category ?? '',
+      //   destination: galleryItem.japaneseTitle,
+      // );
     } catch (err, stack) {
       logger.e('$err\n$stack');
       if (showError) {
