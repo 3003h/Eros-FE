@@ -69,10 +69,10 @@ class _LoginPageState extends State<LoginPage> {
                             child: Text(S.of(context).user_name)),
                         // prefixMode: OverlayVisibilityMode.never,
                         decoration: null,
-                        // autofocus 自动获得焦点
-//                    autofocus: true,
+                        // autofocus
+                        // autofocus: true,
                         onEditingComplete: () {
-                          // 点击键盘完成 焦点跳转密码输入框
+                          // Click the keyboard to complete the focus jump password input box
                           FocusScope.of(context).requestFocus(_nodePwd);
                         },
                       ),
@@ -98,7 +98,7 @@ class _LoginPageState extends State<LoginPage> {
                         obscureText: true,
                         focusNode: _nodePwd,
                         onEditingComplete: () {
-                          // 点击键盘完成 帐号密码都非空的情况 直接登录
+                          // Click the keyboard to complete. If the account and password are not empty, log in
                           _login();
                         },
                       ),
@@ -108,11 +108,8 @@ class _LoginPageState extends State<LoginPage> {
                       color: CupertinoDynamicColor.resolve(
                           CupertinoColors.systemGrey4, context),
                     ),
-                    // 直接登录按钮
                     _buildLoginButton(),
-                    // 网页登录按钮
                     _buildWebLoginButton(context),
-                    // Cookie登录按钮
                     _buildCookieLoginButton(context),
                   ],
                 ),
@@ -146,7 +143,7 @@ class _LoginPageState extends State<LoginPage> {
     return Container(
       height: 60,
       child: CupertinoButton(
-        child: const Text('cookie 登录'),
+        child: const Text('Cookie Login'),
         onPressed: () {
           final dynamic? result = Get.to(() => LoginCookiePage());
           if (result ?? false) {
@@ -170,7 +167,7 @@ class _LoginPageState extends State<LoginPage> {
               child: Text(S.of(context).login_web),
               onPressed: () async {
                 if (!Platform.isIOS && !Platform.isAndroid) {
-                  showToast('平台尚未支持');
+                  showToast('Platform not yet supported');
                   return;
                 }
 

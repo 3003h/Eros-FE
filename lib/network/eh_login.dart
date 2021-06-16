@@ -90,9 +90,12 @@ class EhUserManager {
 
     // 处理cookie 存入sp 方便里站图片请求时构建头 否则会403
     final Map<String, String> cookieMapEx = <String, String>{};
-    cookiesEx.forEach((Cookie cookie) {
-      cookieMapEx.putIfAbsent(cookie.name, () => cookie.value);
-    });
+    // cookiesEx.forEach((Cookie cookie) {
+    //   cookieMapEx.putIfAbsent(cookie.name, () => cookie.value);
+    // });
+    for (final Cookie cookie in cookiesEx) {
+      cookieMapEx[cookie.name] = cookie.value;
+    }
 
     final Map<String, String> cookie = <String, String>{
       'ipb_member_id': cookieMapEx['ipb_member_id'] ?? '',
