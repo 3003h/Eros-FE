@@ -583,24 +583,24 @@ class Api {
       final _imgUrlL = thumb;
 
       // 文件数量
-      final _filecount = rultList[i]['filecount'] as String;
+      final _filecount = rultList[i]['filecount'] as String?;
 
       // logger.d('_filecount $_filecount');
 
       // 上传者
-      final _uploader = rultList[i]['uploader'] as String;
-      final _category = rultList[i]['category'] as String;
+      final _uploader = rultList[i]['uploader'] as String?;
+      final _category = rultList[i]['category'] as String?;
 
       // 标签
       final List<String> tags = List<String>.from(
-          rultList[i]['tags'].map((e) => e as String).toList());
+          rultList[i]['tags'].map((e) => e as String?).toList());
       final _tagsFromApi = tags;
 
       // 大小
-      final _filesize = rultList[i]['filesize'] as int;
+      final _filesize = rultList[i]['filesize'] as int?;
 
       // 种子数量
-      final _torrentcount = rultList[i]['torrentcount'] as String;
+      final _torrentcount = rultList[i]['torrentcount'] as String?;
 
       // 种子列表
       final List<dynamic> torrents = rultList[i]['torrents'];

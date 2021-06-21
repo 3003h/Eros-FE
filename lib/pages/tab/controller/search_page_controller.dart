@@ -134,10 +134,10 @@ class SearchPageController extends TabViewController {
 
       _addHistory();
 
-      logger.d('${state?.length}');
+      // logger.d('${state?.length}');
 
       if (clear) {
-        logger.v('clear $clear');
+        // logger.v('clear $clear');
         change(state, status: RxStatus.loading());
       }
 

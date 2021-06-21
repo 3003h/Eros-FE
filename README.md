@@ -2,7 +2,7 @@
 
 # 应用简介
 
-一个用 flutter 编写的 e-hentai/exhentai app
+一个 flutter 编写的 e-hentai/exhentai app
 
 # 说明
 
@@ -10,8 +10,7 @@
 然后对原生开发不咋熟悉，就起了用 flutter 自己搞一个的想法 \
 就这样从入门到入土，有了现在的版本，虽然问题还缺失的功能还不少。但至少是个能看的版本了
 
-UI 界面方面不少都参考的[E-HentaiViewer](https://github.com/kayanouriko/E-HentaiViewer)\
-所以一眼看过去比较像，毕竟之前主要用的都是它
+UI 方面主要参考的[E-HentaiViewer](https://github.com/kayanouriko/E-HentaiViewer)\
 
 因为是 flutter 所以也是跨平台支持的，测试的平台主要有\
 iOS 14 : iPhone XR / 12 / iPad Pro 2018\
@@ -19,9 +18,8 @@ Android 11 : MIUI12.5/ MI K40
 
 现有问题:
 
-- 大图浏览时有时候比较卡顿
 - 列表滑动可能会有小卡顿。没有原生应用那么流畅
-- 确失一些必要功能(还在开发中)
+- 确失一些必要功能(还在开发完善中)
 
 # 感谢
 
@@ -36,8 +34,22 @@ ehentai译文数据库
 
 # 应用截图
 
-<!-- ![fehv-w50](https://i.loli.net/2020/07/30/YnpIjzJDQ7mRg53.png) -->
-<img width="300"  src="https://i.loli.net/2020/07/30/YnpIjzJDQ7mRg53.png"/>
+## 主页列表
+<img width="200" src="https://raw.githubusercontent.com/honjow/FEhViewer/nullsafety/screenshot/2021-06-21%2019.15.21.jpg" >
+
+## 画廊
+<img width="200" src="https://raw.githubusercontent.com/honjow/FEhViewer/nullsafety/screenshot/2021-06-21%2019.15.27.jpg" >
+<img width="200" src="https://raw.githubusercontent.com/honjow/FEhViewer/nullsafety/screenshot/2021-06-21%2019.15.43.jpg" >
+<img width="200" src="https://raw.githubusercontent.com/honjow/FEhViewer/nullsafety/screenshot/2021-06-21%2019.16.56.jpg" >
+
+## 搜索
+<img width="200" src="https://raw.githubusercontent.com/honjow/FEhViewer/nullsafety/screenshot/2021-06-21%2019.15.53.jpg" >
+<img width="200" src="https://raw.githubusercontent.com/honjow/FEhViewer/nullsafety/screenshot/2021-06-21%2019.15.58.jpg" >
+<img width="200" src="https://raw.githubusercontent.com/honjow/FEhViewer/nullsafety/screenshot/2021-06-21%2019.16.02.jpg" >
+
+## 阅读
+<img width="200" src="https://raw.githubusercontent.com/honjow/FEhViewer/nullsafety/screenshot/2021-06-21%2019.16.08.jpg" >
+<img width="200" src="https://raw.githubusercontent.com/honjow/FEhViewer/nullsafety/screenshot/2021-06-21%2019.54.50.jpg" >
 
 # 功能
 
@@ -49,6 +61,7 @@ ehentai译文数据库
 - [x] 标签搜索
 - [x] 登录
 - [x] 搜索
+- [x] 搜索词匹配tag
 - [x] 高级搜索
 - [x] 单张图片保存于与分享
 - [x] 缓存优化
