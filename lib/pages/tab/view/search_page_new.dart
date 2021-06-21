@@ -341,7 +341,7 @@ class GallerySearchPageNew extends StatelessWidget {
   }
 
   Widget _maxExtentProtoTypeBar(BuildContext context) {
-    logger.v(' _maxExtentProtoTypeBar');
+    // logger.v(' _maxExtentProtoTypeBar');
     return Container(
       child: Column(
         mainAxisSize: MainAxisSize.min,
@@ -598,7 +598,7 @@ class GallerySearchPageNew extends StatelessWidget {
           child: Container(
             padding: const EdgeInsets.only(bottom: 50),
             child: GalleryErrorPage(
-              onTap: controller.refresh,
+              onTap: () => controller.onEditingComplete(),
             ),
           ),
         );

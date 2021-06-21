@@ -31,7 +31,7 @@ class _LoginCookiePageState extends State<LoginCookiePage> {
   Widget build(BuildContext context) {
     return CupertinoPageScaffold(
       navigationBar: const CupertinoNavigationBar(
-        middle: Text('cookie 登录'),
+        middle: Text('Cookie Login'),
       ),
       child: SafeArea(
         child: Center(
