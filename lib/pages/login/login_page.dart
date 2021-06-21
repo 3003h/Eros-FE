@@ -146,7 +146,7 @@ class _LoginPageState extends State<LoginPage> {
         child: const Text('Cookie Login'),
         onPressed: () {
           final dynamic? result = Get.to(() => LoginCookiePage());
-          if (result ?? false) {
+          if (result != null && result is bool && result) {
             Get.back();
           }
         },

@@ -619,7 +619,7 @@ class TagGroupItem extends StatelessWidget {
               onPressed: () {
                 logger.v('search type[${tag.type}] tag[${tag.title}]');
                 NavigatorUtil.goGalleryListBySearch(
-                    simpleSearch: '${tag.type}:${tag.title}');
+                    simpleSearch: '${tag.type}:${tag.title.trim()}');
               },
               onLongPress: () {
                 if (ehConfigService.isTagTranslat) {
