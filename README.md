@@ -33,23 +33,17 @@ ehentai译文数据库
 - [EhTagTranslation/Database](https://github.com/EhTagTranslation/Database)
 
 # 应用截图
-
 ## 主页列表
 <img width="200" src="https://raw.githubusercontent.com/honjow/FEhViewer/nullsafety/screenshot/2021-06-21%2019.15.21.jpg" >
 
 ## 画廊
-<img width="200" src="https://raw.githubusercontent.com/honjow/FEhViewer/nullsafety/screenshot/2021-06-21%2019.15.27.jpg" >
-<img width="200" src="https://raw.githubusercontent.com/honjow/FEhViewer/nullsafety/screenshot/2021-06-21%2019.15.43.jpg" >
-<img width="200" src="https://raw.githubusercontent.com/honjow/FEhViewer/nullsafety/screenshot/2021-06-21%2019.16.56.jpg" >
+<img width="200" src="https://raw.githubusercontent.com/honjow/FEhViewer/nullsafety/screenshot/2021-06-21%2019.15.27.jpg" > <img width="200" src="https://raw.githubusercontent.com/honjow/FEhViewer/nullsafety/screenshot/2021-06-21%2019.15.43.jpg" > <img width="200" src="https://raw.githubusercontent.com/honjow/FEhViewer/nullsafety/screenshot/2021-06-21%2019.16.56.jpg" >
 
 ## 搜索
-<img width="200" src="https://raw.githubusercontent.com/honjow/FEhViewer/nullsafety/screenshot/2021-06-21%2019.15.53.jpg" >
-<img width="200" src="https://raw.githubusercontent.com/honjow/FEhViewer/nullsafety/screenshot/2021-06-21%2019.15.58.jpg" >
-<img width="200" src="https://raw.githubusercontent.com/honjow/FEhViewer/nullsafety/screenshot/2021-06-21%2019.16.02.jpg" >
+<img width="200" src="https://raw.githubusercontent.com/honjow/FEhViewer/nullsafety/screenshot/2021-06-21%2019.15.53.jpg" > <img width="200" src="https://raw.githubusercontent.com/honjow/FEhViewer/nullsafety/screenshot/2021-06-21%2019.15.58.jpg" > <img width="200" src="https://raw.githubusercontent.com/honjow/FEhViewer/nullsafety/screenshot/2021-06-21%2019.16.02.jpg" >
 
 ## 阅读
-<img width="200" src="https://raw.githubusercontent.com/honjow/FEhViewer/nullsafety/screenshot/2021-06-21%2019.16.08.jpg" >
-<img width="200" src="https://raw.githubusercontent.com/honjow/FEhViewer/nullsafety/screenshot/2021-06-21%2019.54.50.jpg" >
+<img width="200" src="https://raw.githubusercontent.com/honjow/FEhViewer/nullsafety/screenshot/2021-06-21%2019.16.08.jpg" > <img width="200" src="https://raw.githubusercontent.com/honjow/FEhViewer/nullsafety/screenshot/2021-06-21%2019.54.50.jpg" >
 
 # 功能
 
