@@ -1,13 +1,10 @@
 import 'dart:io';
 
 import 'package:fehviewer/common/controller/tag_trans_controller.dart';
-import 'package:fehviewer/common/global.dart';
 import 'package:fehviewer/common/service/ehconfig_service.dart';
 import 'package:fehviewer/const/const.dart';
 import 'package:fehviewer/models/index.dart';
 import 'package:fehviewer/network/error.dart';
-import 'package:fehviewer/pages/controller/favorite_sel_controller.dart';
-import 'package:fehviewer/store/tag_database.dart';
 import 'package:fehviewer/utils/logger.dart';
 import 'package:fehviewer/utils/toast.dart';
 import 'package:fehviewer/utils/utility.dart';

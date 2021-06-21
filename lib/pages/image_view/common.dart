@@ -42,19 +42,17 @@ class GalleryPara {
       final int _ser = itemSer + add;
 
       // logger.d('开始缓存 ser $_ser');
-      if (previewMap[_ser] == null) {
-        yield null;
-      }
 
       if (_processingSerSet.contains(_ser)) {
         continue;
       }
 
-      if (previewMap[_ser] == null) {
+      final GalleryPreview? _previewTemp = previewMap[_ser];
+      if (_previewTemp == null) {
         yield null;
       }
 
-      GalleryPreview _preview = previewMap[_ser]!;
+      GalleryPreview _preview = _previewTemp!;
 
       if (_preview.isCache ?? false) {
         // logger.d('ser $_ser 已存在缓存中 跳过');
