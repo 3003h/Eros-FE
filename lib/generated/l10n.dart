@@ -1549,6 +1549,26 @@ class S {
       args: [],
     );
   }
+
+  /// `Expand`
+  String get expand {
+    return Intl.message(
+      'Expand',
+      name: 'expand',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Collapse`
+  String get collapse {
+    return Intl.message(
+      'Collapse',
+      name: 'collapse',
+      desc: '',
+      args: [],
+    );
+  }
 }
 
 class AppLocalizationDelegate extends LocalizationsDelegate<S> {

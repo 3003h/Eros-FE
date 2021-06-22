@@ -221,11 +221,20 @@ class AdvanceSearchSwitchItem extends StatelessWidget {
     return Container(
       child: Row(
         children: <Widget>[
-          Text(title),
-          if (expand) const Spacer(),
-          Transform.scale(
-            scale: 0.8,
-            child: CupertinoSwitch(value: value, onChanged: onChanged),
+          Expanded(
+            child: Text(
+              title,
+              maxLines: 2,
+              textAlign: TextAlign.start,
+            ),
+          ),
+          // if (expand) const Spacer(),
+          Container(
+            alignment: Alignment.centerRight,
+            child: Transform.scale(
+              scale: 0.8,
+              child: CupertinoSwitch(value: value, onChanged: onChanged),
+            ),
           ),
         ],
       ),

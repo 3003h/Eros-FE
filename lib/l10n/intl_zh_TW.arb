@@ -148,5 +148,7 @@
   "vote_successfully": "Vote successfully",
   "vote_up_successfully": "Vote up successfully",
   "vote_down_successfully": "Vote down successfully",
-  "vibrate_feedback": "Vibrate"
+  "vibrate_feedback": "Vibrate",
+  "expand": "Expand",
+  "collapse": "Collapse"
 }

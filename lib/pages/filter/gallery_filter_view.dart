@@ -12,8 +12,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
 
-const double kHeight = 260.0;
-const double kAdvanceHeight = 480.0;
+const double _kHeight = 260.0;
+const double _kAdvanceHeight = 480.0;
 
 /// 高级搜索
 class GalleryFilterView extends StatelessWidget {
@@ -32,14 +32,94 @@ class GalleryFilterView extends StatelessWidget {
 
   final int catCrossAxisCount;
 
-  @override
-  Widget build(BuildContext context) {
-    SearchPageController? _searchPageController;
+  SearchPageController? get _searchPageController {
     if (int.parse(searchPageCtrlDepth) > 0) {
       logger.d('searchPageCtrlDepth $searchPageCtrlDepth');
-      _searchPageController =
-          Get.find<SearchPageController>(tag: searchPageCtrlDepth);
+      return Get.find<SearchPageController>(tag: searchPageCtrlDepth);
     }
+  }
+
+  Widget _getColumnNormal(BuildContext context) {
+    return Obx(() {
+      final Rx<AdvanceSearch> _advanceSearch =
+          advanceSearchController.advanceSearch;
+      return Column(
+        children: <Widget>[
+          if (int.parse(searchPageCtrlDepth) > 0)
+            Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                CupertinoSlidingSegmentedControl<SearchType>(
+                  children: <SearchType, Widget>{
+                    SearchType.normal: Text(S.of(context).tab_gallery)
+                        .marginSymmetric(horizontal: 8),
+                    SearchType.watched: Text(S.of(context).tab_watched)
+                        .marginSymmetric(horizontal: 8),
+                    SearchType.favorite: Text(S.of(context).tab_favorite)
+                        .marginSymmetric(horizontal: 8),
+                  },
+                  groupValue:
+                      _searchPageController?.searchType ?? SearchType.normal,
+                  onValueChanged: (SearchType? value) {
+                    _searchPageController?.searchType =
+                        value ?? SearchType.normal;
+                  },
+                ),
+              ],
+            ),
+          if (_searchPageController?.searchType != SearchType.favorite)
+            GalleryCatFilter(
+              // padding: const EdgeInsets.symmetric(vertical: 4.0),
+              catNum: catNum,
+              onCatNumChanged: catNumChanged,
+              crossAxisCount: catCrossAxisCount,
+              padding: const EdgeInsets.symmetric(vertical: 8),
+            ),
+          if (_searchPageController?.searchType != SearchType.favorite)
+            Container(
+              child: Row(
+                children: <Widget>[
+                  Text(S.of(context).s_Advanced_Options),
+                  Transform.scale(
+                    scale: 0.8,
+                    child: CupertinoSwitch(
+                      value: advanceSearchController.enableAdvance,
+                      onChanged: (bool value) {
+                        logger.d(' onChanged to $value');
+                        advanceSearchController.enableAdvance = value;
+                      },
+                    ),
+                  ),
+                  const Spacer(),
+                  Offstage(
+                    offstage: !advanceSearchController.enableAdvance,
+                    child: CupertinoButton(
+                        // padding: const EdgeInsets.only(right: 8),
+                        // minSize: 20,
+                        child: Text(
+                          S.of(context).clear_filter,
+                          style: const TextStyle(height: 1, fontSize: 14),
+                        ),
+                        onPressed: () {
+                          advanceSearchController.reset();
+                        }),
+                  ),
+                ],
+              ),
+            ),
+        ],
+      );
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    // SearchPageController? _searchPageController;
+    // if (int.parse(searchPageCtrlDepth) > 0) {
+    //   logger.d('searchPageCtrlDepth $searchPageCtrlDepth');
+    //   _searchPageController =
+    //       Get.find<SearchPageController>(tag: searchPageCtrlDepth);
+    // }
 
     return Obx(() {
       final Rx<AdvanceSearch> _advanceSearch =
@@ -212,100 +292,108 @@ class GalleryFilterView extends StatelessWidget {
                 _advanceSearch.value.copyWith(searchWithminRating: value));
           },
         ),
-        AnimatedContainer(
-          height: (_advanceSearch.value.searchWithminRating) ? 50 : 0,
+        AnimatedCrossFade(
+          alignment: Alignment.center,
+          crossFadeState: _advanceSearch.value.searchWithminRating
+              ? CrossFadeState.showSecond
+              : CrossFadeState.showFirst,
+          firstCurve: Curves.easeIn,
+          secondCurve: Curves.easeOut,
           duration: const Duration(milliseconds: 200),
-          child: Column(
-            children: [
-              if (advanceSearchController
-                  .advanceSearch.value.searchWithminRating)
-                CupertinoSlidingSegmentedControl<int>(
-                  // ignore: prefer_const_literals_to_create_immutables
-                  children: <int, Widget>{
-                    2: Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                      child: Text(S.of(context).s_stars('2')),
-                    ),
-                    3: Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                      child: Text(S.of(context).s_stars('3')),
-                    ),
-                    4: Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                      child: Text(S.of(context).s_stars('4')),
-                    ),
-                    5: Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                      child: Text(S.of(context).s_stars('5')),
-                    ),
-                  },
-                  groupValue: _advanceSearch.value.minRating,
-                  onValueChanged: (int? value) {
-                    _advanceSearch(
-                        _advanceSearch.value.copyWith(minRating: value));
-                  },
+          firstChild: const SizedBox(),
+          secondChild: CupertinoSlidingSegmentedControl<int>(
+            // ignore: prefer_const_literals_to_create_immutables
+            children: <int, Widget>{
+              2: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                child: Text(S.of(context).s_stars('2')),
+              ),
+              3: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                child: Text(S.of(context).s_stars('3')),
+              ),
+              4: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                child: Text(S.of(context).s_stars('4')),
+              ),
+              5: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                child: Text(S.of(context).s_stars('5')),
+              ),
+            },
+            groupValue: _advanceSearch.value.minRating,
+            onValueChanged: (int? value) {
+              _advanceSearch(_advanceSearch.value.copyWith(minRating: value));
+            },
+          ),
+        ),
+        AdvanceSearchSwitchItem(
+          title: S.of(context).s_pages,
+          expand: false,
+          value: advanceSearchController.advanceSearch.value.searchBetweenpage,
+          onChanged: (bool value) {
+            _advanceSearch(
+                _advanceSearch.value.copyWith(searchBetweenpage: value));
+          },
+        ),
+        AnimatedCrossFade(
+          alignment: Alignment.center,
+          crossFadeState: _advanceSearch.value.searchBetweenpage
+              ? CrossFadeState.showSecond
+              : CrossFadeState.showFirst,
+          firstCurve: Curves.easeIn,
+          secondCurve: Curves.easeOut,
+          duration: const Duration(milliseconds: 200),
+          firstChild: const SizedBox(),
+          secondChild: Row(
+            mainAxisAlignment: MainAxisAlignment.end,
+            children: <Widget>[
+              Container(
+                margin: const EdgeInsets.only(right: 4),
+                width: 50,
+                height: 28,
+                child: CupertinoTextField(
+                  decoration: BoxDecoration(
+                    color: ehTheme.textFieldBackgroundColor,
+                    borderRadius: const BorderRadius.all(Radius.circular(8.0)),
+                  ),
+                  controller: filterController.statrPageCtrl,
+                  keyboardType: TextInputType.number,
+                  cursorHeight: 14,
+                  enabled: advanceSearchController
+                      .advanceSearch.value.searchBetweenpage,
+                  style: const TextStyle(
+                    height: 1,
+                    textBaseline: TextBaseline.alphabetic,
+                  ),
                 ),
+              ),
+              Text(S.of(context).s_and),
+              Container(
+                margin: const EdgeInsets.only(left: 4),
+                width: 50,
+                height: 28,
+                child: CupertinoTextField(
+                  decoration: BoxDecoration(
+                    color: ehTheme.textFieldBackgroundColor,
+                    borderRadius: const BorderRadius.all(Radius.circular(8.0)),
+                  ),
+                  controller: filterController.endPageCtrl,
+                  keyboardType: TextInputType.number,
+                  cursorHeight: 14,
+                  enabled: advanceSearchController
+                      .advanceSearch.value.searchBetweenpage,
+                  style: const TextStyle(
+                    height: 1,
+                    textBaseline: TextBaseline.alphabetic,
+                  ),
+                ),
+              ),
             ],
           ),
         ),
-        Row(
-          children: <Widget>[
-            AdvanceSearchSwitchItem(
-              title: S.of(context).s_pages,
-              expand: false,
-              value:
-                  advanceSearchController.advanceSearch.value.searchBetweenpage,
-              onChanged: (bool value) {
-                _advanceSearch(
-                    _advanceSearch.value.copyWith(searchBetweenpage: value));
-              },
-            ),
-            const Spacer(),
-            Container(
-              margin: const EdgeInsets.only(right: 4),
-              width: 50,
-              height: 28,
-              child: CupertinoTextField(
-                decoration: BoxDecoration(
-                  color: ehTheme.textFieldBackgroundColor,
-                  borderRadius: const BorderRadius.all(Radius.circular(8.0)),
-                ),
-                controller: filterController.statrPageCtrl,
-                keyboardType: TextInputType.number,
-                cursorHeight: 14,
-                enabled: advanceSearchController
-                    .advanceSearch.value.searchBetweenpage,
-                style: const TextStyle(
-                  height: 1,
-                  textBaseline: TextBaseline.alphabetic,
-                ),
-              ),
-            ),
-            Text(S.of(context).s_and),
-            Container(
-              margin: const EdgeInsets.only(left: 4),
-              width: 50,
-              height: 28,
-              child: CupertinoTextField(
-                decoration: BoxDecoration(
-                  color: ehTheme.textFieldBackgroundColor,
-                  borderRadius: const BorderRadius.all(Radius.circular(8.0)),
-                ),
-                controller: filterController.endPageCtrl,
-                keyboardType: TextInputType.number,
-                cursorHeight: 14,
-                enabled: advanceSearchController
-                    .advanceSearch.value.searchBetweenpage,
-                style: const TextStyle(
-                  height: 1,
-                  textBaseline: TextBaseline.alphabetic,
-                ),
-              ),
-            ),
-          ],
-        ),
         Container(
-            margin: const EdgeInsets.only(top: 8),
+            margin: const EdgeInsets.only(top: 18),
             child: Text(S.of(context).s_Disable_default_filters)),
         AdvanceSearchSwitchItem(
           title: S.of(context).language,
@@ -343,10 +431,10 @@ class GalleryFilterView extends StatelessWidget {
       return AnimatedContainer(
         height: advanceSearchController.enableAdvance &&
                 _searchPageController?.searchType != SearchType.favorite
-            ? kAdvanceHeight
-            : kHeight,
+            ? _kAdvanceHeight
+            : _kHeight,
         // height: context.height / 2,
-        duration: const Duration(milliseconds: 500),
+        duration: const Duration(milliseconds: 300),
         curve: Curves.ease,
         child: ListView.builder(
           padding: const EdgeInsets.all(0),
