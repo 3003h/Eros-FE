@@ -3,7 +3,7 @@ import 'package:fehviewer/common/controller/tag_trans_controller.dart';
 import 'package:fehviewer/common/global.dart';
 import 'package:fehviewer/common/service/depth_service.dart';
 import 'package:fehviewer/generated/l10n.dart';
-import 'package:fehviewer/models/base/extension.dart';
+import 'package:fehviewer/extension.dart';
 import 'package:fehviewer/pages/gallery/controller/taginfo_controller.dart';
 import 'package:fehviewer/route/navigator_util.dart';
 import 'package:fehviewer/store/floor/entity/tag_translat.dart';
