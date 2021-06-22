@@ -11,6 +11,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
+import 'package:fehviewer/extension.dart';
 
 // const double kCoverImageWidth = 120.0;
 const double kPaddingLeft = 8.0;
@@ -41,7 +42,7 @@ class GalleryItemWidget extends StatelessWidget {
       onTapUp: _galleryItemController.onTapUp,
       onTapCancel: _galleryItemController.onTapCancel,
       onLongPress: _galleryItemController.onLongPress,
-    );
+    ).autoCompressKeyboard(context);
   }
 
   Widget _buildItem() {

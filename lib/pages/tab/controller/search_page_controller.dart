@@ -44,8 +44,6 @@ class SearchPageController extends TabViewController {
 
   final String? initSearchText;
 
-  // String searchText = '';
-
   final _searchText = ''.obs;
 
   get searchText => _searchText.value;
@@ -55,8 +53,8 @@ class SearchPageController extends TabViewController {
   late bool _autoComplete = false;
 
   final String tabIndex = 'search_$searchPageCtrlDepth';
-  final CustomPopupMenuController customPopupMenuController =
-      CustomPopupMenuController();
+  // final CustomPopupMenuController customPopupMenuController =
+  //     CustomPopupMenuController();
 
   // 搜索输入框的控制器
   final TextEditingController searchTextController = TextEditingController();
@@ -95,16 +93,15 @@ class SearchPageController extends TabViewController {
   final RxList<TagTranslat> qryTags = <TagTranslat>[].obs;
   late String _currQry;
 
-  FocusNode focusNode = FocusNode();
+  FocusNode searchFocusNode = FocusNode();
 
   late String _search = '';
 
   late DateTime _lastInputCompleteAt; //上次输入完成时间
-  // String lastSearchText = '';
 
   final _lastSearchText = ''.obs;
 
-  get lastSearchText => _lastSearchText.value;
+  String get lastSearchText => _lastSearchText.value;
 
   set lastSearchText(val) => _lastSearchText.value = val;
 
@@ -326,6 +323,12 @@ class SearchPageController extends TabViewController {
     _gStore.searchHistory = searchHistory;
   }
 
+  void removeHistory(Object? value) {
+    searchHistory.remove(value);
+    update([GetIds.SEARCH_INIT_VIEW]);
+    _gStore.searchHistory = searchHistory;
+  }
+
   void clearHistory() {
     searchHistory.clear();
     update([GetIds.SEARCH_INIT_VIEW]);
@@ -338,6 +341,7 @@ class SearchPageController extends TabViewController {
     searchHistory = _gStore.searchHistory;
     _autoComplete = initSearchText?.trim().isNotEmpty ?? false;
     super.onInit();
+    logger.v('onInit');
   }
 
   @override
@@ -383,7 +387,7 @@ class SearchPageController extends TabViewController {
             affinity: TextAffinity.downstream, offset: '$value '.length)),
       );
 
-      FocusScope.of(Get.context!).requestFocus(focusNode);
+      FocusScope.of(Get.context!).requestFocus(searchFocusNode);
     });
   }
 
@@ -407,7 +411,7 @@ class SearchPageController extends TabViewController {
           affinity: TextAffinity.downstream, offset: '$_newSearch '.length)),
     );
 
-    FocusScope.of(Get.context!).requestFocus(focusNode);
+    FocusScope.of(Get.context!).requestFocus(searchFocusNode);
   }
 
   void appendTextToSearch(String text) {
@@ -420,7 +424,7 @@ class SearchPageController extends TabViewController {
           affinity: TextAffinity.downstream, offset: '$_newSearch '.length)),
     );
 
-    FocusScope.of(Get.context!).requestFocus(focusNode);
+    FocusScope.of(Get.context!).requestFocus(searchFocusNode);
   }
 
   void clearText() {

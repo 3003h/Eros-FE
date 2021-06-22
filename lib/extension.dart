@@ -5,9 +5,10 @@ import 'package:fehviewer/common/service/ehconfig_service.dart';
 import 'package:fehviewer/const/const.dart';
 import 'package:fehviewer/pages/image_view/controller/view_state.dart';
 import 'package:fehviewer/store/floor/entity/tag_translat.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
 
-import '../index.dart';
+import 'models/index.dart';
 
 extension ExtGC on GalleryCache {
   ViewColumnMode get columnMode =>
@@ -179,5 +180,22 @@ extension ExSearch on String {
     } else {
       return this;
     }
+  }
+}
+
+extension ExtensionWidget on Widget {
+  Widget autoCompressKeyboard(BuildContext context) {
+    return GestureDetector(
+      behavior: HitTestBehavior.opaque,
+      onTap: () {
+        // 触摸收起键盘
+        FocusScope.of(context).requestFocus(FocusNode());
+      },
+      onPanDown: (DragDownDetails details) {
+        // 滑动收起键盘
+        FocusScope.of(context).requestFocus(FocusNode());
+      },
+      child: this,
+    );
   }
 }

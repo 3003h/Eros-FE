@@ -6,8 +6,8 @@ import 'package:fehviewer/common/controller/tag_trans_controller.dart';
 import 'package:fehviewer/common/service/depth_service.dart';
 import 'package:fehviewer/common/service/theme_service.dart';
 import 'package:fehviewer/const/const.dart';
+import 'package:fehviewer/extension.dart';
 import 'package:fehviewer/generated/l10n.dart';
-import 'package:fehviewer/models/base/extension.dart';
 import 'package:fehviewer/models/index.dart';
 import 'package:fehviewer/pages/filter/filter.dart';
 import 'package:fehviewer/pages/gallery/view/gallery_widget.dart';
@@ -61,7 +61,7 @@ class GallerySearchPageNew extends StatelessWidget {
           controller: controller.searchTextController,
           suffixIcon: const Icon(LineIcons.timesCircle),
           onSubmitted: (_) => controller.onEditingComplete(),
-          focusNode: controller.focusNode,
+          focusNode: controller.searchFocusNode,
         ));
   }
 
@@ -110,7 +110,7 @@ class GallerySearchPageNew extends StatelessWidget {
           autofocus: controller.autofocus,
           // textInputAction: TextInputAction.search,
           onEditingComplete: controller.onEditingComplete,
-          focusNode: controller.focusNode,
+          focusNode: controller.searchFocusNode,
           // keyboardType:
           //     multiline ? TextInputType.multiline : TextInputType.text,
           maxLines: multiline ? null : 1,
@@ -165,7 +165,7 @@ class GallerySearchPageNew extends StatelessWidget {
           autofocus: controller.autofocus,
           // textInputAction: TextInputAction.search,
           onEditingComplete: controller.onEditingComplete,
-          focusNode: controller.focusNode,
+          focusNode: controller.searchFocusNode,
           maxLines: multiline ? null : 1,
           textInputAction: TextInputAction.search,
         ));
@@ -176,6 +176,7 @@ class GallerySearchPageNew extends StatelessWidget {
       padding: const EdgeInsetsDirectional.only(start: 0),
       border: null,
       middle: Text(S.of(context).search),
+      // middle: getSearchTextFieldIn(),
       transitionBetweenRoutes: false,
       trailing: _buildTrailing(context),
     );
@@ -185,7 +186,12 @@ class GallerySearchPageNew extends StatelessWidget {
   Widget build(BuildContext context) {
     final Widget cfp = CupertinoPageScaffold(
       // navigationBar: getNavigationBar(context),
-      child: _buildSearchRult(context),
+      child: Column(
+        children: [
+          // getSearchTextFieldIn().paddingOnly(top: 100),
+          Expanded(child: _buildSearchRult(context)),
+        ],
+      ),
     );
 
     return cfp;
@@ -193,84 +199,75 @@ class GallerySearchPageNew extends StatelessWidget {
 
   Widget _buildSearchRult(BuildContext context) {
     logger.v('_buildSearchRult');
-    return GestureDetector(
-      behavior: HitTestBehavior.opaque,
-      onTap: () {
-        // 触摸收起键盘
-        FocusScope.of(context).requestFocus(FocusNode());
-      },
-      onPanDown: (DragDownDetails details) {
-        // 滑动收起键盘
-        FocusScope.of(context).requestFocus(FocusNode());
-      },
-      child: CustomScrollView(
-        slivers: <Widget>[
-          // SliverToBoxAdapter(child: getSearchTextFieldIn(multiline: true)),
-          // SliverToBoxAdapter(child: _maxExtentProtoTypeBar(context)),
-          SliverFloatingPinnedPersistentHeader(
-            delegate: SliverFloatingPinnedPersistentHeaderBuilder(
-              minExtentProtoType: const SizedBox(),
-              maxExtentProtoType: _maxExtentProtoTypeBar(context),
-              builder: (_, __, maxExtent) => _buildSearchBar(_, __, maxExtent),
-            ),
+    return CustomScrollView(
+      slivers: <Widget>[
+        // SliverToBoxAdapter(child: getSearchTextFieldIn().paddingOnly(top: 50)),
+        // TODO android上会有一次删除多个字符的问题
+        SliverFloatingPinnedPersistentHeader(
+          delegate: SliverFloatingPinnedPersistentHeaderBuilder(
+            minExtentProtoType: const SizedBox(),
+            maxExtentProtoType: _maxExtentProtoTypeBar(context),
+            // maxExtentProtoType: SizedBox(height: 150),
+            builder: (_, __, maxExtent) => _buildSearchBar(_, __, maxExtent),
           ),
-          Obx(() {
-            return CupertinoSliverRefreshControl(
-                onRefresh: controller.listType == ListType.gallery
-                    ? () => controller.onEditingComplete(clear: false)
-                    : null);
-          }),
-          Obx(() => SliverSafeArea(
-                bottom: false,
-                top: false,
-                sliver: () {
-                  switch (controller.listType) {
-                    case ListType.gallery:
-                      return _getGalleryList();
-                    case ListType.tag:
-                      return _getTagQryList();
-                    case ListType.init:
-                      return _getInitView();
-                  }
-                }(),
-              )),
-          Obx(() {
-            if (controller.listType != ListType.tag) {
-              return _endIndicator();
-            } else {
-              return SliverSafeArea(
-                bottom: false,
-                top: false,
-                sliver: SliverToBoxAdapter(
-                  child: GestureDetector(
-                    behavior: HitTestBehavior.opaque,
-                    onTap: controller.onEditingComplete,
-                    child: Row(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        Icon(
-                          LineIcons.search,
-                          size: 20,
-                          color: CupertinoDynamicColor.resolve(
-                              CupertinoColors.inactiveGray, context),
-                        ).paddingOnly(right: 4),
-                        Expanded(
-                          child: Text(
-                            '${S.of(context).search} ${controller.searchText}',
-                            maxLines: 1,
-                            softWrap: true,
-                            overflow: TextOverflow.ellipsis,
-                          ),
+        ),
+        Obx(() {
+          return CupertinoSliverRefreshControl(
+              onRefresh: controller.listType == ListType.gallery
+                  ? () => controller.onEditingComplete(clear: false)
+                  : null);
+        }),
+        Obx(() => SliverSafeArea(
+              bottom: false,
+              top: false,
+              sliver: () {
+                switch (controller.listType) {
+                  case ListType.gallery:
+                    return _getGalleryList();
+                  case ListType.tag:
+                    return _getTagQryList();
+                  case ListType.init:
+                    return _getInitView();
+                }
+              }(),
+            )),
+        Obx(() {
+          if (controller.listType != ListType.tag) {
+            return SliverToBoxAdapter(
+                child: _endIndicator().autoCompressKeyboard(context));
+          } else {
+            return SliverSafeArea(
+              bottom: false,
+              top: false,
+              sliver: SliverToBoxAdapter(
+                child: GestureDetector(
+                  behavior: HitTestBehavior.opaque,
+                  onTap: controller.onEditingComplete,
+                  child: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Icon(
+                        LineIcons.search,
+                        size: 20,
+                        color: CupertinoDynamicColor.resolve(
+                            CupertinoColors.inactiveGray, context),
+                      ).paddingOnly(right: 4),
+                      Expanded(
+                        child: Text(
+                          '${S.of(context).search} ${controller.searchText}',
+                          maxLines: 1,
+                          softWrap: true,
+                          overflow: TextOverflow.ellipsis,
                         ),
-                      ],
-                    ).paddingSymmetric(vertical: 4, horizontal: 12),
-                  ),
-                ),
-              );
-            }
-          }),
-        ],
-      ),
+                      ),
+                    ],
+                  ).paddingSymmetric(vertical: 4, horizontal: 12),
+                ).autoCompressKeyboard(context),
+              ),
+            );
+          }
+        }),
+      ],
     );
   }
 
@@ -298,45 +295,36 @@ class GallerySearchPageNew extends StatelessWidget {
             flex: (maxExtentCallBackValue - _barHeigth) ~/ 1,
             child: Stack(
               // fit: StackFit.expand,
-              alignment: Alignment.center,
+              alignment: Alignment.topCenter,
               children: [
-                // Frost(
-                //   blur: 5,
-                //   frostColor: CupertinoTheme.of(context)
-                //       .barBackgroundColor
-                //       .withOpacity(1),
-                //   frostOpacity: 0.75,
-                // ),
-                Container(
-                  decoration: const BoxDecoration(
-                    // color: CupertinoDynamicColor.resolve(
-                    //         ehTheme.themeData!.barBackgroundColor, context)
-                    //     .withOpacity(1),
-                    // color: Colors.red,
-                    border: _kDefaultNavBarBorder,
-                  ),
-                  padding: EdgeInsets.only(
-                    left: 8 + context.mediaQueryPadding.left,
-                    right: 8 + context.mediaQueryPadding.right,
-                  ),
-                  child: Row(
-                    children: [
-                      Expanded(
-                        child: Padding(
-                          padding:
-                              const EdgeInsets.only(left: 4, top: 4, bottom: 4),
-                          child: getSearchTextFieldIn(
-                              multiline: true, iconOpacity: iconOpacity),
+                ClipRect(
+                  child: Container(
+                    decoration: const BoxDecoration(
+                      border: _kDefaultNavBarBorder,
+                    ),
+                    padding: EdgeInsets.only(
+                      left: 8 + context.mediaQueryPadding.left,
+                      right: 8 + context.mediaQueryPadding.right,
+                    ),
+                    child: Row(
+                      children: [
+                        Expanded(
+                          child: Padding(
+                            padding: const EdgeInsets.only(
+                                left: 4, top: 4, bottom: 4),
+                            child: getSearchTextFieldIn(
+                                multiline: true, iconOpacity: iconOpacity),
+                          ),
                         ),
-                      ),
-                    ],
+                      ],
+                    ),
+                  ).frosted(
+                    blur: 5,
+                    frostColor: CupertinoTheme.of(context)
+                        .barBackgroundColor
+                        .withOpacity(1),
+                    frostOpacity: 0.75,
                   ),
-                ).frosted(
-                  blur: 5,
-                  frostColor: CupertinoTheme.of(context)
-                      .barBackgroundColor
-                      .withOpacity(1),
-                  frostOpacity: 0.75,
                 ),
               ],
             ),
@@ -448,7 +436,8 @@ class GallerySearchPageNew extends StatelessWidget {
       }
     }
 
-    Widget _btn(String text) {
+    Widget _searchHistoryBtn(
+        String text, SearchPageController sPageController) {
       return TagButton(
         text: text,
         padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 6),
@@ -457,17 +446,42 @@ class GallerySearchPageNew extends StatelessWidget {
         },
         onLongPress: () async {
           final String? tranText = await _getTextTranslate(text);
-          if (tranText != null) {
-            vibrateUtil.medium();
-            showCupertinoDialog(
-                context: Get.overlayContext!,
-                barrierDismissible: true,
-                builder: (_) {
-                  return CupertinoAlertDialog(
-                    content: Text(tranText),
-                  );
-                });
-          }
+          vibrateUtil.light();
+          showCupertinoDialog(
+              context: Get.overlayContext!,
+              barrierDismissible: true,
+              builder: (_) {
+                return CupertinoAlertDialog(
+                  content: Column(
+                    children: [
+                      Text(text),
+                      if (tranText != null) const SizedBox(height: 12),
+                      if (tranText != null) Text(tranText),
+                    ],
+                  ),
+                  actions: [
+                    CupertinoDialogAction(
+                      onPressed: () async {
+                        Get.back();
+                      },
+                      child: Text(S.of(Get.context!).cancel),
+                    ),
+                    CupertinoDialogAction(
+                      onPressed: () async {
+                        sPageController.removeHistory(text);
+                        Get.back();
+                      },
+                      child: Text(
+                        S.of(Get.context!).delete,
+                        style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            color: CupertinoDynamicColor.resolve(
+                                CupertinoColors.destructiveRed, Get.context!)),
+                      ),
+                    ),
+                  ],
+                );
+              });
         },
       );
     }
@@ -478,7 +492,7 @@ class GallerySearchPageNew extends StatelessWidget {
       builder: (SearchPageController sPageController) {
         final List<Widget> _btnList = List<Widget>.from(sPageController
             .searchHistory
-            .map((String text) => _btn(text))
+            .map((String text) => _searchHistoryBtn(text, sPageController))
             .toList());
 
         final Widget _searchHistory = SliverToBoxAdapter(
@@ -539,43 +553,41 @@ class GallerySearchPageNew extends StatelessWidget {
   }
 
   Widget _endIndicator() {
-    return SliverToBoxAdapter(
-      child: Obx(() => Container(
-            padding: const EdgeInsets.only(top: 50, bottom: 100),
-            child: () {
-              switch (controller.pageState) {
-                case PageState.None:
-                  return Container();
-                case PageState.Loading:
-                  return const CupertinoActivityIndicator(
-                    radius: 14,
-                  );
-                case PageState.LoadingException:
-                case PageState.LoadingError:
-                  return GestureDetector(
-                    onTap: controller.loadDataMore,
-                    child: Column(
-                      children: <Widget>[
-                        const Icon(
-                          Icons.error,
-                          size: 40,
-                          color: CupertinoColors.systemRed,
+    return Obx(() => Container(
+          padding: const EdgeInsets.only(top: 50, bottom: 100),
+          child: () {
+            switch (controller.pageState) {
+              case PageState.None:
+                return Container();
+              case PageState.Loading:
+                return const CupertinoActivityIndicator(
+                  radius: 14,
+                );
+              case PageState.LoadingException:
+              case PageState.LoadingError:
+                return GestureDetector(
+                  onTap: controller.loadDataMore,
+                  child: Column(
+                    children: <Widget>[
+                      const Icon(
+                        Icons.error,
+                        size: 40,
+                        color: CupertinoColors.systemRed,
+                      ),
+                      Text(
+                        S.of(Get.context!).list_load_more_fail,
+                        style: const TextStyle(
+                          fontSize: 12,
                         ),
-                        Text(
-                          S.of(Get.context!).list_load_more_fail,
-                          style: const TextStyle(
-                            fontSize: 12,
-                          ),
-                        ),
-                      ],
-                    ),
-                  );
-                default:
-                  return Container();
-              }
-            }(),
-          )),
-    );
+                      ),
+                    ],
+                  ),
+                );
+              default:
+                return Container();
+            }
+          }(),
+        ));
   }
 
   Widget _getGalleryList() {
@@ -596,7 +608,7 @@ class GallerySearchPageNew extends StatelessWidget {
           child: const CupertinoActivityIndicator(
             radius: 14.0,
           ),
-        ),
+        ).autoCompressKeyboard(Get.context!),
       ),
       onError: (err) {
         logger.e(' $err');
@@ -606,11 +618,11 @@ class GallerySearchPageNew extends StatelessWidget {
             child: GalleryErrorPage(
               onTap: () => controller.onEditingComplete(),
             ),
-          ),
+          ).autoCompressKeyboard(Get.context!),
         );
       },
       onEmpty: SliverFillRemaining(
-        child: Container(),
+        child: Container().autoCompressKeyboard(Get.context!),
       ),
     );
   }

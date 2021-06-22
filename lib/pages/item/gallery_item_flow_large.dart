@@ -205,7 +205,7 @@ class GalleryItemFlowLarge extends StatelessWidget {
         child: container,
         onTap: () => _galleryItemController.onTap(tabTag),
         onLongPress: _galleryItemController.onLongPress,
-      );
+      ).autoCompressKeyboard(context);
     });
 
     return item;
