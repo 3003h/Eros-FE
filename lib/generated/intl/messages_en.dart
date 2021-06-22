@@ -49,6 +49,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "clear_filter": MessageLookupByLibrary.simpleMessage("Clear"),
         "clear_search_history":
             MessageLookupByLibrary.simpleMessage("Clear search history"),
+        "collapse": MessageLookupByLibrary.simpleMessage("Collapse"),
         "copied_to_clipboard":
             MessageLookupByLibrary.simpleMessage("Copied to clipboard"),
         "copy": MessageLookupByLibrary.simpleMessage("Copy"),
@@ -71,6 +72,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "ehentai_my_tags": MessageLookupByLibrary.simpleMessage("My tags"),
         "ehentai_settings":
             MessageLookupByLibrary.simpleMessage("EHentai settings"),
+        "expand": MessageLookupByLibrary.simpleMessage("Expand"),
         "favcat": MessageLookupByLibrary.simpleMessage("Favorites"),
         "favorites_order":
             MessageLookupByLibrary.simpleMessage("Favorites order"),

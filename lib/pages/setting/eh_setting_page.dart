@@ -154,11 +154,23 @@ class ListViewEhSetting extends StatelessWidget {
                   desc: '当前版本:${_ehConfigService.tagTranslatVer.value}'),
             )),
       Obx(() {
-        if (_ehConfigService.isTagTranslat) {
-          return _buildTagIntroImgLvItem(context);
-        } else {
-          return const SizedBox();
-        }
+        // if (_ehConfigService.isTagTranslat) {
+        //   return _buildTagIntroImgLvItem(context);
+        // } else {
+        //   return const SizedBox();
+        // }
+
+        return AnimatedCrossFade(
+          alignment: Alignment.center,
+          crossFadeState: _ehConfigService.isTagTranslat
+              ? CrossFadeState.showSecond
+              : CrossFadeState.showFirst,
+          firstCurve: Curves.easeIn,
+          secondCurve: Curves.easeOut,
+          duration: const Duration(milliseconds: 200),
+          firstChild: const SizedBox(),
+          secondChild: _buildTagIntroImgLvItem(context),
+        );
       }),
       TextSwitchItem(
         S.of(context).show_jpn_title,

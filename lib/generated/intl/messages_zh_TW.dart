@@ -47,6 +47,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "clear_filter": MessageLookupByLibrary.simpleMessage("重置"),
         "clear_search_history":
             MessageLookupByLibrary.simpleMessage("Clear search history"),
+        "collapse": MessageLookupByLibrary.simpleMessage("Collapse"),
         "copied_to_clipboard": MessageLookupByLibrary.simpleMessage("已复制到剪贴板"),
         "copy": MessageLookupByLibrary.simpleMessage("复制"),
         "current_site": m0,
@@ -63,6 +64,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "eh": MessageLookupByLibrary.simpleMessage("E·H"),
         "ehentai_my_tags": MessageLookupByLibrary.simpleMessage("我的标签"),
         "ehentai_settings": MessageLookupByLibrary.simpleMessage("EHentai 设置"),
+        "expand": MessageLookupByLibrary.simpleMessage("Expand"),
         "favcat": MessageLookupByLibrary.simpleMessage("收藏夾"),
         "favorites_order": MessageLookupByLibrary.simpleMessage("收藏夹排序"),
         "favorites_order_Use_favorited":

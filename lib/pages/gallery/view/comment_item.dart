@@ -18,6 +18,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
 import 'package:linkify/linkify.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:fehviewer/generated/l10n.dart';
 
 const int kMaxline = 4;
 const double kSizeVote = 14.0;
@@ -346,8 +347,8 @@ class CommentItem extends StatelessWidget {
           fontSize: 13,
           color: CupertinoDynamicColor.resolve(ThemeColors.commitText, context),
         ),
-        expandText: '展开',
-        collapseText: '收起',
+        expandText: S.of(context).expand,
+        collapseText: S.of(context).collapse,
         colorExpandText:
             CupertinoDynamicColor.resolve(CupertinoColors.activeBlue, context),
       );

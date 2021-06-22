@@ -1,4 +1,5 @@
 // import 'package:fehviewer/utils/cust_lib/flutter_linkify.dart';
+import 'package:fehviewer/utils/logger.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_linkify/flutter_linkify.dart';
 import 'package:linkify/linkify.dart'
@@ -13,6 +14,8 @@ import 'package:linkify/linkify.dart'
         EmailElement,
         defaultLinkifiers,
         EmailLinkifier;
+
+const Duration _kExpandDuration = Duration(milliseconds: 200);
 
 class ExpandableLinkify extends StatefulWidget {
   const ExpandableLinkify({
@@ -98,64 +101,107 @@ class ExpandableLinkify extends StatefulWidget {
 
   @override
   State<StatefulWidget> createState() {
-    return _ExpandableLinkifyState(expand);
+    return _ExpandableLinkifyState();
   }
 }
 
-class _ExpandableLinkifyState extends State<ExpandableLinkify> {
-  _ExpandableLinkifyState(this._expand) {
-    _expand;
-  }
+class _ExpandableLinkifyState extends State<ExpandableLinkify>
+    with SingleTickerProviderStateMixin {
+  late bool _isExpanded = false;
 
-  bool _expand;
+  @override
+  void initState() {
+    super.initState();
+    _isExpanded = widget.expand;
+  }
 
   @override
   Widget build(BuildContext context) {
     return LayoutBuilder(
-      builder: (context, size) {
+      builder: (BuildContext context, BoxConstraints size) {
         final TextSpan span = TextSpan(text: widget.text, style: widget.style);
 
-        final TextPainter tp = TextPainter(
+        final TextPainter textPainter = TextPainter(
             text: span,
             maxLines: widget.maxLines,
             textDirection: TextDirection.ltr);
 
-        tp.layout(maxWidth: size.maxWidth);
+        textPainter.layout(maxWidth: size.maxWidth);
 
-        if (tp.didExceedMaxLines) {
+        Widget _getLinkify() {
+          if (_isExpanded) {
+            return Container(
+              child: Linkify(
+                text: widget.text,
+                style: widget.style,
+                onOpen: widget.onOpen,
+                options: widget.options,
+                softWrap: widget.softWrap,
+                textAlign: widget.textAlign,
+              ),
+            );
+          } else {
+            return Container(
+              child: Linkify(
+                text: widget.text,
+                maxLines: widget.maxLines,
+                overflow: widget.overflow,
+                style: widget.style,
+                onOpen: widget.onOpen,
+                options: widget.options,
+                softWrap: widget.softWrap,
+                textAlign: widget.textAlign,
+              ),
+            );
+          }
+        }
+
+        Widget _getLinkify2() {
+          return AnimatedCrossFade(
+            duration: const Duration(milliseconds: 200),
+            firstCurve: Curves.easeIn,
+            secondCurve: Curves.easeOut,
+            firstChild: Linkify(
+              text: widget.text,
+              style: widget.style,
+              onOpen: widget.onOpen,
+              options: widget.options,
+              softWrap: widget.softWrap,
+              textAlign: widget.textAlign,
+            ),
+            secondChild: Linkify(
+              text: widget.text,
+              maxLines: widget.maxLines,
+              overflow: widget.overflow,
+              style: widget.style,
+              onOpen: widget.onOpen,
+              options: widget.options,
+              softWrap: widget.softWrap,
+              textAlign: widget.textAlign,
+            ),
+            crossFadeState: _isExpanded
+                ? CrossFadeState.showFirst
+                : CrossFadeState.showSecond,
+          );
+        }
+
+        if (textPainter.didExceedMaxLines) {
           return Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
-              if (_expand)
-                Linkify(
-                  text: widget.text,
-                  style: widget.style,
-                  onOpen: widget.onOpen,
-                  options: widget.options,
-                  softWrap: widget.softWrap,
-                  textAlign: widget.textAlign,
-                )
-              else
-                Linkify(
-                  text: widget.text,
-                  maxLines: widget.maxLines,
-                  overflow: widget.overflow,
-                  style: widget.style,
-                  onOpen: widget.onOpen,
-                  options: widget.options,
-                  softWrap: widget.softWrap,
-                  textAlign: widget.textAlign,
-                ),
+              _getLinkify2(),
+              // 切换文字
               GestureDetector(
                 behavior: HitTestBehavior.translucent,
                 onTap: () {
                   setState(() {
-                    _expand = !_expand;
+                    _isExpanded = !_isExpanded;
                   });
                 },
                 child: Container(
                   padding: const EdgeInsets.symmetric(vertical: 8),
-                  child: Text(_expand ? widget.collapseText : widget.expandText,
+                  child: Text(
+                      _isExpanded ? widget.collapseText : widget.expandText,
                       style: TextStyle(
                           fontSize: widget.style?.fontSize,
                           color: widget.colorExpandText)),
