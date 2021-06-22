@@ -166,6 +166,42 @@ class TagTransController extends GetxController {
     }
   }
 
+  Future<String?> getTranTagWithNameSpaseSmart(String text) async {
+    if (!text.trim().contains(' ')) {
+      return await getTranTagWithNameSpase(text);
+    }
+    logger.d(text);
+    final array = text.split(RegExp(r'\s+'));
+    logger.v(array.map((e) => '[$e]').join(','));
+
+    for (int i = 0; i < array.length; i++) {
+      // print(array[i]);
+      if (array[i].startsWith(RegExp(r'\w+:"?'))) {
+        if (!RegExp(r'\$"?$').hasMatch(array[i])) {
+          final tempArray = array.sublist(i);
+          // logger.v('tempArray $tempArray');
+          final offset = tempArray
+              .indexWhere((element) => RegExp(r'\$"?$').hasMatch(element));
+          // logger.v('offset $offset');
+          for (int j = 0; j < offset; j++) {
+            array[i] = '${array[i]} ${array[i + 1]}';
+            array.removeAt(i + 1);
+          }
+        }
+      }
+    }
+
+    logger.v(array.map((e) => '[$e]').join(''));
+
+    final _translateList = [];
+    for (final text in array) {
+      final String? translate = await getTranTagWithNameSpase(text);
+      _translateList.add(translate ?? text);
+    }
+
+    return _translateList.join('   ');
+  }
+
   Future<String?> getTagTranslateText(String text,
       {String namespace = ''}) async {
     if (text.contains(':')) {

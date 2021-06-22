@@ -56,7 +56,7 @@ packages:
       name: blur
       url: "https://pub.flutter-io.cn"
     source: hosted
-    version: "2.0.0"
+    version: "3.0.0"
   boolean_selector:
     dependency: transitive
     description:
@@ -119,7 +119,7 @@ packages:
       name: built_value
       url: "https://pub.flutter-io.cn"
     source: hosted
-    version: "8.0.6"
+    version: "8.1.0"
   cached_network_image:
     dependency: "direct main"
     description:
@@ -359,7 +359,7 @@ packages:
       name: file
       url: "https://pub.flutter-io.cn"
     source: hosted
-    version: "6.1.1"
+    version: "6.1.2"
   file_picker:
     dependency: "direct main"
     description:
@@ -455,7 +455,7 @@ packages:
       name: flutter_cache_manager
       url: "https://pub.flutter-io.cn"
     source: hosted
-    version: "3.1.1"
+    version: "3.1.2"
   flutter_downloader:
     dependency: "direct main"
     description:
@@ -630,7 +630,7 @@ packages:
       name: hive_flutter
       url: "https://pub.flutter-io.cn"
     source: hosted
-    version: "1.0.0"
+    version: "1.1.0"
   html:
     dependency: "direct main"
     description:
@@ -673,13 +673,6 @@ packages:
       url: "https://pub.flutter-io.cn"
     source: hosted
     version: "4.0.0"
-  image:
-    dependency: transitive
-    description:
-      name: image
-      url: "https://pub.flutter-io.cn"
-    source: hosted
-    version: "3.0.2"
   image_gallery_saver:
     dependency: "direct main"
     description:
@@ -912,14 +905,14 @@ packages:
       name: pedantic
       url: "https://pub.flutter-io.cn"
     source: hosted
-    version: "1.11.0"
+    version: "1.11.1"
   permission_handler:
     dependency: "direct main"
     description:
       name: permission_handler
       url: "https://pub.flutter-io.cn"
     source: hosted
-    version: "8.1.0"
+    version: "8.1.1"
   permission_handler_platform_interface:
     dependency: transitive
     description:
@@ -961,7 +954,7 @@ packages:
       name: pointycastle
       url: "https://pub.flutter-io.cn"
     source: hosted
-    version: "3.1.1"
+    version: "3.1.2"
   pool:
     dependency: transitive
     description:
@@ -989,7 +982,7 @@ packages:
       name: process_run
       url: "https://pub.flutter-io.cn"
     source: hosted
-    version: "0.11.2+8"
+    version: "0.12.1+1"
   pub_semver:
     dependency: transitive
     description:
@@ -1338,13 +1331,6 @@ packages:
       url: "https://pub.flutter-io.cn"
     source: hosted
     version: "0.2.0"
-  xml:
-    dependency: transitive
-    description:
-      name: xml
-      url: "https://pub.flutter-io.cn"
-    source: hosted
-    version: "5.1.2"
   yaml:
     dependency: transitive
     description:

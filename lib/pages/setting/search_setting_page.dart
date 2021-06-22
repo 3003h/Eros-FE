@@ -35,7 +35,7 @@ class ListViewSearchSetting extends StatelessWidget {
         selector: '',
         onTap: () {
           Get.to<String>(
-            () => const QuickSearchListPage(autoSearch: false),
+            () => QuickSearchListPage(autoSearch: false),
             transition: Transition.cupertino,
           );
         },
