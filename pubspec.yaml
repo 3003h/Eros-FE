@@ -3,7 +3,7 @@ description: fehviewer
 
 publish_to: 'none' # Remove this line if you wish to publish to pub.dev
 
-version: 1.1.16+208
+version: 1.1.16+209
 
 environment:
   sdk: '>=2.12.0 <3.0.0'
@@ -170,7 +170,7 @@ dependencies:
   hive: ^2.0.4
   hive_flutter: ^1.0.0
   extended_sliver: ^2.0.0
-  blur: ^2.0.0
+  blur: ^3.0.0
   flutter_easyloading: ^3.0.0
 #  google_ml_kit: ^0.6.0
 #  learning_language: #^0.0.3+2
@@ -196,7 +196,7 @@ dev_dependencies:
   copy_with_extension_gen: ^2.0.1
 
   # git hook 相关
-  process_run: ^0.11.2+8
+  process_run: ^0.12.1+1
   git_hooks: ^0.1.6
 
   flutter_test:

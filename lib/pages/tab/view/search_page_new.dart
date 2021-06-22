@@ -300,13 +300,13 @@ class GallerySearchPageNew extends StatelessWidget {
               // fit: StackFit.expand,
               alignment: Alignment.center,
               children: [
-                Frost(
-                  blur: 5,
-                  frostColor: CupertinoTheme.of(context)
-                      .barBackgroundColor
-                      .withOpacity(1),
-                  frostOpacity: 0.75,
-                ),
+                // Frost(
+                //   blur: 5,
+                //   frostColor: CupertinoTheme.of(context)
+                //       .barBackgroundColor
+                //       .withOpacity(1),
+                //   frostOpacity: 0.75,
+                // ),
                 Container(
                   decoration: const BoxDecoration(
                     // color: CupertinoDynamicColor.resolve(
@@ -331,6 +331,12 @@ class GallerySearchPageNew extends StatelessWidget {
                       ),
                     ],
                   ),
+                ).frosted(
+                  blur: 5,
+                  frostColor: CupertinoTheme.of(context)
+                      .barBackgroundColor
+                      .withOpacity(1),
+                  frostOpacity: 0.75,
                 ),
               ],
             ),
@@ -433,8 +439,8 @@ class GallerySearchPageNew extends StatelessWidget {
   // 初始化页面
   Widget _getInitView() {
     Future<String?> _getTextTranslate(String text) async {
-      final String? tranText =
-          await Get.find<TagTransController>().getTranTagWithNameSpase(text);
+      final String? tranText = await Get.find<TagTransController>()
+          .getTranTagWithNameSpaseSmart(text);
       if (tranText != null && tranText.trim() != text) {
         return tranText;
       } else {

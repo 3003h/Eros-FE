@@ -21,18 +21,249 @@ import 'package:line_icons/line_icons.dart';
 import 'package:share/share.dart';
 
 class QuickSearchListPage extends StatelessWidget {
-  const QuickSearchListPage({this.autoSearch = true});
+  QuickSearchListPage({this.autoSearch = true});
 
   final bool autoSearch;
+  final QuickSearchController quickSearchController = Get.find();
 
   Future<String?> _getTextTranslate(String text) async {
     final String? tranText =
-        await Get.find<TagTransController>().getTranTagWithNameSpase(text);
+        await Get.find<TagTransController>().getTranTagWithNameSpaseSmart(text);
     if (tranText?.trim() != text) {
       return tranText;
     } else {
       return text;
     }
+  }
+
+  Future _upload() async {
+    final List<String> _searchTextList = quickSearchController.searchTextList;
+    final String _searchText = _searchTextList.join('\n');
+    logger.v(_searchText);
+
+    final CollectionReference qSearchs = firestore.collection('fehviewer');
+
+    final DateTime _now = DateTime.now();
+    final DateFormat formatter = DateFormat('yyyyMMdd_HHmmss');
+    final String _time = formatter.format(_now);
+
+    qSearchs
+        .doc(await _getUniqueId())
+        .collection('quick_search')
+        .doc('default')
+        .set({
+      'time': _time,
+      'list': _searchTextList,
+    });
+  }
+
+  Future _download() async {
+    final CollectionReference qSearchs = firestore.collection('fehviewer');
+
+    final DocumentSnapshot<Object?> docById = await qSearchs
+        .doc(await _getUniqueId())
+        .collection('quick_search')
+        .doc('default')
+        .get();
+    if (docById.exists) {
+      final List _importTexts = docById.get('list') as List;
+
+      print(_importTexts);
+
+      _importTexts.forEach((dynamic element) {
+        if (element.trim().isNotEmpty && !element.startsWith('#'))
+          quickSearchController.addText(element.toString(), silent: true);
+      });
+    }
+  }
+
+  Future _merge() async {
+    await _download();
+    await _upload();
+  }
+
+  Widget _buildListBtns(BuildContext context) {
+    Future<void> _showCloud() async {
+      return showCupertinoDialog<void>(
+        context: Get.overlayContext!,
+        barrierDismissible: true,
+        builder: (BuildContext context) {
+          return CupertinoAlertDialog(
+            title: Text('CloudSync'),
+            content: Text('Sync with Google Cloud Firestore'),
+            actions: [
+              CupertinoDialogAction(
+                  onPressed: () async {
+                    await _upload();
+                    Get.back();
+                    showToast('Upload success');
+                  },
+                  child: Text('Upload')),
+              CupertinoDialogAction(
+                  onPressed: () async {
+                    await _download();
+                    Get.back();
+                  },
+                  child: Text('Download')),
+              CupertinoDialogAction(
+                  onPressed: () async {
+                    await _merge();
+                    Get.back();
+                  },
+                  child: Text('Merge')),
+              CupertinoDialogAction(
+                  onPressed: () {
+                    Get.back();
+                  },
+                  child: Text(S.of(context).cancel)),
+            ],
+          );
+        },
+      );
+    }
+
+    Future<void> _showFile() async {
+      return showCupertinoDialog<void>(
+        context: Get.overlayContext!,
+        barrierDismissible: true,
+        builder: (BuildContext context) {
+          return CupertinoAlertDialog(
+            title: Text('Import and Export'),
+            // content: Text('Sync with Google Cloud Firestore'),
+            actions: [
+              CupertinoDialogAction(
+                  onPressed: () async {
+                    final List<String> _searchTextList =
+                        quickSearchController.searchTextList;
+                    if (_searchTextList.isNotEmpty) {
+                      final String _searchText =
+                          '#FEhViewer\n${_searchTextList.join('\n')}';
+                      logger.v(_searchText);
+
+                      final File _tempFlie = await _getLocalFile();
+                      _tempFlie.writeAsStringSync(_searchText);
+                      Share.shareFiles([_tempFlie.path]);
+                    }
+                    Get.back();
+                  },
+                  child: Text('Export')),
+              CupertinoDialogAction(
+                  onPressed: () async {
+                    final FilePickerResult? result =
+                        await FilePicker.platform.pickFiles();
+                    if (result != null) {
+                      final File _file = File(result.files.single.path!);
+                      final String _fileText = _file.readAsStringSync();
+                      if (_fileText.contains('#FEhViewer')) {
+                        logger.v(_fileText);
+                        final List<String> _importTexts = _fileText.split('\n');
+                        _importTexts.forEach((String element) {
+                          if (element.trim().isNotEmpty &&
+                              !element.startsWith('#'))
+                            quickSearchController.addText(element);
+                        });
+                      }
+                    }
+                    Get.back();
+                  },
+                  child: Text('Import')),
+              CupertinoDialogAction(
+                  onPressed: () {
+                    Get.back();
+                  },
+                  child: Text(S.of(context).cancel)),
+            ],
+          );
+        },
+      );
+    }
+
+    return Container(
+      margin: const EdgeInsets.only(right: 6),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.end,
+        mainAxisSize: MainAxisSize.min,
+        children: <Widget>[
+          // 清除按钮
+          CupertinoButton(
+            minSize: 40,
+            padding: const EdgeInsets.all(0),
+            child: const Icon(
+              LineIcons.alternateTrash,
+              size: 26,
+            ),
+            onPressed: () {
+              _removeAll();
+            },
+          ),
+          // 本地导入
+          /*CupertinoButton(
+            minSize: 40,
+            padding: const EdgeInsets.all(0),
+            child: const Icon(
+              LineIcons.fileImport,
+              size: 26,
+            ),
+            onPressed: () async {
+              final FilePickerResult? result =
+                  await FilePicker.platform.pickFiles();
+              if (result != null) {
+                final File _file = File(result.files.single.path!);
+                final String _fileText = _file.readAsStringSync();
+                if (_fileText.contains('#FEhViewer')) {
+                  logger.v(_fileText);
+                  final List<String> _importTexts = _fileText.split('\n');
+                  _importTexts.forEach((String element) {
+                    if (element.trim().isNotEmpty && !element.startsWith('#'))
+                      quickSearchController.addText(element);
+                  });
+                }
+              }
+            },
+          ),
+          // 本地导出
+          CupertinoButton(
+            minSize: 40,
+            padding: const EdgeInsets.all(0),
+            child: const Icon(
+              LineIcons.fileExport,
+              size: 26,
+            ),
+            onPressed: () async {
+              final List<String> _searchTextList =
+                  quickSearchController.searchTextList;
+              if (_searchTextList.isNotEmpty) {
+                final String _searchText =
+                    '#FEhViewer\n${_searchTextList.join('\n')}';
+                logger.v(_searchText);
+
+                final File _tempFlie = await _getLocalFile();
+                _tempFlie.writeAsStringSync(_searchText);
+                Share.shareFiles([_tempFlie.path]);
+              }
+            },
+          ),*/
+          CupertinoButton(
+            minSize: 40,
+            padding: const EdgeInsets.all(0),
+            child: const Icon(
+              LineIcons.alternateFile,
+              size: 26,
+            ),
+            onPressed: _showFile,
+          ),
+          CupertinoButton(
+            minSize: 40,
+            padding: const EdgeInsets.all(0),
+            child: const Icon(
+              LineIcons.cloud,
+              size: 26,
+            ),
+            onPressed: _showCloud,
+          ),
+        ],
+      ),
+    );
   }
 
   @override
@@ -131,160 +362,6 @@ class QuickSearchListPage extends StatelessWidget {
         ));
 
     return sca;
-  }
-
-  Widget _buildListBtns(BuildContext context) {
-    final QuickSearchController quickSearchController = Get.find();
-
-    Future<void> showCloud() async {
-      return showCupertinoDialog<void>(
-        context: Get.overlayContext!,
-        barrierDismissible: true,
-        builder: (BuildContext context) {
-          return CupertinoAlertDialog(
-            title: Text('Cloud Backup'),
-            content: Text('Backup to Google Cloud Firestore'),
-            actions: [
-              CupertinoDialogAction(
-                  onPressed: () async {
-                    final List<String> _searchTextList =
-                        quickSearchController.searchTextList;
-                    final String _searchText = _searchTextList.join('\n');
-                    logger.v(_searchText);
-
-                    final CollectionReference qSearchs =
-                        firestore.collection('fehviewer');
-
-                    final DateTime _now = DateTime.now();
-                    final DateFormat formatter = DateFormat('yyyyMMdd_HHmmss');
-                    final String _time = formatter.format(_now);
-
-                    qSearchs
-                        .doc(await _getUniqueId())
-                        .collection('quick_search')
-                        .doc('default')
-                        .set({
-                      'time': _time,
-                      'list': _searchTextList,
-                    });
-
-                    Get.back();
-                    showToast('Upload success');
-                  },
-                  child: Text('Upload')),
-              CupertinoDialogAction(
-                  onPressed: () async {
-                    final CollectionReference qSearchs =
-                        firestore.collection('fehviewer');
-
-                    final DocumentSnapshot<Object?> docById = await qSearchs
-                        .doc(await _getUniqueId())
-                        .collection('quick_search')
-                        .doc('default')
-                        .get();
-                    if (docById.exists) {
-                      final List _importTexts = docById.get('list') as List;
-
-                      print(_importTexts);
-
-                      _importTexts.forEach((dynamic element) {
-                        if (element.trim().isNotEmpty &&
-                            !element.startsWith('#'))
-                          quickSearchController.addText(element.toString(),
-                              silent: true);
-                      });
-                    }
-                    Get.back();
-                  },
-                  child: Text('Download')),
-              CupertinoDialogAction(
-                  onPressed: () {
-                    Get.back();
-                  },
-                  child: Text(S.of(context).cancel)),
-            ],
-          );
-        },
-      );
-    }
-
-    return Container(
-      margin: const EdgeInsets.only(right: 6),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.end,
-        mainAxisSize: MainAxisSize.min,
-        children: <Widget>[
-          // 清除按钮
-          CupertinoButton(
-            minSize: 40,
-            padding: const EdgeInsets.all(0),
-            child: const Icon(
-              LineIcons.alternateTrash,
-              size: 26,
-            ),
-            onPressed: () {
-              _removeAll();
-            },
-          ),
-          // 本地导入
-          CupertinoButton(
-            minSize: 40,
-            padding: const EdgeInsets.all(0),
-            child: const Icon(
-              LineIcons.fileImport,
-              size: 26,
-            ),
-            onPressed: () async {
-              final FilePickerResult? result =
-                  await FilePicker.platform.pickFiles();
-              if (result != null) {
-                final File _file = File(result.files.single.path!);
-                final String _fileText = _file.readAsStringSync();
-                if (_fileText.contains('#FEhViewer')) {
-                  logger.v(_fileText);
-                  final List<String> _importTexts = _fileText.split('\n');
-                  _importTexts.forEach((String element) {
-                    if (element.trim().isNotEmpty && !element.startsWith('#'))
-                      quickSearchController.addText(element);
-                  });
-                }
-              }
-            },
-          ),
-          // 本地导出
-          CupertinoButton(
-            minSize: 40,
-            padding: const EdgeInsets.all(0),
-            child: const Icon(
-              LineIcons.fileExport,
-              size: 26,
-            ),
-            onPressed: () async {
-              final List<String> _searchTextList =
-                  quickSearchController.searchTextList;
-              if (_searchTextList.isNotEmpty) {
-                final String _searchText =
-                    '#FEhViewer\n${_searchTextList.join('\n')}';
-                logger.v(_searchText);
-
-                final File _tempFlie = await _getLocalFile();
-                _tempFlie.writeAsStringSync(_searchText);
-                Share.shareFiles([_tempFlie.path]);
-              }
-            },
-          ),
-          CupertinoButton(
-            minSize: 40,
-            padding: const EdgeInsets.all(0),
-            child: const Icon(
-              LineIcons.cloud,
-              size: 26,
-            ),
-            onPressed: showCloud,
-          ),
-        ],
-      ),
-    );
   }
 
   Future<String> _getUniqueId() async {
