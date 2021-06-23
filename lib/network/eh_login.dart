@@ -90,9 +90,6 @@ class EhUserManager {
 
     // 处理cookie 存入sp 方便里站图片请求时构建头 否则会403
     final Map<String, String> cookieMapEx = <String, String>{};
-    // cookiesEx.forEach((Cookie cookie) {
-    //   cookieMapEx.putIfAbsent(cookie.name, () => cookie.value);
-    // });
     for (final Cookie cookie in cookiesEx) {
       cookieMapEx[cookie.name] = cookie.value;
     }
@@ -114,7 +111,10 @@ class EhUserManager {
     } catch (_) {}
 
     final String cookieStr = _getCookieStringFromMap(cookie);
-    logger.v(cookieStr);
+    // logger.v(cookieStr);
+    final List<Cookie> _cookiesEx =
+        await cookieJar.loadForRequest(Uri.parse(EHConst.EX_BASE_URL));
+    logger.v('${_cookiesEx.map((e) => '$e').join('\n')} ');
 
     final User user = kDefUser.copyWith(
       cookie: cookieStr,
@@ -158,7 +158,7 @@ class EhUserManager {
     final Map<String, String> cookieMapEx = <String, String>{};
 
     for (final Cookie cookie in cookiesEx) {
-      cookieMapEx.putIfAbsent(cookie.name, () => cookie.value);
+      cookieMapEx[cookie.name] = cookie.value;
     }
 
     final Map<String, String> cookie = {
@@ -167,8 +167,12 @@ class EhUserManager {
       'igneous': cookieMapEx['igneous'] ?? '',
     };
 
+    final List<Cookie> _cookiesEx =
+        await cookieJar.loadForRequest(Uri.parse(EHConst.EX_BASE_URL));
+    logger.v('${_cookiesEx.map((e) => '$e').join('\n')} ');
+
     final String cookieStr = _getCookieStringFromMap(cookie);
-    logger.v(cookieStr);
+    // logger.v(cookieStr);
 
     final User user = kDefUser.copyWith(
       cookie: cookieStr,
@@ -189,7 +193,7 @@ class EhUserManager {
     final List<Cookie> cookies = <Cookie>[
       Cookie('ipb_member_id', id),
       Cookie('ipb_pass_hash', hash),
-      Cookie('nw', '1'),
+      // Cookie('nw', '1'),
     ];
 
     final PersistCookieJar cookieJar = await Api.cookieJar;
@@ -208,14 +212,30 @@ class EhUserManager {
         await cookieJar.loadForRequest(Uri.parse(EHConst.EX_BASE_URL));
 
     // 手动指定igneous的情况
-    cookiesEx.firstWhere((element) => element.name == 'igneous').value =
-        igneous;
+    // cookiesEx.firstWhere((element) => element.name == 'igneous')
+    //   ..value = igneous
+    //   ..expires = null
+    //   ..maxAge = null;
+
+    cookiesEx.forEach((element) {
+      if (element.name == 'igneous') {
+        element.value = igneous;
+      }
+      element
+        ..expires = null
+        ..httpOnly = false
+        ..path = '/'
+        ..domain = '.exhentai.org'
+        ..maxAge = 315360000;
+    });
+
+    logger.v('${cookiesEx.map((e) => '$e').join('\n')} ');
 
     // 处理cookie 存入sp 方便里站图片请求时构建头 否则会403
     final Map<String, String> cookieMapEx = <String, String>{};
 
     for (final Cookie cookie in cookiesEx) {
-      cookieMapEx.putIfAbsent(cookie.name, () => cookie.value);
+      cookieMapEx[cookie.name] = cookie.value;
     }
 
     final Map<String, String> cookie = {
