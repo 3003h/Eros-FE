@@ -144,8 +144,8 @@ class _LoginPageState extends State<LoginPage> {
       height: 60,
       child: CupertinoButton(
         child: const Text('Cookie Login'),
-        onPressed: () {
-          final dynamic? result = Get.to(() => LoginCookiePage());
+        onPressed: () async {
+          final result = await Get.to(() => LoginCookiePage());
           if (result != null && result is bool && result) {
             Get.back();
           }

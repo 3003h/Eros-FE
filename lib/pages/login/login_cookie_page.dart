@@ -138,8 +138,6 @@ class _LoginCookiePageState extends State<LoginCookiePage> {
       rethrow;
     }
 
-    if (user != null) {
-      Get.back(result: true);
-    }
+    Get.back(result: true);
   }
 }
