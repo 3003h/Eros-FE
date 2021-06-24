@@ -129,7 +129,7 @@ class ClientConnectionHandler {
           closeSockets();
         }
 
-        logger.i('$_oriHost  =>  $realHost');
+        logger.d('$_oriHost  =>  $realHost');
         try {
           ServerConnectionHandler(realHost, port, this)
               .handle()
@@ -151,7 +151,7 @@ class ClientConnectionHandler {
           hex.contains(EHUtils.stringToHex('exhentai.org')) ||
           hex.contains(EHUtils.stringToHex('ehgt.org')) ||
           hex.contains(EHUtils.stringToHex('hath.network'))) {
-        logger.i('client hello [$hex]');
+        logger.v('client hello [$hex]');
         // final String _newHex = hex.replaceFirst(
         //     EHUtils.stringToHex('e-hentai.org'),
         //     EHUtils.stringToHex('12345678.org'));

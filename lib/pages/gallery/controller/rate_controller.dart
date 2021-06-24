@@ -23,7 +23,7 @@ class RateController extends GetxController {
   }
 
   Future<void> rating() async {
-    logger.i('rating $rate');
+    logger.d('rating $rate');
     logger.d(
         '${pageController.galleryItem.apiuid} ${pageController.galleryItem.apikey}');
     logger.d('${(rate * 2).round()}');

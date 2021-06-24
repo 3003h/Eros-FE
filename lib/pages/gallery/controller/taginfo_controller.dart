@@ -79,12 +79,12 @@ class TagInfoController extends GetxController {
     final String _add = _qry.key.contains(' ')
         ? '${_qry.namespace.trim().shortName}:"${_qry.key}\$"'
         : '${_qry.namespace.trim().shortName}:${_qry.key}\$';
-    logger.i('_add $_add ');
+    logger.d('_add $_add ');
 
     final String _lastSearchText = this._lastSearchText;
     final String _newSearch =
         _lastSearchText.replaceAll(RegExp('$_currQry\$'), _add);
-    logger.i(
+    logger.d(
         '_lastSearchText $_lastSearchText \n_currQry $_currQry\n_newSearch $_newSearch ');
 
     tagsTextController.value = TextEditingValue(

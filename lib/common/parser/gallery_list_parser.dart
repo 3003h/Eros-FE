@@ -187,7 +187,7 @@ class GalleryListParser {
           _translated = EHUtils.getLangeage(_langTag?.text ?? '');
         }
       } catch (e, stack) {
-        logger.d('$e\n$stack');
+        logger.e('$e\n$stack');
       }
 
       // 封面图片

@@ -139,6 +139,7 @@ class GalleryItemWidget extends StatelessWidget {
           style: const TextStyle(
             fontSize: 14.5,
             fontWeight: FontWeight.w500,
+            // color: CupertinoColors.label,
           ),
         ));
   }

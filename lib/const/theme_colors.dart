@@ -2,6 +2,13 @@ import 'package:fehviewer/common/colors.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
+import 'const.dart';
+
+final ehTextTheme = const CupertinoTextThemeData().copyWith(
+    textStyle: const CupertinoTextThemeData().textStyle.copyWith(
+          fontFamilyFallback: EHConst.fontFamilyFallback,
+        ));
+
 enum ThemesModeEnum {
   system,
   ligthMode,
@@ -132,31 +139,35 @@ class ThemeColors {
 
   /// 主题配置
   /// 浅色主题
-  static CupertinoThemeData ligthTheme = const CupertinoThemeData(
+  static CupertinoThemeData ligthTheme = CupertinoThemeData(
     brightness: Brightness.light,
     barBackgroundColor: navigationBarBackground,
+    textTheme: ehTextTheme,
     // scaffoldBackgroundColor: CupertinoColors.secondarySystemBackground,
   );
 
   /// 浅色主题
-  static CupertinoThemeData ligthThemeSecondary = const CupertinoThemeData(
+  static CupertinoThemeData ligthThemeSecondary = CupertinoThemeData(
     brightness: Brightness.light,
     barBackgroundColor: navigationBarBackground,
     scaffoldBackgroundColor: CupertinoColors.secondarySystemBackground,
+    textTheme: ehTextTheme,
   );
 
   /// 深色纯黑主题
-  static CupertinoThemeData darkPureTheme = const CupertinoThemeData(
+  static CupertinoThemeData darkPureTheme = CupertinoThemeData(
     brightness: Brightness.dark,
     barBackgroundColor: navigationBarBackground,
     // scaffoldBackgroundColor: CupertinoColors.secondarySystemBackground,
+    textTheme: ehTextTheme,
   );
 
   /// 深色灰黑
-  static CupertinoThemeData darkGrayTheme = const CupertinoThemeData(
+  static CupertinoThemeData darkGrayTheme = CupertinoThemeData(
     brightness: Brightness.dark,
     scaffoldBackgroundColor: Color.fromARGB(255, 30, 30, 30),
     barBackgroundColor: navigationBarBackgroundGray,
+    textTheme: ehTextTheme,
   );
 
   // 画廊类型主题色

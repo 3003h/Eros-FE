@@ -214,6 +214,7 @@ class SearchPageController extends TabViewController {
   /// 加载更多
   @override
   Future<void> loadDataMore({bool cleanSearch = false}) async {
+    logger5.i('$searchPageCtrlDepth loadDataMore');
     if (pageState == PageState.Loading) {
       return;
     }
@@ -223,13 +224,12 @@ class SearchPageController extends TabViewController {
     }
 
     final int _catNum = _ehConfigService.catFilter.value;
+    pageState = PageState.Loading;
 
     // 增加延时 避免build期间进行 setState
     await Future<void>.delayed(const Duration(milliseconds: 100));
 
     try {
-      pageState = PageState.Loading;
-
       final String? fromGid = state?.last.gid;
       final Tuple2<List<GalleryItem>, int> tuple =
           searchType != SearchType.favorite
@@ -251,6 +251,8 @@ class SearchPageController extends TabViewController {
 
       state?.addAll(gallerItemBeans);
 
+      logger.d('added gallerItemBeans first ${gallerItemBeans.first.gid} ');
+
       maxPage = tuple.item2;
       curPage.value += 1;
       pageState = PageState.None;
@@ -263,6 +265,8 @@ class SearchPageController extends TabViewController {
 
   /// 获取数据
   Future<List<GalleryItem>> _fetchData({bool refresh = false}) async {
+    logger.v('$searchPageCtrlDepth _fetchData');
+
     final int _catNum = _ehConfigService.catFilter.value;
 
     // logger.v('_loadDataFirst');
@@ -396,12 +400,12 @@ class SearchPageController extends TabViewController {
     final String _add = _qry.key.contains(' ')
         ? '${_qry.namespace.trim().shortName}:"${_qry.key}\$"'
         : '${_qry.namespace.trim().shortName}:${_qry.key}\$';
-    logger.i('_add $_add ');
+    logger.d('_add $_add ');
 
     final String _lastSearchText = this.lastSearchText;
     final String _newSearch =
         _lastSearchText.replaceAll(RegExp('$_currQry\$'), _add);
-    logger.i(
+    logger.d(
         '_lastSearchText $_lastSearchText \n_currQry $_currQry\n_newSearch $_newSearch ');
 
     _autoComplete = false;

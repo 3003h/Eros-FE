@@ -100,6 +100,12 @@ class Api {
     return (Get.find<EhConfigService>().isSiteEx.value) ? 'EH' : 'EX';
   }
 
+  static _printCookie() async {
+    final List<io.Cookie> _cookies =
+        await (await cookieJar).loadForRequest(Uri.parse(getBaseUrl()));
+    logger.d('${_cookies.map((e) => '$e').join('\n')} ');
+  }
+
   /// 获取热门画廊列表
   static Future<Tuple2<List<GalleryItem>, int>> getPopular({
     int? page,
@@ -113,6 +119,8 @@ class Api {
   }) async {
     // logger.d('getPopular');
     const String url = '/popular';
+
+    _printCookie();
 
     await CustomHttpsProxy.instance.init();
     final dio.Options _cacheOptions = getCacheOptions(forceRefresh: refresh);
@@ -154,6 +162,9 @@ class Api {
     String? favcat,
   }) async {
     // logger.d('getWatched');
+
+    _printCookie();
+
     const String _url = '/watched';
     final dio.Options _cacheOptions = getCacheOptions(forceRefresh: refresh);
 
@@ -211,6 +222,8 @@ class Api {
     final bool safeMode = _ehConfigService.isSafeMode.value;
     final AdvanceSearchController _searchController = Get.find();
 
+    _printCookie();
+
     final String url = searchType == SearchType.watched ? '/watched' : '/';
 
     final Map<String, dynamic> params = <String, dynamic>{
@@ -242,7 +255,7 @@ class Api {
     // 列表样式检查 不符合则重新设置
     final bool isDml = GalleryListParser.isGalleryListDmL(response);
     if (!isDml) {
-      logger.i(' inline_set dml');
+      logger.d(' inline_set dml');
       params['inline_set'] = 'dm_l';
       final String response = await getHttpManager()
               .get(url, options: _cacheOptions, params: params) ??
@@ -268,6 +281,8 @@ class Api {
     dio.CancelToken? cancelToken,
     ValueChanged<List<Favcat>>? favCatList,
   }) async {
+    _printCookie();
+
     final AdvanceSearchController _searchController = Get.find();
 
     const String url = '/favorites.php';
@@ -356,7 +371,7 @@ class Api {
     cookies.add(io.Cookie('nw', '1'));
     cookieJar.saveFromResponse(Uri.parse(Api.getBaseUrl()), cookies);
 
-    // logger.i('获取画廊 $url');
+    // logger.d('获取画廊 $url');
     time.showTime('获取画廊');
     await CustomHttpsProxy.instance.init();
     time.showTime('设置代理');
@@ -946,7 +961,7 @@ class Api {
         throw 'Save image fail';
       }
 
-      logger.i('保存成功');
+      logger.d('保存成功');
       return true;
     } catch (e) {
       logger.e(e.toString());
@@ -1005,7 +1020,7 @@ class Api {
         throw 'Save image fail';
       }
 
-      logger.i('保存成功');
+      logger.d('保存成功');
       return true;
     } catch (e, stack) {
       logger.e('$e\n$stack');

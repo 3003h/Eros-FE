@@ -30,7 +30,7 @@ extension EhString on String {
           _dohDnsCacheIndex > -1 ? _dohDnsCacheList[_dohDnsCacheIndex] : null;
       realHost = dohDnsCache?.addr ?? host;
       final String realUrl = replaceFirst(host, realHost);
-      logger.i('realUrl: $realUrl');
+      logger.d('realUrl: $realUrl');
       return realUrl;
     }
     return this;

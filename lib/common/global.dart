@@ -193,7 +193,9 @@ class Global {
 
     await FlutterDownloader.initialize(debug: Global.inDebugMode);
 
-    if (!inDebugMode) Logger.level = Level.info;
+    if (!inDebugMode) {
+      Logger.level = Level.info;
+    }
 
     canCheckBiometrics = await localAuth.canCheckBiometrics;
 

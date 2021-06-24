@@ -2,6 +2,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:fehviewer/common/controller/tag_trans_controller.dart';
 import 'package:fehviewer/common/global.dart';
 import 'package:fehviewer/common/service/depth_service.dart';
+import 'package:fehviewer/const/const.dart';
 import 'package:fehviewer/generated/l10n.dart';
 import 'package:fehviewer/extension.dart';
 import 'package:fehviewer/pages/gallery/controller/taginfo_controller.dart';
@@ -199,13 +200,16 @@ class _TagDialogViewState extends State<TagDialogView> {
                         styleSheetTheme: MarkdownStyleSheetBaseTheme.cupertino,
                         styleSheet: MarkdownStyleSheet(
                           code: theme.textTheme.textStyle.copyWith(
-                            backgroundColor: Colors.transparent,
-                            fontFamily: 'monospace',
-                            decoration: TextDecoration.underline,
-                            decorationStyle: TextDecorationStyle.dashed,
-                            fontSize:
-                                theme.textTheme.textStyle.fontSize! * 0.85,
-                          ),
+                              backgroundColor: Colors.transparent,
+                              // decoration: TextDecoration.underline,
+                              // backgroundColor:
+                              //     CupertinoColors.activeOrange.withOpacity(0.5),
+                              // decorationStyle: TextDecorationStyle.dashed,
+                              color: CupertinoColors.activeOrange,
+                              fontSize:
+                                  theme.textTheme.textStyle.fontSize! * 0.8,
+                              fontFamilyFallback:
+                                  EHConst.monoFontFamilyFallback),
                         ),
                         imageBuilder: (Uri uri, String? title, String? alt) {
                           return CachedNetworkImage(

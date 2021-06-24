@@ -9,9 +9,11 @@ import 'package:fehviewer/common/service/theme_service.dart';
 import 'package:fehviewer/const/theme_colors.dart';
 import 'package:fehviewer/generated/l10n.dart';
 import 'package:fehviewer/pages/setting/custom_hosts_page.dart';
+import 'package:fehviewer/pages/setting/log_page.dart';
 import 'package:fehviewer/route/routes.dart';
 import 'package:fehviewer/utils/logger.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -49,7 +51,7 @@ class ListViewAdvancedSetting extends StatelessWidget {
     }
 
     void _handleDoHChanged(bool newValue) {
-      if (!newValue && !(_dnsConfigController.enableCustomHosts.value)) {
+      if (!newValue && !_dnsConfigController.enableCustomHosts.value) {
         /// 清除hosts 关闭代理
         logger.d(' 关闭代理');
         HttpOverrides.global = null;
@@ -75,7 +77,7 @@ class ListViewAdvancedSetting extends StatelessWidget {
             desc: S.of(context).gray_black,
             descOn: S.of(context).pure_black,
           )),
-      if (!(Get.find<EhConfigService>().isSafeMode.value))
+      if (!Get.find<EhConfigService>().isSafeMode.value)
         SelectorSettingItem(
           hideLine: true,
           title: S.of(context).tabbar_setting,
@@ -116,7 +118,7 @@ class ListViewAdvancedSetting extends StatelessWidget {
               Get.to(() => CustomHostsPage(), transition: Transition.cupertino);
             },
           )),
-      if (Global.inDebugMode)
+      if (kDebugMode)
         TextSwitchItem(
           S.of(context).domain_fronting,
           intValue: _dnsConfigController.enableDomainFronting.value,
@@ -133,6 +135,19 @@ class ListViewAdvancedSetting extends StatelessWidget {
         S.of(context).vibrate_feedback,
         intValue: _ehConfigService.vibrate.value,
         onChanged: (bool val) => _ehConfigService.vibrate.value = val,
+        hideLine: true,
+      ),
+      Container(height: 38),
+      SelectorSettingItem(
+        title: 'Log',
+        onTap: () {
+          Get.to(() => LogPage());
+        },
+      ),
+      TextSwitchItem(
+        'Log debugMode',
+        intValue: _ehConfigService.debugMode,
+        onChanged: (bool val) => _ehConfigService.debugMode = val,
         hideLine: true,
       ),
     ];

@@ -19,12 +19,12 @@ class SelectorSettingItem extends StatefulWidget {
     Key? key,
     this.onTap,
     required this.title,
-    required this.selector,
+    this.selector,
     this.hideLine = false,
   }) : super(key: key);
 
   final String title;
-  final String selector;
+  final String? selector;
   final bool hideLine;
 
   // 点击回调
@@ -73,7 +73,7 @@ class _SelectorSettingItemState extends State<SelectorSettingItem> {
                 ),
                 const Spacer(),
                 Text(
-                  widget.selector,
+                  widget.selector ?? '',
                   style: const TextStyle(
                     color: CupertinoColors.systemGrey2,
                   ),
@@ -288,11 +288,12 @@ class _TextItemState extends State<TextItem> {
                       height: 1.0,
                     ),
                   ),
-                  Text(
-                    widget.desc ?? '',
-                    style: const TextStyle(
-                        fontSize: 12.5, color: CupertinoColors.systemGrey),
-                  ).paddingOnly(top: 2.0),
+                  if (widget.desc != null)
+                    Text(
+                      widget.desc ?? '',
+                      style: const TextStyle(
+                          fontSize: 12.5, color: CupertinoColors.systemGrey),
+                    ).paddingOnly(top: 2.0),
                 ]),
           ),
           if (!widget.hideLine)

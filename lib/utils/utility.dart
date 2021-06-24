@@ -8,6 +8,7 @@ import 'package:fehviewer/models/favcat.dart';
 import 'package:fehviewer/network/gallery_request.dart';
 import 'package:fehviewer/utils/logger.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
 class EHUtils {
@@ -66,9 +67,7 @@ class EHUtils {
   }
 
   bool get isInDebugMode {
-    bool inDebugMode = false;
-    assert(inDebugMode = true); //如果debug模式下会触发赋值
-    return inDebugMode;
+    return kDebugMode;
   }
 
   static String getLangeage(String value) {

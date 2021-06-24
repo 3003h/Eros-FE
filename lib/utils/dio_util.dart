@@ -9,6 +9,8 @@ import 'package:fehviewer/const/const.dart';
 import 'package:fehviewer/utils/time.dart';
 import 'package:fehviewer/utils/toast.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/foundation.dart';
+import 'package:pretty_dio_logger/pretty_dio_logger.dart';
 
 import 'dio_retry/options.dart';
 import 'dio_retry/retry_interceptor.dart';
@@ -56,13 +58,22 @@ class HttpManager {
 
     _dio.interceptors.add(DioFirebasePerformanceInterceptor());
 
-    // if (Global.inDebugMode) {
-    //   _dio.interceptors.add(PrettyDioLogger(
-    //     requestBody: true,
-    //     responseHeader: false,
-    //     responseBody: false,
-    //     maxWidth: 100,
-    //   ));
+    _dio.interceptors.add(PrettyDioLogger(
+      requestBody: true,
+      responseHeader: true,
+      responseBody: false,
+      maxWidth: 100,
+      logPrint: (log) => loggerSimple.d(log),
+    ));
+
+    // if (kDebugMode) {
+    //   _dio.interceptors.add(LogInterceptor(
+    //       responseBody: false,
+    //       error: true,
+    //       requestHeader: false,
+    //       responseHeader: false,
+    //       request: true,
+    //       requestBody: true));
     // }
 
     if (retry) {

@@ -37,32 +37,65 @@ class GalleryRepository {
   final String? url;
 }
 
-class GalleryMainPage extends StatelessWidget {
-  const GalleryMainPage({this.galleryRepository});
+class GalleryMainPage extends StatefulWidget {
+  // const GalleryMainPage({this.galleryRepository});
 
   // GalleryPageController get _controller => Get.find(tag: pageCtrlDepth);
   // late final GalleryPageController _controller;
 
-  final GalleryRepository? galleryRepository;
+  @override
+  _GalleryMainPageState createState() => _GalleryMainPageState();
+}
+
+class _GalleryMainPageState extends State<GalleryMainPage> {
+  GalleryRepository? _galleryRepository;
+
+  GalleryPageController get _controller =>
+      Get.put(GalleryPageController(galleryRepository: _galleryRepository),
+          tag: pageCtrlDepth);
+
+  // GalleryRepository? get galleryRepository {
+  //   if (_galleryRepository != null) {
+  //     return _galleryRepository;
+  //   }
+  //
+  //   GalleryRepository? _repository;
+  //   try {
+  //     // _repository = Get.find<GalleryRepository>(tag: pageCtrlDepth);
+  //     _repository = Get.arguments;
+  //   } catch (_) {}
+  //
+  //   return _galleryRepository ?? _repository;
+  // }
+
+  @override
+  void initState() {
+    super.initState();
+    logger.d('${Get.arguments}');
+
+    if (_galleryRepository == null && Get.arguments is GalleryRepository) {
+      _galleryRepository = Get.arguments;
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
-    GalleryRepository? _galleryRepository() {
-      if (galleryRepository != null) {
-        return galleryRepository;
-      }
-
-      GalleryRepository? repository;
-      try {
-        repository = Get.find<GalleryRepository>(tag: pageCtrlDepth);
-      } catch (_) {}
-
-      return galleryRepository ?? repository;
-    }
-
-    final GalleryPageController _controller = Get.put(
-        GalleryPageController(galleryRepository: _galleryRepository()),
-        tag: pageCtrlDepth);
+    // GalleryRepository? _galleryRepository() {
+    //   if (galleryRepository != null) {
+    //     return galleryRepository;
+    //   }
+    //
+    //   GalleryRepository? repository;
+    //   try {
+    //     repository = Get.find<GalleryRepository>(tag: pageCtrlDepth);
+    //   } catch (_) {}
+    //
+    //   return galleryRepository ?? repository;
+    // }
+    //
+    // final GalleryPageController _controller = Get.put(
+    //     GalleryPageController(galleryRepository: _galleryRepository()),
+    //     tag: pageCtrlDepth);
 
     final String? tabTag = _controller.galleryRepository?.tabTag;
 

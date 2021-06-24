@@ -42,7 +42,7 @@ class EhUserManager {
     try {
       rult = await httpManager.postForm(url, data: formData, options: options);
     } catch (e) {
-      logger.v('$e');
+      logger.d('$e');
     }
 
     //  登录异常处理
@@ -86,7 +86,7 @@ class EhUserManager {
     final List<Cookie> cookiesEx =
         await cookieJar.loadForRequest(Uri.parse(EHConst.EX_BASE_URL));
 
-    logger.v('$cookiesEx');
+    logger.d('$cookiesEx');
 
     // 处理cookie 存入sp 方便里站图片请求时构建头 否则会403
     final Map<String, String> cookieMapEx = <String, String>{};
@@ -114,7 +114,7 @@ class EhUserManager {
     // logger.v(cookieStr);
     final List<Cookie> _cookiesEx =
         await cookieJar.loadForRequest(Uri.parse(EHConst.EX_BASE_URL));
-    logger.v('${_cookiesEx.map((e) => '$e').join('\n')} ');
+    logger.d('${_cookiesEx.map((e) => '$e').join('\n')} ');
 
     final User user = kDefUser.copyWith(
       cookie: cookieStr,
@@ -169,7 +169,7 @@ class EhUserManager {
 
     final List<Cookie> _cookiesEx =
         await cookieJar.loadForRequest(Uri.parse(EHConst.EX_BASE_URL));
-    logger.v('${_cookiesEx.map((e) => '$e').join('\n')} ');
+    logger.d('${_cookiesEx.map((e) => '$e').join('\n')} ');
 
     final String cookieStr = _getCookieStringFromMap(cookie);
     // logger.v(cookieStr);
@@ -212,11 +212,6 @@ class EhUserManager {
         await cookieJar.loadForRequest(Uri.parse(EHConst.EX_BASE_URL));
 
     // 手动指定igneous的情况
-    // cookiesEx.firstWhere((element) => element.name == 'igneous')
-    //   ..value = igneous
-    //   ..expires = null
-    //   ..maxAge = null;
-
     cookiesEx.forEach((element) {
       if (element.name == 'igneous') {
         element.value = igneous;
@@ -229,7 +224,7 @@ class EhUserManager {
         ..maxAge = 315360000;
     });
 
-    logger.v('${cookiesEx.map((e) => '$e').join('\n')} ');
+    logger.d('${cookiesEx.map((e) => '$e').join('\n')} ');
 
     // 处理cookie 存入sp 方便里站图片请求时构建头 否则会403
     final Map<String, String> cookieMapEx = <String, String>{};
@@ -245,7 +240,7 @@ class EhUserManager {
     };
 
     final String cookieStr = _getCookieStringFromMap(cookie);
-    logger.v(cookieStr);
+    logger.d(cookieStr);
 
     final User user = kDefUser.copyWith(
       cookie: cookieStr,
@@ -286,7 +281,7 @@ class EhUserManager {
       }
     }
 
-    logger.v('username $username   ${avatarElm?.outerHtml}');
+    logger.d('username $username   ${avatarElm?.outerHtml}');
 
     return kDefUser.copyWith(
       avatarUrl: _avatarUrl,
