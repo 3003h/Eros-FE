@@ -80,6 +80,10 @@ class EhConfigService extends ProfileService {
   // 震动总开关
   RxBool vibrate = true.obs;
 
+  final _debugMode = false.obs;
+  get debugMode => _debugMode.value;
+  set debugMode(val) => _debugMode.value = val;
+
   @override
   void onInit() {
     super.onInit();
@@ -212,6 +216,11 @@ class EhConfigService extends ProfileService {
         TagIntroImgLv.nonh;
     everFromEunm(tagIntroImgLv,
         (String value) => ehConfig = ehConfig.copyWith(tagIntroImgLv: value));
+
+    //
+    debugMode = ehConfig.debugMode ?? false;
+    everProfile<bool>(_debugMode,
+        (bool value) => ehConfig = ehConfig.copyWith(debugMode: value));
   }
 
   /// 收藏排序

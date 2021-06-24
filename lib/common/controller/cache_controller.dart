@@ -38,7 +38,7 @@ class CacheController extends GetxController with StateMixin<String> {
 
   Future<String> getTotCacheSize() async {
     final int _cachesize = await _loadCache();
-    logger.d('tot cacheSize  ${renderSize(_cachesize)}');
+    // logger.d('tot cacheSize  ${renderSize(_cachesize)}');
     return renderSize(_cachesize);
   }
 
@@ -71,7 +71,7 @@ class CacheController extends GetxController with StateMixin<String> {
       logger.d('临时目录大小: ' + value.toString());
       return value;
     } catch (err) {
-      print(err);
+      logger.e(err);
       return 0;
     }
   }
@@ -94,7 +94,7 @@ class CacheController extends GetxController with StateMixin<String> {
       }
       return 0;
     } catch (e) {
-      print(e);
+      logger.e('$e');
       return 0;
     }
   }
@@ -106,7 +106,7 @@ class CacheController extends GetxController with StateMixin<String> {
       //删除缓存目录
       await delDir(tempDir);
     } catch (e) {
-      print(e);
+      logger.e('$e');
     }
   }
 
@@ -123,7 +123,7 @@ class CacheController extends GetxController with StateMixin<String> {
         await file.delete();
       }
     } catch (e) {
-      print(e);
+      logger.e('$e');
     }
   }
 }

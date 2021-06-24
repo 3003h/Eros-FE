@@ -23,5 +23,6 @@
   "showPageInterval?": true,
   "orientation?": "",
   "vibrate?": true,
-  "tagIntroImgLv?": ""
+  "tagIntroImgLv?": "",
+  "debugMode?": false
 }

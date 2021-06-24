@@ -175,7 +175,7 @@ class _LoginPageState extends State<LoginPage> {
                   EHRoutes.webLogin,
                   preventDuplicates: false,
                 );
-                logger.i(' $result');
+                logger.d(' $result');
                 if (result != null && result is Map) {
                   setState(() {
                     _isWebLogin = true;

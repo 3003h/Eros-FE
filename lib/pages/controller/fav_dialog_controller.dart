@@ -129,7 +129,6 @@ class FavDialogController extends GetxController {
   /// 添加收藏 List形式
   Future<Favcat?> _showAddFavList(
       BuildContext context, List<Favcat> favList) async {
-    logger.v('33');
     final List<Widget> _favcatList = List<Widget>.from(favList
         .where((value) => value.favId != 'a')
         .map((Favcat fav) => FavcatAddListItem(

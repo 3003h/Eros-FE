@@ -165,7 +165,7 @@ Future<void> _fetchAllImageInfo(
         }
       }
     } catch (e, stack) {
-      logger.d('$e\n$stack');
+      logger.e('$e\n$stack');
       // rethrow;
     }
   }

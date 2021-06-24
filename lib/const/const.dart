@@ -241,4 +241,15 @@ class EHConst {
     'thai': 'TH',
     'vietnamese': 'VI',
   };
+
+  static List<String> fontFamilyFallback = [
+    'miui',
+    'sans-serif',
+  ];
+  static List<String> monoFontFamilyFallback = [
+    'monaco',
+    'monospace',
+    'Menlo',
+    'Courier New',
+  ];
 }

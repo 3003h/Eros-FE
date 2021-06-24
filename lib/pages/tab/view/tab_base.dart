@@ -5,6 +5,7 @@ import 'package:fehviewer/pages/item/gallery_item.dart';
 import 'package:fehviewer/pages/item/gallery_item_flow.dart';
 import 'package:fehviewer/pages/item/gallery_item_flow_large.dart';
 import 'package:fehviewer/pages/item/gallery_item_simple.dart';
+import 'package:fehviewer/utils/logger.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -78,6 +79,7 @@ SliverList buildGallerySliverListView(
       (BuildContext context, int index) {
         if (maxPage != null) {
           if (index == gallerItemBeans.length - 1 && curPage < maxPage - 1) {
+            logger.v('$index ${gallerItemBeans.length}');
 //            加载更多数据的回调
             loadMord?.call();
           }

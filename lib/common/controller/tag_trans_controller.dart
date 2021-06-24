@@ -62,7 +62,7 @@ class TagTransController extends GetxController {
     }
     _dbUrl = assMap['db.raw.json.gz'] ?? '';
 
-    logger.v(_dbUrl);
+    logger.i(_dbUrl);
     return true;
   }
 
@@ -172,7 +172,7 @@ class TagTransController extends GetxController {
     }
     logger.d(text);
     final array = text.split(RegExp(r'\s+'));
-    logger.v(array.map((e) => '[$e]').join(','));
+    logger.i(array.map((e) => '[$e]').join(','));
 
     for (int i = 0; i < array.length; i++) {
       // print(array[i]);

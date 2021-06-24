@@ -24,10 +24,10 @@ class SplashController extends GetxController {
       // For sharing or opening urls/text coming from outside the app while the app is in the memory
       _intentDataStreamSubscription =
           ReceiveSharingIntent.getTextStream().listen((String value) {
-        logger.i('value(memory): $value');
+        logger.d('value(memory): $value');
         sharedText = value;
-        logger.i('Shared: $sharedText');
-        startHome(sharedText ?? '');
+        logger.d('Shared: $sharedText');
+        _startHome(sharedText ?? '');
       }, onError: (err) {
         logger.e('getLinkStream error: $err');
       });
@@ -37,15 +37,16 @@ class SplashController extends GetxController {
         // logger.i('value(closed): $value');
         sharedText = value ?? '';
         logger.v('Shared: $sharedText');
-        startHome(sharedText ?? '');
+        _startHome(sharedText ?? '');
       });
     }
   }
 
-  Future<void> startHome(String url) async {
+  Future<void> _startHome(String url) async {
     await _autoLockController.resumed(forceLock: true);
 
-    if (url != null && url.isNotEmpty) {
+    if (url.isNotEmpty) {
+      // 通过外部链接关联打开的时候
       logger.i('open $url');
       await Future<void>.delayed(const Duration(milliseconds: 100), () {
         NavigatorUtil.goGalleryDetailReplace(Get.context!, url: url);

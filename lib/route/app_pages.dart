@@ -26,6 +26,7 @@ import 'package:fehviewer/pages/tab/view/favorite_sel_page.dart';
 import 'package:fehviewer/pages/tab/view/history_page.dart';
 import 'package:fehviewer/pages/tab/view/home_page.dart';
 import 'package:fehviewer/pages/tab/view/popular_page.dart';
+import 'package:fehviewer/pages/tab/view/search_page_new.dart';
 import 'package:fehviewer/pages/tab/view/splash_page.dart';
 import 'package:fehviewer/pages/tab/view/unlock_page.dart';
 import 'package:fehviewer/pages/tab/view/watched_page.dart';
@@ -165,6 +166,12 @@ class AppPages {
       name: EHRoutes.galleryPage,
       page: () => GalleryMainPage(),
       binding: GalleryBinding(),
+    ),
+
+    GetPage(
+      name: EHRoutes.search,
+      page: () => GallerySearchPageNew(),
+      transition: Transition.cupertino,
     ),
   ];
 }

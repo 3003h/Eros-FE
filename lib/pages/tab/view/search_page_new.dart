@@ -46,7 +46,13 @@ enum SearchMenuEnum {
 }
 
 class GallerySearchPageNew extends StatelessWidget {
-  SearchPageController get controller => Get.find(tag: searchPageCtrlDepth);
+  // final _search = Get.arguments;
+  final SearchPageController controller = Get.put(
+      SearchPageController(
+          initSearchText: Get.arguments is String ? Get.arguments : null),
+      tag: searchPageCtrlDepth);
+
+  // SearchPageController get controller => Get.find(tag: searchPageCtrlDepth);
 
   Widget getSearchTextFieldNew() {
     return Obx(() => CupertinoSearchTextField(
@@ -198,7 +204,7 @@ class GallerySearchPageNew extends StatelessWidget {
   }
 
   Widget _buildSearchRult(BuildContext context) {
-    logger.v('_buildSearchRult');
+    // logger.v('_buildSearchRult');
     return CustomScrollView(
       slivers: <Widget>[
         // SliverToBoxAdapter(child: getSearchTextFieldIn().paddingOnly(top: 50)),

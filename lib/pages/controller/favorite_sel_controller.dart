@@ -84,8 +84,8 @@ class FavoriteSelectorController extends GetxController
     }
 
     if (isUpdate) {
-      logger.v(
-          '_favcatList isUpdate  \n${_favcatList.map((e) => jsonEncode(e)).join('\n')}');
+      // logger.v(
+      //     '_favcatList isUpdate  \n${_favcatList.map((e) => jsonEncode(e)).join('\n')}');
       change(_favcatList, status: RxStatus.success());
     }
   }

@@ -7,11 +7,14 @@ import 'package:fehviewer/common/global.dart';
 import 'package:fehviewer/common/service/dns_service.dart';
 import 'package:fehviewer/common/service/ehconfig_service.dart';
 import 'package:fehviewer/common/service/locale_service.dart';
+import 'package:fehviewer/common/service/log_service.dart';
 import 'package:fehviewer/common/service/theme_service.dart';
 import 'package:fehviewer/generated/l10n.dart';
 import 'package:fehviewer/pages/controller/fav_dialog_controller.dart';
 import 'package:fehviewer/pages/controller/favorite_sel_controller.dart';
 import 'package:fehviewer/pages/tab/controller/download_view_controller.dart';
+import 'package:fehviewer/pages/tab/controller/splash_controller.dart';
+import 'package:fehviewer/pages/tab/view/splash_page.dart';
 import 'package:fehviewer/route/app_pages.dart';
 import 'package:fehviewer/route/routes.dart';
 import 'package:fehviewer/store/get_store.dart';
@@ -22,6 +25,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:get/get.dart';
+import 'package:logger/logger.dart';
 import 'package:oktoast/oktoast.dart';
 
 import 'common/controller/advance_search_controller.dart';
@@ -40,12 +44,14 @@ Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await _initializeFlutterFire();
   runZonedGuarded<Future<void>>(() async {
+    Get.lazyPut(() => LogService(), fenix: true);
     Get.lazyPut(() => GStore());
     await Global.init();
 
     await _initializeFlutterFire();
 
     Get.lazyPut(() => EhConfigService(), fenix: true);
+
     //LocaleController
     Get.lazyPut(() => LocaleService(), fenix: true);
     // ThemeController
@@ -75,6 +81,16 @@ Future<void> main() async {
 
     Get.lazyPut(() => UnlockPageController(), fenix: true);
     Get.lazyPut(() => TagTransController(), fenix: true);
+
+    Get.lazyPut(() => SplashController());
+
+    if (Get.find<EhConfigService>().debugMode) {
+      print('Level.verbose');
+      Logger.level = Level.debug;
+      logger.v('Level.verbose');
+    } else {
+      Logger.level = Level.error;
+    }
 
     runApp(MyApp());
   }, (Object error, StackTrace stackTrace) {
@@ -165,7 +181,8 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
         // ],
         getPages: AppPages.routes,
         defaultTransition: Transition.cupertino,
-        initialRoute: EHRoutes.root,
+        // initialRoute: EHRoutes.root,
+        home: SplashPage(),
         theme: theme,
         locale: locale,
         logWriterCallback: loggerGetx,

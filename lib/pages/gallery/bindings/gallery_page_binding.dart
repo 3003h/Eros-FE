@@ -17,11 +17,11 @@ class GalleryBinding extends Bindings {
   @override
   void dependencies() {
     // logger.d('GalleryBinding dependencies');
-    Get.lazyPut(
-        () => GalleryPageController(
-            galleryRepository: galleryRepository ??
-                Get.find<GalleryRepository>(tag: pageCtrlDepth)),
-        tag: pageCtrlDepth);
+    // Get.lazyPut(
+    //     () => GalleryPageController(
+    //         galleryRepository: galleryRepository ??
+    //             Get.find<GalleryRepository>(tag: pageCtrlDepth)),
+    //     tag: pageCtrlDepth);
 
     // Get.lazyPut(() => GalleryPageController(), tag: pageCtrlDepth);
 
