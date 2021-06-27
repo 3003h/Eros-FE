@@ -61,7 +61,7 @@ class LogService extends GetxService {
           // 超过最大时间的文件删除
           final _fileName = path.basename(_logFile.path);
           final _timeString = _fileName.replaceAll(_kSuffix, '');
-          logger.i('log file time $_timeString');
+          // logger.v('log file time $_timeString');
 
           final DateTime _nowTime = DateTime.now();
           final DateFormat formatter = DateFormat(_kFilenameFormat);
@@ -70,7 +70,7 @@ class LogService extends GetxService {
           // final _fileTime = DateTime.parse(_timeString);
           final _diff = _nowTime.difference(_fileTime);
           if (_diff.compareTo(_kMaxTime) > 0) {
-            logger.d('delete $_fileName');
+            // logger.v('delete $_fileName');
             _logFile.delete();
           }
         } catch (_) {}

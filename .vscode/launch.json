@@ -4,10 +4,28 @@
     // 欲了解更多信息，请访问: https://go.microsoft.com/fwlink/?linkid=830387
     "version": "0.2.0",
     "configurations": [
+
         {
             "name": "Flutter",
             "request": "launch",
             "args": ["--no-sound-null-safety"],
+            "type": "dart"
+        },
+        {
+            "name": "debug",
+            "request": "launch",
+            "type": "dart"
+        },
+        {
+            "name": "profile",
+            "request": "launch",
+            "args": ["--profile"],
+            "type": "dart"
+        },
+        {
+            "name": "release",
+            "request": "launch",
+            "args": ["--release"],
             "type": "dart"
         }
     ]

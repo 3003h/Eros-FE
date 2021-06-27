@@ -2,15 +2,23 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:fehviewer/common/service/log_service.dart';
-import 'package:fehviewer/utils/pretty_printer.dart';
+import 'package:fehviewer/utils/logger/pretty_printer.dart';
 import 'package:get/get.dart';
 import 'package:logger/logger.dart';
-import 'package:logger/src/log_output.dart';
-import 'package:logger/src/logger.dart';
 import 'package:path/path.dart' as path;
 
 String get _fileName => Get.find<LogService>().curFileName;
 String get _filePath => Get.find<LogService>().logPath;
+
+late Logger logger;
+
+late Logger logger5;
+
+late Logger loggerNoStack;
+
+late Logger loggerNoStackTime;
+
+late Logger loggerSimple;
 
 final LogOutput _outPut = MultiOutput([
   ConsoleOutput(),
@@ -21,50 +29,57 @@ final LogOutput _outPut = MultiOutput([
   ),
 ]);
 
-Logger get logger => Logger(
-      // level: _logLevel,
-      filter: EHLogFilter(),
-      // printer: SimplePrinter(),
-      printer: EhPrettyPrinter(
-        // lineLength: 100,
-        colors: false,
-        // printTime: true,
-      ),
-      output: _outPut,
-    );
+void resetLogLevel() {
+  initLogger();
+}
 
-Logger get logger5 => Logger(
-      filter: EHLogFilter(),
-      printer: PrettyPrinter(
-        // lineLength: 100,
-        methodCount: 5,
-        colors: false,
-      ),
-      output: _outPut,
-    );
+void initLogger() {
+  logger = Logger(
+    // level: _logLevel,
+    filter: EHLogFilter(),
+    // printer: SimplePrinter(),
+    printer: EhPrettyPrinter(
+      // lineLength: 100,
+      colors: false,
+      // printTime: true,
+    ),
+    output: _outPut,
+  );
 
-Logger get loggerNoStack => Logger(
-      filter: EHLogFilter(),
-      printer: PrettyPrinter(
-        // lineLength: 100,
-        methodCount: 0,
-        colors: false,
-      ),
-      output: _outPut,
-    );
+  logger5 = Logger(
+    filter: EHLogFilter(),
+    printer: EhPrettyPrinter(
+      // lineLength: 100,
+      methodCount: 5,
+      colors: false,
+    ),
+    output: _outPut,
+  );
 
-final Logger loggerNoStackTime = Logger(
-  printer: PrettyPrinter(
-    methodCount: 0,
-    colors: false,
-    printTime: true,
-  ),
-);
+  loggerNoStack = Logger(
+    filter: EHLogFilter(),
+    printer: EhPrettyPrinter(
+      // lineLength: 100,
+      methodCount: 0,
+      colors: false,
+    ),
+    output: _outPut,
+  );
 
-Logger get loggerSimple => Logger(
-      printer: SimplePrinter(),
-      output: _outPut,
-    );
+  loggerNoStackTime = Logger(
+    printer: EhPrettyPrinter(
+      methodCount: 0,
+      colors: false,
+      printTime: true,
+    ),
+  );
+
+  loggerSimple = Logger(
+    filter: EHLogFilter(),
+    printer: SimplePrinter(),
+    output: _outPut,
+  );
+}
 
 class EHLogFilter extends LogFilter {
   @override
@@ -104,25 +119,28 @@ class _FileOutput extends LogOutput {
 
   @override
   void init() {
-    // _sink = file.openWrite(
-    //   mode: overrideExisting ? FileMode.writeOnly : FileMode.writeOnlyAppend,
-    //   encoding: encoding,
-    // );
-  }
-
-  @override
-  void output(OutputEvent event) {
-    // _sink?.writeAll(event.lines.map((e) => e.trim()), '\n');
-    file.writeAsString(
-      event.lines.map((e) => e.trim()).join('\n'),
+    _sink = file.openWrite(
       mode: overrideExisting ? FileMode.writeOnly : FileMode.writeOnlyAppend,
+      encoding: encoding,
     );
   }
 
   @override
+  void output(OutputEvent event) {
+    // file.writeAsString(
+    //   '${event.lines.map((e) => e.trim()).join('\n')}\n',
+    //   mode: overrideExisting ? FileMode.writeOnly : FileMode.writeOnlyAppend,
+    //   encoding: encoding,
+    //   flush: true,
+    // );
+
+    _sink?.writeAll(event.lines, '\n');
+    _sink?.write('\n');
+  }
+
+  @override
   void destroy() async {
-    // _sink?.write('\n');
-    // await _sink?.flush();
-    // await _sink?.close();
+    await _sink?.flush();
+    await _sink?.close();
   }
 }

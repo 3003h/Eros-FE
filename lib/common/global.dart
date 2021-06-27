@@ -193,10 +193,6 @@ class Global {
 
     await FlutterDownloader.initialize(debug: Global.inDebugMode);
 
-    if (!inDebugMode) {
-      Logger.level = Level.info;
-    }
-
     canCheckBiometrics = await localAuth.canCheckBiometrics;
 
     // 代理初始化
@@ -219,7 +215,13 @@ class Global {
 
     packageInfo = await PackageInfo.fromPlatform();
 
-    logger.d('doc $appDocPath \napps $appSupportPath \ntemp $tempPath');
+    initLogger();
+    if (!inDebugMode) {
+      Logger.level = Level.info;
+      initLogger();
+    }
+
+    logger.i('doc $appDocPath \napps $appSupportPath \ntemp $tempPath');
 
     // SP初始化
     await StorageUtil.init();

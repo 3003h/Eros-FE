@@ -31,7 +31,7 @@ class ExpandableLinkify extends StatefulWidget {
     this.textAlign = TextAlign.start,
     this.textDirection,
     this.overflow = TextOverflow.clip,
-    this.textScaleFactor = 1.0,
+    // this.textScaleFactor = 1.0,
     this.softWrap = true,
     this.strutStyle,
     this.locale,
@@ -78,7 +78,7 @@ class ExpandableLinkify extends StatefulWidget {
   final TextOverflow overflow;
 
   /// The number of font pixels for each logical pixel
-  final double? textScaleFactor;
+  // final double? textScaleFactor;
 
   /// Whether the text should break at soft line breaks.
   final bool softWrap;
@@ -128,35 +128,35 @@ class _ExpandableLinkifyState extends State<ExpandableLinkify>
 
         textPainter.layout(maxWidth: size.maxWidth);
 
-        Widget _getLinkify() {
-          if (_isExpanded) {
-            return Container(
-              child: Linkify(
-                text: widget.text,
-                style: widget.style,
-                onOpen: widget.onOpen,
-                options: widget.options,
-                softWrap: widget.softWrap,
-                textAlign: widget.textAlign,
-              ),
-            );
-          } else {
-            return Container(
-              child: Linkify(
-                text: widget.text,
-                maxLines: widget.maxLines,
-                overflow: widget.overflow,
-                style: widget.style,
-                onOpen: widget.onOpen,
-                options: widget.options,
-                softWrap: widget.softWrap,
-                textAlign: widget.textAlign,
-              ),
-            );
-          }
-        }
+        // Widget _getLinkify() {
+        //   if (_isExpanded) {
+        //     return Container(
+        //       child: Linkify(
+        //         text: widget.text,
+        //         style: widget.style,
+        //         onOpen: widget.onOpen,
+        //         options: widget.options,
+        //         softWrap: widget.softWrap,
+        //         textAlign: widget.textAlign,
+        //       ),
+        //     );
+        //   } else {
+        //     return Container(
+        //       child: Linkify(
+        //         text: widget.text,
+        //         maxLines: widget.maxLines,
+        //         overflow: widget.overflow,
+        //         style: widget.style,
+        //         onOpen: widget.onOpen,
+        //         options: widget.options,
+        //         softWrap: widget.softWrap,
+        //         textAlign: widget.textAlign,
+        //       ),
+        //     );
+        //   }
+        // }
 
-        Widget _getLinkify2() {
+        Widget _getLinkify() {
           return AnimatedCrossFade(
             duration: const Duration(milliseconds: 200),
             firstCurve: Curves.easeIn,
@@ -189,7 +189,7 @@ class _ExpandableLinkifyState extends State<ExpandableLinkify>
           return Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
-              _getLinkify2(),
+              _getLinkify(),
               // 切换文字
               GestureDetector(
                 behavior: HitTestBehavior.translucent,

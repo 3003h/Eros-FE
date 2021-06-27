@@ -50,12 +50,14 @@ class LogPage extends StatelessWidget {
 
 class CustomHostsListView extends StatelessWidget {
   final LogService logService = Get.find();
+  final ScrollController _controller = ScrollController();
 
   @override
   Widget build(BuildContext context) {
     logService.loadFiles();
     return Obx(() => Container(
           child: ListView.builder(
+            controller: _controller,
             shrinkWrap: true,
             physics: const BouncingScrollPhysics(),
             itemBuilder: (_, int index) {
@@ -99,8 +101,8 @@ class LogFileItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      child: TextItem(
-        fileName,
+      child: SelectorSettingItem(
+        title: fileName,
         onTap: () {
           // showCustomHostEditer(context, index: index);
           // logger.v('');

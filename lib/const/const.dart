@@ -244,7 +244,7 @@ class EHConst {
 
   static List<String> fontFamilyFallback = [
     'miui',
-    'sans-serif',
+    // 'sans-serif',
   ];
   static List<String> monoFontFamilyFallback = [
     'monaco',

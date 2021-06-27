@@ -123,7 +123,6 @@ class DownloadManager {
     if (_receivePort.isBroadcast) {
       return;
     }
-    logger.i('isolate DownloadManager init');
 
     // isolate spawn
     _isolate = await Isolate.spawn(_isolateDownload, _receivePort.sendPort,

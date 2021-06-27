@@ -5,11 +5,18 @@ import 'package:logger/src/log_printer.dart';
 import 'package:logger/src/ansi_color.dart';
 
 class EhPrettyPrinter extends LogPrinter {
+  // static const topLeftCorner = '┌';
+  // static const bottomLeftCorner = '└';
+  // static const middleCorner = '├';
+  // static const verticalLine = '';
+  // static const doubleDivider = '-';
+  // static const singleDivider = '┄';
+
   static const topLeftCorner = '┌';
   static const bottomLeftCorner = '└';
   static const middleCorner = '├';
-  static const verticalLine = '';
-  static const doubleDivider = '-';
+  static const verticalLine = '│';
+  static const doubleDivider = '─';
   static const singleDivider = '┄';
 
   static final levelColors = {
@@ -23,11 +30,11 @@ class EhPrettyPrinter extends LogPrinter {
 
   static final levelEmojis = {
     Level.verbose: '',
-    Level.debug: '🐛 ',
-    Level.info: '💡 ',
-    Level.warning: '⚠️ ',
-    Level.error: '⛔ ',
-    Level.wtf: '👾 ',
+    Level.debug: '[D] ',
+    Level.info: '[I] ',
+    Level.warning: '[W] ',
+    Level.error: '[E] ',
+    Level.wtf: '[WTF] ',
   };
 
   /// Matches a stacktrace line as generated on Android/iOS devices.
@@ -78,21 +85,21 @@ class EhPrettyPrinter extends LogPrinter {
   }) {
     _startTime ??= DateTime.now();
 
-    var doubleDividerLine = StringBuffer();
-    var singleDividerLine = StringBuffer();
+    final doubleDividerLine = StringBuffer();
+    final singleDividerLine = StringBuffer();
     for (var i = 0; i < lineLength - 1; i++) {
       doubleDividerLine.write(doubleDivider);
       singleDividerLine.write(singleDivider);
     }
 
-    // _topBorder = '$topLeftCorner$doubleDividerLine';
-    // _middleBorder = '$middleCorner$singleDividerLine';
-    // _bottomBorder = '$bottomLeftCorner$doubleDividerLine';
+    _topBorder = '$topLeftCorner$doubleDividerLine';
+    _middleBorder = '$middleCorner$singleDividerLine';
+    _bottomBorder = '$bottomLeftCorner$doubleDividerLine';
   }
 
   @override
   List<String> log(LogEvent event) {
-    var messageStr = stringifyMessage(event.message);
+    final String messageStr = stringifyMessage(event.message);
 
     String? stackTraceStr;
     if (event.stackTrace == null) {
@@ -126,10 +133,11 @@ class EhPrettyPrinter extends LogPrinter {
     }
     var formatted = <String>[];
     var count = 0;
-    for (var line in lines) {
+    for (final line in lines) {
       if (_discardDeviceStacktraceLine(line) ||
           _discardWebStacktraceLine(line) ||
           _discardBrowserStacktraceLine(line) ||
+          _discardEHStacktraceLine(line) ||
           line.isEmpty) {
         continue;
       }
@@ -170,6 +178,14 @@ class EhPrettyPrinter extends LogPrinter {
     }
     return match.group(1)!.startsWith('package:logger') ||
         match.group(1)!.startsWith('dart:');
+  }
+
+  bool _discardEHStacktraceLine(String line) {
+    var match = _deviceStackTraceRegex.matchAsPrefix(line);
+    if (match == null) {
+      return false;
+    }
+    return match.group(2)!.startsWith('package:fehviewer/utils/logger/');
   }
 
   String getTime() {
