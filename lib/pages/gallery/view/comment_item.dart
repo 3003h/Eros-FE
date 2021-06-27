@@ -331,7 +331,8 @@ class CommentItem extends StatelessWidget {
       );
     }
 
-    ExpandableLinkify _simpleExpTextLinkify({bool showTranslate = false}) {
+    ExpandableLinkify _simpleExpTextLinkify(
+        {bool showTranslate = false, TextStyle? style}) {
       return ExpandableLinkify(
         text:
             showTranslate ? galleryComment.textTranslate : galleryComment.text,
@@ -343,10 +344,12 @@ class CommentItem extends StatelessWidget {
         // 对齐方式
         overflow: TextOverflow.ellipsis,
         // 超出部分省略号
-        style: TextStyle(
-          fontSize: 13,
-          color: CupertinoDynamicColor.resolve(ThemeColors.commitText, context),
-        ),
+        style: style ??
+            TextStyle(
+              fontSize: 13,
+              color: CupertinoDynamicColor.resolve(
+                  ThemeColors.commitText, context),
+            ),
         expandText: S.of(context).expand,
         collapseText: S.of(context).collapse,
         colorExpandText:

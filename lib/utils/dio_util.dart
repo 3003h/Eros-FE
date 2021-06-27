@@ -63,7 +63,9 @@ class HttpManager {
       responseHeader: true,
       responseBody: false,
       maxWidth: 100,
-      logPrint: (log) => loggerSimple.d(log),
+      logPrint: (log) {
+        loggerSimple.d(log);
+      },
     ));
 
     // if (kDebugMode) {
@@ -75,6 +77,24 @@ class HttpManager {
     //       request: true,
     //       requestBody: true));
     // }
+
+    // _dio.interceptors.add(LogInterceptor(
+    //     logPrint: (Object log) {
+    //       if ('$log'.trim().isEmpty) {
+    //         return;
+    //       }
+    //       if (log is String && log.startsWith('\n')) {
+    //         loggerSimple.d(log.substring(1).trim());
+    //       } else {
+    //         loggerSimple.d('$log'.trim());
+    //       }
+    //     },
+    //     responseBody: false,
+    //     error: true,
+    //     requestHeader: false,
+    //     responseHeader: false,
+    //     request: true,
+    //     requestBody: true));
 
     if (retry) {
       _dio.interceptors.add(RetryInterceptor(

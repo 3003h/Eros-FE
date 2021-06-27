@@ -16,12 +16,12 @@ import 'package:fehviewer/pages/tab/controller/download_view_controller.dart';
 import 'package:fehviewer/pages/tab/controller/splash_controller.dart';
 import 'package:fehviewer/pages/tab/view/splash_page.dart';
 import 'package:fehviewer/route/app_pages.dart';
-import 'package:fehviewer/route/routes.dart';
 import 'package:fehviewer/store/get_store.dart';
 import 'package:fehviewer/utils/logger.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:get/get.dart';
@@ -85,16 +85,17 @@ Future<void> main() async {
     Get.lazyPut(() => SplashController());
 
     if (Get.find<EhConfigService>().debugMode) {
-      print('Level.verbose');
       Logger.level = Level.debug;
-      logger.v('Level.verbose');
+      logger.v('Level.debug');
     } else {
       Logger.level = Level.error;
     }
+    resetLogLevel();
 
     runApp(MyApp());
   }, (Object error, StackTrace stackTrace) {
-    logger.e('runZonedGuarded: Caught error in my root zone.');
+    // logger.e('runZonedGuarded: Caught error in my root zone.');
+    print('runZonedGuarded: Caught error in my root zone.');
     FirebaseCrashlytics.instance.recordError(error, stackTrace);
   });
 }

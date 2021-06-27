@@ -68,7 +68,6 @@ class CacheController extends GetxController with StateMixin<String> {
       //   //打印每个缓存文件的路径
       //   print(file.path);
       // });
-      logger.d('临时目录大小: ' + value.toString());
       return value;
     } catch (err) {
       logger.e(err);

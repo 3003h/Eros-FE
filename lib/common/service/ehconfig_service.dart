@@ -13,6 +13,7 @@ import 'package:fehviewer/utils/storage.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
+import 'package:logger/logger.dart';
 
 import 'locale_service.dart';
 
@@ -219,8 +220,16 @@ class EhConfigService extends ProfileService {
 
     //
     debugMode = ehConfig.debugMode ?? false;
-    everProfile<bool>(_debugMode,
-        (bool value) => ehConfig = ehConfig.copyWith(debugMode: value));
+    everProfile<bool>(_debugMode, (bool value) {
+      ehConfig = ehConfig.copyWith(debugMode: value);
+      if (value) {
+        Logger.level = Level.debug;
+        logger.v('Level.debug');
+      } else {
+        Logger.level = Level.error;
+      }
+      resetLogLevel();
+    });
   }
 
   /// 收藏排序
