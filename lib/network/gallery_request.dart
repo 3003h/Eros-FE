@@ -58,7 +58,7 @@ class Api {
   static Future<PersistCookieJar> get cookieJar async {
     // print(_cookieJar);
     if (_cookieJar == null) {
-      print('获取的文件系统目录 appSupportPath： ' + Global.appSupportPath);
+      logger.d('获取的文件系统目录 appSupportPath： ' + Global.appSupportPath);
       _cookieJar =
           PersistCookieJar(storage: FileStorage(Global.appSupportPath));
     }

@@ -9,9 +9,9 @@ n e-hentai/exhentai app make on flutter
 
 The main reference for UI is [E-HentaiViewer](https://github.com/kayanouriko/E-HentaiViewer)
 
-Because it is flutter, so it is also cross-platform support, the main platforms tested are
-iOS 14 : iPhone XR / 12 / iPad Pro 2018
-Android 11 : MIUI12.5/ MI K40
+Because it is flutter, so it is also cross-platform support, the main platforms tested are \
+iOS 14 : iPhone XR / 12 / iPad Pro 2018 \
+Android 11 : MIUI12.5/ MI K40 \
 
 Current Issues:
 

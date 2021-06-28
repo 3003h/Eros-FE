@@ -8,13 +8,13 @@
 
 其实主要是想写给自己用，因为用的 ios，感觉现有的几个项目感觉不能满足自己的使用 \
 然后对原生开发不咋熟悉，就起了用 flutter 自己搞一个的想法 \
-就这样从入门到入土，有了现在的版本，虽然问题还缺失的功能还不少。但至少是个能看的版本了
+就这样从入门到入土，有了现在的版本，虽然问题还缺失的功能还不少。但至少是个能看的版本了 \
 
-UI 方面主要参考的[E-HentaiViewer](https://github.com/kayanouriko/E-HentaiViewer)\
+UI 方面主要参考的[E-HentaiViewer](https://github.com/kayanouriko/E-HentaiViewer)
 
-因为是 flutter 所以也是跨平台支持的，测试的平台主要有\
-iOS 14 : iPhone XR / 12 / iPad Pro 2018\
-Android 11 : MIUI12.5/ MI K40
+因为是 flutter 所以也是跨平台支持的，测试的平台主要有 \
+iOS 14 : iPhone XR / 12 / iPad Pro 2018 \
+Android 11 : MIUI12.5/ MI K40 \
 
 现有问题:
 

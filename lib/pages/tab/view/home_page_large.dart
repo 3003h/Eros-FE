@@ -1,6 +1,7 @@
 import 'package:fehviewer/pages/tab/bindings/tabhome_binding.dart';
 import 'package:fehviewer/pages/tab/controller/tabhome_controller.dart';
 import 'package:fehviewer/route/routes.dart';
+import 'package:fehviewer/utils/logger.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -13,7 +14,7 @@ class TabHomeLarge extends GetView<TabHomeController> {
 
   @override
   Widget build(BuildContext context) {
-    print('width:${context.width}');
+    logger.v('width:${context.width}');
     return Row(
       children: [
         Container(

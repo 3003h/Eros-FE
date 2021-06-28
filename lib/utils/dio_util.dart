@@ -64,7 +64,8 @@ class HttpManager {
       responseHeader: true,
       responseBody: false,
       maxWidth: 120,
-      logPrint: loggerSimple.d,
+      // logPrint: kDebugMode? loggerSimple.d : loggerSimpleOnlyFile.d,
+      logPrint: loggerSimpleOnlyFile.d,
     ));
 
     // if (kDebugMode) {
@@ -174,7 +175,7 @@ class HttpManager {
       response = await _dio.get<dynamic>(url,
           queryParameters: params, options: options, cancelToken: cancelToken);
     } on DioError catch (e) {
-      print('getHttp exception: $e');
+      logger.e('getHttp exception: $e');
 //      formatError(e);
       return response;
 //      throw e;
@@ -193,9 +194,8 @@ class HttpManager {
     try {
       response = await _dio.post<dynamic>(url,
           queryParameters: params, options: options, cancelToken: cancelToken);
-      debugPrint('postHttp response: $response');
     } on DioError catch (e) {
-      print('postHttp exception: $e');
+      logger.e('postHttp exception: $e');
       formatError(e);
 //      throw e;
     }
@@ -232,15 +232,15 @@ class HttpManager {
         urlPath,
         savePath,
         onReceiveProgress: (int count, int total) {
-          print('$count $total');
+          logger.v('$count $total');
         },
         options: Options(
           receiveTimeout: 0,
         ),
       );
-      print('downLoadFile response: $response');
+      // print('downLoadFile response: $response');
     } on DioError catch (e) {
-      print('downLoadFile exception: $e');
+      logger.e('downLoadFile exception: $e');
       formatError(e);
     }
     return response;

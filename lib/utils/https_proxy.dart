@@ -39,11 +39,11 @@ class CustomHttpsProxy {
           try {
             ClientConnectionHandler(client).handle();
           } catch (e) {
-            print('ClientConnectionHandler exception $e');
+            logger.e('ClientConnectionHandler exception $e');
           }
         });
       }).catchError((e) {
-        print('serverSocket 处理异常$e');
+        logger.e('serverSocket 处理异常$e');
       });
     }
 
@@ -168,14 +168,14 @@ class ClientConnectionHandler {
       try {
         server?.add(data);
       } catch (e) {
-        print('sever has been shut down');
+        logger.e('sever has been shut down');
         closeSockets();
       }
     }
   }
 
   void errorHandler(error, StackTrace trace) {
-    print('client socket error: $error');
+    logger.e('client socket error: $error');
   }
 
   void doneHandler() {
@@ -206,7 +206,7 @@ class ServerConnectionHandler {
     try {
       client?.add(data);
     } on Exception catch (e) {
-      print('client has been shut down $e');
+      logger.v('client has been shut down $e');
       handler.closeSockets();
     }
   }

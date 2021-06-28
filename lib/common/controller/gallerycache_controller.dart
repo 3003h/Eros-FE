@@ -14,7 +14,7 @@ class GalleryCacheController extends GetxController {
   GalleryCache? getGalleryCache(String gid) {
     final _cache = gStore.getCache(gid);
     if (!gCacheMap.containsKey(gid) && _cache != null) {
-      print('get from store');
+      logger.v('get from store');
       gCacheMap[gid] = _cache;
     }
 

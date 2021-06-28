@@ -69,8 +69,6 @@ Future<void> main() async {
     Get.put(UserController(), permanent: true);
     Get.lazyPut(() => GalleryCacheController(), fenix: true);
 
-    // Get.putAsync(() => downloadManager.init());
-    downloadManager.init();
     Get.put(DownloadController(), permanent: true);
     Get.lazyPut(() => DownloadViewController(), fenix: true);
 
@@ -91,6 +89,9 @@ Future<void> main() async {
       Logger.level = Level.error;
     }
     resetLogLevel();
+
+    downloadManager.init();
+    // downloadManager.initLogger();
 
     runApp(MyApp());
   }, (Object error, StackTrace stackTrace) {

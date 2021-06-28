@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:fehviewer/models/base/eh_models.dart';
+import 'package:fehviewer/utils/logger.dart';
 import 'package:hive/hive.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 
@@ -35,9 +36,9 @@ class HiveHelper {
     final gid = galleryItem.gid;
     await _historyBox.put(gid, jsonEncode(galleryItem));
 
-    print(_historyBox.keys);
+    logger.v(_historyBox.keys);
 
-    print('${getHistory(_historyBox.keys.last).toJson()}');
+    logger.v('${getHistory(_historyBox.keys.last).toJson()}');
   }
 
   Future<void> removeHistory(String gid) async {

@@ -231,7 +231,7 @@ class FavDialogController extends GetxController {
     try {
       result = await showFavListDialog(context, favList);
     } catch (e, stack) {
-      print('$e\n$stack');
+      logger.e('$e\n$stack');
     }
 
     logger.v('$result  ${result.runtimeType}');
