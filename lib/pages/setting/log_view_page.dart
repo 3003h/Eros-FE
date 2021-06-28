@@ -26,7 +26,7 @@ class LogViewPage extends StatelessWidget {
     final _log = const Utf8Decoder(allowMalformed: true).convert(_logByte);
 
     SchedulerBinding.instance?.addPostFrameCallback((_) {
-      //build完成后的回调
+      // build完成后的回调
       logger.v('to end');
       _scrollController.animateTo(
         _scrollController.position.maxScrollExtent, //滚动到底部
@@ -42,6 +42,7 @@ class LogViewPage extends StatelessWidget {
       navigationBar: CupertinoNavigationBar(
         padding: const EdgeInsetsDirectional.only(start: 0),
         middle: Text(title),
+        previousPageTitle: 'Log',
         trailing: CupertinoButton(
           padding: const EdgeInsets.only(right: 12),
           // 清除按钮

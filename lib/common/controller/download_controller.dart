@@ -23,6 +23,10 @@ import 'package:get/get.dart';
 import 'package:path/path.dart' as path;
 import 'package:path_provider/path_provider.dart';
 
+Future<String> get defDownloadPath async => GetPlatform.isAndroid
+    ? path.join((await getExternalStorageDirectory())!.path, 'Download')
+    : path.join(Global.appDocPath, 'Download');
+
 class DownloadController extends GetxController {
   // key DownloadTaskInfo.tag
   final RxMap<String, DownloadTaskInfo> archiverTaskMap =

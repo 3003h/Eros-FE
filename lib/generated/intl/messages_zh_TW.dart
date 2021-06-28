@@ -61,6 +61,8 @@ class MessageLookup extends MessageLookupByLibrary {
         "done": MessageLookupByLibrary.simpleMessage("Done"),
         "double_click_back": MessageLookupByLibrary.simpleMessage("再按一次返回退出"),
         "download": MessageLookupByLibrary.simpleMessage("下載"),
+        "download_locatino":
+            MessageLookupByLibrary.simpleMessage("Download Locatino"),
         "eh": MessageLookupByLibrary.simpleMessage("E·H"),
         "ehentai_my_tags": MessageLookupByLibrary.simpleMessage("我的标签"),
         "ehentai_settings": MessageLookupByLibrary.simpleMessage("EHentai 设置"),

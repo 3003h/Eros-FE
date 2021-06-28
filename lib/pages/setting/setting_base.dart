@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:extended_text/extended_text.dart';
 import 'package:fehviewer/common/global.dart';
 import 'package:fehviewer/common/service/dns_service.dart';
 import 'package:fehviewer/common/service/theme_service.dart';
@@ -19,12 +20,14 @@ class SelectorSettingItem extends StatefulWidget {
     Key? key,
     this.onTap,
     required this.title,
+    this.desc,
     this.selector,
     this.hideLine = false,
   }) : super(key: key);
 
   final String title;
   final String? selector;
+  final String? desc;
   final bool hideLine;
 
   // 点击回调
@@ -55,27 +58,64 @@ class _SelectorSettingItemState extends State<SelectorSettingItem> {
       _pBackgroundColor = color;
     }
 
+    const _kDescStyle = TextStyle(
+        fontSize: 12.5, height: 1.1, color: CupertinoColors.systemGrey);
+
     final Container container = Container(
       color: _color,
       child: Column(
+        mainAxisSize: MainAxisSize.min,
         children: <Widget>[
           Container(
-            height: kItemHeight,
+            // height: kItemHeight,
+            constraints: const BoxConstraints(
+              minHeight: kItemHeight,
+            ),
             alignment: Alignment.centerLeft,
-            padding: const EdgeInsets.fromLTRB(20, 0, 20, 0),
+            padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 20),
             child: Row(
               children: <Widget>[
-                Text(
-                  widget.title,
-                  style: const TextStyle(
-                    height: 1.0,
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Text(
+                        widget.title,
+                        style: const TextStyle(
+                          height: 1.0,
+                        ),
+                      ),
+                      if (widget.desc != null && widget.desc!.isNotEmpty)
+                        ExtendedText(
+                          widget.desc ?? '',
+                          maxLines: 4,
+                          softWrap: true,
+                          // overflow: TextOverflow.ellipsis,
+                          overflowWidget: const TextOverflowWidget(
+                            position: TextOverflowPosition.start,
+                            child: Text(
+                              '\u2026 ',
+                              style: _kDescStyle,
+                            ),
+                          ),
+                          // joinZeroWidthSpace: true,
+                          style: _kDescStyle,
+                        ).paddingOnly(top: 2.0),
+                    ],
                   ),
                 ),
-                const Spacer(),
-                Text(
-                  widget.selector ?? '',
-                  style: const TextStyle(
-                    color: CupertinoColors.systemGrey2,
+                // const Spacer(),
+                Container(
+                  alignment: Alignment.centerRight,
+                  padding: const EdgeInsets.only(left: 8),
+                  child: Text(
+                    widget.selector ?? '',
+                    overflow: TextOverflow.ellipsis,
+                    style: const TextStyle(
+                      color: CupertinoColors.systemGrey2,
+                    ),
                   ),
                 ),
                 const Icon(

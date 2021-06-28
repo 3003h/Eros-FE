@@ -1,9 +1,16 @@
+import 'dart:io';
+
+import 'package:fehviewer/common/controller/download_controller.dart';
+import 'package:fehviewer/common/global.dart';
 import 'package:fehviewer/common/service/ehconfig_service.dart';
 import 'package:fehviewer/common/service/theme_service.dart';
 import 'package:fehviewer/const/const.dart';
 import 'package:fehviewer/generated/l10n.dart';
 import 'package:fehviewer/pages/setting/setting_base.dart';
+import 'package:file_picker/file_picker.dart';
+// import 'package:filesystem_picker/filesystem_picker.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 class DownloadSettingPage extends StatelessWidget {
@@ -27,9 +34,34 @@ class DownloadSettingPage extends StatelessWidget {
 }
 
 class ListViewDownloadSetting extends StatelessWidget {
+  final EhConfigService ehConfigService = Get.find();
   @override
   Widget build(BuildContext context) {
     final List<Widget> _list = <Widget>[
+      if (GetPlatform.isAndroid || GetPlatform.isFuchsia)
+        Obx(() {
+          ehConfigService.downloadLocatino;
+          return FutureBuilder<String>(
+              future: defDownloadPath,
+              builder: (context, snapshot) {
+                return SelectorSettingItem(
+                  title: S.of(context).download_locatino,
+                  desc: snapshot.data ?? '',
+                  onTap: () async {
+                    // final FilePickerResult? result =
+                    //     await FilePicker.platform.pickFiles();
+                    // String? path = await FilesystemPicker.open(
+                    //   title: 'Save to folder',
+                    //   context: context,
+                    //   rootDirectory: Directory(Global.extStorePath),
+                    //   fsType: FilesystemType.folder,
+                    //   pickText: 'Save file to this folder',
+                    //   folderIconColor: Colors.teal,
+                    // );
+                  },
+                );
+              });
+        }),
       _buildPreloadImageItem(context),
     ];
     return ListView.builder(
