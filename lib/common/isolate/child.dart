@@ -3,12 +3,11 @@ part of 'download.dart';
 /// isoload下载入口函数
 /// 在这里进行实际的链接解析，图片文件下载
 void _isolateDownload(SendPort sendPort) {
-  // logger.d('init _isolateDownload');
+  initLogger(isolate: true);
+  logger.d('init _isolateDownload');
   // 创建一个消息接收器
   final ReceivePort _receivePort = ReceivePort();
   sendPort.send(_receivePort.sendPort);
-
-  final bool _inDebugMode = EHUtils().isInDebugMode;
 
   // 监听父isolate消息
   _receivePort.listen((dynamic message) async {
