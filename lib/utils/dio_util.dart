@@ -59,13 +59,12 @@ class HttpManager {
     _dio.interceptors.add(DioFirebasePerformanceInterceptor());
 
     _dio.interceptors.add(PrettyDioLogger(
+      requestHeader: true,
       requestBody: true,
       responseHeader: true,
       responseBody: false,
-      maxWidth: 100,
-      logPrint: (log) {
-        loggerSimple.d(log);
-      },
+      maxWidth: 120,
+      logPrint: loggerSimple.d,
     ));
 
     // if (kDebugMode) {

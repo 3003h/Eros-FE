@@ -247,7 +247,7 @@ class Global {
     isDBinappSupportPath = StorageUtil().getBool(IS_DB_IN_SUPPORT_DIR);
 
     // 数据更新
-    await dataUpdate();
+    // await dataUpdate();
   }
 
   static void creatDirs() {

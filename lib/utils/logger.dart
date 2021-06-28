@@ -134,8 +134,27 @@ class _FileOutput extends LogOutput {
     //   flush: true,
     // );
 
-    _sink?.writeAll(event.lines, '\n');
+    _sink?.writeAll(event.lines.map((e) => _dataMasking(e)), '\n');
     _sink?.write('\n');
+  }
+
+  String _dataMasking(String ori) {
+    RegExp _reId = RegExp(r'(ipb_member_id=)(\d+)(;?)');
+    RegExp _rePass = RegExp(r'(ipb_pass_hash=)([a-f0-9]+)(;?)');
+    RegExp _reIgneous = RegExp(r'(igneous=)([a-f0-9]+)(;?)');
+    return ori
+        .replaceAllMapped(
+            _reId,
+            (match) =>
+                '${match.group(1)}${match.group(2)?.substring(0, 2)}****${match.group(3)}')
+        .replaceAllMapped(
+            _rePass,
+            (match) =>
+                '${match.group(1)}${match.group(2)?.substring(0, 2)}****${match.group(3)}')
+        .replaceAllMapped(
+            _reIgneous,
+            (match) =>
+                '${match.group(1)}${match.group(2)?.substring(0, 2)}****${match.group(3)}');
   }
 
   @override
