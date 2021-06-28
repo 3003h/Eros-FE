@@ -1,14 +1,20 @@
 import 'dart:convert';
 import 'dart:io';
 
+import 'package:fehviewer/common/global.dart';
 import 'package:fehviewer/common/service/log_service.dart';
 import 'package:fehviewer/utils/logger/pretty_printer.dart';
 import 'package:get/get.dart';
+import 'package:intl/intl.dart';
 import 'package:logger/logger.dart';
 import 'package:path/path.dart' as path;
 
-String get _fileName => Get.find<LogService>().curFileName;
-String get _filePath => Get.find<LogService>().logPath;
+const kFilenameFormat = 'yyyy-MM-dd HH:mm:ss';
+const kSuffix = '.log';
+
+String? _logDirectory;
+
+String? _logFileName;
 
 late Logger logger;
 
@@ -22,18 +28,39 @@ late Logger loggerSimple;
 
 final LogOutput _outPut = MultiOutput([
   ConsoleOutput(),
-  _FileOutput(
-    file: File(
-      path.join(_filePath, _fileName),
+  if (_logDirectory != null && _logFileName != null)
+    _FileOutput(
+      file: File(
+        path.join(_logDirectory!, _logFileName),
+      ),
     ),
-  ),
 ]);
 
-void resetLogLevel() {
-  initLogger();
+void _initFile() {
+  _logDirectory = path.join(
+      GetPlatform.isAndroid ? Global.extStorePath : Global.appDocPath, 'log');
+  if (!Directory(_logDirectory!).existsSync()) {
+    Directory(_logDirectory!).createSync(recursive: true);
+  }
+
+  final DateTime _now = DateTime.now();
+  final DateFormat formatter = DateFormat(kFilenameFormat);
+  final String _fileName = formatter.format(_now);
+  _logFileName = '$_fileName$kSuffix';
 }
 
-void initLogger() {
+void initLogger({bool isolate = false}) {
+  if (!isolate) {
+    _initFile();
+  }
+  initLoggerValue();
+}
+
+void resetLogLevel() {
+  initLoggerValue();
+}
+
+void initLoggerValue() {
   logger = Logger(
     // level: _logLevel,
     filter: EHLogFilter(),
