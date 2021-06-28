@@ -1569,6 +1569,16 @@ class S {
       args: [],
     );
   }
+
+  /// `Download Locatino`
+  String get download_locatino {
+    return Intl.message(
+      'Download Locatino',
+      name: 'download_locatino',
+      desc: '',
+      args: [],
+    );
+  }
 }
 
 class AppLocalizationDelegate extends LocalizationsDelegate<S> {

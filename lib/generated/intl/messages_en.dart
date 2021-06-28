@@ -68,6 +68,8 @@ class MessageLookup extends MessageLookupByLibrary {
         "double_click_back":
             MessageLookupByLibrary.simpleMessage("Press again to exit"),
         "download": MessageLookupByLibrary.simpleMessage("Download"),
+        "download_locatino":
+            MessageLookupByLibrary.simpleMessage("Download Locatino"),
         "eh": MessageLookupByLibrary.simpleMessage("E·H"),
         "ehentai_my_tags": MessageLookupByLibrary.simpleMessage("My tags"),
         "ehentai_settings":

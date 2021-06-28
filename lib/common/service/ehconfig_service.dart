@@ -85,6 +85,10 @@ class EhConfigService extends ProfileService {
   get debugMode => _debugMode.value;
   set debugMode(val) => _debugMode.value = val;
 
+  final _downloadLocatino = ''.obs;
+  get downloadLocatino => _downloadLocatino.value;
+  set downloadLocatino(val) => _downloadLocatino.value = val;
+
   @override
   void onInit() {
     super.onInit();
@@ -94,6 +98,12 @@ class EhConfigService extends ProfileService {
     everProfile<int>(preloadImage, (value) {
       // downloadConfig.preloadImage = value;
       downloadConfig = downloadConfig.copyWith(preloadImage: value);
+    });
+
+    // downloadLocatino
+    downloadLocatino = downloadConfig.downloadLocatino ?? '';
+    everProfile<String>(_downloadLocatino, (value) {
+      downloadConfig = downloadConfig.copyWith(downloadLocatino: value);
     });
 
     /// 阅读方向
