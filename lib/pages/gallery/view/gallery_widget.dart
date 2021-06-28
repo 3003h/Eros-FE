@@ -1,4 +1,5 @@
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:extended_text/extended_text.dart';
 import 'package:fehviewer/common/global.dart';
 import 'package:fehviewer/common/service/depth_service.dart';
 import 'package:fehviewer/common/service/ehconfig_service.dart';
@@ -7,6 +8,7 @@ import 'package:fehviewer/const/theme_colors.dart';
 import 'package:fehviewer/generated/l10n.dart';
 import 'package:fehviewer/models/index.dart';
 import 'package:fehviewer/pages/gallery/controller/comment_controller.dart';
+import 'package:fehviewer/pages/gallery/controller/extended_text_selection_controller.dart';
 import 'package:fehviewer/pages/gallery/controller/gallery_page_controller.dart';
 import 'package:fehviewer/pages/gallery/view/comment_item.dart';
 import 'package:fehviewer/pages/gallery/view/gallery_favcat.dart';
@@ -174,13 +176,32 @@ class GalleryTitle extends StatelessWidget {
     /// 20210107 改用SelectableText测试
 
     return GestureDetector(
-      child: SelectableText(
+      /*child: SelectableText(
         _pageController.title,
         maxLines: 6,
         minLines: 1,
         textAlign: TextAlign.left,
         // 对齐方式
         // overflow: TextOverflow.ellipsis, // 超出部分省略号
+        style: const TextStyle(
+          textBaseline: TextBaseline.alphabetic,
+          // height: 1.2,
+          fontSize: 16,
+          fontWeight: FontWeight.w500,
+        ),
+        strutStyle: const StrutStyle(
+          height: 1.2,
+          forceStrutHeight: true,
+        ),
+      ),*/
+      child: ExtendedText(
+        _pageController.title,
+        selectionEnabled: true,
+        textAlign: TextAlign.left,
+        // 对齐方式
+        overflow: TextOverflow.ellipsis, // 超出部分省略号
+        maxLines: 6,
+        selectionControls: EHTextSelectionControls(),
         style: const TextStyle(
           textBaseline: TextBaseline.alphabetic,
           // height: 1.2,
@@ -489,7 +510,7 @@ class PreviewContainer extends StatelessWidget {
     required this.index,
     required this.galleryPreviewList,
     required this.gid,
-  })   : galleryPreview = galleryPreviewList[index],
+  })  : galleryPreview = galleryPreviewList[index],
         hrefs = List<String>.from(
             galleryPreviewList.map((GalleryPreview e) => e.href).toList()),
         super(key: key);

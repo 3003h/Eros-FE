@@ -32,7 +32,7 @@ class EhUserManager {
       'PassWord': passwd,
       'submit': 'Log me in',
       'temporary_https': 'off',
-      'CookieDate': '1',
+      'CookieDate': '365',
     });
 
     final Options options =
@@ -41,8 +41,8 @@ class EhUserManager {
     Response? rult;
     try {
       rult = await httpManager.postForm(url, data: formData, options: options);
-    } catch (e) {
-      logger.d('$e');
+    } catch (e, stack) {
+      logger.e('$e\n$stack');
     }
 
     //  登录异常处理
@@ -71,18 +71,18 @@ class EhUserManager {
     final String _id = _cookies
         .firstWhere((Cookie cookie) => cookie.name == 'ipb_member_id')
         .value;
-    if (_id == null || _id.isEmpty) {
+    if (_id.isEmpty) {
       throw EhError(type: EhErrorType.LOGIN);
     }
 
     final PersistCookieJar cookieJar = await Api.cookieJar;
 
-    // 设置EX的cookie
+    // set ex cookie
     cookieJar.saveFromResponse(Uri.parse(EHConst.EX_BASE_URL), _cookies);
 
     await _getExIgneous();
 
-    //获取Ex cookies
+    //check Ex cookies
     final List<Cookie> cookiesEx =
         await cookieJar.loadForRequest(Uri.parse(EHConst.EX_BASE_URL));
 
@@ -193,7 +193,7 @@ class EhUserManager {
     final List<Cookie> cookies = <Cookie>[
       Cookie('ipb_member_id', id),
       Cookie('ipb_pass_hash', hash),
-      // Cookie('nw', '1'),
+      Cookie('nw', '1'),
     ];
 
     final PersistCookieJar cookieJar = await Api.cookieJar;
