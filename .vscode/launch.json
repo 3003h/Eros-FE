@@ -6,7 +6,7 @@
     "configurations": [
 
         {
-            "name": "Flutter",
+            "name": "no-sound-null",
             "request": "launch",
             "args": ["--no-sound-null-safety"],
             "type": "dart"

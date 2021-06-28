@@ -1,10 +1,10 @@
 # FEhViewer
-
-# 应用简介
+[English](https://github.com/honjow/FEhViewer/blob/nullsafety/README.md)|中文
+## 应用简介
 
 一个 flutter 编写的 e-hentai/exhentai app
 
-# 说明
+## 说明
 
 其实主要是想写给自己用，因为用的 ios，感觉现有的几个项目感觉不能满足自己的使用 \
 然后对原生开发不咋熟悉，就起了用 flutter 自己搞一个的想法 \
@@ -21,7 +21,7 @@ Android 11 : MIUI12.5/ MI K40
 - 列表滑动可能会有小卡顿。没有原生应用那么流畅
 - 确失一些必要功能(还在开发完善中)
 
-# 感谢
+## 感谢
 
 应用借鉴和参考以下项目的部分代码和逻辑进行开发
 
@@ -32,22 +32,27 @@ ehentai译文数据库
 
 - [EhTagTranslation/Database](https://github.com/EhTagTranslation/Database)
 
-# 应用截图
-## 主页列表
+## 应用截图
+
+### 主页列表
+
 <img width="200" src="https://raw.githubusercontent.com/honjow/FEhViewer/nullsafety/screenshot/2021-06-21%2019.15.21.jpg" >
 
-## 画廊
+### 画廊
+
 <img width="200" src="https://raw.githubusercontent.com/honjow/FEhViewer/nullsafety/screenshot/2021-06-21%2019.15.27.jpg" > <img width="200" src="https://raw.githubusercontent.com/honjow/FEhViewer/nullsafety/screenshot/2021-06-21%2019.15.43.jpg" > <img width="200" src="https://raw.githubusercontent.com/honjow/FEhViewer/nullsafety/screenshot/2021-06-21%2019.16.56.jpg" >
 
-## 搜索
+### 搜索
+
 <img width="200" src="https://raw.githubusercontent.com/honjow/FEhViewer/nullsafety/screenshot/2021-06-21%2019.15.53.jpg" > <img width="200" src="https://raw.githubusercontent.com/honjow/FEhViewer/nullsafety/screenshot/2021-06-21%2019.15.58.jpg" > <img width="200" src="https://raw.githubusercontent.com/honjow/FEhViewer/nullsafety/screenshot/2021-06-21%2019.16.02.jpg" >
 
-## 阅读
+### 阅读
+
 <img width="200" src="https://raw.githubusercontent.com/honjow/FEhViewer/nullsafety/screenshot/2021-06-21%2019.16.08.jpg" > <img width="200" src="https://raw.githubusercontent.com/honjow/FEhViewer/nullsafety/screenshot/2021-06-21%2019.54.50.jpg" >
 
-# 功能
+## 功能
 
-- [x] 热门,列表画廊,收藏浏览
+- [x] 热门,关注,主页,收藏
 - [x] 列表视图,瀑布流视图切换
 - [x] 画廊信息查看
 - [x] 图片浏览
@@ -63,12 +68,11 @@ ehentai译文数据库
 - [x] 发表评论 赞和踩
 - [x] watched 和用户 tag
 
-# TODO
-
+## TODO
 
 - [ ] 下载功能(开发中)
 
-# 依赖项目/插件（部分）
+## 依赖项目/插件（部分）
 
 - 网络 [dio](https://pub.dev/packages/dio)
 - 状态管理 [getx](https://pub.dev/packages/get)
@@ -77,6 +81,7 @@ ehentai译文数据库
 - 国际化 [intl](https://pub.dev/packages/intl)
 - 图片 [cached_network_image](https://pub.dev/packages/cached_network_image)、[extended_image](https://pub.dev/packages/extended_image)
 
-# 编译相关
+## 编译相关
+
 flutter版本为最新release版本
 因项目引入firebase, 需要放置自己的google-services.json文件等
