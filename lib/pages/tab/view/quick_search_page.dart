@@ -68,7 +68,7 @@ class QuickSearchListPage extends StatelessWidget {
     if (docById.exists) {
       final List _importTexts = docById.get('list') as List;
 
-      print(_importTexts);
+      logger.v(_importTexts);
 
       _importTexts.forEach((dynamic element) {
         if (element.trim().isNotEmpty && !element.startsWith('#'))
@@ -368,21 +368,21 @@ class QuickSearchListPage extends StatelessWidget {
     final UserController _userController = Get.find();
 
     final User _user = _userController.user.value;
-    print(_user.cookie);
+    logger.v(_user.cookie);
 
     final String memberId = _user.memberIdFB;
     if (memberId.isNotEmpty) {
-      print('memberId $memberId');
+      logger.v('memberId $memberId');
       return memberId;
     }
 
     if (Platform.isIOS) {
       final IosDeviceInfo iosDeviceInfo = await deviceInfo.iosInfo;
-      print('ios唯一设备码：' + iosDeviceInfo.identifierForVendor);
+      logger.v('ios唯一设备码：' + iosDeviceInfo.identifierForVendor);
       return iosDeviceInfo.identifierForVendor; // unique ID on iOS
     } else {
       final AndroidDeviceInfo androidDeviceInfo = await deviceInfo.androidInfo;
-      print('android唯一设备码：' + androidDeviceInfo.androidId);
+      logger.v('android唯一设备码：' + androidDeviceInfo.androidId);
       return androidDeviceInfo.androidId; // unique ID on Android
     }
   }

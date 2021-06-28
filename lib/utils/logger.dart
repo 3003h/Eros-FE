@@ -12,9 +12,9 @@ import 'package:path/path.dart' as path;
 const kFilenameFormat = 'yyyy-MM-dd HH:mm:ss';
 const kSuffix = '.log';
 
-String? _logDirectory;
+String? logDirectory;
 
-String? _logFileName;
+String? logFileName;
 
 late Logger logger;
 
@@ -26,32 +26,38 @@ late Logger loggerNoStackTime;
 
 late Logger loggerSimple;
 
+late Logger loggerSimpleOnlyFile;
+
 final LogOutput _outPut = MultiOutput([
   ConsoleOutput(),
-  if (_logDirectory != null && _logFileName != null)
+  if (logDirectory != null && logFileName != null)
     _FileOutput(
       file: File(
-        path.join(_logDirectory!, _logFileName),
+        path.join(logDirectory!, logFileName),
       ),
     ),
 ]);
 
-void _initFile() {
-  _logDirectory = path.join(
-      GetPlatform.isAndroid ? Global.extStorePath : Global.appDocPath, 'log');
-  if (!Directory(_logDirectory!).existsSync()) {
-    Directory(_logDirectory!).createSync(recursive: true);
+void _initFile({String? directory, String? fileName}) {
+  logDirectory = directory ??
+      path.join(GetPlatform.isAndroid ? Global.extStorePath : Global.appDocPath,
+          'log');
+  if (!Directory(logDirectory!).existsSync()) {
+    Directory(logDirectory!).createSync(recursive: true);
   }
 
   final DateTime _now = DateTime.now();
   final DateFormat formatter = DateFormat(kFilenameFormat);
   final String _fileName = formatter.format(_now);
-  _logFileName = '$_fileName$kSuffix';
+  logFileName = fileName ?? '$_fileName$kSuffix';
 }
 
-void initLogger({bool isolate = false}) {
+void initLogger({bool isolate = false, String? directory, String? fileName}) {
   if (!isolate) {
-    _initFile();
+    _initFile(
+      directory: directory,
+      fileName: fileName,
+    );
   }
   initLoggerValue();
 }
@@ -105,6 +111,18 @@ void initLoggerValue() {
     filter: EHLogFilter(),
     printer: SimplePrinter(),
     output: _outPut,
+  );
+
+  loggerSimpleOnlyFile = Logger(
+    filter: EHLogFilter(),
+    printer: SimplePrinter(),
+    output: (logDirectory != null && logFileName != null)
+        ? _FileOutput(
+            file: File(
+              path.join(logDirectory!, logFileName),
+            ),
+          )
+        : null,
   );
 }
 

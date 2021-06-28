@@ -1,4 +1,5 @@
 import 'package:fehviewer/pages/tab/controller/unlock_page_controller.dart';
+import 'package:fehviewer/utils/logger.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -83,7 +84,7 @@ class _UnLockPageState extends State<UnLockPage> {
         fillPoints: true,
         // callback that called when user's input complete. Called if user selected one or more points.
         onInputComplete: (List<int> input) {
-          print('pattern is $input');
+          logger.v('pattern is $input');
           controller.infoText = '$input';
         },
       ),

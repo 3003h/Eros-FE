@@ -3,6 +3,7 @@ import 'package:fehviewer/common/global.dart';
 import 'package:fehviewer/models/base/eh_models.dart';
 import 'package:fehviewer/network/gallery_request.dart';
 import 'package:fehviewer/utils/dio_util.dart';
+import 'package:fehviewer/utils/logger.dart';
 import 'package:fehviewer/utils/utility.dart';
 import 'package:html/dom.dart';
 import 'package:html/parser.dart' show parse;
@@ -48,7 +49,7 @@ class GalleryFavParser {
     // 解析响应信息dom
     final Document document = parse(response);
 
-    print('frome parserAddFavPage');
+    logger.v('frome parserAddFavPage');
 
     final List<Favcat> favList = <Favcat>[];
 

@@ -19,7 +19,6 @@ import 'package:fehviewer/store/floor/entity/gallery_image_task.dart';
 import 'package:fehviewer/store/floor/entity/gallery_task.dart';
 import 'package:fehviewer/utils/logger.dart';
 import 'package:fehviewer/utils/toast.dart';
-import 'package:fehviewer/utils/utility.dart';
 import 'package:get/get.dart' hide Response;
 import 'package:html/dom.dart';
 import 'package:html/parser.dart' show parse;
@@ -31,6 +30,7 @@ final DownloadManager downloadManager = DownloadManager();
 
 enum _RequestType {
   addTask,
+  initLogger,
 }
 
 enum _ResponseType {
@@ -62,6 +62,7 @@ class _RequestBean {
     this.initPreviews,
     this.galleryTask,
     this.imageTasks,
+    this.loginfo,
   });
 
   final String? appSupportPath;
@@ -72,15 +73,23 @@ class _RequestBean {
   final List<GalleryPreview>? initPreviews;
   final GalleryTask? galleryTask;
   final List<GalleryImageTask>? imageTasks;
+  final List<String?>? loginfo;
 }
 
 class _ResponseBean {
-  _ResponseBean({this.previews, this.progess, this.galleryTask, this.msg});
+  _ResponseBean({
+    this.previews,
+    this.progess,
+    this.galleryTask,
+    this.msg,
+    this.desc,
+  });
 
   final List<GalleryPreview>? previews;
   final ProgessBean? progess;
   final GalleryTask? galleryTask;
   final String? msg;
+  final String? desc;
 }
 
 class _RequestProtocol {
@@ -88,6 +97,9 @@ class _RequestProtocol {
 
   const _RequestProtocol.addTask(this.data)
       : requestType = _RequestType.addTask;
+
+  const _RequestProtocol.initLogger(this.data)
+      : requestType = _RequestType.initLogger;
 
   final _RequestType? requestType;
 
@@ -137,13 +149,16 @@ class DownloadManager {
         if (message is SendPort) {
           // 初始化 获取子isolate的 sendPort
           _sendPortToChild = message;
+          _initLogger();
         }
 
         if (message is _ResponseProtocol) {
           final _ResponseType _responseType = message.responseType!;
           final _ResponseBean _resBean = message.data;
           switch (_responseType) {
-            case _ResponseType.initDtl: // 明细更新
+
+            /// 任务明细更新
+            case _ResponseType.initDtl:
               final List<GalleryPreview> _rultPreviews = _resBean.previews!;
               final GalleryTask _galleryTask = _resBean.galleryTask!;
               // 更新状态
@@ -178,13 +193,12 @@ class DownloadManager {
               logger.d('${_list.map((e) => e.toString()).join('\n')} ');
 
               break;
-            case _ResponseType.progress: // 进度更新
+
+            /// 进度更新
+            case _ResponseType.progress:
               // 更新 大图 相关信息
               final ProgessBean _progess = _resBean.progess!;
               final GalleryTask _galleryTask = _resBean.galleryTask!;
-
-              final GalleryPageController _pageController =
-                  Get.find(tag: pageCtrlDepth);
 
               logger.v('parent progess '
                   '${_progess.updateImages!.map((e) => e.toString()).join('\n')}');
@@ -198,13 +212,13 @@ class DownloadManager {
                   filePath: _uptImageTask.filePath!,
                   sourceId: _uptImageTask.sourceId!,
                 );
-                if (_uptTask != null) {
-                  await _imageTaskDao.updateImageTask(_uptTask);
+                await _imageTaskDao.updateImageTask(_uptTask);
 
-                  // _pageController.previews
-                  //     .firstWhere((GalleryPreview element) =>
-                  //         element.ser == _uptImageTask.ser)
-                  //     .largeImageUrl = _uptImageTask.imageUrl;
+                if (Get.isRegistered<GalleryPageController>()) {
+                  // 可能会有画廊已经退出的情况 _pageController会获取不到
+                  final GalleryPageController _pageController =
+                      Get.find(tag: pageCtrlDepth);
+
                   final int _preIndex = _pageController.previews.indexWhere(
                       (GalleryPreview element) =>
                           element.ser == _uptImageTask.ser);
@@ -215,12 +229,19 @@ class DownloadManager {
               }
 
               break;
-            case _ResponseType.complete: // 下载完成
+
+            /// 下载完成
+            case _ResponseType.complete:
               logger.i('${_resBean.msg} ');
 
               showToast('${_resBean.msg} ');
               break;
+
+            /// ERROR
             case _ResponseType.error:
+              logger
+                  .e('isolate child error:\n${_resBean.msg}\n${_resBean.desc}');
+              showToast('error:\n${_resBean.msg} ');
               break;
             default:
               break;
@@ -238,6 +259,20 @@ class DownloadManager {
     _isolate?.kill(priority: Isolate.immediate);
   }
 
+  // 初始化isolate日志
+  void _initLogger() {
+    logger.d('send initLogger isolate [$logDirectory] [$logFileName]');
+    final _RequestBean _requestBean = _RequestBean(
+      appSupportPath: Global.appSupportPath,
+      appDocPath: Global.appDocPath,
+      extStorePath: Global.extStorePath,
+      loginfo: [logDirectory, logFileName],
+    );
+
+    _sendPortToChild?.send(_RequestProtocol.initLogger(_requestBean));
+  }
+
+  // 添加任务
   void addTask(
       {required GalleryTask galleryTask,
       List<GalleryImageTask>? imageTasks,

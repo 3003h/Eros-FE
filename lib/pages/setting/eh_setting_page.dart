@@ -72,7 +72,7 @@ class ListViewEhSetting extends StatelessWidget {
             logger.v('do not need update');
           }
         } catch (e) {
-          debugPrint('更新翻译异常 $e');
+          logger.e('更新翻译异常 $e');
           rethrow;
         }
       }

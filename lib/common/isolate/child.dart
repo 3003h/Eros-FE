@@ -3,8 +3,19 @@ part of 'download.dart';
 /// isoload下载入口函数
 /// 在这里进行实际的链接解析，图片文件下载
 void _isolateDownload(SendPort sendPort) {
-  initLogger(isolate: true);
-  logger.d('init _isolateDownload');
+  // try {
+  //   initLogger(isolate: true);
+  //   logger.d('init _isolateDownload only ConsoleOutput');
+  // } catch (e, stack) {
+  //   sendPort.send(
+  //     _ResponseProtocol.error(
+  //       _ResponseBean(
+  //         msg: '$e\n$stack',
+  //       ),
+  //     ),
+  //   );
+  // }
+
   // 创建一个消息接收器
   final ReceivePort _receivePort = ReceivePort();
   sendPort.send(_receivePort.sendPort);
@@ -18,11 +29,22 @@ void _isolateDownload(SendPort sendPort) {
 
         switch (_requestType) {
 
+          /// initLogger
+          case _RequestType.initLogger:
+            final List<String?>? _loginfo = _requestBean.loginfo;
+            print(_loginfo);
+            if (_loginfo != null && _loginfo.length >= 2) {
+              initLogger(directory: _loginfo[0], fileName: _loginfo[1]);
+              logger.d('init _isolate Logger');
+            }
+            break;
+
           /// 添加下载任务
           /// 接收父线程发过来的画廊信息
           /// 开始获取解析画廊web页面
           /// 解析画廊图片url
           case _RequestType.addTask:
+            print('_RequestType.addTask');
             final GalleryTask _initGalleryTask = _requestBean.galleryTask!;
             logger.d(
                 'isolate add task ${_initGalleryTask.gid} ${_initGalleryTask.title}');
@@ -34,7 +56,7 @@ void _isolateDownload(SendPort sendPort) {
 
             // 更新大图url 下载图片 通知父线程
             logger.v('更新大图url 下载图片 通知父线程 start');
-            await _fetchAllImageInfo(_requestBean, sendPort, _previews);
+            await _downloadAllImage(_requestBean, sendPort, _previews);
 
             // 测试 发送消息回父isolate
             sendPort.send(
@@ -53,6 +75,14 @@ void _isolateDownload(SendPort sendPort) {
       }
     } catch (e, stack) {
       logger.e('$e\n$stack');
+      sendPort.send(
+        _ResponseProtocol.error(
+          _ResponseBean(
+            msg: '$e',
+            desc: '$stack',
+          ),
+        ),
+      );
       // rethrow;
     }
   });
@@ -69,7 +99,7 @@ Future<List<GalleryPreview>> _updateDtl(
     initPreviews: _requestBean.initPreviews,
   );
 
-  // logger.d('${_previews.length}');
+  logger.d('获取所有图片页的href完成 ${_previews.length}');
 
   // 发送获取结果到父iso 更新明细库
   sendPort.send(
@@ -81,7 +111,95 @@ Future<List<GalleryPreview>> _updateDtl(
   return _previews;
 }
 
-Future<void> _fetchAllImageInfo(
+Future<void> _fetchAndDownloadOneImage(
+  _RequestBean _requestBean,
+  SendPort sendPort,
+  GalleryPreview preview,
+) async {
+  // logger.d('new get imageUrl ${preview.ser} ');
+  final GalleryPreview _info = await _isoParaImageLageInfoFromHtml(
+    preview.href!,
+    isSiteEx: _requestBean.isSiteEx ?? false,
+    appSupportPath: _requestBean.appSupportPath!,
+  );
+
+  final String _fileName =
+      _info.largeImageUrl!.substring(_info.largeImageUrl!.lastIndexOf('/') + 1);
+  logger.d(
+      'isolate gid[${_requestBean.galleryTask?.gid}] ${preview.ser}\n url:[${_info.largeImageUrl}]\n _fileName [$_fileName]');
+
+  final ProgessBean _progessBean = ProgessBean(updateImages: [
+    GalleryImageTask(
+      gid: _requestBean.galleryTask!.gid,
+      ser: preview.ser,
+      imageUrl: _info.largeImageUrl,
+      sourceId: _info.sourceId,
+      filePath: _fileName,
+      token: '',
+    ),
+  ]);
+  // 发送消息回父 isolate, 更新明细中的largeImageUrl,sourceId,_fileName
+  sendPort.send(
+    _ResponseProtocol.progress(
+      _ResponseBean(
+        progess: _progessBean,
+        galleryTask: _requestBean.galleryTask,
+      ),
+    ),
+  );
+
+  /// 开始下载
+  try {
+    await _downloadImage(
+      _requestBean,
+      sendPort,
+      _info.largeImageUrl!,
+      _fileName,
+      _requestBean.appDocPath!,
+      _requestBean.extStorePath!,
+      _requestBean.downloadPath!,
+    );
+  } on DioError catch (e) {
+    if (e.response?.statusCode == 403) {
+      logger.e('403');
+    }
+    if (e.type == DioErrorType.connectTimeout) {
+      logger.e('连接超时');
+    }
+  } catch (e) {
+    rethrow;
+  }
+}
+
+Future<void> _reDownloadOneImage(
+  _RequestBean _requestBean,
+  SendPort sendPort,
+  GalleryPreview preview,
+  GalleryImageTask _imageTask,
+) async {
+  logger.d('re _downloadImage');
+
+  try {
+    await _downloadImage(
+      _requestBean,
+      sendPort,
+      _imageTask.imageUrl!,
+      _imageTask.filePath ?? '',
+      _requestBean.appDocPath!,
+      _requestBean.extStorePath!,
+      _requestBean.downloadPath!,
+    );
+  } on DioError catch (e) {
+    if (e.response?.statusCode == 403) {
+      logger.e('403 ${_imageTask.gid}.${preview.ser}下载链接已经失效 需要更新');
+      _fetchAndDownloadOneImage(_requestBean, sendPort, preview);
+    }
+  } catch (e) {
+    rethrow;
+  }
+}
+
+Future<void> _downloadAllImage(
   _RequestBean _requestBean,
   SendPort sendPort,
   List<GalleryPreview> _previews,
@@ -94,7 +212,7 @@ Future<void> _fetchAllImageInfo(
   for (final GalleryPreview preview in _previews) {
     //
     bool _imageTaskUrlIsNotExist = true;
-    late final GalleryImageTask _imageTask;
+    GalleryImageTask? _imageTask;
     if (_imageTasks!.isNotEmpty) {
       _imageTask = _imageTasks
           .firstWhere((GalleryImageTask element) => element.ser == preview.ser);
@@ -102,74 +220,36 @@ Future<void> _fetchAllImageInfo(
           _imageTask.imageUrl == null || _imageTask.imageUrl!.isEmpty;
     }
 
+    // if (_imageTask == null) {
+    //   logger.d('[${preview.ser}] _imageTask null');
+    //   return;
+    // }
+
     try {
       if ((preview.largeImageUrl == null || preview.largeImageUrl!.isEmpty) &&
           _imageTaskUrlIsNotExist) {
-        logger.d('new get imageUrl ${preview.ser} ');
-        final GalleryPreview _info = await _isoParaImageLageInfoFromHtml(
-          preview.href!,
-          isSiteEx: _requestBean.isSiteEx ?? false,
-          appSupportPath: _requestBean.appSupportPath!,
-        );
-        logger.d('isolate ${preview.ser} => ${_info.largeImageUrl}');
-        final String _fileName = _info.largeImageUrl!
-            .substring(_info.largeImageUrl!.lastIndexOf('/') + 1);
-        logger.d('isolate ${preview.ser} => _fileName $_fileName');
-
-        final ProgessBean _progessBean = ProgessBean(updateImages: [
-          GalleryImageTask(
-            gid: _requestBean.galleryTask!.gid,
-            ser: preview.ser,
-            imageUrl: _info.largeImageUrl,
-            sourceId: _info.sourceId,
-            filePath: _fileName,
-            token: '',
-          ),
-        ]);
-        // 发送消息回父 isolate, 更新明细中的largeImageUrl,sourceId,_fileName
-        sendPort.send(
-          _ResponseProtocol.progress(
-            _ResponseBean(
-              progess: _progessBean,
-              galleryTask: _requestBean.galleryTask,
-            ),
-          ),
-        );
-
-        _downloadImage(
-          _requestBean,
-          sendPort,
-          _info.largeImageUrl!,
-          _fileName,
-          _requestBean.appDocPath!,
-          _requestBean.extStorePath!,
-          _requestBean.downloadPath!,
-        );
-      } else if (_imageTask.imageUrl != null &&
+        _fetchAndDownloadOneImage(_requestBean, sendPort, preview);
+      } else if (_imageTask != null &&
+          _imageTask.imageUrl != null &&
+          _imageTask.imageUrl != null &&
           _imageTask.imageUrl!.isNotEmpty) {
-        logger.v('re _downloadImage');
-
-        try {
-          _downloadImage(
-            _requestBean,
-            sendPort,
-            _imageTask.imageUrl!,
-            _imageTask.filePath ?? '',
-            _requestBean.appDocPath!,
-            _requestBean.extStorePath!,
-            _requestBean.downloadPath!,
-          );
-        } catch (e) {
-          logger.e('$e');
-        }
+        _reDownloadOneImage(_requestBean, sendPort, preview, _imageTask);
       }
     } catch (e, stack) {
-      logger.e('$e\n$stack');
-      // rethrow;
+      // logger.e('$e\n$stack');
+      // sendPort.send(
+      //   _ResponseProtocol.error(
+      //     _ResponseBean(
+      //       msg: '$e\n$stack',
+      //     ),
+      //   ),
+      // );
+      rethrow;
     }
   }
 }
 
+/// 下载单张图片
 Future<void> _downloadImage(
   _RequestBean _requestBean,
   SendPort sendPort,
@@ -182,8 +262,8 @@ Future<void> _downloadImage(
   final String dlPath = await _getDownloadPath(appDocPath, extStorePath);
   // 下载图片
   final String savePath = path.join(downloadPath, fileName);
-  logger.v('savePath $savePath');
-  _downLoadFile(
+  // logger.v('savePath $savePath');
+  await _downLoadFile(
       appSupportPath: _requestBean.appSupportPath!,
       urlPath: largeImageUrl,
       savePath: savePath,
@@ -408,9 +488,9 @@ Future<Response<dynamic>?> _downLoadFile(
         receiveTimeout: 0,
       ),
     );
-    print('downLoadFile response: $response');
+    // print('downLoadFile response: $response');
   } on DioError catch (e) {
-    print('downLoadFile exception: $e');
+    logger.e('downLoadFile exception: $e');
     rethrow;
   }
   return response;
