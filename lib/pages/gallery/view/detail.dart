@@ -1,4 +1,5 @@
-import 'package:fehviewer/common/global.dart';
+import 'package:fehviewer/common/service/depth_service.dart';
+import 'package:fehviewer/generated/l10n.dart';
 import 'package:fehviewer/models/base/eh_models.dart';
 import 'package:fehviewer/pages/gallery/controller/gallery_page_controller.dart';
 import 'package:fehviewer/pages/gallery/view/archiver_dialog.dart';
@@ -13,8 +14,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
-import 'package:fehviewer/common/service/depth_service.dart';
-import 'package:fehviewer/generated/l10n.dart';
 
 import 'const.dart';
 import 'header.dart';
@@ -197,10 +196,10 @@ class _DetailWidget extends StatelessWidget {
               CupertinoColors.systemGrey4, context),
         ),
         PreviewGrid(
-          previews: controller.firstPagePreview,
+          images: controller.firstPageImage,
           gid: state.gid ?? '',
         ),
-        MorePreviewButton(hasMorePreview: controller.hasMorePreview),
+        MorePreviewButton(hasMorePreview: controller.hasMoreImage),
       ],
     );
 
@@ -237,12 +236,11 @@ class _DetailWidget extends StatelessWidget {
           child: const TopComment(showBtn: false),
         ),
         const SizedBox(height: 20),
-        // Row(children: [_getminiTitle(S.of(context).previews)]),
         PreviewGrid(
-          previews: controller.firstPagePreview,
+          images: controller.firstPageImage,
           gid: state.gid ?? '',
         ),
-        MorePreviewButton(hasMorePreview: controller.hasMorePreview),
+        MorePreviewButton(hasMorePreview: controller.hasMoreImage),
       ],
     ).paddingSymmetric(horizontal: kPadding);
 

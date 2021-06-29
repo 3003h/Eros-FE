@@ -137,16 +137,16 @@ class DownloadController extends GetxController {
 
     // 翻页, 获取所有大图页的href
     final GalleryPageController _pageController = Get.find(tag: pageCtrlDepth);
-    final List<GalleryPreview> _allPreview = await _getAllPreviews(
+    final List<GalleryImage> _allImages = await _getAllImages(
         url: url,
         fileCount: fileCount,
-        initPreviews: _pageController.firstPagePreview);
+        initImages: _pageController.firstPageImage);
 
-    logger.d('${_allPreview.length}');
+    logger.d('${_allImages.length}');
 
     // 插入任务明细
-    final List<GalleryImageTask> _galleryImageTasks = _allPreview
-        .map((GalleryPreview e) => GalleryImageTask(
+    final List<GalleryImageTask> _galleryImageTasks = _allImages
+        .map((GalleryImage e) => GalleryImageTask(
               gid: galleryTask.gid,
               token: galleryTask.token,
               href: e.href,
@@ -235,7 +235,8 @@ class DownloadController extends GetxController {
 
     showToast('${galleryTask.gid} 下载任务已入队');
 
-    final String _downloadPath = path.join(galleryTask.gid.toString());
+    final String _downloadPath =
+        path.join('${galleryTask.gid} - ${galleryTask.title}');
     final String _fullPath = await _getGalleryDownloadPath(_downloadPath);
 
     downloadManager.addTask(
@@ -245,24 +246,24 @@ class DownloadController extends GetxController {
     );
   }
 
-  Future<List<GalleryPreview>> _getAllPreviews({
+  Future<List<GalleryImage>> _getAllImages({
     required String url,
-    List<GalleryPreview>? initPreviews,
+    List<GalleryImage>? initImages,
     int? fileCount,
   }) async {
-    if (initPreviews != null &&
-        initPreviews.isNotEmpty &&
-        initPreviews.length == fileCount) {
-      return initPreviews;
+    if (initImages != null &&
+        initImages.isNotEmpty &&
+        initImages.length == fileCount) {
+      return initImages;
     }
 
-    final List<GalleryPreview> _rultList = [];
-    _rultList.addAll(initPreviews ?? []);
+    final List<GalleryImage> _rultList = [];
+    _rultList.addAll(initImages ?? []);
     int _curPage = 0;
     while (_rultList.length < (fileCount ?? 0)) {
       try {
-        final List<GalleryPreview> _moreGalleryPreviewList =
-            await Api.getGalleryPreview(
+        final List<GalleryImage> _moreGalleryImageList =
+            await Api.getGalleryImage(
           url,
           page: _curPage + 1,
           // cancelToken: cancelToken,
@@ -270,10 +271,10 @@ class DownloadController extends GetxController {
         );
 
         // 避免重复添加
-        if (_moreGalleryPreviewList.first.ser > _rultList.last.ser) {
-          logger.d('下载任务 添加图片对象 起始序号${_moreGalleryPreviewList.first.ser}  '
-              '数量${_moreGalleryPreviewList.length}');
-          _rultList.addAll(_moreGalleryPreviewList);
+        if (_moreGalleryImageList.first.ser > _rultList.last.ser) {
+          logger.d('下载任务 添加图片对象 起始序号${_moreGalleryImageList.first.ser}  '
+              '数量${_moreGalleryImageList.length}');
+          _rultList.addAll(_moreGalleryImageList);
         }
         // 成功后才+1
         _curPage++;

@@ -1,6 +1,5 @@
 import 'dart:io';
 
-import 'package:fehviewer/utils/logger.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:logger/logger.dart';

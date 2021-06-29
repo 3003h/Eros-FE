@@ -89,9 +89,9 @@ class ViewState {
   final GlobalKey centkey = GlobalKey();
   final CancelToken getMoreCancelToken = CancelToken();
 
-  List<GalleryPreview> get previews => _galleryPageController.previews;
+  List<GalleryImage> get images => _galleryPageController.images;
 
-  Map<int, GalleryPreview> get previewMap => _galleryPageController.previewMap;
+  Map<int, GalleryImage> get imageMap => _galleryPageController.imageMap;
 
   int get filecount =>
       int.parse(_galleryPageController.galleryItem.filecount ?? '0');
@@ -132,7 +132,6 @@ class ViewState {
 
   /// pageview下实际能翻页的总数
   int get pageCount {
-    // final int imageCount = previews.length;
     final int imageCount = filecount;
     switch (columnMode) {
       case ViewColumnMode.single:

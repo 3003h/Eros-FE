@@ -34,7 +34,7 @@
   "translated?": "chinese",
   "tagGroup?": "$[]tag_group",
   "galleryComment?": "$[]gallery_comment",
-  "galleryPreview?": "$[]gallery_preview",
+  "galleryImages?": "$[]gallery_image",
   "apikey?": "",
   "apiuid?": "",
   "isRatinged?": false,

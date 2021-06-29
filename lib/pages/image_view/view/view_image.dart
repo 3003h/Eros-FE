@@ -45,7 +45,7 @@ class ViewImage extends StatefulWidget {
 
 class _ViewImageState extends State<ViewImage>
     with SingleTickerProviderStateMixin {
-  late Future<GalleryPreview?> _imageFuture;
+  late Future<GalleryImage?> _imageFuture;
   late AnimationController _animationController;
 
   final GalleryPageController _pageController = Get.find(tag: pageCtrlDepth);
@@ -56,13 +56,13 @@ class _ViewImageState extends State<ViewImage>
   ViewController get controller => Get.find();
 
   /// 拉取图片信息
-  Future<GalleryPreview?> _fetchImage(
+  Future<GalleryImage?> _fetchImage(
     int itemSer, {
     bool refresh = false,
     bool changeSource = false,
   }) async {
-    final GalleryPreview? tPreview = _pageController.previewMap[itemSer];
-    if (tPreview == null) {
+    final GalleryImage? tImage = _pageController.imageMap[itemSer];
+    if (tImage == null) {
       logger.v('ser:$itemSer 所在页尚未获取， 开始获取');
 
       // 直接获取需要的
@@ -72,49 +72,48 @@ class _ViewImageState extends State<ViewImage>
       GalleryPara.instance
           .precacheImages(
         Get.context!,
-        previewMap: _pageController.previewMap,
+        imageMap: _pageController.imageMap,
         itemSer: itemSer,
         max: _ehConfigService.preloadImage.value,
       )
-          .listen((GalleryPreview? event) {
+          .listen((GalleryImage? event) {
         if (event != null) {
-          _pageController.uptPreviewBySer(ser: event.ser, preview: event);
+          _pageController.uptImageBySer(ser: event.ser, image: event);
         }
       });
     }
 
-    final GalleryPreview? preview = await _pageController.getImageInfo(
+    final GalleryImage? image = await _pageController.getImageInfo(
       widget.ser,
       cancelToken: _getMoreCancelToken,
       refresh: refresh,
       changeSource: changeSource,
     );
-    if (preview != null) {
-      _pageController.uptPreviewBySer(ser: preview.ser, preview: preview);
+    if (image != null) {
+      _pageController.uptImageBySer(ser: image.ser, image: image);
     }
 
-    return preview;
+    return image;
   }
 
   /// 重载图片数据，重构部件
   Future<void> _reloadImage({bool changeSource = true}) async {
-    final GalleryPreview? _currentPreview =
-        _pageController.galleryItem.previewMap[widget.ser];
+    final GalleryImage? _currentImage =
+        _pageController.galleryItem.imageMap[widget.ser];
     // 清除CachedNetworkImage的缓存
     try {
       // CachedNetworkImage 清除指定缓存
-      await CachedNetworkImage.evictFromCache(
-          _currentPreview?.largeImageUrl ?? '');
+      await CachedNetworkImage.evictFromCache(_currentImage?.imageUrl ?? '');
       // extended_image 清除指定缓存
-      await clearDiskCachedImage(_currentPreview?.largeImageUrl ?? '');
+      await clearDiskCachedImage(_currentImage?.imageUrl ?? '');
       clearMemoryImageCache();
     } catch (_) {}
 
-    if (_currentPreview == null) {
+    if (_currentImage == null) {
       return;
     }
-    _pageController.uptPreviewBySer(
-        ser: widget.ser, preview: _currentPreview.copyWith(largeImageUrl: ''));
+    _pageController.uptImageBySer(
+        ser: widget.ser, image: _currentImage.copyWith(imageUrl: ''));
 
     setState(() {
       // 换源重载
@@ -163,13 +162,12 @@ class _ViewImageState extends State<ViewImage>
       onLongPress: () async {
         logger.d('long press');
         vibrateUtil.medium();
-        final GalleryPreview? _currentPreview =
-            _pageController.previewMap[widget.ser];
-        showImageSheet(
-            context, _currentPreview?.largeImageUrl ?? '', _reloadImage,
-            title: '${_pageController.title} [${_currentPreview?.ser ?? ''}]');
+        final GalleryImage? _currentImage =
+            _pageController.imageMap[widget.ser];
+        showImageSheet(context, _currentImage?.imageUrl ?? '', _reloadImage,
+            title: '${_pageController.title} [${_currentImage?.ser ?? ''}]');
       },
-      child: FutureBuilder<GalleryPreview?>(
+      child: FutureBuilder<GalleryImage?>(
           future: _imageFuture,
           builder: (context, snapshot) {
             switch (snapshot.connectionState) {
@@ -203,39 +201,39 @@ class _ViewImageState extends State<ViewImage>
 
                   return ErrorWidget(ser: widget.ser, errInfo: _errInfo);
                 } else {
-                  final GalleryPreview? _preview = snapshot.data;
+                  final GalleryImage? _image = snapshot.data;
 
                   // 100ms 后更新
                   Future.delayed(const Duration(milliseconds: 100)).then((_) {
-                    if (_preview == null || _preview.ser == 1) {
+                    if (_image == null || _image.ser == 1) {
                       return;
                     }
 
-                    final GalleryPreview? _tmpPreview =
-                        _pageController.previewMap[_preview.ser];
-                    if (_tmpPreview == null ||
-                        (_tmpPreview.completeHeight ?? false)) {
+                    final GalleryImage? _tmpImage =
+                        _pageController.imageMap[_image.ser];
+                    if (_tmpImage == null ||
+                        (_tmpImage.completeHeight ?? false)) {
                       return;
                     }
                     try {
                       final _id = '${GetIds.IMAGE_VIEW_SER}${widget.ser}';
                       // logger.d('update id $_id');
-                      _pageController.uptPreviewBySer(
-                          ser: _preview.ser,
-                          preview: _tmpPreview.copyWith(completeHeight: true));
+                      _pageController.uptImageBySer(
+                          ser: _image.ser,
+                          image: _tmpImage.copyWith(completeHeight: true));
                       Get.find<ViewController>().update([_id]);
                     } catch (_) {}
                   });
 
-                  // logger.v('${widget.ser} ${_preview.largeImageUrl}');
+                  // logger.v('${widget.ser} ${_image.largeImageUrl}');
 
                   Widget image = ImageExtend(
-                    url: _preview?.largeImageUrl ?? '',
+                    url: _image?.imageUrl ?? '',
                     ser: widget.ser,
                     animationController: _animationController,
                     reloadImage: _reloadImage,
-                    imageWidth: snapshot.data!.largeImageWidth!,
-                    imageHeight: snapshot.data!.largeImageHeight!,
+                    imageWidth: snapshot.data!.imageWidth!,
+                    imageHeight: snapshot.data!.imageHeight!,
                     retry: widget.retry,
                   );
 
@@ -247,7 +245,7 @@ class _ViewImageState extends State<ViewImage>
                       if (Global.inDebugMode)
                         Positioned(
                           left: 4,
-                          child: Text('${_preview?.ser ?? ''}',
+                          child: Text('${_image?.ser ?? ''}',
                               style: const TextStyle(
                                   fontSize: 12,
                                   color:

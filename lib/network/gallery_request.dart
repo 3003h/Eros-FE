@@ -399,7 +399,7 @@ class Api {
   /// 获取画廊缩略图
   /// [inUrl] 画廊的地址
   /// [page] 缩略图页码
-  static Future<List<GalleryPreview>> getGalleryPreview(
+  static Future<List<GalleryImage>> getGalleryImage(
     String inUrl, {
     int? page,
     bool refresh = false,
@@ -432,7 +432,7 @@ class Api {
         ) ??
         '';
 
-    return GalleryDetailParser.parseGalleryPreviewFromHtml(response);
+    return GalleryDetailParser.parseGalleryImageFromHtml(response);
   }
 
   /// 由图片url获取解析图库 showkey
@@ -1032,7 +1032,7 @@ class Api {
   /// [href] 爬取的页面地址 用来解析gid 和 imgkey
   /// [showKey] api必须
   /// [index] 索引 从 1 开始
-  static Future<GalleryPreview> paraImageLageInfoFromApi(
+  static Future<GalleryImage> paraImageLageInfoFromApi(
     String href,
     String showKey, {
     required int index,
@@ -1100,20 +1100,20 @@ class Api {
 
 //    logger.v('$imageUrl');
 
-    final GalleryPreview _rePreview = GalleryPreview(
-      largeImageUrl: imageUrl,
+    final GalleryImage _reImage = GalleryImage(
+      imageUrl: imageUrl,
       ser: index + 1,
-      largeImageWidth: width,
-      largeImageHeight: height,
+      imageWidth: width,
+      imageHeight: height,
     );
 
-    return _rePreview;
+    return _reImage;
   }
 
   /// 获取画廊图片的信息
   /// [href] 爬取的页面地址 用来解析gid 和 imgkey
   /// [ser] 序号
-  static Future<GalleryPreview> ftchImageInfo(
+  static Future<GalleryImage> ftchImageInfo(
     String href, {
     required int ser,
     bool refresh = false,

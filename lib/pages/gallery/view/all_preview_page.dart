@@ -29,7 +29,7 @@ class AllPreviewPage extends StatelessWidget {
       ),
       child: CupertinoScrollbar(
         controller: controller.scrollController,
-        child: controller.obx((List<GalleryPreview>? state) {
+        child: controller.obx((List<GalleryImage>? state) {
           if (state != null) {
             return CustomScrollView(
               controller: controller.scrollController,
@@ -59,7 +59,7 @@ class AllPreviewPage extends StatelessWidget {
                           return Center(
                             key: index == 0 ? controller.globalKey : null,
                             child: PreviewContainer(
-                              galleryPreviewList: state,
+                              galleryImageList: state,
                               index: index,
                               gid: controller.gid,
                             ),

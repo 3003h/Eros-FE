@@ -11,7 +11,6 @@ import 'package:fehviewer/pages/gallery/controller/comment_controller.dart';
 import 'package:fehviewer/pages/gallery/controller/extended_text_selection_controller.dart';
 import 'package:fehviewer/pages/gallery/controller/gallery_page_controller.dart';
 import 'package:fehviewer/pages/gallery/view/comment_item.dart';
-import 'package:fehviewer/pages/gallery/view/gallery_favcat.dart';
 import 'package:fehviewer/pages/gallery/view/preview_clipper.dart';
 import 'package:fehviewer/pages/gallery/view/taginfo_dialog.dart';
 import 'package:fehviewer/route/navigator_util.dart';
@@ -21,8 +20,6 @@ import 'package:fehviewer/utils/logger.dart';
 import 'package:fehviewer/widget/rating_bar.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-// import 'package:flutter/material.dart' hide SelectableText;
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
 
 import 'all_preview_page.dart';
@@ -366,9 +363,9 @@ class GalleryRating extends StatelessWidget {
 }
 
 class PreviewGrid extends StatelessWidget {
-  const PreviewGrid({Key? key, required this.previews, required this.gid})
+  const PreviewGrid({Key? key, required this.images, required this.gid})
       : super(key: key);
-  final List<GalleryPreview> previews;
+  final List<GalleryImage> images;
   final String gid;
 
   @override
@@ -386,11 +383,11 @@ class PreviewGrid extends StatelessWidget {
             crossAxisSpacing: 4, //交叉轴方向子元素的间距
             childAspectRatio: 0.55 //显示区域宽高
             ),
-        itemCount: previews.length,
+        itemCount: images.length,
         itemBuilder: (context, index) {
           return Center(
             child: PreviewContainer(
-              galleryPreviewList: previews,
+              galleryImageList: images,
               index: index,
               gid: gid,
             ),
@@ -508,18 +505,18 @@ class PreviewContainer extends StatelessWidget {
   PreviewContainer({
     Key? key,
     required this.index,
-    required this.galleryPreviewList,
+    required this.galleryImageList,
     required this.gid,
-  })  : galleryPreview = galleryPreviewList[index],
+  })  : galleryImage = galleryImageList[index],
         hrefs = List<String>.from(
-            galleryPreviewList.map((GalleryPreview e) => e.href).toList()),
+            galleryImageList.map((GalleryImage e) => e.href).toList()),
         super(key: key);
 
   final int index;
   final String gid;
-  final List<GalleryPreview> galleryPreviewList;
+  final List<GalleryImage> galleryImageList;
   final List<String> hrefs;
-  final GalleryPreview galleryPreview;
+  final GalleryImage galleryImage;
 
   @override
   Widget build(BuildContext context) {
@@ -527,11 +524,11 @@ class PreviewContainer extends StatelessWidget {
       'Cookie': Global.profile.user.cookie ?? '',
     };
     Widget _buildImage() {
-      if (galleryPreview.isLarge ?? false) {
+      if (galleryImage.isLarge ?? false) {
         // 缩略大图
         return CachedNetworkImage(
           httpHeaders: _httpHeaders,
-          imageUrl: galleryPreview.imgUrl ?? '',
+          imageUrl: galleryImage.thumbUrl ?? '',
           progressIndicatorBuilder: (_, __, ___) {
             return const CupertinoActivityIndicator();
           },
@@ -541,14 +538,14 @@ class PreviewContainer extends StatelessWidget {
             builder: (BuildContext context, BoxConstraints constraints) {
           double _subHeight;
           double _subWidth;
-          final double _subHeightP = (galleryPreview.height ?? 0) *
+          final double _subHeightP = (galleryImage.thumbHeight ?? 0) *
               constraints.maxWidth /
-              (galleryPreview.width ?? 0);
+              (galleryImage.thumbWidth ?? 0);
           if (_subHeightP > kHeightPreview) {
             _subHeight = kHeightPreview;
             _subWidth = kHeightPreview *
-                (galleryPreview.width ?? 0) /
-                (galleryPreview.height ?? 0);
+                (galleryImage.thumbWidth ?? 0) /
+                (galleryImage.thumbHeight ?? 0);
           } else {
             _subWidth = constraints.maxWidth;
             _subHeight = _subHeightP;
@@ -562,10 +559,10 @@ class PreviewContainer extends StatelessWidget {
               fit: StackFit.expand,
               children: <Widget>[
                 PreviewImageClipper(
-                  imgUrl: galleryPreview.imgUrl!,
-                  offset: galleryPreview.offSet!,
-                  height: galleryPreview.height!,
-                  width: galleryPreview.width!,
+                  imgUrl: galleryImage.thumbUrl!,
+                  offset: galleryImage.offSet!,
+                  height: galleryImage.thumbHeight!,
+                  width: galleryImage.thumbWidth!,
                 ),
               ],
             ),
@@ -595,7 +592,7 @@ class PreviewContainer extends StatelessWidget {
             Container(
               padding: const EdgeInsets.only(top: 4),
               child: Text(
-                '${galleryPreview.ser}',
+                '${galleryImage.ser}',
                 style: TextStyle(
                   fontSize: 14,
                   color: CupertinoDynamicColor.resolve(

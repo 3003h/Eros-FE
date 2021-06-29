@@ -4,7 +4,7 @@ import 'package:html/parser.dart' show parse;
 
 import '../global.dart';
 
-GalleryPreview paraImage(String htmlText, String href) {
+GalleryImage paraImage(String htmlText, String href) {
   // logger.d('htmlText $htmlText');
   final Document document = parse(htmlText);
 
@@ -27,13 +27,13 @@ GalleryPreview paraImage(String htmlText, String href) {
 
   // logger.v('para_sourceId: $_sourceId ');
 
-  final GalleryPreview _rePreview = kDefGalleryPreview.copyWith(
-    largeImageUrl: imageUrl,
+  final GalleryImage _reImage = kDefGalleryImage.copyWith(
+    imageUrl: imageUrl,
     sourceId: _sourceId,
-    largeImageWidth: width,
-    largeImageHeight: height,
+    imageWidth: width,
+    imageHeight: height,
     href: href,
   );
 
-  return _rePreview;
+  return _reImage;
 }

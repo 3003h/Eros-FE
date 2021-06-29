@@ -1,9 +1,8 @@
-import 'dart:math' as math;
+import 'package:extended_text_library/extended_text_library.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
 import 'package:url_launcher/url_launcher.dart';
-import 'package:extended_text_library/extended_text_library.dart';
 
 const double _kHandleSize = 22.0;
 

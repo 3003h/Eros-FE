@@ -68,8 +68,8 @@ extension ExtCommentSpan on GalleryCommentSpan {
 }
 
 extension ExtItem on GalleryItem {
-  Map<int, GalleryPreview> get previewMap =>
-      {for (GalleryPreview v in galleryPreview ?? []) v.ser: v};
+  Map<int, GalleryImage> get imageMap =>
+      {for (GalleryImage v in galleryImages ?? []) v.ser: v};
 }
 
 extension ExtUser on User {

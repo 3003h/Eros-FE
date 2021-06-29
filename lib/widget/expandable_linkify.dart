@@ -1,5 +1,4 @@
 // import 'package:fehviewer/utils/cust_lib/flutter_linkify.dart';
-import 'package:fehviewer/utils/logger.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_linkify/flutter_linkify.dart';
 import 'package:linkify/linkify.dart'
