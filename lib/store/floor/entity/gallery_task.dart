@@ -3,6 +3,7 @@ import 'package:floor/floor.dart';
 
 part 'gallery_task.g.dart';
 
+// 1to2 update entity with new 'dirPath' field
 @CopyWith()
 @Entity(tableName: 'GalleryTask')
 class GalleryTask {
@@ -11,6 +12,7 @@ class GalleryTask {
       required this.token,
       this.url,
       required this.title,
+      required this.dirPath,
       this.fileCount,
       this.completCount,
       this.status});
@@ -20,12 +22,13 @@ class GalleryTask {
   final String token;
   final String? url;
   final String title;
+  final String? dirPath;
   final int? fileCount;
   final int? completCount;
   final int? status;
 
   @override
   String toString() {
-    return 'GalleryTask{gid: $gid, token: $token, url: $url, title: $title, fileCount: $fileCount, completCount: $completCount, status: $status}';
+    return 'GalleryTask{gid: $gid, token: $token, url: $url, title: $title, dirPath: $dirPath, fileCount: $fileCount, completCount: $completCount, status: $status}';
   }
 }

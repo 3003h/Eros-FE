@@ -51,7 +51,7 @@ class CommentController extends GetxController
   @override
   void onInit() {
     super.onInit();
-    logger.d('CommentController onInit');
+    logger.v('CommentController onInit');
 
     _loadComment();
 

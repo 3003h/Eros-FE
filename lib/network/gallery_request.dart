@@ -103,7 +103,7 @@ class Api {
   static _printCookie() async {
     final List<io.Cookie> _cookies =
         await (await cookieJar).loadForRequest(Uri.parse(getBaseUrl()));
-    logger.d('${_cookies.map((e) => '$e').join('\n')} ');
+    logger.v('${_cookies.map((e) => '$e').join('\n')} ');
   }
 
   /// 获取热门画廊列表

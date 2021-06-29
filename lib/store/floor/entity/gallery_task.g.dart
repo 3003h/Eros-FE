@@ -9,6 +9,7 @@ part of 'gallery_task.dart';
 extension GalleryTaskCopyWith on GalleryTask {
   GalleryTask copyWith({
     int? completCount,
+    String? dirPath,
     int? fileCount,
     int? gid,
     int? status,
@@ -18,6 +19,7 @@ extension GalleryTaskCopyWith on GalleryTask {
   }) {
     return GalleryTask(
       completCount: completCount ?? this.completCount,
+      dirPath: dirPath ?? this.dirPath,
       fileCount: fileCount ?? this.fileCount,
       gid: gid ?? this.gid,
       status: status ?? this.status,

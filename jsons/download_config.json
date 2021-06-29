@@ -1,6 +1,6 @@
 {
   "preloadImage?": 5,
   "multiDownload?": 3,
-  "downloadLocatino?" : "",
+  "downloadLocation?" : "",
   "downloadOrigImage?": false
 }

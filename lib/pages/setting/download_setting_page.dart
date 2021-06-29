@@ -41,7 +41,7 @@ class ListViewDownloadSetting extends StatelessWidget {
               future: defDownloadPath,
               builder: (context, snapshot) {
                 return SelectorSettingItem(
-                  title: S.of(context).download_locatino,
+                  title: S.of(context).download_location,
                   desc: snapshot.data ?? '',
                   onTap: () async {
                     // final FilePickerResult? result =

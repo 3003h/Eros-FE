@@ -101,9 +101,9 @@ class EhConfigService extends ProfileService {
     });
 
     // downloadLocatino
-    downloadLocatino = downloadConfig.downloadLocatino ?? '';
+    downloadLocatino = downloadConfig.downloadLocation ?? '';
     everProfile<String>(_downloadLocatino, (value) {
-      downloadConfig = downloadConfig.copyWith(downloadLocatino: value);
+      downloadConfig = downloadConfig.copyWith(downloadLocation: value);
     });
 
     /// 阅读方向
