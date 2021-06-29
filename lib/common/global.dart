@@ -9,6 +9,7 @@ import 'package:fehviewer/const/storages.dart';
 import 'package:fehviewer/models/index.dart';
 import 'package:fehviewer/models/profile.dart';
 import 'package:fehviewer/network/gallery_request.dart';
+import 'package:fehviewer/store/floor/database.dart';
 import 'package:fehviewer/store/get_store.dart';
 import 'package:fehviewer/store/hive/hive.dart';
 import 'package:fehviewer/utils/https_proxy.dart';
@@ -24,7 +25,7 @@ import 'package:get_storage/get_storage.dart';
 import 'package:local_auth/local_auth.dart';
 import 'package:logger/logger.dart';
 import 'package:package_info/package_info.dart';
-import 'package:path/path.dart';
+import 'package:path/path.dart' as path;
 import 'package:path_provider/path_provider.dart';
 
 const int kProxyPort = 4041;
@@ -142,7 +143,7 @@ const Profile kDefProfile = Profile(
   downloadConfig: DownloadConfig(
     preloadImage: 5,
     multiDownload: -1,
-    downloadLocatino: '',
+    downloadLocation: '',
     downloadOrigImage: false,
   ),
   ehConfig: kDefEhConfig,
@@ -175,6 +176,7 @@ class Global {
   static String appDocPath = '';
   static String tempPath = '';
   static late String extStorePath;
+  static String dbPath = '';
 
   static late PackageInfo packageInfo;
 
@@ -184,6 +186,12 @@ class Global {
 
   User get user => profile.user;
   set user(User val) => profile = profile.copyWith(user: val);
+
+  static Future<EhDatabase> getDatabase() async {
+    return await $FloorEhDatabase
+        .databaseBuilder(Global.dbPath)
+        .addMigrations([migration1to2]).build();
+  }
 
   // init
   static Future<void> init() async {
@@ -222,6 +230,8 @@ class Global {
 
     logger.i('doc $appDocPath \napps $appSupportPath \ntemp $tempPath');
 
+    dbPath = path.join(Global.appSupportPath, EHConst.DB_NAME);
+
     // SP初始化
     await StorageUtil.init();
 
@@ -250,7 +260,7 @@ class Global {
   }
 
   static void creatDirs() {
-    final Directory downloadDir = Directory(join(appDocPath, 'Download'));
+    final Directory downloadDir = Directory(path.join(appDocPath, 'Download'));
     downloadDir.create();
   }
 

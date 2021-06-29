@@ -14,6 +14,7 @@ extension GalleryImageTaskCopyWith on GalleryImageTask {
     String? imageUrl,
     int? ser,
     String? sourceId,
+    int? status,
     String? token,
   }) {
     return GalleryImageTask(
@@ -23,6 +24,7 @@ extension GalleryImageTaskCopyWith on GalleryImageTask {
       imageUrl: imageUrl ?? this.imageUrl,
       ser: ser ?? this.ser,
       sourceId: sourceId ?? this.sourceId,
+      status: status ?? this.status,
       token: token ?? this.token,
     );
   }

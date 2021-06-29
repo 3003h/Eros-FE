@@ -7,33 +7,33 @@ class DownloadConfig {
   const DownloadConfig({
     this.preloadImage,
     this.multiDownload,
-    this.downloadLocatino,
+    this.downloadLocation,
     this.downloadOrigImage,
   });
 
   final int? preloadImage;
   final int? multiDownload;
-  final String? downloadLocatino;
+  final String? downloadLocation;
   final bool? downloadOrigImage;
 
   factory DownloadConfig.fromJson(Map<String,dynamic> json) => DownloadConfig(
     preloadImage: json['preloadImage'] != null ? json['preloadImage'] as int : null,
     multiDownload: json['multiDownload'] != null ? json['multiDownload'] as int : null,
-    downloadLocatino: json['downloadLocatino'] != null ? json['downloadLocatino'] as String : null,
+    downloadLocation: json['downloadLocation'] != null ? json['downloadLocation'] as String : null,
     downloadOrigImage: json['downloadOrigImage'] != null ? json['downloadOrigImage'] as bool : null
   );
   
   Map<String, dynamic> toJson() => {
     'preloadImage': preloadImage,
     'multiDownload': multiDownload,
-    'downloadLocatino': downloadLocatino,
+    'downloadLocation': downloadLocation,
     'downloadOrigImage': downloadOrigImage
   };
 
   DownloadConfig clone() => DownloadConfig(
     preloadImage: preloadImage,
     multiDownload: multiDownload,
-    downloadLocatino: downloadLocatino,
+    downloadLocation: downloadLocation,
     downloadOrigImage: downloadOrigImage
   );
 
@@ -41,19 +41,19 @@ class DownloadConfig {
   DownloadConfig copyWith({
     int? preloadImage,
     int? multiDownload,
-    String? downloadLocatino,
+    String? downloadLocation,
     bool? downloadOrigImage
   }) => DownloadConfig(
     preloadImage: preloadImage ?? this.preloadImage,
     multiDownload: multiDownload ?? this.multiDownload,
-    downloadLocatino: downloadLocatino ?? this.downloadLocatino,
+    downloadLocation: downloadLocation ?? this.downloadLocation,
     downloadOrigImage: downloadOrigImage ?? this.downloadOrigImage,
   );  
 
   @override
   bool operator ==(Object other) => identical(this, other) 
-    || other is DownloadConfig && preloadImage == other.preloadImage && multiDownload == other.multiDownload && downloadLocatino == other.downloadLocatino && downloadOrigImage == other.downloadOrigImage;
+    || other is DownloadConfig && preloadImage == other.preloadImage && multiDownload == other.multiDownload && downloadLocation == other.downloadLocation && downloadOrigImage == other.downloadOrigImage;
 
   @override
-  int get hashCode => preloadImage.hashCode ^ multiDownload.hashCode ^ downloadLocatino.hashCode ^ downloadOrigImage.hashCode;
+  int get hashCode => preloadImage.hashCode ^ multiDownload.hashCode ^ downloadLocation.hashCode ^ downloadOrigImage.hashCode;
 }

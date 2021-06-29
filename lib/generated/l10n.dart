@@ -1,7 +1,6 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-
 import 'intl/messages_all.dart';
 
 // **************************************************************************
@@ -1571,11 +1570,11 @@ class S {
     );
   }
 
-  /// `Download Locatino`
-  String get download_locatino {
+  /// `Download Location`
+  String get download_location {
     return Intl.message(
-      'Download Locatino',
-      name: 'download_locatino',
+      'Download Location',
+      name: 'download_location',
       desc: '',
       args: [],
     );

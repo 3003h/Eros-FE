@@ -21,4 +21,11 @@ abstract class ImageTaskDao {
 
   @update
   Future<void> updateImageTask(GalleryImageTask galleryImageTask);
+
+  @Query('DELETE FROM GalleryImageTask WHERE gid = :gid')
+  Future<void> deleteImageTaskByGid(int gid);
+
+  @Query('SELECT * FROM GalleryImageTask WHERE gid = :gid AND status = :status')
+  Future<List<GalleryImageTask>> countImageTaskByGidAndStatus(
+      int gid, int status);
 }

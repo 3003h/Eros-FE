@@ -61,7 +61,7 @@ class _GalleryMainPageState extends State<GalleryMainPage> {
   @override
   void initState() {
     super.initState();
-    logger.d('${Get.arguments}');
+    logger.v('${Get.arguments.runtimeType}');
 
     if (_galleryRepository == null && Get.arguments is GalleryRepository) {
       _galleryRepository = Get.arguments;

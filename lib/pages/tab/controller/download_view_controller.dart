@@ -1,6 +1,7 @@
 import 'package:fehviewer/common/controller/download_controller.dart';
 import 'package:fehviewer/generated/l10n.dart';
 import 'package:fehviewer/models/index.dart';
+import 'package:fehviewer/store/floor/entity/gallery_task.dart';
 import 'package:fehviewer/utils/logger.dart';
 import 'package:fehviewer/utils/vibrate.dart';
 import 'package:flutter/cupertino.dart';
@@ -42,17 +43,19 @@ class DownloadViewController extends GetxController {
           .map((MapEntry<String, DownloadTaskInfo> e) => e.value)
           .toList();
 
-  // 暂停任务
+  List<GalleryTask> get galleryTasks => _downloadController.galleryTaskList;
+
+  // Archiver暂停任务
   Future<void> pauseArchiverDownload({required String? taskId}) async {
     if (taskId != null) FlutterDownloader.pause(taskId: taskId);
   }
 
-  // 取消任务
+  // Archiver取消任务
   Future<void> cancelArchiverDownload({required String? taskId}) async {
     if (taskId != null) FlutterDownloader.cancel(taskId: taskId);
   }
 
-  // 恢复任务
+  // Archiver恢复任务
   Future<void> resumeArchiverDownload(int index) async {
     final String? _oriTaskid = archiverTasks[index].taskId;
     final int? _oriStatus = archiverTasks[index].status;
@@ -75,7 +78,7 @@ class DownloadViewController extends GetxController {
     }
   }
 
-  // 重试任务
+  // Archiver重试任务
   Future<void> retryArchiverDownload(int index) async {
     final String? _oriTaskid = archiverTasks[index].taskId;
     final int? _oriStatus = archiverTasks[index].status;
@@ -97,8 +100,8 @@ class DownloadViewController extends GetxController {
     }
   }
 
-  // 移除任务
-  void removeTask(int index) {
+  // Archiver移除任务
+  void removeArchiverTask(int index) {
     final String? _oriTaskid = archiverTasks[index].taskId;
     final String? _tag = archiverTasks[index].tag;
     _downloadController.archiverTaskMap.remove(_tag);
@@ -106,13 +109,18 @@ class DownloadViewController extends GetxController {
         taskId: _oriTaskid ?? '', shouldDeleteContent: true);
   }
 
-  void onLongPress(int index) {
+  // Gallery 移除任务
+  void removeGalleryTask(int index) {
+    _downloadController.removeDownloadGalleryTaskIsolate(index: index);
+  }
+
+  void onLongPress(int index, {DownloadType type = DownloadType.gallery}) {
     vibrateUtil.heavy();
-    _showLongPressSheet(index);
+    _showLongPressSheet(index, type);
   }
 
   /// 长按菜单
-  Future<void> _showLongPressSheet(int index) async {
+  Future<void> _showLongPressSheet(int taskIndex, DownloadType type) async {
     final BuildContext context = Get.context!;
 
     await showCupertinoModalPopup<void>(
@@ -127,7 +135,9 @@ class DownloadViewController extends GetxController {
             actions: <Widget>[
               CupertinoActionSheetAction(
                 onPressed: () {
-                  removeTask(index);
+                  type == DownloadType.archiver
+                      ? removeArchiverTask(taskIndex)
+                      : removeGalleryTask(taskIndex);
                   Get.back();
                 },
                 child: const Text('删除任务'),

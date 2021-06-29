@@ -240,6 +240,7 @@ class HttpManager {
     } on DioError catch (e) {
       logger.e('downLoadFile exception: $e');
       formatError(e);
+      rethrow;
     }
     return response;
   }

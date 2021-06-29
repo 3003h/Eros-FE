@@ -187,6 +187,7 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
         home: SplashPage(),
         theme: theme,
         locale: locale,
+        enableLog: false,
         logWriterCallback: loggerGetx,
         // ignore: prefer_const_literals_to_create_immutables
         supportedLocales: <Locale>[

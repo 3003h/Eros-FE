@@ -78,7 +78,7 @@ class TabViewController extends GetxController
       final Tuple2<List<GalleryItem>, int> tuple = await fetchData();
       final List<GalleryItem> _listItem = tuple.item1;
 
-      Api.getMoreGalleryInfo(_listItem);
+      // Api.getMoreGalleryInfo(_listItem);
 
       maxPage = tuple.item2;
       change(_listItem, status: RxStatus.success());
@@ -116,7 +116,7 @@ class TabViewController extends GetxController
       refresh: true,
     );
 
-    Api.getMoreGalleryInfo(tuple.item1, refresh: true);
+    // Api.getMoreGalleryInfo(tuple.item1, refresh: true);
 
     maxPage = tuple.item2;
     change(tuple.item1, status: RxStatus.success());
@@ -151,7 +151,7 @@ class TabViewController extends GetxController
     // 增加延时 避免build期间进行 setState
     await Future<void>.delayed(const Duration(milliseconds: 100));
 
-    logger.d('${curPage.value + 1}');
+    // logger.d('${curPage.value + 1}');
 
     final String fromGid = state?.last.gid ?? '0';
     try {

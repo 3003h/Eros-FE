@@ -29,15 +29,8 @@ class TagTransController extends GetxController {
   String? _dbUrl;
   String? _remoteVer;
 
-  static final String _dbPath =
-      path.join(Global.appSupportPath, EHConst.DB_NAME);
-
-  static Future<EhDatabase> _getDatabase() async {
-    return await $FloorEhDatabase.databaseBuilder(_dbPath).build();
-  }
-
   Future<TagTranslatDao> _getTagTranslatDao() async {
-    return (await _getDatabase()).tagTranslatDao;
+    return (await Global.getDatabase()).tagTranslatDao;
   }
 
   /// 检查更新

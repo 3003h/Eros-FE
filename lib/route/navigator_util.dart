@@ -82,7 +82,7 @@ class NavigatorUtil {
       // );
     } else {
       // item点击跳转方式
-      logger.d('goGalleryPage fromItem tabTag=$tabTag');
+      logger.v('goGalleryPage fromItem tabTag=$tabTag');
 
       //命名路由
       Get.toNamed(EHRoutes.galleryPage,

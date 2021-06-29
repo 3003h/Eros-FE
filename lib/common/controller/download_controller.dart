@@ -4,15 +4,10 @@ import 'dart:ui';
 
 import 'package:fehviewer/common/global.dart';
 import 'package:fehviewer/common/isolate/download.dart';
-import 'package:fehviewer/common/service/depth_service.dart';
-import 'package:fehviewer/const/const.dart';
 import 'package:fehviewer/models/index.dart';
-import 'package:fehviewer/network/gallery_request.dart';
-import 'package:fehviewer/pages/gallery/controller/gallery_page_controller.dart';
 import 'package:fehviewer/pages/tab/controller/download_view_controller.dart';
 import 'package:fehviewer/store/floor/dao/gallery_task_dao.dart';
 import 'package:fehviewer/store/floor/dao/image_task_dao.dart';
-import 'package:fehviewer/store/floor/database.dart';
 import 'package:fehviewer/store/floor/entity/gallery_image_task.dart';
 import 'package:fehviewer/store/floor/entity/gallery_task.dart';
 import 'package:fehviewer/store/get_store.dart';
@@ -23,32 +18,74 @@ import 'package:get/get.dart';
 import 'package:path/path.dart' as path;
 import 'package:path_provider/path_provider.dart';
 
+part 'download_controller_gallery.dart';
+
 Future<String> get defDownloadPath async => GetPlatform.isAndroid
     ? path.join((await getExternalStorageDirectory())!.path, 'Download')
     : path.join(Global.appDocPath, 'Download');
 
 class DownloadController extends GetxController {
-  // key DownloadTaskInfo.tag
   final RxMap<String, DownloadTaskInfo> archiverTaskMap =
       <String, DownloadTaskInfo>{}.obs;
 
   final List<String> _archiverDlIdList = <String>[];
 
+  final RxMap<String, GalleryTask> galleryTaskMap = <String, GalleryTask>{}.obs;
+  final RxList<GalleryTask> galleryTaskList = <GalleryTask>[].obs;
+
   final GStore _gStore = Get.find();
 
-  static final String _dbPath =
-      path.join(Global.appSupportPath, EHConst.DB_NAME);
-
-  static Future<EhDatabase> _getDatabase() async {
-    return await $FloorEhDatabase.databaseBuilder(_dbPath).build();
-  }
-
   static Future<GalleryTaskDao> getGalleryTaskDao() async {
-    return (await _getDatabase()).galleryTaskDao;
+    return (await Global.getDatabase()).galleryTaskDao;
   }
 
   static Future<ImageTaskDao> getImageTaskDao() async {
-    return (await _getDatabase()).imageTaskDao;
+    return (await Global.getDatabase()).imageTaskDao;
+  }
+
+  @override
+  void onInit() {
+    super.onInit();
+    logger.d('DownloadController onInit');
+
+    // _bindBackgroundIsolate();
+    FlutterDownloader.registerCallback(_downloadCallback);
+
+    // 从GS中初始化 archiverDlMap
+    final Map<String, DownloadTaskInfo> _archivermap =
+        _gStore.archiverTaskMap ?? <String, DownloadTaskInfo>{};
+    archiverTaskMap(_archivermap);
+
+    ever(archiverTaskMap, (Map<String, DownloadTaskInfo> val) {
+      _gStore.archiverTaskMap = val;
+    });
+
+    // 处理archiver任务
+    _getArchiverTask();
+
+    _initGalleryTasks();
+  }
+
+  @override
+  void onClose() {
+    // _unbindBackgroundIsolate();
+    downloadManager.close();
+    super.onClose();
+  }
+
+  Future<void> _initGalleryTasks() async {
+    GalleryTaskDao _galleryTaskDao;
+    ImageTaskDao _imageTaskDao;
+    try {
+      _galleryTaskDao = await getGalleryTaskDao();
+      _imageTaskDao = await getImageTaskDao();
+    } catch (e, stack) {
+      logger.e('$e\n$stack ');
+      rethrow;
+    }
+
+    final _tasks = await _galleryTaskDao.findAllGalleryTasks();
+    galleryTaskList(_tasks);
   }
 
   Future<void> downloadArchiverFile({
@@ -81,6 +118,7 @@ class DownloadController extends GetxController {
     showToast('下载任务已添加');
   }
 
+/*
   Future<void> downloadGallery({
     required String url,
     required int fileCount,
@@ -124,6 +162,7 @@ class DownloadController extends GetxController {
       url: url,
       title: title,
       fileCount: fileCount,
+      dirPath: '',
     );
     logger.d('add task ${galleryTask.toString()}');
     try {
@@ -173,78 +212,6 @@ class DownloadController extends GetxController {
     }
   }
 
-  Future<void> downloadGalleryIsolate({
-    required String url,
-    required int fileCount,
-    required String title,
-    int? gid,
-    String? token,
-  }) async {
-    GalleryTaskDao _galleryTaskDao;
-    ImageTaskDao _imageTaskDao;
-    try {
-      _galleryTaskDao = await getGalleryTaskDao();
-      _imageTaskDao = await getImageTaskDao();
-    } catch (e, stack) {
-      logger.e('$e\n$stack ');
-      rethrow;
-    }
-
-    int _gid = 0;
-    String _token = '';
-    if (gid == null || token == null) {
-      final RegExpMatch _match =
-          RegExp(r'/g/(\d+)/([0-9a-f]{10})/?').firstMatch(url)!;
-      _gid = int.parse(_match.group(1)!);
-      _token = _match.group(2)!;
-    }
-
-    // 先查询任务是否已存在
-    try {
-      final GalleryTask? _oriTask =
-          await _galleryTaskDao.findGalleryTaskByGid(gid ?? -1);
-      if (_oriTask != null) {
-        logger.e('$gid 任务已存在');
-        showToast('下载任务已存在');
-        logger.d('${_oriTask.toString()} ');
-        return;
-      }
-    } catch (e, stack) {
-      logger.e('$e\n$stack');
-      rethrow;
-    }
-
-    // 登记主任务表
-    final GalleryTask galleryTask = GalleryTask(
-      gid: gid ?? _gid,
-      token: token ?? _token,
-      url: url,
-      title: title,
-      fileCount: fileCount,
-    );
-    logger.d('add task ${galleryTask.toString()}');
-    try {
-      // _galleryTaskDao.insertTask(galleryTask);
-    } catch (e, stack) {
-      logger.e('$e\n$stack ');
-      rethrow;
-    }
-
-    final List<GalleryImageTask> _imageTasks =
-        await _imageTaskDao.findAllGalleryTaskByGid(galleryTask.gid);
-
-    showToast('${galleryTask.gid} 下载任务已入队');
-
-    final String _downloadPath =
-        path.join('${galleryTask.gid} - ${galleryTask.title}');
-    final String _fullPath = await _getGalleryDownloadPath(_downloadPath);
-
-    downloadManager.addTask(
-      galleryTask: galleryTask,
-      imageTasks: _imageTasks,
-      downloadPath: _fullPath,
-    );
-  }
 
   Future<List<GalleryImage>> _getAllImages({
     required String url,
@@ -290,33 +257,6 @@ class DownloadController extends GetxController {
 
   final ReceivePort _port = ReceivePort();
 
-  @override
-  void onInit() {
-    super.onInit();
-
-    _bindBackgroundIsolate();
-    FlutterDownloader.registerCallback(_downloadCallback);
-
-    // 从GS中初始化 archiverDlMap
-    final Map<String, DownloadTaskInfo> _archivermap =
-        _gStore.archiverTaskMap ?? <String, DownloadTaskInfo>{};
-    archiverTaskMap(_archivermap);
-
-    ever(archiverTaskMap, (Map<String, DownloadTaskInfo> val) {
-      _gStore.archiverTaskMap = val;
-    });
-
-    // 读取所有任务
-    _prepare();
-  }
-
-  @override
-  void onClose() {
-    _unbindBackgroundIsolate();
-    downloadManager.close();
-    super.onClose();
-  }
-
   void _bindBackgroundIsolate() {
     final bool isSuccess = IsolateNameServer.registerPortWithName(
         _port.sendPort, 'downloader_send_port');
@@ -336,42 +276,6 @@ class DownloadController extends GetxController {
 
   void _unbindBackgroundIsolate() {
     IsolateNameServer.removePortNameMapping('downloader_send_port');
-  }
-
-  /// 不在 archiverDlMap 中的任务
-  Future<void> _prepare() async {
-    final List<DownloadTask> tasks = await FlutterDownloader.loadTasks() ?? [];
-    // logger.d(
-    //     'loadTasks \n${tasks.map((DownloadTask e) => e.toString().split(', ').join('\n')).join('\n----------\n')} ');
-
-    for (final DownloadTask downloadTask in tasks) {
-      final int _index = archiverTaskMap.entries.toList().indexWhere(
-          (MapEntry<String, DownloadTaskInfo> element) =>
-              element.value.taskId == downloadTask.taskId);
-
-      // 不在 archiverTaskMap 中的任务 直接删除
-      if (_index < 0) {
-        logger.d(
-            'remove task \n${downloadTask.toString().split(', ').join('\n')}');
-        FlutterDownloader.remove(
-            taskId: downloadTask.taskId, shouldDeleteContent: true);
-      } else {
-        // 否则更新
-        final DownloadTaskInfo _taskInfo = archiverTaskMap.entries
-            .firstWhere((MapEntry<String, DownloadTaskInfo> element) =>
-                element.value.taskId == downloadTask.taskId)
-            .value;
-
-        // 触发ever 保存到GS中
-        archiverTaskMap[_taskInfo.tag!] = _taskInfo.copyWith(
-          status: downloadTask.status.value,
-          progress: downloadTask.progress,
-        );
-
-        // 更新视图
-        Get.find<DownloadViewController>().update([_taskInfo.tag ?? '']);
-      }
-    }
   }
 
   /// 更新任务状态
@@ -418,6 +322,8 @@ class DownloadController extends GetxController {
     // 更新视图
     Get.find<DownloadViewController>().update([_taskInfo.tag ?? '']);
   }
+
+ */
 
   /// 获取下载路径
   Future<String> _getDownloadPath() async {
@@ -470,6 +376,190 @@ class DownloadController extends GetxController {
       openFileFromNotification: false,
       headers: _httpHeaders,
     );
+  }
+
+  /// 不在 archiverDlMap 中的任务
+  Future<void> _getArchiverTask() async {
+    final List<DownloadTask> tasks = await FlutterDownloader.loadTasks() ?? [];
+    // logger.d(
+    //     'loadTasks \n${tasks.map((DownloadTask e) => e.toString().split(', ').join('\n')).join('\n----------\n')} ');
+
+    for (final DownloadTask downloadTask in tasks) {
+      final int _index = archiverTaskMap.entries.toList().indexWhere(
+          (MapEntry<String, DownloadTaskInfo> element) =>
+              element.value.taskId == downloadTask.taskId);
+
+      // 不在 archiverTaskMap 中的任务 直接删除
+      if (_index < 0) {
+        logger.d(
+            'remove task \n${downloadTask.toString().split(', ').join('\n')}');
+        FlutterDownloader.remove(
+            taskId: downloadTask.taskId, shouldDeleteContent: true);
+      } else {
+        // 否则更新
+        final DownloadTaskInfo _taskInfo = archiverTaskMap.entries
+            .firstWhere((MapEntry<String, DownloadTaskInfo> element) =>
+                element.value.taskId == downloadTask.taskId)
+            .value;
+
+        // 触发ever 保存到GS中
+        archiverTaskMap[_taskInfo.tag!] = _taskInfo.copyWith(
+          status: downloadTask.status.value,
+          progress: downloadTask.progress,
+        );
+
+        // 更新视图
+        Get.find<DownloadViewController>().update([_taskInfo.tag ?? '']);
+      }
+    }
+  }
+
+  /// Isolate下载
+  Future<void> downloadGalleryIsolate({
+    required String url,
+    required int fileCount,
+    required String title,
+    int? gid,
+    String? token,
+  }) async {
+    GalleryTaskDao _galleryTaskDao;
+    ImageTaskDao _imageTaskDao;
+    try {
+      _galleryTaskDao = await getGalleryTaskDao();
+      _imageTaskDao = await getImageTaskDao();
+    } catch (e, stack) {
+      logger.e('$e\n$stack ');
+      rethrow;
+    }
+
+    int _gid = 0;
+    String _token = '';
+    if (gid == null || token == null) {
+      final RegExpMatch _match =
+          RegExp(r'/g/(\d+)/([0-9a-f]{10})/?').firstMatch(url)!;
+      _gid = int.parse(_match.group(1)!);
+      _token = _match.group(2)!;
+    }
+
+    // 先查询任务是否已存在
+    try {
+      final GalleryTask? _oriTask =
+          await _galleryTaskDao.findGalleryTaskByGid(gid ?? -1);
+      if (_oriTask != null) {
+        logger.e('$gid 任务已存在');
+        showToast('下载任务已存在');
+        logger.d('${_oriTask.toString()} ');
+        return;
+      }
+    } catch (e, stack) {
+      logger.e('$e\n$stack');
+      rethrow;
+    }
+
+    final String _downloadPath = path.join('$gid - $title');
+    final String _fullPath = await _getGalleryDownloadPath(_downloadPath);
+
+    // 登记主任务表
+    final GalleryTask galleryTask = GalleryTask(
+      gid: gid ?? _gid,
+      token: token ?? _token,
+      url: url,
+      title: title,
+      fileCount: fileCount,
+      dirPath: _fullPath,
+      status: TaskStatus.enqueued.value,
+    );
+    logger.d('add task ${galleryTask.toString()}');
+    try {
+      _galleryTaskDao.insertTask(galleryTask);
+      galleryTaskList.insert(0, galleryTask);
+    } catch (e, stack) {
+      logger.e('$e\n$stack ');
+      // rethrow;
+    }
+
+    final List<GalleryImageTask> _imageTasks =
+        await _imageTaskDao.findAllGalleryTaskByGid(galleryTask.gid);
+
+    showToast('${galleryTask.gid} 下载任务已入队');
+
+    downloadManager.addTask(
+      galleryTask: galleryTask,
+      imageTasks: _imageTasks,
+      downloadPath: _fullPath,
+    );
+  }
+
+  /// 移除Isolate下载
+  Future<void> removeDownloadGalleryTaskIsolate({
+    required int index,
+  }) async {
+    GalleryTaskDao _galleryTaskDao;
+    ImageTaskDao _imageTaskDao;
+    try {
+      _galleryTaskDao = await getGalleryTaskDao();
+      _imageTaskDao = await getImageTaskDao();
+    } catch (e, stack) {
+      logger.e('$e\n$stack ');
+      rethrow;
+    }
+
+    // 删除文件
+    final GalleryTask _task = galleryTaskList[index];
+    String? path = _task.dirPath;
+    logger.d('dirPath: $path');
+    if (path != null) {
+      Directory(path).delete(recursive: true);
+    }
+
+    // 删除数据库记录
+    _imageTaskDao.deleteImageTaskByGid(_task.gid);
+    _galleryTaskDao.deleteTaskByGid(_task.gid);
+
+    galleryTaskList.removeAt(index);
+  }
+
+  GalleryTask galleryTaskCompleIncreasing(int gid) {
+    // logger.d('galleryTaskCompleIncreasing $gid');
+    final index = galleryTaskList.indexWhere((element) => element.gid == gid);
+    final GalleryTask _oriTask = galleryTaskList[index];
+    final int _oricc = _oriTask.completCount ?? 0;
+    // logger.d('_oricc $_oricc');
+
+    galleryTaskList[index] = _oriTask.copyWith(
+        completCount: _oricc + 1,
+        status: _oricc + 1 == _oriTask.fileCount
+            ? TaskStatus.complete.value
+            : null);
+
+    return galleryTaskList[index];
+  }
+
+  GalleryTask galleryTaskCountUpdate(int gid, int countComple) {
+    logger.d('galleryTaskCountUpdate $gid $countComple');
+    final index = galleryTaskList.indexWhere((element) => element.gid == gid);
+    galleryTaskList[index] =
+        galleryTaskList[index].copyWith(completCount: countComple);
+
+    return galleryTaskList[index];
+  }
+
+  GalleryTask galleryTaskComplete(int gid) {
+    final index = galleryTaskList.indexWhere((element) => element.gid == gid);
+    galleryTaskList[index] =
+        galleryTaskList[index].copyWith(status: TaskStatus.complete.value);
+    logger.i('$gid 下载完成');
+
+    return galleryTaskList[index];
+  }
+
+  GalleryTask galleryTaskUpdateStatus(int gid, TaskStatus status) {
+    final index = galleryTaskList.indexWhere((element) => element.gid == gid);
+    galleryTaskList[index] =
+        galleryTaskList[index].copyWith(status: status.value);
+    logger.i('set $gid status $status');
+
+    return galleryTaskList[index];
   }
 }
 

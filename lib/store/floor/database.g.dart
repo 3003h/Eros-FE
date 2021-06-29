@@ -69,7 +69,7 @@ class _$EhDatabase extends EhDatabase {
   Future<sqflite.Database> open(String path, List<Migration> migrations,
       [Callback? callback]) async {
     final databaseOptions = sqflite.OpenDatabaseOptions(
-      version: 1,
+      version: 2,
       onConfigure: (database) async {
         await database.execute('PRAGMA foreign_keys = ON');
         await callback?.onConfigure?.call(database);
@@ -85,9 +85,9 @@ class _$EhDatabase extends EhDatabase {
       },
       onCreate: (database, version) async {
         await database.execute(
-            'CREATE TABLE IF NOT EXISTS `GalleryTask` (`gid` INTEGER NOT NULL, `token` TEXT NOT NULL, `url` TEXT, `title` TEXT NOT NULL, `fileCount` INTEGER, `completCount` INTEGER, `status` INTEGER, PRIMARY KEY (`gid`))');
+            'CREATE TABLE IF NOT EXISTS `GalleryTask` (`gid` INTEGER NOT NULL, `token` TEXT NOT NULL, `url` TEXT, `title` TEXT NOT NULL, `dirPath` TEXT, `fileCount` INTEGER, `completCount` INTEGER, `status` INTEGER, PRIMARY KEY (`gid`))');
         await database.execute(
-            'CREATE TABLE IF NOT EXISTS `GalleryImageTask` (`gid` INTEGER NOT NULL, `ser` INTEGER NOT NULL, `token` TEXT NOT NULL, `href` TEXT, `sourceId` TEXT, `imageUrl` TEXT, `filePath` TEXT, PRIMARY KEY (`gid`, `ser`))');
+            'CREATE TABLE IF NOT EXISTS `GalleryImageTask` (`gid` INTEGER NOT NULL, `ser` INTEGER NOT NULL, `token` TEXT NOT NULL, `href` TEXT, `sourceId` TEXT, `imageUrl` TEXT, `filePath` TEXT, `status` INTEGER, PRIMARY KEY (`gid`, `ser`))');
         await database.execute(
             'CREATE TABLE IF NOT EXISTS `TagTranslat` (`namespace` TEXT NOT NULL, `key` TEXT NOT NULL, `name` TEXT, `intro` TEXT, `links` TEXT, PRIMARY KEY (`namespace`, `key`))');
 
@@ -117,7 +117,7 @@ class _$EhDatabase extends EhDatabase {
 
 class _$GalleryTaskDao extends GalleryTaskDao {
   _$GalleryTaskDao(this.database, this.changeListener)
-      : _queryAdapter = QueryAdapter(database),
+      : _queryAdapter = QueryAdapter(database, changeListener),
         _galleryTaskInsertionAdapter = InsertionAdapter(
             database,
             'GalleryTask',
@@ -126,10 +126,27 @@ class _$GalleryTaskDao extends GalleryTaskDao {
                   'token': item.token,
                   'url': item.url,
                   'title': item.title,
+                  'dirPath': item.dirPath,
                   'fileCount': item.fileCount,
                   'completCount': item.completCount,
                   'status': item.status
-                });
+                },
+            changeListener),
+        _galleryTaskUpdateAdapter = UpdateAdapter(
+            database,
+            'GalleryTask',
+            ['gid'],
+            (GalleryTask item) => <String, Object?>{
+                  'gid': item.gid,
+                  'token': item.token,
+                  'url': item.url,
+                  'title': item.title,
+                  'dirPath': item.dirPath,
+                  'fileCount': item.fileCount,
+                  'completCount': item.completCount,
+                  'status': item.status
+                },
+            changeListener);
 
   final sqflite.DatabaseExecutor database;
 
@@ -139,6 +156,8 @@ class _$GalleryTaskDao extends GalleryTaskDao {
 
   final InsertionAdapter<GalleryTask> _galleryTaskInsertionAdapter;
 
+  final UpdateAdapter<GalleryTask> _galleryTaskUpdateAdapter;
+
   @override
   Future<List<GalleryTask>> findAllGalleryTasks() async {
     return _queryAdapter.queryList('SELECT * FROM GalleryTask',
@@ -147,9 +166,26 @@ class _$GalleryTaskDao extends GalleryTaskDao {
             token: row['token'] as String,
             url: row['url'] as String?,
             title: row['title'] as String,
+            dirPath: row['dirPath'] as String?,
             fileCount: row['fileCount'] as int?,
             completCount: row['completCount'] as int?,
             status: row['status'] as int?));
+  }
+
+  @override
+  Stream<List<GalleryTask>> listenAllGalleryTasks() {
+    return _queryAdapter.queryListStream('SELECT * FROM GalleryTask',
+        mapper: (Map<String, Object?> row) => GalleryTask(
+            gid: row['gid'] as int,
+            token: row['token'] as String,
+            url: row['url'] as String?,
+            title: row['title'] as String,
+            dirPath: row['dirPath'] as String?,
+            fileCount: row['fileCount'] as int?,
+            completCount: row['completCount'] as int?,
+            status: row['status'] as int?),
+        queryableName: 'GalleryTask',
+        isView: false);
   }
 
   @override
@@ -160,6 +196,7 @@ class _$GalleryTaskDao extends GalleryTaskDao {
             token: row['token'] as String,
             url: row['url'] as String?,
             title: row['title'] as String,
+            dirPath: row['dirPath'] as String?,
             fileCount: row['fileCount'] as int?,
             completCount: row['completCount'] as int?,
             status: row['status'] as int?),
@@ -167,8 +204,27 @@ class _$GalleryTaskDao extends GalleryTaskDao {
   }
 
   @override
+  Future<void> deleteTaskByGid(int gid) async {
+    await _queryAdapter.queryNoReturn('DELETE FROM GalleryTask WHERE gid = ?1',
+        arguments: [gid]);
+  }
+
+  @override
+  Future<void> updateStatusByGid(int status, int gid) async {
+    await _queryAdapter.queryNoReturn(
+        'UPDATE GalleryImageTask set status = ?1 WHERE gid = ?2',
+        arguments: [status, gid]);
+  }
+
+  @override
   Future<void> insertTask(GalleryTask galleryTask) async {
     await _galleryTaskInsertionAdapter.insert(
+        galleryTask, OnConflictStrategy.abort);
+  }
+
+  @override
+  Future<void> updateTask(GalleryTask galleryTask) async {
+    await _galleryTaskUpdateAdapter.update(
         galleryTask, OnConflictStrategy.abort);
   }
 }
@@ -186,7 +242,8 @@ class _$ImageTaskDao extends ImageTaskDao {
                   'href': item.href,
                   'sourceId': item.sourceId,
                   'imageUrl': item.imageUrl,
-                  'filePath': item.filePath
+                  'filePath': item.filePath,
+                  'status': item.status
                 }),
         _galleryImageTaskUpdateAdapter = UpdateAdapter(
             database,
@@ -199,7 +256,8 @@ class _$ImageTaskDao extends ImageTaskDao {
                   'href': item.href,
                   'sourceId': item.sourceId,
                   'imageUrl': item.imageUrl,
-                  'filePath': item.filePath
+                  'filePath': item.filePath,
+                  'status': item.status
                 });
 
   final sqflite.DatabaseExecutor database;
@@ -222,7 +280,8 @@ class _$ImageTaskDao extends ImageTaskDao {
             sourceId: row['sourceId'] as String?,
             imageUrl: row['imageUrl'] as String?,
             ser: row['ser'] as int,
-            filePath: row['filePath'] as String?));
+            filePath: row['filePath'] as String?,
+            status: row['status'] as int?));
   }
 
   @override
@@ -236,7 +295,8 @@ class _$ImageTaskDao extends ImageTaskDao {
             sourceId: row['sourceId'] as String?,
             imageUrl: row['imageUrl'] as String?,
             ser: row['ser'] as int,
-            filePath: row['filePath'] as String?),
+            filePath: row['filePath'] as String?,
+            status: row['status'] as int?),
         arguments: [gid]);
   }
 
@@ -251,8 +311,33 @@ class _$ImageTaskDao extends ImageTaskDao {
             sourceId: row['sourceId'] as String?,
             imageUrl: row['imageUrl'] as String?,
             ser: row['ser'] as int,
-            filePath: row['filePath'] as String?),
+            filePath: row['filePath'] as String?,
+            status: row['status'] as int?),
         arguments: [gid, ser]);
+  }
+
+  @override
+  Future<void> deleteImageTaskByGid(int gid) async {
+    await _queryAdapter.queryNoReturn(
+        'DELETE FROM GalleryImageTask WHERE gid = ?1',
+        arguments: [gid]);
+  }
+
+  @override
+  Future<List<GalleryImageTask>> countImageTaskByGidAndStatus(
+      int gid, int status) async {
+    return _queryAdapter.queryList(
+        'SELECT * FROM GalleryImageTask WHERE gid = ?1 AND status = ?2',
+        mapper: (Map<String, Object?> row) => GalleryImageTask(
+            gid: row['gid'] as int,
+            token: row['token'] as String,
+            href: row['href'] as String?,
+            sourceId: row['sourceId'] as String?,
+            imageUrl: row['imageUrl'] as String?,
+            ser: row['ser'] as int,
+            filePath: row['filePath'] as String?,
+            status: row['status'] as int?),
+        arguments: [gid, status]);
   }
 
   @override

@@ -14,6 +14,7 @@ class GalleryImageTask {
     this.imageUrl,
     required this.ser,
     this.filePath,
+    this.status,
   });
 
   final int gid;
@@ -23,9 +24,10 @@ class GalleryImageTask {
   final String? sourceId;
   final String? imageUrl;
   final String? filePath;
+  final int? status;
 
   @override
   String toString() {
-    return 'GalleryImageTask{gid: $gid, ser: $ser, token: $token, href: $href, sourceId: $sourceId, imageUrl: $imageUrl, filePath: $filePath}';
+    return 'GalleryImageTask{gid: $gid, ser: $ser, token: $token, href: $href, sourceId: $sourceId, imageUrl: $imageUrl, filePath: $filePath, status: $status}';
   }
 }
