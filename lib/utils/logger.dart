@@ -2,7 +2,6 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:fehviewer/common/global.dart';
-import 'package:fehviewer/common/service/log_service.dart';
 import 'package:fehviewer/utils/logger/pretty_printer.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';

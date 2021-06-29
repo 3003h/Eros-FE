@@ -1,6 +1,6 @@
 import 'package:dio/dio.dart';
 import 'package:fehviewer/common/service/depth_service.dart';
-import 'package:fehviewer/models/gallery_preview.dart';
+import 'package:fehviewer/models/base/eh_models.dart';
 import 'package:fehviewer/network/gallery_request.dart';
 import 'package:fehviewer/utils/logger.dart';
 import 'package:flutter/cupertino.dart';
@@ -14,16 +14,16 @@ const double kCrossAxisSpacing = 4; //交叉轴方向子元素的间距
 const double kChildAspectRatio = 0.55; //显示区域宽高比
 
 class AllPreviewsPageController extends GetxController
-    with StateMixin<List<GalleryPreview>> {
+    with StateMixin<List<GalleryImage>> {
   GalleryPageController get _pageController => Get.find(tag: pageCtrlDepth);
 
-  List<GalleryPreview> get _previews => _pageController.previewsFromMap;
+  List<GalleryImage> get _images => _pageController.imagesFromMap;
 
   String get filecount => _pageController.galleryItem.filecount ?? '0';
 
   String get gid => _pageController.gid;
 
-  CancelToken moreGalleryPreviewCancelToken = CancelToken();
+  CancelToken moreGalleryImageCancelToken = CancelToken();
 
   final GlobalKey globalKey = GlobalKey();
   final ScrollController scrollController =
@@ -36,16 +36,16 @@ class AllPreviewsPageController extends GetxController
   void onClose() {
     super.onClose();
     scrollController.dispose();
-    moreGalleryPreviewCancelToken.cancel();
+    moreGalleryImageCancelToken.cancel();
   }
 
   @override
   void onInit() {
     super.onInit();
 
-    _pageController.currentPreviewPage = 0;
+    _pageController.currentImagePage = 0;
 
-    change(_previews, status: RxStatus.success());
+    change(_images, status: RxStatus.success());
 
     WidgetsBinding.instance?.addPostFrameCallback((Duration callback) {
       logger.v('addPostFrameCallback be invoke');
@@ -81,7 +81,7 @@ class AllPreviewsPageController extends GetxController
         size.height;
 
     final int _toLine =
-        _pageController.firstPagePreview.length ~/ itemCountCross + 1;
+        _pageController.firstPageImage.length ~/ itemCountCross + 1;
 
     // 计算滚动距离
     final double _offset = (_toLine - itemCountCrossMain) * size.height;
@@ -113,21 +113,20 @@ class AllPreviewsPageController extends GetxController
     logger.v('获取更多预览 ${_pageController.galleryItem.url}');
     // 增加延时 避免build期间进行 setState
     await Future<void>.delayed(const Duration(milliseconds: 100));
-    _pageController.currentPreviewPage++;
+    _pageController.currentImagePage++;
     isLoading = true;
     update();
 
-    final List<GalleryPreview> _nextGalleryPreviewList =
-        await Api.getGalleryPreview(
+    final List<GalleryImage> _nextGalleryImageList = await Api.getGalleryImage(
       _pageController.galleryItem.url!,
-      page: _pageController.currentPreviewPage,
-      cancelToken: moreGalleryPreviewCancelToken,
+      page: _pageController.currentImagePage,
+      cancelToken: moreGalleryImageCancelToken,
       refresh: _pageController.isRefresh,
     );
 
-    _pageController.addAllPreview(_nextGalleryPreviewList);
+    _pageController.addAllImages(_nextGalleryImageList);
     isLoading = false;
-    change(_previews, status: RxStatus.success());
+    change(_images, status: RxStatus.success());
   }
 
   Future<void> fetchFinsh() async {
@@ -137,6 +136,6 @@ class AllPreviewsPageController extends GetxController
     // 增加延时 避免build期间进行 setState
     await Future<void>.delayed(const Duration(milliseconds: 100));
     isLoadFinsh = true;
-    change(_previews, status: RxStatus.success());
+    change(_images, status: RxStatus.success());
   }
 }

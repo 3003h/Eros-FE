@@ -4,7 +4,6 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:cookie_jar/cookie_jar.dart';
 import 'package:device_info/device_info.dart';
 import 'package:dio_cookie_manager/dio_cookie_manager.dart';
-import 'package:fehviewer/common/update.dart';
 import 'package:fehviewer/const/const.dart';
 import 'package:fehviewer/const/storages.dart';
 import 'package:fehviewer/models/index.dart';
@@ -80,18 +79,18 @@ const DownloadTaskInfo kDefDownloadTaskInfo = DownloadTaskInfo(
   progress: 0,
 );
 
-const GalleryPreview kDefGalleryPreview = GalleryPreview(
+const GalleryImage kDefGalleryImage = GalleryImage(
   isLarge: false,
   isCache: false,
   startPrecache: false,
   ser: -1,
   href: '',
-  largeImageUrl: '',
-  imgUrl: '',
-  height: -1,
-  width: -1,
-  largeImageHeight: -1,
-  largeImageWidth: -1,
+  imageUrl: '',
+  thumbUrl: '',
+  thumbHeight: -1,
+  thumbWidth: -1,
+  imageHeight: -1,
+  imageWidth: -1,
   offSet: -1,
   sourceId: '',
 );

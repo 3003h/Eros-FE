@@ -285,7 +285,7 @@ class GalleryDetailParser {
     }
 
     // 画廊缩略图
-    final List<GalleryPreview> _galleryPreviews = parseGalleryPreview(document);
+    final List<GalleryImage> _galleryImages = parseGalleryImage(document);
 
     // todo 待优化 在这里请求showKey会导致等待时间太久
     //  画廊 showKey
@@ -412,7 +412,7 @@ class GalleryDetailParser {
       imgUrl: _imageUrl,
       tagGroup: _tagGroup,
       galleryComment: _galleryComment,
-      galleryPreview: _galleryPreviews,
+      galleryImages: _galleryImages,
       favTitle: _favTitle,
       favcat: _favcat,
       apiuid: _apiuid,
@@ -435,18 +435,18 @@ class GalleryDetailParser {
     return galleryItem;
   }
 
-  static List<GalleryPreview> parseGalleryPreviewFromHtml(String response) {
+  static List<GalleryImage> parseGalleryImageFromHtml(String response) {
     // 解析响应信息dom
     final Document document = parse(response);
-    return parseGalleryPreview(document);
+    return parseGalleryImage(document);
   }
 
   /// 缩略图处理
-  static List<GalleryPreview> parseGalleryPreview(Document document) {
+  static List<GalleryImage> parseGalleryImage(Document document) {
     // 大图 #gdt > div.gdtl  小图 #gdt > div.gdtm
     final List<Element> picLsit = document.querySelectorAll('#gdt > div.gdtm');
 
-    final List<GalleryPreview> galleryPreview = [];
+    final List<GalleryImage> galleryImages = [];
 
     if (picLsit.isNotEmpty) {
       // 小图的处理
@@ -467,13 +467,13 @@ class GalleryDetailParser {
         final Element? imgElem = pic.querySelector('img');
         final String picSer = imgElem?.attributes['alt']?.trim() ?? '';
 
-        galleryPreview.add(GalleryPreview(
+        galleryImages.add(GalleryImage(
           ser: int.parse(picSer),
           isLarge: false,
           href: picHref,
-          imgUrl: picSrcUrl,
-          height: double.parse(height),
-          width: double.parse(width),
+          thumbUrl: picSrcUrl,
+          thumbHeight: double.parse(height),
+          thumbWidth: double.parse(width),
           offSet: double.parse(offSet),
         ));
       }
@@ -488,14 +488,14 @@ class GalleryDetailParser {
         final String picSer = imgElem?.attributes['alt']?.trim() ?? '';
         final String picSrcUrl = imgElem?.attributes['src']?.trim() ?? '';
 
-        galleryPreview.add(GalleryPreview(
+        galleryImages.add(GalleryImage(
             ser: int.parse(picSer),
             isLarge: true,
             href: picHref,
-            imgUrl: picSrcUrl));
+            thumbUrl: picSrcUrl));
       }
     }
 
-    return galleryPreview;
+    return galleryImages;
   }
 }

@@ -1,28 +1,18 @@
-import 'package:fehviewer/common/global.dart';
 import 'package:fehviewer/common/service/depth_service.dart';
-import 'package:fehviewer/generated/l10n.dart';
 import 'package:fehviewer/models/index.dart';
 import 'package:fehviewer/network/gallery_request.dart';
 import 'package:fehviewer/pages/gallery/controller/gallery_page_controller.dart';
 import 'package:fehviewer/pages/gallery/view/gallery_widget.dart';
-import 'package:fehviewer/pages/gallery/view/rate_dialog.dart';
-import 'package:fehviewer/pages/gallery/view/torrent_dialog.dart';
-import 'package:fehviewer/pages/tab/view/gallery_base.dart';
-import 'package:fehviewer/route/navigator_util.dart';
-import 'package:fehviewer/route/routes.dart';
 // import 'package:fehviewer/utils/cust_lib/selectable_text.dart';
 import 'package:fehviewer/utils/logger.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_easyrefresh/easy_refresh.dart';
-// import 'package:flutter/material.dart' hide SelectableText;
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
 import 'package:line_icons/line_icons.dart';
 import 'package:share/share.dart';
 
 import 'all_preview_page.dart';
-import 'archiver_dialog.dart';
 import 'detail.dart';
 
 const double kHeaderHeight = 200.0 + 52;
@@ -106,7 +96,7 @@ class _GalleryMainPageState extends State<GalleryMainPage> {
         enableControlFinishRefresh: false,
         enableControlFinishLoad: false,
         onLoad: () async {
-          if (_controller.previews.isNotEmpty) {
+          if (_controller.images.isNotEmpty) {
             Get.to(
               () => AllPreviewPage(),
               transition: Transition.cupertino,

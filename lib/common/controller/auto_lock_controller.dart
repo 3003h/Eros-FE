@@ -80,7 +80,7 @@ class AutoLockController extends GetxController {
     final _needUnLock =
         autoLockTimeOut >= 0 && (subTime / 1000 > autoLockTimeOut || forceLock);
     logger
-        .v('离开时间为: ${subTime}ms  锁定超时为: $autoLockTimeOut  需要解锁: $_needUnLock');
+        .d('离开时间为: ${subTime}ms  锁定超时为: $autoLockTimeOut  需要解锁: $_needUnLock');
 
     if (_needUnLock && !_isResumed) {
       _isLocking = true;

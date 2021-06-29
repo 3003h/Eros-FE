@@ -27,13 +27,13 @@ class GalleryPara {
 
   final Set<int> _processingSerSet = <int>{};
 
-  final Map<String, Future<GalleryPreview?>> _map =
-      <String, Future<GalleryPreview?>>{};
+  final Map<String, Future<GalleryImage?>> _map =
+      <String, Future<GalleryImage?>>{};
 
   /// 一个很傻的预载功能 需要优化
-  Stream<GalleryPreview?> precacheImages(
+  Stream<GalleryImage?> precacheImages(
     BuildContext context, {
-    required Map<int, GalleryPreview> previewMap,
+    required Map<int, GalleryImage> imageMap,
     required int itemSer,
     required int max,
   }) async* {
@@ -47,57 +47,57 @@ class GalleryPara {
         continue;
       }
 
-      final GalleryPreview? _previewTemp = previewMap[_ser];
-      if (_previewTemp == null) {
+      final GalleryImage? _imageTemp = imageMap[_ser];
+      if (_imageTemp == null) {
         yield null;
       }
 
-      GalleryPreview _preview = _previewTemp!;
+      GalleryImage _image = _imageTemp!;
 
-      if (_preview.isCache ?? false) {
+      if (_image.isCache ?? false) {
         // logger.d('ser $_ser 已存在缓存中 跳过');
         continue;
       }
 
-      if (_preview.startPrecache ?? false) {
+      if (_image.startPrecache ?? false) {
         // logger.d('ser $_ser 已开始缓存 跳过');
         continue;
       }
 
       String _url = '';
-      if (_preview.largeImageUrl?.isEmpty ?? true) {
+      if (_image.imageUrl?.isEmpty ?? true) {
         _processingSerSet.add(_ser);
-        final String _href = previewMap[_ser]?.href ?? '';
+        final String _href = imageMap[_ser]?.href ?? '';
 
         // paraImageLageInfoFromHtml
-        final GalleryPreview _imageFromApi =
+        final GalleryImage _imageFromApi =
             await Api.ftchImageInfo(_href, ser: _ser);
 
-        _url = _imageFromApi.largeImageUrl ?? '';
+        _url = _imageFromApi.imageUrl ?? '';
 
-        _preview = _preview.copyWith(
-          largeImageUrl: _url,
-          largeImageWidth: _imageFromApi.largeImageWidth,
-          largeImageHeight: _imageFromApi.largeImageHeight,
+        _image = _image.copyWith(
+          imageUrl: _url,
+          imageWidth: _imageFromApi.imageWidth,
+          imageHeight: _imageFromApi.imageHeight,
         );
 
         _processingSerSet.remove(_ser);
       }
 
-      _url = _preview.largeImageUrl ?? '';
+      _url = _image.imageUrl ?? '';
 
       if (_url.isEmpty) {
         yield null;
       }
 
-      final Future<GalleryPreview?>? _future = _map[_url] ??
+      final Future<GalleryImage?>? _future = _map[_url] ??
           (() {
-            _map[_url] = _precacheSingleImage(context, _url, _preview);
+            _map[_url] = _precacheSingleImage(context, _url, _image);
             return _map[_url];
           })();
 
       if (_future != null) {
-        final GalleryPreview? value = await _future;
+        final GalleryImage? value = await _future;
         // logger.d('yield rult ser ${value?.ser}  ${value?.toJson()}');
         yield value?.copyWith(isCache: true);
         _map.remove(_url);
@@ -105,10 +105,10 @@ class GalleryPara {
     }
   }
 
-  Future<GalleryPreview?> _precacheSingleImage(
+  Future<GalleryImage?> _precacheSingleImage(
     BuildContext context,
     String url,
-    GalleryPreview preview,
+    GalleryImage image,
   ) async {
     final ImageProvider imageProvider = ExtendedNetworkImageProvider(
       url,
@@ -118,7 +118,7 @@ class GalleryPara {
     /// 预缓存图片
     try {
       await precacheImage(imageProvider, context);
-      return preview.copyWith(isCache: true);
+      return image.copyWith(isCache: true);
     } catch (e, stack) {
       logger.e('$e /n $stack');
       return null;

@@ -212,7 +212,7 @@ class GalleryViewPage extends GetView<ViewController> {
   Widget _buildBottomBar(BuildContext context) {
     final double _max = vState.filecount - 1.0;
     // logger.d('max = $_max');
-    final Map<int, GalleryPreview> previewMap = vState.previewMap;
+    final Map<int, GalleryImage> imageMap = vState.imageMap;
     return Container(
       color: const Color.fromARGB(150, 0, 0, 0),
       padding: vState.bottomBarPadding,
@@ -249,10 +249,10 @@ class GalleryViewPage extends GetView<ViewController> {
                   behavior: HitTestBehavior.opaque,
                   onTap: () {
                     logger.v('tap share');
-                    final GalleryPreview? p =
-                        previewMap[controller.vState.itemIndex + 1];
+                    final GalleryImage? p =
+                        imageMap[controller.vState.itemIndex + 1];
                     logger.v(p?.toJson());
-                    showShareActionSheet(context, p?.largeImageUrl! ?? '');
+                    showShareActionSheet(context, p?.imageUrl! ?? '');
                   },
                   child: Container(
                     width: 40,
@@ -322,13 +322,13 @@ class GalleryViewPage extends GetView<ViewController> {
                     builder: (ViewController controller) {
                       double? _height = () {
                         try {
-                          final _curPreview = vState.previewMap[itemSer];
-                          return _curPreview!.largeImageHeight! *
-                              (context.width / _curPreview.largeImageWidth!);
+                          final _curImage = vState.imageMap[itemSer];
+                          return _curImage!.imageHeight! *
+                              (context.width / _curImage.imageWidth!);
                         } on Exception catch (_) {
-                          final _curPreview = vState.previewMap[itemSer];
-                          return _curPreview!.height! *
-                              (context.width / _curPreview.width!);
+                          final _curImage = vState.imageMap[itemSer];
+                          return _curImage!.thumbHeight! *
+                              (context.width / _curImage.thumbWidth!);
                         } catch (e) {
                           return null;
                         }
@@ -361,9 +361,8 @@ class GalleryViewPage extends GetView<ViewController> {
     return GetBuilder<ViewController>(
       id: GetIds.IMAGE_VIEW,
       builder: (ViewController controller) {
-        // logger.d('lastPreviewLen ${controller.previews.length}');
         final ViewState vState = controller.vState;
-        controller.lastPreviewLen = vState.previews.length;
+        controller.lastImagesSize = vState.images.length;
 
         return Obx(
           () {

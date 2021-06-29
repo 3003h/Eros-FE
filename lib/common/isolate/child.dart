@@ -51,20 +51,20 @@ void _isolateDownload(SendPort sendPort) {
 
             // 获取所有图片页的href链接 通知父线程
             logger.v('获取所有图片页的href链接 通知父线程 start');
-            final List<GalleryPreview> _previews =
+            final List<GalleryImage> _images =
                 await _updateDtl(_requestBean, sendPort);
 
             // 更新大图url 下载图片 通知父线程
             logger.v('更新大图url 下载图片 通知父线程 start');
-            await _downloadAllImage(_requestBean, sendPort, _previews);
+            await _downloadAllImage(_requestBean, sendPort, _images);
 
             // 测试 发送消息回父isolate
             sendPort.send(
               _ResponseProtocol.complete(
                 _ResponseBean(
                   msg:
-                      'gid:${_initGalleryTask.gid} => previews[${_previews.length}]',
-                  previews: _previews,
+                      'gid:${_initGalleryTask.gid} => images[${_images.length}]',
+                  images: _images,
                 ),
               ),
             );
@@ -88,51 +88,61 @@ void _isolateDownload(SendPort sendPort) {
   });
 }
 
-Future<List<GalleryPreview>> _updateDtl(
+Future<List<GalleryImage>> _updateDtl(
     _RequestBean _requestBean, SendPort sendPort) async {
   // 获取所有图片页的href
-  final List<GalleryPreview> _previews = await _fetchAllPreviews(
+  final List<GalleryImage> _images = await _fetchAllImages(
     url: _requestBean.galleryTask!.url!,
     fileCount: _requestBean.galleryTask!.fileCount,
     appSupportPath: _requestBean.appSupportPath!,
     isSiteEx: _requestBean.isSiteEx!,
-    initPreviews: _requestBean.initPreviews,
+    initImages: _requestBean.initImages,
   );
 
-  logger.d('获取所有图片页的href完成 ${_previews.length}');
+  logger.d('获取所有图片页的href完成 ${_images.length}');
 
   // 发送获取结果到父iso 更新明细库
   sendPort.send(
     _ResponseProtocol.initDtl(
-      _ResponseBean(galleryTask: _requestBean.galleryTask, previews: _previews),
+      _ResponseBean(galleryTask: _requestBean.galleryTask, images: _images),
     ),
   );
 
-  return _previews;
+  return _images;
 }
 
 Future<void> _fetchAndDownloadOneImage(
   _RequestBean _requestBean,
   SendPort sendPort,
-  GalleryPreview preview,
-) async {
+  GalleryImage image, {
+  int? maxSer,
+}) async {
+  const int _kserlen = 4;
+
   // logger.d('new get imageUrl ${preview.ser} ');
-  final GalleryPreview _info = await _isoParaImageLageInfoFromHtml(
-    preview.href!,
+  final GalleryImage _info = await _isoParaImageLageInfoFromHtml(
+    image.href!,
     isSiteEx: _requestBean.isSiteEx ?? false,
     appSupportPath: _requestBean.appSupportPath!,
   );
 
-  final String _fileName =
-      _info.largeImageUrl!.substring(_info.largeImageUrl!.lastIndexOf('/') + 1);
-  logger.d(
-      'isolate gid[${_requestBean.galleryTask?.gid}] ${preview.ser}\n url:[${_info.largeImageUrl}]\n _fileName [$_fileName]');
+  // final String _fileName =
+  //     _info.largeImageUrl!.substring(_info.largeImageUrl!.lastIndexOf('/') + 1);
+  final String _suffix =
+      _info.imageUrl!.substring(_info.imageUrl!.lastIndexOf('.'));
+  final String _fileName = maxSer != null && '$maxSer'.length > _kserlen
+      ? '${sprintf('%0${'$maxSer'.length}d', [image.ser])}$_suffix'
+      : '${sprintf('%0${_kserlen}d', [image.ser])}$_suffix';
+
+  logger.d('isolate gid[${_requestBean.galleryTask?.gid}] ${image.ser}\n'
+      'url:[${_info.imageUrl}]\n'
+      'fileName [$_fileName]');
 
   final ProgessBean _progessBean = ProgessBean(updateImages: [
     GalleryImageTask(
       gid: _requestBean.galleryTask!.gid,
-      ser: preview.ser,
-      imageUrl: _info.largeImageUrl,
+      ser: image.ser,
+      imageUrl: _info.imageUrl,
       sourceId: _info.sourceId,
       filePath: _fileName,
       token: '',
@@ -153,7 +163,7 @@ Future<void> _fetchAndDownloadOneImage(
     await _downloadImage(
       _requestBean,
       sendPort,
-      _info.largeImageUrl!,
+      _info.imageUrl!,
       _fileName,
       _requestBean.appDocPath!,
       _requestBean.extStorePath!,
@@ -164,7 +174,16 @@ Future<void> _fetchAndDownloadOneImage(
       logger.e('403');
     }
     if (e.type == DioErrorType.connectTimeout) {
-      logger.e('连接超时');
+      logger.e('连接超时 retry');
+      await _downloadImage(
+        _requestBean,
+        sendPort,
+        _info.imageUrl!,
+        _fileName,
+        _requestBean.appDocPath!,
+        _requestBean.extStorePath!,
+        _requestBean.downloadPath!,
+      );
     }
   } catch (e) {
     rethrow;
@@ -174,7 +193,7 @@ Future<void> _fetchAndDownloadOneImage(
 Future<void> _reDownloadOneImage(
   _RequestBean _requestBean,
   SendPort sendPort,
-  GalleryPreview preview,
+  GalleryImage image,
   GalleryImageTask _imageTask,
 ) async {
   logger.d('re _downloadImage');
@@ -191,8 +210,8 @@ Future<void> _reDownloadOneImage(
     );
   } on DioError catch (e) {
     if (e.response?.statusCode == 403) {
-      logger.e('403 ${_imageTask.gid}.${preview.ser}下载链接已经失效 需要更新');
-      _fetchAndDownloadOneImage(_requestBean, sendPort, preview);
+      logger.e('403 ${_imageTask.gid}.${image.ser}下载链接已经失效 需要更新');
+      _fetchAndDownloadOneImage(_requestBean, sendPort, image);
     }
   } catch (e) {
     rethrow;
@@ -202,38 +221,36 @@ Future<void> _reDownloadOneImage(
 Future<void> _downloadAllImage(
   _RequestBean _requestBean,
   SendPort sendPort,
-  List<GalleryPreview> _previews,
+  List<GalleryImage> _images,
 ) async {
   // 初始化的明细任务 可为空
   final List<GalleryImageTask>? _imageTasks = _requestBean.imageTasks;
 
   // 依次获取大图url 更新明细
   logger.v('循环处理 依次获取大图url 更新明细');
-  for (final GalleryPreview preview in _previews) {
+  for (final GalleryImage image in _images) {
     //
     bool _imageTaskUrlIsNotExist = true;
     GalleryImageTask? _imageTask;
     if (_imageTasks!.isNotEmpty) {
       _imageTask = _imageTasks
-          .firstWhere((GalleryImageTask element) => element.ser == preview.ser);
+          .firstWhere((GalleryImageTask element) => element.ser == image.ser);
       _imageTaskUrlIsNotExist =
           _imageTask.imageUrl == null || _imageTask.imageUrl!.isEmpty;
     }
 
-    // if (_imageTask == null) {
-    //   logger.d('[${preview.ser}] _imageTask null');
-    //   return;
-    // }
-
     try {
-      if ((preview.largeImageUrl == null || preview.largeImageUrl!.isEmpty) &&
+      if ((image.imageUrl == null || image.imageUrl!.isEmpty) &&
           _imageTaskUrlIsNotExist) {
-        _fetchAndDownloadOneImage(_requestBean, sendPort, preview);
+        // 首次获取url 并且下载图片
+        _fetchAndDownloadOneImage(_requestBean, sendPort, image,
+            maxSer: _images.map((e) => e.ser).reduce(math.max));
       } else if (_imageTask != null &&
           _imageTask.imageUrl != null &&
           _imageTask.imageUrl != null &&
           _imageTask.imageUrl!.isNotEmpty) {
-        _reDownloadOneImage(_requestBean, sendPort, preview, _imageTask);
+        // 重新下载图片
+        _reDownloadOneImage(_requestBean, sendPort, image, _imageTask);
       }
     } catch (e, stack) {
       // logger.e('$e\n$stack');
@@ -273,26 +290,26 @@ Future<void> _downloadImage(
 }
 
 /// 获取所有href
-Future<List<GalleryPreview>> _fetchAllPreviews({
+Future<List<GalleryImage>> _fetchAllImages({
   required String url,
-  List<GalleryPreview>? initPreviews,
+  List<GalleryImage>? initImages,
   int? fileCount,
   required String appSupportPath,
   required bool isSiteEx,
 }) async {
-  if (initPreviews != null &&
-      initPreviews.isNotEmpty &&
-      initPreviews.length == fileCount) {
-    return initPreviews;
+  if (initImages != null &&
+      initImages.isNotEmpty &&
+      initImages.length == fileCount) {
+    return initImages;
   }
 
-  final List<GalleryPreview> _rultList = [];
-  _rultList.addAll(initPreviews ?? []);
+  final List<GalleryImage> _rultList = [];
+  _rultList.addAll(initImages ?? []);
   int _curPage = 0;
   while (_rultList.length < (fileCount ?? 0)) {
     try {
-      final List<GalleryPreview> _moreGalleryPreviewList =
-          await _isoFetchGalleryPreview(
+      final List<GalleryImage> _moreGalleryImageList =
+          await _isoFetchGalleryImage(
         url,
         page: _curPage + 1,
         // refresh: true,
@@ -300,16 +317,15 @@ Future<List<GalleryPreview>> _fetchAllPreviews({
         isSiteEx: isSiteEx,
       );
 
-      logger
-          .d(' _moreGalleryPreviewList len ${_moreGalleryPreviewList.length}');
+      logger.d(' _moreGalleryImageList len ${_moreGalleryImageList.length}');
 
       // 避免重复添加
       if (_rultList.isEmpty ||
           (_rultList.isNotEmpty &&
-              _moreGalleryPreviewList.first.ser > _rultList.last.ser)) {
-        logger.d('下载任务 添加图片对象 起始序号${_moreGalleryPreviewList.first.ser}  '
-            '数量${_moreGalleryPreviewList.length}');
-        _rultList.addAll(_moreGalleryPreviewList);
+              _moreGalleryImageList.first.ser > _rultList.last.ser)) {
+        logger.d('下载任务 添加图片对象 起始序号${_moreGalleryImageList.first.ser}  '
+            '数量${_moreGalleryImageList.length}');
+        _rultList.addAll(_moreGalleryImageList);
       }
       // 成功后才+1
       _curPage++;
@@ -370,7 +386,7 @@ Future<Dio> _getIsolateDio(
 /// 获取画廊缩略图
 /// [inUrl] 画廊的地址
 /// [page] 缩略图页码
-Future<List<GalleryPreview>> _isoFetchGalleryPreview(
+Future<List<GalleryImage>> _isoFetchGalleryImage(
   String inUrl, {
   required String appSupportPath,
   bool isSiteEx = false,
@@ -405,13 +421,13 @@ Future<List<GalleryPreview>> _isoFetchGalleryPreview(
 
   // logger.d('${response.data}');
 
-  return GalleryDetailParser.parseGalleryPreviewFromHtml(response.data!);
+  return GalleryDetailParser.parseGalleryImageFromHtml(response.data!);
 }
 
 /// 获取画廊图片的信息
 /// [href] 爬取的页面地址 用来解析gid 和 imgkey
 /// [page] 索引 从 1 开始
-Future<GalleryPreview> _isoParaImageLageInfoFromHtml(
+Future<GalleryImage> _isoParaImageLageInfoFromHtml(
   String href, {
   bool refresh = false,
   bool isSiteEx = false,
@@ -454,14 +470,14 @@ Future<GalleryPreview> _isoParaImageLageInfoFromHtml(
   final double? width = double.parse(_xy?.group(1) ?? '0');
   final double? height = double.parse(_xy?.group(2) ?? '0');
 
-  final GalleryPreview _rePreview = GalleryPreview(
-      largeImageUrl: imageUrl,
+  final GalleryImage _reImage = GalleryImage(
+      imageUrl: imageUrl,
       sourceId: _sourceId,
-      largeImageWidth: width,
-      largeImageHeight: height,
+      imageWidth: width,
+      imageHeight: height,
       ser: -1);
 
-  return _rePreview;
+  return _reImage;
 }
 
 //下载文件

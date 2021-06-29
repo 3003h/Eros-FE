@@ -2,7 +2,6 @@ import 'package:fehviewer/common/service/ehconfig_service.dart';
 import 'package:fehviewer/generated/l10n.dart';
 import 'package:fehviewer/models/index.dart';
 import 'package:fehviewer/pages/controller/fav_dialog_controller.dart';
-import 'package:fehviewer/pages/controller/favorite_sel_controller.dart';
 import 'package:fehviewer/route/navigator_util.dart';
 import 'package:fehviewer/utils/logger.dart';
 import 'package:fehviewer/utils/toast.dart';
@@ -10,7 +9,6 @@ import 'package:fehviewer/utils/vibrate.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:tuple/tuple.dart';
 
 class GalleryItemController extends GetxController {
   GalleryItemController(this.galleryItem);
@@ -69,7 +67,7 @@ class GalleryItemController extends GetxController {
     }
   }
 
-  late List<GalleryPreview> firstPagePreview;
+  late List<GalleryImage> firstPageImage;
   GalleryItem galleryItem;
 
   Rx<Color?> colorTap = const Color.fromARGB(0, 0, 0, 0).obs;
@@ -91,14 +89,13 @@ class GalleryItemController extends GetxController {
 
   bool get localFav => galleryItem.localFav ?? false;
 
-  void firstPutPreview(List<GalleryPreview> galleryPreview) {
-    if (galleryPreview.isNotEmpty) {
-      // galleryItem.galleryPreview = galleryPreview;
-      galleryItem = galleryItem.copyWith(galleryPreview: galleryPreview);
+  void firstPutImage(List<GalleryImage> galleryImage) {
+    if (galleryImage.isNotEmpty) {
+      galleryItem = galleryItem.copyWith(galleryImages: galleryImage);
     }
 
-    firstPagePreview =
-        galleryItem.galleryPreview?.sublist(0, galleryPreview.length) ?? [];
+    firstPageImage =
+        galleryItem.galleryImages?.sublist(0, galleryImage.length) ?? [];
     // logger.d(' _firstPagePreview ${firstPagePreview.length}');
   }
 

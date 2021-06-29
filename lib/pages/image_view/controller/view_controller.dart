@@ -67,7 +67,7 @@ class ViewController extends GetxController {
   final GalleryPageController _galleryPageController =
       Get.find(tag: pageCtrlDepth);
 
-  late int lastPreviewLen;
+  late int lastImagesSize;
 
   final ItemScrollController itemScrollController = ItemScrollController();
   final ItemPositionsListener itemPositionsListener =
@@ -112,15 +112,14 @@ class ViewController extends GetxController {
       GalleryPara.instance
           .precacheImages(
         Get.context!,
-        previewMap: vState.previewMap,
+        imageMap: vState.imageMap,
         itemSer: vState.itemIndex,
         max: _preload,
       )
-          .listen((GalleryPreview? event) {
+          .listen((GalleryImage? event) {
         if (event != null) {
           // logger5.d('preloadImage upt previewMap ${event.ser}');
-          _galleryPageController.uptPreviewBySer(
-              ser: event.ser, preview: event);
+          _galleryPageController.uptImageBySer(ser: event.ser, image: event);
         }
       });
     }
@@ -199,13 +198,13 @@ class ViewController extends GetxController {
     GalleryPara.instance
         .precacheImages(
       Get.context!,
-      previewMap: _galleryPageController.previewMap,
+      imageMap: _galleryPageController.imageMap,
       itemSer: vState.itemIndex,
       max: _ehConfigService.preloadImage.value,
     )
-        .listen((GalleryPreview? event) {
+        .listen((GalleryImage? event) {
       if (event != null) {
-        _galleryPageController.uptPreviewBySer(ser: event.ser, preview: event);
+        _galleryPageController.uptImageBySer(ser: event.ser, image: event);
       }
     });
     // logger.d('itemIndex $itemIndex  ${itemIndex.toDouble()}');

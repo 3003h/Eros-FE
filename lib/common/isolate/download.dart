@@ -1,5 +1,6 @@
 import 'dart:io';
 import 'dart:isolate';
+import 'dart:math' as math;
 
 import 'package:cookie_jar/cookie_jar.dart';
 import 'package:dio/dio.dart';
@@ -23,6 +24,7 @@ import 'package:get/get.dart' hide Response;
 import 'package:html/dom.dart';
 import 'package:html/parser.dart' show parse;
 import 'package:path/path.dart' as path;
+import 'package:sprintf/sprintf.dart';
 
 part 'child.dart';
 
@@ -59,7 +61,7 @@ class _RequestBean {
     this.extStorePath,
     this.isSiteEx,
     this.downloadPath,
-    this.initPreviews,
+    this.initImages,
     this.galleryTask,
     this.imageTasks,
     this.loginfo,
@@ -70,7 +72,7 @@ class _RequestBean {
   final String? extStorePath;
   final bool? isSiteEx;
   final String? downloadPath;
-  final List<GalleryPreview>? initPreviews;
+  final List<GalleryImage>? initImages;
   final GalleryTask? galleryTask;
   final List<GalleryImageTask>? imageTasks;
   final List<String?>? loginfo;
@@ -78,14 +80,14 @@ class _RequestBean {
 
 class _ResponseBean {
   _ResponseBean({
-    this.previews,
+    this.images,
     this.progess,
     this.galleryTask,
     this.msg,
     this.desc,
   });
 
-  final List<GalleryPreview>? previews;
+  final List<GalleryImage>? images;
   final ProgessBean? progess;
   final GalleryTask? galleryTask;
   final String? msg;
@@ -159,24 +161,22 @@ class DownloadManager {
 
             /// 任务明细更新
             case _ResponseType.initDtl:
-              final List<GalleryPreview> _rultPreviews = _resBean.previews!;
+              final List<GalleryImage> _rultImages = _resBean.images!;
               final GalleryTask _galleryTask = _resBean.galleryTask!;
               // 更新状态
               final GalleryPageController _pageController =
                   Get.find(tag: pageCtrlDepth);
-              // logger.d(
-              //     '${_pageController.previews.length} ${_rultPreviews.length}');
 
-              if (_pageController.previews.length < _rultPreviews.length) {
+              if (_pageController.images.length < _rultImages.length) {
                 logger.d('set pre');
-                _pageController.previews.clear();
-                _pageController.previews.addAll(_rultPreviews);
+                _pageController.images.clear();
+                _pageController.images.addAll(_rultImages);
               }
 
               // 明细入库
               // 插入所有任务明细
-              final List<GalleryImageTask> _galleryImageTasks = _rultPreviews
-                  .map((GalleryPreview e) => GalleryImageTask(
+              final List<GalleryImageTask> _galleryImageTasks = _rultImages
+                  .map((GalleryImage e) => GalleryImageTask(
                         gid: _galleryTask.gid,
                         token: _galleryTask.token,
                         href: e.href,
@@ -214,17 +214,17 @@ class DownloadManager {
                 );
                 await _imageTaskDao.updateImageTask(_uptTask);
 
+                // 可能会有画廊已经退出的情况 _pageController会获取不到
                 if (Get.isRegistered<GalleryPageController>()) {
-                  // 可能会有画廊已经退出的情况 _pageController会获取不到
                   final GalleryPageController _pageController =
                       Get.find(tag: pageCtrlDepth);
 
-                  final int _preIndex = _pageController.previews.indexWhere(
-                      (GalleryPreview element) =>
+                  final int _preIndex = _pageController.images.indexWhere(
+                      (GalleryImage element) =>
                           element.ser == _uptImageTask.ser);
-                  _pageController.previews[_preIndex] = _pageController
-                      .previews[_preIndex]
-                      .copyWith(largeImageUrl: _uptImageTask.imageUrl);
+                  _pageController.images[_preIndex] = _pageController
+                      .images[_preIndex]
+                      .copyWith(imageUrl: _uptImageTask.imageUrl);
                 }
               }
 
@@ -286,7 +286,7 @@ class DownloadManager {
       appSupportPath: Global.appSupportPath,
       appDocPath: Global.appDocPath,
       extStorePath: Global.extStorePath,
-      initPreviews: _pageController.firstPagePreview,
+      initImages: _pageController.firstPageImage,
       downloadPath: downloadPath,
     );
 

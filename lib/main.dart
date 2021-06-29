@@ -160,7 +160,7 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
     }
     if (state == AppLifecycleState.resumed) {
       // came back to Foreground
-      logger.d('resumed');
+      // logger.d('resumed');
       _autoLockController.resumed();
 
       _ehConfigService.chkClipboardLink(context);

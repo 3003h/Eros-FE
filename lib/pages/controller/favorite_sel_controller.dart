@@ -1,5 +1,3 @@
-import 'dart:convert';
-
 import 'package:fehviewer/common/controller/localfav_controller.dart';
 import 'package:fehviewer/const/const.dart';
 import 'package:fehviewer/generated/l10n.dart';
