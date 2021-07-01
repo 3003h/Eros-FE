@@ -9,6 +9,7 @@ import 'package:fehviewer/utils/logger.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:keframe/size_cache_widget.dart';
 
 class PopularListTab extends GetView<PopularViewController> {
   const PopularListTab({
@@ -60,6 +61,7 @@ class PopularListTab extends GetView<PopularViewController> {
     );
 
     final Widget customScrollView = CustomScrollView(
+      cacheExtent: 500,
       controller: scrollController,
       physics: const AlwaysScrollableScrollPhysics(),
       slivers: <Widget>[
