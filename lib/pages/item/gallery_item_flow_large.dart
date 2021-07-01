@@ -9,6 +9,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
+import 'package:keframe/frame_separate_widget.dart';
 
 import 'gallery_clipper.dart';
 import 'gallery_item.dart';
@@ -152,17 +153,19 @@ class GalleryItemFlowLarge extends StatelessWidget {
                         // Positioned(
                         //     bottom: 4, right: 4, child: _buildFavcatIcon()),
                         // Positioned(bottom: 4, left: 4, child: _buildRating()),
-                        Container(
-                          height: (kHeight + kRadius) / 2,
-                          width: (kWidth + kRadius) / 2,
-                          alignment: Alignment.center,
-                          child: Text(
-                            galleryItem.translated ?? '',
-                            style: const TextStyle(
-                                fontSize: 8,
-                                color: CupertinoColors.white,
-                                fontWeight: FontWeight.bold,
-                                height: 1),
+                        FrameSeparateWidget(
+                          child: Container(
+                            height: (kHeight + kRadius) / 2,
+                            width: (kWidth + kRadius) / 2,
+                            alignment: Alignment.center,
+                            child: Text(
+                              galleryItem.translated ?? '',
+                              style: const TextStyle(
+                                  fontSize: 8,
+                                  color: CupertinoColors.white,
+                                  fontWeight: FontWeight.bold,
+                                  height: 1),
+                            ),
                           ),
                         ),
                       ],

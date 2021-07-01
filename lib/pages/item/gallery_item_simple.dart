@@ -10,6 +10,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
+import 'package:keframe/frame_separate_widget.dart';
 
 const double kCoverImageWidth = 70.0;
 const double kItemWidth = 115.0;
@@ -101,7 +102,7 @@ class GalleryItemSimpleWidget extends StatelessWidget {
     return GestureDetector(
       child: Column(
         children: <Widget>[
-          containerGallery,
+          FrameSeparateWidget(child: containerGallery),
           Divider(
             height: 0.5,
             indent: kPaddingLeft,
