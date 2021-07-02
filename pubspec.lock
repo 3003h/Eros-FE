@@ -168,21 +168,21 @@ packages:
       name: cloud_firestore
       url: "https://pub.flutter-io.cn"
     source: hosted
-    version: "2.2.2"
+    version: "2.3.0"
   cloud_firestore_platform_interface:
     dependency: transitive
     description:
       name: cloud_firestore_platform_interface
       url: "https://pub.flutter-io.cn"
     source: hosted
-    version: "5.1.2"
+    version: "5.2.0"
   cloud_firestore_web:
     dependency: transitive
     description:
       name: cloud_firestore_web
       url: "https://pub.flutter-io.cn"
     source: hosted
-    version: "2.1.2"
+    version: "2.2.0"
   code_builder:
     dependency: transitive
     description:
@@ -408,7 +408,7 @@ packages:
       name: firebase_crashlytics
       url: "https://pub.flutter-io.cn"
     source: hosted
-    version: "2.0.6"
+    version: "2.0.7"
   firebase_crashlytics_platform_interface:
     dependency: transitive
     description:
@@ -422,7 +422,7 @@ packages:
       name: firebase_performance
       url: "https://pub.flutter-io.cn"
     source: hosted
-    version: "0.7.0+5"
+    version: "0.7.0+6"
   fixnum:
     dependency: transitive
     description:
@@ -589,6 +589,13 @@ packages:
       url: "https://pub.flutter-io.cn"
     source: hosted
     version: "9.1.0"
+  fps_monitor:
+    dependency: "direct main"
+    description:
+      name: fps_monitor
+      url: "https://pub.flutter-io.cn"
+    source: hosted
+    version: "2.0.0"
   frontend_server_client:
     dependency: transitive
     description:
@@ -738,6 +745,13 @@ packages:
       url: "https://pub.flutter-io.cn"
     source: hosted
     version: "4.1.3"
+  keframe:
+    dependency: "direct main"
+    description:
+      name: keframe
+      url: "https://pub.flutter-io.cn"
+    source: hosted
+    version: "2.0.1"
   line_icons:
     dependency: "direct main"
     description:
@@ -1246,7 +1260,7 @@ packages:
       name: url_launcher
       url: "https://pub.flutter-io.cn"
     source: hosted
-    version: "6.0.7"
+    version: "6.0.8"
   url_launcher_linux:
     dependency: transitive
     description:
