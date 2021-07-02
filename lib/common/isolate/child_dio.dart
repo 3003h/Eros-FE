@@ -1,10 +1,60 @@
-part of 'download.dart';
+part of 'download_manager.dart';
 
 const int _connectTimeout = 20000;
 const int _receiveTimeout = 10000;
 
-Future<Dio> _getIsolateDio(
-    {bool isSiteEx = false, required String appSupportPath}) async {
+class IsolateDioEH {
+  IsolateDioEH._({this.appSupportPath}) {
+    _options = BaseOptions(
+      baseUrl: EHConst.EH_BASE_URL,
+      connectTimeout: _connectTimeout,
+      receiveTimeout: _receiveTimeout,
+      //设置请求头
+      headers: <String, String>{
+        'User-Agent': EHConst.CHROME_USER_AGENT,
+        'Accept': EHConst.CHROME_ACCEPT,
+        'Accept-Language': EHConst.CHROME_ACCEPT_LANGUAGE,
+      },
+      contentType: Headers.formUrlEncodedContentType,
+      responseType: ResponseType.json,
+    );
+
+    // this.appSupportPath ??= appSupportPath;
+
+    _dio = Dio(_options);
+
+    // Cookie管理
+    final PersistCookieJar cookieJar =
+        PersistCookieJar(storage: FileStorage(appSupportPath));
+    final CookieManager _cookieManager = CookieManager(cookieJar);
+    _dio.interceptors.add(_cookieManager);
+
+    /// 缓存
+    /// 在ioslae中使用磁盘缓存会有问题，暂时跳过磁盘缓存
+    _dio.interceptors.add(DioCacheManager(
+      CacheConfig(
+        skipDiskCache: true,
+        maxMemoryCacheCount: 1000,
+        databasePath: appSupportPath,
+        baseUrl: EHConst.EH_BASE_URL,
+      ),
+    ).interceptor);
+  }
+  factory IsolateDioEH.getInstance() => _instance;
+  static final IsolateDioEH _instance = IsolateDioEH._();
+
+  late String? appSupportPath;
+
+  late BaseOptions _options;
+
+  late Dio _dio;
+}
+
+Dio _getIsolateDio({
+  bool isSiteEx = false,
+  bool download = false,
+  required String appSupportPath,
+}) {
   Dio _dio;
   BaseOptions _options;
 
@@ -42,6 +92,60 @@ Future<Dio> _getIsolateDio(
     ),
   ).interceptor);
 
+  if (false) {
+    _dio.interceptors.add(InterceptorsWrapper(
+        onRequest: (RequestOptions options, RequestInterceptorHandler handler) {
+      // _dlCountStream.listen((int event) {
+      //   logger.d('event dlCount $event');
+      //   if (event < 3) {
+      //     _incrementTask();
+      //     _dio.interceptors.requestLock.unlock();
+      //     handler.next(options);
+      //   } else {
+      //     _dio.interceptors.requestLock.lock();
+      //   }
+      // });
+
+      _dio.interceptors.requestLock.lock();
+      _dlCountStream.listen((int event) {
+        logger.d('event dlCount $event');
+        if (event < 3) {
+          _incrementTask();
+          handler.next(options);
+          _dio.interceptors.requestLock.unlock();
+        }
+      });
+    }));
+  }
+
+  // 锁定控制
+  /*_dio.interceptors.add(InterceptorsWrapper(
+      onRequest: (RequestOptions options, RequestInterceptorHandler handler) {
+    // We use a new Dio(to avoid dead lock) instance to request token.
+    // tokenDio.get('/token').then((response) {
+    //   //Set the token to headers
+    //   options.headers['token'] = response.data['data']['token'];
+    //   handler.next(options); //continue
+    // }).catchError((error, stackTrace) {
+    //   handler.reject(error, true);
+    // }).whenComplete(() => _dio.interceptors.requestLock.unlock());
+
+    //任务的周期性执行
+    // Timer.periodic(Duration(milliseconds: 200), (timer) {
+    //   // print("f2");
+    //   logger.d('dio numCurrentDownloadTasks $dlCount');
+    //   // count++;
+    //   if (dlCount > 3) {
+    //     _dio.interceptors.requestLock.lock();
+    //   } else {
+    //     //当执行count>3时，取消timer中的任务
+    //     timer.cancel();
+    //     handler.next(options);
+    //     _dio.interceptors.requestLock.unlock();
+    //   }
+    // });
+  }));*/
+
   return _dio;
 }
 
@@ -66,10 +170,11 @@ Future<List<GalleryImage>> _isoFetchGalleryImage(
   cookies.add(Cookie('nw', '1'));
   cookieJar.saveFromResponse(Uri.parse(_baseUrl), cookies);
 
-  final Dio _isolateDio = await _getIsolateDio(
-    isSiteEx: isSiteEx,
-    appSupportPath: appSupportPath,
-  );
+  // final Dio _isolateDio = _getIsolateDio(
+  //   isSiteEx: isSiteEx,
+  //   appSupportPath: appSupportPath,
+  // );
+  final Dio _isolateDio = isSiteEx ? exDio : ehDio;
 
   Response<String> response;
   try {
@@ -97,10 +202,11 @@ Future<GalleryImage> _isoParaImageLageInfoFromHtml(
 }) async {
   final String url = href;
 
-  final Dio _isolateDio = await _getIsolateDio(
-    isSiteEx: isSiteEx,
-    appSupportPath: appSupportPath,
-  );
+  // final Dio _isolateDio = _getIsolateDio(
+  //   isSiteEx: isSiteEx,
+  //   appSupportPath: appSupportPath,
+  // );
+  final Dio _isolateDio = isSiteEx ? exDio : ehDio;
 
   Response<String> response;
   try {
@@ -152,10 +258,12 @@ Future<Response<dynamic>?> _downLoadFile(
     required String savePath}) async {
   late Response<dynamic> response;
 
-  final Dio _isolateDio = await _getIsolateDio(
-    isSiteEx: isSiteEx,
-    appSupportPath: appSupportPath,
-  );
+  // final Dio _isolateDio = _getIsolateDio(
+  //   isSiteEx: isSiteEx,
+  //   appSupportPath: appSupportPath,
+  // );
+
+  final Dio _isolateDio = isSiteEx ? exDlDio : ehDlDio;
 
   try {
     response = await _isolateDio.download(
@@ -172,6 +280,9 @@ Future<Response<dynamic>?> _downLoadFile(
   } on DioError catch (e) {
     logger.e('downLoadFile exception: $e');
     rethrow;
+  } finally {
+    // logger.d('numCurrentDownloadTasks $numCurrentDownloadTasks');
+    _decrementTask();
   }
   return response;
 }

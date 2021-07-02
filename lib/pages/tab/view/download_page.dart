@@ -1,4 +1,4 @@
-import 'package:fehviewer/common/isolate/download.dart';
+import 'package:fehviewer/common/isolate/download_manager.dart';
 import 'package:fehviewer/generated/l10n.dart';
 import 'package:fehviewer/models/index.dart';
 import 'package:fehviewer/pages/item/download_archiver_item.dart';

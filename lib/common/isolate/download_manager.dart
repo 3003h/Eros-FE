@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:io';
 import 'dart:isolate';
 import 'dart:math' as math;
@@ -34,6 +35,10 @@ part 'protocol.dart';
 final DownloadManager downloadManager = DownloadManager();
 
 class DownloadManager {
+  factory DownloadManager() => _instance;
+  DownloadManager._();
+  static final DownloadManager _instance = DownloadManager._();
+
   final ReceivePort _receivePort = ReceivePort();
   SendPort? _sendPortToChild;
   Isolate? _isolate;
@@ -60,6 +65,16 @@ class DownloadManager {
           _imageTaskDao,
           _galleryTaskDao,
         ));
+
+    // 下载
+    download();
+  }
+
+  void download() {
+    //任务的周期性执行
+    Timer.periodic(Duration(milliseconds: 1000), (timer) {
+      // print('download');
+    });
   }
 
   /// 关闭
@@ -67,9 +82,10 @@ class DownloadManager {
     _isolate?.kill(priority: Isolate.immediate);
   }
 
-  /// 初始化isolate日志
-  void _initLogger() {
-    logger.d('send initLogger isolate [$logDirectory] [$logFileName]');
+  /// 初始化isolate
+  void _initChildIsolate() {
+    logger.d(
+        'send init isolate \nlogDirectory[$logDirectory] \nlogFileName[$logFileName]');
     final _RequestBean _requestBean = _RequestBean(
       appSupportPath: Global.appSupportPath,
       appDocPath: Global.appDocPath,
@@ -77,8 +93,21 @@ class DownloadManager {
       loginfo: [logDirectory, logFileName],
     );
 
-    _sendPortToChild?.send(_RequestProtocol.initLogger(_requestBean));
+    _sendPortToChild?.send(_RequestProtocol.init(_requestBean));
   }
+
+  /// 初始化isolate日志
+  // void _initLogger() {
+  //   logger.d('send initLogger isolate [$logDirectory] [$logFileName]');
+  //   final _RequestBean _requestBean = _RequestBean(
+  //     appSupportPath: Global.appSupportPath,
+  //     appDocPath: Global.appDocPath,
+  //     extStorePath: Global.extStorePath,
+  //     loginfo: [logDirectory, logFileName],
+  //   );
+  //
+  //   _sendPortToChild?.send(_RequestProtocol.initLogger(_requestBean));
+  // }
 
   void pauseTask({
     required GalleryTask galleryTask,
@@ -145,7 +174,7 @@ class DownloadManager {
       if (message is SendPort) {
         // 初始化 获取子isolate的 sendPort
         _sendPortToChild = message;
-        _initLogger();
+        _initChildIsolate();
       }
 
       if (message is _ResponseProtocol) {
