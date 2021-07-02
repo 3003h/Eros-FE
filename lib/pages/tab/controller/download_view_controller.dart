@@ -1,3 +1,4 @@
+import 'package:fehviewer/common/controller/archiver_download_controller.dart';
 import 'package:fehviewer/common/controller/download_controller.dart';
 import 'package:fehviewer/generated/l10n.dart';
 import 'package:fehviewer/models/index.dart';
@@ -14,6 +15,7 @@ enum DownloadType {
 }
 
 class DownloadViewController extends GetxController {
+  final ArchiverDownloadController _archiverDownloadController = Get.find();
   final DownloadController _downloadController = Get.find();
 
   PageController pageController = PageController();
@@ -39,11 +41,12 @@ class DownloadViewController extends GetxController {
   }
 
   List<DownloadTaskInfo> get archiverTasks =>
-      _downloadController.archiverTaskMap.entries
+      _archiverDownloadController.archiverTaskMap.entries
           .map((MapEntry<String, DownloadTaskInfo> e) => e.value)
           .toList();
 
-  List<GalleryTask> get galleryTasks => _downloadController.galleryTaskList;
+  List<GalleryTask> get galleryTasks =>
+      _archiverDownloadController.galleryTaskList;
 
   // Archiver暂停任务
   Future<void> pauseArchiverDownload({required String? taskId}) async {
@@ -72,8 +75,9 @@ class DownloadViewController extends GetxController {
       // _downloadController.archiverTaskMap[archiverTasks[index].tag]?.taskId =
       //     _newTaskId;
 
-      _downloadController.archiverTaskMap[archiverTasks[index].tag!] =
-          _downloadController.archiverTaskMap[archiverTasks[index].tag!]!
+      _archiverDownloadController.archiverTaskMap[archiverTasks[index].tag!] =
+          _archiverDownloadController
+              .archiverTaskMap[archiverTasks[index].tag!]!
               .copyWith(taskId: _newTaskId);
     }
   }
@@ -94,8 +98,9 @@ class DownloadViewController extends GetxController {
     if (_newTaskId != null && archiverTasks[index].tag != null) {
       // _downloadController.archiverTaskMap[archiverTasks[index].tag].taskId =
       //     _newTaskId;
-      _downloadController.archiverTaskMap[archiverTasks[index].tag!] =
-          _downloadController.archiverTaskMap[archiverTasks[index].tag!]!
+      _archiverDownloadController.archiverTaskMap[archiverTasks[index].tag!] =
+          _archiverDownloadController
+              .archiverTaskMap[archiverTasks[index].tag!]!
               .copyWith(taskId: _newTaskId);
     }
   }
@@ -104,7 +109,7 @@ class DownloadViewController extends GetxController {
   void removeArchiverTask(int index) {
     final String? _oriTaskid = archiverTasks[index].taskId;
     final String? _tag = archiverTasks[index].tag;
-    _downloadController.archiverTaskMap.remove(_tag);
+    _archiverDownloadController.archiverTaskMap.remove(_tag);
     FlutterDownloader.remove(
         taskId: _oriTaskid ?? '', shouldDeleteContent: true);
   }

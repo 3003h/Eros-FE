@@ -35,7 +35,7 @@ import 'common/controller/localfav_controller.dart';
 import 'common/controller/quicksearch_controller.dart';
 import 'common/controller/tag_trans_controller.dart';
 import 'common/controller/user_controller.dart';
-import 'common/isolate/download.dart';
+import 'common/isolate/download_manager.dart';
 import 'common/service/depth_service.dart';
 import 'common/service/layout_service.dart';
 import 'pages/tab/controller/unlock_page_controller.dart';

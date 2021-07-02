@@ -1,21 +1,38 @@
-part of 'download.dart';
+part of 'download_manager.dart';
+
+String? appSupportPath;
+String? appDocPath;
+String? extStorePath;
+
+late final Dio exDio;
+late final Dio ehDio;
+late final Dio exDlDio;
+late final Dio ehDlDio;
+
+int downloadPoolSize = 0;
+int dlCount = 0;
+void _incrementTask() {
+  dlCount++;
+  _dlCountSink.add(dlCount);
+}
+
+void _decrementTask() {
+  dlCount--;
+  _dlCountSink.add(dlCount);
+}
+
+///定义一个Controller
+final StreamController<int> _dlCountController = StreamController<int>();
+
+///获取 StreamSink 做 add 入口
+final StreamSink<int> _dlCountSink = _dlCountController.sink;
+
+///获取 Stream 用于监听
+Stream<int> _dlCountStream = _dlCountController.stream.asBroadcastStream();
 
 /// isoload下载入口函数
 /// 在这里进行实际的链接解析，图片文件下载
 void _isolateDownload(SendPort sendPort) {
-  // try {
-  //   initLogger(isolate: true);
-  //   logger.d('init _isolateDownload only ConsoleOutput');
-  // } catch (e, stack) {
-  //   sendPort.send(
-  //     _ResponseProtocol.error(
-  //       _ResponseBean(
-  //         msg: '$e\n$stack',
-  //       ),
-  //     ),
-  //   );
-  // }
-
   // 创建一个消息接收器
   final ReceivePort _receivePort = ReceivePort();
   sendPort.send(_receivePort.sendPort);
@@ -29,14 +46,37 @@ void _isolateDownload(SendPort sendPort) {
 
         switch (_requestType) {
 
-          /// initLogger
-          case _RequestType.initLogger:
+          /// init
+          case _RequestType.init:
+            // initLogger
             final List<String?>? _loginfo = _requestBean.loginfo;
             print(_loginfo);
             if (_loginfo != null && _loginfo.length >= 2) {
               initLogger(directory: _loginfo[0], fileName: _loginfo[1]);
               logger.d('init _isolate Logger');
             }
+
+            appSupportPath ??= _requestBean.appSupportPath;
+            appDocPath ??= _requestBean.appDocPath;
+            extStorePath ??= _requestBean.extStorePath;
+
+            if (appSupportPath == null) {
+              break;
+            }
+
+            // init Dio
+            ehDio = _getIsolateDio(appSupportPath: appSupportPath!);
+            ehDlDio =
+                _getIsolateDio(appSupportPath: appSupportPath!, download: true);
+            exDio =
+                _getIsolateDio(appSupportPath: appSupportPath!, isSiteEx: true);
+            exDlDio = _getIsolateDio(
+                appSupportPath: appSupportPath!,
+                isSiteEx: true,
+                download: true);
+
+            _dlCountSink.add(dlCount);
+
             break;
 
           /// 添加下载任务
@@ -53,10 +93,7 @@ void _isolateDownload(SendPort sendPort) {
             final List<GalleryImage> _images =
                 await _updateDtl(_requestBean, sendPort);
 
-            // 更新大图url 异步下载图片
-            await _downloadImageAll(_requestBean, sendPort, _images);
-
-            // 下载任务入队完成
+            // 通知父线程 下载任务入队完成
             sendPort.send(
               _ResponseProtocol.enqueued(
                 _ResponseBean(
@@ -67,6 +104,7 @@ void _isolateDownload(SendPort sendPort) {
                 ),
               ),
             );
+
             break;
           default:
             break;
@@ -108,6 +146,56 @@ Future<List<GalleryImage>> _updateDtl(
   );
 
   return _images;
+}
+
+/// 图片下载任务
+Future<void> _downloadImageAll(
+  _RequestBean _requestBean,
+  SendPort sendPort,
+  List<GalleryImage> _images,
+) async {
+  // 初始化的明细任务列表
+  final List<GalleryImageTask>? _imageTasks = _requestBean.imageTasks;
+
+  // 循环下载处理
+  logger.v('循环 获取大图url并下载');
+  for (final GalleryImage image in _images) {
+    //
+    bool _imageTaskUrlIsNotExist = true;
+    GalleryImageTask? _imageTask;
+    if (_imageTasks!.isNotEmpty) {
+      _imageTask = _imageTasks
+          .firstWhere((GalleryImageTask element) => element.ser == image.ser);
+      _imageTaskUrlIsNotExist =
+          _imageTask.imageUrl == null || _imageTask.imageUrl!.isEmpty;
+    }
+
+    try {
+      if ((image.imageUrl == null || image.imageUrl!.isEmpty) &&
+          _imageTaskUrlIsNotExist) {
+        // 首次获取url 并且下载图片
+        _getUrlAndDownloadOneImage(
+          _requestBean,
+          sendPort,
+          image,
+          maxSer: _images.map((e) => e.ser).reduce(math.max),
+        );
+      } else if (_imageTask != null &&
+          _imageTask.imageUrl != null &&
+          _imageTask.imageUrl != null &&
+          _imageTask.imageUrl!.isNotEmpty) {
+        // 重新下载图片
+        _reDownloadOneImage(
+          _requestBean,
+          sendPort,
+          image,
+          _imageTask,
+        );
+      }
+    } catch (e, stack) {
+      rethrow;
+    }
+  }
 }
 
 Future<void> _getUrlAndDownloadOneImage(
@@ -196,7 +284,7 @@ Future<void> _getUrlAndDownloadOneImage(
     rethrow;
   }
 
-  logger.d('download imageUrl ${image.ser} complete');
+  logger.v('download imageUrl ${image.ser} complete');
 
   /// 单条任务下载完成
   final ProgessBean _progessBeanComplete = ProgessBean(updateImages: [
@@ -243,55 +331,6 @@ Future<void> _reDownloadOneImage(
     }
   } catch (e) {
     rethrow;
-  }
-}
-
-Future<void> _downloadImageAll(
-  _RequestBean _requestBean,
-  SendPort sendPort,
-  List<GalleryImage> _images,
-) async {
-  // 初始化的明细任务 可为空
-  final List<GalleryImageTask>? _imageTasks = _requestBean.imageTasks;
-
-  // 依次获取大图url 更新明细
-  logger.v('循环处理 依次获取大图url 更新明细');
-  for (final GalleryImage image in _images) {
-    //
-    bool _imageTaskUrlIsNotExist = true;
-    GalleryImageTask? _imageTask;
-    if (_imageTasks!.isNotEmpty) {
-      _imageTask = _imageTasks
-          .firstWhere((GalleryImageTask element) => element.ser == image.ser);
-      _imageTaskUrlIsNotExist =
-          _imageTask.imageUrl == null || _imageTask.imageUrl!.isEmpty;
-    }
-
-    try {
-      if ((image.imageUrl == null || image.imageUrl!.isEmpty) &&
-          _imageTaskUrlIsNotExist) {
-        // 首次获取url 并且下载图片
-        _getUrlAndDownloadOneImage(
-          _requestBean,
-          sendPort,
-          image,
-          maxSer: _images.map((e) => e.ser).reduce(math.max),
-        );
-      } else if (_imageTask != null &&
-          _imageTask.imageUrl != null &&
-          _imageTask.imageUrl != null &&
-          _imageTask.imageUrl!.isNotEmpty) {
-        // 重新下载图片
-        _reDownloadOneImage(
-          _requestBean,
-          sendPort,
-          image,
-          _imageTask,
-        );
-      }
-    } catch (e, stack) {
-      rethrow;
-    }
   }
 }
 
@@ -365,7 +404,7 @@ Future<List<GalleryImage>> _fetchImageInfoList({
         // 成功后才+1
         _curPage++;
       } else {
-        continue;
+        break;
       }
     } catch (e, stack) {
       logger.e('$e\n$stack');

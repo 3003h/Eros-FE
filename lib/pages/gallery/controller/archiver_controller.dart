@@ -1,4 +1,4 @@
-import 'package:fehviewer/common/controller/download_controller.dart';
+import 'package:fehviewer/common/controller/archiver_download_controller.dart';
 import 'package:fehviewer/common/service/depth_service.dart';
 import 'package:fehviewer/network/gallery_request.dart';
 import 'package:fehviewer/utils/logger.dart';
@@ -12,7 +12,7 @@ class ArchiverController extends GetxController
   ArchiverController();
 
   GalleryPageController get pageController => Get.find(tag: pageCtrlDepth);
-  final DownloadController _downloadController = Get.find();
+  final ArchiverDownloadController _downloadController = Get.find();
 
   @override
   void onInit() {

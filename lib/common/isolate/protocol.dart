@@ -1,11 +1,11 @@
-part of 'download.dart';
+part of 'download_manager.dart';
 
 enum _RequestType {
+  init,
   addTask,
   pauseTask,
   resumeTask,
   cancelTask,
-  initLogger,
 }
 
 enum _ResponseType {
@@ -83,8 +83,7 @@ class _RequestProtocol {
   const _RequestProtocol.cancelTask(this.data)
       : requestType = _RequestType.cancelTask;
 
-  const _RequestProtocol.initLogger(this.data)
-      : requestType = _RequestType.initLogger;
+  const _RequestProtocol.init(this.data) : requestType = _RequestType.init;
 
   final _RequestType? requestType;
 
