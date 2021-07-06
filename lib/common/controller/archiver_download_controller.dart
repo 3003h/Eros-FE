@@ -60,11 +60,6 @@ class ArchiverDownloadController extends GetxController {
     _getArchiverTask();
   }
 
-  @override
-  void onClose() {
-    super.onClose();
-  }
-
   Future<void> downloadArchiverFile({
     required String gid,
     required String dlType,
@@ -73,7 +68,7 @@ class ArchiverDownloadController extends GetxController {
   }) async {
     final String _tag = '$gid$dlType';
 
-    logger.d('$url');
+    logger.d(url);
 
     if (archiverTaskMap.containsKey(_tag)) {
       showToast('下载任务已存在');

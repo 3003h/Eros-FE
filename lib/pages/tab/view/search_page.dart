@@ -19,6 +19,7 @@ import 'package:fehviewer/utils/vibrate.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:keframe/size_cache_widget.dart';
 import 'package:line_icons/line_icons.dart';
 
 const CupertinoDynamicColor _kClearButtonColor =
@@ -125,22 +126,25 @@ class GallerySearchPage extends StatelessWidget {
           // 滑动收起键盘
           FocusScope.of(context).requestFocus(FocusNode());
         },
-        child: CustomScrollView(
-          slivers: <Widget>[
-            Obx(() => SliverSafeArea(
-                  sliver: () {
-                    switch (controller.listType) {
-                      case ListType.gallery:
-                        return _getGalleryList();
-                      case ListType.tag:
-                        return _getTagQryList();
-                      case ListType.init:
-                        return _getInitView();
-                    }
-                  }(),
-                )),
-            _endIndicator(),
-          ],
+        child: SizeCacheWidget(
+          child: CustomScrollView(
+            cacheExtent: 500,
+            slivers: <Widget>[
+              Obx(() => SliverSafeArea(
+                    sliver: () {
+                      switch (controller.listType) {
+                        case ListType.gallery:
+                          return _getGalleryList();
+                        case ListType.tag:
+                          return _getTagQryList();
+                        case ListType.init:
+                          return _getInitView();
+                      }
+                    }(),
+                  )),
+              _endIndicator(),
+            ],
+          ),
         ),
       ),
     );

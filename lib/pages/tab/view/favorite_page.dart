@@ -16,6 +16,7 @@ import 'package:fehviewer/utils/logger.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:keframe/size_cache_widget.dart';
 import 'package:line_icons/line_icons.dart';
 
 class FavoriteTab extends GetView<FavoriteViewController> {
@@ -227,27 +228,30 @@ class FavoriteTab extends GetView<FavoriteViewController> {
       // navigationBar: navigationBar,
       child: CupertinoScrollbar(
         controller: scrollController,
-        child: CustomScrollView(
-          controller: scrollController,
-          physics: const AlwaysScrollableScrollPhysics(),
-          slivers: <Widget>[
-            // sliverNavigationBar,
-            SliverFloatingPinnedPersistentHeader(
-              delegate: SliverFloatingPinnedPersistentHeaderBuilder(
-                minExtentProtoType: const SizedBox(),
-                maxExtentProtoType: navigationBar,
-                builder: (_, __, ___) => navigationBar,
+        child: SizeCacheWidget(
+          child: CustomScrollView(
+            cacheExtent: 500,
+            controller: scrollController,
+            physics: const AlwaysScrollableScrollPhysics(),
+            slivers: <Widget>[
+              // sliverNavigationBar,
+              SliverFloatingPinnedPersistentHeader(
+                delegate: SliverFloatingPinnedPersistentHeaderBuilder(
+                  minExtentProtoType: const SizedBox(),
+                  maxExtentProtoType: navigationBar,
+                  builder: (_, __, ___) => navigationBar,
+                ),
               ),
-            ),
-            CupertinoSliverRefreshControl(
-              onRefresh: controller.onRefresh,
-            ),
-            SliverSafeArea(
-              top: false,
-              sliver: _getGalleryList(),
-            ),
-            _endIndicator(),
-          ],
+              CupertinoSliverRefreshControl(
+                onRefresh: controller.onRefresh,
+              ),
+              SliverSafeArea(
+                top: false,
+                sliver: _getGalleryList(),
+              ),
+              _endIndicator(),
+            ],
+          ),
         ),
       ),
     );
@@ -268,25 +272,30 @@ class FavoriteTab extends GetView<FavoriteViewController> {
       // navigationBar: navigationBar,
       child: CupertinoScrollbar(
         controller: scrollController,
-        child: CustomScrollView(slivers: <Widget>[
-          // sliverNavigationBar,
-          SliverFloatingPinnedPersistentHeader(
-            delegate: SliverFloatingPinnedPersistentHeaderBuilder(
-              minExtentProtoType: const SizedBox(),
-              maxExtentProtoType: navigationBar,
-              builder: (_, __, ___) => navigationBar,
-            ),
+        child: SizeCacheWidget(
+          child: CustomScrollView(
+            cacheExtent: 500,
+            slivers: <Widget>[
+              // sliverNavigationBar,
+              SliverFloatingPinnedPersistentHeader(
+                delegate: SliverFloatingPinnedPersistentHeaderBuilder(
+                  minExtentProtoType: const SizedBox(),
+                  maxExtentProtoType: navigationBar,
+                  builder: (_, __, ___) => navigationBar,
+                ),
+              ),
+              CupertinoSliverRefreshControl(
+                onRefresh: controller.onRefresh,
+              ),
+              // todo 可能要设置刷新？
+              SliverSafeArea(
+                top: false,
+                sliver: _getGalleryList(),
+              ),
+              _endIndicator(),
+            ],
           ),
-          CupertinoSliverRefreshControl(
-            onRefresh: controller.onRefresh,
-          ),
-          // todo 可能要设置刷新？
-          SliverSafeArea(
-            top: false,
-            sliver: _getGalleryList(),
-          ),
-          _endIndicator(),
-        ]),
+        ),
       ),
     );
   }

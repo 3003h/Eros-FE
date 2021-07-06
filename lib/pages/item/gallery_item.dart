@@ -56,7 +56,7 @@ class GalleryItemWidget extends StatelessWidget {
                 children: <Widget>[
                   Row(children: <Widget>[
                     // 封面图片
-                    FrameSeparateWidget(child: _buildCoverImage()),
+                    _buildCoverImage(),
                     Container(
                       width: 8,
                     ),
@@ -66,60 +66,52 @@ class GalleryItemWidget extends StatelessWidget {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: <Widget>[
                           // 标题 provider
-                          FrameSeparateWidget(child: _buildTitle()),
+                          _buildTitle(),
                           // 上传者
-                          FrameSeparateWidget(
-                            child: Text(
-                              _galleryItemController.galleryItem.uploader ?? '',
-                              style: const TextStyle(
-                                  fontSize: 12,
-                                  color: CupertinoColors.systemGrey),
-                            ),
+                          Text(
+                            _galleryItemController.galleryItem.uploader ?? '',
+                            style: const TextStyle(
+                                fontSize: 12,
+                                color: CupertinoColors.systemGrey),
                           ),
                           // 标签
-                          FrameSeparateWidget(
-                            child: TagBox(
-                              simpleTags: _galleryItemController
-                                      .galleryItem.simpleTags ??
-                                  [],
-                            ),
+                          TagBox(
+                            simpleTags:
+                                _galleryItemController.galleryItem.simpleTags ??
+                                    [],
                           ),
 
                           // 评分行
-                          FrameSeparateWidget(
-                            child: GetBuilder(
-                              init: _galleryItemController,
-                              tag: _galleryItemController.galleryItem.gid,
-                              builder: (_) => Row(
-                                crossAxisAlignment: CrossAxisAlignment.end,
-                                children: <Widget>[
-                                  // 评分
-                                  _buildRating(),
-                                  // 占位
-                                  const Spacer(),
-                                  // 收藏图标
-                                  _buildFavcatIcon(),
-                                  // 图片数量
-                                  _buildFilecontWidget(),
-                                ],
-                              ),
+                          GetBuilder(
+                            init: _galleryItemController,
+                            tag: _galleryItemController.galleryItem.gid,
+                            builder: (_) => Row(
+                              crossAxisAlignment: CrossAxisAlignment.end,
+                              children: <Widget>[
+                                // 评分
+                                _buildRating(),
+                                // 占位
+                                const Spacer(),
+                                // 收藏图标
+                                _buildFavcatIcon(),
+                                // 图片数量
+                                _buildFilecontWidget(),
+                              ],
                             ),
                           ),
                           Container(
                             height: 4,
                           ),
                           // 类型和时间
-                          FrameSeparateWidget(
-                            child: Row(
-                              crossAxisAlignment: CrossAxisAlignment.end,
-                              children: <Widget>[
-                                // 类型
-                                _buildCategory(),
-                                const Spacer(),
-                                // 上传时间
-                                _buildPostTime(),
-                              ],
-                            ),
+                          Row(
+                            crossAxisAlignment: CrossAxisAlignment.end,
+                            children: <Widget>[
+                              // 类型
+                              _buildCategory(),
+                              const Spacer(),
+                              // 上传时间
+                              _buildPostTime(),
+                            ],
                           ),
                         ],
                       ),

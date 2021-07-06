@@ -1,4 +1,5 @@
 import 'package:fehviewer/common/service/depth_service.dart';
+import 'package:fehviewer/common/service/ehconfig_service.dart';
 import 'package:fehviewer/generated/l10n.dart';
 import 'package:fehviewer/models/base/eh_models.dart';
 import 'package:fehviewer/pages/gallery/controller/gallery_page_controller.dart';
@@ -132,7 +133,9 @@ class _DetailWidget extends StatelessWidget {
         child: TextBtn(
           FontAwesomeIcons.solidArrowAltCircleDown,
           title: S.of(context).p_Download,
-          onTap: controller.downloadGallery,
+          onTap: Get.find<EhConfigService>().debugMode
+              ? controller.downloadGallery
+              : null,
         ),
       ),
       // 种子下载

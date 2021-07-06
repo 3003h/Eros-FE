@@ -102,7 +102,7 @@ class GalleryItemSimpleWidget extends StatelessWidget {
     return GestureDetector(
       child: Column(
         children: <Widget>[
-          FrameSeparateWidget(child: containerGallery),
+          containerGallery,
           Divider(
             height: 0.5,
             indent: kPaddingLeft,

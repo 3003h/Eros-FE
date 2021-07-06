@@ -87,7 +87,7 @@ class PopularListTab extends GetView<PopularViewController> {
       // navigationBar: navigationBar,
       child: CupertinoScrollbar(
         controller: scrollController,
-        child: customScrollView,
+        child: SizeCacheWidget(child: customScrollView),
       ),
     );
   }
