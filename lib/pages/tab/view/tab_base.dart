@@ -53,9 +53,12 @@ SliverPadding buildWaterfallFlow(
           }
 
           return large
-              ? GalleryItemFlowLarge(
-                  galleryItem: gallerItemBeans[index],
-                  tabTag: tabTag,
+              ? FrameSeparateWidget(
+                  index: index,
+                  child: GalleryItemFlowLarge(
+                    galleryItem: gallerItemBeans[index],
+                    tabTag: tabTag,
+                  ),
                 )
               : GalleryItemFlow(
                   galleryItem: gallerItemBeans[index],
@@ -88,7 +91,9 @@ SliverList buildGallerySliverListView(
 
         final GalleryItem _item = gallerItemBeans[index];
 
-        return GalleryItemWidget(galleryItem: _item, tabTag: tabTag);
+        return FrameSeparateWidget(
+            index: index,
+            child: GalleryItemWidget(galleryItem: _item, tabTag: tabTag));
       },
       childCount: gallerItemBeans.length,
     ),

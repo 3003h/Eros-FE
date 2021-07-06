@@ -7,6 +7,7 @@ import 'package:fehviewer/utils/cust_lib/sliver/sliver_persistent_header.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:keframe/size_cache_widget.dart';
 import 'package:line_icons/line_icons.dart';
 
 class HistoryTab extends GetView<HistoryViewController> {
@@ -69,6 +70,7 @@ class HistoryTab extends GetView<HistoryViewController> {
       ),
     );
     final Widget customScrollView = CustomScrollView(
+      cacheExtent: 500,
       controller: scrollController,
       physics: const AlwaysScrollableScrollPhysics(),
       slivers: <Widget>[
@@ -107,6 +109,7 @@ class HistoryTab extends GetView<HistoryViewController> {
     return CupertinoPageScaffold(
         // navigationBar: navigationBar,
         child: CupertinoScrollbar(
-            controller: scrollController, child: customScrollView));
+            controller: scrollController,
+            child: SizeCacheWidget(child: customScrollView)));
   }
 }

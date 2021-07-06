@@ -14,6 +14,7 @@ import 'package:fehviewer/utils/vibrate.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:keframe/size_cache_widget.dart';
 import 'package:line_icons/line_icons.dart';
 
 import 'tab_base.dart';
@@ -108,8 +109,6 @@ class GalleryListTab extends GetView<GalleryViewController> {
       );
     }
 
-    ;
-
     final ObstructingPreferredSizeWidget navigationBar = CupertinoNavigationBar(
       transitionBetweenRoutes: false,
       padding: const EdgeInsetsDirectional.only(end: 4),
@@ -190,6 +189,7 @@ class GalleryListTab extends GetView<GalleryViewController> {
     );
 
     final Widget customScrollView = CustomScrollView(
+      cacheExtent: 500,
       controller: scrollController,
       physics: const AlwaysScrollableScrollPhysics(),
       slivers: <Widget>[
@@ -224,7 +224,7 @@ class GalleryListTab extends GetView<GalleryViewController> {
     return CupertinoPageScaffold(
       // navigationBar: navigationBar,
       child: CupertinoScrollbar(
-        child: customScrollView,
+        child: SizeCacheWidget(child: customScrollView),
         controller: scrollController,
       ),
     );

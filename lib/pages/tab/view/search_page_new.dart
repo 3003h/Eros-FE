@@ -22,6 +22,7 @@ import 'package:fehviewer/utils/vibrate.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:keframe/size_cache_widget.dart';
 import 'package:line_icons/line_icons.dart';
 
 const CupertinoDynamicColor _kClearButtonColor =
@@ -205,75 +206,78 @@ class GallerySearchPageNew extends StatelessWidget {
 
   Widget _buildSearchRult(BuildContext context) {
     // logger.v('_buildSearchRult');
-    return CustomScrollView(
-      slivers: <Widget>[
-        // SliverToBoxAdapter(child: getSearchTextFieldIn().paddingOnly(top: 50)),
-        // TODO android上会有一次删除多个字符的问题
-        SliverFloatingPinnedPersistentHeader(
-          delegate: SliverFloatingPinnedPersistentHeaderBuilder(
-            minExtentProtoType: const SizedBox(),
-            maxExtentProtoType: _maxExtentProtoTypeBar(context),
-            // maxExtentProtoType: SizedBox(height: 150),
-            builder: (_, __, maxExtent) => _buildSearchBar(_, __, maxExtent),
+    return SizeCacheWidget(
+      child: CustomScrollView(
+        cacheExtent: 500,
+        slivers: <Widget>[
+          // SliverToBoxAdapter(child: getSearchTextFieldIn().paddingOnly(top: 50)),
+          // TODO android上会有一次删除多个字符的问题
+          SliverFloatingPinnedPersistentHeader(
+            delegate: SliverFloatingPinnedPersistentHeaderBuilder(
+              minExtentProtoType: const SizedBox(),
+              maxExtentProtoType: _maxExtentProtoTypeBar(context),
+              // maxExtentProtoType: SizedBox(height: 150),
+              builder: (_, __, maxExtent) => _buildSearchBar(_, __, maxExtent),
+            ),
           ),
-        ),
-        Obx(() {
-          return CupertinoSliverRefreshControl(
-              onRefresh: controller.listType == ListType.gallery
-                  ? () => controller.onEditingComplete(clear: false)
-                  : null);
-        }),
-        Obx(() => SliverSafeArea(
-              bottom: false,
-              top: false,
-              sliver: () {
-                switch (controller.listType) {
-                  case ListType.gallery:
-                    return _getGalleryList();
-                  case ListType.tag:
-                    return _getTagQryList();
-                  case ListType.init:
-                    return _getInitView();
-                }
-              }(),
-            )),
-        Obx(() {
-          if (controller.listType != ListType.tag) {
-            return SliverToBoxAdapter(
-                child: _endIndicator().autoCompressKeyboard(context));
-          } else {
-            return SliverSafeArea(
-              bottom: false,
-              top: false,
-              sliver: SliverToBoxAdapter(
-                child: GestureDetector(
-                  behavior: HitTestBehavior.opaque,
-                  onTap: controller.onEditingComplete,
-                  child: Row(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      Icon(
-                        LineIcons.search,
-                        size: 20,
-                        color: CupertinoDynamicColor.resolve(
-                            CupertinoColors.inactiveGray, context),
-                      ).paddingOnly(right: 4),
-                      Expanded(
-                        child: Text(
-                          '${S.of(context).search} ${controller.searchText}',
-                          maxLines: 1,
-                          softWrap: true,
-                          overflow: TextOverflow.ellipsis,
+          Obx(() {
+            return CupertinoSliverRefreshControl(
+                onRefresh: controller.listType == ListType.gallery
+                    ? () => controller.onEditingComplete(clear: false)
+                    : null);
+          }),
+          Obx(() => SliverSafeArea(
+                bottom: false,
+                top: false,
+                sliver: () {
+                  switch (controller.listType) {
+                    case ListType.gallery:
+                      return _getGalleryList();
+                    case ListType.tag:
+                      return _getTagQryList();
+                    case ListType.init:
+                      return _getInitView();
+                  }
+                }(),
+              )),
+          Obx(() {
+            if (controller.listType != ListType.tag) {
+              return SliverToBoxAdapter(
+                  child: _endIndicator().autoCompressKeyboard(context));
+            } else {
+              return SliverSafeArea(
+                bottom: false,
+                top: false,
+                sliver: SliverToBoxAdapter(
+                  child: GestureDetector(
+                    behavior: HitTestBehavior.opaque,
+                    onTap: controller.onEditingComplete,
+                    child: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Icon(
+                          LineIcons.search,
+                          size: 20,
+                          color: CupertinoDynamicColor.resolve(
+                              CupertinoColors.inactiveGray, context),
+                        ).paddingOnly(right: 4),
+                        Expanded(
+                          child: Text(
+                            '${S.of(context).search} ${controller.searchText}',
+                            maxLines: 1,
+                            softWrap: true,
+                            overflow: TextOverflow.ellipsis,
+                          ),
                         ),
-                      ),
-                    ],
-                  ).paddingSymmetric(vertical: 4, horizontal: 12),
-                ).autoCompressKeyboard(context),
-              ),
-            );
-          }
-        }),
-      ],
+                      ],
+                    ).paddingSymmetric(vertical: 4, horizontal: 12),
+                  ).autoCompressKeyboard(context),
+                ),
+              );
+            }
+          }),
+        ],
+      ),
     );
   }
 

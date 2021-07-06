@@ -13,6 +13,7 @@ import 'package:fehviewer/utils/logger.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:keframe/size_cache_widget.dart';
 import 'package:line_icons/line_icons.dart';
 
 import 'tab_base.dart';
@@ -186,6 +187,7 @@ class WatchedListTab extends GetView<WatchedViewController> {
     );
 
     final CustomScrollView customScrollView = CustomScrollView(
+      cacheExtent: 500,
       controller: scrollController,
       physics: const AlwaysScrollableScrollPhysics(),
       slivers: <Widget>[
@@ -212,7 +214,8 @@ class WatchedListTab extends GetView<WatchedViewController> {
     return CupertinoPageScaffold(
       // navigationBar: navigationBar,
       child: CupertinoScrollbar(
-          controller: scrollController, child: customScrollView),
+          controller: scrollController,
+          child: SizeCacheWidget(child: customScrollView)),
     );
   }
 

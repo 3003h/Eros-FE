@@ -30,6 +30,7 @@ import 'package:logger/logger.dart';
 import 'package:oktoast/oktoast.dart';
 
 import 'common/controller/advance_search_controller.dart';
+import 'common/controller/archiver_download_controller.dart';
 import 'common/controller/gallerycache_controller.dart';
 import 'common/controller/history_controller.dart';
 import 'common/controller/localfav_controller.dart';
@@ -71,6 +72,7 @@ Future<void> main() async {
     Get.lazyPut(() => GalleryCacheController(), fenix: true);
 
     Get.put(DownloadController(), permanent: true);
+    Get.put(ArchiverDownloadController(), permanent: true);
     Get.lazyPut(() => DownloadViewController(), fenix: true);
 
     Get.lazyPut(() => QuickSearchController(), fenix: true);
