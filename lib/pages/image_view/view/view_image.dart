@@ -235,6 +235,8 @@ class _ViewImageState extends State<ViewImage>
                     imageWidth: snapshot.data!.imageWidth!,
                     imageHeight: snapshot.data!.imageHeight!,
                     retry: widget.retry,
+                    onLoadCompleted: () =>
+                        _viewController.onLoadCompleted(widget.ser),
                   );
 
                   image = Stack(
@@ -281,6 +283,7 @@ class ImageExtend extends StatelessWidget {
     required this.imageHeight,
     required this.imageWidth,
     this.retry = 5,
+    this.onLoadCompleted,
   }) : super(key: key);
 
   final String? url;
@@ -290,6 +293,7 @@ class ImageExtend extends StatelessWidget {
   final double imageHeight;
   final double imageWidth;
   final int retry;
+  final VoidCallback? onLoadCompleted;
 
   final GalleryPageController _pageController = Get.find(tag: pageCtrlDepth);
 
@@ -391,6 +395,9 @@ class ImageExtend extends StatelessWidget {
           //return state.completedWidget;
           case LoadState.completed:
             animationController.forward();
+
+            onLoadCompleted?.call();
+
             return FadeTransition(
               opacity: animationController,
               child: ExtendedRawImage(

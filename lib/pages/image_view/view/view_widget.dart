@@ -49,7 +49,7 @@ class _PageSliderState extends State<PageSlider> {
           Text(
             '${widget.sliderValue.round() + 1}',
             style: const TextStyle(color: CupertinoColors.systemGrey6),
-          ),
+          ).paddingSymmetric(horizontal: 4),
           Expanded(
             child: CupertinoSlider(
                 min: 0,
@@ -68,7 +68,7 @@ class _PageSliderState extends State<PageSlider> {
           Text(
             '${widget.max.round() + 1}',
             style: const TextStyle(color: CupertinoColors.systemGrey6),
-          ),
+          ).paddingSymmetric(horizontal: 4),
         ],
       ),
     );

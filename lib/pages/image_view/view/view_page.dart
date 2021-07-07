@@ -13,9 +13,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
+import 'package:line_icons/line_icons.dart';
 import 'package:photo_view/photo_view.dart';
 import 'package:photo_view/photo_view_gallery.dart';
 import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
+import 'package:fehviewer/generated/l10n.dart';
 
 import '../controller/view_controller.dart';
 
@@ -213,18 +215,19 @@ class GalleryViewPage extends GetView<ViewController> {
     final double _max = vState.filecount - 1.0;
     // logger.d('max = $_max');
     final Map<int, GalleryImage> imageMap = vState.imageMap;
+    const _kTextStyle = TextStyle(color: Colors.white, fontSize: 10);
     return Container(
       color: const Color.fromARGB(150, 0, 0, 0),
       padding: vState.bottomBarPadding,
       width: vState.screensize.width,
       // height: kBottomBarHeight + controller.paddingBottom,
-      child: Column(
-        children: <Widget>[
-          Row(
-            children: <Widget>[
-              Expanded(
-                child: Padding(
-                  padding: const EdgeInsets.only(left: 8.0, right: 8.0),
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 10),
+        child: Column(
+          children: <Widget>[
+            Row(
+              children: <Widget>[
+                Expanded(
                   child: GetBuilder<ViewController>(
                       id: GetIds.IMAGE_VIEW_SLIDER,
                       builder: (ViewController controller) {
@@ -237,12 +240,10 @@ class GalleryViewPage extends GetView<ViewController> {
                         );
                       }),
                 ),
-              ),
-            ],
-          ),
-          Padding(
-            padding: const EdgeInsets.only(left: 10.0),
-            child: Row(
+              ],
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: <Widget>[
                 // 分享按钮
                 GestureDetector(
@@ -257,45 +258,101 @@ class GalleryViewPage extends GetView<ViewController> {
                   child: Container(
                     width: 40,
                     height: kBottomBarHeight,
-                    child: const Icon(
-                      FontAwesomeIcons.share,
-                      color: CupertinoColors.systemGrey6,
-                      // size: 24,
+                    child: Column(
+                      children: [
+                        const Icon(
+                          LineIcons.share,
+                          color: CupertinoColors.systemGrey6,
+                          size: 26,
+                        ),
+                        const Spacer(),
+                        Text(
+                          S.of(context).share,
+                          style: _kTextStyle,
+                        ),
+                      ],
                     ),
                   ),
                 ),
-                const Spacer(),
+
+                // 自动阅读按钮
+                if (vState.viewMode != ViewMode.topToBottom)
+                  Obx(() {
+                    return GestureDetector(
+                      behavior: HitTestBehavior.opaque,
+                      onTap: () {
+                        controller.tapAutoRead(context);
+                      },
+                      onLongPress: () {
+                        controller.longTapAutoRead(context);
+                      },
+                      child: Container(
+                        width: 40,
+                        height: kBottomBarHeight,
+                        child: Column(
+                          children: [
+                            Icon(
+                              LineIcons.hourglassHalf,
+                              size: 26,
+                              color: vState.autoRead
+                                  ? CupertinoColors.activeBlue
+                                  : CupertinoColors.systemGrey6,
+                            ),
+                            const Spacer(),
+                            const Text(
+                              'Auto',
+                              style: _kTextStyle,
+                            ),
+                          ],
+                        ),
+                      ),
+                    );
+                  })
+                else
+                  const SizedBox.shrink(),
+
+                // 双页切换按钮
                 if (vState.viewMode != ViewMode.topToBottom)
                   Obx(() => GestureDetector(
                         behavior: HitTestBehavior.opaque,
                         onTap: () {
-                          // logger.v('tap doublePage');
                           controller.switchColumnMode();
                         },
                         child: Container(
                           width: 40,
-                          margin: const EdgeInsets.only(right: 10.0),
+                          // margin: const EdgeInsets.only(right: 10.0),
                           height: kBottomBarHeight,
-                          child: Icon(
-                            FontAwesomeIcons.bookOpen,
-                            color: () {
-                              switch (vState.columnMode) {
-                                case ViewColumnMode.single:
-                                  return CupertinoColors.systemGrey6;
-                                case ViewColumnMode.odd:
-                                  return CupertinoColors.activeBlue;
-                                case ViewColumnMode.even:
-                                  return CupertinoColors.activeOrange;
-                              }
-                            }(),
-                            // size: 24,
+                          child: Column(
+                            children: [
+                              Icon(
+                                LineIcons.bookOpen,
+                                size: 26,
+                                color: () {
+                                  switch (vState.columnMode) {
+                                    case ViewColumnMode.single:
+                                      return CupertinoColors.systemGrey6;
+                                    case ViewColumnMode.odd:
+                                      return CupertinoColors.activeBlue;
+                                    case ViewColumnMode.even:
+                                      return CupertinoColors.activeOrange;
+                                  }
+                                }(),
+                              ),
+                              const Spacer(),
+                              Text(
+                                '双页',
+                                style: _kTextStyle,
+                              ),
+                            ],
                           ),
                         ),
-                      )),
+                      ))
+                else
+                  const SizedBox.shrink(),
               ],
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }
