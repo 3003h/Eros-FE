@@ -170,7 +170,7 @@ class FavDialogController extends GetxController {
                   onEditingComplete: () {
                     // 点击键盘完成
                   },
-                )
+                ).paddingOnly(top: 8.0),
               ],
             ),
           ),

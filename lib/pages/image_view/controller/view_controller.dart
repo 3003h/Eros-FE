@@ -16,6 +16,7 @@ import 'package:flutter_statusbar_manager/flutter_statusbar_manager.dart';
 import 'package:get/get.dart';
 import 'package:orientation/orientation.dart';
 import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
+import 'package:fehviewer/generated/l10n.dart';
 
 import 'view_state.dart';
 
@@ -126,7 +127,7 @@ class ViewController extends GetxController {
 
     vState.sliderValue = vState.itemIndex / 1.0;
 
-    logger.d('旋转设置');
+    logger.v('旋转设置');
     final ReadOrientation? _orientation = _ehConfigService.orientation.value;
     logger.d(' $_orientation');
     if (_orientation != ReadOrientation.system &&
@@ -346,6 +347,129 @@ class ViewController extends GetxController {
     } else if (vState.viewMode == ViewMode.rightToLeft) {
       if (vState.pageIndex > 0) {
         pageController.jumpToPage(vState.pageIndex - 1);
+      }
+    }
+  }
+
+  // 点击自动阅读
+  Future<void> tapAutoRead(BuildContext context) async {
+    logger.d('tap autoRead');
+
+    if (!vState.autoRead) {
+      await _setAutoReadInv(context);
+    } else {
+      vState.autoRead = !vState.autoRead;
+    }
+
+    _startAutoRead();
+  }
+
+  Future<void> longTapAutoRead(BuildContext context) async {
+    await _setAutoReadInv(context);
+    _startAutoRead();
+  }
+
+  Future<void> _setAutoReadInv(BuildContext context) async {
+    logger.d('_ehConfigService.turnPageInv ${_ehConfigService.turnPageInv}');
+
+    final initIndex = EHConst.invList
+        .indexWhere((int element) => element == _ehConfigService.turnPageInv);
+    final int? inv = await _showAutoReadInvPicker(context, EHConst.invList,
+        initIndex: initIndex);
+
+    if (inv != null) {
+      logger.d('set inv $inv');
+      _ehConfigService.turnPageInv = inv;
+      vState.autoRead = !vState.autoRead;
+    }
+  }
+
+  Future<int?> _showAutoReadInvPicker(BuildContext context, List<int> invList,
+      {int? initIndex}) async {
+    int _selIndex = initIndex ?? 0;
+
+    final _scrollController =
+        FixedExtentScrollController(initialItem: _selIndex);
+
+    final List<Widget> _favPickerList =
+        List<Widget>.from(invList.map((int e) => Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                Text('${e / 1000}'),
+              ],
+            ))).toList();
+
+    return showCupertinoDialog<int>(
+      context: context,
+      barrierDismissible: true,
+      builder: (BuildContext context) {
+        return CupertinoAlertDialog(
+          title: const Text('自动翻页间隔'),
+          content: Container(
+            child: Column(
+              children: <Widget>[
+                Container(
+                  height: 150,
+                  child: CupertinoPicker(
+                    scrollController: _scrollController,
+                    itemExtent: 30,
+                    onSelectedItemChanged: (int index) {
+                      _selIndex = index;
+                    },
+                    children: _favPickerList,
+                  ),
+                ),
+              ],
+            ),
+          ),
+          actions: <Widget>[
+            CupertinoDialogAction(
+              child: Text(S.of(context).cancel),
+              onPressed: () {
+                Get.back();
+              },
+            ),
+            CupertinoDialogAction(
+              child: Text(S.of(context).ok),
+              onPressed: () {
+                // 返回数据
+                Get.back(result: invList[_selIndex]);
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  Future<void> _startAutoRead() async {
+    await Future.delayed(Duration(milliseconds: _ehConfigService.turnPageInv));
+
+    if (vState.autoRead && vState.pageIndex < vState.pageCount - 1) {
+      logger.d('next page');
+      pageController.nextPage(
+          duration: const Duration(milliseconds: 300), curve: Curves.easeOut);
+    }
+  }
+
+  Future<void> onLoadCompleted(int ser) async {
+    vState.loadCompleMap[ser] = true;
+
+    if (vState.columnMode == ViewColumnMode.single) {
+      await _startAutoRead();
+    } else {
+      // 双页阅读
+      final int serLeft = vState.columnMode == ViewColumnMode.odd
+          ? vState.pageIndex * 2 + 1
+          : vState.pageIndex * 2;
+      if (vState.filecount > serLeft) {
+        final leftComplet = vState.loadCompleMap[serLeft] ?? false;
+        final rigthComple = vState.loadCompleMap[serLeft + 1] ?? false;
+        logger.d(
+            ' $serLeft leftComplet: $leftComplet  , ${serLeft + 1} rigthComple:$rigthComple');
+      } else {
+        await _startAutoRead();
       }
     }
   }

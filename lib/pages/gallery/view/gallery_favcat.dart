@@ -103,62 +103,51 @@ class _FavcatAddListItemState extends State<FavcatAddListItem> {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      child: Column(
-        children: [
-          // Container(
-          //   color: CupertinoDynamicColor.resolve(
-          //       CupertinoColors.systemGrey4, context),
-          //   height: 0.5,
-          // ),
-          GestureDetector(
-            behavior: HitTestBehavior.opaque,
-            child: Container(
-              color: _color,
-              width: double.infinity,
-              padding: const EdgeInsets.fromLTRB(0, 8, 0, 8),
-              child: Row(
-                // mainAxisAlignment: MainAxisAlignment.center,
-                crossAxisAlignment: CrossAxisAlignment.end,
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.only(right: 4, bottom: 3),
-                    child: Icon(
-                      FontAwesomeIcons.solidHeart,
-                      color: CupertinoDynamicColor.resolve(
-                          ThemeColors.favColor[widget.favcat]!, context),
-                      size: 18,
-                    ).paddingOnly(left: 12, right: 5),
-                  ),
-                  Text(
-                    widget.text,
-                    style: const TextStyle(
-                      fontSize: 18,
-                    ),
-                  ),
-                  const Spacer(),
-                  Text(
-                    '${widget.totNum ?? 0}',
-                    style: const TextStyle(
-                      fontSize: 14,
-                    ),
-                  ),
-                ],
+    return ClipRRect(
+      borderRadius: const BorderRadius.all(Radius.circular(8)),
+      child: GestureDetector(
+        behavior: HitTestBehavior.opaque,
+        child: Container(
+          color: _color,
+          width: double.infinity,
+          padding: const EdgeInsets.fromLTRB(0, 8, 0, 8),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            // crossAxisAlignment: CrossAxisAlignment.end,
+            children: [
+              Icon(
+                FontAwesomeIcons.solidHeart,
+                color: CupertinoDynamicColor.resolve(
+                    ThemeColors.favColor[widget.favcat]!, context),
+                size: 18,
+              ).paddingOnly(left: 8, right: 8, bottom: 4),
+              Text(
+                widget.text,
+                style: const TextStyle(
+                  fontSize: 18,
+                ),
               ),
-            ),
-            onTap: widget._onTap,
-            onTapDown: (_) {
-              setState(() {
-                _color = CupertinoColors.systemGrey3;
-              });
-            },
-            onTapCancel: () {
-              setState(() {
-                _color = null;
-              });
-            },
+              const Spacer(),
+              Text(
+                '${widget.totNum ?? 0}',
+                style: const TextStyle(
+                  fontSize: 14,
+                ),
+              ).paddingOnly(right: 4),
+            ],
           ),
-        ],
+        ),
+        onTap: widget._onTap,
+        onTapDown: (_) {
+          setState(() {
+            _color = CupertinoColors.systemGrey3;
+          });
+        },
+        onTapCancel: () {
+          setState(() {
+            _color = null;
+          });
+        },
       ),
     );
   }

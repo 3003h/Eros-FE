@@ -43,7 +43,7 @@ class ViewState {
       _itemIndex,
       (int val) {
         if (_galleryPageController.galleryItem.gid != null) {
-          logger.d('debounce 5000 _itemIndex $_itemIndex');
+          logger.v('debounce 5000 _itemIndex $_itemIndex');
           _galleryCacheController.setIndex(
               _galleryPageController.galleryItem.gid ?? '', itemIndex,
               saveToStore: true);
@@ -206,6 +206,9 @@ class ViewState {
   /// 阅读模式
   Rx<ViewMode> get _viewMode => _ehConfigService.viewMode;
 
+  bool get autoRead => _ehConfigService.autoRead;
+  set autoRead(bool val) => _ehConfigService.autoRead = val;
+
   ViewMode get viewMode => _viewMode.value;
 
   set viewMode(val) => _viewMode.value = val;
@@ -220,4 +223,6 @@ class ViewState {
 
   bool fade = true;
   bool needRebuild = false;
+
+  Map<int, bool> loadCompleMap = <int, bool>{};
 }

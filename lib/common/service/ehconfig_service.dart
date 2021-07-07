@@ -89,6 +89,16 @@ class EhConfigService extends ProfileService {
   get downloadLocatino => _downloadLocatino.value;
   set downloadLocatino(val) => _downloadLocatino.value = val;
 
+  // 自动翻页 _autoRead
+  final _autoRead = false.obs;
+  bool get autoRead => _autoRead.value;
+  set autoRead(val) => _autoRead.value = val;
+
+  // 翻页时间间隔 _turnPageInv
+  final _turnPageInv = 3000.obs;
+  int get turnPageInv => _turnPageInv.value;
+  set turnPageInv(val) => _turnPageInv.value = val;
+
   @override
   void onInit() {
     super.onInit();
@@ -240,6 +250,16 @@ class EhConfigService extends ProfileService {
       }
       resetLogLevel();
     });
+
+    // 自动翻页 _autoRead
+    autoRead = ehConfig.autoRead ?? false;
+    everProfile<bool>(_autoRead,
+        (bool value) => ehConfig = ehConfig.copyWith(autoRead: value));
+
+    // 翻页时间间隔 _turnPageInv
+    turnPageInv = ehConfig.turnPageInv ?? 3000;
+    everProfile<int>(_turnPageInv,
+        (int value) => ehConfig = ehConfig.copyWith(turnPageInv: value));
   }
 
   /// 收藏排序
