@@ -8,7 +8,7 @@ import 'package:fehviewer/models/base/eh_models.dart';
 import 'package:fehviewer/pages/gallery/controller/gallery_page_controller.dart';
 import 'package:fehviewer/pages/image_view/common.dart';
 import 'package:fehviewer/utils/logger.dart';
-import 'package:fehviewer/utils/utility.dart';
+import 'package:fehviewer/utils/utility.dart' as utility;
 import 'package:fehviewer/utils/vibrate.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/services.dart';
@@ -150,6 +150,7 @@ class ViewController extends GetxController {
     logger.d('恢复系统旋转设置');
     OrientationPlugin.setPreferredOrientations(DeviceOrientation.values);
     // OrientationPlugin.forceOrientation(DeviceOrientation.portraitUp);
+    cancelAutoRead();
     super.onClose();
   }
 
@@ -245,7 +246,8 @@ class ViewController extends GetxController {
 
   // 点击周围
   void handOnPanDown(DragDownDetails details) {
-    final Rect _centRect = WidgetUtil.getWidgetGlobalRect(vState.centkey);
+    final Rect _centRect =
+        utility.WidgetUtil.getWidgetGlobalRect(vState.centkey);
 
     final double _dx = details.globalPosition.dx;
     final double _dy = details.globalPosition.dy;
@@ -443,15 +445,25 @@ class ViewController extends GetxController {
     );
   }
 
-  Future<void> _startAutoRead() async {
-    await Future.delayed(Duration(milliseconds: _ehConfigService.turnPageInv));
+  void cancelAutoRead() {
+    vState.autoRead = false;
+  }
+
+  Future<void> _startAutoRead({delayed = true}) async {
+    if (delayed) {
+      await Future.delayed(
+          Duration(milliseconds: _ehConfigService.turnPageInv));
+    }
 
     if (vState.autoRead && vState.pageIndex < vState.pageCount - 1) {
-      logger.d('next page');
+      logger.v('next page');
       pageController.nextPage(
           duration: const Duration(milliseconds: 300), curve: Curves.easeOut);
     }
   }
+
+  Future<void> _startAutoReadNotDelayed() async =>
+      await _startAutoRead(delayed: false);
 
   Future<void> onLoadCompleted(int ser) async {
     vState.loadCompleMap[ser] = true;
@@ -466,11 +478,56 @@ class ViewController extends GetxController {
       if (vState.filecount > serLeft) {
         final leftComplet = vState.loadCompleMap[serLeft] ?? false;
         final rigthComple = vState.loadCompleMap[serLeft + 1] ?? false;
-        logger.d(
+        logger.v(
             ' $serLeft leftComplet: $leftComplet  , ${serLeft + 1} rigthComple:$rigthComple');
+        if (leftComplet && rigthComple) {
+          debounce(_startAutoReadNotDelayed,
+              Duration(milliseconds: _ehConfigService.turnPageInv));
+        }
       } else {
         await _startAutoRead();
       }
     }
+  }
+
+  static const deFaultDurationTime = Duration(milliseconds: 300);
+  static Timer? timer;
+
+  // 防抖函数
+  void debounce(Function? doSomething,
+      [Duration durationTime = deFaultDurationTime]) {
+    // timer?.cancel();
+    if (timer?.isActive ?? false) {
+      logger.v('timer.cancel');
+      timer?.cancel();
+    }
+    timer = Timer(durationTime, () {
+      loggerTime.v('func.call');
+      doSomething?.call();
+      timer = null;
+    });
+  }
+
+  /// 函数防抖
+  ///
+  /// [func]: 要执行的方法
+  /// [delay]: 要迟延的时长
+  Function _debounce(
+    Function? func, [
+    Duration delay = const Duration(milliseconds: 2000),
+  ]) {
+    logger.d('debounce');
+    Timer? timer;
+    final Function target = () {
+      if (timer?.isActive ?? false) {
+        logger.d('timer.cancel');
+        timer?.cancel();
+      }
+      timer = Timer(delay, () async {
+        loggerTime.d('func.call');
+        await func?.call();
+      });
+    };
+    return target;
   }
 }

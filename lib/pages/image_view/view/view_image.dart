@@ -235,8 +235,8 @@ class _ViewImageState extends State<ViewImage>
                     imageWidth: snapshot.data!.imageWidth!,
                     imageHeight: snapshot.data!.imageHeight!,
                     retry: widget.retry,
-                    onLoadCompleted: () =>
-                        _viewController.onLoadCompleted(widget.ser),
+                    onLoadCompleted: () async =>
+                        await _viewController.onLoadCompleted(widget.ser),
                   );
 
                   image = Stack(

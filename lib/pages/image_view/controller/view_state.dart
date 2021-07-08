@@ -32,7 +32,7 @@ class ViewState {
     debounce(_itemIndex, (int val) {
       if (_galleryPageController.galleryItem.gid != null &&
           conditionItemIndex) {
-        logger.d('debounce 300 _itemIndex to $val');
+        logger.v('debounce 300 _itemIndex to $val');
         _galleryPageController.lastIndex = itemIndex;
         _galleryCacheController.setIndex(
             _galleryPageController.galleryItem.gid ?? '', itemIndex);

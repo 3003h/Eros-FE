@@ -17,6 +17,8 @@ String? logFileName;
 
 late Logger logger;
 
+late Logger loggerTime;
+
 late Logger logger5;
 
 late Logger loggerNoStack;
@@ -67,13 +69,23 @@ void resetLogLevel() {
 
 void initLoggerValue() {
   logger = Logger(
-    // level: _logLevel,
     filter: EHLogFilter(),
     // printer: SimplePrinter(),
     printer: EhPrettyPrinter(
       // lineLength: 100,
       colors: false,
       // printTime: true,
+    ),
+    output: _outPut,
+  );
+
+  loggerTime = Logger(
+    filter: EHLogFilter(),
+    // printer: SimplePrinter(),
+    printer: EhPrettyPrinter(
+      // lineLength: 100,
+      colors: false,
+      printTime: true,
     ),
     output: _outPut,
   );
