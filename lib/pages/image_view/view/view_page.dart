@@ -411,7 +411,7 @@ class GalleryViewPage extends GetView<ViewController> {
         });
   }
 
-  /// 左右方向浏览部件 使用[PhotoViewGallery] 实现
+  /// 左右方向翻页浏览部件 使用[PhotoViewGallery] 实现
   Widget _buildPhotoViewGallery({bool reverse = false}) {
     const double _maxScale = 10;
 
@@ -421,81 +421,118 @@ class GalleryViewPage extends GetView<ViewController> {
         final ViewState vState = controller.vState;
         controller.lastImagesSize = vState.images.length;
 
-        return Obx(
-          () {
-            return PhotoViewGallery.builder(
-              scrollPhysics: const BouncingScrollPhysics(),
-              reverse: reverse,
-              itemCount: vState.pageCount,
-              customSize: vState.screensize,
-              builder: (BuildContext context, int pageIndex) {
-                return PhotoViewGalleryPageOptions.customChild(
-                  // disableGestures: true,
-                  child: Container(
-                    // alignment: Alignment.center,
-                    padding: EdgeInsets.symmetric(
-                        horizontal:
-                            vState.showPageInterval ? kPageViewPadding : 0),
-                    child: () {
-                      if (vState.columnMode != ViewColumnMode.single) {
-                        // 双页阅读
-                        final int serLeft =
-                            vState.columnMode == ViewColumnMode.odd
-                                ? pageIndex * 2 + 1
-                                : pageIndex * 2;
+        return PhotoViewGallery.builder(
+          scrollPhysics: const BouncingScrollPhysics(),
+          reverse: reverse,
+          itemCount: vState.pageCount,
+          customSize: vState.screensize,
+          builder: (BuildContext context, int pageIndex) {
+            return PhotoViewGalleryPageOptions.customChild(
+              // disableGestures: true,
+              child: Container(
+                // alignment: Alignment.center,
+                padding: EdgeInsets.symmetric(
+                    horizontal: vState.showPageInterval ? kPageViewPadding : 0),
+                child: () {
+                  if (vState.columnMode != ViewColumnMode.single) {
+                    // 双页阅读
+                    final int serLeft = vState.columnMode == ViewColumnMode.odd
+                        ? pageIndex * 2 + 1
+                        : pageIndex * 2;
 
-                        final List<Widget> _pageList = <Widget>[
-                          if (serLeft > 0)
-                            Expanded(
-                              child: Container(
-                                alignment: Alignment.centerRight,
-                                child: ViewImage(
-                                  ser: serLeft,
-                                  fade: vState.fade,
-                                  // expand: true,
-                                ),
-                              ),
-                            ),
-                          if (vState.filecount > serLeft)
-                            Expanded(
-                              child: Container(
-                                alignment:
-                                    serLeft >= 0 ? Alignment.centerLeft : null,
-                                child: ViewImage(
-                                  ser: serLeft + 1,
-                                  fade: vState.fade,
-                                  // expand: true,
-                                ),
-                              ),
-                            ),
-                        ];
+                    Alignment? alignmentL = vState.filecount > serLeft
+                        ? Alignment.centerRight
+                        : null;
+                    Alignment? alignmentR =
+                        serLeft <= 0 ? null : Alignment.centerLeft;
 
-                        return Row(
-                          mainAxisSize: MainAxisSize.min,
-                          children:
-                              reverse ? _pageList.reversed.toList() : _pageList,
-                        );
-                      } else {
-                        return ViewImage(
-                          ser: pageIndex + 1,
-                          fade: vState.fade,
-                          expand: true,
-                        );
+                    double? _widthL = () {
+                      try {
+                        final _curImage = vState.imageMap[serLeft];
+                        return _curImage!.imageWidth! / _curImage.imageHeight!;
+                      } on Exception catch (_) {
+                        final _curImage = vState.imageMap[serLeft];
+                        return _curImage!.thumbWidth! / _curImage.thumbHeight!;
+                      } catch (e) {
+                        return 1.0;
                       }
-                    }(),
-                  ),
-                  initialScale: PhotoViewComputedScale.contained,
-                  minScale: PhotoViewComputedScale.contained * 1.0,
-                  maxScale: PhotoViewComputedScale.covered * _maxScale,
-                );
-              },
-              loadingBuilder: loadingBuilder,
-              // backgroundDecoration: null,
-              pageController: controller.pageController,
-              enableRotation: false,
-              onPageChanged: controller.handOnPageChanged,
+                    }();
+
+                    double? _widthR = () {
+                      if (vState.filecount <= serLeft) {
+                        return 0.0;
+                      }
+                      try {
+                        final _curImage = vState.imageMap[serLeft + 1];
+                        return _curImage!.imageWidth! / _curImage.imageHeight!;
+                      } on Exception catch (_) {
+                        final _curImage = vState.imageMap[serLeft + 1];
+                        return _curImage!.thumbWidth! / _curImage.thumbHeight!;
+                      } catch (e) {
+                        return 1.0;
+                      }
+                    }();
+
+                    logger.d('_widthL:$_widthL  _widthR:$_widthR');
+
+                    final List<Widget> _pageList = <Widget>[
+                      if (serLeft > 0)
+                        Expanded(
+                          flex: _widthL * 1000 ~/ 1,
+                          child: Container(
+                            alignment: alignmentL,
+                            child: Hero(
+                              tag: serLeft,
+                              child: ViewImage(
+                                ser: serLeft,
+                                fade: vState.fade,
+                                // expand: true,
+                              ),
+                            ),
+                          ),
+                        ),
+                      if (vState.filecount > serLeft)
+                        Expanded(
+                          flex: _widthR * 1000 ~/ 1,
+                          child: Container(
+                            alignment: alignmentR,
+                            child: Hero(
+                              tag: serLeft + 1,
+                              child: ViewImage(
+                                ser: serLeft + 1,
+                                fade: vState.fade,
+                                // expand: true,
+                              ),
+                            ),
+                          ),
+                        ),
+                    ];
+
+                    return Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      mainAxisSize: MainAxisSize.min,
+                      children:
+                          reverse ? _pageList.reversed.toList() : _pageList,
+                    );
+                  } else {
+                    return ViewImage(
+                      ser: pageIndex + 1,
+                      fade: vState.fade,
+                      expand: true,
+                    );
+                  }
+                }(),
+              ),
+              initialScale: PhotoViewComputedScale.contained,
+              minScale: PhotoViewComputedScale.contained * 1.0,
+              maxScale: PhotoViewComputedScale.covered * _maxScale,
             );
           },
+          loadingBuilder: loadingBuilder,
+          // backgroundDecoration: null,
+          pageController: controller.pageController,
+          enableRotation: false,
+          onPageChanged: controller.handOnPageChanged,
         );
       },
     );
