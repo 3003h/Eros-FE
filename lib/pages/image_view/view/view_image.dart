@@ -216,12 +216,17 @@ class _ViewImageState extends State<ViewImage>
                       return;
                     }
                     try {
+                      final _controller = Get.find<ViewController>();
                       final _id = '${GetIds.IMAGE_VIEW_SER}${widget.ser}';
-                      // logger.d('update id $_id');
                       _pageController.uptImageBySer(
                           ser: _image.ser,
                           image: _tmpImage.copyWith(completeHeight: true));
-                      Get.find<ViewController>().update([_id]);
+
+                      if (_controller.vState.viewMode == ViewMode.topToBottom) {
+                        _controller.update([_id]);
+                      } else {
+                        _controller.update([GetIds.IMAGE_VIEW]);
+                      }
                     } catch (_) {}
                   });
 
@@ -334,57 +339,56 @@ class ImageExtend extends StatelessWidget {
             // logger.v('$imageHeight $imageWidth');
 
             // 下载进度回调
-            return UnconstrainedBox(
-              child: Container(
-                constraints: BoxConstraints(
-                  maxHeight: context.mediaQueryShortestSide,
-                  minWidth: context.width / 2 - kPageViewPadding,
-                ),
-                alignment: Alignment.center,
-                // margin: const EdgeInsets.symmetric(vertical: 50, horizontal: 50),
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: <Widget>[
-                    Container(
-                      height: 70,
-                      width: 70,
-                      child: LiquidCircularProgressIndicator(
-                        value: progress ?? 0.0,
-                        valueColor: const AlwaysStoppedAnimation<Color>(
-                            Color.fromARGB(255, 163, 199, 100)),
-                        backgroundColor: const Color.fromARGB(255, 50, 50, 50),
-                        // borderColor: Colors.teal[900],
-                        // borderWidth: 2.0,
-                        direction: Axis.vertical,
-                        center: progress != null
-                            ? Text(
-                                '${progress * 100 ~/ 1}%',
-                                style: TextStyle(
-                                  color: progress < 0.5
-                                      ? CupertinoColors.white
-                                      : CupertinoColors.black,
-                                  fontSize: 12,
-                                  height: 1,
-                                ),
-                              )
-                            : Container(),
-                        borderColor: Colors.transparent,
-                        borderWidth: 0.0,
+            return Container(
+              constraints: BoxConstraints(
+                maxHeight: context.mediaQueryShortestSide,
+                minWidth: context.width / 2 - kPageViewPadding,
+              ),
+              alignment: Alignment.center,
+              // margin: const EdgeInsets.symmetric(vertical: 50, horizontal: 50),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: <Widget>[
+                  Container(
+                    height: 70,
+                    width: 70,
+                    // constraints: const BoxConstraints(minWidth: 70, maxHeight: 70),
+                    child: LiquidCircularProgressIndicator(
+                      value: progress ?? 0.0,
+                      valueColor: const AlwaysStoppedAnimation<Color>(
+                          Color.fromARGB(255, 163, 199, 100)),
+                      backgroundColor: const Color.fromARGB(255, 50, 50, 50),
+                      // borderColor: Colors.teal[900],
+                      // borderWidth: 2.0,
+                      direction: Axis.vertical,
+                      center: progress != null
+                          ? Text(
+                              '${progress * 100 ~/ 1}%',
+                              style: TextStyle(
+                                color: progress < 0.5
+                                    ? CupertinoColors.white
+                                    : CupertinoColors.black,
+                                fontSize: 12,
+                                height: 1,
+                              ),
+                            )
+                          : Container(),
+                      borderColor: Colors.transparent,
+                      borderWidth: 0.0,
+                    ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.all(12.0),
+                    child: Text(
+                      '$ser',
+                      style: const TextStyle(
+                        color: CupertinoColors.systemGrey6,
+                        height: 1,
                       ),
                     ),
-                    Padding(
-                      padding: const EdgeInsets.all(12.0),
-                      child: Text(
-                        '$ser',
-                        style: const TextStyle(
-                          color: CupertinoColors.systemGrey6,
-                          height: 1,
-                        ),
-                      ),
-                    )
-                  ],
-                ),
+                  )
+                ],
               ),
             );
             break;
@@ -468,38 +472,36 @@ class LoadingWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return UnconstrainedBox(
-      child: Container(
-        constraints: BoxConstraints(
-          maxHeight: context.mediaQueryShortestSide,
-          minWidth: context.width / 2 - kPageViewPadding,
-        ),
-        alignment: Alignment.center,
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: <Widget>[
-            Text(
-              '$ser',
-              style: const TextStyle(
-                fontSize: 50,
-                color: CupertinoColors.systemGrey6,
-              ),
+    return Container(
+      constraints: BoxConstraints(
+        maxHeight: context.mediaQueryShortestSide,
+        minWidth: context.width / 2 - kPageViewPadding,
+      ),
+      alignment: Alignment.center,
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: <Widget>[
+          Text(
+            '$ser',
+            style: const TextStyle(
+              fontSize: 50,
+              color: CupertinoColors.systemGrey6,
             ),
-            Row(
-              mainAxisSize: MainAxisSize.min,
-              children: <Widget>[
-                const CupertinoActivityIndicator(),
-                const SizedBox(width: 5),
-                Text(
-                  '${S.of(context).loading}...',
-                  style: const TextStyle(
-                    color: CupertinoColors.systemGrey6,
-                  ),
+          ),
+          Row(
+            mainAxisSize: MainAxisSize.min,
+            children: <Widget>[
+              const CupertinoActivityIndicator(),
+              const SizedBox(width: 5),
+              Text(
+                '${S.of(context).loading}...',
+                style: const TextStyle(
+                  color: CupertinoColors.systemGrey6,
                 ),
-              ],
-            ),
-          ],
-        ),
+              ),
+            ],
+          ),
+        ],
       ),
     );
   }

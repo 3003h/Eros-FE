@@ -449,12 +449,12 @@ class ViewController extends GetxController {
     vState.autoRead = false;
   }
 
-  Future<void> _startAutoRead({delayed = true}) async {
-    if (delayed) {
-      await Future.delayed(
-          Duration(milliseconds: _ehConfigService.turnPageInv));
-    }
+  void _startAutoRead() {
+    debounce(
+        _turnNextPage, Duration(milliseconds: _ehConfigService.turnPageInv));
+  }
 
+  Future<void> _turnNextPage() async {
     if (vState.autoRead && vState.pageIndex < vState.pageCount - 1) {
       logger.v('next page');
       pageController.nextPage(
@@ -462,14 +462,11 @@ class ViewController extends GetxController {
     }
   }
 
-  Future<void> _startAutoReadNotDelayed() async =>
-      await _startAutoRead(delayed: false);
-
   Future<void> onLoadCompleted(int ser) async {
     vState.loadCompleMap[ser] = true;
 
     if (vState.columnMode == ViewColumnMode.single) {
-      await _startAutoRead();
+      _startAutoRead();
     } else {
       // 双页阅读
       final int serLeft = vState.columnMode == ViewColumnMode.odd
@@ -481,11 +478,10 @@ class ViewController extends GetxController {
         logger.v(
             ' $serLeft leftComplet: $leftComplet  , ${serLeft + 1} rigthComple:$rigthComple');
         if (leftComplet && rigthComple) {
-          debounce(_startAutoReadNotDelayed,
-              Duration(milliseconds: _ehConfigService.turnPageInv));
+          _startAutoRead();
         }
       } else {
-        await _startAutoRead();
+        _startAutoRead();
       }
     }
   }
