@@ -1,5 +1,5 @@
 # FEhViewer
-[English](https://github.com/honjow/FEhViewer/blob/nullsafety/README.md)|中文
+[English](https://github.com/honjow/FEhViewer/blob/nullsafety/README.md) | 简体中文
 ## 应用简介
 
 一个 flutter 编写的 e-hentai/exhentai app
@@ -14,7 +14,7 @@ UI 方面主要参考的[E-HentaiViewer](https://github.com/kayanouriko/E-Hentai
 
 因为是 flutter 所以也是跨平台支持的，测试的平台主要有 \
 iOS 14 : iPhone XR / 12 / iPad Pro 2018 \
-Android 11 : MIUI12.5/ MI K40 \
+Android 11 : MIUI12.5/ MI K40
 
 现有问题:
 
@@ -56,6 +56,7 @@ ehentai译文数据库
 - [x] 列表视图,瀑布流视图切换
 - [x] 画廊信息查看
 - [x] 图片浏览
+- [x] 自动翻页
 - [x] 里站表站切换
 - [x] 标签搜索
 - [x] 登录

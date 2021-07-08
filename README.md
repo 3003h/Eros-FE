@@ -1,5 +1,5 @@
 # FEhViewer
-English|[中文](https://github.com/honjow/FEhViewer/blob/nullsafety/README_cn.md)
+English | [简体中文](https://github.com/honjow/FEhViewer/blob/nullsafety/README_cn.md)
 
 ## Introduction
 
@@ -11,7 +11,7 @@ The main reference for UI is [E-HentaiViewer](https://github.com/kayanouriko/E-H
 
 Because it is flutter, so it is also cross-platform support, the main platforms tested are \
 iOS 14 : iPhone XR / 12 / iPad Pro 2018 \
-Android 11 : MIUI12.5/ MI K40 \
+Android 11 : MIUI12.5/ MI K40
 
 Current Issues:
 
@@ -53,6 +53,7 @@ EhTagTranslation
 - [x] List View,Waterfall View Switch
 - [x] Gallery information view
 - [x] Gallery Image view
+- [x] Automatically turn pages
 - [x] eh/ex switch
 - [x] Tag search
 - [x] Login
