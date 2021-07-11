@@ -1,6 +1,11 @@
 # FEhViewer
 English | [简体中文](https://github.com/honjow/FEhViewer/blob/nullsafety/README_cn.md)
 
+[![](https://img.shields.io/github/downloads/honjow/FEhViewer/total.svg)](https://gitHub.com/honjow/FEhViewer/releases)
+[![](https://img.shields.io/github/downloads/honjow/FEhViewer/latest/total)](https://github.com/honjow/FEhViewer/releases/latest)
+[![](https://img.shields.io/github/v/release/honjow/FEhViewer)](https://github.com/honjow/FEhViewer/releases/latest)
+[![](https://img.shields.io/github/stars/honjow/FEhViewer)]()
+
 ## Introduction
 
 n e-hentai/exhentai app make on flutter
