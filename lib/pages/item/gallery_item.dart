@@ -35,7 +35,27 @@ class GalleryItemWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return GestureDetector(
       child: Center(
-        child: _buildItem(),
+        child: Stack(
+          children: [
+            _buildItem(),
+            if (Get.find<EhConfigService>().debugMode)
+              Positioned(
+                left: 4,
+                top: 4,
+                child: Text('${galleryItem.pageOfList ?? ''}',
+                    style: const TextStyle(
+                        fontSize: 20,
+                        color: CupertinoColors.secondarySystemBackground,
+                        shadows: <Shadow>[
+                          Shadow(
+                            color: Colors.black,
+                            offset: Offset(2, 2),
+                            blurRadius: 4,
+                          )
+                        ])),
+              ),
+          ],
+        ),
       ),
       behavior: HitTestBehavior.opaque,
       onTap: () => _galleryItemController.onTap(tabTag),

@@ -213,7 +213,10 @@ class SearchPageController extends TabViewController {
   @override
   Future<void> loadDataMore({bool cleanSearch = false}) async {
     logger5.i('$searchPageCtrlDepth loadDataMore');
+    // 增加延时 避免build期间进行 setState
+    await Future<void>.delayed(const Duration(milliseconds: 200));
     if (pageState == PageState.Loading) {
+      logger.d('loadDataMore return');
       return;
     }
 
@@ -223,9 +226,6 @@ class SearchPageController extends TabViewController {
 
     final int _catNum = _ehConfigService.catFilter.value;
     pageState = PageState.Loading;
-
-    // 增加延时 避免build期间进行 setState
-    await Future<void>.delayed(const Duration(milliseconds: 100));
 
     try {
       final String? fromGid = state?.last.gid;
@@ -245,7 +245,9 @@ class SearchPageController extends TabViewController {
                   serach: _search,
                   refresh: true,
                 );
-      final List<GalleryItem> gallerItemBeans = tuple.item1;
+      final List<GalleryItem> gallerItemBeans = tuple.item1
+          .map((GalleryItem e) => e.copyWith(pageOfList: curPage.value + 1))
+          .toList();
 
       state?.addAll(gallerItemBeans);
 
@@ -282,7 +284,8 @@ class SearchPageController extends TabViewController {
                 serach: _search,
                 refresh: refresh,
               );
-    final List<GalleryItem> gallerItemBeans = tuple.item1;
+    final List<GalleryItem> gallerItemBeans =
+        tuple.item1.map((GalleryItem e) => e.copyWith(pageOfList: 0)).toList();
     maxPage = tuple.item2;
     return gallerItemBeans;
   }
@@ -311,7 +314,11 @@ class SearchPageController extends TabViewController {
                 refresh: true,
               );
     curPage.value = page;
-    change(tuple.item1, status: RxStatus.success());
+    change(
+        tuple.item1
+            .map((GalleryItem e) => e.copyWith(pageOfList: page))
+            .toList(),
+        status: RxStatus.success());
   }
 
   List<String> searchHistory = <String>[].obs;
@@ -361,7 +368,7 @@ class SearchPageController extends TabViewController {
 
   @override
   void onClose() {
-    // searchTextController.dispose();
+    searchTextController.dispose();
     Get.find<DepthService>().popSearchPageCtrl();
     super.onClose();
   }

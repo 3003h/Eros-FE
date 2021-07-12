@@ -30,9 +30,11 @@ class DepthService extends GetxService {
 
   void pushSearchPageCtrl() {
     searchPageCtrlDepth++;
+    logger.d('pushSearchPageCtrl to $searchPageCtrlDepth');
   }
 
   void popSearchPageCtrl() {
     searchPageCtrlDepth--;
+    logger.d('pushSearchPageCtrl to $searchPageCtrlDepth');
   }
 }

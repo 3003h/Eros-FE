@@ -71,8 +71,8 @@ Future<void> main() async {
     Get.put(UserController(), permanent: true);
     Get.lazyPut(() => GalleryCacheController(), fenix: true);
 
-    Get.put(DownloadController(), permanent: true);
-    Get.put(ArchiverDownloadController(), permanent: true);
+    Get.lazyPut(() => DownloadController(), fenix: true);
+    Get.lazyPut(() => ArchiverDownloadController(), fenix: true);
     Get.lazyPut(() => DownloadViewController(), fenix: true);
 
     Get.lazyPut(() => QuickSearchController(), fenix: true);
@@ -190,7 +190,7 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
         home: SplashPage(),
         theme: theme,
         locale: locale,
-        enableLog: false,
+        // enableLog: false,
         logWriterCallback: loggerGetx,
         // ignore: prefer_const_literals_to_create_immutables
         supportedLocales: <Locale>[

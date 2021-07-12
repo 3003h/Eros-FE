@@ -41,5 +41,6 @@
   "colorRating?": "r",
   "archiverLink?": "",
   "torrentLink?": "",
-  "lastViewTime?": 123
+  "lastViewTime?": 123,
+  "pageOfList?": 1
 }

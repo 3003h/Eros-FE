@@ -73,7 +73,7 @@ SliverPadding buildWaterfallFlow(
 
 SliverList buildGallerySliverListView(
   List<GalleryItem> gallerItemBeans,
-  tabTag, {
+  dynamic tabTag, {
   int? maxPage,
   int curPage = 0,
   VoidCallback? loadMord,
@@ -92,8 +92,32 @@ SliverList buildGallerySliverListView(
         final GalleryItem _item = gallerItemBeans[index];
 
         return FrameSeparateWidget(
-            index: index,
-            child: GalleryItemWidget(galleryItem: _item, tabTag: tabTag));
+          index: index,
+          // child: GalleryItemWidget(galleryItem: _item, tabTag: tabTag),
+          child: Obx(() {
+            return Stack(
+              children: [
+                GalleryItemWidget(galleryItem: _item, tabTag: tabTag),
+                if (Get.find<EhConfigService>().debugMode)
+                  Positioned(
+                    right: 4,
+                    top: 4,
+                    child: Text('${index + 1}',
+                        style: const TextStyle(
+                            fontSize: 20,
+                            color: CupertinoColors.secondarySystemBackground,
+                            shadows: <Shadow>[
+                              Shadow(
+                                color: Colors.black,
+                                offset: Offset(2, 2),
+                                blurRadius: 4,
+                              )
+                            ])),
+                  ),
+              ],
+            );
+          }),
+        );
       },
       childCount: gallerItemBeans.length,
     ),

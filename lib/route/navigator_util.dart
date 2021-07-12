@@ -54,7 +54,7 @@ class NavigatorUtil {
     Get.toNamed(
       EHRoutes.search,
       arguments: _search,
-      // preventDuplicates: false,
+      preventDuplicates: false,
     );
   }
 
