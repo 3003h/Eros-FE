@@ -202,11 +202,6 @@ class Global {
 
     canCheckBiometrics = await localAuth.canCheckBiometrics;
 
-    // 代理初始化
-    if (Platform.isIOS || Platform.isAndroid) {
-      await CustomHttpsProxy.instance.init();
-    }
-
     //statusBar设置为透明，去除半透明遮罩
     // SystemChrome.setSystemUIOverlayStyle(
     //     const SystemUiOverlayStyle(statusBarColor: Colors.transparent));
@@ -226,6 +221,11 @@ class Global {
     if (!inDebugMode) {
       Logger.level = Level.info;
       initLogger();
+    }
+
+    // 代理初始化
+    if (Platform.isIOS || Platform.isAndroid) {
+      await CustomHttpsProxy.instance.init();
     }
 
     logger.i('doc $appDocPath \napps $appSupportPath \ntemp $tempPath');

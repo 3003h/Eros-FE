@@ -2,18 +2,12 @@ import 'dart:async';
 import 'dart:ui';
 
 import 'package:fehviewer/common/controller/auto_lock_controller.dart';
-import 'package:fehviewer/common/controller/download_controller.dart';
 import 'package:fehviewer/common/global.dart';
-import 'package:fehviewer/common/service/dns_service.dart';
 import 'package:fehviewer/common/service/ehconfig_service.dart';
 import 'package:fehviewer/common/service/locale_service.dart';
 import 'package:fehviewer/common/service/log_service.dart';
 import 'package:fehviewer/common/service/theme_service.dart';
 import 'package:fehviewer/generated/l10n.dart';
-import 'package:fehviewer/pages/controller/fav_dialog_controller.dart';
-import 'package:fehviewer/pages/controller/favorite_sel_controller.dart';
-import 'package:fehviewer/pages/tab/controller/download_view_controller.dart';
-import 'package:fehviewer/pages/tab/controller/splash_controller.dart';
 import 'package:fehviewer/pages/tab/view/splash_page.dart';
 import 'package:fehviewer/route/app_pages.dart';
 import 'package:fehviewer/store/get_store.dart';
@@ -29,18 +23,8 @@ import 'package:get/get.dart';
 import 'package:logger/logger.dart';
 import 'package:oktoast/oktoast.dart';
 
-import 'common/controller/advance_search_controller.dart';
-import 'common/controller/archiver_download_controller.dart';
-import 'common/controller/gallerycache_controller.dart';
-import 'common/controller/history_controller.dart';
-import 'common/controller/localfav_controller.dart';
-import 'common/controller/quicksearch_controller.dart';
-import 'common/controller/tag_trans_controller.dart';
-import 'common/controller/user_controller.dart';
 import 'common/isolate/download_manager.dart';
-import 'common/service/depth_service.dart';
-import 'common/service/layout_service.dart';
-import 'pages/tab/controller/unlock_page_controller.dart';
+import 'get_init.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -52,38 +36,7 @@ Future<void> main() async {
 
     await _initializeFlutterFire();
 
-    Get.lazyPut(() => EhConfigService(), fenix: true);
-
-    //LocaleController
-    Get.lazyPut(() => LocaleService(), fenix: true);
-    // ThemeController
-    Get.lazyPut(() => ThemeService(), fenix: true);
-    // DnsConfigController
-    Get.put(DnsService(), permanent: true);
-    Get.put(DepthService());
-
-    Get.lazyPut(() => LayoutServices());
-
-    /// 一些全局设置或者控制
-    Get.lazyPut(() => AutoLockController(), fenix: true);
-    Get.put(LocalFavController(), permanent: true);
-    Get.put(HistoryController(), permanent: true);
-    Get.put(UserController(), permanent: true);
-    Get.lazyPut(() => GalleryCacheController(), fenix: true);
-
-    Get.lazyPut(() => DownloadController(), fenix: true);
-    Get.lazyPut(() => ArchiverDownloadController(), fenix: true);
-    Get.lazyPut(() => DownloadViewController(), fenix: true);
-
-    Get.lazyPut(() => QuickSearchController(), fenix: true);
-    Get.lazyPut(() => AdvanceSearchController(), fenix: true);
-    Get.lazyPut(() => FavDialogController(), fenix: true);
-    Get.lazyPut(() => FavoriteSelectorController(), fenix: true);
-
-    Get.lazyPut(() => UnlockPageController(), fenix: true);
-    Get.lazyPut(() => TagTransController(), fenix: true);
-
-    Get.lazyPut(() => SplashController());
+    getinit();
 
     if (Get.find<EhConfigService>().debugMode) {
       Logger.level = Level.debug;
@@ -94,7 +47,6 @@ Future<void> main() async {
     resetLogLevel();
 
     downloadManager.init();
-    // downloadManager.initLogger();
 
     runApp(MyApp());
   }, (Object error, StackTrace stackTrace) {
@@ -190,7 +142,7 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
         home: SplashPage(),
         theme: theme,
         locale: locale,
-        // enableLog: false,
+        enableLog: false,
         logWriterCallback: loggerGetx,
         // ignore: prefer_const_literals_to_create_immutables
         supportedLocales: <Locale>[
