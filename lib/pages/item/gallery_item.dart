@@ -10,6 +10,7 @@ import 'package:fehviewer/widget/blur_image.dart';
 import 'package:fehviewer/widget/rating_bar.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
 import 'package:keframe/frame_separate_widget.dart';
@@ -471,5 +472,99 @@ class CoverImg extends StatelessWidget {
           isBlur: ehConfigService.isGalleryImgBlur.value,
           child: image(),
         ));
+  }
+}
+
+class GalleryItemPlaceHolder extends StatelessWidget {
+  const GalleryItemPlaceHolder({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    final double coverImageWidth =
+        Get.context!.isPhone ? Get.context!.mediaQueryShortestSide / 3 : 120;
+
+    final _line = ClipRRect(
+      borderRadius: BorderRadius.circular(6),
+      child: Container(
+        color: CupertinoColors.systemGrey5,
+        height: 16,
+      ),
+    ).paddingSymmetric(vertical: 4);
+
+    return Column(
+      children: <Widget>[
+        Container(
+          padding: const EdgeInsets.fromLTRB(kPaddingLeft, 8, 8, 8),
+          child: Column(
+            children: <Widget>[
+              Row(
+                children: <Widget>[
+                  // 封面图片
+                  ClipRRect(
+                    borderRadius: BorderRadius.circular(6),
+                    child: Container(
+                      constraints: const BoxConstraints(maxHeight: 200),
+                      color: CupertinoColors.systemGrey5,
+                      width: coverImageWidth,
+                    ),
+                  ),
+                  const SizedBox(
+                    width: 8,
+                  ),
+                  // 右侧信息
+                  Expanded(
+                    child: SingleChildScrollView(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: <Widget>[
+                          _line,
+                          _line,
+                          Container(width: 70, child: _line),
+                          const SizedBox(height: 4),
+                          _line,
+                          Container(width: 70, child: _line),
+
+                          // 评分行
+                          Row(
+                            crossAxisAlignment: CrossAxisAlignment.end,
+                            children: <Widget>[
+                              // 评分
+                              Container(width: 50, child: _line),
+                              // 占位
+                              const Spacer(),
+                              Container(width: 50, child: _line),
+                            ],
+                          ),
+                          const SizedBox(
+                            height: 4,
+                          ),
+                          // 类型和时间
+                          Row(
+                            crossAxisAlignment: CrossAxisAlignment.end,
+                            children: <Widget>[
+                              // 类型
+                              // _buildCategory(),
+                              const Spacer(),
+                              // 上传时间
+                              // _buildPostTime(),
+                            ],
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ],
+          ),
+        ),
+        Divider(
+          height: 0.5,
+          indent: kPaddingLeft,
+          color: CupertinoDynamicColor.resolve(
+              CupertinoColors.systemGrey4, Get.context!),
+        ),
+      ],
+    );
   }
 }

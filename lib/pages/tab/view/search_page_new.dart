@@ -17,6 +17,7 @@ import 'package:fehviewer/pages/tab/view/gallery_base.dart';
 import 'package:fehviewer/pages/tab/view/tab_base.dart';
 import 'package:fehviewer/utils/cust_lib/persistent_header_builder.dart';
 import 'package:fehviewer/utils/cust_lib/sliver/sliver_persistent_header.dart';
+import 'package:fehviewer/utils/cust_lib/wrap/ext_wrap.dart';
 import 'package:fehviewer/utils/logger.dart';
 import 'package:fehviewer/utils/vibrate.dart';
 import 'package:flutter/cupertino.dart';
@@ -480,11 +481,31 @@ class GallerySearchPageNew extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 if (sPageController.searchHistory.isNotEmpty)
-                  Text(
-                    S.of(Get.context!).search_history,
-                    style: const TextStyle(
-                      fontSize: 14,
-                    ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text(
+                        S.of(Get.context!).search_history,
+                        style: const TextStyle(
+                          fontSize: 14,
+                        ),
+                      ),
+                      GestureDetector(
+                        onTap: sPageController.clearHistory,
+                        child: Container(
+                          alignment: Alignment.center,
+                          padding: const EdgeInsets.symmetric(
+                            vertical: 6.0,
+                            horizontal: 6,
+                          ),
+                          child: const Icon(
+                            Icons.delete,
+                            size: 17,
+                            color: Colors.red,
+                          ),
+                        ),
+                      )
+                    ],
                   ),
                 Container(
                   child: Wrap(
@@ -494,32 +515,32 @@ class GallerySearchPageNew extends StatelessWidget {
                         0, min<int>(20, _btnList.length)), //要显示的子控件集合
                   ),
                 ).paddingSymmetric(vertical: 8.0),
-                if (sPageController.searchHistory.isNotEmpty)
-                  GestureDetector(
-                    onTap: sPageController.clearHistory,
-                    child: Container(
-                      alignment: Alignment.center,
-                      padding: const EdgeInsets.symmetric(vertical: 4.0),
-                      child: Row(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          const Icon(
-                            Icons.delete,
-                            size: 17,
-                            color: Colors.red,
-                          ),
-                          Text(
-                            S.of(Get.context!).clear_search_history,
-                            style: TextStyle(
-                              fontSize: 15,
-                              color: CupertinoDynamicColor.resolve(
-                                  CupertinoColors.secondaryLabel, Get.context!),
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                  )
+                // if (sPageController.searchHistory.isNotEmpty)
+                //   GestureDetector(
+                //     onTap: sPageController.clearHistory,
+                //     child: Container(
+                //       alignment: Alignment.center,
+                //       padding: const EdgeInsets.symmetric(vertical: 4.0),
+                //       child: Row(
+                //         mainAxisSize: MainAxisSize.min,
+                //         children: [
+                //           const Icon(
+                //             Icons.delete,
+                //             size: 17,
+                //             color: Colors.red,
+                //           ),
+                //           Text(
+                //             S.of(Get.context!).clear_search_history,
+                //             style: TextStyle(
+                //               fontSize: 15,
+                //               color: CupertinoDynamicColor.resolve(
+                //                   CupertinoColors.secondaryLabel, Get.context!),
+                //             ),
+                //           ),
+                //         ],
+                //       ),
+                //     ),
+                //   )
               ],
             ),
           ),

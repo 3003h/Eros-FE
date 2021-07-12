@@ -93,11 +93,15 @@ SliverList buildGallerySliverListView(
 
         return FrameSeparateWidget(
           index: index,
+          placeHolder: const GalleryItemPlaceHolder(),
           // child: GalleryItemWidget(galleryItem: _item, tabTag: tabTag),
           child: Obx(() {
             return Stack(
               children: [
                 GalleryItemWidget(galleryItem: _item, tabTag: tabTag),
+                // index > 5
+                //     ? GalleryItemWidget(galleryItem: _item, tabTag: tabTag)
+                //     : GalleryItemPlaceHolder(),
                 if (Get.find<EhConfigService>().debugMode)
                   Positioned(
                     right: 4,

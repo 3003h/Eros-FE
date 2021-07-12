@@ -12,14 +12,5 @@ class TabHomeBinding extends Bindings {
   @override
   void dependencies() {
     // logger.d('TabHomeBinding');
-    Get.lazyPut(() => TabHomeController(), fenix: true);
-    Get.lazyPut(() => PopularViewController(), fenix: true);
-    Get.lazyPut(() => WatchedViewController(), fenix: true);
-    Get.lazyPut(() => GalleryViewController(), fenix: true);
-    Get.lazyPut(() => FavoriteViewController(), fenix: true);
-    Get.lazyPut(() => SettingViewController(), fenix: true);
-
-    Get.lazyPut(() => HistoryViewController(), fenix: true);
-    Get.lazyPut(() => DownloadViewController(), fenix: true);
   }
 }

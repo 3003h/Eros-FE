@@ -55,7 +55,6 @@ class AppPages {
     GetPage(
       name: EHRoutes.home,
       page: () => HomePage(),
-      binding: TabHomeBinding(),
       transition: Transition.fadeIn,
     ),
     GetPage(
