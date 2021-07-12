@@ -125,64 +125,13 @@ class GallerySearchPageNew extends StatelessWidget {
         ));
   }
 
-  Widget getSearchTextFieldIn(
-      {bool multiline = false, double iconOpacity = 0.0}) {
-    return Obx(() => CupertinoTextField(
-          style: const TextStyle(height: 1.25),
-          decoration: BoxDecoration(
-            color: ehTheme.textFieldBackgroundColor!.withOpacity(0.6),
-            borderRadius: const BorderRadius.all(Radius.circular(8.0)),
-          ),
-          placeholder: controller.placeholderText,
-          placeholderStyle: const TextStyle(
-            fontWeight: FontWeight.w400,
-            color: CupertinoColors.placeholderText,
-            height: 1.25,
-          ),
-          // clearButtonMode: OverlayVisibilityMode.editing,
-          prefix: CupertinoButton(
-            padding: const EdgeInsets.symmetric(horizontal: 4),
-            minSize: 0,
-            child: Icon(
-              LineIcons.search,
-              color: CupertinoColors.systemGrey.withOpacity(iconOpacity),
-            ),
-            onPressed: () {},
-          ),
-          suffix: GetBuilder<SearchPageController>(
-            id: GetIds.SEARCH_CLEAR_BTN,
-            tag: searchPageCtrlDepth,
-            builder: (SearchPageController controller) {
-              return controller.textIsNotEmpty
-                  ? GestureDetector(
-                      onTap: controller.clearText,
-                      child: Icon(
-                        LineIcons.timesCircle,
-                        size: 24.0,
-                        color: CupertinoDynamicColor.resolve(
-                                _kClearButtonColor, Get.context!)
-                            .withOpacity(iconOpacity),
-                      ).paddingSymmetric(horizontal: 6),
-                    )
-                  : const SizedBox();
-            },
-          ),
-          padding: const EdgeInsetsDirectional.fromSTEB(0, 6, 5, 6),
-          controller: controller.searchTextController,
-          autofocus: controller.autofocus,
-          // textInputAction: TextInputAction.search,
-          onEditingComplete: controller.onEditingComplete,
-          focusNode: controller.searchFocusNode,
-          maxLines: multiline ? null : 1,
-          textInputAction: TextInputAction.search,
-        ));
-  }
-
   CupertinoNavigationBar getNavigationBar(BuildContext context) {
     return CupertinoNavigationBar(
       padding: const EdgeInsetsDirectional.only(start: 0),
       border: null,
-      middle: Text(S.of(context).search),
+      middle: Obx(() {
+        return Text(controller.placeholderText);
+      }),
       // middle: getSearchTextFieldIn(),
       transitionBetweenRoutes: false,
       trailing: _buildTrailing(context),
@@ -192,10 +141,22 @@ class GallerySearchPageNew extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final Widget cfp = CupertinoPageScaffold(
-      // navigationBar: getNavigationBar(context),
+      navigationBar: GetPlatform.isAndroid ? getNavigationBar(context) : null,
       child: Column(
         children: [
           // getSearchTextFieldIn().paddingOnly(top: 100),
+          if (GetPlatform.isAndroid)
+            SafeArea(
+              child: Container(
+                decoration: BoxDecoration(
+                  border: _kDefaultNavBarBorder,
+                  color: ehTheme.themeData!.barBackgroundColor,
+                ),
+                child:
+                    const SearchTextFieldIn(iconOpacity: 1.0, multiline: true)
+                        .paddingSymmetric(horizontal: 12, vertical: 4),
+              ),
+            ),
           Expanded(child: _buildSearchRult(context)),
         ],
       ),
@@ -210,16 +171,19 @@ class GallerySearchPageNew extends StatelessWidget {
       child: CustomScrollView(
         cacheExtent: 500,
         slivers: <Widget>[
-          // SliverToBoxAdapter(child: getSearchTextFieldIn().paddingOnly(top: 50)),
+          // SliverToBoxAdapter(
+          //     child: getSearchTextFieldIn().paddingOnly(top: 50)),
           // TODO android上会有一次删除多个字符的问题
-          SliverFloatingPinnedPersistentHeader(
-            delegate: SliverFloatingPinnedPersistentHeaderBuilder(
-              minExtentProtoType: const SizedBox(),
-              maxExtentProtoType: _maxExtentProtoTypeBar(context),
-              // maxExtentProtoType: SizedBox(height: 150),
-              builder: (_, __, maxExtent) => _buildSearchBar(_, __, maxExtent),
+          if (GetPlatform.isIOS)
+            SliverFloatingPinnedPersistentHeader(
+              delegate: SliverFloatingPinnedPersistentHeaderBuilder(
+                minExtentProtoType: const SizedBox(),
+                maxExtentProtoType: _maxExtentProtoTypeBar(context),
+                builder: (_, __, maxExtent) =>
+                    _buildSearchBar(_, __, maxExtent),
+              ),
             ),
-          ),
+          // SliverToBoxAdapter(child: getNavigationBar(context)),
           Obx(() {
             return CupertinoSliverRefreshControl(
                 onRefresh: controller.listType == ListType.gallery
@@ -322,8 +286,11 @@ class GallerySearchPageNew extends StatelessWidget {
                           child: Padding(
                             padding: const EdgeInsets.only(
                                 left: 4, top: 4, bottom: 4),
-                            child: getSearchTextFieldIn(
+                            child: SearchTextFieldIn(
                                 multiline: true, iconOpacity: iconOpacity),
+                            // child: getSearchTextField(
+                            //   multiline: true,
+                            // ),
                           ),
                         ),
                       ],
@@ -361,11 +328,11 @@ class GallerySearchPageNew extends StatelessWidget {
             ),
             padding: const EdgeInsets.symmetric(horizontal: 8),
             child: Row(
-              children: [
+              children: const [
                 Expanded(
                   child: Padding(
-                    padding: const EdgeInsets.only(left: 4, top: 4, bottom: 4),
-                    child: getSearchTextFieldIn(multiline: true),
+                    padding: EdgeInsets.only(left: 4, top: 4, bottom: 4),
+                    child: SearchTextFieldIn(multiline: true),
                   ),
                 ),
               ],
@@ -707,6 +674,70 @@ class GallerySearchPageNew extends StatelessWidget {
     }
 
     return _buildListBtns();
+  }
+}
+
+class SearchTextFieldIn extends StatelessWidget {
+  const SearchTextFieldIn({
+    Key? key,
+    this.multiline = false,
+    this.iconOpacity = 0.0,
+  }) : super(key: key);
+
+  SearchPageController get controller => Get.find(tag: searchPageCtrlDepth);
+  final bool multiline;
+  final double iconOpacity;
+
+  @override
+  Widget build(BuildContext context) {
+    return CupertinoTextField(
+      style: const TextStyle(height: 1.25),
+      decoration: BoxDecoration(
+        color: ehTheme.textFieldBackgroundColor!.withOpacity(0.6),
+        borderRadius: const BorderRadius.all(Radius.circular(8.0)),
+      ),
+      placeholder: S.of(context).search,
+      placeholderStyle: const TextStyle(
+        fontWeight: FontWeight.w400,
+        color: CupertinoColors.placeholderText,
+        height: 1.25,
+      ),
+      // clearButtonMode: OverlayVisibilityMode.editing,
+      prefix: CupertinoButton(
+        padding: const EdgeInsets.symmetric(horizontal: 4),
+        minSize: 0,
+        child: Icon(
+          LineIcons.search,
+          color: CupertinoColors.systemGrey.withOpacity(iconOpacity),
+        ),
+        onPressed: () {},
+      ),
+      suffix: GetBuilder<SearchPageController>(
+        id: GetIds.SEARCH_CLEAR_BTN,
+        tag: searchPageCtrlDepth,
+        builder: (SearchPageController controller) {
+          return controller.textIsNotEmpty
+              ? GestureDetector(
+                  onTap: controller.clearText,
+                  child: Icon(
+                    LineIcons.timesCircle,
+                    size: 24.0,
+                    color: CupertinoDynamicColor.resolve(
+                            _kClearButtonColor, Get.context!)
+                        .withOpacity(iconOpacity),
+                  ).paddingSymmetric(horizontal: 6),
+                )
+              : const SizedBox();
+        },
+      ),
+      padding: const EdgeInsetsDirectional.fromSTEB(0, 6, 5, 6),
+      controller: controller.searchTextController,
+      autofocus: controller.autofocus,
+      onEditingComplete: controller.onEditingComplete,
+      focusNode: controller.searchFocusNode,
+      maxLines: multiline ? null : 1,
+      textInputAction: TextInputAction.search,
+    );
   }
 }
 

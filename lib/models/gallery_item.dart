@@ -52,6 +52,7 @@ class GalleryItem {
     this.archiverLink,
     this.torrentLink,
     this.lastViewTime,
+    this.pageOfList,
   });
 
   final String? gid;
@@ -97,6 +98,7 @@ class GalleryItem {
   final String? archiverLink;
   final String? torrentLink;
   final int? lastViewTime;
+  final int? pageOfList;
 
   factory GalleryItem.fromJson(Map<String,dynamic> json) => GalleryItem(
     gid: json['gid'] != null ? json['gid'] as String : null,
@@ -141,7 +143,8 @@ class GalleryItem {
     colorRating: json['colorRating'] != null ? json['colorRating'] as String : null,
     archiverLink: json['archiverLink'] != null ? json['archiverLink'] as String : null,
     torrentLink: json['torrentLink'] != null ? json['torrentLink'] as String : null,
-    lastViewTime: json['lastViewTime'] != null ? json['lastViewTime'] as int : null
+    lastViewTime: json['lastViewTime'] != null ? json['lastViewTime'] as int : null,
+    pageOfList: json['pageOfList'] != null ? json['pageOfList'] as int : null
   );
   
   Map<String, dynamic> toJson() => {
@@ -187,7 +190,8 @@ class GalleryItem {
     'colorRating': colorRating,
     'archiverLink': archiverLink,
     'torrentLink': torrentLink,
-    'lastViewTime': lastViewTime
+    'lastViewTime': lastViewTime,
+    'pageOfList': pageOfList
   };
 
   GalleryItem clone() => GalleryItem(
@@ -233,7 +237,8 @@ class GalleryItem {
     colorRating: colorRating,
     archiverLink: archiverLink,
     torrentLink: torrentLink,
-    lastViewTime: lastViewTime
+    lastViewTime: lastViewTime,
+    pageOfList: pageOfList
   );
 
     
@@ -280,7 +285,8 @@ class GalleryItem {
     String? colorRating,
     String? archiverLink,
     String? torrentLink,
-    int? lastViewTime
+    int? lastViewTime,
+    int? pageOfList
   }) => GalleryItem(
     gid: gid ?? this.gid,
     token: token ?? this.token,
@@ -325,12 +331,13 @@ class GalleryItem {
     archiverLink: archiverLink ?? this.archiverLink,
     torrentLink: torrentLink ?? this.torrentLink,
     lastViewTime: lastViewTime ?? this.lastViewTime,
+    pageOfList: pageOfList ?? this.pageOfList,
   );  
 
   @override
   bool operator ==(Object other) => identical(this, other) 
-    || other is GalleryItem && gid == other.gid && token == other.token && showKey == other.showKey && url == other.url && imgUrl == other.imgUrl && imgUrlL == other.imgUrlL && imgHeight == other.imgHeight && imgWidth == other.imgWidth && japaneseTitle == other.japaneseTitle && englishTitle == other.englishTitle && category == other.category && uploader == other.uploader && posted == other.posted && language == other.language && filecount == other.filecount && rating == other.rating && ratingCount == other.ratingCount && torrentcount == other.torrentcount && torrents == other.torrents && filesize == other.filesize && filesizeText == other.filesizeText && visible == other.visible && parent == other.parent && ratingFallBack == other.ratingFallBack && numberOfReviews == other.numberOfReviews && postTime == other.postTime && favoritedCount == other.favoritedCount && favTitle == other.favTitle && favcat == other.favcat && localFav == other.localFav && simpleTags == other.simpleTags && tagsFromApi == other.tagsFromApi && translated == other.translated && tagGroup == other.tagGroup && galleryComment == other.galleryComment && galleryImages == other.galleryImages && apikey == other.apikey && apiuid == other.apiuid && isRatinged == other.isRatinged && colorRating == other.colorRating && archiverLink == other.archiverLink && torrentLink == other.torrentLink && lastViewTime == other.lastViewTime;
+    || other is GalleryItem && gid == other.gid && token == other.token && showKey == other.showKey && url == other.url && imgUrl == other.imgUrl && imgUrlL == other.imgUrlL && imgHeight == other.imgHeight && imgWidth == other.imgWidth && japaneseTitle == other.japaneseTitle && englishTitle == other.englishTitle && category == other.category && uploader == other.uploader && posted == other.posted && language == other.language && filecount == other.filecount && rating == other.rating && ratingCount == other.ratingCount && torrentcount == other.torrentcount && torrents == other.torrents && filesize == other.filesize && filesizeText == other.filesizeText && visible == other.visible && parent == other.parent && ratingFallBack == other.ratingFallBack && numberOfReviews == other.numberOfReviews && postTime == other.postTime && favoritedCount == other.favoritedCount && favTitle == other.favTitle && favcat == other.favcat && localFav == other.localFav && simpleTags == other.simpleTags && tagsFromApi == other.tagsFromApi && translated == other.translated && tagGroup == other.tagGroup && galleryComment == other.galleryComment && galleryImages == other.galleryImages && apikey == other.apikey && apiuid == other.apiuid && isRatinged == other.isRatinged && colorRating == other.colorRating && archiverLink == other.archiverLink && torrentLink == other.torrentLink && lastViewTime == other.lastViewTime && pageOfList == other.pageOfList;
 
   @override
-  int get hashCode => gid.hashCode ^ token.hashCode ^ showKey.hashCode ^ url.hashCode ^ imgUrl.hashCode ^ imgUrlL.hashCode ^ imgHeight.hashCode ^ imgWidth.hashCode ^ japaneseTitle.hashCode ^ englishTitle.hashCode ^ category.hashCode ^ uploader.hashCode ^ posted.hashCode ^ language.hashCode ^ filecount.hashCode ^ rating.hashCode ^ ratingCount.hashCode ^ torrentcount.hashCode ^ torrents.hashCode ^ filesize.hashCode ^ filesizeText.hashCode ^ visible.hashCode ^ parent.hashCode ^ ratingFallBack.hashCode ^ numberOfReviews.hashCode ^ postTime.hashCode ^ favoritedCount.hashCode ^ favTitle.hashCode ^ favcat.hashCode ^ localFav.hashCode ^ simpleTags.hashCode ^ tagsFromApi.hashCode ^ translated.hashCode ^ tagGroup.hashCode ^ galleryComment.hashCode ^ galleryImages.hashCode ^ apikey.hashCode ^ apiuid.hashCode ^ isRatinged.hashCode ^ colorRating.hashCode ^ archiverLink.hashCode ^ torrentLink.hashCode ^ lastViewTime.hashCode;
+  int get hashCode => gid.hashCode ^ token.hashCode ^ showKey.hashCode ^ url.hashCode ^ imgUrl.hashCode ^ imgUrlL.hashCode ^ imgHeight.hashCode ^ imgWidth.hashCode ^ japaneseTitle.hashCode ^ englishTitle.hashCode ^ category.hashCode ^ uploader.hashCode ^ posted.hashCode ^ language.hashCode ^ filecount.hashCode ^ rating.hashCode ^ ratingCount.hashCode ^ torrentcount.hashCode ^ torrents.hashCode ^ filesize.hashCode ^ filesizeText.hashCode ^ visible.hashCode ^ parent.hashCode ^ ratingFallBack.hashCode ^ numberOfReviews.hashCode ^ postTime.hashCode ^ favoritedCount.hashCode ^ favTitle.hashCode ^ favcat.hashCode ^ localFav.hashCode ^ simpleTags.hashCode ^ tagsFromApi.hashCode ^ translated.hashCode ^ tagGroup.hashCode ^ galleryComment.hashCode ^ galleryImages.hashCode ^ apikey.hashCode ^ apiuid.hashCode ^ isRatinged.hashCode ^ colorRating.hashCode ^ archiverLink.hashCode ^ torrentLink.hashCode ^ lastViewTime.hashCode ^ pageOfList.hashCode;
 }

@@ -8,6 +8,7 @@ import 'package:fehviewer/common/global.dart';
 import 'package:fehviewer/const/const.dart';
 import 'package:fehviewer/utils/time.dart';
 import 'package:fehviewer/utils/toast.dart';
+import 'package:flutter/foundation.dart';
 import 'package:pretty_dio_logger/pretty_dio_logger.dart';
 
 import 'dio_retry/options.dart';
@@ -62,7 +63,7 @@ class HttpManager {
       responseHeader: true,
       responseBody: false,
       maxWidth: 120,
-      // logPrint: kDebugMode? loggerSimple.d : loggerSimpleOnlyFile.d,
+      // logPrint: kDebugMode ? loggerSimple.d : loggerSimpleOnlyFile.d,
       logPrint: loggerSimpleOnlyFile.d,
     ));
 
