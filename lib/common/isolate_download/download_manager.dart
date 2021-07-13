@@ -32,12 +32,12 @@ part 'child.dart';
 part 'child_dio.dart';
 part 'protocol.dart';
 
-final DownloadManager downloadManager = DownloadManager();
+final DownloadManagerIsolate downloadManagerIsolate = DownloadManagerIsolate();
 
-class DownloadManager {
-  factory DownloadManager() => _instance;
-  DownloadManager._();
-  static final DownloadManager _instance = DownloadManager._();
+class DownloadManagerIsolate {
+  factory DownloadManagerIsolate() => _instance;
+  DownloadManagerIsolate._();
+  static final DownloadManagerIsolate _instance = DownloadManagerIsolate._();
 
   final ReceivePort _receivePort = ReceivePort();
   SendPort? _sendPortToChild;

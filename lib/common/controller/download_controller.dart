@@ -1,19 +1,14 @@
 import 'dart:io';
-import 'dart:isolate';
-import 'dart:ui';
 
+import 'package:fehviewer/common/download/download_manager.dart';
 import 'package:fehviewer/common/global.dart';
-import 'package:fehviewer/common/isolate/download_manager.dart';
-import 'package:fehviewer/models/index.dart';
-import 'package:fehviewer/pages/tab/controller/download_view_controller.dart';
+import 'package:fehviewer/common/isolate_download/download_manager.dart';
 import 'package:fehviewer/store/floor/dao/gallery_task_dao.dart';
 import 'package:fehviewer/store/floor/dao/image_task_dao.dart';
 import 'package:fehviewer/store/floor/entity/gallery_image_task.dart';
 import 'package:fehviewer/store/floor/entity/gallery_task.dart';
-import 'package:fehviewer/store/get_store.dart';
 import 'package:fehviewer/utils/logger.dart';
 import 'package:fehviewer/utils/toast.dart';
-import 'package:flutter_downloader/flutter_downloader.dart';
 import 'package:get/get.dart';
 import 'package:path/path.dart' as path;
 import 'package:path_provider/path_provider.dart';
@@ -25,8 +20,6 @@ Future<String> get defDownloadPath async => GetPlatform.isAndroid
 class DownloadController extends GetxController {
   final RxMap<String, GalleryTask> galleryTaskMap = <String, GalleryTask>{}.obs;
   final RxList<GalleryTask> galleryTaskList = <GalleryTask>[].obs;
-
-  final GStore _gStore = Get.find();
 
   static Future<GalleryTaskDao> getGalleryTaskDao() async {
     return (await Global.getDatabase()).galleryTaskDao;
@@ -46,8 +39,7 @@ class DownloadController extends GetxController {
 
   @override
   void onClose() {
-    // _unbindBackgroundIsolate();
-    downloadManager.close();
+    downloadManagerIsolate.close();
     super.onClose();
   }
 
@@ -72,7 +64,6 @@ class DownloadController extends GetxController {
         ? path.join(
             (await getExternalStorageDirectory())!.path, 'Download', custpath)
         : path.join(Global.appDocPath, 'Download', custpath);
-    // : Global.appDocPath;
 
     final Directory savedDir = Directory(_dirPath);
     // 判断下载路径是否存在
@@ -120,7 +111,7 @@ class DownloadController extends GetxController {
         logger.e('$gid 任务已存在');
         showToast('下载任务已存在');
         logger.d('${_oriTask.toString()} ');
-        return;
+        // return;
       }
     } catch (e, stack) {
       logger.e('$e\n$stack');
@@ -154,7 +145,7 @@ class DownloadController extends GetxController {
 
     showToast('${galleryTask.gid} 下载任务已入队');
 
-    downloadManager.addTask(
+    downloadManagerIsolate.addTask(
       galleryTask: galleryTask,
       imageTasks: _imageTasks,
       downloadPath: _fullPath,
@@ -190,8 +181,81 @@ class DownloadController extends GetxController {
     galleryTaskList.removeAt(index);
   }
 
+  Future<void> downloadGallery({
+    required String url,
+    required int fileCount,
+    required String title,
+    int? gid,
+    String? token,
+  }) async {
+    GalleryTaskDao _galleryTaskDao;
+    ImageTaskDao _imageTaskDao;
+    try {
+      _galleryTaskDao = await getGalleryTaskDao();
+      _imageTaskDao = await getImageTaskDao();
+    } catch (e, stack) {
+      logger.e('$e\n$stack ');
+      rethrow;
+    }
+
+    int _gid = 0;
+    String _token = '';
+    if (gid == null || token == null) {
+      final RegExpMatch _match =
+          RegExp(r'/g/(\d+)/([0-9a-f]{10})/?').firstMatch(url)!;
+      _gid = int.parse(_match.group(1)!);
+      _token = _match.group(2)!;
+    }
+
+    // 先查询任务是否已存在
+    try {
+      final GalleryTask? _oriTask =
+          await _galleryTaskDao.findGalleryTaskByGid(gid ?? -1);
+      if (_oriTask != null) {
+        logger.e('$gid 任务已存在');
+        showToast('下载任务已存在');
+        logger.d('${_oriTask.toString()} ');
+        // return;
+      }
+    } catch (e, stack) {
+      logger.e('$e\n$stack');
+      rethrow;
+    }
+
+    final String _downloadPath = path.join('$gid - $title');
+    final String _fullPath = await _getGalleryDownloadPath(_downloadPath);
+
+    // 登记主任务表
+    final GalleryTask galleryTask = GalleryTask(
+      gid: gid ?? _gid,
+      token: token ?? _token,
+      url: url,
+      title: title,
+      fileCount: fileCount,
+      dirPath: _fullPath,
+      status: TaskStatus.enqueued.value,
+    );
+    logger.d('add task ${galleryTask.toString()}');
+    try {
+      _galleryTaskDao.insertTask(galleryTask);
+      galleryTaskList.insert(0, galleryTask);
+    } catch (e, stack) {
+      logger.e('$e\n$stack ');
+    }
+
+    final List<GalleryImageTask> _imageTasks =
+        await _imageTaskDao.findAllGalleryTaskByGid(galleryTask.gid);
+
+    showToast('${galleryTask.gid} 下载任务已入队');
+
+    downloadManager.startTask(
+      galleryTask: galleryTask,
+      imageTasksOri: _imageTasks,
+      downloadPath: _fullPath,
+    );
+  }
+
   GalleryTask galleryTaskCompleIncreasing(int gid) {
-    // logger.d('galleryTaskCompleIncreasing $gid');
     final index = galleryTaskList.indexWhere((element) => element.gid == gid);
     final GalleryTask _oriTask = galleryTaskList[index];
     final int _oricc = _oriTask.completCount ?? 0;

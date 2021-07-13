@@ -3,7 +3,7 @@ description: fehviewer
 
 publish_to: 'none' # Remove this line if you wish to publish to pub.dev
 
-version: 1.1.18+227
+version: 1.1.18+228
 
 environment:
   sdk: '>=2.13.0 <3.0.0'
@@ -36,102 +36,67 @@ dependencies:
   cookie_jar: ^3.0.1
   dio_cookie_manager: ^2.0.0
   webview_cookie_manager: ^2.0.0
-
-  #shared_preferences插件 持久化
   shared_preferences: ^2.0.5
-
   # toast
   oktoast: ^3.0.0
-
   # 数据库
   sqflite: ^2.0.0+3
-
   # html反转义
   html_unescape: ^2.0.0
-
   enum_to_string: ^2.0.1
-
   # webview
   flutter_inappwebview: ^5.3.2
-
   html: ^0.15.0
-
   # 文字链接
   flutter_linkify: ^5.0.2
 #  flutter_linkify:
 #    git:
 #      url: https://github.com/MohamedEL-Torky/flutter_linkify
   url_launcher: ^6.0.3
-
   # 元组
   tuple: ^2.0.0
-
   get: ^4.1.4
   get_storage: ^2.0.2
-
   photo_view: ^0.11.1
-
   # 图片相关
   cached_network_image: ^3.0.0
   extended_image: ^4.1.0
   liquid_progress_indicator_ns: ^1.0.0
-
   logger: ^1.0.0
-
   # 瀑布流
   waterfall_flow: ^3.0.1
-#    path: /Users/honjow/git/waterfall_flow
-
   modal_bottom_sheet: ^2.0.0
-
-  # 生物认证 指纹 面容等
   local_auth: ^1.1.5
-
   # 彩蛋
   flutter_egg:
     git:
       url: https://github.com/honjow/flutter_egg.git
-
   # 从分享菜单打开
   receive_sharing_intent: ^1.4.5
-
   # 分享
   share: ^2.0.1
-
   # 权限检查
   permission_handler: ^8.0.0+1
-
   # 缓存
   flutter_cache_manager: ^3.0.2
-
   # 图片保存
   image_gallery_saver: #^1.6.8
     git: https://github.com/dvaldivia/image_gallery_saver.git
-
   # 滑动删除
   flutter_slidable: ^0.6.0
-
   scrollable_positioned_list: ^0.2.0-nullsafety.0
-
   reorderables: ^0.4.1
-
   basic_utils: ^3.0.2
-
   # 震动
   flutter_vibrate:
     git:
       url: https://github.com/honjow/flutter_vibrate.git
-
   # 文件选择
   file_picker: ^3.0.1
-
   # 评星
   flutter_rating_bar: ^4.0.0
-
   custom_pop_up_menu: ^1.2.0
-
   flutter_downloader: ^1.6.0
-
   # 自定义进度步进
 #  flutter_downloader:
 #    git:
@@ -142,7 +107,6 @@ dependencies:
   floor: ^1.1.0
   copy_with_extension: ^2.0.0
   package_info: ^2.0.0
-
 #  firebase_analytics: ^8.0.4
   firebase_crashlytics: ^2.0.3
   firebase_performance: ^0.7.0+2
@@ -151,15 +115,12 @@ dependencies:
 #    git:
 #     url: https://github.com/honjow/dio_firebase_performance.git
   pretty_dio_logger: ^1.2.0-beta-1
-
   translator: ^0.1.7
   pattern_lock: ^2.0.0
   orientation: ^1.3.0
   vibration: ^1.7.4-nullsafety.0
-
   moor_flutter: ^4.0.0
   device_info: ^2.0.1
-
   flutter_statusbar_manager:
     git:
       url: https://github.com/NarHakobyan/flutter_statusbar_manager
@@ -176,6 +137,11 @@ dependencies:
   sprintf: ^6.0.0
   keframe: ^2.0.1
   fps_monitor: ^2.0.0
+  executor: ^2.2.2
+  synchronized: ^3.0.0
+  isolate_handler: ^1.0.0
+  worker_manager: ^4.0.2
+  collection: ^1.15.0
   # 不是SAF的形式
 #  filesystem_picker: ^2.0.0-nullsafety.0
 #  google_ml_kit: ^0.6.0

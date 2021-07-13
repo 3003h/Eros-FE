@@ -189,11 +189,16 @@ class GalleryPageController extends GetxController
 
     // 为了保证能正常关闭
     try {
-      Get.delete<RateController>(tag: pageCtrlDepth);
-      Get.delete<TorrentController>(tag: pageCtrlDepth);
-      Get.delete<ArchiverController>(tag: pageCtrlDepth);
-      Get.delete<CommentController>(tag: pageCtrlDepth);
-      Get.delete<TagInfoController>(tag: pageCtrlDepth);
+      if (Get.isRegistered<RateController>(tag: pageCtrlDepth))
+        Get.delete<RateController>(tag: pageCtrlDepth);
+      if (Get.isRegistered<TorrentController>(tag: pageCtrlDepth))
+        Get.delete<TorrentController>(tag: pageCtrlDepth);
+      if (Get.isRegistered<ArchiverController>(tag: pageCtrlDepth))
+        Get.delete<ArchiverController>(tag: pageCtrlDepth);
+      if (Get.isRegistered<CommentController>(tag: pageCtrlDepth))
+        Get.delete<CommentController>(tag: pageCtrlDepth);
+      if (Get.isRegistered<TagInfoController>(tag: pageCtrlDepth))
+        Get.delete<TagInfoController>(tag: pageCtrlDepth);
     } catch (_) {}
 
     logger.v('onClose GalleryPageController $pageCtrlDepth');
@@ -495,7 +500,7 @@ class GalleryPageController extends GetxController
   }
 
   // 直接请求目的index所在的缩略图页
-  Future<void> loadPriviewsForSer(int ser, {CancelToken? cancelToken}) async {
+  Future<void> loadImagesForSer(int ser, {CancelToken? cancelToken}) async {
     //  计算index所在的页码
     final int flen = firstPageImage.length;
     if (filecount <= flen) {
@@ -603,7 +608,14 @@ class GalleryPageController extends GetxController
   void downloadGallery() {
     final DownloadController _downloadController =
         Get.find<DownloadController>();
-    _downloadController.downloadGalleryIsolate(
+    // _downloadController.downloadGalleryIsolate(
+    //   gid: int.parse(gid),
+    //   token: galleryItem.token,
+    //   url: galleryItem.url!,
+    //   fileCount: int.parse(galleryItem.filecount ?? '0'),
+    //   title: title,
+    // );
+    _downloadController.downloadGallery(
       gid: int.parse(gid),
       token: galleryItem.token,
       url: galleryItem.url!,
