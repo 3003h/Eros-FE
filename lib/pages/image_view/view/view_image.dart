@@ -66,7 +66,7 @@ class _ViewImageState extends State<ViewImage>
       logger.v('ser:$itemSer 所在页尚未获取， 开始获取');
 
       // 直接获取需要的
-      await _pageController.loadPriviewsForSer(itemSer);
+      await _pageController.loadImagesForSer(itemSer);
 
       // logger.v('获取缩略结束后 预载图片');
       GalleryPara.instance

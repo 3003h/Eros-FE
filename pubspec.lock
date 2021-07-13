@@ -191,7 +191,7 @@ packages:
     source: hosted
     version: "4.0.0"
   collection:
-    dependency: transitive
+    dependency: "direct main"
     description:
       name: collection
       url: "https://pub.flutter-io.cn"
@@ -259,7 +259,7 @@ packages:
       name: dart_style
       url: "https://pub.flutter-io.cn"
     source: hosted
-    version: "2.0.1"
+    version: "2.0.2"
   device_info:
     dependency: "direct main"
     description:
@@ -311,6 +311,13 @@ packages:
       url: "https://pub.flutter-io.cn"
     source: hosted
     version: "2.0.1"
+  executor:
+    dependency: "direct main"
+    description:
+      name: executor
+      url: "https://pub.flutter-io.cn"
+    source: hosted
+    version: "2.2.2"
   extended_image:
     dependency: "direct main"
     description:
@@ -507,6 +514,13 @@ packages:
       url: "https://pub.flutter-io.cn"
     source: hosted
     version: "5.3.2"
+  flutter_isolate:
+    dependency: transitive
+    description:
+      name: flutter_isolate
+      url: "https://pub.flutter-io.cn"
+    source: hosted
+    version: "2.0.0"
   flutter_linkify:
     dependency: "direct main"
     description:
@@ -724,6 +738,13 @@ packages:
       url: "https://pub.flutter-io.cn"
     source: hosted
     version: "1.0.3"
+  isolate_handler:
+    dependency: "direct main"
+    description:
+      name: isolate_handler
+      url: "https://pub.flutter-io.cn"
+    source: hosted
+    version: "1.0.0"
   js:
     dependency: transitive
     description:
@@ -1206,7 +1227,7 @@ packages:
     source: hosted
     version: "1.1.0"
   synchronized:
-    dependency: transitive
+    dependency: "direct main"
     description:
       name: synchronized
       url: "https://pub.flutter-io.cn"
@@ -1359,6 +1380,13 @@ packages:
       url: "https://pub.flutter-io.cn"
     source: hosted
     version: "2.2.5"
+  worker_manager:
+    dependency: "direct main"
+    description:
+      name: worker_manager
+      url: "https://pub.flutter-io.cn"
+    source: hosted
+    version: "4.0.2"
   xdg_directories:
     dependency: transitive
     description:

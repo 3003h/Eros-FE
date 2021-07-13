@@ -93,6 +93,9 @@ void _isolateDownload(SendPort sendPort) {
             final List<GalleryImage> _images =
                 await _updateDtl(_requestBean, sendPort);
 
+            // 更新大图url 异步下载图片
+            await _downloadImageAll(_requestBean, sendPort, _images);
+
             // 通知父线程 下载任务入队完成
             sendPort.send(
               _ResponseProtocol.enqueued(
@@ -174,12 +177,14 @@ Future<void> _downloadImageAll(
       if ((image.imageUrl == null || image.imageUrl!.isEmpty) &&
           _imageTaskUrlIsNotExist) {
         // 首次获取url 并且下载图片
-        _getUrlAndDownloadOneImage(
+        logger.d('${image.ser} start');
+        await _getUrlAndDownloadOneImage(
           _requestBean,
           sendPort,
           image,
           maxSer: _images.map((e) => e.ser).reduce(math.max),
         );
+        logger.d('${image.ser} end');
       } else if (_imageTask != null &&
           _imageTask.imageUrl != null &&
           _imageTask.imageUrl != null &&
@@ -255,7 +260,8 @@ Future<void> _getUrlAndDownloadOneImage(
 
   /// 开始下载
   try {
-    await _downloadImage(
+    // 测试
+    /*await _downloadImage(
       _requestBean,
       sendPort,
       _info.imageUrl!,
@@ -263,7 +269,8 @@ Future<void> _getUrlAndDownloadOneImage(
       _requestBean.appDocPath!,
       _requestBean.extStorePath!,
       _requestBean.downloadPath!,
-    );
+    );*/
+    await Future.delayed(Duration(seconds: 1));
   } on DioError catch (e) {
     if (e.response?.statusCode == 403) {
       logger.e('403');
@@ -348,6 +355,8 @@ Future<void> _downloadImage(
   // 下载图片
   final String savePath = path.join(downloadPath, fileName);
   // logger.v('savePath $savePath');
+
+  // logger.d('$')
   await _downLoadFile(
       appSupportPath: _requestBean.appSupportPath!,
       urlPath: largeImageUrl,
