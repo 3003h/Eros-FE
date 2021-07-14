@@ -311,8 +311,9 @@ class DownloadManagerIsolate {
           /// 明细入队完成
           case _ResponseType.enqueued:
             logger.d('明细入队完成');
-            GalleryTask _task = _downloadController.galleryTaskUpdateStatus(
-                _resBean.galleryTask!.gid, TaskStatus.running);
+            GalleryTask _task =
+                await _downloadController.galleryTaskUpdateStatus(
+                    _resBean.galleryTask!.gid, TaskStatus.running);
             await _galleryTaskDao.updateTask(_task);
             break;
 
@@ -324,7 +325,7 @@ class DownloadManagerIsolate {
                   await _imageTaskDao.countImageTaskByGidAndStatus(
                       _resBean.galleryTask!.gid, TaskStatus.complete.value);
               if (_compleImageTasks.length == _resBean.galleryTask!.fileCount) {
-                GalleryTask _task = _downloadController
+                GalleryTask _task = await _downloadController
                     .galleryTaskComplete(_resBean.galleryTask!.gid);
                 await _galleryTaskDao.updateTask(_task);
               } else {

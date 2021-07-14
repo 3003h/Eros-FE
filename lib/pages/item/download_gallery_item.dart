@@ -82,7 +82,7 @@ class DownloadGalleryItem extends GetView<DownloadViewController> {
             size: 14,
           ),
           onPressed: () {
-            // controller.pauseArchiverDownload(taskId: _taskInfo.taskId);
+            controller.pauseGalleryDownload(_taskInfo.gid);
           },
         ),
       ),
@@ -110,7 +110,7 @@ class DownloadGalleryItem extends GetView<DownloadViewController> {
             size: 14,
           ),
           onPressed: () {
-            controller.resumeArchiverDownload(index);
+            controller.resumeGalleryDownload(_taskInfo.gid);
           },
         ),
       ),

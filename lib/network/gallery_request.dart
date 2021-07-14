@@ -5,6 +5,7 @@ import 'dart:typed_data';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cookie_jar/cookie_jar.dart';
 import 'package:dio/dio.dart' as dio;
+import 'package:dio/dio.dart';
 import 'package:dio_http_cache/dio_http_cache.dart';
 import 'package:enum_to_string/enum_to_string.dart';
 import 'package:extended_image/extended_image.dart';
@@ -1118,6 +1119,7 @@ class Api {
     required int ser,
     bool refresh = false,
     String? sourceId,
+    CancelToken? cancelToken,
   }) async {
     final String url = href;
 
@@ -1134,6 +1136,7 @@ class Api {
             forceRefresh: refresh,
           ),
           params: _params,
+          cancelToken: cancelToken,
         ) ??
         '';
     // logger.d('url:$url _params:$_params');
@@ -1143,8 +1146,12 @@ class Api {
     return paraImage(response, href).copyWith(ser: ser);
   }
 
-  static Future<void> download(String url, String path) async {
+  static Future<void> download(
+    String url,
+    String path, {
+    dio.CancelToken? cancelToken,
+  }) async {
     await CustomHttpsProxy.instance.init();
-    Api.getHttpManager().downLoadFile(url, path);
+    Api.getHttpManager().downLoadFile(url, path, cancelToken: cancelToken);
   }
 }

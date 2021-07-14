@@ -153,7 +153,12 @@ class HttpManager {
       response = await _dio.get<String>(url,
           queryParameters: params, options: options, cancelToken: cancelToken);
     } on DioError catch (e, stack) {
-      logger.e('getHttp exception: $e\n$stack');
+      if (CancelToken.isCancel(e)) {
+        // print('$e');
+      } else {
+        logger.e('getHttp exception: $e\n$stack');
+      }
+
       formatError(e);
       rethrow;
     }
@@ -224,7 +229,10 @@ class HttpManager {
 
   //下载文件
   Future<Response<dynamic>> downLoadFile(
-      String urlPath, String savePath) async {
+    String urlPath,
+    String savePath, {
+    CancelToken? cancelToken,
+  }) async {
     late Response<dynamic> response;
     try {
       response = await _dio.download(
@@ -236,10 +244,14 @@ class HttpManager {
         options: Options(
           receiveTimeout: 0,
         ),
+        cancelToken: cancelToken,
       );
       // print('downLoadFile response: $response');
     } on DioError catch (e) {
-      logger.e('downLoadFile exception: $e');
+      // logger.e('downLoadFile exception: $e');
+      if (CancelToken.isCancel(e)) {
+        // print('$e');
+      }
       formatError(e);
       rethrow;
     }

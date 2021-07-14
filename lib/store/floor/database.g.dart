@@ -85,7 +85,7 @@ class _$EhDatabase extends EhDatabase {
       },
       onCreate: (database, version) async {
         await database.execute(
-            'CREATE TABLE IF NOT EXISTS `GalleryTask` (`gid` INTEGER NOT NULL, `token` TEXT NOT NULL, `url` TEXT, `title` TEXT NOT NULL, `dirPath` TEXT, `fileCount` INTEGER, `completCount` INTEGER, `status` INTEGER, PRIMARY KEY (`gid`))');
+            'CREATE TABLE IF NOT EXISTS `GalleryTask` (`gid` INTEGER NOT NULL, `token` TEXT NOT NULL, `url` TEXT, `title` TEXT NOT NULL, `dirPath` TEXT, `fileCount` INTEGER NOT NULL, `completCount` INTEGER, `status` INTEGER, PRIMARY KEY (`gid`))');
         await database.execute(
             'CREATE TABLE IF NOT EXISTS `GalleryImageTask` (`gid` INTEGER NOT NULL, `ser` INTEGER NOT NULL, `token` TEXT NOT NULL, `href` TEXT, `sourceId` TEXT, `imageUrl` TEXT, `filePath` TEXT, `status` INTEGER, PRIMARY KEY (`gid`, `ser`))');
         await database.execute(
@@ -167,7 +167,7 @@ class _$GalleryTaskDao extends GalleryTaskDao {
             url: row['url'] as String?,
             title: row['title'] as String,
             dirPath: row['dirPath'] as String?,
-            fileCount: row['fileCount'] as int?,
+            fileCount: row['fileCount'] as int,
             completCount: row['completCount'] as int?,
             status: row['status'] as int?));
   }
@@ -181,7 +181,7 @@ class _$GalleryTaskDao extends GalleryTaskDao {
             url: row['url'] as String?,
             title: row['title'] as String,
             dirPath: row['dirPath'] as String?,
-            fileCount: row['fileCount'] as int?,
+            fileCount: row['fileCount'] as int,
             completCount: row['completCount'] as int?,
             status: row['status'] as int?),
         queryableName: 'GalleryTask',
@@ -197,7 +197,7 @@ class _$GalleryTaskDao extends GalleryTaskDao {
             url: row['url'] as String?,
             title: row['title'] as String,
             dirPath: row['dirPath'] as String?,
-            fileCount: row['fileCount'] as int?,
+            fileCount: row['fileCount'] as int,
             completCount: row['completCount'] as int?,
             status: row['status'] as int?),
         arguments: [gid]);
