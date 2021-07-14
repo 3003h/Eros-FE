@@ -145,4 +145,13 @@ class DownloadViewController extends GetxController {
           );
         });
   }
+
+  // gallery 暂停任务
+  void pauseGalleryDownload(int gid) {
+    _downloadController.galleryTaskPaused(gid);
+  }
+
+  void resumeGalleryDownload(int gid) {
+    _downloadController.galleryTaskResume(gid);
+  }
 }

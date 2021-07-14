@@ -13,7 +13,7 @@ class GalleryTask {
       this.url,
       required this.title,
       required this.dirPath,
-      this.fileCount,
+      required this.fileCount,
       this.completCount,
       this.status});
 
@@ -23,7 +23,7 @@ class GalleryTask {
   final String? url;
   final String title;
   final String? dirPath;
-  final int? fileCount;
+  final int fileCount;
   final int? completCount;
   final int? status;
 
