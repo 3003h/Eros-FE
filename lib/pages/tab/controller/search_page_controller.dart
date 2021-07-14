@@ -55,7 +55,7 @@ class SearchPageController extends TabViewController {
   //     CustomPopupMenuController();
 
   // 搜索输入框的控制器
-  final TextEditingController searchTextController = TextEditingController();
+  late final TextEditingController searchTextController;
 
   bool get textIsNotEmpty => searchTextController.text.isNotEmpty;
 
@@ -346,6 +346,8 @@ class SearchPageController extends TabViewController {
 
   @override
   void onInit() {
+    searchTextController = TextEditingController();
+
     fetchNormal = Api.getGallery;
     searchHistory = _gStore.searchHistory;
     _autoComplete = initSearchText?.trim().isNotEmpty ?? false;
@@ -368,7 +370,7 @@ class SearchPageController extends TabViewController {
 
   @override
   void onClose() {
-    searchTextController.dispose();
+    // searchTextController.dispose();
     Get.find<DepthService>().popSearchPageCtrl();
     super.onClose();
   }
