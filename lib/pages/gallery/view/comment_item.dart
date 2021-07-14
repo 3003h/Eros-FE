@@ -2,6 +2,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:fehviewer/common/global.dart';
 import 'package:fehviewer/common/service/depth_service.dart';
 import 'package:fehviewer/common/service/ehconfig_service.dart';
+import 'package:fehviewer/common/service/theme_service.dart';
 import 'package:fehviewer/const/const.dart';
 import 'package:fehviewer/const/theme_colors.dart';
 import 'package:fehviewer/generated/l10n.dart';
@@ -362,6 +363,8 @@ class CommentItem extends StatelessWidget {
         tag: pageCtrlDepth,
         id: galleryComment.id ?? 'None',
         builder: (CommentController _commentController) {
+          final ThemeService themeService = Get.find();
+
           return Container(
             margin: const EdgeInsets.only(top: 8),
             child: ClipRRect(
@@ -388,9 +391,12 @@ class CommentItem extends StatelessWidget {
                             children: <Widget>[
                               // 翻译
                               if (_ehConfigService.commentTrans.value)
-                                TranslateButton(
-                                  galleryComment: galleryComment,
-                                  commentController: _commentController,
+                                CupertinoTheme(
+                                  data: themeService.themeData!,
+                                  child: TranslateButton(
+                                    galleryComment: galleryComment,
+                                    commentController: _commentController,
+                                  ),
                                 ),
                               // 点赞
                               if (galleryComment.canVote ?? false)

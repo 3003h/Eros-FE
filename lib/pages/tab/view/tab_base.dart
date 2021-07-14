@@ -104,7 +104,7 @@ SliverList buildGallerySliverListView(
                 //     : GalleryItemPlaceHolder(),
                 if (Get.find<EhConfigService>().debugMode)
                   Positioned(
-                    right: 4,
+                    right: 12,
                     top: 4,
                     child: Text('${index + 1}',
                         style: const TextStyle(
@@ -113,8 +113,8 @@ SliverList buildGallerySliverListView(
                             shadows: <Shadow>[
                               Shadow(
                                 color: Colors.black,
-                                offset: Offset(2, 2),
-                                blurRadius: 4,
+                                offset: Offset(1, 1),
+                                blurRadius: 2.5,
                               )
                             ])),
                   ),
