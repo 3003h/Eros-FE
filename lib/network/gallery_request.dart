@@ -437,25 +437,25 @@ class Api {
 
   /// 由图片url获取解析图库 showkey
   /// [href] 画廊图片展示页面的地址
-  static Future<String> getShowkey(
-    String href, {
-    bool refresh = false,
-  }) async {
-    final String url = href;
-
-    await CustomHttpsProxy.instance.init();
-    final String response = await getHttpManager()
-            .get(url, options: getCacheOptions(forceRefresh: refresh)) ??
-        '';
-
-    final RegExp regShowKey = RegExp(r'var showkey="([0-9a-z]+)";');
-
-    final String showkey = regShowKey.firstMatch(response)?.group(1) ?? '';
-
-//    logger.v('$showkey');
-
-    return showkey;
-  }
+//   static Future<String> getShowkey(
+//     String href, {
+//     bool refresh = false,
+//   }) async {
+//     final String url = href;
+//
+//     await CustomHttpsProxy.instance.init();
+//     final String response = await getHttpManager()
+//             .get(url, options: getCacheOptions(forceRefresh: refresh)) ??
+//         '';
+//
+//     final RegExp regShowKey = RegExp(r'var showkey="([0-9a-z]+)";');
+//
+//     final String showkey = regShowKey.firstMatch(response)?.group(1) ?? '';
+//
+// //    logger.v('$showkey');
+//
+//     return showkey;
+//   }
 
   // 获取TorrentToken
   static Future<String> getTorrentToken(
@@ -1113,7 +1113,7 @@ class Api {
   /// 获取画廊图片的信息
   /// [href] 爬取的页面地址 用来解析gid 和 imgkey
   /// [ser] 序号
-  static Future<GalleryImage> ftchImageInfo(
+  static Future<GalleryImage> fetchImageInfo(
     String href, {
     required int ser,
     bool refresh = false,

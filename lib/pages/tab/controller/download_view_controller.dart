@@ -45,8 +45,7 @@ class DownloadViewController extends GetxController {
           .map((MapEntry<String, DownloadTaskInfo> e) => e.value)
           .toList();
 
-  List<GalleryTask> get galleryTasks =>
-      _archiverDownloadController.galleryTaskList;
+  List<GalleryTask> get galleryTasks => _downloadController.galleryTaskList;
 
   // Archiver暂停任务
   Future<void> pauseArchiverDownload({required String? taskId}) async {
@@ -72,9 +71,6 @@ class DownloadViewController extends GetxController {
 
     logger.d('oritaskid $_oriTaskid,  newID $_newTaskId');
     if (_newTaskId != null && archiverTasks[index].tag != null) {
-      // _downloadController.archiverTaskMap[archiverTasks[index].tag]?.taskId =
-      //     _newTaskId;
-
       _archiverDownloadController.archiverTaskMap[archiverTasks[index].tag!] =
           _archiverDownloadController
               .archiverTaskMap[archiverTasks[index].tag!]!
@@ -96,8 +92,6 @@ class DownloadViewController extends GetxController {
 
     logger.d('oritaskid $_oriTaskid,  newID $_newTaskId');
     if (_newTaskId != null && archiverTasks[index].tag != null) {
-      // _downloadController.archiverTaskMap[archiverTasks[index].tag].taskId =
-      //     _newTaskId;
       _archiverDownloadController.archiverTaskMap[archiverTasks[index].tag!] =
           _archiverDownloadController
               .archiverTaskMap[archiverTasks[index].tag!]!
@@ -116,7 +110,7 @@ class DownloadViewController extends GetxController {
 
   // Gallery 移除任务
   void removeGalleryTask(int index) {
-    _downloadController.removeDownloadGalleryTaskIsolate(index: index);
+    _downloadController.removeDownloadGalleryTask(index: index);
   }
 
   void onLongPress(int index, {DownloadType type = DownloadType.gallery}) {

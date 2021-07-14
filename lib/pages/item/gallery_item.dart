@@ -15,7 +15,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
 
 const double kPaddingHorizontal = 12.0;
-const double kPaddingVertical = 12.0;
+const double kPaddingVertical = 18.0;
 
 /// 画廊列表项
 /// 标题和tag需要随设置变化重构ui

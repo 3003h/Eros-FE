@@ -53,12 +53,9 @@ SliverPadding buildWaterfallFlow(
           }
 
           return large
-              ? FrameSeparateWidget(
-                  index: index,
-                  child: GalleryItemFlowLarge(
-                    galleryItem: gallerItemBeans[index],
-                    tabTag: tabTag,
-                  ),
+              ? GalleryItemFlowLarge(
+                  galleryItem: gallerItemBeans[index],
+                  tabTag: tabTag,
                 )
               : GalleryItemFlow(
                   galleryItem: gallerItemBeans[index],

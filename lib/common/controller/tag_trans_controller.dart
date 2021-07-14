@@ -7,7 +7,6 @@ import 'package:fehviewer/common/service/ehconfig_service.dart';
 import 'package:fehviewer/const/const.dart';
 import 'package:fehviewer/extension.dart';
 import 'package:fehviewer/store/floor/dao/tag_translat_dao.dart';
-import 'package:fehviewer/store/floor/database.dart';
 import 'package:fehviewer/store/floor/entity/tag_translat.dart';
 import 'package:fehviewer/utils/dio_util.dart';
 import 'package:fehviewer/utils/logger.dart';
