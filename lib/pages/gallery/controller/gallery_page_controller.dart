@@ -572,7 +572,7 @@ class GalleryPageController extends GetxController
         //     'ser:$itemSer ,href: ${galleryItem.previewMap[itemSer]?.href} , _sourceId: $_sourceId');
 
         try {
-          final GalleryImage _image = await Api.ftchImageInfo(
+          final GalleryImage _image = await Api.fetchImageInfo(
             galleryItem.imageMap[itemSer]?.href ?? '',
             ser: itemSer,
             refresh: changeSource,

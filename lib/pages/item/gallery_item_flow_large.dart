@@ -9,7 +9,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
-import 'package:keframe/frame_separate_widget.dart';
 
 import 'gallery_clipper.dart';
 import 'gallery_item.dart';

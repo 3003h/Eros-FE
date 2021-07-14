@@ -4,7 +4,6 @@ import 'package:fehviewer/models/index.dart';
 import 'package:fehviewer/pages/item/download_archiver_item.dart';
 import 'package:fehviewer/pages/item/download_gallery_item.dart';
 import 'package:fehviewer/pages/tab/controller/download_view_controller.dart';
-import 'package:fehviewer/store/floor/entity/gallery_task.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_downloader/flutter_downloader.dart';
@@ -116,13 +115,6 @@ class DownloadArchiverView extends GetView<DownloadViewController> {
 class DownloadGalleryView extends GetView<DownloadViewController> {
   @override
   Widget build(BuildContext context) {
-    // return Container(
-    //   alignment: Alignment.center,
-    //   child: const Text(
-    //     '[ G ]',
-    //     style: TextStyle(fontSize: 50),
-    //   ),
-    // );
     return Obx(() {
       return ListView.separated(
         itemBuilder: (_, int _taskIndex) {

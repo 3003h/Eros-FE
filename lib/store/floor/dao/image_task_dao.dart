@@ -19,11 +19,19 @@ abstract class ImageTaskDao {
   @insert
   Future<void> insertImageTasks(List<GalleryImageTask> galleryImageTasks);
 
+  @Insert(onConflict: OnConflictStrategy.replace)
+  Future<void> insertOrReplaceImageTasks(
+      List<GalleryImageTask> galleryImageTasks);
+
   @update
   Future<void> updateImageTask(GalleryImageTask galleryImageTask);
 
   @Query('DELETE FROM GalleryImageTask WHERE gid = :gid')
   Future<void> deleteImageTaskByGid(int gid);
+
+  @Query(
+      'UPDATE GalleryImageTask SET status = :status WHERE gid = :gid AND ser = :ser ')
+  Future<void> updateImageTaskStatus(int gid, int ser, int status);
 
   @Query('SELECT * FROM GalleryImageTask WHERE gid = :gid AND status = :status')
   Future<List<GalleryImageTask>> countImageTaskByGidAndStatus(

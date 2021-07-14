@@ -50,7 +50,9 @@ Future<bool> preCommit() async {
     if (branch.startsWith('v')) {
       increaseBuildNum = true;
     } else {
-      if (commitMsg.startsWith('Feat') || commitMsg.startsWith('Fix')) {
+      if (commitMsg.startsWith('Feat') ||
+          commitMsg.startsWith('Fix') ||
+          commitMsg.startsWith('Refactor')) {
         increaseBuildNum = true;
       } else {
         increaseBuildNum = false;

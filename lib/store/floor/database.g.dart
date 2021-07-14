@@ -324,6 +324,13 @@ class _$ImageTaskDao extends ImageTaskDao {
   }
 
   @override
+  Future<void> updateImageTaskStatus(int gid, int ser, int status) async {
+    await _queryAdapter.queryNoReturn(
+        'UPDATE GalleryImageTask SET status = ?3 WHERE gid = ?1 AND ser = ?2',
+        arguments: [gid, ser, status]);
+  }
+
+  @override
   Future<List<GalleryImageTask>> countImageTaskByGidAndStatus(
       int gid, int status) async {
     return _queryAdapter.queryList(
@@ -351,6 +358,13 @@ class _$ImageTaskDao extends ImageTaskDao {
       List<GalleryImageTask> galleryImageTasks) async {
     await _galleryImageTaskInsertionAdapter.insertList(
         galleryImageTasks, OnConflictStrategy.abort);
+  }
+
+  @override
+  Future<void> insertOrReplaceImageTasks(
+      List<GalleryImageTask> galleryImageTasks) async {
+    await _galleryImageTaskInsertionAdapter.insertList(
+        galleryImageTasks, OnConflictStrategy.replace);
   }
 
   @override

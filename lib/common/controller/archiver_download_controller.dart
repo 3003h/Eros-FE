@@ -26,9 +26,6 @@ class ArchiverDownloadController extends GetxController {
 
   final List<String> _archiverDlIdList = <String>[];
 
-  final RxMap<String, GalleryTask> galleryTaskMap = <String, GalleryTask>{}.obs;
-  final RxList<GalleryTask> galleryTaskList = <GalleryTask>[].obs;
-
   final GStore _gStore = Get.find();
 
   static Future<GalleryTaskDao> getGalleryTaskDao() async {

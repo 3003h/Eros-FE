@@ -71,7 +71,7 @@ class GalleryPara {
 
         // paraImageLageInfoFromHtml
         final GalleryImage _imageFromApi =
-            await Api.ftchImageInfo(_href, ser: _ser);
+            await Api.fetchImageInfo(_href, ser: _ser);
 
         _url = _imageFromApi.imageUrl ?? '';
 
