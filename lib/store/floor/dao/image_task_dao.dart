@@ -5,13 +5,13 @@ import '../entity/gallery_image_task.dart';
 @dao
 abstract class ImageTaskDao {
   @Query('SELECT * FROM GalleryImageTask')
-  Future<List<GalleryImageTask>> findAllImageTasks();
+  Future<List<GalleryImageTask>> findAllTasks();
 
   @Query('SELECT * FROM GalleryImageTask WHERE gid = :gid')
-  Future<List<GalleryImageTask>> findAllGalleryTaskByGid(int gid);
+  Future<List<GalleryImageTask>> findAllTaskByGid(int gid);
 
   @Query('SELECT * FROM GalleryImageTask WHERE gid = :gid and ser = :ser')
-  Future<GalleryImageTask?> findGalleryTaskByKey(int gid, int ser);
+  Future<GalleryImageTask?> findTaskByKey(int gid, int ser);
 
   @insert
   Future<void> insertImageTask(GalleryImageTask galleryImageTask);
@@ -34,6 +34,5 @@ abstract class ImageTaskDao {
   Future<void> updateImageTaskStatus(int gid, int ser, int status);
 
   @Query('SELECT * FROM GalleryImageTask WHERE gid = :gid AND status = :status')
-  Future<List<GalleryImageTask>> countImageTaskByGidAndStatus(
-      int gid, int status);
+  Future<List<GalleryImageTask>> finaAllTaskByGidAndStatus(int gid, int status);
 }

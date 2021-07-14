@@ -232,6 +232,7 @@ class HttpManager {
     String urlPath,
     String savePath, {
     CancelToken? cancelToken,
+    bool? errToast = false,
   }) async {
     late Response<dynamic> response;
     try {
@@ -252,7 +253,7 @@ class HttpManager {
       if (CancelToken.isCancel(e)) {
         // print('$e');
       }
-      formatError(e);
+      if (errToast ?? false) formatError(e);
       rethrow;
     }
     return response;

@@ -271,7 +271,7 @@ class _$ImageTaskDao extends ImageTaskDao {
   final UpdateAdapter<GalleryImageTask> _galleryImageTaskUpdateAdapter;
 
   @override
-  Future<List<GalleryImageTask>> findAllImageTasks() async {
+  Future<List<GalleryImageTask>> findAllTasks() async {
     return _queryAdapter.queryList('SELECT * FROM GalleryImageTask',
         mapper: (Map<String, Object?> row) => GalleryImageTask(
             gid: row['gid'] as int,
@@ -285,7 +285,7 @@ class _$ImageTaskDao extends ImageTaskDao {
   }
 
   @override
-  Future<List<GalleryImageTask>> findAllGalleryTaskByGid(int gid) async {
+  Future<List<GalleryImageTask>> findAllTaskByGid(int gid) async {
     return _queryAdapter.queryList(
         'SELECT * FROM GalleryImageTask WHERE gid = ?1',
         mapper: (Map<String, Object?> row) => GalleryImageTask(
@@ -301,7 +301,7 @@ class _$ImageTaskDao extends ImageTaskDao {
   }
 
   @override
-  Future<GalleryImageTask?> findGalleryTaskByKey(int gid, int ser) async {
+  Future<GalleryImageTask?> findTaskByKey(int gid, int ser) async {
     return _queryAdapter.query(
         'SELECT * FROM GalleryImageTask WHERE gid = ?1 and ser = ?2',
         mapper: (Map<String, Object?> row) => GalleryImageTask(
@@ -331,7 +331,7 @@ class _$ImageTaskDao extends ImageTaskDao {
   }
 
   @override
-  Future<List<GalleryImageTask>> countImageTaskByGidAndStatus(
+  Future<List<GalleryImageTask>> finaAllTaskByGidAndStatus(
       int gid, int status) async {
     return _queryAdapter.queryList(
         'SELECT * FROM GalleryImageTask WHERE gid = ?1 AND status = ?2',
