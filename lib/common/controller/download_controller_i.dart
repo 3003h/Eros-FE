@@ -140,7 +140,7 @@ class DownloadControllerI extends GetxController {
     }
 
     final List<GalleryImageTask> _imageTasks =
-        await _imageTaskDao.findAllGalleryTaskByGid(galleryTask.gid);
+        await _imageTaskDao.findAllTaskByGid(galleryTask.gid);
 
     showToast('${galleryTask.gid} 下载任务已入队');
 

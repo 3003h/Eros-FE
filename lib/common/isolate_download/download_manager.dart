@@ -220,7 +220,7 @@ class DownloadManagerIsolate {
 
             // 测试 插入结果
             final List<GalleryImageTask> _list =
-                await _imageTaskDao.findAllGalleryTaskByGid(_galleryTask.gid);
+                await _imageTaskDao.findAllTaskByGid(_galleryTask.gid);
             logger.d('${_list.map((e) => e.toString()).join('\n')} ');
 
             logger.d('任务明细初始化 gid:${_galleryTask.gid} 完成');
@@ -242,7 +242,7 @@ class DownloadManagerIsolate {
 
             for (final _uptImageTask in _progess.updateImages!) {
               _imageTaskDao
-                  .findGalleryTaskByKey(_uptImageTask.gid, _uptImageTask.ser)
+                  .findTaskByKey(_uptImageTask.gid, _uptImageTask.ser)
                   .then((GalleryImageTask? _oriImageTask) =>
                       _oriImageTask?.copyWith(
                         imageUrl: _uptImageTask.imageUrl,
@@ -322,7 +322,7 @@ class DownloadManagerIsolate {
             // logger.i('${_resBean.msg} ');
             if (_resBean.galleryTask != null) {
               final _compleImageTasks =
-                  await _imageTaskDao.countImageTaskByGidAndStatus(
+                  await _imageTaskDao.finaAllTaskByGidAndStatus(
                       _resBean.galleryTask!.gid, TaskStatus.complete.value);
               if (_compleImageTasks.length == _resBean.galleryTask!.fileCount) {
                 GalleryTask _task = await _downloadController

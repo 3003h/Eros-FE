@@ -126,7 +126,7 @@ class DownloadGalleryView extends GetView<DownloadViewController> {
             child: DownloadGalleryItem(
               title: _taskInfo.title,
               status: TaskStatus(_taskInfo.status ?? 0),
-              filecount: _taskInfo.fileCount ?? 0,
+              filecount: _taskInfo.fileCount,
               completeCount: _taskInfo.completCount ?? 0,
               index: _taskIndex,
             ),

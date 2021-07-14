@@ -1150,8 +1150,13 @@ class Api {
     String url,
     String path, {
     dio.CancelToken? cancelToken,
+    bool? errToast,
   }) async {
     await CustomHttpsProxy.instance.init();
-    Api.getHttpManager().downLoadFile(url, path, cancelToken: cancelToken);
+    await Api.getHttpManager().downLoadFile(
+      url,
+      path,
+      cancelToken: cancelToken,
+    );
   }
 }
