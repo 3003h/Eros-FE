@@ -7,6 +7,7 @@ import 'package:executor/executor.dart';
 import 'package:fehviewer/common/global.dart';
 import 'package:fehviewer/common/isolate_download/download_manager.dart';
 import 'package:fehviewer/common/service/depth_service.dart';
+import 'package:fehviewer/common/service/ehconfig_service.dart';
 import 'package:fehviewer/models/base/eh_models.dart';
 import 'package:fehviewer/network/gallery_request.dart';
 import 'package:fehviewer/pages/gallery/controller/gallery_page_controller.dart';
@@ -32,7 +33,7 @@ class DownloadController extends GetxController {
 
   final RxList<GalleryTask> galleryTaskList = <GalleryTask>[].obs;
 
-  final Executor executor = Executor(concurrency: 5);
+  late Executor executor;
 
   final downloadMap = <String, List<GalleryImage>>{};
   final _cancelTokenMap = <String, CancelToken>{};
@@ -45,11 +46,13 @@ class DownloadController extends GetxController {
     return (await Global.getDatabase()).imageTaskDao;
   }
 
+  EhConfigService ehConfigService = Get.find();
+
   @override
   void onInit() {
     super.onInit();
-    logger.d('DownloadController onInit');
-
+    logger.d('DownloadController onInit ${ehConfigService.multiDownload}');
+    executor = Executor(concurrency: ehConfigService.multiDownload);
     _initGalleryTasks();
   }
 
@@ -57,6 +60,20 @@ class DownloadController extends GetxController {
   void onClose() {
     downloadManagerIsolate.close();
     super.onClose();
+  }
+
+  void resetConcurrency() {
+    // 取消所有任务
+    for (final ct in _cancelTokenMap.values) {
+      if (!ct.isCancelled) {
+        ct.cancel();
+      }
+    }
+    logger.d('reset multiDownload ${ehConfigService.multiDownload}');
+    executor = Executor(concurrency: ehConfigService.multiDownload);
+
+    // 重新加入
+    _initGalleryTasks();
   }
 
   Future<void> _initGalleryTasks() async {
@@ -400,73 +417,38 @@ class DownloadController extends GetxController {
               downloadPath!,
               maxSer,
               cancelToken: _cancelToken,
+              onDownloadComplete: () async {
+                loggerSimple.d('$itemSer complete');
+
+                // 下载完成 更新数据库明细
+                // logger.d('下载完成 更新数据库明细');
+                await _imageTaskDao.updateImageTaskStatus(
+                  galleryTask.gid,
+                  itemSer,
+                  TaskStatus.complete.value,
+                );
+
+                // 更新ui
+                final List<GalleryImageTask> listComplete =
+                    await _imageTaskDao.finaAllTaskByGidAndStatus(
+                        galleryTask.gid, TaskStatus.complete.value);
+
+                final _task = galleryTaskCountUpdate(
+                    galleryTask.gid, listComplete.length);
+                if (_task.fileCount == listComplete.length) {
+                  galleryTaskComplete(galleryTask.gid);
+                }
+
+                await _galleryTaskDao.updateTask(_task);
+              },
             );
-
-            // 下载完成 更新数据库明细
-            // logger.d('下载完成 更新数据库明细');
-            await _imageTaskDao.updateImageTaskStatus(
-              galleryTask.gid,
-              itemSer,
-              TaskStatus.complete.value,
-            );
-
-            // 更新ui
-            final List<GalleryImageTask> listComplete =
-                await _imageTaskDao.finaAllTaskByGidAndStatus(
-                    galleryTask.gid, TaskStatus.complete.value);
-
-            final _task =
-                galleryTaskCountUpdate(galleryTask.gid, listComplete.length);
-            if (_task.fileCount == listComplete.length) {
-              galleryTaskComplete(galleryTask.gid);
-            }
-
-            _galleryTaskDao.updateTask(_task);
           } on DioError catch (e) {
             if (!CancelToken.isCancel(e)) {
               rethrow;
             }
 
-            loggerSimple.v('$itemSer 取消');
+            // loggerSimple.d('$itemSer Cancel');
           }
-
-          ///
-          // await _downloadImage(
-          //   tImage,
-          //   imageTasksOri.length > index ? imageTasksOri[index] : null,
-          //   gidStr,
-          //   downloadPath!,
-          //   maxSer,
-          //   cancelToken: _cancelToken,
-          // ).then((_) {
-          //   return _imageTaskDao.updateImageTaskStatus(
-          //     galleryTask.gid,
-          //     itemSer,
-          //     TaskStatus.complete.value,
-          //   );
-          // }).then((_) {
-          //   return _imageTaskDao.updateImageTaskStatus(
-          //     galleryTask.gid,
-          //     itemSer,
-          //     TaskStatus.complete.value,
-          //   );
-          // }).then((_) {
-          //   return _imageTaskDao.finaAllTaskByGidAndStatus(
-          //       galleryTask.gid, TaskStatus.complete.value);
-          // }).then((List<GalleryImageTask> listComplete) {
-          //   final _task =
-          //       galleryTaskCountUpdate(galleryTask.gid, listComplete.length);
-          //   if (_task.fileCount == listComplete.length) {
-          //     galleryTaskComplete(galleryTask.gid);
-          //   }
-          //
-          //   _galleryTaskDao.updateTask(_task);
-          // }).catchError((e) {
-          //   if (!CancelToken.isCancel(e)) {
-          //     throw e;
-          //   }
-          //   loggerSimple.v('$itemSer 取消');
-          // });
         }
       });
     }
@@ -519,6 +501,7 @@ class DownloadController extends GetxController {
     String downloadPath,
     int maxSer, {
     CancelToken? cancelToken,
+    VoidCallback? onDownloadComplete,
   }) async {
     loggerSimple.v('${image.ser} start');
 
@@ -558,14 +541,12 @@ class DownloadController extends GetxController {
       await _updateImageTask(gid, imageFetched, fileName: _fileName);
     }
 
-    // dio下载
-    // await Future.delayed(Duration(milliseconds: 800));
-
     try {
       await Api.download(
         _imageUrl,
         path.join(downloadPath, _fileName),
         cancelToken: cancelToken,
+        onDownloadComplete: onDownloadComplete,
       );
     } on DioError catch (e) {
       if (e.type == DioErrorType.response && e.response?.statusCode == 403) {
@@ -589,12 +570,10 @@ class DownloadController extends GetxController {
           _imageUrl,
           path.join(downloadPath, _fileName),
           cancelToken: cancelToken,
+          onDownloadComplete: onDownloadComplete,
         );
       }
     }
-
-    // 下载完成
-    loggerSimple.d('${image.ser} complete');
   }
 
   String _getFileName(GalleryImage gimage, int maxSer) {

@@ -1151,12 +1151,16 @@ class Api {
     String path, {
     dio.CancelToken? cancelToken,
     bool? errToast,
+    bool deleteOnError = true,
+    VoidCallback? onDownloadComplete,
   }) async {
     await CustomHttpsProxy.instance.init();
     await Api.getHttpManager().downLoadFile(
       url,
       path,
       cancelToken: cancelToken,
+      deleteOnError: deleteOnError,
+      onDownloadComplete: onDownloadComplete,
     );
   }
 }

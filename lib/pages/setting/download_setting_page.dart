@@ -59,6 +59,7 @@ class ListViewDownloadSetting extends StatelessWidget {
               });
         }),
       _buildPreloadImageItem(context),
+      _buildMultiDownloadItem(context),
     ];
     return ListView.builder(
       itemCount: _list.length,
@@ -109,6 +110,54 @@ Widget _buildPreloadImageItem(BuildContext context) {
           final int? _result = await _showActionSheet(context);
           if (_result != null) {
             ehConfigService.preloadImage(_result);
+          }
+        },
+      ));
+}
+
+/// 同时下载图片数量
+Widget _buildMultiDownloadItem(BuildContext context) {
+  final String _title = 'Multi Download';
+  final EhConfigService ehConfigService = Get.find();
+
+  List<Widget> _getModeList(BuildContext context) {
+    return List<Widget>.from(EHConst.multiDownload.map((int element) {
+      return CupertinoActionSheetAction(
+          onPressed: () {
+            Get.back(result: element);
+          },
+          child: Text('$element'));
+    }).toList());
+  }
+
+  Future<int?> _showActionSheet(BuildContext context) {
+    return showCupertinoModalPopup<int>(
+        context: context,
+        builder: (BuildContext context) {
+          final CupertinoActionSheet dialog = CupertinoActionSheet(
+            cancelButton: CupertinoActionSheetAction(
+                onPressed: () {
+                  Get.back();
+                },
+                child: Text(S.of(context).cancel)),
+            actions: <Widget>[
+              ..._getModeList(context),
+            ],
+          );
+          return dialog;
+        });
+  }
+
+  return Obx(() => SelectorSettingItem(
+        title: _title,
+        selector: ehConfigService.multiDownload.toString(),
+        onTap: () async {
+          final int? _result = await _showActionSheet(context);
+          if (_result != null) {
+            if (ehConfigService.multiDownload != _result) {
+              ehConfigService.multiDownload = _result;
+              Get.find<DownloadController>().resetConcurrency();
+            }
           }
         },
       ));

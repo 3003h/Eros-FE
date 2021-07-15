@@ -126,6 +126,16 @@ class EHConst {
     17,
   ];
 
+  static List<int> multiDownload = <int>[
+    if (Global.inDebugMode) 1,
+    3,
+    5,
+    7,
+    9,
+    11,
+    if (Global.inDebugMode) 100,
+  ];
+
   static int cleanDataVer = 1;
 
   static List<int> autoLockTime = <int>[

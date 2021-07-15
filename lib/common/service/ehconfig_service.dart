@@ -65,6 +65,11 @@ class EhConfigService extends ProfileService {
   /// 预载图片数量
   RxInt preloadImage = 5.obs;
 
+  /// 下载线程数
+  final RxInt _multiDownload = 3.obs;
+  int get multiDownload => _multiDownload.value;
+  set multiDownload(val) => _multiDownload.value = val;
+
   /// 阅读相关设置
   /// 阅读方向
   Rx<ViewMode> viewMode = ViewMode.LeftToRight.obs;
@@ -106,7 +111,6 @@ class EhConfigService extends ProfileService {
     /// 预载图片数量
     preloadImage.value = downloadConfig.preloadImage ?? 5;
     everProfile<int>(preloadImage, (value) {
-      // downloadConfig.preloadImage = value;
       downloadConfig = downloadConfig.copyWith(preloadImage: value);
     });
 
@@ -114,6 +118,14 @@ class EhConfigService extends ProfileService {
     downloadLocatino = downloadConfig.downloadLocation ?? '';
     everProfile<String>(_downloadLocatino, (value) {
       downloadConfig = downloadConfig.copyWith(downloadLocation: value);
+    });
+
+    multiDownload = (downloadConfig.multiDownload != null &&
+            downloadConfig.multiDownload! > 0)
+        ? downloadConfig.multiDownload
+        : 3;
+    everProfile<int>(_multiDownload, (value) {
+      downloadConfig = downloadConfig.copyWith(multiDownload: value);
     });
 
     /// 阅读方向
