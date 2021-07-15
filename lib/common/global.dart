@@ -284,7 +284,7 @@ class Global {
 
   // 持久化Profile信息
   static Future<void>? saveProfile() {
-    // logger.v(profile.toJson());
+    // logger.d(profile.toJson());
     final GStore gStore = Get.find<GStore>();
     gStore.profile = profile;
   }

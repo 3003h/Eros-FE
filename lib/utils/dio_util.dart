@@ -232,7 +232,9 @@ class HttpManager {
     String urlPath,
     String savePath, {
     CancelToken? cancelToken,
-    bool? errToast = false,
+    bool errToast = false,
+    bool deleteOnError = true,
+    VoidCallback? onDownloadComplete,
   }) async {
     late Response<dynamic> response;
     try {
@@ -240,12 +242,16 @@ class HttpManager {
         urlPath,
         savePath,
         onReceiveProgress: (int count, int total) {
-          logger.v('$count $total');
+          // logger.v('$count $total');
+          if (count == total) {
+            onDownloadComplete?.call();
+          }
         },
         options: Options(
           receiveTimeout: 0,
         ),
         cancelToken: cancelToken,
+        deleteOnError: deleteOnError,
       );
       // print('downLoadFile response: $response');
     } on DioError catch (e) {
@@ -253,7 +259,7 @@ class HttpManager {
       if (CancelToken.isCancel(e)) {
         // print('$e');
       }
-      if (errToast ?? false) formatError(e);
+      if (errToast) formatError(e);
       rethrow;
     }
     return response;

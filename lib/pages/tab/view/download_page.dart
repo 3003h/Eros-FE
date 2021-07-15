@@ -88,7 +88,8 @@ class DownloadArchiverView extends GetView<DownloadViewController> {
                   _controller.archiverTasks[index];
 
               return GestureDetector(
-                onLongPress: () => _controller.onLongPress(index),
+                onLongPress: () =>
+                    _controller.onLongPress(index, type: DownloadType.archiver),
                 behavior: HitTestBehavior.opaque,
                 child: DownloadArchiverItem(
                   title: _taskInfo.title ?? '',
