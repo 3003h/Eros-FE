@@ -190,7 +190,7 @@ class Global {
   static Future<EhDatabase> getDatabase() async {
     return await $FloorEhDatabase
         .databaseBuilder(Global.dbPath)
-        .addMigrations([migration1to2]).build();
+        .addMigrations([migration1to2, migration2to3]).build();
   }
 
   // init

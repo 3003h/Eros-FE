@@ -2,6 +2,7 @@ import 'package:fehviewer/common/controller/archiver_download_controller.dart';
 import 'package:fehviewer/common/controller/download_controller.dart';
 import 'package:fehviewer/generated/l10n.dart';
 import 'package:fehviewer/models/index.dart';
+import 'package:fehviewer/store/floor/entity/gallery_image_task.dart';
 import 'package:fehviewer/store/floor/entity/gallery_task.dart';
 import 'package:fehviewer/utils/logger.dart';
 import 'package:fehviewer/utils/vibrate.dart';
@@ -46,6 +47,11 @@ class DownloadViewController extends GetxController {
           .toList();
 
   List<GalleryTask> get galleryTasks => _downloadController.galleryTaskList;
+
+  Future<List<GalleryImageTask>> getImageTasks(int index) async {
+    final gid = galleryTasks[index].gid;
+    return await _downloadController.getImageTasks(gid);
+  }
 
   // Archiver暂停任务
   Future<void> pauseArchiverDownload({required String? taskId}) async {

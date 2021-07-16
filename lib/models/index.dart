@@ -9,6 +9,7 @@ export 'download_task_info.dart';
 export 'dns_config.dart';
 export 'gallery_cache.dart';
 export 'gallery_comment_span.dart';
+export 'uconfig.dart';
 export 'gallery_comment.dart';
 export 'openl_translation.dart';
 export 'gallery_tag.dart';

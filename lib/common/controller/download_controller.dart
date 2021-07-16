@@ -17,6 +17,7 @@ import 'package:fehviewer/store/floor/entity/gallery_image_task.dart';
 import 'package:fehviewer/store/floor/entity/gallery_task.dart';
 import 'package:fehviewer/utils/logger.dart';
 import 'package:fehviewer/utils/toast.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
 import 'package:path/path.dart' as path;
 import 'package:path_provider/path_provider.dart';
@@ -200,11 +201,13 @@ class DownloadController extends GetxController {
   }
 
   /// 更新任务进度
-  GalleryTask galleryTaskCountUpdate(int gid, int countComple) {
+  GalleryTask galleryTaskUpdate(int gid, {int? countComple, String? coverImg}) {
     // logger.d('galleryTaskCountUpdate $gid $countComple');
     final index = galleryTaskList.indexWhere((element) => element.gid == gid);
-    galleryTaskList[index] =
-        galleryTaskList[index].copyWith(completCount: countComple);
+    galleryTaskList[index] = galleryTaskList[index].copyWith(
+      completCount: countComple,
+      coverImage: coverImg,
+    );
 
     return galleryTaskList[index];
   }
@@ -417,7 +420,7 @@ class DownloadController extends GetxController {
               downloadPath!,
               maxSer,
               cancelToken: _cancelToken,
-              onDownloadComplete: () async {
+              onDownloadComplete: (String fileName) async {
                 loggerSimple.d('$itemSer complete');
 
                 // 下载完成 更新数据库明细
@@ -433,8 +436,11 @@ class DownloadController extends GetxController {
                     await _imageTaskDao.finaAllTaskByGidAndStatus(
                         galleryTask.gid, TaskStatus.complete.value);
 
-                final _task = galleryTaskCountUpdate(
-                    galleryTask.gid, listComplete.length);
+                final _task = galleryTaskUpdate(
+                  galleryTask.gid,
+                  countComple: listComplete.length,
+                  coverImg: itemSer == 1 ? fileName : null,
+                );
                 if (_task.fileCount == listComplete.length) {
                   galleryTaskComplete(galleryTask.gid);
                 }
@@ -501,7 +507,7 @@ class DownloadController extends GetxController {
     String downloadPath,
     int maxSer, {
     CancelToken? cancelToken,
-    VoidCallback? onDownloadComplete,
+    ValueChanged<String>? onDownloadComplete,
   }) async {
     loggerSimple.v('${image.ser} start');
 
@@ -546,7 +552,7 @@ class DownloadController extends GetxController {
         _imageUrl,
         path.join(downloadPath, _fileName),
         cancelToken: cancelToken,
-        onDownloadComplete: onDownloadComplete,
+        onDownloadComplete: () => onDownloadComplete?.call(_fileName),
       );
     } on DioError catch (e) {
       if (e.type == DioErrorType.response && e.response?.statusCode == 403) {
@@ -570,7 +576,7 @@ class DownloadController extends GetxController {
           _imageUrl,
           path.join(downloadPath, _fileName),
           cancelToken: cancelToken,
-          onDownloadComplete: onDownloadComplete,
+          onDownloadComplete: () => onDownloadComplete?.call(_fileName),
         );
       }
     }
@@ -631,5 +637,12 @@ class DownloadController extends GetxController {
     );
 
     return _moreImageList;
+  }
+
+  Future<List<GalleryImageTask>> getImageTasks(int gid) async {
+    final _imageTaskDao = await getImageTaskDao();
+    final List<GalleryImageTask> tasks =
+        await _imageTaskDao.findAllTaskByGid(gid);
+    return tasks;
   }
 }

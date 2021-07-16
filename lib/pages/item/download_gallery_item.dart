@@ -1,13 +1,13 @@
+import 'package:extended_image/extended_image.dart';
 import 'package:fehviewer/common/isolate_download/download_manager.dart';
-import 'package:fehviewer/models/index.dart';
+import 'package:fehviewer/pages/image_view/view/view_local_page.dart';
 import 'package:fehviewer/pages/tab/controller/download_view_controller.dart';
+import 'package:fehviewer/store/floor/entity/gallery_image_task.dart';
 import 'package:fehviewer/store/floor/entity/gallery_task.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_downloader/flutter_downloader.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
-import 'package:get/get_utils/src/platform/platform_io.dart';
 
 class DownloadGalleryItem extends GetView<DownloadViewController> {
   const DownloadGalleryItem({
@@ -17,52 +17,87 @@ class DownloadGalleryItem extends GetView<DownloadViewController> {
     required this.index,
     required this.filecount,
     this.completeCount = 0,
+    this.coverimagePath,
+    this.coverUrl,
   }) : super(key: key);
   final String title;
   final int filecount;
   final int completeCount;
   final TaskStatus status;
   final int index;
+  final String? coverimagePath;
+  final String? coverUrl;
 
   @override
   Widget build(BuildContext context) {
     return Container(
       padding: const EdgeInsets.only(top: 8, bottom: 8, left: 20, right: 16),
+      height: 100,
       child: Row(
         children: [
+          GestureDetector(
+            child: _CoverImage(path: coverimagePath, url: coverUrl)
+                .paddingOnly(right: 8),
+            onTap: () async {
+              final List<GalleryImageTask> imageTasks =
+                  await controller.getImageTasks(index);
+              final gTask = controller.galleryTasks[index];
+
+              final List<String> pics = imageTasks
+                  .where((element) =>
+                      element.filePath != null && element.filePath!.isNotEmpty)
+                  .map((e) => e.filePath ?? '')
+                  .toList();
+
+              Get.to(
+                ViewLocalPage(
+                  dirPath: gTask.dirPath ?? '',
+                  pics: pics,
+                ),
+                transition: Transition.fade,
+              );
+            },
+          ),
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(
-                  title,
-                  style: const TextStyle(
-                    fontSize: 13,
-                    height: 1.2,
-                  ),
-                ).paddingSymmetric(vertical: 4),
+                Expanded(
+                  child: Text(
+                    title,
+                    softWrap: true,
+                    style: const TextStyle(
+                      fontSize: 13,
+                      height: 1.2,
+                    ),
+                  ).paddingSymmetric(vertical: 4),
+                ),
                 Row(
                   children: [
                     Expanded(
-                      child: LinearProgressIndicator(
-                        value: completeCount / filecount,
-                        backgroundColor: CupertinoDynamicColor.resolve(
-                            CupertinoColors.secondarySystemFill, context),
-                        valueColor: AlwaysStoppedAnimation<Color>(
-                            CupertinoDynamicColor.resolve(
-                                CupertinoColors.activeBlue, context)),
-                      ).paddingOnly(right: 8.0),
+                      child: ClipRRect(
+                          borderRadius: BorderRadius.circular(4),
+                          child: LinearProgressIndicator(
+                            value: completeCount / filecount,
+                            backgroundColor: CupertinoDynamicColor.resolve(
+                                CupertinoColors.secondarySystemFill, context),
+                            valueColor: AlwaysStoppedAnimation<Color>(
+                                CupertinoDynamicColor.resolve(
+                                    CupertinoColors.activeBlue, context)),
+                          )).paddingOnly(right: 8.0),
                     ),
-                    Text('$completeCount/$filecount',
-                        style: const TextStyle(
-                          fontSize: 13,
-                        )),
+                    Text(
+                      '$completeCount/$filecount',
+                      style: const TextStyle(
+                        fontSize: 13,
+                      ),
+                    ),
+                    _getIcon(),
                   ],
                 ),
               ],
             ),
           ),
-          _getIcon(),
         ],
       ),
     );
@@ -153,5 +188,51 @@ class DownloadGalleryItem extends GetView<DownloadViewController> {
     };
 
     return statusMap[status] ?? const SizedBox(width: 40);
+  }
+}
+
+class _CoverImage extends StatelessWidget {
+  const _CoverImage({
+    this.url,
+    this.path,
+    Key? key,
+  }) : super(key: key);
+
+  final String? path;
+  final String? url;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      width: 60,
+      decoration: BoxDecoration(
+        boxShadow: [
+          //阴影
+          BoxShadow(
+            color: CupertinoDynamicColor.resolve(
+                CupertinoColors.systemGrey5, Get.context!),
+            blurRadius: 3,
+          )
+        ],
+      ),
+      child: ClipRRect(
+        borderRadius: BorderRadius.circular(6),
+        child: () {
+          if (path != null) {
+            return ExtendedImage.file(
+              File(path!),
+              fit: BoxFit.fitWidth,
+            );
+          } else if (url != null) {
+            return ExtendedImage.network(
+              url!,
+              fit: BoxFit.fitWidth,
+            );
+          } else {
+            return const SizedBox.expand();
+          }
+        }(),
+      ),
+    );
   }
 }

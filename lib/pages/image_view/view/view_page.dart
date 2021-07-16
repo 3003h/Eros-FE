@@ -428,7 +428,6 @@ class GalleryViewPage extends GetView<ViewController> {
           customSize: vState.screensize,
           builder: (BuildContext context, int pageIndex) {
             return PhotoViewGalleryPageOptions.customChild(
-              // disableGestures: true,
               child: Container(
                 // alignment: Alignment.center,
                 padding: EdgeInsets.symmetric(
