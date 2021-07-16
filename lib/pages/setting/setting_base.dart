@@ -23,6 +23,7 @@ class SelectorSettingItem extends StatefulWidget {
     this.desc,
     this.selector,
     this.hideLine = false,
+    this.onLongPress,
   }) : super(key: key);
 
   final String title;
@@ -32,6 +33,8 @@ class SelectorSettingItem extends StatefulWidget {
 
   // 点击回调
   final VoidCallback? onTap;
+
+  final VoidCallback? onLongPress;
 
   @override
   _SelectorSettingItemState createState() => _SelectorSettingItemState();
@@ -141,6 +144,7 @@ class _SelectorSettingItemState extends State<SelectorSettingItem> {
       // 不可见区域有效
       behavior: HitTestBehavior.opaque,
       onTap: widget.onTap,
+      onLongPress: widget.onLongPress,
       onTapDown: (_) => _updatePressedColor(),
       onTapUp: (_) {
         Future.delayed(const Duration(milliseconds: 80), () {

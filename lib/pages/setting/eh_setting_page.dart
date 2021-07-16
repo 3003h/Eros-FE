@@ -6,6 +6,7 @@ import 'package:fehviewer/common/service/locale_service.dart';
 import 'package:fehviewer/common/service/theme_service.dart';
 import 'package:fehviewer/const/const.dart';
 import 'package:fehviewer/generated/l10n.dart';
+import 'package:fehviewer/network/gallery_request.dart';
 import 'package:fehviewer/pages/setting/webview/mytags_in.dart';
 import 'package:fehviewer/pages/setting/webview/web_mysetting_in.dart';
 import 'package:fehviewer/utils/logger.dart';
@@ -54,6 +55,7 @@ class ListViewEhSetting extends StatelessWidget {
 
     Future<void> _handleSiteChanged(bool newValue) async {
       _ehConfigService.isSiteEx(newValue);
+      Api.selEhProfile();
     }
 
     void _handleJpnTitleChanged(bool newValue) {
@@ -118,6 +120,10 @@ class ListViewEhSetting extends StatelessWidget {
             } else {
               showToast('Not support');
             }
+          },
+          onLongPress: () async {
+            await Api.selEhProfile();
+            showToast('set EhProfile succs');
           },
         ),
       if (_isLogin)

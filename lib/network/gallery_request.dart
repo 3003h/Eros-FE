@@ -36,10 +36,17 @@ import 'package:path/path.dart' as path;
 import 'package:permission_handler/permission_handler.dart';
 import 'package:share/share.dart';
 import 'package:tuple/tuple.dart';
+import 'package:collection/collection.dart';
 
 import 'error.dart';
 
 final Api api = Api();
+
+enum ProfileOpType {
+  create,
+  select,
+  delete,
+}
 
 // ignore: avoid_classes_with_only_static_members
 class Api {
@@ -408,7 +415,7 @@ class Api {
   }) async {
     //?inline_set=ts_m 小图,40一页
     //?inline_set=ts_l 大图,20一页
-    //hc=1#comments 显示全部评论
+    //hc=1 显示全部评论
     //nw=always 不显示警告
 
     // final HttpManager httpManager = HttpManager.getInstance();
@@ -764,6 +771,80 @@ class Api {
     } catch (e, stack) {
       logger.e('$e\n$stack');
       rethrow;
+    }
+  }
+
+  static Future<bool> operatorProfile({
+    required ProfileOpType type,
+    String? pName,
+    int? set,
+  }) async {
+    final String url = '${getBaseUrl()}/uconfig.php';
+
+    Map actionMap = {
+      ProfileOpType.select: '',
+      ProfileOpType.create: 'create',
+      ProfileOpType.delete: 'delete'
+    };
+
+    try {
+      final dio.Response response = await getHttpManager(cache: false).postForm(
+        url,
+        data: dio.FormData.fromMap({
+          'profile_action': actionMap[type],
+          'profile_name': pName ?? '',
+          'profile_set': set ?? ''
+        }),
+        options: dio.Options(
+            followRedirects: false,
+            validateStatus: (int? status) {
+              return (status ?? 0) < 500;
+            }),
+      );
+
+      logger.d('${response.statusCode}');
+      return response.statusCode == 302;
+    } catch (e, stack) {
+      logger.e('$e\n$stack');
+      rethrow;
+    }
+  }
+
+  /// 选用feh单独的profile 没有就新建
+  static Future<void> selEhProfile() async {
+    final String url = '${getBaseUrl()}/uconfig.php';
+
+    // 不能带_
+    const kProfileName = 'FEhViewer';
+
+    final String? response = await getHttpManager(cache: false).get(url);
+
+    if (response == null) {
+      return;
+    }
+
+    final List<EhProfile> ehProfiles = parseProfiles(response);
+
+    final fepIndex =
+        ehProfiles.indexWhere((element) => element.name == kProfileName);
+    final bool existFEhProfile = fepIndex > -1;
+
+    logger.d('${ehProfiles.map((e) => e.toJson()).join('\n')} ');
+
+    if (existFEhProfile) {
+      final selectedSP =
+          ehProfiles.firstWhereOrNull((element) => element.selected);
+      if (selectedSP?.name == kProfileName) {
+        return;
+      }
+      logger.d(
+          'exist profile name [$kProfileName] but not selected, select it...');
+      final fEhProfile = ehProfiles[fepIndex];
+      await operatorProfile(type: ProfileOpType.select, set: fEhProfile.value);
+    } else {
+      // create 完成后会自动set_cookie sp为新建的sp
+      logger.d('create new profile');
+      await operatorProfile(type: ProfileOpType.create, pName: kProfileName);
     }
   }
 
