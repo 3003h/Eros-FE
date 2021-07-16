@@ -63,8 +63,8 @@ class HttpManager {
       responseHeader: true,
       responseBody: false,
       maxWidth: 120,
-      logPrint: kDebugMode ? loggerSimple.d : loggerSimpleOnlyFile.d,
-      // logPrint: loggerSimpleOnlyFile.d,
+      // logPrint: kDebugMode ? loggerSimple.d : loggerSimpleOnlyFile.d,
+      logPrint: loggerSimpleOnlyFile.d,
     ));
 
     // if (kDebugMode) {
@@ -145,6 +145,7 @@ class HttpManager {
     Map<String, dynamic>? params,
     Options? options,
     CancelToken? cancelToken,
+    bool errToast = false,
   }) async {
     Response<String> response;
 
@@ -156,10 +157,10 @@ class HttpManager {
       if (CancelToken.isCancel(e)) {
         // print('$e');
       } else {
-        logger.e('getHttp exception: $e\n$stack');
+        logger5.e('getHttp exception: $e\n$stack');
       }
 
-      formatError(e);
+      if (errToast) formatError(e);
       rethrow;
     }
     time.showTime('get $url end');
@@ -173,6 +174,7 @@ class HttpManager {
     Map<String, dynamic>? params,
     Options? options,
     CancelToken? cancelToken,
+    bool errToast = false,
   }) async {
     late Response<dynamic> response;
     try {
@@ -180,7 +182,6 @@ class HttpManager {
           queryParameters: params, options: options, cancelToken: cancelToken);
     } on DioError catch (e) {
       logger.e('getHttp exception: $e');
-//      formatError(e);
       return response;
 //      throw e;
     }
@@ -193,6 +194,7 @@ class HttpManager {
     Map<String, dynamic>? params,
     Options? options,
     CancelToken? cancelToken,
+    bool errToast = false,
   }) async {
     late Response<dynamic> response;
     try {
@@ -200,8 +202,8 @@ class HttpManager {
           queryParameters: params, options: options, cancelToken: cancelToken);
     } on DioError catch (e) {
       logger.e('postHttp exception: $e');
-      formatError(e);
-//      throw e;
+      if (errToast) formatError(e);
+      rethrow;
     }
     return response;
   }
@@ -212,6 +214,7 @@ class HttpManager {
     Object? data,
     Options? options,
     CancelToken? cancelToken,
+    bool errToast = false,
   }) async {
     late Response<dynamic> response;
     try {
@@ -219,10 +222,8 @@ class HttpManager {
           options: options, cancelToken: cancelToken, data: data);
 //      debugPrint('postHttp response: $response');
     } on DioError catch (e) {
-//      print('postHttp exception: $e');
-      formatError(e);
+      if (errToast) formatError(e);
       rethrow;
-//      throw e;
     }
     return response;
   }

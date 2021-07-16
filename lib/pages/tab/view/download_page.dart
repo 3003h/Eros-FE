@@ -4,10 +4,12 @@ import 'package:fehviewer/models/index.dart';
 import 'package:fehviewer/pages/item/download_archiver_item.dart';
 import 'package:fehviewer/pages/item/download_gallery_item.dart';
 import 'package:fehviewer/pages/tab/controller/download_view_controller.dart';
+import 'package:fehviewer/store/floor/entity/gallery_task.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_downloader/flutter_downloader.dart';
 import 'package:get/get.dart';
+import 'package:path/path.dart' as path;
 
 const Color _kDefaultNavBarBorderColor = Color(0x4D000000);
 
@@ -119,7 +121,7 @@ class DownloadGalleryView extends GetView<DownloadViewController> {
     return Obx(() {
       return ListView.separated(
         itemBuilder: (_, int _taskIndex) {
-          final _taskInfo = controller.galleryTasks[_taskIndex];
+          final GalleryTask _taskInfo = controller.galleryTasks[_taskIndex];
 
           return GestureDetector(
             onLongPress: () => controller.onLongPress(_taskIndex),
@@ -130,6 +132,9 @@ class DownloadGalleryView extends GetView<DownloadViewController> {
               filecount: _taskInfo.fileCount,
               completeCount: _taskInfo.completCount ?? 0,
               index: _taskIndex,
+              coverimagePath: _taskInfo.coverImage != null
+                  ? path.join(_taskInfo.dirPath ?? '', _taskInfo.coverImage)
+                  : null,
             ),
           );
         },

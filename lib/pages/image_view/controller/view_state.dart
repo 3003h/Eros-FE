@@ -66,9 +66,7 @@ class ViewState {
 
     // 初始页码
     final int _iniIndex = Get.arguments as int;
-    // conditionItemIndex = false;
     itemIndex = _iniIndex;
-    // conditionItemIndex = true;
   }
 
   void initSize(BuildContext context) {

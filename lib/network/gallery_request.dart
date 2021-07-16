@@ -823,7 +823,8 @@ class Api {
       return;
     }
 
-    final List<EhProfile> ehProfiles = parseProfiles(response);
+    final Uconfig uconfig = parseUconfig(response);
+    final List<EhProfile> ehProfiles = uconfig.profilelist;
 
     final fepIndex =
         ehProfiles.indexWhere((element) => element.name == kProfileName);
