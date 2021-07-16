@@ -82,8 +82,7 @@ class ListViewAbout extends StatelessWidget {
             ),
           TextItem(
             'Telegram',
-            desc: 'https://t.me/f_ehviewer',
-            onTap: () => launch('https://t.me/f_ehviewer'),
+            onTap: () => launch('https://t.me/joinchat/AEj27KMQe0JiMmUx'),
           ),
           TextItem(
             'Channel',

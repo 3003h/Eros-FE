@@ -133,9 +133,10 @@ class _DetailWidget extends StatelessWidget {
         child: TextBtn(
           FontAwesomeIcons.solidArrowAltCircleDown,
           title: S.of(context).p_Download,
-          onTap: Get.find<EhConfigService>().debugMode
-              ? controller.downloadGallery
-              : null,
+          // onTap: Get.find<EhConfigService>().debugMode
+          //     ? controller.downloadGallery
+          //     : null,
+          onTap: controller.downloadGallery,
         ),
       ),
       // 种子下载
