@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'dart:io';
+import 'dart:math';
 
 import 'package:fehviewer/common/global.dart';
 import 'package:fehviewer/utils/logger/pretty_printer.dart';
@@ -202,15 +203,15 @@ class _FileOutput extends LogOutput {
         .replaceAllMapped(
             _reId,
             (match) =>
-                '${match.group(1)}${match.group(2)?.substring(0, 2)}****${match.group(3)}')
+                '${match.group(1)}${match.group(2)?.substring(0, min(2, match.group(2)!.length))}****${match.group(3)}')
         .replaceAllMapped(
             _rePass,
             (match) =>
-                '${match.group(1)}${match.group(2)?.substring(0, 2)}****${match.group(3)}')
+                '${match.group(1)}${match.group(2)?.substring(0, min(2, match.group(2)!.length))}****${match.group(3)}')
         .replaceAllMapped(
             _reIgneous,
             (match) =>
-                '${match.group(1)}${match.group(2)?.substring(0, 2)}****${match.group(3)}');
+                '${match.group(1)}${match.group(2)?.substring(0, min(2, match.group(2)!.length))}****${match.group(3)}');
   }
 
   @override

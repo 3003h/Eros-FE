@@ -6,6 +6,7 @@ import 'package:fehviewer/generated/l10n.dart';
 import 'package:fehviewer/models/user.dart';
 import 'package:fehviewer/network/eh_login.dart';
 import 'package:fehviewer/network/error.dart';
+import 'package:fehviewer/network/gallery_request.dart';
 import 'package:fehviewer/route/routes.dart';
 import 'package:fehviewer/utils/logger.dart';
 import 'package:fehviewer/utils/toast.dart';
@@ -147,6 +148,7 @@ class _LoginPageState extends State<LoginPage> {
         onPressed: () async {
           final result = await Get.to(() => LoginCookiePage());
           if (result != null && result is bool && result) {
+            Api.selEhProfile();
             Get.back();
           }
         },
@@ -183,6 +185,8 @@ class _LoginPageState extends State<LoginPage> {
                   try {
                     final User user = await EhUserManager().signInByWeb(result);
                     userController.user(user);
+
+                    Api.selEhProfile();
                     Get.back();
                   } catch (e, stack) {
                     showToast(e.toString());
@@ -230,6 +234,8 @@ class _LoginPageState extends State<LoginPage> {
         _isLogin = false;
       });
     }
+
+    Api.selEhProfile();
 
     Get.back();
   }

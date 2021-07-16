@@ -14,6 +14,7 @@ export 'openl_translation.dart';
 export 'gallery_tag.dart';
 export 'dns_cache.dart';
 export 'tab_item.dart';
+export 'eh_profile.dart';
 export 'user.dart';
 export 'download_config.dart';
 export 'gallery_torrent.dart';
