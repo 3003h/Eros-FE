@@ -73,6 +73,8 @@ ehentai译文数据库
 - [x] 高级设置
 - [x] 发表评论 赞和踩
 - [x] watched 和用户 tag
+- [x] Domain Fronting 域前置， 自定义hosts
+
 
 ## TODO
 
@@ -90,4 +92,5 @@ ehentai译文数据库
 ## 编译相关
 
 flutter版本为最新release版本
-因项目引入firebase, 需要放置自己的google-services.json文件等
+因项目引入 firebase, 需要放置自己的google-services.json文件等
+或者直接去掉 firebase 相关功能
