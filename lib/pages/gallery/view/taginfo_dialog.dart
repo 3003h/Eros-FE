@@ -10,7 +10,6 @@ import 'package:fehviewer/store/floor/entity/tag_translat.dart';
 import 'package:fehviewer/utils/logger.dart';
 import 'package:fehviewer/utils/vibrate.dart';
 import 'package:fehviewer/widget/eh_cached_network_image.dart';
-import 'package:fehviewer/widget/network_extended_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_markdown/flutter_markdown.dart';

@@ -1,7 +1,5 @@
 // import 'package:cached_network_image/cached_network_image.dart';
-import 'package:extended_image/extended_image.dart';
 import 'package:fehviewer/common/controller/user_controller.dart';
-import 'package:fehviewer/common/exts.dart';
 import 'package:fehviewer/common/service/theme_service.dart';
 import 'package:fehviewer/generated/l10n.dart';
 import 'package:fehviewer/route/routes.dart';

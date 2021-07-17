@@ -144,17 +144,15 @@ class GallerySearchPageNew extends StatelessWidget {
       navigationBar: GetPlatform.isAndroid ? getNavigationBar(context) : null,
       child: Column(
         children: [
-          // getSearchTextFieldIn().paddingOnly(top: 100),
           if (GetPlatform.isAndroid)
             SafeArea(
               child: Container(
                 decoration: BoxDecoration(
                   border: _kDefaultNavBarBorder,
-                  color: ehTheme.themeData!.barBackgroundColor,
+                  color: CupertinoTheme.of(context).barBackgroundColor,
                 ),
-                child:
-                    const SearchTextFieldIn(iconOpacity: 1.0, multiline: true)
-                        .paddingSymmetric(horizontal: 12, vertical: 4),
+                child: SearchTextFieldIn(iconOpacity: 1.0, multiline: true)
+                    .paddingSymmetric(horizontal: 12, vertical: 4),
               ),
             ),
           Expanded(child: _buildSearchRult(context)),
@@ -328,10 +326,10 @@ class GallerySearchPageNew extends StatelessWidget {
             ),
             padding: const EdgeInsets.symmetric(horizontal: 8),
             child: Row(
-              children: const [
+              children: [
                 Expanded(
                   child: Padding(
-                    padding: EdgeInsets.only(left: 4, top: 4, bottom: 4),
+                    padding: const EdgeInsets.only(left: 4, top: 4, bottom: 4),
                     child: SearchTextFieldIn(multiline: true),
                   ),
                 ),
@@ -698,7 +696,7 @@ class GallerySearchPageNew extends StatelessWidget {
 }
 
 class SearchTextFieldIn extends StatelessWidget {
-  const SearchTextFieldIn({
+  SearchTextFieldIn({
     Key? key,
     this.multiline = false,
     this.iconOpacity = 0.0,
