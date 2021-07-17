@@ -5,10 +5,10 @@ import 'package:get/get.dart';
 
 extension EhString on String {
   String toRealUrl() {
-    final DnsService dnsConfigController = Get.find();
-    final bool enableDoH = dnsConfigController.enableDoH.value;
-    final bool enableCustomHosts = dnsConfigController.enableCustomHosts.value;
-    final List<DnsCache> _dohDnsCacheList = dnsConfigController.dohCache;
+    final DnsService dnsService = Get.find();
+    final bool enableDoH = dnsService.enableDoH;
+    final bool enableCustomHosts = dnsService.enableCustomHosts;
+    final List<DnsCache> _dohDnsCacheList = dnsService.dohCache;
     final String host = Uri.parse(this).host;
     if (host.isEmpty) {
       return this;
@@ -23,8 +23,8 @@ extension EhString on String {
       return this;
     } else if (enableDoH) {
       // logger.d(' enableDoH');
-      Get.find<DnsService>().updateDoHCache(host);
-      final int _dohDnsCacheIndex = dnsConfigController.dohCache
+      Get.find<DnsService>().getDoHCache(host);
+      final int _dohDnsCacheIndex = dnsService.dohCache
           .indexWhere((DnsCache element) => element.host == host);
       final DnsCache? dohDnsCache =
           _dohDnsCacheIndex > -1 ? _dohDnsCacheList[_dohDnsCacheIndex] : null;
@@ -33,6 +33,23 @@ extension EhString on String {
       logger.d('realUrl: $realUrl');
       return realUrl;
     }
+    return this;
+  }
+
+  String get dfUrl {
+    final DnsService dnsService = Get.find();
+    final df = dnsService.enableDomainFronting;
+    final String host = Uri.parse(this).host;
+    if (host.isEmpty) {
+      return this;
+    }
+    if (df) {
+      final realHost = dnsService.hostMapMerge[host] ?? host;
+      final String realUrl = replaceFirst(host, realHost);
+      logger.v('realUrl: $realUrl');
+      return realUrl;
+    }
+
     return this;
   }
 

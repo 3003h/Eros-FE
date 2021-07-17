@@ -50,10 +50,10 @@ class EHInterceptor extends Interceptor {
 
   Future<void> _updateDoHCache(String host) async {
     final DnsService dnsConfigController = Get.find();
-    final bool enableDoH = dnsConfigController.enableDoH.value;
+    final bool enableDoH = dnsConfigController.enableDoH;
     // 更新doh
     if (enableDoH) {
-      await dnsConfigController.updateDoHCache(host);
+      await dnsConfigController.getDoHCache(host);
     }
   }
 }

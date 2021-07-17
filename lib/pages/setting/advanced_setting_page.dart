@@ -1,7 +1,7 @@
 import 'dart:io';
 
+import 'package:extended_image/extended_image.dart';
 import 'package:fehviewer/common/controller/cache_controller.dart';
-import 'package:fehviewer/common/global.dart';
 import 'package:fehviewer/common/service/dns_service.dart';
 import 'package:fehviewer/common/service/ehconfig_service.dart';
 import 'package:fehviewer/common/service/locale_service.dart';
@@ -13,7 +13,6 @@ import 'package:fehviewer/pages/setting/log_page.dart';
 import 'package:fehviewer/route/routes.dart';
 import 'package:fehviewer/utils/logger.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -43,7 +42,7 @@ class ListViewAdvancedSetting extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final EhConfigService _ehConfigService = Get.find();
-    final DnsService _dnsConfigController = Get.find();
+    final DnsService _dnsService = Get.find();
     final CacheController _cacheController = Get.find();
 
     void _handlePureDarkChanged(bool newValue) {
@@ -51,19 +50,26 @@ class ListViewAdvancedSetting extends StatelessWidget {
     }
 
     void _handleDoHChanged(bool newValue) {
-      if (!newValue && !_dnsConfigController.enableCustomHosts.value) {
-        /// 清除hosts 关闭代理
-        logger.d(' 关闭代理');
-        HttpOverrides.global = null;
-      } else if (newValue) {
-        /// 设置全局本地代理
-        HttpOverrides.global = Global.httpProxy;
-      }
-      _dnsConfigController.enableDoH.value = newValue;
+      // if (!newValue && !_dnsService.enableCustomHosts) {
+      //   /// 清除hosts 关闭代理
+      //   logger.d(' 关闭代理');
+      //   HttpOverrides.global = null;
+      // } else if (newValue) {
+      //   /// 设置全局本地代理
+      //   HttpOverrides.global = Global.httpProxy;
+      // }
+      _dnsService.enableDoH = newValue;
     }
 
     void _handleEFChanged(bool newValue) {
-      _dnsConfigController.enableDomainFronting.value = newValue;
+      _dnsService.enableDomainFronting = newValue;
+      if (!newValue) return;
+      final HttpClient eClient =
+          ExtendedNetworkImageProvider.httpClient as HttpClient;
+      eClient.badCertificateCallback =
+          (X509Certificate cert, String host, int port) {
+        return true;
+      };
     }
 
     final List<Widget> _list = <Widget>[
@@ -111,20 +117,19 @@ class ListViewAdvancedSetting extends StatelessWidget {
       Container(height: 38),
       Obx(() => SelectorSettingItem(
             title: S.of(context).custom_hosts,
-            selector: _dnsConfigController.enableCustomHosts.value
+            selector: _dnsService.enableCustomHosts
                 ? S.of(context).on
                 : S.of(context).off,
             onTap: () {
               Get.to(() => CustomHostsPage(), transition: Transition.cupertino);
             },
           )),
-      if (kDebugMode)
-        TextSwitchItem(
-          S.of(context).domain_fronting,
-          intValue: _dnsConfigController.enableDomainFronting.value,
-          onChanged: _handleEFChanged,
-          desc: 'SNI',
-        ),
+      TextSwitchItem(
+        S.of(context).domain_fronting,
+        intValue: _dnsService.enableDomainFronting,
+        onChanged: _handleEFChanged,
+        desc: 'By pass SNI',
+      ),
       // TextSwitchItem(
       //   'DNS-over-HTTPS',
       //   intValue: _dnsConfigController.enableDoH.value,

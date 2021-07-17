@@ -1,9 +1,11 @@
 import 'dart:io';
 
+// import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:cookie_jar/cookie_jar.dart';
 import 'package:device_info/device_info.dart';
 import 'package:dio_cookie_manager/dio_cookie_manager.dart';
+import 'package:extended_image/extended_image.dart';
 import 'package:fehviewer/const/const.dart';
 import 'package:fehviewer/const/storages.dart';
 import 'package:fehviewer/models/index.dart';
@@ -12,7 +14,6 @@ import 'package:fehviewer/network/gallery_request.dart';
 import 'package:fehviewer/store/floor/database.dart';
 import 'package:fehviewer/store/get_store.dart';
 import 'package:fehviewer/store/hive/hive.dart';
-import 'package:fehviewer/utils/https_proxy.dart';
 import 'package:fehviewer/utils/logger.dart';
 import 'package:fehviewer/utils/storage.dart';
 import 'package:fehviewer/utils/utility.dart';
@@ -170,7 +171,7 @@ class Global {
 
   static late PersistCookieJar cookieJar;
 
-  static HttpProxy httpProxy = HttpProxy('localhost', '$kProxyPort');
+  // static HttpProxy httpProxy = HttpProxy('localhost', '$kProxyPort');
 
   static String appSupportPath = '';
   static String appDocPath = '';
@@ -224,9 +225,9 @@ class Global {
     }
 
     // 代理初始化
-    if (Platform.isIOS || Platform.isAndroid) {
-      await CustomHttpsProxy.instance.init();
-    }
+    // if (Platform.isIOS || Platform.isAndroid) {
+    //   await CustomHttpsProxy.instance.init();
+    // }
 
     logger.i('doc $appDocPath \napps $appSupportPath \ntemp $tempPath');
 
@@ -257,6 +258,8 @@ class Global {
 
     // 数据更新
     // await dataUpdate();
+
+    _initImageHttpClient();
   }
 
   static void creatDirs() {
@@ -270,11 +273,11 @@ class Global {
 
     _initProfile();
 
-    if ((profile.dnsConfig.enableCustomHosts ?? false) ||
-        (profile.dnsConfig.enableDoH ?? false)) {
-      logger.v('${profile.dnsConfig.enableCustomHosts}');
-      HttpOverrides.global = httpProxy;
-    }
+    // if ((profile.dnsConfig.enableCustomHosts ?? false) ||
+    //     (profile.dnsConfig.enableDoH ?? false)) {
+    //   logger.v('${profile.dnsConfig.enableCustomHosts}');
+    //   HttpOverrides.global = httpProxy;
+    // }
   }
 
   static void _initProfile() {
@@ -298,5 +301,14 @@ class Global {
       saveProfile();
       StorageUtil().setString(CLEAN_VER, '${EHConst.cleanDataVer}');
     }
+  }
+
+  static void _initImageHttpClient() {
+    final HttpClient eClient =
+        ExtendedNetworkImageProvider.httpClient as HttpClient;
+    eClient.badCertificateCallback =
+        (X509Certificate cert, String host, int port) {
+      return true;
+    };
   }
 }

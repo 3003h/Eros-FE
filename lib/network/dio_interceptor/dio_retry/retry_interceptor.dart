@@ -1,6 +1,6 @@
 import 'package:dio/dio.dart';
 
-import '../logger.dart';
+import '../../../utils/logger.dart';
 import 'options.dart';
 
 /// An interceptor that will try to send failed request again

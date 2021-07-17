@@ -4,6 +4,7 @@ import 'package:fehviewer/common/controller/gallerycache_controller.dart';
 import 'package:fehviewer/common/service/depth_service.dart';
 import 'package:fehviewer/common/service/ehconfig_service.dart';
 import 'package:fehviewer/const/const.dart';
+import 'package:fehviewer/generated/l10n.dart';
 import 'package:fehviewer/models/base/eh_models.dart';
 import 'package:fehviewer/pages/gallery/controller/gallery_page_controller.dart';
 import 'package:fehviewer/pages/image_view/common.dart';
@@ -16,7 +17,6 @@ import 'package:flutter_statusbar_manager/flutter_statusbar_manager.dart';
 import 'package:get/get.dart';
 import 'package:orientation/orientation.dart';
 import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
-import 'package:fehviewer/generated/l10n.dart';
 
 import 'view_state.dart';
 

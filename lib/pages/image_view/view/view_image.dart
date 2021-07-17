@@ -1,4 +1,4 @@
-import 'package:cached_network_image/cached_network_image.dart';
+// import 'package:cached_network_image/cached_network_image.dart';
 import 'package:dio/dio.dart';
 import 'package:extended_image/extended_image.dart';
 import 'package:fehviewer/common/global.dart';
@@ -103,7 +103,7 @@ class _ViewImageState extends State<ViewImage>
     // 清除CachedNetworkImage的缓存
     try {
       // CachedNetworkImage 清除指定缓存
-      await CachedNetworkImage.evictFromCache(_currentImage?.imageUrl ?? '');
+      // await CachedNetworkImage.evictFromCache(_currentImage?.imageUrl ?? '');
       // extended_image 清除指定缓存
       await clearDiskCachedImage(_currentImage?.imageUrl ?? '');
       clearMemoryImageCache();
