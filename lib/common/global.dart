@@ -14,6 +14,7 @@ import 'package:fehviewer/network/gallery_request.dart';
 import 'package:fehviewer/store/floor/database.dart';
 import 'package:fehviewer/store/get_store.dart';
 import 'package:fehviewer/store/hive/hive.dart';
+import 'package:fehviewer/utils/http_override.dart';
 import 'package:fehviewer/utils/logger.dart';
 import 'package:fehviewer/utils/storage.dart';
 import 'package:fehviewer/utils/utility.dart';
@@ -172,6 +173,7 @@ class Global {
   static late PersistCookieJar cookieJar;
 
   // static HttpProxy httpProxy = HttpProxy('localhost', '$kProxyPort');
+  static DFHttpOverrides dfHttpOverrides = DFHttpOverrides();
 
   static String appSupportPath = '';
   static String appDocPath = '';
@@ -278,6 +280,11 @@ class Global {
     //   logger.v('${profile.dnsConfig.enableCustomHosts}');
     //   HttpOverrides.global = httpProxy;
     // }
+
+    if (profile.dnsConfig.enableDomainFronting ?? false) {
+      logger.d('enableDomainFronting');
+      HttpOverrides.global = dfHttpOverrides;
+    }
   }
 
   static void _initProfile() {

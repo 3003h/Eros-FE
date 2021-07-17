@@ -1,9 +1,7 @@
-// import 'package:cached_network_image/cached_network_image.dart';
-import 'package:extended_image/extended_image.dart';
-import 'package:fehviewer/common/global.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:fehviewer/common/exts.dart';
+import 'package:fehviewer/common/global.dart';
 import 'package:fehviewer/common/service/ehconfig_service.dart';
-import 'package:fehviewer/const/const.dart';
 import 'package:fehviewer/const/theme_colors.dart';
 import 'package:fehviewer/extension.dart';
 import 'package:fehviewer/models/index.dart';
@@ -456,21 +454,21 @@ class CoverImg extends StatelessWidget {
 
     Widget image() {
       if (imgUrl.isNotEmpty) {
-        // return CachedNetworkImage(
-        //   placeholder: (_, __) {
-        //     return Container(
-        //       alignment: Alignment.center,
-        //       color: CupertinoDynamicColor.resolve(
-        //           CupertinoColors.systemGrey5, context),
-        //       child: const CupertinoActivityIndicator(),
-        //     );
-        //   },
-        //   // height: height,
-        //   width: width,
-        //   httpHeaders: _httpHeaders,
-        //   imageUrl: imgUrl.dfUrl,
-        //   fit: BoxFit.contain,
-        // );
+        return CachedNetworkImage(
+          placeholder: (_, __) {
+            return Container(
+              alignment: Alignment.center,
+              color: CupertinoDynamicColor.resolve(
+                  CupertinoColors.systemGrey5, context),
+              child: const CupertinoActivityIndicator(),
+            );
+          },
+          // height: height,
+          width: width,
+          httpHeaders: _httpHeaders,
+          imageUrl: imgUrl.dfUrl,
+          fit: BoxFit.contain,
+        );
         return NetworkExtendedImage(
           url: imgUrl,
         );

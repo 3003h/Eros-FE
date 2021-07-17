@@ -1,5 +1,6 @@
-// import 'package:cached_network_image/cached_network_image.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:extended_text/extended_text.dart';
+import 'package:fehviewer/common/exts.dart';
 import 'package:fehviewer/common/global.dart';
 import 'package:fehviewer/common/service/depth_service.dart';
 import 'package:fehviewer/common/service/ehconfig_service.dart';
@@ -86,6 +87,7 @@ class CoverImage extends StatelessWidget {
     return Builder(builder: (_) {
       final Map<String, String> _httpHeaders = {
         'Cookie': Global.profile.user.cookie ?? '',
+        'host': Uri.parse(imageUrl ?? '').host,
       };
 
       if (imageUrl != null && imageUrl!.isNotEmpty) {
@@ -111,23 +113,23 @@ class CoverImage extends StatelessWidget {
                   child: Container(
                     height: imgHeight,
                     width: imgWidth,
-                    // child: CachedNetworkImage(
-                    //   placeholder: (_, __) {
-                    //     return Container(
-                    //       alignment: Alignment.center,
-                    //       color: CupertinoDynamicColor.resolve(
-                    //           CupertinoColors.systemGrey5, context),
-                    //       child: const CupertinoActivityIndicator(),
-                    //     );
-                    //   },
-                    //   imageUrl: imageUrl ?? '',
-                    //   fit: BoxFit.cover,
-                    //   httpHeaders: _httpHeaders,
-                    // ),
-                    child: NetworkExtendedImage(
-                      url: imageUrl ?? '',
+                    child: CachedNetworkImage(
+                      placeholder: (_, __) {
+                        return Container(
+                          alignment: Alignment.center,
+                          color: CupertinoDynamicColor.resolve(
+                              CupertinoColors.systemGrey5, context),
+                          child: const CupertinoActivityIndicator(),
+                        );
+                      },
+                      imageUrl: (imageUrl ?? '').dfUrl,
                       fit: BoxFit.cover,
+                      httpHeaders: _httpHeaders,
                     ),
+                    // child: NetworkExtendedImage(
+                    //   url: imageUrl ?? '',
+                    //   fit: BoxFit.cover,
+                    // ),
                   ),
                 ),
               ),
