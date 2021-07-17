@@ -113,19 +113,20 @@ class AllPreviewsPageController extends GetxController
     logger.v('获取更多预览 ${_pageController.galleryItem.url}');
     // 增加延时 避免build期间进行 setState
     await Future<void>.delayed(const Duration(milliseconds: 100));
-    _pageController.currentImagePage++;
+
     isLoading = true;
     update();
 
     final List<GalleryImage> _nextGalleryImageList = await Api.getGalleryImage(
       _pageController.galleryItem.url!,
-      page: _pageController.currentImagePage,
+      page: _pageController.currentImagePage + 1,
       cancelToken: moreGalleryImageCancelToken,
       refresh: _pageController.isRefresh,
     );
 
     _pageController.addAllImages(_nextGalleryImageList);
     isLoading = false;
+    _pageController.currentImagePage += 1;
     change(_images, status: RxStatus.success());
   }
 

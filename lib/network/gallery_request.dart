@@ -426,7 +426,7 @@ class Api {
     // final HttpManager httpManager = HttpManager.getInstance();
     final String url = inUrl + '?p=$page';
 
-    // logger.v(url);
+    logger.d(url);
 
     // 不显示警告的处理 cookie加上 nw=1
     // 在 url使用 nw=always 未解决 自动写入cookie 暂时搞不懂 先手动设置下
@@ -437,15 +437,13 @@ class Api {
     cookies.add(io.Cookie('nw', '1'));
     cookieJar.saveFromResponse(Uri.parse(Api.getBaseUrl()), cookies);
 
-    // await CustomHttpsProxy.instance.init();
-    final String response = await getHttpManager().get(
-          url,
-          options: getCacheOptions(forceRefresh: refresh),
-          cancelToken: cancelToken,
-        ) ??
-        '';
+    final String? response = await getHttpManager().get(
+      url,
+      options: getCacheOptions(forceRefresh: refresh),
+      cancelToken: cancelToken,
+    );
 
-    return GalleryDetailParser.parseGalleryImageFromHtml(response);
+    return GalleryDetailParser.parseGalleryImageFromHtml(response ?? '');
   }
 
   /// 由图片url获取解析图库 showkey

@@ -136,9 +136,12 @@ class DomainFrontingInterceptorRequest extends Interceptor {
         return;
       }
     }
-    final newUri = options.uri.replace(host: ip, queryParameters: {});
+    final newUri = options.uri.replace(host: ip);
     final headers = {...options.headers, 'host': host};
     final extra = {...options.extra, 'domainFrontingRawOptions': options};
+
+    print('options.uri ${options.uri}');
+    print('newUri $newUri');
     handler.next(options.copyWith(
         path: newUri.toString(), headers: headers, extra: extra));
   }

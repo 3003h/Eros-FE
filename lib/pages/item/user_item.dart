@@ -6,6 +6,7 @@ import 'package:fehviewer/common/service/theme_service.dart';
 import 'package:fehviewer/generated/l10n.dart';
 import 'package:fehviewer/route/routes.dart';
 import 'package:fehviewer/utils/logger.dart';
+import 'package:fehviewer/widget/eh_cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -70,30 +71,30 @@ class _UserItem extends State<UserItem> {
       final String _avatarUrl = _userController.user().avatarUrl ?? '';
       if (_userController.isLogin && _avatarUrl.isNotEmpty) {
         return ClipOval(
-          // child: CachedNetworkImage(
-          //   imageUrl: _avatarUrl,
-          //   width: 55,
-          //   height: 55,
-          //   fit: BoxFit.cover,
-          //   errorWidget: (_, __, ___) => _defAvatar,
-          //   placeholder: (_, __) => _defAvatar,
-          // ),
-          child: ExtendedImage.network(
-            _avatarUrl.dfUrl,
+          child: EhCachedNetworkImage(
+            imageUrl: _avatarUrl,
             width: 55,
             height: 55,
             fit: BoxFit.cover,
-            loadStateChanged: (ExtendedImageState state) {
-              switch (state.extendedImageLoadState) {
-                case LoadState.loading:
-                  return _defAvatar;
-                case LoadState.failed:
-                  return _defAvatar;
-                default:
-                  return null;
-              }
-            },
+            errorWidget: (_, __, ___) => _defAvatar,
+            placeholder: (_, __) => _defAvatar,
           ),
+          // child: ExtendedImage.network(
+          //   _avatarUrl.dfUrl,
+          //   width: 55,
+          //   height: 55,
+          //   fit: BoxFit.cover,
+          //   loadStateChanged: (ExtendedImageState state) {
+          //     switch (state.extendedImageLoadState) {
+          //       case LoadState.loading:
+          //         return _defAvatar;
+          //       case LoadState.failed:
+          //         return _defAvatar;
+          //       default:
+          //         return null;
+          //     }
+          //   },
+          // ),
         );
       } else {
         return _defAvatar;
@@ -159,30 +160,30 @@ class UserWidget extends GetView<UserController> {
     final String _avatarUrl = controller.user().avatarUrl ?? '';
     if (controller.isLogin && _avatarUrl.isNotEmpty) {
       return ClipOval(
-        // child: CachedNetworkImage(
-        //   imageUrl: _avatarUrl,
-        //   width: kAvatarSize,
-        //   height: kAvatarSize,
-        //   fit: BoxFit.cover,
-        //   errorWidget: (_, __, ___) => _defAvatar,
-        //   placeholder: (_, __) => _defAvatar,
-        // ),
-        child: ExtendedImage.network(
-          _avatarUrl.dfUrl,
+        child: EhCachedNetworkImage(
+          imageUrl: _avatarUrl,
           width: kAvatarSize,
           height: kAvatarSize,
           fit: BoxFit.cover,
-          loadStateChanged: (ExtendedImageState state) {
-            switch (state.extendedImageLoadState) {
-              case LoadState.loading:
-                return _defAvatar;
-              case LoadState.failed:
-                return _defAvatar;
-              default:
-                return null;
-            }
-          },
+          errorWidget: (_, __, ___) => _defAvatar,
+          placeholder: (_, __) => _defAvatar,
         ),
+        // child: ExtendedImage.network(
+        //   _avatarUrl.dfUrl,
+        //   width: kAvatarSize,
+        //   height: kAvatarSize,
+        //   fit: BoxFit.cover,
+        //   loadStateChanged: (ExtendedImageState state) {
+        //     switch (state.extendedImageLoadState) {
+        //       case LoadState.loading:
+        //         return _defAvatar;
+        //       case LoadState.failed:
+        //         return _defAvatar;
+        //       default:
+        //         return null;
+        //     }
+        //   },
+        // ),
       );
     } else {
       return _defAvatar;

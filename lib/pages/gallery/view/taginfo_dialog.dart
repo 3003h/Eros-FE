@@ -9,6 +9,7 @@ import 'package:fehviewer/route/navigator_util.dart';
 import 'package:fehviewer/store/floor/entity/tag_translat.dart';
 import 'package:fehviewer/utils/logger.dart';
 import 'package:fehviewer/utils/vibrate.dart';
+import 'package:fehviewer/widget/eh_cached_network_image.dart';
 import 'package:fehviewer/widget/network_extended_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -212,21 +213,18 @@ class _TagDialogViewState extends State<TagDialogView> {
                                   EHConst.monoFontFamilyFallback),
                         ),
                         imageBuilder: (Uri uri, String? title, String? alt) {
-                          // return CachedNetworkImage(
-                          //   imageUrl: uri.toString(),
-                          //   httpHeaders: {
-                          //     'Cookie': Global.profile.user.cookie ?? '',
-                          //   },
-                          //   placeholder: (_, __) {
-                          //     return const Padding(
-                          //       padding: EdgeInsets.all(8.0),
-                          //       child: CupertinoActivityIndicator(),
-                          //     );
-                          //   },
-                          // );
-                          return NetworkExtendedImage(
-                            url: uri.toString(),
+                          return EhCachedNetworkImage(
+                            imageUrl: uri.toString(),
+                            placeholder: (_, __) {
+                              return const Padding(
+                                padding: EdgeInsets.all(8.0),
+                                child: CupertinoActivityIndicator(),
+                              );
+                            },
                           );
+                          // return NetworkExtendedImage(
+                          //   url: uri.toString(),
+                          // );
                         },
                       ),
                       const SizedBox(height: 12),
