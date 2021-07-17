@@ -165,7 +165,7 @@ class ThemeColors {
   /// 深色灰黑
   static CupertinoThemeData darkGrayTheme = CupertinoThemeData(
     brightness: Brightness.dark,
-    scaffoldBackgroundColor: Color.fromARGB(255, 30, 30, 30),
+    scaffoldBackgroundColor: const Color.fromARGB(255, 30, 30, 30),
     barBackgroundColor: navigationBarBackgroundGray,
     textTheme: ehTextTheme,
   );
@@ -240,9 +240,12 @@ class ThemeColors {
 
   static const CupertinoDynamicColor navigationBarBackgroundGray =
       CupertinoDynamicColor.withBrightness(
-    debugLabel: 'navigationBarBackground',
+    debugLabel: 'navigationBarBackgroundGray',
+    // color: Color.fromARGB(230, 35, 35, 35),
     color: Color.fromARGB(222, 249, 249, 249),
     darkColor: Color.fromARGB(230, 35, 35, 35),
+    // color: Color.fromARGB(222, 186, 27, 27),
+    // darkColor: Color.fromARGB(230, 21, 212, 75),
   );
 
   static const Map<String, Color> colorRatingMap = <String, Color>{
