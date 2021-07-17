@@ -2,7 +2,8 @@ import 'dart:convert';
 import 'dart:io' as io;
 import 'dart:typed_data';
 
-import 'package:cached_network_image/cached_network_image.dart';
+import 'package:collection/collection.dart';
+// import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cookie_jar/cookie_jar.dart';
 import 'package:dio/dio.dart' as dio;
 import 'package:dio/dio.dart';
@@ -12,6 +13,7 @@ import 'package:extended_image/extended_image.dart';
 import 'package:fehviewer/common/controller/advance_search_controller.dart';
 import 'package:fehviewer/common/global.dart';
 import 'package:fehviewer/common/parser/eh_parser.dart';
+import 'package:fehviewer/common/service/dns_service.dart';
 import 'package:fehviewer/common/service/ehconfig_service.dart';
 import 'package:fehviewer/const/const.dart';
 import 'package:fehviewer/generated/l10n.dart';
@@ -20,7 +22,6 @@ import 'package:fehviewer/pages/gallery/controller/archiver_controller.dart';
 import 'package:fehviewer/pages/gallery/controller/torrent_controller.dart';
 import 'package:fehviewer/pages/tab/controller/search_page_controller.dart';
 import 'package:fehviewer/utils/dio_util.dart';
-import 'package:fehviewer/utils/https_proxy.dart';
 import 'package:fehviewer/utils/logger.dart';
 import 'package:fehviewer/utils/time.dart';
 import 'package:fehviewer/utils/toast.dart';
@@ -36,7 +37,6 @@ import 'package:path/path.dart' as path;
 import 'package:permission_handler/permission_handler.dart';
 import 'package:share/share.dart';
 import 'package:tuple/tuple.dart';
-import 'package:collection/collection.dart';
 
 import 'error.dart';
 
@@ -53,10 +53,10 @@ class Api {
   Api() {
     final String _baseUrl =
         EHConst.getBaseSite(Get.find<EhConfigService>().isSiteEx.value);
-    httpManager = HttpManager.getInstance(baseUrl: _baseUrl);
+    // httpManager = HttpManager.getInstance(baseUrl: _baseUrl);
   }
 
-  late HttpManager httpManager;
+  // late HttpManager httpManager;
   late String _baseUrl;
 
   //改为使用 PersistCookieJar，在文档中有介绍，PersistCookieJar将cookie保留在文件中，
@@ -80,8 +80,13 @@ class Api {
   }) {
     final String _baseUrl =
         EHConst.getBaseSite(Get.find<EhConfigService>().isSiteEx.value);
-    return HttpManager(baseUrl ?? _baseUrl,
-        cache: cache, connectTimeout: connectTimeout);
+    final bool df = Get.find<DnsService>().enableDomainFronting;
+    return HttpManager(
+      baseUrl ?? _baseUrl,
+      cache: cache,
+      connectTimeout: connectTimeout,
+      domainFronting: df,
+    );
   }
 
   static dio.Options getCacheOptions(
@@ -130,7 +135,7 @@ class Api {
 
     _printCookie();
 
-    await CustomHttpsProxy.instance.init();
+    // await CustomHttpsProxy.instance.init();
     final dio.Options _cacheOptions = getCacheOptions(forceRefresh: refresh);
 
     final String response =
@@ -189,7 +194,7 @@ class Api {
       params.addAll(_searchController.advanceSearchMap);
     }
 
-    await CustomHttpsProxy.instance.init();
+    // await CustomHttpsProxy.instance.init();
     final String response = await getHttpManager().get(
           _url,
           options: _cacheOptions,
@@ -255,7 +260,7 @@ class Api {
 
     // logger.v(url);
 
-    await CustomHttpsProxy.instance.init();
+    // await CustomHttpsProxy.instance.init();
     final String response = await getHttpManager()
             .get(url, options: _cacheOptions, params: params) ??
         '';
@@ -308,7 +313,7 @@ class Api {
 
     final dio.Options _cacheOptions = getCacheOptions(forceRefresh: refresh);
 
-    await CustomHttpsProxy.instance.init();
+    // await CustomHttpsProxy.instance.init();
     String response = await getHttpManager()
             .get(url, options: _cacheOptions, params: params) ??
         '';
@@ -381,7 +386,7 @@ class Api {
 
     // logger.d('获取画廊 $url');
     time.showTime('获取画廊');
-    await CustomHttpsProxy.instance.init();
+    // await CustomHttpsProxy.instance.init();
     time.showTime('设置代理');
     final String response = await getHttpManager()
             .get(url, options: getCacheOptions(forceRefresh: refresh)) ??
@@ -432,7 +437,7 @@ class Api {
     cookies.add(io.Cookie('nw', '1'));
     cookieJar.saveFromResponse(Uri.parse(Api.getBaseUrl()), cookies);
 
-    await CustomHttpsProxy.instance.init();
+    // await CustomHttpsProxy.instance.init();
     final String response = await getHttpManager().get(
           url,
           options: getCacheOptions(forceRefresh: refresh),
@@ -451,7 +456,7 @@ class Api {
 //   }) async {
 //     final String url = href;
 //
-//     await CustomHttpsProxy.instance.init();
+//     // await CustomHttpsProxy.instance.init();
 //     final String response = await getHttpManager()
 //             .get(url, options: getCacheOptions(forceRefresh: refresh)) ??
 //         '';
@@ -576,7 +581,7 @@ class Api {
 
       // logger.d(reqJsonStr);
 
-      await CustomHttpsProxy.instance.init();
+      // await CustomHttpsProxy.instance.init();
       final rult = await getGalleryApi(reqJsonStr, refresh: refresh);
 
       // logger.d('$rult');
@@ -676,7 +681,7 @@ class Api {
     };
     final String reqJsonStr = jsonEncode(reqMap);
     logger.d('$reqJsonStr');
-    await CustomHttpsProxy.instance.init();
+    // await CustomHttpsProxy.instance.init();
     final rult = await getGalleryApi(reqJsonStr, refresh: true, cache: false);
     logger.d('$rult');
     final Map<String, dynamic> rultMap = jsonDecode(rult.toString());
@@ -702,7 +707,7 @@ class Api {
     };
     final String reqJsonStr = jsonEncode(reqMap);
     // logger.d('$reqJsonStr');
-    await CustomHttpsProxy.instance.init();
+    // await CustomHttpsProxy.instance.init();
     final rult = await getGalleryApi(reqJsonStr, refresh: true, cache: false);
     // logger.d('$rult');
     // final jsonObj = jsonDecode(rult.toString());
@@ -729,7 +734,7 @@ class Api {
     };
     final String reqJsonStr = jsonEncode(reqMap);
     logger.d('$reqJsonStr');
-    await CustomHttpsProxy.instance.init();
+    // await CustomHttpsProxy.instance.init();
     final rult = await getGalleryApi(reqJsonStr, refresh: true, cache: false);
     logger.d('$rult');
     final Map<String, dynamic> rultMap = jsonDecode(rult.toString());
@@ -878,7 +883,7 @@ class Api {
   }) async {
     const String url = '/api.php';
 
-    await CustomHttpsProxy.instance.init();
+    // await CustomHttpsProxy.instance.init();
     final response = await getHttpManager(
       cache: cache,
       // baseUrl: EHConst.getBaseSite(),
@@ -892,17 +897,17 @@ class Api {
   }
 
   /// 分享图片
-  static Future<void> shareImage(String imageUrl) async {
-    final CachedNetworkImage image = CachedNetworkImage(imageUrl: imageUrl);
-    final DefaultCacheManager manager =
-        image.cacheManager as DefaultCacheManager? ?? DefaultCacheManager();
-    final Map<String, String>? headers = image.httpHeaders;
-    final File file = await manager.getSingleFile(
-      image.imageUrl,
-      headers: headers,
-    );
-    Share.shareFiles(<String>[file.path]);
-  }
+  // static Future<void> shareImage(String imageUrl) async {
+  //   final CachedNetworkImage image = CachedNetworkImage(imageUrl: imageUrl);
+  //   final DefaultCacheManager manager =
+  //       image.cacheManager as DefaultCacheManager? ?? DefaultCacheManager();
+  //   final Map<String, String>? headers = image.httpHeaders;
+  //   final File file = await manager.getSingleFile(
+  //     image.imageUrl,
+  //     headers: headers,
+  //   );
+  //   Share.shareFiles(<String>[file.path]);
+  // }
 
   static Future<void> shareImageExtended(String imageUrl) async {
     logger.d('imageUrl => $imageUrl');
@@ -1009,48 +1014,48 @@ class Api {
     return false;
   }
 
-  static Future<bool> _saveImage(String imageUrl,
-      {bool isAsset = false}) async {
-    try {
-      if (imageUrl == null) {
-        throw 'Save failed, picture does not exist!';
-      }
-
-      /// 保存的图片数据
-      Uint8List imageBytes;
-
-      if (isAsset == true) {
-        /// 保存资源图片
-        final ByteData bytes = await rootBundle.load(imageUrl);
-        imageBytes = bytes.buffer.asUint8List();
-      } else {
-        /// 保存网络图片
-        logger.d('保存网络图片');
-        final CachedNetworkImage image = CachedNetworkImage(imageUrl: imageUrl);
-        final DefaultCacheManager manager =
-            image.cacheManager as DefaultCacheManager? ?? DefaultCacheManager();
-        final Map<String, String>? headers = image.httpHeaders;
-        final File file = await manager.getSingleFile(
-          image.imageUrl,
-          headers: headers,
-        );
-        imageBytes = await file.readAsBytes();
-      }
-
-      /// 保存图片
-      final result = await ImageGallerySaver.saveImage(imageBytes);
-
-      if (result == null || result == '') {
-        throw 'Save image fail';
-      }
-
-      logger.d('保存成功');
-      return true;
-    } catch (e) {
-      logger.e(e.toString());
-      rethrow;
-    }
-  }
+  // static Future<bool> _saveImage(String imageUrl,
+  //     {bool isAsset = false}) async {
+  //   try {
+  //     if (imageUrl == null) {
+  //       throw 'Save failed, picture does not exist!';
+  //     }
+  //
+  //     /// 保存的图片数据
+  //     Uint8List imageBytes;
+  //
+  //     if (isAsset == true) {
+  //       /// 保存资源图片
+  //       final ByteData bytes = await rootBundle.load(imageUrl);
+  //       imageBytes = bytes.buffer.asUint8List();
+  //     } else {
+  //       /// 保存网络图片
+  //       logger.d('保存网络图片');
+  //       final CachedNetworkImage image = CachedNetworkImage(imageUrl: imageUrl);
+  //       final DefaultCacheManager manager =
+  //           image.cacheManager as DefaultCacheManager? ?? DefaultCacheManager();
+  //       final Map<String, String>? headers = image.httpHeaders;
+  //       final File file = await manager.getSingleFile(
+  //         image.imageUrl,
+  //         headers: headers,
+  //       );
+  //       imageBytes = await file.readAsBytes();
+  //     }
+  //
+  //     /// 保存图片
+  //     final result = await ImageGallerySaver.saveImage(imageBytes);
+  //
+  //     if (result == null || result == '') {
+  //       throw 'Save image fail';
+  //     }
+  //
+  //     logger.d('保存成功');
+  //     return true;
+  //   } catch (e) {
+  //     logger.e(e.toString());
+  //     rethrow;
+  //   }
+  // }
 
   static Future<bool> _saveImageExtended(String imageUrl,
       {bool isAsset = false}) async {
@@ -1164,7 +1169,7 @@ class Api {
     //         })
     //     .toOptions();
 
-    await CustomHttpsProxy.instance.init();
+    // await CustomHttpsProxy.instance.init();
     final dio.Response<dynamic> response = await Api.getHttpManager().postForm(
       url,
       options: _cacheOptinos,
@@ -1211,7 +1216,7 @@ class Api {
       if (sourceId != null && sourceId.trim().isNotEmpty) 'nl': sourceId,
     };
 
-    await CustomHttpsProxy.instance.init();
+    // await CustomHttpsProxy.instance.init();
     final String response = await Api.getHttpManager(connectTimeout: 5000).get(
           url,
           options: getCacheOptions(
@@ -1236,7 +1241,7 @@ class Api {
     bool deleteOnError = true,
     VoidCallback? onDownloadComplete,
   }) async {
-    await CustomHttpsProxy.instance.init();
+    // await CustomHttpsProxy.instance.init();
     await Api.getHttpManager().downLoadFile(
       url,
       path,

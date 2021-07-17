@@ -1,7 +1,9 @@
 import 'dart:async';
 import 'dart:ui' as ui;
 
-import 'package:cached_network_image/cached_network_image.dart';
+// import 'package:cached_network_image/cached_network_image.dart';
+import 'package:extended_image/extended_image.dart';
+import 'package:fehviewer/common/exts.dart';
 import 'package:fehviewer/common/global.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -50,12 +52,21 @@ class PreviewImageClipper extends StatelessWidget {
   Future<ui.Image> _loadPreviewImge(String imgUrl) async {
     final Map<String, String> _httpHeaders = {
       'Cookie': Global.profile.user.cookie ?? '',
+      'host': Uri.parse(imgUrl).host,
     };
-    final ImageStream imageStream = CachedNetworkImageProvider(
-      imgUrl,
+
+    // final ImageStream imageStream = CachedNetworkImageProvider(
+    //   imgUrl,
+    //   scale: kScale,
+    //   headers: _httpHeaders,
+    // ).resolve(const ImageConfiguration());
+
+    final ImageStream imageStream = ExtendedNetworkImageProvider(
+      imgUrl.dfUrl,
       scale: kScale,
       headers: _httpHeaders,
     ).resolve(const ImageConfiguration());
+
 //    imageStream =
 //        CachedNetworkImageProvider(imgUrl).resolve(ImageConfiguration());
     final Completer<ui.Image> completer = Completer<ui.Image>();

@@ -5,14 +5,16 @@ import 'package:dio/dio.dart';
 import 'package:dio_firebase_performance/dio_firebase_performance.dart';
 import 'package:dio_http_cache/dio_http_cache.dart';
 import 'package:fehviewer/common/global.dart';
+import 'package:fehviewer/common/service/dns_service.dart';
 import 'package:fehviewer/const/const.dart';
+import 'package:fehviewer/network/dio_interceptor/domain_fronting/domain_fronting.dart';
 import 'package:fehviewer/utils/time.dart';
 import 'package:fehviewer/utils/toast.dart';
-import 'package:flutter/foundation.dart';
+import 'package:get/get.dart' hide Response;
 import 'package:pretty_dio_logger/pretty_dio_logger.dart';
 
-import 'dio_retry/options.dart';
-import 'dio_retry/retry_interceptor.dart';
+import '../network/dio_interceptor/dio_retry/options.dart';
+import '../network/dio_interceptor/dio_retry/retry_interceptor.dart';
 import 'logger.dart';
 
 const int kDefconnectTimeout = 10000;
@@ -24,6 +26,7 @@ class HttpManager {
     String _baseUrl, {
     bool cache = true,
     bool retry = false,
+    bool domainFronting = false,
     int? connectTimeout = kDefconnectTimeout,
   }) {
     _options = BaseOptions(
@@ -110,15 +113,37 @@ class HttpManager {
           )));
     }
 
-    (_dio.httpClientAdapter as DefaultHttpClientAdapter).onHttpClientCreate =
-        (HttpClient client) {
-      final HttpClient httpClient = HttpClient();
-      httpClient.badCertificateCallback =
-          (X509Certificate cert, String host, int port) {
-        return true;
+    if (domainFronting) {
+      logger.d('domainFronting');
+      final DnsService dnsServices = Get.find();
+      final bool enableDoH = dnsServices.enableDoH;
+
+      final coutomHosts = dnsServices.hostMapMerge;
+
+      final domainFronting = DomainFronting(
+        hosts: coutomHosts,
+        dnsLookup: enableDoH
+            ? (String host) async {
+                final dc = await dnsServices.getDoHCache(host);
+                return dc?.addr ?? host;
+              }
+            : null,
+      );
+
+      // 允许证书错误的地址/ip
+      final hostWhiteList = coutomHosts.values.toSet();
+
+      (_dio.httpClientAdapter as DefaultHttpClientAdapter).onHttpClientCreate =
+          (HttpClient client) {
+        client.badCertificateCallback =
+            (X509Certificate cert, String host, int port) {
+          return hostWhiteList.contains(host);
+        };
       };
-      return httpClient;
-    };
+
+      // 在其他插件添加完毕后再添加，以确保执行顺序正确
+      domainFronting.bind(dio.interceptors);
+    }
   }
 
   //单例模式
@@ -130,11 +155,16 @@ class HttpManager {
   late BaseOptions _options;
 
   //单例模式，一个baseUrl只创建一次实例
-  static HttpManager getInstance(
-      {String baseUrl = '', bool cache = true, bool retry = false}) {
-    final String _key = '${baseUrl}_$cache';
+  static HttpManager getInstance({
+    String baseUrl = '',
+    bool cache = true,
+    bool retry = false,
+    bool df = false,
+  }) {
+    final String _key = '${baseUrl}_${cache}_${retry}_${df}';
     if (null == _instanceMap[_key]) {
-      _instanceMap[_key] = HttpManager(baseUrl, cache: cache, retry: retry);
+      _instanceMap[_key] =
+          HttpManager(baseUrl, cache: cache, retry: retry, domainFronting: df);
     }
     return _instanceMap[_key]!;
   }

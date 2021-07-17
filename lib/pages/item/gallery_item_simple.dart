@@ -1,16 +1,16 @@
-import 'package:cached_network_image/cached_network_image.dart';
+// import 'package:cached_network_image/cached_network_image.dart';
 import 'package:fehviewer/common/global.dart';
 import 'package:fehviewer/common/service/ehconfig_service.dart';
 import 'package:fehviewer/const/theme_colors.dart';
 import 'package:fehviewer/models/base/eh_models.dart';
 import 'package:fehviewer/pages/item/controller/galleryitem_controller.dart';
 import 'package:fehviewer/widget/blur_image.dart';
+import 'package:fehviewer/widget/network_extended_image.dart';
 import 'package:fehviewer/widget/rating_bar.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
-import 'package:keframe/frame_separate_widget.dart';
 
 const double kCoverImageWidth = 70.0;
 const double kItemWidth = 115.0;
@@ -299,19 +299,25 @@ class CoverImg extends StatelessWidget {
           builder: (context, constraints) {
             return BlurImage(
               isBlur: _isBlur,
-              child: CachedNetworkImage(
-                placeholder: (_, __) {
-                  return Container(
-                    alignment: Alignment.center,
-                    color: CupertinoDynamicColor.resolve(
-                        CupertinoColors.systemGrey5, context),
-                    child: const CupertinoActivityIndicator(),
-                  );
-                },
+              // child: CachedNetworkImage(
+              //   placeholder: (_, __) {
+              //     return Container(
+              //       alignment: Alignment.center,
+              //       color: CupertinoDynamicColor.resolve(
+              //           CupertinoColors.systemGrey5, context),
+              //       child: const CupertinoActivityIndicator(),
+              //     );
+              //   },
+              //   height: (height ?? 0) * constraints.maxWidth / (width ?? 0),
+              //   width: constraints.maxWidth,
+              //   httpHeaders: _httpHeaders,
+              //   imageUrl: imgUrl,
+              //   fit: BoxFit.fitWidth,
+              // ),
+              child: NetworkExtendedImage(
+                url: imgUrl,
                 height: (height ?? 0) * constraints.maxWidth / (width ?? 0),
                 width: constraints.maxWidth,
-                httpHeaders: _httpHeaders,
-                imageUrl: imgUrl,
                 fit: BoxFit.fitWidth,
               ),
             );

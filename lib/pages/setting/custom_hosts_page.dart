@@ -1,6 +1,3 @@
-import 'dart:io';
-
-import 'package:fehviewer/common/global.dart';
 import 'package:fehviewer/common/service/dns_service.dart';
 import 'package:fehviewer/common/service/theme_service.dart';
 import 'package:fehviewer/generated/l10n.dart';
@@ -19,14 +16,14 @@ class CustomHostsPage extends StatelessWidget {
     final DnsService dnsConfigController = Get.find();
 
     void _handleEnableCustomHostDarkChanged(bool value) {
-      if (!value && !(dnsConfigController.enableDoH.value)) {
-        /// 关闭代理
-        HttpOverrides.global = null;
-      } else if (value) {
-        /// 设置全局本地代理
-        HttpOverrides.global = Global.httpProxy;
-      }
-      dnsConfigController.enableCustomHosts.value = value;
+      // if (!value && !(dnsConfigController.enableDoH)) {
+      //   /// 关闭代理
+      //   HttpOverrides.global = null;
+      // } else if (value) {
+      //   /// 设置全局本地代理
+      //   HttpOverrides.global = Global.httpProxy;
+      // }
+      dnsConfigController.enableCustomHosts = value;
     }
 
     return CupertinoPageScaffold(
@@ -46,7 +43,7 @@ class CustomHostsPage extends StatelessWidget {
             children: <Widget>[
               Obx(() => TextSwitchItem(
                     _title,
-                    intValue: dnsConfigController.enableCustomHosts.value,
+                    intValue: dnsConfigController.enableCustomHosts,
                     onChanged: _handleEnableCustomHostDarkChanged,
                   )),
               Container(height: 38),

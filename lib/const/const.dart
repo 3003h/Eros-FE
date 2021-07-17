@@ -1,6 +1,10 @@
+import 'package:extended_image/extended_image.dart';
 import 'package:fehviewer/common/global.dart';
 import 'package:fehviewer/common/service/ehconfig_service.dart';
+import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
 
 enum ListModeEnum {
@@ -62,6 +66,28 @@ class GetIds {
   static const String PAGE_VIEW_BODY = 'body';
   static const String TAG_ADD_CLEAR_BTN = 'TAG_ADD_CLEAR_BTN';
 }
+
+LoadStateChanged defLoadStateChanged = (ExtendedImageState state) {
+  switch (state.extendedImageLoadState) {
+    case LoadState.loading:
+      return Container(
+        alignment: Alignment.center,
+        color: CupertinoDynamicColor.resolve(
+            CupertinoColors.systemGrey5, Get.context!),
+        child: const CupertinoActivityIndicator(),
+      );
+    case LoadState.failed:
+      return Container(
+        alignment: Alignment.center,
+        child: const Icon(
+          Icons.error,
+          color: Colors.red,
+        ),
+      );
+    default:
+      return null;
+  }
+};
 
 // ignore: avoid_classes_with_only_static_members
 class EHConst {
@@ -252,18 +278,18 @@ class EHConst {
     'vietnamese': 'VI',
   };
 
-  static List<String> fontFamilyFallback = [
+  static const List<String> fontFamilyFallback = [
     'miui',
     // 'sans-serif',
   ];
-  static List<String> monoFontFamilyFallback = [
+  static const List<String> monoFontFamilyFallback = [
     'monaco',
     'monospace',
     'Menlo',
     'Courier New',
   ];
 
-  static List<int> invList = [
+  static const List<int> invList = [
     500,
     1000,
     1500,
@@ -285,4 +311,10 @@ class EHConst {
     9500,
     10000,
   ];
+
+  static const Map<String, String> internalHosts = {
+    'e-hentai.org': '104.20.134.21',
+    'api.e-hentai.org': '37.48.89.16',
+    'exhentai.org': '178.175.129.252',
+  };
 }

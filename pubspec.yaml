@@ -3,7 +3,7 @@ description: fehviewer
 
 publish_to: 'none' # Remove this line if you wish to publish to pub.dev
 
-version: 1.1.19+235
+version: 1.1.19+236
 
 environment:
   sdk: '>=2.13.0 <3.0.0'
@@ -59,7 +59,7 @@ dependencies:
   get_storage: ^2.0.2
   photo_view: ^0.11.1
   # 图片相关
-  cached_network_image: ^3.0.0
+#  cached_network_image: ^3.0.0
   extended_image: ^4.1.0
   liquid_progress_indicator_ns: ^1.0.0
   logger: ^1.0.0

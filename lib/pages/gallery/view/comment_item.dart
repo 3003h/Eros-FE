@@ -1,4 +1,4 @@
-import 'package:cached_network_image/cached_network_image.dart';
+// import 'package:cached_network_image/cached_network_image.dart';
 import 'package:fehviewer/common/global.dart';
 import 'package:fehviewer/common/service/depth_service.dart';
 import 'package:fehviewer/common/service/ehconfig_service.dart';
@@ -13,6 +13,7 @@ import 'package:fehviewer/route/navigator_util.dart';
 import 'package:fehviewer/utils/logger.dart';
 import 'package:fehviewer/utils/vibrate.dart';
 import 'package:fehviewer/widget/expandable_linkify.dart';
+import 'package:fehviewer/widget/network_extended_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart' hide SelectableText;
 import 'package:flutter_linkify/flutter_linkify.dart' as clif;
@@ -69,10 +70,13 @@ class CommentItem extends StatelessWidget {
                 child: Container(
                   constraints:
                       const BoxConstraints(maxWidth: 100, maxHeight: 140),
-                  child: CachedNetworkImage(
-                    httpHeaders: _httpHeaders,
-                    imageUrl: e.imageUrl!,
-                    placeholder: (_, __) => const CupertinoActivityIndicator(),
+                  // child: CachedNetworkImage(
+                  //   httpHeaders: _httpHeaders,
+                  //   imageUrl: e.imageUrl!,
+                  //   placeholder: (_, __) => const CupertinoActivityIndicator(),
+                  // ),
+                  child: NetworkExtendedImage(
+                    url: e.imageUrl ?? '',
                   ),
                 ),
               ),
@@ -166,11 +170,14 @@ class CommentItem extends StatelessWidget {
                     child: Container(
                       constraints:
                           const BoxConstraints(maxWidth: 100, maxHeight: 140),
-                      child: CachedNetworkImage(
-                        httpHeaders: _httpHeaders,
-                        imageUrl: e.imageUrl!,
-                        placeholder: (_, __) =>
-                            const CupertinoActivityIndicator(),
+                      // child: CachedNetworkImage(
+                      //   httpHeaders: _httpHeaders,
+                      //   imageUrl: e.imageUrl!,
+                      //   placeholder: (_, __) =>
+                      //       const CupertinoActivityIndicator(),
+                      // ),
+                      child: NetworkExtendedImage(
+                        url: e.imageUrl ?? '',
                       ),
                     ),
                   );
@@ -315,11 +322,14 @@ class CommentItem extends StatelessWidget {
                     child: Container(
                       constraints:
                           const BoxConstraints(maxWidth: 100, maxHeight: 140),
-                      child: CachedNetworkImage(
-                        httpHeaders: _httpHeaders,
-                        imageUrl: commentSpan.imageUrl ?? '',
-                        placeholder: (_, __) =>
-                            const CupertinoActivityIndicator(),
+                      // child: CachedNetworkImage(
+                      //   httpHeaders: _httpHeaders,
+                      //   imageUrl: commentSpan.imageUrl ?? '',
+                      //   placeholder: (_, __) =>
+                      //       const CupertinoActivityIndicator(),
+                      // ),
+                      child: NetworkExtendedImage(
+                        url: commentSpan.imageUrl ?? '',
                       ),
                     ),
                   );

@@ -1,4 +1,4 @@
-import 'package:cached_network_image/cached_network_image.dart';
+// import 'package:cached_network_image/cached_network_image.dart';
 import 'package:extended_text/extended_text.dart';
 import 'package:fehviewer/common/global.dart';
 import 'package:fehviewer/common/service/depth_service.dart';
@@ -17,6 +17,7 @@ import 'package:fehviewer/route/navigator_util.dart';
 import 'package:fehviewer/route/routes.dart';
 // import 'package:fehviewer/utils/cust_lib/selectable_text.dart';
 import 'package:fehviewer/utils/logger.dart';
+import 'package:fehviewer/widget/network_extended_image.dart';
 import 'package:fehviewer/widget/rating_bar.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -42,16 +43,21 @@ class CoveTinyImage extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.all(4),
       child: ClipRRect(
-        // 圆角
-        borderRadius: BorderRadius.circular(4),
-        child: CachedNetworkImage(
-          httpHeaders: _httpHeaders,
-          width: 44,
-          height: 44,
-          fit: BoxFit.cover,
-          imageUrl: imgUrl,
-        ),
-      ),
+          // 圆角
+          borderRadius: BorderRadius.circular(4),
+          // child: CachedNetworkImage(
+          //   httpHeaders: _httpHeaders,
+          //   width: 44,
+          //   height: 44,
+          //   fit: BoxFit.cover,
+          //   imageUrl: imgUrl,
+          // ),
+          child: NetworkExtendedImage(
+            url: imgUrl,
+            height: 44,
+            width: 44,
+            fit: BoxFit.cover,
+          )),
     );
   }
 }
@@ -105,18 +111,22 @@ class CoverImage extends StatelessWidget {
                   child: Container(
                     height: imgHeight,
                     width: imgWidth,
-                    child: CachedNetworkImage(
-                      placeholder: (_, __) {
-                        return Container(
-                          alignment: Alignment.center,
-                          color: CupertinoDynamicColor.resolve(
-                              CupertinoColors.systemGrey5, context),
-                          child: const CupertinoActivityIndicator(),
-                        );
-                      },
-                      imageUrl: imageUrl ?? '',
+                    // child: CachedNetworkImage(
+                    //   placeholder: (_, __) {
+                    //     return Container(
+                    //       alignment: Alignment.center,
+                    //       color: CupertinoDynamicColor.resolve(
+                    //           CupertinoColors.systemGrey5, context),
+                    //       child: const CupertinoActivityIndicator(),
+                    //     );
+                    //   },
+                    //   imageUrl: imageUrl ?? '',
+                    //   fit: BoxFit.cover,
+                    //   httpHeaders: _httpHeaders,
+                    // ),
+                    child: NetworkExtendedImage(
+                      url: imageUrl ?? '',
                       fit: BoxFit.cover,
-                      httpHeaders: _httpHeaders,
                     ),
                   ),
                 ),
@@ -526,12 +536,15 @@ class PreviewContainer extends StatelessWidget {
     Widget _buildImage() {
       if (galleryImage.isLarge ?? false) {
         // 缩略大图
-        return CachedNetworkImage(
-          httpHeaders: _httpHeaders,
-          imageUrl: galleryImage.thumbUrl ?? '',
-          progressIndicatorBuilder: (_, __, ___) {
-            return const CupertinoActivityIndicator();
-          },
+        // return CachedNetworkImage(
+        //   httpHeaders: _httpHeaders,
+        //   imageUrl: galleryImage.thumbUrl ?? '',
+        //   progressIndicatorBuilder: (_, __, ___) {
+        //     return const CupertinoActivityIndicator();
+        //   },
+        // );
+        return NetworkExtendedImage(
+          url: galleryImage.thumbUrl ?? '',
         );
       } else {
         return LayoutBuilder(

@@ -1,6 +1,7 @@
 import 'package:extended_image/extended_image.dart';
 import 'package:fehviewer/common/global.dart';
 import 'package:fehviewer/const/const.dart';
+import 'package:fehviewer/generated/l10n.dart';
 import 'package:fehviewer/models/index.dart';
 import 'package:fehviewer/pages/image_view/controller/view_state.dart';
 import 'package:fehviewer/pages/image_view/view/view_image.dart';
@@ -17,7 +18,6 @@ import 'package:line_icons/line_icons.dart';
 import 'package:photo_view/photo_view.dart';
 import 'package:photo_view/photo_view_gallery.dart';
 import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
-import 'package:fehviewer/generated/l10n.dart';
 
 import '../controller/view_controller.dart';
 

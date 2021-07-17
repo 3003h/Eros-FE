@@ -10,7 +10,6 @@ import 'common/controller/localfav_controller.dart';
 import 'common/controller/quicksearch_controller.dart';
 import 'common/controller/tag_trans_controller.dart';
 import 'common/controller/user_controller.dart';
-import 'common/isolate_download/download_manager.dart';
 import 'common/service/depth_service.dart';
 import 'common/service/dns_service.dart';
 import 'common/service/ehconfig_service.dart';

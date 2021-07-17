@@ -1,4 +1,5 @@
 import 'package:fehviewer/common/global.dart';
+import 'package:fehviewer/const/const.dart';
 import 'package:fehviewer/models/index.dart';
 import 'package:fehviewer/utils/dns_util.dart';
 import 'package:fehviewer/utils/logger.dart';
@@ -12,15 +13,50 @@ const String _regExpHost =
     r'^(?=^.{3,255}$)[a-zA-Z0-9][-a-zA-Z0-9]{0,62}(\.[a-zA-Z0-9][-a-zA-Z0-9]{0,62})+$';
 
 class DnsService extends ProfileService {
-  RxBool enableCustomHosts = false.obs;
-  RxBool enableDoH = false.obs;
-  RxBool enableDomainFronting = false.obs;
+  // RxBool enableCustomHosts = false.obs;
+  final _enableCustomHosts = false.obs;
+  bool get enableCustomHosts => _enableCustomHosts.value;
+  set enableCustomHosts(val) => _enableCustomHosts.value = val;
+
+  // RxBool enableDoH = false.obs;
+  final _enableDoH = false.obs;
+  bool get enableDoH => _enableDoH.value;
+  set enableDoH(val) => _enableDoH.value = val;
+
+  // RxBool enableDomainFronting = false.obs;
+  final _enableDomainFronting = false.obs;
+  bool get enableDomainFronting => _enableDomainFronting.value;
+  set enableDomainFronting(val) => _enableDomainFronting.value = val;
+
   final RxList<DnsCache> _hosts = <DnsCache>[].obs;
   final RxList<DnsCache> _dohCache = <DnsCache>[].obs;
 
   RxList<DnsCache> get hosts => _hosts;
 
   RxList<DnsCache> get dohCache => _dohCache;
+
+  Map<String, String> get hostMap {
+    final _map = <String, String>{};
+    for (final dc in hosts) {
+      if (dc.host != null && dc.addr != null) {
+        _map.putIfAbsent(dc.host!, () => dc.addr!);
+      }
+    }
+    return _map;
+  }
+
+  Map<String, String> get hostMapMerge {
+    final coutomHosts = hostMap;
+
+    // 预置列表
+    if (enableCustomHosts) {
+      for (final host in EHConst.internalHosts.entries) {
+        coutomHosts.putIfAbsent(host.key, () => host.value);
+      }
+    }
+
+    return coutomHosts;
+  }
 
   void removeCustomHostAt(int index) {
     _hosts.removeAt(index);
@@ -60,9 +96,9 @@ class DnsService extends ProfileService {
     }
   }
 
-  Future<void> updateDoHCache(String host) async {
+  Future<DnsCache?> getDoHCache(String host) async {
     if (host == 'cloudflare-dns.com') {
-      return;
+      return null;
     }
 
     // 24小时
@@ -75,26 +111,29 @@ class DnsService extends ProfileService {
     if (dnsCache != null) {
       if (dnsCache.lastResolve != null &&
           nowTime - (dnsCache.lastResolve ?? -1) > updateInterval) {
-        logger.wtf(' updateDoHCache $host');
+        logger.d('updateDoHCache $host');
         // get new and cache
-        final String _addr = await DnsUtil.doh(host);
-        // dnsCache
-        //   ..lastResolve = nowTime
-        //   ..addr = _addr;
-        dohCache[index] = dnsCache.copyWith(lastResolve: nowTime, addr: _addr);
+        final String? _addr = await DnsUtil.doh(host);
+        final _dc = dnsCache.copyWith(lastResolve: nowTime, addr: _addr);
+        dohCache[index] = _dc;
+        logger.d('rult ${_dc.toJson()}');
+        return _dc;
       }
     } else {
       // get new
-      logger.wtf(' get new doh $host');
-      final String _addr = await DnsUtil.doh(host);
-      // logger.d(' get new doh $host  addr=$_addr');
-      dohCache.add(DnsCache(
+      logger.d('get new doh $host');
+      final String? _addr = await DnsUtil.doh(host);
+      logger.d(' get new doh $host  addr=$_addr');
+      final _dc = DnsCache(
         host: host,
         lastResolve: nowTime,
         addr: _addr,
         ttl: -1,
         addrs: [],
-      ));
+      );
+      dohCache.add(_dc);
+      // logger.d(_dc.toJson());
+      return _dc;
     }
   }
 
@@ -102,39 +141,36 @@ class DnsService extends ProfileService {
   void onInit() {
     super.onInit();
     final DnsConfig _dnsConfig = Global.profile.dnsConfig;
-    enableCustomHosts.value = _dnsConfig.enableCustomHosts ?? false;
-    _hosts(_dnsConfig.hosts);
-    _dohCache(_dnsConfig.dohCache);
 
-    ever<bool>(enableCustomHosts as RxInterface<bool>, (bool value) {
-      // _dnsConfig.enableCustomHosts = value;
+    enableCustomHosts = _dnsConfig.enableCustomHosts ?? false;
+    ever<bool>(_enableCustomHosts, (bool value) {
       Global.profile = Global.profile
           .copyWith(dnsConfig: _dnsConfig.copyWith(enableCustomHosts: value));
       Global.saveProfile();
     });
+
+    _hosts(_dnsConfig.hosts);
     ever<List<DnsCache>>(_hosts, (List<DnsCache> value) {
-      // _dnsConfig.hosts = value;
       Global.profile =
           Global.profile.copyWith(dnsConfig: _dnsConfig.copyWith(hosts: value));
       Global.saveProfile();
     });
 
-    ever<bool>(enableDoH as RxInterface<bool>, (bool value) {
-      // _dnsConfig.enableDoH = value;
+    enableDoH = _dnsConfig.enableDoH ?? false;
+    ever<bool>(_enableDoH, (bool value) {
       Global.profile = Global.profile
           .copyWith(dnsConfig: _dnsConfig.copyWith(enableDoH: value));
       Global.saveProfile();
     });
-    enableDoH.value = _dnsConfig.enableDoH ?? false;
+
+    _dohCache(_dnsConfig.dohCache);
     everProfile<List<DnsCache>>(_dohCache, (List<DnsCache> value) {
-      // _dnsConfig.dohCache = value;
       Global.profile = Global.profile
           .copyWith(dnsConfig: _dnsConfig.copyWith(dohCache: value));
     });
 
-    enableDomainFronting.value = _dnsConfig.enableDomainFronting ?? false;
-    everProfile<bool>(enableDomainFronting as RxInterface<bool>, (bool value) {
-      // _dnsConfig.enableDomainFronting = value;
+    enableDomainFronting = _dnsConfig.enableDomainFronting ?? false;
+    everProfile<bool>(_enableDomainFronting, (bool value) {
       Global.profile = Global.profile.copyWith(
           dnsConfig: _dnsConfig.copyWith(enableDomainFronting: value));
     });

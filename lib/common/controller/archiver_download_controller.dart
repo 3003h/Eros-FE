@@ -7,7 +7,6 @@ import 'package:fehviewer/models/index.dart';
 import 'package:fehviewer/pages/tab/controller/download_view_controller.dart';
 import 'package:fehviewer/store/floor/dao/gallery_task_dao.dart';
 import 'package:fehviewer/store/floor/dao/image_task_dao.dart';
-import 'package:fehviewer/store/floor/entity/gallery_task.dart';
 import 'package:fehviewer/store/get_store.dart';
 import 'package:fehviewer/utils/logger.dart';
 import 'package:fehviewer/utils/toast.dart';

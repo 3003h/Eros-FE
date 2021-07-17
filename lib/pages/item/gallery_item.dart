@@ -1,12 +1,16 @@
-import 'package:cached_network_image/cached_network_image.dart';
+// import 'package:cached_network_image/cached_network_image.dart';
+import 'package:extended_image/extended_image.dart';
 import 'package:fehviewer/common/global.dart';
+import 'package:fehviewer/common/exts.dart';
 import 'package:fehviewer/common/service/ehconfig_service.dart';
+import 'package:fehviewer/const/const.dart';
 import 'package:fehviewer/const/theme_colors.dart';
 import 'package:fehviewer/extension.dart';
 import 'package:fehviewer/models/index.dart';
 import 'package:fehviewer/pages/item/controller/galleryitem_controller.dart';
 import 'package:fehviewer/utils/utility.dart';
 import 'package:fehviewer/widget/blur_image.dart';
+import 'package:fehviewer/widget/network_extended_image.dart';
 import 'package:fehviewer/widget/rating_bar.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -447,24 +451,28 @@ class CoverImg extends StatelessWidget {
     final EhConfigService ehConfigService = Get.find();
     final Map<String, String> _httpHeaders = {
       'Cookie': Global.profile.user.cookie ?? '',
+      'host': Uri.parse(imgUrl).host,
     };
 
     Widget image() {
-      if (imgUrl != null && imgUrl.isNotEmpty) {
-        return CachedNetworkImage(
-          placeholder: (_, __) {
-            return Container(
-              alignment: Alignment.center,
-              color: CupertinoDynamicColor.resolve(
-                  CupertinoColors.systemGrey5, context),
-              child: const CupertinoActivityIndicator(),
-            );
-          },
-          // height: height,
-          width: width,
-          httpHeaders: _httpHeaders,
-          imageUrl: imgUrl,
-          fit: BoxFit.contain,
+      if (imgUrl.isNotEmpty) {
+        // return CachedNetworkImage(
+        //   placeholder: (_, __) {
+        //     return Container(
+        //       alignment: Alignment.center,
+        //       color: CupertinoDynamicColor.resolve(
+        //           CupertinoColors.systemGrey5, context),
+        //       child: const CupertinoActivityIndicator(),
+        //     );
+        //   },
+        //   // height: height,
+        //   width: width,
+        //   httpHeaders: _httpHeaders,
+        //   imageUrl: imgUrl.dfUrl,
+        //   fit: BoxFit.contain,
+        // );
+        return NetworkExtendedImage(
+          url: imgUrl,
         );
       } else {
         return Container();
