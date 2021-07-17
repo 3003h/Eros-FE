@@ -114,7 +114,7 @@ class HttpManager {
     }
 
     if (domainFronting) {
-      logger.d('domainFronting');
+      // logger.d('domainFronting');
       final DnsService dnsServices = Get.find();
       final bool enableDoH = dnsServices.enableDoH;
 

@@ -32,8 +32,14 @@ class _NetworkExtendedImageState extends State<NetworkExtendedImage>
 
     animationController = AnimationController(
       vsync: this,
-      duration: const Duration(milliseconds: 200),
+      duration: const Duration(milliseconds: 0),
     );
+  }
+
+  @override
+  void dispose() {
+    animationController.dispose();
+    super.dispose();
   }
 
   @override
@@ -44,9 +50,11 @@ class _NetworkExtendedImageState extends State<NetworkExtendedImage>
       height: widget.height,
       headers: _httpHeaders,
       fit: widget.fit,
+      // enableLoadState: false,
       loadStateChanged: (ExtendedImageState state) {
         switch (state.extendedImageLoadState) {
           case LoadState.loading:
+            // return null;
             return Container(
               alignment: Alignment.center,
               color: CupertinoDynamicColor.resolve(
@@ -55,6 +63,11 @@ class _NetworkExtendedImageState extends State<NetworkExtendedImage>
             );
           case LoadState.completed:
             animationController.forward();
+
+            return ExtendedRawImage(
+              fit: BoxFit.contain,
+              image: state.extendedImageInfo?.image,
+            );
 
             return FadeTransition(
               opacity: animationController,

@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:extended_image/extended_image.dart';
 import 'package:fehviewer/common/controller/cache_controller.dart';
+import 'package:fehviewer/common/global.dart';
 import 'package:fehviewer/common/service/dns_service.dart';
 import 'package:fehviewer/common/service/ehconfig_service.dart';
 import 'package:fehviewer/common/service/locale_service.dart';
@@ -63,13 +64,17 @@ class ListViewAdvancedSetting extends StatelessWidget {
 
     void _handleEFChanged(bool newValue) {
       _dnsService.enableDomainFronting = newValue;
-      if (!newValue) return;
-      final HttpClient eClient =
-          ExtendedNetworkImageProvider.httpClient as HttpClient;
-      eClient.badCertificateCallback =
-          (X509Certificate cert, String host, int port) {
-        return true;
-      };
+      if (!newValue) {
+        HttpOverrides.global = null;
+      } else {
+        HttpOverrides.global = Global.dfHttpOverrides;
+        final HttpClient eClient =
+            ExtendedNetworkImageProvider.httpClient as HttpClient;
+        eClient.badCertificateCallback =
+            (X509Certificate cert, String host, int port) {
+          return true;
+        };
+      }
     }
 
     final List<Widget> _list = <Widget>[

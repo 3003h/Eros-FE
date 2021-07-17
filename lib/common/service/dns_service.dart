@@ -53,6 +53,8 @@ class DnsService extends ProfileService {
       for (final host in EHConst.internalHosts.entries) {
         coutomHosts.putIfAbsent(host.key, () => host.value);
       }
+    } else {
+      return EHConst.internalHosts;
     }
 
     return coutomHosts;
@@ -140,39 +142,30 @@ class DnsService extends ProfileService {
   @override
   void onInit() {
     super.onInit();
-    final DnsConfig _dnsConfig = Global.profile.dnsConfig;
 
-    enableCustomHosts = _dnsConfig.enableCustomHosts ?? false;
-    ever<bool>(_enableCustomHosts, (bool value) {
-      Global.profile = Global.profile
-          .copyWith(dnsConfig: _dnsConfig.copyWith(enableCustomHosts: value));
-      Global.saveProfile();
+    enableCustomHosts = dnsConfig.enableCustomHosts ?? false;
+    everProfile<bool>(_enableCustomHosts, (bool value) {
+      dnsConfig = dnsConfig.copyWith(enableCustomHosts: value);
     });
 
-    _hosts(_dnsConfig.hosts);
-    ever<List<DnsCache>>(_hosts, (List<DnsCache> value) {
-      Global.profile =
-          Global.profile.copyWith(dnsConfig: _dnsConfig.copyWith(hosts: value));
-      Global.saveProfile();
+    _hosts(dnsConfig.hosts);
+    everProfile<List<DnsCache>>(_hosts, (List<DnsCache> value) {
+      dnsConfig = dnsConfig.copyWith(hosts: value);
     });
 
-    enableDoH = _dnsConfig.enableDoH ?? false;
-    ever<bool>(_enableDoH, (bool value) {
-      Global.profile = Global.profile
-          .copyWith(dnsConfig: _dnsConfig.copyWith(enableDoH: value));
-      Global.saveProfile();
+    enableDoH = dnsConfig.enableDoH ?? false;
+    everProfile<bool>(_enableDoH, (bool value) {
+      dnsConfig = dnsConfig.copyWith(enableDoH: value);
     });
 
-    _dohCache(_dnsConfig.dohCache);
+    _dohCache(dnsConfig.dohCache);
     everProfile<List<DnsCache>>(_dohCache, (List<DnsCache> value) {
-      Global.profile = Global.profile
-          .copyWith(dnsConfig: _dnsConfig.copyWith(dohCache: value));
+      dnsConfig = dnsConfig.copyWith(dohCache: value);
     });
 
-    enableDomainFronting = _dnsConfig.enableDomainFronting ?? false;
+    enableDomainFronting = dnsConfig.enableDomainFronting ?? false;
     everProfile<bool>(_enableDomainFronting, (bool value) {
-      Global.profile = Global.profile.copyWith(
-          dnsConfig: _dnsConfig.copyWith(enableDomainFronting: value));
+      dnsConfig = dnsConfig.copyWith(enableDomainFronting: value);
     });
   }
 }
