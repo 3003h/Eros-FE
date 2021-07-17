@@ -18,6 +18,7 @@ import 'package:fehviewer/route/navigator_util.dart';
 import 'package:fehviewer/route/routes.dart';
 // import 'package:fehviewer/utils/cust_lib/selectable_text.dart';
 import 'package:fehviewer/utils/logger.dart';
+import 'package:fehviewer/widget/eh_cached_network_image.dart';
 import 'package:fehviewer/widget/network_extended_image.dart';
 import 'package:fehviewer/widget/rating_bar.dart';
 import 'package:flutter/cupertino.dart';
@@ -44,21 +45,21 @@ class CoveTinyImage extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.all(4),
       child: ClipRRect(
-          // 圆角
-          borderRadius: BorderRadius.circular(4),
-          // child: CachedNetworkImage(
-          //   httpHeaders: _httpHeaders,
-          //   width: 44,
-          //   height: 44,
-          //   fit: BoxFit.cover,
-          //   imageUrl: imgUrl,
-          // ),
-          child: NetworkExtendedImage(
-            url: imgUrl,
-            height: 44,
-            width: 44,
-            fit: BoxFit.cover,
-          )),
+        // 圆角
+        borderRadius: BorderRadius.circular(4),
+        child: EhCachedNetworkImage(
+          width: 44,
+          height: 44,
+          fit: BoxFit.cover,
+          imageUrl: imgUrl,
+        ),
+        // child: NetworkExtendedImage(
+        //   url: imgUrl,
+        //   height: 44,
+        //   width: 44,
+        //   fit: BoxFit.cover,
+        // ),
+      ),
     );
   }
 }
@@ -538,16 +539,15 @@ class PreviewContainer extends StatelessWidget {
     Widget _buildImage() {
       if (galleryImage.isLarge ?? false) {
         // 缩略大图
-        // return CachedNetworkImage(
-        //   httpHeaders: _httpHeaders,
-        //   imageUrl: galleryImage.thumbUrl ?? '',
-        //   progressIndicatorBuilder: (_, __, ___) {
-        //     return const CupertinoActivityIndicator();
-        //   },
-        // );
-        return NetworkExtendedImage(
-          url: galleryImage.thumbUrl ?? '',
+        return EhCachedNetworkImage(
+          imageUrl: galleryImage.thumbUrl ?? '',
+          progressIndicatorBuilder: (_, __, ___) {
+            return const CupertinoActivityIndicator();
+          },
         );
+        // return NetworkExtendedImage(
+        //   url: galleryImage.thumbUrl ?? '',
+        // );
       } else {
         return LayoutBuilder(
             builder: (BuildContext context, BoxConstraints constraints) {

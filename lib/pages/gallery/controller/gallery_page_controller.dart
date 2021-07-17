@@ -111,7 +111,7 @@ class GalleryPageController extends GetxController
     List<MapEntry<int, GalleryImage>> list = imageMap.entries
         .map((MapEntry<int, GalleryImage> e) => MapEntry(e.key, e.value))
         .toList();
-    logger.d('imagesFromMap len ${list.length}');
+    // logger5.d('imagesFromMap len ${list.length}');
     list.sort((a, b) => a.key.compareTo(b.key));
 
     return list.map((e) => e.value).toList();
@@ -241,7 +241,7 @@ class GalleryPageController extends GetxController
     //   Get.find<ViewController>().update([GetID.IMAGE_VIEW]);
     // } catch (_) {}
 
-    logger.v(
+    logger.d(
         'addAllPreview ${galleryImages.first.ser}~${galleryImages.last.ser} ');
 
     // update();
@@ -485,18 +485,21 @@ class GalleryPageController extends GetxController
   Future<void> _loarMordPriview({CancelToken? cancelToken}) async {
     // 增加延时 避免build期间进行 setState
     await Future<void>.delayed(const Duration(milliseconds: 0));
-    currentImagePage++;
+
     logger.v('获取更多预览 ${galleryItem.url} : $currentImagePage');
 
     final List<GalleryImage> _moreGalleryImageList = await Api.getGalleryImage(
       galleryItem.url!,
-      page: currentImagePage,
+      page: currentImagePage + 1,
       cancelToken: cancelToken,
       refresh: isRefresh,
     );
 
+    currentImagePage++;
     addAllImages(_moreGalleryImageList);
-    Get.find<AllPreviewsPageController>().update();
+    if (Get.isRegistered<AllPreviewsPageController>()) {
+      Get.find<AllPreviewsPageController>().update();
+    }
   }
 
   // 直接请求目的index所在的缩略图页
@@ -521,7 +524,9 @@ class GalleryPageController extends GetxController
     //     '添加的图片序号: ${_moreImageList.map((GalleryPreview e) => e.ser).join(',')}');
 
     addAllImages(_moreImageList);
-    Get.find<AllPreviewsPageController>().update();
+    if (Get.isRegistered<AllPreviewsPageController>()) {
+      Get.find<AllPreviewsPageController>().update();
+    }
   }
 
   // 按顺序翻页加载缩略图对象

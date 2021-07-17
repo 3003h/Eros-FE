@@ -198,6 +198,7 @@ class _DetailWidget extends StatelessWidget {
           color: CupertinoDynamicColor.resolve(
               CupertinoColors.systemGrey4, context),
         ),
+        // 缩略图
         PreviewGrid(
           images: controller.firstPageImage,
           gid: state.gid ?? '',

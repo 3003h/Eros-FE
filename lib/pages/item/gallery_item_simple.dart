@@ -5,6 +5,7 @@ import 'package:fehviewer/const/theme_colors.dart';
 import 'package:fehviewer/models/base/eh_models.dart';
 import 'package:fehviewer/pages/item/controller/galleryitem_controller.dart';
 import 'package:fehviewer/widget/blur_image.dart';
+import 'package:fehviewer/widget/eh_cached_network_image.dart';
 import 'package:fehviewer/widget/network_extended_image.dart';
 import 'package:fehviewer/widget/rating_bar.dart';
 import 'package:flutter/cupertino.dart';
@@ -290,10 +291,6 @@ class CoverImg extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final EhConfigService _ehConfigService = Get.find();
-    final Map<String, String> _httpHeaders = {
-      'Cookie': Global.profile.user.cookie ?? '',
-      'host': Uri.parse(imgUrl).host,
-    };
     if (imgUrl.isNotEmpty) {
       return Obx(() {
         final bool _isBlur = _ehConfigService.isGalleryImgBlur.value;
@@ -301,7 +298,7 @@ class CoverImg extends StatelessWidget {
           builder: (context, constraints) {
             return BlurImage(
               isBlur: _isBlur,
-              child: CachedNetworkImage(
+              child: EhCachedNetworkImage(
                 placeholder: (_, __) {
                   return Container(
                     alignment: Alignment.center,
@@ -312,8 +309,7 @@ class CoverImg extends StatelessWidget {
                 },
                 height: (height ?? 0) * constraints.maxWidth / (width ?? 0),
                 width: constraints.maxWidth,
-                httpHeaders: _httpHeaders,
-                imageUrl: imgUrl.dfUrl,
+                imageUrl: imgUrl,
                 fit: BoxFit.fitWidth,
               ),
               // child: NetworkExtendedImage(

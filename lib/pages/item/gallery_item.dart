@@ -469,9 +469,9 @@ class CoverImg extends StatelessWidget {
           imageUrl: imgUrl.dfUrl,
           fit: BoxFit.contain,
         );
-        return NetworkExtendedImage(
-          url: imgUrl,
-        );
+        // return NetworkExtendedImage(
+        //   url: imgUrl,
+        // );
       } else {
         return Container();
       }

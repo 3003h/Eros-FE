@@ -1,4 +1,3 @@
-// import 'package:cached_network_image/cached_network_image.dart';
 import 'package:dio/dio.dart';
 import 'package:extended_image/extended_image.dart';
 import 'package:fehviewer/common/global.dart';
@@ -176,7 +175,7 @@ class _ViewImageState extends State<ViewImage>
               case ConnectionState.active:
                 return LoadingWidget(ser: widget.ser);
               case ConnectionState.done:
-                if (snapshot.hasError) {
+                if (snapshot.hasError || snapshot.data == null) {
                   String _errInfo = '';
                   if (snapshot.error is DioError) {
                     final DioError dioErr = snapshot.error as DioError;
