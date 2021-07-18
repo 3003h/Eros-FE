@@ -10,6 +10,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
 
 import 'const.dart';
+import 'gallery_info_page.dart';
 import 'gallery_widget.dart';
 
 class GalleryHeader extends StatelessWidget {
@@ -30,7 +31,7 @@ class GalleryHeader extends StatelessWidget {
     );
 
     return Container(
-      margin: const EdgeInsets.all(kPadding),
+      padding: const EdgeInsets.all(kPadding),
       child: Column(
         children: <Widget>[
           Container(
@@ -67,14 +68,78 @@ class GalleryHeader extends StatelessWidget {
               ],
             ),
           ),
-          GetBuilder<GalleryPageController>(
-              init: GalleryPageController(),
-              tag: pageCtrlDepth,
-              id: GetIds.PAGE_VIEW_HEADER,
-              builder: (GalleryPageController controller) {
-                // logger.d(
-                //     'GalleryPageController GetBuilder GetIds.PAGE_VIEW_HEADER');
-                return GestureDetector(
+          GalleryInfoBar(hearTextStyle: _hearTextStyle),
+        ],
+      ),
+    );
+  }
+}
+
+class GalleryInfoBar extends StatefulWidget {
+  const GalleryInfoBar({
+    Key? key,
+    required TextStyle hearTextStyle,
+  })  : _hearTextStyle = hearTextStyle,
+        super(key: key);
+
+  final TextStyle _hearTextStyle;
+
+  @override
+  _GalleryInfoBarState createState() => _GalleryInfoBarState();
+}
+
+class _GalleryInfoBarState extends State<GalleryInfoBar> {
+  Color? _itemColor;
+
+  void _updateNormalColor() {
+    setState(() {
+      _itemColor = null;
+    });
+  }
+
+  void _updatePressedColor() {
+    setState(() {
+      _itemColor = CupertinoDynamicColor.resolve(
+          CupertinoColors.systemGrey5, Get.context!);
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return GetBuilder<GalleryPageController>(
+        init: GalleryPageController(),
+        tag: pageCtrlDepth,
+        id: GetIds.PAGE_VIEW_HEADER,
+        builder: (GalleryPageController controller) {
+          // logger.d(
+          //     'GalleryPageController GetBuilder GetIds.PAGE_VIEW_HEADER');
+          return GestureDetector(
+            behavior: HitTestBehavior.opaque,
+            onTap: () {
+              // print('tap h');
+              Get.to(() => const GalleryInfoPage());
+            },
+            onTapDown: (_) {
+              _updatePressedColor();
+            },
+            onTapUp: (_) {
+              Future<void>.delayed(const Duration(milliseconds: 100), () {
+                _updateNormalColor();
+              });
+            },
+            onTapCancel: () {
+              Future<void>.delayed(const Duration(milliseconds: 100), () {
+                _updateNormalColor();
+              });
+            },
+            child: Container(
+              padding: const EdgeInsets.symmetric(vertical: 4),
+              child: ClipRRect(
+                borderRadius: BorderRadius.circular(8.0),
+                child: Container(
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 4, vertical: 4),
+                  color: _itemColor,
                   child: Column(
                     mainAxisSize: MainAxisSize.min,
                     children: <Widget>[
@@ -124,7 +189,7 @@ class GalleryHeader extends StatelessWidget {
                           ).paddingOnly(right: 8),
                           Text(
                             controller.galleryItem.language ?? '',
-                            style: _hearTextStyle,
+                            style: widget._hearTextStyle,
                           ),
                           const Spacer(),
                           Icon(
@@ -136,12 +201,12 @@ class GalleryHeader extends StatelessWidget {
                           const SizedBox(width: 6),
                           Text(
                             controller.galleryItem.filecount ?? '',
-                            style: _hearTextStyle,
+                            style: widget._hearTextStyle,
                           ),
                           const Spacer(),
                           Text(
                             controller.galleryItem.filesizeText ?? '',
-                            style: _hearTextStyle,
+                            style: widget._hearTextStyle,
                           ),
                         ],
                       ).marginSymmetric(vertical: 4),
@@ -165,23 +230,23 @@ class GalleryHeader extends StatelessWidget {
                                   child: Text(
                                       controller.galleryItem.favoritedCount ??
                                           '',
-                                      style: _hearTextStyle),
+                                      style: widget._hearTextStyle),
                                 );
                               }),
                           const Spacer(),
                           Text(
                             controller.galleryItem.postTime ?? '',
-                            style: _hearTextStyle,
+                            style: widget._hearTextStyle,
                           ),
                         ],
                       ),
                       // const Text('...'),
                     ],
                   ),
-                ).paddingSymmetric(horizontal: 8);
-              }),
-        ],
-      ),
-    );
+                ),
+              ),
+            ),
+          );
+        });
   }
 }

@@ -5,6 +5,7 @@ English | [简体中文](https://github.com/honjow/FEhViewer/blob/nullsafety/REA
 [![](https://img.shields.io/github/downloads/honjow/FEhViewer/latest/total)](https://github.com/honjow/FEhViewer/releases/latest)
 [![](https://img.shields.io/github/v/release/honjow/FEhViewer)](https://github.com/honjow/FEhViewer/releases/latest)
 [![](https://img.shields.io/github/stars/honjow/FEhViewer)]()
+[![Telegram](https://img.shields.io/badge/chat-on%20Telegram-blue.svg)](https://t.me/joinchat/AEj27KMQe0JiMmUx)
 
 ## Introduction
 

@@ -314,7 +314,11 @@ class EHConst {
 
   static const Map<String, String> internalHosts = {
     'e-hentai.org': '104.20.134.21',
-    'api.e-hentai.org': '37.48.89.16',
+    // 'api.e-hentai.org': '37.48.89.16',
+    'api.e-hentai.org': '178.162.147.246',
+    'forums.e-hentai.org': '172.67.0.127',
+    'ehgt.org': '178.162.140.212',
     'exhentai.org': '178.175.129.252',
+    'api.exhentai.org': '178.175.128.252',
   };
 }

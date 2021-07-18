@@ -140,7 +140,8 @@ class _FavcatAddListItemState extends State<FavcatAddListItem> {
         onTap: widget._onTap,
         onTapDown: (_) {
           setState(() {
-            _color = CupertinoColors.systemGrey3;
+            _color = CupertinoDynamicColor.resolve(
+                CupertinoColors.systemGrey3, context);
           });
         },
         onTapCancel: () {
