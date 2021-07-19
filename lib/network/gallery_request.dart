@@ -81,6 +81,7 @@ class Api {
     final String _baseUrl =
         EHConst.getBaseSite(Get.find<EhConfigService>().isSiteEx.value);
     final bool df = Get.find<DnsService>().enableDomainFronting;
+
     return HttpManager(
       baseUrl ?? _baseUrl,
       cache: cache,

@@ -154,13 +154,14 @@ class HttpManager {
   Dio get dio => _dio;
   late BaseOptions _options;
 
-  //单例模式，一个baseUrl只创建一次实例
+  // 缓存实例
   static HttpManager getInstance({
     String baseUrl = '',
     bool cache = true,
     bool retry = false,
-    bool df = false,
   }) {
+    final bool df = Get.find<DnsService>().enableDomainFronting;
+
     final String _key = '${baseUrl}_${cache}_${retry}_${df}';
     if (null == _instanceMap[_key]) {
       _instanceMap[_key] =
