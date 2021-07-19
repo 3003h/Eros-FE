@@ -1,4 +1,5 @@
 import 'package:fehviewer/common/service/depth_service.dart';
+import 'package:fehviewer/common/service/theme_service.dart';
 import 'package:fehviewer/const/const.dart';
 import 'package:fehviewer/network/gallery_request.dart';
 import 'package:fehviewer/pages/gallery/controller/gallery_page_controller.dart';
@@ -16,7 +17,10 @@ class GalleryInfoPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return CupertinoPageScaffold(
-      backgroundColor: CupertinoColors.systemGroupedBackground,
+      // backgroundColor: CupertinoColors.systemGroupedBackground,
+      backgroundColor: !ehTheme.isDarkMode
+          ? CupertinoColors.secondarySystemBackground
+          : null,
       navigationBar: const CupertinoNavigationBar(
         middle: Text('Gallery info'),
       ),
@@ -52,7 +56,7 @@ class GalleryInfoPage extends StatelessWidget {
               };
 
               return CupertinoFormSection.insetGrouped(
-                // backgroundColor: Colors.transparent,
+                backgroundColor: Colors.transparent,
                 margin: const EdgeInsets.fromLTRB(16, 10, 16, 30),
                 children: _infoMap.entries
                     .map((e) => TextItem(
@@ -77,21 +81,22 @@ class TextItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return CupertinoTextFormFieldRow(
-      prefix: Text(
-        prefixText,
-        style: kTextStyle.copyWith(fontWeight: FontWeight.w500),
-      ),
-      initialValue: initialValue,
-      readOnly: true,
-      maxLines: null,
-      style: kTextStyle,
-      textAlign: TextAlign.right,
+    return GestureDetector(
+      behavior: HitTestBehavior.opaque,
       onTap: () {
-        // print('tap $initialValue');
         showToast('Copied to clipboard');
         Clipboard.setData(ClipboardData(text: initialValue));
       },
+      child: CupertinoFormRow(
+        prefix: Text(
+          prefixText,
+          style: kTextStyle.copyWith(fontWeight: FontWeight.w500),
+        ).paddingOnly(right: 20),
+        child: SelectableText(
+          initialValue ?? '',
+          style: kTextStyle,
+        ),
+      ).paddingSymmetric(horizontal: 8, vertical: 8),
     );
   }
 }

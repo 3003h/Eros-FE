@@ -197,8 +197,12 @@ class _ViewImageState extends State<ViewImage>
                     logger.d(
                         '${widget.ser} 重试 第 ${_pageController.errCountMap[widget.ser]} 次');
                   }
-
-                  return ErrorWidget(ser: widget.ser, errInfo: _errInfo);
+                  if ((_pageController.errCountMap[widget.ser] ?? 0) >=
+                      widget.retry) {
+                    return ErrorWidget(ser: widget.ser, errInfo: _errInfo);
+                  } else {
+                    return const SizedBox.shrink();
+                  }
                 } else {
                   final GalleryImage? _image = snapshot.data;
 

@@ -196,7 +196,9 @@ class GalleryListTab extends GetView<GalleryViewController> {
         // getSliverNavigationBar(),
         SliverFloatingPinnedPersistentHeader(
           delegate: SliverFloatingPinnedPersistentHeaderBuilder(
-            minExtentProtoType: const SizedBox(),
+            minExtentProtoType: SizedBox(
+              height: context.mediaQueryPadding.top,
+            ),
             maxExtentProtoType: navigationBar,
             builder: (_, __, ___) => navigationBar,
           ),

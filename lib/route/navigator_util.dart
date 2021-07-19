@@ -14,17 +14,17 @@ import 'package:get/get.dart';
 
 class NavigatorUtil {
   /// 转到画廊列表页面
-  static void goGalleryList({int cats = 0}) {
-    Get.to(() => const GalleryListTab(),
+  static Future<void> goGalleryList({int cats = 0}) async {
+    await Get.to(() => const GalleryListTab(),
         binding: BindingsBuilder<GalleryViewController>(() {
       Get.put(GalleryViewController(cats: cats));
     }));
   }
 
   // 带搜索条件打开搜索
-  static void goGalleryListBySearch({
+  static Future<void> goGalleryListBySearch({
     required String simpleSearch,
-  }) {
+  }) async {
     String _search = simpleSearch;
     if (simpleSearch.contains(':') &&
         EHConst.translateTagType.keys
@@ -51,26 +51,32 @@ class NavigatorUtil {
       }),
     );*/
 
-    Get.toNamed(
+    await Get.toNamed(
       EHRoutes.search,
       arguments: _search,
       preventDuplicates: false,
     );
+
+    Get.find<DepthService>().popSearchPageCtrl();
   }
 
   /// 转到画廊页面
-  static void goGalleryPage({
+  static Future<void> goGalleryPage({
     String? url,
     String? tabTag,
     GalleryItem? galleryItem,
-  }) {
+  }) async {
     Get.find<DepthService>().pushPageCtrl();
 
     // url跳转方式
     if (url != null && url.isNotEmpty) {
       logger.d('goGalleryPage fromUrl');
       // 命名路由方式
-      Get.toNamed(EHRoutes.galleryPage, arguments: GalleryRepository(url: url));
+      await Get.toNamed(
+        EHRoutes.galleryPage,
+        arguments: GalleryRepository(url: url),
+        preventDuplicates: false,
+      );
 
       // Get.to(
       //   () => GalleryMainPage(),
@@ -85,8 +91,11 @@ class NavigatorUtil {
       logger.v('goGalleryPage fromItem tabTag=$tabTag');
 
       //命名路由
-      Get.toNamed(EHRoutes.galleryPage,
-          arguments: GalleryRepository(item: galleryItem, tabTag: tabTag));
+      await Get.toNamed(
+        EHRoutes.galleryPage,
+        arguments: GalleryRepository(item: galleryItem, tabTag: tabTag),
+        preventDuplicates: false,
+      );
 
       // 普通路由
 
@@ -103,15 +112,19 @@ class NavigatorUtil {
       //   // arguments: GalleryRepository(item: galleryItem, tabTag: tabTag),
       // );
     }
+    Get.find<DepthService>().popPageCtrl();
   }
 
   // 跳转画廊页并替换当前路由
-  static void goGalleryDetailReplace(BuildContext context, {String? url}) {
+  static Future<void> goGalleryDetailReplace(
+    BuildContext context, {
+    String? url,
+  }) async {
     final DepthService depthService = Get.find();
     depthService.pushPageCtrl();
     if (url != null && url.isNotEmpty) {
       // 命名路由方式
-      Get.offNamed(EHRoutes.galleryPage,
+      await Get.offNamed(EHRoutes.galleryPage,
           arguments: GalleryRepository(url: url));
 
       // 普通方式
@@ -132,15 +145,19 @@ class NavigatorUtil {
       //   preventDuplicates: false,
       // );
     }
+
+    depthService.popPageCtrl();
   }
 
   /// 打开搜索页面 指定搜索类型
-  static void showSearch(
-      {SearchType searchType = SearchType.normal, bool fromTabItem = true}) {
+  static Future<void> showSearch({
+    SearchType searchType = SearchType.normal,
+    bool fromTabItem = true,
+  }) async {
     logger.d('fromTabItem $fromTabItem');
     Get.find<DepthService>().pushSearchPageCtrl();
 
-    Get.to(
+    await Get.to(
       // () => GallerySearchPage(),
       () => GallerySearchPageNew(),
       transition: fromTabItem ? Transition.fadeIn : Transition.cupertino,
@@ -151,6 +168,8 @@ class NavigatorUtil {
         );
       }),
     );
+
+    Get.find<DepthService>().popSearchPageCtrl();
   }
 
   // 转到大图浏览

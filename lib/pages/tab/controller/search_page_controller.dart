@@ -371,7 +371,7 @@ class SearchPageController extends TabViewController {
   @override
   void onClose() {
     // searchTextController.dispose();
-    Get.find<DepthService>().popSearchPageCtrl();
+    // Get.find<DepthService>().popSearchPageCtrl();
     super.onClose();
   }
 
