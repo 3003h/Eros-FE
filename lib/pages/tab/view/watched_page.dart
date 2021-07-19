@@ -194,7 +194,9 @@ class WatchedListTab extends GetView<WatchedViewController> {
         // sliverNavigationBar,
         SliverFloatingPinnedPersistentHeader(
           delegate: SliverFloatingPinnedPersistentHeaderBuilder(
-            minExtentProtoType: const SizedBox(),
+            minExtentProtoType: SizedBox(
+              height: context.mediaQueryPadding.top,
+            ),
             maxExtentProtoType: navigationBar,
             builder: (_, __, ___) => navigationBar,
           ),

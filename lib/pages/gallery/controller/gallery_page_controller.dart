@@ -188,7 +188,7 @@ class GalleryPageController extends GetxController
     scrollController.dispose();
 
     // 为了保证能正常关闭
-    try {
+    /*try {
       if (Get.isRegistered<RateController>(tag: pageCtrlDepth))
         Get.delete<RateController>(tag: pageCtrlDepth);
       if (Get.isRegistered<TorrentController>(tag: pageCtrlDepth))
@@ -199,10 +199,13 @@ class GalleryPageController extends GetxController
         Get.delete<CommentController>(tag: pageCtrlDepth);
       if (Get.isRegistered<TagInfoController>(tag: pageCtrlDepth))
         Get.delete<TagInfoController>(tag: pageCtrlDepth);
-    } catch (_) {}
+    } catch (_) {}*/
 
     logger.v('onClose GalleryPageController $pageCtrlDepth');
-    Get.find<DepthService>().popPageCtrl();
+
+    // 如果不在onClose进行这步。在使用命名路由对 [EHRoutes.galleryPage] 跳转关闭后
+    // 所有不同tag的 [CommentController] 等 都会被deleted
+    // Get.find<DepthService>().popPageCtrl();
   }
 
   // 阅读按钮开关

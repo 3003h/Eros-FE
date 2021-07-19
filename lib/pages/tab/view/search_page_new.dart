@@ -175,7 +175,9 @@ class GallerySearchPageNew extends StatelessWidget {
           if (GetPlatform.isIOS)
             SliverFloatingPinnedPersistentHeader(
               delegate: SliverFloatingPinnedPersistentHeaderBuilder(
-                minExtentProtoType: const SizedBox(),
+                minExtentProtoType: SizedBox(
+                  height: context.mediaQueryPadding.top,
+                ),
                 maxExtentProtoType: _maxExtentProtoTypeBar(context),
                 builder: (_, __, maxExtent) =>
                     _buildSearchBar(_, __, maxExtent),
