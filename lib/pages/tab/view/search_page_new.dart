@@ -46,83 +46,21 @@ enum SearchMenuEnum {
   addToQuickSearch,
 }
 
-class GallerySearchPageNew extends StatelessWidget {
-  // final _search = Get.arguments;
-  final SearchPageController controller = Get.put(
-      SearchPageController(
-          initSearchText: Get.arguments is String ? Get.arguments : null),
-      tag: searchPageCtrlDepth);
+class GallerySearchPageNew extends StatefulWidget {
+  @override
+  _GallerySearchPageNewState createState() => _GallerySearchPageNewState();
+}
 
-  // SearchPageController get controller => Get.find(tag: searchPageCtrlDepth);
+class _GallerySearchPageNewState extends State<GallerySearchPageNew> {
+  late SearchPageController controller;
 
-  Widget getSearchTextFieldNew() {
-    return Obx(() => CupertinoSearchTextField(
-          padding: const EdgeInsetsDirectional.fromSTEB(3, 6, 5, 6),
-          style: const TextStyle(height: 1.25),
-          placeholder: controller.placeholderText,
-          placeholderStyle: const TextStyle(
-            fontWeight: FontWeight.w400,
-            color: CupertinoColors.placeholderText,
-            height: 1.25,
-          ),
-          controller: controller.searchTextController,
-          suffixIcon: const Icon(LineIcons.timesCircle),
-          onSubmitted: (_) => controller.onEditingComplete(),
-          focusNode: controller.searchFocusNode,
-        ));
-  }
-
-  Widget getSearchTextField({bool multiline = false}) {
-    return Obx(() => CupertinoTextField(
-          style: const TextStyle(height: 1.25),
-          decoration: BoxDecoration(
-            color: ehTheme.textFieldBackgroundColor,
-            borderRadius: const BorderRadius.all(Radius.circular(8.0)),
-          ),
-          placeholder: controller.placeholderText,
-          placeholderStyle: const TextStyle(
-            fontWeight: FontWeight.w400,
-            color: CupertinoColors.placeholderText,
-            height: 1.25,
-          ),
-          // clearButtonMode: OverlayVisibilityMode.editing,
-          prefix: CupertinoButton(
-            padding: const EdgeInsets.symmetric(horizontal: 4),
-            minSize: 0,
-            child: const Icon(
-              LineIcons.search,
-              color: CupertinoColors.systemGrey,
-            ),
-            onPressed: () {},
-          ),
-          suffix: GetBuilder<SearchPageController>(
-            id: GetIds.SEARCH_CLEAR_BTN,
-            tag: searchPageCtrlDepth,
-            builder: (SearchPageController controller) {
-              return controller.textIsNotEmpty
-                  ? GestureDetector(
-                      onTap: controller.clearText,
-                      child: Icon(
-                        LineIcons.timesCircle,
-                        size: 24.0,
-                        color: CupertinoDynamicColor.resolve(
-                            _kClearButtonColor, Get.context!),
-                      ).paddingSymmetric(horizontal: 6),
-                    )
-                  : const SizedBox();
-            },
-          ),
-          padding: const EdgeInsetsDirectional.fromSTEB(0, 6, 5, 6),
-          controller: controller.searchTextController,
-          autofocus: controller.autofocus,
-          // textInputAction: TextInputAction.search,
-          onEditingComplete: controller.onEditingComplete,
-          focusNode: controller.searchFocusNode,
-          // keyboardType:
-          //     multiline ? TextInputType.multiline : TextInputType.text,
-          maxLines: multiline ? null : 1,
-          textInputAction: TextInputAction.search,
-        ));
+  @override
+  void initState() {
+    super.initState();
+    controller = Get.put(
+        SearchPageController(
+            initSearchText: Get.arguments is String ? Get.arguments : null),
+        tag: searchPageCtrlDepth);
   }
 
   CupertinoNavigationBar getNavigationBar(BuildContext context) {
@@ -287,7 +225,9 @@ class GallerySearchPageNew extends StatelessWidget {
                             padding: const EdgeInsets.only(
                                 left: 4, top: 4, bottom: 4),
                             child: SearchTextFieldIn(
-                                multiline: true, iconOpacity: iconOpacity),
+                              multiline: true,
+                              iconOpacity: iconOpacity,
+                            ),
                             // child: getSearchTextField(
                             //   multiline: true,
                             // ),
@@ -378,7 +318,6 @@ class GallerySearchPageNew extends StatelessWidget {
     ).paddingSymmetric(vertical: 8, horizontal: 12);
   }
 
-  // tag搜索结果页面
   Widget _getTagQryList() {
     return SliverList(
       delegate: SliverChildBuilderDelegate(
@@ -401,7 +340,6 @@ class GallerySearchPageNew extends StatelessWidget {
     );
   }
 
-  // 初始化页面
   Widget _getInitView() {
     Future<String?> _getTextTranslate(String text) async {
       final String? tranText = await Get.find<TagTransController>()
