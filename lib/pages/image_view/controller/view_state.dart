@@ -203,20 +203,16 @@ class ViewState {
 
   /// 阅读模式
   Rx<ViewMode> get _viewMode => _ehConfigService.viewMode;
+  ViewMode get viewMode => _viewMode.value;
+  set viewMode(val) => _viewMode.value = val;
 
+  /// 自动阅读
   bool get autoRead => _ehConfigService.autoRead;
   set autoRead(bool val) => _ehConfigService.autoRead = val;
 
-  ViewMode get viewMode => _viewMode.value;
-
-  set viewMode(val) => _viewMode.value = val;
-
   /// 显示页面间隔
-
   RxBool get _showPageInterval => _ehConfigService.showPageInterval;
-
   bool get showPageInterval => _showPageInterval.value;
-
   set showPageInterval(bool val) => _showPageInterval.value = val;
 
   bool fade = true;

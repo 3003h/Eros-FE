@@ -2,12 +2,14 @@ import 'package:extended_image/extended_image.dart';
 import 'package:fehviewer/common/isolate_download/download_manager.dart';
 import 'package:fehviewer/pages/image_view/view/view_local_page.dart';
 import 'package:fehviewer/pages/tab/controller/download_view_controller.dart';
+import 'package:fehviewer/route/navigator_util.dart';
 import 'package:fehviewer/store/floor/entity/gallery_image_task.dart';
 import 'package:fehviewer/store/floor/entity/gallery_task.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
+import 'package:path/path.dart' as path;
 
 class DownloadGalleryItem extends GetView<DownloadViewController> {
   const DownloadGalleryItem({
@@ -46,16 +48,16 @@ class DownloadGalleryItem extends GetView<DownloadViewController> {
               final List<String> pics = imageTasks
                   .where((element) =>
                       element.filePath != null && element.filePath!.isNotEmpty)
-                  .map((e) => e.filePath ?? '')
+                  .map((e) => path.join(gTask.dirPath ?? '', e.filePath ?? ''))
                   .toList();
 
-              Get.to(
-                ViewLocalPage(
-                  dirPath: gTask.dirPath ?? '',
-                  pics: pics,
-                ),
-                transition: Transition.fade,
-              );
+              // Get.to(
+              //   ViewLocalPage(
+              //     pics: pics,
+              //   ),
+              //   transition: Transition.fade,
+              // );
+              NavigatorUtil.goGalleryViewPageFile(0, pics);
             },
           ),
           Expanded(

@@ -3,6 +3,7 @@ import 'dart:isolate';
 import 'dart:ui';
 
 import 'package:fehviewer/common/global.dart';
+import 'package:fehviewer/const/const.dart';
 import 'package:fehviewer/models/index.dart';
 import 'package:fehviewer/pages/tab/controller/download_view_controller.dart';
 import 'package:fehviewer/store/floor/dao/gallery_task_dao.dart';

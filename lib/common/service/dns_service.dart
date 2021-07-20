@@ -162,7 +162,7 @@ class DnsService extends ProfileService {
       dnsConfig = dnsConfig.copyWith(dohCache: value);
     });
 
-    enableDomainFronting = dnsConfig.enableDomainFronting ?? false;
+    enableDomainFronting = dnsConfig.enableDomainFronting ?? true;
     everProfile<bool>(_enableDomainFronting, (bool value) {
       dnsConfig = dnsConfig.copyWith(enableDomainFronting: value);
     });

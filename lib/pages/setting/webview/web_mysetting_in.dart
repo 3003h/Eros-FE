@@ -9,6 +9,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter_inappwebview/flutter_inappwebview.dart' hide WebView;
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
+import '../../../common/exts.dart';
 
 /// iOS使用
 class InWebMySetting extends StatelessWidget {
@@ -29,6 +30,13 @@ class InWebMySetting extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     InAppWebViewController? _controller;
+
+    final baseUrl = Api.getBaseUrl();
+
+    final Map<String, String> _httpHeaders = {
+      // 'Cookie': Global.profile.user.cookie ?? '',
+      'host': Uri.parse(baseUrl).host,
+    };
 
     final CupertinoPageScaffold cpf = CupertinoPageScaffold(
       navigationBar: CupertinoNavigationBar(
@@ -58,7 +66,6 @@ class InWebMySetting extends StatelessWidget {
                 _controller?.evaluateJavascript(
                     source:
                         'document.querySelector("#apply > input[type=submit]").click();');
-                // 写入cookie到dio
               },
             ),
           ],
@@ -67,8 +74,12 @@ class InWebMySetting extends StatelessWidget {
       child: SafeArea(
         child: InAppWebView(
           // initialUrl: '${Api.getBaseUrl()}/uconfig.php',
-          initialUrlRequest:
-              URLRequest(url: Uri.parse('${Api.getBaseUrl()}/uconfig.php')),
+          initialUrlRequest: URLRequest(
+            url: Uri.parse(
+              '${baseUrl.dfUrl}/uconfig.php',
+            ),
+            // headers: _httpHeaders,
+          ),
           onWebViewCreated: (InAppWebViewController controller) {
             _controller = controller;
           },

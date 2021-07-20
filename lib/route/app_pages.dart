@@ -6,6 +6,8 @@ import 'package:fehviewer/pages/gallery/view/add_tags_page.dart';
 import 'package:fehviewer/pages/gallery/view/comment_page.dart';
 import 'package:fehviewer/pages/gallery/view/gallery_page.dart';
 import 'package:fehviewer/pages/image_view/controller/view_controller.dart';
+import 'package:fehviewer/pages/image_view/controller/view_ext_contorller.dart';
+import 'package:fehviewer/pages/image_view/view/view_ext_page.dart';
 import 'package:fehviewer/pages/image_view/view/view_page.dart';
 import 'package:fehviewer/pages/login/login_page.dart';
 import 'package:fehviewer/pages/login/web_login_in.dart';
@@ -155,6 +157,16 @@ class AppPages {
       binding: BindingsBuilder<dynamic>(() {
         Get.lazyPut(() => ViewController());
       }),
+    ),
+
+    GetPage(
+      name: EHRoutes.galleryViewExt,
+      page: () => const ViewExtPage(),
+      binding: BindingsBuilder<dynamic>(() {
+        Get.lazyPut(() => ViewExtController());
+      }),
+      transition: Transition.fade,
+      opaque: false,
     ),
 
     // 使用命名路由跳转 EHRoutes.galleryPage

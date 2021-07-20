@@ -513,10 +513,14 @@ class GalleryItemPlaceHolder extends StatelessWidget {
                   ClipRRect(
                     borderRadius: BorderRadius.circular(6),
                     child: Container(
-                      constraints: const BoxConstraints(maxHeight: 200),
+                      constraints:
+                          const BoxConstraints(maxHeight: 250, minHeight: 100),
                       color: CupertinoDynamicColor.resolve(
                           CupertinoColors.systemGrey5, context),
                       width: coverImageWidth,
+                      child: const SizedBox(
+                        height: 150,
+                      ),
                     ),
                   ),
                   const SizedBox(

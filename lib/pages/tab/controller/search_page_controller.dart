@@ -2,6 +2,7 @@ import 'dart:collection';
 
 import 'package:fehviewer/common/controller/quicksearch_controller.dart';
 import 'package:fehviewer/common/controller/tag_trans_controller.dart';
+import 'package:fehviewer/common/global.dart';
 import 'package:fehviewer/common/service/depth_service.dart';
 import 'package:fehviewer/common/service/ehconfig_service.dart';
 import 'package:fehviewer/const/const.dart';
@@ -41,25 +42,18 @@ class SearchPageController extends TabViewController {
   }
 
   final String? initSearchText;
-
-  final _searchText = ''.obs;
-
-  get searchText => _searchText.value;
-
+  final RxString _searchText = ''.obs;
+  String get searchText => _searchText.value;
   set searchText(val) => _searchText.value = val;
-
   late bool _autoComplete = false;
-
   final String tabIndex = 'search_$searchPageCtrlDepth';
-  // final CustomPopupMenuController customPopupMenuController =
-  //     CustomPopupMenuController();
 
   // 搜索输入框的控制器
   late final TextEditingController searchTextController;
 
   bool get textIsNotEmpty => searchTextController.text.isNotEmpty;
 
-  final GStore _gStore = Get.find();
+  // final GStore _gStore = Get.find();
 
   // 搜索类型
   final Rx<SearchType> _searchType = SearchType.normal.obs;
@@ -163,7 +157,7 @@ class SearchPageController extends TabViewController {
   Future<void> _delayedSearch() async {
     searchText = searchTextController.text.trim();
     update([GetIds.SEARCH_CLEAR_BTN]);
-    // logger.d(' _delayedSearch');
+    logger.d(' _delayedSearch');
     const Duration _duration = Duration(milliseconds: 800);
     _lastInputCompleteAt = DateTime.now();
     await Future<void>.delayed(_duration);
@@ -329,35 +323,39 @@ class SearchPageController extends TabViewController {
     if (searchHistory.length > 100) {
       searchHistory.removeRange(100, searchHistory.length);
     }
-    _gStore.searchHistory = searchHistory;
+    // _gStore.searchHistory = searchHistory;
+    hiveHelper.setSearchHistory(searchHistory);
   }
 
   void removeHistory(Object? value) {
     searchHistory.remove(value);
     update([GetIds.SEARCH_INIT_VIEW]);
-    _gStore.searchHistory = searchHistory;
+    // _gStore.searchHistory = searchHistory;
+    hiveHelper.setSearchHistory(searchHistory);
   }
 
   void clearHistory() {
     searchHistory.clear();
     update([GetIds.SEARCH_INIT_VIEW]);
-    _gStore.searchHistory = searchHistory;
+    // _gStore.searchHistory = searchHistory;
+    hiveHelper.setSearchHistory(searchHistory);
   }
 
   @override
   void onInit() {
+    logger.v('onInit');
     searchTextController = TextEditingController();
 
     fetchNormal = Api.getGallery;
-    searchHistory = _gStore.searchHistory;
+    // searchHistory = _gStore.searchHistory;
+    searchHistory = hiveHelper.getAllSearchHistory();
     _autoComplete = initSearchText?.trim().isNotEmpty ?? false;
+    searchTextController.addListener(_delayedSearch);
     super.onInit();
-    logger.v('onInit');
   }
 
   @override
   Future<void> firstLoad() async {
-    searchTextController.addListener(_delayedSearch);
     if (initSearchText != null && initSearchText!.trim().isNotEmpty) {
       // logger.d('$searchText');
       searchTextController.text = initSearchText!.trim();
@@ -394,8 +392,12 @@ class SearchPageController extends TabViewController {
       }
       searchTextController.value = TextEditingValue(
         text: '$value ',
-        selection: TextSelection.fromPosition(TextPosition(
-            affinity: TextAffinity.downstream, offset: '$value '.length)),
+        selection: TextSelection.fromPosition(
+          TextPosition(
+            affinity: TextAffinity.downstream,
+            offset: '$value '.length,
+          ),
+        ),
       );
 
       FocusScope.of(Get.context!).requestFocus(searchFocusNode);
@@ -431,8 +433,12 @@ class SearchPageController extends TabViewController {
     _autoComplete = false;
     searchTextController.value = TextEditingValue(
       text: '$_newSearch ',
-      selection: TextSelection.fromPosition(TextPosition(
-          affinity: TextAffinity.downstream, offset: '$_newSearch '.length)),
+      selection: TextSelection.fromPosition(
+        TextPosition(
+          affinity: TextAffinity.downstream,
+          offset: '$_newSearch '.length,
+        ),
+      ),
     );
 
     FocusScope.of(Get.context!).requestFocus(searchFocusNode);

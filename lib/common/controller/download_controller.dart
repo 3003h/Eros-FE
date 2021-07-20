@@ -51,7 +51,8 @@ class DownloadController extends GetxController {
   @override
   void onInit() {
     super.onInit();
-    logger.d('DownloadController onInit ${ehConfigService.multiDownload}');
+    logger.d(
+        'DownloadController onInit multiDownload:${ehConfigService.multiDownload}');
     executor = Executor(concurrency: ehConfigService.multiDownload);
     _initGalleryTasks();
   }

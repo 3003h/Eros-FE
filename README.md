@@ -6,6 +6,7 @@ English | [简体中文](https://github.com/honjow/FEhViewer/blob/nullsafety/REA
 [![](https://img.shields.io/github/v/release/honjow/FEhViewer)](https://github.com/honjow/FEhViewer/releases/latest)
 [![](https://img.shields.io/github/stars/honjow/FEhViewer)]()
 [![Telegram](https://img.shields.io/badge/chat-on%20Telegram-blue.svg)](https://t.me/joinchat/AEj27KMQe0JiMmUx)
+[![QQ](https://img.shields.io/badge/chat-QQ-blue.svg)](https://qm.qq.com/cgi-bin/qm/qr?k=fr6P5pYFbbdzh9djpE0QEMcX0sJd9ISj&jump_from=webapi)
 
 ## Introduction
 
@@ -87,5 +88,5 @@ EhTagTranslation
 
 ## About compiling
 
-flutter version is the latest release version
+flutter version is the latest release version \
 Because the project introduces firebase, you need to place your own google-services.json file
