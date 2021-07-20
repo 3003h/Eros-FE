@@ -54,6 +54,6 @@ class HistoryController extends GetxController {
 
     // historys = _gStore.historys;
     // _historys = hiveHelper.getAll();
-    _historys.addAll(hiveHelper.getAll());
+    _historys.addAll(hiveHelper.getAllHistory());
   }
 }

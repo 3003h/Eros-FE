@@ -24,8 +24,6 @@ const double kBottomBarHeight = 44.0;
 const double kTopBarHeight = 40.0;
 
 class ViewController extends GetxController {
-  ViewController();
-
   // 状态
   final ViewState vState = ViewState();
 

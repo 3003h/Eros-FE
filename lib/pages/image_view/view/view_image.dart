@@ -20,16 +20,16 @@ import 'package:liquid_progress_indicator_ns/liquid_progress_indicator.dart';
 import '../common.dart';
 
 class ViewImage extends StatefulWidget {
-  const ViewImage(
-      {Key? key,
-      required this.ser,
-      this.fade = true,
-      this.enableSlideOutPage = false,
-      this.expand = false,
-      this.imageHeight,
-      this.imageWidth,
-      this.retry = 4})
-      : super(key: key);
+  const ViewImage({
+    Key? key,
+    required this.ser,
+    this.fade = true,
+    this.enableSlideOutPage = false,
+    this.expand = false,
+    this.imageHeight,
+    this.imageWidth,
+    this.retry = 7,
+  }) : super(key: key);
   final int ser;
   final bool fade;
   final bool enableSlideOutPage;

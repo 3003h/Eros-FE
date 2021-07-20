@@ -814,8 +814,19 @@ class Api {
     }
   }
 
+  static Future<bool?> selEhProfile() async {
+    const int kRetry = 3;
+    for (int i = 0; i < kRetry; i++) {
+      final bool? rult = await _selEhProfile();
+      if (rult != null && rult) {
+        Future.delayed(const Duration(milliseconds: 500));
+        break;
+      }
+    }
+  }
+
   /// 选用feh单独的profile 没有就新建
-  static Future<void> selEhProfile() async {
+  static Future<bool?> _selEhProfile() async {
     final String url = '${getBaseUrl()}/uconfig.php';
 
     // 不能带_
@@ -823,8 +834,11 @@ class Api {
 
     final String? response = await getHttpManager(cache: false).get(url);
 
-    if (response == null) {
-      return;
+    // logger.d('$response');
+
+    if (response == null || response.isEmpty) {
+      logger.e('response isEmpty');
+      return false;
     }
 
     final Uconfig uconfig = parseUconfig(response);
@@ -834,22 +848,24 @@ class Api {
         ehProfiles.indexWhere((element) => element.name == kProfileName);
     final bool existFEhProfile = fepIndex > -1;
 
-    logger.d('${ehProfiles.map((e) => e.toJson()).join('\n')} ');
+    logger.d('ehProfiles\n${ehProfiles.map((e) => e.toJson()).join('\n')} ');
 
     if (existFEhProfile) {
       final selectedSP =
           ehProfiles.firstWhereOrNull((element) => element.selected);
       if (selectedSP?.name == kProfileName) {
-        return;
+        return true;
       }
       logger.d(
           'exist profile name [$kProfileName] but not selected, select it...');
       final fEhProfile = ehProfiles[fepIndex];
       await operatorProfile(type: ProfileOpType.select, set: fEhProfile.value);
+      return true;
     } else {
       // create 完成后会自动set_cookie sp为新建的sp
       logger.d('create new profile');
       await operatorProfile(type: ProfileOpType.create, pName: kProfileName);
+      return true;
     }
   }
 

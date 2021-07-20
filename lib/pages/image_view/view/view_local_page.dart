@@ -3,15 +3,12 @@ import 'package:fehviewer/pages/image_view/controller/view_local_controller.dart
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:path/path.dart' as path;
 
 class ViewLocalPage extends StatefulWidget {
-  const ViewLocalPage(
-      {Key? key, this.index = 0, required this.pics, required this.dirPath})
+  const ViewLocalPage({Key? key, this.index = 0, required this.pics})
       : super(key: key);
 
   final int index;
-  final String dirPath;
   final List<String> pics;
 
   @override
@@ -33,7 +30,7 @@ class _ViewLocalPageState extends State<ViewLocalPage> {
   @override
   Widget build(BuildContext context) {
     Widget itemBuilder(BuildContext context, int index) {
-      final String item = path.join(widget.dirPath, widget.pics[index]);
+      final String item = widget.pics[index];
       Widget image = ExtendedImage.file(
         File(item),
         fit: BoxFit.contain,
@@ -44,7 +41,7 @@ class _ViewLocalPageState extends State<ViewLocalPage> {
       return image.paddingSymmetric(horizontal: 2.0);
     }
 
-    Widget result = Material(
+    final Widget result = Material(
       color: Colors.black,
       shadowColor: Colors.transparent,
       child: ExtendedImageGesturePageView.builder(

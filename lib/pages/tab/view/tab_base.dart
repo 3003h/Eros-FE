@@ -96,7 +96,7 @@ SliverList buildGallerySliverListView(
             return Stack(
               children: [
                 GalleryItemWidget(galleryItem: _item, tabTag: tabTag),
-                // index > 5
+                // index > 1
                 //     ? GalleryItemWidget(galleryItem: _item, tabTag: tabTag)
                 //     : GalleryItemPlaceHolder(),
                 if (Get.find<EhConfigService>().debugMode)

@@ -3,6 +3,7 @@ import 'package:fehviewer/models/base/eh_models.dart';
 import 'package:fehviewer/pages/tab/controller/popular_controller.dart';
 import 'package:fehviewer/pages/tab/view/gallery_base.dart';
 import 'package:fehviewer/pages/tab/view/tab_base.dart';
+import 'package:fehviewer/route/navigator_util.dart';
 import 'package:fehviewer/utils/cust_lib/persistent_header_builder.dart';
 import 'package:fehviewer/utils/cust_lib/sliver/sliver_persistent_header.dart';
 import 'package:fehviewer/utils/logger.dart';
@@ -10,6 +11,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:keframe/size_cache_widget.dart';
+import 'package:line_icons/line_icons.dart';
 
 class PopularListTab extends GetView<PopularViewController> {
   const PopularListTab({
@@ -43,22 +45,32 @@ class PopularListTab extends GetView<PopularViewController> {
     );
 
     final CupertinoNavigationBar navigationBar = CupertinoNavigationBar(
-      transitionBetweenRoutes: false,
-      middle: Row(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          Text(_title),
-          Obx(() {
-            if (controller.isBackgroundRefresh)
-              return const CupertinoActivityIndicator(
-                radius: 10,
-              ).paddingSymmetric(horizontal: 8);
-            else
-              return const SizedBox();
-          }),
-        ],
-      ),
-    );
+        transitionBetweenRoutes: false,
+        middle: Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Text(_title),
+            Obx(() {
+              if (controller.isBackgroundRefresh)
+                return const CupertinoActivityIndicator(
+                  radius: 10,
+                ).paddingSymmetric(horizontal: 8);
+              else
+                return const SizedBox();
+            }),
+          ],
+        ),
+        trailing: CupertinoButton(
+          minSize: 40,
+          padding: const EdgeInsets.all(0),
+          child: const Icon(
+            LineIcons.search,
+            size: 26,
+          ),
+          onPressed: () {
+            NavigatorUtil.showSearch();
+          },
+        ));
 
     final Widget customScrollView = CustomScrollView(
       cacheExtent: 500,

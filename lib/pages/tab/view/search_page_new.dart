@@ -52,16 +52,11 @@ class GallerySearchPageNew extends StatefulWidget {
 }
 
 class _GallerySearchPageNewState extends State<GallerySearchPageNew> {
-  late SearchPageController controller;
-
-  @override
-  void initState() {
-    super.initState();
-    controller = Get.put(
-        SearchPageController(
-            initSearchText: Get.arguments is String ? Get.arguments : null),
-        tag: searchPageCtrlDepth);
-  }
+  final SearchPageController controller = Get.put(
+    SearchPageController(
+        initSearchText: Get.arguments is String ? Get.arguments : null),
+    tag: searchPageCtrlDepth,
+  );
 
   CupertinoNavigationBar getNavigationBar(BuildContext context) {
     return CupertinoNavigationBar(
@@ -84,13 +79,15 @@ class _GallerySearchPageNewState extends State<GallerySearchPageNew> {
         children: [
           if (GetPlatform.isAndroid)
             SafeArea(
+              bottom: false,
               child: Container(
                 decoration: BoxDecoration(
                   border: _kDefaultNavBarBorder,
                   color: CupertinoTheme.of(context).barBackgroundColor,
                 ),
-                child: SearchTextFieldIn(iconOpacity: 1.0, multiline: true)
-                    .paddingSymmetric(horizontal: 12, vertical: 4),
+                child:
+                    const SearchTextFieldIn(iconOpacity: 1.0, multiline: true)
+                        .paddingSymmetric(horizontal: 12, vertical: 4),
               ),
             ),
           Expanded(child: _buildSearchRult(context)),
@@ -268,10 +265,10 @@ class _GallerySearchPageNewState extends State<GallerySearchPageNew> {
             ),
             padding: const EdgeInsets.symmetric(horizontal: 8),
             child: Row(
-              children: [
+              children: const <Widget>[
                 Expanded(
                   child: Padding(
-                    padding: const EdgeInsets.only(left: 4, top: 4, bottom: 4),
+                    padding: EdgeInsets.only(left: 4, top: 4, bottom: 4),
                     child: SearchTextFieldIn(multiline: true),
                   ),
                 ),
@@ -636,7 +633,7 @@ class _GallerySearchPageNewState extends State<GallerySearchPageNew> {
 }
 
 class SearchTextFieldIn extends StatelessWidget {
-  SearchTextFieldIn({
+  const SearchTextFieldIn({
     Key? key,
     this.multiline = false,
     this.iconOpacity = 0.0,

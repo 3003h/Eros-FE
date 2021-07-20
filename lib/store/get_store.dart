@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:fehviewer/common/global.dart';
+import 'package:fehviewer/const/const.dart';
 import 'package:fehviewer/models/index.dart';
 import 'package:fehviewer/utils/logger.dart';
 import 'package:get_storage/get_storage.dart';
@@ -89,8 +90,8 @@ class GStore {
 
     // logger.d('get searchHistory $val');
 
-    List<String> rult = <String>[];
-    if (val == null || val.trim().isEmpty) {
+    final List<String> rult = <String>[];
+    if (val.trim().isEmpty) {
       return rult;
     }
     for (final dynamic his in jsonDecode(val) as List<dynamic>) {

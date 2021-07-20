@@ -9,7 +9,7 @@ Uconfig parseUconfig(String html) {
 
   final Element? profileSetElm =
       document.querySelector('#profile_form > select');
-  late String selectedName;
+  late String selectedName = '';
   if (profileSetElm != null) {
     final profiles = profileSetElm.children;
     for (final pf in profiles) {

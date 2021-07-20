@@ -5,19 +5,24 @@ import 'package:fehviewer/utils/logger.dart';
 import 'package:hive/hive.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 
-const historyBox = 'history_box';
+const String historyBox = 'history_box';
+const String searchHistoryBox = 'search_history_box';
+
+const String searchHistoryKey = 'search_history';
 
 // ignore: avoid_classes_with_only_static_members
 class HiveHelper {
   HiveHelper();
   static final _historyBox = Hive.box<String>(historyBox);
+  static final _searchHistoryBox = Hive.box<String>(searchHistoryBox);
 
   static Future<void> init() async {
     await Hive.initFlutter();
     await Hive.openBox<String>(historyBox);
+    await Hive.openBox<String>(searchHistoryBox);
   }
 
-  List<GalleryItem> getAll() {
+  List<GalleryItem> getAllHistory() {
     final _historys = <GalleryItem>[];
     for (final val in _historyBox.values) {
       _historys.add(GalleryItem.fromJson(jsonDecode(val)));
@@ -47,5 +52,20 @@ class HiveHelper {
 
   Future<int> cleanHistory() async {
     return await _historyBox.clear();
+  }
+
+  List<String> getAllSearchHistory() {
+    final rult = <String>[];
+    final String? val =
+        _searchHistoryBox.get(searchHistoryKey, defaultValue: '[]');
+    for (final dynamic his in jsonDecode(val ?? '[]') as List<dynamic>) {
+      final String _his = his;
+      rult.add(_his);
+    }
+    return rult;
+  }
+
+  Future<void> setSearchHistory(List<String> searchTexts) async {
+    await _searchHistoryBox.put(searchHistoryKey, jsonEncode(searchTexts));
   }
 }

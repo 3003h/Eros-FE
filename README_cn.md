@@ -15,7 +15,7 @@
 
 其实主要是想写给自己用，因为用的 ios，感觉现有的几个项目感觉不能满足自己的使用 \
 然后对原生开发不咋熟悉，就起了用 flutter 自己搞一个的想法 \
-就这样从入门到入土，有了现在的版本，虽然问题还缺失的功能还不少。但至少是个能看的版本了 \
+就这样从入门到入土，有了现在的版本，虽然问题还缺失的功能还不少。但至少是个能看的版本了
 
 UI 方面主要参考的[E-HentaiViewer](https://github.com/kayanouriko/E-HentaiViewer)
 
@@ -27,6 +27,7 @@ Android 11 : MIUI12.5/ MI K40
 
 - 列表滑动可能会有小卡顿。没有原生应用那么流畅
 - 确失一些必要功能(还在开发完善中)
+- 里站连接体验不佳
 
 ## 感谢
 
@@ -38,6 +39,8 @@ Android 11 : MIUI12.5/ MI K40
 ehentai译文数据库
 
 - [EhTagTranslation/Database](https://github.com/EhTagTranslation/Database)
+
+[xioxin](https://github.com/xioxin) 写的Dio Domain Fronting拦截器
 
 ## 应用截图
 
@@ -75,12 +78,12 @@ ehentai译文数据库
 - [x] 高级设置
 - [x] 发表评论 赞和踩
 - [x] watched 和用户 tag
-- [x] Domain Fronting 域前置， 自定义hosts
+- [x] Domain Fronting 域前置 支持直连， 自定义hosts
 
 
 ## TODO
 
-- [ ] 下载功能(开发中)
+- [ ] 下载功能(半成品)
 
 ## 依赖项目/插件（部分）
 
@@ -93,6 +96,6 @@ ehentai译文数据库
 
 ## 编译相关
 
-flutter版本为最新release版本
-因项目引入 firebase, 需要放置自己的google-services.json文件等
+flutter版本为最新release版本 \
+因项目引入 firebase, 需要放置自己的google-services.json文件等 \
 或者直接去掉 firebase 相关功能
