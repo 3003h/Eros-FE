@@ -1,4 +1,6 @@
+import 'package:dio/dio.dart';
 import 'package:fehviewer/common/service/depth_service.dart';
+import 'package:fehviewer/common/service/ehconfig_service.dart';
 import 'package:fehviewer/pages/gallery/controller/gallery_page_controller.dart';
 import 'package:get/get.dart';
 import '../view/view_ext_page.dart';
@@ -20,14 +22,18 @@ class ViewExtState {
           imagePathList = vr.files!;
         }
       } else {
-        _galleryPageController = Get.find(tag: pageCtrlDepth);
+        galleryPageController = Get.find(tag: pageCtrlDepth);
       }
 
       currentItemIndex = vr.index;
     }
   }
 
-  late final GalleryPageController _galleryPageController;
+  late final GalleryPageController galleryPageController;
+
+  final EhConfigService ehConfigService = Get.find();
+
+  final CancelToken getMoreCancelToken = CancelToken();
 
   ///
   LoadType loadType = LoadType.network;
@@ -42,7 +48,7 @@ class ViewExtState {
     if (loadType == LoadType.file) {
       return imagePathList.length;
     } else {
-      return int.parse(_galleryPageController.galleryItem.filecount ?? '0');
+      return int.parse(galleryPageController.galleryItem.filecount ?? '0');
     }
   }
 
@@ -50,4 +56,10 @@ class ViewExtState {
   int get pageCount {
     return filecount;
   }
+
+  final Map<int, int> errCountMap = {};
+
+  int retryCount = 7;
+
+  List<double> doubleTapScales = <double>[1.0, 2.0, 3.0];
 }

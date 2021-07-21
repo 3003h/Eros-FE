@@ -2,8 +2,8 @@ import 'package:fehviewer/common/service/depth_service.dart';
 import 'package:fehviewer/const/const.dart';
 import 'package:fehviewer/models/index.dart';
 import 'package:fehviewer/pages/gallery/view/gallery_page.dart';
-import 'package:fehviewer/pages/image_view/controller/view_ext_state.dart';
-import 'package:fehviewer/pages/image_view/view/view_ext_page.dart';
+import 'package:fehviewer/pages/image_view_ext/controller/view_ext_state.dart';
+import 'package:fehviewer/pages/image_view_ext/view/view_ext_page.dart';
 import 'package:fehviewer/pages/tab/controller/gallery_controller.dart';
 import 'package:fehviewer/pages/tab/controller/search_page_controller.dart';
 import 'package:fehviewer/pages/tab/view/gallery_page.dart';
@@ -175,15 +175,21 @@ class NavigatorUtil {
   }
 
   // 转到大图浏览
-  static void goGalleryViewPage(int index, String gid) {
+  static Future<void> goGalleryViewPage(int index, String gid) async {
     // logger.d('goGalleryViewPage $index');
     // 命名路由方式
-    Get.toNamed(EHRoutes.galleryView, arguments: index);
+    await Get.toNamed(EHRoutes.galleryView, arguments: index);
+    // Get.toNamed(EHRoutes.galleryViewExt,
+    //     arguments: ViewRepository(
+    //       index: index,
+    //       loadType: LoadType.network,
+    //     ));
   }
 
-  static void goGalleryViewPageFile(int index, List<String> pics) {
+  static Future<void> goGalleryViewPageFile(
+      int index, List<String> pics) async {
     // 命名路由方式
-    Get.toNamed(EHRoutes.galleryViewExt,
+    await Get.toNamed(EHRoutes.galleryViewExt,
         arguments: ViewRepository(
           index: index,
           files: pics,

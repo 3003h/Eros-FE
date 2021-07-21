@@ -12,8 +12,11 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
-double? initScale(
-    {required Size imageSize, required Size size, double? initialScale}) {
+double? initScale({
+  required Size imageSize,
+  required Size size,
+  double? initialScale,
+}) {
   final double n1 = imageSize.height / imageSize.width;
   final double n2 = size.height / size.width;
   if (n1 > n2) {
@@ -31,6 +34,41 @@ double? initScale(
   }
 
   return initialScale;
+}
+
+double scaleScreen({
+  required Size imageSize,
+  required Size size,
+}) {
+  final double n1 = imageSize.height / imageSize.width;
+  final double n2 = size.height / size.width;
+
+  final FittedSizes fittedSizes = applyBoxFit(BoxFit.contain, imageSize, size);
+  //final Size sourceSize = fittedSizes.source;
+  final Size destinationSize = fittedSizes.destination;
+  if (n1 > n2) {
+    // 屏幕更高
+    return size.width / destinationSize.width;
+  } else {
+    // 屏幕更宽
+    return size.height / destinationSize.height;
+  }
+}
+
+double scale100({
+  required Size imageSize,
+  required Size size,
+}) {
+  final double n1 = imageSize.height / imageSize.width;
+  final double n2 = size.height / size.width;
+
+  if (n2 > n1) {
+    // 屏幕更高
+    return imageSize.width / size.width;
+  } else {
+    // 屏幕更宽
+    return imageSize.height / size.height;
+  }
 }
 
 class EHUtils {

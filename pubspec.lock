@@ -637,7 +637,7 @@ packages:
       name: get
       url: "https://pub.flutter-io.cn"
     source: hosted
-    version: "4.1.4"
+    version: "4.2.1+2"
   get_storage:
     dependency: "direct main"
     description:
@@ -725,12 +725,10 @@ packages:
   image_gallery_saver:
     dependency: "direct main"
     description:
-      path: "."
-      ref: HEAD
-      resolved-ref: adc4af39664bba6c7b7b3092968b86d8fc5b218d
-      url: "https://github.com/dvaldivia/image_gallery_saver.git"
-    source: git
-    version: "1.6.8"
+      name: image_gallery_saver
+      url: "https://pub.flutter-io.cn"
+    source: hosted
+    version: "1.6.9"
   intl:
     dependency: "direct main"
     description:

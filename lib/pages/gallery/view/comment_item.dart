@@ -188,6 +188,7 @@ class CommentItem extends StatelessWidget {
                       fontSize: 14,
                       color: CupertinoDynamicColor.resolve(
                           ThemeColors.commitText, context),
+                      fontFamilyFallback: EHConst.fontFamilyFallback,
                     ),
                     options: const LinkifyOptions(humanize: false),
                   );
@@ -263,6 +264,7 @@ class CommentItem extends StatelessWidget {
       final TextStyle _commentTextStyle = TextStyle(
         fontSize: 14,
         color: CupertinoDynamicColor.resolve(ThemeColors.commitText, context),
+        fontFamilyFallback: EHConst.fontFamilyFallback,
       );
 
       return Column(
@@ -356,6 +358,7 @@ class CommentItem extends StatelessWidget {
               fontSize: 13,
               color: CupertinoDynamicColor.resolve(
                   ThemeColors.commitText, context),
+              fontFamilyFallback: EHConst.fontFamilyFallback,
             ),
         expandText: S.of(context).expand,
         collapseText: S.of(context).collapse,

@@ -6,8 +6,8 @@ import 'package:fehviewer/pages/gallery/view/add_tags_page.dart';
 import 'package:fehviewer/pages/gallery/view/comment_page.dart';
 import 'package:fehviewer/pages/gallery/view/gallery_page.dart';
 import 'package:fehviewer/pages/image_view/controller/view_controller.dart';
-import 'package:fehviewer/pages/image_view/controller/view_ext_contorller.dart';
-import 'package:fehviewer/pages/image_view/view/view_ext_page.dart';
+import 'package:fehviewer/pages/image_view_ext/controller/view_ext_contorller.dart';
+import 'package:fehviewer/pages/image_view_ext/view/view_ext_page.dart';
 import 'package:fehviewer/pages/image_view/view/view_page.dart';
 import 'package:fehviewer/pages/login/login_page.dart';
 import 'package:fehviewer/pages/login/web_login_in.dart';
@@ -157,6 +157,8 @@ class AppPages {
       binding: BindingsBuilder<dynamic>(() {
         Get.lazyPut(() => ViewController());
       }),
+      transition: Transition.fadeIn,
+      opaque: false,
     ),
 
     GetPage(
@@ -165,7 +167,7 @@ class AppPages {
       binding: BindingsBuilder<dynamic>(() {
         Get.lazyPut(() => ViewExtController());
       }),
-      transition: Transition.fade,
+      transition: Transition.fadeIn,
       opaque: false,
     ),
 
@@ -174,6 +176,7 @@ class AppPages {
       name: EHRoutes.galleryPage,
       page: () => GalleryMainPage(),
       binding: GalleryBinding(),
+      transition: Transition.cupertinoDialog,
     ),
 
     GetPage(
