@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:extended_image/extended_image.dart';
 import 'package:fehviewer/common/global.dart';
 import 'package:fehviewer/const/const.dart';
@@ -21,7 +23,7 @@ import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
 
 import '../controller/view_controller.dart';
 
-double kPageViewPadding = 4.0;
+const double kPageViewPadding = 4.0;
 
 class GalleryViewPage extends GetView<ViewController> {
   const GalleryViewPage({Key? key}) : super(key: key);
@@ -118,8 +120,8 @@ class GalleryViewPage extends GetView<ViewController> {
         case ViewMode.topToBottom:
           return _buildListView();
         case ViewMode.LeftToRight:
-          return _buildPhotoViewGallery();
-        // return _buildExtendedImageGesturePageView();
+          if (!kDebugMode) return _buildPhotoViewGallery();
+          return _buildExtendedImageGesturePageView();
         case ViewMode.rightToLeft:
           return _buildPhotoViewGallery(reverse: true);
         default:
@@ -538,25 +540,28 @@ class GalleryViewPage extends GetView<ViewController> {
   }
 
   /// 左右方向浏览部件 使用[ExtendedImageGesturePageView] 实现
-  /// todo 缩放的处理有点问题
   Widget _buildExtendedImageGesturePageView({bool reverse = false}) {
     final ViewState vState = controller.vState;
     return ExtendedImageGesturePageView.builder(
       itemBuilder: (BuildContext context, int pageIndex) {
         Widget image = ViewImage(
-          ser: pageIndex,
+          ser: pageIndex + 1,
           fade: vState.fade,
           enableSlideOutPage: true,
-        );
-        image = Container(
-          child: image,
-          padding: const EdgeInsets.all(5.0),
+          expand: true,
         );
 
         image = ExtendedImageSlidePage(
           child: image,
           slideAxis: SlideAxis.vertical,
           slideType: SlideType.onlyImage,
+          resetPageDuration: const Duration(milliseconds: 300),
+          slidePageBackgroundHandler: (Offset offset, Size pageSize) {
+            double opacity = 0.0;
+            opacity = offset.distance /
+                (Offset(pageSize.width, pageSize.height).distance / 2.0);
+            return Colors.black.withOpacity(min(1.0, max(1.0 - opacity, 0.0)));
+          },
         );
 
         return image;
