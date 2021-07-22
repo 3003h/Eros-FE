@@ -125,9 +125,7 @@ class AppPages {
       name: EHRoutes.pageSetting,
       page: () => TabSettingPage(),
       binding: BindingsBuilder(
-        () => Get.lazyPut(
-          () => TabSettingController(),
-        ),
+        () => Get.lazyPut(() => TabSettingController()),
       ),
     ),
     GetPage(

@@ -6,9 +6,18 @@ import 'package:fehviewer/pages/image_view/common.dart';
 import 'package:fehviewer/utils/logger.dart';
 import 'package:fehviewer/utils/utility.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter_statusbar_manager/flutter_statusbar_manager.dart';
 import 'package:get/get.dart';
 
 import 'view_ext_state.dart';
+
+const double kBottomBarHeight = 44.0;
+const double kTopBarHeight = 44.0;
+
+const String idViewTopBar = 'ViewExtController.ViewTopBar';
+const String idViewBottomBar = 'ViewExtController.ViewBottomBar';
+const String idViewBar = 'ViewExtController.ViewBar';
+const String idViewPageSlider = 'ViewExtControlle˙r.ViewPageSlider';
 
 /// 支持在线以及本地（已下载）阅读的组件
 class ViewExtController extends GetxController {
@@ -35,6 +44,16 @@ class ViewExtController extends GetxController {
   // 页码切换时的回调
   void handOnPageChanged(int pageIndex) {
     logger.d('PageChanged $pageIndex');
+    vState.currentItemIndex = pageIndex;
+
+    if (vState.currentItemIndex >= vState.filecount - 1) {
+      vState.sliderValue = (vState.filecount - 1).toDouble();
+    } else if (vState.currentItemIndex < 0) {
+      vState.sliderValue = 1.0;
+    } else {
+      vState.sliderValue = vState.currentItemIndex.toDouble();
+    }
+    update([idViewTopBar, idViewPageSlider]);
   }
 
   /// 拉取图片信息
@@ -124,5 +143,41 @@ class ViewExtController extends GetxController {
     } else {
       vState.doubleTapScales[2] = _scalesS100;
     }
+  }
+
+  // 点击中间
+  Future<void> handOnTapCent() async {
+    if (GetPlatform.isIOS) {
+      if (!vState.showBar) {
+        await FlutterStatusbarManager.setFullscreen(false);
+        vState.showBar = !vState.showBar;
+      } else {
+        vState.showBar = !vState.showBar;
+        await Future.delayed(Duration(milliseconds: 200));
+        await FlutterStatusbarManager.setFullscreen(true);
+      }
+    } else {
+      vState.showBar = !vState.showBar;
+    }
+    update([idViewBar]);
+  }
+
+  Future<void> tapLeft() async {
+    logger.d('tap left');
+  }
+
+  Future<void> tapRight() async {
+    logger.d('tap right');
+  }
+
+  void handOnSliderChangedEnd(double value) {
+    vState.currentItemIndex = value.round();
+    // TODO(honjow): 双页 以及上下滚动模式
+    pageController.jumpToPage(vState.currentItemIndex);
+  }
+
+  void handOnSliderChanged(double value) {
+    vState.sliderValue = value;
+    update([idViewPageSlider]);
   }
 }
