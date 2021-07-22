@@ -422,7 +422,7 @@ class ViewBottomBar extends GetView<ViewExtController> {
               ),
 
               // 自动阅读按钮
-              if (1 == 1)
+              if (1 == 2)
                 GestureDetector(
                   behavior: HitTestBehavior.opaque,
                   onTap: () {
@@ -456,7 +456,7 @@ class ViewBottomBar extends GetView<ViewExtController> {
                 const SizedBox.shrink(),
 
               // 双页切换按钮
-              if (1 == 1)
+              if (1 == 2)
                 GestureDetector(
                   behavior: HitTestBehavior.opaque,
                   onTap: () {

@@ -203,7 +203,9 @@ class EhUserManager {
 
     // 设置EX的cookie
     cookieJar.saveFromResponse(Uri.parse(EHConst.EX_BASE_URL), cookies);
-    await _getExIgneous();
+    if (igneous.isEmpty) {
+      await _getExIgneous();
+    }
 
     final User userinfo = await _getUserInfo(id);
 
@@ -211,18 +213,20 @@ class EhUserManager {
     final List<Cookie> cookiesEx =
         await cookieJar.loadForRequest(Uri.parse(EHConst.EX_BASE_URL));
 
-    // 手动指定igneous的情况
-    cookiesEx.forEach((element) {
-      if (element.name == 'igneous') {
-        element.value = igneous;
-      }
-      element
-        ..expires = null
-        ..httpOnly = false
-        ..path = '/'
-        ..domain = '.exhentai.org'
-        ..maxAge = 315360000;
-    });
+    if (igneous.isNotEmpty) {
+      // 手动指定igneous的情况
+      cookiesEx.forEach((element) {
+        if (element.name == 'igneous') {
+          element.value = igneous;
+        }
+        element
+          ..expires = null
+          ..httpOnly = false
+          ..path = '/'
+          ..domain = '.exhentai.org'
+          ..maxAge = 315360000;
+      });
+    }
 
     logger.d('${cookiesEx.map((e) => '$e').join('\n')} ');
 
@@ -259,11 +263,6 @@ class EhUserManager {
 
     final String response = await httpManager.get(url) ?? '';
 
-    // logger.v('$response');
-
-    // final RegExp regExp = RegExp(r'Viewing Profile: (.+?)</div');
-    // final String username = regExp.firstMatch('$response').group(1);
-
     final Document document = parse(response);
 
     final Element? profilenameElm = document.querySelector('#profilename');
@@ -295,8 +294,7 @@ class EhUserManager {
         HttpManager.getInstance(baseUrl: EHConst.EX_BASE_URL, cache: false);
     const String url = '/uconfig.php';
 
-    final Response<dynamic> response = await httpManager.getAll(url);
-    // logger.d('${response}');
+    await httpManager.get(url, errToast: true);
   }
 
   static String _getCookieStringFromMap(Map cookie) {

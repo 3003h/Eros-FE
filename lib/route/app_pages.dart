@@ -10,7 +10,9 @@ import 'package:fehviewer/pages/image_view_ext/controller/view_ext_contorller.da
 import 'package:fehviewer/pages/image_view_ext/view/view_ext_page.dart';
 import 'package:fehviewer/pages/image_view/view/view_page.dart';
 import 'package:fehviewer/pages/login/login_page.dart';
-import 'package:fehviewer/pages/login/web_login_in.dart';
+import 'package:fehviewer/pages/login_ext/view/web_login_in.dart';
+import 'package:fehviewer/pages/login_ext/controller/login_ext_controller.dart';
+import 'package:fehviewer/pages/login_ext/view/login_ext_page.dart';
 import 'package:fehviewer/pages/setting/about_page.dart';
 import 'package:fehviewer/pages/setting/advanced_setting_page.dart';
 import 'package:fehviewer/pages/setting/controller/tab_setting_controller.dart';
@@ -101,7 +103,11 @@ class AppPages {
     ),
     GetPage(
       name: EHRoutes.login,
-      page: () => LoginPage(),
+      // page: () => LoginPage(),
+      page: () => const LoginExtPage(),
+      binding: BindingsBuilder(
+        () => Get.lazyPut(() => LoginExtController()),
+      ),
       transition: Transition.cupertino,
     ),
     GetPage(
