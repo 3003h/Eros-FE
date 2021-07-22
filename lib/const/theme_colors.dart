@@ -41,7 +41,7 @@ class EhDynamicColors {
   static const EhDynamicColor itemBackground = EhDynamicColor(
     color: Color.fromARGB(255, 255, 255, 255),
     darkColor: Color.fromARGB(255, 30, 30, 30),
-    darkGrayColor: Color.fromARGB(255, 30, 30, 30),
+    darkGrayColor: Color.fromARGB(255, 32, 32, 32),
   );
 }
 
@@ -165,7 +165,7 @@ class ThemeColors {
   /// 深色灰黑
   static CupertinoThemeData darkGrayTheme = CupertinoThemeData(
     brightness: Brightness.dark,
-    scaffoldBackgroundColor: const Color.fromARGB(255, 30, 30, 30),
+    scaffoldBackgroundColor: const Color.fromARGB(255, 20, 20, 20),
     barBackgroundColor: navigationBarBackgroundGray,
     textTheme: ehTextTheme,
   );
@@ -243,7 +243,7 @@ class ThemeColors {
     debugLabel: 'navigationBarBackgroundGray',
     // color: Color.fromARGB(230, 35, 35, 35),
     color: Color.fromARGB(200, 249, 249, 249),
-    darkColor: Color.fromARGB(200, 35, 35, 35),
+    darkColor: Color.fromARGB(200, 25, 25, 25),
     // color: Color.fromARGB(222, 186, 27, 27),
     // darkColor: Color.fromARGB(230, 21, 212, 75),
   );
