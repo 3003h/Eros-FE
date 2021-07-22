@@ -207,14 +207,14 @@ class HttpManager {
     CancelToken? cancelToken,
     bool errToast = false,
   }) async {
-    late Response<dynamic> response;
+    Response<dynamic> response;
     try {
       response = await _dio.get<dynamic>(url,
           queryParameters: params, options: options, cancelToken: cancelToken);
     } on DioError catch (e) {
       logger.e('getHttp exception: $e');
-      return response;
-//      throw e;
+      rethrow;
+      // return response;
     }
     return response;
   }
@@ -227,7 +227,7 @@ class HttpManager {
     CancelToken? cancelToken,
     bool errToast = false,
   }) async {
-    late Response<dynamic> response;
+    Response<dynamic> response;
     try {
       response = await _dio.post<dynamic>(url,
           queryParameters: params, options: options, cancelToken: cancelToken);
@@ -247,7 +247,7 @@ class HttpManager {
     CancelToken? cancelToken,
     bool errToast = false,
   }) async {
-    late Response<dynamic> response;
+    Response<dynamic> response;
     try {
       response = await _dio.post<dynamic>(url,
           options: options, cancelToken: cancelToken, data: data);
@@ -268,7 +268,7 @@ class HttpManager {
     bool deleteOnError = true,
     VoidCallback? onDownloadComplete,
   }) async {
-    late Response<dynamic> response;
+    Response<dynamic> response;
     try {
       response = await _dio.download(
         urlPath,

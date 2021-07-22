@@ -68,12 +68,8 @@ class _LoginPageState extends State<LoginPage> {
                         prefix: ConstrainedBox(
                             constraints: const BoxConstraints(minWidth: 50),
                             child: Text(S.of(context).user_name)),
-                        // prefixMode: OverlayVisibilityMode.never,
                         decoration: null,
-                        // autofocus
-                        // autofocus: true,
                         onEditingComplete: () {
-                          // Click the keyboard to complete the focus jump password input box
                           FocusScope.of(context).requestFocus(_nodePwd);
                         },
                       ),
@@ -94,12 +90,10 @@ class _LoginPageState extends State<LoginPage> {
                         prefix: ConstrainedBox(
                             constraints: const BoxConstraints(minWidth: 50),
                             child: Text(S.of(context).passwd)),
-                        // prefixMode: OverlayVisibilityMode.never,
                         decoration: null,
                         obscureText: true,
                         focusNode: _nodePwd,
                         onEditingComplete: () {
-                          // Click the keyboard to complete. If the account and password are not empty, log in
                           _login();
                         },
                       ),
@@ -125,14 +119,12 @@ class _LoginPageState extends State<LoginPage> {
       height: 60,
       child: _isLogin
           ? Container(
-//              padding: const EdgeInsets.all(8),
               child: const CupertinoActivityIndicator(
                 radius: 14.0,
               ),
             )
           : CupertinoButton(
               child: Text(S.of(context).login),
-//             color: CupertinoColors.activeBlue,
               onPressed: () {
                 _login();
               },
