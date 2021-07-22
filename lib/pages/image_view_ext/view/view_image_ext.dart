@@ -47,7 +47,9 @@ class _ViewImageExtState extends State<ViewImageExt>
     _fadeAnimationController =
         AnimationController(vsync: this, duration: Duration(milliseconds: 200));
 
-    controller.imageFuture = controller.fetchImage(widget.imageSer);
+    if (vState.loadType == LoadType.network) {
+      controller.imageFuture = controller.fetchImage(widget.imageSer);
+    }
 
     super.initState();
   }
@@ -239,9 +241,12 @@ class _ViewImageExtState extends State<ViewImageExt>
 
                   return image;
                 } else {
-                  return const CupertinoActivityIndicator(
-                    radius: 20,
+                  return ViewLoading(
+                    ser: widget.imageSer,
                   );
+                  // return const CupertinoActivityIndicator(
+                  //   radius: 20,
+                  // );
                 }
               });
         },

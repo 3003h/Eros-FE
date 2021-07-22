@@ -1,11 +1,17 @@
 import 'package:extended_image/extended_image.dart';
 import 'package:fehviewer/common/service/depth_service.dart';
+import 'package:fehviewer/generated/l10n.dart';
+import 'package:fehviewer/models/base/eh_models.dart';
 import 'package:fehviewer/pages/gallery/controller/gallery_page_controller.dart';
+import 'package:fehviewer/route/routes.dart';
 import 'package:fehviewer/utils/logger.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
+import 'package:line_icons/line_icons.dart';
 import 'package:liquid_progress_indicator_ns/liquid_progress_indicator.dart';
+
 import '../controller/view_ext_contorller.dart';
 
 const double kPageViewPadding = 4.0;
@@ -40,6 +46,47 @@ class ViewError extends StatelessWidget {
             '$ser',
             style: const TextStyle(
                 color: CupertinoColors.secondarySystemBackground),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class ViewLoading extends StatelessWidget {
+  const ViewLoading({Key? key, required this.ser}) : super(key: key);
+  final int ser;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      constraints: BoxConstraints(
+        maxHeight: context.mediaQueryShortestSide,
+        minWidth: context.width / 2 - kPageViewPadding,
+      ),
+      alignment: Alignment.center,
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: <Widget>[
+          Text(
+            '$ser',
+            style: const TextStyle(
+              fontSize: 50,
+              color: CupertinoColors.systemGrey6,
+            ),
+          ),
+          Row(
+            mainAxisSize: MainAxisSize.min,
+            children: <Widget>[
+              const CupertinoActivityIndicator(),
+              const SizedBox(width: 5),
+              Text(
+                '${S.of(context).loading}...',
+                style: const TextStyle(
+                  color: CupertinoColors.systemGrey6,
+                ),
+              ),
+            ],
           ),
         ],
       ),
@@ -240,6 +287,284 @@ class ImageExt extends GetView<ViewExtController> {
             return null;
         }
       },
+    );
+  }
+}
+
+class ViewTopBar extends StatelessWidget {
+  const ViewTopBar({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      color: Colors.black.withOpacity(0.7),
+      height: context.mediaQueryPadding.top + kTopBarHeight,
+      width: context.mediaQuery.size.width,
+      padding: EdgeInsets.symmetric(
+          horizontal: context.mediaQueryPadding.horizontal / 2),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        crossAxisAlignment: CrossAxisAlignment.end,
+        children: [
+          GestureDetector(
+            behavior: HitTestBehavior.opaque,
+            onTap: () {
+              Get.back();
+            },
+            child: Container(
+              width: 40,
+              height: kBottomBarHeight,
+              child: const Icon(
+                FontAwesomeIcons.chevronLeft,
+                color: CupertinoColors.systemGrey6,
+                // size: 24,
+              ),
+            ),
+          ),
+          GetBuilder<ViewExtController>(
+            id: idViewTopBar,
+            builder: (logic) {
+              return Container(
+                alignment: Alignment.center,
+                height: kBottomBarHeight,
+                child: Text(
+                  '${logic.vState.currentItemIndex + 1}/${logic.vState.filecount}',
+                  style: const TextStyle(
+                    color: CupertinoColors.systemGrey6,
+                  ),
+                ),
+              );
+            },
+          ),
+          GestureDetector(
+            behavior: HitTestBehavior.opaque,
+            onTap: () {
+              Get.toNamed(EHRoutes.viewSeting);
+            },
+            child: Container(
+              width: 40,
+              margin: const EdgeInsets.only(right: 8.0),
+              height: kBottomBarHeight,
+              child: const Icon(
+                FontAwesomeIcons.ellipsisH,
+                color: CupertinoColors.systemGrey6,
+                // size: 24,
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+const _kBottomTextStyle = TextStyle(color: Colors.white, fontSize: 10);
+
+class ViewBottomBar extends GetView<ViewExtController> {
+  const ViewBottomBar({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      color: Colors.black.withOpacity(0.7),
+      height: context.mediaQueryPadding.bottom + kTopBarHeight * 2,
+      width: context.mediaQuery.size.width,
+      padding: EdgeInsets.symmetric(
+          horizontal: context.mediaQueryPadding.horizontal / 2 + 10),
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          GetBuilder<ViewExtController>(
+            id: idViewPageSlider,
+            builder: (logic) {
+              return SizedBox(
+                height: kBottomBarHeight,
+                child: ViewPageSlider(
+                  max: logic.vState.filecount - 1.0,
+                  sliderValue: logic.vState.sliderValue,
+                  onChangedEnd: logic.handOnSliderChangedEnd,
+                  onChanged: logic.handOnSliderChanged,
+                ).paddingSymmetric(vertical: 8),
+              );
+            },
+          ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: <Widget>[
+              // 分享按钮
+              GestureDetector(
+                behavior: HitTestBehavior.opaque,
+                onTap: () {
+                  logger.v('tap share');
+                  // final GalleryImage? p =
+                  // imageMap[controller.vState.itemIndex + 1];
+                  // logger.v(p?.toJson());
+                  // showShareActionSheet(context, p?.imageUrl! ?? '');
+                },
+                child: Container(
+                  width: 40,
+                  height: kBottomBarHeight,
+                  child: Column(
+                    children: [
+                      const Icon(
+                        LineIcons.share,
+                        color: CupertinoColors.systemGrey6,
+                        size: 26,
+                      ),
+                      const Spacer(),
+                      Text(
+                        S.of(context).share,
+                        style: _kBottomTextStyle,
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+
+              // 自动阅读按钮
+              if (1 == 1)
+                GestureDetector(
+                  behavior: HitTestBehavior.opaque,
+                  onTap: () {
+                    // controller.tapAutoRead(context);
+                  },
+                  onLongPress: () {
+                    // controller.longTapAutoRead(context);
+                  },
+                  child: Container(
+                    width: 40,
+                    height: kBottomBarHeight,
+                    child: Column(
+                      children: [
+                        Icon(
+                          LineIcons.hourglassHalf,
+                          size: 26,
+                          // color: vState.autoRead
+                          //     ? CupertinoColors.activeBlue
+                          //     : CupertinoColors.systemGrey6,
+                        ),
+                        const Spacer(),
+                        const Text(
+                          'Auto',
+                          style: _kBottomTextStyle,
+                        ),
+                      ],
+                    ),
+                  ),
+                )
+              else
+                const SizedBox.shrink(),
+
+              // 双页切换按钮
+              if (1 == 1)
+                GestureDetector(
+                  behavior: HitTestBehavior.opaque,
+                  onTap: () {
+                    // controller.switchColumnMode();
+                  },
+                  child: Container(
+                    width: 40,
+                    // margin: const EdgeInsets.only(right: 10.0),
+                    height: kBottomBarHeight,
+                    child: Column(
+                      children: [
+                        Icon(
+                          LineIcons.bookOpen,
+                          size: 26,
+                          // color: () {
+                          //   switch (vState.columnMode) {
+                          //     case ViewColumnMode.single:
+                          //       return CupertinoColors.systemGrey6;
+                          //     case ViewColumnMode.odd:
+                          //       return CupertinoColors.activeBlue;
+                          //     case ViewColumnMode.even:
+                          //       return CupertinoColors.activeOrange;
+                          //   }
+                          // }(),
+                        ),
+                        const Spacer(),
+                        Text(
+                          '双页',
+                          style: _kBottomTextStyle,
+                        ),
+                      ],
+                    ),
+                  ),
+                )
+              else
+                const SizedBox.shrink(),
+            ],
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+/// 页面滑条
+class ViewPageSlider extends StatefulWidget {
+  const ViewPageSlider({
+    Key? key,
+    required this.max,
+    required this.sliderValue,
+    required this.onChangedEnd,
+    required this.onChanged,
+  }) : super(key: key);
+
+  final double max;
+  final double sliderValue;
+  final ValueChanged<double> onChangedEnd;
+  final ValueChanged<double> onChanged;
+
+  @override
+  _ViewPageSliderState createState() => _ViewPageSliderState();
+}
+
+class _ViewPageSliderState extends State<ViewPageSlider> {
+  late double _value;
+
+  @override
+  void initState() {
+    super.initState();
+    _value = widget.sliderValue;
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    _value = widget.sliderValue;
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      child: Row(
+        children: <Widget>[
+          Text(
+            '${widget.sliderValue.round() + 1}',
+            style: const TextStyle(color: CupertinoColors.systemGrey6),
+          ).paddingSymmetric(horizontal: 4),
+          Expanded(
+            child: CupertinoSlider(
+                min: 0,
+                max: widget.max,
+                value: widget.sliderValue,
+                onChanged: (double newValue) {
+                  setState(() {
+                    _value = newValue;
+                  });
+                  widget.onChanged(newValue);
+                },
+                onChangeEnd: (double newValue) {
+                  widget.onChangedEnd(newValue);
+                }),
+          ),
+          Text(
+            '${widget.max.round() + 1}',
+            style: const TextStyle(color: CupertinoColors.systemGrey6),
+          ).paddingSymmetric(horizontal: 4),
+        ],
+      ),
     );
   }
 }

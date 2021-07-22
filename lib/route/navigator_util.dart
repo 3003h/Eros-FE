@@ -178,12 +178,12 @@ class NavigatorUtil {
   static Future<void> goGalleryViewPage(int index, String gid) async {
     // logger.d('goGalleryViewPage $index');
     // 命名路由方式
-    await Get.toNamed(EHRoutes.galleryView, arguments: index);
-    // Get.toNamed(EHRoutes.galleryViewExt,
-    //     arguments: ViewRepository(
-    //       index: index,
-    //       loadType: LoadType.network,
-    //     ));
+    // await Get.toNamed(EHRoutes.galleryView, arguments: index);
+    await Get.toNamed(EHRoutes.galleryViewExt,
+        arguments: ViewRepository(
+          index: index,
+          loadType: LoadType.network,
+        ));
   }
 
   static Future<void> goGalleryViewPageFile(
