@@ -1,8 +1,8 @@
 import 'package:fehviewer/common/service/theme_service.dart';
+import 'package:fehviewer/generated/l10n.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:fehviewer/generated/l10n.dart';
 
 import '../controller/login_ext_controller.dart';
 

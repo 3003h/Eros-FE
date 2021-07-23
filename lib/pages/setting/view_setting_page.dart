@@ -3,6 +3,7 @@ import 'package:fehviewer/common/service/ehconfig_service.dart';
 import 'package:fehviewer/common/service/theme_service.dart';
 import 'package:fehviewer/const/const.dart';
 import 'package:fehviewer/generated/l10n.dart';
+import 'package:fehviewer/pages/image_view_ext/controller/view_ext_contorller.dart';
 import 'package:fehviewer/pages/setting/setting_base.dart';
 import 'package:fehviewer/utils/logger.dart';
 import 'package:flutter/cupertino.dart';
@@ -44,7 +45,13 @@ class ViewSettingList extends StatelessWidget {
       TextSwitchItem(
         S.of(context).show_page_interval,
         intValue: ehConfigService.showPageInterval.value,
-        onChanged: (bool val) => ehConfigService.showPageInterval.value = val,
+        onChanged: (bool val) {
+          ehConfigService.showPageInterval.value = val;
+          if (Get.isRegistered<ViewExtController>()) {
+            Get.find<ViewExtController>().resetPageController();
+            Get.find<ViewExtController>().update([idPageView]);
+          }
+        },
       )
     ];
     return ListView.builder(

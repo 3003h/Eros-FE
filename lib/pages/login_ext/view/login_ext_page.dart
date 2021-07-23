@@ -1,14 +1,11 @@
 import 'package:fehviewer/common/service/theme_service.dart';
-import 'package:fehviewer/network/gallery_request.dart';
-import 'package:fehviewer/pages/login/login_cookie_page.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:fehviewer/generated/l10n.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:line_icons/line_icons.dart';
 
 import '../controller/login_ext_controller.dart';
-import 'login_cookie_ext.dart';
 
 class LoginExtPage extends GetView<LoginExtController> {
   const LoginExtPage({Key? key}) : super(key: key);

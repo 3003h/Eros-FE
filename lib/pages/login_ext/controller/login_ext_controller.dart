@@ -11,7 +11,6 @@ import 'package:fehviewer/utils/logger.dart';
 import 'package:fehviewer/utils/toast.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
-import 'package:meta/meta.dart';
 
 const TextStyle kTextStyle = TextStyle(
   fontSize: 18,

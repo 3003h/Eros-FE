@@ -10,7 +10,7 @@ English | [简体中文](https://github.com/honjow/FEhViewer/blob/nullsafety/REA
 
 ## Introduction
 
-an e-hentai/exhentai app make on flutter
+An Unofficial e-hentai app make on flutter
 
 ## Descriptions
 

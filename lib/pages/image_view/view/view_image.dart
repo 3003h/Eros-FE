@@ -17,7 +17,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:liquid_progress_indicator_ns/liquid_progress_indicator.dart';
 
-import '../common.dart';
+import '../../image_view_ext/common.dart';
 
 class ViewImage extends StatefulWidget {
   const ViewImage({

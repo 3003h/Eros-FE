@@ -1,10 +1,11 @@
 import 'package:extended_image/extended_image.dart';
 import 'package:fehviewer/common/service/depth_service.dart';
 import 'package:fehviewer/generated/l10n.dart';
-import 'package:fehviewer/models/base/eh_models.dart';
+import 'package:fehviewer/network/gallery_request.dart';
 import 'package:fehviewer/pages/gallery/controller/gallery_page_controller.dart';
 import 'package:fehviewer/route/routes.dart';
 import 'package:fehviewer/utils/logger.dart';
+import 'package:fehviewer/utils/toast.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -12,6 +13,7 @@ import 'package:get/get.dart';
 import 'package:line_icons/line_icons.dart';
 import 'package:liquid_progress_indicator_ns/liquid_progress_indicator.dart';
 
+import '../common.dart';
 import '../controller/view_ext_contorller.dart';
 
 const double kPageViewPadding = 4.0;
@@ -124,26 +126,6 @@ class ImageExt extends GetView<ViewExtController> {
 
   @override
   Widget build(BuildContext context) {
-    if (false)
-      return ExtendedImage.network(
-        url,
-        fit: BoxFit.contain,
-        enableSlideOutPage: true,
-        handleLoadingProgress: true,
-        clearMemoryCacheIfFailed: true,
-        mode: ExtendedImageMode.gesture,
-        initGestureConfigHandler: initGestureConfigHandler,
-        onDoubleTap: onDoubleTap,
-        loadStateChanged: (ExtendedImageState state) {
-          if (state.extendedImageLoadState == LoadState.loading) {}
-
-          if (state.extendedImageLoadState == LoadState.completed) {
-            final ImageInfo? imageInfo = state.extendedImageInfo;
-            controller.setScale100(imageInfo!, context.mediaQuerySize);
-          }
-        },
-      );
-
     return ExtendedImage.network(
       url,
       fit: BoxFit.contain,
@@ -230,7 +212,6 @@ class ImageExt extends GetView<ViewExtController> {
 
             onLoadCompleted?.call();
 
-            // return null;
             return FadeTransition(
               opacity: fadeAnimationController,
               child: state.completedWidget,
@@ -395,11 +376,7 @@ class ViewBottomBar extends GetView<ViewExtController> {
               GestureDetector(
                 behavior: HitTestBehavior.opaque,
                 onTap: () {
-                  logger.v('tap share');
-                  // final GalleryImage? p =
-                  // imageMap[controller.vState.itemIndex + 1];
-                  // logger.v(p?.toJson());
-                  // showShareActionSheet(context, p?.imageUrl! ?? '');
+                  controller.share(context);
                 },
                 child: Container(
                   width: 40,
@@ -422,45 +399,50 @@ class ViewBottomBar extends GetView<ViewExtController> {
               ),
 
               // 自动阅读按钮
-              if (1 == 2)
+              if (1 == 1)
                 GestureDetector(
                   behavior: HitTestBehavior.opaque,
                   onTap: () {
-                    // controller.tapAutoRead(context);
+                    controller.tapAutoRead(context);
                   },
                   onLongPress: () {
-                    // controller.longTapAutoRead(context);
+                    controller.longTapAutoRead(context);
                   },
-                  child: Container(
-                    width: 40,
-                    height: kBottomBarHeight,
-                    child: Column(
-                      children: [
-                        Icon(
-                          LineIcons.hourglassHalf,
-                          size: 26,
-                          // color: vState.autoRead
-                          //     ? CupertinoColors.activeBlue
-                          //     : CupertinoColors.systemGrey6,
+                  child: GetBuilder<ViewExtController>(
+                    id: idAutoReadIcon,
+                    builder: (logic) {
+                      return Container(
+                        width: 40,
+                        height: kBottomBarHeight,
+                        child: Column(
+                          children: [
+                            Icon(
+                              LineIcons.hourglassHalf,
+                              size: 26,
+                              color: logic.vState.autoRead
+                                  ? CupertinoColors.activeBlue
+                                  : CupertinoColors.systemGrey6,
+                            ),
+                            const Spacer(),
+                            const Text(
+                              'Auto',
+                              style: _kBottomTextStyle,
+                            ),
+                          ],
                         ),
-                        const Spacer(),
-                        const Text(
-                          'Auto',
-                          style: _kBottomTextStyle,
-                        ),
-                      ],
-                    ),
+                      );
+                    },
                   ),
                 )
               else
                 const SizedBox.shrink(),
 
               // 双页切换按钮
-              if (1 == 2)
+              if (1 == 1)
                 GestureDetector(
                   behavior: HitTestBehavior.opaque,
                   onTap: () {
-                    // controller.switchColumnMode();
+                    controller.switchColumnMode();
                   },
                   child: Container(
                     width: 40,
@@ -468,22 +450,27 @@ class ViewBottomBar extends GetView<ViewExtController> {
                     height: kBottomBarHeight,
                     child: Column(
                       children: [
-                        Icon(
-                          LineIcons.bookOpen,
-                          size: 26,
-                          // color: () {
-                          //   switch (vState.columnMode) {
-                          //     case ViewColumnMode.single:
-                          //       return CupertinoColors.systemGrey6;
-                          //     case ViewColumnMode.odd:
-                          //       return CupertinoColors.activeBlue;
-                          //     case ViewColumnMode.even:
-                          //       return CupertinoColors.activeOrange;
-                          //   }
-                          // }(),
+                        GetBuilder<ViewExtController>(
+                          id: idViewColumnModeIcon,
+                          builder: (logic) {
+                            return Icon(
+                              LineIcons.bookOpen,
+                              size: 26,
+                              color: () {
+                                switch (logic.vState.columnMode) {
+                                  case ViewColumnMode.single:
+                                    return CupertinoColors.systemGrey6;
+                                  case ViewColumnMode.oddLeft:
+                                    return CupertinoColors.activeBlue;
+                                  case ViewColumnMode.evenLeft:
+                                    return CupertinoColors.activeOrange;
+                                }
+                              }(),
+                            );
+                          },
                         ),
                         const Spacer(),
-                        Text(
+                        const Text(
                           '双页',
                           style: _kBottomTextStyle,
                         ),
@@ -567,4 +554,77 @@ class _ViewPageSliderState extends State<ViewPageSlider> {
       ),
     );
   }
+}
+
+Future<void> showShareActionSheet(
+  BuildContext context, {
+  String? imageUrl,
+  String? filePath,
+  LoadType loadType = LoadType.network,
+}) {
+  return showCupertinoModalPopup<void>(
+      context: context,
+      builder: (BuildContext context) {
+        final CupertinoActionSheet dialog = CupertinoActionSheet(
+          cancelButton: CupertinoActionSheetAction(
+              onPressed: () {
+                Get.back();
+              },
+              child: Text(S.of(context).cancel)),
+          actions: <Widget>[
+            CupertinoActionSheetAction(
+                onPressed: () async {
+                  logger.v('保存到手机');
+                  Get.back();
+                  final bool rult = await Api.saveImage(context,
+                      imageUrl: imageUrl, filePath: filePath);
+                  if (rult) {
+                    showToast(S.of(context).saved_successfully);
+                  }
+                },
+                child: Text(S.of(context).save_into_album)),
+            CupertinoActionSheetAction(
+                onPressed: () {
+                  logger.v('系统分享');
+                  Get.back();
+                  Api.shareImageExtended(
+                      imageUrl: imageUrl, filePath: filePath);
+                },
+                child: Text(S.of(context).system_share)),
+          ],
+        );
+        return dialog;
+      });
+}
+
+Future<void> showImageSheet(
+    BuildContext context, String imageUrl, VoidCallback reload,
+    {String? title}) {
+  return showCupertinoModalPopup<void>(
+      context: context,
+      builder: (BuildContext context) {
+        final CupertinoActionSheet dialog = CupertinoActionSheet(
+          title: title != null ? Text(title) : null,
+          cancelButton: CupertinoActionSheetAction(
+              onPressed: () {
+                Get.back();
+              },
+              child: Text(S.of(context).cancel)),
+          actions: <Widget>[
+            CupertinoActionSheetAction(
+                onPressed: () {
+                  reload();
+                  Get.back();
+                },
+                child: Text(S.of(context).reload_image)),
+            CupertinoActionSheetAction(
+                onPressed: () {
+                  Get.back();
+                  showShareActionSheet(context, imageUrl: imageUrl);
+                },
+                child: Text(S.of(context).share_image)),
+          ],
+        );
+        return dialog;
+      });
 }

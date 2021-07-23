@@ -7,7 +7,7 @@ import 'package:fehviewer/const/const.dart';
 import 'package:fehviewer/generated/l10n.dart';
 import 'package:fehviewer/models/base/eh_models.dart';
 import 'package:fehviewer/pages/gallery/controller/gallery_page_controller.dart';
-import 'package:fehviewer/pages/image_view/common.dart';
+import 'package:fehviewer/pages/image_view_ext/common.dart';
 import 'package:fehviewer/utils/logger.dart';
 import 'package:fehviewer/utils/utility.dart' as utility;
 import 'package:fehviewer/utils/vibrate.dart';
@@ -34,16 +34,16 @@ class ViewController extends GetxController {
     switch (vState.columnMode) {
       case ViewColumnMode.single:
         logger.d('单页 => 双页1. itemIndex:${vState.itemIndex},');
-        vState.columnMode = ViewColumnMode.odd;
+        vState.columnMode = ViewColumnMode.oddLeft;
         pageController.jumpToPage(vState.pageIndex);
         break;
-      case ViewColumnMode.odd:
+      case ViewColumnMode.oddLeft:
         logger.d('双页1 => 双页2, itemIndex:${vState.itemIndex}');
-        vState.columnMode = ViewColumnMode.even;
+        vState.columnMode = ViewColumnMode.evenLeft;
         vState.needRebuild = true;
         pageController.jumpToPage(vState.pageIndex);
         break;
-      case ViewColumnMode.even:
+      case ViewColumnMode.evenLeft:
         logger.d('双页2 => 单页, itemIndex:${vState.itemIndex}');
         vState.columnMode = ViewColumnMode.single;
         Future.delayed(Duration.zero).then((_) {
@@ -104,16 +104,15 @@ class ViewController extends GetxController {
 
     /// 初始预载
     /// 后续的预载触发放在翻页事件中
-    final int _preload = _ehConfigService.preloadImage.value;
     if (vState.viewMode != ViewMode.topToBottom) {
       // 预载
-      // logger.v('初始预载');
+      logger.d('初始预载');
       GalleryPara.instance
           .precacheImages(
         Get.context!,
         imageMap: vState.imageMap,
         itemSer: vState.itemIndex,
-        max: _preload,
+        max: _ehConfigService.preloadImage.value,
       )
           .listen((GalleryImage? event) {
         if (event != null) {
@@ -181,10 +180,10 @@ class ViewController extends GetxController {
       case ViewColumnMode.single:
         vState.itemIndex = pageIndex;
         break;
-      case ViewColumnMode.odd:
+      case ViewColumnMode.oddLeft:
         vState.itemIndex = pageIndex * 2;
         break;
-      case ViewColumnMode.even:
+      case ViewColumnMode.evenLeft:
         final int index = pageIndex * 2 - 1;
         vState.itemIndex = index > 0 ? index : 0;
         break;
@@ -448,7 +447,7 @@ class ViewController extends GetxController {
   }
 
   void _startAutoRead() {
-    debounce(
+    vDebounce(
         _turnNextPage, Duration(milliseconds: _ehConfigService.turnPageInv));
   }
 
@@ -467,7 +466,7 @@ class ViewController extends GetxController {
       _startAutoRead();
     } else {
       // 双页阅读
-      final int serLeft = vState.columnMode == ViewColumnMode.odd
+      final int serLeft = vState.columnMode == ViewColumnMode.oddLeft
           ? vState.pageIndex * 2 + 1
           : vState.pageIndex * 2;
       if (vState.filecount > serLeft) {
@@ -488,7 +487,7 @@ class ViewController extends GetxController {
   static Timer? timer;
 
   // 防抖函数
-  void debounce(Function? doSomething,
+  void vDebounce(Function? doSomething,
       [Duration durationTime = deFaultDurationTime]) {
     // timer?.cancel();
     if (timer?.isActive ?? false) {

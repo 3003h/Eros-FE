@@ -1,5 +1,3 @@
-import 'dart:math';
-
 import 'package:dio/dio.dart';
 import 'package:extended_image/extended_image.dart';
 import 'package:fehviewer/common/global.dart';
@@ -10,6 +8,8 @@ import 'package:fehviewer/utils/utility.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+
+import '../common.dart';
 import '../controller/view_ext_contorller.dart';
 import 'view_ext.dart';
 
@@ -19,9 +19,11 @@ class ViewImageExt extends StatefulWidget {
   const ViewImageExt({
     Key? key,
     required this.imageSer,
+    this.initialScale = 1.0,
   }) : super(key: key);
 
   final int imageSer;
+  final double initialScale;
 
   @override
   _ViewImageExtState createState() => _ViewImageExtState();
@@ -33,7 +35,6 @@ class _ViewImageExtState extends State<ViewImageExt>
   late AnimationController _doubleClickAnimationController;
   Animation<double>? _doubleClickAnimation;
   late DoubleClickAnimationListener _doubleClickAnimationListener;
-  // List<double> doubleTapScales = <double>[1.0, 2.0, 3.0];
 
   late AnimationController _fadeAnimationController;
 
@@ -48,10 +49,21 @@ class _ViewImageExtState extends State<ViewImageExt>
         AnimationController(vsync: this, duration: Duration(milliseconds: 200));
 
     if (vState.loadType == LoadType.network) {
-      controller.imageFuture = controller.fetchImage(widget.imageSer);
+      // controller.imageFuture = controller.fetchImage(widget.imageSer);
+      controller.imageFutureMap[widget.imageSer] =
+          controller.fetchImage(widget.imageSer);
     }
 
+    vState.doubleTapScales[0] = widget.initialScale;
+
     super.initState();
+  }
+
+  @override
+  void dispose() {
+    _doubleClickAnimationController.dispose();
+    _fadeAnimationController.dispose();
+    super.dispose();
   }
 
   @override
@@ -72,7 +84,7 @@ class _ViewImageExtState extends State<ViewImageExt>
       }
       return GestureConfig(
           inPageView: true,
-          initialScale: 1,
+          initialScale: widget.initialScale,
           // maxScale: max(initialScale!, 5.0),
           maxScale: 10.0,
           // animationMaxScale: max(initialScale, 5.0),
@@ -140,19 +152,21 @@ class _ViewImageExtState extends State<ViewImageExt>
           if (state.extendedImageLoadState == LoadState.completed) {
             final ImageInfo? imageInfo = state.extendedImageInfo;
             controller.setScale100(imageInfo!, size);
+
+            controller.onLoadCompleted(widget.imageSer);
           }
         },
       );
 
-      return image.paddingSymmetric(horizontal: 2.0);
+      return image;
     } else {
       /// 在线查看的形式
-      Widget image = GetBuilder<ViewExtController>(
+      final Widget viewImage = GetBuilder<ViewExtController>(
         builder: (ViewExtController controller) {
           final ViewExtState vState = controller.vState;
 
           return FutureBuilder<GalleryImage?>(
-              future: controller.imageFuture,
+              future: controller.imageFutureMap[widget.imageSer],
               builder: (context, snapshot) {
                 if (snapshot.connectionState == ConnectionState.done) {
                   if (snapshot.hasError || snapshot.data == null) {
@@ -187,21 +201,6 @@ class _ViewImageExtState extends State<ViewImageExt>
                   }
                   final GalleryImage? _image = snapshot.data;
 
-                  /*Widget image = ExtendedImage.network(
-                    _image?.imageUrl ?? '',
-                    fit: BoxFit.contain,
-                    enableSlideOutPage: true,
-                    mode: ExtendedImageMode.gesture,
-                    initGestureConfigHandler: _initGestureConfigHandler,
-                    onDoubleTap: onDoubleTap,
-                    loadStateChanged: (ExtendedImageState state) {
-                      if (state.extendedImageLoadState == LoadState.completed) {
-                        final ImageInfo? imageInfo = state.extendedImageInfo;
-                        _setScale100(imageInfo!);
-                      }
-                    },
-                  );*/
-
                   Widget image = ImageExt(
                     url: _image?.imageUrl ?? '',
                     onDoubleTap: onDoubleTap,
@@ -210,18 +209,19 @@ class _ViewImageExtState extends State<ViewImageExt>
                         changeSource: true),
                     fadeAnimationController: _fadeAnimationController,
                     initGestureConfigHandler: _initGestureConfigHandler,
-                    // onLoadCompleted: () {},
+                    onLoadCompleted: () {
+                      controller.onLoadCompleted(widget.imageSer);
+                    },
                   );
 
                   if (Global.inDebugMode) {
                     image = Stack(
                       alignment: Alignment.center,
-                      // fit: widget.expand ? StackFit.expand : StackFit.loose,
                       fit: StackFit.expand,
                       children: [
                         image,
                         Positioned(
-                          left: 4,
+                          left: 10,
                           child: Text('${_image?.ser ?? ''}',
                               style: const TextStyle(
                                   fontSize: 12,
@@ -244,15 +244,12 @@ class _ViewImageExtState extends State<ViewImageExt>
                   return ViewLoading(
                     ser: widget.imageSer,
                   );
-                  // return const CupertinoActivityIndicator(
-                  //   radius: 20,
-                  // );
                 }
               });
         },
       );
 
-      return image;
+      return viewImage;
     }
   }
 }

@@ -2,7 +2,7 @@ import 'dart:collection';
 import 'dart:convert';
 
 import 'package:fehviewer/models/base/eh_models.dart';
-import 'package:fehviewer/pages/image_view/controller/view_state.dart';
+import 'package:fehviewer/pages/image_view_ext/common.dart';
 import 'package:fehviewer/store/get_store.dart';
 import 'package:fehviewer/utils/logger.dart';
 import 'package:get/get.dart';

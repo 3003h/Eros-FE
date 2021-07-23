@@ -2,7 +2,6 @@ import 'dart:io';
 
 import 'package:cookie_jar/cookie_jar.dart';
 import 'package:dio/dio.dart';
-import 'package:fehviewer/common/global.dart';
 import 'package:fehviewer/const/const.dart';
 import 'package:fehviewer/models/user.dart';
 import 'package:fehviewer/network/error.dart';
