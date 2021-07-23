@@ -6,13 +6,12 @@ import 'package:fehviewer/pages/gallery/view/add_tags_page.dart';
 import 'package:fehviewer/pages/gallery/view/comment_page.dart';
 import 'package:fehviewer/pages/gallery/view/gallery_page.dart';
 import 'package:fehviewer/pages/image_view/controller/view_controller.dart';
+import 'package:fehviewer/pages/image_view/view/view_page.dart';
 import 'package:fehviewer/pages/image_view_ext/controller/view_ext_contorller.dart';
 import 'package:fehviewer/pages/image_view_ext/view/view_ext_page.dart';
-import 'package:fehviewer/pages/image_view/view/view_page.dart';
-import 'package:fehviewer/pages/login/login_page.dart';
-import 'package:fehviewer/pages/login_ext/view/web_login_in.dart';
 import 'package:fehviewer/pages/login_ext/controller/login_ext_controller.dart';
 import 'package:fehviewer/pages/login_ext/view/login_ext_page.dart';
+import 'package:fehviewer/pages/login_ext/view/web_login_in.dart';
 import 'package:fehviewer/pages/setting/about_page.dart';
 import 'package:fehviewer/pages/setting/advanced_setting_page.dart';
 import 'package:fehviewer/pages/setting/controller/tab_setting_controller.dart';
@@ -171,7 +170,7 @@ class AppPages {
       binding: BindingsBuilder<dynamic>(() {
         Get.lazyPut(() => ViewExtController());
       }),
-      transition: Transition.fadeIn,
+      transition: Transition.native,
       opaque: false,
     ),
 

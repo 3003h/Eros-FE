@@ -3,8 +3,6 @@ import 'package:fehviewer/models/index.dart';
 import 'package:html/dom.dart';
 import 'package:html/parser.dart' show parse;
 
-import '../global.dart';
-
 GalleryImage paraImage(String htmlText, String href) {
   // logger.d('htmlText $htmlText');
   final Document document = parse(htmlText);

@@ -7,22 +7,12 @@ import 'package:fehviewer/common/service/ehconfig_service.dart';
 import 'package:fehviewer/const/const.dart';
 import 'package:fehviewer/models/base/eh_models.dart';
 import 'package:fehviewer/pages/gallery/controller/gallery_page_controller.dart';
+import 'package:fehviewer/pages/image_view_ext/common.dart';
 import 'package:fehviewer/utils/logger.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
 
 import 'view_controller.dart';
-
-enum ViewColumnMode {
-  // 双页 奇数页位于左边
-  odd,
-
-  // 双页 偶数页位于左边
-  even,
-
-  // 单页
-  single,
-}
 
 class ViewState {
   ViewState() {
@@ -96,18 +86,13 @@ class ViewState {
 
   /// 横屏翻页模式
   final Rx<ViewColumnMode> _columnMode = ViewColumnMode.single.obs;
-
   ViewColumnMode get columnMode => _columnMode.value;
-
   set columnMode(val) => _columnMode.value = val;
 
   /// 当前查看的图片inde
   final RxInt _itemIndex = 0.obs;
-
   int get itemIndex => _itemIndex.value;
-
   set itemIndex(int val) {
-    // logger5.d('will set itemIndex to $val');
     _itemIndex.value = val;
   }
 
@@ -119,9 +104,9 @@ class ViewState {
     switch (columnMode) {
       case ViewColumnMode.single:
         return itemIndex;
-      case ViewColumnMode.odd:
+      case ViewColumnMode.oddLeft:
         return itemIndex ~/ 2;
-      case ViewColumnMode.even:
+      case ViewColumnMode.evenLeft:
         return (itemIndex + 1) ~/ 2;
       default:
         return itemIndex;
@@ -134,9 +119,9 @@ class ViewState {
     switch (columnMode) {
       case ViewColumnMode.single:
         return imageCount;
-      case ViewColumnMode.odd:
+      case ViewColumnMode.oddLeft:
         return (imageCount / 2).round();
-      case ViewColumnMode.even:
+      case ViewColumnMode.evenLeft:
         return (imageCount / 2).round() + ((imageCount + 1) % 2);
       default:
         return imageCount;

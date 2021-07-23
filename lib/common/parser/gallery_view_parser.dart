@@ -1,10 +1,3 @@
-import 'package:dio/dio.dart';
-import 'package:fehviewer/common/global.dart';
-import 'package:fehviewer/utils/dio_util.dart';
-import 'package:fehviewer/utils/logger.dart';
-import 'package:html/dom.dart';
-import 'package:html/parser.dart' show parse;
-
 class GalleryViewParser {
   // static Future<String> getImageUrl(String href) async {
   //   final HttpManager httpManager = HttpManager.getInstance();

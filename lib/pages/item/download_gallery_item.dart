@@ -1,6 +1,5 @@
 import 'package:extended_image/extended_image.dart';
 import 'package:fehviewer/common/isolate_download/download_manager.dart';
-import 'package:fehviewer/pages/image_view/view/view_local_page.dart';
 import 'package:fehviewer/pages/tab/controller/download_view_controller.dart';
 import 'package:fehviewer/route/navigator_util.dart';
 import 'package:fehviewer/store/floor/entity/gallery_image_task.dart';

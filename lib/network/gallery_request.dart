@@ -28,7 +28,6 @@ import 'package:fehviewer/utils/toast.dart';
 import 'package:fehviewer/utils/utility.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_cache_manager/flutter_cache_manager.dart';
 import 'package:get/get.dart' hide Response, FormData;
 import 'package:html_unescape/html_unescape.dart';
@@ -911,42 +910,51 @@ class Api {
     return response;
   }
 
-  /// 分享图片
-  // static Future<void> shareImage(String imageUrl) async {
-  //   final CachedNetworkImage image = CachedNetworkImage(imageUrl: imageUrl);
-  //   final DefaultCacheManager manager =
-  //       image.cacheManager as DefaultCacheManager? ?? DefaultCacheManager();
-  //   final Map<String, String>? headers = image.httpHeaders;
-  //   final File file = await manager.getSingleFile(
-  //     image.imageUrl,
-  //     headers: headers,
-  //   );
-  //   Share.shareFiles(<String>[file.path]);
-  // }
-
-  static Future<void> shareImageExtended(String imageUrl) async {
-    logger.d('imageUrl => $imageUrl');
-    io.File? file = await getCachedImageFile(imageUrl);
-    if (file == null) {
-      try {
-        final DefaultCacheManager manager = DefaultCacheManager();
-        file = await manager.getSingleFile(
-          imageUrl,
-        );
-      } catch (e) {
-        throw 'get file error';
-      }
+  static Future<void> shareImageExtended({
+    String? imageUrl,
+    String? filePath,
+  }) async {
+    if (imageUrl == null && filePath == null) {
+      return;
     }
-    final String _name = imageUrl.substring(imageUrl.lastIndexOf('/') + 1);
+
+    io.File? file;
+    String? _name;
+
+    if (filePath != null) {
+      file = io.File(filePath);
+      _name = path.basename(filePath);
+    } else if (imageUrl != null) {
+      logger.d('imageUrl => $imageUrl');
+      file = await getCachedImageFile(imageUrl);
+      if (file == null) {
+        try {
+          final DefaultCacheManager manager = DefaultCacheManager();
+          file = await manager.getSingleFile(
+            imageUrl,
+          );
+        } catch (e) {
+          throw 'get file error';
+        }
+      }
+      _name = imageUrl.substring(imageUrl.lastIndexOf('/') + 1);
+    }
+
+    if (file == null) {
+      throw 'get file error';
+    }
+
     logger.v('_name $_name url $imageUrl');
     final io.File newFile = file.copySync(path.join(Global.tempPath, _name));
-    Share.shareFiles(<String>[newFile.path], text: 'save image');
+    Share.shareFiles(<String>[newFile.path]);
   }
 
   /// 保存图片到相册
-  /// 默认为下载网络图片，如需下载资源图片，需要指定 [isAsset] 为 `true`。
-  static Future<bool> saveImage(BuildContext context, String imageUrl,
-      {bool isAsset = false}) async {
+  static Future<bool> saveImage(
+    BuildContext context, {
+    String? imageUrl,
+    String? filePath,
+  }) async {
     /// 跳转权限设置
     Future<bool?> _jumpToAppSettings(context) async {
       return showCupertinoDialog<bool>(
@@ -999,7 +1007,7 @@ class Api {
             requestAll.isGranted ||
             requestAll.isLimited) {
           // return _saveImage(imageUrl);
-          return _saveImageExtended(imageUrl);
+          return _saveImageExtended(imageUrl: imageUrl, filePath: filePath);
           // Either the permission was already granted before or the user just granted it.
         } else {
           throw 'Unable to save pictures, please authorize first~';
@@ -1011,7 +1019,7 @@ class Api {
       if (await Permission.storage.status.isPermanentlyDenied) {
         if (await Permission.storage.request().isGranted) {
           // _saveImage(imageUrl);
-          return _saveImageExtended(imageUrl);
+          return _saveImageExtended(imageUrl: imageUrl, filePath: filePath);
         } else {
           await _jumpToAppSettings(context);
           return false;
@@ -1020,74 +1028,36 @@ class Api {
         if (await Permission.storage.request().isGranted) {
           // Either the permission was already granted before or the user just granted it.
           // return _saveImage(imageUrl);
-          return _saveImageExtended(imageUrl);
+          return _saveImageExtended(imageUrl: imageUrl, filePath: filePath);
         } else {
           throw 'Unable to save pictures, please authorize first~';
         }
       }
     }
-    return false;
   }
 
-  // static Future<bool> _saveImage(String imageUrl,
-  //     {bool isAsset = false}) async {
-  //   try {
-  //     if (imageUrl == null) {
-  //       throw 'Save failed, picture does not exist!';
-  //     }
-  //
-  //     /// 保存的图片数据
-  //     Uint8List imageBytes;
-  //
-  //     if (isAsset == true) {
-  //       /// 保存资源图片
-  //       final ByteData bytes = await rootBundle.load(imageUrl);
-  //       imageBytes = bytes.buffer.asUint8List();
-  //     } else {
-  //       /// 保存网络图片
-  //       logger.d('保存网络图片');
-  //       final CachedNetworkImage image = CachedNetworkImage(imageUrl: imageUrl);
-  //       final DefaultCacheManager manager =
-  //           image.cacheManager as DefaultCacheManager? ?? DefaultCacheManager();
-  //       final Map<String, String>? headers = image.httpHeaders;
-  //       final File file = await manager.getSingleFile(
-  //         image.imageUrl,
-  //         headers: headers,
-  //       );
-  //       imageBytes = await file.readAsBytes();
-  //     }
-  //
-  //     /// 保存图片
-  //     final result = await ImageGallerySaver.saveImage(imageBytes);
-  //
-  //     if (result == null || result == '') {
-  //       throw 'Save image fail';
-  //     }
-  //
-  //     logger.d('保存成功');
-  //     return true;
-  //   } catch (e) {
-  //     logger.e(e.toString());
-  //     rethrow;
-  //   }
-  // }
-
-  static Future<bool> _saveImageExtended(String imageUrl,
-      {bool isAsset = false}) async {
+  static Future<bool> _saveImageExtended({
+    String? imageUrl,
+    String? filePath,
+  }) async {
     try {
-      if (imageUrl == null) {
+      if (imageUrl == null && filePath == null) {
         throw 'Save failed, picture does not exist!';
       }
 
       /// 保存的图片数据
       Uint8List imageBytes;
       io.File? file;
+      String? _name;
 
-      if (isAsset == true) {
-        /// 保存资源图片
-        final ByteData bytes = await rootBundle.load(imageUrl);
-        imageBytes = bytes.buffer.asUint8List();
-      } else {
+      if (filePath != null) {
+        file = io.File(filePath);
+        if (!file.existsSync()) {
+          throw 'read file error';
+        }
+        imageBytes = await file.readAsBytes();
+        _name = path.basename(filePath);
+      } else if (imageUrl != null) {
         /// 保存网络图片
         logger.d('保存网络图片');
         file = await getCachedImageFile(imageUrl);
@@ -1099,21 +1069,15 @@ class Api {
         logger.v('file path ${file.path}');
 
         imageBytes = await file.readAsBytes();
-      }
 
-      /// 保存图片
-      // final result = await ImageGallerySaver.saveImage(
-      //   imageBytes,
-      //   quality: 100,
-      //   name: _name,
-      // );
+        _name = imageUrl.substring(imageUrl.lastIndexOf('/') + 1);
+        logger.v('_name $_name url $imageUrl');
+      }
 
       if (file == null) {
         throw 'read file error';
       }
 
-      final _name = imageUrl.substring(imageUrl.lastIndexOf('/') + 1);
-      logger.v('_name $_name url $imageUrl');
       final io.File newFile = file.copySync(path.join(Global.tempPath, _name));
       logger.v('${newFile.path} ${file.lengthSync()} ${newFile.lengthSync()}');
 

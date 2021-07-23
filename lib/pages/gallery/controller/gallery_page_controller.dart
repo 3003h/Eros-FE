@@ -8,7 +8,6 @@ import 'package:fehviewer/common/service/ehconfig_service.dart';
 import 'package:fehviewer/const/const.dart';
 import 'package:fehviewer/models/base/eh_models.dart';
 import 'package:fehviewer/network/gallery_request.dart';
-import 'package:fehviewer/pages/gallery/controller/rate_controller.dart';
 import 'package:fehviewer/pages/gallery/controller/taginfo_controller.dart';
 import 'package:fehviewer/pages/gallery/controller/torrent_controller.dart';
 import 'package:fehviewer/pages/gallery/view/gallery_page.dart';
@@ -22,7 +21,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
 
 import 'all_previews_controller.dart';
-import 'archiver_controller.dart';
 import 'comment_controller.dart';
 import 'gallery_fav_controller.dart';
 

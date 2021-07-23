@@ -8,6 +8,7 @@ import 'package:fehviewer/models/index.dart';
 import 'package:fehviewer/pages/image_view/controller/view_state.dart';
 import 'package:fehviewer/pages/image_view/view/view_image.dart';
 import 'package:fehviewer/pages/image_view/view/view_widget.dart';
+import 'package:fehviewer/pages/image_view_ext/common.dart';
 import 'package:fehviewer/route/routes.dart';
 import 'package:fehviewer/utils/logger.dart';
 import 'package:flutter/cupertino.dart';
@@ -333,9 +334,9 @@ class GalleryViewPage extends GetView<ViewController> {
                                   switch (vState.columnMode) {
                                     case ViewColumnMode.single:
                                       return CupertinoColors.systemGrey6;
-                                    case ViewColumnMode.odd:
+                                    case ViewColumnMode.oddLeft:
                                       return CupertinoColors.activeBlue;
-                                    case ViewColumnMode.even:
+                                    case ViewColumnMode.evenLeft:
                                       return CupertinoColors.activeOrange;
                                   }
                                 }(),
@@ -437,9 +438,10 @@ class GalleryViewPage extends GetView<ViewController> {
                 child: () {
                   if (vState.columnMode != ViewColumnMode.single) {
                     // 双页阅读
-                    final int serLeft = vState.columnMode == ViewColumnMode.odd
-                        ? pageIndex * 2 + 1
-                        : pageIndex * 2;
+                    final int serLeft =
+                        vState.columnMode == ViewColumnMode.oddLeft
+                            ? pageIndex * 2 + 1
+                            : pageIndex * 2;
 
                     Alignment? alignmentL = vState.filecount > serLeft
                         ? Alignment.centerRight

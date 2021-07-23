@@ -112,7 +112,7 @@ Future<void> showShareActionSheet(BuildContext context, String imageUrl) {
             CupertinoActionSheetAction(
                 onPressed: () {
                   logger.v('保存到手机');
-                  Api.saveImage(context, imageUrl).then((bool rult) {
+                  Api.saveImage(context, imageUrl: imageUrl).then((bool rult) {
                     Get.back();
                     if (rult) {
                       showToast(S.of(context).saved_successfully);
@@ -125,8 +125,7 @@ Future<void> showShareActionSheet(BuildContext context, String imageUrl) {
             CupertinoActionSheetAction(
                 onPressed: () {
                   logger.v('系统分享');
-                  // Api.shareImage(imageUrl);
-                  Api.shareImageExtended(imageUrl);
+                  Api.shareImageExtended(imageUrl: imageUrl);
                 },
                 child: Text(S.of(context).system_share)),
           ],
