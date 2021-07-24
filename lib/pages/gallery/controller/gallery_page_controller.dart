@@ -238,14 +238,9 @@ class GalleryPageController extends GetxController
 
   /// 添加缩略图对象
   void addAllImages(List<GalleryImage> galleryImages) {
-    // try {
-    //   Get.find<ViewController>().update([GetID.IMAGE_VIEW]);
-    // } catch (_) {}
-
     logger.d(
         'addAllPreview ${galleryImages.first.ser}~${galleryImages.last.ser} ');
 
-    // update();
     for (final GalleryImage _image in galleryImages) {
       final int index =
           images.indexWhere((GalleryImage e) => e.ser == _image.ser);
@@ -589,7 +584,7 @@ class GalleryPageController extends GetxController
 
           // 换源加载
           if (changeSource) {
-            logger.d('itemSer$itemSer 换源加载 ${_image.imageUrl}');
+            logger5.d('itemSer$itemSer 换源加载 ${_image.imageUrl}');
           }
 
           final GalleryImage _imageCopyWith = _curImages.copyWith(

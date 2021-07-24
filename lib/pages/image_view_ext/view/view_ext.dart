@@ -118,7 +118,7 @@ class ImageExt extends GetView<ViewExtController> {
   final double? imageHeight;
   final double? imageWidth;
   final int retryCount;
-  final VoidCallback? onLoadCompleted;
+  final ValueChanged<ExtendedImageState>? onLoadCompleted;
   final InitGestureConfigHandler initGestureConfigHandler;
   final DoubleTap onDoubleTap;
 
@@ -207,10 +207,7 @@ class ImageExt extends GetView<ViewExtController> {
           case LoadState.completed:
             fadeAnimationController.forward();
 
-            final ImageInfo? imageInfo = state.extendedImageInfo;
-            controller.setScale100(imageInfo!, context.mediaQuerySize);
-
-            onLoadCompleted?.call();
+            onLoadCompleted?.call(state);
 
             return FadeTransition(
               opacity: fadeAnimationController,
@@ -221,7 +218,8 @@ class ImageExt extends GetView<ViewExtController> {
             logger.d('Failed $url');
             fadeAnimationController.reset();
 
-            if ((_pageController.errCountMap[ser] ?? 0) < retryCount) {
+            final reload = (_pageController.errCountMap[ser] ?? 0) < retryCount;
+            if (reload) {
               Future.delayed(const Duration(milliseconds: 100))
                   .then((_) => reloadImage());
               _pageController.errCountMap
@@ -229,40 +227,45 @@ class ImageExt extends GetView<ViewExtController> {
               logger.d('${ser} 重试 第 ${_pageController.errCountMap[ser]} 次');
             }
 
-            return Container(
-              alignment: Alignment.center,
-              constraints: BoxConstraints(
-                maxHeight: context.width * 0.8,
-              ),
-              child: GestureDetector(
-                behavior: HitTestBehavior.opaque,
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    const Icon(
-                      Icons.error,
-                      size: 50,
-                      color: Colors.red,
-                    ),
-                    const Text(
-                      'Load image failed',
-                      style: TextStyle(
-                          fontSize: 10,
-                          color: CupertinoColors.secondarySystemBackground),
-                    ),
-                    Text(
-                      '${ser + 1}',
-                      style: const TextStyle(
-                          color: CupertinoColors.secondarySystemBackground),
-                    ),
-                  ],
+            if (reload) {
+              return const SizedBox.shrink();
+            } else {
+              return Container(
+                alignment: Alignment.center,
+                constraints: BoxConstraints(
+                  maxHeight: context.width * 0.8,
                 ),
-                onTap: () {
-                  // state.reLoadImage();
-                  reloadImage();
-                },
-              ),
-            );
+                child: GestureDetector(
+                  behavior: HitTestBehavior.opaque,
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      const Icon(
+                        Icons.error,
+                        size: 50,
+                        color: Colors.red,
+                      ),
+                      const Text(
+                        'Load image failed',
+                        style: TextStyle(
+                            fontSize: 10,
+                            color: CupertinoColors.secondarySystemBackground),
+                      ),
+                      Text(
+                        '${ser + 1}',
+                        style: const TextStyle(
+                            color: CupertinoColors.secondarySystemBackground),
+                      ),
+                    ],
+                  ),
+                  onTap: () {
+                    // state.reLoadImage();
+                    reloadImage();
+                  },
+                ),
+              );
+            }
+
             break;
           default:
             return null;

@@ -77,7 +77,7 @@ class InWebMySetting extends StatelessWidget {
           // initialUrl: '${Api.getBaseUrl()}/uconfig.php',
           initialUrlRequest: URLRequest(
             url: Uri.parse(
-              '${baseUrl.dfUrl}/uconfig.php',
+              '${baseUrl}/uconfig.php',
             ),
             // headers: _httpHeaders,
           ),

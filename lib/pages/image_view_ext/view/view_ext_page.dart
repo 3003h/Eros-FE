@@ -1,6 +1,7 @@
 import 'dart:math';
 
 import 'package:extended_image/extended_image.dart';
+import 'package:fehviewer/const/const.dart';
 import 'package:fehviewer/pages/image_view_ext/view/view_ext.dart';
 import 'package:fehviewer/utils/logger.dart';
 import 'package:flutter/cupertino.dart';
@@ -60,18 +61,39 @@ class _ViewExtPageState extends State<ViewExtPage>
   }
 }
 
-class ImagePageView extends GetView<ViewExtController> {
-  const ImagePageView({Key? key, this.reverse = false}) : super(key: key);
+class ImagePageView extends StatelessWidget {
+  const ImagePageView({Key? key}) : super(key: key);
 
+  @override
+  Widget build(BuildContext context) {
+    return GetBuilder<ViewExtController>(
+      id: idImagePageView,
+      builder: (logic) {
+        switch (logic.vState.viewMode) {
+          case ViewMode.topToBottom:
+            // return _buildListView();
+            return const SizedBox.shrink();
+          case ViewMode.LeftToRight:
+            return const ViewImageSlidePage();
+          case ViewMode.rightToLeft:
+            return const ViewImageSlidePage(reverse: true);
+          default:
+            return const ViewImageSlidePage();
+        }
+      },
+    );
+  }
+}
+
+class ViewImageSlidePage extends GetView<ViewExtController> {
+  const ViewImageSlidePage({Key? key, this.reverse = false}) : super(key: key);
   final bool reverse;
-
-  // ViewExtState get vState => controller.vState;
 
   @override
   Widget build(BuildContext context) {
     return ExtendedImageSlidePage(
       child: GetBuilder<ViewExtController>(
-        id: idPageView,
+        id: idSlidePage,
         builder: (logic) {
           if (logic.vState.columnMode != ViewColumnMode.single) {
             return PhotoViewGallery.builder(
@@ -102,6 +124,8 @@ class ImagePageView extends GetView<ViewExtController> {
               physics: const BouncingScrollPhysics(),
               reverse: reverse,
               itemBuilder: (BuildContext context, int index) {
+                logger.d('pageIndex $index ser ${index + 1}');
+
                 /// 单页
                 return ViewImageExt(
                   imageSer: index + 1,
@@ -141,14 +165,19 @@ class DoublePageView extends GetView<ViewExtController> {
   final int pageIndex;
   final bool reverse;
 
-  ViewExtState get vState => controller.vState;
+  // ViewExtState get vState => controller.vState;
 
   @override
   Widget build(BuildContext context) {
+    final ViewExtState vState = controller.vState;
+
     // 双页阅读
     final int serLeft = vState.columnMode == ViewColumnMode.oddLeft
         ? pageIndex * 2 + 1
         : pageIndex * 2;
+    vState.serLeft = serLeft;
+
+    // logger.d('pageIndex $pageIndex leftSer $serLeft');
 
     Alignment? alignmentL =
         vState.filecount > serLeft ? Alignment.centerRight : null;
@@ -181,7 +210,7 @@ class DoublePageView extends GetView<ViewExtController> {
       }
     }();
 
-    logger.d('_widthL:$_widthL  _widthR:$_widthR');
+    // logger.d('_widthL:$_widthL  _widthR:$_widthR');
 
     final List<Widget> _pageList = <Widget>[
       if (serLeft > 0)

@@ -27,7 +27,8 @@ const String idViewTopBar = 'ViewExtController.ViewTopBar';
 const String idViewBottomBar = 'ViewExtController.ViewBottomBar';
 const String idViewBar = 'ViewExtController.ViewBar';
 const String idViewPageSlider = 'ViewExtController.ViewPageSlider';
-const String idPageView = 'ViewExtController.ExtendedImageGesturePageView';
+const String idSlidePage = 'ViewExtController.ViewImageSlidePage';
+const String idImagePageView = 'ViewExtController.ImagePageView';
 const String idViewColumnModeIcon = 'ViewExtController.ViewColumnModeIcon';
 const String idAutoReadIcon = 'ViewExtController.AutoReadIcon';
 
@@ -55,14 +56,13 @@ class ViewExtController extends GetxController {
 
     // 横屏模式pageview控制器初始化
     pageController = PageController(
-      initialPage: vState.currentItemIndex,
+      initialPage: vState.pageIndex,
       viewportFraction: vState.showPageInterval ? 1.1 : 1.0,
     );
 
     /// 初始预载
     /// 后续的预载触发放在翻页事件中
-    final int _preload = _ehConfigService.preloadImage.value;
-    if (1 == 1) {
+    if (vState.loadType == LoadType.network) {
       // 预载
       logger.v('初始预载');
       GalleryPara.instance
@@ -70,7 +70,7 @@ class ViewExtController extends GetxController {
         Get.context!,
         imageMap: vState.imageMap,
         itemSer: vState.currentItemIndex,
-        max: _preload,
+        max: _ehConfigService.preloadImage.value,
       )
           .listen((GalleryImage? event) {
         if (event != null) {
@@ -82,7 +82,7 @@ class ViewExtController extends GetxController {
 
     logger.v('旋转设置');
     final ReadOrientation? _orientation = _ehConfigService.orientation.value;
-    logger.d(' $_orientation');
+    // logger.d(' $_orientation');
     if (_orientation != ReadOrientation.system &&
         _orientation != ReadOrientation.auto) {
       OrientationPlugin.setPreferredOrientations(
@@ -102,7 +102,7 @@ class ViewExtController extends GetxController {
     // SystemChrome.setEnabledSystemUIOverlays(SystemUiOverlay.values);
     FlutterStatusbarManager.setFullscreen(false);
     // 恢复系统旋转设置
-    logger.d('恢复系统旋转设置');
+    // logger.d('恢复系统旋转设置');
     OrientationPlugin.setPreferredOrientations(DeviceOrientation.values);
     // OrientationPlugin.forceOrientation(DeviceOrientation.portraitUp);
     cancelAutoRead();
@@ -119,8 +119,6 @@ class ViewExtController extends GetxController {
 
   // 页码切换时的回调
   void handOnPageChanged(int pageIndex) {
-    logger.d('PageChanged $pageIndex');
-
     // 根据 columnMode 的不同设置不同的 currentItemIndex 值
     switch (vState.columnMode) {
       case ViewColumnMode.single:
@@ -163,36 +161,32 @@ class ViewExtController extends GetxController {
   }
 
   /// 切换单页双页模式
-  void switchColumnMode() {
+  Future<void> switchColumnMode() async {
     vibrateUtil.light();
     logger.v('切换单页双页模式');
+    late final int _toIndex;
     switch (vState.columnMode) {
       case ViewColumnMode.single:
         logger.d('单页 => 双页1. itemIndex:${vState.currentItemIndex},');
         vState.columnMode = ViewColumnMode.oddLeft;
-        pageController.jumpToPage(vState.pageIndex);
-        update([idViewColumnModeIcon, idPageView]);
+        _toIndex = vState.pageIndex;
         break;
       case ViewColumnMode.oddLeft:
         logger.d('双页1 => 双页2, itemIndex:${vState.currentItemIndex}');
         vState.columnMode = ViewColumnMode.evenLeft;
-        vState.needRebuild = true;
-        update([idViewColumnModeIcon, idPageView]);
-        pageController.jumpToPage(vState.pageIndex);
+        _toIndex = vState.pageIndex;
         break;
       case ViewColumnMode.evenLeft:
         logger.d('双页2 => 单页, itemIndex:${vState.currentItemIndex}');
         vState.columnMode = ViewColumnMode.single;
-        Future.delayed(Duration.zero).then((_) {
-          final int _toIndex = vState.pageIndex;
-          logger.d('pageIndex $_toIndex');
-          vState.currentItemIndex = _toIndex;
-          vState.sliderValue = _toIndex.toDouble();
-          update([idViewColumnModeIcon, idPageView]);
-          pageController.jumpToPage(_toIndex);
-        });
+        _toIndex = vState.pageIndex;
         break;
     }
+
+    logger.d('_toIndex ${_toIndex}  ');
+    update([idViewColumnModeIcon, idSlidePage]);
+    await Future.delayed(const Duration(milliseconds: 50));
+    pageController.jumpToPage(_toIndex);
   }
 
   /// 拉取图片信息
@@ -302,11 +296,27 @@ class ViewExtController extends GetxController {
   }
 
   Future<void> tapLeft() async {
-    logger.d('tap left');
+    logger.d('${vState.viewMode} tap left');
+    vState.fade = false;
+    if (vState.viewMode == ViewMode.LeftToRight) {
+      if (vState.pageIndex > 0) {
+        pageController.jumpToPage(vState.pageIndex - 1);
+      }
+    } else if (vState.viewMode == ViewMode.rightToLeft) {
+      pageController.jumpToPage(vState.pageIndex + 1);
+    }
   }
 
   Future<void> tapRight() async {
-    logger.d('tap right');
+    logger.d('${vState.viewMode} tap right');
+    vState.fade = false;
+    if (vState.viewMode == ViewMode.LeftToRight) {
+      pageController.jumpToPage(vState.pageIndex + 1);
+    } else if (vState.viewMode == ViewMode.rightToLeft) {
+      if (vState.pageIndex > 0) {
+        pageController.jumpToPage(vState.pageIndex - 1);
+      }
+    }
   }
 
   void handOnSliderChangedEnd(double value) {
@@ -338,16 +348,15 @@ class ViewExtController extends GetxController {
   }
 
   Future tapAutoRead(BuildContext context) async {
-    logger.d('tap autoRead');
+    // logger.d('tap autoRead');
 
     if (!vState.autoRead) {
       await _setAutoReadInv(context);
+      update([idAutoReadIcon]);
+      _startAutoRead();
     } else {
-      vState.autoRead = !vState.autoRead;
+      cancelAutoRead();
     }
-    update([idAutoReadIcon]);
-
-    _startAutoRead();
   }
 
   Future<void> longTapAutoRead(BuildContext context) async {
@@ -356,7 +365,7 @@ class ViewExtController extends GetxController {
   }
 
   Future<void> _setAutoReadInv(BuildContext context) async {
-    logger.d('_ehConfigService.turnPageInv ${_ehConfigService.turnPageInv}');
+    // logger.d('_ehConfigService.turnPageInv ${_ehConfigService.turnPageInv}');
 
     final initIndex = EHConst.invList
         .indexWhere((int element) => element == _ehConfigService.turnPageInv);
@@ -367,7 +376,7 @@ class ViewExtController extends GetxController {
     );
 
     if (inv != null) {
-      logger.d('set inv $inv');
+      // logger.d('set inv $inv');
       _ehConfigService.turnPageInv = inv;
       vState.autoRead = !vState.autoRead;
     }
@@ -434,6 +443,8 @@ class ViewExtController extends GetxController {
 
   void cancelAutoRead() {
     vState.autoRead = false;
+    // vState.complePages.clear();
+    vState.lastAutoNextLeftSer = null;
     update([idAutoReadIcon]);
   }
 
@@ -447,34 +458,47 @@ class ViewExtController extends GetxController {
 
   Future<void> onLoadCompleted(int ser) async {
     vState.loadCompleMap[ser] = true;
+    await Future.delayed(Duration.zero);
 
     if (vState.columnMode == ViewColumnMode.single) {
       _startAutoRead();
     } else {
       // 双页阅读
-      final int serLeft = vState.columnMode == ViewColumnMode.oddLeft
-          ? vState.pageIndex * 2 + 1
-          : vState.pageIndex * 2;
+      final int serLeft = vState.serLeft;
       if (vState.filecount > serLeft) {
-        final leftComplet = vState.loadCompleMap[serLeft] ?? false;
+        final bool leftComplet;
+        if (serLeft > 0) {
+          leftComplet = vState.loadCompleMap[serLeft] ?? false;
+        } else {
+          leftComplet = true;
+        }
         final rigthComple = vState.loadCompleMap[serLeft + 1] ?? false;
-        logger.v(
-            ' $serLeft leftComplet: $leftComplet  , ${serLeft + 1} rigthComple:$rigthComple');
-        if (leftComplet && rigthComple) {
+
+        final bool canJump = vState.lastAutoNextLeftSer != serLeft;
+        logger.v('ser:$ser\nserL:$serLeft leftComplet: $leftComplet\n'
+            'serR:${serLeft + 1} rigthComple:$rigthComple\ncanJump $canJump');
+        if (leftComplet && rigthComple && canJump) {
+          logger.v('auto [$serLeft][${serLeft + 1}]');
           _startAutoRead();
         }
       } else {
+        logger.v('else auto [$serLeft][${serLeft + 1}]');
         _startAutoRead();
       }
     }
   }
 
   Future<void> _turnNextPage() async {
-    if (vState.autoRead && vState.currentItemIndex < vState.pageCount - 1) {
-      logger.v('next page');
+    if (vState.autoRead && vState.pageIndex < vState.pageCount - 1) {
+      logger5.v('next page ${vState.pageIndex + 1}');
+
       if (pageController.positions.isNotEmpty) {
         pageController.nextPage(
             duration: const Duration(milliseconds: 300), curve: Curves.easeOut);
+      }
+
+      if (vState.columnMode != ViewColumnMode.single) {
+        vState.lastAutoNextLeftSer = vState.serLeft;
       }
     }
   }
