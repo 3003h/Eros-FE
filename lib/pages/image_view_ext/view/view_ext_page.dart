@@ -10,6 +10,7 @@ import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:photo_view/photo_view.dart';
 import 'package:photo_view/photo_view_gallery.dart';
+import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
 
 import '../common.dart';
 import '../controller/view_ext_contorller.dart';
@@ -71,8 +72,7 @@ class ImagePageView extends StatelessWidget {
       builder: (logic) {
         switch (logic.vState.viewMode) {
           case ViewMode.topToBottom:
-            // return _buildListView();
-            return const SizedBox.shrink();
+            return const ImageListViewPage();
           case ViewMode.LeftToRight:
             return const ViewImageSlidePage();
           case ViewMode.rightToLeft:
@@ -82,6 +82,107 @@ class ImagePageView extends StatelessWidget {
         }
       },
     );
+  }
+}
+
+class ImageListViewPage extends StatelessWidget {
+  const ImageListViewPage({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    Widget image = Container(
+      height: context.height,
+      width: context.width,
+      color: Colors.black,
+      child: GetBuilder<ViewExtController>(
+        id: idImageListView,
+        builder: (logic) {
+          final vState = logic.vState;
+
+          return ScrollablePositionedList.builder(
+            itemScrollController: logic.itemScrollController,
+            itemPositionsListener: logic.itemPositionsListener,
+            itemCount: vState.filecount,
+            itemBuilder: itemBuilder(),
+          );
+        },
+      ),
+    );
+
+    // return Container(
+    //   height: context.height,
+    //   width: context.width,
+    //   color: Colors.grey.withAlpha(150),
+    //   child: InteractiveViewer(
+    //     // boundaryMargin: EdgeInsets.all(400),
+    //     minScale: 1.0,
+    //     maxScale: 5.0,
+    //     panEnabled: true,
+    //     scaleEnabled: true,
+    //     // child: Container(
+    //     //   child: Image.asset('assets/40.png'),
+    //     // ),
+    //     child: UnconstrainedBox(child: image),
+    //   ),
+    // );
+
+    return PhotoViewGallery.builder(
+      itemCount: 1,
+      customSize: context.mediaQuery.size,
+      builder: (_, __) {
+        return PhotoViewGalleryPageOptions.customChild(
+          initialScale: 1.0,
+          minScale: PhotoViewComputedScale.contained * 1.0,
+          maxScale: 5.0,
+          child: image,
+        );
+      },
+    );
+  }
+
+  Widget Function(BuildContext context, int index) itemBuilder() {
+    return (BuildContext context, int index) {
+      final int itemSer = index + 1;
+
+      return ConstrainedBox(
+        constraints: BoxConstraints(
+          minWidth: context.width,
+        ),
+        child: GetBuilder<ViewExtController>(
+            id: '$idImageListView$itemSer',
+            builder: (logic) {
+              final vState = logic.vState;
+              double? _height = () {
+                try {
+                  final _curImage = vState.imageMap[itemSer];
+                  return _curImage!.imageHeight! *
+                      (context.width / _curImage.imageWidth!);
+                } on Exception catch (_) {
+                  final _curImage = vState.imageMap[itemSer];
+                  return _curImage!.thumbHeight! *
+                      (context.width / _curImage.thumbWidth!);
+                } catch (e) {
+                  return null;
+                }
+              }();
+
+              if (_height != null) {
+                _height += vState.showPageInterval ? 8 : 0;
+              }
+
+              return Container(
+                padding:
+                    EdgeInsets.only(bottom: vState.showPageInterval ? 8 : 0),
+                height: _height,
+                child: ViewImageExt(
+                  imageSer: itemSer,
+                  enableDoubleTap: false,
+                  // expand: _height != null,
+                ),
+              );
+            }),
+      );
+    };
   }
 }
 
@@ -222,6 +323,7 @@ class DoublePageView extends GetView<ViewExtController> {
               tag: serLeft,
               child: ViewImageExt(
                 imageSer: serLeft,
+                enableDoubleTap: false,
                 // fade: vState.fade,
                 // expand: true,
               ),
@@ -237,6 +339,7 @@ class DoublePageView extends GetView<ViewExtController> {
               tag: serLeft + 1,
               child: ViewImageExt(
                 imageSer: serLeft + 1,
+                enableDoubleTap: false,
                 // fade: vState.fade,
                 // expand: true,
               ),

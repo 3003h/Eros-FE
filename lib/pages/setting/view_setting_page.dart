@@ -113,7 +113,7 @@ Widget _buildViewModeItem(BuildContext context) {
             logger.v('${EnumToString.convertToString(_result)}');
             ehConfigService.viewMode.value = _result;
             if (Get.isRegistered<ViewExtController>()) {
-              Get.find<ViewExtController>().update([idImagePageView]);
+              Get.find<ViewExtController>().handOnViewModeChanged(_result);
             }
           }
         },

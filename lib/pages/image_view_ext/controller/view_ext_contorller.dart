@@ -17,6 +17,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_statusbar_manager/flutter_statusbar_manager.dart';
 import 'package:get/get.dart';
 import 'package:orientation/orientation.dart';
+import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
 
 import 'view_ext_state.dart';
 
@@ -29,6 +30,7 @@ const String idViewBar = 'ViewExtController.ViewBar';
 const String idViewPageSlider = 'ViewExtController.ViewPageSlider';
 const String idSlidePage = 'ViewExtController.ViewImageSlidePage';
 const String idImagePageView = 'ViewExtController.ImagePageView';
+const String idImageListView = 'ViewExtController.ImageListView';
 const String idViewColumnModeIcon = 'ViewExtController.ViewColumnModeIcon';
 const String idAutoReadIcon = 'ViewExtController.AutoReadIcon';
 
@@ -50,6 +52,10 @@ class ViewExtController extends GetxController {
 
   Map<int, Future<GalleryImage?>> imageFutureMap = {};
 
+  final ItemScrollController itemScrollController = ItemScrollController();
+  final ItemPositionsListener itemPositionsListener =
+      ItemPositionsListener.create();
+
   @override
   void onInit() {
     super.onInit();
@@ -59,6 +65,18 @@ class ViewExtController extends GetxController {
       initialPage: vState.pageIndex,
       viewportFraction: vState.showPageInterval ? 1.1 : 1.0,
     );
+
+    // 竖屏模式初始页码
+    if (vState.viewMode == ViewMode.topToBottom) {
+      // logger.v('竖屏模式初始页码: ${vState.itemIndex}');
+      Future.delayed(const Duration(milliseconds: 50)).then((value) =>
+          itemScrollController.jumpTo(index: vState.currentItemIndex));
+    }
+
+    itemPositionsListener.itemPositions.addListener(() {
+      final positions = itemPositionsListener.itemPositions.value;
+      handItemPositionsChange(positions);
+    });
 
     /// 初始预载
     /// 后续的预载触发放在翻页事件中
@@ -97,6 +115,7 @@ class ViewExtController extends GetxController {
   @override
   void onClose() {
     Get.find<GalleryCacheController>().saveAll();
+    vState.saveLastIndex(saveToStore: true);
     pageController.dispose();
     vState.getMoreCancelToken.cancel();
     // SystemChrome.setEnabledSystemUIOverlays(SystemUiOverlay.values);
@@ -112,7 +131,9 @@ class ViewExtController extends GetxController {
 
   void resetPageController() {
     pageController = PageController(
-      initialPage: pageController.page?.round() ?? vState.currentItemIndex,
+      initialPage: pageController.positions.isNotEmpty
+          ? pageController.page?.round() ?? vState.currentItemIndex
+          : vState.currentItemIndex,
       viewportFraction: vState.showPageInterval ? 1.1 : 1.0,
     );
   }
@@ -321,8 +342,13 @@ class ViewExtController extends GetxController {
 
   void handOnSliderChangedEnd(double value) {
     vState.currentItemIndex = value.round();
-    // TODO(honjow): 上下滚动模式
-    pageController.jumpToPage(vState.pageIndex);
+
+    if (vState.viewMode != ViewMode.topToBottom) {
+      pageController.jumpToPage(vState.pageIndex);
+    } else {
+      itemScrollController.jumpTo(index: vState.currentItemIndex);
+      update([idViewTopBar]);
+    }
   }
 
   void handOnSliderChanged(double value) {
@@ -488,6 +514,46 @@ class ViewExtController extends GetxController {
     }
   }
 
+  /// 竖屏阅读下页码变化的监听
+  void handItemPositionsChange(Iterable<ItemPosition> positions) {
+    int min;
+    int max;
+    if (positions.isNotEmpty) {
+      // Determine the first visible item by finding the item with the
+      // smallest trailing edge that is greater than 0.  i.e. the first
+      // item whose trailing edge in visible in the viewport.
+      min = positions
+          .where((ItemPosition position) => position.itemTrailingEdge > 0)
+          .reduce((ItemPosition min, ItemPosition position) =>
+              position.itemTrailingEdge < min.itemTrailingEdge ? position : min)
+          .index;
+      // Determine the last visible item by finding the item with the
+      // greatest leading edge that is less than 1.  i.e. the last
+      // item whose leading edge in visible in the viewport.
+      max = positions
+          .where((ItemPosition position) => position.itemLeadingEdge < 1)
+          .reduce((ItemPosition max, ItemPosition position) =>
+              position.itemLeadingEdge > max.itemLeadingEdge ? position : max)
+          .index;
+
+      vState.tempIndex = (min + max) ~/ 2;
+      // logger.d('max $max  min $min tempIndex ${vState.tempIndex}');
+
+      // logger.d('${positions.elementAt(index).itemLeadingEdge} ');
+      if (vState.tempIndex != vState.currentItemIndex &&
+          vState.conditionItemIndex) {
+        // logger.d('${vState.tempIndex} ${vState.currentItemIndex}');
+        Future.delayed(const Duration(milliseconds: 50)).then((value) {
+          // logger.d('tempIndex ${vState.tempIndex}');
+          vState.currentItemIndex = vState.tempIndex;
+          vState.sliderValue = vState.currentItemIndex / 1.0;
+          update([idViewTopBar, idViewPageSlider]);
+        });
+      }
+    }
+    // logger.i('First Item: ${min ?? ''}\nLast Item: ${max ?? ''}');
+  }
+
   Future<void> _turnNextPage() async {
     if (vState.autoRead && vState.pageIndex < vState.pageCount - 1) {
       logger5.v('next page ${vState.pageIndex + 1}');
@@ -520,5 +586,17 @@ class ViewExtController extends GetxController {
       doSomething?.call();
       debounceTimer = null;
     });
+  }
+
+  Future<void> handOnViewModeChanged(ViewMode val) async {
+    final itemIndex = vState.currentItemIndex;
+    update([idImagePageView, idViewBottomBar]);
+    await Future.delayed(Duration(milliseconds: 50));
+    if (val == ViewMode.topToBottom) {
+      itemScrollController.jumpTo(index: itemIndex);
+    } else {
+      vState.currentItemIndex = itemIndex;
+      pageController.jumpToPage(vState.pageIndex);
+    }
   }
 }

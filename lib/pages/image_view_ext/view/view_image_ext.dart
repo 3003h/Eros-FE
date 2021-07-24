@@ -21,10 +21,12 @@ class ViewImageExt extends StatefulWidget {
     Key? key,
     required this.imageSer,
     this.initialScale = 1.0,
+    this.enableDoubleTap = true,
   }) : super(key: key);
 
   final int imageSer;
   final double initialScale;
+  final bool enableDoubleTap;
 
   @override
   _ViewImageExtState createState() => _ViewImageExtState();
@@ -152,7 +154,7 @@ class _ViewImageExtState extends State<ViewImageExt>
         enableSlideOutPage: true,
         mode: ExtendedImageMode.gesture,
         initGestureConfigHandler: _initGestureConfigHandler,
-        onDoubleTap: onDoubleTap,
+        onDoubleTap: widget.enableDoubleTap ? onDoubleTap : null,
         loadStateChanged: (ExtendedImageState state) {
           if (state.extendedImageLoadState == LoadState.completed) {
             final ImageInfo? imageInfo = state.extendedImageInfo;
@@ -224,7 +226,7 @@ class _ViewImageExtState extends State<ViewImageExt>
 
                     Widget image = ImageExt(
                       url: _image?.imageUrl ?? '',
-                      onDoubleTap: onDoubleTap,
+                      onDoubleTap: widget.enableDoubleTap ? onDoubleTap : null,
                       ser: widget.imageSer,
                       reloadImage: () => controller.reloadImage(widget.imageSer,
                           changeSource: true),
@@ -258,7 +260,6 @@ class _ViewImageExtState extends State<ViewImageExt>
                     if (Global.inDebugMode) {
                       image = Stack(
                         alignment: Alignment.center,
-                        fit: StackFit.expand,
                         children: [
                           image,
                           Positioned(
