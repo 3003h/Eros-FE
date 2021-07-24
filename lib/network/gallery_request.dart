@@ -426,7 +426,7 @@ class Api {
     // final HttpManager httpManager = HttpManager.getInstance();
     final String url = inUrl + '?p=$page';
 
-    logger.d(url);
+    logger.v(url);
 
     // 不显示警告的处理 cookie加上 nw=1
     // 在 url使用 nw=always 未解决 自动写入cookie 暂时搞不懂 先手动设置下

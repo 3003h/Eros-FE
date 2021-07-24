@@ -5,6 +5,7 @@ import 'package:fehviewer/models/base/eh_models.dart';
 import 'package:fehviewer/pages/image_view_ext/controller/view_ext_state.dart';
 import 'package:fehviewer/utils/logger.dart';
 import 'package:fehviewer/utils/utility.dart';
+import 'package:fehviewer/utils/vibrate.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -45,14 +46,18 @@ class _ViewImageExtState extends State<ViewImageExt>
     _doubleClickAnimationController = AnimationController(
         duration: const Duration(milliseconds: 150), vsync: this);
 
-    _fadeAnimationController =
-        AnimationController(vsync: this, duration: Duration(milliseconds: 200));
+    _fadeAnimationController = AnimationController(
+        vsync: this, duration: const Duration(milliseconds: 200));
 
     if (vState.loadType == LoadType.network) {
-      // controller.imageFuture = controller.fetchImage(widget.imageSer);
       controller.imageFutureMap[widget.imageSer] =
           controller.fetchImage(widget.imageSer);
     }
+
+    WidgetsBinding.instance?.addPostFrameCallback((_) {
+      controller.vState.fade = true;
+      controller.vState.needRebuild = false;
+    });
 
     vState.doubleTapScales[0] = widget.initialScale;
 
@@ -165,87 +170,124 @@ class _ViewImageExtState extends State<ViewImageExt>
         builder: (ViewExtController controller) {
           final ViewExtState vState = controller.vState;
 
-          return FutureBuilder<GalleryImage?>(
-              future: controller.imageFutureMap[widget.imageSer],
-              builder: (context, snapshot) {
-                if (snapshot.connectionState == ConnectionState.done) {
-                  if (snapshot.hasError || snapshot.data == null) {
-                    String _errInfo = '';
-                    if (snapshot.error is DioError) {
-                      final DioError dioErr = snapshot.error as DioError;
-                      logger.e('${dioErr.error}');
-                      _errInfo = dioErr.type.toString();
-                    } else {
-                      _errInfo = snapshot.error.toString();
+          return GestureDetector(
+            behavior: HitTestBehavior.opaque,
+            onLongPress: () async {
+              logger.d('long press');
+              vibrateUtil.medium();
+              final GalleryImage? _currentImage =
+                  vState.galleryPageController.imageMap[widget.imageSer];
+              showImageSheet(
+                  context,
+                  _currentImage?.imageUrl ?? '',
+                  () => controller.reloadImage(widget.imageSer,
+                      changeSource: true),
+                  title:
+                      '${vState.galleryPageController.title} [${_currentImage?.ser ?? ''}]');
+            },
+            child: FutureBuilder<GalleryImage?>(
+                future: controller.imageFutureMap[widget.imageSer],
+                builder: (context, snapshot) {
+                  if (snapshot.connectionState == ConnectionState.done) {
+                    if (snapshot.hasError || snapshot.data == null) {
+                      String _errInfo = '';
+                      if (snapshot.error is DioError) {
+                        final DioError dioErr = snapshot.error as DioError;
+                        logger.e('${dioErr.error}');
+                        _errInfo = dioErr.type.toString();
+                      } else {
+                        _errInfo = snapshot.error.toString();
+                      }
+
+                      if ((vState.errCountMap[widget.imageSer] ?? 0) <
+                          vState.retryCount) {
+                        Future.delayed(const Duration(milliseconds: 100)).then(
+                            (_) => controller.reloadImage(widget.imageSer,
+                                changeSource: true));
+                        vState.errCountMap.update(
+                            widget.imageSer, (int value) => value + 1,
+                            ifAbsent: () => 1);
+
+                        logger.v('${vState.errCountMap}');
+                        logger.d(
+                            '${widget.imageSer} 重试 第 ${vState.errCountMap[widget.imageSer]} 次');
+                      }
+                      if ((vState.errCountMap[widget.imageSer] ?? 0) >=
+                          vState.retryCount) {
+                        return ViewError(
+                            ser: widget.imageSer, errInfo: _errInfo);
+                      } else {
+                        return const SizedBox.shrink();
+                      }
+                    }
+                    final GalleryImage? _image = snapshot.data;
+
+                    Widget image = ImageExt(
+                      url: _image?.imageUrl ?? '',
+                      onDoubleTap: onDoubleTap,
+                      ser: widget.imageSer,
+                      reloadImage: () => controller.reloadImage(widget.imageSer,
+                          changeSource: true),
+                      fadeAnimationController: _fadeAnimationController,
+                      initGestureConfigHandler: _initGestureConfigHandler,
+                      onLoadCompleted: (ExtendedImageState state) {
+                        final ImageInfo? imageInfo = state.extendedImageInfo;
+                        controller.setScale100(
+                            imageInfo!, context.mediaQuerySize);
+
+                        if (_image != null && _image.ser != 1) {
+                          final GalleryImage? _tmpImage =
+                              vState.imageMap[_image.ser];
+                          if (_tmpImage != null &&
+                              !(_tmpImage.completeHeight ?? false)) {
+                            vState.galleryPageController.uptImageBySer(
+                                ser: _image.ser,
+                                image:
+                                    _tmpImage.copyWith(completeHeight: true));
+
+                            // logger.d('upt _tmpImage ${_tmpImage.ser}');
+                            Future.delayed(Duration.zero).then(
+                                (value) => controller.update([idSlidePage]));
+                          }
+                        }
+
+                        controller.onLoadCompleted(widget.imageSer);
+                      },
+                    );
+
+                    if (Global.inDebugMode) {
+                      image = Stack(
+                        alignment: Alignment.center,
+                        fit: StackFit.expand,
+                        children: [
+                          image,
+                          Positioned(
+                            left: 30,
+                            child: Text('${_image?.ser ?? ''}',
+                                style: const TextStyle(
+                                    fontSize: 18,
+                                    color: CupertinoColors
+                                        .secondarySystemBackground,
+                                    shadows: <Shadow>[
+                                      Shadow(
+                                        color: Colors.black,
+                                        offset: Offset(1, 1),
+                                        blurRadius: 2,
+                                      )
+                                    ])),
+                          ),
+                        ],
+                      );
                     }
 
-                    if ((vState.errCountMap[widget.imageSer] ?? 0) <
-                        vState.retryCount) {
-                      Future.delayed(const Duration(milliseconds: 100)).then(
-                          (_) => controller.reloadImage(widget.imageSer,
-                              changeSource: true));
-                      vState.errCountMap.update(
-                          widget.imageSer, (int value) => value + 1,
-                          ifAbsent: () => 1);
-
-                      logger.v('${vState.errCountMap}');
-                      logger.d(
-                          '${widget.imageSer} 重试 第 ${vState.errCountMap[widget.imageSer]} 次');
-                    }
-                    if ((vState.errCountMap[widget.imageSer] ?? 0) >=
-                        vState.retryCount) {
-                      return ViewError(ser: widget.imageSer, errInfo: _errInfo);
-                    } else {
-                      return const SizedBox.shrink();
-                    }
-                  }
-                  final GalleryImage? _image = snapshot.data;
-
-                  Widget image = ImageExt(
-                    url: _image?.imageUrl ?? '',
-                    onDoubleTap: onDoubleTap,
-                    ser: widget.imageSer,
-                    reloadImage: () => controller.reloadImage(widget.imageSer,
-                        changeSource: true),
-                    fadeAnimationController: _fadeAnimationController,
-                    initGestureConfigHandler: _initGestureConfigHandler,
-                    onLoadCompleted: () {
-                      controller.onLoadCompleted(widget.imageSer);
-                    },
-                  );
-
-                  if (Global.inDebugMode) {
-                    image = Stack(
-                      alignment: Alignment.center,
-                      fit: StackFit.expand,
-                      children: [
-                        image,
-                        Positioned(
-                          left: 10,
-                          child: Text('${_image?.ser ?? ''}',
-                              style: const TextStyle(
-                                  fontSize: 12,
-                                  color:
-                                      CupertinoColors.secondarySystemBackground,
-                                  shadows: <Shadow>[
-                                    Shadow(
-                                      color: Colors.black,
-                                      offset: Offset(1, 1),
-                                      blurRadius: 2,
-                                    )
-                                  ])),
-                        ),
-                      ],
+                    return image;
+                  } else {
+                    return ViewLoading(
+                      ser: widget.imageSer,
                     );
                   }
-
-                  return image;
-                } else {
-                  return ViewLoading(
-                    ser: widget.imageSer,
-                  );
-                }
-              });
+                }),
+          );
         },
       );
 

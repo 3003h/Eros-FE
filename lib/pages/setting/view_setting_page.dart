@@ -49,7 +49,7 @@ class ViewSettingList extends StatelessWidget {
           ehConfigService.showPageInterval.value = val;
           if (Get.isRegistered<ViewExtController>()) {
             Get.find<ViewExtController>().resetPageController();
-            Get.find<ViewExtController>().update([idPageView]);
+            Get.find<ViewExtController>().update([idSlidePage]);
           }
         },
       )
@@ -112,6 +112,9 @@ Widget _buildViewModeItem(BuildContext context) {
             // ignore: unnecessary_string_interpolations
             logger.v('${EnumToString.convertToString(_result)}');
             ehConfigService.viewMode.value = _result;
+            if (Get.isRegistered<ViewExtController>()) {
+              Get.find<ViewExtController>().update([idImagePageView]);
+            }
           }
         },
       ));

@@ -179,7 +179,7 @@ class NavigatorUtil {
   static Future<void> goGalleryViewPage(int index, String gid) async {
     // logger.d('goGalleryViewPage $index');
     // 命名路由方式
-    if (!kDebugMode) {
+    if (!kDebugMode && false) {
       await Get.toNamed(EHRoutes.galleryView, arguments: index);
     } else {
       await Get.toNamed(EHRoutes.galleryViewExt,

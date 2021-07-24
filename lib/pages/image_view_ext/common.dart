@@ -4,9 +4,12 @@ import 'package:extended_image/extended_image.dart';
 import 'package:fehviewer/models/index.dart';
 import 'package:fehviewer/network/gallery_request.dart';
 import 'package:fehviewer/utils/logger.dart';
+import 'package:fehviewer/utils/toast.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:get/get.dart';
+import 'package:fehviewer/generated/l10n.dart';
 
 enum ViewColumnMode {
   // 双页 奇数页位于左边
@@ -40,12 +43,13 @@ void vDebounceM(
   }
 
   debounceTimer = Timer(durationTime, () {
-    loggerTime.v('func.call');
+    logger.v('func.call');
     doSomething?.call();
     debounceTimerMap[id] = null;
   });
 
-  debounceTimerMap.putIfAbsent(id, () => debounceTimer);
+  // debounceTimerMap.putIfAbsent(id, () => debounceTimer);
+  debounceTimerMap[id] = debounceTimer;
 }
 
 class GalleryPara {

@@ -2,6 +2,7 @@ import 'package:dio/dio.dart';
 import 'package:fehviewer/common/controller/gallerycache_controller.dart';
 import 'package:fehviewer/common/service/depth_service.dart';
 import 'package:fehviewer/common/service/ehconfig_service.dart';
+import 'package:fehviewer/const/const.dart';
 import 'package:fehviewer/models/base/eh_models.dart';
 import 'package:fehviewer/pages/gallery/controller/gallery_page_controller.dart';
 import 'package:get/get.dart';
@@ -23,14 +24,13 @@ class ViewExtState {
         }
       } else {
         galleryPageController = Get.find(tag: pageCtrlDepth);
+        _columnMode = _galleryCacheController
+                .getGalleryCache(galleryPageController.galleryItem.gid ?? '')
+                ?.columnMode ??
+            ViewColumnMode.single;
       }
 
       currentItemIndex = vr.index;
-
-      _columnMode = _galleryCacheController
-              .getGalleryCache(galleryPageController.galleryItem.gid ?? '')
-              ?.columnMode ??
-          ViewColumnMode.single;
     }
   }
 
@@ -77,9 +77,11 @@ class ViewExtState {
   ViewColumnMode get columnMode => _columnMode;
   set columnMode(ViewColumnMode val) {
     _columnMode = val;
-    vDebounceM(() async {
-      _galleryCacheController.setColumnMode(
-          galleryPageController.galleryItem.gid ?? '', val);
+    vDebounceM(() {
+      if (loadType == LoadType.network) {
+        _galleryCacheController.setColumnMode(
+            galleryPageController.galleryItem.gid ?? '', val);
+      }
     }, id: '_columnMode');
   }
 
@@ -164,6 +166,13 @@ class ViewExtState {
 
   bool autoRead = false;
   Map<int, bool> loadCompleMap = <int, bool>{};
+  int? lastAutoNextLeftSer;
+  int serLeft = 0;
+
+  /// 阅读模式
+  Rx<ViewMode> get _viewMode => ehConfigService.viewMode;
+  ViewMode get viewMode => _viewMode.value;
+  set viewMode(val) => _viewMode.value = val;
 
   bool fade = true;
   bool needRebuild = false;

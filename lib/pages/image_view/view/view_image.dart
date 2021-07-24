@@ -136,7 +136,7 @@ class _ViewImageState extends State<ViewImage>
     _viewController.vState.fade = true;
 
     WidgetsBinding.instance?.addPostFrameCallback((_) {
-      logger.v('单次Frame绘制回调'); //只回调一次
+      // logger.v('单次Frame绘制回调'); //只回调一次
       _viewController.vState.needRebuild = false;
     });
   }
