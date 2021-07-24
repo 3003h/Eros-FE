@@ -1,5 +1,6 @@
 import 'package:extended_image/extended_image.dart';
 import 'package:fehviewer/common/service/depth_service.dart';
+import 'package:fehviewer/const/const.dart';
 import 'package:fehviewer/generated/l10n.dart';
 import 'package:fehviewer/network/gallery_request.dart';
 import 'package:fehviewer/pages/gallery/controller/gallery_page_controller.dart';
@@ -120,7 +121,7 @@ class ImageExt extends GetView<ViewExtController> {
   final int retryCount;
   final ValueChanged<ExtendedImageState>? onLoadCompleted;
   final InitGestureConfigHandler initGestureConfigHandler;
-  final DoubleTap onDoubleTap;
+  final DoubleTap? onDoubleTap;
 
   final GalleryPageController _pageController = Get.find(tag: pageCtrlDepth);
 
@@ -349,144 +350,149 @@ class ViewBottomBar extends GetView<ViewExtController> {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      color: Colors.black.withOpacity(0.7),
-      height: context.mediaQueryPadding.bottom + kTopBarHeight * 2,
-      width: context.mediaQuery.size.width,
-      padding: EdgeInsets.symmetric(
-          horizontal: context.mediaQueryPadding.horizontal / 2 + 10),
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          GetBuilder<ViewExtController>(
-            id: idViewPageSlider,
-            builder: (logic) {
-              return SizedBox(
-                height: kBottomBarHeight,
-                child: ViewPageSlider(
-                  max: logic.vState.filecount - 1.0,
-                  sliderValue: logic.vState.sliderValue,
-                  onChangedEnd: logic.handOnSliderChangedEnd,
-                  onChanged: logic.handOnSliderChanged,
-                ).paddingSymmetric(vertical: 8),
-              );
-            },
-          ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: <Widget>[
-              // 分享按钮
-              GestureDetector(
-                behavior: HitTestBehavior.opaque,
-                onTap: () {
-                  controller.share(context);
+    return GetBuilder<ViewExtController>(
+      id: idViewBottomBar,
+      builder: (logic) {
+        return Container(
+          color: Colors.black.withOpacity(0.7),
+          height: context.mediaQueryPadding.bottom + kTopBarHeight * 2,
+          width: context.mediaQuery.size.width,
+          padding: EdgeInsets.symmetric(
+              horizontal: context.mediaQueryPadding.horizontal / 2 + 10),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              GetBuilder<ViewExtController>(
+                id: idViewPageSlider,
+                builder: (logic) {
+                  return SizedBox(
+                    height: kBottomBarHeight,
+                    child: ViewPageSlider(
+                      max: logic.vState.filecount - 1.0,
+                      sliderValue: logic.vState.sliderValue,
+                      onChangedEnd: logic.handOnSliderChangedEnd,
+                      onChanged: logic.handOnSliderChanged,
+                    ).paddingSymmetric(vertical: 8),
+                  );
                 },
-                child: Container(
-                  width: 40,
-                  height: kBottomBarHeight,
-                  child: Column(
-                    children: [
-                      const Icon(
-                        LineIcons.share,
-                        color: CupertinoColors.systemGrey6,
-                        size: 26,
-                      ),
-                      const Spacer(),
-                      Text(
-                        S.of(context).share,
-                        style: _kBottomTextStyle,
-                      ),
-                    ],
-                  ),
-                ),
               ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: <Widget>[
+                  // 分享按钮
+                  GestureDetector(
+                    behavior: HitTestBehavior.opaque,
+                    onTap: () {
+                      controller.share(context);
+                    },
+                    child: Container(
+                      width: 40,
+                      height: kBottomBarHeight,
+                      child: Column(
+                        children: [
+                          const Icon(
+                            LineIcons.share,
+                            color: CupertinoColors.systemGrey6,
+                            size: 26,
+                          ),
+                          const Spacer(),
+                          Text(
+                            S.of(context).share,
+                            style: _kBottomTextStyle,
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
 
-              // 自动阅读按钮
-              if (1 == 1)
-                GestureDetector(
-                  behavior: HitTestBehavior.opaque,
-                  onTap: () {
-                    controller.tapAutoRead(context);
-                  },
-                  onLongPress: () {
-                    controller.longTapAutoRead(context);
-                  },
-                  child: GetBuilder<ViewExtController>(
-                    id: idAutoReadIcon,
-                    builder: (logic) {
-                      return Container(
+                  // 自动阅读按钮
+                  if (logic.vState.viewMode != ViewMode.topToBottom)
+                    GestureDetector(
+                      behavior: HitTestBehavior.opaque,
+                      onTap: () {
+                        controller.tapAutoRead(context);
+                      },
+                      onLongPress: () {
+                        controller.longTapAutoRead(context);
+                      },
+                      child: GetBuilder<ViewExtController>(
+                        id: idAutoReadIcon,
+                        builder: (logic) {
+                          return Container(
+                            width: 40,
+                            height: kBottomBarHeight,
+                            child: Column(
+                              children: [
+                                Icon(
+                                  LineIcons.hourglassHalf,
+                                  size: 26,
+                                  color: logic.vState.autoRead
+                                      ? CupertinoColors.activeBlue
+                                      : CupertinoColors.systemGrey6,
+                                ),
+                                const Spacer(),
+                                const Text(
+                                  'Auto',
+                                  style: _kBottomTextStyle,
+                                ),
+                              ],
+                            ),
+                          );
+                        },
+                      ),
+                    )
+                  else
+                    const SizedBox.shrink(),
+
+                  // 双页切换按钮
+                  if (logic.vState.viewMode != ViewMode.topToBottom)
+                    GestureDetector(
+                      behavior: HitTestBehavior.opaque,
+                      onTap: () {
+                        controller.switchColumnMode();
+                      },
+                      child: Container(
                         width: 40,
+                        // margin: const EdgeInsets.only(right: 10.0),
                         height: kBottomBarHeight,
                         child: Column(
                           children: [
-                            Icon(
-                              LineIcons.hourglassHalf,
-                              size: 26,
-                              color: logic.vState.autoRead
-                                  ? CupertinoColors.activeBlue
-                                  : CupertinoColors.systemGrey6,
+                            GetBuilder<ViewExtController>(
+                              id: idViewColumnModeIcon,
+                              builder: (logic) {
+                                return Icon(
+                                  LineIcons.bookOpen,
+                                  size: 26,
+                                  color: () {
+                                    switch (logic.vState.columnMode) {
+                                      case ViewColumnMode.single:
+                                        return CupertinoColors.systemGrey6;
+                                      case ViewColumnMode.oddLeft:
+                                        return CupertinoColors.activeBlue;
+                                      case ViewColumnMode.evenLeft:
+                                        return CupertinoColors.activeOrange;
+                                    }
+                                  }(),
+                                );
+                              },
                             ),
                             const Spacer(),
                             const Text(
-                              'Auto',
+                              '双页',
                               style: _kBottomTextStyle,
                             ),
                           ],
                         ),
-                      );
-                    },
-                  ),
-                )
-              else
-                const SizedBox.shrink(),
-
-              // 双页切换按钮
-              if (1 == 1)
-                GestureDetector(
-                  behavior: HitTestBehavior.opaque,
-                  onTap: () {
-                    controller.switchColumnMode();
-                  },
-                  child: Container(
-                    width: 40,
-                    // margin: const EdgeInsets.only(right: 10.0),
-                    height: kBottomBarHeight,
-                    child: Column(
-                      children: [
-                        GetBuilder<ViewExtController>(
-                          id: idViewColumnModeIcon,
-                          builder: (logic) {
-                            return Icon(
-                              LineIcons.bookOpen,
-                              size: 26,
-                              color: () {
-                                switch (logic.vState.columnMode) {
-                                  case ViewColumnMode.single:
-                                    return CupertinoColors.systemGrey6;
-                                  case ViewColumnMode.oddLeft:
-                                    return CupertinoColors.activeBlue;
-                                  case ViewColumnMode.evenLeft:
-                                    return CupertinoColors.activeOrange;
-                                }
-                              }(),
-                            );
-                          },
-                        ),
-                        const Spacer(),
-                        const Text(
-                          '双页',
-                          style: _kBottomTextStyle,
-                        ),
-                      ],
-                    ),
-                  ),
-                )
-              else
-                const SizedBox.shrink(),
+                      ),
+                    )
+                  else
+                    const SizedBox.shrink(),
+                ],
+              ),
             ],
           ),
-        ],
-      ),
+        );
+      },
     );
   }
 }

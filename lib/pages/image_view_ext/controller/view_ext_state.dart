@@ -53,15 +53,15 @@ class ViewExtState {
     _currentItemIndex = val;
 
     // 防抖
-    vDebounceM(() => _saveLastIndex(), id: '_currentItemIndex');
+    vDebounceM(() => saveLastIndex(), id: '_currentItemIndex');
     vDebounceM(
-      () => _saveLastIndex(saveToStore: true),
+      () => saveLastIndex(saveToStore: true),
       id: '_currentItemIndex',
       durationTime: const Duration(seconds: 5),
     );
   }
 
-  void _saveLastIndex({bool saveToStore = false}) {
+  void saveLastIndex({bool saveToStore = false}) {
     if (loadType == LoadType.network) {
       if (galleryPageController.galleryItem.gid != null && conditionItemIndex) {
         galleryPageController.lastIndex = currentItemIndex;
@@ -178,4 +178,5 @@ class ViewExtState {
   bool needRebuild = false;
 
   bool conditionItemIndex = true;
+  int tempIndex = 0;
 }
