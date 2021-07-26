@@ -118,7 +118,7 @@ class SearchPageController extends TabViewController {
     if (_searchText.isNotEmpty) {
       _search = searchText;
 
-      // analytics.logSearch(searchTerm: _search);
+      analytics.logSearch(searchTerm: _search);
 
       _addHistory();
 

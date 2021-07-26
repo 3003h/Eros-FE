@@ -45,7 +45,7 @@ class RateView extends StatelessWidget {
                 ),
               ),
               onRatingUpdate: (double rating) {
-                logger.d(rating);
+                // logger.d(rating);
                 controller.rate = rating;
               },
             ),

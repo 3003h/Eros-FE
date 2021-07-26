@@ -11,6 +11,7 @@ import 'package:fehviewer/route/routes.dart';
 import 'package:fehviewer/utils/logger.dart';
 import 'package:fehviewer/utils/storage.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:logger/logger.dart';
@@ -103,6 +104,8 @@ class EhConfigService extends ProfileService {
   final _turnPageInv = 3000.obs;
   int get turnPageInv => _turnPageInv.value;
   set turnPageInv(val) => _turnPageInv.value = val;
+
+  int debugCount = 3;
 
   @override
   void onInit() {
@@ -250,15 +253,26 @@ class EhConfigService extends ProfileService {
     everFromEunm(tagIntroImgLv,
         (String value) => ehConfig = ehConfig.copyWith(tagIntroImgLv: value));
 
-    //
-    debugMode = ehConfig.debugMode ?? false;
+    debugCount = ehConfig.debugCount ?? 3;
+    if (!kDebugMode) {
+      debugCount -= 1;
+      ehConfig = ehConfig.copyWith(debugCount: debugCount);
+    }
+    if (debugCount > 0) {
+      debugMode = ehConfig.debugMode ?? false;
+    } else {
+      debugMode = false;
+    }
+    Global.saveProfile();
     everProfile<bool>(_debugMode, (bool value) {
-      ehConfig = ehConfig.copyWith(debugMode: value);
+      ehConfig = ehConfig.copyWith(debugMode: value, debugCount: 3);
       if (value) {
         Logger.level = Level.debug;
         logger.v('Level.debug');
+        ehConfig = ehConfig.copyWith(debugCount: 3);
       } else {
         Logger.level = Level.error;
+        ehConfig = ehConfig.copyWith(debugCount: 0);
       }
       resetLogLevel();
     });

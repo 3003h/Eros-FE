@@ -1,6 +1,7 @@
 import 'package:dio/dio.dart';
 import 'package:extended_image/extended_image.dart';
 import 'package:fehviewer/common/global.dart';
+import 'package:fehviewer/const/const.dart';
 import 'package:fehviewer/models/base/eh_models.dart';
 import 'package:fehviewer/pages/image_view_ext/controller/view_ext_state.dart';
 import 'package:fehviewer/utils/logger.dart';
@@ -46,7 +47,7 @@ class _ViewImageExtState extends State<ViewImageExt>
   @override
   void initState() {
     _doubleClickAnimationController = AnimationController(
-        duration: const Duration(milliseconds: 150), vsync: this);
+        duration: const Duration(milliseconds: 300), vsync: this);
 
     _fadeAnimationController = AnimationController(
         vsync: this, duration: const Duration(milliseconds: 200));
@@ -136,8 +137,9 @@ class _ViewImageExtState extends State<ViewImageExt>
             scale: _doubleClickAnimation!.value,
             doubleTapPosition: pointerDownPosition);
       };
-      _doubleClickAnimation = _doubleClickAnimationController
-          .drive(Tween<double>(begin: begin, end: end));
+      _doubleClickAnimation = _doubleClickAnimationController.drive(
+          Tween<double>(begin: begin, end: end)
+              .chain(CurveTween(curve: Curves.easeInOutCubic)));
 
       _doubleClickAnimation!.addListener(_doubleClickAnimationListener);
 
@@ -260,6 +262,9 @@ class _ViewImageExtState extends State<ViewImageExt>
                     if (Global.inDebugMode) {
                       image = Stack(
                         alignment: Alignment.center,
+                        fit: controller.vState.viewMode == ViewMode.topToBottom
+                            ? StackFit.loose
+                            : StackFit.expand,
                         children: [
                           image,
                           Positioned(

@@ -146,6 +146,7 @@ class _DetailWidget extends StatelessWidget {
           onTap: state.torrentcount != '0'
               ? () async {
                   showTorrentDialog();
+                  // showTorrentModal();
                 }
               : null,
         ),

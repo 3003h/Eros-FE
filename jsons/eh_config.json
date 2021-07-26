@@ -25,6 +25,7 @@
   "vibrate?": true,
   "tagIntroImgLv?": "",
   "debugMode?": false,
+  "debugCount?": 3,
   "autoRead?": false,
   "turnPageInv?": 3000
 }

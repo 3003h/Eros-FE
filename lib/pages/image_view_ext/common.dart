@@ -7,6 +7,7 @@ import 'package:fehviewer/utils/logger.dart';
 import 'package:fehviewer/utils/toast.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/physics.dart';
 import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
 import 'package:fehviewer/generated/l10n.dart';
@@ -172,4 +173,20 @@ class GalleryPara {
       return null;
     }
   }
+}
+
+class CustomScrollPhysics extends BouncingScrollPhysics {
+  const CustomScrollPhysics({ScrollPhysics? parent}) : super(parent: parent);
+
+  @override
+  CustomScrollPhysics applyTo(ScrollPhysics? ancestor) {
+    return CustomScrollPhysics(parent: buildParent(ancestor));
+  }
+
+  @override
+  SpringDescription get spring => SpringDescription.withDampingRatio(
+        mass: 0.5,
+        stiffness: 300.0, // Increase this value as you wish.
+        ratio: 1.1,
+      );
 }

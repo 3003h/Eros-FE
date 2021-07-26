@@ -1,4 +1,5 @@
 import 'package:fehviewer/common/service/depth_service.dart';
+import 'package:fehviewer/models/base/eh_models.dart';
 import 'package:fehviewer/network/gallery_request.dart';
 import 'package:fehviewer/utils/logger.dart';
 import 'package:get/get.dart';
@@ -49,11 +50,6 @@ class TorrentController extends GetxController
 }
 
 class TorrentProvider {
-  late List<TorrentBean> torrents;
+  late List<GalleryTorrent> torrents;
   late String torrentToken;
-}
-
-class TorrentBean {
-  late String fileName;
-  late String hash;
 }
