@@ -80,7 +80,7 @@ class _ViewImageExtState extends State<ViewImageExt>
 
     final InitGestureConfigHandler _initGestureConfigHandler =
         (ExtendedImageState state) {
-      double? initialScale = 1.0;
+      double? initialScale = widget.initialScale;
 
       if (state.extendedImageInfo != null) {
         initialScale = initScale(
@@ -88,11 +88,16 @@ class _ViewImageExtState extends State<ViewImageExt>
             initialScale: initialScale,
             imageSize: Size(state.extendedImageInfo!.image.width.toDouble(),
                 state.extendedImageInfo!.image.height.toDouble()));
-        // logger.d('initialScale $initialScale');
+        logger.d('initialScale $initialScale');
+
+        vState.doubleTapScales[0] = initialScale ?? vState.doubleTapScales[0];
+        vState.doubleTapScales[1] =
+            initialScale != null ? initialScale * 2 : vState.doubleTapScales[1];
       }
       return GestureConfig(
           inPageView: true,
-          initialScale: widget.initialScale,
+          initialScale: initialScale!,
+          // initialScale: widget.initialScale,
           // maxScale: max(initialScale!, 5.0),
           maxScale: 10.0,
           // animationMaxScale: max(initialScale, 5.0),

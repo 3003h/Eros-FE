@@ -230,7 +230,7 @@ class ViewImageSlidePage extends GetView<ViewExtController> {
                 /// 单页
                 return ViewImageExt(
                   imageSer: index + 1,
-                  initialScale: 1 / (logic.vState.showPageInterval ? 1.1 : 1.0),
+                  initialScale: logic.vState.showPageInterval ? (1 / 1.1) : 1.0,
                 );
               },
             );

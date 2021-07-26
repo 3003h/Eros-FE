@@ -12,7 +12,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
-double? initScale({
+double? initScaleWithSize({
   required Size imageSize,
   required Size size,
   double? initialScale,
@@ -34,6 +34,35 @@ double? initScale({
   }
 
   return initialScale;
+}
+
+double? initScale({
+  required Size imageSize,
+  required Size size,
+  required double initialScale,
+}) {
+  final double n1 = imageSize.height / imageSize.width;
+  final double n2 = size.height / size.width;
+
+  final FittedSizes fittedSizes = applyBoxFit(BoxFit.contain, imageSize, size);
+  logger.v(
+      'source: ${fittedSizes.source}  destination:${fittedSizes.destination}');
+
+  // logger.d('n2/n1 ${n2 / n1}');
+  if (n2 / n1 > 1 / initialScale) {
+    logger.v('H');
+    return initialScale;
+  }
+
+  // logger.d('n1/n2 ${n1 / n2}');
+  if (n1 / n2 > 1 / initialScale) {
+    logger.v('fitHeight');
+    return 1.0;
+  }
+
+  logger.v('other ${size.height / fittedSizes.destination.height}');
+
+  return fittedSizes.destination.height / size.height;
 }
 
 double scaleScreen({
