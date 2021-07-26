@@ -3,11 +3,13 @@ import 'package:fehviewer/common/controller/download_controller.dart';
 import 'package:fehviewer/common/controller/gallerycache_controller.dart';
 import 'package:fehviewer/common/controller/history_controller.dart';
 import 'package:fehviewer/common/controller/localfav_controller.dart';
+import 'package:fehviewer/common/global.dart';
 import 'package:fehviewer/common/service/depth_service.dart';
 import 'package:fehviewer/common/service/ehconfig_service.dart';
 import 'package:fehviewer/const/const.dart';
 import 'package:fehviewer/models/base/eh_models.dart';
 import 'package:fehviewer/network/gallery_request.dart';
+import 'package:fehviewer/pages/gallery/controller/rate_controller.dart';
 import 'package:fehviewer/pages/gallery/controller/taginfo_controller.dart';
 import 'package:fehviewer/pages/gallery/controller/torrent_controller.dart';
 import 'package:fehviewer/pages/gallery/view/gallery_page.dart';
@@ -21,6 +23,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
 
 import 'all_previews_controller.dart';
+import 'archiver_controller.dart';
 import 'comment_controller.dart';
 import 'gallery_fav_controller.dart';
 
@@ -182,28 +185,14 @@ class GalleryPageController extends GetxController
 
   @override
   void onClose() {
-    super.onClose();
     scrollController.dispose();
-
-    // 为了保证能正常关闭
-    /*try {
-      if (Get.isRegistered<RateController>(tag: pageCtrlDepth))
-        Get.delete<RateController>(tag: pageCtrlDepth);
-      if (Get.isRegistered<TorrentController>(tag: pageCtrlDepth))
-        Get.delete<TorrentController>(tag: pageCtrlDepth);
-      if (Get.isRegistered<ArchiverController>(tag: pageCtrlDepth))
-        Get.delete<ArchiverController>(tag: pageCtrlDepth);
-      if (Get.isRegistered<CommentController>(tag: pageCtrlDepth))
-        Get.delete<CommentController>(tag: pageCtrlDepth);
-      if (Get.isRegistered<TagInfoController>(tag: pageCtrlDepth))
-        Get.delete<TagInfoController>(tag: pageCtrlDepth);
-    } catch (_) {}*/
 
     logger.v('onClose GalleryPageController $pageCtrlDepth');
 
     // 如果不在onClose进行这步。在使用命名路由对 [EHRoutes.galleryPage] 跳转关闭后
     // 所有不同tag的 [CommentController] 等 都会被deleted
     // Get.find<DepthService>().popPageCtrl();
+    super.onClose();
   }
 
   // 阅读按钮开关
@@ -367,12 +356,12 @@ class GalleryPageController extends GetxController
 
       _enableRead.value = true;
 
-      // analytics.logViewItem(
-      //   itemId: galleryItem.gid ?? '',
-      //   itemName: galleryItem.englishTitle ?? '',
-      //   itemCategory: galleryItem.category ?? '',
-      //   destination: galleryItem.japaneseTitle,
-      // );
+      analytics.logViewItem(
+        itemId: galleryItem.gid ?? '',
+        itemName: galleryItem.englishTitle ?? '',
+        itemCategory: galleryItem.category ?? '',
+        destination: galleryItem.japaneseTitle,
+      );
     } catch (err, stack) {
       logger.e('$err\n$stack');
       if (showError) {

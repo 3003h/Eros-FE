@@ -1,6 +1,11 @@
 import 'package:fehviewer/common/service/depth_service.dart';
 import 'package:fehviewer/const/const.dart';
 import 'package:fehviewer/models/index.dart';
+import 'package:fehviewer/pages/gallery/controller/archiver_controller.dart';
+import 'package:fehviewer/pages/gallery/controller/comment_controller.dart';
+import 'package:fehviewer/pages/gallery/controller/rate_controller.dart';
+import 'package:fehviewer/pages/gallery/controller/taginfo_controller.dart';
+import 'package:fehviewer/pages/gallery/controller/torrent_controller.dart';
 import 'package:fehviewer/pages/gallery/view/gallery_page.dart';
 import 'package:fehviewer/pages/image_view_ext/common.dart';
 import 'package:fehviewer/pages/image_view_ext/view/view_ext_page.dart';
@@ -115,6 +120,10 @@ class NavigatorUtil {
       //   // arguments: GalleryRepository(item: galleryItem, tabTag: tabTag),
       // );
     }
+
+    // 为了保证能正常关闭
+    deletePageController();
+
     Get.find<DepthService>().popPageCtrl();
   }
 
@@ -149,6 +158,7 @@ class NavigatorUtil {
       // );
     }
 
+    deletePageController();
     depthService.popPageCtrl();
   }
 
@@ -199,5 +209,19 @@ class NavigatorUtil {
           files: pics,
           loadType: LoadType.file,
         ));
+  }
+
+  static void deletePageController() {
+    // 为了保证能正常关闭
+    if (Get.isRegistered<RateController>(tag: pageCtrlDepth))
+      Get.delete<RateController>(tag: pageCtrlDepth);
+    if (Get.isRegistered<TorrentController>(tag: pageCtrlDepth))
+      Get.delete<TorrentController>(tag: pageCtrlDepth);
+    if (Get.isRegistered<ArchiverController>(tag: pageCtrlDepth))
+      Get.delete<ArchiverController>(tag: pageCtrlDepth);
+    if (Get.isRegistered<CommentController>(tag: pageCtrlDepth))
+      Get.delete<CommentController>(tag: pageCtrlDepth);
+    if (Get.isRegistered<TagInfoController>(tag: pageCtrlDepth))
+      Get.delete<TagInfoController>(tag: pageCtrlDepth);
   }
 }

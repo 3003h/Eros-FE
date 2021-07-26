@@ -178,64 +178,61 @@ class _TagDialogViewState extends State<TagDialogView> {
                       textStyle: theme.textTheme.textStyle.copyWith(
                 fontSize: 14,
               )));
-              return Container(
-                child: CupertinoTheme(
-                  data: lTheme,
-                  child: Column(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      // SelectableText(
-                      //   _taginfo?.intro ?? '',
-                      //   textAlign: TextAlign.start,
-                      //   style: const TextStyle(
-                      //     height: 1.5,
-                      //   ),
-                      // ),
-                      MarkdownBody(
-                        data: _taginfo?.introMDimage ?? '',
-                        selectable: true,
-                        onTapLink: (String text, String? href, String title) {
-                          _onOpen(context, href);
-                        },
-                        styleSheetTheme: MarkdownStyleSheetBaseTheme.cupertino,
-                        styleSheet: MarkdownStyleSheet(
-                          code: theme.textTheme.textStyle.copyWith(
-                              backgroundColor: Colors.transparent,
-                              // decoration: TextDecoration.underline,
-                              // backgroundColor:
-                              //     CupertinoColors.activeOrange.withOpacity(0.5),
-                              // decorationStyle: TextDecorationStyle.dashed,
-                              color: CupertinoColors.activeOrange,
-                              fontSize:
-                                  theme.textTheme.textStyle.fontSize! * 0.8,
-                              fontFamilyFallback:
-                                  EHConst.monoFontFamilyFallback),
+              return IntrinsicHeight(
+                child: Container(
+                  child: CupertinoTheme(
+                    data: lTheme,
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        MarkdownBody(
+                          data: _taginfo?.introMDimage ?? '',
+                          selectable: true,
+                          onTapLink: (String text, String? href, String title) {
+                            _onOpen(context, href);
+                          },
+                          styleSheetTheme:
+                              MarkdownStyleSheetBaseTheme.cupertino,
+                          styleSheet: MarkdownStyleSheet(
+                            code: theme.textTheme.textStyle.copyWith(
+                                backgroundColor: Colors.transparent,
+                                // decoration: TextDecoration.underline,
+                                // backgroundColor:
+                                //     CupertinoColors.activeOrange.withOpacity(0.5),
+                                // decorationStyle: TextDecorationStyle.dashed,
+                                color: CupertinoColors.activeOrange,
+                                fontSize:
+                                    theme.textTheme.textStyle.fontSize! * 0.8,
+                                fontFamilyFallback:
+                                    EHConst.monoFontFamilyFallback),
+                          ),
+                          imageBuilder: (Uri uri, String? title, String? alt) {
+                            return EhCachedNetworkImage(
+                              imageUrl: uri.toString(),
+                              placeholder: (_, __) {
+                                return const Padding(
+                                  padding: EdgeInsets.all(8.0),
+                                  child: CupertinoActivityIndicator(),
+                                );
+                              },
+                            );
+                            // return NetworkExtendedImage(
+                            //   url: uri.toString(),
+                            // );
+                          },
                         ),
-                        imageBuilder: (Uri uri, String? title, String? alt) {
-                          return EhCachedNetworkImage(
-                            imageUrl: uri.toString(),
-                            placeholder: (_, __) {
-                              return const Padding(
-                                padding: EdgeInsets.all(8.0),
-                                child: CupertinoActivityIndicator(),
-                              );
-                            },
-                          );
-                          // return NetworkExtendedImage(
-                          //   url: uri.toString(),
-                          // );
-                        },
-                      ),
-                      const SizedBox(height: 12),
-                      MarkdownBody(
-                        data: _taginfo?.links ?? '',
-                        selectable: true,
-                        onTapLink: (String text, String? href, String title) {
-                          _onOpen(context, href);
-                        },
-                        styleSheetTheme: MarkdownStyleSheetBaseTheme.cupertino,
-                      ),
-                    ],
+                        const SizedBox(height: 12),
+                        MarkdownBody(
+                          data: _taginfo?.links ?? '',
+                          selectable: true,
+                          onTapLink: (String text, String? href, String title) {
+                            _onOpen(context, href);
+                          },
+                          styleSheetTheme:
+                              MarkdownStyleSheetBaseTheme.cupertino,
+                        ),
+                      ],
+                    ),
                   ),
                 ),
               );

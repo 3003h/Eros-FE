@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:fehviewer/common/controller/advance_search_controller.dart';
 import 'package:fehviewer/common/service/depth_service.dart';
 import 'package:fehviewer/common/service/theme_service.dart';
@@ -150,7 +152,6 @@ class GalleryFilterView extends StatelessWidget {
           ),
         if (_searchPageController?.searchType != SearchType.favorite)
           GalleryCatFilter(
-            // padding: const EdgeInsets.symmetric(vertical: 4.0),
             catNum: catNum,
             onCatNumChanged: catNumChanged,
             crossAxisCount: catCrossAxisCount,
@@ -428,11 +429,68 @@ class GalleryFilterView extends StatelessWidget {
         _listDft.addAll(_listFav);
       }
 
+      // return Container(
+      //   height: 400,
+      //   child: SingleChildScrollView(
+      //     child: Column(
+      //       children: [
+      //         ..._listDft,
+      //         if (advanceSearchController.enableAdvance &&
+      //             _searchPageController?.searchType != SearchType.favorite)
+      //           ..._listAdv
+      //         else if (_searchPageController?.searchType == SearchType.favorite)
+      //           ..._listFav
+      //       ],
+      //     ),
+      //   ),
+      // );
+
+      // return AnimatedContainer(
+      //   height: advanceSearchController.enableAdvance &&
+      //           _searchPageController?.searchType != SearchType.favorite
+      //       ? _kAdvanceHeight
+      //       : _kHeight,
+      //   duration: const Duration(milliseconds: 300),
+      //   curve: Curves.ease,
+      //   child: SingleChildScrollView(
+      //     child: Column(
+      //       mainAxisSize: MainAxisSize.min,
+      //       children: [
+      //         ..._listDft,
+      //         if (advanceSearchController.enableAdvance &&
+      //             _searchPageController?.searchType != SearchType.favorite)
+      //           ..._listAdv
+      //         else if (_searchPageController?.searchType == SearchType.favorite)
+      //           ..._listFav
+      //       ],
+      //     ),
+      //   ),
+      // );
+
+      // return AnimatedContainer(
+      //   height: advanceSearchController.enableAdvance &&
+      //           _searchPageController?.searchType != SearchType.favorite
+      //       ? _kAdvanceHeight
+      //       : _kHeight,
+      //   duration: const Duration(milliseconds: 300),
+      //   curve: Curves.ease,
+      //   child: SingleChildScrollView(
+      //     child: Column(
+      //       mainAxisSize: MainAxisSize.min,
+      //       children: [
+      //         ..._listDft,
+      //       ],
+      //     ),
+      //   ),
+      // );
+
       return AnimatedContainer(
-        height: advanceSearchController.enableAdvance &&
-                _searchPageController?.searchType != SearchType.favorite
-            ? _kAdvanceHeight
-            : _kHeight,
+        height: min(
+            context.height / 2,
+            advanceSearchController.enableAdvance &&
+                    _searchPageController?.searchType != SearchType.favorite
+                ? _kAdvanceHeight
+                : _kHeight),
         // height: context.height / 2,
         duration: const Duration(milliseconds: 300),
         curve: Curves.ease,

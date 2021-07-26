@@ -278,6 +278,7 @@ class HatHGridView extends StatelessWidget {
       child: GridView.count(
         physics: const NeverScrollableScrollPhysics(),
         padding: const EdgeInsets.all(0),
+        shrinkWrap: true,
         crossAxisCount: 2,
         childAspectRatio: 2.0,
         children: _items!,

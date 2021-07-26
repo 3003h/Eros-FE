@@ -32,6 +32,7 @@ import 'package:fehviewer/pages/tab/view/search_page_new.dart';
 import 'package:fehviewer/pages/tab/view/splash_page.dart';
 import 'package:fehviewer/pages/tab/view/unlock_page.dart';
 import 'package:fehviewer/pages/tab/view/watched_page.dart';
+import 'package:flutter/foundation.dart';
 import 'package:get/get.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 
@@ -115,8 +116,7 @@ class AppPages {
     ),
     GetPage(
       name: EHRoutes.galleryComment,
-      page: () => CupertinoScaffold(body: CommentPage()),
-      transition: Transition.cupertino,
+      page: () => CommentPage(),
     ),
     GetPage(
       name: EHRoutes.addTag,
@@ -171,6 +171,7 @@ class AppPages {
         Get.lazyPut(() => ViewExtController());
       }),
       transition: Transition.native,
+      // opaque: kDebugMode,
       opaque: false,
     ),
 

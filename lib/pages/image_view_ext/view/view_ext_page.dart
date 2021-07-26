@@ -205,7 +205,7 @@ class ViewImageSlidePage extends GetView<ViewExtController> {
                 onPageChanged: controller.handOnPageChanged,
                 scrollDirection: Axis.horizontal,
                 customSize: context.mediaQuery.size,
-                scrollPhysics: const BouncingScrollPhysics(),
+                scrollPhysics: const CustomScrollPhysics(),
                 reverse: reverse,
                 builder: (BuildContext context, int pageIndex) {
                   /// 双页
@@ -222,7 +222,7 @@ class ViewImageSlidePage extends GetView<ViewExtController> {
               itemCount: logic.vState.pageCount,
               onPageChanged: controller.handOnPageChanged,
               scrollDirection: Axis.horizontal,
-              physics: const BouncingScrollPhysics(),
+              physics: const CustomScrollPhysics(),
               reverse: reverse,
               itemBuilder: (BuildContext context, int index) {
                 logger.d('pageIndex $index ser ${index + 1}');
@@ -425,6 +425,10 @@ class ImageGestureDetector extends GetView<ViewExtController> {
                 onTap: controller.tapLeft,
               ),
             ),
+            SizedBox(
+              height: context.height,
+              width: context.width / 2.5,
+            ),
             Expanded(
               child: GestureDetector(
                 behavior: HitTestBehavior.translucent,
@@ -437,7 +441,6 @@ class ImageGestureDetector extends GetView<ViewExtController> {
         GestureDetector(
           behavior: HitTestBehavior.translucent,
           child: Container(
-            // key: controller.vState.centkey,
             height: context.height / 4,
             width: context.width / 2.5,
           ),
