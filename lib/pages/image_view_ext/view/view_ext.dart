@@ -486,7 +486,7 @@ class ViewBottomBar extends GetView<ViewExtController> {
                       ),
                     )
                   else
-                    const SizedBox.shrink(),
+                    const SizedBox(width: 40),
                 ],
               ),
             ],

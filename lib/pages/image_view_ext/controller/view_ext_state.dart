@@ -53,11 +53,10 @@ class ViewExtState {
     _currentItemIndex = val;
 
     // 防抖
-    vDebounceM(() => saveLastIndex(), id: '_currentItemIndex');
-    vDebounceM(
+    vDebounce(() => saveLastIndex(), duration: Duration(milliseconds: 500));
+    vDebounce(
       () => saveLastIndex(saveToStore: true),
-      id: '_currentItemIndex',
-      durationTime: const Duration(seconds: 5),
+      duration: const Duration(seconds: 5),
     );
   }
 
@@ -77,12 +76,12 @@ class ViewExtState {
   ViewColumnMode get columnMode => _columnMode;
   set columnMode(ViewColumnMode val) {
     _columnMode = val;
-    vDebounceM(() {
+    vDebounce(() {
       if (loadType == LoadType.network) {
         _galleryCacheController.setColumnMode(
             galleryPageController.galleryItem.gid ?? '', val);
       }
-    }, id: '_columnMode');
+    });
   }
 
   /// pageview下实际的index
@@ -166,7 +165,7 @@ class ViewExtState {
 
   bool autoRead = false;
   Map<int, bool> loadCompleMap = <int, bool>{};
-  int? lastAutoNextLeftSer;
+  int? lastAutoNextSer;
   int serLeft = 0;
 
   /// 阅读模式

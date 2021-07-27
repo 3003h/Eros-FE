@@ -24,47 +24,33 @@ dependencies:
 
   # 网络请求
   dio: ^4.0.0
-#  dio_http_cache: ^0.2.11
-  # 临时 空安全版本
-  dio_http_cache:
-    git:
-      url: https://github.com/vrtdev/dio-http-cache.git
-      ref: feature/nullsafety-dio4
+  dio_http_cache: any
 #  dio_cache_interceptor: 2.3.1
+  dio_retry_fixed: ^0.1.15-beta-null-safety
 
-  # cookie
   cookie_jar: ^3.0.1
   dio_cookie_manager: ^2.0.0
   webview_cookie_manager: ^2.0.0
   shared_preferences: ^2.0.5
-  # toast
   oktoast: ^3.0.0
-  # 数据库
   sqflite: ^2.0.0+3
-  # html反转义
   html_unescape: ^2.0.0
   enum_to_string: ^2.0.1
-  # webview
   flutter_inappwebview: ^5.3.2
   html: ^0.15.0
-  # 文字链接
   flutter_linkify: ^5.0.2
   url_launcher: ^6.0.3
-  # 元组
   tuple: ^2.0.0
   get: ^4.2.0
   get_storage: ^2.0.2
   photo_view: ^0.11.1
-  # 图片相关
   cached_network_image: ^3.0.0
   extended_image: ^4.1.0
   liquid_progress_indicator_ns: ^1.0.0
   logger: ^1.0.0
-  # 瀑布流
   waterfall_flow: ^3.0.1
   modal_bottom_sheet: ^2.0.0
   local_auth: ^1.1.5
-  # 彩蛋
   flutter_egg:
     git:
       url: https://github.com/honjow/flutter_egg.git
@@ -77,9 +63,7 @@ dependencies:
   # 缓存
   flutter_cache_manager: ^3.0.2
   # 图片保存
-  image_gallery_saver:
-#  image_gallery_saver: #^1.6.8
-#    git: https://github.com/dvaldivia/image_gallery_saver.git
+  image_gallery_saver: any
   # 滑动删除
   flutter_slidable: ^0.6.0
   scrollable_positioned_list: ^0.2.0-nullsafety.0
@@ -95,13 +79,6 @@ dependencies:
   flutter_rating_bar: ^4.0.0
   custom_pop_up_menu: ^1.2.0
   flutter_downloader: ^1.6.0
-  # 自定义进度步进
-#  flutter_downloader:
-#    git:
-#      url: https://github.com/nimisis/flutter_downloader.git
-  # flutter_downloader:
-  #   path: /Users/honjow/git/flutter_downloader_honjow
-
   floor: ^1.1.0
   copy_with_extension: ^2.0.0
   package_info: ^2.0.0
@@ -138,6 +115,7 @@ dependencies:
   isolate_handler: ^1.0.0
   worker_manager: ^4.0.2
   collection: ^1.15.0
+  throttling: ^1.0.0
   # 不是SAF的形式
 #  filesystem_picker: ^2.0.0-nullsafety.0
 #  google_ml_kit: ^0.6.0
