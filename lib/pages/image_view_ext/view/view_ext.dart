@@ -110,6 +110,7 @@ class ImageExt extends GetView<ViewExtController> {
     this.onLoadCompleted,
     required this.initGestureConfigHandler,
     required this.onDoubleTap,
+    this.mode = ExtendedImageMode.gesture,
   }) : super(key: key);
 
   final String url;
@@ -122,6 +123,7 @@ class ImageExt extends GetView<ViewExtController> {
   final ValueChanged<ExtendedImageState>? onLoadCompleted;
   final InitGestureConfigHandler initGestureConfigHandler;
   final DoubleTap? onDoubleTap;
+  final ExtendedImageMode mode;
 
   final GalleryPageController _pageController = Get.find(tag: pageCtrlDepth);
 
@@ -133,7 +135,7 @@ class ImageExt extends GetView<ViewExtController> {
       handleLoadingProgress: true,
       clearMemoryCacheIfFailed: true,
       enableSlideOutPage: true,
-      mode: ExtendedImageMode.gesture,
+      mode: mode,
       timeLimit: const Duration(seconds: 10),
       initGestureConfigHandler: initGestureConfigHandler,
       onDoubleTap: onDoubleTap,

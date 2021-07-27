@@ -23,11 +23,13 @@ class ViewImageExt extends StatefulWidget {
     required this.imageSer,
     this.initialScale = 1.0,
     this.enableDoubleTap = true,
+    this.mode = ExtendedImageMode.gesture,
   }) : super(key: key);
 
   final int imageSer;
   final double initialScale;
   final bool enableDoubleTap;
+  final ExtendedImageMode mode;
 
   @override
   _ViewImageExtState createState() => _ViewImageExtState();
@@ -88,7 +90,7 @@ class _ViewImageExtState extends State<ViewImageExt>
             initialScale: initialScale,
             imageSize: Size(state.extendedImageInfo!.image.width.toDouble(),
                 state.extendedImageInfo!.image.height.toDouble()));
-        logger.d('initialScale $initialScale');
+        // logger.d('initialScale $initialScale');
 
         vState.doubleTapScales[0] = initialScale ?? vState.doubleTapScales[0];
         vState.doubleTapScales[1] =
@@ -159,7 +161,7 @@ class _ViewImageExtState extends State<ViewImageExt>
         File(path),
         fit: BoxFit.contain,
         enableSlideOutPage: true,
-        mode: ExtendedImageMode.gesture,
+        mode: widget.mode,
         initGestureConfigHandler: _initGestureConfigHandler,
         onDoubleTap: widget.enableDoubleTap ? onDoubleTap : null,
         loadStateChanged: (ExtendedImageState state) {
@@ -235,6 +237,7 @@ class _ViewImageExtState extends State<ViewImageExt>
                       url: _image?.imageUrl ?? '',
                       onDoubleTap: widget.enableDoubleTap ? onDoubleTap : null,
                       ser: widget.imageSer,
+                      mode: widget.mode,
                       reloadImage: () => controller.reloadImage(widget.imageSer,
                           changeSource: true),
                       fadeAnimationController: _fadeAnimationController,

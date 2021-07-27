@@ -17,6 +17,8 @@ import 'package:flutter/services.dart';
 import 'package:flutter_statusbar_manager/flutter_statusbar_manager.dart';
 import 'package:get/get.dart';
 import 'package:orientation/orientation.dart';
+import 'package:photo_view/photo_view.dart';
+import 'package:scroll_to_index/scroll_to_index.dart';
 import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
 
 import 'view_ext_state.dart';
@@ -47,14 +49,27 @@ class ViewExtController extends GetxController {
 
   final GalleryCacheController _galleryCacheController = Get.find();
 
-  // todo 双页阅读会有问题
-  // late Future<GalleryImage?> imageFuture;
-
   Map<int, Future<GalleryImage?>> imageFutureMap = {};
 
   final ItemScrollController itemScrollController = ItemScrollController();
   final ItemPositionsListener itemPositionsListener =
       ItemPositionsListener.create();
+
+  final AutoScrollController autoScrollController = AutoScrollController(
+      //add this for advanced viewport boundary. e.g. SafeArea
+      viewportBoundaryGetter: () =>
+          Rect.fromLTRB(0, 0, 0, MediaQuery.of(Get.context!).padding.bottom),
+
+      //choose vertical/horizontal
+      axis: Axis.vertical,
+
+      //this given value will bring the scroll offset to the nearest position in fixed row height case.
+      //for variable row height case, you can still set the average height, it will try to get to the relatively closer offset
+      //and then start searching.
+      suggestedRowHeight: 200);
+
+  PhotoViewScaleStateController photoViewScaleStateController =
+      PhotoViewScaleStateController();
 
   @override
   void onInit() {
@@ -73,9 +88,20 @@ class ViewExtController extends GetxController {
           itemScrollController.jumpTo(index: vState.currentItemIndex));
     }
 
+    // 监听列表模式的滚动数据
     itemPositionsListener.itemPositions.addListener(() {
       final positions = itemPositionsListener.itemPositions.value;
       handItemPositionsChange(positions);
+    });
+
+    photoViewScaleStateController.outputScaleStateStream
+        .listen((PhotoViewScaleState event) {
+      logger.d('scaleState: $event');
+    });
+
+    photoViewScaleStateController.addIgnorableListener(() {
+      final st = photoViewScaleStateController.prevScaleState;
+      logger.d('prevScaleState: $st');
     });
 
     /// 初始预载
@@ -301,6 +327,7 @@ class ViewExtController extends GetxController {
 
   // 点击中间
   Future<void> handOnTapCent() async {
+    // logger.d('top tap');
     if (GetPlatform.isIOS) {
       if (!vState.showBar) {
         await FlutterStatusbarManager.setFullscreen(false);
@@ -325,6 +352,15 @@ class ViewExtController extends GetxController {
       }
     } else if (vState.viewMode == ViewMode.rightToLeft) {
       pageController.jumpToPage(vState.pageIndex + 1);
+    } else if (vState.viewMode == ViewMode.topToBottom &&
+        itemScrollController.isAttached) {
+      if (vState.pageIndex > 0) {
+        itemScrollController.scrollTo(
+          index: vState.pageIndex - 1,
+          duration: Duration(milliseconds: 200),
+          curve: Curves.ease,
+        );
+      }
     }
   }
 
@@ -337,6 +373,13 @@ class ViewExtController extends GetxController {
       if (vState.pageIndex > 0) {
         pageController.jumpToPage(vState.pageIndex - 1);
       }
+    } else if (vState.viewMode == ViewMode.topToBottom &&
+        itemScrollController.isAttached) {
+      itemScrollController.scrollTo(
+        index: vState.pageIndex + 1,
+        duration: Duration(milliseconds: 200),
+        curve: Curves.ease,
+      );
     }
   }
 
@@ -346,7 +389,12 @@ class ViewExtController extends GetxController {
     if (vState.viewMode != ViewMode.topToBottom) {
       pageController.jumpToPage(vState.pageIndex);
     } else {
-      itemScrollController.jumpTo(index: vState.currentItemIndex);
+      if (itemScrollController.isAttached) {
+        itemScrollController.jumpTo(index: vState.currentItemIndex);
+      }
+
+      autoScrollController.scrollToIndex(vState.currentItemIndex);
+
       update([idViewTopBar]);
     }
   }
