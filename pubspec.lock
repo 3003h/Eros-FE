@@ -312,12 +312,17 @@ packages:
   dio_http_cache:
     dependency: "direct main"
     description:
-      path: "."
-      ref: "feature/nullsafety-dio4"
-      resolved-ref: "19ac02526b64307d95be22e0cd5b21ca75ff26ec"
-      url: "https://github.com/vrtdev/dio-http-cache.git"
-    source: git
-    version: "0.3.0-nullsafety.0"
+      name: dio_http_cache
+      url: "https://pub.flutter-io.cn"
+    source: hosted
+    version: "0.3.0"
+  dio_retry_fixed:
+    dependency: "direct main"
+    description:
+      name: dio_retry_fixed
+      url: "https://pub.flutter-io.cn"
+    source: hosted
+    version: "0.1.15-beta-null-safety"
   enum_to_string:
     dependency: "direct main"
     description:
@@ -1287,6 +1292,13 @@ packages:
       url: "https://pub.flutter-io.cn"
     source: hosted
     version: "0.3.0"
+  throttling:
+    dependency: "direct main"
+    description:
+      name: throttling
+      url: "https://pub.flutter-io.cn"
+    source: hosted
+    version: "1.0.0"
   timing:
     dependency: transitive
     description:

@@ -18,6 +18,7 @@ import 'package:flutter_statusbar_manager/flutter_statusbar_manager.dart';
 import 'package:get/get.dart';
 import 'package:orientation/orientation.dart';
 import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
+import 'package:throttling/throttling.dart';
 
 import 'view_ext_state.dart';
 
@@ -319,24 +320,39 @@ class ViewExtController extends GetxController {
   Future<void> tapLeft() async {
     logger.d('${vState.viewMode} tap left');
     vState.fade = false;
-    if (vState.viewMode == ViewMode.LeftToRight) {
-      if (vState.pageIndex > 0) {
-        pageController.jumpToPage(vState.pageIndex - 1);
-      }
-    } else if (vState.viewMode == ViewMode.rightToLeft) {
+    if (vState.viewMode == ViewMode.LeftToRight && vState.pageIndex > 0) {
+      pageController.jumpToPage(vState.pageIndex - 1);
+    } else if (vState.viewMode == ViewMode.rightToLeft &&
+        vState.pageIndex < vState.filecount) {
       pageController.jumpToPage(vState.pageIndex + 1);
+    } else if (vState.viewMode == ViewMode.topToBottom &&
+        itemScrollController.isAttached &&
+        vState.pageIndex > 0) {
+      itemScrollController.scrollTo(
+        index: vState.pageIndex - 1,
+        duration: const Duration(milliseconds: 200),
+        curve: Curves.ease,
+      );
     }
   }
 
   Future<void> tapRight() async {
     logger.d('${vState.viewMode} tap right');
     vState.fade = false;
-    if (vState.viewMode == ViewMode.LeftToRight) {
+    if (vState.viewMode == ViewMode.LeftToRight &&
+        vState.pageIndex < vState.filecount) {
       pageController.jumpToPage(vState.pageIndex + 1);
-    } else if (vState.viewMode == ViewMode.rightToLeft) {
-      if (vState.pageIndex > 0) {
-        pageController.jumpToPage(vState.pageIndex - 1);
-      }
+    } else if (vState.viewMode == ViewMode.rightToLeft &&
+        vState.pageIndex > 0) {
+      pageController.jumpToPage(vState.pageIndex - 1);
+    } else if (vState.viewMode == ViewMode.topToBottom &&
+        itemScrollController.isAttached &&
+        vState.pageIndex < vState.filecount) {
+      itemScrollController.scrollTo(
+        index: vState.pageIndex + 1,
+        duration: const Duration(milliseconds: 200),
+        curve: Curves.ease,
+      );
     }
   }
 
@@ -470,21 +486,36 @@ class ViewExtController extends GetxController {
   void cancelAutoRead() {
     vState.autoRead = false;
     // vState.complePages.clear();
-    vState.lastAutoNextLeftSer = null;
+    vState.lastAutoNextSer = null;
     update([idAutoReadIcon]);
   }
 
-  void _startAutoRead() {
-    vDebounceM(
-      _turnNextPage,
-      id: '_turnNextPage',
-      durationTime: Duration(milliseconds: _ehConfigService.turnPageInv),
-    );
+  final debNextPage = Debouncing(duration: const Duration(seconds: 1));
+  void _startAutoRead({int? toIndex}) {
+    // vDebounce(
+    //   _turnNextPage,
+    //   duration: Duration(milliseconds: _ehConfigService.turnPageInv),
+    // );
+    debNextPage.duration = Duration(milliseconds: _ehConfigService.turnPageInv);
+    if (vState.viewMode != ViewMode.topToBottom) {
+      debNextPage.debounce(_toPage);
+    } else {
+      debNextPage.debounce(() => _toPage(index: toIndex));
+    }
   }
 
   Future<void> onLoadCompleted(int ser) async {
     vState.loadCompleMap[ser] = true;
     await Future.delayed(Duration.zero);
+
+    if (vState.viewMode == ViewMode.topToBottom) {
+      final bool canJump = vState.lastAutoNextSer != ser;
+      logger.d('canJump $canJump');
+      if (canJump) {
+        _startAutoRead();
+      }
+      return;
+    }
 
     if (vState.columnMode == ViewColumnMode.single) {
       _startAutoRead();
@@ -500,7 +531,7 @@ class ViewExtController extends GetxController {
         }
         final rigthComple = vState.loadCompleMap[serLeft + 1] ?? false;
 
-        final bool canJump = vState.lastAutoNextLeftSer != serLeft;
+        final bool canJump = vState.lastAutoNextSer != serLeft;
         logger.v('ser:$ser\nserL:$serLeft leftComplet: $leftComplet\n'
             'serR:${serLeft + 1} rigthComple:$rigthComple\ncanJump $canJump');
         if (leftComplet && rigthComple && canJump) {
@@ -554,8 +585,12 @@ class ViewExtController extends GetxController {
     // logger.i('First Item: ${min ?? ''}\nLast Item: ${max ?? ''}');
   }
 
-  Future<void> _turnNextPage() async {
-    if (vState.autoRead && vState.pageIndex < vState.pageCount - 1) {
+  Future<void> _toPage({int? index}) async {
+    if (vState.pageIndex >= vState.pageCount - 1) {
+      return;
+    }
+
+    if (vState.autoRead) {
       logger5.v('next page ${vState.pageIndex + 1}');
 
       if (pageController.positions.isNotEmpty) {
@@ -563,18 +598,27 @@ class ViewExtController extends GetxController {
             duration: const Duration(milliseconds: 300), curve: Curves.easeOut);
       }
 
+      if (itemScrollController.isAttached) {
+        itemScrollController.scrollTo(
+          index: index ?? vState.currentItemIndex + 1,
+          duration: const Duration(milliseconds: 200),
+          curve: Curves.ease,
+        );
+        vState.lastAutoNextSer = vState.currentItemIndex + 2;
+      }
+
       if (vState.columnMode != ViewColumnMode.single) {
-        vState.lastAutoNextLeftSer = vState.serLeft;
+        vState.lastAutoNextSer = vState.serLeft;
       }
     }
   }
 
   static Timer? debounceTimer;
   // 防抖函数
-  void vDebounce(
+  void vvDebounce(
     Function? doSomething, {
     required String id,
-    Duration durationTime = deFaultDurationTime,
+    Duration durationTime = const Duration(milliseconds: 200),
   }) {
     if (debounceTimer?.isActive ?? false) {
       logger.v('timer.cancel');
