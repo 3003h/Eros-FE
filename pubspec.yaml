@@ -3,7 +3,7 @@ description: fehviewer
 
 publish_to: 'none' # Remove this line if you wish to publish to pub.dev
 
-version: 1.1.20+255
+version: 1.1.20+256
 
 environment:
   sdk: '>=2.13.0 <3.0.0'
@@ -82,7 +82,12 @@ dependencies:
 #    git: https://github.com/dvaldivia/image_gallery_saver.git
   # 滑动删除
   flutter_slidable: ^0.6.0
-  scrollable_positioned_list: ^0.2.0-nullsafety.0
+#  scrollable_positioned_list: ^0.2.0-nullsafety.0
+  scrollable_positioned_list:
+    git:
+      url: https://github.com/lvfen/flutter.widgets.git
+      ref: shrinkWrapSupport
+      path: packages/scrollable_positioned_list
   reorderables: ^0.4.1
   basic_utils: ^3.0.2
   # 震动
@@ -138,6 +143,9 @@ dependencies:
   isolate_handler: ^1.0.0
   worker_manager: ^4.0.2
   collection: ^1.15.0
+  zoom_widget: ^0.2.1
+  english_words: ^4.0.0
+  scroll_to_index: ^2.0.0
   # 不是SAF的形式
 #  filesystem_picker: ^2.0.0-nullsafety.0
 #  google_ml_kit: ^0.6.0

@@ -318,6 +318,13 @@ packages:
       url: "https://github.com/vrtdev/dio-http-cache.git"
     source: git
     version: "0.3.0-nullsafety.0"
+  english_words:
+    dependency: "direct main"
+    description:
+      name: english_words
+      url: "https://pub.flutter-io.cn"
+    source: hosted
+    version: "4.0.0"
   enum_to_string:
     dependency: "direct main"
     description:
@@ -1114,12 +1121,21 @@ packages:
       url: "https://pub.flutter-io.cn"
     source: hosted
     version: "0.27.1"
+  scroll_to_index:
+    dependency: "direct main"
+    description:
+      name: scroll_to_index
+      url: "https://pub.flutter-io.cn"
+    source: hosted
+    version: "2.0.0"
   scrollable_positioned_list:
     dependency: "direct main"
     description:
-      name: scrollable_positioned_list
-      url: "https://pub.flutter-io.cn"
-    source: hosted
+      path: "packages/scrollable_positioned_list"
+      ref: shrinkWrapSupport
+      resolved-ref: cdf8fad028146085f5cdc1155ea80bc2b7d0353d
+      url: "https://github.com/lvfen/flutter.widgets.git"
+    source: git
     version: "0.2.0-nullsafety.0"
   share:
     dependency: "direct main"
@@ -1441,6 +1457,13 @@ packages:
       url: "https://pub.flutter-io.cn"
     source: hosted
     version: "3.1.0"
+  zoom_widget:
+    dependency: "direct main"
+    description:
+      name: zoom_widget
+      url: "https://pub.flutter-io.cn"
+    source: hosted
+    version: "0.2.1"
 sdks:
   dart: ">=2.13.0 <3.0.0"
   flutter: ">=2.2.0"

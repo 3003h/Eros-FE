@@ -1,5 +1,6 @@
 import 'dart:math';
 
+import 'package:english_words/english_words.dart';
 import 'package:extended_image/extended_image.dart';
 import 'package:fehviewer/const/const.dart';
 import 'package:fehviewer/pages/image_view_ext/view/view_ext.dart';
@@ -10,7 +11,9 @@ import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:photo_view/photo_view.dart';
 import 'package:photo_view/photo_view_gallery.dart';
+import 'package:scroll_to_index/scroll_to_index.dart';
 import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
+import 'package:zoom_widget/zoom_widget.dart';
 
 import '../common.dart';
 import '../controller/view_ext_contorller.dart';
@@ -85,21 +88,22 @@ class ImagePageView extends StatelessWidget {
   }
 }
 
-class ImageListViewPage extends StatelessWidget {
+class ImageListViewPage extends GetView<ViewExtController> {
   const ImageListViewPage({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    Widget image = Container(
+    Widget imageListview = Container(
       height: context.height,
       width: context.width,
-      color: Colors.black,
+      color: CupertinoTheme.of(context).scaffoldBackgroundColor,
       child: GetBuilder<ViewExtController>(
         id: idImageListView,
         builder: (logic) {
           final vState = logic.vState;
 
           return ScrollablePositionedList.builder(
+            padding: const EdgeInsets.all(0),
             itemScrollController: logic.itemScrollController,
             itemPositionsListener: logic.itemPositionsListener,
             itemCount: vState.filecount,
@@ -109,32 +113,127 @@ class ImageListViewPage extends StatelessWidget {
       ),
     );
 
-    // return Container(
-    //   height: context.height,
-    //   width: context.width,
-    //   color: Colors.grey.withAlpha(150),
-    //   child: InteractiveViewer(
-    //     // boundaryMargin: EdgeInsets.all(400),
-    //     minScale: 1.0,
-    //     maxScale: 5.0,
-    //     panEnabled: true,
-    //     scaleEnabled: true,
-    //     // child: Container(
-    //     //   child: Image.asset('assets/40.png'),
-    //     // ),
-    //     child: UnconstrainedBox(child: image),
-    //   ),
-    // );
+    Widget imageListview2 = Container(
+      color: CupertinoTheme.of(context).scaffoldBackgroundColor,
+      child: GetBuilder<ViewExtController>(
+        id: idImageListView,
+        builder: (logic) {
+          final vState = logic.vState;
 
+          return ListView.builder(
+            padding: const EdgeInsets.all(0),
+            itemCount: vState.filecount,
+            itemBuilder: itemBuilder(),
+          );
+        },
+      ),
+    );
+
+    Widget imageListview3 = Container(
+      color: CupertinoTheme.of(context).scaffoldBackgroundColor,
+      child: GetBuilder<ViewExtController>(
+        id: idImageListView,
+        builder: (logic) {
+          final vState = logic.vState;
+
+          return ListView.builder(
+            controller: controller.autoScrollController,
+            padding: const EdgeInsets.all(0),
+            itemCount: vState.filecount,
+            itemBuilder: itemBuilder2(),
+          );
+        },
+      ),
+    );
+
+    final _list = generateWordPairs().take(700).toList();
+    Widget wordlist = Container(
+      color: Colors.blueGrey,
+      child: ListView.builder(
+        itemCount: _list.length,
+        itemBuilder: (_, index) {
+          final w = _list[index];
+          return Text('$w', style: TextStyle(color: Colors.white));
+        },
+      ),
+    );
+
+    Widget wordlist2 = Container(
+      color: Colors.blueGrey,
+      child: GetBuilder<ViewExtController>(
+        id: idImageListView,
+        builder: (logic) {
+          return ListView.builder(
+            itemCount: _list.length,
+            itemBuilder: (_, index) {
+              final w = _list[index];
+              return AutoScrollTag(
+                  key: ValueKey(index),
+                  controller: logic.autoScrollController,
+                  index: index,
+                  child: Text('$w', style: TextStyle(color: Colors.white)));
+            },
+          );
+        },
+      ),
+    );
+
+    if (false)
+      return Zoom(
+        maxZoomWidth: context.width * 2,
+        maxZoomHeight: context.height * 2,
+        enableScroll: false,
+        child: Center(child: imageListview),
+      );
+
+    if (false)
+      return Zoom(
+        maxZoomWidth: context.width * 0.5,
+        maxZoomHeight: context.height * 0.5,
+        enableScroll: false,
+        child: wordlist,
+      );
+
+    if (false)
+      return Container(
+        height: context.height,
+        width: context.width,
+        color: Colors.grey.withAlpha(150),
+        child: InteractiveViewer(
+          // boundaryMargin: EdgeInsets.all(400),
+          minScale: 1.0,
+          maxScale: 2.0,
+          panEnabled: true,
+          scaleEnabled: true,
+          // child: Container(
+          //   child: Image.asset('assets/40.png'),
+          // ),
+          child: imageListview3,
+        ),
+      );
+
+    if (false)
+      return PhotoView.customChild(
+        initialScale: 1.0,
+        customSize: context.mediaQuery.size,
+        minScale: PhotoViewComputedScale.contained * 1.0,
+        maxScale: 5.0,
+        tightMode: true,
+        child: imageListview,
+      );
+
+    // if (false)
     return PhotoViewGallery.builder(
       itemCount: 1,
-      customSize: context.mediaQuery.size,
       builder: (_, __) {
         return PhotoViewGalleryPageOptions.customChild(
+          scaleStateController: controller.photoViewScaleStateController,
           initialScale: 1.0,
           minScale: PhotoViewComputedScale.contained * 1.0,
           maxScale: 5.0,
-          child: image,
+          tightMode: true,
+          // scaleStateCycle: lisviewScaleStateCycle,
+          child: imageListview,
         );
       },
     );
@@ -177,12 +276,89 @@ class ImageListViewPage extends StatelessWidget {
                 child: ViewImageExt(
                   imageSer: itemSer,
                   enableDoubleTap: false,
+                  mode: ExtendedImageMode.none,
                   // expand: _height != null,
                 ),
               );
             }),
       );
     };
+  }
+
+  Widget Function(BuildContext context, int index) itemBuilder2() {
+    return (BuildContext context, int index) {
+      final int itemSer = index + 1;
+
+      return AutoScrollTag(
+        key: ValueKey(index),
+        controller: controller.autoScrollController,
+        index: index,
+        child: ConstrainedBox(
+          constraints: BoxConstraints(
+            minWidth: context.width,
+          ),
+          child: GetBuilder<ViewExtController>(
+              id: '$idImageListView$itemSer',
+              builder: (logic) {
+                final vState = logic.vState;
+                double? _height = () {
+                  try {
+                    final _curImage = vState.imageMap[itemSer];
+                    return _curImage!.imageHeight! *
+                        (context.width / _curImage.imageWidth!);
+                  } on Exception catch (_) {
+                    final _curImage = vState.imageMap[itemSer];
+                    return _curImage!.thumbHeight! *
+                        (context.width / _curImage.thumbWidth!);
+                  } catch (e) {
+                    return null;
+                  }
+                }();
+
+                if (_height != null) {
+                  _height += vState.showPageInterval ? 8 : 0;
+                }
+
+                return Container(
+                  padding:
+                      EdgeInsets.only(bottom: vState.showPageInterval ? 8 : 0),
+                  height: _height,
+                  child: ViewImageExt(
+                    imageSer: itemSer,
+                    enableDoubleTap: false,
+                    mode: ExtendedImageMode.none,
+                    // expand: _height != null,
+                  ),
+                );
+              }),
+        ),
+      );
+    };
+  }
+}
+
+PhotoViewScaleState lisviewScaleStateCycle(PhotoViewScaleState actual) {
+  logger.d('actual $actual');
+  // switch (actual) {
+  //   case PhotoViewScaleState.initial:
+  //   case PhotoViewScaleState.covering:
+  //   case PhotoViewScaleState.originalSize:
+  //     return PhotoViewScaleState.zoomedOut;
+  //   default:
+  //     return PhotoViewScaleState.initial;
+  // }
+  switch (actual) {
+    case PhotoViewScaleState.initial:
+      return PhotoViewScaleState.covering;
+    case PhotoViewScaleState.covering:
+      return PhotoViewScaleState.originalSize;
+    case PhotoViewScaleState.originalSize:
+      return PhotoViewScaleState.initial;
+    case PhotoViewScaleState.zoomedIn:
+    case PhotoViewScaleState.zoomedOut:
+      return PhotoViewScaleState.initial;
+    default:
+      return PhotoViewScaleState.initial;
   }
 }
 
@@ -211,8 +387,9 @@ class ViewImageSlidePage extends GetView<ViewExtController> {
                   /// 双页
                   return PhotoViewGalleryPageOptions.customChild(
                     initialScale: PhotoViewComputedScale.contained,
-                    minScale: PhotoViewComputedScale.contained * 1.0,
-                    maxScale: PhotoViewComputedScale.covered * 10,
+                    minScale: PhotoViewComputedScale.contained * 0.8,
+                    maxScale: PhotoViewComputedScale.covered * 5,
+                    // scaleStateCycle: lisviewScaleStateCycle,
                     child: DoublePageView(pageIndex: pageIndex),
                   );
                 });
@@ -324,6 +501,7 @@ class DoublePageView extends GetView<ViewExtController> {
               child: ViewImageExt(
                 imageSer: serLeft,
                 enableDoubleTap: false,
+                mode: ExtendedImageMode.none,
                 // fade: vState.fade,
                 // expand: true,
               ),
@@ -340,6 +518,7 @@ class DoublePageView extends GetView<ViewExtController> {
               child: ViewImageExt(
                 imageSer: serLeft + 1,
                 enableDoubleTap: false,
+                mode: ExtendedImageMode.none,
                 // fade: vState.fade,
                 // expand: true,
               ),
@@ -412,11 +591,25 @@ class ImageGestureDetector extends GetView<ViewExtController> {
 
   @override
   Widget build(BuildContext context) {
+    // return GestureDetector(
+    //   behavior: HitTestBehavior.translucent,
+    //   onTap: () {
+    //     logger.d('top tap');
+    //     controller.handOnTapCent();
+    //   },
+    //   onDoubleTap: () {
+    //     logger.d('onDoubleTap');
+    //   },
+    //   child: child,
+    //   // child: SizedBox.expand(),
+    // );
+
     return Stack(
       alignment: Alignment.center,
       children: <Widget>[
         child,
-        // 非中心触摸区
+        // 两侧触摸区
+        // if (controller.vState.viewMode != ViewMode.topToBottom)
         Row(
           children: [
             Expanded(

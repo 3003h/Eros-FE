@@ -96,8 +96,8 @@ class GalleryPara {
 
       final GalleryImage? _imageTemp = imageMap[_ser];
       if (_imageTemp == null) {
-        yield null;
-        return;
+        // yield null;
+        continue;
       }
 
       GalleryImage _image = _imageTemp;
@@ -135,21 +135,20 @@ class GalleryPara {
       _url = _image.imageUrl ?? '';
 
       if (_url.isEmpty) {
-        yield null;
-        return;
+        // yield null;
+        continue;
       }
 
-      final Future<GalleryImage?>? _future = _map[_url] ??
-          (() {
-            _map[_url] = _precacheSingleImage(context, _url, _image);
-            return _map[_url];
-          })();
+      _map.putIfAbsent(_url, () => _precacheSingleImage(context, _url, _image));
+
+      final Future<GalleryImage?>? _future = _map[_url];
 
       if (_future != null) {
         final GalleryImage? value = await _future;
         // logger.d('yield rult ser ${value?.ser}  ${value?.toJson()}');
         yield value?.copyWith(isCache: true);
         _map.remove(_url);
+        continue;
       }
     }
   }
@@ -162,6 +161,8 @@ class GalleryPara {
     final ImageProvider imageProvider = ExtendedNetworkImageProvider(
       url,
       cache: true,
+      retries: 5,
+      timeLimit: const Duration(seconds: 5),
     );
 
     /// 预缓存图片
