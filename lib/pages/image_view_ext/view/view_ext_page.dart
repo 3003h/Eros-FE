@@ -231,7 +231,6 @@ class ImageListViewPage extends GetView<ViewExtController> {
           initialScale: 1.0,
           minScale: PhotoViewComputedScale.contained * 1.0,
           maxScale: 5.0,
-          tightMode: true,
           // scaleStateCycle: lisviewScaleStateCycle,
           child: imageListview,
         );
