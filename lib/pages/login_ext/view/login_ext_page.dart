@@ -22,7 +22,7 @@ class LoginExtPage extends GetView<LoginExtController> {
           ? CupertinoColors.secondarySystemBackground
           : null,
       navigationBar: CupertinoNavigationBar(
-          middle: Text(S.of(context).user_login),
+          middle: Text(L10n.of(context).user_login),
           trailing: Row(
             mainAxisSize: MainAxisSize.min,
             mainAxisAlignment: MainAxisAlignment.end,
@@ -68,10 +68,10 @@ class LoginExtPage extends GetView<LoginExtController> {
                         prefix: Row(
                           children: [
                             Icon(LineIcons.user).paddingOnly(right: 4.0),
-                            Text(S.of(context).user_name),
+                            Text(L10n.of(context).user_name),
                           ],
                         ),
-                        placeholder: S.of(context).pls_i_username,
+                        placeholder: L10n.of(context).pls_i_username,
                         textAlign: TextAlign.right,
                         onEditingComplete: () {
                           FocusScope.of(context)
@@ -93,10 +93,10 @@ class LoginExtPage extends GetView<LoginExtController> {
                                       .paddingOnly(right: 4.0),
                                   onTap: logic.switchObscure,
                                 ),
-                                Text(S.of(context).passwd),
+                                Text(L10n.of(context).passwd),
                               ],
                             ),
-                            placeholder: S.of(context).pls_i_passwd,
+                            placeholder: L10n.of(context).pls_i_passwd,
                             textAlign: TextAlign.right,
                             obscureText: logic.obscurePasswd,
                             focusNode: logic.nodePwd,
@@ -112,7 +112,7 @@ class LoginExtPage extends GetView<LoginExtController> {
                         return CupertinoButton(
                           child: logic.loadingLogin
                               ? const CupertinoActivityIndicator()
-                              : Text(S.of(context).login),
+                              : Text(L10n.of(context).login),
                           color: CupertinoColors.activeBlue,
                           onPressed:
                               logic.loadingLogin ? null : logic.pressLogin,

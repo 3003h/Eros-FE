@@ -77,19 +77,19 @@ class TabPages {
 
   Map<String, String> get tabTitles => <String, String>{
         EHRoutes.popular:
-            S.of(Get.find<TabHomeController>().tContext).tab_popular,
+            L10n.of(Get.find<TabHomeController>().tContext).tab_popular,
         EHRoutes.watched:
-            S.of(Get.find<TabHomeController>().tContext).tab_watched,
+            L10n.of(Get.find<TabHomeController>().tContext).tab_watched,
         EHRoutes.gallery:
-            S.of(Get.find<TabHomeController>().tContext).tab_gallery,
+            L10n.of(Get.find<TabHomeController>().tContext).tab_gallery,
         EHRoutes.favorite:
-            S.of(Get.find<TabHomeController>().tContext).tab_favorite,
+            L10n.of(Get.find<TabHomeController>().tContext).tab_favorite,
         EHRoutes.history:
-            S.of(Get.find<TabHomeController>().tContext).tab_history,
+            L10n.of(Get.find<TabHomeController>().tContext).tab_history,
         EHRoutes.download:
-            S.of(Get.find<TabHomeController>().tContext).tab_download,
+            L10n.of(Get.find<TabHomeController>().tContext).tab_download,
         EHRoutes.setting:
-            S.of(Get.find<TabHomeController>().tContext).tab_setting,
+            L10n.of(Get.find<TabHomeController>().tContext).tab_setting,
       };
 }
 
@@ -288,7 +288,7 @@ class TabHomeController extends GetxController {
     if (lastPressedAt == null ||
         DateTime.now().difference(lastPressedAt ?? DateTime.now()) >
             const Duration(seconds: 1)) {
-      showToast(S.of(tContext).double_click_back);
+      showToast(L10n.of(tContext).double_click_back);
       //两次点击间隔超过1秒则重新计时
       lastPressedAt = DateTime.now();
       return false;

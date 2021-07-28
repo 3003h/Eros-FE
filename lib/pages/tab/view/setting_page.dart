@@ -20,7 +20,7 @@ class SettingTab extends GetView<SettingViewController> {
   Widget build(BuildContext context) {
     // logger.d(' SettingTab BuildContext');
     controller.initData(context);
-    final String _title = S.of(context).tab_setting;
+    final String _title = L10n.of(context).tab_setting;
     return CupertinoPageScaffold(
       backgroundColor: !ehTheme.isDarkMode
           ? CupertinoColors.secondarySystemBackground

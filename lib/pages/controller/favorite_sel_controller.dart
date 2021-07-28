@@ -121,14 +121,14 @@ class FavoriteSelectorController extends GetxController
 
     if (!_favcatList.any((element) => element.favId == 'l')) {
       _favcatList.add(Favcat(
-          favTitle: S.of(Get.context!).local_favorite,
+          favTitle: L10n.of(Get.context!).local_favorite,
           favId: 'l',
           totNum: _localFavController.loacalFavs.length));
     }
 
     if (!_favcatList.any((element) => element.favId == 'a')) {
       _favcatList.add(Favcat(
-          favTitle: S.of(Get.context!).all_Favorites,
+          favTitle: L10n.of(Get.context!).all_Favorites,
           favId: 'a',
           totNum: _allNetworkFavcatCount));
     }

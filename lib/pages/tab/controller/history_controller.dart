@@ -40,16 +40,16 @@ class HistoryViewController extends GetxController
       context: Get.context!,
       builder: (BuildContext context) {
         return CupertinoAlertDialog(
-          title: Text(S.of(context).t_Clear_all_history),
+          title: Text(L10n.of(context).t_Clear_all_history),
           actions: <Widget>[
             CupertinoDialogAction(
-              child: Text(S.of(context).cancel),
+              child: Text(L10n.of(context).cancel),
               onPressed: () {
                 Get.back();
               },
             ),
             CupertinoDialogAction(
-              child: Text(S.of(context).ok),
+              child: Text(L10n.of(context).ok),
               onPressed: () {
                 historyController.cleanHistory();
                 Get.back();

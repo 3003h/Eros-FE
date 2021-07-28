@@ -66,7 +66,7 @@ class FavDialogController extends GetxController {
               _ehConfigService.isFavPicker.value = false;
               showToast('切换样式');
             },
-            child: Text(S.of(context).add_to_favorites),
+            child: Text(L10n.of(context).add_to_favorites),
           ),
           content: Container(
             child: Column(
@@ -100,13 +100,13 @@ class FavDialogController extends GetxController {
           ),
           actions: <Widget>[
             CupertinoDialogAction(
-              child: Text(S.of(context).cancel),
+              child: Text(L10n.of(context).cancel),
               onPressed: () {
                 Get.back();
               },
             ),
             CupertinoDialogAction(
-              child: Text(S.of(context).ok),
+              child: Text(L10n.of(context).ok),
               onPressed: () {
                 // 添加收藏
                 final Map<String, String> favMap = <String, String>{
@@ -153,7 +153,7 @@ class FavDialogController extends GetxController {
               _ehConfigService.isFavPicker.value = true;
               showToast('切换样式');
             },
-            child: const Text('添加收藏'),
+            child: Text(L10n.of(context).add_to_favorites),
           ),
           content: Container(
             child: Column(
@@ -176,7 +176,7 @@ class FavDialogController extends GetxController {
           ),
           actions: <Widget>[
             CupertinoDialogAction(
-              child: Text(S.of(context).cancel),
+              child: Text(L10n.of(context).cancel),
               onPressed: () {
                 Get.back();
               },
@@ -220,8 +220,8 @@ class FavDialogController extends GetxController {
     //       )
     //     : <Favcat>[];
     //
-    // // favList.add({'favId': 'l', 'favTitle': S.of(context).local_favorite});
-    // favList.add(Favcat(favId: 'l', favTitle: S.of(context).local_favorite));
+    // // favList.add({'favId': 'l', 'favTitle': L10n.of(context).local_favorite});
+    // favList.add(Favcat(favId: 'l', favTitle: L10n.of(context).local_favorite));
 
     final List<Favcat> favList = _favoriteSelectorController.favcatList;
     logger.d(' ${favList.length}');

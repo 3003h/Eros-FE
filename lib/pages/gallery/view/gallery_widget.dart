@@ -277,8 +277,8 @@ class ReadButton extends StatelessWidget {
       () => CupertinoButton(
           child: Text(
             (_pageController.lastIndex != null && _pageController.lastIndex > 0)
-                ? '${S.of(context).READ} ${_pageController.lastIndex + 1}'
-                : S.of(context).READ,
+                ? '${L10n.of(context).READ} ${_pageController.lastIndex + 1}'
+                : L10n.of(context).READ,
             style: const TextStyle(fontSize: 15, height: 1.2),
           ),
           minSize: 20,
@@ -455,7 +455,7 @@ class TopComment extends StatelessWidget {
             minSize: 0,
             padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 8),
             child: Text(
-              S.of(Get.context!).all_comment,
+              L10n.of(Get.context!).all_comment,
               style: const TextStyle(fontSize: 16),
             ),
             onPressed: () {
@@ -499,8 +499,8 @@ class MorePreviewButton extends StatelessWidget {
       padding: const EdgeInsets.symmetric(vertical: 40, horizontal: 20),
       child: Text(
         hasMorePreview
-            ? S.of(Get.context!).morePreviews
-            : S.of(Get.context!).noMorePreviews,
+            ? L10n.of(Get.context!).morePreviews
+            : L10n.of(Get.context!).noMorePreviews,
         style: const TextStyle(fontSize: 16),
       ),
       onPressed: () {

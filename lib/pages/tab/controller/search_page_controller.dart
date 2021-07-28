@@ -64,12 +64,12 @@ class SearchPageController extends TabViewController {
     // logger.v('$searchType');
     switch (searchType) {
       case SearchType.favorite:
-        return '${S.of(context).search} ${S.of(context).tab_favorite}';
+        return '${L10n.of(context).search} ${L10n.of(context).tab_favorite}';
       case SearchType.watched:
-        return '${S.of(context).search} ${S.of(context).tab_watched}';
+        return '${L10n.of(context).search} ${L10n.of(context).tab_watched}';
       case SearchType.normal:
       default:
-        return '${S.of(context).search} ${S.of(context).tab_gallery}';
+        return '${L10n.of(context).search} ${L10n.of(context).tab_gallery}';
     }
   }
 

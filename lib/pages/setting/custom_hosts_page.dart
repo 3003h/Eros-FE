@@ -12,7 +12,7 @@ import 'package:get/get.dart';
 class CustomHostsPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    final String _title = S.of(context).custom_hosts;
+    final String _title = L10n.of(context).custom_hosts;
     final DnsService dnsConfigController = Get.find();
 
     void _handleEnableCustomHostDarkChanged(bool value) {
@@ -85,7 +85,7 @@ class CustomHostsListView extends StatelessWidget {
                 actionExtentRatio: 0.25,
                 secondaryActions: <Widget>[
                   IconSlideAction(
-                    caption: S.of(context).delete,
+                    caption: L10n.of(context).delete,
                     color: CupertinoDynamicColor.resolve(
                         CupertinoColors.systemRed, context),
                     icon: Icons.delete,

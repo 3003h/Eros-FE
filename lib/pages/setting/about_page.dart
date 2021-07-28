@@ -22,7 +22,7 @@ class AboutPage extends StatelessWidget {
             ? CupertinoColors.secondarySystemBackground
             : null,
         navigationBar: CupertinoNavigationBar(
-          middle: Text(S.of(context).about),
+          middle: Text(L10n.of(context).about),
         ),
         child: SafeArea(
           bottom: false,
@@ -44,18 +44,18 @@ class ListViewAbout extends StatelessWidget {
           Egg(
             child: TextItem(
               '${Global.packageInfo.appName} ',
-              desc: 'an e-hentai app',
+              desc: 'an unofficial e-hentai app',
               onTap: null,
             ),
             onTrigger: (int tapNum, int neededNum) {
               if (Platform.isIOS) {
                 if (_ehConfigService.isSafeMode.value) {
-                  showToast('你发现了不得了的东西');
+                  // showToast('你发现了不得了的东西');
                   logger.v('safeMode off');
                   _ehConfigService.isSafeMode.value = false;
                   Vibrate.feedback(FeedbackType.success);
                 } else {
-                  showToast('ヾ(￣▽￣)Bye~Bye~');
+                  // showToast('ヾ(￣▽￣)Bye~Bye~');
                   logger.v('safeMode on');
                   _ehConfigService.isSafeMode.value = true;
                   Vibrate.feedback(FeedbackType.error);

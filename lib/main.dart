@@ -134,7 +134,7 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
       return GetCupertinoApp(
         // builder: EasyLoading.init(),
         debugShowCheckedModeBanner: false,
-        onGenerateTitle: (BuildContext context) => S.of(context).app_title,
+        onGenerateTitle: (BuildContext context) => L10n.of(context).app_title,
         navigatorObservers: [
           FirebaseAnalyticsObserver(analytics: analytics),
         ],
@@ -149,13 +149,13 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
         // ignore: prefer_const_literals_to_create_immutables
         supportedLocales: <Locale>[
           const Locale('en', ''),
-          ...S.delegate.supportedLocales,
+          ...L10n.delegate.supportedLocales,
           // const Locale('zh', 'CN'),
         ],
         // ignore: prefer_const_literals_to_create_immutables
         localizationsDelegates: [
           // 本地化的代理类
-          S.delegate,
+          L10n.delegate,
           GlobalMaterialLocalizations.delegate,
           GlobalCupertinoLocalizations.delegate,
           GlobalWidgetsLocalizations.delegate,

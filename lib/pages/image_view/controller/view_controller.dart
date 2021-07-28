@@ -404,7 +404,7 @@ class ViewController extends GetxController {
       barrierDismissible: true,
       builder: (BuildContext context) {
         return CupertinoAlertDialog(
-          title: const Text('自动翻页间隔'),
+          title: const Text('Auto page interval'),
           content: Container(
             child: Column(
               children: <Widget>[
@@ -424,13 +424,13 @@ class ViewController extends GetxController {
           ),
           actions: <Widget>[
             CupertinoDialogAction(
-              child: Text(S.of(context).cancel),
+              child: Text(L10n.of(context).cancel),
               onPressed: () {
                 Get.back();
               },
             ),
             CupertinoDialogAction(
-              child: Text(S.of(context).ok),
+              child: Text(L10n.of(context).ok),
               onPressed: () {
                 // 返回数据
                 Get.back(result: invList[_selIndex]);

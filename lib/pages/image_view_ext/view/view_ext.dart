@@ -84,7 +84,7 @@ class ViewLoading extends StatelessWidget {
               const CupertinoActivityIndicator(),
               const SizedBox(width: 5),
               Text(
-                '${S.of(context).loading}...',
+                '${L10n.of(context).loading}...',
                 style: const TextStyle(
                   color: CupertinoColors.systemGrey6,
                 ),
@@ -399,7 +399,7 @@ class ViewBottomBar extends GetView<ViewExtController> {
                           ),
                           const Spacer(),
                           Text(
-                            S.of(context).share,
+                            L10n.of(context).share,
                             style: _kBottomTextStyle,
                           ),
                         ],
@@ -480,7 +480,7 @@ class ViewBottomBar extends GetView<ViewExtController> {
                             ),
                             const Spacer(),
                             const Text(
-                              '双页',
+                              'Double',
                               style: _kBottomTextStyle,
                             ),
                           ],
@@ -581,7 +581,7 @@ Future<void> showShareActionSheet(
               onPressed: () {
                 Get.back();
               },
-              child: Text(S.of(context).cancel)),
+              child: Text(L10n.of(context).cancel)),
           actions: <Widget>[
             CupertinoActionSheetAction(
                 onPressed: () async {
@@ -590,10 +590,10 @@ Future<void> showShareActionSheet(
                   final bool rult = await Api.saveImage(context,
                       imageUrl: imageUrl, filePath: filePath);
                   if (rult) {
-                    showToast(S.of(context).saved_successfully);
+                    showToast(L10n.of(context).saved_successfully);
                   }
                 },
-                child: Text(S.of(context).save_into_album)),
+                child: Text(L10n.of(context).save_into_album)),
             CupertinoActionSheetAction(
                 onPressed: () {
                   logger.v('系统分享');
@@ -601,7 +601,7 @@ Future<void> showShareActionSheet(
                   Api.shareImageExtended(
                       imageUrl: imageUrl, filePath: filePath);
                 },
-                child: Text(S.of(context).system_share)),
+                child: Text(L10n.of(context).system_share)),
           ],
         );
         return dialog;
@@ -620,20 +620,20 @@ Future<void> showImageSheet(
               onPressed: () {
                 Get.back();
               },
-              child: Text(S.of(context).cancel)),
+              child: Text(L10n.of(context).cancel)),
           actions: <Widget>[
             CupertinoActionSheetAction(
                 onPressed: () {
                   reload();
                   Get.back();
                 },
-                child: Text(S.of(context).reload_image)),
+                child: Text(L10n.of(context).reload_image)),
             CupertinoActionSheetAction(
                 onPressed: () {
                   Get.back();
                   showShareActionSheet(context, imageUrl: imageUrl);
                 },
-                child: Text(S.of(context).share_image)),
+                child: Text(L10n.of(context).share_image)),
           ],
         );
         return dialog;

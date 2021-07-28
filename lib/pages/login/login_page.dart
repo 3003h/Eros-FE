@@ -46,7 +46,7 @@ class _LoginPageState extends State<LoginPage> {
   Widget build(BuildContext context) {
     return CupertinoPageScaffold(
         navigationBar: CupertinoNavigationBar(
-          middle: Text(S.of(context).user_login),
+          middle: Text(L10n.of(context).user_login),
         ),
         child: SafeArea(
           child: SingleChildScrollView(
@@ -64,10 +64,10 @@ class _LoginPageState extends State<LoginPage> {
                         style: const TextStyle(
                             textBaseline: TextBaseline.alphabetic),
                         controller: _usernameController,
-                        placeholder: S.of(context).pls_i_username,
+                        placeholder: L10n.of(context).pls_i_username,
                         prefix: ConstrainedBox(
                             constraints: const BoxConstraints(minWidth: 50),
-                            child: Text(S.of(context).user_name)),
+                            child: Text(L10n.of(context).user_name)),
                         decoration: null,
                         onEditingComplete: () {
                           FocusScope.of(context).requestFocus(_nodePwd);
@@ -86,10 +86,10 @@ class _LoginPageState extends State<LoginPage> {
                         style: const TextStyle(
                             textBaseline: TextBaseline.alphabetic),
                         controller: _passwdController,
-                        placeholder: S.of(context).pls_i_passwd,
+                        placeholder: L10n.of(context).pls_i_passwd,
                         prefix: ConstrainedBox(
                             constraints: const BoxConstraints(minWidth: 50),
-                            child: Text(S.of(context).passwd)),
+                            child: Text(L10n.of(context).passwd)),
                         decoration: null,
                         obscureText: true,
                         focusNode: _nodePwd,
@@ -124,7 +124,7 @@ class _LoginPageState extends State<LoginPage> {
               ),
             )
           : CupertinoButton(
-              child: Text(S.of(context).login),
+              child: Text(L10n.of(context).login),
               onPressed: () {
                 _login();
               },
@@ -158,7 +158,7 @@ class _LoginPageState extends State<LoginPage> {
               ),
             )
           : CupertinoButton(
-              child: Text(S.of(context).login_web),
+              child: Text(L10n.of(context).login_web),
               onPressed: () async {
                 if (!Platform.isIOS && !Platform.isAndroid) {
                   showToast('Platform not yet supported');

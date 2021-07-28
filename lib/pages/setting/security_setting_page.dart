@@ -16,7 +16,7 @@ class SecuritySettingPage extends StatelessWidget {
             : null,
         navigationBar: CupertinoNavigationBar(
           transitionBetweenRoutes: true,
-          middle: Text(S.of(context).security),
+          middle: Text(L10n.of(context).security),
         ),
         child: SafeArea(
           child: ListViewSecuritySetting(),
@@ -35,7 +35,7 @@ class ListViewSecuritySetting extends StatelessWidget {
     final List<Widget> _list = <Widget>[
       if (GetPlatform.isIOS)
         TextSwitchItem(
-          S.of(context).security_blurredInRecentTasks,
+          L10n.of(context).security_blurredInRecentTasks,
           intValue: _ehConfigService.blurredInRecentTasks.value,
           onChanged: (val) => _ehConfigService.blurredInRecentTasks.value = val,
         ),
@@ -52,30 +52,30 @@ class ListViewSecuritySetting extends StatelessWidget {
 
 /// 自动锁定时间设置
 Widget _buildAutoLockItem(BuildContext context) {
-  final String _title = S.of(context).autoLock;
+  final String _title = L10n.of(context).autoLock;
   final EhConfigService ehConfigService = Get.find();
   final AutoLockController autoLockController = Get.find();
 
   String _getTimeText(int seconds) {
     if (seconds < 0) {
-      return S.of(context).disabled;
+      return L10n.of(context).disabled;
     }
 
     if (seconds == 0) {
-      return S.of(context).instantly;
+      return L10n.of(context).instantly;
     }
 
     final Duration d = Duration(seconds: seconds);
     final List<String> parts = d.toString().split(RegExp(r'[:.]'));
 
     final _hours = int.parse(parts[0]);
-    final partHours = _hours > 0 ? '$_hours ${S.of(context).hours}' : '';
+    final partHours = _hours > 0 ? '$_hours ${L10n.of(context).hours}' : '';
 
     final _min = int.parse(parts[1]);
-    final partMin = _min > 0 ? '$_min ${S.of(context).min}' : '';
+    final partMin = _min > 0 ? '$_min ${L10n.of(context).min}' : '';
 
     final _second = int.parse(parts[2]);
-    final partSecond = _second > 0 ? '$_second ${S.of(context).second}' : '';
+    final partSecond = _second > 0 ? '$_second ${L10n.of(context).second}' : '';
 
     return '$partHours $partMin $partSecond';
   }
@@ -99,7 +99,7 @@ Widget _buildAutoLockItem(BuildContext context) {
                 onPressed: () {
                   Get.back();
                 },
-                child: Text(S.of(context).cancel)),
+                child: Text(L10n.of(context).cancel)),
             actions: <Widget>[
               ..._getTimeOutList(context),
             ],

@@ -28,7 +28,7 @@ class AdvancedSettingPage extends StatelessWidget {
             : null,
         navigationBar: CupertinoNavigationBar(
           // transitionBetweenRoutes: true,
-          middle: Text(S.of(context).advanced),
+          middle: Text(L10n.of(context).advanced),
         ),
         child: SafeArea(
           bottom: false,
@@ -82,16 +82,16 @@ class ListViewAdvancedSetting extends StatelessWidget {
       Container(height: 38),
       _buildThemeItem(context),
       Obx(() => TextSwitchItem(
-            S.of(context).dark_mode_effect,
+            L10n.of(context).dark_mode_effect,
             intValue: _ehConfigService.isPureDarkTheme.value,
             onChanged: _handlePureDarkChanged,
-            desc: S.of(context).gray_black,
-            descOn: S.of(context).pure_black,
+            desc: L10n.of(context).gray_black,
+            descOn: L10n.of(context).pure_black,
           )),
       if (!Get.find<EhConfigService>().isSafeMode.value)
         SelectorSettingItem(
           hideLine: true,
-          title: S.of(context).tabbar_setting,
+          title: L10n.of(context).tabbar_setting,
           selector: '',
           onTap: () {
             // Get.to(() => TabSettingPage());
@@ -102,7 +102,7 @@ class ListViewAdvancedSetting extends StatelessWidget {
       // 清除缓存
       _cacheController.obx(
           (String? state) => SelectorSettingItem(
-                title: S.of(context).clear_cache,
+                title: L10n.of(context).clear_cache,
                 selector: state ?? '',
                 hideLine: true,
                 onTap: () {
@@ -111,7 +111,7 @@ class ListViewAdvancedSetting extends StatelessWidget {
                 },
               ),
           onLoading: SelectorSettingItem(
-            title: S.of(context).clear_cache,
+            title: L10n.of(context).clear_cache,
             selector: '',
             hideLine: true,
             onTap: () {
@@ -121,16 +121,16 @@ class ListViewAdvancedSetting extends StatelessWidget {
           )),
       Container(height: 38),
       Obx(() => SelectorSettingItem(
-            title: S.of(context).custom_hosts,
+            title: L10n.of(context).custom_hosts,
             selector: _dnsService.enableCustomHosts
-                ? S.of(context).on
-                : S.of(context).off,
+                ? L10n.of(context).on
+                : L10n.of(context).off,
             onTap: () {
               Get.to(() => CustomHostsPage(), transition: Transition.cupertino);
             },
           )),
       TextSwitchItem(
-        S.of(context).domain_fronting,
+        L10n.of(context).domain_fronting,
         intValue: _dnsService.enableDomainFronting,
         onChanged: _handleEFChanged,
         desc: 'By pass SNI',
@@ -142,7 +142,7 @@ class ListViewAdvancedSetting extends StatelessWidget {
       //   desc: '优先级低于自定义hosts',
       // ),
       TextSwitchItem(
-        S.of(context).vibrate_feedback,
+        L10n.of(context).vibrate_feedback,
         intValue: _ehConfigService.vibrate.value,
         onChanged: (bool val) => _ehConfigService.vibrate.value = val,
         hideLine: true,
@@ -173,10 +173,10 @@ class ListViewAdvancedSetting extends StatelessWidget {
   /// 语言设置部件
   Widget _buildLanguageItem(BuildContext context) {
     final LocaleService localeService = Get.find();
-    final String _title = S.of(context).language;
+    final String _title = L10n.of(context).language;
 
     final Map<String, String> localeMap = <String, String>{
-      '': S.of(context).follow_system,
+      '': L10n.of(context).follow_system,
       'zh_CN': '简体中文',
       'en_US': 'English',
     };
@@ -200,7 +200,7 @@ class ListViewAdvancedSetting extends StatelessWidget {
                   onPressed: () {
                     Get.back();
                   },
-                  child: Text(S.of(context).cancel)),
+                  child: Text(L10n.of(context).cancel)),
               actions: <Widget>[
                 ..._getLocaleList(context),
               ],
@@ -226,13 +226,13 @@ class ListViewAdvancedSetting extends StatelessWidget {
 
   /// 主题设置部件
   Widget _buildThemeItem(BuildContext context) {
-    final String _title = S.of(context).theme;
+    final String _title = L10n.of(context).theme;
     final ThemeService themeService = Get.find();
 
     final Map<ThemesModeEnum, String> themeMap = <ThemesModeEnum, String>{
-      ThemesModeEnum.system: S.of(context).follow_system,
-      ThemesModeEnum.ligthMode: S.of(context).light,
-      ThemesModeEnum.darkMode: S.of(context).dark,
+      ThemesModeEnum.system: L10n.of(context).follow_system,
+      ThemesModeEnum.ligthMode: L10n.of(context).light,
+      ThemesModeEnum.darkMode: L10n.of(context).dark,
     };
 
     List<Widget> _getThemeList(BuildContext context) {
@@ -254,7 +254,7 @@ class ListViewAdvancedSetting extends StatelessWidget {
                   onPressed: () {
                     Get.back();
                   },
-                  child: Text(S.of(context).cancel)),
+                  child: Text(L10n.of(context).cancel)),
               actions: <Widget>[
                 ..._getThemeList(context),
               ],

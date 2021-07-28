@@ -107,7 +107,7 @@ Future<void> showShareActionSheet(BuildContext context, String imageUrl) {
               onPressed: () {
                 Get.back();
               },
-              child: Text(S.of(context).cancel)),
+              child: Text(L10n.of(context).cancel)),
           actions: <Widget>[
             CupertinoActionSheetAction(
                 onPressed: () {
@@ -115,19 +115,19 @@ Future<void> showShareActionSheet(BuildContext context, String imageUrl) {
                   Api.saveImage(context, imageUrl: imageUrl).then((bool rult) {
                     Get.back();
                     if (rult) {
-                      showToast(S.of(context).saved_successfully);
+                      showToast(L10n.of(context).saved_successfully);
                     }
                   }).catchError((e) {
                     showToast(e);
                   });
                 },
-                child: Text(S.of(context).save_into_album)),
+                child: Text(L10n.of(context).save_into_album)),
             CupertinoActionSheetAction(
                 onPressed: () {
                   logger.v('系统分享');
                   Api.shareImageExtended(imageUrl: imageUrl);
                 },
-                child: Text(S.of(context).system_share)),
+                child: Text(L10n.of(context).system_share)),
           ],
         );
         return dialog;
@@ -146,20 +146,20 @@ Future<void> showImageSheet(
               onPressed: () {
                 Get.back();
               },
-              child: Text(S.of(context).cancel)),
+              child: Text(L10n.of(context).cancel)),
           actions: <Widget>[
             CupertinoActionSheetAction(
                 onPressed: () {
                   reload();
                   Get.back();
                 },
-                child: Text(S.of(context).reload_image)),
+                child: Text(L10n.of(context).reload_image)),
             CupertinoActionSheetAction(
                 onPressed: () {
                   Get.back();
                   showShareActionSheet(context, imageUrl);
                 },
-                child: Text(S.of(context).share_image)),
+                child: Text(L10n.of(context).share_image)),
           ],
         );
         return dialog;

@@ -491,7 +491,7 @@ class LoadingWidget extends StatelessWidget {
               const CupertinoActivityIndicator(),
               const SizedBox(width: 5),
               Text(
-                '${S.of(context).loading}...',
+                '${L10n.of(context).loading}...',
                 style: const TextStyle(
                   color: CupertinoColors.systemGrey6,
                 ),

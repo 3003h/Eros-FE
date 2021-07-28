@@ -151,5 +151,15 @@
   "vibrate_feedback": "Vibrate feedback",
   "expand": "Expand",
   "collapse": "Collapse",
-  "download_location": "Download Location"
+  "download_location": "Download Location",
+  "default_favorites": "Default Favorites",
+  "manually_sel_favorites": "Manually select favorites",
+  "last_favorites": "Last Favorites, long press to manually select",
+  "clipboard_detection": "Clipboard detection",
+  "clipboard_detection_desc": "Automatically detect clipboard gallery links",
+  "jump_to_page": "Jump to Page",
+  "page_range": "Page range",
+  "page_range_error": "Page range error",
+  "input_error": "Input error",
+  "input_empty": "Input empty"
 }

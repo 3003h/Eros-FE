@@ -47,6 +47,10 @@ class MessageLookup extends MessageLookupByLibrary {
         "clear_filter": MessageLookupByLibrary.simpleMessage("重置"),
         "clear_search_history":
             MessageLookupByLibrary.simpleMessage("Clear search history"),
+        "clipboard_detection":
+            MessageLookupByLibrary.simpleMessage("Clipboard detection"),
+        "clipboard_detection_desc": MessageLookupByLibrary.simpleMessage(
+            "Automatically detect clipboard gallery links"),
         "collapse": MessageLookupByLibrary.simpleMessage("Collapse"),
         "copied_to_clipboard": MessageLookupByLibrary.simpleMessage("已复制到剪贴板"),
         "copy": MessageLookupByLibrary.simpleMessage("复制"),
@@ -55,6 +59,8 @@ class MessageLookup extends MessageLookupByLibrary {
         "custom_hosts": MessageLookupByLibrary.simpleMessage("自定义hosts"),
         "dark": MessageLookupByLibrary.simpleMessage("深色模式"),
         "dark_mode_effect": MessageLookupByLibrary.simpleMessage("深色模式效果"),
+        "default_favorites":
+            MessageLookupByLibrary.simpleMessage("Default Favorites"),
         "delete": MessageLookupByLibrary.simpleMessage("刪除"),
         "disabled": MessageLookupByLibrary.simpleMessage("停用"),
         "domain_fronting": MessageLookupByLibrary.simpleMessage("域名前置"),
@@ -78,8 +84,13 @@ class MessageLookup extends MessageLookupByLibrary {
         "gallery_comments": MessageLookupByLibrary.simpleMessage("畫廊評論"),
         "gray_black": MessageLookupByLibrary.simpleMessage("灰黑"),
         "hours": MessageLookupByLibrary.simpleMessage("小时"),
+        "input_empty": MessageLookupByLibrary.simpleMessage("Input empty"),
+        "input_error": MessageLookupByLibrary.simpleMessage("Input error"),
         "instantly": MessageLookupByLibrary.simpleMessage("立即"),
+        "jump_to_page": MessageLookupByLibrary.simpleMessage("Jump to Page"),
         "language": MessageLookupByLibrary.simpleMessage("语言设置"),
+        "last_favorites": MessageLookupByLibrary.simpleMessage(
+            "Last Favorites, long press to manually select"),
         "left_to_right": MessageLookupByLibrary.simpleMessage("从左到右"),
         "light": MessageLookupByLibrary.simpleMessage("淺色模式"),
         "list_load_more_fail":
@@ -94,6 +105,8 @@ class MessageLookup extends MessageLookupByLibrary {
         "local_favorite": MessageLookupByLibrary.simpleMessage("本地收藏"),
         "login": MessageLookupByLibrary.simpleMessage("login"),
         "login_web": MessageLookupByLibrary.simpleMessage("通过网页登录"),
+        "manually_sel_favorites":
+            MessageLookupByLibrary.simpleMessage("Manually select favorites"),
         "max_history": MessageLookupByLibrary.simpleMessage("最大历史记录"),
         "min": MessageLookupByLibrary.simpleMessage("分钟"),
         "morePreviews": MessageLookupByLibrary.simpleMessage("更多预览"),
@@ -118,6 +131,9 @@ class MessageLookup extends MessageLookupByLibrary {
         "p_Rate": MessageLookupByLibrary.simpleMessage("评分"),
         "p_Similar": MessageLookupByLibrary.simpleMessage("相似"),
         "p_Torrent": MessageLookupByLibrary.simpleMessage("种子"),
+        "page_range": MessageLookupByLibrary.simpleMessage("Page range"),
+        "page_range_error":
+            MessageLookupByLibrary.simpleMessage("Page range error"),
         "passwd": MessageLookupByLibrary.simpleMessage("密碼"),
         "pls_i_passwd": MessageLookupByLibrary.simpleMessage("請輸入密碼"),
         "pls_i_username": MessageLookupByLibrary.simpleMessage("請輸入用戶名"),

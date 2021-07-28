@@ -94,7 +94,7 @@ class _LoginCookiePageState extends State<LoginCookiePage> {
             )
           : Container(
               child: CupertinoButton(
-                child: Text(S.of(context).ok),
+                child: Text(L10n.of(context).ok),
                 onPressed: () {
                   _loginCookie();
                 },

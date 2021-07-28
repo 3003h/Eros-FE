@@ -14,7 +14,7 @@ class LocalFavController extends ProfileController {
         -1) {
       loacalFavs.insert(0, galleryItem);
     } else {
-      showToast('收藏已存在');
+      showToast('Favorites already exist');
     }
   }
 

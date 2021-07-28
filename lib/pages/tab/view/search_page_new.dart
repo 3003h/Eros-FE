@@ -162,7 +162,7 @@ class _GallerySearchPageNewState extends State<GallerySearchPageNew> {
                         ).paddingOnly(right: 4),
                         Expanded(
                           child: Text(
-                            '${S.of(context).search} ${controller.searchText}',
+                            '${L10n.of(context).search} ${controller.searchText}',
                             maxLines: 1,
                             softWrap: true,
                             overflow: TextOverflow.ellipsis,
@@ -376,7 +376,7 @@ class _GallerySearchPageNewState extends State<GallerySearchPageNew> {
                       onPressed: () async {
                         Get.back();
                       },
-                      child: Text(S.of(Get.context!).cancel),
+                      child: Text(L10n.of(Get.context!).cancel),
                     ),
                     CupertinoDialogAction(
                       onPressed: () async {
@@ -384,7 +384,7 @@ class _GallerySearchPageNewState extends State<GallerySearchPageNew> {
                         Get.back();
                       },
                       child: Text(
-                        S.of(Get.context!).delete,
+                        L10n.of(Get.context!).delete,
                         style: TextStyle(
                             fontWeight: FontWeight.bold,
                             color: CupertinoDynamicColor.resolve(
@@ -419,7 +419,7 @@ class _GallerySearchPageNewState extends State<GallerySearchPageNew> {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Text(
-                        S.of(Get.context!).search_history,
+                        L10n.of(Get.context!).search_history,
                         style: const TextStyle(
                           fontSize: 14,
                         ),
@@ -464,7 +464,7 @@ class _GallerySearchPageNewState extends State<GallerySearchPageNew> {
                 //             color: Colors.red,
                 //           ),
                 //           Text(
-                //             S.of(Get.context!).clear_search_history,
+                //             L10n.of(Get.context!).clear_search_history,
                 //             style: TextStyle(
                 //               fontSize: 15,
                 //               color: CupertinoDynamicColor.resolve(
@@ -507,7 +507,7 @@ class _GallerySearchPageNewState extends State<GallerySearchPageNew> {
                         color: CupertinoColors.systemRed,
                       ),
                       Text(
-                        S.of(Get.context!).list_load_more_fail,
+                        L10n.of(Get.context!).list_load_more_fail,
                         style: const TextStyle(
                           fontSize: 12,
                         ),
@@ -651,7 +651,7 @@ class SearchTextFieldIn extends StatelessWidget {
         color: ehTheme.textFieldBackgroundColor!.withOpacity(0.6),
         borderRadius: const BorderRadius.all(Radius.circular(8.0)),
       ),
-      placeholder: S.of(context).search,
+      placeholder: L10n.of(context).search,
       placeholderStyle: const TextStyle(
         fontWeight: FontWeight.w400,
         color: CupertinoColors.placeholderText,

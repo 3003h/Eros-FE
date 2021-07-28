@@ -66,11 +66,11 @@ class DnsService extends ProfileService {
   bool addCustomHost(String host, String addr) {
     /// 检查
     if (host.isEmpty) {
-      showToast('host无效');
+      showToast('host invalid');
       return false;
     }
     if (!RegExp(_regExpIP).hasMatch(addr)) {
-      showToast('地址无效');
+      showToast('ip invalid');
       return false;
     }
     if (host.isNotEmpty && addr.isNotEmpty) {

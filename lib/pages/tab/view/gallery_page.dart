@@ -299,7 +299,7 @@ class GalleryListTab extends GetView<GalleryViewController> {
                         color: CupertinoColors.systemRed,
                       ),
                       Text(
-                        S.of(Get.context!).list_load_more_fail,
+                        L10n.of(Get.context!).list_load_more_fail,
                         style: const TextStyle(
                           fontSize: 12,
                         ),

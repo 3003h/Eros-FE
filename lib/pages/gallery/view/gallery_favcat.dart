@@ -39,7 +39,7 @@ class GalleryFavButton extends StatelessWidget {
               child: Text(
                 _favController.isFav
                     ? _favController.favTitle
-                    : S.of(context).notFav,
+                    : L10n.of(context).notFav,
                 style: const TextStyle(
                   fontSize: 11,
                 ),
@@ -58,7 +58,7 @@ class GalleryFavButton extends StatelessWidget {
         Container(
           height: 14,
           child: Text(
-            S.of(context).processing,
+            L10n.of(context).processing,
             style: const TextStyle(
               fontSize: 11,
             ),

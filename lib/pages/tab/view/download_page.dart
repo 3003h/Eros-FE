@@ -29,18 +29,18 @@ class DownloadTab extends GetView<DownloadViewController> {
 
   @override
   Widget build(BuildContext context) {
-    final String _title = S.of(context).tab_download;
+    final String _title = L10n.of(context).tab_download;
     return CupertinoPageScaffold(
       navigationBar: CupertinoNavigationBar(
         middle: Obx(
           () => CupertinoSlidingSegmentedControl<DownloadType>(
             children: <DownloadType, Widget>{
               DownloadType.gallery: Text(
-                S.of(context).tab_gallery,
+                L10n.of(context).tab_gallery,
                 style: const TextStyle(fontSize: 14),
               ).marginSymmetric(horizontal: 6),
               DownloadType.archiver: Text(
-                S.of(context).p_Archiver,
+                L10n.of(context).p_Archiver,
                 style: const TextStyle(fontSize: 14),
               ).marginSymmetric(horizontal: 6),
             },

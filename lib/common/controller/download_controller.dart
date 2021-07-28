@@ -173,7 +173,7 @@ class DownloadController extends GetxController {
       logger.d('add task ${galleryTask.toString()}');
       _galleryTaskDao.insertTask(galleryTask);
       galleryTaskList.insert(0, galleryTask);
-      showToast('${galleryTask.gid} 下载任务已入队');
+      showToast('${galleryTask.gid} Download task start');
     }
 
     final GalleryPageController _pageController = Get.find(tag: pageCtrlDepth);

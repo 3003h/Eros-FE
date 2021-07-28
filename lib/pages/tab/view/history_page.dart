@@ -18,7 +18,7 @@ class HistoryTab extends GetView<HistoryViewController> {
 
   @override
   Widget build(BuildContext context) {
-    final String _title = S.of(context).tab_history;
+    final String _title = L10n.of(context).tab_history;
 
     final Widget sliverNavigationBar = CupertinoSliverNavigationBar(
       transitionBetweenRoutes: false,

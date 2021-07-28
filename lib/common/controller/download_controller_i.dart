@@ -108,7 +108,7 @@ class DownloadControllerI extends GetxController {
           await _galleryTaskDao.findGalleryTaskByGid(gid ?? -1);
       if (_oriTask != null) {
         logger.e('$gid 任务已存在');
-        showToast('下载任务已存在');
+        showToast('Download task already exists');
         logger.d('${_oriTask.toString()} ');
         // return;
       }

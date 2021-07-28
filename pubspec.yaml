@@ -3,7 +3,7 @@ description: fehviewer
 
 publish_to: 'none' # Remove this line if you wish to publish to pub.dev
 
-version: 1.1.20+256
+version: 1.1.20+258
 
 environment:
   sdk: '>=2.13.0 <3.0.0'
@@ -134,7 +134,7 @@ dev_dependencies:
   # flutter packages pub run build_runner watch
 
   # flutter pub run intl_utils:generate
-  intl_utils: ^2.2.0
+  intl_utils: ^2.4.0
   # flutter pub run apn_json2model
   apn_json2model: ^2.3.0
   build_runner: ^2.0.3
@@ -163,6 +163,7 @@ dependency_overrides:
 
 flutter_intl:
   enabled: true
+  class_name: L10n
 
 flutter:
   uses-material-design: true

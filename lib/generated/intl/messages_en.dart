@@ -49,6 +49,10 @@ class MessageLookup extends MessageLookupByLibrary {
         "clear_filter": MessageLookupByLibrary.simpleMessage("Clear"),
         "clear_search_history":
             MessageLookupByLibrary.simpleMessage("Clear search history"),
+        "clipboard_detection":
+            MessageLookupByLibrary.simpleMessage("Clipboard detection"),
+        "clipboard_detection_desc": MessageLookupByLibrary.simpleMessage(
+            "Automatically detect clipboard gallery links"),
         "collapse": MessageLookupByLibrary.simpleMessage("Collapse"),
         "copied_to_clipboard":
             MessageLookupByLibrary.simpleMessage("Copied to clipboard"),
@@ -60,6 +64,8 @@ class MessageLookup extends MessageLookupByLibrary {
         "dark": MessageLookupByLibrary.simpleMessage("Dark"),
         "dark_mode_effect":
             MessageLookupByLibrary.simpleMessage("Dark mode effect"),
+        "default_favorites":
+            MessageLookupByLibrary.simpleMessage("Default Favorites"),
         "delete": MessageLookupByLibrary.simpleMessage("Delete"),
         "disabled": MessageLookupByLibrary.simpleMessage("Disabled"),
         "domain_fronting":
@@ -88,8 +94,13 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("Gallery Comments"),
         "gray_black": MessageLookupByLibrary.simpleMessage("Gray black"),
         "hours": MessageLookupByLibrary.simpleMessage("hours"),
+        "input_empty": MessageLookupByLibrary.simpleMessage("Input empty"),
+        "input_error": MessageLookupByLibrary.simpleMessage("Input error"),
         "instantly": MessageLookupByLibrary.simpleMessage("Instantly"),
+        "jump_to_page": MessageLookupByLibrary.simpleMessage("Jump to Page"),
         "language": MessageLookupByLibrary.simpleMessage("Language"),
+        "last_favorites": MessageLookupByLibrary.simpleMessage(
+            "Last Favorites, long press to manually select"),
         "left_to_right": MessageLookupByLibrary.simpleMessage("Left to right"),
         "light": MessageLookupByLibrary.simpleMessage("Ligth"),
         "list_load_more_fail":
@@ -106,6 +117,8 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("Local Favorites"),
         "login": MessageLookupByLibrary.simpleMessage("Sign"),
         "login_web": MessageLookupByLibrary.simpleMessage("Sign in on the web"),
+        "manually_sel_favorites":
+            MessageLookupByLibrary.simpleMessage("Manually select favorites"),
         "max_history": MessageLookupByLibrary.simpleMessage("Maximum history"),
         "min": MessageLookupByLibrary.simpleMessage("min"),
         "morePreviews": MessageLookupByLibrary.simpleMessage("More previews"),
@@ -132,6 +145,9 @@ class MessageLookup extends MessageLookupByLibrary {
         "p_Rate": MessageLookupByLibrary.simpleMessage("Rate"),
         "p_Similar": MessageLookupByLibrary.simpleMessage("Similar"),
         "p_Torrent": MessageLookupByLibrary.simpleMessage("Torrent"),
+        "page_range": MessageLookupByLibrary.simpleMessage("Page range"),
+        "page_range_error":
+            MessageLookupByLibrary.simpleMessage("Page range error"),
         "passwd": MessageLookupByLibrary.simpleMessage("Password"),
         "pls_i_passwd":
             MessageLookupByLibrary.simpleMessage("Please enter your password"),

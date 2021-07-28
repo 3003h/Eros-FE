@@ -360,8 +360,8 @@ class CommentItem extends StatelessWidget {
                   ThemeColors.commitText, context),
               fontFamilyFallback: EHConst.fontFamilyFallback,
             ),
-        expandText: S.of(context).expand,
-        collapseText: S.of(context).collapse,
+        expandText: L10n.of(context).expand,
+        collapseText: L10n.of(context).collapse,
         colorExpandText:
             CupertinoDynamicColor.resolve(CupertinoColors.activeBlue, context),
       );

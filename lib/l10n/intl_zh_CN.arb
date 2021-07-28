@@ -151,5 +151,15 @@
   "vibrate_feedback": "震动反馈",
   "expand": "展开",
   "collapse": "折叠",
-  "download_location": "下载路径"
+  "download_location": "下载路径",
+  "default_favorites": "默认收藏夹设置",
+  "manually_sel_favorites": "手动选择",
+  "last_favorites": "使用上次选择，长按选择其他",
+  "clipboard_detection": "剪贴板检测",
+  "clipboard_detection_desc": "自动检测剪贴板画廊链接",
+  "jump_to_page": "页面跳转",
+  "page_range": "跳转范围",
+  "page_range_error": "输入范围有误",
+  "input_error": "输入格式有误",
+  "input_empty": "输入空"
 }

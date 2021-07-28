@@ -26,7 +26,7 @@ class EhSettingPage extends StatelessWidget {
             ? CupertinoColors.secondarySystemBackground
             : null,
         navigationBar: CupertinoNavigationBar(
-          middle: Text(S.of(context).eh),
+          middle: Text(L10n.of(context).eh),
         ),
         child: SafeArea(
           child: ListViewEhSetting(),
@@ -95,11 +95,11 @@ class ListViewEhSetting extends StatelessWidget {
     final List<Widget> _list = <Widget>[
       if (_isLogin)
         TextSwitchItem(
-          S.of(context).galery_site,
+          L10n.of(context).galery_site,
           intValue: _siteEx,
           onChanged: _handleSiteChanged,
-          desc: S.of(context).current_site('E-Hentai'),
-          descOn: S.of(context).current_site('ExHentai'),
+          desc: L10n.of(context).current_site('E-Hentai'),
+          descOn: L10n.of(context).current_site('ExHentai'),
         ),
       if (_isLogin)
         const SelectorSettingItem(
@@ -109,8 +109,8 @@ class ListViewEhSetting extends StatelessWidget {
         ),
       if (_isLogin)
         SelectorSettingItem(
-          title: S.of(context).ehentai_settings,
-          selector: S.of(context).setting_on_website,
+          title: L10n.of(context).ehentai_settings,
+          selector: L10n.of(context).setting_on_website,
           onTap: () {
             if (GetPlatform.isAndroid) {
               // Get.to(() => WebMySettingAP());
@@ -129,8 +129,8 @@ class ListViewEhSetting extends StatelessWidget {
       if (_isLogin)
         SelectorSettingItem(
           hideLine: true,
-          title: S.of(context).ehentai_my_tags,
-          selector: S.of(context).mytags_on_website,
+          title: L10n.of(context).ehentai_my_tags,
+          selector: L10n.of(context).mytags_on_website,
           onTap: () {
             if (GetPlatform.isAndroid) {
               // Get.to(() => WebMyTagsAP());
@@ -179,7 +179,7 @@ class ListViewEhSetting extends StatelessWidget {
         );
       }),
       TextSwitchItem(
-        S.of(context).show_jpn_title,
+        L10n.of(context).show_jpn_title,
         intValue: _jpnTitle,
         onChanged: _handleJpnTitleChanged,
         // desc: '如果该画廊有日文标题则优先显示',
@@ -194,27 +194,27 @@ class ListViewEhSetting extends StatelessWidget {
         ),
       Container(height: 38),
       TextSwitchItem(
-        '默认收藏夹设置',
+        L10n.of(context).default_favorites,
         intValue: _favLongTap,
         onChanged: _handleFavLongTapChanged,
-        desc: '无默认,每次进行选择',
-        descOn: '使用上次选择，长按选择其他',
+        desc: L10n.of(context).manually_sel_favorites,
+        descOn: L10n.of(context).last_favorites,
       ),
       TextSwitchItem(
-        '剪贴板链接检测',
+        L10n.of(context).clipboard_detection,
         intValue: _isClipboar,
         onChanged: _handleClipboarLinkTapChange,
-        desc: '关闭',
-        descOn: '自动检测剪贴板画廊链接',
+        desc: L10n.of(context).clipboard_detection_desc,
       ),
-      TextSwitchItem(
-        '评论机翻按钮',
-        intValue: _ehConfigService.commentTrans.value,
-        onChanged: (bool newValue) =>
-            _ehConfigService.commentTrans.value = newValue,
-        desc: '关闭',
-        descOn: '用机器翻译将评论翻译为简体中文',
-      ),
+      if (localeService.isLanguageCodeZh)
+        TextSwitchItem(
+          '评论机翻按钮',
+          intValue: _ehConfigService.commentTrans.value,
+          onChanged: (bool newValue) =>
+              _ehConfigService.commentTrans.value = newValue,
+          desc: '关闭',
+          descOn: '用机器翻译将评论翻译为简体中文',
+        ),
       _buildListModeItem(context),
       _buildHistoryMaxItem(context),
     ];
@@ -230,14 +230,14 @@ class ListViewEhSetting extends StatelessWidget {
 
 /// 列表模式切换
 Widget _buildListModeItem(BuildContext context) {
-  final String _title = S.of(context).list_mode;
+  final String _title = L10n.of(context).list_mode;
   final EhConfigService ehConfigService = Get.find();
 
   final Map<ListModeEnum, String> modeMap = <ListModeEnum, String>{
-    ListModeEnum.list: S.of(context).listmode_medium,
-    ListModeEnum.simpleList: S.of(context).listmode_small,
-    ListModeEnum.waterfall: S.of(context).listmode_waterfall,
-    ListModeEnum.waterfallLarge: S.of(context).listmode_waterfall_large,
+    ListModeEnum.list: L10n.of(context).listmode_medium,
+    ListModeEnum.simpleList: L10n.of(context).listmode_small,
+    ListModeEnum.waterfall: L10n.of(context).listmode_waterfall,
+    ListModeEnum.waterfallLarge: L10n.of(context).listmode_waterfall_large,
   };
 
   List<Widget> _getModeList(BuildContext context) {
@@ -260,7 +260,7 @@ Widget _buildListModeItem(BuildContext context) {
                 onPressed: () {
                   Get.back();
                 },
-                child: Text(S.of(context).cancel)),
+                child: Text(L10n.of(context).cancel)),
             actions: <Widget>[
               ..._getModeList(context),
             ],
@@ -286,12 +286,12 @@ Widget _buildListModeItem(BuildContext context) {
 
 /// 历史记录数量切换
 Widget _buildHistoryMaxItem(BuildContext context) {
-  final String _title = S.of(context).max_history;
+  final String _title = L10n.of(context).max_history;
   final EhConfigService ehConfigService = Get.find();
 
   String _getMaxNumText(int max) {
     if (max == 0) {
-      return S.of(context).unlimited;
+      return L10n.of(context).unlimited;
     } else {
       return '$max';
     }
@@ -317,7 +317,7 @@ Widget _buildHistoryMaxItem(BuildContext context) {
                 onPressed: () {
                   Get.back();
                 },
-                child: Text(S.of(context).cancel)),
+                child: Text(L10n.of(context).cancel)),
             actions: <Widget>[
               ..._getModeList(context),
             ],
@@ -372,7 +372,7 @@ Widget _buildTagIntroImgLvItem(BuildContext context) {
                 onPressed: () {
                   Get.back();
                 },
-                child: Text(S.of(context).cancel)),
+                child: Text(L10n.of(context).cancel)),
             actions: <Widget>[
               ..._getModeList(context),
             ],
