@@ -7,6 +7,7 @@ import 'package:dio_http_cache/dio_http_cache.dart';
 import 'package:fehviewer/common/global.dart';
 import 'package:fehviewer/common/service/dns_service.dart';
 import 'package:fehviewer/const/const.dart';
+import 'package:fehviewer/network/dio_interceptor/dio_retry/retry_interceptor.dart';
 import 'package:fehviewer/network/dio_interceptor/domain_fronting/domain_fronting.dart';
 import 'package:fehviewer/utils/time.dart';
 import 'package:fehviewer/utils/toast.dart';
@@ -14,7 +15,7 @@ import 'package:get/get.dart' hide Response;
 import 'package:pretty_dio_logger/pretty_dio_logger.dart';
 
 import '../network/dio_interceptor/dio_retry/options.dart';
-import '../network/dio_interceptor/dio_retry/retry_interceptor.dart';
+// import '../network/dio_interceptor/dio_retry/retry_interceptor.dart';
 import 'logger.dart';
 
 const int kDefconnectTimeout = 10000;
