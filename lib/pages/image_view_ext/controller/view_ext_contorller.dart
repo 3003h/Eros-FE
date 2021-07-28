@@ -26,16 +26,19 @@ import 'view_ext_state.dart';
 
 const double kBottomBarHeight = 44.0;
 const double kTopBarHeight = 44.0;
+const double kThumbListViewHeight = 140.0;
 
-const String idViewTopBar = 'ViewExtController.ViewTopBar';
-const String idViewBottomBar = 'ViewExtController.ViewBottomBar';
-const String idViewBar = 'ViewExtController.ViewBar';
-const String idViewPageSlider = 'ViewExtController.ViewPageSlider';
-const String idSlidePage = 'ViewExtController.ViewImageSlidePage';
-const String idImagePageView = 'ViewExtController.ImagePageView';
-const String idImageListView = 'ViewExtController.ImageListView';
-const String idViewColumnModeIcon = 'ViewExtController.ViewColumnModeIcon';
-const String idAutoReadIcon = 'ViewExtController.AutoReadIcon';
+const String idViewTopBar = 'ViewTopBar';
+const String idViewBottomBar = 'ViewBottomBar';
+const String idViewBar = 'ViewBar';
+const String idViewPageSlider = 'ViewPageSlider';
+const String idSlidePage = 'ViewImageSlidePage';
+const String idImagePageView = 'ImagePageView';
+const String idImageListView = 'ImageListView';
+const String idViewColumnModeIcon = 'ViewColumnModeIcon';
+const String idThumbnailListView = 'ThumbnailListView';
+const String idShowThumbListIcon = 'ShowThumbListIcon';
+const String idAutoReadIcon = 'AutoReadIcon';
 
 /// 支持在线以及本地（已下载）阅读的组件
 class ViewExtController extends GetxController {
@@ -216,6 +219,35 @@ class ViewExtController extends GetxController {
     pageController.jumpToPage(_toIndex);
   }
 
+  Future<void> switchShowThumbList() async {
+    if (vState.showThumbList) {
+      vState.showThumbList = false;
+    } else {
+      vState.showThumbList = true;
+    }
+
+    update([idShowThumbListIcon, idViewBottomBar, idThumbnailListView]);
+  }
+
+  /// 拉取图片信息
+  Future<GalleryImage?> fetchThumb(
+    int itemSer, {
+    bool refresh = false,
+    bool changeSource = false,
+  }) async {
+    final GalleryImage? tImage = _galleryPageController.imageMap[itemSer];
+    if (tImage == null) {
+      logger.d('ser:$itemSer 所在页尚未获取， 开始获取');
+
+      // 直接获取需要的ser所在页
+      await _galleryPageController.loadImagesForSer(itemSer);
+    }
+
+    final GalleryImage? image = _galleryPageController.imageMap[itemSer];
+
+    return image;
+  }
+
   /// 拉取图片信息
   Future<GalleryImage?> fetchImage(
     int itemSer, {
@@ -362,8 +394,11 @@ class ViewExtController extends GetxController {
   }
 
   void handOnSliderChangedEnd(double value) {
-    vState.currentItemIndex = value.round();
+    jumpToPage(value.round());
+  }
 
+  void jumpToPage(int index) {
+    vState.currentItemIndex = index;
     if (vState.viewMode != ViewMode.topToBottom) {
       pageController.jumpToPage(vState.pageIndex);
     } else {

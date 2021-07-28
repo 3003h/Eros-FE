@@ -263,6 +263,7 @@ class CommentItem extends StatelessWidget {
 
       final TextStyle _commentTextStyle = TextStyle(
         fontSize: 14,
+        height: 1.2,
         color: CupertinoDynamicColor.resolve(ThemeColors.commitText, context),
         fontFamilyFallback: EHConst.fontFamilyFallback,
       );
@@ -356,6 +357,7 @@ class CommentItem extends StatelessWidget {
         style: style ??
             TextStyle(
               fontSize: 13,
+              height: 1.2,
               color: CupertinoDynamicColor.resolve(
                   ThemeColors.commitText, context),
               fontFamilyFallback: EHConst.fontFamilyFallback,
