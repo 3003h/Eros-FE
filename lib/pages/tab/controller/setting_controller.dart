@@ -77,12 +77,12 @@ class SettingViewController extends GetxController
 
   void initData(BuildContext context) {
     _itemTitles = <String>[
-      S.of(context).eh,
-      S.of(context).download,
-      S.of(context).search,
-      S.of(context).advanced,
-      S.of(context).security,
-      S.of(context).about,
+      L10n.of(context).eh,
+      L10n.of(context).download,
+      L10n.of(context).search,
+      L10n.of(context).advanced,
+      L10n.of(context).security,
+      L10n.of(context).about,
     ];
 
     _icons = <IconData>[

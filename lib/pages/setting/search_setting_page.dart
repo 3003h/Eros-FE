@@ -14,7 +14,7 @@ class SearchSettingPage extends StatelessWidget {
             : null,
         navigationBar: CupertinoNavigationBar(
           transitionBetweenRoutes: true,
-          middle: Text(S.of(context).search),
+          middle: Text(L10n.of(context).search),
         ),
         child: SafeArea(
           child: ListViewSearchSetting(),
@@ -31,7 +31,7 @@ class ListViewSearchSetting extends StatelessWidget {
     final List<Widget> _list = <Widget>[
       // _buildPreloadImageItem(context),
       SelectorSettingItem(
-        title: S.of(context).quick_search,
+        title: L10n.of(context).quick_search,
         selector: '',
         onTap: () {
           Get.to<String>(

@@ -10,6 +10,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
 import 'package:tuple/tuple.dart';
+import 'package:fehviewer/generated/l10n.dart';
 
 import 'enum.dart';
 
@@ -208,12 +209,12 @@ class TabViewController extends GetxController
       final String _input = _pageController.text.trim();
 
       if (_input.isEmpty) {
-        showToast('输入为空');
+        showToast(L10n.of(Get.context!).input_empty);
       }
 
       // 数字检查
       if (!RegExp(r'(^\d+$)').hasMatch(_input)) {
-        showToast('输入格式有误');
+        showToast(L10n.of(Get.context!).input_error);
       }
 
       final int _toPage = int.parse(_input) - 1;
@@ -222,7 +223,7 @@ class TabViewController extends GetxController
         loadFromPage(_toPage);
         Get.back();
       } else {
-        showToast('输入范围有误');
+        showToast(L10n.of(Get.context!).page_range_error);
       }
     }
 
@@ -231,13 +232,13 @@ class TabViewController extends GetxController
       // barrierDismissible: false, // user must tap button!
       builder: (BuildContext context) {
         return CupertinoAlertDialog(
-          title: const Text('页面跳转'),
+          title: Text(L10n.of(context).jump_to_page),
           content: Container(
             child: Column(
               children: <Widget>[
                 Padding(
                   padding: const EdgeInsets.all(8.0),
-                  child: Text('跳转范围 1~$maxPage'),
+                  child: Text('${L10n.of(context).page_range} 1~$maxPage'),
                 ),
                 CupertinoTextField(
                   decoration: BoxDecoration(
@@ -258,13 +259,16 @@ class TabViewController extends GetxController
           ),
           actions: <Widget>[
             CupertinoDialogAction(
-              child: const Text('取消'),
+              child: Text(L10n.of(context).cancel),
               onPressed: () {
                 Get.back();
               },
             ),
             CupertinoDialogAction(
-              child: const Text('确定'),
+              child: Text(
+                L10n.of(context).ok,
+                style: const TextStyle(fontWeight: FontWeight.w500),
+              ),
               onPressed: () {
                 // 画廊跳转
                 _jump();

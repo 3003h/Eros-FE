@@ -39,17 +39,16 @@ class UserController extends ProfileController {
       context: context,
       builder: (BuildContext context) {
         return CupertinoAlertDialog(
-          title: const Text('注销用户'),
-          content: const Text('确定注销?'),
+          title: Text('Logout'),
           actions: <Widget>[
             CupertinoDialogAction(
-              child: Text(S.of(context).cancel),
+              child: Text(L10n.of(context).cancel),
               onPressed: () {
                 Get.back();
               },
             ),
             CupertinoDialogAction(
-              child: Text(S.of(context).ok),
+              child: Text(L10n.of(context).ok),
               onPressed: () async {
                 (await Api.cookieJar).deleteAll();
                 // userController.user(User());

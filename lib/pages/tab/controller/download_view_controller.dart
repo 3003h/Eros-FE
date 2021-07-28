@@ -136,7 +136,7 @@ class DownloadViewController extends GetxController {
                 onPressed: () {
                   Get.back();
                 },
-                child: Text(S.of(context).cancel)),
+                child: Text(L10n.of(context).cancel)),
             actions: <Widget>[
               CupertinoActionSheetAction(
                 onPressed: () {
@@ -145,7 +145,10 @@ class DownloadViewController extends GetxController {
                       : removeGalleryTask(taskIndex);
                   Get.back();
                 },
-                child: const Text('删除任务'),
+                child: Text(
+                  L10n.of(context).delete,
+                  style: const TextStyle(color: CupertinoColors.destructiveRed),
+                ),
               ),
             ],
           );

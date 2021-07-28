@@ -1,5 +1,4 @@
 import 'dart:collection';
-import 'dart:math';
 
 import 'package:fehviewer/common/service/depth_service.dart';
 import 'package:fehviewer/const/const.dart';
@@ -33,13 +32,13 @@ class TorrentView extends StatelessWidget {
             children: state.torrents
                 .map((torrent) => Column(
                       children: [
-                        TorrentItem(
-                            torrent: torrent, token: state.torrentToken),
                         Divider(
                           height: 0.5,
                           color: CupertinoDynamicColor.resolve(
                               CupertinoColors.systemGrey4, context),
                         ),
+                        TorrentItem(
+                            torrent: torrent, token: state.torrentToken),
                       ],
                     ))
                 .toList(),
@@ -187,11 +186,11 @@ Future<void> showTorrentDialog() {
       barrierDismissible: true,
       builder: (_) {
         return CupertinoAlertDialog(
-          title: Text(S.of(Get.context!).p_Torrent),
+          title: Text(L10n.of(Get.context!).p_Torrent),
           content: const TorrentView(),
           actions: <Widget>[
             CupertinoDialogAction(
-              child: Text(S.of(Get.context!).cancel),
+              child: Text(L10n.of(Get.context!).cancel),
               onPressed: () {
                 Get.back();
               },

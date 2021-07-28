@@ -18,7 +18,7 @@ class DownloadSettingPage extends StatelessWidget {
             : null,
         navigationBar: CupertinoNavigationBar(
           transitionBetweenRoutes: true,
-          middle: Text(S.of(context).download),
+          middle: Text(L10n.of(context).download),
         ),
         child: SafeArea(
           bottom: false,
@@ -41,7 +41,7 @@ class ListViewDownloadSetting extends StatelessWidget {
               future: defDownloadPath,
               builder: (context, snapshot) {
                 return SelectorSettingItem(
-                  title: S.of(context).download_location,
+                  title: L10n.of(context).download_location,
                   desc: snapshot.data ?? '',
                   onTap: () async {
                     // final FilePickerResult? result =
@@ -72,7 +72,7 @@ class ListViewDownloadSetting extends StatelessWidget {
 
 /// 预载图片数量
 Widget _buildPreloadImageItem(BuildContext context) {
-  final String _title = S.of(context).preload_image;
+  final String _title = L10n.of(context).preload_image;
   final EhConfigService ehConfigService = Get.find();
 
   List<Widget> _getModeList(BuildContext context) {
@@ -94,7 +94,7 @@ Widget _buildPreloadImageItem(BuildContext context) {
                 onPressed: () {
                   Get.back();
                 },
-                child: Text(S.of(context).cancel)),
+                child: Text(L10n.of(context).cancel)),
             actions: <Widget>[
               ..._getModeList(context),
             ],
@@ -139,7 +139,7 @@ Widget _buildMultiDownloadItem(BuildContext context) {
                 onPressed: () {
                   Get.back();
                 },
-                child: Text(S.of(context).cancel)),
+                child: Text(L10n.of(context).cancel)),
             actions: <Widget>[
               ..._getModeList(context),
             ],

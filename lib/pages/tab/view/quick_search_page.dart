@@ -7,6 +7,7 @@ import 'package:fehviewer/common/controller/quicksearch_controller.dart';
 import 'package:fehviewer/common/controller/tag_trans_controller.dart';
 import 'package:fehviewer/common/controller/user_controller.dart';
 import 'package:fehviewer/common/global.dart';
+import 'package:fehviewer/common/service/locale_service.dart';
 import 'package:fehviewer/generated/l10n.dart';
 import 'package:fehviewer/models/base/eh_models.dart';
 import 'package:fehviewer/utils/logger.dart';
@@ -25,6 +26,7 @@ class QuickSearchListPage extends StatelessWidget {
 
   final bool autoSearch;
   final QuickSearchController quickSearchController = Get.find();
+  final LocaleService localeService = Get.find();
 
   Future<String?> _getTextTranslate(String text) async {
     final String? tranText =
@@ -115,7 +117,7 @@ class QuickSearchListPage extends StatelessWidget {
                   onPressed: () {
                     Get.back();
                   },
-                  child: Text(S.of(context).cancel)),
+                  child: Text(L10n.of(context).cancel)),
             ],
           );
         },
@@ -171,7 +173,7 @@ class QuickSearchListPage extends StatelessWidget {
                   onPressed: () {
                     Get.back();
                   },
-                  child: Text(S.of(context).cancel)),
+                  child: Text(L10n.of(context).cancel)),
             ],
           );
         },
@@ -272,7 +274,7 @@ class QuickSearchListPage extends StatelessWidget {
     final CupertinoPageScaffold sca = CupertinoPageScaffold(
         navigationBar: CupertinoNavigationBar(
           padding: const EdgeInsetsDirectional.only(start: 0),
-          middle: Text(S.of(context).quick_search),
+          middle: Text(L10n.of(context).quick_search),
           transitionBetweenRoutes: false,
           trailing: _buildListBtns(context),
         ),
@@ -295,12 +297,41 @@ class QuickSearchListPage extends StatelessWidget {
                         }
                       },
                       behavior: HitTestBehavior.opaque,
-                      child: FutureBuilder<String?>(
-                          future: _getTextTranslate(_datas[position]),
-                          initialData: _datas[position],
-                          builder: (context, snapshot) {
-                            return Container(
-                              height: 60,
+                      child: localeService.isLanguageCodeZh
+                          ? FutureBuilder<String?>(
+                              future: _getTextTranslate(_datas[position]),
+                              initialData: _datas[position],
+                              builder: (context, snapshot) {
+                                return Container(
+                                  constraints:
+                                      const BoxConstraints(minHeight: 60),
+                                  width: double.infinity,
+                                  alignment: Alignment.centerLeft,
+                                  child: Column(
+                                    mainAxisSize: MainAxisSize.min,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      Text(
+                                        _datas[position],
+                                        softWrap: true,
+                                        style: const TextStyle(fontSize: 16),
+                                      ),
+                                      Text(
+                                        snapshot.data ?? '',
+                                        softWrap: true,
+                                        style: const TextStyle(
+                                          fontSize: 12,
+                                          color: CupertinoColors.systemGrey,
+                                        ),
+                                      ),
+                                    ],
+                                  ).paddingSymmetric(vertical: 8),
+                                );
+                              },
+                            )
+                          : Container(
+                              constraints: const BoxConstraints(minHeight: 40),
                               width: double.infinity,
                               alignment: Alignment.centerLeft,
                               child: Column(
@@ -309,27 +340,16 @@ class QuickSearchListPage extends StatelessWidget {
                                 children: [
                                   Text(
                                     _datas[position],
-                                    maxLines: 2,
-                                    overflow: TextOverflow.ellipsis,
+                                    softWrap: true,
                                     style: const TextStyle(fontSize: 16),
                                   ),
-                                  Text(
-                                    snapshot.data ?? '',
-                                    maxLines: 2,
-                                    overflow: TextOverflow.ellipsis,
-                                    style: const TextStyle(
-                                      fontSize: 12,
-                                      color: CupertinoColors.systemGrey,
-                                    ),
-                                  ),
                                 ],
-                              ),
-                            );
-                          }),
+                              ).paddingSymmetric(vertical: 8),
+                            ),
                     ),
                     secondaryActions: <Widget>[
                       IconSlideAction(
-                        caption: S.of(context).delete,
+                        caption: L10n.of(context).delete,
                         color: CupertinoDynamicColor.resolve(
                             CupertinoColors.systemRed, context),
                         icon: Icons.delete,
@@ -404,13 +424,13 @@ class QuickSearchListPage extends StatelessWidget {
           title: const Text('Remove all?'),
           actions: <Widget>[
             CupertinoDialogAction(
-              child: Text(S.of(context).cancel),
+              child: Text(L10n.of(context).cancel),
               onPressed: () {
                 Get.back();
               },
             ),
             CupertinoDialogAction(
-              child: Text(S.of(context).ok),
+              child: Text(L10n.of(context).ok),
               onPressed: () {
                 quickSearchController.removeAll();
                 Get.back();

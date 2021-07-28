@@ -67,7 +67,7 @@ class CustomHostsListView extends StatelessWidget {
                 actionExtentRatio: 0.25,
                 secondaryActions: <Widget>[
                   IconSlideAction(
-                    caption: S.of(context).delete,
+                    caption: L10n.of(context).delete,
                     color: CupertinoDynamicColor.resolve(
                         CupertinoColors.systemRed, context),
                     icon: Icons.delete,

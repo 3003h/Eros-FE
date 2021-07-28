@@ -29,7 +29,7 @@ class InWebMyTags extends StatelessWidget {
     final CupertinoPageScaffold cpf = CupertinoPageScaffold(
       navigationBar: CupertinoNavigationBar(
         padding: const EdgeInsetsDirectional.only(end: 6),
-        middle: Text(S.of(context).ehentai_my_tags),
+        middle: Text(L10n.of(context).ehentai_my_tags),
         trailing: Row(
           mainAxisSize: MainAxisSize.min,
           children: <Widget>[

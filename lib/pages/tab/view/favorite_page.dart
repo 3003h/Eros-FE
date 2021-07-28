@@ -32,7 +32,7 @@ class FavoriteTab extends GetView<FavoriteViewController> {
     return Obx(() {
       if (userController.isLogin) {
         if (controller.title == null || (controller.title?.isEmpty ?? true)) {
-          controller.title = S.of(context).all_Favorites;
+          controller.title = L10n.of(context).all_Favorites;
         }
         return _buildNetworkFavView(context);
       } else {
@@ -261,12 +261,12 @@ class FavoriteTab extends GetView<FavoriteViewController> {
 
   Widget _buildLocalFavView() {
     final Widget sliverNavigationBar = CupertinoSliverNavigationBar(
-      largeTitle: Text(S.of(Get.context!).local_favorite),
+      largeTitle: Text(L10n.of(Get.context!).local_favorite),
       transitionBetweenRoutes: false,
     );
 
     final CupertinoNavigationBar navigationBar = CupertinoNavigationBar(
-      middle: Text(S.of(Get.context!).local_favorite),
+      middle: Text(L10n.of(Get.context!).local_favorite),
       transitionBetweenRoutes: false,
     );
 
@@ -326,7 +326,7 @@ class FavoriteTab extends GetView<FavoriteViewController> {
                           color: CupertinoColors.systemRed,
                         ),
                         Text(
-                          S.of(Get.context!).list_load_more_fail,
+                          L10n.of(Get.context!).list_load_more_fail,
                           style: const TextStyle(
                             fontSize: 12,
                           ),

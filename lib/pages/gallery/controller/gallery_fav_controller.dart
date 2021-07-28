@@ -45,7 +45,7 @@ class GalleryFavController extends GetxController {
         _pageController.galleryItem.favTitle!.isNotEmpty) {
       _favTitle.value = _pageController.galleryItem.favTitle ?? '';
     } else {
-      _favTitle.value = localFav ? S.of(Get.context!).local_favorite : '';
+      _favTitle.value = localFav ? L10n.of(Get.context!).local_favorite : '';
     }
 
     // _favcat初始化
@@ -61,7 +61,7 @@ class GalleryFavController extends GetxController {
 
   bool get localFav => _pageController.localFav;
 
-  final RxString _favTitle = S.of(Get.context!).notFav.obs;
+  final RxString _favTitle = L10n.of(Get.context!).notFav.obs;
 
   String get favTitle => _favTitle.value;
 
@@ -146,7 +146,7 @@ class GalleryFavController extends GetxController {
     //       )
     //     : <Favcat>[];
     //
-    // favList.add(Favcat(favId: 'l', favTitle: S.of(context).local_favorite));
+    // favList.add(Favcat(favId: 'l', favTitle: L10n.of(context).local_favorite));
 
     final List<Favcat> favList = _favoriteSelectorController.favcatList;
 

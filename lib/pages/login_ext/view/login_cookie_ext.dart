@@ -69,7 +69,7 @@ class LoginCookie extends GetView<LoginExtController> {
                         return CupertinoButton(
                           child: logic.loadingLogin
                               ? const CupertinoActivityIndicator()
-                              : Text(S.of(context).login),
+                              : Text(L10n.of(context).login),
                           color: CupertinoColors.activeBlue,
                           onPressed: logic.loadingLogin
                               ? null

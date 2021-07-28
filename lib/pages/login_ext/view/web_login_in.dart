@@ -15,7 +15,7 @@ class WebLoginViewIn extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final String title = S.of(context).login_web;
+    final String title = L10n.of(context).login_web;
     InAppWebViewController _controller;
     final WebviewCookieManager cookieManager = WebviewCookieManager();
 

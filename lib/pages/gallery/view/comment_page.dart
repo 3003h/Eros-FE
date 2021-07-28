@@ -105,8 +105,8 @@ class CommentPage extends StatelessWidget {
       child: CupertinoPageScaffold(
         // resizeToAvoidBottomInset: false,
         navigationBar: CupertinoNavigationBar(
-          middle: Text(S.of(context).gallery_comments),
-          previousPageTitle: S.of(context).back,
+          middle: Text(L10n.of(context).gallery_comments),
+          previousPageTitle: L10n.of(context).back,
         ),
         // child: commList,
         child: SafeArea(

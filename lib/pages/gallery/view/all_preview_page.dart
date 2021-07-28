@@ -23,9 +23,9 @@ class AllPreviewPage extends StatelessWidget {
       navigationBar: CupertinoNavigationBar(
         middle: GestureDetector(
           onTap: controller.scrollToTop,
-          child: Text(S.of(context).all_preview),
+          child: Text(L10n.of(context).all_preview),
         ),
-        previousPageTitle: S.of(context).back,
+        previousPageTitle: L10n.of(context).back,
       ),
       child: CupertinoScrollbar(
         controller: controller.scrollController,
@@ -85,7 +85,7 @@ class AllPreviewPage extends StatelessWidget {
                           Container(
                             padding: const EdgeInsets.only(top: 0),
                             child: Text(
-                              S.of(context).noMorePreviews,
+                              L10n.of(context).noMorePreviews,
                               style: const TextStyle(fontSize: 14),
                             ),
                           )

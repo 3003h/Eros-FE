@@ -24,7 +24,7 @@ class PopularListTab extends GetView<PopularViewController> {
 
   @override
   Widget build(BuildContext context) {
-    final String _title = S.of(context).tab_popular;
+    final String _title = L10n.of(context).tab_popular;
 
     final Widget sliverNavigationBar = CupertinoSliverNavigationBar(
       transitionBetweenRoutes: false,

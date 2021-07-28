@@ -53,7 +53,7 @@ class _UserItem extends State<UserItem> {
           final String _userName = _userController.user().username ?? '';
           return Text(_userName);
         } else {
-          return Text(S.of(context).login);
+          return Text(L10n.of(context).login);
         }
       });
     }

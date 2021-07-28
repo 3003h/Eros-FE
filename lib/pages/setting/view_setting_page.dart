@@ -20,7 +20,7 @@ class ViewSettingPage extends StatelessWidget {
             : null,
         navigationBar: CupertinoNavigationBar(
           // transitionBetweenRoutes: true,
-          middle: Text(S.of(context).read_setting),
+          middle: Text(L10n.of(context).read_setting),
         ),
         child: SafeArea(
           bottom: false,
@@ -43,7 +43,7 @@ class ViewSettingList extends StatelessWidget {
       _buildViewModeItem(context),
       if (!_hideOrientationItem) ReadOrientationItem(),
       TextSwitchItem(
-        S.of(context).show_page_interval,
+        L10n.of(context).show_page_interval,
         intValue: ehConfigService.showPageInterval.value,
         onChanged: (bool val) {
           ehConfigService.showPageInterval.value = val;
@@ -65,13 +65,13 @@ class ViewSettingList extends StatelessWidget {
 
 /// 阅读方向模式切换
 Widget _buildViewModeItem(BuildContext context) {
-  final String _title = S.of(context).reading_direction;
+  final String _title = L10n.of(context).reading_direction;
   final EhConfigService ehConfigService = Get.find();
 
   final Map<ViewMode, String> modeMap = <ViewMode, String>{
-    ViewMode.LeftToRight: S.of(context).left_to_right,
-    ViewMode.rightToLeft: S.of(context).right_to_left,
-    ViewMode.topToBottom: S.of(context).top_to_bottom,
+    ViewMode.LeftToRight: L10n.of(context).left_to_right,
+    ViewMode.rightToLeft: L10n.of(context).right_to_left,
+    ViewMode.topToBottom: L10n.of(context).top_to_bottom,
   };
 
   List<Widget> _getModeList() {
@@ -93,7 +93,7 @@ Widget _buildViewModeItem(BuildContext context) {
                 onPressed: () {
                   Get.back();
                 },
-                child: Text(S.of(context).cancel)),
+                child: Text(L10n.of(context).cancel)),
             actions: <Widget>[
               ..._getModeList(),
             ],
@@ -121,15 +121,16 @@ Widget _buildViewModeItem(BuildContext context) {
 }
 
 class ReadOrientationItem extends StatelessWidget {
-  final String _title = S.of(Get.context!).screen_orientation;
+  final String _title = L10n.of(Get.context!).screen_orientation;
   final EhConfigService ehConfigService = Get.find();
 
   final Map<ReadOrientation, String> modeMap = <ReadOrientation, String>{
-    ReadOrientation.system: S.of(Get.context!).orientation_system,
-    ReadOrientation.portraitUp: S.of(Get.context!).orientation_portraitUp,
-    ReadOrientation.landscapeLeft: S.of(Get.context!).orientation_landscapeLeft,
+    ReadOrientation.system: L10n.of(Get.context!).orientation_system,
+    ReadOrientation.portraitUp: L10n.of(Get.context!).orientation_portraitUp,
+    ReadOrientation.landscapeLeft:
+        L10n.of(Get.context!).orientation_landscapeLeft,
     ReadOrientation.landscapeRight:
-        S.of(Get.context!).orientation_landscapeRight,
+        L10n.of(Get.context!).orientation_landscapeRight,
   };
 
   List<Widget> get modeList {
@@ -151,7 +152,7 @@ class ReadOrientationItem extends StatelessWidget {
                 onPressed: () {
                   Get.back();
                 },
-                child: Text(S.of(context).cancel)),
+                child: Text(L10n.of(context).cancel)),
             actions: <Widget>[
               ...modeList,
             ],

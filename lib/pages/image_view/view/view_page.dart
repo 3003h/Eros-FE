@@ -270,7 +270,7 @@ class GalleryViewPage extends GetView<ViewController> {
                         ),
                         const Spacer(),
                         Text(
-                          S.of(context).share,
+                          L10n.of(context).share,
                           style: _kTextStyle,
                         ),
                       ],
@@ -343,7 +343,7 @@ class GalleryViewPage extends GetView<ViewController> {
                               ),
                               const Spacer(),
                               Text(
-                                '双页',
+                                'Double',
                                 style: _kTextStyle,
                               ),
                             ],

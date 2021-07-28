@@ -19,7 +19,7 @@ class FavoriteSelectorPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final String _title = S.of(context).favcat;
+    final String _title = L10n.of(context).favcat;
     final CupertinoPageScaffold sca = CupertinoPageScaffold(
         navigationBar: CupertinoNavigationBar(
           middle: Text(_title),

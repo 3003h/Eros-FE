@@ -17,13 +17,13 @@ class UnlockPageController extends GetxController {
 
   Future<bool> _unlock({required BuildContext context}) async {
     final IOSAuthMessages iosStrings = IOSAuthMessages(
-        cancelButton: S.of(context).cancel,
-        goToSettingsButton: S.of(context).tab_setting,
+        cancelButton: L10n.of(context).cancel,
+        goToSettingsButton: L10n.of(context).tab_setting,
         goToSettingsDescription: 'Please set up your Touch & Face ID.',
         lockOut: 'Please reenable your Touch & Face ID');
 
     final AndroidAuthMessages androidStrings = AndroidAuthMessages(
-      cancelButton: S.of(context).cancel,
+      cancelButton: L10n.of(context).cancel,
       // signInTitle: '指纹认证',
       biometricHint: '',
     );

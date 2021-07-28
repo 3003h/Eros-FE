@@ -13,6 +13,7 @@ import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 
 const double kItemHeight = 50.0;
+const double kCupertinoItemHeight = 36.0;
 
 /// 选择类型的设置项
 class SelectorSettingItem extends StatefulWidget {
@@ -278,15 +279,17 @@ class TextItem extends StatefulWidget {
     this.desc,
     this.onTap,
     Key? key,
-    this.height = kItemHeight,
+    // this.height = kItemHeight,
     this.hideLine = false,
+    this.cupertinoFormRow = false,
   }) : super(key: key);
 
   final String title;
   final String? desc;
   final VoidCallback? onTap;
-  final double height;
+  // final double height;
   final bool hideLine;
+  final bool cupertinoFormRow;
 
   @override
   _TextItemState createState() => _TextItemState();
@@ -313,14 +316,19 @@ class _TextItemState extends State<TextItem> {
       _pBackgroundColor = color;
     }
 
-    final Widget item = Container(
+    Widget item = Container(
       color: _color,
       child: Column(
         children: <Widget>[
           Container(
+            constraints: BoxConstraints(
+                minHeight: widget.cupertinoFormRow
+                    ? kCupertinoItemHeight
+                    : kItemHeight),
             alignment: Alignment.centerLeft,
-            height: widget.height,
-            padding: const EdgeInsets.symmetric(horizontal: 20),
+            padding: widget.cupertinoFormRow
+                ? const EdgeInsets.all(0)
+                : const EdgeInsets.symmetric(horizontal: 20),
             child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 mainAxisAlignment: MainAxisAlignment.start,
@@ -340,7 +348,7 @@ class _TextItemState extends State<TextItem> {
                     ).paddingOnly(top: 2.0),
                 ]),
           ),
-          if (!widget.hideLine)
+          if (!(widget.hideLine || widget.cupertinoFormRow))
             Divider(
               indent: 20,
               height: 0.6,
@@ -351,7 +359,7 @@ class _TextItemState extends State<TextItem> {
       ),
     );
 
-    return GestureDetector(
+    item = GestureDetector(
       child: item,
       behavior: HitTestBehavior.translucent,
       onTap: widget.onTap,
@@ -363,6 +371,12 @@ class _TextItemState extends State<TextItem> {
       },
       onTapCancel: () => _updateNormalColor(),
     );
+
+    if (widget.cupertinoFormRow) {
+      item = CupertinoFormRow(child: item);
+    }
+
+    return item;
   }
 
   void _updateNormalColor() {
@@ -441,13 +455,13 @@ Future<void> showCustomHostEditer(BuildContext context, {int? index}) async {
         ),
         actions: <Widget>[
           CupertinoDialogAction(
-            child: Text(S.of(context).cancel),
+            child: Text(L10n.of(context).cancel),
             onPressed: () {
               Get.back();
             },
           ),
           CupertinoDialogAction(
-            child: Text(S.of(context).ok),
+            child: Text(L10n.of(context).ok),
             onPressed: () {
               if (dnsConfigController.addCustomHost(
                   _hostController.text.trim(), _addrController.text.trim()))
@@ -479,7 +493,7 @@ Future<void> showUserCookie() async {
           child: Column(
             children: [
               Text(
-                S.of(context).KEEP_IT_SAFE,
+                L10n.of(context).KEEP_IT_SAFE,
                 style: const TextStyle(
                   fontSize: 14,
                   fontWeight: FontWeight.bold,
@@ -515,17 +529,17 @@ Future<void> showUserCookie() async {
         ),
         actions: <Widget>[
           CupertinoDialogAction(
-            child: Text(S.of(context).cancel),
+            child: Text(L10n.of(context).cancel),
             onPressed: () {
               Get.back();
             },
           ),
           CupertinoDialogAction(
-            child: Text(S.of(context).copy),
+            child: Text(L10n.of(context).copy),
             onPressed: () {
               Clipboard.setData(ClipboardData(text: _cookieString));
               Get.back();
-              showToast(S.of(context).copied_to_clipboard);
+              showToast(L10n.of(context).copied_to_clipboard);
             },
           ),
         ],

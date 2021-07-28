@@ -119,7 +119,7 @@ class _DetailWidget extends StatelessWidget {
               controller.isRatinged
                   ? FontAwesomeIcons.solidStar
                   : FontAwesomeIcons.star,
-              title: S.of(context).p_Rate,
+              title: L10n.of(context).p_Rate,
               onTap: state.apiuid?.isNotEmpty ?? false
                   ? () {
                       showRateDialog(context);
@@ -131,7 +131,7 @@ class _DetailWidget extends StatelessWidget {
       Expanded(
         child: TextBtn(
           FontAwesomeIcons.solidArrowAltCircleDown,
-          title: S.of(context).p_Download,
+          title: L10n.of(context).p_Download,
           // onTap: Get.find<EhConfigService>().debugMode
           //     ? controller.downloadGallery
           //     : null,
@@ -142,7 +142,7 @@ class _DetailWidget extends StatelessWidget {
       Expanded(
         child: TextBtn(
           FontAwesomeIcons.magnet,
-          title: '${S.of(context).p_Torrent}(${state.torrentcount ?? 0})',
+          title: '${L10n.of(context).p_Torrent}(${state.torrentcount ?? 0})',
           onTap: state.torrentcount != '0'
               ? () async {
                   showTorrentDialog();
@@ -155,7 +155,7 @@ class _DetailWidget extends StatelessWidget {
       Expanded(
         child: TextBtn(
           FontAwesomeIcons.solidFileArchive,
-          title: S.of(Get.context!).p_Archiver,
+          title: L10n.of(Get.context!).p_Archiver,
           onTap: () async {
             showArchiverDialog();
           },
@@ -165,7 +165,7 @@ class _DetailWidget extends StatelessWidget {
       Expanded(
         child: TextBtn(
           FontAwesomeIcons.solidImages,
-          title: S.of(context).p_Similar,
+          title: L10n.of(context).p_Similar,
           onTap: () {
             final String title = (state.englishTitle ?? '')
                 .replaceAll(RegExp(r'(\[.*?\]|\(.*?\))|{.*?}'), '')
@@ -216,16 +216,16 @@ class _DetailWidget extends StatelessWidget {
         ).paddingSymmetric(vertical: 4),
         const SizedBox(height: 10),
         // 标签
-        Row(children: [_getminiTitle(S.of(context).tags)]),
+        Row(children: [_getminiTitle(L10n.of(context).tags)]),
         TagBox(listTagGroup: state.tagGroup!).paddingSymmetric(vertical: 4),
         const SizedBox(height: 20),
         Row(
           children: [
-            _getminiTitle(S.of(context).gallery_comments),
+            _getminiTitle(L10n.of(context).gallery_comments),
             const Spacer(),
             GestureDetector(
               child: Text(
-                S.of(context).all_comment,
+                L10n.of(context).all_comment,
                 style: TextStyle(
                     fontSize: 14,
                     color: CupertinoDynamicColor.resolve(

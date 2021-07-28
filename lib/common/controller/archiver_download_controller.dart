@@ -67,7 +67,7 @@ class ArchiverDownloadController extends GetxController {
     logger.d(url);
 
     if (archiverTaskMap.containsKey(_tag)) {
-      showToast('下载任务已存在');
+      showToast('Download task already exists');
       return;
     }
 
@@ -83,7 +83,7 @@ class ArchiverDownloadController extends GetxController {
 
     _archiverDlIdList.add(_tag);
 
-    showToast('下载任务已添加');
+    showToast('Download task added');
   }
 
   /// 获取下载路径

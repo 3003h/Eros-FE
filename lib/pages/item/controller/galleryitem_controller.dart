@@ -112,7 +112,7 @@ class GalleryItemController extends GetxController {
                 onPressed: () {
                   Get.back();
                 },
-                child: Text(S.of(context).cancel)),
+                child: Text(L10n.of(context).cancel)),
             actions: <Widget>[
               if (galleryItem.favcat == null ||
                   (galleryItem.favcat?.isEmpty ?? false))
@@ -132,7 +132,7 @@ class GalleryItemController extends GetxController {
                       }
                     });
                   },
-                  child: Text(S.of(context).add_to_favorites),
+                  child: Text(L10n.of(context).add_to_favorites),
                 ),
               if (galleryItem.favcat != null &&
                   (galleryItem.favcat?.isNotEmpty ?? false))
@@ -150,28 +150,30 @@ class GalleryItemController extends GetxController {
                     });
                     Get.back();
                   },
-                  child: Text(S.of(context).remove_from_favorites),
+                  child: Text(L10n.of(context).remove_from_favorites),
                 ),
-              CupertinoActionSheetAction(
-                onPressed: () {
-                  if (galleryItem.gid == null || galleryItem.token == null) {
-                    return;
-                  }
-                  Get.back();
-                  _favDialogController
-                      .tapAddFav(galleryItem.gid!, galleryItem.token!,
-                          oriFavcat: galleryItem.favcat!)
-                      .then((Favcat? value) {
-                    if (value != null) {
-                      setFavTitle(favTitle: '', favcat: '');
-                      setFavTitle(
-                          favTitle: value.favTitle, favcat: value.favId);
-                      showToast('successfully changed');
+              if (galleryItem.favcat != null &&
+                  (galleryItem.favcat?.isNotEmpty ?? false))
+                CupertinoActionSheetAction(
+                  onPressed: () {
+                    if (galleryItem.gid == null || galleryItem.token == null) {
+                      return;
                     }
-                  });
-                },
-                child: Text(S.of(context).change_to_favorites),
-              ),
+                    Get.back();
+                    _favDialogController
+                        .tapAddFav(galleryItem.gid!, galleryItem.token!,
+                            oriFavcat: galleryItem.favcat!)
+                        .then((Favcat? value) {
+                      if (value != null) {
+                        setFavTitle(favTitle: '', favcat: '');
+                        setFavTitle(
+                            favTitle: value.favTitle, favcat: value.favId);
+                        showToast('successfully changed');
+                      }
+                    });
+                  },
+                  child: Text(L10n.of(context).change_to_favorites),
+                ),
             ],
           );
         });

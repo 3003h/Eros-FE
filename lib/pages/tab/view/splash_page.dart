@@ -28,11 +28,11 @@ class SplashPage extends GetView<SplashController> {
                     color: Colors.grey,
                   ),
                   // Text(
-                  //   S.of(context).welcome_text,
+                  //   L10n.of(context).welcome_text,
                   //   style: const TextStyle(color: Colors.grey),
                   // ),
                   Text(
-                    S.of(context).app_title,
+                    L10n.of(context).app_title,
                     style: const TextStyle(color: Colors.grey),
                   )
                 ],
