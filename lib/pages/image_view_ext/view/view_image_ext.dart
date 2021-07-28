@@ -52,7 +52,8 @@ class _ViewImageExtState extends State<ViewImageExt>
         duration: const Duration(milliseconds: 300), vsync: this);
 
     _fadeAnimationController = AnimationController(
-        vsync: this, duration: const Duration(milliseconds: 200));
+        vsync: this, duration: Duration(milliseconds: vState.fade ? 200 : 0));
+    vState.fade = true;
 
     if (vState.loadType == LoadType.network) {
       controller.imageFutureMap[widget.imageSer] =
@@ -298,6 +299,9 @@ class _ViewImageExtState extends State<ViewImageExt>
                   } else {
                     return ViewLoading(
                       ser: widget.imageSer,
+                      duration: vState.viewMode != ViewMode.topToBottom
+                          ? const Duration(milliseconds: 50)
+                          : null,
                     );
                   }
                 }),

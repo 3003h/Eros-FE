@@ -1,3 +1,5 @@
+import 'dart:math' as math;
+
 import 'package:extended_image/extended_image.dart';
 import 'package:fehviewer/common/service/depth_service.dart';
 import 'package:fehviewer/const/const.dart';
@@ -13,6 +15,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
 import 'package:line_icons/line_icons.dart';
 import 'package:liquid_progress_indicator_ns/liquid_progress_indicator.dart';
+import 'package:sleek_circular_slider/sleek_circular_slider.dart';
 
 import '../common.dart';
 import '../controller/view_ext_contorller.dart';
@@ -57,12 +60,14 @@ class ViewError extends StatelessWidget {
 }
 
 class ViewLoading extends StatelessWidget {
-  const ViewLoading({Key? key, required this.ser}) : super(key: key);
+  const ViewLoading({Key? key, required this.ser, this.duration})
+      : super(key: key);
   final int ser;
+  final Duration? duration;
 
   @override
   Widget build(BuildContext context) {
-    return Container(
+    final _loadWidget = Container(
       constraints: BoxConstraints(
         maxHeight: context.mediaQueryShortestSide,
         minWidth: context.width / 2 - kPageViewPadding,
@@ -94,6 +99,20 @@ class ViewLoading extends StatelessWidget {
         ],
       ),
     );
+
+    if (duration == null) {
+      return _loadWidget;
+    } else {
+      return FutureBuilder<void>(
+          future: Future.delayed(duration ?? Duration(milliseconds: 100)),
+          builder: (context, snapshot) {
+            if (snapshot.connectionState == ConnectionState.done) {
+              return _loadWidget;
+            } else {
+              return const SizedBox.shrink();
+            }
+          });
+    }
   }
 }
 
@@ -149,44 +168,32 @@ class ImageExt extends GetView<ViewExtController> {
                     (loadingProgress?.expectedTotalBytes ?? 1)
                 : null;
 
-            // 下载进度回调
+            // if (false)
             return Container(
               constraints: BoxConstraints(
                 maxHeight: context.mediaQueryShortestSide,
                 minWidth: context.width / 2 - kPageViewPadding,
               ),
               alignment: Alignment.center,
-              // margin: const EdgeInsets.symmetric(vertical: 50, horizontal: 50),
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 mainAxisAlignment: MainAxisAlignment.center,
-                children: <Widget>[
+                children: [
                   Container(
-                    height: 70,
-                    width: 70,
-                    // constraints: const BoxConstraints(minWidth: 70, maxHeight: 70),
-                    child: LiquidCircularProgressIndicator(
-                      value: progress ?? 0.0,
-                      valueColor: const AlwaysStoppedAnimation<Color>(
-                          Color.fromARGB(255, 163, 199, 100)),
-                      backgroundColor: const Color.fromARGB(255, 50, 50, 50),
-                      // borderColor: Colors.teal[900],
-                      // borderWidth: 2.0,
-                      direction: Axis.vertical,
-                      center: progress != null
-                          ? Text(
-                              '${progress * 100 ~/ 1}%',
-                              style: TextStyle(
-                                color: progress < 0.5
-                                    ? CupertinoColors.white
-                                    : CupertinoColors.black,
-                                fontSize: 12,
-                                height: 1,
-                              ),
-                            )
-                          : Container(),
-                      borderColor: Colors.transparent,
-                      borderWidth: 0.0,
+                    constraints: const BoxConstraints(
+                      maxHeight: 100,
+                      maxWidth: 100,
+                    ),
+                    child: SleekCircularSlider(
+                      appearance: CircularSliderAppearance(
+                          infoProperties: InfoProperties(
+                              mainLabelStyle: const TextStyle(
+                                  color: CupertinoColors.systemGrey6)),
+                          customWidths:
+                              CustomSliderWidths(progressBarWidth: 10)),
+                      min: 0,
+                      max: 100,
+                      initialValue: (progress ?? 0) * 100,
                     ),
                   ),
                   Padding(
@@ -198,10 +205,65 @@ class ImageExt extends GetView<ViewExtController> {
                         height: 1,
                       ),
                     ),
-                  )
+                  ),
                 ],
               ),
             );
+
+            // 下载进度回调
+            if (false)
+              return Container(
+                constraints: BoxConstraints(
+                  maxHeight: context.mediaQueryShortestSide,
+                  minWidth: context.width / 2 - kPageViewPadding,
+                ),
+                alignment: Alignment.center,
+                // margin: const EdgeInsets.symmetric(vertical: 50, horizontal: 50),
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: <Widget>[
+                    Container(
+                      height: 70,
+                      width: 70,
+                      // constraints: const BoxConstraints(minWidth: 70, maxHeight: 70),
+                      child: LiquidCircularProgressIndicator(
+                        value: progress ?? 0.0,
+                        valueColor: const AlwaysStoppedAnimation<Color>(
+                            Color.fromARGB(255, 163, 199, 100)),
+                        backgroundColor: const Color.fromARGB(255, 50, 50, 50),
+                        // borderColor: Colors.teal[900],
+                        // borderWidth: 2.0,
+                        direction: Axis.vertical,
+                        center: progress != null
+                            ? Text(
+                                '${progress * 100 ~/ 1}%',
+                                style: TextStyle(
+                                  color: progress < 0.5
+                                      ? CupertinoColors.white
+                                      : CupertinoColors.black,
+                                  fontSize: 12,
+                                  height: 1,
+                                ),
+                              )
+                            : Container(),
+                        borderColor: Colors.transparent,
+                        borderWidth: 0.0,
+                      ),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.all(12.0),
+                      child: Text(
+                        '$ser',
+                        style: const TextStyle(
+                          color: CupertinoColors.systemGrey6,
+                          height: 1,
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              );
 
           ///if you don't want override completed widget
           ///please return null or state.completedWidget
@@ -374,6 +436,7 @@ class ViewBottomBar extends GetView<ViewExtController> {
                       sliderValue: logic.vState.sliderValue,
                       onChangedEnd: logic.handOnSliderChangedEnd,
                       onChanged: logic.handOnSliderChanged,
+                      reverse: logic.vState.viewMode == ViewMode.rightToLeft,
                     ).paddingSymmetric(vertical: 8),
                   );
                 },
@@ -507,12 +570,14 @@ class ViewPageSlider extends StatefulWidget {
     required this.sliderValue,
     required this.onChangedEnd,
     required this.onChanged,
+    this.reverse = false,
   }) : super(key: key);
 
   final double max;
   final double sliderValue;
   final ValueChanged<double> onChangedEnd;
   final ValueChanged<double> onChanged;
+  final bool reverse;
 
   @override
   _ViewPageSliderState createState() => _ViewPageSliderState();
@@ -535,15 +600,24 @@ class _ViewPageSliderState extends State<ViewPageSlider> {
 
   @override
   Widget build(BuildContext context) {
+    final minText = Text(
+      '${widget.sliderValue.round() + 1}',
+      style: const TextStyle(color: CupertinoColors.systemGrey6),
+    ).paddingSymmetric(horizontal: 4);
+
+    final maxText = Text(
+      '${widget.max.round() + 1}',
+      style: const TextStyle(color: CupertinoColors.systemGrey6),
+    ).paddingSymmetric(horizontal: 4);
+
     return Container(
       child: Row(
         children: <Widget>[
-          Text(
-            '${widget.sliderValue.round() + 1}',
-            style: const TextStyle(color: CupertinoColors.systemGrey6),
-          ).paddingSymmetric(horizontal: 4),
+          if (widget.reverse) maxText else minText,
           Expanded(
-            child: CupertinoSlider(
+            child: Transform.rotate(
+              angle: widget.reverse ? math.pi : 0.0,
+              child: CupertinoSlider(
                 min: 0,
                 max: widget.max,
                 value: widget.sliderValue,
@@ -555,12 +629,11 @@ class _ViewPageSliderState extends State<ViewPageSlider> {
                 },
                 onChangeEnd: (double newValue) {
                   widget.onChangedEnd(newValue);
-                }),
+                },
+              ),
+            ),
           ),
-          Text(
-            '${widget.max.round() + 1}',
-            style: const TextStyle(color: CupertinoColors.systemGrey6),
-          ).paddingSymmetric(horizontal: 4),
+          if (widget.reverse) minText else maxText,
         ],
       ),
     );

@@ -515,7 +515,7 @@ class ViewExtController extends GetxController {
 
     if (vState.viewMode == ViewMode.topToBottom) {
       final bool canJump = vState.lastAutoNextSer != ser;
-      logger.d('canJump $canJump');
+      // logger.d('canJump $canJump');
       if (canJump) {
         _startAutoRead();
       }
