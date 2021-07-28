@@ -312,12 +312,17 @@ packages:
   dio_http_cache:
     dependency: "direct main"
     description:
-      path: "."
-      ref: "feature/nullsafety-dio4"
-      resolved-ref: "19ac02526b64307d95be22e0cd5b21ca75ff26ec"
-      url: "https://github.com/vrtdev/dio-http-cache.git"
-    source: git
-    version: "0.3.0-nullsafety.0"
+      name: dio_http_cache
+      url: "https://pub.flutter-io.cn"
+    source: hosted
+    version: "0.3.0"
+  dio_retry_fixed:
+    dependency: "direct main"
+    description:
+      name: dio_retry_fixed
+      url: "https://pub.flutter-io.cn"
+    source: hosted
+    version: "0.1.15-beta-null-safety"
   english_words:
     dependency: "direct main"
     description:
@@ -1131,11 +1136,9 @@ packages:
   scrollable_positioned_list:
     dependency: "direct main"
     description:
-      path: "packages/scrollable_positioned_list"
-      ref: shrinkWrapSupport
-      resolved-ref: cdf8fad028146085f5cdc1155ea80bc2b7d0353d
-      url: "https://github.com/lvfen/flutter.widgets.git"
-    source: git
+      name: scrollable_positioned_list
+      url: "https://pub.flutter-io.cn"
+    source: hosted
     version: "0.2.0-nullsafety.0"
   share:
     dependency: "direct main"
@@ -1303,6 +1306,13 @@ packages:
       url: "https://pub.flutter-io.cn"
     source: hosted
     version: "0.3.0"
+  throttling:
+    dependency: "direct main"
+    description:
+      name: throttling
+      url: "https://pub.flutter-io.cn"
+    source: hosted
+    version: "1.0.0"
   timing:
     dependency: transitive
     description:

@@ -28,29 +28,33 @@ enum LoadType {
   file,
 }
 
-const Duration deFaultDurationTime = Duration(milliseconds: 300);
-final Map<String, Timer?> debounceTimerMap = {};
+final Map<String, Timer> _debounceTimers = {};
+Map<String, bool> _throttles = {};
 
-// 防抖函数
-void vDebounceM(
-  Function? doSomething, {
-  required String id,
-  Duration durationTime = deFaultDurationTime,
+/// 函数防抖
+///
+/// [func]: 要执行的方法
+/// [durationTime]: 要迟延的时间
+void vDebounce(
+  Function? func, {
+  Duration duration = const Duration(milliseconds: 300),
 }) {
-  Timer? debounceTimer = debounceTimerMap[id];
-  if (debounceTimer?.isActive ?? false) {
-    logger.v('timer.cancel');
-    debounceTimer?.cancel();
+  String key = func.hashCode.toString();
+
+  if (duration == Duration.zero) {
+    _debounceTimers[key]?.cancel();
+    _debounceTimers.remove(key);
+    // logger.d('${func.hashCode} call');
+    func?.call();
+  } else {
+    // logger.d('${func.hashCode} cancel');
+    _debounceTimers[key]?.cancel();
+    _debounceTimers[key] = Timer(duration, () {
+      _debounceTimers[key]?.cancel();
+      _debounceTimers.remove(key);
+      func?.call();
+    });
   }
-
-  debounceTimer = Timer(durationTime, () {
-    logger.v('func.call');
-    doSomething?.call();
-    debounceTimerMap[id] = null;
-  });
-
-  // debounceTimerMap.putIfAbsent(id, () => debounceTimer);
-  debounceTimerMap[id] = debounceTimer;
 }
 
 class GalleryPara {
