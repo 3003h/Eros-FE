@@ -140,14 +140,15 @@ class ViewExtState {
   /// 显示Bar
   bool showBar = false;
 
+  /// 底栏高度
+  double bottomBarHeight = 0.0;
+
   /// 底栏偏移
   double get bottomBarOffset {
-    final _paddingBottom = Get.context!.mediaQueryPadding.bottom;
-
     if (showBar) {
       return 0;
     } else {
-      return -kBottomBarHeight * 2 - _paddingBottom;
+      return -bottomBarHeight;
     }
   }
 
@@ -178,4 +179,6 @@ class ViewExtState {
 
   bool conditionItemIndex = true;
   int tempIndex = 0;
+
+  bool showThumbList = false;
 }

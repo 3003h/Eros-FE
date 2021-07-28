@@ -505,9 +505,6 @@ class GalleryPageController extends GetxController
       refresh: isRefresh, // 刷新画廊后加载缩略图不能从缓存读取，否则在改变每页数量后加载画廊会出错
     );
 
-    // logger.v(
-    //     '添加的图片序号: ${_moreImageList.map((GalleryPreview e) => e.ser).join(',')}');
-
     addAllImages(_moreImageList);
     if (Get.isRegistered<AllPreviewsPageController>()) {
       Get.find<AllPreviewsPageController>().update();
