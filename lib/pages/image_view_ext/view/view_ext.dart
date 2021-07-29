@@ -458,178 +458,183 @@ class BottomBarControlWidget extends GetView<ViewExtController> {
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: EdgeInsets.symmetric(
-          horizontal: context.mediaQueryPadding.horizontal / 2 + 10),
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          GetBuilder<ViewExtController>(
-            id: idViewPageSlider,
-            builder: (logic) {
-              return SizedBox(
-                height: kBottomBarHeight,
-                child: ViewPageSlider(
-                  max: logic.vState.filecount - 1.0,
-                  sliderValue: logic.vState.sliderValue,
-                  onChangedEnd: logic.handOnSliderChangedEnd,
-                  onChanged: logic.handOnSliderChanged,
-                  reverse: logic.vState.viewMode == ViewMode.rightToLeft,
-                ).paddingSymmetric(vertical: 8),
-              );
-            },
-          ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: <Widget>[
-              // 分享按钮
-              GestureDetector(
-                behavior: HitTestBehavior.opaque,
-                onTap: () {
-                  controller.share(context);
+    return GetBuilder<ViewExtController>(
+      id: idIconBar,
+      builder: (logic) {
+        return Padding(
+          padding: EdgeInsets.symmetric(
+              horizontal: context.mediaQueryPadding.horizontal / 2 + 10),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              GetBuilder<ViewExtController>(
+                id: idViewPageSlider,
+                builder: (logic) {
+                  return SizedBox(
+                    height: kBottomBarHeight,
+                    child: ViewPageSlider(
+                      max: logic.vState.filecount - 1.0,
+                      sliderValue: logic.vState.sliderValue,
+                      onChangedEnd: logic.handOnSliderChangedEnd,
+                      onChanged: logic.handOnSliderChanged,
+                      reverse: logic.vState.viewMode == ViewMode.rightToLeft,
+                    ).paddingSymmetric(vertical: 8),
+                  );
                 },
-                child: Container(
-                  width: 40,
-                  height: kBottomBarHeight,
-                  child: Column(
-                    children: [
-                      const Icon(
-                        LineIcons.share,
-                        color: CupertinoColors.systemGrey6,
-                        size: 26,
-                      ),
-                      const Spacer(),
-                      Text(
-                        L10n.of(context).share,
-                        style: _kBottomTextStyle,
-                      ),
-                    ],
-                  ),
-                ),
               ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: <Widget>[
+                  // 分享按钮
+                  GestureDetector(
+                    behavior: HitTestBehavior.opaque,
+                    onTap: () {
+                      controller.share(context);
+                    },
+                    child: Container(
+                      width: 40,
+                      height: kBottomBarHeight,
+                      child: Column(
+                        children: [
+                          const Icon(
+                            LineIcons.share,
+                            color: CupertinoColors.systemGrey6,
+                            size: 26,
+                          ),
+                          const Spacer(),
+                          Text(
+                            L10n.of(context).share,
+                            style: _kBottomTextStyle,
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
 
-              // 自动阅读按钮
-              if (controller.vState.viewMode != ViewMode.topToBottom)
-                GestureDetector(
-                  behavior: HitTestBehavior.opaque,
-                  onTap: () {
-                    controller.tapAutoRead(context);
-                  },
-                  onLongPress: () {
-                    controller.longTapAutoRead(context);
-                  },
-                  child: GetBuilder<ViewExtController>(
-                    id: idAutoReadIcon,
-                    builder: (logic) {
-                      return Container(
+                  // 自动阅读按钮
+                  if (logic.vState.viewMode != ViewMode.topToBottom)
+                    GestureDetector(
+                      behavior: HitTestBehavior.opaque,
+                      onTap: () {
+                        controller.tapAutoRead(context);
+                      },
+                      onLongPress: () {
+                        controller.longTapAutoRead(context);
+                      },
+                      child: GetBuilder<ViewExtController>(
+                        id: idAutoReadIcon,
+                        builder: (logic) {
+                          return Container(
+                            width: 40,
+                            height: kBottomBarHeight,
+                            child: Column(
+                              children: [
+                                Icon(
+                                  LineIcons.hourglassHalf,
+                                  size: 26,
+                                  color: logic.vState.autoRead
+                                      ? CupertinoColors.activeBlue
+                                      : CupertinoColors.systemGrey6,
+                                ),
+                                const Spacer(),
+                                const Text(
+                                  'Auto',
+                                  style: _kBottomTextStyle,
+                                ),
+                              ],
+                            ),
+                          );
+                        },
+                      ),
+                    )
+                  else
+                    const SizedBox(width: 40),
+
+                  GestureDetector(
+                    behavior: HitTestBehavior.opaque,
+                    onTap: () {
+                      controller.switchShowThumbList();
+                    },
+                    onLongPress: () {
+                      vibrateUtil.light();
+                      controller.thumbScrollTo();
+                    },
+                    child: Container(
+                      width: 40,
+                      height: kBottomBarHeight,
+                      child: Column(
+                        children: [
+                          GetBuilder<ViewExtController>(
+                            id: idShowThumbListIcon,
+                            builder: (logic) {
+                              return Icon(
+                                LineIcons.images,
+                                size: 26,
+                                color: logic.vState.showThumbList
+                                    ? CupertinoColors.activeBlue
+                                    : CupertinoColors.systemGrey6,
+                              );
+                            },
+                          ),
+                          const Spacer(),
+                          const Text(
+                            'Thumb',
+                            style: _kBottomTextStyle,
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+
+                  // 双页切换按钮
+                  if (logic.vState.viewMode != ViewMode.topToBottom)
+                    GestureDetector(
+                      behavior: HitTestBehavior.opaque,
+                      onTap: () {
+                        controller.switchColumnMode();
+                      },
+                      child: Container(
                         width: 40,
+                        // margin: const EdgeInsets.only(right: 10.0),
                         height: kBottomBarHeight,
                         child: Column(
                           children: [
-                            Icon(
-                              LineIcons.hourglassHalf,
-                              size: 26,
-                              color: logic.vState.autoRead
-                                  ? CupertinoColors.activeBlue
-                                  : CupertinoColors.systemGrey6,
+                            GetBuilder<ViewExtController>(
+                              id: idViewColumnModeIcon,
+                              builder: (logic) {
+                                return Icon(
+                                  LineIcons.bookOpen,
+                                  size: 26,
+                                  color: () {
+                                    switch (logic.vState.columnMode) {
+                                      case ViewColumnMode.single:
+                                        return CupertinoColors.systemGrey6;
+                                      case ViewColumnMode.oddLeft:
+                                        return CupertinoColors.activeBlue;
+                                      case ViewColumnMode.evenLeft:
+                                        return CupertinoColors.activeOrange;
+                                    }
+                                  }(),
+                                );
+                              },
                             ),
                             const Spacer(),
                             const Text(
-                              'Auto',
+                              'Double',
                               style: _kBottomTextStyle,
                             ),
                           ],
                         ),
-                      );
-                    },
-                  ),
-                )
-              else
-                const SizedBox(width: 40),
-
-              GestureDetector(
-                behavior: HitTestBehavior.opaque,
-                onTap: () {
-                  controller.switchShowThumbList();
-                },
-                onLongPress: () {
-                  vibrateUtil.light();
-                  controller.reIndexThumb();
-                },
-                child: Container(
-                  width: 40,
-                  height: kBottomBarHeight,
-                  child: Column(
-                    children: [
-                      GetBuilder<ViewExtController>(
-                        id: idShowThumbListIcon,
-                        builder: (logic) {
-                          return Icon(
-                            LineIcons.images,
-                            size: 26,
-                            color: logic.vState.showThumbList
-                                ? CupertinoColors.activeBlue
-                                : CupertinoColors.systemGrey6,
-                          );
-                        },
                       ),
-                      const Spacer(),
-                      const Text(
-                        'Thumb',
-                        style: _kBottomTextStyle,
-                      ),
-                    ],
-                  ),
-                ),
+                    )
+                  else
+                    const SizedBox(width: 40),
+                ],
               ),
-
-              // 双页切换按钮
-              if (controller.vState.viewMode != ViewMode.topToBottom)
-                GestureDetector(
-                  behavior: HitTestBehavior.opaque,
-                  onTap: () {
-                    controller.switchColumnMode();
-                  },
-                  child: Container(
-                    width: 40,
-                    // margin: const EdgeInsets.only(right: 10.0),
-                    height: kBottomBarHeight,
-                    child: Column(
-                      children: [
-                        GetBuilder<ViewExtController>(
-                          id: idViewColumnModeIcon,
-                          builder: (logic) {
-                            return Icon(
-                              LineIcons.bookOpen,
-                              size: 26,
-                              color: () {
-                                switch (logic.vState.columnMode) {
-                                  case ViewColumnMode.single:
-                                    return CupertinoColors.systemGrey6;
-                                  case ViewColumnMode.oddLeft:
-                                    return CupertinoColors.activeBlue;
-                                  case ViewColumnMode.evenLeft:
-                                    return CupertinoColors.activeOrange;
-                                }
-                              }(),
-                            );
-                          },
-                        ),
-                        const Spacer(),
-                        const Text(
-                          'Double',
-                          style: _kBottomTextStyle,
-                        ),
-                      ],
-                    ),
-                  ),
-                )
-              else
-                const SizedBox(width: 40),
             ],
           ),
-        ],
-      ),
+        );
+      },
     );
   }
 }
@@ -644,62 +649,91 @@ class ThumbnailListView extends GetView<ViewExtController> {
     return GetBuilder<ViewExtController>(
       id: idThumbnailListView,
       builder: (logic) {
-        return Container(
-          height: kThumbListViewHeight,
-          padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 4),
-          child: ScrollablePositionedList.builder(
-            itemScrollController: logic.thumbScrollController,
-            itemPositionsListener: logic.thumbPositionsListener,
-            itemCount: controller.vState.filecount,
-            scrollDirection: Axis.horizontal,
-            reverse: logic.vState.viewMode == ViewMode.rightToLeft,
-            itemBuilder: (context, index) {
-              late Widget thumb;
-              if (logic.vState.loadType == LoadType.file) {
-                final path = controller.vState.imagePathList[index];
+        return Stack(
+          children: [
+            Container(
+              height: kThumbListViewHeight,
+              padding: const EdgeInsets.symmetric(vertical: 8),
+              child: ScrollablePositionedList.builder(
+                itemScrollController: logic.thumbScrollController,
+                itemPositionsListener: logic.thumbPositionsListener,
+                itemCount: controller.vState.filecount,
+                scrollDirection: Axis.horizontal,
+                reverse: logic.vState.viewMode == ViewMode.rightToLeft,
+                itemBuilder: (context, index) {
+                  late Widget thumb;
+                  if (logic.vState.loadType == LoadType.file) {
+                    final path = controller.vState.imagePathList[index];
 
-                thumb = ExtendedImage.file(
-                  File(path),
-                  fit: BoxFit.cover,
-                );
-              } else {
-                thumb = FutureThumbl(itemSer: index + 1);
-              }
+                    thumb = ExtendedImage.file(
+                      File(path),
+                      fit: BoxFit.cover,
+                    );
+                  } else {
+                    thumb = FutureThumbl(itemSer: index + 1);
+                  }
 
-              return GestureDetector(
-                onTap: () => logic.jumpToPage(index),
-                child: Container(
-                  margin: const EdgeInsets.symmetric(horizontal: 4),
-                  width: 75,
-                  child: Column(
-                    // mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Expanded(
-                        flex: 10,
-                        child: Center(
-                          child: ClipRRect(
-                            borderRadius: BorderRadius.circular(6),
-                            child: Container(
-                              // color: Colors.grey.withOpacity(0.6),
-                              child: thumb,
+                  return GestureDetector(
+                    onTap: () => logic.jumpToPage(index),
+                    child: Container(
+                      margin: const EdgeInsets.symmetric(horizontal: 4),
+                      width: 75,
+                      child: Column(
+                        // mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Expanded(
+                            flex: 10,
+                            child: Center(
+                              child: ClipRRect(
+                                borderRadius: BorderRadius.circular(6),
+                                child: Container(
+                                  // color: Colors.grey.withOpacity(0.6),
+                                  child: thumb,
+                                ),
+                              ),
                             ),
                           ),
-                        ),
+                          if (logic.vState.showThumbList)
+                            Expanded(
+                              flex: 1,
+                              child: Text(
+                                '${index + 1}',
+                                style: _kBottomTextStyle,
+                              ),
+                            ),
+                        ],
                       ),
-                      if (logic.vState.showThumbList)
-                        Expanded(
-                          flex: 1,
-                          child: Text(
-                            '${index + 1}',
-                            style: _kBottomTextStyle,
-                          ),
-                        ),
-                    ],
+                    ),
+                  );
+                },
+              ),
+            ),
+            if (logic.vState.showThumbList)
+              GestureDetector(
+                onTap: () {
+                  vibrateUtil.light();
+                  logic.switchSyncThumb();
+                },
+                child: Container(
+                  width: 30,
+                  height: 30,
+                  margin:
+                      const EdgeInsets.symmetric(horizontal: 8, vertical: 10),
+                  decoration: BoxDecoration(
+                    color: Colors.black.withOpacity(0.6),
+                    borderRadius: const BorderRadius.all(Radius.circular(40.0)),
+                  ),
+                  alignment: Alignment.center,
+                  child: Icon(
+                    LineIcons.lock,
+                    size: 20,
+                    color: logic.vState.syncThumbList
+                        ? CupertinoColors.activeOrange
+                        : CupertinoColors.systemGrey6,
                   ),
                 ),
-              );
-            },
-          ),
+              ),
+          ],
         );
       },
     );
@@ -750,6 +784,7 @@ class _FutureThumblState extends State<FutureThumbl> {
                 },
               );
             } else {
+              logger.d('error ${_image?.ser}');
               return builderrorWidget();
             }
           } else {

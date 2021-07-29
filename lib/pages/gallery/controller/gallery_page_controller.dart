@@ -227,7 +227,7 @@ class GalleryPageController extends GetxController
 
   /// 添加缩略图对象
   void addAllImages(List<GalleryImage> galleryImages) {
-    logger.d(
+    logger5.d(
         'addAllPreview ${galleryImages.first.ser}~${galleryImages.last.ser} ');
 
     for (final GalleryImage _image in galleryImages) {
@@ -487,8 +487,12 @@ class GalleryPageController extends GetxController
     }
   }
 
-  // 直接请求目的index所在的缩略图页
+  final Map<int, Future<List<GalleryImage>>> _mapLoadImagesForSer = {};
+
+  /// 直接请求目的index所在的缩略图页
   Future<void> loadImagesForSer(int ser, {CancelToken? cancelToken}) async {
+    // TODO(w): 优化重复触发
+
     //  计算index所在的页码
     final int flen = firstPageImage.length;
     if (filecount <= flen) {
@@ -496,19 +500,24 @@ class GalleryPageController extends GetxController
     }
 
     final int page = (ser - 1) ~/ flen;
-    logger.v('ser:$ser 所在页码为$page');
+    logger.d('ser:$ser 所在页码为$page');
 
-    final List<GalleryImage> _moreImageList = await Api.getGalleryImage(
-      galleryItem.url!,
-      page: page,
-      cancelToken: cancelToken,
-      refresh: isRefresh, // 刷新画廊后加载缩略图不能从缓存读取，否则在改变每页数量后加载画廊会出错
-    );
+    _mapLoadImagesForSer.putIfAbsent(
+        page,
+        () => Api.getGalleryImage(
+              galleryItem.url!,
+              page: page,
+              cancelToken: cancelToken,
+              refresh: isRefresh, // 刷新画廊后加载缩略图不能从缓存读取，否则在改变每页数量后加载画廊会出错
+            ));
+
+    final List<GalleryImage> _moreImageList = await _mapLoadImagesForSer[page]!;
 
     addAllImages(_moreImageList);
     if (Get.isRegistered<AllPreviewsPageController>()) {
       Get.find<AllPreviewsPageController>().update();
     }
+    _mapLoadImagesForSer.remove(page);
   }
 
   // 按顺序翻页加载缩略图对象
@@ -566,7 +575,7 @@ class GalleryPageController extends GetxController
             sourceId: _sourceId,
           );
 
-          // logger.v('fetch _image ${_image.toJson()}');
+          logger.v('fetch _image ${_image.toJson()}');
 
           // 换源加载
           if (changeSource) {
@@ -579,8 +588,11 @@ class GalleryPageController extends GetxController
             imageWidth: _image.imageWidth,
             imageHeight: _image.imageHeight,
           );
+
+          logger.v('_imageCopyWith ${_imageCopyWith.toJson()}');
+
           uptImageBySer(ser: itemSer, image: _imageCopyWith);
-          return _image;
+          return _imageCopyWith;
         } catch (_) {
           rethrow;
         }
