@@ -172,8 +172,8 @@ class AppPages {
         Get.lazyPut(() => ViewExtController());
       }),
       transition: Transition.native,
-      // opaque: kDebugMode,
-      opaque: false,
+      opaque: kDebugMode,
+      // opaque: false,
     ),
 
     // 使用命名路由跳转 EHRoutes.galleryPage

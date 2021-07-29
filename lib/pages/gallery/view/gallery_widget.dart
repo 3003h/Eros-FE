@@ -19,6 +19,7 @@ import 'package:fehviewer/route/routes.dart';
 // import 'package:fehviewer/utils/cust_lib/selectable_text.dart';
 import 'package:fehviewer/utils/logger.dart';
 import 'package:fehviewer/widget/eh_cached_network_image.dart';
+import 'package:fehviewer/widget/network_extended_image.dart';
 import 'package:fehviewer/widget/rating_bar.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -550,6 +551,7 @@ class PreviewContainer extends StatelessWidget {
       } else {
         return LayoutBuilder(
             builder: (BuildContext context, BoxConstraints constraints) {
+/*
           double _subHeight;
           double _subWidth;
           final double _subHeightP = (galleryImage.thumbHeight ?? 0) *
@@ -564,23 +566,42 @@ class PreviewContainer extends StatelessWidget {
             _subWidth = constraints.maxWidth;
             _subHeight = _subHeightP;
           }
-          return Container(
-            height: _subHeight,
-            width: _subWidth,
-            // 缩略小图
-            child: Stack(
-              alignment: AlignmentDirectional.center,
-              fit: StackFit.expand,
-              children: <Widget>[
-                PreviewImageClipper(
-                  imgUrl: galleryImage.thumbUrl!,
-                  offset: galleryImage.offSet!,
-                  height: galleryImage.thumbHeight!,
-                  width: galleryImage.thumbWidth!,
-                ),
-              ],
+*/
+          final imageSize =
+              Size(galleryImage.thumbWidth!, galleryImage.thumbHeight!);
+          final size = Size(constraints.maxWidth, constraints.maxHeight);
+          final FittedSizes fittedSizes =
+              applyBoxFit(BoxFit.contain, imageSize, size);
+
+          return ExtendedImageRect(
+            url: galleryImage.thumbUrl!,
+            height: fittedSizes.destination.height,
+            width: fittedSizes.destination.width,
+            sourceRect: Rect.fromLTWH(
+              galleryImage.offSet! + 1,
+              1.0,
+              galleryImage.thumbWidth! - 2,
+              galleryImage.thumbHeight! - 2,
             ),
           );
+          if (false)
+            return Container(
+              height: fittedSizes.destination.height,
+              width: fittedSizes.destination.width,
+              // 缩略小图
+              child: Stack(
+                alignment: AlignmentDirectional.center,
+                fit: StackFit.expand,
+                children: <Widget>[
+                  PreviewImageClipper(
+                    imgUrl: galleryImage.thumbUrl!,
+                    offset: galleryImage.offSet!,
+                    height: galleryImage.thumbHeight!,
+                    width: galleryImage.thumbWidth!,
+                  ),
+                ],
+              ),
+            );
         });
       }
     }

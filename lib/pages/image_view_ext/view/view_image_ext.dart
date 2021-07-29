@@ -30,6 +30,7 @@ class ViewImageExt extends StatefulWidget {
   final double initialScale;
   final bool enableDoubleTap;
   final ExtendedImageMode mode;
+  // final bool
 
   @override
   _ViewImageExtState createState() => _ViewImageExtState();
@@ -271,7 +272,10 @@ class _ViewImageExtState extends State<ViewImageExt>
                     if (Global.inDebugMode) {
                       image = Stack(
                         alignment: Alignment.center,
-                        fit: controller.vState.viewMode == ViewMode.topToBottom
+                        fit: controller.vState.viewMode ==
+                                    ViewMode.topToBottom ||
+                                controller.vState.columnMode !=
+                                    ViewColumnMode.single
                             ? StackFit.loose
                             : StackFit.expand,
                         children: [

@@ -71,10 +71,113 @@ class _NetworkExtendedImageState extends State<NetworkExtendedImage>
           case LoadState.completed:
             animationController.forward();
 
-            return ExtendedRawImage(
-              fit: BoxFit.contain,
-              image: state.extendedImageInfo?.image,
+            return state.completedWidget;
+
+            // return ExtendedRawImage(
+            //   fit: BoxFit.contain,
+            //   image: state.extendedImageInfo?.image,
+            // );
+
+            return FadeTransition(
+              opacity: animationController,
+              child: ExtendedRawImage(
+                fit: BoxFit.contain,
+                image: state.extendedImageInfo?.image,
+              ),
             );
+          case LoadState.failed:
+            return Container(
+              alignment: Alignment.center,
+              child: const Icon(
+                Icons.error,
+                color: Colors.red,
+              ),
+            );
+          default:
+            return null;
+        }
+      },
+    );
+  }
+}
+
+class ExtendedImageRect extends StatefulWidget {
+  const ExtendedImageRect({
+    Key? key,
+    required this.url,
+    this.sourceRect,
+    this.height,
+    this.width,
+    this.fit,
+  }) : super(key: key);
+  final String url;
+  final Rect? sourceRect;
+  final double? height;
+  final double? width;
+  final BoxFit? fit;
+
+  @override
+  _ExtendedImageRectState createState() => _ExtendedImageRectState();
+}
+
+class _ExtendedImageRectState extends State<ExtendedImageRect>
+    with SingleTickerProviderStateMixin {
+  Map<String, String> _httpHeaders = {};
+  late AnimationController animationController;
+
+  @override
+  void initState() {
+    super.initState();
+    _httpHeaders = {
+      'Cookie': Global.profile.user.cookie ?? '',
+      'host': Uri.parse(widget.url).host,
+    };
+
+    animationController = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 0),
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return ExtendedImage.network(
+      widget.url.dfUrl,
+      width: widget.width,
+      height: widget.height,
+      headers: _httpHeaders,
+      // fit: widget.fit,
+      fit: BoxFit.fitHeight,
+      // enableLoadState: false,
+      loadStateChanged: (ExtendedImageState state) {
+        switch (state.extendedImageLoadState) {
+          case LoadState.loading:
+            // return null;
+            return Center(
+              child: Container(
+                alignment: Alignment.center,
+                color: CupertinoDynamicColor.resolve(
+                    CupertinoColors.systemGrey5.withOpacity(0.2), context),
+                child: const CupertinoActivityIndicator(),
+              ),
+            );
+          case LoadState.completed:
+            animationController.forward();
+
+            return ExtendedRawImage(
+              image: state.extendedImageInfo?.image,
+              width: widget.sourceRect?.width,
+              height: widget.sourceRect?.height,
+              fit: BoxFit.fill,
+              sourceRect: widget.sourceRect,
+            );
+
+            return state.completedWidget;
+
+            // return ExtendedRawImage(
+            //   fit: BoxFit.contain,
+            //   image: state.extendedImageInfo?.image,
+            // );
 
             return FadeTransition(
               opacity: animationController,

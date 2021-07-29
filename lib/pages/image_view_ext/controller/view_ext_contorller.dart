@@ -586,7 +586,7 @@ class ViewExtController extends GetxController {
       _startAutoRead();
     } else {
       // 双页阅读
-      final int serLeft = vState.serLeft;
+      final int serLeft = vState.serStart;
       if (vState.filecount > serLeft) {
         final bool leftComplet;
         if (serLeft > 0) {
@@ -676,11 +676,11 @@ class ViewExtController extends GetxController {
   }
 
   final thrThumbScrollTo =
-      Throttling(duration: const Duration(milliseconds: 100));
+      Throttling(duration: const Duration(milliseconds: 200));
   void thumbScrollTo({int? index}) {
     thrThumbScrollTo.throttle(() => thumbScrollController.scrollTo(
           index: index ?? vState.currentItemIndex,
-          duration: const Duration(milliseconds: 100),
+          duration: const Duration(milliseconds: 200),
           curve: Curves.ease,
         ));
   }
@@ -708,7 +708,7 @@ class ViewExtController extends GetxController {
       }
 
       if (vState.columnMode != ViewColumnMode.single) {
-        vState.lastAutoNextSer = vState.serLeft;
+        vState.lastAutoNextSer = vState.serStart;
       }
     }
   }
