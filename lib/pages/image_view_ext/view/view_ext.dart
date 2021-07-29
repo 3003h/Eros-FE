@@ -11,6 +11,7 @@ import 'package:fehviewer/pages/gallery/controller/gallery_page_controller.dart'
 import 'package:fehviewer/route/routes.dart';
 import 'package:fehviewer/utils/logger.dart';
 import 'package:fehviewer/utils/toast.dart';
+import 'package:fehviewer/utils/vibrate.dart';
 import 'package:fehviewer/widget/eh_cached_network_image.dart';
 import 'package:fehviewer/widget/network_extended_image.dart';
 import 'package:flutter/cupertino.dart';
@@ -19,6 +20,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
 import 'package:line_icons/line_icons.dart';
 import 'package:liquid_progress_indicator_ns/liquid_progress_indicator.dart';
+import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
 import 'package:sleek_circular_slider/sleek_circular_slider.dart';
 import 'package:fehviewer/common/exts.dart';
 
@@ -550,6 +552,10 @@ class BottomBarControlWidget extends GetView<ViewExtController> {
                 onTap: () {
                   controller.switchShowThumbList();
                 },
+                onLongPress: () {
+                  vibrateUtil.light();
+                  controller.reIndexThumb();
+                },
                 child: Container(
                   width: 40,
                   height: kBottomBarHeight,
@@ -641,10 +647,12 @@ class ThumbnailListView extends GetView<ViewExtController> {
         return Container(
           height: kThumbListViewHeight,
           padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 4),
-          // alignment: Alignment.center,
-          child: ListView.builder(
+          child: ScrollablePositionedList.builder(
+            itemScrollController: logic.thumbScrollController,
+            itemPositionsListener: logic.thumbPositionsListener,
             itemCount: controller.vState.filecount,
             scrollDirection: Axis.horizontal,
+            reverse: logic.vState.viewMode == ViewMode.rightToLeft,
             itemBuilder: (context, index) {
               late Widget thumb;
               if (logic.vState.loadType == LoadType.file) {
@@ -655,30 +663,7 @@ class ThumbnailListView extends GetView<ViewExtController> {
                   fit: BoxFit.cover,
                 );
               } else {
-                final itemSer = index + 1;
-                thumb = FutureBuilder<GalleryImage?>(
-                    future: logic.fetchThumb(itemSer),
-                    builder: (context, snapshot) {
-                      if (snapshot.connectionState == ConnectionState.done) {
-                        final _image = snapshot.data;
-                        if (_image != null &&
-                            _image.thumbUrl != null &&
-                            _image.thumbUrl!.isNotEmpty) {
-                          logger.v('${_image.ser}  ${_image.thumbUrl}');
-
-                          return EhCachedNetworkImage(
-                            imageUrl: _image.thumbUrl ?? '',
-                            progressIndicatorBuilder: (_, __, ___) {
-                              return const CupertinoActivityIndicator();
-                            },
-                          );
-                        } else {
-                          return const SizedBox.shrink();
-                        }
-                      } else {
-                        return const SizedBox.shrink();
-                      }
-                    });
+                thumb = FutureThumbl(itemSer: index + 1);
               }
 
               return GestureDetector(
@@ -717,6 +702,78 @@ class ThumbnailListView extends GetView<ViewExtController> {
           ),
         );
       },
+    );
+  }
+}
+
+class FutureThumbl extends StatefulWidget {
+  const FutureThumbl({
+    Key? key,
+    required this.itemSer,
+  }) : super(key: key);
+
+  final int itemSer;
+
+  @override
+  _FutureThumblState createState() => _FutureThumblState();
+}
+
+class _FutureThumblState extends State<FutureThumbl> {
+  final ViewExtController logic = Get.find();
+  late Future<GalleryImage?> _future;
+
+  @override
+  void initState() {
+    _future = logic.fetchThumb(widget.itemSer);
+    super.initState();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return FutureBuilder<GalleryImage?>(
+        future: _future,
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.done) {
+            final _image = snapshot.data;
+            if (_image != null &&
+                _image.thumbUrl != null &&
+                _image.thumbUrl!.isNotEmpty) {
+              logger.v('${_image.ser}  ${_image.thumbUrl}');
+
+              return EhCachedNetworkImage(
+                imageUrl: _image.thumbUrl ?? '',
+                placeholder: (_, __) {
+                  return buildPlaceholder();
+                },
+                errorWidget: (ctx, url, error) {
+                  return builderrorWidget();
+                },
+              );
+            } else {
+              return builderrorWidget();
+            }
+          } else {
+            return buildPlaceholder();
+          }
+        });
+  }
+
+  Container buildPlaceholder() {
+    return Container(
+      color: Colors.grey.withOpacity(0.3),
+      child: const Center(child: CupertinoActivityIndicator()),
+    );
+  }
+
+  GestureDetector builderrorWidget() {
+    return GestureDetector(
+      behavior: HitTestBehavior.opaque,
+      onTap: () {
+        _future = logic.fetchThumb(widget.itemSer);
+        setState(() {});
+      },
+      child: const Icon(LineIcons.alternateRedo,
+          color: CupertinoColors.destructiveRed),
     );
   }
 }

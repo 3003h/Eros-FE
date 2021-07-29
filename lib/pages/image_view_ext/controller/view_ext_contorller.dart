@@ -62,6 +62,10 @@ class ViewExtController extends GetxController {
   final ItemPositionsListener itemPositionsListener =
       ItemPositionsListener.create();
 
+  final ItemScrollController thumbScrollController = ItemScrollController();
+  final ItemPositionsListener thumbPositionsListener =
+      ItemPositionsListener.create();
+
   final AutoScrollController autoScrollController = AutoScrollController();
   final photoViewScaleStateController = PhotoViewScaleStateController();
 
@@ -85,6 +89,14 @@ class ViewExtController extends GetxController {
     itemPositionsListener.itemPositions.addListener(() {
       final positions = itemPositionsListener.itemPositions.value;
       handItemPositionsChange(positions);
+    });
+
+    Future.delayed(const Duration(milliseconds: 100)).then((value) =>
+        thumbScrollController.jumpTo(index: vState.currentItemIndex));
+
+    thumbPositionsListener.itemPositions.addListener(() {
+      final positions = thumbPositionsListener.itemPositions.value;
+      handThumbPositionsChange(positions);
     });
 
     /// 初始预载
@@ -260,21 +272,20 @@ class ViewExtController extends GetxController {
 
       // 直接获取需要的
       await _galleryPageController.loadImagesForSer(itemSer);
-
-      // logger.v('获取缩略结束后 预载图片');
-      GalleryPara.instance
-          .precacheImages(
-        Get.context!,
-        imageMap: _galleryPageController.imageMap,
-        itemSer: itemSer,
-        max: _ehConfigService.preloadImage.value,
-      )
-          .listen((GalleryImage? event) {
-        if (event != null) {
-          _galleryPageController.uptImageBySer(ser: event.ser, image: event);
-        }
-      });
     }
+
+    GalleryPara.instance
+        .precacheImages(
+      Get.context!,
+      imageMap: _galleryPageController.imageMap,
+      itemSer: itemSer,
+      max: _ehConfigService.preloadImage.value,
+    )
+        .listen((GalleryImage? event) {
+      if (event != null) {
+        _galleryPageController.uptImageBySer(ser: event.ser, image: event);
+      }
+    });
 
     final GalleryImage? image = await _galleryPageController.getImageInfo(
       itemSer,
@@ -394,7 +405,12 @@ class ViewExtController extends GetxController {
   }
 
   void handOnSliderChangedEnd(double value) {
+    final curIndex = vState.currentItemIndex;
     jumpToPage(value.round());
+    if ((value.round() - curIndex).abs() > 20) {
+      Future.delayed(const Duration(milliseconds: 200))
+          .then((value) => reIndexThumb());
+    }
   }
 
   void jumpToPage(int index) {
@@ -623,6 +639,36 @@ class ViewExtController extends GetxController {
       }
     }
     // logger.i('First Item: ${min ?? ''}\nLast Item: ${max ?? ''}');
+  }
+
+  void handThumbPositionsChange(Iterable<ItemPosition> positions) {
+    int? min;
+    int? max;
+    if (positions.isNotEmpty) {
+      min = positions
+          .where((ItemPosition position) => position.itemTrailingEdge > 0)
+          .reduce((ItemPosition min, ItemPosition position) =>
+              position.itemTrailingEdge < min.itemTrailingEdge ? position : min)
+          .index;
+      max = positions
+          .where((ItemPosition position) => position.itemLeadingEdge < 1)
+          .reduce((ItemPosition max, ItemPosition position) =>
+              position.itemLeadingEdge > max.itemLeadingEdge ? position : max)
+          .index;
+
+      final midIndex = (min + max) ~/ 2;
+      if (vState.mindThumbIndex != midIndex) {
+        vState.mindThumbIndex = midIndex;
+      }
+    }
+  }
+
+  void reIndexThumb() {
+    thumbScrollController.scrollTo(
+      index: vState.currentItemIndex,
+      duration: const Duration(milliseconds: 300),
+      curve: Curves.ease,
+    );
   }
 
   Future<void> _toPage({int? index}) async {
