@@ -141,7 +141,7 @@ class ViewExtState {
   bool showBar = false;
 
   /// 底栏高度
-  double bottomBarHeight = 0.0;
+  double bottomBarHeight = -1;
 
   /// 底栏偏移
   double get bottomBarOffset {
@@ -181,4 +181,5 @@ class ViewExtState {
   int tempIndex = 0;
 
   bool showThumbList = false;
+  int mindThumbIndex = 0;
 }

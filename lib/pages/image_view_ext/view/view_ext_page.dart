@@ -547,6 +547,10 @@ class ImagePlugins extends GetView<ViewExtController> {
 
   @override
   Widget build(BuildContext context) {
+    vState.bottomBarHeight = context.mediaQueryPadding.bottom +
+        kTopBarHeight * 2 +
+        (vState.showThumbList ? kThumbListViewHeight : 0);
+
     return Container(
       child: Stack(
         alignment: Alignment.center,
