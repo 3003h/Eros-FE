@@ -401,7 +401,7 @@ class ViewImageSlidePage extends GetView<ViewExtController> {
               physics: const CustomScrollPhysics(),
               reverse: reverse,
               itemBuilder: (BuildContext context, int index) {
-                logger.d('pageIndex $index ser ${index + 1}');
+                logger.v('pageIndex $index ser ${index + 1}');
 
                 /// 单页
                 return ViewImageExt(

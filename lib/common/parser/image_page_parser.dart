@@ -1,5 +1,6 @@
 import 'package:fehviewer/const/const.dart';
 import 'package:fehviewer/models/index.dart';
+import 'package:fehviewer/utils/logger.dart';
 import 'package:html/dom.dart';
 import 'package:html/parser.dart' show parse;
 
@@ -24,7 +25,7 @@ GalleryImage paraImage(String htmlText, String href) {
           .group(1) ??
       '';
 
-  // logger.v('para_sourceId: $_sourceId ');
+  logger.v('para_sourceId: $_sourceId ');
 
   final GalleryImage _reImage = kDefGalleryImage.copyWith(
     imageUrl: imageUrl,

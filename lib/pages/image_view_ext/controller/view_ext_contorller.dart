@@ -39,6 +39,7 @@ const String idViewColumnModeIcon = 'ViewColumnModeIcon';
 const String idThumbnailListView = 'ThumbnailListView';
 const String idShowThumbListIcon = 'ShowThumbListIcon';
 const String idAutoReadIcon = 'AutoReadIcon';
+const String idIconBar = 'IconBar';
 
 /// 支持在线以及本地（已下载）阅读的组件
 class ViewExtController extends GetxController {
@@ -159,7 +160,7 @@ class ViewExtController extends GetxController {
     );
   }
 
-  // 页码切换时的回调
+  // 横向页码切换时的回调
   void handOnPageChanged(int pageIndex) {
     // 根据 columnMode 的不同设置不同的 currentItemIndex 值
     switch (vState.columnMode) {
@@ -200,6 +201,9 @@ class ViewExtController extends GetxController {
       vState.sliderValue = vState.currentItemIndex.toDouble();
     }
     update([idViewTopBar, idViewPageSlider]);
+    if (vState.syncThumbList) {
+      thumbScrollTo();
+    }
   }
 
   /// 切换单页双页模式
@@ -241,6 +245,8 @@ class ViewExtController extends GetxController {
     update([idShowThumbListIcon, idViewBottomBar, idThumbnailListView]);
   }
 
+  final Map<int, Future<void>> _mapFetchGalleryPriviewPage = {};
+
   /// 拉取图片信息
   Future<GalleryImage?> fetchThumb(
     int itemSer, {
@@ -250,9 +256,11 @@ class ViewExtController extends GetxController {
     final GalleryImage? tImage = _galleryPageController.imageMap[itemSer];
     if (tImage == null) {
       logger.d('ser:$itemSer 所在页尚未获取， 开始获取');
+      _mapFetchGalleryPriviewPage.putIfAbsent(
+          itemSer, () => _galleryPageController.loadImagesForSer(itemSer));
 
       // 直接获取需要的ser所在页
-      await _galleryPageController.loadImagesForSer(itemSer);
+      await _mapFetchGalleryPriviewPage[itemSer];
     }
 
     final GalleryImage? image = _galleryPageController.imageMap[itemSer];
@@ -293,9 +301,6 @@ class ViewExtController extends GetxController {
       refresh: refresh,
       changeSource: changeSource,
     );
-    if (image != null) {
-      _galleryPageController.uptImageBySer(ser: image.ser, image: image);
-    }
 
     return image;
   }
@@ -366,7 +371,7 @@ class ViewExtController extends GetxController {
   }
 
   Future<void> tapLeft() async {
-    logger.d('${vState.viewMode} tap left');
+    logger.v('${vState.viewMode} tap left');
     vState.fade = false;
     if (vState.viewMode == ViewMode.LeftToRight && vState.pageIndex > 0) {
       pageController.jumpToPage(vState.pageIndex - 1);
@@ -385,7 +390,7 @@ class ViewExtController extends GetxController {
   }
 
   Future<void> tapRight() async {
-    logger.d('${vState.viewMode} tap right');
+    logger.v('${vState.viewMode} tap right');
     vState.fade = false;
     if (vState.viewMode == ViewMode.LeftToRight &&
         vState.pageIndex < vState.filecount) {
@@ -409,7 +414,7 @@ class ViewExtController extends GetxController {
     jumpToPage(value.round());
     if ((value.round() - curIndex).abs() > 20) {
       Future.delayed(const Duration(milliseconds: 200))
-          .then((value) => reIndexThumb());
+          .then((value) => thumbScrollTo());
     }
   }
 
@@ -426,6 +431,10 @@ class ViewExtController extends GetxController {
   void handOnSliderChanged(double value) {
     vState.sliderValue = value;
     update([idViewPageSlider]);
+
+    if (vState.syncThumbList) {
+      thumbScrollTo(index: value.round());
+    }
   }
 
   void share(BuildContext context) {
@@ -635,6 +644,9 @@ class ViewExtController extends GetxController {
           vState.currentItemIndex = vState.tempIndex;
           vState.sliderValue = vState.currentItemIndex / 1.0;
           update([idViewTopBar, idViewPageSlider]);
+          if (vState.syncThumbList) {
+            thumbScrollTo();
+          }
         });
       }
     }
@@ -663,12 +675,14 @@ class ViewExtController extends GetxController {
     }
   }
 
-  void reIndexThumb() {
-    thumbScrollController.scrollTo(
-      index: vState.currentItemIndex,
-      duration: const Duration(milliseconds: 300),
-      curve: Curves.ease,
-    );
+  final thrThumbScrollTo =
+      Throttling(duration: const Duration(milliseconds: 100));
+  void thumbScrollTo({int? index}) {
+    thrThumbScrollTo.throttle(() => thumbScrollController.scrollTo(
+          index: index ?? vState.currentItemIndex,
+          duration: const Duration(milliseconds: 100),
+          curve: Curves.ease,
+        ));
   }
 
   Future<void> _toPage({int? index}) async {
@@ -720,13 +734,21 @@ class ViewExtController extends GetxController {
 
   Future<void> handOnViewModeChanged(ViewMode val) async {
     final itemIndex = vState.currentItemIndex;
-    update([idImagePageView, idViewBottomBar]);
-    await Future.delayed(Duration(milliseconds: 50));
+    update([idImagePageView, idViewBottomBar, idIconBar]);
+    await Future.delayed(const Duration(milliseconds: 50));
     if (val == ViewMode.topToBottom) {
       itemScrollController.jumpTo(index: itemIndex);
     } else {
       vState.currentItemIndex = itemIndex;
       pageController.jumpToPage(vState.pageIndex);
     }
+  }
+
+  void switchSyncThumb() {
+    vState.syncThumbList = !vState.syncThumbList;
+    if (vState.syncThumbList) {
+      thumbScrollTo();
+    }
+    update([idThumbnailListView]);
   }
 }

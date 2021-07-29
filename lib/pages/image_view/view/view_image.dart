@@ -88,9 +88,9 @@ class _ViewImageState extends State<ViewImage>
       refresh: refresh,
       changeSource: changeSource,
     );
-    if (image != null) {
-      _pageController.uptImageBySer(ser: image.ser, image: image);
-    }
+    // if (image != null) {
+    //   _pageController.uptImageBySer(ser: image.ser, image: image);
+    // }
 
     return image;
   }
