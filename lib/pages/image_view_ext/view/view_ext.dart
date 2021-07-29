@@ -774,15 +774,61 @@ class _FutureThumblState extends State<FutureThumbl> {
                 _image.thumbUrl!.isNotEmpty) {
               logger.v('${_image.ser}  ${_image.thumbUrl}');
 
-              return EhCachedNetworkImage(
-                imageUrl: _image.thumbUrl ?? '',
-                placeholder: (_, __) {
-                  return buildPlaceholder();
-                },
-                errorWidget: (ctx, url, error) {
-                  return builderrorWidget();
-                },
-              );
+              if (_image.isLarge ?? false) {
+                return EhCachedNetworkImage(
+                  imageUrl: _image.thumbUrl ?? '',
+                  placeholder: (_, __) {
+                    return buildPlaceholder();
+                  },
+                  errorWidget: (ctx, url, error) {
+                    return builderrorWidget();
+                  },
+                );
+              } else {
+                return LayoutBuilder(builder:
+                    (BuildContext context, BoxConstraints constraints) {
+/*
+
+                  late double _subHeight;
+                  late double _subWidth;
+                  final double _subHeightP = (_image.thumbHeight ?? 0) *
+                      constraints.maxWidth /
+                      (_image.thumbWidth ?? 0);
+
+                  if (_subHeightP > (kThumbListViewHeight - 16)) {
+                    _subHeight = kThumbListViewHeight - 16;
+                    _subWidth = (kThumbListViewHeight - 16) *
+                        (_image.thumbWidth ?? 0) /
+                        (_image.thumbHeight ?? 0);
+                  } else {
+                    _subWidth = constraints.maxWidth;
+                    _subHeight = _subHeightP;
+                  }
+*/
+
+                  final imageSize =
+                      Size(_image.thumbWidth!, _image.thumbHeight!);
+                  final size =
+                      Size(constraints.maxWidth, constraints.maxHeight);
+                  final FittedSizes fittedSizes =
+                      applyBoxFit(BoxFit.contain, imageSize, size);
+
+                  // logger.d(
+                  //     '${fittedSizes.source} ${fittedSizes.destination} $_subWidth $_subHeight');
+
+                  return ExtendedImageRect(
+                    url: _image.thumbUrl!,
+                    height: fittedSizes.destination.height,
+                    width: fittedSizes.destination.width,
+                    sourceRect: Rect.fromLTWH(
+                      _image.offSet! + 1,
+                      1.0,
+                      _image.thumbWidth! - 2,
+                      _image.thumbHeight! - 2,
+                    ),
+                  );
+                });
+              }
             } else {
               logger.d('error ${_image?.ser}');
               return builderrorWidget();

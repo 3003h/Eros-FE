@@ -167,7 +167,7 @@ class ViewExtState {
   bool autoRead = false;
   Map<int, bool> loadCompleMap = <int, bool>{};
   int? lastAutoNextSer;
-  int serLeft = 0;
+  int serStart = 0;
 
   /// 阅读模式
   Rx<ViewMode> get _viewMode => ehConfigService.viewMode;

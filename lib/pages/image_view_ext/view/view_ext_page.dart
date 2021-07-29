@@ -436,90 +436,89 @@ class DoublePageView extends GetView<ViewExtController> {
   const DoublePageView({
     Key? key,
     required this.pageIndex,
-    this.reverse = false,
+    // this.reverse = false,
   }) : super(key: key);
 
   final int pageIndex;
-  final bool reverse;
+  // final bool reverse;
 
   // ViewExtState get vState => controller.vState;
 
   @override
   Widget build(BuildContext context) {
     final ViewExtState vState = controller.vState;
+    final reverse = vState.viewMode == ViewMode.rightToLeft;
 
     // 双页阅读
-    final int serLeft = vState.columnMode == ViewColumnMode.oddLeft
+    final int serStart = vState.columnMode == ViewColumnMode.oddLeft
         ? pageIndex * 2 + 1
         : pageIndex * 2;
-    vState.serLeft = serLeft;
+    vState.serStart = serStart;
 
-    // logger.d('pageIndex $pageIndex leftSer $serLeft');
+    // logger.d('pageIndex $pageIndex leftSer $serStart');
 
     Alignment? alignmentL =
-        vState.filecount > serLeft ? Alignment.centerRight : null;
-    Alignment? alignmentR = serLeft <= 0 ? null : Alignment.centerLeft;
+        vState.filecount > serStart ? Alignment.centerRight : null;
+    Alignment? alignmentR = serStart <= 0 ? null : Alignment.centerLeft;
 
-    double? _widthL = () {
+    logger.d('alignmentL:$alignmentL  alignmentR:$alignmentR');
+
+    double? _flexStart = () {
       try {
-        final _curImage = vState.imageMap[serLeft];
+        final _curImage = vState.imageMap[serStart];
         return _curImage!.imageWidth! / _curImage.imageHeight!;
       } on Exception catch (_) {
-        final _curImage = vState.imageMap[serLeft];
+        final _curImage = vState.imageMap[serStart];
         return _curImage!.thumbWidth! / _curImage.thumbHeight!;
       } catch (e) {
         return 1.0;
       }
     }();
 
-    double? _widthR = () {
-      if (vState.filecount <= serLeft) {
+    double? _flexEnd = () {
+      if (vState.filecount <= serStart) {
         return 0.0;
       }
       try {
-        final _curImage = vState.imageMap[serLeft + 1];
+        final _curImage = vState.imageMap[serStart + 1];
         return _curImage!.imageWidth! / _curImage.imageHeight!;
       } on Exception catch (_) {
-        final _curImage = vState.imageMap[serLeft + 1];
+        final _curImage = vState.imageMap[serStart + 1];
         return _curImage!.thumbWidth! / _curImage.thumbHeight!;
       } catch (e) {
         return 1.0;
       }
     }();
 
-    // logger.d('_widthL:$_widthL  _widthR:$_widthR');
+    logger.d('_flexStart:$_flexStart  _flexEnd:$_flexEnd');
 
     final List<Widget> _pageList = <Widget>[
-      if (serLeft > 0)
+      if (serStart > 0)
         Expanded(
-          flex: _widthL * 1000 ~/ 1,
+          flex: _flexStart * 1000 ~/ 1,
           child: Container(
-            alignment: alignmentL,
+            alignment: reverse ? alignmentR : alignmentL,
             child: Hero(
-              tag: serLeft,
+              tag: serStart,
               child: ViewImageExt(
-                imageSer: serLeft,
+                imageSer: serStart,
                 enableDoubleTap: false,
                 mode: ExtendedImageMode.none,
-                // fade: vState.fade,
-                // expand: true,
               ),
             ),
           ),
         ),
-      if (vState.filecount > serLeft)
+      if (vState.filecount > serStart)
         Expanded(
-          flex: _widthR * 1000 ~/ 1,
+          flex: _flexEnd * 1000 ~/ 1,
           child: Container(
-            alignment: alignmentR,
+            alignment: reverse ? alignmentL : alignmentR,
             child: Hero(
-              tag: serLeft + 1,
+              tag: serStart + 1,
               child: ViewImageExt(
-                imageSer: serLeft + 1,
+                imageSer: serStart + 1,
                 enableDoubleTap: false,
                 mode: ExtendedImageMode.none,
-                // fade: vState.fade,
-                // expand: true,
               ),
             ),
           ),
