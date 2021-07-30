@@ -1,6 +1,7 @@
 import 'package:fehviewer/generated/l10n.dart';
 import 'package:fehviewer/models/index.dart';
 import 'package:fehviewer/pages/gallery/controller/all_previews_controller.dart';
+import 'package:fehviewer/utils/logger.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -12,7 +13,14 @@ const double kMainAxisSpacing = 0; //主轴方向的间距
 const double kCrossAxisSpacing = 4; //交叉轴方向子元素的间距
 const double kChildAspectRatio = 0.55; //显示区域宽高比
 
-class AllPreviewPage extends StatelessWidget {
+class AllPreviewPage extends StatefulWidget {
+  @override
+  _AllPreviewPageState createState() => _AllPreviewPageState();
+}
+
+class _AllPreviewPageState extends State<AllPreviewPage> {
+  final Map<String, bool> _loadComplets = {};
+
   @override
   Widget build(BuildContext context) {
     final AllPreviewsPageController controller =
@@ -62,6 +70,23 @@ class AllPreviewPage extends StatelessWidget {
                               galleryImageList: state,
                               index: index,
                               gid: controller.gid,
+                              onLoadComplet: () {
+                                final thumbUrl = state[index].thumbUrl ?? '';
+                                Future.delayed(const Duration(milliseconds: 50))
+                                    .then(
+                                  (_) {
+                                    if (!(_loadComplets[thumbUrl] ?? false) &&
+                                        mounted) {
+                                      logger.d('onLoadComplet $thumbUrl');
+                                      setState(
+                                        () {
+                                          _loadComplets[thumbUrl] = true;
+                                        },
+                                      );
+                                    }
+                                  },
+                                );
+                              },
                             ),
                           );
                         },

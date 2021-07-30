@@ -109,12 +109,14 @@ class ExtendedImageRect extends StatefulWidget {
     this.height,
     this.width,
     this.fit,
+    this.onLoadComplet,
   }) : super(key: key);
   final String url;
   final Rect? sourceRect;
   final double? height;
   final double? width;
   final BoxFit? fit;
+  final VoidCallback? onLoadComplet;
 
   @override
   _ExtendedImageRectState createState() => _ExtendedImageRectState();
@@ -163,6 +165,8 @@ class _ExtendedImageRectState extends State<ExtendedImageRect>
             );
           case LoadState.completed:
             animationController.forward();
+
+            widget.onLoadComplet?.call();
 
             return ExtendedRawImage(
               image: state.extendedImageInfo?.image,
