@@ -751,4 +751,18 @@ class ViewExtController extends GetxController {
     }
     update([idThumbnailListView]);
   }
+
+  final Map<String, bool> _loadExtendedImageRectComplets = {};
+  void handOnLoadCompletExtendedImageRect({required String url}) {
+    Future.delayed(const Duration(milliseconds: 50)).then(
+      (_) {
+        if (!(_loadExtendedImageRectComplets[url] ?? false)) {
+          logger.d('onLoadComplet $url');
+
+          _loadExtendedImageRectComplets[url] = true;
+          update([idThumbnailListView]);
+        }
+      },
+    );
+  }
 }

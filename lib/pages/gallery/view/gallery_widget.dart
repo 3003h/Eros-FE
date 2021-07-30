@@ -375,11 +375,18 @@ class GalleryRating extends StatelessWidget {
   }
 }
 
-class PreviewGrid extends StatelessWidget {
+class PreviewGrid extends StatefulWidget {
   const PreviewGrid({Key? key, required this.images, required this.gid})
       : super(key: key);
   final List<GalleryImage> images;
   final String gid;
+
+  @override
+  _PreviewGridState createState() => _PreviewGridState();
+}
+
+class _PreviewGridState extends State<PreviewGrid> {
+  final Map<String, bool> _loadComplets = {};
 
   @override
   Widget build(BuildContext context) {
@@ -390,19 +397,31 @@ class PreviewGrid extends StatelessWidget {
         physics: const NeverScrollableScrollPhysics(),
         //禁用滑动事件
         gridDelegate: const SliverGridDelegateWithMaxCrossAxisExtent(
-//              crossAxisCount: _crossAxisCount, //每行列数
             maxCrossAxisExtent: 130,
             mainAxisSpacing: 0, //主轴方向的间距
             crossAxisSpacing: 4, //交叉轴方向子元素的间距
             childAspectRatio: 0.55 //显示区域宽高
             ),
-        itemCount: images.length,
+        itemCount: widget.images.length,
         itemBuilder: (context, index) {
           return Center(
             child: PreviewContainer(
-              galleryImageList: images,
+              galleryImageList: widget.images,
               index: index,
-              gid: gid,
+              gid: widget.gid,
+              onLoadComplet: () {
+                final thumbUrl = widget.images[index].thumbUrl ?? '';
+                Future.delayed(const Duration(milliseconds: 50)).then(
+                  (_) {
+                    if (!(_loadComplets[thumbUrl] ?? false) && mounted) {
+                      logger.d('onLoadComplet $thumbUrl');
+                      setState(() {
+                        _loadComplets[thumbUrl] = true;
+                      });
+                    }
+                  },
+                );
+              },
             ),
           );
         });
@@ -520,6 +539,7 @@ class PreviewContainer extends StatelessWidget {
     required this.index,
     required this.galleryImageList,
     required this.gid,
+    this.onLoadComplet,
   })  : galleryImage = galleryImageList[index],
         hrefs = List<String>.from(
             galleryImageList.map((GalleryImage e) => e.href).toList()),
@@ -530,6 +550,7 @@ class PreviewContainer extends StatelessWidget {
   final List<GalleryImage> galleryImageList;
   final List<String> hrefs;
   final GalleryImage galleryImage;
+  final VoidCallback? onLoadComplet;
 
   @override
   Widget build(BuildContext context) {
@@ -577,6 +598,7 @@ class PreviewContainer extends StatelessWidget {
             url: galleryImage.thumbUrl!,
             height: fittedSizes.destination.height,
             width: fittedSizes.destination.width,
+            onLoadComplet: onLoadComplet,
             sourceRect: Rect.fromLTWH(
               galleryImage.offSet! + 1,
               1.0,

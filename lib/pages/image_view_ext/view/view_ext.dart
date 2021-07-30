@@ -1,5 +1,6 @@
 import 'dart:math' as math;
 
+import 'package:blur/blur.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:extended_image/extended_image.dart';
 import 'package:fehviewer/common/service/depth_service.dart';
@@ -217,61 +218,6 @@ class ImageExt extends GetView<ViewExtController> {
               ),
             );
 
-            // 下载进度回调
-            if (false)
-              return Container(
-                constraints: BoxConstraints(
-                  maxHeight: context.mediaQueryShortestSide,
-                  minWidth: context.width / 2 - kPageViewPadding,
-                ),
-                alignment: Alignment.center,
-                // margin: const EdgeInsets.symmetric(vertical: 50, horizontal: 50),
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: <Widget>[
-                    Container(
-                      height: 70,
-                      width: 70,
-                      // constraints: const BoxConstraints(minWidth: 70, maxHeight: 70),
-                      child: LiquidCircularProgressIndicator(
-                        value: progress ?? 0.0,
-                        valueColor: const AlwaysStoppedAnimation<Color>(
-                            Color.fromARGB(255, 163, 199, 100)),
-                        backgroundColor: const Color.fromARGB(255, 50, 50, 50),
-                        // borderColor: Colors.teal[900],
-                        // borderWidth: 2.0,
-                        direction: Axis.vertical,
-                        center: progress != null
-                            ? Text(
-                                '${progress * 100 ~/ 1}%',
-                                style: TextStyle(
-                                  color: progress < 0.5
-                                      ? CupertinoColors.white
-                                      : CupertinoColors.black,
-                                  fontSize: 12,
-                                  height: 1,
-                                ),
-                              )
-                            : Container(),
-                        borderColor: Colors.transparent,
-                        borderWidth: 0.0,
-                      ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.all(12.0),
-                      child: Text(
-                        '$ser',
-                        style: const TextStyle(
-                          color: CupertinoColors.systemGrey6,
-                          height: 1,
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-              );
-
           ///if you don't want override completed widget
           ///please return null or state.completedWidget
           //return null;
@@ -353,62 +299,69 @@ class ViewTopBar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      color: Colors.black.withOpacity(0.7),
       height: context.mediaQueryPadding.top + kTopBarHeight,
       width: context.mediaQuery.size.width,
-      padding: EdgeInsets.symmetric(
-          horizontal: context.mediaQueryPadding.horizontal / 2),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        crossAxisAlignment: CrossAxisAlignment.end,
-        children: [
-          GestureDetector(
-            behavior: HitTestBehavior.opaque,
-            onTap: () {
-              Get.back();
-            },
-            child: Container(
-              width: 40,
-              height: kBottomBarHeight,
-              child: const Icon(
-                FontAwesomeIcons.chevronLeft,
-                color: CupertinoColors.systemGrey6,
-                // size: 24,
-              ),
-            ),
-          ),
-          GetBuilder<ViewExtController>(
-            id: idViewTopBar,
-            builder: (logic) {
-              return Container(
-                alignment: Alignment.center,
+      child: Padding(
+        padding: EdgeInsets.symmetric(
+            horizontal: context.mediaQueryPadding.horizontal / 2),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          crossAxisAlignment: CrossAxisAlignment.end,
+          children: [
+            GestureDetector(
+              behavior: HitTestBehavior.opaque,
+              onTap: () {
+                Get.back();
+              },
+              child: Container(
+                width: 40,
                 height: kBottomBarHeight,
-                child: Text(
-                  '${logic.vState.currentItemIndex + 1}/${logic.vState.filecount}',
-                  style: const TextStyle(
-                    color: CupertinoColors.systemGrey6,
-                  ),
+                child: const Icon(
+                  FontAwesomeIcons.chevronLeft,
+                  color: CupertinoColors.systemGrey6,
+                  // size: 24,
                 ),
-              );
-            },
-          ),
-          GestureDetector(
-            behavior: HitTestBehavior.opaque,
-            onTap: () {
-              Get.toNamed(EHRoutes.viewSeting);
-            },
-            child: Container(
-              width: 40,
-              margin: const EdgeInsets.only(right: 8.0),
-              height: kBottomBarHeight,
-              child: const Icon(
-                FontAwesomeIcons.ellipsisH,
-                color: CupertinoColors.systemGrey6,
-                // size: 24,
               ),
             ),
-          ),
-        ],
+            GetBuilder<ViewExtController>(
+              id: idViewTopBar,
+              builder: (logic) {
+                return Container(
+                  alignment: Alignment.center,
+                  height: kBottomBarHeight,
+                  child: Text(
+                    '${logic.vState.currentItemIndex + 1}/${logic.vState.filecount}',
+                    style: const TextStyle(
+                      color: CupertinoColors.systemGrey6,
+                    ),
+                  ),
+                );
+              },
+            ),
+            GestureDetector(
+              behavior: HitTestBehavior.opaque,
+              onTap: () {
+                Get.toNamed(EHRoutes.viewSeting);
+              },
+              child: Container(
+                width: 40,
+                margin: const EdgeInsets.only(right: 8.0),
+                height: kBottomBarHeight,
+                child: const Icon(
+                  FontAwesomeIcons.ellipsisH,
+                  color: CupertinoColors.systemGrey6,
+                  // size: 24,
+                ),
+              ),
+            ),
+          ],
+        ),
+      ).frosted(
+        height: context.mediaQueryPadding.top + kTopBarHeight,
+        width: context.mediaQuery.size.width,
+        blur: 8,
+        frostColor: CupertinoTheme.of(context).barBackgroundColor,
+        frostOpacity: 0.5,
       ),
     );
   }
@@ -429,7 +382,8 @@ class ViewBottomBar extends GetView<ViewExtController> {
             (logic.vState.showThumbList ? kThumbListViewHeight : 0);
 
         return AnimatedContainer(
-          color: Colors.black.withOpacity(0.7),
+          // color:
+          //     CupertinoTheme.of(context).barBackgroundColor.withOpacity(0.75),
           height: controller.vState.bottomBarHeight,
           width: context.mediaQuery.size.width,
           duration: const Duration(milliseconds: 300),
@@ -444,6 +398,14 @@ class ViewBottomBar extends GetView<ViewExtController> {
               ),
               const BottomBarControlWidget(),
             ],
+          ).frosted(
+            height: context.mediaQueryPadding.bottom +
+                kTopBarHeight * 2 +
+                kThumbListViewHeight,
+            width: context.mediaQuery.size.width,
+            blur: 8,
+            frostColor: CupertinoTheme.of(context).barBackgroundColor,
+            frostOpacity: 0.5,
           ),
         );
       },
@@ -787,25 +749,6 @@ class _FutureThumblState extends State<FutureThumbl> {
               } else {
                 return LayoutBuilder(builder:
                     (BuildContext context, BoxConstraints constraints) {
-/*
-
-                  late double _subHeight;
-                  late double _subWidth;
-                  final double _subHeightP = (_image.thumbHeight ?? 0) *
-                      constraints.maxWidth /
-                      (_image.thumbWidth ?? 0);
-
-                  if (_subHeightP > (kThumbListViewHeight - 16)) {
-                    _subHeight = kThumbListViewHeight - 16;
-                    _subWidth = (kThumbListViewHeight - 16) *
-                        (_image.thumbWidth ?? 0) /
-                        (_image.thumbHeight ?? 0);
-                  } else {
-                    _subWidth = constraints.maxWidth;
-                    _subHeight = _subHeightP;
-                  }
-*/
-
                   final imageSize =
                       Size(_image.thumbWidth!, _image.thumbHeight!);
                   final size =
@@ -826,6 +769,9 @@ class _FutureThumblState extends State<FutureThumbl> {
                       _image.thumbWidth! - 2,
                       _image.thumbHeight! - 2,
                     ),
+                    onLoadComplet: () =>
+                        logic.handOnLoadCompletExtendedImageRect(
+                            url: _image.thumbUrl!),
                   );
                 });
               }
