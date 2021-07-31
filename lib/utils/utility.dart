@@ -102,7 +102,7 @@ double scale100({
 
 class EHUtils {
   static Uint8List stringToUint8List(String source) {
-    /*print('${source.length}: "$source" (${source.runes.length})');
+    /*logger.d('${source.length}: "$source" (${source.runes.length})');
 
     // String (Dart uses UTF-16) to bytes
     final List<int> list = <int>[];

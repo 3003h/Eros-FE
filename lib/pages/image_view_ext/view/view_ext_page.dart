@@ -420,7 +420,8 @@ class ViewImageSlidePage extends GetView<ViewExtController> {
         double opacity = 0.0;
         opacity = offset.distance /
             (Offset(pageSize.width, pageSize.height).distance / 2.0);
-        return Colors.black.withOpacity(min(1.0, max(1.0 - opacity, 0.0)));
+        return CupertinoColors.systemBackground.darkColor
+            .withOpacity(min(1.0, max(1.0 - opacity, 0.0)));
       },
       onSlidingPage: (ExtendedImageSlidePageState state) {
         if (controller.vState.showBar) {
@@ -436,11 +437,9 @@ class DoublePageView extends GetView<ViewExtController> {
   const DoublePageView({
     Key? key,
     required this.pageIndex,
-    // this.reverse = false,
   }) : super(key: key);
 
   final int pageIndex;
-  // final bool reverse;
 
   // ViewExtState get vState => controller.vState;
 
@@ -593,25 +592,11 @@ class ImageGestureDetector extends GetView<ViewExtController> {
 
   @override
   Widget build(BuildContext context) {
-    // return GestureDetector(
-    //   behavior: HitTestBehavior.translucent,
-    //   onTap: () {
-    //     logger.d('top tap');
-    //     controller.handOnTapCent();
-    //   },
-    //   onDoubleTap: () {
-    //     logger.d('onDoubleTap');
-    //   },
-    //   child: child,
-    //   // child: SizedBox.expand(),
-    // );
-
     return Stack(
       alignment: Alignment.center,
       children: <Widget>[
         child,
         // 两侧触摸区
-        // if (controller.vState.viewMode != ViewMode.topToBottom)
         Row(
           children: [
             Expanded(

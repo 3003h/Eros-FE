@@ -91,9 +91,9 @@ class EhConfigService extends ProfileService {
   get debugMode => _debugMode.value;
   set debugMode(val) => _debugMode.value = val;
 
-  final _downloadLocatino = ''.obs;
-  get downloadLocatino => _downloadLocatino.value;
-  set downloadLocatino(val) => _downloadLocatino.value = val;
+  final RxString _downloadLocatino = ''.obs;
+  String get downloadLocatino => _downloadLocatino.value;
+  set downloadLocatino(String val) => _downloadLocatino.value = val;
 
   // 自动翻页 _autoRead
   final _autoRead = false.obs;

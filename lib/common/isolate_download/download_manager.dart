@@ -73,7 +73,7 @@ class DownloadManagerIsolate {
   void download() {
     //任务的周期性执行
     Timer.periodic(Duration(milliseconds: 1000), (timer) {
-      // print('download');
+      // logger.d('download');
     });
   }
 

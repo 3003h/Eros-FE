@@ -182,5 +182,5 @@ class ViewExtState {
 
   bool showThumbList = false;
   int mindThumbIndex = 0;
-  bool syncThumbList = false;
+  bool syncThumbList = true;
 }

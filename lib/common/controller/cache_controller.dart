@@ -66,7 +66,7 @@ class CacheController extends GetxController with StateMixin<String> {
       //     .list(followLinks: false, recursive: true)
       //     .listen((io.FileSystemEntity file) {
       //   //打印每个缓存文件的路径
-      //   print(file.path);
+      //   logger.d(file.path);
       // });
       return value;
     } catch (err) {
@@ -79,11 +79,11 @@ class CacheController extends GetxController with StateMixin<String> {
   Future<int> _getTotalSizeOfFilesInDir(final io.FileSystemEntity file) async {
     try {
       if (file is io.File) {
-        // print('is file');
+        // logger.d('is file');
         return await file.length();
       }
       if (file is io.Directory) {
-        // print('is Directory');
+        // logger.d('is Directory');
         final List<io.FileSystemEntity> children = file.listSync();
         int total = 0;
         if (children != null)

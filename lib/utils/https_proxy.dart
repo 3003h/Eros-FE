@@ -71,7 +71,7 @@ class ClientConnectionHandler {
   final DnsService dnsConfigController = Get.find();
 
   void closeSockets() {
-//    print('socket is going to destroy');
+//    logger.d('socket is going to destroy');
     if (server != null) {
       server?.destroy();
     }
@@ -146,7 +146,7 @@ class ClientConnectionHandler {
       // debugPrint('${data.runtimeType}');
       final String hex = EHUtils.formatBytesAsHexString(data);
       // logger.v(hex);
-      // print(EHUtils.stringToHex('e-hentai.org'));
+      // logger.d(EHUtils.stringToHex('e-hentai.org'));
       if (hex.contains(EHUtils.stringToHex('e-hentai.org')) ||
           hex.contains(EHUtils.stringToHex('exhentai.org')) ||
           hex.contains(EHUtils.stringToHex('ehgt.org')) ||
@@ -222,7 +222,7 @@ class ServerConnectionHandler {
   }
 
   Future handle() async {
-    // print('尝试建立连接： $host:$port');
+    // logger.d('尝试建立连接： $host:$port');
     server = await Socket.connect(host, port,
         timeout: const Duration(milliseconds: 10000));
     server?.listen(dataHandler,

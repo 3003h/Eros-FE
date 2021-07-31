@@ -116,7 +116,7 @@ class CommentController extends GetxController
           //     .toList()
           //     .join(', ');
           //
-          // print('Possible Languages: $languages');
+          // logger.d('Possible Languages: $languages');
           //
           // if (possibleLanguages.first.language == 'zh') {
           //   return;

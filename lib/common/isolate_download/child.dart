@@ -50,7 +50,7 @@ void _isolateDownload(SendPort sendPort) {
           case _RequestType.init:
             // initLogger
             final List<String?>? _loginfo = _requestBean.loginfo;
-            print(_loginfo);
+            logger.d(_loginfo);
             if (_loginfo != null && _loginfo.length >= 2) {
               initLogger(directory: _loginfo[0], fileName: _loginfo[1]);
               logger.d('init _isolate Logger');
@@ -84,7 +84,7 @@ void _isolateDownload(SendPort sendPort) {
           /// 开始获取解析画廊web页面
           /// 解析画廊图片url
           case _RequestType.addTask:
-            print('_RequestType.addTask');
+            logger.d('_RequestType.addTask');
             final GalleryTask _initGalleryTask = _requestBean.galleryTask!;
             logger.d(
                 'isolate add task ${_initGalleryTask.gid} ${_initGalleryTask.title}');

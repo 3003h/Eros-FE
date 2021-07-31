@@ -132,7 +132,6 @@ Dio _getIsolateDio({
 
     //任务的周期性执行
     // Timer.periodic(Duration(milliseconds: 200), (timer) {
-    //   // print("f2");
     //   logger.d('dio numCurrentDownloadTasks $dlCount');
     //   // count++;
     //   if (dlCount > 3) {
@@ -270,13 +269,13 @@ Future<Response<dynamic>?> _downLoadFile(
       urlPath,
       savePath,
       onReceiveProgress: (int count, int total) {
-        // print('$count / $total');
+        // logger.d('$count / $total');
       },
       options: Options(
         receiveTimeout: 0,
       ),
     );
-    // print('downLoadFile response: $response');
+    // logger.d('downLoadFile response: $response');
   } on DioError catch (e) {
     logger.e('downLoadFile exception: $e');
     rethrow;

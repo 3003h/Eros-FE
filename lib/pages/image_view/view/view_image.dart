@@ -57,7 +57,7 @@ class _ViewImageState extends State<ViewImage>
   /// 拉取图片信息
   Future<GalleryImage?> _fetchImage(
     int itemSer, {
-    bool refresh = false,
+    // bool refresh = false,
     bool changeSource = false,
   }) async {
     final GalleryImage? tImage = _pageController.imageMap[itemSer];
@@ -85,7 +85,7 @@ class _ViewImageState extends State<ViewImage>
     final GalleryImage? image = await _pageController.getImageInfo(
       widget.ser,
       cancelToken: _getMoreCancelToken,
-      refresh: refresh,
+      // refresh: refresh,
       changeSource: changeSource,
     );
     // if (image != null) {
@@ -118,7 +118,7 @@ class _ViewImageState extends State<ViewImage>
       // 换源重载
       _imageFuture = _fetchImage(
         widget.ser,
-        refresh: true,
+        // refresh: true,
         changeSource: changeSource,
       );
     });
@@ -185,19 +185,19 @@ class _ViewImageState extends State<ViewImage>
                     _errInfo = snapshot.error.toString();
                   }
 
-                  if ((_pageController.errCountMap[widget.ser] ?? 0) <
+                  if ((_viewController.vState.errCountMap[widget.ser] ?? 0) <
                       widget.retry) {
                     Future.delayed(const Duration(milliseconds: 100))
                         .then((_) => _reloadImage(changeSource: true));
-                    _pageController.errCountMap.update(
+                    _viewController.vState.errCountMap.update(
                         widget.ser, (int value) => value + 1,
                         ifAbsent: () => 1);
 
-                    logger.v('${_pageController.errCountMap}');
+                    logger.v('${_viewController.vState.errCountMap}');
                     logger.d(
-                        '${widget.ser} 重试 第 ${_pageController.errCountMap[widget.ser]} 次');
+                        '${widget.ser} 重试 第 ${_viewController.vState.errCountMap[widget.ser]} 次');
                   }
-                  if ((_pageController.errCountMap[widget.ser] ?? 0) >=
+                  if ((_viewController.vState.errCountMap[widget.ser] ?? 0) >=
                       widget.retry) {
                     return ErrorWidget(ser: widget.ser, errInfo: _errInfo);
                   } else {
@@ -281,7 +281,7 @@ class _ViewImageState extends State<ViewImage>
   }
 }
 
-class ImageExtend extends StatelessWidget {
+class ImageExtend extends GetView<ViewController> {
   ImageExtend({
     Key? key,
     this.url,
@@ -392,7 +392,6 @@ class ImageExtend extends StatelessWidget {
                 ],
               ),
             );
-            break;
 
           ///if you don't want override completed widget
           ///please return null or state.completedWidget
@@ -412,12 +411,12 @@ class ImageExtend extends StatelessWidget {
             logger.d('Failed $url');
             animationController.reset();
 
-            if ((_pageController.errCountMap[ser] ?? 0) < retry) {
+            if ((controller.vState.errCountMap[ser] ?? 0) < retry) {
               Future.delayed(const Duration(milliseconds: 100))
                   .then((_) => reloadImage());
-              _pageController.errCountMap
+              controller.vState.errCountMap
                   .update(ser, (int value) => value + 1, ifAbsent: () => 1);
-              logger.d('${ser} 重试 第 ${_pageController.errCountMap[ser]} 次');
+              logger.d('${ser} 重试 第 ${controller.vState.errCountMap[ser]} 次');
             }
 
             return Container(

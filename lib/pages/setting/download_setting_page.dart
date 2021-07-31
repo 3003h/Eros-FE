@@ -4,6 +4,8 @@ import 'package:fehviewer/common/service/theme_service.dart';
 import 'package:fehviewer/const/const.dart';
 import 'package:fehviewer/generated/l10n.dart';
 import 'package:fehviewer/pages/setting/setting_base.dart';
+import 'package:fehviewer/utils/logger.dart';
+import 'package:file_picker/file_picker.dart';
 // import 'package:filesystem_picker/filesystem_picker.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -40,20 +42,26 @@ class ListViewDownloadSetting extends StatelessWidget {
           return FutureBuilder<String>(
               future: defDownloadPath,
               builder: (context, snapshot) {
+                late String path;
+                if (snapshot.connectionState == ConnectionState.done) {
+                  if (ehConfigService.downloadLocatino.isEmpty) {
+                    path = snapshot.data ?? '';
+                  } else {
+                    path = ehConfigService.downloadLocatino;
+                  }
+                } else {
+                  path = '';
+                }
+
                 return SelectorSettingItem(
                   title: L10n.of(context).download_location,
-                  desc: snapshot.data ?? '',
+                  desc: path,
                   onTap: () async {
-                    // final FilePickerResult? result =
-                    //     await FilePicker.platform.pickFiles();
-                    // String? path = await FilesystemPicker.open(
-                    //   title: 'Save to folder',
-                    //   context: context,
-                    //   rootDirectory: Directory(Global.extStorePath),
-                    //   fsType: FilesystemType.folder,
-                    //   pickText: 'Save file to this folder',
-                    //   folderIconColor: Colors.teal,
-                    // );
+                    final String? result =
+                        await FilePicker.platform.getDirectoryPath();
+                    logger.d('set $result');
+                    ehConfigService.downloadLocatino =
+                        result ?? snapshot.data ?? '';
                   },
                 );
               });

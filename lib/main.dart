@@ -8,7 +8,6 @@ import 'package:fehviewer/common/service/locale_service.dart';
 import 'package:fehviewer/common/service/log_service.dart';
 import 'package:fehviewer/common/service/theme_service.dart';
 import 'package:fehviewer/generated/l10n.dart';
-import 'package:fehviewer/pages/tab/view/splash_page.dart';
 import 'package:fehviewer/route/app_pages.dart';
 import 'package:fehviewer/route/routes.dart';
 import 'package:fehviewer/store/get_store.dart';
@@ -53,7 +52,7 @@ Future<void> main() async {
     runApp(MyApp());
   }, (Object error, StackTrace stackTrace) {
     // logger.e('runZonedGuarded: Caught error in my root zone.');
-    print('runZonedGuarded: Caught error in my root zone.');
+    debugPrint('runZonedGuarded: Caught error in my root zone.');
     FirebaseCrashlytics.instance.recordError(error, stackTrace);
   });
 }
@@ -139,7 +138,7 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
           FirebaseAnalyticsObserver(analytics: analytics),
         ],
         getPages: AppPages.routes,
-        defaultTransition: Transition.cupertino,
+        defaultTransition: Transition.native,
         initialRoute: EHRoutes.root,
         // home: SplashPage(),
         theme: theme,

@@ -271,7 +271,7 @@ class ViewExtController extends GetxController {
   /// 拉取图片信息
   Future<GalleryImage?> fetchImage(
     int itemSer, {
-    bool refresh = false,
+    // bool refresh = false,
     bool changeSource = false,
   }) async {
     final GalleryImage? tImage = _galleryPageController.imageMap[itemSer];
@@ -298,7 +298,7 @@ class ViewExtController extends GetxController {
     final GalleryImage? image = await _galleryPageController.getImageInfo(
       itemSer,
       cancelToken: vState.getMoreCancelToken,
-      refresh: refresh,
+      // refresh: refresh,
       changeSource: changeSource,
     );
 
@@ -329,7 +329,7 @@ class ViewExtController extends GetxController {
     // 换源重载
     imageFutureMap[itemSer] = fetchImage(
       itemSer,
-      refresh: true,
+      // refresh: true,
       changeSource: changeSource,
     );
 
