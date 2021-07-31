@@ -7,6 +7,7 @@ import 'package:dio_http_cache/dio_http_cache.dart';
 import 'package:fehviewer/common/global.dart';
 import 'package:fehviewer/common/service/dns_service.dart';
 import 'package:fehviewer/const/const.dart';
+import 'package:fehviewer/network/dio_interceptor/dio_retry/options.dart';
 import 'package:fehviewer/network/dio_interceptor/dio_retry/retry_interceptor.dart';
 import 'package:fehviewer/network/dio_interceptor/domain_fronting/domain_fronting.dart';
 import 'package:fehviewer/utils/time.dart';
@@ -14,11 +15,9 @@ import 'package:fehviewer/utils/toast.dart';
 import 'package:get/get.dart' hide Response;
 import 'package:pretty_dio_logger/pretty_dio_logger.dart';
 
-import '../network/dio_interceptor/dio_retry/options.dart';
-// import '../network/dio_interceptor/dio_retry/retry_interceptor.dart';
 import 'logger.dart';
 
-const int kDefconnectTimeout = 10000;
+const int kDefconnectTimeout = 5000;
 const int kDefreceiveTimeout = 10000;
 
 class HttpManager {
@@ -26,7 +25,7 @@ class HttpManager {
   HttpManager(
     String _baseUrl, {
     bool cache = true,
-    bool retry = false,
+    bool retry = true,
     bool domainFronting = false,
     int? connectTimeout = kDefconnectTimeout,
   }) {
@@ -102,11 +101,12 @@ class HttpManager {
     if (retry) {
       _dio.interceptors.add(RetryInterceptor(
           dio: _dio..options.extra.addAll({DIO_CACHE_KEY_FORCE_REFRESH: true}),
+          // dio: _dio,
           options: RetryOptions(
             retries: 3, // Number of retries before a failure
             retryInterval:
                 const Duration(seconds: 1), // Interval between each retry
-            retryEvaluator: (error) =>
+            retryEvaluator: (DioError error) =>
                 error.type != DioErrorType.cancel &&
                 error.type !=
                     DioErrorType
@@ -187,7 +187,7 @@ class HttpManager {
           queryParameters: params, options: options, cancelToken: cancelToken);
     } on DioError catch (e, stack) {
       if (CancelToken.isCancel(e)) {
-        // print('$e');
+        // logger.d('$e');
       } else {
         logger5.e('getHttp exception: $e\n$stack');
       }
@@ -197,7 +197,7 @@ class HttpManager {
     }
     time.showTime('get $url end');
 
-    // print('getHttp statusCode: ${response.statusCode}');
+    // logger.d('getHttp statusCode: ${response.statusCode}');
     return response.data;
   }
 
@@ -286,11 +286,11 @@ class HttpManager {
         cancelToken: cancelToken,
         deleteOnError: deleteOnError,
       );
-      // print('downLoadFile response: $response');
+      // logger.d('downLoadFile response: $response');
     } on DioError catch (e) {
       // logger.e('downLoadFile exception: $e');
       if (CancelToken.isCancel(e)) {
-        // print('$e');
+        // logger.d('$e');
       }
       if (errToast) formatError(e);
       rethrow;

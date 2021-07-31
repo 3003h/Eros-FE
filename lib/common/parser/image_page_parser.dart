@@ -4,7 +4,7 @@ import 'package:fehviewer/utils/logger.dart';
 import 'package:html/dom.dart';
 import 'package:html/parser.dart' show parse;
 
-GalleryImage paraImage(String htmlText, String href) {
+GalleryImage paraImage(String htmlText) {
   // logger.d('htmlText $htmlText');
   final Document document = parse(htmlText);
 
@@ -24,15 +24,34 @@ GalleryImage paraImage(String htmlText, String href) {
               document.querySelector('#loadfail')!.attributes['onclick']!)!
           .group(1) ??
       '';
-
   logger.v('para_sourceId: $_sourceId ');
+
+  final RegExp urlRegExp =
+      RegExp(r'https?://e[-x]hentai.org/g/([0-9]+)/([0-9a-z]+)/?');
+
+  final Element? elmToGallery = document.querySelector('#i5 > div > a');
+  final String? gUrl = elmToGallery?.attributes['href'];
+  String gid = '';
+  String token = '';
+  if (gUrl != null) {
+    final RegExpMatch? urlRult = urlRegExp.firstMatch(gUrl);
+    gid = urlRult?.group(1) ?? '';
+    token = urlRult?.group(2) ?? '';
+  }
+
+  final List<Element> serElms =
+      document.querySelectorAll('#i2 > div.sn > div > span');
+  logger.v('${serElms.length}');
+  final int ser = int.parse(serElms[0].text);
 
   final GalleryImage _reImage = kDefGalleryImage.copyWith(
     imageUrl: imageUrl,
     sourceId: _sourceId,
     imageWidth: width,
     imageHeight: height,
-    href: href,
+    gid: gid,
+    token: token,
+    ser: ser,
   );
 
   return _reImage;

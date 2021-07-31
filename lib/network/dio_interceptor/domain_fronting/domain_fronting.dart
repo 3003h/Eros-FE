@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:dio/dio.dart';
+import 'package:fehviewer/utils/logger.dart';
 
 typedef DomainFrontingDomainLookup = FutureOr<String?> Function(
     String hostname);
@@ -57,7 +58,7 @@ class DomainFronting {
   }
 
   Future<String?> lookup(String hostname) async {
-    print('hostname: ${hostname}');
+    logger.d('hostname: ${hostname}');
     if (hosts.containsKey(hostname)) {
       return Future.value(hosts[hostname]);
     }
@@ -140,8 +141,8 @@ class DomainFrontingInterceptorRequest extends Interceptor {
     final headers = {...options.headers, 'host': host};
     final extra = {...options.extra, 'domainFrontingRawOptions': options};
 
-    print('options.uri ${options.uri}');
-    print('newUri $newUri');
+    logger.d('options.uri ${options.uri}');
+    logger.d('newUri $newUri');
     handler.next(options.copyWith(
         path: newUri.toString(), headers: headers, extra: extra));
   }

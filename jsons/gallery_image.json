@@ -12,5 +12,7 @@
   "imageWidth?": 1280.0,
   "offSet?" : 200.0,
   "sourceId?": "1234",
-  "completeHeight?": false
+  "completeHeight?": false,
+  "gid?": "1234",
+  "token?": "1234"
 }

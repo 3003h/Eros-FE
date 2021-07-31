@@ -7,13 +7,14 @@ import 'package:fehviewer/common/global.dart';
 import 'package:fehviewer/common/service/depth_service.dart';
 import 'package:fehviewer/common/service/ehconfig_service.dart';
 import 'package:fehviewer/const/const.dart';
+import 'package:fehviewer/generated/l10n.dart';
 import 'package:fehviewer/models/base/eh_models.dart';
 import 'package:fehviewer/network/gallery_request.dart';
-import 'package:fehviewer/pages/gallery/controller/rate_controller.dart';
 import 'package:fehviewer/pages/gallery/controller/taginfo_controller.dart';
 import 'package:fehviewer/pages/gallery/controller/torrent_controller.dart';
 import 'package:fehviewer/pages/gallery/view/gallery_page.dart';
 import 'package:fehviewer/pages/item/controller/galleryitem_controller.dart';
+import 'package:fehviewer/route/navigator_util.dart';
 import 'package:fehviewer/route/routes.dart';
 import 'package:fehviewer/utils/logger.dart';
 import 'package:fehviewer/utils/time.dart';
@@ -23,7 +24,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
 
 import 'all_previews_controller.dart';
-import 'archiver_controller.dart';
 import 'comment_controller.dart';
 import 'gallery_fav_controller.dart';
 
@@ -126,7 +126,7 @@ class GalleryPageController extends GetxController
     }
   }
 
-  final Map<int, int> errCountMap = {};
+  // final Map<int, int> errCountMap = {};
 
   String get showKey => galleryItem.showKey ?? '';
 
@@ -158,7 +158,6 @@ class GalleryPageController extends GetxController
         galleryRepository!.url!.isNotEmpty) {
       // url跳转
       fromUrl = true;
-      // galleryItem = GalleryItem()..url = galleryRepository.url;
 
       final RegExp urlRex =
           RegExp(r'(http?s://e(-|x)hentai.org)?/g/(\d+)/(\w+)/?$');
@@ -227,7 +226,7 @@ class GalleryPageController extends GetxController
 
   /// 添加缩略图对象
   void addAllImages(List<GalleryImage> galleryImages) {
-    logger5.d(
+    logger5.v(
         'addAllPreview ${galleryImages.first.ser}~${galleryImages.last.ser} ');
 
     for (final GalleryImage _image in galleryImages) {
@@ -356,6 +355,11 @@ class GalleryPageController extends GetxController
 
       _enableRead.value = true;
 
+      // 跳转提示dialog
+      if (galleryRepository?.jumpSer != null) {
+        startReadDialog(galleryRepository!.jumpSer!);
+      }
+
       analytics.logViewItem(
         itemId: galleryItem.gid ?? '',
         itemName: galleryItem.englishTitle ?? '',
@@ -368,6 +372,38 @@ class GalleryPageController extends GetxController
         change(null, status: RxStatus.error(err.toString()));
       }
     }
+  }
+
+  Future<void> startReadDialog(int ser) async {
+    await showCupertinoDialog<void>(
+      context: Get.overlayContext!,
+      barrierDismissible: true,
+      builder: (context) {
+        return CupertinoAlertDialog(
+          // title: Text(L10n.of(context).jump_to_page),
+          // title: Text('${L10n.of(context).jump_to_page} $ser?'),
+          title: Text('Start reading on page $ser ?'),
+          actions: [
+            CupertinoDialogAction(
+              child: Text(L10n.of(Get.context!).cancel),
+              onPressed: () {
+                Get.back();
+              },
+            ),
+            CupertinoDialogAction(
+              child: Text(
+                L10n.of(Get.context!).ok,
+                style: const TextStyle(fontWeight: FontWeight.w500),
+              ),
+              onPressed: () {
+                Get.back();
+                NavigatorUtil.goGalleryViewPage(ser - 1, gid);
+              },
+            ),
+          ],
+        );
+      },
+    );
   }
 
   Future<void> _reloadData() async {
@@ -539,7 +575,7 @@ class GalleryPageController extends GetxController
   Future<GalleryImage?> getImageInfo(
     int itemSer, {
     CancelToken? cancelToken,
-    bool refresh = false,
+    // bool refresh = false,
     bool changeSource = false,
   }) async {
     try {
@@ -570,7 +606,6 @@ class GalleryPageController extends GetxController
         try {
           final GalleryImage _image = await Api.fetchImageInfo(
             galleryItem.imageMap[itemSer]?.href ?? '',
-            ser: itemSer,
             refresh: changeSource,
             sourceId: _sourceId,
           );
@@ -607,13 +642,6 @@ class GalleryPageController extends GetxController
   void downloadGallery() {
     final DownloadController _downloadController =
         Get.find<DownloadController>();
-    // _downloadController.downloadGalleryIsolate(
-    //   gid: int.parse(gid),
-    //   token: galleryItem.token,
-    //   url: galleryItem.url!,
-    //   fileCount: int.parse(galleryItem.filecount ?? '0'),
-    //   title: title,
-    // );
     _downloadController.downloadGallery(
       gid: int.parse(gid),
       token: galleryItem.token,

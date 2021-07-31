@@ -1,6 +1,7 @@
 import 'package:fehviewer/common/service/depth_service.dart';
 import 'package:fehviewer/const/const.dart';
 import 'package:fehviewer/models/index.dart';
+import 'package:fehviewer/network/gallery_request.dart';
 import 'package:fehviewer/pages/gallery/controller/archiver_controller.dart';
 import 'package:fehviewer/pages/gallery/controller/comment_controller.dart';
 import 'package:fehviewer/pages/gallery/controller/rate_controller.dart';
@@ -32,6 +33,7 @@ class NavigatorUtil {
   // 带搜索条件打开搜索
   static Future<void> goGalleryListBySearch({
     required String simpleSearch,
+    bool replace = false,
   }) async {
     String _search = simpleSearch;
     if (simpleSearch.contains(':') &&
@@ -46,24 +48,20 @@ class NavigatorUtil {
     }
 
     Get.find<DepthService>().pushSearchPageCtrl();
-    /*Get.to(
-      // () => GallerySearchPage(),
-      () => GallerySearchPageNew(),
-      transition: Transition.cupertino,
-      binding: BindingsBuilder(() {
-        logger.d('goGalleryListBySearch BindingsBuilder');
-        Get.lazyPut(
-          () => SearchPageController(initSearchText: _search),
-          tag: searchPageCtrlDepth,
-        );
-      }),
-    );*/
 
-    await Get.toNamed(
-      EHRoutes.search,
-      arguments: _search,
-      preventDuplicates: false,
-    );
+    if (replace) {
+      await Get.offNamed(
+        EHRoutes.search,
+        arguments: _search,
+        preventDuplicates: false,
+      );
+    } else {
+      await Get.toNamed(
+        EHRoutes.search,
+        arguments: _search,
+        preventDuplicates: false,
+      );
+    }
 
     Get.find<DepthService>().popSearchPageCtrl();
   }
@@ -73,27 +71,56 @@ class NavigatorUtil {
     String? url,
     String? tabTag,
     GalleryItem? galleryItem,
+    bool replace = false,
   }) async {
     Get.find<DepthService>().pushPageCtrl();
 
     // url跳转方式
     if (url != null && url.isNotEmpty) {
-      logger.d('goGalleryPage fromUrl');
-      // 命名路由方式
-      await Get.toNamed(
-        EHRoutes.galleryPage,
-        arguments: GalleryRepository(url: url),
-        preventDuplicates: false,
-      );
+      logger.d('goGalleryPage fromUrl $url');
 
-      // Get.to(
-      //   () => GalleryMainPage(),
-      //   binding: GalleryBinding(
-      //     galleryRepository: GalleryRepository(url: url, tabTag: tabTag),
-      //   ),
-      //   preventDuplicates: false,
-      //   // arguments: GalleryRepository(url: url, tabTag: tabTag),
-      // );
+      final RegExp regGalleryUrl =
+          RegExp(r'https?://e[-x]hentai.org/g/[0-9]+/[0-9a-z]+/?');
+      final RegExp regGalleryPageUrl =
+          RegExp(r'https://e[-x]hentai.org/s/[0-9a-z]+/\d+-\d+');
+
+      if (regGalleryUrl.hasMatch(url)) {
+        // 命名路由方式
+        if (replace) {
+          await Get.offNamed(
+            EHRoutes.galleryPage,
+            arguments: GalleryRepository(url: url),
+            preventDuplicates: false,
+          );
+        } else {
+          await Get.toNamed(
+            EHRoutes.galleryPage,
+            arguments: GalleryRepository(url: url),
+            preventDuplicates: false,
+          );
+        }
+      } else if (regGalleryPageUrl.hasMatch(url)) {
+        // url为画廊某一页的链接
+        final _image = await Api.fetchImageInfo(url);
+        final ser = _image.ser;
+        final _galleryUrl =
+            '${Api.getBaseUrl()}/g/${_image.gid}/${_image.token}';
+        logger.d('jump to $_galleryUrl $ser');
+
+        if (replace) {
+          await Get.offNamed(
+            EHRoutes.galleryPage,
+            arguments: GalleryRepository(url: _galleryUrl, jumpSer: ser),
+            preventDuplicates: false,
+          );
+        } else {
+          await Get.toNamed(
+            EHRoutes.galleryPage,
+            arguments: GalleryRepository(url: _galleryUrl, jumpSer: ser),
+            preventDuplicates: false,
+          );
+        }
+      }
     } else {
       // item点击跳转方式
       logger.v('goGalleryPage fromItem tabTag=$tabTag');
@@ -104,62 +131,12 @@ class NavigatorUtil {
         arguments: GalleryRepository(item: galleryItem, tabTag: tabTag),
         preventDuplicates: false,
       );
-
-      // 普通路由
-
-      // Get.to(
-      //   () => GalleryMainPage(
-      //     galleryRepository:
-      //         GalleryRepository(item: galleryItem, tabTag: tabTag),
-      //   ),
-      //   binding: GalleryBinding(
-      //     galleryRepository:
-      //         GalleryRepository(item: galleryItem, tabTag: tabTag),
-      //   ),
-      //   preventDuplicates: false,
-      //   // arguments: GalleryRepository(item: galleryItem, tabTag: tabTag),
-      // );
     }
 
     // 为了保证能正常关闭
     deletePageController();
 
     Get.find<DepthService>().popPageCtrl();
-  }
-
-  // 跳转画廊页并替换当前路由
-  static Future<void> goGalleryDetailReplace(
-    BuildContext context, {
-    String? url,
-  }) async {
-    final DepthService depthService = Get.find();
-    depthService.pushPageCtrl();
-    if (url != null && url.isNotEmpty) {
-      // 命名路由方式
-      await Get.offNamed(EHRoutes.galleryPage,
-          arguments: GalleryRepository(url: url));
-
-      // 普通方式
-      // Get.off(
-      //   () => GalleryMainPage(
-      //     galleryRepository: GalleryRepository(url: url),
-      //   ),
-      //   binding: GalleryBinding(
-      //     galleryRepository: GalleryRepository(url: url),
-      //   ),
-      //   preventDuplicates: false,
-      //   // arguments: GalleryRepository(url: url),
-      // );
-    } else {
-      logger5.wtf('为什么会到这?');
-      // Get.off(
-      //   () => GalleryMainPage(),
-      //   preventDuplicates: false,
-      // );
-    }
-
-    deletePageController();
-    depthService.popPageCtrl();
   }
 
   /// 打开搜索页面 指定搜索类型

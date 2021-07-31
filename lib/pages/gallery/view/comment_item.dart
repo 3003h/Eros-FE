@@ -548,12 +548,16 @@ class CommentItem extends StatelessWidget {
     vibrateUtil.light();
 
     final String? _openUrl = url ?? link?.url;
-    final RegExp regExp =
+    final RegExp regGalleryUrl =
         RegExp(r'https?://e[-x]hentai.org/g/[0-9]+/[0-9a-z]+/?');
+    final RegExp regGalleryPageUrl =
+        RegExp(r'https://e[-x]hentai.org/s/([0-9a-z]+)/(\d+)-(\d+)');
     if (await canLaunch(_openUrl!)) {
-      if (regExp.hasMatch(_openUrl)) {
-        final String? _realUrl = regExp.firstMatch(_openUrl)?.group(0);
-        logger.v('in $_realUrl');
+      if (regGalleryUrl.hasMatch(_openUrl) ||
+          regGalleryPageUrl.hasMatch(_openUrl)) {
+        final String? _realUrl = regGalleryUrl.firstMatch(_openUrl)?.group(0) ??
+            regGalleryPageUrl.firstMatch(_openUrl)?.group(0);
+        logger.d('in $_realUrl');
         NavigatorUtil.goGalleryPage(
           url: _realUrl,
         );

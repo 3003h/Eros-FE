@@ -63,7 +63,6 @@ class Api {
   static PersistCookieJar? _cookieJar;
 
   static Future<PersistCookieJar> get cookieJar async {
-    // print(_cookieJar);
     if (_cookieJar == null) {
       logger.d('获取的文件系统目录 appSupportPath： ' + Global.appSupportPath);
       _cookieJar =
@@ -74,6 +73,7 @@ class Api {
 
   static HttpManager getHttpManager({
     bool cache = true,
+    bool retry = true,
     String? baseUrl,
     int? connectTimeout,
   }) {
@@ -86,6 +86,7 @@ class Api {
       cache: cache,
       connectTimeout: connectTimeout,
       domainFronting: df,
+      retry: retry,
     );
   }
 
@@ -1179,24 +1180,19 @@ class Api {
 
   /// 获取画廊图片的信息
   /// [href] 爬取的页面地址 用来解析gid 和 imgkey
-  /// [ser] 序号
   static Future<GalleryImage> fetchImageInfo(
     String href, {
-    required int ser,
     bool refresh = false,
     String? sourceId,
     CancelToken? cancelToken,
   }) async {
     final String url = href;
 
-    // logger.d('$reqJsonStr');
-
     final Map<String, dynamic> _params = {
       if (sourceId != null && sourceId.trim().isNotEmpty) 'nl': sourceId,
     };
 
-    // await CustomHttpsProxy.instance.init();
-    final String response = await Api.getHttpManager(connectTimeout: 5000).get(
+    final String response = await Api.getHttpManager(connectTimeout: 3000).get(
           url,
           options: getCacheOptions(
             forceRefresh: refresh,
@@ -1205,11 +1201,11 @@ class Api {
           cancelToken: cancelToken,
         ) ??
         '';
-    // logger.d('url:$url _params:$_params');
+    // logger5.d('url:$url _params:$_params refresh:$refresh');
 
     // logger.d('$response ');
 
-    return paraImage(response, href).copyWith(ser: ser);
+    return paraImage(response).copyWith(href: href);
   }
 
   static Future<void> download(
@@ -1221,7 +1217,7 @@ class Api {
     VoidCallback? onDownloadComplete,
   }) async {
     // await CustomHttpsProxy.instance.init();
-    await Api.getHttpManager().downLoadFile(
+    await Api.getHttpManager(retry: false).downLoadFile(
       url,
       path,
       cancelToken: cancelToken,

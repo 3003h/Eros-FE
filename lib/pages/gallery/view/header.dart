@@ -107,7 +107,7 @@ class _GalleryInfoBarState extends State<GalleryInfoBar> {
   @override
   Widget build(BuildContext context) {
     return GetBuilder<GalleryPageController>(
-        init: GalleryPageController(),
+        // init: GalleryPageController(),
         tag: pageCtrlDepth,
         id: GetIds.PAGE_VIEW_HEADER,
         builder: (GalleryPageController controller) {
@@ -116,7 +116,7 @@ class _GalleryInfoBarState extends State<GalleryInfoBar> {
           return GestureDetector(
             behavior: HitTestBehavior.opaque,
             onTap: () {
-              // print('tap h');
+              // logger.d('tap h');
               Get.to(() => const GalleryInfoPage());
             },
             onTapDown: (_) {

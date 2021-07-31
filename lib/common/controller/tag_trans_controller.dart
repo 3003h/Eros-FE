@@ -167,7 +167,6 @@ class TagTransController extends GetxController {
     logger.i(array.map((e) => '[$e]').join(','));
 
     for (int i = 0; i < array.length; i++) {
-      // print(array[i]);
       if (array[i].startsWith(RegExp(r'\w+:"?'))) {
         if (!RegExp(r'\$"?$').hasMatch(array[i])) {
           final tempArray = array.sublist(i);

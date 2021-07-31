@@ -204,4 +204,6 @@ class ViewState {
   bool needRebuild = false;
 
   Map<int, bool> loadCompleMap = <int, bool>{};
+
+  final Map<int, int> errCountMap = {};
 }

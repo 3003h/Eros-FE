@@ -230,7 +230,13 @@ class _ViewImageExtState extends State<ViewImageExt>
                         return ViewError(
                             ser: widget.imageSer, errInfo: _errInfo);
                       } else {
-                        return const SizedBox.shrink();
+                        // return const SizedBox.shrink();
+                        return ViewLoading(
+                          ser: widget.imageSer,
+                          duration: vState.viewMode != ViewMode.topToBottom
+                              ? const Duration(milliseconds: 50)
+                              : null,
+                        );
                       }
                     }
                     final GalleryImage? _image = snapshot.data;

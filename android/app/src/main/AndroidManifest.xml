@@ -47,11 +47,36 @@
                 <data
                     android:scheme="https"
                     android:host="e-hentai.org"
-                    android:pathPrefix="/g"/>
+                    android:pathPrefix="/g/"/>
                 <data
                     android:scheme="https"
                     android:host="exhentai.org"
-                    android:pathPrefix="/g"/>
+                    android:pathPrefix="/g/"/>
+                <data
+                    android:scheme="https"
+                    android:host="e-hentai.org"
+                    android:pathPrefix="/s/"/>
+                <data
+                    android:scheme="https"
+                    android:host="exhentai.org"
+                    android:pathPrefix="/s/"/>
+                <data
+                    android:scheme="https"
+                    android:host="e-hentai.org"
+                    android:pathPrefix="/tag/"/>
+                <data
+                    android:scheme="https"
+                    android:host="exhentai.org"
+                    android:pathPrefix="/tag/"/>
+                <data
+                    android:scheme="https"
+                    android:host="e-hentai.org"
+                    android:pathPrefix="/uploader/"/>
+                <data
+                    android:scheme="https"
+                    android:host="exhentai.org"
+                    android:pathPrefix="/uploader/"/>
+
             </intent-filter>
         </activity>
         <!-- Don't delete the meta-data below.

@@ -99,10 +99,20 @@ class DownloadController extends GetxController {
 
   /// 获取下载路径
   Future<String> _getGalleryDownloadPath(String custpath) async {
-    final String _dirPath = GetPlatform.isAndroid
-        ? path.join(
-            (await getExternalStorageDirectory())!.path, 'Download', custpath)
-        : path.join(Global.appDocPath, 'Download', custpath);
+    // final String _dirPath2 = GetPlatform.isAndroid
+    //     ? path.join(
+    //         (await getExternalStorageDirectory())!.path, 'Download', custpath)
+    //     : path.join(Global.appDocPath, 'Download', custpath);
+
+    late final String _dirPath;
+    if (GetPlatform.isAndroid && ehConfigService.downloadLocatino.isNotEmpty) {
+      _dirPath = path.join(ehConfigService.downloadLocatino, custpath);
+    } else if (GetPlatform.isAndroid) {
+      _dirPath = path.join(
+          (await getExternalStorageDirectory())!.path, 'Download', custpath);
+    } else {
+      _dirPath = path.join(Global.appDocPath, 'Download', custpath);
+    }
 
     final Directory savedDir = Directory(_dirPath);
     // 判断下载路径是否存在
@@ -368,7 +378,7 @@ class DownloadController extends GetxController {
     final List<GalleryImageTask> imageTasksOri =
         await _imageTaskDao.findAllTaskByGid(galleryTask.gid);
 
-    logger.d('${imageTasksOri.map((e) => e.toString()).join('\n')} ');
+    logger.v('${imageTasksOri.map((e) => e.toString()).join('\n')} ');
 
     final gidStr = '${galleryTask.gid}';
 
@@ -421,7 +431,7 @@ class DownloadController extends GetxController {
               maxSer,
               cancelToken: _cancelToken,
               onDownloadComplete: (String fileName) async {
-                loggerSimple.d('$itemSer complete');
+                logger.d('$itemSer complete');
 
                 // 下载完成 更新数据库明细
                 // logger.d('下载完成 更新数据库明细');
@@ -602,7 +612,6 @@ class DownloadController extends GetxController {
   }) async {
     final GalleryImage _image = await Api.fetchImageInfo(
       href,
-      ser: itemSer,
       refresh: changeSource,
       sourceId: sourceId,
       cancelToken: cancelToken,

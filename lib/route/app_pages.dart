@@ -20,7 +20,6 @@ import 'package:fehviewer/pages/setting/eh_setting_page.dart';
 import 'package:fehviewer/pages/setting/search_setting_page.dart';
 import 'package:fehviewer/pages/setting/security_setting_page.dart';
 import 'package:fehviewer/pages/setting/tab_setting.dart';
-import 'package:fehviewer/pages/setting/view/about_ex_page.dart';
 import 'package:fehviewer/pages/setting/view_setting_page.dart';
 import 'package:fehviewer/pages/tab/bindings/splash_binding.dart';
 import 'package:fehviewer/pages/tab/view/download_page.dart';
@@ -33,9 +32,7 @@ import 'package:fehviewer/pages/tab/view/search_page_new.dart';
 import 'package:fehviewer/pages/tab/view/splash_page.dart';
 import 'package:fehviewer/pages/tab/view/unlock_page.dart';
 import 'package:fehviewer/pages/tab/view/watched_page.dart';
-import 'package:flutter/foundation.dart';
 import 'package:get/get.dart';
-import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 
 import 'routes.dart';
 
@@ -64,43 +61,35 @@ class AppPages {
     GetPage(
       name: EHRoutes.selFavorie,
       page: () => FavoriteSelectorPage(),
-      transition: Transition.cupertino,
     ),
     GetPage(
       name: EHRoutes.ehSetting,
       page: () => EhSettingPage(),
-      transition: Transition.cupertino,
     ),
     GetPage(
       name: EHRoutes.advancedSetting,
       page: () => AdvancedSettingPage(),
-      transition: Transition.cupertino,
       binding: BindingsBuilder(() => Get.lazyPut(() => CacheController())),
     ),
     GetPage(
       name: EHRoutes.about,
       page: () => AboutPage(),
-      transition: Transition.cupertino,
     ),
     GetPage(
       name: EHRoutes.downloadSetting,
       page: () => DownloadSettingPage(),
-      transition: Transition.cupertino,
     ),
     GetPage(
       name: EHRoutes.searchSetting,
       page: () => SearchSettingPage(),
-      transition: Transition.cupertino,
     ),
     GetPage(
       name: EHRoutes.securitySetting,
       page: () => SecuritySettingPage(),
-      transition: Transition.cupertino,
     ),
     GetPage(
       name: EHRoutes.viewSeting,
       page: () => ViewSettingPage(),
-      transition: Transition.cupertino,
     ),
     GetPage(
       name: EHRoutes.login,
@@ -109,7 +98,6 @@ class AppPages {
       binding: BindingsBuilder(
         () => Get.lazyPut(() => LoginExtController()),
       ),
-      transition: Transition.cupertino,
     ),
     GetPage(
       name: EHRoutes.webLogin,
@@ -125,7 +113,6 @@ class AppPages {
       binding: BindingsBuilder(
         () => Get.lazyPut(() => TagInfoController(), tag: pageCtrlDepth),
       ),
-      transition: Transition.cupertino,
     ),
     GetPage(
       name: EHRoutes.pageSetting,
@@ -153,7 +140,6 @@ class AppPages {
     GetPage(
       name: EHRoutes.download,
       page: () => const DownloadTab(tabIndex: EHRoutes.download),
-      transition: Transition.cupertino,
     ),
     GetPage(
       name: EHRoutes.galleryView,
@@ -171,9 +157,9 @@ class AppPages {
       binding: BindingsBuilder<dynamic>(() {
         Get.lazyPut(() => ViewExtController());
       }),
-      transition: Transition.native,
-      opaque: kDebugMode,
-      // opaque: false,
+      // transition: Transition.native,
+      // opaque: kDebugMode,
+      opaque: false,
     ),
 
     // 使用命名路由跳转 EHRoutes.galleryPage
@@ -181,13 +167,11 @@ class AppPages {
       name: EHRoutes.galleryPage,
       page: () => GalleryMainPage(),
       binding: GalleryBinding(),
-      transition: Transition.cupertinoDialog,
     ),
 
     GetPage(
       name: EHRoutes.search,
       page: () => GallerySearchPageNew(),
-      transition: Transition.cupertino,
     ),
   ];
 }

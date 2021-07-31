@@ -5,19 +5,19 @@ import 'package:dio/dio.dart';
 typedef RetryEvaluator = FutureOr<bool> Function(DioError error);
 
 class RetryOptions {
-  const RetryOptions(
-      {this.retries = 3,
-      RetryEvaluator? retryEvaluator,
-      this.retryInterval = const Duration(seconds: 1)})
-      : _retryEvaluator = retryEvaluator;
+  const RetryOptions({
+    this.retries = 3,
+    RetryEvaluator? retryEvaluator,
+    this.retryInterval = const Duration(seconds: 1),
+  }) : _retryEvaluator = retryEvaluator;
 
   factory RetryOptions.fromExtra(RequestOptions? request) {
-    return request?.extra[extraKey];
+    return request?.extra[extraKey] ?? RetryOptions.noRetry();
   }
 
   factory RetryOptions.noRetry() {
     return const RetryOptions(
-      retries: 0,
+      retries: -1,
     );
   }
 
@@ -70,5 +70,10 @@ class RetryOptions {
     return options
       ..extra?.addAll(
           <String, dynamic>{}..addAll(options.extra ?? {})..addAll(toExtra()));
+  }
+
+  @override
+  String toString() {
+    return 'RetryOptions{retries: $retries, retryInterval: $retryInterval, _retryEvaluator: $_retryEvaluator}';
   }
 }

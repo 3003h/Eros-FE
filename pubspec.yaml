@@ -26,7 +26,7 @@ dependencies:
   dio: ^4.0.0
   dio_http_cache: any
 #  dio_cache_interceptor: 2.3.1
-  dio_retry_fixed: ^0.1.15-beta-null-safety
+#  dio_retry_fixed: ^0.1.15-beta-null-safety
 
   cookie_jar: ^3.0.1
   dio_cookie_manager: ^2.0.0
@@ -43,7 +43,7 @@ dependencies:
   tuple: ^2.0.0
   get: ^4.2.0
   get_storage: ^2.0.2
-  photo_view: ^0.11.1
+  photo_view: ^0.12.0
   cached_network_image: ^3.0.0
   extended_image: ^4.1.0
   liquid_progress_indicator_ns: ^1.0.0
@@ -74,7 +74,7 @@ dependencies:
     git:
       url: https://github.com/honjow/flutter_vibrate.git
   # 文件选择
-  file_picker: ^3.0.1
+  file_picker: ^3.0.4
   # 评星
   flutter_rating_bar: ^4.0.0
   custom_pop_up_menu: ^1.2.0
@@ -96,8 +96,8 @@ dependencies:
   device_info: ^2.0.1
   flutter_statusbar_manager:
     git:
-      url: https://github.com/NarHakobyan/flutter_statusbar_manager
-      ref: master
+      url: https://github.com/NarHakobyan/flutter_statusbar_manager.git
+#      ref: master
   flutter_easyrefresh: ^2.2.1
   flutter_markdown: ^0.6.2
   archive: ^3.1.2

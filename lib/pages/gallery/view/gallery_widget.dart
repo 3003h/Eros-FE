@@ -26,7 +26,6 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 import 'all_preview_page.dart';
-import 'const.dart';
 
 /// 封面小图 纯StatelessWidget
 class CoveTinyImage extends StatelessWidget {
