@@ -114,7 +114,7 @@ void _isolateDownload(SendPort sendPort) {
         }
       }
     } catch (e, stack) {
-      logger5.e('$e\n$stack');
+      // logger5.e('$e\n$stack');
       sendPort.send(
         _ResponseProtocol.error(
           _ResponseBean(
