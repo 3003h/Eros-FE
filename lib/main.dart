@@ -47,7 +47,7 @@ Future<void> main() async {
     }
     resetLogLevel();
 
-    downloadManagerIsolate.init();
+    // downloadManagerIsolate.init();
 
     runApp(MyApp());
   }, (Object error, StackTrace stackTrace) {

@@ -1,4 +1,7 @@
+import 'dart:async';
+import 'dart:convert';
 import 'dart:io';
+import 'dart:math';
 
 import 'package:collection/collection.dart';
 import 'package:dio/dio.dart';
@@ -46,7 +49,7 @@ class DownloadController extends GetxController {
     return (await Global.getDatabase()).imageTaskDao;
   }
 
-  EhConfigService ehConfigService = Get.find();
+  final EhConfigService ehConfigService = Get.find();
 
   @override
   void onInit() {
@@ -60,6 +63,7 @@ class DownloadController extends GetxController {
   @override
   void onClose() {
     downloadManagerIsolate.close();
+    cancelChkTimer();
     super.onClose();
   }
 
@@ -70,6 +74,7 @@ class DownloadController extends GetxController {
         ct.cancel();
       }
     }
+    cancelChkTimer();
     logger.d('reset multiDownload ${ehConfigService.multiDownload}');
     executor = Executor(concurrency: ehConfigService.multiDownload);
 
@@ -78,6 +83,7 @@ class DownloadController extends GetxController {
   }
 
   Future<void> _initGalleryTasks() async {
+    logger5.d(' _initGalleryTasks');
     GalleryTaskDao _galleryTaskDao;
     ImageTaskDao _imageTaskDao;
     try {
@@ -93,17 +99,13 @@ class DownloadController extends GetxController {
     for (final task in _tasks.reversed) {
       if (task.status == TaskStatus.running.value) {
         _startImageTask(galleryTask: task);
+        initChkTimer(task.gid);
       }
     }
   }
 
   /// 获取下载路径
   Future<String> _getGalleryDownloadPath(String custpath) async {
-    // final String _dirPath2 = GetPlatform.isAndroid
-    //     ? path.join(
-    //         (await getExternalStorageDirectory())!.path, 'Download', custpath)
-    //     : path.join(Global.appDocPath, 'Download', custpath);
-
     late final String _dirPath;
     if (GetPlatform.isAndroid && ehConfigService.downloadLocatino.isNotEmpty) {
       _dirPath = path.join(ehConfigService.downloadLocatino, custpath);
@@ -157,7 +159,6 @@ class DownloadController extends GetxController {
         await _galleryTaskDao.findGalleryTaskByGid(gid ?? -1);
     if (_oriTask != null) {
       logger.i('$gid 任务已存在 ');
-      // showToast('下载任务已存在');
       logger.d('${_oriTask.toString()} ');
       isNewTask = false;
     }
@@ -180,7 +181,7 @@ class DownloadController extends GetxController {
         : _oriTask!;
 
     if (isNewTask) {
-      logger.d('add task ${galleryTask.toString()}');
+      logger.d('add NewTask ${galleryTask.toString()}');
       _galleryTaskDao.insertTask(galleryTask);
       galleryTaskList.insert(0, galleryTask);
       showToast('${galleryTask.gid} Download task start');
@@ -194,6 +195,40 @@ class DownloadController extends GetxController {
       downloadPath: _dirPath,
       fCount: _fCount,
     );
+    initChkTimer(galleryTask.gid);
+  }
+
+  Map<int, Timer?> chkTimers = {};
+  Map<int, int> preComplet = {};
+  Map<int, int> curComplet = {};
+  void initChkTimer(int gid) {
+    const Duration period = Duration(seconds: 10);
+    chkTimers[gid] = Timer.periodic(
+      period,
+      (Timer timer) {
+        // 回调
+        logger.d('$gid afterTimer = ' + DateTime.now().toString());
+        logger.d('${curComplet[gid]}  ${preComplet[gid]}');
+        if (curComplet[gid] == preComplet[gid]) {
+          logger.d('reset $gid');
+          Future<void>(() => galleryTaskPaused(gid, silent: true))
+              .then((_) => Future.delayed(const Duration(microseconds: 2000)))
+              .then((_) => galleryTaskResume(gid));
+        } else {
+          preComplet[gid] = curComplet[gid] ?? 0;
+        }
+      },
+    );
+  }
+
+  void cancelChkTimer({int? gid}) {
+    if (gid != null) {
+      chkTimers[gid]?.cancel();
+    } else {
+      for (final Timer? timer in chkTimers.values) {
+        timer?.cancel();
+      }
+    }
   }
 
   GalleryTask galleryTaskCompleIncreasing(int gid) {
@@ -211,11 +246,14 @@ class DownloadController extends GetxController {
   }
 
   /// 更新任务进度
-  GalleryTask galleryTaskUpdate(int gid, {int? countComple, String? coverImg}) {
-    // logger.d('galleryTaskCountUpdate $gid $countComple');
+  GalleryTask galleryTaskUpdate(int gid,
+      {int? countComplet, String? coverImg}) {
+    logger.v('galleryTaskCountUpdate gid:$gid count:$countComplet');
+    curComplet[gid] = countComplet ?? 0;
+
     final index = galleryTaskList.indexWhere((element) => element.gid == gid);
     galleryTaskList[index] = galleryTaskList[index].copyWith(
-      completCount: countComple,
+      completCount: countComplet,
       coverImage: coverImg,
     );
 
@@ -224,24 +262,32 @@ class DownloadController extends GetxController {
 
   /// 更新任务为已完成
   Future<GalleryTask> galleryTaskComplete(int gid) {
+    cancelChkTimer(gid: gid);
     return galleryTaskUpdateStatus(gid, TaskStatus.complete);
   }
 
   /// 暂停任务
-  Future<GalleryTask> galleryTaskPaused(int gid) {
+  Future<GalleryTask?> galleryTaskPaused(int gid, {bool silent = false}) async {
+    cancelChkTimer(gid: gid);
     if (!((_cancelTokenMap['$gid']?.isCancelled) ?? true)) {
       _cancelTokenMap['$gid']?.cancel();
+    }
+    if (silent) {
+      return null;
     }
 
     return galleryTaskUpdateStatus(gid, TaskStatus.paused);
   }
 
-  Future galleryTaskResume(int gid) async {
+  /// 恢复任务
+  Future<void> galleryTaskResume(int gid) async {
+    logger.d('galleryTaskResume');
     final _galleryTaskDao = await getGalleryTaskDao();
     final GalleryTask? galleryTask =
         await _galleryTaskDao.findGalleryTaskByGid(gid);
     if (galleryTask != null) {
-      _startImageTask(galleryTask: galleryTask);
+      await _startImageTask(galleryTask: galleryTask);
+      initChkTimer(galleryTask.gid);
     }
   }
 
@@ -369,7 +415,7 @@ class DownloadController extends GetxController {
     int? fCount,
     List<GalleryImage>? images,
   }) async {
-    logger.d('addTask ${galleryTask.gid} ${galleryTask.title}');
+    logger.d('_startImageTask ${galleryTask.gid} ${galleryTask.title}');
 
     final ImageTaskDao _imageTaskDao = await getImageTaskDao();
 
@@ -378,18 +424,14 @@ class DownloadController extends GetxController {
     final List<GalleryImageTask> imageTasksOri =
         await _imageTaskDao.findAllTaskByGid(galleryTask.gid);
 
-    logger.v('${imageTasksOri.map((e) => e.toString()).join('\n')} ');
+    logger.d(
+        '${imageTasksOri.where((element) => element.status != TaskStatus.complete.value).map((e) => e.toString()).join('\n')} ');
 
     final gidStr = '${galleryTask.gid}';
 
     // 初始化
     _initDownloadMapByGid(gidStr, images: images);
 
-    // 获取所有href信息
-    // for (int index = 0; index < filecount; index++) {
-    //   await _checkAndGetImages(gidStr, index + 1, filecount, fCount, url);
-    // }
-    // logger.d('获取所有href信息完成');
     _updateImageTasksByGid(gidStr);
 
     galleryTaskUpdateStatus(int.parse(gidStr), TaskStatus.running);
@@ -401,37 +443,49 @@ class DownloadController extends GetxController {
 
     downloadPath ??= galleryTask.dirPath;
 
+    final _completSers = imageTasksOri
+        .where((element) => element.status == TaskStatus.complete.value)
+        .map((e) => e.ser)
+        .toList();
+
+    final int _maxCompletSer =
+        _completSers.isNotEmpty ? _completSers.reduce(max) : 0;
+
+    logger.d('_maxCompletSer:$_maxCompletSer');
+
     // 下载
     for (int index = 0; index < galleryTask.fileCount; index++) {
-      if (imageTasksOri.length > index) {
-        final _imageTask = imageTasksOri[index];
-        if (_imageTask.status == TaskStatus.complete.value) {
-          continue;
-        }
+      final itemSer = index + 1;
+
+      final _oriImageTask =
+          imageTasksOri.firstWhereOrNull((element) => element.ser == itemSer);
+      if (_oriImageTask?.status == TaskStatus.complete.value) {
+        continue;
       }
+
+      logger.v('ser:$itemSer/${imageTasksOri.length}');
 
       fCount ??= await _fetchFirstPageCount(galleryTask.url!,
           cancelToken: _cancelToken);
 
       executor.scheduleTask(() async {
-        final itemSer = index + 1;
-
         final GalleryImage? tImage = await _checkAndGetImages(
             gidStr, itemSer, galleryTask.fileCount, fCount!, galleryTask.url);
 
         if (tImage != null) {
-          final maxSer = galleryTask.fileCount + 1;
+          final int maxSer = galleryTask.fileCount + 1;
 
           try {
             await _downloadImage(
               tImage,
-              imageTasksOri.length > index ? imageTasksOri[index] : null,
+              _oriImageTask,
               gidStr,
               downloadPath!,
               maxSer,
               cancelToken: _cancelToken,
+              redownload: itemSer < _maxCompletSer,
               onDownloadComplete: (String fileName) async {
-                logger.d('$itemSer complete');
+                logger.v('$itemSer complete');
 
                 // 下载完成 更新数据库明细
                 // logger.d('下载完成 更新数据库明细');
@@ -448,7 +502,7 @@ class DownloadController extends GetxController {
 
                 final _task = galleryTaskUpdate(
                   galleryTask.gid,
-                  countComple: listComplete.length,
+                  countComplet: listComplete.length,
                   coverImg: itemSer == 1 ? fileName : null,
                 );
                 if (_task.fileCount == listComplete.length) {
@@ -516,19 +570,23 @@ class DownloadController extends GetxController {
     String gid,
     String downloadPath,
     int maxSer, {
+    bool redownload = false,
     CancelToken? cancelToken,
     ValueChanged<String>? onDownloadComplete,
   }) async {
     loggerSimple.v('${image.ser} start');
+    // if (redownload) logger.d('${image.ser} redownload');
 
     String _imageUrl = '';
     late GalleryImage _uptImage;
     String _fileName = '';
 
     // 存在imageTask的 用原url下载
-    if (imageTask != null &&
+    final bool useOriginalUrl = imageTask != null &&
         imageTask.imageUrl != null &&
-        (imageTask.imageUrl?.isNotEmpty ?? false)) {
+        (imageTask.imageUrl?.isNotEmpty ?? false);
+
+    if (useOriginalUrl && !redownload) {
       final String? imageUrl = imageTask.imageUrl;
       loggerSimple.v('${image.ser} DL $imageUrl');
 
@@ -547,6 +605,7 @@ class DownloadController extends GetxController {
         oriImage: image,
         gid: gid,
         cancelToken: cancelToken,
+        changeSource: redownload,
       );
       _imageUrl = imageFetched.imageUrl!;
       _uptImage = imageFetched;
@@ -555,6 +614,8 @@ class DownloadController extends GetxController {
 
       _addAllImages(gid, [imageFetched]);
       await _updateImageTask(gid, imageFetched, fileName: _fileName);
+
+      if (redownload) logger.v('${jsonEncode(imageFetched)} ');
     }
 
     try {
