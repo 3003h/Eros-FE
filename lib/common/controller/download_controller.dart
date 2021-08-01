@@ -53,6 +53,7 @@ class DownloadController extends GetxController {
     logger.d(
         'DownloadController onInit multiDownload:${ehConfigService.multiDownload}');
     dState.executor = Executor(concurrency: ehConfigService.multiDownload);
+    allowMediaScan(ehConfigService.allowMediaScan);
     _initGalleryTasks();
   }
 
