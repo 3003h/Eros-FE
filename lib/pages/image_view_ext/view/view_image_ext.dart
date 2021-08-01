@@ -156,7 +156,7 @@ class _ViewImageExtState extends State<ViewImageExt>
     };
 
     if (vState.loadType == LoadType.file) {
-      /// 从已下载查看的形式
+      /// 从已下载查看
       final path = vState.imagePathList[widget.imageSer - 1];
 
       final Widget image = ExtendedImage.file(
@@ -172,6 +172,19 @@ class _ViewImageExtState extends State<ViewImageExt>
             controller.setScale100(imageInfo!, size);
 
             controller.onLoadCompleted(widget.imageSer);
+          } else if (state.extendedImageLoadState == LoadState.loading) {
+            final ImageChunkEvent? loadingProgress = state.loadingProgress;
+            final double? progress = loadingProgress?.expectedTotalBytes != null
+                ? (loadingProgress?.cumulativeBytesLoaded ?? 0) /
+                    (loadingProgress?.expectedTotalBytes ?? 1)
+                : null;
+            return ViewLoading(
+              ser: widget.imageSer,
+              progress: progress,
+              duration: vState.viewMode != ViewMode.topToBottom
+                  ? const Duration(milliseconds: 50)
+                  : null,
+            );
           }
         },
       );

@@ -65,14 +65,15 @@ class ViewError extends StatelessWidget {
 }
 
 class ViewLoading extends StatelessWidget {
-  const ViewLoading({Key? key, required this.ser, this.duration})
+  const ViewLoading({Key? key, required this.ser, this.duration, this.progress})
       : super(key: key);
   final int ser;
   final Duration? duration;
+  final double? progress;
 
   @override
   Widget build(BuildContext context) {
-    final _loadWidget = _ViewLoading(ser: ser);
+    final _loadWidget = _ViewLoading(ser: ser, progress: progress);
 
     if (duration == null) {
       return _loadWidget;
@@ -660,17 +661,17 @@ class ThumbnailListView extends GetView<ViewExtController> {
                     onTap: () => logic.jumpToPage(index),
                     child: Container(
                       margin: const EdgeInsets.symmetric(horizontal: 4),
-                      width: 75,
+                      width: kThumbListViewHeight / 2,
                       child: Column(
                         // mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           Expanded(
-                            flex: 10,
-                            child: Center(
+                            flex: (kThumbListViewHeight / 14).round(),
+                            child: Container(
+                              alignment: Alignment.center,
                               child: ClipRRect(
-                                borderRadius: BorderRadius.circular(6),
+                                borderRadius: BorderRadius.circular(4),
                                 child: Container(
-                                  // color: Colors.grey.withOpacity(0.6),
                                   child: thumb,
                                 ),
                               ),
@@ -808,11 +809,16 @@ class _FutureThumblState extends State<FutureThumbl> {
         });
   }
 
-  Container buildPlaceholder() {
-    return Container(
-      color: Colors.grey.withOpacity(0.3),
-      child: const Center(child: CupertinoActivityIndicator()),
-    );
+  Widget buildPlaceholder() {
+    return const CupertinoActivityIndicator();
+
+    // return Center(
+    //     child: ClipRRect(
+    //   borderRadius: BorderRadius.all(Radius.circular(40)),
+    //   child: Container(
+    //       color: Colors.grey.withOpacity(0.3),
+    //       child: const CupertinoActivityIndicator().paddingAll(4)),
+    // ));
   }
 
   GestureDetector builderrorWidget() {

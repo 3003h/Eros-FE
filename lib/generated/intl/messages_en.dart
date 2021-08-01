@@ -39,6 +39,8 @@ class MessageLookup extends MessageLookupByLibrary {
         "all_Favorites": MessageLookupByLibrary.simpleMessage("All Favorites"),
         "all_comment": MessageLookupByLibrary.simpleMessage("All Comment"),
         "all_preview": MessageLookupByLibrary.simpleMessage("All Preview"),
+        "allow_media_scan":
+            MessageLookupByLibrary.simpleMessage("Allow media scan"),
         "app_title": MessageLookupByLibrary.simpleMessage("FEhViewer"),
         "autoLock": MessageLookupByLibrary.simpleMessage("Auto-lock"),
         "back": MessageLookupByLibrary.simpleMessage("Back"),
@@ -122,6 +124,8 @@ class MessageLookup extends MessageLookupByLibrary {
         "max_history": MessageLookupByLibrary.simpleMessage("Maximum history"),
         "min": MessageLookupByLibrary.simpleMessage("min"),
         "morePreviews": MessageLookupByLibrary.simpleMessage("More previews"),
+        "multi_download":
+            MessageLookupByLibrary.simpleMessage("multi Download"),
         "mytags_on_website":
             MessageLookupByLibrary.simpleMessage("My tags on website"),
         "noMorePreviews":

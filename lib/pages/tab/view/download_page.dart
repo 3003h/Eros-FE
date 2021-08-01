@@ -122,6 +122,7 @@ class DownloadGalleryView extends GetView<DownloadViewController> {
       return ListView.separated(
         itemBuilder: (_, int _taskIndex) {
           final GalleryTask _taskInfo = controller.galleryTasks[_taskIndex];
+          final String? _speed = controller.downloadSpeeds[_taskInfo.gid];
 
           return GestureDetector(
             onLongPress: () => controller.onLongPress(_taskIndex),
@@ -129,6 +130,7 @@ class DownloadGalleryView extends GetView<DownloadViewController> {
             child: DownloadGalleryItem(
               title: _taskInfo.title,
               status: TaskStatus(_taskInfo.status ?? 0),
+              speed: _speed,
               filecount: _taskInfo.fileCount,
               completeCount: _taskInfo.completCount ?? 0,
               index: _taskIndex,

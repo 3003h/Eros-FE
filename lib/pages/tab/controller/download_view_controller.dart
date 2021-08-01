@@ -46,7 +46,11 @@ class DownloadViewController extends GetxController {
           .map((MapEntry<String, DownloadTaskInfo> e) => e.value)
           .toList();
 
-  List<GalleryTask> get galleryTasks => _downloadController.galleryTaskList;
+  List<GalleryTask> get galleryTasks =>
+      _downloadController.dState.galleryTaskList;
+
+  Map<int, String> get downloadSpeeds =>
+      _downloadController.dState.downloadSpeeds;
 
   Future<List<GalleryImageTask>> getImageTasks(int index) async {
     final gid = galleryTasks[index].gid;

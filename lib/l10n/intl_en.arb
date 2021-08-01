@@ -161,5 +161,7 @@
   "page_range": "Page range",
   "page_range_error": "Page range error",
   "input_error": "Input error",
-  "input_empty": "Input empty"
+  "input_empty": "Input empty",
+  "allow_media_scan": "Allow media scan",
+  "multi_download": "multi Download"
 }

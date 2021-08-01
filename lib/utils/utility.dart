@@ -100,6 +100,19 @@ double scale100({
   }
 }
 
+///格式化文件大小
+String renderSize(int inValue) {
+  double value = inValue.toDouble();
+  final List<String> unitArr = <String>['B', 'K', 'M', 'G'];
+  int index = 0;
+  while (value > 1024) {
+    index++;
+    value = value / 1024;
+  }
+  final String size = value.toStringAsFixed(2);
+  return '$size ${unitArr[index]}';
+}
+
 class EHUtils {
   static Uint8List stringToUint8List(String source) {
     /*logger.d('${source.length}: "$source" (${source.runes.length})');

@@ -128,7 +128,7 @@ class ViewExtState {
 
   final Map<int, int> errCountMap = {};
 
-  int retryCount = 7;
+  int retryCount = 3;
 
   List<double> doubleTapScales = <double>[1.0, 2.0, 3.0];
 
@@ -181,6 +181,8 @@ class ViewExtState {
   int tempIndex = 0;
 
   bool showThumbList = false;
-  int mindThumbIndex = 0;
+  int centThumbIndex = 0;
+  int minThumbIndex = 0;
+  int maxThumbIndex = 0;
   bool syncThumbList = true;
 }

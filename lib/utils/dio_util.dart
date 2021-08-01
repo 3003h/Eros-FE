@@ -268,6 +268,7 @@ class HttpManager {
     bool errToast = false,
     bool deleteOnError = true,
     VoidCallback? onDownloadComplete,
+    ProgressCallback? progressCallback,
   }) async {
     Response<dynamic> response;
     try {
@@ -275,6 +276,7 @@ class HttpManager {
         urlPath,
         savePath,
         onReceiveProgress: (int count, int total) {
+          progressCallback?.call(count, total);
           // logger.v('$count $total');
           if (count == total) {
             onDownloadComplete?.call();

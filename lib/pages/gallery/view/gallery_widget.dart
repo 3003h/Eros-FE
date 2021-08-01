@@ -523,10 +523,7 @@ class MorePreviewButton extends StatelessWidget {
         style: const TextStyle(fontSize: 16),
       ),
       onPressed: () {
-        Get.to(
-          () => AllPreviewPage(),
-          transition: Transition.cupertino,
-        );
+        Get.toNamed(EHRoutes.galleryAllPreviews);
       },
     );
   }

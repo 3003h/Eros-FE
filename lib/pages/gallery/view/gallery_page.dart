@@ -3,6 +3,7 @@ import 'package:fehviewer/models/index.dart';
 import 'package:fehviewer/network/gallery_request.dart';
 import 'package:fehviewer/pages/gallery/controller/gallery_page_controller.dart';
 import 'package:fehviewer/pages/gallery/view/gallery_widget.dart';
+import 'package:fehviewer/route/routes.dart';
 // import 'package:fehviewer/utils/cust_lib/selectable_text.dart';
 import 'package:fehviewer/utils/logger.dart';
 import 'package:flutter/cupertino.dart';
@@ -67,10 +68,7 @@ class _GalleryMainPageState extends State<GalleryMainPage> {
         enableControlFinishLoad: false,
         onLoad: () async {
           if (_controller.images.isNotEmpty) {
-            Get.to(
-              () => AllPreviewPage(),
-              transition: Transition.cupertino,
-            );
+            Get.toNamed(EHRoutes.galleryAllPreviews);
           }
         },
         footer: BezierBounceFooter(

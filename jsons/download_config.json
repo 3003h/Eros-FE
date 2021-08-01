@@ -2,5 +2,6 @@
   "preloadImage?": 5,
   "multiDownload?": 3,
   "downloadLocation?" : "",
-  "downloadOrigImage?": false
+  "downloadOrigImage?": false,
+  "allowMediaScan?": false
 }

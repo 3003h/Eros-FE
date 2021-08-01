@@ -4,6 +4,7 @@ import 'package:dio_http_cache/dio_http_cache.dart';
 import 'package:fehviewer/common/global.dart';
 import 'package:fehviewer/utils/logger.dart';
 import 'package:fehviewer/utils/toast.dart';
+import 'package:fehviewer/utils/utility.dart';
 import 'package:flutter_cache_manager/flutter_cache_manager.dart';
 import 'package:get/get.dart';
 import 'package:get/get_state_manager/get_state_manager.dart';
@@ -125,20 +126,4 @@ class CacheController extends GetxController with StateMixin<String> {
       logger.e('$e');
     }
   }
-}
-
-///格式化文件大小
-String renderSize(int inValue) {
-  double value = inValue.toDouble();
-  if (null == value) {
-    return '0';
-  }
-  final List<String> unitArr = <String>['B', 'K', 'M', 'G'];
-  int index = 0;
-  while (value > 1024) {
-    index++;
-    value = value / 1024;
-  }
-  final String size = value.toStringAsFixed(2);
-  return '$size ${unitArr[index]}';
 }

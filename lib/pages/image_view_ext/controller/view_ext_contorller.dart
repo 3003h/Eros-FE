@@ -26,7 +26,7 @@ import 'view_ext_state.dart';
 
 const double kBottomBarHeight = 44.0;
 const double kTopBarHeight = 44.0;
-const double kThumbListViewHeight = 140.0;
+const double kThumbListViewHeight = 120.0;
 
 const String idViewTopBar = 'ViewTopBar';
 const String idViewBottomBar = 'ViewBottomBar';
@@ -374,10 +374,14 @@ class ViewExtController extends GetxController {
     logger.v('${vState.viewMode} tap left');
     vState.fade = false;
     if (vState.viewMode == ViewMode.LeftToRight && vState.pageIndex > 0) {
-      pageController.jumpToPage(vState.pageIndex - 1);
+      // pageController.jumpToPage(vState.pageIndex - 1);
+      pageController.animateToPage(vState.pageIndex - 1,
+          duration: const Duration(milliseconds: 200), curve: Curves.ease);
     } else if (vState.viewMode == ViewMode.rightToLeft &&
         vState.pageIndex < vState.filecount) {
-      pageController.jumpToPage(vState.pageIndex + 1);
+      // pageController.jumpToPage(vState.pageIndex + 1);
+      pageController.animateToPage(vState.pageIndex + 1,
+          duration: const Duration(milliseconds: 200), curve: Curves.ease);
     } else if (vState.viewMode == ViewMode.topToBottom &&
         itemScrollController.isAttached &&
         vState.pageIndex > 0) {
@@ -394,10 +398,14 @@ class ViewExtController extends GetxController {
     vState.fade = false;
     if (vState.viewMode == ViewMode.LeftToRight &&
         vState.pageIndex < vState.filecount) {
-      pageController.jumpToPage(vState.pageIndex + 1);
+      // pageController.jumpToPage(vState.pageIndex + 1);
+      pageController.animateToPage(vState.pageIndex + 1,
+          duration: const Duration(milliseconds: 200), curve: Curves.ease);
     } else if (vState.viewMode == ViewMode.rightToLeft &&
         vState.pageIndex > 0) {
-      pageController.jumpToPage(vState.pageIndex - 1);
+      // pageController.jumpToPage(vState.pageIndex - 1);
+      pageController.animateToPage(vState.pageIndex - 1,
+          duration: const Duration(milliseconds: 200), curve: Curves.ease);
     } else if (vState.viewMode == ViewMode.topToBottom &&
         itemScrollController.isAttached &&
         vState.pageIndex < vState.filecount) {
@@ -668,9 +676,11 @@ class ViewExtController extends GetxController {
               position.itemLeadingEdge > max.itemLeadingEdge ? position : max)
           .index;
 
-      final midIndex = (min + max) ~/ 2;
-      if (vState.mindThumbIndex != midIndex) {
-        vState.mindThumbIndex = midIndex;
+      final centIndex = (min + max) ~/ 2;
+      if (vState.centThumbIndex != centIndex) {
+        vState.minThumbIndex = min;
+        vState.maxThumbIndex = max;
+        vState.centThumbIndex = centIndex;
       }
     }
   }
@@ -678,11 +688,15 @@ class ViewExtController extends GetxController {
   final thrThumbScrollTo =
       Throttling(duration: const Duration(milliseconds: 200));
   void thumbScrollTo({int? index}) {
-    thrThumbScrollTo.throttle(() => thumbScrollController.scrollTo(
-          index: index ?? vState.currentItemIndex,
-          duration: const Duration(milliseconds: 200),
-          curve: Curves.ease,
-        ));
+    final indexRange = vState.maxThumbIndex - vState.minThumbIndex;
+    final toIndex = index ?? vState.currentItemIndex;
+    if (toIndex < vState.filecount - indexRange - 1) {
+      thrThumbScrollTo.throttle(() => thumbScrollController.scrollTo(
+            index: toIndex,
+            duration: const Duration(milliseconds: 300),
+            curve: Curves.ease,
+          ));
+    }
   }
 
   Future<void> _toPage({int? index}) async {
