@@ -126,7 +126,7 @@ class ListViewAdvancedSetting extends StatelessWidget {
                 ? L10n.of(context).on
                 : L10n.of(context).off,
             onTap: () {
-              Get.to(() => CustomHostsPage(), transition: Transition.cupertino);
+              Get.to(() => CustomHostsPage());
             },
           )),
       TextSwitchItem(

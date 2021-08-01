@@ -71,6 +71,10 @@ class EhConfigService extends ProfileService {
   int get multiDownload => _multiDownload.value;
   set multiDownload(val) => _multiDownload.value = val;
 
+  final RxBool _allowMediaScan = false.obs;
+  bool get allowMediaScan => _allowMediaScan.value;
+  set allowMediaScan(bool val) => _allowMediaScan.value = val;
+
   /// 阅读相关设置
   /// 阅读方向
   Rx<ViewMode> viewMode = ViewMode.LeftToRight.obs;
@@ -129,6 +133,11 @@ class EhConfigService extends ProfileService {
         : 3;
     everProfile<int>(_multiDownload, (value) {
       downloadConfig = downloadConfig.copyWith(multiDownload: value);
+    });
+
+    allowMediaScan = downloadConfig.allowMediaScan ?? false;
+    everProfile<bool>(_allowMediaScan, (value) {
+      downloadConfig = downloadConfig.copyWith(allowMediaScan: value);
     });
 
     /// 阅读方向

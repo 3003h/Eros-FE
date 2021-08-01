@@ -1215,6 +1215,7 @@ class Api {
     bool? errToast,
     bool deleteOnError = true,
     VoidCallback? onDownloadComplete,
+    ProgressCallback? progressCallback,
   }) async {
     // await CustomHttpsProxy.instance.init();
     await Api.getHttpManager(retry: false).downLoadFile(
@@ -1223,6 +1224,7 @@ class Api {
       cancelToken: cancelToken,
       deleteOnError: deleteOnError,
       onDownloadComplete: onDownloadComplete,
+      progressCallback: progressCallback,
     );
   }
 }

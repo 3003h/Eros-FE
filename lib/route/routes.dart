@@ -29,6 +29,7 @@ class EHRoutes {
   static const String search = '/search';
 
   static const String galleryComment = '/galleryPage/comment';
+  static const String galleryAllPreviews = '/galleryPage/allPreviews';
   static const String galleryView = '/galleryPage/view';
   static const String galleryViewExt = '/galleryPage/viewExt';
   static const String galleryPage = '/galleryPage';

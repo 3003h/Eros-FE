@@ -6,7 +6,6 @@ import 'package:fehviewer/generated/l10n.dart';
 import 'package:fehviewer/pages/setting/setting_base.dart';
 import 'package:fehviewer/utils/logger.dart';
 import 'package:file_picker/file_picker.dart';
-// import 'package:filesystem_picker/filesystem_picker.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -33,6 +32,13 @@ class DownloadSettingPage extends StatelessWidget {
 
 class ListViewDownloadSetting extends StatelessWidget {
   final EhConfigService ehConfigService = Get.find();
+  final DownloadController downloadController = Get.find();
+
+  void _handleAllowMediaScanChanged(bool newValue) {
+    ehConfigService.allowMediaScan = newValue;
+    downloadController.allowMediaScan(newValue);
+  }
+
   @override
   Widget build(BuildContext context) {
     final List<Widget> _list = <Widget>[
@@ -60,14 +66,21 @@ class ListViewDownloadSetting extends StatelessWidget {
                     final String? result =
                         await FilePicker.platform.getDirectoryPath();
                     logger.d('set $result');
-                    ehConfigService.downloadLocatino =
-                        result ?? snapshot.data ?? '';
+                    if (result != null) {
+                      ehConfigService.downloadLocatino = result;
+                    }
                   },
                 );
               });
         }),
       _buildPreloadImageItem(context),
       _buildMultiDownloadItem(context),
+      if (GetPlatform.isAndroid || GetPlatform.isFuchsia)
+        TextSwitchItem(
+          L10n.of(context).allow_media_scan,
+          intValue: ehConfigService.allowMediaScan,
+          onChanged: _handleAllowMediaScanChanged,
+        ),
     ];
     return ListView.builder(
       itemCount: _list.length,
@@ -125,7 +138,7 @@ Widget _buildPreloadImageItem(BuildContext context) {
 
 /// 同时下载图片数量
 Widget _buildMultiDownloadItem(BuildContext context) {
-  final String _title = 'Multi Download';
+  final String _title = L10n.of(context).multi_download;
   final EhConfigService ehConfigService = Get.find();
 
   List<Widget> _getModeList(BuildContext context) {

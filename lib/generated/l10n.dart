@@ -1,7 +1,6 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-
 import 'intl/messages_all.dart';
 
 // **************************************************************************
@@ -1676,6 +1675,26 @@ class L10n {
     return Intl.message(
       'Input empty',
       name: 'input_empty',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Allow media scan`
+  String get allow_media_scan {
+    return Intl.message(
+      'Allow media scan',
+      name: 'allow_media_scan',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `multi Download`
+  String get multi_download {
+    return Intl.message(
+      'multi Download',
+      name: 'multi_download',
       desc: '',
       args: [],
     );

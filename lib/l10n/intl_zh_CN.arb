@@ -161,5 +161,7 @@
   "page_range": "跳转范围",
   "page_range_error": "输入范围有误",
   "input_error": "输入格式有误",
-  "input_empty": "输入空"
+  "input_empty": "输入空",
+  "allow_media_scan": "允许媒体扫描",
+  "multi_download": "同时下载图片数量"
 }

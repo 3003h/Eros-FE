@@ -20,6 +20,7 @@ class DownloadGalleryItem extends GetView<DownloadViewController> {
     this.completeCount = 0,
     this.coverimagePath,
     this.coverUrl,
+    this.speed,
   }) : super(key: key);
   final String title;
   final int filecount;
@@ -28,6 +29,7 @@ class DownloadGalleryItem extends GetView<DownloadViewController> {
   final int index;
   final String? coverimagePath;
   final String? coverUrl;
+  final String? speed;
 
   @override
   Widget build(BuildContext context) {
@@ -75,18 +77,14 @@ class DownloadGalleryItem extends GetView<DownloadViewController> {
                 ),
                 Row(
                   children: [
-                    Expanded(
-                      child: ClipRRect(
-                          borderRadius: BorderRadius.circular(4),
-                          child: LinearProgressIndicator(
-                            value: completeCount / filecount,
-                            backgroundColor: CupertinoDynamicColor.resolve(
-                                CupertinoColors.secondarySystemFill, context),
-                            valueColor: AlwaysStoppedAnimation<Color>(
-                                CupertinoDynamicColor.resolve(
-                                    CupertinoColors.activeBlue, context)),
-                          )).paddingOnly(right: 8.0),
+                    Text(
+                      speed != null ? '$speed/s' : '',
+                      style: const TextStyle(
+                        fontSize: 13,
+                      ),
                     ),
+                    const Spacer(),
+                    const SizedBox(width: 10),
                     Text(
                       '$completeCount/$filecount',
                       style: const TextStyle(
@@ -95,6 +93,17 @@ class DownloadGalleryItem extends GetView<DownloadViewController> {
                     ),
                     _getIcon(),
                   ],
+                ),
+                ClipRRect(
+                  borderRadius: BorderRadius.circular(4),
+                  child: LinearProgressIndicator(
+                    value: completeCount / filecount,
+                    backgroundColor: CupertinoDynamicColor.resolve(
+                        CupertinoColors.secondarySystemFill, context),
+                    valueColor: AlwaysStoppedAnimation<Color>(
+                        CupertinoDynamicColor.resolve(
+                            CupertinoColors.activeBlue, context)),
+                  ),
                 ),
               ],
             ),
@@ -113,6 +122,7 @@ class DownloadGalleryItem extends GetView<DownloadViewController> {
         data: const CupertinoThemeData(primaryColor: CupertinoColors.systemRed),
         child: CupertinoButton(
           padding: const EdgeInsets.all(0),
+          minSize: 30,
           child: const Icon(
             FontAwesomeIcons.pause,
             size: 14,
@@ -128,6 +138,7 @@ class DownloadGalleryItem extends GetView<DownloadViewController> {
             const CupertinoThemeData(primaryColor: CupertinoColors.activeBlue),
         child: CupertinoButton(
           padding: const EdgeInsets.all(0),
+          minSize: 30,
           child: const Icon(
             FontAwesomeIcons.check,
             size: 14,
@@ -141,6 +152,7 @@ class DownloadGalleryItem extends GetView<DownloadViewController> {
             const CupertinoThemeData(primaryColor: CupertinoColors.activeGreen),
         child: CupertinoButton(
           padding: const EdgeInsets.all(0),
+          minSize: 30,
           child: const Icon(
             FontAwesomeIcons.play,
             size: 14,
@@ -153,6 +165,7 @@ class DownloadGalleryItem extends GetView<DownloadViewController> {
       // 失败时 显示重试按钮。按下重试任务
       TaskStatus.failed: CupertinoButton(
         padding: const EdgeInsets.all(0),
+        minSize: 30,
         child: const Icon(
           FontAwesomeIcons.play,
           size: 14,
@@ -164,6 +177,7 @@ class DownloadGalleryItem extends GetView<DownloadViewController> {
       // 取消状态 显示重试按钮。按下重试任务
       TaskStatus.canceled: CupertinoButton(
         padding: const EdgeInsets.all(0),
+        minSize: 30,
         child: const Icon(
           FontAwesomeIcons.redo,
           size: 14,
@@ -173,15 +187,15 @@ class DownloadGalleryItem extends GetView<DownloadViewController> {
         },
       ).paddingSymmetric(),
       TaskStatus.enqueued: Container(
-        width: 40,
-        height: 40,
+        width: 30,
+        height: 30,
         child: const CupertinoActivityIndicator(
           radius: 10,
         ),
       ),
       TaskStatus.undefined: Container(
-        width: 40,
-        height: 40,
+        width: 30,
+        height: 30,
         child: const CupertinoActivityIndicator(
           radius: 10,
         ),

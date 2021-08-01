@@ -54,7 +54,7 @@ android {
     defaultConfig {
         applicationId "com.honjow.fehviewer"
         minSdkVersion 21
-        targetSdkVersion 30
+        targetSdkVersion 28
         versionCode flutterVersionCode.toInteger()
         versionName flutterVersionName
         archivesBaseName = "feh-v$versionName+$versionCode"

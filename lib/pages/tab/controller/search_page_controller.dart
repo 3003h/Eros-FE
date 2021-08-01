@@ -384,7 +384,6 @@ class SearchPageController extends TabViewController {
   void quickSearchList() {
     Get.to<String>(
       () => QuickSearchListPage(),
-      transition: Transition.cupertino,
     )?.then((String? value) {
       if (value == null) {
         return;

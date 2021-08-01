@@ -49,8 +49,8 @@ void getinit() {
   Get.lazyPut(() => UserController(), fenix: true);
   Get.lazyPut(() => GalleryCacheController(), fenix: true);
 
-  Get.lazyPut(() => DownloadController(), fenix: true);
-  Get.lazyPut(() => ArchiverDownloadController(), fenix: true);
+  Get.put(DownloadController());
+  Get.put(ArchiverDownloadController());
 
   Get.lazyPut(() => TabHomeController(), fenix: true);
   Get.lazyPut(() => PopularViewController(), fenix: true);
