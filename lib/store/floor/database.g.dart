@@ -69,7 +69,7 @@ class _$EhDatabase extends EhDatabase {
   Future<sqflite.Database> open(String path, List<Migration> migrations,
       [Callback? callback]) async {
     final databaseOptions = sqflite.OpenDatabaseOptions(
-      version: 3,
+      version: 4,
       onConfigure: (database) async {
         await database.execute('PRAGMA foreign_keys = ON');
         await callback?.onConfigure?.call(database);
@@ -85,7 +85,7 @@ class _$EhDatabase extends EhDatabase {
       },
       onCreate: (database, version) async {
         await database.execute(
-            'CREATE TABLE IF NOT EXISTS `GalleryTask` (`gid` INTEGER NOT NULL, `token` TEXT NOT NULL, `url` TEXT, `title` TEXT NOT NULL, `dirPath` TEXT, `fileCount` INTEGER NOT NULL, `completCount` INTEGER, `status` INTEGER, `coverImage` TEXT, PRIMARY KEY (`gid`))');
+            'CREATE TABLE IF NOT EXISTS `GalleryTask` (`gid` INTEGER NOT NULL, `token` TEXT NOT NULL, `url` TEXT, `title` TEXT NOT NULL, `dirPath` TEXT, `fileCount` INTEGER NOT NULL, `completCount` INTEGER, `status` INTEGER, `coverImage` TEXT, `addTime` INTEGER, PRIMARY KEY (`gid`))');
         await database.execute(
             'CREATE TABLE IF NOT EXISTS `GalleryImageTask` (`gid` INTEGER NOT NULL, `ser` INTEGER NOT NULL, `token` TEXT NOT NULL, `href` TEXT, `sourceId` TEXT, `imageUrl` TEXT, `filePath` TEXT, `status` INTEGER, PRIMARY KEY (`gid`, `ser`))');
         await database.execute(
@@ -130,7 +130,8 @@ class _$GalleryTaskDao extends GalleryTaskDao {
                   'fileCount': item.fileCount,
                   'completCount': item.completCount,
                   'status': item.status,
-                  'coverImage': item.coverImage
+                  'coverImage': item.coverImage,
+                  'addTime': item.addTime
                 },
             changeListener),
         _galleryTaskUpdateAdapter = UpdateAdapter(
@@ -146,7 +147,8 @@ class _$GalleryTaskDao extends GalleryTaskDao {
                   'fileCount': item.fileCount,
                   'completCount': item.completCount,
                   'status': item.status,
-                  'coverImage': item.coverImage
+                  'coverImage': item.coverImage,
+                  'addTime': item.addTime
                 },
             changeListener);
 
@@ -172,7 +174,8 @@ class _$GalleryTaskDao extends GalleryTaskDao {
             fileCount: row['fileCount'] as int,
             completCount: row['completCount'] as int?,
             status: row['status'] as int?,
-            coverImage: row['coverImage'] as String?));
+            coverImage: row['coverImage'] as String?,
+            addTime: row['addTime'] as int?));
   }
 
   @override
@@ -187,7 +190,8 @@ class _$GalleryTaskDao extends GalleryTaskDao {
             fileCount: row['fileCount'] as int,
             completCount: row['completCount'] as int?,
             status: row['status'] as int?,
-            coverImage: row['coverImage'] as String?),
+            coverImage: row['coverImage'] as String?,
+            addTime: row['addTime'] as int?),
         queryableName: 'GalleryTask',
         isView: false);
   }
@@ -204,7 +208,8 @@ class _$GalleryTaskDao extends GalleryTaskDao {
             fileCount: row['fileCount'] as int,
             completCount: row['completCount'] as int?,
             status: row['status'] as int?,
-            coverImage: row['coverImage'] as String?),
+            coverImage: row['coverImage'] as String?,
+            addTime: row['addTime'] as int?),
         arguments: [gid]);
   }
 

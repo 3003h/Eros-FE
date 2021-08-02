@@ -25,7 +25,7 @@ class HttpManager {
   HttpManager(
     String _baseUrl, {
     bool cache = true,
-    bool retry = true,
+    bool retry = false,
     bool domainFronting = false,
     int? connectTimeout = kDefconnectTimeout,
   }) {

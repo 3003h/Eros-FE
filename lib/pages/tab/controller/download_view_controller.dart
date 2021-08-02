@@ -46,14 +46,21 @@ class DownloadViewController extends GetxController {
           .map((MapEntry<String, DownloadTaskInfo> e) => e.value)
           .toList();
 
-  List<GalleryTask> get galleryTasks =>
-      _downloadController.dState.galleryTaskList;
+  RxMap<int, GalleryTask> get galleryTaskMap =>
+      _downloadController.dState.galleryTaskMap;
+
+  List<GalleryTask> get galleryTasks {
+    final tasks = _downloadController.dState.galleryTasks;
+    tasks.sort((GalleryTask a, GalleryTask b) {
+      return (b.addTime ?? 0) - (a.addTime ?? 0);
+    });
+    return tasks;
+  }
 
   Map<int, String> get downloadSpeeds =>
       _downloadController.dState.downloadSpeeds;
 
-  Future<List<GalleryImageTask>> getImageTasks(int index) async {
-    final gid = galleryTasks[index].gid;
+  Future<List<GalleryImageTask>> getImageTasks(int gid) async {
     return await _downloadController.getImageTasks(gid);
   }
 
@@ -120,7 +127,8 @@ class DownloadViewController extends GetxController {
 
   // Gallery 移除任务
   void removeGalleryTask(int index) {
-    _downloadController.removeDownloadGalleryTask(index: index);
+    final GalleryTask _task = galleryTasks[index];
+    _downloadController.removeDownloadGalleryTask(gid: _task.gid);
   }
 
   void onLongPress(int index, {DownloadType type = DownloadType.gallery}) {
@@ -160,11 +168,11 @@ class DownloadViewController extends GetxController {
   }
 
   // gallery 暂停任务
-  void pauseGalleryDownload(int gid) {
-    _downloadController.galleryTaskPaused(gid);
+  void pauseGalleryDownload(int? gid) {
+    if (gid != null) _downloadController.galleryTaskPaused(gid);
   }
 
-  void resumeGalleryDownload(int gid) {
-    _downloadController.galleryTaskResume(gid);
+  void resumeGalleryDownload(int? gid) {
+    if (gid != null) _downloadController.galleryTaskResume(gid);
   }
 }
