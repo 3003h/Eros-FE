@@ -14,5 +14,7 @@
   "sourceId?": "1234",
   "completeHeight?": false,
   "gid?": "1234",
-  "token?": "1234"
+  "token?": "1234",
+  "isDownloaded?": false,
+  "filePath?": ""
 }

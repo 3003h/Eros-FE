@@ -253,10 +253,7 @@ class DownloadManagerIsolate {
                   .then((GalleryImageTask? _uptImageTask) {
                 if (_uptImageTask != null &&
                     _uptImageTask.status == TaskStatus.complete.value) {
-                  final _task = _downloadController
-                      .galleryTaskCompleIncreasing(_uptImageTask.gid);
                   _imageTaskDao.updateImageTask(_uptImageTask);
-                  _galleryTaskDao.updateTask(_task);
                 }
               });
             }
@@ -311,10 +308,12 @@ class DownloadManagerIsolate {
           /// 明细入队完成
           case _ResponseType.enqueued:
             logger.d('明细入队完成');
-            GalleryTask _task =
+            GalleryTask? _task =
                 await _downloadController.galleryTaskUpdateStatus(
                     _resBean.galleryTask!.gid, TaskStatus.running);
-            await _galleryTaskDao.updateTask(_task);
+            if (_task != null) {
+              await _galleryTaskDao.updateTask(_task);
+            }
             break;
 
           /// 下载完成
@@ -325,9 +324,11 @@ class DownloadManagerIsolate {
                   await _imageTaskDao.finaAllTaskByGidAndStatus(
                       _resBean.galleryTask!.gid, TaskStatus.complete.value);
               if (_compleImageTasks.length == _resBean.galleryTask!.fileCount) {
-                GalleryTask _task = await _downloadController
+                final _task = await _downloadController
                     .galleryTaskComplete(_resBean.galleryTask!.gid);
-                await _galleryTaskDao.updateTask(_task);
+                if (_task != null) {
+                  await _galleryTaskDao.updateTask(_task);
+                }
               } else {
                 logger.d('有未完成的下载');
               }

@@ -9,6 +9,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_downloader/flutter_downloader.dart';
 import 'package:get/get.dart';
+import 'package:intl/intl.dart';
 import 'package:path/path.dart' as path;
 
 const Color _kDefaultNavBarBorderColor = Color(0x4D000000);
@@ -124,18 +125,24 @@ class DownloadGalleryView extends GetView<DownloadViewController> {
           final GalleryTask _taskInfo = controller.galleryTasks[_taskIndex];
           final String? _speed = controller.downloadSpeeds[_taskInfo.gid];
 
+          final DateTime date =
+              DateTime.fromMillisecondsSinceEpoch(_taskInfo.addTime ?? 0);
           return GestureDetector(
             onLongPress: () => controller.onLongPress(_taskIndex),
             behavior: HitTestBehavior.opaque,
             child: DownloadGalleryItem(
+              url: _taskInfo.url,
               title: _taskInfo.title,
               status: TaskStatus(_taskInfo.status ?? 0),
               speed: _speed,
+              addTime: _taskInfo.addTime != null
+                  ? DateFormat('yyyy-MM-dd HH:mm').format(date)
+                  : null,
               filecount: _taskInfo.fileCount,
               completeCount: _taskInfo.completCount ?? 0,
-              index: _taskIndex,
+              gid: _taskInfo.gid,
               coverimagePath: _taskInfo.coverImage != null
-                  ? path.join(_taskInfo.dirPath ?? '', _taskInfo.coverImage)
+                  ? path.join(_taskInfo.realDirPath ?? '', _taskInfo.coverImage)
                   : null,
             ),
           );

@@ -6,11 +6,13 @@ import 'package:fehviewer/models/base/eh_models.dart';
 import 'package:fehviewer/store/floor/entity/gallery_task.dart';
 import 'package:get/get.dart';
 
+const int kRetryThreshold = 20;
+
 class DownloadState {
   DownloadState();
-  // final RxMap<String, GalleryTask> galleryTaskMap = <String, GalleryTask>{}.obs;
+  final RxMap<int, GalleryTask> galleryTaskMap = <int, GalleryTask>{}.obs;
 
-  final RxList<GalleryTask> galleryTaskList = <GalleryTask>[].obs;
+  List<GalleryTask> get galleryTasks => galleryTaskMap.values.toList();
   final RxMap<int, String> downloadSpeeds = <int, String>{}.obs;
 
   late Executor executor;
@@ -23,8 +25,7 @@ class DownloadState {
   final Map<int, int> curComplet = {};
 
   final Map<String, int> downloadCounts = {};
-  final Map<int, int> lastCounts = {};
+  final Map<int, List<int>> lastCounts = {};
 
-  final retryThreshold = 2;
   final Map<int, int> noSpeed = {};
 }
