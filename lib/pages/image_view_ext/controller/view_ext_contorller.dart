@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:extended_image/extended_image.dart';
+import 'package:fehviewer/common/controller/download_controller.dart';
 import 'package:fehviewer/common/controller/gallerycache_controller.dart';
 import 'package:fehviewer/common/service/ehconfig_service.dart';
 import 'package:fehviewer/const/const.dart';
@@ -9,6 +10,8 @@ import 'package:fehviewer/models/base/eh_models.dart';
 import 'package:fehviewer/pages/gallery/controller/gallery_page_controller.dart';
 import 'package:fehviewer/pages/image_view_ext/common.dart';
 import 'package:fehviewer/pages/image_view_ext/view/view_ext.dart';
+import 'package:fehviewer/store/floor/dao/gallery_task_dao.dart';
+import 'package:fehviewer/store/floor/dao/image_task_dao.dart';
 import 'package:fehviewer/utils/logger.dart';
 import 'package:fehviewer/utils/utility.dart';
 import 'package:fehviewer/utils/vibrate.dart';
@@ -271,9 +274,11 @@ class ViewExtController extends GetxController {
   /// 拉取图片信息
   Future<GalleryImage?> fetchImage(
     int itemSer, {
-    // bool refresh = false,
     bool changeSource = false,
   }) async {
+    // GalleryTaskDao galleryTaskDao = await DownloadController.getGalleryTaskDao();
+    print(vState.galleryTaskDao.runtimeType);
+
     final GalleryImage? tImage = _galleryPageController.imageMap[itemSer];
     if (tImage == null) {
       logger.d('ser:$itemSer 所在页尚未获取， 开始获取');
