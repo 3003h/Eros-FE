@@ -24,7 +24,11 @@ dependencies:
 
   # 网络请求
   dio: ^4.0.0
-  dio_http_cache: any
+  dio_http_cache:
+    git:
+      url: https://github.com/vrtdev/dio-http-cache.git
+      ref: feature/nullsafety-dio4
+#  dio_http_cache: any
 #  dio_cache_interceptor: 2.3.1
 #  dio_retry_fixed: ^0.1.15-beta-null-safety
 

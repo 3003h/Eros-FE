@@ -71,6 +71,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "download": MessageLookupByLibrary.simpleMessage("下載"),
         "download_location":
             MessageLookupByLibrary.simpleMessage("Download Locatino"),
+        "downloaded": MessageLookupByLibrary.simpleMessage("Downloaded"),
         "eh": MessageLookupByLibrary.simpleMessage("E·H"),
         "ehentai_my_tags": MessageLookupByLibrary.simpleMessage("我的标签"),
         "ehentai_settings": MessageLookupByLibrary.simpleMessage("EHentai 设置"),

@@ -173,18 +173,20 @@ class NavigatorUtil {
           arguments: ViewRepository(
             index: index,
             loadType: LoadType.network,
+            gid: gid,
           ));
     }
   }
 
   static Future<void> goGalleryViewPageFile(
-      int index, List<String> pics) async {
+      int index, List<String> pics, String gid) async {
     // 命名路由方式
     await Get.toNamed(EHRoutes.galleryViewExt,
         arguments: ViewRepository(
           index: index,
           files: pics,
           loadType: LoadType.file,
+          gid: gid,
         ));
   }
 

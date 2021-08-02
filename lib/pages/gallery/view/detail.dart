@@ -129,14 +129,15 @@ class _DetailWidget extends StatelessWidget {
       ),
       // 画廊下载
       Expanded(
-        child: TextBtn(
-          FontAwesomeIcons.solidArrowAltCircleDown,
-          title: L10n.of(context).p_Download,
-          // onTap: Get.find<EhConfigService>().debugMode
-          //     ? controller.downloadGallery
-          //     : null,
-          onTap: controller.downloadGallery,
-        ),
+        child: Obx(() {
+          return TextBtn(
+            FontAwesomeIcons.solidArrowAltCircleDown,
+            title: controller.downloaded
+                ? L10n.of(context).downloaded
+                : L10n.of(context).p_Download,
+            onTap: !controller.downloaded ? controller.downloadGallery : null,
+          );
+        }),
       ),
       // 种子下载
       Expanded(

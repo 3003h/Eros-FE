@@ -818,14 +818,6 @@ class TextBtn extends StatelessWidget {
           // padding: const EdgeInsets.all(8.0),
           child: Column(
             children: <Widget>[
-              /*Padding(
-                padding: const EdgeInsets.only(bottom: 8.0),
-                child: Icon(
-                  iconData,
-                  size: iconSize ?? 28,
-                  color: CupertinoColors.systemGrey3,
-                ),
-              ),*/
               CupertinoButton(
                 padding: const EdgeInsets.only(bottom: 8.0),
                 // color: CupertinoColors.activeBlue,

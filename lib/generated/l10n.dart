@@ -1699,6 +1699,16 @@ class L10n {
       args: [],
     );
   }
+
+  /// `Downloaded`
+  String get downloaded {
+    return Intl.message(
+      'Downloaded',
+      name: 'downloaded',
+      desc: '',
+      args: [],
+    );
+  }
 }
 
 class AppLocalizationDelegate extends LocalizationsDelegate<L10n> {

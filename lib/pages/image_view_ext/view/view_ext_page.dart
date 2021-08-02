@@ -27,10 +27,12 @@ class ViewRepository {
     this.index = 0,
     this.loadType = LoadType.network,
     this.files,
+    required this.gid,
   });
 
   final int index;
   final List<String>? files;
+  final String gid;
   final LoadType loadType;
 }
 

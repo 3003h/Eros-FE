@@ -256,6 +256,12 @@ class _ViewImageExtState extends State<ViewImageExt>
                     }
                     final GalleryImage? _image = snapshot.data;
 
+                    if (_image != null &&
+                        _image.filePath != null &&
+                        _image.filePath!.isNotEmpty) {
+                      return fileImage(_image.filePath!);
+                    }
+
                     Widget image = ImageExt(
                       url: _image?.imageUrl ?? '',
                       onDoubleTap: widget.enableDoubleTap ? onDoubleTap : null,
