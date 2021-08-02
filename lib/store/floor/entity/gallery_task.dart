@@ -5,6 +5,7 @@ part 'gallery_task.g.dart';
 
 // 1to2 update entity with new 'dirPath' field
 // 2to3 update entity with new 'coverImage' field
+// 3to4 update entity with new 'addTime' field
 @CopyWith()
 @Entity(tableName: 'GalleryTask')
 class GalleryTask {
@@ -18,6 +19,7 @@ class GalleryTask {
     this.completCount,
     this.status,
     this.coverImage,
+    this.addTime,
   });
 
   @primaryKey
@@ -30,9 +32,10 @@ class GalleryTask {
   final int? completCount;
   final int? status;
   final String? coverImage;
+  final int? addTime;
 
   @override
   String toString() {
-    return 'GalleryTask{gid: $gid, token: $token, url: $url, title: $title, dirPath: $dirPath, fileCount: $fileCount, completCount: $completCount, status: $status, coverImage: $coverImage}';
+    return 'GalleryTask{gid: $gid, token: $token, url: $url, title: $title, dirPath: $dirPath, fileCount: $fileCount, completCount: $completCount, status: $status, coverImage: $coverImage, addTime: $addTime}';
   }
 }
