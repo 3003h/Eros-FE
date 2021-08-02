@@ -138,7 +138,7 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
           FirebaseAnalyticsObserver(analytics: analytics),
         ],
         getPages: AppPages.routes,
-        defaultTransition: Transition.native,
+        defaultTransition: Transition.cupertino,
         initialRoute: EHRoutes.root,
         // home: SplashPage(),
         theme: theme,
