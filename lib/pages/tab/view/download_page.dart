@@ -142,7 +142,7 @@ class DownloadGalleryView extends GetView<DownloadViewController> {
               completeCount: _taskInfo.completCount ?? 0,
               gid: _taskInfo.gid,
               coverimagePath: _taskInfo.coverImage != null
-                  ? path.join(_taskInfo.dirPath ?? '', _taskInfo.coverImage)
+                  ? path.join(_taskInfo.realDirPath ?? '', _taskInfo.coverImage)
                   : null,
             ),
           );
