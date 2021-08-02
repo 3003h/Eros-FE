@@ -155,39 +155,41 @@ class _ViewImageExtState extends State<ViewImageExt>
       _doubleClickAnimationController.forward();
     };
 
+    final fileImage = (String path) => ExtendedImage.file(
+          File(path),
+          fit: BoxFit.contain,
+          enableSlideOutPage: true,
+          mode: widget.mode,
+          initGestureConfigHandler: _initGestureConfigHandler,
+          onDoubleTap: widget.enableDoubleTap ? onDoubleTap : null,
+          loadStateChanged: (ExtendedImageState state) {
+            if (state.extendedImageLoadState == LoadState.completed) {
+              final ImageInfo? imageInfo = state.extendedImageInfo;
+              controller.setScale100(imageInfo!, size);
+
+              controller.onLoadCompleted(widget.imageSer);
+            } else if (state.extendedImageLoadState == LoadState.loading) {
+              final ImageChunkEvent? loadingProgress = state.loadingProgress;
+              final double? progress =
+                  loadingProgress?.expectedTotalBytes != null
+                      ? (loadingProgress?.cumulativeBytesLoaded ?? 0) /
+                          (loadingProgress?.expectedTotalBytes ?? 1)
+                      : null;
+              return ViewLoading(
+                ser: widget.imageSer,
+                progress: progress,
+                duration: vState.viewMode != ViewMode.topToBottom
+                    ? const Duration(milliseconds: 50)
+                    : null,
+              );
+            }
+          },
+        );
+
     if (vState.loadType == LoadType.file) {
       /// 从已下载查看
       final path = vState.imagePathList[widget.imageSer - 1];
-
-      final Widget image = ExtendedImage.file(
-        File(path),
-        fit: BoxFit.contain,
-        enableSlideOutPage: true,
-        mode: widget.mode,
-        initGestureConfigHandler: _initGestureConfigHandler,
-        onDoubleTap: widget.enableDoubleTap ? onDoubleTap : null,
-        loadStateChanged: (ExtendedImageState state) {
-          if (state.extendedImageLoadState == LoadState.completed) {
-            final ImageInfo? imageInfo = state.extendedImageInfo;
-            controller.setScale100(imageInfo!, size);
-
-            controller.onLoadCompleted(widget.imageSer);
-          } else if (state.extendedImageLoadState == LoadState.loading) {
-            final ImageChunkEvent? loadingProgress = state.loadingProgress;
-            final double? progress = loadingProgress?.expectedTotalBytes != null
-                ? (loadingProgress?.cumulativeBytesLoaded ?? 0) /
-                    (loadingProgress?.expectedTotalBytes ?? 1)
-                : null;
-            return ViewLoading(
-              ser: widget.imageSer,
-              progress: progress,
-              duration: vState.viewMode != ViewMode.topToBottom
-                  ? const Duration(milliseconds: 50)
-                  : null,
-            );
-          }
-        },
-      );
+      final Widget image = fileImage(path);
 
       return image;
     } else {

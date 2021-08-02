@@ -5,6 +5,7 @@ import 'package:fehviewer/common/service/ehconfig_service.dart';
 import 'package:fehviewer/const/const.dart';
 import 'package:fehviewer/models/base/eh_models.dart';
 import 'package:fehviewer/pages/gallery/controller/gallery_page_controller.dart';
+import 'package:fehviewer/store/floor/dao/gallery_task_dao.dart';
 import 'package:get/get.dart';
 
 import '../common.dart';
@@ -185,4 +186,6 @@ class ViewExtState {
   int minThumbIndex = 0;
   int maxThumbIndex = 0;
   bool syncThumbList = true;
+
+  GalleryTaskDao? galleryTaskDao;
 }

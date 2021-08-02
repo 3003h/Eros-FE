@@ -21,6 +21,8 @@ class GalleryImage {
     this.completeHeight,
     this.gid,
     this.token,
+    this.isDownloaded,
+    this.filePath,
   });
 
   final bool? isLarge;
@@ -39,6 +41,8 @@ class GalleryImage {
   final bool? completeHeight;
   final String? gid;
   final String? token;
+  final bool? isDownloaded;
+  final String? filePath;
 
   factory GalleryImage.fromJson(Map<String,dynamic> json) => GalleryImage(
     isLarge: json['isLarge'] != null ? json['isLarge'] as bool : null,
@@ -56,7 +60,9 @@ class GalleryImage {
     sourceId: json['sourceId'] != null ? json['sourceId'] as String : null,
     completeHeight: json['completeHeight'] != null ? json['completeHeight'] as bool : null,
     gid: json['gid'] != null ? json['gid'] as String : null,
-    token: json['token'] != null ? json['token'] as String : null
+    token: json['token'] != null ? json['token'] as String : null,
+    isDownloaded: json['isDownloaded'] != null ? json['isDownloaded'] as bool : null,
+    filePath: json['filePath'] != null ? json['filePath'] as String : null
   );
   
   Map<String, dynamic> toJson() => {
@@ -75,7 +81,9 @@ class GalleryImage {
     'sourceId': sourceId,
     'completeHeight': completeHeight,
     'gid': gid,
-    'token': token
+    'token': token,
+    'isDownloaded': isDownloaded,
+    'filePath': filePath
   };
 
   GalleryImage clone() => GalleryImage(
@@ -94,7 +102,9 @@ class GalleryImage {
     sourceId: sourceId,
     completeHeight: completeHeight,
     gid: gid,
-    token: token
+    token: token,
+    isDownloaded: isDownloaded,
+    filePath: filePath
   );
 
     
@@ -114,7 +124,9 @@ class GalleryImage {
     String? sourceId,
     bool? completeHeight,
     String? gid,
-    String? token
+    String? token,
+    bool? isDownloaded,
+    String? filePath
   }) => GalleryImage(
     isLarge: isLarge ?? this.isLarge,
     isCache: isCache ?? this.isCache,
@@ -132,12 +144,14 @@ class GalleryImage {
     completeHeight: completeHeight ?? this.completeHeight,
     gid: gid ?? this.gid,
     token: token ?? this.token,
+    isDownloaded: isDownloaded ?? this.isDownloaded,
+    filePath: filePath ?? this.filePath,
   );  
 
   @override
   bool operator ==(Object other) => identical(this, other) 
-    || other is GalleryImage && isLarge == other.isLarge && isCache == other.isCache && startPrecache == other.startPrecache && ser == other.ser && href == other.href && imageUrl == other.imageUrl && thumbUrl == other.thumbUrl && thumbHeight == other.thumbHeight && thumbWidth == other.thumbWidth && imageHeight == other.imageHeight && imageWidth == other.imageWidth && offSet == other.offSet && sourceId == other.sourceId && completeHeight == other.completeHeight && gid == other.gid && token == other.token;
+    || other is GalleryImage && isLarge == other.isLarge && isCache == other.isCache && startPrecache == other.startPrecache && ser == other.ser && href == other.href && imageUrl == other.imageUrl && thumbUrl == other.thumbUrl && thumbHeight == other.thumbHeight && thumbWidth == other.thumbWidth && imageHeight == other.imageHeight && imageWidth == other.imageWidth && offSet == other.offSet && sourceId == other.sourceId && completeHeight == other.completeHeight && gid == other.gid && token == other.token && isDownloaded == other.isDownloaded && filePath == other.filePath;
 
   @override
-  int get hashCode => isLarge.hashCode ^ isCache.hashCode ^ startPrecache.hashCode ^ ser.hashCode ^ href.hashCode ^ imageUrl.hashCode ^ thumbUrl.hashCode ^ thumbHeight.hashCode ^ thumbWidth.hashCode ^ imageHeight.hashCode ^ imageWidth.hashCode ^ offSet.hashCode ^ sourceId.hashCode ^ completeHeight.hashCode ^ gid.hashCode ^ token.hashCode;
+  int get hashCode => isLarge.hashCode ^ isCache.hashCode ^ startPrecache.hashCode ^ ser.hashCode ^ href.hashCode ^ imageUrl.hashCode ^ thumbUrl.hashCode ^ thumbHeight.hashCode ^ thumbWidth.hashCode ^ imageHeight.hashCode ^ imageWidth.hashCode ^ offSet.hashCode ^ sourceId.hashCode ^ completeHeight.hashCode ^ gid.hashCode ^ token.hashCode ^ isDownloaded.hashCode ^ filePath.hashCode;
 }
