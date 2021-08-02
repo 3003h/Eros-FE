@@ -4,6 +4,7 @@ import 'package:fehviewer/common/controller/gallerycache_controller.dart';
 import 'package:fehviewer/common/controller/history_controller.dart';
 import 'package:fehviewer/common/controller/localfav_controller.dart';
 import 'package:fehviewer/common/global.dart';
+import 'package:fehviewer/common/isolate_download/download_manager.dart';
 import 'package:fehviewer/common/service/depth_service.dart';
 import 'package:fehviewer/common/service/ehconfig_service.dart';
 import 'package:fehviewer/const/const.dart';
@@ -103,9 +104,7 @@ class GalleryPageController extends GetxController
   }
 
   List<GalleryImage> get images => galleryItem.galleryImages ?? [];
-
   Map<int, GalleryImage> get imageMap => galleryItem.imageMap;
-
   int get filecount => int.parse(galleryItem.filecount ?? '0');
 
   List<GalleryImage> get imagesFromMap {
@@ -126,8 +125,6 @@ class GalleryPageController extends GetxController
     }
   }
 
-  // final Map<int, int> errCountMap = {};
-
   String get showKey => galleryItem.showKey ?? '';
 
   /// 当前缩略图页码
@@ -143,6 +140,11 @@ class GalleryPageController extends GetxController
   final EhConfigService _ehConfigService = Get.find();
   final HistoryController _historyController = Get.find();
   final GalleryCacheController _galleryCacheController = Get.find();
+  DownloadController get _downloadController => Get.find();
+
+  bool get downloaded =>
+      _downloadController.dState.galleryTaskMap[int.parse(gid)]?.status ==
+      TaskStatus.complete.value;
 
   @override
   void onInit() {

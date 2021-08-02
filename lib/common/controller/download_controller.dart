@@ -164,9 +164,11 @@ class DownloadController extends GetxController {
     final GalleryTask? _oriTask =
         await _galleryTaskDao.findGalleryTaskByGid(gid ?? -1);
     if (_oriTask != null) {
-      logger.i('$gid 任务已存在 ');
+      showToast('Download task existed');
+      logger.i('$gid 任务已存在');
       logger.d('${_oriTask.toString()} ');
       isNewTask = false;
+      return;
     }
 
     final String _downloadPath =

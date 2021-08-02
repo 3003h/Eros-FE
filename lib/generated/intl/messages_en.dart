@@ -78,6 +78,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "download": MessageLookupByLibrary.simpleMessage("Download"),
         "download_location":
             MessageLookupByLibrary.simpleMessage("Download Location"),
+        "downloaded": MessageLookupByLibrary.simpleMessage("Downloaded"),
         "eh": MessageLookupByLibrary.simpleMessage("E·H"),
         "ehentai_my_tags": MessageLookupByLibrary.simpleMessage("My tags"),
         "ehentai_settings":

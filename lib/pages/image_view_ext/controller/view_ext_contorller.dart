@@ -12,6 +12,8 @@ import 'package:fehviewer/pages/image_view_ext/common.dart';
 import 'package:fehviewer/pages/image_view_ext/view/view_ext.dart';
 import 'package:fehviewer/store/floor/dao/gallery_task_dao.dart';
 import 'package:fehviewer/store/floor/dao/image_task_dao.dart';
+import 'package:fehviewer/store/floor/entity/gallery_image_task.dart';
+import 'package:fehviewer/store/floor/entity/gallery_task.dart';
 import 'package:fehviewer/utils/logger.dart';
 import 'package:fehviewer/utils/utility.dart';
 import 'package:fehviewer/utils/vibrate.dart';
@@ -24,6 +26,8 @@ import 'package:photo_view/photo_view.dart';
 import 'package:scroll_to_index/scroll_to_index.dart';
 import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
 import 'package:throttling/throttling.dart';
+import 'package:collection/collection.dart';
+import 'package:path/path.dart' as path;
 
 import 'view_ext_state.dart';
 
@@ -56,9 +60,6 @@ class ViewExtController extends GetxController {
   EhConfigService get _ehConfigService => vState.ehConfigService;
 
   final GalleryCacheController _galleryCacheController = Get.find();
-
-  // todo 双页阅读会有问题
-  // late Future<GalleryImage?> imageFuture;
 
   Map<int, Future<GalleryImage?>> imageFutureMap = {};
 
@@ -258,7 +259,7 @@ class ViewExtController extends GetxController {
   }) async {
     final GalleryImage? tImage = _galleryPageController.imageMap[itemSer];
     if (tImage == null) {
-      logger.d('ser:$itemSer 所在页尚未获取， 开始获取');
+      logger.d('fetchThumb ser:$itemSer 所在页尚未获取， 开始获取');
       _mapFetchGalleryPriviewPage.putIfAbsent(
           itemSer, () => _galleryPageController.loadImagesForSer(itemSer));
 
@@ -271,15 +272,57 @@ class ViewExtController extends GetxController {
     return image;
   }
 
+  GalleryImage? _getImageFromImageTasks(int itemSer, String? dir) {
+    if (dir == null) {
+      return null;
+    }
+
+    final imageTask = vState.imageTasks
+        .firstWhereOrNull((imageTask) => imageTask.ser == itemSer);
+
+    if (imageTask != null &&
+        imageTask.filePath != null &&
+        imageTask.filePath!.isNotEmpty) {
+      return GalleryImage(
+        ser: itemSer,
+        isDownloaded: true,
+        filePath: path.join(dir, imageTask.filePath!),
+      );
+    }
+  }
+
+  Future<String?> _getTaskDirPath(int gid) async {
+    final gtask = await vState.galleryTaskDao!.findGalleryTaskByGid(gid);
+    return gtask?.realDirPath;
+  }
+
   /// 拉取图片信息
   Future<GalleryImage?> fetchImage(
     int itemSer, {
     bool changeSource = false,
   }) async {
-    // GalleryTaskDao galleryTaskDao = await DownloadController.getGalleryTaskDao();
-    print(vState.galleryTaskDao.runtimeType);
+    vState.imageTaskDao ??= await DownloadController.getImageTaskDao();
+    vState.galleryTaskDao ??= await DownloadController.getGalleryTaskDao();
+    vState.dirPath ??=
+        await _getTaskDirPath(int.parse(_galleryPageController.gid));
 
-    final GalleryImage? tImage = _galleryPageController.imageMap[itemSer];
+    // logger.d('${vState.dirPath}');
+
+    GalleryImage? imageFromTasks =
+        _getImageFromImageTasks(itemSer, vState.dirPath);
+    if (imageFromTasks != null) {
+      return imageFromTasks;
+    }
+
+    vState.imageTasks = await vState.imageTaskDao!
+        .findAllTaskByGid(int.parse(_galleryPageController.gid));
+
+    imageFromTasks = _getImageFromImageTasks(itemSer, vState.dirPath);
+    if (imageFromTasks != null) {
+      return imageFromTasks;
+    }
+
+    final tImage = _galleryPageController.imageMap[itemSer];
     if (tImage == null) {
       logger.d('ser:$itemSer 所在页尚未获取， 开始获取');
 

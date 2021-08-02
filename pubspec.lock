@@ -312,9 +312,11 @@ packages:
   dio_http_cache:
     dependency: "direct main"
     description:
-      name: dio_http_cache
-      url: "https://pub.flutter-io.cn"
-    source: hosted
+      path: "."
+      ref: "feature/nullsafety-dio4"
+      resolved-ref: "2ddd64b7e982aec2bb6cc251d8e33254230cc664"
+      url: "https://github.com/vrtdev/dio-http-cache.git"
+    source: git
     version: "0.3.0"
   english_words:
     dependency: "direct main"

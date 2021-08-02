@@ -1,5 +1,7 @@
 import 'package:extended_image/extended_image.dart';
+import 'package:fehviewer/common/controller/gallerycache_controller.dart';
 import 'package:fehviewer/common/isolate_download/download_manager.dart';
+import 'package:fehviewer/models/gallery_cache.dart';
 import 'package:fehviewer/network/gallery_request.dart';
 import 'package:fehviewer/pages/tab/controller/download_view_controller.dart';
 import 'package:fehviewer/route/navigator_util.dart';
@@ -54,7 +56,11 @@ class DownloadGalleryItem extends GetView<DownloadViewController> {
             .map((e) => path.join(gTask.realDirPath ?? '', e.filePath ?? ''))
             .toList();
 
-        NavigatorUtil.goGalleryViewPageFile(0, pics);
+        final GalleryCache? _galleryCache =
+            Get.find<GalleryCacheController>().getGalleryCache('$gid');
+        final lastIndex = _galleryCache?.lastIndex ?? 0;
+
+        NavigatorUtil.goGalleryViewPageFile(lastIndex, pics, '$gid');
       },
       child: Container(
         padding: const EdgeInsets.only(top: 8, bottom: 8, left: 20, right: 16),

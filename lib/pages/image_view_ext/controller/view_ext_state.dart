@@ -6,6 +6,8 @@ import 'package:fehviewer/const/const.dart';
 import 'package:fehviewer/models/base/eh_models.dart';
 import 'package:fehviewer/pages/gallery/controller/gallery_page_controller.dart';
 import 'package:fehviewer/store/floor/dao/gallery_task_dao.dart';
+import 'package:fehviewer/store/floor/dao/image_task_dao.dart';
+import 'package:fehviewer/store/floor/entity/gallery_image_task.dart';
 import 'package:get/get.dart';
 
 import '../common.dart';
@@ -22,6 +24,12 @@ class ViewExtState {
       if (loadType == LoadType.file) {
         if (vr.files != null) {
           imagePathList = vr.files!;
+          initGid = vr.gid;
+
+          _columnMode = _galleryCacheController
+                  .getGalleryCache(initGid ?? '')
+                  ?.columnMode ??
+              ViewColumnMode.single;
         }
       } else {
         galleryPageController = Get.find(tag: pageCtrlDepth);
@@ -47,6 +55,8 @@ class ViewExtState {
   ///
   LoadType loadType = LoadType.network;
 
+  late final String? initGid;
+
   /// 当前的index
   int _currentItemIndex = 0;
   int get currentItemIndex => _currentItemIndex;
@@ -67,6 +77,11 @@ class ViewExtState {
         galleryPageController.lastIndex = currentItemIndex;
         _galleryCacheController.setIndex(
             galleryPageController.galleryItem.gid ?? '', currentItemIndex,
+            saveToStore: saveToStore);
+      }
+    } else {
+      if (initGid != null) {
+        _galleryCacheController.setIndex(initGid ?? '', currentItemIndex,
             saveToStore: saveToStore);
       }
     }
@@ -188,4 +203,7 @@ class ViewExtState {
   bool syncThumbList = true;
 
   GalleryTaskDao? galleryTaskDao;
+  ImageTaskDao? imageTaskDao;
+  List<GalleryImageTask> imageTasks = [];
+  String? dirPath;
 }
