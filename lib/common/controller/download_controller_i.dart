@@ -167,7 +167,7 @@ class DownloadControllerI extends GetxController {
 
     // 删除文件
     final GalleryTask _task = galleryTaskList[index];
-    String? path = _task.dirPath;
+    String? path = _task.realDirPath;
     logger.d('dirPath: $path');
     if (path != null) {
       Directory(path).delete(recursive: true);

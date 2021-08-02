@@ -1,5 +1,9 @@
 import 'package:copy_with_extension/copy_with_extension.dart';
+import 'package:fehviewer/common/global.dart';
+import 'package:fehviewer/utils/logger.dart';
 import 'package:floor/floor.dart';
+import 'package:get/get.dart';
+import 'package:path/path.dart' as path;
 
 part 'gallery_task.g.dart';
 
@@ -33,6 +37,19 @@ class GalleryTask {
   final int? status;
   final String? coverImage;
   final int? addTime;
+
+  String? get realDirPath {
+    if (dirPath == null) {
+      return dirPath;
+    }
+    if (GetPlatform.isIOS) {
+      final List<String> pathList = path.split(dirPath!).reversed.toList();
+      // logger.v('$pathList');
+      return path.join(Global.appDocPath, pathList[1], pathList[0]);
+    } else {
+      return dirPath;
+    }
+  }
 
   @override
   String toString() {

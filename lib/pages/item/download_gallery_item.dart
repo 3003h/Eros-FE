@@ -51,7 +51,7 @@ class DownloadGalleryItem extends GetView<DownloadViewController> {
         final List<String> pics = imageTasks
             .where((element) =>
                 element.filePath != null && element.filePath!.isNotEmpty)
-            .map((e) => path.join(gTask.dirPath ?? '', e.filePath ?? ''))
+            .map((e) => path.join(gTask.realDirPath ?? '', e.filePath ?? ''))
             .toList();
 
         NavigatorUtil.goGalleryViewPageFile(0, pics);

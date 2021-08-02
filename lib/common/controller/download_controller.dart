@@ -107,16 +107,20 @@ class DownloadController extends GetxController {
   /// 获取下载路径
   Future<String> _getGalleryDownloadPath(String custpath) async {
     late final String _dirPath;
+    late final Directory savedDir;
     if (GetPlatform.isAndroid && ehConfigService.downloadLocatino.isNotEmpty) {
       _dirPath = path.join(ehConfigService.downloadLocatino, custpath);
+      savedDir = Directory(_dirPath);
     } else if (GetPlatform.isAndroid) {
       _dirPath = path.join(
           (await getExternalStorageDirectory())!.path, 'Download', custpath);
+      savedDir = Directory(_dirPath);
     } else {
-      _dirPath = path.join(Global.appDocPath, 'Download', custpath);
+      // iOS 记录的为相对路径 不记录doc的实际路径
+      _dirPath = path.join('Download', custpath);
+      savedDir = Directory(path.join(Global.appDocPath, _dirPath));
     }
 
-    final Directory savedDir = Directory(_dirPath);
     // 判断下载路径是否存在
     final bool hasExisted = savedDir.existsSync();
     // 不存在就新建路径
@@ -194,7 +198,6 @@ class DownloadController extends GetxController {
 
     _startImageTask(
       galleryTask: galleryTask,
-      downloadPath: _dirPath,
       fCount: _fCount,
     );
     initDownloadStateChkTimer(galleryTask.gid);
@@ -359,7 +362,7 @@ class DownloadController extends GetxController {
     if (_task == null) {
       return;
     }
-    String? dirpath = _task.dirPath;
+    String? dirpath = _task.realDirPath;
     logger.d('dirPath: $dirpath');
     if (dirpath != null) {
       Directory(dirpath).delete(recursive: true);
@@ -457,7 +460,6 @@ class DownloadController extends GetxController {
   /// 开始下载
   Future<void> _startImageTask({
     required GalleryTask galleryTask,
-    String? downloadPath,
     int? fCount,
     List<GalleryImage>? images,
   }) async {
@@ -487,7 +489,7 @@ class DownloadController extends GetxController {
 
     logger.v('filecount:${galleryTask.fileCount} url:${galleryTask.url}');
 
-    downloadPath ??= galleryTask.dirPath;
+    final String? downloadPath = galleryTask.realDirPath;
 
     final _completSers = imageTasksOri
         .where((element) => element.status == TaskStatus.complete.value)
@@ -775,14 +777,10 @@ class DownloadController extends GetxController {
 
   Future<void> allowMediaScan(bool newValue) async {
     final pathSet = dState.galleryTasks
-        .where((elm) => elm.dirPath != null)
-        .map((element) => Directory(element.dirPath!).parent.path)
+        .where((elm) => elm.realDirPath != null)
+        .map((element) => Directory(element.realDirPath!).parent.path)
         .toSet();
 
-    // final pathSet = dState.galleryTaskList
-    //     .where((elm) => elm.dirPath != null)
-    //     .map((element) => element.dirPath!)
-    //     .toSet();
     if (newValue) {
       logger.d('delete all .nomedia file');
       for (final dirPath in pathSet) {
