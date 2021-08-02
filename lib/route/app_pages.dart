@@ -152,7 +152,7 @@ class AppPages {
       binding: BindingsBuilder<dynamic>(() {
         Get.lazyPut(() => ViewController());
       }),
-      transition: Transition.fadeIn,
+      showCupertinoParallax: false,
       opaque: false,
     ),
 
@@ -162,9 +162,9 @@ class AppPages {
       binding: BindingsBuilder<dynamic>(() {
         Get.lazyPut(() => ViewExtController());
       }),
-      // transition: Transition.native,
       // opaque: kDebugMode,
       opaque: false,
+      showCupertinoParallax: false,
     ),
 
     // 使用命名路由跳转 EHRoutes.galleryPage
@@ -172,11 +172,13 @@ class AppPages {
       name: EHRoutes.galleryPage,
       page: () => GalleryMainPage(),
       binding: GalleryBinding(),
+      preventDuplicates: false,
     ),
 
     GetPage(
       name: EHRoutes.search,
       page: () => GallerySearchPageNew(),
+      preventDuplicates: false,
     ),
   ];
 }
