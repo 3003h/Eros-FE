@@ -73,7 +73,7 @@ class Api {
 
   static HttpManager getHttpManager({
     bool cache = true,
-    bool retry = true,
+    bool retry = false,
     String? baseUrl,
     int? connectTimeout,
   }) {

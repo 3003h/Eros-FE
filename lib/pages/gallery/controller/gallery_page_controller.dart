@@ -648,6 +648,7 @@ class GalleryPageController extends GetxController
       url: galleryItem.url!,
       fileCount: int.parse(galleryItem.filecount ?? '0'),
       title: title,
+      coverUrl: galleryItem.imgUrl,
     );
   }
 

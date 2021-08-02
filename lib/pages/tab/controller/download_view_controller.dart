@@ -52,7 +52,7 @@ class DownloadViewController extends GetxController {
   List<GalleryTask> get galleryTasks {
     final tasks = _downloadController.dState.galleryTasks;
     tasks.sort((GalleryTask a, GalleryTask b) {
-      return (a.addTime ?? 0) - (b.addTime ?? 0);
+      return (b.addTime ?? 0) - (a.addTime ?? 0);
     });
     return tasks;
   }

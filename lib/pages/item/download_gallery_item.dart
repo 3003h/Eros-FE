@@ -92,25 +92,27 @@ class DownloadGalleryItem extends GetView<DownloadViewController> {
                             height: 1.2,
                           ),
                         ).paddingSymmetric(vertical: 4),
-                        Row(
-                          children: [
-                            Expanded(
-                              child: Column(
-                                mainAxisAlignment: MainAxisAlignment.start,
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Text(
-                                    addTime ?? '',
-                                    style: const TextStyle(
-                                      fontSize: 11,
-                                      color: CupertinoColors.secondaryLabel,
+                        Expanded(
+                          child: Row(
+                            children: [
+                              Expanded(
+                                child: Column(
+                                  mainAxisAlignment: MainAxisAlignment.start,
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text(
+                                      addTime ?? '',
+                                      style: const TextStyle(
+                                        fontSize: 11,
+                                        color: CupertinoColors.secondaryLabel,
+                                      ),
                                     ),
-                                  ),
-                                ],
+                                  ],
+                                ),
                               ),
-                            ),
-                            _getIcon(),
-                          ],
+                              _getIcon(),
+                            ],
+                          ),
                         ),
                         Row(
                           children: [

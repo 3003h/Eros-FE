@@ -137,6 +137,7 @@ class DownloadController extends GetxController {
     required String title,
     int? gid,
     String? token,
+    String? coverUrl,
   }) async {
     GalleryTaskDao _galleryTaskDao;
     ImageTaskDao _imageTaskDao;
@@ -238,6 +239,8 @@ class DownloadController extends GetxController {
         .map((e) => e.value)
         .sum;
 
+    dState.lastCounts[gid]?.add(totCurCount);
+
     dState.lastCounts.putIfAbsent(gid, () => [0]);
     final List<int> lastCounts = dState.lastCounts[gid] ?? [0];
     final List<int> lastCountsTop = lastCounts.reversed
@@ -251,7 +254,7 @@ class DownloadController extends GetxController {
 
     dState.downloadSpeeds[gid] = renderSize(speed);
 
-    dState.lastCounts[gid]?.add(totCurCount);
+    logger.v('speed:${renderSize(speed)}\n${lastCountsTop.join(',')}');
 
     if (speed == 0) {
       if (dState.noSpeed[gid] != null) {
