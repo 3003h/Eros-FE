@@ -24,6 +24,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
 import 'package:path/path.dart' as path;
 import 'package:path_provider/path_provider.dart';
+import 'package:permission_handler/permission_handler.dart';
 import 'package:sprintf/sprintf.dart' as sp;
 
 import 'download_state.dart';
@@ -105,18 +106,44 @@ class DownloadController extends GetxController {
     }
   }
 
+  Future<void> requestPermission() async {
+    final PermissionStatus statusMStorage =
+        await Permission.manageExternalStorage.status;
+    logger.d('manageExternalStorage $statusMStorage');
+    if (statusMStorage.isPermanentlyDenied) {
+      if (await Permission.manageExternalStorage.request().isGranted) {
+        return;
+      } else {
+        showToast('Permission is permanently denied, open App Settings');
+        openAppSettings();
+        logger.d('jump to setting');
+      }
+    } else {
+      if (await Permission.manageExternalStorage.request().isGranted) {
+        return;
+      } else {
+        throw 'Unable to download, please authorize first~';
+      }
+    }
+  }
+
   /// 获取下载路径
   Future<String> _getGalleryDownloadPath(String custpath) async {
     late final String _dirPath;
     late final Directory savedDir;
     if (GetPlatform.isAndroid && ehConfigService.downloadLocatino.isNotEmpty) {
+      // 自定义路径
+      logger.d('自定义路径');
+      await requestPermission();
       _dirPath = path.join(ehConfigService.downloadLocatino, custpath);
       savedDir = Directory(_dirPath);
     } else if (GetPlatform.isAndroid) {
+      logger.d('无自定义路径');
       _dirPath = path.join(
           (await getExternalStorageDirectory())!.path, 'Download', custpath);
       savedDir = Directory(_dirPath);
     } else {
+      logger.d('iOS');
       // iOS 记录的为相对路径 不记录doc的实际路径
       _dirPath = path.join('Download', custpath);
       savedDir = Directory(path.join(Global.appDocPath, _dirPath));
