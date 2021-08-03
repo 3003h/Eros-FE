@@ -28,7 +28,7 @@ class GalleryRepository {
     this.jumpSer,
   });
 
-  final String? tabTag;
+  final dynamic tabTag;
   final GalleryItem? item;
   final String? url;
   final int? jumpSer;
@@ -52,13 +52,13 @@ class _GalleryMainPageState extends State<GalleryMainPage> {
     logger.v('${Get.arguments.runtimeType}');
 
     if (_galleryRepository == null && Get.arguments is GalleryRepository) {
-      _galleryRepository = Get.arguments;
+      _galleryRepository = Get.arguments as GalleryRepository;
     }
   }
 
   @override
   Widget build(BuildContext context) {
-    final String? tabTag = _controller.galleryRepository?.tabTag;
+    final dynamic tabTag = _controller.galleryRepository?.tabTag;
 
     final GalleryItem _item = _controller.galleryItem;
 

@@ -25,7 +25,8 @@ class HiveHelper {
   List<GalleryItem> getAllHistory() {
     final _historys = <GalleryItem>[];
     for (final val in _historyBox.values) {
-      _historys.add(GalleryItem.fromJson(jsonDecode(val)));
+      _historys
+          .add(GalleryItem.fromJson(jsonDecode(val) as Map<String, dynamic>));
     }
     _historys
         .sort((a, b) => (a.lastViewTime ?? 0).compareTo(b.lastViewTime ?? 0));
@@ -34,7 +35,7 @@ class HiveHelper {
 
   GalleryItem getHistory(String gid) {
     final itemText = _historyBox.get(gid) ?? '{}';
-    return GalleryItem.fromJson(jsonDecode(itemText));
+    return GalleryItem.fromJson(jsonDecode(itemText) as Map<String, dynamic>);
   }
 
   Future<void> addHistory(GalleryItem galleryItem) async {
@@ -43,7 +44,7 @@ class HiveHelper {
 
     logger.v(_historyBox.keys);
 
-    logger.v('${getHistory(_historyBox.keys.last).toJson()}');
+    logger.v('${getHistory(_historyBox.keys.last as String).toJson()}');
   }
 
   Future<void> removeHistory(String gid) async {
@@ -59,7 +60,7 @@ class HiveHelper {
     final String? val =
         _searchHistoryBox.get(searchHistoryKey, defaultValue: '[]');
     for (final dynamic his in jsonDecode(val ?? '[]') as List<dynamic>) {
-      final String _his = his;
+      final String _his = his as String;
       rult.add(_his);
     }
     return rult;

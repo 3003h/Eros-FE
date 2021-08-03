@@ -10,7 +10,7 @@ class TranslatorHelper {
   static Future<String> getApikey() async {
     final String openl = await rootBundle.loadString('assets/openl.json');
     final openlJson = json.decode(openl);
-    return openlJson['apikey'] ?? '';
+    return openlJson['apikey'] as String? ?? '';
   }
 
   static Future<OpenlTranslation> translate(

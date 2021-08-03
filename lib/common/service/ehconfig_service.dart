@@ -46,7 +46,7 @@ class EhConfigService extends ProfileService {
     return localeService.isLanguageCodeZh && _isTagTranslat.value;
   }
 
-  set isTagTranslat(val) => _isTagTranslat.value = val;
+  set isTagTranslat(bool val) => _isTagTranslat.value = val;
 
   String _lastClipboardLink = '';
 
@@ -69,7 +69,7 @@ class EhConfigService extends ProfileService {
   /// 下载线程数
   final RxInt _multiDownload = 3.obs;
   int get multiDownload => _multiDownload.value;
-  set multiDownload(val) => _multiDownload.value = val;
+  set multiDownload(int val) => _multiDownload.value = val;
 
   final RxBool _allowMediaScan = false.obs;
   bool get allowMediaScan => _allowMediaScan.value;
@@ -91,23 +91,23 @@ class EhConfigService extends ProfileService {
   // 震动总开关
   RxBool vibrate = true.obs;
 
-  final _debugMode = false.obs;
-  get debugMode => _debugMode.value;
-  set debugMode(val) => _debugMode.value = val;
+  final RxBool _debugMode = false.obs;
+  bool get debugMode => _debugMode.value;
+  set debugMode(bool val) => _debugMode.value = val;
 
   final RxString _downloadLocatino = ''.obs;
   String get downloadLocatino => _downloadLocatino.value;
   set downloadLocatino(String val) => _downloadLocatino.value = val;
 
   // 自动翻页 _autoRead
-  final _autoRead = false.obs;
+  final RxBool _autoRead = false.obs;
   bool get autoRead => _autoRead.value;
-  set autoRead(val) => _autoRead.value = val;
+  set autoRead(bool val) => _autoRead.value = val;
 
   // 翻页时间间隔 _turnPageInv
-  final _turnPageInv = 3000.obs;
+  final RxInt _turnPageInv = 3000.obs;
   int get turnPageInv => _turnPageInv.value;
-  set turnPageInv(val) => _turnPageInv.value = val;
+  set turnPageInv(int val) => _turnPageInv.value = val;
 
   int debugCount = 3;
 
@@ -129,7 +129,7 @@ class EhConfigService extends ProfileService {
 
     multiDownload = (downloadConfig.multiDownload != null &&
             downloadConfig.multiDownload! > 0)
-        ? downloadConfig.multiDownload
+        ? downloadConfig.multiDownload!
         : 3;
     everProfile<int>(_multiDownload, (value) {
       downloadConfig = downloadConfig.copyWith(multiDownload: value);

@@ -467,7 +467,7 @@ class GalleryPageController extends GetxController
 
   final _topTitle = ''.obs;
   // get topTitle => _topTitle.value;
-  set topTitle(val) => _topTitle.value = val;
+  set topTitle(String val) => _topTitle.value = val;
 
   // 根据设置的语言显示的标题
   String get title {

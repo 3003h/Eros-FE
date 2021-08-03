@@ -47,10 +47,11 @@ class TagTransController extends GetxController {
       return false;
     }
 
-    final List assList = _urlJson['assets'];
+    final List<dynamic> assList = _urlJson['assets'] as List<dynamic>;
     final Map<String, String> assMap = <String, String>{};
     for (final dynamic assets in assList) {
-      assMap[assets['name']] = assets['browser_download_url'];
+      assMap[assets['name'] as String? ?? ''] =
+          assets['browser_download_url'] as String;
     }
     _dbUrl = assMap['db.raw.json.gz'] ?? '';
 

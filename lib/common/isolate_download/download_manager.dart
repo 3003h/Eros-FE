@@ -179,7 +179,7 @@ class DownloadManagerIsolate {
 
       if (message is _ResponseProtocol) {
         final _ResponseType _responseType = message.responseType!;
-        final _ResponseBean _resBean = message.data;
+        final _ResponseBean _resBean = message.data as _ResponseBean;
         switch (_responseType) {
 
           /// 任务明细初始化

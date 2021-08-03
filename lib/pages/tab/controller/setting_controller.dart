@@ -60,15 +60,15 @@ class SettingViewController extends GetxController
 
   List _routes = [];
 
-  List get itemList {
-    final List _slivers = [];
+  List<Widget> get itemList {
+    final _slivers = <Widget>[];
     for (int _index = 0; _index < _itemTitles.length; _index++) {
       _slivers.add(
         SettingItems(
           bottomDivider: _index != _itemTitles.length - 1,
-          text: _itemTitles[_index],
-          icon: _icons[_index],
-          route: _routes[_index],
+          text: _itemTitles[_index] as String,
+          icon: _icons[_index] as IconData,
+          route: _routes[_index] as String,
         ),
       );
     }

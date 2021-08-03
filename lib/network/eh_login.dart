@@ -134,8 +134,8 @@ class EhUserManager {
     });
 
     final List<Cookie> cookies = [
-      Cookie('ipb_member_id', cookieMap['ipb_member_id']),
-      Cookie('ipb_pass_hash', cookieMap['ipb_pass_hash']),
+      Cookie('ipb_member_id', cookieMap['ipb_member_id'] as String),
+      Cookie('ipb_pass_hash', cookieMap['ipb_pass_hash'] as String),
       Cookie('nw', '1'),
     ];
 
@@ -148,7 +148,7 @@ class EhUserManager {
     cookieJar.saveFromResponse(Uri.parse(EHConst.EX_BASE_URL), cookies);
     await _getExIgneous();
 
-    final User userinfo = await _getUserInfo(cookieMap['ipb_member_id']);
+    final User userinfo = await _getUserInfo(cookieMap['ipb_member_id'] as String);
 
     //获取Ex cookies
     final List<Cookie> cookiesEx =

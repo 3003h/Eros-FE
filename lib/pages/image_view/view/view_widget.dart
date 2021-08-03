@@ -118,7 +118,7 @@ Future<void> showShareActionSheet(BuildContext context, String imageUrl) {
                       showToast(L10n.of(context).saved_successfully);
                     }
                   }).catchError((e) {
-                    showToast(e);
+                    showToast(e.toString());
                   });
                 },
                 child: Text(L10n.of(context).save_into_album)),

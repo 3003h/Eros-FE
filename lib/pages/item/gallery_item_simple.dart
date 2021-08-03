@@ -25,7 +25,7 @@ class GalleryItemSimpleWidget extends StatelessWidget {
   }
 
   final GalleryItem galleryItem;
-  final String tabTag;
+  final dynamic tabTag;
 
   GalleryItemController get _galleryItemController =>
       Get.find(tag: galleryItem.gid);

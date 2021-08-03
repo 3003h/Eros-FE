@@ -39,7 +39,7 @@ Future<bool> preCommit() async {
   // 获取当前分支名
   final List<ProcessResult> branchRes =
       await shell.run('git branch --show-current');
-  final String branch = branchRes.first.stdout;
+  final String branch = branchRes.first.stdout as String;
 
   bool increaseBuildNum = false;
 

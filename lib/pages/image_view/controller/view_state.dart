@@ -87,7 +87,7 @@ class ViewState {
   /// 横屏翻页模式
   final Rx<ViewColumnMode> _columnMode = ViewColumnMode.single.obs;
   ViewColumnMode get columnMode => _columnMode.value;
-  set columnMode(val) => _columnMode.value = val;
+  set columnMode(ViewColumnMode val) => _columnMode.value = val;
 
   /// 当前查看的图片inde
   final RxInt _itemIndex = 0.obs;
@@ -189,7 +189,7 @@ class ViewState {
   /// 阅读模式
   Rx<ViewMode> get _viewMode => _ehConfigService.viewMode;
   ViewMode get viewMode => _viewMode.value;
-  set viewMode(val) => _viewMode.value = val;
+  set viewMode(ViewMode val) => _viewMode.value = val;
 
   /// 自动阅读
   bool get autoRead => _ehConfigService.autoRead;

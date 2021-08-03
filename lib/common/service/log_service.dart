@@ -17,19 +17,19 @@ class LogService extends GetxService {
     return _logFiles.value;
   }
 
-  set logFiles(val) => _logFiles.value = val;
+  set logFiles(List<File> val) => _logFiles.value = val;
 
   final _curFileName = 'eh.log'.obs;
-  get curFileName => _curFileName.value;
-  set curFileName(val) => _curFileName.value = val;
+  String get curFileName => _curFileName.value;
+  set curFileName(String val) => _curFileName.value = val;
 
   final _logPath = ''.obs;
-  get logPath => _logPath.value;
-  set logPath(val) => _logPath.value = val;
+  String get logPath => _logPath.value;
+  set logPath(String val) => _logPath.value = val;
 
   final Rx<Level> _logLevel = Level.error.obs;
   Level get logLevel => _logLevel.value;
-  set logLevel(val) => _logLevel.value = val;
+  set logLevel(Level val) => _logLevel.value = val;
 
   @override
   void onInit() {

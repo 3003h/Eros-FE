@@ -333,7 +333,7 @@ class EHConst {
     'Western',
   ];
 
-  static const Map favCat = {
+  static const Map<String, String> favCat = {
     '#000': '0',
     '#f00': '1',
     '#fa0': '2',
@@ -359,7 +359,7 @@ class EHConst {
     {'favcat': '9', 'desc': 'Favorites 9'},
   ];
 
-  static const Map prefixToNameSpaceMap = {
+  static const Map<String, String> prefixToNameSpaceMap = {
     'a': 'artist',
     'c': 'character',
     'f': 'female',

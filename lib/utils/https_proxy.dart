@@ -85,7 +85,7 @@ class ClientConnectionHandler {
 
     if (server == null) {
       // 建立连接
-      content += utf8.decode(data);
+      content += utf8.decode(data as List<int>);
       logger.d('\n$content');
       final RegExpMatch? m = regx.firstMatch(content);
       if (m != null) {
@@ -144,7 +144,7 @@ class ClientConnectionHandler {
       }
     } else {
       // debugPrint('${data.runtimeType}');
-      final String hex = EHUtils.formatBytesAsHexString(data);
+      final String hex = EHUtils.formatBytesAsHexString(data as Uint8List);
       // logger.v(hex);
       // logger.d(EHUtils.stringToHex('e-hentai.org'));
       if (hex.contains(EHUtils.stringToHex('e-hentai.org')) ||
@@ -214,7 +214,7 @@ class ServerConnectionHandler {
   void errorHandler(error, StackTrace trace) {
     logger.e('server socket error: $error \n $trace');
     handler.closeSockets();
-    throw error;
+    throw error as Exception;
   }
 
   void doneHandler() {

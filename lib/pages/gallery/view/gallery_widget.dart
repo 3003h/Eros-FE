@@ -668,7 +668,7 @@ class TagGroupItem extends StatelessWidget {
 
   final TagGroup tagGroupData;
 
-  List<Widget> _initTagBtnList(List<GalleryTag> galleryTags, context) {
+  List<Widget> _initTagBtnList(List<GalleryTag> galleryTags, BuildContext context) {
     final EhConfigService ehConfigService = Get.find();
     final List<Widget> _tagBtnList = <Widget>[];
     galleryTags.forEach((GalleryTag tag) {

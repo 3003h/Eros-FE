@@ -25,7 +25,9 @@ class GStore {
 
   GalleryCache? getCache(String gid) {
     final val = ReadWriteValue(gid, '', _cacheStore).val;
-    return val.isNotEmpty ? GalleryCache.fromJson(jsonDecode(val)) : null;
+    return val.isNotEmpty
+        ? GalleryCache.fromJson(jsonDecode(val) as Map<String, dynamic>)
+        : null;
   }
 
   void saveCache(GalleryCache cache) {
@@ -46,7 +48,9 @@ class GStore {
     if (_config['tab_item_list'] == null) {
       _config['tab_item_list'] = _config['tabItemList'];
     }
-    return val.isNotEmpty ? TabConfig.fromJson(_config) : null;
+    return val.isNotEmpty
+        ? TabConfig.fromJson(_config as Map<String, dynamic>)
+        : null;
   }
 
   set archiverTaskMap(Map<String, DownloadTaskInfo>? taskInfoMap) {
@@ -71,7 +75,8 @@ class GStore {
     logger.d('get archiverDlMap ${jsonDecode(val)}');
     final Map<String, DownloadTaskInfo> _map = <String, DownloadTaskInfo>{};
     for (final dynamic dlItemJson in jsonDecode(val) as List<dynamic>) {
-      final DownloadTaskInfo _takInfo = DownloadTaskInfo.fromJson(dlItemJson);
+      final DownloadTaskInfo _takInfo =
+          DownloadTaskInfo.fromJson(dlItemJson as Map<String, dynamic>);
       if (_takInfo.tag != null) {
         _map[_takInfo.tag!] = _takInfo;
       }
@@ -95,7 +100,7 @@ class GStore {
       return rult;
     }
     for (final dynamic his in jsonDecode(val) as List<dynamic>) {
-      final String _his = his;
+      final String _his = his as String;
       rult.add(_his);
     }
 
@@ -104,7 +109,8 @@ class GStore {
 
   Profile get profile {
     final String val = ReadWriteValue('profile', '{}', _profileStore).val;
-    final Profile _profileObj = Profile.fromJson(jsonDecode(val));
+    final Profile _profileObj =
+        Profile.fromJson(jsonDecode(val) as Map<String, dynamic>);
     // logger.v('_initProfile \n${_profileObj.toJson()}');
     final Profile _profile = kDefProfile.copyWith(
         user: _profileObj.user,

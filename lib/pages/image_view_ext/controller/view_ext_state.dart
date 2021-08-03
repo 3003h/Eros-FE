@@ -19,7 +19,7 @@ class ViewExtState {
   ViewExtState() {
     // 设置加载类型
     if (Get.arguments is ViewRepository) {
-      final ViewRepository vr = Get.arguments;
+      final ViewRepository vr = Get.arguments as ViewRepository;
       loadType = vr.loadType;
       if (loadType == LoadType.file) {
         if (vr.files != null) {
@@ -188,7 +188,7 @@ class ViewExtState {
   /// 阅读模式
   Rx<ViewMode> get _viewMode => ehConfigService.viewMode;
   ViewMode get viewMode => _viewMode.value;
-  set viewMode(val) => _viewMode.value = val;
+  set viewMode(ViewMode val) => _viewMode.value = val;
 
   bool fade = true;
   bool needRebuild = false;
