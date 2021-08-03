@@ -81,7 +81,7 @@ class DownloadController extends GetxController {
   }
 
   Future<void> _initGalleryTasks() async {
-    logger5.d(' _initGalleryTasks');
+    logger5.v(' _initGalleryTasks');
     GalleryTaskDao _galleryTaskDao;
     ImageTaskDao _imageTaskDao;
     try {

@@ -177,8 +177,9 @@ class ListViewAdvancedSetting extends StatelessWidget {
 
     final Map<String, String> localeMap = <String, String>{
       '': L10n.of(context).follow_system,
-      'zh_CN': '简体中文',
       'en_US': 'English',
+      'zh_CN': '简体中文',
+      'ko_': '한국어',
     };
 
     List<Widget> _getLocaleList(BuildContext context) {
