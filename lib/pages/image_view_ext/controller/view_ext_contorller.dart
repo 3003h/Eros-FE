@@ -1,8 +1,10 @@
 import 'dart:async';
 
+import 'package:collection/collection.dart';
 import 'package:extended_image/extended_image.dart';
 import 'package:fehviewer/common/controller/download_controller.dart';
 import 'package:fehviewer/common/controller/gallerycache_controller.dart';
+import 'package:fehviewer/common/isolate_download/download_manager.dart';
 import 'package:fehviewer/common/service/ehconfig_service.dart';
 import 'package:fehviewer/const/const.dart';
 import 'package:fehviewer/generated/l10n.dart';
@@ -10,24 +12,20 @@ import 'package:fehviewer/models/base/eh_models.dart';
 import 'package:fehviewer/pages/gallery/controller/gallery_page_controller.dart';
 import 'package:fehviewer/pages/image_view_ext/common.dart';
 import 'package:fehviewer/pages/image_view_ext/view/view_ext.dart';
-import 'package:fehviewer/store/floor/dao/gallery_task_dao.dart';
-import 'package:fehviewer/store/floor/dao/image_task_dao.dart';
-import 'package:fehviewer/store/floor/entity/gallery_image_task.dart';
-import 'package:fehviewer/store/floor/entity/gallery_task.dart';
 import 'package:fehviewer/utils/logger.dart';
 import 'package:fehviewer/utils/utility.dart';
 import 'package:fehviewer/utils/vibrate.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_statusbar_manager/flutter_statusbar_manager.dart';
 import 'package:get/get.dart';
 import 'package:orientation/orientation.dart';
+import 'package:path/path.dart' as path;
 import 'package:photo_view/photo_view.dart';
 import 'package:scroll_to_index/scroll_to_index.dart';
 import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
 import 'package:throttling/throttling.dart';
-import 'package:collection/collection.dart';
-import 'package:path/path.dart' as path;
 
 import 'view_ext_state.dart';
 
@@ -58,8 +56,6 @@ class ViewExtController extends GetxController {
   GalleryPageController get _galleryPageController =>
       vState.galleryPageController;
   EhConfigService get _ehConfigService => vState.ehConfigService;
-
-  final GalleryCacheController _galleryCacheController = Get.find();
 
   Map<int, Future<GalleryImage?>> imageFutureMap = {};
 
@@ -136,6 +132,14 @@ class ViewExtController extends GetxController {
     }
 
     vState.sliderValue = vState.currentItemIndex / 1.0;
+
+    if (GetPlatform.isIOS) {
+      FlutterStatusbarManager.setFullscreen(true);
+    }
+    // FlutterStatusbarManager.setHidden(true,
+    //     animation: StatusBarAnimation.SLIDE);
+    // FlutterStatusbarManager.setTranslucent(true);
+    // FlutterStatusbarManager.setColor(Colors.transparent);
   }
 
   @override
@@ -144,8 +148,12 @@ class ViewExtController extends GetxController {
     vState.saveLastIndex(saveToStore: true);
     pageController.dispose();
     vState.getMoreCancelToken.cancel();
-    // SystemChrome.setEnabledSystemUIOverlays(SystemUiOverlay.values);
+
+    FlutterStatusbarManager.setHidden(false,
+        animation: StatusBarAnimation.SLIDE);
     FlutterStatusbarManager.setFullscreen(false);
+    FlutterStatusbarManager.setTranslucent(false);
+
     // 恢复系统旋转设置
     // logger.d('恢复系统旋转设置');
     OrientationPlugin.setPreferredOrientations(DeviceOrientation.values);
@@ -233,7 +241,7 @@ class ViewExtController extends GetxController {
         break;
     }
 
-    logger.d('_toIndex ${_toIndex}  ');
+    logger.d('_toIndex $_toIndex  ');
     update([idViewColumnModeIcon, idSlidePage]);
     await Future.delayed(const Duration(milliseconds: 50));
     pageController.jumpToPage(_toIndex);
@@ -282,7 +290,8 @@ class ViewExtController extends GetxController {
 
     if (imageTask != null &&
         imageTask.filePath != null &&
-        imageTask.filePath!.isNotEmpty) {
+        imageTask.filePath!.isNotEmpty &&
+        imageTask.status == TaskStatus.complete.value) {
       return GalleryImage(
         ser: itemSer,
         isDownloaded: true,
@@ -405,29 +414,32 @@ class ViewExtController extends GetxController {
   Future<void> handOnTapCent() async {
     if (GetPlatform.isIOS) {
       if (!vState.showBar) {
-        await FlutterStatusbarManager.setFullscreen(false);
+        // show
+        FlutterStatusbarManager.setFullscreen(false);
         vState.showBar = !vState.showBar;
+        update([idViewBar]);
       } else {
+        // hide
         vState.showBar = !vState.showBar;
-        await Future.delayed(Duration(milliseconds: 200));
-        await FlutterStatusbarManager.setFullscreen(true);
+        update([idViewBar]);
+        // await Future.delayed(const Duration(milliseconds: 200));
+        FlutterStatusbarManager.setFullscreen(true);
+        // FlutterStatusbarManager.setHidden(true);
       }
     } else {
       vState.showBar = !vState.showBar;
+      update([idViewBar]);
     }
-    update([idViewBar]);
   }
 
   Future<void> tapLeft() async {
     logger.v('${vState.viewMode} tap left');
     vState.fade = false;
     if (vState.viewMode == ViewMode.LeftToRight && vState.pageIndex > 0) {
-      // pageController.jumpToPage(vState.pageIndex - 1);
       pageController.animateToPage(vState.pageIndex - 1,
           duration: const Duration(milliseconds: 200), curve: Curves.ease);
     } else if (vState.viewMode == ViewMode.rightToLeft &&
         vState.pageIndex < vState.filecount) {
-      // pageController.jumpToPage(vState.pageIndex + 1);
       pageController.animateToPage(vState.pageIndex + 1,
           duration: const Duration(milliseconds: 200), curve: Curves.ease);
     } else if (vState.viewMode == ViewMode.topToBottom &&

@@ -48,11 +48,6 @@ class AutoLockController extends GetxController {
 
   bool _isResumed = false;
 
-  @override
-  void onInit() {
-    super.onInit();
-  }
-
   Future<bool> checkBiometrics({String? localizedReason}) async {
     final bool didAuthenticate = await localAuth.authenticate(
       localizedReason: localizedReason ?? '验证以解锁应用',

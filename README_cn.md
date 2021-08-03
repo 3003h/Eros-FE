@@ -80,11 +80,12 @@ ehentai译文数据库
 - [x] 发表评论 赞和踩
 - [x] watched 和用户 tag
 - [x] Domain Fronting 域前置 支持直连， 自定义hosts
+- [x] 下载
 
 
 ## TODO
 
-- [ ] 下载功能(半成品)
+
 
 ## 依赖项目/插件（部分）
 

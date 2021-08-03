@@ -87,9 +87,8 @@ class CacheController extends GetxController with StateMixin<String> {
         // logger.d('is Directory');
         final List<io.FileSystemEntity> children = file.listSync();
         int total = 0;
-        if (children != null)
-          for (final io.FileSystemEntity child in children)
-            total += await _getTotalSizeOfFilesInDir(child);
+        for (final io.FileSystemEntity child in children)
+          total += await _getTotalSizeOfFilesInDir(child);
         return total;
       }
       return 0;

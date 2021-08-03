@@ -54,8 +54,8 @@ class WebLoginViewIn extends StatelessWidget {
               // 写入cookie到dio
               _cookieManager.getCookies(url: url).then((List<Cookie> value) {
                 logger.d(' $value');
-                value.forEach(
-                    (Cookie cookie) => cookieMap[cookie.name] = cookie.value as String);
+                value.forEach((Cookie cookie) =>
+                    cookieMap[cookie.name] = cookie.value as String);
                 logger.d(' $cookieMap');
                 Get.back(result: cookieMap);
               });

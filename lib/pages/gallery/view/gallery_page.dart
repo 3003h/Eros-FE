@@ -13,7 +13,6 @@ import 'package:get/get.dart';
 import 'package:line_icons/line_icons.dart';
 import 'package:share/share.dart';
 
-import 'all_preview_page.dart';
 import 'detail.dart';
 
 const double kHeaderHeight = 200.0 + 52;

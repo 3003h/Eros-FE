@@ -16,9 +16,7 @@ import 'package:fehviewer/pages/tab/view/gallery_page.dart';
 import 'package:fehviewer/pages/tab/view/search_page_new.dart';
 import 'package:fehviewer/route/routes.dart';
 import 'package:fehviewer/utils/logger.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
-import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 class NavigatorUtil {

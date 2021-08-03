@@ -24,7 +24,6 @@ import 'package:get/get.dart';
 import 'package:logger/logger.dart';
 import 'package:oktoast/oktoast.dart';
 
-import 'common/isolate_download/download_manager.dart';
 import 'get_init.dart';
 
 Future<void> main() async {

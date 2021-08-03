@@ -1,6 +1,5 @@
 import 'package:copy_with_extension/copy_with_extension.dart';
 import 'package:fehviewer/common/global.dart';
-import 'package:fehviewer/utils/logger.dart';
 import 'package:floor/floor.dart';
 import 'package:get/get.dart';
 import 'package:path/path.dart' as path;

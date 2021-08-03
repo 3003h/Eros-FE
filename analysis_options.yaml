@@ -54,7 +54,7 @@ linter:
     - always_put_control_body_on_new_line
     # - always_put_required_named_parameters_first # we prefer having parameters in the same order as fields https://github.com/flutter/flutter/issues/10219
     # - always_require_non_null_named_parameters
-    - always_specify_types
+    # - always_specify_types
     - annotate_overrides
     # - avoid_annotating_with_dynamic # conflicts with always_specify_types
     # - avoid_as # required for implicit-casts: true
@@ -150,7 +150,7 @@ linter:
     # - prefer_expression_function_bodies # conflicts with https://github.com/flutter/flutter/wiki/Style-guide-for-Flutter-repo#consider-using--for-short-functions-and-methods
     - prefer_final_fields
     - prefer_final_in_for_each
-    - prefer_final_locals
+    # - prefer_final_locals
     - prefer_for_elements_to_map_fromIterable
     - prefer_foreach
     # - prefer_function_declarations_over_variables # not yet tested
