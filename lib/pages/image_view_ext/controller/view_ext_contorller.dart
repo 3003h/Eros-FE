@@ -627,7 +627,7 @@ class ViewExtController extends GetxController {
 
   Future<void> onLoadCompleted(int ser) async {
     vState.loadCompleMap[ser] = true;
-    await Future.delayed(Duration.zero);
+    await Future.delayed(const Duration(milliseconds: 100));
 
     if (vState.viewMode == ViewMode.topToBottom) {
       final bool canJump = vState.lastAutoNextSer != ser;
@@ -695,7 +695,7 @@ class ViewExtController extends GetxController {
       if (vState.tempIndex != vState.currentItemIndex &&
           vState.conditionItemIndex) {
         // logger.d('${vState.tempIndex} ${vState.currentItemIndex}');
-        Future.delayed(const Duration(milliseconds: 50)).then((value) {
+        Future.delayed(const Duration(milliseconds: 200)).then((value) {
           // logger.d('tempIndex ${vState.tempIndex}');
           vState.currentItemIndex = vState.tempIndex;
           vState.sliderValue = vState.currentItemIndex / 1.0;

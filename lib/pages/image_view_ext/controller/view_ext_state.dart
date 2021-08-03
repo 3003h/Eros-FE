@@ -1,3 +1,5 @@
+import 'dart:ui';
+
 import 'package:dio/dio.dart';
 import 'package:fehviewer/common/controller/gallerycache_controller.dart';
 import 'package:fehviewer/common/service/depth_service.dart';
@@ -64,7 +66,8 @@ class ViewExtState {
     _currentItemIndex = val;
 
     // 防抖
-    vDebounce(() => saveLastIndex(), duration: Duration(milliseconds: 500));
+    vDebounce(() => saveLastIndex(),
+        duration: const Duration(milliseconds: 500));
     vDebounce(
       () => saveLastIndex(saveToStore: true),
       duration: const Duration(seconds: 5),
@@ -206,4 +209,6 @@ class ViewExtState {
   ImageTaskDao? imageTaskDao;
   List<GalleryImageTask> imageTasks = [];
   String? dirPath;
+
+  Map<int, Size> imageSizeMap = {};
 }
