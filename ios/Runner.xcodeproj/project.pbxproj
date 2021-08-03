@@ -66,6 +66,8 @@
 		BADC7A7A24A9198200AFDF67 /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/LaunchScreen.strings"; sourceTree = "<group>"; };
 		BADC7A7B24A919C100AFDF67 /* zh-Hant */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hant"; path = "zh-Hant.lproj/Main.strings"; sourceTree = "<group>"; };
 		BADC7A7C24A919C100AFDF67 /* zh-Hant */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hant"; path = "zh-Hant.lproj/LaunchScreen.strings"; sourceTree = "<group>"; };
+		BAEB747626B94E73005B4723 /* ko */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ko; path = ko.lproj/Main.strings; sourceTree = "<group>"; };
+		BAEB747726B94E73005B4723 /* ko */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ko; path = ko.lproj/LaunchScreen.strings; sourceTree = "<group>"; };
 		F41D3CF3E08C82EC7233BE93 /* Pods-Runner.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Runner.release.xcconfig"; path = "Target Support Files/Pods-Runner/Pods-Runner.release.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -200,6 +202,7 @@
 				Base,
 				"zh-Hans",
 				"zh-Hant",
+				ko,
 			);
 			mainGroup = 97C146E51CF9000F007C117D;
 			productRefGroup = 97C146EF1CF9000F007C117D /* Products */;
@@ -316,6 +319,7 @@
 				97C146FB1CF9000F007C117D /* Base */,
 				BADC7A7924A9198200AFDF67 /* zh-Hans */,
 				BADC7A7B24A919C100AFDF67 /* zh-Hant */,
+				BAEB747626B94E73005B4723 /* ko */,
 			);
 			name = Main.storyboard;
 			sourceTree = "<group>";
@@ -326,6 +330,7 @@
 				97C147001CF9000F007C117D /* Base */,
 				BADC7A7A24A9198200AFDF67 /* zh-Hans */,
 				BADC7A7C24A919C100AFDF67 /* zh-Hant */,
+				BAEB747726B94E73005B4723 /* ko */,
 			);
 			name = LaunchScreen.storyboard;
 			sourceTree = "<group>";
