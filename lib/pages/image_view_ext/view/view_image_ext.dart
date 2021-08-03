@@ -80,6 +80,8 @@ class _ViewImageExtState extends State<ViewImageExt>
 
   @override
   Widget build(BuildContext context) {
+    // loggerSimple.d('build _ViewImageExtState');
+
     final Size size = MediaQuery.of(context).size;
 
     final InitGestureConfigHandler _initGestureConfigHandler =
@@ -167,6 +169,15 @@ class _ViewImageExtState extends State<ViewImageExt>
               final ImageInfo? imageInfo = state.extendedImageInfo;
               controller.setScale100(imageInfo!, size);
 
+              if (vState.imageSizeMap[widget.imageSer] == null) {
+                vState.imageSizeMap[widget.imageSer] = Size(
+                    imageInfo.image.width.toDouble(),
+                    imageInfo.image.height.toDouble());
+                Future.delayed(const Duration(milliseconds: 100)).then(
+                    (value) => controller
+                        .update(['$idImageListView${widget.imageSer}']));
+              }
+
               controller.onLoadCompleted(widget.imageSer);
             } else if (state.extendedImageLoadState == LoadState.loading) {
               final ImageChunkEvent? loadingProgress = state.loadingProgress;
@@ -196,6 +207,7 @@ class _ViewImageExtState extends State<ViewImageExt>
       /// 在线查看的形式
       final Widget viewImage = GetBuilder<ViewExtController>(
         builder: (ViewExtController controller) {
+          // loggerSimple.d('build viewImage online');
           final ViewExtState vState = controller.vState;
 
           return GestureDetector(
@@ -286,9 +298,12 @@ class _ViewImageExtState extends State<ViewImageExt>
                                 image:
                                     _tmpImage.copyWith(completeHeight: true));
 
-                            // logger.d('upt _tmpImage ${_tmpImage.ser}');
-                            Future.delayed(Duration.zero).then(
-                                (value) => controller.update([idSlidePage]));
+                            logger.d('upt _tmpImage ${_tmpImage.ser}');
+                            Future.delayed(const Duration(milliseconds: 100))
+                                .then((value) => controller.update([
+                                      idSlidePage,
+                                      '$idImageListView${_image.ser}'
+                                    ]));
                           }
                         }
 

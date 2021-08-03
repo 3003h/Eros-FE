@@ -102,10 +102,16 @@ class ImageListViewPage extends GetView<ViewExtController> {
       child: GetBuilder<ViewExtController>(
         id: idImageListView,
         builder: (logic) {
+          loggerSimple.d('builder ImageListViewPage');
+
           final vState = logic.vState;
 
           return ScrollablePositionedList.builder(
-            padding: const EdgeInsets.all(0),
+            // minCacheExtent: 500,
+            padding: EdgeInsets.only(
+              top: context.mediaQueryPadding.top,
+              bottom: context.mediaQueryPadding.bottom,
+            ),
             itemScrollController: logic.itemScrollController,
             itemPositionsListener: logic.itemPositionsListener,
             itemCount: vState.filecount,
@@ -243,6 +249,7 @@ class ImageListViewPage extends GetView<ViewExtController> {
   Widget Function(BuildContext context, int index) itemBuilder() {
     return (BuildContext context, int index) {
       final int itemSer = index + 1;
+      // loggerSimple.d('builder itemBuilder $itemSer');
 
       return ConstrainedBox(
         constraints: BoxConstraints(
@@ -251,8 +258,15 @@ class ImageListViewPage extends GetView<ViewExtController> {
         child: GetBuilder<ViewExtController>(
             id: '$idImageListView$itemSer',
             builder: (logic) {
+              loggerSimple.v('builder itemBuilder $itemSer');
+
               final vState = logic.vState;
               double? _height = () {
+                if (vState.imageSizeMap[itemSer] != null) {
+                  final imageSize = vState.imageSizeMap[itemSer]!;
+                  return imageSize.height * (context.width / imageSize.width);
+                }
+
                 try {
                   final _curImage = vState.imageMap[itemSer];
                   return _curImage!.imageHeight! *
@@ -270,10 +284,15 @@ class ImageListViewPage extends GetView<ViewExtController> {
                 _height += vState.showPageInterval ? 8 : 0;
               }
 
-              return Container(
+              loggerSimple.v('builder itemBuilder $itemSer $_height');
+
+              return AnimatedContainer(
                 padding:
                     EdgeInsets.only(bottom: vState.showPageInterval ? 8 : 0),
-                height: _height,
+                height: _height ?? context.mediaQueryShortestSide * 4 / 3,
+                // height: _height,
+                duration: const Duration(milliseconds: 200),
+                curve: Curves.ease,
                 child: ViewImageExt(
                   imageSer: itemSer,
                   enableDoubleTap: false,
@@ -319,6 +338,8 @@ class ImageListViewPage extends GetView<ViewExtController> {
                 if (_height != null) {
                   _height += vState.showPageInterval ? 8 : 0;
                 }
+
+                loggerSimple.d('ViewImageExt2');
 
                 return Container(
                   padding:
@@ -404,6 +425,8 @@ class ViewImageSlidePage extends GetView<ViewExtController> {
               reverse: reverse,
               itemBuilder: (BuildContext context, int index) {
                 logger.v('pageIndex $index ser ${index + 1}');
+
+                loggerSimple.d('ViewImageExt2');
 
                 /// 单页
                 return ViewImageExt(
