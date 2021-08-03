@@ -571,7 +571,7 @@ class Api {
     // 25个一组分割
     List _group = EHUtils.splitList(_gidlist, 25);
 
-    List rultList = [];
+    final rultList = <dynamic>[];
 
     // 查询 合并结果
     for (int i = 0; i < _group.length; i++) {
@@ -620,8 +620,7 @@ class Api {
       final _category = rultList[i]['category'] as String?;
 
       // 标签
-      final List<String> tags =
-          rultList[i]['tags'].map((e) => e as String?).toList() as List<String>;
+      final List<dynamic> tags = rultList[i]['tags'] as List<dynamic>;
       final _tagsFromApi = tags;
 
       // 大小
@@ -641,7 +640,7 @@ class Api {
       /// 判断获取语言标识
       String _translated = '';
       if (tags.isNotEmpty) {
-        _translated = EHUtils.getLangeage(tags[0]);
+        _translated = EHUtils.getLangeage(tags[0] as String);
       }
 
       galleryItems[i] = galleryItems[i].copyWith(
