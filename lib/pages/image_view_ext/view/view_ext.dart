@@ -2,7 +2,6 @@ import 'dart:math' as math;
 
 import 'package:blur/blur.dart';
 import 'package:extended_image/extended_image.dart';
-import 'package:fehviewer/common/service/depth_service.dart';
 import 'package:fehviewer/const/const.dart';
 import 'package:fehviewer/generated/l10n.dart';
 import 'package:fehviewer/models/gallery_image.dart';
@@ -79,7 +78,7 @@ class ViewLoading extends StatelessWidget {
       return _loadWidget;
     } else {
       return FutureBuilder<void>(
-          future: Future.delayed(duration ?? Duration(milliseconds: 100)),
+          future: Future.delayed(duration ?? const Duration(milliseconds: 100)),
           builder: (context, snapshot) {
             if (snapshot.connectionState == ConnectionState.done) {
               return _loadWidget;
@@ -92,7 +91,7 @@ class ViewLoading extends StatelessWidget {
 }
 
 class ImageExt extends GetView<ViewExtController> {
-  ImageExt({
+  const ImageExt({
     Key? key,
     required this.url,
     required this.ser,
@@ -118,8 +117,6 @@ class ImageExt extends GetView<ViewExtController> {
   final InitGestureConfigHandler initGestureConfigHandler;
   final DoubleTap? onDoubleTap;
   final ExtendedImageMode mode;
-
-  final GalleryPageController _pageController = Get.find(tag: pageCtrlDepth);
 
   @override
   Widget build(BuildContext context) {

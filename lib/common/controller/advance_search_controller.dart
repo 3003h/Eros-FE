@@ -80,13 +80,13 @@ class AdvanceSearchController extends ProfileController {
     super.onInit();
     _enableAdvance.value = Global.profile.enableAdvanceSearch;
     everProfile<bool>(
-        _enableAdvance as RxInterface<bool>,
+        _enableAdvance,
         (bool value) => Global.profile =
             Global.profile.copyWith(enableAdvanceSearch: value));
 
     advanceSearch.value = Global.profile.advanceSearch;
     everProfile<AdvanceSearch>(
-        advanceSearch as RxInterface<AdvanceSearch>,
+        advanceSearch,
         (AdvanceSearch value) =>
             Global.profile = Global.profile.copyWith(advanceSearch: value));
   }

@@ -44,6 +44,6 @@ class OpenLTranslator {
       throw http.ClientException('Error: Can\'t parse json data');
     }
 
-    return OpenlTranslation.fromJson(jsonData as Map<String,dynamic>);
+    return OpenlTranslation.fromJson(jsonData as Map<String, dynamic>);
   }
 }

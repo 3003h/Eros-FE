@@ -25,8 +25,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-import 'all_preview_page.dart';
-
 /// 封面小图 纯StatelessWidget
 class CoveTinyImage extends StatelessWidget {
   const CoveTinyImage(
@@ -668,7 +666,8 @@ class TagGroupItem extends StatelessWidget {
 
   final TagGroup tagGroupData;
 
-  List<Widget> _initTagBtnList(List<GalleryTag> galleryTags, BuildContext context) {
+  List<Widget> _initTagBtnList(
+      List<GalleryTag> galleryTags, BuildContext context) {
     final EhConfigService ehConfigService = Get.find();
     final List<Widget> _tagBtnList = <Widget>[];
     galleryTags.forEach((GalleryTag tag) {

@@ -72,10 +72,10 @@ EhTagTranslation
 - [x] Advanced settings
 - [x] post comments, vote up ，vote down
 - [x] watched and user tag
+- [x] Download
 
 ## TODO
 
-- [ ] Download function (under development)
 
 ## Dependency projects/plugins (partial)
 

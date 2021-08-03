@@ -161,7 +161,7 @@ class ImageListViewPage extends GetView<ViewExtController> {
         itemCount: _list.length,
         itemBuilder: (_, index) {
           final w = _list[index];
-          return Text('$w', style: TextStyle(color: Colors.white));
+          return Text('$w', style: const TextStyle(color: Colors.white));
         },
       ),
     );
@@ -179,7 +179,7 @@ class ImageListViewPage extends GetView<ViewExtController> {
                   key: ValueKey(index),
                   controller: logic.autoScrollController,
                   index: index,
-                  child: Text('$w', style: TextStyle(color: Colors.white)));
+                  child: Text('$w', style: const TextStyle(color: Colors.white)));
             },
           );
         },

@@ -80,8 +80,6 @@ class _ViewImageExtState extends State<ViewImageExt>
 
   @override
   Widget build(BuildContext context) {
-    // loggerSimple.d('build _ViewImageExtState');
-
     final Size size = MediaQuery.of(context).size;
 
     final InitGestureConfigHandler _initGestureConfigHandler =

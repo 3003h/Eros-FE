@@ -148,7 +148,8 @@ class EhUserManager {
     cookieJar.saveFromResponse(Uri.parse(EHConst.EX_BASE_URL), cookies);
     await _getExIgneous();
 
-    final User userinfo = await _getUserInfo(cookieMap['ipb_member_id'] as String);
+    final User userinfo =
+        await _getUserInfo(cookieMap['ipb_member_id'] as String);
 
     //获取Ex cookies
     final List<Cookie> cookiesEx =

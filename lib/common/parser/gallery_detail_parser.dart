@@ -167,7 +167,7 @@ class GalleryDetailParser {
 
         /// for in遍历的方式处理
         final List<GalleryCommentSpan> commentSpansf = [];
-        for (Node node in contextElem?.nodes ?? []) {
+        for (final Node node in contextElem?.nodes ?? []) {
           if (node.nodeType == Node.TEXT_NODE) {
             final String _nodeText = RegExp(r'^"?(.+)"?$')
                     .firstMatch(node.text?.trim() ?? '')
@@ -206,9 +206,9 @@ class GalleryDetailParser {
             }
 
             // span带a href
-            if ((node as Element).localName == 'span' &&
+            if (node.localName == 'span' &&
                 node.children.isNotEmpty) {
-              final Element? _nodeElm = (node as Element).children.first;
+              final Element? _nodeElm = node.children.first;
               final String _nodeHref = _nodeElm?.attributes['href'] ?? '';
               final GalleryCommentSpan _commentSpan = GalleryCommentSpan(
                 text: _nodeElm?.text.trim() ?? _nodeHref,
@@ -220,8 +220,8 @@ class GalleryDetailParser {
             }
 
             // a标签带href
-            if ((node as Element).localName == 'a') {
-              final Element? _nodeElm = node as Element;
+            if (node.localName == 'a') {
+              final Element? _nodeElm = node;
 
               final String _nodeHref = _nodeElm?.attributes['href'] ?? '';
 
@@ -254,8 +254,8 @@ class GalleryDetailParser {
             }
 
             // 只有一个img的情况 无href
-            if ((node as Element).localName == 'img') {
-              final Element? _nodeElm = node as Element;
+            if (node.localName == 'img') {
+              final Element? _nodeElm = node;
               final String _nodeImageUrl = _nodeElm?.attributes['src'] ?? '';
 
               final _commentSpan = GalleryCommentSpan(
