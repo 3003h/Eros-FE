@@ -15,17 +15,17 @@ class DnsService extends ProfileService {
   // RxBool enableCustomHosts = false.obs;
   final _enableCustomHosts = false.obs;
   bool get enableCustomHosts => _enableCustomHosts.value;
-  set enableCustomHosts(val) => _enableCustomHosts.value = val;
+  set enableCustomHosts(bool val) => _enableCustomHosts.value = val;
 
   // RxBool enableDoH = false.obs;
   final _enableDoH = false.obs;
   bool get enableDoH => _enableDoH.value;
-  set enableDoH(val) => _enableDoH.value = val;
+  set enableDoH(bool val) => _enableDoH.value = val;
 
   // RxBool enableDomainFronting = false.obs;
   final _enableDomainFronting = false.obs;
   bool get enableDomainFronting => _enableDomainFronting.value;
-  set enableDomainFronting(val) => _enableDomainFronting.value = val;
+  set enableDomainFronting(bool val) => _enableDomainFronting.value = val;
 
   final RxList<DnsCache> _hosts = <DnsCache>[].obs;
   final RxList<DnsCache> _dohCache = <DnsCache>[].obs;

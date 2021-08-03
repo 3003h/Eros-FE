@@ -10,10 +10,8 @@ import 'package:local_auth/error_codes.dart' as auth_error;
 
 class UnlockPageController extends GetxController {
   final _infoText = ''.obs;
-
-  get infoText => _infoText.value;
-
-  set infoText(val) => _infoText.value = val;
+  String get infoText => _infoText.value;
+  set infoText(String val) => _infoText.value = val;
 
   Future<bool> _unlock({required BuildContext context}) async {
     final IOSAuthMessages iosStrings = IOSAuthMessages(
@@ -41,7 +39,7 @@ class UnlockPageController extends GetxController {
       switch (e.code) {
         case auth_error.notAvailable:
         default:
-          infoText = e.message;
+          infoText = e.message as String;
           break;
       }
       rethrow;

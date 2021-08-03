@@ -89,7 +89,7 @@ class DomainFrontingInterceptorResponse extends Interceptor {
       return;
     }
     final rawOptions = e.requestOptions.extra['domainFrontingRawOptions'];
-    e.requestOptions = rawOptions;
+    e.requestOptions = rawOptions as RequestOptions;
     handler.next(e);
   }
 }
@@ -110,7 +110,8 @@ class DomainFrontingInterceptorRequest extends Interceptor {
       return;
     }
 
-    final String domainFronting = options.extra['domainFronting'] ?? 'dns';
+    final String domainFronting =
+        options.extra['domainFronting'] as String? ?? 'dns';
     final host = options.uri.host;
     String? ip;
     if (domainFronting != 'dns') {

@@ -23,7 +23,7 @@ class GalleryItemFlow extends StatelessWidget {
     );
   }
 
-  final String? tabTag;
+  final dynamic tabTag;
   final GalleryItem galleryItem;
 
   GalleryItemController get _galleryItemController =>

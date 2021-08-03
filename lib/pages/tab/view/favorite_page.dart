@@ -31,7 +31,7 @@ class FavoriteTab extends GetView<FavoriteViewController> {
     final UserController userController = Get.find();
     return Obx(() {
       if (userController.isLogin) {
-        if (controller.title == null || (controller.title?.isEmpty ?? true)) {
+        if (controller.title == null || (controller.title.isEmpty)) {
           controller.title = L10n.of(context).all_Favorites;
         }
         return _buildNetworkFavView(context);
@@ -49,7 +49,7 @@ class FavoriteTab extends GetView<FavoriteViewController> {
         mainAxisSize: MainAxisSize.min,
         children: [
           Text(
-            controller.title ?? '...',
+            controller.title,
           ),
           Obx(() {
             if (controller.isBackgroundRefresh)
@@ -140,7 +140,7 @@ class FavoriteTab extends GetView<FavoriteViewController> {
         children: [
           Obx(() {
             return Text(
-              controller.title ?? '...',
+              controller.title,
             );
           }),
           Obx(() {

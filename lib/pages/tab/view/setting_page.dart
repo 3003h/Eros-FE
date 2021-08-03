@@ -55,7 +55,7 @@ class SettingTab extends GetView<SettingViewController> {
             sliver: SliverList(
               delegate: SliverChildBuilderDelegate(
                 (context, index) {
-                  final List _itemList = controller.itemList;
+                  final _itemList = controller.itemList;
                   if (index < _itemList.length) {
                     return _itemList[index];
                   } else {

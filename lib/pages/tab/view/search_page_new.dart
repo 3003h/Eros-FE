@@ -54,7 +54,8 @@ class GallerySearchPageNew extends StatefulWidget {
 class _GallerySearchPageNewState extends State<GallerySearchPageNew> {
   final SearchPageController controller = Get.put(
     SearchPageController(
-        initSearchText: Get.arguments is String ? Get.arguments : null),
+        initSearchText:
+            Get.arguments is String ? Get.arguments as String : null),
     tag: searchPageCtrlDepth,
   );
 

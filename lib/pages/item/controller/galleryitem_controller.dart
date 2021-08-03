@@ -17,7 +17,7 @@ class GalleryItemController extends GetxController {
   final FavDialogController _favDialogController = Get.find();
 
   /// 点击item
-  void onTap(String? tabTag) {
+  void onTap(dynamic tabTag) {
     logger.d('${galleryItem.englishTitle} ');
     NavigatorUtil.goGalleryPage(galleryItem: galleryItem, tabTag: tabTag);
   }

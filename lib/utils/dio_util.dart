@@ -55,7 +55,7 @@ class HttpManager {
           databasePath: Global.appSupportPath,
           baseUrl: _baseUrl,
         ),
-      ).interceptor);
+      ).interceptor as Interceptor);
     }
 
     _dio.interceptors.add(DioFirebasePerformanceInterceptor());

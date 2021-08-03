@@ -12,7 +12,7 @@ class RetryOptions {
   }) : _retryEvaluator = retryEvaluator;
 
   factory RetryOptions.fromExtra(RequestOptions? request) {
-    return request?.extra[extraKey] ?? RetryOptions.noRetry();
+    return request?.extra[extraKey] as RetryOptions? ?? RetryOptions.noRetry();
   }
 
   factory RetryOptions.noRetry() {

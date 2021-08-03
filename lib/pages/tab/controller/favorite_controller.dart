@@ -17,15 +17,15 @@ import 'tabview_controller.dart';
 class FavoriteViewController extends TabViewController {
   final RxString _title = ''.obs;
 
-  String? get title {
+  String get title {
     if (_title.value.isNotEmpty) {
       return _title.value;
     } else {
-      return _ehConfigService.lastShowFavTitle;
+      return _ehConfigService.lastShowFavTitle ?? '';
     }
   }
 
-  set title(val) => _title.value = val;
+  set title(String val) => _title.value = val;
 
   bool enableDelayedLoad = true;
 

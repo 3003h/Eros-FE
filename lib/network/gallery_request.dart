@@ -524,7 +524,7 @@ class Api {
             data: dio.FormData.fromMap({
               'hathdl_xres': resolution.trim(),
             }));
-    return parseArchiverDownload(response.data);
+    return parseArchiverDownload(response.data as String);
   }
 
   static Future<String> postArchiverLocalDownload(
@@ -540,7 +540,7 @@ class Api {
             }));
     // logger.d('${response.data} ');
     final String _href = RegExp(r'document.location = "(.+)"')
-            .firstMatch(response.data)
+            .firstMatch(response.data as String)
             ?.group(1) ??
         '';
 
@@ -586,7 +586,7 @@ class Api {
       // logger.d('$rult');
 
       final jsonObj = jsonDecode(rult.toString());
-      final tempList = jsonObj['gmetadata'];
+      final tempList = jsonObj['gmetadata'] as List<dynamic>;
       rultList.addAll(tempList);
     }
 
@@ -594,19 +594,20 @@ class Api {
 
     for (int i = 0; i < galleryItems.length; i++) {
       // 标题
-      final _englishTitle = unescape.convert(rultList[i]['title']);
+      final _englishTitle = unescape.convert(rultList[i]['title'] as String);
 
       // 日语标题
-      final _japaneseTitle = unescape.convert(rultList[i]['title_jpn']);
+      final _japaneseTitle =
+          unescape.convert(rultList[i]['title_jpn'] as String);
 
       // 详细评分
-      final rating = rultList[i]['rating'];
+      final rating = rultList[i]['rating'] as String?;
       final _rating = rating != null
           ? double.parse(rating)
           : galleryItems[i].ratingFallBack;
 
       // 封面图片
-      final String thumb = rultList[i]['thumb'];
+      final String thumb = rultList[i]['thumb'] as String;
       final _imgUrlL = thumb;
 
       // 文件数量
@@ -619,8 +620,8 @@ class Api {
       final _category = rultList[i]['category'] as String?;
 
       // 标签
-      final List<String> tags = List<String>.from(
-          rultList[i]['tags'].map((e) => e as String?).toList());
+      final List<String> tags =
+          rultList[i]['tags'].map((e) => e as String?).toList() as List<String>;
       final _tagsFromApi = tags;
 
       // 大小
@@ -630,11 +631,11 @@ class Api {
       final _torrentcount = rultList[i]['torrentcount'] as String?;
 
       // 种子列表
-      final List<dynamic> torrents = rultList[i]['torrents'];
+      final List<dynamic> torrents = rultList[i]['torrents'] as List<dynamic>;
       final _torrents = <GalleryTorrent>[];
-      torrents.forEach((element) {
+      torrents.forEach((dynamic element) {
         // final Map<String, dynamic> e = element as Map<String, dynamic>;
-        _torrents.add(GalleryTorrent.fromJson(element));
+        _torrents.add(GalleryTorrent.fromJson(element as Map<String, dynamic>));
       });
 
       /// 判断获取语言标识
@@ -683,7 +684,8 @@ class Api {
     // await CustomHttpsProxy.instance.init();
     final rult = await getGalleryApi(reqJsonStr, refresh: true, cache: false);
     logger.d('$rult');
-    final Map<String, dynamic> rultMap = jsonDecode(rult.toString());
+    final Map<String, dynamic> rultMap =
+        jsonDecode(rult.toString()) as Map<String, dynamic>;
     return rultMap;
   }
 
@@ -710,7 +712,8 @@ class Api {
     final rult = await getGalleryApi(reqJsonStr, refresh: true, cache: false);
     // logger.d('$rult');
     // final jsonObj = jsonDecode(rult.toString());
-    return CommitVoteRes.fromJson(jsonDecode(rult.toString()));
+    return CommitVoteRes.fromJson(
+        jsonDecode(rult.toString()) as Map<String, dynamic>);
   }
 
   /// 给画廊添加tag
@@ -736,7 +739,8 @@ class Api {
     // await CustomHttpsProxy.instance.init();
     final rult = await getGalleryApi(reqJsonStr, refresh: true, cache: false);
     logger.d('$rult');
-    final Map<String, dynamic> rultMap = jsonDecode(rult.toString());
+    final Map<String, dynamic> rultMap =
+        jsonDecode(rult.toString()) as Map<String, dynamic>;
     return rultMap;
   }
 
@@ -957,7 +961,7 @@ class Api {
     String? filePath,
   }) async {
     /// 跳转权限设置
-    Future<bool?> _jumpToAppSettings(context) async {
+    Future<bool?> _jumpToAppSettings(BuildContext context) async {
       return showCupertinoDialog<bool>(
         context: context,
         builder: (BuildContext context) {
@@ -1162,7 +1166,7 @@ class Api {
 
     final RegExp regImageUrl = RegExp('<img[^>]*src=\"([^\"]+)\" style');
     final String imageUrl =
-        regImageUrl.firstMatch(rultJson['i3'])?.group(1) ?? '';
+        regImageUrl.firstMatch(rultJson['i3'] as String)?.group(1) ?? '';
     final double width = double.parse(rultJson['x'].toString());
     final double height = double.parse(rultJson['y'].toString());
 

@@ -69,7 +69,7 @@ class NavigatorUtil {
   /// 转到画廊页面
   static Future<void> goGalleryPage({
     String? url,
-    String? tabTag,
+    dynamic tabTag,
     GalleryItem? galleryItem,
     bool replace = false,
   }) async {

@@ -101,7 +101,7 @@ class InWebMySetting extends StatelessWidget {
               // List<Cookie> _cookies = value.forEach((key, value) { });
               final List<io.Cookie> _cookies = value
                   .map((Cookie e) =>
-                      io.Cookie(e.name, e.value)..domain = e.domain)
+                      io.Cookie(e.name, e.value as String)..domain = e.domain)
                   .toList();
 
               logger.d('${_cookies.map((e) => e.toString()).join('\n')} ');

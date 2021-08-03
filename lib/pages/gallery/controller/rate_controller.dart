@@ -37,8 +37,8 @@ class RateController extends GetxController {
     pageController.ratinged(
       ratingUsr: double.parse(rultMap['rating_usr'].toString()),
       ratingAvg: double.parse(rultMap['rating_avg'].toString()),
-      ratingCnt: rultMap['rating_cnt'],
-      colorRating: rultMap['rating_cls'],
+      ratingCnt: rultMap['rating_cnt'] as int,
+      colorRating: rultMap['rating_cls'] as String,
     );
     showToast('Ratting successfully');
   }

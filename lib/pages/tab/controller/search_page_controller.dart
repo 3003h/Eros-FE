@@ -43,7 +43,7 @@ class SearchPageController extends TabViewController {
   final String? initSearchText;
   final RxString _searchText = ''.obs;
   String get searchText => _searchText.value;
-  set searchText(val) => _searchText.value = val;
+  set searchText(String val) => _searchText.value = val;
   late bool _autoComplete = false;
   final String tabIndex = 'search_$searchPageCtrlDepth';
 
@@ -91,10 +91,8 @@ class SearchPageController extends TabViewController {
   late DateTime _lastInputCompleteAt; //上次输入完成时间
 
   final _lastSearchText = ''.obs;
-
   String get lastSearchText => _lastSearchText.value;
-
-  set lastSearchText(val) => _lastSearchText.value = val;
+  set lastSearchText(String val) => _lastSearchText.value = val;
 
   /// 自动获取焦点
   bool autofocus = false;

@@ -253,7 +253,7 @@ class EHUtils {
     final Map<String, bool> catMap = <String, bool>{};
     for (int i = 0; i < catList.length; i++) {
       final String catName = catList[i];
-      final int curCatNum = catsNumMaps[catName];
+      final int curCatNum = catsNumMaps[catName] as int;
       if (catNum & curCatNum != curCatNum) {
         catMap[catName] = true;
       } else {

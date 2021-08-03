@@ -580,7 +580,7 @@ class DownloadController extends GetxController {
     }
   }
 
-  Future _checkAndGetImages(
+  Future<GalleryImage?> _checkAndGetImages(
     String gidStr,
     int itemSer,
     int filecount,
@@ -791,17 +791,20 @@ class DownloadController extends GetxController {
       logger.d('delete all .nomedia file');
       for (final dirPath in pathSet) {
         final File noMediaFile = File(path.join(dirPath, '.nomedia'));
-        if (noMediaFile.existsSync()) {
-          noMediaFile.deleteSync(recursive: true);
+        if (await noMediaFile.exists()) {
+          noMediaFile.delete(recursive: true);
         }
       }
     } else {
       logger.d('add .nomedia file \n${pathSet.join('\n')}');
       for (final dirPath in pathSet) {
         final File noMediaFile = File(path.join(dirPath, '.nomedia'));
-        if (!noMediaFile.existsSync()) {
-          noMediaFile.createSync(recursive: true);
-          // noMediaFile.renameSync(path.join(dirPath, '.nomedia'));
+        // if (!noMediaFile.existsSync()) {
+        //   noMediaFile.createSync(recursive: true);
+        //   // noMediaFile.renameSync(path.join(dirPath, '.nomedia'));
+        // }
+        if (!await noMediaFile.exists()) {
+          noMediaFile.create(recursive: true);
         }
       }
     }

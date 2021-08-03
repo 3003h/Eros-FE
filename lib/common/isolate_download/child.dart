@@ -42,7 +42,7 @@ void _isolateDownload(SendPort sendPort) {
     try {
       if (message is _RequestProtocol) {
         final _RequestType _requestType = message.requestType!;
-        final _RequestBean _requestBean = message.data;
+        final _RequestBean _requestBean = message.data as _RequestBean;
 
         switch (_requestType) {
 

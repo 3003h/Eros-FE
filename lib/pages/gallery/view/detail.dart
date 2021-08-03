@@ -26,7 +26,7 @@ class GalleryDetail extends StatelessWidget {
     required this.controller,
   }) : super(key: key);
 
-  final String? tabTag;
+  final dynamic tabTag;
   final GalleryPageController controller;
 
   GalleryPageController get _controller => Get.find(tag: pageCtrlDepth);
@@ -268,7 +268,7 @@ class _DetailFromItem extends StatelessWidget {
   const _DetailFromItem({Key? key, this.tabTag, required this.controller})
       : super(key: key);
 
-  final String? tabTag;
+  final dynamic tabTag;
   final GalleryPageController controller;
 
   // GalleryPageController get _controller => Get.find(tag: pageCtrlDepth);

@@ -20,11 +20,11 @@
 
 analyzer:
   strong-mode:
-    implicit-casts: true
+    implicit-casts: false
     implicit-dynamic: true
   errors:
     # treat missing required parameters as a warning (not a hint)
-    missing_required_param: warning
+    missing_required_param: error
     # treat missing returns as a warning (not a hint)
     missing_return: warning
     # allow having TODOs in the code
@@ -43,6 +43,7 @@ analyzer:
     - "lib/i18n/messages_*.dart"
     - "lib/generated/**"
     - "lib/src/http/**"
+    - "lib/models/**"
 
 linter:
   rules:
@@ -84,7 +85,7 @@ linter:
     # - avoid_setters_without_getters # not yet tested
     # - avoid_shadowing_type_parameters # not yet tested
     - avoid_single_cascade_in_expression_statements
-    - avoid_slow_async_io
+    # avoid_slow_async_io
     - avoid_types_as_parameter_names
     # - avoid_types_on_closure_parameters # conflicts with always_specify_types
     # - avoid_unnecessary_containers # not yet tested

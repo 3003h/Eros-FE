@@ -28,7 +28,7 @@ class GalleryItemWidget extends StatelessWidget {
   }
 
   final GalleryItem galleryItem;
-  final String tabTag;
+  final dynamic tabTag;
 
   late GalleryItemController _galleryItemController;
 

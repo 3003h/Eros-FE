@@ -68,11 +68,11 @@ class QuickSearchListPage extends StatelessWidget {
         .doc('default')
         .get();
     if (docById.exists) {
-      final List _importTexts = docById.get('list') as List;
+      final _importTexts = docById.get('list') as List<String>;
 
       logger.v(_importTexts);
 
-      _importTexts.forEach((dynamic element) {
+      _importTexts.forEach((element) {
         if (element.trim().isNotEmpty && !element.startsWith('#'))
           quickSearchController.addText(element.toString(), silent: true);
       });

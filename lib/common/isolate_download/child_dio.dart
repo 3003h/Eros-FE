@@ -38,7 +38,7 @@ class IsolateDioEH {
         databasePath: appSupportPath,
         baseUrl: EHConst.EH_BASE_URL,
       ),
-    ).interceptor);
+    ).interceptor as Interceptor);
   }
   factory IsolateDioEH.getInstance() => _instance;
   static final IsolateDioEH _instance = IsolateDioEH._();
@@ -90,7 +90,7 @@ Dio _getIsolateDio({
       databasePath: appSupportPath,
       baseUrl: Api.getBaseUrl(isSiteEx: isSiteEx),
     ),
-  ).interceptor);
+  ).interceptor as Interceptor);
 
   if (false) {
     _dio.interceptors.add(InterceptorsWrapper(
