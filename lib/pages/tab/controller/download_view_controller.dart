@@ -46,7 +46,7 @@ class DownloadViewController extends GetxController {
           .map((MapEntry<String, DownloadTaskInfo> e) => e.value)
           .toList();
 
-  RxMap<int, GalleryTask> get galleryTaskMap =>
+  Map<int, GalleryTask> get galleryTaskMap =>
       _downloadController.dState.galleryTaskMap;
 
   List<GalleryTask> get galleryTasks {
@@ -170,9 +170,12 @@ class DownloadViewController extends GetxController {
   // gallery 暂停任务
   void pauseGalleryDownload(int? gid) {
     if (gid != null) _downloadController.galleryTaskPaused(gid);
+    update(['DownloadGalleryItem_$gid']);
   }
 
+  // gallery 恢复任务
   void resumeGalleryDownload(int? gid) {
     if (gid != null) _downloadController.galleryTaskResume(gid);
+    update(['DownloadGalleryItem_$gid']);
   }
 }

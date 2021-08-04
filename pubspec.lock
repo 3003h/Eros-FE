@@ -70,7 +70,7 @@ packages:
       name: build
       url: "https://pub.flutter-io.cn"
     source: hosted
-    version: "2.0.3"
+    version: "2.1.0"
   build_config:
     dependency: transitive
     description:
@@ -98,14 +98,14 @@ packages:
       name: build_runner
       url: "https://pub.flutter-io.cn"
     source: hosted
-    version: "2.0.6"
+    version: "2.1.0"
   build_runner_core:
     dependency: transitive
     description:
       name: build_runner_core
       url: "https://pub.flutter-io.cn"
     source: hosted
-    version: "7.0.1"
+    version: "7.1.0"
   built_collection:
     dependency: transitive
     description:
@@ -140,7 +140,7 @@ packages:
       name: cached_network_image_web
       url: "https://pub.flutter-io.cn"
     source: hosted
-    version: "1.0.0"
+    version: "1.0.1"
   characters:
     dependency: transitive
     description:
@@ -588,7 +588,7 @@ packages:
       name: flutter_markdown
       url: "https://pub.flutter-io.cn"
     source: hosted
-    version: "0.6.3"
+    version: "0.6.4"
   flutter_plugin_android_lifecycle:
     dependency: transitive
     description:
@@ -672,7 +672,7 @@ packages:
       name: get
       url: "https://pub.flutter-io.cn"
     source: hosted
-    version: "4.3.0"
+    version: "4.3.4"
   get_storage:
     dependency: "direct main"
     description:
@@ -833,7 +833,7 @@ packages:
       name: linkify
       url: "https://pub.flutter-io.cn"
     source: hosted
-    version: "4.0.0"
+    version: "4.1.0"
   liquid_progress_indicator_ns:
     dependency: "direct main"
     description:
@@ -924,7 +924,7 @@ packages:
       name: oktoast
       url: "https://pub.flutter-io.cn"
     source: hosted
-    version: "3.0.0"
+    version: "3.1.0"
   orientation:
     dependency: "direct main"
     description:

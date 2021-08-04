@@ -37,6 +37,11 @@ class CacheController extends GetxController with StateMixin<String> {
     showToast('Clear cache successfully');
   }
 
+  Future<void> clearDioCache({required String path}) async {
+    DioCacheManager(CacheConfig(databasePath: Global.appSupportPath))
+        .deleteByPrimaryKey(path);
+  }
+
   Future<String> getTotCacheSize() async {
     final int _cachesize = await _loadCache();
     // logger.d('tot cacheSize  ${renderSize(_cachesize)}');

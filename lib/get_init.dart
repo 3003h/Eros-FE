@@ -3,6 +3,7 @@ import 'package:get/get.dart';
 import 'common/controller/advance_search_controller.dart';
 import 'common/controller/archiver_download_controller.dart';
 import 'common/controller/auto_lock_controller.dart';
+import 'common/controller/cache_controller.dart';
 import 'common/controller/download_controller.dart';
 import 'common/controller/gallerycache_controller.dart';
 import 'common/controller/history_controller.dart';
@@ -48,6 +49,7 @@ void getinit() {
   Get.lazyPut(() => HistoryController(), fenix: true);
   Get.lazyPut(() => UserController(), fenix: true);
   Get.lazyPut(() => GalleryCacheController(), fenix: true);
+  Get.lazyPut(() => CacheController(), fenix: true);
 
   Get.put(DownloadController());
   Get.put(ArchiverDownloadController());
