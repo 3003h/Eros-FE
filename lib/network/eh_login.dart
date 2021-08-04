@@ -4,7 +4,7 @@ import 'package:cookie_jar/cookie_jar.dart';
 import 'package:dio/dio.dart';
 import 'package:fehviewer/const/const.dart';
 import 'package:fehviewer/models/user.dart';
-import 'package:fehviewer/network/error.dart';
+import 'package:fehviewer/component/exception/error.dart';
 import 'package:fehviewer/network/gallery_request.dart';
 import 'package:fehviewer/utils/dio_util.dart';
 import 'package:fehviewer/utils/logger.dart';
@@ -50,7 +50,7 @@ class EhUserManager {
     logger.d('set-cookie $setcookie');
 
     if (setcookie.length < 2) {
-      throw EhError(type: EhErrorType.LOGIN);
+      throw EhError(type: EhErrorType.login);
     }
 
     final String cookieMemberId = setcookie.firstWhere(
@@ -71,7 +71,7 @@ class EhUserManager {
         .firstWhere((Cookie cookie) => cookie.name == 'ipb_member_id')
         .value;
     if (_id.isEmpty) {
-      throw EhError(type: EhErrorType.LOGIN);
+      throw EhError(type: EhErrorType.login);
     }
 
     final PersistCookieJar cookieJar = await Api.cookieJar;

@@ -577,8 +577,8 @@ class GalleryPageController extends GetxController
     return true;
   }
 
-  /// 获取当前页的图片url 宽高信息
-  Future<GalleryImage?> getImageInfo(
+  /// 获取当前页的图片信息
+  Future<GalleryImage?> fetchAndParserImageInfo(
     int itemSer, {
     CancelToken? cancelToken,
     // bool refresh = false,

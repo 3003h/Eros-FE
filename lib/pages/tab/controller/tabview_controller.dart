@@ -1,6 +1,7 @@
 import 'package:dio/dio.dart';
 import 'package:fehviewer/common/service/ehconfig_service.dart';
 import 'package:fehviewer/common/service/theme_service.dart';
+import 'package:fehviewer/component/exception/error.dart';
 import 'package:fehviewer/generated/l10n.dart';
 import 'package:fehviewer/models/index.dart';
 import 'package:fehviewer/pages/tab/controller/search_page_controller.dart';
@@ -102,12 +103,18 @@ class TabViewController extends GetxController
       {bool refresh = false}) async {
     final int _catNum = _ehConfigService.catFilter.value;
 
-    final Future<Tuple2<List<GalleryItem>, int>> tuple = fetchNormal(
-      cats: cats ?? _catNum,
-      refresh: refresh,
-      cancelToken: cancelToken,
-    );
-    return tuple;
+    try {
+      final Future<Tuple2<List<GalleryItem>, int>> tuple = fetchNormal(
+        cats: cats ?? _catNum,
+        refresh: refresh,
+        cancelToken: cancelToken,
+      );
+      return tuple;
+    } on EhError catch (eherror) {
+      logger.e('type:${eherror.type}\n${eherror.message}');
+      showToast(eherror.message);
+      rethrow;
+    }
   }
 
   Future<void> reloadData() async {

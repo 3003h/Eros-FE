@@ -3,7 +3,7 @@ import 'dart:io';
 import 'package:fehviewer/common/controller/user_controller.dart';
 import 'package:fehviewer/models/base/eh_models.dart';
 import 'package:fehviewer/network/eh_login.dart';
-import 'package:fehviewer/network/error.dart';
+import 'package:fehviewer/component/exception/error.dart';
 import 'package:fehviewer/network/gallery_request.dart';
 import 'package:fehviewer/pages/login_ext/view/login_cookie_ext.dart';
 import 'package:fehviewer/route/routes.dart';
@@ -69,7 +69,7 @@ class LoginExtController extends GetxController {
       userController.user(user);
     } on EhError catch (e, stack) {
       logger.e('$e\n$stack');
-      if (e.type == EhErrorType.LOGIN) {
+      if (e.type == EhErrorType.login) {
         showToast('login fail');
       }
       // rethrow;
