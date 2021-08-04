@@ -237,7 +237,6 @@ class _ViewImageExtState extends State<ViewImageExt>
                       } else if (snapshot.error is EhError) {
                         final EhError ehErr = snapshot.error as EhError;
                         _errInfo = ehErr.type.toString();
-                        logger.e('${ehErr.message} ');
                         if (ehErr.type == EhErrorType.image509) {
                           return ViewErr509(ser: widget.imageSer);
                         }
@@ -295,7 +294,7 @@ class _ViewImageExtState extends State<ViewImageExt>
                         controller.setScale100(
                             imageInfo!, context.mediaQuerySize);
 
-                        if (_image != null && _image.ser != 1) {
+                        if (_image != null) {
                           final GalleryImage? _tmpImage =
                               vState.imageMap[_image.ser];
                           if (_tmpImage != null &&

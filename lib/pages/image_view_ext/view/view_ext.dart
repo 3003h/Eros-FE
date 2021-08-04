@@ -1,4 +1,5 @@
 import 'dart:math' as math;
+import 'dart:math';
 
 import 'package:blur/blur.dart';
 import 'package:extended_image/extended_image.dart';
@@ -51,14 +52,14 @@ class ViewErr509 extends StatelessWidget {
                   '509',
                   style: TextStyle(
                     fontSize: 20,
-                    color: CupertinoColors.systemRed.darkColor,
+                    color: CupertinoColors.systemPink.darkColor,
                   ),
                 ),
                 Expanded(
                   child: Icon(
                     LineIcons.toriiGate,
                     size: 77,
-                    color: CupertinoColors.systemRed.darkColor,
+                    color: CupertinoColors.systemPink.darkColor,
                   ),
                 ),
               ],
@@ -480,7 +481,8 @@ class BottomBarControlWidget extends GetView<ViewExtController> {
                     height: kBottomBarHeight,
                     child: ViewPageSlider(
                       max: logic.vState.filecount - 1.0,
-                      sliderValue: logic.vState.sliderValue,
+                      sliderValue: min(logic.vState.sliderValue,
+                          logic.vState.filecount - 1.0),
                       onChangedEnd: logic.handOnSliderChangedEnd,
                       onChanged: logic.handOnSliderChanged,
                       reverse: logic.vState.viewMode == ViewMode.rightToLeft,

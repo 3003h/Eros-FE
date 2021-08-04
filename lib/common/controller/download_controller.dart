@@ -9,6 +9,7 @@ import 'package:fehviewer/common/global.dart';
 import 'package:fehviewer/common/isolate_download/download_manager.dart';
 import 'package:fehviewer/common/service/depth_service.dart';
 import 'package:fehviewer/common/service/ehconfig_service.dart';
+import 'package:fehviewer/component/exception/error.dart';
 import 'package:fehviewer/component/quene_task/quene_task.dart';
 import 'package:fehviewer/models/base/eh_models.dart';
 import 'package:fehviewer/network/gallery_request.dart';
@@ -218,8 +219,8 @@ class DownloadController extends GetxController {
       return;
     }
 
-    final String _downloadPath =
-        path.join('$gid - ${path.split(title).join('_')}');
+    final String _downloadPath = path.join(
+        '$gid - ${path.split(title).join('_').replaceAll(RegExp(r'[/:*"<>|,? ]'), '_')}');
     final String _dirPath = await _getGalleryDownloadPath(_downloadPath);
 
     // 登记主任务表
@@ -373,6 +374,13 @@ class DownloadController extends GetxController {
     }
 
     return galleryTaskUpdateStatus(gid, TaskStatus.paused);
+  }
+
+  void _galleryTaskPausedAll() {
+    for (final _task in dState.galleryTasks) {
+      galleryTaskPaused(_task.gid);
+      _updateDownloadView(['DownloadGalleryItem_${_task.gid}']);
+    }
   }
 
   /// 恢复任务
@@ -620,6 +628,16 @@ class DownloadController extends GetxController {
             }
 
             // loggerSimple.d('$itemSer Cancel');
+          } on EhError catch (e) {
+            if (e.type == EhErrorType.image509) {
+              logger.e('image509');
+              show509Toast();
+              _galleryTaskPausedAll();
+            } else {
+              rethrow;
+            }
+          } catch (e) {
+            rethrow;
           }
         }
       });

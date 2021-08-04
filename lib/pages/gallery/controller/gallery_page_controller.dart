@@ -639,8 +639,7 @@ class GalleryPageController extends GetxController
         }
       }
     } catch (e, stack) {
-      logger.e('$e \n $stack');
-      FirebaseCrashlytics.instance.recordError(e, stack);
+      // logger.e('fetchAndParserImageInfo error\n$e \n $stack');
       rethrow;
     }
   }

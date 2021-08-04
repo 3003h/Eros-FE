@@ -7,6 +7,7 @@ import 'package:fehviewer/common/service/ehconfig_service.dart';
 import 'package:fehviewer/common/service/locale_service.dart';
 import 'package:fehviewer/common/service/log_service.dart';
 import 'package:fehviewer/common/service/theme_service.dart';
+import 'package:fehviewer/component/exception/error.dart';
 import 'package:fehviewer/generated/l10n.dart';
 import 'package:fehviewer/route/app_pages.dart';
 import 'package:fehviewer/route/routes.dart';
@@ -50,7 +51,10 @@ Future<void> main() async {
 
     runApp(MyApp());
   }, (Object error, StackTrace stackTrace) {
-    // logger.e('runZonedGuarded: Caught error in my root zone.');
+    if (error is EhError && error.type == EhErrorType.image509) {
+      debugPrint('EhErrorType.image509');
+      return;
+    }
     debugPrint('runZonedGuarded: Caught error in my root zone.');
     FirebaseCrashlytics.instance.recordError(error, stackTrace);
   });
@@ -60,18 +64,13 @@ Future<void> _initializeFlutterFire() async {
   // Wait for Firebase to initialize
   await Firebase.initializeApp();
 
-  // await FirebaseCrashlytics.instance
-  //     .setCrashlyticsCollectionEnabled(!Global.inDebugMode);
-  await FirebaseCrashlytics.instance.setCrashlyticsCollectionEnabled(true);
+  await FirebaseCrashlytics.instance
+      .setCrashlyticsCollectionEnabled(!kDebugMode);
 
   // Pass all uncaught errors to Crashlytics.
   final Function? originalOnError = FlutterError.onError;
   FlutterError.onError = (FlutterErrorDetails errorDetails) async {
     await FirebaseCrashlytics.instance.recordFlutterError(errorDetails);
-    // Forward to original handler.
-    // if (originalOnError != null) {
-    //   originalOnError(errorDetails);
-    // }
     originalOnError?.call(errorDetails);
   };
 }
