@@ -45,12 +45,23 @@ class ViewErr509 extends StatelessWidget {
               maxWidth: 100,
             ),
             alignment: Alignment.center,
-            child: Text(
-              '509',
-              style: TextStyle(
-                fontSize: 40,
-                color: CupertinoColors.systemRed.darkColor,
-              ),
+            child: Column(
+              children: [
+                Text(
+                  '509',
+                  style: TextStyle(
+                    fontSize: 20,
+                    color: CupertinoColors.systemRed.darkColor,
+                  ),
+                ),
+                Expanded(
+                  child: Icon(
+                    LineIcons.toriiGate,
+                    size: 77,
+                    color: CupertinoColors.systemRed.darkColor,
+                  ),
+                ),
+              ],
             ),
           ),
           Text(
