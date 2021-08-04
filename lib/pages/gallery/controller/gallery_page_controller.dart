@@ -146,6 +146,10 @@ class GalleryPageController extends GetxController
       _downloadController.dState.galleryTaskMap[int.parse(gid)]?.status ==
       TaskStatus.complete.value;
 
+  // final _downloaded = false.obs;
+  // bool get downloaded => _downloaded.value;
+  // set downloaded(bool val) => _downloaded.value = val;
+
   @override
   void onInit() {
     super.onInit();

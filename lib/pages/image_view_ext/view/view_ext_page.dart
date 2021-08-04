@@ -102,8 +102,6 @@ class ImageListViewPage extends GetView<ViewExtController> {
       child: GetBuilder<ViewExtController>(
         id: idImageListView,
         builder: (logic) {
-          loggerSimple.d('builder ImageListViewPage');
-
           final vState = logic.vState;
 
           return ScrollablePositionedList.builder(
@@ -179,7 +177,8 @@ class ImageListViewPage extends GetView<ViewExtController> {
                   key: ValueKey(index),
                   controller: logic.autoScrollController,
                   index: index,
-                  child: Text('$w', style: const TextStyle(color: Colors.white)));
+                  child:
+                      Text('$w', style: const TextStyle(color: Colors.white)));
             },
           );
         },
@@ -249,7 +248,6 @@ class ImageListViewPage extends GetView<ViewExtController> {
   Widget Function(BuildContext context, int index) itemBuilder() {
     return (BuildContext context, int index) {
       final int itemSer = index + 1;
-      // loggerSimple.d('builder itemBuilder $itemSer');
 
       return ConstrainedBox(
         constraints: BoxConstraints(
@@ -289,8 +287,8 @@ class ImageListViewPage extends GetView<ViewExtController> {
               return AnimatedContainer(
                 padding:
                     EdgeInsets.only(bottom: vState.showPageInterval ? 8 : 0),
-                height: _height ?? context.mediaQueryShortestSide * 4 / 3,
-                // height: _height,
+                // height: _height ?? context.mediaQueryShortestSide * 4 / 3,
+                height: _height ?? context.mediaQueryShortestSide,
                 duration: const Duration(milliseconds: 200),
                 curve: Curves.ease,
                 child: ViewImageExt(
@@ -338,8 +336,6 @@ class ImageListViewPage extends GetView<ViewExtController> {
                 if (_height != null) {
                   _height += vState.showPageInterval ? 8 : 0;
                 }
-
-                loggerSimple.d('ViewImageExt2');
 
                 return Container(
                   padding:

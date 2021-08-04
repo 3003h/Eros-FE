@@ -9,9 +9,11 @@ import 'package:fehviewer/common/global.dart';
 import 'package:fehviewer/common/isolate_download/download_manager.dart';
 import 'package:fehviewer/common/service/depth_service.dart';
 import 'package:fehviewer/common/service/ehconfig_service.dart';
+import 'package:fehviewer/component/quene_task/quene_task.dart';
 import 'package:fehviewer/models/base/eh_models.dart';
 import 'package:fehviewer/network/gallery_request.dart';
 import 'package:fehviewer/pages/gallery/controller/gallery_page_controller.dart';
+import 'package:fehviewer/pages/tab/controller/download_view_controller.dart';
 import 'package:fehviewer/store/floor/dao/gallery_task_dao.dart';
 import 'package:fehviewer/store/floor/dao/image_task_dao.dart';
 import 'package:fehviewer/store/floor/entity/gallery_image_task.dart';
@@ -26,6 +28,7 @@ import 'package:path_provider/path_provider.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:sprintf/sprintf.dart' as sp;
 
+import 'cache_controller.dart';
 import 'download_state.dart';
 
 Future<String> get defDownloadPath async => GetPlatform.isAndroid
@@ -46,6 +49,13 @@ class DownloadController extends GetxController {
   }
 
   final EhConfigService ehConfigService = Get.find();
+  final CacheController cacheController = Get.find();
+
+  void _updateDownloadView(List<Object>? ids) {
+    if (Get.isRegistered<DownloadViewController>()) {
+      Get.find<DownloadViewController>().update(ids);
+    }
+  }
 
   @override
   void onInit() {
@@ -82,10 +92,10 @@ class DownloadController extends GetxController {
   Future<void> _initGalleryTasks() async {
     logger5.v(' _initGalleryTasks');
     GalleryTaskDao _galleryTaskDao;
-    ImageTaskDao _imageTaskDao;
+    // ImageTaskDao _imageTaskDao;
     try {
       _galleryTaskDao = await getGalleryTaskDao();
-      _imageTaskDao = await getImageTaskDao();
+      // _imageTaskDao = await getImageTaskDao();
     } catch (e, stack) {
       logger.e('$e\n$stack ');
       rethrow;
@@ -97,12 +107,23 @@ class DownloadController extends GetxController {
       dState.galleryTaskMap[_task.gid] = _task;
     }
 
-    for (final task in _tasks.reversed) {
+    for (final task in _tasks) {
       if (task.status == TaskStatus.running.value) {
-        _startImageTask(galleryTask: task);
-        initDownloadStateChkTimer(task.gid);
+        // _startImageTask(galleryTask: task);
+        addGalleryTask(task);
       }
     }
+  }
+
+  void addGalleryTask(GalleryTask galleryTask) {
+    dState.taskCanceltokens[galleryTask.gid] = TaskCancelToken();
+    dState.queueTask.add(
+      ({name}) {
+        logger.d('excue $name');
+        _startImageTask(galleryTask: galleryTask);
+      },
+      taskName: '${galleryTask.gid}',
+    );
   }
 
   Future<void> requestPermission() async {
@@ -167,10 +188,10 @@ class DownloadController extends GetxController {
     String? coverUrl,
   }) async {
     GalleryTaskDao _galleryTaskDao;
-    ImageTaskDao _imageTaskDao;
+    // ImageTaskDao _imageTaskDao;
     try {
       _galleryTaskDao = await getGalleryTaskDao();
-      _imageTaskDao = await getImageTaskDao();
+      // _imageTaskDao = await getImageTaskDao();
     } catch (e, stack) {
       logger.e('$e\n$stack ');
       rethrow;
@@ -230,16 +251,15 @@ class DownloadController extends GetxController {
       galleryTask: galleryTask,
       fCount: _fCount,
     );
-    initDownloadStateChkTimer(galleryTask.gid);
   }
 
   void initDownloadStateChkTimer(int gid) {
-    const int periodSeconds = 1;
-    const int maxCount = 10;
+    const int periodSeconds = 3;
+    const int maxCount = 12;
     dState.chkTimers[gid] = Timer.periodic(
       const Duration(seconds: periodSeconds),
       (Timer timer) {
-        totalDownloadSpeed(gid, maxCount);
+        totalDownloadSpeed(gid, maxCount, periodSeconds);
       },
     );
   }
@@ -262,7 +282,7 @@ class DownloadController extends GetxController {
   /// 统计当前时间到 [maxCount] 秒前 这个时间范围内的平均速度
   /// 自动重试检查
   /// [kRetryThreshold] 秒内速度没有变化, 重试该任务
-  void totalDownloadSpeed(int gid, int maxCount) {
+  void totalDownloadSpeed(int gid, int maxCount, int periodSeconds) {
     final int totCurCount = dState.downloadCounts.entries
         .where((element) => element.key.startsWith('${gid}_'))
         .map((e) => e.value)
@@ -278,12 +298,15 @@ class DownloadController extends GetxController {
 
     logger.v('${lastCountsTop.join(',')}\n${lastCounts.reversed.join(',')}');
 
-    final speed =
-        (max(totCurCount - lastCountsTop.reversed.first, 0) / maxCount).round();
+    final speed = (max(totCurCount - lastCountsTop.reversed.first, 0) /
+            (lastCountsTop.length * periodSeconds))
+        .round();
 
     dState.downloadSpeeds[gid] = renderSize(speed);
 
     logger.v('speed:${renderSize(speed)}\n${lastCountsTop.join(',')}');
+
+    _updateDownloadView(['DownloadGalleryItem_$gid']);
 
     if (speed == 0) {
       if (dState.noSpeed[gid] != null) {
@@ -295,7 +318,7 @@ class DownloadController extends GetxController {
       if ((dState.noSpeed[gid] ?? 0) > kRetryThreshold) {
         logger.d('$gid retry = ' + DateTime.now().toString());
         Future<void>(() => galleryTaskPaused(gid, silent: true))
-            .then((_) => Future.delayed(const Duration(microseconds: 2000)))
+            .then((_) => Future.delayed(const Duration(microseconds: 1000)))
             .then((_) => galleryTaskResume(gid));
       }
     }
@@ -359,8 +382,7 @@ class DownloadController extends GetxController {
     final GalleryTask? galleryTask =
         await _galleryTaskDao.findGalleryTaskByGid(gid);
     if (galleryTask != null) {
-      await _startImageTask(galleryTask: galleryTask);
-      initDownloadStateChkTimer(galleryTask.gid);
+      addGalleryTask(galleryTask);
     }
   }
 
@@ -419,16 +441,16 @@ class DownloadController extends GetxController {
     dState.galleryTaskMap.remove(gid);
   }
 
-  void _initDownloadMapByGid(String gid, {List<GalleryImage>? images}) {
+  void _initDownloadMapByGid(int gid, {List<GalleryImage>? images}) {
     dState.downloadMap[gid] = images ?? [];
   }
 
-  GalleryImage? _getImageObj(String gid, int ser) {
+  GalleryImage? _getImageObj(int gid, int ser) {
     return dState.downloadMap[gid]
         ?.firstWhereOrNull((element) => element.ser == ser);
   }
 
-  void _addAllImages(String gid, List<GalleryImage> galleryImages) {
+  void _addAllImages(int gid, List<GalleryImage> galleryImages) {
     for (final GalleryImage _image in galleryImages) {
       final int? index = dState.downloadMap[gid]
           ?.indexWhere((GalleryImage e) => e.ser == _image.ser);
@@ -440,11 +462,10 @@ class DownloadController extends GetxController {
     }
   }
 
-  Future _updateImageTasksByGid(String gid,
-      {List<GalleryImage>? images}) async {
+  Future _updateImageTasksByGid(int gid, {List<GalleryImage>? images}) async {
     final ImageTaskDao _imageTaskDao = await getImageTaskDao();
 
-    final GalleryTaskDao _galleryTaskDao = await getGalleryTaskDao();
+    // final GalleryTaskDao _galleryTaskDao = await getGalleryTaskDao();
 
     // logger.d(
     //     '_updateImageTasksByGid $gid\n  ${(images ?? downloadMap[gid])?.map((e) => e.toJson()).join('\n')} ');
@@ -453,7 +474,7 @@ class DownloadController extends GetxController {
     final List<GalleryImageTask>? _galleryImageTasks =
         (images ?? dState.downloadMap[gid])
             ?.map((GalleryImage e) => GalleryImageTask(
-                  gid: int.parse(gid),
+                  gid: gid,
                   token: '',
                   href: e.href,
                   ser: e.ser,
@@ -470,14 +491,14 @@ class DownloadController extends GetxController {
     }
   }
 
-  Future _updateImageTask(String gid, GalleryImage images,
+  Future _updateImageTask(int gid, GalleryImage images,
       {String? fileName}) async {
     final ImageTaskDao _imageTaskDao = await getImageTaskDao();
 
-    final GalleryTaskDao _galleryTaskDao = await getGalleryTaskDao();
+    // final GalleryTaskDao _galleryTaskDao = await getGalleryTaskDao();
 
     final GalleryImageTask _imageTask = GalleryImageTask(
-      gid: int.parse(gid),
+      gid: gid,
       token: '',
       href: images.href,
       ser: images.ser,
@@ -497,8 +518,9 @@ class DownloadController extends GetxController {
   }) async {
     logger.v('_startImageTask ${galleryTask.gid} ${galleryTask.title}');
 
-    final ImageTaskDao _imageTaskDao = await getImageTaskDao();
+    initDownloadStateChkTimer(galleryTask.gid);
 
+    final ImageTaskDao _imageTaskDao = await getImageTaskDao();
     final GalleryTaskDao _galleryTaskDao = await getGalleryTaskDao();
 
     final List<GalleryImageTask> imageTasksOri =
@@ -507,17 +529,15 @@ class DownloadController extends GetxController {
     logger.v(
         '${imageTasksOri.where((element) => element.status != TaskStatus.complete.value).map((e) => e.toString()).join('\n')} ');
 
-    final gidStr = '${galleryTask.gid}';
-
     // 初始化
-    _initDownloadMapByGid(gidStr, images: images);
+    _initDownloadMapByGid(galleryTask.gid, images: images);
 
-    _updateImageTasksByGid(gidStr);
+    _updateImageTasksByGid(galleryTask.gid);
 
-    galleryTaskUpdateStatus(int.parse(gidStr), TaskStatus.running);
+    galleryTaskUpdateStatus(galleryTask.gid, TaskStatus.running);
 
     final CancelToken _cancelToken = CancelToken();
-    dState.cancelTokenMap[gidStr] = _cancelToken;
+    dState.cancelTokenMap[galleryTask.gid] = _cancelToken;
 
     logger.v('filecount:${galleryTask.fileCount} url:${galleryTask.url}');
 
@@ -549,8 +569,8 @@ class DownloadController extends GetxController {
           cancelToken: _cancelToken);
 
       dState.executor.scheduleTask(() async {
-        final GalleryImage? tImage = await _checkAndGetImages(
-            gidStr, itemSer, galleryTask.fileCount, fCount!, galleryTask.url);
+        final GalleryImage? tImage = await _checkAndGetImages(galleryTask.gid,
+            itemSer, galleryTask.fileCount, fCount!, galleryTask.url);
 
         if (tImage != null) {
           final int maxSer = galleryTask.fileCount + 1;
@@ -559,7 +579,7 @@ class DownloadController extends GetxController {
             await _downloadImage(
               tImage,
               _oriImageTask,
-              gidStr,
+              galleryTask.gid,
               downloadPath!,
               maxSer,
               cancelToken: _cancelToken,
@@ -607,14 +627,14 @@ class DownloadController extends GetxController {
   }
 
   Future<GalleryImage?> _checkAndGetImages(
-    String gidStr,
+    int gid,
     int itemSer,
     int filecount,
     int firstPageCount,
     String? url, {
     CancelToken? cancelToken,
   }) async {
-    GalleryImage? tImage = _getImageObj(gidStr, itemSer);
+    GalleryImage? tImage = _getImageObj(gid, itemSer);
 
     if (tImage == null && url != null) {
       loggerSimple.v('ser:$itemSer 所在页尚未获取， 开始获取');
@@ -626,8 +646,8 @@ class DownloadController extends GetxController {
         cancelToken: cancelToken,
       );
       loggerSimple.v('images.length: ${images.length}');
-      _addAllImages(gidStr, images);
-      tImage = _getImageObj(gidStr, itemSer);
+      _addAllImages(gid, images);
+      tImage = _getImageObj(gid, itemSer);
     }
 
     return tImage;
@@ -649,7 +669,7 @@ class DownloadController extends GetxController {
   Future<void> _downloadImage(
     GalleryImage image,
     GalleryImageTask? imageTask,
-    String gid,
+    int gid,
     String downloadPath,
     int maxSer, {
     bool redownload = false,
@@ -680,6 +700,10 @@ class DownloadController extends GetxController {
         _fileName = _getFileName(image, maxSer);
       }
     } else if (image.href != null) {
+      if (redownload) {
+        cacheController.clearDioCache(path: image.href ?? '');
+      }
+
       // 否则先请求解析html
       final GalleryImage imageFetched = await _fetchImageInfo(
         image.href!,
@@ -757,7 +781,7 @@ class DownloadController extends GetxController {
     String href, {
     required int itemSer,
     required GalleryImage oriImage,
-    required String gid,
+    required int gid,
     bool changeSource = false,
     String? sourceId,
     CancelToken? cancelToken,

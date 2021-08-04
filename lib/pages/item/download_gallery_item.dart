@@ -121,9 +121,9 @@ class DownloadGalleryItem extends GetView<DownloadViewController> {
                                             CupertinoColors.secondarySystemFill,
                                             context),
                                     valueColor: AlwaysStoppedAnimation<Color>(
-                                        CupertinoDynamicColor.resolve(
-                                            CupertinoColors.activeBlue,
-                                            context)),
+                                      CupertinoDynamicColor.resolve(
+                                          CupertinoColors.activeBlue, context),
+                                    ),
                                   ),
                                 ),
                               // 速度和进度行

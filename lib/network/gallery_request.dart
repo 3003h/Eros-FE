@@ -1195,7 +1195,7 @@ class Api {
       if (sourceId != null && sourceId.trim().isNotEmpty) 'nl': sourceId,
     };
 
-    final String response = await Api.getHttpManager(connectTimeout: 3000).get(
+    final String response = await Api.getHttpManager(connectTimeout: 8000).get(
           url,
           options: getCacheOptions(
             forceRefresh: refresh,
