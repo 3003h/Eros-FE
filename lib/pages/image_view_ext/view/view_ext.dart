@@ -26,6 +26,44 @@ import '../controller/view_ext_contorller.dart';
 
 const double kPageViewPadding = 4.0;
 
+class ViewErr509 extends StatelessWidget {
+  const ViewErr509({Key? key, required this.ser}) : super(key: key);
+  final int ser;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      alignment: Alignment.center,
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Container(
+            height: 100,
+            width: 100,
+            constraints: const BoxConstraints(
+              maxHeight: 100,
+              maxWidth: 100,
+            ),
+            alignment: Alignment.center,
+            child: Text(
+              '509',
+              style: TextStyle(
+                fontSize: 40,
+                color: CupertinoColors.systemRed.darkColor,
+              ),
+            ),
+          ),
+          Text(
+            '$ser',
+            style: const TextStyle(
+                color: CupertinoColors.secondarySystemBackground),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
 class ViewError extends StatelessWidget {
   const ViewError({Key? key, required this.ser, this.errInfo})
       : super(key: key);
@@ -44,13 +82,13 @@ class ViewError extends StatelessWidget {
         children: [
           const Icon(
             Icons.error,
-            size: 50,
+            size: 60,
             color: Colors.red,
           ),
           Text(
             errInfo ?? '',
             style: const TextStyle(
-                fontSize: 10, color: CupertinoColors.secondarySystemBackground),
+                fontSize: 12, color: CupertinoColors.secondarySystemBackground),
           ),
           Text(
             '$ser',

@@ -1,16 +1,18 @@
 enum EhErrorType {
-  BANNED,
+  banned,
 
   /// Default error type, Some other Error. In this case, you can
   /// use the DioError.error if it is not null.
-  DEFAULT,
+  def,
 
-  LOGIN,
+  login,
+
+  image509,
 }
 
 class EhError implements Exception {
   EhError({
-    this.type = EhErrorType.DEFAULT,
+    this.type = EhErrorType.def,
     this.error,
   });
 
@@ -22,7 +24,7 @@ class EhError implements Exception {
 
   @override
   String toString() {
-    var msg = 'DioError [$type]: $message';
+    var msg = 'EhError [$type]: $message';
     if (error is Error) {
       msg += '\n${error.stackTrace}';
     }

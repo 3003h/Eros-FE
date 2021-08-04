@@ -352,7 +352,8 @@ class ViewExtController extends GetxController {
       }
     });
 
-    final GalleryImage? image = await _galleryPageController.getImageInfo(
+    final GalleryImage? image =
+        await _galleryPageController.fetchAndParserImageInfo(
       itemSer,
       cancelToken: vState.getMoreCancelToken,
       // refresh: refresh,

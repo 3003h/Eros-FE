@@ -4,7 +4,7 @@ import 'package:fehviewer/common/controller/tag_trans_controller.dart';
 import 'package:fehviewer/common/service/ehconfig_service.dart';
 import 'package:fehviewer/const/const.dart';
 import 'package:fehviewer/models/index.dart';
-import 'package:fehviewer/network/error.dart';
+import 'package:fehviewer/component/exception/error.dart';
 import 'package:fehviewer/utils/logger.dart';
 import 'package:fehviewer/utils/toast.dart';
 import 'package:fehviewer/utils/utility.dart';
@@ -63,8 +63,8 @@ class GalleryListParser {
     if ((document.body?.children.isEmpty ?? false) &&
         response.contains('banned')) {
       logger.e('banned');
-      showToast(response);
-      throw EhError(type: EhErrorType.BANNED, error: response);
+      // showToast(response);
+      throw EhError(type: EhErrorType.banned, error: response);
     }
 
     final EhConfigService ehConfigService = Get.find();

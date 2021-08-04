@@ -1,6 +1,7 @@
 import 'package:dio/dio.dart';
 import 'package:extended_image/extended_image.dart';
 import 'package:fehviewer/common/global.dart';
+import 'package:fehviewer/component/exception/error.dart';
 import 'package:fehviewer/const/const.dart';
 import 'package:fehviewer/models/base/eh_models.dart';
 import 'package:fehviewer/pages/image_view_ext/controller/view_ext_state.dart';
@@ -233,7 +234,15 @@ class _ViewImageExtState extends State<ViewImageExt>
                         final DioError dioErr = snapshot.error as DioError;
                         logger.e('${dioErr.error}');
                         _errInfo = dioErr.type.toString();
+                      } else if (snapshot.error is EhError) {
+                        final EhError ehErr = snapshot.error as EhError;
+                        _errInfo = ehErr.type.toString();
+                        logger.e('${ehErr.message} ');
+                        if (ehErr.type == EhErrorType.image509) {
+                          return ViewErr509(ser: widget.imageSer);
+                        }
                       } else {
+                        logger.e('other error');
                         _errInfo = snapshot.error.toString();
                       }
 

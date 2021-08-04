@@ -422,8 +422,6 @@ class ViewImageSlidePage extends GetView<ViewExtController> {
               itemBuilder: (BuildContext context, int index) {
                 logger.v('pageIndex $index ser ${index + 1}');
 
-                loggerSimple.d('ViewImageExt2');
-
                 /// 单页
                 return ViewImageExt(
                   imageSer: index + 1,

@@ -37,7 +37,7 @@ import 'package:permission_handler/permission_handler.dart';
 import 'package:share/share.dart';
 import 'package:tuple/tuple.dart';
 
-import 'error.dart';
+import '../component/exception/error.dart';
 
 final Api api = Api();
 
@@ -755,8 +755,7 @@ class Api {
     final String url = '${getBaseUrl()}/g/$gid/$token';
     if (utf8.encode(comment).length < 10) {
       showToast('Your comment is too short.');
-      throw EhError(
-          type: EhErrorType.DEFAULT, error: 'Your comment is too short.');
+      throw EhError(type: EhErrorType.def, error: 'Your comment is too short.');
     }
 
     try {

@@ -82,7 +82,7 @@ class _ViewImageState extends State<ViewImage>
       });
     }
 
-    final GalleryImage? image = await _pageController.getImageInfo(
+    final GalleryImage? image = await _pageController.fetchAndParserImageInfo(
       widget.ser,
       cancelToken: _getMoreCancelToken,
       // refresh: refresh,
