@@ -17,7 +17,7 @@ import 'package:pretty_dio_logger/pretty_dio_logger.dart';
 
 import 'logger.dart';
 
-const int kDefconnectTimeout = 5000;
+const int kDefconnectTimeout = 10000;
 const int kDefreceiveTimeout = 10000;
 
 class HttpManager {
@@ -307,17 +307,17 @@ class HttpManager {
 
   void formatError(DioError e) {
     if (e.type == DioErrorType.connectTimeout) {
-      showToast('连接超时');
+      showToast('Connect Timeout');
     } else if (e.type == DioErrorType.sendTimeout) {
-      showToast('请求超时');
+      showToast('Send Timeout');
     } else if (e.type == DioErrorType.receiveTimeout) {
-      showToast('响应超时');
+      showToast('Receive Timeout');
     } else if (e.type == DioErrorType.response) {
-      showToast('响应异常');
+      showToast('Response Error');
     } else if (e.type == DioErrorType.cancel) {
       // showToast('请求取消');
     } else {
-      showToast('网络好像出问题了');
+      showToast('NetWork Error');
     }
   }
 }
