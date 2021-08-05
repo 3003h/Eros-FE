@@ -7,6 +7,8 @@ import 'package:fehviewer/pages/tab/controller/download_view_controller.dart';
 import 'package:fehviewer/route/navigator_util.dart';
 import 'package:fehviewer/store/floor/entity/gallery_image_task.dart';
 import 'package:fehviewer/store/floor/entity/gallery_task.dart';
+import 'package:fehviewer/utils/logger.dart';
+import 'package:fehviewer/widget/eh_cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -72,7 +74,7 @@ class DownloadGalleryItem extends GetView<DownloadViewController> {
           children: [
             // 封面
             GestureDetector(
-              child: _CoverImage(path: coverimagePath, url: coverUrl)
+              child: _CoverImage(filePath: coverimagePath, url: coverUrl)
                   .paddingOnly(right: 8),
               onTap: () async {
                 NavigatorUtil.goGalleryPage(url: '${Api.getBaseUrl()}$url');
@@ -265,15 +267,17 @@ class DownloadGalleryItem extends GetView<DownloadViewController> {
 class _CoverImage extends StatelessWidget {
   const _CoverImage({
     this.url,
-    this.path,
+    this.filePath,
     Key? key,
   }) : super(key: key);
 
-  final String? path;
+  final String? filePath;
   final String? url;
 
   @override
   Widget build(BuildContext context) {
+    logger.v('$filePath  $url');
+
     return Container(
       width: 70,
       decoration: BoxDecoration(
@@ -289,15 +293,19 @@ class _CoverImage extends StatelessWidget {
       child: ClipRRect(
         borderRadius: BorderRadius.circular(6),
         child: () {
-          if (path != null) {
+          if (filePath != null) {
             return ExtendedImage.file(
-              File(path!),
+              File(filePath!),
               fit: BoxFit.fitWidth,
             );
           } else if (url != null) {
-            return ExtendedImage.network(
-              url!,
-              fit: BoxFit.fitWidth,
+            // return ExtendedImage.network(
+            //   url!,
+            //   fit: BoxFit.fitWidth,
+            // );
+
+            return EhCachedNetworkImage(
+              imageUrl: url!,
             );
           } else {
             return const SizedBox.expand();

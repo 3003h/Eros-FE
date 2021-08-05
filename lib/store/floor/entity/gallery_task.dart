@@ -9,6 +9,7 @@ part 'gallery_task.g.dart';
 // 1to2 update entity with new 'dirPath' field
 // 2to3 update entity with new 'coverImage' field
 // 3to4 update entity with new 'addTime' field
+// 4to5 update entity with new 'coverUrl' field
 @CopyWith()
 @Entity(tableName: 'GalleryTask')
 class GalleryTask {
@@ -23,6 +24,7 @@ class GalleryTask {
     this.status,
     this.coverImage,
     this.addTime,
+    this.coverUrl,
   });
 
   @primaryKey
@@ -36,6 +38,7 @@ class GalleryTask {
   final int? status;
   final String? coverImage;
   final int? addTime;
+  final String? coverUrl;
 
   String? get realDirPath {
     if (dirPath == null) {
@@ -52,6 +55,6 @@ class GalleryTask {
 
   @override
   String toString() {
-    return 'GalleryTask{gid: $gid, token: $token, url: $url, title: $title, dirPath: $dirPath, fileCount: $fileCount, completCount: $completCount, status: $status, coverImage: $coverImage, addTime: $addTime}';
+    return 'GalleryTask{gid: $gid, token: $token, url: $url, title: $title, dirPath: $dirPath, fileCount: $fileCount, completCount: $completCount, status: $status, coverImage: $coverImage, addTime: $addTime, coverUrl: $coverUrl}';
   }
 }

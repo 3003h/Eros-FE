@@ -220,7 +220,7 @@ class DownloadController extends GetxController {
     }
 
     final String _downloadPath = path.join(
-        '$gid - ${path.split(title).join('_').replaceAll(RegExp(r'[/:*"<>|,? ]'), '_')}');
+        '$gid - ${path.split(title).join('_').replaceAll(RegExp(r'[/:*"<>|,?]'), '_')}');
     final String _dirPath = await _getGalleryDownloadPath(_downloadPath);
 
     // 登记主任务表
@@ -234,6 +234,7 @@ class DownloadController extends GetxController {
             dirPath: _dirPath,
             status: TaskStatus.enqueued.value,
             addTime: DateTime.now().millisecondsSinceEpoch,
+            coverUrl: coverUrl,
           )
         : _oriTask!;
 

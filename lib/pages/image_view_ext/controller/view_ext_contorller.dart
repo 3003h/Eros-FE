@@ -70,6 +70,8 @@ class ViewExtController extends GetxController {
   final AutoScrollController autoScrollController = AutoScrollController();
   final photoViewScaleStateController = PhotoViewScaleStateController();
 
+  final PhotoViewController photoViewController = PhotoViewController();
+
   @override
   void onInit() {
     super.onInit();
@@ -98,6 +100,11 @@ class ViewExtController extends GetxController {
     thumbPositionsListener.itemPositions.addListener(() {
       final positions = thumbPositionsListener.itemPositions.value;
       handThumbPositionsChange(positions);
+    });
+
+    photoViewScaleStateController.outputScaleStateStream.listen((state) {
+      final prevScaleState = photoViewScaleStateController.prevScaleState;
+      logger.d('prevScaleState $prevScaleState , state $state');
     });
 
     /// 初始预载
