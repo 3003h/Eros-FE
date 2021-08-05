@@ -1,7 +1,6 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-
 import 'intl/messages_all.dart';
 
 // **************************************************************************
@@ -1718,7 +1717,7 @@ class AppLocalizationDelegate extends LocalizationsDelegate<L10n> {
   List<Locale> get supportedLocales {
     return const <Locale>[
       Locale.fromSubtags(languageCode: 'en'),
-      Locale.fromSubtags(languageCode: 'ko'),
+      Locale.fromSubtags(languageCode: 'ko', countryCode: 'KR'),
       Locale.fromSubtags(languageCode: 'zh', countryCode: 'CN'),
       Locale.fromSubtags(languageCode: 'zh', countryCode: 'TW'),
     ];

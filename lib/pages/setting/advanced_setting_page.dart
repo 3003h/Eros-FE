@@ -179,7 +179,7 @@ class ListViewAdvancedSetting extends StatelessWidget {
       '': L10n.of(context).follow_system,
       'en_US': 'English',
       'zh_CN': '简体中文',
-      'ko_': '한국어',
+      'ko_KR': '한국어',
     };
 
     List<Widget> _getLocaleList(BuildContext context) {

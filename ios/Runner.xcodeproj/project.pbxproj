@@ -273,7 +273,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "/bin/sh \"$FLUTTER_ROOT/packages/flutter_tools/bin/xcode_backend.sh\" build\n\n# Name of the resource we're selectively copying\nGOOGLESERVICE_INFO_LOCATION=${PROJECT_DIR}/Runner/GoogleService-Info.plist\n\n# Upload sysmbol\necho \"Uploading dsym file\"\n\"${PODS_ROOT}/FirebaseCrashlytics/upload-symbols\" -gsp ${GOOGLESERVICE_INFO_LOCATION} -p ios \"${DWARF_DSYM_FOLDER_PATH}/${DWARF_DSYM_FILE_NAME}\"\n\n";
+			shellScript = "/bin/sh \"$FLUTTER_ROOT/packages/flutter_tools/bin/xcode_backend.sh\" build\n\n# Name of the resource we're selectively copying\nGOOGLESERVICE_INFO_LOCATION=${PROJECT_DIR}/Runner/GoogleService-Info.plist\n\n# Upload sysmbol\necho \"Uploading dsym file\"\n#\"${PODS_ROOT}/FirebaseCrashlytics/upload-symbols\" -gsp ${GOOGLESERVICE_INFO_LOCATION} -p ios \"${DWARF_DSYM_FOLDER_PATH}/${DWARF_DSYM_FILE_NAME}\"\n\n";
 		};
 		A8447FDBF0AAD65714D79CA6 /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
