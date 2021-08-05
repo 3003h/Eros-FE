@@ -5,6 +5,7 @@ import 'package:fehviewer/pages/gallery/controller/taginfo_controller.dart';
 import 'package:fehviewer/pages/gallery/view/add_tags_page.dart';
 import 'package:fehviewer/pages/gallery/view/all_preview_page.dart';
 import 'package:fehviewer/pages/gallery/view/comment_page.dart';
+import 'package:fehviewer/pages/gallery/view/gallery_info_page.dart';
 import 'package:fehviewer/pages/gallery/view/gallery_page.dart';
 import 'package:fehviewer/pages/image_view/controller/view_controller.dart';
 import 'package:fehviewer/pages/image_view/view/view_page.dart';
@@ -39,7 +40,6 @@ import 'routes.dart';
 
 const Duration kUnLockPageTransitionDuration = Duration(milliseconds: 200);
 
-// ignore: avoid_classes_with_only_static_members
 class AppPages {
   static final List<GetPage> routes = <GetPage>[
     GetPage(
@@ -94,7 +94,6 @@ class AppPages {
     ),
     GetPage(
       name: EHRoutes.login,
-      // page: () => LoginPage(),
       page: () => const LoginExtPage(),
       binding: BindingsBuilder(
         () => Get.lazyPut(() => LoginExtController()),
@@ -118,6 +117,10 @@ class AppPages {
       binding: BindingsBuilder(
         () => Get.lazyPut(() => TagInfoController(), tag: pageCtrlDepth),
       ),
+    ),
+    GetPage(
+      name: EHRoutes.galleryInfo,
+      page: () => const GalleryInfoPage(),
     ),
     GetPage(
       name: EHRoutes.pageSetting,

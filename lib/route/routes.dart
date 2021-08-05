@@ -33,7 +33,8 @@ class EHRoutes {
   static const String galleryView = '/galleryPage/view';
   static const String galleryViewExt = '/galleryPage/viewExt';
   static const String galleryPage = '/galleryPage';
-  static const String addTag = '/galleryPage/AddTag';
+  static const String addTag = '/galleryPage/addTag';
+  static const String galleryInfo = '/galleryPage/info';
 
   static const String pageSetting = '/pageSetting';
 }

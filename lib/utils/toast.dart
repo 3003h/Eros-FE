@@ -63,7 +63,8 @@ void show509Toast() {
             mainAxisSize: MainAxisSize.min,
             children: [
               const Icon(
-                LineIcons.toriiGate,
+                // LineIcons.toriiGate,
+                LineIcons.fill,
                 size: 80,
                 color: CupertinoColors.systemPink,
               ),
