@@ -142,6 +142,7 @@ class DownloadGalleryView extends GetView<DownloadViewController> {
               behavior: HitTestBehavior.opaque,
               child: DownloadGalleryItem(
                 url: _taskInfo.url,
+                coverUrl: _taskInfo.coverUrl,
                 title: _taskInfo.title,
                 status: TaskStatus(_taskInfo.status ?? 0),
                 speed: _speed,

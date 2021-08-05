@@ -405,9 +405,12 @@ class ViewImageSlidePage extends GetView<ViewExtController> {
                   /// 双页
                   return PhotoViewGalleryPageOptions.customChild(
                     initialScale: PhotoViewComputedScale.contained,
-                    minScale: PhotoViewComputedScale.contained * 0.8,
+                    minScale: PhotoViewComputedScale.contained,
                     maxScale: PhotoViewComputedScale.covered * 5,
                     // scaleStateCycle: lisviewScaleStateCycle,
+                    controller: logic.photoViewController,
+                    // scaleStateController: logic.photoViewScaleStateController,
+                    // disableGestures: true,
                     child: DoublePageView(pageIndex: pageIndex),
                   );
                 });
@@ -479,7 +482,7 @@ class DoublePageView extends GetView<ViewExtController> {
         vState.filecount > serStart ? Alignment.centerRight : null;
     Alignment? alignmentR = serStart <= 0 ? null : Alignment.centerLeft;
 
-    logger.d('alignmentL:$alignmentL  alignmentR:$alignmentR');
+    logger.v('alignmentL:$alignmentL  alignmentR:$alignmentR');
 
     double? _flexStart = () {
       try {
@@ -508,7 +511,7 @@ class DoublePageView extends GetView<ViewExtController> {
       }
     }();
 
-    logger.d('_flexStart:$_flexStart  _flexEnd:$_flexEnd');
+    logger.v('_flexStart:$_flexStart  _flexEnd:$_flexEnd');
 
     final List<Widget> _pageList = <Widget>[
       if (serStart > 0)
@@ -543,10 +546,20 @@ class DoublePageView extends GetView<ViewExtController> {
         ),
     ];
 
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.center,
-      mainAxisSize: MainAxisSize.min,
-      children: reverse ? _pageList.reversed.toList() : _pageList,
+    return GestureDetector(
+      // onDoubleTap: () {
+      //   logger.d('onDoubleTap');
+      //   controller.photoViewScaleStateController.scaleState =
+      //       PhotoViewScaleState.zoomedOut;
+      // },
+      onDoubleTapDown: (details) {
+        logger.d('onDoubleTapDown');
+      },
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        mainAxisSize: MainAxisSize.min,
+        children: reverse ? _pageList.reversed.toList() : _pageList,
+      ),
     );
   }
 }
