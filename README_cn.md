@@ -41,7 +41,11 @@ ehentai译文数据库
 
 - [EhTagTranslation/Database](https://github.com/EhTagTranslation/Database)
 
-[xioxin](https://github.com/xioxin) 写的Dio Domain Fronting拦截器
+翻译
+- [KeepSOBP](https://github.com/KeepSOBP) 韩语翻译
+
+其它
+- [xioxin](https://github.com/xioxin) Dio Domain Fronting 拦截器
 
 ## 应用截图
 

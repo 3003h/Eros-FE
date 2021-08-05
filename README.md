@@ -12,6 +12,15 @@ English | [简体中文](https://github.com/honjow/FEhViewer/blob/nullsafety/REA
 
 An Unofficial e-hentai app make on flutter
 
+## 🔍 Translations Wanted 🔍
+Please submit a pull request if you want to help with translation.
+
+App Strings: `lib/l10n/{lang}.arb`
+
+## Installation for iOS
+1. Get the ipa file from [Releases](https://github.com/honjow/FEhViewer/releases/latest).
+1. Use some software like [AltStore](https://altstore.io) to install the ipa file on your device.
+
 ## Descriptions
 
 The main reference for UI is [E-HentaiViewer](https://github.com/kayanouriko/E-HentaiViewer)
@@ -35,6 +44,9 @@ The code and logic of the following projects are used and referenced for develop
 EhTagTranslation
 
 - [EhTagTranslation/Database](https://github.com/EhTagTranslation/Database)
+
+Translation
+- [KeepSOBP](https://github.com/KeepSOBP) Korean translation
 
 ## Screenshot
 

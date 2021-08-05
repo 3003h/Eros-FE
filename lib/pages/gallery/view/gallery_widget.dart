@@ -411,7 +411,7 @@ class _PreviewGridState extends State<PreviewGrid> {
                 Future.delayed(const Duration(milliseconds: 50)).then(
                   (_) {
                     if (!(_loadComplets[thumbUrl] ?? false) && mounted) {
-                      logger.d('onLoadComplet $thumbUrl');
+                      logger.v('onLoadComplet $thumbUrl');
                       setState(() {
                         _loadComplets[thumbUrl] = true;
                       });

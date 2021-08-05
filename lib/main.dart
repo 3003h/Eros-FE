@@ -145,9 +145,7 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
         logWriterCallback: loggerGetx,
         // ignore: prefer_const_literals_to_create_immutables
         supportedLocales: <Locale>[
-          // const Locale('en', ''),
           ...L10n.delegate.supportedLocales,
-          // const Locale('zh', 'CN'),
         ],
         // ignore: prefer_const_literals_to_create_immutables
         localizationsDelegates: [
@@ -168,35 +166,7 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
             return locale;
           } else {
             logger.d('语言跟随系统语言  ${window.locale}');
-            // return null;
-
-            logger.v('$supportedLocales');
-
-            Locale locale;
-            //APP语言跟随系统语言，如果系统语言不是中文简体或美国英语，
-            //则默认使用美国英语
-            if (supportedLocales.contains(_locale)) {
-              logger.d('系统语言在支持列表中');
-              locale = _locale;
-            } else if (supportedLocales
-                .map((e) => e.languageCode)
-                .contains(_locale.languageCode)) {
-              logger.d('only contains languageCode ${_locale.languageCode}');
-              locale = Locale(_locale.languageCode, '');
-            } else {
-              locale = const Locale('en', 'US');
-            }
-
-            // 中文 简繁体处理
-            if (_locale.languageCode == 'zh') {
-              if (_locale.scriptCode == 'Hant') {
-                locale = const Locale('zh', 'HK'); //繁体
-              } else {
-                locale = const Locale('zh', 'CN'); //简体
-              }
-            }
-            logger.v('$locale');
-            return Locale(locale.languageCode, locale.countryCode);
+            return null;
           }
         },
       );

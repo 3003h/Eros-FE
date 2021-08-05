@@ -365,7 +365,9 @@ class DownloadController extends GetxController {
 
   /// 暂停任务
   Future<GalleryTask?> galleryTaskPaused(int gid, {bool silent = false}) async {
+    // logger.d('galleryTaskPaused $gid');
     cancelDownloadStateChkTimer(gid: gid);
+    logger.d('${dState.cancelTokenMap['$gid']}');
     if (!((dState.cancelTokenMap['$gid']?.isCancelled) ?? true)) {
       dState.cancelTokenMap['$gid']?.cancel();
     }
@@ -630,12 +632,13 @@ class DownloadController extends GetxController {
             // loggerSimple.d('$itemSer Cancel');
           } on EhError catch (e) {
             if (e.type == EhErrorType.image509) {
-              logger.e('image509');
+              // logger.e('image509');
               show509Toast();
               _galleryTaskPausedAll();
-            } else {
-              rethrow;
+              dState.executor.close();
+              resetConcurrency();
             }
+            rethrow;
           } catch (e) {
             rethrow;
           }

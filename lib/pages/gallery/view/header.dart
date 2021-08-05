@@ -4,6 +4,7 @@ import 'package:fehviewer/const/theme_colors.dart';
 import 'package:fehviewer/models/index.dart';
 import 'package:fehviewer/pages/gallery/controller/gallery_page_controller.dart';
 import 'package:fehviewer/pages/gallery/view/gallery_favcat.dart';
+import 'package:fehviewer/route/routes.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -116,8 +117,7 @@ class _GalleryInfoBarState extends State<GalleryInfoBar> {
           return GestureDetector(
             behavior: HitTestBehavior.opaque,
             onTap: () {
-              // logger.d('tap h');
-              Get.to(() => const GalleryInfoPage());
+              Get.toNamed(EHRoutes.galleryInfo);
             },
             onTapDown: (_) {
               _updatePressedColor();

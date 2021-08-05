@@ -924,7 +924,7 @@ packages:
       name: oktoast
       url: "https://pub.flutter-io.cn"
     source: hosted
-    version: "3.1.0"
+    version: "3.1.1"
   orientation:
     dependency: "direct main"
     description:

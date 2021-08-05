@@ -57,7 +57,7 @@ class ViewErr509 extends StatelessWidget {
                 ),
                 Expanded(
                   child: Icon(
-                    LineIcons.toriiGate,
+                    LineIcons.fill,
                     size: 77,
                     color: CupertinoColors.systemPink.darkColor,
                   ),
