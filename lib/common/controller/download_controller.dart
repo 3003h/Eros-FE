@@ -380,8 +380,10 @@ class DownloadController extends GetxController {
 
   void _galleryTaskPausedAll() {
     for (final _task in dState.galleryTasks) {
-      galleryTaskPaused(_task.gid);
-      _updateDownloadView(['DownloadGalleryItem_${_task.gid}']);
+      if (_task.status != TaskStatus.complete.value) {
+        galleryTaskPaused(_task.gid);
+        _updateDownloadView(['DownloadGalleryItem_${_task.gid}']);
+      }
     }
   }
 
