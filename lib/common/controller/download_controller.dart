@@ -32,154 +32,50 @@ import 'package:sprintf/sprintf.dart' as sp;
 import 'cache_controller.dart';
 import 'download_state.dart';
 
+const int _kDefNameLen = 4;
+
 Future<String> get defDownloadPath async => GetPlatform.isAndroid
     ? path.join((await getExternalStorageDirectory())!.path, 'Download')
     : path.join(Global.appDocPath, 'Download');
 
-const int _kDefNameLen = 4;
-
 class DownloadController extends GetxController {
   final DownloadState dState = DownloadState();
 
-  static Future<GalleryTaskDao> getGalleryTaskDao() async {
-    return (await Global.getDatabase()).galleryTaskDao;
-  }
-
-  static Future<ImageTaskDao> getImageTaskDao() async {
-    return (await Global.getDatabase()).imageTaskDao;
-  }
-
   final EhConfigService ehConfigService = Get.find();
+
   final CacheController cacheController = Get.find();
 
-  void _updateDownloadView(List<Object>? ids) {
-    if (Get.isRegistered<DownloadViewController>()) {
-      Get.find<DownloadViewController>().update(ids);
-    }
-  }
+  /// 允许媒体扫描
+  Future<void> allowMediaScan(bool newValue) async {
+    final pathSet = dState.galleryTasks
+        .where((elm) => elm.realDirPath != null)
+        .map((element) => Directory(element.realDirPath!).parent.path)
+        .toSet();
 
-  @override
-  void onInit() {
-    super.onInit();
-    logger.d(
-        'DownloadController onInit multiDownload:${ehConfigService.multiDownload}');
-    dState.executor = Executor(concurrency: ehConfigService.multiDownload);
-    allowMediaScan(ehConfigService.allowMediaScan);
-    _initGalleryTasks();
-  }
-
-  @override
-  void onClose() {
-    downloadManagerIsolate.close();
-    cancelDownloadStateChkTimer();
-    super.onClose();
-  }
-
-  void resetConcurrency() {
-    // 取消所有任务
-    for (final ct in dState.cancelTokenMap.values) {
-      if (!ct.isCancelled) {
-        ct.cancel();
-      }
-    }
-    cancelDownloadStateChkTimer();
-    logger.d('reset multiDownload ${ehConfigService.multiDownload}');
-    dState.executor = Executor(concurrency: ehConfigService.multiDownload);
-
-    // 重新加入
-    _initGalleryTasks();
-  }
-
-  Future<void> _initGalleryTasks() async {
-    logger5.v(' _initGalleryTasks');
-    GalleryTaskDao _galleryTaskDao;
-    // ImageTaskDao _imageTaskDao;
-    try {
-      _galleryTaskDao = await getGalleryTaskDao();
-      // _imageTaskDao = await getImageTaskDao();
-    } catch (e, stack) {
-      logger.e('$e\n$stack ');
-      rethrow;
-    }
-
-    final _tasks = await _galleryTaskDao.findAllGalleryTasks();
-    // dState.galleryTaskList(_tasks);
-    for (final _task in _tasks) {
-      dState.galleryTaskMap[_task.gid] = _task;
-    }
-
-    for (final task in _tasks) {
-      if (task.status == TaskStatus.running.value) {
-        // _startImageTask(galleryTask: task);
-        addGalleryTask(task);
-      }
-    }
-  }
-
-  void addGalleryTask(GalleryTask galleryTask) {
-    dState.taskCanceltokens[galleryTask.gid] = TaskCancelToken();
-    dState.queueTask.add(
-      ({name}) {
-        logger.d('excue $name');
-        _startImageTask(galleryTask: galleryTask);
-      },
-      taskName: '${galleryTask.gid}',
-    );
-  }
-
-  Future<void> requestPermission() async {
-    final PermissionStatus statusMStorage =
-        await Permission.manageExternalStorage.status;
-    logger.d('manageExternalStorage $statusMStorage');
-    if (statusMStorage.isPermanentlyDenied) {
-      if (await Permission.manageExternalStorage.request().isGranted) {
-        return;
-      } else {
-        showToast('Permission is permanently denied, open App Settings');
-        openAppSettings();
-        logger.d('jump to setting');
+    if (newValue) {
+      logger.d('delete all .nomedia file');
+      for (final dirPath in pathSet) {
+        final File noMediaFile = File(path.join(dirPath, '.nomedia'));
+        if (await noMediaFile.exists()) {
+          noMediaFile.delete(recursive: true);
+        }
       }
     } else {
-      if (await Permission.manageExternalStorage.request().isGranted) {
-        return;
-      } else {
-        throw 'Unable to download, please authorize first~';
+      logger.d('add .nomedia file \n${pathSet.join('\n')}');
+      for (final dirPath in pathSet) {
+        final File noMediaFile = File(path.join(dirPath, '.nomedia'));
+        // if (!noMediaFile.existsSync()) {
+        //   noMediaFile.createSync(recursive: true);
+        //   // noMediaFile.renameSync(path.join(dirPath, '.nomedia'));
+        // }
+        if (!await noMediaFile.exists()) {
+          noMediaFile.create(recursive: true);
+        }
       }
     }
   }
 
-  /// 获取下载路径
-  Future<String> _getGalleryDownloadPath(String custpath) async {
-    late final String _dirPath;
-    late final Directory savedDir;
-    if (GetPlatform.isAndroid && ehConfigService.downloadLocatino.isNotEmpty) {
-      // 自定义路径
-      logger.d('自定义路径');
-      await requestPermission();
-      _dirPath = path.join(ehConfigService.downloadLocatino, custpath);
-      savedDir = Directory(_dirPath);
-    } else if (GetPlatform.isAndroid) {
-      logger.d('无自定义路径');
-      _dirPath = path.join(
-          (await getExternalStorageDirectory())!.path, 'Download', custpath);
-      savedDir = Directory(_dirPath);
-    } else {
-      logger.d('iOS');
-      // iOS 记录的为相对路径 不记录doc的实际路径
-      _dirPath = path.join('Download', custpath);
-      savedDir = Directory(path.join(Global.appDocPath, _dirPath));
-    }
-
-    // 判断下载路径是否存在
-    final bool hasExisted = savedDir.existsSync();
-    // 不存在就新建路径
-    if (!hasExisted) {
-      savedDir.createSync(recursive: true);
-    }
-
-    return _dirPath;
-  }
-
+  /// 下载画廊
   Future<void> downloadGallery({
     required String url,
     required int fileCount,
@@ -241,7 +137,6 @@ class DownloadController extends GetxController {
     if (isNewTask) {
       logger.d('add NewTask ${galleryTask.toString()}');
       _galleryTaskDao.insertTask(galleryTask);
-      // dState.galleryTaskList.insert(0, galleryTask);
       dState.galleryTaskMap[galleryTask.gid] = galleryTask;
       showToast('${galleryTask.gid} Download task start');
     }
@@ -249,94 +144,45 @@ class DownloadController extends GetxController {
     final GalleryPageController _pageController = Get.find(tag: pageCtrlDepth);
     final _fCount = _pageController.firstPageImage.length;
 
-    _startImageTask(
-      galleryTask: galleryTask,
+    logger.d('新任务');
+    _addGalleryTask(
+      galleryTask,
       fCount: _fCount,
     );
   }
 
-  void initDownloadStateChkTimer(int gid) {
-    const int periodSeconds = 3;
-    const int maxCount = 12;
-    dState.chkTimers[gid] = Timer.periodic(
-      const Duration(seconds: periodSeconds),
-      (Timer timer) {
-        totalDownloadSpeed(gid, maxCount, periodSeconds);
-      },
-    );
-  }
-
-  void autoRetryTask(int gid) {
-    // 回调
-    logger.d('$gid afterTimer = ' + DateTime.now().toString());
-    logger.d('${dState.curComplet[gid]}  ${dState.preComplet[gid]}');
-    if (dState.curComplet[gid] == dState.preComplet[gid]) {
-      logger.d('reset $gid');
-      Future<void>(() => galleryTaskPaused(gid, silent: true))
-          .then((_) => Future.delayed(const Duration(microseconds: 2000)))
-          .then((_) => galleryTaskResume(gid));
-    } else {
-      dState.preComplet[gid] = dState.curComplet[gid] ?? 0;
+  /// 更新任务为已完成
+  Future<GalleryTask?> galleryTaskComplete(int gid) {
+    _cancelDownloadStateChkTimer(gid: gid);
+    if (!((dState.taskCanceltokens[gid]?.isCancelled) ?? true)) {
+      dState.taskCanceltokens[gid]?.cancel();
     }
+    return galleryTaskUpdateStatus(gid, TaskStatus.complete);
   }
 
-  /// 下载速度统计
-  /// 统计当前时间到 [maxCount] 秒前 这个时间范围内的平均速度
-  /// 自动重试检查
-  /// [kRetryThreshold] 秒内速度没有变化, 重试该任务
-  void totalDownloadSpeed(int gid, int maxCount, int periodSeconds) {
-    final int totCurCount = dState.downloadCounts.entries
-        .where((element) => element.key.startsWith('${gid}_'))
-        .map((e) => e.value)
-        .sum;
-
-    dState.lastCounts[gid]?.add(totCurCount);
-
-    dState.lastCounts.putIfAbsent(gid, () => [0]);
-    final List<int> lastCounts = dState.lastCounts[gid] ?? [0];
-    final List<int> lastCountsTop = lastCounts.reversed
-        .toList()
-        .sublist(0, min(lastCounts.length, maxCount));
-
-    logger.v('${lastCountsTop.join(',')}\n${lastCounts.reversed.join(',')}');
-
-    final speed = (max(totCurCount - lastCountsTop.reversed.first, 0) /
-            (lastCountsTop.length * periodSeconds))
-        .round();
-
-    dState.downloadSpeeds[gid] = renderSize(speed);
-
-    logger.v('speed:${renderSize(speed)}\n${lastCountsTop.join(',')}');
-
-    _updateDownloadView(['DownloadGalleryItem_$gid']);
-
-    if (speed == 0) {
-      if (dState.noSpeed[gid] != null) {
-        dState.noSpeed[gid] = dState.noSpeed[gid]! + 1;
-      } else {
-        dState.noSpeed[gid] = 1;
-      }
-
-      if ((dState.noSpeed[gid] ?? 0) > kRetryThreshold) {
-        logger.d('$gid retry = ' + DateTime.now().toString());
-        Future<void>(() => galleryTaskPaused(gid, silent: true))
-            .then((_) => Future.delayed(const Duration(microseconds: 1000)))
-            .then((_) => galleryTaskResume(gid));
-      }
+  /// 暂停任务
+  Future<GalleryTask?> galleryTaskPaused(int gid, {bool silent = false}) async {
+    // logger.d('galleryTaskPaused $gid');
+    _cancelDownloadStateChkTimer(gid: gid);
+    logger.v('${dState.cancelTokenMap[gid]?.isCancelled}');
+    if (!((dState.cancelTokenMap[gid]?.isCancelled) ?? true)) {
+      dState.cancelTokenMap[gid]?.cancel();
     }
+    if (silent) {
+      return null;
+    }
+
+    return galleryTaskUpdateStatus(gid, TaskStatus.paused);
   }
 
-  void cancelDownloadStateChkTimer({int? gid}) {
-    if (gid != null) {
-      dState.chkTimers[gid]?.cancel();
-      dState.downloadSpeeds.remove(gid);
-      dState.noSpeed.remove(gid);
-    } else {
-      for (final Timer? timer in dState.chkTimers.values) {
-        timer?.cancel();
-      }
-      dState.downloadSpeeds.clear();
-      dState.noSpeed.clear();
+  /// 恢复任务
+  Future<void> galleryTaskResume(int gid) async {
+    final _galleryTaskDao = await getGalleryTaskDao();
+    final GalleryTask? galleryTask =
+        await _galleryTaskDao.findGalleryTaskByGid(gid);
+    if (galleryTask != null) {
+      logger.d('恢复任务 $gid');
+      _addGalleryTask(galleryTask);
     }
   }
 
@@ -358,47 +204,6 @@ class DownloadController extends GetxController {
     return dState.galleryTaskMap[gid];
   }
 
-  /// 更新任务为已完成
-  Future<GalleryTask?> galleryTaskComplete(int gid) {
-    cancelDownloadStateChkTimer(gid: gid);
-    return galleryTaskUpdateStatus(gid, TaskStatus.complete);
-  }
-
-  /// 暂停任务
-  Future<GalleryTask?> galleryTaskPaused(int gid, {bool silent = false}) async {
-    // logger.d('galleryTaskPaused $gid');
-    cancelDownloadStateChkTimer(gid: gid);
-    logger.v('${dState.cancelTokenMap[gid]?.isCancelled}');
-    if (!((dState.cancelTokenMap[gid]?.isCancelled) ?? true)) {
-      dState.cancelTokenMap[gid]?.cancel();
-    }
-    if (silent) {
-      return null;
-    }
-
-    return galleryTaskUpdateStatus(gid, TaskStatus.paused);
-  }
-
-  void _galleryTaskPausedAll() {
-    for (final _task in dState.galleryTasks) {
-      if (_task.status != TaskStatus.complete.value) {
-        galleryTaskPaused(_task.gid);
-        _updateDownloadView(['DownloadGalleryItem_${_task.gid}']);
-      }
-    }
-  }
-
-  /// 恢复任务
-  Future<void> galleryTaskResume(int gid) async {
-    logger.d('galleryTaskResume');
-    final _galleryTaskDao = await getGalleryTaskDao();
-    final GalleryTask? galleryTask =
-        await _galleryTaskDao.findGalleryTaskByGid(gid);
-    if (galleryTask != null) {
-      addGalleryTask(galleryTask);
-    }
-  }
-
   /// 更新任务状态
   Future<GalleryTask?> galleryTaskUpdateStatus(
       int gid, TaskStatus status) async {
@@ -415,6 +220,31 @@ class DownloadController extends GetxController {
     }
 
     return dState.galleryTaskMap[gid];
+  }
+
+  /// 根据gid获取任务
+  Future<List<GalleryImageTask>> getImageTasks(int gid) async {
+    final _imageTaskDao = await getImageTaskDao();
+    final List<GalleryImageTask> tasks =
+        await _imageTaskDao.findAllTaskByGid(gid);
+    return tasks;
+  }
+
+  @override
+  void onClose() {
+    downloadManagerIsolate.close();
+    _cancelDownloadStateChkTimer();
+    super.onClose();
+  }
+
+  @override
+  void onInit() {
+    super.onInit();
+    logger.d(
+        'DownloadController onInit multiDownload:${ehConfigService.multiDownload}');
+    dState.executor = Executor(concurrency: ehConfigService.multiDownload);
+    allowMediaScan(ehConfigService.allowMediaScan);
+    _initGalleryTasks();
   }
 
   /// 移除任务
@@ -454,13 +284,19 @@ class DownloadController extends GetxController {
     dState.galleryTaskMap.remove(gid);
   }
 
-  void _initDownloadMapByGid(int gid, {List<GalleryImage>? images}) {
-    dState.downloadMap[gid] = images ?? [];
-  }
+  void resetConcurrency() {
+    // 取消所有任务
+    for (final ct in dState.cancelTokenMap.values) {
+      if (!ct.isCancelled) {
+        ct.cancel();
+      }
+    }
+    _cancelDownloadStateChkTimer();
+    logger.d('reset multiDownload ${ehConfigService.multiDownload}');
+    dState.executor = Executor(concurrency: ehConfigService.multiDownload);
 
-  GalleryImage? _getImageObj(int gid, int ser) {
-    return dState.downloadMap[gid]
-        ?.firstWhereOrNull((element) => element.ser == ser);
+    // 重新加入
+    _initGalleryTasks();
   }
 
   void _addAllImages(int gid, List<GalleryImage> galleryImages) {
@@ -475,52 +311,370 @@ class DownloadController extends GetxController {
     }
   }
 
-  Future _updateImageTasksByGid(int gid, {List<GalleryImage>? images}) async {
-    final ImageTaskDao _imageTaskDao = await getImageTaskDao();
+  void _addGalleryTask(
+    GalleryTask galleryTask, {
+    int? fCount,
+    List<GalleryImage>? images,
+  }) {
+    dState.taskCanceltokens[galleryTask.gid] = TaskCancelToken();
+    dState.queueTask.add(
+      ({name}) {
+        logger.d('excue $name');
+        _startImageTask(
+          galleryTask: galleryTask,
+          fCount: fCount,
+          images: images,
+        );
+      },
+      taskName: '${galleryTask.gid}',
+    );
+  }
 
-    // final GalleryTaskDao _galleryTaskDao = await getGalleryTaskDao();
+  // void _autoRetryTask(int gid) {
+  //   // 回调
+  //   logger.d('$gid afterTimer = ' + DateTime.now().toString());
+  //   logger.d('${dState.curComplet[gid]}  ${dState.preComplet[gid]}');
+  //   if (dState.curComplet[gid] == dState.preComplet[gid]) {
+  //     logger.d('reset $gid');
+  //     Future<void>(() => galleryTaskPaused(gid, silent: true))
+  //         .then((_) => Future.delayed(const Duration(microseconds: 2000)))
+  //         .then((_) => galleryTaskResume(gid));
+  //   } else {
+  //     dState.preComplet[gid] = dState.curComplet[gid] ?? 0;
+  //   }
+  // }
 
-    // logger.d(
-    //     '_updateImageTasksByGid $gid\n  ${(images ?? downloadMap[gid])?.map((e) => e.toJson()).join('\n')} ');
-
-    // 插入所有任务明细
-    final List<GalleryImageTask>? _galleryImageTasks =
-        (images ?? dState.downloadMap[gid])
-            ?.map((GalleryImage e) => GalleryImageTask(
-                  gid: gid,
-                  token: '',
-                  href: e.href,
-                  ser: e.ser,
-                  imageUrl: e.imageUrl,
-                  sourceId: e.sourceId,
-                ))
-            .toList();
-
-    // loggerNoStack.d(
-    //     '_updateImageTasksByGid $gid\n${_galleryImageTasks?.map((e) => e.toString()).join('\n')}');
-
-    if (_galleryImageTasks != null) {
-      _imageTaskDao.insertOrReplaceImageTasks(_galleryImageTasks);
+  void _cancelDownloadStateChkTimer({int? gid}) {
+    if (gid != null) {
+      dState.downloadSpeeds.remove(gid);
+      dState.noSpeed.remove(gid);
+      dState.chkTimers[gid]?.cancel();
+    } else {
+      for (final Timer? timer in dState.chkTimers.values) {
+        timer?.cancel();
+      }
+      dState.downloadSpeeds.clear();
+      dState.noSpeed.clear();
     }
   }
 
-  Future _updateImageTask(int gid, GalleryImage images,
-      {String? fileName}) async {
-    final ImageTaskDao _imageTaskDao = await getImageTaskDao();
+  Future<GalleryImage?> _checkAndGetImages(
+    int gid,
+    int itemSer,
+    int filecount,
+    int firstPageCount,
+    String? url, {
+    CancelToken? cancelToken,
+  }) async {
+    GalleryImage? tImage = _getImageObj(gid, itemSer);
 
-    // final GalleryTaskDao _galleryTaskDao = await getGalleryTaskDao();
+    if (tImage == null && url != null) {
+      loggerSimple.v('ser:$itemSer 所在页尚未获取， 开始获取');
+      final images = await _fetchImages(
+        ser: itemSer,
+        fileCount: filecount,
+        firstPageCount: firstPageCount,
+        url: url,
+        cancelToken: cancelToken,
+      );
+      loggerSimple.v('images.length: ${images.length}');
+      _addAllImages(gid, images);
+      tImage = _getImageObj(gid, itemSer);
+    }
 
-    final GalleryImageTask _imageTask = GalleryImageTask(
-      gid: gid,
-      token: '',
-      href: images.href,
-      ser: images.ser,
-      imageUrl: images.imageUrl,
-      sourceId: images.sourceId,
-      filePath: fileName,
+    return tImage;
+  }
+
+  Future<void> _downloadImage(
+    GalleryImage image,
+    GalleryImageTask? imageTask,
+    int gid,
+    String downloadPath,
+    int maxSer, {
+    bool redownload = false,
+    CancelToken? cancelToken,
+    ValueChanged<String>? onDownloadComplete,
+  }) async {
+    loggerSimple.v('${image.ser} start');
+    if (redownload) logger.v('${image.ser} redownload ');
+
+    String _imageUrl = '';
+    late GalleryImage _uptImage;
+    String _fileName = '';
+
+    // 存在imageTask的 用原url下载
+    final bool useOriginalUrl = imageTask != null &&
+        imageTask.imageUrl != null &&
+        (imageTask.imageUrl?.isNotEmpty ?? false);
+
+    if (useOriginalUrl && !redownload) {
+      final String? imageUrl = imageTask.imageUrl;
+      loggerSimple.v('${image.ser} DL $imageUrl');
+
+      _imageUrl = imageUrl!;
+      _uptImage = image;
+      if (imageTask.filePath != null && imageTask.filePath!.isNotEmpty) {
+        _fileName = imageTask.filePath!;
+      } else {
+        _fileName = _getFileName(image, maxSer);
+      }
+    } else if (image.href != null) {
+      if (redownload) {
+        cacheController.clearDioCache(path: image.href ?? '');
+      }
+
+      // 否则先请求解析html
+      final GalleryImage imageFetched = await _fetchImageInfo(
+        image.href!,
+        itemSer: image.ser,
+        oriImage: image,
+        gid: gid,
+        cancelToken: cancelToken,
+        changeSource: redownload,
+      );
+      _imageUrl = imageFetched.imageUrl!;
+      _uptImage = imageFetched;
+
+      _fileName = _getFileName(imageFetched, maxSer);
+
+      _addAllImages(gid, [imageFetched]);
+      await _updateImageTask(gid, imageFetched, fileName: _fileName);
+
+      if (redownload)
+        logger.v('${imageFetched.href}\n${imageFetched.imageUrl} ');
+    }
+
+    final ProgressCallback _progressCallback = (int count, int total) {
+      // logger.d('gid:$gid ser:${image.ser}  dlCount:$count');
+
+      dState.downloadCounts['${gid}_${image.ser}'] = count;
+    };
+
+    try {
+      await Api.download(
+        _imageUrl,
+        path.join(downloadPath, _fileName),
+        cancelToken: cancelToken,
+        onDownloadComplete: () => onDownloadComplete?.call(_fileName),
+        progressCallback: _progressCallback,
+      );
+    } on DioError catch (e) {
+      if (e.type == DioErrorType.response && e.response?.statusCode == 403) {
+        logger.d('403 $gid.${image.ser}下载链接已经失效 需要更新 ${image.href}');
+        final GalleryImage newImageFetched = await _fetchImageInfo(
+          image.href!,
+          itemSer: image.ser,
+          oriImage: image,
+          gid: gid,
+          cancelToken: cancelToken,
+          sourceId: _uptImage.sourceId,
+          changeSource: true,
+        );
+
+        _imageUrl = newImageFetched.imageUrl!;
+
+        _addAllImages(gid, [newImageFetched]);
+        await _updateImageTask(gid, newImageFetched, fileName: _fileName);
+
+        await Api.download(
+          _imageUrl,
+          path.join(downloadPath, _fileName),
+          cancelToken: cancelToken,
+          onDownloadComplete: () => onDownloadComplete?.call(_fileName),
+          progressCallback: _progressCallback,
+        );
+      }
+    }
+  }
+
+  Future<int> _fetchFirstPageCount(
+    String url, {
+    CancelToken? cancelToken,
+  }) async {
+    final List<GalleryImage> _moreImageList = await Api.getGalleryImage(
+      url,
+      page: 0,
+      cancelToken: cancelToken,
+      refresh: true, // 刷新画廊后加载缩略图不能从缓存读取，否则在改变每页数量后加载画廊会出错
+    );
+    return _moreImageList.length;
+  }
+
+  Future<GalleryImage> _fetchImageInfo(
+    String href, {
+    required int itemSer,
+    required GalleryImage oriImage,
+    required int gid,
+    bool changeSource = false,
+    String? sourceId,
+    CancelToken? cancelToken,
+  }) async {
+    final GalleryImage _image = await Api.fetchImageInfo(
+      href,
+      refresh: changeSource,
+      sourceId: sourceId,
+      cancelToken: cancelToken,
     );
 
-    await _imageTaskDao.insertOrReplaceImageTasks([_imageTask]);
+    final GalleryImage _imageCopyWith = oriImage.copyWith(
+      sourceId: _image.sourceId,
+      imageUrl: _image.imageUrl,
+      imageWidth: _image.imageWidth,
+      imageHeight: _image.imageHeight,
+    );
+
+    return _imageCopyWith;
+  }
+
+  Future<List<GalleryImage>> _fetchImages({
+    required int ser,
+    required int fileCount,
+    required String url,
+    bool isRefresh = false,
+    int? firstPageCount,
+    CancelToken? cancelToken,
+  }) async {
+    final int page = firstPageCount != null ? (ser - 1) ~/ firstPageCount : 0;
+    loggerSimple.v('ser:$ser 所在页码为$page');
+
+    final List<GalleryImage> _moreImageList = await Api.getGalleryImage(
+      url,
+      page: page,
+      cancelToken: cancelToken,
+      refresh: isRefresh, // 刷新画廊后加载缩略图不能从缓存读取，否则在改变每页数量后加载画廊会出错
+    );
+
+    return _moreImageList;
+  }
+
+  void _galleryTaskPausedAll() {
+    for (final _task in dState.galleryTasks) {
+      if (_task.status != TaskStatus.complete.value) {
+        galleryTaskPaused(_task.gid);
+        _updateDownloadView(['DownloadGalleryItem_${_task.gid}']);
+      }
+    }
+  }
+
+  String _getFileName(GalleryImage gimage, int maxSer) {
+    final String _suffix = path.extension(gimage.imageUrl!);
+    // gimage.imageUrl!.substring(gimage.imageUrl!.lastIndexOf('.'));
+    final String _fileName = '$maxSer'.length > _kDefNameLen
+        ? '${sp.sprintf('%0${'$maxSer'.length}d', [gimage.ser])}$_suffix'
+        : '${sp.sprintf('%0${_kDefNameLen}d', [gimage.ser])}$_suffix';
+    return _fileName;
+  }
+
+  /// 获取下载路径
+  Future<String> _getGalleryDownloadPath(String custpath) async {
+    late final String _dirPath;
+    late final Directory savedDir;
+    if (GetPlatform.isAndroid && ehConfigService.downloadLocatino.isNotEmpty) {
+      // 自定义路径
+      logger.d('自定义下载路径');
+      await _requestPermission();
+      _dirPath = path.join(ehConfigService.downloadLocatino, custpath);
+      savedDir = Directory(_dirPath);
+    } else if (GetPlatform.isAndroid) {
+      logger.d('无自定义下载路径');
+      _dirPath = path.join(
+          (await getExternalStorageDirectory())!.path, 'Download', custpath);
+      savedDir = Directory(_dirPath);
+    } else {
+      logger.d('iOS');
+      // iOS 记录的为相对路径 不记录doc的实际路径
+      _dirPath = path.join('Download', custpath);
+      savedDir = Directory(path.join(Global.appDocPath, _dirPath));
+    }
+
+    // 判断下载路径是否存在
+    final bool hasExisted = savedDir.existsSync();
+    // 不存在就新建路径
+    if (!hasExisted) {
+      savedDir.createSync(recursive: true);
+    }
+
+    return _dirPath;
+  }
+
+  GalleryImage? _getImageObj(int gid, int ser) {
+    return dState.downloadMap[gid]
+        ?.firstWhereOrNull((element) => element.ser == ser);
+  }
+
+  void _initDownloadMapByGid(int gid, {List<GalleryImage>? images}) {
+    dState.downloadMap[gid] = images ?? [];
+  }
+
+  void _initDownloadStateChkTimer(int gid) {
+    const int periodSeconds = 3;
+    const int maxCount = 12;
+    dState.chkTimers[gid] = Timer.periodic(
+      const Duration(seconds: periodSeconds),
+      (Timer timer) {
+        logger.d('timer');
+        final _task = dState.galleryTaskMap[gid];
+        if (_task != null && _task.fileCount == _task.completCount) {
+          galleryTaskComplete(gid);
+          return;
+        }
+
+        if (dState.galleryTaskMap[gid]?.status == TaskStatus.running.value) {
+          _totalDownloadSpeed(gid, maxCount, periodSeconds);
+        }
+      },
+    );
+  }
+
+  Future<void> _initGalleryTasks() async {
+    logger5.v(' _initGalleryTasks');
+    GalleryTaskDao _galleryTaskDao;
+    // ImageTaskDao _imageTaskDao;
+    try {
+      _galleryTaskDao = await getGalleryTaskDao();
+      // _imageTaskDao = await getImageTaskDao();
+    } catch (e, stack) {
+      logger.e('$e\n$stack ');
+      rethrow;
+    }
+
+    final _tasks = await _galleryTaskDao.findAllGalleryTasks();
+    // dState.galleryTaskList(_tasks);
+
+    // 添加到map中
+    for (final _task in _tasks) {
+      dState.galleryTaskMap[_task.gid] = _task;
+    }
+
+    // 继续未完成的任务
+    for (final task in _tasks) {
+      if (task.status == TaskStatus.running.value) {
+        // _startImageTask(galleryTask: task);
+        logger.d('继续未完成的任务');
+        _addGalleryTask(task);
+      }
+    }
+  }
+
+  Future<void> _requestPermission() async {
+    final PermissionStatus statusMStorage =
+        await Permission.manageExternalStorage.status;
+    logger.d('manageExternalStorage $statusMStorage');
+    if (statusMStorage.isPermanentlyDenied) {
+      if (await Permission.manageExternalStorage.request().isGranted) {
+        return;
+      } else {
+        showToast('Permission is permanently denied, open App Settings');
+        openAppSettings();
+        logger.d('jump to setting');
+      }
+    } else {
+      if (await Permission.manageExternalStorage.request().isGranted) {
+        return;
+      } else {
+        throw 'Unable to download, please authorize first~';
+      }
+    }
   }
 
   /// 开始下载
@@ -529,9 +683,18 @@ class DownloadController extends GetxController {
     int? fCount,
     List<GalleryImage>? images,
   }) async {
-    logger.v('_startImageTask ${galleryTask.gid} ${galleryTask.title}');
+    // logger.d('_startImageTask ${galleryTask.gid} ${galleryTask.title}');
 
-    initDownloadStateChkTimer(galleryTask.gid);
+    // logger.d('${galleryTask.toString()} ');
+
+    if (galleryTask.completCount == galleryTask.fileCount) {
+      logger.d('complete ${galleryTask.gid}  ${galleryTask.title}');
+
+      await galleryTaskComplete(galleryTask.gid);
+      _updateDownloadView(['DownloadGalleryItem_${galleryTask.gid}']);
+    }
+
+    _initDownloadStateChkTimer(galleryTask.gid);
 
     final ImageTaskDao _imageTaskDao = await getImageTaskDao();
     final GalleryTaskDao _galleryTaskDao = await getGalleryTaskDao();
@@ -651,237 +814,111 @@ class DownloadController extends GetxController {
     }
   }
 
-  Future<GalleryImage?> _checkAndGetImages(
-    int gid,
-    int itemSer,
-    int filecount,
-    int firstPageCount,
-    String? url, {
-    CancelToken? cancelToken,
-  }) async {
-    GalleryImage? tImage = _getImageObj(gid, itemSer);
+  /// 下载速度统计
 
-    if (tImage == null && url != null) {
-      loggerSimple.v('ser:$itemSer 所在页尚未获取， 开始获取');
-      final images = await _fetchImages(
-        ser: itemSer,
-        fileCount: filecount,
-        firstPageCount: firstPageCount,
-        url: url,
-        cancelToken: cancelToken,
-      );
-      loggerSimple.v('images.length: ${images.length}');
-      _addAllImages(gid, images);
-      tImage = _getImageObj(gid, itemSer);
-    }
+  /// 自动重试检查
+  /// [kRetryThreshold] 秒内速度没有变化, 重试该任务
+  void _totalDownloadSpeed(int gid, int maxCount, int periodSeconds) {
+    final int totCurCount = dState.downloadCounts.entries
+        .where((element) => element.key.startsWith('${gid}_'))
+        .map((e) => e.value)
+        .sum;
 
-    return tImage;
-  }
+    dState.lastCounts[gid]?.add(totCurCount);
 
-  Future<int> _fetchFirstPageCount(
-    String url, {
-    CancelToken? cancelToken,
-  }) async {
-    final List<GalleryImage> _moreImageList = await Api.getGalleryImage(
-      url,
-      page: 0,
-      cancelToken: cancelToken,
-      refresh: true, // 刷新画廊后加载缩略图不能从缓存读取，否则在改变每页数量后加载画廊会出错
-    );
-    return _moreImageList.length;
-  }
+    dState.lastCounts.putIfAbsent(gid, () => [0]);
+    final List<int> lastCounts = dState.lastCounts[gid] ?? [0];
+    final List<int> lastCountsTop = lastCounts.reversed
+        .toList()
+        .sublist(0, min(lastCounts.length, maxCount));
 
-  Future<void> _downloadImage(
-    GalleryImage image,
-    GalleryImageTask? imageTask,
-    int gid,
-    String downloadPath,
-    int maxSer, {
-    bool redownload = false,
-    CancelToken? cancelToken,
-    ValueChanged<String>? onDownloadComplete,
-  }) async {
-    loggerSimple.v('${image.ser} start');
-    if (redownload) logger.v('${image.ser} redownload ');
+    logger.v('${lastCountsTop.join(',')}\n${lastCounts.reversed.join(',')}');
 
-    String _imageUrl = '';
-    late GalleryImage _uptImage;
-    String _fileName = '';
+    final speed = (max(totCurCount - lastCountsTop.reversed.first, 0) /
+            (lastCountsTop.length * periodSeconds))
+        .round();
 
-    // 存在imageTask的 用原url下载
-    final bool useOriginalUrl = imageTask != null &&
-        imageTask.imageUrl != null &&
-        (imageTask.imageUrl?.isNotEmpty ?? false);
+    dState.downloadSpeeds[gid] = renderSize(speed);
 
-    if (useOriginalUrl && !redownload) {
-      final String? imageUrl = imageTask.imageUrl;
-      loggerSimple.v('${image.ser} DL $imageUrl');
+    logger.v('speed:${renderSize(speed)}\n${lastCountsTop.join(',')}');
 
-      _imageUrl = imageUrl!;
-      _uptImage = image;
-      if (imageTask.filePath != null && imageTask.filePath!.isNotEmpty) {
-        _fileName = imageTask.filePath!;
+    _updateDownloadView(['DownloadGalleryItem_$gid']);
+
+    if (speed == 0) {
+      if (dState.noSpeed[gid] != null) {
+        dState.noSpeed[gid] = dState.noSpeed[gid]! + 1;
       } else {
-        _fileName = _getFileName(image, maxSer);
-      }
-    } else if (image.href != null) {
-      if (redownload) {
-        cacheController.clearDioCache(path: image.href ?? '');
+        dState.noSpeed[gid] = 1;
       }
 
-      // 否则先请求解析html
-      final GalleryImage imageFetched = await _fetchImageInfo(
-        image.href!,
-        itemSer: image.ser,
-        oriImage: image,
-        gid: gid,
-        cancelToken: cancelToken,
-        changeSource: redownload,
-      );
-      _imageUrl = imageFetched.imageUrl!;
-      _uptImage = imageFetched;
-
-      _fileName = _getFileName(imageFetched, maxSer);
-
-      _addAllImages(gid, [imageFetched]);
-      await _updateImageTask(gid, imageFetched, fileName: _fileName);
-
-      if (redownload)
-        logger.v('${imageFetched.href}\n${imageFetched.imageUrl} ');
-    }
-
-    final ProgressCallback _progressCallback = (int count, int total) {
-      // logger.d('gid:$gid ser:${image.ser}  dlCount:$count');
-
-      dState.downloadCounts['${gid}_${image.ser}'] = count;
-    };
-
-    try {
-      await Api.download(
-        _imageUrl,
-        path.join(downloadPath, _fileName),
-        cancelToken: cancelToken,
-        onDownloadComplete: () => onDownloadComplete?.call(_fileName),
-        progressCallback: _progressCallback,
-      );
-    } on DioError catch (e) {
-      if (e.type == DioErrorType.response && e.response?.statusCode == 403) {
-        logger.d('403 $gid.${image.ser}下载链接已经失效 需要更新 ${image.href}');
-        final GalleryImage newImageFetched = await _fetchImageInfo(
-          image.href!,
-          itemSer: image.ser,
-          oriImage: image,
-          gid: gid,
-          cancelToken: cancelToken,
-          sourceId: _uptImage.sourceId,
-          changeSource: true,
-        );
-
-        _imageUrl = newImageFetched.imageUrl!;
-
-        _addAllImages(gid, [newImageFetched]);
-        await _updateImageTask(gid, newImageFetched, fileName: _fileName);
-
-        await Api.download(
-          _imageUrl,
-          path.join(downloadPath, _fileName),
-          cancelToken: cancelToken,
-          onDownloadComplete: () => onDownloadComplete?.call(_fileName),
-          progressCallback: _progressCallback,
-        );
+      if ((dState.noSpeed[gid] ?? 0) > kRetryThreshold) {
+        logger.d('$gid retry = ' + DateTime.now().toString());
+        Future<void>(() => galleryTaskPaused(gid, silent: true))
+            .then((_) => Future.delayed(const Duration(microseconds: 1000)))
+            .then((_) => galleryTaskResume(gid));
       }
     }
   }
 
-  String _getFileName(GalleryImage gimage, int maxSer) {
-    final String _suffix = path.extension(gimage.imageUrl!);
-    // gimage.imageUrl!.substring(gimage.imageUrl!.lastIndexOf('.'));
-    final String _fileName = '$maxSer'.length > _kDefNameLen
-        ? '${sp.sprintf('%0${'$maxSer'.length}d', [gimage.ser])}$_suffix'
-        : '${sp.sprintf('%0${_kDefNameLen}d', [gimage.ser])}$_suffix';
-    return _fileName;
-  }
-
-  Future<GalleryImage> _fetchImageInfo(
-    String href, {
-    required int itemSer,
-    required GalleryImage oriImage,
-    required int gid,
-    bool changeSource = false,
-    String? sourceId,
-    CancelToken? cancelToken,
-  }) async {
-    final GalleryImage _image = await Api.fetchImageInfo(
-      href,
-      refresh: changeSource,
-      sourceId: sourceId,
-      cancelToken: cancelToken,
-    );
-
-    final GalleryImage _imageCopyWith = oriImage.copyWith(
-      sourceId: _image.sourceId,
-      imageUrl: _image.imageUrl,
-      imageWidth: _image.imageWidth,
-      imageHeight: _image.imageHeight,
-    );
-
-    return _imageCopyWith;
-  }
-
-  Future<List<GalleryImage>> _fetchImages({
-    required int ser,
-    required int fileCount,
-    required String url,
-    bool isRefresh = false,
-    int? firstPageCount,
-    CancelToken? cancelToken,
-  }) async {
-    final int page = firstPageCount != null ? (ser - 1) ~/ firstPageCount : 0;
-    loggerSimple.v('ser:$ser 所在页码为$page');
-
-    final List<GalleryImage> _moreImageList = await Api.getGalleryImage(
-      url,
-      page: page,
-      cancelToken: cancelToken,
-      refresh: isRefresh, // 刷新画廊后加载缩略图不能从缓存读取，否则在改变每页数量后加载画廊会出错
-    );
-
-    return _moreImageList;
-  }
-
-  Future<List<GalleryImageTask>> getImageTasks(int gid) async {
-    final _imageTaskDao = await getImageTaskDao();
-    final List<GalleryImageTask> tasks =
-        await _imageTaskDao.findAllTaskByGid(gid);
-    return tasks;
-  }
-
-  Future<void> allowMediaScan(bool newValue) async {
-    final pathSet = dState.galleryTasks
-        .where((elm) => elm.realDirPath != null)
-        .map((element) => Directory(element.realDirPath!).parent.path)
-        .toSet();
-
-    if (newValue) {
-      logger.d('delete all .nomedia file');
-      for (final dirPath in pathSet) {
-        final File noMediaFile = File(path.join(dirPath, '.nomedia'));
-        if (await noMediaFile.exists()) {
-          noMediaFile.delete(recursive: true);
-        }
-      }
-    } else {
-      logger.d('add .nomedia file \n${pathSet.join('\n')}');
-      for (final dirPath in pathSet) {
-        final File noMediaFile = File(path.join(dirPath, '.nomedia'));
-        // if (!noMediaFile.existsSync()) {
-        //   noMediaFile.createSync(recursive: true);
-        //   // noMediaFile.renameSync(path.join(dirPath, '.nomedia'));
-        // }
-        if (!await noMediaFile.exists()) {
-          noMediaFile.create(recursive: true);
-        }
-      }
+  void _updateDownloadView(List<Object>? ids) {
+    if (Get.isRegistered<DownloadViewController>()) {
+      Get.find<DownloadViewController>().update(ids);
     }
+  }
+
+  Future _updateImageTask(int gid, GalleryImage images,
+      {String? fileName}) async {
+    final ImageTaskDao _imageTaskDao = await getImageTaskDao();
+
+    // final GalleryTaskDao _galleryTaskDao = await getGalleryTaskDao();
+
+    final GalleryImageTask _imageTask = GalleryImageTask(
+      gid: gid,
+      token: '',
+      href: images.href,
+      ser: images.ser,
+      imageUrl: images.imageUrl,
+      sourceId: images.sourceId,
+      filePath: fileName,
+    );
+
+    await _imageTaskDao.insertOrReplaceImageTasks([_imageTask]);
+  }
+
+  Future _updateImageTasksByGid(int gid, {List<GalleryImage>? images}) async {
+    final ImageTaskDao _imageTaskDao = await getImageTaskDao();
+
+    // final GalleryTaskDao _galleryTaskDao = await getGalleryTaskDao();
+
+    // logger.d(
+    //     '_updateImageTasksByGid $gid\n  ${(images ?? downloadMap[gid])?.map((e) => e.toJson()).join('\n')} ');
+
+    // 插入所有任务明细
+    final List<GalleryImageTask>? _galleryImageTasks =
+        (images ?? dState.downloadMap[gid])
+            ?.map((GalleryImage e) => GalleryImageTask(
+                  gid: gid,
+                  token: '',
+                  href: e.href,
+                  ser: e.ser,
+                  imageUrl: e.imageUrl,
+                  sourceId: e.sourceId,
+                ))
+            .toList();
+
+    // loggerNoStack.d(
+    //     '_updateImageTasksByGid $gid\n${_galleryImageTasks?.map((e) => e.toString()).join('\n')}');
+
+    if (_galleryImageTasks != null) {
+      _imageTaskDao.insertOrReplaceImageTasks(_galleryImageTasks);
+    }
+  }
+
+  static Future<GalleryTaskDao> getGalleryTaskDao() async {
+    return (await Global.getDatabase()).galleryTaskDao;
+  }
+
+  static Future<ImageTaskDao> getImageTaskDao() async {
+    return (await Global.getDatabase()).imageTaskDao;
   }
 }

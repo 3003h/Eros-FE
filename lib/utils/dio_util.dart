@@ -54,6 +54,7 @@ class HttpManager {
         CacheConfig(
           databasePath: Global.appSupportPath,
           baseUrl: _baseUrl,
+          defaultRequestMethod: 'GET',
         ),
       ).interceptor as Interceptor);
     }
