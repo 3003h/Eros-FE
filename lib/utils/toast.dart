@@ -8,26 +8,37 @@ import 'package:oktoast/oktoast.dart';
 
 void showToast(
   String msg, {
-  ToastPosition? position = ToastPosition.bottom,
+  ToastPosition? position =
+      const ToastPosition(align: Alignment.bottomCenter, offset: -60.0),
 }) {
-  final Widget widget = ClipRect(
+  final Widget widget = CupertinoTheme(
+    data: Get.find<ThemeService>().themeData!,
     child: Container(
       margin: const EdgeInsets.all(50.0),
-      child: CupertinoTheme(
-        data: Get.find<ThemeService>().themeData!,
-        child: CupertinoPopupSurface(
-          child: Container(
-            padding: const EdgeInsets.all(10),
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Text(
-                  msg,
-                  textScaleFactor: 0.8,
-                  style: CupertinoTheme.of(Get.context!).textTheme.textStyle,
-                ),
-              ],
-            ),
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(15),
+        boxShadow: [
+          BoxShadow(
+            color: CupertinoDynamicColor.resolve(
+                    CupertinoColors.systemGrey, Get.context!)
+                .withOpacity(0.5),
+            blurRadius: 100, //阴影模糊程度
+            spreadRadius: 10, //阴影扩散程度
+          ),
+        ],
+      ),
+      child: CupertinoPopupSurface(
+        child: Container(
+          padding: const EdgeInsets.all(10),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Text(
+                msg,
+                textScaleFactor: 0.8,
+                style: CupertinoTheme.of(Get.context!).textTheme.textStyle,
+              ),
+            ],
           ),
         ),
       ),
@@ -38,15 +49,9 @@ void showToast(
     widget,
     position: position,
   );
-
-  if (false)
-    oktoast.showToast(
-      msg,
-      position: position,
-      backgroundColor: const Color(0xaa000000),
-    );
 }
 
+// 同时间只显示一个。防止叠加
 bool _isShowing509 = false;
 void show509Toast() {
   if (_isShowing509) {

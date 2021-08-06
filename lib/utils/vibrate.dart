@@ -32,7 +32,7 @@ class VibrateUtil {
     if (Platform.isIOS) {
       Vibrate.feedback(FeedbackType.light);
     } else if (Platform.isAndroid) {
-      Vibration.vibrate(duration: 15);
+      Vibration.vibrate(duration: 10);
     }
   }
 

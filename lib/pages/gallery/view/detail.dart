@@ -136,6 +136,7 @@ class _DetailWidget extends StatelessWidget {
                 ? L10n.of(context).downloaded
                 : L10n.of(context).p_Download,
             onTap: !controller.downloaded ? controller.downloadGallery : null,
+            onLongPress: () => Get.toNamed(EHRoutes.download),
           );
         }),
       ),

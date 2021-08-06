@@ -254,7 +254,7 @@ class GalleryListTab extends GetView<GalleryViewController> {
           arrowColor: _color,
           showArrow: false,
           menuBuilder: () {
-            vibrateUtil.light();
+            // vibrateUtil.light();
             return ClipRRect(
               borderRadius: BorderRadius.circular(8),
               child: Container(
