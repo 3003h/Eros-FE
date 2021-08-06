@@ -7,7 +7,14 @@ import 'package:fehviewer/models/base/eh_models.dart';
 import 'package:fehviewer/store/floor/entity/gallery_task.dart';
 import 'package:get/get.dart';
 
-const int kRetryThreshold = 5;
+/// 轮询周期间隔 单位秒
+const int periodSeconds = 1;
+
+/// 速度统计周期
+const int maxCount = 6;
+
+// 无速度多少个周期后重试
+const int kRetryThresholdTime = 15;
 
 class DownloadState {
   DownloadState();

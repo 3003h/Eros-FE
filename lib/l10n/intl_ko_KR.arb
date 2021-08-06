@@ -164,5 +164,7 @@
   "input_empty": "인풋 비어있음",
   "allow_media_scan": "미디어 스캔 허용",
   "multi_download": "다중 다운로드",
-  "downloaded": "다운로드 완료"
+  "downloaded": "다운로드 완료",
+  "downloading": "Downloading",
+  "paused": "Paused"
 }

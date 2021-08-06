@@ -1,3 +1,4 @@
+import 'package:fehviewer/common/isolate_download/download_manager.dart';
 import 'package:fehviewer/common/service/depth_service.dart';
 import 'package:fehviewer/generated/l10n.dart';
 import 'package:fehviewer/models/base/eh_models.dart';
@@ -130,14 +131,34 @@ class _DetailWidget extends StatelessWidget {
       // 画廊下载
       Expanded(
         child: Obx(() {
-          return TextBtn(
+          final defIcon = TextBtn(
             FontAwesomeIcons.solidArrowAltCircleDown,
-            title: controller.downloaded
-                ? L10n.of(context).downloaded
-                : L10n.of(context).p_Download,
-            onTap: !controller.downloaded ? controller.downloadGallery : null,
-            onLongPress: () => Get.toNamed(EHRoutes.download),
+            title: L10n.of(context).p_Download,
+            onTap: controller.downloadGallery,
           );
+
+          final Map<TaskStatus, Widget> iconMap = {
+            TaskStatus.complete: TextBtn(
+              FontAwesomeIcons.solidCheckCircle,
+              title: L10n.of(context).downloaded,
+              onTap: () => Get.toNamed(EHRoutes.download),
+              onLongPress: () => Get.toNamed(EHRoutes.download),
+            ),
+            TaskStatus.running: TextBtn(
+              FontAwesomeIcons.solidPlayCircle,
+              title: L10n.of(context).downloading,
+              onTap: () => Get.toNamed(EHRoutes.download),
+              onLongPress: () => Get.toNamed(EHRoutes.download),
+            ),
+            TaskStatus.paused: TextBtn(
+              FontAwesomeIcons.solidPauseCircle,
+              title: L10n.of(context).paused,
+              onTap: () => Get.toNamed(EHRoutes.download),
+              onLongPress: () => Get.toNamed(EHRoutes.download),
+            ),
+          };
+
+          return iconMap[controller.downloadState] ?? defIcon;
         }),
       ),
       // 种子下载

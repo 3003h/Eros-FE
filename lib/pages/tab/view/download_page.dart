@@ -141,21 +141,8 @@ class DownloadGalleryView extends GetView<DownloadViewController> {
               onLongPress: () => controller.onLongPress(_taskIndex),
               behavior: HitTestBehavior.opaque,
               child: DownloadGalleryItem(
-                url: _taskInfo.url,
-                coverUrl: _taskInfo.coverUrl,
-                title: _taskInfo.title,
-                status: TaskStatus(_taskInfo.status ?? 0),
+                galleryTask: _taskInfo,
                 speed: _speed,
-                addTime: _taskInfo.addTime != null
-                    ? DateFormat('yyyy-MM-dd HH:mm').format(date)
-                    : null,
-                filecount: _taskInfo.fileCount,
-                completeCount: _taskInfo.completCount ?? 0,
-                gid: _taskInfo.gid,
-                coverimagePath: _taskInfo.coverImage != null
-                    ? path.join(
-                        _taskInfo.realDirPath ?? '', _taskInfo.coverImage)
-                    : null,
               ),
             );
           },

@@ -1709,6 +1709,26 @@ class L10n {
       args: [],
     );
   }
+
+  /// `Downloading`
+  String get downloading {
+    return Intl.message(
+      'Downloading',
+      name: 'downloading',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Paused`
+  String get paused {
+    return Intl.message(
+      'Paused',
+      name: 'paused',
+      desc: '',
+      args: [],
+    );
+  }
 }
 
 class AppLocalizationDelegate extends LocalizationsDelegate<L10n> {

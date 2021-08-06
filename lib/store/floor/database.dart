@@ -12,7 +12,7 @@ import 'entity/tag_translat.dart';
 
 part 'database.g.dart';
 
-@Database(version: 5, entities: [GalleryTask, GalleryImageTask, TagTranslat])
+@Database(version: 6, entities: [GalleryTask, GalleryImageTask, TagTranslat])
 abstract class EhDatabase extends FloorDatabase {
   GalleryTaskDao get galleryTaskDao;
 
@@ -20,6 +20,14 @@ abstract class EhDatabase extends FloorDatabase {
 
   TagTranslatDao get tagTranslatDao;
 }
+
+final ehMigrations = [
+  migration1to2,
+  migration2to3,
+  migration3to4,
+  migration4to5,
+  migration5to6,
+];
 
 // create migration
 final migration1to2 = Migration(1, 2, (database) async {
@@ -38,4 +46,10 @@ final migration3to4 = Migration(3, 4, (database) async {
 
 final migration4to5 = Migration(4, 5, (database) async {
   await database.execute('ALTER TABLE GalleryTask ADD COLUMN coverUrl TEXT');
+});
+
+final migration5to6 = Migration(5, 6, (database) async {
+  await database.execute('ALTER TABLE GalleryTask ADD COLUMN rating REAL');
+  await database.execute('ALTER TABLE GalleryTask ADD COLUMN category TEXT');
+  await database.execute('ALTER TABLE GalleryTask ADD COLUMN uploader TEXT');
 });

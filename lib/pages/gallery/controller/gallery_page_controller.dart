@@ -142,9 +142,12 @@ class GalleryPageController extends GetxController
   final GalleryCacheController _galleryCacheController = Get.find();
   DownloadController get _downloadController => Get.find();
 
-  bool get downloaded =>
-      _downloadController.dState.galleryTaskMap[int.parse(gid)]?.status ==
-      TaskStatus.complete.value;
+  // bool get downloaded =>
+  //     _downloadController.dState.galleryTaskMap[int.parse(gid)]?.status ==
+  //     TaskStatus.complete.value;
+
+  TaskStatus get downloadState => TaskStatus(
+      _downloadController.dState.galleryTaskMap[int.parse(gid)]?.status ?? 0);
 
   // final _downloaded = false.obs;
   // bool get downloaded => _downloaded.value;
@@ -654,6 +657,9 @@ class GalleryPageController extends GetxController
       fileCount: int.parse(galleryItem.filecount ?? '0'),
       title: title,
       coverUrl: galleryItem.imgUrl,
+      rating: galleryItem.rating,
+      uploader: galleryItem.uploader,
+      category: galleryItem.category,
     );
   }
 
