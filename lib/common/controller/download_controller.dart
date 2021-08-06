@@ -83,6 +83,9 @@ class DownloadController extends GetxController {
     int? gid,
     String? token,
     String? coverUrl,
+    double? rating,
+    String? category,
+    String? uploader,
   }) async {
     GalleryTaskDao _galleryTaskDao;
     // ImageTaskDao _imageTaskDao;
@@ -131,6 +134,9 @@ class DownloadController extends GetxController {
             status: TaskStatus.enqueued.value,
             addTime: DateTime.now().millisecondsSinceEpoch,
             coverUrl: coverUrl,
+            rating: rating,
+            category: category,
+            uploader: uploader,
           )
         : _oriTask!;
 
@@ -607,12 +613,9 @@ class DownloadController extends GetxController {
   }
 
   void _initDownloadStateChkTimer(int gid) {
-    const int periodSeconds = 3;
-    const int maxCount = 12;
     dState.chkTimers[gid] = Timer.periodic(
       const Duration(seconds: periodSeconds),
       (Timer timer) {
-        logger.d('timer');
         final _task = dState.galleryTaskMap[gid];
         if (_task != null && _task.fileCount == _task.completCount) {
           galleryTaskComplete(gid);
@@ -814,10 +817,8 @@ class DownloadController extends GetxController {
     }
   }
 
-  /// 下载速度统计
-
   /// 自动重试检查
-  /// [kRetryThreshold] 秒内速度没有变化, 重试该任务
+  /// [kRetryThresholdTime] 秒内速度没有变化, 重试该任务
   void _totalDownloadSpeed(int gid, int maxCount, int periodSeconds) {
     final int totCurCount = dState.downloadCounts.entries
         .where((element) => element.key.startsWith('${gid}_'))
@@ -840,7 +841,7 @@ class DownloadController extends GetxController {
 
     dState.downloadSpeeds[gid] = renderSize(speed);
 
-    logger.v('speed:${renderSize(speed)}\n${lastCountsTop.join(',')}');
+    loggerSimple.d('speed:${renderSize(speed)}\n${lastCountsTop.join(',')}');
 
     _updateDownloadView(['DownloadGalleryItem_$gid']);
 
@@ -851,7 +852,7 @@ class DownloadController extends GetxController {
         dState.noSpeed[gid] = 1;
       }
 
-      if ((dState.noSpeed[gid] ?? 0) > kRetryThreshold) {
+      if ((dState.noSpeed[gid] ?? 0) > kRetryThresholdTime) {
         logger.d('$gid retry = ' + DateTime.now().toString());
         Future<void>(() => galleryTaskPaused(gid, silent: true))
             .then((_) => Future.delayed(const Duration(microseconds: 1000)))

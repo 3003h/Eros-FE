@@ -69,6 +69,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "download": MessageLookupByLibrary.simpleMessage("다운로드"),
         "download_location": MessageLookupByLibrary.simpleMessage("다운로드 경로"),
         "downloaded": MessageLookupByLibrary.simpleMessage("다운로드 완료"),
+        "downloading": MessageLookupByLibrary.simpleMessage("Downloading"),
         "eh": MessageLookupByLibrary.simpleMessage("E·H"),
         "ehentai_my_tags": MessageLookupByLibrary.simpleMessage("내 태그"),
         "ehentai_settings": MessageLookupByLibrary.simpleMessage("EHentai 설정"),
@@ -132,6 +133,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "page_range": MessageLookupByLibrary.simpleMessage("페이지 범위"),
         "page_range_error": MessageLookupByLibrary.simpleMessage("페이지 범위 오류"),
         "passwd": MessageLookupByLibrary.simpleMessage("비밀번호"),
+        "paused": MessageLookupByLibrary.simpleMessage("Paused"),
         "pls_i_passwd": MessageLookupByLibrary.simpleMessage("비밀번호를 입력하여 주세요."),
         "pls_i_username":
             MessageLookupByLibrary.simpleMessage("사용자 이름을 입력하여 주세요."),

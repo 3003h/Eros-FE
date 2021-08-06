@@ -79,6 +79,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "download_location":
             MessageLookupByLibrary.simpleMessage("Download Location"),
         "downloaded": MessageLookupByLibrary.simpleMessage("Downloaded"),
+        "downloading": MessageLookupByLibrary.simpleMessage("Downloading"),
         "eh": MessageLookupByLibrary.simpleMessage("E·H"),
         "ehentai_my_tags": MessageLookupByLibrary.simpleMessage("My tags"),
         "ehentai_settings":
@@ -154,6 +155,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "page_range_error":
             MessageLookupByLibrary.simpleMessage("Page range error"),
         "passwd": MessageLookupByLibrary.simpleMessage("Password"),
+        "paused": MessageLookupByLibrary.simpleMessage("Paused"),
         "pls_i_passwd":
             MessageLookupByLibrary.simpleMessage("Please enter your password"),
         "pls_i_username":

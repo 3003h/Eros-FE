@@ -72,6 +72,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "download_location":
             MessageLookupByLibrary.simpleMessage("Download Locatino"),
         "downloaded": MessageLookupByLibrary.simpleMessage("Downloaded"),
+        "downloading": MessageLookupByLibrary.simpleMessage("Downloading"),
         "eh": MessageLookupByLibrary.simpleMessage("E·H"),
         "ehentai_my_tags": MessageLookupByLibrary.simpleMessage("我的标签"),
         "ehentai_settings": MessageLookupByLibrary.simpleMessage("EHentai 设置"),
@@ -140,6 +141,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "page_range_error":
             MessageLookupByLibrary.simpleMessage("Page range error"),
         "passwd": MessageLookupByLibrary.simpleMessage("密碼"),
+        "paused": MessageLookupByLibrary.simpleMessage("Paused"),
         "pls_i_passwd": MessageLookupByLibrary.simpleMessage("請輸入密碼"),
         "pls_i_username": MessageLookupByLibrary.simpleMessage("請輸入用戶名"),
         "preload_image": MessageLookupByLibrary.simpleMessage("预载图片数量"),

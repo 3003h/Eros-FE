@@ -6,10 +6,11 @@ import 'package:path/path.dart' as path;
 
 part 'gallery_task.g.dart';
 
-// 1to2 update entity with new 'dirPath' field
-// 2to3 update entity with new 'coverImage' field
-// 3to4 update entity with new 'addTime' field
-// 4to5 update entity with new 'coverUrl' field
+/// 1to2 update entity with new 'dirPath' field
+/// 2to3 update entity with new 'coverImage' field
+/// 3to4 update entity with new 'addTime' field
+/// 4to5 update entity with new 'coverUrl' field
+/// 5to6 update entity with new 'rating', 'category', 'uploader' field
 @CopyWith()
 @Entity(tableName: 'GalleryTask')
 class GalleryTask {
@@ -25,6 +26,9 @@ class GalleryTask {
     this.coverImage,
     this.addTime,
     this.coverUrl,
+    this.rating,
+    this.category,
+    this.uploader,
   });
 
   @primaryKey
@@ -39,6 +43,9 @@ class GalleryTask {
   final String? coverImage;
   final int? addTime;
   final String? coverUrl;
+  final double? rating;
+  final String? category;
+  final String? uploader;
 
   String? get realDirPath {
     if (dirPath == null) {

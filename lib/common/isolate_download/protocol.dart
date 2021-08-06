@@ -113,10 +113,8 @@ class _ResponseProtocol {
 }
 
 class TaskStatus {
-  const TaskStatus(int value) : _value = value;
-  final int _value;
-
-  int get value => _value;
+  const TaskStatus(this.value);
+  final int value;
 
   static TaskStatus from(int value) => TaskStatus(value);
 
@@ -134,12 +132,14 @@ class TaskStatus {
       return true;
     }
 
-    return o is TaskStatus && o._value == _value;
+    return o is TaskStatus && o.value == value;
   }
 
   @override
-  int get hashCode => _value.hashCode;
+  int get hashCode => value.hashCode;
 
   @override
-  String toString() => 'TaskStatus($_value)';
+  String toString() {
+    return 'TaskStatus{value: $value}';
+  }
 }

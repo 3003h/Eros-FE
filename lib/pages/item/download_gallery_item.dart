@@ -1,6 +1,7 @@
 import 'package:extended_image/extended_image.dart';
 import 'package:fehviewer/common/controller/gallerycache_controller.dart';
 import 'package:fehviewer/common/isolate_download/download_manager.dart';
+import 'package:fehviewer/const/theme_colors.dart';
 import 'package:fehviewer/models/gallery_cache.dart';
 import 'package:fehviewer/network/gallery_request.dart';
 import 'package:fehviewer/pages/tab/controller/download_view_controller.dart';
@@ -9,47 +10,41 @@ import 'package:fehviewer/store/floor/entity/gallery_image_task.dart';
 import 'package:fehviewer/store/floor/entity/gallery_task.dart';
 import 'package:fehviewer/utils/logger.dart';
 import 'package:fehviewer/widget/eh_cached_network_image.dart';
+import 'package:fehviewer/widget/rating_bar.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
+import 'package:intl/intl.dart';
 import 'package:path/path.dart' as path;
 
 class DownloadGalleryItem extends GetView<DownloadViewController> {
   const DownloadGalleryItem({
     Key? key,
-    required this.title,
-    required this.status,
-    required this.gid,
-    required this.url,
-    required this.filecount,
-    this.completeCount = 0,
-    this.coverimagePath,
-    this.coverUrl,
+    required this.galleryTask,
     this.speed,
-    this.addTime,
   }) : super(key: key);
-  final String title;
-  final int filecount;
-  final int completeCount;
-  final TaskStatus status;
-  final int gid;
-  final String? coverimagePath;
-  final String? coverUrl;
+
+  final GalleryTask galleryTask;
   final String? speed;
-  final String? url;
-  final String? addTime;
 
   @override
   Widget build(BuildContext context) {
+    final DateTime date =
+        DateTime.fromMillisecondsSinceEpoch(galleryTask.addTime ?? 0);
+    final addTime = galleryTask.addTime != null
+        ? DateFormat('yyyy-MM-dd HH:mm').format(date)
+        : null;
+
+    final status = TaskStatus(galleryTask.status ?? 0);
     final _complete = status == TaskStatus.complete;
 
     return GestureDetector(
       behavior: HitTestBehavior.opaque,
       onTap: () async {
         final List<GalleryImageTask> imageTasks =
-            await controller.getImageTasks(gid);
-        final GalleryTask? gTask = controller.galleryTaskMap[gid];
+            await controller.getImageTasks(galleryTask.gid);
+        final GalleryTask? gTask = controller.galleryTaskMap[galleryTask.gid];
         if (gTask == null) {
           return;
         }
@@ -60,24 +55,31 @@ class DownloadGalleryItem extends GetView<DownloadViewController> {
             .map((e) => path.join(gTask.realDirPath ?? '', e.filePath ?? ''))
             .toList();
 
-        final GalleryCache? _galleryCache =
-            Get.find<GalleryCacheController>().getGalleryCache('$gid');
+        final GalleryCache? _galleryCache = Get.find<GalleryCacheController>()
+            .getGalleryCache('${galleryTask.gid}');
         final lastIndex = _galleryCache?.lastIndex ?? 0;
 
-        NavigatorUtil.goGalleryViewPageFile(lastIndex, pics, '$gid');
+        NavigatorUtil.goGalleryViewPageFile(
+            lastIndex, pics, '${galleryTask.gid}');
       },
       child: Container(
         padding: const EdgeInsets.only(top: 4, bottom: 4, left: 20, right: 16),
-        height: 110,
+        height: 120,
         // constraints: const BoxConstraints(minHeight: 120),
         child: Row(
           children: [
             // 封面
             GestureDetector(
-              child: _CoverImage(filePath: coverimagePath, url: coverUrl)
+              child: _CoverImage(
+                      filePath: galleryTask.coverImage != null
+                          ? path.join(galleryTask.realDirPath ?? '',
+                              galleryTask.coverImage)
+                          : null,
+                      url: galleryTask.coverUrl)
                   .paddingOnly(right: 8),
               onTap: () async {
-                NavigatorUtil.goGalleryPage(url: '${Api.getBaseUrl()}$url');
+                NavigatorUtil.goGalleryPage(
+                    url: '${Api.getBaseUrl()}${galleryTask.url}');
               },
             ),
             // 右侧
@@ -85,8 +87,9 @@ class DownloadGalleryItem extends GetView<DownloadViewController> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
+                  // 标题
                   Text(
-                    title,
+                    galleryTask.title,
                     softWrap: true,
                     maxLines: 2,
                     overflow: TextOverflow.ellipsis,
@@ -94,7 +97,7 @@ class DownloadGalleryItem extends GetView<DownloadViewController> {
                       fontSize: 13,
                       height: 1.2,
                     ),
-                  ).paddingSymmetric(vertical: 4),
+                  ).paddingSymmetric(vertical: 2),
                   Expanded(
                     child: Row(
                       children: [
@@ -103,21 +106,38 @@ class DownloadGalleryItem extends GetView<DownloadViewController> {
                             mainAxisAlignment: MainAxisAlignment.start,
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              Text(
-                                addTime ?? '',
-                                style: TextStyle(
-                                  fontSize: 11,
-                                  color: CupertinoDynamicColor.resolve(
-                                      CupertinoColors.secondaryLabel, context),
-                                ),
+                              Row(
+                                children: [
+                                  Text(
+                                    galleryTask.uploader ?? '',
+                                    style: TextStyle(
+                                      fontSize: 12,
+                                      color: CupertinoDynamicColor.resolve(
+                                          CupertinoColors.secondaryLabel,
+                                          context),
+                                    ),
+                                  ),
+                                  const Spacer(),
+                                  // 任务添加时间
+                                  Text(
+                                    addTime ?? '',
+                                    style: TextStyle(
+                                      fontSize: 12,
+                                      color: CupertinoDynamicColor.resolve(
+                                          CupertinoColors.secondaryLabel,
+                                          context),
+                                    ),
+                                  ),
+                                ],
                               ),
                               const Spacer(),
-                              // 进度条行
+                              // 进度条
                               if (!_complete)
                                 ClipRRect(
                                   borderRadius: BorderRadius.circular(4),
                                   child: LinearProgressIndicator(
-                                    value: completeCount / filecount,
+                                    value: (galleryTask.completCount ?? 0) /
+                                        galleryTask.fileCount,
                                     backgroundColor:
                                         CupertinoDynamicColor.resolve(
                                             CupertinoColors.secondarySystemFill,
@@ -127,29 +147,35 @@ class DownloadGalleryItem extends GetView<DownloadViewController> {
                                           CupertinoColors.activeBlue, context),
                                     ),
                                   ),
-                                ),
-                              // 速度和进度行
+                                )
+                              else
+                                _buildRating(galleryTask.rating),
+                              // 下载速度 下载进度
                               Row(
                                 children: [
-                                  Text(
-                                    speed != null ? '$speed/s' : '',
-                                    style: TextStyle(
-                                        fontSize: 13,
-                                        color: CupertinoDynamicColor.resolve(
-                                            CupertinoColors.secondaryLabel,
-                                            context)),
-                                  ),
+                                  if (!_complete)
+                                    Text(
+                                      speed != null ? '$speed/s' : '',
+                                      style: TextStyle(
+                                          fontSize: 13,
+                                          color: CupertinoDynamicColor.resolve(
+                                              CupertinoColors.secondaryLabel,
+                                              context)),
+                                    )
+                                  else
+                                    _buildCategory(galleryTask.category),
                                   const Spacer(),
                                   Text(
                                     _complete
-                                        ? '$filecount'
-                                        : '$completeCount/$filecount',
+                                        ? '${galleryTask.fileCount}'
+                                        : '${galleryTask.completCount ?? 0}/${galleryTask.fileCount}',
                                     style: TextStyle(
                                         fontSize: 13,
                                         color: CupertinoDynamicColor.resolve(
                                             CupertinoColors.secondaryLabel,
                                             context)),
                                   ),
+                                  // 控制按钮
                                   _getIcon(),
                                 ],
                               ),
@@ -168,8 +194,61 @@ class DownloadGalleryItem extends GetView<DownloadViewController> {
     );
   }
 
+  Widget _buildRating(double? rating) {
+    if (rating == null) {
+      return const SizedBox.shrink();
+    }
+
+    return Row(
+      children: <Widget>[
+        Container(
+          padding: const EdgeInsets.fromLTRB(0, 0, 4, 0),
+          child: StaticRatingBar(
+            size: 16.0,
+            rate: rating,
+            radiusRatio: 1.5,
+            colorLight: ThemeColors.colorRatingMap['ir'],
+            colorDark: CupertinoDynamicColor.resolve(
+                CupertinoColors.systemGrey3, Get.context!),
+          ),
+        ),
+        Text(
+          rating.toString(),
+          style: TextStyle(
+            fontSize: 11,
+            color: CupertinoDynamicColor.resolve(
+                CupertinoColors.systemGrey, Get.context!),
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildCategory(String? category) {
+    final Color _colorCategory = CupertinoDynamicColor.resolve(
+        ThemeColors.catColor[category ?? 'default'] ??
+            CupertinoColors.systemBackground,
+        Get.context!);
+
+    return ClipRRect(
+      borderRadius: BorderRadius.circular(4),
+      child: Container(
+        padding: const EdgeInsets.fromLTRB(6, 3, 6, 3),
+        color: _colorCategory,
+        child: Text(
+          category ?? '',
+          style: const TextStyle(
+            fontSize: 14,
+            height: 1,
+            color: CupertinoColors.white,
+          ),
+        ),
+      ),
+    );
+  }
+
   Widget _getIcon() {
-    final GalleryTask? _taskInfo = controller.galleryTaskMap[gid];
+    final GalleryTask? _taskInfo = controller.galleryTaskMap[galleryTask.gid];
     const minSize = 30.0;
     const iconSize = 18.0;
     const buttonPadding = EdgeInsets.only(left: 8.0);
@@ -229,7 +308,7 @@ class DownloadGalleryItem extends GetView<DownloadViewController> {
           size: iconSize,
         ),
         onPressed: () {
-          controller.retryArchiverDownload(gid);
+          controller.retryArchiverDownload(galleryTask.gid);
         },
       ),
       // 取消状态 显示重试按钮。按下重试任务
@@ -241,7 +320,7 @@ class DownloadGalleryItem extends GetView<DownloadViewController> {
           size: iconSize,
         ),
         onPressed: () {
-          controller.retryArchiverDownload(gid);
+          controller.retryArchiverDownload(galleryTask.gid);
         },
       ).paddingSymmetric(),
       TaskStatus.enqueued: Container(
@@ -260,7 +339,8 @@ class DownloadGalleryItem extends GetView<DownloadViewController> {
       ),
     };
 
-    return statusMap[status] ?? const SizedBox(width: 40);
+    return statusMap[TaskStatus(galleryTask.status ?? 0)] ??
+        const SizedBox(width: 40);
   }
 }
 
@@ -299,11 +379,6 @@ class _CoverImage extends StatelessWidget {
               fit: BoxFit.fitWidth,
             );
           } else if (url != null) {
-            // return ExtendedImage.network(
-            //   url!,
-            //   fit: BoxFit.fitWidth,
-            // );
-
             return EhCachedNetworkImage(
               imageUrl: url!,
             );

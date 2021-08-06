@@ -69,7 +69,7 @@ class _$EhDatabase extends EhDatabase {
   Future<sqflite.Database> open(String path, List<Migration> migrations,
       [Callback? callback]) async {
     final databaseOptions = sqflite.OpenDatabaseOptions(
-      version: 5,
+      version: 6,
       onConfigure: (database) async {
         await database.execute('PRAGMA foreign_keys = ON');
         await callback?.onConfigure?.call(database);
@@ -85,7 +85,7 @@ class _$EhDatabase extends EhDatabase {
       },
       onCreate: (database, version) async {
         await database.execute(
-            'CREATE TABLE IF NOT EXISTS `GalleryTask` (`gid` INTEGER NOT NULL, `token` TEXT NOT NULL, `url` TEXT, `title` TEXT NOT NULL, `dirPath` TEXT, `fileCount` INTEGER NOT NULL, `completCount` INTEGER, `status` INTEGER, `coverImage` TEXT, `addTime` INTEGER, `coverUrl` TEXT, PRIMARY KEY (`gid`))');
+            'CREATE TABLE IF NOT EXISTS `GalleryTask` (`gid` INTEGER NOT NULL, `token` TEXT NOT NULL, `url` TEXT, `title` TEXT NOT NULL, `dirPath` TEXT, `fileCount` INTEGER NOT NULL, `completCount` INTEGER, `status` INTEGER, `coverImage` TEXT, `addTime` INTEGER, `coverUrl` TEXT, `rating` REAL, `category` TEXT, `uploader` TEXT, PRIMARY KEY (`gid`))');
         await database.execute(
             'CREATE TABLE IF NOT EXISTS `GalleryImageTask` (`gid` INTEGER NOT NULL, `ser` INTEGER NOT NULL, `token` TEXT NOT NULL, `href` TEXT, `sourceId` TEXT, `imageUrl` TEXT, `filePath` TEXT, `status` INTEGER, PRIMARY KEY (`gid`, `ser`))');
         await database.execute(
@@ -132,7 +132,10 @@ class _$GalleryTaskDao extends GalleryTaskDao {
                   'status': item.status,
                   'coverImage': item.coverImage,
                   'addTime': item.addTime,
-                  'coverUrl': item.coverUrl
+                  'coverUrl': item.coverUrl,
+                  'rating': item.rating,
+                  'category': item.category,
+                  'uploader': item.uploader
                 },
             changeListener),
         _galleryTaskUpdateAdapter = UpdateAdapter(
@@ -150,7 +153,10 @@ class _$GalleryTaskDao extends GalleryTaskDao {
                   'status': item.status,
                   'coverImage': item.coverImage,
                   'addTime': item.addTime,
-                  'coverUrl': item.coverUrl
+                  'coverUrl': item.coverUrl,
+                  'rating': item.rating,
+                  'category': item.category,
+                  'uploader': item.uploader
                 },
             changeListener);
 
@@ -178,7 +184,10 @@ class _$GalleryTaskDao extends GalleryTaskDao {
             status: row['status'] as int?,
             coverImage: row['coverImage'] as String?,
             addTime: row['addTime'] as int?,
-            coverUrl: row['coverUrl'] as String?));
+            coverUrl: row['coverUrl'] as String?,
+            rating: row['rating'] as double?,
+            category: row['category'] as String?,
+            uploader: row['uploader'] as String?));
   }
 
   @override
@@ -195,7 +204,10 @@ class _$GalleryTaskDao extends GalleryTaskDao {
             status: row['status'] as int?,
             coverImage: row['coverImage'] as String?,
             addTime: row['addTime'] as int?,
-            coverUrl: row['coverUrl'] as String?),
+            coverUrl: row['coverUrl'] as String?,
+            rating: row['rating'] as double?,
+            category: row['category'] as String?,
+            uploader: row['uploader'] as String?),
         queryableName: 'GalleryTask',
         isView: false);
   }
@@ -214,7 +226,10 @@ class _$GalleryTaskDao extends GalleryTaskDao {
             status: row['status'] as int?,
             coverImage: row['coverImage'] as String?,
             addTime: row['addTime'] as int?,
-            coverUrl: row['coverUrl'] as String?),
+            coverUrl: row['coverUrl'] as String?,
+            rating: row['rating'] as double?,
+            category: row['category'] as String?,
+            uploader: row['uploader'] as String?),
         arguments: [gid]);
   }
 
