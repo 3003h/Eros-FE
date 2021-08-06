@@ -39,7 +39,9 @@ class CacheController extends GetxController with StateMixin<String> {
 
   Future<void> clearDioCache({required String path}) async {
     DioCacheManager(CacheConfig(databasePath: Global.appSupportPath))
-        .deleteByPrimaryKey(path);
+        .deleteByPrimaryKey(path, requestMethod: 'GET');
+    DioCacheManager(CacheConfig(databasePath: Global.appSupportPath))
+        .deleteByPrimaryKey(path, requestMethod: 'POST');
   }
 
   Future<String> getTotCacheSize() async {
