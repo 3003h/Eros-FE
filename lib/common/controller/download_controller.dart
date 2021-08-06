@@ -368,9 +368,9 @@ class DownloadController extends GetxController {
   Future<GalleryTask?> galleryTaskPaused(int gid, {bool silent = false}) async {
     // logger.d('galleryTaskPaused $gid');
     cancelDownloadStateChkTimer(gid: gid);
-    logger.d('${dState.cancelTokenMap['$gid']}');
-    if (!((dState.cancelTokenMap['$gid']?.isCancelled) ?? true)) {
-      dState.cancelTokenMap['$gid']?.cancel();
+    logger.v('${dState.cancelTokenMap[gid]?.isCancelled}');
+    if (!((dState.cancelTokenMap[gid]?.isCancelled) ?? true)) {
+      dState.cancelTokenMap[gid]?.cancel();
     }
     if (silent) {
       return null;
@@ -435,8 +435,8 @@ class DownloadController extends GetxController {
       Directory(dirpath).delete(recursive: true);
     }
 
-    if (!((dState.cancelTokenMap['${_task.gid}']?.isCancelled) ?? true)) {
-      dState.cancelTokenMap['${_task.gid}']?.cancel();
+    if (!((dState.cancelTokenMap[_task.gid]?.isCancelled) ?? true)) {
+      dState.cancelTokenMap[_task.gid]?.cancel();
     }
 
     try {
@@ -628,6 +628,7 @@ class DownloadController extends GetxController {
               },
             );
           } on DioError catch (e) {
+            // 忽略 [DioErrorType.cancel]
             if (!CancelToken.isCancel(e)) {
               rethrow;
             }

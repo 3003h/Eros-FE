@@ -93,19 +93,21 @@ class TabPages {
       };
 }
 
+// 默认显示在tabbar的view
 const Map<String, bool> kDefTabMap = <String, bool>{
   EHRoutes.popular: true,
-  EHRoutes.watched: true,
+  EHRoutes.watched: false,
   EHRoutes.gallery: true,
   EHRoutes.favorite: true,
-  EHRoutes.download: false,
+  EHRoutes.download: true,
   EHRoutes.history: false,
 };
 
+// 默认显示顺序 ?
 const List<String> kTabNameList = <String>[
+  EHRoutes.gallery,
   EHRoutes.popular,
   EHRoutes.watched,
-  EHRoutes.gallery,
   EHRoutes.favorite,
   EHRoutes.download,
   EHRoutes.history,
@@ -139,14 +141,15 @@ class TabHomeController extends GetxController {
         _list.add(key);
       }
     }
-    // end
+    // setting 必须显示
     _list.add(EHRoutes.setting);
     return _list;
   }
 
   // 控制tab项顺序
-  RxList<String> tabNameList =
-      kDefTabMap.entries.map((e) => e.key).toList().obs;
+  RxList<String> tabNameList = kTabNameList.obs;
+  // RxList<String> tabNameList =
+  //     kDefTabMap.entries.map((e) => e.key).toList().obs;
 
   // 通过控制该变量控制tab项的开关
   RxMap<String, bool> tabMap = kDefTabMap.obs;
@@ -172,15 +175,12 @@ class TabHomeController extends GetxController {
         // 新增tab页的处理
         logger.d('add tab $_newTabs');
 
-        _newTabs.forEach((String element) {
-          _tabConfig.tabItemList.add(TabItem(name: element, enable: false));
-        });
+        for (final viewName in _newTabs) {
+          _tabConfig.tabItemList.add(TabItem(name: viewName, enable: false));
+        }
       }
 
       tabMap(_tabConfig.tabMap);
-      // if (!Global.inDebugMode) {
-      //   tabMap.remove(EHRoutes.download);
-      // }
     }
 
     if (_tabConfig.tabNameList.isNotEmpty) {
@@ -202,7 +202,7 @@ class TabHomeController extends GetxController {
       _tabConfig.setItemList(tabMap, nameList);
       gStore.tabConfig = _tabConfig;
       logger.d(
-          '${_tabConfig.tabItemList.map((e) => '${e.name}:${e.enable}').toList().join('\n')}');
+          '${_tabConfig.tabItemList.map((e) => '${e.name}:${e.enable}').toList().join('\n')} ');
     });
   }
 
@@ -260,7 +260,7 @@ class TabHomeController extends GetxController {
     required bool awaitComplete,
   }) async {
     final Duration _duration = duration;
-    if (!tapAwait || tapAwait == null) {
+    if (!tapAwait) {
       tapAwait = true;
 
       if (awaitComplete) {
@@ -275,7 +275,7 @@ class TabHomeController extends GetxController {
         await Future<void>.delayed(_duration);
         tapAwait = false;
       }
-    } else if (onDoubleTap != null) {
+    } else {
 //      loggerNoStack.v('等待时间内第二次点击 执行双击事件');
       tapAwait = false;
       onDoubleTap();

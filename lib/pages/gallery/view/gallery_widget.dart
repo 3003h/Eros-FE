@@ -800,13 +800,14 @@ class TagButton extends StatelessWidget {
 
 class TextBtn extends StatelessWidget {
   const TextBtn(this.iconData,
-      {Key? key, this.iconSize, this.title, this.onTap})
+      {Key? key, this.iconSize, this.title, this.onTap, this.onLongPress})
       : super(key: key);
   final IconData iconData;
   final double? iconSize;
   final String? title;
 
   final VoidCallback? onTap;
+  final VoidCallback? onLongPress;
 
   @override
   Widget build(BuildContext context) {
@@ -834,7 +835,7 @@ class TextBtn extends StatelessWidget {
             ],
           ),
         ),
-        onTap: onTap,
+        onLongPress: onLongPress,
       ),
     );
   }
