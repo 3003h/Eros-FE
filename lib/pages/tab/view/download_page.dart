@@ -122,41 +122,43 @@ class DownloadGalleryView extends GetView<DownloadViewController> {
   final DownloadController downloadController = Get.find();
   @override
   Widget build(BuildContext context) {
-    return ListView.separated(
-      itemBuilder: (_, int _taskIndex) {
-        final gid = controller.galleryTasks[_taskIndex].gid;
+    return GetBuilder<DownloadViewController>(
+      id: 'DownloadGalleryView',
+      builder: (logic) {
+        return ListView.separated(
+          itemBuilder: (_, int _taskIndex) {
+            final gid = controller.galleryTasks[_taskIndex].gid;
 
-        return GetBuilder<DownloadViewController>(
-          id: 'DownloadGalleryItem_$gid',
-          builder: (logic) {
-            logger.v('rebuild DownloadGalleryItem_$gid');
+            return GetBuilder<DownloadViewController>(
+              id: 'DownloadGalleryItem_$gid',
+              builder: (logic) {
+                logger.v('rebuild DownloadGalleryItem_$gid');
 
-            final GalleryTask _taskInfo = logic.galleryTasks[_taskIndex];
-            final DateTime date =
-                DateTime.fromMillisecondsSinceEpoch(_taskInfo.addTime ?? 0);
-            final String? _speed = logic.downloadSpeeds[_taskInfo.gid];
-            if (_speed != null) logger.v('$_speed');
+                final GalleryTask _taskInfo = logic.galleryTasks[_taskIndex];
+                final String? _speed = logic.downloadSpeeds[_taskInfo.gid];
 
-            return GestureDetector(
-              onLongPress: () => controller.onLongPress(_taskIndex),
-              behavior: HitTestBehavior.opaque,
-              child: DownloadGalleryItem(
-                galleryTask: _taskInfo,
-                speed: _speed,
-              ),
+                return GestureDetector(
+                  onLongPress: () => controller.onLongPress(_taskIndex),
+                  behavior: HitTestBehavior.opaque,
+                  child: DownloadGalleryItem(
+                    galleryTask: _taskInfo,
+                    speed: _speed,
+                  ),
+                );
+              },
             );
           },
+          separatorBuilder: (_, __) {
+            return Divider(
+              indent: 20,
+              height: 0.6,
+              color: CupertinoDynamicColor.resolve(
+                  CupertinoColors.systemGrey4, context),
+            );
+          },
+          itemCount: controller.galleryTasks.length,
         );
       },
-      separatorBuilder: (_, __) {
-        return Divider(
-          indent: 20,
-          height: 0.6,
-          color: CupertinoDynamicColor.resolve(
-              CupertinoColors.systemGrey4, context),
-        );
-      },
-      itemCount: controller.galleryTasks.length,
     );
   }
 }

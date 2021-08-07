@@ -21,6 +21,7 @@ import 'package:fehviewer/models/index.dart';
 import 'package:fehviewer/pages/gallery/controller/archiver_controller.dart';
 import 'package:fehviewer/pages/gallery/controller/torrent_controller.dart';
 import 'package:fehviewer/pages/tab/controller/search_page_controller.dart';
+import 'package:fehviewer/store/floor/entity/tag_translat.dart';
 import 'package:fehviewer/utils/dio_util.dart';
 import 'package:fehviewer/utils/logger.dart';
 import 'package:fehviewer/utils/time.dart';
@@ -734,13 +735,38 @@ class Api {
       'vote': vote,
     };
     final String reqJsonStr = jsonEncode(reqMap);
-    logger.d('$reqJsonStr');
-    // await CustomHttpsProxy.instance.init();
     final rult = await getGalleryApi(reqJsonStr, refresh: true, cache: false);
     logger.d('$rult');
     final Map<String, dynamic> rultMap =
         jsonDecode(rult.toString()) as Map<String, dynamic>;
     return rultMap;
+  }
+
+  /// 给画廊添加tag
+  static Future<List<TagTranslat>> tagSuggest({
+    required String text,
+  }) async {
+    final Map reqMap = {
+      'method': 'tagsuggest',
+      'text': text,
+    };
+    final String reqJsonStr = jsonEncode(reqMap);
+    // logger.d('$reqJsonStr ');
+    final rult = await getGalleryApi(reqJsonStr, refresh: true, cache: false);
+    // logger.d('$rult');
+    final Map<String, dynamic> rultMap =
+        jsonDecode(rult.toString()) as Map<String, dynamic>;
+    final Map<String, dynamic> tagMap = rultMap['tags'] as Map<String, dynamic>;
+    final List<Map<String, dynamic>> rultList =
+        tagMap.values.map((e) => e as Map<String, dynamic>).toList();
+
+    List<TagTranslat> tagTranslateList = rultList
+        .map((e) =>
+            TagTranslat(namespace: e['ns'] as String, key: e['tn'] as String))
+        .toList();
+
+    // logger.d('$tagTranslateList');
+    return tagTranslateList;
   }
 
   /// 发布评论

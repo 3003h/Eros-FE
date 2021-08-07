@@ -129,6 +129,7 @@ class DownloadViewController extends GetxController {
   void removeGalleryTask(int index) {
     final GalleryTask _task = galleryTasks[index];
     _downloadController.removeDownloadGalleryTask(gid: _task.gid);
+    update(['DownloadGalleryView']);
   }
 
   void onLongPress(int index, {DownloadType type = DownloadType.gallery}) {
