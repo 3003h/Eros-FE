@@ -65,7 +65,6 @@ class DownloadGalleryItem extends GetView<DownloadViewController> {
       child: Container(
         padding: const EdgeInsets.only(top: 4, bottom: 4, left: 20, right: 16),
         height: 120,
-        // constraints: const BoxConstraints(minHeight: 120),
         child: Row(
           children: [
             // 封面
@@ -78,8 +77,15 @@ class DownloadGalleryItem extends GetView<DownloadViewController> {
                       url: galleryTask.coverUrl)
                   .paddingOnly(right: 8),
               onTap: () async {
-                NavigatorUtil.goGalleryPage(
-                    url: '${Api.getBaseUrl()}${galleryTask.url}');
+                logger.d('${galleryTask.url} ');
+                String? url = galleryTask.url;
+                if (url == null) {
+                  return;
+                }
+                if (!url.startsWith('http')) {
+                  url = '${Api.getBaseUrl()}$url';
+                }
+                NavigatorUtil.goGalleryPage(url: url);
               },
             ),
             // 右侧
