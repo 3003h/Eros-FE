@@ -206,8 +206,7 @@ class GalleryDetailParser {
             }
 
             // span带a href
-            if (node.localName == 'span' &&
-                node.children.isNotEmpty) {
+            if (node.localName == 'span' && node.children.isNotEmpty) {
               final Element? _nodeElm = node.children.first;
               final String _nodeHref = _nodeElm?.attributes['href'] ?? '';
               final GalleryCommentSpan _commentSpan = GalleryCommentSpan(
