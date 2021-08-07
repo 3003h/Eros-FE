@@ -5,6 +5,7 @@
   "tab_watched": "關注",
   "tab_gallery": "畫廊",
   "tab_favorite": "收藏",
+  "tab_toplist": "Toplists",
   "tab_history": "歷史",
   "tab_setting": "設置",
   "tab_download": "下載",
@@ -166,5 +167,9 @@
   "multi_download": "multi Download",
   "downloaded": "Downloaded",
   "downloading": "Downloading",
-  "paused": "Paused"
+  "paused": "Paused",
+  "tolist_alltime": "All-Time",
+  "tolist_past_year": "Past Year",
+  "tolist_past_month": "Past Month",
+  "tolist_yesterday": "Yesterday"
 }

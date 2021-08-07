@@ -5,6 +5,7 @@
   "tab_watched": "Watched",
   "tab_gallery": "Gallery",
   "tab_favorite": "Favorites",
+  "tab_toplist": "Toplists",
   "tab_history": "History",
   "tab_setting": "Settings",
   "tab_download": "Download",
@@ -166,5 +167,9 @@
   "multi_download": "multi Download",
   "downloaded": "Downloaded",
   "downloading": "Downloading",
-  "paused": "Paused"
+  "paused": "Paused",
+  "tolist_alltime": "All-Time",
+  "tolist_past_year": "Past Year",
+  "tolist_past_month": "Past Month",
+  "tolist_yesterday": "Yesterday"
 }

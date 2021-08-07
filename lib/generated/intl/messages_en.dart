@@ -239,6 +239,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "tab_setting": MessageLookupByLibrary.simpleMessage("Settings"),
         "tab_sort":
             MessageLookupByLibrary.simpleMessage("Long press and drag to sort"),
+        "tab_toplist": MessageLookupByLibrary.simpleMessage("Toplists"),
         "tab_watched": MessageLookupByLibrary.simpleMessage("Watched"),
         "tabbar_setting":
             MessageLookupByLibrary.simpleMessage("Tabbar setting"),
@@ -248,6 +249,10 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("Withdraw Vote"),
         "tags": MessageLookupByLibrary.simpleMessage("Tags"),
         "theme": MessageLookupByLibrary.simpleMessage("Theme"),
+        "tolist_alltime": MessageLookupByLibrary.simpleMessage("All-Time"),
+        "tolist_past_month": MessageLookupByLibrary.simpleMessage("Past Month"),
+        "tolist_past_year": MessageLookupByLibrary.simpleMessage("Past Year"),
+        "tolist_yesterday": MessageLookupByLibrary.simpleMessage("Yesterday"),
         "top_to_bottom": MessageLookupByLibrary.simpleMessage("Top to bottom"),
         "unlimited": MessageLookupByLibrary.simpleMessage("Unlimited"),
         "uploader": MessageLookupByLibrary.simpleMessage("Uploader"),

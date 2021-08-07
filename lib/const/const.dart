@@ -172,6 +172,7 @@ const EhConfig kDefEhConfig = EhConfig(
   orientation: '',
   vibrate: true,
   tagIntroImgLv: '',
+  toplist: '15',
 );
 
 const Profile kDefProfile = Profile(

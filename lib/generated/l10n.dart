@@ -110,6 +110,16 @@ class L10n {
     );
   }
 
+  /// `Toplists`
+  String get tab_toplist {
+    return Intl.message(
+      'Toplists',
+      name: 'tab_toplist',
+      desc: '',
+      args: [],
+    );
+  }
+
   /// `History`
   String get tab_history {
     return Intl.message(
@@ -1725,6 +1735,46 @@ class L10n {
     return Intl.message(
       'Paused',
       name: 'paused',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `All-Time`
+  String get tolist_alltime {
+    return Intl.message(
+      'All-Time',
+      name: 'tolist_alltime',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Past Year`
+  String get tolist_past_year {
+    return Intl.message(
+      'Past Year',
+      name: 'tolist_past_year',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Past Month`
+  String get tolist_past_month {
+    return Intl.message(
+      'Past Month',
+      name: 'tolist_past_month',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Yesterday`
+  String get tolist_yesterday {
+    return Intl.message(
+      'Yesterday',
+      name: 'tolist_yesterday',
       desc: '',
       args: [],
     );

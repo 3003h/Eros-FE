@@ -1,3 +1,4 @@
+import 'package:fehviewer/pages/tab/controller/toplist_controller.dart';
 import 'package:get/get.dart';
 
 import 'common/controller/advance_search_controller.dart';
@@ -63,6 +64,7 @@ void getinit() {
   Get.lazyPut(() => HistoryViewController(), fenix: true);
   Get.lazyPut(() => DownloadViewController(), fenix: true);
   Get.lazyPut(() => FavoriteViewController(), fenix: true);
+  Get.lazyPut(() => TopListViewController(), fenix: true);
 
   Get.lazyPut(() => QuickSearchController(), fenix: true);
   Get.lazyPut(() => AdvanceSearchController(), fenix: true);
