@@ -5,6 +5,7 @@ import 'package:fehviewer/component/exception/error.dart';
 import 'package:fehviewer/generated/l10n.dart';
 import 'package:fehviewer/models/index.dart';
 import 'package:fehviewer/pages/tab/controller/search_page_controller.dart';
+import 'package:fehviewer/pages/tab/controller/toplist_controller.dart';
 import 'package:fehviewer/utils/logger.dart';
 import 'package:fehviewer/utils/toast.dart';
 import 'package:flutter/cupertino.dart';
@@ -21,6 +22,7 @@ typedef FetchCallBack = Future<Tuple2<List<GalleryItem>, int>> Function({
   int cats,
   String fromGid,
   String favcat,
+  String toplist,
   SearchType searchType,
   CancelToken cancelToken,
 });
@@ -56,9 +58,7 @@ class TabViewController extends GetxController
   late FetchCallBack fetchNormal;
 
   String? _curFavcat;
-
   String get curFavcat {
-    // logger.d(' get curFavcat ${_ehConfigService.lastShowFavcat}');
     return _curFavcat ?? _ehConfigService.lastShowFavcat ?? 'a';
   }
 
@@ -66,6 +66,8 @@ class TabViewController extends GetxController
     logger.d('set curFavcat $val');
     _curFavcat = val;
   }
+
+  String get currToplist => topListVal[_ehConfigService.toplist] ?? '15';
 
   @override
   void onInit() {
@@ -106,6 +108,7 @@ class TabViewController extends GetxController
     try {
       final Future<Tuple2<List<GalleryItem>, int>> tuple = fetchNormal(
         cats: cats ?? _catNum,
+        toplist: currToplist,
         refresh: refresh,
         cancelToken: cancelToken,
       );
@@ -122,8 +125,6 @@ class TabViewController extends GetxController
     final Tuple2<List<GalleryItem>, int> tuple = await fetchData(
       refresh: true,
     );
-
-    // Api.getMoreGalleryInfo(tuple.item1, refresh: true);
 
     maxPage = tuple.item2;
     change(tuple.item1, status: RxStatus.success());
@@ -170,6 +171,7 @@ class TabViewController extends GetxController
         refresh: true,
         cancelToken: cancelToken,
         favcat: curFavcat,
+        toplist: currToplist,
       );
 
       final List<GalleryItem> galleryItemBeans = tuple.item1;
@@ -204,6 +206,7 @@ class TabViewController extends GetxController
       refresh: true,
       cancelToken: cancelToken,
       favcat: curFavcat,
+      toplist: currToplist,
     ).then((tuple) {
       curPage.value = page;
       change(tuple.item1, status: RxStatus.success());

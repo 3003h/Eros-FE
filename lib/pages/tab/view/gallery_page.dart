@@ -206,14 +206,6 @@ class GalleryListTab extends GetView<GalleryViewController> {
         CupertinoSliverRefreshControl(
           onRefresh: controller.onRefresh,
         ),
-        // SliverPadding(
-        //   padding: EdgeInsets.only(
-        //       top: context.mediaQueryPadding.top +
-        //           kMinInteractiveDimensionCupertino),
-        //   sliver: CupertinoSliverRefreshControl(
-        //     onRefresh: controller.onRefresh,
-        //   ),
-        // ),
         SliverSafeArea(
           top: false,
           bottom: false,

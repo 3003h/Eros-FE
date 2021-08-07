@@ -5,6 +5,7 @@
   "tab_watched": "Watched",
   "tab_gallery": "갤러리",
   "tab_favorite": "즐겨찾기",
+  "tab_toplist": "Toplists",
   "tab_history": "방문 기록",
   "tab_setting": "설정",
   "tab_download": "다운로드",
@@ -166,5 +167,9 @@
   "multi_download": "다중 다운로드",
   "downloaded": "다운로드 완료",
   "downloading": "Downloading",
-  "paused": "Paused"
+  "paused": "Paused",
+  "tolist_alltime": "All-Time",
+  "tolist_past_year": "Past Year",
+  "tolist_past_month": "Past Month",
+  "tolist_yesterday": "Yesterday"
 }

@@ -6,6 +6,7 @@ import 'package:fehviewer/const/storages.dart';
 import 'package:fehviewer/generated/l10n.dart';
 import 'package:fehviewer/pages/gallery/view/gallery_page.dart';
 import 'package:fehviewer/pages/tab/controller/tabhome_controller.dart';
+import 'package:fehviewer/pages/tab/controller/toplist_controller.dart';
 import 'package:fehviewer/route/navigator_util.dart';
 import 'package:fehviewer/route/routes.dart';
 import 'package:fehviewer/utils/logger.dart';
@@ -51,13 +52,11 @@ class EhConfigService extends ProfileService {
   String _lastClipboardLink = '';
 
   String? get lastShowFavcat => ehConfig.lastShowFavcat;
-
   set lastShowFavcat(String? value) {
     ehConfig = ehConfig.copyWith(lastShowFavcat: value);
   }
 
   String? get lastShowFavTitle => ehConfig.lastShowFavTitle;
-
   set lastShowFavTitle(String? value) {
     ehConfig = ehConfig.copyWith(lastShowFavTitle: value);
     Global.saveProfile();
@@ -108,6 +107,11 @@ class EhConfigService extends ProfileService {
   final RxInt _turnPageInv = 3000.obs;
   int get turnPageInv => _turnPageInv.value;
   set turnPageInv(int val) => _turnPageInv.value = val;
+
+  // toplists
+  final _toplist = ToplistType.yesterday.obs;
+  ToplistType get toplist => _toplist.value;
+  set toplist(ToplistType val) => _toplist.value = val;
 
   int debugCount = 3;
 
@@ -295,9 +299,15 @@ class EhConfigService extends ProfileService {
     turnPageInv = ehConfig.turnPageInv ?? 3000;
     everProfile<int>(_turnPageInv,
         (int value) => ehConfig = ehConfig.copyWith(turnPageInv: value));
+
+    _toplist.value =
+        EnumToString.fromString(ToplistType.values, ehConfig.toplist) ??
+            ToplistType.yesterday;
+    everFromEunm(_toplist,
+        (String value) => ehConfig = ehConfig.copyWith(toplist: value));
   }
 
-  /// 收藏排序
+  /// 收藏排序 dialog
   Future<FavoriteOrder?> showFavOrder(BuildContext context) async {
     List<Widget> _getOrderList(BuildContext context) {
       final Map<FavoriteOrder, String> _orderMap = <FavoriteOrder, String>{
@@ -344,6 +354,61 @@ class EhConfigService extends ProfileService {
       logger.v('to ${EnumToString.convertToString(_result)}');
       if (favoriteOrder.value != _result) {
         return favoriteOrder.value = _result;
+      } else {
+        return null;
+      }
+    }
+    return _result;
+  }
+
+  /// 收藏排序 dialog
+  Future<ToplistType?> showToplistsSel(BuildContext context) async {
+    List<Widget> _getTopListsText(BuildContext context) {
+      final toplistTextMap = <ToplistType, String>{
+        ToplistType.yesterday: L10n.of(context).tolist_yesterday,
+        ToplistType.month: L10n.of(context).tolist_past_month,
+        ToplistType.year: L10n.of(context).tolist_past_year,
+        ToplistType.all: L10n.of(context).tolist_alltime,
+      };
+
+      return List<Widget>.from(toplistTextMap.keys.map((ToplistType element) {
+        return CupertinoActionSheetAction(
+            onPressed: () {
+              Get.back(result: element);
+            },
+            child: Row(
+              mainAxisSize: MainAxisSize.min,
+              children: <Widget>[
+                if (element == toplist)
+                  const Padding(
+                    padding: EdgeInsets.symmetric(horizontal: 8),
+                    child: Icon(CupertinoIcons.checkmark),
+                  ),
+                Text(toplistTextMap[element] ?? ''),
+              ],
+            ));
+      }).toList());
+    }
+
+    final ToplistType? _result = await showCupertinoModalPopup<ToplistType>(
+        context: context,
+        builder: (BuildContext context) {
+          return CupertinoActionSheet(
+            cancelButton: CupertinoActionSheetAction(
+                onPressed: () {
+                  Get.back();
+                },
+                child: Text(L10n.of(context).cancel)),
+            actions: <Widget>[
+              ..._getTopListsText(context),
+            ],
+          );
+        });
+
+    if (_result != null) {
+      logger.v('to ${EnumToString.convertToString(_result)}');
+      if (toplist != _result) {
+        return toplist = _result;
       } else {
         return null;
       }

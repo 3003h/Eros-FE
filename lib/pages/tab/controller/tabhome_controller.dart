@@ -3,6 +3,7 @@ import 'package:fehviewer/generated/l10n.dart';
 import 'package:fehviewer/models/base/eh_models.dart';
 import 'package:fehviewer/pages/tab/view/download_page.dart';
 import 'package:fehviewer/pages/tab/view/history_page.dart';
+import 'package:fehviewer/pages/tab/view/toplist_page.dart';
 import 'package:fehviewer/pages/tab/view/watched_page.dart';
 import 'package:fehviewer/route/routes.dart';
 import 'package:fehviewer/store/get_store.dart';
@@ -48,6 +49,10 @@ class TabPages {
           tabTag: EHRoutes.favorite,
           scrollController: _scrollController(EHRoutes.favorite),
         ),
+        EHRoutes.toplist: ToplistTab(
+          tabTag: EHRoutes.toplist,
+          scrollController: _scrollController(EHRoutes.toplist),
+        ),
         EHRoutes.history: HistoryTab(
           tabTag: EHRoutes.history,
           scrollController: _scrollController(EHRoutes.history),
@@ -67,6 +72,7 @@ class TabPages {
     EHRoutes.watched: FontAwesomeIcons.eye,
     EHRoutes.gallery: FontAwesomeIcons.list,
     EHRoutes.favorite: FontAwesomeIcons.solidHeart,
+    EHRoutes.toplist: FontAwesomeIcons.solidThumbsUp,
     EHRoutes.history: FontAwesomeIcons.history,
     EHRoutes.download: FontAwesomeIcons.download,
     EHRoutes.setting: FontAwesomeIcons.cog,
@@ -84,6 +90,8 @@ class TabPages {
             L10n.of(Get.find<TabHomeController>().tContext).tab_gallery,
         EHRoutes.favorite:
             L10n.of(Get.find<TabHomeController>().tContext).tab_favorite,
+        EHRoutes.toplist:
+            L10n.of(Get.find<TabHomeController>().tContext).tab_toplist,
         EHRoutes.history:
             L10n.of(Get.find<TabHomeController>().tContext).tab_history,
         EHRoutes.download:
@@ -99,6 +107,7 @@ const Map<String, bool> kDefTabMap = <String, bool>{
   EHRoutes.watched: false,
   EHRoutes.gallery: true,
   EHRoutes.favorite: true,
+  EHRoutes.toplist: false,
   EHRoutes.download: true,
   EHRoutes.history: false,
 };
@@ -109,6 +118,7 @@ const List<String> kTabNameList = <String>[
   EHRoutes.popular,
   EHRoutes.watched,
   EHRoutes.favorite,
+  EHRoutes.toplist,
   EHRoutes.download,
   EHRoutes.history,
 ];

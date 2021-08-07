@@ -27,5 +27,6 @@
   "debugMode?": false,
   "debugCount?": 3,
   "autoRead?": false,
-  "turnPageInv?": 3000
+  "turnPageInv?": 3000,
+  "toplist": "15"
 }

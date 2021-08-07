@@ -131,6 +131,7 @@ class Api {
     SearchType searchType = SearchType.normal,
     dio.CancelToken? cancelToken,
     String? favcat,
+    String? toplist,
   }) async {
     // logger.d('getPopular');
     const String url = '/popular';
@@ -175,6 +176,7 @@ class Api {
     SearchType searchType = SearchType.normal,
     dio.CancelToken? cancelToken,
     String? favcat,
+    String? toplist,
   }) async {
     // logger.d('getWatched');
 
@@ -232,6 +234,7 @@ class Api {
     SearchType searchType = SearchType.normal,
     dio.CancelToken? cancelToken,
     String? favcat,
+    String? toplist,
   }) async {
     final EhConfigService _ehConfigService = Get.find();
     final bool safeMode = _ehConfigService.isSafeMode.value;
@@ -262,7 +265,6 @@ class Api {
 
     // logger.v(url);
 
-    // await CustomHttpsProxy.instance.init();
     final String response = await getHttpManager()
             .get(url, options: _cacheOptions, params: params) ??
         '';
@@ -283,10 +285,65 @@ class Api {
     }
   }
 
+  /// 获取排行
+  /// inline_set 不能和页码同时使用 会默认定向到第一页
+  static Future<Tuple2<List<GalleryItem>, int>> getToplist({
+    String? favcat,
+    String? toplist,
+    int? page,
+    String? fromGid,
+    String? serach,
+    int? cats,
+    bool refresh = false,
+    SearchType searchType = SearchType.normal,
+    dio.CancelToken? cancelToken,
+    ValueChanged<List<Favcat>>? favCatList,
+  }) async {
+    logger.d('getToplist');
+    const String url = '/toplist.php';
+
+    final Map<String, dynamic> params = <String, dynamic>{
+      'p': page ?? 0,
+      if (toplist != null && toplist.isNotEmpty) 'tl': toplist,
+    };
+
+    final dio.Options _cacheOptions = getCacheOptions(forceRefresh: refresh);
+
+    String response = await getHttpManager()
+            .get(url, options: _cacheOptions, params: params) ??
+        '';
+
+    // 列表样式检查 不符合则重新设置
+    final bool isDml = GalleryListParser.isGalleryListDmL(response);
+    if (isDml) {
+      try {
+        return await GalleryListParser.parseGalleryList(
+          response,
+          refresh: refresh,
+        );
+      } catch (e, stack) {
+        logger.e('$e\n$stack');
+        rethrow;
+      }
+    } else {
+      logger.d('列表样式重设 inline_set=dm_l');
+      params['inline_set'] = 'dm_l';
+      params.removeWhere((key, value) => key == 'page');
+      final String response = await getHttpManager().get(url,
+              options: getCacheOptions(forceRefresh: true), params: params) ??
+          '';
+      return await GalleryListParser.parseGalleryList(
+        response,
+        refresh: true,
+      );
+    }
+  }
+
   /// 获取收藏
   /// inline_set 不能和页码同时使用 会默认定向到第一页
   static Future<Tuple2<List<GalleryItem>, int>> getFavorite({
     String? favcat,
+    String? toplist,
     int? page,
     String? fromGid,
     String? serach,

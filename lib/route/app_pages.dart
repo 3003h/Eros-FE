@@ -32,6 +32,7 @@ import 'package:fehviewer/pages/tab/view/home_page.dart';
 import 'package:fehviewer/pages/tab/view/popular_page.dart';
 import 'package:fehviewer/pages/tab/view/search_page_new.dart';
 import 'package:fehviewer/pages/tab/view/splash_page.dart';
+import 'package:fehviewer/pages/tab/view/toplist_page.dart';
 import 'package:fehviewer/pages/tab/view/unlock_page.dart';
 import 'package:fehviewer/pages/tab/view/watched_page.dart';
 import 'package:get/get.dart';
@@ -140,6 +141,10 @@ class AppPages {
     GetPage(
       name: EHRoutes.favorite,
       page: () => const FavoriteTab(tabTag: EHRoutes.favorite),
+    ),
+    GetPage(
+      name: EHRoutes.toplist,
+      page: () => const ToplistTab(tabTag: EHRoutes.toplist),
     ),
     GetPage(
       name: EHRoutes.popular,

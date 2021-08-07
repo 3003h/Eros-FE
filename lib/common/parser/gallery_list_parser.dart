@@ -59,30 +59,17 @@ class GalleryListParser {
   }) async {
     final dom.Document document = parse(response);
 
-    // logger.v('${document.body.children.length}');
     if ((document.body?.children.isEmpty ?? false) &&
         response.contains('banned')) {
       logger.e('banned');
-      // showToast(response);
       throw EhError(type: EhErrorType.banned, error: response);
     }
 
     final EhConfigService ehConfigService = Get.find();
-    // final FavoriteSelectorController favoriteSelectorController = Get.find();
 
-    const String _gallerySelector =
-        'body > div.ido > div:nth-child(2) > table > tbody > tr';
-    const String _favSelector =
-        'body > div.ido > form > table.itg.gltc > tbody > tr';
+    const String _listSelector = 'tbody > tr';
 
-    final String _listSelector = isFavorite ? _favSelector : _gallerySelector;
-
-    const String _galleryPageSelector =
-        'body > div.ido > div:nth-child(2) > table.ptt > tbody > tr > td';
-    const String _favPageSelector =
-        'body > div.ido > form > table.ptt > tbody > tr > td';
-    final String _pageSelector =
-        isFavorite ? _favPageSelector : _galleryPageSelector;
+    const String _pageSelector = 'table.ptt > tbody > tr > td';
 
     const String _favoritesSelector = 'body > div.ido > div.nosel > div';
 
@@ -112,10 +99,13 @@ class GalleryListParser {
     // 最大页数
     int _maxPage = 0;
     List<dom.Element> _pages = document.querySelectorAll(_pageSelector);
+    logger.v('_pages ${_pages.length}');
     if (_pages.length > 2) {
       final dom.Element _maxPageElem = _pages[_pages.length - 2];
       _maxPage = int.parse(_maxPageElem.text.trim());
     }
+
+    logger.v('_maxPage $_maxPage');
 
     // 画廊列表
     List<dom.Element> gallerys = document.querySelectorAll(_listSelector);
@@ -260,13 +250,16 @@ class GalleryListParser {
       String _uplader = '';
       String _filecount = '';
       if (!isFavorite) {
-        final dom.Element elmGl4c = tr.children[3];
-        // 上传者
-        _uplader = elmGl4c.children[0].text;
+        final dom.Element? elmGl4c = tr.querySelector('td.gl4c.glhide');
+        if (elmGl4c != null) {
+          // 上传者
+          _uplader = elmGl4c.children[0].text;
 
-        // 文件数量
-        _filecount =
-            RegExp(r'\d+').firstMatch(elmGl4c.children[1].text)!.group(0) ?? '';
+          // 文件数量
+          _filecount =
+              RegExp(r'\d+').firstMatch(elmGl4c.children[1].text)!.group(0) ??
+                  '';
+        }
       } else {
         final dom.Element elmGl2c = tr.children[1];
         _filecount = RegExp(r'\d+')
