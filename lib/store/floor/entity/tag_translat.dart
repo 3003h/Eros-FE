@@ -19,4 +19,9 @@ class TagTranslat {
   final String? name;
   final String? intro;
   final String? links;
+
+  @override
+  String toString() {
+    return 'TagTranslat{namespace: $namespace, key: $key, name: $name, intro: $intro, links: $links}';
+  }
 }

@@ -316,12 +316,14 @@ class _GallerySearchPageNewState extends State<GallerySearchPageNew> {
     ).paddingSymmetric(vertical: 8, horizontal: 12);
   }
 
+  /// tag匹配view
   Widget _getTagQryList() {
     return SliverList(
       delegate: SliverChildBuilderDelegate(
         (BuildContext context, int index) {
           final _text = controller.qryTags[index].fullTagText ?? '';
-          final _translate = controller.isTagTranslat
+          // 开启tag翻译的是情况才去查询翻译
+          final _tagRults = controller.isTagTranslat
               ? controller.qryTags[index].fullTagTranslate
               : null;
 
@@ -330,7 +332,7 @@ class _GallerySearchPageNewState extends State<GallerySearchPageNew> {
             onTap: () {
               controller.addQryTag(index);
             },
-            child: _tagItem(_text, _translate),
+            child: _tagItem(_text, _tagRults),
           );
         },
         childCount: controller.qryTags.length,

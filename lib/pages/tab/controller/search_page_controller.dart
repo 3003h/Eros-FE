@@ -5,6 +5,7 @@ import 'package:fehviewer/common/controller/tag_trans_controller.dart';
 import 'package:fehviewer/common/global.dart';
 import 'package:fehviewer/common/service/depth_service.dart';
 import 'package:fehviewer/common/service/ehconfig_service.dart';
+import 'package:fehviewer/common/service/locale_service.dart';
 import 'package:fehviewer/const/const.dart';
 import 'package:fehviewer/generated/l10n.dart';
 import 'package:fehviewer/models/base/eh_models.dart';
@@ -82,7 +83,7 @@ class SearchPageController extends TabViewController {
   set listType(ListType val) => _listType.value = val;
 
   final RxList<TagTranslat> qryTags = <TagTranslat>[].obs;
-  late String _currQry;
+  late String _currQryText;
 
   FocusNode searchFocusNode = FocusNode();
 
@@ -100,6 +101,7 @@ class SearchPageController extends TabViewController {
   final EhConfigService _ehConfigService = Get.find();
   final QuickSearchController quickSearchController = Get.find();
   final FavoriteViewController _favoriteViewController = Get.find();
+  final LocaleService localeService = Get.find();
 
   bool get isTagTranslat => _ehConfigService.isTagTranslat;
 
@@ -154,7 +156,7 @@ class SearchPageController extends TabViewController {
   Future<void> _delayedSearch() async {
     searchText = searchTextController.text.trim();
     update([GetIds.SEARCH_CLEAR_BTN]);
-    logger.d(' _delayedSearch');
+    logger.v(' _delayedSearch');
     const Duration _duration = Duration(milliseconds: 800);
     _lastInputCompleteAt = DateTime.now();
     await Future<void>.delayed(_duration);
@@ -165,7 +167,7 @@ class SearchPageController extends TabViewController {
         DateTime.now().difference(_lastInputCompleteAt) >= _duration) {
       // logger.d('_autoComplete $_autoComplete');
       if (searchTextController.text.trim().isEmpty) {
-        logger.d('ListType to ListType.init');
+        logger.v('ListType to ListType.init');
         listType = ListType.init;
         return;
       }
@@ -180,16 +182,30 @@ class SearchPageController extends TabViewController {
 
       listType = ListType.tag;
 
-      _currQry = searchTextController.text.trim().split(RegExp(r'[ ;"]')).last;
-      if (_currQry.isEmpty) {
+      _currQryText = searchTextController.text.split(RegExp(r'[ ;"]')).last;
+      if (_currQryText.isEmpty) {
         qryTags([]);
         return;
       }
 
+      /// 模糊搜索
       try {
-        Get.find<TagTransController>()
-            .getTagTranslatesLike(text: _currQry, limit: 200)
-            .then((List<TagTranslat> value) => qryTags(value));
+        // 中文从翻译库匹配
+        if (localeService.isLanguageCodeZh) {
+          logger.d('isLanguageCodeZh');
+          List<TagTranslat> qryTagsTemp = await Get.find<TagTransController>()
+              .getTagTranslatesLike(text: _currQryText, limit: 200);
+          if (qryTagsTemp.isNotEmpty) {
+            qryTags.value = qryTagsTemp;
+          }
+        } else {
+          // 其它通过eh的api
+          qryTags.clear();
+          logger.d('tagSuggest $_currQryText');
+          List<TagTranslat> tagTranslateList =
+              await Api.tagSuggest(text: _currQryText);
+          qryTags.value = tagTranslateList;
+        }
       } catch (_) {}
 
       logger.d('_autoComplete $_autoComplete');
@@ -400,6 +416,7 @@ class SearchPageController extends TabViewController {
     });
   }
 
+  /// tag搜索结果上屏
   void addQryTag(int index) {
     final TagTranslat _qry = qryTags[index];
     final String _add = _qry.key.contains(' ')
@@ -407,11 +424,11 @@ class SearchPageController extends TabViewController {
         : '${_qry.namespace.trim().shortName}:${_qry.key}\$';
     logger.d('_add $_add ');
 
-    final String _lastSearchText = this.lastSearchText;
+    final String _lastSearchText = lastSearchText;
     final String _newSearch =
-        _lastSearchText.replaceAll(RegExp('$_currQry\$'), _add);
+        _lastSearchText.replaceAll(RegExp('$_currQryText\$'), _add);
     logger.d(
-        '_lastSearchText $_lastSearchText \n_currQry $_currQry\n_newSearch $_newSearch ');
+        '_lastSearchText $_lastSearchText \n_currQry $_currQryText\n_newSearch $_newSearch ');
 
     _autoComplete = false;
     searchTextController.value = TextEditingValue(
@@ -421,6 +438,7 @@ class SearchPageController extends TabViewController {
     );
 
     FocusScope.of(Get.context!).requestFocus(searchFocusNode);
+    qryTags.clear();
   }
 
   void appendTextToSearch(String text) {
