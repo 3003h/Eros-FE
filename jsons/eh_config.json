@@ -28,5 +28,5 @@
   "debugCount?": 3,
   "autoRead?": false,
   "turnPageInv?": 3000,
-  "toplist": "15"
+  "toplist?": "15"
 }
