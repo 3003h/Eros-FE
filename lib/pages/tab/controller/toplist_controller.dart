@@ -1,11 +1,9 @@
 import 'package:fehviewer/common/service/ehconfig_service.dart';
+import 'package:fehviewer/generated/l10n.dart';
 import 'package:fehviewer/network/gallery_request.dart';
 import 'package:fehviewer/pages/tab/controller/tabview_controller.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:get/get.dart';
-import 'package:fehviewer/generated/l10n.dart';
-import 'package:tuple/tuple.dart';
-import 'package:fehviewer/models/base/eh_models.dart';
 
 enum ToplistType {
   yesterday,
