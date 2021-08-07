@@ -301,7 +301,7 @@ class EhConfigService extends ProfileService {
         (int value) => ehConfig = ehConfig.copyWith(turnPageInv: value));
 
     _toplist.value =
-        EnumToString.fromString(ToplistType.values, ehConfig.toplist) ??
+        EnumToString.fromString(ToplistType.values, ehConfig.toplist ?? '') ??
             ToplistType.yesterday;
     everFromEunm(_toplist,
         (String value) => ehConfig = ehConfig.copyWith(toplist: value));

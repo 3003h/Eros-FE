@@ -34,7 +34,7 @@ class EhConfig {
     this.debugCount,
     this.autoRead,
     this.turnPageInv,
-    required this.toplist,
+    this.toplist,
   });
 
   final bool jpnTitle;
@@ -66,7 +66,7 @@ class EhConfig {
   final int? debugCount;
   final bool? autoRead;
   final int? turnPageInv;
-  final String toplist;
+  final String? toplist;
 
   factory EhConfig.fromJson(Map<String,dynamic> json) => EhConfig(
     jpnTitle: json['jpnTitle'] as bool,
@@ -98,7 +98,7 @@ class EhConfig {
     debugCount: json['debugCount'] != null ? json['debugCount'] as int : null,
     autoRead: json['autoRead'] != null ? json['autoRead'] as bool : null,
     turnPageInv: json['turnPageInv'] != null ? json['turnPageInv'] as int : null,
-    toplist: json['toplist'] as String
+    toplist: json['toplist'] != null ? json['toplist'] as String : null
   );
   
   Map<String, dynamic> toJson() => {
