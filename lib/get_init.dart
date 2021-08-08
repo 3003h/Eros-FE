@@ -42,7 +42,7 @@ void getinit() {
   Get.put(DnsService(), permanent: true);
   Get.put(DepthService());
 
-  Get.lazyPut(() => LayoutServices());
+  Get.lazyPut(() => LayoutServices(), fenix: true);
 
   /// 一些全局设置或者控制
   Get.lazyPut(() => AutoLockController(), fenix: true);

@@ -4,6 +4,7 @@ import 'package:fehviewer/common/exts.dart';
 import 'package:fehviewer/common/global.dart';
 import 'package:fehviewer/common/service/depth_service.dart';
 import 'package:fehviewer/common/service/ehconfig_service.dart';
+import 'package:fehviewer/common/service/layout_service.dart';
 import 'package:fehviewer/const/const.dart';
 import 'package:fehviewer/const/theme_colors.dart';
 import 'package:fehviewer/generated/l10n.dart';
@@ -14,6 +15,8 @@ import 'package:fehviewer/pages/gallery/controller/gallery_page_controller.dart'
 import 'package:fehviewer/pages/gallery/view/comment_item.dart';
 import 'package:fehviewer/pages/gallery/view/preview_clipper.dart';
 import 'package:fehviewer/pages/gallery/view/taginfo_dialog.dart';
+import 'package:fehviewer/pages/image_view_ext/controller/view_ext_contorller.dart';
+import 'package:fehviewer/pages/image_view_ext/view/hero.dart';
 import 'package:fehviewer/route/navigator_util.dart';
 import 'package:fehviewer/route/routes.dart';
 // import 'package:fehviewer/utils/cust_lib/selectable_text.dart';
@@ -560,65 +563,30 @@ class PreviewContainer extends StatelessWidget {
             return const CupertinoActivityIndicator();
           },
         );
-        // return NetworkExtendedImage(
-        //   url: galleryImage.thumbUrl ?? '',
-        // );
       } else {
+        // 缩略小图 需要切割
         return LayoutBuilder(
-            builder: (BuildContext context, BoxConstraints constraints) {
-/*
-          double _subHeight;
-          double _subWidth;
-          final double _subHeightP = (galleryImage.thumbHeight ?? 0) *
-              constraints.maxWidth /
-              (galleryImage.thumbWidth ?? 0);
-          if (_subHeightP > kHeightPreview) {
-            _subHeight = kHeightPreview;
-            _subWidth = kHeightPreview *
-                (galleryImage.thumbWidth ?? 0) /
-                (galleryImage.thumbHeight ?? 0);
-          } else {
-            _subWidth = constraints.maxWidth;
-            _subHeight = _subHeightP;
-          }
-*/
-          final imageSize =
-              Size(galleryImage.thumbWidth!, galleryImage.thumbHeight!);
-          final size = Size(constraints.maxWidth, constraints.maxHeight);
-          final FittedSizes fittedSizes =
-              applyBoxFit(BoxFit.contain, imageSize, size);
+          builder: (BuildContext context, BoxConstraints constraints) {
+            final imageSize =
+                Size(galleryImage.thumbWidth!, galleryImage.thumbHeight!);
+            final size = Size(constraints.maxWidth, constraints.maxHeight);
+            final FittedSizes fittedSizes =
+                applyBoxFit(BoxFit.contain, imageSize, size);
 
-          return ExtendedImageRect(
-            url: galleryImage.thumbUrl!,
-            height: fittedSizes.destination.height,
-            width: fittedSizes.destination.width,
-            onLoadComplet: onLoadComplet,
-            sourceRect: Rect.fromLTWH(
-              galleryImage.offSet! + 1,
-              1.0,
-              galleryImage.thumbWidth! - 2,
-              galleryImage.thumbHeight! - 2,
-            ),
-          );
-          if (false)
-            return Container(
+            return ExtendedImageRect(
+              url: galleryImage.thumbUrl!,
               height: fittedSizes.destination.height,
               width: fittedSizes.destination.width,
-              // 缩略小图
-              child: Stack(
-                alignment: AlignmentDirectional.center,
-                fit: StackFit.expand,
-                children: <Widget>[
-                  PreviewImageClipper(
-                    imgUrl: galleryImage.thumbUrl!,
-                    offset: galleryImage.offSet!,
-                    height: galleryImage.thumbHeight!,
-                    width: galleryImage.thumbWidth!,
-                  ),
-                ],
+              onLoadComplet: onLoadComplet,
+              sourceRect: Rect.fromLTWH(
+                galleryImage.offSet! + 1,
+                1.0,
+                galleryImage.thumbWidth! - 2,
+                galleryImage.thumbHeight! - 2,
               ),
             );
-        });
+          },
+        );
       }
     }
 
@@ -634,7 +602,26 @@ class PreviewContainer extends StatelessWidget {
               child: Center(
                 child: ClipRRect(
                   borderRadius: BorderRadius.circular(4),
-                  child: Container(
+                  // child: Hero(
+                  //   tag: '${index + 1}',
+                  //   createRectTween: (Rect? begin, Rect? end) {
+                  //     final tween =
+                  //         MaterialRectCenterArcTween(begin: begin, end: end);
+                  //     logger.d('begin $begin\n end $end');
+                  //     return tween;
+                  //   },
+                  //   child: Container(
+                  //     child: _buildImage(),
+                  //   ),
+                  // ),
+                  child: Hero(
+                    tag: '${index + 1}',
+                    createRectTween: (Rect? begin, Rect? end) {
+                      final tween =
+                          MaterialRectCenterArcTween(begin: begin, end: end);
+                      // logger.d('begin $begin\n end $end');
+                      return tween;
+                    },
                     child: _buildImage(),
                   ),
                 ),

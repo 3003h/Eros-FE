@@ -264,6 +264,7 @@ class _DetailWidget extends StatelessWidget {
           child: const TopComment(showBtn: false),
         ),
         const SizedBox(height: 20),
+        // 缩略图
         PreviewGrid(
           images: controller.firstPageImage,
           gid: state.gid ?? '',
@@ -293,8 +294,6 @@ class _DetailFromItem extends StatelessWidget {
   final dynamic tabTag;
   final GalleryPageController controller;
 
-  // GalleryPageController get _controller => Get.find(tag: pageCtrlDepth);
-
   @override
   Widget build(BuildContext context) {
     final GalleryItem galleryItem = controller.galleryItem;
@@ -306,11 +305,6 @@ class _DetailFromItem extends StatelessWidget {
             initGalleryItem: galleryItem,
             tabTag: tabTag,
           ),
-          // Divider(
-          //   height: 0.5,
-          //   color: CupertinoDynamicColor.resolve(
-          //       CupertinoColors.systemGrey4, context),
-          // ),
           controller.obx(
             (GalleryItem? state) {
               return state != null
