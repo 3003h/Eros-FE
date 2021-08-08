@@ -132,97 +132,100 @@ class FavoriteTab extends GetView<FavoriteViewController> {
       ),
     );
 
-    final CupertinoNavigationBar navigationBar = CupertinoNavigationBar(
-      transitionBetweenRoutes: false,
-      padding: const EdgeInsetsDirectional.only(end: 4),
-      middle: Row(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          Obx(() {
-            return Text(
-              controller.title,
-            );
-          }),
-          Obx(() {
-            if (controller.isBackgroundRefresh)
-              return const CupertinoActivityIndicator(
-                radius: 10,
-              ).paddingSymmetric(horizontal: 8);
-            else
-              return const SizedBox();
-          }),
-        ],
-      ),
-      trailing: Row(
-        mainAxisSize: MainAxisSize.min,
-        mainAxisAlignment: MainAxisAlignment.end,
-        children: [
-          // 搜索按钮
-          CupertinoButton(
-            minSize: 40,
-            padding: const EdgeInsets.all(0),
-            child: const Icon(
-              LineIcons.search,
-              size: 26,
+    final Widget navigationBar = Obx(() {
+      return CupertinoNavigationBar(
+        transitionBetweenRoutes: false,
+        padding: const EdgeInsetsDirectional.only(end: 4),
+        leading: controller.leading,
+        middle: Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Obx(() {
+              return Text(
+                controller.title,
+              );
+            }),
+            Obx(() {
+              if (controller.isBackgroundRefresh)
+                return const CupertinoActivityIndicator(
+                  radius: 10,
+                ).paddingSymmetric(horizontal: 8);
+              else
+                return const SizedBox();
+            }),
+          ],
+        ),
+        trailing: Row(
+          mainAxisSize: MainAxisSize.min,
+          mainAxisAlignment: MainAxisAlignment.end,
+          children: [
+            // 搜索按钮
+            CupertinoButton(
+              minSize: 40,
+              padding: const EdgeInsets.all(0),
+              child: const Icon(
+                LineIcons.search,
+                size: 26,
+              ),
+              onPressed: () {
+                final bool fromTabItem =
+                    Get.find<TabHomeController>().tabMap[tabTag] ?? false;
+                NavigatorUtil.showSearch(
+                    searchType: SearchType.favorite, fromTabItem: fromTabItem);
+              },
             ),
-            onPressed: () {
-              final bool fromTabItem =
-                  Get.find<TabHomeController>().tabMap[tabTag] ?? false;
-              NavigatorUtil.showSearch(
-                  searchType: SearchType.favorite, fromTabItem: fromTabItem);
-            },
-          ),
-          CupertinoButton(
-            padding: const EdgeInsets.all(0.0),
-            minSize: 36,
-            child: Row(
-              mainAxisSize: MainAxisSize.min,
-              children: <Widget>[
-                const Icon(
-                  LineIcons.sortAmountDown,
-                  size: 26,
-                ),
-                Align(
-                  alignment: Alignment.centerLeft,
-                  child: Text(
-                    controller.orderText,
-                    style: const TextStyle(
-                      fontSize: 10,
-                      fontWeight: FontWeight.bold,
+            CupertinoButton(
+              padding: const EdgeInsets.all(0.0),
+              minSize: 36,
+              child: Row(
+                mainAxisSize: MainAxisSize.min,
+                children: <Widget>[
+                  const Icon(
+                    LineIcons.sortAmountDown,
+                    size: 26,
+                  ),
+                  Align(
+                    alignment: Alignment.centerLeft,
+                    child: Text(
+                      controller.orderText,
+                      style: const TextStyle(
+                        fontSize: 10,
+                        fontWeight: FontWeight.bold,
+                      ),
                     ),
-                  ),
-                )
-              ],
+                  )
+                ],
+              ),
+              onPressed: () => controller.setOrder(context),
             ),
-            onPressed: () => controller.setOrder(context),
-          ),
-          CupertinoButton(
-            padding: const EdgeInsets.all(0),
-            minSize: 36,
-            child: Container(
-              padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 0),
-              decoration: BoxDecoration(
-                  border: Border.all(
-                    color: CupertinoDynamicColor.resolve(
-                        CupertinoColors.activeBlue, context),
-                    width: 1.5,
-                  ),
-                  borderRadius: const BorderRadius.all(Radius.circular(8))),
-              child: Obx(() => Text(
-                    '${controller.curPage.value + 1}',
-                    style: TextStyle(
-                        color: CupertinoDynamicColor.resolve(
-                            CupertinoColors.activeBlue, context)),
-                  )),
+            CupertinoButton(
+              padding: const EdgeInsets.all(0),
+              minSize: 36,
+              child: Container(
+                padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 0),
+                decoration: BoxDecoration(
+                    border: Border.all(
+                      color: CupertinoDynamicColor.resolve(
+                          CupertinoColors.activeBlue, context),
+                      width: 1.5,
+                    ),
+                    borderRadius: const BorderRadius.all(Radius.circular(8))),
+                child: Obx(() => Text(
+                      '${controller.curPage.value + 1}',
+                      style: TextStyle(
+                          color: CupertinoDynamicColor.resolve(
+                              CupertinoColors.activeBlue, context)),
+                    )),
+              ),
+              onPressed: () {
+                controller.jumpToPage();
+              },
             ),
-            onPressed: () {
-              controller.jumpToPage();
-            },
-          ),
-          _buildFavcatButton(context),
-        ],
-      ),
-    );
+            _buildFavcatButton(context),
+          ],
+        ),
+      );
+    });
 
     return CupertinoPageScaffold(
       // navigationBar: navigationBar,

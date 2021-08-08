@@ -5,7 +5,7 @@
   "tab_watched": "关注",
   "tab_gallery": "画廊",
   "tab_favorite": "收藏",
-  "tab_toplist": "排行榜",
+  "tab_toplist": "排行",
   "tab_history": "历史",
   "tab_setting": "设置",
   "tab_download": "下载",
@@ -171,5 +171,5 @@
   "tolist_alltime": "总排行",
   "tolist_past_year": "年排行",
   "tolist_past_month": "月排行",
-  "tolist_yesterday": "昨日排行"
+  "tolist_yesterday": "日排行"
 }

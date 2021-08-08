@@ -1,5 +1,9 @@
+import 'dart:ui' show ImageFilter;
+
 import 'package:custom_pop_up_menu/custom_pop_up_menu.dart';
 import 'package:fehviewer/common/service/ehconfig_service.dart';
+import 'package:fehviewer/common/service/theme_service.dart';
+import 'package:fehviewer/const/theme_colors.dart';
 import 'package:fehviewer/generated/l10n.dart';
 import 'package:fehviewer/models/index.dart';
 import 'package:fehviewer/pages/filter/filter.dart';
@@ -45,10 +49,7 @@ class GalleryListTab extends GetView<GalleryViewController> {
             }),
           ],
         ),
-        leading: controller.enablePopupMenu &&
-                (!Get.find<EhConfigService>().isSafeMode.value)
-            ? _buildLeading(context)
-            : const SizedBox(),
+        leading: controller.leading,
         trailing: Row(
           mainAxisSize: MainAxisSize.min,
           mainAxisAlignment: MainAxisAlignment.end,
@@ -108,7 +109,7 @@ class GalleryListTab extends GetView<GalleryViewController> {
       );
     }
 
-    final ObstructingPreferredSizeWidget navigationBar = CupertinoNavigationBar(
+    final Widget navigationBar = CupertinoNavigationBar(
       transitionBetweenRoutes: false,
       padding: const EdgeInsetsDirectional.only(end: 4),
       middle: Row(
@@ -125,10 +126,7 @@ class GalleryListTab extends GetView<GalleryViewController> {
           }),
         ],
       ),
-      leading: controller.enablePopupMenu &&
-              (!Get.find<EhConfigService>().isSafeMode.value)
-          ? _buildLeading(context)
-          : const SizedBox(),
+      leading: controller.leading,
       trailing: Row(
         mainAxisSize: MainAxisSize.min,
         mainAxisAlignment: MainAxisAlignment.end,
@@ -219,48 +217,6 @@ class GalleryListTab extends GetView<GalleryViewController> {
       child: CupertinoScrollbar(
         child: SizeCacheWidget(child: customScrollView),
         controller: scrollController,
-      ),
-    );
-  }
-
-  Widget _buildLeading(BuildContext context) {
-    final Color _color =
-        CupertinoDynamicColor.resolve(CupertinoColors.systemGrey5, context)
-            .withOpacity(0.98);
-
-    // CustomPopupMenu 更新改用了inkwell 要包一层Scaffold 否则会报错。 并且更新偏移值
-    return Scaffold(
-      backgroundColor: Colors.transparent,
-      body: Container(
-        alignment: Alignment.centerLeft,
-        child: CustomPopupMenu(
-          child: Container(
-            padding: const EdgeInsets.only(left: 14, bottom: 2),
-            child: const Icon(
-              // LineIcons.horizontalEllipsis,
-              CupertinoIcons.ellipsis_circle,
-              size: 26,
-            ),
-          ),
-          arrowColor: _color,
-          showArrow: false,
-          menuBuilder: () {
-            // vibrateUtil.light();
-            return ClipRRect(
-              borderRadius: BorderRadius.circular(8),
-              child: Container(
-                color: _color,
-                child: IntrinsicWidth(
-                  child: controller.popupMenu,
-                ),
-              ),
-            );
-          },
-          pressType: PressType.singleClick,
-          verticalMargin: 8,
-          horizontalMargin: 8,
-          controller: controller.customPopupMenuController,
-        ),
       ),
     );
   }

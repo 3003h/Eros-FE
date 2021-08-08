@@ -30,7 +30,7 @@ class HomePage extends GetView<TabHomeController> {
           //   layoutServices.layoutMode = LayoutMode.small;
           //   return TabHomeSmall();
           // }
-          return TabHomeSmallPersistent();
+          return TabHomeSmall();
         },
       ),
     );

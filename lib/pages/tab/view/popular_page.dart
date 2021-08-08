@@ -44,8 +44,9 @@ class PopularListTab extends GetView<PopularViewController> {
       ),
     );
 
-    final CupertinoNavigationBar navigationBar = CupertinoNavigationBar(
+    final Widget navigationBar = CupertinoNavigationBar(
         transitionBetweenRoutes: false,
+        padding: const EdgeInsetsDirectional.only(end: 4),
         middle: Row(
           mainAxisSize: MainAxisSize.min,
           children: [
@@ -60,6 +61,7 @@ class PopularListTab extends GetView<PopularViewController> {
             }),
           ],
         ),
+        leading: controller.leading,
         trailing: CupertinoButton(
           minSize: 40,
           padding: const EdgeInsets.all(0),

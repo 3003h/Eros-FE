@@ -108,10 +108,10 @@ class WatchedListTab extends GetView<WatchedViewController> {
       ),
     );
 
-    final CupertinoNavigationBar navigationBar = CupertinoNavigationBar(
+    final Widget navigationBar = CupertinoNavigationBar(
       transitionBetweenRoutes: false,
       padding: const EdgeInsetsDirectional.only(end: 4),
-      // largeTitle: Text(controller.title),
+      leading: controller.leading,
       middle: Row(
         mainAxisSize: MainAxisSize.min,
         children: [

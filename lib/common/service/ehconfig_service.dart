@@ -14,6 +14,7 @@ import 'package:fehviewer/utils/storage.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
 import 'package:logger/logger.dart';
 
@@ -324,11 +325,15 @@ class EhConfigService extends ProfileService {
               mainAxisSize: MainAxisSize.min,
               children: <Widget>[
                 if (element == favoriteOrder.value)
-                  const Padding(
-                    padding: EdgeInsets.symmetric(horizontal: 8),
-                    child: Icon(CupertinoIcons.checkmark),
+                  const SizedBox(
+                    width: 40,
+                    child: Icon(FontAwesomeIcons.checkCircle),
                   ),
                 Text(_orderMap[element] ?? ''),
+                if (element == favoriteOrder.value)
+                  const SizedBox(
+                    width: 40,
+                  ),
               ],
             ));
       }).toList());
@@ -380,11 +385,15 @@ class EhConfigService extends ProfileService {
               mainAxisSize: MainAxisSize.min,
               children: <Widget>[
                 if (element == toplist)
-                  const Padding(
-                    padding: EdgeInsets.symmetric(horizontal: 8),
-                    child: Icon(CupertinoIcons.checkmark),
+                  const SizedBox(
+                    width: 40,
+                    child: Icon(FontAwesomeIcons.checkCircle),
                   ),
                 Text(toplistTextMap[element] ?? ''),
+                if (element == toplist)
+                  const SizedBox(
+                    width: 40,
+                  ),
               ],
             ));
       }).toList());
