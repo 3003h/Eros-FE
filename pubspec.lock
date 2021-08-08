@@ -1023,6 +1023,13 @@ packages:
       url: "https://pub.flutter-io.cn"
     source: hosted
     version: "3.6.1"
+  persistent_bottom_nav_bar:
+    dependency: "direct main"
+    description:
+      name: persistent_bottom_nav_bar
+      url: "https://pub.flutter-io.cn"
+    source: hosted
+    version: "4.0.2"
   petitparser:
     dependency: transitive
     description:

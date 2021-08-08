@@ -129,7 +129,7 @@ class CacheController extends GetxController with StateMixin<String> {
         await file.delete();
       }
     } catch (e) {
-      logger.e('$e');
+      // logger.e('$e');
     }
   }
 }

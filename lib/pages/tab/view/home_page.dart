@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 import 'home_page_small.dart';
+import 'home_page_small_persistent.dart';
 
 class HomePage extends GetView<TabHomeController> {
   @override
@@ -29,7 +30,7 @@ class HomePage extends GetView<TabHomeController> {
           //   layoutServices.layoutMode = LayoutMode.small;
           //   return TabHomeSmall();
           // }
-          return TabHomeSmall();
+          return TabHomeSmallPersistent();
         },
       ),
     );

@@ -13,6 +13,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/widgets.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
+import 'package:persistent_bottom_nav_bar/persistent-tab-view.dart';
 
 import '../view/favorite_page.dart';
 import '../view/gallery_page.dart';
@@ -135,6 +136,8 @@ class TabHomeController extends GetxController {
   bool get isSafeMode => _ehConfigService.isSafeMode.value;
 
   final CupertinoTabController tabController = CupertinoTabController();
+  final PersistentTabController persistentTabController =
+      PersistentTabController();
 
   // 需要显示的tab
   List<String> get _showTabs => isSafeMode
