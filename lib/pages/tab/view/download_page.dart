@@ -10,6 +10,10 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_downloader/flutter_downloader.dart';
 import 'package:get/get.dart';
+import 'package:line_icons/line_icons.dart';
+import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
+
+import 'donwload_labels_page.dart';
 
 const Color _kDefaultNavBarBorderColor = Color(0x4D000000);
 
@@ -52,6 +56,7 @@ class _DownloadTabState extends State<DownloadTab> {
 
     return CupertinoPageScaffold(
       navigationBar: CupertinoNavigationBar(
+        padding: const EdgeInsetsDirectional.only(end: 10),
         middle: Obx(
           () => CupertinoSlidingSegmentedControl<DownloadType>(
             children: <DownloadType, Widget>{
@@ -66,9 +71,6 @@ class _DownloadTabState extends State<DownloadTab> {
             },
             groupValue: controller.viewType,
             onValueChanged: (DownloadType? value) {
-              // if (value != null) {
-              //   controller.animateToPage(value);
-              // }
               final toIndex =
                   controller.pageList.indexOf(value ?? DownloadType.gallery);
               pageController.animateToPage(toIndex,
@@ -78,16 +80,36 @@ class _DownloadTabState extends State<DownloadTab> {
             },
           ),
         ),
+        trailing: Row(
+          mainAxisSize: MainAxisSize.min,
+          mainAxisAlignment: MainAxisAlignment.end,
+          children: [
+            CupertinoButton(
+              minSize: 40,
+              padding: const EdgeInsets.all(0),
+              child: const Icon(
+                LineIcons.layerGroup,
+                size: 26,
+              ),
+              onPressed: () {
+                CupertinoScaffold.showCupertinoModalBottomSheet(
+                  context: context,
+                  animationCurve: Curves.easeOutQuart,
+                  // previousRouteAnimationCurve: Curves.easeInOutBack,
+                  duration: Duration(milliseconds: 400),
+                  useRootNavigator: true,
+                  builder: (context) => const DownloadLabelsView(),
+                );
+              },
+            ),
+          ],
+        ),
       ),
       child: PageView(
         controller: pageController,
         children: viewList,
         onPageChanged: controller.handOnPageChange,
       ),
-      // child: Obx(() {
-      //   final _index = controller.pageList.indexOf(controller.viewType);
-      //   return viewList[_index];
-      // }),
     );
   }
 }

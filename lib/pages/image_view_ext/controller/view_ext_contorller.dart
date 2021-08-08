@@ -72,6 +72,9 @@ class ViewExtController extends GetxController {
 
   final PhotoViewController photoViewController = PhotoViewController();
 
+  final GlobalKey<ExtendedImageSlidePageState> slidePagekey =
+      GlobalKey<ExtendedImageSlidePageState>();
+
   @override
   void onInit() {
     super.onInit();

@@ -14,6 +14,7 @@ import 'package:photo_view/photo_view_gallery.dart';
 import 'package:scroll_to_index/scroll_to_index.dart';
 import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
 import 'package:zoom_widget/zoom_widget.dart';
+import 'package:fehviewer/common/service/layout_service.dart';
 
 import '../common.dart';
 import '../controller/view_ext_contorller.dart';
@@ -387,6 +388,7 @@ class ViewImageSlidePage extends GetView<ViewExtController> {
   @override
   Widget build(BuildContext context) {
     return ExtendedImageSlidePage(
+      key: ehLayout.slidePagekey,
       child: GetBuilder<ViewExtController>(
         id: idSlidePage,
         builder: (logic) {

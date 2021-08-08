@@ -1,6 +1,7 @@
 import 'package:dio/dio.dart';
 import 'package:extended_image/extended_image.dart';
 import 'package:fehviewer/common/global.dart';
+import 'package:fehviewer/common/service/layout_service.dart';
 import 'package:fehviewer/component/exception/error.dart';
 import 'package:fehviewer/const/const.dart';
 import 'package:fehviewer/models/base/eh_models.dart';
@@ -14,6 +15,7 @@ import 'package:get/get.dart';
 
 import '../common.dart';
 import '../controller/view_ext_contorller.dart';
+import 'hero.dart';
 import 'view_ext.dart';
 
 typedef DoubleClickAnimationListener = void Function();
@@ -178,6 +180,15 @@ class _ViewImageExtState extends State<ViewImageExt>
               }
 
               controller.onLoadCompleted(widget.imageSer);
+              return Hero(
+                tag: '${widget.imageSer}',
+                child: state.completedWidget,
+                createRectTween: (Rect? begin, Rect? end) {
+                  final tween =
+                      MaterialRectCenterArcTween(begin: begin, end: end);
+                  return tween;
+                },
+              );
             } else if (state.extendedImageLoadState == LoadState.loading) {
               final ImageChunkEvent? loadingProgress = state.loadingProgress;
               final double? progress =

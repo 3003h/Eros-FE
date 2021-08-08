@@ -3,6 +3,7 @@ import 'dart:math';
 
 import 'package:blur/blur.dart';
 import 'package:extended_image/extended_image.dart';
+import 'package:fehviewer/common/service/layout_service.dart';
 import 'package:fehviewer/const/const.dart';
 import 'package:fehviewer/generated/l10n.dart';
 import 'package:fehviewer/models/gallery_image.dart';
@@ -24,6 +25,7 @@ import 'package:sleek_circular_slider/sleek_circular_slider.dart';
 
 import '../common.dart';
 import '../controller/view_ext_contorller.dart';
+import 'hero.dart';
 
 const double kPageViewPadding = 4.0;
 
@@ -201,10 +203,28 @@ class ImageExt extends GetView<ViewExtController> {
 
             onLoadCompleted?.call(state);
 
-            return FadeTransition(
-              opacity: fadeAnimationController,
-              child: state.completedWidget,
+            return Hero(
+              tag: '$ser',
+              createRectTween: (Rect? begin, Rect? end) {
+                final tween =
+                    MaterialRectCenterArcTween(begin: begin, end: end);
+                return tween;
+              },
+              child: FadeTransition(
+                opacity: fadeAnimationController,
+                child: state.completedWidget,
+              ),
             );
+
+          // return HeroWidget(
+          //   tag: '$ser',
+          //   child: FadeTransition(
+          //     opacity: fadeAnimationController,
+          //     child: state.completedWidget,
+          //   ),
+          //   slideType: SlideType.onlyImage,
+          //   slidePagekey: ehLayout.slidePagekey,
+          // );
 
           case LoadState.failed:
             logger.d('Failed $url');
@@ -334,7 +354,7 @@ class _ViewLoading extends StatelessWidget {
   }
 }
 
-class ViewTopBar extends StatelessWidget {
+class ViewTopBar extends GetView<ViewExtController> {
   const ViewTopBar({Key? key}) : super(key: key);
 
   @override
@@ -355,6 +375,7 @@ class ViewTopBar extends StatelessWidget {
                 GestureDetector(
                   behavior: HitTestBehavior.opaque,
                   onTap: () {
+                    ehLayout.slidePagekey.currentState!.popPage();
                     Get.back();
                   },
                   child: Container(
