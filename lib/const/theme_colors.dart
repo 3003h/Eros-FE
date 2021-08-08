@@ -97,6 +97,11 @@ class ThemeColors {
     darkColor: CupertinoColors.secondaryLabel,
   );
 
+  static const Color dialogColor = CupertinoDynamicColor.withBrightness(
+    color: Color(0xCCF2F2F2),
+    darkColor: Color(0xBF1E1E1E),
+  );
+
   /// 标签总分类颜色
   static const Map<String, Color> tagColorTagType = <String, Color>{
     'artist': CupertinoDynamicColor.withBrightness(

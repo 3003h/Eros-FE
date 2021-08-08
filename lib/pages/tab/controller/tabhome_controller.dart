@@ -70,10 +70,10 @@ class TabPages {
 
   final Map<String, IconData> iconDatas = <String, IconData>{
     EHRoutes.popular: FontAwesomeIcons.fire,
-    EHRoutes.watched: FontAwesomeIcons.eye,
-    EHRoutes.gallery: FontAwesomeIcons.list,
+    EHRoutes.watched: FontAwesomeIcons.solidEye,
+    EHRoutes.gallery: FontAwesomeIcons.jira,
     EHRoutes.favorite: FontAwesomeIcons.solidHeart,
-    EHRoutes.toplist: FontAwesomeIcons.solidThumbsUp,
+    EHRoutes.toplist: FontAwesomeIcons.listOl,
     EHRoutes.history: FontAwesomeIcons.history,
     EHRoutes.download: FontAwesomeIcons.download,
     EHRoutes.setting: FontAwesomeIcons.cog,

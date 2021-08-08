@@ -1,10 +1,15 @@
+import 'dart:ui' show ImageFilter;
+
+import 'package:custom_pop_up_menu/custom_pop_up_menu.dart';
 import 'package:dio/dio.dart';
 import 'package:fehviewer/common/service/ehconfig_service.dart';
 import 'package:fehviewer/common/service/theme_service.dart';
 import 'package:fehviewer/component/exception/error.dart';
+import 'package:fehviewer/const/theme_colors.dart';
 import 'package:fehviewer/generated/l10n.dart';
 import 'package:fehviewer/models/index.dart';
 import 'package:fehviewer/pages/tab/controller/search_page_controller.dart';
+import 'package:fehviewer/pages/tab/controller/tabhome_controller.dart';
 import 'package:fehviewer/pages/tab/controller/toplist_controller.dart';
 import 'package:fehviewer/utils/logger.dart';
 import 'package:fehviewer/utils/toast.dart';
@@ -289,4 +294,110 @@ class TabViewController extends GetxController
       },
     );
   }
+
+  final TabHomeController _tabHomeController = Get.find();
+
+  bool get enablePopupMenu =>
+      _tabHomeController.tabMap.entries
+          .toList()
+          .indexWhere((MapEntry<String, bool> element) => !element.value) >
+      -1;
+
+  final CustomPopupMenuController customPopupMenuController =
+      CustomPopupMenuController();
+
+  Widget get popupMenu {
+    final List<Widget> _menu = <Widget>[];
+    for (final MapEntry<String, bool> elem
+        in _tabHomeController.tabMap.entries) {
+      if (!elem.value) {
+        _menu.add(GestureDetector(
+          behavior: HitTestBehavior.translucent,
+          onTap: () {
+            // vibrateUtil.light();
+            customPopupMenuController.hideMenu();
+            Get.toNamed(elem.key);
+          },
+          child: Container(
+            padding:
+                const EdgeInsets.only(left: 14, right: 18, top: 5, bottom: 5),
+            child: Row(
+              mainAxisSize: MainAxisSize.min,
+              children: <Widget>[
+                Icon(
+                  tabPages.iconDatas[elem.key],
+                  size: 20,
+                  // color: CupertinoDynamicColor.resolve(
+                  //     CupertinoColors.secondaryLabel, Get.context!),
+                ),
+                Expanded(
+                  child: Container(
+                    margin: const EdgeInsets.only(left: 10),
+                    padding: const EdgeInsets.symmetric(vertical: 10),
+                    child: Text(
+                      tabPages.tabTitles[elem.key] ?? '',
+                      style: TextStyle(
+                        color: CupertinoDynamicColor.resolve(
+                            CupertinoColors.label, Get.context!),
+                        fontWeight: FontWeight.w500,
+                        // fontSize: 12,
+                      ),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ));
+      }
+    }
+
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      mainAxisSize: MainAxisSize.min,
+      children: _menu,
+    );
+  }
+
+  Widget buildLeadingCustomPopupMenu(BuildContext context) {
+    return CupertinoTheme(
+      data: ehTheme.themeData!,
+      child: CustomPopupMenu(
+        child: Container(
+          padding: const EdgeInsets.only(left: 14, bottom: 2),
+          child: const Icon(
+            CupertinoIcons.ellipsis_circle,
+            size: 26,
+          ),
+        ),
+        // arrowColor: _color,
+        showArrow: false,
+        menuBuilder: () {
+          return ClipRRect(
+            borderRadius: BorderRadius.circular(8),
+            child: BackdropFilter(
+              filter: ImageFilter.blur(sigmaX: 20.0, sigmaY: 20.0),
+              child: Container(
+                color: CupertinoDynamicColor.resolve(
+                    ThemeColors.dialogColor, context),
+                child: IntrinsicWidth(
+                  child: popupMenu,
+                ),
+              ),
+            ),
+          );
+        },
+        pressType: PressType.singleClick,
+        verticalMargin: -2,
+        horizontalMargin: 8,
+        controller: customPopupMenuController,
+      ),
+    );
+  }
+
+  Widget? get leading => Navigator.of(Get.context!).canPop()
+      ? null
+      : enablePopupMenu && (!Get.find<EhConfigService>().isSafeMode.value)
+          ? buildLeadingCustomPopupMenu(Get.context!)
+          : const SizedBox();
 }

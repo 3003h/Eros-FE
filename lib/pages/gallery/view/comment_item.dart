@@ -22,8 +22,8 @@ import 'package:linkify/linkify.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 const int kMaxline = 4;
-const double kSizeVote = 14.0;
-const double kSizeNotVote = 13.0;
+const double kSizeVote = 15.0;
+const double kSizeNotVote = 15.0;
 
 class CommentItem extends StatelessWidget {
   const CommentItem(
@@ -374,8 +374,6 @@ class CommentItem extends StatelessWidget {
         tag: pageCtrlDepth,
         id: galleryComment.id ?? 'None',
         builder: (CommentController _commentController) {
-          final ThemeService themeService = Get.find();
-
           return Container(
             margin: const EdgeInsets.only(top: 8),
             child: ClipRRect(
@@ -403,7 +401,7 @@ class CommentItem extends StatelessWidget {
                               // 翻译
                               if (_ehConfigService.commentTrans.value)
                                 CupertinoTheme(
-                                  data: themeService.themeData!,
+                                  data: ehTheme.themeData!,
                                   child: TranslateButton(
                                     galleryComment: galleryComment,
                                     commentController: _commentController,
@@ -487,7 +485,9 @@ class CommentItem extends StatelessWidget {
                         ),
                         // 分值
                         Text(
-                          galleryComment.score,
+                          galleryComment.score.startsWith('+')
+                              ? galleryComment.score.substring(1)
+                              : galleryComment.score,
                           style: TextStyle(
                             fontSize: 12,
                             fontWeight: FontWeight.normal,

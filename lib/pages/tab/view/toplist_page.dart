@@ -31,6 +31,7 @@ class ToplistTab extends GetView<TopListViewController> {
       return CupertinoNavigationBar(
         transitionBetweenRoutes: false,
         padding: const EdgeInsetsDirectional.only(end: 4),
+        leading: controller.leading,
         middle: Row(
           mainAxisSize: MainAxisSize.min,
           children: [
