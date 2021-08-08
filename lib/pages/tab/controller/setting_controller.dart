@@ -20,7 +20,7 @@ class SettingViewController extends GetxController
   late AnimationController _animationController;
 
   final ScrollController _scrollController =
-      tabPages.scrollControllerMap[EHRoutes.setting]!;
+      tabPages.scrollControllerMap[EHRoutes.setting] ?? ScrollController();
 
   @override
   void onInit() {

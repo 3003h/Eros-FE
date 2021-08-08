@@ -125,6 +125,7 @@ dependencies:
   throttling: ^1.0.0
   sleek_circular_slider: ^2.0.1
   linked_scroll_controller: ^0.2.0
+  persistent_bottom_nav_bar: ^4.0.2
   # 不是SAF的形式
 #  filesystem_picker: ^2.0.0-nullsafety.0
 #  google_ml_kit: ^0.6.0
