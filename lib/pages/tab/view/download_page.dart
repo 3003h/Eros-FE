@@ -37,12 +37,15 @@ class DownloadTab extends StatefulWidget {
 
 class _DownloadTabState extends State<DownloadTab> {
   final DownloadViewController controller = Get.find();
-  late final PageController pageController;
+  late PageController pageController;
+  DownloadType viewType = DownloadType.gallery;
+
+  int get currIndex => controller.pageList.indexOf(viewType);
 
   @override
   void initState() {
     super.initState();
-    pageController = PageController(initialPage: controller.currIndex);
+    pageController = PageController(initialPage: currIndex);
   }
 
   @override
@@ -57,28 +60,25 @@ class _DownloadTabState extends State<DownloadTab> {
     return CupertinoPageScaffold(
       navigationBar: CupertinoNavigationBar(
         padding: const EdgeInsetsDirectional.only(end: 10),
-        middle: Obx(
-          () => CupertinoSlidingSegmentedControl<DownloadType>(
-            children: <DownloadType, Widget>{
-              DownloadType.gallery: Text(
-                L10n.of(context).tab_gallery,
-                style: const TextStyle(fontSize: 14),
-              ).marginSymmetric(horizontal: 6),
-              DownloadType.archiver: Text(
-                L10n.of(context).p_Archiver,
-                style: const TextStyle(fontSize: 14),
-              ).marginSymmetric(horizontal: 6),
-            },
-            groupValue: controller.viewType,
-            onValueChanged: (DownloadType? value) {
-              final toIndex =
-                  controller.pageList.indexOf(value ?? DownloadType.gallery);
-              pageController.animateToPage(toIndex,
-                  duration: const Duration(milliseconds: 300),
-                  curve: Curves.ease);
-              // controller.viewType = value ?? DownloadType.gallery;
-            },
-          ),
+        middle: CupertinoSlidingSegmentedControl<DownloadType>(
+          children: <DownloadType, Widget>{
+            DownloadType.gallery: Text(
+              L10n.of(context).tab_gallery,
+              style: const TextStyle(fontSize: 14),
+            ).marginSymmetric(horizontal: 6),
+            DownloadType.archiver: Text(
+              L10n.of(context).p_Archiver,
+              style: const TextStyle(fontSize: 14),
+            ).marginSymmetric(horizontal: 6),
+          },
+          groupValue: viewType,
+          onValueChanged: (DownloadType? value) {
+            final toIndex =
+                controller.pageList.indexOf(value ?? DownloadType.gallery);
+            pageController.animateToPage(toIndex,
+                duration: const Duration(milliseconds: 300),
+                curve: Curves.ease);
+          },
         ),
         trailing: Row(
           mainAxisSize: MainAxisSize.min,
@@ -96,7 +96,7 @@ class _DownloadTabState extends State<DownloadTab> {
                   context: context,
                   animationCurve: Curves.easeOutQuart,
                   // previousRouteAnimationCurve: Curves.easeInOutBack,
-                  duration: Duration(milliseconds: 400),
+                  duration: const Duration(milliseconds: 400),
                   useRootNavigator: true,
                   builder: (context) => const DownloadLabelsView(),
                 );
@@ -108,7 +108,11 @@ class _DownloadTabState extends State<DownloadTab> {
       child: PageView(
         controller: pageController,
         children: viewList,
-        onPageChanged: controller.handOnPageChange,
+        onPageChanged: (index) {
+          setState(() {
+            viewType = controller.pageList[index];
+          });
+        },
       ),
     );
   }

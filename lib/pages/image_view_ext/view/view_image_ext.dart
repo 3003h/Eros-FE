@@ -15,7 +15,6 @@ import 'package:get/get.dart';
 
 import '../common.dart';
 import '../controller/view_ext_contorller.dart';
-import 'hero.dart';
 import 'view_ext.dart';
 
 typedef DoubleClickAnimationListener = void Function();
@@ -180,15 +179,17 @@ class _ViewImageExtState extends State<ViewImageExt>
               }
 
               controller.onLoadCompleted(widget.imageSer);
-              return Hero(
-                tag: '${widget.imageSer}',
-                child: state.completedWidget,
-                createRectTween: (Rect? begin, Rect? end) {
-                  final tween =
-                      MaterialRectCenterArcTween(begin: begin, end: end);
-                  return tween;
-                },
-              );
+              return controller.vState.viewMode != ViewMode.topToBottom
+                  ? Hero(
+                      tag: '${widget.imageSer}',
+                      child: state.completedWidget,
+                      createRectTween: (Rect? begin, Rect? end) {
+                        final tween =
+                            MaterialRectCenterArcTween(begin: begin, end: end);
+                        return tween;
+                      },
+                    )
+                  : state.completedWidget;
             } else if (state.extendedImageLoadState == LoadState.loading) {
               final ImageChunkEvent? loadingProgress = state.loadingProgress;
               final double? progress =
@@ -315,7 +316,7 @@ class _ViewImageExtState extends State<ViewImageExt>
                                 image:
                                     _tmpImage.copyWith(completeHeight: true));
 
-                            logger.d('upt _tmpImage ${_tmpImage.ser}');
+                            logger.v('upt _tmpImage ${_tmpImage.ser}');
                             Future.delayed(const Duration(milliseconds: 100))
                                 .then((value) => controller.update([
                                       idSlidePage,

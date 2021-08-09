@@ -75,7 +75,7 @@ class NavigatorUtil {
 
     // url跳转方式
     if (url != null && url.isNotEmpty) {
-      logger.d('goGalleryPage fromUrl $url');
+      logger.v('goGalleryPage fromUrl $url');
 
       final RegExp regGalleryUrl =
           RegExp(r'https?://e[-x]hentai.org/g/[0-9]+/[0-9a-z]+/?');

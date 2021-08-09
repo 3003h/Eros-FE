@@ -77,7 +77,7 @@ class DownloadGalleryItem extends GetView<DownloadViewController> {
                       url: galleryTask.coverUrl)
                   .paddingOnly(right: 8),
               onTap: () async {
-                logger.d('${galleryTask.url} ');
+                logger.v('${galleryTask.url} ');
                 String? url = galleryTask.url;
                 if (url == null) {
                   return;
