@@ -1,5 +1,7 @@
+import 'dart:async';
 import 'dart:ui';
 
+import 'package:collection/collection.dart';
 import 'package:dio/dio.dart';
 import 'package:fehviewer/common/controller/gallerycache_controller.dart';
 import 'package:fehviewer/common/service/depth_service.dart';
@@ -211,4 +213,17 @@ class ViewExtState {
   String? dirPath;
 
   Map<int, Size> imageSizeMap = {};
+
+  late final Timer? speedTimer;
+  double tempPos = 0.0;
+  double lastOffset = 0.0;
+  final speedList = <double>[];
+
+  int minImageIndex = 0;
+  int maxImageIndex = 0;
+
+  bool get isScrolling {
+    final _first = speedList.firstOrNull ?? 0.0;
+    return speedList.any((element) => element != _first);
+  }
 }

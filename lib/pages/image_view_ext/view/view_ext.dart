@@ -203,28 +203,23 @@ class ImageExt extends GetView<ViewExtController> {
 
             onLoadCompleted?.call(state);
 
-            return Hero(
-              tag: '$ser',
-              createRectTween: (Rect? begin, Rect? end) {
-                final tween =
-                    MaterialRectCenterArcTween(begin: begin, end: end);
-                return tween;
-              },
-              child: FadeTransition(
-                opacity: fadeAnimationController,
-                child: state.completedWidget,
-              ),
-            );
-
-          // return HeroWidget(
-          //   tag: '$ser',
-          //   child: FadeTransition(
-          //     opacity: fadeAnimationController,
-          //     child: state.completedWidget,
-          //   ),
-          //   slideType: SlideType.onlyImage,
-          //   slidePagekey: ehLayout.slidePagekey,
-          // );
+            return controller.vState.viewMode != ViewMode.topToBottom
+                ? Hero(
+                    tag: '$ser',
+                    createRectTween: (Rect? begin, Rect? end) {
+                      final tween =
+                          MaterialRectCenterArcTween(begin: begin, end: end);
+                      return tween;
+                    },
+                    child: FadeTransition(
+                      opacity: fadeAnimationController,
+                      child: state.completedWidget,
+                    ),
+                  )
+                : FadeTransition(
+                    opacity: fadeAnimationController,
+                    child: state.completedWidget,
+                  );
 
           case LoadState.failed:
             logger.d('Failed $url');
@@ -375,7 +370,6 @@ class ViewTopBar extends GetView<ViewExtController> {
                 GestureDetector(
                   behavior: HitTestBehavior.opaque,
                   onTap: () {
-                    ehLayout.slidePagekey.currentState!.popPage();
                     Get.back();
                   },
                   child: Container(
@@ -541,16 +535,15 @@ class BottomBarControlWidget extends GetView<ViewExtController> {
                   ),
 
                   // 自动阅读按钮
-                  // if (logic.vState.viewMode != ViewMode.topToBottom)
                   GestureDetector(
                     behavior: HitTestBehavior.opaque,
                     onTap: () {
-                      if (logic.vState.viewMode != ViewMode.topToBottom)
-                        controller.tapAutoRead(context);
+                      // if (logic.vState.viewMode != ViewMode.topToBottom)
+                      controller.tapAutoRead(context);
                     },
                     onLongPress: () {
-                      if (logic.vState.viewMode != ViewMode.topToBottom)
-                        controller.longTapAutoRead(context);
+                      // if (logic.vState.viewMode != ViewMode.topToBottom)
+                      controller.longTapAutoRead(context);
                     },
                     child: GetBuilder<ViewExtController>(
                       id: idAutoReadIcon,
@@ -564,10 +557,10 @@ class BottomBarControlWidget extends GetView<ViewExtController> {
                                 LineIcons.hourglassHalf,
                                 size: 26,
                                 color: () {
-                                  if (logic.vState.viewMode ==
-                                      ViewMode.topToBottom) {
-                                    return CupertinoColors.systemGrey;
-                                  }
+                                  // if (logic.vState.viewMode ==
+                                  //     ViewMode.topToBottom) {
+                                  //   return CupertinoColors.systemGrey;
+                                  // }
 
                                   return logic.vState.autoRead
                                       ? CupertinoColors.activeBlue
@@ -575,13 +568,9 @@ class BottomBarControlWidget extends GetView<ViewExtController> {
                                 }(),
                               ),
                               const Spacer(),
-                              Text(
+                              const Text(
                                 'Auto',
-                                style: _kBottomTextStyle.copyWith(
-                                    color: logic.vState.viewMode ==
-                                            ViewMode.topToBottom
-                                        ? CupertinoColors.systemGrey
-                                        : null),
+                                style: _kBottomTextStyle,
                               ),
                             ],
                           ),

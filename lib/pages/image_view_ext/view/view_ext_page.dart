@@ -521,13 +521,10 @@ class DoublePageView extends GetView<ViewExtController> {
           flex: _flexStart * 1000 ~/ 1,
           child: Container(
             alignment: reverse ? alignmentR : alignmentL,
-            child: Hero(
-              tag: serStart,
-              child: ViewImageExt(
-                imageSer: serStart,
-                enableDoubleTap: false,
-                mode: ExtendedImageMode.none,
-              ),
+            child: ViewImageExt(
+              imageSer: serStart,
+              enableDoubleTap: false,
+              mode: ExtendedImageMode.none,
             ),
           ),
         ),
@@ -536,13 +533,10 @@ class DoublePageView extends GetView<ViewExtController> {
           flex: _flexEnd * 1000 ~/ 1,
           child: Container(
             alignment: reverse ? alignmentL : alignmentR,
-            child: Hero(
-              tag: serStart + 1,
-              child: ViewImageExt(
-                imageSer: serStart + 1,
-                enableDoubleTap: false,
-                mode: ExtendedImageMode.none,
-              ),
+            child: ViewImageExt(
+              imageSer: serStart + 1,
+              enableDoubleTap: false,
+              mode: ExtendedImageMode.none,
             ),
           ),
         ),

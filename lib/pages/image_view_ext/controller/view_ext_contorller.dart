@@ -46,6 +46,9 @@ const String idShowThumbListIcon = 'ShowThumbListIcon';
 const String idAutoReadIcon = 'AutoReadIcon';
 const String idIconBar = 'IconBar';
 
+const int _speedMaxCount = 40;
+const int _speedInv = 10;
+
 /// 支持在线以及本地（已下载）阅读的组件
 class ViewExtController extends GetxController {
   /// 状态
@@ -90,16 +93,31 @@ class ViewExtController extends GetxController {
       // logger.v('竖屏模式初始页码: ${vState.itemIndex}');
       Future.delayed(const Duration(milliseconds: 50)).then((value) =>
           itemScrollController.jumpTo(index: vState.currentItemIndex));
+
+      vState.speedTimer = Timer.periodic(
+        const Duration(milliseconds: _speedInv),
+        (timer) {
+          // loggerSimple.d('${vState.tempPos}');
+          final offset = vState.tempPos;
+          vState.speedList.add(offset);
+          if (vState.speedList.length > _speedMaxCount) {
+            vState.speedList.removeAt(0);
+          }
+        },
+      );
     }
 
+    // list视图滚动监听
     itemPositionsListener.itemPositions.addListener(() {
       final positions = itemPositionsListener.itemPositions.value;
+      vState.tempPos = positions.first.itemLeadingEdge;
       handItemPositionsChange(positions);
     });
 
     Future.delayed(const Duration(milliseconds: 100)).then((value) =>
         thumbScrollController.jumpTo(index: vState.currentItemIndex));
 
+    // 缩略图滚动组件监听
     thumbPositionsListener.itemPositions.addListener(() {
       final positions = thumbPositionsListener.itemPositions.value;
       handThumbPositionsChange(positions);
@@ -169,6 +187,8 @@ class ViewExtController extends GetxController {
     OrientationPlugin.setPreferredOrientations(DeviceOrientation.values);
     // OrientationPlugin.forceOrientation(DeviceOrientation.portraitUp);
     cancelAutoRead();
+
+    vState.speedTimer?.cancel();
 
     super.onClose();
   }
@@ -455,9 +475,12 @@ class ViewExtController extends GetxController {
           duration: const Duration(milliseconds: 200), curve: Curves.ease);
     } else if (vState.viewMode == ViewMode.topToBottom &&
         itemScrollController.isAttached &&
+        !vState.isScrolling &&
         vState.pageIndex > 0) {
+      logger.d('${vState.minImageIndex}');
       itemScrollController.scrollTo(
-        index: vState.pageIndex - 1,
+        // index: vState.pageIndex - 1,
+        index: vState.minImageIndex - 1,
         duration: const Duration(milliseconds: 200),
         curve: Curves.ease,
       );
@@ -465,6 +488,8 @@ class ViewExtController extends GetxController {
   }
 
   Future<void> tapRight() async {
+    // logger.d('${vState.speedList}');
+
     logger.v('${vState.viewMode} tap right');
     vState.fade = false;
     if (vState.viewMode == ViewMode.LeftToRight &&
@@ -479,9 +504,10 @@ class ViewExtController extends GetxController {
           duration: const Duration(milliseconds: 200), curve: Curves.ease);
     } else if (vState.viewMode == ViewMode.topToBottom &&
         itemScrollController.isAttached &&
+        !vState.isScrolling &&
         vState.pageIndex < vState.filecount) {
       itemScrollController.scrollTo(
-        index: vState.pageIndex + 1,
+        index: vState.minImageIndex + 1,
         duration: const Duration(milliseconds: 200),
         curve: Curves.ease,
       );
@@ -644,7 +670,8 @@ class ViewExtController extends GetxController {
     if (vState.viewMode != ViewMode.topToBottom) {
       debNextPage.debounce(_toPage);
     } else {
-      debNextPage.debounce(() => _toPage(index: toIndex));
+      debNextPage.debounce(_toPage);
+      // _toPage();
     }
   }
 
@@ -653,12 +680,14 @@ class ViewExtController extends GetxController {
     await Future.delayed(const Duration(milliseconds: 100));
 
     if (vState.viewMode == ViewMode.topToBottom) {
-      final bool canJump = vState.lastAutoNextSer != ser;
-      // logger.d('canJump $canJump');
-      if (canJump) {
-        _startAutoRead();
-      }
-      return;
+      // final bool canJump = vState.lastAutoNextSer != ser;
+      // logger.d('onLoadCompleted canJump $canJump');
+      // if (canJump) {
+      //   _startAutoRead();
+      // }
+      // return;
+      logger.d('completed ser $ser');
+      _startAutoRead();
     }
 
     if (vState.columnMode == ViewColumnMode.single) {
@@ -713,6 +742,9 @@ class ViewExtController extends GetxController {
 
       vState.tempIndex = (min + max) ~/ 2;
       // logger.d('max $max  min $min tempIndex ${vState.tempIndex}');
+
+      vState.minImageIndex = min;
+      vState.maxImageIndex = max;
 
       // logger.d('${positions.elementAt(index).itemLeadingEdge} ');
       if (vState.tempIndex != vState.currentItemIndex &&
@@ -771,12 +803,13 @@ class ViewExtController extends GetxController {
   }
 
   Future<void> _toPage({int? index}) async {
+    logger.d('_toPage');
     if (vState.pageIndex >= vState.pageCount - 1) {
       return;
     }
 
     if (vState.autoRead) {
-      logger5.v('next page ${vState.pageIndex + 1}');
+      logger.d('next page ${vState.pageIndex + 1}');
 
       if (pageController.positions.isNotEmpty) {
         pageController.nextPage(
@@ -784,12 +817,14 @@ class ViewExtController extends GetxController {
       }
 
       if (itemScrollController.isAttached) {
+        logger.d('minImageIndex:${vState.minImageIndex + 1}');
+        final _minIndex = vState.minImageIndex;
         itemScrollController.scrollTo(
-          index: index ?? vState.currentItemIndex + 1,
+          index: index ?? _minIndex + 1,
           duration: const Duration(milliseconds: 200),
           curve: Curves.ease,
         );
-        vState.lastAutoNextSer = vState.currentItemIndex + 2;
+        vState.lastAutoNextSer = _minIndex + 2;
       }
 
       if (vState.columnMode != ViewColumnMode.single) {

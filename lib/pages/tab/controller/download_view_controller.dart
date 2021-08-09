@@ -21,37 +21,23 @@ class DownloadViewController extends GetxController {
 
   // PageController pageController = PageController();
 
-  void handOnPageChange(int value) {
-    viewType = pageList[value];
-  }
+  // void handOnPageChange(int value) {
+  //   viewType = pageList[value];
+  // }
 
   List<DownloadType> pageList = <DownloadType>[
     DownloadType.gallery,
     DownloadType.archiver,
   ];
 
-  int get currIndex => pageList.indexOf(viewType);
+  // int get currIndex => pageList.indexOf(viewType);
 
-  final Rx<DownloadType> _viewType = DownloadType.gallery.obs;
-
-  DownloadType get viewType => _viewType.value;
-
-  void animateToPage(DownloadType val) {
-    final int _index = pageList.indexOf(val);
-    // Future.delayed(const Duration(milliseconds: 50)).then((value) =>
-    //     pageController.animateToPage(_index,
-    //         duration: const Duration(milliseconds: 300), curve: Curves.ease));
-  }
-
-  set viewType(DownloadType val) {
-    final int _index = pageList.indexOf(val);
-
-    _viewType.value = val;
-    // logger.d('${pageController.position}');
-    // Future.delayed(const Duration(milliseconds: 300)).then((value) =>
-    //     pageController.animateToPage(_index,
-    //         duration: const Duration(milliseconds: 300), curve: Curves.ease));
-  }
+  // final Rx<DownloadType> _viewType = DownloadType.gallery.obs;
+  // DownloadType get viewType => _viewType.value;
+  // set viewType(DownloadType val) {
+  //   // final int _index = pageList.indexOf(val);
+  //   _viewType.value = val;
+  // }
 
   List<DownloadTaskInfo> get archiverTasks =>
       _archiverDownloadController.archiverTaskMap.entries
