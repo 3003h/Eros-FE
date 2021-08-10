@@ -14,8 +14,8 @@ EhLayout ehLayout = EhLayout();
 
 class EhLayout {
   LayoutServices layoutServices = Get.find();
-  GlobalKey<ExtendedImageSlidePageState> get slidePagekey =>
-      layoutServices.slidePagekey;
+  // GlobalKey<ExtendedImageSlidePageState> get slidePagekey =>
+  //     layoutServices.slidePagekey;
 }
 
 class LayoutServices extends GetxService {
@@ -23,6 +23,6 @@ class LayoutServices extends GetxService {
 
   bool get isLayoutLarge => layoutMode == LayoutMode.large;
 
-  final GlobalKey<ExtendedImageSlidePageState> slidePagekey =
-      GlobalKey<ExtendedImageSlidePageState>();
+  // final GlobalKey<ExtendedImageSlidePageState> slidePagekey =
+  //     GlobalKey<ExtendedImageSlidePageState>();
 }
