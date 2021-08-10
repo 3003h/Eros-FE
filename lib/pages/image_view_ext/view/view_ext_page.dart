@@ -388,7 +388,6 @@ class ViewImageSlidePage extends GetView<ViewExtController> {
   @override
   Widget build(BuildContext context) {
     return ExtendedImageSlidePage(
-      key: ehLayout.slidePagekey,
       child: GetBuilder<ViewExtController>(
         id: idSlidePage,
         builder: (logic) {
