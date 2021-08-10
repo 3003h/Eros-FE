@@ -22,33 +22,34 @@ class LoginExtPage extends GetView<LoginExtController> {
           ? CupertinoColors.secondarySystemBackground
           : null,
       navigationBar: CupertinoNavigationBar(
-          middle: Text(L10n.of(context).user_login),
-          trailing: Row(
-            mainAxisSize: MainAxisSize.min,
-            mainAxisAlignment: MainAxisAlignment.end,
-            children: [
-              // web登陆
-              CupertinoButton(
-                minSize: 40,
-                padding: const EdgeInsets.all(0),
-                child: const Icon(
-                  LineIcons.globeWithAmericasShown,
-                  size: 26,
-                ),
-                onPressed: controller.hanOnWeblogin,
-              ),
-              // cookie登陆
-              CupertinoButton(
-                minSize: 40,
-                padding: const EdgeInsets.all(0),
-                child: const Icon(
-                  LineIcons.cookieBite,
-                  size: 26,
-                ),
-                onPressed: controller.hanOnCookieLogin,
-              ),
-            ],
-          )),
+        middle: Text(L10n.of(context).user_login),
+        // trailing: Row(
+        //   mainAxisSize: MainAxisSize.min,
+        //   mainAxisAlignment: MainAxisAlignment.end,
+        //   children: [
+        //     // web登陆
+        //     CupertinoButton(
+        //       minSize: 40,
+        //       padding: const EdgeInsets.all(0),
+        //       child: const Icon(
+        //         LineIcons.globeWithAmericasShown,
+        //         size: 26,
+        //       ),
+        //       onPressed: controller.hanOnWeblogin,
+        //     ),
+        //     // cookie登陆
+        //     CupertinoButton(
+        //       minSize: 40,
+        //       padding: const EdgeInsets.all(0),
+        //       child: const Icon(
+        //         LineIcons.cookieBite,
+        //         size: 26,
+        //       ),
+        //       onPressed: controller.hanOnCookieLogin,
+        //     ),
+        //   ],
+        // ),
+      ),
       child: SafeArea(
         child: Align(
           alignment: Alignment.topCenter,
@@ -71,7 +72,7 @@ class LoginExtPage extends GetView<LoginExtController> {
                             Text(L10n.of(context).user_name),
                           ],
                         ),
-                        placeholder: L10n.of(context).pls_i_username,
+                        // placeholder: L10n.of(context).pls_i_username,
                         textAlign: TextAlign.right,
                         onEditingComplete: () {
                           FocusScope.of(context)
@@ -96,7 +97,7 @@ class LoginExtPage extends GetView<LoginExtController> {
                                 Text(L10n.of(context).passwd),
                               ],
                             ),
-                            placeholder: L10n.of(context).pls_i_passwd,
+                            // placeholder: L10n.of(context).pls_i_passwd,
                             textAlign: TextAlign.right,
                             obscureText: logic.obscurePasswd,
                             focusNode: logic.nodePwd,
@@ -120,6 +121,42 @@ class LoginExtPage extends GetView<LoginExtController> {
                       },
                     ),
                   ),
+                  Row(
+                    mainAxisSize: MainAxisSize.min,
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: [
+                      // web登陆
+                      CupertinoButton(
+                        minSize: 50,
+                        padding: const EdgeInsets.all(20),
+                        child: Column(
+                          children: const [
+                            Icon(
+                              LineIcons.globeWithAmericasShown,
+                              size: 30,
+                            ),
+                            Text('Web', textScaleFactor: 0.8),
+                          ],
+                        ),
+                        onPressed: controller.hanOnWeblogin,
+                      ),
+                      // cookie登陆
+                      CupertinoButton(
+                        minSize: 50,
+                        padding: const EdgeInsets.all(20),
+                        child: Column(
+                          children: const [
+                            Icon(
+                              LineIcons.cookieBite,
+                              size: 30,
+                            ),
+                            Text('Cookie', textScaleFactor: 0.8),
+                          ],
+                        ),
+                        onPressed: controller.hanOnCookieLogin,
+                      ),
+                    ],
+                  ).paddingSymmetric(vertical: 30),
                 ],
               ),
             ),

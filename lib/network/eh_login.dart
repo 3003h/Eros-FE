@@ -203,9 +203,11 @@ class EhUserManager {
 
     // 设置EX的cookie
     cookieJar.saveFromResponse(Uri.parse(EHConst.EX_BASE_URL), cookies);
-    if (igneous.isEmpty) {
-      await _getExIgneous();
-    }
+    // if (igneous.isEmpty) {
+    //   await _getExIgneous();
+    // }
+
+    await _getExIgneous();
 
     final User userinfo = await _getUserInfo(id);
 
