@@ -375,7 +375,6 @@ class ViewTopBar extends GetView<ViewExtController> {
                 GestureDetector(
                   behavior: HitTestBehavior.opaque,
                   onTap: () {
-                    ehLayout.slidePagekey.currentState!.popPage();
                     Get.back();
                   },
                   child: Container(
