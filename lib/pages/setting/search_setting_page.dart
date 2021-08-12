@@ -1,7 +1,9 @@
+import 'package:fehviewer/common/service/layout_service.dart';
 import 'package:fehviewer/common/service/theme_service.dart';
 import 'package:fehviewer/generated/l10n.dart';
 import 'package:fehviewer/pages/setting/setting_base.dart';
 import 'package:fehviewer/pages/tab/view/quick_search_page.dart';
+import 'package:fehviewer/route/routes.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
 
@@ -33,10 +35,11 @@ class ListViewSearchSetting extends StatelessWidget {
       SelectorSettingItem(
         title: L10n.of(context).quick_search,
         selector: '',
-        onTap: () {
-          Get.to<String>(
-            () => QuickSearchListPage(autoSearch: false),
-          );
+        onTap: () async {
+          // await Get.to(
+          //   () => QuickSearchListPage(autoSearch: false),
+          // );
+          await Get.toNamed(EHRoutes.quickSearch, id: isLayoutLarge ? 2 : null);
         },
       ),
     ];

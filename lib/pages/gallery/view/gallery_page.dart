@@ -50,8 +50,13 @@ class _GalleryMainPageState extends State<GalleryMainPage> {
     super.initState();
     logger.v('${Get.arguments.runtimeType}');
 
-    if (_galleryRepository == null && Get.arguments is GalleryRepository) {
-      _galleryRepository = Get.arguments as GalleryRepository;
+    // if (_galleryRepository == null && Get.arguments is GalleryRepository) {
+    //   _galleryRepository = Get.arguments as GalleryRepository;
+    // }
+
+    if (_galleryRepository == null &&
+        Get.isRegistered<GalleryRepository>(tag: pageCtrlDepth)) {
+      _galleryRepository = Get.find<GalleryRepository>(tag: pageCtrlDepth);
     }
   }
 
