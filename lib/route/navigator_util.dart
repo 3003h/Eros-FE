@@ -159,6 +159,7 @@ class NavigatorUtil {
     // 为了保证能正常关闭
     deletePageController();
 
+    Get.delete<GalleryRepository>(tag: pageCtrlDepth);
     if (!isLayoutLarge) {
       Get.find<DepthService>().popPageCtrl();
     }
