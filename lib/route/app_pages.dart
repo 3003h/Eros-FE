@@ -17,8 +17,10 @@ import 'package:fehviewer/pages/login_ext/view/web_login_in.dart';
 import 'package:fehviewer/pages/setting/about_page.dart';
 import 'package:fehviewer/pages/setting/advanced_setting_page.dart';
 import 'package:fehviewer/pages/setting/controller/tab_setting_controller.dart';
+import 'package:fehviewer/pages/setting/custom_hosts_page.dart';
 import 'package:fehviewer/pages/setting/download_setting_page.dart';
 import 'package:fehviewer/pages/setting/eh_setting_page.dart';
+import 'package:fehviewer/pages/setting/log_page.dart';
 import 'package:fehviewer/pages/setting/search_setting_page.dart';
 import 'package:fehviewer/pages/setting/security_setting_page.dart';
 import 'package:fehviewer/pages/setting/tab_setting.dart';
@@ -30,6 +32,7 @@ import 'package:fehviewer/pages/tab/view/favorite_sel_page.dart';
 import 'package:fehviewer/pages/tab/view/history_page.dart';
 import 'package:fehviewer/pages/tab/view/home_page.dart';
 import 'package:fehviewer/pages/tab/view/popular_page.dart';
+import 'package:fehviewer/pages/tab/view/quick_search_page.dart';
 import 'package:fehviewer/pages/tab/view/search_page_new.dart';
 import 'package:fehviewer/pages/tab/view/splash_page.dart';
 import 'package:fehviewer/pages/tab/view/toplist_page.dart';
@@ -188,6 +191,19 @@ class AppPages {
       name: EHRoutes.search,
       page: () => GallerySearchPageNew(),
       preventDuplicates: false,
+    ),
+
+    GetPage(
+      name: EHRoutes.quickSearch,
+      page: () => QuickSearchListPage(),
+    ),
+    GetPage(
+      name: EHRoutes.customHosts,
+      page: () => CustomHostsPage(),
+    ),
+    GetPage(
+      name: EHRoutes.logfile,
+      page: () => LogPage(),
     ),
   ];
 }

@@ -1,6 +1,8 @@
+import 'package:fehviewer/common/service/layout_service.dart';
 import 'package:fehviewer/common/service/theme_service.dart';
 import 'package:fehviewer/utils/logger.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -87,8 +89,11 @@ class _SettingItems extends State<SettingItems> {
       behavior: HitTestBehavior.opaque,
       onTap: () {
         loggerNoStack.v('set tap ${widget.text} ');
-        // NavigatorUtil.jump(context, widget.route, rootNavigator: false);
-        Get.toNamed(widget.route);
+        if (isLayoutLarge) {
+          Get.offNamed(widget.route, id: 2);
+        } else {
+          Get.toNamed(widget.route);
+        }
       },
       onTapDown: (_) => _updatePressedColor(),
       onTapUp: (_) {

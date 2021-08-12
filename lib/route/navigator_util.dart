@@ -1,4 +1,5 @@
 import 'package:fehviewer/common/service/depth_service.dart';
+import 'package:fehviewer/common/service/layout_service.dart';
 import 'package:fehviewer/const/const.dart';
 import 'package:fehviewer/models/index.dart';
 import 'package:fehviewer/network/gallery_request.dart';
@@ -123,17 +124,29 @@ class NavigatorUtil {
       // item点击跳转方式
       logger.v('goGalleryPage fromItem tabTag=$tabTag');
 
+      Get.put(GalleryRepository(item: galleryItem, tabTag: tabTag),
+          tag: pageCtrlDepth);
+
       //命名路由
-      await Get.toNamed(
-        EHRoutes.galleryPage,
-        arguments: GalleryRepository(item: galleryItem, tabTag: tabTag),
-        preventDuplicates: false,
-      );
+      if (isLayoutLarge) {
+        logger.d('Get.currentRoute ${Get.currentRoute}');
+        await Get.toNamed(
+          EHRoutes.galleryPage,
+          id: 2,
+          preventDuplicates: false,
+        );
+      } else {
+        await Get.toNamed(
+          EHRoutes.galleryPage,
+          preventDuplicates: false,
+        );
+      }
     }
 
     // 为了保证能正常关闭
     deletePageController();
 
+    Get.delete<GalleryRepository>(tag: pageCtrlDepth);
     Get.find<DepthService>().popPageCtrl();
   }
 

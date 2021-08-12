@@ -5,6 +5,7 @@ import 'package:fehviewer/common/controller/cache_controller.dart';
 import 'package:fehviewer/common/global.dart';
 import 'package:fehviewer/common/service/dns_service.dart';
 import 'package:fehviewer/common/service/ehconfig_service.dart';
+import 'package:fehviewer/common/service/layout_service.dart';
 import 'package:fehviewer/common/service/locale_service.dart';
 import 'package:fehviewer/common/service/theme_service.dart';
 import 'package:fehviewer/const/theme_colors.dart';
@@ -126,7 +127,10 @@ class ListViewAdvancedSetting extends StatelessWidget {
                 ? L10n.of(context).on
                 : L10n.of(context).off,
             onTap: () {
-              Get.to(() => CustomHostsPage());
+              Get.toNamed(
+                EHRoutes.customHosts,
+                id: isLayoutLarge ? 2 : null,
+              );
             },
           )),
       TextSwitchItem(
@@ -151,7 +155,11 @@ class ListViewAdvancedSetting extends StatelessWidget {
       SelectorSettingItem(
         title: 'Log',
         onTap: () {
-          Get.to(() => LogPage());
+          // Get.to(() => LogPage());
+          Get.toNamed(
+            EHRoutes.logfile,
+            id: isLayoutLarge ? 2 : null,
+          );
         },
       ),
       TextSwitchItem(
