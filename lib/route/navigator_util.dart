@@ -72,7 +72,9 @@ class NavigatorUtil {
     GalleryItem? galleryItem,
     bool replace = false,
   }) async {
-    Get.find<DepthService>().pushPageCtrl();
+    if (!isLayoutLarge) {
+      Get.find<DepthService>().pushPageCtrl();
+    }
 
     // url跳转方式
     if (url != null && url.isNotEmpty) {
@@ -124,21 +126,32 @@ class NavigatorUtil {
       // item点击跳转方式
       logger.v('goGalleryPage fromItem tabTag=$tabTag');
 
+      logger.d('put GalleryRepository $pageCtrlDepth');
       Get.put(GalleryRepository(item: galleryItem, tabTag: tabTag),
           tag: pageCtrlDepth);
 
       //命名路由
-      if (isLayoutLarge) {
-        logger.d('Get.currentRoute ${Get.currentRoute}');
-        await Get.toNamed(
+      if (isLayoutLarge && Get.currentRoute == EHRoutes.home) {
+        if (int.parse(pageCtrlDepth) > 0) {
+          logger.d('2 back pageCtrlDepth:$pageCtrlDepth');
+          // Get.back(id: 2);
+          await Get.delete<GalleryRepository>(tag: pageCtrlDepth);
+          Get.put(GalleryRepository(item: galleryItem, tabTag: tabTag),
+              tag: pageCtrlDepth);
+        }
+
+        await Get.offNamed(
           EHRoutes.galleryPage,
           id: 2,
           preventDuplicates: false,
+          // arguments: GalleryRepository(item: galleryItem, tabTag: tabTag),
         );
+        // Get.delete<GalleryRepository>(tag: pageCtrlDepth);
       } else {
         await Get.toNamed(
           EHRoutes.galleryPage,
           preventDuplicates: false,
+          // arguments: GalleryRepository(item: galleryItem, tabTag: tabTag),
         );
       }
     }
@@ -146,8 +159,9 @@ class NavigatorUtil {
     // 为了保证能正常关闭
     deletePageController();
 
-    Get.delete<GalleryRepository>(tag: pageCtrlDepth);
-    Get.find<DepthService>().popPageCtrl();
+    if (!isLayoutLarge) {
+      Get.find<DepthService>().popPageCtrl();
+    }
   }
 
   /// 打开搜索页面 指定搜索类型
@@ -202,6 +216,7 @@ class NavigatorUtil {
   }
 
   static void deletePageController() {
+    logger.d('deletePageController');
     // 为了保证能正常关闭
     if (Get.isRegistered<RateController>(tag: pageCtrlDepth))
       Get.delete<RateController>(tag: pageCtrlDepth);
