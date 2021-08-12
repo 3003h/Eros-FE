@@ -78,6 +78,8 @@ class ViewExtController extends GetxController {
   final GlobalKey<ExtendedImageSlidePageState> slidePagekey =
       GlobalKey<ExtendedImageSlidePageState>();
 
+  Timer? autoNextTimer;
+
   @override
   void onInit() {
     super.onInit();
@@ -172,6 +174,12 @@ class ViewExtController extends GetxController {
 
   @override
   void onClose() {
+    super.onClose();
+    cancelAutoRead();
+    autoNextTimer?.cancel();
+    autoNextTimer = null;
+
+    vState.speedTimer?.cancel();
     Get.find<GalleryCacheController>().saveAll();
     vState.saveLastIndex(saveToStore: true);
     pageController.dispose();
@@ -183,14 +191,9 @@ class ViewExtController extends GetxController {
     FlutterStatusbarManager.setTranslucent(false);
 
     // 恢复系统旋转设置
-    // logger.d('恢复系统旋转设置');
+    logger.d('恢复系统旋转设置');
     OrientationPlugin.setPreferredOrientations(DeviceOrientation.values);
     // OrientationPlugin.forceOrientation(DeviceOrientation.portraitUp);
-    cancelAutoRead();
-
-    vState.speedTimer?.cancel();
-
-    super.onClose();
   }
 
   void resetPageController() {
@@ -443,6 +446,10 @@ class ViewExtController extends GetxController {
 
   // 点击中间
   Future<void> handOnTapCent() async {
+    if (vState.viewMode == ViewMode.topToBottom && vState.isScrolling) {
+      return;
+    }
+
     if (GetPlatform.isIOS) {
       if (!vState.showBar) {
         // show
@@ -655,66 +662,25 @@ class ViewExtController extends GetxController {
 
   void cancelAutoRead() {
     vState.autoRead = false;
-    // vState.complePages.clear();
     vState.lastAutoNextSer = null;
+    autoNextTimer?.cancel();
     update([idAutoReadIcon]);
   }
 
   final debNextPage = Debouncing(duration: const Duration(seconds: 1));
-  void _startAutoRead({int? toIndex}) {
-    // vDebounce(
-    //   _turnNextPage,
-    //   duration: Duration(milliseconds: _ehConfigService.turnPageInv),
-    // );
-    debNextPage.duration = Duration(milliseconds: _ehConfigService.turnPageInv);
-    if (vState.viewMode != ViewMode.topToBottom) {
-      debNextPage.debounce(_toPage);
-    } else {
-      debNextPage.debounce(_toPage);
-      // _toPage();
-    }
+  void _startAutoRead() {
+    final duration = Duration(milliseconds: _ehConfigService.turnPageInv);
+    autoNextTimer = Timer.periodic(duration, (timer) {
+      _toPage();
+    });
   }
 
   Future<void> onLoadCompleted(int ser) async {
     vState.loadCompleMap[ser] = true;
     await Future.delayed(const Duration(milliseconds: 100));
 
-    if (vState.viewMode == ViewMode.topToBottom) {
-      // final bool canJump = vState.lastAutoNextSer != ser;
-      // logger.d('onLoadCompleted canJump $canJump');
-      // if (canJump) {
-      //   _startAutoRead();
-      // }
-      // return;
-      logger.d('completed ser $ser');
+    if (vState.autoRead && !(autoNextTimer?.isActive ?? false)) {
       _startAutoRead();
-    }
-
-    if (vState.columnMode == ViewColumnMode.single) {
-      _startAutoRead();
-    } else {
-      // 双页阅读
-      final int serLeft = vState.serStart;
-      if (vState.filecount > serLeft) {
-        final bool leftComplet;
-        if (serLeft > 0) {
-          leftComplet = vState.loadCompleMap[serLeft] ?? false;
-        } else {
-          leftComplet = true;
-        }
-        final rigthComple = vState.loadCompleMap[serLeft + 1] ?? false;
-
-        final bool canJump = vState.lastAutoNextSer != serLeft;
-        logger.v('ser:$ser\nserL:$serLeft leftComplet: $leftComplet\n'
-            'serR:${serLeft + 1} rigthComple:$rigthComple\ncanJump $canJump');
-        if (leftComplet && rigthComple && canJump) {
-          logger.v('auto [$serLeft][${serLeft + 1}]');
-          _startAutoRead();
-        }
-      } else {
-        logger.v('else auto [$serLeft][${serLeft + 1}]');
-        _startAutoRead();
-      }
     }
   }
 
@@ -802,34 +768,79 @@ class ViewExtController extends GetxController {
     }
   }
 
-  Future<void> _toPage({int? index}) async {
-    logger.d('_toPage');
+  Future<void> _toPage() async {
     if (vState.pageIndex >= vState.pageCount - 1) {
       return;
     }
 
     if (vState.autoRead) {
-      logger.d('next page ${vState.pageIndex + 1}');
-
-      if (pageController.positions.isNotEmpty) {
-        pageController.nextPage(
-            duration: const Duration(milliseconds: 300), curve: Curves.easeOut);
-      }
-
-      if (itemScrollController.isAttached) {
-        logger.d('minImageIndex:${vState.minImageIndex + 1}');
+      if (vState.viewMode == ViewMode.topToBottom &&
+          itemScrollController.isAttached) {
+        logger.v('trd minImageIndex:${vState.minImageIndex + 1}');
         final _minIndex = vState.minImageIndex;
-        itemScrollController.scrollTo(
-          index: index ?? _minIndex + 1,
-          duration: const Duration(milliseconds: 200),
-          curve: Curves.ease,
-        );
-        vState.lastAutoNextSer = _minIndex + 2;
+        final _minImageSer = _minIndex + 1;
+        if (!(vState.loadCompleMap[_minImageSer] ?? false)) {
+          autoNextTimer?.cancel();
+        }
+
+        vState.lastAutoNextSer = _minImageSer + 1;
+        if (!(vState.loadCompleMap[vState.lastAutoNextSer] ?? false)) {
+          autoNextTimer?.cancel();
+        }
+
+        if (vState.loadCompleMap[_minImageSer] ?? false) {
+          itemScrollController.scrollTo(
+            index: _minIndex + 1,
+            duration: const Duration(milliseconds: 200),
+            curve: Curves.ease,
+          );
+        }
+      } else {
+        logger.d('ltr or rtl next page ${vState.pageIndex + 1}');
+
+        if (vState.columnMode == ViewColumnMode.single) {
+          // 下一张图片的加载完成标志 如果没有完成 取消翻页定时器
+          vState.lastAutoNextSer = vState.minImageIndex + 2;
+          if (!(vState.loadCompleMap[vState.lastAutoNextSer] ?? false)) {
+            autoNextTimer?.cancel();
+          }
+          // 翻页
+          if (pageController.positions.isNotEmpty) {
+            pageController.nextPage(
+                duration: const Duration(milliseconds: 300),
+                curve: Curves.easeOut);
+          }
+        } else {
+          // 双页阅读
+          final int serLeftNext = vState.serStart + 2;
+          if (vState.filecount > serLeftNext) {
+            if (serLeftNext > 0 &&
+                !(vState.loadCompleMap[serLeftNext] ?? false)) {
+              autoNextTimer?.cancel();
+            }
+            final rigthNextComple =
+                vState.loadCompleMap[serLeftNext + 1] ?? false;
+            if (!rigthNextComple) {
+              autoNextTimer?.cancel();
+            }
+          }
+
+          final int serLeftCur = vState.serStart;
+          if ((vState.loadCompleMap[serLeftCur] ?? false) &&
+              (vState.loadCompleMap[serLeftCur + 1] ?? false)) {
+            // 翻页
+            if (pageController.positions.isNotEmpty) {
+              pageController.nextPage(
+                  duration: const Duration(milliseconds: 300),
+                  curve: Curves.easeOut);
+            }
+          }
+        }
       }
 
-      if (vState.columnMode != ViewColumnMode.single) {
-        vState.lastAutoNextSer = vState.serStart;
-      }
+      // if (vState.columnMode != ViewColumnMode.single) {
+      //   vState.lastAutoNextSer = vState.serStart;
+      // }
     }
   }
 

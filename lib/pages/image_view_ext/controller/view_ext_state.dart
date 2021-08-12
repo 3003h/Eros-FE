@@ -214,7 +214,7 @@ class ViewExtState {
 
   Map<int, Size> imageSizeMap = {};
 
-  late final Timer? speedTimer;
+  Timer? speedTimer;
   double tempPos = 0.0;
   double lastOffset = 0.0;
   final speedList = <double>[];
