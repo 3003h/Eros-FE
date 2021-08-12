@@ -48,16 +48,18 @@ class _GalleryMainPageState extends State<GalleryMainPage> {
   @override
   void initState() {
     super.initState();
-    logger.v('${Get.arguments.runtimeType}');
+    logger.d('initState pageCtrlDepth:$pageCtrlDepth');
+    // logger.d('${Get.arguments.runtimeType}');
 
     // if (_galleryRepository == null && Get.arguments is GalleryRepository) {
     //   _galleryRepository = Get.arguments as GalleryRepository;
     // }
 
-    if (_galleryRepository == null &&
-        Get.isRegistered<GalleryRepository>(tag: pageCtrlDepth)) {
-      _galleryRepository = Get.find<GalleryRepository>(tag: pageCtrlDepth);
-    }
+    // if (_galleryRepository == null &&
+    //     Get.isRegistered<GalleryRepository>(tag: pageCtrlDepth)) {
+    //   _galleryRepository = Get.find<GalleryRepository>(tag: pageCtrlDepth);
+    // }
+    _galleryRepository = Get.find<GalleryRepository>(tag: pageCtrlDepth);
   }
 
   @override
