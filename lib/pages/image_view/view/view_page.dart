@@ -1,605 +1,619 @@
 import 'dart:math';
 
+import 'package:english_words/english_words.dart';
 import 'package:extended_image/extended_image.dart';
-import 'package:fehviewer/common/global.dart';
 import 'package:fehviewer/const/const.dart';
-import 'package:fehviewer/generated/l10n.dart';
-import 'package:fehviewer/models/index.dart';
-import 'package:fehviewer/pages/image_view/controller/view_state.dart';
-import 'package:fehviewer/pages/image_view/view/view_image.dart';
 import 'package:fehviewer/pages/image_view/view/view_widget.dart';
-import 'package:fehviewer/pages/image_view_ext/common.dart';
-import 'package:fehviewer/route/routes.dart';
 import 'package:fehviewer/utils/logger.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
-import 'package:line_icons/line_icons.dart';
 import 'package:photo_view/photo_view.dart';
 import 'package:photo_view/photo_view_gallery.dart';
+import 'package:scroll_to_index/scroll_to_index.dart';
 import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
+import 'package:zoom_widget/zoom_widget.dart';
+import 'package:fehviewer/common/service/layout_service.dart';
 
-import '../controller/view_controller.dart';
+import '../common.dart';
+import '../controller/view_ext_contorller.dart';
+import '../controller/view_ext_state.dart';
+import 'view_image.dart';
 
-const double kPageViewPadding = 4.0;
+typedef DoubleClickAnimationListener = void Function();
 
-class GalleryViewPage extends GetView<ViewController> {
-  const GalleryViewPage({Key? key}) : super(key: key);
+class ViewRepository {
+  ViewRepository({
+    this.index = 0,
+    this.loadType = LoadType.network,
+    this.files,
+    required this.gid,
+  });
 
-  ViewState get vState => controller.vState;
+  final int index;
+  final List<String>? files;
+  final String gid;
+  final LoadType loadType;
+}
 
-  /// 画廊图片大图浏览
+class ViewPage extends StatefulWidget {
+  const ViewPage({Key? key}) : super(key: key);
+
+  @override
+  _ViewPageState createState() => _ViewPageState();
+}
+
+class _ViewPageState extends State<ViewPage> with TickerProviderStateMixin {
+  final ViewExtController controller = Get.find();
+
+  ViewExtState get vState => controller.vState;
+
   @override
   Widget build(BuildContext context) {
-    // logger.d('rebuild GalleryViewPage');
-    vState.initSize(context);
-    // logger.d('build ${state.viewMode}  ${state.columnMode}');
-    return CupertinoTheme(
-      data: const CupertinoThemeData(
+    return const CupertinoTheme(
+      data: CupertinoThemeData(
         brightness: Brightness.dark,
       ),
       child: AnnotatedRegion<SystemUiOverlayStyle>(
         value: SystemUiOverlayStyle.light,
-        child: CupertinoPageScaffold(
-          child: Stack(
-            alignment: Alignment.center,
-            children: <Widget>[
-              // 内容部件
-              _buildView(),
-              // 外沿触摸区
-              Row(
-                children: [
-                  Expanded(
-                    child: GestureDetector(
-                      behavior: HitTestBehavior.translucent,
-                      onPanDown: controller.handOnPanDown,
-                      onTap: controller.tapLeft,
-                    ),
-                  ),
-                  Expanded(
-                    child: GestureDetector(
-                      behavior: HitTestBehavior.translucent,
-                      onPanDown: controller.handOnPanDown,
-                      onTap: controller.tapRight,
-                    ),
-                  ),
-                ],
-              ),
-              // 中心触摸区
-              GestureDetector(
-                behavior: HitTestBehavior.translucent,
-                child: Container(
-                  key: vState.centkey,
-                  height: vState.screensize.height / 4,
-                  width: vState.screensize.width / 2.5,
-                ),
-                onTap: controller.handOnTapCent,
-              ),
-              SafeArea(
-                bottom: false,
-                top: false,
-                left: false,
-                right: false,
-                child: Obx(() => Stack(
-                      fit: StackFit.expand,
-                      alignment: Alignment.center,
-                      children: <Widget>[
-                        // 顶栏
-                        AnimatedPositioned(
-                          curve: Curves.fastOutSlowIn,
-                          duration: const Duration(milliseconds: 300),
-                          top: vState.topBarOffset,
-                          child: _buildTopBar(Get.context!),
-                        ),
-                        // 底栏
-                        AnimatedPositioned(
-                          curve: Curves.fastOutSlowIn,
-                          duration: const Duration(milliseconds: 300),
-                          bottom: vState.bottomBarOffset,
-                          child: _buildBottomBar(context),
-                        ),
-                      ],
-                    )),
-              ),
-            ],
+        child: ImagePlugins(
+          child: ImageGestureDetector(
+            child: ImagePageView(),
           ),
         ),
       ),
     );
   }
+}
 
-  /// 不同阅读方向不同布局
-  Widget _buildView() {
-    // logger.v('_buildView ');
-    return Obx(() {
-      // 布局切换时进行页码跳转处理
-      controller.checkViewModel();
-      switch (vState.viewMode) {
-        case ViewMode.topToBottom:
-          return _buildListView();
-        case ViewMode.LeftToRight:
-          if (!kDebugMode) return _buildPhotoViewGallery();
-          return _buildExtendedImageGesturePageView();
-        case ViewMode.rightToLeft:
-          return _buildPhotoViewGallery(reverse: true);
-        default:
-          // return _buildPhotoViewGallery();
-          return _buildPhotoViewGallery();
-      }
-    });
-  }
+class ImagePageView extends StatelessWidget {
+  const ImagePageView({Key? key}) : super(key: key);
 
-  /// 顶栏
-  Widget _buildTopBar(BuildContext context) {
-    return Container(
-        // height: kTopBarHeight + controller.paddingTop,
-        width: vState.screensize.width,
-        color: const Color.fromARGB(150, 0, 0, 0),
-        padding: vState.topBarPadding,
-        child: Stack(
-          alignment: Alignment.center,
-          children: <Widget>[
-            // 页码提示
-            _buildPageText(),
-            Row(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: <Widget>[
-                GestureDetector(
-                  behavior: HitTestBehavior.opaque,
-                  onTap: () {
-                    Get.back();
-                  },
-                  child: Container(
-                    width: 40,
-                    height: kBottomBarHeight,
-                    child: const Icon(
-                      FontAwesomeIcons.chevronLeft,
-                      color: CupertinoColors.systemGrey6,
-                      // size: 24,
-                    ),
-                  ),
-                ),
-                const Spacer(),
-                // 菜单按钮
-                GestureDetector(
-                  behavior: HitTestBehavior.opaque,
-                  onTap: () {
-                    Get.toNamed(EHRoutes.viewSeting);
-                  },
-                  child: Container(
-                    width: 40,
-                    margin: const EdgeInsets.only(right: 8.0),
-                    height: kBottomBarHeight,
-                    child: const Icon(
-                      FontAwesomeIcons.ellipsisH,
-                      color: CupertinoColors.systemGrey6,
-                      // size: 24,
-                    ),
-                  ),
-                ),
-              ],
-            ),
-          ],
-        ));
-  }
-
-  Widget _buildPageText() {
-    if (vState.viewMode != ViewMode.topToBottom) {
-      // logger.v('${state?.itemIndex}');
-      return Text(
-        '${vState.itemIndex + 1}/${vState.filecount}',
-        style: const TextStyle(
-          color: CupertinoColors.systemGrey6,
-        ),
-      );
-    } else {
-      return ValueListenableBuilder<Iterable<ItemPosition>>(
-        valueListenable: controller.itemPositionsListener.itemPositions,
-        builder: (_, Iterable<ItemPosition> positions, __) {
-          controller.handItemPositionsChange(positions);
-
-          return Text(
-            '${vState.itemIndex + 1}/${vState.filecount}',
-            style: const TextStyle(
-              color: CupertinoColors.systemGrey6,
-            ),
-          );
-        },
-      );
-    }
-  }
-
-  /// 底栏
-  Widget _buildBottomBar(BuildContext context) {
-    final double _max = vState.filecount - 1.0;
-    // logger.d('max = $_max');
-    final Map<int, GalleryImage> imageMap = vState.imageMap;
-    const _kTextStyle = TextStyle(color: Colors.white, fontSize: 10);
-    return Container(
-      color: const Color.fromARGB(150, 0, 0, 0),
-      padding: vState.bottomBarPadding,
-      width: vState.screensize.width,
-      // height: kBottomBarHeight + controller.paddingBottom,
-      child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 10),
-        child: Column(
-          children: <Widget>[
-            Row(
-              children: <Widget>[
-                Expanded(
-                  child: GetBuilder<ViewController>(
-                      id: GetIds.IMAGE_VIEW_SLIDER,
-                      builder: (ViewController controller) {
-                        final ViewState vState = controller.vState;
-                        return PageSlider(
-                          max: _max,
-                          sliderValue: vState.sliderValue,
-                          onChangedEnd: controller.handOnSliderChangedEnd,
-                          onChanged: controller.handOnSliderChanged,
-                        );
-                      }),
-                ),
-              ],
-            ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: <Widget>[
-                // 分享按钮
-                GestureDetector(
-                  behavior: HitTestBehavior.opaque,
-                  onTap: () {
-                    logger.v('tap share');
-                    final GalleryImage? p =
-                        imageMap[controller.vState.itemIndex + 1];
-                    logger.v(p?.toJson());
-                    showShareActionSheet(context, p?.imageUrl! ?? '');
-                  },
-                  child: Container(
-                    width: 40,
-                    height: kBottomBarHeight,
-                    child: Column(
-                      children: [
-                        const Icon(
-                          LineIcons.share,
-                          color: CupertinoColors.systemGrey6,
-                          size: 26,
-                        ),
-                        const Spacer(),
-                        Text(
-                          L10n.of(context).share,
-                          style: _kTextStyle,
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
-
-                // 自动阅读按钮
-                if (vState.viewMode != ViewMode.topToBottom)
-                  Obx(() {
-                    return GestureDetector(
-                      behavior: HitTestBehavior.opaque,
-                      onTap: () {
-                        controller.tapAutoRead(context);
-                      },
-                      onLongPress: () {
-                        controller.longTapAutoRead(context);
-                      },
-                      child: Container(
-                        width: 40,
-                        height: kBottomBarHeight,
-                        child: Column(
-                          children: [
-                            Icon(
-                              LineIcons.hourglassHalf,
-                              size: 26,
-                              color: vState.autoRead
-                                  ? CupertinoColors.activeBlue
-                                  : CupertinoColors.systemGrey6,
-                            ),
-                            const Spacer(),
-                            const Text(
-                              'Auto',
-                              style: _kTextStyle,
-                            ),
-                          ],
-                        ),
-                      ),
-                    );
-                  })
-                else
-                  const SizedBox.shrink(),
-
-                // 双页切换按钮
-                if (vState.viewMode != ViewMode.topToBottom)
-                  Obx(() => GestureDetector(
-                        behavior: HitTestBehavior.opaque,
-                        onTap: () {
-                          controller.switchColumnMode();
-                        },
-                        child: Container(
-                          width: 40,
-                          // margin: const EdgeInsets.only(right: 10.0),
-                          height: kBottomBarHeight,
-                          child: Column(
-                            children: [
-                              Icon(
-                                LineIcons.bookOpen,
-                                size: 26,
-                                color: () {
-                                  switch (vState.columnMode) {
-                                    case ViewColumnMode.single:
-                                      return CupertinoColors.systemGrey6;
-                                    case ViewColumnMode.oddLeft:
-                                      return CupertinoColors.activeBlue;
-                                    case ViewColumnMode.evenLeft:
-                                      return CupertinoColors.activeOrange;
-                                  }
-                                }(),
-                              ),
-                              const Spacer(),
-                              Text(
-                                'Double',
-                                style: _kTextStyle,
-                              ),
-                            ],
-                          ),
-                        ),
-                      ))
-                else
-                  const SizedBox.shrink(),
-              ],
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-
-  /// 上下浏览布局 利用[ScrollablePositionedList]实现
-  Widget _buildListView() {
-    return GetBuilder<ViewController>(
-        id: GetIds.IMAGE_VIEW,
-        builder: (ViewController controller) {
-          final ViewState vState = controller.vState;
-          return ScrollablePositionedList.builder(
-            itemScrollController: controller.itemScrollController,
-            itemPositionsListener: controller.itemPositionsListener,
-            itemCount: vState.filecount,
-            itemBuilder: (BuildContext context, int index) {
-              final int itemSer = index + 1;
-
-              return ConstrainedBox(
-                constraints: BoxConstraints(
-                  minWidth: context.width,
-                ),
-                child: GetBuilder<ViewController>(
-                    id: '${GetIds.IMAGE_VIEW_SER}$itemSer',
-                    builder: (ViewController controller) {
-                      double? _height = () {
-                        try {
-                          final _curImage = vState.imageMap[itemSer];
-                          return _curImage!.imageHeight! *
-                              (context.width / _curImage.imageWidth!);
-                        } on Exception catch (_) {
-                          final _curImage = vState.imageMap[itemSer];
-                          return _curImage!.thumbHeight! *
-                              (context.width / _curImage.thumbWidth!);
-                        } catch (e) {
-                          return null;
-                        }
-                      }();
-
-                      if (_height != null) {
-                        _height += vState.showPageInterval ? 8 : 0;
-                      }
-
-                      return Container(
-                        padding: EdgeInsets.only(
-                            bottom: vState.showPageInterval ? 8 : 0),
-                        height: _height,
-                        child: ViewImage(
-                          ser: itemSer,
-                          expand: _height != null,
-                        ),
-                      );
-                    }),
-              );
-            },
-          );
-        });
-  }
-
-  /// 左右方向翻页浏览部件 使用[PhotoViewGallery] 实现
-  Widget _buildPhotoViewGallery({bool reverse = false}) {
-    const double _maxScale = 10;
-
-    return GetBuilder<ViewController>(
-      id: GetIds.IMAGE_VIEW,
-      builder: (ViewController controller) {
-        final ViewState vState = controller.vState;
-        controller.lastImagesSize = vState.images.length;
-
-        return PhotoViewGallery.builder(
-          scrollPhysics: const BouncingScrollPhysics(),
-          reverse: reverse,
-          itemCount: vState.pageCount,
-          customSize: vState.screensize,
-          builder: (BuildContext context, int pageIndex) {
-            return PhotoViewGalleryPageOptions.customChild(
-              child: Container(
-                // alignment: Alignment.center,
-                padding: EdgeInsets.symmetric(
-                    horizontal: vState.showPageInterval ? kPageViewPadding : 0),
-                child: () {
-                  if (vState.columnMode != ViewColumnMode.single) {
-                    // 双页阅读
-                    final int serLeft =
-                        vState.columnMode == ViewColumnMode.oddLeft
-                            ? pageIndex * 2 + 1
-                            : pageIndex * 2;
-
-                    Alignment? alignmentL = vState.filecount > serLeft
-                        ? Alignment.centerRight
-                        : null;
-                    Alignment? alignmentR =
-                        serLeft <= 0 ? null : Alignment.centerLeft;
-
-                    double? _widthL = () {
-                      try {
-                        final _curImage = vState.imageMap[serLeft];
-                        return _curImage!.imageWidth! / _curImage.imageHeight!;
-                      } on Exception catch (_) {
-                        final _curImage = vState.imageMap[serLeft];
-                        return _curImage!.thumbWidth! / _curImage.thumbHeight!;
-                      } catch (e) {
-                        return 1.0;
-                      }
-                    }();
-
-                    double? _widthR = () {
-                      if (vState.filecount <= serLeft) {
-                        return 0.0;
-                      }
-                      try {
-                        final _curImage = vState.imageMap[serLeft + 1];
-                        return _curImage!.imageWidth! / _curImage.imageHeight!;
-                      } on Exception catch (_) {
-                        final _curImage = vState.imageMap[serLeft + 1];
-                        return _curImage!.thumbWidth! / _curImage.thumbHeight!;
-                      } catch (e) {
-                        return 1.0;
-                      }
-                    }();
-
-                    logger.d('_widthL:$_widthL  _widthR:$_widthR');
-
-                    final List<Widget> _pageList = <Widget>[
-                      if (serLeft > 0)
-                        Expanded(
-                          flex: _widthL * 1000 ~/ 1,
-                          child: Container(
-                            alignment: alignmentL,
-                            child: Hero(
-                              tag: serLeft,
-                              child: ViewImage(
-                                ser: serLeft,
-                                fade: vState.fade,
-                                // expand: true,
-                              ),
-                            ),
-                          ),
-                        ),
-                      if (vState.filecount > serLeft)
-                        Expanded(
-                          flex: _widthR * 1000 ~/ 1,
-                          child: Container(
-                            alignment: alignmentR,
-                            child: Hero(
-                              tag: serLeft + 1,
-                              child: ViewImage(
-                                ser: serLeft + 1,
-                                fade: vState.fade,
-                                // expand: true,
-                              ),
-                            ),
-                          ),
-                        ),
-                    ];
-
-                    return Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      mainAxisSize: MainAxisSize.min,
-                      children:
-                          reverse ? _pageList.reversed.toList() : _pageList,
-                    );
-                  } else {
-                    return ViewImage(
-                      ser: pageIndex + 1,
-                      fade: vState.fade,
-                      expand: true,
-                    );
-                  }
-                }(),
-              ),
-              initialScale: PhotoViewComputedScale.contained,
-              minScale: PhotoViewComputedScale.contained * 1.0,
-              maxScale: PhotoViewComputedScale.covered * _maxScale,
-            );
-          },
-          loadingBuilder: loadingBuilder,
-          // backgroundDecoration: null,
-          pageController: controller.pageController,
-          enableRotation: false,
-          onPageChanged: controller.handOnPageChanged,
-        );
+  @override
+  Widget build(BuildContext context) {
+    return GetBuilder<ViewExtController>(
+      id: idImagePageView,
+      builder: (logic) {
+        switch (logic.vState.viewMode) {
+          case ViewMode.topToBottom:
+            return const ImageListViewPage();
+          case ViewMode.LeftToRight:
+            return const ViewImageSlidePage();
+          case ViewMode.rightToLeft:
+            return const ViewImageSlidePage(reverse: true);
+          default:
+            return const ViewImageSlidePage();
+        }
       },
     );
-  }
-
-  /// 左右方向浏览部件 使用[ExtendedImageGesturePageView] 实现
-  Widget _buildExtendedImageGesturePageView({bool reverse = false}) {
-    final ViewState vState = controller.vState;
-    return ExtendedImageGesturePageView.builder(
-      itemBuilder: (BuildContext context, int pageIndex) {
-        Widget image = ViewImage(
-          ser: pageIndex + 1,
-          fade: vState.fade,
-          enableSlideOutPage: true,
-          expand: true,
-        );
-
-        image = ExtendedImageSlidePage(
-          child: image,
-          slideAxis: SlideAxis.vertical,
-          slideType: SlideType.onlyImage,
-          resetPageDuration: const Duration(milliseconds: 300),
-          slidePageBackgroundHandler: (Offset offset, Size pageSize) {
-            double opacity = 0.0;
-            opacity = offset.distance /
-                (Offset(pageSize.width, pageSize.height).distance / 2.0);
-            return Colors.black.withOpacity(min(1.0, max(1.0 - opacity, 0.0)));
-          },
-        );
-
-        return image;
-      },
-      itemCount: vState.filecount,
-      onPageChanged: controller.handOnPageChanged,
-      controller: controller.pageController,
-      reverse: reverse,
-    );
-  }
-
-  Widget loadingBuilder(BuildContext context, ImageChunkEvent? progress) {
-    return progress != null
-        ? Container(
-            child: Center(
-              child: Text(
-                '${progress.cumulativeBytesLoaded * 100 ~/ (progress.expectedTotalBytes ?? 1)} %',
-                style: const TextStyle(
-                  color: Colors.white,
-                ),
-              ),
-            ),
-          )
-        : Container(
-            child: Center(
-              child: Text(
-                'Loading ${vState.itemIndex + 1}',
-              ),
-            ),
-          );
   }
 }
 
-class NumStack extends StatelessWidget {
-  const NumStack({Key? key, this.text, required this.child}) : super(key: key);
-  final String? text;
+class ImageListViewPage extends GetView<ViewExtController> {
+  const ImageListViewPage({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    Widget imageListview = Container(
+      height: context.height,
+      width: context.width,
+      color: CupertinoTheme.of(context).scaffoldBackgroundColor,
+      child: GetBuilder<ViewExtController>(
+        id: idImageListView,
+        builder: (logic) {
+          final vState = logic.vState;
+
+          return ScrollablePositionedList.builder(
+            // minCacheExtent: 500,
+            padding: EdgeInsets.only(
+              top: context.mediaQueryPadding.top,
+              bottom: context.mediaQueryPadding.bottom,
+            ),
+            itemScrollController: logic.itemScrollController,
+            itemPositionsListener: logic.itemPositionsListener,
+            itemCount: vState.filecount,
+            itemBuilder: itemBuilder(),
+          );
+        },
+      ),
+    );
+
+    Widget imageListview2 = Container(
+      color: CupertinoTheme.of(context).scaffoldBackgroundColor,
+      child: GetBuilder<ViewExtController>(
+        id: idImageListView,
+        builder: (logic) {
+          final vState = logic.vState;
+
+          return ListView.builder(
+            padding: const EdgeInsets.all(0),
+            itemCount: vState.filecount,
+            itemBuilder: itemBuilder(),
+          );
+        },
+      ),
+    );
+
+    Widget imageListview3 = Container(
+      color: CupertinoTheme.of(context).scaffoldBackgroundColor,
+      child: GetBuilder<ViewExtController>(
+        id: idImageListView,
+        builder: (logic) {
+          final vState = logic.vState;
+
+          return ListView.builder(
+            controller: controller.autoScrollController,
+            padding: const EdgeInsets.all(0),
+            itemCount: vState.filecount,
+            itemBuilder: itemBuilder2(),
+          );
+        },
+      ),
+    );
+
+    final _list = generateWordPairs().take(700).toList();
+    Widget wordlist = Container(
+      color: Colors.blueGrey,
+      child: ListView.builder(
+        itemCount: _list.length,
+        itemBuilder: (_, index) {
+          final w = _list[index];
+          return Text('$w', style: const TextStyle(color: Colors.white));
+        },
+      ),
+    );
+
+    Widget wordlist2 = Container(
+      color: Colors.blueGrey,
+      child: GetBuilder<ViewExtController>(
+        id: idImageListView,
+        builder: (logic) {
+          return ListView.builder(
+            itemCount: _list.length,
+            itemBuilder: (_, index) {
+              final w = _list[index];
+              return AutoScrollTag(
+                  key: ValueKey(index),
+                  controller: logic.autoScrollController,
+                  index: index,
+                  child:
+                      Text('$w', style: const TextStyle(color: Colors.white)));
+            },
+          );
+        },
+      ),
+    );
+
+    if (false)
+      return Zoom(
+        maxZoomWidth: context.width * 2,
+        maxZoomHeight: context.height * 2,
+        enableScroll: false,
+        child: Center(child: imageListview),
+      );
+
+    if (false)
+      return Zoom(
+        maxZoomWidth: context.width * 0.5,
+        maxZoomHeight: context.height * 0.5,
+        enableScroll: false,
+        child: wordlist,
+      );
+
+    if (false)
+      return Container(
+        height: context.height,
+        width: context.width,
+        color: Colors.grey.withAlpha(150),
+        child: InteractiveViewer(
+          // boundaryMargin: EdgeInsets.all(400),
+          minScale: 1.0,
+          maxScale: 2.0,
+          panEnabled: true,
+          scaleEnabled: true,
+          // child: Container(
+          //   child: Image.asset('assets/40.png'),
+          // ),
+          child: imageListview3,
+        ),
+      );
+
+    if (false)
+      return PhotoView.customChild(
+        initialScale: 1.0,
+        customSize: context.mediaQuery.size,
+        minScale: PhotoViewComputedScale.contained * 1.0,
+        maxScale: 5.0,
+        tightMode: true,
+        child: imageListview,
+      );
+
+    // if (false)
+    return PhotoViewGallery.builder(
+      itemCount: 1,
+      builder: (_, __) {
+        return PhotoViewGalleryPageOptions.customChild(
+          scaleStateController: controller.photoViewScaleStateController,
+          initialScale: 1.0,
+          minScale: PhotoViewComputedScale.contained * 1.0,
+          maxScale: 5.0,
+          // scaleStateCycle: lisviewScaleStateCycle,
+          child: imageListview,
+        );
+      },
+    );
+  }
+
+  Widget Function(BuildContext context, int index) itemBuilder() {
+    return (BuildContext context, int index) {
+      final int itemSer = index + 1;
+
+      return ConstrainedBox(
+        constraints: BoxConstraints(
+          minWidth: context.width,
+        ),
+        child: GetBuilder<ViewExtController>(
+            id: '$idImageListView$itemSer',
+            builder: (logic) {
+              loggerSimple.v('builder itemBuilder $itemSer');
+
+              final vState = logic.vState;
+              double? _height = () {
+                if (vState.imageSizeMap[itemSer] != null) {
+                  final imageSize = vState.imageSizeMap[itemSer]!;
+                  return imageSize.height * (context.width / imageSize.width);
+                }
+
+                try {
+                  final _curImage = vState.imageMap[itemSer];
+                  return _curImage!.imageHeight! *
+                      (context.width / _curImage.imageWidth!);
+                } on Exception catch (_) {
+                  final _curImage = vState.imageMap[itemSer];
+                  return _curImage!.thumbHeight! *
+                      (context.width / _curImage.thumbWidth!);
+                } catch (e) {
+                  return null;
+                }
+              }();
+
+              if (_height != null) {
+                _height += vState.showPageInterval ? 8 : 0;
+              }
+
+              loggerSimple.v('builder itemBuilder $itemSer $_height');
+
+              return AnimatedContainer(
+                padding:
+                    EdgeInsets.only(bottom: vState.showPageInterval ? 8 : 0),
+                // height: _height ?? context.mediaQueryShortestSide * 4 / 3,
+                height: _height ?? context.mediaQueryShortestSide,
+                duration: const Duration(milliseconds: 200),
+                curve: Curves.ease,
+                child: ViewImage(
+                  imageSer: itemSer,
+                  enableDoubleTap: false,
+                  mode: ExtendedImageMode.none,
+                  // expand: _height != null,
+                ),
+              );
+            }),
+      );
+    };
+  }
+
+  Widget Function(BuildContext context, int index) itemBuilder2() {
+    return (BuildContext context, int index) {
+      final int itemSer = index + 1;
+
+      return AutoScrollTag(
+        key: ValueKey(index),
+        controller: controller.autoScrollController,
+        index: index,
+        child: ConstrainedBox(
+          constraints: BoxConstraints(
+            minWidth: context.width,
+          ),
+          child: GetBuilder<ViewExtController>(
+              id: '$idImageListView$itemSer',
+              builder: (logic) {
+                final vState = logic.vState;
+                double? _height = () {
+                  try {
+                    final _curImage = vState.imageMap[itemSer];
+                    return _curImage!.imageHeight! *
+                        (context.width / _curImage.imageWidth!);
+                  } on Exception catch (_) {
+                    final _curImage = vState.imageMap[itemSer];
+                    return _curImage!.thumbHeight! *
+                        (context.width / _curImage.thumbWidth!);
+                  } catch (e) {
+                    return null;
+                  }
+                }();
+
+                if (_height != null) {
+                  _height += vState.showPageInterval ? 8 : 0;
+                }
+
+                return Container(
+                  padding:
+                      EdgeInsets.only(bottom: vState.showPageInterval ? 8 : 0),
+                  height: _height,
+                  child: ViewImage(
+                    imageSer: itemSer,
+                    enableDoubleTap: false,
+                    mode: ExtendedImageMode.none,
+                    // expand: _height != null,
+                  ),
+                );
+              }),
+        ),
+      );
+    };
+  }
+}
+
+PhotoViewScaleState lisviewScaleStateCycle(PhotoViewScaleState actual) {
+  logger.d('actual $actual');
+  // switch (actual) {
+  //   case PhotoViewScaleState.initial:
+  //   case PhotoViewScaleState.covering:
+  //   case PhotoViewScaleState.originalSize:
+  //     return PhotoViewScaleState.zoomedOut;
+  //   default:
+  //     return PhotoViewScaleState.initial;
+  // }
+  switch (actual) {
+    case PhotoViewScaleState.initial:
+      return PhotoViewScaleState.covering;
+    case PhotoViewScaleState.covering:
+      return PhotoViewScaleState.originalSize;
+    case PhotoViewScaleState.originalSize:
+      return PhotoViewScaleState.initial;
+    case PhotoViewScaleState.zoomedIn:
+    case PhotoViewScaleState.zoomedOut:
+      return PhotoViewScaleState.initial;
+    default:
+      return PhotoViewScaleState.initial;
+  }
+}
+
+class ViewImageSlidePage extends GetView<ViewExtController> {
+  const ViewImageSlidePage({Key? key, this.reverse = false}) : super(key: key);
+  final bool reverse;
+
+  @override
+  Widget build(BuildContext context) {
+    return ExtendedImageSlidePage(
+      child: GetBuilder<ViewExtController>(
+        id: idSlidePage,
+        builder: (logic) {
+          if (logic.vState.columnMode != ViewColumnMode.single) {
+            return PhotoViewGallery.builder(
+                backgroundDecoration:
+                    const BoxDecoration(color: Colors.transparent),
+                pageController: logic.pageController,
+                itemCount: logic.vState.pageCount,
+                onPageChanged: controller.handOnPageChanged,
+                scrollDirection: Axis.horizontal,
+                customSize: context.mediaQuery.size,
+                scrollPhysics: const CustomScrollPhysics(),
+                reverse: reverse,
+                builder: (BuildContext context, int pageIndex) {
+                  /// 双页
+                  return PhotoViewGalleryPageOptions.customChild(
+                    initialScale: PhotoViewComputedScale.contained,
+                    minScale: PhotoViewComputedScale.contained,
+                    maxScale: PhotoViewComputedScale.covered * 5,
+                    // scaleStateCycle: lisviewScaleStateCycle,
+                    controller: logic.photoViewController,
+                    // scaleStateController: logic.photoViewScaleStateController,
+                    // disableGestures: true,
+                    child: DoublePageView(pageIndex: pageIndex),
+                  );
+                });
+          } else {
+            return ExtendedImageGesturePageView.builder(
+              controller: logic.pageController,
+              itemCount: logic.vState.pageCount,
+              onPageChanged: controller.handOnPageChanged,
+              scrollDirection: Axis.horizontal,
+              physics: const CustomScrollPhysics(),
+              reverse: reverse,
+              itemBuilder: (BuildContext context, int index) {
+                logger.v('pageIndex $index ser ${index + 1}');
+
+                /// 单页
+                return ViewImage(
+                  imageSer: index + 1,
+                  initialScale: logic.vState.showPageInterval ? (1 / 1.1) : 1.0,
+                );
+              },
+            );
+          }
+        },
+      ),
+      slideAxis: SlideAxis.vertical,
+      slideType: SlideType.wholePage,
+      resetPageDuration: const Duration(milliseconds: 300),
+      slidePageBackgroundHandler: (Offset offset, Size pageSize) {
+        double opacity = 0.0;
+        opacity = offset.distance /
+            (Offset(pageSize.width, pageSize.height).distance / 2.0);
+        return CupertinoColors.systemBackground.darkColor
+            .withOpacity(min(1.0, max(1.0 - opacity, 0.0)));
+      },
+      onSlidingPage: (ExtendedImageSlidePageState state) {
+        if (controller.vState.showBar) {
+          controller.vState.showBar = !state.isSliding;
+          controller.update([idViewBar]);
+        }
+      },
+    );
+  }
+}
+
+class DoublePageView extends GetView<ViewExtController> {
+  const DoublePageView({
+    Key? key,
+    required this.pageIndex,
+  }) : super(key: key);
+
+  final int pageIndex;
+
+  // ViewExtState get vState => controller.vState;
+
+  @override
+  Widget build(BuildContext context) {
+    final ViewExtState vState = controller.vState;
+    final reverse = vState.viewMode == ViewMode.rightToLeft;
+
+    // 双页阅读
+    final int serStart = vState.columnMode == ViewColumnMode.oddLeft
+        ? pageIndex * 2 + 1
+        : pageIndex * 2;
+    vState.serStart = serStart;
+
+    // logger.d('pageIndex $pageIndex leftSer $serStart');
+
+    Alignment? alignmentL =
+        vState.filecount > serStart ? Alignment.centerRight : null;
+    Alignment? alignmentR = serStart <= 0 ? null : Alignment.centerLeft;
+
+    logger.v('alignmentL:$alignmentL  alignmentR:$alignmentR');
+
+    double? _flexStart = () {
+      try {
+        final _curImage = vState.imageMap[serStart];
+        return _curImage!.imageWidth! / _curImage.imageHeight!;
+      } on Exception catch (_) {
+        final _curImage = vState.imageMap[serStart];
+        return _curImage!.thumbWidth! / _curImage.thumbHeight!;
+      } catch (e) {
+        return 1.0;
+      }
+    }();
+
+    double? _flexEnd = () {
+      if (vState.filecount <= serStart) {
+        return 0.0;
+      }
+      try {
+        final _curImage = vState.imageMap[serStart + 1];
+        return _curImage!.imageWidth! / _curImage.imageHeight!;
+      } on Exception catch (_) {
+        final _curImage = vState.imageMap[serStart + 1];
+        return _curImage!.thumbWidth! / _curImage.thumbHeight!;
+      } catch (e) {
+        return 1.0;
+      }
+    }();
+
+    logger.v('_flexStart:$_flexStart  _flexEnd:$_flexEnd');
+
+    final List<Widget> _pageList = <Widget>[
+      if (serStart > 0)
+        Expanded(
+          flex: _flexStart * 1000 ~/ 1,
+          child: Container(
+            alignment: reverse ? alignmentR : alignmentL,
+            child: ViewImage(
+              imageSer: serStart,
+              enableDoubleTap: false,
+              mode: ExtendedImageMode.none,
+            ),
+          ),
+        ),
+      if (vState.filecount > serStart)
+        Expanded(
+          flex: _flexEnd * 1000 ~/ 1,
+          child: Container(
+            alignment: reverse ? alignmentL : alignmentR,
+            child: ViewImage(
+              imageSer: serStart + 1,
+              enableDoubleTap: false,
+              mode: ExtendedImageMode.none,
+            ),
+          ),
+        ),
+    ];
+
+    return GestureDetector(
+      // onDoubleTap: () {
+      //   logger.d('onDoubleTap');
+      //   controller.photoViewScaleStateController.scaleState =
+      //       PhotoViewScaleState.zoomedOut;
+      // },
+      onDoubleTapDown: (details) {
+        logger.d('onDoubleTapDown');
+      },
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        mainAxisSize: MainAxisSize.min,
+        children: reverse ? _pageList.reversed.toList() : _pageList,
+      ),
+    );
+  }
+}
+
+///  显示顶栏 底栏 slider等
+class ImagePlugins extends GetView<ViewExtController> {
+  const ImagePlugins({
+    Key? key,
+    required this.child,
+  }) : super(key: key);
+
+  final Widget child;
+
+  ViewExtState get vState => controller.vState;
+
+  @override
+  Widget build(BuildContext context) {
+    vState.bottomBarHeight = context.mediaQueryPadding.bottom +
+        kTopBarHeight * 2 +
+        (vState.showThumbList ? kThumbListViewHeight : 0);
+
+    return Container(
+      child: Stack(
+        alignment: Alignment.center,
+        children: [
+          child,
+          GetBuilder<ViewExtController>(
+            id: idViewBar,
+            builder: (logic) {
+              return Stack(
+                children: [
+                  AnimatedPositioned(
+                    curve: Curves.fastOutSlowIn,
+                    duration: const Duration(milliseconds: 300),
+                    top: logic.vState.topBarOffset,
+                    // top: 50,
+                    child: const ViewTopBar(),
+                  ),
+                  AnimatedPositioned(
+                    curve: Curves.fastOutSlowIn,
+                    duration: const Duration(milliseconds: 300),
+                    bottom: logic.vState.bottomBarOffset,
+                    child: const ViewBottomBar(),
+                  ),
+                ],
+              );
+            },
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+/// 控制触摸手势事件
+class ImageGestureDetector extends GetView<ViewExtController> {
+  const ImageGestureDetector({
+    Key? key,
+    required this.child,
+  }) : super(key: key);
   final Widget child;
 
   @override
@@ -608,25 +622,36 @@ class NumStack extends StatelessWidget {
       alignment: Alignment.center,
       children: <Widget>[
         child,
-        if (Global.inDebugMode)
-          Positioned(
-            left: 10,
-            top: 10,
-            child: Text(
-              text ?? '',
-              style: const TextStyle(
-                  fontSize: 50,
-                  fontWeight: FontWeight.bold,
-                  color: Colors.white,
-                  shadows: <Shadow>[
-                    Shadow(
-                      color: Colors.black,
-                      offset: Offset(2, 2),
-                      blurRadius: 4,
-                    )
-                  ]),
+        // 两侧触摸区
+        Row(
+          children: [
+            Expanded(
+              child: GestureDetector(
+                behavior: HitTestBehavior.translucent,
+                onTap: controller.tapLeft,
+              ),
             ),
+            SizedBox(
+              height: context.height,
+              width: context.width / 2.5,
+            ),
+            Expanded(
+              child: GestureDetector(
+                behavior: HitTestBehavior.translucent,
+                onTap: controller.tapRight,
+              ),
+            ),
+          ],
+        ),
+        // 中心触摸区
+        GestureDetector(
+          behavior: HitTestBehavior.translucent,
+          child: Container(
+            height: context.height / 4,
+            width: context.width / 2.5,
           ),
+          onTap: controller.handOnTapCent,
+        ),
       ],
     );
   }

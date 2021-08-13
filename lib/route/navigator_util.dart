@@ -9,12 +9,12 @@ import 'package:fehviewer/pages/gallery/controller/rate_controller.dart';
 import 'package:fehviewer/pages/gallery/controller/taginfo_controller.dart';
 import 'package:fehviewer/pages/gallery/controller/torrent_controller.dart';
 import 'package:fehviewer/pages/gallery/view/gallery_page.dart';
-import 'package:fehviewer/pages/image_view_ext/common.dart';
-import 'package:fehviewer/pages/image_view_ext/view/view_ext_page.dart';
+import 'package:fehviewer/pages/image_view/common.dart';
+import 'package:fehviewer/pages/image_view/view/view_page.dart';
 import 'package:fehviewer/pages/tab/controller/gallery_controller.dart';
 import 'package:fehviewer/pages/tab/controller/search_page_controller.dart';
 import 'package:fehviewer/pages/tab/view/gallery_page.dart';
-import 'package:fehviewer/pages/tab/view/search_page_new.dart';
+import 'package:fehviewer/pages/tab/view/search_page.dart';
 import 'package:fehviewer/route/routes.dart';
 import 'package:fehviewer/utils/logger.dart';
 import 'package:flutter/foundation.dart';
@@ -179,7 +179,7 @@ class NavigatorUtil {
 
     await Get.to(
       // () => GallerySearchPage(),
-      () => GallerySearchPageNew(),
+      () => GallerySearchPage(),
       transition: fromTabItem ? Transition.fadeIn : Transition.cupertino,
       binding: BindingsBuilder(() {
         Get.lazyPut(

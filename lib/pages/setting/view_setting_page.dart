@@ -3,7 +3,7 @@ import 'package:fehviewer/common/service/ehconfig_service.dart';
 import 'package:fehviewer/common/service/theme_service.dart';
 import 'package:fehviewer/const/const.dart';
 import 'package:fehviewer/generated/l10n.dart';
-import 'package:fehviewer/pages/image_view_ext/controller/view_ext_contorller.dart';
+import 'package:fehviewer/pages/image_view/controller/view_ext_contorller.dart';
 import 'package:fehviewer/pages/setting/setting_base.dart';
 import 'package:fehviewer/utils/logger.dart';
 import 'package:flutter/cupertino.dart';

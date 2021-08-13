@@ -15,8 +15,8 @@ import 'package:fehviewer/pages/gallery/controller/gallery_page_controller.dart'
 import 'package:fehviewer/pages/gallery/view/comment_item.dart';
 import 'package:fehviewer/pages/gallery/view/preview_clipper.dart';
 import 'package:fehviewer/pages/gallery/view/taginfo_dialog.dart';
-import 'package:fehviewer/pages/image_view_ext/controller/view_ext_contorller.dart';
-import 'package:fehviewer/pages/image_view_ext/view/hero.dart';
+import 'package:fehviewer/pages/image_view/controller/view_ext_contorller.dart';
+import 'package:fehviewer/pages/image_view/view/hero.dart';
 import 'package:fehviewer/route/navigator_util.dart';
 import 'package:fehviewer/route/routes.dart';
 // import 'package:fehviewer/utils/cust_lib/selectable_text.dart';
