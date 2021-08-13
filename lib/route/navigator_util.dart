@@ -72,9 +72,10 @@ class NavigatorUtil {
     GalleryItem? galleryItem,
     bool replace = false,
   }) async {
-    if (!isLayoutLarge) {
-      Get.find<DepthService>().pushPageCtrl();
-    }
+    // if (!isLayoutLarge) {
+    //   Get.find<DepthService>().pushPageCtrl();
+    // }
+    Get.find<DepthService>().pushPageCtrl();
 
     // url跳转方式
     if (url != null && url.isNotEmpty) {
@@ -86,7 +87,10 @@ class NavigatorUtil {
           RegExp(r'https://e[-x]hentai.org/s/[0-9a-z]+/\d+-\d+');
 
       if (regGalleryUrl.hasMatch(url)) {
-        Get.put(GalleryRepository(url: url), tag: pageCtrlDepth);
+        Get.put(
+          GalleryRepository(url: url),
+          // tag: pageCtrlDepth,
+        );
         // 命名路由方式
         if (replace) {
           await Get.offNamed(
@@ -109,8 +113,10 @@ class NavigatorUtil {
             '${Api.getBaseUrl()}/g/${_image.gid}/${_image.token}';
         logger.d('jump to $_galleryUrl $ser');
 
-        Get.put(GalleryRepository(url: _galleryUrl, jumpSer: ser),
-            tag: pageCtrlDepth);
+        Get.put(
+          GalleryRepository(url: _galleryUrl, jumpSer: ser),
+          // tag: pageCtrlDepth,
+        );
 
         if (replace) {
           await Get.offNamed(
@@ -131,18 +137,25 @@ class NavigatorUtil {
       logger.v('goGalleryPage fromItem tabTag=$tabTag');
 
       logger.d('put GalleryRepository $pageCtrlDepth');
-      Get.put(GalleryRepository(item: galleryItem, tabTag: tabTag),
-          tag: pageCtrlDepth);
+      // Get.lazyReplace(
+      //   () => GalleryRepository(item: galleryItem, tabTag: tabTag),
+      //   // tag: pageCtrlDepth,
+      //   fenix: true,
+      // );
+
+      Get.replace(GalleryRepository(item: galleryItem, tabTag: tabTag));
 
       //命名路由
       if (isLayoutLarge && Get.currentRoute == EHRoutes.home) {
-        if (int.parse(pageCtrlDepth) > 0) {
-          logger.d('2 back pageCtrlDepth:$pageCtrlDepth');
-          // Get.back(id: 2);
-          await Get.delete<GalleryRepository>(tag: pageCtrlDepth);
-          Get.put(GalleryRepository(item: galleryItem, tabTag: tabTag),
-              tag: pageCtrlDepth);
-        }
+        // if (int.parse(pageCtrlDepth) >= 0) {
+        //   logger.d('back pageCtrlDepth:$pageCtrlDepth');
+        //   // Get.back(id: 2);
+        //   await Get.delete<GalleryRepository>(tag: pageCtrlDepth);
+        //   Get.lazyPut(
+        //       () => GalleryRepository(item: galleryItem, tabTag: tabTag),
+        //       tag: pageCtrlDepth,
+        //       fenix: true);
+        // }
 
         await Get.offNamed(
           EHRoutes.galleryPage,
@@ -161,7 +174,7 @@ class NavigatorUtil {
     }
 
     // 为了保证能正常关闭
-    deletePageController();
+    // deletePageController();
 
     Get.delete<GalleryRepository>(tag: pageCtrlDepth);
     if (!isLayoutLarge) {
@@ -217,7 +230,7 @@ class NavigatorUtil {
   }
 
   static void deletePageController() {
-    logger.d('deletePageController');
+    logger.d('deletePageController $pageCtrlDepth');
     // 为了保证能正常关闭
     if (Get.isRegistered<RateController>(tag: pageCtrlDepth))
       Get.delete<RateController>(tag: pageCtrlDepth);

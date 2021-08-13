@@ -2,6 +2,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:fehviewer/common/exts.dart';
 import 'package:fehviewer/common/global.dart';
 import 'package:fehviewer/common/service/ehconfig_service.dart';
+import 'package:fehviewer/common/service/layout_service.dart';
 import 'package:fehviewer/const/theme_colors.dart';
 import 'package:fehviewer/extension.dart';
 import 'package:fehviewer/models/index.dart';
@@ -184,32 +185,35 @@ class GalleryItemWidget extends StatelessWidget {
     // logger.v('hero item => ${galleryItem.gid}_cover_$tabTag');
     // logger.d('${_item.englishTitle} ${_getHeigth()}');
 
+    Widget image = Container(
+      decoration: BoxDecoration(boxShadow: [
+        //阴影
+        BoxShadow(
+          color: CupertinoDynamicColor.resolve(
+              CupertinoColors.systemGrey4, Get.context!),
+          blurRadius: 10,
+        )
+      ]),
+      child: ClipRRect(
+        // 圆角
+        borderRadius: BorderRadius.circular(6),
+        child: CoverImg(
+          imgUrl: _item.imgUrl ?? '',
+          height: _item.imgWidth != null ? _getHeigth() : null,
+        ),
+      ),
+    );
+
     return Container(
-      // margin: const EdgeInsets.only(top: 10, bottom: 10),
       width: coverImageWidth,
       height: _item.imgWidth != null ? _getHeigth() : null,
       alignment: Alignment.center,
-      child: Hero(
-        tag: '${_item.gid}_cover_$tabTag',
-        child: Container(
-          decoration: BoxDecoration(boxShadow: [
-            //阴影
-            BoxShadow(
-              color: CupertinoDynamicColor.resolve(
-                  CupertinoColors.systemGrey4, Get.context!),
-              blurRadius: 10,
+      child: isLayoutLarge
+          ? Hero(
+              tag: '${_item.gid}_cover_$tabTag',
+              child: image,
             )
-          ]),
-          child: ClipRRect(
-            // 圆角
-            borderRadius: BorderRadius.circular(6),
-            child: CoverImg(
-              imgUrl: _item.imgUrl ?? '',
-              height: _item.imgWidth != null ? _getHeigth() : null,
-            ),
-          ),
-        ),
-      ),
+          : image,
     );
   }
 
