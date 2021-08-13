@@ -7,10 +7,8 @@ import 'package:fehviewer/pages/gallery/view/all_preview_page.dart';
 import 'package:fehviewer/pages/gallery/view/comment_page.dart';
 import 'package:fehviewer/pages/gallery/view/gallery_info_page.dart';
 import 'package:fehviewer/pages/gallery/view/gallery_page.dart';
-import 'package:fehviewer/pages/image_view/controller/view_controller.dart';
+import 'package:fehviewer/pages/image_view/controller/view_ext_contorller.dart';
 import 'package:fehviewer/pages/image_view/view/view_page.dart';
-import 'package:fehviewer/pages/image_view_ext/controller/view_ext_contorller.dart';
-import 'package:fehviewer/pages/image_view_ext/view/view_ext_page.dart';
 import 'package:fehviewer/pages/login_ext/controller/login_ext_controller.dart';
 import 'package:fehviewer/pages/login_ext/view/login_ext_page.dart';
 import 'package:fehviewer/pages/login_ext/view/web_login_in.dart';
@@ -33,7 +31,7 @@ import 'package:fehviewer/pages/tab/view/history_page.dart';
 import 'package:fehviewer/pages/tab/view/home_page.dart';
 import 'package:fehviewer/pages/tab/view/popular_page.dart';
 import 'package:fehviewer/pages/tab/view/quick_search_page.dart';
-import 'package:fehviewer/pages/tab/view/search_page_new.dart';
+import 'package:fehviewer/pages/tab/view/search_page.dart';
 import 'package:fehviewer/pages/tab/view/splash_page.dart';
 import 'package:fehviewer/pages/tab/view/toplist_page.dart';
 import 'package:fehviewer/pages/tab/view/unlock_page.dart';
@@ -158,19 +156,10 @@ class AppPages {
       name: EHRoutes.download,
       page: () => const DownloadTab(tabIndex: EHRoutes.download),
     ),
-    GetPage(
-      name: EHRoutes.galleryView,
-      page: () => const GalleryViewPage(),
-      binding: BindingsBuilder<dynamic>(() {
-        Get.lazyPut(() => ViewController());
-      }),
-      showCupertinoParallax: false,
-      opaque: false,
-    ),
 
     GetPage(
       name: EHRoutes.galleryViewExt,
-      page: () => const ViewExtPage(),
+      page: () => const ViewPage(),
       binding: BindingsBuilder<dynamic>(() {
         Get.lazyPut(() => ViewExtController());
       }),
@@ -189,7 +178,7 @@ class AppPages {
 
     GetPage(
       name: EHRoutes.search,
-      page: () => GallerySearchPageNew(),
+      page: () => GallerySearchPage(),
       preventDuplicates: false,
     ),
 

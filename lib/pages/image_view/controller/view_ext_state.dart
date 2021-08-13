@@ -15,7 +15,7 @@ import 'package:fehviewer/store/floor/entity/gallery_image_task.dart';
 import 'package:get/get.dart';
 
 import '../common.dart';
-import '../view/view_ext_page.dart';
+import '../view/view_page.dart';
 import 'view_ext_contorller.dart';
 
 class ViewExtState {
