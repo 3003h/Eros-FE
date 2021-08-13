@@ -86,17 +86,18 @@ class NavigatorUtil {
           RegExp(r'https://e[-x]hentai.org/s/[0-9a-z]+/\d+-\d+');
 
       if (regGalleryUrl.hasMatch(url)) {
+        Get.put(GalleryRepository(url: url), tag: pageCtrlDepth);
         // 命名路由方式
         if (replace) {
           await Get.offNamed(
             EHRoutes.galleryPage,
-            arguments: GalleryRepository(url: url),
+            // arguments: GalleryRepository(url: url),
             preventDuplicates: false,
           );
         } else {
           await Get.toNamed(
             EHRoutes.galleryPage,
-            arguments: GalleryRepository(url: url),
+            // arguments: GalleryRepository(url: url),
             preventDuplicates: false,
           );
         }
@@ -108,16 +109,19 @@ class NavigatorUtil {
             '${Api.getBaseUrl()}/g/${_image.gid}/${_image.token}';
         logger.d('jump to $_galleryUrl $ser');
 
+        Get.put(GalleryRepository(url: _galleryUrl, jumpSer: ser),
+            tag: pageCtrlDepth);
+
         if (replace) {
           await Get.offNamed(
             EHRoutes.galleryPage,
-            arguments: GalleryRepository(url: _galleryUrl, jumpSer: ser),
+            // arguments: GalleryRepository(url: _galleryUrl, jumpSer: ser),
             preventDuplicates: false,
           );
         } else {
           await Get.toNamed(
             EHRoutes.galleryPage,
-            arguments: GalleryRepository(url: _galleryUrl, jumpSer: ser),
+            // arguments: GalleryRepository(url: _galleryUrl, jumpSer: ser),
             preventDuplicates: false,
           );
         }
@@ -192,16 +196,12 @@ class NavigatorUtil {
   static Future<void> goGalleryViewPage(int index, String gid) async {
     // logger.d('goGalleryViewPage $index');
     // 命名路由方式
-    if (!kDebugMode && false) {
-      await Get.toNamed(EHRoutes.galleryView, arguments: index);
-    } else {
-      await Get.toNamed(EHRoutes.galleryViewExt,
-          arguments: ViewRepository(
-            index: index,
-            loadType: LoadType.network,
-            gid: gid,
-          ));
-    }
+    await Get.toNamed(EHRoutes.galleryViewExt,
+        arguments: ViewRepository(
+          index: index,
+          loadType: LoadType.network,
+          gid: gid,
+        ));
   }
 
   static Future<void> goGalleryViewPageFile(
