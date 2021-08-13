@@ -1,4 +1,5 @@
 import 'package:fehviewer/common/service/depth_service.dart';
+import 'package:fehviewer/common/service/layout_service.dart';
 import 'package:fehviewer/const/const.dart';
 import 'package:fehviewer/const/theme_colors.dart';
 import 'package:fehviewer/models/index.dart';
@@ -41,7 +42,9 @@ class GalleryHeader extends StatelessWidget {
                 // 封面
                 CoverImage(
                   imageUrl: initGalleryItem.imgUrl!,
-                  heroTag: '${initGalleryItem.gid}_cover_$tabTag',
+                  heroTag: isLayoutLarge
+                      ? '${initGalleryItem.gid}_cover_$tabTag'
+                      : null,
                 ),
                 Expanded(
                   child: Column(

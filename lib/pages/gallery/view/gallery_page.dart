@@ -59,7 +59,9 @@ class _GalleryMainPageState extends State<GalleryMainPage> {
     //     Get.isRegistered<GalleryRepository>(tag: pageCtrlDepth)) {
     //   _galleryRepository = Get.find<GalleryRepository>(tag: pageCtrlDepth);
     // }
-    _galleryRepository = Get.find<GalleryRepository>(tag: pageCtrlDepth);
+    _galleryRepository = Get.find<GalleryRepository>(
+        // tag: pageCtrlDepth,
+        );
   }
 
   @override

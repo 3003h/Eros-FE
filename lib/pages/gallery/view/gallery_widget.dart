@@ -69,7 +69,7 @@ class CoverImage extends StatelessWidget {
   const CoverImage({
     Key? key,
     required this.imageUrl,
-    required this.heroTag,
+    this.heroTag,
     this.imgHeight,
     this.imgWidth,
   }) : super(key: key);
@@ -78,7 +78,7 @@ class CoverImage extends StatelessWidget {
   final String? imageUrl;
 
   // ${_item.gid}_${_item.token}_cover_$_tabIndex
-  final Object heroTag;
+  final Object? heroTag;
 
   final double? imgHeight;
   final double? imgWidth;
@@ -92,49 +92,53 @@ class CoverImage extends StatelessWidget {
       };
 
       if (imageUrl != null && imageUrl!.isNotEmpty) {
+        Widget image = Container(
+          decoration: BoxDecoration(
+            boxShadow: [
+              //阴影
+              BoxShadow(
+                color: CupertinoDynamicColor.resolve(
+                    CupertinoColors.systemGrey4, context),
+                blurRadius: 10,
+              )
+            ],
+          ),
+          child: ClipRRect(
+            borderRadius: BorderRadius.circular(6),
+            child: Container(
+              height: imgHeight,
+              width: imgWidth,
+              child: CachedNetworkImage(
+                placeholder: (_, __) {
+                  return Container(
+                    alignment: Alignment.center,
+                    color: CupertinoDynamicColor.resolve(
+                        CupertinoColors.systemGrey5, context),
+                    child: const CupertinoActivityIndicator(),
+                  );
+                },
+                imageUrl: (imageUrl ?? '').dfUrl,
+                fit: BoxFit.cover,
+                httpHeaders: _httpHeaders,
+              ),
+              // child: NetworkExtendedImage(
+              //   url: imageUrl ?? '',
+              //   fit: BoxFit.cover,
+              // ),
+            ),
+          ),
+        );
+
         return Container(
           width: kWidth,
           margin: const EdgeInsets.only(right: 10),
           child: Center(
-            child: Hero(
-              tag: heroTag,
-              child: Container(
-                decoration: BoxDecoration(
-                  boxShadow: [
-                    //阴影
-                    BoxShadow(
-                      color: CupertinoDynamicColor.resolve(
-                          CupertinoColors.systemGrey4, context),
-                      blurRadius: 10,
-                    )
-                  ],
-                ),
-                child: ClipRRect(
-                  borderRadius: BorderRadius.circular(6),
-                  child: Container(
-                    height: imgHeight,
-                    width: imgWidth,
-                    child: CachedNetworkImage(
-                      placeholder: (_, __) {
-                        return Container(
-                          alignment: Alignment.center,
-                          color: CupertinoDynamicColor.resolve(
-                              CupertinoColors.systemGrey5, context),
-                          child: const CupertinoActivityIndicator(),
-                        );
-                      },
-                      imageUrl: (imageUrl ?? '').dfUrl,
-                      fit: BoxFit.cover,
-                      httpHeaders: _httpHeaders,
-                    ),
-                    // child: NetworkExtendedImage(
-                    //   url: imageUrl ?? '',
-                    //   fit: BoxFit.cover,
-                    // ),
-                  ),
-                ),
-              ),
-            ),
+            child: heroTag != null
+                ? Hero(
+                    tag: heroTag!,
+                    child: image,
+                  )
+                : image,
           ),
         );
       } else {
