@@ -39,7 +39,7 @@ class ListViewSecuritySetting extends StatelessWidget {
           intValue: _ehConfigService.blurredInRecentTasks.value,
           onChanged: (val) => _ehConfigService.blurredInRecentTasks.value = val,
         ),
-      _buildAutoLockItem(context),
+      _buildAutoLockItem(context, hideLine: true),
     ];
     return ListView.builder(
       itemCount: _list.length,
@@ -51,7 +51,7 @@ class ListViewSecuritySetting extends StatelessWidget {
 }
 
 /// 自动锁定时间设置
-Widget _buildAutoLockItem(BuildContext context) {
+Widget _buildAutoLockItem(BuildContext context, {bool hideLine = false}) {
   final String _title = L10n.of(context).autoLock;
   final EhConfigService ehConfigService = Get.find();
   final AutoLockController autoLockController = Get.find();
@@ -130,6 +130,7 @@ Widget _buildAutoLockItem(BuildContext context) {
 
   return Obx(() => SelectorSettingItem(
         title: _title,
+        hideLine: hideLine,
         selector: _getTimeText(ehConfigService.autoLockTimeOut.value),
         onTap: () async {
           final int? _result = await _showActionSheet(context);

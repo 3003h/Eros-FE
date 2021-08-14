@@ -1,5 +1,6 @@
 import 'package:fehviewer/common/controller/user_controller.dart';
 import 'package:fehviewer/common/service/ehconfig_service.dart';
+import 'package:fehviewer/common/service/layout_service.dart';
 import 'package:fehviewer/generated/l10n.dart';
 import 'package:fehviewer/models/index.dart';
 import 'package:fehviewer/pages/tab/controller/enum.dart';
@@ -136,7 +137,7 @@ class FavoriteTab extends GetView<FavoriteViewController> {
       return CupertinoNavigationBar(
         transitionBetweenRoutes: false,
         padding: const EdgeInsetsDirectional.only(end: 4),
-        leading: controller.leading,
+        leading: controller.getLeading(context),
         middle: Row(
           mainAxisSize: MainAxisSize.min,
           children: [
@@ -390,7 +391,10 @@ class FavoriteTab extends GetView<FavoriteViewController> {
       ),
       onPressed: () async {
         // 跳转收藏夹选择页
-        final dynamic? result = await Get.toNamed(EHRoutes.selFavorie);
+        final result = await Get.toNamed(
+          EHRoutes.selFavorie,
+          id: isLayoutLarge ? 1 : null,
+        );
         if (result != null && result is Favcat) {
           final Favcat fav = result;
           if (controller.curFavcat != fav.favId) {

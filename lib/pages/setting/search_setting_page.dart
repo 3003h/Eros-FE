@@ -31,16 +31,13 @@ class ListViewSearchSetting extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final List<Widget> _list = <Widget>[
-      // _buildPreloadImageItem(context),
       SelectorSettingItem(
         title: L10n.of(context).quick_search,
         selector: '',
         onTap: () async {
-          // await Get.to(
-          //   () => QuickSearchListPage(autoSearch: false),
-          // );
           await Get.toNamed(EHRoutes.quickSearch, id: isLayoutLarge ? 2 : null);
         },
+        hideLine: true,
       ),
     ];
     return ListView.builder(

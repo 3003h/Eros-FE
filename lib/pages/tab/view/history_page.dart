@@ -48,7 +48,7 @@ class HistoryTab extends GetView<HistoryViewController> {
     final Widget navigationBar = CupertinoNavigationBar(
       transitionBetweenRoutes: false,
       padding: const EdgeInsetsDirectional.only(end: 4),
-      leading: controller.leading,
+      leading: controller.getLeading(context),
       middle: Text(_title),
       trailing: Container(
         width: 40,

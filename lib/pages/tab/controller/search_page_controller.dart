@@ -12,6 +12,7 @@ import 'package:fehviewer/models/base/eh_models.dart';
 import 'package:fehviewer/models/index.dart';
 import 'package:fehviewer/network/gallery_request.dart';
 import 'package:fehviewer/pages/tab/view/quick_search_page.dart';
+import 'package:fehviewer/pages/tab/view/tab_base.dart';
 import 'package:fehviewer/store/floor/entity/tag_translat.dart';
 import 'package:fehviewer/utils/logger.dart';
 import 'package:fehviewer/utils/vibrate.dart';
@@ -36,12 +37,9 @@ enum ListType {
 }
 
 class SearchPageController extends TabViewController {
-  SearchPageController(
-      {SearchType searchType = SearchType.normal, this.initSearchText}) {
-    this.searchType = searchType;
-  }
+  SearchPageController();
 
-  final String? initSearchText;
+  late final String? initSearchText;
   final RxString _searchText = ''.obs;
   String get searchText => _searchText.value;
   set searchText(String val) => _searchText.value = val;
@@ -50,14 +48,10 @@ class SearchPageController extends TabViewController {
 
   // 搜索输入框的控制器
   late final TextEditingController searchTextController;
-
   bool get textIsNotEmpty => searchTextController.text.isNotEmpty;
-
-  // final GStore _gStore = Get.find();
 
   // 搜索类型
   final Rx<SearchType> _searchType = SearchType.normal.obs;
-
   SearchType get searchType => _searchType.value;
 
   String get placeholderText {
@@ -350,17 +344,20 @@ class SearchPageController extends TabViewController {
   void clearHistory() {
     searchHistory.clear();
     update([GetIds.SEARCH_INIT_VIEW]);
-    // _gStore.searchHistory = searchHistory;
     hiveHelper.setSearchHistory(searchHistory);
   }
 
   @override
   void onInit() {
-    logger.v('onInit');
+    logger.d('onInit $searchPageCtrlDepth');
+
+    SearchRepository searchRepository = Get.find();
+    initSearchText = searchRepository.searchText;
+    searchType = searchRepository.searchType;
+
     searchTextController = TextEditingController();
 
     fetchNormal = Api.getGallery;
-    // searchHistory = _gStore.searchHistory;
     searchHistory = hiveHelper.getAllSearchHistory();
     _autoComplete = initSearchText?.trim().isNotEmpty ?? false;
     searchTextController.addListener(_delayedSearch);

@@ -3,6 +3,7 @@ import 'package:fehviewer/common/service/layout_service.dart';
 import 'package:fehviewer/const/const.dart';
 import 'package:fehviewer/models/index.dart';
 import 'package:fehviewer/network/gallery_request.dart';
+import 'package:fehviewer/pages/gallery/comm.dart';
 import 'package:fehviewer/pages/gallery/controller/archiver_controller.dart';
 import 'package:fehviewer/pages/gallery/controller/comment_controller.dart';
 import 'package:fehviewer/pages/gallery/controller/rate_controller.dart';
@@ -15,9 +16,9 @@ import 'package:fehviewer/pages/tab/controller/gallery_controller.dart';
 import 'package:fehviewer/pages/tab/controller/search_page_controller.dart';
 import 'package:fehviewer/pages/tab/view/gallery_page.dart';
 import 'package:fehviewer/pages/tab/view/search_page.dart';
+import 'package:fehviewer/pages/tab/view/tab_base.dart';
 import 'package:fehviewer/route/routes.dart';
 import 'package:fehviewer/utils/logger.dart';
-import 'package:flutter/foundation.dart';
 import 'package:get/get.dart';
 
 class NavigatorUtil {
@@ -47,20 +48,39 @@ class NavigatorUtil {
     }
 
     Get.find<DepthService>().pushSearchPageCtrl();
+    Get.replace(SearchRepository(searchText: _search));
 
     if (replace) {
       await Get.offNamed(
         EHRoutes.search,
-        arguments: _search,
         preventDuplicates: false,
       );
     } else {
       await Get.toNamed(
         EHRoutes.search,
-        arguments: _search,
+        id: isLayoutLarge ? 1 : null,
         preventDuplicates: false,
       );
     }
+
+    Get.find<DepthService>().popSearchPageCtrl();
+  }
+
+  /// 打开搜索页面 指定搜索类型
+  static Future<void> showSearch({
+    SearchType searchType = SearchType.normal,
+    bool fromTabItem = true,
+  }) async {
+    logger.d('fromTabItem $fromTabItem');
+    Get.find<DepthService>().pushSearchPageCtrl();
+
+    Get.replace(SearchRepository(searchType: searchType));
+
+    await Get.to(
+      () => GallerySearchPage(),
+      id: isLayoutLarge ? 1 : null,
+      transition: fromTabItem ? Transition.fadeIn : Transition.cupertino,
+    );
 
     Get.find<DepthService>().popSearchPageCtrl();
   }
@@ -72,13 +92,9 @@ class NavigatorUtil {
     GalleryItem? galleryItem,
     bool replace = false,
   }) async {
-    // if (!isLayoutLarge) {
-    //   Get.find<DepthService>().pushPageCtrl();
-    // }
-    Get.find<DepthService>().pushPageCtrl();
-
     // url跳转方式
     if (url != null && url.isNotEmpty) {
+      Get.find<DepthService>().pushPageCtrl();
       logger.v('goGalleryPage fromUrl $url');
 
       final RegExp regGalleryUrl =
@@ -87,21 +103,18 @@ class NavigatorUtil {
           RegExp(r'https://e[-x]hentai.org/s/[0-9a-z]+/\d+-\d+');
 
       if (regGalleryUrl.hasMatch(url)) {
-        Get.put(
-          GalleryRepository(url: url),
-          // tag: pageCtrlDepth,
-        );
+        // url为画廊链接
+        Get.replace(GalleryRepository(url: url));
         // 命名路由方式
         if (replace) {
           await Get.offNamed(
             EHRoutes.galleryPage,
-            // arguments: GalleryRepository(url: url),
             preventDuplicates: false,
           );
         } else {
           await Get.toNamed(
             EHRoutes.galleryPage,
-            // arguments: GalleryRepository(url: url),
+            id: isLayoutLarge ? 2 : null,
             preventDuplicates: false,
           );
         }
@@ -113,96 +126,51 @@ class NavigatorUtil {
             '${Api.getBaseUrl()}/g/${_image.gid}/${_image.token}';
         logger.d('jump to $_galleryUrl $ser');
 
-        Get.put(
-          GalleryRepository(url: _galleryUrl, jumpSer: ser),
-          // tag: pageCtrlDepth,
-        );
+        Get.replace(GalleryRepository(url: _galleryUrl, jumpSer: ser));
 
         if (replace) {
           await Get.offNamed(
             EHRoutes.galleryPage,
-            // arguments: GalleryRepository(url: _galleryUrl, jumpSer: ser),
             preventDuplicates: false,
           );
         } else {
           await Get.toNamed(
             EHRoutes.galleryPage,
-            // arguments: GalleryRepository(url: _galleryUrl, jumpSer: ser),
+            id: isLayoutLarge ? 2 : null,
             preventDuplicates: false,
           );
         }
       }
+      deletePageController();
+      Get.find<DepthService>().popPageCtrl();
     } else {
       // item点击跳转方式
       logger.v('goGalleryPage fromItem tabTag=$tabTag');
 
-      logger.d('put GalleryRepository $pageCtrlDepth');
-      // Get.lazyReplace(
-      //   () => GalleryRepository(item: galleryItem, tabTag: tabTag),
-      //   // tag: pageCtrlDepth,
-      //   fenix: true,
-      // );
+      // logger.v('put GalleryRepository $pageCtrlDepth');
 
       Get.replace(GalleryRepository(item: galleryItem, tabTag: tabTag));
 
       //命名路由
       if (isLayoutLarge && Get.currentRoute == EHRoutes.home) {
-        // if (int.parse(pageCtrlDepth) >= 0) {
-        //   logger.d('back pageCtrlDepth:$pageCtrlDepth');
-        //   // Get.back(id: 2);
-        //   await Get.delete<GalleryRepository>(tag: pageCtrlDepth);
-        //   Get.lazyPut(
-        //       () => GalleryRepository(item: galleryItem, tabTag: tabTag),
-        //       tag: pageCtrlDepth,
-        //       fenix: true);
-        // }
-
+        Get.find<DepthService>().pushPageCtrl();
         await Get.offNamed(
           EHRoutes.galleryPage,
           id: 2,
           preventDuplicates: false,
-          // arguments: GalleryRepository(item: galleryItem, tabTag: tabTag),
         );
-        // Get.delete<GalleryRepository>(tag: pageCtrlDepth);
+        // deletePageController();
       } else {
+        Get.find<DepthService>().pushPageCtrl();
         await Get.toNamed(
           EHRoutes.galleryPage,
           preventDuplicates: false,
-          // arguments: GalleryRepository(item: galleryItem, tabTag: tabTag),
         );
+        deletePageController();
+        Get.find<DepthService>().popPageCtrl();
       }
     }
-
-    // 为了保证能正常关闭
     // deletePageController();
-
-    Get.delete<GalleryRepository>(tag: pageCtrlDepth);
-    if (!isLayoutLarge) {
-      Get.find<DepthService>().popPageCtrl();
-    }
-  }
-
-  /// 打开搜索页面 指定搜索类型
-  static Future<void> showSearch({
-    SearchType searchType = SearchType.normal,
-    bool fromTabItem = true,
-  }) async {
-    logger.d('fromTabItem $fromTabItem');
-    Get.find<DepthService>().pushSearchPageCtrl();
-
-    await Get.to(
-      // () => GallerySearchPage(),
-      () => GallerySearchPage(),
-      transition: fromTabItem ? Transition.fadeIn : Transition.cupertino,
-      binding: BindingsBuilder(() {
-        Get.lazyPut(
-          () => SearchPageController(searchType: searchType),
-          tag: searchPageCtrlDepth,
-        );
-      }),
-    );
-
-    Get.find<DepthService>().popSearchPageCtrl();
   }
 
   // 转到大图浏览
@@ -227,20 +195,5 @@ class NavigatorUtil {
           loadType: LoadType.file,
           gid: gid,
         ));
-  }
-
-  static void deletePageController() {
-    logger.d('deletePageController $pageCtrlDepth');
-    // 为了保证能正常关闭
-    if (Get.isRegistered<RateController>(tag: pageCtrlDepth))
-      Get.delete<RateController>(tag: pageCtrlDepth);
-    if (Get.isRegistered<TorrentController>(tag: pageCtrlDepth))
-      Get.delete<TorrentController>(tag: pageCtrlDepth);
-    if (Get.isRegistered<ArchiverController>(tag: pageCtrlDepth))
-      Get.delete<ArchiverController>(tag: pageCtrlDepth);
-    if (Get.isRegistered<CommentController>(tag: pageCtrlDepth))
-      Get.delete<CommentController>(tag: pageCtrlDepth);
-    if (Get.isRegistered<TagInfoController>(tag: pageCtrlDepth))
-      Get.delete<TagInfoController>(tag: pageCtrlDepth);
   }
 }

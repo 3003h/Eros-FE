@@ -1,4 +1,5 @@
 import 'package:fehviewer/common/service/depth_service.dart';
+import 'package:fehviewer/common/service/layout_service.dart';
 import 'package:fehviewer/common/service/theme_service.dart';
 import 'package:fehviewer/const/const.dart';
 import 'package:fehviewer/extension.dart';
@@ -30,7 +31,10 @@ class AddTagPage extends StatelessWidget {
             padding: const EdgeInsets.only(left: 4),
             child: Text(L10n.of(context).done),
             onPressed: () {
-              Get.back(result: controller.tags);
+              Get.back(
+                result: controller.tags,
+                id: isLayoutLarge ? 2 : null,
+              );
             },
           ),
         ),
@@ -78,7 +82,10 @@ class AddTagPage extends StatelessWidget {
                 // strutStyle:
                 //     const StrutStyle(forceStrutHeight: true, height: 1.2),
                 onEditingComplete: () {
-                  Get.back(result: controller.tags);
+                  Get.back(
+                    result: controller.tags,
+                    id: isLayoutLarge ? 2 : null,
+                  );
                 },
               ).paddingSymmetric(vertical: 8, horizontal: 10),
               Expanded(

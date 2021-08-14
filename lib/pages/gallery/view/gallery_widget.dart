@@ -483,7 +483,10 @@ class TopComment extends StatelessWidget {
               style: const TextStyle(fontSize: 16),
             ),
             onPressed: () {
-              Get.toNamed(EHRoutes.galleryComment);
+              Get.toNamed(
+                EHRoutes.galleryComment,
+                id: isLayoutLarge ? 2 : null,
+              );
             },
           ),
       ],
@@ -528,7 +531,10 @@ class MorePreviewButton extends StatelessWidget {
         style: const TextStyle(fontSize: 16),
       ),
       onPressed: () {
-        Get.toNamed(EHRoutes.galleryAllPreviews);
+        Get.toNamed(
+          EHRoutes.galleryAllPreviews,
+          id: isLayoutLarge ? 2 : null,
+        );
       },
     );
   }

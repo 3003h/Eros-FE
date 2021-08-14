@@ -61,7 +61,7 @@ class PopularListTab extends GetView<PopularViewController> {
             }),
           ],
         ),
-        leading: controller.leading,
+        leading: controller.getLeading(context),
         trailing: CupertinoButton(
           minSize: 40,
           padding: const EdgeInsets.all(0),

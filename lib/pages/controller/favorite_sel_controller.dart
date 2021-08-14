@@ -11,6 +11,8 @@ import 'package:get/get.dart';
 
 class FavoriteSelectorController extends GetxController
     with StateMixin<List<Favcat>> {
+  FavoriteSelectorController();
+
   final List<Favcat> _favcatList = [];
   List<Favcat> get favcatList => _favcatList;
   final LocalFavController _localFavController = Get.find();
@@ -55,11 +57,6 @@ class FavoriteSelectorController extends GetxController
   }
 
   void addAllFavList(List<Favcat> list, {bool isUpdate = true}) {
-    // logger.v('len ${list.length}');
-    // logger.v('list  \n${list.map((e) => jsonEncode(e)).join('\n')}');
-    //
-    // logger.v(
-    //     '_favcatList  \n${_favcatList.map((e) => jsonEncode(e)).join('\n')}');
     for (final fav in list) {
       final _index =
           _favcatList.indexWhere((element) => element.favId == fav.favId);
@@ -121,14 +118,14 @@ class FavoriteSelectorController extends GetxController
 
     if (!_favcatList.any((element) => element.favId == 'l')) {
       _favcatList.add(Favcat(
-          favTitle: L10n.of(Get.context!).local_favorite,
+          favTitle: L10n.current.local_favorite,
           favId: 'l',
           totNum: _localFavController.loacalFavs.length));
     }
 
     if (!_favcatList.any((element) => element.favId == 'a')) {
       _favcatList.add(Favcat(
-          favTitle: L10n.of(Get.context!).all_Favorites,
+          favTitle: L10n.current.all_Favorites,
           favId: 'a',
           totNum: _allNetworkFavcatCount));
     }

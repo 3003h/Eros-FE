@@ -208,7 +208,7 @@ class GalleryItemWidget extends StatelessWidget {
       width: coverImageWidth,
       height: _item.imgWidth != null ? _getHeigth() : null,
       alignment: Alignment.center,
-      child: isLayoutLarge
+      child: !isLayoutLarge
           ? Hero(
               tag: '${_item.gid}_cover_$tabTag',
               child: image,

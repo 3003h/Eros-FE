@@ -41,7 +41,11 @@ class FavoriteViewController extends TabViewController {
   final LocalFavController _localFavController = Get.find();
   final UserController _userController = Get.find();
 
-  final FavoriteSelectorController _favoriteSelectorController = Get.find();
+  FavoriteSelectorController? get _favoriteSelectorController {
+    if (Get.isRegistered<FavoriteSelectorController>()) {
+      return Get.find<FavoriteSelectorController>();
+    }
+  }
 
   @override
   void onInit() {
@@ -54,9 +58,6 @@ class FavoriteViewController extends TabViewController {
     bool refresh = false,
     bool first = false,
   }) async {
-    // logger
-    //     .d('FavoriteViewController fetchData $curFavcat  page${curPage.value}');
-
     final bool _isLogin = _userController.isLogin;
     if (!_isLogin) {
       curFavcat = 'l';
@@ -69,7 +70,7 @@ class FavoriteViewController extends TabViewController {
         refresh: refresh,
         cancelToken: _cancelToken,
         favCatList: (List<Favcat> list) {
-          _favoriteSelectorController.addAllFavList(list);
+          _favoriteSelectorController?.addAllFavList(list);
         },
       );
 
