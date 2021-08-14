@@ -345,12 +345,12 @@ class GalleryPageController extends GetxController
       return galleryItem;
     } on DioError catch (e) {
       if (e.type == DioErrorType.response && e.response?.statusCode == 404) {
-        showToast('Gallery has been deleted');
+        showToast('This gallery has been removed or is unavailable.');
         rethrow;
       }
       rethrow;
     } catch (e, stack) {
-      showToast('Parsing data abnormal');
+      showToast('Parsing data error');
       logger.e('解析数据异常\n' + e.toString() + '\n' + stack.toString());
       rethrow;
     }

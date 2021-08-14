@@ -5,6 +5,7 @@ import 'package:fehviewer/common/controller/tag_trans_controller.dart';
 import 'package:fehviewer/common/global.dart';
 import 'package:fehviewer/common/service/depth_service.dart';
 import 'package:fehviewer/common/service/ehconfig_service.dart';
+import 'package:fehviewer/common/service/layout_service.dart';
 import 'package:fehviewer/common/service/locale_service.dart';
 import 'package:fehviewer/const/const.dart';
 import 'package:fehviewer/generated/l10n.dart';
@@ -13,6 +14,7 @@ import 'package:fehviewer/models/index.dart';
 import 'package:fehviewer/network/gallery_request.dart';
 import 'package:fehviewer/pages/tab/view/quick_search_page.dart';
 import 'package:fehviewer/pages/tab/view/tab_base.dart';
+import 'package:fehviewer/route/routes.dart';
 import 'package:fehviewer/store/floor/entity/tag_translat.dart';
 import 'package:fehviewer/utils/logger.dart';
 import 'package:fehviewer/utils/vibrate.dart';
@@ -392,25 +394,26 @@ class SearchPageController extends TabViewController {
   }
 
   /// 打开快速搜索列表
-  void quickSearchList() {
-    Get.to<String>(
-      () => QuickSearchListPage(),
-    )?.then((String? value) {
-      if (value == null) {
-        return;
-      }
-      searchTextController.value = TextEditingValue(
-        text: '$value ',
-        selection: TextSelection.fromPosition(
-          TextPosition(
-            affinity: TextAffinity.downstream,
-            offset: '$value '.length,
-          ),
-        ),
-      );
+  Future<void> quickSearchList() async {
+    final text = await Get.toNamed(
+      EHRoutes.quickSearch,
+      id: isLayoutLarge ? 2 : null,
+    );
 
-      FocusScope.of(Get.context!).requestFocus(searchFocusNode);
-    });
+    if (text == null) {
+      return;
+    }
+    searchTextController.value = TextEditingValue(
+      text: '$text ',
+      selection: TextSelection.fromPosition(
+        TextPosition(
+          affinity: TextAffinity.downstream,
+          offset: '$text '.length,
+        ),
+      ),
+    );
+
+    FocusScope.of(Get.context!).requestFocus(searchFocusNode);
   }
 
   /// tag搜索结果上屏

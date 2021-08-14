@@ -7,6 +7,7 @@ import 'package:fehviewer/common/controller/quicksearch_controller.dart';
 import 'package:fehviewer/common/controller/tag_trans_controller.dart';
 import 'package:fehviewer/common/controller/user_controller.dart';
 import 'package:fehviewer/common/global.dart';
+import 'package:fehviewer/common/service/layout_service.dart';
 import 'package:fehviewer/common/service/locale_service.dart';
 import 'package:fehviewer/generated/l10n.dart';
 import 'package:fehviewer/models/base/eh_models.dart';
@@ -68,12 +69,13 @@ class QuickSearchListPage extends StatelessWidget {
         .doc('default')
         .get();
     if (docById.exists) {
-      final _importTexts = docById.get('list') as List<String>;
+      final _importTexts = docById.get('list');
 
       logger.v(_importTexts);
 
       _importTexts.forEach((element) {
-        if (element.trim().isNotEmpty && !element.startsWith('#'))
+        final text = element.toString();
+        if (text.trim().isNotEmpty && !text.startsWith('#'))
           quickSearchController.addText(element.toString(), silent: true);
       });
     }
@@ -293,7 +295,10 @@ class QuickSearchListPage extends StatelessWidget {
                     child: GestureDetector(
                       onTap: () {
                         if (autoSearch) {
-                          Get.back<String>(result: _datas[position]);
+                          Get.back<String>(
+                            result: _datas[position],
+                            id: isLayoutLarge ? 2 : null,
+                          );
                         }
                       },
                       behavior: HitTestBehavior.opaque,

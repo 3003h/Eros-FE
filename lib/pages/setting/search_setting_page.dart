@@ -35,7 +35,10 @@ class ListViewSearchSetting extends StatelessWidget {
         title: L10n.of(context).quick_search,
         selector: '',
         onTap: () async {
-          await Get.toNamed(EHRoutes.quickSearch, id: isLayoutLarge ? 2 : null);
+          await Get.toNamed(
+            EHRoutes.quickSearch,
+            id: isLayoutLarge ? 2 : null,
+          );
         },
         hideLine: true,
       ),

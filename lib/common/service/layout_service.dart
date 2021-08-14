@@ -7,8 +7,7 @@ enum LayoutMode {
 }
 
 LayoutMode get layoutMode => Get.find<LayoutServices>().layoutMode;
-bool get isLayoutLarge =>
-    Get.find<LayoutServices>().isLayoutLarge && kDebugMode;
+bool get isLayoutLarge => Get.find<LayoutServices>().isLayoutLarge;
 
 EhLayout ehLayout = EhLayout();
 
