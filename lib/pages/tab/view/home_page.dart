@@ -19,16 +19,21 @@ class HomePage extends GetView<TabHomeController> {
       child: LayoutBuilder(
         builder: (context, constraints) {
           logger.v('${constraints.maxWidth}');
-          if (context.width > 1080) {
+          if (context.width > 700) {
             layoutServices.layoutMode = LayoutMode.large;
-            return const TabHomeLarge(
-              wide: true,
-            );
-          } else if (context.width > 700) {
-            layoutServices.layoutMode = LayoutMode.large;
-            return const TabHomeLarge();
           } else {
             layoutServices.layoutMode = LayoutMode.small;
+          }
+
+          if (!isLayoutLarge) {
+            return TabHomeSmall();
+          }
+
+          if (context.width > 1080) {
+            return const TabHomeLarge(wide: true);
+          } else if (context.width > 700) {
+            return const TabHomeLarge();
+          } else {
             return TabHomeSmall();
           }
         },
