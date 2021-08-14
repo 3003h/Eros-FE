@@ -15,31 +15,16 @@ class GalleryBinding extends Bindings {
 
   @override
   void dependencies() {
-    // logger.d('GalleryBinding dependencies');
-    // Get.lazyPut(
-    //     () => GalleryPageController(
-    //         galleryRepository: galleryRepository ??
-    //             Get.find<GalleryRepository>(tag: pageCtrlDepth)),
-    //     tag: pageCtrlDepth);
-
-    // Get.lazyPut(() => GalleryPageController(), tag: pageCtrlDepth);
-
-    // Get.put(
-    //     GalleryPageController(
-    //         galleryRepository: Get.find<GalleryRepository>(tag: pageCtrlDepth)),
-    //     tag: pageCtrlDepth);
-
-    Get.lazyPut(() => CommentController(), tag: pageCtrlDepth);
-
-    Get.lazyPut(() => RateController(), tag: pageCtrlDepth);
-
-    Get.lazyPut(() => TorrentController(), tag: pageCtrlDepth);
-
-    Get.lazyPut(() => ArchiverController(), tag: pageCtrlDepth);
-
-    Get.lazyPut(() => GalleryFavController(), tag: pageCtrlDepth);
-
-    // TagInfoController
-    Get.lazyPut(() => TagInfoController(), tag: pageCtrlDepth);
+    // Get.lazyPut(() => CommentController(), tag: pageCtrlDepth);
+    //
+    // Get.lazyPut(() => RateController(), tag: pageCtrlDepth);
+    //
+    // Get.lazyPut(() => TorrentController(), tag: pageCtrlDepth);
+    //
+    // Get.lazyPut(() => ArchiverController(), tag: pageCtrlDepth);
+    //
+    // Get.lazyPut(() => GalleryFavController(), tag: pageCtrlDepth);
+    //
+    // Get.lazyPut(() => TagInfoController(), tag: pageCtrlDepth);
   }
 }

@@ -25,7 +25,11 @@ class CommentController extends GetxController
     with StateMixin<List<GalleryComment>>, WidgetsBindingObserver {
   CommentController();
 
-  GalleryPageController get pageController => Get.find(tag: pageCtrlDepth);
+  GalleryPageController get pageController {
+    logger.d('CommentController -> pageCtrlDepth: $pageCtrlDepth');
+    return Get.find(tag: pageCtrlDepth);
+  }
+
   final TextEditingController commentTextController = TextEditingController();
 
   GalleryItem get _item => pageController.galleryItem;

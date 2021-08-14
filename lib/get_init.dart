@@ -1,4 +1,5 @@
 import 'package:fehviewer/pages/tab/controller/toplist_controller.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
 
 import 'common/controller/advance_search_controller.dart';
@@ -55,21 +56,31 @@ void getinit() {
   Get.put(DownloadController());
   Get.put(ArchiverDownloadController());
 
-  Get.lazyPut(() => TabHomeController(), fenix: true);
-  Get.lazyPut(() => PopularViewController(), fenix: true);
-  Get.lazyPut(() => WatchedViewController(), fenix: true);
-  Get.lazyPut(() => GalleryViewController(), fenix: true);
+  debugPrint('getinit');
+  Get.put(TabHomeController(), permanent: true);
+
+  // Get.lazyPut(() => PopularViewController(), fenix: true);
+  // Get.lazyPut(() => WatchedViewController(), fenix: true);
+  // Get.lazyPut(() => GalleryViewController(), fenix: true);
+  // Get.lazyPut(() => HistoryViewController(), fenix: true);
+  // Get.lazyPut(() => DownloadViewController(), fenix: true);
+  // Get.lazyPut(() => FavoriteViewController(), fenix: true);
+  // Get.lazyPut(() => TopListViewController(), fenix: true);
+
+  Get.put(PopularViewController(), permanent: true);
+  Get.put(WatchedViewController(), permanent: true);
+  Get.put(GalleryViewController(), permanent: true);
+  Get.put(HistoryViewController(), permanent: true);
+  Get.put(DownloadViewController(), permanent: true);
+  Get.put(FavoriteViewController(), permanent: true);
+  Get.put(TopListViewController(), permanent: true);
+
   Get.lazyPut(() => SettingViewController(), fenix: true);
 
-  Get.lazyPut(() => HistoryViewController(), fenix: true);
-  Get.lazyPut(() => DownloadViewController(), fenix: true);
-  Get.lazyPut(() => FavoriteViewController(), fenix: true);
-  Get.lazyPut(() => TopListViewController(), fenix: true);
-
+  Get.lazyPut(() => FavoriteSelectorController(), fenix: true);
   Get.lazyPut(() => QuickSearchController(), fenix: true);
   Get.lazyPut(() => AdvanceSearchController(), fenix: true);
   Get.lazyPut(() => FavDialogController(), fenix: true);
-  Get.lazyPut(() => FavoriteSelectorController(), fenix: true);
 
   Get.lazyPut(() => UnlockPageController(), fenix: true);
   Get.lazyPut(() => TagTransController(), fenix: true);

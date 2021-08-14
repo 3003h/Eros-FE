@@ -52,12 +52,17 @@ class GallerySearchPage extends StatefulWidget {
 }
 
 class _GallerySearchPageState extends State<GallerySearchPage> {
-  final SearchPageController controller = Get.put(
-    SearchPageController(
-        initSearchText:
-            Get.arguments is String ? Get.arguments as String : null),
+  final String _tag = searchPageCtrlDepth;
+  SearchPageController controller = Get.put(
+    SearchPageController(),
     tag: searchPageCtrlDepth,
   );
+
+  @override
+  void dispose() {
+    Get.delete<SearchPageController>(tag: _tag);
+    super.dispose();
+  }
 
   CupertinoNavigationBar getNavigationBar(BuildContext context) {
     return CupertinoNavigationBar(

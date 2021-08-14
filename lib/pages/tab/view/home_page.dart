@@ -18,7 +18,7 @@ class HomePage extends GetView<TabHomeController> {
       onWillPop: controller.doubleClickBack,
       child: LayoutBuilder(
         builder: (context, constraints) {
-          logger.d('${constraints.maxWidth}');
+          logger.v('${constraints.maxWidth}');
           if (context.width > 1080) {
             layoutServices.layoutMode = LayoutMode.large;
             return const TabHomeLarge(
@@ -31,7 +31,6 @@ class HomePage extends GetView<TabHomeController> {
             layoutServices.layoutMode = LayoutMode.small;
             return TabHomeSmall();
           }
-          // return TabHomeSmall();
         },
       ),
     );

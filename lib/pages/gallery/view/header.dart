@@ -42,7 +42,7 @@ class GalleryHeader extends StatelessWidget {
                 // 封面
                 CoverImage(
                   imageUrl: initGalleryItem.imgUrl!,
-                  heroTag: isLayoutLarge
+                  heroTag: !isLayoutLarge
                       ? '${initGalleryItem.gid}_cover_$tabTag'
                       : null,
                 ),
@@ -119,7 +119,10 @@ class _GalleryInfoBarState extends State<GalleryInfoBar> {
           return GestureDetector(
             behavior: HitTestBehavior.opaque,
             onTap: () {
-              Get.toNamed(EHRoutes.galleryInfo);
+              Get.toNamed(
+                EHRoutes.galleryInfo,
+                id: isLayoutLarge ? 2 : null,
+              );
             },
             onTapDown: (_) {
               _updatePressedColor();

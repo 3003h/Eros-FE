@@ -49,7 +49,7 @@ class GalleryListTab extends GetView<GalleryViewController> {
             }),
           ],
         ),
-        leading: controller.leading,
+        leading: controller.getLeading(context),
         trailing: Row(
           mainAxisSize: MainAxisSize.min,
           mainAxisAlignment: MainAxisAlignment.end,
@@ -126,7 +126,7 @@ class GalleryListTab extends GetView<GalleryViewController> {
           }),
         ],
       ),
-      leading: controller.leading,
+      leading: controller.getLeading(context),
       trailing: Row(
         mainAxisSize: MainAxisSize.min,
         mainAxisAlignment: MainAxisAlignment.end,

@@ -1,4 +1,5 @@
 import 'package:fehviewer/common/service/depth_service.dart';
+import 'package:fehviewer/common/service/layout_service.dart';
 import 'package:fehviewer/models/index.dart';
 import 'package:fehviewer/network/gallery_request.dart';
 import 'package:fehviewer/pages/gallery/controller/gallery_page_controller.dart';
@@ -13,6 +14,7 @@ import 'package:get/get.dart';
 import 'package:line_icons/line_icons.dart';
 import 'package:share/share.dart';
 
+import '../comm.dart';
 import 'detail.dart';
 
 const double kHeaderHeight = 200.0 + 52;
@@ -39,29 +41,21 @@ class GalleryMainPage extends StatefulWidget {
 }
 
 class _GalleryMainPageState extends State<GalleryMainPage> {
-  GalleryRepository? _galleryRepository;
-
-  GalleryPageController get _controller =>
-      Get.put(GalleryPageController(galleryRepository: _galleryRepository),
-          tag: pageCtrlDepth);
+  late final GalleryPageController _controller;
+  final _tag = pageCtrlDepth;
 
   @override
   void initState() {
     super.initState();
     logger.d('initState pageCtrlDepth:$pageCtrlDepth');
-    // logger.d('${Get.arguments.runtimeType}');
+    initPageController(tag: _tag);
+    _controller = Get.put(GalleryPageController(), tag: _tag);
+  }
 
-    // if (_galleryRepository == null && Get.arguments is GalleryRepository) {
-    //   _galleryRepository = Get.arguments as GalleryRepository;
-    // }
-
-    // if (_galleryRepository == null &&
-    //     Get.isRegistered<GalleryRepository>(tag: pageCtrlDepth)) {
-    //   _galleryRepository = Get.find<GalleryRepository>(tag: pageCtrlDepth);
-    // }
-    _galleryRepository = Get.find<GalleryRepository>(
-        // tag: pageCtrlDepth,
-        );
+  @override
+  void dispose() {
+    super.dispose();
+    deletePageController(tag: _tag);
   }
 
   @override
@@ -76,7 +70,10 @@ class _GalleryMainPageState extends State<GalleryMainPage> {
         enableControlFinishLoad: false,
         onLoad: () async {
           if (_controller.images.isNotEmpty) {
-            Get.toNamed(EHRoutes.galleryAllPreviews);
+            Get.toNamed(
+              EHRoutes.galleryAllPreviews,
+              id: isLayoutLarge ? 2 : null,
+            );
           }
         },
         footer: BezierBounceFooter(

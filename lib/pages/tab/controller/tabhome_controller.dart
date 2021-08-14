@@ -125,6 +125,7 @@ const List<String> kTabNameList = <String>[
 ];
 
 class TabHomeController extends GetxController {
+  TabHomeController();
   DateTime? lastPressedAt; //上次点击时间
 
   int currentIndex = 0;
@@ -173,7 +174,7 @@ class TabHomeController extends GetxController {
   void onInit() {
     super.onInit();
 
-    _tabConfig = gStore.tabConfig ?? (TabConfig(tabItemList: []));
+    _tabConfig = gStore.tabConfig ?? (const TabConfig(tabItemList: []));
 
     // logger.i('get tab config ${_tabConfig.tabItemList.length}');
 
@@ -226,7 +227,8 @@ class TabHomeController extends GetxController {
           ))
       .toList();
 
-  BuildContext tContext = Get.context!;
+  // BuildContext tContext = Get.context!;
+  late BuildContext tContext;
 
   /// 需要初始化获取BuildContext 否则修改语言时tabitem的文字不会立即生效
   void init({required BuildContext inContext}) {

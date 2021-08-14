@@ -5,6 +5,7 @@ import 'package:fehviewer/pages/item/gallery_item.dart';
 import 'package:fehviewer/pages/item/gallery_item_flow.dart';
 import 'package:fehviewer/pages/item/gallery_item_flow_large.dart';
 import 'package:fehviewer/pages/item/gallery_item_simple.dart';
+import 'package:fehviewer/pages/tab/controller/search_page_controller.dart';
 import 'package:fehviewer/utils/logger.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -201,6 +202,12 @@ Widget getGalleryList(
           loadMord: loadMord,
         );
     }
-    return Container();
   });
+}
+
+class SearchRepository {
+  SearchRepository({this.searchText, this.searchType = SearchType.normal});
+
+  final String? searchText;
+  final SearchType searchType;
 }

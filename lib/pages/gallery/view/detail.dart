@@ -1,5 +1,6 @@
 import 'package:fehviewer/common/isolate_download/download_manager.dart';
 import 'package:fehviewer/common/service/depth_service.dart';
+import 'package:fehviewer/common/service/layout_service.dart';
 import 'package:fehviewer/generated/l10n.dart';
 import 'package:fehviewer/models/base/eh_models.dart';
 import 'package:fehviewer/pages/gallery/controller/gallery_page_controller.dart';
@@ -74,8 +75,6 @@ class _DetailFromUrl extends StatelessWidget {
       },
       onLoading: SliverFillRemaining(
         child: Container(
-          // height: Get.size.height - 200,
-          // height: 200,
           alignment: Alignment.center,
           padding: const EdgeInsets.only(bottom: 50),
           child: const CupertinoActivityIndicator(
@@ -254,13 +253,19 @@ class _DetailWidget extends StatelessWidget {
                     color: CupertinoDynamicColor.resolve(
                         CupertinoColors.link, context)),
               ),
-              onTap: () => Get.toNamed(EHRoutes.galleryComment),
+              onTap: () => Get.toNamed(
+                EHRoutes.galleryComment,
+                id: isLayoutLarge ? 2 : null,
+              ),
             ).marginOnly(right: 4),
           ],
         ),
         GestureDetector(
           behavior: HitTestBehavior.deferToChild,
-          onTap: () => Get.toNamed(EHRoutes.galleryComment),
+          onTap: () => Get.toNamed(
+            EHRoutes.galleryComment,
+            id: isLayoutLarge ? 2 : null,
+          ),
           child: const TopComment(showBtn: false),
         ),
         const SizedBox(height: 20),

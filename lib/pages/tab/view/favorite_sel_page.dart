@@ -1,3 +1,4 @@
+import 'package:fehviewer/common/service/layout_service.dart';
 import 'package:fehviewer/const/theme_colors.dart';
 import 'package:fehviewer/generated/l10n.dart';
 import 'package:fehviewer/models/base/eh_models.dart';
@@ -146,7 +147,10 @@ class _FavSelItemWidget extends StatelessWidget {
       behavior: HitTestBehavior.opaque,
       onTap: () {
         // 返回 并带上参数
-        Get.back(result: favcatItemBean);
+        Get.back(
+          result: favcatItemBean,
+          id: isLayoutLarge ? 1 : null,
+        );
       },
       onTapDown: (_) => favoriteSelectorItemController.updatePressedColor(),
       onTapUp: (_) {

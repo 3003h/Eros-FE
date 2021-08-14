@@ -9,9 +9,9 @@ import 'package:fehviewer/pages/gallery/view/gallery_info_page.dart';
 import 'package:fehviewer/pages/gallery/view/gallery_page.dart';
 import 'package:fehviewer/pages/image_view/controller/view_ext_contorller.dart';
 import 'package:fehviewer/pages/image_view/view/view_page.dart';
-import 'package:fehviewer/pages/login_ext/controller/login_ext_controller.dart';
-import 'package:fehviewer/pages/login_ext/view/login_ext_page.dart';
-import 'package:fehviewer/pages/login_ext/view/web_login_in.dart';
+import 'package:fehviewer/pages/login/controller/login_ext_controller.dart';
+import 'package:fehviewer/pages/login/view/login_page.dart';
+import 'package:fehviewer/pages/login/view/web_login_in.dart';
 import 'package:fehviewer/pages/setting/about_page.dart';
 import 'package:fehviewer/pages/setting/advanced_setting_page.dart';
 import 'package:fehviewer/pages/setting/controller/tab_setting_controller.dart';
@@ -99,7 +99,7 @@ class AppPages {
       name: EHRoutes.login,
       page: () => const LoginExtPage(),
       binding: BindingsBuilder(
-        () => Get.lazyPut(() => LoginExtController()),
+        () => Get.lazyPut(() => LoginController()),
       ),
     ),
     GetPage(
@@ -112,7 +112,7 @@ class AppPages {
     ),
     GetPage(
       name: EHRoutes.galleryAllPreviews,
-      page: () => AllPreviewPage(),
+      page: () => const AllPreviewPage(),
     ),
     GetPage(
       name: EHRoutes.addTag,

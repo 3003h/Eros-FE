@@ -3,6 +3,7 @@ import 'dart:ui' show ImageFilter;
 import 'package:custom_pop_up_menu/custom_pop_up_menu.dart';
 import 'package:dio/dio.dart';
 import 'package:fehviewer/common/service/ehconfig_service.dart';
+import 'package:fehviewer/common/service/layout_service.dart';
 import 'package:fehviewer/common/service/theme_service.dart';
 import 'package:fehviewer/component/exception/error.dart';
 import 'package:fehviewer/const/theme_colors.dart';
@@ -75,9 +76,8 @@ class TabViewController extends GetxController
   String get currToplist => topListVal[_ehConfigService.toplist] ?? '15';
 
   @override
-  void onInit() {
-    super.onInit();
-
+  void onReady() {
+    super.onReady();
     firstLoad();
   }
 
@@ -316,7 +316,10 @@ class TabViewController extends GetxController
           onTap: () {
             // vibrateUtil.light();
             customPopupMenuController.hideMenu();
-            Get.toNamed(elem.key);
+            Get.toNamed(
+              elem.key,
+              id: isLayoutLarge ? 1 : null,
+            );
           },
           child: Container(
             padding:
@@ -327,8 +330,6 @@ class TabViewController extends GetxController
                 Icon(
                   tabPages.iconDatas[elem.key],
                   size: 20,
-                  // color: CupertinoDynamicColor.resolve(
-                  //     CupertinoColors.secondaryLabel, Get.context!),
                 ),
                 Expanded(
                   child: Container(
@@ -395,7 +396,7 @@ class TabViewController extends GetxController
     );
   }
 
-  Widget? get leading => Navigator.of(Get.context!).canPop()
+  Widget? getLeading(BuildContext context) => Navigator.of(context).canPop()
       ? null
       : enablePopupMenu && (!Get.find<EhConfigService>().isSafeMode.value)
           ? buildLeadingCustomPopupMenu(Get.context!)

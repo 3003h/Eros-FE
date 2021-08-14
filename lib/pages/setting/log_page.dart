@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:fehviewer/common/service/layout_service.dart';
 import 'package:fehviewer/common/service/log_service.dart';
 import 'package:fehviewer/common/service/theme_service.dart';
 import 'package:fehviewer/generated/l10n.dart';
@@ -106,10 +107,14 @@ class LogFileItem extends StatelessWidget {
         onTap: () {
           // showCustomHostEditer(context, index: index);
           // logger.v('');
-          Get.to(() => LogViewPage(
-                title: fileName,
-                index: index,
-              ));
+          Get.to(
+            () => LogViewPage(
+              title: fileName,
+              index: index,
+            ),
+            id: isLayoutLarge ? 2 : null,
+            transition: isLayoutLarge ? Transition.rightToLeft : null,
+          );
         },
       ),
     );

@@ -14,6 +14,7 @@ const double kCrossAxisSpacing = 4; //交叉轴方向子元素的间距
 const double kChildAspectRatio = 0.55; //显示区域宽高比
 
 class AllPreviewPage extends StatefulWidget {
+  const AllPreviewPage();
   @override
   _AllPreviewPageState createState() => _AllPreviewPageState();
 }

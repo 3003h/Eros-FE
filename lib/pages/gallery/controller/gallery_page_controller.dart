@@ -7,6 +7,7 @@ import 'package:fehviewer/common/global.dart';
 import 'package:fehviewer/common/isolate_download/download_manager.dart';
 import 'package:fehviewer/common/service/depth_service.dart';
 import 'package:fehviewer/common/service/ehconfig_service.dart';
+import 'package:fehviewer/common/service/layout_service.dart';
 import 'package:fehviewer/const/const.dart';
 import 'package:fehviewer/generated/l10n.dart';
 import 'package:fehviewer/models/base/eh_models.dart';
@@ -31,9 +32,9 @@ const double kHeaderHeightOffset = kHeaderHeight;
 
 class GalleryPageController extends GetxController
     with StateMixin<GalleryItem> {
-  GalleryPageController({this.galleryRepository});
+  GalleryPageController();
 
-  final GalleryRepository? galleryRepository;
+  late final GalleryRepository? galleryRepository;
 
   /// 画廊数据对象
   late GalleryItem _galleryItem;
@@ -160,6 +161,8 @@ class GalleryPageController extends GetxController
 
     scrollController.addListener(_scrollControllerLister);
     hideNavigationBtn = true;
+
+    galleryRepository = Get.find<GalleryRepository>();
 
     if (galleryRepository != null &&
         galleryRepository!.url != null &&
@@ -663,7 +666,10 @@ class GalleryPageController extends GetxController
   }
 
   Future<void> addTag() async {
-    final dynamic _rult = await Get.toNamed(EHRoutes.addTag);
+    final dynamic _rult = await Get.toNamed(
+      EHRoutes.addTag,
+      id: isLayoutLarge ? 2 : null,
+    );
     if (_rult != null && _rult is String) {
       logger.v('addTag $_rult');
       final TagInfoController? controller =

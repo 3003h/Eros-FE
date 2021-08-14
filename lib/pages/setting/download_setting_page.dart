@@ -73,14 +73,14 @@ class ListViewDownloadSetting extends StatelessWidget {
                 );
               });
         }),
-      _buildPreloadImageItem(context),
-      _buildMultiDownloadItem(context),
       if (GetPlatform.isAndroid || GetPlatform.isFuchsia)
         TextSwitchItem(
           L10n.of(context).allow_media_scan,
           intValue: ehConfigService.allowMediaScan,
           onChanged: _handleAllowMediaScanChanged,
         ),
+      _buildPreloadImageItem(context),
+      _buildMultiDownloadItem(context, hideLine: true),
     ];
     return ListView.builder(
       itemCount: _list.length,
@@ -137,7 +137,7 @@ Widget _buildPreloadImageItem(BuildContext context) {
 }
 
 /// 同时下载图片数量
-Widget _buildMultiDownloadItem(BuildContext context) {
+Widget _buildMultiDownloadItem(BuildContext context, {bool hideLine = false}) {
   final String _title = L10n.of(context).multi_download;
   final EhConfigService ehConfigService = Get.find();
 
@@ -171,6 +171,7 @@ Widget _buildMultiDownloadItem(BuildContext context) {
 
   return Obx(() => SelectorSettingItem(
         title: _title,
+        hideLine: hideLine,
         selector: ehConfigService.multiDownload.toString(),
         onTap: () async {
           final int? _result = await _showActionSheet(context);
