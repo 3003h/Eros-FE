@@ -243,6 +243,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "tab_watched": MessageLookupByLibrary.simpleMessage("Watched"),
         "tabbar_setting":
             MessageLookupByLibrary.simpleMessage("Tabbar setting"),
+        "tablet_layout": MessageLookupByLibrary.simpleMessage("Tablet layout"),
         "tag_vote_down": MessageLookupByLibrary.simpleMessage("Vote Down"),
         "tag_vote_up": MessageLookupByLibrary.simpleMessage("Vote Up"),
         "tag_withdraw_vote":

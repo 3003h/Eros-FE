@@ -1779,6 +1779,16 @@ class L10n {
       args: [],
     );
   }
+
+  /// `Tablet layout`
+  String get tablet_layout {
+    return Intl.message(
+      'Tablet layout',
+      name: 'tablet_layout',
+      desc: '',
+      args: [],
+    );
+  }
 }
 
 class AppLocalizationDelegate extends LocalizationsDelegate<L10n> {

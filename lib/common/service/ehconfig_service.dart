@@ -116,6 +116,10 @@ class EhConfigService extends ProfileService {
 
   int debugCount = 3;
 
+  final _tabletLayout = true.obs;
+  bool get tabletLayout => _tabletLayout.value;
+  set tabletLayout(bool val) => _tabletLayout.value = val;
+
   @override
   void onInit() {
     super.onInit();
@@ -306,6 +310,10 @@ class EhConfigService extends ProfileService {
             ToplistType.yesterday;
     everFromEunm(_toplist,
         (String value) => ehConfig = ehConfig.copyWith(toplist: value));
+
+    tabletLayout = ehConfig.tabletLayout ?? true;
+    everProfile<bool>(_tabletLayout,
+        (bool value) => ehConfig = ehConfig.copyWith(tabletLayout: value));
   }
 
   /// 收藏排序 dialog
