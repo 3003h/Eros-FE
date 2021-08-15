@@ -210,6 +210,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "tab_toplist": MessageLookupByLibrary.simpleMessage("Toplists"),
         "tab_watched": MessageLookupByLibrary.simpleMessage("關注"),
         "tabbar_setting": MessageLookupByLibrary.simpleMessage("主页标签设置"),
+        "tablet_layout": MessageLookupByLibrary.simpleMessage("Tablet layout"),
         "tag_vote_down": MessageLookupByLibrary.simpleMessage("Vote Down"),
         "tag_vote_up": MessageLookupByLibrary.simpleMessage("Vote Up"),
         "tag_withdraw_vote":

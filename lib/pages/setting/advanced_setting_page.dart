@@ -89,6 +89,12 @@ class ListViewAdvancedSetting extends StatelessWidget {
             desc: L10n.of(context).gray_black,
             descOn: L10n.of(context).pure_black,
           )),
+      if (context.isTablet)
+        Obx(() => TextSwitchItem(
+              L10n.of(context).tablet_layout,
+              intValue: _ehConfigService.tabletLayout,
+              onChanged: (bool val) => _ehConfigService.tabletLayout = val,
+            )),
       if (!Get.find<EhConfigService>().isSafeMode.value)
         SelectorSettingItem(
           hideLine: true,

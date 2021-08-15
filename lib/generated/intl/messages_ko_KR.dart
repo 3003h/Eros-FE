@@ -205,6 +205,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "tab_toplist": MessageLookupByLibrary.simpleMessage("Toplists"),
         "tab_watched": MessageLookupByLibrary.simpleMessage("Watched"),
         "tabbar_setting": MessageLookupByLibrary.simpleMessage("탭바 설정"),
+        "tablet_layout": MessageLookupByLibrary.simpleMessage("Tablet layout"),
         "tag_vote_down": MessageLookupByLibrary.simpleMessage("비추천"),
         "tag_vote_up": MessageLookupByLibrary.simpleMessage("추천"),
         "tag_withdraw_vote": MessageLookupByLibrary.simpleMessage("추천 취소"),

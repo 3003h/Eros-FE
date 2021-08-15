@@ -171,5 +171,6 @@
   "tolist_alltime": "All-Time",
   "tolist_past_year": "Past Year",
   "tolist_past_month": "Past Month",
-  "tolist_yesterday": "Yesterday"
+  "tolist_yesterday": "Yesterday",
+  "tablet_layout": "Tablet layout"
 }

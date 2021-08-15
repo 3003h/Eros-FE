@@ -171,5 +171,6 @@
   "tolist_alltime": "总排行",
   "tolist_past_year": "年排行",
   "tolist_past_month": "月排行",
-  "tolist_yesterday": "日排行"
+  "tolist_yesterday": "日排行",
+  "tablet_layout": "平板布局"
 }

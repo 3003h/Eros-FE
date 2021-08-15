@@ -21,9 +21,10 @@ void showToast(
           BoxShadow(
             color: CupertinoDynamicColor.resolve(
                     CupertinoColors.systemGrey, Get.context!)
-                .withOpacity(0.5),
-            blurRadius: 100, //阴影模糊程度
-            spreadRadius: 10, //阴影扩散程度
+                .withOpacity(0.1),
+            offset: const Offset(0, 5),
+            blurRadius: 10, //阴影模糊程度
+            spreadRadius: 3, //阴影扩散程度
           ),
         ],
       ),

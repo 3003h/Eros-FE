@@ -68,7 +68,7 @@ class TabHomeLarge extends GetView<TabHomeController> {
             children: [
               Container(
                 color: CupertinoColors.systemGrey4,
-                width: 0.6,
+                width: 0.5,
               ),
               Expanded(
                 child: Navigator(
