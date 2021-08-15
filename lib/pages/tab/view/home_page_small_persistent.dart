@@ -20,9 +20,9 @@ class TabHomeSmallPersistent extends GetView<TabHomeController> {
     return PersistentTabView(
       context,
       screens: [
-        GalleryListTab(tabTag: EHRoutes.gallery),
-        ToplistTab(tabTag: EHRoutes.toplist),
-        SettingTab(tabIndex: EHRoutes.setting),
+        GalleryListTab(),
+        ToplistTab(),
+        SettingTab(),
       ],
       decoration: NavBarDecoration(
           colorBehindNavBar: Colors.indigo,

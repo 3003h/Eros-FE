@@ -1,26 +1,42 @@
 import 'package:fehviewer/generated/l10n.dart';
 import 'package:fehviewer/models/base/eh_models.dart';
 import 'package:fehviewer/pages/tab/controller/popular_controller.dart';
+import 'package:fehviewer/pages/tab/controller/tabhome_controller.dart';
 import 'package:fehviewer/pages/tab/view/gallery_base.dart';
 import 'package:fehviewer/pages/tab/view/tab_base.dart';
 import 'package:fehviewer/route/navigator_util.dart';
 import 'package:fehviewer/utils/cust_lib/persistent_header_builder.dart';
 import 'package:fehviewer/utils/cust_lib/sliver/sliver_persistent_header.dart';
 import 'package:fehviewer/utils/logger.dart';
+import 'package:fehviewer/widget/refresh.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:keframe/size_cache_widget.dart';
 import 'package:line_icons/line_icons.dart';
 
-class PopularListTab extends GetView<PopularViewController> {
-  const PopularListTab({
-    Key? key,
-    this.tabTag,
-    this.scrollController,
-  }) : super(key: key);
-  final String? tabTag;
-  final ScrollController? scrollController;
+import '../comm.dart';
+
+class PopularListTab extends StatefulWidget {
+  const PopularListTab({Key? key}) : super(key: key);
+
+  @override
+  _PopularListTabState createState() => _PopularListTabState();
+}
+
+class _PopularListTabState extends State<PopularListTab> {
+  final controller = Get.find<PopularViewController>();
+  final EhTabController ehTabController = EhTabController();
+
+  @override
+  void initState() {
+    super.initState();
+
+    ehTabController.scrollToTopCall = () => controller.srcollToTop(context);
+    ehTabController.scrollToTopRefreshCall =
+        () => controller.srcollToTopRefresh(context);
+    tabPages.scrollControllerMap[controller.tabTag] = ehTabController;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -47,19 +63,22 @@ class PopularListTab extends GetView<PopularViewController> {
     final Widget navigationBar = CupertinoNavigationBar(
         transitionBetweenRoutes: false,
         padding: const EdgeInsetsDirectional.only(end: 4),
-        middle: Row(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Text(_title),
-            Obx(() {
-              if (controller.isBackgroundRefresh)
-                return const CupertinoActivityIndicator(
-                  radius: 10,
-                ).paddingSymmetric(horizontal: 8);
-              else
-                return const SizedBox();
-            }),
-          ],
+        middle: GestureDetector(
+          onTap: () => controller.srcollToTop(context),
+          child: Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Text(_title),
+              Obx(() {
+                if (controller.isBackgroundRefresh)
+                  return const CupertinoActivityIndicator(
+                    radius: 10,
+                  ).paddingSymmetric(horizontal: 8);
+                else
+                  return const SizedBox();
+              }),
+            ],
+          ),
         ),
         leading: controller.getLeading(context),
         trailing: CupertinoButton(
@@ -76,7 +95,7 @@ class PopularListTab extends GetView<PopularViewController> {
 
     final Widget customScrollView = CustomScrollView(
       cacheExtent: 500,
-      controller: scrollController,
+      // controller: scrollController,
       physics: const AlwaysScrollableScrollPhysics(),
       slivers: <Widget>[
         // sliverNavigationBar,
@@ -89,7 +108,7 @@ class PopularListTab extends GetView<PopularViewController> {
             builder: (_, __, ___) => navigationBar,
           ),
         ),
-        CupertinoSliverRefreshControl(
+        EhCupertinoSliverRefreshControl(
           onRefresh: controller.onRefresh,
         ),
         SliverSafeArea(
@@ -102,24 +121,25 @@ class PopularListTab extends GetView<PopularViewController> {
     return CupertinoPageScaffold(
       // navigationBar: navigationBar,
       child: CupertinoScrollbar(
-        controller: scrollController,
+        // controller: scrollController,
+        controller: PrimaryScrollController.of(context),
         child: SizeCacheWidget(child: customScrollView),
       ),
     );
   }
 
   Widget _getGalleryList() {
-    return controller
-        .obx((List<GalleryItem>? state) => getGalleryList(state, tabTag),
-            onLoading: SliverFillRemaining(
-              child: Container(
-                alignment: Alignment.center,
-                padding: const EdgeInsets.only(bottom: 50),
-                child: const CupertinoActivityIndicator(
-                  radius: 14.0,
-                ),
-              ),
-            ), onError: (err) {
+    return controller.obx(
+        (List<GalleryItem>? state) => getGalleryList(state, controller.tabTag),
+        onLoading: SliverFillRemaining(
+          child: Container(
+            alignment: Alignment.center,
+            padding: const EdgeInsets.only(bottom: 50),
+            child: const CupertinoActivityIndicator(
+              radius: 14.0,
+            ),
+          ),
+        ), onError: (err) {
       logger.e(' $err');
       return SliverFillRemaining(
         child: Container(

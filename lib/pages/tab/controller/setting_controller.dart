@@ -19,8 +19,7 @@ class SettingViewController extends GetxController
   late Animation<double> animation;
   late AnimationController _animationController;
 
-  final ScrollController _scrollController =
-      tabPages.scrollControllerMap[EHRoutes.setting] ?? ScrollController();
+  ScrollController? scrollController;
 
   @override
   void onInit() {
@@ -32,16 +31,23 @@ class SettingViewController extends GetxController
     );
 
     animation = Tween(begin: 0.0, end: 1.0).animate(_animationController);
+  }
 
+  @override
+  void onReady() {
+    super.onReady();
     // 监听滚动
-    _scrollController.addListener(_scrollControllerLister);
+    scrollController?.addListener(_scrollControllerLister);
   }
 
   void _scrollControllerLister() {
-    if (_scrollController.offset < 50.0 && showMidle) {
+    if (scrollController == null) {
+      return;
+    }
+    if (scrollController!.offset < 50.0 && showMidle) {
       _animationController.reverse();
       showMidle = false;
-    } else if (_scrollController.offset >= 50.0 && !showMidle) {
+    } else if (scrollController!.offset >= 50.0 && !showMidle) {
       _animationController.forward();
       showMidle = true;
     }
@@ -76,6 +82,8 @@ class SettingViewController extends GetxController
   }
 
   void initData(BuildContext context) {
+    scrollController = PrimaryScrollController.of(context);
+
     _itemTitles = <String>[
       L10n.of(context).eh,
       L10n.of(context).download,

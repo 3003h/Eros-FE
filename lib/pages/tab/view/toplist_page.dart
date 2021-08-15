@@ -1,27 +1,42 @@
 import 'package:fehviewer/generated/l10n.dart';
 import 'package:fehviewer/models/base/eh_models.dart';
 import 'package:fehviewer/pages/tab/controller/enum.dart';
+import 'package:fehviewer/pages/tab/controller/tabhome_controller.dart';
 import 'package:fehviewer/pages/tab/controller/toplist_controller.dart';
 import 'package:fehviewer/pages/tab/view/tab_base.dart';
 import 'package:fehviewer/utils/cust_lib/persistent_header_builder.dart';
 import 'package:fehviewer/utils/cust_lib/sliver/sliver_persistent_header.dart';
 import 'package:fehviewer/utils/logger.dart';
+import 'package:fehviewer/widget/refresh.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:keframe/size_cache_widget.dart';
 import 'package:line_icons/line_icons.dart';
 
+import '../comm.dart';
 import 'gallery_base.dart';
 
-class ToplistTab extends GetView<TopListViewController> {
-  const ToplistTab({
-    Key? key,
-    this.tabTag,
-    this.scrollController,
-  }) : super(key: key);
-  final String? tabTag;
-  final ScrollController? scrollController;
+class ToplistTab extends StatefulWidget {
+  const ToplistTab({Key? key}) : super(key: key);
+
+  @override
+  _ToplistTabState createState() => _ToplistTabState();
+}
+
+class _ToplistTabState extends State<ToplistTab> {
+  final controller = Get.find<TopListViewController>();
+  final EhTabController ehTabController = EhTabController();
+
+  @override
+  void initState() {
+    super.initState();
+
+    ehTabController.scrollToTopCall = () => controller.srcollToTop(context);
+    ehTabController.scrollToTopRefreshCall =
+        () => controller.srcollToTopRefresh(context);
+    tabPages.scrollControllerMap[controller.tabTag] = ehTabController;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -32,19 +47,22 @@ class ToplistTab extends GetView<TopListViewController> {
         transitionBetweenRoutes: false,
         padding: const EdgeInsetsDirectional.only(end: 4),
         leading: controller.getLeading(context),
-        middle: Row(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Text(controller.getTopListTitle),
-            Obx(() {
-              if (controller.isBackgroundRefresh)
-                return const CupertinoActivityIndicator(
-                  radius: 10,
-                ).paddingSymmetric(horizontal: 8);
-              else
-                return const SizedBox();
-            }),
-          ],
+        middle: GestureDetector(
+          onTap: () => controller.srcollToTop(context),
+          child: Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Text(controller.getTopListTitle),
+              Obx(() {
+                if (controller.isBackgroundRefresh)
+                  return const CupertinoActivityIndicator(
+                    radius: 10,
+                  ).paddingSymmetric(horizontal: 8);
+                else
+                  return const SizedBox();
+              }),
+            ],
+          ),
         ),
         trailing: Row(
           mainAxisSize: MainAxisSize.min,
@@ -106,7 +124,7 @@ class ToplistTab extends GetView<TopListViewController> {
 
     final Widget customScrollView = CustomScrollView(
       cacheExtent: 500,
-      controller: scrollController,
+      // controller: scrollController,
       physics: const AlwaysScrollableScrollPhysics(),
       slivers: <Widget>[
         // sliverNavigationBar,
@@ -119,7 +137,7 @@ class ToplistTab extends GetView<TopListViewController> {
             builder: (_, __, ___) => navigationBar,
           ),
         ),
-        CupertinoSliverRefreshControl(
+        EhCupertinoSliverRefreshControl(
           onRefresh: controller.onRefresh,
         ),
         SliverSafeArea(
@@ -132,7 +150,7 @@ class ToplistTab extends GetView<TopListViewController> {
 
     return CupertinoPageScaffold(
       child: CupertinoScrollbar(
-        controller: scrollController,
+        controller: PrimaryScrollController.of(context),
         child: SizeCacheWidget(child: customScrollView),
       ),
     );
@@ -142,7 +160,7 @@ class ToplistTab extends GetView<TopListViewController> {
     return controller.obx(
       (List<GalleryItem>? state) => getGalleryList(
         state,
-        tabTag,
+        controller.tabTag,
         maxPage: controller.maxPage,
         curPage: controller.curPage.value,
         loadMord: controller.loadDataMore,

@@ -14,6 +14,7 @@ import 'package:fehviewer/pages/tab/controller/tabhome_controller.dart';
 import 'package:fehviewer/pages/tab/controller/toplist_controller.dart';
 import 'package:fehviewer/utils/logger.dart';
 import 'package:fehviewer/utils/toast.dart';
+import 'package:fehviewer/widget/refresh.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
@@ -39,6 +40,8 @@ class TabViewController extends GetxController
 
   int? cats;
 
+  late String tabTag;
+
   RxInt curPage = 0.obs;
   int maxPage = 1;
 
@@ -61,7 +64,7 @@ class TabViewController extends GetxController
   // 页码跳转输入框的控制器
   final TextEditingController _pageController = TextEditingController();
 
-  late FetchCallBack fetchNormal;
+  FetchCallBack? fetchNormal;
 
   String? _curFavcat;
   String get curFavcat {
@@ -83,15 +86,18 @@ class TabViewController extends GetxController
 
   Future<void> firstLoad() async {
     try {
-      final Tuple2<List<GalleryItem>, int> tuple = await fetchData();
-      final List<GalleryItem> _listItem = tuple.item1;
+      final Tuple2<List<GalleryItem>, int>? tuple = await fetchData();
+      if (tuple == null) {
+        return;
+      }
 
+      final List<GalleryItem> _listItem = tuple.item1;
       // Api.getMoreGalleryInfo(_listItem);
 
       maxPage = tuple.item2;
       change(_listItem, status: RxStatus.success());
-    } catch (err) {
-      logger.e('$err');
+    } catch (err, stack) {
+      logger.e('$err\n$stack');
       change(null, status: RxStatus.error(err.toString()));
     }
 
@@ -106,12 +112,24 @@ class TabViewController extends GetxController
     }
   }
 
-  Future<Tuple2<List<GalleryItem>, int>> fetchData(
+  void srcollToTop(BuildContext context) {
+    PrimaryScrollController.of(context)?.animateTo(0.0,
+        duration: const Duration(milliseconds: 500), curve: Curves.ease);
+  }
+
+  void srcollToTopRefresh(BuildContext context) {
+    PrimaryScrollController.of(context)?.animateTo(
+        -kDefaultRefreshTriggerPullDistance,
+        duration: const Duration(milliseconds: 500),
+        curve: Curves.ease);
+  }
+
+  Future<Tuple2<List<GalleryItem>, int>?> fetchData(
       {bool refresh = false}) async {
     final int _catNum = _ehConfigService.catFilter.value;
 
     try {
-      final Future<Tuple2<List<GalleryItem>, int>> tuple = fetchNormal(
+      final Future<Tuple2<List<GalleryItem>, int>>? tuple = fetchNormal?.call(
         cats: cats ?? _catNum,
         toplist: currToplist,
         refresh: refresh,
@@ -127,9 +145,12 @@ class TabViewController extends GetxController
 
   Future<void> reloadData() async {
     curPage.value = 0;
-    final Tuple2<List<GalleryItem>, int> tuple = await fetchData(
+    final Tuple2<List<GalleryItem>, int>? tuple = await fetchData(
       refresh: true,
     );
+    if (tuple == null) {
+      return;
+    }
 
     maxPage = tuple.item2;
     change(tuple.item1, status: RxStatus.success());
@@ -169,7 +190,7 @@ class TabViewController extends GetxController
     final String fromGid = state?.last.gid ?? '0';
     try {
       pageState = PageState.Loading;
-      final Tuple2<List<GalleryItem>, int> tuple = await fetchNormal(
+      final Tuple2<List<GalleryItem>, int>? tuple = await fetchNormal?.call(
         page: curPage.value + 1,
         fromGid: fromGid,
         cats: cats ?? _catNum,
@@ -178,6 +199,10 @@ class TabViewController extends GetxController
         favcat: curFavcat,
         toplist: currToplist,
       );
+
+      if (tuple == null) {
+        return;
+      }
 
       final List<GalleryItem> galleryItemBeans = tuple.item1;
 
@@ -205,14 +230,16 @@ class TabViewController extends GetxController
     final int _catNum = _ehConfigService.catFilter.value;
 
     change(state, status: RxStatus.loading());
-    fetchNormal(
+    fetchNormal
+        ?.call(
       page: page,
       cats: cats ?? _catNum,
       refresh: true,
       cancelToken: cancelToken,
       favcat: curFavcat,
       toplist: currToplist,
-    ).then((tuple) {
+    )
+        .then((tuple) {
       curPage.value = page;
       change(tuple.item1, status: RxStatus.success());
     });
@@ -311,45 +338,47 @@ class TabViewController extends GetxController
     for (final MapEntry<String, bool> elem
         in _tabHomeController.tabMap.entries) {
       if (!elem.value) {
-        _menu.add(GestureDetector(
-          behavior: HitTestBehavior.translucent,
-          onTap: () {
-            // vibrateUtil.light();
-            customPopupMenuController.hideMenu();
-            Get.toNamed(
-              elem.key,
-              id: isLayoutLarge ? 1 : null,
-            );
-          },
-          child: Container(
-            padding:
-                const EdgeInsets.only(left: 14, right: 18, top: 5, bottom: 5),
-            child: Row(
-              mainAxisSize: MainAxisSize.min,
-              children: <Widget>[
-                Icon(
-                  tabPages.iconDatas[elem.key],
-                  size: 20,
-                ),
-                Expanded(
-                  child: Container(
-                    margin: const EdgeInsets.only(left: 10),
-                    padding: const EdgeInsets.symmetric(vertical: 10),
-                    child: Text(
-                      tabPages.tabTitles[elem.key] ?? '',
-                      style: TextStyle(
-                        color: CupertinoDynamicColor.resolve(
-                            CupertinoColors.label, Get.context!),
-                        fontWeight: FontWeight.w500,
-                        // fontSize: 12,
+        _menu.add(
+          GestureDetector(
+            behavior: HitTestBehavior.translucent,
+            onTap: () {
+              // vibrateUtil.light();
+              customPopupMenuController.hideMenu();
+              Get.toNamed(
+                elem.key,
+                id: isLayoutLarge ? 1 : null,
+              );
+            },
+            child: Container(
+              padding:
+                  const EdgeInsets.only(left: 14, right: 18, top: 5, bottom: 5),
+              child: Row(
+                mainAxisSize: MainAxisSize.min,
+                children: <Widget>[
+                  Icon(
+                    tabPages.iconDatas[elem.key],
+                    size: 20,
+                  ),
+                  Expanded(
+                    child: Container(
+                      margin: const EdgeInsets.only(left: 10),
+                      padding: const EdgeInsets.symmetric(vertical: 10),
+                      child: Text(
+                        tabPages.tabTitles[elem.key] ?? '',
+                        style: TextStyle(
+                          color: CupertinoDynamicColor.resolve(
+                              CupertinoColors.label, Get.context!),
+                          fontWeight: FontWeight.w500,
+                          // fontSize: 12,
+                        ),
                       ),
                     ),
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
           ),
-        ));
+        );
       }
     }
 
@@ -368,7 +397,7 @@ class TabViewController extends GetxController
           padding: const EdgeInsets.only(left: 14, bottom: 2),
           child: const Icon(
             CupertinoIcons.ellipsis_circle,
-            size: 26,
+            size: 24,
           ),
         ),
         // arrowColor: _color,

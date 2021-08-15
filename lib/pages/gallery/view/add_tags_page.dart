@@ -17,8 +17,21 @@ const CupertinoDynamicColor _kClearButtonColor =
   darkColor: Color(0xFFAEAEB2),
 );
 
-class AddTagPage extends StatelessWidget {
+class AddTagPage extends StatefulWidget {
+  @override
+  _AddTagPageState createState() => _AddTagPageState();
+}
+
+class _AddTagPageState extends State<AddTagPage> {
   final TagInfoController controller = Get.find(tag: pageCtrlDepth);
+
+  @override
+  void dispose() {
+    super.dispose();
+    if (Get.isRegistered<TagInfoController>(tag: pageCtrlDepth)) {
+      Get.delete<TagInfoController>(tag: pageCtrlDepth);
+    }
+  }
 
   @override
   Widget build(BuildContext context) {

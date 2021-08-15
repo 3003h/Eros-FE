@@ -19,6 +19,7 @@ import 'package:fehviewer/utils/cust_lib/persistent_header_builder.dart';
 import 'package:fehviewer/utils/cust_lib/sliver/sliver_persistent_header.dart';
 import 'package:fehviewer/utils/logger.dart';
 import 'package:fehviewer/utils/vibrate.dart';
+import 'package:fehviewer/widget/refresh.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -126,7 +127,7 @@ class _GallerySearchPageState extends State<GallerySearchPage> {
             ),
           // SliverToBoxAdapter(child: getNavigationBar(context)),
           Obx(() {
-            return CupertinoSliverRefreshControl(
+            return EhCupertinoSliverRefreshControl(
                 onRefresh: controller.listType == ListType.gallery
                     ? () => controller.onEditingComplete(clear: false)
                     : null);

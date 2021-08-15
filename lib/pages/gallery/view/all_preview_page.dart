@@ -23,6 +23,14 @@ class _AllPreviewPageState extends State<AllPreviewPage> {
   final Map<String, bool> _loadComplets = {};
 
   @override
+  void dispose() {
+    super.dispose();
+    if (Get.isRegistered<AllPreviewsPageController>()) {
+      Get.delete<AllPreviewsPageController>();
+    }
+  }
+
+  @override
   Widget build(BuildContext context) {
     final AllPreviewsPageController controller =
         Get.put(AllPreviewsPageController());

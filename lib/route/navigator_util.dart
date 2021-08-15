@@ -4,6 +4,7 @@ import 'package:fehviewer/const/const.dart';
 import 'package:fehviewer/models/index.dart';
 import 'package:fehviewer/network/gallery_request.dart';
 import 'package:fehviewer/pages/gallery/comm.dart';
+import 'package:fehviewer/pages/gallery/controller/gallery_page_controller.dart';
 import 'package:fehviewer/pages/gallery/view/gallery_page.dart';
 import 'package:fehviewer/pages/image_view/common.dart';
 import 'package:fehviewer/pages/image_view/view/view_page.dart';
@@ -13,8 +14,10 @@ import 'package:fehviewer/pages/tab/view/gallery_page.dart';
 import 'package:fehviewer/pages/tab/view/search_page.dart';
 import 'package:fehviewer/pages/tab/view/tab_base.dart';
 import 'package:fehviewer/route/routes.dart';
+import 'package:fehviewer/route/second_observer.dart';
 import 'package:fehviewer/utils/logger.dart';
 import 'package:get/get.dart';
+import 'package:collection/collection.dart';
 
 class NavigatorUtil {
   /// 转到画廊列表页面
@@ -87,32 +90,23 @@ class NavigatorUtil {
     GalleryItem? galleryItem,
     bool replace = false,
   }) async {
+    final topRoute = SecondNavigatorObserver.history.lastOrNull?.settings.name;
+    late final String? _gid;
+
     // url跳转方式
     if (url != null && url.isNotEmpty) {
-      Get.find<DepthService>().pushPageCtrl();
       logger.v('goGalleryPage fromUrl $url');
 
       final RegExp regGalleryUrl =
-          RegExp(r'https?://e[-x]hentai.org/g/[0-9]+/[0-9a-z]+/?');
+          RegExp(r'https?://e[-x]hentai.org/g/([0-9]+)/[0-9a-z]+/?');
       final RegExp regGalleryPageUrl =
           RegExp(r'https://e[-x]hentai.org/s/[0-9a-z]+/\d+-\d+');
 
       if (regGalleryUrl.hasMatch(url)) {
         // url为画廊链接
         Get.replace(GalleryRepository(url: url));
-        // 命名路由方式
-        if (replace) {
-          await Get.offNamed(
-            EHRoutes.galleryPage,
-            preventDuplicates: false,
-          );
-        } else {
-          await Get.toNamed(
-            EHRoutes.galleryPage,
-            id: isLayoutLarge ? 2 : null,
-            preventDuplicates: false,
-          );
-        }
+        final matcher = regGalleryUrl.firstMatch(url);
+        _gid = matcher?[1];
       } else if (regGalleryPageUrl.hasMatch(url)) {
         // url为画廊某一页的链接
         final _image = await Api.fetchImageInfo(url);
@@ -121,40 +115,79 @@ class NavigatorUtil {
             '${Api.getBaseUrl()}/g/${_image.gid}/${_image.token}';
         logger.d('jump to $_galleryUrl $ser');
 
-        Get.replace(GalleryRepository(url: _galleryUrl, jumpSer: ser));
+        _gid = _image.gid;
 
-        if (replace) {
-          await Get.offNamed(
-            EHRoutes.galleryPage,
-            preventDuplicates: false,
-          );
-        } else {
-          await Get.toNamed(
-            EHRoutes.galleryPage,
-            id: isLayoutLarge ? 2 : null,
-            preventDuplicates: false,
-          );
-        }
+        Get.replace(GalleryRepository(url: _galleryUrl, jumpSer: ser));
       }
-      deletePageController();
-      Get.find<DepthService>().popPageCtrl();
+
+      if (replace) {
+        Get.find<DepthService>().pushPageCtrl();
+        await Get.offNamed(
+          EHRoutes.galleryPage,
+          preventDuplicates: false,
+        );
+        deletePageController();
+        Get.find<DepthService>().popPageCtrl();
+      } else {
+        if (topRoute == EHRoutes.galleryPage) {
+          logger.d('topRoute == EHRoutes.galleryPage');
+          if (Get.isRegistered<GalleryPageController>(tag: pageCtrlDepth) &&
+              Get.find<GalleryPageController>(tag: pageCtrlDepth).gid == _gid) {
+            logger.d('same gallery');
+            return;
+          }
+        }
+
+        Get.find<DepthService>().pushPageCtrl();
+        await Get.toNamed(
+          EHRoutes.galleryPage,
+          id: isLayoutLarge ? 2 : null,
+          preventDuplicates: false,
+        );
+        deletePageController();
+        Get.find<DepthService>().popPageCtrl();
+      }
     } else {
       // item点击跳转方式
       logger.v('goGalleryPage fromItem tabTag=$tabTag');
-
-      // logger.v('put GalleryRepository $pageCtrlDepth');
+      _gid = galleryItem?.gid;
 
       Get.replace(GalleryRepository(item: galleryItem, tabTag: tabTag));
 
       //命名路由
-      if (isLayoutLarge && Get.currentRoute == EHRoutes.home) {
+      if (isLayoutLarge) {
         Get.find<DepthService>().pushPageCtrl();
-        await Get.offNamed(
-          EHRoutes.galleryPage,
-          id: 2,
-          preventDuplicates: false,
-        );
-        // deletePageController();
+
+        logger.d('topRoute: $topRoute');
+        if (topRoute == EHRoutes.galleryPage) {
+          logger.d('topRoute == EHRoutes.galleryPage');
+          final curTag = (int.parse(pageCtrlDepth) - 1).toString();
+          if (Get.isRegistered<GalleryPageController>(tag: curTag) &&
+              Get.find<GalleryPageController>(tag: curTag).gid == _gid) {
+            logger.d('same gallery');
+            Get.find<DepthService>().popPageCtrl();
+            return;
+          } else {
+            await Get.offNamed(
+              EHRoutes.galleryPage,
+              id: 2,
+              preventDuplicates: true,
+            );
+          }
+        } else if (topRoute != EHRoutes.empty) {
+          logger.d('Get.offNamed');
+          await Get.offNamed(
+            EHRoutes.galleryPage,
+            id: 2,
+            preventDuplicates: true,
+          );
+        } else {
+          await Get.toNamed(
+            EHRoutes.galleryPage,
+            id: 2,
+            preventDuplicates: true,
+          );
+        }
       } else {
         Get.find<DepthService>().pushPageCtrl();
         await Get.toNamed(

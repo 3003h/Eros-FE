@@ -14,30 +14,52 @@ import 'package:fehviewer/route/routes.dart';
 import 'package:fehviewer/utils/cust_lib/persistent_header_builder.dart';
 import 'package:fehviewer/utils/cust_lib/sliver/sliver_persistent_header.dart';
 import 'package:fehviewer/utils/logger.dart';
+import 'package:fehviewer/widget/refresh.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:keframe/size_cache_widget.dart';
 import 'package:line_icons/line_icons.dart';
 
-class FavoriteTab extends GetView<FavoriteViewController> {
-  const FavoriteTab({Key? key, this.tabTag, this.scrollController})
-      : super(key: key);
-  final String? tabTag;
-  final ScrollController? scrollController;
+import '../comm.dart';
+
+class FavoriteTab extends StatefulWidget {
+  const FavoriteTab({Key? key}) : super(key: key);
+
+  @override
+  _FavoriteTabState createState() => _FavoriteTabState();
+}
+
+class _FavoriteTabState extends State<FavoriteTab> {
+  final controller = Get.find<FavoriteViewController>();
+  final EhTabController ehTabController = EhTabController();
+
+  @override
+  void initState() {
+    super.initState();
+
+    ehTabController.scrollToTopCall = () => controller.srcollToTop(context);
+    ehTabController.scrollToTopRefreshCall =
+        () => controller.srcollToTopRefresh(context);
+    tabPages.scrollControllerMap[controller.tabTag] = ehTabController;
+  }
 
   @override
   Widget build(BuildContext context) {
     // logger.d(' FavoriteTab BuildContext');
     final UserController userController = Get.find();
+
+    // tabPages.scrollControllerMap[controller.tabTag] =
+    //     PrimaryScrollController.of(context);
+
     return Obx(() {
       if (userController.isLogin) {
-        if (controller.title == null || (controller.title.isEmpty)) {
+        if (controller.title.isEmpty) {
           controller.title = L10n.of(context).all_Favorites;
         }
         return _buildNetworkFavView(context);
       } else {
-        return _buildLocalFavView();
+        return _buildLocalFavView(context);
       }
     });
   }
@@ -76,7 +98,8 @@ class FavoriteTab extends GetView<FavoriteViewController> {
             ),
             onPressed: () {
               final bool fromTabItem =
-                  Get.find<TabHomeController>().tabMap[tabTag] ?? false;
+                  Get.find<TabHomeController>().tabMap[controller.tabTag] ??
+                      false;
               NavigatorUtil.showSearch(
                   searchType: SearchType.favorite, fromTabItem: fromTabItem);
             },
@@ -138,23 +161,30 @@ class FavoriteTab extends GetView<FavoriteViewController> {
         transitionBetweenRoutes: false,
         padding: const EdgeInsetsDirectional.only(end: 4),
         leading: controller.getLeading(context),
-        middle: Row(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Obx(() {
-              return Text(
-                controller.title,
-              );
-            }),
-            Obx(() {
-              if (controller.isBackgroundRefresh)
-                return const CupertinoActivityIndicator(
-                  radius: 10,
-                ).paddingSymmetric(horizontal: 8);
-              else
-                return const SizedBox();
-            }),
-          ],
+        middle: GestureDetector(
+          onTap: () => controller.srcollToTop(context),
+          // onTap: () {
+          //   PrimaryScrollController.of(context)?.animateTo(0.0,
+          //       duration: Duration(milliseconds: 500), curve: Curves.ease);
+          // },
+          child: Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Obx(() {
+                return Text(
+                  controller.title,
+                );
+              }),
+              Obx(() {
+                if (controller.isBackgroundRefresh)
+                  return const CupertinoActivityIndicator(
+                    radius: 10,
+                  ).paddingSymmetric(horizontal: 8);
+                else
+                  return const SizedBox();
+              }),
+            ],
+          ),
         ),
         trailing: Row(
           mainAxisSize: MainAxisSize.min,
@@ -170,7 +200,8 @@ class FavoriteTab extends GetView<FavoriteViewController> {
               ),
               onPressed: () {
                 final bool fromTabItem =
-                    Get.find<TabHomeController>().tabMap[tabTag] ?? false;
+                    Get.find<TabHomeController>().tabMap[controller.tabTag] ??
+                        false;
                 NavigatorUtil.showSearch(
                     searchType: SearchType.favorite, fromTabItem: fromTabItem);
               },
@@ -231,11 +262,11 @@ class FavoriteTab extends GetView<FavoriteViewController> {
     return CupertinoPageScaffold(
       // navigationBar: navigationBar,
       child: CupertinoScrollbar(
-        controller: scrollController,
+        controller: PrimaryScrollController.of(context),
         child: SizeCacheWidget(
           child: CustomScrollView(
             cacheExtent: 500,
-            controller: scrollController,
+            // controller: scrollController,
             physics: const AlwaysScrollableScrollPhysics(),
             slivers: <Widget>[
               // sliverNavigationBar,
@@ -248,7 +279,7 @@ class FavoriteTab extends GetView<FavoriteViewController> {
                   builder: (_, __, ___) => navigationBar,
                 ),
               ),
-              CupertinoSliverRefreshControl(
+              EhCupertinoSliverRefreshControl(
                 onRefresh: controller.onRefresh,
               ),
               SliverSafeArea(
@@ -263,21 +294,24 @@ class FavoriteTab extends GetView<FavoriteViewController> {
     );
   }
 
-  Widget _buildLocalFavView() {
+  Widget _buildLocalFavView(BuildContext context) {
     final Widget sliverNavigationBar = CupertinoSliverNavigationBar(
       largeTitle: Text(L10n.of(Get.context!).local_favorite),
       transitionBetweenRoutes: false,
     );
 
     final CupertinoNavigationBar navigationBar = CupertinoNavigationBar(
-      middle: Text(L10n.of(Get.context!).local_favorite),
+      middle: GestureDetector(
+        onTap: () => controller.srcollToTop(context),
+        child: Text(L10n.of(Get.context!).local_favorite),
+      ),
       transitionBetweenRoutes: false,
     );
 
     return CupertinoPageScaffold(
       // navigationBar: navigationBar,
       child: CupertinoScrollbar(
-        controller: scrollController,
+        controller: PrimaryScrollController.of(context),
         child: SizeCacheWidget(
           child: CustomScrollView(
             cacheExtent: 500,
@@ -290,7 +324,7 @@ class FavoriteTab extends GetView<FavoriteViewController> {
                   builder: (_, __, ___) => navigationBar,
                 ),
               ),
-              CupertinoSliverRefreshControl(
+              EhCupertinoSliverRefreshControl(
                 onRefresh: controller.onRefresh,
               ),
               // todo 可能要设置刷新？
@@ -351,7 +385,7 @@ class FavoriteTab extends GetView<FavoriteViewController> {
         (List<GalleryItem>? state) {
           return getGalleryList(
             state,
-            tabTag,
+            controller.tabTag,
             maxPage: controller.maxPage,
             curPage: controller.curPage.value,
             loadMord: controller.loadDataMore,

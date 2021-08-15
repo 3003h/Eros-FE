@@ -2,6 +2,7 @@ import 'package:fehviewer/common/service/ehconfig_service.dart';
 import 'package:fehviewer/generated/l10n.dart';
 import 'package:fehviewer/network/gallery_request.dart';
 import 'package:fehviewer/pages/tab/controller/tabview_controller.dart';
+import 'package:fehviewer/route/routes.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:get/get.dart';
 
@@ -27,6 +28,7 @@ class TopListViewController extends TabViewController {
   @override
   void onInit() {
     fetchNormal = Api.getToplist;
+    tabTag = EHRoutes.toplist;
     super.onInit();
   }
 

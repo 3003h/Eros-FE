@@ -7,6 +7,7 @@ import 'package:fehviewer/generated/l10n.dart';
 import 'package:fehviewer/models/index.dart';
 import 'package:fehviewer/network/gallery_request.dart';
 import 'package:fehviewer/pages/controller/favorite_sel_controller.dart';
+import 'package:fehviewer/route/routes.dart';
 import 'package:fehviewer/utils/logger.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
@@ -50,6 +51,7 @@ class FavoriteViewController extends TabViewController {
   @override
   void onInit() {
     fetchNormal = Api.getFavorite;
+    tabTag = EHRoutes.favorite;
     super.onInit();
   }
 

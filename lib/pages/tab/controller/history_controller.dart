@@ -2,6 +2,7 @@ import 'package:fehviewer/common/controller/history_controller.dart';
 import 'package:fehviewer/generated/l10n.dart';
 import 'package:fehviewer/models/index.dart';
 import 'package:fehviewer/pages/tab/controller/tabview_controller.dart';
+import 'package:fehviewer/route/routes.dart';
 import 'package:fehviewer/utils/logger.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/widgets.dart';
@@ -13,6 +14,7 @@ class HistoryViewController extends TabViewController {
   @override
   void onInit() {
     super.onInit();
+    tabTag = EHRoutes.history;
 
     loadData().then((List<GalleryItem> value) {
       change(value, status: RxStatus.success());

@@ -138,12 +138,10 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
         getPages: AppPages.routes,
         defaultTransition: Transition.cupertino,
         initialRoute: EHRoutes.root,
-        // home: SplashPage(),
         theme: theme,
         locale: locale,
-        // enableLog: false,
+        enableLog: false,
         logWriterCallback: loggerGetx,
-        // ignore: prefer_const_literals_to_create_immutables
         supportedLocales: <Locale>[
           ...L10n.delegate.supportedLocales,
         ],

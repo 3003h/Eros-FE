@@ -20,16 +20,19 @@ import 'package:fehviewer/pages/setting/security_setting_page.dart';
 import 'package:fehviewer/pages/setting/tab_setting.dart';
 import 'package:fehviewer/pages/tab/bindings/tabhome_binding.dart';
 import 'package:fehviewer/pages/tab/controller/tabhome_controller.dart';
+import 'package:fehviewer/pages/tab/view/download_page.dart';
 import 'package:fehviewer/pages/tab/view/quick_search_page.dart';
 import 'package:fehviewer/pages/tab/view/search_page.dart';
 import 'package:fehviewer/route/app_pages.dart';
 import 'package:fehviewer/route/routes.dart';
+import 'package:fehviewer/route/second_observer.dart';
 import 'package:fehviewer/utils/logger.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:collection/collection.dart';
 
+import 'empty.dart';
 import 'home_page_small.dart';
 
 class TabHomeLarge extends GetView<TabHomeController> {
@@ -67,42 +70,50 @@ class TabHomeLarge extends GetView<TabHomeController> {
           child: Row(
             children: [
               Container(
-                color: CupertinoColors.systemGrey4,
+                color: CupertinoDynamicColor.resolve(
+                    CupertinoColors.systemGrey4, context),
                 width: 0.5,
               ),
               Expanded(
                 child: Navigator(
                   key: Get.nestedKey(2),
+                  observers: [SecondNavigatorObserver()],
+                  initialRoute: EHRoutes.empty,
                   onGenerateRoute: (settings) {
-                    // logger.d('$settings');
                     switch (settings.name) {
                       case EHRoutes.about:
                         return GetPageRoute(
+                          settings: settings,
                           page: () => AboutPage(),
                           transition: Transition.fadeIn,
                         );
                       case EHRoutes.ehSetting:
                         return GetPageRoute(
+                          settings: settings,
                           page: () => EhSettingPage(),
                           transition: Transition.fadeIn,
                         );
                       case EHRoutes.downloadSetting:
                         return GetPageRoute(
+                          settings: settings,
                           page: () => DownloadSettingPage(),
                           transition: Transition.fadeIn,
                         );
                       case EHRoutes.searchSetting:
                         return GetPageRoute(
+                          settings: settings,
                           page: () => SearchSettingPage(),
                           transition: Transition.fadeIn,
                         );
                       case EHRoutes.quickSearch:
                         return GetPageRoute(
+                          settings: settings,
                           page: () => QuickSearchListPage(),
                           transition: Transition.rightToLeft,
                         );
                       case EHRoutes.advancedSetting:
                         return GetPageRoute(
+                          settings: settings,
                           page: () => AdvancedSettingPage(),
                           binding: BindingsBuilder(
                               () => Get.lazyPut(() => CacheController())),
@@ -110,37 +121,44 @@ class TabHomeLarge extends GetView<TabHomeController> {
                         );
                       case EHRoutes.customHosts:
                         return GetPageRoute(
+                          settings: settings,
                           page: () => CustomHostsPage(),
                           transition: Transition.rightToLeft,
                         );
                       case EHRoutes.logfile:
                         return GetPageRoute(
+                          settings: settings,
                           page: () => LogPage(),
                           transition: Transition.rightToLeft,
                         );
                       case EHRoutes.securitySetting:
                         return GetPageRoute(
+                          settings: settings,
                           page: () => SecuritySettingPage(),
                           transition: Transition.fadeIn,
                         );
                       case EHRoutes.galleryPage:
                         return GetPageRoute(
+                          settings: settings,
                           page: () => GalleryMainPage(),
                           transition: Transition.fadeIn,
                           binding: GalleryBinding(),
                         );
                       case EHRoutes.galleryComment:
                         return GetPageRoute(
+                          settings: settings,
                           page: () => CommentPage(),
                           transition: Transition.rightToLeft,
                         );
                       case EHRoutes.galleryAllPreviews:
                         return GetPageRoute(
+                          settings: settings,
                           page: () => const AllPreviewPage(),
                           transition: Transition.rightToLeft,
                         );
                       case EHRoutes.addTag:
                         return GetPageRoute(
+                          settings: settings,
                           page: () => AddTagPage(),
                           transition: Transition.rightToLeft,
                           binding: BindingsBuilder(
@@ -150,34 +168,36 @@ class TabHomeLarge extends GetView<TabHomeController> {
                         );
                       case EHRoutes.galleryInfo:
                         return GetPageRoute(
+                          settings: settings,
                           page: () => const GalleryInfoPage(),
                           transition: Transition.rightToLeft,
                         );
                       case EHRoutes.pageSetting:
                         return GetPageRoute(
+                          settings: settings,
                           page: () => TabSettingPage(),
                           binding: BindingsBuilder(
                             () => Get.lazyPut(() => TabSettingController()),
                           ),
                           transition: Transition.rightToLeft,
                         );
+                      case EHRoutes.empty:
+                        return GetPageRoute(
+                          settings: settings,
+                          page: () => const EmptyPage(),
+                          transition: Transition.rightToLeft,
+                        );
+                      case EHRoutes.download:
+                        return GetPageRoute(
+                          settings: settings,
+                          page: () => const DownloadTab(),
+                          transition: Transition.rightToLeft,
+                        );
                       default:
                         return GetPageRoute(
-                          page: () => CupertinoTheme(
-                            data: ehTheme.themeData!,
-                            child: CupertinoPageScaffold(
-                              child: Container(
-                                color:
-                                    ehTheme.themeData!.scaffoldBackgroundColor,
-                                child: const Center(
-                                  child: Text(
-                                    '[ ]',
-                                    style: TextStyle(fontSize: 50),
-                                  ),
-                                ),
-                              ),
-                            ),
-                          ),
+                          settings: settings,
+                          routeName: EHRoutes.empty,
+                          page: () => const EmptyPage(),
                           transition: Transition.fadeIn,
                         );
                     }

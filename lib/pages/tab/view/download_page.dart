@@ -4,6 +4,7 @@ import 'package:fehviewer/models/index.dart';
 import 'package:fehviewer/pages/item/download_archiver_item.dart';
 import 'package:fehviewer/pages/item/download_gallery_item.dart';
 import 'package:fehviewer/pages/tab/controller/download_view_controller.dart';
+import 'package:fehviewer/pages/tab/controller/tabhome_controller.dart';
 import 'package:fehviewer/store/floor/entity/gallery_task.dart';
 import 'package:fehviewer/utils/logger.dart';
 import 'package:flutter/cupertino.dart';
@@ -26,10 +27,7 @@ const Border _kDefaultNavBarBorder = Border(
 );
 
 class DownloadTab extends StatefulWidget {
-  const DownloadTab({Key? key, this.tabIndex, this.scrollController})
-      : super(key: key);
-  final String? tabIndex;
-  final ScrollController? scrollController;
+  const DownloadTab({Key? key}) : super(key: key);
 
   @override
   _DownloadTabState createState() => _DownloadTabState();
@@ -53,8 +51,8 @@ class _DownloadTabState extends State<DownloadTab> {
     final String _title = L10n.of(context).tab_download;
 
     final viewList = [
-      DownloadGalleryView(scrollController: widget.scrollController),
-      DownloadArchiverView(scrollController: widget.scrollController),
+      const DownloadGalleryView(),
+      const DownloadArchiverView(),
     ];
 
     return CupertinoPageScaffold(
@@ -119,8 +117,7 @@ class _DownloadTabState extends State<DownloadTab> {
 }
 
 class DownloadArchiverView extends StatefulWidget {
-  const DownloadArchiverView({this.scrollController});
-  final ScrollController? scrollController;
+  const DownloadArchiverView();
 
   @override
   _DownloadArchiverViewState createState() => _DownloadArchiverViewState();
@@ -131,11 +128,18 @@ class _DownloadArchiverViewState extends State<DownloadArchiverView>
   final DownloadViewController controller = Get.find();
 
   @override
+  void initState() {
+    super.initState();
+    // tabPages.scrollControllerMap[controller.tabTag] =
+    //     PrimaryScrollController.of(context);
+  }
+
+  @override
   Widget build(BuildContext context) {
     super.build(context);
     return CupertinoScrollbar(
       child: ListView.separated(
-        controller: widget.scrollController,
+        // controller: widget.scrollController,
         itemBuilder: (_, int index) {
           final _id = controller.archiverTasks[index].tag;
 
@@ -176,8 +180,7 @@ class _DownloadArchiverViewState extends State<DownloadArchiverView>
 }
 
 class DownloadGalleryView extends StatefulWidget {
-  const DownloadGalleryView({this.scrollController});
-  final ScrollController? scrollController;
+  const DownloadGalleryView();
 
   @override
   _DownloadGalleryViewState createState() => _DownloadGalleryViewState();
@@ -192,6 +195,8 @@ class _DownloadGalleryViewState extends State<DownloadGalleryView>
   @override
   void initState() {
     super.initState();
+    // tabPages.scrollControllerMap[controller.tabTag] =
+    //     PrimaryScrollController.of(context);
   }
 
   @override
@@ -201,9 +206,9 @@ class _DownloadGalleryViewState extends State<DownloadGalleryView>
       id: 'DownloadGalleryView',
       builder: (logic) {
         return CupertinoScrollbar(
-          controller: widget.scrollController,
+          controller: PrimaryScrollController.of(context),
           child: ListView.separated(
-            controller: widget.scrollController,
+            // controller: widget.scrollController,
             itemBuilder: (_, int _taskIndex) {
               final gid = controller.galleryTasks[_taskIndex].gid;
 

@@ -5,8 +5,8 @@ import 'package:fehviewer/network/gallery_request.dart';
 import 'package:fehviewer/pages/gallery/controller/gallery_page_controller.dart';
 import 'package:fehviewer/pages/gallery/view/gallery_widget.dart';
 import 'package:fehviewer/route/routes.dart';
-// import 'package:fehviewer/utils/cust_lib/selectable_text.dart';
 import 'package:fehviewer/utils/logger.dart';
+import 'package:fehviewer/widget/refresh.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_easyrefresh/easy_refresh.dart';
@@ -140,7 +140,7 @@ class _GalleryMainPageState extends State<GalleryMainPage> {
                     )
                   : ReadButton(gid: _item.gid ?? '').paddingOnly(right: 4)),
             ),
-            CupertinoSliverRefreshControl(
+            EhCupertinoSliverRefreshControl(
               onRefresh: _controller.handOnRefresh,
             ),
             SliverSafeArea(
