@@ -25,6 +25,7 @@ import 'package:fehviewer/pages/setting/tab_setting.dart';
 import 'package:fehviewer/pages/setting/view_setting_page.dart';
 import 'package:fehviewer/pages/tab/bindings/splash_binding.dart';
 import 'package:fehviewer/pages/tab/view/download_page.dart';
+import 'package:fehviewer/pages/tab/view/empty.dart';
 import 'package:fehviewer/pages/tab/view/favorite_page.dart';
 import 'package:fehviewer/pages/tab/view/favorite_sel_page.dart';
 import 'package:fehviewer/pages/tab/view/history_page.dart';
@@ -49,6 +50,11 @@ class AppPages {
       name: EHRoutes.root,
       page: () => SplashPage(),
       binding: SplashBinding(),
+      transition: Transition.fadeIn,
+    ),
+    GetPage(
+      name: EHRoutes.empty,
+      page: () => const EmptyPage(),
       transition: Transition.fadeIn,
     ),
     GetPage(
@@ -134,27 +140,27 @@ class AppPages {
     ),
     GetPage(
       name: EHRoutes.history,
-      page: () => const HistoryTab(tabTag: EHRoutes.history),
+      page: () => const HistoryTab(),
     ),
     GetPage(
       name: EHRoutes.watched,
-      page: () => const WatchedListTab(tabIndex: EHRoutes.watched),
+      page: () => const WatchedListTab(),
     ),
     GetPage(
       name: EHRoutes.favorite,
-      page: () => const FavoriteTab(tabTag: EHRoutes.favorite),
+      page: () => const FavoriteTab(),
     ),
     GetPage(
       name: EHRoutes.toplist,
-      page: () => const ToplistTab(tabTag: EHRoutes.toplist),
+      page: () => const ToplistTab(),
     ),
     GetPage(
       name: EHRoutes.popular,
-      page: () => const PopularListTab(tabTag: EHRoutes.popular),
+      page: () => const PopularListTab(),
     ),
     GetPage(
       name: EHRoutes.download,
-      page: () => const DownloadTab(tabIndex: EHRoutes.download),
+      page: () => const DownloadTab(),
     ),
 
     GetPage(

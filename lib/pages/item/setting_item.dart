@@ -1,10 +1,13 @@
 import 'package:fehviewer/common/service/layout_service.dart';
 import 'package:fehviewer/common/service/theme_service.dart';
+import 'package:fehviewer/route/routes.dart';
+import 'package:fehviewer/route/second_observer.dart';
 import 'package:fehviewer/utils/logger.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:collection/collection.dart';
 
 class SettingItems extends StatefulWidget {
   const SettingItems({
@@ -90,7 +93,13 @@ class _SettingItems extends State<SettingItems> {
       onTap: () {
         loggerNoStack.v('set tap ${widget.text} ');
         if (isLayoutLarge) {
-          Get.offNamed(widget.route, id: 2);
+          final topRoute =
+              SecondNavigatorObserver.history.lastOrNull?.settings.name;
+          if (topRoute?.startsWith('/setting') ?? false) {
+            Get.offNamed(widget.route, id: 2);
+          } else {
+            Get.toNamed(widget.route, id: 2);
+          }
         } else {
           Get.toNamed(widget.route);
         }

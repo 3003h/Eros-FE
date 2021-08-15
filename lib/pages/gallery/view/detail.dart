@@ -136,24 +136,27 @@ class _DetailWidget extends StatelessWidget {
             onTap: controller.downloadGallery,
           );
 
+          final toDownloadPage = () =>
+              Get.toNamed(EHRoutes.download, id: isLayoutLarge ? 2 : null);
+
           final Map<TaskStatus, Widget> iconMap = {
             TaskStatus.complete: TextBtn(
               FontAwesomeIcons.solidCheckCircle,
               title: L10n.of(context).downloaded,
-              onTap: () => Get.toNamed(EHRoutes.download),
-              onLongPress: () => Get.toNamed(EHRoutes.download),
+              onTap: toDownloadPage,
+              onLongPress: toDownloadPage,
             ),
             TaskStatus.running: TextBtn(
               FontAwesomeIcons.solidPlayCircle,
               title: L10n.of(context).downloading,
-              onTap: () => Get.toNamed(EHRoutes.download),
-              onLongPress: () => Get.toNamed(EHRoutes.download),
+              onTap: toDownloadPage,
+              onLongPress: toDownloadPage,
             ),
             TaskStatus.paused: TextBtn(
               FontAwesomeIcons.solidPauseCircle,
               title: L10n.of(context).paused,
-              onTap: () => Get.toNamed(EHRoutes.download),
-              onLongPress: () => Get.toNamed(EHRoutes.download),
+              onTap: toDownloadPage,
+              onLongPress: toDownloadPage,
             ),
           };
 

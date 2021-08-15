@@ -15,6 +15,7 @@ const double kChildAspectRatio = 0.55; //显示区域宽高比
 
 class AllPreviewsPageController extends GetxController
     with StateMixin<List<GalleryImage>> {
+  AllPreviewsPageController();
   GalleryPageController get _pageController => Get.find(tag: pageCtrlDepth);
 
   List<GalleryImage> get _images => _pageController.imagesFromMap;

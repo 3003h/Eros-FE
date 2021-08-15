@@ -15,6 +15,7 @@ import 'package:get/get.dart';
 import 'gallery_page_controller.dart';
 
 class TagInfoController extends GetxController {
+  TagInfoController();
   GalleryPageController get pageController => Get.find(tag: pageCtrlDepth);
 
   GalleryItem get _item => pageController.galleryItem;

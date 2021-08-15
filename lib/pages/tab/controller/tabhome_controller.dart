@@ -9,12 +9,14 @@ import 'package:fehviewer/route/routes.dart';
 import 'package:fehviewer/store/get_store.dart';
 import 'package:fehviewer/utils/logger.dart';
 import 'package:fehviewer/utils/toast.dart';
+import 'package:fehviewer/widget/refresh.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/widgets.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
 import 'package:persistent_bottom_nav_bar/persistent-tab-view.dart';
 
+import '../comm.dart';
 import '../view/favorite_page.dart';
 import '../view/gallery_page.dart';
 import '../view/popular_page.dart';
@@ -24,48 +26,24 @@ const double kIconSize = 24.0;
 final TabPages tabPages = TabPages();
 
 class TabPages {
-  final Map<String, ScrollController> scrollControllerMap = {};
+  final Map<String, EhTabController?> scrollControllerMap = {};
 
-  ScrollController? _scrollController(String key) {
-    if (scrollControllerMap[key] == null) {
-      scrollControllerMap[key] = ScrollController();
-    }
+  EhTabController? _scrollController(String key) {
+    // if (scrollControllerMap[key] == null) {
+    //   scrollControllerMap[key] = ScrollController();
+    // }
     return scrollControllerMap[key];
   }
 
   Map<String, Widget> get tabViews => <String, Widget>{
-        EHRoutes.popular: PopularListTab(
-          tabTag: EHRoutes.popular,
-          scrollController: _scrollController(EHRoutes.popular),
-        ),
-        EHRoutes.watched: WatchedListTab(
-          tabIndex: EHRoutes.watched,
-          scrollController: _scrollController(EHRoutes.watched),
-        ),
-        EHRoutes.gallery: GalleryListTab(
-          tabTag: EHRoutes.gallery,
-          scrollController: _scrollController(EHRoutes.gallery),
-        ),
-        EHRoutes.favorite: FavoriteTab(
-          tabTag: EHRoutes.favorite,
-          scrollController: _scrollController(EHRoutes.favorite),
-        ),
-        EHRoutes.toplist: ToplistTab(
-          tabTag: EHRoutes.toplist,
-          scrollController: _scrollController(EHRoutes.toplist),
-        ),
-        EHRoutes.history: HistoryTab(
-          tabTag: EHRoutes.history,
-          scrollController: _scrollController(EHRoutes.history),
-        ),
-        EHRoutes.download: DownloadTab(
-          tabIndex: EHRoutes.download,
-          scrollController: _scrollController(EHRoutes.download),
-        ),
-        EHRoutes.setting: SettingTab(
-          tabIndex: EHRoutes.setting,
-          scrollController: _scrollController(EHRoutes.setting),
-        ),
+        EHRoutes.popular: const PopularListTab(),
+        EHRoutes.watched: const WatchedListTab(),
+        EHRoutes.gallery: const GalleryListTab(),
+        EHRoutes.favorite: const FavoriteTab(),
+        EHRoutes.toplist: const ToplistTab(),
+        EHRoutes.history: const HistoryTab(),
+        EHRoutes.download: const DownloadTab(),
+        EHRoutes.setting: const SettingTab(),
       };
 
   final Map<String, IconData> iconDatas = <String, IconData>{
@@ -239,7 +217,7 @@ class TabHomeController extends GetxController {
   List<Widget> get viewList =>
       _showTabs.map((e) => tabPages.tabViews[e]!).toList();
 
-  List<ScrollController?> get scrollControllerList =>
+  List<EhTabController?> get scrollControllerList =>
       _showTabs.map((e) => tabPages.scrollControllerMap[e]).toList();
 
   Future<void> onTap(int index) async {
@@ -249,12 +227,16 @@ class TabHomeController extends GetxController {
         duration: const Duration(milliseconds: 800),
         awaitComplete: false,
         onTap: () {
-          scrollControllerList[index]?.animateTo(0.0,
-              duration: const Duration(milliseconds: 500), curve: Curves.ease);
+          // scrollControllerList[index]?.animateTo(0.0,
+          //     duration: const Duration(milliseconds: 500), curve: Curves.ease);
+          scrollControllerList[index]?.scrollToTop();
         },
         onDoubleTap: () {
-          scrollControllerList[index]?.animateTo(-100.0,
-              duration: const Duration(milliseconds: 500), curve: Curves.ease);
+          // scrollControllerList[index]?.animateTo(
+          //     -kDefaultRefreshTriggerPullDistance,
+          //     duration: const Duration(milliseconds: 500),
+          //     curve: Curves.ease);
+          scrollControllerList[index]?.scrollToTopRefresh();
         },
       );
     } else {

@@ -1,6 +1,7 @@
 import 'package:fehviewer/common/controller/history_controller.dart';
 import 'package:fehviewer/generated/l10n.dart';
 import 'package:fehviewer/pages/tab/controller/history_controller.dart';
+import 'package:fehviewer/pages/tab/controller/tabhome_controller.dart';
 import 'package:fehviewer/pages/tab/view/tab_base.dart';
 import 'package:fehviewer/utils/cust_lib/persistent_header_builder.dart';
 import 'package:fehviewer/utils/cust_lib/sliver/sliver_persistent_header.dart';
@@ -10,11 +11,28 @@ import 'package:get/get.dart';
 import 'package:keframe/size_cache_widget.dart';
 import 'package:line_icons/line_icons.dart';
 
-class HistoryTab extends GetView<HistoryViewController> {
-  const HistoryTab({Key? key, this.tabTag, this.scrollController})
-      : super(key: key);
-  final String? tabTag;
-  final ScrollController? scrollController;
+import '../comm.dart';
+
+class HistoryTab extends StatefulWidget {
+  const HistoryTab({Key? key}) : super(key: key);
+
+  @override
+  _HistoryTabState createState() => _HistoryTabState();
+}
+
+class _HistoryTabState extends State<HistoryTab> {
+  final controller = Get.find<HistoryViewController>();
+  final EhTabController ehTabController = EhTabController();
+
+  @override
+  void initState() {
+    super.initState();
+
+    ehTabController.scrollToTopCall = () => controller.srcollToTop(context);
+    ehTabController.scrollToTopRefreshCall =
+        () => controller.srcollToTopRefresh(context);
+    tabPages.scrollControllerMap[controller.tabTag] = ehTabController;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -49,7 +67,8 @@ class HistoryTab extends GetView<HistoryViewController> {
       transitionBetweenRoutes: false,
       padding: const EdgeInsetsDirectional.only(end: 4),
       leading: controller.getLeading(context),
-      middle: Text(_title),
+      middle: GestureDetector(
+          onTap: () => controller.srcollToTop(context), child: Text(_title)),
       trailing: Container(
         width: 40,
         child: Row(
@@ -73,7 +92,7 @@ class HistoryTab extends GetView<HistoryViewController> {
     );
     final Widget customScrollView = CustomScrollView(
       cacheExtent: 500,
-      controller: scrollController,
+      // controller: scrollController,
       physics: const AlwaysScrollableScrollPhysics(),
       slivers: <Widget>[
         SliverFloatingPinnedPersistentHeader(
@@ -90,7 +109,7 @@ class HistoryTab extends GetView<HistoryViewController> {
         //   padding: EdgeInsets.only(
         //       top: context.mediaQueryPadding.top +
         //           kMinInteractiveDimensionCupertino),
-        //   sliver: CupertinoSliverRefreshControl(
+        //   sliver: EhCupertinoSliverRefreshControl(
         //     onRefresh: () async {
         //       await controller.reloadData();
         //     },
@@ -102,7 +121,7 @@ class HistoryTab extends GetView<HistoryViewController> {
             sliver: GetBuilder<HistoryController>(
               init: HistoryController(),
               builder: (_) {
-                return getGalleryList(_.historys, tabTag);
+                return getGalleryList(_.historys, controller.tabTag);
               },
             )
             // sliver: _getGalleryList(),
@@ -113,7 +132,7 @@ class HistoryTab extends GetView<HistoryViewController> {
     return CupertinoPageScaffold(
         // navigationBar: navigationBar,
         child: CupertinoScrollbar(
-            controller: scrollController,
+            controller: PrimaryScrollController.of(context),
             child: SizeCacheWidget(child: customScrollView)));
   }
 }

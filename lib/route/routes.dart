@@ -3,6 +3,8 @@ class EHRoutes {
   static const String home = '/home';
   static const String galleryList = '/galleryList';
 
+  static const String empty = '/empty';
+
   static const String selFavorie = '/selFavoriePage';
 
   static const String unlockPage = '/unlockPage';

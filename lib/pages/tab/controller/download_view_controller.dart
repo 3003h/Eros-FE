@@ -2,6 +2,7 @@ import 'package:fehviewer/common/controller/archiver_download_controller.dart';
 import 'package:fehviewer/common/controller/download_controller.dart';
 import 'package:fehviewer/generated/l10n.dart';
 import 'package:fehviewer/models/index.dart';
+import 'package:fehviewer/route/routes.dart';
 import 'package:fehviewer/store/floor/entity/gallery_image_task.dart';
 import 'package:fehviewer/store/floor/entity/gallery_task.dart';
 import 'package:fehviewer/utils/logger.dart';
@@ -19,25 +20,18 @@ class DownloadViewController extends GetxController {
   final ArchiverDownloadController _archiverDownloadController = Get.find();
   final DownloadController _downloadController = Get.find();
 
-  // PageController pageController = PageController();
+  late String tabTag;
 
-  // void handOnPageChange(int value) {
-  //   viewType = pageList[value];
-  // }
+  @override
+  void onInit() {
+    super.onInit();
+    tabTag = EHRoutes.download;
+  }
 
   List<DownloadType> pageList = <DownloadType>[
     DownloadType.gallery,
     DownloadType.archiver,
   ];
-
-  // int get currIndex => pageList.indexOf(viewType);
-
-  // final Rx<DownloadType> _viewType = DownloadType.gallery.obs;
-  // DownloadType get viewType => _viewType.value;
-  // set viewType(DownloadType val) {
-  //   // final int _index = pageList.indexOf(val);
-  //   _viewType.value = val;
-  // }
 
   List<DownloadTaskInfo> get archiverTasks =>
       _archiverDownloadController.archiverTaskMap.entries

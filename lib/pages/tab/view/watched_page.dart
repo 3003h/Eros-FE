@@ -10,23 +10,36 @@ import 'package:fehviewer/route/navigator_util.dart';
 import 'package:fehviewer/utils/cust_lib/persistent_header_builder.dart';
 import 'package:fehviewer/utils/cust_lib/sliver/sliver_persistent_header.dart';
 import 'package:fehviewer/utils/logger.dart';
+import 'package:fehviewer/widget/refresh.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:keframe/size_cache_widget.dart';
 import 'package:line_icons/line_icons.dart';
 
+import '../comm.dart';
 import 'tab_base.dart';
 
-class WatchedListTab extends GetView<WatchedViewController> {
-  const WatchedListTab({
-    Key? key,
-    this.tabIndex,
-    this.scrollController,
-  }) : super(key: key);
+class WatchedListTab extends StatefulWidget {
+  const WatchedListTab({Key? key}) : super(key: key);
 
-  final String? tabIndex;
-  final ScrollController? scrollController;
+  @override
+  _WatchedListTabState createState() => _WatchedListTabState();
+}
+
+class _WatchedListTabState extends State<WatchedListTab> {
+  final controller = Get.find<WatchedViewController>();
+  final EhTabController ehTabController = EhTabController();
+
+  @override
+  void initState() {
+    super.initState();
+
+    ehTabController.scrollToTopCall = () => controller.srcollToTop(context);
+    ehTabController.scrollToTopRefreshCall =
+        () => controller.srcollToTopRefresh(context);
+    tabPages.scrollControllerMap[controller.tabTag] = ehTabController;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -61,7 +74,8 @@ class WatchedListTab extends GetView<WatchedViewController> {
             ),
             onPressed: () {
               final bool fromTabItem =
-                  Get.find<TabHomeController>().tabMap[tabIndex] ?? false;
+                  Get.find<TabHomeController>().tabMap[controller.tabTag] ??
+                      false;
               NavigatorUtil.showSearch(
                   searchType: SearchType.watched, fromTabItem: fromTabItem);
             },
@@ -112,19 +126,22 @@ class WatchedListTab extends GetView<WatchedViewController> {
       transitionBetweenRoutes: false,
       padding: const EdgeInsetsDirectional.only(end: 4),
       leading: controller.getLeading(context),
-      middle: Row(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          Text(controller.title),
-          Obx(() {
-            if (controller.isBackgroundRefresh)
-              return const CupertinoActivityIndicator(
-                radius: 10,
-              ).paddingSymmetric(horizontal: 8);
-            else
-              return const SizedBox();
-          }),
-        ],
+      middle: GestureDetector(
+        onTap: () => controller.srcollToTop(context),
+        child: Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Text(controller.title),
+            Obx(() {
+              if (controller.isBackgroundRefresh)
+                return const CupertinoActivityIndicator(
+                  radius: 10,
+                ).paddingSymmetric(horizontal: 8);
+              else
+                return const SizedBox();
+            }),
+          ],
+        ),
       ),
       trailing: Row(
         mainAxisSize: MainAxisSize.min,
@@ -140,7 +157,8 @@ class WatchedListTab extends GetView<WatchedViewController> {
             ),
             onPressed: () {
               final bool fromTabItem =
-                  Get.find<TabHomeController>().tabMap[tabIndex] ?? false;
+                  Get.find<TabHomeController>().tabMap[controller.tabTag] ??
+                      false;
               NavigatorUtil.showSearch(
                   searchType: SearchType.watched, fromTabItem: fromTabItem);
             },
@@ -189,7 +207,7 @@ class WatchedListTab extends GetView<WatchedViewController> {
 
     final CustomScrollView customScrollView = CustomScrollView(
       cacheExtent: 500,
-      controller: scrollController,
+      // controller: scrollController,
       physics: const AlwaysScrollableScrollPhysics(),
       slivers: <Widget>[
         // sliverNavigationBar,
@@ -202,7 +220,7 @@ class WatchedListTab extends GetView<WatchedViewController> {
             builder: (_, __, ___) => navigationBar,
           ),
         ),
-        CupertinoSliverRefreshControl(
+        EhCupertinoSliverRefreshControl(
           onRefresh: controller.onRefresh,
         ),
         SliverSafeArea(
@@ -217,7 +235,7 @@ class WatchedListTab extends GetView<WatchedViewController> {
     return CupertinoPageScaffold(
       // navigationBar: navigationBar,
       child: CupertinoScrollbar(
-          controller: scrollController,
+          controller: PrimaryScrollController.of(context),
           child: SizeCacheWidget(child: customScrollView)),
     );
   }
@@ -267,7 +285,7 @@ class WatchedListTab extends GetView<WatchedViewController> {
         (List<GalleryItem>? state) {
           return getGalleryList(
             state,
-            tabIndex,
+            controller.tabTag,
             maxPage: controller.maxPage,
             curPage: controller.curPage.value,
             loadMord: controller.loadDataMore,

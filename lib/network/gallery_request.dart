@@ -299,7 +299,7 @@ class Api {
     dio.CancelToken? cancelToken,
     ValueChanged<List<Favcat>>? favCatList,
   }) async {
-    logger.d('getToplist');
+    // logger.d('getToplist');
     const String url = '/toplist.php';
 
     final Map<String, dynamic> params = <String, dynamic>{

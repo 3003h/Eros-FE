@@ -9,25 +9,42 @@ import 'package:fehviewer/models/index.dart';
 import 'package:fehviewer/pages/filter/filter.dart';
 import 'package:fehviewer/pages/tab/controller/enum.dart';
 import 'package:fehviewer/pages/tab/controller/gallery_controller.dart';
+import 'package:fehviewer/pages/tab/controller/tabhome_controller.dart';
 import 'package:fehviewer/pages/tab/view/gallery_base.dart';
 import 'package:fehviewer/route/navigator_util.dart';
 import 'package:fehviewer/utils/cust_lib/persistent_header_builder.dart';
 import 'package:fehviewer/utils/cust_lib/sliver/sliver_persistent_header.dart';
 import 'package:fehviewer/utils/logger.dart';
+import 'package:fehviewer/widget/refresh.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:keframe/size_cache_widget.dart';
 import 'package:line_icons/line_icons.dart';
 
+import '../comm.dart';
 import 'tab_base.dart';
 
-class GalleryListTab extends GetView<GalleryViewController> {
-  const GalleryListTab({Key? key, this.tabTag, this.scrollController})
-      : super(key: key);
+class GalleryListTab extends StatefulWidget {
+  const GalleryListTab({Key? key}) : super(key: key);
 
-  final String? tabTag;
-  final ScrollController? scrollController;
+  @override
+  _GalleryListTabState createState() => _GalleryListTabState();
+}
+
+class _GalleryListTabState extends State<GalleryListTab> {
+  final controller = Get.find<GalleryViewController>();
+  final EhTabController ehTabController = EhTabController();
+
+  @override
+  void initState() {
+    super.initState();
+
+    ehTabController.scrollToTopCall = () => controller.srcollToTop(context);
+    ehTabController.scrollToTopRefreshCall =
+        () => controller.srcollToTopRefresh(context);
+    tabPages.scrollControllerMap[controller.tabTag] = ehTabController;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -112,19 +129,22 @@ class GalleryListTab extends GetView<GalleryViewController> {
     final Widget navigationBar = CupertinoNavigationBar(
       transitionBetweenRoutes: false,
       padding: const EdgeInsetsDirectional.only(end: 4),
-      middle: Row(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          Text(controller.title),
-          Obx(() {
-            if (controller.isBackgroundRefresh)
-              return const CupertinoActivityIndicator(
-                radius: 10,
-              ).paddingSymmetric(horizontal: 8);
-            else
-              return const SizedBox();
-          }),
-        ],
+      middle: GestureDetector(
+        onTap: () => controller.srcollToTop(context),
+        child: Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Text(controller.title),
+            Obx(() {
+              if (controller.isBackgroundRefresh)
+                return const CupertinoActivityIndicator(
+                  radius: 10,
+                ).paddingSymmetric(horizontal: 8);
+              else
+                return const SizedBox();
+            }),
+          ],
+        ),
       ),
       leading: controller.getLeading(context),
       trailing: Row(
@@ -187,7 +207,6 @@ class GalleryListTab extends GetView<GalleryViewController> {
 
     final Widget customScrollView = CustomScrollView(
       cacheExtent: 500,
-      controller: scrollController,
       physics: const AlwaysScrollableScrollPhysics(),
       slivers: <Widget>[
         // getSliverNavigationBar(),
@@ -200,7 +219,7 @@ class GalleryListTab extends GetView<GalleryViewController> {
             builder: (_, __, ___) => navigationBar,
           ),
         ),
-        CupertinoSliverRefreshControl(
+        EhCupertinoSliverRefreshControl(
           onRefresh: controller.onRefresh,
         ),
         SliverSafeArea(
@@ -216,7 +235,7 @@ class GalleryListTab extends GetView<GalleryViewController> {
       // navigationBar: navigationBar,
       child: CupertinoScrollbar(
         child: SizeCacheWidget(child: customScrollView),
-        controller: scrollController,
+        controller: PrimaryScrollController.of(context),
       ),
     );
   }
@@ -266,7 +285,7 @@ class GalleryListTab extends GetView<GalleryViewController> {
         (List<GalleryItem>? state) {
           return getGalleryList(
             state,
-            tabTag,
+            controller.tabTag,
             maxPage: controller.maxPage,
             curPage: controller.curPage.value,
             loadMord: controller.loadDataMore,
