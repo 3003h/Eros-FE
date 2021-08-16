@@ -16,24 +16,42 @@ const double kPaddingLeft = 8.0;
 
 /// 画廊列表项
 /// 简单模式 精简显示信息 固定高度
-class GalleryItemSimpleWidget extends StatelessWidget {
-  GalleryItemSimpleWidget({required this.galleryItem, required this.tabTag}) {
-    Get.lazyPut(
-      () => GalleryItemController(galleryItem),
-      tag: galleryItem.gid,
-    );
-  }
+class GalleryItemSimpleWidget extends StatefulWidget {
+  const GalleryItemSimpleWidget(
+      {Key? key, required this.galleryItem, required this.tabTag})
+      : super(key: key);
 
   final GalleryItem galleryItem;
   final dynamic tabTag;
 
-  GalleryItemController get _galleryItemController =>
-      Get.find(tag: galleryItem.gid);
+  @override
+  _GalleryItemSimpleWidgetState createState() =>
+      _GalleryItemSimpleWidgetState();
+}
+
+class _GalleryItemSimpleWidgetState extends State<GalleryItemSimpleWidget> {
+  late GalleryItemController galleryItemController;
+
+  @override
+  void initState() {
+    super.initState();
+    galleryItemController = Get.put(GalleryItemController(widget.galleryItem),
+        tag: widget.galleryItem.gid);
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    if (Get.isRegistered<GalleryItemController>(tag: widget.galleryItem.gid)) {
+      Get.replace(GalleryItemController(widget.galleryItem),
+          tag: widget.galleryItem.gid);
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
     final Widget containerGallery = Container(
-      color: _galleryItemController.colorTap.value,
+      color: galleryItemController.colorTap.value,
       height: kItemWidth,
       padding: const EdgeInsets.fromLTRB(kPaddingLeft, 6, 6, 6),
       child: Column(
@@ -53,14 +71,14 @@ class GalleryItemSimpleWidget extends StatelessWidget {
                   _buildTitle(),
                   // 上传者
                   Text(
-                    _galleryItemController.galleryItem.uploader ?? '',
+                    galleryItemController.galleryItem.uploader ?? '',
                     style: const TextStyle(
                         fontSize: 12, color: CupertinoColors.systemGrey),
                   ),
                   // 评分行
                   GetBuilder(
-                    init: _galleryItemController,
-                    tag: _galleryItemController.galleryItem.gid,
+                    init: galleryItemController,
+                    tag: galleryItemController.galleryItem.gid,
                     builder: (_) => Row(
                       crossAxisAlignment: CrossAxisAlignment.end,
                       children: <Widget>[
@@ -111,18 +129,18 @@ class GalleryItemSimpleWidget extends StatelessWidget {
       ),
       // 不可见区域点击有效
       behavior: HitTestBehavior.opaque,
-      onTap: () => _galleryItemController.onTap(tabTag),
-      onTapDown: _galleryItemController.onTapDown,
-      onTapUp: _galleryItemController.onTapUp,
-      onTapCancel: _galleryItemController.onTapCancel,
-      onLongPress: _galleryItemController.onLongPress,
+      onTap: () => galleryItemController.onTap(widget.tabTag),
+      onTapDown: galleryItemController.onTapDown,
+      onTapUp: galleryItemController.onTapUp,
+      onTapCancel: galleryItemController.onTapCancel,
+      onLongPress: galleryItemController.onLongPress,
     ).autoCompressKeyboard(context);
   }
 
   /// 构建标题
   Widget _buildTitle() {
     return Obx(() => Text(
-          _galleryItemController.title,
+          galleryItemController.title,
           maxLines: 2,
           textAlign: TextAlign.left, // 对齐方式
           overflow: TextOverflow.ellipsis, // 超出部分省略号
@@ -135,14 +153,14 @@ class GalleryItemSimpleWidget extends StatelessWidget {
 
   /// 构建封面图片
   Widget _buildCoverImage() {
-    final GalleryItem _item = _galleryItemController.galleryItem;
+    final GalleryItem _item = galleryItemController.galleryItem;
 
     return Container(
       width: kCoverImageWidth,
       height: kItemWidth - 12,
       child: Center(
         child: Hero(
-          tag: '${_item.gid}_cover_$tabTag',
+          tag: '${_item.gid}_cover_${widget.tabTag}',
           child: Container(
             decoration: BoxDecoration(
               boxShadow: [
@@ -160,7 +178,7 @@ class GalleryItemSimpleWidget extends StatelessWidget {
               child: CoverImg(
                   height: _item.imgHeight,
                   width: _item.imgWidth,
-                  imgUrl: _galleryItemController.galleryItem.imgUrl ?? ''),
+                  imgUrl: galleryItemController.galleryItem.imgUrl ?? ''),
             ),
           ),
         ),
@@ -175,16 +193,16 @@ class GalleryItemSimpleWidget extends StatelessWidget {
           padding: const EdgeInsets.fromLTRB(0, 0, 4, 0),
           child: StaticRatingBar(
             size: 16.0,
-            rate: _galleryItemController.galleryItem.ratingFallBack ?? 0,
+            rate: galleryItemController.galleryItem.ratingFallBack ?? 0,
             radiusRatio: 1.5,
             colorLight: ThemeColors.colorRatingMap[
-                _galleryItemController.galleryItem.colorRating?.trim() ?? 'ir'],
+                galleryItemController.galleryItem.colorRating?.trim() ?? 'ir'],
             colorDark: CupertinoDynamicColor.resolve(
                 CupertinoColors.systemGrey3, Get.context!),
           ),
         ),
         Text(
-          _galleryItemController.galleryItem.rating?.toString() ?? '',
+          galleryItemController.galleryItem.rating?.toString() ?? '',
           style: TextStyle(
             fontSize: 12,
             color: CupertinoDynamicColor.resolve(
@@ -201,7 +219,7 @@ class GalleryItemSimpleWidget extends StatelessWidget {
         Padding(
           padding: const EdgeInsets.only(right: 4),
           child: Text(
-            _galleryItemController.galleryItem.translated ?? '',
+            galleryItemController.galleryItem.translated ?? '',
             style: const TextStyle(
                 fontSize: 12, color: CupertinoColors.systemGrey),
           ),
@@ -214,7 +232,7 @@ class GalleryItemSimpleWidget extends StatelessWidget {
         Container(
           padding: const EdgeInsets.only(left: 2),
           child: Text(
-            _galleryItemController.galleryItem.filecount ?? '',
+            galleryItemController.galleryItem.filecount ?? '',
             style: const TextStyle(
                 fontSize: 12, color: CupertinoColors.systemGrey),
           ),
@@ -225,14 +243,14 @@ class GalleryItemSimpleWidget extends StatelessWidget {
 
   Widget _buildFavcatIcon() {
     return Container(
-      child: _galleryItemController.galleryItem.favTitle?.isNotEmpty ?? false
+      child: galleryItemController.galleryItem.favTitle?.isNotEmpty ?? false
           ? Container(
               padding: const EdgeInsets.only(bottom: 2.5, right: 8),
               child: Icon(
                 FontAwesomeIcons.solidHeart,
                 size: 12,
                 color: ThemeColors
-                    .favColor[_galleryItemController.galleryItem.favcat],
+                    .favColor[galleryItemController.galleryItem.favcat],
               ),
             )
           : Container(),
@@ -241,7 +259,7 @@ class GalleryItemSimpleWidget extends StatelessWidget {
 
   Widget _buildPostTime() {
     return Text(
-      _galleryItemController.galleryItem.postTime ?? '',
+      galleryItemController.galleryItem.postTime ?? '',
       style: const TextStyle(fontSize: 12, color: CupertinoColors.systemGrey),
     );
   }
@@ -249,7 +267,7 @@ class GalleryItemSimpleWidget extends StatelessWidget {
   Widget _buildCategory() {
     final Color _colorCategory = CupertinoDynamicColor.resolve(
         ThemeColors.catColor[
-                _galleryItemController.galleryItem.category ?? 'default'] ??
+                galleryItemController.galleryItem.category ?? 'default'] ??
             CupertinoColors.systemBackground,
         Get.context!);
 
@@ -259,7 +277,7 @@ class GalleryItemSimpleWidget extends StatelessWidget {
         padding: const EdgeInsets.fromLTRB(6, 3, 6, 3),
         color: _colorCategory,
         child: Text(
-          _galleryItemController.galleryItem.category ?? '',
+          galleryItemController.galleryItem.category ?? '',
           style: const TextStyle(
             fontSize: 14,
             height: 1,

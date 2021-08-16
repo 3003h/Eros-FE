@@ -1,6 +1,5 @@
 import 'package:fehviewer/common/controller/cache_controller.dart';
 import 'package:fehviewer/common/service/depth_service.dart';
-import 'package:fehviewer/pages/gallery/bindings/gallery_page_binding.dart';
 import 'package:fehviewer/pages/gallery/controller/taginfo_controller.dart';
 import 'package:fehviewer/pages/gallery/view/add_tags_page.dart';
 import 'package:fehviewer/pages/gallery/view/all_preview_page.dart';
@@ -178,7 +177,6 @@ class AppPages {
     GetPage(
       name: EHRoutes.galleryPage,
       page: () => GalleryMainPage(),
-      binding: GalleryBinding(),
       preventDuplicates: false,
     ),
 

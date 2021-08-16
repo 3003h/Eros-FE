@@ -187,7 +187,7 @@ Future<List<GalleryImage>> _isoFetchGalleryImage(
 
   // logger.d('${response.data}');
 
-  return GalleryDetailParser.parseGalleryImageFromHtml(response.data!);
+  return parseGalleryImageFromHtml(response.data!);
 }
 
 /// 获取画廊图片的信息

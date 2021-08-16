@@ -53,7 +53,13 @@ class GalleryHeader extends StatelessWidget {
                       // 标题
                       const GalleryTitle(),
                       // 上传用户
-                      GalleryUploader(uploader: initGalleryItem.uploader ?? ''),
+                      GetBuilder<GalleryPageController>(
+                          id: GetIds.PAGE_VIEW_HEADER,
+                          tag: pageCtrlDepth,
+                          builder: (logic) {
+                            return GalleryUploader(
+                                uploader: logic.galleryItem.uploader ?? '');
+                          }),
                       const Spacer(),
                       Row(
                         crossAxisAlignment: CrossAxisAlignment.end,

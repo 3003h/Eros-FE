@@ -1,7 +1,6 @@
 import 'package:collection/collection.dart';
 import 'package:fehviewer/common/controller/cache_controller.dart';
 import 'package:fehviewer/common/service/depth_service.dart';
-import 'package:fehviewer/pages/gallery/bindings/gallery_page_binding.dart';
 import 'package:fehviewer/pages/gallery/controller/taginfo_controller.dart';
 import 'package:fehviewer/pages/gallery/view/add_tags_page.dart';
 import 'package:fehviewer/pages/gallery/view/all_preview_page.dart';
@@ -42,7 +41,7 @@ class TabHomeLarge extends GetView<TabHomeController> {
     return Row(
       children: [
         Container(
-          width: wide ? 375 : 320,
+          width: wide ? 390 : 320,
           child: Navigator(
               key: Get.nestedKey(1),
               initialRoute: EHRoutes.home,
@@ -139,7 +138,6 @@ class TabHomeLarge extends GetView<TabHomeController> {
                           settings: settings,
                           page: () => GalleryMainPage(),
                           transition: Transition.fadeIn,
-                          binding: GalleryBinding(),
                         );
                       case EHRoutes.galleryComment:
                         return GetPageRoute(

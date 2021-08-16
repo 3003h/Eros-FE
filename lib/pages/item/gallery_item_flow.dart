@@ -15,31 +15,48 @@ const double kRadius = 6.0;
 const double kWidth = 28.0;
 const double kHeight = 18.0;
 
-class GalleryItemFlow extends StatelessWidget {
-  GalleryItemFlow({@required this.tabTag, required this.galleryItem}) {
-    Get.lazyPut(
-      () => GalleryItemController(galleryItem),
-      tag: galleryItem.gid,
-    );
-  }
+class GalleryItemFlow extends StatefulWidget {
+  const GalleryItemFlow(
+      {Key? key, required this.tabTag, required this.galleryItem})
+      : super(key: key);
 
   final dynamic tabTag;
   final GalleryItem galleryItem;
 
-  GalleryItemController get _galleryItemController =>
-      Get.find(tag: galleryItem.gid);
+  @override
+  _GalleryItemFlowState createState() => _GalleryItemFlowState();
+}
+
+class _GalleryItemFlowState extends State<GalleryItemFlow> {
+  late GalleryItemController galleryItemController;
+
+  @override
+  void initState() {
+    super.initState();
+    galleryItemController = Get.put(GalleryItemController(widget.galleryItem),
+        tag: widget.galleryItem.gid);
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    if (Get.isRegistered<GalleryItemController>(tag: widget.galleryItem.gid)) {
+      Get.replace(GalleryItemController(widget.galleryItem),
+          tag: widget.galleryItem.gid);
+    }
+  }
 
   Widget _buildFavcatIcon() {
     return Obx(() {
       // logger.d('${_galleryItemController.isFav}');
       return Container(
-        child: _galleryItemController.isFav
+        child: galleryItemController.isFav
             ? Container(
                 child: Icon(
                   FontAwesomeIcons.solidHeart,
                   size: 12,
                   color: ThemeColors
-                      .favColor[_galleryItemController.galleryItem.favcat],
+                      .favColor[galleryItemController.galleryItem.favcat],
                 ),
               )
             : Container(),
@@ -51,7 +68,7 @@ class GalleryItemFlow extends StatelessWidget {
   Widget build(BuildContext context) {
     final Widget item = LayoutBuilder(
         builder: (BuildContext context, BoxConstraints constraints) {
-      final GalleryItem galleryItem = _galleryItemController.galleryItem;
+      final GalleryItem galleryItem = galleryItemController.galleryItem;
 
       final Color _colorCategory = CupertinoDynamicColor.resolve(
           ThemeColors.catColor[galleryItem.category ?? 'default'] ??
@@ -74,7 +91,7 @@ class GalleryItemFlow extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
             Hero(
-              tag: '${galleryItem.gid}_cover_$tabTag',
+              tag: '${galleryItem.gid}_cover_${widget.tabTag}',
               child: Container(
                 decoration: BoxDecoration(
                     // borderRadius: BorderRadius.circular(kRadius), //圆角
@@ -134,8 +151,8 @@ class GalleryItemFlow extends StatelessWidget {
       return GestureDetector(
         behavior: HitTestBehavior.opaque,
         child: container,
-        onTap: () => _galleryItemController.onTap(tabTag),
-        onLongPress: _galleryItemController.onLongPress,
+        onTap: () => galleryItemController.onTap(widget.tabTag),
+        onLongPress: galleryItemController.onLongPress,
       ).autoCompressKeyboard(context);
     });
 

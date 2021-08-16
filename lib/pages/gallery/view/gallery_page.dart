@@ -1,5 +1,6 @@
 import 'package:fehviewer/common/service/depth_service.dart';
 import 'package:fehviewer/common/service/layout_service.dart';
+import 'package:fehviewer/const/const.dart';
 import 'package:fehviewer/models/index.dart';
 import 'package:fehviewer/network/gallery_request.dart';
 import 'package:fehviewer/pages/gallery/controller/gallery_page_controller.dart';
@@ -87,18 +88,26 @@ class _GalleryMainPageState extends State<GalleryMainPage> {
             // 导航栏
             CupertinoSliverNavigationBar(
               padding: const EdgeInsetsDirectional.only(end: 10),
-              largeTitle: Obx(() => SelectableText(
-                    _controller.topTitle,
+              largeTitle: GetBuilder<GalleryPageController>(
+                id: GetIds.PAGE_VIEW_HEADER,
+                tag: pageCtrlDepth,
+                builder: (logic) {
+                  return SelectableText(
+                    logic.topTitle,
                     textAlign: TextAlign.start,
                     maxLines: 3,
                     minLines: 1,
                     style: TextStyle(
-                      fontSize: 12,
+                      fontSize: 11,
+                      height: 1.2,
                       color: CupertinoDynamicColor.resolve(
                           CupertinoColors.secondaryLabel, context),
                       fontWeight: FontWeight.normal,
+                      fontStyle: FontStyle.italic,
                     ),
-                  )),
+                  );
+                },
+              ),
               middle: Obx(() => _controller.hideNavigationBtn
                   ? const SizedBox()
                   : (_item.imgUrl?.isNotEmpty ?? false

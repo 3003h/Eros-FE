@@ -278,7 +278,7 @@ class ReadButton extends StatelessWidget {
     return Obx(
       () => CupertinoButton(
           child: Text(
-            (_pageController.lastIndex != null && _pageController.lastIndex > 0)
+            (_pageController.lastIndex > 0)
                 ? '${L10n.of(context).READ} ${_pageController.lastIndex + 1}'
                 : L10n.of(context).READ,
             style: const TextStyle(fontSize: 15, height: 1.2),
