@@ -3,7 +3,6 @@ import 'dart:math';
 
 import 'package:blur/blur.dart';
 import 'package:extended_image/extended_image.dart';
-import 'package:fehviewer/common/service/layout_service.dart';
 import 'package:fehviewer/const/const.dart';
 import 'package:fehviewer/generated/l10n.dart';
 import 'package:fehviewer/models/gallery_image.dart';
@@ -25,7 +24,6 @@ import 'package:sleek_circular_slider/sleek_circular_slider.dart';
 
 import '../common.dart';
 import '../controller/view_ext_contorller.dart';
-import 'hero.dart';
 
 const double kPageViewPadding = 4.0;
 

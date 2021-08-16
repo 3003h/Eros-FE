@@ -12,7 +12,6 @@ import 'package:fehviewer/generated/l10n.dart';
 import 'package:fehviewer/models/base/eh_models.dart';
 import 'package:fehviewer/models/index.dart';
 import 'package:fehviewer/network/gallery_request.dart';
-import 'package:fehviewer/pages/tab/view/quick_search_page.dart';
 import 'package:fehviewer/pages/tab/view/tab_base.dart';
 import 'package:fehviewer/route/routes.dart';
 import 'package:fehviewer/store/floor/entity/tag_translat.dart';

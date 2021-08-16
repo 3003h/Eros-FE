@@ -1,9 +1,3 @@
-import 'dart:ui' show ImageFilter;
-
-import 'package:custom_pop_up_menu/custom_pop_up_menu.dart';
-import 'package:fehviewer/common/service/ehconfig_service.dart';
-import 'package:fehviewer/common/service/theme_service.dart';
-import 'package:fehviewer/const/theme_colors.dart';
 import 'package:fehviewer/generated/l10n.dart';
 import 'package:fehviewer/models/index.dart';
 import 'package:fehviewer/pages/filter/filter.dart';

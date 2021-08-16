@@ -10,8 +10,6 @@ import 'package:fehviewer/common/service/locale_service.dart';
 import 'package:fehviewer/common/service/theme_service.dart';
 import 'package:fehviewer/const/theme_colors.dart';
 import 'package:fehviewer/generated/l10n.dart';
-import 'package:fehviewer/pages/setting/custom_hosts_page.dart';
-import 'package:fehviewer/pages/setting/log_page.dart';
 import 'package:fehviewer/route/routes.dart';
 import 'package:fehviewer/utils/logger.dart';
 import 'package:flutter/cupertino.dart';

@@ -1,6 +1,5 @@
 import 'package:fehviewer/generated/l10n.dart';
 import 'package:fehviewer/pages/item/setting_item.dart';
-import 'package:fehviewer/pages/tab/controller/tabhome_controller.dart';
 import 'package:fehviewer/route/routes.dart';
 import 'package:flutter/widgets.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';

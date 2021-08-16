@@ -12,7 +12,6 @@ import 'package:fehviewer/network/dio_interceptor/dio_retry/retry_interceptor.da
 import 'package:fehviewer/network/dio_interceptor/domain_fronting/domain_fronting.dart';
 import 'package:fehviewer/utils/time.dart';
 import 'package:fehviewer/utils/toast.dart';
-import 'package:flutter/foundation.dart';
 import 'package:get/get.dart' hide Response;
 import 'package:pretty_dio_logger/pretty_dio_logger.dart';
 
