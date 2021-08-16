@@ -4,7 +4,6 @@ import 'package:fehviewer/models/index.dart';
 import 'package:fehviewer/pages/item/download_archiver_item.dart';
 import 'package:fehviewer/pages/item/download_gallery_item.dart';
 import 'package:fehviewer/pages/tab/controller/download_view_controller.dart';
-import 'package:fehviewer/pages/tab/controller/tabhome_controller.dart';
 import 'package:fehviewer/store/floor/entity/gallery_task.dart';
 import 'package:fehviewer/utils/logger.dart';
 import 'package:flutter/cupertino.dart';

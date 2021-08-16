@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:ui';
 
+import 'package:device_preview/device_preview.dart';
 import 'package:fehviewer/common/controller/auto_lock_controller.dart';
 import 'package:fehviewer/common/global.dart';
 import 'package:fehviewer/common/service/ehconfig_service.dart';
@@ -49,7 +50,10 @@ Future<void> main() async {
 
     // downloadManagerIsolate.init();
 
-    runApp(MyApp());
+    runApp(DevicePreview(
+      enabled: !kReleaseMode,
+      builder: (context) => MyApp(),
+    ));
   }, (Object error, StackTrace stackTrace) {
     if (error is EhError && error.type == EhErrorType.image509) {
       debugPrint('EhErrorType.image509');
@@ -130,6 +134,7 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
     }) {
       return GetCupertinoApp(
         // builder: EasyLoading.init(),
+        builder: DevicePreview.appBuilder,
         debugShowCheckedModeBanner: false,
         onGenerateTitle: (BuildContext context) => L10n.of(context).app_title,
         navigatorObservers: [
@@ -154,7 +159,7 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
           GlobalWidgetsLocalizations.delegate,
         ],
         localeResolutionCallback: (_, Iterable<Locale> supportedLocales) {
-          final Locale _locale = window.locale;
+          final Locale _locale = DevicePreview.locale(context) ?? window.locale;
           logger.d(
               'system Locale \n${_locale.languageCode}  ${_locale.scriptCode}  ${_locale.countryCode}');
           // logger.d('${_locale} ${supportedLocales}');
@@ -163,7 +168,7 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
             //如果已经选定语言，则不跟随系统
             return locale;
           } else {
-            logger.d('语言跟随系统语言  ${window.locale}');
+            logger.d('语言跟随系统语言  $_locale');
             return null;
           }
         },

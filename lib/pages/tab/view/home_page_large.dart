@@ -1,6 +1,6 @@
+import 'package:collection/collection.dart';
 import 'package:fehviewer/common/controller/cache_controller.dart';
 import 'package:fehviewer/common/service/depth_service.dart';
-import 'package:fehviewer/common/service/theme_service.dart';
 import 'package:fehviewer/pages/gallery/bindings/gallery_page_binding.dart';
 import 'package:fehviewer/pages/gallery/controller/taginfo_controller.dart';
 import 'package:fehviewer/pages/gallery/view/add_tags_page.dart';
@@ -18,11 +18,9 @@ import 'package:fehviewer/pages/setting/log_page.dart';
 import 'package:fehviewer/pages/setting/search_setting_page.dart';
 import 'package:fehviewer/pages/setting/security_setting_page.dart';
 import 'package:fehviewer/pages/setting/tab_setting.dart';
-import 'package:fehviewer/pages/tab/bindings/tabhome_binding.dart';
 import 'package:fehviewer/pages/tab/controller/tabhome_controller.dart';
 import 'package:fehviewer/pages/tab/view/download_page.dart';
 import 'package:fehviewer/pages/tab/view/quick_search_page.dart';
-import 'package:fehviewer/pages/tab/view/search_page.dart';
 import 'package:fehviewer/route/app_pages.dart';
 import 'package:fehviewer/route/routes.dart';
 import 'package:fehviewer/route/second_observer.dart';
@@ -30,7 +28,6 @@ import 'package:fehviewer/utils/logger.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:collection/collection.dart';
 
 import 'empty.dart';
 import 'home_page_small.dart';
@@ -72,7 +69,7 @@ class TabHomeLarge extends GetView<TabHomeController> {
               Container(
                 color: CupertinoDynamicColor.resolve(
                     CupertinoColors.systemGrey4, context),
-                width: 0.5,
+                width: 0.3,
               ),
               Expanded(
                 child: Navigator(

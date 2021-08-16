@@ -1,14 +1,12 @@
+import 'package:fehviewer/generated/l10n.dart';
 import 'package:fehviewer/pages/tab/controller/tabhome_controller.dart';
-import 'package:fehviewer/pages/tab/view/popular_page.dart';
 import 'package:fehviewer/pages/tab/view/setting_page.dart';
 import 'package:fehviewer/pages/tab/view/toplist_page.dart';
-import 'package:fehviewer/route/routes.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
 import 'package:persistent_bottom_nav_bar/persistent-tab-view.dart';
-import 'package:fehviewer/generated/l10n.dart';
 
 import 'gallery_page.dart';
 
