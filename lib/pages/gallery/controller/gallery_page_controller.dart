@@ -335,11 +335,6 @@ class GalleryPageController extends GetxController
         });
       }
 
-      // logger.d('fb ${galleryItem.ratingFallBack} ');
-
-      // logger.d('ratingCount ${galleryItem.ratingCount} ');
-
-      // logger.d('update GetIds.PAGE_VIEW_HEADER');
       update([GetIds.PAGE_VIEW_HEADER]);
       _itemController?.update([gid]);
       return galleryItem;

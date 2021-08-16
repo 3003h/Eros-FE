@@ -460,8 +460,7 @@ class Api {
 
     // 解析画廊数据
     final GalleryItem galleryItem =
-        await GalleryDetailParser.parseGalleryDetail(response,
-            inGalleryItem: inGalleryItem);
+        await parseGalleryDetail(response, inGalleryItem: inGalleryItem);
 
     // logger.v(galleryItem.toJson());
 
@@ -502,7 +501,7 @@ class Api {
       cancelToken: cancelToken,
     );
 
-    return GalleryDetailParser.parseGalleryImageFromHtml(response ?? '');
+    return parseGalleryImageFromHtml(response ?? '');
   }
 
   /// 由图片url获取解析图库 showkey

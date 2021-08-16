@@ -46,7 +46,7 @@ const String idShowThumbListIcon = 'ShowThumbListIcon';
 const String idAutoReadIcon = 'AutoReadIcon';
 const String idIconBar = 'IconBar';
 
-const int _speedMaxCount = 40;
+const int _speedMaxCount = 50;
 const int _speedInv = 10;
 
 /// 支持在线以及本地（已下载）阅读的组件

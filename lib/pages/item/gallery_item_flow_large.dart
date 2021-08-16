@@ -17,31 +17,48 @@ const double kRadius = 6.0;
 const double kWidth = 28.0;
 const double kHeight = 18.0;
 
-class GalleryItemFlowLarge extends StatelessWidget {
-  GalleryItemFlowLarge({@required this.tabTag, required this.galleryItem}) {
-    Get.lazyPut(
-      () => GalleryItemController(galleryItem),
-      tag: galleryItem.gid,
-    );
-  }
+class GalleryItemFlowLarge extends StatefulWidget {
+  const GalleryItemFlowLarge(
+      {Key? key, required this.tabTag, required this.galleryItem})
+      : super(key: key);
 
   final dynamic tabTag;
   final GalleryItem galleryItem;
 
-  GalleryItemController get _galleryItemController =>
-      Get.find(tag: galleryItem.gid);
+  @override
+  _GalleryItemFlowLargeState createState() => _GalleryItemFlowLargeState();
+}
+
+class _GalleryItemFlowLargeState extends State<GalleryItemFlowLarge> {
+  late GalleryItemController galleryItemController;
+
+  @override
+  void initState() {
+    super.initState();
+    galleryItemController = Get.put(GalleryItemController(widget.galleryItem),
+        tag: widget.galleryItem.gid);
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    if (Get.isRegistered<GalleryItemController>(tag: widget.galleryItem.gid)) {
+      Get.replace(GalleryItemController(widget.galleryItem),
+          tag: widget.galleryItem.gid);
+    }
+  }
 
   Widget _buildFavcatIcon() {
     return Obx(() {
       // logger.d('${_galleryItemController.isFav}');
       return Container(
-        child: _galleryItemController.isFav
+        child: galleryItemController.isFav
             ? Container(
                 child: Icon(
                   FontAwesomeIcons.solidHeart,
                   size: 12,
                   color: ThemeColors
-                      .favColor[_galleryItemController.galleryItem.favcat],
+                      .favColor[galleryItemController.galleryItem.favcat],
                 ),
               )
             : Container(),
@@ -56,10 +73,10 @@ class GalleryItemFlowLarge extends StatelessWidget {
           padding: const EdgeInsets.fromLTRB(0, 0, 4, 0),
           child: StaticRatingBar(
             size: 14.0,
-            rate: _galleryItemController.galleryItem.ratingFallBack ?? 0,
+            rate: galleryItemController.galleryItem.ratingFallBack ?? 0,
             radiusRatio: 1.5,
             colorLight: ThemeColors.colorRatingMap[
-                _galleryItemController.galleryItem.colorRating?.trim() ?? 'ir'],
+                galleryItemController.galleryItem.colorRating?.trim() ?? 'ir'],
             colorDark: CupertinoDynamicColor.resolve(
                 CupertinoColors.systemGrey3, Get.context!),
           ),
@@ -71,7 +88,7 @@ class GalleryItemFlowLarge extends StatelessWidget {
   /// 构建标题
   Widget _buildTitle() {
     return Obx(() => Text(
-          _galleryItemController.title,
+          galleryItemController.title,
           maxLines: 2,
           textAlign: TextAlign.left, // 对齐方式
           overflow: TextOverflow.ellipsis, // 超出部分省略号
@@ -86,7 +103,7 @@ class GalleryItemFlowLarge extends StatelessWidget {
   Widget build(BuildContext context) {
     final Widget item = LayoutBuilder(
         builder: (BuildContext context, BoxConstraints constraints) {
-      final GalleryItem galleryItem = _galleryItemController.galleryItem;
+      final GalleryItem galleryItem = galleryItemController.galleryItem;
 
       final Color _colorCategory = CupertinoDynamicColor.resolve(
           ThemeColors.catColor[galleryItem.category ?? 'default'] ??
@@ -123,7 +140,7 @@ class GalleryItemFlowLarge extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
               Hero(
-                tag: '${galleryItem.gid}_cover_$tabTag',
+                tag: '${galleryItem.gid}_cover_${widget.tabTag}',
                 child: Container(
                   child: ClipRRect(
                     borderRadius: const BorderRadius.only(
@@ -189,7 +206,7 @@ class GalleryItemFlowLarge extends StatelessWidget {
                       borderRadius: BorderRadius.circular(4),
                       child: TagListViewBox(
                         simpleTags:
-                            _galleryItemController.galleryItem.simpleTags ?? [],
+                            galleryItemController.galleryItem.simpleTags ?? [],
                       ),
                     ),
                   ),
@@ -203,8 +220,8 @@ class GalleryItemFlowLarge extends StatelessWidget {
       return GestureDetector(
         behavior: HitTestBehavior.opaque,
         child: container,
-        onTap: () => _galleryItemController.onTap(tabTag),
-        onLongPress: _galleryItemController.onLongPress,
+        onTap: () => galleryItemController.onTap(widget.tabTag),
+        onLongPress: galleryItemController.onLongPress,
       ).autoCompressKeyboard(context);
     });
 

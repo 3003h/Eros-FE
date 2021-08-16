@@ -55,10 +55,12 @@ SliverPadding buildWaterfallFlow(
 
           return large
               ? GalleryItemFlowLarge(
+                  key: UniqueKey(),
                   galleryItem: gallerItemBeans[index],
                   tabTag: tabTag,
                 )
               : GalleryItemFlow(
+                  key: UniqueKey(),
                   galleryItem: gallerItemBeans[index],
                   tabTag: tabTag,
                 );
@@ -96,7 +98,11 @@ SliverList buildGallerySliverListView(
           child: Obx(() {
             return Stack(
               children: [
-                GalleryItemWidget(galleryItem: _item, tabTag: tabTag),
+                GalleryItemWidget(
+                  key: UniqueKey(),
+                  galleryItem: _item,
+                  tabTag: tabTag,
+                ),
                 // index > 1
                 //     ? GalleryItemWidget(galleryItem: _item, tabTag: tabTag)
                 //     : GalleryItemPlaceHolder(),
@@ -144,6 +150,7 @@ SliverFixedExtentList buildGallerySliverListSimpleView(
         }
 
         return GalleryItemSimpleWidget(
+          key: UniqueKey(),
           galleryItem: gallerItemBeans[index],
           tabTag: tabTag,
         );

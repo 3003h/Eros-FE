@@ -26,7 +26,7 @@ class CommentController extends GetxController
   CommentController();
 
   GalleryPageController get pageController {
-    logger.d('CommentController -> pageCtrlDepth: $pageCtrlDepth');
+    logger.v('CommentController -> pageCtrlDepth: $pageCtrlDepth');
     return Get.find(tag: pageCtrlDepth);
   }
 

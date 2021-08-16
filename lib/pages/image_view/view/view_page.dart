@@ -632,7 +632,7 @@ class ImageGestureDetector extends GetView<ViewExtController> {
             ),
             SizedBox(
               height: context.height,
-              width: context.width / 2.5,
+              width: context.width * 0.7,
             ),
             Expanded(
               child: GestureDetector(
@@ -646,8 +646,8 @@ class ImageGestureDetector extends GetView<ViewExtController> {
         GestureDetector(
           behavior: HitTestBehavior.translucent,
           child: Container(
-            height: context.height / 4,
-            width: context.width / 2.5,
+            height: context.height * 0.8,
+            width: context.width * 0.7,
           ),
           onTap: controller.handOnTapCent,
         ),

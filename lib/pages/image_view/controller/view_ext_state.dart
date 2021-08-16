@@ -223,7 +223,7 @@ class ViewExtState {
   int maxImageIndex = 0;
 
   bool get isScrolling {
-    final _first = speedList.firstOrNull ?? 0.0;
+    final _first = speedList.firstOrNull ?? 0.00;
     return speedList.any((element) => element != _first);
   }
 }
