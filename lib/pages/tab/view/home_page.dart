@@ -34,7 +34,7 @@ class HomePage extends GetView<TabHomeController> {
             }
 
             if (context.width > 1080) {
-              return const TabHomeLarge(wide: true);
+              return const TabHomeLarge();
             } else if (context.width > 700) {
               return const TabHomeLarge();
             } else {

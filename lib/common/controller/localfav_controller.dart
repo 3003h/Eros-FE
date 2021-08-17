@@ -12,7 +12,13 @@ class LocalFavController extends ProfileController {
     if (loacalFavs.indexWhere(
             (GalleryItem element) => element.gid == galleryItem.gid) ==
         -1) {
-      loacalFavs.insert(0, galleryItem);
+      loacalFavs.insert(
+        0,
+        galleryItem.copyWith(
+          galleryImages: null,
+          galleryComment: null,
+        ),
+      );
     } else {
       showToast('Favorites already exist');
     }
@@ -31,10 +37,13 @@ class LocalFavController extends ProfileController {
   void onInit() {
     super.onInit();
     loacalFavs(Global.profile.localFav.gallerys);
-    everProfile<List<GalleryItem>>(loacalFavs, (List<GalleryItem> value) {
-      // Global.profile.localFav.gallerys = value;
-      Global.profile = Global.profile.copyWith(
-          localFav: Global.profile.localFav.copyWith(gallerys: value));
-    });
+    everProfile<List<GalleryItem>>(
+      loacalFavs,
+      (List<GalleryItem> value) {
+        Global.profile = Global.profile.copyWith(
+          localFav: Global.profile.localFav.copyWith(gallerys: value),
+        );
+      },
+    );
   }
 }

@@ -32,16 +32,28 @@ import 'empty.dart';
 import 'home_page_small.dart';
 
 class TabHomeLarge extends GetView<TabHomeController> {
-  const TabHomeLarge({Key? key, this.wide = false}) : super(key: key);
-  final bool wide;
+  const TabHomeLarge({Key? key}) : super(key: key);
+
+  double getSideWidth(BuildContext context) {
+    if (context.width >= 1366) {
+      return 420;
+    }
+    if (context.width >= 1024) {
+      return 390;
+    }
+    if (context.width > 768) {
+      return 320;
+    }
+    return 310;
+  }
 
   @override
   Widget build(BuildContext context) {
-    logger.v('width:${context.width}');
+    logger.d('width:${context.width} ${getSideWidth(context)}');
     return Row(
       children: [
         Container(
-          width: wide ? 390 : 320,
+          width: getSideWidth(context),
           child: Navigator(
               key: Get.nestedKey(1),
               initialRoute: EHRoutes.home,
@@ -68,7 +80,7 @@ class TabHomeLarge extends GetView<TabHomeController> {
               Container(
                 color: CupertinoDynamicColor.resolve(
                     CupertinoColors.systemGrey4, context),
-                width: 0.3,
+                width: 0.6,
               ),
               Expanded(
                 child: Navigator(

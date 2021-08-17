@@ -51,6 +51,13 @@ class _GalleryMainPageState extends State<GalleryMainPage> {
     logger.d('initState pageCtrlDepth:$pageCtrlDepth');
     initPageController(tag: _tag);
     _controller = Get.put(GalleryPageController(), tag: _tag);
+
+    Future.delayed(const Duration(milliseconds: 100)).then((value) {
+      _controller.scrollController =
+          PrimaryScrollController.of(context) ?? ScrollController();
+      _controller.scrollController
+          .addListener(_controller.scrollControllerLister);
+    });
   }
 
   @override
@@ -62,8 +69,8 @@ class _GalleryMainPageState extends State<GalleryMainPage> {
   @override
   Widget build(BuildContext context) {
     final dynamic tabTag = _controller.galleryRepository?.tabTag;
-
     final GalleryItem _item = _controller.galleryItem;
+    // _controller.scrollController = PrimaryScrollController.of(context);
 
     return CupertinoPageScaffold(
       child: EasyRefresh(
@@ -82,7 +89,6 @@ class _GalleryMainPageState extends State<GalleryMainPage> {
           color: CupertinoColors.inactiveGray,
         ),
         child: CustomScrollView(
-          controller: _controller.scrollController,
           physics: const AlwaysScrollableScrollPhysics(),
           slivers: <Widget>[
             // 导航栏
@@ -172,18 +178,18 @@ class NavigationBarImage extends StatelessWidget {
   const NavigationBarImage({
     Key? key,
     required this.imageUrl,
-    required this.scrollController,
+    this.scrollController,
   }) : super(key: key);
 
   final String imageUrl;
-  final ScrollController scrollController;
+  final ScrollController? scrollController;
 
   @override
   Widget build(BuildContext context) {
     final double _statusBarHeight = MediaQuery.of(Get.context!).padding.top;
     return GestureDetector(
       onTap: () {
-        scrollController.animateTo(0,
+        scrollController?.animateTo(0,
             duration: const Duration(milliseconds: 500), curve: Curves.ease);
       },
       child: Container(
