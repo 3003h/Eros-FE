@@ -18,8 +18,18 @@ class HiveHelper {
 
   static Future<void> init() async {
     await Hive.initFlutter();
-    await Hive.openBox<String>(historyBox);
-    await Hive.openBox<String>(searchHistoryBox);
+    await Hive.openBox<String>(
+      historyBox,
+      compactionStrategy: (int entries, int deletedEntries) {
+        logger.d('entries $entries');
+        return entries > 10;
+      },
+    );
+    await Hive.openBox<String>(searchHistoryBox,
+        compactionStrategy: (int entries, int deletedEntries) {
+      logger.d('entries $entries');
+      return entries > 20;
+    });
   }
 
   List<GalleryItem> getAllHistory() {
@@ -42,9 +52,9 @@ class HiveHelper {
     final gid = galleryItem.gid;
     await _historyBox.put(gid, jsonEncode(galleryItem));
 
-    logger.v(_historyBox.keys);
-
-    logger.v('${getHistory(_historyBox.keys.last as String).toJson()}');
+    logger.v('${_historyBox.keys}');
+    // _historyBox.compact();
+    logger.d('${getHistory(_historyBox.keys.last as String).toJson()}');
   }
 
   Future<void> removeHistory(String gid) async {

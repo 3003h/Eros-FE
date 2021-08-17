@@ -37,13 +37,11 @@ class GalleryPageController extends GetxController
   late final GalleryRepository? galleryRepository;
 
   /// 画廊数据对象
-  late GalleryItem _galleryItem;
-
-  GalleryItem get galleryItem => _galleryItem;
-
-  set galleryItem(GalleryItem val) {
-    _galleryItem = val;
-  }
+  late GalleryItem galleryItem;
+  // GalleryItem get galleryItem => _galleryItem;
+  // set galleryItem(GalleryItem val) {
+  //   _galleryItem = val;
+  // }
 
   // void initItem(GalleryItem val) {
   //   _galleryItem = val;
@@ -134,7 +132,8 @@ class GalleryPageController extends GetxController
   bool isImageInfoGeting = false;
 
   // 滚动控制器
-  final ScrollController scrollController = ScrollController();
+  // final ScrollController scrollController = ScrollController();
+  late ScrollController scrollController;
 
   // eh设置
   final EhConfigService _ehConfigService = Get.find();
@@ -159,7 +158,6 @@ class GalleryPageController extends GetxController
 
     logger.v('GalleryPageController $pageCtrlDepth onInit');
 
-    scrollController.addListener(_scrollControllerLister);
     hideNavigationBtn = true;
 
     galleryRepository = Get.find<GalleryRepository>();
@@ -180,7 +178,7 @@ class GalleryPageController extends GetxController
       galleryItem =
           GalleryItem(url: galleryRepository!.url, gid: gid, token: token);
     } else {
-      _galleryItem = galleryRepository!.item!;
+      galleryItem = galleryRepository!.item!;
     }
 
     _loadData();
@@ -193,15 +191,18 @@ class GalleryPageController extends GetxController
     logger.v('GalleryPageController $pageCtrlDepth onInit end');
   }
 
+  // @override
+  // void onReady() {
+  //   super.onReady();
+  //   scrollController = PrimaryScrollController.of(Get.context!)!;
+  //   scrollController.addListener(scrollControllerLister);
+  // }
+
   @override
   void onClose() {
     scrollController.dispose();
-
     logger.v('onClose GalleryPageController $pageCtrlDepth');
 
-    // 如果不在onClose进行这步。在使用命名路由对 [EHRoutes.galleryPage] 跳转关闭后
-    // 所有不同tag的 [CommentController] 等 都会被deleted
-    // Get.find<DepthService>().popPageCtrl();
     super.onClose();
   }
 
@@ -444,7 +445,10 @@ class GalleryPageController extends GetxController
     return index >= 0;
   }
 
-  void _scrollControllerLister() {
+  void scrollControllerLister() {
+    if (scrollController == null) {
+      return;
+    }
     try {
       if (scrollController.offset < kHeaderHeightOffset + kHeaderPaddingTop &&
           !hideNavigationBtn) {

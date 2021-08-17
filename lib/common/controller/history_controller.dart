@@ -17,7 +17,11 @@ class HistoryController extends GetxController {
 
   void addHistory(GalleryItem galleryItem) {
     final int nowTime = DateTime.now().millisecondsSinceEpoch;
-    final _item = galleryItem.copyWith(lastViewTime: nowTime);
+    final _item = galleryItem.copyWith(
+      lastViewTime: nowTime,
+      galleryImages: null,
+      galleryComment: null,
+    );
 
     final int _index = historys.indexWhere((GalleryItem element) {
       return element.gid == _item.gid;
@@ -45,15 +49,12 @@ class HistoryController extends GetxController {
     update();
     hiveHelper.cleanHistory();
     _gStore.historys = historys;
-    // _gStore.historys = historys;
   }
 
   @override
   void onInit() {
     super.onInit();
 
-    // historys = _gStore.historys;
-    // _historys = hiveHelper.getAll();
     _historys.addAll(hiveHelper.getAllHistory());
   }
 }

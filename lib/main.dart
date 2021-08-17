@@ -52,6 +52,7 @@ Future<void> main() async {
 
     runApp(DevicePreview(
       enabled: !kReleaseMode,
+      isToolbarVisible: true,
       builder: (context) => MyApp(),
     ));
   }, (Object error, StackTrace stackTrace) {
