@@ -22,6 +22,7 @@ import 'package:fehviewer/pages/setting/search_setting_page.dart';
 import 'package:fehviewer/pages/setting/security_setting_page.dart';
 import 'package:fehviewer/pages/setting/tab_setting.dart';
 import 'package:fehviewer/pages/setting/view_setting_page.dart';
+import 'package:fehviewer/pages/setting/webdav_setting_page.dart';
 import 'package:fehviewer/pages/tab/bindings/splash_binding.dart';
 import 'package:fehviewer/pages/tab/view/download_page.dart';
 import 'package:fehviewer/pages/tab/view/empty.dart';
@@ -193,6 +194,10 @@ class AppPages {
     GetPage(
       name: EHRoutes.customHosts,
       page: () => CustomHostsPage(),
+    ),
+    GetPage(
+      name: EHRoutes.webDavSetting,
+      page: () => WebDavSetting(),
     ),
     GetPage(
       name: EHRoutes.logfile,

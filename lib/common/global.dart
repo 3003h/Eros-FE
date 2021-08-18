@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'dart:io';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -165,12 +166,7 @@ class Global {
     await _checkReset();
 
     _initProfile();
-
-    // if ((profile.dnsConfig.enableCustomHosts ?? false) ||
-    //     (profile.dnsConfig.enableDoH ?? false)) {
-    //   logger.v('${profile.dnsConfig.enableCustomHosts}');
-    //   HttpOverrides.global = httpProxy;
-    // }
+    Get.lazyPut(() => profile.webdav ?? const WebdavProfile(url: ''));
 
     if (profile.dnsConfig.enableDomainFronting ?? false) {
       logger.d('enableDomainFronting');
@@ -180,12 +176,13 @@ class Global {
 
   static void _initProfile() {
     final GStore gStore = Get.find<GStore>();
+    logger.v('profile\n${jsonEncode(gStore.profile.webdav)}');
     profile = gStore.profile;
   }
 
   // 持久化Profile信息
   static Future<void>? saveProfile() {
-    // logger.d(profile.toJson());
+    logger.v(profile.webdav?.toJson());
     final GStore gStore = Get.find<GStore>();
     gStore.profile = profile;
   }

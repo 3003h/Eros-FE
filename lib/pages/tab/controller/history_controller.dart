@@ -63,4 +63,8 @@ class HistoryViewController extends TabViewController {
       },
     );
   }
+
+  Future<void> syncHistory() async {
+    await historyController.syncHistory();
+  }
 }

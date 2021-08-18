@@ -13,6 +13,7 @@ import 'common/controller/localfav_controller.dart';
 import 'common/controller/quicksearch_controller.dart';
 import 'common/controller/tag_trans_controller.dart';
 import 'common/controller/user_controller.dart';
+import 'common/controller/webdav_controller.dart';
 import 'common/service/depth_service.dart';
 import 'common/service/dns_service.dart';
 import 'common/service/ehconfig_service.dart';
@@ -46,6 +47,7 @@ void getinit() {
   Get.lazyPut(() => LayoutServices(), fenix: true);
 
   /// 一些全局设置或者控制
+  Get.lazyPut(() => WebdavController(), fenix: true);
   Get.lazyPut(() => AutoLockController(), fenix: true);
   Get.lazyPut(() => LocalFavController(), fenix: true);
   Get.lazyPut(() => HistoryController(), fenix: true);

@@ -1,8 +1,14 @@
+import 'dart:convert';
+
+import 'package:collection/collection.dart';
+import 'package:fehviewer/common/controller/webdav_controller.dart';
 import 'package:fehviewer/common/global.dart';
 import 'package:fehviewer/common/service/ehconfig_service.dart';
 import 'package:fehviewer/models/index.dart';
 import 'package:fehviewer/store/get_store.dart';
+import 'package:fehviewer/utils/logger.dart';
 import 'package:get/get.dart';
+import 'package:throttling/throttling.dart';
 
 class HistoryController extends GetxController {
   final List<GalleryItem> _historys = <GalleryItem>[];
@@ -13,14 +19,21 @@ class HistoryController extends GetxController {
   }
 
   final EhConfigService _ehConfigService = Get.find();
+  final WebdavController webdavController = Get.find();
   final GStore _gStore = Get.find<GStore>();
 
-  void addHistory(GalleryItem galleryItem) {
+  final thrSync = Throttling(duration: const Duration(seconds: 60));
+
+  void addHistory(
+    GalleryItem galleryItem, {
+    bool updateTime = true,
+    bool sync = true,
+  }) {
     final int nowTime = DateTime.now().millisecondsSinceEpoch;
     final _item = galleryItem.copyWith(
-      lastViewTime: nowTime,
-      galleryImages: null,
-      galleryComment: null,
+      lastViewTime: updateTime ? nowTime : null,
+      galleryImages: [],
+      galleryComment: [],
     );
 
     final int _index = historys.indexWhere((GalleryItem element) {
@@ -42,6 +55,14 @@ class HistoryController extends GetxController {
       hiveHelper.addHistory(_item);
     }
     update();
+
+    if (sync) {
+      // 节流函数 最多每分钟一次同步
+      thrSync.throttle(() {
+        logger.d('throttle syncHistory');
+        return syncHistory();
+      });
+    }
   }
 
   void cleanHistory() {
@@ -56,5 +77,116 @@ class HistoryController extends GetxController {
     super.onInit();
 
     _historys.addAll(hiveHelper.getAllHistory());
+  }
+
+  Future<void> syncHistory() async {
+    if (!webdavController.syncHistory) {
+      return;
+    }
+    //
+    final List<HistoryIndexGid?> listLocalIndex = historys
+        .map((e) => HistoryIndexGid(t: e.lastViewTime, g: e.gid))
+        .toList();
+    logger.d('listLocalIndex ${listLocalIndex.length} \n$listLocalIndex');
+    logger.d('${jsonEncode(listLocalIndex)}');
+
+    // 下载远程列表
+    final remoteIndex = await webdavController.downloadHistoryList();
+    if (remoteIndex == null) {
+      await _uploadHistorys(listLocalIndex.toList());
+      await uploadHistory(listLocalIndex);
+      return;
+    }
+
+    final listRemoteIndex = remoteIndex.gids ?? [];
+    // 比较远程和本地的差异
+    final allGid = [...listRemoteIndex, ...listLocalIndex];
+    final diff = allGid
+        .where((element) =>
+            !listRemoteIndex.contains(element) ||
+            !listLocalIndex.contains(element))
+        .toList()
+        .toSet();
+    logger.d('diff ${diff.map((e) => e?.toJson())}');
+
+    // 本地时间更大的画廊
+    final localNewer = listLocalIndex.where((eLocal) {
+      if (eLocal == null) {
+        return false;
+      }
+      final _eRemote =
+          listRemoteIndex.firstWhereOrNull((eRemote) => eRemote.g == eLocal.g);
+      if (_eRemote == null) {
+        return true;
+      }
+
+      return (eLocal.t ?? 0) > (_eRemote.t ?? 0);
+    });
+    logger.d('localNewer ${localNewer.map((e) => e?.g)}');
+
+    // 远程时间更大的画廊
+    final remoteNewer = listRemoteIndex.where((eRemote) {
+      final _eLocal = listLocalIndex
+          .firstWhereOrNull((eLocal) => (eLocal?.g ?? '') == eRemote.g);
+      if (_eLocal == null) {
+        return true;
+      }
+
+      return (eRemote.t ?? 0) > (_eLocal.t ?? 0);
+    });
+    logger.d('remoteNewer ${remoteNewer.map((e) => e.g)}');
+
+    await _downloadHistorys(remoteNewer.toList());
+
+    // 远程实际列表
+    final List<String> realRemoteList =
+        (await webdavController.getRemotFileList())
+            .map((e) => e.substring(0, e.lastIndexOf('.')))
+            .toList();
+
+    // 上传远程需要的的
+    final remoteNeeds = allGid
+        .where((element) => !realRemoteList.contains(element?.g))
+        .toSet()
+          ..addAll(localNewer);
+    logger.d('remoteNeeds ${remoteNeeds.map((e) => e?.g).toList()}');
+
+    await _uploadHistorys(remoteNeeds.toList());
+
+    // 更新远程index文件
+    if (remoteNeeds.isNotEmpty || remoteNewer.isNotEmpty) {
+      await uploadHistory(historys
+          .map((e) => HistoryIndexGid(t: e.lastViewTime, g: e.gid))
+          .toList());
+    }
+  }
+
+  Future _downloadHistorys(List<HistoryIndexGid> hisList) async {
+    for (final gid in hisList) {
+      if (gid.g != null) {
+        final image = await webdavController.downloadHistory(gid.g!);
+        if (image == null) {
+          continue;
+        }
+        addHistory(image, updateTime: false, sync: false);
+      }
+    }
+  }
+
+  Future _uploadHistorys(List<HistoryIndexGid?> hisList) async {
+    for (final gid in hisList) {
+      final GalleryItem? _his =
+          historys.firstWhereOrNull((element) => element.gid == gid?.g);
+      if (_his != null) {
+        await webdavController.uploadHistory(_his);
+      }
+    }
+  }
+
+  Future<void> uploadHistory(List<HistoryIndexGid?> gids) async {
+    final _time = DateTime.now().millisecondsSinceEpoch;
+    await webdavController.uploadHistoryList(
+        gids.where((element) => element != null).toList(), _time);
+    // 更新时间戳
   }
 }

@@ -124,6 +124,7 @@ class GStore {
         advanceSearch: _profileObj.advanceSearch,
         dnsConfig: _profileObj.dnsConfig,
         downloadConfig: _profileObj.downloadConfig,
+        webdav: _profileObj.webdav,
         autoLock: _profileObj.autoLock);
     return _profile;
   }

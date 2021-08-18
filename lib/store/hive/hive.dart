@@ -21,13 +21,13 @@ class HiveHelper {
     await Hive.openBox<String>(
       historyBox,
       compactionStrategy: (int entries, int deletedEntries) {
-        logger.d('entries $entries');
+        logger.v('entries $entries');
         return entries > 10;
       },
     );
     await Hive.openBox<String>(searchHistoryBox,
         compactionStrategy: (int entries, int deletedEntries) {
-      logger.d('entries $entries');
+      logger.v('entries $entries');
       return entries > 20;
     });
   }
@@ -54,7 +54,7 @@ class HiveHelper {
 
     logger.v('${_historyBox.keys}');
     // _historyBox.compact();
-    logger.d('${getHistory(_historyBox.keys.last as String).toJson()}');
+    logger.v('${getHistory(_historyBox.keys.last as String).toJson()}');
   }
 
   Future<void> removeHistory(String gid) async {

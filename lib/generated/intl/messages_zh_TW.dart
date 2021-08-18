@@ -198,6 +198,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "show_jpn_title": MessageLookupByLibrary.simpleMessage("显示日文标题"),
         "show_page_interval":
             MessageLookupByLibrary.simpleMessage("Show page interval"),
+        "sync_history": MessageLookupByLibrary.simpleMessage("Sync history"),
         "system_share": MessageLookupByLibrary.simpleMessage("系统分享"),
         "t_Clear_all_history": MessageLookupByLibrary.simpleMessage("清除所有历史"),
         "tab_download": MessageLookupByLibrary.simpleMessage("下載"),
@@ -233,6 +234,8 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("Vote successfully"),
         "vote_up_successfully":
             MessageLookupByLibrary.simpleMessage("Vote up successfully"),
+        "webdav_Account":
+            MessageLookupByLibrary.simpleMessage("WebDAV Account"),
         "welcome_text":
             MessageLookupByLibrary.simpleMessage("小撸怡情~大撸伤身~强撸灰飞烟灭~~")
       };

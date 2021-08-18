@@ -1789,6 +1789,26 @@ class L10n {
       args: [],
     );
   }
+
+  /// `WebDAV Account`
+  String get webdav_Account {
+    return Intl.message(
+      'WebDAV Account',
+      name: 'webdav_Account',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Sync history`
+  String get sync_history {
+    return Intl.message(
+      'Sync history',
+      name: 'sync_history',
+      desc: '',
+      args: [],
+    );
+  }
 }
 
 class AppLocalizationDelegate extends LocalizationsDelegate<L10n> {

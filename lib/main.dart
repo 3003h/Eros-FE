@@ -51,7 +51,8 @@ Future<void> main() async {
     // downloadManagerIsolate.init();
 
     runApp(DevicePreview(
-      enabled: !kReleaseMode,
+      // enabled: !kReleaseMode,
+      enabled: false,
       isToolbarVisible: true,
       builder: (context) => MyApp(),
     ));

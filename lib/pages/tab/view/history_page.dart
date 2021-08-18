@@ -5,6 +5,7 @@ import 'package:fehviewer/pages/tab/controller/tabhome_controller.dart';
 import 'package:fehviewer/pages/tab/view/tab_base.dart';
 import 'package:fehviewer/utils/cust_lib/persistent_header_builder.dart';
 import 'package:fehviewer/utils/cust_lib/sliver/sliver_persistent_header.dart';
+import 'package:fehviewer/widget/refresh.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -70,9 +71,9 @@ class _HistoryTabState extends State<HistoryTab> {
       middle: GestureDetector(
           onTap: () => controller.srcollToTop(context), child: Text(_title)),
       trailing: Container(
-        width: 40,
         child: Row(
           mainAxisAlignment: MainAxisAlignment.end,
+          mainAxisSize: MainAxisSize.min,
           children: [
             // 清除按钮
             CupertinoButton(
@@ -86,6 +87,18 @@ class _HistoryTabState extends State<HistoryTab> {
                 controller.clearHistory();
               },
             ),
+            // 同步按钮
+            // CupertinoButton(
+            //   minSize: 40,
+            //   padding: const EdgeInsets.all(0),
+            //   child: const Icon(
+            //     LineIcons.alternateSync,
+            //     size: 26,
+            //   ),
+            //   onPressed: () {
+            //     controller.syncHistory();
+            //   },
+            // ),
           ],
         ),
       ),
@@ -115,6 +128,9 @@ class _HistoryTabState extends State<HistoryTab> {
         //     },
         //   ),
         // ),
+        EhCupertinoSliverRefreshControl(
+          onRefresh: controller.syncHistory,
+        ),
         SliverSafeArea(
             top: false,
             // sliver: _getGalleryList(),

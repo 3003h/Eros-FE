@@ -228,6 +228,7 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("Show japanese title"),
         "show_page_interval":
             MessageLookupByLibrary.simpleMessage("Show page interval"),
+        "sync_history": MessageLookupByLibrary.simpleMessage("Sync history"),
         "system_share": MessageLookupByLibrary.simpleMessage("System share"),
         "t_Clear_all_history":
             MessageLookupByLibrary.simpleMessage("Clear all history"),
@@ -267,6 +268,8 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("Vote successfully"),
         "vote_up_successfully":
             MessageLookupByLibrary.simpleMessage("Vote up successfully"),
+        "webdav_Account":
+            MessageLookupByLibrary.simpleMessage("WebDAV Account"),
         "welcome_text": MessageLookupByLibrary.simpleMessage("~oh~ oh~ oh~~~")
       };
 }
