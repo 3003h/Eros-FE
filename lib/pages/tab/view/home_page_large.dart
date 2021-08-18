@@ -98,24 +98,28 @@ class TabHomeLarge extends GetView<TabHomeController> {
                             settings: settings,
                             page: () => AboutPage(),
                             transition: Transition.fadeIn,
+                            showCupertinoParallax: false,
                           );
                         case EHRoutes.ehSetting:
                           return GetPageRoute(
                             settings: settings,
                             page: () => EhSettingPage(),
                             transition: Transition.fadeIn,
+                            showCupertinoParallax: false,
                           );
                         case EHRoutes.downloadSetting:
                           return GetPageRoute(
                             settings: settings,
                             page: () => DownloadSettingPage(),
                             transition: Transition.fadeIn,
+                            showCupertinoParallax: false,
                           );
                         case EHRoutes.searchSetting:
                           return GetPageRoute(
                             settings: settings,
                             page: () => SearchSettingPage(),
                             transition: Transition.fadeIn,
+                            showCupertinoParallax: false,
                           );
                         case EHRoutes.quickSearch:
                           return GetPageRoute(
@@ -129,6 +133,7 @@ class TabHomeLarge extends GetView<TabHomeController> {
                             binding: BindingsBuilder(
                                 () => Get.lazyPut(() => CacheController())),
                             transition: Transition.fadeIn,
+                            showCupertinoParallax: false,
                           );
                         case EHRoutes.customHosts:
                           return GetPageRoute(
@@ -150,6 +155,7 @@ class TabHomeLarge extends GetView<TabHomeController> {
                             settings: settings,
                             page: () => SecuritySettingPage(),
                             transition: Transition.fadeIn,
+                            showCupertinoParallax: false,
                           );
                         case EHRoutes.galleryPage:
                           return GetPageRoute(
@@ -194,6 +200,7 @@ class TabHomeLarge extends GetView<TabHomeController> {
                           return GetPageRoute(
                             settings: settings,
                             page: () => const EmptyPage(),
+                            // page: () => Container(),
                           );
                         case EHRoutes.download:
                           return GetPageRoute(
@@ -205,6 +212,7 @@ class TabHomeLarge extends GetView<TabHomeController> {
                             settings: settings,
                             routeName: EHRoutes.empty,
                             page: () => const EmptyPage(),
+                            // page: () => Container(),
                             transition: Transition.fadeIn,
                           );
                       }
