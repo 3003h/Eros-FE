@@ -153,25 +153,30 @@ Future<void> showWebDAVLogin(BuildContext context) async {
               Container(
                 height: 10,
               ),
-              CupertinoTextField(
-                decoration: BoxDecoration(
-                  color: ehTheme.textFieldBackgroundColor,
-                  borderRadius: const BorderRadius.all(Radius.circular(8.0)),
-                ),
-                clearButtonMode: OverlayVisibilityMode.editing,
-                controller: _pwdController,
-                placeholder: 'Password',
-                focusNode: _nodePwd,
-                obscureText: true,
-                onEditingComplete: () async {
-                  // 点击键盘完成
-                  await _addWebDAV(
-                    _urlController.text,
-                    user: _unameController.text,
-                    pwd: _pwdController.text,
-                  );
-                },
-              ),
+              GetBuilder<WebdavController>(builder: (logic) {
+                return CupertinoTextField(
+                  decoration: BoxDecoration(
+                    color: ehTheme.textFieldBackgroundColor,
+                    borderRadius: const BorderRadius.all(Radius.circular(8.0)),
+                  ),
+                  clearButtonMode: OverlayVisibilityMode.editing,
+                  controller: _pwdController,
+                  placeholder: 'Password',
+                  focusNode: _nodePwd,
+                  obscureText: true,
+                  onEditingComplete: () async {
+                    // 点击键盘完成
+                    final rult = await logic.addWebDAVProfile(
+                      _urlController.text,
+                      user: _unameController.text,
+                      pwd: _pwdController.text,
+                    );
+                    if (rult) {
+                      Get.back();
+                    }
+                  },
+                );
+              }),
             ],
           ),
         ),
@@ -182,13 +187,26 @@ Future<void> showWebDAVLogin(BuildContext context) async {
               Get.back();
             },
           ),
-          CupertinoDialogAction(
-            child: Text(L10n.of(context).ok),
-            onPressed: () async {
-              await _addWebDAV(
-                _urlController.text,
-                user: _unameController.text,
-                pwd: _pwdController.text,
+          GetBuilder<WebdavController>(
+            id: idActionLogin,
+            builder: (logic) {
+              return CupertinoDialogAction(
+                child: logic.isLongining
+                    ? const CupertinoActivityIndicator()
+                    : Text(L10n.of(context).ok),
+                onPressed: logic.isLongining
+                    ? null
+                    : () async {
+                        logic.isLongining = true;
+                        final rult = await logic.addWebDAVProfile(
+                          _urlController.text,
+                          user: _unameController.text,
+                          pwd: _pwdController.text,
+                        );
+                        if (rult) {
+                          Get.back();
+                        }
+                      },
               );
             },
           ),
@@ -196,33 +214,4 @@ Future<void> showWebDAVLogin(BuildContext context) async {
       );
     },
   );
-}
-
-Future<void> _addWebDAV(String url, {String? user, String? pwd}) async {
-  final WebdavController webdavController = Get.find();
-  final rult = await _pingWebDAV(url, user: user, pwd: pwd);
-  if (rult) {
-    // 保存账号 rebuild
-    WebdavProfile webdavUser =
-        WebdavProfile(url: url, user: user, password: pwd);
-    Global.profile = Global.profile.copyWith(webdav: webdavUser);
-    Global.saveProfile();
-    Get.replace(webdavUser);
-    webdavController.initClient();
-    Get.back();
-  }
-}
-
-Future<bool> _pingWebDAV(String url, {String? user, String? pwd}) async {
-  final client = webdav.newClient(
-    url,
-    user: user ?? '',
-    password: pwd ?? '',
-  );
-  try {
-    await client.ping();
-    return true;
-  } catch (e) {
-    return false;
-  }
 }

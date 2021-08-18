@@ -117,6 +117,8 @@ class TabHomeController extends GetxController {
   final PersistentTabController persistentTabController =
       PersistentTabController();
 
+  String get currRoute => _showTabs[currentIndex];
+
   // 需要显示的tab
   List<String> get _showTabs => isSafeMode
       ? <String>[
