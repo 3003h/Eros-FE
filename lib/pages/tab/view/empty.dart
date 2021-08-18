@@ -1,25 +1,38 @@
 import 'package:fehviewer/common/service/theme_service.dart';
+import 'package:fehviewer/utils/logger.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/services.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:get/get.dart';
 
 class EmptyPage extends StatelessWidget {
   const EmptyPage({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return CupertinoPageScaffold(
-      backgroundColor: !ehTheme.isDarkMode
-          ? CupertinoColors.secondarySystemBackground
-          : null,
-      child: Container(
-        child: const Center(
-          child: Icon(
-            FontAwesomeIcons.layerGroup,
-            size: 100,
-            color: CupertinoColors.inactiveGray,
+    logger.d('isDarkMode ${ehTheme.isDarkMode}');
+    return Obx(() {
+      return AnnotatedRegion<SystemUiOverlayStyle>(
+        value: ehTheme.isDarkMode
+            ? SystemUiOverlayStyle.light
+            : SystemUiOverlayStyle.dark,
+        child: CupertinoPageScaffold(
+          backgroundColor: !ehTheme.isDarkMode
+              ? CupertinoColors.secondarySystemBackground
+              : null,
+          child: SafeArea(
+            child: Container(
+              child: const Center(
+                child: Icon(
+                  FontAwesomeIcons.layerGroup,
+                  size: 100,
+                  color: CupertinoColors.inactiveGray,
+                ),
+              ),
+            ),
           ),
         ),
-      ),
-    );
+      );
+    });
   }
 }

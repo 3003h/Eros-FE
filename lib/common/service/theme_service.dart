@@ -57,8 +57,8 @@ class ThemeService extends ProfileService {
 final EHTheme ehTheme = EHTheme();
 
 class EHTheme {
-  final ThemeService _themeService = Get.find();
-  final EhConfigService _ehConfigService = Get.find();
+  ThemeService get _themeService => Get.find();
+  EhConfigService get _ehConfigService => Get.find();
 
   Color? _getColorWithTheme(EhDynamicColor ehcolor) {
     final Color effDarkColor = _ehConfigService.isPureDarkTheme.value
