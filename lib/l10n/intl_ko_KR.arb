@@ -172,5 +172,7 @@
   "tolist_past_year": "Past Year",
   "tolist_past_month": "Past Month",
   "tolist_yesterday": "Yesterday",
-  "tablet_layout": "Tablet layout"
+  "tablet_layout": "Tablet layout",
+  "webdav_Account": "WebDAV Account",
+   "sync_history": "Sync history"
 }

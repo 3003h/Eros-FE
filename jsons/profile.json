@@ -10,5 +10,6 @@
   "advanceSearch": "$advance_search",
   "dnsConfig": "$dns_config",
   "downloadConfig": "$download_config",
-  "autoLock": "$auto_lock"
+  "autoLock": "$auto_lock",
+  "webdav?": "$webdav_profile"
 }

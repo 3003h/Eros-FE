@@ -192,6 +192,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "show_filter": MessageLookupByLibrary.simpleMessage("필터 표시"),
         "show_jpn_title": MessageLookupByLibrary.simpleMessage("일본어 제목 표시"),
         "show_page_interval": MessageLookupByLibrary.simpleMessage("페이지 간격 표시"),
+        "sync_history": MessageLookupByLibrary.simpleMessage("Sync history"),
         "system_share": MessageLookupByLibrary.simpleMessage("시스템 공유"),
         "t_Clear_all_history":
             MessageLookupByLibrary.simpleMessage("모든 기록 지우기"),
@@ -225,6 +226,8 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("비추천 성공"),
         "vote_successfully": MessageLookupByLibrary.simpleMessage("추천 성공"),
         "vote_up_successfully": MessageLookupByLibrary.simpleMessage("추천 성공"),
+        "webdav_Account":
+            MessageLookupByLibrary.simpleMessage("WebDAV Account"),
         "welcome_text": MessageLookupByLibrary.simpleMessage("oh~ oh~ oh~~~")
       };
 }

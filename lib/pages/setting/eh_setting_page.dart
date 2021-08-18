@@ -2,6 +2,7 @@ import 'package:enum_to_string/enum_to_string.dart';
 import 'package:fehviewer/common/controller/tag_trans_controller.dart';
 import 'package:fehviewer/common/controller/user_controller.dart';
 import 'package:fehviewer/common/service/ehconfig_service.dart';
+import 'package:fehviewer/common/service/layout_service.dart';
 import 'package:fehviewer/common/service/locale_service.dart';
 import 'package:fehviewer/common/service/theme_service.dart';
 import 'package:fehviewer/const/const.dart';
@@ -9,6 +10,7 @@ import 'package:fehviewer/generated/l10n.dart';
 import 'package:fehviewer/network/gallery_request.dart';
 import 'package:fehviewer/pages/setting/webview/mytags_in.dart';
 import 'package:fehviewer/pages/setting/webview/web_mysetting_in.dart';
+import 'package:fehviewer/route/routes.dart';
 import 'package:fehviewer/utils/logger.dart';
 import 'package:fehviewer/utils/toast.dart';
 import 'package:fehviewer/utils/vibrate.dart';
@@ -143,6 +145,17 @@ class ListViewEhSetting extends StatelessWidget {
           },
         ),
       if (_isLogin) Container(height: 38),
+      SelectorSettingItem(
+        title: 'WebDAV',
+        onTap: () {
+          Get.toNamed(
+            EHRoutes.webDavSetting,
+            id: isLayoutLarge ? 2 : null,
+          );
+        },
+        hideLine: true,
+      ),
+      Container(height: 38),
       if (localeService.isLanguageCodeZh)
         Obx(() => GestureDetector(
               behavior: HitTestBehavior.opaque,

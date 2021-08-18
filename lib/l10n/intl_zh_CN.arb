@@ -172,5 +172,7 @@
   "tolist_past_year": "年排行",
   "tolist_past_month": "月排行",
   "tolist_yesterday": "日排行",
-  "tablet_layout": "平板布局"
+  "tablet_layout": "平板布局",
+  "webdav_Account": "WebDAV账户",
+  "sync_history": "同步历史记录"
 }
