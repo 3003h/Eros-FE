@@ -1,8 +1,13 @@
+import 'package:collection/collection.dart';
+import 'package:fehviewer/common/controller/history_controller.dart';
 import 'package:fehviewer/common/service/ehconfig_service.dart';
 import 'package:fehviewer/generated/l10n.dart';
 import 'package:fehviewer/models/index.dart';
 import 'package:fehviewer/pages/controller/fav_dialog_controller.dart';
+import 'package:fehviewer/pages/tab/controller/tabhome_controller.dart';
+import 'package:fehviewer/route/main_observer.dart';
 import 'package:fehviewer/route/navigator_util.dart';
+import 'package:fehviewer/route/routes.dart';
 import 'package:fehviewer/utils/logger.dart';
 import 'package:fehviewer/utils/toast.dart';
 import 'package:fehviewer/utils/vibrate.dart';
@@ -15,6 +20,8 @@ class GalleryItemController extends GetxController {
 
   final EhConfigService _ehConfigService = Get.find();
   final FavDialogController _favDialogController = Get.find();
+  final TabHomeController _tabHomeController = Get.find();
+  final HistoryController _historyController = Get.find();
 
   /// 点击item
   void onTap(dynamic tabTag) {
@@ -102,6 +109,16 @@ class GalleryItemController extends GetxController {
   /// 长按菜单
   Future<void> _showLongPressSheet() async {
     final BuildContext context = Get.overlayContext!;
+    final curPage = Get.currentRoute;
+    logger.v('curPage $curPage');
+    final curTab = _tabHomeController.currRoute;
+    logger.v('curTab $curTab');
+    final topRoute = MainNavigatorObserver().history.lastOrNull?.settings.name;
+
+    final isHistoryItem = curPage == EHRoutes.history ||
+        topRoute == EHRoutes.history ||
+        curTab == EHRoutes.history;
+    logger.d('isHistoryItem $isHistoryItem');
 
     await showCupertinoModalPopup<void>(
         context: context,
@@ -173,6 +190,24 @@ class GalleryItemController extends GetxController {
                     });
                   },
                   child: Text(L10n.of(context).change_to_favorites),
+                ),
+              if (isHistoryItem)
+                CupertinoActionSheetAction(
+                  onPressed: () {
+                    if (galleryItem.gid == null) {
+                      return;
+                    }
+                    _historyController.removeHistory(galleryItem.gid!);
+
+                    Get.back();
+                  },
+                  child: Text(
+                    L10n.of(context).delete,
+                    style: TextStyle(
+                      color: CupertinoDynamicColor.resolve(
+                          CupertinoColors.destructiveRed, context),
+                    ),
+                  ),
                 ),
             ],
           );

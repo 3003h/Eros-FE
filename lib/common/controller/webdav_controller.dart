@@ -15,12 +15,16 @@ const String kDirPath = '/fehviewer';
 const String kHistoryDirPath = '/fehviewer/history';
 const String kHistoryDtlDirPath = '/fehviewer/history/s';
 
+const String idActionLogin = 'action_login';
+
 class WebdavController extends GetxController {
   late webdav.Client? client;
 
   WebdavProfile get webdavProfile => Get.find();
 
   bool get validAccount => webdavProfile.url.isNotEmpty;
+
+  bool isLongining = false;
 
   bool get syncHistory => webdavProfile.syncHistory ?? false;
   set syncHistory(bool val) {
@@ -68,7 +72,9 @@ class WebdavController extends GetxController {
   }
 
   Future<void> checkDir({String dir = kDirPath}) async {
-    if (client == null) return;
+    if (client == null) {
+      return;
+    }
     try {
       final list = await client!.readDir(dir);
       logger.d('${list.map((e) => e.path)}');
@@ -88,7 +94,9 @@ class WebdavController extends GetxController {
   }
 
   Future<List<String>> getRemotFileList() async {
-    if (client == null) return [];
+    if (client == null) {
+      return [];
+    }
     final list = await client!.readDir(kHistoryDtlDirPath);
     final names = list.map((e) => e.name).toList();
     final _list = <String>[];
@@ -102,7 +110,9 @@ class WebdavController extends GetxController {
   }
 
   Future<HistoryIndex?> downloadHistoryList() async {
-    if (client == null) return null;
+    if (client == null) {
+      return null;
+    }
     final _path = path.join(Global.tempPath, _getIndexFileName());
     try {
       await client!.read2File('$kHistoryDirPath/index.json', _path);
@@ -133,7 +143,9 @@ class WebdavController extends GetxController {
   }
 
   Future<void> uploadHistoryList(List<HistoryIndexGid?> gids, int time) async {
-    if (client == null) return;
+    if (client == null) {
+      return;
+    }
     final _path = path.join(Global.tempPath, _getIndexFileName());
     final File _file = File(_path);
     final _gids = <HistoryIndexGid>[];
@@ -151,7 +163,9 @@ class WebdavController extends GetxController {
   }
 
   Future<void> uploadHistory(GalleryItem his) async {
-    if (client == null) return;
+    if (client == null) {
+      return;
+    }
     final _path = path.join(Global.tempPath, his.gid);
     final File _file = File(_path);
     final _his = his.copyWith(
@@ -178,7 +192,9 @@ class WebdavController extends GetxController {
   }
 
   Future<GalleryItem?> downloadHistory(String gid) async {
-    if (client == null) return null;
+    if (client == null) {
+      return null;
+    }
     final _path = path.join(Global.tempPath, gid);
     try {
       await client!.read2File('$kHistoryDtlDirPath/$gid.json', _path);
@@ -194,5 +210,37 @@ class WebdavController extends GetxController {
     } catch (err) {
       return null;
     }
+  }
+
+  Future<bool> _pingWebDAV(String url, {String? user, String? pwd}) async {
+    final client = webdav.newClient(
+      url,
+      user: user ?? '',
+      password: pwd ?? '',
+    );
+    try {
+      await client.ping();
+      return true;
+    } catch (e) {
+      return false;
+    }
+  }
+
+  Future<bool> addWebDAVProfile(String url, {String? user, String? pwd}) async {
+    isLongining = true;
+    update([idActionLogin]);
+    final rult = await _pingWebDAV(url, user: user, pwd: pwd);
+    if (rult) {
+      // 保存账号 rebuild
+      WebdavProfile webdavUser =
+          WebdavProfile(url: url, user: user, password: pwd);
+      Global.profile = Global.profile.copyWith(webdav: webdavUser);
+      Global.saveProfile();
+      Get.replace(webdavUser);
+      initClient();
+    }
+    isLongining = false;
+    // update([idActionLogin]);
+    return rult;
   }
 }

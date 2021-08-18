@@ -163,9 +163,9 @@ class TagTransController extends GetxController {
     if (!text.trim().contains(' ')) {
       return await getTranTagWithNameSpase(text);
     }
-    logger.d(text);
+    logger.v(text);
     final array = text.split(RegExp(r'\s+'));
-    logger.i(array.map((e) => '[$e]').join(','));
+    logger.v(array.map((e) => '[$e]').join(','));
 
     for (int i = 0; i < array.length; i++) {
       if (array[i].startsWith(RegExp(r'\w+:"?'))) {

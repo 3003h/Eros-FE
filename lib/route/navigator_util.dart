@@ -90,7 +90,8 @@ class NavigatorUtil {
     GalleryItem? galleryItem,
     bool replace = false,
   }) async {
-    final topRoute = SecondNavigatorObserver.history.lastOrNull?.settings.name;
+    final topRoute =
+        SecondNavigatorObserver().history.lastOrNull?.settings.name;
     late final String? _gid;
 
     // url跳转方式

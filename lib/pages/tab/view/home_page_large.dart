@@ -22,6 +22,7 @@ import 'package:fehviewer/pages/tab/controller/tabhome_controller.dart';
 import 'package:fehviewer/pages/tab/view/download_page.dart';
 import 'package:fehviewer/pages/tab/view/quick_search_page.dart';
 import 'package:fehviewer/route/app_pages.dart';
+import 'package:fehviewer/route/main_observer.dart';
 import 'package:fehviewer/route/routes.dart';
 import 'package:fehviewer/route/second_observer.dart';
 import 'package:fehviewer/utils/logger.dart';
@@ -58,6 +59,7 @@ class TabHomeLarge extends GetView<TabHomeController> {
           child: ClipRect(
             child: Navigator(
                 key: Get.nestedKey(1),
+                observers: [MainNavigatorObserver()],
                 initialRoute: EHRoutes.home,
                 onGenerateRoute: (settings) {
                   final GetPage? _route = AppPages.routes
@@ -67,10 +69,12 @@ class TabHomeLarge extends GetView<TabHomeController> {
                       _route.name != EHRoutes.home) {
                     // logger.d('_route $_route');
                     return GetPageRoute(
+                      settings: settings,
                       page: _route.page,
                     );
                   } else {
                     return GetPageRoute(
+                      settings: settings,
                       page: () => TabHomeSmall(),
                     );
                   }

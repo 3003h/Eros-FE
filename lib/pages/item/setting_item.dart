@@ -92,7 +92,7 @@ class _SettingItems extends State<SettingItems> {
         loggerNoStack.v('set tap ${widget.text} ');
         if (isLayoutLarge) {
           final topRoute =
-              SecondNavigatorObserver.history.lastOrNull?.settings.name;
+              SecondNavigatorObserver().history.lastOrNull?.settings.name;
           if (topRoute?.startsWith('/setting') ?? false) {
             Get.offNamed(widget.route, id: 2);
           } else {
