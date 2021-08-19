@@ -1,37 +1,74 @@
 import 'dart:collection';
 import 'dart:convert';
 
+import 'package:fehviewer/common/controller/webdav_controller.dart';
 import 'package:fehviewer/models/base/eh_models.dart';
 import 'package:fehviewer/pages/image_view/common.dart';
 import 'package:fehviewer/store/get_store.dart';
 import 'package:fehviewer/utils/logger.dart';
 import 'package:get/get.dart';
+import 'package:throttling/throttling.dart';
 
 class GalleryCacheController extends GetxController {
   final GStore gStore = Get.find<GStore>();
+  final WebdavController webdavController = Get.find();
   LinkedHashMap<String, GalleryCache> gCacheMap = LinkedHashMap();
 
-  GalleryCache? getGalleryCache(String gid) {
-    final _cache = gStore.getCache(gid);
-    if (!gCacheMap.containsKey(gid) && _cache != null) {
+  // final thrSync = Throttling(duration: const Duration(seconds: 10));
+  final debSync = Debouncing(duration: const Duration(seconds: 5));
+
+  Future<GalleryCache?> getGalleryCache(String gid, {bool sync = true}) async {
+    final _localCache = gStore.getCache(gid);
+    if (!gCacheMap.containsKey(gid) && _localCache != null) {
       logger.v('get from store');
-      gCacheMap[gid] = _cache;
+      gCacheMap[gid] = _localCache;
     }
 
+    if (!sync || !webdavController.syncReadProgress) {
+      return gCacheMap[gid];
+    } else {
+      try {
+        final remotelist = await webdavController.getRemotReadList();
+        logger.d('remotelist $remotelist');
+        if (remotelist.contains(gid)) {
+          final remote = await webdavController.downloadRead(gid);
+          if (_localCache == null && remote != null) {
+            gCacheMap[gid] = GalleryCache(lastIndex: remote.lastIndex);
+          } else if (_localCache != null && remote != null) {
+            if ((remote.time ?? 0) > (_localCache.time ?? 0)) {
+              gCacheMap[gid] = _localCache.copyWith(
+                  lastIndex: remote.lastIndex, time: remote.time);
+            }
+          }
+        }
+      } catch (e) {
+        return gCacheMap[gid];
+      }
+    }
     return gCacheMap[gid];
   }
 
-  void setIndex(String gid, int index, {bool saveToStore = false}) {
-    final GalleryCache? _ori = getGalleryCache(gid);
+  Future<void> setIndex(String gid, int index,
+      {bool saveToStore = false}) async {
+    final GalleryCache? _ori = await getGalleryCache(gid, sync: false);
+    final _time = DateTime.now().millisecondsSinceEpoch;
     if (_ori == null) {
-      gCacheMap[gid] = GalleryCache(gid: gid, lastIndex: index);
+      final _newCache = GalleryCache(gid: gid, lastIndex: index, time: _time);
+      gCacheMap[gid] = _newCache;
       if (saveToStore) {
-        gStore.saveCache(GalleryCache(gid: gid, lastIndex: index));
+        gStore.saveCache(_newCache);
+        if (webdavController.syncReadProgress) {
+          debSync.debounce(() => webdavController.uploadRead(_newCache));
+        }
       }
     } else {
-      gCacheMap[gid] = _ori.copyWith(lastIndex: index);
+      final _newCache = _ori.copyWith(lastIndex: index, time: _time);
+      gCacheMap[gid] = _newCache;
       if (saveToStore) {
-        gStore.saveCache(_ori.copyWith(lastIndex: index));
+        gStore.saveCache(_newCache);
+        if (webdavController.syncReadProgress) {
+          debSync.debounce(() => webdavController.uploadRead(_newCache));
+        }
       }
     }
   }
@@ -44,8 +81,8 @@ class GalleryCacheController extends GetxController {
     });
   }
 
-  void setColumnMode(String gid, ViewColumnMode columnMode) {
-    final GalleryCache? _ori = getGalleryCache(gid);
+  Future<void> setColumnMode(String gid, ViewColumnMode columnMode) async {
+    final GalleryCache? _ori = await getGalleryCache(gid, sync: false);
     if (_ori == null) {
       gCacheMap[gid] = GalleryCache(gid: gid).copyWithMode(columnMode);
       gStore.saveCache(GalleryCache(gid: gid).copyWithMode(columnMode));

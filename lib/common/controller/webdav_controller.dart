@@ -16,6 +16,7 @@ const String kDirPath = '/fehviewer';
 const String kHistoryDirPath = '/fehviewer/history';
 const String kHistoryDtlDirPath = '/fehviewer/history/s';
 const String kHistoryDelDirPath = '/fehviewer/history/del';
+const String kReadDirPath = '/fehviewer/read';
 
 const String idActionLogin = 'action_login';
 
@@ -29,8 +30,18 @@ class WebdavController extends GetxController {
   bool isLongining = false;
 
   bool get syncHistory => webdavProfile.syncHistory ?? false;
+  bool get syncReadProgress => webdavProfile.syncReadProgress ?? false;
+
   set syncHistory(bool val) {
     final _dav = webdavProfile.copyWith(syncHistory: val);
+    Get.replace(_dav);
+    update();
+    Global.profile = Global.profile.copyWith(webdav: _dav);
+    Global.saveProfile();
+  }
+
+  set syncReadProgress(bool val) {
+    final _dav = webdavProfile.copyWith(syncReadProgress: val);
     Get.replace(_dav);
     update();
     Global.profile = Global.profile.copyWith(webdav: _dav);
@@ -71,7 +82,8 @@ class WebdavController extends GetxController {
     client?.setReceiveTimeout(8000);
 
     checkDir(dir: kHistoryDtlDirPath)
-        .then((value) => checkDir(dir: kHistoryDelDirPath));
+        .then((value) => checkDir(dir: kHistoryDelDirPath))
+        .then((value) => checkDir(dir: kReadDirPath));
   }
 
   Future<void> checkDir({String dir = kDirPath}) async {
@@ -130,10 +142,6 @@ class WebdavController extends GetxController {
     if (client == null) {
       return;
     }
-    // final _path = path.join(Global.tempPath, 'del', gid);
-    // final File _file = File(_path);
-    // _file.create();
-    // await client!.writeFromFile(_path, '$kHistoryDelDirPath/$gid');
     await client!.write('$kHistoryDelDirPath/$gid', Uint8List.fromList([]));
   }
 
@@ -201,8 +209,6 @@ class WebdavController extends GetxController {
       galleryImages: [],
       tagGroup: [],
     );
-    // logger.d('${_his.galleryImages?.length}');
-
     final _text = jsonEncode(_his);
     _file.writeAsStringSync(_text);
 
@@ -238,6 +244,75 @@ class WebdavController extends GetxController {
     } catch (err) {
       return null;
     }
+  }
+
+  Future<void> uploadRead(GalleryCache read) async {
+    if (client == null) {
+      return;
+    }
+    final _dirPath = path.join(Global.tempPath, 'read');
+    final Directory _directory = Directory(_dirPath);
+    if (!_directory.existsSync()) {
+      _directory.createSync(recursive: true);
+    }
+
+    final _path = path.join(Global.tempPath, 'read', read.gid);
+    final File _file = File(_path);
+    final _read = read.copyWith(
+      columnModeVal: '',
+    );
+    final _text = jsonEncode(_read);
+    _file.writeAsStringSync(_text);
+
+    try {
+      await client!.writeFromFile(_path, '$kReadDirPath/${read.gid}.json');
+    } on DioError catch (err) {
+      logger.d('${err.response?.statusCode}');
+      if (err.response?.statusCode == 404) {
+        logger.d('file 404');
+        rethrow;
+      } else {
+        rethrow;
+      }
+    }
+  }
+
+  Future<GalleryCache?> downloadRead(String gid) async {
+    if (client == null) {
+      return null;
+    }
+    final _path = path.join(Global.tempPath, 'read', gid);
+    try {
+      await client!.read2File('$kReadDirPath/$gid.json', _path);
+      final File _file = File(_path);
+      if (!_file.existsSync()) {
+        return null;
+      }
+      final String _fileText = _file.readAsStringSync();
+      final _read =
+          GalleryCache.fromJson(jsonDecode(_fileText) as Map<String, dynamic>);
+
+      return _read;
+    } catch (err) {
+      return null;
+    }
+  }
+
+  Future<List<String>> getRemotReadList() async {
+    if (client == null) {
+      return [];
+    }
+    final list = await client!.readDir(kReadDirPath);
+    final names = list
+        .map((e) => e.name?.substring(0, e.name?.lastIndexOf('.')))
+        .toList();
+    final _list = <String>[];
+    for (final name in names) {
+      if (name != null) {
+        _list.add(name);
+      }
+    }
+    return _list;
   }
 
   Future<bool> _pingWebDAV(String url, {String? user, String? pwd}) async {

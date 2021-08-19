@@ -1809,6 +1809,16 @@ class L10n {
       args: [],
     );
   }
+
+  /// `Sync read progress`
+  String get sync_read_progress {
+    return Intl.message(
+      'Sync read progress',
+      name: 'sync_read_progress',
+      desc: '',
+      args: [],
+    );
+  }
 }
 
 class AppLocalizationDelegate extends LocalizationsDelegate<L10n> {

@@ -229,6 +229,8 @@ class MessageLookup extends MessageLookupByLibrary {
         "show_page_interval":
             MessageLookupByLibrary.simpleMessage("Show page interval"),
         "sync_history": MessageLookupByLibrary.simpleMessage("Sync history"),
+        "sync_read_progress":
+            MessageLookupByLibrary.simpleMessage("Sync read progress"),
         "system_share": MessageLookupByLibrary.simpleMessage("System share"),
         "t_Clear_all_history":
             MessageLookupByLibrary.simpleMessage("Clear all history"),

@@ -184,9 +184,9 @@ class GalleryPageController extends GetxController
     _loadData();
 
     // 初始
-    final GalleryCache? _galleryCache =
-        _galleryCacheController.getGalleryCache(galleryItem.gid ?? '');
-    lastIndex = _galleryCache?.lastIndex ?? 0;
+    _galleryCacheController
+        .getGalleryCache(galleryItem.gid ?? '')
+        .then((_galleryCache) => lastIndex = _galleryCache?.lastIndex ?? 0);
 
     logger.v('GalleryPageController $pageCtrlDepth onInit end');
   }

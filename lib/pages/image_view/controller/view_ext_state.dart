@@ -30,17 +30,28 @@ class ViewExtState {
           imagePathList = vr.files!;
           initGid = vr.gid;
 
-          _columnMode = _galleryCacheController
-                  .getGalleryCache(initGid ?? '')
-                  ?.columnMode ??
-              ViewColumnMode.single;
+          // _columnMode = _galleryCacheController
+          //         .getGalleryCache(initGid ?? '', sync: false)
+          //         ?.columnMode ??
+          //     ViewColumnMode.single;
+
+          _galleryCacheController
+              .getGalleryCache(initGid ?? '', sync: false)
+              .then((value) =>
+                  _columnMode = value?.columnMode ?? ViewColumnMode.single);
         }
       } else {
         galleryPageController = Get.find(tag: pageCtrlDepth);
-        _columnMode = _galleryCacheController
-                .getGalleryCache(galleryPageController.galleryItem.gid ?? '')
-                ?.columnMode ??
-            ViewColumnMode.single;
+        // _columnMode = _galleryCacheController
+        //         .getGalleryCache(galleryPageController.galleryItem.gid ?? '',
+        //             sync: false)
+        //         ?.columnMode ??
+        //     ViewColumnMode.single;
+        _galleryCacheController
+            .getGalleryCache(galleryPageController.galleryItem.gid ?? '',
+                sync: false)
+            .then((value) =>
+                _columnMode = value?.columnMode ?? ViewColumnMode.single);
       }
 
       currentItemIndex = vr.index;
