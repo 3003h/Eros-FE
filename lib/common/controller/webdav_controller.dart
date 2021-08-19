@@ -166,7 +166,7 @@ class WebdavController extends GetxController {
       return null;
     }
     final String _fileText = _file.readAsStringSync();
-    logger.d('_fileText\n$_fileText');
+    logger.v('_fileText\n$_fileText');
 
     try {
       final _index =
@@ -192,7 +192,7 @@ class WebdavController extends GetxController {
     }
     final _index = HistoryIndex(time: time, gids: _gids);
     final _text = jsonEncode(_index);
-    logger.d('upload :\n$_text');
+    logger.v('upload :\n$_text');
     _file.writeAsStringSync(_text);
 
     await client!.writeFromFile(_path, '$kHistoryDirPath/index.json');
@@ -246,15 +246,19 @@ class WebdavController extends GetxController {
     }
   }
 
-  Future<void> uploadRead(GalleryCache read) async {
-    if (client == null) {
-      return;
-    }
+  void chkReadTempDir() {
     final _dirPath = path.join(Global.tempPath, 'read');
     final Directory _directory = Directory(_dirPath);
     if (!_directory.existsSync()) {
       _directory.createSync(recursive: true);
     }
+  }
+
+  Future<void> uploadRead(GalleryCache read) async {
+    if (client == null) {
+      return;
+    }
+    chkReadTempDir();
 
     final _path = path.join(Global.tempPath, 'read', read.gid);
     final File _file = File(_path);
@@ -281,6 +285,7 @@ class WebdavController extends GetxController {
     if (client == null) {
       return null;
     }
+    chkReadTempDir();
     final _path = path.join(Global.tempPath, 'read', gid);
     try {
       await client!.read2File('$kReadDirPath/$gid.json', _path);
@@ -294,6 +299,7 @@ class WebdavController extends GetxController {
 
       return _read;
     } catch (err) {
+      logger.e('$err');
       return null;
     }
   }
