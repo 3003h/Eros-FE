@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'dart:io';
+import 'dart:typed_data';
 
 import 'package:dio/dio.dart';
 import 'package:fehviewer/utils/logger.dart';
@@ -14,6 +15,7 @@ import '../global.dart';
 const String kDirPath = '/fehviewer';
 const String kHistoryDirPath = '/fehviewer/history';
 const String kHistoryDtlDirPath = '/fehviewer/history/s';
+const String kHistoryDelDirPath = '/fehviewer/history/del';
 
 const String idActionLogin = 'action_login';
 
@@ -68,7 +70,8 @@ class WebdavController extends GetxController {
     // Set transfer data time in milliseconds.
     client?.setReceiveTimeout(8000);
 
-    checkDir(dir: kHistoryDtlDirPath);
+    checkDir(dir: kHistoryDtlDirPath)
+        .then((value) => checkDir(dir: kHistoryDelDirPath));
   }
 
   Future<void> checkDir({String dir = kDirPath}) async {
@@ -77,7 +80,7 @@ class WebdavController extends GetxController {
     }
     try {
       final list = await client!.readDir(dir);
-      logger.d('${list.map((e) => e.path)}');
+      logger.d('$dir\n${list.map((e) => '${e.name} ${e.mTime}').join('\n')}');
     } on DioError catch (err) {
       if (err.response?.statusCode == 404) {
         logger.d('dir 404, mkdir...');
@@ -105,8 +108,33 @@ class WebdavController extends GetxController {
         _list.add(name);
       }
     }
-    // logger.d('$names');
     return _list;
+  }
+
+  Future<List<String>> getRemotDeleteList() async {
+    if (client == null) {
+      return [];
+    }
+    final list = await client!.readDir(kHistoryDelDirPath);
+    final names = list.map((e) => e.name).toList();
+    final _list = <String>[];
+    for (final name in names) {
+      if (name != null) {
+        _list.add(name);
+      }
+    }
+    return _list;
+  }
+
+  Future updateRemoveFlg(String gid) async {
+    if (client == null) {
+      return;
+    }
+    // final _path = path.join(Global.tempPath, 'del', gid);
+    // final File _file = File(_path);
+    // _file.create();
+    // await client!.writeFromFile(_path, '$kHistoryDelDirPath/$gid');
+    await client!.write('$kHistoryDelDirPath/$gid', Uint8List.fromList([]));
   }
 
   Future<HistoryIndex?> downloadHistoryList() async {

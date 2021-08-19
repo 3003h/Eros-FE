@@ -19,6 +19,9 @@ class HistoryController extends GetxController {
     return _historys;
   }
 
+  // 登记删除gid和删除时间，用于同步远程时筛选
+  final List<HistoryIndexGid> _delHistorys = <HistoryIndexGid>[];
+
   final EhConfigService _ehConfigService = Get.find();
   final WebdavController webdavController = Get.find();
   final GStore _gStore = Get.find<GStore>();
@@ -39,6 +42,12 @@ class HistoryController extends GetxController {
       galleryImages: [],
       galleryComment: [],
     );
+
+    final _eDelFlg =
+        _delHistorys.firstWhereOrNull((eDel) => eDel.g == galleryItem.gid);
+    if (nowTime > (_eDelFlg?.t ?? 0)) {
+      _removeHistoryDelFlg(galleryItem.gid ?? '');
+    }
 
     final int _index = historys.indexWhere((GalleryItem element) {
       return element.gid == _item.gid;
@@ -75,6 +84,9 @@ class HistoryController extends GetxController {
     historys.removeWhere((element) => element.gid == gid);
     update();
     hiveHelper.removeHistory(gid);
+
+    _addHistoryDelFlg(gid);
+
     if (sync) {
       // 节流函数 最多每分钟一次同步
       thrSync.throttle(() {
@@ -86,11 +98,22 @@ class HistoryController extends GetxController {
     }
   }
 
+  void _addHistoryDelFlg(String gid) {
+    final int nowTime = DateTime.now().millisecondsSinceEpoch;
+    final _del = HistoryIndexGid(t: nowTime, g: gid);
+    _delHistorys.add(_del);
+    hiveHelper.addHistoryDel(_del);
+  }
+
+  void _removeHistoryDelFlg(String gid) {
+    _delHistorys.removeWhere((element) => element.g == gid);
+    hiveHelper.removeHistoryDel(gid);
+  }
+
   void cleanHistory() {
     historys.clear();
     update();
     hiveHelper.cleanHistory();
-    // _gStore.historys = historys;
   }
 
   @override
@@ -98,7 +121,13 @@ class HistoryController extends GetxController {
     super.onInit();
 
     _historys.addAll(hiveHelper.getAllHistory());
+    _delHistorys.addAll(hiveHelper.getAllHistoryDel());
   }
+
+  // Future<void> removeRemoteHistory(String gid) async {
+  //   // 发送云端标记该画廊为删除 不直接删除云端信息
+  //   webdavController.updateRemoveFlg(gid);
+  // }
 
   Future<void> syncHistory() async {
     if (!webdavController.syncHistory) {
@@ -109,7 +138,7 @@ class HistoryController extends GetxController {
         .map((e) => HistoryIndexGid(t: e.lastViewTime, g: e.gid))
         .toList();
     logger.d('listLocalIndex ${listLocalIndex.length} \n$listLocalIndex');
-    logger.d('${jsonEncode(listLocalIndex)}');
+    logger.d('${jsonEncode(listLocalIndex)} ');
 
     // 下载远程列表
     final remoteIndex = await webdavController.downloadHistoryList();
@@ -149,6 +178,14 @@ class HistoryController extends GetxController {
     final remoteNewer = listRemoteIndex.where((eRemote) {
       final _eLocal = listLocalIndex
           .firstWhereOrNull((eLocal) => (eLocal?.g ?? '') == eRemote.g);
+
+      final _eDelFlg =
+          _delHistorys.firstWhereOrNull((eDel) => (eDel.g ?? '') == eRemote.g);
+
+      if (_eDelFlg != null) {
+        return (eRemote.t ?? 0) > (_eDelFlg.t ?? 0);
+      }
+
       if (_eLocal == null) {
         return true;
       }
@@ -198,7 +235,6 @@ class HistoryController extends GetxController {
     for (final gid in hisList) {
       executor.scheduleTask(() async {
         if (gid.g != null) {
-          // logger.d('download ${gid.g}');
           final image = await webdavController.downloadHistory(gid.g!);
           if (image != null) {
             addHistory(image, updateTime: false, sync: false);

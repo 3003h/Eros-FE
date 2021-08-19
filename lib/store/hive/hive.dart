@@ -6,6 +6,7 @@ import 'package:hive/hive.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 
 const String historyBox = 'history_box';
+const String historyDelBox = 'history_del_box';
 const String searchHistoryBox = 'search_history_box';
 
 const String searchHistoryKey = 'search_history';
@@ -14,12 +15,20 @@ const String searchHistoryKey = 'search_history';
 class HiveHelper {
   HiveHelper();
   static final _historyBox = Hive.box<String>(historyBox);
+  static final _historyDelBox = Hive.box<String>(historyDelBox);
   static final _searchHistoryBox = Hive.box<String>(searchHistoryBox);
 
   static Future<void> init() async {
     await Hive.initFlutter();
     await Hive.openBox<String>(
       historyBox,
+      compactionStrategy: (int entries, int deletedEntries) {
+        logger.v('entries $entries');
+        return entries > 10;
+      },
+    );
+    await Hive.openBox<String>(
+      historyDelBox,
       compactionStrategy: (int entries, int deletedEntries) {
         logger.v('entries $entries');
         return entries > 10;
@@ -74,6 +83,24 @@ class HiveHelper {
       rult.add(_his);
     }
     return rult;
+  }
+
+  Future<void> addHistoryDel(HistoryIndexGid gi) async {
+    final gid = gi.g;
+    await _historyDelBox.put(gid, jsonEncode(gi));
+  }
+
+  List<HistoryIndexGid> getAllHistoryDel() {
+    final _delHistorys = <HistoryIndexGid>[];
+    for (final val in _historyDelBox.values) {
+      _delHistorys.add(
+          HistoryIndexGid.fromJson(jsonDecode(val) as Map<String, dynamic>));
+    }
+    return _delHistorys;
+  }
+
+  Future<void> removeHistoryDel(String gid) async {
+    _historyDelBox.delete(gid);
   }
 
   Future<void> setSearchHistory(List<String> searchTexts) async {
