@@ -193,6 +193,8 @@ class MessageLookup extends MessageLookupByLibrary {
         "show_jpn_title": MessageLookupByLibrary.simpleMessage("일본어 제목 표시"),
         "show_page_interval": MessageLookupByLibrary.simpleMessage("페이지 간격 표시"),
         "sync_history": MessageLookupByLibrary.simpleMessage("Sync history"),
+        "sync_read_progress":
+            MessageLookupByLibrary.simpleMessage("Sync read progress"),
         "system_share": MessageLookupByLibrary.simpleMessage("시스템 공유"),
         "t_Clear_all_history":
             MessageLookupByLibrary.simpleMessage("모든 기록 지우기"),

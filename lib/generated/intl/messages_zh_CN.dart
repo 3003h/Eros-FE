@@ -185,6 +185,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "show_jpn_title": MessageLookupByLibrary.simpleMessage("显示日文标题"),
         "show_page_interval": MessageLookupByLibrary.simpleMessage("显示页面间隔"),
         "sync_history": MessageLookupByLibrary.simpleMessage("同步历史记录"),
+        "sync_read_progress": MessageLookupByLibrary.simpleMessage("同步阅读进度"),
         "system_share": MessageLookupByLibrary.simpleMessage("系统分享"),
         "t_Clear_all_history": MessageLookupByLibrary.simpleMessage("清除所有历史"),
         "tab_download": MessageLookupByLibrary.simpleMessage("下载"),

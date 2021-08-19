@@ -55,12 +55,19 @@ class DownloadGalleryItem extends GetView<DownloadViewController> {
             .map((e) => path.join(gTask.realDirPath ?? '', e.filePath ?? ''))
             .toList();
 
-        final GalleryCache? _galleryCache = Get.find<GalleryCacheController>()
-            .getGalleryCache('${galleryTask.gid}');
-        final lastIndex = _galleryCache?.lastIndex ?? 0;
+        // final GalleryCache? _galleryCache = Get.find<GalleryCacheController>()
+        //     .getGalleryCache('${galleryTask.gid}');
+        // final lastIndex = _galleryCache?.lastIndex ?? 0;
+        // NavigatorUtil.goGalleryViewPageFile(
+        //     lastIndex, pics, '${galleryTask.gid}');
 
-        NavigatorUtil.goGalleryViewPageFile(
-            lastIndex, pics, '${galleryTask.gid}');
+        Get.find<GalleryCacheController>()
+            .getGalleryCache('${galleryTask.gid}')
+            .then((_galleryCache) {
+          final lastIndex = _galleryCache?.lastIndex ?? 0;
+          NavigatorUtil.goGalleryViewPageFile(
+              lastIndex, pics, '${galleryTask.gid}');
+        });
       },
       child: Container(
         padding: const EdgeInsets.only(top: 4, bottom: 4, left: 20, right: 16),

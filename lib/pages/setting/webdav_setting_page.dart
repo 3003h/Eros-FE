@@ -99,7 +99,14 @@ class WebDavSettingView extends GetView<WebdavController> {
           onChanged: (val) {
             controller.syncHistory = val;
           },
-        )
+        ),
+        TextSwitchItem(
+          L10n.of(context).sync_read_progress,
+          intValue: controller.syncReadProgress,
+          onChanged: (val) {
+            controller.syncReadProgress = val;
+          },
+        ),
       ],
     );
   }
