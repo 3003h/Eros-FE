@@ -137,8 +137,9 @@ class HistoryController extends GetxController {
     final List<HistoryIndexGid?> listLocalIndex = historys
         .map((e) => HistoryIndexGid(t: e.lastViewTime, g: e.gid))
         .toList();
-    logger.d('listLocalIndex ${listLocalIndex.length} \n$listLocalIndex');
-    logger.d('${jsonEncode(listLocalIndex)} ');
+    logger.v(
+        'listLocalIndex ${listLocalIndex.length} \n${listLocalIndex.map((e) => e?.g)}');
+    logger.v('${jsonEncode(listLocalIndex)} ');
 
     // 下载远程列表
     final remoteIndex = await webdavController.downloadHistoryList();
@@ -157,7 +158,7 @@ class HistoryController extends GetxController {
             !listLocalIndex.contains(element))
         .toList()
         .toSet();
-    logger.d('diff ${diff.map((e) => e?.toJson())}');
+    logger.v('diff ${diff.map((e) => e?.toJson())}');
 
     // 本地时间更大的画廊
     final localNewer = listLocalIndex.where((eLocal) {
@@ -172,7 +173,7 @@ class HistoryController extends GetxController {
 
       return (eLocal.t ?? 0) > (_eRemote.t ?? 0);
     });
-    logger.d('localNewer ${localNewer.map((e) => e?.g)}');
+    logger.v('localNewer ${localNewer.map((e) => e?.g)}');
 
     // 远程时间更大的画廊
     final remoteNewer = listRemoteIndex.where((eRemote) {
@@ -192,7 +193,7 @@ class HistoryController extends GetxController {
 
       return (eRemote.t ?? 0) > (_eLocal.t ?? 0);
     });
-    logger.d('remoteNewer ${remoteNewer.map((e) => e.g)}');
+    logger.v('remoteNewer ${remoteNewer.map((e) => e.g)}');
 
     await _downloadHistorys2(remoteNewer.toList());
 
@@ -207,7 +208,7 @@ class HistoryController extends GetxController {
         .where((element) => !realRemoteList.contains(element?.g))
         .toSet()
           ..addAll(localNewer);
-    logger.d('remoteNeeds ${remoteNeeds.map((e) => e?.g).toList()}');
+    logger.v('remoteNeeds ${remoteNeeds.map((e) => e?.g).toList()}');
 
     await _uploadHistorys2(remoteNeeds.toList());
 
