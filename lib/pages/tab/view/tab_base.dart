@@ -1,6 +1,7 @@
 import 'package:fehviewer/common/service/ehconfig_service.dart';
 import 'package:fehviewer/const/const.dart';
 import 'package:fehviewer/models/index.dart';
+import 'package:fehviewer/pages/item/controller/galleryitem_controller.dart';
 import 'package:fehviewer/pages/item/gallery_item.dart';
 import 'package:fehviewer/pages/item/gallery_item_flow.dart';
 import 'package:fehviewer/pages/item/gallery_item_flow_large.dart';
@@ -71,47 +72,106 @@ SliverPadding buildWaterfallFlow(
   );
 }
 
-SliverList buildGallerySliverListView(
+Widget buildGallerySliverListItem(
+    GalleryItem _item, int index, Animation<double> _animation,
+    {dynamic tabTag}) {
+  return FadeTransition(
+    opacity: _animation.drive(CurveTween(curve: Curves.easeIn)),
+    child: SizeTransition(
+      sizeFactor: _animation.drive(CurveTween(curve: Curves.easeIn)),
+      child: GalleryItemWidget(
+        key: ValueKey(_item.gid),
+        galleryItem: _item,
+        tabTag: tabTag,
+      ),
+    ),
+  );
+}
+
+Widget buildDelGallerySliverListItem(
+    GalleryItem _item, int index, Animation<double> _animation,
+    {dynamic tabTag}) {
+  return FadeTransition(
+    opacity: _animation
+        .drive(CurveTween(curve: Interval(0.0, 1.0, curve: Curves.easeOut))),
+    child: SizeTransition(
+      sizeFactor: _animation
+          .drive(CurveTween(curve: Interval(0.0, 1.0, curve: Curves.easeOut))),
+      child: SlideTransition(
+        position: Tween<Offset>(begin: Offset(1, 0), end: Offset.zero).animate(
+            CurvedAnimation(
+                parent: _animation,
+                curve: Interval(0.4, 1.0, curve: Curves.easeOut))),
+        child: GalleryItemWidget(
+          key: ValueKey(_item.gid),
+          galleryItem: _item,
+          tabTag: tabTag,
+        ),
+      ),
+    ),
+  );
+}
+
+Widget buildGallerySliverListView(
   List<GalleryItem> gallerItemBeans,
   dynamic tabTag, {
   int? maxPage,
   int curPage = 0,
   VoidCallback? loadMord,
+  Key? key,
 }) {
-  return SliverList(
-    delegate: SliverChildBuilderDelegate(
-      (BuildContext context, int index) {
-        if (maxPage != null) {
-          if (index == gallerItemBeans.length - 1 && curPage < maxPage - 1) {
-            logger.v('$index ${gallerItemBeans.length}');
+  return SliverAnimatedList(
+    key: key,
+    initialItemCount: gallerItemBeans.length,
+    itemBuilder:
+        (BuildContext context, int index, Animation<double> animation) {
+      if (maxPage != null) {
+        if (index == gallerItemBeans.length - 1 && curPage < maxPage - 1) {
+          logger.v('$index ${gallerItemBeans.length}');
 //            加载更多数据的回调
-            loadMord?.call();
-          }
+          loadMord?.call();
         }
+      }
+      final GalleryItem _item = gallerItemBeans[index];
+      return buildGallerySliverListItem(_item, index, animation,
+          tabTag: tabTag);
+    },
+  );
 
-        final GalleryItem _item = gallerItemBeans[index];
+  if (false)
+    return SliverList(
+      key: key,
+      delegate: SliverChildBuilderDelegate(
+        (BuildContext context, int index) {
+          if (maxPage != null) {
+            if (index == gallerItemBeans.length - 1 && curPage < maxPage - 1) {
+              logger.v('$index ${gallerItemBeans.length}');
+//            加载更多数据的回调
+              loadMord?.call();
+            }
+          }
 
-        return FrameSeparateWidget(
-          index: index,
-          placeHolder: const GalleryItemPlaceHolder(),
-          // child: GalleryItemWidget(galleryItem: _item, tabTag: tabTag),
-          child: Obx(() {
-            return Stack(
-              children: [
-                GalleryItemWidget(
-                  key: UniqueKey(),
-                  galleryItem: _item,
-                  tabTag: tabTag,
-                ),
-                // index > 1
-                //     ? GalleryItemWidget(galleryItem: _item, tabTag: tabTag)
-                //     : GalleryItemPlaceHolder(),
-                if (Get.find<EhConfigService>().debugMode)
-                  Positioned(
-                    right: 12,
-                    top: 4,
-                    child: Text('${index + 1}',
-                        style: const TextStyle(
+          final GalleryItem _item = gallerItemBeans[index];
+
+          return FrameSeparateWidget(
+            index: index,
+            placeHolder: const GalleryItemPlaceHolder(),
+            child: Obx(
+              () {
+                return Stack(
+                  children: [
+                    GalleryItemWidget(
+                      key: UniqueKey(),
+                      galleryItem: _item,
+                      tabTag: tabTag,
+                    ),
+                    if (Get.find<EhConfigService>().debugMode)
+                      Positioned(
+                        right: 12,
+                        top: 4,
+                        child: Text(
+                          '${index + 1}',
+                          style: const TextStyle(
                             fontSize: 20,
                             color: CupertinoColors.secondarySystemBackground,
                             shadows: <Shadow>[
@@ -120,16 +180,19 @@ SliverList buildGallerySliverListView(
                                 offset: Offset(1, 1),
                                 blurRadius: 2.5,
                               )
-                            ])),
-                  ),
-              ],
-            );
-          }),
-        );
-      },
-      childCount: gallerItemBeans.length,
-    ),
-  );
+                            ],
+                          ),
+                        ),
+                      ),
+                  ],
+                );
+              },
+            ),
+          );
+        },
+        childCount: gallerItemBeans.length,
+      ),
+    );
 }
 
 SliverFixedExtentList buildGallerySliverListSimpleView(
@@ -138,8 +201,10 @@ SliverFixedExtentList buildGallerySliverListSimpleView(
   int? maxPage,
   required int curPage,
   VoidCallback? loadMord,
+  Key? key,
 }) {
   return SliverFixedExtentList(
+    key: key,
     delegate: SliverChildBuilderDelegate(
       (BuildContext context, int index) {
         if (maxPage != null) {
@@ -167,6 +232,7 @@ Widget getGalleryList(
   int? maxPage,
   int? curPage,
   VoidCallback? loadMord,
+  Key? key,
 }) {
   final EhConfigService ehConfigService = Get.find();
 
@@ -182,6 +248,7 @@ Widget getGalleryList(
           maxPage: maxPage,
           curPage: curPage ?? 0,
           loadMord: loadMord,
+          key: key,
         );
       case ListModeEnum.waterfall:
         return buildWaterfallFlow(
@@ -207,6 +274,7 @@ Widget getGalleryList(
           maxPage: maxPage,
           curPage: curPage ?? 0,
           loadMord: loadMord,
+          key: key,
         );
     }
   });

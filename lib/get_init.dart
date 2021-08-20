@@ -25,7 +25,7 @@ import 'pages/controller/favorite_sel_controller.dart';
 import 'pages/tab/controller/download_view_controller.dart';
 import 'pages/tab/controller/favorite_controller.dart';
 import 'pages/tab/controller/gallery_controller.dart';
-import 'pages/tab/controller/history_controller.dart';
+import 'pages/tab/controller/history_view_controller.dart';
 import 'pages/tab/controller/popular_controller.dart';
 import 'pages/tab/controller/setting_controller.dart';
 import 'pages/tab/controller/splash_controller.dart';
