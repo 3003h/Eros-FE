@@ -1,10 +1,11 @@
 import 'package:fehviewer/common/controller/history_controller.dart';
 import 'package:fehviewer/generated/l10n.dart';
-import 'package:fehviewer/pages/tab/controller/history_controller.dart';
+import 'package:fehviewer/pages/tab/controller/history_view_controller.dart';
 import 'package:fehviewer/pages/tab/controller/tabhome_controller.dart';
 import 'package:fehviewer/pages/tab/view/tab_base.dart';
 import 'package:fehviewer/utils/cust_lib/persistent_header_builder.dart';
 import 'package:fehviewer/utils/cust_lib/sliver/sliver_persistent_header.dart';
+import 'package:fehviewer/utils/logger.dart';
 import 'package:fehviewer/widget/refresh.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -87,18 +88,6 @@ class _HistoryTabState extends State<HistoryTab> {
                 controller.clearHistory();
               },
             ),
-            // 同步按钮
-            // CupertinoButton(
-            //   minSize: 40,
-            //   padding: const EdgeInsets.all(0),
-            //   child: const Icon(
-            //     LineIcons.alternateSync,
-            //     size: 26,
-            //   ),
-            //   onPressed: () {
-            //     controller.syncHistory();
-            //   },
-            // ),
           ],
         ),
       ),
@@ -117,31 +106,23 @@ class _HistoryTabState extends State<HistoryTab> {
             builder: (_, __, ___) => navigationBar,
           ),
         ),
-        // sliverNavigationBar,
-        // SliverPadding(
-        //   padding: EdgeInsets.only(
-        //       top: context.mediaQueryPadding.top +
-        //           kMinInteractiveDimensionCupertino),
-        //   sliver: EhCupertinoSliverRefreshControl(
-        //     onRefresh: () async {
-        //       await controller.reloadData();
-        //     },
-        //   ),
-        // ),
         EhCupertinoSliverRefreshControl(
           onRefresh: controller.syncHistory,
         ),
         SliverSafeArea(
-            top: false,
-            // sliver: _getGalleryList(),
-            sliver: GetBuilder<HistoryController>(
-              init: HistoryController(),
-              builder: (_) {
-                return getGalleryList(_.historys, controller.tabTag);
-              },
-            )
-            // sliver: _getGalleryList(),
-            ),
+          top: false,
+          sliver: GetBuilder<HistoryController>(
+            init: HistoryController(),
+            builder: (logic) {
+              logger.d('build Historyview');
+              return getGalleryList(
+                logic.historys,
+                controller.tabTag,
+                key: controller.sliverAnimatedListKey,
+              );
+            },
+          ),
+        ),
       ],
     );
 

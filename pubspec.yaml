@@ -128,6 +128,7 @@ dependencies:
   persistent_bottom_nav_bar: ^4.0.2
   device_preview: ^0.7.4
   webdav_client: ^1.1.0
+  auto_animated: ^3.0.0
   # 不是SAF的形式
 #  filesystem_picker: ^2.0.0-nullsafety.0
 #  google_ml_kit: ^0.6.0

@@ -61,6 +61,8 @@ class TabViewController extends GetxController
 
   final CancelToken cancelToken = CancelToken();
 
+  final sliverAnimatedListKey = GlobalKey<SliverAnimatedListState>();
+
   // 页码跳转输入框的控制器
   final TextEditingController _pageController = TextEditingController();
 

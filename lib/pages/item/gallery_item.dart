@@ -7,6 +7,7 @@ import 'package:fehviewer/const/theme_colors.dart';
 import 'package:fehviewer/extension.dart';
 import 'package:fehviewer/models/index.dart';
 import 'package:fehviewer/pages/item/controller/galleryitem_controller.dart';
+import 'package:fehviewer/utils/logger.dart';
 import 'package:fehviewer/utils/utility.dart';
 import 'package:fehviewer/widget/blur_image.dart';
 import 'package:fehviewer/widget/rating_bar.dart';
@@ -38,6 +39,7 @@ class _GalleryItemWidgetState extends State<GalleryItemWidget> {
   late GalleryItemController galleryItemController;
   @override
   void initState() {
+    logger.d('_GalleryItemWidgetState initState');
     super.initState();
     galleryItemController = Get.put(GalleryItemController(widget.galleryItem),
         tag: widget.galleryItem.gid);
@@ -45,6 +47,7 @@ class _GalleryItemWidgetState extends State<GalleryItemWidget> {
 
   @override
   void didChangeDependencies() {
+    logger.d('_GalleryItemWidgetState didChangeDependencies');
     super.didChangeDependencies();
     if (Get.isRegistered<GalleryItemController>(tag: widget.galleryItem.gid)) {
       Get.replace(GalleryItemController(widget.galleryItem),
