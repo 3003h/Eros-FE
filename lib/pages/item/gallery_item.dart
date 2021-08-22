@@ -39,7 +39,7 @@ class _GalleryItemWidgetState extends State<GalleryItemWidget> {
   late GalleryItemController galleryItemController;
   @override
   void initState() {
-    logger.d('_GalleryItemWidgetState initState');
+    logger.v('_GalleryItemWidgetState initState');
     super.initState();
     galleryItemController = Get.put(GalleryItemController(widget.galleryItem),
         tag: widget.galleryItem.gid);
@@ -47,7 +47,7 @@ class _GalleryItemWidgetState extends State<GalleryItemWidget> {
 
   @override
   void didChangeDependencies() {
-    logger.d('_GalleryItemWidgetState didChangeDependencies');
+    logger.v('_GalleryItemWidgetState didChangeDependencies');
     super.didChangeDependencies();
     if (Get.isRegistered<GalleryItemController>(tag: widget.galleryItem.gid)) {
       Get.replace(GalleryItemController(widget.galleryItem),
@@ -124,18 +124,19 @@ class _GalleryItemWidgetState extends State<GalleryItemWidget> {
                                   [],
                         ),
 
-                        Spacer(),
+                        const Spacer(),
                         // 评分行
                         GetBuilder(
                           init: galleryItemController,
                           tag: galleryItemController.galleryItem.gid,
                           builder: (_) => Row(
-                            crossAxisAlignment: CrossAxisAlignment.end,
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            mainAxisSize: MainAxisSize.min,
                             children: <Widget>[
                               // 评分
-                              _buildRating(),
+                              Expanded(child: _buildRating()),
                               // 占位
-                              const Spacer(),
+                              // const Spacer(),
                               // 收藏图标
                               _buildFavcatIcon(),
                               // 图片数量
@@ -148,13 +149,13 @@ class _GalleryItemWidgetState extends State<GalleryItemWidget> {
                         ),
                         // 类型和时间
                         Row(
-                          crossAxisAlignment: CrossAxisAlignment.end,
+                          crossAxisAlignment: CrossAxisAlignment.center,
                           children: <Widget>[
                             // 类型
                             _buildCategory(),
-                            const Spacer(),
+                            // const Spacer(),
                             // 上传时间
-                            _buildPostTime(),
+                            Expanded(child: _buildPostTime()),
                           ],
                         ),
                       ],
@@ -242,7 +243,8 @@ class _GalleryItemWidgetState extends State<GalleryItemWidget> {
   Widget _buildRating() {
     // logger.d(
     //     'ratingFallBack ${_galleryItemController.galleryItem.ratingFallBack} ');
-    return Row(
+    return Wrap(
+      crossAxisAlignment: WrapCrossAlignment.center,
       children: <Widget>[
         Container(
           padding: const EdgeInsets.fromLTRB(0, 0, 4, 0),
@@ -265,7 +267,7 @@ class _GalleryItemWidgetState extends State<GalleryItemWidget> {
           ),
         ),
       ],
-    );
+    ).paddingOnly(right: 4);
   }
 
   Widget _buildFilecontWidget() {
@@ -318,8 +320,9 @@ class _GalleryItemWidgetState extends State<GalleryItemWidget> {
   Widget _buildPostTime() {
     return Text(
       galleryItemController.galleryItem.postTime ?? '',
+      textAlign: TextAlign.right,
       style: const TextStyle(fontSize: 12, color: CupertinoColors.systemGrey),
-    );
+    ).paddingOnly(left: 8);
   }
 
   Widget _buildCategory() {

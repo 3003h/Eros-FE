@@ -18,31 +18,32 @@ class HomePage extends GetView<TabHomeController> {
 
     final WillPopScope willPopScope = WillPopScope(
       onWillPop: controller.doubleClickBack,
-      child: Obx(() {
-        final tabletLayout = _ehConfigService.tabletLayout;
-        return LayoutBuilder(
-          builder: (context, constraints) {
-            logger.v('${constraints.maxWidth}');
-            if (context.width > 700 && context.isTablet && tabletLayout) {
-              layoutServices.layoutMode = LayoutMode.large;
-            } else {
-              layoutServices.layoutMode = LayoutMode.small;
-            }
+      child: Obx(
+        () {
+          final tabletLayout = _ehConfigService.tabletLayout;
+          return LayoutBuilder(
+            builder: (context, constraints) {
+              logger.v('${constraints.maxWidth}');
+              if (context.width > 700 && context.isTablet && tabletLayout) {
+                layoutServices.layoutMode = LayoutMode.large;
+              } else {
+                layoutServices.layoutMode = LayoutMode.small;
+              }
 
-            if (!isLayoutLarge) {
-              return TabHomeSmall();
-            }
+              if (!isLayoutLarge) {
+                return const TabHomeSmall();
+              }
 
-            if (context.width > 1080) {
-              return const TabHomeLarge();
-            } else if (context.width > 700) {
-              return const TabHomeLarge();
-            } else {
-              return TabHomeSmall();
-            }
-          },
-        );
-      }),
+              if (context.width > 700) {
+                return const TabHomeLarge();
+              } else {
+                // return const TabHomeSmall();
+                return SizedBox.shrink();
+              }
+            },
+          );
+        },
+      ),
     );
 
     return willPopScope;
