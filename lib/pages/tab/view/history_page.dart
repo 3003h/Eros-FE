@@ -41,9 +41,6 @@ class _HistoryTabState extends State<HistoryTab> {
     logger.d('build Historyview');
     final String _title = L10n.of(context).tab_history;
 
-    // final sliverAnimatedListKey = GlobalKey<SliverAnimatedListState>();
-    // controller.sliverAnimatedListKey = sliverAnimatedListKey;
-
     final Widget sliverNavigationBar = CupertinoSliverNavigationBar(
       transitionBetweenRoutes: false,
       largeTitle: Text(_title),

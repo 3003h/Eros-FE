@@ -80,9 +80,11 @@ class WebDavSettingView extends GetView<WebdavController> {
                         Global.profile = Global.profile
                             .copyWith(webdav: const WebdavProfile(url: ''));
                         Global.saveProfile();
-                        Get.replace(WebdavProfile(url: ''));
+                        Get.replace(const WebdavProfile(url: ''));
                         controller.close();
                         Get.back();
+                        controller.update();
+                        controller.update([idActionLogin]);
                       },
                     ),
                   ],

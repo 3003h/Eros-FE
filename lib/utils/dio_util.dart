@@ -190,7 +190,7 @@ class HttpManager {
       if (CancelToken.isCancel(e)) {
         // logger.d('$e');
       } else {
-        logger5.e('getHttp exception: $e\n$stack');
+        logger5.e('getHttp $url exception: $e\n$stack');
       }
 
       if (errToast) formatError(e);

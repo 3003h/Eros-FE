@@ -116,8 +116,8 @@ class WebdavController extends GetxController {
     final names = list.map((e) => e.name).toList();
     final _list = <String>[];
     for (final name in names) {
-      if (name != null) {
-        _list.add(name);
+      if (name != null && name.endsWith('.json')) {
+        _list.add(name.substring(0, name.indexOf('.')));
       }
     }
     return _list;
@@ -145,7 +145,33 @@ class WebdavController extends GetxController {
     await client!.write('$kHistoryDelDirPath/$gid', Uint8List.fromList([]));
   }
 
-  Future<HistoryIndex?> downloadHistoryList() async {
+  Future<List<HistoryIndexGid>> getRemoteHistoryList() async {
+    if (client == null) {
+      return [];
+    }
+    final list = await client!.readDir(kHistoryDtlDirPath);
+    final hisObjs = list.map((e) {
+      final name = e.name?.substring(0, e.name?.lastIndexOf('.'));
+      final gid = name?.split('_')[0];
+      final time = int.parse(name?.split('_')[1] ?? '0');
+      return HistoryIndexGid(g: gid, t: time);
+    }).toList();
+    final _list = <HistoryIndexGid>[];
+    for (final his in hisObjs) {
+      if (his.g != null && his.t! > 0) {
+        _list.add(his);
+      }
+    }
+    return _list;
+  }
+
+  int _mTime2MillisecondsSinceEpoch(String mTime) {
+    final DateFormat formatter = DateFormat('yyyy-MM-dd HH:mm:ss.SSS');
+    final _mTime = formatter.parse(mTime);
+    return _mTime.millisecondsSinceEpoch;
+  }
+
+  Future<HistoryIndex?> downloadHistoryList_Old() async {
     if (client == null) {
       return null;
     }
@@ -178,7 +204,7 @@ class WebdavController extends GetxController {
     }
   }
 
-  Future<void> uploadHistoryList(List<HistoryIndexGid?> gids, int time) async {
+  Future<void> uploadHistoryIndex(List<HistoryIndexGid?> gids, int time) async {
     if (client == null) {
       return;
     }
@@ -213,7 +239,8 @@ class WebdavController extends GetxController {
     _file.writeAsStringSync(_text);
 
     try {
-      await client!.writeFromFile(_path, '$kHistoryDtlDirPath/${his.gid}.json');
+      await client!.writeFromFile(
+          _path, '$kHistoryDtlDirPath/${his.gid}_${his.lastViewTime}.json');
     } on DioError catch (err) {
       logger.d('${err.response?.statusCode}');
       if (err.response?.statusCode == 404) {
@@ -225,13 +252,13 @@ class WebdavController extends GetxController {
     }
   }
 
-  Future<GalleryItem?> downloadHistory(String gid) async {
+  Future<GalleryItem?> downloadHistory(String fileName) async {
     if (client == null) {
       return null;
     }
-    final _path = path.join(Global.tempPath, gid);
+    final _path = path.join(Global.tempPath, fileName);
     try {
-      await client!.read2File('$kHistoryDtlDirPath/$gid.json', _path);
+      await client!.read2File('$kHistoryDtlDirPath/$fileName.json', _path);
       final File _file = File(_path);
       if (!_file.existsSync()) {
         return null;
@@ -351,5 +378,19 @@ class WebdavController extends GetxController {
     isLongining = false;
     // update([idActionLogin]);
     return rult;
+  }
+
+  Future<void> deleteHistory(HistoryIndexGid? oriRemote) async {
+    if (client == null || oriRemote == null) {
+      return;
+    }
+
+    try {
+      await client!
+          .remove('$kHistoryDtlDirPath/${oriRemote.g}_${oriRemote.t}.json');
+    } catch (err) {
+      logger.e('$err');
+      return;
+    }
   }
 }

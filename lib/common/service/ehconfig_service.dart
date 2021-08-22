@@ -28,7 +28,7 @@ class EhConfigService extends ProfileService {
   RxBool isFavLongTap = false.obs;
   RxInt catFilter = 0.obs;
   Rx<ListModeEnum> listMode = ListModeEnum.list.obs;
-  RxInt maxHistory = 100.obs;
+  // RxInt maxHistory = 100.obs;
   RxBool isSearchBarComp = true.obs;
   Rx<FavoriteOrder> favoriteOrder = FavoriteOrder.fav.obs;
   RxBool isSafeMode = false.obs;
@@ -197,9 +197,9 @@ class EhConfigService extends ProfileService {
     everFromEunm(listMode,
         (String value) => ehConfig = ehConfig.copyWith(listMode: value));
 
-    maxHistory.value = ehConfig.maxHistory;
-    everProfile(maxHistory,
-        (value) => ehConfig = ehConfig.copyWith(maxHistory: value as int));
+    // maxHistory.value = ehConfig.maxHistory;
+    // everProfile(maxHistory,
+    //     (value) => ehConfig = ehConfig.copyWith(maxHistory: value as int));
 
     isSearchBarComp.value = ehConfig.searchBarComp ?? false;
     everProfile(isSearchBarComp,

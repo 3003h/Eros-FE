@@ -52,36 +52,38 @@ class HistoryController extends GetxController {
       _removeHistoryDelFlg(galleryItem.gid ?? '');
     }
 
-    final int _index = historys.indexWhere((GalleryItem element) {
+    final int _curIndex = historys.indexWhere((GalleryItem element) {
       return element.gid == _item.gid;
     });
-    if (_index >= 0) {
-      historys.removeAt(_index);
-      historys.insert(0, _item);
-      hiveHelper.addHistory(_item);
-    } else {
-      // 检查数量限制 超限则删除最后一条
-      if (_ehConfigService.maxHistory.value > 0 &&
-          historys.length == _ehConfigService.maxHistory.value) {
-        hiveHelper.removeHistory(historys.last.gid ?? '');
-        historys.removeLast();
+
+    if (_curIndex >= 0) {
+      historys.removeAt(_curIndex);
+      if (_curIndex > 0) {
+        _hisViewController.sliverAnimatedListKey.currentState?.removeItem(
+            _curIndex,
+            (context, Animation<double> animation) =>
+                buildDelGallerySliverListItem(_item, _curIndex, animation));
       }
 
       historys.insert(0, _item);
+      if (_curIndex > 0) {
+        _hisViewController.sliverAnimatedListKey.currentState?.insertItem(0);
+      }
+
+      hiveHelper.addHistory(_item);
+    } else {
+      historys.insert(0, _item);
+      _hisViewController.sliverAnimatedListKey.currentState?.insertItem(0);
       hiveHelper.addHistory(_item);
     }
-    // _hisViewController.sliverAnimatedListKey?.currentState?.insertItem(
-    //   0,
-    //   duration: Duration(milliseconds: 300),
-    // );
 
-    logger.d('add ${galleryItem.gid} update1');
-    update();
+    logger.v('add ${galleryItem.gid} update1');
+    // update();
 
     if (sync) {
       // 节流函数 最多每分钟一次同步
       thrSync.throttle(() {
-        logger.d('throttle syncHistory');
+        logger.v('throttle syncHistory');
         return syncHistory();
       });
 
@@ -95,11 +97,9 @@ class HistoryController extends GetxController {
     final _index = historys.indexWhere((element) => element.gid == gid);
     final GalleryItem _item = historys[_index];
     _hisViewController.sliverAnimatedListKey.currentState?.removeItem(
-      _index,
-      (context, Animation<double> animation) =>
-          buildDelGallerySliverListItem(_item, _index, animation),
-      duration: Duration(milliseconds: 300),
-    );
+        _index,
+        (context, Animation<double> animation) =>
+            buildDelGallerySliverListItem(_item, _index, animation));
 
     historys.removeAt(_index);
     // update();
@@ -109,7 +109,7 @@ class HistoryController extends GetxController {
     if (sync) {
       // 节流函数 最多每分钟一次同步
       thrSync.throttle(() {
-        logger.d('throttle syncHistory');
+        logger.v('throttle syncHistory');
         return syncHistory();
       });
 
@@ -153,111 +153,87 @@ class HistoryController extends GetxController {
       return;
     }
 
-    final List<HistoryIndexGid?> listLocalIndex = historys
+    final List<HistoryIndexGid?> listLocal = historys
         .map((e) => HistoryIndexGid(t: e.lastViewTime, g: e.gid))
         .toList();
-    logger.v(
-        'listLocalIndex ${listLocalIndex.length} \n${listLocalIndex.map((e) => e?.g)}');
-    logger.v('${jsonEncode(listLocalIndex)} ');
+    logger.v('listLocal ${listLocal.length} \n${listLocal.map((e) => e?.g)}');
+    logger.v('${jsonEncode(listLocal)} ');
 
     // 下载远程列表
-    final remoteIndex = await webdavController.downloadHistoryList();
-    if (remoteIndex == null) {
-      await _uploadHistorys2(listLocalIndex.toList());
-      await _uploadHistory(listLocalIndex);
+    final listRemote = await webdavController.getRemoteHistoryList();
+    if (listRemote.isEmpty) {
+      await _uploadHistorys(listLocal.toList());
       return;
     }
 
-    final listRemoteIndex = remoteIndex.gids ?? [];
+    logger.v('listRemote size ${listRemote.length}');
+
     // 比较远程和本地的差异
-    final allGid = [...listRemoteIndex, ...listLocalIndex];
+    final allGid = <HistoryIndexGid?>{...listRemote, ...listLocal};
     final diff = allGid
         .where((element) =>
-            !listRemoteIndex.contains(element) ||
-            !listLocalIndex.contains(element))
+            !listRemote.contains(element) || !listLocal.contains(element))
         .toList()
         .toSet();
     logger.v('diff ${diff.map((e) => e?.toJson())}');
 
     // 本地时间更大的画廊
-    final localNewer = listLocalIndex.where((eLocal) {
-      if (eLocal == null) {
-        return false;
-      }
-      final _eRemote =
-          listRemoteIndex.firstWhereOrNull((eRemote) => eRemote.g == eLocal.g);
-      if (_eRemote == null) {
-        return true;
-      }
+    final localNewer = listLocal.where(
+      (eLocal) {
+        if (eLocal == null) {
+          return false;
+        }
+        final _eRemote =
+            listRemote.firstWhereOrNull((eRemote) => eRemote.g == eLocal.g);
+        if (_eRemote == null) {
+          return true;
+        }
 
-      return (eLocal.t ?? 0) > (_eRemote.t ?? 0);
-    });
-    logger.d('localNewer ${localNewer.map((e) => e?.g)}');
+        return (eLocal.t ?? 0) > (_eRemote.t ?? 0);
+      },
+    );
+    logger.v('localNewer count ${localNewer.length}');
 
     // 远程时间更大的画廊
-    final remoteNewer = listRemoteIndex.where((eRemote) {
-      final _eLocal = listLocalIndex
-          .firstWhereOrNull((eLocal) => (eLocal?.g ?? '') == eRemote.g);
+    final remoteNewer = listRemote.where(
+      (eRemote) {
+        final _eLocal = listLocal
+            .firstWhereOrNull((eLocal) => (eLocal?.g ?? '') == eRemote.g);
 
-      final _eDelFlg =
-          _delHistorys.firstWhereOrNull((eDel) => (eDel.g ?? '') == eRemote.g);
+        final _eDelFlg = _delHistorys
+            .firstWhereOrNull((eDel) => (eDel.g ?? '') == eRemote.g);
 
-      if (_eDelFlg != null) {
-        return (eRemote.t ?? 0) > (_eDelFlg.t ?? 0);
-      }
+        if (_eDelFlg != null) {
+          return (eRemote.t ?? 0) > (_eDelFlg.t ?? 0);
+        }
 
-      if (_eLocal == null) {
-        return true;
-      }
+        if (_eLocal == null) {
+          return true;
+        }
 
-      return (eRemote.t ?? 0) > (_eLocal.t ?? 0);
-    });
-    logger.d('remoteNewer ${remoteNewer.map((e) => e.g)}');
+        return (eRemote.t ?? 0) > (_eLocal.t ?? 0);
+      },
+    );
+    logger.d('remoteNewer ${remoteNewer.map((e) => e.g).toList()}');
 
-    await _downloadHistorys2(remoteNewer.toList());
+    await _downloadHistorys(remoteNewer.toSet().toList());
 
-    // 远程实际列表
-    final List<String> realRemoteList =
-        (await webdavController.getRemotFileList())
-            .map((e) => e.substring(0, e.lastIndexOf('.')))
-            .toList();
-
-    // 上传远程需要的的
-    final remoteNeeds = allGid
-        .where((element) => !realRemoteList.contains(element?.g))
-        .toSet()
-          ..addAll(localNewer);
-    logger.d('remoteNeeds ${remoteNeeds.map((e) => e?.g).toList()}');
-
-    await _uploadHistorys2(remoteNeeds.toList());
-
-    // 更新远程index文件
-    if (remoteNeeds.isNotEmpty || remoteNewer.isNotEmpty) {
-      await _uploadHistory(historys
-          .map((e) => HistoryIndexGid(t: e.lastViewTime, g: e.gid))
-          .toList());
-    }
+    await _uploadHistorys(localNewer.toList(), listRemote: listRemote);
   }
 
   Future _downloadHistorys(List<HistoryIndexGid> hisList) async {
     for (final gid in hisList) {
-      if (gid.g != null) {
-        final image = await webdavController.downloadHistory(gid.g!);
-        if (image == null) {
-          continue;
-        }
-        addHistory(image, updateTime: false, sync: false);
-      }
-    }
-  }
-
-  Future _downloadHistorys2(List<HistoryIndexGid> hisList) async {
-    for (final gid in hisList) {
       executor.scheduleTask(() async {
         if (gid.g != null) {
-          final image = await webdavController.downloadHistory(gid.g!);
-          if (image != null) {
-            addHistory(image, updateTime: false, sync: false);
+          final _image =
+              await webdavController.downloadHistory('${gid.g!}_${gid.t}');
+          if (_image != null) {
+            final ori = historys
+                .firstWhereOrNull((element) => element.gid == _image.gid);
+            if (ori != null && (gid.t ?? 0) <= (ori.lastViewTime ?? 0)) {
+              return;
+            }
+            addHistory(_image, updateTime: false, sync: false);
           }
         }
       });
@@ -266,32 +242,31 @@ class HistoryController extends GetxController {
     await executor.join(withWaiting: true);
   }
 
-  Future _uploadHistorys(List<HistoryIndexGid?> hisList) async {
-    for (final gid in hisList) {
-      final GalleryItem? _his =
-          historys.firstWhereOrNull((element) => element.gid == gid?.g);
-      if (_his != null) {
-        await webdavController.uploadHistory(_his);
-      }
-    }
-  }
-
-  Future _uploadHistorys2(List<HistoryIndexGid?> hisList) async {
-    for (final gid in hisList) {
+  Future _uploadHistorys(
+    List<HistoryIndexGid?> localHisList, {
+    List<HistoryIndexGid?>? listRemote,
+  }) async {
+    for (final his in localHisList) {
       executor.scheduleTask(() async {
         final GalleryItem? _his =
-            historys.firstWhereOrNull((element) => element.gid == gid?.g);
+            historys.firstWhereOrNull((element) => element.gid == his?.g);
+
+        final _oriRemote =
+            listRemote?.firstWhereOrNull((element) => element?.g == his?.g);
+
         if (_his != null) {
-          await webdavController.uploadHistory(_his);
+          final upload = webdavController.uploadHistory(_his);
+          final delete = webdavController.deleteHistory(_oriRemote);
+          await Future.wait([upload, delete]);
         }
       });
     }
     await executor.join(withWaiting: true);
   }
 
-  Future<void> _uploadHistory(List<HistoryIndexGid?> gids) async {
+  Future<void> _uploadHistoryIndex(List<HistoryIndexGid?> gids) async {
     final _time = DateTime.now().millisecondsSinceEpoch;
-    await webdavController.uploadHistoryList(
+    await webdavController.uploadHistoryIndex(
         gids.where((element) => element != null).toList(), _time);
   }
 }
