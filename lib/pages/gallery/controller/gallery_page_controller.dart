@@ -53,21 +53,15 @@ class GalleryPageController extends GetxController
   bool isRefresh = false;
 
   final RxBool _fromUrl = false.obs;
-
   bool get fromUrl => _fromUrl.value;
-
   set fromUrl(bool val) => _fromUrl.value = val;
 
   final RxBool _isRatinged = false.obs;
-
   bool get isRatinged => _isRatinged.value;
-
   set isRatinged(bool val) => _isRatinged.value = val;
 
   final RxInt _lastIndex = 0.obs;
-
   int get lastIndex => _lastIndex.value;
-
   set lastIndex(int val) => _lastIndex.value = val;
 
   // 评分后更新ui和数据
@@ -272,11 +266,8 @@ class GalleryPageController extends GetxController
             await Api.getMoreGalleryInfoOne(galleryItem, refresh: refresh);
       }
 
-      // logger.d('filecount ${galleryItem.filecount}');
-
       // 检查画廊是否包含在本地收藏中
       final bool _localFav = _isInLocalFav(galleryItem.gid ?? '');
-      // galleryItem.localFav = _localFav;
       galleryItem = galleryItem.copyWith(localFav: _localFav);
 
       final String? _oriColorRating = galleryItem.colorRating;
@@ -292,27 +283,18 @@ class GalleryPageController extends GetxController
       );
       time.showTime('fetch galleryItem end');
 
-      // logger.d('filecount ${galleryItem.filecount}');
-
       currentImagePage = 0;
       setImageAfterRequest(galleryItem.galleryImages);
 
       // logger.v('category ${galleryItem.category}');
-
       // logger.d('ratingCount ${galleryItem.ratingCount} ');
 
       try {
         // 页面内刷新时的处理
         if (refresh) {
-          // 收藏控制器状态更新
-          final GalleryFavController _favController =
-              Get.find(tag: pageCtrlDepth);
-          _favController.setFav(galleryItem.favcat!, galleryItem.favTitle!);
-
           // 评论控制器状态数据更新
           Get.find<CommentController>(tag: pageCtrlDepth)
               .change(galleryItem.galleryComment);
-
           // 评分状态更新
           isRatinged = galleryItem.isRatinged ?? false;
         } else {
@@ -320,12 +302,19 @@ class GalleryPageController extends GetxController
             ratingFallBack: galleryItem.ratingFallBack ?? _oriRatingFallBack,
             ratingCount: galleryItem.ratingCount ?? _oriRatingCount,
             colorRating: _oriColorRating,
-            isRatinged: _oriIsRatinged,
+            // isRatinged: _oriIsRatinged,
           );
+
+          // 评分状态更新
+          isRatinged = galleryItem.isRatinged ?? false;
+
+          // 收藏控制器状态更新
+          final GalleryFavController _favController =
+              Get.find(tag: pageCtrlDepth);
+          _favController.setFav(galleryItem.favcat!, galleryItem.favTitle!);
         }
       } catch (_) {}
 
-      // galleryItem.imgUrl = galleryItem.imgUrl ?? galleryItem.imgUrlL;
       galleryItem = galleryItem.copyWith(
           imgUrl: galleryItem.imgUrl ?? galleryItem.imgUrlL);
 
@@ -597,8 +586,6 @@ class GalleryPageController extends GetxController
       }
 
       final String? _largeImageUrl = _curImages.imageUrl;
-
-      // logger.d('_largeImageUrl $_largeImageUrl');
 
       // 大图url为空或者宽高信息为空的时候 都会解析获取
       if (_largeImageUrl != null &&

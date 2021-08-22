@@ -59,11 +59,6 @@ class _DetailFromUrl extends StatelessWidget {
                   initGalleryItem: state,
                   tabTag: '',
                 ),
-              // Divider(
-              //   height: 0.5,
-              //   color: CupertinoDynamicColor.resolve(
-              //       CupertinoColors.systemGrey4, context),
-              // ),
               if (state != null)
                 _DetailWidget(
                   state: state,

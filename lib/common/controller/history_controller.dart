@@ -5,6 +5,7 @@ import 'package:executor/executor.dart';
 import 'package:fehviewer/common/controller/webdav_controller.dart';
 import 'package:fehviewer/common/global.dart';
 import 'package:fehviewer/common/service/ehconfig_service.dart';
+import 'package:fehviewer/const/const.dart';
 import 'package:fehviewer/models/index.dart';
 import 'package:fehviewer/pages/tab/controller/history_view_controller.dart';
 import 'package:fehviewer/pages/tab/view/tab_base.dart';
@@ -32,6 +33,10 @@ class HistoryController extends GetxController {
 
   final executor = Executor(concurrency: 3);
 
+  bool get isListView =>
+      _ehConfigService.listMode.value == ListModeEnum.list ||
+      _ehConfigService.listMode.value == ListModeEnum.simpleList;
+
   void addHistory(
     GalleryItem galleryItem, {
     bool updateTime = true,
@@ -58,7 +63,7 @@ class HistoryController extends GetxController {
 
     if (_curIndex >= 0) {
       historys.removeAt(_curIndex);
-      if (_curIndex > 0) {
+      if (_curIndex > 0 && isListView) {
         _hisViewController.sliverAnimatedListKey.currentState?.removeItem(
             _curIndex,
             (context, Animation<double> animation) =>
@@ -66,19 +71,23 @@ class HistoryController extends GetxController {
       }
 
       historys.insert(0, _item);
-      if (_curIndex > 0) {
+      if (_curIndex > 0 && isListView) {
         _hisViewController.sliverAnimatedListKey.currentState?.insertItem(0);
       }
 
       hiveHelper.addHistory(_item);
     } else {
       historys.insert(0, _item);
-      _hisViewController.sliverAnimatedListKey.currentState?.insertItem(0);
+      if (isListView) {
+        _hisViewController.sliverAnimatedListKey.currentState?.insertItem(0);
+      }
       hiveHelper.addHistory(_item);
     }
 
     logger.v('add ${galleryItem.gid} update1');
-    // update();
+    if (!isListView) {
+      update();
+    }
 
     if (sync) {
       // 节流函数 最多每分钟一次同步
@@ -96,13 +105,16 @@ class HistoryController extends GetxController {
 
     final _index = historys.indexWhere((element) => element.gid == gid);
     final GalleryItem _item = historys[_index];
-    _hisViewController.sliverAnimatedListKey.currentState?.removeItem(
-        _index,
-        (context, Animation<double> animation) =>
-            buildDelGallerySliverListItem(_item, _index, animation));
-
     historys.removeAt(_index);
-    // update();
+    if (isListView) {
+      _hisViewController.sliverAnimatedListKey.currentState?.removeItem(
+          _index,
+          (context, Animation<double> animation) =>
+              buildDelGallerySliverListItem(_item, _index, animation));
+    } else {
+      update();
+    }
+
     hiveHelper.removeHistory(gid);
     _addHistoryDelFlg(gid);
 

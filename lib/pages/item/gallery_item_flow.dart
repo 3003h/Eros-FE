@@ -15,7 +15,7 @@ const double kRadius = 6.0;
 const double kWidth = 28.0;
 const double kHeight = 18.0;
 
-class GalleryItemFlow extends StatefulWidget {
+class GalleryItemFlow extends StatelessWidget {
   const GalleryItemFlow(
       {Key? key, required this.tabTag, required this.galleryItem})
       : super(key: key);
@@ -23,28 +23,8 @@ class GalleryItemFlow extends StatefulWidget {
   final dynamic tabTag;
   final GalleryItem galleryItem;
 
-  @override
-  _GalleryItemFlowState createState() => _GalleryItemFlowState();
-}
-
-class _GalleryItemFlowState extends State<GalleryItemFlow> {
-  late GalleryItemController galleryItemController;
-
-  @override
-  void initState() {
-    super.initState();
-    galleryItemController = Get.put(GalleryItemController(widget.galleryItem),
-        tag: widget.galleryItem.gid);
-  }
-
-  @override
-  void didChangeDependencies() {
-    super.didChangeDependencies();
-    if (Get.isRegistered<GalleryItemController>(tag: widget.galleryItem.gid)) {
-      Get.replace(GalleryItemController(widget.galleryItem),
-          tag: widget.galleryItem.gid);
-    }
-  }
+  GalleryItemController get galleryItemController =>
+      Get.find(tag: galleryItem.gid);
 
   Widget _buildFavcatIcon() {
     return Obx(() {
@@ -91,7 +71,7 @@ class _GalleryItemFlowState extends State<GalleryItemFlow> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
             Hero(
-              tag: '${galleryItem.gid}_cover_${widget.tabTag}',
+              tag: '${galleryItem.gid}_cover_${tabTag}',
               child: Container(
                 decoration: BoxDecoration(
                     // borderRadius: BorderRadius.circular(kRadius), //圆角
@@ -151,7 +131,7 @@ class _GalleryItemFlowState extends State<GalleryItemFlow> {
       return GestureDetector(
         behavior: HitTestBehavior.opaque,
         child: container,
-        onTap: () => galleryItemController.onTap(widget.tabTag),
+        onTap: () => galleryItemController.onTap(tabTag),
         onLongPress: galleryItemController.onLongPress,
       ).autoCompressKeyboard(context);
     });

@@ -17,7 +17,7 @@ const double kRadius = 6.0;
 const double kWidth = 28.0;
 const double kHeight = 18.0;
 
-class GalleryItemFlowLarge extends StatefulWidget {
+class GalleryItemFlowLarge extends StatelessWidget {
   const GalleryItemFlowLarge(
       {Key? key, required this.tabTag, required this.galleryItem})
       : super(key: key);
@@ -25,28 +25,8 @@ class GalleryItemFlowLarge extends StatefulWidget {
   final dynamic tabTag;
   final GalleryItem galleryItem;
 
-  @override
-  _GalleryItemFlowLargeState createState() => _GalleryItemFlowLargeState();
-}
-
-class _GalleryItemFlowLargeState extends State<GalleryItemFlowLarge> {
-  late GalleryItemController galleryItemController;
-
-  @override
-  void initState() {
-    super.initState();
-    galleryItemController = Get.put(GalleryItemController(widget.galleryItem),
-        tag: widget.galleryItem.gid);
-  }
-
-  @override
-  void didChangeDependencies() {
-    super.didChangeDependencies();
-    if (Get.isRegistered<GalleryItemController>(tag: widget.galleryItem.gid)) {
-      Get.replace(GalleryItemController(widget.galleryItem),
-          tag: widget.galleryItem.gid);
-    }
-  }
+  GalleryItemController get galleryItemController =>
+      Get.find(tag: galleryItem.gid);
 
   Widget _buildFavcatIcon() {
     return Obx(() {
@@ -140,7 +120,7 @@ class _GalleryItemFlowLargeState extends State<GalleryItemFlowLarge> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
               Hero(
-                tag: '${galleryItem.gid}_cover_${widget.tabTag}',
+                tag: '${galleryItem.gid}_cover_${tabTag}',
                 child: Container(
                   child: ClipRRect(
                     borderRadius: const BorderRadius.only(
@@ -220,7 +200,7 @@ class _GalleryItemFlowLargeState extends State<GalleryItemFlowLarge> {
       return GestureDetector(
         behavior: HitTestBehavior.opaque,
         child: container,
-        onTap: () => galleryItemController.onTap(widget.tabTag),
+        onTap: () => galleryItemController.onTap(tabTag),
         onLongPress: galleryItemController.onLongPress,
       ).autoCompressKeyboard(context);
     });

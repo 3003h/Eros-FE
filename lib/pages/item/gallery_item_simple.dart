@@ -16,7 +16,7 @@ const double kPaddingLeft = 8.0;
 
 /// 画廊列表项
 /// 简单模式 精简显示信息 固定高度
-class GalleryItemSimpleWidget extends StatefulWidget {
+class GalleryItemSimpleWidget extends StatelessWidget {
   const GalleryItemSimpleWidget(
       {Key? key, required this.galleryItem, required this.tabTag})
       : super(key: key);
@@ -24,29 +24,8 @@ class GalleryItemSimpleWidget extends StatefulWidget {
   final GalleryItem galleryItem;
   final dynamic tabTag;
 
-  @override
-  _GalleryItemSimpleWidgetState createState() =>
-      _GalleryItemSimpleWidgetState();
-}
-
-class _GalleryItemSimpleWidgetState extends State<GalleryItemSimpleWidget> {
-  late GalleryItemController galleryItemController;
-
-  @override
-  void initState() {
-    super.initState();
-    galleryItemController = Get.put(GalleryItemController(widget.galleryItem),
-        tag: widget.galleryItem.gid);
-  }
-
-  @override
-  void didChangeDependencies() {
-    super.didChangeDependencies();
-    if (Get.isRegistered<GalleryItemController>(tag: widget.galleryItem.gid)) {
-      Get.replace(GalleryItemController(widget.galleryItem),
-          tag: widget.galleryItem.gid);
-    }
-  }
+  GalleryItemController get galleryItemController =>
+      Get.find(tag: galleryItem.gid);
 
   @override
   Widget build(BuildContext context) {
@@ -129,7 +108,7 @@ class _GalleryItemSimpleWidgetState extends State<GalleryItemSimpleWidget> {
       ),
       // 不可见区域点击有效
       behavior: HitTestBehavior.opaque,
-      onTap: () => galleryItemController.onTap(widget.tabTag),
+      onTap: () => galleryItemController.onTap(tabTag),
       onTapDown: galleryItemController.onTapDown,
       onTapUp: galleryItemController.onTapUp,
       onTapCancel: galleryItemController.onTapCancel,
@@ -160,7 +139,7 @@ class _GalleryItemSimpleWidgetState extends State<GalleryItemSimpleWidget> {
       height: kItemWidth - 12,
       child: Center(
         child: Hero(
-          tag: '${_item.gid}_cover_${widget.tabTag}',
+          tag: '${_item.gid}_cover_${tabTag}',
           child: Container(
             decoration: BoxDecoration(
               boxShadow: [

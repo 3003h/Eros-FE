@@ -445,7 +445,6 @@ class Api {
 
     // logger.d('获取画廊 $url');
     time.showTime('获取画廊');
-    // await CustomHttpsProxy.instance.init();
     time.showTime('设置代理');
     final String response = await getHttpManager()
             .get(url, options: getCacheOptions(forceRefresh: refresh)) ??
@@ -453,16 +452,14 @@ class Api {
     time.showTime('获取到响应');
 
     // todo 画廊警告问题 使用 nw=always 未解决 待处理 怀疑和Session有关
-    if ('$response'.contains(r'<strong>Offensive For Everyone</strong>')) {
-      logger.v('Offensive For Everyone');
-      showToast('Offensive For Everyone');
-    }
+    // if ('$response'.contains(r'<strong>Offensive For Everyone</strong>')) {
+    //   logger.v('Offensive For Everyone');
+    //   showToast('Offensive For Everyone');
+    // }
 
     // 解析画廊数据
     final GalleryItem galleryItem =
         await parseGalleryDetail(response, inGalleryItem: inGalleryItem);
-
-    // logger.v(galleryItem.toJson());
 
     return galleryItem;
   }

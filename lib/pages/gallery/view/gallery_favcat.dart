@@ -17,8 +17,6 @@ class GalleryFavButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // final GalleryFavController _favController =
-    //     Get.put(GalleryFavController(), tag: pageCtrlDepth);
     // 收藏按钮图标
     final Widget favIcon = Obx(() {
       return Container(
@@ -53,7 +51,7 @@ class GalleryFavButton extends StatelessWidget {
     final Widget _loadIcon = Column(
       children: <Widget>[
         const CupertinoActivityIndicator(
-          radius: 12.0,
+          radius: 10.0,
         ),
         Container(
           height: 14,
@@ -113,7 +111,6 @@ class _FavcatAddListItemState extends State<FavcatAddListItem> {
           padding: const EdgeInsets.fromLTRB(0, 8, 0, 8),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.center,
-            // crossAxisAlignment: CrossAxisAlignment.end,
             children: [
               Icon(
                 FontAwesomeIcons.solidHeart,
