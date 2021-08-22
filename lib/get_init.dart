@@ -61,21 +61,21 @@ void getinit() {
   debugPrint('getinit');
   Get.put(TabHomeController(), permanent: true);
 
-  // Get.lazyPut(() => PopularViewController(), fenix: true);
-  // Get.lazyPut(() => WatchedViewController(), fenix: true);
-  // Get.lazyPut(() => GalleryViewController(), fenix: true);
-  // Get.lazyPut(() => HistoryViewController(), fenix: true);
-  // Get.lazyPut(() => DownloadViewController(), fenix: true);
-  // Get.lazyPut(() => FavoriteViewController(), fenix: true);
-  // Get.lazyPut(() => TopListViewController(), fenix: true);
+  Get.lazyPut(() => PopularViewController(), fenix: true);
+  Get.lazyPut(() => WatchedViewController(), fenix: true);
+  Get.lazyPut(() => GalleryViewController(), fenix: true);
+  Get.lazyPut(() => HistoryViewController(), fenix: true);
+  Get.lazyPut(() => DownloadViewController(), fenix: true);
+  Get.lazyPut(() => FavoriteViewController(), fenix: true);
+  Get.lazyPut(() => TopListViewController(), fenix: true);
 
-  Get.put(PopularViewController(), permanent: true);
-  Get.put(WatchedViewController(), permanent: true);
-  Get.put(GalleryViewController(), permanent: true);
-  Get.put(HistoryViewController(), permanent: true);
-  Get.put(DownloadViewController(), permanent: true);
-  Get.put(FavoriteViewController(), permanent: true);
-  Get.put(TopListViewController(), permanent: true);
+  // Get.put(PopularViewController(), permanent: true);
+  // Get.put(WatchedViewController(), permanent: true);
+  // Get.put(GalleryViewController(), permanent: true);
+  // Get.put(HistoryViewController(), permanent: true);
+  // Get.put(DownloadViewController(), permanent: true);
+  // Get.put(FavoriteViewController(), permanent: true);
+  // Get.put(TopListViewController(), permanent: true);
 
   Get.lazyPut(() => SettingViewController(), fenix: true);
 

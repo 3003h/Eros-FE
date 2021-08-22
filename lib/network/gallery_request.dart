@@ -300,7 +300,7 @@ class Api {
     ValueChanged<List<Favcat>>? favCatList,
   }) async {
     // logger.d('getToplist');
-    const String url = '/toplist.php';
+    const String url = '${EHConst.EH_BASE_URL}/toplist.php';
 
     final Map<String, dynamic> params = <String, dynamic>{
       'p': page ?? 0,

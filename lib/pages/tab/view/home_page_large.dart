@@ -89,7 +89,7 @@ class TabHomeLarge extends GetView<TabHomeController> {
                   child: Navigator(
                     key: Get.nestedKey(2),
                     observers: [SecondNavigatorObserver()],
-                    // initialRoute: EHRoutes.empty,
+                    initialRoute: EHRoutes.empty,
                     onGenerateRoute: (settings) {
                       switch (settings.name) {
                         case EHRoutes.about:
