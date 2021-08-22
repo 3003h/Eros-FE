@@ -1,3 +1,4 @@
+import 'package:fehviewer/common/controller/cache_controller.dart';
 import 'package:fehviewer/common/controller/localfav_controller.dart';
 import 'package:fehviewer/common/controller/user_controller.dart';
 import 'package:fehviewer/common/global.dart';
@@ -6,6 +7,7 @@ import 'package:fehviewer/common/service/depth_service.dart';
 import 'package:fehviewer/common/service/ehconfig_service.dart';
 import 'package:fehviewer/generated/l10n.dart';
 import 'package:fehviewer/models/favcat.dart';
+import 'package:fehviewer/network/gallery_request.dart';
 import 'package:fehviewer/pages/controller/fav_dialog_controller.dart';
 import 'package:fehviewer/pages/controller/favorite_sel_controller.dart';
 import 'package:fehviewer/pages/gallery/controller/gallery_page_controller.dart';
@@ -24,12 +26,13 @@ class GalleryFavController extends GetxController {
   String favnote = '';
 
   final LocalFavController _localFavController = Get.find();
-  final UserController _userController = Get.find();
   final EhConfigService _ehConfigService = Get.find();
   final FavDialogController _favDialogController = Get.find();
   final FavoriteSelectorController _favoriteSelectorController = Get.find();
 
   GalleryPageController get _pageController => Get.find(tag: pageCtrlDepth);
+
+  final CacheController cacheController = Get.find();
 
   GalleryItemController get _itemController =>
       Get.find(tag: _pageController.gid);
@@ -136,17 +139,6 @@ class GalleryFavController extends GetxController {
   // 选择并收藏
   Future<bool?> _showAddFavDialog() async {
     final BuildContext context = Get.context!;
-    final bool _isLogin = _userController.isLogin;
-
-    /// [{'favId': favId, 'favTitle': favTitle}]
-    // final List<Favcat> favList = _isLogin
-    //     ? await GalleryFavParser.getFavcat(
-    //         gid: _pageController.galleryItem.gid,
-    //         token: _pageController.galleryItem.token,
-    //       )
-    //     : <Favcat>[];
-    //
-    // favList.add(Favcat(favId: 'l', favTitle: L10n.of(context).local_favorite));
 
     final List<Favcat> favList = _favoriteSelectorController.favcatList;
 
@@ -168,13 +160,16 @@ class GalleryFavController extends GetxController {
 
       try {
         if (_favcat != 'l') {
+          // 网络收藏
           await GalleryFavParser.galleryAddfavorite(
             _pageController.galleryItem.gid!,
             _pageController.galleryItem.token!,
             favcat: _favcat,
             favnote: _favnote,
           );
+          _removeGalleryCache();
         } else {
+          // 本地收藏
           _pageController.localFav = true;
           _localFavController.addLocalFav(_pageController.galleryItem);
         }
@@ -192,6 +187,7 @@ class GalleryFavController extends GetxController {
         this._favTitle.value = _favTitle;
         this._favcat.value = _favcat;
         if (!_pageController.fromUrl) {
+          logger.d('upt item');
           _itemController.setFavTitle(favTitle: favTitle, favcat: favcat);
         }
       }
@@ -218,6 +214,8 @@ class GalleryFavController extends GetxController {
         _localFavController.removeFav(_pageController.galleryItem);
       }
       _favoriteSelectorController.decrease(favcat);
+
+      _removeGalleryCache();
     } catch (e) {
       return true;
     } finally {
@@ -225,7 +223,7 @@ class GalleryFavController extends GetxController {
       _favTitle.value = '';
       _favcat.value = '';
       if (!_pageController.fromUrl) {
-        logger.d('del fav ${_itemController.galleryItem.gid}');
+        logger.d('del fav ${_itemController.galleryItem.gid} ,upt item');
         _itemController.setFavTitle(favTitle: '', favcat: '');
       }
     }
@@ -237,5 +235,11 @@ class GalleryFavController extends GetxController {
     vibrateUtil.heavy();
     // 手选收藏夹
     await _showAddFavDialog();
+  }
+
+  void _removeGalleryCache() {
+    final url = _itemController.galleryItem.url;
+    logger.d('delete cache $url');
+    cacheController.clearDioCache(path: '${Api.getBaseUrl()}$url');
   }
 }

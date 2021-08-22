@@ -11,7 +11,6 @@ import 'package:fehviewer/utils/logger.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:keframe/frame_separate_widget.dart';
 import 'package:waterfall_flow/waterfall_flow.dart';
 
 SliverPadding buildWaterfallFlow(
@@ -54,15 +53,18 @@ SliverPadding buildWaterfallFlow(
             }
           }
 
+          final GalleryItem _item = gallerItemBeans[index];
+          Get.replace(GalleryItemController(_item), tag: _item.gid);
+
           return large
               ? GalleryItemFlowLarge(
-                  key: UniqueKey(),
-                  galleryItem: gallerItemBeans[index],
+                  key: ValueKey(_item.gid),
+                  galleryItem: _item,
                   tabTag: tabTag,
                 )
               : GalleryItemFlow(
-                  key: UniqueKey(),
-                  galleryItem: gallerItemBeans[index],
+                  key: ValueKey(_item.gid),
+                  galleryItem: _item,
                   tabTag: tabTag,
                 );
         },
@@ -72,43 +74,84 @@ SliverPadding buildWaterfallFlow(
   );
 }
 
-Widget buildGallerySliverListItem(
-    GalleryItem _item, int index, Animation<double> _animation,
-    {dynamic tabTag}) {
+Widget _listItemWiget(GalleryItem _item, {dynamic tabTag}) {
+  final EhConfigService ehConfigService = Get.find();
+
+  switch (ehConfigService.listMode.value) {
+    case ListModeEnum.list:
+      return GalleryItemWidget(
+        key: ValueKey(_item.gid),
+        galleryItem: _item,
+        tabTag: tabTag,
+      );
+    case ListModeEnum.simpleList:
+      return GalleryItemSimpleWidget(
+        key: ValueKey(_item.gid),
+        galleryItem: _item,
+        tabTag: tabTag,
+      );
+    default:
+      return const SizedBox.shrink();
+  }
+}
+
+Widget _buildSliverAnimatedListItem(
+  GalleryItem _item,
+  int index,
+  Animation<double> _animation, {
+  required Widget child,
+}) {
   return FadeTransition(
     opacity: _animation.drive(CurveTween(curve: Curves.easeIn)),
     child: SizeTransition(
       sizeFactor: _animation.drive(CurveTween(curve: Curves.easeIn)),
-      child: GalleryItemWidget(
-        key: ValueKey(_item.gid),
-        galleryItem: _item,
-        tabTag: tabTag,
+      child: child,
+    ),
+  );
+}
+
+Widget _buildDelSliverAnimatedListItem(
+  GalleryItem _item,
+  int index,
+  Animation<double> _animation, {
+  required Widget child,
+}) {
+  return FadeTransition(
+    opacity: _animation.drive(
+        CurveTween(curve: const Interval(0.0, 1.0, curve: Curves.easeOut))),
+    child: SizeTransition(
+      sizeFactor: _animation.drive(
+          CurveTween(curve: const Interval(0.0, 1.0, curve: Curves.easeOut))),
+      child: SlideTransition(
+        position: Tween<Offset>(begin: const Offset(1, 0), end: Offset.zero)
+            .animate(CurvedAnimation(
+                parent: _animation,
+                curve: const Interval(0.4, 1.0, curve: Curves.easeOut))),
+        child: child,
       ),
     ),
+  );
+}
+
+Widget buildGallerySliverListItem(
+    GalleryItem _item, int index, Animation<double> _animation,
+    {dynamic tabTag}) {
+  return _buildSliverAnimatedListItem(
+    _item,
+    index,
+    _animation,
+    child: _listItemWiget(_item, tabTag: tabTag),
   );
 }
 
 Widget buildDelGallerySliverListItem(
     GalleryItem _item, int index, Animation<double> _animation,
     {dynamic tabTag}) {
-  return FadeTransition(
-    opacity: _animation
-        .drive(CurveTween(curve: Interval(0.0, 1.0, curve: Curves.easeOut))),
-    child: SizeTransition(
-      sizeFactor: _animation
-          .drive(CurveTween(curve: Interval(0.0, 1.0, curve: Curves.easeOut))),
-      child: SlideTransition(
-        position: Tween<Offset>(begin: Offset(1, 0), end: Offset.zero).animate(
-            CurvedAnimation(
-                parent: _animation,
-                curve: Interval(0.4, 1.0, curve: Curves.easeOut))),
-        child: GalleryItemWidget(
-          key: ValueKey(_item.gid),
-          galleryItem: _item,
-          tabTag: tabTag,
-        ),
-      ),
-    ),
+  return _buildDelSliverAnimatedListItem(
+    _item,
+    index,
+    _animation,
+    child: _listItemWiget(_item, tabTag: tabTag),
   );
 }
 
@@ -133,69 +176,14 @@ Widget buildGallerySliverListView(
         }
       }
       final GalleryItem _item = gallerItemBeans[index];
+      Get.replace(GalleryItemController(_item), tag: _item.gid);
       return buildGallerySliverListItem(_item, index, animation,
           tabTag: tabTag);
     },
   );
-
-  if (false)
-    return SliverList(
-      key: key,
-      delegate: SliverChildBuilderDelegate(
-        (BuildContext context, int index) {
-          if (maxPage != null) {
-            if (index == gallerItemBeans.length - 1 && curPage < maxPage - 1) {
-              logger.v('$index ${gallerItemBeans.length}');
-//            加载更多数据的回调
-              loadMord?.call();
-            }
-          }
-
-          final GalleryItem _item = gallerItemBeans[index];
-
-          return FrameSeparateWidget(
-            index: index,
-            placeHolder: const GalleryItemPlaceHolder(),
-            child: Obx(
-              () {
-                return Stack(
-                  children: [
-                    GalleryItemWidget(
-                      key: UniqueKey(),
-                      galleryItem: _item,
-                      tabTag: tabTag,
-                    ),
-                    if (Get.find<EhConfigService>().debugMode)
-                      Positioned(
-                        right: 12,
-                        top: 4,
-                        child: Text(
-                          '${index + 1}',
-                          style: const TextStyle(
-                            fontSize: 20,
-                            color: CupertinoColors.secondarySystemBackground,
-                            shadows: <Shadow>[
-                              Shadow(
-                                color: Colors.black,
-                                offset: Offset(1, 1),
-                                blurRadius: 2.5,
-                              )
-                            ],
-                          ),
-                        ),
-                      ),
-                  ],
-                );
-              },
-            ),
-          );
-        },
-        childCount: gallerItemBeans.length,
-      ),
-    );
 }
 
-SliverFixedExtentList buildGallerySliverListSimpleView(
+Widget buildGallerySliverListSimpleView(
   List<GalleryItem> gallerItemBeans,
   tabTag, {
   int? maxPage,
@@ -203,26 +191,23 @@ SliverFixedExtentList buildGallerySliverListSimpleView(
   VoidCallback? loadMord,
   Key? key,
 }) {
-  return SliverFixedExtentList(
+  return SliverAnimatedList(
     key: key,
-    delegate: SliverChildBuilderDelegate(
-      (BuildContext context, int index) {
-        if (maxPage != null) {
-          if (index == gallerItemBeans.length - 1 && curPage < maxPage - 1) {
+    initialItemCount: gallerItemBeans.length,
+    itemBuilder:
+        (BuildContext context, int index, Animation<double> animation) {
+      if (maxPage != null) {
+        if (index == gallerItemBeans.length - 1 && curPage < maxPage - 1) {
+          logger.v('$index ${gallerItemBeans.length}');
 //            加载更多数据的回调
-            loadMord?.call();
-          }
+          loadMord?.call();
         }
-
-        return GalleryItemSimpleWidget(
-          key: UniqueKey(),
-          galleryItem: gallerItemBeans[index],
-          tabTag: tabTag,
-        );
-      },
-      childCount: gallerItemBeans.length,
-    ),
-    itemExtent: kItemWidth + 1,
+      }
+      final GalleryItem _item = gallerItemBeans[index];
+      Get.replace(GalleryItemController(_item), tag: _item.gid);
+      return buildGallerySliverListItem(_item, index, animation,
+          tabTag: tabTag);
+    },
   );
 }
 
@@ -236,10 +221,7 @@ Widget getGalleryList(
 }) {
   final EhConfigService ehConfigService = Get.find();
 
-  // logger.d(' getGalleryList');
-
   return Obx(() {
-    // ignore: missing_enum_constant_in_switch
     switch (ehConfigService.listMode.value) {
       case ListModeEnum.list:
         return buildGallerySliverListView(

@@ -22,8 +22,7 @@ const double kPaddingVertical = 18.0;
 
 /// 画廊列表项
 /// 标题和tag需要随设置变化重构ui
-// ignore: must_be_immutable
-class GalleryItemWidget extends StatefulWidget {
+class GalleryItemWidget extends StatelessWidget {
   const GalleryItemWidget(
       {Key? key, required this.tabTag, required this.galleryItem})
       : super(key: key);
@@ -31,29 +30,8 @@ class GalleryItemWidget extends StatefulWidget {
   final GalleryItem galleryItem;
   final dynamic tabTag;
 
-  @override
-  _GalleryItemWidgetState createState() => _GalleryItemWidgetState();
-}
-
-class _GalleryItemWidgetState extends State<GalleryItemWidget> {
-  late GalleryItemController galleryItemController;
-  @override
-  void initState() {
-    logger.v('_GalleryItemWidgetState initState');
-    super.initState();
-    galleryItemController = Get.put(GalleryItemController(widget.galleryItem),
-        tag: widget.galleryItem.gid);
-  }
-
-  @override
-  void didChangeDependencies() {
-    logger.v('_GalleryItemWidgetState didChangeDependencies');
-    super.didChangeDependencies();
-    if (Get.isRegistered<GalleryItemController>(tag: widget.galleryItem.gid)) {
-      Get.replace(GalleryItemController(widget.galleryItem),
-          tag: widget.galleryItem.gid);
-    }
-  }
+  GalleryItemController get galleryItemController =>
+      Get.find(tag: galleryItem.gid);
 
   @override
   Widget build(BuildContext context) {
@@ -66,7 +44,7 @@ class _GalleryItemWidgetState extends State<GalleryItemWidget> {
               Positioned(
                 left: 4,
                 top: 4,
-                child: Text('${widget.galleryItem.pageOfList ?? ''}',
+                child: Text('${galleryItem.pageOfList ?? ''}',
                     style: const TextStyle(
                         fontSize: 20,
                         color: CupertinoColors.secondarySystemBackground,
@@ -82,7 +60,7 @@ class _GalleryItemWidgetState extends State<GalleryItemWidget> {
         ),
       ),
       behavior: HitTestBehavior.opaque,
-      onTap: () => galleryItemController.onTap(widget.tabTag),
+      onTap: () => galleryItemController.onTap(tabTag),
       onTapDown: galleryItemController.onTapDown,
       onTapUp: galleryItemController.onTapUp,
       onTapCancel: galleryItemController.onTapCancel,
@@ -233,7 +211,7 @@ class _GalleryItemWidgetState extends State<GalleryItemWidget> {
       alignment: Alignment.center,
       child: !isLayoutLarge
           ? Hero(
-              tag: '${_item.gid}_cover_${widget.tabTag}',
+              tag: '${_item.gid}_cover_${tabTag}',
               child: image,
             )
           : image,
@@ -300,7 +278,8 @@ class _GalleryItemWidgetState extends State<GalleryItemWidget> {
 
   Widget _buildFavcatIcon() {
     return Obx(() {
-      // logger.d('${_galleryItemController.isFav}');
+      logger.v(
+          '${galleryItemController.galleryItem.gid}  isFav:${galleryItemController.isFav}');
       return Container(
         child: galleryItemController.isFav
             ? Container(
