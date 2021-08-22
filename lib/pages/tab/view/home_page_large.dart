@@ -43,10 +43,7 @@ class TabHomeLarge extends GetView<TabHomeController> {
     if (context.width >= 1024) {
       return 390;
     }
-    if (context.width > 768) {
-      return 320;
-    }
-    return 310;
+    return 320;
   }
 
   @override
@@ -54,20 +51,18 @@ class TabHomeLarge extends GetView<TabHomeController> {
     logger.d('width:${context.width} ${getSideWidth(context)}');
     return Row(
       children: [
-        Container(
+        SizedBox(
           width: getSideWidth(context),
           child: ClipRect(
             child: Navigator(
                 key: Get.nestedKey(1),
                 observers: [MainNavigatorObserver()],
-                initialRoute: EHRoutes.home,
                 onGenerateRoute: (settings) {
                   final GetPage? _route = AppPages.routes
                       .firstWhereOrNull((GetPage e) => e.name == settings.name);
                   if (_route != null &&
                       _route.name != EHRoutes.root &&
                       _route.name != EHRoutes.home) {
-                    // logger.d('_route $_route');
                     return GetPageRoute(
                       settings: settings,
                       page: _route.page,
@@ -75,7 +70,7 @@ class TabHomeLarge extends GetView<TabHomeController> {
                   } else {
                     return GetPageRoute(
                       settings: settings,
-                      page: () => TabHomeSmall(),
+                      page: () => const TabHomeSmall(),
                     );
                   }
                 }),
@@ -94,7 +89,7 @@ class TabHomeLarge extends GetView<TabHomeController> {
                   child: Navigator(
                     key: Get.nestedKey(2),
                     observers: [SecondNavigatorObserver()],
-                    initialRoute: EHRoutes.empty,
+                    // initialRoute: EHRoutes.empty,
                     onGenerateRoute: (settings) {
                       switch (settings.name) {
                         case EHRoutes.about:
@@ -216,7 +211,6 @@ class TabHomeLarge extends GetView<TabHomeController> {
                             settings: settings,
                             routeName: EHRoutes.empty,
                             page: () => const EmptyPage(),
-                            // page: () => Container(),
                             transition: Transition.fadeIn,
                           );
                       }
@@ -226,7 +220,6 @@ class TabHomeLarge extends GetView<TabHomeController> {
               ),
             ],
           ),
-          // child: CupertinoPageScaffold(child: Container()),
         ),
       ],
     );

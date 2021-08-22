@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 class TabHomeSmall extends GetView<TabHomeController> {
+  const TabHomeSmall({Key? key}) : super(key: key);
   @override
   Widget build(BuildContext context) {
     controller.init(inContext: context);

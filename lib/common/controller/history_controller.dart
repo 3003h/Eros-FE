@@ -70,12 +70,13 @@ class HistoryController extends GetxController {
       historys.insert(0, _item);
       hiveHelper.addHistory(_item);
     }
-    _hisViewController.sliverAnimatedListKey.currentState?.insertItem(
-      0,
-      duration: Duration(milliseconds: 400),
-    );
+    // _hisViewController.sliverAnimatedListKey?.currentState?.insertItem(
+    //   0,
+    //   duration: Duration(milliseconds: 300),
+    // );
 
-    // update();
+    logger.d('add ${galleryItem.gid} update1');
+    update();
 
     if (sync) {
       // 节流函数 最多每分钟一次同步
@@ -97,7 +98,7 @@ class HistoryController extends GetxController {
       _index,
       (context, Animation<double> animation) =>
           buildDelGallerySliverListItem(_item, _index, animation),
-      duration: Duration(milliseconds: 400),
+      duration: Duration(milliseconds: 300),
     );
 
     historys.removeAt(_index);
@@ -151,7 +152,7 @@ class HistoryController extends GetxController {
     if (!webdavController.syncHistory) {
       return;
     }
-    //
+
     final List<HistoryIndexGid?> listLocalIndex = historys
         .map((e) => HistoryIndexGid(t: e.lastViewTime, g: e.gid))
         .toList();
@@ -191,7 +192,7 @@ class HistoryController extends GetxController {
 
       return (eLocal.t ?? 0) > (_eRemote.t ?? 0);
     });
-    logger.v('localNewer ${localNewer.map((e) => e?.g)}');
+    logger.d('localNewer ${localNewer.map((e) => e?.g)}');
 
     // 远程时间更大的画廊
     final remoteNewer = listRemoteIndex.where((eRemote) {
@@ -211,7 +212,7 @@ class HistoryController extends GetxController {
 
       return (eRemote.t ?? 0) > (_eLocal.t ?? 0);
     });
-    logger.v('remoteNewer ${remoteNewer.map((e) => e.g)}');
+    logger.d('remoteNewer ${remoteNewer.map((e) => e.g)}');
 
     await _downloadHistorys2(remoteNewer.toList());
 
@@ -226,7 +227,7 @@ class HistoryController extends GetxController {
         .where((element) => !realRemoteList.contains(element?.g))
         .toSet()
           ..addAll(localNewer);
-    logger.v('remoteNeeds ${remoteNeeds.map((e) => e?.g).toList()}');
+    logger.d('remoteNeeds ${remoteNeeds.map((e) => e?.g).toList()}');
 
     await _uploadHistorys2(remoteNeeds.toList());
 

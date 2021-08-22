@@ -38,7 +38,11 @@ class _HistoryTabState extends State<HistoryTab> {
 
   @override
   Widget build(BuildContext context) {
+    logger.d('build Historyview');
     final String _title = L10n.of(context).tab_history;
+
+    // final sliverAnimatedListKey = GlobalKey<SliverAnimatedListState>();
+    // controller.sliverAnimatedListKey = sliverAnimatedListKey;
 
     final Widget sliverNavigationBar = CupertinoSliverNavigationBar(
       transitionBetweenRoutes: false,
@@ -114,7 +118,6 @@ class _HistoryTabState extends State<HistoryTab> {
           sliver: GetBuilder<HistoryController>(
             init: HistoryController(),
             builder: (logic) {
-              logger.d('build Historyview');
               return getGalleryList(
                 logic.historys,
                 controller.tabTag,
@@ -130,6 +133,6 @@ class _HistoryTabState extends State<HistoryTab> {
         // navigationBar: navigationBar,
         child: CupertinoScrollbar(
             controller: PrimaryScrollController.of(context),
-            child: SizeCacheWidget(child: customScrollView)));
+            child: customScrollView));
   }
 }
