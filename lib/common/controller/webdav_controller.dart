@@ -92,7 +92,7 @@ class WebdavController extends GetxController {
     }
     try {
       final list = await client!.readDir(dir);
-      logger.d('$dir\n${list.map((e) => '${e.name} ${e.mTime}').join('\n')}');
+      logger.v('$dir\n${list.map((e) => '${e.name} ${e.mTime}').join('\n')}');
     } on DioError catch (err) {
       if (err.response?.statusCode == 404) {
         logger.d('dir 404, mkdir...');

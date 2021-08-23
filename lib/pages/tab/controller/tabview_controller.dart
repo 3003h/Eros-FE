@@ -1,5 +1,6 @@
 import 'dart:ui' show ImageFilter;
 
+import 'package:collection/collection.dart';
 import 'package:custom_pop_up_menu/custom_pop_up_menu.dart';
 import 'package:dio/dio.dart';
 import 'package:fehviewer/common/service/ehconfig_service.dart';
@@ -61,7 +62,6 @@ class TabViewController extends GetxController
 
   final CancelToken cancelToken = CancelToken();
 
-  // GlobalKey<SliverAnimatedListState>? sliverAnimatedListKey;
   final GlobalKey<SliverAnimatedListState> sliverAnimatedListKey =
       GlobalKey<SliverAnimatedListState>();
 
@@ -76,11 +76,13 @@ class TabViewController extends GetxController
   }
 
   set curFavcat(String? val) {
-    logger.d('set curFavcat $val');
     _curFavcat = val;
   }
 
   String get currToplist => topListVal[_ehConfigService.toplist] ?? '15';
+
+  bool isLoadPrevious = false;
+  int lastTopitemIndex = 0;
 
   @override
   void onReady() {
@@ -160,13 +162,32 @@ class TabViewController extends GetxController
     change(tuple.item1, status: RxStatus.success());
   }
 
-  Future<void> onRefresh() async {
+  Future<void> onRefresh({GlobalKey? centerKey}) async {
     isBackgroundRefresh = false;
     if (!cancelToken.isCancelled) {
       cancelToken.cancel();
     }
     change(state, status: RxStatus.success());
-    await reloadData();
+    if (isLoadPrevious) {
+      logger.d('isLoadPrevious');
+      await loadPrevious();
+
+      WidgetsBinding.instance?.addPostFrameCallback((_) {
+        Future.delayed(const Duration(milliseconds: 50)).then(
+          (value) {
+            //获取position
+            RenderBox? box =
+                centerKey?.currentContext?.findRenderObject() as RenderBox?;
+            Offset? offset = box?.localToGlobal(Offset.zero);
+            logger.d('offset $offset');
+
+            Scrollable.ensureVisible(centerKey!.currentContext!);
+          },
+        );
+      });
+    } else {
+      await reloadData();
+    }
   }
 
   Future<void> reLoadDataFirst() async {
@@ -184,12 +205,14 @@ class TabViewController extends GetxController
       return;
     }
 
+    logger.d('loadDataMore .....');
+
     final int _catNum = _ehConfigService.catFilter.value;
 
     // 增加延时 避免build期间进行 setState
     await Future<void>.delayed(const Duration(milliseconds: 100));
 
-    // logger.d('${curPage.value + 1}');
+    logger.d('load page: ${curPage.value + 1}');
 
     final String fromGid = state?.last.gid ?? '0';
     try {
@@ -208,22 +231,78 @@ class TabViewController extends GetxController
         return;
       }
 
-      final List<GalleryItem> galleryItemBeans = tuple.item1;
+      final List<GalleryItem> rultList = tuple.item1;
 
-      if (galleryItemBeans.isNotEmpty &&
-          state?.indexWhere((GalleryItem element) =>
-                  element.gid == galleryItemBeans.first.gid) ==
+      logger.d('ori len:${state?.length}');
+
+      if (rultList.isNotEmpty &&
+          state?.indexWhere((GalleryItem e) => e.gid == rultList.first.gid) ==
               -1) {
-        state?.addAll(galleryItemBeans);
-
+        // state?.addAll(rultList);
         maxPage = tuple.item2;
+
+        // logger.d('add all to end ${state?.length}');
       }
       // 成功才+1
       curPage.value += 1;
       pageState = PageState.None;
-      update();
+
+      final insertIndex = state?.length ?? 0;
+
+      change([...?state, ...rultList], status: RxStatus.success());
+
+      for (final item in rultList) {
+        sliverAnimatedListKey.currentState?.insertItem(insertIndex);
+      }
     } catch (e, stack) {
       pageState = PageState.LoadingException;
+      rethrow;
+    }
+  }
+
+  // 加载上一页
+  Future<void> loadPrevious() async {
+    if (pageState == PageState.Loading) {
+      return;
+    }
+
+    final int _catNum = _ehConfigService.catFilter.value;
+
+    final lastTopitemGid = state?.first.gid ?? '';
+    logger.d('lastTopitemGid $lastTopitemGid');
+
+    // 增加延时 避免build期间进行 setState
+    await Future<void>.delayed(const Duration(milliseconds: 100));
+
+    try {
+      final Tuple2<List<GalleryItem>, int>? tuple = await fetchNormal?.call(
+        page: curPage.value - 1,
+        cats: cats ?? _catNum,
+        refresh: true,
+        cancelToken: cancelToken,
+        favcat: curFavcat,
+        toplist: currToplist,
+      );
+
+      if (tuple == null) {
+        return;
+      }
+
+      final List<GalleryItem> galleryItemBeans = tuple.item1;
+
+      if (galleryItemBeans.isNotEmpty) {
+        state?.insertAll(0, galleryItemBeans);
+
+        maxPage = tuple.item2;
+
+        lastTopitemIndex =
+            state?.indexWhere((e) => e.gid == lastTopitemGid) ?? 0;
+        logger.d('lastTopitemIndex $lastTopitemIndex');
+      }
+      // 成功才-1
+      curPage.value -= 1;
+      update();
+    } catch (e, stack) {
       rethrow;
     }
   }
@@ -234,19 +313,21 @@ class TabViewController extends GetxController
     final int _catNum = _ehConfigService.catFilter.value;
 
     change(state, status: RxStatus.loading());
-    fetchNormal
-        ?.call(
+    final tuple = await fetchNormal?.call(
       page: page,
       cats: cats ?? _catNum,
       refresh: true,
       cancelToken: cancelToken,
       favcat: curFavcat,
       toplist: currToplist,
-    )
-        .then((tuple) {
-      curPage.value = page;
+    );
+
+    isLoadPrevious = page > 1;
+
+    curPage.value = page;
+    if (tuple != null) {
       change(tuple.item1, status: RxStatus.success());
-    });
+    }
   }
 
   /// 跳转页码

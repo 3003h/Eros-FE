@@ -265,6 +265,59 @@ class SearchPageController extends TabViewController {
     }
   }
 
+  @override
+  Future<void> loadPrevious({bool cleanSearch = false}) async {
+    logger5.i('$searchPageCtrlDepth loadDataMore');
+    // 增加延时 避免build期间进行 setState
+    await Future<void>.delayed(const Duration(milliseconds: 200));
+    if (pageState == PageState.Loading) {
+      logger.d('loadDataMore return');
+      return;
+    }
+
+    if (cleanSearch) {
+      _search = '';
+    }
+
+    final int _catNum = _ehConfigService.catFilter.value;
+    pageState = PageState.Loading;
+
+    try {
+      final String? fromGid = state?.last.gid;
+      final Tuple2<List<GalleryItem>, int> tuple =
+          searchType != SearchType.favorite
+              ? await Api.getGallery(
+                  page: curPage.value - 1,
+                  fromGid: fromGid,
+                  cats: _catNum,
+                  serach: _search,
+                  searchType: searchType,
+                  refresh: true,
+                )
+              : await Api.getFavorite(
+                  page: curPage.value - 1,
+                  favcat: _favoriteViewController.curFavcat,
+                  serach: _search,
+                  refresh: true,
+                );
+      final List<GalleryItem> gallerItemBeans = tuple.item1
+          .map((GalleryItem e) => e.copyWith(pageOfList: curPage.value - 1))
+          .toList();
+
+      state?.insertAll(0, gallerItemBeans);
+
+      logger.d('insert gallerItemBeans first ${gallerItemBeans.first.gid} ');
+
+      maxPage = tuple.item2;
+      curPage.value -= 1;
+      pageState = PageState.None;
+      update();
+    } catch (e, stack) {
+      pageState = PageState.LoadingException;
+      rethrow;
+    }
+  }
+
   /// 获取数据
   Future<List<GalleryItem>> _fetchData({bool refresh = false}) async {
     logger.v('$searchPageCtrlDepth _fetchData');
@@ -315,6 +368,7 @@ class SearchPageController extends TabViewController {
                 serach: _search,
                 refresh: true,
               );
+    isLoadPrevious = page > 1;
     curPage.value = page;
     change(
         tuple.item1

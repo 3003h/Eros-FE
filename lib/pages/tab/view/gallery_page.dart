@@ -9,6 +9,7 @@ import 'package:fehviewer/route/navigator_util.dart';
 import 'package:fehviewer/utils/cust_lib/persistent_header_builder.dart';
 import 'package:fehviewer/utils/cust_lib/sliver/sliver_persistent_header.dart';
 import 'package:fehviewer/utils/logger.dart';
+import 'package:fehviewer/utils/toast.dart';
 import 'package:fehviewer/widget/refresh.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -17,6 +18,7 @@ import 'package:keframe/size_cache_widget.dart';
 import 'package:line_icons/line_icons.dart';
 
 import '../comm.dart';
+import 'constants.dart';
 import 'tab_base.dart';
 
 class GalleryListTab extends StatefulWidget {
@@ -30,6 +32,8 @@ class _GalleryListTabState extends State<GalleryListTab> {
   final controller = Get.find<GalleryViewController>();
   final EhTabController ehTabController = EhTabController();
 
+  GlobalKey centerKey = GlobalKey();
+
   @override
   void initState() {
     super.initState();
@@ -38,6 +42,22 @@ class _GalleryListTabState extends State<GalleryListTab> {
     ehTabController.scrollToTopRefreshCall =
         () => controller.srcollToTopRefresh(context);
     tabPages.scrollControllerMap[controller.tabTag] = ehTabController;
+
+    WidgetsBinding.instance?.addPostFrameCallback((_) {
+      final _scrollController = PrimaryScrollController.of(context);
+      _scrollController?.addListener(() async {
+        if (_scrollController.position.pixels ==
+            _scrollController.position.maxScrollExtent) {
+          if (controller.curPage < controller.maxPage - 1) {
+            // 加载更多
+            await controller.loadDataMore();
+          } else {
+            // 没有更多了
+            showToast('No More');
+          }
+        }
+      });
+    });
   }
 
   @override
@@ -202,10 +222,9 @@ class _GalleryListTabState extends State<GalleryListTab> {
     );
 
     final Widget customScrollView = CustomScrollView(
-      cacheExtent: 500,
+      cacheExtent: kTabViewCacheExtent,
       physics: const AlwaysScrollableScrollPhysics(),
       slivers: <Widget>[
-        // getSliverNavigationBar(),
         SliverFloatingPinnedPersistentHeader(
           delegate: SliverFloatingPinnedPersistentHeaderBuilder(
             minExtentProtoType: SizedBox(
@@ -216,7 +235,7 @@ class _GalleryListTabState extends State<GalleryListTab> {
           ),
         ),
         EhCupertinoSliverRefreshControl(
-          onRefresh: controller.onRefresh,
+          onRefresh: () => controller.onRefresh(centerKey: centerKey),
         ),
         SliverSafeArea(
           top: false,
@@ -284,7 +303,10 @@ class _GalleryListTabState extends State<GalleryListTab> {
             controller.tabTag,
             maxPage: controller.maxPage,
             curPage: controller.curPage.value,
-            loadMord: controller.loadDataMore,
+            // loadMord: controller.loadDataMore,
+            key: controller.sliverAnimatedListKey,
+            centerKey: centerKey,
+            lastTopitemIndex: controller.lastTopitemIndex,
           );
         },
         onLoading: SliverFillRemaining(

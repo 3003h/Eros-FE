@@ -18,6 +18,7 @@ import 'package:fehviewer/pages/tab/view/tab_base.dart';
 import 'package:fehviewer/utils/cust_lib/persistent_header_builder.dart';
 import 'package:fehviewer/utils/cust_lib/sliver/sliver_persistent_header.dart';
 import 'package:fehviewer/utils/logger.dart';
+import 'package:fehviewer/utils/toast.dart';
 import 'package:fehviewer/utils/vibrate.dart';
 import 'package:fehviewer/widget/refresh.dart';
 import 'package:flutter/cupertino.dart';
@@ -25,6 +26,8 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:keframe/size_cache_widget.dart';
 import 'package:line_icons/line_icons.dart';
+
+import 'constants.dart';
 
 const CupertinoDynamicColor _kClearButtonColor =
     CupertinoDynamicColor.withBrightness(
@@ -58,6 +61,29 @@ class _GallerySearchPageState extends State<GallerySearchPage> {
     SearchPageController(),
     tag: searchPageCtrlDepth,
   );
+
+  GlobalKey centerKey = GlobalKey();
+
+  @override
+  void initState() {
+    super.initState();
+
+    WidgetsBinding.instance?.addPostFrameCallback((_) {
+      final _scrollController = PrimaryScrollController.of(context);
+      _scrollController?.addListener(() async {
+        if (_scrollController.position.pixels ==
+            _scrollController.position.maxScrollExtent) {
+          if (controller.curPage < controller.maxPage - 1) {
+            // 加载更多
+            await controller.loadDataMore();
+          } else {
+            // 没有更多了
+            showToast('No More');
+          }
+        }
+      });
+    });
+  }
 
   @override
   void dispose() {
@@ -109,7 +135,7 @@ class _GallerySearchPageState extends State<GallerySearchPage> {
     // logger.v('_buildSearchRult');
     return SizeCacheWidget(
       child: CustomScrollView(
-        cacheExtent: 500,
+        cacheExtent: kTabViewCacheExtent,
         slivers: <Widget>[
           // SliverToBoxAdapter(
           //     child: getSearchTextFieldIn().paddingOnly(top: 50)),
@@ -539,7 +565,10 @@ class _GallerySearchPageState extends State<GallerySearchPage> {
           controller.tabIndex,
           maxPage: controller.maxPage,
           curPage: controller.curPage.value,
-          loadMord: controller.loadDataMore,
+          // loadMord: controller.loadDataMore,
+          centerKey: centerKey,
+          key: controller.sliverAnimatedListKey,
+          lastTopitemIndex: controller.lastTopitemIndex,
         );
       },
       onLoading: SliverFillRemaining(

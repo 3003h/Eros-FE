@@ -155,7 +155,7 @@ final Logger loggerForGetx = Logger(
 
 void loggerGetx(String text, {bool isError = false}) {
   if (isError) {
-    loggerNoStack.e('[GETX] ==> $text');
+    // loggerSimple.e('[GETX] ==> $text');
   } else if (Get.isLogEnable) {
     loggerForGetx.d('[GETX] ==> $text');
   }
