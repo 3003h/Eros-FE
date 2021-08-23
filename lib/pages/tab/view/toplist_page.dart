@@ -7,6 +7,7 @@ import 'package:fehviewer/pages/tab/view/tab_base.dart';
 import 'package:fehviewer/utils/cust_lib/persistent_header_builder.dart';
 import 'package:fehviewer/utils/cust_lib/sliver/sliver_persistent_header.dart';
 import 'package:fehviewer/utils/logger.dart';
+import 'package:fehviewer/utils/toast.dart';
 import 'package:fehviewer/widget/refresh.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -15,6 +16,7 @@ import 'package:keframe/size_cache_widget.dart';
 import 'package:line_icons/line_icons.dart';
 
 import '../comm.dart';
+import 'constants.dart';
 import 'gallery_base.dart';
 
 class ToplistTab extends StatefulWidget {
@@ -28,6 +30,8 @@ class _ToplistTabState extends State<ToplistTab> {
   final controller = Get.find<TopListViewController>();
   final EhTabController ehTabController = EhTabController();
 
+  GlobalKey centerKey = GlobalKey();
+
   @override
   void initState() {
     super.initState();
@@ -36,6 +40,22 @@ class _ToplistTabState extends State<ToplistTab> {
     ehTabController.scrollToTopRefreshCall =
         () => controller.srcollToTopRefresh(context);
     tabPages.scrollControllerMap[controller.tabTag] = ehTabController;
+
+    WidgetsBinding.instance?.addPostFrameCallback((_) {
+      final _scrollController = PrimaryScrollController.of(context);
+      _scrollController?.addListener(() async {
+        if (_scrollController.position.pixels ==
+            _scrollController.position.maxScrollExtent) {
+          if (controller.curPage < controller.maxPage - 1) {
+            // 加载更多
+            await controller.loadDataMore();
+          } else {
+            // 没有更多了
+            showToast('No More');
+          }
+        }
+      });
+    });
   }
 
   @override
@@ -123,8 +143,7 @@ class _ToplistTabState extends State<ToplistTab> {
     });
 
     final Widget customScrollView = CustomScrollView(
-      cacheExtent: 500,
-      // controller: scrollController,
+      cacheExtent: kTabViewCacheExtent,
       physics: const AlwaysScrollableScrollPhysics(),
       slivers: <Widget>[
         // sliverNavigationBar,
@@ -163,7 +182,10 @@ class _ToplistTabState extends State<ToplistTab> {
         controller.tabTag,
         maxPage: controller.maxPage,
         curPage: controller.curPage.value,
-        loadMord: controller.loadDataMore,
+        // loadMord: controller.loadDataMore,
+        centerKey: centerKey,
+        key: controller.sliverAnimatedListKey,
+        lastTopitemIndex: controller.lastTopitemIndex,
       ),
       onLoading: SliverFillRemaining(
         child: Container(

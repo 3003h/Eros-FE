@@ -20,6 +20,8 @@ SliverPadding buildWaterfallFlow(
   required int curPage,
   VoidCallback? loadMord,
   bool large = false,
+  Key? centerKey,
+  int? lastTopitemIndex,
 }) {
   final double _padding = large
       ? EHConst.waterfallFlowLargeCrossAxisSpacing
@@ -58,12 +60,16 @@ SliverPadding buildWaterfallFlow(
 
           return large
               ? GalleryItemFlowLarge(
-                  key: ValueKey(_item.gid),
+                  key: index == lastTopitemIndex
+                      ? centerKey
+                      : ValueKey(_item.gid),
                   galleryItem: _item,
                   tabTag: tabTag,
                 )
               : GalleryItemFlow(
-                  key: ValueKey(_item.gid),
+                  key: index == lastTopitemIndex
+                      ? centerKey
+                      : ValueKey(_item.gid),
                   galleryItem: _item,
                   tabTag: tabTag,
                 );
@@ -74,19 +80,23 @@ SliverPadding buildWaterfallFlow(
   );
 }
 
-Widget _listItemWiget(GalleryItem _item, {dynamic tabTag}) {
+Widget _listItemWiget(
+  GalleryItem _item, {
+  dynamic tabTag,
+  Key? centerKey,
+}) {
   final EhConfigService ehConfigService = Get.find();
 
   switch (ehConfigService.listMode.value) {
     case ListModeEnum.list:
       return GalleryItemWidget(
-        key: ValueKey(_item.gid),
+        key: centerKey ?? ValueKey(_item.gid),
         galleryItem: _item,
         tabTag: tabTag,
       );
     case ListModeEnum.simpleList:
       return GalleryItemSimpleWidget(
-        key: ValueKey(_item.gid),
+        key: centerKey ?? ValueKey(_item.gid),
         galleryItem: _item,
         tabTag: tabTag,
       );
@@ -134,13 +144,22 @@ Widget _buildDelSliverAnimatedListItem(
 }
 
 Widget buildGallerySliverListItem(
-    GalleryItem _item, int index, Animation<double> _animation,
-    {dynamic tabTag}) {
+  GalleryItem _item,
+  int index,
+  Animation<double> _animation, {
+  dynamic tabTag,
+  int? oriFirstIndex,
+  Key? centerKey,
+}) {
   return _buildSliverAnimatedListItem(
     _item,
     index,
     _animation,
-    child: _listItemWiget(_item, tabTag: tabTag),
+    child: _listItemWiget(
+      _item,
+      tabTag: tabTag,
+      centerKey: index == oriFirstIndex ? centerKey : null,
+    ),
   );
 }
 
@@ -162,6 +181,8 @@ Widget buildGallerySliverListView(
   int curPage = 0,
   VoidCallback? loadMord,
   Key? key,
+  Key? centerKey,
+  int? lastTopitemIndex,
 }) {
   return SliverAnimatedList(
     key: key,
@@ -170,15 +191,22 @@ Widget buildGallerySliverListView(
         (BuildContext context, int index, Animation<double> animation) {
       if (maxPage != null) {
         if (index == gallerItemBeans.length - 1 && curPage < maxPage - 1) {
-          logger.v('$index ${gallerItemBeans.length}');
+          // logger.d(
+          //     'index:$index oriEnd:${gallerItemBeans.length} curPage:$curPage maxPage:$maxPage');
 //            加载更多数据的回调
-          loadMord?.call();
+//           loadMord?.call();
         }
       }
       final GalleryItem _item = gallerItemBeans[index];
       Get.replace(GalleryItemController(_item), tag: _item.gid);
-      return buildGallerySliverListItem(_item, index, animation,
-          tabTag: tabTag);
+      return buildGallerySliverListItem(
+        _item,
+        index,
+        animation,
+        tabTag: tabTag,
+        centerKey: centerKey,
+        oriFirstIndex: lastTopitemIndex,
+      );
     },
   );
 }
@@ -190,6 +218,8 @@ Widget buildGallerySliverListSimpleView(
   required int curPage,
   VoidCallback? loadMord,
   Key? key,
+  Key? centerKey,
+  int? lastTopitemIndex,
 }) {
   return SliverAnimatedList(
     key: key,
@@ -205,8 +235,14 @@ Widget buildGallerySliverListSimpleView(
       }
       final GalleryItem _item = gallerItemBeans[index];
       Get.replace(GalleryItemController(_item), tag: _item.gid);
-      return buildGallerySliverListItem(_item, index, animation,
-          tabTag: tabTag);
+      return buildGallerySliverListItem(
+        _item,
+        index,
+        animation,
+        tabTag: tabTag,
+        centerKey: centerKey,
+        oriFirstIndex: lastTopitemIndex,
+      );
     },
   );
 }
@@ -218,8 +254,12 @@ Widget getGalleryList(
   int? curPage,
   VoidCallback? loadMord,
   Key? key,
+  Key? centerKey,
+  int? lastTopitemIndex,
 }) {
   final EhConfigService ehConfigService = Get.find();
+
+  logger.v('lastTopitemIndex $lastTopitemIndex');
 
   return Obx(() {
     switch (ehConfigService.listMode.value) {
@@ -231,6 +271,8 @@ Widget getGalleryList(
           curPage: curPage ?? 0,
           loadMord: loadMord,
           key: key,
+          centerKey: centerKey,
+          lastTopitemIndex: lastTopitemIndex,
         );
       case ListModeEnum.waterfall:
         return buildWaterfallFlow(
@@ -239,6 +281,8 @@ Widget getGalleryList(
           maxPage: maxPage,
           curPage: curPage ?? 0,
           loadMord: loadMord,
+          centerKey: centerKey,
+          lastTopitemIndex: lastTopitemIndex,
         );
       case ListModeEnum.waterfallLarge:
         return buildWaterfallFlow(
@@ -248,6 +292,8 @@ Widget getGalleryList(
           curPage: curPage ?? 0,
           loadMord: loadMord,
           large: true,
+          centerKey: centerKey,
+          lastTopitemIndex: lastTopitemIndex,
         );
       case ListModeEnum.simpleList:
         return buildGallerySliverListSimpleView(
@@ -257,6 +303,8 @@ Widget getGalleryList(
           curPage: curPage ?? 0,
           loadMord: loadMord,
           key: key,
+          centerKey: centerKey,
+          lastTopitemIndex: lastTopitemIndex,
         );
     }
   });
