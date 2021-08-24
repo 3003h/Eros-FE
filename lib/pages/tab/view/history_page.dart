@@ -38,7 +38,7 @@ class _HistoryTabState extends State<HistoryTab> {
 
   @override
   Widget build(BuildContext context) {
-    logger.d('build Historyview');
+    logger.v('build Historyview');
     final String _title = L10n.of(context).tab_history;
 
     final Widget sliverNavigationBar = CupertinoSliverNavigationBar(

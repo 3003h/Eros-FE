@@ -368,7 +368,7 @@ Future<GalleryItem> parseGalleryDetail(String response,
 
   // uploader
   final _uploader = document.querySelector('#gdn > a')?.text.trim() ?? '';
-  logger.d('_uploader $_uploader');
+  logger.v('_uploader $_uploader');
 
   galleryItem = galleryItem.copyWith(
     imgUrl: _imageUrl,

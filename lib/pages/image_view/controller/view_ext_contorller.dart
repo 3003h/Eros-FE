@@ -191,7 +191,7 @@ class ViewExtController extends GetxController {
     FlutterStatusbarManager.setTranslucent(false);
 
     // 恢复系统旋转设置
-    logger.d('恢复系统旋转设置');
+    logger.v('恢复系统旋转设置');
     OrientationPlugin.setPreferredOrientations(DeviceOrientation.values);
     // OrientationPlugin.forceOrientation(DeviceOrientation.portraitUp);
   }

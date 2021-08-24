@@ -62,7 +62,7 @@ class _GalleryListTabState extends State<GalleryListTab> {
 
   @override
   Widget build(BuildContext context) {
-    logger.d('build GalleryListTab');
+    logger.v('build GalleryListTab');
 
     Widget getSliverNavigationBar() {
       return CupertinoSliverNavigationBar(

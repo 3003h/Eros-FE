@@ -170,6 +170,8 @@ class ImageExt extends GetView<ViewExtController> {
 
   @override
   Widget build(BuildContext context) {
+    logger.d('ser:$ser, url:$url');
+
     return ExtendedImage.network(
       url,
       fit: BoxFit.contain,
@@ -988,8 +990,11 @@ Future<void> showShareActionSheet(
                 onPressed: () async {
                   logger.v('保存到手机');
                   Get.back();
-                  final bool rult = await Api.saveImage(context,
-                      imageUrl: imageUrl, filePath: filePath);
+                  final bool rult = await Api.saveImage(
+                    context: context,
+                    imageUrl: imageUrl,
+                    filePath: filePath,
+                  );
                   if (rult) {
                     showToast(L10n.of(context).saved_successfully);
                   }

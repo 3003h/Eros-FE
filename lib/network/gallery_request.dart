@@ -1032,8 +1032,8 @@ class Api {
   }
 
   /// 保存图片到相册
-  static Future<bool> saveImage(
-    BuildContext context, {
+  static Future<bool> saveImage({
+    BuildContext? context,
     String? imageUrl,
     String? filePath,
   }) async {
@@ -1077,7 +1077,8 @@ class Api {
       logger.d('statusPhotos $statusPhotos , photosAddOnly $statusPhotosAdd');
 
       if (statusPhotos.isPermanentlyDenied &&
-          statusPhotosAdd.isPermanentlyDenied) {
+          statusPhotosAdd.isPermanentlyDenied &&
+          context != null) {
         _jumpToAppSettings(context);
         return false;
       } else {
@@ -1102,10 +1103,11 @@ class Api {
         if (await Permission.storage.request().isGranted) {
           // _saveImage(imageUrl);
           return _saveImageExtended(imageUrl: imageUrl, filePath: filePath);
-        } else {
+        } else if (context != null) {
           await _jumpToAppSettings(context);
           return false;
         }
+        return false;
       } else {
         if (await Permission.storage.request().isGranted) {
           // Either the permission was already granted before or the user just granted it.
@@ -1116,6 +1118,25 @@ class Api {
         }
       }
     }
+  }
+
+  static Future<bool> saveImageFromExtendedCache({
+    required String imageUrl,
+    required String savePath,
+  }) async {
+    final imageFile = await getCachedImageFile(imageUrl);
+    if (imageFile == null) {
+      logger.d('not from cache \n$imageUrl');
+      return false;
+    }
+
+    logger.d('from cache \n$imageUrl');
+
+    // final imageBytes = await imageFile.readAsBytes();
+    // final _name = imageUrl.substring(imageUrl.lastIndexOf('/') + 1);
+
+    final destFile = imageFile.copySync(savePath);
+    return true;
   }
 
   static Future<bool> _saveImageExtended({
@@ -1150,7 +1171,7 @@ class Api {
 
         logger.v('file path ${file.path}');
 
-        imageBytes = await file.readAsBytes();
+        // imageBytes = await file.readAsBytes();
 
         _name = imageUrl.substring(imageUrl.lastIndexOf('/') + 1);
         logger.v('_name $_name url $imageUrl');

@@ -226,7 +226,7 @@ class HistoryController extends GetxController {
         return (eRemote.t ?? 0) > (_eLocal.t ?? 0);
       },
     );
-    logger.d('remoteNewer ${remoteNewer.map((e) => e.g).toList()}');
+    logger.v('remoteNewer ${remoteNewer.map((e) => e.g).toList()}');
 
     await _downloadHistorys(remoteNewer.toSet().toList());
 
