@@ -74,10 +74,15 @@ class NavigatorUtil {
 
     Get.replace(SearchRepository(searchType: searchType));
 
-    await Get.to(
-      () => GallerySearchPage(),
+    // await Get.to(
+    //   () => GallerySearchPage(),
+    //   id: isLayoutLarge ? 1 : null,
+    //   transition: fromTabItem ? Transition.fadeIn : Transition.cupertino,
+    // );
+
+    await Get.toNamed(
+      EHRoutes.search,
       id: isLayoutLarge ? 1 : null,
-      transition: fromTabItem ? Transition.fadeIn : Transition.cupertino,
     );
 
     Get.find<DepthService>().popSearchPageCtrl();

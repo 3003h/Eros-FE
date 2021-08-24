@@ -214,7 +214,8 @@ class _ToplistTabState extends State<ToplistTab> {
     return SliverToBoxAdapter(
       child: Obx(() => Container(
           alignment: Alignment.center,
-          padding: const EdgeInsets.only(top: 50, bottom: 100),
+          padding: EdgeInsets.only(
+              top: 50, bottom: 50.0 + context.mediaQueryPadding.bottom),
           child: () {
             switch (controller.pageState) {
               case PageState.None:

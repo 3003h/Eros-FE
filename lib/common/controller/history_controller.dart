@@ -64,30 +64,37 @@ class HistoryController extends GetxController {
     if (_curIndex >= 0) {
       historys.removeAt(_curIndex);
       if (_curIndex > 0 && isListView) {
+        // removeItem 动画
         _hisViewController.sliverAnimatedListKey.currentState?.removeItem(
             _curIndex,
             (context, Animation<double> animation) =>
                 buildDelGallerySliverListItem(_item, _curIndex, animation));
       }
 
-      historys.insert(0, _item);
+      // historys.insert(0, _item);
+      _historys.add(_item);
       if (_curIndex > 0 && isListView) {
+        // insertItem 动画
         _hisViewController.sliverAnimatedListKey.currentState?.insertItem(0);
       }
 
       hiveHelper.addHistory(_item);
     } else {
-      historys.insert(0, _item);
+      // historys.insert(0, _item);
+      _historys.add(_item);
+      final insertIndex = historys.indexOf(_item);
       if (isListView) {
-        _hisViewController.sliverAnimatedListKey.currentState?.insertItem(0);
+        _hisViewController.sliverAnimatedListKey.currentState
+            ?.insertItem(insertIndex);
       }
       hiveHelper.addHistory(_item);
     }
 
     logger.v('add ${galleryItem.gid} update1');
-    if (!isListView) {
-      update();
-    }
+    update();
+    // if (!isListView) {
+    //   update();
+    // }
 
     if (sync) {
       // 节流函数 最多每分钟一次同步
