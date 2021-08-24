@@ -106,8 +106,6 @@ Widget _listItemWiget(
 }
 
 Widget _buildSliverAnimatedListItem(
-  GalleryItem _item,
-  int index,
   Animation<double> _animation, {
   required Widget child,
 }) {
@@ -121,8 +119,6 @@ Widget _buildSliverAnimatedListItem(
 }
 
 Widget _buildDelSliverAnimatedListItem(
-  GalleryItem _item,
-  int index,
   Animation<double> _animation, {
   required Widget child,
 }) {
@@ -152,8 +148,6 @@ Widget buildGallerySliverListItem(
   Key? centerKey,
 }) {
   return _buildSliverAnimatedListItem(
-    _item,
-    index,
     _animation,
     child: _listItemWiget(
       _item,
@@ -167,8 +161,6 @@ Widget buildDelGallerySliverListItem(
     GalleryItem _item, int index, Animation<double> _animation,
     {dynamic tabTag}) {
   return _buildDelSliverAnimatedListItem(
-    _item,
-    index,
     _animation,
     child: _listItemWiget(_item, tabTag: tabTag),
   );
