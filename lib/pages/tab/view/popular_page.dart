@@ -40,7 +40,7 @@ class _PopularListTabState extends State<PopularListTab> {
 
   @override
   Widget build(BuildContext context) {
-    logger.d('build PopularListTab');
+    logger.v('build PopularListTab');
     String _title = L10n.of(context).tab_popular;
 
     final Widget sliverNavigationBar = CupertinoSliverNavigationBar(

@@ -456,7 +456,7 @@ class DownloadController extends GetxController {
     };
 
     try {
-      await Api.download(
+      await _download(
         _imageUrl,
         path.join(downloadPath, _fileName),
         cancelToken: cancelToken,
@@ -489,6 +489,36 @@ class DownloadController extends GetxController {
           progressCallback: _progressCallback,
         );
       }
+    }
+  }
+
+  Future _download(
+    String url,
+    String path, {
+    CancelToken? cancelToken,
+    VoidCallback? onDownloadComplete,
+    ProgressCallback? progressCallback,
+  }) async {
+    bool formCache = false;
+    // 根据url读取缓存 存在的话直接将缓存写文件
+    try {
+      formCache =
+          await Api.saveImageFromExtendedCache(imageUrl: url, savePath: path);
+    } catch (e) {
+      logger.e('$e');
+      formCache = false;
+    }
+
+    if (!formCache) {
+      await Api.download(
+        url,
+        path,
+        cancelToken: cancelToken,
+        onDownloadComplete: onDownloadComplete,
+        progressCallback: progressCallback,
+      );
+    } else {
+      onDownloadComplete?.call();
     }
   }
 
@@ -840,7 +870,7 @@ class DownloadController extends GetxController {
 
     dState.downloadSpeeds[gid] = renderSize(speed);
 
-    loggerSimple.d('speed:${renderSize(speed)}\n${lastCountsTop.join(',')}');
+    loggerSimple.v('speed:${renderSize(speed)}\n${lastCountsTop.join(',')}');
 
     _updateDownloadView(['DownloadGalleryItem_$gid']);
 
