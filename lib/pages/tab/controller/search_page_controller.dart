@@ -247,18 +247,24 @@ class SearchPageController extends TabViewController {
                   serach: _search,
                   refresh: true,
                 );
-      final List<GalleryItem> gallerItemBeans = tuple.item1
+      final List<GalleryItem> rultList = tuple.item1
           .map((GalleryItem e) => e.copyWith(pageOfList: curPage.value + 1))
           .toList();
 
-      state?.addAll(gallerItemBeans);
+      // state?.addAll(rultList);
+      final insertIndex = state?.length ?? 0;
+      change([...?state, ...rultList], status: RxStatus.success());
 
-      logger.d('added gallerItemBeans first ${gallerItemBeans.first.gid} ');
+      for (final item in rultList) {
+        sliverAnimatedListKey.currentState?.insertItem(insertIndex);
+      }
+
+      logger.d('added rultList first ${rultList.first.gid} ');
 
       maxPage = tuple.item2;
       curPage.value += 1;
       pageState = PageState.None;
-      update();
+      // update();
     } catch (e, stack) {
       pageState = PageState.LoadingException;
       rethrow;

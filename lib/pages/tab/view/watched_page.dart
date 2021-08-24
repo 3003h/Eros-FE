@@ -263,7 +263,8 @@ class _WatchedListTabState extends State<WatchedListTab> {
   Widget _endIndicator() {
     return SliverToBoxAdapter(
       child: Obx(() => Container(
-            padding: const EdgeInsets.only(top: 50, bottom: 100),
+            padding: EdgeInsets.only(
+                top: 50, bottom: 50.0 + context.mediaQueryPadding.bottom),
             child: () {
               switch (controller.pageState) {
                 case PageState.None:

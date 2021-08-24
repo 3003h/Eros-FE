@@ -52,13 +52,13 @@ class GalleryItemController extends GetxController {
   set isFav(bool val) => _isFav.value = val;
 
   void setFavTitle({String favTitle = '', String? favcat}) {
-    logger.d('setFavTitle ori isFav :$isFav');
+    logger.v('setFavTitle ori isFav :$isFav');
     galleryItem = galleryItem.copyWith(favTitle: favTitle);
     isFav = favTitle.isNotEmpty;
-    logger.d('setFavTitle cur isFav :$isFav');
+    logger.v('setFavTitle cur isFav :$isFav');
     if (favcat != null || (favcat?.isNotEmpty ?? false)) {
       galleryItem = galleryItem.copyWith(favcat: favcat);
-      logger.d('item set favcat $favcat');
+      logger.v('item set favcat $favcat');
     } else {
       galleryItem = galleryItem.copyWith(favcat: '', favTitle: '');
     }

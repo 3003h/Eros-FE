@@ -300,6 +300,7 @@ class _FavoriteTabState extends State<FavoriteTab> {
               ),
               SliverSafeArea(
                 top: false,
+                bottom: false,
                 sliver: _getGalleryList(),
               ),
               _endIndicator(),
@@ -346,6 +347,7 @@ class _FavoriteTabState extends State<FavoriteTab> {
               // todo 可能要设置刷新？
               SliverSafeArea(
                 top: false,
+                bottom: false,
                 sliver: _getGalleryList(),
               ),
               _endIndicator(),
@@ -359,7 +361,8 @@ class _FavoriteTabState extends State<FavoriteTab> {
   Widget _endIndicator() {
     return SliverToBoxAdapter(
       child: Obx(() => Container(
-            padding: const EdgeInsets.only(top: 50, bottom: 100),
+            padding: EdgeInsets.only(
+                top: 50, bottom: 50.0 + context.mediaQueryPadding.bottom),
             child: () {
               switch (controller.pageState) {
                 case PageState.None:

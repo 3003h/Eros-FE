@@ -108,23 +108,26 @@ class _GallerySearchPageState extends State<GallerySearchPage> {
   Widget build(BuildContext context) {
     final Widget cfp = CupertinoPageScaffold(
       navigationBar: GetPlatform.isAndroid ? getNavigationBar(context) : null,
-      child: Column(
-        children: [
-          if (GetPlatform.isAndroid)
-            SafeArea(
-              bottom: false,
-              child: Container(
-                decoration: BoxDecoration(
-                  border: _kDefaultNavBarBorder,
-                  color: CupertinoTheme.of(context).barBackgroundColor,
+      child: CupertinoScrollbar(
+        controller: PrimaryScrollController.of(context),
+        child: Column(
+          children: [
+            if (GetPlatform.isAndroid)
+              SafeArea(
+                bottom: false,
+                child: Container(
+                  decoration: BoxDecoration(
+                    border: _kDefaultNavBarBorder,
+                    color: CupertinoTheme.of(context).barBackgroundColor,
+                  ),
+                  child:
+                      const SearchTextFieldIn(iconOpacity: 1.0, multiline: true)
+                          .paddingSymmetric(horizontal: 12, vertical: 4),
                 ),
-                child:
-                    const SearchTextFieldIn(iconOpacity: 1.0, multiline: true)
-                        .paddingSymmetric(horizontal: 12, vertical: 4),
               ),
-            ),
-          Expanded(child: _buildSearchRult(context)),
-        ],
+            Expanded(child: _buildSearchRult(context)),
+          ],
+        ),
       ),
     );
 
@@ -151,7 +154,6 @@ class _GallerySearchPageState extends State<GallerySearchPage> {
                     _buildSearchBar(_, __, maxExtent),
               ),
             ),
-          // SliverToBoxAdapter(child: getNavigationBar(context)),
           Obx(() {
             return EhCupertinoSliverRefreshControl(
                 onRefresh: controller.listType == ListType.gallery
@@ -521,7 +523,8 @@ class _GallerySearchPageState extends State<GallerySearchPage> {
 
   Widget _endIndicator() {
     return Obx(() => Container(
-          padding: const EdgeInsets.only(top: 50, bottom: 100),
+          padding: EdgeInsets.only(
+              top: 50, bottom: 50.0 + context.mediaQueryPadding.bottom),
           child: () {
             switch (controller.pageState) {
               case PageState.None:

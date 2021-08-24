@@ -65,12 +65,14 @@ class TabHomeLarge extends GetView<TabHomeController> {
                       _route.name != EHRoutes.home) {
                     return GetPageRoute(
                       settings: settings,
+                      showCupertinoParallax: false,
                       page: _route.page,
                     );
                   } else {
                     return GetPageRoute(
                       settings: settings,
                       page: () => const TabHomeSmall(),
+                      showCupertinoParallax: false,
                     );
                   }
                 }),
