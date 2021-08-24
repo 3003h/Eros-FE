@@ -188,14 +188,11 @@ class DownloadGalleryView extends StatefulWidget {
 class _DownloadGalleryViewState extends State<DownloadGalleryView>
     with AutomaticKeepAliveClientMixin {
   final DownloadController downloadController = Get.find();
-
   final DownloadViewController controller = Get.find();
 
   @override
   void initState() {
     super.initState();
-    // tabPages.scrollControllerMap[controller.tabTag] =
-    //     PrimaryScrollController.of(context);
   }
 
   @override
@@ -206,39 +203,14 @@ class _DownloadGalleryViewState extends State<DownloadGalleryView>
       builder: (logic) {
         return CupertinoScrollbar(
           controller: PrimaryScrollController.of(context),
-          child: ListView.separated(
-            // controller: widget.scrollController,
-            itemBuilder: (_, int _taskIndex) {
-              final gid = controller.galleryTasks[_taskIndex].gid;
-
-              return GetBuilder<DownloadViewController>(
-                id: 'DownloadGalleryItem_$gid',
-                builder: (logic) {
-                  logger.v('rebuild DownloadGalleryItem_$gid');
-
-                  final GalleryTask _taskInfo = logic.galleryTasks[_taskIndex];
-                  final String? _speed = logic.downloadSpeeds[_taskInfo.gid];
-
-                  return GestureDetector(
-                    onLongPress: () => controller.onLongPress(_taskIndex),
-                    behavior: HitTestBehavior.opaque,
-                    child: DownloadGalleryItem(
-                      galleryTask: _taskInfo,
-                      speed: _speed,
-                    ),
-                  );
-                },
-              );
-            },
-            separatorBuilder: (_, __) {
-              return Divider(
-                indent: 20,
-                height: 0.6,
-                color: CupertinoDynamicColor.resolve(
-                    CupertinoColors.systemGrey4, context),
-              );
-            },
-            itemCount: controller.galleryTasks.length,
+          child: AnimatedList(
+            key: controller.animatedListKey,
+            padding: EdgeInsets.only(
+              top: context.mediaQueryPadding.top,
+              bottom: context.mediaQueryPadding.bottom,
+            ),
+            initialItemCount: controller.galleryTasks.length,
+            itemBuilder: downloadItemBuilder,
           ),
         );
       },
@@ -247,4 +219,88 @@ class _DownloadGalleryViewState extends State<DownloadGalleryView>
 
   @override
   bool get wantKeepAlive => true;
+}
+
+Widget downloadItemBuilder(
+    BuildContext context, int _taskIndex, Animation<double> animation) {
+  return _buildAnimatedListItem(
+    animation,
+    child: _downloadItemBuilder(context, _taskIndex),
+  );
+}
+
+Widget downloadDelItemBuilder(
+    BuildContext context, int _taskIndex, Animation<double> animation) {
+  return _buildDelAnimatedListItem(
+    animation,
+    child: _downloadItemBuilder(context, _taskIndex),
+  );
+}
+
+Widget _downloadItemBuilder(BuildContext context, int _taskIndex) {
+  final DownloadViewController controller = Get.find();
+  final gid = controller.galleryTasks[_taskIndex].gid;
+
+  return GetBuilder<DownloadViewController>(
+    id: 'DownloadGalleryItem_$gid',
+    builder: (logic) {
+      logger.v('rebuild DownloadGalleryItem_$gid');
+
+      final GalleryTask _taskInfo = logic.galleryTasks[_taskIndex];
+      final String? _speed = logic.downloadSpeeds[_taskInfo.gid];
+
+      return GestureDetector(
+        onLongPress: () => controller.onLongPress(_taskIndex),
+        behavior: HitTestBehavior.opaque,
+        child: Column(
+          children: [
+            DownloadGalleryItem(
+              galleryTask: _taskInfo,
+              speed: _speed,
+            ),
+            Divider(
+              indent: 20,
+              height: 0.6,
+              color: CupertinoDynamicColor.resolve(
+                  CupertinoColors.systemGrey4, context),
+            ),
+          ],
+        ),
+      );
+    },
+  );
+}
+
+Widget _buildDelAnimatedListItem(
+  Animation<double> _animation, {
+  required Widget child,
+}) {
+  return FadeTransition(
+    opacity: _animation.drive(
+        CurveTween(curve: const Interval(0.0, 1.0, curve: Curves.easeOut))),
+    child: SizeTransition(
+      sizeFactor: _animation.drive(
+          CurveTween(curve: const Interval(0.0, 1.0, curve: Curves.easeOut))),
+      child: SlideTransition(
+        position: Tween<Offset>(begin: const Offset(1, 0), end: Offset.zero)
+            .animate(CurvedAnimation(
+                parent: _animation,
+                curve: const Interval(0.4, 1.0, curve: Curves.easeOut))),
+        child: child,
+      ),
+    ),
+  );
+}
+
+Widget _buildAnimatedListItem(
+  Animation<double> _animation, {
+  required Widget child,
+}) {
+  return FadeTransition(
+    opacity: _animation.drive(CurveTween(curve: Curves.easeIn)),
+    child: SizeTransition(
+      sizeFactor: _animation.drive(CurveTween(curve: Curves.easeIn)),
+      child: child,
+    ),
+  );
 }

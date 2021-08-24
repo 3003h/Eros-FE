@@ -87,15 +87,7 @@ class DownloadController extends GetxController {
     String? category,
     String? uploader,
   }) async {
-    GalleryTaskDao _galleryTaskDao;
-    // ImageTaskDao _imageTaskDao;
-    try {
-      _galleryTaskDao = await getGalleryTaskDao();
-      // _imageTaskDao = await getImageTaskDao();
-    } catch (e, stack) {
-      logger.e('$e\n$stack ');
-      rethrow;
-    }
+    final _galleryTaskDao = await getGalleryTaskDao();
 
     int _gid = 0;
     String _token = '';
@@ -144,6 +136,7 @@ class DownloadController extends GetxController {
       logger.d('add NewTask ${galleryTask.toString()}');
       _galleryTaskDao.insertTask(galleryTask);
       dState.galleryTaskMap[galleryTask.gid] = galleryTask;
+      _downloadViewAnimateListAdd();
       showToast('${galleryTask.gid} Download task start');
     }
 
@@ -155,6 +148,12 @@ class DownloadController extends GetxController {
       galleryTask,
       fCount: _fCount,
     );
+  }
+
+  void _downloadViewAnimateListAdd() {
+    if (Get.isRegistered<DownloadViewController>()) {
+      Get.find<DownloadViewController>().animateListAddTask();
+    }
   }
 
   /// 更新任务为已完成

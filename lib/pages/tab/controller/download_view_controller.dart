@@ -2,6 +2,7 @@ import 'package:fehviewer/common/controller/archiver_download_controller.dart';
 import 'package:fehviewer/common/controller/download_controller.dart';
 import 'package:fehviewer/generated/l10n.dart';
 import 'package:fehviewer/models/index.dart';
+import 'package:fehviewer/pages/tab/view/download_page.dart';
 import 'package:fehviewer/route/routes.dart';
 import 'package:fehviewer/store/floor/entity/gallery_image_task.dart';
 import 'package:fehviewer/store/floor/entity/gallery_task.dart';
@@ -19,6 +20,9 @@ enum DownloadType {
 class DownloadViewController extends GetxController {
   final ArchiverDownloadController _archiverDownloadController = Get.find();
   final DownloadController _downloadController = Get.find();
+
+  final GlobalKey<AnimatedListState> animatedListKey =
+      GlobalKey<AnimatedListState>();
 
   late String tabTag;
 
@@ -121,7 +125,15 @@ class DownloadViewController extends GetxController {
   void removeGalleryTask(int index) {
     final GalleryTask _task = galleryTasks[index];
     _downloadController.removeDownloadGalleryTask(gid: _task.gid);
-    update(['DownloadGalleryView']);
+    animatedListKey.currentState?.removeItem(
+        index,
+        (context, animation) =>
+            downloadDelItemBuilder(context, index, animation));
+    // update(['DownloadGalleryView']);
+  }
+
+  void animateListAddTask() {
+    animatedListKey.currentState?.insertItem(galleryTasks.length - 1);
   }
 
   void onLongPress(int index, {DownloadType type = DownloadType.gallery}) {
