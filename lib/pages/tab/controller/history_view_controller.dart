@@ -65,6 +65,10 @@ class HistoryViewController extends TabViewController {
   }
 
   Future<void> syncHistory() async {
-    await historyController.syncHistory();
+    // await for (final rult in historyController.syncHistory()) {
+    //   logger.d('${rult.runtimeType}');
+    // }
+    historyController.syncHistory();
+    await Future.delayed(const Duration(seconds: 1));
   }
 }

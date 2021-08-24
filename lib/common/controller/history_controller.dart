@@ -169,6 +169,7 @@ class HistoryController extends GetxController {
 
   Future<void> syncHistory() async {
     if (!webdavController.syncHistory) {
+      logger.d('disable syncHistory');
       return;
     }
 
@@ -186,6 +187,7 @@ class HistoryController extends GetxController {
     }
 
     logger.v('listRemote size ${listRemote.length}');
+    // yield true;
 
     // 比较远程和本地的差异
     final allGid = <HistoryIndexGid?>{...listRemote, ...listLocal};
