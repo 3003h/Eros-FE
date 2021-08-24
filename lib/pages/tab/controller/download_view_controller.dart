@@ -129,7 +129,7 @@ class DownloadViewController extends GetxController {
         index,
         (context, animation) =>
             downloadDelItemBuilder(context, index, animation));
-    // update(['DownloadGalleryView']);
+    update(['DownloadGalleryView']);
   }
 
   void animateListAddTask() {

@@ -29,12 +29,17 @@ class WebdavController extends GetxController {
 
   bool isLongining = false;
 
-  bool get syncHistory => webdavProfile.syncHistory ?? false;
-  bool get syncReadProgress => webdavProfile.syncReadProgress ?? false;
+  // bool get syncHistory => webdavProfile.syncHistory ?? false;
+  // bool get syncReadProgress => webdavProfile.syncReadProgress ?? false;
+  bool _syncHistory = false;
+  bool _syncReadProgress = false;
+
+  bool get syncHistory => _syncHistory;
+  bool get syncReadProgress => _syncReadProgress;
 
   set syncHistory(bool val) {
     final _dav = webdavProfile.copyWith(syncHistory: val);
-    Get.replace(_dav);
+    _syncHistory = val;
     update();
     Global.profile = Global.profile.copyWith(webdav: _dav);
     Global.saveProfile();
@@ -42,7 +47,7 @@ class WebdavController extends GetxController {
 
   set syncReadProgress(bool val) {
     final _dav = webdavProfile.copyWith(syncReadProgress: val);
-    Get.replace(_dav);
+    _syncReadProgress = val;
     update();
     Global.profile = Global.profile.copyWith(webdav: _dav);
     Global.saveProfile();
@@ -53,10 +58,13 @@ class WebdavController extends GetxController {
     super.onInit();
     if (webdavProfile.url.isNotEmpty) {
       initClient();
+
+      syncHistory = webdavProfile.syncHistory ?? false;
+      syncReadProgress = webdavProfile.syncReadProgress ?? false;
     }
   }
 
-  void close() {
+  void closeClient() {
     client = null;
   }
 
@@ -377,6 +385,7 @@ class WebdavController extends GetxController {
     }
     isLongining = false;
     // update([idActionLogin]);
+    update();
     return rult;
   }
 

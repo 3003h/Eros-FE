@@ -77,11 +77,12 @@ class WebDavSettingView extends GetView<WebdavController> {
                     CupertinoDialogAction(
                       child: Text(L10n.of(context).ok),
                       onPressed: () async {
+                        // 登出WebDAV
                         Global.profile = Global.profile
                             .copyWith(webdav: const WebdavProfile(url: ''));
                         Global.saveProfile();
                         Get.replace(const WebdavProfile(url: ''));
-                        controller.close();
+                        controller.closeClient();
                         Get.back();
                         controller.update();
                         controller.update([idActionLogin]);

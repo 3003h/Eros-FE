@@ -181,13 +181,8 @@ Widget buildGallerySliverListView(
     initialItemCount: gallerItemBeans.length,
     itemBuilder:
         (BuildContext context, int index, Animation<double> animation) {
-      if (maxPage != null) {
-        if (index == gallerItemBeans.length - 1 && curPage < maxPage - 1) {
-          // logger.d(
-          //     'index:$index oriEnd:${gallerItemBeans.length} curPage:$curPage maxPage:$maxPage');
-//            加载更多数据的回调
-//           loadMord?.call();
-        }
+      if (gallerItemBeans.length - 1 < index) {
+        return const SizedBox.shrink();
       }
       final GalleryItem _item = gallerItemBeans[index];
       Get.replace(GalleryItemController(_item), tag: _item.gid);

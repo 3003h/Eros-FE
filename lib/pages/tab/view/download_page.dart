@@ -239,6 +239,10 @@ Widget downloadDelItemBuilder(
 
 Widget _downloadItemBuilder(BuildContext context, int _taskIndex) {
   final DownloadViewController controller = Get.find();
+  if (controller.galleryTasks.length - 1 < _taskIndex) {
+    return const SizedBox.shrink();
+  }
+
   final gid = controller.galleryTasks[_taskIndex].gid;
 
   return GetBuilder<DownloadViewController>(
