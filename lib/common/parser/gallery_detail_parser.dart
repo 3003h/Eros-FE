@@ -8,6 +8,13 @@ import 'package:html/dom.dart';
 import 'package:html/parser.dart' show parse;
 import 'package:intl/intl.dart';
 
+String parseErrGallery(String response) {
+  final Document document = parse(response);
+  const String msgSelect = 'div > p';
+  final msg = document.querySelector(msgSelect)?.text ?? '';
+  return msg;
+}
+
 List<GalleryComment> parseGalleryComment(Document document) {
   // 全部评论数据
   final List<GalleryComment> _galleryComment = [];
