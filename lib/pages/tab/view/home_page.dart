@@ -22,6 +22,7 @@ class HomePage extends GetView<TabHomeController> {
         () {
           final tabletLayout = _ehConfigService.tabletLayout;
           final half = layoutServices.half;
+          final vOffset = layoutServices.sideProportion;
           return LayoutBuilder(
             builder: (context, constraints) {
               logger.v('${constraints.maxWidth}');
@@ -36,10 +37,12 @@ class HomePage extends GetView<TabHomeController> {
               }
 
               if (context.width > 700) {
-                return TabHomeLarge(half: half);
+                return TabHomeLarge(
+                  sideProportion: vOffset,
+                );
               } else {
                 // return const TabHomeSmall();
-                return SizedBox.shrink();
+                return const SizedBox.shrink();
               }
             },
           );

@@ -244,12 +244,12 @@ class EHConst {
   static const double waterfallFlowCrossAxisSpacing = 4.0;
   static const double waterfallFlowMainAxisSpacing = 4.0;
   static const double waterfallFlowMaxCrossAxisExtent = 150.0;
-  static const double waterfallFlowMaxCrossAxisExtentTablet = 240.0;
+  static const double waterfallFlowMaxCrossAxisExtentTablet = 220.0;
 
   // 瀑布流视图参数 large
   static const double waterfallFlowLargeCrossAxisSpacing = 12.0;
   static const double waterfallFlowLargeMainAxisSpacing = 12.0;
-  static const double waterfallFlowLargeMaxCrossAxisExtent = 250.0;
+  static const double waterfallFlowLargeMaxCrossAxisExtent = 220.0;
 
   static List<int> historyMax = <int>[50, 100, 300, 0];
 

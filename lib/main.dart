@@ -135,7 +135,6 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
       Locale? locale,
     }) {
       return GetCupertinoApp(
-        // builder: EasyLoading.init(),
         builder: DevicePreview.appBuilder,
         debugShowCheckedModeBanner: false,
         onGenerateTitle: (BuildContext context) => L10n.of(context).app_title,

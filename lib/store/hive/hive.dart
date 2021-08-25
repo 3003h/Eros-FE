@@ -8,15 +8,17 @@ import 'package:hive_flutter/hive_flutter.dart';
 const String historyBox = 'history_box';
 const String historyDelBox = 'history_del_box';
 const String searchHistoryBox = 'search_history_box';
+const String configBox = 'config_box';
 
 const String searchHistoryKey = 'search_history';
+const String layoutConfigKey = 'config_layout';
 
-// ignore: avoid_classes_with_only_static_members
 class HiveHelper {
   HiveHelper();
   static final _historyBox = Hive.box<String>(historyBox);
   static final _historyDelBox = Hive.box<String>(historyDelBox);
   static final _searchHistoryBox = Hive.box<String>(searchHistoryBox);
+  static final _configBox = Hive.box<String>(configBox);
 
   static Future<void> init() async {
     await Hive.initFlutter();
@@ -39,6 +41,8 @@ class HiveHelper {
       logger.v('entries $entries');
       return entries > 20;
     });
+
+    await Hive.openBox<String>(configBox);
   }
 
   List<GalleryItem> getAllHistory() {
@@ -105,5 +109,14 @@ class HiveHelper {
 
   Future<void> setSearchHistory(List<String> searchTexts) async {
     await _searchHistoryBox.put(searchHistoryKey, jsonEncode(searchTexts));
+  }
+
+  Future<void> setEhLayout(EhLayout ehLayout) async {
+    await _configBox.put(layoutConfigKey, jsonEncode(ehLayout));
+  }
+
+  EhLayout getEhLayout() {
+    final val = _configBox.get(layoutConfigKey, defaultValue: '{}');
+    return EhLayout.fromJson(jsonDecode(val ?? '{}') as Map<String, dynamic>);
   }
 }

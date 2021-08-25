@@ -1,4 +1,8 @@
+import 'package:fehviewer/store/hive/hive.dart';
 import 'package:get/get.dart';
+import 'package:fehviewer/models/base/eh_models.dart';
+
+import '../global.dart';
 
 enum LayoutMode {
   small,
@@ -8,25 +12,42 @@ enum LayoutMode {
 LayoutMode get layoutMode => Get.find<LayoutServices>().layoutMode;
 bool get isLayoutLarge => Get.find<LayoutServices>().isLayoutLarge;
 
-EhLayout ehLayout = EhLayout();
+EhLayoutHelper ehLayoutHelper = EhLayoutHelper();
 
-class EhLayout {
+class EhLayoutHelper {
   LayoutServices layoutServices = Get.find();
-  // GlobalKey<ExtendedImageSlidePageState> get slidePagekey =>
-  //     layoutServices.slidePagekey;
 
   bool get isLayoutLarge => layoutServices.isLayoutLarge;
 }
 
 class LayoutServices extends GetxService {
   LayoutMode layoutMode = LayoutMode.small;
-
   bool get isLayoutLarge => layoutMode == LayoutMode.large;
+
+  late EhLayout _ehLayout;
 
   final _half = false.obs;
   bool get half => _half.value;
   set half(bool val) => _half.value = val;
 
-  // final GlobalKey<ExtendedImageSlidePageState> slidePagekey =
-  //     GlobalKey<ExtendedImageSlidePageState>();
+  final _sideProportion = 0.0.obs;
+  double get sideProportion => _sideProportion.value;
+  set sideProportion(double val) => _sideProportion.value = val;
+
+  @override
+  void onInit() {
+    super.onInit();
+
+    _ehLayout = hiveHelper.getEhLayout();
+    sideProportion = _ehLayout.sideProportion ?? 0.0;
+
+    debounce<double>(
+      _sideProportion,
+      (double val) {
+        _ehLayout = _ehLayout.copyWith(sideProportion: val);
+        hiveHelper.setEhLayout(_ehLayout);
+      },
+      time: const Duration(milliseconds: 3000),
+    );
+  }
 }
