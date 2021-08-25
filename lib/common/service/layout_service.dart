@@ -23,6 +23,10 @@ class LayoutServices extends GetxService {
 
   bool get isLayoutLarge => layoutMode == LayoutMode.large;
 
+  final _half = false.obs;
+  bool get half => _half.value;
+  set half(bool val) => _half.value = val;
+
   // final GlobalKey<ExtendedImageSlidePageState> slidePagekey =
   //     GlobalKey<ExtendedImageSlidePageState>();
 }

@@ -21,6 +21,7 @@ class HomePage extends GetView<TabHomeController> {
       child: Obx(
         () {
           final tabletLayout = _ehConfigService.tabletLayout;
+          final half = layoutServices.half;
           return LayoutBuilder(
             builder: (context, constraints) {
               logger.v('${constraints.maxWidth}');
@@ -35,7 +36,7 @@ class HomePage extends GetView<TabHomeController> {
               }
 
               if (context.width > 700) {
-                return const TabHomeLarge();
+                return TabHomeLarge(half: half);
               } else {
                 // return const TabHomeSmall();
                 return SizedBox.shrink();
