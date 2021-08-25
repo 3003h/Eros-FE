@@ -1124,6 +1124,10 @@ class Api {
     required String imageUrl,
     required String savePath,
   }) async {
+    if (!(await cachedImageExists(imageUrl))) {
+      return false;
+    }
+
     final imageFile = await getCachedImageFile(imageUrl);
     if (imageFile == null) {
       logger.d('not from cache \n$imageUrl');

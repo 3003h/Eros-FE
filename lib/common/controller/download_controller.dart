@@ -42,7 +42,6 @@ class DownloadController extends GetxController {
   final DownloadState dState = DownloadState();
 
   final EhConfigService ehConfigService = Get.find();
-
   final CacheController cacheController = Get.find();
 
   /// 允许媒体扫描
@@ -546,7 +545,7 @@ class DownloadController extends GetxController {
   }) async {
     final GalleryImage _image = await Api.fetchImageInfo(
       href,
-      refresh: changeSource,
+      // refresh: changeSource,
       sourceId: sourceId,
       cancelToken: cancelToken,
     );

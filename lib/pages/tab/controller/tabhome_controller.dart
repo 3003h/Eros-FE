@@ -17,7 +17,7 @@ import 'package:persistent_bottom_nav_bar/persistent-tab-view.dart';
 
 import '../comm.dart';
 import '../view/favorite_page.dart';
-import '../view/gallery_page.dart';
+import '../view/gallery_list_page.dart';
 import '../view/popular_page.dart';
 import '../view/setting_page.dart';
 

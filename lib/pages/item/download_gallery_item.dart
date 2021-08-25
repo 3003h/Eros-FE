@@ -390,6 +390,16 @@ class _CoverImage extends StatelessWidget {
             return ExtendedImage.file(
               File(filePath!),
               fit: BoxFit.fitWidth,
+              loadStateChanged: (ExtendedImageState state) {
+                if (state.extendedImageLoadState == LoadState.loading) {
+                  return Container(
+                    alignment: Alignment.center,
+                    color: CupertinoDynamicColor.resolve(
+                        CupertinoColors.systemGrey5, context),
+                    child: const CupertinoActivityIndicator(),
+                  );
+                }
+              },
             );
           } else if (url != null) {
             return EhCachedNetworkImage(

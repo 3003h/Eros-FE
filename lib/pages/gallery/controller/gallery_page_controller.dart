@@ -1,4 +1,5 @@
 import 'package:dio/dio.dart';
+import 'package:fehviewer/common/controller/cache_controller.dart';
 import 'package:fehviewer/common/controller/download_controller.dart';
 import 'package:fehviewer/common/controller/gallerycache_controller.dart';
 import 'package:fehviewer/common/controller/history_controller.dart';
@@ -134,6 +135,7 @@ class GalleryPageController extends GetxController
   final HistoryController _historyController = Get.find();
   final GalleryCacheController _galleryCacheController = Get.find();
   DownloadController get _downloadController => Get.find();
+  final CacheController _cacheController = Get.find();
 
   // bool get downloaded =>
   //     _downloadController.dState.galleryTaskMap[int.parse(gid)]?.status ==
@@ -601,9 +603,15 @@ class GalleryPageController extends GetxController
         //     'ser:$itemSer ,href: ${galleryItem.previewMap[itemSer]?.href} , _sourceId: $_sourceId');
 
         try {
+          if (changeSource) {
+            // 删除旧缓存
+            _cacheController.clearDioCache(
+                path: galleryItem.imageMap[itemSer]?.href ?? '');
+          }
+
           final GalleryImage _image = await Api.fetchImageInfo(
             galleryItem.imageMap[itemSer]?.href ?? '',
-            refresh: changeSource,
+            // refresh: changeSource,
             sourceId: _sourceId,
           );
 

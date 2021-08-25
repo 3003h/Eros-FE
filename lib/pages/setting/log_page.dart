@@ -105,8 +105,6 @@ class LogFileItem extends StatelessWidget {
       child: SelectorSettingItem(
         title: fileName,
         onTap: () {
-          // showCustomHostEditer(context, index: index);
-          // logger.v('');
           Get.to(
             () => LogViewPage(
               title: fileName,

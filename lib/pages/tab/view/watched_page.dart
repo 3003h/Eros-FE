@@ -309,7 +309,7 @@ class _WatchedListTabState extends State<WatchedListTab> {
             controller.tabTag,
             maxPage: controller.maxPage,
             curPage: controller.curPage.value,
-            centerKey: centerKey,
+            topKey: centerKey,
             key: controller.sliverAnimatedListKey,
             lastTopitemIndex: controller.lastTopitemIndex,
             // loadMord: controller.loadDataMore,

@@ -569,7 +569,7 @@ class _GallerySearchPageState extends State<GallerySearchPage> {
           maxPage: controller.maxPage,
           curPage: controller.curPage.value,
           // loadMord: controller.loadDataMore,
-          centerKey: centerKey,
+          topKey: centerKey,
           key: controller.sliverAnimatedListKey,
           lastTopitemIndex: controller.lastTopitemIndex,
         );

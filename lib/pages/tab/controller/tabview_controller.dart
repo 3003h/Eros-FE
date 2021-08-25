@@ -172,19 +172,19 @@ class TabViewController extends GetxController
       logger.d('isLoadPrevious');
       await loadPrevious();
 
-      WidgetsBinding.instance?.addPostFrameCallback((_) {
-        Future.delayed(const Duration(milliseconds: 50)).then(
-          (value) {
-            //获取position
-            RenderBox? box =
-                centerKey?.currentContext?.findRenderObject() as RenderBox?;
-            Offset? offset = box?.localToGlobal(Offset.zero);
-            logger.d('offset $offset');
-
-            Scrollable.ensureVisible(centerKey!.currentContext!);
-          },
-        );
-      });
+      // WidgetsBinding.instance?.addPostFrameCallback((_) {
+      //   Future.delayed(const Duration(milliseconds: 50)).then(
+      //     (value) {
+      //       //获取position
+      //       RenderBox? box =
+      //           centerKey?.currentContext?.findRenderObject() as RenderBox?;
+      //       Offset? offset = box?.localToGlobal(Offset.zero);
+      //       logger.d('offset $offset');
+      //
+      //       Scrollable.ensureVisible(centerKey!.currentContext!);
+      //     },
+      //   );
+      // });
     } else {
       await reloadData();
     }
@@ -298,10 +298,12 @@ class TabViewController extends GetxController
         lastTopitemIndex =
             state?.indexWhere((e) => e.gid == lastTopitemGid) ?? 0;
         logger.d('lastTopitemIndex $lastTopitemIndex');
+
+        change(state);
       }
       // 成功才-1
       curPage.value -= 1;
-      update();
+      // update();
     } catch (e, stack) {
       rethrow;
     }

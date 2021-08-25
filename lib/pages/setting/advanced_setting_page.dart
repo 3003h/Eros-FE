@@ -99,7 +99,6 @@ class ListViewAdvancedSetting extends StatelessWidget {
           title: L10n.of(context).tabbar_setting,
           selector: '',
           onTap: () {
-            // Get.to(() => TabSettingPage());
             Get.toNamed(
               EHRoutes.pageSetting,
               id: isLayoutLarge ? 2 : null,
@@ -162,7 +161,6 @@ class ListViewAdvancedSetting extends StatelessWidget {
       SelectorSettingItem(
         title: 'Log',
         onTap: () {
-          // Get.to(() => LogPage());
           Get.toNamed(
             EHRoutes.logfile,
             id: isLayoutLarge ? 2 : null,
