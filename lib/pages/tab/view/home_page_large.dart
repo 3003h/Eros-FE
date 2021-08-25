@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:collection/collection.dart';
 import 'package:fehviewer/common/controller/cache_controller.dart';
 import 'package:fehviewer/common/service/depth_service.dart';
@@ -34,32 +36,38 @@ import 'package:get/get.dart';
 import 'empty.dart';
 import 'home_page_small.dart';
 
+const kMinWidth = 320.0;
+
 class TabHomeLarge extends GetView<TabHomeController> {
-  const TabHomeLarge({Key? key, this.half = false}) : super(key: key);
-  final bool half;
+  const TabHomeLarge({
+    Key? key,
+    this.sideProportion = 0.0,
+  }) : super(key: key);
+  final double sideProportion;
 
   double getSideWidth(BuildContext context) {
-    if (half) {
-      return context.width / 2;
-    }
+    double _width = kMinWidth;
 
     if (context.width >= 1366) {
-      return 420;
+      _width = 420;
     }
     if (context.width >= 1024) {
-      return 390;
+      _width = 390;
     }
-    return 320;
+
+    _width = kMinWidth + (context.width - 2 * kMinWidth) * sideProportion;
+    logger.v('width:${context.width} $_width}');
+    return min(max(_width, kMinWidth), context.width - kMinWidth);
   }
 
   @override
   Widget build(BuildContext context) {
-    logger.d('width:${context.width} ${getSideWidth(context)}');
+    // logger.d('width:${context.width} ${getSideWidth(context)}');
     return Row(
       children: [
         AnimatedContainer(
           width: getSideWidth(context),
-          duration: Duration(milliseconds: 500),
+          duration: const Duration(milliseconds: 500),
           curve: Curves.ease,
           child: ClipRect(
             child: Navigator(
@@ -87,155 +95,153 @@ class TabHomeLarge extends GetView<TabHomeController> {
           ),
         ),
         Expanded(
-          child: Stack(
-            alignment: Alignment.centerLeft,
-            children: [
-              Row(
-                children: [
-                  Container(
-                    color: CupertinoDynamicColor.resolve(
-                        CupertinoColors.systemGrey4, context),
-                    width: 0.6,
-                  ),
-                  Expanded(
-                    child: ClipRect(
-                      child: Navigator(
-                        key: Get.nestedKey(2),
-                        observers: [SecondNavigatorObserver()],
-                        initialRoute: EHRoutes.empty,
-                        onGenerateRoute: (settings) {
-                          switch (settings.name) {
-                            case EHRoutes.about:
-                              return GetPageRoute(
-                                settings: settings,
-                                page: () => AboutPage(),
-                                transition: Transition.fadeIn,
-                                showCupertinoParallax: false,
-                              );
-                            case EHRoutes.ehSetting:
-                              return GetPageRoute(
-                                settings: settings,
-                                page: () => EhSettingPage(),
-                                transition: Transition.fadeIn,
-                                showCupertinoParallax: false,
-                              );
-                            case EHRoutes.downloadSetting:
-                              return GetPageRoute(
-                                settings: settings,
-                                page: () => DownloadSettingPage(),
-                                transition: Transition.fadeIn,
-                                showCupertinoParallax: false,
-                              );
-                            case EHRoutes.searchSetting:
-                              return GetPageRoute(
-                                settings: settings,
-                                page: () => SearchSettingPage(),
-                                transition: Transition.fadeIn,
-                                showCupertinoParallax: false,
-                              );
-                            case EHRoutes.quickSearch:
-                              return GetPageRoute(
-                                settings: settings,
-                                page: () => QuickSearchListPage(),
-                              );
-                            case EHRoutes.advancedSetting:
-                              return GetPageRoute(
-                                settings: settings,
-                                page: () => AdvancedSettingPage(),
-                                binding: BindingsBuilder(
-                                    () => Get.lazyPut(() => CacheController())),
-                                transition: Transition.fadeIn,
-                                showCupertinoParallax: false,
-                              );
-                            case EHRoutes.customHosts:
-                              return GetPageRoute(
-                                settings: settings,
-                                page: () => CustomHostsPage(),
-                              );
-                            case EHRoutes.webDavSetting:
-                              return GetPageRoute(
-                                settings: settings,
-                                page: () => WebDavSetting(),
-                              );
-                            case EHRoutes.logfile:
-                              return GetPageRoute(
-                                settings: settings,
-                                page: () => LogPage(),
-                              );
-                            case EHRoutes.securitySetting:
-                              return GetPageRoute(
-                                settings: settings,
-                                page: () => SecuritySettingPage(),
-                                transition: Transition.fadeIn,
-                                showCupertinoParallax: false,
-                              );
-                            case EHRoutes.galleryPage:
-                              return GetPageRoute(
-                                settings: settings,
-                                page: () => GalleryMainPage(),
-                                transition: Transition.fadeIn,
-                                showCupertinoParallax: false,
-                              );
-                            case EHRoutes.galleryComment:
-                              return GetPageRoute(
-                                settings: settings,
-                                page: () => CommentPage(),
-                              );
-                            case EHRoutes.galleryAllPreviews:
-                              return GetPageRoute(
-                                settings: settings,
-                                page: () => const AllPreviewPage(),
-                              );
-                            case EHRoutes.addTag:
-                              return GetPageRoute(
-                                settings: settings,
-                                page: () => AddTagPage(),
-                                binding: BindingsBuilder(
-                                  () => Get.lazyPut(() => TagInfoController(),
-                                      tag: pageCtrlDepth),
-                                ),
-                              );
-                            case EHRoutes.galleryInfo:
-                              return GetPageRoute(
-                                settings: settings,
-                                page: () => const GalleryInfoPage(),
-                              );
-                            case EHRoutes.pageSetting:
-                              return GetPageRoute(
-                                settings: settings,
-                                page: () => TabSettingPage(),
-                                binding: BindingsBuilder(
-                                  () =>
-                                      Get.lazyPut(() => TabSettingController()),
-                                ),
-                              );
-                            case EHRoutes.empty:
-                              return GetPageRoute(
-                                settings: settings,
-                                page: () => const EmptyPage(),
-                                // page: () => Container(),
-                              );
-                            case EHRoutes.download:
-                              return GetPageRoute(
-                                settings: settings,
-                                page: () => const DownloadTab(),
-                              );
-                            default:
-                              return GetPageRoute(
-                                settings: settings,
-                                routeName: EHRoutes.empty,
-                                page: () => const EmptyPage(),
-                                transition: Transition.fadeIn,
-                              );
-                          }
-                        },
-                      ),
+          child: SideControllerbar(
+            child: Row(
+              children: [
+                Container(
+                  color: CupertinoDynamicColor.resolve(
+                      CupertinoColors.systemGrey4, context),
+                  width: 0.6,
+                ),
+                Expanded(
+                  child: ClipRect(
+                    child: Navigator(
+                      key: Get.nestedKey(2),
+                      observers: [SecondNavigatorObserver()],
+                      initialRoute: EHRoutes.empty,
+                      onGenerateRoute: (settings) {
+                        switch (settings.name) {
+                          case EHRoutes.about:
+                            return GetPageRoute(
+                              settings: settings,
+                              page: () => AboutPage(),
+                              transition: Transition.fadeIn,
+                              showCupertinoParallax: false,
+                            );
+                          case EHRoutes.ehSetting:
+                            return GetPageRoute(
+                              settings: settings,
+                              page: () => EhSettingPage(),
+                              transition: Transition.fadeIn,
+                              showCupertinoParallax: false,
+                            );
+                          case EHRoutes.downloadSetting:
+                            return GetPageRoute(
+                              settings: settings,
+                              page: () => DownloadSettingPage(),
+                              transition: Transition.fadeIn,
+                              showCupertinoParallax: false,
+                            );
+                          case EHRoutes.searchSetting:
+                            return GetPageRoute(
+                              settings: settings,
+                              page: () => SearchSettingPage(),
+                              transition: Transition.fadeIn,
+                              showCupertinoParallax: false,
+                            );
+                          case EHRoutes.quickSearch:
+                            return GetPageRoute(
+                              settings: settings,
+                              page: () => QuickSearchListPage(),
+                            );
+                          case EHRoutes.advancedSetting:
+                            return GetPageRoute(
+                              settings: settings,
+                              page: () => AdvancedSettingPage(),
+                              binding: BindingsBuilder(
+                                  () => Get.lazyPut(() => CacheController())),
+                              transition: Transition.fadeIn,
+                              showCupertinoParallax: false,
+                            );
+                          case EHRoutes.customHosts:
+                            return GetPageRoute(
+                              settings: settings,
+                              page: () => CustomHostsPage(),
+                            );
+                          case EHRoutes.webDavSetting:
+                            return GetPageRoute(
+                              settings: settings,
+                              page: () => WebDavSetting(),
+                            );
+                          case EHRoutes.logfile:
+                            return GetPageRoute(
+                              settings: settings,
+                              page: () => LogPage(),
+                            );
+                          case EHRoutes.securitySetting:
+                            return GetPageRoute(
+                              settings: settings,
+                              page: () => SecuritySettingPage(),
+                              transition: Transition.fadeIn,
+                              showCupertinoParallax: false,
+                            );
+                          case EHRoutes.galleryPage:
+                            return GetPageRoute(
+                              settings: settings,
+                              page: () => GalleryMainPage(),
+                              // transition: Transition.fadeIn,
+                              showCupertinoParallax: false,
+                              // fullscreenDialog: true,
+                            );
+                          case EHRoutes.galleryComment:
+                            return GetPageRoute(
+                              settings: settings,
+                              page: () => CommentPage(),
+                            );
+                          case EHRoutes.galleryAllPreviews:
+                            return GetPageRoute(
+                              settings: settings,
+                              page: () => const AllPreviewPage(),
+                            );
+                          case EHRoutes.addTag:
+                            return GetPageRoute(
+                              settings: settings,
+                              page: () => AddTagPage(),
+                              binding: BindingsBuilder(
+                                () => Get.lazyPut(() => TagInfoController(),
+                                    tag: pageCtrlDepth),
+                              ),
+                            );
+                          case EHRoutes.galleryInfo:
+                            return GetPageRoute(
+                              settings: settings,
+                              page: () => const GalleryInfoPage(),
+                            );
+                          case EHRoutes.pageSetting:
+                            return GetPageRoute(
+                              settings: settings,
+                              page: () => TabSettingPage(),
+                              binding: BindingsBuilder(
+                                () => Get.lazyPut(() => TabSettingController()),
+                              ),
+                            );
+                          case EHRoutes.empty:
+                            return GetPageRoute(
+                              settings: settings,
+                              page: () => const EmptyPage(),
+                              popGesture: false,
+                              transition: Transition.fadeIn,
+                            );
+                          case EHRoutes.download:
+                            return GetPageRoute(
+                              settings: settings,
+                              page: () => const DownloadTab(),
+                            );
+                          default:
+                            return GetPageRoute(
+                              settings: settings,
+                              routeName: EHRoutes.empty,
+                              page: () => const EmptyPage(),
+                              popGesture: false,
+                              transition: Transition.fadeIn,
+                            );
+                        }
+                      },
                     ),
                   ),
-                ],
-              ),
-              const SideControllerbar(),
-            ],
+                ),
+              ],
+            ),
           ),
         ),
       ],
@@ -244,7 +250,8 @@ class TabHomeLarge extends GetView<TabHomeController> {
 }
 
 class SideControllerbar extends StatefulWidget {
-  const SideControllerbar({Key? key}) : super(key: key);
+  const SideControllerbar({Key? key, required this.child}) : super(key: key);
+  final Widget child;
 
   @override
   _SideControllerbarState createState() => _SideControllerbarState();
@@ -260,14 +267,15 @@ class _SideControllerbarState extends State<SideControllerbar> {
         color:
             CupertinoDynamicColor.resolve(CupertinoColors.systemGrey, context)
                 .withOpacity(0.7),
-        borderRadius: BorderRadius.circular(dragging ? 4.0 : 1.5),
+        borderRadius: BorderRadius.circular(dragging ? 5.0 : 1.5),
       ),
-      margin: const EdgeInsets.only(left: 2.0),
-      height: 55,
-      width: dragging ? 8 : 3,
-      duration: Duration(milliseconds: 200),
+      margin: EdgeInsets.only(
+          left: dragging ? 5.0 : 2.0, right: dragging ? 5.0 : 20.0),
+      height: dragging ? 80 : 55,
+      width: dragging ? 10 : 3,
+      duration: const Duration(milliseconds: 200),
       curve: Curves.ease,
-      child: SizedBox.expand(),
+      child: const SizedBox.expand(),
     );
   }
 
@@ -277,26 +285,36 @@ class _SideControllerbarState extends State<SideControllerbar> {
 
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
-      onTapDown: (_) {
-        setState(() {
-          isTapDown = true;
-        });
-      },
-      onLongPress: () {
-        layoutServices.half = !layoutServices.half;
-      },
-      onTapUp: (_) {
-        setState(() {
-          isTapDown = false;
-        });
-      },
-      onTapCancel: () {
-        setState(() {
-          isTapDown = false;
-        });
-      },
-      child: getbar(),
+    return Stack(
+      alignment: Alignment.centerLeft,
+      children: [
+        widget.child,
+        GestureDetector(
+          behavior: HitTestBehavior.opaque,
+          onPanDown: (details) {
+            setState(() {
+              isTapDown = true;
+            });
+          },
+          onPanEnd: (_) {
+            setState(() {
+              isTapDown = false;
+            });
+          },
+          onPanCancel: () {
+            setState(() {
+              isTapDown = false;
+            });
+          },
+          onPanUpdate: (details) {
+            final proportion = layoutServices.sideProportion +
+                details.delta.dx / (context.width - 2 * kMinWidth);
+
+            layoutServices.sideProportion = max(min(1.0, proportion), 0.0);
+          },
+          child: getbar(),
+        ),
+      ],
     );
   }
 }
