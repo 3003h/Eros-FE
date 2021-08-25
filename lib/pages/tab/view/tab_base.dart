@@ -241,7 +241,7 @@ Widget getGalleryList(
   int? curPage,
   VoidCallback? loadMord,
   Key? key,
-  Key? centerKey,
+  Key? topKey,
   int? lastTopitemIndex,
 }) {
   final EhConfigService ehConfigService = Get.find();
@@ -258,7 +258,7 @@ Widget getGalleryList(
           curPage: curPage ?? 0,
           loadMord: loadMord,
           key: key,
-          centerKey: centerKey,
+          centerKey: topKey,
           lastTopitemIndex: lastTopitemIndex,
         );
       case ListModeEnum.waterfall:
@@ -268,7 +268,7 @@ Widget getGalleryList(
           maxPage: maxPage,
           curPage: curPage ?? 0,
           loadMord: loadMord,
-          centerKey: centerKey,
+          centerKey: topKey,
           lastTopitemIndex: lastTopitemIndex,
         );
       case ListModeEnum.waterfallLarge:
@@ -279,7 +279,7 @@ Widget getGalleryList(
           curPage: curPage ?? 0,
           loadMord: loadMord,
           large: true,
-          centerKey: centerKey,
+          centerKey: topKey,
           lastTopitemIndex: lastTopitemIndex,
         );
       case ListModeEnum.simpleList:
@@ -290,7 +290,7 @@ Widget getGalleryList(
           curPage: curPage ?? 0,
           loadMord: loadMord,
           key: key,
-          centerKey: centerKey,
+          centerKey: topKey,
           lastTopitemIndex: lastTopitemIndex,
         );
     }

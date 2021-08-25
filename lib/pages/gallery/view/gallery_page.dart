@@ -73,100 +73,109 @@ class _GalleryMainPageState extends State<GalleryMainPage> {
     // _controller.scrollController = PrimaryScrollController.of(context);
 
     return CupertinoPageScaffold(
-      child: EasyRefresh(
-        enableControlFinishRefresh: false,
-        enableControlFinishLoad: false,
-        onLoad: () async {
-          if (_controller.images.isNotEmpty) {
-            Get.toNamed(
-              EHRoutes.galleryAllPreviews,
-              id: isLayoutLarge ? 2 : null,
-            );
-          }
-        },
-        footer: BezierBounceFooter(
-          backgroundColor: Colors.transparent,
-          color: CupertinoColors.inactiveGray,
-        ),
-        child: CustomScrollView(
-          physics: const AlwaysScrollableScrollPhysics(),
-          slivers: <Widget>[
-            // 导航栏
-            CupertinoSliverNavigationBar(
-              padding: const EdgeInsetsDirectional.only(end: 10),
-              largeTitle: GetBuilder<GalleryPageController>(
-                id: GetIds.PAGE_VIEW_HEADER,
-                tag: pageCtrlDepth,
-                builder: (logic) {
-                  return SelectableText(
-                    logic.topTitle,
-                    textAlign: TextAlign.start,
-                    maxLines: 3,
-                    minLines: 1,
-                    style: TextStyle(
-                      fontSize: 11,
-                      height: 1.2,
-                      color: CupertinoDynamicColor.resolve(
-                          CupertinoColors.secondaryLabel, context),
-                      fontWeight: FontWeight.normal,
-                      fontStyle: FontStyle.italic,
-                    ),
-                  );
-                },
-              ),
-              middle: Obx(() => _controller.hideNavigationBtn
-                  ? const SizedBox()
-                  : (_item.imgUrl?.isNotEmpty ?? false
-                      ? NavigationBarImage(
-                          imageUrl: _item.imgUrl ?? '',
-                          scrollController: _controller.scrollController,
-                        )
-                      : const SizedBox())),
-              trailing: Obx(() => _controller.hideNavigationBtn
-                  ? Row(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        CupertinoButton(
-                          padding: const EdgeInsets.all(0),
-                          minSize: 38,
-                          child: const Icon(
-                            LineIcons.tags,
-                            size: 26,
-                          ),
-                          onPressed: () {
-                            _controller.addTag();
+      child: CupertinoScrollbar(
+        controller: PrimaryScrollController.of(context),
+        child: EasyRefresh(
+          enableControlFinishRefresh: false,
+          enableControlFinishLoad: false,
+          onLoad: () async {
+            if (_controller.images.isNotEmpty) {
+              Get.toNamed(
+                EHRoutes.galleryAllPreviews,
+                id: isLayoutLarge ? 2 : null,
+              );
+            }
+          },
+          footer: BezierBounceFooter(
+            backgroundColor: Colors.transparent,
+            color: CupertinoColors.inactiveGray,
+          ),
+          child: CustomScrollView(
+            physics: const AlwaysScrollableScrollPhysics(),
+            slivers: <Widget>[
+              // 导航栏
+              CupertinoSliverNavigationBar(
+                padding: const EdgeInsetsDirectional.only(end: 10),
+                largeTitle: GetBuilder<GalleryPageController>(
+                  id: GetIds.PAGE_VIEW_HEADER,
+                  tag: pageCtrlDepth,
+                  builder: (logic) {
+                    return SelectableText(
+                      logic.topTitle,
+                      textAlign: TextAlign.start,
+                      maxLines: 3,
+                      minLines: 1,
+                      style: TextStyle(
+                        fontSize: 11,
+                        height: 1.2,
+                        color: CupertinoDynamicColor.resolve(
+                            CupertinoColors.secondaryLabel, context),
+                        fontWeight: FontWeight.normal,
+                        fontStyle: FontStyle.italic,
+                      ),
+                    );
+                  },
+                ),
+                middle: Obx(
+                  () => _controller.hideNavigationBtn
+                      ? const SizedBox()
+                      : GetBuilder<GalleryPageController>(
+                          id: GetIds.PAGE_VIEW_HEADER,
+                          tag: pageCtrlDepth,
+                          builder: (logic) {
+                            return NavigationBarImage(
+                              imageUrl: logic.galleryItem.imgUrl ?? '',
+                              scrollController: logic.scrollController,
+                            );
                           },
                         ),
-                        CupertinoButton(
-                          padding: const EdgeInsets.all(0),
-                          minSize: 38,
-                          child: const Icon(
-                            LineIcons.share,
-                            size: 26,
+                ),
+                trailing: Obx(() => _controller.hideNavigationBtn
+                    ? Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          CupertinoButton(
+                            padding: const EdgeInsets.all(0),
+                            minSize: 38,
+                            child: const Icon(
+                              LineIcons.tags,
+                              size: 26,
+                            ),
+                            onPressed: () {
+                              _controller.addTag();
+                            },
                           ),
-                          onPressed: () {
-                            final String _url =
-                                '${Api.getBaseUrl()}/g/${_item.gid}/${_item.token}';
-                            logger.v('share $_url');
-                            Share.share(_url);
-                          },
-                        ),
-                      ],
-                    )
-                  : ReadButton(gid: _item.gid ?? '').paddingOnly(right: 4)),
-            ),
-            EhCupertinoSliverRefreshControl(
-              onRefresh: _controller.handOnRefresh,
-            ),
-            SliverSafeArea(
-              top: false,
-              bottom: false,
-              sliver: GalleryDetail(
-                tabTag: tabTag,
-                controller: _controller,
+                          CupertinoButton(
+                            padding: const EdgeInsets.all(0),
+                            minSize: 38,
+                            child: const Icon(
+                              LineIcons.share,
+                              size: 26,
+                            ),
+                            onPressed: () {
+                              final String _url =
+                                  '${Api.getBaseUrl()}/g/${_item.gid}/${_item.token}';
+                              logger.v('share $_url');
+                              Share.share(_url);
+                            },
+                          ),
+                        ],
+                      )
+                    : ReadButton(gid: _item.gid ?? '').paddingOnly(right: 4)),
               ),
-            ),
-          ],
+              EhCupertinoSliverRefreshControl(
+                onRefresh: _controller.handOnRefresh,
+              ),
+              SliverSafeArea(
+                top: false,
+                bottom: false,
+                sliver: GalleryDetail(
+                  tabTag: tabTag,
+                  controller: _controller,
+                ),
+              ),
+            ],
+          ),
         ),
       ),
     );
@@ -177,11 +186,11 @@ class _GalleryMainPageState extends State<GalleryMainPage> {
 class NavigationBarImage extends StatelessWidget {
   const NavigationBarImage({
     Key? key,
-    required this.imageUrl,
+    this.imageUrl,
     this.scrollController,
   }) : super(key: key);
 
-  final String imageUrl;
+  final String? imageUrl;
   final ScrollController? scrollController;
 
   @override
@@ -192,12 +201,14 @@ class NavigationBarImage extends StatelessWidget {
         scrollController?.animateTo(0,
             duration: const Duration(milliseconds: 500), curve: Curves.ease);
       },
-      child: Container(
-        child: CoveTinyImage(
-          imgUrl: imageUrl,
-          statusBarHeight: _statusBarHeight,
-        ),
-      ),
+      child: imageUrl == null || (imageUrl?.isEmpty ?? true)
+          ? const SizedBox.expand()
+          : Container(
+              child: CoveTinyImage(
+                imgUrl: imageUrl!,
+                statusBarHeight: _statusBarHeight,
+              ),
+            ),
     );
   }
 }

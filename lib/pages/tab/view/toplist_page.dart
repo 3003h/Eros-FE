@@ -183,7 +183,7 @@ class _ToplistTabState extends State<ToplistTab> {
         maxPage: controller.maxPage,
         curPage: controller.curPage.value,
         // loadMord: controller.loadDataMore,
-        centerKey: centerKey,
+        topKey: centerKey,
         key: controller.sliverAnimatedListKey,
         lastTopitemIndex: controller.lastTopitemIndex,
       ),

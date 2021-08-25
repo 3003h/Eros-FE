@@ -32,6 +32,7 @@ class _GalleryListTabState extends State<GalleryListTab> {
   final controller = Get.find<GalleryViewController>();
   final EhTabController ehTabController = EhTabController();
 
+  GlobalKey topKey = GlobalKey();
   GlobalKey centerKey = GlobalKey();
 
   @override
@@ -142,7 +143,7 @@ class _GalleryListTabState extends State<GalleryListTab> {
       );
     }
 
-    final Widget navigationBar = CupertinoNavigationBar(
+    final CupertinoNavigationBar navigationBar = CupertinoNavigationBar(
       transitionBetweenRoutes: false,
       padding: const EdgeInsetsDirectional.only(end: 4),
       middle: GestureDetector(
@@ -223,7 +224,57 @@ class _GalleryListTabState extends State<GalleryListTab> {
 
     final Widget customScrollView = CustomScrollView(
       cacheExtent: kTabViewCacheExtent,
+      // center: centerKey,
       physics: const AlwaysScrollableScrollPhysics(),
+      // slivers: [
+      //   // EhCupertinoSliverRefreshControl(onRefresh: controller.onRefresh),
+      //   SliverToBoxAdapter(
+      //     child: SafeArea(
+      //       bottom: false,
+      //       child: CupertinoButton(
+      //         onPressed: controller.onRefresh,
+      //         child: Text('RRR'),
+      //       ),
+      //     ),
+      //   ),
+      //   // SliverList(delegate: SliverChildBuilderDelegate((context, index) {
+      //   //   return Text('1234');
+      //   // })),
+      //   controller.obx(
+      //     (state) {
+      //       return SliverList(
+      //           delegate: SliverChildBuilderDelegate(
+      //         (context, index) {
+      //           final item = state?[index];
+      //           return Text('${item?.englishTitle}')
+      //               .paddingSymmetric(vertical: 10);
+      //         },
+      //         childCount: state?.length ?? 0,
+      //       ));
+      //     },
+      //     onLoading: SliverFillRemaining(
+      //       child: Container(
+      //         alignment: Alignment.center,
+      //         padding: const EdgeInsets.only(bottom: 50),
+      //         child: const CupertinoActivityIndicator(
+      //           radius: 14.0,
+      //         ),
+      //       ),
+      //     ),
+      //   ),
+      //   SliverToBoxAdapter(
+      //     key: centerKey,
+      //     child: Container(
+      //       height: 80,
+      //       color: Colors.blue,
+      //       alignment: Alignment.center,
+      //       child: Text(
+      //         'aaa',
+      //         textAlign: TextAlign.center,
+      //       ),
+      //     ),
+      //   ),
+      // ],
       slivers: <Widget>[
         SliverFloatingPinnedPersistentHeader(
           delegate: SliverFloatingPinnedPersistentHeaderBuilder(
@@ -235,9 +286,11 @@ class _GalleryListTabState extends State<GalleryListTab> {
           ),
         ),
         EhCupertinoSliverRefreshControl(
-          onRefresh: () => controller.onRefresh(centerKey: centerKey),
+          // key: centerKey,
+          onRefresh: () => controller.onRefresh(centerKey: topKey),
         ),
         SliverSafeArea(
+          // key: centerKey,
           top: false,
           bottom: false,
           sliver: _getGalleryList(),
@@ -257,6 +310,7 @@ class _GalleryListTabState extends State<GalleryListTab> {
 
   Widget _endIndicator() {
     return SliverToBoxAdapter(
+      // key: centerKey,
       child: Obx(() => Container(
           alignment: Alignment.center,
           padding: EdgeInsets.only(
@@ -306,7 +360,7 @@ class _GalleryListTabState extends State<GalleryListTab> {
             curPage: controller.curPage.value,
             // loadMord: controller.loadDataMore,
             key: controller.sliverAnimatedListKey,
-            centerKey: centerKey,
+            topKey: topKey,
             lastTopitemIndex: controller.lastTopitemIndex,
           );
         },

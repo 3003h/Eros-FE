@@ -11,7 +11,7 @@ import 'package:fehviewer/pages/image_view/common.dart';
 import 'package:fehviewer/pages/image_view/view/view_page.dart';
 import 'package:fehviewer/pages/tab/controller/gallery_controller.dart';
 import 'package:fehviewer/pages/tab/controller/search_page_controller.dart';
-import 'package:fehviewer/pages/tab/view/gallery_page.dart';
+import 'package:fehviewer/pages/tab/view/gallery_list_page.dart';
 import 'package:fehviewer/pages/tab/view/search_page.dart';
 import 'package:fehviewer/pages/tab/view/tab_base.dart';
 import 'package:fehviewer/route/routes.dart';
@@ -20,14 +20,6 @@ import 'package:fehviewer/utils/logger.dart';
 import 'package:get/get.dart';
 
 class NavigatorUtil {
-  /// 转到画廊列表页面
-  static Future<void> goGalleryList({int cats = 0}) async {
-    await Get.to(() => const GalleryListTab(),
-        binding: BindingsBuilder<GalleryViewController>(() {
-      Get.put(GalleryViewController(cats: cats));
-    }));
-  }
-
   // 带搜索条件打开搜索
   static Future<void> goGalleryListBySearch({
     required String simpleSearch,
@@ -73,12 +65,6 @@ class NavigatorUtil {
     Get.find<DepthService>().pushSearchPageCtrl();
 
     Get.replace(SearchRepository(searchType: searchType));
-
-    // await Get.to(
-    //   () => GallerySearchPage(),
-    //   id: isLayoutLarge ? 1 : null,
-    //   transition: fromTabItem ? Transition.fadeIn : Transition.cupertino,
-    // );
 
     await Get.toNamed(
       EHRoutes.search,
