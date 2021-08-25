@@ -48,15 +48,16 @@ SliverPadding buildWaterfallFlow(
       ),
       delegate: SliverChildBuilderDelegate(
         (BuildContext context, int index) {
-          if (maxPage != null) {
-            if (index == gallerItemBeans.length - 1 && curPage < maxPage - 1) {
-//            加载更多数据的回调
-              loadMord?.call();
-            }
-          }
+//           if (maxPage != null) {
+//             if (index == gallerItemBeans.length - 1 && curPage < maxPage - 1) {
+// //            加载更多数据的回调
+//               loadMord?.call();
+//             }
+//           }
 
           final GalleryItem _item = gallerItemBeans[index];
-          Get.replace(GalleryItemController(_item), tag: _item.gid);
+          Get.lazyReplace(() => GalleryItemController(_item),
+              tag: _item.gid, fenix: true);
 
           return large
               ? GalleryItemFlowLarge(
@@ -185,7 +186,8 @@ Widget buildGallerySliverListView(
         return const SizedBox.shrink();
       }
       final GalleryItem _item = gallerItemBeans[index];
-      Get.replace(GalleryItemController(_item), tag: _item.gid);
+      Get.lazyReplace(() => GalleryItemController(_item),
+          tag: _item.gid, fenix: true);
       return buildGallerySliverListItem(
         _item,
         index,
@@ -221,7 +223,9 @@ Widget buildGallerySliverListSimpleView(
         }
       }
       final GalleryItem _item = gallerItemBeans[index];
-      Get.replace(GalleryItemController(_item), tag: _item.gid);
+      // Get.replace(GalleryItemController(_item), tag: _item.gid);
+      Get.lazyReplace(() => GalleryItemController(_item),
+          tag: _item.gid, fenix: true);
       return buildGallerySliverListItem(
         _item,
         index,
