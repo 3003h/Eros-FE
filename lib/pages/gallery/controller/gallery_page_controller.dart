@@ -6,9 +6,11 @@ import 'package:fehviewer/common/controller/history_controller.dart';
 import 'package:fehviewer/common/controller/localfav_controller.dart';
 import 'package:fehviewer/common/global.dart';
 import 'package:fehviewer/common/isolate_download/download_manager.dart';
+import 'package:fehviewer/common/parser/eh_parser.dart';
 import 'package:fehviewer/common/service/depth_service.dart';
 import 'package:fehviewer/common/service/ehconfig_service.dart';
 import 'package:fehviewer/common/service/layout_service.dart';
+import 'package:fehviewer/component/exception/error.dart';
 import 'package:fehviewer/const/const.dart';
 import 'package:fehviewer/generated/l10n.dart';
 import 'package:fehviewer/models/base/eh_models.dart';
@@ -288,9 +290,6 @@ class GalleryPageController extends GetxController
       currentImagePage = 0;
       setImageAfterRequest(galleryItem.galleryImages);
 
-      // logger.v('category ${galleryItem.category}');
-      // logger.d('ratingCount ${galleryItem.ratingCount} ');
-
       try {
         // 页面内刷新时的处理
         if (refresh) {
@@ -332,14 +331,19 @@ class GalleryPageController extends GetxController
       return galleryItem;
     } on DioError catch (e) {
       if (e.type == DioErrorType.response && e.response?.statusCode == 404) {
-        showToast('This gallery has been removed or is unavailable.');
-        rethrow;
+        logger.e('data: ${e.response?.data}');
+        final errMsg = parseErrGallery('${e.response?.data ?? ''}');
+        logger.d('errMsg: $errMsg');
+        // showToast('This gallery has been removed or is unavailable.');
+        // rethrow;
+        throw EhError(error: errMsg);
       }
       rethrow;
     } catch (e, stack) {
-      showToast('Parsing data error');
+      // showToast('Parsing data error');
       logger.e('解析数据异常\n' + e.toString() + '\n' + stack.toString());
-      rethrow;
+      // rethrow;
+      throw EhError(error: 'Parsing data error');
     }
   }
 
@@ -366,8 +370,12 @@ class GalleryPageController extends GetxController
       );
     } catch (err, stack) {
       logger.e('$err\n$stack');
+      String errMsg = err.toString();
+      if (err is EhError) {
+        errMsg = err.message;
+      }
       if (showError) {
-        change(null, status: RxStatus.error(err.toString()));
+        change(null, status: RxStatus.error(errMsg));
       }
     }
   }
