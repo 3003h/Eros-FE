@@ -179,7 +179,7 @@ class TabHomeLarge extends GetView<TabHomeController> {
                             return GetPageRoute(
                               settings: settings,
                               page: () => GalleryMainPage(),
-                              // transition: Transition.fadeIn,
+                              transition: Transition.fadeIn,
                               showCupertinoParallax: false,
                               // fullscreenDialog: true,
                             );
