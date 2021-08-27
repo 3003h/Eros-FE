@@ -5,21 +5,26 @@ import 'package:fehviewer/models/openl_translation.dart';
 import 'package:fehviewer/utils/logger.dart';
 import 'package:fehviewer/utils/openl/openl_translator.dart';
 import 'package:flutter/services.dart';
+import 'package:translator/translator.dart';
+
+import 'language.dart';
 
 class TranslatorHelper {
-  static Future<String> getApikey() async {
+  static Future<String> getOpenLApikey() async {
     final String openl = await rootBundle.loadString('assets/openl.json');
     final openlJson = json.decode(openl);
     return openlJson['apikey'] as String? ?? '';
   }
 
-  static Future<OpenlTranslation> translate(
+  static GoogleTranslator googleTranslator = GoogleTranslator();
+
+  static Future<OpenlTranslation> openLtranslate(
     String sourceText, {
     String from = 'auto',
     String to = 'en',
     String service = 'deepl',
   }) async {
-    final String apikey = await getApikey();
+    final String apikey = await getOpenLApikey();
 
     logger.v('apikey $apikey');
 
@@ -33,11 +38,22 @@ class TranslatorHelper {
     String to = 'en',
     String service = 'deepl',
   }) async {
-    final OpenlTranslation rult =
-        await translate(sourceText, from: from, to: to);
+    String rultText = '';
+    if (OpenLLanguageList.contains(from)) {
+      final OpenlTranslation rult =
+          await openLtranslate(sourceText, from: from, to: to);
+      logger.v(rult.toJson());
+      rultText = rult.result ?? '';
+    } else {
+      try {
+        final googleTranslateRult = await googleTranslator.translate(sourceText,
+            to: to == 'zh' ? 'zh-cn' : to);
+        rultText = googleTranslateRult.text;
+      } catch (e, stack) {
+        logger.e('$e\n$stack');
+      }
+    }
 
-    logger.v(rult.toJson());
-
-    return rult.result ?? '';
+    return rultText;
   }
 }
