@@ -5,12 +5,13 @@ import 'package:fehviewer/network/gallery_request.dart';
 import 'package:fehviewer/utils/logger.dart';
 import 'package:fehviewer/utils/openl/translator_helper.dart';
 import 'package:fehviewer/utils/toast.dart';
-// import 'package:firebase_language_identifier/firebase_language_identifier.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:get/get.dart';
+import 'package:fehviewer/common/global.dart';
+import 'package:google_ml_kit/google_ml_kit.dart';
 
 // import 'package:learning_language/learning_language.dart';
 
@@ -51,6 +52,9 @@ class CommentController extends GetxController
   set editState(EditState val) => _editState.value = val;
 
   bool get isEditStat => _editState.value == EditState.editComment;
+
+  final LanguageIdentifier languageIdentifier =
+      GoogleMlKit.nlp.languageIdentifier(confidenceThreshold: 0.34);
 
   @override
   void onInit() {
@@ -112,6 +116,9 @@ class CommentController extends GetxController
       for (int i = 0; i < spans.length; i++) {
         String? translate = spans[i].translate;
         if (translate?.isEmpty ?? true) {
+          if (spans[i].text?.isEmpty ?? true) {
+            return;
+          }
           // final List<IdentifiedLanguage> possibleLanguages =
           //     await identifier.idenfityPossibleLanguages(spans[i].text ?? '');
           //
@@ -126,8 +133,28 @@ class CommentController extends GetxController
           //   return;
           // }
 
-          translate = await TranslatorHelper.translateText(spans[i].text ?? '',
-              to: 'zh');
+          final language =
+              await languageIdentifier.identifyLanguage(spans[i].text!);
+          logger.d('language $language');
+
+          // final possibleLanguages = await languageIdentifier
+          //     .identifyPossibleLanguages(spans[i].text!);
+          // final String languages = possibleLanguages
+          //     .map((item) => item.language)
+          //     .toList()
+          //     .join(', ');
+          // logger.d('Possible Languages: $languages');
+          // final possibleLanguage = possibleLanguages.first.language;
+          // if (possibleLanguage == 'zh') {
+          //   return;
+          // }
+
+          translate = await TranslatorHelper.translateText(
+            spans[i].text ?? '',
+            from: language,
+            to: 'zh',
+          );
+
           if (translate.trim().isEmpty) {
             return;
           }

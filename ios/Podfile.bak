@@ -1,5 +1,14 @@
 # Uncomment this line to define a global platform for your project
-platform :ios, '11.0'
+platform :ios, '10.0'
+
+$iOSVersion = '10.0'
+
+# Override Firebase SDK Version
+# $FirebaseSDKVersion = '7.11.0'
+
+pod 'GoogleMLKit/LanguageID', '~> 2.2.0'
+# pod 'GoogleMLKit/LanguageID'
+# pod 'GoogleMLKit/LanguageID', '2.3.0'
 
 # CocoaPods analytics sends network stats synchronously affecting flutter build latency.
 ENV['COCOAPODS_DISABLE_STATS'] = 'true'
@@ -27,8 +36,6 @@ require File.expand_path(File.join('packages', 'flutter_tools', 'bin', 'podhelpe
 
 flutter_ios_podfile_setup
 
-# pod 'GoogleMLKit/LanguageID'
-
 target 'Runner' do
   use_frameworks!
   use_modular_headers!
@@ -38,9 +45,19 @@ end
 
 post_install do |installer|
   installer.pods_project.targets.each do |target|
+    installer.pods_project.build_configurations.each do |config|
+      config.build_settings["EXCLUDED_ARCHS[sdk=*]"] = "armv7"
+      config.build_settings['IPHONEOS_DEPLOYMENT_TARGET'] = $iOSVersion
+    end
+    
     flutter_additional_ios_build_settings(target)
+    
+    
     target.build_configurations.each do |config|
-      config.build_settings['IPHONEOS_DEPLOYMENT_TARGET'] = '11.0'
+      if Gem::Version.new($iOSVersion) > Gem::Version.new(config.build_settings['IPHONEOS_DEPLOYMENT_TARGET'])
+        config.build_settings['IPHONEOS_DEPLOYMENT_TARGET'] = $iOSVersion
+      end
+      
       config.build_settings['SWIFT_VERSION'] = '5.0'  # required by simple_permission
       config.build_settings['ENABLE_BITCODE'] = 'NO'
       # You can enable the permissions needed here. For example to enable camera

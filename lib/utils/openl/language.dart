@@ -10,7 +10,7 @@ class Language {
 }
 
 /// Language list containing all languages supported by openl Translate API
-class LanguageList {
+class OpenLLanguageList {
   static final Map<String, String> _langs = {
     'auto': 'Automatic',
     'zh': 'Chinese',

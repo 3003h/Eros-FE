@@ -18,7 +18,7 @@ class OpenLTranslator {
     String service = 'deepl',
   }) async {
     for (final String each in [from, to]) {
-      if (!LanguageList.contains(each)) {
+      if (!OpenLLanguageList.contains(each)) {
         throw LanguageNotSupportedException(each);
       }
     }
