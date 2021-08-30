@@ -36,6 +36,13 @@ packages:
       url: "https://pub.flutter-io.cn"
     source: hosted
     version: "2.2.0"
+  asn1lib:
+    dependency: transitive
+    description:
+      name: asn1lib
+      url: "https://pub.flutter-io.cn"
+    source: hosted
+    version: "1.0.2"
   async:
     dependency: transitive
     description:
@@ -339,6 +346,13 @@ packages:
       url: "https://github.com/vrtdev/dio-http-cache.git"
     source: git
     version: "0.3.0"
+  encrypt:
+    dependency: "direct main"
+    description:
+      name: encrypt
+      url: "https://pub.flutter-io.cn"
+    source: hosted
+    version: "5.0.1"
   english_words:
     dependency: "direct main"
     description:

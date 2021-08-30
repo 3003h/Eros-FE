@@ -285,9 +285,9 @@ class HistoryController extends GetxController {
     await executor.join(withWaiting: true);
   }
 
-  Future<void> _uploadHistoryIndex(List<HistoryIndexGid?> gids) async {
-    final _time = DateTime.now().millisecondsSinceEpoch;
-    await webdavController.uploadHistoryIndex(
-        gids.where((element) => element != null).toList(), _time);
-  }
+  // Future<void> _uploadHistoryIndex(List<HistoryIndexGid?> gids) async {
+  //   final _time = DateTime.now().millisecondsSinceEpoch;
+  //   await webdavController.uploadHistoryIndex(
+  //       gids.where((element) => element != null).toList(), _time);
+  // }
 }
