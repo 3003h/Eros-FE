@@ -736,15 +736,6 @@ packages:
       url: "https://pub.flutter-io.cn"
     source: hosted
     version: "2.0.1"
-  google_ml_kit:
-    dependency: "direct main"
-    description:
-      path: "."
-      ref: HEAD
-      resolved-ref: "5f2e30a01cdd3933cb592b677fa939df51434398"
-      url: "https://github.com/honjow/Google-Ml-Kit-plugin.git"
-    source: git
-    version: "0.7.1"
   graphs:
     dependency: transitive
     description:
@@ -871,6 +862,15 @@ packages:
       url: "https://pub.flutter-io.cn"
     source: hosted
     version: "2.0.2"
+  learning_language:
+    dependency: "direct main"
+    description:
+      path: "packages/learning_language"
+      ref: HEAD
+      resolved-ref: a796b460ab00338b109ceb8d40de3baf00c897d7
+      url: "https://github.com/honjow/learning.git"
+    source: git
+    version: "0.0.3+2"
   line_icons:
     dependency: "direct main"
     description:

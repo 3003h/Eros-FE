@@ -4,6 +4,7 @@ use warnings;
 
 use Archive::Zip qw( :ERROR_CODES :CONSTANTS );
 use File::Copy::Recursive qw(fcopy rcopy dircopy fmove rmove dirmove);
+use File::Path qw(make_path remove_tree);
 
 my $archiverPath = "build/ios/archive/fehviewer.xcarchive/Products/Applications";
 my $desPath = "$ENV{HOME}/Public/fehv";
@@ -17,6 +18,10 @@ close(DATA);
 
 my $tempDir = "$desPath/temp";
 my $tempDirP = "$desPath/temp/Payload";
+
+# unlink glob ($tempDirP);
+remove_tree($tempDirP, 1, 1);
+
 if (!-d $tempDir) {
     mkdir($tempDir) or die "无法创建 $tempDir 目录, $!";
 }

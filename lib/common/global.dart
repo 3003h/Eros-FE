@@ -36,7 +36,6 @@ final FirebaseAnalytics analytics = FirebaseAnalytics();
 FirebaseFirestore firestore = FirebaseFirestore.instance;
 final LocalAuthentication localAuth = LocalAuthentication();
 DeviceInfoPlugin deviceInfo = DeviceInfoPlugin();
-// final LanguageIdentifier identifier = LanguageIdentifier();
 // final LanguageIdentifier identifier =
 //     FirebaseLanguage.instance.languageIdentifier();
 
