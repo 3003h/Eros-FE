@@ -11,7 +11,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:get/get.dart';
 import 'package:fehviewer/common/global.dart';
-import 'package:google_ml_kit/google_ml_kit.dart';
+import 'package:learning_language/learning_language.dart';
+// import 'package:google_ml_kit/google_ml_kit.dart';
 
 // import 'package:learning_language/learning_language.dart';
 
@@ -53,8 +54,10 @@ class CommentController extends GetxController
 
   bool get isEditStat => _editState.value == EditState.editComment;
 
-  final LanguageIdentifier languageIdentifier =
-      GoogleMlKit.nlp.languageIdentifier(confidenceThreshold: 0.34);
+  // final LanguageIdentifier languageIdentifier =
+  //     GoogleMlKit.nlp.languageIdentifier(confidenceThreshold: 0.34);
+
+  final LanguageIdentifier identifier = LanguageIdentifier();
 
   @override
   void onInit() {
@@ -133,21 +136,12 @@ class CommentController extends GetxController
           //   return;
           // }
 
-          final language =
-              await languageIdentifier.identifyLanguage(spans[i].text!);
-          logger.d('language $language');
+          final language = await identifier.identify(spans[i].text ?? '');
 
-          // final possibleLanguages = await languageIdentifier
-          //     .identifyPossibleLanguages(spans[i].text!);
-          // final String languages = possibleLanguages
-          //     .map((item) => item.language)
-          //     .toList()
-          //     .join(', ');
-          // logger.d('Possible Languages: $languages');
-          // final possibleLanguage = possibleLanguages.first.language;
-          // if (possibleLanguage == 'zh') {
-          //   return;
-          // }
+          // final language =
+          //     await languageIdentifier.identifyLanguage(spans[i].text!);
+
+          logger.d('language $language');
 
           translate = await TranslatorHelper.translateText(
             spans[i].text ?? '',

@@ -3,7 +3,7 @@ description: fehviewer
 
 publish_to: 'none' # Remove this line if you wish to publish to pub.dev
 
-version: 1.1.25+295
+version: 1.1.25+296
 
 environment:
   sdk: '>=2.13.0 <3.0.0'
@@ -130,18 +130,15 @@ dependencies:
   webdav_client: ^1.1.0
   auto_animated: ^3.0.0
 #  google_ml_kit: ^0.7.1
-  google_ml_kit:
+#  google_ml_kit:
 #    path: /Users/honjow/git/Google-Ml-Kit-plugin
-    git:
-      url: https://github.com/honjow/Google-Ml-Kit-plugin.git
-#  learning_language: #^0.0.3+2
-#    path: /Users/honjow/git/learning/packages/learning_language
 #    git:
-#      url: https://github.com/honjow/learning.git
-#      path: packages/learning_language
-#  learning: ^0.0.4+2
-#  firebase_language_identifier:
-#    path: /Users/honjow/flutter/firebase_language_identifier
+#      url: https://github.com/honjow/Google-Ml-Kit-plugin.git
+  learning_language:
+#    path: /Users/honjow/git/learning/packages/learning_language
+    git:
+      url: https://github.com/honjow/learning.git
+      path: packages/learning_language
 
 dev_dependencies:
   # flutter packages pub run build_runner build --delete-conflicting-outputs
