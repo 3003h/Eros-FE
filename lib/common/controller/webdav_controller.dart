@@ -9,6 +9,7 @@ import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:webdav_client/webdav_client.dart' as webdav;
 import 'package:path/path.dart' as path;
+import 'package:encrypt/encrypt.dart';
 
 import '../global.dart';
 
@@ -20,6 +21,9 @@ const String kReadDirPath = '/fehviewer/read';
 
 const String idActionLogin = 'action_login';
 
+const String kAESKey = 'fehviewer is very good!!';
+const String kAESIV = '0000000000000000';
+
 class WebdavController extends GetxController {
   late webdav.Client? client;
 
@@ -29,13 +33,15 @@ class WebdavController extends GetxController {
 
   bool isLongining = false;
 
-  // bool get syncHistory => webdavProfile.syncHistory ?? false;
-  // bool get syncReadProgress => webdavProfile.syncReadProgress ?? false;
   bool _syncHistory = false;
   bool _syncReadProgress = false;
 
   bool get syncHistory => _syncHistory;
   bool get syncReadProgress => _syncReadProgress;
+
+  late final Key _key;
+  late final IV _iv;
+  late final Encrypter _encrypter;
 
   set syncHistory(bool val) {
     final _dav = webdavProfile.copyWith(syncHistory: val);
@@ -62,6 +68,10 @@ class WebdavController extends GetxController {
       syncHistory = webdavProfile.syncHistory ?? false;
       syncReadProgress = webdavProfile.syncReadProgress ?? false;
     }
+
+    _key = Key.fromUtf8(kAESKey);
+    _iv = IV.fromUtf8(kAESIV);
+    _encrypter = Encrypter(AES(_key));
   }
 
   void closeClient() {
@@ -179,63 +189,11 @@ class WebdavController extends GetxController {
     return _mTime.millisecondsSinceEpoch;
   }
 
-  Future<HistoryIndex?> downloadHistoryList_Old() async {
-    if (client == null) {
-      return null;
-    }
-    final _path = path.join(Global.tempPath, _getIndexFileName());
-    try {
-      await client!.read2File('$kHistoryDirPath/index.json', _path);
-    } on DioError catch (err) {
-      if (err.response?.statusCode == 404) {
-        logger.d('file 404');
-        return null;
-      } else {
-        rethrow;
-      }
-    }
-
-    final File _file = File(_path);
-    if (!_file.existsSync()) {
-      return null;
-    }
-    final String _fileText = _file.readAsStringSync();
-    logger.v('_fileText\n$_fileText');
-
-    try {
-      final _index =
-          HistoryIndex.fromJson(jsonDecode(_fileText) as Map<String, dynamic>);
-
-      return _index;
-    } catch (e) {
-      return null;
-    }
-  }
-
-  Future<void> uploadHistoryIndex(List<HistoryIndexGid?> gids, int time) async {
-    if (client == null) {
-      return;
-    }
-    final _path = path.join(Global.tempPath, _getIndexFileName());
-    final File _file = File(_path);
-    final _gids = <HistoryIndexGid>[];
-    for (final gid in gids) {
-      if (gid != null) {
-        _gids.add(gid);
-      }
-    }
-    final _index = HistoryIndex(time: time, gids: _gids);
-    final _text = jsonEncode(_index);
-    logger.v('upload :\n$_text');
-    _file.writeAsStringSync(_text);
-
-    await client!.writeFromFile(_path, '$kHistoryDirPath/index.json');
-  }
-
   Future<void> uploadHistory(GalleryItem his) async {
     if (client == null) {
       return;
     }
+    logger.d('uploadHistory');
     final _path = path.join(Global.tempPath, his.gid);
     final File _file = File(_path);
     final _his = his.copyWith(
@@ -243,10 +201,14 @@ class WebdavController extends GetxController {
       galleryImages: [],
       tagGroup: [],
     );
-    final _text = jsonEncode(_his);
-    _file.writeAsStringSync(_text);
 
     try {
+      final _text = jsonEncode(_his);
+      // final base64Text = base64Encode(utf8.encode(_text));
+      final encrypted = _encrypter.encrypt(_text, iv: _iv);
+      logger.v('encrypted.base64 ${encrypted.base64}');
+      _file.writeAsStringSync(encrypted.base64);
+
       await client!.writeFromFile(
           _path, '$kHistoryDtlDirPath/${his.gid}_${his.lastViewTime}.json');
     } on DioError catch (err) {
@@ -257,6 +219,9 @@ class WebdavController extends GetxController {
       } else {
         rethrow;
       }
+    } catch (e, stack) {
+      logger.e('$e\n$stack');
+      // rethrow;
     }
   }
 
@@ -264,6 +229,7 @@ class WebdavController extends GetxController {
     if (client == null) {
       return null;
     }
+    logger.d('downloadHistory');
     final _path = path.join(Global.tempPath, fileName);
     try {
       await client!.read2File('$kHistoryDtlDirPath/$fileName.json', _path);
@@ -272,11 +238,20 @@ class WebdavController extends GetxController {
         return null;
       }
       final String _fileText = _file.readAsStringSync();
+
+      late String jsonText;
+      if (_fileText.startsWith('{')) {
+        jsonText = _fileText;
+      } else {
+        // jsonText = utf8.decode(base64Decode(_fileText));
+        jsonText = _encrypter.decrypt64(_fileText, iv: _iv);
+      }
       final _image =
-          GalleryItem.fromJson(jsonDecode(_fileText) as Map<String, dynamic>);
+          GalleryItem.fromJson(jsonDecode(jsonText) as Map<String, dynamic>);
 
       return _image;
     } catch (err) {
+      logger.e('$err');
       return null;
     }
   }
@@ -293,6 +268,7 @@ class WebdavController extends GetxController {
     if (client == null) {
       return;
     }
+    logger.d('uploadRead');
     chkReadTempDir();
 
     final _path = path.join(Global.tempPath, 'read', read.gid);
@@ -301,7 +277,9 @@ class WebdavController extends GetxController {
       columnModeVal: '',
     );
     final _text = jsonEncode(_read);
-    _file.writeAsStringSync(_text);
+    // final base64Text = base64Encode(utf8.encode(_text));
+    final encrypted = _encrypter.encrypt(_text, iv: _iv);
+    _file.writeAsStringSync(encrypted.base64);
 
     try {
       await client!.writeFromFile(_path, '$kReadDirPath/${read.gid}.json');
@@ -313,6 +291,8 @@ class WebdavController extends GetxController {
       } else {
         rethrow;
       }
+    } catch (e, stack) {
+      logger.e('$e\n$stack');
     }
   }
 
@@ -320,6 +300,7 @@ class WebdavController extends GetxController {
     if (client == null) {
       return null;
     }
+    logger.d('downloadRead');
     chkReadTempDir();
     final _path = path.join(Global.tempPath, 'read', gid);
     try {
@@ -329,8 +310,15 @@ class WebdavController extends GetxController {
         return null;
       }
       final String _fileText = _file.readAsStringSync();
+      late String jsonText;
+      if (_fileText.startsWith('{')) {
+        jsonText = _fileText;
+      } else {
+        // jsonText = utf8.decode(base64Decode(_fileText));
+        jsonText = _encrypter.decrypt64(_fileText, iv: _iv);
+      }
       final _read =
-          GalleryCache.fromJson(jsonDecode(_fileText) as Map<String, dynamic>);
+          GalleryCache.fromJson(jsonDecode(jsonText) as Map<String, dynamic>);
 
       return _read;
     } catch (err) {
@@ -401,5 +389,9 @@ class WebdavController extends GetxController {
       logger.e('$err');
       return;
     }
+  }
+
+  String encryptAES(String plainText) {
+    return '';
   }
 }
