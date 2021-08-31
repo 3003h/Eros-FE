@@ -15,7 +15,7 @@ class SettingTab extends GetView<SettingViewController> {
     controller.initData(context);
     final String _title = L10n.of(context).tab_setting;
     return CupertinoPageScaffold(
-      backgroundColor: !ehTheme.isDarkMode
+      backgroundColor: CupertinoTheme.of(context).brightness != Brightness.dark
           ? CupertinoColors.secondarySystemBackground
           : null,
       child: CustomScrollView(

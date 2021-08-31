@@ -59,11 +59,11 @@ class SettingViewController extends GetxController
   }
 
   // 菜单文案
-  List _itemTitles = [];
+  List<String> _itemTitles = <String>[];
 
-  List _icons = [];
+  List<IconData> _icons = <IconData>[];
 
-  List _routes = [];
+  List<String> _routes = <String>[];
 
   List<Widget> get itemList {
     final _slivers = <Widget>[];
@@ -71,9 +71,9 @@ class SettingViewController extends GetxController
       _slivers.add(
         SettingItems(
           bottomDivider: _index != _itemTitles.length - 1,
-          text: _itemTitles[_index] as String,
-          icon: _icons[_index] as IconData,
-          route: _routes[_index] as String,
+          text: _itemTitles[_index],
+          icon: _icons[_index],
+          route: _routes[_index],
         ),
       );
     }
