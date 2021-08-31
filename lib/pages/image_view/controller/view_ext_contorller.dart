@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:wakelock/wakelock.dart';
 import 'package:collection/collection.dart';
 import 'package:extended_image/extended_image.dart';
 import 'package:fehviewer/common/controller/download_controller.dart';
@@ -661,6 +662,7 @@ class ViewExtController extends GetxController {
   }
 
   void cancelAutoRead() {
+    Wakelock.disable();
     vState.autoRead = false;
     vState.lastAutoNextSer = null;
     autoNextTimer?.cancel();
@@ -669,6 +671,7 @@ class ViewExtController extends GetxController {
 
   final debNextPage = Debouncing(duration: const Duration(seconds: 1));
   void _startAutoRead() {
+    Wakelock.enable();
     final duration = Duration(milliseconds: _ehConfigService.turnPageInv);
     autoNextTimer = Timer.periodic(duration, (timer) {
       _toPage();

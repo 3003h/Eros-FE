@@ -140,6 +140,7 @@ dependencies:
       url: https://github.com/honjow/learning.git
       path: packages/learning_language
   encrypt: ^5.0.1
+  wakelock: ^0.5.3+3
 
 dev_dependencies:
   # flutter packages pub run build_runner build --delete-conflicting-outputs
