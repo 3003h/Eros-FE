@@ -779,7 +779,7 @@ class ViewExtController extends GetxController {
     if (vState.autoRead) {
       if (vState.viewMode == ViewMode.topToBottom &&
           itemScrollController.isAttached) {
-        logger.v('trd minImageIndex:${vState.minImageIndex + 1}');
+        logger.d('trd minImageIndex:${vState.minImageIndex + 1}');
         final _minIndex = vState.minImageIndex;
         final _minImageSer = _minIndex + 1;
         if (!(vState.loadCompleMap[_minImageSer] ?? false)) {
@@ -803,7 +803,11 @@ class ViewExtController extends GetxController {
 
         if (vState.columnMode == ViewColumnMode.single) {
           // 下一张图片的加载完成标志 如果没有完成 取消翻页定时器
-          vState.lastAutoNextSer = vState.minImageIndex + 2;
+          vState.lastAutoNextSer = vState.currentItemIndex + 2;
+
+          logger.d('cur ${vState.loadCompleMap[vState.currentItemIndex]}  '
+              'nex ${vState.loadCompleMap[vState.currentItemIndex + 1]}');
+
           if (!(vState.loadCompleMap[vState.lastAutoNextSer] ?? false)) {
             autoNextTimer?.cancel();
           }

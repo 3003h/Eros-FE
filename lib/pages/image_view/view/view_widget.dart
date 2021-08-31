@@ -170,7 +170,7 @@ class ImageExt extends GetView<ViewExtController> {
 
   @override
   Widget build(BuildContext context) {
-    logger.d('ser:$ser, url:$url');
+    logger.v('ser:$ser, url:$url');
 
     return ExtendedImage.network(
       url,
