@@ -1,6 +1,7 @@
 import 'package:extended_image/extended_image.dart';
 import 'package:fehviewer/common/controller/gallerycache_controller.dart';
 import 'package:fehviewer/common/isolate_download/download_manager.dart';
+import 'package:fehviewer/common/service/theme_service.dart';
 import 'package:fehviewer/const/theme_colors.dart';
 import 'package:fehviewer/models/gallery_cache.dart';
 import 'package:fehviewer/network/gallery_request.dart';
@@ -17,6 +18,8 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:path/path.dart' as path;
+
+const kCardRadius = 10.0;
 
 class DownloadGalleryItem extends GetView<DownloadViewController> {
   const DownloadGalleryItem({
@@ -55,12 +58,6 @@ class DownloadGalleryItem extends GetView<DownloadViewController> {
             .map((e) => path.join(gTask.realDirPath ?? '', e.filePath ?? ''))
             .toList();
 
-        // final GalleryCache? _galleryCache = Get.find<GalleryCacheController>()
-        //     .getGalleryCache('${galleryTask.gid}');
-        // final lastIndex = _galleryCache?.lastIndex ?? 0;
-        // NavigatorUtil.goGalleryViewPageFile(
-        //     lastIndex, pics, '${galleryTask.gid}');
-
         Get.find<GalleryCacheController>()
             .getGalleryCache('${galleryTask.gid}')
             .then((_galleryCache) {
@@ -69,141 +66,201 @@ class DownloadGalleryItem extends GetView<DownloadViewController> {
               lastIndex, pics, '${galleryTask.gid}');
         });
       },
-      child: Container(
-        padding: const EdgeInsets.only(top: 4, bottom: 4, left: 20, right: 16),
-        height: 120,
-        child: Row(
-          children: [
-            // 封面
-            GestureDetector(
-              child: _CoverImage(
-                      filePath: galleryTask.coverImage != null
-                          ? path.join(galleryTask.realDirPath ?? '',
-                              galleryTask.coverImage)
-                          : null,
-                      url: galleryTask.coverUrl)
-                  .paddingOnly(right: 8),
-              onTap: () async {
-                logger.v('${galleryTask.url} ');
-                String? url = galleryTask.url;
-                if (url == null) {
-                  return;
-                }
-                if (!url.startsWith('http')) {
-                  url = '${Api.getBaseUrl()}$url';
-                }
-                NavigatorUtil.goGalleryPage(url: url);
-              },
-            ),
-            // 右侧
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  // 标题
-                  Text(
-                    galleryTask.title,
-                    softWrap: true,
-                    maxLines: 2,
-                    overflow: TextOverflow.ellipsis,
-                    style: const TextStyle(
-                      fontSize: 13,
-                      height: 1.2,
-                    ),
-                  ).paddingSymmetric(vertical: 2),
-                  Expanded(
-                    child: Row(
+      child: _buildCardItem(context, _complete, addTime: addTime),
+    );
+  }
+
+  Widget _buildCardItem(BuildContext context, bool _complete,
+      {String? addTime}) {
+    return Container(
+      padding: const EdgeInsets.only(right: 10),
+      margin: const EdgeInsets.symmetric(vertical: 5, horizontal: 10),
+      decoration: BoxDecoration(
+        boxShadow: ehTheme.isDarkMode
+            ? null
+            : [
+                BoxShadow(
+                  color: CupertinoDynamicColor.resolve(
+                          CupertinoColors.systemGrey5, Get.context!)
+                      .withOpacity(0.5),
+                  blurRadius: 10,
+                  spreadRadius: 5,
+                )
+              ],
+        color: ehTheme.itemBackgroundColor,
+        borderRadius: BorderRadius.circular(kCardRadius),
+      ),
+      height: 120,
+      child: Row(
+        children: [
+          // 封面
+          Column(
+            children: [
+              Expanded(child: _buildCover(cardType: true)),
+            ],
+          ),
+          // 右侧
+          Expanded(
+            child: _buildItemInfo(context, _complete, addTime: addTime)
+                .paddingSymmetric(vertical: 4),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildItem(BuildContext context, bool _complete, {String? addTime}) {
+    return Column(
+      children: [
+        Container(
+          padding:
+              const EdgeInsets.only(top: 4, bottom: 4, left: 20, right: 16),
+          height: 120,
+          child: Row(
+            children: [
+              // 封面
+              _buildCover(),
+              // 右侧
+              Expanded(
+                child: _buildItemInfo(context, _complete, addTime: addTime),
+              ),
+            ],
+          ),
+        ),
+        Divider(
+          indent: 20,
+          height: 0.6,
+          color: CupertinoDynamicColor.resolve(
+              CupertinoColors.systemGrey4, context),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildCover({bool cardType = false}) {
+    return GestureDetector(
+      child: _CoverImage(
+        filePath: galleryTask.coverImage != null
+            ? path.join(galleryTask.realDirPath ?? '', galleryTask.coverImage)
+            : null,
+        url: galleryTask.coverUrl,
+        cardType: cardType,
+      ).paddingOnly(right: 8),
+      onTap: () async {
+        logger.v('${galleryTask.url} ');
+        String? url = galleryTask.url;
+        if (url == null) {
+          return;
+        }
+        if (!url.startsWith('http')) {
+          url = '${Api.getBaseUrl()}$url';
+        }
+        NavigatorUtil.goGalleryPage(url: url);
+      },
+    );
+  }
+
+  Widget _buildItemInfo(
+    BuildContext context,
+    bool _complete, {
+    String? addTime,
+  }) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        // 标题
+        Text(
+          galleryTask.title,
+          softWrap: true,
+          maxLines: 2,
+          overflow: TextOverflow.ellipsis,
+          style: const TextStyle(
+            fontSize: 13,
+            height: 1.2,
+          ),
+        ).paddingSymmetric(vertical: 2),
+        Expanded(
+          child: Row(
+            children: [
+              Expanded(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Row(
                       children: [
-                        Expanded(
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.start,
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Row(
-                                children: [
-                                  Text(
-                                    galleryTask.uploader ?? '',
-                                    style: TextStyle(
-                                      fontSize: 12,
-                                      color: CupertinoDynamicColor.resolve(
-                                          CupertinoColors.secondaryLabel,
-                                          context),
-                                    ),
-                                  ),
-                                  const Spacer(),
-                                  // 任务添加时间
-                                  Text(
-                                    addTime ?? '',
-                                    style: TextStyle(
-                                      fontSize: 12,
-                                      color: CupertinoDynamicColor.resolve(
-                                          CupertinoColors.secondaryLabel,
-                                          context),
-                                    ),
-                                  ),
-                                ],
-                              ),
-                              const Spacer(),
-                              // 进度条
-                              if (!_complete)
-                                ClipRRect(
-                                  borderRadius: BorderRadius.circular(4),
-                                  child: LinearProgressIndicator(
-                                    value: (galleryTask.completCount ?? 0) /
-                                        galleryTask.fileCount,
-                                    backgroundColor:
-                                        CupertinoDynamicColor.resolve(
-                                            CupertinoColors.secondarySystemFill,
-                                            context),
-                                    valueColor: AlwaysStoppedAnimation<Color>(
-                                      CupertinoDynamicColor.resolve(
-                                          CupertinoColors.activeBlue, context),
-                                    ),
-                                  ),
-                                )
-                              else
-                                _buildRating(galleryTask.rating),
-                              // 下载速度 下载进度
-                              Row(
-                                children: [
-                                  if (!_complete)
-                                    Text(
-                                      speed != null ? '$speed/s' : '',
-                                      style: TextStyle(
-                                          fontSize: 13,
-                                          color: CupertinoDynamicColor.resolve(
-                                              CupertinoColors.secondaryLabel,
-                                              context)),
-                                    )
-                                  else
-                                    _buildCategory(galleryTask.category),
-                                  const Spacer(),
-                                  Text(
-                                    _complete
-                                        ? '${galleryTask.fileCount}'
-                                        : '${galleryTask.completCount ?? 0}/${galleryTask.fileCount}',
-                                    style: TextStyle(
-                                        fontSize: 13,
-                                        color: CupertinoDynamicColor.resolve(
-                                            CupertinoColors.secondaryLabel,
-                                            context)),
-                                  ),
-                                  // 控制按钮
-                                  _getIcon(),
-                                ],
-                              ),
-                            ],
+                        Text(
+                          galleryTask.uploader ?? '',
+                          style: TextStyle(
+                            fontSize: 12,
+                            color: CupertinoDynamicColor.resolve(
+                                CupertinoColors.secondaryLabel, context),
+                          ),
+                        ),
+                        const Spacer(),
+                        // 任务添加时间
+                        Text(
+                          addTime ?? '',
+                          style: TextStyle(
+                            fontSize: 12,
+                            color: CupertinoDynamicColor.resolve(
+                                CupertinoColors.secondaryLabel, context),
                           ),
                         ),
                       ],
                     ),
-                  ),
-                ],
+                    const Spacer(),
+                    // 进度条
+                    if (!_complete)
+                      ClipRRect(
+                        borderRadius: BorderRadius.circular(4),
+                        child: LinearProgressIndicator(
+                          value: (galleryTask.completCount ?? 0) /
+                              galleryTask.fileCount,
+                          backgroundColor: CupertinoDynamicColor.resolve(
+                              CupertinoColors.secondarySystemFill, context),
+                          valueColor: AlwaysStoppedAnimation<Color>(
+                            CupertinoDynamicColor.resolve(
+                                CupertinoColors.activeBlue, context),
+                          ),
+                        ),
+                      )
+                    else
+                      _buildRating(galleryTask.rating),
+                    // 下载速度 下载进度
+                    Row(
+                      children: [
+                        if (!_complete)
+                          Text(
+                            speed != null ? '$speed/s' : '',
+                            style: TextStyle(
+                                fontSize: 13,
+                                color: CupertinoDynamicColor.resolve(
+                                    CupertinoColors.secondaryLabel, context)),
+                          )
+                        else
+                          _buildCategory(galleryTask.category),
+                        const Spacer(),
+                        Text(
+                          _complete
+                              ? '${galleryTask.fileCount}'
+                              : '${galleryTask.completCount ?? 0}/${galleryTask.fileCount}',
+                          style: TextStyle(
+                              fontSize: 13,
+                              color: CupertinoDynamicColor.resolve(
+                                  CupertinoColors.secondaryLabel, context)),
+                        ),
+                        // 控制按钮
+                        _getIcon(),
+                      ],
+                    ),
+                  ],
+                ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
-      ),
+      ],
     );
   }
 
@@ -361,55 +418,68 @@ class _CoverImage extends StatelessWidget {
   const _CoverImage({
     this.url,
     this.filePath,
+    this.cardType = false,
     Key? key,
   }) : super(key: key);
 
   final String? filePath;
   final String? url;
+  final bool cardType;
 
   @override
   Widget build(BuildContext context) {
     logger.v('$filePath  $url');
 
+    Widget image = () {
+      if (filePath != null) {
+        return ExtendedImage.file(
+          File(filePath!),
+          fit: cardType ? BoxFit.cover : BoxFit.fitWidth,
+          loadStateChanged: (ExtendedImageState state) {
+            if (state.extendedImageLoadState == LoadState.loading) {
+              return Container(
+                alignment: Alignment.center,
+                color: CupertinoDynamicColor.resolve(
+                    CupertinoColors.systemGrey5, context),
+                child: const CupertinoActivityIndicator(),
+              );
+            }
+          },
+        );
+      } else if (url != null) {
+        return EhCachedNetworkImage(
+          imageUrl: url!,
+          fit: cardType ? BoxFit.cover : BoxFit.fitWidth,
+        );
+      } else {
+        return const SizedBox.expand();
+      }
+    }();
+
+    image = ClipRRect(
+      borderRadius: cardType
+          ? const BorderRadius.only(
+              topLeft: Radius.circular(kCardRadius),
+              bottomLeft: Radius.circular(kCardRadius))
+          : BorderRadius.circular(6),
+      child: image,
+    );
+
     return Container(
-      width: 70,
+      width: 90,
       decoration: BoxDecoration(
-        boxShadow: [
-          //阴影
-          BoxShadow(
-            color: CupertinoDynamicColor.resolve(
-                CupertinoColors.systemGrey5, Get.context!),
-            blurRadius: 3,
-          )
-        ],
+        boxShadow: cardType
+            ? null
+            : [
+                //阴影
+                BoxShadow(
+                  color: CupertinoDynamicColor.resolve(
+                      CupertinoColors.systemGrey5, Get.context!),
+                  blurRadius: 3,
+                )
+              ],
       ),
-      child: ClipRRect(
-        borderRadius: BorderRadius.circular(6),
-        child: () {
-          if (filePath != null) {
-            return ExtendedImage.file(
-              File(filePath!),
-              fit: BoxFit.fitWidth,
-              loadStateChanged: (ExtendedImageState state) {
-                if (state.extendedImageLoadState == LoadState.loading) {
-                  return Container(
-                    alignment: Alignment.center,
-                    color: CupertinoDynamicColor.resolve(
-                        CupertinoColors.systemGrey5, context),
-                    child: const CupertinoActivityIndicator(),
-                  );
-                }
-              },
-            );
-          } else if (url != null) {
-            return EhCachedNetworkImage(
-              imageUrl: url!,
-            );
-          } else {
-            return const SizedBox.expand();
-          }
-        }(),
-      ),
+      child: image,
     );
   }
 }

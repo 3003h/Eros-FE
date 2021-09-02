@@ -848,6 +848,13 @@ packages:
       url: "https://pub.flutter-io.cn"
     source: hosted
     version: "1.0.0"
+  jinja:
+    dependency: "direct main"
+    description:
+      name: jinja
+      url: "https://pub.flutter-io.cn"
+    source: hosted
+    version: "0.3.4"
   js:
     dependency: transitive
     description:

@@ -13,6 +13,7 @@ class BlurImage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Stack(
       alignment: Alignment.center,
+      fit: StackFit.loose,
       children: <Widget>[
         Container(child: child),
         Offstage(
