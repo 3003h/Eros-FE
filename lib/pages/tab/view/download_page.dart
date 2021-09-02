@@ -256,19 +256,9 @@ Widget _downloadItemBuilder(BuildContext context, int _taskIndex) {
       return GestureDetector(
         onLongPress: () => controller.onLongPress(_taskIndex),
         behavior: HitTestBehavior.opaque,
-        child: Column(
-          children: [
-            DownloadGalleryItem(
-              galleryTask: _taskInfo,
-              speed: _speed,
-            ),
-            Divider(
-              indent: 20,
-              height: 0.6,
-              color: CupertinoDynamicColor.resolve(
-                  CupertinoColors.systemGrey4, context),
-            ),
-          ],
+        child: DownloadGalleryItem(
+          galleryTask: _taskInfo,
+          speed: _speed,
         ),
       );
     },

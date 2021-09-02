@@ -3,7 +3,7 @@ description: fehviewer
 
 publish_to: 'none' # Remove this line if you wish to publish to pub.dev
 
-version: 1.1.25+298
+version: 1.1.25+299
 
 environment:
   sdk: '>=2.13.0 <3.0.0'
@@ -141,6 +141,7 @@ dependencies:
       path: packages/learning_language
   encrypt: ^5.0.1
   wakelock: ^0.5.3+3
+  jinja: ^0.3.4
 
 dev_dependencies:
   # flutter packages pub run build_runner build --delete-conflicting-outputs

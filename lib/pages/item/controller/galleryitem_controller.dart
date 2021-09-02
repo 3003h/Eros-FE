@@ -1,6 +1,7 @@
 import 'package:collection/collection.dart';
 import 'package:fehviewer/common/controller/history_controller.dart';
 import 'package:fehviewer/common/service/ehconfig_service.dart';
+import 'package:fehviewer/common/service/theme_service.dart';
 import 'package:fehviewer/generated/l10n.dart';
 import 'package:fehviewer/models/index.dart';
 import 'package:fehviewer/pages/controller/fav_dialog_controller.dart';
@@ -76,10 +77,11 @@ class GalleryItemController extends GetxController {
   late List<GalleryImage> firstPageImage;
   GalleryItem galleryItem;
 
-  Rx<Color?> colorTap = const Color.fromARGB(0, 0, 0, 0).obs;
+  Rx<Color?> colorTap = ehTheme.itemBackgroundColor.obs;
 
   void _updateNormalColor() {
-    colorTap.value = Colors.transparent;
+    // colorTap.value = Colors.transparent;
+    colorTap.value = ehTheme.itemBackgroundColor;
   }
 
   void _updatePressedColor() {
@@ -88,7 +90,6 @@ class GalleryItemController extends GetxController {
   }
 
   set localFav(bool value) {
-    // galleryItem.localFav = value;
     galleryItem = galleryItem.copyWith(localFav: localFav);
     update();
   }

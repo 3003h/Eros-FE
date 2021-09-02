@@ -106,15 +106,17 @@ class GalleryItemFlowLarge extends StatelessWidget {
           decoration: BoxDecoration(
               color: ehTheme.itemBackgroundColor,
               borderRadius: BorderRadius.circular(kRadius), //圆角
-              // ignore: prefer_const_literals_to_create_immutables
-              boxShadow: [
-                //阴影
-                BoxShadow(
-                  color: CupertinoDynamicColor.resolve(
-                      CupertinoColors.systemGrey4, context),
-                  blurRadius: 10,
-                )
-              ]),
+              boxShadow: ehTheme.isDarkMode
+                  ? null
+                  : [
+                      BoxShadow(
+                        color: CupertinoDynamicColor.resolve(
+                                CupertinoColors.systemGrey5, Get.context!)
+                            .withOpacity(0.5),
+                        blurRadius: 10,
+                        spreadRadius: 5,
+                      )
+                    ]),
           child: Column(
             mainAxisSize: MainAxisSize.min,
             crossAxisAlignment: CrossAxisAlignment.start,
