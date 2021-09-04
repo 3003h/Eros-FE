@@ -305,12 +305,6 @@ class CoverImg extends StatelessWidget {
                 imageUrl: imgUrl,
                 fit: BoxFit.fitWidth,
               ),
-              // child: NetworkExtendedImage(
-              //   url: imgUrl,
-              //   height: (height ?? 0) * constraints.maxWidth / (width ?? 0),
-              //   width: constraints.maxWidth,
-              //   fit: BoxFit.fitWidth,
-              // ),
             );
           },
         );

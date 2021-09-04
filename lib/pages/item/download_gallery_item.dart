@@ -74,7 +74,8 @@ class DownloadGalleryItem extends GetView<DownloadViewController> {
       {String? addTime}) {
     return Container(
       padding: const EdgeInsets.only(right: 10),
-      margin: const EdgeInsets.symmetric(vertical: 5, horizontal: 10),
+      // margin: const EdgeInsets.symmetric(vertical: 5, horizontal: 10),
+      margin: const EdgeInsets.fromLTRB(10, 5, 10, 10),
       decoration: BoxDecoration(
         boxShadow: ehTheme.isDarkMode
             ? null
@@ -85,6 +86,7 @@ class DownloadGalleryItem extends GetView<DownloadViewController> {
                       .withOpacity(0.5),
                   blurRadius: 10,
                   spreadRadius: 5,
+                  offset: const Offset(2, 2),
                 )
               ],
         color: ehTheme.itemBackgroundColor,
