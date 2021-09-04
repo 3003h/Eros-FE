@@ -17,6 +17,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
+import 'package:blur/blur.dart';
 
 const double kPaddingHorizontal = 12.0;
 const double kPaddingVertical = 18.0;
@@ -83,9 +84,13 @@ class GalleryItemWidget extends StatelessWidget {
               child: Row(
                 children: <Widget>[
                   // 封面图片
-                  _CoverImage(
-                    galleryItemController: galleryItemController,
-                    tabTag: tabTag,
+                  Column(
+                    children: [
+                      _CoverImage(
+                        galleryItemController: galleryItemController,
+                        tabTag: tabTag,
+                      ),
+                    ],
                   ),
                   Container(
                     width: 8,
@@ -195,16 +200,18 @@ class GalleryItemWidget extends StatelessWidget {
                       BoxShadow(
                         color: CupertinoDynamicColor.resolve(
                                 CupertinoColors.systemGrey5, Get.context!)
-                            .withOpacity(0.5),
+                            .withOpacity(0.9),
                         blurRadius: 10,
-                        spreadRadius: 5,
+                        spreadRadius: 2,
+                        offset: Offset(2, 2),
                       )
                     ],
               color: galleryItemController.colorTap.value,
               borderRadius: BorderRadius.circular(kCardRadius),
             ),
             padding: const EdgeInsets.only(right: kPaddingHorizontal),
-            margin: const EdgeInsets.symmetric(vertical: 10, horizontal: 10),
+            // margin: const EdgeInsets.symmetric(vertical: 10, horizontal: 10),
+            margin: const EdgeInsets.fromLTRB(10, 8, 10, 12),
             child: IntrinsicHeight(
               child: Row(
                 children: <Widget>[
@@ -348,6 +355,18 @@ class _CoverImage extends StatelessWidget {
 
     if (!cardType) {
       image = Container(
+        width: coverImageWidth,
+        height: _item.imgWidth != null ? _getHeigth() : null,
+        child: HeroMode(
+          enabled: !isLayoutLarge,
+          child: Hero(
+            tag: '${_item.gid}_cover_${tabTag}',
+            child: image,
+          ),
+        ),
+      );
+
+      image = Container(
         decoration: BoxDecoration(boxShadow: [
           //阴影
           BoxShadow(
@@ -363,6 +382,36 @@ class _CoverImage extends StatelessWidget {
         ),
       );
     } else {
+      image = Container(
+        width: coverImageWidth,
+        height: _item.imgWidth != null ? _getHeigth() : null,
+        child: Stack(
+          fit: StackFit.passthrough,
+          children: [
+            FittedBox(
+              fit: BoxFit.cover,
+              child: image.blurred(
+                blur: 10,
+                colorOpacity: ehTheme.isDarkMode ? 0.5 : 0.1,
+                blurColor: CupertinoTheme.of(context)
+                    .barBackgroundColor
+                    .withOpacity(1),
+              ),
+            ),
+            HeroMode(
+              enabled: !isLayoutLarge,
+              child: Hero(
+                tag: '${_item.gid}_cover_${tabTag}',
+                child: Center(
+                  child: ClipRRect(
+                      borderRadius: BorderRadius.circular(4), child: image),
+                ),
+              ),
+            ),
+          ],
+        ),
+      );
+
       image = ClipRRect(
         // 圆角
         borderRadius: const BorderRadius.only(
@@ -373,17 +422,7 @@ class _CoverImage extends StatelessWidget {
       );
     }
 
-    return Container(
-      width: coverImageWidth,
-      height: _item.imgWidth != null ? _getHeigth() : null,
-      // alignment: Alignment.center,
-      child: !isLayoutLarge
-          ? Hero(
-              tag: '${_item.gid}_cover_${tabTag}',
-              child: image,
-            )
-          : image,
-    );
+    return image;
   }
 }
 
@@ -694,22 +733,19 @@ class CoverImg extends StatelessWidget {
           // height: height,
           httpHeaders: _httpHeaders,
           imageUrl: imgUrl.dfUrl,
-          fit: BoxFit.cover,
+          fit: BoxFit.fitWidth,
         );
-        // return NetworkExtendedImage(
-        //   url: imgUrl,
-        // );
       } else {
         return Container();
       }
     }
 
-    return image();
-
-    return Obx(() => BlurImage(
-          isBlur: ehConfigService.isGalleryImgBlur.value,
-          child: image(),
-        ));
+    return Obx(
+      () => BlurImage(
+        child: image(),
+        isBlur: ehConfigService.isGalleryImgBlur.value,
+      ),
+    );
   }
 }
 
