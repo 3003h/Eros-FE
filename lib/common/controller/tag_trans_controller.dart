@@ -220,8 +220,8 @@ class TagTransController extends GetxController {
     // 查询code字段
     final qryMap = {};
     final RegExp regCode = RegExp(r'`((\w+\s+?)*\w+)`');
-    final matchs = regCode.allMatches(_translates?.intro ?? '');
-    for (final match in matchs) {
+    final matches = regCode.allMatches(_translates?.intro ?? '');
+    for (final match in matches) {
       final _ori = match.group(1);
       if (_ori != null) {
         final _translateCode = await getTagTranslateText(_ori);
