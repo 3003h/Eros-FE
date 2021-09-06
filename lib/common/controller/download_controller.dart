@@ -151,7 +151,7 @@ class DownloadController extends GetxController {
 
   void _downloadViewAnimateListAdd() {
     if (Get.isRegistered<DownloadViewController>()) {
-      Get.find<DownloadViewController>().animateListAddTask();
+      Get.find<DownloadViewController>().animateGalleryListAddTask();
     }
   }
 

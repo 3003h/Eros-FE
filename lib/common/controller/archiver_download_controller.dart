@@ -15,16 +15,20 @@ import 'package:flutter_downloader/flutter_downloader.dart';
 import 'package:get/get.dart';
 import 'package:path/path.dart' as path;
 import 'package:path_provider/path_provider.dart';
+import 'package:collection/collection.dart';
 
 Future<String> get defDownloadPath async => GetPlatform.isAndroid
     ? path.join((await getExternalStorageDirectory())!.path, 'Download')
     : path.join(Global.appDocPath, 'Download');
 
 class ArchiverDownloadController extends GetxController {
-  final RxMap<String, DownloadTaskInfo> archiverTaskMap =
-      <String, DownloadTaskInfo>{}.obs;
+  final Map<String, DownloadTaskInfo> _archiverTaskMap =
+      <String, DownloadTaskInfo>{};
+  set archiverTaskMap(Map<String, DownloadTaskInfo> val) {
+    _gStore.archiverTaskMap = val;
+  }
 
-  final List<String> _archiverDlIdList = <String>[];
+  Map<String, DownloadTaskInfo> get archiverTaskMap => _archiverTaskMap;
 
   final GStore _gStore = Get.find();
 
@@ -36,26 +40,63 @@ class ArchiverDownloadController extends GetxController {
     return (await Global.getDatabase()).imageTaskDao;
   }
 
+  final ReceivePort _port = ReceivePort();
+
   @override
   void onInit() {
     super.onInit();
     logger.d('ArchiverDownloadController onInit');
 
+    IsolateNameServer.registerPortWithName(
+        _port.sendPort, 'downloader_send_port');
+    _port.listen((dynamic data) {
+      final dataList = data as List<dynamic>;
+      String taskId = dataList[0] as String;
+      DownloadTaskStatus status = dataList[1] as DownloadTaskStatus;
+      int progress = dataList[2] as int;
+
+      logger.d('$taskId $status $progress');
+
+      // 更新任务状态
+      if (archiverTaskMap[taskId] != null) {
+        // 通过taskid找到任务
+        final _key = archiverTaskMap.entries
+            .firstWhereOrNull((element) => element.value.taskId == taskId)
+            ?.key;
+
+        if (_key == null) {
+          return;
+        }
+
+        archiverTaskMap[_key] = archiverTaskMap[_key]!
+            .copyWith(status: status.value, progress: progress);
+
+        final _tag = archiverTaskMap[_key]!.tag;
+        if (Get.isRegistered<DownloadViewController>()) {
+          Get.find<DownloadViewController>()
+              .update(['${idDownloadArchiverItem}_$_tag']);
+        }
+      }
+    });
+
     FlutterDownloader.registerCallback(_downloadCallback);
 
     // 从GS中初始化 archiverDlMap
-    final Map<String, DownloadTaskInfo> _archivermap =
-        _gStore.archiverTaskMap ?? <String, DownloadTaskInfo>{};
-    archiverTaskMap(_archivermap);
-
-    ever(archiverTaskMap, (Map<String, DownloadTaskInfo> val) {
-      _gStore.archiverTaskMap = val;
-    });
+    final _archiver = _gStore.archiverTaskMap ?? <String, DownloadTaskInfo>{};
+    _archiverTaskMap.clear();
+    _archiverTaskMap.addAll(_archiver);
 
     // 处理archiver任务
     _getArchiverTask();
   }
 
+  @override
+  void onClose() {
+    super.onClose();
+    IsolateNameServer.removePortNameMapping('downloader_send_port');
+  }
+
+  /// 新增下载任务
   Future<void> downloadArchiverFile({
     required String gid,
     required String dlType,
@@ -81,9 +122,18 @@ class ArchiverDownloadController extends GetxController {
       title: title,
     );
 
-    _archiverDlIdList.add(_tag);
+    _downloadViewAnimateListAdd();
+    if (Get.isRegistered<DownloadViewController>()) {
+      Get.find<DownloadViewController>().update();
+    }
 
     showToast('Download task added');
+  }
+
+  void _downloadViewAnimateListAdd() {
+    if (Get.isRegistered<DownloadViewController>()) {
+      Get.find<DownloadViewController>().animateArchiverListAddTask();
+    }
   }
 
   /// 获取下载路径
@@ -91,7 +141,6 @@ class ArchiverDownloadController extends GetxController {
     final String _dirPath = GetPlatform.isAndroid
         ? path.join((await getExternalStorageDirectory())!.path, '')
         : path.join(Global.appDocPath, 'Download', 'Archiver');
-    // : Global.appDocPath;
 
     final Directory savedDir = Directory(_dirPath);
     // 判断下载路径是否存在
@@ -159,6 +208,8 @@ class ArchiverDownloadController extends GetxController {
 
 /// 下载进度回调顶级函数
 void _downloadCallback(String id, DownloadTaskStatus status, int progress) {
+  // logger.d('$id $status $progress');
+
   final SendPort send =
       IsolateNameServer.lookupPortByName('downloader_send_port')!;
   send.send([id, status, progress]);

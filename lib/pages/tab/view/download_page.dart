@@ -129,47 +129,20 @@ class _DownloadArchiverViewState extends State<DownloadArchiverView>
   @override
   void initState() {
     super.initState();
-    // tabPages.scrollControllerMap[controller.tabTag] =
-    //     PrimaryScrollController.of(context);
   }
 
   @override
   Widget build(BuildContext context) {
     super.build(context);
     return CupertinoScrollbar(
-      child: ListView.separated(
-        // controller: widget.scrollController,
-        itemBuilder: (_, int index) {
-          final _id = controller.archiverTasks[index].tag;
-
-          return GetBuilder<DownloadViewController>(
-              id: _id,
-              builder: (DownloadViewController _controller) {
-                final DownloadTaskInfo _taskInfo =
-                    _controller.archiverTasks[index];
-
-                return GestureDetector(
-                  onLongPress: () => _controller.onLongPress(index,
-                      type: DownloadType.archiver),
-                  behavior: HitTestBehavior.opaque,
-                  child: DownloadArchiverItem(
-                    title: _taskInfo.title ?? '',
-                    progress: _taskInfo.progress ?? 0,
-                    status: DownloadTaskStatus(_taskInfo.status ?? 0),
-                    index: index,
-                  ),
-                );
-              });
-        },
-        separatorBuilder: (_, __) {
-          return Divider(
-            indent: 20,
-            height: 0.6,
-            color: CupertinoDynamicColor.resolve(
-                CupertinoColors.systemGrey4, context),
-          );
-        },
-        itemCount: controller.archiverTasks.length,
+      child: AnimatedList(
+        key: controller.animatedArchiverListKey,
+        padding: EdgeInsets.only(
+          top: context.mediaQueryPadding.top,
+          bottom: context.mediaQueryPadding.bottom,
+        ),
+        initialItemCount: controller.archiverTasks.length,
+        itemBuilder: downloadArchiverItemBuilder,
       ),
     );
   }
@@ -198,22 +171,17 @@ class _DownloadGalleryViewState extends State<DownloadGalleryView>
   @override
   Widget build(BuildContext context) {
     super.build(context);
-    return GetBuilder<DownloadViewController>(
-      id: 'DownloadGalleryView',
-      builder: (logic) {
-        return CupertinoScrollbar(
-          controller: PrimaryScrollController.of(context),
-          child: AnimatedList(
-            key: controller.animatedListKey,
-            padding: EdgeInsets.only(
-              top: context.mediaQueryPadding.top,
-              bottom: context.mediaQueryPadding.bottom,
-            ),
-            initialItemCount: controller.galleryTasks.length,
-            itemBuilder: downloadItemBuilder,
-          ),
-        );
-      },
+    return CupertinoScrollbar(
+      controller: PrimaryScrollController.of(context),
+      child: AnimatedList(
+        key: controller.animatedGalleryListKey,
+        padding: EdgeInsets.only(
+          top: context.mediaQueryPadding.top,
+          bottom: context.mediaQueryPadding.bottom,
+        ),
+        initialItemCount: controller.galleryTasks.length,
+        itemBuilder: downloadItemBuilder,
+      ),
     );
   }
 
@@ -237,6 +205,22 @@ Widget downloadDelItemBuilder(
   );
 }
 
+Widget downloadArchiverItemBuilder(
+    BuildContext context, int _taskIndex, Animation<double> animation) {
+  return _buildAnimatedListItem(
+    animation,
+    child: _downloadArciverItemBuilder(context, _taskIndex),
+  );
+}
+
+Widget downloadArchiverDelItemBuilder(
+    BuildContext context, int _taskIndex, Animation<double> animation) {
+  return _buildDelAnimatedListItem(
+    animation,
+    child: _downloadArciverItemBuilder(context, _taskIndex),
+  );
+}
+
 Widget _downloadItemBuilder(BuildContext context, int _taskIndex) {
   final DownloadViewController controller = Get.find();
   if (controller.galleryTasks.length - 1 < _taskIndex) {
@@ -244,9 +228,8 @@ Widget _downloadItemBuilder(BuildContext context, int _taskIndex) {
   }
 
   final gid = controller.galleryTasks[_taskIndex].gid;
-
   return GetBuilder<DownloadViewController>(
-    id: 'DownloadGalleryItem_$gid',
+    id: '${idDownloadGalleryItem}_$gid',
     builder: (logic) {
       logger.v('rebuild DownloadGalleryItem_$gid');
 
@@ -259,6 +242,32 @@ Widget _downloadItemBuilder(BuildContext context, int _taskIndex) {
         child: DownloadGalleryItem(
           galleryTask: _taskInfo,
           speed: _speed,
+        ),
+      );
+    },
+  );
+}
+
+Widget _downloadArciverItemBuilder(BuildContext context, int _taskIndex) {
+  final DownloadViewController controller = Get.find();
+  if (controller.archiverTasks.length - 1 < _taskIndex) {
+    return const SizedBox.shrink();
+  }
+
+  final _tag = controller.archiverTasks[_taskIndex].tag;
+  return GetBuilder<DownloadViewController>(
+    id: '${idDownloadArchiverItem}_$_tag',
+    builder: (logic) {
+      final DownloadTaskInfo _taskInfo = logic.archiverTasks[_taskIndex];
+      return GestureDetector(
+        onLongPress: () =>
+            logic.onLongPress(_taskIndex, type: DownloadType.archiver),
+        behavior: HitTestBehavior.opaque,
+        child: DownloadArchiverItem(
+          title: _taskInfo.title ?? '',
+          progress: _taskInfo.progress ?? 0,
+          status: DownloadTaskStatus(_taskInfo.status ?? 0),
+          index: _taskIndex,
         ),
       );
     },

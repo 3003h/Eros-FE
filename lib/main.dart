@@ -48,8 +48,6 @@ Future<void> main() async {
     }
     resetLogLevel();
 
-    // downloadManagerIsolate.init();
-
     runApp(DevicePreview(
       // enabled: !kReleaseMode,
       enabled: false,
