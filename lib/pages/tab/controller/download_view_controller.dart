@@ -17,11 +17,19 @@ enum DownloadType {
   archiver,
 }
 
+const String idDownloadGalleryView = 'DownloadGalleryView';
+const String idDownloadArchiverView = 'DownloadArchiverView';
+const String idDownloadGalleryItem = 'DownloadGalleryItem';
+const String idDownloadArchiverItem = 'DownloadArchiverItem';
+
 class DownloadViewController extends GetxController {
   final ArchiverDownloadController _archiverDownloadController = Get.find();
   final DownloadController _downloadController = Get.find();
 
-  final GlobalKey<AnimatedListState> animatedListKey =
+  final GlobalKey<AnimatedListState> animatedGalleryListKey =
+      GlobalKey<AnimatedListState>();
+
+  final GlobalKey<AnimatedListState> animatedArchiverListKey =
       GlobalKey<AnimatedListState>();
 
   late String tabTag;
@@ -116,24 +124,34 @@ class DownloadViewController extends GetxController {
   void removeArchiverTask(int index) {
     final String? _oriTaskid = archiverTasks[index].taskId;
     final String? _tag = archiverTasks[index].tag;
+
+    animatedArchiverListKey.currentState?.removeItem(
+        index,
+        (context, animation) =>
+            downloadArchiverDelItemBuilder(context, index, animation));
     _archiverDownloadController.archiverTaskMap.remove(_tag);
     FlutterDownloader.remove(
         taskId: _oriTaskid ?? '', shouldDeleteContent: true);
+    update([idDownloadArchiverView]);
   }
 
   // Gallery 移除任务
   void removeGalleryTask(int index) {
     final GalleryTask _task = galleryTasks[index];
     _downloadController.removeDownloadGalleryTask(gid: _task.gid);
-    animatedListKey.currentState?.removeItem(
+    animatedGalleryListKey.currentState?.removeItem(
         index,
         (context, animation) =>
             downloadDelItemBuilder(context, index, animation));
-    update(['DownloadGalleryView']);
+    update([idDownloadGalleryView]);
   }
 
-  void animateListAddTask() {
-    animatedListKey.currentState?.insertItem(galleryTasks.length - 1);
+  void animateGalleryListAddTask() {
+    animatedGalleryListKey.currentState?.insertItem(galleryTasks.length - 1);
+  }
+
+  void animateArchiverListAddTask() {
+    animatedArchiverListKey.currentState?.insertItem(archiverTasks.length - 1);
   }
 
   void onLongPress(int index, {DownloadType type = DownloadType.gallery}) {
@@ -175,12 +193,12 @@ class DownloadViewController extends GetxController {
   // gallery 暂停任务
   void pauseGalleryDownload(int? gid) {
     if (gid != null) _downloadController.galleryTaskPaused(gid);
-    update(['DownloadGalleryItem_$gid']);
+    update(['${idDownloadGalleryItem}_$gid']);
   }
 
   // gallery 恢复任务
   void resumeGalleryDownload(int? gid) {
     if (gid != null) _downloadController.galleryTaskResume(gid);
-    update(['DownloadGalleryItem_$gid']);
+    update(['${idDownloadGalleryItem}_$gid']);
   }
 }

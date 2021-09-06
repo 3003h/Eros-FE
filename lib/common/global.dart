@@ -20,6 +20,7 @@ import 'package:fehviewer/utils/storage.dart';
 import 'package:fehviewer/utils/utility.dart';
 import 'package:fehviewer/utils/vibrate.dart';
 import 'package:firebase_analytics/firebase_analytics.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_downloader/flutter_downloader.dart';
@@ -91,7 +92,7 @@ class Global {
     // 判断是否debug模式
     inDebugMode = EHUtils().isInDebugMode;
 
-    await FlutterDownloader.initialize(debug: Global.inDebugMode);
+    await FlutterDownloader.initialize(debug: kDebugMode);
 
     canCheckBiometrics = await localAuth.canCheckBiometrics;
 
