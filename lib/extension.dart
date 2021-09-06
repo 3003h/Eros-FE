@@ -99,10 +99,10 @@ extension ExtUser on User {
 
 extension ExtTagTranlat on TagTranslat {
   String? get nameNotMD {
-    final reg = RegExp(r'!\[\S+\]\(.+?\)(\S+)');
+    final reg = RegExp(r'!\[(\S+)?\]\(.+?\)(\S+)');
     final match = reg.allMatches(name ?? '');
     if (match.isNotEmpty) {
-      return name?.replaceAllMapped(reg, (match) => match.group(1) ?? '') ??
+      return name?.replaceAllMapped(reg, (match) => match.group(2) ?? '') ??
           name;
     } else {
       return name;
