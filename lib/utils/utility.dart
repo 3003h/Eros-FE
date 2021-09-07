@@ -8,9 +8,32 @@ import 'package:fehviewer/const/const.dart';
 import 'package:fehviewer/models/favcat.dart';
 import 'package:fehviewer/network/gallery_request.dart';
 import 'package:fehviewer/utils/logger.dart';
+import 'package:fehviewer/utils/toast.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:permission_handler/permission_handler.dart';
+
+Future<void> requestPermission() async {
+  final PermissionStatus statusMStorage =
+      await Permission.manageExternalStorage.status;
+  logger.d('manageExternalStorage $statusMStorage');
+  if (statusMStorage.isPermanentlyDenied) {
+    if (await Permission.manageExternalStorage.request().isGranted) {
+      return;
+    } else {
+      showToast('Permission is permanently denied, open App Settings');
+      openAppSettings();
+      logger.d('jump to setting');
+    }
+  } else {
+    if (await Permission.manageExternalStorage.request().isGranted) {
+      return;
+    } else {
+      throw 'Unable to download, please authorize first~';
+    }
+  }
+}
 
 double? initScaleWithSize({
   required Size imageSize,

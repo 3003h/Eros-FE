@@ -91,7 +91,9 @@ class DownloadViewController extends GetxController {
     }
 
     logger.d('oritaskid $_oriTaskid,  newID $_newTaskId');
-    if (_newTaskId != null && archiverTasks[index].tag != null) {
+    if (_newTaskId != null &&
+        _newTaskId.isNotEmpty &&
+        archiverTasks[index].tag != null) {
       _archiverDownloadController.archiverTaskMap[archiverTasks[index].tag!] =
           _archiverDownloadController
               .archiverTaskMap[archiverTasks[index].tag!]!
@@ -112,7 +114,9 @@ class DownloadViewController extends GetxController {
     }
 
     logger.d('oritaskid $_oriTaskid,  newID $_newTaskId');
-    if (_newTaskId != null && archiverTasks[index].tag != null) {
+    if (_newTaskId != null &&
+        _newTaskId.isNotEmpty &&
+        archiverTasks[index].tag != null) {
       _archiverDownloadController.archiverTaskMap[archiverTasks[index].tag!] =
           _archiverDownloadController
               .archiverTaskMap[archiverTasks[index].tag!]!
@@ -129,7 +133,9 @@ class DownloadViewController extends GetxController {
         index,
         (context, animation) =>
             downloadArchiverDelItemBuilder(context, index, animation));
-    _archiverDownloadController.archiverTaskMap.remove(_tag);
+
+    // _archiverDownloadController.archiverTaskMap.remove(_tag);
+    _archiverDownloadController.removeTask(_tag);
     FlutterDownloader.remove(
         taskId: _oriTaskid ?? '', shouldDeleteContent: true);
     update([idDownloadArchiverView]);

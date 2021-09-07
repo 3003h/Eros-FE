@@ -229,7 +229,7 @@ class WebdavController extends GetxController {
     if (client == null) {
       return null;
     }
-    logger.d('downloadHistory');
+    logger.v('downloadHistory');
     final _path = path.join(Global.tempPath, fileName);
     try {
       await client!.read2File('$kHistoryDtlDirPath/$fileName.json', _path);

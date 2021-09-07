@@ -4,6 +4,8 @@
   "type?": "",
   "title?": "",
   "taskId?": "",
+  "imgUrl?": "",
+  "galleryUrl?": "",
   "dowmloadType?": "",
   "status?": 1,
   "progress?": 100
