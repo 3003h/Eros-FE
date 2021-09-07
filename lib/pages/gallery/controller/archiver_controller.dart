@@ -50,16 +50,18 @@ class ArchiverController extends GetxController
     required String dltype,
     required String dlcheck,
   }) async {
-    Get.back();
     final String _url = await Api.postArchiverLocalDownload(
         pageController.galleryItem.archiverLink ?? '',
         dltype: dltype,
         dlcheck: dlcheck);
+    Get.back();
     _downloadController.downloadArchiverFile(
       gid: pageController.galleryItem.gid ?? '',
       title: pageController.title,
       dlType: dltype,
       url: _url,
+      imgUrl: pageController.galleryItem.imgUrl,
+      galleryUrl: pageController.galleryItem.url,
     );
   }
 }

@@ -1,11 +1,19 @@
+import 'package:fehviewer/common/service/theme_service.dart';
 import 'package:fehviewer/models/index.dart';
+import 'package:fehviewer/network/gallery_request.dart';
 import 'package:fehviewer/pages/tab/controller/download_view_controller.dart';
+import 'package:fehviewer/route/navigator_util.dart';
+import 'package:fehviewer/utils/logger.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_downloader/flutter_downloader.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
 import 'package:get/get_utils/src/platform/platform_io.dart';
+
+import 'download_gallery_item.dart';
+
+const kCardRadius = 10.0;
 
 class DownloadArchiverItem extends GetView<DownloadViewController> {
   const DownloadArchiverItem({
@@ -14,53 +22,113 @@ class DownloadArchiverItem extends GetView<DownloadViewController> {
     this.progress = 0,
     required this.status,
     required this.index,
+    this.coverUrl,
+    this.galleryUrl,
   }) : super(key: key);
   final String title;
   final int progress;
   final DownloadTaskStatus status;
   final int index;
+  final String? coverUrl;
+  final String? galleryUrl;
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.only(top: 8, bottom: 8, left: 20, right: 16),
-      child: Row(
-        children: [
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  title,
-                  style: const TextStyle(
-                    fontSize: 13,
-                    height: 1.2,
-                  ),
-                ).paddingSymmetric(vertical: 4),
-                Row(
+      padding: const EdgeInsets.only(right: 10),
+      margin: const EdgeInsets.fromLTRB(10, 5, 10, 10),
+      decoration: BoxDecoration(
+        boxShadow: ehTheme.isDarkMode
+            ? null
+            : [
+                BoxShadow(
+                  color: CupertinoDynamicColor.resolve(
+                          CupertinoColors.systemGrey5, Get.context!)
+                      .withOpacity(0.7),
+                  blurRadius: 10,
+                  spreadRadius: 1,
+                  offset: const Offset(2, 2),
+                )
+              ],
+        color: ehTheme.itemBackgroundColor,
+        borderRadius: BorderRadius.circular(kCardRadius),
+      ),
+      height: 80,
+      child: ClipRRect(
+        borderRadius: BorderRadius.circular(kCardRadius),
+        child: Row(
+          children: [
+            _buildCover().paddingOnly(right: 8),
+            Expanded(
+              child: Padding(
+                padding: const EdgeInsets.only(top: 4, bottom: 4),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Expanded(
-                      child: LinearProgressIndicator(
-                        value: (progress) / 100.0,
-                        backgroundColor: CupertinoDynamicColor.resolve(
-                            CupertinoColors.secondarySystemFill, context),
-                        valueColor: AlwaysStoppedAnimation<Color>(
-                            CupertinoDynamicColor.resolve(
-                                CupertinoColors.activeBlue, context)),
-                      ).paddingOnly(right: 8.0),
-                    ),
-                    Text('${progress} %',
+                      child: Text(
+                        title,
                         style: const TextStyle(
                           fontSize: 13,
-                        )),
+                          height: 1.2,
+                        ),
+                      ).paddingSymmetric(vertical: 4),
+                    ),
+                    Row(
+                      children: [
+                        Expanded(
+                          child: LinearProgressIndicator(
+                            value: progress / 100.0,
+                            backgroundColor: CupertinoDynamicColor.resolve(
+                                CupertinoColors.secondarySystemFill, context),
+                            valueColor: AlwaysStoppedAnimation<Color>(
+                                CupertinoDynamicColor.resolve(
+                                    CupertinoColors.activeBlue, context)),
+                          ).paddingOnly(right: 8.0),
+                        ),
+                        Text(
+                          '${progress} %',
+                          style: const TextStyle(
+                            fontSize: 13,
+                          ),
+                        ),
+                      ],
+                    ),
                   ],
                 ),
-              ],
+              ),
             ),
-          ),
-          _getIcon(),
-        ],
+            _getIcon(),
+          ],
+        ),
       ),
+    );
+  }
+
+  Widget _buildCover() {
+    return GestureDetector(
+      child: Container(
+        width: 80,
+        child: coverUrl != null && coverUrl!.isNotEmpty
+            ? DownloadItemCoverImage(
+                url: coverUrl,
+                cardType: true,
+              )
+            : Container(
+                color: CupertinoColors.systemGrey5,
+              ),
+      ),
+      onTap: () async {
+        logger.v('${galleryUrl} ');
+        String? url = galleryUrl;
+        if (url == null) {
+          return;
+        }
+        if (!url.startsWith('http')) {
+          url = '${Api.getBaseUrl()}$url';
+        }
+        NavigatorUtil.goGalleryPage(url: url);
+      },
     );
   }
 

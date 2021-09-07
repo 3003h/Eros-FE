@@ -606,7 +606,7 @@ class DownloadController extends GetxController {
     if (GetPlatform.isAndroid && ehConfigService.downloadLocatino.isNotEmpty) {
       // 自定义路径
       logger.d('自定义下载路径');
-      await _requestPermission();
+      await requestPermission();
       _dirPath = path.join(ehConfigService.downloadLocatino, custpath);
       savedDir = Directory(_dirPath);
     } else if (GetPlatform.isAndroid) {
@@ -683,27 +683,6 @@ class DownloadController extends GetxController {
         // _startImageTask(galleryTask: task);
         logger.d('继续未完成的任务');
         _addGalleryTask(task);
-      }
-    }
-  }
-
-  Future<void> _requestPermission() async {
-    final PermissionStatus statusMStorage =
-        await Permission.manageExternalStorage.status;
-    logger.d('manageExternalStorage $statusMStorage');
-    if (statusMStorage.isPermanentlyDenied) {
-      if (await Permission.manageExternalStorage.request().isGranted) {
-        return;
-      } else {
-        showToast('Permission is permanently denied, open App Settings');
-        openAppSettings();
-        logger.d('jump to setting');
-      }
-    } else {
-      if (await Permission.manageExternalStorage.request().isGranted) {
-        return;
-      } else {
-        throw 'Unable to download, please authorize first~';
       }
     }
   }
