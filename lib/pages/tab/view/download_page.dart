@@ -268,6 +268,7 @@ Widget _downloadArciverItemBuilder(BuildContext context, int _taskIndex) {
           progress: _taskInfo.progress ?? 0,
           status: DownloadTaskStatus(_taskInfo.status ?? 0),
           index: _taskIndex,
+          coverUrl: _taskInfo.imgUrl,
         ),
       );
     },

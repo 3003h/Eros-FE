@@ -74,7 +74,6 @@ class DownloadGalleryItem extends GetView<DownloadViewController> {
       {String? addTime}) {
     return Container(
       padding: const EdgeInsets.only(right: 10),
-      // margin: const EdgeInsets.symmetric(vertical: 5, horizontal: 10),
       margin: const EdgeInsets.fromLTRB(10, 5, 10, 10),
       decoration: BoxDecoration(
         boxShadow: ehTheme.isDarkMode
@@ -83,9 +82,9 @@ class DownloadGalleryItem extends GetView<DownloadViewController> {
                 BoxShadow(
                   color: CupertinoDynamicColor.resolve(
                           CupertinoColors.systemGrey5, Get.context!)
-                      .withOpacity(0.5),
+                      .withOpacity(0.9),
                   blurRadius: 10,
-                  spreadRadius: 5,
+                  spreadRadius: 1.0,
                   offset: const Offset(2, 2),
                 )
               ],
@@ -141,7 +140,7 @@ class DownloadGalleryItem extends GetView<DownloadViewController> {
 
   Widget _buildCover({bool cardType = false}) {
     return GestureDetector(
-      child: _CoverImage(
+      child: DownloadItemCoverImage(
         filePath: galleryTask.coverImage != null
             ? path.join(galleryTask.realDirPath ?? '', galleryTask.coverImage)
             : null,
@@ -416,8 +415,8 @@ class DownloadGalleryItem extends GetView<DownloadViewController> {
   }
 }
 
-class _CoverImage extends StatelessWidget {
-  const _CoverImage({
+class DownloadItemCoverImage extends StatelessWidget {
+  const DownloadItemCoverImage({
     this.url,
     this.filePath,
     this.cardType = false,

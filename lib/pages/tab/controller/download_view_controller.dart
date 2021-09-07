@@ -129,7 +129,9 @@ class DownloadViewController extends GetxController {
         index,
         (context, animation) =>
             downloadArchiverDelItemBuilder(context, index, animation));
-    _archiverDownloadController.archiverTaskMap.remove(_tag);
+
+    // _archiverDownloadController.archiverTaskMap.remove(_tag);
+    _archiverDownloadController.removeTask(_tag);
     FlutterDownloader.remove(
         taskId: _oriTaskid ?? '', shouldDeleteContent: true);
     update([idDownloadArchiverView]);
