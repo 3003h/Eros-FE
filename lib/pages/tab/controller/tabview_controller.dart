@@ -24,7 +24,7 @@ import 'package:tuple/tuple.dart';
 
 import 'enum.dart';
 
-typedef FetchCallBack = Future<Tuple2<List<GalleryItem>, int>> Function({
+typedef FetchCallBack = Future<GallerysAndMaxpage> Function({
   int page,
   bool refresh,
   int cats,
@@ -92,15 +92,15 @@ class TabViewController extends GetxController
 
   Future<void> firstLoad() async {
     try {
-      final Tuple2<List<GalleryItem>, int>? tuple = await fetchData();
-      if (tuple == null) {
+      final GallerysAndMaxpage? rult = await fetchData();
+      if (rult == null) {
         return;
       }
 
-      final List<GalleryItem> _listItem = tuple.item1;
+      final List<GalleryItem> _listItem = rult.gallerys ?? [];
       // Api.getMoreGalleryInfo(_listItem);
 
-      maxPage = tuple.item2;
+      maxPage = rult.maxPage ?? 0;
       change(_listItem, status: RxStatus.success());
     } catch (err, stack) {
       logger.e('$err\n$stack');
@@ -130,18 +130,17 @@ class TabViewController extends GetxController
         curve: Curves.ease);
   }
 
-  Future<Tuple2<List<GalleryItem>, int>?> fetchData(
-      {bool refresh = false}) async {
+  Future<GallerysAndMaxpage?> fetchData({bool refresh = false}) async {
     final int _catNum = _ehConfigService.catFilter.value;
 
     try {
-      final Future<Tuple2<List<GalleryItem>, int>>? tuple = fetchNormal?.call(
+      final Future<GallerysAndMaxpage>? rult = fetchNormal?.call(
         cats: cats ?? _catNum,
         toplist: currToplist,
         refresh: refresh,
         cancelToken: cancelToken,
       );
-      return tuple;
+      return rult;
     } on EhError catch (eherror) {
       logger.e('type:${eherror.type}\n${eherror.message}');
       showToast(eherror.message);
@@ -151,15 +150,15 @@ class TabViewController extends GetxController
 
   Future<void> reloadData() async {
     curPage.value = 0;
-    final Tuple2<List<GalleryItem>, int>? tuple = await fetchData(
+    final GallerysAndMaxpage? tuple = await fetchData(
       refresh: true,
     );
     if (tuple == null) {
       return;
     }
 
-    maxPage = tuple.item2;
-    change(tuple.item1, status: RxStatus.success());
+    maxPage = tuple.maxPage ?? 0;
+    change(tuple.gallerys, status: RxStatus.success());
   }
 
   Future<void> onRefresh({GlobalKey? centerKey}) async {
@@ -217,7 +216,7 @@ class TabViewController extends GetxController
     final String fromGid = state?.last.gid ?? '0';
     try {
       pageState = PageState.Loading;
-      final Tuple2<List<GalleryItem>, int>? tuple = await fetchNormal?.call(
+      final GallerysAndMaxpage? tuple = await fetchNormal?.call(
         page: curPage.value + 1,
         fromGid: fromGid,
         cats: cats ?? _catNum,
@@ -231,7 +230,7 @@ class TabViewController extends GetxController
         return;
       }
 
-      final List<GalleryItem> rultList = tuple.item1;
+      final List<GalleryItem> rultList = tuple.gallerys ?? [];
 
       logger.d('ori len:${state?.length}');
 
@@ -239,7 +238,7 @@ class TabViewController extends GetxController
           state?.indexWhere((GalleryItem e) => e.gid == rultList.first.gid) ==
               -1) {
         // state?.addAll(rultList);
-        maxPage = tuple.item2;
+        maxPage = tuple.maxPage ?? 0;
 
         // logger.d('add all to end ${state?.length}');
       }
@@ -275,7 +274,7 @@ class TabViewController extends GetxController
     await Future<void>.delayed(const Duration(milliseconds: 100));
 
     try {
-      final Tuple2<List<GalleryItem>, int>? tuple = await fetchNormal?.call(
+      final GallerysAndMaxpage? rult = await fetchNormal?.call(
         page: curPage.value - 1,
         cats: cats ?? _catNum,
         refresh: true,
@@ -284,16 +283,16 @@ class TabViewController extends GetxController
         toplist: currToplist,
       );
 
-      if (tuple == null) {
+      if (rult == null) {
         return;
       }
 
-      final List<GalleryItem> galleryItemBeans = tuple.item1;
+      final List<GalleryItem> galleryItemBeans = rult.gallerys ?? [];
 
       if (galleryItemBeans.isNotEmpty) {
         state?.insertAll(0, galleryItemBeans);
 
-        maxPage = tuple.item2;
+        maxPage = rult.maxPage ?? 0;
 
         lastTopitemIndex =
             state?.indexWhere((e) => e.gid == lastTopitemGid) ?? 0;
@@ -315,7 +314,7 @@ class TabViewController extends GetxController
     final int _catNum = _ehConfigService.catFilter.value;
 
     change(state, status: RxStatus.loading());
-    final tuple = await fetchNormal?.call(
+    final rult = await fetchNormal?.call(
       page: page,
       cats: cats ?? _catNum,
       refresh: true,
@@ -327,8 +326,8 @@ class TabViewController extends GetxController
     isLoadPrevious = page > 1;
 
     curPage.value = page;
-    if (tuple != null) {
-      change(tuple.item1, status: RxStatus.success());
+    if (rult != null) {
+      change(rult.gallerys, status: RxStatus.success());
     }
   }
 

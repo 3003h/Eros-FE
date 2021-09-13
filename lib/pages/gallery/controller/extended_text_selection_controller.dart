@@ -117,7 +117,8 @@ class EHTextSelectionControls extends MaterialTextSelectionControls {
   ///
   /// See [TextSelectionControls.getHandleAnchor].
   @override
-  Offset getHandleAnchor(TextSelectionHandleType type, double textLineHeight) {
+  Offset getHandleAnchor(TextSelectionHandleType type, double textLineHeight,
+      [double? startGlyphHeight, double? endGlyphHeight]) {
     switch (type) {
       case TextSelectionHandleType.left:
         return const Offset(_kHandleSize, 0);

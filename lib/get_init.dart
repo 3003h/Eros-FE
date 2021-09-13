@@ -20,6 +20,7 @@ import 'common/service/ehconfig_service.dart';
 import 'common/service/layout_service.dart';
 import 'common/service/locale_service.dart';
 import 'common/service/theme_service.dart';
+import 'network/app_dio/pdio.dart';
 import 'pages/controller/fav_dialog_controller.dart';
 import 'pages/controller/favorite_sel_controller.dart';
 import 'pages/tab/controller/download_view_controller.dart';
@@ -88,4 +89,14 @@ void getinit() {
   Get.lazyPut(() => TagTransController(), fenix: true);
 
   Get.lazyPut(() => SplashController());
+
+  DioHttpConfig ehDioConfig = DioHttpConfig(baseUrl: 'https://e-hentai.org/');
+  DioHttpClient ehClient = DioHttpClient(dioConfig: ehDioConfig);
+  // Get.put<DioHttpClient>(ehClient, tag: 'EH');
+  Get.lazyPut(() => ehClient, tag: 'EH');
+
+  DioHttpConfig exDioConfig = DioHttpConfig(baseUrl: 'https://exhentai.org/');
+  DioHttpClient exClient = DioHttpClient(dioConfig: exDioConfig);
+  // Get.put<DioHttpClient>(exClient, tag: 'EX');
+  Get.lazyPut(() => exClient, tag: 'EX');
 }

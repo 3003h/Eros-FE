@@ -36,7 +36,6 @@ import 'package:image_gallery_saver/image_gallery_saver.dart';
 import 'package:path/path.dart' as path;
 import 'package:permission_handler/permission_handler.dart';
 import 'package:share/share.dart';
-import 'package:tuple/tuple.dart';
 
 import '../component/exception/error.dart';
 
@@ -122,7 +121,7 @@ class Api {
   }
 
   /// 获取热门画廊列表
-  static Future<Tuple2<List<GalleryItem>, int>> getPopular({
+  static Future<GallerysAndMaxpage> getPopular({
     int? page,
     String? fromGid,
     String? serach,
@@ -146,7 +145,7 @@ class Api {
     // logger.d('$response');
 
     // 列表样式检查 不符合则重新设置
-    final bool isDml = GalleryListParser.isGalleryListDmL(response);
+    final bool isDml = isGalleryListDmL(response);
     if (!isDml) {
       logger.d('reset inline_set');
       final String response = await getHttpManager().get(
@@ -158,16 +157,14 @@ class Api {
             cancelToken: cancelToken,
           ) ??
           '';
-      return await GalleryListParser.parseGalleryList(response,
-          refresh: refresh);
+      return await parseGalleryList(response, refresh: refresh);
     } else {
-      return await GalleryListParser.parseGalleryList(response,
-          refresh: refresh);
+      return await parseGalleryList(response, refresh: refresh);
     }
   }
 
   /// Watched
-  static Future<Tuple2<List<GalleryItem>, int>> getWatched({
+  static Future<GallerysAndMaxpage> getWatched({
     int? page,
     String? fromGid,
     String? serach,
@@ -207,7 +204,7 @@ class Api {
         '';
 
     // 列表样式检查 不符合则重新设置
-    final bool isDml = GalleryListParser.isGalleryListDmL(response);
+    final bool isDml = isGalleryListDmL(response);
     if (!isDml) {
       params['inline_set'] = 'dm_l';
       final String response = await getHttpManager().get(
@@ -216,16 +213,14 @@ class Api {
             params: params,
           ) ??
           '';
-      return await GalleryListParser.parseGalleryList(response,
-          refresh: refresh);
+      return await parseGalleryList(response, refresh: refresh);
     } else {
-      return await GalleryListParser.parseGalleryList(response,
-          refresh: refresh);
+      return await parseGalleryList(response, refresh: refresh);
     }
   }
 
   /// 获取画廊列表
-  static Future<Tuple2<List<GalleryItem>, int>> getGallery({
+  static Future<GallerysAndMaxpage> getGallery({
     int? page,
     String? fromGid,
     String? serach,
@@ -270,24 +265,22 @@ class Api {
         '';
 
     // 列表样式检查 不符合则重新设置
-    final bool isDml = GalleryListParser.isGalleryListDmL(response);
+    final bool isDml = isGalleryListDmL(response);
     if (!isDml) {
       logger.d(' inline_set dml');
       params['inline_set'] = 'dm_l';
       final String response = await getHttpManager()
               .get(url, options: _cacheOptions, params: params) ??
           '';
-      return await GalleryListParser.parseGalleryList(response,
-          refresh: refresh);
+      return await parseGalleryList(response, refresh: refresh);
     } else {
-      return await GalleryListParser.parseGalleryList(response,
-          refresh: refresh);
+      return await parseGalleryList(response, refresh: refresh);
     }
   }
 
   /// 获取排行
   /// inline_set 不能和页码同时使用 会默认定向到第一页
-  static Future<Tuple2<List<GalleryItem>, int>> getToplist({
+  static Future<GallerysAndMaxpage> getToplist({
     String? favcat,
     String? toplist,
     int? page,
@@ -314,10 +307,10 @@ class Api {
         '';
 
     // 列表样式检查 不符合则重新设置
-    final bool isDml = GalleryListParser.isGalleryListDmL(response);
+    final bool isDml = isGalleryListDmL(response);
     if (isDml) {
       try {
-        return await GalleryListParser.parseGalleryList(
+        return await parseGalleryList(
           response,
           refresh: refresh,
         );
@@ -332,7 +325,7 @@ class Api {
       final String response = await getHttpManager().get(url,
               options: getCacheOptions(forceRefresh: true), params: params) ??
           '';
-      return await GalleryListParser.parseGalleryList(
+      return await parseGalleryList(
         response,
         refresh: true,
       );
@@ -341,7 +334,7 @@ class Api {
 
   /// 获取收藏
   /// inline_set 不能和页码同时使用 会默认定向到第一页
-  static Future<Tuple2<List<GalleryItem>, int>> getFavorite({
+  static Future<GallerysAndMaxpage> getFavorite({
     String? favcat,
     String? toplist,
     int? page,
@@ -384,7 +377,7 @@ class Api {
         FavoriteOrder.fav;
     // 排序参数
     final String _order = EHConst.favoriteOrder[order] ?? EHConst.FAV_ORDER_FAV;
-    final bool isOrderFav = GalleryListParser.isFavoriteOrder(response);
+    final bool isOrderFav = isFavoriteOrder(response);
     if (isOrderFav ^ (order == FavoriteOrder.fav)) {
       // 重设排序方式
       logger.d('重设排序方式为 $_order');
@@ -396,9 +389,9 @@ class Api {
     }
 
     // 列表样式检查 不符合则重新设置
-    final bool isDml = GalleryListParser.isGalleryListDmL(response);
+    final bool isDml = isGalleryListDmL(response);
     if (isDml) {
-      return await GalleryListParser.parseGalleryList(
+      return await parseGalleryList(
         response,
         isFavorite: true,
         refresh: refresh,
@@ -411,7 +404,7 @@ class Api {
       final String response = await getHttpManager().get(url,
               options: getCacheOptions(forceRefresh: true), params: params) ??
           '';
-      return await GalleryListParser.parseGalleryList(
+      return await parseGalleryList(
         response,
         isFavorite: true,
         refresh: true,
