@@ -56,7 +56,7 @@ class FavoriteViewController extends TabViewController {
   }
 
   @override
-  Future<Tuple2<List<GalleryItem>, int>> fetchData({
+  Future<GallerysAndMaxpage> fetchData({
     bool refresh = false,
     bool first = false,
   }) async {
@@ -67,7 +67,7 @@ class FavoriteViewController extends TabViewController {
 
     if (curFavcat != 'l') {
       // 网络收藏夹
-      final Future<Tuple2<List<GalleryItem>, int>> tuple = Api.getFavorite(
+      final Future<GallerysAndMaxpage> tuple = Api.getFavorite(
         favcat: curFavcat,
         refresh: refresh,
         cancelToken: _cancelToken,
@@ -87,7 +87,8 @@ class FavoriteViewController extends TabViewController {
       logger.v('本地收藏');
       final List<GalleryItem> localFav = _localFavController.loacalFavs;
 
-      return Future<Tuple2<List<GalleryItem>, int>>.value(Tuple2(localFav, 1));
+      return Future<GallerysAndMaxpage>.value(
+          GallerysAndMaxpage(gallerys: localFav, maxPage: 1));
     }
   }
 
