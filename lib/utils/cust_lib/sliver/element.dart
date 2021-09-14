@@ -34,7 +34,7 @@ class SliverFloatingPersistentHeaderElement extends RenderObjectElement {
   @override
   void unmount() {
     super.unmount();
-    renderObject.element = null;
+    // renderObject.element = null;
   }
 
   @override

@@ -9,10 +9,7 @@ import 'package:fehviewer/pages/gallery/controller/gallery_page_controller.dart'
 import 'package:fehviewer/pages/gallery/view/gallery_page.dart';
 import 'package:fehviewer/pages/image_view/common.dart';
 import 'package:fehviewer/pages/image_view/view/view_page.dart';
-import 'package:fehviewer/pages/tab/controller/gallery_controller.dart';
 import 'package:fehviewer/pages/tab/controller/search_page_controller.dart';
-import 'package:fehviewer/pages/tab/view/gallery_list_page.dart';
-import 'package:fehviewer/pages/tab/view/search_page.dart';
 import 'package:fehviewer/pages/tab/view/tab_base.dart';
 import 'package:fehviewer/route/routes.dart';
 import 'package:fehviewer/route/second_observer.dart';

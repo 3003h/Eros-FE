@@ -183,6 +183,7 @@ class TextSwitchItem extends StatefulWidget {
     this.hideLine = false,
     this.icon,
     this.iconIndent = 0.0,
+    this.suffix,
   }) : super(key: key);
 
   final bool? intValue;
@@ -193,6 +194,7 @@ class TextSwitchItem extends StatefulWidget {
   final bool hideLine;
   final Widget? icon;
   final double iconIndent;
+  final Widget? suffix;
 
   @override
   _TextSwitchItemState createState() => _TextSwitchItemState();
@@ -242,9 +244,8 @@ class _TextSwitchItemState extends State<TextSwitchItem> {
                               color: CupertinoColors.systemGrey),
                         ).paddingOnly(top: 2.0),
                     ]),
-                Expanded(
-                  child: Container(),
-                ),
+                const Spacer(),
+                if (widget.suffix != null) widget.suffix!,
                 if (widget.onChanged != null)
                   CupertinoSwitch(
                     onChanged: (bool value) {

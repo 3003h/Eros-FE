@@ -48,7 +48,7 @@ class _GalleryMainPageState extends State<GalleryMainPage> {
   @override
   void initState() {
     super.initState();
-    logger.d('initState pageCtrlDepth:$pageCtrlDepth');
+    logger.v('initState pageCtrlDepth:$pageCtrlDepth');
     initPageController(tag: _tag);
     _controller = Get.put(GalleryPageController(), tag: _tag);
 

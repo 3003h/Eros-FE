@@ -29,7 +29,7 @@ class GalleryCacheController extends GetxController {
     } else {
       try {
         final remotelist = await webdavController.getRemotReadList();
-        logger.d('remotelist $remotelist');
+        logger.v('remotelist $remotelist');
         if (remotelist.contains(gid)) {
           final remote = await webdavController.downloadRead(gid);
           logger.d('remote $remote');
