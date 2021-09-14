@@ -94,6 +94,14 @@ class ListViewEhSetting extends StatelessWidget {
       _ehConfigService.isClipboardLink.value = val;
     }
 
+    Future<void> _forceUpdateTranslate() async {
+      if (await transController.checkUpdate(force: true)) {
+        showToast('手动更新开始');
+        await transController.updateDB();
+        showToast('更新完成');
+      }
+    }
+
     final List<Widget> _list = <Widget>[
       if (_isLogin)
         TextSwitchItem(
@@ -159,16 +167,19 @@ class ListViewEhSetting extends StatelessWidget {
               behavior: HitTestBehavior.opaque,
               onLongPress: () async {
                 vibrateUtil.light();
-                showToast('强制更新开始');
-                if (await transController.checkUpdate(force: true)) {
-                  await transController.updateDB();
-                  showToast('更新完成');
-                }
+                _forceUpdateTranslate();
               },
-              child: TextSwitchItem('显示标签中文翻译',
-                  intValue: _tagTranslat,
-                  onChanged: _handleTagTranslatChanged,
-                  desc: '当前版本:${_ehConfigService.tagTranslatVer.value}'),
+              child: TextSwitchItem(
+                '显示标签中文翻译',
+                intValue: _tagTranslat,
+                onChanged: _handleTagTranslatChanged,
+                desc: '当前版本:${_ehConfigService.tagTranslatVer.value}',
+                suffix: CupertinoButton(
+                  padding: const EdgeInsets.all(0),
+                  child: const Icon(CupertinoIcons.refresh),
+                  onPressed: _forceUpdateTranslate,
+                ),
+              ),
             )),
       Obx(() {
         // if (_ehConfigService.isTagTranslat) {
