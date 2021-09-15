@@ -1,9 +1,11 @@
 import 'package:extended_image/extended_image.dart';
 import 'package:fehviewer/common/controller/gallerycache_controller.dart';
+import 'package:fehviewer/common/controller/webdav_controller.dart';
 import 'package:fehviewer/common/isolate_download/download_manager.dart';
 import 'package:fehviewer/common/service/theme_service.dart';
 import 'package:fehviewer/const/theme_colors.dart';
 import 'package:fehviewer/models/gallery_cache.dart';
+import 'package:fehviewer/generated/l10n.dart';
 import 'package:fehviewer/network/gallery_request.dart';
 import 'package:fehviewer/pages/tab/controller/download_view_controller.dart';
 import 'package:fehviewer/route/navigator_util.dart';
@@ -20,6 +22,42 @@ import 'package:intl/intl.dart';
 import 'package:path/path.dart' as path;
 
 const kCardRadius = 10.0;
+
+Future<int?> showSyncReadProgressDialog(BuildContext context, int gid) async {
+  return showCupertinoDialog<int?>(
+    context: context,
+    barrierDismissible: true,
+    builder: (BuildContext context) {
+      return CupertinoAlertDialog(
+        title: Text('${L10n.of(context).sync_read_progress}...'),
+        content: GetBuilder<DownloadViewController>(
+          initState: (state) {
+            // Future.delayed(Duration(seconds: 3)).then((value) => Get.back());
+            Get.find<GalleryCacheController>().getGalleryCache('$gid').then(
+                (_galleryCache) =>
+                    Get.back(result: _galleryCache?.lastIndex ?? 0));
+          },
+          builder: (logic) {
+            return const CupertinoActivityIndicator(radius: 16);
+          },
+        ).paddingOnly(top: 10.0),
+        actions: [
+          CupertinoDialogAction(
+            child: Text(
+              L10n.of(context).cancel,
+              style: const TextStyle(
+                  fontWeight: FontWeight.bold,
+                  color: CupertinoColors.destructiveRed),
+            ),
+            onPressed: () {
+              Get.back();
+            },
+          ),
+        ],
+      );
+    },
+  );
+}
 
 class DownloadGalleryItem extends GetView<DownloadViewController> {
   const DownloadGalleryItem({
@@ -58,13 +96,24 @@ class DownloadGalleryItem extends GetView<DownloadViewController> {
             .map((e) => path.join(gTask.realDirPath ?? '', e.filePath ?? ''))
             .toList();
 
-        Get.find<GalleryCacheController>()
-            .getGalleryCache('${galleryTask.gid}')
-            .then((_galleryCache) {
-          final lastIndex = _galleryCache?.lastIndex ?? 0;
-          NavigatorUtil.goGalleryViewPageFile(
-              lastIndex, pics, '${galleryTask.gid}');
-        });
+        // 同步进度
+        int? lastIndex;
+        if (Get.find<WebdavController>().syncReadProgress) {
+          lastIndex =
+              await showSyncReadProgressDialog(context, galleryTask.gid);
+        }
+        logger.d('lastIndex $lastIndex');
+        lastIndex ??= (await Get.find<GalleryCacheController>()
+                    .getGalleryCache('${galleryTask.gid}', sync: false))
+                ?.lastIndex ??
+            0;
+        logger.d('lastIndex $lastIndex');
+
+        // final _galleryCache = await Get.find<GalleryCacheController>()
+        //     .getGalleryCache('${galleryTask.gid}');
+        // final lastIndex = _galleryCache?.lastIndex ?? 0;
+        NavigatorUtil.goGalleryViewPageFile(
+            lastIndex, pics, '${galleryTask.gid}');
       },
       child: _buildCardItem(context, _complete, addTime: addTime),
     );
