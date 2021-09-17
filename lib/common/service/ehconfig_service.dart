@@ -180,8 +180,13 @@ class EhConfigService extends ProfileService {
         (value) => ehConfig = ehConfig.copyWith(galleryImgBlur: value as bool));
 
     isSiteEx.value = ehConfig.siteEx ?? false;
-    everProfile(isSiteEx,
-        (value) => ehConfig = ehConfig.copyWith(siteEx: value as bool));
+    ehDioConfig.baseUrl =
+        isSiteEx.value ? EHConst.EX_BASE_URL : EHConst.EH_BASE_URL;
+    everProfile(isSiteEx, (value) {
+      ehConfig = ehConfig.copyWith(siteEx: value as bool);
+      ehDioConfig.baseUrl =
+          isSiteEx.value ? EHConst.EX_BASE_URL : EHConst.EH_BASE_URL;
+    });
 
     isFavLongTap.value = ehConfig.favLongTap ?? false;
     everProfile(isFavLongTap,

@@ -59,7 +59,7 @@ class GalleryHeader extends StatelessWidget {
                           tag: pageCtrlDepth,
                           builder: (logic) {
                             return GalleryUploader(
-                                uploader: logic.galleryItem.uploader ?? '');
+                                uploader: logic.galleryItem?.uploader ?? '');
                           }),
                       const Spacer(),
                       Row(
@@ -163,31 +163,31 @@ class _GalleryInfoBarState extends State<GalleryInfoBar> {
                           children: <Widget>[
                             // 评分
                             GalleryRating(
-                              rating: controller.galleryItem.rating ?? 0,
+                              rating: controller.galleryItem?.rating ?? 0,
                               ratingFB:
-                                  controller.galleryItem.ratingFallBack ?? 0,
+                                  controller.galleryItem?.ratingFallBack ?? 0,
                               color: ThemeColors.colorRatingMap[
-                                  controller.galleryItem.colorRating?.trim() ??
-                                      'ir']!,
+                                  controller.galleryItem?.colorRating?.trim() ??
+                                      'ir'],
                             ),
                             // 评分人次
                             Padding(
                               padding:
                                   const EdgeInsets.symmetric(horizontal: 4),
-                              child:
-                                  Text(controller.galleryItem.ratingCount ?? '',
-                                      style: TextStyle(
-                                        fontSize: 10,
-                                        color: CupertinoDynamicColor.resolve(
-                                            CupertinoColors.secondaryLabel,
-                                            context),
-                                      )),
+                              child: Text(
+                                  controller.galleryItem?.ratingCount ?? '',
+                                  style: TextStyle(
+                                    fontSize: 10,
+                                    color: CupertinoDynamicColor.resolve(
+                                        CupertinoColors.secondaryLabel,
+                                        context),
+                                  )),
                             ),
                             const Spacer(),
                             // 类型
                             GalleryCategory(
                                 category:
-                                    controller.galleryItem.category ?? ''),
+                                    controller.galleryItem?.category ?? ''),
                           ],
                         ),
                       ),
@@ -200,7 +200,7 @@ class _GalleryInfoBarState extends State<GalleryInfoBar> {
                             size: 13,
                           ).paddingOnly(right: 8),
                           Text(
-                            controller.galleryItem.language ?? '',
+                            controller.galleryItem?.language ?? '',
                             style: widget._hearTextStyle,
                           ),
                           const Spacer(),
@@ -212,12 +212,12 @@ class _GalleryInfoBarState extends State<GalleryInfoBar> {
                           ),
                           const SizedBox(width: 6),
                           Text(
-                            controller.galleryItem.filecount ?? '',
+                            controller.galleryItem?.filecount ?? '',
                             style: widget._hearTextStyle,
                           ),
                           const Spacer(),
                           Text(
-                            controller.galleryItem.filesizeText ?? '',
+                            controller.galleryItem?.filesizeText ?? '',
                             style: widget._hearTextStyle,
                           ),
                         ],
@@ -240,14 +240,14 @@ class _GalleryInfoBarState extends State<GalleryInfoBar> {
                                   padding:
                                       const EdgeInsets.symmetric(horizontal: 4),
                                   child: Text(
-                                      controller.galleryItem.favoritedCount ??
+                                      controller.galleryItem?.favoritedCount ??
                                           '',
                                       style: widget._hearTextStyle),
                                 );
                               }),
                           const Spacer(),
                           Text(
-                            controller.galleryItem.postTime ?? '',
+                            controller.galleryItem?.postTime ?? '',
                             style: widget._hearTextStyle,
                           ),
                         ],

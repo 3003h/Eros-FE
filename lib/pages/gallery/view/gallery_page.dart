@@ -69,8 +69,7 @@ class _GalleryMainPageState extends State<GalleryMainPage> {
   @override
   Widget build(BuildContext context) {
     final dynamic tabTag = _controller.galleryRepository?.tabTag;
-    final GalleryItem _item = _controller.galleryItem;
-    // _controller.scrollController = PrimaryScrollController.of(context);
+    final GalleryItem? _item = _controller.galleryItem;
 
     return CupertinoPageScaffold(
       child: CupertinoScrollbar(
@@ -124,7 +123,7 @@ class _GalleryMainPageState extends State<GalleryMainPage> {
                           tag: pageCtrlDepth,
                           builder: (logic) {
                             return NavigationBarImage(
-                              imageUrl: logic.galleryItem.imgUrl ?? '',
+                              imageUrl: logic.galleryItem?.imgUrl ?? '',
                               scrollController: logic.scrollController,
                             );
                           },
@@ -153,6 +152,9 @@ class _GalleryMainPageState extends State<GalleryMainPage> {
                               size: 26,
                             ),
                             onPressed: () {
+                              if (_item == null) {
+                                return;
+                              }
                               final String _url =
                                   '${Api.getBaseUrl()}/g/${_item.gid}/${_item.token}';
                               logger.v('share $_url');
@@ -161,7 +163,7 @@ class _GalleryMainPageState extends State<GalleryMainPage> {
                           ),
                         ],
                       )
-                    : ReadButton(gid: _item.gid ?? '').paddingOnly(right: 4)),
+                    : ReadButton(gid: _item?.gid ?? '0').paddingOnly(right: 4)),
               ),
               EhCupertinoSliverRefreshControl(
                 onRefresh: _controller.handOnRefresh,

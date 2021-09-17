@@ -39,7 +39,6 @@ class HttpManager {
           'Accept': EHConst.CHROME_ACCEPT,
           'Accept-Language': EHConst.CHROME_ACCEPT_LANGUAGE,
         },
-        //默认值是"application/json; charset=utf-8",Headers.formUrlEncodedContentType会自动编码请求体.
         contentType: Headers.formUrlEncodedContentType,
         //共有三种方式json,bytes(响应字节),stream（响应流）,plain
         responseType: ResponseType.json);

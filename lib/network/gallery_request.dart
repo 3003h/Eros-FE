@@ -420,7 +420,6 @@ class Api {
   /// nw=always 不显示警告
   static Future<GalleryItem> getGalleryDetail({
     required String inUrl,
-    GalleryItem? inGalleryItem,
     bool refresh = false,
     dio.CancelToken? cancelToken,
   }) async {
@@ -451,8 +450,7 @@ class Api {
     // }
 
     // 解析画廊数据
-    final GalleryItem galleryItem =
-        await parseGalleryDetail(response, inGalleryItem: inGalleryItem);
+    final GalleryItem galleryItem = await parseGalleryDetail(response);
 
     return galleryItem;
   }

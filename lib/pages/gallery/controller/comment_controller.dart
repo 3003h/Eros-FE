@@ -10,11 +10,7 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:get/get.dart';
-import 'package:fehviewer/common/global.dart';
 import 'package:learning_language/learning_language.dart';
-// import 'package:google_ml_kit/google_ml_kit.dart';
-
-// import 'package:learning_language/learning_language.dart';
 
 import 'gallery_page_controller.dart';
 
@@ -34,7 +30,7 @@ class CommentController extends GetxController
 
   final TextEditingController commentTextController = TextEditingController();
 
-  GalleryItem get _item => pageController.galleryItem;
+  GalleryItem? get _item => pageController.galleryItem;
   late String comment;
   late String oriComment;
   String? commentId;
@@ -73,7 +69,7 @@ class CommentController extends GetxController
 
   Future<void> _loadComment() async {
     await Future.delayed(const Duration(milliseconds: 200));
-    change(pageController.galleryItem.galleryComment,
+    change(pageController.galleryItem?.galleryComment,
         status: RxStatus.success());
   }
 
@@ -179,10 +175,10 @@ class CommentController extends GetxController
 
     update([_id]);
     final CommitVoteRes rult = await Api.commitVote(
-      apikey: _item.apikey!,
-      apiuid: _item.apiuid!,
-      gid: _item.gid!,
-      token: _item.token!,
+      apikey: _item?.apikey ?? '',
+      apiuid: _item?.apiuid ?? '',
+      gid: _item?.gid ?? '0',
+      token: _item?.token ?? '',
       commentId: _id,
       vote: 1,
     );
@@ -201,10 +197,10 @@ class CommentController extends GetxController
     state![_commentIndex!] = state![_commentIndex].copyWith(vote: -1);
     update([_id]);
     final CommitVoteRes rult = await Api.commitVote(
-      apikey: _item.apikey!,
-      apiuid: _item.apiuid!,
-      gid: _item.gid!,
-      token: _item.token!,
+      apikey: _item?.apikey ?? '',
+      apiuid: _item?.apiuid ?? '',
+      gid: _item?.gid ?? '',
+      token: _item?.token ?? '',
       commentId: _id,
       vote: -1,
     );
@@ -236,7 +232,7 @@ class CommentController extends GetxController
       {bool isEdit = false, String? commentId}) async {
     final bool rult = await Api.postComment(
       gid: pageController.gid,
-      token: pageController.galleryItem.token!,
+      token: pageController.galleryItem?.token ?? '',
       comment: comment,
       commentId: commentId,
       isEdit: isEdit,

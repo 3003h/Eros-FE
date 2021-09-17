@@ -32,26 +32,30 @@ class GalleryInfoPage extends StatelessWidget {
             tag: pageCtrlDepth,
             id: GetIds.PAGE_VIEW_HEADER,
             builder: (GalleryPageController controller) {
+              if (controller.galleryItem == null) {
+                return const SizedBox.shrink();
+              }
+
               final _infoMap = {
-                'Gid': controller.galleryItem.gid,
-                'Token': controller.galleryItem.token,
-                'Url': '${Api.getBaseUrl()}${controller.galleryItem.url}',
-                'Title': controller.galleryItem.englishTitle,
-                'Jpn Title': controller.galleryItem.japaneseTitle,
-                'Thumb': controller.galleryItem.imgUrl,
-                'Category': controller.galleryItem.category,
-                'Uploader': controller.galleryItem.uploader,
-                'Posted': controller.galleryItem.postTime,
-                'Language': controller.galleryItem.language,
-                'Pages': controller.galleryItem.filecount,
-                'Size': controller.galleryItem.filesizeText,
-                'Favorite count': controller.galleryItem.favoritedCount,
+                'Gid': controller.galleryItem!.gid,
+                'Token': controller.galleryItem!.token,
+                'Url': '${Api.getBaseUrl()}${controller.galleryItem!.url}',
+                'Title': controller.galleryItem!.englishTitle,
+                'Jpn Title': controller.galleryItem!.japaneseTitle,
+                'Thumb': controller.galleryItem!.imgUrl,
+                'Category': controller.galleryItem!.category,
+                'Uploader': controller.galleryItem!.uploader,
+                'Posted': controller.galleryItem!.postTime,
+                'Language': controller.galleryItem!.language,
+                'Pages': controller.galleryItem!.filecount,
+                'Size': controller.galleryItem!.filesizeText,
+                'Favorite count': controller.galleryItem!.favoritedCount,
                 'Favorited':
-                    '${controller.galleryItem.favcat?.isNotEmpty ?? false}',
-                'Favorite': controller.galleryItem.favTitle ?? '',
-                'Rating count': controller.galleryItem.ratingCount,
-                'Rating': '${controller.galleryItem.rating}',
-                'Torrents': controller.galleryItem.torrentcount,
+                    '${controller.galleryItem!.favcat?.isNotEmpty ?? false}',
+                'Favorite': controller.galleryItem!.favTitle ?? '',
+                'Rating count': controller.galleryItem!.ratingCount,
+                'Rating': '${controller.galleryItem!.rating}',
+                'Torrents': controller.galleryItem!.torrentcount,
                 // 'Torrents Url': controller.galleryItem.torrentcount,
               };
 

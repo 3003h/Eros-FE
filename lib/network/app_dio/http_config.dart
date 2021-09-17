@@ -13,14 +13,12 @@ class DioHttpConfig {
     this.receiveTimeout = Duration.millisecondsPerMinute,
   });
 
-  final String? baseUrl;
-  final String? proxy;
-  final String? cookiesPath;
-  final List<Interceptor>? interceptors;
-  final int connectTimeout;
-  final int sendTimeout;
-  final int receiveTimeout;
-  final bool? domainFronting;
-
-// static DioConfig of() => Get.find<DioConfig>();
+  String? baseUrl;
+  String? proxy;
+  String? cookiesPath;
+  List<Interceptor>? interceptors;
+  int connectTimeout;
+  int sendTimeout;
+  int receiveTimeout;
+  bool? domainFronting;
 }

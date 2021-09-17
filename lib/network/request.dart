@@ -1,9 +1,20 @@
 import 'package:dio/dio.dart';
+import 'package:dio_http_cache/dio_http_cache.dart';
+import 'package:fehviewer/common/global.dart';
 import 'package:fehviewer/models/base/eh_models.dart';
 import 'package:fehviewer/pages/tab/controller/search_page_controller.dart';
-import 'package:get/get.dart';
+import 'package:fehviewer/utils/logger.dart';
 
 import 'app_dio/pdio.dart';
+
+Options getCacheOptions({bool forceRefresh = false, Options? options}) {
+  return buildCacheOptions(
+    const Duration(days: 5),
+    maxStale: const Duration(days: 7),
+    forceRefresh: forceRefresh,
+    options: options,
+  );
+}
 
 Future<GallerysAndMaxpage?> getPopular({
   int? page,
@@ -16,7 +27,7 @@ Future<GallerysAndMaxpage?> getPopular({
   String? favcat,
   String? toplist,
 }) async {
-  DioHttpClient dioHttpClient = Get.find(tag: 'EH');
+  DioHttpClient dioHttpClient = DioHttpClient(dioConfig: ehDioConfig);
   DioHttpResponse httpResponse = await dioHttpClient.get(
     '/popular',
     httpTransformer: GalleryListHttpTransformer(),
@@ -24,5 +35,45 @@ Future<GallerysAndMaxpage?> getPopular({
 
   if (httpResponse.ok && httpResponse.data is GallerysAndMaxpage) {
     return httpResponse.data as GallerysAndMaxpage;
+  }
+}
+
+Future<GalleryItem?> getGalleryDetail({
+  required String inUrl,
+  bool refresh = false,
+  CancelToken? cancelToken,
+}) async {
+  DioHttpClient dioHttpClient = DioHttpClient(dioConfig: ehDioConfig);
+  DioHttpResponse httpResponse = await dioHttpClient.get(
+    inUrl,
+    httpTransformer: GalleryHttpTransformer(),
+    options: getCacheOptions(forceRefresh: refresh),
+  );
+  logger.v('httpResponse.ok ${httpResponse.ok}');
+  if (httpResponse.ok && httpResponse.data is GalleryItem) {
+    return httpResponse.data as GalleryItem;
+  }
+}
+
+Future<GalleryImage?> fetchImageInfo(
+  String href, {
+  bool refresh = false,
+  String? sourceId,
+  CancelToken? cancelToken,
+}) async {
+  final Map<String, dynamic> _params = {
+    if (sourceId != null && sourceId.trim().isNotEmpty) 'nl': sourceId,
+  };
+
+  DioHttpClient dioHttpClient = DioHttpClient(dioConfig: ehDioConfig);
+  DioHttpResponse httpResponse = await dioHttpClient.get(
+    href,
+    queryParameters: _params,
+    httpTransformer: GalleryImageHttpTransformer(),
+    options: getCacheOptions(forceRefresh: refresh),
+  );
+
+  if (httpResponse.ok && httpResponse.data is GalleryImage) {
+    return (httpResponse.data as GalleryImage).copyWith(href: href);
   }
 }

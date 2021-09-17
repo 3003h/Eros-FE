@@ -14,24 +14,28 @@ class RateController extends GetxController {
 
   GalleryPageController get pageController => Get.find(tag: pageCtrlDepth);
 
-  GalleryItem get _item => pageController.galleryItem;
+  GalleryItem? get _item => pageController.galleryItem;
 
   @override
   void onInit() {
     super.onInit();
-    rate = pageController.galleryItem.rating ?? 0;
+    rate = pageController.galleryItem?.rating ?? 0;
   }
 
   Future<void> rating() async {
+    if (_item == null) {
+      return;
+    }
+
     logger.d('rating $rate');
     logger.d(
-        '${pageController.galleryItem.apiuid} ${pageController.galleryItem.apikey}');
+        '${pageController.galleryItem?.apiuid} ${pageController.galleryItem?.apikey}');
     logger.d('${(rate * 2).round()}');
     final Map<String, dynamic> rultMap = await Api.setRating(
-      apikey: _item.apikey!,
-      apiuid: _item.apiuid!,
-      gid: _item.gid!,
-      token: _item.token!,
+      apikey: _item!.apikey ?? '',
+      apiuid: _item!.apiuid ?? '',
+      gid: _item!.gid ?? '0',
+      token: _item!.token ?? '',
       rating: (rate * 2).round(),
     );
     pageController.ratinged(

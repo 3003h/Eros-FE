@@ -70,6 +70,53 @@ extension ExtCommentSpan on GalleryCommentSpan {
 extension ExtItem on GalleryItem {
   Map<int, GalleryImage> get imageMap =>
       {for (GalleryImage v in galleryImages ?? []) v.ser: v};
+
+  GalleryItem copyWithAll(GalleryItem item) {
+    return copyWith(
+        token: item.token,
+        showKey: item.showKey,
+        url: item.url,
+        imgUrl: item.imgUrl,
+        imgUrlL: item.imgUrlL,
+        imgHeight: item.imgHeight,
+        imgWidth: item.imgWidth,
+        japaneseTitle: item.japaneseTitle,
+        englishTitle: item.englishTitle,
+        category: item.category,
+        uploader: item.uploader,
+        posted: item.posted,
+        language: item.language,
+        filecount: item.filecount,
+        rating: item.rating,
+        ratingCount: item.ratingCount,
+        torrentcount: item.torrentcount,
+        torrents: item.torrents,
+        filesize: item.filesize,
+        filesizeText: item.filesizeText,
+        visible: item.visible,
+        parent: item.parent,
+        ratingFallBack: item.ratingFallBack,
+        numberOfReviews: item.numberOfReviews,
+        postTime: item.postTime,
+        favoritedCount: item.favoritedCount,
+        favTitle: item.favTitle,
+        favcat: item.favcat,
+        localFav: item.localFav,
+        simpleTags: item.simpleTags,
+        tagsFromApi: item.tagsFromApi?.toList(),
+        translated: item.translated,
+        tagGroup: item.tagGroup,
+        galleryComment: item.galleryComment,
+        galleryImages: item.galleryImages,
+        apikey: item.apikey,
+        apiuid: item.apiuid,
+        isRatinged: item.isRatinged,
+        colorRating: item.colorRating,
+        archiverLink: item.archiverLink,
+        torrentLink: item.torrentLink,
+        lastViewTime: item.lastViewTime,
+        pageOfList: item.pageOfList);
+  }
 }
 
 extension ExtUser on User {

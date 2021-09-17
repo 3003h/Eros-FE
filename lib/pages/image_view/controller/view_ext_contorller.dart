@@ -1,6 +1,5 @@
 import 'dart:async';
 
-import 'package:wakelock/wakelock.dart';
 import 'package:collection/collection.dart';
 import 'package:extended_image/extended_image.dart';
 import 'package:fehviewer/common/controller/download_controller.dart';
@@ -27,6 +26,7 @@ import 'package:photo_view/photo_view.dart';
 import 'package:scroll_to_index/scroll_to_index.dart';
 import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
 import 'package:throttling/throttling.dart';
+import 'package:wakelock/wakelock.dart';
 
 import 'view_ext_state.dart';
 
@@ -400,7 +400,7 @@ class ViewExtController extends GetxController {
   /// 重载图片数据，重构部件
   Future<void> reloadImage(int itemSer, {bool changeSource = true}) async {
     final GalleryImage? _currentImage =
-        _galleryPageController.galleryItem.imageMap[itemSer];
+        _galleryPageController.galleryItem?.imageMap[itemSer];
     // 清除CachedNetworkImage的缓存
     try {
       // CachedNetworkImage 清除指定缓存

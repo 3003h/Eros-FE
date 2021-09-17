@@ -256,12 +256,11 @@ Future<List<TagGroup>> parseGalleryTags(Document document) async {
 }
 
 /// 解析画廊详情数据
-Future<GalleryItem> parseGalleryDetail(String response,
-    {GalleryItem? inGalleryItem}) async {
+Future<GalleryItem> parseGalleryDetail(String response) async {
   // 解析响应信息dom
   final Document document = parse(response);
 
-  GalleryItem galleryItem = inGalleryItem ?? const GalleryItem();
+  GalleryItem galleryItem = const GalleryItem();
 
   // 封面图片
   final Element? imageElem = document.querySelector('#gd1 > div');

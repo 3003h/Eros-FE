@@ -44,17 +44,19 @@ class GalleryFavController extends GetxController {
     _localFav.value = _pageController.localFav;
 
     // _favTitle 初始化
-    if (_pageController.galleryItem.favTitle != null &&
-        _pageController.galleryItem.favTitle!.isNotEmpty) {
-      _favTitle.value = _pageController.galleryItem.favTitle ?? '';
+    if (_pageController.galleryItem != null &&
+        _pageController.galleryItem?.favTitle != null &&
+        _pageController.galleryItem!.favTitle!.isNotEmpty) {
+      _favTitle.value = _pageController.galleryItem?.favTitle ?? '';
     } else {
       _favTitle.value = localFav ? L10n.of(Get.context!).local_favorite : '';
     }
 
     // _favcat初始化
-    if (_pageController.galleryItem.favcat != null &&
-        _pageController.galleryItem.favcat!.isNotEmpty) {
-      _favcat.value = _pageController.galleryItem.favcat ?? '';
+    if (_pageController.galleryItem != null &&
+        _pageController.galleryItem?.favcat != null &&
+        _pageController.galleryItem!.favcat!.isNotEmpty) {
+      _favcat.value = _pageController.galleryItem?.favcat ?? '';
     } else {
       _favcat.value = localFav ? 'l' : '';
     }
@@ -91,8 +93,8 @@ class GalleryFavController extends GetxController {
 
     try {
       await GalleryFavParser.galleryAddfavorite(
-        _pageController.galleryItem.gid!,
-        _pageController.galleryItem.token!,
+        _pageController.galleryItem?.gid ?? '0',
+        _pageController.galleryItem?.token ?? '',
         favcat: _lastFavcat,
         favnote: favnote,
       );
@@ -162,8 +164,8 @@ class GalleryFavController extends GetxController {
         if (_favcat != 'l') {
           // 网络收藏
           await GalleryFavParser.galleryAddfavorite(
-            _pageController.galleryItem.gid!,
-            _pageController.galleryItem.token!,
+            _pageController.galleryItem?.gid ?? '0',
+            _pageController.galleryItem?.token ?? '',
             favcat: _favcat,
             favnote: _favnote,
           );
@@ -174,7 +176,7 @@ class GalleryFavController extends GetxController {
           _localFavController.addLocalFav(_pageController.galleryItem);
         }
         final _oriFavcat = this._favcat.value;
-        logger.v(' ${_pageController.galleryItem.toJson()}');
+        logger.v(' ${_pageController.galleryItem?.toJson()}');
         if (_oriFavcat.isNotEmpty) {
           _favoriteSelectorController.decrease(_oriFavcat);
         }
@@ -205,8 +207,8 @@ class GalleryFavController extends GetxController {
       if (favcat.isNotEmpty && favcat != 'l') {
         logger.v('删除网络收藏');
         await GalleryFavParser.galleryAddfavorite(
-          _pageController.galleryItem.gid!,
-          _pageController.galleryItem.token!,
+          _pageController.galleryItem?.gid ?? '0',
+          _pageController.galleryItem?.token ?? '',
         );
       } else {
         logger.v('取消本地收藏');

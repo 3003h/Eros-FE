@@ -10,6 +10,7 @@ import 'package:fehviewer/const/const.dart';
 import 'package:fehviewer/const/storages.dart';
 import 'package:fehviewer/models/index.dart';
 import 'package:fehviewer/models/profile.dart';
+import 'package:fehviewer/network/app_dio/http_config.dart';
 import 'package:fehviewer/network/gallery_request.dart';
 import 'package:fehviewer/store/floor/database.dart';
 import 'package:fehviewer/store/get_store.dart';
@@ -43,6 +44,9 @@ DeviceInfoPlugin deviceInfo = DeviceInfoPlugin();
 final HiveHelper hiveHelper = HiveHelper();
 
 final Global global = Global();
+
+DioHttpConfig ehDioConfig = DioHttpConfig(
+    baseUrl: EHConst.EH_BASE_URL, cookiesPath: Global.appSupportPath);
 
 // 全局配置
 // ignore: avoid_classes_with_only_static_members

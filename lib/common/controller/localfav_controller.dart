@@ -8,7 +8,10 @@ import 'base_controller.dart';
 class LocalFavController extends ProfileController {
   RxList<GalleryItem> loacalFavs = <GalleryItem>[].obs;
 
-  void addLocalFav(GalleryItem galleryItem) {
+  void addLocalFav(GalleryItem? galleryItem) {
+    if (galleryItem == null) {
+      return;
+    }
     if (loacalFavs.indexWhere(
             (GalleryItem element) => element.gid == galleryItem.gid) ==
         -1) {
@@ -24,7 +27,10 @@ class LocalFavController extends ProfileController {
     }
   }
 
-  void removeFav(GalleryItem galleryItem) {
+  void removeFav(GalleryItem? galleryItem) {
+    if (galleryItem == null) {
+      return;
+    }
     loacalFavs
         .removeWhere((GalleryItem element) => element.gid == galleryItem.gid);
   }

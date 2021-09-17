@@ -22,7 +22,7 @@ class AppDio with DioMixin implements Dio {
   AppDio({BaseOptions? options, DioHttpConfig? dioConfig}) {
     options ??= BaseOptions(
       baseUrl: dioConfig?.baseUrl ?? '',
-      contentType: 'application/json',
+      contentType: Headers.formUrlEncodedContentType,
       connectTimeout: dioConfig?.connectTimeout,
       sendTimeout: dioConfig?.sendTimeout,
       receiveTimeout: dioConfig?.receiveTimeout,

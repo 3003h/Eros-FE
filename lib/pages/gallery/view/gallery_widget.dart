@@ -16,7 +16,6 @@ import 'package:fehviewer/pages/gallery/view/comment_item.dart';
 import 'package:fehviewer/pages/gallery/view/taginfo_dialog.dart';
 import 'package:fehviewer/route/navigator_util.dart';
 import 'package:fehviewer/route/routes.dart';
-// import 'package:fehviewer/utils/cust_lib/selectable_text.dart';
 import 'package:fehviewer/utils/logger.dart';
 import 'package:fehviewer/widget/eh_cached_network_image.dart';
 import 'package:fehviewer/widget/network_extended_image.dart';
@@ -288,8 +287,8 @@ class ReadButton extends StatelessWidget {
           borderRadius: BorderRadius.circular(20),
           color: CupertinoColors.activeBlue,
           onPressed: _pageController.enableRead
-              ? () => _toViewPage(
-                  _pageController.galleryItem.gid, _pageController.lastIndex)
+              ? () => _toViewPage(_pageController.galleryItem?.gid ?? '0',
+                  _pageController.lastIndex)
               : null),
     );
   }
