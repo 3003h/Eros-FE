@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:extended_image/extended_image.dart';
 import 'package:fehviewer/models/index.dart';
 import 'package:fehviewer/network/gallery_request.dart';
+import 'package:fehviewer/network/request.dart';
 import 'package:fehviewer/utils/logger.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -119,14 +120,14 @@ class GalleryPara {
         final String _href = imageMap[_ser]?.href ?? '';
 
         // paraImageLageInfoFromHtml
-        final GalleryImage _imageFromApi = await Api.fetchImageInfo(_href);
+        final GalleryImage? _imageFromApi = await fetchImageInfo(_href);
 
-        _url = _imageFromApi.imageUrl ?? '';
+        _url = _imageFromApi?.imageUrl ?? '';
 
         _image = _image.copyWith(
           imageUrl: _url,
-          imageWidth: _imageFromApi.imageWidth,
-          imageHeight: _imageFromApi.imageHeight,
+          imageWidth: _imageFromApi?.imageWidth,
+          imageHeight: _imageFromApi?.imageHeight,
         );
 
         _processingSerSet.remove(_ser);

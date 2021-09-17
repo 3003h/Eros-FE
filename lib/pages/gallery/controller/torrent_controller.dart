@@ -22,7 +22,7 @@ class TorrentController extends GetxController
 
   Future<TorrentProvider> _fetch() async {
     final _torrentLink = '${Api.getBaseUrl()}/gallerytorrents.php'
-        '?gid=${pageController.gid}&t=${pageController.galleryItem.token}';
+        '?gid=${pageController.gid}&t=${pageController.galleryItem?.token}';
     logger.d(_torrentLink);
     return await Api.getTorrent(_torrentLink);
   }
@@ -44,7 +44,7 @@ class TorrentController extends GetxController
 
   Future<String> _fetchTk() async {
     return await Api.getTorrentToken(
-        pageController.gid, pageController.galleryItem.token!,
+        pageController.gid, pageController.galleryItem?.token ?? '',
         refresh: isRefresh);
   }
 }

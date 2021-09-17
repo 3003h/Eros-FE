@@ -300,15 +300,16 @@ class _DetailFromItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final GalleryItem galleryItem = controller.galleryItem;
+    final GalleryItem? galleryItem = controller.galleryItem;
 
     return SliverToBoxAdapter(
       child: Column(
         children: <Widget>[
-          GalleryHeader(
-            initGalleryItem: galleryItem,
-            tabTag: tabTag,
-          ),
+          if (galleryItem != null)
+            GalleryHeader(
+              initGalleryItem: galleryItem,
+              tabTag: tabTag,
+            ),
           controller.obx(
             (GalleryItem? state) {
               return state != null

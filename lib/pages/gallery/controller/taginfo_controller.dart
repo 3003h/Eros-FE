@@ -18,7 +18,7 @@ class TagInfoController extends GetxController {
   TagInfoController();
   GalleryPageController get pageController => Get.find(tag: pageCtrlDepth);
 
-  GalleryItem get _item => pageController.galleryItem;
+  GalleryItem? get _item => pageController.galleryItem;
 
   final TextEditingController tagsTextController = TextEditingController();
   FocusNode focusNode = FocusNode();
@@ -98,13 +98,16 @@ class TagInfoController extends GetxController {
   }
 
   Future<void> tagVoteDown(String tags) async {
+    if (_item == null) {
+      return;
+    }
     logger.d('tags down id $tags');
 
     final Map<String, dynamic> rult = await Api.tagGallery(
-      apikey: _item.apikey!,
-      apiuid: _item.apiuid!,
-      gid: _item.gid!,
-      token: _item.token!,
+      apikey: _item!.apikey!,
+      apiuid: _item!.apiuid!,
+      gid: _item!.gid!,
+      token: _item!.token!,
       tags: tags,
       vote: -1,
     );
@@ -117,13 +120,16 @@ class TagInfoController extends GetxController {
   }
 
   Future<void> tagVoteUp(String tags) async {
+    if (_item == null) {
+      return;
+    }
     logger.d('tags down id $tags');
 
     final Map<String, dynamic> rult = await Api.tagGallery(
-      apikey: _item.apikey!,
-      apiuid: _item.apiuid!,
-      gid: _item.gid!,
-      token: _item.token!,
+      apikey: _item!.apikey!,
+      apiuid: _item!.apiuid!,
+      gid: _item!.gid!,
+      token: _item!.token!,
       tags: tags,
       vote: 1,
     );

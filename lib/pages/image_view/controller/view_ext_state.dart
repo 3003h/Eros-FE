@@ -48,7 +48,7 @@ class ViewExtState {
         //         ?.columnMode ??
         //     ViewColumnMode.single;
         _galleryCacheController
-            .getGalleryCache(galleryPageController.galleryItem.gid ?? '',
+            .getGalleryCache(galleryPageController.galleryItem?.gid ?? '0',
                 sync: false)
             .then((value) =>
                 _columnMode = value?.columnMode ?? ViewColumnMode.single);
@@ -89,10 +89,11 @@ class ViewExtState {
 
   void saveLastIndex({bool saveToStore = false}) {
     if (loadType == LoadType.network) {
-      if (galleryPageController.galleryItem.gid != null && conditionItemIndex) {
+      if (galleryPageController.galleryItem?.gid != null &&
+          conditionItemIndex) {
         galleryPageController.lastIndex = currentItemIndex;
         _galleryCacheController.setIndex(
-            galleryPageController.galleryItem.gid ?? '', currentItemIndex,
+            galleryPageController.galleryItem?.gid ?? '0', currentItemIndex,
             saveToStore: saveToStore);
       }
     } else {
@@ -111,7 +112,7 @@ class ViewExtState {
     vDebounce(() {
       if (loadType == LoadType.network) {
         _galleryCacheController.setColumnMode(
-            galleryPageController.galleryItem.gid ?? '', val);
+            galleryPageController.galleryItem?.gid ?? '', val);
       }
     });
   }
@@ -154,7 +155,7 @@ class ViewExtState {
     if (loadType == LoadType.file) {
       return imagePathList.length;
     } else {
-      return int.parse(galleryPageController.galleryItem.filecount ?? '0');
+      return int.parse(galleryPageController.galleryItem?.filecount ?? '0');
     }
   }
 

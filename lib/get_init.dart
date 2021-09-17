@@ -14,6 +14,7 @@ import 'common/controller/quicksearch_controller.dart';
 import 'common/controller/tag_trans_controller.dart';
 import 'common/controller/user_controller.dart';
 import 'common/controller/webdav_controller.dart';
+import 'common/global.dart';
 import 'common/service/depth_service.dart';
 import 'common/service/dns_service.dart';
 import 'common/service/ehconfig_service.dart';
@@ -90,13 +91,13 @@ void getinit() {
 
   Get.lazyPut(() => SplashController());
 
-  DioHttpConfig ehDioConfig = DioHttpConfig(baseUrl: 'https://e-hentai.org/');
-  DioHttpClient ehClient = DioHttpClient(dioConfig: ehDioConfig);
-  // Get.put<DioHttpClient>(ehClient, tag: 'EH');
-  Get.lazyPut(() => ehClient, tag: 'EH');
-
-  DioHttpConfig exDioConfig = DioHttpConfig(baseUrl: 'https://exhentai.org/');
-  DioHttpClient exClient = DioHttpClient(dioConfig: exDioConfig);
-  // Get.put<DioHttpClient>(exClient, tag: 'EX');
-  Get.lazyPut(() => exClient, tag: 'EX');
+  // DioHttpConfig ehDioConfig = DioHttpConfig(
+  //     baseUrl: 'https://e-hentai.org/', cookiesPath: Global.appSupportPath);
+  // DioHttpClient ehClient = DioHttpClient(dioConfig: ehDioConfig);
+  // Get.lazyPut(() => ehClient, tag: 'EH', fenix: true);
+  //
+  // DioHttpConfig exDioConfig = DioHttpConfig(
+  //     baseUrl: 'https://exhentai.org/', cookiesPath: Global.appSupportPath);
+  // DioHttpClient exClient = DioHttpClient(dioConfig: exDioConfig);
+  // Get.lazyPut(() => exClient, tag: 'EX', fenix: true);
 }

@@ -13,6 +13,7 @@ import 'package:fehviewer/component/exception/error.dart';
 import 'package:fehviewer/component/quene_task/quene_task.dart';
 import 'package:fehviewer/models/base/eh_models.dart';
 import 'package:fehviewer/network/gallery_request.dart';
+import 'package:fehviewer/network/request.dart';
 import 'package:fehviewer/pages/gallery/controller/gallery_page_controller.dart';
 import 'package:fehviewer/pages/tab/controller/download_view_controller.dart';
 import 'package:fehviewer/store/floor/dao/gallery_task_dao.dart';
@@ -543,12 +544,16 @@ class DownloadController extends GetxController {
     String? sourceId,
     CancelToken? cancelToken,
   }) async {
-    final GalleryImage _image = await Api.fetchImageInfo(
+    final GalleryImage? _image = await fetchImageInfo(
       href,
       // refresh: changeSource,
       sourceId: sourceId,
       cancelToken: cancelToken,
     );
+
+    if (_image == null) {
+      return oriImage;
+    }
 
     final GalleryImage _imageCopyWith = oriImage.copyWith(
       sourceId: _image.sourceId,

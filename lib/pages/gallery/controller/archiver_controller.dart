@@ -21,8 +21,9 @@ class ArchiverController extends GetxController
   }
 
   Future<ArchiverProvider> _fetch() async {
-    logger.d(pageController.galleryItem.archiverLink);
-    return await Api.getArchiver(pageController.galleryItem.archiverLink ?? '');
+    logger.d(pageController.galleryItem?.archiverLink);
+    return await Api.getArchiver(
+        pageController.galleryItem?.archiverLink ?? '');
   }
 
   Future<void> _loadData() async {
@@ -42,7 +43,7 @@ class ArchiverController extends GetxController
 
   Future<void> downloadRemote(String dlres) async {
     final String response = await Api.postArchiverRemoteDownload(
-        pageController.galleryItem.archiverLink ?? '', dlres);
+        pageController.galleryItem?.archiverLink ?? '', dlres);
     showToast(response);
   }
 
@@ -51,17 +52,17 @@ class ArchiverController extends GetxController
     required String dlcheck,
   }) async {
     final String _url = await Api.postArchiverLocalDownload(
-        pageController.galleryItem.archiverLink ?? '',
+        pageController.galleryItem?.archiverLink ?? '',
         dltype: dltype,
         dlcheck: dlcheck);
     Get.back();
     _downloadController.downloadArchiverFile(
-      gid: pageController.galleryItem.gid ?? '',
+      gid: pageController.galleryItem?.gid ?? '0',
       title: pageController.title,
       dlType: dltype,
       url: _url,
-      imgUrl: pageController.galleryItem.imgUrl,
-      galleryUrl: pageController.galleryItem.url,
+      imgUrl: pageController.galleryItem?.imgUrl,
+      galleryUrl: pageController.galleryItem?.url,
     );
   }
 }

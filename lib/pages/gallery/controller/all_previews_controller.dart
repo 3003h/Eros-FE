@@ -20,7 +20,7 @@ class AllPreviewsPageController extends GetxController
 
   List<GalleryImage> get _images => _pageController.imagesFromMap;
 
-  String get filecount => _pageController.galleryItem.filecount ?? '0';
+  String get filecount => _pageController.galleryItem?.filecount ?? '0';
 
   String get gid => _pageController.gid;
 
@@ -111,7 +111,7 @@ class AllPreviewsPageController extends GetxController
       return;
     }
     //
-    logger.v('获取更多预览 ${_pageController.galleryItem.url}');
+    logger.v('获取更多预览 ${_pageController.galleryItem?.url}');
     // 增加延时 避免build期间进行 setState
     await Future<void>.delayed(const Duration(milliseconds: 100));
 
@@ -119,7 +119,7 @@ class AllPreviewsPageController extends GetxController
     update();
 
     final List<GalleryImage> _nextGalleryImageList = await Api.getGalleryImage(
-      _pageController.galleryItem.url!,
+      _pageController.galleryItem?.url ?? '',
       page: _pageController.currentImagePage + 1,
       cancelToken: moreGalleryImageCancelToken,
       refresh: _pageController.isRefresh,

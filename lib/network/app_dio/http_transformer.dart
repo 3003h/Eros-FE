@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:dio/dio.dart';
 import 'package:fehviewer/common/parser/eh_parser.dart';
 import 'package:fehviewer/models/base/eh_models.dart';
+import 'package:fehviewer/utils/logger.dart';
 
 import 'http_response.dart';
 
@@ -69,5 +70,15 @@ class GalleryHttpTransformer extends HttpTransformer {
     final html = response.data as String;
     final GalleryItem item = await parseGalleryDetail(html);
     return DioHttpResponse<GalleryItem>.success(item);
+  }
+}
+
+class GalleryImageHttpTransformer extends HttpTransformer {
+  @override
+  FutureOr<DioHttpResponse<GalleryImage>> parse(
+      Response<dynamic> response) async {
+    final html = response.data as String;
+    final GalleryImage image = await paraImage(html);
+    return DioHttpResponse<GalleryImage>.success(image);
   }
 }

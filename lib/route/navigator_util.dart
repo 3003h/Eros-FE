@@ -4,6 +4,7 @@ import 'package:fehviewer/common/service/layout_service.dart';
 import 'package:fehviewer/const/const.dart';
 import 'package:fehviewer/models/index.dart';
 import 'package:fehviewer/network/gallery_request.dart';
+import 'package:fehviewer/network/request.dart';
 import 'package:fehviewer/pages/gallery/comm.dart';
 import 'package:fehviewer/pages/gallery/controller/gallery_page_controller.dart';
 import 'package:fehviewer/pages/gallery/view/gallery_page.dart';
@@ -98,13 +99,18 @@ class NavigatorUtil {
         _gid = matcher?[1];
       } else if (regGalleryPageUrl.hasMatch(url)) {
         // url为画廊某一页的链接
-        final _image = await Api.fetchImageInfo(url);
+        final _image = await fetchImageInfo(url);
+
+        if (_image == null) {
+          return;
+        }
+
         final ser = _image.ser;
         final _galleryUrl =
             '${Api.getBaseUrl()}/g/${_image.gid}/${_image.token}';
         logger.d('jump to $_galleryUrl $ser');
 
-        _gid = _image.gid;
+        _gid = _image.gid ?? '0';
 
         Get.replace(GalleryRepository(url: _galleryUrl, jumpSer: ser));
       }

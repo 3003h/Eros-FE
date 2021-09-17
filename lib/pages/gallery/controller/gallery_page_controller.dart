@@ -15,6 +15,7 @@ import 'package:fehviewer/const/const.dart';
 import 'package:fehviewer/generated/l10n.dart';
 import 'package:fehviewer/models/base/eh_models.dart';
 import 'package:fehviewer/network/gallery_request.dart';
+import 'package:fehviewer/network/request.dart';
 import 'package:fehviewer/pages/gallery/controller/taginfo_controller.dart';
 import 'package:fehviewer/pages/gallery/controller/torrent_controller.dart';
 import 'package:fehviewer/pages/gallery/view/gallery_page.dart';
@@ -40,7 +41,7 @@ class GalleryPageController extends GetxController
   late final GalleryRepository? galleryRepository;
 
   /// 画廊数据对象
-  late GalleryItem galleryItem;
+  GalleryItem? galleryItem;
   // GalleryItem get galleryItem => _galleryItem;
   // set galleryItem(GalleryItem val) {
   //   _galleryItem = val;
@@ -51,7 +52,7 @@ class GalleryPageController extends GetxController
   // }
 
   /// 画廊gid 唯一
-  String get gid => galleryItem.gid ?? '';
+  String get gid => galleryItem?.gid ?? '0';
 
   bool isRefresh = false;
 
@@ -76,7 +77,7 @@ class GalleryPageController extends GetxController
   }) {
     isRatinged = true;
 
-    galleryItem = galleryItem.copyWith(
+    galleryItem = galleryItem?.copyWith(
       isRatinged: true,
       ratingFallBack: ratingUsr,
       rating: ratingAvg,
@@ -98,9 +99,9 @@ class GalleryPageController extends GetxController
     }
   }
 
-  List<GalleryImage> get images => galleryItem.galleryImages ?? [];
-  Map<int, GalleryImage> get imageMap => galleryItem.imageMap;
-  int get filecount => int.parse(galleryItem.filecount ?? '0');
+  List<GalleryImage> get images => galleryItem?.galleryImages ?? [];
+  Map<int, GalleryImage> get imageMap => galleryItem?.imageMap ?? {};
+  int get filecount => int.parse(galleryItem?.filecount ?? '0');
 
   List<GalleryImage> get imagesFromMap {
     List<MapEntry<int, GalleryImage>> list = imageMap.entries
@@ -113,14 +114,14 @@ class GalleryPageController extends GetxController
   }
 
   void uptImageBySer({required int ser, required GalleryImage image}) {
-    final int? _index = galleryItem.galleryImages
+    final int? _index = galleryItem?.galleryImages
         ?.indexWhere((GalleryImage element) => element.ser == ser);
     if (_index != null && _index >= 0) {
-      galleryItem.galleryImages?[_index] = image;
+      galleryItem?.galleryImages?[_index] = image;
     }
   }
 
-  String get showKey => galleryItem.showKey ?? '';
+  String get showKey => galleryItem?.showKey ?? '';
 
   /// 当前缩略图页码
   late int currentImagePage;
@@ -183,7 +184,7 @@ class GalleryPageController extends GetxController
 
     // 初始
     _galleryCacheController
-        .getGalleryCache(galleryItem.gid ?? '')
+        .getGalleryCache(galleryItem?.gid ?? '')
         .then((_galleryCache) => lastIndex = _galleryCache?.lastIndex ?? 0);
 
     logger.v('GalleryPageController $pageCtrlDepth onInit end');
@@ -210,7 +211,7 @@ class GalleryPageController extends GetxController
   bool get enableRead => _enableRead.value;
 
   bool get hasMoreImage {
-    return int.parse(galleryItem.filecount ?? '0') > (firstPageImage.length);
+    return int.parse(galleryItem?.filecount ?? '0') > (firstPageImage.length);
   }
 
   // 控制隐藏导航栏按钮和封面
@@ -221,17 +222,17 @@ class GalleryPageController extends GetxController
   set hideNavigationBtn(bool val) => _hideNavigationBtn.value = val;
 
   // 第一页的缩略图对象数组
-  late List<GalleryImage> _firstPageImage;
+  List<GalleryImage>? _firstPageImage;
 
-  List<GalleryImage> get firstPageImage => _firstPageImage;
+  List<GalleryImage> get firstPageImage => _firstPageImage ?? [];
 
   void setImageAfterRequest(List<GalleryImage>? images) {
     if (images?.isNotEmpty ?? false) {
-      // galleryItem.galleryPreview = galleryPreview;
-      galleryItem = galleryItem.copyWith(galleryImages: images);
+      galleryItem = galleryItem?.copyWith(galleryImages: images);
     }
 
-    _firstPageImage = galleryItem.galleryImages!.sublist(0, images?.length);
+    _firstPageImage =
+        galleryItem?.galleryImages?.sublist(0, images?.length) ?? [];
   }
 
   /// 添加缩略图对象
@@ -253,76 +254,81 @@ class GalleryPageController extends GetxController
   /// 是否存在本地收藏中
   set localFav(bool value) {
     // galleryItem.localFav = value;
-    galleryItem = galleryItem.copyWith(localFav: value);
+    galleryItem = galleryItem?.copyWith(localFav: value);
   }
 
-  bool get localFav => galleryItem.localFav ?? false;
+  bool get localFav => galleryItem?.localFav ?? false;
 
   /// 请求数据
-  Future<GalleryItem> _fetchData({bool refresh = false}) async {
+  Future<GalleryItem?> _fetchData({bool refresh = false}) async {
     await Future<void>.delayed(const Duration(milliseconds: 200));
     try {
       hideNavigationBtn = true;
 
-      if (galleryItem.filecount == null ||
-          (galleryItem.filecount?.isEmpty ?? true)) {
+      if (galleryItem != null &&
+          (galleryItem?.filecount == null ||
+              (galleryItem?.filecount?.isEmpty ?? true))) {
         galleryItem =
-            await Api.getMoreGalleryInfoOne(galleryItem, refresh: refresh);
+            await Api.getMoreGalleryInfoOne(galleryItem!, refresh: refresh);
       }
 
       // 检查画廊是否包含在本地收藏中
-      final bool _localFav = _isInLocalFav(galleryItem.gid ?? '');
-      galleryItem = galleryItem.copyWith(localFav: _localFav);
+      final bool _localFav = _isInLocalFav(galleryItem?.gid ?? '0');
+      galleryItem = galleryItem?.copyWith(localFav: _localFav);
 
-      final String? _oriColorRating = galleryItem.colorRating;
-      final String? _oriRatingCount = galleryItem.ratingCount;
-      final double? _oriRatingFallBack = galleryItem.ratingFallBack;
-      final bool? _oriIsRatinged = galleryItem.isRatinged;
+      final String? _oriColorRating = galleryItem?.colorRating;
+      final String? _oriRatingCount = galleryItem?.ratingCount;
+      final double? _oriRatingFallBack = galleryItem?.ratingFallBack;
+      final bool? _oriIsRatinged = galleryItem?.isRatinged;
 
       time.showTime('start get galleryItem');
-      galleryItem = await Api.getGalleryDetail(
-        inUrl: galleryItem.url!,
-        inGalleryItem: galleryItem,
+      final fetchedGalleryItem = await getGalleryDetail(
+        inUrl: galleryItem?.url ?? '',
         refresh: refresh,
       );
       time.showTime('fetch galleryItem end');
 
+      if (fetchedGalleryItem != null) {
+        galleryItem = galleryItem?.copyWithAll(fetchedGalleryItem);
+      }
+
       currentImagePage = 0;
-      setImageAfterRequest(galleryItem.galleryImages);
+      setImageAfterRequest(galleryItem?.galleryImages);
 
       try {
         // 页面内刷新时的处理
         if (refresh) {
           // 评论控制器状态数据更新
           Get.find<CommentController>(tag: pageCtrlDepth)
-              .change(galleryItem.galleryComment);
+              .change(galleryItem?.galleryComment);
           // 评分状态更新
-          isRatinged = galleryItem.isRatinged ?? false;
+          isRatinged = galleryItem?.isRatinged ?? false;
         } else {
-          galleryItem = galleryItem.copyWith(
-            ratingFallBack: galleryItem.ratingFallBack ?? _oriRatingFallBack,
-            ratingCount: galleryItem.ratingCount ?? _oriRatingCount,
+          galleryItem = galleryItem?.copyWith(
+            ratingFallBack: galleryItem?.ratingFallBack ?? _oriRatingFallBack,
+            ratingCount: galleryItem?.ratingCount ?? _oriRatingCount,
             colorRating: _oriColorRating,
             // isRatinged: _oriIsRatinged,
           );
 
           // 评分状态更新
-          isRatinged = galleryItem.isRatinged ?? false;
+          isRatinged = galleryItem?.isRatinged ?? false;
 
           // 收藏控制器状态更新
           final GalleryFavController _favController =
               Get.find(tag: pageCtrlDepth);
-          _favController.setFav(galleryItem.favcat!, galleryItem.favTitle!);
+          _favController.setFav(
+              galleryItem?.favcat ?? '', galleryItem?.favTitle ?? '');
         }
       } catch (_) {}
 
-      galleryItem = galleryItem.copyWith(
-          imgUrl: galleryItem.imgUrl ?? galleryItem.imgUrlL);
+      galleryItem = galleryItem?.copyWith(
+          imgUrl: galleryItem?.imgUrl ?? galleryItem?.imgUrlL);
 
       // 加入历史
-      if (galleryItem.gid != null) {
+      if (galleryItem != null && galleryItem?.gid != null) {
         Future<void>.delayed(const Duration(milliseconds: 700)).then((_) {
-          _historyController.addHistory(galleryItem);
+          _historyController.addHistory(galleryItem!);
         });
       }
 
@@ -351,7 +357,7 @@ class GalleryPageController extends GetxController
     // logger.d('_firstLoadData');
 
     try {
-      final GalleryItem _fetchItem = await _fetchData(refresh: refresh);
+      final GalleryItem? _fetchItem = await _fetchData(refresh: refresh);
       change(_fetchItem, status: RxStatus.success());
       time.showTime('change end');
 
@@ -363,10 +369,10 @@ class GalleryPageController extends GetxController
       }
 
       analytics.logViewItem(
-        itemId: galleryItem.gid ?? '',
-        itemName: galleryItem.englishTitle ?? '',
-        itemCategory: galleryItem.category ?? '',
-        destination: galleryItem.japaneseTitle,
+        itemId: galleryItem?.gid ?? '',
+        itemName: galleryItem?.englishTitle ?? '',
+        itemCategory: galleryItem?.category ?? '',
+        destination: galleryItem?.japaneseTitle,
       );
     } catch (err, stack) {
       logger.e('$err\n$stack');
@@ -428,7 +434,7 @@ class GalleryPageController extends GetxController
 
   Future<void> handOnRefreshAfterErr() async {
     change(null, status: RxStatus.loading());
-    _fetchData(refresh: true).then((GalleryItem value) {
+    _fetchData(refresh: true).then((GalleryItem? value) {
       _enableRead.value = true;
       change(value, status: RxStatus.success());
     });
@@ -465,10 +471,10 @@ class GalleryPageController extends GetxController
     // logger.d('${galleryItem.japaneseTitle} ${galleryItem.englishTitle}');
 
     if ((_ehConfigService.isJpnTitle.value) &&
-        (galleryItem.japaneseTitle?.isNotEmpty ?? false)) {
-      return galleryItem.englishTitle ?? '';
+        (galleryItem?.japaneseTitle?.isNotEmpty ?? false)) {
+      return galleryItem?.englishTitle ?? '';
     } else {
-      return galleryItem.japaneseTitle ?? '';
+      return galleryItem?.japaneseTitle ?? '';
     }
   }
 
@@ -479,10 +485,10 @@ class GalleryPageController extends GetxController
   // 根据设置的语言显示的标题
   String get title {
     if ((_ehConfigService.isJpnTitle.value) &&
-        (galleryItem.japaneseTitle?.isNotEmpty ?? false)) {
-      return galleryItem.japaneseTitle ?? '';
+        (galleryItem?.japaneseTitle?.isNotEmpty ?? false)) {
+      return galleryItem?.japaneseTitle ?? '';
     } else {
-      return galleryItem.englishTitle ?? '';
+      return galleryItem?.englishTitle ?? '';
     }
   }
 
@@ -516,10 +522,10 @@ class GalleryPageController extends GetxController
     // 增加延时 避免build期间进行 setState
     await Future<void>.delayed(const Duration(milliseconds: 0));
 
-    logger.v('获取更多预览 ${galleryItem.url} : $currentImagePage');
+    logger.v('获取更多预览 ${galleryItem?.url} : $currentImagePage');
 
     final List<GalleryImage> _moreGalleryImageList = await Api.getGalleryImage(
-      galleryItem.url!,
+      galleryItem?.url ?? '',
       page: currentImagePage + 1,
       cancelToken: cancelToken,
       refresh: isRefresh,
@@ -550,7 +556,7 @@ class GalleryPageController extends GetxController
     _mapLoadImagesForSer.putIfAbsent(
         page,
         () => Api.getGalleryImage(
-              galleryItem.url!,
+              galleryItem?.url ?? '',
               page: page,
               cancelToken: cancelToken,
               refresh: isRefresh, // 刷新画廊后加载缩略图不能从缓存读取，否则在改变每页数量后加载画廊会出错
@@ -567,7 +573,7 @@ class GalleryPageController extends GetxController
 
   // 按顺序翻页加载缩略图对象
   Future<bool> loadPriviewUntilIndex(int index) async {
-    final List<GalleryImage>? _galleryImageList = galleryItem.galleryImages;
+    final List<GalleryImage>? _galleryImageList = galleryItem?.galleryImages;
 
     if (_galleryImageList == null) {
       return true;
@@ -589,7 +595,7 @@ class GalleryPageController extends GetxController
   }) async {
     try {
       /// 当前缩略图对象
-      final GalleryImage? _curImages = galleryItem.imageMap[itemSer];
+      final GalleryImage? _curImages = galleryItem?.imageMap[itemSer];
 
       if (_curImages == null) {
         return null;
@@ -602,10 +608,10 @@ class GalleryPageController extends GetxController
           _largeImageUrl.isNotEmpty &&
           _curImages.imageHeight != null &&
           _curImages.imageWidth != null) {
-        return galleryItem.imageMap[itemSer];
+        return galleryItem?.imageMap[itemSer];
       } else {
         final String? _sourceId =
-            changeSource ? galleryItem.imageMap[itemSer]?.sourceId : '';
+            changeSource ? galleryItem?.imageMap[itemSer]?.sourceId : '';
 
         // logger.v(
         //     'ser:$itemSer ,href: ${galleryItem.previewMap[itemSer]?.href} , _sourceId: $_sourceId');
@@ -614,20 +620,24 @@ class GalleryPageController extends GetxController
           if (changeSource) {
             // 删除旧缓存
             _cacheController.clearDioCache(
-                path: galleryItem.imageMap[itemSer]?.href ?? '');
+                path: galleryItem?.imageMap[itemSer]?.href ?? '');
           }
 
-          final GalleryImage _image = await Api.fetchImageInfo(
-            galleryItem.imageMap[itemSer]?.href ?? '',
+          final GalleryImage? _image = await fetchImageInfo(
+            galleryItem?.imageMap[itemSer]?.href ?? '',
             // refresh: changeSource,
             sourceId: _sourceId,
           );
 
-          logger.v('fetch _image ${_image.toJson()}');
+          logger.v('fetch _image ${_image?.toJson()}');
 
           // 换源加载
           if (changeSource) {
-            logger5.d('itemSer$itemSer 换源加载 ${_image.imageUrl}');
+            logger5.d('itemSer$itemSer 换源加载 ${_image?.imageUrl}');
+          }
+
+          if (_image == null) {
+            return _curImages;
           }
 
           final GalleryImage _imageCopyWith = _curImages.copyWith(
@@ -656,14 +666,14 @@ class GalleryPageController extends GetxController
         Get.find<DownloadController>();
     _downloadController.downloadGallery(
       gid: int.parse(gid),
-      token: galleryItem.token,
-      url: galleryItem.url!,
-      fileCount: int.parse(galleryItem.filecount ?? '0'),
+      token: galleryItem?.token,
+      url: galleryItem?.url ?? '',
+      fileCount: int.parse(galleryItem?.filecount ?? '0'),
       title: title,
-      coverUrl: galleryItem.imgUrl,
-      rating: galleryItem.rating,
-      uploader: galleryItem.uploader,
-      category: galleryItem.category,
+      coverUrl: galleryItem?.imgUrl,
+      rating: galleryItem?.rating,
+      uploader: galleryItem?.uploader,
+      category: galleryItem?.category,
     );
   }
 
