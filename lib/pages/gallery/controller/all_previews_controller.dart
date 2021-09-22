@@ -1,7 +1,7 @@
 import 'package:dio/dio.dart';
 import 'package:fehviewer/common/service/depth_service.dart';
 import 'package:fehviewer/models/base/eh_models.dart';
-import 'package:fehviewer/network/gallery_request.dart';
+import 'package:fehviewer/network/request.dart';
 import 'package:fehviewer/utils/logger.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
@@ -118,7 +118,7 @@ class AllPreviewsPageController extends GetxController
     isLoading = true;
     update();
 
-    final List<GalleryImage> _nextGalleryImageList = await Api.getGalleryImage(
+    final List<GalleryImage> _nextGalleryImageList = await getGalleryImage(
       _pageController.galleryItem?.url ?? '',
       page: _pageController.currentImagePage + 1,
       cancelToken: moreGalleryImageCancelToken,

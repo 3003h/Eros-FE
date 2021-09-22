@@ -228,6 +228,7 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("Show japanese title"),
         "show_page_interval":
             MessageLookupByLibrary.simpleMessage("Show page interval"),
+        "skip": MessageLookupByLibrary.simpleMessage("Skip"),
         "sync_history": MessageLookupByLibrary.simpleMessage("Sync history"),
         "sync_read_progress":
             MessageLookupByLibrary.simpleMessage("Sync read progress"),

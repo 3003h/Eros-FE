@@ -524,7 +524,7 @@ class GalleryPageController extends GetxController
 
     logger.v('获取更多预览 ${galleryItem?.url} : $currentImagePage');
 
-    final List<GalleryImage> _moreGalleryImageList = await Api.getGalleryImage(
+    final List<GalleryImage> _moreGalleryImageList = await getGalleryImage(
       galleryItem?.url ?? '',
       page: currentImagePage + 1,
       cancelToken: cancelToken,
@@ -555,7 +555,7 @@ class GalleryPageController extends GetxController
 
     _mapLoadImagesForSer.putIfAbsent(
         page,
-        () => Api.getGalleryImage(
+        () => getGalleryImage(
               galleryItem?.url ?? '',
               page: page,
               cancelToken: cancelToken,
