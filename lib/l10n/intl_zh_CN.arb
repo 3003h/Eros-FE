@@ -175,5 +175,6 @@
   "tablet_layout": "平板布局",
   "webdav_Account": "WebDAV账户",
   "sync_history": "同步历史记录",
-  "sync_read_progress": "同步阅读进度"
+  "sync_read_progress": "同步阅读进度",
+  "skip": "跳过"
 }

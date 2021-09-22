@@ -82,3 +82,13 @@ class GalleryImageHttpTransformer extends HttpTransformer {
     return DioHttpResponse<GalleryImage>.success(image);
   }
 }
+
+class GalleryImageListHttpTransformer extends HttpTransformer {
+  @override
+  FutureOr<DioHttpResponse<List<GalleryImage>>> parse(
+      Response<dynamic> response) async {
+    final html = response.data as String;
+    final List<GalleryImage> image = await parseGalleryImageFromHtml(html);
+    return DioHttpResponse<List<GalleryImage>>.success(image);
+  }
+}

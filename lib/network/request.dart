@@ -77,3 +77,28 @@ Future<GalleryImage?> fetchImageInfo(
     return (httpResponse.data as GalleryImage).copyWith(href: href);
   }
 }
+
+Future<List<GalleryImage>> getGalleryImage(
+  String inUrl, {
+  int? page,
+  bool refresh = false,
+  CancelToken? cancelToken,
+}) async {
+  final Map<String, dynamic> _params = {
+    if (page != null) 'p': page,
+  };
+  DioHttpClient dioHttpClient = DioHttpClient(dioConfig: ehDioConfig);
+
+  DioHttpResponse httpResponse = await dioHttpClient.get(
+    inUrl,
+    queryParameters: _params,
+    httpTransformer: GalleryImageListHttpTransformer(),
+    options: getCacheOptions(forceRefresh: refresh),
+  );
+
+  if (httpResponse.ok && httpResponse.data is List<GalleryImage>) {
+    return httpResponse.data as List<GalleryImage>;
+  } else {
+    return [];
+  }
+}

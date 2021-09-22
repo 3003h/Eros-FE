@@ -469,7 +469,6 @@ class Api {
     //hc=1 显示全部评论
     //nw=always 不显示警告
 
-    // final HttpManager httpManager = HttpManager.getInstance();
     final String url = inUrl + '?p=$page';
 
     logger.v(url);

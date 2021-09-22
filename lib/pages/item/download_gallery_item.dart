@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:extended_image/extended_image.dart';
 import 'package:fehviewer/common/controller/gallerycache_controller.dart';
 import 'package:fehviewer/common/controller/webdav_controller.dart';
@@ -23,40 +25,59 @@ import 'package:path/path.dart' as path;
 
 const kCardRadius = 10.0;
 
-Future<int?> showSyncReadProgressDialog(BuildContext context, int gid) async {
-  return showCupertinoDialog<int?>(
-    context: context,
-    barrierDismissible: true,
-    builder: (BuildContext context) {
-      return CupertinoAlertDialog(
-        title: Text('${L10n.of(context).sync_read_progress}...'),
-        content: GetBuilder<DownloadViewController>(
-          initState: (state) {
-            // Future.delayed(Duration(seconds: 3)).then((value) => Get.back());
-            Get.find<GalleryCacheController>().getGalleryCache('$gid').then(
-                (_galleryCache) =>
-                    Get.back(result: _galleryCache?.lastIndex ?? 0));
-          },
-          builder: (logic) {
-            return const CupertinoActivityIndicator(radius: 16);
-          },
-        ).paddingOnly(top: 10.0),
-        actions: [
-          CupertinoDialogAction(
-            child: Text(
-              L10n.of(context).cancel,
-              style: const TextStyle(
-                  fontWeight: FontWeight.bold,
-                  color: CupertinoColors.destructiveRed),
-            ),
-            onPressed: () {
-              Get.back();
+Future<int?> syncReadProgress(
+  BuildContext context,
+  int gid, {
+  Duration duration = const Duration(milliseconds: 500),
+}) async {
+  bool _cancelSync = false;
+  bool _needShowDialog = true;
+
+  Future<int> _sync() async {
+    final _cache =
+        await Get.find<GalleryCacheController>().getGalleryCache('$gid');
+    _needShowDialog = false;
+    return _cache?.lastIndex ?? 0;
+  }
+
+  Future<int?> _showDialog() async {
+    return await showCupertinoDialog<int?>(
+      context: context,
+      barrierDismissible: true,
+      builder: (BuildContext context) {
+        return CupertinoAlertDialog(
+          title: Text('${L10n.of(context).sync_read_progress}...'),
+          content: GetBuilder<DownloadViewController>(
+            initState: (state) async {
+              final _index = await _sync();
+              if (!_cancelSync) {
+                Get.back(result: _index);
+              }
             },
-          ),
-        ],
-      );
-    },
-  );
+            builder: (logic) {
+              return const CupertinoActivityIndicator(radius: 16);
+            },
+          ).paddingOnly(top: 10.0),
+          actions: [
+            CupertinoDialogAction(
+              child: Text(
+                L10n.of(context).skip,
+                style: const TextStyle(
+                    fontWeight: FontWeight.bold,
+                    color: CupertinoColors.destructiveRed),
+              ),
+              onPressed: () {
+                _cancelSync = true;
+                Get.back();
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  return await _showDialog();
 }
 
 class DownloadGalleryItem extends GetView<DownloadViewController> {
@@ -99,8 +120,7 @@ class DownloadGalleryItem extends GetView<DownloadViewController> {
         // 同步进度
         int? lastIndex;
         if (Get.find<WebdavController>().syncReadProgress) {
-          lastIndex =
-              await showSyncReadProgressDialog(context, galleryTask.gid);
+          lastIndex = await syncReadProgress(context, galleryTask.gid);
         }
         logger.d('lastIndex $lastIndex');
         lastIndex ??= (await Get.find<GalleryCacheController>()

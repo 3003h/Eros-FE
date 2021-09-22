@@ -526,7 +526,7 @@ class DownloadController extends GetxController {
     String url, {
     CancelToken? cancelToken,
   }) async {
-    final List<GalleryImage> _moreImageList = await Api.getGalleryImage(
+    final List<GalleryImage> _moreImageList = await getGalleryImage(
       url,
       page: 0,
       cancelToken: cancelToken,
@@ -576,7 +576,7 @@ class DownloadController extends GetxController {
     final int page = firstPageCount != null ? (ser - 1) ~/ firstPageCount : 0;
     loggerSimple.v('ser:$ser 所在页码为$page');
 
-    final List<GalleryImage> _moreImageList = await Api.getGalleryImage(
+    final List<GalleryImage> _moreImageList = await getGalleryImage(
       url,
       page: page,
       cancelToken: cancelToken,

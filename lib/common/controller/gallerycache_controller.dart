@@ -19,6 +19,7 @@ class GalleryCacheController extends GetxController {
 
   Future<GalleryCache?> getGalleryCache(String gid, {bool sync = true}) async {
     final _localCache = gStore.getCache(gid);
+
     if (!gCacheMap.containsKey(gid) && _localCache != null) {
       logger.v('get from store');
       gCacheMap[gid] = _localCache;
