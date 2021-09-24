@@ -6,12 +6,8 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
+import 'const.dart';
 import 'gallery_widget.dart';
-
-const double kMaxCrossAxisExtent = 135.0;
-const double kMainAxisSpacing = 0; //主轴方向的间距
-const double kCrossAxisSpacing = 4; //交叉轴方向子元素的间距
-const double kChildAspectRatio = 0.55; //显示区域宽高比
 
 class AllPreviewPage extends StatefulWidget {
   const AllPreviewPage();

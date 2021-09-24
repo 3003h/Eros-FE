@@ -24,6 +24,8 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
+import 'const.dart';
+
 /// 封面小图 纯StatelessWidget
 class CoveTinyImage extends StatelessWidget {
   const CoveTinyImage(
@@ -397,10 +399,10 @@ class _PreviewGridState extends State<PreviewGrid> {
         physics: const NeverScrollableScrollPhysics(),
         //禁用滑动事件
         gridDelegate: const SliverGridDelegateWithMaxCrossAxisExtent(
-            maxCrossAxisExtent: 130,
-            mainAxisSpacing: 0, //主轴方向的间距
-            crossAxisSpacing: 4, //交叉轴方向子元素的间距
-            childAspectRatio: 0.55 //显示区域宽高
+            maxCrossAxisExtent: kMaxCrossAxisExtent,
+            mainAxisSpacing: kMainAxisSpacing, //主轴方向的间距
+            crossAxisSpacing: kCrossAxisSpacing, //交叉轴方向子元素的间距
+            childAspectRatio: kChildAspectRatio //显示区域宽高
             ),
         itemCount: widget.images.length,
         itemBuilder: (context, index) {
