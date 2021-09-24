@@ -2,16 +2,12 @@ import 'package:dio/dio.dart';
 import 'package:fehviewer/common/service/depth_service.dart';
 import 'package:fehviewer/models/base/eh_models.dart';
 import 'package:fehviewer/network/request.dart';
+import 'package:fehviewer/pages/gallery/view/const.dart';
 import 'package:fehviewer/utils/logger.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
 
 import 'gallery_page_controller.dart';
-
-const double kMaxCrossAxisExtent = 135.0;
-const double kMainAxisSpacing = 0; //主轴方向的间距
-const double kCrossAxisSpacing = 4; //交叉轴方向子元素的间距
-const double kChildAspectRatio = 0.55; //显示区域宽高比
 
 class AllPreviewsPageController extends GetxController
     with StateMixin<List<GalleryImage>> {
