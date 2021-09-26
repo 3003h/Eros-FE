@@ -1,3 +1,4 @@
+import 'package:blur/blur.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:fehviewer/common/exts.dart';
 import 'package:fehviewer/common/global.dart';
@@ -17,7 +18,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
-import 'package:blur/blur.dart';
 
 const double kPaddingHorizontal = 12.0;
 const double kPaddingVertical = 18.0;
@@ -200,10 +200,10 @@ class GalleryItemWidget extends StatelessWidget {
                       BoxShadow(
                         color: CupertinoDynamicColor.resolve(
                                 CupertinoColors.systemGrey5, Get.context!)
-                            .withOpacity(0.9),
+                            .withOpacity(1.0),
                         blurRadius: 10,
-                        spreadRadius: 2,
-                        offset: Offset(2, 2),
+                        // spreadRadius: 2,
+                        offset: const Offset(2, 4),
                       )
                     ],
               color: galleryItemController.colorTap.value,
@@ -400,9 +400,9 @@ class _CoverImage extends StatelessWidget {
             ),
             HeroMode(
               enabled: !isLayoutLarge,
-              child: Hero(
-                tag: '${_item.gid}_cover_${tabTag}',
-                child: Center(
+              child: Center(
+                child: Hero(
+                  tag: '${_item.gid}_cover_$tabTag',
                   child: ClipRRect(
                       borderRadius: BorderRadius.circular(4), child: image),
                 ),
