@@ -484,9 +484,21 @@ class CommentItem extends StatelessWidget {
                           ),
                         ),
                         // 分值
+                        if (galleryComment.score.isNotEmpty)
+                          Padding(
+                            padding: const EdgeInsets.only(left: 8.0, right: 4),
+                            child: Icon(
+                              FontAwesomeIcons.adjust,
+                              size: kSizeNotVote - 1,
+                              color: CupertinoDynamicColor.resolve(
+                                ThemeColors.commitText,
+                                context,
+                              ),
+                            ),
+                          ),
                         Text(
                           galleryComment.score.startsWith('+')
-                              ? galleryComment.score.substring(1)
+                              ? '+${galleryComment.score.substring(1)}'
                               : galleryComment.score,
                           style: TextStyle(
                             fontSize: 12,

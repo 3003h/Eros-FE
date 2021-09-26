@@ -113,7 +113,8 @@ class TabViewController extends GetxController
       }
       isBackgroundRefresh = true;
       await reloadData();
-    } catch (_) {} finally {
+    } catch (_) {
+    } finally {
       isBackgroundRefresh = false;
     }
   }
@@ -242,9 +243,6 @@ class TabViewController extends GetxController
 
         // logger.d('add all to end ${state?.length}');
       }
-      // 成功才+1
-      curPage.value += 1;
-      pageState = PageState.None;
 
       final insertIndex = state?.length ?? 0;
 
@@ -253,6 +251,10 @@ class TabViewController extends GetxController
       for (final item in rultList) {
         sliverAnimatedListKey.currentState?.insertItem(insertIndex);
       }
+
+      // 成功才+1
+      curPage.value += 1;
+      pageState = PageState.None;
     } catch (e, stack) {
       pageState = PageState.LoadingException;
       rethrow;
