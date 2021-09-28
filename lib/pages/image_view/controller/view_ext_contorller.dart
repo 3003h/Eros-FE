@@ -56,6 +56,7 @@ class ViewExtController extends GetxController {
   final ViewExtState vState = ViewExtState();
 
   late PageController pageController;
+  late ExtendedPageController extendedPageController;
 
   GalleryPageController get _galleryPageController =>
       vState.galleryPageController;
@@ -89,6 +90,12 @@ class ViewExtController extends GetxController {
     pageController = PageController(
       initialPage: vState.pageIndex,
       viewportFraction: vState.showPageInterval ? 1.1 : 1.0,
+    );
+
+    extendedPageController = ExtendedPageController(
+      initialPage: vState.pageIndex,
+      shouldIgnorePointerWhenScrolling: true,
+      pageSpacing: vState.showPageInterval ? 20.0 : 0.0,
     );
 
     // 竖屏模式初始页码
@@ -184,6 +191,7 @@ class ViewExtController extends GetxController {
     Get.find<GalleryCacheController>().saveAll();
     vState.saveLastIndex(saveToStore: true);
     pageController.dispose();
+    extendedPageController.dispose();
     vState.getMoreCancelToken.cancel();
 
     FlutterStatusbarManager.setHidden(false,
@@ -194,7 +202,6 @@ class ViewExtController extends GetxController {
     // 恢复系统旋转设置
     logger.v('恢复系统旋转设置');
     OrientationPlugin.setPreferredOrientations(DeviceOrientation.values);
-    // OrientationPlugin.forceOrientation(DeviceOrientation.portraitUp);
   }
 
   void resetPageController() {
@@ -203,6 +210,14 @@ class ViewExtController extends GetxController {
           ? pageController.page?.round() ?? vState.currentItemIndex
           : vState.currentItemIndex,
       viewportFraction: vState.showPageInterval ? 1.1 : 1.0,
+    );
+
+    extendedPageController = ExtendedPageController(
+      initialPage: pageController.positions.isNotEmpty
+          ? pageController.page?.round() ?? vState.currentItemIndex
+          : vState.currentItemIndex,
+      shouldIgnorePointerWhenScrolling: true,
+      pageSpacing: vState.showPageInterval ? 20.0 : 0.0,
     );
   }
 
@@ -278,7 +293,12 @@ class ViewExtController extends GetxController {
     logger.d('_toIndex $_toIndex  ');
     update([idViewColumnModeIcon, idSlidePage]);
     await Future.delayed(const Duration(milliseconds: 50));
-    pageController.jumpToPage(_toIndex);
+
+    // pageController.jumpToPage(_toIndex);
+    // extendedPageController.jumpToPage(_toIndex);
+
+    pageControllerCallBack(() => pageController.jumpToPage(_toIndex),
+        () => extendedPageController.jumpToPage(_toIndex));
   }
 
   Future<void> switchShowThumbList() async {
@@ -475,12 +495,28 @@ class ViewExtController extends GetxController {
     logger.v('${vState.viewMode} tap left');
     vState.fade = false;
     if (vState.viewMode == ViewMode.LeftToRight && vState.pageIndex > 0) {
-      pageController.animateToPage(vState.pageIndex - 1,
-          duration: const Duration(milliseconds: 200), curve: Curves.ease);
+      // pageController.animateToPage(vState.pageIndex - 1,
+      //     duration: const Duration(milliseconds: 200), curve: Curves.ease);
+      // extendedPageController.animateToPage(vState.pageIndex - 1,
+      //     duration: const Duration(milliseconds: 200), curve: Curves.ease);
+
+      pageControllerCallBack(
+          () => pageController.animateToPage(vState.pageIndex - 1,
+              duration: const Duration(milliseconds: 200), curve: Curves.ease),
+          () => extendedPageController.animateToPage(vState.pageIndex - 1,
+              duration: const Duration(milliseconds: 200), curve: Curves.ease));
     } else if (vState.viewMode == ViewMode.rightToLeft &&
         vState.pageIndex < vState.filecount) {
-      pageController.animateToPage(vState.pageIndex + 1,
-          duration: const Duration(milliseconds: 200), curve: Curves.ease);
+      // pageController.animateToPage(vState.pageIndex + 1,
+      //     duration: const Duration(milliseconds: 200), curve: Curves.ease);
+      // extendedPageController.animateToPage(vState.pageIndex + 1,
+      //     duration: const Duration(milliseconds: 200), curve: Curves.ease);
+
+      pageControllerCallBack(
+          () => pageController.animateToPage(vState.pageIndex + 1,
+              duration: const Duration(milliseconds: 200), curve: Curves.ease),
+          () => extendedPageController.animateToPage(vState.pageIndex + 1,
+              duration: const Duration(milliseconds: 200), curve: Curves.ease));
     } else if (vState.viewMode == ViewMode.topToBottom &&
         itemScrollController.isAttached &&
         !vState.isScrolling &&
@@ -502,14 +538,28 @@ class ViewExtController extends GetxController {
     vState.fade = false;
     if (vState.viewMode == ViewMode.LeftToRight &&
         vState.pageIndex < vState.filecount) {
-      // pageController.jumpToPage(vState.pageIndex + 1);
-      pageController.animateToPage(vState.pageIndex + 1,
-          duration: const Duration(milliseconds: 200), curve: Curves.ease);
+      // pageController.animateToPage(vState.pageIndex + 1,
+      //     duration: const Duration(milliseconds: 200), curve: Curves.ease);
+      // extendedPageController.animateToPage(vState.pageIndex + 1,
+      //     duration: const Duration(milliseconds: 200), curve: Curves.ease);
+
+      pageControllerCallBack(
+          () => pageController.animateToPage(vState.pageIndex + 1,
+              duration: const Duration(milliseconds: 200), curve: Curves.ease),
+          () => extendedPageController.animateToPage(vState.pageIndex + 1,
+              duration: const Duration(milliseconds: 200), curve: Curves.ease));
     } else if (vState.viewMode == ViewMode.rightToLeft &&
         vState.pageIndex > 0) {
-      // pageController.jumpToPage(vState.pageIndex - 1);
-      pageController.animateToPage(vState.pageIndex - 1,
-          duration: const Duration(milliseconds: 200), curve: Curves.ease);
+      // pageController.animateToPage(vState.pageIndex - 1,
+      //     duration: const Duration(milliseconds: 200), curve: Curves.ease);
+      // extendedPageController.animateToPage(vState.pageIndex - 1,
+      //     duration: const Duration(milliseconds: 200), curve: Curves.ease);
+
+      pageControllerCallBack(
+          () => pageController.animateToPage(vState.pageIndex - 1,
+              duration: const Duration(milliseconds: 200), curve: Curves.ease),
+          () => extendedPageController.animateToPage(vState.pageIndex - 1,
+              duration: const Duration(milliseconds: 200), curve: Curves.ease));
     } else if (vState.viewMode == ViewMode.topToBottom &&
         itemScrollController.isAttached &&
         !vState.isScrolling &&
@@ -534,7 +584,10 @@ class ViewExtController extends GetxController {
   void jumpToPage(int index) {
     vState.currentItemIndex = index;
     if (vState.viewMode != ViewMode.topToBottom) {
-      pageController.jumpToPage(vState.pageIndex);
+      // pageController.jumpToPage(vState.pageIndex);
+      // extendedPageController.jumpToPage(vState.pageIndex);
+      pageControllerCallBack(() => pageController.jumpToPage(vState.pageIndex),
+          () => extendedPageController.jumpToPage(vState.pageIndex));
     } else {
       itemScrollController.jumpTo(index: vState.currentItemIndex);
       update([idViewTopBar]);
@@ -812,11 +865,30 @@ class ViewExtController extends GetxController {
             autoNextTimer?.cancel();
           }
           // 翻页
-          if (pageController.positions.isNotEmpty) {
-            pageController.nextPage(
-                duration: const Duration(milliseconds: 300),
-                curve: Curves.easeOut);
-          }
+          // if (pageController.positions.isNotEmpty) {
+          //   pageController.nextPage(
+          //       duration: const Duration(milliseconds: 300),
+          //       curve: Curves.easeOut);
+          // }
+          // if (extendedPageController.positions.isNotEmpty) {
+          //   extendedPageController.nextPage(
+          //       duration: const Duration(milliseconds: 300),
+          //       curve: Curves.easeOut);
+          // }
+
+          pageControllerCallBack(() {
+            if (pageController.positions.isNotEmpty) {
+              pageController.nextPage(
+                  duration: const Duration(milliseconds: 300),
+                  curve: Curves.easeOut);
+            }
+          }, () {
+            if (extendedPageController.positions.isNotEmpty) {
+              extendedPageController.nextPage(
+                  duration: const Duration(milliseconds: 300),
+                  curve: Curves.easeOut);
+            }
+          });
         } else {
           // 双页阅读
           final int serLeftNext = vState.serStart + 2;
@@ -836,11 +908,29 @@ class ViewExtController extends GetxController {
           if ((vState.loadCompleMap[serLeftCur] ?? false) &&
               (vState.loadCompleMap[serLeftCur + 1] ?? false)) {
             // 翻页
-            if (pageController.positions.isNotEmpty) {
-              pageController.nextPage(
-                  duration: const Duration(milliseconds: 300),
-                  curve: Curves.easeOut);
-            }
+            // if (pageController.positions.isNotEmpty) {
+            //   pageController.nextPage(
+            //       duration: const Duration(milliseconds: 300),
+            //       curve: Curves.easeOut);
+            // }
+            // if (extendedPageController.positions.isNotEmpty) {
+            //   extendedPageController.nextPage(
+            //       duration: const Duration(milliseconds: 300),
+            //       curve: Curves.easeOut);
+            // }
+            pageControllerCallBack(() {
+              if (pageController.positions.isNotEmpty) {
+                pageController.nextPage(
+                    duration: const Duration(milliseconds: 300),
+                    curve: Curves.easeOut);
+              }
+            }, () {
+              if (extendedPageController.positions.isNotEmpty) {
+                extendedPageController.nextPage(
+                    duration: const Duration(milliseconds: 300),
+                    curve: Curves.easeOut);
+              }
+            });
           }
         }
       }
@@ -878,7 +968,10 @@ class ViewExtController extends GetxController {
       itemScrollController.jumpTo(index: itemIndex);
     } else {
       vState.currentItemIndex = itemIndex;
-      pageController.jumpToPage(vState.pageIndex);
+      // pageController.jumpToPage(vState.pageIndex);
+      // extendedPageController.jumpToPage(vState.pageIndex);
+      pageControllerCallBack(() => pageController.jumpToPage(vState.pageIndex),
+          () => extendedPageController.jumpToPage(vState.pageIndex));
     }
   }
 
@@ -902,5 +995,14 @@ class ViewExtController extends GetxController {
         }
       },
     );
+  }
+
+  void pageControllerCallBack(
+      Function onPageController, Function onExtendedPageController) {
+    if (vState.columnMode != ViewColumnMode.single) {
+      onPageController.call();
+    } else {
+      onExtendedPageController.call();
+    }
   }
 }

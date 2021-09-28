@@ -499,7 +499,9 @@ class CommentItem extends StatelessWidget {
                         Text(
                           galleryComment.score.startsWith('+')
                               ? '+${galleryComment.score.substring(1)}'
-                              : galleryComment.score,
+                              : galleryComment.score.startsWith('-')
+                                  ? galleryComment.score
+                                  : '+${galleryComment.score}',
                           style: TextStyle(
                             fontSize: 12,
                             fontWeight: FontWeight.normal,

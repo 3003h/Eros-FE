@@ -49,7 +49,7 @@ class ImagePageView extends GetView<ViewExtController> {
                 });
           } else {
             return ExtendedImageGesturePageView.builder(
-              controller: logic.pageController,
+              controller: logic.extendedPageController,
               itemCount: logic.vState.pageCount,
               onPageChanged: controller.handOnPageChanged,
               scrollDirection: Axis.horizontal,
@@ -61,7 +61,7 @@ class ImagePageView extends GetView<ViewExtController> {
                 /// 单页
                 return ViewImage(
                   imageSer: index + 1,
-                  initialScale: logic.vState.showPageInterval ? (1 / 1.1) : 1.0,
+                  // initialScale: logic.vState.showPageInterval ? (1 / 1.1) : 1.0,
                 );
               },
             );
