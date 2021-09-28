@@ -181,13 +181,13 @@ class Global {
 
   static void _initProfile() {
     final GStore gStore = Get.find<GStore>();
-    logger.v('profile\n${jsonEncode(gStore.profile.webdav)}');
+    // logger.v('profile\n${jsonEncode(gStore.profile.webdav)}');
     profile = gStore.profile;
   }
 
   // 持久化Profile信息
   static Future<void>? saveProfile() {
-    logger.v(profile.webdav?.toJson());
+    // logger.v(profile.webdav?.toJson());
     final GStore gStore = Get.find<GStore>();
     gStore.profile = profile;
   }

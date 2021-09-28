@@ -3,7 +3,7 @@ description: fehviewer
 
 publish_to: 'none' # Remove this line if you wish to publish to pub.dev
 
-version: 1.1.25+308
+version: 1.1.25+309
 
 environment:
   sdk: '>=2.14.0 <3.0.0'
@@ -34,7 +34,7 @@ dependencies:
 
   cookie_jar: ^3.0.1
   dio_cookie_manager: ^2.0.0
-  webview_cookie_manager: ^2.0.0
+  webview_cookie_manager: ^2.0.6
   shared_preferences: ^2.0.5
   oktoast: ^3.0.0
   sqflite: ^2.0.0+3
@@ -49,7 +49,7 @@ dependencies:
   get_storage: ^2.0.2
   photo_view: ^0.12.0
   cached_network_image: ^3.0.0
-  extended_image: ^4.1.0
+  extended_image: ^5.1.0
   liquid_progress_indicator_ns: ^1.0.0
   logger: ^1.0.0
   waterfall_flow: ^3.0.1
@@ -78,7 +78,7 @@ dependencies:
     git:
       url: https://github.com/honjow/flutter_vibrate.git
   # 文件选择
-  file_picker: ^3.0.4
+  file_picker: ^4.1.2
   # 评星
   flutter_rating_bar: ^4.0.0
   custom_pop_up_menu: ^1.2.0
