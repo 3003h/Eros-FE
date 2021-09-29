@@ -14,6 +14,7 @@ export 'gallery_comment.dart';
 export 'openl_translation.dart';
 export 'gallery_tag.dart';
 export 'dns_cache.dart';
+export 'eh_settings.dart';
 export 'gallerys_and_maxpage.dart';
 export 'tab_item.dart';
 export 'eh_profile.dart';
