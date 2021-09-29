@@ -244,7 +244,6 @@ class ListViewEhSetting extends StatelessWidget {
           descOn: '用机器翻译将评论翻译为简体中文',
         ),
       _buildListModeItem(context, hideLine: true),
-      // _buildHistoryMaxItem(context),
     ];
 
     return ListView.builder(
@@ -258,6 +257,28 @@ class ListViewEhSetting extends StatelessWidget {
 
 /// 列表模式切换
 Widget _buildListModeItem(BuildContext context, {bool hideLine = false}) {
+  final String _title = L10n.of(context).list_mode;
+  final EhConfigService ehConfigService = Get.find();
+
+  final Map<ListModeEnum, String> modeMap = <ListModeEnum, String>{
+    ListModeEnum.list: L10n.of(context).listmode_medium,
+    ListModeEnum.simpleList: L10n.of(context).listmode_small,
+    ListModeEnum.waterfall: L10n.of(context).listmode_waterfall,
+    ListModeEnum.waterfallLarge: L10n.of(context).listmode_waterfall_large,
+  };
+  return Obx(() {
+    return SelectorItem<ListModeEnum>(
+      title: _title,
+      hideLine: hideLine,
+      actionMap: modeMap,
+      initVal: ehConfigService.listMode.value,
+      onValueChanged: (val) => ehConfigService.listMode.value = val,
+    );
+  });
+}
+
+/// 列表模式切换
+Widget _buildListModeItem_Old(BuildContext context, {bool hideLine = false}) {
   final String _title = L10n.of(context).list_mode;
   final EhConfigService ehConfigService = Get.find();
 
@@ -312,62 +333,6 @@ Widget _buildListModeItem(BuildContext context, {bool hideLine = false}) {
         },
       ));
 }
-
-/// 历史记录数量切换
-// Widget _buildHistoryMaxItem(BuildContext context) {
-//   final String _title = L10n.of(context).max_history;
-//   final EhConfigService ehConfigService = Get.find();
-//
-//   String _getMaxNumText(int max) {
-//     if (max == 0) {
-//       return L10n.of(context).unlimited;
-//     } else {
-//       return '$max';
-//     }
-//   }
-//
-//   List<Widget> _getModeList(BuildContext context) {
-//     return List<Widget>.from(EHConst.historyMax.map((int element) {
-//       return CupertinoActionSheetAction(
-//           onPressed: () {
-//             Get.back(result: element);
-//           },
-//           child: Text(_getMaxNumText(element)));
-//     }).toList());
-//   }
-//
-//   Future<int?> _showActionSheet(BuildContext context) {
-//     return showCupertinoModalPopup<int>(
-//         context: context,
-//         builder: (BuildContext context) {
-//           final CupertinoActionSheet dialog = CupertinoActionSheet(
-//             title: Text(_title),
-//             cancelButton: CupertinoActionSheetAction(
-//                 onPressed: () {
-//                   Get.back();
-//                 },
-//                 child: Text(L10n.of(context).cancel)),
-//             actions: <Widget>[
-//               ..._getModeList(context),
-//             ],
-//           );
-//           return dialog;
-//         });
-//   }
-//
-//   return Obx(() => SelectorSettingItem(
-//         title: _title,
-//         selector: _getMaxNumText(ehConfigService.maxHistory.value),
-//         hideLine: true,
-//         onTap: () async {
-//           logger.v('tap ModeItem');
-//           final int? _result = await _showActionSheet(context);
-//           if (_result != null) {
-//             ehConfigService.maxHistory.value = _result;
-//           }
-//         },
-//       ));
-// }
 
 /// 标签介绍图片切换
 Widget _buildTagIntroImgLvItem(BuildContext context) {
