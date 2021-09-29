@@ -21,6 +21,7 @@ class EHRoutes {
   static const String customHosts = '/customHosts';
   static const String logfile = '/logfile';
   static const String webDavSetting = '/webDavSetting';
+  static const String mySettings = '/mySettings';
 
   static const String login = '/login';
   static const String webLogin = '/webLogin';
