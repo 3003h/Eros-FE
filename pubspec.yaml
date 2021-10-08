@@ -3,7 +3,7 @@ description: fehviewer
 
 publish_to: 'none' # Remove this line if you wish to publish to pub.dev
 
-version: 1.1.25+309
+version: 1.1.25+310
 
 environment:
   sdk: '>=2.14.0 <3.0.0'
@@ -109,7 +109,7 @@ dependencies:
   hive_flutter: ^1.0.0
   extended_sliver: ^2.0.0
   blur: ^3.0.0
-  flutter_easyloading: ^3.0.0
+  flutter_easyloading: ^3.0.3
   extended_text: ^7.0.0
   sprintf: ^6.0.0
   keframe: ^2.0.1
@@ -164,6 +164,7 @@ dev_dependencies:
 
   flutter_test:
     sdk: flutter
+  flutter_lints: ^1.0.4
 
 dependency_overrides:
   #args: ^2.1.0

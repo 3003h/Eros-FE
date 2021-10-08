@@ -1,3 +1,6 @@
+import 'dart:io';
+
+import 'package:cookie_jar/cookie_jar.dart';
 import 'package:dio/dio.dart';
 import 'package:dio_http_cache/dio_http_cache.dart';
 import 'package:fehviewer/common/global.dart';
@@ -6,6 +9,7 @@ import 'package:fehviewer/pages/tab/controller/search_page_controller.dart';
 import 'package:fehviewer/utils/logger.dart';
 
 import 'app_dio/pdio.dart';
+import 'gallery_request.dart';
 
 Options getCacheOptions({bool forceRefresh = false, Options? options}) {
   return buildCacheOptions(
@@ -43,6 +47,12 @@ Future<GalleryItem?> getGalleryDetail({
   bool refresh = false,
   CancelToken? cancelToken,
 }) async {
+  final PersistCookieJar cookieJar = await Api.cookieJar;
+  final List<Cookie> cookies =
+      await cookieJar.loadForRequest(Uri.parse(Api.getBaseUrl()));
+  cookies.add(Cookie('nw', '1'));
+  cookieJar.saveFromResponse(Uri.parse(Api.getBaseUrl()), cookies);
+
   DioHttpClient dioHttpClient = DioHttpClient(dioConfig: ehDioConfig);
   DioHttpResponse httpResponse = await dioHttpClient.get(
     inUrl,

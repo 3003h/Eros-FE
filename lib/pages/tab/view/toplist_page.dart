@@ -51,7 +51,7 @@ class _ToplistTabState extends State<ToplistTab> {
             await controller.loadDataMore();
           } else {
             // 没有更多了
-            showToast('No More');
+            // showToast('No More');
           }
         }
       });

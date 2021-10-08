@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:fehviewer/common/service/depth_service.dart';
 import 'package:fehviewer/generated/l10n.dart';
 import 'package:fehviewer/models/index.dart';
@@ -243,21 +245,28 @@ class CommentController extends GetxController
     }
   }
 
-  // 会有重复执行的问题 弃用
-  Future<void> pressSend_Old() async {
+  // 会有重复执行的问题
+  Future<void> pressSendOld() async {
     comment = commentTextController.text;
     logger.d('comment: $comment');
     FocusScope.of(Get.context!).requestFocus(FocusNode());
 
-    showLoadingDialog(Get.overlayContext!, () async {
-      // await _postComment(
-      //   comment,
-      //   isEdit: editState == EditState.editComment,
-      //   commentId: commentId,
-      // );
-      await Future.delayed(const Duration(seconds: 3));
-      logger.v('_postComment $comment');
-    });
+    final Completer completer = Completer();
+
+    showLoadingDialog(
+      Get.context!,
+      completer,
+      () async {
+        await _postComment(
+          comment,
+          isEdit: editState == EditState.editComment,
+          commentId: commentId,
+        );
+        pressCancle();
+        // await Future.delayed(const Duration(seconds: 3));
+        logger.v('_postComment $comment');
+      },
+    );
   }
 
   Future<void> pressSend() async {
@@ -287,14 +296,14 @@ class CommentController extends GetxController
       ),
     );
 
-    // await Future.delayed(const Duration(seconds: 3));
-    // logger.v('_postComment $comment');
-    await _postComment(
-      comment,
-      isEdit: editState == EditState.editComment,
-      commentId: commentId,
-    );
-    pressCancle();
+    await Future.delayed(const Duration(seconds: 3));
+    logger.v('_postComment $comment');
+    // await _postComment(
+    //   comment,
+    //   isEdit: editState == EditState.editComment,
+    //   commentId: commentId,
+    // );
+    // pressCancle();
 
     EasyLoading.dismiss();
   }
@@ -375,19 +384,34 @@ class CommentController extends GetxController
 }
 
 /// 显示等待
-Future<void> showLoadingDialog(BuildContext context, Function function) async {
+Future<void> showLoadingDialog(
+  BuildContext context,
+  Completer completer,
+  Function function,
+) async {
   logger.v('showLoadingDialog');
-  return showCupertinoDialog<void>(
-    context: Get.overlayContext!,
+
+  Future<void> runFunc() async {
+    try {
+      await function.call();
+      completer.complete();
+    } catch (e) {
+      logger.e('$e');
+      completer.complete([e]);
+    }
+    logger.d('${Get.currentRoute}');
+  }
+
+  return await showCupertinoDialog<void>(
+    context: context,
     builder: (BuildContext context) {
       logger5.v('builder showLoadingDialog');
 
-      Future<void> runFunc() async {
-        await function();
-        Get.back();
-      }
-
-      runFunc();
+      runFunc().then((_) {
+        if (completer.isCompleted) {
+          Get.back();
+        }
+      });
 
       return Center(
         child: CupertinoPopupSurface(

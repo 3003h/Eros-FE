@@ -199,7 +199,7 @@ class CommentPage extends StatelessWidget {
                                         ),
                                 ),
                               ),
-                              onPressed: controller.pressSend,
+                              onPressed: controller.pressSendOld,
                             ),
                           ),
                         ],

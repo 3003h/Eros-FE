@@ -176,5 +176,6 @@
   "webdav_Account": "WebDAV Account",
    "sync_history": "Sync history",
    "sync_read_progress": "Sync read progress",
-   "skip": "Skip"
+   "skip": "Skip",
+   "export": "Export"
 }

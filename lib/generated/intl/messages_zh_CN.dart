@@ -71,6 +71,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "ehentai_my_tags": MessageLookupByLibrary.simpleMessage("我的标签"),
         "ehentai_settings": MessageLookupByLibrary.simpleMessage("EHentai 设置"),
         "expand": MessageLookupByLibrary.simpleMessage("展开"),
+        "export": MessageLookupByLibrary.simpleMessage("导出"),
         "favcat": MessageLookupByLibrary.simpleMessage("收藏夹"),
         "favorites_order": MessageLookupByLibrary.simpleMessage("收藏夹排序"),
         "favorites_order_Use_favorited":
