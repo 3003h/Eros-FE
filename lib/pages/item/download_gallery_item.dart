@@ -6,7 +6,6 @@ import 'package:fehviewer/common/controller/webdav_controller.dart';
 import 'package:fehviewer/common/isolate_download/download_manager.dart';
 import 'package:fehviewer/common/service/theme_service.dart';
 import 'package:fehviewer/const/theme_colors.dart';
-import 'package:fehviewer/models/gallery_cache.dart';
 import 'package:fehviewer/generated/l10n.dart';
 import 'package:fehviewer/network/gallery_request.dart';
 import 'package:fehviewer/pages/tab/controller/download_view_controller.dart';
@@ -25,6 +24,7 @@ import 'package:path/path.dart' as path;
 
 const kCardRadius = 10.0;
 
+/// 同步阅读进度的提示dialog，会自动关闭，也可跳过同步直接阅读
 Future<int?> syncReadProgress(
   BuildContext context,
   int gid, {
@@ -40,7 +40,7 @@ Future<int?> syncReadProgress(
     return _cache?.lastIndex ?? 0;
   }
 
-  Future<int?> _showDialog() async {
+  Future<int?> _showSyncDialog() async {
     return await showCupertinoDialog<int?>(
       context: context,
       barrierDismissible: true,
@@ -77,9 +77,10 @@ Future<int?> syncReadProgress(
     );
   }
 
-  return await _showDialog();
+  return await _showSyncDialog();
 }
 
+/// 画廊下载项
 class DownloadGalleryItem extends GetView<DownloadViewController> {
   const DownloadGalleryItem({
     Key? key,
@@ -129,9 +130,6 @@ class DownloadGalleryItem extends GetView<DownloadViewController> {
             0;
         logger.d('lastIndex $lastIndex');
 
-        // final _galleryCache = await Get.find<GalleryCacheController>()
-        //     .getGalleryCache('${galleryTask.gid}');
-        // final lastIndex = _galleryCache?.lastIndex ?? 0;
         NavigatorUtil.goGalleryViewPageFile(
             lastIndex, pics, '${galleryTask.gid}');
       },

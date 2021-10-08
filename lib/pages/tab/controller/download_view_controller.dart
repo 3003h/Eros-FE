@@ -179,6 +179,16 @@ class DownloadViewController extends GetxController {
                 },
                 child: Text(L10n.of(context).cancel)),
             actions: <Widget>[
+              // 导出
+              CupertinoActionSheetAction(
+                onPressed: () {
+                  Get.back();
+                },
+                child: Text(
+                  L10n.of(context).export,
+                ),
+              ),
+              // 删除下载项
               CupertinoActionSheetAction(
                 onPressed: () {
                   type == DownloadType.archiver

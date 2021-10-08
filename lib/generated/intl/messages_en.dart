@@ -85,6 +85,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "ehentai_settings":
             MessageLookupByLibrary.simpleMessage("EHentai settings"),
         "expand": MessageLookupByLibrary.simpleMessage("Expand"),
+        "export": MessageLookupByLibrary.simpleMessage("Export"),
         "favcat": MessageLookupByLibrary.simpleMessage("Favorites"),
         "favorites_order":
             MessageLookupByLibrary.simpleMessage("Favorites order"),
