@@ -236,13 +236,10 @@ Widget _downloadItemBuilder(BuildContext context, int _taskIndex) {
       final GalleryTask _taskInfo = logic.galleryTasks[_taskIndex];
       final String? _speed = logic.downloadSpeeds[_taskInfo.gid];
 
-      return GestureDetector(
-        onLongPress: () => controller.onLongPress(_taskIndex),
-        behavior: HitTestBehavior.opaque,
-        child: DownloadGalleryItem(
-          galleryTask: _taskInfo,
-          speed: _speed,
-        ),
+      return DownloadGalleryItem(
+        galleryTask: _taskInfo,
+        taskIndex: _taskIndex,
+        speed: _speed,
       );
     },
   );

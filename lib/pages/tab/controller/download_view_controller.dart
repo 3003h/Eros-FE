@@ -1,5 +1,6 @@
 import 'package:fehviewer/common/controller/archiver_download_controller.dart';
 import 'package:fehviewer/common/controller/download_controller.dart';
+import 'package:fehviewer/common/isolate_download/download_manager.dart';
 import 'package:fehviewer/generated/l10n.dart';
 import 'package:fehviewer/models/index.dart';
 import 'package:fehviewer/pages/tab/view/download_page.dart';
@@ -160,13 +161,21 @@ class DownloadViewController extends GetxController {
     animatedArchiverListKey.currentState?.insertItem(archiverTasks.length - 1);
   }
 
-  void onLongPress(int index, {DownloadType type = DownloadType.gallery}) {
+  void onLongPress(
+    int index, {
+    DownloadType type = DownloadType.gallery,
+    GalleryTask? task,
+  }) {
     vibrateUtil.heavy();
-    _showLongPressSheet(index, type);
+    _showLongPressSheet(index, type, task: task);
   }
 
   /// 长按菜单
-  Future<void> _showLongPressSheet(int taskIndex, DownloadType type) async {
+  Future<void> _showLongPressSheet(
+    int taskIndex,
+    DownloadType type, {
+    GalleryTask? task,
+  }) async {
     final BuildContext context = Get.context!;
 
     await showCupertinoModalPopup<void>(
@@ -180,14 +189,16 @@ class DownloadViewController extends GetxController {
                 child: Text(L10n.of(context).cancel)),
             actions: <Widget>[
               // 导出
-              CupertinoActionSheetAction(
-                onPressed: () {
-                  Get.back();
-                },
-                child: Text(
-                  L10n.of(context).export,
+              if (task?.status == TaskStatus.complete.value)
+                CupertinoActionSheetAction(
+                  onPressed: () {
+                    Get.back();
+                    _showExportSheet(taskIndex);
+                  },
+                  child: Text(
+                    L10n.of(context).export,
+                  ),
                 ),
-              ),
               // 删除下载项
               CupertinoActionSheetAction(
                 onPressed: () {
@@ -199,6 +210,42 @@ class DownloadViewController extends GetxController {
                 child: Text(
                   L10n.of(context).delete,
                   style: const TextStyle(color: CupertinoColors.destructiveRed),
+                ),
+              ),
+            ],
+          );
+        });
+  }
+
+  Future<void> _showExportSheet(int taskIndex) async {
+    await showCupertinoModalPopup<void>(
+        context: Get.context!,
+        builder: (BuildContext context) {
+          return CupertinoActionSheet(
+            cancelButton: CupertinoActionSheetAction(
+                onPressed: () {
+                  Get.back();
+                },
+                child: Text(L10n.of(context).cancel)),
+            actions: <Widget>[
+              // ZIP
+              CupertinoActionSheetAction(
+                onPressed: () {
+                  logger.d('导出zip');
+                  Get.back();
+                },
+                child: const Text(
+                  'ZIP',
+                ),
+              ),
+              // ZIP
+              CupertinoActionSheetAction(
+                onPressed: () {
+                  logger.d('导出epub');
+                  Get.back();
+                },
+                child: const Text(
+                  'EPUB',
                 ),
               ),
             ],
