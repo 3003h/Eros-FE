@@ -1,5 +1,9 @@
+import 'dart:io';
+
+import 'package:archive/archive_io.dart';
 import 'package:fehviewer/common/controller/archiver_download_controller.dart';
 import 'package:fehviewer/common/controller/download_controller.dart';
+import 'package:fehviewer/common/global.dart';
 import 'package:fehviewer/common/isolate_download/download_manager.dart';
 import 'package:fehviewer/generated/l10n.dart';
 import 'package:fehviewer/models/index.dart';
@@ -12,6 +16,8 @@ import 'package:fehviewer/utils/vibrate.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_downloader/flutter_downloader.dart';
 import 'package:get/get.dart';
+import 'package:path/path.dart' as path;
+import 'package:share/share.dart';
 
 enum DownloadType {
   gallery,
@@ -193,7 +199,7 @@ class DownloadViewController extends GetxController {
                 CupertinoActionSheetAction(
                   onPressed: () {
                     Get.back();
-                    _showExportSheet(taskIndex);
+                    _showExportSheet(task: task);
                   },
                   child: Text(
                     L10n.of(context).export,
@@ -217,7 +223,10 @@ class DownloadViewController extends GetxController {
         });
   }
 
-  Future<void> _showExportSheet(int taskIndex) async {
+  Future<void> _showExportSheet({GalleryTask? task}) async {
+    if (task == null) {
+      return;
+    }
     await showCupertinoModalPopup<void>(
         context: Get.context!,
         builder: (BuildContext context) {
@@ -233,6 +242,7 @@ class DownloadViewController extends GetxController {
                 onPressed: () {
                   logger.d('导出zip');
                   Get.back();
+                  _exportZip(task);
                 },
                 child: const Text(
                   'ZIP',
@@ -243,6 +253,7 @@ class DownloadViewController extends GetxController {
                 onPressed: () {
                   logger.d('导出epub');
                   Get.back();
+                  _exportEpub(task);
                 },
                 child: const Text(
                   'EPUB',
@@ -252,6 +263,51 @@ class DownloadViewController extends GetxController {
           );
         });
   }
+
+  Future<String?> _exportZip(GalleryTask task) async {
+    logger.d('export zip , dir path ${task.dirPath}');
+    if (task.dirPath == null) {
+      return null;
+    }
+
+    final _zipPath = await _compZip(task);
+
+    if (_zipPath != null) {
+      Share.shareFiles([_zipPath]);
+    }
+  }
+
+  Future<String?> _compZip(GalleryTask task) async {
+    final _tempPath = path.join(Global.tempPath, 'export_temp');
+    Directory _tempDir = Directory(_tempPath);
+    if (_tempDir.existsSync()) {
+      _tempDir.deleteSync(recursive: true);
+    }
+    _tempDir.createSync(recursive: true);
+
+    // 打包zip
+    final encoder = ZipFileEncoder();
+    final _zipPath =
+        path.join(Global.tempPath, 'zip', '${task.gid}_${task.title}.zip');
+    encoder.create(_zipPath);
+
+    // 添加文件
+    final _galleryDir = Directory(task.dirPath!);
+    for (final _file in _galleryDir.listSync()) {
+      if ((await FileSystemEntity.type(_file.path)) ==
+          FileSystemEntityType.file) {
+        final srcFile = File(_file.path);
+        // srcFile.copySync(path.join(_tempPath, path.basename(srcFile.path)));
+        // logger.d('${_file.path}');
+        encoder.addFile(srcFile);
+      }
+    }
+
+    encoder.close();
+    return _zipPath;
+  }
+
+  Future<String?> _exportEpub(GalleryTask task) async {}
 
   // gallery 暂停任务
   void pauseGalleryDownload(int? gid) {
