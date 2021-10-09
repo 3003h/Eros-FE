@@ -1,131 +1,128 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    package="com.honjow.fehviewer">
+          xmlns:tools="http://schemas.android.com/tools"
+          package="com.honjow.fehviewer">
     <!-- io.flutter.app.FlutterApplication is an android.app.Application that
          calls FlutterMain.startInitialization(this); in its onCreate method.
          In most cases you can leave this as-is, but you if you want to provide
          additional functionality it is fine to subclass or reimplement
          FlutterApplication and put your custom class here. -->
     <application
-        android:name="io.flutter.app.FlutterApplication"
-        android:requestLegacyExternalStorage="true"
-        android:label="FEhViewer"
-        android:icon="@mipmap/ic_launcher">
-        <activity
-            android:name=".MainActivity"
-            android:launchMode="singleTop"
-            android:theme="@style/LaunchTheme"
-            android:configChanges="orientation|keyboardHidden|keyboard|screenSize|smallestScreenSize|locale|layoutDirection|fontScale|screenLayout|density|uiMode"
-            android:hardwareAccelerated="true"
+            android:name="io.flutter.app.FlutterApplication"
             android:requestLegacyExternalStorage="true"
-            android:windowSoftInputMode="adjustResize">
-            <!-- Specifies an Android theme to apply to this Activity as soon as
-                 the Android process has started. This theme is visible to the user
-                 while the Flutter UI initializes. After that, this theme continues
-                 to determine the Window background behind the Flutter UI. -->
+            android:label="FEhViewer"
+            android:icon="@mipmap/ic_launcher">
+        <activity
+                android:name=".MainActivity"
+                android:exported="true"
+                android:launchMode="singleTop"
+                android:theme="@style/LaunchTheme"
+                android:configChanges="orientation|keyboardHidden|keyboard|screenSize|smallestScreenSize|locale|layoutDirection|fontScale|screenLayout|density|uiMode"
+                android:hardwareAccelerated="true"
+                android:requestLegacyExternalStorage="true"
+                android:windowSoftInputMode="adjustResize">
             <meta-data
-              android:name="io.flutter.embedding.android.NormalTheme"
-              android:resource="@style/NormalTheme"
-              />
-            <!-- Displays an Android View that continues showing the launch screen
-                 Drawable until Flutter paints its first frame, then this splash
-                 screen fades out. A splash screen is useful to avoid any visual
-                 gap between the end of Android's launch screen and the painting of
-                 Flutter's first frame. -->
+                    android:name="io.flutter.embedding.android.NormalTheme"
+                    android:resource="@style/NormalTheme"
+            />
             <meta-data
-              android:name="io.flutter.embedding.android.SplashScreenDrawable"
-              android:resource="@drawable/launch_background"
-              />
+                    android:name="io.flutter.embedding.android.SplashScreenDrawable"
+                    android:resource="@drawable/launch_background"
+            />
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
 
             <intent-filter>
-                <action android:name="android.intent.action.VIEW" />
-                <category android:name="android.intent.category.DEFAULT" />
-                <category android:name="android.intent.category.BROWSABLE" />
+                <action android:name="android.intent.action.VIEW"/>
+                <category android:name="android.intent.category.DEFAULT"/>
+                <category android:name="android.intent.category.BROWSABLE"/>
                 <!--TODO:  Add this filter, if you want support opening urls into your app-->
                 <data
-                    android:scheme="https"
-                    android:host="e-hentai.org"
-                    android:pathPrefix="/g/"/>
+                        android:scheme="https"
+                        android:host="e-hentai.org"
+                        android:pathPrefix="/g/"/>
                 <data
-                    android:scheme="https"
-                    android:host="exhentai.org"
-                    android:pathPrefix="/g/"/>
+                        android:scheme="https"
+                        android:host="exhentai.org"
+                        android:pathPrefix="/g/"/>
                 <data
-                    android:scheme="https"
-                    android:host="e-hentai.org"
-                    android:pathPrefix="/s/"/>
+                        android:scheme="https"
+                        android:host="e-hentai.org"
+                        android:pathPrefix="/s/"/>
                 <data
-                    android:scheme="https"
-                    android:host="exhentai.org"
-                    android:pathPrefix="/s/"/>
+                        android:scheme="https"
+                        android:host="exhentai.org"
+                        android:pathPrefix="/s/"/>
                 <data
-                    android:scheme="https"
-                    android:host="e-hentai.org"
-                    android:pathPrefix="/tag/"/>
+                        android:scheme="https"
+                        android:host="e-hentai.org"
+                        android:pathPrefix="/tag/"/>
                 <data
-                    android:scheme="https"
-                    android:host="exhentai.org"
-                    android:pathPrefix="/tag/"/>
+                        android:scheme="https"
+                        android:host="exhentai.org"
+                        android:pathPrefix="/tag/"/>
                 <data
-                    android:scheme="https"
-                    android:host="e-hentai.org"
-                    android:pathPrefix="/uploader/"/>
+                        android:scheme="https"
+                        android:host="e-hentai.org"
+                        android:pathPrefix="/uploader/"/>
                 <data
-                    android:scheme="https"
-                    android:host="exhentai.org"
-                    android:pathPrefix="/uploader/"/>
+                        android:scheme="https"
+                        android:host="exhentai.org"
+                        android:pathPrefix="/uploader/"/>
 
             </intent-filter>
         </activity>
         <!-- Don't delete the meta-data below.
              This is used by the Flutter tool to generate GeneratedPluginRegistrant.java -->
         <meta-data
-            android:name="flutterEmbedding"
-            android:value="2" />
+                android:name="flutterEmbedding"
+                android:value="2"/>
 
         <provider
-            android:name="vn.hunghd.flutterdownloader.DownloadedFileProvider"
-            android:authorities="${applicationId}.flutter_downloader.provider"
-            android:exported="false"
-            android:grantUriPermissions="true">
+                android:name="vn.hunghd.flutterdownloader.DownloadedFileProvider"
+                android:authorities="${applicationId}.flutter_downloader.provider"
+                android:exported="false"
+                android:grantUriPermissions="true">
             <meta-data
-                android:name="android.support.FILE_PROVIDER_PATHS"
-                android:resource="@xml/provider_paths"/>
+                    android:name="android.support.FILE_PROVIDER_PATHS"
+                    android:resource="@xml/provider_paths"/>
         </provider>
 
         <provider
-            android:name="androidx.work.impl.WorkManagerInitializer"
-            android:authorities="${applicationId}.workmanager-init"
-            tools:node="remove" />
+                android:name="androidx.work.impl.WorkManagerInitializer"
+                android:authorities="${applicationId}.workmanager-init"
+                tools:node="remove"/>
 
         <provider
-            android:name="vn.hunghd.flutterdownloader.FlutterDownloaderInitializer"
-            android:authorities="${applicationId}.flutter-downloader-init"
-            android:exported="false">
-            <!-- changes this number to configure the maximum number of concurrent tasks -->
+                android:name="androidx.startup.InitializationProvider"
+                android:authorities="${applicationId}.androidx-startup"
+                tools:node="remove">
+        </provider>
+
+        <provider
+                android:name="vn.hunghd.flutterdownloader.FlutterDownloaderInitializer"
+                android:authorities="${applicationId}.flutter-downloader-init"
+                android:exported="false">
             <meta-data
-                android:name="vn.hunghd.flutterdownloader.MAX_CONCURRENT_TASKS"
-                android:value="5" />
+                    android:name="vn.hunghd.flutterdownloader.MAX_CONCURRENT_TASKS"
+                    android:value="5"/>
         </provider>
 
     </application>
-    
-    <!-- 访问电话状态 -->
-    <uses-permission android:name="android.permission.READ_PHONE_STATE" /> 
-    <!-- 允许全部网络访问 -->
-    <uses-permission android:name="android.permission.INTERNET" /> 
-    <!-- 获取网络信息状态 -->
-    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" /> 
-    <!-- 获取当前WiFi接入的状态以及WLAN热点的信息 -->
-    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
 
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <!-- 访问电话状态 -->
+    <uses-permission android:name="android.permission.READ_PHONE_STATE"/>
+    <!-- 允许全部网络访问 -->
+    <uses-permission android:name="android.permission.INTERNET"/>
+    <!-- 获取网络信息状态 -->
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
+    <!-- 获取当前WiFi接入的状态以及WLAN热点的信息 -->
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE"/>
+
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
-    <uses-permission android:name="android.permission.MANAGE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.MANAGE_EXTERNAL_STORAGE"/>
 
     <!-- 震动 -->
     <uses-permission android:name="android.permission.VIBRATE"/>
