@@ -85,10 +85,12 @@ class DownloadGalleryItem extends GetView<DownloadViewController> {
   const DownloadGalleryItem({
     Key? key,
     required this.galleryTask,
+    required this.taskIndex,
     this.speed,
   }) : super(key: key);
 
   final GalleryTask galleryTask;
+  final int taskIndex;
   final String? speed;
 
   @override
@@ -133,6 +135,7 @@ class DownloadGalleryItem extends GetView<DownloadViewController> {
         NavigatorUtil.goGalleryViewPageFile(
             lastIndex, pics, '${galleryTask.gid}');
       },
+      onLongPress: () => controller.onLongPress(taskIndex, task: galleryTask),
       child: _buildCardItem(context, _complete, addTime: addTime),
     );
   }
