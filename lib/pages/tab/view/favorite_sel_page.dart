@@ -3,12 +3,15 @@ import 'package:fehviewer/const/theme_colors.dart';
 import 'package:fehviewer/generated/l10n.dart';
 import 'package:fehviewer/models/base/eh_models.dart';
 import 'package:fehviewer/network/gallery_request.dart';
+import 'package:fehviewer/network/request.dart';
 import 'package:fehviewer/pages/controller/favorite_sel_controller.dart';
 import 'package:fehviewer/pages/tab/view/gallery_base.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
+
+import '../fetch_list.dart';
 
 /// 收藏夹选择页面 列表
 class FavoriteSelectorPage extends StatelessWidget {
@@ -51,9 +54,10 @@ class FavoriteSelectorPage extends StatelessWidget {
               padding: const EdgeInsets.only(bottom: 50),
               child: GalleryErrorPage(
                 onTap: () async {
-                  await Api.getFavorite(
+                  await getGallery(
                     favcat: 'a',
                     refresh: true,
+                    galleryListType: GalleryListType.favorite,
                   );
                 },
               ),

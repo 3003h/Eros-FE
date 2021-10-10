@@ -3,6 +3,8 @@ import 'package:fehviewer/const/const.dart';
 import 'package:fehviewer/generated/l10n.dart';
 import 'package:fehviewer/models/favcat.dart';
 import 'package:fehviewer/network/gallery_request.dart';
+import 'package:fehviewer/network/request.dart';
+import 'package:fehviewer/pages/tab/fetch_list.dart';
 import 'package:fehviewer/utils/logger.dart';
 import 'package:fehviewer/utils/utility.dart';
 import 'package:flutter/cupertino.dart';
@@ -86,14 +88,12 @@ class FavoriteSelectorController extends GetxController
   }
 
   Future<List<Favcat>> _fetchFavCatList() async {
-    final List<Favcat> _fetchList = [];
-    await Api.getFavorite(
-        favcat: 'a',
-        refresh: true,
-        favCatList: (List<Favcat> list) {
-          _fetchList.addAll(list);
-        });
-    return _fetchList;
+    final rult = await getGallery(
+      favcat: 'a',
+      refresh: true,
+      galleryListType: GalleryListType.favorite,
+    );
+    return rult?.favList ?? [];
   }
 
   void _initFavItemBeans() {

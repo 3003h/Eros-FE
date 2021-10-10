@@ -1,5 +1,5 @@
 import 'package:fehviewer/generated/l10n.dart';
-import 'package:fehviewer/network/gallery_request.dart';
+import 'package:fehviewer/pages/tab/fetch_list.dart';
 import 'package:fehviewer/route/routes.dart';
 import 'package:get/get.dart';
 
@@ -10,8 +10,12 @@ class WatchedViewController extends TabViewController {
 
   @override
   void onInit() {
-    fetchNormal = Api.getWatched;
     tabTag = EHRoutes.watched;
     super.onInit();
+  }
+
+  @override
+  FetchListClient getFetchListClient(FetchParams fetchParams) {
+    return WatchedFetchListClient(fetchParams: fetchParams);
   }
 }

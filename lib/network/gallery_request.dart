@@ -3,7 +3,6 @@ import 'dart:io' as io;
 import 'dart:typed_data';
 
 import 'package:collection/collection.dart';
-// import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cookie_jar/cookie_jar.dart';
 import 'package:dio/dio.dart' as dio;
 import 'package:dio/dio.dart';
@@ -52,14 +51,10 @@ class Api {
   Api() {
     final String _baseUrl =
         EHConst.getBaseSite(Get.find<EhConfigService>().isSiteEx.value);
-    // httpManager = HttpManager.getInstance(baseUrl: _baseUrl);
   }
 
-  // late HttpManager httpManager;
   late String _baseUrl;
 
-  //改为使用 PersistCookieJar，在文档中有介绍，PersistCookieJar将cookie保留在文件中，
-  // 因此，如果应用程序退出，则cookie始终存在，除非显式调用delete
   static PersistCookieJar? _cookieJar;
 
   static Future<PersistCookieJar> get cookieJar async {
@@ -121,7 +116,7 @@ class Api {
   }
 
   /// 获取热门画廊列表
-  static Future<GallerysAndMaxpage> getPopular({
+  static Future<GalleryList> getPopular({
     int? page,
     String? fromGid,
     String? serach,
@@ -164,7 +159,7 @@ class Api {
   }
 
   /// Watched
-  static Future<GallerysAndMaxpage> getWatched({
+  static Future<GalleryList> getWatched({
     int? page,
     String? fromGid,
     String? serach,
@@ -220,7 +215,7 @@ class Api {
   }
 
   /// 获取画廊列表
-  static Future<GallerysAndMaxpage> getGallery({
+  static Future<GalleryList> getGallery({
     int? page,
     String? fromGid,
     String? serach,
@@ -237,7 +232,7 @@ class Api {
 
     _printCookie();
 
-    final String url = searchType == SearchType.watched ? '/watched' : '/';
+    const String url = '/';
 
     final Map<String, dynamic> params = <String, dynamic>{
       'page': page ?? 0,
@@ -257,8 +252,6 @@ class Api {
     }
 
     final dio.Options _cacheOptions = getCacheOptions(forceRefresh: refresh);
-
-    // logger.v(url);
 
     final String response = await getHttpManager()
             .get(url, options: _cacheOptions, params: params) ??
@@ -280,7 +273,7 @@ class Api {
 
   /// 获取排行
   /// inline_set 不能和页码同时使用 会默认定向到第一页
-  static Future<GallerysAndMaxpage> getToplist({
+  static Future<GalleryList> getToplist({
     String? favcat,
     String? toplist,
     int? page,
@@ -334,7 +327,7 @@ class Api {
 
   /// 获取收藏
   /// inline_set 不能和页码同时使用 会默认定向到第一页
-  static Future<GallerysAndMaxpage> getFavorite({
+  static Future<GalleryList> getFavorite({
     String? favcat,
     String? toplist,
     int? page,
@@ -344,7 +337,7 @@ class Api {
     bool refresh = false,
     SearchType searchType = SearchType.normal,
     dio.CancelToken? cancelToken,
-    ValueChanged<List<Favcat>>? favCatList,
+    // ValueChanged<List<Favcat>>? favCatList,
   }) async {
     _printCookie();
 
@@ -395,7 +388,7 @@ class Api {
         response,
         isFavorite: true,
         refresh: refresh,
-        favCatList: favCatList,
+        // favCatList: favCatList,
       );
     } else {
       logger.d('列表样式重设 inline_set=dm_l');
@@ -408,7 +401,7 @@ class Api {
         response,
         isFavorite: true,
         refresh: true,
-        favCatList: favCatList,
+        // favCatList: favCatList,
       );
     }
   }

@@ -1,13 +1,17 @@
-import 'package:fehviewer/network/gallery_request.dart';
 import 'package:fehviewer/route/routes.dart';
 
+import '../fetch_list.dart';
 import 'tabview_controller.dart';
 
 class PopularViewController extends TabViewController {
   @override
   void onInit() {
-    fetchNormal = Api.getPopular;
     tabTag = EHRoutes.popular;
     super.onInit();
+  }
+
+  @override
+  FetchListClient getFetchListClient(FetchParams fetchParams) {
+    return PopularFetchListClient(fetchParams: fetchParams);
   }
 }

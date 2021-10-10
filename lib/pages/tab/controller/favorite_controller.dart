@@ -6,6 +6,7 @@ import 'package:fehviewer/const/const.dart';
 import 'package:fehviewer/generated/l10n.dart';
 import 'package:fehviewer/models/index.dart';
 import 'package:fehviewer/network/gallery_request.dart';
+import 'package:fehviewer/network/request.dart';
 import 'package:fehviewer/pages/controller/favorite_sel_controller.dart';
 import 'package:fehviewer/route/routes.dart';
 import 'package:fehviewer/utils/logger.dart';
@@ -13,6 +14,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
 import 'package:tuple/tuple.dart';
 
+import '../fetch_list.dart';
 import 'tabview_controller.dart';
 
 class FavoriteViewController extends TabViewController {
@@ -50,13 +52,13 @@ class FavoriteViewController extends TabViewController {
 
   @override
   void onInit() {
-    fetchNormal = Api.getFavorite;
+    // fetchNormal = Api.getFavorite;
     tabTag = EHRoutes.favorite;
     super.onInit();
   }
 
   @override
-  Future<GallerysAndMaxpage> fetchData({
+  Future<GalleryList?> fetchData({
     bool refresh = false,
     bool first = false,
   }) async {
@@ -67,16 +69,19 @@ class FavoriteViewController extends TabViewController {
 
     if (curFavcat != 'l') {
       // 网络收藏夹
-      final Future<GallerysAndMaxpage> tuple = Api.getFavorite(
+      final rult = await getGallery(
         favcat: curFavcat,
         refresh: refresh,
         cancelToken: _cancelToken,
-        favCatList: (List<Favcat> list) {
-          _favoriteSelectorController?.addAllFavList(list);
-        },
+        galleryListType: GalleryListType.favorite,
+        // favCatList: (List<Favcat> list) {
+        //   _favoriteSelectorController?.addAllFavList(list);
+        // },
       );
 
-      return tuple;
+      _favoriteSelectorController?.addAllFavList(rult?.favList ?? []);
+
+      return rult;
     } else {
       if (first) {
         _ehConfigService.lastShowFavcat = 'l';
@@ -87,8 +92,8 @@ class FavoriteViewController extends TabViewController {
       logger.v('本地收藏');
       final List<GalleryItem> localFav = _localFavController.loacalFavs;
 
-      return Future<GallerysAndMaxpage>.value(
-          GallerysAndMaxpage(gallerys: localFav, maxPage: 1));
+      return Future<GalleryList>.value(
+          GalleryList(gallerys: localFav, maxPage: 1));
     }
   }
 
