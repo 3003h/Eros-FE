@@ -12,6 +12,7 @@ import 'package:fehviewer/generated/l10n.dart';
 import 'package:fehviewer/models/base/eh_models.dart';
 import 'package:fehviewer/models/index.dart';
 import 'package:fehviewer/network/gallery_request.dart';
+import 'package:fehviewer/network/request.dart';
 import 'package:fehviewer/pages/tab/view/tab_base.dart';
 import 'package:fehviewer/route/routes.dart';
 import 'package:fehviewer/store/floor/entity/tag_translat.dart';
@@ -21,6 +22,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
 import 'package:tuple/tuple.dart';
 
+import '../fetch_list.dart';
 import 'enum.dart';
 import 'favorite_controller.dart';
 import 'tabview_controller.dart';
@@ -231,22 +233,22 @@ class SearchPageController extends TabViewController {
 
     try {
       final String? fromGid = state?.last.gid;
-      final GallerysAndMaxpage tuple = searchType != SearchType.favorite
-          ? await Api.getGallery(
+      final GalleryList? rult = searchType != SearchType.favorite
+          ? await getGallery(
               page: curPage.value + 1,
               fromGid: fromGid,
               cats: _catNum,
               serach: _search,
-              searchType: searchType,
               refresh: true,
             )
-          : await Api.getFavorite(
+          : await getGallery(
               page: curPage.value + 1,
               favcat: _favoriteViewController.curFavcat,
               serach: _search,
               refresh: true,
+              galleryListType: GalleryListType.favorite,
             );
-      final List<GalleryItem> rultList = tuple.gallerys
+      final List<GalleryItem> rultList = rult?.gallerys
               ?.map(
                   (GalleryItem e) => e.copyWith(pageOfList: curPage.value + 1))
               .toList() ??
@@ -262,7 +264,7 @@ class SearchPageController extends TabViewController {
 
       logger.d('added rultList first ${rultList.first.gid} ');
 
-      maxPage = tuple.maxPage ?? 0;
+      maxPage = rult?.maxPage ?? 0;
       curPage.value += 1;
       pageState = PageState.None;
       // update();
@@ -291,22 +293,22 @@ class SearchPageController extends TabViewController {
 
     try {
       final String? fromGid = state?.last.gid;
-      final GallerysAndMaxpage tuple = searchType != SearchType.favorite
-          ? await Api.getGallery(
+      final GalleryList? rult = searchType != SearchType.favorite
+          ? await getGallery(
               page: curPage.value - 1,
               fromGid: fromGid,
               cats: _catNum,
               serach: _search,
-              searchType: searchType,
               refresh: true,
             )
-          : await Api.getFavorite(
+          : await getGallery(
               page: curPage.value - 1,
               favcat: _favoriteViewController.curFavcat,
               serach: _search,
               refresh: true,
+              galleryListType: GalleryListType.favorite,
             );
-      final List<GalleryItem> gallerItemBeans = tuple.gallerys
+      final List<GalleryItem> gallerItemBeans = rult?.gallerys
               ?.map(
                   (GalleryItem e) => e.copyWith(pageOfList: curPage.value - 1))
               .toList() ??
@@ -316,7 +318,7 @@ class SearchPageController extends TabViewController {
 
       logger.d('insert gallerItemBeans first ${gallerItemBeans.first.gid} ');
 
-      maxPage = tuple.maxPage ?? 0;
+      maxPage = rult?.maxPage ?? 0;
       curPage.value -= 1;
       pageState = PageState.None;
       update();
@@ -334,23 +336,23 @@ class SearchPageController extends TabViewController {
 
     // logger.v('_loadDataFirst');
 
-    final GallerysAndMaxpage tuple = searchType != SearchType.favorite
-        ? await Api.getGallery(
+    final GalleryList? rult = searchType != SearchType.favorite
+        ? await getGallery(
             cats: _catNum,
             serach: _search,
             refresh: refresh,
-            searchType: searchType,
           )
-        : await Api.getFavorite(
+        : await getGallery(
             favcat: _favoriteViewController.curFavcat,
             serach: _search,
             refresh: refresh,
+            galleryListType: GalleryListType.favorite,
           );
-    final List<GalleryItem> gallerItemBeans = tuple.gallerys
+    final List<GalleryItem> gallerItemBeans = rult?.gallerys
             ?.map((GalleryItem e) => e.copyWith(pageOfList: 0))
             .toList() ??
         [];
-    maxPage = tuple.maxPage ?? 0;
+    maxPage = rult?.maxPage ?? 0;
     return gallerItemBeans;
   }
 
@@ -362,24 +364,24 @@ class SearchPageController extends TabViewController {
     final int _catNum = _ehConfigService.catFilter.value;
 
     change(state, status: RxStatus.loading());
-    final GallerysAndMaxpage tuple = searchType != SearchType.favorite
-        ? await Api.getGallery(
+    final GalleryList? rult = searchType != SearchType.favorite
+        ? await getGallery(
             page: page,
             cats: _catNum,
             serach: _search,
             refresh: true,
-            searchType: searchType,
           )
-        : await Api.getFavorite(
+        : await getGallery(
             page: page,
             favcat: _favoriteViewController.curFavcat,
             serach: _search,
             refresh: true,
+            galleryListType: GalleryListType.favorite,
           );
     isLoadPrevious = page > 1;
     curPage.value = page;
     change(
-        tuple.gallerys
+        rult?.gallerys
                 ?.map((GalleryItem e) => e.copyWith(pageOfList: page))
                 .toList() ??
             [],
@@ -421,7 +423,7 @@ class SearchPageController extends TabViewController {
 
     searchTextController = TextEditingController();
 
-    fetchNormal = Api.getGallery;
+    // fetchNormal = getGallery;
     searchHistory = hiveHelper.getAllSearchHistory();
     _autoComplete = initSearchText?.trim().isNotEmpty ?? false;
     searchTextController.addListener(_delayedSearch);

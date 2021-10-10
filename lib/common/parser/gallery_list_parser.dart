@@ -48,11 +48,11 @@ bool isFavoriteOrder(String response) {
 }
 
 /// 列表数据处理
-Future<GallerysAndMaxpage> parseGalleryList(
+Future<GalleryList> parseGalleryList(
   String response, {
   bool isFavorite = false,
   bool refresh = false,
-  ValueChanged<List<Favcat>>? favCatList,
+  // ValueChanged<List<Favcat>>? favCatList,
 }) async {
   final dom.Document document = parse(response);
 
@@ -68,12 +68,12 @@ Future<GallerysAndMaxpage> parseGalleryList(
   const String _pageSelector = 'table.ptt > tbody > tr > td';
   const String _favoritesSelector = 'body > div.ido > div.nosel > div';
 
+  final List<Favcat> favcatList = <Favcat>[];
   if (isFavorite) {
     /// 收藏夹列表
     final List<dom.Element> favorites =
         document.querySelectorAll(_favoritesSelector);
     int _favId = 0;
-    final List<Favcat> favcatList = <Favcat>[];
     for (final dom.Element elm in favorites) {
       final List<dom.Element> divs = elm.querySelectorAll('div');
       if (divs.isNotEmpty && divs.length >= 3) {
@@ -85,9 +85,9 @@ Future<GallerysAndMaxpage> parseGalleryList(
         _favId += 1;
       }
     }
-    if (favcatList.isNotEmpty) {
-      favCatList?.call(favcatList);
-    }
+    // if (favcatList.isNotEmpty) {
+    //   favCatList?.call(favcatList);
+    // }
   }
 
 // 最大页数
@@ -298,5 +298,9 @@ Future<GallerysAndMaxpage> parseGalleryList(
   }
 
   // return Tuple2(_gallaryItems, _maxPage);
-  return GallerysAndMaxpage(gallerys: _gallaryItems, maxPage: _maxPage);
+  return GalleryList(
+    gallerys: _gallaryItems,
+    maxPage: _maxPage,
+    favList: favcatList,
+  );
 }

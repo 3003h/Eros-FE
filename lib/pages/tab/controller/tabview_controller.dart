@@ -20,11 +20,11 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
-import 'package:tuple/tuple.dart';
 
+import '../fetch_list.dart';
 import 'enum.dart';
 
-typedef FetchCallBack = Future<GallerysAndMaxpage> Function({
+typedef FetchCallBack = Future<GalleryList?> Function({
   int page,
   bool refresh,
   int cats,
@@ -68,7 +68,9 @@ class TabViewController extends GetxController
   // 页码跳转输入框的控制器
   final TextEditingController _pageController = TextEditingController();
 
-  FetchCallBack? fetchNormal;
+  // FetchCallBack? fetchNormal;
+
+  FetchListClient? fetchList;
 
   String? _curFavcat;
   String get curFavcat {
@@ -92,7 +94,7 @@ class TabViewController extends GetxController
 
   Future<void> firstLoad() async {
     try {
-      final GallerysAndMaxpage? rult = await fetchData();
+      final GalleryList? rult = await fetchData();
       if (rult == null) {
         return;
       }
@@ -131,16 +133,32 @@ class TabViewController extends GetxController
         curve: Curves.ease);
   }
 
-  Future<GallerysAndMaxpage?> fetchData({bool refresh = false}) async {
+  FetchListClient getFetchListClient(FetchParams fetchParams) {
+    return DefaultFetchListClient(fetchParams: fetchParams);
+  }
+
+  Future<GalleryList?> fetchData({bool refresh = false}) async {
+    logger.d('fetchData');
     final int _catNum = _ehConfigService.catFilter.value;
 
+    final fetchConfig = FetchParams(
+      cats: cats ?? _catNum,
+      toplist: currToplist,
+      refresh: refresh,
+      cancelToken: cancelToken,
+    );
+
     try {
-      final Future<GallerysAndMaxpage>? rult = fetchNormal?.call(
-        cats: cats ?? _catNum,
-        toplist: currToplist,
-        refresh: refresh,
-        cancelToken: cancelToken,
-      );
+      // final Future<GalleryList?>? rult = fetchNormal?.call(
+      //   cats: cats ?? _catNum,
+      //   toplist: currToplist,
+      //   refresh: refresh,
+      //   cancelToken: cancelToken,
+      // );
+
+      FetchListClient fetchListClient = getFetchListClient(fetchConfig);
+      final Future<GalleryList?> rult = fetchListClient.fetch();
+
       return rult;
     } on EhError catch (eherror) {
       logger.e('type:${eherror.type}\n${eherror.message}');
@@ -151,7 +169,7 @@ class TabViewController extends GetxController
 
   Future<void> reloadData() async {
     curPage.value = 0;
-    final GallerysAndMaxpage? tuple = await fetchData(
+    final GalleryList? tuple = await fetchData(
       refresh: true,
     );
     if (tuple == null) {
@@ -217,7 +235,17 @@ class TabViewController extends GetxController
     final String fromGid = state?.last.gid ?? '0';
     try {
       pageState = PageState.Loading;
-      final GallerysAndMaxpage? tuple = await fetchNormal?.call(
+      // final GalleryList? rult = await fetchNormal?.call(
+      //   page: curPage.value + 1,
+      //   fromGid: fromGid,
+      //   cats: cats ?? _catNum,
+      //   refresh: true,
+      //   cancelToken: cancelToken,
+      //   favcat: curFavcat,
+      //   toplist: currToplist,
+      // );
+
+      final fetchConfig = FetchParams(
         page: curPage.value + 1,
         fromGid: fromGid,
         cats: cats ?? _catNum,
@@ -226,12 +254,14 @@ class TabViewController extends GetxController
         favcat: curFavcat,
         toplist: currToplist,
       );
+      FetchListClient fetchListClient = getFetchListClient(fetchConfig);
+      final GalleryList? rult = await fetchListClient.fetch();
 
-      if (tuple == null) {
+      if (rult == null) {
         return;
       }
 
-      final List<GalleryItem> rultList = tuple.gallerys ?? [];
+      final List<GalleryItem> rultList = rult.gallerys ?? [];
 
       logger.d('ori len:${state?.length}');
 
@@ -239,7 +269,7 @@ class TabViewController extends GetxController
           state?.indexWhere((GalleryItem e) => e.gid == rultList.first.gid) ==
               -1) {
         // state?.addAll(rultList);
-        maxPage = tuple.maxPage ?? 0;
+        maxPage = rult.maxPage ?? 0;
 
         // logger.d('add all to end ${state?.length}');
       }
@@ -276,7 +306,16 @@ class TabViewController extends GetxController
     await Future<void>.delayed(const Duration(milliseconds: 100));
 
     try {
-      final GallerysAndMaxpage? rult = await fetchNormal?.call(
+      // final GalleryList? rult = await fetchNormal?.call(
+      //   page: curPage.value - 1,
+      //   cats: cats ?? _catNum,
+      //   refresh: true,
+      //   cancelToken: cancelToken,
+      //   favcat: curFavcat,
+      //   toplist: currToplist,
+      // );
+
+      final fetchConfig = FetchParams(
         page: curPage.value - 1,
         cats: cats ?? _catNum,
         refresh: true,
@@ -284,6 +323,8 @@ class TabViewController extends GetxController
         favcat: curFavcat,
         toplist: currToplist,
       );
+      FetchListClient fetchListClient = getFetchListClient(fetchConfig);
+      final GalleryList? rult = await fetchListClient.fetch();
 
       if (rult == null) {
         return;
@@ -316,7 +357,16 @@ class TabViewController extends GetxController
     final int _catNum = _ehConfigService.catFilter.value;
 
     change(state, status: RxStatus.loading());
-    final rult = await fetchNormal?.call(
+    // final rult = await fetchNormal?.call(
+    //   page: page,
+    //   cats: cats ?? _catNum,
+    //   refresh: true,
+    //   cancelToken: cancelToken,
+    //   favcat: curFavcat,
+    //   toplist: currToplist,
+    // );
+
+    final fetchConfig = FetchParams(
       page: page,
       cats: cats ?? _catNum,
       refresh: true,
@@ -324,9 +374,10 @@ class TabViewController extends GetxController
       favcat: curFavcat,
       toplist: currToplist,
     );
+    FetchListClient fetchListClient = getFetchListClient(fetchConfig);
+    final GalleryList? rult = await fetchListClient.fetch();
 
     isLoadPrevious = page > 1;
-
     curPage.value = page;
     if (rult != null) {
       change(rult.gallerys, status: RxStatus.success());

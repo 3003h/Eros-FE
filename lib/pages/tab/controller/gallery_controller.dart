@@ -1,9 +1,11 @@
 import 'package:fehviewer/const/const.dart';
 import 'package:fehviewer/generated/l10n.dart';
 import 'package:fehviewer/network/gallery_request.dart';
+import 'package:fehviewer/network/request.dart';
 import 'package:fehviewer/route/routes.dart';
 import 'package:get/get.dart';
 
+import '../fetch_list.dart';
 import 'tabview_controller.dart';
 
 class GalleryViewController extends TabViewController {
@@ -22,8 +24,14 @@ class GalleryViewController extends TabViewController {
 
   @override
   void onInit() {
-    fetchNormal = Api.getGallery;
+    // fetchNormal = getGallery;
     tabTag = EHRoutes.gallery;
     super.onInit();
   }
+
+  // @override
+  // FetchListClient getFetchListClient(FetchConfig fetchConfig) {
+  //   return FetchListClient(fetchConfig: fetchConfig);
+  // }
+
 }

@@ -1,0 +1,6 @@
+{
+  "gallerys?": "$[]gallery_item",
+  "maxPage?": 50,
+  "nextPage?": 3,
+  "favList?": "$[]favcat"
+}

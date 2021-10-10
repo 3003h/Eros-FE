@@ -10,22 +10,22 @@ class DioHttpResponse<T> {
   DioHttpResponse._internal({this.ok = false});
 
   DioHttpResponse.success(this.data) {
-    this.ok = true;
+    ok = true;
   }
 
   DioHttpResponse.failure({String? errorMsg, int? errorCode}) {
-    this.error = BadRequestException(message: errorMsg, code: errorCode);
-    this.ok = false;
+    error = BadRequestException(message: errorMsg, code: errorCode);
+    ok = false;
   }
 
-  DioHttpResponse.failureFormResponse({dynamic? data}) {
-    this.error = BadResponseException(data);
-    this.ok = false;
+  DioHttpResponse.failureFormResponse({dynamic data}) {
+    error = BadResponseException(data);
+    ok = false;
   }
 
   DioHttpResponse.failureFromError([HttpException? error]) {
     this.error = error ?? UnknownException();
-    this.ok = false;
+    ok = false;
   }
 
   late bool ok;

@@ -1,4 +1,6 @@
 class HttpException implements Exception {
+  HttpException([this._message, this._code]);
+
   final String? _message;
 
   String get message => _message ?? runtimeType.toString();
@@ -7,8 +9,7 @@ class HttpException implements Exception {
 
   int get code => _code ?? -1;
 
-  HttpException([this._message, this._code]);
-
+  @override
   String toString() {
     return 'code:$code--message=$message';
   }
@@ -38,11 +39,25 @@ class NetworkException extends HttpException {
 
 /// 401
 class UnauthorisedException extends HttpException {
-  UnauthorisedException({String? message, int? code = 401}) : super(message);
+  UnauthorisedException({String? message, int? code = 401})
+      : super(message, code);
 }
 
 class BadResponseException extends HttpException {
-  dynamic? data;
-
   BadResponseException([this.data]) : super();
+
+  dynamic data;
+}
+
+/// 列表样式
+class ListDisplayModeException extends HttpException {
+  ListDisplayModeException({String? message, int? code, this.params})
+      : super(message, code);
+  Map<String, dynamic>? params;
+}
+
+class FavOrderException extends HttpException {
+  FavOrderException({String? message, int? code, this.order})
+      : super(message, code);
+  String? order;
 }
