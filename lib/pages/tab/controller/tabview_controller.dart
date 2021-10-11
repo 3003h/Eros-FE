@@ -24,17 +24,6 @@ import 'package:get/get.dart';
 import '../fetch_list.dart';
 import 'enum.dart';
 
-typedef FetchCallBack = Future<GalleryList?> Function({
-  int page,
-  bool refresh,
-  int cats,
-  String fromGid,
-  String favcat,
-  String toplist,
-  SearchType searchType,
-  CancelToken cancelToken,
-});
-
 class TabViewController extends GetxController
     with StateMixin<List<GalleryItem>> {
   TabViewController({this.cats});
@@ -45,6 +34,7 @@ class TabViewController extends GetxController
 
   RxInt curPage = 0.obs;
   int maxPage = 1;
+  int nextPage = 1;
 
   final RxBool _isBackgroundRefresh = false.obs;
 
@@ -67,8 +57,6 @@ class TabViewController extends GetxController
 
   // 页码跳转输入框的控制器
   final TextEditingController _pageController = TextEditingController();
-
-  // FetchCallBack? fetchNormal;
 
   FetchListClient? fetchList;
 
@@ -103,6 +91,7 @@ class TabViewController extends GetxController
       // Api.getMoreGalleryInfo(_listItem);
 
       maxPage = rult.maxPage ?? 0;
+      nextPage = rult.nextPage ?? 1;
       change(_listItem, status: RxStatus.success());
     } catch (err, stack) {
       logger.e('$err\n$stack');
@@ -169,15 +158,16 @@ class TabViewController extends GetxController
 
   Future<void> reloadData() async {
     curPage.value = 0;
-    final GalleryList? tuple = await fetchData(
+    final GalleryList? rult = await fetchData(
       refresh: true,
     );
-    if (tuple == null) {
+    if (rult == null) {
       return;
     }
 
-    maxPage = tuple.maxPage ?? 0;
-    change(tuple.gallerys, status: RxStatus.success());
+    maxPage = rult.maxPage ?? 0;
+    nextPage = rult.nextPage ?? 1;
+    change(rult.gallerys, status: RxStatus.success());
   }
 
   Future<void> onRefresh({GlobalKey? centerKey}) async {
@@ -230,7 +220,7 @@ class TabViewController extends GetxController
     // 增加延时 避免build期间进行 setState
     await Future<void>.delayed(const Duration(milliseconds: 100));
 
-    logger.d('load page: ${curPage.value + 1}');
+    logger.d('load page: $nextPage');
 
     final String fromGid = state?.last.gid ?? '0';
     try {
@@ -246,7 +236,7 @@ class TabViewController extends GetxController
       // );
 
       final fetchConfig = FetchParams(
-        page: curPage.value + 1,
+        page: nextPage,
         fromGid: fromGid,
         cats: cats ?? _catNum,
         refresh: true,
@@ -270,6 +260,7 @@ class TabViewController extends GetxController
               -1) {
         // state?.addAll(rultList);
         maxPage = rult.maxPage ?? 0;
+        nextPage = rult.nextPage ?? 1;
 
         // logger.d('add all to end ${state?.length}');
       }
@@ -282,8 +273,8 @@ class TabViewController extends GetxController
         sliverAnimatedListKey.currentState?.insertItem(insertIndex);
       }
 
-      // 成功才+1
-      curPage.value += 1;
+      // 成功才更新
+      curPage.value = nextPage;
       pageState = PageState.None;
     } catch (e, stack) {
       pageState = PageState.LoadingException;
@@ -336,6 +327,7 @@ class TabViewController extends GetxController
         state?.insertAll(0, galleryItemBeans);
 
         maxPage = rult.maxPage ?? 0;
+        nextPage = rult.nextPage ?? 1;
 
         lastTopitemIndex =
             state?.indexWhere((e) => e.gid == lastTopitemGid) ?? 0;
