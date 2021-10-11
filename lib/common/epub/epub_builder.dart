@@ -1,0 +1,127 @@
+import 'dart:io';
+
+import 'package:fehviewer/store/floor/entity/gallery_task.dart';
+import 'package:fehviewer/utils/logger.dart';
+import 'package:flutter/services.dart' show rootBundle;
+import 'package:jinja/jinja.dart';
+import 'package:path/path.dart' as path;
+
+import '../global.dart';
+
+Future<String> buildEpub(GalleryTask task, {String? tempPath}) async {
+  final _tempPath = tempPath ?? path.join(Global.tempPath, 'export_epub_temp');
+
+  Directory _tempDir = Directory(_tempPath);
+  if (_tempDir.existsSync()) {
+    _tempDir.deleteSync(recursive: true);
+  }
+  _tempDir.createSync(recursive: true);
+
+  final metaPath = path.join(_tempPath, 'META-INF');
+  _creatDir(metaPath);
+
+  // OEBPS 目录创建
+  final oebpsPath = path.join(_tempPath, 'OEBPS');
+  _creatDir(oebpsPath);
+
+  final contentPath = path.join(oebpsPath, 'content');
+  _creatDir(contentPath);
+
+  final resourcesPath = path.join(contentPath, 'resources');
+  _creatDir(resourcesPath);
+
+  // mimetype
+  final fileMimetype = File(path.join(_tempPath, 'mimetype'));
+  fileMimetype.writeAsStringSync('application/epub+zip\n');
+
+  // css 创建
+  final cssText = await rootBundle
+      .loadString('assets/templates/epub/OEBPS/content/resources/index_0.css');
+  final fileCss = File(path.join(resourcesPath, 'index_0.css'));
+  fileCss.writeAsStringSync(cssText);
+
+  // container
+  final containerText = await rootBundle
+      .loadString('assets/templates/epub/META-INF/container.xml');
+  final fileContainer = File(path.join(metaPath, 'container.xml'));
+  fileContainer.writeAsStringSync(containerText);
+
+  // 图片复制到 resourcesPath
+  final _galleryDir = Directory(task.dirPath!);
+  final _fileList = _galleryDir.listSync();
+  for (final _file in _fileList) {
+    if ((await FileSystemEntity.type(_file.path)) ==
+        FileSystemEntityType.file) {
+      final srcFile = File(_file.path);
+      srcFile.copySync(path.join(resourcesPath, path.basename(srcFile.path)));
+    }
+  }
+
+  // 模板操作
+  final environment = Environment();
+
+  // index 模板内容读取
+  final indexTemplateText = await rootBundle
+      .loadString('assets/templates/epub/OEBPS/content/index.html.tpl');
+  final indexTemplate = environment.fromString(indexTemplateText);
+
+  // metadata 模板内容读取
+  final metadataTemplateText = await rootBundle
+      .loadString('assets/templates/epub/OEBPS/metadata.xml.tpl');
+  final metadataTemplate = environment.fromString(metadataTemplateText);
+
+  // toc 模板内容读取
+  final tocTemplateText =
+      await rootBundle.loadString('assets/templates/epub/OEBPS/toc.ncx.tpl');
+  final tocTemplate = environment.fromString(tocTemplateText);
+
+  final _fileNameList = _fileList
+      .map(
+        (e) => {
+          'withoutExtension': path.basenameWithoutExtension(e.path),
+          'name': path.basename(e.path),
+          'extension': path.extension(e.path) == '.jpg'
+              ? 'jpeg'
+              : path.extension(e.path).split('.').last.toLowerCase(),
+        },
+      )
+      .toList()
+    ..sort((a, b) => a['name']!.compareTo(b['name']!));
+
+  // 写入index
+  for (final _imgFile in _fileNameList) {
+    final _xhtml = indexTemplate.render(
+      fileName: _imgFile['name'],
+    );
+    final _xhtmlFile = File(
+        path.join(contentPath, 'index_${_imgFile['withoutExtension']}.xhtml'));
+    _xhtmlFile.createSync(recursive: true);
+    _xhtmlFile.writeAsStringSync('$_xhtml');
+  }
+
+  // 写入 metadata.opf
+  final metadata = metadataTemplate.render(
+    title: task.title,
+    fileNameList: _fileNameList,
+    coverName: _fileNameList.first['name'],
+    coverExtension: _fileNameList.first['extension'],
+  );
+  final metadataFile = File(path.join(oebpsPath, 'metadata.opf'));
+  metadataFile.createSync();
+  metadataFile.writeAsStringSync('$metadata');
+
+  // 写入 toc.ncx
+  final toc = tocTemplate.render();
+  final tocFile = File(path.join(oebpsPath, 'toc.ncx'));
+  tocFile.createSync();
+  tocFile.writeAsStringSync('$toc');
+
+  return _tempPath;
+}
+
+void _creatDir(String path) {
+  final _dir = Directory(path);
+  if (!_dir.existsSync()) {
+    _dir.createSync(recursive: true);
+  }
+}

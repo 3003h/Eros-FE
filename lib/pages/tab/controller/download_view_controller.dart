@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:archive/archive_io.dart';
 import 'package:fehviewer/common/controller/archiver_download_controller.dart';
 import 'package:fehviewer/common/controller/download_controller.dart';
+import 'package:fehviewer/common/epub/epub_builder.dart';
 import 'package:fehviewer/common/global.dart';
 import 'package:fehviewer/common/isolate_download/download_manager.dart';
 import 'package:fehviewer/generated/l10n.dart';
@@ -23,6 +24,8 @@ enum DownloadType {
   gallery,
   archiver,
 }
+
+typedef FunctionExport = Future Function();
 
 const String idDownloadGalleryView = 'DownloadGalleryView';
 const String idDownloadArchiverView = 'DownloadArchiverView';
@@ -242,7 +245,8 @@ class DownloadViewController extends GetxController {
                 onPressed: () {
                   logger.d('导出zip');
                   Get.back();
-                  _exportZip(task);
+
+                  _exportZip(context, task);
                 },
                 child: const Text(
                   'ZIP',
@@ -253,7 +257,7 @@ class DownloadViewController extends GetxController {
                 onPressed: () {
                   logger.d('导出epub');
                   Get.back();
-                  _exportEpub(task);
+                  _exportEpub(context, task);
                 },
                 child: const Text(
                   'EPUB',
@@ -264,13 +268,13 @@ class DownloadViewController extends GetxController {
         });
   }
 
-  Future<String?> _exportZip(GalleryTask task) async {
+  Future<String?> _exportZip(BuildContext context, GalleryTask task) async {
     logger.d('export zip , dir path ${task.dirPath}');
     if (task.dirPath == null) {
       return null;
     }
 
-    final _zipPath = await _compZip(task);
+    final _zipPath = await exportGallery(context, () => _compZip(task));
 
     if (_zipPath != null) {
       Share.shareFiles([_zipPath]);
@@ -307,7 +311,33 @@ class DownloadViewController extends GetxController {
     return _zipPath;
   }
 
-  Future<String?> _exportEpub(GalleryTask task) async {}
+  Future<String?> _exportEpub(BuildContext context, GalleryTask task) async {
+    logger.d('export epub , dir path ${task.dirPath}');
+    if (task.dirPath == null) {
+      return null;
+    }
+
+    final _exportFilePath =
+        await exportGallery(context, () => _buildEpub(task));
+
+    if (_exportFilePath != null) {
+      Share.shareFiles([_exportFilePath]);
+    }
+  }
+
+  Future<String?> _buildEpub(GalleryTask task) async {
+    final _tempPath = await buildEpub(task);
+
+    // 打包epub文件
+    final encoder = ZipFileEncoder();
+    final _epubPath =
+        path.join(Global.tempPath, 'epub', '${task.gid}_${task.title}.epub');
+    encoder.create(_epubPath);
+    encoder.addDirectory(Directory(_tempPath), includeDirName: false);
+    encoder.close();
+
+    return _epubPath;
+  }
 
   // gallery 暂停任务
   void pauseGalleryDownload(int? gid) {
@@ -320,4 +350,46 @@ class DownloadViewController extends GetxController {
     if (gid != null) _downloadController.galleryTaskResume(gid);
     update(['${idDownloadGalleryItem}_$gid']);
   }
+}
+
+Future<String?> exportGallery(
+  BuildContext context,
+  FunctionExport funExport, {
+  FunctionExport? funcCancel,
+}) async {
+  Future<String?> _showExportDialog() async {
+    return await showCupertinoDialog<String?>(
+      context: context,
+      builder: (BuildContext context) {
+        return CupertinoAlertDialog(
+          title: Text(L10n.of(context).processing),
+          content: GetBuilder<DownloadViewController>(
+            initState: (state) async {
+              final _path = await funExport();
+              Get.back(result: _path);
+            },
+            builder: (logic) {
+              return const CupertinoActivityIndicator(radius: 16);
+            },
+          ).paddingOnly(top: 10.0),
+          actions: [
+            CupertinoDialogAction(
+              child: Text(
+                L10n.of(context).cancel,
+                style: const TextStyle(
+                    fontWeight: FontWeight.bold,
+                    color: CupertinoColors.destructiveRed),
+              ),
+              onPressed: () {
+                funcCancel?.call();
+                Get.back();
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  return await _showExportDialog();
 }
