@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:fehviewer/store/floor/entity/gallery_task.dart';
 import 'package:fehviewer/utils/logger.dart';
 import 'package:flutter/services.dart' show rootBundle;
+import 'package:get/get_utils/src/platform/platform.dart';
 import 'package:jinja/jinja.dart';
 import 'package:path/path.dart' as path;
 
@@ -47,7 +48,9 @@ Future<String> buildEpub(GalleryTask task, {String? tempPath}) async {
   fileContainer.writeAsStringSync(containerText);
 
   // 图片复制到 resourcesPath
-  final _galleryDir = Directory(task.dirPath!);
+  final _galleryDir = GetPlatform.isIOS
+      ? Directory(path.join(Global.appDocPath, task.dirPath!))
+      : Directory(task.dirPath!);
   final _fileList = _galleryDir.listSync();
   for (final _file in _fileList) {
     if ((await FileSystemEntity.type(_file.path)) ==
