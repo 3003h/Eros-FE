@@ -296,7 +296,9 @@ class DownloadViewController extends GetxController {
     encoder.create(_zipPath);
 
     // 添加文件
-    final _galleryDir = Directory(task.dirPath!);
+    final _galleryDir = GetPlatform.isIOS
+        ? Directory(path.join(Global.appDocPath, task.dirPath!))
+        : Directory(task.dirPath!);
     for (final _file in _galleryDir.listSync()) {
       if ((await FileSystemEntity.type(_file.path)) ==
           FileSystemEntityType.file) {
