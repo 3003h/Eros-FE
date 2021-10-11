@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:collection/collection.dart';
 import 'package:fehviewer/common/controller/tag_trans_controller.dart';
 import 'package:fehviewer/common/service/ehconfig_service.dart';
 import 'package:fehviewer/component/exception/error.dart';
@@ -51,7 +52,6 @@ Future<GalleryList> parseGalleryList(
   String response, {
   bool isFavorite = false,
   bool refresh = false,
-  // ValueChanged<List<Favcat>>? favCatList,
 }) async {
   final dom.Document document = parse(response);
 
@@ -84,9 +84,6 @@ Future<GalleryList> parseGalleryList(
         _favId += 1;
       }
     }
-    // if (favcatList.isNotEmpty) {
-    //   favCatList?.call(favcatList);
-    // }
   }
 
 // 最大页数
@@ -99,6 +96,13 @@ Future<GalleryList> parseGalleryList(
   }
 
   logger.v('_maxPage $_maxPage');
+
+  // 下一页页码
+  final dom.Element? _curPageElem =
+      _pages.firstWhereOrNull((e) => e.attributes['class'] == 'ptds');
+  final _curPage = _curPageElem?.text.trim() ?? '1';
+  final _nextPage = int.parse(_curPage.split('-').last);
+  logger.d('_curPage:$_curPage, nextIndex:$_nextPage');
 
 // 画廊列表
   List<dom.Element> gallerys = document.querySelectorAll(_listSelector);
@@ -301,5 +305,6 @@ Future<GalleryList> parseGalleryList(
     gallerys: _gallaryItems,
     maxPage: _maxPage,
     favList: favcatList,
+    nextPage: _nextPage,
   );
 }
