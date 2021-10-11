@@ -2,6 +2,7 @@ import 'dart:io';
 import 'dart:isolate';
 import 'dart:ui';
 
+import 'package:collection/collection.dart';
 import 'package:fehviewer/common/global.dart';
 import 'package:fehviewer/common/service/ehconfig_service.dart';
 import 'package:fehviewer/const/const.dart';
@@ -17,7 +18,6 @@ import 'package:flutter_downloader/flutter_downloader.dart';
 import 'package:get/get.dart';
 import 'package:path/path.dart' as path;
 import 'package:path_provider/path_provider.dart';
-import 'package:collection/collection.dart';
 
 Future<String> get defDownloadPath async => GetPlatform.isAndroid
     ? path.join((await getExternalStorageDirectory())!.path, 'Download')

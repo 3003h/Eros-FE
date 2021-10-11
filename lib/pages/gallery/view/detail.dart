@@ -1,7 +1,6 @@
 import 'package:fehviewer/common/isolate_download/download_manager.dart';
 import 'package:fehviewer/common/service/depth_service.dart';
 import 'package:fehviewer/common/service/layout_service.dart';
-import 'package:fehviewer/component/exception/error.dart';
 import 'package:fehviewer/generated/l10n.dart';
 import 'package:fehviewer/models/base/eh_models.dart';
 import 'package:fehviewer/pages/gallery/controller/gallery_page_controller.dart';

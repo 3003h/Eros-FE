@@ -3,7 +3,6 @@ import 'package:fehviewer/common/service/layout_service.dart';
 import 'package:fehviewer/const/const.dart';
 import 'package:fehviewer/const/theme_colors.dart';
 import 'package:fehviewer/models/index.dart';
-import 'package:fehviewer/pages/gallery/controller/gallery_fav_controller.dart';
 import 'package:fehviewer/pages/gallery/controller/gallery_page_controller.dart';
 import 'package:fehviewer/pages/gallery/view/gallery_favcat.dart';
 import 'package:fehviewer/route/routes.dart';

@@ -20,7 +20,6 @@ import 'package:fehviewer/utils/logger.dart';
 import 'package:fehviewer/utils/vibrate.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
-import 'package:tuple/tuple.dart';
 
 import '../fetch_list.dart';
 import 'enum.dart';

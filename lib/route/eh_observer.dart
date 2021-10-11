@@ -1,8 +1,5 @@
 import 'package:fehviewer/utils/logger.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:get/get_navigation/src/bottomsheet/bottomsheet.dart';
-import 'package:get/get_navigation/src/dialog/dialog_route.dart';
-import 'package:get/get_navigation/src/routes/default_route.dart';
 
 class EhNavigatorObserver extends NavigatorObserver {
   List<Route<dynamic>> history = <Route<dynamic>>[];

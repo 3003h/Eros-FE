@@ -7,7 +7,6 @@ import 'package:fehviewer/common/controller/advance_search_controller.dart';
 import 'package:fehviewer/common/global.dart';
 import 'package:fehviewer/const/const.dart';
 import 'package:fehviewer/models/base/eh_models.dart';
-import 'package:fehviewer/pages/tab/controller/search_page_controller.dart';
 import 'package:fehviewer/pages/tab/fetch_list.dart';
 import 'package:fehviewer/utils/logger.dart';
 import 'package:flutter/cupertino.dart';
@@ -23,18 +22,6 @@ Options getCacheOptions({bool forceRefresh = false, Options? options}) {
     forceRefresh: forceRefresh,
     options: options,
   );
-}
-
-Future<GalleryList?> getPopular() async {
-  DioHttpClient dioHttpClient = DioHttpClient(dioConfig: ehDioConfig);
-  DioHttpResponse httpResponse = await dioHttpClient.get(
-    '/popular',
-    httpTransformer: GalleryListHttpTransformer(),
-  );
-
-  if (httpResponse.ok && httpResponse.data is GalleryList) {
-    return httpResponse.data as GalleryList;
-  }
 }
 
 Future<GalleryList?> getGallery({
@@ -63,19 +50,25 @@ Future<GalleryList?> getGallery({
     case GalleryListType.favorite:
       _url = '/favorites.php';
       break;
+    case GalleryListType.popular:
+      _url = '/popular';
+      break;
     default:
       _url = '/';
   }
 
   final isTopList = galleryListType == GalleryListType.toplist;
   final isFav = galleryListType == GalleryListType.favorite;
+  final isPopular = galleryListType == GalleryListType.popular;
 
   final Map<String, dynamic> _params = <String, dynamic>{
-    'page': page ?? 0,
-    if (!isTopList) 'f_cats': cats,
-    if (fromGid != null) 'from': fromGid,
+    if (!isTopList) 'page': page ?? 0,
+    if (isTopList) 'p': page ?? 0,
+    if (!isTopList && !isPopular) 'f_cats': cats,
+    if (!isTopList && !isPopular && fromGid != null) 'from': fromGid,
     if (!(galleryListType == GalleryListType.watched) &&
         !isTopList &&
+        !isPopular &&
         serach != null)
       'f_search': serach,
     if (isTopList && toplist != null && toplist.isNotEmpty) 'tl': toplist,

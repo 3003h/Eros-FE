@@ -11,7 +11,7 @@ enum GalleryListType {
   watched,
   toplist,
   favorite,
-  pupular,
+  popular,
 }
 
 abstract class FetchListClient {
@@ -84,7 +84,9 @@ class PopularFetchListClient extends FetchListClient {
 
   @override
   Future<GalleryList?> fetch() async {
-    return await getPopular();
+    return await getGallery(
+      galleryListType: GalleryListType.popular,
+    );
   }
 }
 

@@ -12,8 +12,8 @@ import '../common.dart';
 import '../controller/view_ext_contorller.dart';
 import '../controller/view_ext_state.dart';
 import 'image_list_view.dart';
-import 'view_image.dart';
 import 'image_page_view.dart';
+import 'view_image.dart';
 
 typedef DoubleClickAnimationListener = void Function();
 

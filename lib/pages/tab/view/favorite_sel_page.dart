@@ -2,7 +2,6 @@ import 'package:fehviewer/common/service/layout_service.dart';
 import 'package:fehviewer/const/theme_colors.dart';
 import 'package:fehviewer/generated/l10n.dart';
 import 'package:fehviewer/models/base/eh_models.dart';
-import 'package:fehviewer/network/gallery_request.dart';
 import 'package:fehviewer/network/request.dart';
 import 'package:fehviewer/pages/controller/favorite_sel_controller.dart';
 import 'package:fehviewer/pages/tab/view/gallery_base.dart';
@@ -15,7 +14,7 @@ import '../fetch_list.dart';
 
 /// 收藏夹选择页面 列表
 class FavoriteSelectorPage extends StatelessWidget {
-  FavoriteSelectorPage({this.favcatItemBean});
+  FavoriteSelectorPage({Key? key, this.favcatItemBean}) : super(key: key);
 
   final Favcat? favcatItemBean;
 
