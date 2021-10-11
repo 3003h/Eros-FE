@@ -1,14 +1,12 @@
 import 'package:fehviewer/common/controller/webdav_controller.dart';
 import 'package:fehviewer/common/global.dart';
 import 'package:fehviewer/common/service/theme_service.dart';
+import 'package:fehviewer/generated/l10n.dart';
+import 'package:fehviewer/models/base/eh_models.dart';
 import 'package:fehviewer/pages/setting/setting_base.dart';
-import 'package:fehviewer/utils/logger.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
 import 'package:line_icons/line_icons.dart';
-import 'package:fehviewer/generated/l10n.dart';
-import 'package:fehviewer/models/base/eh_models.dart';
-import 'package:webdav_client/webdav_client.dart' as webdav;
 
 class WebDavSetting extends GetView<WebdavController> {
   const WebDavSetting({Key? key}) : super(key: key);
