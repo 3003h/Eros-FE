@@ -43,7 +43,7 @@ Future<int?> syncReadProgress(
   Future<int?> _showSyncDialog() async {
     return await showCupertinoDialog<int?>(
       context: context,
-      barrierDismissible: true,
+      // barrierDismissible: true,
       builder: (BuildContext context) {
         return CupertinoAlertDialog(
           title: Text('${L10n.of(context).sync_read_progress}...'),
