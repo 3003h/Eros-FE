@@ -127,7 +127,6 @@ class TabViewController extends GetxController
   }
 
   Future<GalleryList?> fetchData({bool refresh = false}) async {
-    logger.d('fetchData');
     final int _catNum = _ehConfigService.catFilter.value;
 
     final fetchConfig = FetchParams(

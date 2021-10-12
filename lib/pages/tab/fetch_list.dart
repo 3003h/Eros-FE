@@ -86,6 +86,7 @@ class PopularFetchListClient extends FetchListClient {
   Future<GalleryList?> fetch() async {
     return await getGallery(
       galleryListType: GalleryListType.popular,
+      refresh: fetchParams.refresh,
     );
   }
 }
