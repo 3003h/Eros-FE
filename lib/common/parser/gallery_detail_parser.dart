@@ -260,7 +260,7 @@ Future<GalleryItem> parseGalleryDetail(String response) async {
   // 解析响应信息dom
   final Document document = parse(response);
 
-  GalleryItem galleryItem = const GalleryItem();
+  // GalleryItem galleryItem = const GalleryItem();
 
   // 封面图片
   final Element? imageElem = document.querySelector('#gd1 > div');
@@ -302,8 +302,9 @@ Future<GalleryItem> parseGalleryDetail(String response) async {
 // 20201230 Archiver link
   final String or = RegExp(r"or=(.*?)'").firstMatch(response)?.group(1) ?? '';
 // logger.d('or=$or');
-  final _archiverLink =
-      '${Api.getBaseUrl()}/archiver.php?gid=${galleryItem.gid}&token=${galleryItem.token}&or=$or';
+//   final _archiverLink =
+//       '${Api.getBaseUrl()}/archiver.php?gid=${galleryItem.gid}&token=${galleryItem.token}&or=$or';
+  final _archiverLink = or;
 // logger.d('archiverLink: ${galleryItem.archiverLink}');
 
   final Element? _ratingImage = document.querySelector('#rating_image');
@@ -365,18 +366,15 @@ Future<GalleryItem> parseGalleryDetail(String response) async {
           ?.text ??
       '';
 
-  String _category = galleryItem.category ?? '';
-  if (galleryItem.category == null) {
-    final Element? elmCategory = document.querySelector('#gdc > div');
-    // 详情页解析 category
-    _category = elmCategory?.text ?? '';
-  }
+  final Element? elmCategory = document.querySelector('#gdc > div');
+  // 详情页解析 category
+  final _category = elmCategory?.text ?? '';
 
   // uploader
   final _uploader = document.querySelector('#gdn > a')?.text.trim() ?? '';
   logger.v('_uploader $_uploader');
 
-  galleryItem = galleryItem.copyWith(
+  final galleryItem = GalleryItem(
     imgUrl: _imageUrl,
     tagGroup: await parseGalleryTags(document),
     galleryComment: parseGalleryComment(document),

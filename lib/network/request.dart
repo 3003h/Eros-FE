@@ -62,9 +62,9 @@ Future<GalleryList?> getGallery({
   final isPopular = galleryListType == GalleryListType.popular;
 
   final Map<String, dynamic> _params = <String, dynamic>{
-    if (!isTopList) 'page': page ?? 0,
+    if (!isTopList && !isPopular) 'page': page ?? 0,
     if (isTopList) 'p': page ?? 0,
-    if (!isTopList && !isPopular) 'f_cats': cats,
+    if (!isTopList && !isPopular && !isFav) 'f_cats': cats,
     if (!isTopList && !isPopular && fromGid != null) 'from': fromGid,
     if (!(galleryListType == GalleryListType.watched) &&
         !isTopList &&
@@ -77,7 +77,7 @@ Future<GalleryList?> getGallery({
   };
 
   /// 高级搜索处理
-  if (!isTopList && _searchController.enableAdvance) {
+  if (!isTopList && !isPopular && !isFav && _searchController.enableAdvance) {
     _params['advsearch'] = 1;
     _params.addAll(_searchController.advanceSearchMap);
   }
