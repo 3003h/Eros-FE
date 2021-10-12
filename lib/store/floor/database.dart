@@ -27,6 +27,7 @@ final ehMigrations = [
   migration3to4,
   migration4to5,
   migration5to6,
+  migration6to7,
 ];
 
 // create migration
@@ -52,4 +53,8 @@ final migration5to6 = Migration(5, 6, (database) async {
   await database.execute('ALTER TABLE GalleryTask ADD COLUMN rating REAL');
   await database.execute('ALTER TABLE GalleryTask ADD COLUMN category TEXT');
   await database.execute('ALTER TABLE GalleryTask ADD COLUMN uploader TEXT');
+});
+
+final migration6to7 = Migration(6, 7, (database) async {
+  await database.execute('ALTER TABLE GalleryTask ADD COLUMN jsonString TEXT');
 });

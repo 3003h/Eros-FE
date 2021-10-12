@@ -48,9 +48,7 @@ Future<String> buildEpub(GalleryTask task, {String? tempPath}) async {
   fileContainer.writeAsStringSync(containerText);
 
   // 图片复制到 resourcesPath
-  final _galleryDir = GetPlatform.isIOS
-      ? Directory(path.join(Global.appDocPath, task.dirPath!))
-      : Directory(task.dirPath!);
+  final _galleryDir = Directory(task.realDirPath!);
   final _fileList = _galleryDir.listSync();
   for (final _file in _fileList) {
     if ((await FileSystemEntity.type(_file.path)) ==
