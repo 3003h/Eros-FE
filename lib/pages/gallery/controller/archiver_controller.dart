@@ -21,9 +21,12 @@ class ArchiverController extends GetxController
   }
 
   Future<ArchiverProvider> _fetch() async {
-    logger.d(pageController.galleryItem?.archiverLink);
-    return await Api.getArchiver(
-        pageController.galleryItem?.archiverLink ?? '');
+    final _archiverLink =
+        '${Api.getBaseUrl()}/archiver.php?gid=${pageController.galleryItem?.gid}'
+        '&token=${pageController.galleryItem?.token}'
+        '&or=${pageController.galleryItem?.archiverLink}';
+    logger.d(_archiverLink);
+    return await Api.getArchiver(_archiverLink);
   }
 
   Future<void> _loadData() async {

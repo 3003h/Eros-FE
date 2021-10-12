@@ -193,7 +193,7 @@ class WebdavController extends GetxController {
     if (client == null) {
       return;
     }
-    logger.d('uploadHistory');
+    logger.v('uploadHistory');
     final _path = path.join(Global.tempPath, his.gid);
     final File _file = File(_path);
     final _his = his.copyWith(
