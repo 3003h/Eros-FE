@@ -51,19 +51,19 @@ ehentai译文数据库
 
 ### 主页列表
 
-<img width="200" src="https://raw.githubusercontent.com/honjow/FEhViewer/nullsafety/screenshot/2021-06-21%2019.15.21.jpg" >
+<img width="200" src="https://raw.githubusercontent.com/honjow/FEhViewer/nullsafety/screenshot/home1.jpg" >
 
 ### 画廊
 
-<img width="200" src="https://raw.githubusercontent.com/honjow/FEhViewer/nullsafety/screenshot/2021-06-21%2019.15.27.jpg" > <img width="200" src="https://raw.githubusercontent.com/honjow/FEhViewer/nullsafety/screenshot/2021-06-21%2019.15.43.jpg" > <img width="200" src="https://raw.githubusercontent.com/honjow/FEhViewer/nullsafety/screenshot/2021-06-21%2019.16.56.jpg" >
+<img width="200" src="https://raw.githubusercontent.com/honjow/FEhViewer/nullsafety/screenshot/gallery1.jpg" > <img width="200" src="https://raw.githubusercontent.com/honjow/FEhViewer/nullsafety/screenshot/gallery2.jpg" > <img width="200" src="https://raw.githubusercontent.com/honjow/FEhViewer/nullsafety/screenshot/gallery3.jpg" >
 
 ### 搜索
 
-<img width="200" src="https://raw.githubusercontent.com/honjow/FEhViewer/nullsafety/screenshot/2021-06-21%2019.15.53.jpg" > <img width="200" src="https://raw.githubusercontent.com/honjow/FEhViewer/nullsafety/screenshot/2021-06-21%2019.15.58.jpg" > <img width="200" src="https://raw.githubusercontent.com/honjow/FEhViewer/nullsafety/screenshot/2021-06-21%2019.16.02.jpg" >
+<img width="200" src="https://raw.githubusercontent.com/honjow/FEhViewer/nullsafety/screenshot/search1.jpg" > <img width="200" src="https://raw.githubusercontent.com/honjow/FEhViewer/nullsafety/screenshot/search2.jpg" > <img width="200" src="https://raw.githubusercontent.com/honjow/FEhViewer/nullsafety/screenshot/search3.jpg" >
 
 ### 阅读
 
-<img width="200" src="https://raw.githubusercontent.com/honjow/FEhViewer/nullsafety/screenshot/2021-06-21%2019.16.08.jpg" > <img width="200" src="https://raw.githubusercontent.com/honjow/FEhViewer/nullsafety/screenshot/2021-06-21%2019.54.50.jpg" >
+<img width="200" src="https://raw.githubusercontent.com/honjow/FEhViewer/nullsafety/screenshot/read1.jpg" > <img width="200" src="https://raw.githubusercontent.com/honjow/FEhViewer/nullsafety/screenshot/read2.jpg" >
 
 ## 功能
 
