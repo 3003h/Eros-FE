@@ -57,6 +57,11 @@ class FavoriteViewController extends TabViewController {
   }
 
   @override
+  FetchListClient getFetchListClient(FetchParams fetchParams) {
+    return FavoriteFetchListClient(fetchParams: fetchParams);
+  }
+
+  @override
   Future<GalleryList?> fetchData({
     bool refresh = false,
     bool first = false,
@@ -73,9 +78,6 @@ class FavoriteViewController extends TabViewController {
         refresh: refresh,
         cancelToken: _cancelToken,
         galleryListType: GalleryListType.favorite,
-        // favCatList: (List<Favcat> list) {
-        //   _favoriteSelectorController?.addAllFavList(list);
-        // },
       );
 
       _favoriteSelectorController?.addAllFavList(rult?.favList ?? []);
