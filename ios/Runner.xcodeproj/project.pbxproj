@@ -418,7 +418,7 @@
 					"$(PROJECT_DIR)/Flutter",
 				);
 				MARKETING_VERSION = "$(FLUTTER_BUILD_NAME)";
-				PRODUCT_BUNDLE_IDENTIFIER = cn.honjow.fehv;
+				PRODUCT_BUNDLE_IDENTIFIER = dev.cn.honjow.fehv;
 				PRODUCT_NAME = fehviewer;
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_OBJC_BRIDGING_HEADER = "Runner/Runner-Bridging-Header.h";
@@ -567,7 +567,7 @@
 					"$(PROJECT_DIR)/Flutter",
 				);
 				MARKETING_VERSION = "$(FLUTTER_BUILD_NAME)";
-				PRODUCT_BUNDLE_IDENTIFIER = cn.honjow.fehv;
+				PRODUCT_BUNDLE_IDENTIFIER = dev.cn.honjow.fehv;
 				PRODUCT_NAME = fehviewer;
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_OBJC_BRIDGING_HEADER = "Runner/Runner-Bridging-Header.h";
@@ -605,7 +605,7 @@
 					"$(PROJECT_DIR)/Flutter",
 				);
 				MARKETING_VERSION = "$(FLUTTER_BUILD_NAME)";
-				PRODUCT_BUNDLE_IDENTIFIER = cn.honjow.fehv;
+				PRODUCT_BUNDLE_IDENTIFIER = dev.cn.honjow.fehv;
 				PRODUCT_NAME = fehviewer;
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_OBJC_BRIDGING_HEADER = "Runner/Runner-Bridging-Header.h";

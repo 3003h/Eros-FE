@@ -1,1 +1,1 @@
-flutter build ipa --release && perl zip.pl && dsym.sh
+flutter build ipa --release && sh reid.sh && perl zip.pl && sh dsym.sh

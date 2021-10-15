@@ -224,15 +224,6 @@ class TabViewController extends GetxController
     final String fromGid = state?.last.gid ?? '0';
     try {
       pageState = PageState.Loading;
-      // final GalleryList? rult = await fetchNormal?.call(
-      //   page: curPage.value + 1,
-      //   fromGid: fromGid,
-      //   cats: cats ?? _catNum,
-      //   refresh: true,
-      //   cancelToken: cancelToken,
-      //   favcat: curFavcat,
-      //   toplist: currToplist,
-      // );
 
       final fetchConfig = FetchParams(
         page: nextPage,
@@ -257,11 +248,8 @@ class TabViewController extends GetxController
       if (rultList.isNotEmpty &&
           state?.indexWhere((GalleryItem e) => e.gid == rultList.first.gid) ==
               -1) {
-        // state?.addAll(rultList);
         maxPage = rult.maxPage ?? 0;
         nextPage = rult.nextPage ?? 1;
-
-        // logger.d('add all to end ${state?.length}');
       }
 
       final insertIndex = state?.length ?? 0;

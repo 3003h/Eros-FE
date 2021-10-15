@@ -57,6 +57,26 @@ class WatchedFetchListClient extends FetchListClient {
   }
 }
 
+class FavoriteFetchListClient extends FetchListClient {
+  FavoriteFetchListClient({
+    required FetchParams fetchParams,
+  }) : super(fetchParams: fetchParams);
+
+  @override
+  Future<GalleryList?> fetch() async {
+    return await getGallery(
+      page: fetchParams.page,
+      fromGid: fetchParams.fromGid,
+      serach: fetchParams.serach,
+      cats: fetchParams.cats,
+      cancelToken: fetchParams.cancelToken,
+      refresh: fetchParams.refresh,
+      favcat: fetchParams.favcat,
+      galleryListType: GalleryListType.favorite,
+    );
+  }
+}
+
 class ToplistFetchListClient extends FetchListClient {
   ToplistFetchListClient({
     required FetchParams fetchParams,
