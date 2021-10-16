@@ -19,6 +19,8 @@ import 'package:get/get.dart';
 import 'setting_base.dart';
 
 class AdvancedSettingPage extends StatelessWidget {
+  const AdvancedSettingPage({Key? key}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     final CupertinoPageScaffold cps = CupertinoPageScaffold(
@@ -29,7 +31,7 @@ class AdvancedSettingPage extends StatelessWidget {
           // transitionBetweenRoutes: true,
           middle: Text(L10n.of(context).advanced),
         ),
-        child: SafeArea(
+        child: const SafeArea(
           bottom: false,
           child: ListViewAdvancedSetting(),
         ));
@@ -39,6 +41,8 @@ class AdvancedSettingPage extends StatelessWidget {
 }
 
 class ListViewAdvancedSetting extends StatelessWidget {
+  const ListViewAdvancedSetting({Key? key}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     final EhConfigService _ehConfigService = Get.find();
@@ -61,7 +65,7 @@ class ListViewAdvancedSetting extends StatelessWidget {
       _dnsService.enableDoH = newValue;
     }
 
-    void _handleEFChanged(bool newValue) {
+    void _handleDFChanged(bool newValue) {
       _dnsService.enableDomainFronting = newValue;
       if (!newValue) {
         HttpOverrides.global = null;
@@ -127,30 +131,63 @@ class ListViewAdvancedSetting extends StatelessWidget {
             },
           )),
       Container(height: 38),
+      TextSwitchItem(
+        L10n.of(context).domain_fronting,
+        intValue: _dnsService.enableDomainFronting,
+        onChanged: _handleDFChanged,
+        desc: 'By pass SNI',
+      ),
+      // Obx(() {
+      //   return AnimatedCrossFade(
+      //     alignment: Alignment.center,
+      //     crossFadeState: _dnsService.enableDomainFronting
+      //         ? CrossFadeState.showSecond
+      //         : CrossFadeState.showFirst,
+      //     firstCurve: Curves.easeIn,
+      //     secondCurve: Curves.easeOut,
+      //     duration: const Duration(milliseconds: 200),
+      //     firstChild: const SizedBox(),
+      //     secondChild: SelectorSettingItem(
+      //       title: L10n.of(context).custom_hosts,
+      //       selector: _dnsService.enableCustomHosts
+      //           ? L10n.of(context).on
+      //           : L10n.of(context).off,
+      //       onTap: () {
+      //         Get.toNamed(
+      //           EHRoutes.customHosts,
+      //           id: isLayoutLarge ? 2 : null,
+      //         );
+      //       },
+      //       hideLine: true,
+      //     ),
+      //   );
+      // }),
       Obx(() => SelectorSettingItem(
             title: L10n.of(context).custom_hosts,
             selector: _dnsService.enableCustomHosts
                 ? L10n.of(context).on
                 : L10n.of(context).off,
             onTap: () {
+              if (!_dnsService.enableDomainFronting) {
+                return;
+              }
               Get.toNamed(
                 EHRoutes.customHosts,
                 id: isLayoutLarge ? 2 : null,
               );
             },
+            titleColor: !_dnsService.enableDomainFronting
+                ? CupertinoColors.secondaryLabel
+                : null,
+            hideLine: true,
           )),
-      TextSwitchItem(
-        L10n.of(context).domain_fronting,
-        intValue: _dnsService.enableDomainFronting,
-        onChanged: _handleEFChanged,
-        desc: 'By pass SNI',
-      ),
       // TextSwitchItem(
       //   'DNS-over-HTTPS',
       //   intValue: _dnsConfigController.enableDoH.value,
       //   onChanged: _handleDoHChanged,
       //   desc: '优先级低于自定义hosts',
       // ),
+      Container(height: 38),
       TextSwitchItem(
         L10n.of(context).vibrate_feedback,
         intValue: _ehConfigService.vibrate.value,

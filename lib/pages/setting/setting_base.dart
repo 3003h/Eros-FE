@@ -21,6 +21,7 @@ class SelectorSettingItem extends StatefulWidget {
     Key? key,
     this.onTap,
     required this.title,
+    this.titleColor,
     this.desc,
     this.selector,
     this.hideLine = false,
@@ -31,6 +32,7 @@ class SelectorSettingItem extends StatefulWidget {
   final String? selector;
   final String? desc;
   final bool hideLine;
+  final Color? titleColor;
 
   // 点击回调
   final VoidCallback? onTap;
@@ -87,8 +89,9 @@ class _SelectorSettingItemState extends State<SelectorSettingItem> {
                     children: [
                       Text(
                         widget.title,
-                        style: const TextStyle(
+                        style: TextStyle(
                           height: 1.0,
+                          color: widget.titleColor,
                         ),
                       ),
                       if (widget.desc != null && widget.desc!.isNotEmpty)

@@ -29,6 +29,8 @@ class AppDio with DioMixin implements Dio {
     );
     this.options = options;
 
+    logger.d('dioConfig ${dioConfig?.toString()}');
+
     // DioCacheManager
     final cacheOptions = CacheConfig(
       databasePath: Global.appSupportPath,

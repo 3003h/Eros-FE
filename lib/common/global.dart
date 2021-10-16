@@ -45,7 +45,11 @@ final HiveHelper hiveHelper = HiveHelper();
 final Global global = Global();
 
 DioHttpConfig ehDioConfig = DioHttpConfig(
-    baseUrl: EHConst.EH_BASE_URL, cookiesPath: Global.appSupportPath);
+  baseUrl: EHConst.EH_BASE_URL,
+  cookiesPath: Global.appSupportPath,
+  connectTimeout: 20000,
+  sendTimeout: 10000,
+);
 
 // 全局配置
 // ignore: avoid_classes_with_only_static_members

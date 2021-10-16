@@ -21,6 +21,8 @@ import 'package:get/get.dart';
 import 'setting_base.dart';
 
 class EhSettingPage extends StatelessWidget {
+  const EhSettingPage({Key? key}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     final CupertinoPageScaffold cps = CupertinoPageScaffold(
@@ -30,7 +32,7 @@ class EhSettingPage extends StatelessWidget {
         navigationBar: CupertinoNavigationBar(
           middle: Text(L10n.of(context).eh),
         ),
-        child: SafeArea(
+        child: const SafeArea(
           child: ListViewEhSetting(),
           bottom: false,
         ));
@@ -40,6 +42,8 @@ class EhSettingPage extends StatelessWidget {
 }
 
 class ListViewEhSetting extends StatelessWidget {
+  const ListViewEhSetting({Key? key}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     final EhConfigService _ehConfigService = Get.find();
@@ -187,12 +191,6 @@ class ListViewEhSetting extends StatelessWidget {
               ),
             )),
       Obx(() {
-        // if (_ehConfigService.isTagTranslat) {
-        //   return _buildTagIntroImgLvItem(context);
-        // } else {
-        //   return const SizedBox();
-        // }
-
         return AnimatedCrossFade(
           alignment: Alignment.center,
           crossFadeState: _ehConfigService.isTagTranslat
@@ -335,7 +333,7 @@ Widget _buildListModeItem_Old(BuildContext context, {bool hideLine = false}) {
 
 /// 标签介绍图片切换
 Widget _buildTagIntroImgLvItem(BuildContext context) {
-  final String _title = '标签介绍图片';
+  const String _title = '标签介绍图片';
   final EhConfigService ehConfigService = Get.find();
 
   final Map<TagIntroImgLv, String> descMap = <TagIntroImgLv, String>{
