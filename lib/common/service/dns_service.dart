@@ -5,6 +5,7 @@ import 'package:fehviewer/utils/logger.dart';
 import 'package:fehviewer/utils/toast.dart';
 import 'package:get/get.dart';
 
+import '../global.dart';
 import 'base_service.dart';
 
 const String _regExpIP = r'(\.((2(5[0-5]|[0-4]\d))|[0-1]?\d{1,2})){3}';
@@ -163,8 +164,11 @@ class DnsService extends ProfileService {
     });
 
     enableDomainFronting = dnsConfig.enableDomainFronting ?? false;
+    ehDioConfig.domainFronting = enableDomainFronting;
     everProfile<bool>(_enableDomainFronting, (bool value) {
+      logger.d('everProfile _enableDomainFronting:$value');
       dnsConfig = dnsConfig.copyWith(enableDomainFronting: value);
+      ehDioConfig.domainFronting = value;
     });
   }
 }

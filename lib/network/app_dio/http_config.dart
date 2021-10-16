@@ -21,4 +21,9 @@ class DioHttpConfig {
   int sendTimeout;
   int receiveTimeout;
   bool? domainFronting;
+
+  @override
+  String toString() {
+    return 'DioHttpConfig{baseUrl: $baseUrl, proxy: $proxy, cookiesPath: $cookiesPath, interceptors: $interceptors, connectTimeout: $connectTimeout, sendTimeout: $sendTimeout, receiveTimeout: $receiveTimeout, domainFronting: $domainFronting}';
+  }
 }
