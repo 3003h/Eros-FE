@@ -13,6 +13,7 @@ import 'package:get/get.dart';
 import 'gallery_clipper.dart';
 import 'gallery_item.dart';
 
+const int kTitleMaxLines = 3;
 const double kRadius = 6.0;
 const double kWidth = 28.0;
 const double kHeight = 18.0;
@@ -33,13 +34,11 @@ class GalleryItemFlowLarge extends StatelessWidget {
       // logger.d('${_galleryItemController.isFav}');
       return Container(
         child: galleryItemController.isFav
-            ? Container(
-                child: Icon(
-                  FontAwesomeIcons.solidHeart,
-                  size: 12,
-                  color: ThemeColors
-                      .favColor[galleryItemController.galleryItem.favcat],
-                ),
+            ? Icon(
+                FontAwesomeIcons.solidHeart,
+                size: 12,
+                color: ThemeColors
+                    .favColor[galleryItemController.galleryItem.favcat],
               )
             : Container(),
       );
@@ -69,11 +68,12 @@ class GalleryItemFlowLarge extends StatelessWidget {
   Widget _buildTitle() {
     return Obx(() => Text(
           galleryItemController.title,
-          maxLines: 2,
+          maxLines: kTitleMaxLines,
           textAlign: TextAlign.left, // 对齐方式
-          overflow: TextOverflow.ellipsis, // 超出部分省略号
+          overflow: TextOverflow.ellipsis, // 超出部分
           style: const TextStyle(
-            fontSize: 14.5,
+            fontSize: 14,
+            // height: 1.3,
             // fontWeight: FontWeight.w500,
           ),
         ));
@@ -102,100 +102,108 @@ class GalleryItemFlowLarge extends StatelessWidget {
       }
 
       final Widget container = Container(
-        child: Container(
-          decoration: BoxDecoration(
-              color: ehTheme.itemBackgroundColor,
-              borderRadius: BorderRadius.circular(kRadius), //圆角
-              boxShadow: ehTheme.isDarkMode
-                  ? null
-                  : [
-                      BoxShadow(
-                        color: CupertinoDynamicColor.resolve(
-                                CupertinoColors.systemGrey5, Get.context!)
-                            .withOpacity(0.5),
-                        blurRadius: 10,
-                        spreadRadius: 5,
-                      )
-                    ]),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: <Widget>[
-              Hero(
-                tag: '${galleryItem.gid}_cover_${tabTag}',
-                child: Container(
-                  child: ClipRRect(
-                    borderRadius: const BorderRadius.only(
-                      topLeft: Radius.circular(kRadius),
-                      topRight: Radius.circular(kRadius),
-                    ),
-                    child: Stack(
-                      alignment: Alignment.topRight,
-                      children: <Widget>[
-                        Container(
-                          alignment: Alignment.center,
-                          height: galleryItem.imgWidth != null
-                              ? _getHeigth()
-                              : null,
-                          child: CoverImg(imgUrl: galleryItem.imgUrl!),
+        decoration: BoxDecoration(
+          color: ehTheme.itemBackgroundColor,
+          borderRadius: BorderRadius.circular(kRadius), //圆角
+          boxShadow: ehTheme.isDarkMode
+              ? null
+              : [
+                  BoxShadow(
+                    color: CupertinoDynamicColor.resolve(
+                        CupertinoColors.systemGrey3, Get.context!),
+                    blurRadius: 10,
+                  )
+                ],
+        ),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: <Widget>[
+            /// 画廊封面
+            Hero(
+              tag: '${galleryItem.gid}_cover_$tabTag',
+              child: Container(
+                decoration: BoxDecoration(boxShadow: [
+                  BoxShadow(
+                    color: CupertinoDynamicColor.resolve(
+                            CupertinoColors.systemGrey5, Get.context!)
+                        .withOpacity(1.0),
+                    blurRadius: 8,
+                    offset: const Offset(0, 4),
+                  ),
+                ]),
+                child: ClipRRect(
+                  borderRadius: const BorderRadius.only(
+                    topLeft: Radius.circular(kRadius),
+                    topRight: Radius.circular(kRadius),
+                  ),
+                  child: Stack(
+                    alignment: Alignment.topRight,
+                    children: <Widget>[
+                      Container(
+                        alignment: Alignment.center,
+                        height:
+                            galleryItem.imgWidth != null ? _getHeigth() : null,
+                        child: CoverImg(imgUrl: galleryItem.imgUrl!),
+                      ),
+                      ClipPath(
+                        clipper:
+                            CategoryClipper(width: kWidth, height: kHeight),
+                        child: Container(
+                          width: kWidth,
+                          height: kHeight,
+                          color: _colorCategory,
                         ),
-                        ClipPath(
-                          clipper:
-                              CategoryClipper(width: kWidth, height: kHeight),
-                          child: Container(
-                            width: kWidth,
-                            height: kHeight,
-                            color: _colorCategory,
-                          ),
+                      ),
+                      // Positioned(
+                      //     bottom: 4, right: 4, child: _buildFavcatIcon()),
+                      // Positioned(bottom: 4, left: 4, child: _buildRating()),
+                      Container(
+                        height: (kHeight + kRadius) / 2,
+                        width: (kWidth + kRadius) / 2,
+                        alignment: Alignment.center,
+                        child: Text(
+                          galleryItem.translated ?? '',
+                          style: const TextStyle(
+                              fontSize: 8,
+                              color: CupertinoColors.white,
+                              fontWeight: FontWeight.bold,
+                              height: 1),
                         ),
-                        // Positioned(
-                        //     bottom: 4, right: 4, child: _buildFavcatIcon()),
-                        // Positioned(bottom: 4, left: 4, child: _buildRating()),
-                        Container(
-                          height: (kHeight + kRadius) / 2,
-                          width: (kWidth + kRadius) / 2,
-                          alignment: Alignment.center,
-                          child: Text(
-                            galleryItem.translated ?? '',
-                            style: const TextStyle(
-                                fontSize: 8,
-                                color: CupertinoColors.white,
-                                fontWeight: FontWeight.bold,
-                                height: 1),
-                          ),
-                        ),
-                      ],
-                    ),
+                      ),
+                    ],
                   ),
                 ),
               ),
-              Column(
-                mainAxisSize: MainAxisSize.min,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Row(
-                    children: [
-                      _buildRating(),
-                      const Spacer(),
-                      _buildFavcatIcon(),
-                    ],
-                  ),
-                  const SizedBox(height: 4),
-                  _buildTitle(),
-                  Container(
-                    padding: const EdgeInsets.fromLTRB(0, 8, 0, 8),
-                    child: ClipRRect(
-                      borderRadius: BorderRadius.circular(4),
-                      child: TagListViewBox(
-                        simpleTags:
-                            galleryItemController.galleryItem.simpleTags ?? [],
-                      ),
+            ),
+
+            /// 画廊信息等
+            Column(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Row(
+                  children: [
+                    _buildRating(),
+                    const Spacer(),
+                    _buildFavcatIcon(),
+                  ],
+                ),
+                const SizedBox(height: 4),
+                _buildTitle(),
+                Container(
+                  padding: const EdgeInsets.fromLTRB(0, 8, 0, 8),
+                  child: ClipRRect(
+                    borderRadius: BorderRadius.circular(4),
+                    child: TagListViewBox(
+                      simpleTags:
+                          galleryItemController.galleryItem.simpleTags ?? [],
                     ),
                   ),
-                ],
-              ).paddingAll(8.0),
-            ],
-          ),
+                ),
+              ],
+            ).paddingAll(8.0),
+          ],
         ),
       );
 

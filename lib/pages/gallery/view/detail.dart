@@ -211,7 +211,7 @@ class _DetailWidget extends StatelessWidget {
               CupertinoColors.systemGrey4, context),
         ),
         // 标签
-        TagBox(listTagGroup: state.tagGroup!),
+        TagBox(listTagGroup: state.tagGroup ?? []),
         const TopComment(),
         Container(
           margin: const EdgeInsets.only(top: 4),
@@ -237,7 +237,8 @@ class _DetailWidget extends StatelessWidget {
         const SizedBox(height: 10),
         // 标签
         Row(children: [_getminiTitle(L10n.of(context).tags)]),
-        TagBox(listTagGroup: state.tagGroup!).paddingSymmetric(vertical: 4),
+        TagBox(listTagGroup: state.tagGroup ?? [])
+            .paddingSymmetric(vertical: 4),
         const SizedBox(height: 20),
         Row(
           children: [
