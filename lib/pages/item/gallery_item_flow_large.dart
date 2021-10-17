@@ -1,14 +1,17 @@
 import 'dart:ui';
 
+import 'package:fehviewer/common/service/ehconfig_service.dart';
 import 'package:fehviewer/common/service/theme_service.dart';
 import 'package:fehviewer/const/theme_colors.dart';
 import 'package:fehviewer/models/base/eh_models.dart';
 import 'package:fehviewer/pages/item/controller/galleryitem_controller.dart';
+import 'package:fehviewer/utils/utility.dart';
 import 'package:fehviewer/widget/rating_bar.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
+import 'package:waterfall_flow/waterfall_flow.dart';
 
 import 'gallery_clipper.dart';
 import 'gallery_item.dart';
@@ -191,16 +194,7 @@ class GalleryItemFlowLarge extends StatelessWidget {
                 ),
                 const SizedBox(height: 4),
                 _buildTitle(),
-                Container(
-                  padding: const EdgeInsets.fromLTRB(0, 8, 0, 8),
-                  child: ClipRRect(
-                    borderRadius: BorderRadius.circular(4),
-                    child: TagListViewBox(
-                      simpleTags:
-                          galleryItemController.galleryItem.simpleTags ?? [],
-                    ),
-                  ),
-                ),
+                _buildSimpleTagsView(),
               ],
             ).paddingAll(8.0),
           ],
@@ -216,5 +210,93 @@ class GalleryItemFlowLarge extends StatelessWidget {
     });
 
     return item;
+  }
+
+  Container _buildSimpleTagsView() {
+    return Container(
+      padding: const EdgeInsets.fromLTRB(0, 8, 0, 8),
+      child: ClipRRect(
+        borderRadius: BorderRadius.circular(4),
+        child: (galleryItemController.galleryItem.simpleTags?.length ?? 0) >= 5
+            ? TagWaterfallFlowViewBox(
+                simpleTags: galleryItemController.galleryItem.simpleTags ?? [],
+              )
+            : TagListViewBox(
+                simpleTags: galleryItemController.galleryItem.simpleTags ?? [],
+              ),
+      ),
+    );
+  }
+}
+
+class TagListViewBox extends StatelessWidget {
+  const TagListViewBox({Key? key, this.simpleTags}) : super(key: key);
+
+  final List<SimpleTag>? simpleTags;
+
+  @override
+  Widget build(BuildContext context) {
+    final EhConfigService _ehConfigService = Get.find();
+    return simpleTags != null && simpleTags!.isNotEmpty
+        ? Obx(() => SizedBox(
+              height: 18,
+              child: ListView(
+                scrollDirection: Axis.horizontal,
+                children:
+                    List<Widget>.from(simpleTags!.map((SimpleTag _simpleTag) {
+                  final String? _text = _ehConfigService.isTagTranslat
+                      ? _simpleTag.translat
+                      : _simpleTag.text;
+                  return TagItem(
+                    text: _text,
+                    color: ColorsUtil.getTagColor(_simpleTag.color),
+                    backgrondColor:
+                        ColorsUtil.getTagColor(_simpleTag.backgrondColor),
+                  ).paddingOnly(right: 4.0);
+                }).toList()), //要显示的子控件集合
+              ),
+            ))
+        : Container();
+  }
+}
+
+class TagWaterfallFlowViewBox extends StatelessWidget {
+  const TagWaterfallFlowViewBox({Key? key, this.simpleTags}) : super(key: key);
+
+  final List<SimpleTag>? simpleTags;
+
+  @override
+  Widget build(BuildContext context) {
+    final EhConfigService _ehConfigService = Get.find();
+    if (simpleTags == null || (simpleTags?.isEmpty ?? true)) {
+      return const SizedBox.shrink();
+    }
+
+    return SizedBox(
+      height: 40,
+      child: WaterfallFlow.builder(
+        shrinkWrap: true,
+        scrollDirection: Axis.horizontal,
+        gridDelegate: const SliverWaterfallFlowDelegateWithFixedCrossAxisCount(
+          crossAxisCount: 2,
+          crossAxisSpacing: 4.0,
+          mainAxisSpacing: 4.0,
+        ),
+        itemCount: simpleTags?.length ?? 0,
+        itemBuilder: (BuildContext context, int index) {
+          return Obx(() {
+            final _simpleTag = simpleTags![index];
+            final String? _text = _ehConfigService.isTagTranslat
+                ? _simpleTag.translat
+                : _simpleTag.text;
+            return TagItem(
+              text: _text,
+              color: ColorsUtil.getTagColor(_simpleTag.color),
+              backgrondColor: ColorsUtil.getTagColor(_simpleTag.backgrondColor),
+            );
+          });
+        },
+      ),
+    );
   }
 }

@@ -664,37 +664,6 @@ class TagBox extends StatelessWidget {
   }
 }
 
-class TagListViewBox extends StatelessWidget {
-  const TagListViewBox({Key? key, this.simpleTags}) : super(key: key);
-
-  final List<SimpleTag>? simpleTags;
-
-  @override
-  Widget build(BuildContext context) {
-    final EhConfigService _ehConfigService = Get.find();
-    return simpleTags != null && simpleTags!.isNotEmpty
-        ? Obx(() => Container(
-              height: 18,
-              child: ListView(
-                scrollDirection: Axis.horizontal,
-                children:
-                    List<Widget>.from(simpleTags!.map((SimpleTag _simpleTag) {
-                  final String? _text = _ehConfigService.isTagTranslat
-                      ? _simpleTag.translat
-                      : _simpleTag.text;
-                  return TagItem(
-                    text: _text,
-                    color: ColorsUtil.getTagColor(_simpleTag.color),
-                    backgrondColor:
-                        ColorsUtil.getTagColor(_simpleTag.backgrondColor),
-                  ).paddingOnly(right: 4.0);
-                }).toList()), //要显示的子控件集合
-              ),
-            ))
-        : Container();
-  }
-}
-
 /// 封面图片Widget
 class CoverImg extends StatelessWidget {
   const CoverImg({
