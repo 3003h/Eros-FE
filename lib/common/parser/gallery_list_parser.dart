@@ -102,7 +102,7 @@ Future<GalleryList> parseGalleryList(
       _pages.firstWhereOrNull((e) => e.attributes['class'] == 'ptds');
   final _curPage = _curPageElem?.text.trim() ?? '1';
   final _nextPage = int.parse(_curPage.split('-').last);
-  logger.d('_curPage:$_curPage, nextIndex:$_nextPage');
+  logger.v('_curPage:$_curPage, nextIndex:$_nextPage');
 
 // 画廊列表
   List<dom.Element> gallerys = document.querySelectorAll(_listSelector);

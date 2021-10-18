@@ -234,7 +234,7 @@ Widget _downloadItemBuilder(BuildContext context, int _taskIndex) {
       logger.v('rebuild DownloadGalleryItem_$gid');
 
       final GalleryTask _taskInfo = logic.galleryTasks[_taskIndex];
-      final String? _speed = logic.downloadSpeeds[_taskInfo.gid];
+      final String? _speed = logic.downloadSpeedMap[_taskInfo.gid];
 
       return DownloadGalleryItem(
         galleryTask: _taskInfo,

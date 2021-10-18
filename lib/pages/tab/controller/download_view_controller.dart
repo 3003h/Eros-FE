@@ -71,7 +71,7 @@ class DownloadViewController extends GetxController {
     return tasks;
   }
 
-  Map<int, String> get downloadSpeeds =>
+  Map<int, String> get downloadSpeedMap =>
       _downloadController.dState.downloadSpeeds;
 
   Future<List<GalleryImageTask>> getImageTasks(int gid) async {

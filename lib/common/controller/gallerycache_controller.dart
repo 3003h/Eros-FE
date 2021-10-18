@@ -33,7 +33,7 @@ class GalleryCacheController extends GetxController {
         logger.v('remotelist $remotelist');
         if (remotelist.contains(gid)) {
           final remote = await webdavController.downloadRead(gid);
-          logger.d('remote $remote');
+          logger.d('remote ${remote?.toJson()}');
           if (_localCache == null && remote != null) {
             logger.d('local null');
             gCacheMap[gid] = GalleryCache(lastIndex: remote.lastIndex);
