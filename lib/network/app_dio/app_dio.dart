@@ -29,7 +29,7 @@ class AppDio with DioMixin implements Dio {
     );
     this.options = options;
 
-    logger.d('dioConfig ${dioConfig?.toString()}');
+    logger.v('dioConfig ${dioConfig?.toString()}');
 
     // DioCacheManager
     final cacheOptions = CacheConfig(

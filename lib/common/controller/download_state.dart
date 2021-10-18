@@ -11,10 +11,13 @@ import 'package:get/get.dart';
 const int periodSeconds = 1;
 
 /// 速度统计周期
-const int maxCount = 6;
+const int maxCount = 4;
+
+/// 速度统计周期
+const int checkMaxCount = 10;
 
 // 无速度多少个周期后重试
-const int kRetryThresholdTime = 15;
+const int kRetryThresholdTime = 10;
 
 class DownloadState {
   DownloadState();

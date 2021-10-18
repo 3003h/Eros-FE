@@ -157,6 +157,7 @@ class DownloadController extends GetxController {
 
   /// 更新任务为已完成
   Future<GalleryTask?> galleryTaskComplete(int gid) {
+    logger.d('更新任务为已完成');
     _cancelDownloadStateChkTimer(gid: gid);
     if (!((dState.taskCanceltokens[gid]?.isCancelled) ?? true)) {
       dState.taskCanceltokens[gid]?.cancel();
@@ -655,7 +656,12 @@ class DownloadController extends GetxController {
         }
 
         if (dState.galleryTaskMap[gid]?.status == TaskStatus.running.value) {
-          _totalDownloadSpeed(gid, maxCount, periodSeconds);
+          _totalDownloadSpeed(
+            gid,
+            maxCount: maxCount,
+            checkMaxCount: checkMaxCount,
+            periodSeconds: periodSeconds,
+          );
         }
       },
     );
@@ -778,7 +784,7 @@ class DownloadController extends GetxController {
                 logger.v('$itemSer complete');
 
                 // 下载完成 更新数据库明细
-                // logger.d('下载完成 更新数据库明细');
+                logger.v('下载完成 更新数据库明细');
                 await _imageTaskDao.updateImageTaskStatus(
                   galleryTask.gid,
                   itemSer,
@@ -786,6 +792,7 @@ class DownloadController extends GetxController {
                 );
 
                 // 更新ui
+                // logger.v('更新ui');
                 final List<GalleryImageTask> listComplete =
                     await _imageTaskDao.finaAllTaskByGidAndStatus(
                         galleryTask.gid, TaskStatus.complete.value);
@@ -802,6 +809,7 @@ class DownloadController extends GetxController {
                 if (_task != null) {
                   await _galleryTaskDao.updateTask(_task);
                 }
+                _updateDownloadView(['DownloadGalleryItem_${galleryTask.gid}']);
               },
             );
           } on DioError catch (e) {
@@ -830,7 +838,12 @@ class DownloadController extends GetxController {
 
   /// 自动重试检查
   /// [kRetryThresholdTime] 秒内速度没有变化, 重试该任务
-  void _totalDownloadSpeed(int gid, int maxCount, int periodSeconds) {
+  void _totalDownloadSpeed(
+    int gid, {
+    int maxCount = 3,
+    int checkMaxCount = 10,
+    int periodSeconds = 1,
+  }) {
     final int totCurCount = dState.downloadCounts.entries
         .where((element) => element.key.startsWith('${gid}_'))
         .map((e) => e.value)
@@ -840,23 +853,23 @@ class DownloadController extends GetxController {
 
     dState.lastCounts.putIfAbsent(gid, () => [0]);
     final List<int> lastCounts = dState.lastCounts[gid] ?? [0];
-    final List<int> lastCountsTop = lastCounts.reversed
+    final List<int> lastCountsTopCheck = lastCounts.reversed
         .toList()
-        .sublist(0, min(lastCounts.length, maxCount));
+        .sublist(0, min(lastCounts.length, checkMaxCount));
 
-    logger.v('${lastCountsTop.join(',')}\n${lastCounts.reversed.join(',')}');
+    logger
+        .v('${lastCountsTopCheck.join(',')}\n${lastCounts.reversed.join(',')}');
 
-    final speed = (max(totCurCount - lastCountsTop.reversed.first, 0) /
-            (lastCountsTop.length * periodSeconds))
-        .round();
+    final speedCheck =
+        (max(totCurCount - lastCountsTopCheck.reversed.first, 0) /
+                (lastCountsTopCheck.length * periodSeconds))
+            .round();
 
-    dState.downloadSpeeds[gid] = renderSize(speed);
+    logger.d(
+        'speedCheck:${renderSize(speedCheck)}\n${lastCountsTopCheck.join(',')}');
 
-    loggerSimple.v('speed:${renderSize(speed)}\n${lastCountsTop.join(',')}');
-
-    _updateDownloadView(['DownloadGalleryItem_$gid']);
-
-    if (speed == 0) {
+    // 用速度检查是否需要重试
+    if (speedCheck == 0) {
       if (dState.noSpeed[gid] != null) {
         dState.noSpeed[gid] = dState.noSpeed[gid]! + 1;
       } else {
@@ -870,6 +883,18 @@ class DownloadController extends GetxController {
             .then((_) => galleryTaskResume(gid));
       }
     }
+
+    // 显示的速度
+    final List<int> lastCountsTopShow = lastCounts.reversed
+        .toList()
+        .sublist(0, min(lastCounts.length, maxCount));
+    final speedShow = (max(totCurCount - lastCountsTopShow.reversed.first, 0) /
+            (lastCountsTopShow.length * periodSeconds))
+        .round();
+    logger.d(
+        'speedShow:${renderSize(speedShow)}\n${lastCountsTopShow.join(',')}');
+    dState.downloadSpeeds[gid] = renderSize(speedShow);
+    _updateDownloadView(['DownloadGalleryItem_$gid']);
   }
 
   void _updateDownloadView(List<Object>? ids) {
