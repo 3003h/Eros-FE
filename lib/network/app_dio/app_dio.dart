@@ -45,15 +45,15 @@ class AppDio with DioMixin implements Dio {
           PersistCookieJar(storage: FileStorage(dioConfig!.cookiesPath))));
     }
 
-    if (kDebugMode) {
-      interceptors.add(LogInterceptor(
-          responseBody: false,
-          error: true,
-          requestHeader: false,
-          responseHeader: false,
-          request: true,
-          requestBody: true));
-    }
+    // if (kDebugMode) {
+    //   interceptors.add(LogInterceptor(
+    //       responseBody: false,
+    //       error: true,
+    //       requestHeader: false,
+    //       responseHeader: false,
+    //       request: true,
+    //       requestBody: true));
+    // }
 
     interceptors.add(DioFirebasePerformanceInterceptor());
 
