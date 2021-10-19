@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:fehviewer/utils/logger.dart';
 import 'package:floor/floor.dart';
 import 'package:sqflite/sqflite.dart' as sqflite;
 
@@ -12,7 +13,7 @@ import 'entity/tag_translat.dart';
 
 part 'database.g.dart';
 
-@Database(version: 7, entities: [GalleryTask, GalleryImageTask, TagTranslat])
+@Database(version: 8, entities: [GalleryTask, GalleryImageTask, TagTranslat])
 abstract class EhDatabase extends FloorDatabase {
   GalleryTaskDao get galleryTaskDao;
 
@@ -27,7 +28,8 @@ final ehMigrations = [
   migration3to4,
   migration4to5,
   migration5to6,
-  migration6to7,
+  migration6to8,
+  migration7to8,
 ];
 
 // create migration
@@ -55,6 +57,32 @@ final migration5to6 = Migration(5, 6, (database) async {
   await database.execute('ALTER TABLE GalleryTask ADD COLUMN uploader TEXT');
 });
 
-final migration6to7 = Migration(6, 7, (database) async {
-  await database.execute('ALTER TABLE GalleryTask ADD COLUMN jsonString TEXT');
-});
+final migration7to8 =
+    Migration(7, 8, (database) => _addColumnJsonString(database));
+
+final migration6to8 =
+    Migration(6, 8, (database) => _addColumnJsonString(database));
+
+Future _addColumnJsonString(sqflite.Database database) async {
+  await _addColumn(
+    database,
+    tabName: 'GalleryTask',
+    columnName: 'jsonString',
+    type: 'TEXT',
+  );
+}
+
+Future _addColumn(
+  sqflite.Database database, {
+  required String tabName,
+  required String columnName,
+  required String type,
+}) async {
+  final columnExiste = await database.rawQuery(
+      'select * from sqlite_master WHERE name=? and sql like ?',
+      [tabName, '%`$columnName`%']);
+  logger.i('$columnName columnExiste ${columnExiste.isNotEmpty}');
+  if (columnExiste.isEmpty) {
+    await database.execute('ALTER TABLE $tabName ADD COLUMN $columnName $type');
+  }
+}

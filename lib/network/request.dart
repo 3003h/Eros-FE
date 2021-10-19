@@ -39,7 +39,7 @@ Future<GalleryList?> getGallery({
   final AdvanceSearchController _searchController = Get.find();
   DioHttpClient dioHttpClient = DioHttpClient(dioConfig: ehDioConfig);
 
-  logger.d('df ${ehDioConfig.domainFronting}');
+  logger.v('df ${ehDioConfig.domainFronting}');
 
   late final String _url;
   switch (galleryListType) {
