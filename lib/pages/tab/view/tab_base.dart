@@ -48,6 +48,9 @@ SliverPadding buildWaterfallFlow(
       ),
       delegate: SliverChildBuilderDelegate(
         (BuildContext context, int index) {
+          if (gallerItemBeans.length - 1 < index) {
+            return const SizedBox.shrink();
+          }
 //           if (maxPage != null) {
 //             if (index == gallerItemBeans.length - 1 && curPage < maxPage - 1) {
 // //            加载更多数据的回调
@@ -215,12 +218,8 @@ Widget buildGallerySliverListSimpleView(
     initialItemCount: gallerItemBeans.length,
     itemBuilder:
         (BuildContext context, int index, Animation<double> animation) {
-      if (maxPage != null) {
-        if (index == gallerItemBeans.length - 1 && curPage < maxPage - 1) {
-          logger.v('$index ${gallerItemBeans.length}');
-//            加载更多数据的回调
-          loadMord?.call();
-        }
+      if (gallerItemBeans.length - 1 < index) {
+        return const SizedBox.shrink();
       }
       final GalleryItem _item = gallerItemBeans[index];
       // Get.replace(GalleryItemController(_item), tag: _item.gid);
