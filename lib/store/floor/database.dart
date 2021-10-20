@@ -83,6 +83,11 @@ Future _addColumn(
       [tabName, '%`$columnName`%']);
   logger.i('$columnName columnExiste ${columnExiste.isNotEmpty}');
   if (columnExiste.isEmpty) {
-    await database.execute('ALTER TABLE $tabName ADD COLUMN $columnName $type');
+    try {
+      await database
+          .execute('ALTER TABLE $tabName ADD COLUMN $columnName $type');
+    } catch (e, stack) {
+      logger.e('$e\n$stack');
+    }
   }
 }
