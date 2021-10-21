@@ -212,6 +212,35 @@ class SearchPageController extends TabViewController {
     }
   }
 
+  /// 获取数据
+  Future<List<GalleryItem>> _fetchData({bool refresh = false}) async {
+    logger.v('$searchPageCtrlDepth _fetchData');
+
+    final int _catNum = _ehConfigService.catFilter.value;
+
+    // logger.v('_loadDataFirst');
+
+    final GalleryList? rult = searchType != SearchType.favorite
+        ? await getGallery(
+            cats: _catNum,
+            serach: _search,
+            refresh: refresh,
+          )
+        : await getGallery(
+            favcat: _favoriteViewController.curFavcat,
+            serach: _search,
+            refresh: refresh,
+            galleryListType: GalleryListType.favorite,
+          );
+    final List<GalleryItem> gallerItemBeans = rult?.gallerys
+            ?.map((GalleryItem e) => e.copyWith(pageOfList: 0))
+            .toList() ??
+        [];
+    nextPage = rult?.nextPage ?? 1;
+    maxPage = rult?.maxPage ?? 0;
+    return gallerItemBeans;
+  }
+
   /// 加载更多
   @override
   Future<void> loadDataMore({bool cleanSearch = false}) async {
@@ -230,18 +259,20 @@ class SearchPageController extends TabViewController {
     final int _catNum = _ehConfigService.catFilter.value;
     pageState = PageState.Loading;
 
+    logger.d('load page: $nextPage');
+
     try {
       final String? fromGid = state?.last.gid;
       final GalleryList? rult = searchType != SearchType.favorite
           ? await getGallery(
-              page: curPage.value + 1,
+              page: nextPage,
               fromGid: fromGid,
               cats: _catNum,
               serach: _search,
               refresh: true,
             )
           : await getGallery(
-              page: curPage.value + 1,
+              page: nextPage,
               favcat: _favoriteViewController.curFavcat,
               serach: _search,
               refresh: true,
@@ -263,8 +294,9 @@ class SearchPageController extends TabViewController {
 
       logger.d('added rultList first ${rultList.first.gid} ');
 
+      nextPage = rult?.nextPage ?? 1;
       maxPage = rult?.maxPage ?? 0;
-      curPage.value += 1;
+      curPage.value = nextPage;
       pageState = PageState.None;
       // update();
     } catch (e, stack) {
@@ -317,6 +349,7 @@ class SearchPageController extends TabViewController {
 
       logger.d('insert gallerItemBeans first ${gallerItemBeans.first.gid} ');
 
+      nextPage = rult?.nextPage ?? 1;
       maxPage = rult?.maxPage ?? 0;
       curPage.value -= 1;
       pageState = PageState.None;
@@ -325,34 +358,6 @@ class SearchPageController extends TabViewController {
       pageState = PageState.LoadingException;
       rethrow;
     }
-  }
-
-  /// 获取数据
-  Future<List<GalleryItem>> _fetchData({bool refresh = false}) async {
-    logger.v('$searchPageCtrlDepth _fetchData');
-
-    final int _catNum = _ehConfigService.catFilter.value;
-
-    // logger.v('_loadDataFirst');
-
-    final GalleryList? rult = searchType != SearchType.favorite
-        ? await getGallery(
-            cats: _catNum,
-            serach: _search,
-            refresh: refresh,
-          )
-        : await getGallery(
-            favcat: _favoriteViewController.curFavcat,
-            serach: _search,
-            refresh: refresh,
-            galleryListType: GalleryListType.favorite,
-          );
-    final List<GalleryItem> gallerItemBeans = rult?.gallerys
-            ?.map((GalleryItem e) => e.copyWith(pageOfList: 0))
-            .toList() ??
-        [];
-    maxPage = rult?.maxPage ?? 0;
-    return gallerItemBeans;
   }
 
   /// 从指定页数开始
@@ -379,6 +384,10 @@ class SearchPageController extends TabViewController {
           );
     isLoadPrevious = page > 1;
     curPage.value = page;
+
+    nextPage = rult?.nextPage ?? 1;
+    maxPage = rult?.maxPage ?? 0;
+
     change(
         rult?.gallerys
                 ?.map((GalleryItem e) => e.copyWith(pageOfList: page))
