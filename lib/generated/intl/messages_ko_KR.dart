@@ -143,6 +143,8 @@ class MessageLookup extends MessageLookupByLibrary {
         "processing": MessageLookupByLibrary.simpleMessage("처리 중"),
         "pure_black": MessageLookupByLibrary.simpleMessage("검정색 (Pure)"),
         "quick_search": MessageLookupByLibrary.simpleMessage("빠른 검색"),
+        "read_from_clipboard":
+            MessageLookupByLibrary.simpleMessage("Read from clipboard"),
         "read_setting": MessageLookupByLibrary.simpleMessage("읽기 설정"),
         "reading_direction": MessageLookupByLibrary.simpleMessage("읽기 방향"),
         "reload_image": MessageLookupByLibrary.simpleMessage("이미지 새로고침"),

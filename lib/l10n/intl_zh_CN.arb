@@ -177,5 +177,6 @@
   "sync_history": "同步历史记录",
   "sync_read_progress": "同步阅读进度",
   "skip": "跳过",
-  "export": "导出"
+  "export": "导出",
+  "read_from_clipboard": "从剪贴板读取"
 }

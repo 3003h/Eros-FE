@@ -150,6 +150,8 @@ class MessageLookup extends MessageLookupByLibrary {
         "processing": MessageLookupByLibrary.simpleMessage("處理中"),
         "pure_black": MessageLookupByLibrary.simpleMessage("純黑"),
         "quick_search": MessageLookupByLibrary.simpleMessage("快速搜索"),
+        "read_from_clipboard":
+            MessageLookupByLibrary.simpleMessage("Read from clipboard"),
         "read_setting": MessageLookupByLibrary.simpleMessage("阅读设置"),
         "reading_direction": MessageLookupByLibrary.simpleMessage("阅读方向"),
         "reload_image": MessageLookupByLibrary.simpleMessage("重新载入图片"),

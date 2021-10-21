@@ -1839,6 +1839,16 @@ class L10n {
       args: [],
     );
   }
+
+  /// `Read from clipboard`
+  String get read_from_clipboard {
+    return Intl.message(
+      'Read from clipboard',
+      name: 'read_from_clipboard',
+      desc: '',
+      args: [],
+    );
+  }
 }
 
 class AppLocalizationDelegate extends LocalizationsDelegate<L10n> {

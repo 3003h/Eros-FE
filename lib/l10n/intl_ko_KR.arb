@@ -177,5 +177,6 @@
    "sync_history": "Sync history",
    "sync_read_progress": "Sync read progress",
    "skip": "Skip",
-   "export": "Export"
+   "export": "Export",
+   "read_from_clipboard": "Read from clipboard"
 }

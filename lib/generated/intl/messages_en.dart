@@ -166,6 +166,8 @@ class MessageLookup extends MessageLookupByLibrary {
         "processing": MessageLookupByLibrary.simpleMessage("Processing"),
         "pure_black": MessageLookupByLibrary.simpleMessage("Pure black"),
         "quick_search": MessageLookupByLibrary.simpleMessage("Quick search"),
+        "read_from_clipboard":
+            MessageLookupByLibrary.simpleMessage("Read from clipboard"),
         "read_setting": MessageLookupByLibrary.simpleMessage("Read setting"),
         "reading_direction":
             MessageLookupByLibrary.simpleMessage("Reading direction"),
