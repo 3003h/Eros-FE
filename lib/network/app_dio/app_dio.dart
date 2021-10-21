@@ -107,7 +107,7 @@ class AppDio with DioMixin implements Dio {
     }
   }
 
-  setProxy(String proxy) {
+  void setProxy(String proxy) {
     (httpClientAdapter as DefaultHttpClientAdapter).onHttpClientCreate =
         (client) {
       // config the http client

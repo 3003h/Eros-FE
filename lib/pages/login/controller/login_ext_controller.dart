@@ -1,3 +1,5 @@
+import 'dart:collection';
+import 'dart:convert';
 import 'dart:io';
 
 import 'package:fehviewer/common/controller/user_controller.dart';
@@ -10,6 +12,7 @@ import 'package:fehviewer/route/routes.dart';
 import 'package:fehviewer/utils/logger.dart';
 import 'package:fehviewer/utils/toast.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 
 const TextStyle kTextStyle = TextStyle(
@@ -162,6 +165,53 @@ class LoginController extends GetxController {
         loadingLogin = false;
         update();
       }
+    }
+  }
+
+  Future<void> readCookieFromClipboard() async {
+    final kMatchMenberId = RegExp(r'^\d+$');
+    final kMatchPassHash = RegExp(r'^[0-9a-f]{32}$');
+    final kMatchIgneous = RegExp(r'^[0-9a-f]+$');
+
+    final String _clipText =
+        (await Clipboard.getData(Clipboard.kTextPlain))?.text ?? '';
+    // logger.d('Clipboard:\n' + _clipText);
+    if (!_clipText.contains('{')) {
+      final textArray = _clipText.split(RegExp(r'\s|:'));
+      logger.d('textArray:$textArray');
+      for (final _text in textArray) {
+        if (kMatchMenberId.hasMatch(_text)) {
+          logger.d('id:$_text');
+          idController.text = _text;
+          continue;
+        }
+        if (kMatchPassHash.hasMatch(_text)) {
+          logger.d('passHash:$_text');
+          hashController.text = _text;
+          continue;
+        }
+        if (kMatchIgneous.hasMatch(_text)) {
+          logger.d('igneous:$_text');
+          igneousController.text = _text;
+        }
+      }
+    }
+
+    try {
+      final jsonObj = jsonDecode(_clipText);
+      final cookieList = jsonObj as List;
+      final cookieMap = <String, String>{};
+      for (final cookie in cookieList) {
+        final _cookieMap = cookie as Map<String, dynamic>;
+        final _name = _cookieMap['name'] as String;
+        final _value = _cookieMap['value'] as String;
+        cookieMap[_name] = _value;
+      }
+      idController.text = cookieMap['ipb_member_id'] ?? '';
+      hashController.text = cookieMap['ipb_pass_hash'] ?? '';
+      igneousController.text = cookieMap['igneous'] ?? '';
+    } catch (e) {
+      logger.e('$e');
     }
   }
 }

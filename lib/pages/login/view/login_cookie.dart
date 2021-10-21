@@ -3,6 +3,7 @@ import 'package:fehviewer/generated/l10n.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:line_icons/line_icons.dart';
 
 import '../controller/login_ext_controller.dart';
 
@@ -29,60 +30,77 @@ class LoginCookie extends GetView<LoginController> {
           child: Container(
             constraints: const BoxConstraints(maxWidth: 500),
             child: SingleChildScrollView(
-              child: Padding(
-                padding:
-                    EdgeInsets.only(top: context.mediaQueryShortestSide / 4),
-                child: Column(
-                  children: [
-                    CupertinoFormSection.insetGrouped(
-                      backgroundColor: Colors.transparent,
-                      margin: const EdgeInsets.fromLTRB(16, 10, 16, 30),
-                      children: [
-                        CupertinoTextFormFieldRow(
-                          controller: controller.idController,
-                          style: kTextStyle,
-                          placeholderStyle: _placeholderStyle,
-                          // prefix: Text(''),
-                          placeholder: 'ibp_member_id',
-                          onEditingComplete: () {
-                            FocusScope.of(context)
-                                .requestFocus(controller.nodePwd);
-                          },
-                        ),
-                        CupertinoTextFormFieldRow(
-                          controller: controller.hashController,
-                          style: kTextStyle,
-                          placeholderStyle: _placeholderStyle,
-                          // prefix: Text(''),
-                          placeholder: 'ibp_pass_hash',
-                        ),
-                        CupertinoTextFormFieldRow(
-                          controller: controller.igneousController,
-                          style: kTextStyle,
-                          placeholderStyle: _placeholderStyle,
-                          // prefix: Text(''),
-                          placeholder: 'igneous',
-                        ),
-                      ],
-                    ),
-                    SizedBox(
-                      height: 50,
-                      child: GetBuilder<LoginController>(
-                        builder: (logic) {
-                          return CupertinoButton(
-                            child: logic.loadingLogin
-                                ? const CupertinoActivityIndicator()
-                                : Text(L10n.of(context).login),
-                            color: CupertinoColors.activeBlue,
-                            onPressed: logic.loadingLogin
-                                ? null
-                                : logic.pressLoginCookie,
-                          );
+              child: Column(
+                children: [
+                  const SizedBox(height: 50),
+                  const Icon(
+                    LineIcons.cookieBite,
+                    size: 120,
+                    color: CupertinoColors.activeBlue,
+                  ),
+                  CupertinoFormSection.insetGrouped(
+                    backgroundColor: Colors.transparent,
+                    margin: const EdgeInsets.fromLTRB(16, 10, 16, 30),
+                    children: [
+                      CupertinoTextFormFieldRow(
+                        controller: controller.idController,
+                        style: kTextStyle,
+                        placeholderStyle: _placeholderStyle,
+                        // prefix: Text(''),
+                        placeholder: 'ibp_member_id',
+                        onEditingComplete: () {
+                          FocusScope.of(context)
+                              .requestFocus(controller.nodePwd);
                         },
                       ),
+                      CupertinoTextFormFieldRow(
+                        controller: controller.hashController,
+                        style: kTextStyle,
+                        placeholderStyle: _placeholderStyle,
+                        // prefix: Text(''),
+                        placeholder: 'ibp_pass_hash',
+                      ),
+                      CupertinoTextFormFieldRow(
+                        controller: controller.igneousController,
+                        style: kTextStyle,
+                        placeholderStyle: _placeholderStyle,
+                        // prefix: Text(''),
+                        placeholder: 'igneous',
+                      ),
+                    ],
+                  ),
+                  SizedBox(
+                    height: 50,
+                    child: GetBuilder<LoginController>(
+                      builder: (logic) {
+                        return CupertinoButton(
+                          child: logic.loadingLogin
+                              ? const CupertinoActivityIndicator()
+                              : Text(L10n.of(context).login),
+                          color: CupertinoColors.activeBlue,
+                          onPressed: logic.loadingLogin
+                              ? null
+                              : logic.pressLoginCookie,
+                        );
+                      },
                     ),
-                  ],
-                ),
+                  ),
+                  CupertinoButton(
+                    minSize: 50,
+                    padding: const EdgeInsets.all(20),
+                    child: Column(
+                      children: [
+                        const Icon(
+                          LineIcons.clipboardAlt,
+                          size: 30,
+                        ),
+                        Text(L10n.of(context).read_from_clipboard,
+                            textScaleFactor: 0.8),
+                      ],
+                    ),
+                    onPressed: controller.readCookieFromClipboard,
+                  ),
+                ],
               ),
             ),
           ),

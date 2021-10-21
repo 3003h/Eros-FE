@@ -22,6 +22,12 @@ class DefaultHttpTransformer extends HttpTransformer {
 //     "data": {},
 //     "message": "success"
 // }
+  /// 内部构造方法，可避免外部暴露构造函数，进行实例化
+  DefaultHttpTransformer._internal();
+
+  /// 工厂构造方法，这里使用命名构造函数方式进行声明
+  factory DefaultHttpTransformer.getInstance() => _instance;
+
   @override
   FutureOr<DioHttpResponse<dynamic>> parse(Response response) {
     // if (response.data["code"] == 100) {
@@ -33,13 +39,8 @@ class DefaultHttpTransformer extends HttpTransformer {
   }
 
   /// 单例对象
-  static DefaultHttpTransformer _instance = DefaultHttpTransformer._internal();
-
-  /// 内部构造方法，可避免外部暴露构造函数，进行实例化
-  DefaultHttpTransformer._internal();
-
-  /// 工厂构造方法，这里使用命名构造函数方式进行声明
-  factory DefaultHttpTransformer.getInstance() => _instance;
+  static final DefaultHttpTransformer _instance =
+      DefaultHttpTransformer._internal();
 }
 
 /// 画廊列表解析
@@ -119,7 +120,7 @@ class GalleryImageListHttpTransformer extends HttpTransformer {
   FutureOr<DioHttpResponse<List<GalleryImage>>> parse(
       Response<dynamic> response) async {
     final html = response.data as String;
-    final List<GalleryImage> image = await parseGalleryImageFromHtml(html);
+    final List<GalleryImage> image = parseGalleryImageFromHtml(html);
     return DioHttpResponse<List<GalleryImage>>.success(image);
   }
 }

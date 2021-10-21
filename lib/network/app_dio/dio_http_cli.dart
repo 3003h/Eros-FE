@@ -141,7 +141,7 @@ class DioHttpClient {
       );
       return response;
     } catch (e) {
-      throw e;
+      rethrow;
     }
   }
 }
