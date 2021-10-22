@@ -14,7 +14,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:permission_handler/permission_handler.dart';
 
-Future<void> requestPermission() async {
+Future<void> requestManageExternalStoragePermission() async {
   final PermissionStatus statusMStorage =
       await Permission.manageExternalStorage.status;
   logger.d('manageExternalStorage $statusMStorage');
@@ -384,10 +384,10 @@ class CookieUtil {
         await cookieJar.loadForRequest(Uri.parse(EHConst.EH_BASE_URL));
     final Cookie _memberId = cookiesEh
         .firstWhere((Cookie cookie) => cookie.name == 'ipb_member_id')
-          ..domain = '.e-hentai.org';
+      ..domain = '.e-hentai.org';
     final Cookie _passHash = cookiesEh
         .firstWhere((Cookie cookie) => cookie.name == 'ipb_pass_hash')
-          ..domain = '.e-hentai.org';
+      ..domain = '.e-hentai.org';
 
     cookieJar.saveFromResponse(
         Uri.parse(EHConst.EH_BASE_URL), <Cookie>[_memberId, _passHash]);

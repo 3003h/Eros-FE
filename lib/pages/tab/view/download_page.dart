@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:fehviewer/common/controller/download_controller.dart';
 import 'package:fehviewer/generated/l10n.dart';
 import 'package:fehviewer/models/index.dart';
@@ -6,12 +8,17 @@ import 'package:fehviewer/pages/item/download_gallery_item.dart';
 import 'package:fehviewer/pages/tab/controller/download_view_controller.dart';
 import 'package:fehviewer/store/floor/entity/gallery_task.dart';
 import 'package:fehviewer/utils/logger.dart';
+import 'package:fehviewer/utils/toast.dart';
+import 'package:fehviewer/utils/utility.dart';
+import 'package:file_picker/file_picker.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_downloader/flutter_downloader.dart';
 import 'package:get/get.dart';
 import 'package:line_icons/line_icons.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
+import 'package:path/path.dart' as path;
+import 'package:share/share.dart';
 
 import 'donwload_labels_page.dart';
 
@@ -85,6 +92,15 @@ class _DownloadTabState extends State<DownloadTab> {
               minSize: 40,
               padding: const EdgeInsets.all(0),
               child: const Icon(
+                LineIcons.alternateArrowsHorizontal,
+                size: 24,
+              ),
+              onPressed: _showExportDialog,
+            ),
+            CupertinoButton(
+              minSize: 40,
+              padding: const EdgeInsets.all(0),
+              child: const Icon(
                 LineIcons.layerGroup,
                 size: 26,
               ),
@@ -111,6 +127,60 @@ class _DownloadTabState extends State<DownloadTab> {
           });
         },
       ),
+    );
+  }
+
+  Future<void> _showExportDialog() async {
+    return showCupertinoDialog<void>(
+      context: Get.overlayContext!,
+      barrierDismissible: true,
+      builder: (BuildContext context) {
+        return CupertinoAlertDialog(
+          title: const Text('Import & Export'),
+          content: const Text('Import and Export download task'),
+          actions: [
+            CupertinoDialogAction(
+              onPressed: () async {
+                Get.back();
+                controller.shareTaskInfoFile();
+              },
+              child: Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  const Icon(LineIcons.shareSquareAlt).paddingOnly(right: 8),
+                  const Text('Share '),
+                ],
+              ),
+            ),
+            CupertinoDialogAction(
+              onPressed: () async {
+                Get.back();
+                controller.exportTaskInfoFile();
+              },
+              child: Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  const Icon(LineIcons.fileExport).paddingOnly(right: 8),
+                  const Text('Export'),
+                ],
+              ),
+            ),
+            CupertinoDialogAction(
+              onPressed: () async {
+                Get.back();
+                controller.importTaskInfoFile();
+              },
+              child: Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  const Icon(LineIcons.fileImport).paddingOnly(right: 8),
+                  const Text('Import'),
+                ],
+              ),
+            ),
+          ],
+        );
+      },
     );
   }
 }
