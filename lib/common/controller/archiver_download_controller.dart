@@ -168,7 +168,7 @@ class ArchiverDownloadController extends GetxController {
     if (GetPlatform.isAndroid && ehConfigService.downloadLocatino.isNotEmpty) {
       // 自定义路径
       logger.d('自定义下载路径');
-      await requestManageExternalStoragePermission();
+      await requestPermission();
       _dirPath = path.join(ehConfigService.downloadLocatino);
     } else if (GetPlatform.isAndroid) {
       logger.d('无自定义下载路径');
