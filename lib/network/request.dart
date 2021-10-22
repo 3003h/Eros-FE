@@ -68,11 +68,7 @@ Future<GalleryList?> getGallery({
     if (isTopList) 'p': page ?? 0,
     if (!isTopList && !isPopular && !isFav) 'f_cats': cats,
     if (!isTopList && !isPopular && fromGid != null) 'from': fromGid,
-    if (!(galleryListType == GalleryListType.watched) &&
-        !isTopList &&
-        !isPopular &&
-        serach != null)
-      'f_search': serach,
+    if (!isTopList && !isPopular && serach != null) 'f_search': serach,
     if (isTopList && toplist != null && toplist.isNotEmpty) 'tl': toplist,
     if (isFav && favcat != null && favcat != 'a' && favcat.isNotEmpty)
       'favcat': favcat,

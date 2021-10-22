@@ -212,6 +212,15 @@ class SearchPageController extends TabViewController {
     }
   }
 
+  final _typeMap = {
+    SearchType.favorite: GalleryListType.favorite,
+    SearchType.normal: GalleryListType.gallery,
+    SearchType.watched: GalleryListType.watched,
+  };
+
+  GalleryListType get _currListType =>
+      _typeMap[searchType] ?? GalleryListType.gallery;
+
   /// 获取数据
   Future<List<GalleryItem>> _fetchData({bool refresh = false}) async {
     logger.v('$searchPageCtrlDepth _fetchData');
@@ -220,18 +229,27 @@ class SearchPageController extends TabViewController {
 
     // logger.v('_loadDataFirst');
 
-    final GalleryList? rult = searchType != SearchType.favorite
-        ? await getGallery(
-            cats: _catNum,
-            serach: _search,
-            refresh: refresh,
-          )
-        : await getGallery(
-            favcat: _favoriteViewController.curFavcat,
-            serach: _search,
-            refresh: refresh,
-            galleryListType: GalleryListType.favorite,
-          );
+    // final GalleryList? rult = searchType != SearchType.favorite
+    //     ? await getGallery(
+    //         cats: _catNum,
+    //         serach: _search,
+    //         refresh: refresh,
+    //       )
+    //     : await getGallery(
+    //         favcat: _favoriteViewController.curFavcat,
+    //         serach: _search,
+    //         refresh: refresh,
+    //         galleryListType: GalleryListType.favorite,
+    //       );
+
+    final GalleryList? rult = await getGallery(
+      cats: _catNum,
+      favcat: _favoriteViewController.curFavcat,
+      serach: _search,
+      refresh: refresh,
+      galleryListType: _currListType,
+    );
+
     final List<GalleryItem> gallerItemBeans = rult?.gallerys
             ?.map((GalleryItem e) => e.copyWith(pageOfList: 0))
             .toList() ??
@@ -263,21 +281,33 @@ class SearchPageController extends TabViewController {
 
     try {
       final String? fromGid = state?.last.gid;
-      final GalleryList? rult = searchType != SearchType.favorite
-          ? await getGallery(
-              page: nextPage,
-              fromGid: fromGid,
-              cats: _catNum,
-              serach: _search,
-              refresh: true,
-            )
-          : await getGallery(
-              page: nextPage,
-              favcat: _favoriteViewController.curFavcat,
-              serach: _search,
-              refresh: true,
-              galleryListType: GalleryListType.favorite,
-            );
+
+      // final GalleryList? rult = searchType != SearchType.favorite
+      //     ? await getGallery(
+      //         page: nextPage,
+      //         fromGid: fromGid,
+      //         cats: _catNum,
+      //         serach: _search,
+      //         refresh: true,
+      //       )
+      //     : await getGallery(
+      //         page: nextPage,
+      //         favcat: _favoriteViewController.curFavcat,
+      //         serach: _search,
+      //         refresh: true,
+      //         galleryListType: GalleryListType.favorite,
+      //       );
+
+      final GalleryList? rult = await getGallery(
+        page: nextPage,
+        fromGid: fromGid,
+        cats: _catNum,
+        favcat: _favoriteViewController.curFavcat,
+        serach: _search,
+        refresh: true,
+        galleryListType: _currListType,
+      );
+
       final List<GalleryItem> rultList = rult?.gallerys
               ?.map(
                   (GalleryItem e) => e.copyWith(pageOfList: curPage.value + 1))
@@ -324,21 +354,33 @@ class SearchPageController extends TabViewController {
 
     try {
       final String? fromGid = state?.last.gid;
-      final GalleryList? rult = searchType != SearchType.favorite
-          ? await getGallery(
-              page: curPage.value - 1,
-              fromGid: fromGid,
-              cats: _catNum,
-              serach: _search,
-              refresh: true,
-            )
-          : await getGallery(
-              page: curPage.value - 1,
-              favcat: _favoriteViewController.curFavcat,
-              serach: _search,
-              refresh: true,
-              galleryListType: GalleryListType.favorite,
-            );
+
+      // final GalleryList? rult = searchType != SearchType.favorite
+      //     ? await getGallery(
+      //         page: curPage.value - 1,
+      //         fromGid: fromGid,
+      //         cats: _catNum,
+      //         serach: _search,
+      //         refresh: true,
+      //       )
+      //     : await getGallery(
+      //         page: curPage.value - 1,
+      //         favcat: _favoriteViewController.curFavcat,
+      //         serach: _search,
+      //         refresh: true,
+      //         galleryListType: GalleryListType.favorite,
+      //       );
+
+      final GalleryList? rult = await getGallery(
+        page: curPage.value - 1,
+        fromGid: fromGid,
+        cats: _catNum,
+        favcat: _favoriteViewController.curFavcat,
+        serach: _search,
+        refresh: true,
+        galleryListType: _currListType,
+      );
+
       final List<GalleryItem> gallerItemBeans = rult?.gallerys
               ?.map(
                   (GalleryItem e) => e.copyWith(pageOfList: curPage.value - 1))
@@ -368,20 +410,29 @@ class SearchPageController extends TabViewController {
     final int _catNum = _ehConfigService.catFilter.value;
 
     change(state, status: RxStatus.loading());
-    final GalleryList? rult = searchType != SearchType.favorite
-        ? await getGallery(
-            page: page,
-            cats: _catNum,
-            serach: _search,
-            refresh: true,
-          )
-        : await getGallery(
-            page: page,
-            favcat: _favoriteViewController.curFavcat,
-            serach: _search,
-            refresh: true,
-            galleryListType: GalleryListType.favorite,
-          );
+    // final GalleryList? rult = searchType != SearchType.favorite
+    //     ? await getGallery(
+    //         page: page,
+    //         cats: _catNum,
+    //         serach: _search,
+    //         refresh: true,
+    //       )
+    //     : await getGallery(
+    //         page: page,
+    //         favcat: _favoriteViewController.curFavcat,
+    //         serach: _search,
+    //         refresh: true,
+    //         galleryListType: GalleryListType.favorite,
+    //       );
+    final GalleryList? rult = await getGallery(
+      page: page,
+      cats: _catNum,
+      favcat: _favoriteViewController.curFavcat,
+      serach: _search,
+      refresh: true,
+      galleryListType: _currListType,
+    );
+
     isLoadPrevious = page > 1;
     curPage.value = page;
 
