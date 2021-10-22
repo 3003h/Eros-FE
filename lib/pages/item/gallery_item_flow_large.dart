@@ -1,5 +1,6 @@
 import 'dart:ui';
 
+import 'package:blur/blur.dart';
 import 'package:fehviewer/common/service/ehconfig_service.dart';
 import 'package:fehviewer/common/service/theme_service.dart';
 import 'package:fehviewer/const/theme_colors.dart';
@@ -64,6 +65,26 @@ class GalleryItemFlowLarge extends StatelessWidget {
           ),
         ),
       ],
+    );
+  }
+
+  Widget _buildCount() {
+    return Container(
+      padding: const EdgeInsets.only(left: 2),
+      child: Text(
+        galleryItemController.galleryItem.filecount ?? '',
+        style: const TextStyle(
+          fontSize: 10,
+          color: Color.fromARGB(255, 240, 240, 240),
+          height: 1.12,
+        ),
+      ).frosted(
+        blur: 2,
+        frostColor: CupertinoColors.systemGrey2,
+        frostOpacity: 0.1,
+        borderRadius: BorderRadius.circular(6),
+        padding: const EdgeInsets.symmetric(vertical: 2, horizontal: 4),
+      ),
     );
   }
 
@@ -155,12 +176,13 @@ class GalleryItemFlowLarge extends StatelessWidget {
                         child: Container(
                           width: kWidth,
                           height: kHeight,
-                          color: _colorCategory,
+                          color: _colorCategory.withOpacity(0.8),
                         ),
                       ),
                       // Positioned(
                       //     bottom: 4, right: 4, child: _buildFavcatIcon()),
                       // Positioned(bottom: 4, left: 4, child: _buildRating()),
+                      Positioned(bottom: 4, right: 4, child: _buildCount()),
                       Container(
                         height: (kHeight + kRadius) / 2,
                         width: (kWidth + kRadius) / 2,

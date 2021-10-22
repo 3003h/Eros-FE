@@ -49,7 +49,7 @@ class ArchiverDownloadController extends GetxController {
   @override
   void onInit() {
     super.onInit();
-    logger.d('ArchiverDownloadController onInit');
+    // logger.d('ArchiverDownloadController onInit');
 
     IsolateNameServer.registerPortWithName(
         _port.sendPort, 'downloader_send_port');

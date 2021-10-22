@@ -60,7 +60,7 @@ class DownloadController extends GetxController {
         }
       }
     } else {
-      logger.d('add .nomedia file \n${pathSet.join('\n')}');
+      // logger.d('add .nomedia file \n${pathSet.join('\n')}');
       for (final dirPath in pathSet) {
         final File noMediaFile = File(path.join(dirPath, '.nomedia'));
         // if (!noMediaFile.existsSync()) {
@@ -245,8 +245,8 @@ class DownloadController extends GetxController {
   @override
   void onInit() {
     super.onInit();
-    logger.d(
-        'DownloadController onInit multiDownload:${ehConfigService.multiDownload}');
+    // logger.d(
+    //     'DownloadController onInit multiDownload:${ehConfigService.multiDownload}');
     dState.executor = Executor(concurrency: ehConfigService.multiDownload);
     allowMediaScan(ehConfigService.allowMediaScan);
     _initGalleryTasks();
@@ -668,7 +668,7 @@ class DownloadController extends GetxController {
   }
 
   Future<void> _initGalleryTasks() async {
-    logger5.v(' _initGalleryTasks');
+    // logger5.v(' _initGalleryTasks');
     GalleryTaskDao _galleryTaskDao;
     // ImageTaskDao _imageTaskDao;
     try {

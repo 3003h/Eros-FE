@@ -130,7 +130,7 @@ class Global {
     //   await CustomHttpsProxy.instance.init();
     // }
 
-    logger.v('doc $appDocPath \napps $appSupportPath \ntemp $tempPath');
+    // logger.v('doc $appDocPath \napps $appSupportPath \ntemp $tempPath');
 
     dbPath = path.join(Global.appSupportPath, EHConst.DB_NAME);
 
