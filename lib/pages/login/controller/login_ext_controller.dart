@@ -195,6 +195,7 @@ class LoginController extends GetxController {
           igneousController.text = _text;
         }
       }
+      return;
     }
 
     try {
