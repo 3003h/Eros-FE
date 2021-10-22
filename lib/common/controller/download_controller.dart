@@ -445,8 +445,9 @@ class DownloadController extends GetxController {
       _addAllImages(gid, [imageFetched]);
       await _updateImageTask(gid, imageFetched, fileName: _fileName);
 
-      if (redownload)
+      if (redownload) {
         logger.v('${imageFetched.href}\n${imageFetched.imageUrl} ');
+      }
     }
 
     final ProgressCallback _progressCallback = (int count, int total) {
@@ -611,7 +612,7 @@ class DownloadController extends GetxController {
     if (GetPlatform.isAndroid && ehConfigService.downloadLocatino.isNotEmpty) {
       // 自定义路径
       logger.d('自定义下载路径');
-      await requestPermission();
+      await requestManageExternalStoragePermission();
       _dirPath = path.join(ehConfigService.downloadLocatino, custpath);
       savedDir = Directory(_dirPath);
     } else if (GetPlatform.isAndroid) {

@@ -13,10 +13,14 @@ import 'package:fehviewer/route/routes.dart';
 import 'package:fehviewer/store/floor/entity/gallery_image_task.dart';
 import 'package:fehviewer/store/floor/entity/gallery_task.dart';
 import 'package:fehviewer/utils/logger.dart';
+import 'package:fehviewer/utils/toast.dart';
+import 'package:fehviewer/utils/utility.dart';
 import 'package:fehviewer/utils/vibrate.dart';
+import 'package:file_picker/file_picker.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_downloader/flutter_downloader.dart';
 import 'package:get/get.dart';
+import 'package:intl/intl.dart';
 import 'package:path/path.dart' as path;
 import 'package:share/share.dart';
 
@@ -274,7 +278,7 @@ class DownloadViewController extends GetxController {
       return null;
     }
 
-    final _zipPath = await exportGallery(context, () => _compZip(task));
+    final _zipPath = await _exportGallery(context, () => _compZip(task));
 
     if (_zipPath != null) {
       Share.shareFiles([_zipPath]);
@@ -318,7 +322,7 @@ class DownloadViewController extends GetxController {
     }
 
     final _exportFilePath =
-        await exportGallery(context, () => _buildEpub(task));
+        await _exportGallery(context, () => _buildEpub(task));
 
     if (_exportFilePath != null) {
       Share.shareFiles([_exportFilePath]);
@@ -341,18 +345,76 @@ class DownloadViewController extends GetxController {
 
   // gallery 暂停任务
   void pauseGalleryDownload(int? gid) {
-    if (gid != null) _downloadController.galleryTaskPaused(gid);
+    if (gid != null) {
+      _downloadController.galleryTaskPaused(gid);
+    }
     update(['${idDownloadGalleryItem}_$gid']);
   }
 
   // gallery 恢复任务
   void resumeGalleryDownload(int? gid) {
-    if (gid != null) _downloadController.galleryTaskResume(gid);
+    if (gid != null) {
+      _downloadController.galleryTaskResume(gid);
+    }
     update(['${idDownloadGalleryItem}_$gid']);
+  }
+
+  Future<String?> _writeTaskInfoFile() async {
+    // 创建zip文件
+    final encoder = ZipFileEncoder();
+    final _zipPath = _getLocalFilePath();
+    encoder.create(_zipPath);
+
+    // 添加文件
+    final srcFile = File(Global.dbPath);
+    encoder.addFile(srcFile);
+
+    encoder.close();
+    return _zipPath;
+  }
+
+  String _getLocalFilePath() {
+    final DateTime _now = DateTime.now();
+    final DateFormat formatter = DateFormat('yyyyMMdd_HHmmss');
+    final String _nowTime = formatter.format(_now);
+    return path.join(Global.appDocPath, 'FEhDownloadTask_$_nowTime.zip');
+  }
+
+  Future shareTaskInfoFile() async {
+    final _tempFilePath = await _writeTaskInfoFile();
+    if (_tempFilePath != null) {
+      Share.shareFiles([_tempFilePath]);
+    }
+  }
+
+  Future exportTaskInfoFile() async {
+    try {
+      final _tempFilePath = await _writeTaskInfoFile();
+      await requestManageExternalStoragePermission();
+      if (_tempFilePath != null) {
+        final _saveToDirPath = await FilePicker.platform.getDirectoryPath();
+        logger.d('$_saveToDirPath');
+        if (_saveToDirPath != null) {
+          final _dstPath =
+              path.join(_saveToDirPath, path.basename(_tempFilePath));
+          File(_tempFilePath).copySync(_dstPath);
+        }
+      }
+    } catch (e) {
+      showToast('$e');
+      rethrow;
+    }
+  }
+
+  Future importTaskInfoFile() async {
+    final FilePickerResult? result = await FilePicker.platform.pickFiles();
+    if (result != null) {
+      final File _file = File(result.files.single.path!);
+    }
   }
 }
 
-Future<String?> exportGallery(
+Future<String?> _exportGallery(
   BuildContext context,
   FunctionExport funExport, {
   FunctionExport? funcCancel,

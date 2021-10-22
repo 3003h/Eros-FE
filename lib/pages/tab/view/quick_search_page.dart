@@ -13,6 +13,7 @@ import 'package:fehviewer/generated/l10n.dart';
 import 'package:fehviewer/models/base/eh_models.dart';
 import 'package:fehviewer/utils/logger.dart';
 import 'package:fehviewer/utils/toast.dart';
+import 'package:fehviewer/utils/utility.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -21,9 +22,10 @@ import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:line_icons/line_icons.dart';
 import 'package:share/share.dart';
+import 'package:path/path.dart' as path;
 
 class QuickSearchListPage extends StatelessWidget {
-  QuickSearchListPage({this.autoSearch = true});
+  QuickSearchListPage({Key? key, this.autoSearch = true}) : super(key: key);
 
   final bool autoSearch;
   final QuickSearchController quickSearchController = Get.find();
@@ -126,51 +128,101 @@ class QuickSearchListPage extends StatelessWidget {
       );
     }
 
+    Future<String?> _writeFile() async {
+      final List<String> _searchTextList = quickSearchController.searchTextList;
+      if (_searchTextList.isNotEmpty) {
+        final String _searchText = '#FEhViewer\n${_searchTextList.join('\n')}';
+        logger.v(_searchText);
+
+        final File _tempFlie = await _getLocalFile();
+        _tempFlie.writeAsStringSync(_searchText);
+        return _tempFlie.path;
+      }
+    }
+
     Future<void> _showFile() async {
       return showCupertinoDialog<void>(
         context: Get.overlayContext!,
         barrierDismissible: true,
         builder: (BuildContext context) {
           return CupertinoAlertDialog(
-            title: Text('Import and Export'),
+            title: const Text('Import and Export'),
             // content: Text('Sync with Google Cloud Firestore'),
             actions: [
               CupertinoDialogAction(
-                  onPressed: () async {
-                    final List<String> _searchTextList =
-                        quickSearchController.searchTextList;
-                    if (_searchTextList.isNotEmpty) {
-                      final String _searchText =
-                          '#FEhViewer\n${_searchTextList.join('\n')}';
-                      logger.v(_searchText);
-
-                      final File _tempFlie = await _getLocalFile();
-                      _tempFlie.writeAsStringSync(_searchText);
-                      Share.shareFiles([_tempFlie.path]);
-                    }
-                    Get.back();
-                  },
-                  child: Text('Export')),
+                onPressed: () async {
+                  final _tempFilePath = await _writeFile();
+                  if (_tempFilePath != null) {
+                    Share.shareFiles([_tempFilePath]);
+                  }
+                  Get.back();
+                },
+                child: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    const Icon(LineIcons.shareSquareAlt).paddingOnly(right: 4),
+                    const Text('Share'),
+                  ],
+                ),
+              ),
               CupertinoDialogAction(
-                  onPressed: () async {
-                    final FilePickerResult? result =
-                        await FilePicker.platform.pickFiles();
-                    if (result != null) {
-                      final File _file = File(result.files.single.path!);
-                      final String _fileText = _file.readAsStringSync();
-                      if (_fileText.contains('#FEhViewer')) {
-                        logger.v(_fileText);
-                        final List<String> _importTexts = _fileText.split('\n');
-                        _importTexts.forEach((String element) {
-                          if (element.trim().isNotEmpty &&
-                              !element.startsWith('#'))
-                            quickSearchController.addText(element);
-                        });
+                onPressed: () async {
+                  Get.back();
+                  try {
+                    final _tempFilePath = await _writeFile();
+                    await requestManageExternalStoragePermission();
+                    if (_tempFilePath != null) {
+                      // Share.shareFiles([_tempFilePath]);
+                      final _saveToDirPath =
+                          await FilePicker.platform.getDirectoryPath();
+                      logger.d('$_saveToDirPath');
+                      if (_saveToDirPath != null) {
+                        final _dstPath = path.join(
+                            _saveToDirPath, path.basename(_tempFilePath));
+                        File(_tempFilePath).copySync(_dstPath);
                       }
                     }
-                    Get.back();
-                  },
-                  child: Text('Import')),
+                  } catch (e) {
+                    showToast('$e');
+                    rethrow;
+                  }
+                },
+                child: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    const Icon(LineIcons.fileExport).paddingOnly(right: 4),
+                    const Text('Export'),
+                  ],
+                ),
+              ),
+              CupertinoDialogAction(
+                onPressed: () async {
+                  final FilePickerResult? result =
+                      await FilePicker.platform.pickFiles();
+                  if (result != null) {
+                    final File _file = File(result.files.single.path!);
+                    final String _fileText = _file.readAsStringSync();
+                    if (_fileText.contains('#FEhViewer')) {
+                      logger.v(_fileText);
+                      final List<String> _importTexts = _fileText.split('\n');
+                      for (final element in _importTexts) {
+                        if (element.trim().isNotEmpty &&
+                            !element.startsWith('#')) {
+                          quickSearchController.addText(element);
+                        }
+                      }
+                    }
+                  }
+                  Get.back();
+                },
+                child: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    const Icon(LineIcons.fileImport).paddingOnly(right: 4),
+                    const Text('Import'),
+                  ],
+                ),
+              ),
               CupertinoDialogAction(
                   onPressed: () {
                     Get.back();
@@ -200,53 +252,6 @@ class QuickSearchListPage extends StatelessWidget {
               _removeAll();
             },
           ),
-          // 本地导入
-          /*CupertinoButton(
-            minSize: 40,
-            padding: const EdgeInsets.all(0),
-            child: const Icon(
-              LineIcons.fileImport,
-              size: 26,
-            ),
-            onPressed: () async {
-              final FilePickerResult? result =
-                  await FilePicker.platform.pickFiles();
-              if (result != null) {
-                final File _file = File(result.files.single.path!);
-                final String _fileText = _file.readAsStringSync();
-                if (_fileText.contains('#FEhViewer')) {
-                  logger.v(_fileText);
-                  final List<String> _importTexts = _fileText.split('\n');
-                  _importTexts.forEach((String element) {
-                    if (element.trim().isNotEmpty && !element.startsWith('#'))
-                      quickSearchController.addText(element);
-                  });
-                }
-              }
-            },
-          ),
-          // 本地导出
-          CupertinoButton(
-            minSize: 40,
-            padding: const EdgeInsets.all(0),
-            child: const Icon(
-              LineIcons.fileExport,
-              size: 26,
-            ),
-            onPressed: () async {
-              final List<String> _searchTextList =
-                  quickSearchController.searchTextList;
-              if (_searchTextList.isNotEmpty) {
-                final String _searchText =
-                    '#FEhViewer\n${_searchTextList.join('\n')}';
-                logger.v(_searchText);
-
-                final File _tempFlie = await _getLocalFile();
-                _tempFlie.writeAsStringSync(_searchText);
-                Share.shareFiles([_tempFlie.path]);
-              }
-            },
-          ),*/
           CupertinoButton(
             minSize: 40,
             padding: const EdgeInsets.all(0),
