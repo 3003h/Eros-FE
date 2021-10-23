@@ -19,10 +19,13 @@ import 'package:fehviewer/utils/utility.dart';
 import 'package:fehviewer/utils/vibrate.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter_app_restart/flutter_app_restart.dart';
 import 'package:flutter_downloader/flutter_downloader.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
+import 'package:line_icons/line_icons.dart';
 import 'package:path/path.dart' as path;
+import 'package:restart_app/restart_app.dart';
 import 'package:share/share.dart';
 
 enum DownloadType {
@@ -390,6 +393,41 @@ class DownloadViewController extends GetxController {
     return _zipPath;
   }
 
+  Future<void> _readTaskInfoFile(File importFile) async {
+    final decoder = ZipDecoder();
+    final archive = decoder.decodeBytes(importFile.readAsBytesSync());
+    final archivePath = path.join(Global.tempPath, 'archive');
+
+    for (final file in archive) {
+      final filename = file.name;
+      if (file.isFile && filename == EHConst.DB_NAME) {
+        final data = file.content as List<int>;
+        File(path.join(archivePath, filename))
+          ..createSync(recursive: true)
+          ..writeAsBytesSync(data);
+      } else {
+        Directory(path.join(archivePath, filename)).create(recursive: true);
+      }
+    }
+
+    final _pathImportDB = path.join(archivePath, EHConst.DB_NAME);
+    final _importDBFile = File(_pathImportDB);
+    if (!_importDBFile.existsSync()) {
+      return;
+    }
+
+    final importDb = await Global.getDatabase(path: _pathImportDB);
+    final allImageTasks = await importDb.imageTaskDao.findAllTasks();
+    final allTasks = await importDb.galleryTaskDao.findAllGalleryTasks();
+
+    logger.d('import task ${allTasks.length}');
+
+    // 从临时db导入任务数据
+    final ehDB = await Global.getDatabase();
+    await ehDB.imageTaskDao.insertOrReplaceImageTasks(allImageTasks);
+    await ehDB.galleryTaskDao.insertOrReplaceTasks(allTasks);
+  }
+
   String _getLocalFilePath() {
     final DateTime _now = DateTime.now();
     final DateFormat formatter = DateFormat('yyyyMMdd_HHmmss');
@@ -424,11 +462,46 @@ class DownloadViewController extends GetxController {
   }
 
   Future importTaskInfoFile() async {
+    await requestManageExternalStoragePermission();
     final FilePickerResult? result = await FilePicker.platform.pickFiles();
+    logger.d('import file $result');
     if (result != null) {
       final File _file = File(result.files.single.path!);
+      await _readTaskInfoFile(_file);
+      _downloadController.initGalleryTasks();
+      update([idDownloadGalleryView]);
+      await _showRestartAppDialog();
     }
   }
+}
+
+Future<void> _showRestartAppDialog() async {
+  return showCupertinoDialog<void>(
+    context: Get.overlayContext!,
+    barrierDismissible: true,
+    builder: (BuildContext context) {
+      return CupertinoAlertDialog(
+        title: const Text('Restart App'),
+        content: const Text('重启应用以生效?'),
+        actions: [
+          CupertinoDialogAction(
+            onPressed: () async {
+              Get.back();
+              // Restart.restartApp();
+              await FlutterRestart.restartApp();
+            },
+            child: const Text('Restart Now'),
+          ),
+          CupertinoDialogAction(
+            onPressed: () async {
+              Get.back();
+            },
+            child: Text(L10n.of(context).cancel),
+          ),
+        ],
+      );
+    },
+  );
 }
 
 Future<String?> _exportGallery(

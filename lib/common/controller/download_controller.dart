@@ -249,7 +249,7 @@ class DownloadController extends GetxController {
     //     'DownloadController onInit multiDownload:${ehConfigService.multiDownload}');
     dState.executor = Executor(concurrency: ehConfigService.multiDownload);
     allowMediaScan(ehConfigService.allowMediaScan);
-    _initGalleryTasks();
+    initGalleryTasks();
   }
 
   /// 移除任务
@@ -301,7 +301,7 @@ class DownloadController extends GetxController {
     dState.executor = Executor(concurrency: ehConfigService.multiDownload);
 
     // 重新加入
-    _initGalleryTasks();
+    initGalleryTasks();
   }
 
   void _addAllImages(int gid, List<GalleryImage> galleryImages) {
@@ -668,20 +668,16 @@ class DownloadController extends GetxController {
     );
   }
 
-  Future<void> _initGalleryTasks() async {
-    // logger5.v(' _initGalleryTasks');
+  Future<void> initGalleryTasks() async {
     GalleryTaskDao _galleryTaskDao;
-    // ImageTaskDao _imageTaskDao;
     try {
       _galleryTaskDao = await getGalleryTaskDao();
-      // _imageTaskDao = await getImageTaskDao();
     } catch (e, stack) {
       logger.e('$e\n$stack ');
       rethrow;
     }
 
     final _tasks = await _galleryTaskDao.findAllGalleryTasks();
-    // dState.galleryTaskList(_tasks);
 
     // 添加到map中
     for (final _task in _tasks) {
