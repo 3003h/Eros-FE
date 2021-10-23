@@ -6,6 +6,7 @@ import 'package:fehviewer/common/controller/download_controller.dart';
 import 'package:fehviewer/common/epub/epub_builder.dart';
 import 'package:fehviewer/common/global.dart';
 import 'package:fehviewer/common/isolate_download/download_manager.dart';
+import 'package:fehviewer/const/const.dart';
 import 'package:fehviewer/generated/l10n.dart';
 import 'package:fehviewer/models/index.dart';
 import 'package:fehviewer/pages/tab/view/download_page.dart';
@@ -365,9 +366,25 @@ class DownloadViewController extends GetxController {
     final _zipPath = _getLocalFilePath();
     encoder.create(_zipPath);
 
+    // 临时db
+    final tempDBPath = path.join(Global.tempPath, 'export', EHConst.DB_NAME);
+    final tempDBFile = File(tempDBPath);
+    if (tempDBFile.existsSync()) {
+      tempDBFile.deleteSync(recursive: true);
+    }
+
+    final ehDb = await Global.getDatabase();
+    final allImageTasks = await ehDb.imageTaskDao.findAllTasks();
+    final allTasks = await ehDb.galleryTaskDao.findAllGalleryTasks();
+
+    // 导出任务数据表到临时db中
+    final tempDB = await Global.getDatabase(path: tempDBPath);
+    await tempDB.imageTaskDao.insertOrReplaceImageTasks(allImageTasks);
+    await tempDB.galleryTaskDao.insertOrReplaceTasks(allTasks);
+    tempDB.close();
+
     // 添加文件
-    final srcFile = File(Global.dbPath);
-    encoder.addFile(srcFile);
+    encoder.addFile(tempDBFile);
 
     encoder.close();
     return _zipPath;

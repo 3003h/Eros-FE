@@ -866,7 +866,7 @@ class DownloadController extends GetxController {
                 (lastCountsTopCheck.length * periodSeconds))
             .round();
 
-    logger.d(
+    logger.v(
         'speedCheck:${renderSize(speedCheck)}\n${lastCountsTopCheck.join(',')}');
 
     // 用速度检查是否需要重试
@@ -892,7 +892,7 @@ class DownloadController extends GetxController {
     final speedShow = (max(totCurCount - lastCountsTopShow.reversed.first, 0) /
             (lastCountsTopShow.length * periodSeconds))
         .round();
-    logger.d(
+    logger.v(
         'speedShow:${renderSize(speedShow)}\n${lastCountsTopShow.join(',')}');
     dState.downloadSpeeds[gid] = renderSize(speedShow);
     _updateDownloadView(['DownloadGalleryItem_$gid']);

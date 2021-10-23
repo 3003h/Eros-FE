@@ -87,9 +87,9 @@ class Global {
   User get user => profile.user;
   set user(User val) => profile = profile.copyWith(user: val);
 
-  static Future<EhDatabase> getDatabase() async {
+  static Future<EhDatabase> getDatabase({String? path}) async {
     return await $FloorEhDatabase
-        .databaseBuilder(Global.dbPath)
+        .databaseBuilder(path ?? Global.dbPath)
         .addMigrations(ehMigrations)
         .build();
   }
