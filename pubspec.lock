@@ -568,6 +568,13 @@ packages:
     description: flutter
     source: sdk
     version: "0.0.0"
+  flutter_app_restart:
+    dependency: "direct main"
+    description:
+      name: flutter_app_restart
+      url: "https://pub.flutter-io.cn"
+    source: hosted
+    version: "1.0.0"
   flutter_blurhash:
     dependency: transitive
     description:
@@ -1256,6 +1263,13 @@ packages:
       url: "https://pub.flutter-io.cn"
     source: hosted
     version: "0.4.1"
+  restart_app:
+    dependency: "direct main"
+    description:
+      name: restart_app
+      url: "https://pub.flutter-io.cn"
+    source: hosted
+    version: "1.1.0"
   rxdart:
     dependency: transitive
     description:

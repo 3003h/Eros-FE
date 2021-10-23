@@ -168,7 +168,7 @@ class _DownloadTabState extends State<DownloadTab> {
             CupertinoDialogAction(
               onPressed: () async {
                 Get.back();
-                controller.importTaskInfoFile();
+                await controller.importTaskInfoFile();
               },
               child: Row(
                 mainAxisSize: MainAxisSize.min,
