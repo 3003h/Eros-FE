@@ -16,6 +16,12 @@ abstract class GalleryTaskDao {
   @insert
   Future<void> insertTask(GalleryTask galleryTask);
 
+  @insert
+  Future<void> insertTasks(List<GalleryTask> galleryTasks);
+
+  @Insert(onConflict: OnConflictStrategy.replace)
+  Future<void> insertOrReplaceTasks(List<GalleryTask> galleryTasks);
+
   @Query('DELETE FROM GalleryTask WHERE gid = :gid')
   Future<void> deleteTaskByGid(int gid);
 
