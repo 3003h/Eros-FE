@@ -568,13 +568,6 @@ packages:
     description: flutter
     source: sdk
     version: "0.0.0"
-  flutter_app_restart:
-    dependency: "direct main"
-    description:
-      name: flutter_app_restart
-      url: "https://pub.flutter-io.cn"
-    source: hosted
-    version: "1.0.0"
   flutter_blurhash:
     dependency: transitive
     description:
@@ -687,15 +680,6 @@ packages:
       url: "https://pub.flutter-io.cn"
     source: hosted
     version: "5.1.0"
-  flutter_statusbar_manager:
-    dependency: "direct main"
-    description:
-      path: "."
-      ref: HEAD
-      resolved-ref: e81699cdf20d119135df80506302a667ff8c0b7e
-      url: "https://github.com/NarHakobyan/flutter_statusbar_manager.git"
-    source: git
-    version: "3.0.1"
   flutter_svg:
     dependency: transitive
     description:
@@ -711,12 +695,10 @@ packages:
   flutter_vibrate:
     dependency: "direct main"
     description:
-      path: "."
-      ref: HEAD
-      resolved-ref: "8f34ad419e446909fa6a9f823bf76fc028f29d00"
-      url: "https://github.com/honjow/flutter_vibrate.git"
-    source: git
-    version: "1.0.0"
+      name: flutter_vibrate
+      url: "https://pub.flutter-io.cn"
+    source: hosted
+    version: "1.3.0"
   flutter_web_plugins:
     dependency: transitive
     description: flutter
@@ -729,13 +711,6 @@ packages:
       url: "https://pub.flutter-io.cn"
     source: hosted
     version: "9.1.0"
-  fps_monitor:
-    dependency: "direct main"
-    description:
-      name: fps_monitor
-      url: "https://pub.flutter-io.cn"
-    source: hosted
-    version: "2.0.0"
   freezed_annotation:
     dependency: transitive
     description:
@@ -1123,13 +1098,6 @@ packages:
       url: "https://pub.flutter-io.cn"
     source: hosted
     version: "2.0.3"
-  pattern_lock:
-    dependency: "direct main"
-    description:
-      name: pattern_lock
-      url: "https://pub.flutter-io.cn"
-    source: hosted
-    version: "2.0.0"
   pedantic:
     dependency: transitive
     description:

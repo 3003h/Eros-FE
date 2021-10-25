@@ -12,9 +12,14 @@ import 'package:fehviewer/utils/toast.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:get/utils.dart';
 import 'package:permission_handler/permission_handler.dart';
 
 Future<void> requestManageExternalStoragePermission() async {
+  if (!GetPlatform.isAndroid) {
+    return;
+  }
   final PermissionStatus statusMStorage =
       await Permission.manageExternalStorage.status;
   logger.d('manageExternalStorage $statusMStorage');
@@ -33,6 +38,15 @@ Future<void> requestManageExternalStoragePermission() async {
       throw 'Unable to download, please authorize first~';
     }
   }
+}
+
+void setFullscreen() {
+  SystemChrome.setEnabledSystemUIMode(SystemUiMode.immersiveSticky);
+}
+
+void unsetFullscreen() {
+  SystemChrome.setEnabledSystemUIMode(SystemUiMode.edgeToEdge,
+      overlays: [SystemUiOverlay.top]);
 }
 
 double? initScaleWithSize({

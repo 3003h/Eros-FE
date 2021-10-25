@@ -59,6 +59,10 @@ class MessageLookup extends MessageLookupByLibrary {
         "dark_mode_effect": MessageLookupByLibrary.simpleMessage("深色模式效果"),
         "default_favorites": MessageLookupByLibrary.simpleMessage("默认收藏夹设置"),
         "delete": MessageLookupByLibrary.simpleMessage("删除"),
+        "delete_task": MessageLookupByLibrary.simpleMessage("删除任务"),
+        "delete_task_and_content":
+            MessageLookupByLibrary.simpleMessage("删除任务和下载内容"),
+        "delete_task_only": MessageLookupByLibrary.simpleMessage("仅删除任务"),
         "disabled": MessageLookupByLibrary.simpleMessage("停用"),
         "domain_fronting": MessageLookupByLibrary.simpleMessage("域名前置"),
         "done": MessageLookupByLibrary.simpleMessage("完成"),

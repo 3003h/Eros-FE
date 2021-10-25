@@ -255,6 +255,7 @@ class DownloadController extends GetxController {
   /// 移除任务
   Future<void> removeDownloadGalleryTask({
     required int gid,
+    bool shouldDeleteContent = true,
   }) async {
     GalleryTaskDao _galleryTaskDao;
     ImageTaskDao _imageTaskDao;
@@ -266,7 +267,7 @@ class DownloadController extends GetxController {
     }
     String? dirpath = _task.realDirPath;
     logger.d('dirPath: $dirpath');
-    if (dirpath != null) {
+    if (dirpath != null && shouldDeleteContent) {
       Directory(dirpath).delete(recursive: true);
     }
 

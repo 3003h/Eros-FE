@@ -64,6 +64,11 @@ class MessageLookup extends MessageLookupByLibrary {
         "default_favorites":
             MessageLookupByLibrary.simpleMessage("Default Favorites"),
         "delete": MessageLookupByLibrary.simpleMessage("刪除"),
+        "delete_task": MessageLookupByLibrary.simpleMessage("Delete Task"),
+        "delete_task_and_content":
+            MessageLookupByLibrary.simpleMessage("Delete task and content"),
+        "delete_task_only":
+            MessageLookupByLibrary.simpleMessage("Delete task only"),
         "disabled": MessageLookupByLibrary.simpleMessage("停用"),
         "domain_fronting": MessageLookupByLibrary.simpleMessage("域名前置"),
         "done": MessageLookupByLibrary.simpleMessage("Done"),

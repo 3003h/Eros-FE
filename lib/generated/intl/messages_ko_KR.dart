@@ -61,6 +61,11 @@ class MessageLookup extends MessageLookupByLibrary {
         "dark_mode_effect": MessageLookupByLibrary.simpleMessage("다크 모드 효과"),
         "default_favorites": MessageLookupByLibrary.simpleMessage("기본 즐겨찾기"),
         "delete": MessageLookupByLibrary.simpleMessage("지우기"),
+        "delete_task": MessageLookupByLibrary.simpleMessage("Delete Task"),
+        "delete_task_and_content":
+            MessageLookupByLibrary.simpleMessage("Delete task and content"),
+        "delete_task_only":
+            MessageLookupByLibrary.simpleMessage("Delete task only"),
         "disabled": MessageLookupByLibrary.simpleMessage("비활성화 됨"),
         "domain_fronting": MessageLookupByLibrary.simpleMessage("도메인 프론팅"),
         "done": MessageLookupByLibrary.simpleMessage("완료"),

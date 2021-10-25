@@ -3,7 +3,6 @@ import 'package:fehviewer/utils/logger.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:pattern_lock/pattern_lock.dart';
 
 class UnLockPage extends StatefulWidget {
   const UnLockPage({
@@ -55,40 +54,6 @@ class _UnLockPageState extends State<UnLockPage> {
             ),
           ),
         ));
-  }
-
-  Container _buildPatternLock(BuildContext context) {
-    return Container(
-      constraints: BoxConstraints(
-        maxHeight: context.mediaQueryShortestSide,
-        maxWidth: context.mediaQueryShortestSide,
-      ),
-      child: PatternLock(
-        notSelectedColor: CupertinoDynamicColor.resolve(
-            CupertinoColors.secondaryLabel, context),
-
-        // color of selected points.
-        selectedColor:
-            CupertinoDynamicColor.resolve(CupertinoColors.activeGreen, context),
-        // radius of points.
-        pointRadius: 10,
-        // whether show user's input and highlight selected points.
-        showInput: true,
-        // count of points horizontally and vertically.
-        dimension: 3,
-        // padding of points area relative to distance between points.
-        relativePadding: 0.7,
-        // needed distance from input to point to select point.
-        selectThreshold: 25,
-        // whether fill points.
-        fillPoints: true,
-        // callback that called when user's input complete. Called if user selected one or more points.
-        onInputComplete: (List<int> input) {
-          logger.v('pattern is $input');
-          controller.infoText = '$input';
-        },
-      ),
-    );
   }
 
   Widget _buildText(BuildContext context) {

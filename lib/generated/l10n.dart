@@ -1849,6 +1849,36 @@ class L10n {
       args: [],
     );
   }
+
+  /// `Delete Task`
+  String get delete_task {
+    return Intl.message(
+      'Delete Task',
+      name: 'delete_task',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Delete task only`
+  String get delete_task_only {
+    return Intl.message(
+      'Delete task only',
+      name: 'delete_task_only',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Delete task and content`
+  String get delete_task_and_content {
+    return Intl.message(
+      'Delete task and content',
+      name: 'delete_task_and_content',
+      desc: '',
+      args: [],
+    );
+  }
 }
 
 class AppLocalizationDelegate extends LocalizationsDelegate<L10n> {
