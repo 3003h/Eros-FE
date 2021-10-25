@@ -178,5 +178,8 @@
   "sync_read_progress": "同步阅读进度",
   "skip": "跳过",
   "export": "导出",
-  "read_from_clipboard": "从剪贴板读取"
+  "read_from_clipboard": "从剪贴板读取",
+  "delete_task": "删除任务",
+  "delete_task_only": "仅删除任务",
+  "delete_task_and_content": "删除任务和下载内容"
 }

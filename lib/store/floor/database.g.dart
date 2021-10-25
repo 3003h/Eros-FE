@@ -401,6 +401,13 @@ class _$ImageTaskDao extends ImageTaskDao {
   }
 
   @override
+  Future<void> insertOrReplaceImageTask(
+      GalleryImageTask galleryImageTask) async {
+    await _galleryImageTaskInsertionAdapter.insert(
+        galleryImageTask, OnConflictStrategy.replace);
+  }
+
+  @override
   Future<void> insertImageTasks(
       List<GalleryImageTask> galleryImageTasks) async {
     await _galleryImageTaskInsertionAdapter.insertList(

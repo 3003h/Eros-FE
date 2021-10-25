@@ -178,5 +178,8 @@
   "sync_read_progress": "Sync read progress",
   "skip": "Skip",
   "export": "Export",
-  "read_from_clipboard": "Read from clipboard"
+  "read_from_clipboard": "Read from clipboard",
+  "delete_task": "Delete Task",
+  "delete_task_only": "Delete task only",
+  "delete_task_and_content": "Delete task and content"
 }

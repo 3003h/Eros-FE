@@ -211,7 +211,8 @@ class DownloadGalleryItem extends GetView<DownloadViewController> {
   Widget _buildCover({bool cardType = false}) {
     return GestureDetector(
       child: DownloadItemCoverImage(
-        filePath: galleryTask.coverImage != null
+        filePath: (galleryTask.coverImage != null &&
+                galleryTask.coverImage!.isNotEmpty)
             ? path.join(galleryTask.realDirPath ?? '', galleryTask.coverImage)
             : null,
         url: galleryTask.coverUrl,

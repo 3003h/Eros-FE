@@ -18,7 +18,7 @@ import 'package:fehviewer/utils/vibrate.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_statusbar_manager/flutter_statusbar_manager.dart';
+// import 'package:flutter_statusbar_manager/flutter_statusbar_manager.dart';
 import 'package:get/get.dart';
 import 'package:orientation/orientation.dart';
 import 'package:path/path.dart' as path;
@@ -172,7 +172,8 @@ class ViewExtController extends GetxController {
     vState.sliderValue = vState.currentItemIndex / 1.0;
 
     if (GetPlatform.isIOS) {
-      FlutterStatusbarManager.setFullscreen(true);
+      setFullscreen();
+      // FlutterStatusbarManager.setFullscreen(true);
     }
     // FlutterStatusbarManager.setHidden(true,
     //     animation: StatusBarAnimation.SLIDE);
@@ -194,10 +195,12 @@ class ViewExtController extends GetxController {
     extendedPageController.dispose();
     vState.getMoreCancelToken.cancel();
 
-    FlutterStatusbarManager.setHidden(false,
-        animation: StatusBarAnimation.SLIDE);
-    FlutterStatusbarManager.setFullscreen(false);
-    FlutterStatusbarManager.setTranslucent(false);
+    unsetFullscreen();
+
+    // FlutterStatusbarManager.setHidden(false,
+    //     animation: StatusBarAnimation.SLIDE);
+    // FlutterStatusbarManager.setFullscreen(false);
+    // FlutterStatusbarManager.setTranslucent(false);
 
     // 恢复系统旋转设置
     logger.v('恢复系统旋转设置');
@@ -474,7 +477,8 @@ class ViewExtController extends GetxController {
     if (GetPlatform.isIOS) {
       if (!vState.showBar) {
         // show
-        FlutterStatusbarManager.setFullscreen(false);
+        // FlutterStatusbarManager.setFullscreen(false);
+        unsetFullscreen();
         vState.showBar = !vState.showBar;
         update([idViewBar]);
       } else {
@@ -482,7 +486,8 @@ class ViewExtController extends GetxController {
         vState.showBar = !vState.showBar;
         update([idViewBar]);
         // await Future.delayed(const Duration(milliseconds: 200));
-        FlutterStatusbarManager.setFullscreen(true);
+        // FlutterStatusbarManager.setFullscreen(true);
+        setFullscreen();
         // FlutterStatusbarManager.setHidden(true);
       }
     } else {

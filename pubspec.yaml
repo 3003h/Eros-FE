@@ -3,7 +3,7 @@ description: fehviewer
 
 publish_to: 'none' # Remove this line if you wish to publish to pub.dev
 
-version: 1.1.29+322
+version: 1.1.29+323
 
 environment:
   sdk: '>=2.14.0 <3.0.0'
@@ -74,9 +74,9 @@ dependencies:
   reorderables: ^0.4.1
   basic_utils: ^3.0.2
   # 震动
-  flutter_vibrate:
-    git:
-      url: https://github.com/honjow/flutter_vibrate.git
+  flutter_vibrate: ^1.3.0
+#     git:
+#       url: https://github.com/honjow/flutter_vibrate.git
   # 文件选择
   file_picker: ^4.1.2
   # 评星
@@ -93,14 +93,14 @@ dependencies:
   cloud_firestore: ^2.2.0
   pretty_dio_logger: ^1.2.0-beta-1
   translator: ^0.1.7
-  pattern_lock: ^2.0.0
+#   pattern_lock: ^2.0.0
   orientation: ^1.3.0
   vibration: ^1.7.4-nullsafety.0
   moor_flutter: ^4.0.0
   device_info: ^2.0.1
-  flutter_statusbar_manager:
-    git:
-      url: https://github.com/NarHakobyan/flutter_statusbar_manager.git
+#   flutter_statusbar_manager:
+#     git:
+#       url: https://github.com/jWinterDay/flutter_statusbar_manager.git
 #      ref: master
   flutter_easyrefresh: ^2.2.1
   flutter_markdown: ^0.6.2
@@ -113,7 +113,7 @@ dependencies:
   extended_text: ^7.0.0
   sprintf: ^6.0.0
   keframe: ^2.0.1
-  fps_monitor: ^2.0.0
+#   fps_monitor: ^2.0.0
   executor: ^2.2.2
   synchronized: ^3.0.0
   isolate_handler: ^1.0.0
@@ -143,7 +143,7 @@ dependencies:
   wakelock: ^0.5.3+3
   jinja: ^0.3.4
   restart_app: ^1.1.0
-  flutter_app_restart: ^1.0.0
+#   flutter_app_restart: ^1.0.0
 
 dev_dependencies:
   # flutter packages pub run build_runner build --delete-conflicting-outputs

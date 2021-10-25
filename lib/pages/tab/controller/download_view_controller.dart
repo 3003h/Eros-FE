@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:collection/collection.dart';
 import 'package:archive/archive_io.dart';
 import 'package:fehviewer/common/controller/archiver_download_controller.dart';
 import 'package:fehviewer/common/controller/download_controller.dart';
@@ -19,11 +20,10 @@ import 'package:fehviewer/utils/utility.dart';
 import 'package:fehviewer/utils/vibrate.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:flutter_app_restart/flutter_app_restart.dart';
+// import 'package:flutter_app_restart/flutter_app_restart.dart';
 import 'package:flutter_downloader/flutter_downloader.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
-import 'package:line_icons/line_icons.dart';
 import 'package:path/path.dart' as path;
 import 'package:restart_app/restart_app.dart';
 import 'package:share/share.dart';
@@ -143,7 +143,10 @@ class DownloadViewController extends GetxController {
   }
 
   // Archiver移除任务
-  void removeArchiverTask(int index) {
+  void removeArchiverTask(
+    int index, {
+    bool shouldDeleteContent = true,
+  }) {
     final String? _oriTaskid = archiverTasks[index].taskId;
     final String? _tag = archiverTasks[index].tag;
 
@@ -155,14 +158,22 @@ class DownloadViewController extends GetxController {
     // _archiverDownloadController.archiverTaskMap.remove(_tag);
     _archiverDownloadController.removeTask(_tag);
     FlutterDownloader.remove(
-        taskId: _oriTaskid ?? '', shouldDeleteContent: true);
+      taskId: _oriTaskid ?? '',
+      shouldDeleteContent: shouldDeleteContent,
+    );
     update([idDownloadArchiverView]);
   }
 
   // Gallery 移除任务
-  void removeGalleryTask(int index) {
+  void removeGalleryTask(
+    int index, {
+    bool shouldDeleteContent = true,
+  }) {
     final GalleryTask _task = galleryTasks[index];
-    _downloadController.removeDownloadGalleryTask(gid: _task.gid);
+    _downloadController.removeDownloadGalleryTask(
+      gid: _task.gid,
+      shouldDeleteContent: shouldDeleteContent,
+    );
     animatedGalleryListKey.currentState?.removeItem(
         index,
         (context, animation) =>
@@ -219,10 +230,8 @@ class DownloadViewController extends GetxController {
               // 删除下载项
               CupertinoActionSheetAction(
                 onPressed: () {
-                  type == DownloadType.archiver
-                      ? removeArchiverTask(taskIndex)
-                      : removeGalleryTask(taskIndex);
                   Get.back();
+                  _showDeleteDialog(taskIndex, type);
                 },
                 child: Text(
                   L10n.of(context).delete,
@@ -232,6 +241,51 @@ class DownloadViewController extends GetxController {
             ],
           );
         });
+  }
+
+  Future<void> _showDeleteDialog(int taskIndex, DownloadType type) async {
+    return showCupertinoDialog<void>(
+      context: Get.overlayContext!,
+      barrierDismissible: true,
+      builder: (BuildContext context) {
+        return CupertinoAlertDialog(
+          title: Text(L10n.of(context).delete_task),
+          // content: const Text('Import and Export download task'),
+          actions: [
+            CupertinoDialogAction(
+              onPressed: () async {
+                Get.back();
+                type == DownloadType.archiver
+                    ? removeArchiverTask(taskIndex, shouldDeleteContent: false)
+                    : removeGalleryTask(taskIndex, shouldDeleteContent: false);
+              },
+              child: Text(
+                L10n.of(context).delete_task_only,
+                style: const TextStyle(color: CupertinoColors.destructiveRed),
+              ),
+            ),
+            CupertinoDialogAction(
+              onPressed: () async {
+                Get.back();
+                type == DownloadType.archiver
+                    ? removeArchiverTask(taskIndex)
+                    : removeGalleryTask(taskIndex);
+              },
+              child: Text(
+                L10n.of(context).delete_task_and_content,
+                style: const TextStyle(color: CupertinoColors.destructiveRed),
+              ),
+            ),
+            CupertinoDialogAction(
+              onPressed: () async {
+                Get.back();
+              },
+              child: Text(L10n.of(context).cancel),
+            ),
+          ],
+        );
+      },
+    );
   }
 
   Future<void> _showExportSheet({GalleryTask? task}) async {
@@ -424,8 +478,61 @@ class DownloadViewController extends GetxController {
 
     // 从临时db导入任务数据
     final ehDB = await Global.getDatabase();
-    await ehDB.imageTaskDao.insertOrReplaceImageTasks(allImageTasks);
-    await ehDB.galleryTaskDao.insertOrReplaceTasks(allTasks);
+
+    final taskMap = <int, GalleryTask?>{};
+    final taskCompletMap = <int, int>{};
+
+    // 导入 imagetask
+    for (final imageTask in allImageTasks) {
+      late GalleryTask? _task;
+      if (taskMap[imageTask.gid] != null) {
+        _task = taskMap[imageTask.gid];
+      } else {
+        _task = allTasks
+            .firstWhereOrNull((element) => element.gid == imageTask.gid);
+        taskMap[imageTask.gid] = _task;
+      }
+      if (_task == null || _task.realDirPath == null) {
+        continue;
+      }
+
+      final _filePath = path.join(_task.realDirPath!, imageTask.filePath);
+      // logger.d(_filePath);
+
+      taskCompletMap.putIfAbsent(imageTask.gid, () => 0);
+      if (File(_filePath).existsSync()) {
+        // logger.d(
+        //     'insertOrReplaceImageTask complete ${imageTask.gid}/${imageTask.filePath}');
+        await ehDB.imageTaskDao.insertOrReplaceImageTask(
+            imageTask.copyWith(status: TaskStatus.complete.value));
+        taskCompletMap.update(imageTask.gid, (val) => val + 1,
+            ifAbsent: () => 1);
+      } else {
+        // logger.d(
+        //     'insertOrReplaceImageTask enqueued ${imageTask.gid}/${imageTask.filePath}');
+        await ehDB.imageTaskDao.insertOrReplaceImageTask(
+            imageTask.copyWith(status: TaskStatus.enqueued.value));
+      }
+    }
+
+    // 导入task
+    final allOriTasks = await ehDB.galleryTaskDao.findAllGalleryTasks();
+    for (final task in allTasks) {
+      GalleryTask? _oriTask =
+          allOriTasks.firstWhereOrNull((element) => element.gid == task.gid);
+      // 插入新的任务
+      if (_oriTask == null) {
+        final _task = task.copyWith(
+          coverImage: '',
+          status: TaskStatus.paused.value,
+          completCount: taskCompletMap[task.gid] ?? 0,
+        );
+        logger.d('insert ${_task.toString()}');
+        await ehDB.galleryTaskDao.insertTask(_task);
+        _downloadController.dState.galleryTaskMap[_task.gid] = _task;
+        animateGalleryListAddTask();
+      }
+    }
   }
 
   String _getLocalFilePath() {
@@ -463,6 +570,7 @@ class DownloadViewController extends GetxController {
 
   Future importTaskInfoFile() async {
     await requestManageExternalStoragePermission();
+
     final FilePickerResult? result = await FilePicker.platform.pickFiles();
     logger.d('import file $result');
     if (result != null) {
@@ -470,7 +578,7 @@ class DownloadViewController extends GetxController {
       await _readTaskInfoFile(_file);
       _downloadController.initGalleryTasks();
       update([idDownloadGalleryView]);
-      await _showRestartAppDialog();
+      // await _showRestartAppDialog();
     }
   }
 }
@@ -487,8 +595,8 @@ Future<void> _showRestartAppDialog() async {
           CupertinoDialogAction(
             onPressed: () async {
               Get.back();
-              // Restart.restartApp();
-              await FlutterRestart.restartApp();
+              await Restart.restartApp();
+              // await FlutterRestart.restartApp();
             },
             child: const Text('Restart Now'),
           ),
