@@ -20,10 +20,6 @@
 
 UI 方面主要参考的[E-HentaiViewer](https://github.com/kayanouriko/E-HentaiViewer)
 
-因为是 flutter 所以也是跨平台支持的，测试的平台主要有 \
-iOS 14 : iPhone XR / 12 / iPad Pro 2018 \
-Android 11 : MIUI12.5/ MI K40
-
 现有问题:
 
 - 列表滑动可能会有小卡顿。没有原生应用那么流畅

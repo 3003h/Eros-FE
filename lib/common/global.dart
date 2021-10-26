@@ -48,7 +48,8 @@ DioHttpConfig ehDioConfig = DioHttpConfig(
   baseUrl: EHConst.EH_BASE_URL,
   cookiesPath: Global.appSupportPath,
   connectTimeout: 20000,
-  sendTimeout: 10000,
+  sendTimeout: 8000,
+  receiveTimeout: 10000,
 );
 
 // 全局配置

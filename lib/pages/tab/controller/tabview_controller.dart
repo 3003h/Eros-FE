@@ -61,6 +61,7 @@ class TabViewController extends GetxController
   FetchListClient? fetchList;
 
   String? _curFavcat;
+
   String get curFavcat {
     return _curFavcat ?? _ehConfigService.lastShowFavcat ?? 'a';
   }
@@ -136,21 +137,19 @@ class TabViewController extends GetxController
       cancelToken: cancelToken,
     );
 
-    try {
-      // final Future<GalleryList?>? rult = fetchNormal?.call(
-      //   cats: cats ?? _catNum,
-      //   toplist: currToplist,
-      //   refresh: refresh,
-      //   cancelToken: cancelToken,
-      // );
+    pageState = PageState.Loading;
 
+    try {
       FetchListClient fetchListClient = getFetchListClient(fetchConfig);
       final Future<GalleryList?> rult = fetchListClient.fetch();
+
+      pageState = PageState.None;
 
       return rult;
     } on EhError catch (eherror) {
       logger.e('type:${eherror.type}\n${eherror.message}');
       showToast(eherror.message);
+      pageState = PageState.LoadingError;
       rethrow;
     }
   }
@@ -243,7 +242,7 @@ class TabViewController extends GetxController
 
       final List<GalleryItem> rultList = rult.gallerys ?? [];
 
-      logger.d('ori len:${state?.length}');
+      logger.v('ori len:${state?.length}');
 
       if (rultList.isNotEmpty &&
           state?.indexWhere((GalleryItem e) => e.gid == rultList.first.gid) ==
@@ -253,6 +252,8 @@ class TabViewController extends GetxController
       }
 
       final insertIndex = state?.length ?? 0;
+
+      logger.v('insertIndex $insertIndex');
 
       change([...?state, ...rultList], status: RxStatus.success());
 
@@ -284,15 +285,6 @@ class TabViewController extends GetxController
     await Future<void>.delayed(const Duration(milliseconds: 100));
 
     try {
-      // final GalleryList? rult = await fetchNormal?.call(
-      //   page: curPage.value - 1,
-      //   cats: cats ?? _catNum,
-      //   refresh: true,
-      //   cancelToken: cancelToken,
-      //   favcat: curFavcat,
-      //   toplist: currToplist,
-      // );
-
       final fetchConfig = FetchParams(
         page: curPage.value - 1,
         cats: cats ?? _catNum,
@@ -336,14 +328,6 @@ class TabViewController extends GetxController
     final int _catNum = _ehConfigService.catFilter.value;
 
     change(state, status: RxStatus.loading());
-    // final rult = await fetchNormal?.call(
-    //   page: page,
-    //   cats: cats ?? _catNum,
-    //   refresh: true,
-    //   cancelToken: cancelToken,
-    //   favcat: curFavcat,
-    //   toplist: currToplist,
-    // );
 
     final fetchConfig = FetchParams(
       page: page,

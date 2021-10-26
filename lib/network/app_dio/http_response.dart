@@ -78,7 +78,7 @@ HttpException _parseException(Exception error) {
       case DioErrorType.connectTimeout:
       case DioErrorType.receiveTimeout:
       case DioErrorType.sendTimeout:
-        return NetworkException(message: error.error.message as String?);
+        return NetworkException(message: error.error as String?);
       case DioErrorType.cancel:
         return CancelException(error.error.message as String?);
       case DioErrorType.response:
