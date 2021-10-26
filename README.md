@@ -25,10 +25,6 @@ App Strings: `lib/l10n/{lang}.arb`
 
 The main reference for UI is [E-HentaiViewer](https://github.com/kayanouriko/E-HentaiViewer)
 
-Because it is flutter, so it is also cross-platform support, the main platforms tested are \
-iOS 14 : iPhone XR / 12 / iPad Pro 2018 \
-Android 11 : MIUI12.5/ MI K40
-
 Current Issues:
 
 - List sliding may have a small lag. Not as smooth as native apps

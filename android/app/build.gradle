@@ -85,6 +85,11 @@ android {
             minifyEnabled true
             shrinkResources true
         }
+        debug {
+            signingConfig signingConfigs.release
+            minifyEnabled true
+            shrinkResources true
+        }
     }
 }
 
