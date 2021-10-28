@@ -1,9 +1,11 @@
 import 'package:fehviewer/common/controller/webdav_controller.dart';
 import 'package:fehviewer/common/global.dart';
+import 'package:fehviewer/common/service/layout_service.dart';
 import 'package:fehviewer/common/service/theme_service.dart';
 import 'package:fehviewer/generated/l10n.dart';
 import 'package:fehviewer/models/base/eh_models.dart';
 import 'package:fehviewer/pages/setting/setting_base.dart';
+import 'package:fehviewer/route/routes.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
 import 'package:line_icons/line_icons.dart';
@@ -43,9 +45,17 @@ class WebDavSetting extends GetView<WebdavController> {
               LineIcons.alternateSignIn,
               size: 28,
             ),
-            onPressed: () {
-              showWebDAVLogin(context);
-            });
+            onPressed: () async {
+              // showWebDAVLogin(context);
+              final result = await Get.toNamed(
+                EHRoutes.loginWebDAV,
+                id: isLayoutLarge ? 2 : null,
+              );
+              if (result != null && result is bool && result) {
+                Get.back();
+              }
+            },
+          );
   }
 }
 
@@ -123,70 +133,68 @@ Future<void> showWebDAVLogin(BuildContext context) async {
     context: context,
     builder: (BuildContext context) {
       return CupertinoAlertDialog(
-        content: Container(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: <Widget>[
-              CupertinoTextField(
+        content: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: <Widget>[
+            CupertinoTextField(
+              decoration: BoxDecoration(
+                color: ehTheme.textFieldBackgroundColor,
+                borderRadius: const BorderRadius.all(Radius.circular(8.0)),
+              ),
+              clearButtonMode: OverlayVisibilityMode.editing,
+              controller: _urlController,
+              placeholder: 'Url',
+              autofocus: true,
+              onEditingComplete: () {
+                // 点击键盘完成
+                FocusScope.of(context).requestFocus(_nodeUname);
+              },
+            ),
+            Container(
+              height: 10,
+            ),
+            CupertinoTextField(
+              decoration: BoxDecoration(
+                color: ehTheme.textFieldBackgroundColor,
+                borderRadius: const BorderRadius.all(Radius.circular(8.0)),
+              ),
+              clearButtonMode: OverlayVisibilityMode.editing,
+              controller: _unameController,
+              placeholder: 'User',
+              focusNode: _nodeUname,
+              onEditingComplete: () {
+                // 点击键盘完成
+                FocusScope.of(context).requestFocus(_nodePwd);
+              },
+            ),
+            Container(
+              height: 10,
+            ),
+            GetBuilder<WebdavController>(builder: (logic) {
+              return CupertinoTextField(
                 decoration: BoxDecoration(
                   color: ehTheme.textFieldBackgroundColor,
                   borderRadius: const BorderRadius.all(Radius.circular(8.0)),
                 ),
                 clearButtonMode: OverlayVisibilityMode.editing,
-                controller: _urlController,
-                placeholder: 'Url',
-                autofocus: true,
-                onEditingComplete: () {
+                controller: _pwdController,
+                placeholder: 'Password',
+                focusNode: _nodePwd,
+                obscureText: true,
+                onEditingComplete: () async {
                   // 点击键盘完成
-                  FocusScope.of(context).requestFocus(_nodeUname);
+                  final rult = await logic.addWebDAVProfile(
+                    _urlController.text,
+                    user: _unameController.text,
+                    pwd: _pwdController.text,
+                  );
+                  if (rult) {
+                    Get.back();
+                  }
                 },
-              ),
-              Container(
-                height: 10,
-              ),
-              CupertinoTextField(
-                decoration: BoxDecoration(
-                  color: ehTheme.textFieldBackgroundColor,
-                  borderRadius: const BorderRadius.all(Radius.circular(8.0)),
-                ),
-                clearButtonMode: OverlayVisibilityMode.editing,
-                controller: _unameController,
-                placeholder: 'User',
-                focusNode: _nodeUname,
-                onEditingComplete: () {
-                  // 点击键盘完成
-                  FocusScope.of(context).requestFocus(_nodePwd);
-                },
-              ),
-              Container(
-                height: 10,
-              ),
-              GetBuilder<WebdavController>(builder: (logic) {
-                return CupertinoTextField(
-                  decoration: BoxDecoration(
-                    color: ehTheme.textFieldBackgroundColor,
-                    borderRadius: const BorderRadius.all(Radius.circular(8.0)),
-                  ),
-                  clearButtonMode: OverlayVisibilityMode.editing,
-                  controller: _pwdController,
-                  placeholder: 'Password',
-                  focusNode: _nodePwd,
-                  obscureText: true,
-                  onEditingComplete: () async {
-                    // 点击键盘完成
-                    final rult = await logic.addWebDAVProfile(
-                      _urlController.text,
-                      user: _unameController.text,
-                      pwd: _pwdController.text,
-                    );
-                    if (rult) {
-                      Get.back();
-                    }
-                  },
-                );
-              }),
-            ],
-          ),
+              );
+            }),
+          ],
         ),
         actions: <Widget>[
           CupertinoDialogAction(

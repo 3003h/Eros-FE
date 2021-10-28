@@ -50,6 +50,8 @@ class LogPage extends StatelessWidget {
 }
 
 class CustomHostsListView extends StatelessWidget {
+  CustomHostsListView({Key? key}) : super(key: key);
+
   final LogService logService = Get.find();
   final ScrollController _controller = ScrollController();
 
@@ -101,20 +103,18 @@ class LogFileItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      child: SelectorSettingItem(
-        title: fileName,
-        onTap: () {
-          Get.to(
-            () => LogViewPage(
-              title: fileName,
-              index: index,
-            ),
-            id: isLayoutLarge ? 2 : null,
-            transition: isLayoutLarge ? Transition.rightToLeft : null,
-          );
-        },
-      ),
+    return SelectorSettingItem(
+      title: fileName,
+      onTap: () {
+        Get.to(
+          () => LogViewPage(
+            title: fileName,
+            index: index,
+          ),
+          id: isLayoutLarge ? 2 : null,
+          transition: isLayoutLarge ? Transition.rightToLeft : null,
+        );
+      },
     );
   }
 }

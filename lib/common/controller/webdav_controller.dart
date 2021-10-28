@@ -3,9 +3,10 @@ import 'dart:io';
 import 'dart:typed_data';
 
 import 'package:dio/dio.dart';
-import 'package:encrypt/encrypt.dart';
+import 'package:encrypt/encrypt.dart' as encrypt;
 import 'package:fehviewer/models/base/eh_models.dart';
 import 'package:fehviewer/utils/logger.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:path/path.dart' as path;
@@ -29,7 +30,7 @@ class WebdavController extends GetxController {
 
   WebdavProfile get webdavProfile => Get.find();
 
-  bool get validAccount => webdavProfile.url.isNotEmpty;
+  bool get validAccount => webdavProfile.user?.isNotEmpty ?? false;
 
   bool isLongining = false;
 
@@ -39,9 +40,47 @@ class WebdavController extends GetxController {
   bool get syncHistory => _syncHistory;
   bool get syncReadProgress => _syncReadProgress;
 
-  late final Key _key;
-  late final IV _iv;
-  late final Encrypter _encrypter;
+  late final encrypt.Key _key;
+  late final encrypt.IV _iv;
+  late final encrypt.Encrypter _encrypter;
+
+  // url
+  final TextEditingController urlController = TextEditingController();
+
+  // user
+  final TextEditingController usernameController = TextEditingController();
+
+  // passwd
+  final TextEditingController passwdController = TextEditingController();
+
+  final FocusNode nodeUser = FocusNode();
+  final FocusNode nodePwd = FocusNode();
+
+  bool loadingLogin = false;
+  bool obscurePasswd = true;
+
+  void switchObscure() {
+    obscurePasswd = !obscurePasswd;
+    update();
+  }
+
+  Future<bool?> pressLoginWebDAV() async {
+    if (loadingLogin) {
+      return null;
+    }
+
+    loadingLogin = true;
+    update();
+    final rult = await addWebDAVProfile(
+      urlController.text,
+      user: usernameController.text,
+      pwd: passwdController.text,
+    );
+
+    loadingLogin = false;
+    update();
+    return rult;
+  }
 
   set syncHistory(bool val) {
     final _dav = webdavProfile.copyWith(syncHistory: val);
@@ -69,9 +108,9 @@ class WebdavController extends GetxController {
       syncReadProgress = webdavProfile.syncReadProgress ?? false;
     }
 
-    _key = Key.fromUtf8(kAESKey);
-    _iv = IV.fromUtf8(kAESIV);
-    _encrypter = Encrypter(AES(_key));
+    _key = encrypt.Key.fromUtf8(kAESKey);
+    _iv = encrypt.IV.fromUtf8(kAESIV);
+    _encrypter = encrypt.Encrypter(encrypt.AES(_key));
   }
 
   void closeClient() {

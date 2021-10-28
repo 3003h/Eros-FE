@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:line_icons/line_icons.dart';
 
-import '../controller/login_ext_controller.dart';
+import '../controller/login_controller.dart';
 
 class LoginExtPage extends GetView<LoginController> {
   const LoginExtPage({Key? key}) : super(key: key);
@@ -50,7 +50,7 @@ class LoginExtPage extends GetView<LoginController> {
                         placeholderStyle: _placeholderStyle,
                         prefix: Row(
                           children: [
-                            Icon(LineIcons.user).paddingOnly(right: 4.0),
+                            const Icon(LineIcons.user).paddingOnly(right: 4.0),
                             Text(L10n.of(context).user_name),
                           ],
                         ),

@@ -26,6 +26,8 @@ class EHRoutes {
   static const String login = '/login';
   static const String webLogin = '/webLogin';
 
+  static const String loginWebDAV = '/loginWebDAV';
+
   static const String popular = '/popular';
   static const String watched = '/watched';
   static const String gallery = '/gallery';
