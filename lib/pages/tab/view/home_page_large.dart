@@ -21,6 +21,7 @@ import 'package:fehviewer/pages/setting/log_page.dart';
 import 'package:fehviewer/pages/setting/search_setting_page.dart';
 import 'package:fehviewer/pages/setting/security_setting_page.dart';
 import 'package:fehviewer/pages/setting/tab_setting.dart';
+import 'package:fehviewer/pages/setting/view/login_webdav.dart';
 import 'package:fehviewer/pages/setting/webdav_setting_page.dart';
 import 'package:fehviewer/pages/tab/controller/tabhome_controller.dart';
 import 'package:fehviewer/pages/tab/view/download_page.dart';
@@ -232,6 +233,11 @@ class TabHomeLarge extends GetView<TabHomeController> {
                             return GetPageRoute(
                               settings: settings,
                               page: () => const EhMySettingsPage(),
+                            );
+                          case EHRoutes.loginWebDAV:
+                            return GetPageRoute(
+                              settings: settings,
+                              page: () => const LoginWebDAV(),
                             );
                           default:
                             return GetPageRoute(

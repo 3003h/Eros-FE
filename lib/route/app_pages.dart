@@ -8,7 +8,7 @@ import 'package:fehviewer/pages/gallery/view/gallery_info_page.dart';
 import 'package:fehviewer/pages/gallery/view/gallery_page.dart';
 import 'package:fehviewer/pages/image_view/controller/view_ext_contorller.dart';
 import 'package:fehviewer/pages/image_view/view/view_page.dart';
-import 'package:fehviewer/pages/login/controller/login_ext_controller.dart';
+import 'package:fehviewer/pages/login/controller/login_controller.dart';
 import 'package:fehviewer/pages/login/view/login_page.dart';
 import 'package:fehviewer/pages/login/view/web_login_in.dart';
 import 'package:fehviewer/pages/setting/about_page.dart';
@@ -22,6 +22,7 @@ import 'package:fehviewer/pages/setting/log_page.dart';
 import 'package:fehviewer/pages/setting/search_setting_page.dart';
 import 'package:fehviewer/pages/setting/security_setting_page.dart';
 import 'package:fehviewer/pages/setting/tab_setting.dart';
+import 'package:fehviewer/pages/setting/view/login_webdav.dart';
 import 'package:fehviewer/pages/setting/view_setting_page.dart';
 import 'package:fehviewer/pages/setting/webdav_setting_page.dart';
 import 'package:fehviewer/pages/tab/bindings/splash_binding.dart';
@@ -75,11 +76,11 @@ class AppPages {
     ),
     GetPage(
       name: EHRoutes.ehSetting,
-      page: () => EhSettingPage(),
+      page: () => const EhSettingPage(),
     ),
     GetPage(
       name: EHRoutes.advancedSetting,
-      page: () => AdvancedSettingPage(),
+      page: () => const AdvancedSettingPage(),
       binding: BindingsBuilder(() => Get.lazyPut(() => CacheController())),
     ),
     GetPage(
@@ -194,11 +195,11 @@ class AppPages {
     ),
     GetPage(
       name: EHRoutes.customHosts,
-      page: () => CustomHostsPage(),
+      page: () => const CustomHostsPage(),
     ),
     GetPage(
       name: EHRoutes.webDavSetting,
-      page: () => WebDavSetting(),
+      page: () => const WebDavSetting(),
     ),
     GetPage(
       name: EHRoutes.logfile,
@@ -207,6 +208,10 @@ class AppPages {
     GetPage(
       name: EHRoutes.mySettings,
       page: () => const EhMySettingsPage(),
+    ),
+    GetPage(
+      name: EHRoutes.loginWebDAV,
+      page: () => const LoginWebDAV(),
     ),
   ];
 }

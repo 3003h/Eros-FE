@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:line_icons/line_icons.dart';
 
-import '../controller/login_ext_controller.dart';
+import '../controller/login_controller.dart';
 
 class LoginCookie extends GetView<LoginController> {
   const LoginCookie({Key? key}) : super(key: key);

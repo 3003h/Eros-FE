@@ -10,6 +10,8 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
 
 class CustomHostsPage extends StatelessWidget {
+  const CustomHostsPage({Key? key}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     final String _title = L10n.of(context).custom_hosts;
