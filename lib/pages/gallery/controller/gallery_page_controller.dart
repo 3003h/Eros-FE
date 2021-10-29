@@ -14,6 +14,7 @@ import 'package:fehviewer/component/exception/error.dart';
 import 'package:fehviewer/const/const.dart';
 import 'package:fehviewer/generated/l10n.dart';
 import 'package:fehviewer/models/base/eh_models.dart';
+import 'package:fehviewer/network/app_dio/exception.dart';
 import 'package:fehviewer/network/gallery_request.dart';
 import 'package:fehviewer/network/request.dart';
 import 'package:fehviewer/pages/gallery/controller/taginfo_controller.dart';
@@ -282,7 +283,7 @@ class GalleryPageController extends GetxController
 
       time.showTime('start get galleryItem');
       final fetchedGalleryItem = await getGalleryDetail(
-        inUrl: galleryItem?.url ?? '',
+        url: galleryItem?.url ?? '',
         refresh: refresh,
       );
       time.showTime('fetch galleryItem end');
@@ -334,6 +335,8 @@ class GalleryPageController extends GetxController
       update([GetIds.PAGE_VIEW_HEADER]);
       _itemController?.update([gid]);
       return galleryItem;
+    } on HttpException catch (e) {
+      throw EhError(error: e.message);
     } on DioError catch (e) {
       if (e.type == DioErrorType.response && e.response?.statusCode == 404) {
         logger.e('data: ${e.response?.data}');

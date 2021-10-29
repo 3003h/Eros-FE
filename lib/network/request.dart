@@ -5,6 +5,7 @@ import 'package:dio/dio.dart';
 import 'package:dio_http_cache/dio_http_cache.dart';
 import 'package:fehviewer/common/controller/advance_search_controller.dart';
 import 'package:fehviewer/common/global.dart';
+import 'package:fehviewer/common/parser/gallery_detail_parser.dart';
 import 'package:fehviewer/const/const.dart';
 import 'package:fehviewer/models/base/eh_models.dart';
 import 'package:fehviewer/pages/tab/fetch_list.dart';
@@ -124,7 +125,7 @@ Future<GalleryList?> getGallery({
 }
 
 Future<GalleryItem?> getGalleryDetail({
-  required String inUrl,
+  required String url,
   bool refresh = false,
   CancelToken? cancelToken,
 }) async {
@@ -136,13 +137,22 @@ Future<GalleryItem?> getGalleryDetail({
 
   DioHttpClient dioHttpClient = DioHttpClient(dioConfig: ehDioConfig);
   DioHttpResponse httpResponse = await dioHttpClient.get(
-    inUrl,
+    url,
     httpTransformer: GalleryHttpTransformer(),
     options: getCacheOptions(forceRefresh: refresh),
   );
   logger.v('httpResponse.ok ${httpResponse.ok}');
   if (httpResponse.ok && httpResponse.data is GalleryItem) {
     return httpResponse.data as GalleryItem;
+  } else {
+    // logger.e('${httpResponse.error}');
+    if (httpResponse.error?.code == 404) {
+      final errMsg = parseErrGallery(httpResponse.error?.data as String? ?? '');
+      logger.d('errMsg: $errMsg');
+      throw BadRequestException(
+          code: httpResponse.error?.code, message: errMsg);
+    }
+    throw httpResponse.error ?? UnknownException();
   }
 }
 
