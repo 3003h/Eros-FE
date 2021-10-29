@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:archive/archive_io.dart';
 import 'package:fehviewer/store/floor/entity/gallery_task.dart';
 import 'package:fehviewer/utils/logger.dart';
 import 'package:flutter/services.dart' show rootBundle;
@@ -8,6 +9,24 @@ import 'package:jinja/jinja.dart';
 import 'package:path/path.dart' as path;
 
 import '../global.dart';
+
+void compactZip(String outputPath, String inputDirPath) {
+  loggerTime.d('start compactZip');
+  final encoder = ZipFileEncoder();
+  encoder.create(outputPath);
+  encoder.addDirectory(Directory(inputDirPath), includeDirName: false);
+  encoder.close();
+  loggerTime.d('end compactZip');
+}
+
+void isolateCompactDir2Zip(List<String> para) {
+  final outputPath = para[0];
+  final inputDirPath = para[1];
+  final encoder = ZipFileEncoder();
+  encoder.create(outputPath);
+  encoder.addDirectory(Directory(inputDirPath), includeDirName: false);
+  encoder.close();
+}
 
 Future<String> buildEpub(GalleryTask task, {String? tempPath}) async {
   final _tempPath = tempPath ?? path.join(Global.tempPath, 'export_epub_temp');
