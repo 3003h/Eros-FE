@@ -3,9 +3,13 @@ import 'dart:io';
 import 'package:archive/archive_io.dart';
 import 'package:fehviewer/store/floor/entity/gallery_task.dart';
 import 'package:fehviewer/utils/logger.dart';
+import 'package:flutter/cupertino.dart';
+import 'package:flutter/foundation.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter/services.dart' show rootBundle;
-import 'package:get/get_utils/src/platform/platform.dart';
+import 'package:image/image.dart' as pImage;
 import 'package:jinja/jinja.dart';
+import 'package:palette_generator/palette_generator.dart';
 import 'package:path/path.dart' as path;
 
 import '../global.dart';
@@ -66,15 +70,43 @@ Future<String> buildEpub(GalleryTask task, {String? tempPath}) async {
   final fileContainer = File(path.join(metaPath, 'container.xml'));
   fileContainer.writeAsStringSync(containerText);
 
-  // 图片复制到 resourcesPath
+  // 画廊图片
   final _galleryDir = Directory(task.realDirPath!);
-  final _fileList = _galleryDir.listSync();
+  final _fileList = _galleryDir.listSync().whereType<File>().toList()
+    ..sort((a, b) => a.path.compareTo(b.path));
+
+  // 封面处理
+  final imageData = _fileList.first.readAsBytesSync();
+  final image = pImage.decodeImage(imageData)!;
+  // final trimRect = findTrim(image, mode: TrimMode.transparent);
+  // logger.d('trimRect $trimRect');
+
+  final paletteGenerator = await PaletteGenerator.fromImageProvider(
+    MemoryImage(imageData),
+    maximumColorCount: 20,
+  );
+  logger.d('${paletteGenerator.dominantColor?.color}');
+  final dColor = paletteGenerator.dominantColor?.color ?? Colors.black;
+
+  final backgroundImage =
+      pImage.Image(image.width, (image.width * 4 / 3).round()).fill(
+    pImage.Color.fromRgba(dColor.red, dColor.green, dColor.blue, dColor.alpha),
+  );
+
+  final cover = pImage.copyResize(
+      pImage.copyInto(backgroundImage, image, center: true),
+      width: 900);
+
+  logger.d('${cover.width} ${cover.height}');
+
+  final coverName = 'cover${path.extension(_fileList.first.path)}';
+  File(path.join(resourcesPath, coverName))
+      .writeAsBytesSync(pImage.encodeNamedImage(cover, _fileList.first.path)!);
+
+  // 图片复制到 resourcesPath
   for (final _file in _fileList) {
-    if ((await FileSystemEntity.type(_file.path)) ==
-        FileSystemEntityType.file) {
-      final srcFile = File(_file.path);
-      srcFile.copySync(path.join(resourcesPath, path.basename(srcFile.path)));
-    }
+    File(_file.path)
+        .copySync(path.join(resourcesPath, path.basename(_file.path)));
   }
 
   // 模板操作
@@ -121,11 +153,14 @@ Future<String> buildEpub(GalleryTask task, {String? tempPath}) async {
 
   // 写入 metadata.opf
   final metadata = metadataTemplate.render(
-    title: task.title,
-    fileNameList: _fileNameList,
-    coverName: _fileNameList.first['name'],
-    coverExtension: _fileNameList.first['extension'],
-  );
+      title: task.title,
+      fileNameList: _fileNameList,
+      // coverName: _fileNameList.first['name'],
+      coverName: coverName,
+      // coverExtension: _fileNameList.first['extension'],
+      coverExtension: path.extension(coverName) == '.jpg'
+          ? 'jpeg'
+          : path.extension(coverName).split('.').last.toLowerCase());
   final metadataFile = File(path.join(oebpsPath, 'metadata.opf'));
   metadataFile.createSync();
   metadataFile.writeAsStringSync('$metadata');

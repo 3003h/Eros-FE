@@ -816,6 +816,13 @@ packages:
       url: "https://pub.flutter-io.cn"
     source: hosted
     version: "4.0.0"
+  image:
+    dependency: "direct main"
+    description:
+      name: image
+      url: "https://pub.flutter-io.cn"
+    source: hosted
+    version: "3.0.8"
   image_gallery_saver:
     dependency: "direct main"
     description:
@@ -1042,6 +1049,13 @@ packages:
       url: "https://pub.flutter-io.cn"
     source: hosted
     version: "2.0.2"
+  palette_generator:
+    dependency: "direct main"
+    description:
+      name: palette_generator
+      url: "https://pub.flutter-io.cn"
+    source: hosted
+    version: "0.3.2"
   path:
     dependency: transitive
     description:
