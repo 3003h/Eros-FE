@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:io';
+import 'dart:math';
 import 'dart:typed_data';
 
 import 'package:cookie_jar/cookie_jar.dart';
@@ -38,6 +39,11 @@ Future<void> requestManageExternalStoragePermission() async {
       throw 'Unable to download, please authorize first~';
     }
   }
+}
+
+T radomList<T>(List<T> srcList) {
+  final index = Random().nextInt(srcList.length);
+  return srcList[index];
 }
 
 void setFullscreen() {

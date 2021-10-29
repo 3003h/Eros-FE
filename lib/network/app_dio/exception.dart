@@ -1,5 +1,5 @@
 class HttpException implements Exception {
-  HttpException([this._message, this._code]);
+  HttpException([this._message, this._code, this._data]);
 
   final String? _message;
 
@@ -9,15 +9,19 @@ class HttpException implements Exception {
 
   int get code => _code ?? -1;
 
+  final dynamic _data;
+  dynamic get data => _data;
+
   @override
   String toString() {
-    return 'code:$code--message=$message';
+    return 'HttpException{_message: $_message, _code: $_code, _data: $_data}';
   }
 }
 
 /// 客户端请求错误
 class BadRequestException extends HttpException {
-  BadRequestException({String? message, int? code}) : super(message, code);
+  BadRequestException({String? message, int? code, dynamic data})
+      : super(message, code, data);
 }
 
 /// 服务端响应错误

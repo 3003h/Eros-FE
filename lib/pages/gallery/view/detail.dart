@@ -82,7 +82,7 @@ class _DetailFromUrl extends StatelessWidget {
         return SliverFillRemaining(
           child: Container(
             alignment: Alignment.center,
-            padding: const EdgeInsets.only(bottom: 50, top: 50),
+            padding: const EdgeInsets.symmetric(horizontal: 40, vertical: 50),
             child: GalleryErrorPage(
               onTap: _controller.handOnRefreshAfterErr,
             ),
@@ -333,9 +333,10 @@ class _DetailFromItem extends StatelessWidget {
             onError: (err) {
               logger.e('$err ');
               return Container(
-                padding: const EdgeInsets.only(bottom: 50, top: 50),
+                padding:
+                    const EdgeInsets.symmetric(vertical: 50, horizontal: 40),
                 child: GalleryErrorPage(
-                  onTap: controller.handOnRefreshAfterErr,
+                  // onTap: controller.handOnRefreshAfterErr,
                   error: err,
                 ),
               );

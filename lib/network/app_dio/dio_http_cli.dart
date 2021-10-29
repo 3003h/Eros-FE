@@ -1,4 +1,5 @@
 import 'package:dio/dio.dart';
+import 'package:fehviewer/utils/logger.dart';
 
 import 'app_dio.dart';
 import 'http_response.dart';
@@ -25,6 +26,8 @@ class DioHttpClient {
         onReceiveProgress: onReceiveProgress,
       );
       return handleResponse(response, httpTransformer: httpTransformer);
+    } on DioError catch (e) {
+      return handleException(e, data: e.response?.data);
     } on Exception catch (e) {
       return handleException(e);
     }

@@ -57,8 +57,8 @@ FutureOr<DioHttpResponse> handleResponse(Response? response,
   }
 }
 
-DioHttpResponse<T> handleException<T>(Exception exception) {
-  var parseException = _parseException(exception);
+DioHttpResponse<T> handleException<T>(Exception exception, {dynamic data}) {
+  var parseException = _parseException(exception, data: data);
   return DioHttpResponse.failureFromError(parseException);
 }
 
@@ -72,7 +72,7 @@ bool _isRequestSuccess(int? statusCode) {
   return statusCode != null && statusCode >= 200 && statusCode < 300;
 }
 
-HttpException _parseException(Exception error) {
+HttpException _parseException(Exception error, {dynamic data}) {
   if (error is DioError) {
     switch (error.type) {
       case DioErrorType.connectTimeout:
@@ -86,13 +86,16 @@ HttpException _parseException(Exception error) {
           int? errCode = error.response?.statusCode;
           switch (errCode) {
             case 400:
-              return BadRequestException(message: '请求语法错误', code: errCode);
+              return BadRequestException(
+                  message: '请求语法错误', code: errCode, data: data);
             case 401:
               return UnauthorisedException(message: '没有权限', code: errCode);
             case 403:
-              return BadRequestException(message: '服务器拒绝执行', code: errCode);
+              return BadRequestException(
+                  message: '服务器拒绝执行', code: errCode, data: data);
             case 404:
-              return BadRequestException(message: '无法连接服务器', code: errCode);
+              return BadRequestException(
+                  message: '服务未找到', code: errCode, data: data);
             case 405:
               return BadRequestException(message: '请求方法被禁止', code: errCode);
             case 500:
