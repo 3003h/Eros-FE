@@ -20,6 +20,7 @@ import 'package:fehviewer/utils/utility.dart';
 import 'package:fehviewer/utils/vibrate.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/foundation.dart';
 // import 'package:flutter_app_restart/flutter_app_restart.dart';
 import 'package:flutter_downloader/flutter_downloader.dart';
 import 'package:get/get.dart';
@@ -388,15 +389,15 @@ class DownloadViewController extends GetxController {
   }
 
   Future<String?> _buildEpub(GalleryTask task) async {
-    final _tempPath = await buildEpub(task);
+    loggerTime.d('start buildEpub');
+    final _tempEpubPath = await buildEpub(task);
+    loggerTime.d('end buildEpub');
 
     // 打包epub文件
-    final encoder = ZipFileEncoder();
     final _epubPath =
         path.join(Global.tempPath, 'epub', '${task.gid}_${task.title}.epub');
-    encoder.create(_epubPath);
-    encoder.addDirectory(Directory(_tempPath), includeDirName: false);
-    encoder.close();
+    // compactZip(_epubPath, _tempEpubPath);
+    await compute(isolateCompactDir2Zip, [_epubPath, _tempEpubPath]);
 
     return _epubPath;
   }
