@@ -201,6 +201,11 @@ const Profile kDefProfile = Profile(
   advanceSearch: kDefAdvanceSearch,
 );
 
+final RegExp regGalleryUrl =
+    RegExp(r'https?://e[-x]hentai.org/g/[0-9]+/[0-9a-z]+/?');
+final RegExp regGalleryPageUrl =
+    RegExp(r'https://e[-x]hentai.org/s/([0-9a-z]+)/(\d+)-(\d+)');
+
 // ignore: avoid_classes_with_only_static_members
 class EHConst {
   // 网页登陆页面
@@ -217,7 +222,8 @@ class EHConst {
   static const String CHROME_ACCEPT =
       'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9';
 
-  static const String CHROME_ACCEPT_LANGUAGE = 'zh-CN,zh;q=0.9,en;q=0.8,en-GB;q=0.7,en-US;q=0.6';
+  static const String CHROME_ACCEPT_LANGUAGE =
+      'zh-CN,zh;q=0.9,en;q=0.8,en-GB;q=0.7,en-US;q=0.6';
 
   static const String FAV_ORDER_FAV = 'fs_f';
   static const String FAV_ORDER_POSTED = 'fs_p';

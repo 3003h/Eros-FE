@@ -85,7 +85,7 @@ class NavigatorUtil {
 
     // url跳转方式
     if (url != null && url.isNotEmpty) {
-      logger.v('goGalleryPage fromUrl $url');
+      logger.d('goGalleryPage fromUrl $url');
 
       final RegExp regGalleryUrl =
           RegExp(r'https?://e[-x]hentai.org/g/([0-9]+)/[0-9a-z]+/?');
@@ -144,7 +144,7 @@ class NavigatorUtil {
       }
     } else {
       // item点击跳转方式
-      logger.v('goGalleryPage fromItem tabTag=$tabTag');
+      logger.d('goGalleryPage fromItem tabTag=$tabTag');
       _gid = galleryItem?.gid;
 
       Get.replace(GalleryRepository(item: galleryItem, tabTag: tabTag));
