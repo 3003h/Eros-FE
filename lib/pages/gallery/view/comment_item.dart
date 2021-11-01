@@ -151,52 +151,50 @@ class CommentItem extends StatelessWidget {
 
       // logger.v('${_groups.length}');
 
-      return Container(
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children:
-              List<Widget>.from(_groups.map((List<GalleryCommentSpan> spans) {
-            return Wrap(
-              children: List<Widget>.from(spans.map((GalleryCommentSpan e) {
-                if (e.imageUrl != null) {
-                  final Map<String, String> _httpHeaders = {
-                    'Cookie': Global.profile.user.cookie ?? '',
-                  };
+      return Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children:
+            List<Widget>.from(_groups.map((List<GalleryCommentSpan> spans) {
+          return Wrap(
+            children: List<Widget>.from(spans.map((GalleryCommentSpan e) {
+              if (e.imageUrl != null) {
+                final Map<String, String> _httpHeaders = {
+                  'Cookie': Global.profile.user.cookie ?? '',
+                };
 
-                  return GestureDetector(
-                    onTap: () => _onOpen(context, url: e.href!),
-                    child: Container(
-                      constraints:
-                          const BoxConstraints(maxWidth: 100, maxHeight: 140),
-                      child: EhCachedNetworkImage(
-                        imageUrl: e.imageUrl!,
-                        placeholder: (_, __) =>
-                            const CupertinoActivityIndicator(),
-                      ),
-                      // child: NetworkExtendedImage(
-                      //   url: e.imageUrl ?? '',
-                      // ),
+                return GestureDetector(
+                  onTap: () => _onOpen(context, url: e.href!),
+                  child: Container(
+                    constraints:
+                        const BoxConstraints(maxWidth: 100, maxHeight: 140),
+                    child: EhCachedNetworkImage(
+                      imageUrl: e.imageUrl!,
+                      placeholder: (_, __) =>
+                          const CupertinoActivityIndicator(),
                     ),
-                  );
-                } else {
-                  return clif.SelectableLinkify(
-                    onOpen: (link) => _onOpen(context, link: link),
-                    text: e.text ?? '',
-                    textAlign: TextAlign.left,
-                    // 对齐方式
-                    style: TextStyle(
-                      fontSize: 14,
-                      color: CupertinoDynamicColor.resolve(
-                          ThemeColors.commitText, context),
-                      fontFamilyFallback: EHConst.fontFamilyFallback,
-                    ),
-                    options: const LinkifyOptions(humanize: false),
-                  );
-                }
-              }).toList()),
-            );
-          }).toList()),
-        ),
+                    // child: NetworkExtendedImage(
+                    //   url: e.imageUrl ?? '',
+                    // ),
+                  ),
+                );
+              } else {
+                return clif.SelectableLinkify(
+                  onOpen: (link) => _onOpen(context, link: link),
+                  text: e.text ?? '',
+                  textAlign: TextAlign.left,
+                  // 对齐方式
+                  style: TextStyle(
+                    fontSize: 14,
+                    color: CupertinoDynamicColor.resolve(
+                        ThemeColors.commitText, context),
+                    fontFamilyFallback: EHConst.fontFamilyFallback,
+                  ),
+                  options: const LinkifyOptions(humanize: false),
+                );
+              }
+            }).toList()),
+          );
+        }).toList()),
       );
     }
 

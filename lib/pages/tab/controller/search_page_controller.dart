@@ -53,6 +53,8 @@ class SearchPageController extends TabViewController {
   bool textIsGalleryUrl = false;
   String? _jumpToUrl;
 
+  bool translateSerachHistory = false;
+
   // 搜索输入框的控制器
   late final TextEditingController searchTextController;
   bool get textIsNotEmpty => searchTextController.text.isNotEmpty;
@@ -494,6 +496,13 @@ class SearchPageController extends TabViewController {
     searchHistory.clear();
     update([GetIds.SEARCH_INIT_VIEW]);
     hiveHelper.setSearchHistory(searchHistory);
+  }
+
+  void switchTranslateHistory() {
+    // searchHistory.clear();
+    translateSerachHistory = !translateSerachHistory;
+    update([GetIds.SEARCH_INIT_VIEW]);
+    // hiveHelper.setSearchHistory(searchHistory);
   }
 
   @override
