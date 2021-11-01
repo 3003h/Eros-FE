@@ -749,6 +749,7 @@ class TagButton extends StatelessWidget {
   const TagButton({
     Key? key,
     required this.text,
+    this.desc,
     this.textColor,
     this.color,
     this.onPressed,
@@ -757,6 +758,7 @@ class TagButton extends StatelessWidget {
   }) : super(key: key);
 
   final String text;
+  final String? desc;
   final Color? textColor;
   final Color? color;
   final VoidCallback? onPressed;
@@ -769,23 +771,47 @@ class TagButton extends StatelessWidget {
       onTap: onPressed,
       onLongPress: onLongPress,
       child: ClipRRect(
-        key: key,
+        // key: key,
         borderRadius: BorderRadius.circular(8),
         child: Container(
           padding: padding ?? const EdgeInsets.fromLTRB(6, 3, 6, 4),
           color: color ??
               CupertinoDynamicColor.resolve(ThemeColors.tagBackground, context),
-          child: Text(
-            text,
-            style: TextStyle(
-              color: textColor ??
-                  CupertinoDynamicColor.resolve(ThemeColors.tagText, context),
-              fontSize: 13,
-              fontWeight: textColor != null ? FontWeight.w500 : null,
-              height: 1.3,
+          child: IntrinsicWidth(
+            child: Column(
+              children: [
+                Text(
+                  text,
+                  style: TextStyle(
+                    color: textColor ??
+                        CupertinoDynamicColor.resolve(
+                            ThemeColors.tagText, context),
+                    fontSize: 13,
+                    fontWeight: textColor != null ? FontWeight.w500 : null,
+                    height: 1.3,
 //              fontWeight: FontWeight.w500,
+                  ),
+                  strutStyle: const StrutStyle(height: 1),
+                ),
+                if (desc != null && desc!.isNotEmpty)
+                  Container(
+                    height: 0.1,
+                    color: ThemeColors.tagText,
+                  ),
+                if (desc != null && desc!.isNotEmpty)
+                  Text(
+                    desc!,
+                    style: TextStyle(
+                      color: textColor ??
+                          CupertinoDynamicColor.resolve(
+                              ThemeColors.tagText, context),
+                      fontSize: 12,
+                      height: 1.3,
+                      // fontWeight: FontWeight.w500,
+                    ),
+                  ),
+              ],
             ),
-            strutStyle: const StrutStyle(height: 1),
           ),
         ),
       ),

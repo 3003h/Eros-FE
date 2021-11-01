@@ -373,75 +373,155 @@ class _GallerySearchPageState extends State<GallerySearchPage> {
     );
   }
 
-  Widget _getInitView() {
-    Future<String?> _getTextTranslate(String text) async {
-      final String? tranText = await Get.find<TagTransController>()
-          .getTranTagWithNameSpaseSmart(text);
-      if (tranText != null && tranText.trim() != text) {
-        return tranText;
-      } else {
-        return null;
-      }
+  Future<String?> _getTextTranslate(String text) async {
+    final String? tranText =
+        await Get.find<TagTransController>().getTranTagWithNameSpaseSmart(text);
+    if (tranText != null && tranText.trim() != text) {
+      return tranText;
+    } else {
+      return null;
     }
+  }
 
-    Widget _searchHistoryBtn(
-        String text, SearchPageController sPageController) {
-      return TagButton(
-        text: text,
-        padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 6),
-        onPressed: () {
-          controller.appendTextToSearch(text);
-        },
-        onLongPress: () async {
-          final String? tranText = await _getTextTranslate(text);
-          vibrateUtil.light();
-          showCupertinoDialog(
-              context: Get.overlayContext!,
-              barrierDismissible: true,
-              builder: (_) {
-                return CupertinoAlertDialog(
-                  content: Column(
-                    children: [
-                      Text(text),
-                      if (tranText != null) const SizedBox(height: 12),
-                      if (tranText != null) Text(tranText),
-                    ],
+  Widget _searchHistoryBtn(String text, VoidCallback removeHistory) {
+    return TagButton(
+      text: text,
+      padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 6),
+      onPressed: () {
+        controller.appendTextToSearch(text);
+      },
+      onLongPress: () async {
+        final String? tranText = await _getTextTranslate(text);
+        vibrateUtil.light();
+        showCupertinoDialog(
+          context: Get.overlayContext!,
+          barrierDismissible: true,
+          builder: (_) {
+            return CupertinoAlertDialog(
+              content: Column(
+                children: [
+                  Text(text),
+                  if (tranText != null) const SizedBox(height: 12),
+                  if (tranText != null) Text(tranText),
+                ],
+              ),
+              actions: [
+                CupertinoDialogAction(
+                  onPressed: () async {
+                    Get.back();
+                  },
+                  child: Text(L10n.of(Get.context!).cancel),
+                ),
+                CupertinoDialogAction(
+                  onPressed: () async {
+                    removeHistory();
+                    Get.back();
+                  },
+                  child: Text(
+                    L10n.of(Get.context!).delete,
+                    style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        color: CupertinoDynamicColor.resolve(
+                            CupertinoColors.destructiveRed, Get.context!)),
                   ),
-                  actions: [
-                    CupertinoDialogAction(
-                      onPressed: () async {
-                        Get.back();
-                      },
-                      child: Text(L10n.of(Get.context!).cancel),
-                    ),
-                    CupertinoDialogAction(
-                      onPressed: () async {
-                        sPageController.removeHistory(text);
-                        Get.back();
-                      },
-                      child: Text(
-                        L10n.of(Get.context!).delete,
-                        style: TextStyle(
-                            fontWeight: FontWeight.bold,
-                            color: CupertinoDynamicColor.resolve(
-                                CupertinoColors.destructiveRed, Get.context!)),
-                      ),
-                    ),
-                  ],
-                );
-              });
-        },
-      );
-    }
+                ),
+              ],
+            );
+          },
+        );
+      },
+    );
+  }
 
+  Widget _searchHistoryBtnWithTranslate(
+      String text, VoidCallback removeHistory) {
+    return FutureBuilder<String?>(
+      future: _getTextTranslate(text),
+      initialData: '',
+      builder: (BuildContext context, AsyncSnapshot snapshot) {
+        String? tranText = snapshot.data as String?;
+        return TagButton(
+          text: text,
+          desc: tranText,
+          padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 6),
+          onPressed: () {
+            controller.appendTextToSearch(text);
+          },
+          onLongPress: () {
+            vibrateUtil.light();
+            showCupertinoDialog(
+                context: Get.overlayContext!,
+                barrierDismissible: true,
+                builder: (_) {
+                  return CupertinoAlertDialog(
+                    content: Column(
+                      children: [
+                        Text(text),
+                        if (tranText != null) const SizedBox(height: 12),
+                        if (tranText != null) Text(tranText),
+                      ],
+                    ),
+                    actions: [
+                      CupertinoDialogAction(
+                        onPressed: () async {
+                          Get.back();
+                        },
+                        child: Text(L10n.of(Get.context!).cancel),
+                      ),
+                      CupertinoDialogAction(
+                        onPressed: () async {
+                          removeHistory();
+                          Get.back();
+                        },
+                        child: Text(
+                          L10n.of(Get.context!).delete,
+                          style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                              color: CupertinoDynamicColor.resolve(
+                                  CupertinoColors.destructiveRed,
+                                  Get.context!)),
+                        ),
+                      ),
+                    ],
+                  );
+                });
+          },
+        );
+      },
+    );
+  }
+
+  Widget _searchHistoryBtnAnimated(
+      String text, VoidCallback removeHistory, bool translate) {
+    // return translate
+    //     ? _searchHistoryBtnWithTranslate(text, removeHistory)
+    //     : _searchHistoryBtn(text, removeHistory);
+    return AnimatedCrossFade(
+      duration: const Duration(milliseconds: 200),
+      firstCurve: Curves.easeIn,
+      secondCurve: Curves.easeOut,
+      firstChild: _searchHistoryBtnWithTranslate(text, removeHistory),
+      secondChild: _searchHistoryBtn(text, removeHistory),
+      crossFadeState:
+          translate ? CrossFadeState.showFirst : CrossFadeState.showSecond,
+    );
+  }
+
+  Widget _getInitView() {
     return GetBuilder<SearchPageController>(
       tag: searchPageCtrlDepth,
       id: GetIds.SEARCH_INIT_VIEW,
       builder: (SearchPageController sPageController) {
-        final List<Widget> _btnList = List<Widget>.from(sPageController
-            .searchHistory
-            .map((String text) => _searchHistoryBtn(text, sPageController))
-            .toList());
+        final List<Widget> _btnList =
+            List<Widget>.from(sPageController.searchHistory
+                .map(
+                  (String text) => _searchHistoryBtnAnimated(
+                    text,
+                    () => sPageController.removeHistory(text),
+                    sPageController.translateSerachHistory,
+                  ),
+                )
+                .toList());
 
         final Widget _searchHistory = SliverToBoxAdapter(
           child: Container(
@@ -460,21 +540,42 @@ class _GallerySearchPageState extends State<GallerySearchPage> {
                           fontSize: 14,
                         ),
                       ),
-                      GestureDetector(
-                        onTap: sPageController.clearHistory,
-                        child: Container(
-                          alignment: Alignment.center,
-                          padding: const EdgeInsets.symmetric(
-                            vertical: 6.0,
-                            horizontal: 6,
+                      Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          if (sPageController.isTagTranslat)
+                            GestureDetector(
+                              onTap: sPageController.switchTranslateHistory,
+                              child: Container(
+                                alignment: Alignment.center,
+                                padding: const EdgeInsets.symmetric(
+                                  vertical: 6.0,
+                                  horizontal: 16,
+                                ),
+                                child: const Icon(
+                                  Icons.language,
+                                  size: 17,
+                                  color: CupertinoColors.activeBlue,
+                                ),
+                              ),
+                            ),
+                          GestureDetector(
+                            onTap: sPageController.clearHistory,
+                            child: Container(
+                              alignment: Alignment.center,
+                              padding: const EdgeInsets.symmetric(
+                                vertical: 6.0,
+                                horizontal: 6,
+                              ),
+                              child: const Icon(
+                                Icons.delete,
+                                size: 17,
+                                color: Colors.red,
+                              ),
+                            ),
                           ),
-                          child: const Icon(
-                            Icons.delete,
-                            size: 17,
-                            color: Colors.red,
-                          ),
-                        ),
-                      )
+                        ],
+                      ),
                     ],
                   ),
                 Container(
