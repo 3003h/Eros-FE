@@ -14,12 +14,14 @@ import 'package:fehviewer/models/index.dart';
 import 'package:fehviewer/network/gallery_request.dart';
 import 'package:fehviewer/network/request.dart';
 import 'package:fehviewer/pages/tab/view/tab_base.dart';
+import 'package:fehviewer/route/navigator_util.dart';
 import 'package:fehviewer/route/routes.dart';
 import 'package:fehviewer/store/floor/entity/tag_translat.dart';
 import 'package:fehviewer/utils/logger.dart';
 import 'package:fehviewer/utils/vibrate.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import '../fetch_list.dart';
 import 'enum.dart';
@@ -47,6 +49,9 @@ class SearchPageController extends TabViewController {
   set searchText(String val) => _searchText.value = val;
   late bool _autoComplete = false;
   final String tabIndex = 'search_$searchPageCtrlDepth';
+
+  bool textIsGalleryUrl = false;
+  String? _jumpToUrl;
 
   // 搜索输入框的控制器
   late final TextEditingController searchTextController;
@@ -165,6 +170,8 @@ class SearchPageController extends TabViewController {
       if (searchTextController.text.trim().isEmpty) {
         logger.v('ListType to ListType.init');
         listType = ListType.init;
+        textIsGalleryUrl = false;
+        update([GetIds.SEARCH_CLEAR_BTN]);
         return;
       }
 
@@ -177,6 +184,23 @@ class SearchPageController extends TabViewController {
       }
 
       listType = ListType.tag;
+
+      // url 直接打开
+      if (await canLaunch(searchText)) {
+        if (regGalleryUrl.hasMatch(searchText) ||
+            regGalleryPageUrl.hasMatch(searchText)) {
+          _jumpToUrl = regGalleryUrl.firstMatch(searchText)?.group(0) ??
+              regGalleryPageUrl.firstMatch(searchText)?.group(0);
+          logger.d('_jumpToUrl $_jumpToUrl');
+          textIsGalleryUrl = true;
+        } else {
+          textIsGalleryUrl = false;
+        }
+        update([GetIds.SEARCH_CLEAR_BTN]);
+      } else {
+        textIsGalleryUrl = false;
+        update([GetIds.SEARCH_CLEAR_BTN]);
+      }
 
       _currQryText = searchTextController.text.split(RegExp(r'[ ;"]')).last;
       if (_currQryText.isEmpty) {
@@ -585,5 +609,11 @@ class SearchPageController extends TabViewController {
     vibrateUtil.light();
     searchTextController.clear();
     curPage.value = 0;
+  }
+
+  void jumpToGallery() {
+    NavigatorUtil.goGalleryPage(
+      url: _jumpToUrl,
+    );
   }
 }

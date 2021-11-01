@@ -711,8 +711,22 @@ class SearchTextFieldIn extends StatelessWidget {
         id: GetIds.SEARCH_CLEAR_BTN,
         tag: searchPageCtrlDepth,
         builder: (SearchPageController controller) {
-          return controller.textIsNotEmpty
-              ? GestureDetector(
+          return Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              if (controller.textIsGalleryUrl)
+                GestureDetector(
+                  onTap: controller.jumpToGallery,
+                  child: Icon(
+                    LineIcons.arrowCircleRight,
+                    size: 24.0,
+                    color: CupertinoDynamicColor.resolve(
+                            _kClearButtonColor, Get.context!)
+                        .withOpacity(iconOpacity),
+                  ).paddingSymmetric(horizontal: 6),
+                ),
+              if (controller.textIsNotEmpty)
+                GestureDetector(
                   onTap: controller.clearText,
                   child: Icon(
                     LineIcons.timesCircle,
@@ -721,8 +735,9 @@ class SearchTextFieldIn extends StatelessWidget {
                             _kClearButtonColor, Get.context!)
                         .withOpacity(iconOpacity),
                   ).paddingSymmetric(horizontal: 6),
-                )
-              : const SizedBox();
+                ),
+            ],
+          );
         },
       ),
       padding: const EdgeInsetsDirectional.fromSTEB(0, 6, 5, 6),
