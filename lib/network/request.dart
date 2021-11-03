@@ -91,6 +91,7 @@ Future<GalleryList?> getGallery({
     httpTransformer:
         isFav ? FavoriteListHttpTransformer() : GalleryListHttpTransformer(),
     options: getCacheOptions(forceRefresh: refresh),
+    cancelToken: cancelToken,
   );
 
   if (httpResponse.error is ListDisplayModeException) {
@@ -103,6 +104,7 @@ Future<GalleryList?> getGallery({
       httpTransformer:
           isFav ? FavoriteListHttpTransformer() : GalleryListHttpTransformer(),
       options: getCacheOptions(forceRefresh: true),
+      cancelToken: cancelToken,
     );
   }
 
@@ -116,6 +118,7 @@ Future<GalleryList?> getGallery({
       httpTransformer:
           isFav ? FavoriteListHttpTransformer() : GalleryListHttpTransformer(),
       options: getCacheOptions(forceRefresh: true),
+      cancelToken: cancelToken,
     );
   }
 
@@ -140,6 +143,7 @@ Future<GalleryItem?> getGalleryDetail({
     url,
     httpTransformer: GalleryHttpTransformer(),
     options: getCacheOptions(forceRefresh: refresh),
+    cancelToken: cancelToken,
   );
   logger.v('httpResponse.ok ${httpResponse.ok}');
   if (httpResponse.ok && httpResponse.data is GalleryItem) {
@@ -172,6 +176,7 @@ Future<GalleryImage?> fetchImageInfo(
     queryParameters: _params,
     httpTransformer: GalleryImageHttpTransformer(),
     options: getCacheOptions(forceRefresh: refresh),
+    cancelToken: cancelToken,
   );
 
   if (httpResponse.ok && httpResponse.data is GalleryImage) {
@@ -195,6 +200,7 @@ Future<List<GalleryImage>> getGalleryImage(
     queryParameters: _params,
     httpTransformer: GalleryImageListHttpTransformer(),
     options: getCacheOptions(forceRefresh: refresh),
+    cancelToken: cancelToken,
   );
 
   if (httpResponse.ok && httpResponse.data is List<GalleryImage>) {

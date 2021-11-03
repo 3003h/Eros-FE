@@ -38,7 +38,9 @@ class FavoriteSelectorPage extends StatelessWidget {
   Widget _buildFavoriteSelectorListView() {
     return favoriteSelectorController.obx(
         (List<Favcat>? state) {
-          return ListViewFavorite(state ?? []);
+          return ListViewFavorite(
+            favcatList: state ?? [],
+          );
         },
         onLoading: Container(
           alignment: Alignment.center,
@@ -67,19 +69,19 @@ class FavoriteSelectorPage extends StatelessWidget {
 }
 
 class ListViewFavorite extends StatelessWidget {
-  const ListViewFavorite(this.favItemBeans);
-
-  final List<Favcat> favItemBeans;
+  const ListViewFavorite({Key? key, required this.favcatList})
+      : super(key: key);
+  final List<Favcat> favcatList;
 
   @override
   Widget build(BuildContext context) {
     return ListView.builder(
-      itemCount: favItemBeans.length,
+      itemCount: favcatList.length,
 
       //列表项构造器
       itemBuilder: (BuildContext context, int index) {
-        return _FavSelItemWidget(
-          favcatItemBean: favItemBeans[index],
+        return _FavSelectorItem(
+          favcat: favcatList[index],
           index: index,
         );
       },
@@ -88,11 +90,11 @@ class ListViewFavorite extends StatelessWidget {
 }
 
 /// 收藏夹选择单项
-class _FavSelItemWidget extends StatelessWidget {
-  const _FavSelItemWidget({required this.index, required this.favcatItemBean});
+class _FavSelectorItem extends StatelessWidget {
+  const _FavSelectorItem({required this.index, required this.favcat});
 
   final int index;
-  final Favcat favcatItemBean;
+  final Favcat favcat;
 
   @override
   Widget build(BuildContext context) {
@@ -111,20 +113,20 @@ class _FavSelItemWidget extends StatelessWidget {
                 // 图标
                 Icon(
                   FontAwesomeIcons.solidHeart,
-                  color: ThemeColors.favColor[favcatItemBean.favId],
+                  color: ThemeColors.favColor[favcat.favId],
                 ),
                 Container(
                   width: 8,
                 ), // 占位 宽度8
                 Text(
-                  favcatItemBean.favTitle,
+                  favcat.favTitle,
                   style: const TextStyle(
                     fontSize: 20,
                   ),
                 ),
                 const Spacer(),
                 Text(
-                  '${favcatItemBean.totNum ?? 0}',
+                  '${favcat.totNum ?? 0}',
                   style: const TextStyle(
                     fontSize: 18,
                   ),
@@ -151,7 +153,7 @@ class _FavSelItemWidget extends StatelessWidget {
       onTap: () {
         // 返回 并带上参数
         Get.back(
-          result: favcatItemBean,
+          result: favcat,
           id: isLayoutLarge ? 1 : null,
         );
       },

@@ -61,9 +61,9 @@ class AutoLockController extends GetxController {
     if (!_isLocking) {
       resetLastLeaveTime();
       _isResumed = false;
-      logger.v('更新最后离开时间 $lastLeaveTime');
+      logger.d('更新最后离开时间 $lastLeaveTime');
     } else {
-      logger.v('保持原离开时间 不更新');
+      logger.d('保持原离开时间 不更新');
     }
   }
 

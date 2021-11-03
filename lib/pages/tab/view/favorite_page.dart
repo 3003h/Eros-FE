@@ -191,12 +191,13 @@ class _FavoriteTabState extends State<FavoriteTab> {
                 );
               }),
               Obx(() {
-                if (controller.isBackgroundRefresh)
+                if (controller.isBackgroundRefresh) {
                   return const CupertinoActivityIndicator(
                     radius: 10,
                   ).paddingSymmetric(horizontal: 8);
-                else
+                } else {
                   return const SizedBox();
+                }
               }),
             ],
           ),
@@ -453,6 +454,7 @@ class _FavoriteTabState extends State<FavoriteTab> {
         if (result != null && result is Favcat) {
           final Favcat fav = result;
           if (controller.curFavcat != fav.favId) {
+            controller.cancelToken?.cancel(['sel another fav']);
             ehConfigService.lastShowFavcat = fav.favId;
             ehConfigService.lastShowFavTitle = fav.favTitle;
             logger.v('set fav to ${fav.favTitle}  favId ${fav.favId}');
