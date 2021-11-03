@@ -285,6 +285,7 @@ class EHConst {
   static List<int> autoLockTime = <int>[
     -1,
     0,
+    if (Global.inDebugMode) 10,
     30,
     60 * 1,
     60 * 5,

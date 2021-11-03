@@ -57,12 +57,6 @@ final migration5to6 = Migration(5, 6, (database) async {
   await database.execute('ALTER TABLE GalleryTask ADD COLUMN uploader TEXT');
 });
 
-final migration7to8 =
-    Migration(7, 8, (database) => _addColumnJsonString(database));
-
-final migration6to8 =
-    Migration(6, 8, (database) => _addColumnJsonString(database));
-
 Future _addColumnJsonString(sqflite.Database database) async {
   await _addColumn(
     database,
@@ -71,6 +65,22 @@ Future _addColumnJsonString(sqflite.Database database) async {
     type: 'TEXT',
   );
 }
+
+final migration7to8 =
+    Migration(7, 8, (database) => _addColumnJsonString(database));
+
+final migration6to8 =
+    Migration(6, 8, (database) => _addColumnJsonString(database));
+
+final migration8to9 = Migration(
+    8,
+    9,
+    (database) async => await _addColumn(
+          database,
+          tabName: 'GalleryTask',
+          columnName: 'tag',
+          type: 'TEXT',
+        ));
 
 Future _addColumn(
   sqflite.Database database, {

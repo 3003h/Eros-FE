@@ -50,7 +50,7 @@ class TabViewController extends GetxController
 
   final EhConfigService _ehConfigService = Get.find();
 
-  final CancelToken cancelToken = CancelToken();
+  CancelToken? cancelToken = CancelToken();
 
   final GlobalKey<SliverAnimatedListState> sliverAnimatedListKey =
       GlobalKey<SliverAnimatedListState>();
@@ -85,6 +85,7 @@ class TabViewController extends GetxController
     try {
       final GalleryList? rult = await fetchData();
       if (rult == null) {
+        change(null, status: RxStatus.loading());
         return;
       }
 
@@ -100,7 +101,7 @@ class TabViewController extends GetxController
     }
 
     try {
-      if (cancelToken.isCancelled) {
+      if (cancelToken?.isCancelled ?? false) {
         return;
       }
       isBackgroundRefresh = true;
@@ -129,6 +130,7 @@ class TabViewController extends GetxController
 
   Future<GalleryList?> fetchData({bool refresh = false}) async {
     final int _catNum = _ehConfigService.catFilter.value;
+    cancelToken = CancelToken();
 
     final fetchConfig = FetchParams(
       cats: cats ?? _catNum,
@@ -141,7 +143,14 @@ class TabViewController extends GetxController
 
     try {
       FetchListClient fetchListClient = getFetchListClient(fetchConfig);
-      final Future<GalleryList?> rult = fetchListClient.fetch();
+      final GalleryList? rult = await fetchListClient.fetch();
+
+      logger.d('isCancelled ${cancelToken?.isCancelled}');
+
+      if (cancelToken?.isCancelled ?? false) {
+        logger.d('isCancelled ${cancelToken?.isCancelled}');
+        return null;
+      }
 
       pageState = PageState.None;
 
@@ -170,8 +179,8 @@ class TabViewController extends GetxController
 
   Future<void> onRefresh({GlobalKey? centerKey}) async {
     isBackgroundRefresh = false;
-    if (!cancelToken.isCancelled) {
-      cancelToken.cancel();
+    if (!(cancelToken?.isCancelled ?? false)) {
+      cancelToken?.cancel();
     }
     change(state, status: RxStatus.success());
     if (isLoadPrevious) {
@@ -197,13 +206,13 @@ class TabViewController extends GetxController
   }
 
   Future<void> reLoadDataFirst() async {
-    logger.d('reLoadDataFirst ');
+    logger.d('reLoadDataFirst isCancelled ${cancelToken?.isCancelled}');
     isBackgroundRefresh = false;
-    if (!cancelToken.isCancelled) {
-      cancelToken.cancel();
+    if (!(cancelToken?.isCancelled ?? false)) {
+      cancelToken?.cancel();
     }
     change(null, status: RxStatus.loading());
-    onInit();
+    onReady();
   }
 
   Future<void> loadDataMore() async {

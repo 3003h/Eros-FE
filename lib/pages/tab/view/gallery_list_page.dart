@@ -73,12 +73,13 @@ class _GalleryListTabState extends State<GalleryListTab> {
           children: [
             Text(controller.title),
             Obx(() {
-              if (controller.isBackgroundRefresh)
+              if (controller.isBackgroundRefresh) {
                 return const CupertinoActivityIndicator(
                   radius: 10,
                 ).paddingSymmetric(horizontal: 8);
-              else
+              } else {
                 return const SizedBox();
+              }
             }),
           ],
         ),
