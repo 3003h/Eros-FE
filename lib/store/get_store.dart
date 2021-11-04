@@ -11,10 +11,10 @@ class GStore {
     return GetStorage('GalleryCache', Global.appSupportPath);
   }
 
-  static final _cacheStore = () => _getStore('GalleryCache');
-  static final _hisStore = () => _getStore('GalleryHistory');
-  static final _profileStore = () => _getStore('Profile');
-  static final _downloadStore = () => _getStore('Download');
+  GetStorage _cacheStore() => _getStore('GalleryCache');
+  GetStorage _hisStore() => _getStore('GalleryHistory');
+  GetStorage _profileStore() => _getStore('Profile');
+  GetStorage _downloadStore() => _getStore('Download');
 
   static Future<void> init() async {
     await _getStore('GalleryCache').initStorage;

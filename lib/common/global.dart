@@ -191,7 +191,7 @@ class Global {
 
   // 持久化Profile信息
   static Future<void>? saveProfile() {
-    // logger.v(profile.webdav?.toJson());
+    // logger.d(profile.ehConfig.toJson());
     final GStore gStore = Get.find<GStore>();
     gStore.profile = profile;
   }

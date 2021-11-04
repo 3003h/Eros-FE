@@ -75,6 +75,10 @@ class EhConfigService extends ProfileService {
   bool get allowMediaScan => _allowMediaScan.value;
   set allowMediaScan(bool val) => _allowMediaScan.value = val;
 
+  final RxBool _enableTagTranslateCDN = false.obs;
+  bool get enableTagTranslateCDN => _enableTagTranslateCDN.value;
+  set enableTagTranslateCDN(bool val) => _enableTagTranslateCDN.value = val;
+
   /// 阅读相关设置
   /// 阅读方向
   Rx<ViewMode> viewMode = ViewMode.LeftToRight.obs;
@@ -319,6 +323,12 @@ class EhConfigService extends ProfileService {
     tabletLayout = ehConfig.tabletLayout ?? true;
     everProfile<bool>(_tabletLayout,
         (bool value) => ehConfig = ehConfig.copyWith(tabletLayout: value));
+
+    enableTagTranslateCDN = ehConfig.enableTagTranslateCDN ?? false;
+    everProfile<bool>(
+        _enableTagTranslateCDN,
+        (bool value) =>
+            ehConfig = ehConfig.copyWith(enableTagTranslateCDN: value));
   }
 
   /// 收藏排序 dialog
