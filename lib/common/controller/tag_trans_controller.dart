@@ -16,6 +16,8 @@ import 'package:path/path.dart' as path;
 import '../global.dart';
 
 const String kUrl = '/repos/EhTagTranslation/Database/releases/latest';
+const String kCDNurl =
+    'https://cdn.jsdelivr.net/gh/EhTagTranslation/DatabaseReleases/db.raw.json.gz';
 const int kConnectTimeout = 10000;
 const int kReceiveTimeout = 30000;
 
@@ -34,6 +36,11 @@ class TagTransController extends GetxController {
 
   /// 检查更新
   Future<bool> checkUpdate({bool force = false}) async {
+    if (ehConfigService.enableTagTranslateCDN) {
+      logger.d('use CND');
+      return true;
+    }
+
     final String urlJsonString = await _httpManager.get(kUrl) ?? '';
     final dynamic _urlJson = jsonDecode(urlJsonString);
     // 获取发布时间 作为远程版本号
@@ -61,6 +68,10 @@ class TagTransController extends GetxController {
 
   /// 获取数据
   Future<List> _fetch() async {
+    if (ehConfigService.enableTagTranslateCDN) {
+      _dbUrl = kCDNurl;
+    }
+
     if (_dbUrl == null) {
       return [];
     }
@@ -77,6 +88,11 @@ class TagTransController extends GetxController {
 
     final dbdataMap = jsonDecode(dbJson);
     final List listData = dbdataMap['data'] as List;
+
+    final head = dbdataMap['head'] as Map;
+    final committer = head['committer'] as Map;
+    _remoteVer = committer['when'] as String;
+    logger.d('CDN _remoteVer $_remoteVer');
 
     return listData;
   }

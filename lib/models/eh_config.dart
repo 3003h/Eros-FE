@@ -36,6 +36,7 @@ class EhConfig {
     this.turnPageInv,
     this.toplist,
     this.tabletLayout,
+    this.enableTagTranslateCDN,
   });
 
   final bool jpnTitle;
@@ -69,6 +70,7 @@ class EhConfig {
   final int? turnPageInv;
   final String? toplist;
   final bool? tabletLayout;
+  final bool? enableTagTranslateCDN;
 
   factory EhConfig.fromJson(Map<String,dynamic> json) => EhConfig(
     jpnTitle: json['jpnTitle'] as bool,
@@ -101,7 +103,8 @@ class EhConfig {
     autoRead: json['autoRead'] != null ? json['autoRead'] as bool : null,
     turnPageInv: json['turnPageInv'] != null ? json['turnPageInv'] as int : null,
     toplist: json['toplist'] != null ? json['toplist'] as String : null,
-    tabletLayout: json['tabletLayout'] != null ? json['tabletLayout'] as bool : null
+    tabletLayout: json['tabletLayout'] != null ? json['tabletLayout'] as bool : null,
+    enableTagTranslateCDN: json['enableTagTranslateCDN'] != null ? json['enableTagTranslateCDN'] as bool : null
   );
   
   Map<String, dynamic> toJson() => {
@@ -135,7 +138,8 @@ class EhConfig {
     'autoRead': autoRead,
     'turnPageInv': turnPageInv,
     'toplist': toplist,
-    'tabletLayout': tabletLayout
+    'tabletLayout': tabletLayout,
+    'enableTagTranslateCDN': enableTagTranslateCDN
   };
 
   EhConfig clone() => EhConfig(
@@ -169,7 +173,8 @@ class EhConfig {
     autoRead: autoRead,
     turnPageInv: turnPageInv,
     toplist: toplist,
-    tabletLayout: tabletLayout
+    tabletLayout: tabletLayout,
+    enableTagTranslateCDN: enableTagTranslateCDN
   );
 
     
@@ -204,7 +209,8 @@ class EhConfig {
     bool? autoRead,
     int? turnPageInv,
     String? toplist,
-    bool? tabletLayout
+    bool? tabletLayout,
+    bool? enableTagTranslateCDN
   }) => EhConfig(
     jpnTitle: jpnTitle ?? this.jpnTitle,
     tagTranslat: tagTranslat ?? this.tagTranslat,
@@ -237,12 +243,13 @@ class EhConfig {
     turnPageInv: turnPageInv ?? this.turnPageInv,
     toplist: toplist ?? this.toplist,
     tabletLayout: tabletLayout ?? this.tabletLayout,
+    enableTagTranslateCDN: enableTagTranslateCDN ?? this.enableTagTranslateCDN,
   );  
 
   @override
   bool operator ==(Object other) => identical(this, other) 
-    || other is EhConfig && jpnTitle == other.jpnTitle && tagTranslat == other.tagTranslat && tagTranslatVer == other.tagTranslatVer && favoritesOrder == other.favoritesOrder && siteEx == other.siteEx && galleryImgBlur == other.galleryImgBlur && favPicker == other.favPicker && favLongTap == other.favLongTap && lastFavcat == other.lastFavcat && lastShowFavcat == other.lastShowFavcat && lastShowFavTitle == other.lastShowFavTitle && listMode == other.listMode && safeMode == other.safeMode && catFilter == other.catFilter && maxHistory == other.maxHistory && searchBarComp == other.searchBarComp && pureDarkTheme == other.pureDarkTheme && viewModel == other.viewModel && clipboardLink == other.clipboardLink && commentTrans == other.commentTrans && autoLockTimeOut == other.autoLockTimeOut && showPageInterval == other.showPageInterval && orientation == other.orientation && vibrate == other.vibrate && tagIntroImgLv == other.tagIntroImgLv && debugMode == other.debugMode && debugCount == other.debugCount && autoRead == other.autoRead && turnPageInv == other.turnPageInv && toplist == other.toplist && tabletLayout == other.tabletLayout;
+    || other is EhConfig && jpnTitle == other.jpnTitle && tagTranslat == other.tagTranslat && tagTranslatVer == other.tagTranslatVer && favoritesOrder == other.favoritesOrder && siteEx == other.siteEx && galleryImgBlur == other.galleryImgBlur && favPicker == other.favPicker && favLongTap == other.favLongTap && lastFavcat == other.lastFavcat && lastShowFavcat == other.lastShowFavcat && lastShowFavTitle == other.lastShowFavTitle && listMode == other.listMode && safeMode == other.safeMode && catFilter == other.catFilter && maxHistory == other.maxHistory && searchBarComp == other.searchBarComp && pureDarkTheme == other.pureDarkTheme && viewModel == other.viewModel && clipboardLink == other.clipboardLink && commentTrans == other.commentTrans && autoLockTimeOut == other.autoLockTimeOut && showPageInterval == other.showPageInterval && orientation == other.orientation && vibrate == other.vibrate && tagIntroImgLv == other.tagIntroImgLv && debugMode == other.debugMode && debugCount == other.debugCount && autoRead == other.autoRead && turnPageInv == other.turnPageInv && toplist == other.toplist && tabletLayout == other.tabletLayout && enableTagTranslateCDN == other.enableTagTranslateCDN;
 
   @override
-  int get hashCode => jpnTitle.hashCode ^ tagTranslat.hashCode ^ tagTranslatVer.hashCode ^ favoritesOrder.hashCode ^ siteEx.hashCode ^ galleryImgBlur.hashCode ^ favPicker.hashCode ^ favLongTap.hashCode ^ lastFavcat.hashCode ^ lastShowFavcat.hashCode ^ lastShowFavTitle.hashCode ^ listMode.hashCode ^ safeMode.hashCode ^ catFilter.hashCode ^ maxHistory.hashCode ^ searchBarComp.hashCode ^ pureDarkTheme.hashCode ^ viewModel.hashCode ^ clipboardLink.hashCode ^ commentTrans.hashCode ^ autoLockTimeOut.hashCode ^ showPageInterval.hashCode ^ orientation.hashCode ^ vibrate.hashCode ^ tagIntroImgLv.hashCode ^ debugMode.hashCode ^ debugCount.hashCode ^ autoRead.hashCode ^ turnPageInv.hashCode ^ toplist.hashCode ^ tabletLayout.hashCode;
+  int get hashCode => jpnTitle.hashCode ^ tagTranslat.hashCode ^ tagTranslatVer.hashCode ^ favoritesOrder.hashCode ^ siteEx.hashCode ^ galleryImgBlur.hashCode ^ favPicker.hashCode ^ favLongTap.hashCode ^ lastFavcat.hashCode ^ lastShowFavcat.hashCode ^ lastShowFavTitle.hashCode ^ listMode.hashCode ^ safeMode.hashCode ^ catFilter.hashCode ^ maxHistory.hashCode ^ searchBarComp.hashCode ^ pureDarkTheme.hashCode ^ viewModel.hashCode ^ clipboardLink.hashCode ^ commentTrans.hashCode ^ autoLockTimeOut.hashCode ^ showPageInterval.hashCode ^ orientation.hashCode ^ vibrate.hashCode ^ tagIntroImgLv.hashCode ^ debugMode.hashCode ^ debugCount.hashCode ^ autoRead.hashCode ^ turnPageInv.hashCode ^ toplist.hashCode ^ tabletLayout.hashCode ^ enableTagTranslateCDN.hashCode;
 }

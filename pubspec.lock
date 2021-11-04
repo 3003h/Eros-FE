@@ -63,7 +63,7 @@ packages:
       name: basic_utils
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "3.7.0"
+    version: "3.8.1"
   blur:
     dependency: "direct main"
     description:
@@ -301,7 +301,7 @@ packages:
       name: device_info
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "2.0.2"
+    version: "2.0.3"
   device_info_platform_interface:
     dependency: transitive
     description:
@@ -1027,7 +1027,7 @@ packages:
       name: oktoast
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "3.1.3+1"
+    version: "3.1.4"
   orientation:
     dependency: "direct main"
     description:

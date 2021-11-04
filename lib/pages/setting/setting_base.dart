@@ -178,7 +178,7 @@ class _SelectorSettingItemState extends State<SelectorSettingItem> {
 class TextSwitchItem extends StatefulWidget {
   const TextSwitchItem(
     this.title, {
-    this.intValue,
+    required this.intValue,
     this.onChanged,
     this.desc,
     this.descOn,

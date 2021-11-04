@@ -86,6 +86,10 @@ class ListViewEhSetting extends StatelessWidget {
       }
     }
 
+    void _handleTagTranslatCDNChanged(bool newValue) {
+      _ehConfigService.enableTagTranslateCDN = newValue;
+    }
+
     void _handleGalleryListImgBlurChanged(bool newValue) {
       _ehConfigService.isGalleryImgBlur.value = newValue;
     }
@@ -172,22 +176,22 @@ class ListViewEhSetting extends StatelessWidget {
       ),
       Container(height: 38),
       if (localeService.isLanguageCodeZh)
-        Obx(() => GestureDetector(
-              behavior: HitTestBehavior.opaque,
-              onLongPress: () async {
-                vibrateUtil.light();
-                _forceUpdateTranslate();
-              },
-              child: TextSwitchItem(
-                '显示标签中文翻译',
-                intValue: _tagTranslat,
-                onChanged: _handleTagTranslatChanged,
-                desc: '当前版本:${_ehConfigService.tagTranslatVer.value}',
-                suffix: CupertinoButton(
-                  padding: const EdgeInsets.all(0),
-                  child: const Icon(CupertinoIcons.refresh),
-                  onPressed: _forceUpdateTranslate,
-                ),
+        TextSwitchItem(
+          '启用CDN',
+          intValue: _ehConfigService.enableTagTranslateCDN,
+          onChanged: _handleTagTranslatCDNChanged,
+          desc: '加速下载翻译数据',
+        ),
+      if (localeService.isLanguageCodeZh)
+        Obx(() => TextSwitchItem(
+              '显示标签中文翻译',
+              intValue: _tagTranslat,
+              onChanged: _handleTagTranslatChanged,
+              desc: '当前版本:${_ehConfigService.tagTranslatVer.value}',
+              suffix: CupertinoButton(
+                padding: const EdgeInsets.all(0),
+                child: const Icon(CupertinoIcons.refresh),
+                onPressed: _forceUpdateTranslate,
               ),
             )),
       Obx(() {
