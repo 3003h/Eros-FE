@@ -98,14 +98,12 @@ class DownloadController extends GetxController {
     }
 
     // 先查询任务是否已存在
-    bool isNewTask = true;
     final GalleryTask? _oriTask =
         await _galleryTaskDao.findGalleryTaskByGid(gid ?? -1);
     if (_oriTask != null) {
       showToast('Download task existed');
       logger.i('$gid 任务已存在');
       logger.d('${_oriTask.toString()} ');
-      isNewTask = false;
       return;
     }
 
@@ -114,30 +112,26 @@ class DownloadController extends GetxController {
     final String _dirPath = await _getGalleryDownloadPath(_downloadPath);
 
     // 登记主任务表
-    final GalleryTask galleryTask = isNewTask
-        ? GalleryTask(
-            gid: gid ?? _gid,
-            token: token ?? _token,
-            url: url,
-            title: title,
-            fileCount: fileCount,
-            dirPath: _dirPath,
-            status: TaskStatus.enqueued.value,
-            addTime: DateTime.now().millisecondsSinceEpoch,
-            coverUrl: coverUrl,
-            rating: rating,
-            category: category,
-            uploader: uploader,
-          )
-        : _oriTask!;
+    final GalleryTask galleryTask = GalleryTask(
+      gid: gid ?? _gid,
+      token: token ?? _token,
+      url: url,
+      title: title,
+      fileCount: fileCount,
+      dirPath: _dirPath,
+      status: TaskStatus.enqueued.value,
+      addTime: DateTime.now().millisecondsSinceEpoch,
+      coverUrl: coverUrl,
+      rating: rating,
+      category: category,
+      uploader: uploader,
+    );
 
-    if (isNewTask) {
-      logger.d('add NewTask ${galleryTask.toString()}');
-      _galleryTaskDao.insertTask(galleryTask);
-      dState.galleryTaskMap[galleryTask.gid] = galleryTask;
-      _downloadViewAnimateListAdd();
-      showToast('${galleryTask.gid} Download task start');
-    }
+    logger.d('add NewTask ${galleryTask.toString()}');
+    _galleryTaskDao.insertTask(galleryTask);
+    dState.galleryTaskMap[galleryTask.gid] = galleryTask;
+    _downloadViewAnimateListAdd();
+    showToast('${galleryTask.gid} Download task start');
 
     final GalleryPageController _pageController = Get.find(tag: pageCtrlDepth);
     final _fCount = _pageController.firstPageImage.length;
@@ -156,7 +150,10 @@ class DownloadController extends GetxController {
   }
 
   /// 更新任务为已完成
-  Future<GalleryTask?> galleryTaskComplete(int gid) {
+  Future<GalleryTask?> galleryTaskComplete(int gid) async {
+    if (dState.galleryTaskMap[gid]?.status == TaskStatus.complete.value) {
+      return null;
+    }
     logger.d('更新任务为已完成');
     _cancelDownloadStateChkTimer(gid: gid);
     if (!((dState.taskCanceltokens[gid]?.isCancelled) ?? true)) {
@@ -188,6 +185,24 @@ class DownloadController extends GetxController {
     if (galleryTask != null) {
       logger.d('恢复任务 $gid');
       _addGalleryTask(galleryTask);
+    }
+  }
+
+  /// 重下任务
+  Future<void> galleryTaskRestart(int gid) async {
+    final _galleryTaskDao = await getGalleryTaskDao();
+    final _imageTaskDao = await getImageTaskDao();
+
+    await _imageTaskDao.deleteImageTaskByGid(gid);
+    final GalleryTask? galleryTask =
+        await _galleryTaskDao.findGalleryTaskByGid(gid);
+    if (galleryTask != null) {
+      logger.d('重下任务 $gid ${galleryTask.url}');
+      cacheController.clearDioCache(
+          path: '${Api.getBaseUrl()}${galleryTask.url}');
+      final _reTask = galleryTask.copyWith(completCount: 0);
+      dState.galleryTaskMap[gid] = _reTask;
+      _addGalleryTask(_reTask);
     }
   }
 
@@ -391,6 +406,7 @@ class DownloadController extends GetxController {
     return tImage;
   }
 
+  /// 下载图片
   Future<void> _downloadImage(
     GalleryImage image,
     GalleryImageTask? imageTask,
@@ -572,11 +588,12 @@ class DownloadController extends GetxController {
     required int fileCount,
     required String url,
     bool isRefresh = false,
-    int? firstPageCount,
+    required int firstPageCount,
     CancelToken? cancelToken,
   }) async {
-    final int page = firstPageCount != null ? (ser - 1) ~/ firstPageCount : 0;
-    loggerSimple.v('ser:$ser 所在页码为$page');
+    logger.d('firstPageCount $firstPageCount');
+    final int page = (ser - 1) ~/ firstPageCount;
+    logger.d('ser:$ser 所在页码为$page');
 
     final List<GalleryImage> _moreImageList = await getGalleryImage(
       url,
@@ -759,8 +776,10 @@ class DownloadController extends GetxController {
 
       logger.v('ser:$itemSer/${imageTasksOri.length}');
 
-      fCount ??= await _fetchFirstPageCount(galleryTask.url!,
-          cancelToken: _cancelToken);
+      if (fCount == null || fCount < 1) {
+        fCount = await _fetchFirstPageCount(galleryTask.url!,
+            cancelToken: _cancelToken);
+      }
 
       dState.executor.scheduleTask(() async {
         final GalleryImage? tImage = await _checkAndGetImages(galleryTask.gid,

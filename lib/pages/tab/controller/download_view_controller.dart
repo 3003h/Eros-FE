@@ -1,7 +1,7 @@
 import 'dart:io';
 
-import 'package:collection/collection.dart';
 import 'package:archive/archive_io.dart';
+import 'package:collection/collection.dart';
 import 'package:fehviewer/common/controller/archiver_download_controller.dart';
 import 'package:fehviewer/common/controller/download_controller.dart';
 import 'package:fehviewer/common/epub/epub_builder.dart';
@@ -217,6 +217,16 @@ class DownloadViewController extends GetxController {
                 },
                 child: Text(L10n.of(context).cancel)),
             actions: <Widget>[
+              // 重新下载 restartGalleryDownload
+              CupertinoActionSheetAction(
+                onPressed: () {
+                  Get.back();
+                  restartGalleryDownload(task?.gid);
+                },
+                child: Text(
+                  'ReDownload',
+                ),
+              ),
               // 导出
               if (task?.status == TaskStatus.complete.value)
                 CupertinoActionSheetAction(
@@ -414,6 +424,14 @@ class DownloadViewController extends GetxController {
   void resumeGalleryDownload(int? gid) {
     if (gid != null) {
       _downloadController.galleryTaskResume(gid);
+    }
+    update(['${idDownloadGalleryItem}_$gid']);
+  }
+
+  // gallery 重新下载
+  void restartGalleryDownload(int? gid) {
+    if (gid != null) {
+      _downloadController.galleryTaskRestart(gid);
     }
     update(['${idDownloadGalleryItem}_$gid']);
   }
