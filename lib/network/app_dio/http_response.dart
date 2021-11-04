@@ -80,7 +80,7 @@ HttpException _parseException(Exception error, {dynamic data}) {
       case DioErrorType.sendTimeout:
         return NetworkException(message: error.error as String?);
       case DioErrorType.cancel:
-        return CancelException(error.error.message as String?);
+        return CancelException(error.error as String?);
       case DioErrorType.response:
         try {
           int? errCode = error.response?.statusCode;

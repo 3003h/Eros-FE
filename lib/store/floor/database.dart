@@ -13,7 +13,7 @@ import 'entity/tag_translat.dart';
 
 part 'database.g.dart';
 
-@Database(version: 8, entities: [GalleryTask, GalleryImageTask, TagTranslat])
+@Database(version: 9, entities: [GalleryTask, GalleryImageTask, TagTranslat])
 abstract class EhDatabase extends FloorDatabase {
   GalleryTaskDao get galleryTaskDao;
 
@@ -30,6 +30,7 @@ final ehMigrations = [
   migration5to6,
   migration6to8,
   migration7to8,
+  migration8to9,
 ];
 
 // create migration
