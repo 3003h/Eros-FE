@@ -85,8 +85,9 @@ Future<String> buildEpub(GalleryTask task, {String? tempPath}) async {
     MemoryImage(imageData),
     maximumColorCount: 20,
   );
-  logger.d('${paletteGenerator.dominantColor?.color}');
-  final dColor = paletteGenerator.dominantColor?.color ?? Colors.black;
+
+  // 获取主色
+  final dColor = paletteGenerator.darkMutedColor?.color ?? Colors.black;
 
   final backgroundImage =
       pImage.Image(image.width, (image.width * 4 / 3).round()).fill(
@@ -95,13 +96,16 @@ Future<String> buildEpub(GalleryTask task, {String? tempPath}) async {
 
   final cover = pImage.copyResize(
       pImage.copyInto(backgroundImage, image, center: true),
-      width: 900);
+      width: 1200);
 
   logger.d('${cover.width} ${cover.height}');
 
-  final coverName = 'cover${path.extension(_fileList.first.path)}';
-  File(path.join(resourcesPath, coverName))
-      .writeAsBytesSync(pImage.encodeNamedImage(cover, _fileList.first.path)!);
+  final coverName = '#cover${path.extension(_fileList.first.path)}';
+  final name = _fileList.first.path.toLowerCase();
+  final coverImage = name.endsWith('.jpg') || name.endsWith('.jpeg')
+      ? pImage.encodeJpg(cover, quality: 80)
+      : pImage.encodeNamedImage(cover, name)!;
+  File(path.join(resourcesPath, coverName)).writeAsBytesSync(coverImage);
 
   // 图片复制到 resourcesPath
   for (final _file in _fileList) {
