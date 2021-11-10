@@ -6,6 +6,7 @@ import 'package:fehviewer/common/global.dart';
 import 'package:fehviewer/common/parser/eh_parser.dart';
 import 'package:fehviewer/const/const.dart';
 import 'package:fehviewer/models/base/eh_models.dart';
+import 'package:fehviewer/pages/gallery/controller/archiver_controller.dart';
 
 import 'exception.dart';
 import 'http_response.dart';
@@ -122,5 +123,34 @@ class GalleryImageListHttpTransformer extends HttpTransformer {
     final html = response.data as String;
     final List<GalleryImage> image = parseGalleryImageFromHtml(html);
     return DioHttpResponse<List<GalleryImage>>.success(image);
+  }
+}
+
+class GalleryArchiverHttpTransformer extends HttpTransformer {
+  @override
+  FutureOr<DioHttpResponse<ArchiverProvider>> parse(
+      Response<dynamic> response) async {
+    final html = response.data as String;
+    final ArchiverProvider archiverProvider = parseArchiver(html);
+    return DioHttpResponse<ArchiverProvider>.success(archiverProvider);
+  }
+}
+
+class GalleryArchiverRemoteDownloadResponseTransformer extends HttpTransformer {
+  @override
+  FutureOr<DioHttpResponse<String>> parse(Response<dynamic> response) async {
+    final html = response.data as String;
+    final String msg = parseArchiverDownload(html);
+    return DioHttpResponse<String>.success(msg);
+  }
+}
+
+class GalleryArchiverLocalDownloadResponseTransformer extends HttpTransformer {
+  @override
+  FutureOr<DioHttpResponse<String>> parse(Response<dynamic> response) async {
+    final html = response.data as String;
+    final String _href =
+        RegExp(r'document.location = "(.+)"').firstMatch(html)?.group(1) ?? '';
+    return DioHttpResponse<String>.success('$_href?start=1');
   }
 }

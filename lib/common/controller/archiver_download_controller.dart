@@ -119,8 +119,6 @@ class ArchiverDownloadController extends GetxController {
   }) async {
     final String _tag = '$gid$dlType';
 
-    logger.d(url);
-
     if (archiverTaskMap.containsKey(_tag)) {
       showToast('Download task already exists');
       return;

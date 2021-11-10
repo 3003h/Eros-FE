@@ -8,10 +8,11 @@ import 'package:fehviewer/common/global.dart';
 import 'package:fehviewer/common/parser/gallery_detail_parser.dart';
 import 'package:fehviewer/const/const.dart';
 import 'package:fehviewer/models/base/eh_models.dart';
+import 'package:fehviewer/pages/gallery/controller/archiver_controller.dart';
 import 'package:fehviewer/pages/tab/fetch_list.dart';
 import 'package:fehviewer/utils/logger.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:get/get.dart';
+import 'package:get/get.dart' hide FormData;
 
 import 'app_dio/pdio.dart';
 import 'gallery_request.dart';
@@ -138,6 +139,8 @@ Future<GalleryItem?> getGalleryDetail({
   cookies.add(Cookie('nw', '1'));
   cookieJar.saveFromResponse(Uri.parse(Api.getBaseUrl()), cookies);
 
+  logger.d('cookies $cookies');
+
   DioHttpClient dioHttpClient = DioHttpClient(dioConfig: ehDioConfig);
   DioHttpResponse httpResponse = await dioHttpClient.get(
     url,
@@ -207,5 +210,73 @@ Future<List<GalleryImage>> getGalleryImage(
     return httpResponse.data as List<GalleryImage>;
   } else {
     return [];
+  }
+}
+
+Future<ArchiverProvider> getArchiver(
+  String url, {
+  bool refresh = true,
+}) async {
+  DioHttpClient dioHttpClient = DioHttpClient(dioConfig: ehDioConfig);
+
+  DioHttpResponse httpResponse = await dioHttpClient.get(
+    url,
+    httpTransformer: GalleryArchiverHttpTransformer(),
+    options: getCacheOptions(forceRefresh: refresh),
+  );
+
+  if (httpResponse.ok && httpResponse.data is ArchiverProvider) {
+    return httpResponse.data as ArchiverProvider;
+  } else {
+    return ArchiverProvider();
+  }
+}
+
+Future<String> postArchiverRemoteDownload(
+  String url,
+  String resolution,
+) async {
+  DioHttpClient dioHttpClient = DioHttpClient(dioConfig: ehDioConfig);
+
+  final formData = FormData.fromMap({
+    'hathdl_xres': resolution.trim(),
+  });
+
+  DioHttpResponse httpResponse = await dioHttpClient.post(
+    url,
+    data: formData,
+    httpTransformer: GalleryArchiverRemoteDownloadResponseTransformer(),
+    options: getCacheOptions(forceRefresh: true),
+  );
+
+  if (httpResponse.ok && httpResponse.data is String) {
+    return httpResponse.data as String;
+  } else {
+    return '';
+  }
+}
+
+Future<String> postArchiverLocalDownload(
+  String url, {
+  String? dltype,
+  String? dlcheck,
+}) async {
+  final formData = FormData.fromMap({
+    if (dltype != null) 'dltype': dltype.trim(),
+    if (dlcheck != null) 'dlcheck': dlcheck.trim(),
+  });
+  DioHttpClient dioHttpClient = DioHttpClient(dioConfig: ehDioConfig);
+
+  DioHttpResponse httpResponse = await dioHttpClient.post(
+    url,
+    data: formData,
+    httpTransformer: GalleryArchiverLocalDownloadResponseTransformer(),
+    options: getCacheOptions(forceRefresh: true),
+  );
+
+  if (httpResponse.ok && httpResponse.data is String) {
+    return httpResponse.data as String;
+  } else {
+    return '';
   }
 }

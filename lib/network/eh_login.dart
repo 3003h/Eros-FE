@@ -217,7 +217,7 @@ class EhUserManager {
 
     if (igneous.isNotEmpty) {
       // 手动指定igneous的情况
-      cookiesEx.forEach((element) {
+      for (final element in cookiesEx) {
         if (element.name == 'igneous') {
           element.value = igneous;
         }
@@ -227,7 +227,7 @@ class EhUserManager {
           ..path = '/'
           ..domain = '.exhentai.org'
           ..maxAge = 315360000;
-      });
+      }
     }
 
     logger.d('${cookiesEx.map((e) => '$e').join('\n')} ');

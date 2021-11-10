@@ -1,6 +1,7 @@
 import 'package:fehviewer/common/controller/archiver_download_controller.dart';
 import 'package:fehviewer/common/service/depth_service.dart';
 import 'package:fehviewer/network/gallery_request.dart';
+import 'package:fehviewer/network/request.dart';
 import 'package:fehviewer/utils/logger.dart';
 import 'package:fehviewer/utils/toast.dart';
 import 'package:get/get.dart';
@@ -13,6 +14,7 @@ class ArchiverController extends GetxController
 
   GalleryPageController get pageController => Get.find(tag: pageCtrlDepth);
   final ArchiverDownloadController _downloadController = Get.find();
+  late String _archiverLink;
 
   @override
   void onInit() {
@@ -21,12 +23,12 @@ class ArchiverController extends GetxController
   }
 
   Future<ArchiverProvider> _fetch() async {
-    final _archiverLink =
+    _archiverLink =
         '${Api.getBaseUrl()}/archiver.php?gid=${pageController.galleryItem?.gid}'
         '&token=${pageController.galleryItem?.token}'
         '&or=${pageController.galleryItem?.archiverLink}';
     logger.d(_archiverLink);
-    return await Api.getArchiver(_archiverLink);
+    return await getArchiver(_archiverLink);
   }
 
   Future<void> _loadData() async {
@@ -45,8 +47,9 @@ class ArchiverController extends GetxController
   }
 
   Future<void> downloadRemote(String dlres) async {
-    final String response = await Api.postArchiverRemoteDownload(
-        pageController.galleryItem?.archiverLink ?? '', dlres);
+    logger.d('downloadRemote  $_archiverLink $dlres');
+    final String response =
+        await postArchiverRemoteDownload(_archiverLink, dlres);
     showToast(response);
   }
 
@@ -54,11 +57,13 @@ class ArchiverController extends GetxController
     required String dltype,
     required String dlcheck,
   }) async {
-    final String _url = await Api.postArchiverLocalDownload(
-        pageController.galleryItem?.archiverLink ?? '',
-        dltype: dltype,
-        dlcheck: dlcheck);
+    final String _url = await postArchiverLocalDownload(
+      _archiverLink,
+      dltype: dltype,
+      dlcheck: dlcheck,
+    );
     Get.back();
+    logger.d('archiver downloadLoacal $_url');
     _downloadController.downloadArchiverFile(
       gid: pageController.galleryItem?.gid ?? '0',
       title: pageController.title,
