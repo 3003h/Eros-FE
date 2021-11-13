@@ -3,7 +3,7 @@ description: fehviewer
 
 publish_to: 'none' # Remove this line if you wish to publish to pub.dev
 
-version: 1.1.33+330
+version: 1.1.33+329
 
 environment:
   sdk: '>=2.14.0 <3.0.0'
@@ -16,14 +16,14 @@ dependencies:
   flutter_localizations:
     sdk: flutter
   # 图标
-  cupertino_icons: ^1.0.4
+  cupertino_icons: ^1.0.3
 
   intl: ^0.17.0
-  font_awesome_flutter: ^9.2.0
+  font_awesome_flutter: ^9.0.0
   line_icons: ^2.0.1
 
   # 网络请求
-  dio: ^4.0.1
+  dio: ^4.0.0
   dio_http_cache:
     git:
       url: https://github.com/vrtdev/dio-http-cache.git
@@ -35,100 +35,100 @@ dependencies:
   cookie_jar: ^3.0.1
   dio_cookie_manager: ^2.0.0
   webview_cookie_manager: ^2.0.6
-  shared_preferences: ^2.0.8
-  oktoast: ^3.1.5
-  sqflite: ^2.0.0+4
+  shared_preferences: ^2.0.5
+  oktoast: ^3.0.0
+  sqflite: ^2.0.0+3
   html_unescape: ^2.0.0
   enum_to_string: ^2.0.1
   flutter_inappwebview: ^5.3.2
   html: ^0.15.0
   flutter_linkify: ^5.0.2
-  url_launcher: ^6.0.12
+  url_launcher: ^6.0.3
   tuple: ^2.0.0
-  get: ^4.3.8
-  get_storage: ^2.0.3
+  get: ^4.2.0
+  get_storage: ^2.0.2
   photo_view: ^0.13.0
-  cached_network_image: ^3.1.0+1
-  extended_image: ^5.1.3
+  cached_network_image: ^3.0.0
+  extended_image: ^5.1.0
   liquid_progress_indicator_ns: ^1.0.0
-  logger: ^1.1.0
+  logger: ^1.0.0
   waterfall_flow: ^3.0.1
   modal_bottom_sheet: ^2.0.0
-  local_auth: ^1.1.8
+  local_auth: ^1.1.5
   flutter_egg:
     git:
       url: https://github.com/honjow/flutter_egg.git
   # 从分享菜单打开
   receive_sharing_intent: ^1.4.5
   # 分享
-  share: ^2.0.4
+  share: ^2.0.1
   # 权限检查
-  permission_handler: ^8.2.6
+  permission_handler: ^8.0.0+1
   # 缓存
-  flutter_cache_manager: ^3.1.3
+  flutter_cache_manager: ^3.0.2
   # 图片保存
   image_gallery_saver: any
   # 滑动删除
   flutter_slidable: ^1.0.0
   scrollable_positioned_list: ^0.2.2
   reorderables: ^0.4.1
-  basic_utils: ^3.8.2
+  basic_utils: ^3.0.2
   # 震动
   flutter_vibrate: ^1.3.0
 #     git:
 #       url: https://github.com/honjow/flutter_vibrate.git
   # 文件选择
-  file_picker: ^4.2.2+1
+  file_picker: ^4.1.2
   # 评星
   flutter_rating_bar: ^4.0.0
-  custom_pop_up_menu: ^1.2.2
-  flutter_downloader: ^1.7.1
-  floor: ^1.2.0
-  copy_with_extension: ^2.0.2
-  package_info: ^2.0.2
-  firebase_analytics: ^8.3.4
-  firebase_crashlytics: ^2.3.0
-  firebase_performance: ^0.7.1+4
-  dio_firebase_performance: ^0.3.0
+  custom_pop_up_menu: ^1.2.0
+  flutter_downloader: ^1.6.0
+  floor: ^1.1.0
+  copy_with_extension: ^2.0.0
+  package_info: ^2.0.0
+  firebase_analytics: ^8.0.4
+  firebase_crashlytics: ^2.0.3
+  firebase_performance: ^0.7.0+2
+  dio_firebase_performance: ^0.3.1-dev.3
   cloud_firestore: ^3.1.0
-  pretty_dio_logger: ^1.1.1
+  pretty_dio_logger: ^1.2.0-beta-1
   translator: ^0.1.7
 #   pattern_lock: ^2.0.0
   orientation: ^1.3.0
-  vibration: ^1.7.3
+  vibration: ^1.7.4-nullsafety.0
   moor_flutter: ^4.0.0
-  device_info: ^2.0.3
+  device_info: ^2.0.1
 #   flutter_statusbar_manager:
 #     git:
 #       url: https://github.com/jWinterDay/flutter_statusbar_manager.git
 #      ref: master
   flutter_easyrefresh: ^2.2.1
-  flutter_markdown: ^0.6.8
-  archive: ^3.1.6
+  flutter_markdown: ^0.6.2
+  archive: ^3.1.2
   hive: ^2.0.4
-  hive_flutter: ^1.1.0
-  extended_sliver: ^2.0.1
+  hive_flutter: ^1.0.0
+  extended_sliver: ^2.0.0
   blur: ^3.0.0
   flutter_easyloading: ^3.0.3
   extended_text: ^7.0.0
   sprintf: ^6.0.0
-  keframe: ^2.0.3
+  keframe: ^2.0.1
 #   fps_monitor: ^2.0.0
   executor: ^2.2.2
   synchronized: ^3.0.0
   isolate_handler: ^1.0.0
-  worker_manager: ^4.2.4
+  worker_manager: ^4.0.2
   collection: ^1.15.0
   zoom_widget: ^0.2.1
   english_words: ^4.0.0
-  scroll_to_index: ^2.1.0
+  scroll_to_index: ^2.0.0
   throttling: ^1.0.0
   sleek_circular_slider: ^2.0.1
   linked_scroll_controller: ^0.2.0
   persistent_bottom_nav_bar: ^4.0.2
-  device_preview: ^0.8.0
-  webdav_client: ^1.1.2
-  auto_animated: ^3.0.1
+  device_preview: ^0.7.4
+  webdav_client: ^1.1.0
+  auto_animated: ^3.0.0
 #  google_ml_kit: ^0.7.1
 #  google_ml_kit:
 #    path: /Users/honjow/git/Google-Ml-Kit-plugin
@@ -140,29 +140,30 @@ dependencies:
       url: https://github.com/honjow/learning.git
       path: packages/learning_language
   encrypt: ^5.0.1
-  wakelock: ^0.5.6
+  wakelock: ^0.5.3+3
   jinja: ^0.3.4
   restart_app: ^1.1.0
   image: ^3.0.8
   palette_generator: ^0.3.2
+#   flutter_app_restart: ^1.0.0
 
 dev_dependencies:
   # flutter packages pub run build_runner build --delete-conflicting-outputs
   # flutter packages pub run build_runner watch
 
   # flutter pub run intl_utils:generate
-  intl_utils: ^2.5.1
+  intl_utils: ^2.4.0
   # flutter pub run apn_json2model
   apn_json2model: ^2.3.0
-  build_runner: ^2.1.5
-  json_serializable: ^6.0.1
-  json_annotation: ^4.3.0
+  build_runner: ^2.0.3
+  json_serializable: ^4.1.2
+  json_annotation: ^4.0.1
 
-  floor_generator: ^1.2.0
-  copy_with_extension_gen: ^2.0.3
+  floor_generator: ^1.1.0
+  copy_with_extension_gen: ^2.0.1
 
   # git hook 相关
-  process_run: ^0.12.2+2
+  process_run: ^0.12.1+1
   git_hooks: ^0.1.6
 
   flutter_test:
@@ -170,8 +171,14 @@ dev_dependencies:
   flutter_lints: ^1.0.4
 
 dependency_overrides:
-  async: ^2.8.2
-  json_serializable: ^6.0.1
+  #args: ^2.1.0
+  #expressions: ^0.2.2
+  #logging: ^1.0.1
+
+  # google_ml_kit pod 依赖冲突 降低firebase版本处理
+#  firebase_core: 1.1.0
+#  firebase_crashlytics: 2.0.0
+#  cloud_firestore: 2.0.0
 
 flutter_intl:
   enabled: true
