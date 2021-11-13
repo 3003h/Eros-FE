@@ -50,16 +50,18 @@ enum SearchMenuEnum {
 }
 
 class GallerySearchPage extends StatefulWidget {
+  const GallerySearchPage({Key? key}) : super(key: key);
+
   @override
   _GallerySearchPageState createState() => _GallerySearchPageState();
 }
 
 class _GallerySearchPageState extends State<GallerySearchPage> {
   final String _tag = searchPageCtrlDepth;
-  SearchPageController controller = Get.put(
-    SearchPageController(),
-    tag: searchPageCtrlDepth,
-  );
+  SearchPageController get controller => Get.put(
+        SearchPageController(),
+        tag: _tag,
+      );
 
   GlobalKey centerKey = GlobalKey();
 
@@ -97,7 +99,6 @@ class _GallerySearchPageState extends State<GallerySearchPage> {
       middle: Obx(() {
         return Text(controller.placeholderText);
       }),
-      // middle: getSearchTextFieldIn(),
       transitionBetweenRoutes: false,
       trailing: _buildTrailing(context),
     );
@@ -105,7 +106,7 @@ class _GallerySearchPageState extends State<GallerySearchPage> {
 
   @override
   Widget build(BuildContext context) {
-    final Widget cfp = CupertinoPageScaffold(
+    final Widget cpf = CupertinoPageScaffold(
       navigationBar: GetPlatform.isAndroid ? getNavigationBar(context) : null,
       child: CupertinoScrollbar(
         controller: PrimaryScrollController.of(context),
@@ -130,7 +131,7 @@ class _GallerySearchPageState extends State<GallerySearchPage> {
       ),
     );
 
-    return cfp;
+    return cpf;
   }
 
   Widget _buildSearchRult(BuildContext context) {
@@ -139,9 +140,7 @@ class _GallerySearchPageState extends State<GallerySearchPage> {
       child: CustomScrollView(
         cacheExtent: kTabViewCacheExtent,
         slivers: <Widget>[
-          // SliverToBoxAdapter(
-          //     child: getSearchTextFieldIn().paddingOnly(top: 50)),
-          // TODO android上会有一次删除多个字符的问题
+          // todo android上会有一次删除多个字符的问题
           if (GetPlatform.isIOS)
             SliverFloatingPinnedPersistentHeader(
               delegate: SliverFloatingPinnedPersistentHeaderBuilder(
@@ -284,33 +283,31 @@ class _GallerySearchPageState extends State<GallerySearchPage> {
 
   Widget _maxExtentProtoTypeBar(BuildContext context) {
     // logger.v(' _maxExtentProtoTypeBar');
-    return Container(
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          const SizedBox(),
-          getNavigationBar(context),
-          Container(
-            decoration: BoxDecoration(
-              color: CupertinoDynamicColor.resolve(
-                      ehTheme.themeData!.barBackgroundColor, context)
-                  .withOpacity(1),
-              border: _kDefaultNavBarBorder,
-            ),
-            padding: const EdgeInsets.symmetric(horizontal: 8),
-            child: Row(
-              children: const <Widget>[
-                Expanded(
-                  child: Padding(
-                    padding: EdgeInsets.only(left: 4, top: 4, bottom: 4),
-                    child: SearchTextFieldIn(multiline: true),
-                  ),
-                ),
-              ],
-            ),
+    return Column(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        const SizedBox(),
+        getNavigationBar(context),
+        Container(
+          decoration: BoxDecoration(
+            color: CupertinoDynamicColor.resolve(
+                    ehTheme.themeData!.barBackgroundColor, context)
+                .withOpacity(1),
+            border: _kDefaultNavBarBorder,
           ),
-        ],
-      ),
+          padding: const EdgeInsets.symmetric(horizontal: 8),
+          child: Row(
+            children: const <Widget>[
+              Expanded(
+                child: Padding(
+                  padding: EdgeInsets.only(left: 4, top: 4, bottom: 4),
+                  child: SearchTextFieldIn(multiline: true),
+                ),
+              ),
+            ],
+          ),
+        ),
+      ],
     );
   }
 
@@ -493,9 +490,6 @@ class _GallerySearchPageState extends State<GallerySearchPage> {
 
   Widget _searchHistoryBtnAnimated(
       String text, VoidCallback removeHistory, bool translate) {
-    // return translate
-    //     ? _searchHistoryBtnWithTranslate(text, removeHistory)
-    //     : _searchHistoryBtn(text, removeHistory);
     return AnimatedCrossFade(
       duration: const Duration(milliseconds: 200),
       firstCurve: Curves.easeIn,
@@ -578,40 +572,12 @@ class _GallerySearchPageState extends State<GallerySearchPage> {
                       ),
                     ],
                   ),
-                Container(
-                  child: Wrap(
-                    spacing: 8, //主轴上子控件的间距
-                    runSpacing: 8, //交叉轴上子控件之间的间距
-                    children: _btnList.sublist(
-                        0, min<int>(20, _btnList.length)), //要显示的子控件集合
-                  ),
+                Wrap(
+                  spacing: 8, //主轴上子控件的间距
+                  runSpacing: 8, //交叉轴上子控件之间的间距
+                  children: _btnList.sublist(
+                      0, min<int>(20, _btnList.length)), //要显示的子控件集合
                 ).paddingSymmetric(vertical: 8.0),
-                // if (sPageController.searchHistory.isNotEmpty)
-                //   GestureDetector(
-                //     onTap: sPageController.clearHistory,
-                //     child: Container(
-                //       alignment: Alignment.center,
-                //       padding: const EdgeInsets.symmetric(vertical: 4.0),
-                //       child: Row(
-                //         mainAxisSize: MainAxisSize.min,
-                //         children: [
-                //           const Icon(
-                //             Icons.delete,
-                //             size: 17,
-                //             color: Colors.red,
-                //           ),
-                //           Text(
-                //             L10n.of(Get.context!).clear_search_history,
-                //             style: TextStyle(
-                //               fontSize: 15,
-                //               color: CupertinoDynamicColor.resolve(
-                //                   CupertinoColors.secondaryLabel, Get.context!),
-                //             ),
-                //           ),
-                //         ],
-                //       ),
-                //     ),
-                //   )
               ],
             ),
           ),

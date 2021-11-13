@@ -58,36 +58,49 @@ class CustomHostsListView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     logService.loadFiles();
-    return Obx(() => Container(
-          child: ListView.builder(
-            controller: _controller,
-            shrinkWrap: true,
-            physics: const BouncingScrollPhysics(),
-            itemBuilder: (_, int index) {
-              final File _file = logService.logFiles[index];
-              return Slidable(
-                actionPane: const SlidableDrawerActionPane(),
-                actionExtentRatio: 0.25,
-                secondaryActions: <Widget>[
-                  IconSlideAction(
-                    caption: L10n.of(context).delete,
-                    color: CupertinoDynamicColor.resolve(
+    return Obx(() => ListView.builder(
+          controller: _controller,
+          shrinkWrap: true,
+          physics: const BouncingScrollPhysics(),
+          itemBuilder: (_, int index) {
+            final File _file = logService.logFiles[index];
+            return Slidable(
+              // actionPane: const SlidableDrawerActionPane(),
+              // actionExtentRatio: 0.25,
+              // secondaryActions: <Widget>[
+              //   IconSlideAction(
+              //     caption: L10n.of(context).delete,
+              //     color: CupertinoDynamicColor.resolve(
+              //         CupertinoColors.systemRed, context),
+              //     icon: Icons.delete,
+              //     onTap: () {
+              //       logService.removeLogAt(index);
+              //       // showToast('delete');
+              //     },
+              //   ),
+              // ],
+              endActionPane: ActionPane(
+                motion: const ScrollMotion(),
+                children: [
+                  SlidableAction(
+                    // An action can be bigger than the others.
+                    flex: 2,
+                    onPressed: (_) => logService.removeLogAt(index),
+                    backgroundColor: CupertinoDynamicColor.resolve(
                         CupertinoColors.systemRed, context),
+                    foregroundColor: Colors.white,
                     icon: Icons.delete,
-                    onTap: () {
-                      logService.removeLogAt(index);
-                      // showToast('delete');
-                    },
+                    label: L10n.of(context).delete,
                   ),
                 ],
-                child: LogFileItem(
-                  index: index,
-                  fileName: path.basename(_file.path),
-                ),
-              );
-            },
-            itemCount: logService.logFiles.length,
-          ),
+              ),
+              child: LogFileItem(
+                index: index,
+                fileName: path.basename(_file.path),
+              ),
+            );
+          },
+          itemCount: logService.logFiles.length,
         ));
   }
 }

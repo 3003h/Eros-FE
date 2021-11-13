@@ -43,7 +43,7 @@ enum ListType {
 class SearchPageController extends TabViewController {
   SearchPageController();
 
-  late final String? initSearchText;
+  String? initSearchText;
   final RxString _searchText = ''.obs;
   String get searchText => _searchText.value;
   set searchText(String val) => _searchText.value = val;
@@ -56,7 +56,8 @@ class SearchPageController extends TabViewController {
   bool translateSerachHistory = false;
 
   // 搜索输入框的控制器
-  late final TextEditingController searchTextController;
+  late final TextEditingController searchTextController =
+      TextEditingController();
   bool get textIsNotEmpty => searchTextController.text.isNotEmpty;
 
   // 搜索类型
@@ -253,21 +254,6 @@ class SearchPageController extends TabViewController {
 
     final int _catNum = _ehConfigService.catFilter.value;
 
-    // logger.v('_loadDataFirst');
-
-    // final GalleryList? rult = searchType != SearchType.favorite
-    //     ? await getGallery(
-    //         cats: _catNum,
-    //         serach: _search,
-    //         refresh: refresh,
-    //       )
-    //     : await getGallery(
-    //         favcat: _favoriteViewController.curFavcat,
-    //         serach: _search,
-    //         refresh: refresh,
-    //         galleryListType: GalleryListType.favorite,
-    //       );
-
     final GalleryList? rult = await getGallery(
       cats: _catNum,
       favcat: _favoriteViewController.curFavcat,
@@ -308,22 +294,6 @@ class SearchPageController extends TabViewController {
     try {
       final String? fromGid = state?.last.gid;
 
-      // final GalleryList? rult = searchType != SearchType.favorite
-      //     ? await getGallery(
-      //         page: nextPage,
-      //         fromGid: fromGid,
-      //         cats: _catNum,
-      //         serach: _search,
-      //         refresh: true,
-      //       )
-      //     : await getGallery(
-      //         page: nextPage,
-      //         favcat: _favoriteViewController.curFavcat,
-      //         serach: _search,
-      //         refresh: true,
-      //         galleryListType: GalleryListType.favorite,
-      //       );
-
       final GalleryList? rult = await getGallery(
         page: nextPage,
         fromGid: fromGid,
@@ -340,7 +310,6 @@ class SearchPageController extends TabViewController {
               .toList() ??
           [];
 
-      // state?.addAll(rultList);
       final insertIndex = state?.length ?? 0;
       change([...?state, ...rultList], status: RxStatus.success());
 
@@ -354,7 +323,6 @@ class SearchPageController extends TabViewController {
       maxPage = rult?.maxPage ?? 0;
       curPage.value = nextPage;
       pageState = PageState.None;
-      // update();
     } catch (e, stack) {
       pageState = PageState.LoadingException;
       rethrow;
@@ -380,22 +348,6 @@ class SearchPageController extends TabViewController {
 
     try {
       final String? fromGid = state?.last.gid;
-
-      // final GalleryList? rult = searchType != SearchType.favorite
-      //     ? await getGallery(
-      //         page: curPage.value - 1,
-      //         fromGid: fromGid,
-      //         cats: _catNum,
-      //         serach: _search,
-      //         refresh: true,
-      //       )
-      //     : await getGallery(
-      //         page: curPage.value - 1,
-      //         favcat: _favoriteViewController.curFavcat,
-      //         serach: _search,
-      //         refresh: true,
-      //         galleryListType: GalleryListType.favorite,
-      //       );
 
       final GalleryList? rult = await getGallery(
         page: curPage.value - 1,
@@ -436,20 +388,7 @@ class SearchPageController extends TabViewController {
     final int _catNum = _ehConfigService.catFilter.value;
 
     change(state, status: RxStatus.loading());
-    // final GalleryList? rult = searchType != SearchType.favorite
-    //     ? await getGallery(
-    //         page: page,
-    //         cats: _catNum,
-    //         serach: _search,
-    //         refresh: true,
-    //       )
-    //     : await getGallery(
-    //         page: page,
-    //         favcat: _favoriteViewController.curFavcat,
-    //         serach: _search,
-    //         refresh: true,
-    //         galleryListType: GalleryListType.favorite,
-    //       );
+
     final GalleryList? rult = await getGallery(
       page: page,
       cats: _catNum,
@@ -509,17 +448,28 @@ class SearchPageController extends TabViewController {
   void onInit() {
     logger.d('onInit $searchPageCtrlDepth');
 
+    // SearchRepository searchRepository = Get.find();
+    // initSearchText = searchRepository.searchText;
+    // searchType = searchRepository.searchType;
+    //
+    // searchTextController = TextEditingController();
+    //
+    // searchHistory = hiveHelper.getAllSearchHistory();
+    // _autoComplete = initSearchText?.trim().isNotEmpty ?? false;
+    // searchTextController.addListener(_delayedSearch);
+    // searchTextController = TextEditingController();
+    super.onInit();
+  }
+
+  @override
+  void onReady() {
     SearchRepository searchRepository = Get.find();
     initSearchText = searchRepository.searchText;
     searchType = searchRepository.searchType;
-
-    searchTextController = TextEditingController();
-
-    // fetchNormal = getGallery;
-    searchHistory = hiveHelper.getAllSearchHistory();
     _autoComplete = initSearchText?.trim().isNotEmpty ?? false;
     searchTextController.addListener(_delayedSearch);
-    super.onInit();
+    super.onReady();
+    searchHistory = hiveHelper.getAllSearchHistory();
   }
 
   @override

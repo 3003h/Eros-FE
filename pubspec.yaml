@@ -69,8 +69,8 @@ dependencies:
   # 图片保存
   image_gallery_saver: any
   # 滑动删除
-  flutter_slidable: ^0.6.0
-  scrollable_positioned_list: ^0.2.0-nullsafety.0
+  flutter_slidable: ^1.0.0
+  scrollable_positioned_list: ^0.2.2
   reorderables: ^0.4.1
   basic_utils: ^3.0.2
   # 震动
@@ -90,7 +90,7 @@ dependencies:
   firebase_crashlytics: ^2.0.3
   firebase_performance: ^0.7.0+2
   dio_firebase_performance: ^0.3.1-dev.3
-  cloud_firestore: ^2.2.0
+  cloud_firestore: ^3.1.0
   pretty_dio_logger: ^1.2.0-beta-1
   translator: ^0.1.7
 #   pattern_lock: ^2.0.0
@@ -145,7 +145,6 @@ dependencies:
   restart_app: ^1.1.0
   image: ^3.0.8
   palette_generator: ^0.3.2
-#   flutter_app_restart: ^1.0.0
 
 dev_dependencies:
   # flutter packages pub run build_runner build --delete-conflicting-outputs
