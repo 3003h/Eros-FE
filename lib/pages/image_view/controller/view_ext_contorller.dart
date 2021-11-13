@@ -366,6 +366,7 @@ class ViewExtController extends GetxController {
   Future<GalleryImage?> fetchImage(
     int itemSer, {
     bool changeSource = false,
+    BuildContext? context,
   }) async {
     vState.imageTaskDao ??= await DownloadController.getImageTaskDao();
     vState.galleryTaskDao ??= await DownloadController.getGalleryTaskDao();
@@ -398,7 +399,7 @@ class ViewExtController extends GetxController {
 
     GalleryPara.instance
         .precacheImages(
-      Get.context!,
+      context ?? Get.context!,
       imageMap: _galleryPageController.imageMap,
       itemSer: itemSer,
       max: _ehConfigService.preloadImage.value,

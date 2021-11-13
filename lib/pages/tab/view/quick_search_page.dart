@@ -21,8 +21,8 @@ import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:line_icons/line_icons.dart';
-import 'package:share/share.dart';
 import 'package:path/path.dart' as path;
+import 'package:share/share.dart';
 
 class QuickSearchListPage extends StatelessWidget {
   QuickSearchListPage({Key? key, this.autoSearch = true}) : super(key: key);
@@ -77,8 +77,9 @@ class QuickSearchListPage extends StatelessWidget {
 
       _importTexts.forEach((element) {
         final text = element.toString();
-        if (text.trim().isNotEmpty && !text.startsWith('#'))
+        if (text.trim().isNotEmpty && !text.startsWith('#')) {
           quickSearchController.addText(element.toString(), silent: true);
+        }
       });
     }
   }
@@ -295,26 +296,13 @@ class QuickSearchListPage extends StatelessWidget {
                   margin: const EdgeInsets.only(left: 24),
                   child: Slidable(
                     key: Key(_datas[position].toString()),
-                    // actionPane: const SlidableDrawerActionPane(),
-                    // actionExtentRatio: 0.25,
-                    // secondaryActions: <Widget>[
-                    //   IconSlideAction(
-                    //     caption: L10n.of(context).delete,
-                    //     color: CupertinoDynamicColor.resolve(
-                    //         CupertinoColors.systemRed, context),
-                    //     icon: Icons.delete,
-                    //     onTap: () {
-                    //       // showToast('delete');
-                    //       quickSearchController.removeTextAt(position);
-                    //     },
-                    //   ),
-                    // ],
                     endActionPane: ActionPane(
+                      extentRatio: 0.25,
                       motion: const ScrollMotion(),
                       children: [
                         SlidableAction(
                           // An action can be bigger than the others.
-                          flex: 2,
+                          // flex: 2,
                           onPressed: (_) =>
                               quickSearchController.removeTextAt(position),
                           backgroundColor: CupertinoDynamicColor.resolve(

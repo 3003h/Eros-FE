@@ -1,9 +1,11 @@
 import 'dart:io';
 
+import 'package:collection/collection.dart';
 import 'package:cookie_jar/cookie_jar.dart';
 import 'package:dio/dio.dart';
 import 'package:dio_http_cache/dio_http_cache.dart';
 import 'package:fehviewer/common/controller/advance_search_controller.dart';
+import 'package:fehviewer/common/controller/user_controller.dart';
 import 'package:fehviewer/common/global.dart';
 import 'package:fehviewer/common/parser/gallery_detail_parser.dart';
 import 'package:fehviewer/const/const.dart';
@@ -40,6 +42,8 @@ Future<GalleryList?> getGallery({
 }) async {
   final AdvanceSearchController _searchController = Get.find();
   DioHttpClient dioHttpClient = DioHttpClient(dioConfig: ehDioConfig);
+
+  await checkCookie();
 
   logger.v('df ${ehDioConfig.domainFronting}');
 
@@ -128,18 +132,32 @@ Future<GalleryList?> getGallery({
   }
 }
 
+Future checkCookie() async {
+  final PersistCookieJar cookieJar = await Api.cookieJar;
+  final List<Cookie> cookies =
+      await cookieJar.loadForRequest(Uri.parse(Api.getBaseUrl()));
+  cookies.add(Cookie('nw', '1'));
+
+  if (cookies.firstWhereOrNull((_cookie) => _cookie.name == 'ipb_member_id') ==
+      null) {
+    logger.d('reset cookie');
+    final user = Get.find<UserController>().user.value;
+    cookies.add(Cookie('ipb_member_id', user.memberIdFB));
+    cookies.add(Cookie('ipb_pass_hash', user.passHashFB));
+    if (user.igneousFB.isNotEmpty) {
+      cookies.add(Cookie('igneous', user.igneousFB));
+    }
+  }
+
+  cookieJar.saveFromResponse(Uri.parse(Api.getBaseUrl()), cookies);
+}
+
 Future<GalleryItem?> getGalleryDetail({
   required String url,
   bool refresh = false,
   CancelToken? cancelToken,
 }) async {
-  final PersistCookieJar cookieJar = await Api.cookieJar;
-  final List<Cookie> cookies =
-      await cookieJar.loadForRequest(Uri.parse(Api.getBaseUrl()));
-  cookies.add(Cookie('nw', '1'));
-  cookieJar.saveFromResponse(Uri.parse(Api.getBaseUrl()), cookies);
-
-  logger.d('cookies $cookies');
+  await checkCookie();
 
   DioHttpClient dioHttpClient = DioHttpClient(dioConfig: ehDioConfig);
   DioHttpResponse httpResponse = await dioHttpClient.get(

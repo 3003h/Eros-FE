@@ -65,26 +65,11 @@ class CustomHostsListView extends StatelessWidget {
           itemBuilder: (_, int index) {
             final File _file = logService.logFiles[index];
             return Slidable(
-              // actionPane: const SlidableDrawerActionPane(),
-              // actionExtentRatio: 0.25,
-              // secondaryActions: <Widget>[
-              //   IconSlideAction(
-              //     caption: L10n.of(context).delete,
-              //     color: CupertinoDynamicColor.resolve(
-              //         CupertinoColors.systemRed, context),
-              //     icon: Icons.delete,
-              //     onTap: () {
-              //       logService.removeLogAt(index);
-              //       // showToast('delete');
-              //     },
-              //   ),
-              // ],
               endActionPane: ActionPane(
                 motion: const ScrollMotion(),
+                extentRatio: 0.25,
                 children: [
                   SlidableAction(
-                    // An action can be bigger than the others.
-                    flex: 2,
                     onPressed: (_) => logService.removeLogAt(index),
                     backgroundColor: CupertinoDynamicColor.resolve(
                         CupertinoColors.systemRed, context),
