@@ -218,7 +218,6 @@ class ImageListView extends GetView<ViewExtController> {
                   imageSer: itemSer,
                   enableDoubleTap: false,
                   mode: ExtendedImageMode.none,
-                  // expand: _height != null,
                 ),
               );
             }),
@@ -268,7 +267,6 @@ class ImageListView extends GetView<ViewExtController> {
                     imageSer: itemSer,
                     enableDoubleTap: false,
                     mode: ExtendedImageMode.none,
-                    // expand: _height != null,
                   ),
                 );
               }),

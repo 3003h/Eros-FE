@@ -17,7 +17,7 @@
 #
 # This file contains the analysis options used by Flutter tools, such as IntelliJ,
 # Android Studio, and the `flutter analyze` command.
-include: package:flutter_lints/flutter.yaml
+#include: package:flutter_lints/flutter.yaml
 
 analyzer:
   strong-mode:

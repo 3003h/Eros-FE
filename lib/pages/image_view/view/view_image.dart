@@ -57,8 +57,10 @@ class _ViewImageState extends State<ViewImage> with TickerProviderStateMixin {
     vState.fade = true;
 
     if (vState.loadType == LoadType.network) {
-      controller.imageFutureMap[widget.imageSer] =
-          controller.fetchImage(widget.imageSer);
+      controller.imageFutureMap[widget.imageSer] = controller.fetchImage(
+        widget.imageSer,
+        context: context,
+      );
     }
 
     WidgetsBinding.instance?.addPostFrameCallback((_) {
@@ -86,12 +88,13 @@ class _ViewImageState extends State<ViewImage> with TickerProviderStateMixin {
         (ExtendedImageState state) {
       double? initialScale = widget.initialScale;
 
-      if (state.extendedImageInfo != null) {
+      final _imageInfo = state.extendedImageInfo;
+      if (_imageInfo != null) {
         initialScale = initScale(
             size: size,
             initialScale: initialScale,
-            imageSize: Size(state.extendedImageInfo!.image.width.toDouble(),
-                state.extendedImageInfo!.image.height.toDouble()));
+            imageSize: Size(_imageInfo.image.width.toDouble(),
+                _imageInfo.image.height.toDouble()));
         // logger.d('initialScale $initialScale');
 
         vState.doubleTapScales[0] = initialScale ?? vState.doubleTapScales[0];
@@ -100,9 +103,7 @@ class _ViewImageState extends State<ViewImage> with TickerProviderStateMixin {
       }
       return GestureConfig(
           inPageView: true,
-          initialScale: initialScale!,
-          // initialScale: widget.initialScale,
-          // maxScale: max(initialScale!, 5.0),
+          initialScale: initialScale ?? 1.0,
           maxScale: 10.0,
           // animationMaxScale: max(initialScale, 5.0),
           animationMaxScale: 10.0,
@@ -116,7 +117,7 @@ class _ViewImageState extends State<ViewImage> with TickerProviderStateMixin {
       ///you can use define pointerDownPosition as you can,
       ///default value is double tap pointer down postion.
       final Offset? pointerDownPosition = state.pointerDownPosition;
-      final double begin = state.gestureDetails!.totalScale ?? 0.0;
+      final double begin = state.gestureDetails?.totalScale ?? 0.0;
       double end;
 
       //remove old
@@ -143,14 +144,14 @@ class _ViewImageState extends State<ViewImage> with TickerProviderStateMixin {
 
       _doubleClickAnimationListener = () {
         state.handleDoubleTap(
-            scale: _doubleClickAnimation!.value,
+            scale: _doubleClickAnimation?.value ?? 1.0,
             doubleTapPosition: pointerDownPosition);
       };
       _doubleClickAnimation = _doubleClickAnimationController.drive(
           Tween<double>(begin: begin, end: end)
               .chain(CurveTween(curve: Curves.easeInOutCubic)));
 
-      _doubleClickAnimation!.addListener(_doubleClickAnimationListener);
+      _doubleClickAnimation?.addListener(_doubleClickAnimationListener);
 
       _doubleClickAnimationController.forward();
     };
@@ -163,8 +164,9 @@ class _ViewImageState extends State<ViewImage> with TickerProviderStateMixin {
           initGestureConfigHandler: _initGestureConfigHandler,
           onDoubleTap: widget.enableDoubleTap ? onDoubleTap : null,
           loadStateChanged: (ExtendedImageState state) {
-            if (state.extendedImageLoadState == LoadState.completed) {
-              final ImageInfo? imageInfo = state.extendedImageInfo;
+            final ImageInfo? imageInfo = state.extendedImageInfo;
+            if (state.extendedImageLoadState == LoadState.completed ||
+                imageInfo != null) {
               controller.setScale100(imageInfo!, size);
 
               if (vState.imageSizeMap[widget.imageSer] == null) {
@@ -251,7 +253,7 @@ class _ViewImageState extends State<ViewImage> with TickerProviderStateMixin {
                           return ViewErr509(ser: widget.imageSer);
                         }
                       } else {
-                        logger.e('other error');
+                        logger.e('other error: ${snapshot.error}');
                         _errInfo = snapshot.error.toString();
                       }
 
@@ -327,35 +329,35 @@ class _ViewImageState extends State<ViewImage> with TickerProviderStateMixin {
                       },
                     );
 
-                    if (Global.inDebugMode) {
-                      image = Stack(
-                        alignment: Alignment.center,
-                        fit: controller.vState.viewMode ==
-                                    ViewMode.topToBottom ||
-                                controller.vState.columnMode !=
-                                    ViewColumnMode.single
-                            ? StackFit.loose
-                            : StackFit.expand,
-                        children: [
-                          image,
-                          Positioned(
-                            left: 30,
-                            child: Text('${_image?.ser ?? ''}',
-                                style: const TextStyle(
-                                    fontSize: 18,
-                                    color: CupertinoColors
-                                        .secondarySystemBackground,
-                                    shadows: <Shadow>[
-                                      Shadow(
-                                        color: Colors.black,
-                                        offset: Offset(1, 1),
-                                        blurRadius: 2,
-                                      )
-                                    ])),
-                          ),
-                        ],
-                      );
-                    }
+                    // if (Global.inDebugMode) {
+                    //   image = Stack(
+                    //     alignment: Alignment.center,
+                    //     fit: controller.vState.viewMode ==
+                    //                 ViewMode.topToBottom ||
+                    //             controller.vState.columnMode !=
+                    //                 ViewColumnMode.single
+                    //         ? StackFit.loose
+                    //         : StackFit.expand,
+                    //     children: [
+                    //       image,
+                    //       Positioned(
+                    //         left: 30,
+                    //         child: Text('${_image?.ser ?? ''}',
+                    //             style: const TextStyle(
+                    //                 fontSize: 18,
+                    //                 color: CupertinoColors
+                    //                     .secondarySystemBackground,
+                    //                 shadows: <Shadow>[
+                    //                   Shadow(
+                    //                     color: Colors.black,
+                    //                     offset: Offset(1, 1),
+                    //                     blurRadius: 2,
+                    //                   )
+                    //                 ])),
+                    //       ),
+                    //     ],
+                    //   );
+                    // }
 
                     return image;
                   } else {

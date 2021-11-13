@@ -58,10 +58,10 @@ class GallerySearchPage extends StatefulWidget {
 
 class _GallerySearchPageState extends State<GallerySearchPage> {
   final String _tag = searchPageCtrlDepth;
-  SearchPageController get controller => Get.put(
-        SearchPageController(),
-        tag: _tag,
-      );
+  SearchPageController controller = Get.put(
+    SearchPageController(),
+    tag: searchPageCtrlDepth,
+  );
 
   GlobalKey centerKey = GlobalKey();
 
