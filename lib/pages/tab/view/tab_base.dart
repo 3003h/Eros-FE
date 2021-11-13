@@ -5,12 +5,15 @@ import 'package:fehviewer/pages/item/controller/galleryitem_controller.dart';
 import 'package:fehviewer/pages/item/gallery_item.dart';
 import 'package:fehviewer/pages/item/gallery_item_flow.dart';
 import 'package:fehviewer/pages/item/gallery_item_flow_large.dart';
+import 'package:fehviewer/pages/item/gallery_item_placeholder.dart';
 import 'package:fehviewer/pages/item/gallery_item_simple.dart';
 import 'package:fehviewer/pages/tab/controller/search_page_controller.dart';
+import 'package:fehviewer/route/routes.dart';
 import 'package:fehviewer/utils/logger.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:keframe/frame_separate_widget.dart';
 import 'package:waterfall_flow/waterfall_flow.dart';
 
 SliverPadding buildWaterfallFlow(
@@ -188,17 +191,27 @@ Widget buildGallerySliverListView(
       if (gallerItemBeans.length - 1 < index) {
         return const SizedBox.shrink();
       }
-      final GalleryItem _item = gallerItemBeans[index];
-      Get.lazyReplace(() => GalleryItemController(_item),
-          tag: _item.gid, fenix: true);
-      return buildGallerySliverListItem(
-        _item,
+      final GalleryItem _itemInfo = gallerItemBeans[index];
+      Get.lazyReplace(() => GalleryItemController(_itemInfo),
+          tag: _itemInfo.gid, fenix: true);
+      final itemWidget = buildGallerySliverListItem(
+        _itemInfo,
         index,
         animation,
         tabTag: tabTag,
         centerKey: centerKey,
         oriFirstIndex: lastTopitemIndex,
       );
+
+      if (tabTag == EHRoutes.history) {
+        return itemWidget;
+      } else {
+        return FrameSeparateWidget(
+          index: index,
+          placeHolder: const GalleryItemPlaceHolder(),
+          child: itemWidget,
+        );
+      }
     },
   );
 }
