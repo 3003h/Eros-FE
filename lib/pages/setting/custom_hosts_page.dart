@@ -69,36 +69,50 @@ class CustomHostsListView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Obx(() => Container(
-          child: ListView.builder(
-            shrinkWrap: true,
-            physics: const NeverScrollableScrollPhysics(),
-            itemBuilder: (_, int index) {
-              final DnsCache _dnsCache = dnsConfigController.hosts[index];
-              return Slidable(
-                actionPane: const SlidableDrawerActionPane(),
-                actionExtentRatio: 0.25,
-                secondaryActions: <Widget>[
-                  IconSlideAction(
-                    caption: L10n.of(context).delete,
-                    color: CupertinoDynamicColor.resolve(
+    return Obx(() => ListView.builder(
+          shrinkWrap: true,
+          physics: const NeverScrollableScrollPhysics(),
+          itemBuilder: (_, int index) {
+            final DnsCache _dnsCache = dnsConfigController.hosts[index];
+            return Slidable(
+              // actionPane: const SlidableDrawerActionPane(),
+              // actionExtentRatio: 0.25,
+              // secondaryActions: <Widget>[
+              //   IconSlideAction(
+              //     caption: L10n.of(context).delete,
+              //     color: CupertinoDynamicColor.resolve(
+              //         CupertinoColors.systemRed, context),
+              //     icon: Icons.delete,
+              //     onTap: () {
+              //       dnsConfigController.removeCustomHostAt(index);
+              //       // showToast('delete');
+              //     },
+              //   ),
+              // ],
+              endActionPane: ActionPane(
+                motion: const ScrollMotion(),
+                children: [
+                  SlidableAction(
+                    // An action can be bigger than the others.
+                    flex: 2,
+                    onPressed: (_) =>
+                        dnsConfigController.removeCustomHostAt(index),
+                    backgroundColor: CupertinoDynamicColor.resolve(
                         CupertinoColors.systemRed, context),
+                    foregroundColor: Colors.white,
                     icon: Icons.delete,
-                    onTap: () {
-                      dnsConfigController.removeCustomHostAt(index);
-                      // showToast('delete');
-                    },
+                    label: L10n.of(context).delete,
                   ),
                 ],
-                child: CuttomHostItem(
-                  index: index,
-                  host: _dnsCache.host ?? '',
-                  addr: _dnsCache.addr ?? '',
-                ),
-              );
-            },
-            itemCount: dnsConfigController.hosts.length,
-          ),
+              ),
+              child: CuttomHostItem(
+                index: index,
+                host: _dnsCache.host ?? '',
+                addr: _dnsCache.addr ?? '',
+              ),
+            );
+          },
+          itemCount: dnsConfigController.hosts.length,
         ));
   }
 }

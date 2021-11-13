@@ -295,8 +295,36 @@ class QuickSearchListPage extends StatelessWidget {
                   margin: const EdgeInsets.only(left: 24),
                   child: Slidable(
                     key: Key(_datas[position].toString()),
-                    actionPane: const SlidableDrawerActionPane(),
-                    actionExtentRatio: 0.25,
+                    // actionPane: const SlidableDrawerActionPane(),
+                    // actionExtentRatio: 0.25,
+                    // secondaryActions: <Widget>[
+                    //   IconSlideAction(
+                    //     caption: L10n.of(context).delete,
+                    //     color: CupertinoDynamicColor.resolve(
+                    //         CupertinoColors.systemRed, context),
+                    //     icon: Icons.delete,
+                    //     onTap: () {
+                    //       // showToast('delete');
+                    //       quickSearchController.removeTextAt(position);
+                    //     },
+                    //   ),
+                    // ],
+                    endActionPane: ActionPane(
+                      motion: const ScrollMotion(),
+                      children: [
+                        SlidableAction(
+                          // An action can be bigger than the others.
+                          flex: 2,
+                          onPressed: (_) =>
+                              quickSearchController.removeTextAt(position),
+                          backgroundColor: CupertinoDynamicColor.resolve(
+                              CupertinoColors.systemRed, context),
+                          foregroundColor: Colors.white,
+                          icon: Icons.delete,
+                          label: L10n.of(context).delete,
+                        ),
+                      ],
+                    ),
                     child: GestureDetector(
                       onTap: () {
                         if (autoSearch) {
@@ -357,18 +385,6 @@ class QuickSearchListPage extends StatelessWidget {
                               ).paddingSymmetric(vertical: 8),
                             ),
                     ),
-                    secondaryActions: <Widget>[
-                      IconSlideAction(
-                        caption: L10n.of(context).delete,
-                        color: CupertinoDynamicColor.resolve(
-                            CupertinoColors.systemRed, context),
-                        icon: Icons.delete,
-                        onTap: () {
-                          // showToast('delete');
-                          quickSearchController.removeTextAt(position);
-                        },
-                      ),
-                    ],
                   ),
                 );
               }
