@@ -10,6 +10,7 @@ import 'package:fehviewer/widget/refresh.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:keframe/size_cache_widget.dart';
 import 'package:line_icons/line_icons.dart';
 
 import '../comm.dart';
@@ -129,6 +130,6 @@ class _HistoryTabState extends State<HistoryTab> {
         // navigationBar: navigationBar,
         child: CupertinoScrollbar(
             controller: PrimaryScrollController.of(context),
-            child: customScrollView));
+            child: SizeCacheWidget(child: customScrollView)));
   }
 }

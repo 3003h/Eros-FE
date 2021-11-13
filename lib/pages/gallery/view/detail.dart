@@ -6,6 +6,7 @@ import 'package:fehviewer/models/base/eh_models.dart';
 import 'package:fehviewer/pages/gallery/controller/gallery_page_controller.dart';
 import 'package:fehviewer/pages/gallery/view/archiver_dialog.dart';
 import 'package:fehviewer/pages/gallery/view/gallery_widget.dart';
+import 'package:fehviewer/pages/gallery/view/preview.dart';
 import 'package:fehviewer/pages/gallery/view/rate_dialog.dart';
 import 'package:fehviewer/pages/gallery/view/torrent_dialog.dart';
 import 'package:fehviewer/pages/tab/view/gallery_base.dart';

@@ -16,14 +16,14 @@ dependencies:
   flutter_localizations:
     sdk: flutter
   # 图标
-  cupertino_icons: ^1.0.3
+  cupertino_icons: ^1.0.4
 
   intl: ^0.17.0
-  font_awesome_flutter: ^9.0.0
+  font_awesome_flutter: ^9.2.0
   line_icons: ^2.0.1
 
   # 网络请求
-  dio: ^4.0.0
+  dio: ^4.0.1
   dio_http_cache:
     git:
       url: https://github.com/vrtdev/dio-http-cache.git
@@ -35,17 +35,17 @@ dependencies:
   cookie_jar: ^3.0.1
   dio_cookie_manager: ^2.0.0
   webview_cookie_manager: ^2.0.6
-  shared_preferences: ^2.0.5
-  oktoast: ^3.0.0
+  shared_preferences: ^2.0.8
+  oktoast: ^3.1.5
   sqflite: ^2.0.0+3
   html_unescape: ^2.0.0
   enum_to_string: ^2.0.1
   flutter_inappwebview: ^5.3.2
   html: ^0.15.0
   flutter_linkify: ^5.0.2
-  url_launcher: ^6.0.3
+  url_launcher: ^6.0.12
   tuple: ^2.0.0
-  get: ^4.2.0
+  get: ^4.3.8
   get_storage: ^2.0.2
   photo_view: ^0.13.0
   cached_network_image: ^3.0.0
@@ -78,7 +78,7 @@ dependencies:
 #     git:
 #       url: https://github.com/honjow/flutter_vibrate.git
   # 文件选择
-  file_picker: ^4.1.2
+  file_picker: ^4.2.2+1
   # 评星
   flutter_rating_bar: ^4.0.0
   custom_pop_up_menu: ^1.2.0
@@ -112,7 +112,7 @@ dependencies:
   flutter_easyloading: ^3.0.3
   extended_text: ^7.0.0
   sprintf: ^6.0.0
-  keframe: ^2.0.1
+  keframe: ^2.0.3
 #   fps_monitor: ^2.0.0
   executor: ^2.2.2
   synchronized: ^3.0.0
