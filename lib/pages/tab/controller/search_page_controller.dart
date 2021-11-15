@@ -451,13 +451,9 @@ class SearchPageController extends TabViewController {
     // SearchRepository searchRepository = Get.find();
     // initSearchText = searchRepository.searchText;
     // searchType = searchRepository.searchType;
-    //
-    // searchTextController = TextEditingController();
-    //
-    // searchHistory = hiveHelper.getAllSearchHistory();
     // _autoComplete = initSearchText?.trim().isNotEmpty ?? false;
     // searchTextController.addListener(_delayedSearch);
-    // searchTextController = TextEditingController();
+    searchHistory = hiveHelper.getAllSearchHistory();
     super.onInit();
   }
 
@@ -468,8 +464,8 @@ class SearchPageController extends TabViewController {
     searchType = searchRepository.searchType;
     _autoComplete = initSearchText?.trim().isNotEmpty ?? false;
     searchTextController.addListener(_delayedSearch);
+    // searchHistory = hiveHelper.getAllSearchHistory();
     super.onReady();
-    searchHistory = hiveHelper.getAllSearchHistory();
   }
 
   @override

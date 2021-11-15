@@ -17,8 +17,8 @@ import 'package:pretty_dio_logger/pretty_dio_logger.dart';
 
 import 'logger.dart';
 
-const int kDefconnectTimeout = 10000;
-const int kDefreceiveTimeout = 10000;
+const int kDefconnectTimeout = 20000;
+const int kDefreceiveTimeout = 20000;
 
 class HttpManager {
   //构造函数
