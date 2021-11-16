@@ -7,6 +7,7 @@ import 'package:fehviewer/common/service/locale_service.dart';
 import 'package:fehviewer/common/service/theme_service.dart';
 import 'package:fehviewer/const/const.dart';
 import 'package:fehviewer/generated/l10n.dart';
+import 'package:fehviewer/network/eh_login.dart';
 import 'package:fehviewer/network/gallery_request.dart';
 import 'package:fehviewer/pages/setting/webview/mytags_in.dart';
 import 'package:fehviewer/pages/setting/webview/web_mysetting_in.dart';
@@ -61,6 +62,9 @@ class ListViewEhSetting extends StatelessWidget {
 
     Future<void> _handleSiteChanged(bool newValue) async {
       _ehConfigService.isSiteEx(newValue);
+      if (newValue) {
+        EhUserManager().getExIgneous();
+      }
       Api.selEhProfile();
     }
 

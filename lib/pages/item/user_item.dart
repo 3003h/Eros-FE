@@ -156,36 +156,22 @@ class UserWidget extends GetView<UserController> {
 
     // logger.d('${controller.user().avatarUrl} ');
     final String _avatarUrl = controller.user().avatarUrl ?? '';
-    if (controller.isLogin && _avatarUrl.isNotEmpty) {
-      return ClipOval(
-        child: EhCachedNetworkImage(
-          imageUrl: _avatarUrl,
-          width: kAvatarSize,
-          height: kAvatarSize,
-          fit: BoxFit.cover,
-          errorWidget: (_, __, ___) => _defAvatar,
-          placeholder: (_, __) => _defAvatar,
-        ),
-        // child: ExtendedImage.network(
-        //   _avatarUrl.dfUrl,
-        //   width: kAvatarSize,
-        //   height: kAvatarSize,
-        //   fit: BoxFit.cover,
-        //   loadStateChanged: (ExtendedImageState state) {
-        //     switch (state.extendedImageLoadState) {
-        //       case LoadState.loading:
-        //         return _defAvatar;
-        //       case LoadState.failed:
-        //         return _defAvatar;
-        //       default:
-        //         return null;
-        //     }
-        //   },
-        // ),
-      );
-    } else {
-      return _defAvatar;
-    }
+    return Obx(() {
+      if (controller.isLogin && _avatarUrl.isNotEmpty) {
+        return ClipOval(
+          child: EhCachedNetworkImage(
+            imageUrl: _avatarUrl,
+            width: kAvatarSize,
+            height: kAvatarSize,
+            fit: BoxFit.cover,
+            errorWidget: (_, __, ___) => _defAvatar,
+            placeholder: (_, __) => _defAvatar,
+          ),
+        );
+      } else {
+        return _defAvatar;
+      }
+    });
   }
 
   Widget _buildText() {

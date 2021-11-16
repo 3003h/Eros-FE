@@ -15,13 +15,13 @@ class DepthService extends GetxService {
   // 路由入栈时 深度+1
   void pushPageCtrl() {
     pageCtrlDepth++;
-    logger.v('pushPageCtrl to $pageCtrlDepth');
+    // logger.v('pushPageCtrl to $pageCtrlDepth');
   }
 
   // 出栈 深度-1 放在onClose事件中
   void popPageCtrl() {
     pageCtrlDepth--;
-    logger.v('popPageCtrl to $pageCtrlDepth');
+    // logger.v('popPageCtrl to $pageCtrlDepth');
   }
 
   /// [searchPageCtrlDepth] 搜索页深度
@@ -30,11 +30,11 @@ class DepthService extends GetxService {
 
   void pushSearchPageCtrl() {
     searchPageCtrlDepth++;
-    logger.d('pushSearchPageCtrl to $searchPageCtrlDepth');
+    // logger.d('pushSearchPageCtrl to $searchPageCtrlDepth');
   }
 
   void popSearchPageCtrl() {
     searchPageCtrlDepth--;
-    logger.d('pushSearchPageCtrl to $searchPageCtrlDepth');
+    // logger.d('pushSearchPageCtrl to $searchPageCtrlDepth');
   }
 }

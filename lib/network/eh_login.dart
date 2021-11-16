@@ -79,7 +79,7 @@ class EhUserManager {
     // set ex cookie
     cookieJar.saveFromResponse(Uri.parse(EHConst.EX_BASE_URL), _cookies);
 
-    await _getExIgneous();
+    getExIgneous();
 
     //check Ex cookies
     final List<Cookie> cookiesEx =
@@ -146,7 +146,7 @@ class EhUserManager {
 
     // 设置EX的cookie
     cookieJar.saveFromResponse(Uri.parse(EHConst.EX_BASE_URL), cookies);
-    await _getExIgneous();
+    getExIgneous();
 
     final User userinfo =
         await _getUserInfo(cookieMap['ipb_member_id'] as String);
@@ -203,11 +203,8 @@ class EhUserManager {
 
     // 设置EX的cookie
     cookieJar.saveFromResponse(Uri.parse(EHConst.EX_BASE_URL), cookies);
-    // if (igneous.isEmpty) {
-    //   await _getExIgneous();
-    // }
 
-    await _getExIgneous();
+    getExIgneous();
 
     final User userinfo = await _getUserInfo(id);
 
@@ -291,7 +288,7 @@ class EhUserManager {
   }
 
   /// 获取里站cookie
-  Future<void> _getExIgneous() async {
+  Future<void> getExIgneous() async {
     final HttpManager httpManager =
         HttpManager.getInstance(baseUrl: EHConst.EX_BASE_URL, cache: false);
     const String url = '/uconfig.php';

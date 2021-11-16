@@ -142,10 +142,14 @@ Future checkCookie() async {
       null) {
     logger.d('reset cookie');
     final user = Get.find<UserController>().user.value;
-    cookies.add(Cookie('ipb_member_id', user.memberIdFB));
-    cookies.add(Cookie('ipb_pass_hash', user.passHashFB));
-    if (user.igneousFB.isNotEmpty) {
-      cookies.add(Cookie('igneous', user.igneousFB));
+    if (user.memberId?.isNotEmpty ?? false) {
+      cookies.add(Cookie('ipb_member_id', user.memberId!));
+    }
+    if (user.passHash?.isNotEmpty ?? false) {
+      cookies.add(Cookie('ipb_pass_hash', user.passHash!));
+    }
+    if (user.igneous?.isNotEmpty ?? false) {
+      cookies.add(Cookie('igneous', user.igneous!));
     }
   }
 
