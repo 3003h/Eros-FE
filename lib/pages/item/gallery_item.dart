@@ -404,7 +404,9 @@ class _CoverImage extends StatelessWidget {
                 child: Hero(
                   tag: '${_item.gid}_cover_$tabTag',
                   child: ClipRRect(
-                      borderRadius: BorderRadius.circular(4), child: image),
+                    borderRadius: BorderRadius.circular(4),
+                    child: image,
+                  ),
                 ),
               ),
             ),
@@ -699,10 +701,9 @@ class CoverImg extends StatelessWidget {
             );
           },
           width: width,
-          // height: height,
           httpHeaders: _httpHeaders,
           imageUrl: imgUrl.dfUrl,
-          fit: BoxFit.fitWidth,
+          fit: BoxFit.contain,
         );
       } else {
         return Container();

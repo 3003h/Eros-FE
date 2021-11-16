@@ -33,7 +33,7 @@ class EhSettingPage extends StatelessWidget {
         navigationBar: CupertinoNavigationBar(
           middle: Text(L10n.of(context).eh),
         ),
-        child: const SafeArea(
+        child: SafeArea(
           child: ListViewEhSetting(),
           bottom: false,
         ));
@@ -43,15 +43,15 @@ class EhSettingPage extends StatelessWidget {
 }
 
 class ListViewEhSetting extends StatelessWidget {
-  const ListViewEhSetting({Key? key}) : super(key: key);
+  ListViewEhSetting({Key? key}) : super(key: key);
+
+  final EhConfigService _ehConfigService = Get.find();
+  final UserController userController = Get.find();
+  final TagTransController transController = Get.find();
+  final LocaleService localeService = Get.find();
 
   @override
   Widget build(BuildContext context) {
-    final EhConfigService _ehConfigService = Get.find();
-    final UserController userController = Get.find();
-    final TagTransController transController = Get.find();
-    final LocaleService localeService = Get.find();
-
     final bool _siteEx = _ehConfigService.isSiteEx.value;
     final bool _jpnTitle = _ehConfigService.isJpnTitle.value;
     final bool _tagTranslat = _ehConfigService.isTagTranslat;
@@ -282,65 +282,31 @@ Widget _buildListModeItem(BuildContext context, {bool hideLine = false}) {
   });
 }
 
-/// 列表模式切换
-Widget _buildListModeItem_Old(BuildContext context, {bool hideLine = false}) {
-  final String _title = L10n.of(context).list_mode;
+/// 标签介绍图片切换
+Widget _buildTagIntroImgLvItem(BuildContext context, {bool hideLine = false}) {
+  const String _title = '标签介绍图片';
   final EhConfigService ehConfigService = Get.find();
 
-  final Map<ListModeEnum, String> modeMap = <ListModeEnum, String>{
-    ListModeEnum.list: L10n.of(context).listmode_medium,
-    ListModeEnum.simpleList: L10n.of(context).listmode_small,
-    ListModeEnum.waterfall: L10n.of(context).listmode_waterfall,
-    ListModeEnum.waterfallLarge: L10n.of(context).listmode_waterfall_large,
+  final Map<TagIntroImgLv, String> descMap = <TagIntroImgLv, String>{
+    TagIntroImgLv.disable: '禁用',
+    TagIntroImgLv.nonh: '隐藏H图片',
+    TagIntroImgLv.r18: '隐藏引起不适的图片',
+    TagIntroImgLv.r18g: '全部显示',
   };
 
-  List<Widget> _getModeList(BuildContext context) {
-    return List<Widget>.from(modeMap.keys.map((ListModeEnum element) {
-      return CupertinoActionSheetAction(
-          onPressed: () {
-            Get.back(result: element);
-          },
-          child: Text(modeMap[element] ?? ''));
-    }).toList());
-  }
-
-  Future<ListModeEnum?> _showDialog(BuildContext context) {
-    return showCupertinoModalPopup<ListModeEnum>(
-        context: context,
-        builder: (BuildContext context) {
-          final CupertinoActionSheet dialog = CupertinoActionSheet(
-            title: Text(_title),
-            cancelButton: CupertinoActionSheetAction(
-                onPressed: () {
-                  Get.back();
-                },
-                child: Text(L10n.of(context).cancel)),
-            actions: <Widget>[
-              ..._getModeList(context),
-            ],
-          );
-          return dialog;
-        });
-  }
-
-  return Obx(() => SelectorSettingItem(
-        title: _title,
-        hideLine: hideLine,
-        selector: modeMap[ehConfigService.listMode.value] ?? '',
-        onTap: () async {
-          logger.v('tap ModeItem');
-          final ListModeEnum? _result = await _showDialog(context);
-          if (_result != null) {
-            // ignore: unnecessary_string_interpolations
-            logger.v('${EnumToString.convertToString(_result)}');
-            ehConfigService.listMode.value = _result;
-          }
-        },
-      ));
+  return Obx(() {
+    return SelectorItem<TagIntroImgLv>(
+      title: _title,
+      hideLine: hideLine,
+      actionMap: descMap,
+      initVal: ehConfigService.tagIntroImgLv.value,
+      onValueChanged: (val) => ehConfigService.tagIntroImgLv.value = val,
+    );
+  });
 }
 
 /// 标签介绍图片切换
-Widget _buildTagIntroImgLvItem(BuildContext context) {
+Widget _buildTagIntroImgLvItem_Old(BuildContext context) {
   const String _title = '标签介绍图片';
   final EhConfigService ehConfigService = Get.find();
 
