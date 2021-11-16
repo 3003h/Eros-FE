@@ -97,7 +97,7 @@ class _GalleryListTabState extends State<GalleryListTab> {
                 size: 26,
               ),
               onPressed: () {
-                NavigatorUtil.showSearch();
+                NavigatorUtil.goSearchPage();
               },
             ),
             // 筛选按钮
@@ -177,7 +177,7 @@ class _GalleryListTabState extends State<GalleryListTab> {
               size: 26,
             ),
             onPressed: () {
-              NavigatorUtil.showSearch();
+              NavigatorUtil.goSearchPage();
             },
           ),
           // 筛选按钮

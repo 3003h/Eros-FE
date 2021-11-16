@@ -90,7 +90,7 @@ class _PopularListTabState extends State<PopularListTab> {
             size: 26,
           ),
           onPressed: () {
-            NavigatorUtil.showSearch();
+            NavigatorUtil.goSearchPage();
           },
         ));
 

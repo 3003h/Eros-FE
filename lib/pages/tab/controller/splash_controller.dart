@@ -67,7 +67,7 @@ class SplashController extends GetxController {
             if (regTagUrl.hasMatch(url)) {
               searchText = regTagUrl.firstMatch(url)?.group(1);
               if (sharedText != null) {
-                NavigatorUtil.goGalleryListBySearch(
+                NavigatorUtil.goSearchPageWithText(
                   simpleSearch: searchText!,
                   replace: true,
                 );
@@ -75,7 +75,7 @@ class SplashController extends GetxController {
             } else if (regUploaderUrl.hasMatch(url)) {
               searchText = regUploaderUrl.firstMatch(url)?.group(1);
               if (sharedText != null) {
-                NavigatorUtil.goGalleryListBySearch(
+                NavigatorUtil.goSearchPageWithText(
                   simpleSearch: 'uploader:${searchText!}',
                   replace: true,
                 );
