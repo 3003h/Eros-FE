@@ -31,6 +31,8 @@ class GalleryHeader extends StatelessWidget {
       color: CupertinoDynamicColor.resolve(CupertinoColors.label, context),
     );
 
+    final _controller = Get.find<GalleryPageController>(tag: pageCtrlDepth);
+
     return Container(
       padding: const EdgeInsets.all(kPadding),
       child: Column(
@@ -40,12 +42,17 @@ class GalleryHeader extends StatelessWidget {
             child: Row(
               children: <Widget>[
                 // 封面
-                CoverImage(
-                  imageUrl: initGalleryItem.imgUrl!,
-                  heroTag: !isLayoutLarge
-                      ? '${initGalleryItem.gid}_cover_$tabTag'
-                      : null,
-                ),
+                Obx(() {
+                  return HeroMode(
+                    enabled: _controller.hideNavigationBtn,
+                    child: CoverImage(
+                      imageUrl: initGalleryItem.imgUrl!,
+                      heroTag: !isLayoutLarge
+                          ? '${initGalleryItem.gid}_cover_$tabTag'
+                          : null,
+                    ),
+                  );
+                }),
                 Expanded(
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
