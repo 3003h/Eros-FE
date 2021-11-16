@@ -6,6 +6,7 @@ import 'package:dio/dio.dart';
 import 'package:encrypt/encrypt.dart' as encrypt;
 import 'package:fehviewer/models/base/eh_models.dart';
 import 'package:fehviewer/utils/logger.dart';
+import 'package:fehviewer/utils/toast.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
@@ -383,24 +384,27 @@ class WebdavController extends GetxController {
     return _list;
   }
 
-  Future<bool> _pingWebDAV(String url, {String? user, String? pwd}) async {
+  Future<void> _pingWebDAV(String url, {String? user, String? pwd}) async {
     final client = webdav.newClient(
       url,
       user: user ?? '',
       password: pwd ?? '',
     );
-    try {
-      await client.ping();
-      return true;
-    } catch (e) {
-      return false;
-    }
+
+    await client.ping();
   }
 
   Future<bool> addWebDAVProfile(String url, {String? user, String? pwd}) async {
     isLongining = true;
     update([idActionLogin]);
-    final rult = await _pingWebDAV(url, user: user, pwd: pwd);
+    bool rult = false;
+    try {
+      _pingWebDAV(url, user: user, pwd: pwd);
+      rult = true;
+    } catch (e, stack) {
+      logger.e('$e\n$stack');
+      showToast('$e\n$stack');
+    }
     if (rult) {
       // 保存账号 rebuild
       WebdavProfile webdavUser =
