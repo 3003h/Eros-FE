@@ -446,7 +446,7 @@ class SearchPageController extends TabViewController {
 
   @override
   void onInit() {
-    logger.d('onInit $searchPageCtrlDepth');
+    logger.d('onInit searchPageCtrlDepth $searchPageCtrlDepth');
 
     // SearchRepository searchRepository = Get.find();
     // initSearchText = searchRepository.searchText;

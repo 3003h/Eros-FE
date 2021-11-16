@@ -96,7 +96,7 @@ class _WatchedListTabState extends State<WatchedListTab> {
               final bool fromTabItem =
                   Get.find<TabHomeController>().tabMap[controller.tabTag] ??
                       false;
-              NavigatorUtil.showSearch(
+              NavigatorUtil.goSearchPage(
                   searchType: SearchType.watched, fromTabItem: fromTabItem);
             },
           ),
@@ -179,7 +179,7 @@ class _WatchedListTabState extends State<WatchedListTab> {
               final bool fromTabItem =
                   Get.find<TabHomeController>().tabMap[controller.tabTag] ??
                       false;
-              NavigatorUtil.showSearch(
+              NavigatorUtil.goSearchPage(
                   searchType: SearchType.watched, fromTabItem: fromTabItem);
             },
           ),

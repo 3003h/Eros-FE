@@ -119,7 +119,7 @@ class _FavoriteTabState extends State<FavoriteTab> {
               final bool fromTabItem =
                   Get.find<TabHomeController>().tabMap[controller.tabTag] ??
                       false;
-              NavigatorUtil.showSearch(
+              NavigatorUtil.goSearchPage(
                   searchType: SearchType.favorite, fromTabItem: fromTabItem);
             },
           ),
@@ -218,7 +218,7 @@ class _FavoriteTabState extends State<FavoriteTab> {
                 final bool fromTabItem =
                     Get.find<TabHomeController>().tabMap[controller.tabTag] ??
                         false;
-                NavigatorUtil.showSearch(
+                NavigatorUtil.goSearchPage(
                     searchType: SearchType.favorite, fromTabItem: fromTabItem);
               },
             ),

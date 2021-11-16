@@ -194,7 +194,7 @@ class _DetailWidget extends StatelessWidget {
                 .split('\|')
                 .first;
             logger.d('处理后标题 "$title"');
-            NavigatorUtil.goGalleryListBySearch(simpleSearch: '"$title"');
+            NavigatorUtil.goSearchPageWithText(simpleSearch: '"$title"');
             // NavigatorUtil.goGalleryListBySearch(simpleSearch: title);
           },
         ),

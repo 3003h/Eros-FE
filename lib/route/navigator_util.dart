@@ -19,7 +19,7 @@ import 'package:get/get.dart';
 
 class NavigatorUtil {
   // 带搜索条件打开搜索
-  static Future<void> goGalleryListBySearch({
+  static Future<void> goSearchPageWithText({
     required String simpleSearch,
     bool replace = false,
   }) async {
@@ -38,6 +38,11 @@ class NavigatorUtil {
     Get.find<DepthService>().pushSearchPageCtrl();
     Get.replace(SearchRepository(searchText: _search));
 
+    Get.put(
+      SearchPageController(),
+      tag: searchPageCtrlDepth,
+    );
+
     if (replace) {
       await Get.offNamed(
         EHRoutes.search,
@@ -55,7 +60,7 @@ class NavigatorUtil {
   }
 
   /// 打开搜索页面 指定搜索类型
-  static Future<void> showSearch({
+  static Future<void> goSearchPage({
     SearchType searchType = SearchType.normal,
     bool fromTabItem = true,
   }) async {
@@ -63,6 +68,11 @@ class NavigatorUtil {
     Get.find<DepthService>().pushSearchPageCtrl();
 
     Get.replace(SearchRepository(searchType: searchType));
+
+    Get.put(
+      SearchPageController(),
+      tag: searchPageCtrlDepth,
+    );
 
     await Get.toNamed(
       EHRoutes.search,

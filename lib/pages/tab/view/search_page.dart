@@ -58,16 +58,28 @@ class GallerySearchPage extends StatefulWidget {
 
 class _GallerySearchPageState extends State<GallerySearchPage> {
   final String _tag = searchPageCtrlDepth;
-  SearchPageController controller = Get.put(
-    SearchPageController(),
-    tag: searchPageCtrlDepth,
-  );
+  // SearchPageController controller = Get.put(
+  //   SearchPageController(),
+  //   tag: searchPageCtrlDepth,
+  // );
+  late SearchPageController controller;
 
-  GlobalKey centerKey = GlobalKey();
+  // GlobalKey centerKey = GlobalKey();
 
   @override
   void initState() {
     super.initState();
+
+    if (Get.isRegistered<SearchPageController>(tag: _tag)) {
+      logger.d('find SearchPageController $_tag');
+      controller = Get.find<SearchPageController>(tag: _tag);
+    } else {
+      logger.d('put SearchPageController $_tag');
+      controller = Get.put(
+        SearchPageController(),
+        tag: _tag,
+      );
+    }
 
     WidgetsBinding.instance?.addPostFrameCallback((_) {
       final _scrollController = PrimaryScrollController.of(context);
@@ -88,8 +100,8 @@ class _GallerySearchPageState extends State<GallerySearchPage> {
 
   @override
   void dispose() {
-    Get.delete<SearchPageController>(tag: _tag);
     super.dispose();
+    Get.delete<SearchPageController>(tag: _tag);
   }
 
   CupertinoNavigationBar getNavigationBar(BuildContext context) {
@@ -635,7 +647,7 @@ class _GallerySearchPageState extends State<GallerySearchPage> {
           maxPage: controller.maxPage,
           curPage: controller.curPage.value,
           // loadMord: controller.loadDataMore,
-          topKey: centerKey,
+          // topKey: centerKey,
           key: controller.sliverAnimatedListKey,
           lastTopitemIndex: controller.lastTopitemIndex,
         );

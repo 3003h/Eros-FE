@@ -186,6 +186,8 @@ class AppPages {
     GetPage(
       name: EHRoutes.search,
       page: () => const GallerySearchPage(),
+      // page: () => const SearchPage(),
+      // page: () => const EmptyPage(),
       preventDuplicates: false,
     ),
 
