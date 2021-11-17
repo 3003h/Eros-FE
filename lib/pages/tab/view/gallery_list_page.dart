@@ -11,6 +11,7 @@ import 'package:fehviewer/utils/cust_lib/sliver/sliver_persistent_header.dart';
 import 'package:fehviewer/utils/logger.dart';
 import 'package:fehviewer/widget/refresh.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:keframe/size_cache_widget.dart';
@@ -168,15 +169,16 @@ class _GalleryListTabState extends State<GalleryListTab> {
         mainAxisAlignment: MainAxisAlignment.end,
         children: [
           // 模拟下拉刷新按钮
-          CupertinoButton(
-            minSize: 40,
-            padding: const EdgeInsets.all(0),
-            child: const Icon(
-              LineIcons.upload,
-              size: 26,
-            ),
-            onPressed: controller.onRefresh,
-          ),
+          // if (kDebugMode)
+          //   CupertinoButton(
+          //     minSize: 40,
+          //     padding: const EdgeInsets.all(0),
+          //     child: const Icon(
+          //       LineIcons.upload,
+          //       size: 26,
+          //     ),
+          //     onPressed: controller.onRefresh,
+          //   ),
           // 搜索按钮
           CupertinoButton(
             minSize: 40,
