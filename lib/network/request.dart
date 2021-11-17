@@ -45,7 +45,7 @@ Future<GalleryList?> getGallery({
 
   await checkCookie();
 
-  logger.v('df ${ehDioConfig.domainFronting}');
+  logger.v('df ${ehDioConfig}');
 
   late final String _url;
   switch (galleryListType) {
@@ -89,6 +89,8 @@ Future<GalleryList?> getGallery({
   if (serach != null && isFav) {
     _params.addAll(_searchController.favSearchMap);
   }
+
+  logger.d('${_params}');
 
   DioHttpResponse httpResponse = await dioHttpClient.get(
     _url,

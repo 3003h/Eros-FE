@@ -307,9 +307,9 @@ class _WatchedListTabState extends State<WatchedListTab> {
           return getGalleryList(
             state,
             controller.tabTag,
-            maxPage: controller.maxPage,
+            // maxPage: controller.maxPage,
             curPage: controller.curPage.value,
-            topKey: centerKey,
+            centerKey: centerKey,
             key: controller.sliverAnimatedListKey,
             lastTopitemIndex: controller.lastTopitemIndex,
             // loadMord: controller.loadDataMore,

@@ -398,8 +398,8 @@ class SearchPageController extends TabViewController {
       galleryListType: _currListType,
     );
 
-    isLoadPrevious = page > 1;
     curPage.value = page;
+    minPage = page;
 
     nextPage = rult?.nextPage ?? 1;
     maxPage = rult?.maxPage ?? 0;

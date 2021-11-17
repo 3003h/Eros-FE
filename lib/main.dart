@@ -114,12 +114,12 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
     super.didChangeAppLifecycleState(state);
     if (state != AppLifecycleState.resumed) {
       // went to Background
-      loggerTime.d('paused');
+      // loggerTime.d('paused');
       _autoLockController.paused();
     }
     if (state == AppLifecycleState.resumed) {
       // came back to Foreground
-      loggerTime.d('resumed');
+      // loggerTime.d('resumed');
       _autoLockController.resumed();
 
       _ehConfigService.chkClipboardLink(context);

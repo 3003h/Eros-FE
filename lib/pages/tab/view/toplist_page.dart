@@ -179,10 +179,10 @@ class _ToplistTabState extends State<ToplistTab> {
       (List<GalleryItem>? state) => getGalleryList(
         state,
         controller.tabTag,
-        maxPage: controller.maxPage,
+        // maxPage: controller.maxPage,
         curPage: controller.curPage.value,
         // loadMord: controller.loadDataMore,
-        topKey: centerKey,
+        centerKey: centerKey,
         key: controller.sliverAnimatedListKey,
         lastTopitemIndex: controller.lastTopitemIndex,
       ),
