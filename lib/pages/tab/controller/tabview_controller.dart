@@ -33,6 +33,7 @@ class TabViewController extends GetxController
   late String tabTag;
 
   RxInt curPage = 0.obs;
+  int minPage = 1;
   int maxPage = 1;
   int nextPage = 1;
 
@@ -72,8 +73,9 @@ class TabViewController extends GetxController
 
   String get currToplist => topListVal[_ehConfigService.toplist] ?? '15';
 
-  bool isLoadPrevious = false;
   int lastTopitemIndex = 0;
+
+  final previousList = <GalleryItem>[].obs;
 
   @override
   void onReady() {
@@ -145,10 +147,10 @@ class TabViewController extends GetxController
       FetchListClient fetchListClient = getFetchListClient(fetchConfig);
       final GalleryList? rult = await fetchListClient.fetch();
 
-      logger.d('isCancelled ${cancelToken?.isCancelled}');
+      // logger.d('isCancelled ${cancelToken?.isCancelled}');
 
       if (cancelToken?.isCancelled ?? false) {
-        logger.d('isCancelled ${cancelToken?.isCancelled}');
+        // logger.d('isCancelled ${cancelToken?.isCancelled}');
         return null;
       }
 
@@ -183,23 +185,9 @@ class TabViewController extends GetxController
       cancelToken?.cancel();
     }
     change(state, status: RxStatus.success());
-    if (isLoadPrevious) {
-      logger.d('isLoadPrevious');
+    if (minPage > 1) {
+      logger.d('loadPrevious');
       await loadPrevious();
-
-      // WidgetsBinding.instance?.addPostFrameCallback((_) {
-      //   Future.delayed(const Duration(milliseconds: 50)).then(
-      //     (value) {
-      //       //获取position
-      //       RenderBox? box =
-      //           centerKey?.currentContext?.findRenderObject() as RenderBox?;
-      //       Offset? offset = box?.localToGlobal(Offset.zero);
-      //       logger.d('offset $offset');
-      //
-      //       Scrollable.ensureVisible(centerKey!.currentContext!);
-      //     },
-      //   );
-      // });
     } else {
       await reloadData();
     }
@@ -221,6 +209,7 @@ class TabViewController extends GetxController
     }
 
     logger.d('loadDataMore .....');
+    cancelToken = CancelToken();
 
     final int _catNum = _ehConfigService.catFilter.value;
 
@@ -285,6 +274,8 @@ class TabViewController extends GetxController
       return;
     }
 
+    cancelToken = CancelToken();
+
     final int _catNum = _ehConfigService.catFilter.value;
 
     final lastTopitemGid = state?.first.gid ?? '';
@@ -294,25 +285,26 @@ class TabViewController extends GetxController
     await Future<void>.delayed(const Duration(milliseconds: 100));
 
     try {
-      final fetchConfig = FetchParams(
-        page: curPage.value - 1,
+      final fetchParams = FetchParams(
+        page: minPage - 1,
         cats: cats ?? _catNum,
         refresh: true,
         cancelToken: cancelToken,
         favcat: curFavcat,
         toplist: currToplist,
       );
-      FetchListClient fetchListClient = getFetchListClient(fetchConfig);
+      FetchListClient fetchListClient = getFetchListClient(fetchParams);
       final GalleryList? rult = await fetchListClient.fetch();
 
       if (rult == null) {
+        logger.d('rult null');
         return;
       }
 
-      final List<GalleryItem> galleryItemBeans = rult.gallerys ?? [];
+      final List<GalleryItem> _itemList = rult.gallerys ?? [];
 
-      if (galleryItemBeans.isNotEmpty) {
-        state?.insertAll(0, galleryItemBeans);
+      if (_itemList.isNotEmpty) {
+        state?.insertAll(0, _itemList);
 
         maxPage = rult.maxPage ?? 0;
         nextPage = rult.nextPage ?? 1;
@@ -320,23 +312,36 @@ class TabViewController extends GetxController
         lastTopitemIndex =
             state?.indexWhere((e) => e.gid == lastTopitemGid) ?? 0;
         logger.d('lastTopitemIndex $lastTopitemIndex');
+        // change(state);
 
-        change(state);
+        // logger.d('_itemList ${_itemList.length}');
+        // logger.d('添加 旧的前列表 ${previousList.length} 项 到主列表中');
+        // state?.insertAll(0, previousList);
+        // logger.d('更新主列表');
+        // // change(state);
+        // logger.d('set state end');
+        // logger.d('主列表 ${state?.length}');
+        // logger.d('${state?.length}');
+        // previousList.clear();
+        // previousList(_itemList);
       }
       // 成功才-1
-      curPage.value -= 1;
-      // update();
+      minPage -= 1;
+      curPage.value = minPage;
+      update();
     } catch (e, stack) {
       rethrow;
     }
   }
 
   Future<void> loadFromPage(int page) async {
-    logger.v('jump to page =>  $page');
+    logger.d('jump to page =>  $page');
 
     final int _catNum = _ehConfigService.catFilter.value;
 
     change(state, status: RxStatus.loading());
+
+    previousList.clear();
 
     final fetchConfig = FetchParams(
       page: page,
@@ -349,8 +354,8 @@ class TabViewController extends GetxController
     FetchListClient fetchListClient = getFetchListClient(fetchConfig);
     final GalleryList? rult = await fetchListClient.fetch();
 
-    isLoadPrevious = page > 1;
     curPage.value = page;
+    minPage = page;
     if (rult != null) {
       change(rult.gallerys, status: RxStatus.success());
     }

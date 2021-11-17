@@ -405,10 +405,10 @@ class _FavoriteTabState extends State<FavoriteTab> {
           return getGalleryList(
             state,
             controller.tabTag,
-            maxPage: controller.maxPage,
+            // maxPage: controller.maxPage,
             curPage: controller.curPage.value,
             // loadMord: controller.loadDataMore,
-            topKey: centerKey,
+            centerKey: centerKey,
             key: controller.sliverAnimatedListKey,
             lastTopitemIndex: controller.lastTopitemIndex,
           );

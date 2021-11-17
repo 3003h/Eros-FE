@@ -58,13 +58,9 @@ class GallerySearchPage extends StatefulWidget {
 
 class _GallerySearchPageState extends State<GallerySearchPage> {
   final String _tag = searchPageCtrlDepth;
-  // SearchPageController controller = Get.put(
-  //   SearchPageController(),
-  //   tag: searchPageCtrlDepth,
-  // );
   late SearchPageController controller;
 
-  // GlobalKey centerKey = GlobalKey();
+  GlobalKey centerKey = GlobalKey();
 
   @override
   void initState() {
@@ -170,6 +166,10 @@ class _GallerySearchPageState extends State<GallerySearchPage> {
                     ? () => controller.onEditingComplete(clear: false)
                     : null);
           }),
+          SliverPadding(
+            padding: EdgeInsets.zero,
+            key: centerKey,
+          ),
           Obx(() => SliverSafeArea(
                 bottom: false,
                 top: false,
@@ -644,10 +644,10 @@ class _GallerySearchPageState extends State<GallerySearchPage> {
         return getGalleryList(
           state,
           controller.tabIndex,
-          maxPage: controller.maxPage,
+          // maxPage: controller.maxPage,
           curPage: controller.curPage.value,
           // loadMord: controller.loadDataMore,
-          // topKey: centerKey,
+          // centerKey: centerKey,
           key: controller.sliverAnimatedListKey,
           lastTopitemIndex: controller.lastTopitemIndex,
         );

@@ -31,7 +31,6 @@ class _GalleryListTabState extends State<GalleryListTab> {
   final controller = Get.find<GalleryViewController>();
   final EhTabController ehTabController = EhTabController();
 
-  GlobalKey topKey = GlobalKey();
   GlobalKey centerKey = GlobalKey();
 
   @override
@@ -168,6 +167,16 @@ class _GalleryListTabState extends State<GalleryListTab> {
         mainAxisSize: MainAxisSize.min,
         mainAxisAlignment: MainAxisAlignment.end,
         children: [
+          // 模拟下拉刷新按钮
+          CupertinoButton(
+            minSize: 40,
+            padding: const EdgeInsets.all(0),
+            child: const Icon(
+              LineIcons.upload,
+              size: 26,
+            ),
+            onPressed: controller.onRefresh,
+          ),
           // 搜索按钮
           CupertinoButton(
             minSize: 40,
@@ -224,57 +233,8 @@ class _GalleryListTabState extends State<GalleryListTab> {
 
     final Widget customScrollView = CustomScrollView(
       cacheExtent: kTabViewCacheExtent,
-      // center: centerKey,
       physics: const AlwaysScrollableScrollPhysics(),
-      // slivers: [
-      //   // EhCupertinoSliverRefreshControl(onRefresh: controller.onRefresh),
-      //   SliverToBoxAdapter(
-      //     child: SafeArea(
-      //       bottom: false,
-      //       child: CupertinoButton(
-      //         onPressed: controller.onRefresh,
-      //         child: Text('RRR'),
-      //       ),
-      //     ),
-      //   ),
-      //   // SliverList(delegate: SliverChildBuilderDelegate((context, index) {
-      //   //   return Text('1234');
-      //   // })),
-      //   controller.obx(
-      //     (state) {
-      //       return SliverList(
-      //           delegate: SliverChildBuilderDelegate(
-      //         (context, index) {
-      //           final item = state?[index];
-      //           return Text('${item?.englishTitle}')
-      //               .paddingSymmetric(vertical: 10);
-      //         },
-      //         childCount: state?.length ?? 0,
-      //       ));
-      //     },
-      //     onLoading: SliverFillRemaining(
-      //       child: Container(
-      //         alignment: Alignment.center,
-      //         padding: const EdgeInsets.only(bottom: 50),
-      //         child: const CupertinoActivityIndicator(
-      //           radius: 14.0,
-      //         ),
-      //       ),
-      //     ),
-      //   ),
-      //   SliverToBoxAdapter(
-      //     key: centerKey,
-      //     child: Container(
-      //       height: 80,
-      //       color: Colors.blue,
-      //       alignment: Alignment.center,
-      //       child: Text(
-      //         'aaa',
-      //         textAlign: TextAlign.center,
-      //       ),
-      //     ),
-      //   ),
-      // ],
+      // center: centerKey,
       slivers: <Widget>[
         SliverFloatingPinnedPersistentHeader(
           delegate: SliverFloatingPinnedPersistentHeaderBuilder(
@@ -286,11 +246,29 @@ class _GalleryListTabState extends State<GalleryListTab> {
           ),
         ),
         EhCupertinoSliverRefreshControl(
-          // key: centerKey,
-          onRefresh: () => controller.onRefresh(centerKey: topKey),
+          onRefresh: () => controller.onRefresh(),
+        ),
+        // Obx(() {
+        //   logger.d('build previousList ${controller.previousList.length}');
+        //   if (controller.previousList.isEmpty) {
+        //     logger.d('previousList empty');
+        //     return const SliverToBoxAdapter(
+        //       child: SizedBox(),
+        //     );
+        //   } else {
+        //     logger.d('previousList not empty');
+        //     return getGalleryList(
+        //       controller.previousList,
+        //       controller.tabTag,
+        //       curPage: controller.curPage.value,
+        //     );
+        //   }
+        // }),
+        SliverPadding(
+          padding: EdgeInsets.zero,
+          key: centerKey,
         ),
         SliverSafeArea(
-          // key: centerKey,
           top: false,
           bottom: false,
           sliver: _getGalleryList(),
@@ -356,11 +334,11 @@ class _GalleryListTabState extends State<GalleryListTab> {
           return getGalleryList(
             state,
             controller.tabTag,
-            maxPage: controller.maxPage,
+            // maxPage: controller.maxPage,
             curPage: controller.curPage.value,
             // loadMord: controller.loadDataMore,
             key: controller.sliverAnimatedListKey,
-            topKey: topKey,
+            // centerKey: centerKey,
             lastTopitemIndex: controller.lastTopitemIndex,
           );
         },

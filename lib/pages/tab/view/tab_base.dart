@@ -176,7 +176,7 @@ Widget buildDelGallerySliverListItem(
 Widget buildGallerySliverListView(
   List<GalleryItem> gallerItemBeans,
   dynamic tabTag, {
-  int? maxPage,
+  // int? maxPage,
   int curPage = 0,
   VoidCallback? loadMord,
   Key? key,
@@ -206,6 +206,7 @@ Widget buildGallerySliverListView(
       if (tabTag == EHRoutes.history) {
         return itemWidget;
       } else {
+        return itemWidget;
         return FrameSeparateWidget(
           index: index,
           placeHolder: const GalleryItemPlaceHolder(),
@@ -253,11 +254,11 @@ Widget buildGallerySliverListSimpleView(
 Widget getGalleryList(
   List<GalleryItem>? gallerItemBeans,
   tabTag, {
-  int? maxPage,
+  // int? maxPage,
   int? curPage,
   VoidCallback? loadMord,
   Key? key,
-  Key? topKey,
+  Key? centerKey,
   int? lastTopitemIndex,
 }) {
   final EhConfigService ehConfigService = Get.find();
@@ -270,43 +271,43 @@ Widget getGalleryList(
         return buildGallerySliverListView(
           gallerItemBeans ?? [],
           tabTag,
-          maxPage: maxPage,
+          // maxPage: maxPage,
           curPage: curPage ?? 0,
           loadMord: loadMord,
           key: key,
-          centerKey: topKey,
+          centerKey: centerKey,
           lastTopitemIndex: lastTopitemIndex,
         );
       case ListModeEnum.waterfall:
         return buildWaterfallFlow(
           gallerItemBeans ?? [],
           tabTag,
-          maxPage: maxPage,
+          // maxPage: maxPage,
           curPage: curPage ?? 0,
           loadMord: loadMord,
-          centerKey: topKey,
+          centerKey: centerKey,
           lastTopitemIndex: lastTopitemIndex,
         );
       case ListModeEnum.waterfallLarge:
         return buildWaterfallFlow(
           gallerItemBeans ?? [],
           tabTag,
-          maxPage: maxPage,
+          // maxPage: maxPage,
           curPage: curPage ?? 0,
           loadMord: loadMord,
           large: true,
-          centerKey: topKey,
+          centerKey: centerKey,
           lastTopitemIndex: lastTopitemIndex,
         );
       case ListModeEnum.simpleList:
         return buildGallerySliverListSimpleView(
           gallerItemBeans ?? [],
           tabTag,
-          maxPage: maxPage,
+          // maxPage: maxPage,
           curPage: curPage ?? 0,
           loadMord: loadMord,
           key: key,
-          centerKey: topKey,
+          centerKey: centerKey,
           lastTopitemIndex: lastTopitemIndex,
         );
     }
