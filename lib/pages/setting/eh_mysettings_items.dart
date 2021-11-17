@@ -327,3 +327,105 @@ Widget _buildMPVThumbPane(BuildContext context, {bool hideLine = false}) {
     onValueChanged: (val) => print(val),
   );
 }
+
+Widget _buildRatingsItem(BuildContext context, {bool hideLine = false}) {
+  return SingleInputItem(
+    title: 'Colors',
+    pageTitle: 'Ratings Colors',
+    previousPageTitle: L10n.of(context).ehentai_settings,
+    initVal: '',
+    hideLine: hideLine,
+    onValueChanged: (val) => print(val),
+  );
+}
+
+Widget _buildTagFilteringThreshold(BuildContext context) {
+  return SingleInputItem(
+    title: 'Threshold',
+    pageTitle: 'Tag Filtering Threshold',
+    previousPageTitle: L10n.of(context).ehentai_settings,
+    initVal: '',
+    hideLine: true,
+    onValueChanged: (val) => print(val),
+  );
+}
+
+Widget _buildTagWatchingThreshold(BuildContext context) {
+  return SingleInputItem(
+    title: 'Threshold',
+    pageTitle: 'Tag Watching Threshold',
+    previousPageTitle: L10n.of(context).ehentai_settings,
+    initVal: '',
+    hideLine: true,
+    onValueChanged: (val) => print(val),
+  );
+}
+
+Widget _buildExcludedUploaders(BuildContext context) {
+  return SingleInputItem(
+    title: 'Uploaders',
+    pageTitle: 'Excluded Uploaders',
+    previousPageTitle: L10n.of(context).ehentai_settings,
+    initVal: '',
+    hideLine: true,
+    onValueChanged: (val) => print(val),
+  );
+}
+
+Widget _buildThumbnailScaling(BuildContext context) {
+  // Thumbnail Scaling
+  return SingleInputItem(
+    title: 'Scaling',
+    previousPageTitle: L10n.of(context).ehentai_settings,
+    initVal: '',
+    suffixText: '%',
+    hideLine: true,
+    onValueChanged: (val) => print(val),
+  );
+}
+
+Widget _buildViewportOverride(BuildContext context) {
+  // Thumbnail Scaling
+  return SingleInputItem(
+    title: 'DPI',
+    previousPageTitle: L10n.of(context).ehentai_settings,
+    initVal: '',
+    suffixText: 'px',
+    hideLine: true,
+    onValueChanged: (val) => print(val),
+  );
+}
+
+Widget _buildHatHLocalNetworkHost(BuildContext context) {
+  // Hentai@Home Local Network Host
+  return SingleInputItem(
+    title: 'IP Address:Port',
+    pageTitle: 'Hentai@Home Local Network Host',
+    previousPageTitle: L10n.of(context).ehentai_settings,
+    initVal: '',
+    hideLine: true,
+    onValueChanged: (val) => print(val),
+  );
+}
+
+Widget _buildSizeHorizontal(BuildContext context) {
+  return SingleInputItem(
+    title: 'Horizontal',
+    previousPageTitle: L10n.of(context).ehentai_settings,
+    initVal: '',
+    suffixText: 'pixels',
+    hideLine: false,
+    onValueChanged: (val) => print(val),
+  );
+}
+
+Widget _buildSizeVertical(BuildContext context) {
+  return SingleInputItem(
+    title: 'Vertical',
+    previousPageTitle: L10n.of(context).ehentai_settings,
+    initVal: '',
+    suffixText: 'pixels',
+    hideLine: true,
+    onValueChanged: (val) => print(val),
+  );
+}
