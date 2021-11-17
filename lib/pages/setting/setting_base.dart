@@ -556,14 +556,18 @@ class SelectorItem<T> extends StatefulWidget {
   const SelectorItem({
     Key? key,
     required this.title,
+    this.actionTitle,
     this.hideLine = false,
     required this.actionMap,
+    this.simpleActionMap,
     required this.initVal,
     this.onValueChanged,
   }) : super(key: key);
   final String title;
+  final String? actionTitle;
   final bool hideLine;
   final Map<T, String> actionMap;
+  final Map<T, String>? simpleActionMap;
   final T initVal;
   final ValueChanged<T>? onValueChanged;
 
@@ -577,7 +581,9 @@ class _SelectorItemState<T> extends State<SelectorItem<T>> {
   @override
   void initState() {
     super.initState();
-    selector = widget.actionMap[widget.initVal] ?? '';
+    selector = widget.simpleActionMap?[widget.initVal] ??
+        widget.actionMap[widget.initVal] ??
+        '';
   }
 
   List<Widget> _getActionList() {
@@ -597,7 +603,7 @@ class _SelectorItemState<T> extends State<SelectorItem<T>> {
           context: context,
           builder: (BuildContext context) {
             final CupertinoActionSheet dialog = CupertinoActionSheet(
-              title: Text(widget.title),
+              title: Text(widget.actionTitle ?? widget.title),
               cancelButton: CupertinoActionSheetAction(
                   onPressed: () {
                     Get.back();
@@ -621,7 +627,9 @@ class _SelectorItemState<T> extends State<SelectorItem<T>> {
         if (_result != null) {
           // 结果回调
           setState(() {
-            selector = widget.actionMap[_result] ?? '';
+            selector = widget.simpleActionMap?[_result] ??
+                widget.actionMap[_result] ??
+                '';
           });
           widget.onValueChanged?.call(_result);
         }

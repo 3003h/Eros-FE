@@ -7,6 +7,8 @@ import 'package:line_icons/line_icons.dart';
 
 import 'webview/web_mysetting_in.dart';
 
+part 'eh_mysettings_items.dart';
+
 class EhMySettingsPage extends StatelessWidget {
   const EhMySettingsPage({Key? key}) : super(key: key);
 
@@ -54,74 +56,115 @@ class ListViewEhMySettings extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final List<Widget> _list = <Widget>[
-      _GroupHeader(
-        text: 'Image Load Settings',
+      GroupItem(
+        title: 'Image Load Settings',
+        child: _buildLoadTypeItem(context),
       ),
-      _buildLoadTypeItem(context),
-      _GroupHeader(
-        text: 'Image Size Settings',
+      GroupItem(
+        title: 'Image Size Settings',
+        desc:
+            'Normally, images are resampled to 1280 pixels of horizontal resolution for online viewing. You can alternatively select one of the following resample resolutions. To avoid murdering the staging servers, resolutions above 1280x are temporarily restricted to donators, people with any hath perk, and people with a UID below 3,000,000.',
+        child: _buildImageSizeItem(context),
       ),
-      _buildImageSizeItem(context),
-      _GroupHeader(
-        text: 'Gallery Name Display',
+      GroupItem(
+        title: 'Gallery Name Display',
+        desc:
+            'Many galleries have both an English/Romanized title and a title in Japanese script. Which gallery name would you like as default?',
+        child: _buildNameDisplayItem(context),
       ),
-      _buildNameDisplayItem(context),
-      _GroupHeader(
-        text: 'Archiver Settings',
+      GroupItem(
+        title: 'Archiver Settings',
+        desc:
+            'The default behavior for the Archiver is to confirm the cost and selection for original or resampled archive, then present a link that can be clicked or copied elsewhere. You can change this behavior here.',
+        child: _buildArchiverSettingsItem(context),
       ),
-      _GroupHeader(
-        text: 'Front Page Settings',
+      GroupItem(
+        title: 'Front Page Settings',
+        child: _buildFrontPageSettingsItem(context),
       ),
-      _GroupHeader(
-        text: 'Favorites',
+      GroupItem(
+        title: 'Favorites',
+        child: Column(
+          children: [
+            _buildFavoritesSortItem(context),
+          ],
+        ),
+        desc:
+            'You can also select your default sort order for galleries on your favorites page. Note that favorites added prior to the March 2016 revamp did not store a timestamp, and will use the gallery posted time regardless of this setting.',
       ),
-      _GroupHeader(
-        text: 'Ratings',
+      GroupItem(
+        title: 'Ratings',
       ),
-      _GroupHeader(
-        text: 'Tag Namespaces',
+      GroupItem(
+        title: 'Tag Namespaces',
       ),
-      _GroupHeader(
-        text: 'Tag Filtering Threshold',
+      GroupItem(
+        title: 'Tag Filtering Threshold',
       ),
-      _GroupHeader(
-        text: 'Tag Watching Threshold',
+      GroupItem(
+        title: 'Tag Watching Threshold',
       ),
-      _GroupHeader(
-        text: 'Excluded Languages',
+      GroupItem(
+        title: 'Excluded Languages',
       ),
-      _GroupHeader(
-        text: 'Excluded Uploaders',
+      GroupItem(
+        title: 'Excluded Uploaders',
       ),
-      _GroupHeader(
-        text: 'Search Result Count',
+      GroupItem(
+        title: 'Search',
+        desc:
+            'How many results would you like per page for the index/search page and torrent search pages? (Hath Perk: Paging Enlargement Required)',
+        child: _buildSearchResultCountItem(context),
       ),
-      _GroupHeader(
-        text: 'Thumbnail Settings',
+      GroupItem(
+        title: 'Thumbnail Settings',
+        child: Column(
+          children: [
+            _buildThumbMouseOverItem(context),
+            _buildThumbSizeItem(context),
+            _buildThumbRowItem(context, hideLine: true),
+          ],
+        ),
       ),
-      _GroupHeader(
-        text: 'Thumbnail Scaling',
+      GroupItem(
+        title: 'Thumbnail Scaling',
       ),
-      _GroupHeader(
-        text: 'Viewport Override',
+      GroupItem(
+        title: 'Viewport Override',
       ),
-      _GroupHeader(
-        text: 'Gallery Comments',
+      GroupItem(
+        title: 'Gallery Comments',
+        child: Column(
+          children: [
+            _buildSortOrderComment(context),
+            _buildShowCommentVotes(context, hideLine: true),
+          ],
+        ),
       ),
-      _GroupHeader(
-        text: 'Gallery Tags',
+      GroupItem(
+        title: 'Gallery Tags',
+        child: _buildSortOrderTags(context, hideLine: true),
       ),
-      _GroupHeader(
-        text: 'Gallery Page Numbering',
+      GroupItem(
+        title: 'Gallery Page Numbering',
+        child: _buildShowPageNumbers(context, hideLine: true),
       ),
-      _GroupHeader(
-        text: 'Hentai@Home Local Network Host',
+      GroupItem(
+        title: 'Hentai@Home Local Network Host',
       ),
-      _GroupHeader(
-        text: 'Original Images',
+      GroupItem(
+        title: 'Original Images',
+        child: _buildOriginalImages(context, hideLine: true),
       ),
-      _GroupHeader(
-        text: 'Multi-Page Viewer',
+      GroupItem(
+        title: 'Multi-Page Viewer',
+        child: Column(
+          children: [
+            _buildMPVAlwaysUse(context),
+            _buildMPVDisplayStyle(context),
+            _buildMPVThumbPane(context, hideLine: true),
+          ],
+        ),
       ),
     ];
 
@@ -134,75 +177,52 @@ class ListViewEhMySettings extends StatelessWidget {
   }
 }
 
-Widget _buildLoadTypeItem(BuildContext context, {bool hideLine = false}) {
-  final Map<String, String> modeMap = <String, String>{
-    '0': 'Any client (Recommended)',
-    '1':
-        'Default port clients only (Can be slower. Enable if behind firewall/proxy that blocks outgoing non-standard ports.)',
-    '2':
-        'No (Donator only. You will not be able to browse as many pages, enable only if having severe problems.)',
-  };
-
-  final Map<String, String> actionMap = <String, String>{
-    '0': 'Any client',
-    '1': 'Default port clients only',
-    '2': 'No',
-  };
-  return SelectorItem<String>(
-    title: 'Load images through the H@H',
-    hideLine: hideLine,
-    actionMap: actionMap,
-    initVal: '',
-    onValueChanged: (val) => print(val),
-  );
-}
-
-Widget _buildImageSizeItem(BuildContext context, {bool hideLine = false}) {
-  final Map<String, String> actionMap = <String, String>{
-    '0': 'Auto',
-    '5': '2400x',
-    '4': '1600x',
-    '3': '1280x',
-    '2': '980x',
-    '1': '780x',
-  };
-  return SelectorItem<String>(
-    title: 'Resample Resolution',
-    hideLine: hideLine,
-    actionMap: actionMap,
-    initVal: '',
-    onValueChanged: (val) => print(val),
-  );
-}
-
-Widget _buildNameDisplayItem(BuildContext context, {bool hideLine = false}) {
-  final Map<String, String> actionMap = <String, String>{
-    '0': 'Default Title',
-    '1': 'Japanese Title',
-  };
-  return SelectorItem<String>(
-    title: 'Name Display',
-    hideLine: hideLine,
-    actionMap: actionMap,
-    initVal: '',
-    onValueChanged: (val) => print(val),
-  );
-}
-
-class _GroupHeader extends StatelessWidget {
-  const _GroupHeader({Key? key, this.text}) : super(key: key);
-  final String? text;
+class GroupItem extends StatelessWidget {
+  const GroupItem({Key? key, this.title, this.child, this.desc})
+      : super(key: key);
+  final String? title;
+  final Widget? child;
+  final String? desc;
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      constraints: BoxConstraints(minHeight: 38),
-      padding: const EdgeInsets.only(left: 20, bottom: 4),
-      alignment: Alignment.bottomLeft,
-      child: Text(
-        text ?? '',
-        style: const TextStyle(fontSize: 14),
-      ),
+    return Column(
+      mainAxisSize: MainAxisSize.max,
+      children: [
+        Container(
+          // constraints: const BoxConstraints(minHeight: 38),
+          padding: const EdgeInsets.only(
+            left: 20,
+            bottom: 4,
+            top: 20,
+          ),
+          width: double.infinity,
+          child: Text(
+            title ?? '',
+            style: const TextStyle(fontSize: 14),
+            textAlign: TextAlign.start,
+          ),
+        ),
+        child ?? const SizedBox.shrink(),
+        if (desc != null)
+          Container(
+            padding: const EdgeInsets.only(
+              left: 20,
+              top: 4,
+              bottom: 10,
+              right: 20,
+            ),
+            width: double.infinity,
+            child: Text(
+              desc!,
+              style: const TextStyle(
+                fontSize: 12.5,
+                color: CupertinoColors.secondaryLabel,
+              ),
+              textAlign: TextAlign.start,
+            ),
+          ),
+      ],
     );
   }
 }

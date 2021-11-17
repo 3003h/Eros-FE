@@ -169,7 +169,7 @@ class GalleryFilterView extends StatelessWidget {
                   child: CupertinoSwitch(
                     value: advanceSearchController.enableAdvance,
                     onChanged: (bool value) {
-                      logger.d(' onChanged to $value');
+                      // logger.d(' onChanged to $value');
                       advanceSearchController.enableAdvance = value;
                     },
                   ),
