@@ -5,11 +5,13 @@ import 'package:get/get.dart';
 class EhMySettingsController extends GetxController {
   // Rx<EhSettings> ehSettings = const EhSettings().obs;
 
-  final _ehSetting = EhSettings().obs;
+  final _ehSetting = const EhSettings(profilelist: []).obs;
   EhSettings get ehSetting => _ehSetting.value;
   set ehSetting(EhSettings val) => _ehSetting.value = val;
 
   void print() {
     logger.d('${_ehSetting.value.postParam}');
   }
+
+  Future<void> loadData() async {}
 }
