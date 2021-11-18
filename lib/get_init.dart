@@ -22,6 +22,7 @@ import 'common/service/locale_service.dart';
 import 'common/service/theme_service.dart';
 import 'pages/controller/fav_dialog_controller.dart';
 import 'pages/controller/favorite_sel_controller.dart';
+import 'pages/setting/controller/eh_mysettings_controller.dart';
 import 'pages/tab/controller/download_view_controller.dart';
 import 'pages/tab/controller/favorite_controller.dart';
 import 'pages/tab/controller/gallery_controller.dart';
@@ -88,6 +89,8 @@ void getinit() {
   Get.lazyPut(() => TagTransController(), fenix: true);
 
   Get.lazyPut(() => SplashController());
+
+  Get.put(EhMySettingsController(), permanent: true);
 
   // DioHttpConfig ehDioConfig = DioHttpConfig(
   //     baseUrl: 'https://e-hentai.org/', cookiesPath: Global.appSupportPath);

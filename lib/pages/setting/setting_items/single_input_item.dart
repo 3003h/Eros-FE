@@ -1,3 +1,4 @@
+import 'package:fehviewer/common/service/layout_service.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
 
@@ -46,18 +47,21 @@ class _SingleInputItemState extends State<SingleInputItem> {
           ? '$selector ${widget.suffixText}'
           : selector,
       onTap: () async {
-        Get.to(() => SingleInputPage(
-              title: widget.pageTitle ?? widget.title,
-              previousPageTitle: widget.previousPageTitle,
-              suffixText: widget.suffixText,
-              initValue: selector,
-              onValueChanged: (val) {
-                setState(() {
-                  selector = val;
-                  widget.onValueChanged?.call(val);
-                });
-              },
-            ));
+        Get.to(
+          () => SingleInputPage(
+            title: widget.pageTitle ?? widget.title,
+            previousPageTitle: widget.previousPageTitle,
+            suffixText: widget.suffixText,
+            initValue: selector,
+            onValueChanged: (val) {
+              setState(() {
+                selector = val;
+                widget.onValueChanged?.call(val);
+              });
+            },
+          ),
+          id: isLayoutLarge ? 2 : null,
+        );
       },
     );
   }

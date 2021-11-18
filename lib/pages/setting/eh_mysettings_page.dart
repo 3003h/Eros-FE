@@ -1,16 +1,21 @@
 import 'package:fehviewer/common/service/theme_service.dart';
+import 'package:fehviewer/extension.dart';
 import 'package:fehviewer/generated/l10n.dart';
+import 'package:fehviewer/pages/setting/setting_items/multi_selector.dart';
 import 'package:fehviewer/pages/setting/setting_items/selector_Item.dart';
+import 'package:fehviewer/utils/logger.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
 import 'package:line_icons/line_icons.dart';
 
+import 'controller/eh_mysettings_controller.dart';
 import 'setting_items/single_input_item.dart';
+import 'setting_items/multi_selector.dart';
 import 'webview/web_mysetting_in.dart';
 
 part 'eh_mysettings_items.dart';
 
-class EhMySettingsPage extends StatelessWidget {
+class EhMySettingsPage extends GetView<EhMySettingsController> {
   const EhMySettingsPage({Key? key}) : super(key: key);
 
   @override
@@ -24,6 +29,16 @@ class EhMySettingsPage extends StatelessWidget {
             trailing: Row(
               mainAxisSize: MainAxisSize.min,
               children: <Widget>[
+                CupertinoButton(
+                  padding: const EdgeInsets.all(0),
+                  child: const Icon(
+                    LineIcons.upload,
+                    size: 24,
+                  ),
+                  onPressed: () async {
+                    controller.print();
+                  },
+                ),
                 CupertinoButton(
                   padding: const EdgeInsets.all(0),
                   child: const Icon(
@@ -53,14 +68,16 @@ class EhMySettingsPage extends StatelessWidget {
   }
 }
 
-class ListViewEhMySettings extends StatelessWidget {
+class ListViewEhMySettings extends GetView<EhMySettingsController> {
   @override
   Widget build(BuildContext context) {
     final List<Widget> _list = <Widget>[
+      // uh
       GroupItem(
         title: 'Image Load Settings',
         child: _buildLoadTypeItem(context, hideLine: true),
       ),
+      // xr
       GroupItem(
         title: 'Image Size Settings',
         desc:
@@ -104,7 +121,6 @@ class ListViewEhMySettings extends StatelessWidget {
             'You can also select your default sort order for galleries on your favorites page. Note that favorites added prior to the March 2016 revamp did not store a timestamp, and will use the gallery posted time regardless of this setting.',
       ),
       GroupItem(
-        title: 'Ratings',
         desc:
             '    By default, galleries that you have rated will appear with red stars for ratings of 2 stars and below, green for ratings between 2.5 and 4 stars, and blue for ratings of 4.5 or 5 stars. You can customize this by entering your desired color combination below.\n'
             '    Each letter represents one star. The default RRGGB means R(ed) for the first and second star, G(reen) for the third and fourth, and B(lue) for the fifth. You can also use (Y)ellow for the normal stars. Any five-letter R/G/B/Y combo works.',
@@ -112,17 +128,16 @@ class ListViewEhMySettings extends StatelessWidget {
       ),
       GroupItem(
         title: 'Tag Namespaces',
+        child: _buildTagNamespaces(context),
         desc:
             'If you want to exclude certain namespaces from a default tag search, you can check those below. Note that this does not prevent galleries with tags in these namespaces from appearing, it just makes it so that when searching tags, it will forego those namespaces.',
       ),
       GroupItem(
-        title: 'Tag Filtering Threshold',
         child: _buildTagFilteringThreshold(context),
         desc:
             'You can soft filter tags by adding them to My Tags with a negative weight. If a gallery has tags that add up to weight below this value, it is filtered from view. This threshold can be set between 0 and -9999.',
       ),
       GroupItem(
-        title: 'Tag Watching Threshold',
         child: _buildTagWatchingThreshold(context),
         desc:
             'Recently uploaded galleries will be included on the watched screen if it has at least one watched tag with positive weight, and the sum of weights on its watched tags add up to this value or higher. This threshold can be set between 0 and 9999.',
@@ -134,14 +149,12 @@ class ListViewEhMySettings extends StatelessWidget {
             'Note that matching galleries will never appear regardless of your search query.',
       ),
       GroupItem(
-        title: 'Excluded Uploaders',
         child: _buildExcludedUploaders(context),
         desc:
             'If you wish to hide galleries from certain uploaders from the gallery list and searches, add them below. Put one username per line.\n'
             'Note that galleries from these uploaders will never appear regardless of your search query.',
       ),
       GroupItem(
-        title: 'Search',
         desc:
             'How many results would you like per page for the index/search page and torrent search pages? (Hath Perk: Paging Enlargement Required)',
         child: _buildSearchResultCountItem(context, hideLine: true),
@@ -157,13 +170,11 @@ class ListViewEhMySettings extends StatelessWidget {
         ),
       ),
       GroupItem(
-        title: 'Thumbnail Scaling',
         child: _buildThumbnailScaling(context),
         desc:
             'Thumbnails on the thumbnail and extended gallery list views can be scaled to a custom value between 75% and 150%.',
       ),
       GroupItem(
-        title: 'Viewport Override',
         child: _buildViewportOverride(context),
         desc:
             'Allows you to override the virtual width of the site for mobile devices. This is normally determined automatically by your device based on its DPI. Sensible values at 100% thumbnail scale are between 640 and 1400.',
