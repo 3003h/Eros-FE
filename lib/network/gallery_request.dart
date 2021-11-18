@@ -19,6 +19,7 @@ import 'package:fehviewer/generated/l10n.dart';
 import 'package:fehviewer/models/index.dart';
 import 'package:fehviewer/pages/gallery/controller/archiver_controller.dart';
 import 'package:fehviewer/pages/gallery/controller/torrent_controller.dart';
+import 'package:fehviewer/pages/setting/controller/eh_mysettings_controller.dart';
 import 'package:fehviewer/pages/tab/controller/search_page_controller.dart';
 import 'package:fehviewer/store/floor/entity/tag_translat.dart';
 import 'package:fehviewer/utils/dio_util.dart';
@@ -902,8 +903,10 @@ class Api {
       return false;
     }
 
-    final Uconfig uconfig = parseUconfig(response);
+    final uconfig = parseUconfig(response);
     final List<EhProfile> ehProfiles = uconfig.profilelist;
+
+    Get.find<EhMySettingsController>().ehSetting = uconfig;
 
     final fepIndex =
         ehProfiles.indexWhere((element) => element.name == kProfileName);

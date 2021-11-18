@@ -1,16 +1,14 @@
 import 'package:fehviewer/common/service/theme_service.dart';
-import 'package:fehviewer/extension.dart';
 import 'package:fehviewer/generated/l10n.dart';
 import 'package:fehviewer/pages/setting/setting_items/multi_selector.dart';
 import 'package:fehviewer/pages/setting/setting_items/selector_Item.dart';
-import 'package:fehviewer/utils/logger.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
 import 'package:line_icons/line_icons.dart';
 
 import 'controller/eh_mysettings_controller.dart';
-import 'setting_items/single_input_item.dart';
 import 'setting_items/multi_selector.dart';
+import 'setting_items/single_input_item.dart';
 import 'webview/web_mysetting_in.dart';
 
 part 'eh_mysettings_items.dart';

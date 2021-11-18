@@ -339,7 +339,7 @@ extension ExtEhSettings on EhSettings {
       if (xlOthTr1279 != null) 'xl_1279': xlOthTr1279,
       if (xlOthRe2303 != null) 'xl_2303': xlOthRe2303,
       if (tagFilteringThreshold != null) 'ft': tagFilteringThreshold,
-      if (tagWatchingThreshold != null) 'wf': tagWatchingThreshold,
+      if (tagWatchingThreshold != null) 'wt': tagWatchingThreshold,
       if (excludedLanguages != null) '': excludedLanguages,
       if (excludedUploaders != null) 'xu': excludedUploaders,
       if (searchResultCount != null) 'rc': searchResultCount,
