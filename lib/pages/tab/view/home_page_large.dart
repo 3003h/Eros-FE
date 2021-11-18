@@ -12,6 +12,7 @@ import 'package:fehviewer/pages/gallery/view/gallery_info_page.dart';
 import 'package:fehviewer/pages/gallery/view/gallery_page.dart';
 import 'package:fehviewer/pages/setting/about_page.dart';
 import 'package:fehviewer/pages/setting/advanced_setting_page.dart';
+import 'package:fehviewer/pages/setting/controller/eh_mysettings_controller.dart';
 import 'package:fehviewer/pages/setting/controller/tab_setting_controller.dart';
 import 'package:fehviewer/pages/setting/custom_hosts_page.dart';
 import 'package:fehviewer/pages/setting/download_setting_page.dart';
