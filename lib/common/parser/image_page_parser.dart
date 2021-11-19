@@ -1,12 +1,10 @@
 import 'package:fehviewer/component/exception/error.dart';
 import 'package:fehviewer/const/const.dart';
 import 'package:fehviewer/models/index.dart';
-import 'package:fehviewer/utils/logger.dart';
 import 'package:html/dom.dart';
 import 'package:html/parser.dart' show parse;
 
 GalleryImage paraImage(String htmlText) {
-  logger.v('paraImage');
   final Document document = parse(htmlText);
 
   final RegExp regImageUrl = RegExp('<img[^>]*src=\"([^\"]+)\" style');
@@ -31,7 +29,6 @@ GalleryImage paraImage(String htmlText) {
               document.querySelector('#loadfail')!.attributes['onclick']!)!
           .group(1) ??
       '';
-  logger.v('para_sourceId: $_sourceId ');
 
   final RegExp urlRegExp =
       RegExp(r'https?://e[-x]hentai.org/g/([0-9]+)/([0-9a-z]+)/?');
@@ -48,7 +45,6 @@ GalleryImage paraImage(String htmlText) {
 
   final List<Element> serElms =
       document.querySelectorAll('#i2 > div.sn > div > span');
-  logger.v('${serElms.length}');
   final int ser = int.parse(serElms[0].text);
 
   final GalleryImage _reImage = kDefGalleryImage.copyWith(
