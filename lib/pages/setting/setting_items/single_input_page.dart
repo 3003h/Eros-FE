@@ -9,12 +9,14 @@ class SingleInputPage extends StatelessWidget {
     this.onValueChanged,
     this.initValue,
     this.suffixText,
+    this.placeholder,
   }) : super(key: key);
   final String? title;
   final String? previousPageTitle;
   final String? initValue;
   final ValueChanged<String>? onValueChanged;
   final String? suffixText;
+  final String? placeholder;
 
   @override
   Widget build(BuildContext context) {
@@ -57,6 +59,7 @@ class SingleInputPage extends StatelessWidget {
               color: CupertinoColors.placeholderText,
               height: 1.25,
             ),
+            placeholder: placeholder,
             clearButtonMode: OverlayVisibilityMode.editing,
             autofocus: true,
             style: const TextStyle(height: 1.25),

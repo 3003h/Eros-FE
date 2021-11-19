@@ -138,6 +138,12 @@ class _SelectorSettingItemState extends State<SelectorSettingItem> {
               height: 0.6,
               color: CupertinoDynamicColor.resolve(
                   CupertinoColors.systemGrey4, context),
+            )
+          else
+            Container(
+              height: 0,
+              color: CupertinoDynamicColor.resolve(
+                  CupertinoColors.systemGrey4, context),
             ),
         ],
       ),

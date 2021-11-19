@@ -1,5 +1,7 @@
 import 'package:flutter/foundation.dart';
 import 'eh_profile.dart';
+import 'eh_setting_item.dart';
+import 'eh_setting_item.dart';
 
 @immutable
 class EhSettings {
@@ -37,14 +39,8 @@ class EhSettings {
     this.favorites9,
     this.sortOrderFavorites,
     this.ratings,
-    this.xn1,
-    this.xn2,
-    this.xn3,
-    this.xn4,
-    this.xn5,
-    this.xn6,
-    this.xn7,
-    this.xn8,
+    required this.xn,
+    required this.xl,
     this.xlJpnTl1024,
     this.xlJpnRw2048,
     this.xlEnOr1,
@@ -148,14 +144,8 @@ class EhSettings {
   final String? favorites9;
   final String? sortOrderFavorites;
   final String? ratings;
-  final String? xn1;
-  final String? xn2;
-  final String? xn3;
-  final String? xn4;
-  final String? xn5;
-  final String? xn6;
-  final String? xn7;
-  final String? xn8;
+  final List<EhSettingItem> xn;
+  final List<EhSettingItem> xl;
   final String? xlJpnTl1024;
   final String? xlJpnRw2048;
   final String? xlEnOr1;
@@ -259,14 +249,8 @@ class EhSettings {
     favorites9: json['favorites9'] != null ? json['favorites9'] as String : null,
     sortOrderFavorites: json['sort_order_favorites'] != null ? json['sort_order_favorites'] as String : null,
     ratings: json['ratings'] != null ? json['ratings'] as String : null,
-    xn1: json['xn1'] != null ? json['xn1'] as String : null,
-    xn2: json['xn2'] != null ? json['xn2'] as String : null,
-    xn3: json['xn3'] != null ? json['xn3'] as String : null,
-    xn4: json['xn4'] != null ? json['xn4'] as String : null,
-    xn5: json['xn5'] != null ? json['xn5'] as String : null,
-    xn6: json['xn6'] != null ? json['xn6'] as String : null,
-    xn7: json['xn7'] != null ? json['xn7'] as String : null,
-    xn8: json['xn8'] != null ? json['xn8'] as String : null,
+    xn: (json['xn'] as List? ?? []).map((e) => EhSettingItem.fromJson(e as Map<String, dynamic>)).toList(),
+    xl: (json['xl'] as List? ?? []).map((e) => EhSettingItem.fromJson(e as Map<String, dynamic>)).toList(),
     xlJpnTl1024: json['xl_jpn_tl_1024'] != null ? json['xl_jpn_tl_1024'] as String : null,
     xlJpnRw2048: json['xl_jpn_rw_2048'] != null ? json['xl_jpn_rw_2048'] as String : null,
     xlEnOr1: json['xl_en_or_1'] != null ? json['xl_en_or_1'] as String : null,
@@ -371,14 +355,8 @@ class EhSettings {
     'favorites9': favorites9,
     'sort_order_favorites': sortOrderFavorites,
     'ratings': ratings,
-    'xn1': xn1,
-    'xn2': xn2,
-    'xn3': xn3,
-    'xn4': xn4,
-    'xn5': xn5,
-    'xn6': xn6,
-    'xn7': xn7,
-    'xn8': xn8,
+    'xn': xn.map((e) => e.toJson()).toList(),
+    'xl': xl.map((e) => e.toJson()).toList(),
     'xl_jpn_tl_1024': xlJpnTl1024,
     'xl_jpn_rw_2048': xlJpnRw2048,
     'xl_en_or_1': xlEnOr1,
@@ -483,14 +461,8 @@ class EhSettings {
     favorites9: favorites9,
     sortOrderFavorites: sortOrderFavorites,
     ratings: ratings,
-    xn1: xn1,
-    xn2: xn2,
-    xn3: xn3,
-    xn4: xn4,
-    xn5: xn5,
-    xn6: xn6,
-    xn7: xn7,
-    xn8: xn8,
+    xn: xn.map((e) => e.clone()).toList(),
+    xl: xl.map((e) => e.clone()).toList(),
     xlJpnTl1024: xlJpnTl1024,
     xlJpnRw2048: xlJpnRw2048,
     xlEnOr1: xlEnOr1,
@@ -596,14 +568,8 @@ class EhSettings {
     String? favorites9,
     String? sortOrderFavorites,
     String? ratings,
-    String? xn1,
-    String? xn2,
-    String? xn3,
-    String? xn4,
-    String? xn5,
-    String? xn6,
-    String? xn7,
-    String? xn8,
+    List<EhSettingItem>? xn,
+    List<EhSettingItem>? xl,
     String? xlJpnTl1024,
     String? xlJpnRw2048,
     String? xlEnOr1,
@@ -706,14 +672,8 @@ class EhSettings {
     favorites9: favorites9 ?? this.favorites9,
     sortOrderFavorites: sortOrderFavorites ?? this.sortOrderFavorites,
     ratings: ratings ?? this.ratings,
-    xn1: xn1 ?? this.xn1,
-    xn2: xn2 ?? this.xn2,
-    xn3: xn3 ?? this.xn3,
-    xn4: xn4 ?? this.xn4,
-    xn5: xn5 ?? this.xn5,
-    xn6: xn6 ?? this.xn6,
-    xn7: xn7 ?? this.xn7,
-    xn8: xn8 ?? this.xn8,
+    xn: xn ?? this.xn,
+    xl: xl ?? this.xl,
     xlJpnTl1024: xlJpnTl1024 ?? this.xlJpnTl1024,
     xlJpnRw2048: xlJpnRw2048 ?? this.xlJpnRw2048,
     xlEnOr1: xlEnOr1 ?? this.xlEnOr1,
@@ -787,8 +747,8 @@ class EhSettings {
 
   @override
   bool operator ==(Object other) => identical(this, other) 
-    || other is EhSettings && profilelist == other.profilelist && profileSelected == other.profileSelected && loadImageThroughHAtH == other.loadImageThroughHAtH && loadBrowsingCountry == other.loadBrowsingCountry && imageSize == other.imageSize && imageSizeHorizontal == other.imageSizeHorizontal && imageSizeVertical == other.imageSizeVertical && galleryNameDisplay == other.galleryNameDisplay && archiverSettings == other.archiverSettings && frontPageSettings == other.frontPageSettings && ctDoujinshi == other.ctDoujinshi && ctManga == other.ctManga && ctArtistcg == other.ctArtistcg && ctGamecg == other.ctGamecg && ctWestern == other.ctWestern && ctNonH == other.ctNonH && ctImageset == other.ctImageset && ctCosplay == other.ctCosplay && ctAsianporn == other.ctAsianporn && ctMisc == other.ctMisc && favorites0 == other.favorites0 && favorites1 == other.favorites1 && favorites2 == other.favorites2 && favorites3 == other.favorites3 && favorites4 == other.favorites4 && favorites5 == other.favorites5 && favorites6 == other.favorites6 && favorites7 == other.favorites7 && favorites8 == other.favorites8 && favorites9 == other.favorites9 && sortOrderFavorites == other.sortOrderFavorites && ratings == other.ratings && xn1 == other.xn1 && xn2 == other.xn2 && xn3 == other.xn3 && xn4 == other.xn4 && xn5 == other.xn5 && xn6 == other.xn6 && xn7 == other.xn7 && xn8 == other.xn8 && xlJpnTl1024 == other.xlJpnTl1024 && xlJpnRw2048 == other.xlJpnRw2048 && xlEnOr1 == other.xlEnOr1 && xlEnTr1025 == other.xlEnTr1025 && xlEnRe2049 == other.xlEnRe2049 && xlChiOr10 == other.xlChiOr10 && xlChiTr1034 == other.xlChiTr1034 && xlChiRe2058 == other.xlChiRe2058 && xlDutOr20 == other.xlDutOr20 && xlDutTr1044 == other.xlDutTr1044 && xlDutRe2068 == other.xlDutRe2068 && xlFrOr30 == other.xlFrOr30 && xlFrTr1054 == other.xlFrTr1054 && xlFrRe2078 == other.xlFrRe2078 && xlGmOr40 == other.xlGmOr40 && xlGmTr1064 == other.xlGmTr1064 && xlGmRe2088 == other.xlGmRe2088 && xlHungOr50 == other.xlHungOr50 && xlHungTr1074 == other.xlHungTr1074 && xlHungRe2098 == other.xlHungRe2098 && xlItaOr60 == other.xlItaOr60 && xlItaTr1084 == other.xlItaTr1084 && xlItaRe2108 == other.xlItaRe2108 && xlKrOr70 == other.xlKrOr70 && xlKrTr1094 == other.xlKrTr1094 && xlKrRe2118 == other.xlKrRe2118 && xlPoliOr80 == other.xlPoliOr80 && xlPoliTr1104 == other.xlPoliTr1104 && xlPoliRe2128 == other.xlPoliRe2128 && xlPorOr90 == other.xlPorOr90 && xlPorTr1114 == other.xlPorTr1114 && xlPorRe2138 == other.xlPorRe2138 && xlRuOr100 == other.xlRuOr100 && xlRuTr1124 == other.xlRuTr1124 && xlRuRe2148 == other.xlRuRe2148 && xlSpaOr110 == other.xlSpaOr110 && xlSpaTr1134 == other.xlSpaTr1134 && xlSpaRe2158 == other.xlSpaRe2158 && xlThaiOr120 == other.xlThaiOr120 && xlThaiTr1144 == other.xlThaiTr1144 && xlThaiRe2168 == other.xlThaiRe2168 && xlVieOr130 == other.xlVieOr130 && xlVieTr1154 == other.xlVieTr1154 && xlVieRe2178 == other.xlVieRe2178 && xlNaOr254 == other.xlNaOr254 && xlNaTr1278 == other.xlNaTr1278 && xlNaRe2302 == other.xlNaRe2302 && xlOthOr255 == other.xlOthOr255 && xlOthTr1279 == other.xlOthTr1279 && xlOthRe2303 == other.xlOthRe2303 && tagFilteringThreshold == other.tagFilteringThreshold && tagWatchingThreshold == other.tagWatchingThreshold && excludedLanguages == other.excludedLanguages && excludedUploaders == other.excludedUploaders && searchResultCount == other.searchResultCount && mouseOverThumbnails == other.mouseOverThumbnails && thumbnailSize == other.thumbnailSize && thumbnailRows == other.thumbnailRows && thumbnailScaling == other.thumbnailScaling && viewportOverride == other.viewportOverride && sortOrderComments == other.sortOrderComments && showCommentVotes == other.showCommentVotes && sortOrderTags == other.sortOrderTags && showGalleryPageNumbers == other.showGalleryPageNumbers && hentaiAtHomeLocalNetworkHost == other.hentaiAtHomeLocalNetworkHost && originalImages == other.originalImages && alwaysUseMpv == other.alwaysUseMpv && mpvStyle == other.mpvStyle && mpvThumbnailPane == other.mpvThumbnailPane;
+    || other is EhSettings && profilelist == other.profilelist && profileSelected == other.profileSelected && loadImageThroughHAtH == other.loadImageThroughHAtH && loadBrowsingCountry == other.loadBrowsingCountry && imageSize == other.imageSize && imageSizeHorizontal == other.imageSizeHorizontal && imageSizeVertical == other.imageSizeVertical && galleryNameDisplay == other.galleryNameDisplay && archiverSettings == other.archiverSettings && frontPageSettings == other.frontPageSettings && ctDoujinshi == other.ctDoujinshi && ctManga == other.ctManga && ctArtistcg == other.ctArtistcg && ctGamecg == other.ctGamecg && ctWestern == other.ctWestern && ctNonH == other.ctNonH && ctImageset == other.ctImageset && ctCosplay == other.ctCosplay && ctAsianporn == other.ctAsianporn && ctMisc == other.ctMisc && favorites0 == other.favorites0 && favorites1 == other.favorites1 && favorites2 == other.favorites2 && favorites3 == other.favorites3 && favorites4 == other.favorites4 && favorites5 == other.favorites5 && favorites6 == other.favorites6 && favorites7 == other.favorites7 && favorites8 == other.favorites8 && favorites9 == other.favorites9 && sortOrderFavorites == other.sortOrderFavorites && ratings == other.ratings && xn == other.xn && xl == other.xl && xlJpnTl1024 == other.xlJpnTl1024 && xlJpnRw2048 == other.xlJpnRw2048 && xlEnOr1 == other.xlEnOr1 && xlEnTr1025 == other.xlEnTr1025 && xlEnRe2049 == other.xlEnRe2049 && xlChiOr10 == other.xlChiOr10 && xlChiTr1034 == other.xlChiTr1034 && xlChiRe2058 == other.xlChiRe2058 && xlDutOr20 == other.xlDutOr20 && xlDutTr1044 == other.xlDutTr1044 && xlDutRe2068 == other.xlDutRe2068 && xlFrOr30 == other.xlFrOr30 && xlFrTr1054 == other.xlFrTr1054 && xlFrRe2078 == other.xlFrRe2078 && xlGmOr40 == other.xlGmOr40 && xlGmTr1064 == other.xlGmTr1064 && xlGmRe2088 == other.xlGmRe2088 && xlHungOr50 == other.xlHungOr50 && xlHungTr1074 == other.xlHungTr1074 && xlHungRe2098 == other.xlHungRe2098 && xlItaOr60 == other.xlItaOr60 && xlItaTr1084 == other.xlItaTr1084 && xlItaRe2108 == other.xlItaRe2108 && xlKrOr70 == other.xlKrOr70 && xlKrTr1094 == other.xlKrTr1094 && xlKrRe2118 == other.xlKrRe2118 && xlPoliOr80 == other.xlPoliOr80 && xlPoliTr1104 == other.xlPoliTr1104 && xlPoliRe2128 == other.xlPoliRe2128 && xlPorOr90 == other.xlPorOr90 && xlPorTr1114 == other.xlPorTr1114 && xlPorRe2138 == other.xlPorRe2138 && xlRuOr100 == other.xlRuOr100 && xlRuTr1124 == other.xlRuTr1124 && xlRuRe2148 == other.xlRuRe2148 && xlSpaOr110 == other.xlSpaOr110 && xlSpaTr1134 == other.xlSpaTr1134 && xlSpaRe2158 == other.xlSpaRe2158 && xlThaiOr120 == other.xlThaiOr120 && xlThaiTr1144 == other.xlThaiTr1144 && xlThaiRe2168 == other.xlThaiRe2168 && xlVieOr130 == other.xlVieOr130 && xlVieTr1154 == other.xlVieTr1154 && xlVieRe2178 == other.xlVieRe2178 && xlNaOr254 == other.xlNaOr254 && xlNaTr1278 == other.xlNaTr1278 && xlNaRe2302 == other.xlNaRe2302 && xlOthOr255 == other.xlOthOr255 && xlOthTr1279 == other.xlOthTr1279 && xlOthRe2303 == other.xlOthRe2303 && tagFilteringThreshold == other.tagFilteringThreshold && tagWatchingThreshold == other.tagWatchingThreshold && excludedLanguages == other.excludedLanguages && excludedUploaders == other.excludedUploaders && searchResultCount == other.searchResultCount && mouseOverThumbnails == other.mouseOverThumbnails && thumbnailSize == other.thumbnailSize && thumbnailRows == other.thumbnailRows && thumbnailScaling == other.thumbnailScaling && viewportOverride == other.viewportOverride && sortOrderComments == other.sortOrderComments && showCommentVotes == other.showCommentVotes && sortOrderTags == other.sortOrderTags && showGalleryPageNumbers == other.showGalleryPageNumbers && hentaiAtHomeLocalNetworkHost == other.hentaiAtHomeLocalNetworkHost && originalImages == other.originalImages && alwaysUseMpv == other.alwaysUseMpv && mpvStyle == other.mpvStyle && mpvThumbnailPane == other.mpvThumbnailPane;
 
   @override
-  int get hashCode => profilelist.hashCode ^ profileSelected.hashCode ^ loadImageThroughHAtH.hashCode ^ loadBrowsingCountry.hashCode ^ imageSize.hashCode ^ imageSizeHorizontal.hashCode ^ imageSizeVertical.hashCode ^ galleryNameDisplay.hashCode ^ archiverSettings.hashCode ^ frontPageSettings.hashCode ^ ctDoujinshi.hashCode ^ ctManga.hashCode ^ ctArtistcg.hashCode ^ ctGamecg.hashCode ^ ctWestern.hashCode ^ ctNonH.hashCode ^ ctImageset.hashCode ^ ctCosplay.hashCode ^ ctAsianporn.hashCode ^ ctMisc.hashCode ^ favorites0.hashCode ^ favorites1.hashCode ^ favorites2.hashCode ^ favorites3.hashCode ^ favorites4.hashCode ^ favorites5.hashCode ^ favorites6.hashCode ^ favorites7.hashCode ^ favorites8.hashCode ^ favorites9.hashCode ^ sortOrderFavorites.hashCode ^ ratings.hashCode ^ xn1.hashCode ^ xn2.hashCode ^ xn3.hashCode ^ xn4.hashCode ^ xn5.hashCode ^ xn6.hashCode ^ xn7.hashCode ^ xn8.hashCode ^ xlJpnTl1024.hashCode ^ xlJpnRw2048.hashCode ^ xlEnOr1.hashCode ^ xlEnTr1025.hashCode ^ xlEnRe2049.hashCode ^ xlChiOr10.hashCode ^ xlChiTr1034.hashCode ^ xlChiRe2058.hashCode ^ xlDutOr20.hashCode ^ xlDutTr1044.hashCode ^ xlDutRe2068.hashCode ^ xlFrOr30.hashCode ^ xlFrTr1054.hashCode ^ xlFrRe2078.hashCode ^ xlGmOr40.hashCode ^ xlGmTr1064.hashCode ^ xlGmRe2088.hashCode ^ xlHungOr50.hashCode ^ xlHungTr1074.hashCode ^ xlHungRe2098.hashCode ^ xlItaOr60.hashCode ^ xlItaTr1084.hashCode ^ xlItaRe2108.hashCode ^ xlKrOr70.hashCode ^ xlKrTr1094.hashCode ^ xlKrRe2118.hashCode ^ xlPoliOr80.hashCode ^ xlPoliTr1104.hashCode ^ xlPoliRe2128.hashCode ^ xlPorOr90.hashCode ^ xlPorTr1114.hashCode ^ xlPorRe2138.hashCode ^ xlRuOr100.hashCode ^ xlRuTr1124.hashCode ^ xlRuRe2148.hashCode ^ xlSpaOr110.hashCode ^ xlSpaTr1134.hashCode ^ xlSpaRe2158.hashCode ^ xlThaiOr120.hashCode ^ xlThaiTr1144.hashCode ^ xlThaiRe2168.hashCode ^ xlVieOr130.hashCode ^ xlVieTr1154.hashCode ^ xlVieRe2178.hashCode ^ xlNaOr254.hashCode ^ xlNaTr1278.hashCode ^ xlNaRe2302.hashCode ^ xlOthOr255.hashCode ^ xlOthTr1279.hashCode ^ xlOthRe2303.hashCode ^ tagFilteringThreshold.hashCode ^ tagWatchingThreshold.hashCode ^ excludedLanguages.hashCode ^ excludedUploaders.hashCode ^ searchResultCount.hashCode ^ mouseOverThumbnails.hashCode ^ thumbnailSize.hashCode ^ thumbnailRows.hashCode ^ thumbnailScaling.hashCode ^ viewportOverride.hashCode ^ sortOrderComments.hashCode ^ showCommentVotes.hashCode ^ sortOrderTags.hashCode ^ showGalleryPageNumbers.hashCode ^ hentaiAtHomeLocalNetworkHost.hashCode ^ originalImages.hashCode ^ alwaysUseMpv.hashCode ^ mpvStyle.hashCode ^ mpvThumbnailPane.hashCode;
+  int get hashCode => profilelist.hashCode ^ profileSelected.hashCode ^ loadImageThroughHAtH.hashCode ^ loadBrowsingCountry.hashCode ^ imageSize.hashCode ^ imageSizeHorizontal.hashCode ^ imageSizeVertical.hashCode ^ galleryNameDisplay.hashCode ^ archiverSettings.hashCode ^ frontPageSettings.hashCode ^ ctDoujinshi.hashCode ^ ctManga.hashCode ^ ctArtistcg.hashCode ^ ctGamecg.hashCode ^ ctWestern.hashCode ^ ctNonH.hashCode ^ ctImageset.hashCode ^ ctCosplay.hashCode ^ ctAsianporn.hashCode ^ ctMisc.hashCode ^ favorites0.hashCode ^ favorites1.hashCode ^ favorites2.hashCode ^ favorites3.hashCode ^ favorites4.hashCode ^ favorites5.hashCode ^ favorites6.hashCode ^ favorites7.hashCode ^ favorites8.hashCode ^ favorites9.hashCode ^ sortOrderFavorites.hashCode ^ ratings.hashCode ^ xn.hashCode ^ xl.hashCode ^ xlJpnTl1024.hashCode ^ xlJpnRw2048.hashCode ^ xlEnOr1.hashCode ^ xlEnTr1025.hashCode ^ xlEnRe2049.hashCode ^ xlChiOr10.hashCode ^ xlChiTr1034.hashCode ^ xlChiRe2058.hashCode ^ xlDutOr20.hashCode ^ xlDutTr1044.hashCode ^ xlDutRe2068.hashCode ^ xlFrOr30.hashCode ^ xlFrTr1054.hashCode ^ xlFrRe2078.hashCode ^ xlGmOr40.hashCode ^ xlGmTr1064.hashCode ^ xlGmRe2088.hashCode ^ xlHungOr50.hashCode ^ xlHungTr1074.hashCode ^ xlHungRe2098.hashCode ^ xlItaOr60.hashCode ^ xlItaTr1084.hashCode ^ xlItaRe2108.hashCode ^ xlKrOr70.hashCode ^ xlKrTr1094.hashCode ^ xlKrRe2118.hashCode ^ xlPoliOr80.hashCode ^ xlPoliTr1104.hashCode ^ xlPoliRe2128.hashCode ^ xlPorOr90.hashCode ^ xlPorTr1114.hashCode ^ xlPorRe2138.hashCode ^ xlRuOr100.hashCode ^ xlRuTr1124.hashCode ^ xlRuRe2148.hashCode ^ xlSpaOr110.hashCode ^ xlSpaTr1134.hashCode ^ xlSpaRe2158.hashCode ^ xlThaiOr120.hashCode ^ xlThaiTr1144.hashCode ^ xlThaiRe2168.hashCode ^ xlVieOr130.hashCode ^ xlVieTr1154.hashCode ^ xlVieRe2178.hashCode ^ xlNaOr254.hashCode ^ xlNaTr1278.hashCode ^ xlNaRe2302.hashCode ^ xlOthOr255.hashCode ^ xlOthTr1279.hashCode ^ xlOthRe2303.hashCode ^ tagFilteringThreshold.hashCode ^ tagWatchingThreshold.hashCode ^ excludedLanguages.hashCode ^ excludedUploaders.hashCode ^ searchResultCount.hashCode ^ mouseOverThumbnails.hashCode ^ thumbnailSize.hashCode ^ thumbnailRows.hashCode ^ thumbnailScaling.hashCode ^ viewportOverride.hashCode ^ sortOrderComments.hashCode ^ showCommentVotes.hashCode ^ sortOrderTags.hashCode ^ showGalleryPageNumbers.hashCode ^ hentaiAtHomeLocalNetworkHost.hashCode ^ originalImages.hashCode ^ alwaysUseMpv.hashCode ^ mpvStyle.hashCode ^ mpvThumbnailPane.hashCode;
 }

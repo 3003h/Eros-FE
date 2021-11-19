@@ -895,6 +895,7 @@ class Api {
     const kProfileName = 'FEhViewer';
 
     final String? response = await getHttpManager(cache: false).get(url);
+    // final String? response = await getHttpManager().get(url);
 
     // logger.d('$response');
 
