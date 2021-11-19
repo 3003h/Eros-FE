@@ -7,6 +7,7 @@ import 'package:fehviewer/common/parser/eh_parser.dart';
 import 'package:fehviewer/const/const.dart';
 import 'package:fehviewer/models/base/eh_models.dart';
 import 'package:fehviewer/pages/gallery/controller/archiver_controller.dart';
+import 'package:flutter/foundation.dart';
 
 import 'exception.dart';
 import 'http_response.dart';
@@ -152,5 +153,15 @@ class GalleryArchiverLocalDownloadResponseTransformer extends HttpTransformer {
     final String _href =
         RegExp(r'document.location = "(.+)"').firstMatch(html)?.group(1) ?? '';
     return DioHttpResponse<String>.success('$_href?start=1');
+  }
+}
+
+class UconfigHttpTransformer extends HttpTransformer {
+  @override
+  FutureOr<DioHttpResponse<EhSettings>> parse(
+      Response<dynamic> response) async {
+    final html = response.data as String;
+    final EhSettings uconfig = await compute(parseUconfig, html);
+    return DioHttpResponse<EhSettings>.success(uconfig);
   }
 }

@@ -229,6 +229,113 @@ class MessageLookup extends MessageLookupByLibrary {
         "tolist_past_year": MessageLookupByLibrary.simpleMessage("Past Year"),
         "tolist_yesterday": MessageLookupByLibrary.simpleMessage("Yesterday"),
         "top_to_bottom": MessageLookupByLibrary.simpleMessage("위에서 아래로"),
+        "uc_archiver_desc": MessageLookupByLibrary.simpleMessage(
+            "The default behavior for the Archiver is to confirm the cost and selection for original or resampled archive, then present a link that can be clicked or copied elsewhere. You can change this behavior here."),
+        "uc_archiver_set":
+            MessageLookupByLibrary.simpleMessage("rchiver Settings"),
+        "uc_artist": MessageLookupByLibrary.simpleMessage("rtist"),
+        "uc_character": MessageLookupByLibrary.simpleMessage("character"),
+        "uc_comments_show_votes":
+            MessageLookupByLibrary.simpleMessage("Show votes"),
+        "uc_comments_sort_order":
+            MessageLookupByLibrary.simpleMessage("Sort order"),
+        "uc_crt_profile": MessageLookupByLibrary.simpleMessage("Create New"),
+        "uc_del_profile":
+            MessageLookupByLibrary.simpleMessage("Delete Profile"),
+        "uc_exc_lang":
+            MessageLookupByLibrary.simpleMessage("Excluded Languages"),
+        "uc_exc_lang_desc": MessageLookupByLibrary.simpleMessage(
+            "If you wish to hide galleries in certain languages from the gallery list and searches, select them from the list abover.\nNote that matching galleries will never appear regardless of your search query."),
+        "uc_exc_up": MessageLookupByLibrary.simpleMessage("Excluded Uploaders"),
+        "uc_exc_up_desc": MessageLookupByLibrary.simpleMessage(
+            "If you wish to hide galleries from certain uploaders from the gallery list and searches, add them abover. Put one username per line.\nNote that galleries from these uploaders will never appear regardless of your search query."),
+        "uc_fav": MessageLookupByLibrary.simpleMessage("Favorites"),
+        "uc_fav_sort": MessageLookupByLibrary.simpleMessage("Default sort"),
+        "uc_fav_sort_desc": MessageLookupByLibrary.simpleMessage(
+            "You can also select your default sort order for galleries on your favorites page. Note that favorites added prior to the March 2016 revamp did not store a timestamp, and will use the gallery posted time regardless of this setting."),
+        "uc_female": MessageLookupByLibrary.simpleMessage("female"),
+        "uc_front_page": MessageLookupByLibrary.simpleMessage("Front Page"),
+        "uc_front_page_dis_mode":
+            MessageLookupByLibrary.simpleMessage("Front Page Display mode"),
+        "uc_gallery_comments":
+            MessageLookupByLibrary.simpleMessage("Gallery Comments"),
+        "uc_group": MessageLookupByLibrary.simpleMessage("group"),
+        "uc_hath_local_host": MessageLookupByLibrary.simpleMessage(
+            "Hentai@Home Local Network Host"),
+        "uc_hath_local_host_desc": MessageLookupByLibrary.simpleMessage(
+            "    This setting can be used if you have a H@H client running on your local network with the same public IP you browse the site with. Some routers are buggy and cannot route requests back to its own IP; this allows you to work around this problem.\n    If you are running the client on the same PC you browse from, use the loopback address (127.0.0.1:port). If the client is running on another computer on your network, use its local network IP. Some browser configurations prevent external web sites from accessing URLs with local network IPs, the site must then be whitelisted for this to work."),
+        "uc_img_cussize_desc": MessageLookupByLibrary.simpleMessage(
+            "While the site will automatically scale down images to fit your screen width, you can also manually restrict the maximum display size of an image. Like the automatic scaling, this does not resample the image, as the resizing is done browser-side. (0 = no limit)"),
+        "uc_img_horiz": MessageLookupByLibrary.simpleMessage("Horizontal"),
+        "uc_img_load_setting":
+            MessageLookupByLibrary.simpleMessage("Image Load Settings"),
+        "uc_img_size_setting":
+            MessageLookupByLibrary.simpleMessage("Image Size Settings"),
+        "uc_img_vert": MessageLookupByLibrary.simpleMessage("Vertical"),
+        "uc_ip_addr_port":
+            MessageLookupByLibrary.simpleMessage("IP Address:Port"),
+        "uc_language": MessageLookupByLibrary.simpleMessage("language"),
+        "uc_male": MessageLookupByLibrary.simpleMessage("male"),
+        "uc_mose_over_thumb":
+            MessageLookupByLibrary.simpleMessage("mouse-over thumbnails"),
+        "uc_mpv": MessageLookupByLibrary.simpleMessage("Multi-Page Viewer"),
+        "uc_mpv_always": MessageLookupByLibrary.simpleMessage("Always use"),
+        "uc_mpv_stype": MessageLookupByLibrary.simpleMessage("Display Style"),
+        "uc_mpv_thumb_pane":
+            MessageLookupByLibrary.simpleMessage("Thumbnail Pane"),
+        "uc_name_display":
+            MessageLookupByLibrary.simpleMessage("Gallery Name Display"),
+        "uc_name_display_desc": MessageLookupByLibrary.simpleMessage(
+            "Many galleries have both an English/Romanized title and a title in Japanese script. Which gallery name would you like as default?"),
+        "uc_ori_image": MessageLookupByLibrary.simpleMessage("Original Images"),
+        "uc_ori_image_desc": MessageLookupByLibrary.simpleMessage(
+            "Use original images instead of the resampled versions where applicable?"),
+        "uc_parody": MessageLookupByLibrary.simpleMessage("parody"),
+        "uc_profile": MessageLookupByLibrary.simpleMessage("Profile"),
+        "uc_rating": MessageLookupByLibrary.simpleMessage("Ratings Colors"),
+        "uc_rating_desc": MessageLookupByLibrary.simpleMessage(
+            "    By default, galleries that you have rated will appear with red stars for ratings of 2 stars and below, green for ratings between 2.5 and 4 stars, and blue for ratings of 4.5 or 5 stars. You can customize this by entering your desired color combination below.\n    Each letter represents one star. The default RRGGB means R(ed) for the first and second star, G(reen) for the third and fourth, and B(lue) for the fifth. You can also use (Y)ellow for the normal stars. Any five-letter R/G/B/Y combo works."),
+        "uc_reclass": MessageLookupByLibrary.simpleMessage("reclass"),
+        "uc_rename": MessageLookupByLibrary.simpleMessage("Rename"),
+        "uc_res_res":
+            MessageLookupByLibrary.simpleMessage("Resample Resolution"),
+        "uc_res_res_desc": MessageLookupByLibrary.simpleMessage(
+            "Normally, images are resampled to 1280 pixels of horizontal resolution for online viewing. You can alternatively select one of the following resample resolutions. To avoid murdering the staging servers, resolutions above 1280x are temporarily restricted to donators, people with any hath perk, and people with a UID below 3,000,000."),
+        "uc_search_r_count":
+            MessageLookupByLibrary.simpleMessage("Search Result Count"),
+        "uc_search_r_count_desc": MessageLookupByLibrary.simpleMessage(
+            "How many results would you like per page for the index/search page and torrent search pages? (Hath Perk: Paging Enlargement Required)"),
+        "uc_selected": MessageLookupByLibrary.simpleMessage("Selected"),
+        "uc_set_as_def": MessageLookupByLibrary.simpleMessage("Set as Default"),
+        "uc_show_page_num":
+            MessageLookupByLibrary.simpleMessage("Show Page Numbers"),
+        "uc_tag": MessageLookupByLibrary.simpleMessage("Gallery Tags"),
+        "uc_tag_ft":
+            MessageLookupByLibrary.simpleMessage("Tag Filtering Threshold"),
+        "uc_tag_ft_desc": MessageLookupByLibrary.simpleMessage(
+            "You can soft filter tags by adding them to My Tags with a negative weight. If a gallery has tags that add up to weight abover this value, it is filtered from view. This threshold can be set between 0 and -9999."),
+        "uc_tag_namesp": MessageLookupByLibrary.simpleMessage("Tag Namespaces"),
+        "uc_tag_short_order":
+            MessageLookupByLibrary.simpleMessage("Gallery Tags Sort order"),
+        "uc_tag_wt":
+            MessageLookupByLibrary.simpleMessage("Tag Watching Threshold"),
+        "uc_tag_wt_desc": MessageLookupByLibrary.simpleMessage(
+            "Recently uploaded galleries will be included on the watched screen if it has at least one watched tag with positive weight, and the sum of weights on its watched tags add up to this value or higher. This threshold can be set between 0 and 9999."),
+        "uc_thor_hath": MessageLookupByLibrary.simpleMessage("Through the H@H"),
+        "uc_thumb_row": MessageLookupByLibrary.simpleMessage("Row"),
+        "uc_thumb_scaling":
+            MessageLookupByLibrary.simpleMessage("Thumbnail Scaling"),
+        "uc_thumb_scaling_desc": MessageLookupByLibrary.simpleMessage(
+            "Thumbnails on the thumbnail and extended gallery list views can be scaled to a custom value between 75% and 150%."),
+        "uc_thumb_setting":
+            MessageLookupByLibrary.simpleMessage("Thumbnail Settings"),
+        "uc_thumb_size": MessageLookupByLibrary.simpleMessage("Size"),
+        "uc_viewport_or":
+            MessageLookupByLibrary.simpleMessage("Viewport Override"),
+        "uc_viewport_or_desc": MessageLookupByLibrary.simpleMessage(
+            "Allows you to override the virtual width of the site for mobile devices. This is normally determined automatically by your device based on its DPI. Sensible values at 100% thumbnail scale are between 640 and 1400."),
+        "uc_xt_desc": MessageLookupByLibrary.simpleMessage(
+            "If you want to exclude certain namespaces from a default tag search, you can check those abover. Note that this does not prevent galleries with tags in these namespaces from appearing, it just makes it so that when searching tags, it will forego those namespaces."),
         "unlimited": MessageLookupByLibrary.simpleMessage("제한 없음"),
         "uploader": MessageLookupByLibrary.simpleMessage("업로더"),
         "user_login": MessageLookupByLibrary.simpleMessage("로그인"),

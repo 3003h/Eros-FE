@@ -217,6 +217,94 @@ class MessageLookup extends MessageLookupByLibrary {
         "tolist_past_year": MessageLookupByLibrary.simpleMessage("年排行"),
         "tolist_yesterday": MessageLookupByLibrary.simpleMessage("日排行"),
         "top_to_bottom": MessageLookupByLibrary.simpleMessage("从上到下"),
+        "uc_archiver_desc": MessageLookupByLibrary.simpleMessage(
+            "默认归档下载方式为手动选择（原画质或压缩画质），然后手动复制或点击下载链接。你可以修改归档下载方式。"),
+        "uc_archiver_set": MessageLookupByLibrary.simpleMessage("归档设置"),
+        "uc_artist": MessageLookupByLibrary.simpleMessage("艺术家"),
+        "uc_character": MessageLookupByLibrary.simpleMessage("角色"),
+        "uc_comments_show_votes": MessageLookupByLibrary.simpleMessage("显示投票数"),
+        "uc_comments_sort_order": MessageLookupByLibrary.simpleMessage("排序方式"),
+        "uc_crt_profile": MessageLookupByLibrary.simpleMessage("新建"),
+        "uc_del_profile": MessageLookupByLibrary.simpleMessage("删除配置"),
+        "uc_exc_lang": MessageLookupByLibrary.simpleMessage("排除语言"),
+        "uc_exc_lang_desc": MessageLookupByLibrary.simpleMessage(
+            "如果您希望以图库列表中的某些语言隐藏图库并进行搜索，请从下面的列表中选择它们。\n请注意，无论搜索查询如何，匹配的图库都不会出现。"),
+        "uc_exc_up": MessageLookupByLibrary.simpleMessage("屏蔽的上传者"),
+        "uc_exc_up_desc": MessageLookupByLibrary.simpleMessage(
+            "如果你希望在图库中和搜索中隐藏某个上传者的话，请把他们的用户名填写在上方，每行一个。\n注意：无论你如何搜索，这些上传者都不会出现。"),
+        "uc_fav": MessageLookupByLibrary.simpleMessage("收藏"),
+        "uc_fav_sort": MessageLookupByLibrary.simpleMessage("默认排序"),
+        "uc_fav_sort_desc": MessageLookupByLibrary.simpleMessage(
+            "请注意，2016 年 3 月改版之前加入收藏夹的图库并未保存收藏时间，会以图库发布时间代替。"),
+        "uc_female": MessageLookupByLibrary.simpleMessage("女性"),
+        "uc_front_page": MessageLookupByLibrary.simpleMessage("首页设置"),
+        "uc_front_page_dis_mode":
+            MessageLookupByLibrary.simpleMessage("首页显示样式"),
+        "uc_gallery_comments": MessageLookupByLibrary.simpleMessage("图库评论"),
+        "uc_group": MessageLookupByLibrary.simpleMessage("社团"),
+        "uc_hath_local_host":
+            MessageLookupByLibrary.simpleMessage("Hentai@Home 本地网络服务器"),
+        "uc_hath_local_host_desc": MessageLookupByLibrary.simpleMessage(
+            "    如果你本地安装了 H@H 客户端，本地 IP 与浏览网站的公共 IP 相同，一些路由器不支持回流导致无法访问到自己，你可以设置这里来解决。\n    如果在同一台电脑上访问网站和运行客户端，请使用本地回环地址（127.0.0.1:端口号）。如果客户端在网络上的其他计算机运行，请使用那台机器的内网 IP。某些浏览器的配置可能阻止外部网站访问本地网络，你必须将网站列入白名单才能工作。"),
+        "uc_img_cussize_desc": MessageLookupByLibrary.simpleMessage(
+            "虽然图片会自动根据窗口缩小，你也可以手动设置最大大小，图片并没有重新采样（0 为不限制）"),
+        "uc_img_horiz": MessageLookupByLibrary.simpleMessage("宽/横向"),
+        "uc_img_load_setting": MessageLookupByLibrary.simpleMessage("图片加载设置"),
+        "uc_img_size_setting": MessageLookupByLibrary.simpleMessage("图片大小设置"),
+        "uc_img_vert": MessageLookupByLibrary.simpleMessage("高/纵向"),
+        "uc_ip_addr_port":
+            MessageLookupByLibrary.simpleMessage("IP Address:Port"),
+        "uc_language": MessageLookupByLibrary.simpleMessage("语言"),
+        "uc_male": MessageLookupByLibrary.simpleMessage("男性"),
+        "uc_mose_over_thumb": MessageLookupByLibrary.simpleMessage("缩略图何时加载"),
+        "uc_mpv": MessageLookupByLibrary.simpleMessage("多页查看器"),
+        "uc_mpv_always": MessageLookupByLibrary.simpleMessage("总是使用"),
+        "uc_mpv_stype": MessageLookupByLibrary.simpleMessage("显示样式"),
+        "uc_mpv_thumb_pane": MessageLookupByLibrary.simpleMessage("缩略图侧栏"),
+        "uc_name_display": MessageLookupByLibrary.simpleMessage("图库的名字显示"),
+        "uc_name_display_desc": MessageLookupByLibrary.simpleMessage(
+            "很多图库都同时拥有英文或者日文标题，你想默认显示哪一个？"),
+        "uc_ori_image": MessageLookupByLibrary.simpleMessage("原始图像"),
+        "uc_ori_image_desc":
+            MessageLookupByLibrary.simpleMessage("当可用的时候，使用原始图像代替压缩过的版本?"),
+        "uc_parody": MessageLookupByLibrary.simpleMessage("原作"),
+        "uc_profile": MessageLookupByLibrary.simpleMessage("配置"),
+        "uc_rating": MessageLookupByLibrary.simpleMessage("评分颜色"),
+        "uc_rating_desc": MessageLookupByLibrary.simpleMessage(
+            "    默认设置下，你评为 2 星及以下的图库显示为红星，2.5 ~ 4 星显示为绿星，4.5 ~ 5 星显示为蓝星。你可以将其设定为其他颜色组合。\n    每一个字幕代表一颗星, 默认的 RRGGB 表示第一第二颗星显示为红色 R(ed)，第三第四颗星显示是绿色 G(reen)，第五颗星显示为蓝色 B(lue)。你也可以使用黄色 (Y)ellow，R/G/B/Y 任何五个组合都是有效的。"),
+        "uc_reclass": MessageLookupByLibrary.simpleMessage("重新分类"),
+        "uc_rename": MessageLookupByLibrary.simpleMessage("重命名"),
+        "uc_res_res": MessageLookupByLibrary.simpleMessage("重新采样分辨率"),
+        "uc_res_res_desc": MessageLookupByLibrary.simpleMessage(
+            "通常情况，图像将重采样到 1280 像素宽度以用于在线浏览，您也可以选择以下重新采样分辨率。但是为了避免负载过高，高于 1280 像素将只供给于赞助者、特殊贡献者，以及 UID 小于 3,000,000 的用户。"),
+        "uc_search_r_count": MessageLookupByLibrary.simpleMessage("搜索结果数"),
+        "uc_search_r_count_desc": MessageLookupByLibrary.simpleMessage(
+            "主页/搜索页面每页显示多少条数据？（Hath Perk：需要「页面扩大」）"),
+        "uc_selected": MessageLookupByLibrary.simpleMessage("当前"),
+        "uc_set_as_def": MessageLookupByLibrary.simpleMessage("设为默认"),
+        "uc_show_page_num": MessageLookupByLibrary.simpleMessage("显示图库页码"),
+        "uc_tag": MessageLookupByLibrary.simpleMessage("图库标签"),
+        "uc_tag_ft": MessageLookupByLibrary.simpleMessage("标签筛选阈值"),
+        "uc_tag_ft_desc": MessageLookupByLibrary.simpleMessage(
+            "\t你可以通过将标签加入「我的标签」并设置一个负权重来软过滤它们。如果一个作品所有的标签权重之和低于设定值，此作品将从视图中被过滤。这个值可以设定为 0 ~ -9999。"),
+        "uc_tag_namesp": MessageLookupByLibrary.simpleMessage("标签组"),
+        "uc_tag_short_order": MessageLookupByLibrary.simpleMessage("图库标签排序"),
+        "uc_tag_wt": MessageLookupByLibrary.simpleMessage("标签订阅阈值"),
+        "uc_tag_wt_desc": MessageLookupByLibrary.simpleMessage(
+            "你可以通过将标签加入「我的标签」并设置一个正权重来关注它们。如果一个最近上传的作品所有标签的权重之和高于设定值，则它将会被包含在「关注」里。这个值可以设定为 0 ~ 9999。"),
+        "uc_thor_hath":
+            MessageLookupByLibrary.simpleMessage("通过 Hentai@Home 网络加载"),
+        "uc_thumb_row": MessageLookupByLibrary.simpleMessage("行数"),
+        "uc_thumb_scaling": MessageLookupByLibrary.simpleMessage("缩略图缩放"),
+        "uc_thumb_scaling_desc": MessageLookupByLibrary.simpleMessage(
+            "缩略图和扩展模式下的图库列表缩略图可以缩放为 75% 到 150% 之间的自定义值。"),
+        "uc_thumb_setting": MessageLookupByLibrary.simpleMessage("缩略图设置"),
+        "uc_thumb_size": MessageLookupByLibrary.simpleMessage("大小"),
+        "uc_viewport_or": MessageLookupByLibrary.simpleMessage("移动端虚拟宽度"),
+        "uc_viewport_or_desc": MessageLookupByLibrary.simpleMessage(
+            "允许你覆盖移动设备的虚拟宽度，默认是根据 DPI 自动计算的，100% 缩略图比例下的合理值在 640 到 1400 之间。"),
+        "uc_xt_desc": MessageLookupByLibrary.simpleMessage(
+            "如果要从默认标签搜索中排除某些标签组，可以检查以下内容。请注意，这不会阻止在这些标签组中的标签的展示区出现，它只是在搜索标签时排除这些标签组。"),
         "unlimited": MessageLookupByLibrary.simpleMessage("不限制"),
         "uploader": MessageLookupByLibrary.simpleMessage("上传者"),
         "user_login": MessageLookupByLibrary.simpleMessage("用户登录"),

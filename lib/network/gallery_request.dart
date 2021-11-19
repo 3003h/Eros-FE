@@ -28,6 +28,7 @@ import 'package:fehviewer/utils/time.dart';
 import 'package:fehviewer/utils/toast.dart';
 import 'package:fehviewer/utils/utility.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_cache_manager/flutter_cache_manager.dart';
 import 'package:get/get.dart' hide Response, FormData;
@@ -904,7 +905,8 @@ class Api {
       return false;
     }
 
-    final uconfig = parseUconfig(response);
+    // final uconfig = parseUconfig(response);
+    final uconfig = await compute(parseUconfig, response);
     final List<EhProfile> ehProfiles = uconfig.profilelist;
 
     Get.find<EhMySettingsController>().ehSetting = uconfig;
