@@ -74,7 +74,7 @@ class EhMySettingsPage extends GetView<EhMySettingsController> {
                   ),
                   onPressed: () async {
                     // 保存配置
-                    controller.print();
+                    controller.printParam();
                   },
                 ),
               ],
@@ -91,24 +91,24 @@ class ListViewEhMySettings extends GetView<EhMySettingsController> {
   Widget build(BuildContext context) {
     final List<Widget> _list = <Widget>[
       GroupItem(
-        title: 'Profile',
+        title: L10n.of(context).uc_profile,
         child: Column(
           children: [
             _buildSelectedProfileItem(context, hideLine: false),
             TextItem(
-              'Rename',
+              L10n.of(context).uc_rename,
               onTap: controller.renameProfile,
             ),
             TextItem(
-              'Create New',
+              L10n.of(context).uc_crt_profile,
               onTap: controller.crtNewProfile,
             ),
             TextItem(
-              'Delete Profile',
+              L10n.of(context).uc_del_profile,
               onTap: controller.deleteProfile,
             ),
             TextItem(
-              'Set as Default',
+              L10n.of(context).uc_set_as_def,
               onTap: controller.setDefaultProfile,
             ),
           ],
@@ -117,19 +117,17 @@ class ListViewEhMySettings extends GetView<EhMySettingsController> {
 
       // uh
       GroupItem(
-        title: 'Image Load Settings',
+        title: L10n.of(context).uc_img_load_setting,
         child: _buildLoadTypeItem(context, hideLine: true),
       ),
       // xr
       GroupItem(
-        title: 'Image Size Settings',
-        desc:
-            'Normally, images are resampled to 1280 pixels of horizontal resolution for online viewing. You can alternatively select one of the following resample resolutions. To avoid murdering the staging servers, resolutions above 1280x are temporarily restricted to donators, people with any hath perk, and people with a UID below 3,000,000.',
+        title: L10n.of(context).uc_img_size_setting,
+        desc: L10n.of(context).uc_res_res_desc,
         child: _buildImageSizeItem(context, hideLine: true),
       ),
       GroupItem(
-        desc:
-            'While the site will automatically scale down images to fit your screen width, you can also manually restrict the maximum display size of an image. Like the automatic scaling, this does not resample the image, as the resizing is done browser-side. (0 = no limit)',
+        desc: L10n.of(context).uc_img_cussize_desc,
         child: Column(
           children: [
             _buildSizeHorizontal(context),
@@ -139,71 +137,58 @@ class ListViewEhMySettings extends GetView<EhMySettingsController> {
       ),
       GroupItem(
         // title: 'Gallery Name Display',
-        desc:
-            'Many galleries have both an English/Romanized title and a title in Japanese script. Which gallery name would you like as default?',
+        desc: L10n.of(context).uc_name_display_desc,
         child: _buildNameDisplayItem(context, hideLine: true),
       ),
       GroupItem(
         // title: 'Archiver Settings',
-        desc:
-            'The default behavior for the Archiver is to confirm the cost and selection for original or resampled archive, then present a link that can be clicked or copied elsewhere. You can change this behavior here.',
+        desc: L10n.of(context).uc_archiver_desc,
         child: _buildArchiverSettingsItem(context, hideLine: true),
       ),
       GroupItem(
-        title: 'Front Page',
+        // title: 'Front Page',
         child: _buildFrontPageSettingsItem(context, hideLine: true),
       ),
       GroupItem(
-        title: 'Favorites',
+        title: L10n.of(context).uc_fav,
         child: Column(
           children: [
             _buildFavoritesSortItem(context, hideLine: true),
           ],
         ),
-        desc:
-            'You can also select your default sort order for galleries on your favorites page. Note that favorites added prior to the March 2016 revamp did not store a timestamp, and will use the gallery posted time regardless of this setting.',
+        desc: L10n.of(context).uc_fav_sort_desc,
       ),
       GroupItem(
-        desc:
-            '    By default, galleries that you have rated will appear with red stars for ratings of 2 stars and below, green for ratings between 2.5 and 4 stars, and blue for ratings of 4.5 or 5 stars. You can customize this by entering your desired color combination below.\n'
-            '    Each letter represents one star. The default RRGGB means R(ed) for the first and second star, G(reen) for the third and fourth, and B(lue) for the fifth. You can also use (Y)ellow for the normal stars. Any five-letter R/G/B/Y combo works.',
+        desc: L10n.of(context).uc_rating_desc,
         child: _buildRatingsItem(context, hideLine: true),
       ),
       GroupItem(
-        title: 'Tag Namespaces',
+        title: L10n.of(context).uc_tag_namesp,
         child: _buildTagNamespaces(context),
-        desc:
-            'If you want to exclude certain namespaces from a default tag search, you can check those below. Note that this does not prevent galleries with tags in these namespaces from appearing, it just makes it so that when searching tags, it will forego those namespaces.',
+        desc: L10n.of(context).uc_xt_desc,
       ),
       GroupItem(
         child: _buildTagFilteringThreshold(context),
-        desc:
-            'You can soft filter tags by adding them to My Tags with a negative weight. If a gallery has tags that add up to weight below this value, it is filtered from view. This threshold can be set between 0 and -9999.',
+        desc: L10n.of(context).uc_tag_ft_desc,
       ),
       GroupItem(
         child: _buildTagWatchingThreshold(context),
-        desc:
-            'Recently uploaded galleries will be included on the watched screen if it has at least one watched tag with positive weight, and the sum of weights on its watched tags add up to this value or higher. This threshold can be set between 0 and 9999.',
+        desc: L10n.of(context).uc_tag_wt_desc,
       ),
       GroupItem(
-        title: 'Excluded Languages',
-        desc:
-            'If you wish to hide galleries in certain languages from the gallery list and searches, select them from the list below.\n'
-            'Note that matching galleries will never appear regardless of your search query.',
+        title: L10n.of(context).uc_exc_lang,
+        desc: L10n.of(context).uc_exc_lang_desc,
       ),
       GroupItem(
         child: _buildExcludedUploaders(context),
-        desc:
-            'If you wish to hide galleries from certain uploaders from the gallery list and searches, add them below. Put one username per line.\n'
-            'Note that galleries from these uploaders will never appear regardless of your search query.',
+        desc: L10n.of(context).uc_exc_up_desc,
       ),
       GroupItem(
-        desc:
-            'How many results would you like per page for the index/search page and torrent search pages? (Hath Perk: Paging Enlargement Required)',
+        desc: L10n.of(context).uc_search_r_count_desc,
         child: _buildSearchResultCountItem(context, hideLine: true),
       ),
       GroupItem(
-        title: 'Thumbnail Settings',
+        title: L10n.of(context).uc_thumb_setting,
         child: Column(
           children: [
             _buildThumbMouseOverItem(context),
@@ -214,16 +199,14 @@ class ListViewEhMySettings extends GetView<EhMySettingsController> {
       ),
       GroupItem(
         child: _buildThumbnailScaling(context),
-        desc:
-            'Thumbnails on the thumbnail and extended gallery list views can be scaled to a custom value between 75% and 150%.',
+        desc: L10n.of(context).uc_thumb_scaling_desc,
       ),
       GroupItem(
         child: _buildViewportOverride(context),
-        desc:
-            'Allows you to override the virtual width of the site for mobile devices. This is normally determined automatically by your device based on its DPI. Sensible values at 100% thumbnail scale are between 640 and 1400.',
+        desc: L10n.of(context).uc_viewport_or_desc,
       ),
       GroupItem(
-        title: 'Gallery Comments',
+        title: L10n.of(context).uc_gallery_comments,
         child: Column(
           children: [
             _buildSortOrderComment(context),
@@ -232,28 +215,25 @@ class ListViewEhMySettings extends GetView<EhMySettingsController> {
         ),
       ),
       GroupItem(
-        title: 'Gallery Tags',
+        // title: 'Gallery Tags',
         child: _buildSortOrderTags(context, hideLine: true),
       ),
       GroupItem(
-        title: 'Gallery Page Numbering',
+        // title: 'Gallery Page Numbering',
         child: _buildShowPageNumbers(context, hideLine: true),
       ),
       GroupItem(
-        title: 'Hentai@Home Local Network Host',
+        title: L10n.of(context).uc_hath_local_host,
         child: _buildHatHLocalNetworkHost(context),
-        desc:
-            'This setting can be used if you have a H@H client running on your local network with the same public IP you browse the site with. Some routers are buggy and cannot route requests back to its own IP; this allows you to work around this problem.\n'
-            'If you are running the client on the same PC you browse from, use the loopback address (127.0.0.1:port). If the client is running on another computer on your network, use its local network IP. Some browser configurations prevent external web sites from accessing URLs with local network IPs, the site must then be whitelisted for this to work.',
+        desc: L10n.of(context).uc_hath_local_host_desc,
       ),
       GroupItem(
-        title: 'Original Images',
-        desc:
-            'Use original images instead of the resampled versions where applicable?',
+        // title: 'Original Images',
+        desc: L10n.of(context).uc_ori_image_desc,
         child: _buildOriginalImages(context, hideLine: true),
       ),
       GroupItem(
-        title: 'Multi-Page Viewer',
+        title: L10n.of(context).uc_mpv,
         child: Column(
           children: [
             _buildMPVAlwaysUse(context),
@@ -267,37 +247,37 @@ class ListViewEhMySettings extends GetView<EhMySettingsController> {
     return CustomScrollView(
       slivers: [
         EhCupertinoSliverRefreshControl(
-          onRefresh: _controller.loadData,
+          onRefresh: _controller.reloadData,
         ),
         SliverSafeArea(
           sliver: FutureBuilder(
               future: controller.loadData(),
               initialData: controller.ehSetting,
               builder: (context, snapshot) {
-                return SliverList(
-                  delegate: SliverChildBuilderDelegate(
-                    (context, index) {
-                      return _list[index];
-                    },
-                    childCount: _list.length,
-                  ),
-                );
-                // if (snapshot.connectionState != ConnectionState.done) {
-                //   return const SliverFillRemaining(
-                //     child: CupertinoActivityIndicator(
-                //       radius: 20,
-                //     ),
-                //   );
-                // } else {
-                //   return SliverList(
-                //     delegate: SliverChildBuilderDelegate(
-                //       (context, index) {
-                //         return _list[index];
-                //       },
-                //       childCount: _list.length,
-                //     ),
-                //   );
-                // }
+                // return SliverList(
+                //   delegate: SliverChildBuilderDelegate(
+                //     (context, index) {
+                //       return _list[index];
+                //     },
+                //     childCount: _list.length,
+                //   ),
+                // );
+                if (snapshot.connectionState != ConnectionState.done) {
+                  return const SliverFillRemaining(
+                    child: CupertinoActivityIndicator(
+                      radius: 20,
+                    ),
+                  );
+                } else {
+                  return SliverList(
+                    delegate: SliverChildBuilderDelegate(
+                      (context, index) {
+                        return _list[index];
+                      },
+                      childCount: _list.length,
+                    ),
+                  );
+                }
               }),
         ),
       ],

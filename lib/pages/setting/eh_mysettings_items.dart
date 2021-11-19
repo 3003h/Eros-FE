@@ -4,19 +4,18 @@ final _controller = Get.find<EhMySettingsController>();
 
 Widget _buildSelectedProfileItem(BuildContext context,
     {bool hideLine = false}) {
-  final Map<String, String> actionMap = <String, String>{};
-  for (final _profile in _controller.ehSetting.profilelist) {
-    actionMap['${_profile.value}'] = _profile.name;
-  }
-
   return Obx(() {
+    final Map<String, String> actionMap = <String, String>{};
+    for (final _profile in _controller.ehSetting.profilelist) {
+      actionMap['${_profile.value}'] = _profile.name;
+    }
     return SelectorItem<String>(
       key: UniqueKey(),
-      title: 'Selected',
+      title: L10n.of(context).uc_selected,
       actionTitle: 'Selected Profile',
       hideLine: hideLine,
       actionMap: actionMap,
-      initVal: _controller.ehSetting.loadImageThroughHAtH ?? '',
+      initVal: _controller.ehSetting.profileSelected ?? '',
       onValueChanged: (val) {
         print(val);
       },
@@ -41,9 +40,7 @@ Widget _buildLoadTypeItem(BuildContext context, {bool hideLine = false}) {
   return Obx(() {
     return SelectorItem<String>(
       key: UniqueKey(),
-      title: 'Load images through the H@H',
-      actionTitle:
-          'Do you wish to load images through the Hentai@Home Network, if available?',
+      title: L10n.of(context).uc_thor_hath,
       hideLine: hideLine,
       actionMap: actionMap,
       simpleActionMap: simpleActionMap,
@@ -66,7 +63,7 @@ Widget _buildImageSizeItem(BuildContext context, {bool hideLine = false}) {
   return Obx(() {
     return SelectorItem<String>(
       key: UniqueKey(),
-      title: 'Resample Resolution',
+      title: L10n.of(context).uc_res_res,
       hideLine: hideLine,
       actionMap: actionMap,
       initVal: _controller.ehSetting.imageSize ?? '',
@@ -84,7 +81,7 @@ Widget _buildNameDisplayItem(BuildContext context, {bool hideLine = false}) {
   return Obx(() {
     return SelectorItem<String>(
       key: UniqueKey(),
-      title: 'Gallery Name Display',
+      title: L10n.of(context).uc_name_display,
       hideLine: hideLine,
       actionMap: actionMap,
       initVal: _controller.ehSetting.galleryNameDisplay ?? '',
@@ -115,7 +112,7 @@ Widget _buildArchiverSettingsItem(BuildContext context,
   return Obx(() {
     return SelectorItem<String>(
       key: UniqueKey(),
-      title: 'Archiver Settings',
+      title: L10n.of(context).uc_archiver_set,
       hideLine: hideLine,
       actionMap: actionMap,
       simpleActionMap: sActionMap,
@@ -139,7 +136,7 @@ Widget _buildFrontPageSettingsItem(BuildContext context,
   return Obx(() {
     return SelectorItem<String>(
       key: UniqueKey(),
-      title: 'Display mode',
+      title: L10n.of(context).uc_front_page_dis_mode,
       hideLine: hideLine,
       actionMap: actionMap,
       initVal: _controller.ehSetting.frontPageSettings ?? '',
@@ -158,7 +155,7 @@ Widget _buildFavoritesSortItem(BuildContext context, {bool hideLine = false}) {
   return Obx(() {
     return SelectorItem<String>(
       key: UniqueKey(),
-      title: 'Default sort',
+      title: L10n.of(context).uc_fav_sort,
       hideLine: hideLine,
       actionMap: actionMap,
       initVal: _controller.ehSetting.frontPageSettings ?? '',
@@ -180,7 +177,7 @@ Widget _buildSearchResultCountItem(BuildContext context,
   return Obx(() {
     return SelectorItem<String>(
       key: UniqueKey(),
-      title: 'Search Result Count',
+      title: L10n.of(context).uc_search_r_count,
       hideLine: hideLine,
       actionMap: actionMap,
       initVal: _controller.ehSetting.sortOrderFavorites ?? '',
@@ -206,7 +203,7 @@ Widget _buildThumbMouseOverItem(BuildContext context, {bool hideLine = false}) {
   return Obx(() {
     return SelectorItem<String>(
       key: UniqueKey(),
-      title: 'mouse-over thumbnails',
+      title: L10n.of(context).uc_mose_over_thumb,
       hideLine: hideLine,
       actionMap: actionMap,
       simpleActionMap: sActionMap,
@@ -226,7 +223,7 @@ Widget _buildThumbSizeItem(BuildContext context, {bool hideLine = false}) {
   return Obx(() {
     return SelectorItem<String>(
       key: UniqueKey(),
-      title: 'Size',
+      title: L10n.of(context).uc_thumb_size,
       hideLine: hideLine,
       actionMap: actionMap,
       initVal: _controller.ehSetting.thumbnailSize ?? '',
@@ -247,7 +244,7 @@ Widget _buildThumbRowItem(BuildContext context, {bool hideLine = false}) {
   return Obx(() {
     return SelectorItem<String>(
       key: UniqueKey(),
-      title: 'Row',
+      title: L10n.of(context).uc_thumb_row,
       hideLine: hideLine,
       actionMap: actionMap,
       initVal: _controller.ehSetting.thumbnailRows ?? '',
@@ -267,7 +264,7 @@ Widget _buildSortOrderComment(BuildContext context, {bool hideLine = false}) {
   return Obx(() {
     return SelectorItem<String>(
       key: UniqueKey(),
-      title: 'Sort order',
+      title: L10n.of(context).uc_comments_sort_order,
       hideLine: hideLine,
       actionMap: actionMap,
       initVal: _controller.ehSetting.sortOrderComments ?? '',
@@ -286,7 +283,7 @@ Widget _buildShowCommentVotes(BuildContext context, {bool hideLine = false}) {
   return Obx(() {
     return SelectorItem<String>(
       key: UniqueKey(),
-      title: 'Show votes',
+      title: L10n.of(context).uc_comments_show_votes,
       hideLine: hideLine,
       actionMap: actionMap,
       initVal: _controller.ehSetting.showCommentVotes ?? '',
@@ -305,7 +302,7 @@ Widget _buildSortOrderTags(BuildContext context, {bool hideLine = false}) {
   return Obx(() {
     return SelectorItem<String>(
       key: UniqueKey(),
-      title: 'Sort order',
+      title: L10n.of(context).uc_tag_short_order,
       hideLine: hideLine,
       actionMap: actionMap,
       initVal: _controller.ehSetting.sortOrderTags ?? '',
@@ -324,7 +321,7 @@ Widget _buildShowPageNumbers(BuildContext context, {bool hideLine = false}) {
   return Obx(() {
     return SelectorItem<String>(
       key: UniqueKey(),
-      title: 'Show Page Numbers',
+      title: L10n.of(context).uc_show_page_num,
       hideLine: hideLine,
       actionMap: actionMap,
       initVal: _controller.ehSetting.showGalleryPageNumbers ?? '',
@@ -343,7 +340,7 @@ Widget _buildOriginalImages(BuildContext context, {bool hideLine = false}) {
   return Obx(() {
     return SelectorItem<String>(
       key: UniqueKey(),
-      title: 'Original images',
+      title: L10n.of(context).uc_ori_image,
       actionTitle:
           'Use original images instead of the resampled versions where applicable?',
       hideLine: hideLine,
@@ -364,7 +361,7 @@ Widget _buildMPVAlwaysUse(BuildContext context, {bool hideLine = false}) {
   return Obx(() {
     return SelectorItem<String>(
       key: UniqueKey(),
-      title: 'Always use',
+      title: L10n.of(context).uc_mpv_always,
       actionTitle:
           'Always use the Multi-Page Viewer? There will still be a link to manually start it if this is left disabled',
       hideLine: hideLine,
@@ -392,7 +389,7 @@ Widget _buildMPVDisplayStyle(BuildContext context, {bool hideLine = false}) {
   return Obx(() {
     return SelectorItem<String>(
       key: UniqueKey(),
-      title: 'Display Style',
+      title: L10n.of(context).uc_mpv_stype,
       actionTitle: 'Multi-Page Viewer Display Style',
       hideLine: hideLine,
       actionMap: actionMap,
@@ -413,7 +410,7 @@ Widget _buildMPVThumbPane(BuildContext context, {bool hideLine = false}) {
   return Obx(() {
     return SelectorItem<String>(
       key: UniqueKey(),
-      title: 'Thumbnail Pane',
+      title: L10n.of(context).uc_mpv_thumb_pane,
       actionTitle: 'Multi-Page Viewer Thumbnail Pane',
       hideLine: hideLine,
       actionMap: actionMap,
@@ -428,7 +425,7 @@ Widget _buildRatingsItem(BuildContext context, {bool hideLine = false}) {
   return Obx(() {
     return SingleInputItem(
       key: UniqueKey(),
-      title: 'Ratings Colors',
+      title: L10n.of(context).uc_rating,
       placeholder: 'RRGGB',
       previousPageTitle: L10n.of(context).ehentai_settings,
       hideLine: hideLine,
@@ -443,7 +440,7 @@ Widget _buildTagFilteringThreshold(BuildContext context) {
   return Obx(() {
     return SingleInputItem(
       key: UniqueKey(),
-      title: 'Tag Filtering Threshold',
+      title: L10n.of(context).uc_tag_ft,
       previousPageTitle: L10n.of(context).ehentai_settings,
       hideLine: true,
       initVal: _controller.ehSetting.tagFilteringThreshold ?? '',
@@ -457,7 +454,7 @@ Widget _buildTagWatchingThreshold(BuildContext context) {
   return Obx(() {
     return SingleInputItem(
       key: UniqueKey(),
-      title: 'Tag Watching Threshold',
+      title: L10n.of(context).uc_tag_wt,
       previousPageTitle: L10n.of(context).ehentai_settings,
       hideLine: true,
       initVal: _controller.ehSetting.tagWatchingThreshold ?? '',
@@ -471,7 +468,7 @@ Widget _buildExcludedUploaders(BuildContext context) {
   return Obx(() {
     return SingleInputItem(
       key: UniqueKey(),
-      title: 'Excluded Uploaders',
+      title: L10n.of(context).uc_exc_up,
       previousPageTitle: L10n.of(context).ehentai_settings,
       hideLine: true,
       initVal: _controller.ehSetting.excludedUploaders ?? '',
@@ -486,7 +483,7 @@ Widget _buildThumbnailScaling(BuildContext context) {
   return Obx(() {
     return SingleInputItem(
       key: UniqueKey(),
-      title: 'Thumbnail Scaling',
+      title: L10n.of(context).uc_thumb_scaling,
       previousPageTitle: L10n.of(context).ehentai_settings,
       suffixText: '%',
       hideLine: true,
@@ -502,7 +499,7 @@ Widget _buildViewportOverride(BuildContext context) {
   return Obx(() {
     return SingleInputItem(
       key: UniqueKey(),
-      title: 'Viewport Override',
+      title: L10n.of(context).uc_viewport_or,
       previousPageTitle: L10n.of(context).ehentai_settings,
       suffixText: 'px',
       hideLine: true,
@@ -533,7 +530,7 @@ Widget _buildSizeHorizontal(BuildContext context) {
   return Obx(() {
     return SingleInputItem(
       key: UniqueKey(),
-      title: 'Horizontal',
+      title: L10n.of(context).uc_img_horiz,
       previousPageTitle: L10n.of(context).ehentai_settings,
       suffixText: 'pixels',
       hideLine: false,
@@ -548,7 +545,7 @@ Widget _buildSizeVertical(BuildContext context) {
   return Obx(() {
     return SingleInputItem(
       key: UniqueKey(),
-      title: 'Vertical',
+      title: L10n.of(context).uc_img_vert,
       previousPageTitle: L10n.of(context).ehentai_settings,
       suffixText: 'pixels',
       hideLine: true,
@@ -585,17 +582,6 @@ Widget _buildTagNamespaces(BuildContext context) {
             title: 'female', enable: _controller.ehSetting.xnFemale == '1'),
       },
       onValueChanged: (val) {
-        // _controller.ehSetting = _controller.ehSetting.copyWith(
-        //   xn1: (val['reclass']?.enable ?? false) ? '1' : '0',
-        //   xn2: (val['language']?.enable ?? false) ? '1' : '0',
-        //   xn3: (val['parody']?.enable ?? false) ? '1' : '0',
-        //   xn4: (val['character']?.enable ?? false) ? '1' : '0',
-        //   xn5: (val['group']?.enable ?? false) ? '1' : '0',
-        //   xn6: (val['artist']?.enable ?? false) ? '1' : '0',
-        //   xn7: (val['male']?.enable ?? false) ? '1' : '0',
-        //   xn8: (val['female']?.enable ?? false) ? '1' : '0',
-        // );
-
         _controller.ehSetting
           ..xnReclass = (val['reclass']?.enable ?? false) ? '1' : '0'
           ..xnLanguage = (val['language']?.enable ?? false) ? '1' : '0'

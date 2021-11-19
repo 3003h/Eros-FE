@@ -1,18 +1,20 @@
 import 'package:collection/collection.dart';
 import 'package:fehviewer/models/base/eh_models.dart';
-import 'package:fehviewer/utils/logger.dart';
+// import 'package:fehviewer/utils/logger.dart';
 import 'package:html/dom.dart';
 import 'package:html/parser.dart' show parse;
 
 EhSettings parseUconfig(String html) {
   final profileSet = <EhProfile>[];
+  // initLogger();
+  print(html);
 
   final Document document = parse(html);
 
   // 解析profile
   final Element? profileSetElm =
       document.querySelector('#profile_form > select');
-  late String selectedName = '';
+  late String selectedValue = '';
   if (profileSetElm != null) {
     final profiles = profileSetElm.children;
     for (final pf in profiles) {
@@ -20,15 +22,15 @@ EhSettings parseUconfig(String html) {
       if (value == null) {
         continue;
       }
-      final selected = pf.attributes['selected'] == 'selected';
+      final isSelected = pf.attributes['selected'] == 'selected';
 
       final name = pf.text.split(RegExp(r'\s')).first;
-      if (selected) {
-        selectedName = name;
+      if (isSelected) {
+        selectedValue = value;
       }
 
       profileSet.add(
-          EhProfile(name: name, selected: selected, value: int.parse(value)));
+          EhProfile(name: name, selected: isSelected, value: int.parse(value)));
     }
   }
 
@@ -65,6 +67,7 @@ EhSettings parseUconfig(String html) {
     final Element? _elm = document.querySelector('#xl_$idx');
     if (_elm?.attributes['checked'] == 'checked') {
       // logger.d('xl_$idx');
+      // print('xl_$idx');
       xl.add(EhSettingItem(name: 'xl', ser: '$idx', value: '1'));
     }
   }
@@ -73,7 +76,8 @@ EhSettings parseUconfig(String html) {
   final wt = _parseUconfigInput('wt', _inputElms);
 
   final xu = document.querySelector('#xu')?.text;
-  logger.d('xu:$xu');
+  // logger.d('xu:$xu');
+  print('xu:$xu');
 
   // 搜索结果数 rc
   // todo 需要测试无Hath Perk情况
@@ -119,7 +123,7 @@ EhSettings parseUconfig(String html) {
 
   return EhSettings(
     profilelist: profileSet,
-    profileSelected: selectedName,
+    profileSelected: selectedValue,
     loadImageThroughHAtH: uh,
     imageSize: xr,
     galleryNameDisplay: tl,

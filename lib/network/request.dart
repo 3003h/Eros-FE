@@ -304,3 +304,18 @@ Future<String> postArchiverLocalDownload(
     return '';
   }
 }
+
+Future<EhSettings?> getUconfig(String url, {bool refresh = false}) async {
+  await checkCookie();
+  DioHttpClient dioHttpClient = DioHttpClient(dioConfig: ehDioConfig);
+
+  DioHttpResponse httpResponse = await dioHttpClient.get(
+    url,
+    httpTransformer: UconfigHttpTransformer(),
+    options: getCacheOptions(forceRefresh: refresh),
+  );
+
+  if (httpResponse.ok && httpResponse.data is EhSettings) {
+    return httpResponse.data as EhSettings;
+  }
+}

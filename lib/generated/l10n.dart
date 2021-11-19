@@ -1879,6 +1879,686 @@ class L10n {
       args: [],
     );
   }
+
+  /// `Profile`
+  String get uc_profile {
+    return Intl.message(
+      'Profile',
+      name: 'uc_profile',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Selected`
+  String get uc_selected {
+    return Intl.message(
+      'Selected',
+      name: 'uc_selected',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Rename`
+  String get uc_rename {
+    return Intl.message(
+      'Rename',
+      name: 'uc_rename',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Create New`
+  String get uc_crt_profile {
+    return Intl.message(
+      'Create New',
+      name: 'uc_crt_profile',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Delete Profile`
+  String get uc_del_profile {
+    return Intl.message(
+      'Delete Profile',
+      name: 'uc_del_profile',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Set as Default`
+  String get uc_set_as_def {
+    return Intl.message(
+      'Set as Default',
+      name: 'uc_set_as_def',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Image Load Settings`
+  String get uc_img_load_setting {
+    return Intl.message(
+      'Image Load Settings',
+      name: 'uc_img_load_setting',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Through the H@H`
+  String get uc_thor_hath {
+    return Intl.message(
+      'Through the H@H',
+      name: 'uc_thor_hath',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Image Size Settings`
+  String get uc_img_size_setting {
+    return Intl.message(
+      'Image Size Settings',
+      name: 'uc_img_size_setting',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Resample Resolution`
+  String get uc_res_res {
+    return Intl.message(
+      'Resample Resolution',
+      name: 'uc_res_res',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Normally, images are resampled to 1280 pixels of horizontal resolution for online viewing. You can alternatively select one of the following resample resolutions. To avoid murdering the staging servers, resolutions above 1280x are temporarily restricted to donators, people with any hath perk, and people with a UID below 3,000,000.`
+  String get uc_res_res_desc {
+    return Intl.message(
+      'Normally, images are resampled to 1280 pixels of horizontal resolution for online viewing. You can alternatively select one of the following resample resolutions. To avoid murdering the staging servers, resolutions above 1280x are temporarily restricted to donators, people with any hath perk, and people with a UID below 3,000,000.',
+      name: 'uc_res_res_desc',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Horizontal`
+  String get uc_img_horiz {
+    return Intl.message(
+      'Horizontal',
+      name: 'uc_img_horiz',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Vertical`
+  String get uc_img_vert {
+    return Intl.message(
+      'Vertical',
+      name: 'uc_img_vert',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `While the site will automatically scale down images to fit your screen width, you can also manually restrict the maximum display size of an image. Like the automatic scaling, this does not resample the image, as the resizing is done browser-side. (0 = no limit)`
+  String get uc_img_cussize_desc {
+    return Intl.message(
+      'While the site will automatically scale down images to fit your screen width, you can also manually restrict the maximum display size of an image. Like the automatic scaling, this does not resample the image, as the resizing is done browser-side. (0 = no limit)',
+      name: 'uc_img_cussize_desc',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Gallery Name Display`
+  String get uc_name_display {
+    return Intl.message(
+      'Gallery Name Display',
+      name: 'uc_name_display',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Many galleries have both an English/Romanized title and a title in Japanese script. Which gallery name would you like as default?`
+  String get uc_name_display_desc {
+    return Intl.message(
+      'Many galleries have both an English/Romanized title and a title in Japanese script. Which gallery name would you like as default?',
+      name: 'uc_name_display_desc',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `rchiver Settings`
+  String get uc_archiver_set {
+    return Intl.message(
+      'rchiver Settings',
+      name: 'uc_archiver_set',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `The default behavior for the Archiver is to confirm the cost and selection for original or resampled archive, then present a link that can be clicked or copied elsewhere. You can change this behavior here.`
+  String get uc_archiver_desc {
+    return Intl.message(
+      'The default behavior for the Archiver is to confirm the cost and selection for original or resampled archive, then present a link that can be clicked or copied elsewhere. You can change this behavior here.',
+      name: 'uc_archiver_desc',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Front Page`
+  String get uc_front_page {
+    return Intl.message(
+      'Front Page',
+      name: 'uc_front_page',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Front Page Display mode`
+  String get uc_front_page_dis_mode {
+    return Intl.message(
+      'Front Page Display mode',
+      name: 'uc_front_page_dis_mode',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Favorites`
+  String get uc_fav {
+    return Intl.message(
+      'Favorites',
+      name: 'uc_fav',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Default sort`
+  String get uc_fav_sort {
+    return Intl.message(
+      'Default sort',
+      name: 'uc_fav_sort',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `You can also select your default sort order for galleries on your favorites page. Note that favorites added prior to the March 2016 revamp did not store a timestamp, and will use the gallery posted time regardless of this setting.`
+  String get uc_fav_sort_desc {
+    return Intl.message(
+      'You can also select your default sort order for galleries on your favorites page. Note that favorites added prior to the March 2016 revamp did not store a timestamp, and will use the gallery posted time regardless of this setting.',
+      name: 'uc_fav_sort_desc',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Ratings Colors`
+  String get uc_rating {
+    return Intl.message(
+      'Ratings Colors',
+      name: 'uc_rating',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `    By default, galleries that you have rated will appear with red stars for ratings of 2 stars and below, green for ratings between 2.5 and 4 stars, and blue for ratings of 4.5 or 5 stars. You can customize this by entering your desired color combination below.\n    Each letter represents one star. The default RRGGB means R(ed) for the first and second star, G(reen) for the third and fourth, and B(lue) for the fifth. You can also use (Y)ellow for the normal stars. Any five-letter R/G/B/Y combo works.`
+  String get uc_rating_desc {
+    return Intl.message(
+      '    By default, galleries that you have rated will appear with red stars for ratings of 2 stars and below, green for ratings between 2.5 and 4 stars, and blue for ratings of 4.5 or 5 stars. You can customize this by entering your desired color combination below.\n    Each letter represents one star. The default RRGGB means R(ed) for the first and second star, G(reen) for the third and fourth, and B(lue) for the fifth. You can also use (Y)ellow for the normal stars. Any five-letter R/G/B/Y combo works.',
+      name: 'uc_rating_desc',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Tag Namespaces`
+  String get uc_tag_namesp {
+    return Intl.message(
+      'Tag Namespaces',
+      name: 'uc_tag_namesp',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `reclass`
+  String get uc_reclass {
+    return Intl.message(
+      'reclass',
+      name: 'uc_reclass',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `language`
+  String get uc_language {
+    return Intl.message(
+      'language',
+      name: 'uc_language',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `parody`
+  String get uc_parody {
+    return Intl.message(
+      'parody',
+      name: 'uc_parody',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `character`
+  String get uc_character {
+    return Intl.message(
+      'character',
+      name: 'uc_character',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `group`
+  String get uc_group {
+    return Intl.message(
+      'group',
+      name: 'uc_group',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `artist`
+  String get uc_artist {
+    return Intl.message(
+      'artist',
+      name: 'uc_artist',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `male`
+  String get uc_male {
+    return Intl.message(
+      'male',
+      name: 'uc_male',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `female`
+  String get uc_female {
+    return Intl.message(
+      'female',
+      name: 'uc_female',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `If you want to exclude certain namespaces from a default tag search, you can check those abover. Note that this does not prevent galleries with tags in these namespaces from appearing, it just makes it so that when searching tags, it will forego those namespaces.`
+  String get uc_xt_desc {
+    return Intl.message(
+      'If you want to exclude certain namespaces from a default tag search, you can check those abover. Note that this does not prevent galleries with tags in these namespaces from appearing, it just makes it so that when searching tags, it will forego those namespaces.',
+      name: 'uc_xt_desc',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Tag Filtering Threshold`
+  String get uc_tag_ft {
+    return Intl.message(
+      'Tag Filtering Threshold',
+      name: 'uc_tag_ft',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `You can soft filter tags by adding them to My Tags with a negative weight. If a gallery has tags that add up to weight abover this value, it is filtered from view. This threshold can be set between 0 and -9999.`
+  String get uc_tag_ft_desc {
+    return Intl.message(
+      'You can soft filter tags by adding them to My Tags with a negative weight. If a gallery has tags that add up to weight abover this value, it is filtered from view. This threshold can be set between 0 and -9999.',
+      name: 'uc_tag_ft_desc',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Tag Watching Threshold`
+  String get uc_tag_wt {
+    return Intl.message(
+      'Tag Watching Threshold',
+      name: 'uc_tag_wt',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Recently uploaded galleries will be included on the watched screen if it has at least one watched tag with positive weight, and the sum of weights on its watched tags add up to this value or higher. This threshold can be set between 0 and 9999.`
+  String get uc_tag_wt_desc {
+    return Intl.message(
+      'Recently uploaded galleries will be included on the watched screen if it has at least one watched tag with positive weight, and the sum of weights on its watched tags add up to this value or higher. This threshold can be set between 0 and 9999.',
+      name: 'uc_tag_wt_desc',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Excluded Languages`
+  String get uc_exc_lang {
+    return Intl.message(
+      'Excluded Languages',
+      name: 'uc_exc_lang',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `If you wish to hide galleries in certain languages from the gallery list and searches, select them from the list abover.\nNote that matching galleries will never appear regardless of your search query.`
+  String get uc_exc_lang_desc {
+    return Intl.message(
+      'If you wish to hide galleries in certain languages from the gallery list and searches, select them from the list abover.\nNote that matching galleries will never appear regardless of your search query.',
+      name: 'uc_exc_lang_desc',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Excluded Uploaders`
+  String get uc_exc_up {
+    return Intl.message(
+      'Excluded Uploaders',
+      name: 'uc_exc_up',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `If you wish to hide galleries from certain uploaders from the gallery list and searches, add them abover. Put one username per line.\nNote that galleries from these uploaders will never appear regardless of your search query.`
+  String get uc_exc_up_desc {
+    return Intl.message(
+      'If you wish to hide galleries from certain uploaders from the gallery list and searches, add them abover. Put one username per line.\nNote that galleries from these uploaders will never appear regardless of your search query.',
+      name: 'uc_exc_up_desc',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Search Result Count`
+  String get uc_search_r_count {
+    return Intl.message(
+      'Search Result Count',
+      name: 'uc_search_r_count',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `How many results would you like per page for the index/search page and torrent search pages? (Hath Perk: Paging Enlargement Required)`
+  String get uc_search_r_count_desc {
+    return Intl.message(
+      'How many results would you like per page for the index/search page and torrent search pages? (Hath Perk: Paging Enlargement Required)',
+      name: 'uc_search_r_count_desc',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Thumbnail Settings`
+  String get uc_thumb_setting {
+    return Intl.message(
+      'Thumbnail Settings',
+      name: 'uc_thumb_setting',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `mouse-over thumbnails`
+  String get uc_mose_over_thumb {
+    return Intl.message(
+      'mouse-over thumbnails',
+      name: 'uc_mose_over_thumb',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Size`
+  String get uc_thumb_size {
+    return Intl.message(
+      'Size',
+      name: 'uc_thumb_size',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Row`
+  String get uc_thumb_row {
+    return Intl.message(
+      'Row',
+      name: 'uc_thumb_row',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Thumbnail Scaling`
+  String get uc_thumb_scaling {
+    return Intl.message(
+      'Thumbnail Scaling',
+      name: 'uc_thumb_scaling',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Thumbnails on the thumbnail and extended gallery list views can be scaled to a custom value between 75% and 150%.`
+  String get uc_thumb_scaling_desc {
+    return Intl.message(
+      'Thumbnails on the thumbnail and extended gallery list views can be scaled to a custom value between 75% and 150%.',
+      name: 'uc_thumb_scaling_desc',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Viewport Override`
+  String get uc_viewport_or {
+    return Intl.message(
+      'Viewport Override',
+      name: 'uc_viewport_or',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Allows you to override the virtual width of the site for mobile devices. This is normally determined automatically by your device based on its DPI. Sensible values at 100% thumbnail scale are between 640 and 1400.`
+  String get uc_viewport_or_desc {
+    return Intl.message(
+      'Allows you to override the virtual width of the site for mobile devices. This is normally determined automatically by your device based on its DPI. Sensible values at 100% thumbnail scale are between 640 and 1400.',
+      name: 'uc_viewport_or_desc',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Gallery Comments`
+  String get uc_gallery_comments {
+    return Intl.message(
+      'Gallery Comments',
+      name: 'uc_gallery_comments',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Sort order`
+  String get uc_comments_sort_order {
+    return Intl.message(
+      'Sort order',
+      name: 'uc_comments_sort_order',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Show votes`
+  String get uc_comments_show_votes {
+    return Intl.message(
+      'Show votes',
+      name: 'uc_comments_show_votes',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Gallery Tags`
+  String get uc_tag {
+    return Intl.message(
+      'Gallery Tags',
+      name: 'uc_tag',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Gallery Tags Sort order`
+  String get uc_tag_short_order {
+    return Intl.message(
+      'Gallery Tags Sort order',
+      name: 'uc_tag_short_order',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Show Page Numbers`
+  String get uc_show_page_num {
+    return Intl.message(
+      'Show Page Numbers',
+      name: 'uc_show_page_num',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Hentai@Home Local Network Host`
+  String get uc_hath_local_host {
+    return Intl.message(
+      'Hentai@Home Local Network Host',
+      name: 'uc_hath_local_host',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `IP Address:Port`
+  String get uc_ip_addr_port {
+    return Intl.message(
+      'IP Address:Port',
+      name: 'uc_ip_addr_port',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `    This setting can be used if you have a H@H client running on your local network with the same public IP you browse the site with. Some routers are buggy and cannot route requests back to its own IP; this allows you to work around this problem.\n    If you are running the client on the same PC you browse from, use the loopback address (127.0.0.1:port). If the client is running on another computer on your network, use its local network IP. Some browser configurations prevent external web sites from accessing URLs with local network IPs, the site must then be whitelisted for this to work.`
+  String get uc_hath_local_host_desc {
+    return Intl.message(
+      '    This setting can be used if you have a H@H client running on your local network with the same public IP you browse the site with. Some routers are buggy and cannot route requests back to its own IP; this allows you to work around this problem.\n    If you are running the client on the same PC you browse from, use the loopback address (127.0.0.1:port). If the client is running on another computer on your network, use its local network IP. Some browser configurations prevent external web sites from accessing URLs with local network IPs, the site must then be whitelisted for this to work.',
+      name: 'uc_hath_local_host_desc',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Original Images`
+  String get uc_ori_image {
+    return Intl.message(
+      'Original Images',
+      name: 'uc_ori_image',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Use original images instead of the resampled versions where applicable?`
+  String get uc_ori_image_desc {
+    return Intl.message(
+      'Use original images instead of the resampled versions where applicable?',
+      name: 'uc_ori_image_desc',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Multi-Page Viewer`
+  String get uc_mpv {
+    return Intl.message(
+      'Multi-Page Viewer',
+      name: 'uc_mpv',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Always use`
+  String get uc_mpv_always {
+    return Intl.message(
+      'Always use',
+      name: 'uc_mpv_always',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Display Style`
+  String get uc_mpv_stype {
+    return Intl.message(
+      'Display Style',
+      name: 'uc_mpv_stype',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Thumbnail Pane`
+  String get uc_mpv_thumb_pane {
+    return Intl.message(
+      'Thumbnail Pane',
+      name: 'uc_mpv_thumb_pane',
+      desc: '',
+      args: [],
+    );
+  }
 }
 
 class AppLocalizationDelegate extends LocalizationsDelegate<L10n> {
