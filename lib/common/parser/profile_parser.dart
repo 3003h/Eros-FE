@@ -43,7 +43,7 @@ EhSettings parseUconfig(String html) {
   final ry = _parseUconfigInput('ry', _inputElms);
 
   // 图库的名字显示
-  final tl = _parseUconfigChecked('xr', 1, document);
+  final tl = _parseUconfigChecked('tl', 1, document);
 
   // 归档下载方式
   final ar = _parseUconfigChecked('ar', 5, document);
@@ -57,20 +57,23 @@ EhSettings parseUconfig(String html) {
   final fs = _parseUconfigChecked('fs', 1, document);
 
   //
-  final ru = _parseUconfigInput('ru', _inputElms) ?? 'RRGGB';
+  final ru = _parseUconfigInput('ru', _inputElms);
 
   // 排除语言 xl
+  final xl = <EhSettingItem>[];
   for (int idx = 0; idx <= 2303; idx++) {
     final Element? _elm = document.querySelector('#xl_$idx');
     if (_elm?.attributes['checked'] == 'checked') {
       // logger.d('xl_$idx');
+      xl.add(EhSettingItem(name: 'xl', ser: '$idx', value: '1'));
     }
   }
 
   final ft = _parseUconfigInput('ft', _inputElms);
   final wt = _parseUconfigInput('wt', _inputElms);
 
-  final xu = _parseUconfigInput('xu', _inputElms);
+  final xu = document.querySelector('#xu')?.text;
+  logger.d('xu:$xu');
 
   // 搜索结果数 rc
   // todo 需要测试无Hath Perk情况
@@ -144,6 +147,8 @@ EhSettings parseUconfig(String html) {
     ratings: ru,
     imageSizeHorizontal: rx,
     imageSizeVertical: ry,
+    xn: [],
+    xl: xl,
   );
 }
 

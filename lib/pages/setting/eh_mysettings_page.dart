@@ -1,12 +1,16 @@
 import 'package:fehviewer/common/service/theme_service.dart';
+import 'package:fehviewer/extension.dart';
 import 'package:fehviewer/generated/l10n.dart';
 import 'package:fehviewer/pages/setting/setting_items/multi_selector.dart';
 import 'package:fehviewer/pages/setting/setting_items/selector_Item.dart';
+import 'package:fehviewer/utils/logger.dart';
+import 'package:fehviewer/widget/refresh.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
 import 'package:line_icons/line_icons.dart';
 
 import 'controller/eh_mysettings_controller.dart';
+import 'setting_base.dart';
 import 'setting_items/multi_selector.dart';
 import 'setting_items/single_input_item.dart';
 import 'webview/web_mysetting_in.dart';
@@ -23,22 +27,36 @@ class EhMySettingsPage extends GetView<EhMySettingsController> {
             ? CupertinoColors.secondarySystemBackground
             : null,
         navigationBar: CupertinoNavigationBar(
+            padding: const EdgeInsetsDirectional.only(end: 8),
             middle: Text(L10n.of(context).ehentai_settings),
             trailing: Row(
               mainAxisSize: MainAxisSize.min,
               children: <Widget>[
+                // CupertinoButton(
+                //   padding: const EdgeInsets.all(0),
+                //   minSize: 36,
+                //   child: const Icon(
+                //     LineIcons.download,
+                //     size: 24,
+                //   ),
+                //   onPressed: () async {
+                //     controller.loadData();
+                //   },
+                // ),
+                // CupertinoButton(
+                //   padding: const EdgeInsets.all(0),
+                //   minSize: 36,
+                //   child: const Icon(
+                //     LineIcons.upload,
+                //     size: 24,
+                //   ),
+                //   onPressed: () async {
+                //     controller.print();
+                //   },
+                // ),
                 CupertinoButton(
                   padding: const EdgeInsets.all(0),
-                  child: const Icon(
-                    LineIcons.upload,
-                    size: 24,
-                  ),
-                  onPressed: () async {
-                    controller.print();
-                  },
-                ),
-                CupertinoButton(
-                  padding: const EdgeInsets.all(0),
+                  minSize: 36,
                   child: const Icon(
                     LineIcons.globeWithAmericasShown,
                     size: 24,
@@ -49,12 +67,14 @@ class EhMySettingsPage extends GetView<EhMySettingsController> {
                 ),
                 CupertinoButton(
                   padding: const EdgeInsets.all(0),
+                  minSize: 36,
                   child: const Icon(
                     LineIcons.checkCircle,
                     size: 24,
                   ),
                   onPressed: () async {
                     // 保存配置
+                    controller.print();
                   },
                 ),
               ],
@@ -70,6 +90,31 @@ class ListViewEhMySettings extends GetView<EhMySettingsController> {
   @override
   Widget build(BuildContext context) {
     final List<Widget> _list = <Widget>[
+      GroupItem(
+        title: 'Profile',
+        child: Column(
+          children: [
+            _buildSelectedProfileItem(context, hideLine: false),
+            TextItem(
+              'Rename',
+              onTap: controller.renameProfile,
+            ),
+            TextItem(
+              'Create New',
+              onTap: controller.crtNewProfile,
+            ),
+            TextItem(
+              'Delete Profile',
+              onTap: controller.deleteProfile,
+            ),
+            TextItem(
+              'Set as Default',
+              onTap: controller.setDefaultProfile,
+            ),
+          ],
+        ),
+      ),
+
       // uh
       GroupItem(
         title: 'Image Load Settings',
@@ -93,19 +138,19 @@ class ListViewEhMySettings extends GetView<EhMySettingsController> {
         ),
       ),
       GroupItem(
-        title: 'Gallery Name Display',
+        // title: 'Gallery Name Display',
         desc:
             'Many galleries have both an English/Romanized title and a title in Japanese script. Which gallery name would you like as default?',
         child: _buildNameDisplayItem(context, hideLine: true),
       ),
       GroupItem(
-        title: 'Archiver Settings',
+        // title: 'Archiver Settings',
         desc:
             'The default behavior for the Archiver is to confirm the cost and selection for original or resampled archive, then present a link that can be clicked or copied elsewhere. You can change this behavior here.',
         child: _buildArchiverSettingsItem(context, hideLine: true),
       ),
       GroupItem(
-        title: 'Front Page Settings',
+        title: 'Front Page',
         child: _buildFrontPageSettingsItem(context, hideLine: true),
       ),
       GroupItem(
@@ -219,12 +264,51 @@ class ListViewEhMySettings extends GetView<EhMySettingsController> {
       ),
     ];
 
-    return ListView.builder(
-      itemCount: _list.length,
-      itemBuilder: (BuildContext context, int index) {
-        return _list[index];
-      },
+    return CustomScrollView(
+      slivers: [
+        EhCupertinoSliverRefreshControl(
+          onRefresh: _controller.loadData,
+        ),
+        SliverSafeArea(
+          sliver: FutureBuilder(
+              future: controller.loadData(),
+              initialData: controller.ehSetting,
+              builder: (context, snapshot) {
+                return SliverList(
+                  delegate: SliverChildBuilderDelegate(
+                    (context, index) {
+                      return _list[index];
+                    },
+                    childCount: _list.length,
+                  ),
+                );
+                // if (snapshot.connectionState != ConnectionState.done) {
+                //   return const SliverFillRemaining(
+                //     child: CupertinoActivityIndicator(
+                //       radius: 20,
+                //     ),
+                //   );
+                // } else {
+                //   return SliverList(
+                //     delegate: SliverChildBuilderDelegate(
+                //       (context, index) {
+                //         return _list[index];
+                //       },
+                //       childCount: _list.length,
+                //     ),
+                //   );
+                // }
+              }),
+        ),
+      ],
     );
+
+    // return ListView.builder(
+    //   itemCount: _list.length,
+    //   itemBuilder: (BuildContext context, int index) {
+    //     return _list[index];
+    //   },
+    // );
   }
 }
 

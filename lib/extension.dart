@@ -248,8 +248,78 @@ extension ExtensionWidget on Widget {
 }
 
 extension ExtEhSettings on EhSettings {
+  Map<String, String> get xnMap {
+    final _map = <String, String>{};
+    for (final _x in xn) {
+      if (_x.ser != null) {
+        _map[_x.ser!] = _x.value ?? '';
+      }
+    }
+    return _map;
+  }
+
+  Map<String, String> get xlMap {
+    final _map = <String, String>{};
+    for (final _x in xl) {
+      if (_x.ser != null) {
+        _map[_x.ser!] = _x.value ?? '';
+      }
+    }
+    return _map;
+  }
+
+  void setXn(String ser, String? value) {
+    if (value == null) {
+      return;
+    }
+
+    final _index = xn.indexWhere((element) => element.ser == ser);
+    if (_index > -1) {
+      xn[_index] = xn[_index].copyWith(value: value);
+    } else {
+      xn.add(EhSettingItem(ser: ser, value: value, name: 'xn'));
+    }
+  }
+
+  void setXl(String ser, String? value) {
+    if (value == null) {
+      return;
+    }
+    final _index = xl.indexWhere((element) => element.ser == ser);
+    if (_index > -1) {
+      xl[_index] = xl[_index].copyWith(value: value);
+    } else {
+      xl.add(EhSettingItem(ser: ser, value: value, name: 'xl'));
+    }
+  }
+
+  //
+  String? get xnReclass => xnMap['1'];
+  set xnReclass(String? val) => setXn('1', val);
+
+  String? get xnLanguage => xnMap['2'];
+  set xnLanguage(String? val) => setXn('2', val);
+
+  String? get xnParody => xnMap['3'];
+  set xnParody(String? val) => setXn('3', val);
+
+  String? get xnCharacter => xnMap['4'];
+  set xnCharacter(String? val) => setXn('4', val);
+
+  String? get xnGroup => xnMap['5'];
+  set xnGroup(String? val) => setXn('5', val);
+
+  String? get xnArtist => xnMap['6'];
+  set xnArtist(String? val) => setXn('6', val);
+
+  String? get xnMale => xnMap['7'];
+  set xnMale(String? val) => setXn('7', val);
+
+  String? get xnFemale => xnMap['8'];
+  set xnFemale(String? val) => setXn('1', val);
+
   Map get postParam {
-    return <String, dynamic>{
+    final param = <String, dynamic>{
       if (loadImageThroughHAtH != null) 'uh': loadImageThroughHAtH,
       if (loadBrowsingCountry != null) 'co': loadBrowsingCountry,
       if (imageSize != null) 'xr': imageSize,
@@ -280,64 +350,67 @@ extension ExtEhSettings on EhSettings {
       if (favorites9 != null) 'favorite_9': favorites9,
       if (sortOrderFavorites != null) 'fs': sortOrderFavorites,
       if (ratings != null) 'ru': ratings,
-      if (xn1 != null) 'xn_1': xn1,
-      if (xn2 != null) 'xn_2': xn2,
-      if (xn3 != null) 'xn_3': xn3,
-      if (xn4 != null) 'xn_4': xn4,
-      if (xn5 != null) 'xn_5': xn5,
-      if (xn6 != null) 'xn_6': xn6,
-      if (xn7 != null) 'xn_7': xn7,
-      if (xn8 != null) 'xn_8': xn8,
-      if (xlJpnTl1024 != null) 'xl_1024': xlJpnTl1024,
-      if (xlJpnRw2048 != null) 'xl_2048': xlJpnRw2048,
-      if (xlEnOr1 != null) 'xl_1': xlEnOr1,
-      if (xlEnTr1025 != null) 'xl_1025': xlEnTr1025,
-      if (xlEnRe2049 != null) 'xl_2049': xlEnRe2049,
-      if (xlChiOr10 != null) 'xl_10': xlChiOr10,
-      if (xlChiTr1034 != null) 'xl_1034': xlChiTr1034,
-      if (xlChiRe2058 != null) 'xl_2058': xlChiRe2058,
-      if (xlDutOr20 != null) 'xl_20': xlDutOr20,
-      if (xlDutTr1044 != null) 'xl_1044': xlDutTr1044,
-      if (xlDutRe2068 != null) 'xl_2068': xlDutRe2068,
-      if (xlFrOr30 != null) 'xl_30': xlFrOr30,
-      if (xlFrTr1054 != null) 'xl_1054': xlFrTr1054,
-      if (xlFrRe2078 != null) 'xl_2078': xlFrRe2078,
-      if (xlGmOr40 != null) 'xl_40': xlGmOr40,
-      if (xlGmTr1064 != null) 'xl_1064': xlGmTr1064,
-      if (xlGmRe2088 != null) 'xl_2088': xlGmRe2088,
-      if (xlHungOr50 != null) 'xl_50': xlHungOr50,
-      if (xlHungTr1074 != null) 'xl_1074': xlHungTr1074,
-      if (xlHungRe2098 != null) 'xl_2098': xlHungRe2098,
-      if (xlItaOr60 != null) 'xl_60': xlItaOr60,
-      if (xlItaTr1084 != null) 'xl_1084': xlItaTr1084,
-      if (xlItaRe2108 != null) 'xl_2108': xlItaRe2108,
-      if (xlKrOr70 != null) 'xl_70': xlKrOr70,
-      if (xlKrTr1094 != null) 'xl_1094': xlKrTr1094,
-      if (xlKrRe2118 != null) 'xl_2118': xlKrRe2118,
-      if (xlPoliOr80 != null) 'xl_80': xlPoliOr80,
-      if (xlPoliTr1104 != null) 'xl_1104': xlPoliTr1104,
-      if (xlPoliRe2128 != null) 'xl_2128': xlPoliRe2128,
-      if (xlPorOr90 != null) 'xl_90': xlPorOr90,
-      if (xlPorTr1114 != null) 'xl_1114': xlPorTr1114,
-      if (xlPorRe2138 != null) 'xl_2138': xlPorRe2138,
-      if (xlRuOr100 != null) 'xl_100': xlRuOr100,
-      if (xlRuTr1124 != null) 'xl_1124': xlRuTr1124,
-      if (xlRuRe2148 != null) 'xl_2148': xlRuRe2148,
-      if (xlSpaOr110 != null) 'xl_110': xlSpaOr110,
-      if (xlSpaTr1134 != null) 'xl_1134': xlSpaTr1134,
-      if (xlSpaRe2158 != null) 'xl_2158': xlSpaRe2158,
-      if (xlThaiOr120 != null) 'xl_120': xlThaiOr120,
-      if (xlThaiTr1144 != null) 'xl_1144': xlThaiTr1144,
-      if (xlThaiRe2168 != null) 'xl_2168': xlThaiRe2168,
-      if (xlVieOr130 != null) 'xl_130': xlVieOr130,
-      if (xlVieTr1154 != null) 'xl_1154': xlVieTr1154,
-      if (xlVieRe2178 != null) 'xl_2178': xlVieRe2178,
-      if (xlNaOr254 != null) 'xl_254': xlNaOr254,
-      if (xlNaTr1278 != null) 'xl_1278': xlNaTr1278,
-      if (xlNaRe2302 != null) 'xl_2302': xlNaRe2302,
-      if (xlOthOr255 != null) 'xl_255': xlOthOr255,
-      if (xlOthTr1279 != null) 'xl_1279': xlOthTr1279,
-      if (xlOthRe2303 != null) 'xl_2303': xlOthRe2303,
+
+      // if (xnReclass != null) 'xn_1': xnReclass,
+      // if (xnLanguage != null) 'xn_2': xnLanguage,
+      // if (xnParody != null) 'xn_3': xnParody,
+      // if (xnCharacter != null) 'xn_4': xnCharacter,
+      // if (xnGroup != null) 'xn_5': xnGroup,
+      // if (xnArtist != null) 'xn_6': xnArtist,
+      // if (xnMale != null) 'xn_7': xnMale,
+      // if (xnFemale != null) 'xn_8': xnFemale,
+
+      // if (xlJpnTl1024 != null) 'xl_1024': xlJpnTl1024,
+      // if (xlJpnRw2048 != null) 'xl_2048': xlJpnRw2048,
+      // if (xlEnOr1 != null) 'xl_1': xlEnOr1,
+      // if (xlEnTr1025 != null) 'xl_1025': xlEnTr1025,
+      // if (xlEnRe2049 != null) 'xl_2049': xlEnRe2049,
+      // if (xlChiOr10 != null) 'xl_10': xlChiOr10,
+      // if (xlChiTr1034 != null) 'xl_1034': xlChiTr1034,
+      // if (xlChiRe2058 != null) 'xl_2058': xlChiRe2058,
+      // if (xlDutOr20 != null) 'xl_20': xlDutOr20,
+      // if (xlDutTr1044 != null) 'xl_1044': xlDutTr1044,
+      // if (xlDutRe2068 != null) 'xl_2068': xlDutRe2068,
+      // if (xlFrOr30 != null) 'xl_30': xlFrOr30,
+      // if (xlFrTr1054 != null) 'xl_1054': xlFrTr1054,
+      // if (xlFrRe2078 != null) 'xl_2078': xlFrRe2078,
+      // if (xlGmOr40 != null) 'xl_40': xlGmOr40,
+      // if (xlGmTr1064 != null) 'xl_1064': xlGmTr1064,
+      // if (xlGmRe2088 != null) 'xl_2088': xlGmRe2088,
+      // if (xlHungOr50 != null) 'xl_50': xlHungOr50,
+      // if (xlHungTr1074 != null) 'xl_1074': xlHungTr1074,
+      // if (xlHungRe2098 != null) 'xl_2098': xlHungRe2098,
+      // if (xlItaOr60 != null) 'xl_60': xlItaOr60,
+      // if (xlItaTr1084 != null) 'xl_1084': xlItaTr1084,
+      // if (xlItaRe2108 != null) 'xl_2108': xlItaRe2108,
+      // if (xlKrOr70 != null) 'xl_70': xlKrOr70,
+      // if (xlKrTr1094 != null) 'xl_1094': xlKrTr1094,
+      // if (xlKrRe2118 != null) 'xl_2118': xlKrRe2118,
+      // if (xlPoliOr80 != null) 'xl_80': xlPoliOr80,
+      // if (xlPoliTr1104 != null) 'xl_1104': xlPoliTr1104,
+      // if (xlPoliRe2128 != null) 'xl_2128': xlPoliRe2128,
+      // if (xlPorOr90 != null) 'xl_90': xlPorOr90,
+      // if (xlPorTr1114 != null) 'xl_1114': xlPorTr1114,
+      // if (xlPorRe2138 != null) 'xl_2138': xlPorRe2138,
+      // if (xlRuOr100 != null) 'xl_100': xlRuOr100,
+      // if (xlRuTr1124 != null) 'xl_1124': xlRuTr1124,
+      // if (xlRuRe2148 != null) 'xl_2148': xlRuRe2148,
+      // if (xlSpaOr110 != null) 'xl_110': xlSpaOr110,
+      // if (xlSpaTr1134 != null) 'xl_1134': xlSpaTr1134,
+      // if (xlSpaRe2158 != null) 'xl_2158': xlSpaRe2158,
+      // if (xlThaiOr120 != null) 'xl_120': xlThaiOr120,
+      // if (xlThaiTr1144 != null) 'xl_1144': xlThaiTr1144,
+      // if (xlThaiRe2168 != null) 'xl_2168': xlThaiRe2168,
+      // if (xlVieOr130 != null) 'xl_130': xlVieOr130,
+      // if (xlVieTr1154 != null) 'xl_1154': xlVieTr1154,
+      // if (xlVieRe2178 != null) 'xl_2178': xlVieRe2178,
+      // if (xlNaOr254 != null) 'xl_254': xlNaOr254,
+      // if (xlNaTr1278 != null) 'xl_1278': xlNaTr1278,
+      // if (xlNaRe2302 != null) 'xl_2302': xlNaRe2302,
+      // if (xlOthOr255 != null) 'xl_255': xlOthOr255,
+      // if (xlOthTr1279 != null) 'xl_1279': xlOthTr1279,
+      // if (xlOthRe2303 != null) 'xl_2303': xlOthRe2303,
+
       if (tagFilteringThreshold != null) 'ft': tagFilteringThreshold,
       if (tagWatchingThreshold != null) 'wt': tagWatchingThreshold,
       if (excludedLanguages != null) '': excludedLanguages,
@@ -359,5 +432,15 @@ extension ExtEhSettings on EhSettings {
       if (mpvStyle != null) 'ms': mpvStyle,
       if (mpvThumbnailPane != null) 'mt': mpvThumbnailPane,
     };
+
+    for (final _xn in xn) {
+      param['xn_${_xn.ser}'] = _xn.value;
+    }
+
+    for (final _xl in xl) {
+      param['xl_${_xl.ser}'] = _xl.value;
+    }
+
+    return param;
   }
 }

@@ -15,6 +15,7 @@ class SingleInputItem extends StatefulWidget {
     this.hideLine = false,
     this.previousPageTitle,
     this.suffixText,
+    this.placeholder,
   }) : super(key: key);
 
   final String title;
@@ -24,6 +25,7 @@ class SingleInputItem extends StatefulWidget {
   final ValueChanged<String>? onValueChanged;
   final bool hideLine;
   final String? suffixText;
+  final String? placeholder;
 
   @override
   _SingleInputItemState createState() => _SingleInputItemState();
@@ -53,6 +55,7 @@ class _SingleInputItemState extends State<SingleInputItem> {
             previousPageTitle: widget.previousPageTitle,
             suffixText: widget.suffixText,
             initValue: selector,
+            placeholder: widget.placeholder,
             onValueChanged: (val) {
               setState(() {
                 selector = val;
