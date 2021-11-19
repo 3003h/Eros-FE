@@ -30,6 +30,10 @@ class DefaultHttpTransformer extends HttpTransformer {
   /// 工厂构造方法，这里使用命名构造函数方式进行声明
   factory DefaultHttpTransformer.getInstance() => _instance;
 
+  /// 单例对象
+  static final DefaultHttpTransformer _instance =
+      DefaultHttpTransformer._internal();
+
   @override
   FutureOr<DioHttpResponse<dynamic>> parse(Response response) {
     // if (response.data["code"] == 100) {
@@ -39,14 +43,15 @@ class DefaultHttpTransformer extends HttpTransformer {
     // }
     return DioHttpResponse.success(response.data['data']);
   }
-
-  /// 单例对象
-  static final DefaultHttpTransformer _instance =
-      DefaultHttpTransformer._internal();
 }
 
 /// 画廊列表解析
 class GalleryListHttpTransformer extends HttpTransformer {
+  factory GalleryListHttpTransformer() => _instance;
+  GalleryListHttpTransformer._internal();
+  static late final GalleryListHttpTransformer _instance =
+      GalleryListHttpTransformer._internal();
+
   @override
   FutureOr<DioHttpResponse<GalleryList>> parse(
       Response<dynamic> response) async {
@@ -55,8 +60,12 @@ class GalleryListHttpTransformer extends HttpTransformer {
     // 列表样式检查 不符合则设置参数重新请求
     final bool isDml = isGalleryListDmL(html);
     if (isDml) {
-      final GalleryList gam = await parseGalleryList(html);
-      return DioHttpResponse<GalleryList>.success(gam);
+      final GalleryList _list = await compute(parseGalleryList, html);
+
+      // 查询和写入simpletag的翻译
+      final _listWithTagTranslate = await _list.qrySimpleTagTranslate;
+
+      return DioHttpResponse<GalleryList>.success(_listWithTagTranslate);
     } else {
       return DioHttpResponse<GalleryList>.failureFromError(
           ListDisplayModeException());
@@ -66,6 +75,11 @@ class GalleryListHttpTransformer extends HttpTransformer {
 
 /// 画廊列表解析 - 收藏夹页
 class FavoriteListHttpTransformer extends HttpTransformer {
+  factory FavoriteListHttpTransformer() => _instance;
+  FavoriteListHttpTransformer._internal();
+  static late final FavoriteListHttpTransformer _instance =
+      FavoriteListHttpTransformer._internal();
+
   @override
   FutureOr<DioHttpResponse<GalleryList>> parse(
       Response<dynamic> response) async {
@@ -77,11 +91,14 @@ class FavoriteListHttpTransformer extends HttpTransformer {
         FavoriteOrder.fav;
     // 排序参数
     final String _order = EHConst.favoriteOrder[order] ?? EHConst.FAV_ORDER_FAV;
-    final bool isOrderFav = isFavoriteOrder(html);
+    // final bool isOrderFav = isFavoriteOrder(html);
+    final bool isOrderFav = await compute(isFavoriteOrder, html);
+
     final bool needReOrder = isOrderFav ^ (order == FavoriteOrder.fav);
 
     // 列表样式检查 不符合则设置参数重新请求
-    final bool isDml = isGalleryListDmL(html);
+    // final bool isDml = isGalleryListDmL(html);
+    final bool isDml = await compute(isGalleryListDmL, html);
 
     if (!isDml) {
       return DioHttpResponse<GalleryList>.failureFromError(
@@ -90,14 +107,23 @@ class FavoriteListHttpTransformer extends HttpTransformer {
       return DioHttpResponse<GalleryList>.failureFromError(
           FavOrderException(order: _order));
     } else {
-      final GalleryList gam = await parseGalleryList(html, isFavorite: true);
-      return DioHttpResponse<GalleryList>.success(gam);
+      final GalleryList _list = await compute(parseGalleryListOfFav, html);
+
+      // 查询和写入simpletag的翻译
+      final _listWithTagTranslate = await _list.qrySimpleTagTranslate;
+
+      return DioHttpResponse<GalleryList>.success(_listWithTagTranslate);
     }
   }
 }
 
 /// 画廊解析
 class GalleryHttpTransformer extends HttpTransformer {
+  factory GalleryHttpTransformer() => _instance;
+  GalleryHttpTransformer._internal();
+  static late final GalleryHttpTransformer _instance =
+      GalleryHttpTransformer._internal();
+
   @override
   FutureOr<DioHttpResponse<GalleryItem>> parse(
       Response<dynamic> response) async {
@@ -108,26 +134,45 @@ class GalleryHttpTransformer extends HttpTransformer {
 }
 
 class GalleryImageHttpTransformer extends HttpTransformer {
+  factory GalleryImageHttpTransformer() => _instance;
+  GalleryImageHttpTransformer._internal();
+  static late final GalleryImageHttpTransformer _instance =
+      GalleryImageHttpTransformer._internal();
+
   @override
   FutureOr<DioHttpResponse<GalleryImage>> parse(
       Response<dynamic> response) async {
     final html = response.data as String;
-    final GalleryImage image = await paraImage(html);
+    // final GalleryImage image = await paraImage(html);
+    final GalleryImage image = await compute(paraImage, html);
     return DioHttpResponse<GalleryImage>.success(image);
   }
 }
 
 class GalleryImageListHttpTransformer extends HttpTransformer {
+  factory GalleryImageListHttpTransformer() => _instance;
+  GalleryImageListHttpTransformer._internal();
+  static late final GalleryImageListHttpTransformer _instance =
+      GalleryImageListHttpTransformer._internal();
+
   @override
   FutureOr<DioHttpResponse<List<GalleryImage>>> parse(
       Response<dynamic> response) async {
     final html = response.data as String;
-    final List<GalleryImage> image = parseGalleryImageFromHtml(html);
+    // final List<GalleryImage> image = parseGalleryImageFromHtml(html);
+    final List<GalleryImage> image =
+        await compute(parseGalleryImageFromHtml, html);
+
     return DioHttpResponse<List<GalleryImage>>.success(image);
   }
 }
 
 class GalleryArchiverHttpTransformer extends HttpTransformer {
+  factory GalleryArchiverHttpTransformer() => _instance;
+  GalleryArchiverHttpTransformer._internal();
+  static late final GalleryArchiverHttpTransformer _instance =
+      GalleryArchiverHttpTransformer._internal();
+
   @override
   FutureOr<DioHttpResponse<ArchiverProvider>> parse(
       Response<dynamic> response) async {
@@ -138,6 +183,11 @@ class GalleryArchiverHttpTransformer extends HttpTransformer {
 }
 
 class GalleryArchiverRemoteDownloadResponseTransformer extends HttpTransformer {
+  factory GalleryArchiverRemoteDownloadResponseTransformer() => _instance;
+  GalleryArchiverRemoteDownloadResponseTransformer._internal();
+  static late final GalleryArchiverRemoteDownloadResponseTransformer _instance =
+      GalleryArchiverRemoteDownloadResponseTransformer._internal();
+
   @override
   FutureOr<DioHttpResponse<String>> parse(Response<dynamic> response) async {
     final html = response.data as String;
@@ -147,6 +197,11 @@ class GalleryArchiverRemoteDownloadResponseTransformer extends HttpTransformer {
 }
 
 class GalleryArchiverLocalDownloadResponseTransformer extends HttpTransformer {
+  factory GalleryArchiverLocalDownloadResponseTransformer() => _instance;
+  GalleryArchiverLocalDownloadResponseTransformer._internal();
+  static late final GalleryArchiverLocalDownloadResponseTransformer _instance =
+      GalleryArchiverLocalDownloadResponseTransformer._internal();
+
   @override
   FutureOr<DioHttpResponse<String>> parse(Response<dynamic> response) async {
     final html = response.data as String;
@@ -157,6 +212,11 @@ class GalleryArchiverLocalDownloadResponseTransformer extends HttpTransformer {
 }
 
 class UconfigHttpTransformer extends HttpTransformer {
+  factory UconfigHttpTransformer() => _instance;
+  UconfigHttpTransformer._internal();
+  static late final UconfigHttpTransformer _instance =
+      UconfigHttpTransformer._internal();
+
   @override
   FutureOr<DioHttpResponse<EhSettings>> parse(
       Response<dynamic> response) async {

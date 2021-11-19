@@ -8,6 +8,7 @@ import 'package:fehviewer/store/floor/entity/tag_translat.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
 
+import 'common/controller/tag_trans_controller.dart';
 import 'models/index.dart';
 
 extension ExtGC on GalleryCache {
@@ -442,5 +443,24 @@ extension ExtEhSettings on EhSettings {
     }
 
     return param;
+  }
+}
+
+extension ExtGalleryList on GalleryList {
+  Future<GalleryList> get qrySimpleTagTranslate async {
+    final trController = Get.find<TagTransController>();
+    final _gallerysF = gallerys?.map((e) async {
+          final _simpleTagsF = e.simpleTags?.map((e) async {
+                final tr = await trController.getTagTranslateText(e.text!);
+                return e.copyWith(translat: tr ?? e.text);
+              }) ??
+              [];
+          final _simpleTags = Future.wait<SimpleTag>(_simpleTagsF);
+          return e.copyWith(simpleTags: await _simpleTags);
+        }) ??
+        [];
+
+    final _gallerys = Future.wait(_gallerysF);
+    return copyWith(gallerys: await _gallerys);
   }
 }

@@ -1,14 +1,8 @@
-import 'dart:io';
-
 import 'package:collection/collection.dart';
-import 'package:fehviewer/common/controller/tag_trans_controller.dart';
-import 'package:fehviewer/common/service/ehconfig_service.dart';
 import 'package:fehviewer/component/exception/error.dart';
 import 'package:fehviewer/const/const.dart';
 import 'package:fehviewer/models/index.dart';
-import 'package:fehviewer/utils/logger.dart';
 import 'package:fehviewer/utils/utility.dart';
-import 'package:get/get.dart';
 import 'package:html/dom.dart' as dom;
 import 'package:html/parser.dart' show parse;
 import 'package:intl/intl.dart';
@@ -47,21 +41,21 @@ bool isFavoriteOrder(String response) {
   return false;
 }
 
+GalleryList parseGalleryListOfFav(String response) {
+  return parseGalleryList(response, isFavorite: true);
+}
+
 /// 列表数据处理
-Future<GalleryList> parseGalleryList(
+GalleryList parseGalleryList(
   String response, {
   bool isFavorite = false,
-  bool refresh = false,
-}) async {
+}) {
   final dom.Document document = parse(response);
 
   if ((document.body?.children.isEmpty ?? false) &&
       response.contains('banned')) {
-    logger.e('banned');
     throw EhError(type: EhErrorType.banned, error: response);
   }
-
-  final EhConfigService ehConfigService = Get.find();
 
   const String _listSelector = 'tbody > tr';
   const String _pageSelector = 'table.ptt > tbody > tr > td';
@@ -89,13 +83,10 @@ Future<GalleryList> parseGalleryList(
 // 最大页数
   int _maxPage = 0;
   List<dom.Element> _pages = document.querySelectorAll(_pageSelector);
-  logger.v('_pages ${_pages.length}');
   if (_pages.length > 2) {
     final dom.Element _maxPageElem = _pages[_pages.length - 2];
     _maxPage = int.parse(_maxPageElem.text.trim());
   }
-
-  logger.v('_maxPage $_maxPage');
 
   // 下一页页码
   final dom.Element? _curPageElem =
@@ -139,9 +130,6 @@ Future<GalleryList> parseGalleryList(
     final RegExp colorRex = RegExp(r'#(\w{6})');
     for (final dom.Element tag in tags) {
       final String tagText = tag.text.trim();
-      final String translate =
-          await Get.find<TagTransController>().getTagTranslateText(tagText) ??
-              tagText;
 
       final String? style = tag.attributes['style'];
       String color = '';
@@ -153,7 +141,7 @@ Future<GalleryList> parseGalleryList(
       }
       simpleTags.add(SimpleTag(
           text: tagText,
-          translat: translate,
+          translat: tagText,
           color: color,
           backgrondColor: backgroundColor));
     }
@@ -174,7 +162,7 @@ Future<GalleryList> parseGalleryList(
         _translated = EHUtils.getLangeage(_langTag?.text ?? '');
       }
     } catch (e, stack) {
-      logger.e('$e\n$stack');
+      // logger.e('$e\n$stack');
     }
 
 // 封面图片
@@ -285,19 +273,16 @@ Future<GalleryList> parseGalleryList(
       ));
     }
 
-// safeMode检查
-    if (Platform.isIOS && (ehConfigService.isSafeMode.value)) {
-      if (category.trim() == 'Non-H') {
-        _addIiem();
-      }
-    } else {
-      _addIiem();
-    }
-  }
+    _addIiem();
 
-// 通过api请求获取更多信息
-  if (_gallaryItems.isNotEmpty) {
-// await Api.getMoreGalleryInfo(_gallaryItems, refresh: refresh);
+// safeMode检查
+//     if (Platform.isIOS && (ehConfigService.isSafeMode.value)) {
+//       if (category.trim() == 'Non-H') {
+//         _addIiem();
+//       }
+//     } else {
+//       _addIiem();
+//     }
   }
 
   // return Tuple2(_gallaryItems, _maxPage);

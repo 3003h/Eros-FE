@@ -1,9 +1,9 @@
 import 'package:fehviewer/common/service/theme_service.dart';
 import 'package:fehviewer/extension.dart';
 import 'package:fehviewer/generated/l10n.dart';
+import 'package:fehviewer/models/base/eh_models.dart';
 import 'package:fehviewer/pages/setting/setting_items/multi_selector.dart';
 import 'package:fehviewer/pages/setting/setting_items/selector_Item.dart';
-import 'package:fehviewer/utils/logger.dart';
 import 'package:fehviewer/widget/refresh.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
@@ -56,7 +56,7 @@ class EhMySettingsPage extends GetView<EhMySettingsController> {
                 // ),
                 CupertinoButton(
                   padding: const EdgeInsets.all(0),
-                  minSize: 36,
+                  minSize: 40,
                   child: const Icon(
                     LineIcons.globeWithAmericasShown,
                     size: 24,
@@ -67,7 +67,7 @@ class EhMySettingsPage extends GetView<EhMySettingsController> {
                 ),
                 CupertinoButton(
                   padding: const EdgeInsets.all(0),
-                  minSize: 36,
+                  minSize: 40,
                   child: const Icon(
                     LineIcons.checkCircle,
                     size: 24,
@@ -250,7 +250,7 @@ class ListViewEhMySettings extends GetView<EhMySettingsController> {
           onRefresh: _controller.reloadData,
         ),
         SliverSafeArea(
-          sliver: FutureBuilder(
+          sliver: FutureBuilder<EhSettings?>(
               future: controller.loadData(),
               initialData: controller.ehSetting,
               builder: (context, snapshot) {

@@ -151,9 +151,13 @@ class Api {
             cancelToken: cancelToken,
           ) ??
           '';
-      return await parseGalleryList(response, refresh: refresh);
+      return await parseGalleryList(
+        response,
+      );
     } else {
-      return await parseGalleryList(response, refresh: refresh);
+      return await parseGalleryList(
+        response,
+      );
     }
   }
 
@@ -207,9 +211,13 @@ class Api {
             params: params,
           ) ??
           '';
-      return await parseGalleryList(response, refresh: refresh);
+      return await parseGalleryList(
+        response,
+      );
     } else {
-      return await parseGalleryList(response, refresh: refresh);
+      return await parseGalleryList(
+        response,
+      );
     }
   }
 
@@ -264,9 +272,13 @@ class Api {
       final String response = await getHttpManager()
               .get(url, options: _cacheOptions, params: params) ??
           '';
-      return await parseGalleryList(response, refresh: refresh);
+      return await parseGalleryList(
+        response,
+      );
     } else {
-      return await parseGalleryList(response, refresh: refresh);
+      return await parseGalleryList(
+        response,
+      );
     }
   }
 
@@ -304,7 +316,7 @@ class Api {
       try {
         return await parseGalleryList(
           response,
-          refresh: refresh,
+          // refresh: refresh,
         );
       } catch (e, stack) {
         logger.e('$e\n$stack');
@@ -319,7 +331,7 @@ class Api {
           '';
       return await parseGalleryList(
         response,
-        refresh: true,
+        // refresh: true,
       );
     }
   }
@@ -386,7 +398,7 @@ class Api {
       return await parseGalleryList(
         response,
         isFavorite: true,
-        refresh: refresh,
+        // refresh: refresh,
         // favCatList: favCatList,
       );
     } else {
@@ -399,7 +411,7 @@ class Api {
       return await parseGalleryList(
         response,
         isFavorite: true,
-        refresh: true,
+        // refresh: true,
         // favCatList: favCatList,
       );
     }

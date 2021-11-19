@@ -1,6 +1,5 @@
 import 'package:dio/dio.dart';
 import 'package:extended_image/extended_image.dart';
-import 'package:fehviewer/common/global.dart';
 import 'package:fehviewer/component/exception/error.dart';
 import 'package:fehviewer/const/const.dart';
 import 'package:fehviewer/models/base/eh_models.dart';

@@ -1,8 +1,7 @@
 import 'package:fehviewer/common/controller/tag_trans_controller.dart';
 import 'package:fehviewer/const/const.dart';
 import 'package:fehviewer/models/base/eh_models.dart';
-import 'package:fehviewer/network/gallery_request.dart';
-import 'package:fehviewer/utils/logger.dart';
+// import 'package:fehviewer/utils/logger.dart';
 import 'package:get/get.dart' hide Node;
 import 'package:html/dom.dart';
 import 'package:html/parser.dart' show parse;
@@ -186,8 +185,6 @@ List<GalleryComment> parseGalleryComment(Document document) {
               imageUrl: _nodeImageUrl,
             ).copyWithSpanType(CommentSpanType.image);
 
-            logger.v('${_commentSpan.toJson()}');
-
             commentSpansf.add(_commentSpan);
           }
         }
@@ -203,7 +200,7 @@ List<GalleryComment> parseGalleryComment(Document document) {
           time: postTimeLocal,
           score: score));
     } catch (e, stack) {
-      logger.e('解析评论异常\n' + e.toString() + '\n' + stack.toString());
+      // logger.e('解析评论异常\n' + e.toString() + '\n' + stack.toString());
     }
   }
 
@@ -249,7 +246,8 @@ Future<List<TagGroup>> parseGalleryTags(Document document) async {
 
       _tagGroup.add(TagGroup(tagType: type, galleryTags: galleryTags));
     } catch (e, stack) {
-      logger.e('解析tag数据异常\n' + e.toString() + '\n' + stack.toString());
+      // logger.e('解析tag数据异常\n' + e.toString() + '\n' + stack.toString());
+      // rethrow;
     }
   }
   return _tagGroup;
@@ -372,7 +370,6 @@ Future<GalleryItem> parseGalleryDetail(String response) async {
 
   // uploader
   final _uploader = document.querySelector('#gdn > a')?.text.trim() ?? '';
-  logger.v('_uploader $_uploader');
 
   final galleryItem = GalleryItem(
     imgUrl: _imageUrl,
