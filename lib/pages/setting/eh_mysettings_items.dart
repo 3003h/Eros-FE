@@ -18,6 +18,9 @@ Widget _buildSelectedProfileItem(BuildContext context,
       initVal: _controller.ehSetting.profileSelected ?? '',
       onValueChanged: (val) {
         print(val);
+        if (val != _controller.ehSetting.profileSelected) {
+          _controller.changeProfile(val);
+        }
       },
     );
   });
@@ -532,7 +535,7 @@ Widget _buildSizeHorizontal(BuildContext context) {
       key: UniqueKey(),
       title: L10n.of(context).uc_img_horiz,
       previousPageTitle: L10n.of(context).ehentai_settings,
-      suffixText: 'pixels',
+      suffixText: L10n.of(context).uc_pixels,
       hideLine: false,
       initVal: _controller.ehSetting.imageSizeHorizontal ?? '',
       onValueChanged: (val) => _controller.ehSetting =
@@ -547,7 +550,7 @@ Widget _buildSizeVertical(BuildContext context) {
       key: UniqueKey(),
       title: L10n.of(context).uc_img_vert,
       previousPageTitle: L10n.of(context).ehentai_settings,
-      suffixText: 'pixels',
+      suffixText: L10n.of(context).uc_pixels,
       hideLine: true,
       initVal: _controller.ehSetting.imageSizeVertical ?? '',
       onValueChanged: (val) => _controller.ehSetting =
@@ -564,22 +567,29 @@ Widget _buildTagNamespaces(BuildContext context) {
       key: UniqueKey(),
       selectorMap: {
         'reclass': SingleSelectItemBean(
-            title: 'reclass', enable: _controller.ehSetting.xnReclass == '1'),
+            title: L10n.of(context).uc_reclass,
+            enable: _controller.ehSetting.xnReclass == '1'),
         'language': SingleSelectItemBean(
-            title: 'language', enable: _controller.ehSetting.xnLanguage == '1'),
+            title: L10n.of(context).uc_language,
+            enable: _controller.ehSetting.xnLanguage == '1'),
         'parody': SingleSelectItemBean(
-            title: 'parody', enable: _controller.ehSetting.xnParody == '1'),
+            title: L10n.of(context).uc_parody,
+            enable: _controller.ehSetting.xnParody == '1'),
         'character': SingleSelectItemBean(
-            title: 'character',
+            title: L10n.of(context).uc_character,
             enable: _controller.ehSetting.xnCharacter == '1'),
         'group': SingleSelectItemBean(
-            title: 'group', enable: _controller.ehSetting.xnGroup == '1'),
+            title: L10n.of(context).uc_group,
+            enable: _controller.ehSetting.xnGroup == '1'),
         'artist': SingleSelectItemBean(
-            title: 'artist', enable: _controller.ehSetting.xnArtist == '1'),
+            title: L10n.of(context).uc_artist,
+            enable: _controller.ehSetting.xnArtist == '1'),
         'male': SingleSelectItemBean(
-            title: 'male', enable: _controller.ehSetting.xnMale == '1'),
+            title: L10n.of(context).uc_male,
+            enable: _controller.ehSetting.xnMale == '1'),
         'female': SingleSelectItemBean(
-            title: 'female', enable: _controller.ehSetting.xnFemale == '1'),
+            title: L10n.of(context).uc_female,
+            enable: _controller.ehSetting.xnFemale == '1'),
       },
       onValueChanged: (val) {
         _controller.ehSetting

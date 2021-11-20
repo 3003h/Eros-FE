@@ -2559,6 +2559,16 @@ class L10n {
       args: [],
     );
   }
+
+  /// `pixels`
+  String get uc_pixels {
+    return Intl.message(
+      'pixels',
+      name: 'uc_pixels',
+      desc: '',
+      args: [],
+    );
+  }
 }
 
 class AppLocalizationDelegate extends LocalizationsDelegate<L10n> {

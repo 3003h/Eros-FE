@@ -268,6 +268,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "uc_ori_image_desc":
             MessageLookupByLibrary.simpleMessage("当可用的时候，使用原始图像代替压缩过的版本?"),
         "uc_parody": MessageLookupByLibrary.simpleMessage("原作"),
+        "uc_pixels": MessageLookupByLibrary.simpleMessage("像素"),
         "uc_profile": MessageLookupByLibrary.simpleMessage("配置"),
         "uc_rating": MessageLookupByLibrary.simpleMessage("评分颜色"),
         "uc_rating_desc": MessageLookupByLibrary.simpleMessage(

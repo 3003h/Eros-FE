@@ -249,5 +249,6 @@
   "uc_mpv": "Multi-Page Viewer",
   "uc_mpv_always": "Always use",
   "uc_mpv_stype": "Display Style",
-  "uc_mpv_thumb_pane": "Thumbnail Pane"
+  "uc_mpv_thumb_pane": "Thumbnail Pane",
+  "uc_pixels": "pixels"
 }

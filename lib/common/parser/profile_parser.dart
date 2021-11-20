@@ -15,6 +15,7 @@ EhSettings parseUconfig(String html) {
   final Element? profileSetElm =
       document.querySelector('#profile_form > select');
   late String selectedValue = '';
+  late String defaultProfile = '';
   if (profileSetElm != null) {
     final profiles = profileSetElm.children;
     for (final pf in profiles) {
@@ -24,9 +25,14 @@ EhSettings parseUconfig(String html) {
       }
       final isSelected = pf.attributes['selected'] == 'selected';
 
-      final name = pf.text.split(RegExp(r'\s')).first;
+      final name = pf.text.replaceAllMapped(
+          RegExp(r'(.+)\(Default\)'), (match) => match.group(1) ?? '');
       if (isSelected) {
         selectedValue = value;
+      }
+
+      if (pf.text.trim().endsWith('(Default)')) {
+        defaultProfile = value;
       }
 
       profileSet.add(
@@ -66,8 +72,6 @@ EhSettings parseUconfig(String html) {
   for (int idx = 0; idx <= 2303; idx++) {
     final Element? _elm = document.querySelector('#xl_$idx');
     if (_elm?.attributes['checked'] == 'checked') {
-      // logger.d('xl_$idx');
-      // print('xl_$idx');
       xl.add(EhSettingItem(name: 'xl', ser: '$idx', value: '1'));
     }
   }
@@ -75,8 +79,7 @@ EhSettings parseUconfig(String html) {
   final ft = _parseUconfigInput('ft', _inputElms);
   final wt = _parseUconfigInput('wt', _inputElms);
 
-  final xu = document.querySelector('#xu')?.text;
-  // logger.d('xu:$xu');
+  final xu = document.querySelector('#xu')?.text.trim();
   print('xu:$xu');
 
   // 搜索结果数 rc
@@ -124,6 +127,7 @@ EhSettings parseUconfig(String html) {
   return EhSettings(
     profilelist: profileSet,
     profileSelected: selectedValue,
+    defaultProfile: defaultProfile,
     loadImageThroughHAtH: uh,
     imageSize: xr,
     galleryNameDisplay: tl,

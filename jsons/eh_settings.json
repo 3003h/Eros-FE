@@ -1,6 +1,7 @@
 {
   "profilelist":"$[]eh_profile",
-  "profileSelected?": "feh",
+  "profile_selected?": "1",
+  "default_profile?": "1",
   "load_image_through_hAtH?": "",
   "load_browsing_country?": "",
   "image_size?": "",
