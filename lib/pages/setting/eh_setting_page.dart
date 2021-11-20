@@ -116,12 +116,15 @@ class ListViewEhSetting extends StatelessWidget {
 
     final List<Widget> _list = <Widget>[
       if (_isLogin)
-        TextSwitchItem(
-          L10n.of(context).galery_site,
-          intValue: _siteEx,
-          onChanged: _handleSiteChanged,
-          desc: L10n.of(context).current_site('E-Hentai'),
-          descOn: L10n.of(context).current_site('ExHentai'),
+        GestureDetector(
+          onLongPress: Api.selEhProfile,
+          child: TextSwitchItem(
+            L10n.of(context).galery_site,
+            intValue: _siteEx,
+            onChanged: _handleSiteChanged,
+            desc: L10n.of(context).current_site('E-Hentai'),
+            descOn: L10n.of(context).current_site('ExHentai'),
+          ),
         ),
       if (_isLogin)
         const SelectorSettingItem(

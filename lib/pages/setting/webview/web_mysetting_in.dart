@@ -14,18 +14,6 @@ import 'package:line_icons/line_icons.dart';
 class InWebMySetting extends StatelessWidget {
   final CookieManager _cookieManager = CookieManager.instance();
 
-  // Future<void> _setCookie() async {
-  //   final List<io.Cookie>? cookies =
-  //       await Global.cookieJar?.loadForRequest(Uri.parse(Api.getBaseUrl()));
-  //
-  //   for (final io.Cookie cookie in cookies ?? []) {
-  //     _cookieManager.setCookie(
-  //         url: Uri.parse(Api.getBaseUrl()),
-  //         name: cookie.name,
-  //         value: cookie.value);
-  //   }
-  // }
-
   @override
   Widget build(BuildContext context) {
     InAppWebViewController? _controller;
@@ -75,7 +63,7 @@ class InWebMySetting extends StatelessWidget {
           // initialUrl: '${Api.getBaseUrl()}/uconfig.php',
           initialUrlRequest: URLRequest(
             url: Uri.parse(
-              '${baseUrl}/uconfig.php',
+              '$baseUrl/uconfig.php',
             ),
             // headers: _httpHeaders,
           ),

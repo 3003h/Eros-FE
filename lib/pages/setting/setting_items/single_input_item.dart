@@ -5,7 +5,7 @@ import 'package:get/get.dart';
 import '../setting_base.dart';
 import 'single_input_page.dart';
 
-class SingleInputItem extends StatefulWidget {
+class SingleInputItem extends StatelessWidget {
   const SingleInputItem({
     Key? key,
     required this.title,
@@ -28,39 +28,25 @@ class SingleInputItem extends StatefulWidget {
   final String? placeholder;
 
   @override
-  _SingleInputItemState createState() => _SingleInputItemState();
-}
-
-class _SingleInputItemState extends State<SingleInputItem> {
-  String selector = '';
-
-  @override
-  void initState() {
-    super.initState();
-    selector = widget.initVal ?? '';
-  }
-
-  @override
   Widget build(BuildContext context) {
+    final selector = initVal ?? '';
+
     return SelectorSettingItem(
-      title: widget.title,
-      hideLine: widget.hideLine,
-      selector: (selector.isNotEmpty && widget.suffixText != null)
-          ? '$selector ${widget.suffixText}'
+      title: title,
+      hideLine: hideLine,
+      selector: (selector.isNotEmpty && suffixText != null)
+          ? '$selector $suffixText'
           : selector,
       onTap: () async {
         Get.to(
           () => SingleInputPage(
-            title: widget.pageTitle ?? widget.title,
-            previousPageTitle: widget.previousPageTitle,
-            suffixText: widget.suffixText,
+            title: pageTitle ?? title,
+            previousPageTitle: previousPageTitle,
+            suffixText: suffixText,
             initValue: selector,
-            placeholder: widget.placeholder,
+            placeholder: placeholder,
             onValueChanged: (val) {
-              setState(() {
-                selector = val;
-                widget.onValueChanged?.call(val);
-              });
+              onValueChanged?.call(val);
             },
           ),
           id: isLayoutLarge ? 2 : null,

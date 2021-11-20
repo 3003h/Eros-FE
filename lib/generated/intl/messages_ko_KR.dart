@@ -291,6 +291,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "uc_ori_image_desc": MessageLookupByLibrary.simpleMessage(
             "Use original images instead of the resampled versions where applicable?"),
         "uc_parody": MessageLookupByLibrary.simpleMessage("parody"),
+        "uc_pixels": MessageLookupByLibrary.simpleMessage("pixels"),
         "uc_profile": MessageLookupByLibrary.simpleMessage("Profile"),
         "uc_rating": MessageLookupByLibrary.simpleMessage("Ratings Colors"),
         "uc_rating_desc": MessageLookupByLibrary.simpleMessage(

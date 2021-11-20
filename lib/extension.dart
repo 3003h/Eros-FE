@@ -319,7 +319,7 @@ extension ExtEhSettings on EhSettings {
   String? get xnFemale => xnMap['8'];
   set xnFemale(String? val) => setXn('1', val);
 
-  Map get postParam {
+  Map<String, dynamic> get postParam {
     final param = <String, dynamic>{
       if (loadImageThroughHAtH != null) 'uh': loadImageThroughHAtH,
       if (loadBrowsingCountry != null) 'co': loadBrowsingCountry,
@@ -432,6 +432,7 @@ extension ExtEhSettings on EhSettings {
       if (alwaysUseMpv != null) 'qb': alwaysUseMpv,
       if (mpvStyle != null) 'ms': mpvStyle,
       if (mpvThumbnailPane != null) 'mt': mpvThumbnailPane,
+      'apply': 'apply',
     };
 
     for (final _xn in xn) {

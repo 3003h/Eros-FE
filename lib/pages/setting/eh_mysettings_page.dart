@@ -6,6 +6,7 @@ import 'package:fehviewer/pages/setting/setting_items/multi_selector.dart';
 import 'package:fehviewer/pages/setting/setting_items/selector_Item.dart';
 import 'package:fehviewer/widget/refresh.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:get/get.dart';
 import 'package:line_icons/line_icons.dart';
 
@@ -16,6 +17,8 @@ import 'setting_items/single_input_item.dart';
 import 'webview/web_mysetting_in.dart';
 
 part 'eh_mysettings_items.dart';
+
+const kIndicatorRadius = 20.0;
 
 class EhMySettingsPage extends GetView<EhMySettingsController> {
   const EhMySettingsPage({Key? key}) : super(key: key);
@@ -75,12 +78,57 @@ class EhMySettingsPage extends GetView<EhMySettingsController> {
                   onPressed: () async {
                     // 保存配置
                     controller.printParam();
+                    await controller.applyProfile();
                   },
                 ),
               ],
             )),
         child: SafeArea(
-          child: ListViewEhMySettings(),
+          child: Stack(
+            alignment: Alignment.center,
+            children: [
+              ListViewEhMySettings(),
+              Obx(() {
+                if (controller.isLoading) {
+                  // loading 提示组件
+                  return GestureDetector(
+                    behavior: HitTestBehavior.opaque, // 拦截触摸手势
+                    child: Container(
+                      width: double.infinity,
+                      height: double.infinity,
+                      child: Center(
+                        child: Container(
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(15),
+                            boxShadow: [
+                              BoxShadow(
+                                color: CupertinoDynamicColor.resolve(
+                                        CupertinoColors.systemGrey,
+                                        Get.context!)
+                                    .withOpacity(0.1),
+                                offset: const Offset(0, 5),
+                                blurRadius: 10, //阴影模糊程度
+                                spreadRadius: 3, //阴影扩散程度
+                              ),
+                            ],
+                          ),
+                          child: CupertinoPopupSurface(
+                            child: Container(
+                              padding: const EdgeInsets.all(10),
+                              child: const CupertinoActivityIndicator(
+                                  radius: kIndicatorRadius),
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+                  );
+                } else {
+                  return const SizedBox.shrink();
+                }
+              }),
+            ],
+          ),
           bottom: false,
         ));
   }
@@ -99,18 +147,34 @@ class ListViewEhMySettings extends GetView<EhMySettingsController> {
               L10n.of(context).uc_rename,
               onTap: controller.renameProfile,
             ),
-            TextItem(
-              L10n.of(context).uc_crt_profile,
-              onTap: controller.crtNewProfile,
-            ),
-            TextItem(
-              L10n.of(context).uc_del_profile,
-              onTap: controller.deleteProfile,
-            ),
-            TextItem(
-              L10n.of(context).uc_set_as_def,
-              onTap: controller.setDefaultProfile,
-            ),
+            Obx(() {
+              return TextItem(
+                L10n.of(context).uc_crt_profile,
+                onTap: controller.crtNewProfile,
+                hideLine: controller.selectedIsDefault,
+              );
+            }),
+            Obx(() {
+              if (controller.selectedIsDefault) {
+                return const SizedBox.shrink();
+              } else {
+                return TextItem(
+                  L10n.of(context).uc_del_profile,
+                  onTap: controller.deleteProfile,
+                );
+              }
+            }),
+            Obx(() {
+              if (controller.selectedIsDefault) {
+                return const SizedBox.shrink();
+              } else {
+                return TextItem(
+                  L10n.of(context).uc_set_as_def,
+                  onTap: controller.setDefaultProfile,
+                  hideLine: true,
+                );
+              }
+            }),
           ],
         ),
       ),
@@ -252,7 +316,7 @@ class ListViewEhMySettings extends GetView<EhMySettingsController> {
         SliverSafeArea(
           sliver: FutureBuilder<EhSettings?>(
               future: controller.loadData(),
-              initialData: controller.ehSetting,
+              // initialData: controller.ehSetting,
               builder: (context, snapshot) {
                 // return SliverList(
                 //   delegate: SliverChildBuilderDelegate(

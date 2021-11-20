@@ -249,5 +249,6 @@
   "uc_mpv": "多页查看器",
   "uc_mpv_always": "总是使用",
   "uc_mpv_stype": "显示样式",
-  "uc_mpv_thumb_pane": "缩略图侧栏"
+  "uc_mpv_thumb_pane": "缩略图侧栏",
+  "uc_pixels": "像素"
 }

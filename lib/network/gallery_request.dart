@@ -17,6 +17,7 @@ import 'package:fehviewer/common/service/ehconfig_service.dart';
 import 'package:fehviewer/const/const.dart';
 import 'package:fehviewer/generated/l10n.dart';
 import 'package:fehviewer/models/index.dart';
+import 'package:fehviewer/network/request.dart';
 import 'package:fehviewer/pages/gallery/controller/archiver_controller.dart';
 import 'package:fehviewer/pages/gallery/controller/torrent_controller.dart';
 import 'package:fehviewer/pages/setting/controller/eh_mysettings_controller.dart';
@@ -860,6 +861,8 @@ class Api {
   }) async {
     final String url = '${getBaseUrl()}/uconfig.php';
 
+    showCookie();
+
     Map actionMap = {
       ProfileOpType.select: '',
       ProfileOpType.create: 'create',
@@ -938,12 +941,16 @@ class Api {
       logger.d(
           'exist profile name [$kProfileName] but not selected, select it...');
       final fEhProfile = ehProfiles[fepIndex];
+      await cleanCookie('sp');
+      // await setCookie('sp', '1');
       await operatorProfile(type: ProfileOpType.select, set: fEhProfile.value);
+      showCookie();
       return true;
     } else {
       // create 完成后会自动set_cookie sp为新建的sp
       logger.d('create new profile');
       await operatorProfile(type: ProfileOpType.create, pName: kProfileName);
+      showCookie();
       return true;
     }
   }

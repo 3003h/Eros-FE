@@ -158,6 +158,39 @@ Future checkCookie() async {
   cookieJar.saveFromResponse(Uri.parse(Api.getBaseUrl()), cookies);
 }
 
+Future<void> showCookie() async {
+  final PersistCookieJar cookieJar = await Api.cookieJar;
+  final List<Cookie> cookies =
+      await cookieJar.loadForRequest(Uri.parse(Api.getBaseUrl()));
+  logger.d('showCookie: \n${cookies.join('\n')}');
+}
+
+Future<void> cleanCookie(String name) async {
+  final PersistCookieJar cookieJar = await Api.cookieJar;
+  final List<Cookie> cookies =
+      await cookieJar.loadForRequest(Uri.parse(Api.getBaseUrl()));
+  cookies.removeWhere((element) => element.name == name);
+  logger.d('after remove: \n${cookies.join('\n')}');
+  await cookieJar.delete(Uri.parse(Api.getBaseUrl()));
+  await cookieJar.saveFromResponse(Uri.parse(Api.getBaseUrl()), cookies);
+  logger.d('showCookie: \n${cookies.join('\n')}');
+}
+
+Future<void> setCookie(String name, String value) async {
+  final PersistCookieJar cookieJar = await Api.cookieJar;
+  final List<Cookie> cookies =
+      await cookieJar.loadForRequest(Uri.parse(Api.getBaseUrl()));
+  final _cookie = cookies.firstWhereOrNull((element) => element.name == name);
+  if (_cookie != null) {
+    _cookie.value = value;
+  } else {
+    cookies.add(Cookie(name, value));
+  }
+  // logger.d('after remove: \n${cookies.join('\n')}');
+  // await cookieJar.delete(Uri.parse(Api.getBaseUrl()));
+  // await cookieJar.saveFromResponse(Uri.parse(Api.getBaseUrl()), cookies);
+}
+
 Future<GalleryItem?> getGalleryDetail({
   required String url,
   bool refresh = false,
@@ -305,9 +338,13 @@ Future<String> postArchiverLocalDownload(
   }
 }
 
-Future<EhSettings?> getUconfig(String url, {bool refresh = false}) async {
+Future<EhSettings?> getUconfig({bool refresh = false}) async {
   await checkCookie();
+
+  await showCookie();
+
   DioHttpClient dioHttpClient = DioHttpClient(dioConfig: ehDioConfig);
+  final String url = '${Api.getBaseUrl()}/uconfig.php';
 
   DioHttpResponse httpResponse = await dioHttpClient.get(
     url,
@@ -318,4 +355,93 @@ Future<EhSettings?> getUconfig(String url, {bool refresh = false}) async {
   if (httpResponse.ok && httpResponse.data is EhSettings) {
     return httpResponse.data as EhSettings;
   }
+}
+
+Future<EhSettings?> postEhProfile({
+  String? profileSet,
+  String? action,
+  String? name,
+  Map<String, dynamic>? paramMap,
+  bool refresh = true,
+}) async {
+  await checkCookie();
+  final dataMap = {
+    if (action != null) 'profile_action': action,
+    if (name != null) 'profile_name': name,
+    if (profileSet != null) 'profile_set': profileSet.trim(),
+  };
+  // final _dataString =
+  //     dataMap.entries.map((e) => '${e.key}=${e.value}').join('&');
+  // logger.d('_dataString: $_dataString');
+  final formData = FormData.fromMap(paramMap ?? dataMap);
+  DioHttpClient dioHttpClient = DioHttpClient(dioConfig: ehDioConfig);
+  const String url = '/uconfig.php';
+
+  logger.d('${formData.fields}');
+
+  DioHttpResponse httpResponse = await dioHttpClient.post(
+    url,
+    data: formData,
+    // data: _dataString,
+    httpTransformer: UconfigHttpTransformer(),
+    options: getCacheOptions(forceRefresh: refresh),
+  );
+
+  if (httpResponse.ok && httpResponse.data is EhSettings) {
+    return httpResponse.data as EhSettings;
+  }
+}
+
+Future<EhSettings?> changeEhProfile(String profileSet,
+    {bool refresh = true}) async {
+  // await cleanCookie('sp');
+  return await postEhProfile(
+    profileSet: profileSet,
+    action: '',
+    refresh: refresh,
+  );
+}
+
+Future<EhSettings?> deleteEhProfile(String profileSet,
+    {bool refresh = true}) async {
+  // await cleanCookie('sp');
+  return await postEhProfile(
+    profileSet: profileSet,
+    action: 'delete',
+    refresh: refresh,
+  );
+}
+
+Future<EhSettings?> createEhProfile(String name, {bool refresh = true}) async {
+  // await cleanCookie('sp');
+  return await postEhProfile(
+    action: 'create',
+    name: name,
+    refresh: refresh,
+  );
+}
+
+Future<EhSettings?> renameEhProfile(String profileSet, String name,
+    {bool refresh = true}) async {
+  return await postEhProfile(
+    action: 'rename',
+    profileSet: profileSet,
+    name: name,
+    refresh: refresh,
+  );
+}
+
+Future<EhSettings?> setDefauleEhProfile(String profileSet,
+    {bool refresh = true}) async {
+  return await postEhProfile(
+    profileSet: profileSet,
+    action: 'default',
+    refresh: refresh,
+  );
+}
+
+Future<EhSettings?> applyEhProfile(Map<String, dynamic> paramMap) async {
+  return await postEhProfile(
+    paramMap: paramMap,
+  );
 }

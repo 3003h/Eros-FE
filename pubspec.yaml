@@ -3,7 +3,7 @@ description: fehviewer
 
 publish_to: 'none' # Remove this line if you wish to publish to pub.dev
 
-version: 1.1.36+335
+version: 1.1.36+336
 
 environment:
   sdk: '>=2.14.0 <3.0.0'
@@ -23,7 +23,7 @@ dependencies:
   line_icons: ^2.0.1
 
   # 网络请求
-  dio: ^4.0.0
+  dio: ^4.0.3
   dio_http_cache:
     git:
       url: https://github.com/vrtdev/dio-http-cache.git
@@ -45,8 +45,8 @@ dependencies:
   flutter_linkify: ^5.0.2
   url_launcher: ^6.0.3
   tuple: ^2.0.0
-  get: ^4.2.0
-  get_storage: ^2.0.2
+  get: ^4.3.8
+  get_storage: ^2.0.3
   photo_view: ^0.13.0
   cached_network_image: ^3.0.0
   extended_image: ^5.1.0

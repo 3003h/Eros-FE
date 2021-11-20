@@ -148,7 +148,7 @@ class _SingleSelectItemState extends State<SingleSelectItem> {
               minHeight: kItemHeight,
             ),
             alignment: Alignment.centerLeft,
-            padding: const EdgeInsets.symmetric(horizontal: 22),
+            padding: const EdgeInsets.only(left: 20, right: 26),
             child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 mainAxisAlignment: MainAxisAlignment.start,
