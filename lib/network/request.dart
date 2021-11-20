@@ -140,22 +140,32 @@ Future checkCookie() async {
       await cookieJar.loadForRequest(Uri.parse(Api.getBaseUrl()));
   cookies.add(Cookie('nw', '1'));
 
-  if (cookies.firstWhereOrNull((_cookie) => _cookie.name == 'ipb_member_id') ==
-      null) {
-    logger.d('reset cookie');
-    final user = Get.find<UserController>().user.value;
-    if (user.memberId?.isNotEmpty ?? false) {
-      cookies.add(Cookie('ipb_member_id', user.memberId!));
-    }
-    if (user.passHash?.isNotEmpty ?? false) {
-      cookies.add(Cookie('ipb_pass_hash', user.passHash!));
-    }
-    if (user.igneous?.isNotEmpty ?? false) {
-      cookies.add(Cookie('igneous', user.igneous!));
-    }
-  }
+  final List<String> _c = Global.profile.user.cookie?.split(';') ?? [];
+
+  final List<Cookie> _cookies =
+      _c.map((e) => Cookie.fromSetCookieValue(e)).toList();
+
+  cookies.addAll(_cookies);
+
+  // if (cookies.firstWhereOrNull((_cookie) => _cookie.name == 'ipb_member_id') ==
+  //     null) {
+  //   logger.d('reset cookie');
+  //   final user = Get.find<UserController>().user.value;
+  //   logger.d('${user.passHashFB}');
+  //   if (user.memberIdFB.isNotEmpty) {
+  //     cookies.add(Cookie('ipb_member_id', user.memberIdFB));
+  //   }
+  //   if (user.passHashFB.isNotEmpty) {
+  //     cookies.add(Cookie('ipb_pass_hash', user.passHashFB));
+  //   }
+  //   if (user.igneousFB.isNotEmpty) {
+  //     cookies.add(Cookie('igneous', user.igneousFB));
+  //   }
+  // }
 
   cookieJar.saveFromResponse(Uri.parse(Api.getBaseUrl()), cookies);
+
+  // logger.d('cookies:${cookies.join('\n')}');
 }
 
 Future<void> showCookie() async {

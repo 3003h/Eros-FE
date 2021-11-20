@@ -137,18 +137,22 @@ class ListViewEhSetting extends StatelessWidget {
           title: L10n.of(context).ehentai_settings,
           selector: L10n.of(context).setting_on_website,
           onTap: () {
-            if (GetPlatform.isAndroid || GetPlatform.isIOS) {
-              if (_ehConfigService.debugMode) {
-                Get.toNamed(
-                  EHRoutes.mySettings,
-                  id: isLayoutLarge ? 2 : null,
-                );
-              } else {
-                Get.to(() => InWebMySetting());
-              }
-            } else {
-              showToast('Not support');
-            }
+            Get.toNamed(
+              EHRoutes.mySettings,
+              id: isLayoutLarge ? 2 : null,
+            );
+            // if (GetPlatform.isAndroid || GetPlatform.isIOS) {
+            //   if (_ehConfigService.debugMode) {
+            //     Get.toNamed(
+            //       EHRoutes.mySettings,
+            //       id: isLayoutLarge ? 2 : null,
+            //     );
+            //   } else {
+            //     Get.to(() => InWebMySetting());
+            //   }
+            // } else {
+            //   showToast('Not support');
+            // }
           },
           onLongPress: () async {
             await Api.selEhProfile();

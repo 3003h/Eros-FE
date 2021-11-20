@@ -23,12 +23,12 @@ class MultiSelectorPage extends StatelessWidget {
 }
 
 class MultiSelectorGroup extends StatefulWidget {
-  const MultiSelectorGroup(
-      {Key? key,
-      required this.selectorMap,
-      this.initValue,
-      this.onValueChanged})
-      : super(key: key);
+  const MultiSelectorGroup({
+    Key? key,
+    required this.selectorMap,
+    this.initValue,
+    this.onValueChanged,
+  }) : super(key: key);
   final Map<String, SingleSelectItemBean> selectorMap;
   final List<bool>? initValue;
   final ValueChanged<Map<String, SingleSelectItemBean>>? onValueChanged;
@@ -51,28 +51,54 @@ class _MultiSelectorGroupState extends State<MultiSelectorGroup> {
 
   @override
   Widget build(BuildContext context) {
-    return ListView.builder(
-      physics: const NeverScrollableScrollPhysics(),
-      shrinkWrap: true,
-      itemBuilder: (context, index) {
-        final select = selectorTitleList[index];
-        final _title = select.value.title;
-        final _enable = select.value.enable ?? false;
-        return SingleSelectItem(
-          title: _title,
-          enable: _enable,
-          showLine: index < selectorTitleList.length - 1,
-          onTap: () {
-            setState(() {
-              valueMap[select.key] =
-                  SingleSelectItemBean(title: _title, enable: !_enable);
-              widget.onValueChanged?.call(valueMap);
-            });
-          },
-        );
-      },
-      itemCount: selectorTitleList.length,
-    );
+    return GridView.builder(
+        physics: const NeverScrollableScrollPhysics(),
+        shrinkWrap: true,
+        gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
+          maxCrossAxisExtent: 220,
+          childAspectRatio: 3.6,
+        ),
+        itemCount: selectorTitleList.length,
+        itemBuilder: (context, index) {
+          final select = selectorTitleList[index];
+          final _title = select.value.title;
+          final _enable = select.value.enable ?? false;
+          return SingleSelectItem(
+            title: _title,
+            enable: _enable,
+            // showLine: index < selectorTitleList.length - 1,
+            onTap: () {
+              setState(() {
+                valueMap[select.key] =
+                    SingleSelectItemBean(title: _title, enable: !_enable);
+                widget.onValueChanged?.call(valueMap);
+              });
+            },
+          );
+        });
+    //
+    // return ListView.builder(
+    //   physics: const NeverScrollableScrollPhysics(),
+    //   shrinkWrap: true,
+    //   itemBuilder: (context, index) {
+    //     final select = selectorTitleList[index];
+    //     final _title = select.value.title;
+    //     final _enable = select.value.enable ?? false;
+    //     return SingleSelectItem(
+    //       title: _title,
+    //       enable: _enable,
+    //       showLine: index < selectorTitleList.length - 1,
+    //       onTap: () {
+    //         setState(() {
+    //           valueMap[select.key] =
+    //               SingleSelectItemBean(title: _title, enable: !_enable);
+    //           widget.onValueChanged?.call(valueMap);
+    //         });
+    //       },
+    //     );
+    //   },
+    //   itemCount: selectorTitleList.length,
+    // );
   }
 }
 
