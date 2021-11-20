@@ -147,6 +147,7 @@ class _PopularListTabState extends State<PopularListTab> {
           padding: const EdgeInsets.only(bottom: 50),
           child: GalleryErrorPage(
             onTap: controller.reLoadDataFirst,
+            error: '$err',
           ),
         ),
       );

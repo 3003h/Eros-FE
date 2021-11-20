@@ -467,6 +467,92 @@ Widget _buildTagWatchingThreshold(BuildContext context) {
   });
 }
 
+Widget _buildExcludedLanguage(BuildContext context) {
+  const _style = TextStyle(fontSize: 14.0);
+  const _flexLang = 8;
+  const _flexSwitch = 10;
+  return Container(
+    padding: const EdgeInsets.symmetric(vertical: 8.0),
+    color: CupertinoDynamicColor.resolve(ehTheme.itemBackgroundColor!, context),
+    child: Column(
+      children: [
+        Row(
+          children: [
+            Expanded(
+                flex: _flexLang,
+                child: Text(
+                  'Language',
+                  textAlign: TextAlign.right,
+                  style: _style,
+                )),
+            Expanded(
+                flex: _flexSwitch,
+                child: Text(
+                  'Original',
+                  textAlign: TextAlign.center,
+                  style: _style,
+                )),
+            Expanded(
+                flex: _flexSwitch,
+                child: Text(
+                  'Translated',
+                  textAlign: TextAlign.center,
+                  style: _style,
+                )),
+            Expanded(
+                flex: _flexSwitch,
+                child: Text(
+                  'Rewrite',
+                  textAlign: TextAlign.center,
+                  style: _style,
+                )),
+          ],
+        ),
+        Row(
+          children: [
+            Expanded(
+                flex: _flexLang,
+                child: Text(
+                  'Jpn',
+                  textAlign: TextAlign.right,
+                  style: _style,
+                )),
+            Expanded(
+                flex: _flexSwitch,
+                child: CupertinoSwitch(value: false, onChanged: (_) {})),
+            Expanded(
+                flex: _flexSwitch,
+                child: CupertinoSwitch(value: false, onChanged: (_) {})),
+            Expanded(
+                flex: _flexSwitch,
+                child: CupertinoSwitch(value: false, onChanged: (_) {})),
+          ],
+        ),
+        Row(
+          children: [
+            Expanded(
+                flex: _flexLang,
+                child: Text(
+                  'Chinese',
+                  textAlign: TextAlign.right,
+                  style: _style,
+                )),
+            Expanded(
+                flex: _flexSwitch,
+                child: CupertinoSwitch(value: false, onChanged: (_) {})),
+            Expanded(
+                flex: _flexSwitch,
+                child: CupertinoSwitch(value: false, onChanged: (_) {})),
+            Expanded(
+                flex: _flexSwitch,
+                child: CupertinoSwitch(value: false, onChanged: (_) {})),
+          ],
+        ),
+      ],
+    ),
+  );
+}
+
 Widget _buildExcludedUploaders(BuildContext context) {
   return Obx(() {
     return SingleInputItem(

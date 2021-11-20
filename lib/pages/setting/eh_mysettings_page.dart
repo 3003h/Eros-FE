@@ -134,7 +134,21 @@ class EhMySettingsPage extends GetView<EhMySettingsController> {
   }
 }
 
-class ListViewEhMySettings extends GetView<EhMySettingsController> {
+class ListViewEhMySettings extends StatefulWidget {
+  @override
+  State<ListViewEhMySettings> createState() => _ListViewEhMySettingsState();
+}
+
+class _ListViewEhMySettingsState extends State<ListViewEhMySettings> {
+  final controller = Get.find<EhMySettingsController>();
+  late Future<EhSettings?> future;
+
+  @override
+  void initState() {
+    super.initState();
+    future = _controller.loadData();
+  }
+
   @override
   Widget build(BuildContext context) {
     final List<Widget> _list = <Widget>[
@@ -241,6 +255,7 @@ class ListViewEhMySettings extends GetView<EhMySettingsController> {
       ),
       GroupItem(
         title: L10n.of(context).uc_exc_lang,
+        child: _buildExcludedLanguage(context),
         desc: L10n.of(context).uc_exc_lang_desc,
       ),
       GroupItem(
@@ -315,17 +330,9 @@ class ListViewEhMySettings extends GetView<EhMySettingsController> {
         ),
         SliverSafeArea(
           sliver: FutureBuilder<EhSettings?>(
-              future: controller.loadData(),
-              // initialData: controller.ehSetting,
+              future: future,
+              initialData: controller.ehSetting,
               builder: (context, snapshot) {
-                // return SliverList(
-                //   delegate: SliverChildBuilderDelegate(
-                //     (context, index) {
-                //       return _list[index];
-                //     },
-                //     childCount: _list.length,
-                //   ),
-                // );
                 if (snapshot.connectionState != ConnectionState.done) {
                   return const SliverFillRemaining(
                     child: CupertinoActivityIndicator(
