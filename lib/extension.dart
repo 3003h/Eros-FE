@@ -122,25 +122,27 @@ extension ExtItem on GalleryItem {
 
 extension ExtUser on User {
   List<String> get _cookieStrList => cookie?.split(';') ?? [];
-  List<Cookie> get _cookies =>
+  List<Cookie> get _cookiesFromStr =>
       _cookieStrList.map((e) => Cookie.fromSetCookieValue(e)).toList();
 
-  String get memberIdFromCookie => _cookies
+  String get memberIdFromCookieStr => _cookiesFromStr
       .where((Cookie element) => element.name == 'ipb_member_id')
       .first
       .value;
 
-  String get passHashFromCookie => _cookies
+  String get passHashFromCookieStr => _cookiesFromStr
       .where((Cookie element) => element.name == 'ipb_pass_hash')
       .first
       .value;
 
-  String get igneousFromCookie =>
-      _cookies.where((Cookie element) => element.name == 'igneous').first.value;
+  String get igneousFromCookie => _cookiesFromStr
+      .where((Cookie element) => element.name == 'igneous')
+      .first
+      .value;
 
-  String get memberIdFB => memberId ?? memberIdFromCookie;
+  String get memberIdFB => memberId ?? memberIdFromCookieStr;
 
-  String get passHashFB => passHash ?? passHashFromCookie;
+  String get passHashFB => passHash ?? passHashFromCookieStr;
 
   String get igneousFB => igneous ?? igneousFromCookie;
 }
@@ -371,7 +373,6 @@ extension ExtEhSettings on EhSettings {
       if (ratings != null) 'ru': ratings,
       if (tagFilteringThreshold != null) 'ft': tagFilteringThreshold,
       if (tagWatchingThreshold != null) 'wt': tagWatchingThreshold,
-      if (excludedLanguages != null) '': excludedLanguages,
       if (excludedUploaders != null) 'xu': excludedUploaders,
       if (searchResultCount != null) 'rc': searchResultCount,
       if (mouseOverThumbnails != null) 'lt': mouseOverThumbnails,

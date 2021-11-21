@@ -181,9 +181,9 @@ Widget _buildSearchResultCountItem(BuildContext context,
       title: L10n.of(context).uc_search_r_count,
       hideLine: hideLine,
       actionMap: actionMap,
-      initVal: _controller.ehSetting.sortOrderFavorites ?? '',
+      initVal: _controller.ehSetting.searchResultCount ?? '',
       onValueChanged: (val) => _controller.ehSetting =
-          _controller.ehSetting.copyWith(sortOrderFavorites: val),
+          _controller.ehSetting.copyWith(searchResultCount: val),
     );
   });
 }
@@ -317,17 +317,24 @@ Widget _buildShowPageNumbers(BuildContext context, {bool hideLine = false}) {
     '1': L10n.of(context).uc_pn_1,
   };
 
-  return Obx(() {
-    return SelectorItem<String>(
-      key: UniqueKey(),
-      title: L10n.of(context).uc_show_page_num,
-      hideLine: hideLine,
-      actionMap: actionMap,
-      initVal: _controller.ehSetting.showGalleryPageNumbers ?? '',
-      onValueChanged: (val) => _controller.ehSetting =
-          _controller.ehSetting.copyWith(showGalleryPageNumbers: val),
-    );
-  });
+  return TextSwitchItem(
+    L10n.of(context).uc_show_page_num,
+    intValue: _controller.ehSetting.showGalleryPageNumbers == '1',
+    onChanged: (val) => _controller.ehSetting =
+        _controller.ehSetting.copyWith(showGalleryPageNumbers: val ? '1' : ''),
+  );
+
+  // return Obx(() {
+  //   return SelectorItem<String>(
+  //     key: UniqueKey(),
+  //     title: L10n.of(context).uc_show_page_num,
+  //     hideLine: hideLine,
+  //     actionMap: actionMap,
+  //     initVal: _controller.ehSetting.showGalleryPageNumbers ?? '',
+  //     onValueChanged: (val) => _controller.ehSetting =
+  //         _controller.ehSetting.copyWith(showGalleryPageNumbers: val),
+  //   );
+  // });
 }
 
 Widget _buildOriginalImages(BuildContext context, {bool hideLine = false}) {
@@ -336,19 +343,26 @@ Widget _buildOriginalImages(BuildContext context, {bool hideLine = false}) {
     '1': L10n.of(context).uc_oi_1,
   };
 
-  return Obx(() {
-    return SelectorItem<String>(
-      key: UniqueKey(),
-      title: L10n.of(context).uc_ori_image,
-      actionTitle:
-          'Use original images instead of the resampled versions where applicable?',
-      hideLine: hideLine,
-      actionMap: actionMap,
-      initVal: _controller.ehSetting.originalImages ?? '',
-      onValueChanged: (val) => _controller.ehSetting =
-          _controller.ehSetting.copyWith(originalImages: val),
-    );
-  });
+  return TextSwitchItem(
+    L10n.of(context).uc_ori_image,
+    intValue: _controller.ehSetting.originalImages == '1',
+    onChanged: (val) => _controller.ehSetting =
+        _controller.ehSetting.copyWith(originalImages: val ? '1' : ''),
+  );
+
+  // return Obx(() {
+  //   return SelectorItem<String>(
+  //     key: UniqueKey(),
+  //     title: L10n.of(context).uc_ori_image,
+  //     actionTitle:
+  //         'Use original images instead of the resampled versions where applicable?',
+  //     hideLine: hideLine,
+  //     actionMap: actionMap,
+  //     initVal: _controller.ehSetting.originalImages ?? '',
+  //     onValueChanged: (val) => _controller.ehSetting =
+  //         _controller.ehSetting.copyWith(originalImages: val),
+  //   );
+  // });
 }
 
 Widget _buildMPVAlwaysUse(BuildContext context, {bool hideLine = false}) {
@@ -357,19 +371,26 @@ Widget _buildMPVAlwaysUse(BuildContext context, {bool hideLine = false}) {
     '1': L10n.of(context).uc_qb_1,
   };
 
-  return Obx(() {
-    return SelectorItem<String>(
-      key: UniqueKey(),
-      title: L10n.of(context).uc_mpv_always,
-      actionTitle:
-          'Always use the Multi-Page Viewer? There will still be a link to manually start it if this is left disabled',
-      hideLine: hideLine,
-      actionMap: actionMap,
-      initVal: _controller.ehSetting.alwaysUseMpv ?? '',
-      onValueChanged: (val) => _controller.ehSetting =
-          _controller.ehSetting.copyWith(alwaysUseMpv: val),
-    );
-  });
+  return TextSwitchItem(
+    L10n.of(context).uc_mpv_always,
+    intValue: _controller.ehSetting.alwaysUseMpv == '1',
+    onChanged: (val) => _controller.ehSetting =
+        _controller.ehSetting.copyWith(alwaysUseMpv: val ? '1' : ''),
+  );
+
+  // return Obx(() {
+  //   return SelectorItem<String>(
+  //     key: UniqueKey(),
+  //     title: L10n.of(context).uc_mpv_always,
+  //     actionTitle:
+  //         'Always use the Multi-Page Viewer? There will still be a link to manually start it if this is left disabled',
+  //     hideLine: hideLine,
+  //     actionMap: actionMap,
+  //     initVal: _controller.ehSetting.alwaysUseMpv ?? '',
+  //     onValueChanged: (val) => _controller.ehSetting =
+  //         _controller.ehSetting.copyWith(alwaysUseMpv: val),
+  //   );
+  // });
 }
 
 Widget _buildMPVDisplayStyle(BuildContext context, {bool hideLine = false}) {
@@ -406,18 +427,25 @@ Widget _buildMPVThumbPane(BuildContext context, {bool hideLine = false}) {
     '1': L10n.of(context).uc_mt_1,
   };
 
-  return Obx(() {
-    return SelectorItem<String>(
-      key: UniqueKey(),
-      title: L10n.of(context).uc_mpv_thumb_pane,
-      actionTitle: 'Multi-Page Viewer Thumbnail Pane',
-      hideLine: hideLine,
-      actionMap: actionMap,
-      initVal: _controller.ehSetting.mpvThumbnailPane ?? '',
-      onValueChanged: (val) => _controller.ehSetting =
-          _controller.ehSetting.copyWith(mpvThumbnailPane: val),
-    );
-  });
+  return TextSwitchItem(
+    L10n.of(context).uc_mpv_thumb_pane,
+    intValue: _controller.ehSetting.mpvThumbnailPane == '1',
+    onChanged: (val) => _controller.ehSetting =
+        _controller.ehSetting.copyWith(mpvThumbnailPane: val ? '1' : ''),
+  );
+
+  // return Obx(() {
+  //   return SelectorItem<String>(
+  //     key: UniqueKey(),
+  //     title: L10n.of(context).uc_mpv_thumb_pane,
+  //     actionTitle: 'Multi-Page Viewer Thumbnail Pane',
+  //     hideLine: hideLine,
+  //     actionMap: actionMap,
+  //     initVal: _controller.ehSetting.mpvThumbnailPane ?? '',
+  //     onValueChanged: (val) => _controller.ehSetting =
+  //         _controller.ehSetting.copyWith(mpvThumbnailPane: val),
+  //   );
+  // });
 }
 
 Widget _buildRatingsItem(BuildContext context, {bool hideLine = false}) {

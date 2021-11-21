@@ -41,6 +41,8 @@ class MessageLookup extends MessageLookupByLibrary {
         "allow_media_scan": MessageLookupByLibrary.simpleMessage("미디어 스캔 허용"),
         "app_title": MessageLookupByLibrary.simpleMessage("FEhViewer"),
         "autoLock": MessageLookupByLibrary.simpleMessage("자동 잠금"),
+        "auto_select_profile":
+            MessageLookupByLibrary.simpleMessage("Auto select profile"),
         "back": MessageLookupByLibrary.simpleMessage("뒤로"),
         "cancel": MessageLookupByLibrary.simpleMessage("취소"),
         "change_to_favorites": MessageLookupByLibrary.simpleMessage("즐겨찾기 변경"),
@@ -336,11 +338,11 @@ class MessageLookup extends MessageLookupByLibrary {
         "uc_mpv_thumb_pane":
             MessageLookupByLibrary.simpleMessage("Thumbnail Pane"),
         "uc_ms_0": MessageLookupByLibrary.simpleMessage(
-            "Align left; Only scale if image is larger than browser width"),
+            "Align left;\nOnly scale if image is larger than browser width"),
         "uc_ms_1": MessageLookupByLibrary.simpleMessage(
-            "Align center; Only scale if image is larger than browser width"),
+            "Align center;\nOnly scale if image is larger than browser width"),
         "uc_ms_2": MessageLookupByLibrary.simpleMessage(
-            "Align center; Always scale images to fit browser width"),
+            "Align center;\nAlways scale images to fit browser width"),
         "uc_mt_0": MessageLookupByLibrary.simpleMessage("Show"),
         "uc_mt_1": MessageLookupByLibrary.simpleMessage("Hide"),
         "uc_name_display":

@@ -124,6 +124,10 @@ class EhConfigService extends ProfileService {
   bool get tabletLayout => _tabletLayout.value;
   set tabletLayout(bool val) => _tabletLayout.value = val;
 
+  final _autoSelectProfile = true.obs;
+  bool get autoSelectProfile => _autoSelectProfile.value;
+  set autoSelectProfile(bool val) => _autoSelectProfile.value = val;
+
   @override
   void onInit() {
     super.onInit();
@@ -329,6 +333,11 @@ class EhConfigService extends ProfileService {
         _enableTagTranslateCDN,
         (bool value) =>
             ehConfig = ehConfig.copyWith(enableTagTranslateCDN: value));
+
+    // _autoSelectProfile
+    autoSelectProfile = ehConfig.autoSelectProfile ?? true;
+    everProfile<bool>(_autoSelectProfile,
+        (bool value) => ehConfig = ehConfig.copyWith(autoSelectProfile: value));
   }
 
   /// 收藏排序 dialog

@@ -41,6 +41,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "allow_media_scan": MessageLookupByLibrary.simpleMessage("允许媒体扫描"),
         "app_title": MessageLookupByLibrary.simpleMessage("FEhViewer"),
         "autoLock": MessageLookupByLibrary.simpleMessage("自动锁定"),
+        "auto_select_profile": MessageLookupByLibrary.simpleMessage("自动选择配置"),
         "back": MessageLookupByLibrary.simpleMessage("返回"),
         "cancel": MessageLookupByLibrary.simpleMessage("取消"),
         "change_to_favorites": MessageLookupByLibrary.simpleMessage("修改收藏夹"),

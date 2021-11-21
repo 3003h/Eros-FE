@@ -1,4 +1,5 @@
 import 'package:fehviewer/common/service/theme_service.dart';
+import 'package:fehviewer/utils/vibrate.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -68,6 +69,7 @@ class _MultiSelectorGroupState extends State<MultiSelectorGroup> {
             title: _title,
             enable: _enable,
             onChanged: (val) {
+              vibrateUtil.light();
               setState(() {
                 valueMap[select.key] =
                     SingleSelectItemBean(title: _title, enable: val);
@@ -77,6 +79,7 @@ class _MultiSelectorGroupState extends State<MultiSelectorGroup> {
             expand: true,
             // showLine: index < selectorTitleList.length - 1,
             onTap: () {
+              vibrateUtil.light();
               setState(() {
                 valueMap[select.key] =
                     SingleSelectItemBean(title: _title, enable: !_enable);
