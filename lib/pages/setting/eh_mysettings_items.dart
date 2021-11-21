@@ -28,17 +28,15 @@ Widget _buildSelectedProfileItem(BuildContext context,
 
 Widget _buildLoadTypeItem(BuildContext context, {bool hideLine = false}) {
   final Map<String, String> actionMap = <String, String>{
-    '0': 'Any client (Recommended)',
-    '1':
-        'Default port clients only (Can be slower. Enable if behind firewall/proxy that blocks outgoing non-standard ports.)',
-    '2':
-        'No (Donator only. You will not be able to browse as many pages, enable only if having severe problems.)',
+    '0': L10n.of(context).uc_uh_0,
+    '1': L10n.of(context).uc_uh_1,
+    '2': L10n.of(context).uc_uh_2,
   };
 
   final Map<String, String> simpleActionMap = <String, String>{
-    '0': 'Any client',
-    '1': 'Default port',
-    '2': 'No',
+    '0': L10n.of(context).uc_uh_0_s,
+    '1': L10n.of(context).uc_uh_1_s,
+    '2': L10n.of(context).uc_uh_2_s,
   };
   return Obx(() {
     return SelectorItem<String>(
@@ -56,7 +54,7 @@ Widget _buildLoadTypeItem(BuildContext context, {bool hideLine = false}) {
 
 Widget _buildImageSizeItem(BuildContext context, {bool hideLine = false}) {
   final Map<String, String> actionMap = <String, String>{
-    '0': 'Auto',
+    '0': L10n.of(context).uc_auto,
     '5': '2400x',
     '4': '1600x',
     '3': '1280x',
@@ -78,8 +76,8 @@ Widget _buildImageSizeItem(BuildContext context, {bool hideLine = false}) {
 
 Widget _buildNameDisplayItem(BuildContext context, {bool hideLine = false}) {
   final Map<String, String> actionMap = <String, String>{
-    '0': 'Default Title',
-    '1': 'Japanese Title',
+    '0': L10n.of(context).uc_tl_0,
+    '1': L10n.of(context).uc_tl_1,
   };
   return Obx(() {
     return SelectorItem<String>(
@@ -97,12 +95,12 @@ Widget _buildNameDisplayItem(BuildContext context, {bool hideLine = false}) {
 Widget _buildArchiverSettingsItem(BuildContext context,
     {bool hideLine = false}) {
   final Map<String, String> actionMap = <String, String>{
-    '0': 'Manual Select, Manual Start (Default)',
-    '1': 'Manual Select, Auto Start',
-    '2': 'Auto Select Original, Manual Start',
-    '3': 'Auto Select Original, Auto Start',
-    '4': 'Auto Select Resample, Manual Start',
-    '5': 'Auto Select Resample, Auto Start',
+    '0': L10n.of(context).uc_ar_0,
+    '1': L10n.of(context).uc_ar_1,
+    '2': L10n.of(context).uc_ar_2,
+    '3': L10n.of(context).uc_ar_3,
+    '4': L10n.of(context).uc_ar_4,
+    '5': L10n.of(context).uc_ar_5,
   };
   final Map<String, String> sActionMap = <String, String>{
     '0': 'MM (Default)',
@@ -118,7 +116,7 @@ Widget _buildArchiverSettingsItem(BuildContext context,
       title: L10n.of(context).uc_archiver_set,
       hideLine: hideLine,
       actionMap: actionMap,
-      simpleActionMap: sActionMap,
+      // simpleActionMap: sActionMap,
       initVal: _controller.ehSetting.archiverSettings ?? '',
       onValueChanged: (val) => _controller.ehSetting =
           _controller.ehSetting.copyWith(archiverSettings: val),
@@ -129,11 +127,11 @@ Widget _buildArchiverSettingsItem(BuildContext context,
 Widget _buildFrontPageSettingsItem(BuildContext context,
     {bool hideLine = false}) {
   final Map<String, String> actionMap = <String, String>{
-    '3': 'Minimal',
-    '4': 'Minimal+',
-    '0': 'Compact',
-    '2': 'Extended',
-    '1': 'Thumbnail',
+    '3': L10n.of(context).uc_dm_3,
+    '4': L10n.of(context).uc_dm_4,
+    '0': L10n.of(context).uc_dm_0,
+    '2': L10n.of(context).uc_dm_2,
+    '1': L10n.of(context).uc_dm_1,
   };
 
   return Obx(() {
@@ -151,8 +149,8 @@ Widget _buildFrontPageSettingsItem(BuildContext context,
 
 Widget _buildFavoritesSortItem(BuildContext context, {bool hideLine = false}) {
   final Map<String, String> actionMap = <String, String>{
-    '0': 'By last gallery update time',
-    '1': 'By favorited time',
+    '0': L10n.of(context).uc_fs_0,
+    '1': L10n.of(context).uc_fs_1,
   };
 
   return Obx(() {
@@ -192,15 +190,13 @@ Widget _buildSearchResultCountItem(BuildContext context,
 
 Widget _buildThumbMouseOverItem(BuildContext context, {bool hideLine = false}) {
   final Map<String, String> actionMap = <String, String>{
-    '0':
-        'On mouse-over (pages load faster, but there may be a slight delay before a thumb appears)',
-    '1':
-        'On page load (pages take longer to load, but there is no delay for loading a thumb after the page has loaded)',
+    '0': L10n.of(context).uc_lt_0,
+    '1': L10n.of(context).uc_lt_1,
   };
 
   final Map<String, String> sActionMap = <String, String>{
-    '0': 'On mouse-over',
-    '1': 'On page load',
+    '0': L10n.of(context).uc_lt_0_s,
+    '1': L10n.of(context).uc_lt_1_s,
   };
 
   return Obx(() {
@@ -219,8 +215,8 @@ Widget _buildThumbMouseOverItem(BuildContext context, {bool hideLine = false}) {
 
 Widget _buildThumbSizeItem(BuildContext context, {bool hideLine = false}) {
   final Map<String, String> actionMap = <String, String>{
-    '0': 'Narmal',
-    '1': 'Large',
+    '0': L10n.of(context).uc_ts_0,
+    '1': L10n.of(context).uc_ts_1,
   };
 
   return Obx(() {
@@ -259,9 +255,9 @@ Widget _buildThumbRowItem(BuildContext context, {bool hideLine = false}) {
 
 Widget _buildSortOrderComment(BuildContext context, {bool hideLine = false}) {
   final Map<String, String> actionMap = <String, String>{
-    '0': 'Oldest comments first',
-    '1': 'Recent comments first',
-    '2': 'By highest score',
+    '0': L10n.of(context).uc_cs_0,
+    '1': L10n.of(context).uc_cs_1,
+    '2': L10n.of(context).uc_cs_2,
   };
 
   return Obx(() {
@@ -279,8 +275,8 @@ Widget _buildSortOrderComment(BuildContext context, {bool hideLine = false}) {
 
 Widget _buildShowCommentVotes(BuildContext context, {bool hideLine = false}) {
   final Map<String, String> actionMap = <String, String>{
-    '0': 'On score hover or click',
-    '1': 'Always',
+    '0': L10n.of(context).uc_sc_0,
+    '1': L10n.of(context).uc_sc_1,
   };
 
   return Obx(() {
@@ -298,8 +294,8 @@ Widget _buildShowCommentVotes(BuildContext context, {bool hideLine = false}) {
 
 Widget _buildSortOrderTags(BuildContext context, {bool hideLine = false}) {
   final Map<String, String> actionMap = <String, String>{
-    '0': 'Alphabetical',
-    '1': 'By tag power',
+    '0': L10n.of(context).uc_tb_0,
+    '1': L10n.of(context).uc_tb_1,
   };
 
   return Obx(() {
@@ -317,8 +313,8 @@ Widget _buildSortOrderTags(BuildContext context, {bool hideLine = false}) {
 
 Widget _buildShowPageNumbers(BuildContext context, {bool hideLine = false}) {
   final Map<String, String> actionMap = <String, String>{
-    '0': 'No',
-    '1': 'Yes',
+    '0': L10n.of(context).uc_pn_0,
+    '1': L10n.of(context).uc_pn_1,
   };
 
   return Obx(() {
@@ -336,8 +332,8 @@ Widget _buildShowPageNumbers(BuildContext context, {bool hideLine = false}) {
 
 Widget _buildOriginalImages(BuildContext context, {bool hideLine = false}) {
   final Map<String, String> actionMap = <String, String>{
-    '0': 'Nope',
-    '1': 'Yup, I can take it',
+    '0': L10n.of(context).uc_oi_0,
+    '1': L10n.of(context).uc_oi_1,
   };
 
   return Obx(() {
@@ -357,8 +353,8 @@ Widget _buildOriginalImages(BuildContext context, {bool hideLine = false}) {
 
 Widget _buildMPVAlwaysUse(BuildContext context, {bool hideLine = false}) {
   final Map<String, String> actionMap = <String, String>{
-    '0': 'Nope',
-    '1': 'Yup',
+    '0': L10n.of(context).uc_qb_0,
+    '1': L10n.of(context).uc_qb_1,
   };
 
   return Obx(() {
@@ -378,9 +374,9 @@ Widget _buildMPVAlwaysUse(BuildContext context, {bool hideLine = false}) {
 
 Widget _buildMPVDisplayStyle(BuildContext context, {bool hideLine = false}) {
   final Map<String, String> actionMap = <String, String>{
-    '0': 'Align left; Only scale if image is larger than browser width',
-    '1': 'Align center; Only scale if image is larger than browser width',
-    '2': 'Align center; Always scale images to fit browser width',
+    '0': L10n.of(context).uc_ms_0,
+    '1': L10n.of(context).uc_ms_1,
+    '2': L10n.of(context).uc_ms_2,
   };
 
   final Map<String, String> sActionMap = <String, String>{
@@ -396,7 +392,7 @@ Widget _buildMPVDisplayStyle(BuildContext context, {bool hideLine = false}) {
       actionTitle: 'Multi-Page Viewer Display Style',
       hideLine: hideLine,
       actionMap: actionMap,
-      simpleActionMap: sActionMap,
+      // simpleActionMap: sActionMap,
       initVal: _controller.ehSetting.mpvStyle ?? '',
       onValueChanged: (val) =>
           _controller.ehSetting = _controller.ehSetting.copyWith(mpvStyle: val),
@@ -406,8 +402,8 @@ Widget _buildMPVDisplayStyle(BuildContext context, {bool hideLine = false}) {
 
 Widget _buildMPVThumbPane(BuildContext context, {bool hideLine = false}) {
   final Map<String, String> actionMap = <String, String>{
-    '0': 'Show',
-    '1': 'Hide',
+    '0': L10n.of(context).uc_mt_0,
+    '1': L10n.of(context).uc_mt_1,
   };
 
   return Obx(() {
@@ -465,92 +461,6 @@ Widget _buildTagWatchingThreshold(BuildContext context) {
           _controller.ehSetting.copyWith(tagWatchingThreshold: val),
     );
   });
-}
-
-Widget _buildExcludedLanguage(BuildContext context) {
-  const _style = TextStyle(fontSize: 14.0);
-  const _flexLang = 8;
-  const _flexSwitch = 10;
-  return Container(
-    padding: const EdgeInsets.symmetric(vertical: 8.0),
-    color: CupertinoDynamicColor.resolve(ehTheme.itemBackgroundColor!, context),
-    child: Column(
-      children: [
-        Row(
-          children: [
-            Expanded(
-                flex: _flexLang,
-                child: Text(
-                  'Language',
-                  textAlign: TextAlign.right,
-                  style: _style,
-                )),
-            Expanded(
-                flex: _flexSwitch,
-                child: Text(
-                  'Original',
-                  textAlign: TextAlign.center,
-                  style: _style,
-                )),
-            Expanded(
-                flex: _flexSwitch,
-                child: Text(
-                  'Translated',
-                  textAlign: TextAlign.center,
-                  style: _style,
-                )),
-            Expanded(
-                flex: _flexSwitch,
-                child: Text(
-                  'Rewrite',
-                  textAlign: TextAlign.center,
-                  style: _style,
-                )),
-          ],
-        ),
-        Row(
-          children: [
-            Expanded(
-                flex: _flexLang,
-                child: Text(
-                  'Jpn',
-                  textAlign: TextAlign.right,
-                  style: _style,
-                )),
-            Expanded(
-                flex: _flexSwitch,
-                child: CupertinoSwitch(value: false, onChanged: (_) {})),
-            Expanded(
-                flex: _flexSwitch,
-                child: CupertinoSwitch(value: false, onChanged: (_) {})),
-            Expanded(
-                flex: _flexSwitch,
-                child: CupertinoSwitch(value: false, onChanged: (_) {})),
-          ],
-        ),
-        Row(
-          children: [
-            Expanded(
-                flex: _flexLang,
-                child: Text(
-                  'Chinese',
-                  textAlign: TextAlign.right,
-                  style: _style,
-                )),
-            Expanded(
-                flex: _flexSwitch,
-                child: CupertinoSwitch(value: false, onChanged: (_) {})),
-            Expanded(
-                flex: _flexSwitch,
-                child: CupertinoSwitch(value: false, onChanged: (_) {})),
-            Expanded(
-                flex: _flexSwitch,
-                child: CupertinoSwitch(value: false, onChanged: (_) {})),
-          ],
-        ),
-      ],
-    ),
-  );
 }
 
 Widget _buildExcludedUploaders(BuildContext context) {
@@ -679,14 +589,14 @@ Widget _buildTagNamespaces(BuildContext context) {
       },
       onValueChanged: (val) {
         _controller.ehSetting
-          ..xnReclass = (val['reclass']?.enable ?? false) ? '1' : '0'
-          ..xnLanguage = (val['language']?.enable ?? false) ? '1' : '0'
-          ..xnParody = (val['parody']?.enable ?? false) ? '1' : '0'
-          ..xnCharacter = (val['character']?.enable ?? false) ? '1' : '0'
-          ..xnGroup = (val['group']?.enable ?? false) ? '1' : '0'
-          ..xnArtist = (val['artist']?.enable ?? false) ? '1' : '0'
-          ..xnMale = (val['male']?.enable ?? false) ? '1' : '0'
-          ..xnFemale = (val['female']?.enable ?? false) ? '1' : '0';
+          ..xnReclass = (val['reclass']?.enable ?? false) ? '1' : ''
+          ..xnLanguage = (val['language']?.enable ?? false) ? '1' : ''
+          ..xnParody = (val['parody']?.enable ?? false) ? '1' : ''
+          ..xnCharacter = (val['character']?.enable ?? false) ? '1' : ''
+          ..xnGroup = (val['group']?.enable ?? false) ? '1' : ''
+          ..xnArtist = (val['artist']?.enable ?? false) ? '1' : ''
+          ..xnMale = (val['male']?.enable ?? false) ? '1' : ''
+          ..xnFemale = (val['female']?.enable ?? false) ? '1' : '';
       },
     );
   });

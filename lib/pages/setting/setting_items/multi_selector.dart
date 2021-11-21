@@ -2,6 +2,7 @@ import 'package:fehviewer/common/service/theme_service.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:getwidget/getwidget.dart';
 import 'package:line_icons/line_icons.dart';
 
 import '../setting_base.dart';
@@ -54,8 +55,8 @@ class _MultiSelectorGroupState extends State<MultiSelectorGroup> {
     return GridView.builder(
         physics: const NeverScrollableScrollPhysics(),
         shrinkWrap: true,
-        gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
-          maxCrossAxisExtent: 220,
+        gridDelegate: const SliverGridDelegateWithMaxCrossAxisExtent(
+          maxCrossAxisExtent: 200,
           childAspectRatio: 3.6,
         ),
         itemCount: selectorTitleList.length,
@@ -66,6 +67,14 @@ class _MultiSelectorGroupState extends State<MultiSelectorGroup> {
           return SingleSelectItem(
             title: _title,
             enable: _enable,
+            onChanged: (val) {
+              setState(() {
+                valueMap[select.key] =
+                    SingleSelectItemBean(title: _title, enable: val);
+                widget.onValueChanged?.call(valueMap);
+              });
+            },
+            expand: true,
             // showLine: index < selectorTitleList.length - 1,
             onTap: () {
               setState(() {
@@ -114,17 +123,21 @@ class SingleSelectItemBean {
 }
 
 class SingleSelectItem extends StatefulWidget {
-  const SingleSelectItem(
-      {Key? key,
-      this.title,
-      this.onTap,
-      this.enable = false,
-      this.showLine = true})
-      : super(key: key);
+  const SingleSelectItem({
+    Key? key,
+    this.title,
+    this.onTap,
+    this.enable = false,
+    this.showLine = true,
+    this.expand = false,
+    this.onChanged,
+  }) : super(key: key);
   final String? title;
   final bool enable;
   final VoidCallback? onTap;
   final bool showLine;
+  final bool expand;
+  final ValueChanged<bool>? onChanged;
 
   @override
   State<SingleSelectItem> createState() => _SingleSelectItemState();
@@ -166,43 +179,63 @@ class _SingleSelectItemState extends State<SingleSelectItem> {
     }
 
     Widget item = Container(
+      constraints: !widget.expand
+          ? const BoxConstraints(
+              minHeight: kItemHeight,
+            )
+          : null,
+      alignment: Alignment.centerLeft,
+      padding: const EdgeInsets.only(left: 20, right: 26),
+      child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          mainAxisAlignment: MainAxisAlignment.start,
+          mainAxisSize: MainAxisSize.min,
+          children: <Widget>[
+            Row(
+              children: [
+                Text(
+                  widget.title ?? '',
+                  style: const TextStyle(
+                    height: 1.0,
+                  ),
+                ),
+                const Spacer(),
+                Card(
+                  color: Colors.transparent,
+                  shadowColor: Colors.transparent,
+                  child: Theme(
+                    data: ThemeData(
+                      // 去掉水波纹效果
+                      splashColor: Colors.transparent,
+                      // 去掉点击效果
+                      highlightColor: Colors.transparent,
+                    ),
+                    child: GFCheckbox(
+                      size: 24.0,
+                      activeBgColor: GFColors.DANGER,
+                      activeBorderColor: GFColors.DANGER,
+                      type: GFCheckboxType.circle,
+                      onChanged: widget.onChanged?.call,
+                      value: widget.enable,
+                      inactiveIcon: null,
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ]),
+    );
+
+    item = Container(
       color: _color,
       child: Column(
         children: <Widget>[
-          Container(
-            constraints: const BoxConstraints(
-              minHeight: kItemHeight,
-            ),
-            alignment: Alignment.centerLeft,
-            padding: const EdgeInsets.only(left: 20, right: 26),
-            child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                mainAxisAlignment: MainAxisAlignment.start,
-                mainAxisSize: MainAxisSize.min,
-                children: <Widget>[
-                  Row(
-                    children: [
-                      Text(
-                        widget.title ?? '',
-                        style: const TextStyle(
-                          height: 1.0,
-                        ),
-                      ),
-                      const Spacer(),
-                      if (widget.enable)
-                        const Icon(
-                          LineIcons.checkCircle,
-                          size: 24,
-                        )
-                      else
-                        const Icon(
-                          LineIcons.circle,
-                          size: 26,
-                        ),
-                    ],
-                  ),
-                ]),
-          ),
+          if (widget.expand)
+            Expanded(
+              child: item,
+            )
+          else
+            item,
           if (widget.showLine)
             Divider(
               indent: 20,

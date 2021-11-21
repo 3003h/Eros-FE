@@ -32,7 +32,7 @@ class VibrateUtil {
     if (Platform.isIOS) {
       Vibrate.feedback(FeedbackType.light);
     } else if (Platform.isAndroid) {
-      Vibration.vibrate(duration: 10);
+      Vibration.vibrate(duration: 5);
     }
   }
 
@@ -43,7 +43,7 @@ class VibrateUtil {
     if (Platform.isIOS) {
       Vibrate.feedback(FeedbackType.medium);
     } else if (Platform.isAndroid) {
-      Vibration.vibrate(duration: 30);
+      Vibration.vibrate(duration: 20);
     }
   }
 
@@ -54,7 +54,7 @@ class VibrateUtil {
     if (Platform.isIOS) {
       Vibrate.feedback(FeedbackType.heavy);
     } else if (Platform.isAndroid) {
-      Vibration.vibrate(duration: 50);
+      Vibration.vibrate(duration: 35);
     }
   }
 

@@ -2120,10 +2120,10 @@ class L10n {
     );
   }
 
-  /// `    By default, galleries that you have rated will appear with red stars for ratings of 2 stars and below, green for ratings between 2.5 and 4 stars, and blue for ratings of 4.5 or 5 stars. You can customize this by entering your desired color combination below.\n    Each letter represents one star. The default RRGGB means R(ed) for the first and second star, G(reen) for the third and fourth, and B(lue) for the fifth. You can also use (Y)ellow for the normal stars. Any five-letter R/G/B/Y combo works.`
+  /// `By default, galleries that you have rated will appear with red stars for ratings of 2 stars and below, green for ratings between 2.5 and 4 stars, and blue for ratings of 4.5 or 5 stars. You can customize this by entering your desired color combination below.\nEach letter represents one star. The default RRGGB means R(ed) for the first and second star, G(reen) for the third and fourth, and B(lue) for the fifth. You can also use (Y)ellow for the normal stars. Any five-letter R/G/B/Y combo works.`
   String get uc_rating_desc {
     return Intl.message(
-      '    By default, galleries that you have rated will appear with red stars for ratings of 2 stars and below, green for ratings between 2.5 and 4 stars, and blue for ratings of 4.5 or 5 stars. You can customize this by entering your desired color combination below.\n    Each letter represents one star. The default RRGGB means R(ed) for the first and second star, G(reen) for the third and fourth, and B(lue) for the fifth. You can also use (Y)ellow for the normal stars. Any five-letter R/G/B/Y combo works.',
+      'By default, galleries that you have rated will appear with red stars for ratings of 2 stars and below, green for ratings between 2.5 and 4 stars, and blue for ratings of 4.5 or 5 stars. You can customize this by entering your desired color combination below.\nEach letter represents one star. The default RRGGB means R(ed) for the first and second star, G(reen) for the third and fourth, and B(lue) for the fifth. You can also use (Y)ellow for the normal stars. Any five-letter R/G/B/Y combo works.',
       name: 'uc_rating_desc',
       desc: '',
       args: [],
@@ -2490,10 +2490,10 @@ class L10n {
     );
   }
 
-  /// `    This setting can be used if you have a H@H client running on your local network with the same public IP you browse the site with. Some routers are buggy and cannot route requests back to its own IP; this allows you to work around this problem.\n    If you are running the client on the same PC you browse from, use the loopback address (127.0.0.1:port). If the client is running on another computer on your network, use its local network IP. Some browser configurations prevent external web sites from accessing URLs with local network IPs, the site must then be whitelisted for this to work.`
+  /// `This setting can be used if you have a H@H client running on your local network with the same public IP you browse the site with. Some routers are buggy and cannot route requests back to its own IP; this allows you to work around this problem.\nIf you are running the client on the same PC you browse from, use the loopback address (127.0.0.1:port). If the client is running on another computer on your network, use its local network IP. Some browser configurations prevent external web sites from accessing URLs with local network IPs, the site must then be whitelisted for this to work.`
   String get uc_hath_local_host_desc {
     return Intl.message(
-      '    This setting can be used if you have a H@H client running on your local network with the same public IP you browse the site with. Some routers are buggy and cannot route requests back to its own IP; this allows you to work around this problem.\n    If you are running the client on the same PC you browse from, use the loopback address (127.0.0.1:port). If the client is running on another computer on your network, use its local network IP. Some browser configurations prevent external web sites from accessing URLs with local network IPs, the site must then be whitelisted for this to work.',
+      'This setting can be used if you have a H@H client running on your local network with the same public IP you browse the site with. Some routers are buggy and cannot route requests back to its own IP; this allows you to work around this problem.\nIf you are running the client on the same PC you browse from, use the loopback address (127.0.0.1:port). If the client is running on another computer on your network, use its local network IP. Some browser configurations prevent external web sites from accessing URLs with local network IPs, the site must then be whitelisted for this to work.',
       name: 'uc_hath_local_host_desc',
       desc: '',
       args: [],
@@ -2565,6 +2565,666 @@ class L10n {
     return Intl.message(
       'pixels',
       name: 'uc_pixels',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Original`
+  String get uc_Original {
+    return Intl.message(
+      'Original',
+      name: 'uc_Original',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Translated`
+  String get uc_Translated {
+    return Intl.message(
+      'Translated',
+      name: 'uc_Translated',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Rewrite`
+  String get uc_Rewrite {
+    return Intl.message(
+      'Rewrite',
+      name: 'uc_Rewrite',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Japanese`
+  String get uc_Japanese {
+    return Intl.message(
+      'Japanese',
+      name: 'uc_Japanese',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `English`
+  String get uc_English {
+    return Intl.message(
+      'English',
+      name: 'uc_English',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Chinese`
+  String get uc_Chinese {
+    return Intl.message(
+      'Chinese',
+      name: 'uc_Chinese',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Dutch`
+  String get uc_Dutch {
+    return Intl.message(
+      'Dutch',
+      name: 'uc_Dutch',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `French`
+  String get uc_French {
+    return Intl.message(
+      'French',
+      name: 'uc_French',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `German`
+  String get uc_German {
+    return Intl.message(
+      'German',
+      name: 'uc_German',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Hungarian`
+  String get uc_Hungarian {
+    return Intl.message(
+      'Hungarian',
+      name: 'uc_Hungarian',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Italian`
+  String get uc_Italian {
+    return Intl.message(
+      'Italian',
+      name: 'uc_Italian',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Korean`
+  String get uc_Korean {
+    return Intl.message(
+      'Korean',
+      name: 'uc_Korean',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Polish`
+  String get uc_Polish {
+    return Intl.message(
+      'Polish',
+      name: 'uc_Polish',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Portuguese`
+  String get uc_Portuguese {
+    return Intl.message(
+      'Portuguese',
+      name: 'uc_Portuguese',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Russian`
+  String get uc_Russian {
+    return Intl.message(
+      'Russian',
+      name: 'uc_Russian',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Spanish`
+  String get uc_Spanish {
+    return Intl.message(
+      'Spanish',
+      name: 'uc_Spanish',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Thai`
+  String get uc_Thai {
+    return Intl.message(
+      'Thai',
+      name: 'uc_Thai',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Vietnamese`
+  String get uc_Vietnamese {
+    return Intl.message(
+      'Vietnamese',
+      name: 'uc_Vietnamese',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `N/A`
+  String get uc_NA {
+    return Intl.message(
+      'N/A',
+      name: 'uc_NA',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Other`
+  String get uc_Other {
+    return Intl.message(
+      'Other',
+      name: 'uc_Other',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Any client (Recommended)`
+  String get uc_uh_0 {
+    return Intl.message(
+      'Any client (Recommended)',
+      name: 'uc_uh_0',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Default port clients only (Can be slower. Enable if behind firewall/proxy that blocks outgoing non-standard ports.)`
+  String get uc_uh_1 {
+    return Intl.message(
+      'Default port clients only (Can be slower. Enable if behind firewall/proxy that blocks outgoing non-standard ports.)',
+      name: 'uc_uh_1',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `No (Donator only. You will not be able to browse as many pages, enable only if having severe problems.)`
+  String get uc_uh_2 {
+    return Intl.message(
+      'No (Donator only. You will not be able to browse as many pages, enable only if having severe problems.)',
+      name: 'uc_uh_2',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Any client`
+  String get uc_uh_0_s {
+    return Intl.message(
+      'Any client',
+      name: 'uc_uh_0_s',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Default port clients only`
+  String get uc_uh_1_s {
+    return Intl.message(
+      'Default port clients only',
+      name: 'uc_uh_1_s',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `No`
+  String get uc_uh_2_s {
+    return Intl.message(
+      'No',
+      name: 'uc_uh_2_s',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Auto`
+  String get uc_auto {
+    return Intl.message(
+      'Auto',
+      name: 'uc_auto',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Default Title`
+  String get uc_tl_0 {
+    return Intl.message(
+      'Default Title',
+      name: 'uc_tl_0',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Japanese Title (if available)`
+  String get uc_tl_1 {
+    return Intl.message(
+      'Japanese Title (if available)',
+      name: 'uc_tl_1',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Manual Select, Manual Start (Default)`
+  String get uc_ar_0 {
+    return Intl.message(
+      'Manual Select, Manual Start (Default)',
+      name: 'uc_ar_0',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Manual Select, Auto Start`
+  String get uc_ar_1 {
+    return Intl.message(
+      'Manual Select, Auto Start',
+      name: 'uc_ar_1',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Auto Select Original, Manual Start`
+  String get uc_ar_2 {
+    return Intl.message(
+      'Auto Select Original, Manual Start',
+      name: 'uc_ar_2',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Auto Select Original, Auto Start`
+  String get uc_ar_3 {
+    return Intl.message(
+      'Auto Select Original, Auto Start',
+      name: 'uc_ar_3',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Auto Select Resample, Manual Start`
+  String get uc_ar_4 {
+    return Intl.message(
+      'Auto Select Resample, Manual Start',
+      name: 'uc_ar_4',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Auto Select Resample, Auto Start`
+  String get uc_ar_5 {
+    return Intl.message(
+      'Auto Select Resample, Auto Start',
+      name: 'uc_ar_5',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Compact`
+  String get uc_dm_0 {
+    return Intl.message(
+      'Compact',
+      name: 'uc_dm_0',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Thumbnail`
+  String get uc_dm_1 {
+    return Intl.message(
+      'Thumbnail',
+      name: 'uc_dm_1',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Extended`
+  String get uc_dm_2 {
+    return Intl.message(
+      'Extended',
+      name: 'uc_dm_2',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Minimal`
+  String get uc_dm_3 {
+    return Intl.message(
+      'Minimal',
+      name: 'uc_dm_3',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Minimal+`
+  String get uc_dm_4 {
+    return Intl.message(
+      'Minimal+',
+      name: 'uc_dm_4',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `By last gallery update time`
+  String get uc_fs_0 {
+    return Intl.message(
+      'By last gallery update time',
+      name: 'uc_fs_0',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `By favorited time`
+  String get uc_fs_1 {
+    return Intl.message(
+      'By favorited time',
+      name: 'uc_fs_1',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `On mouse-over (pages load faster, but there may be a slight delay before a thumb appears)`
+  String get uc_lt_0 {
+    return Intl.message(
+      'On mouse-over (pages load faster, but there may be a slight delay before a thumb appears)',
+      name: 'uc_lt_0',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `On page load (pages take longer to load, but there is no delay for loading a thumb after the page has loaded)`
+  String get uc_lt_1 {
+    return Intl.message(
+      'On page load (pages take longer to load, but there is no delay for loading a thumb after the page has loaded)',
+      name: 'uc_lt_1',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `On mouse-over`
+  String get uc_lt_0_s {
+    return Intl.message(
+      'On mouse-over',
+      name: 'uc_lt_0_s',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `On page load`
+  String get uc_lt_1_s {
+    return Intl.message(
+      'On page load',
+      name: 'uc_lt_1_s',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Narmal`
+  String get uc_ts_0 {
+    return Intl.message(
+      'Narmal',
+      name: 'uc_ts_0',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Large`
+  String get uc_ts_1 {
+    return Intl.message(
+      'Large',
+      name: 'uc_ts_1',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Oldest comments first`
+  String get uc_cs_0 {
+    return Intl.message(
+      'Oldest comments first',
+      name: 'uc_cs_0',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Recent comments first`
+  String get uc_cs_1 {
+    return Intl.message(
+      'Recent comments first',
+      name: 'uc_cs_1',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `By highest score`
+  String get uc_cs_2 {
+    return Intl.message(
+      'By highest score',
+      name: 'uc_cs_2',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `On score hover or click`
+  String get uc_sc_0 {
+    return Intl.message(
+      'On score hover or click',
+      name: 'uc_sc_0',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Always`
+  String get uc_sc_1 {
+    return Intl.message(
+      'Always',
+      name: 'uc_sc_1',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Alphabetical`
+  String get uc_tb_0 {
+    return Intl.message(
+      'Alphabetical',
+      name: 'uc_tb_0',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `By tag power`
+  String get uc_tb_1 {
+    return Intl.message(
+      'By tag power',
+      name: 'uc_tb_1',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `No`
+  String get uc_pn_0 {
+    return Intl.message(
+      'No',
+      name: 'uc_pn_0',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Yes`
+  String get uc_pn_1 {
+    return Intl.message(
+      'Yes',
+      name: 'uc_pn_1',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Nope`
+  String get uc_oi_0 {
+    return Intl.message(
+      'Nope',
+      name: 'uc_oi_0',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Yup, I can take it`
+  String get uc_oi_1 {
+    return Intl.message(
+      'Yup, I can take it',
+      name: 'uc_oi_1',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Nope`
+  String get uc_qb_0 {
+    return Intl.message(
+      'Nope',
+      name: 'uc_qb_0',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Yup`
+  String get uc_qb_1 {
+    return Intl.message(
+      'Yup',
+      name: 'uc_qb_1',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Align left\nOnly scale if image is larger than browser width`
+  String get uc_ms_0 {
+    return Intl.message(
+      'Align left\nOnly scale if image is larger than browser width',
+      name: 'uc_ms_0',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Align center\nOnly scale if image is larger than browser width`
+  String get uc_ms_1 {
+    return Intl.message(
+      'Align center\nOnly scale if image is larger than browser width',
+      name: 'uc_ms_1',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Align center\nAlways scale images to fit browser width`
+  String get uc_ms_2 {
+    return Intl.message(
+      'Align center\nAlways scale images to fit browser width',
+      name: 'uc_ms_2',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Show`
+  String get uc_mt_0 {
+    return Intl.message(
+      'Show',
+      name: 'uc_mt_0',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Hide`
+  String get uc_mt_1 {
+    return Intl.message(
+      'Hide',
+      name: 'uc_mt_1',
       desc: '',
       args: [],
     );

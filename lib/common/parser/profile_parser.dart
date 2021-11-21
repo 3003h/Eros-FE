@@ -67,6 +67,16 @@ EhSettings parseUconfig(String html) {
   //
   final ru = _parseUconfigInput('ru', _inputElms);
 
+  // 排除标签组
+  final xn = <EhSettingItem>[];
+  for (int idx = 1; idx <= 8; idx++) {
+    final Element? _elm = document.querySelector('#xn_$idx');
+    if (_elm?.attributes['checked'] == 'checked') {
+      print('xn_$idx  on');
+      xn.add(EhSettingItem(name: 'xn', ser: '$idx', value: '1'));
+    }
+  }
+
   // 排除语言 xl
   final xl = <EhSettingItem>[];
   for (int idx = 0; idx <= 2303; idx++) {
@@ -155,7 +165,7 @@ EhSettings parseUconfig(String html) {
     ratings: ru,
     imageSizeHorizontal: rx,
     imageSizeVertical: ry,
-    xn: [],
+    xn: xn,
     xl: xl,
   );
 }
