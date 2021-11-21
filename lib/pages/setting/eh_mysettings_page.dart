@@ -3,6 +3,7 @@ import 'package:fehviewer/extension.dart';
 import 'package:fehviewer/generated/l10n.dart';
 import 'package:fehviewer/models/base/eh_models.dart';
 import 'package:fehviewer/pages/setting/setting_items/excluded_language.dart';
+import 'package:fehviewer/pages/setting/setting_items/favorites_rename_item.dart';
 import 'package:fehviewer/pages/setting/setting_items/multi_selector.dart';
 import 'package:fehviewer/pages/setting/setting_items/selector_Item.dart';
 import 'package:fehviewer/utils/logger.dart';
@@ -235,6 +236,7 @@ class _ListViewEhMySettingsState extends State<ListViewEhMySettings> {
         title: L10n.of(context).uc_fav,
         child: Column(
           children: [
+            const FavoritesRenameItem(),
             _buildFavoritesSortItem(context, hideLine: true),
           ],
         ),
@@ -259,7 +261,7 @@ class _ListViewEhMySettingsState extends State<ListViewEhMySettings> {
       ),
       GroupItem(
         title: L10n.of(context).uc_exc_lang,
-        child: ExcludedLanguageWidget(),
+        child: const ExcludedLanguageWidget(),
         desc: L10n.of(context).uc_exc_lang_desc,
       ),
       GroupItem(
@@ -347,7 +349,8 @@ class _ListViewEhMySettingsState extends State<ListViewEhMySettings> {
                   return SliverList(
                     delegate: SliverChildBuilderDelegate(
                       (context, index) {
-                        return _list[index];
+                        return _list[index].autoCompressKeyboard(context);
+                        // return _list[index];
                       },
                       childCount: _list.length,
                     ),

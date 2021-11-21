@@ -421,15 +421,14 @@ Widget _buildMPVThumbPane(BuildContext context, {bool hideLine = false}) {
 }
 
 Widget _buildRatingsItem(BuildContext context, {bool hideLine = false}) {
+  logger.d('ratings ${_controller.ehSetting.ratings}');
   return Obx(() {
-    return SingleInputItem(
-      key: UniqueKey(),
+    return TextInputItem(
       title: L10n.of(context).uc_rating,
       placeholder: 'RRGGB',
-      previousPageTitle: L10n.of(context).ehentai_settings,
       hideLine: hideLine,
-      initVal: _controller.ehSetting.ratings ?? '',
-      onValueChanged: (val) =>
+      initValue: _controller.ehSetting.ratings ?? '',
+      onChanged: (val) =>
           _controller.ehSetting = _controller.ehSetting.copyWith(ratings: val),
     );
   });
@@ -437,13 +436,11 @@ Widget _buildRatingsItem(BuildContext context, {bool hideLine = false}) {
 
 Widget _buildTagFilteringThreshold(BuildContext context) {
   return Obx(() {
-    return SingleInputItem(
-      key: UniqueKey(),
+    return TextInputItem(
       title: L10n.of(context).uc_tag_ft,
-      previousPageTitle: L10n.of(context).ehentai_settings,
       hideLine: true,
-      initVal: _controller.ehSetting.tagFilteringThreshold ?? '',
-      onValueChanged: (val) => _controller.ehSetting =
+      initValue: _controller.ehSetting.tagFilteringThreshold ?? '',
+      onChanged: (val) => _controller.ehSetting =
           _controller.ehSetting.copyWith(tagFilteringThreshold: val),
     );
   });
@@ -451,13 +448,11 @@ Widget _buildTagFilteringThreshold(BuildContext context) {
 
 Widget _buildTagWatchingThreshold(BuildContext context) {
   return Obx(() {
-    return SingleInputItem(
-      key: UniqueKey(),
+    return TextInputItem(
       title: L10n.of(context).uc_tag_wt,
-      previousPageTitle: L10n.of(context).ehentai_settings,
       hideLine: true,
-      initVal: _controller.ehSetting.tagWatchingThreshold ?? '',
-      onValueChanged: (val) => _controller.ehSetting =
+      initValue: _controller.ehSetting.tagWatchingThreshold ?? '',
+      onChanged: (val) => _controller.ehSetting =
           _controller.ehSetting.copyWith(tagWatchingThreshold: val),
     );
   });
@@ -465,13 +460,12 @@ Widget _buildTagWatchingThreshold(BuildContext context) {
 
 Widget _buildExcludedUploaders(BuildContext context) {
   return Obx(() {
-    return SingleInputItem(
-      key: UniqueKey(),
+    return TextInputItem(
       title: L10n.of(context).uc_exc_up,
-      previousPageTitle: L10n.of(context).ehentai_settings,
       hideLine: true,
-      initVal: _controller.ehSetting.excludedUploaders ?? '',
-      onValueChanged: (val) => _controller.ehSetting =
+      maxLines: null,
+      initValue: _controller.ehSetting.excludedUploaders ?? '',
+      onChanged: (val) => _controller.ehSetting =
           _controller.ehSetting.copyWith(excludedUploaders: val),
     );
   });
@@ -480,14 +474,13 @@ Widget _buildExcludedUploaders(BuildContext context) {
 Widget _buildThumbnailScaling(BuildContext context) {
   // Thumbnail Scaling
   return Obx(() {
-    return SingleInputItem(
-      key: UniqueKey(),
+    return TextInputItem(
       title: L10n.of(context).uc_thumb_scaling,
-      previousPageTitle: L10n.of(context).ehentai_settings,
       suffixText: '%',
+      placeholder: '100',
       hideLine: true,
-      initVal: _controller.ehSetting.thumbnailScaling ?? '',
-      onValueChanged: (val) => _controller.ehSetting =
+      initValue: _controller.ehSetting.thumbnailScaling ?? '',
+      onChanged: (val) => _controller.ehSetting =
           _controller.ehSetting.copyWith(thumbnailScaling: val),
     );
   });
@@ -496,14 +489,12 @@ Widget _buildThumbnailScaling(BuildContext context) {
 Widget _buildViewportOverride(BuildContext context) {
   // Thumbnail Scaling
   return Obx(() {
-    return SingleInputItem(
-      key: UniqueKey(),
+    return TextInputItem(
       title: L10n.of(context).uc_viewport_or,
-      previousPageTitle: L10n.of(context).ehentai_settings,
       suffixText: 'px',
       hideLine: true,
-      initVal: _controller.ehSetting.viewportOverride ?? '',
-      onValueChanged: (val) => _controller.ehSetting =
+      initValue: _controller.ehSetting.viewportOverride ?? '',
+      onChanged: (val) => _controller.ehSetting =
           _controller.ehSetting.copyWith(viewportOverride: val),
     );
   });
@@ -512,14 +503,11 @@ Widget _buildViewportOverride(BuildContext context) {
 Widget _buildHatHLocalNetworkHost(BuildContext context) {
   // Hentai@Home Local Network Host
   return Obx(() {
-    return SingleInputItem(
-      key: UniqueKey(),
+    return TextInputItem(
       title: 'IP Address:Port',
-      pageTitle: 'Host',
-      previousPageTitle: L10n.of(context).ehentai_settings,
       hideLine: true,
-      initVal: _controller.ehSetting.hentaiAtHomeLocalNetworkHost ?? '',
-      onValueChanged: (val) => _controller.ehSetting =
+      initValue: _controller.ehSetting.hentaiAtHomeLocalNetworkHost ?? '',
+      onChanged: (val) => _controller.ehSetting =
           _controller.ehSetting.copyWith(hentaiAtHomeLocalNetworkHost: val),
     );
   });
@@ -527,14 +515,12 @@ Widget _buildHatHLocalNetworkHost(BuildContext context) {
 
 Widget _buildSizeHorizontal(BuildContext context) {
   return Obx(() {
-    return SingleInputItem(
-      key: UniqueKey(),
+    return TextInputItem(
       title: L10n.of(context).uc_img_horiz,
-      previousPageTitle: L10n.of(context).ehentai_settings,
       suffixText: L10n.of(context).uc_pixels,
       hideLine: false,
-      initVal: _controller.ehSetting.imageSizeHorizontal ?? '',
-      onValueChanged: (val) => _controller.ehSetting =
+      initValue: _controller.ehSetting.imageSizeHorizontal ?? '',
+      onChanged: (val) => _controller.ehSetting =
           _controller.ehSetting.copyWith(imageSizeHorizontal: val),
     );
   });
@@ -542,22 +528,18 @@ Widget _buildSizeHorizontal(BuildContext context) {
 
 Widget _buildSizeVertical(BuildContext context) {
   return Obx(() {
-    return SingleInputItem(
-      key: UniqueKey(),
+    return TextInputItem(
       title: L10n.of(context).uc_img_vert,
-      previousPageTitle: L10n.of(context).ehentai_settings,
       suffixText: L10n.of(context).uc_pixels,
       hideLine: true,
-      initVal: _controller.ehSetting.imageSizeVertical ?? '',
-      onValueChanged: (val) => _controller.ehSetting =
+      initValue: _controller.ehSetting.imageSizeVertical ?? '',
+      onChanged: (val) => _controller.ehSetting =
           _controller.ehSetting.copyWith(imageSizeVertical: val),
     );
   });
 }
 
 Widget _buildTagNamespaces(BuildContext context) {
-  // _controller.ehSetting.frontPageSettings ?? ''
-  // return SizedBox.shrink();
   return Obx(() {
     return MultiSelectorGroup(
       key: UniqueKey(),
