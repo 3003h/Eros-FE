@@ -59,8 +59,8 @@ class AdvanceSearchController extends ProfileController {
       if (val.searchBetweenpage) 'f_sp': 'on',
       if (val.startPage.isNotEmpty) 'f_spf': val.startPage,
       if (val.endPage.isNotEmpty) 'f_spt': val.endPage,
-      if (val.disableDFTags) 'f_sfl': 'on',
-      if (val.disableDFTags) 'f_sfu': 'on',
+      if (val.disableDFLanguage) 'f_sfl': 'on',
+      if (val.disableDFUploader) 'f_sfu': 'on',
       if (val.disableDFTags) 'f_sft': 'on',
     };
   }
