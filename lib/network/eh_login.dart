@@ -2,12 +2,14 @@ import 'dart:io';
 
 import 'package:cookie_jar/cookie_jar.dart';
 import 'package:dio/dio.dart';
+import 'package:fehviewer/common/controller/user_controller.dart';
 import 'package:fehviewer/component/exception/error.dart';
 import 'package:fehviewer/const/const.dart';
 import 'package:fehviewer/models/user.dart';
 import 'package:fehviewer/network/gallery_request.dart';
 import 'package:fehviewer/utils/dio_util.dart';
 import 'package:fehviewer/utils/logger.dart';
+import 'package:get/get.dart' hide Response, FormData;
 import 'package:html/dom.dart';
 import 'package:html/parser.dart' show parse;
 
@@ -17,6 +19,8 @@ class EhUserManager {
   EhUserManager._();
 
   static final EhUserManager _instance = EhUserManager._();
+
+  final UserController userController = Get.find();
 
   Future<User> signIn(String username, String passwd) async {
     final HttpManager httpManager = HttpManager.getInstance(
@@ -119,6 +123,9 @@ class EhUserManager {
       cookie: cookieStr,
       avatarUrl: _avatarUrl,
       username: nickame,
+      memberId: cookieMapEx['ipb_member_id'],
+      passHash: cookieMapEx['ipb_pass_hash'],
+      igneous: cookieMapEx['igneous'],
     );
 
     return user;
@@ -178,6 +185,9 @@ class EhUserManager {
       cookie: cookieStr,
       avatarUrl: userinfo.avatarUrl,
       username: userinfo.username,
+      memberId: cookieMapEx['ipb_member_id'],
+      passHash: cookieMapEx['ipb_pass_hash'],
+      igneous: cookieMapEx['igneous'],
     );
 
     return user;
@@ -249,6 +259,9 @@ class EhUserManager {
       cookie: cookieStr,
       avatarUrl: userinfo.avatarUrl,
       username: userinfo.username,
+      memberId: cookieMapEx['ipb_member_id'],
+      passHash: cookieMapEx['ipb_pass_hash'],
+      igneous: cookieMapEx['igneous'],
     );
 
     return user;
@@ -294,6 +307,34 @@ class EhUserManager {
     const String url = '/uconfig.php';
 
     await httpManager.get(url, errToast: true);
+
+    final PersistCookieJar cookieJar = await Api.cookieJar;
+
+    //获取Ex cookies
+    final List<Cookie> cookiesEx =
+        await cookieJar.loadForRequest(Uri.parse(EHConst.EX_BASE_URL));
+
+    // 处理cookie 存入sp 方便里站图片请求时构建头 否则会403
+    final Map<String, String> cookieMapEx = <String, String>{};
+
+    for (final Cookie cookie in cookiesEx) {
+      cookieMapEx[cookie.name] = cookie.value;
+    }
+
+    final Map<String, String> cookie = {
+      'ipb_member_id': cookieMapEx['ipb_member_id'] ?? '',
+      'ipb_pass_hash': cookieMapEx['ipb_pass_hash'] ?? '',
+      'igneous': cookieMapEx['igneous'] ?? '',
+    };
+
+    final String cookieStr = _getCookieStringFromMap(cookie);
+
+    userController.user(userController.user.value.copyWith(
+      memberId: cookieMapEx['ipb_member_id'],
+      passHash: cookieMapEx['ipb_pass_hash'],
+      igneous: cookieMapEx['igneous'],
+      cookie: cookieStr,
+    ));
   }
 
   static String _getCookieStringFromMap(Map cookie) {

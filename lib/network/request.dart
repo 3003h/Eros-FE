@@ -140,32 +140,36 @@ Future checkCookie() async {
       await cookieJar.loadForRequest(Uri.parse(Api.getBaseUrl()));
   cookies.add(Cookie('nw', '1'));
 
-  final List<String> _c = Global.profile.user.cookie?.split(';') ?? [];
+  final UserController userController = Get.find();
 
-  final List<Cookie> _cookies =
-      _c.map((e) => Cookie.fromSetCookieValue(e)).toList();
+  if (userController.isLogin) {
+    final List<String> _c = Global.profile.user.cookie?.split(';') ?? [];
 
-  cookies.addAll(_cookies);
+    final List<Cookie> _cookies =
+        _c.map((e) => Cookie.fromSetCookieValue(e)).toList();
 
-  // if (cookies.firstWhereOrNull((_cookie) => _cookie.name == 'ipb_member_id') ==
-  //     null) {
-  //   logger.d('reset cookie');
-  //   final user = Get.find<UserController>().user.value;
-  //   logger.d('${user.passHashFB}');
-  //   if (user.memberIdFB.isNotEmpty) {
-  //     cookies.add(Cookie('ipb_member_id', user.memberIdFB));
-  //   }
-  //   if (user.passHashFB.isNotEmpty) {
-  //     cookies.add(Cookie('ipb_pass_hash', user.passHashFB));
-  //   }
-  //   if (user.igneousFB.isNotEmpty) {
-  //     cookies.add(Cookie('igneous', user.igneousFB));
-  //   }
-  // }
+    cookies.addAll(_cookies);
 
-  cookieJar.saveFromResponse(Uri.parse(Api.getBaseUrl()), cookies);
+    // if (cookies.firstWhereOrNull((_cookie) => _cookie.name == 'ipb_member_id') ==
+    //     null) {
+    //   logger.d('reset cookie');
+    //   final user = Get.find<UserController>().user.value;
+    //   logger.d('${user.passHashFB}');
+    //   if (user.memberIdFB.isNotEmpty) {
+    //     cookies.add(Cookie('ipb_member_id', user.memberIdFB));
+    //   }
+    //   if (user.passHashFB.isNotEmpty) {
+    //     cookies.add(Cookie('ipb_pass_hash', user.passHashFB));
+    //   }
+    //   if (user.igneousFB.isNotEmpty) {
+    //     cookies.add(Cookie('igneous', user.igneousFB));
+    //   }
+    // }
 
-  // logger.d('cookies:${cookies.join('\n')}');
+    cookieJar.saveFromResponse(Uri.parse(Api.getBaseUrl()), cookies);
+
+    // logger.d('cookies:${cookies.join('\n')}');
+  }
 }
 
 Future<void> showCookie() async {

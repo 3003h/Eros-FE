@@ -44,6 +44,8 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("Allow media scan"),
         "app_title": MessageLookupByLibrary.simpleMessage("FEhViewer"),
         "autoLock": MessageLookupByLibrary.simpleMessage("Auto-lock"),
+        "auto_select_profile":
+            MessageLookupByLibrary.simpleMessage("Auto select profile"),
         "back": MessageLookupByLibrary.simpleMessage("Back"),
         "cancel": MessageLookupByLibrary.simpleMessage("Cancel"),
         "change_to_favorites":
@@ -375,11 +377,11 @@ class MessageLookup extends MessageLookupByLibrary {
         "uc_mpv_thumb_pane":
             MessageLookupByLibrary.simpleMessage("Thumbnail Pane"),
         "uc_ms_0": MessageLookupByLibrary.simpleMessage(
-            "Align left\nOnly scale if image is larger than browser width"),
+            "Align left;\nOnly scale if image is larger than browser width"),
         "uc_ms_1": MessageLookupByLibrary.simpleMessage(
-            "Align center\nOnly scale if image is larger than browser width"),
+            "Align center;\nOnly scale if image is larger than browser width"),
         "uc_ms_2": MessageLookupByLibrary.simpleMessage(
-            "Align center\nAlways scale images to fit browser width"),
+            "Align center;\nAlways scale images to fit browser width"),
         "uc_mt_0": MessageLookupByLibrary.simpleMessage("Show"),
         "uc_mt_1": MessageLookupByLibrary.simpleMessage("Hide"),
         "uc_name_display":

@@ -893,6 +893,10 @@ class Api {
   }
 
   static Future<bool?> selEhProfile() async {
+    if (!Get.find<EhConfigService>().autoSelectProfile) {
+      logger.d('do not to select profile');
+      return null;
+    }
     const int kRetry = 3;
     for (int i = 0; i < kRetry; i++) {
       final bool? rult = await _selEhProfile();

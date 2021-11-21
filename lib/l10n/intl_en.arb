@@ -319,9 +319,11 @@
   "uc_oi_1": "Yup, I can take it",
   "uc_qb_0": "Nope",
   "uc_qb_1": "Yup",
-  "uc_ms_0": "Align left\nOnly scale if image is larger than browser width",
-  "uc_ms_1": "Align center\nOnly scale if image is larger than browser width",
-  "uc_ms_2": "Align center\nAlways scale images to fit browser width",
+  "uc_ms_0": "Align left;\nOnly scale if image is larger than browser width",
+  "uc_ms_1": "Align center;\nOnly scale if image is larger than browser width",
+  "uc_ms_2": "Align center;\nAlways scale images to fit browser width",
   "uc_mt_0": "Show",
-  "uc_mt_1": "Hide"
+  "uc_mt_1": "Hide",
+
+  "auto_select_profile": "Auto select profile"
 }

@@ -3180,30 +3180,30 @@ class L10n {
     );
   }
 
-  /// `Align left\nOnly scale if image is larger than browser width`
+  /// `Align left;\nOnly scale if image is larger than browser width`
   String get uc_ms_0 {
     return Intl.message(
-      'Align left\nOnly scale if image is larger than browser width',
+      'Align left;\nOnly scale if image is larger than browser width',
       name: 'uc_ms_0',
       desc: '',
       args: [],
     );
   }
 
-  /// `Align center\nOnly scale if image is larger than browser width`
+  /// `Align center;\nOnly scale if image is larger than browser width`
   String get uc_ms_1 {
     return Intl.message(
-      'Align center\nOnly scale if image is larger than browser width',
+      'Align center;\nOnly scale if image is larger than browser width',
       name: 'uc_ms_1',
       desc: '',
       args: [],
     );
   }
 
-  /// `Align center\nAlways scale images to fit browser width`
+  /// `Align center;\nAlways scale images to fit browser width`
   String get uc_ms_2 {
     return Intl.message(
-      'Align center\nAlways scale images to fit browser width',
+      'Align center;\nAlways scale images to fit browser width',
       name: 'uc_ms_2',
       desc: '',
       args: [],
@@ -3225,6 +3225,16 @@ class L10n {
     return Intl.message(
       'Hide',
       name: 'uc_mt_1',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Auto select profile`
+  String get auto_select_profile {
+    return Intl.message(
+      'Auto select profile',
+      name: 'auto_select_profile',
       desc: '',
       args: [],
     );

@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:extended_text/extended_text.dart';
+import 'package:fehviewer/common/controller/user_controller.dart';
 import 'package:fehviewer/common/global.dart';
 import 'package:fehviewer/common/service/dns_service.dart';
 import 'package:fehviewer/common/service/theme_service.dart';
@@ -26,6 +27,8 @@ class SelectorSettingItem extends StatefulWidget {
     this.selector,
     this.hideLine = false,
     this.onLongPress,
+    this.titleFlex = 1,
+    this.valueFlex = 0,
   }) : super(key: key);
 
   final String title;
@@ -33,6 +36,8 @@ class SelectorSettingItem extends StatefulWidget {
   final String? desc;
   final bool hideLine;
   final Color? titleColor;
+  final int titleFlex;
+  final int valueFlex;
 
   // 点击回调
   final VoidCallback? onTap;
@@ -67,6 +72,51 @@ class _SelectorSettingItemState extends State<SelectorSettingItem> {
     const _kDescStyle = TextStyle(
         fontSize: 12.5, height: 1.1, color: CupertinoColors.systemGrey);
 
+    Widget titleWidget = Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      mainAxisAlignment: MainAxisAlignment.start,
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        Text(
+          widget.title,
+          maxLines: 1,
+          style: TextStyle(
+            height: 1.0,
+            color: widget.titleColor,
+          ),
+        ),
+        if (widget.desc != null && widget.desc!.isNotEmpty)
+          ExtendedText(
+            widget.desc ?? '',
+            maxLines: 4,
+            softWrap: true,
+            // overflow: TextOverflow.ellipsis,
+            overflowWidget: const TextOverflowWidget(
+              position: TextOverflowPosition.start,
+              child: Text(
+                '\u2026 ',
+                style: _kDescStyle,
+              ),
+            ),
+            // joinZeroWidthSpace: true,
+            style: _kDescStyle,
+          ).paddingOnly(top: 2.0),
+      ],
+    );
+
+    Widget selectedWidget = Container(
+      alignment: Alignment.centerRight,
+      padding: const EdgeInsets.only(left: 8),
+      child: Text(
+        widget.selector ?? '',
+        textAlign: TextAlign.right,
+        overflow: TextOverflow.ellipsis,
+        style: const TextStyle(
+          color: CupertinoColors.systemGrey2,
+        ),
+      ),
+    );
+
     final Container container = Container(
       color: _color,
       child: Column(
@@ -81,50 +131,8 @@ class _SelectorSettingItemState extends State<SelectorSettingItem> {
             padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 20),
             child: Row(
               children: <Widget>[
-                Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      Text(
-                        widget.title,
-                        style: TextStyle(
-                          height: 1.0,
-                          color: widget.titleColor,
-                        ),
-                      ),
-                      if (widget.desc != null && widget.desc!.isNotEmpty)
-                        ExtendedText(
-                          widget.desc ?? '',
-                          maxLines: 4,
-                          softWrap: true,
-                          // overflow: TextOverflow.ellipsis,
-                          overflowWidget: const TextOverflowWidget(
-                            position: TextOverflowPosition.start,
-                            child: Text(
-                              '\u2026 ',
-                              style: _kDescStyle,
-                            ),
-                          ),
-                          // joinZeroWidthSpace: true,
-                          style: _kDescStyle,
-                        ).paddingOnly(top: 2.0),
-                    ],
-                  ),
-                ),
-                // const Spacer(),
-                Container(
-                  alignment: Alignment.centerRight,
-                  padding: const EdgeInsets.only(left: 8),
-                  child: Text(
-                    widget.selector ?? '',
-                    overflow: TextOverflow.ellipsis,
-                    style: const TextStyle(
-                      color: CupertinoColors.systemGrey2,
-                    ),
-                  ),
-                ),
+                Expanded(flex: widget.titleFlex, child: titleWidget),
+                Expanded(flex: widget.valueFlex, child: selectedWidget),
                 const Icon(
                   CupertinoIcons.forward,
                   color: CupertinoColors.systemGrey,
@@ -592,7 +600,7 @@ Future<void> showUserCookie() async {
       _c.map((e) => Cookie.fromSetCookieValue(e)).toList();
 
   final String _cookieString =
-      _cookies.map((e) => '${e.name}: ${e.value}').join('\n');
+      _cookies.map((e) => '${e.name}=${e.value}').join('\n');
   logger.d('$_cookieString ');
 
   return showCupertinoDialog<void>(
@@ -610,13 +618,6 @@ Future<void> showUserCookie() async {
                   fontWeight: FontWeight.bold,
                 ),
               ).paddingOnly(bottom: 4),
-              // Text(
-              //   _cookieString,
-              //   textAlign: TextAlign.justify,
-              //   style: const TextStyle(
-              //     fontSize: 14,
-              //   ),
-              // ),
               CupertinoFormSection.insetGrouped(
                 margin: const EdgeInsetsDirectional.fromSTEB(0, 0.0, 0, 5.0),
                 backgroundColor: Colors.transparent,

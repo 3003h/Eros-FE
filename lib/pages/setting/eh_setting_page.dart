@@ -61,6 +61,8 @@ class ListViewEhSetting extends StatelessWidget {
     final bool _isLogin = userController.isLogin;
     final bool _isClipboar = _ehConfigService.isClipboardLink.value;
 
+    final bool _autoSelectProfile = _ehConfigService.autoSelectProfile;
+
     Future<void> _handleSiteChanged(bool newValue) async {
       _ehConfigService.isSiteEx(newValue);
       Global.forceRefreshUconfig = true;
@@ -134,6 +136,12 @@ class ListViewEhSetting extends StatelessWidget {
           selector: '',
           onTap: showUserCookie,
         ),
+      TextSwitchItem(
+        L10n.of(context).auto_select_profile,
+        intValue: _autoSelectProfile,
+        hideLine: !_isLogin,
+        onChanged: (val) => _ehConfigService.autoSelectProfile = val,
+      ),
       if (_isLogin)
         SelectorSettingItem(
           title: L10n.of(context).ehentai_settings,
@@ -176,7 +184,7 @@ class ListViewEhSetting extends StatelessWidget {
             }
           },
         ),
-      if (_isLogin) Container(height: 38),
+      Container(height: 38),
       SelectorSettingItem(
         title: 'WebDAV',
         onTap: () {

@@ -30,5 +30,6 @@
   "turnPageInv?": 3000,
   "toplist?": "15",
   "tabletLayout?": true,
-  "enableTagTranslateCDN?": false
+  "enableTagTranslateCDN?": false,
+  "autoSelectProfile?": true
 }
