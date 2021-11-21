@@ -387,8 +387,6 @@ Future<EhSettings?> postEhProfile({
   DioHttpClient dioHttpClient = DioHttpClient(dioConfig: ehDioConfig);
   const String url = '/uconfig.php';
 
-  logger.d('${formData.fields}');
-
   DioHttpResponse httpResponse = await dioHttpClient.post(
     url,
     data: formData,

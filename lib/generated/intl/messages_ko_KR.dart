@@ -229,19 +229,62 @@ class MessageLookup extends MessageLookupByLibrary {
         "tolist_past_year": MessageLookupByLibrary.simpleMessage("Past Year"),
         "tolist_yesterday": MessageLookupByLibrary.simpleMessage("Yesterday"),
         "top_to_bottom": MessageLookupByLibrary.simpleMessage("위에서 아래로"),
+        "uc_Chinese": MessageLookupByLibrary.simpleMessage("Chinese"),
+        "uc_Dutch": MessageLookupByLibrary.simpleMessage("Dutch"),
+        "uc_English": MessageLookupByLibrary.simpleMessage("English"),
+        "uc_French": MessageLookupByLibrary.simpleMessage("French"),
+        "uc_German": MessageLookupByLibrary.simpleMessage("German"),
+        "uc_Hungarian": MessageLookupByLibrary.simpleMessage("Hungarian"),
+        "uc_Italian": MessageLookupByLibrary.simpleMessage("Italian"),
+        "uc_Japanese": MessageLookupByLibrary.simpleMessage("Japanese"),
+        "uc_Korean": MessageLookupByLibrary.simpleMessage("Korean"),
+        "uc_NA": MessageLookupByLibrary.simpleMessage("N/A"),
+        "uc_Original": MessageLookupByLibrary.simpleMessage("Original"),
+        "uc_Other": MessageLookupByLibrary.simpleMessage("Other"),
+        "uc_Polish": MessageLookupByLibrary.simpleMessage("Polish"),
+        "uc_Portuguese": MessageLookupByLibrary.simpleMessage("Portuguese"),
+        "uc_Rewrite": MessageLookupByLibrary.simpleMessage("Rewrite"),
+        "uc_Russian": MessageLookupByLibrary.simpleMessage("Russian"),
+        "uc_Spanish": MessageLookupByLibrary.simpleMessage("Spanish"),
+        "uc_Thai": MessageLookupByLibrary.simpleMessage("Thai"),
+        "uc_Translated": MessageLookupByLibrary.simpleMessage("Translated"),
+        "uc_Vietnamese": MessageLookupByLibrary.simpleMessage("Vietnamese"),
+        "uc_ar_0": MessageLookupByLibrary.simpleMessage(
+            "Manual Select, Manual Start (Default)"),
+        "uc_ar_1":
+            MessageLookupByLibrary.simpleMessage("Manual Select, Auto Start"),
+        "uc_ar_2": MessageLookupByLibrary.simpleMessage(
+            "Auto Select Original, Manual Start"),
+        "uc_ar_3": MessageLookupByLibrary.simpleMessage(
+            "Auto Select Original, Auto Start"),
+        "uc_ar_4": MessageLookupByLibrary.simpleMessage(
+            "Auto Select Resample, Manual Start"),
+        "uc_ar_5": MessageLookupByLibrary.simpleMessage(
+            "Auto Select Resample, Auto Start"),
         "uc_archiver_desc": MessageLookupByLibrary.simpleMessage(
             "The default behavior for the Archiver is to confirm the cost and selection for original or resampled archive, then present a link that can be clicked or copied elsewhere. You can change this behavior here."),
         "uc_archiver_set":
             MessageLookupByLibrary.simpleMessage("rchiver Settings"),
         "uc_artist": MessageLookupByLibrary.simpleMessage("rtist"),
+        "uc_auto": MessageLookupByLibrary.simpleMessage("Auto"),
         "uc_character": MessageLookupByLibrary.simpleMessage("character"),
         "uc_comments_show_votes":
             MessageLookupByLibrary.simpleMessage("Show votes"),
         "uc_comments_sort_order":
             MessageLookupByLibrary.simpleMessage("Sort order"),
         "uc_crt_profile": MessageLookupByLibrary.simpleMessage("Create New"),
+        "uc_cs_0":
+            MessageLookupByLibrary.simpleMessage("Oldest comments first"),
+        "uc_cs_1":
+            MessageLookupByLibrary.simpleMessage("Recent comments first"),
+        "uc_cs_2": MessageLookupByLibrary.simpleMessage("By highest score"),
         "uc_del_profile":
             MessageLookupByLibrary.simpleMessage("Delete Profile"),
+        "uc_dm_0": MessageLookupByLibrary.simpleMessage("Compact"),
+        "uc_dm_1": MessageLookupByLibrary.simpleMessage("Thumbnail"),
+        "uc_dm_2": MessageLookupByLibrary.simpleMessage("Extended"),
+        "uc_dm_3": MessageLookupByLibrary.simpleMessage("Minimal"),
+        "uc_dm_4": MessageLookupByLibrary.simpleMessage("Minimal+"),
         "uc_exc_lang":
             MessageLookupByLibrary.simpleMessage("Excluded Languages"),
         "uc_exc_lang_desc": MessageLookupByLibrary.simpleMessage(
@@ -257,6 +300,9 @@ class MessageLookup extends MessageLookupByLibrary {
         "uc_front_page": MessageLookupByLibrary.simpleMessage("Front Page"),
         "uc_front_page_dis_mode":
             MessageLookupByLibrary.simpleMessage("Front Page Display mode"),
+        "uc_fs_0":
+            MessageLookupByLibrary.simpleMessage("By last gallery update time"),
+        "uc_fs_1": MessageLookupByLibrary.simpleMessage("By favorited time"),
         "uc_gallery_comments":
             MessageLookupByLibrary.simpleMessage("Gallery Comments"),
         "uc_group": MessageLookupByLibrary.simpleMessage("group"),
@@ -275,6 +321,12 @@ class MessageLookup extends MessageLookupByLibrary {
         "uc_ip_addr_port":
             MessageLookupByLibrary.simpleMessage("IP Address:Port"),
         "uc_language": MessageLookupByLibrary.simpleMessage("language"),
+        "uc_lt_0": MessageLookupByLibrary.simpleMessage(
+            "On mouse-over (pages load faster, but there may be a slight delay before a thumb appears)"),
+        "uc_lt_0_s": MessageLookupByLibrary.simpleMessage("On mouse-over"),
+        "uc_lt_1": MessageLookupByLibrary.simpleMessage(
+            "On page load (pages take longer to load, but there is no delay for loading a thumb after the page has loaded)"),
+        "uc_lt_1_s": MessageLookupByLibrary.simpleMessage("On page load"),
         "uc_male": MessageLookupByLibrary.simpleMessage("male"),
         "uc_mose_over_thumb":
             MessageLookupByLibrary.simpleMessage("mouse-over thumbnails"),
@@ -283,16 +335,30 @@ class MessageLookup extends MessageLookupByLibrary {
         "uc_mpv_stype": MessageLookupByLibrary.simpleMessage("Display Style"),
         "uc_mpv_thumb_pane":
             MessageLookupByLibrary.simpleMessage("Thumbnail Pane"),
+        "uc_ms_0": MessageLookupByLibrary.simpleMessage(
+            "Align left; Only scale if image is larger than browser width"),
+        "uc_ms_1": MessageLookupByLibrary.simpleMessage(
+            "Align center; Only scale if image is larger than browser width"),
+        "uc_ms_2": MessageLookupByLibrary.simpleMessage(
+            "Align center; Always scale images to fit browser width"),
+        "uc_mt_0": MessageLookupByLibrary.simpleMessage("Show"),
+        "uc_mt_1": MessageLookupByLibrary.simpleMessage("Hide"),
         "uc_name_display":
             MessageLookupByLibrary.simpleMessage("Gallery Name Display"),
         "uc_name_display_desc": MessageLookupByLibrary.simpleMessage(
             "Many galleries have both an English/Romanized title and a title in Japanese script. Which gallery name would you like as default?"),
+        "uc_oi_0": MessageLookupByLibrary.simpleMessage("Nope"),
+        "uc_oi_1": MessageLookupByLibrary.simpleMessage("Yup, I can take it"),
         "uc_ori_image": MessageLookupByLibrary.simpleMessage("Original Images"),
         "uc_ori_image_desc": MessageLookupByLibrary.simpleMessage(
             "Use original images instead of the resampled versions where applicable?"),
         "uc_parody": MessageLookupByLibrary.simpleMessage("parody"),
         "uc_pixels": MessageLookupByLibrary.simpleMessage("pixels"),
+        "uc_pn_0": MessageLookupByLibrary.simpleMessage("No"),
+        "uc_pn_1": MessageLookupByLibrary.simpleMessage("Yes"),
         "uc_profile": MessageLookupByLibrary.simpleMessage("Profile"),
+        "uc_qb_0": MessageLookupByLibrary.simpleMessage("Nope"),
+        "uc_qb_1": MessageLookupByLibrary.simpleMessage("Yup"),
         "uc_rating": MessageLookupByLibrary.simpleMessage("Ratings Colors"),
         "uc_rating_desc": MessageLookupByLibrary.simpleMessage(
             "    By default, galleries that you have rated will appear with red stars for ratings of 2 stars and below, green for ratings between 2.5 and 4 stars, and blue for ratings of 4.5 or 5 stars. You can customize this by entering your desired color combination below.\n    Each letter represents one star. The default RRGGB means R(ed) for the first and second star, G(reen) for the third and fourth, and B(lue) for the fifth. You can also use (Y)ellow for the normal stars. Any five-letter R/G/B/Y combo works."),
@@ -302,6 +368,9 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("Resample Resolution"),
         "uc_res_res_desc": MessageLookupByLibrary.simpleMessage(
             "Normally, images are resampled to 1280 pixels of horizontal resolution for online viewing. You can alternatively select one of the following resample resolutions. To avoid murdering the staging servers, resolutions above 1280x are temporarily restricted to donators, people with any hath perk, and people with a UID below 3,000,000."),
+        "uc_sc_0":
+            MessageLookupByLibrary.simpleMessage("On score hover or click"),
+        "uc_sc_1": MessageLookupByLibrary.simpleMessage("Always"),
         "uc_search_r_count":
             MessageLookupByLibrary.simpleMessage("Search Result Count"),
         "uc_search_r_count_desc": MessageLookupByLibrary.simpleMessage(
@@ -322,6 +391,8 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("Tag Watching Threshold"),
         "uc_tag_wt_desc": MessageLookupByLibrary.simpleMessage(
             "Recently uploaded galleries will be included on the watched screen if it has at least one watched tag with positive weight, and the sum of weights on its watched tags add up to this value or higher. This threshold can be set between 0 and 9999."),
+        "uc_tb_0": MessageLookupByLibrary.simpleMessage("Alphabetical"),
+        "uc_tb_1": MessageLookupByLibrary.simpleMessage("By tag power"),
         "uc_thor_hath": MessageLookupByLibrary.simpleMessage("Through the H@H"),
         "uc_thumb_row": MessageLookupByLibrary.simpleMessage("Row"),
         "uc_thumb_scaling":
@@ -331,6 +402,21 @@ class MessageLookup extends MessageLookupByLibrary {
         "uc_thumb_setting":
             MessageLookupByLibrary.simpleMessage("Thumbnail Settings"),
         "uc_thumb_size": MessageLookupByLibrary.simpleMessage("Size"),
+        "uc_tl_0": MessageLookupByLibrary.simpleMessage("Default Title"),
+        "uc_tl_1": MessageLookupByLibrary.simpleMessage(
+            " Japanese Title (if available)"),
+        "uc_ts_0": MessageLookupByLibrary.simpleMessage("Narmal"),
+        "uc_ts_1": MessageLookupByLibrary.simpleMessage("Large"),
+        "uc_uh_0":
+            MessageLookupByLibrary.simpleMessage("Any client (Recommended)"),
+        "uc_uh_0_s": MessageLookupByLibrary.simpleMessage("Any client"),
+        "uc_uh_1": MessageLookupByLibrary.simpleMessage(
+            "Default port clients only (Can be slower. Enable if behind firewall/proxy that blocks outgoing non-standard ports.)"),
+        "uc_uh_1_s":
+            MessageLookupByLibrary.simpleMessage("Default port clients only"),
+        "uc_uh_2": MessageLookupByLibrary.simpleMessage(
+            "No (Donator only. You will not be able to browse as many pages, enable only if having severe problems.)"),
+        "uc_uh_2_s": MessageLookupByLibrary.simpleMessage("No"),
         "uc_viewport_or":
             MessageLookupByLibrary.simpleMessage("Viewport Override"),
         "uc_viewport_or_desc": MessageLookupByLibrary.simpleMessage(

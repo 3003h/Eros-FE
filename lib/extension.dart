@@ -269,6 +269,13 @@ extension ExtEhSettings on EhSettings {
     return _map;
   }
 
+  Map<String, bool> get xlBoolMap {
+    return xlMap.map((key, value) => MapEntry(key, value == '1'));
+  }
+
+  bool getBoolXl(String ser) => xlBoolMap[ser] ?? false;
+  void setBoolXl(String ser, bool val) => setXl(ser, val ? '1' : '');
+
   void setXn(String ser, String? value) {
     if (value == null) {
       return;
@@ -317,7 +324,7 @@ extension ExtEhSettings on EhSettings {
   set xnMale(String? val) => setXn('7', val);
 
   String? get xnFemale => xnMap['8'];
-  set xnFemale(String? val) => setXn('1', val);
+  set xnFemale(String? val) => setXn('8', val);
 
   Map<String, dynamic> get postParam {
     final param = <String, dynamic>{
@@ -351,15 +358,6 @@ extension ExtEhSettings on EhSettings {
       if (favorites9 != null) 'favorite_9': favorites9,
       if (sortOrderFavorites != null) 'fs': sortOrderFavorites,
       if (ratings != null) 'ru': ratings,
-
-      // if (xnReclass != null) 'xn_1': xnReclass,
-      // if (xnLanguage != null) 'xn_2': xnLanguage,
-      // if (xnParody != null) 'xn_3': xnParody,
-      // if (xnCharacter != null) 'xn_4': xnCharacter,
-      // if (xnGroup != null) 'xn_5': xnGroup,
-      // if (xnArtist != null) 'xn_6': xnArtist,
-      // if (xnMale != null) 'xn_7': xnMale,
-      // if (xnFemale != null) 'xn_8': xnFemale,
 
       // if (xlJpnTl1024 != null) 'xl_1024': xlJpnTl1024,
       // if (xlJpnRw2048 != null) 'xl_2048': xlJpnRw2048,
@@ -436,11 +434,15 @@ extension ExtEhSettings on EhSettings {
     };
 
     for (final _xn in xn) {
-      param['xn_${_xn.ser}'] = _xn.value;
+      if (_xn.value == '1') {
+        param['xn_${_xn.ser}'] = 'on';
+      }
     }
 
     for (final _xl in xl) {
-      param['xl_${_xl.ser}'] = _xl.value;
+      if (_xl.value == '1') {
+        param['xl_${_xl.ser}'] = 'on';
+      }
     }
 
     return param;

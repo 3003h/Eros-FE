@@ -2,12 +2,16 @@ import 'package:fehviewer/common/service/theme_service.dart';
 import 'package:fehviewer/extension.dart';
 import 'package:fehviewer/generated/l10n.dart';
 import 'package:fehviewer/models/base/eh_models.dart';
+import 'package:fehviewer/pages/setting/setting_items/excluded_language.dart';
 import 'package:fehviewer/pages/setting/setting_items/multi_selector.dart';
 import 'package:fehviewer/pages/setting/setting_items/selector_Item.dart';
+import 'package:fehviewer/utils/logger.dart';
 import 'package:fehviewer/widget/refresh.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:get/get.dart';
+import 'package:getwidget/getwidget.dart';
 import 'package:line_icons/line_icons.dart';
 
 import 'controller/eh_mysettings_controller.dart';
@@ -255,7 +259,7 @@ class _ListViewEhMySettingsState extends State<ListViewEhMySettings> {
       ),
       GroupItem(
         title: L10n.of(context).uc_exc_lang,
-        child: _buildExcludedLanguage(context),
+        child: ExcludedLanguageWidget(),
         desc: L10n.of(context).uc_exc_lang_desc,
       ),
       GroupItem(
