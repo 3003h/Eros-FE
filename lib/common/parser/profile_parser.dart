@@ -64,6 +64,14 @@ EhSettings parseUconfig(String html) {
   // 收藏夹中默认排序 fs
   final fs = _parseUconfigChecked('fs', 1, document);
 
+  final fav = <EhSettingItem>[];
+  for (int idx = 0; idx <= 9; idx++) {
+    final _value = _parseUconfigInput('favorite_$idx', _inputElms);
+    if (_value != null) {
+      fav.add(EhSettingItem(name: 'favorite', ser: '$idx', value: _value));
+    }
+  }
+
   //
   final ru = _parseUconfigInput('ru', _inputElms);
 
@@ -167,6 +175,7 @@ EhSettings parseUconfig(String html) {
     imageSizeVertical: ry,
     xn: xn,
     xl: xl,
+    favorites: fav,
   );
 }
 

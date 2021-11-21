@@ -1,4 +1,5 @@
 import 'package:collection/collection.dart';
+import 'package:fehviewer/common/global.dart';
 import 'package:fehviewer/common/service/theme_service.dart';
 import 'package:fehviewer/models/base/eh_models.dart';
 import 'package:fehviewer/network/gallery_request.dart';
@@ -9,7 +10,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:get/get.dart';
 
-const kEhSettings = EhSettings(profilelist: [], xn: [], xl: []);
+const kEhSettings = EhSettings(profilelist: [], xn: [], xl: [], favorites: []);
 
 class EhMySettingsController extends GetxController {
   // Rx<EhSettings> ehSettings = const EhSettings().obs;
@@ -29,7 +30,8 @@ class EhMySettingsController extends GetxController {
   Future<EhSettings?> loadData({bool refresh = false}) async {
     // isLoading = true;
     try {
-      final uconfig = await getUconfig(refresh: refresh);
+      final uconfig =
+          await getUconfig(refresh: refresh || Global.forceRefreshUconfig);
       isLoading = false;
       if (uconfig != null) {
         ehSetting = uconfig;
@@ -38,6 +40,7 @@ class EhMySettingsController extends GetxController {
     } catch (e) {
       rethrow;
     } finally {
+      Global.forceRefreshUconfig = false;
       // isLoading = false;
     }
   }
@@ -117,9 +120,10 @@ class EhMySettingsController extends GetxController {
   }
 
   Future<void> deleteProfile() async {
-    if (ehSetting.profileSelected == null) {
+    if (ehSetting.profileSelected == null || !await _dialogDeleteProfile()) {
       return;
     }
+
     final _selected = ehSetting.profileSelected!;
     isLoading = true;
     ehSetting = kEhSettings;
@@ -180,7 +184,7 @@ class EhMySettingsController extends GetxController {
         context: Get.context!,
         builder: (context) {
           return CupertinoAlertDialog(
-            title: Text('Profile Name'),
+            title: const Text('Profile Name'),
             content: CupertinoTextField(
               controller: _textEditingController,
               decoration: BoxDecoration(
@@ -202,5 +206,33 @@ class EhMySettingsController extends GetxController {
         });
 
     return name;
+  }
+
+  Future<bool> _dialogDeleteProfile() async {
+    final rult = await showCupertinoDialog<bool>(
+            context: Get.context!,
+            builder: (context) {
+              return CupertinoAlertDialog(
+                title: const Text('Delete Profile'),
+                actions: [
+                  CupertinoDialogAction(
+                    child: Text(L10n.of(context).cancel),
+                    onPressed: Get.back,
+                  ),
+                  CupertinoDialogAction(
+                    child: Text(
+                      L10n.of(context).ok,
+                      style: const TextStyle(
+                        color: CupertinoColors.destructiveRed,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    onPressed: () => Get.back(result: true),
+                  ),
+                ],
+              );
+            }) ??
+        false;
+    return rult;
   }
 }

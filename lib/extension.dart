@@ -269,6 +269,16 @@ extension ExtEhSettings on EhSettings {
     return _map;
   }
 
+  Map<String, String> get favMap {
+    final _map = <String, String>{};
+    for (final _fav in favorites) {
+      if (_fav.ser != null) {
+        _map[_fav.ser!] = _fav.value ?? '';
+      }
+    }
+    return _map;
+  }
+
   Map<String, bool> get xlBoolMap {
     return xlMap.map((key, value) => MapEntry(key, value == '1'));
   }
@@ -301,7 +311,18 @@ extension ExtEhSettings on EhSettings {
     }
   }
 
-  //
+  void setFavname(String ser, String? value) {
+    if (value == null) {
+      return;
+    }
+    final _index = favorites.indexWhere((element) => element.ser == ser);
+    if (_index > -1) {
+      favorites[_index] = favorites[_index].copyWith(value: value);
+    } else {
+      favorites.add(EhSettingItem(ser: ser, value: value, name: 'xl'));
+    }
+  }
+
   String? get xnReclass => xnMap['1'];
   set xnReclass(String? val) => setXn('1', val);
 
@@ -346,70 +367,8 @@ extension ExtEhSettings on EhSettings {
       if (ctDoujinshi != null) 'ct_cosplay': ctCosplay,
       if (ctAsianporn != null) 'ct_asianporn': ctAsianporn,
       if (ctMisc != null) 'ct_misc': ctMisc,
-      if (favorites0 != null) 'favorite_0': favorites0,
-      if (favorites1 != null) 'favorite_1': favorites1,
-      if (favorites2 != null) 'favorite_2': favorites2,
-      if (favorites3 != null) 'favorite_3': favorites3,
-      if (favorites4 != null) 'favorite_4': favorites4,
-      if (favorites5 != null) 'favorite_5': favorites5,
-      if (favorites6 != null) 'favorite_6': favorites6,
-      if (favorites7 != null) 'favorite_7': favorites7,
-      if (favorites8 != null) 'favorite_8': favorites8,
-      if (favorites9 != null) 'favorite_9': favorites9,
       if (sortOrderFavorites != null) 'fs': sortOrderFavorites,
       if (ratings != null) 'ru': ratings,
-
-      // if (xlJpnTl1024 != null) 'xl_1024': xlJpnTl1024,
-      // if (xlJpnRw2048 != null) 'xl_2048': xlJpnRw2048,
-      // if (xlEnOr1 != null) 'xl_1': xlEnOr1,
-      // if (xlEnTr1025 != null) 'xl_1025': xlEnTr1025,
-      // if (xlEnRe2049 != null) 'xl_2049': xlEnRe2049,
-      // if (xlChiOr10 != null) 'xl_10': xlChiOr10,
-      // if (xlChiTr1034 != null) 'xl_1034': xlChiTr1034,
-      // if (xlChiRe2058 != null) 'xl_2058': xlChiRe2058,
-      // if (xlDutOr20 != null) 'xl_20': xlDutOr20,
-      // if (xlDutTr1044 != null) 'xl_1044': xlDutTr1044,
-      // if (xlDutRe2068 != null) 'xl_2068': xlDutRe2068,
-      // if (xlFrOr30 != null) 'xl_30': xlFrOr30,
-      // if (xlFrTr1054 != null) 'xl_1054': xlFrTr1054,
-      // if (xlFrRe2078 != null) 'xl_2078': xlFrRe2078,
-      // if (xlGmOr40 != null) 'xl_40': xlGmOr40,
-      // if (xlGmTr1064 != null) 'xl_1064': xlGmTr1064,
-      // if (xlGmRe2088 != null) 'xl_2088': xlGmRe2088,
-      // if (xlHungOr50 != null) 'xl_50': xlHungOr50,
-      // if (xlHungTr1074 != null) 'xl_1074': xlHungTr1074,
-      // if (xlHungRe2098 != null) 'xl_2098': xlHungRe2098,
-      // if (xlItaOr60 != null) 'xl_60': xlItaOr60,
-      // if (xlItaTr1084 != null) 'xl_1084': xlItaTr1084,
-      // if (xlItaRe2108 != null) 'xl_2108': xlItaRe2108,
-      // if (xlKrOr70 != null) 'xl_70': xlKrOr70,
-      // if (xlKrTr1094 != null) 'xl_1094': xlKrTr1094,
-      // if (xlKrRe2118 != null) 'xl_2118': xlKrRe2118,
-      // if (xlPoliOr80 != null) 'xl_80': xlPoliOr80,
-      // if (xlPoliTr1104 != null) 'xl_1104': xlPoliTr1104,
-      // if (xlPoliRe2128 != null) 'xl_2128': xlPoliRe2128,
-      // if (xlPorOr90 != null) 'xl_90': xlPorOr90,
-      // if (xlPorTr1114 != null) 'xl_1114': xlPorTr1114,
-      // if (xlPorRe2138 != null) 'xl_2138': xlPorRe2138,
-      // if (xlRuOr100 != null) 'xl_100': xlRuOr100,
-      // if (xlRuTr1124 != null) 'xl_1124': xlRuTr1124,
-      // if (xlRuRe2148 != null) 'xl_2148': xlRuRe2148,
-      // if (xlSpaOr110 != null) 'xl_110': xlSpaOr110,
-      // if (xlSpaTr1134 != null) 'xl_1134': xlSpaTr1134,
-      // if (xlSpaRe2158 != null) 'xl_2158': xlSpaRe2158,
-      // if (xlThaiOr120 != null) 'xl_120': xlThaiOr120,
-      // if (xlThaiTr1144 != null) 'xl_1144': xlThaiTr1144,
-      // if (xlThaiRe2168 != null) 'xl_2168': xlThaiRe2168,
-      // if (xlVieOr130 != null) 'xl_130': xlVieOr130,
-      // if (xlVieTr1154 != null) 'xl_1154': xlVieTr1154,
-      // if (xlVieRe2178 != null) 'xl_2178': xlVieRe2178,
-      // if (xlNaOr254 != null) 'xl_254': xlNaOr254,
-      // if (xlNaTr1278 != null) 'xl_1278': xlNaTr1278,
-      // if (xlNaRe2302 != null) 'xl_2302': xlNaRe2302,
-      // if (xlOthOr255 != null) 'xl_255': xlOthOr255,
-      // if (xlOthTr1279 != null) 'xl_1279': xlOthTr1279,
-      // if (xlOthRe2303 != null) 'xl_2303': xlOthRe2303,
-
       if (tagFilteringThreshold != null) 'ft': tagFilteringThreshold,
       if (tagWatchingThreshold != null) 'wt': tagWatchingThreshold,
       if (excludedLanguages != null) '': excludedLanguages,
@@ -443,6 +402,10 @@ extension ExtEhSettings on EhSettings {
       if (_xl.value == '1') {
         param['xl_${_xl.ser}'] = 'on';
       }
+    }
+
+    for (final _fav in favorites) {
+      param['favorite_${_fav.ser}'] = _fav.value;
     }
 
     return param;

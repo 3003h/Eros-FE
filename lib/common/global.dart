@@ -60,6 +60,8 @@ class Global {
   static bool inDebugMode = false;
   static bool isFirstReOpenEhSetting = true;
 
+  static bool forceRefreshUconfig = true;
+
   // static Profile profile = kDefProfile.copyWith(
   //     ehConfig: kDefEhConfig.copyWith(safeMode: Platform.isIOS));
   static Profile profile = kDefProfile.copyWith(ehConfig: kDefEhConfig);

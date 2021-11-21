@@ -404,6 +404,107 @@ class _TextItemState extends State<TextItem> {
   }
 }
 
+/// 文本输入框类型
+class TextInputItem extends StatefulWidget {
+  const TextInputItem({
+    this.title,
+    Key? key,
+    this.hideLine = false,
+    this.maxLines = 1,
+    this.onChanged,
+    this.initValue,
+    this.suffixText,
+    this.placeholder,
+    this.icon,
+    this.textAlign = TextAlign.right,
+  }) : super(key: key);
+
+  final String? title;
+  final String? initValue;
+  final bool hideLine;
+  final ValueChanged<String>? onChanged;
+  final String? suffixText;
+  final String? placeholder;
+  final int? maxLines;
+  final Widget? icon;
+  final TextAlign textAlign;
+
+  @override
+  State<TextInputItem> createState() => _TextInputItemState();
+}
+
+class _TextInputItemState extends State<TextInputItem> {
+  late TextEditingController textController;
+
+  @override
+  void initState() {
+    super.initState();
+    textController = TextEditingController(text: widget.initValue);
+    textController.addListener(() {
+      widget.onChanged?.call(textController.text);
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    Widget item = Container(
+      color: CupertinoDynamicColor.resolve(
+          ehTheme.itemBackgroundColor!, Get.context!),
+      child: Column(
+        children: <Widget>[
+          Container(
+            constraints: const BoxConstraints(minHeight: kItemHeight),
+            alignment: Alignment.centerLeft,
+            padding: const EdgeInsets.symmetric(horizontal: 20),
+            child: Row(
+              children: [
+                if (widget.icon != null) widget.icon!,
+                Text(
+                  widget.title ?? '',
+                  style: const TextStyle(
+                    height: 1.0,
+                  ),
+                ),
+                Expanded(
+                  child: CupertinoTextField(
+                    decoration: null,
+                    controller: textController,
+                    textAlign: widget.textAlign,
+                    maxLines: widget.maxLines,
+                    suffix: widget.suffixText != null
+                        ? Padding(
+                            padding: const EdgeInsets.symmetric(horizontal: 10),
+                            child: Text(widget.suffixText!),
+                          )
+                        : null,
+                    placeholderStyle: const TextStyle(
+                      fontWeight: FontWeight.w400,
+                      color: CupertinoColors.placeholderText,
+                      height: 1.25,
+                    ),
+                    placeholder: widget.placeholder,
+                    style: const TextStyle(height: 1.25),
+                    onChanged: widget.onChanged?.call,
+                  ),
+                ),
+              ],
+            ),
+          ),
+          if (!widget.hideLine)
+            Divider(
+              indent: 20,
+              height: 0.6,
+              color: CupertinoDynamicColor.resolve(
+                  CupertinoColors.systemGrey4, context),
+            ),
+        ],
+      ),
+    );
+
+    return item;
+  }
+}
+
 Future<void> showCustomHostEditer(BuildContext context, {int? index}) async {
   final TextEditingController _hostController = TextEditingController();
   final TextEditingController _addrController = TextEditingController();

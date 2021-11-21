@@ -10,8 +10,8 @@ class SingleInputItem extends StatelessWidget {
     Key? key,
     required this.title,
     this.pageTitle,
-    this.initVal,
-    this.onValueChanged,
+    this.initValue,
+    this.onChanged,
     this.hideLine = false,
     this.previousPageTitle,
     this.suffixText,
@@ -21,15 +21,15 @@ class SingleInputItem extends StatelessWidget {
   final String title;
   final String? pageTitle;
   final String? previousPageTitle;
-  final String? initVal;
-  final ValueChanged<String>? onValueChanged;
+  final String? initValue;
+  final ValueChanged<String>? onChanged;
   final bool hideLine;
   final String? suffixText;
   final String? placeholder;
 
   @override
   Widget build(BuildContext context) {
-    final selector = initVal ?? '';
+    final selector = initValue ?? '';
 
     return SelectorSettingItem(
       title: title,
@@ -46,7 +46,7 @@ class SingleInputItem extends StatelessWidget {
             initValue: selector,
             placeholder: placeholder,
             onValueChanged: (val) {
-              onValueChanged?.call(val);
+              onChanged?.call(val);
             },
           ),
           id: isLayoutLarge ? 2 : null,

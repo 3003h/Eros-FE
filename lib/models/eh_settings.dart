@@ -2,6 +2,7 @@ import 'package:flutter/foundation.dart';
 import 'eh_profile.dart';
 import 'eh_setting_item.dart';
 import 'eh_setting_item.dart';
+import 'eh_setting_item.dart';
 
 @immutable
 class EhSettings {
@@ -28,16 +29,7 @@ class EhSettings {
     this.ctCosplay,
     this.ctAsianporn,
     this.ctMisc,
-    this.favorites0,
-    this.favorites1,
-    this.favorites2,
-    this.favorites3,
-    this.favorites4,
-    this.favorites5,
-    this.favorites6,
-    this.favorites7,
-    this.favorites8,
-    this.favorites9,
+    required this.favorites,
     this.sortOrderFavorites,
     this.ratings,
     required this.xn,
@@ -84,16 +76,7 @@ class EhSettings {
   final String? ctCosplay;
   final String? ctAsianporn;
   final String? ctMisc;
-  final String? favorites0;
-  final String? favorites1;
-  final String? favorites2;
-  final String? favorites3;
-  final String? favorites4;
-  final String? favorites5;
-  final String? favorites6;
-  final String? favorites7;
-  final String? favorites8;
-  final String? favorites9;
+  final List<EhSettingItem> favorites;
   final String? sortOrderFavorites;
   final String? ratings;
   final List<EhSettingItem> xn;
@@ -140,16 +123,7 @@ class EhSettings {
     ctCosplay: json['ct_cosplay'] != null ? json['ct_cosplay'] as String : null,
     ctAsianporn: json['ct_asianporn'] != null ? json['ct_asianporn'] as String : null,
     ctMisc: json['ct_misc'] != null ? json['ct_misc'] as String : null,
-    favorites0: json['favorites0'] != null ? json['favorites0'] as String : null,
-    favorites1: json['favorites1'] != null ? json['favorites1'] as String : null,
-    favorites2: json['favorites2'] != null ? json['favorites2'] as String : null,
-    favorites3: json['favorites3'] != null ? json['favorites3'] as String : null,
-    favorites4: json['favorites4'] != null ? json['favorites4'] as String : null,
-    favorites5: json['favorites5'] != null ? json['favorites5'] as String : null,
-    favorites6: json['favorites6'] != null ? json['favorites6'] as String : null,
-    favorites7: json['favorites7'] != null ? json['favorites7'] as String : null,
-    favorites8: json['favorites8'] != null ? json['favorites8'] as String : null,
-    favorites9: json['favorites9'] != null ? json['favorites9'] as String : null,
+    favorites: (json['favorites'] as List? ?? []).map((e) => EhSettingItem.fromJson(e as Map<String, dynamic>)).toList(),
     sortOrderFavorites: json['sort_order_favorites'] != null ? json['sort_order_favorites'] as String : null,
     ratings: json['ratings'] != null ? json['ratings'] as String : null,
     xn: (json['xn'] as List? ?? []).map((e) => EhSettingItem.fromJson(e as Map<String, dynamic>)).toList(),
@@ -197,16 +171,7 @@ class EhSettings {
     'ct_cosplay': ctCosplay,
     'ct_asianporn': ctAsianporn,
     'ct_misc': ctMisc,
-    'favorites0': favorites0,
-    'favorites1': favorites1,
-    'favorites2': favorites2,
-    'favorites3': favorites3,
-    'favorites4': favorites4,
-    'favorites5': favorites5,
-    'favorites6': favorites6,
-    'favorites7': favorites7,
-    'favorites8': favorites8,
-    'favorites9': favorites9,
+    'favorites': favorites.map((e) => e.toJson()).toList(),
     'sort_order_favorites': sortOrderFavorites,
     'ratings': ratings,
     'xn': xn.map((e) => e.toJson()).toList(),
@@ -254,16 +219,7 @@ class EhSettings {
     ctCosplay: ctCosplay,
     ctAsianporn: ctAsianporn,
     ctMisc: ctMisc,
-    favorites0: favorites0,
-    favorites1: favorites1,
-    favorites2: favorites2,
-    favorites3: favorites3,
-    favorites4: favorites4,
-    favorites5: favorites5,
-    favorites6: favorites6,
-    favorites7: favorites7,
-    favorites8: favorites8,
-    favorites9: favorites9,
+    favorites: favorites.map((e) => e.clone()).toList(),
     sortOrderFavorites: sortOrderFavorites,
     ratings: ratings,
     xn: xn.map((e) => e.clone()).toList(),
@@ -312,16 +268,7 @@ class EhSettings {
     String? ctCosplay,
     String? ctAsianporn,
     String? ctMisc,
-    String? favorites0,
-    String? favorites1,
-    String? favorites2,
-    String? favorites3,
-    String? favorites4,
-    String? favorites5,
-    String? favorites6,
-    String? favorites7,
-    String? favorites8,
-    String? favorites9,
+    List<EhSettingItem>? favorites,
     String? sortOrderFavorites,
     String? ratings,
     List<EhSettingItem>? xn,
@@ -367,16 +314,7 @@ class EhSettings {
     ctCosplay: ctCosplay ?? this.ctCosplay,
     ctAsianporn: ctAsianporn ?? this.ctAsianporn,
     ctMisc: ctMisc ?? this.ctMisc,
-    favorites0: favorites0 ?? this.favorites0,
-    favorites1: favorites1 ?? this.favorites1,
-    favorites2: favorites2 ?? this.favorites2,
-    favorites3: favorites3 ?? this.favorites3,
-    favorites4: favorites4 ?? this.favorites4,
-    favorites5: favorites5 ?? this.favorites5,
-    favorites6: favorites6 ?? this.favorites6,
-    favorites7: favorites7 ?? this.favorites7,
-    favorites8: favorites8 ?? this.favorites8,
-    favorites9: favorites9 ?? this.favorites9,
+    favorites: favorites ?? this.favorites,
     sortOrderFavorites: sortOrderFavorites ?? this.sortOrderFavorites,
     ratings: ratings ?? this.ratings,
     xn: xn ?? this.xn,
@@ -404,8 +342,8 @@ class EhSettings {
 
   @override
   bool operator ==(Object other) => identical(this, other) 
-    || other is EhSettings && profilelist == other.profilelist && profileSelected == other.profileSelected && defaultProfile == other.defaultProfile && loadImageThroughHAtH == other.loadImageThroughHAtH && loadBrowsingCountry == other.loadBrowsingCountry && imageSize == other.imageSize && imageSizeHorizontal == other.imageSizeHorizontal && imageSizeVertical == other.imageSizeVertical && galleryNameDisplay == other.galleryNameDisplay && archiverSettings == other.archiverSettings && frontPageSettings == other.frontPageSettings && ctDoujinshi == other.ctDoujinshi && ctManga == other.ctManga && ctArtistcg == other.ctArtistcg && ctGamecg == other.ctGamecg && ctWestern == other.ctWestern && ctNonH == other.ctNonH && ctImageset == other.ctImageset && ctCosplay == other.ctCosplay && ctAsianporn == other.ctAsianporn && ctMisc == other.ctMisc && favorites0 == other.favorites0 && favorites1 == other.favorites1 && favorites2 == other.favorites2 && favorites3 == other.favorites3 && favorites4 == other.favorites4 && favorites5 == other.favorites5 && favorites6 == other.favorites6 && favorites7 == other.favorites7 && favorites8 == other.favorites8 && favorites9 == other.favorites9 && sortOrderFavorites == other.sortOrderFavorites && ratings == other.ratings && xn == other.xn && xl == other.xl && tagFilteringThreshold == other.tagFilteringThreshold && tagWatchingThreshold == other.tagWatchingThreshold && excludedLanguages == other.excludedLanguages && excludedUploaders == other.excludedUploaders && searchResultCount == other.searchResultCount && mouseOverThumbnails == other.mouseOverThumbnails && thumbnailSize == other.thumbnailSize && thumbnailRows == other.thumbnailRows && thumbnailScaling == other.thumbnailScaling && viewportOverride == other.viewportOverride && sortOrderComments == other.sortOrderComments && showCommentVotes == other.showCommentVotes && sortOrderTags == other.sortOrderTags && showGalleryPageNumbers == other.showGalleryPageNumbers && hentaiAtHomeLocalNetworkHost == other.hentaiAtHomeLocalNetworkHost && originalImages == other.originalImages && alwaysUseMpv == other.alwaysUseMpv && mpvStyle == other.mpvStyle && mpvThumbnailPane == other.mpvThumbnailPane;
+    || other is EhSettings && profilelist == other.profilelist && profileSelected == other.profileSelected && defaultProfile == other.defaultProfile && loadImageThroughHAtH == other.loadImageThroughHAtH && loadBrowsingCountry == other.loadBrowsingCountry && imageSize == other.imageSize && imageSizeHorizontal == other.imageSizeHorizontal && imageSizeVertical == other.imageSizeVertical && galleryNameDisplay == other.galleryNameDisplay && archiverSettings == other.archiverSettings && frontPageSettings == other.frontPageSettings && ctDoujinshi == other.ctDoujinshi && ctManga == other.ctManga && ctArtistcg == other.ctArtistcg && ctGamecg == other.ctGamecg && ctWestern == other.ctWestern && ctNonH == other.ctNonH && ctImageset == other.ctImageset && ctCosplay == other.ctCosplay && ctAsianporn == other.ctAsianporn && ctMisc == other.ctMisc && favorites == other.favorites && sortOrderFavorites == other.sortOrderFavorites && ratings == other.ratings && xn == other.xn && xl == other.xl && tagFilteringThreshold == other.tagFilteringThreshold && tagWatchingThreshold == other.tagWatchingThreshold && excludedLanguages == other.excludedLanguages && excludedUploaders == other.excludedUploaders && searchResultCount == other.searchResultCount && mouseOverThumbnails == other.mouseOverThumbnails && thumbnailSize == other.thumbnailSize && thumbnailRows == other.thumbnailRows && thumbnailScaling == other.thumbnailScaling && viewportOverride == other.viewportOverride && sortOrderComments == other.sortOrderComments && showCommentVotes == other.showCommentVotes && sortOrderTags == other.sortOrderTags && showGalleryPageNumbers == other.showGalleryPageNumbers && hentaiAtHomeLocalNetworkHost == other.hentaiAtHomeLocalNetworkHost && originalImages == other.originalImages && alwaysUseMpv == other.alwaysUseMpv && mpvStyle == other.mpvStyle && mpvThumbnailPane == other.mpvThumbnailPane;
 
   @override
-  int get hashCode => profilelist.hashCode ^ profileSelected.hashCode ^ defaultProfile.hashCode ^ loadImageThroughHAtH.hashCode ^ loadBrowsingCountry.hashCode ^ imageSize.hashCode ^ imageSizeHorizontal.hashCode ^ imageSizeVertical.hashCode ^ galleryNameDisplay.hashCode ^ archiverSettings.hashCode ^ frontPageSettings.hashCode ^ ctDoujinshi.hashCode ^ ctManga.hashCode ^ ctArtistcg.hashCode ^ ctGamecg.hashCode ^ ctWestern.hashCode ^ ctNonH.hashCode ^ ctImageset.hashCode ^ ctCosplay.hashCode ^ ctAsianporn.hashCode ^ ctMisc.hashCode ^ favorites0.hashCode ^ favorites1.hashCode ^ favorites2.hashCode ^ favorites3.hashCode ^ favorites4.hashCode ^ favorites5.hashCode ^ favorites6.hashCode ^ favorites7.hashCode ^ favorites8.hashCode ^ favorites9.hashCode ^ sortOrderFavorites.hashCode ^ ratings.hashCode ^ xn.hashCode ^ xl.hashCode ^ tagFilteringThreshold.hashCode ^ tagWatchingThreshold.hashCode ^ excludedLanguages.hashCode ^ excludedUploaders.hashCode ^ searchResultCount.hashCode ^ mouseOverThumbnails.hashCode ^ thumbnailSize.hashCode ^ thumbnailRows.hashCode ^ thumbnailScaling.hashCode ^ viewportOverride.hashCode ^ sortOrderComments.hashCode ^ showCommentVotes.hashCode ^ sortOrderTags.hashCode ^ showGalleryPageNumbers.hashCode ^ hentaiAtHomeLocalNetworkHost.hashCode ^ originalImages.hashCode ^ alwaysUseMpv.hashCode ^ mpvStyle.hashCode ^ mpvThumbnailPane.hashCode;
+  int get hashCode => profilelist.hashCode ^ profileSelected.hashCode ^ defaultProfile.hashCode ^ loadImageThroughHAtH.hashCode ^ loadBrowsingCountry.hashCode ^ imageSize.hashCode ^ imageSizeHorizontal.hashCode ^ imageSizeVertical.hashCode ^ galleryNameDisplay.hashCode ^ archiverSettings.hashCode ^ frontPageSettings.hashCode ^ ctDoujinshi.hashCode ^ ctManga.hashCode ^ ctArtistcg.hashCode ^ ctGamecg.hashCode ^ ctWestern.hashCode ^ ctNonH.hashCode ^ ctImageset.hashCode ^ ctCosplay.hashCode ^ ctAsianporn.hashCode ^ ctMisc.hashCode ^ favorites.hashCode ^ sortOrderFavorites.hashCode ^ ratings.hashCode ^ xn.hashCode ^ xl.hashCode ^ tagFilteringThreshold.hashCode ^ tagWatchingThreshold.hashCode ^ excludedLanguages.hashCode ^ excludedUploaders.hashCode ^ searchResultCount.hashCode ^ mouseOverThumbnails.hashCode ^ thumbnailSize.hashCode ^ thumbnailRows.hashCode ^ thumbnailScaling.hashCode ^ viewportOverride.hashCode ^ sortOrderComments.hashCode ^ showCommentVotes.hashCode ^ sortOrderTags.hashCode ^ showGalleryPageNumbers.hashCode ^ hentaiAtHomeLocalNetworkHost.hashCode ^ originalImages.hashCode ^ alwaysUseMpv.hashCode ^ mpvStyle.hashCode ^ mpvThumbnailPane.hashCode;
 }
