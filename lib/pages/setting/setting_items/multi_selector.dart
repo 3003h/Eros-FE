@@ -57,8 +57,8 @@ class _MultiSelectorGroupState extends State<MultiSelectorGroup> {
         physics: const NeverScrollableScrollPhysics(),
         shrinkWrap: true,
         gridDelegate: const SliverGridDelegateWithMaxCrossAxisExtent(
-          maxCrossAxisExtent: 200,
-          childAspectRatio: 3.6,
+          maxCrossAxisExtent: 220,
+          childAspectRatio: 4.5,
         ),
         itemCount: selectorTitleList.length,
         itemBuilder: (context, index) {
@@ -216,7 +216,10 @@ class _SingleSelectItemState extends State<SingleSelectItem> {
                     child: GFCheckbox(
                       size: 24.0,
                       activeBgColor: GFColors.DANGER,
+                      inactiveBgColor: Colors.transparent,
                       activeBorderColor: GFColors.DANGER,
+                      inactiveBorderColor: CupertinoDynamicColor.resolve(
+                          CupertinoColors.label, context),
                       type: GFCheckboxType.circle,
                       onChanged: widget.onChanged?.call,
                       value: widget.enable,

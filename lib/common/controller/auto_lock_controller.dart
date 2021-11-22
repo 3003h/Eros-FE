@@ -61,9 +61,9 @@ class AutoLockController extends GetxController {
     if (!_isLocking) {
       resetLastLeaveTime();
       _isResumed = false;
-      logger.d('更新最后离开时间 $lastLeaveTime');
+      logger.v('更新最后离开时间 $lastLeaveTime');
     } else {
-      logger.d('保持原离开时间 不更新');
+      logger.v('保持原离开时间 不更新');
     }
   }
 
@@ -75,7 +75,7 @@ class AutoLockController extends GetxController {
     final _needUnLock =
         autoLockTimeOut >= 0 && (subTime / 1000 > autoLockTimeOut || forceLock);
     logger
-        .d('离开时间为: ${subTime}ms  锁定超时为: $autoLockTimeOut  需要解锁: $_needUnLock');
+        .v('离开时间为: ${subTime}ms  锁定超时为: $autoLockTimeOut  需要解锁: $_needUnLock');
 
     if (_needUnLock && !_isResumed) {
       _isLocking = true;

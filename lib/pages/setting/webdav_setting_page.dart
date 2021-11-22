@@ -16,23 +16,26 @@ class WebDavSetting extends GetView<WebdavController> {
   @override
   Widget build(BuildContext context) {
     final String _title = 'WebDAV';
-    return CupertinoPageScaffold(
-      backgroundColor: !ehTheme.isDarkMode
-          ? CupertinoColors.secondarySystemBackground
-          : null,
-      navigationBar: CupertinoNavigationBar(
-        padding: const EdgeInsetsDirectional.only(end: 5),
-        middle: Text(_title),
-        trailing: _buildListBtns(context),
-      ),
-      child: GetBuilder<WebdavController>(
-        builder: (logic) {
-          return SafeArea(
-            child: logic.validAccount ? const WebDavSettingView() : Container(),
-          );
-        },
-      ),
-    );
+    return Obx(() {
+      return CupertinoPageScaffold(
+        backgroundColor: !ehTheme.isDarkMode
+            ? CupertinoColors.secondarySystemBackground
+            : null,
+        navigationBar: CupertinoNavigationBar(
+          padding: const EdgeInsetsDirectional.only(end: 5),
+          middle: Text(_title),
+          trailing: _buildListBtns(context),
+        ),
+        child: GetBuilder<WebdavController>(
+          builder: (logic) {
+            return SafeArea(
+              child:
+                  logic.validAccount ? const WebDavSettingView() : Container(),
+            );
+          },
+        ),
+      );
+    });
   }
 
   Widget _buildListBtns(BuildContext context) {

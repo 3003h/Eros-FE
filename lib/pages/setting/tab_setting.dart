@@ -9,35 +9,37 @@ import 'package:reorderables/reorderables.dart';
 class TabSettingPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return CupertinoPageScaffold(
-      backgroundColor: !ehTheme.isDarkMode
-          ? CupertinoColors.secondarySystemBackground
-          : null,
-      navigationBar: CupertinoNavigationBar(
-        middle: Text(L10n.of(context).tabbar_setting),
-      ),
-      child: SafeArea(
-        bottom: false,
-        child: CustomScrollView(
-          controller: Get.find<TabSettingController>().scrollController,
-          physics: const AlwaysScrollableScrollPhysics(),
-          slivers: [
-            SliverToBoxAdapter(
-              child: Container(
-                height: 38,
-                padding: const EdgeInsets.only(left: 20, bottom: 4),
-                alignment: Alignment.bottomLeft,
-                child: Text(
-                  L10n.of(context).tab_sort,
-                  style: const TextStyle(fontSize: 14),
+    return Obx(() {
+      return CupertinoPageScaffold(
+        backgroundColor: !ehTheme.isDarkMode
+            ? CupertinoColors.secondarySystemBackground
+            : null,
+        navigationBar: CupertinoNavigationBar(
+          middle: Text(L10n.of(context).tabbar_setting),
+        ),
+        child: SafeArea(
+          bottom: false,
+          child: CustomScrollView(
+            controller: Get.find<TabSettingController>().scrollController,
+            physics: const AlwaysScrollableScrollPhysics(),
+            slivers: [
+              SliverToBoxAdapter(
+                child: Container(
+                  height: 38,
+                  padding: const EdgeInsets.only(left: 20, bottom: 4),
+                  alignment: Alignment.bottomLeft,
+                  child: Text(
+                    L10n.of(context).tab_sort,
+                    style: const TextStyle(fontSize: 14),
+                  ),
                 ),
               ),
-            ),
-            const TablistView(),
-          ],
+              const TablistView(),
+            ],
+          ),
         ),
-      ),
-    );
+      );
+    });
   }
 }
 

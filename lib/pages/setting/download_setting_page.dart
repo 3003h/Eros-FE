@@ -13,18 +13,20 @@ import 'package:get/get.dart';
 class DownloadSettingPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    final CupertinoPageScaffold cps = CupertinoPageScaffold(
-        backgroundColor: !ehTheme.isDarkMode
-            ? CupertinoColors.secondarySystemBackground
-            : null,
-        navigationBar: CupertinoNavigationBar(
-          transitionBetweenRoutes: true,
-          middle: Text(L10n.of(context).download),
-        ),
-        child: SafeArea(
-          bottom: false,
-          child: ListViewDownloadSetting(),
-        ));
+    final Widget cps = Obx(() {
+      return CupertinoPageScaffold(
+          backgroundColor: !ehTheme.isDarkMode
+              ? CupertinoColors.secondarySystemBackground
+              : null,
+          navigationBar: CupertinoNavigationBar(
+            transitionBetweenRoutes: true,
+            middle: Text(L10n.of(context).download),
+          ),
+          child: SafeArea(
+            bottom: false,
+            child: ListViewDownloadSetting(),
+          ));
+    });
 
     return cps;
   }

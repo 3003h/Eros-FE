@@ -17,17 +17,19 @@ import 'package:url_launcher/url_launcher.dart';
 class AboutPageEx extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    final CupertinoPageScaffold cps = CupertinoPageScaffold(
-        backgroundColor: !ehTheme.isDarkMode
-            ? CupertinoColors.secondarySystemBackground
-            : null,
-        navigationBar: CupertinoNavigationBar(
-          middle: Text(L10n.of(context).about),
-        ),
-        child: SafeArea(
-          bottom: false,
-          child: ListViewAbout(),
-        ));
+    final Widget cps = Obx(() {
+      return CupertinoPageScaffold(
+          backgroundColor: !ehTheme.isDarkMode
+              ? CupertinoColors.secondarySystemBackground
+              : null,
+          navigationBar: CupertinoNavigationBar(
+            middle: Text(L10n.of(context).about),
+          ),
+          child: SafeArea(
+            bottom: false,
+            child: ListViewAbout(),
+          ));
+    });
 
     return cps;
   }

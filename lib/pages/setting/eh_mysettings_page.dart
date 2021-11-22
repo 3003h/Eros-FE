@@ -1,3 +1,4 @@
+import 'package:fehviewer/common/service/layout_service.dart';
 import 'package:fehviewer/common/service/theme_service.dart';
 import 'package:fehviewer/extension.dart';
 import 'package:fehviewer/generated/l10n.dart';
@@ -6,19 +7,15 @@ import 'package:fehviewer/pages/setting/setting_items/excluded_language.dart';
 import 'package:fehviewer/pages/setting/setting_items/favorites_rename_item.dart';
 import 'package:fehviewer/pages/setting/setting_items/multi_selector.dart';
 import 'package:fehviewer/pages/setting/setting_items/selector_Item.dart';
-import 'package:fehviewer/utils/logger.dart';
 import 'package:fehviewer/widget/refresh.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:get/get.dart';
-import 'package:getwidget/getwidget.dart';
 import 'package:line_icons/line_icons.dart';
 
 import 'controller/eh_mysettings_controller.dart';
 import 'setting_base.dart';
 import 'setting_items/multi_selector.dart';
-import 'setting_items/single_input_item.dart';
 import 'webview/web_mysetting_in.dart';
 
 part 'eh_mysettings_items.dart';
@@ -30,112 +27,114 @@ class EhMySettingsPage extends GetView<EhMySettingsController> {
 
   @override
   Widget build(BuildContext context) {
-    return CupertinoPageScaffold(
-        backgroundColor: !ehTheme.isDarkMode
-            ? CupertinoColors.secondarySystemBackground
-            : null,
-        navigationBar: CupertinoNavigationBar(
-            padding: const EdgeInsetsDirectional.only(end: 8),
-            middle: Text(L10n.of(context).ehentai_settings),
-            trailing: Row(
-              mainAxisSize: MainAxisSize.min,
-              children: <Widget>[
-                // CupertinoButton(
-                //   padding: const EdgeInsets.all(0),
-                //   minSize: 36,
-                //   child: const Icon(
-                //     LineIcons.download,
-                //     size: 24,
-                //   ),
-                //   onPressed: () async {
-                //     controller.loadData();
-                //   },
-                // ),
-                // CupertinoButton(
-                //   padding: const EdgeInsets.all(0),
-                //   minSize: 36,
-                //   child: const Icon(
-                //     LineIcons.upload,
-                //     size: 24,
-                //   ),
-                //   onPressed: () async {
-                //     controller.print();
-                //   },
-                // ),
-                CupertinoButton(
-                  padding: const EdgeInsets.all(0),
-                  minSize: 40,
-                  child: const Icon(
-                    LineIcons.globeWithAmericasShown,
-                    size: 24,
+    return Obx(() {
+      return CupertinoPageScaffold(
+          backgroundColor: !ehTheme.isDarkMode
+              ? CupertinoColors.secondarySystemBackground
+              : null,
+          navigationBar: CupertinoNavigationBar(
+              padding: const EdgeInsetsDirectional.only(end: 8),
+              middle: Text(L10n.of(context).ehentai_settings),
+              trailing: Row(
+                mainAxisSize: MainAxisSize.min,
+                children: <Widget>[
+                  // CupertinoButton(
+                  //   padding: const EdgeInsets.all(0),
+                  //   minSize: 36,
+                  //   child: const Icon(
+                  //     LineIcons.download,
+                  //     size: 24,
+                  //   ),
+                  //   onPressed: () async {
+                  //     controller.loadData();
+                  //   },
+                  // ),
+                  // CupertinoButton(
+                  //   padding: const EdgeInsets.all(0),
+                  //   minSize: 36,
+                  //   child: const Icon(
+                  //     LineIcons.upload,
+                  //     size: 24,
+                  //   ),
+                  //   onPressed: () async {
+                  //     controller.print();
+                  //   },
+                  // ),
+                  CupertinoButton(
+                    padding: const EdgeInsets.all(0),
+                    minSize: 40,
+                    child: const Icon(
+                      LineIcons.globeWithAmericasShown,
+                      size: 24,
+                    ),
+                    onPressed: () async {
+                      Get.to(() => InWebMySetting());
+                    },
                   ),
-                  onPressed: () async {
-                    Get.to(() => InWebMySetting());
-                  },
-                ),
-                CupertinoButton(
-                  padding: const EdgeInsets.all(0),
-                  minSize: 40,
-                  child: const Icon(
-                    LineIcons.checkCircle,
-                    size: 24,
+                  CupertinoButton(
+                    padding: const EdgeInsets.all(0),
+                    minSize: 40,
+                    child: const Icon(
+                      LineIcons.checkCircle,
+                      size: 24,
+                    ),
+                    onPressed: () async {
+                      // 保存配置
+                      controller.printParam();
+                      await controller.applyProfile();
+                    },
                   ),
-                  onPressed: () async {
-                    // 保存配置
-                    controller.printParam();
-                    await controller.applyProfile();
-                  },
-                ),
-              ],
-            )),
-        child: SafeArea(
-          child: Stack(
-            alignment: Alignment.center,
-            children: [
-              ListViewEhMySettings(),
-              Obx(() {
-                if (controller.isLoading) {
-                  // loading 提示组件
-                  return GestureDetector(
-                    behavior: HitTestBehavior.opaque, // 拦截触摸手势
-                    child: Container(
-                      width: double.infinity,
-                      height: double.infinity,
-                      child: Center(
-                        child: Container(
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(15),
-                            boxShadow: [
-                              BoxShadow(
-                                color: CupertinoDynamicColor.resolve(
-                                        CupertinoColors.systemGrey,
-                                        Get.context!)
-                                    .withOpacity(0.1),
-                                offset: const Offset(0, 5),
-                                blurRadius: 10, //阴影模糊程度
-                                spreadRadius: 3, //阴影扩散程度
+                ],
+              )),
+          child: SafeArea(
+            child: Stack(
+              alignment: Alignment.center,
+              children: [
+                ListViewEhMySettings(),
+                Obx(() {
+                  if (controller.isLoading) {
+                    // loading 提示组件
+                    return GestureDetector(
+                      behavior: HitTestBehavior.opaque, // 拦截触摸手势
+                      child: Container(
+                        width: double.infinity,
+                        height: double.infinity,
+                        child: Center(
+                          child: Container(
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(15),
+                              boxShadow: [
+                                BoxShadow(
+                                  color: CupertinoDynamicColor.resolve(
+                                          CupertinoColors.systemGrey,
+                                          Get.context!)
+                                      .withOpacity(0.1),
+                                  offset: const Offset(0, 5),
+                                  blurRadius: 10, //阴影模糊程度
+                                  spreadRadius: 3, //阴影扩散程度
+                                ),
+                              ],
+                            ),
+                            child: CupertinoPopupSurface(
+                              child: Container(
+                                padding: const EdgeInsets.all(10),
+                                child: const CupertinoActivityIndicator(
+                                    radius: kIndicatorRadius),
                               ),
-                            ],
-                          ),
-                          child: CupertinoPopupSurface(
-                            child: Container(
-                              padding: const EdgeInsets.all(10),
-                              child: const CupertinoActivityIndicator(
-                                  radius: kIndicatorRadius),
                             ),
                           ),
                         ),
                       ),
-                    ),
-                  );
-                } else {
-                  return const SizedBox.shrink();
-                }
-              }),
-            ],
-          ),
-          bottom: false,
-        ));
+                    );
+                  } else {
+                    return const SizedBox.shrink();
+                  }
+                }),
+              ],
+            ),
+            bottom: false,
+          ));
+    });
   }
 }
 
@@ -260,8 +259,18 @@ class _ListViewEhMySettingsState extends State<ListViewEhMySettings> {
         desc: L10n.of(context).uc_tag_wt_desc,
       ),
       GroupItem(
-        title: L10n.of(context).uc_exc_lang,
-        child: const ExcludedLanguageWidget(),
+        // title: L10n.of(context).uc_exc_lang,
+        // child: const ExcludedLanguageWidget(),
+        child: SelectorSettingItem(
+          hideLine: true,
+          title: L10n.of(context).uc_exc_lang,
+          onTap: () {
+            Get.to(
+              () => const ExcludedLanguagePage(),
+              id: isLayoutLarge ? 2 : null,
+            );
+          },
+        ),
         desc: L10n.of(context).uc_exc_lang_desc,
       ),
       GroupItem(
@@ -371,11 +380,12 @@ class _ListViewEhMySettingsState extends State<ListViewEhMySettings> {
 }
 
 class GroupItem extends StatelessWidget {
-  const GroupItem({Key? key, this.title, this.child, this.desc})
+  const GroupItem({Key? key, this.title, this.child, this.desc, this.descTop})
       : super(key: key);
   final String? title;
   final Widget? child;
   final String? desc;
+  final String? descTop;
 
   @override
   Widget build(BuildContext context) {
@@ -396,6 +406,25 @@ class GroupItem extends StatelessWidget {
             textAlign: TextAlign.start,
           ),
         ),
+        if (descTop != null)
+          Container(
+            padding: const EdgeInsets.only(
+              left: 20,
+              top: 4,
+              bottom: 10,
+              right: 20,
+            ),
+            width: double.infinity,
+            child: Text(
+              descTop!,
+              style: TextStyle(
+                fontSize: 12.5,
+                color: CupertinoDynamicColor.resolve(
+                    CupertinoColors.secondaryLabel, context),
+              ),
+              textAlign: TextAlign.start,
+            ),
+          ),
         child ?? const SizedBox.shrink(),
         if (desc != null)
           Container(

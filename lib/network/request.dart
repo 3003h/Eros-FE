@@ -205,6 +205,14 @@ Future<void> setCookie(String name, String value) async {
   // await cookieJar.saveFromResponse(Uri.parse(Api.getBaseUrl()), cookies);
 }
 
+Future<String?> getCookieValue(String name) async {
+  final PersistCookieJar cookieJar = await Api.cookieJar;
+  final List<Cookie> cookies =
+      await cookieJar.loadForRequest(Uri.parse(Api.getBaseUrl()));
+  final _cookie = cookies.firstWhereOrNull((element) => element.name == name);
+  return _cookie?.value;
+}
+
 Future<GalleryItem?> getGalleryDetail({
   required String url,
   bool refresh = false,
@@ -244,11 +252,21 @@ Future<GalleryImage?> fetchImageInfo(
     if (sourceId != null && sourceId.trim().isNotEmpty) 'nl': sourceId,
   };
 
+  String mpvSer = '1';
+  final isMpv = regGalleryMpvPageUrl.hasMatch(href);
+  if (isMpv) {
+    mpvSer = regGalleryMpvPageUrl.firstMatch(href)?.group(3) ?? '1';
+  }
+
+  logger.d('url $href  isMpv:$isMpv');
+
   DioHttpClient dioHttpClient = DioHttpClient(dioConfig: ehDioConfig);
   DioHttpResponse httpResponse = await dioHttpClient.get(
     href,
     queryParameters: _params,
-    httpTransformer: GalleryImageHttpTransformer(),
+    httpTransformer: isMpv
+        ? GalleryMpvImageHttpTransformer(mpvSer)
+        : GalleryImageHttpTransformer(),
     options: getCacheOptions(forceRefresh: refresh),
     cancelToken: cancelToken,
   );
@@ -352,7 +370,8 @@ Future<String> postArchiverLocalDownload(
   }
 }
 
-Future<EhSettings?> getUconfig({bool refresh = false}) async {
+Future<EhSettings?> getUconfig(
+    {bool refresh = false, String? selectProfile}) async {
   await checkCookie();
 
   await showCookie();
@@ -360,11 +379,25 @@ Future<EhSettings?> getUconfig({bool refresh = false}) async {
   DioHttpClient dioHttpClient = DioHttpClient(dioConfig: ehDioConfig);
   final String url = '${Api.getBaseUrl()}/uconfig.php';
 
-  DioHttpResponse httpResponse = await dioHttpClient.get(
-    url,
-    httpTransformer: UconfigHttpTransformer(),
-    options: getCacheOptions(forceRefresh: refresh),
-  );
+  late DioHttpResponse httpResponse;
+  for (int i = 0; i < 3; i++) {
+    logger.d('getUconfig sp:$selectProfile idx:$i');
+    httpResponse = await dioHttpClient.get(
+      url,
+      httpTransformer: UconfigHttpTransformer(),
+      options: getCacheOptions(forceRefresh: refresh || i > 0),
+    );
+
+    if (selectProfile == null) {
+      break;
+    }
+
+    if (httpResponse.ok && httpResponse.data is EhSettings) {
+      if (httpResponse.data.profileSelected == selectProfile) {
+        break;
+      }
+    }
+  }
 
   if (httpResponse.ok && httpResponse.data is EhSettings) {
     return httpResponse.data as EhSettings;

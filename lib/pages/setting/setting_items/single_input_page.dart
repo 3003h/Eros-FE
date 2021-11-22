@@ -1,4 +1,5 @@
 import 'package:fehviewer/common/service/theme_service.dart';
+import 'package:fehviewer/utils/logger.dart';
 import 'package:flutter/cupertino.dart';
 
 class SingleInputPage extends StatelessWidget {
@@ -25,6 +26,8 @@ class SingleInputPage extends StatelessWidget {
     textController.addListener(() {
       onValueChanged?.call(textController.text);
     });
+
+    logger.d('ehTheme.isDarkMode ${ehTheme.isDarkMode}');
 
     return CupertinoPageScaffold(
       backgroundColor: !ehTheme.isDarkMode

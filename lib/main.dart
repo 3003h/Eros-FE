@@ -150,8 +150,7 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
         supportedLocales: <Locale>[
           ...L10n.delegate.supportedLocales,
         ],
-        // ignore: prefer_const_literals_to_create_immutables
-        localizationsDelegates: [
+        localizationsDelegates: const [
           // 本地化的代理类
           L10n.delegate,
           GlobalMaterialLocalizations.delegate,

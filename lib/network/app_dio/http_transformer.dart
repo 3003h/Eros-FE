@@ -4,6 +4,7 @@ import 'package:dio/dio.dart';
 import 'package:enum_to_string/enum_to_string.dart';
 import 'package:fehviewer/common/global.dart';
 import 'package:fehviewer/common/parser/eh_parser.dart';
+import 'package:fehviewer/common/parser/mpv_parser.dart';
 import 'package:fehviewer/const/const.dart';
 import 'package:fehviewer/models/base/eh_models.dart';
 import 'package:fehviewer/pages/gallery/controller/archiver_controller.dart';
@@ -143,9 +144,25 @@ class GalleryImageHttpTransformer extends HttpTransformer {
   FutureOr<DioHttpResponse<GalleryImage>> parse(
       Response<dynamic> response) async {
     final html = response.data as String;
-    // final GalleryImage image = await paraImage(html);
     final GalleryImage image = await compute(paraImage, html);
     return DioHttpResponse<GalleryImage>.success(image);
+  }
+}
+
+class GalleryMpvImageHttpTransformer extends HttpTransformer {
+  GalleryMpvImageHttpTransformer(this.ser);
+
+  final String ser;
+
+  @override
+  FutureOr<DioHttpResponse<GalleryImage>> parse(
+      Response<dynamic> response) async {
+    final html = response.data as String;
+    final mpvImage = await compute(parserMpvImage, html);
+
+    // 请求 api 获取大图信息
+
+    return DioHttpResponse<GalleryImage>.success(GalleryImage(ser: 1));
   }
 }
 

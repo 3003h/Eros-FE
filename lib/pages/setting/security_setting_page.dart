@@ -10,18 +10,20 @@ import 'package:get/get.dart';
 class SecuritySettingPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    final CupertinoPageScaffold cps = CupertinoPageScaffold(
-        backgroundColor: !ehTheme.isDarkMode
-            ? CupertinoColors.secondarySystemBackground
-            : null,
-        navigationBar: CupertinoNavigationBar(
-          transitionBetweenRoutes: true,
-          middle: Text(L10n.of(context).security),
-        ),
-        child: SafeArea(
-          child: ListViewSecuritySetting(),
-          bottom: false,
-        ));
+    final Widget cps = Obx(() {
+      return CupertinoPageScaffold(
+          backgroundColor: !ehTheme.isDarkMode
+              ? CupertinoColors.secondarySystemBackground
+              : null,
+          navigationBar: CupertinoNavigationBar(
+            transitionBetweenRoutes: true,
+            middle: Text(L10n.of(context).security),
+          ),
+          child: SafeArea(
+            child: ListViewSecuritySetting(),
+            bottom: false,
+          ));
+    });
 
     return cps;
   }

@@ -431,3 +431,13 @@ extension ExtGalleryList on GalleryList {
     return copyWith(gallerys: await _gallerys);
   }
 }
+
+extension ExtMvpImage on MvpImage {
+  // 050e0cfa0fa8f3564afb38b8cabdadd5885ecf5e-636194-1286-1964-jpg_l.jpg
+  String? get thumbName => Uri.parse(t ?? '').pathSegments.last;
+  RegExpMatch? get _match => regExpMpvThumbName.firstMatch(thumbName ?? '');
+
+  String? get width => _match?.group(2);
+  String? get height => _match?.group(3);
+  String? get size => _match?.group(1);
+}

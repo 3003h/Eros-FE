@@ -21,33 +21,35 @@ class CustomHostsPage extends StatelessWidget {
       dnsConfigController.enableCustomHosts = value;
     }
 
-    return CupertinoPageScaffold(
-      backgroundColor: !ehTheme.isDarkMode
-          ? CupertinoColors.secondarySystemBackground
-          : null,
-      navigationBar: CupertinoNavigationBar(
-        padding: const EdgeInsetsDirectional.only(start: 0),
-        middle: Text(_title),
-        // transitionBetweenRoutes: false,
-        trailing: _buildListBtns(context),
-      ),
-      child: SafeArea(
-        bottom: false,
-        child: Container(
-          child: ListView(
-            children: <Widget>[
-              Obx(() => TextSwitchItem(
-                    _title,
-                    intValue: dnsConfigController.enableCustomHosts,
-                    onChanged: _handleEnableCustomHostDarkChanged,
-                  )),
-              Container(height: 38),
-              CustomHostsListView(),
-            ],
+    return Obx(() {
+      return CupertinoPageScaffold(
+        backgroundColor: !ehTheme.isDarkMode
+            ? CupertinoColors.secondarySystemBackground
+            : null,
+        navigationBar: CupertinoNavigationBar(
+          padding: const EdgeInsetsDirectional.only(start: 0),
+          middle: Text(_title),
+          // transitionBetweenRoutes: false,
+          trailing: _buildListBtns(context),
+        ),
+        child: SafeArea(
+          bottom: false,
+          child: Container(
+            child: ListView(
+              children: <Widget>[
+                Obx(() => TextSwitchItem(
+                      _title,
+                      intValue: dnsConfigController.enableCustomHosts,
+                      onChanged: _handleEnableCustomHostDarkChanged,
+                    )),
+                Container(height: 38),
+                CustomHostsListView(),
+              ],
+            ),
           ),
         ),
-      ),
-    );
+      );
+    });
   }
 
   Widget _buildListBtns(BuildContext context) {

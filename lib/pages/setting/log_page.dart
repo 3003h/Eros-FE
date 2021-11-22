@@ -23,29 +23,31 @@ class LogPage extends StatelessWidget {
     logService.loadFiles();
 
     final String _title = 'Log';
-    return CupertinoPageScaffold(
-      backgroundColor: !ehTheme.isDarkMode
-          ? CupertinoColors.secondarySystemBackground
-          : null,
-      navigationBar: CupertinoNavigationBar(
-        padding: const EdgeInsetsDirectional.only(start: 0),
-        middle: Text(_title),
-        trailing: CupertinoButton(
-          // 清除按钮
-          child: const Icon(
-            LineIcons.alternateTrash,
-            size: 26,
+    return Obx(() {
+      return CupertinoPageScaffold(
+        backgroundColor: !ehTheme.isDarkMode
+            ? CupertinoColors.secondarySystemBackground
+            : null,
+        navigationBar: CupertinoNavigationBar(
+          padding: const EdgeInsetsDirectional.only(start: 0),
+          middle: Text(_title),
+          trailing: CupertinoButton(
+            // 清除按钮
+            child: const Icon(
+              LineIcons.alternateTrash,
+              size: 26,
+            ),
+            onPressed: logService.removeAll,
           ),
-          onPressed: logService.removeAll,
         ),
-      ),
-      child: SafeArea(
-        bottom: false,
-        child: Container(
-          child: CustomHostsListView(),
+        child: SafeArea(
+          bottom: false,
+          child: Container(
+            child: CustomHostsListView(),
+          ),
         ),
-      ),
-    );
+      );
+    });
   }
 }
 

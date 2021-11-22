@@ -449,7 +449,6 @@ Widget _buildMPVThumbPane(BuildContext context, {bool hideLine = false}) {
 }
 
 Widget _buildRatingsItem(BuildContext context, {bool hideLine = false}) {
-  logger.d('ratings ${_controller.ehSetting.ratings}');
   return Obx(() {
     return TextInputItem(
       title: L10n.of(context).uc_rating,

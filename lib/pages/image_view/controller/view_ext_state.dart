@@ -221,7 +221,7 @@ class ViewExtState {
 
   GalleryTaskDao? galleryTaskDao;
   ImageTaskDao? imageTaskDao;
-  List<GalleryImageTask> imageTasks = [];
+  List<GalleryImageTask> imageTasks = <GalleryImageTask>[];
   String? dirPath;
 
   Map<int, Size> imageSizeMap = {};
