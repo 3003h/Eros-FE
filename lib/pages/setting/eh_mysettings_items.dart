@@ -319,9 +319,10 @@ Widget _buildShowPageNumbers(BuildContext context, {bool hideLine = false}) {
 
   return TextSwitchItem(
     L10n.of(context).uc_show_page_num,
-    intValue: _controller.ehSetting.showGalleryPageNumbers == '1',
+    hideLine: hideLine,
+    intValue: _controller.ehSetting.showGalleryPageNumbers == '0',
     onChanged: (val) => _controller.ehSetting =
-        _controller.ehSetting.copyWith(showGalleryPageNumbers: val ? '1' : ''),
+        _controller.ehSetting.copyWith(showGalleryPageNumbers: val ? '0' : '1'),
   );
 
   // return Obx(() {
@@ -343,11 +344,16 @@ Widget _buildOriginalImages(BuildContext context, {bool hideLine = false}) {
     '1': L10n.of(context).uc_oi_1,
   };
 
-  return TextSwitchItem(
-    L10n.of(context).uc_ori_image,
-    intValue: _controller.ehSetting.originalImages == '1',
-    onChanged: (val) => _controller.ehSetting =
-        _controller.ehSetting.copyWith(originalImages: val ? '1' : ''),
+  return Obx(
+    () {
+      return TextSwitchItem(
+        L10n.of(context).uc_ori_image,
+        hideLine: true,
+        intValue: _controller.ehSetting.originalImages == '1',
+        onChanged: (val) => _controller.ehSetting =
+            _controller.ehSetting.copyWith(originalImages: val ? '1' : '0'),
+      );
+    },
   );
 
   // return Obx(() {
@@ -371,11 +377,16 @@ Widget _buildMPVAlwaysUse(BuildContext context, {bool hideLine = false}) {
     '1': L10n.of(context).uc_qb_1,
   };
 
-  return TextSwitchItem(
-    L10n.of(context).uc_mpv_always,
-    intValue: _controller.ehSetting.alwaysUseMpv == '1',
-    onChanged: (val) => _controller.ehSetting =
-        _controller.ehSetting.copyWith(alwaysUseMpv: val ? '1' : ''),
+  return Obx(
+    () {
+      return TextSwitchItem(
+        L10n.of(context).uc_mpv_always,
+        key: UniqueKey(),
+        intValue: _controller.ehSetting.alwaysUseMpv == '1',
+        onChanged: (val) => _controller.ehSetting =
+            _controller.ehSetting.copyWith(alwaysUseMpv: val ? '1' : '0'),
+      );
+    },
   );
 
   // return Obx(() {
@@ -427,11 +438,16 @@ Widget _buildMPVThumbPane(BuildContext context, {bool hideLine = false}) {
     '1': L10n.of(context).uc_mt_1,
   };
 
-  return TextSwitchItem(
-    L10n.of(context).uc_mpv_thumb_pane,
-    intValue: _controller.ehSetting.mpvThumbnailPane == '1',
-    onChanged: (val) => _controller.ehSetting =
-        _controller.ehSetting.copyWith(mpvThumbnailPane: val ? '1' : ''),
+  return Obx(
+    () {
+      return TextSwitchItem(
+        L10n.of(context).uc_mpv_thumb_pane,
+        key: UniqueKey(),
+        intValue: _controller.ehSetting.mpvThumbnailPane == '0',
+        onChanged: (val) => _controller.ehSetting =
+            _controller.ehSetting.copyWith(mpvThumbnailPane: val ? '0' : '1'),
+      );
+    },
   );
 
   // return Obx(() {
