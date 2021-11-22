@@ -4,12 +4,12 @@ import 'package:dio/dio.dart';
 import 'package:enum_to_string/enum_to_string.dart';
 import 'package:fehviewer/common/global.dart';
 import 'package:fehviewer/common/parser/eh_parser.dart';
-import 'package:fehviewer/common/parser/mpv_parser.dart';
 import 'package:fehviewer/const/const.dart';
 import 'package:fehviewer/models/base/eh_models.dart';
 import 'package:fehviewer/pages/gallery/controller/archiver_controller.dart';
 import 'package:flutter/foundation.dart';
 
+import '../request.dart';
 import 'exception.dart';
 import 'http_response.dart';
 
@@ -158,11 +158,38 @@ class GalleryMpvImageHttpTransformer extends HttpTransformer {
   FutureOr<DioHttpResponse<GalleryImage>> parse(
       Response<dynamic> response) async {
     final html = response.data as String;
-    final mpvImage = await compute(parserMpvImage, html);
+    final mpvPage = await compute(parserMpvPage, html);
+
+    if (mpvPage.mpvkey == null || mpvPage.mpvkey!.isEmpty) {
+      return DioHttpResponse<GalleryImage>.failure(
+          errorMsg: 'get mpvkey empty');
+    }
+
+    if (mpvPage.gid == 0) {
+      return DioHttpResponse<GalleryImage>.failure(errorMsg: 'get gid empty');
+    }
+
+    final _page = int.parse(ser);
+    final mpvImage = mpvPage.imagelist?[_page - 1];
+    if (mpvImage == null) {
+      return DioHttpResponse<GalleryImage>.failure(
+          errorMsg: 'get mpvImage empty or null');
+    }
+
+    if (mpvImage.k == null || mpvImage.k!.isEmpty) {
+      return DioHttpResponse<GalleryImage>.failure(
+          errorMsg: 'imagekey of $_page is empty or null');
+    }
 
     // 请求 api 获取大图信息
+    final galleryImage = await mpvImageDispatch(
+      gid: mpvPage.gid!,
+      mpvkey: mpvPage.mpvkey!,
+      page: _page,
+      imgkey: mpvImage.k!,
+    );
 
-    return DioHttpResponse<GalleryImage>.success(GalleryImage(ser: 1));
+    return DioHttpResponse<GalleryImage>.success(galleryImage);
   }
 }
 
@@ -240,5 +267,20 @@ class UconfigHttpTransformer extends HttpTransformer {
     final html = response.data as String;
     final EhSettings uconfig = await compute(parseUconfig, html);
     return DioHttpResponse<EhSettings>.success(uconfig);
+  }
+}
+
+class ImageDispatchTransformer extends HttpTransformer {
+  factory ImageDispatchTransformer() => _instance;
+  ImageDispatchTransformer._internal();
+  static late final ImageDispatchTransformer _instance =
+      ImageDispatchTransformer._internal();
+
+  @override
+  FutureOr<DioHttpResponse<GalleryImage>> parse(
+      Response<dynamic> response) async {
+    final json = response.data as String;
+    final GalleryImage image = await compute(parserMpvImageDispatch, json);
+    return DioHttpResponse<GalleryImage>.success(image);
   }
 }

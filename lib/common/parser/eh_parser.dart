@@ -8,3 +8,5 @@ export 'gallery_view_parser.dart';
 export 'image_page_parser.dart';
 export 'profile_parser.dart';
 export 'torrent_parser.dart';
+export 'mpv_image_dispatch_parser.dart';
+export 'mpv_parser.dart';

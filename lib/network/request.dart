@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'dart:io';
 
 import 'package:collection/collection.dart';
@@ -488,5 +489,47 @@ Future<EhSettings?> setDefauleEhProfile(String profileSet,
 Future<EhSettings?> applyEhProfile(Map<String, dynamic> paramMap) async {
   return await postEhProfile(
     paramMap: paramMap,
+  );
+}
+
+Future<T?> getEhApi<T>({
+  required String data,
+  bool refresh = false,
+  HttpTransformer? httpTransformer,
+}) async {
+  const String url = '/api.php';
+  await checkCookie();
+  DioHttpClient dioHttpClient = DioHttpClient(dioConfig: ehDioConfig);
+
+  DioHttpResponse httpResponse = await dioHttpClient.post(
+    url,
+    data: data,
+    httpTransformer: httpTransformer,
+    options: getCacheOptions(forceRefresh: refresh),
+  );
+
+  if (httpResponse.ok && httpResponse.data is T) {
+    return httpResponse.data as T;
+  }
+}
+
+Future<GalleryImage?> mpvImageDispatch({
+  required int gid,
+  required String mpvkey,
+  required int page,
+  required String imgkey,
+}) async {
+  final Map reqMap = {
+    'imgkey': imgkey,
+    'method': 'imagedispatch',
+    'gid': gid,
+    'page': page,
+    'mpvkey': mpvkey,
+  };
+  final String reqJsonStr = jsonEncode(reqMap);
+
+  return await getEhApi<GalleryImage>(
+    data: reqJsonStr,
+    httpTransformer: ImageDispatchTransformer(),
   );
 }
