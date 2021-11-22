@@ -305,6 +305,7 @@ class TextItem extends StatefulWidget {
   final String title;
   final String? desc;
   final VoidCallback? onTap;
+
   // final double height;
   final bool hideLine;
   final bool cupertinoFormRow;
@@ -455,59 +456,62 @@ class _TextInputItemState extends State<TextInputItem> {
 
   @override
   Widget build(BuildContext context) {
-    Widget item = Container(
-      color: CupertinoDynamicColor.resolve(
-          ehTheme.itemBackgroundColor!, Get.context!),
-      child: Column(
-        children: <Widget>[
-          Container(
-            constraints: const BoxConstraints(minHeight: kItemHeight),
-            alignment: Alignment.centerLeft,
-            padding: const EdgeInsets.symmetric(horizontal: 20),
-            child: Row(
-              children: [
-                if (widget.icon != null) widget.icon!,
-                Text(
-                  widget.title ?? '',
-                  style: const TextStyle(
-                    height: 1.0,
-                  ),
-                ),
-                Expanded(
-                  child: CupertinoTextField(
-                    decoration: null,
-                    controller: textController,
-                    textAlign: widget.textAlign,
-                    maxLines: widget.maxLines,
-                    suffix: widget.suffixText != null
-                        ? Padding(
-                            padding: const EdgeInsets.symmetric(horizontal: 10),
-                            child: Text(widget.suffixText!),
-                          )
-                        : null,
-                    placeholderStyle: const TextStyle(
-                      fontWeight: FontWeight.w400,
-                      color: CupertinoColors.placeholderText,
-                      height: 1.25,
+    Widget item = Obx(() {
+      return Container(
+        color: CupertinoDynamicColor.resolve(
+            ehTheme.itemBackgroundColor!, Get.context!),
+        child: Column(
+          children: <Widget>[
+            Container(
+              constraints: const BoxConstraints(minHeight: kItemHeight),
+              alignment: Alignment.centerLeft,
+              padding: const EdgeInsets.symmetric(horizontal: 20),
+              child: Row(
+                children: [
+                  if (widget.icon != null) widget.icon!,
+                  Text(
+                    widget.title ?? '',
+                    style: const TextStyle(
+                      height: 1.0,
                     ),
-                    placeholder: widget.placeholder,
-                    style: const TextStyle(height: 1.25),
-                    onChanged: widget.onChanged?.call,
                   ),
-                ),
-              ],
+                  Expanded(
+                    child: CupertinoTextField(
+                      decoration: null,
+                      controller: textController,
+                      textAlign: widget.textAlign,
+                      maxLines: widget.maxLines,
+                      suffix: widget.suffixText != null
+                          ? Padding(
+                              padding:
+                                  const EdgeInsets.symmetric(horizontal: 10),
+                              child: Text(widget.suffixText!),
+                            )
+                          : null,
+                      placeholderStyle: const TextStyle(
+                        fontWeight: FontWeight.w400,
+                        color: CupertinoColors.placeholderText,
+                        height: 1.25,
+                      ),
+                      placeholder: widget.placeholder,
+                      style: const TextStyle(height: 1.25),
+                      onChanged: widget.onChanged?.call,
+                    ),
+                  ),
+                ],
+              ),
             ),
-          ),
-          if (!widget.hideLine)
-            Divider(
-              indent: 20,
-              height: 0.6,
-              color: CupertinoDynamicColor.resolve(
-                  CupertinoColors.systemGrey4, context),
-            ),
-        ],
-      ),
-    );
+            if (!widget.hideLine)
+              Divider(
+                indent: 20,
+                height: 0.6,
+                color: CupertinoDynamicColor.resolve(
+                    CupertinoColors.systemGrey4, context),
+              ),
+          ],
+        ),
+      );
+    });
 
     return item;
   }

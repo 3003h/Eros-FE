@@ -27,17 +27,19 @@ class EhSettingPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final CupertinoPageScaffold cps = CupertinoPageScaffold(
-        backgroundColor: !ehTheme.isDarkMode
-            ? CupertinoColors.secondarySystemBackground
-            : null,
-        navigationBar: CupertinoNavigationBar(
-          middle: Text(L10n.of(context).eh),
-        ),
-        child: SafeArea(
-          child: ListViewEhSetting(),
-          bottom: false,
-        ));
+    final Widget cps = Obx(() {
+      return CupertinoPageScaffold(
+          backgroundColor: !ehTheme.isDarkMode
+              ? CupertinoColors.secondarySystemBackground
+              : null,
+          navigationBar: CupertinoNavigationBar(
+            middle: Text(L10n.of(context).eh),
+          ),
+          child: SafeArea(
+            child: ListViewEhSetting(),
+            bottom: false,
+          ));
+    });
 
     return cps;
   }

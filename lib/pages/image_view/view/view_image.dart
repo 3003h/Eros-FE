@@ -252,7 +252,8 @@ class _ViewImageState extends State<ViewImage> with TickerProviderStateMixin {
                           return ViewErr509(ser: widget.imageSer);
                         }
                       } else {
-                        logger.e('other error: ${snapshot.error}');
+                        logger.e(
+                            'other error: ${snapshot.error}\n${snapshot.stackTrace}');
                         _errInfo = snapshot.error.toString();
                       }
 

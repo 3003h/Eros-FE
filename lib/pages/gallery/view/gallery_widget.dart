@@ -185,7 +185,7 @@ class GalleryTitle extends StatelessWidget {
     /// 20210107 改用SelectableText测试
 
     return GestureDetector(
-      /*child: SelectableText(
+      child: SelectableText(
         _pageController.title,
         maxLines: 6,
         minLines: 1,
@@ -202,26 +202,26 @@ class GalleryTitle extends StatelessWidget {
           height: 1.2,
           forceStrutHeight: true,
         ),
-      ),*/
-      child: ExtendedText(
-        _pageController.title,
-        selectionEnabled: true,
-        textAlign: TextAlign.left,
-        // 对齐方式
-        overflow: TextOverflow.ellipsis, // 超出部分省略号
-        maxLines: 6,
-        selectionControls: EHTextSelectionControls(),
-        style: const TextStyle(
-          textBaseline: TextBaseline.alphabetic,
-          // height: 1.2,
-          fontSize: 16,
-          fontWeight: FontWeight.w500,
-        ),
-        strutStyle: const StrutStyle(
-          height: 1.2,
-          forceStrutHeight: true,
-        ),
       ),
+      // child: ExtendedText(
+      //   _pageController.title,
+      //   selectionEnabled: true,
+      //   textAlign: TextAlign.left,
+      //   // 对齐方式
+      //   overflow: TextOverflow.ellipsis, // 超出部分省略号
+      //   maxLines: 6,
+      //   // selectionControls: EHTextSelectionControls(),
+      //   style: const TextStyle(
+      //     textBaseline: TextBaseline.alphabetic,
+      //     // height: 1.2,
+      //     fontSize: 16,
+      //     fontWeight: FontWeight.w500,
+      //   ),
+      //   strutStyle: const StrutStyle(
+      //     height: 1.2,
+      //     forceStrutHeight: true,
+      //   ),
+      // ),
     );
   }
 }

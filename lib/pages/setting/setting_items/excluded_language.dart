@@ -12,6 +12,33 @@ const _kElStyle = TextStyle(fontSize: 14.0);
 const _kElFlexLang = 10;
 const _kElFlexSwitch = 10;
 
+class ExcludedLanguagePage extends StatelessWidget {
+  const ExcludedLanguagePage({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return CupertinoPageScaffold(
+      navigationBar: CupertinoNavigationBar(
+        middle: Text(L10n.of(context).uc_exc_lang),
+      ),
+      backgroundColor: !ehTheme.isDarkMode
+          ? CupertinoColors.secondarySystemBackground
+          : null,
+      child: const CustomScrollView(
+        physics: AlwaysScrollableScrollPhysics(),
+        slivers: [
+          SliverSafeArea(
+            bottom: false,
+            sliver: SliverToBoxAdapter(
+              child: ExcludedLanguageWidget(),
+            ),
+          )
+        ],
+      ),
+    );
+  }
+}
+
 class ExcludedLanguageWidget extends GetView<EhMySettingsController> {
   const ExcludedLanguageWidget({Key? key}) : super(key: key);
 
@@ -70,32 +97,34 @@ class ExcludedLanguageWidget extends GetView<EhMySettingsController> {
       [L10n.of(context).uc_Other, '255', '1279', '2303'],
     ];
 
-    return Container(
-      padding: const EdgeInsets.symmetric(vertical: 8.0),
-      width: double.infinity,
-      color:
-          CupertinoDynamicColor.resolve(ehTheme.itemBackgroundColor!, context),
-      child: Center(
-        child: Container(
-          constraints: const BoxConstraints(
-            maxWidth: 800,
-          ),
-          child: Column(
-            children: [
-              _heard,
-              ..._elIds.map(
-                (e) => ExcludedLanguageBody(
-                  language: e[0] ?? '',
-                  oriId: e[1],
-                  transId: e[2],
-                  rewId: e[3],
+    return Obx(() {
+      return Container(
+        padding: const EdgeInsets.symmetric(vertical: 8.0),
+        width: double.infinity,
+        color: CupertinoDynamicColor.resolve(
+            ehTheme.itemBackgroundColor!, context),
+        child: Center(
+          child: Container(
+            constraints: const BoxConstraints(
+              maxWidth: 800,
+            ),
+            child: Column(
+              children: [
+                _heard,
+                ..._elIds.map(
+                  (e) => ExcludedLanguageBody(
+                    language: e[0] ?? '',
+                    oriId: e[1],
+                    transId: e[2],
+                    rewId: e[3],
+                  ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
         ),
-      ),
-    );
+      );
+    });
   }
 }
 
@@ -176,7 +205,10 @@ class ExcludedLanguageCheckBox extends GetView<EhMySettingsController> {
                     child: GFCheckbox(
                       size: 24.0,
                       activeBgColor: GFColors.DANGER,
+                      inactiveBgColor: Colors.transparent,
                       activeBorderColor: GFColors.DANGER,
+                      inactiveBorderColor: CupertinoDynamicColor.resolve(
+                          CupertinoColors.label, context),
                       type: GFCheckboxType.circle,
                       onChanged: (val) {
                         vibrateUtil.light();

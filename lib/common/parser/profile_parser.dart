@@ -7,7 +7,7 @@ import 'package:html/parser.dart' show parse;
 EhSettings parseUconfig(String html) {
   final profileSet = <EhProfile>[];
   // initLogger();
-  print(html);
+  // print(html);
 
   final Document document = parse(html);
 
@@ -135,6 +135,7 @@ EhSettings parseUconfig(String html) {
 
   // 总是使用多页查看器 qb
   final qb = _parseUconfigChecked('qb', 1, document);
+  print('mpv qb $qb');
 
   // 显示样式 ms
   final ms = _parseUconfigChecked('ms', 2, document);

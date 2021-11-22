@@ -381,8 +381,9 @@ class ViewExtController extends GetxController {
       return imageFromTasks;
     }
 
-    vState.imageTasks = await vState.imageTaskDao!
-        .findAllTaskByGid(int.parse(_galleryPageController.gid));
+    vState.imageTasks = (await vState.imageTaskDao
+            ?.findAllTaskByGid(int.parse(_galleryPageController.gid))) ??
+        [];
 
     imageFromTasks = _getImageFromImageTasks(itemSer, vState.dirPath);
     if (imageFromTasks != null) {

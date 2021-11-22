@@ -35,50 +35,52 @@ class LogViewPage extends StatelessWidget {
       );
     });
 
-    return CupertinoPageScaffold(
-      backgroundColor: !ehTheme.isDarkMode
-          ? CupertinoColors.secondarySystemBackground
-          : null,
-      navigationBar: CupertinoNavigationBar(
-        padding: const EdgeInsetsDirectional.only(start: 0),
-        middle: Text(title),
-        previousPageTitle: 'Log',
-        trailing: CupertinoButton(
-          padding: const EdgeInsets.only(right: 12),
-          // 清除按钮
-          child: const Icon(
-            CupertinoIcons.share,
-            size: 26,
+    return Obx(() {
+      return CupertinoPageScaffold(
+        backgroundColor: !ehTheme.isDarkMode
+            ? CupertinoColors.secondarySystemBackground
+            : null,
+        navigationBar: CupertinoNavigationBar(
+          padding: const EdgeInsetsDirectional.only(start: 0),
+          middle: Text(title),
+          previousPageTitle: 'Log',
+          trailing: CupertinoButton(
+            padding: const EdgeInsets.only(right: 12),
+            // 清除按钮
+            child: const Icon(
+              CupertinoIcons.share,
+              size: 26,
+            ),
+            onPressed: () {
+              Share.shareFiles([logService.logFiles[index].path]);
+            },
           ),
-          onPressed: () {
-            Share.shareFiles([logService.logFiles[index].path]);
-          },
+          // transitionBetweenRoutes: false,
         ),
-        // transitionBetweenRoutes: false,
-      ),
-      child: SafeArea(
-        bottom: false,
-        child: CupertinoScrollbar(
-          controller: _scrollController,
-          child: SingleChildScrollView(
+        child: SafeArea(
+          bottom: false,
+          child: CupertinoScrollbar(
             controller: _scrollController,
             child: SingleChildScrollView(
-              scrollDirection: Axis.horizontal,
-              child: Container(
-                child: Text(
-                  _log,
-                  softWrap: false,
-                  style: TextStyle(
-                    fontSize: 12,
-                    height: 1.1,
-                    fontFamilyFallback: EHConst.monoFontFamilyFallback,
-                  ),
-                ).paddingAll(8),
+              controller: _scrollController,
+              child: SingleChildScrollView(
+                scrollDirection: Axis.horizontal,
+                child: Container(
+                  child: Text(
+                    _log,
+                    softWrap: false,
+                    style: TextStyle(
+                      fontSize: 12,
+                      height: 1.1,
+                      fontFamilyFallback: EHConst.monoFontFamilyFallback,
+                    ),
+                  ).paddingAll(8),
+                ),
               ),
             ),
           ),
         ),
-      ),
-    );
+      );
+    });
   }
 }

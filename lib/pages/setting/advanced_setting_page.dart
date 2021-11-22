@@ -23,18 +23,20 @@ class AdvancedSettingPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final CupertinoPageScaffold cps = CupertinoPageScaffold(
-        backgroundColor: !ehTheme.isDarkMode
-            ? CupertinoColors.secondarySystemBackground
-            : null,
-        navigationBar: CupertinoNavigationBar(
-          // transitionBetweenRoutes: true,
-          middle: Text(L10n.of(context).advanced),
-        ),
-        child: const SafeArea(
-          bottom: false,
-          child: ListViewAdvancedSetting(),
-        ));
+    final Widget cps = Obx(() {
+      return CupertinoPageScaffold(
+          backgroundColor: !ehTheme.isDarkMode
+              ? CupertinoColors.secondarySystemBackground
+              : null,
+          navigationBar: CupertinoNavigationBar(
+            // transitionBetweenRoutes: true,
+            middle: Text(L10n.of(context).advanced),
+          ),
+          child: const SafeArea(
+            bottom: false,
+            child: ListViewAdvancedSetting(),
+          ));
+    });
 
     return cps;
   }

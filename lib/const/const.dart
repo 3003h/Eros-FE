@@ -204,7 +204,10 @@ const Profile kDefProfile = Profile(
 final RegExp regGalleryUrl =
     RegExp(r'https?://e[-x]hentai.org/g/[0-9]+/[0-9a-z]+/?');
 final RegExp regGalleryPageUrl =
-    RegExp(r'https://e[-x]hentai.org/s/([0-9a-z]+)/(\d+)-(\d+)');
+    RegExp(r'https?://e[-x]hentai.org/s/([0-9a-z]+)/(\d+)-(\d+)');
+final RegExp regGalleryMpvPageUrl =
+    RegExp(r'https?://e[-x]hentai.org/mpv/([0-9]+)/([0-9a-z]+)/#page(\d+)');
+final RegExp regExpMpvThumbName = RegExp(r'[0-9a-f]{40}-(\d+)-(\d+)-(\d+)');
 
 // ignore: avoid_classes_with_only_static_members
 class EHConst {

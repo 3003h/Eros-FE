@@ -28,19 +28,22 @@ class EhMySettingsController extends GetxController {
   }
 
   Future<EhSettings?> loadData({bool refresh = false}) async {
-    // isLoading = true;
+    final selectedProfile = await getCookieValue('sp');
     try {
-      final uconfig =
-          await getUconfig(refresh: refresh || Global.forceRefreshUconfig);
+      final uconfig = await getUconfig(
+        refresh: refresh || Global.forceRefreshUconfig,
+        selectProfile: selectedProfile,
+      );
       isLoading = false;
+
       if (uconfig != null) {
+        Global.forceRefreshUconfig = false;
         ehSetting = uconfig;
         return uconfig;
       }
     } catch (e) {
       rethrow;
     } finally {
-      Global.forceRefreshUconfig = false;
       // isLoading = false;
     }
   }
@@ -53,10 +56,16 @@ class EhMySettingsController extends GetxController {
     isLoading = true;
     ehSetting = kEhSettings;
     try {
-      // final uconfig = await changeEhProfile(profileSet, refresh: true);
       await setCookie('sp', profileSet);
-      await loadData(refresh: true);
-      await showCookie();
+      // await loadData(refresh: true);
+      // await showCookie();
+      final uconfig = await changeEhProfile(profileSet, refresh: true);
+      if (uconfig != null) {
+        ehSetting = uconfig;
+      } else {
+        Global.forceRefreshUconfig = true;
+      }
+
       isLoading = false;
     } catch (e) {
       rethrow;
@@ -159,7 +168,7 @@ class EhMySettingsController extends GetxController {
       rethrow;
     } finally {
       isLoading = false;
-      showCookie();
+      // showCookie();
     }
   }
 
