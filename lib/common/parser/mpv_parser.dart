@@ -4,15 +4,18 @@ import 'package:fehviewer/models/base/eh_models.dart';
 import 'package:html/dom.dart';
 import 'package:html/parser.dart' show parse;
 
-Mpv parserMpvImage(String html) {
+Mpv parserMpvPage(String html) {
   final Document document = parse(html);
 
   final mpvkey =
-      RegExp(r'mpvkey\s+=\s+"([0-9a-z]+)"').firstMatch(html)?.group(1);
+      RegExp(r'mpvkey(\s+)?=(\s+)?"([0-9a-z]+)"').firstMatch(html)?.group(3);
   final imagelistStr =
-      RegExp(r'imagelist\s+=\s+(\[.+\]);').firstMatch(html)?.group(1);
+      RegExp(r'imagelist(\s+)?=(\s+)?(\[.+\]);').firstMatch(html)?.group(3);
 
-  // print('mpvkey:$mpvkey\nimagelistStr:$imagelistStr');
+  final gidStr =
+      RegExp(r'gid(\s+)?=(\s+)?(\d+);').firstMatch(html)?.group(3) ?? '0';
+
+  print('mpvkey:$mpvkey\ngid:$gidStr');
 
   final imageList = <MvpImage>[];
   for (final dynamic e in jsonDecode(imagelistStr ?? '[]') as List<dynamic>) {
@@ -21,10 +24,9 @@ Mpv parserMpvImage(String html) {
     imageList.add(_mpvImage);
   }
 
-  print('${imageList.length}');
-
   return Mpv(
     imagelist: imageList,
+    gid: int.parse(gidStr),
     mpvkey: mpvkey,
   );
 }
