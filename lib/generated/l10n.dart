@@ -290,11 +290,11 @@ class L10n {
     );
   }
 
-  /// `READ`
-  String get READ {
+  /// `Read`
+  String get read {
     return Intl.message(
-      'READ',
-      name: 'READ',
+      'Read',
+      name: 'read',
       desc: '',
       args: [],
     );
@@ -3235,6 +3235,16 @@ class L10n {
     return Intl.message(
       'Auto select profile',
       name: 'auto_select_profile',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Tap to turn page animations`
+  String get tap_to_turn_page_anima {
+    return Intl.message(
+      'Tap to turn page animations',
+      name: 'tap_to_turn_page_anima',
       desc: '',
       args: [],
     );

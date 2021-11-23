@@ -27,7 +27,6 @@ class MessageLookup extends MessageLookupByLibrary {
   final messages = _notInlinedMessages(_notInlinedMessages);
   static Map<String, Function> _notInlinedMessages(_) => <String, Function>{
         "KEEP_IT_SAFE": MessageLookupByLibrary.simpleMessage("注意数据安全"),
-        "READ": MessageLookupByLibrary.simpleMessage("阅读"),
         "about": MessageLookupByLibrary.simpleMessage("关于"),
         "add_quick_search": MessageLookupByLibrary.simpleMessage("添加搜索"),
         "add_tag_placeholder":
@@ -144,6 +143,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "processing": MessageLookupByLibrary.simpleMessage("处理中"),
         "pure_black": MessageLookupByLibrary.simpleMessage("纯黑"),
         "quick_search": MessageLookupByLibrary.simpleMessage("快速搜索"),
+        "read": MessageLookupByLibrary.simpleMessage("阅读"),
         "read_from_clipboard": MessageLookupByLibrary.simpleMessage("从剪贴板读取"),
         "read_setting": MessageLookupByLibrary.simpleMessage("阅读设置"),
         "reading_direction": MessageLookupByLibrary.simpleMessage("阅读方向"),
@@ -212,6 +212,8 @@ class MessageLookup extends MessageLookupByLibrary {
         "tag_vote_up": MessageLookupByLibrary.simpleMessage("顶"),
         "tag_withdraw_vote": MessageLookupByLibrary.simpleMessage("撤销投票"),
         "tags": MessageLookupByLibrary.simpleMessage("标签"),
+        "tap_to_turn_page_anima":
+            MessageLookupByLibrary.simpleMessage("点击翻页动画"),
         "theme": MessageLookupByLibrary.simpleMessage("主题"),
         "tolist_alltime": MessageLookupByLibrary.simpleMessage("总排行"),
         "tolist_past_month": MessageLookupByLibrary.simpleMessage("月排行"),

@@ -23,7 +23,7 @@ import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
 import 'package:sleek_circular_slider/sleek_circular_slider.dart';
 
 import '../common.dart';
-import '../controller/view_ext_contorller.dart';
+import '../controller/view_contorller.dart';
 
 const double kPageViewPadding = 4.0;
 
@@ -400,7 +400,7 @@ class ViewTopBar extends GetView<ViewExtController> {
                 GestureDetector(
                   behavior: HitTestBehavior.opaque,
                   onTap: () {
-                    Get.toNamed(EHRoutes.viewSeting);
+                    Get.toNamed(EHRoutes.readSeting);
                   },
                   child: Container(
                     width: 40,

@@ -128,6 +128,10 @@ class EhConfigService extends ProfileService {
   bool get autoSelectProfile => _autoSelectProfile.value;
   set autoSelectProfile(bool val) => _autoSelectProfile.value = val;
 
+  final _tapToTurnPageAnimations = true.obs;
+  bool get tapToTurnPageAnimations => _tapToTurnPageAnimations.value;
+  set tapToTurnPageAnimations(bool val) => _tapToTurnPageAnimations.value = val;
+
   @override
   void onInit() {
     super.onInit();
@@ -338,6 +342,13 @@ class EhConfigService extends ProfileService {
     autoSelectProfile = ehConfig.autoSelectProfile ?? true;
     everProfile<bool>(_autoSelectProfile,
         (bool value) => ehConfig = ehConfig.copyWith(autoSelectProfile: value));
+
+    // tapToTurnPageAnimations
+    tapToTurnPageAnimations = ehConfig.tapToTurnPageAnimations ?? true;
+    everProfile<bool>(
+        _tapToTurnPageAnimations,
+        (bool value) =>
+            ehConfig = ehConfig.copyWith(tapToTurnPageAnimations: value));
   }
 
   /// 收藏排序 dialog

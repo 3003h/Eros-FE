@@ -9,8 +9,8 @@ import 'package:get/get.dart';
 import 'package:photo_view/photo_view.dart';
 
 import '../common.dart';
-import '../controller/view_ext_contorller.dart';
-import '../controller/view_ext_state.dart';
+import '../controller/view_contorller.dart';
+import '../controller/view_state.dart';
 import 'image_list_view.dart';
 import 'image_page_view.dart';
 import 'view_image.dart';

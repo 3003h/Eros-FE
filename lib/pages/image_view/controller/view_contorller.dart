@@ -28,7 +28,7 @@ import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
 import 'package:throttling/throttling.dart';
 import 'package:wakelock/wakelock.dart';
 
-import 'view_ext_state.dart';
+import 'view_state.dart';
 
 const double kBottomBarHeight = 44.0;
 const double kTopBarHeight = 44.0;
@@ -500,30 +500,46 @@ class ViewExtController extends GetxController {
 
   Future<void> tapLeft() async {
     logger.v('${vState.viewMode} tap left');
+    final enableAnimate = _ehConfigService.tapToTurnPageAnimations;
+
     vState.fade = false;
     if (vState.viewMode == ViewMode.LeftToRight && vState.pageIndex > 0) {
-      // pageController.animateToPage(vState.pageIndex - 1,
-      //     duration: const Duration(milliseconds: 200), curve: Curves.ease);
-      // extendedPageController.animateToPage(vState.pageIndex - 1,
-      //     duration: const Duration(milliseconds: 200), curve: Curves.ease);
-
+      final toPage = vState.pageIndex - 1;
       pageControllerCallBack(
-          () => pageController.animateToPage(vState.pageIndex - 1,
-              duration: const Duration(milliseconds: 200), curve: Curves.ease),
-          () => extendedPageController.animateToPage(vState.pageIndex - 1,
-              duration: const Duration(milliseconds: 200), curve: Curves.ease));
+        () => enableAnimate
+            ? pageController.animateToPage(
+                toPage,
+                duration: const Duration(milliseconds: 200),
+                curve: Curves.ease,
+              )
+            : pageController.jumpToPage(toPage),
+        () => enableAnimate
+            ? extendedPageController.animateToPage(
+                toPage,
+                duration: const Duration(milliseconds: 200),
+                curve: Curves.ease,
+              )
+            : extendedPageController.jumpToPage(toPage),
+      );
     } else if (vState.viewMode == ViewMode.rightToLeft &&
         vState.pageIndex < vState.filecount) {
-      // pageController.animateToPage(vState.pageIndex + 1,
-      //     duration: const Duration(milliseconds: 200), curve: Curves.ease);
-      // extendedPageController.animateToPage(vState.pageIndex + 1,
-      //     duration: const Duration(milliseconds: 200), curve: Curves.ease);
-
+      final toPage = vState.pageIndex + 1;
       pageControllerCallBack(
-          () => pageController.animateToPage(vState.pageIndex + 1,
-              duration: const Duration(milliseconds: 200), curve: Curves.ease),
-          () => extendedPageController.animateToPage(vState.pageIndex + 1,
-              duration: const Duration(milliseconds: 200), curve: Curves.ease));
+        () => enableAnimate
+            ? pageController.animateToPage(
+                toPage,
+                duration: const Duration(milliseconds: 200),
+                curve: Curves.ease,
+              )
+            : pageController.jumpToPage(toPage),
+        () => enableAnimate
+            ? extendedPageController.animateToPage(
+                toPage,
+                duration: const Duration(milliseconds: 200),
+                curve: Curves.ease,
+              )
+            : extendedPageController.jumpToPage(toPage),
+      );
     } else if (vState.viewMode == ViewMode.topToBottom &&
         itemScrollController.isAttached &&
         !vState.isScrolling &&
@@ -540,33 +556,48 @@ class ViewExtController extends GetxController {
 
   Future<void> tapRight() async {
     // logger.d('${vState.speedList}');
+    final enableAnimate = _ehConfigService.tapToTurnPageAnimations;
 
     logger.v('${vState.viewMode} tap right');
     vState.fade = false;
     if (vState.viewMode == ViewMode.LeftToRight &&
         vState.pageIndex < vState.filecount) {
-      // pageController.animateToPage(vState.pageIndex + 1,
-      //     duration: const Duration(milliseconds: 200), curve: Curves.ease);
-      // extendedPageController.animateToPage(vState.pageIndex + 1,
-      //     duration: const Duration(milliseconds: 200), curve: Curves.ease);
-
+      final toPage = vState.pageIndex + 1;
       pageControllerCallBack(
-          () => pageController.animateToPage(vState.pageIndex + 1,
-              duration: const Duration(milliseconds: 200), curve: Curves.ease),
-          () => extendedPageController.animateToPage(vState.pageIndex + 1,
-              duration: const Duration(milliseconds: 200), curve: Curves.ease));
+        () => enableAnimate
+            ? pageController.animateToPage(
+                toPage,
+                duration: const Duration(milliseconds: 200),
+                curve: Curves.ease,
+              )
+            : pageController.jumpToPage(toPage),
+        () => enableAnimate
+            ? extendedPageController.animateToPage(
+                toPage,
+                duration: const Duration(milliseconds: 200),
+                curve: Curves.ease,
+              )
+            : extendedPageController.jumpToPage(toPage),
+      );
     } else if (vState.viewMode == ViewMode.rightToLeft &&
         vState.pageIndex > 0) {
-      // pageController.animateToPage(vState.pageIndex - 1,
-      //     duration: const Duration(milliseconds: 200), curve: Curves.ease);
-      // extendedPageController.animateToPage(vState.pageIndex - 1,
-      //     duration: const Duration(milliseconds: 200), curve: Curves.ease);
-
+      final toPage = vState.pageIndex - 1;
       pageControllerCallBack(
-          () => pageController.animateToPage(vState.pageIndex - 1,
-              duration: const Duration(milliseconds: 200), curve: Curves.ease),
-          () => extendedPageController.animateToPage(vState.pageIndex - 1,
-              duration: const Duration(milliseconds: 200), curve: Curves.ease));
+        () => enableAnimate
+            ? pageController.animateToPage(
+                toPage,
+                duration: const Duration(milliseconds: 200),
+                curve: Curves.ease,
+              )
+            : pageController.jumpToPage(toPage),
+        () => enableAnimate
+            ? extendedPageController.animateToPage(
+                toPage,
+                duration: const Duration(milliseconds: 200),
+                curve: Curves.ease,
+              )
+            : extendedPageController.jumpToPage(toPage),
+      );
     } else if (vState.viewMode == ViewMode.topToBottom &&
         itemScrollController.isAttached &&
         !vState.isScrolling &&
