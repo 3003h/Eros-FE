@@ -266,7 +266,7 @@ Future<GalleryImage?> fetchImageInfo(
     href,
     queryParameters: _params,
     httpTransformer: isMpv
-        ? GalleryMpvImageHttpTransformer(mpvSer)
+        ? GalleryMpvImageHttpTransformer(mpvSer, sourceId: sourceId)
         : GalleryImageHttpTransformer(),
     options: getCacheOptions(forceRefresh: refresh),
     cancelToken: cancelToken,
@@ -513,11 +513,12 @@ Future<T?> getEhApi<T>({
   }
 }
 
-Future<GalleryImage?> mpvImageDispatch({
+Future<GalleryImage?> mpvLoadImageDispatch({
   required int gid,
   required String mpvkey,
   required int page,
   required String imgkey,
+  String? sourceId,
 }) async {
   final Map reqMap = {
     'imgkey': imgkey,
@@ -525,6 +526,7 @@ Future<GalleryImage?> mpvImageDispatch({
     'gid': gid,
     'page': page,
     'mpvkey': mpvkey,
+    if (sourceId != null) 'nl': sourceId,
   };
   final String reqJsonStr = jsonEncode(reqMap);
 
