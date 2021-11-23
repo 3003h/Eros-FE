@@ -36,8 +36,9 @@ class EhSettings {
     required this.xl,
     this.tagFilteringThreshold,
     this.tagWatchingThreshold,
-    this.excludedLanguages,
     this.excludedUploaders,
+    this.xuQuotaUsing,
+    this.xuQuotaMax,
     this.searchResultCount,
     this.mouseOverThumbnails,
     this.thumbnailSize,
@@ -83,8 +84,9 @@ class EhSettings {
   final List<EhSettingItem> xl;
   final String? tagFilteringThreshold;
   final String? tagWatchingThreshold;
-  final String? excludedLanguages;
   final String? excludedUploaders;
+  final int? xuQuotaUsing;
+  final int? xuQuotaMax;
   final String? searchResultCount;
   final String? mouseOverThumbnails;
   final String? thumbnailSize;
@@ -130,8 +132,9 @@ class EhSettings {
     xl: (json['xl'] as List? ?? []).map((e) => EhSettingItem.fromJson(e as Map<String, dynamic>)).toList(),
     tagFilteringThreshold: json['tag_filtering_threshold'] != null ? json['tag_filtering_threshold'] as String : null,
     tagWatchingThreshold: json['tag_watching_threshold'] != null ? json['tag_watching_threshold'] as String : null,
-    excludedLanguages: json['excluded_languages'] != null ? json['excluded_languages'] as String : null,
     excludedUploaders: json['excluded_uploaders'] != null ? json['excluded_uploaders'] as String : null,
+    xuQuotaUsing: json['xu_quota_using'] != null ? json['xu_quota_using'] as int : null,
+    xuQuotaMax: json['xu_quota_max'] != null ? json['xu_quota_max'] as int : null,
     searchResultCount: json['search_result_count'] != null ? json['search_result_count'] as String : null,
     mouseOverThumbnails: json['mouse-over_thumbnails'] != null ? json['mouse-over_thumbnails'] as String : null,
     thumbnailSize: json['thumbnail_size'] != null ? json['thumbnail_size'] as String : null,
@@ -178,8 +181,9 @@ class EhSettings {
     'xl': xl.map((e) => e.toJson()).toList(),
     'tag_filtering_threshold': tagFilteringThreshold,
     'tag_watching_threshold': tagWatchingThreshold,
-    'excluded_languages': excludedLanguages,
     'excluded_uploaders': excludedUploaders,
+    'xu_quota_using': xuQuotaUsing,
+    'xu_quota_max': xuQuotaMax,
     'search_result_count': searchResultCount,
     'mouse-over_thumbnails': mouseOverThumbnails,
     'thumbnail_size': thumbnailSize,
@@ -226,8 +230,9 @@ class EhSettings {
     xl: xl.map((e) => e.clone()).toList(),
     tagFilteringThreshold: tagFilteringThreshold,
     tagWatchingThreshold: tagWatchingThreshold,
-    excludedLanguages: excludedLanguages,
     excludedUploaders: excludedUploaders,
+    xuQuotaUsing: xuQuotaUsing,
+    xuQuotaMax: xuQuotaMax,
     searchResultCount: searchResultCount,
     mouseOverThumbnails: mouseOverThumbnails,
     thumbnailSize: thumbnailSize,
@@ -275,8 +280,9 @@ class EhSettings {
     List<EhSettingItem>? xl,
     String? tagFilteringThreshold,
     String? tagWatchingThreshold,
-    String? excludedLanguages,
     String? excludedUploaders,
+    int? xuQuotaUsing,
+    int? xuQuotaMax,
     String? searchResultCount,
     String? mouseOverThumbnails,
     String? thumbnailSize,
@@ -321,8 +327,9 @@ class EhSettings {
     xl: xl ?? this.xl,
     tagFilteringThreshold: tagFilteringThreshold ?? this.tagFilteringThreshold,
     tagWatchingThreshold: tagWatchingThreshold ?? this.tagWatchingThreshold,
-    excludedLanguages: excludedLanguages ?? this.excludedLanguages,
     excludedUploaders: excludedUploaders ?? this.excludedUploaders,
+    xuQuotaUsing: xuQuotaUsing ?? this.xuQuotaUsing,
+    xuQuotaMax: xuQuotaMax ?? this.xuQuotaMax,
     searchResultCount: searchResultCount ?? this.searchResultCount,
     mouseOverThumbnails: mouseOverThumbnails ?? this.mouseOverThumbnails,
     thumbnailSize: thumbnailSize ?? this.thumbnailSize,
@@ -342,8 +349,8 @@ class EhSettings {
 
   @override
   bool operator ==(Object other) => identical(this, other) 
-    || other is EhSettings && profilelist == other.profilelist && profileSelected == other.profileSelected && defaultProfile == other.defaultProfile && loadImageThroughHAtH == other.loadImageThroughHAtH && loadBrowsingCountry == other.loadBrowsingCountry && imageSize == other.imageSize && imageSizeHorizontal == other.imageSizeHorizontal && imageSizeVertical == other.imageSizeVertical && galleryNameDisplay == other.galleryNameDisplay && archiverSettings == other.archiverSettings && frontPageSettings == other.frontPageSettings && ctDoujinshi == other.ctDoujinshi && ctManga == other.ctManga && ctArtistcg == other.ctArtistcg && ctGamecg == other.ctGamecg && ctWestern == other.ctWestern && ctNonH == other.ctNonH && ctImageset == other.ctImageset && ctCosplay == other.ctCosplay && ctAsianporn == other.ctAsianporn && ctMisc == other.ctMisc && favorites == other.favorites && sortOrderFavorites == other.sortOrderFavorites && ratings == other.ratings && xn == other.xn && xl == other.xl && tagFilteringThreshold == other.tagFilteringThreshold && tagWatchingThreshold == other.tagWatchingThreshold && excludedLanguages == other.excludedLanguages && excludedUploaders == other.excludedUploaders && searchResultCount == other.searchResultCount && mouseOverThumbnails == other.mouseOverThumbnails && thumbnailSize == other.thumbnailSize && thumbnailRows == other.thumbnailRows && thumbnailScaling == other.thumbnailScaling && viewportOverride == other.viewportOverride && sortOrderComments == other.sortOrderComments && showCommentVotes == other.showCommentVotes && sortOrderTags == other.sortOrderTags && showGalleryPageNumbers == other.showGalleryPageNumbers && hentaiAtHomeLocalNetworkHost == other.hentaiAtHomeLocalNetworkHost && originalImages == other.originalImages && alwaysUseMpv == other.alwaysUseMpv && mpvStyle == other.mpvStyle && mpvThumbnailPane == other.mpvThumbnailPane;
+    || other is EhSettings && profilelist == other.profilelist && profileSelected == other.profileSelected && defaultProfile == other.defaultProfile && loadImageThroughHAtH == other.loadImageThroughHAtH && loadBrowsingCountry == other.loadBrowsingCountry && imageSize == other.imageSize && imageSizeHorizontal == other.imageSizeHorizontal && imageSizeVertical == other.imageSizeVertical && galleryNameDisplay == other.galleryNameDisplay && archiverSettings == other.archiverSettings && frontPageSettings == other.frontPageSettings && ctDoujinshi == other.ctDoujinshi && ctManga == other.ctManga && ctArtistcg == other.ctArtistcg && ctGamecg == other.ctGamecg && ctWestern == other.ctWestern && ctNonH == other.ctNonH && ctImageset == other.ctImageset && ctCosplay == other.ctCosplay && ctAsianporn == other.ctAsianporn && ctMisc == other.ctMisc && favorites == other.favorites && sortOrderFavorites == other.sortOrderFavorites && ratings == other.ratings && xn == other.xn && xl == other.xl && tagFilteringThreshold == other.tagFilteringThreshold && tagWatchingThreshold == other.tagWatchingThreshold && excludedUploaders == other.excludedUploaders && xuQuotaUsing == other.xuQuotaUsing && xuQuotaMax == other.xuQuotaMax && searchResultCount == other.searchResultCount && mouseOverThumbnails == other.mouseOverThumbnails && thumbnailSize == other.thumbnailSize && thumbnailRows == other.thumbnailRows && thumbnailScaling == other.thumbnailScaling && viewportOverride == other.viewportOverride && sortOrderComments == other.sortOrderComments && showCommentVotes == other.showCommentVotes && sortOrderTags == other.sortOrderTags && showGalleryPageNumbers == other.showGalleryPageNumbers && hentaiAtHomeLocalNetworkHost == other.hentaiAtHomeLocalNetworkHost && originalImages == other.originalImages && alwaysUseMpv == other.alwaysUseMpv && mpvStyle == other.mpvStyle && mpvThumbnailPane == other.mpvThumbnailPane;
 
   @override
-  int get hashCode => profilelist.hashCode ^ profileSelected.hashCode ^ defaultProfile.hashCode ^ loadImageThroughHAtH.hashCode ^ loadBrowsingCountry.hashCode ^ imageSize.hashCode ^ imageSizeHorizontal.hashCode ^ imageSizeVertical.hashCode ^ galleryNameDisplay.hashCode ^ archiverSettings.hashCode ^ frontPageSettings.hashCode ^ ctDoujinshi.hashCode ^ ctManga.hashCode ^ ctArtistcg.hashCode ^ ctGamecg.hashCode ^ ctWestern.hashCode ^ ctNonH.hashCode ^ ctImageset.hashCode ^ ctCosplay.hashCode ^ ctAsianporn.hashCode ^ ctMisc.hashCode ^ favorites.hashCode ^ sortOrderFavorites.hashCode ^ ratings.hashCode ^ xn.hashCode ^ xl.hashCode ^ tagFilteringThreshold.hashCode ^ tagWatchingThreshold.hashCode ^ excludedLanguages.hashCode ^ excludedUploaders.hashCode ^ searchResultCount.hashCode ^ mouseOverThumbnails.hashCode ^ thumbnailSize.hashCode ^ thumbnailRows.hashCode ^ thumbnailScaling.hashCode ^ viewportOverride.hashCode ^ sortOrderComments.hashCode ^ showCommentVotes.hashCode ^ sortOrderTags.hashCode ^ showGalleryPageNumbers.hashCode ^ hentaiAtHomeLocalNetworkHost.hashCode ^ originalImages.hashCode ^ alwaysUseMpv.hashCode ^ mpvStyle.hashCode ^ mpvThumbnailPane.hashCode;
+  int get hashCode => profilelist.hashCode ^ profileSelected.hashCode ^ defaultProfile.hashCode ^ loadImageThroughHAtH.hashCode ^ loadBrowsingCountry.hashCode ^ imageSize.hashCode ^ imageSizeHorizontal.hashCode ^ imageSizeVertical.hashCode ^ galleryNameDisplay.hashCode ^ archiverSettings.hashCode ^ frontPageSettings.hashCode ^ ctDoujinshi.hashCode ^ ctManga.hashCode ^ ctArtistcg.hashCode ^ ctGamecg.hashCode ^ ctWestern.hashCode ^ ctNonH.hashCode ^ ctImageset.hashCode ^ ctCosplay.hashCode ^ ctAsianporn.hashCode ^ ctMisc.hashCode ^ favorites.hashCode ^ sortOrderFavorites.hashCode ^ ratings.hashCode ^ xn.hashCode ^ xl.hashCode ^ tagFilteringThreshold.hashCode ^ tagWatchingThreshold.hashCode ^ excludedUploaders.hashCode ^ xuQuotaUsing.hashCode ^ xuQuotaMax.hashCode ^ searchResultCount.hashCode ^ mouseOverThumbnails.hashCode ^ thumbnailSize.hashCode ^ thumbnailRows.hashCode ^ thumbnailScaling.hashCode ^ viewportOverride.hashCode ^ sortOrderComments.hashCode ^ showCommentVotes.hashCode ^ sortOrderTags.hashCode ^ showGalleryPageNumbers.hashCode ^ hentaiAtHomeLocalNetworkHost.hashCode ^ originalImages.hashCode ^ alwaysUseMpv.hashCode ^ mpvStyle.hashCode ^ mpvThumbnailPane.hashCode;
 }

@@ -29,8 +29,11 @@
 
   "tag_filtering_threshold?": "",
   "tag_watching_threshold?": "",
-  "excluded_languages?": "",
+
   "excluded_uploaders?": "",
+  "xu_quota_using?": 0,
+  "xu_quota_max?": 1000,
+
   "search_result_count?": "",
   "mouse-over_thumbnails?": "",
   "thumbnail_size?": "",
