@@ -77,7 +77,7 @@ class GalleryFavController extends GetxController {
     _favTitle.value = favtitle;
     _favcat.value = favcat;
     try {
-      _itemController.setFavTitle(favTitle: favTitle, favcat: favcat);
+      _itemController.setFavTitleAndFavcat(favTitle: favTitle, favcat: favcat);
     } catch (_) {}
   }
 
@@ -87,7 +87,7 @@ class GalleryFavController extends GetxController {
   Future<bool> _addToLastFavcat(String _lastFavcat) async {
     isLoading = true;
 
-    final String _favTitle =
+    final String _favTitleFromProfile =
         Global.profile.user.favcat![int.parse(_lastFavcat)].favTitle;
 
     try {
@@ -97,15 +97,22 @@ class GalleryFavController extends GetxController {
         favcat: _lastFavcat,
         favnote: favnote,
       );
+      _removeGalleryCache();
+      final _oriFavcat = _favcat.value;
+      if (_oriFavcat.isNotEmpty) {
+        _favoriteSelectorController.decrease(_oriFavcat);
+      }
+      _favoriteSelectorController.increase(_lastFavcat);
     } catch (e) {
       return false;
     } finally {
       isLoading = false;
-
-      this._favTitle.value = _favTitle;
+      _favTitle.value = _favTitleFromProfile;
       _favcat.value = _lastFavcat;
       if (!_pageController.fromUrl) {
-        _itemController.setFavTitle(favTitle: favTitle, favcat: favcat);
+        logger.d('upt item');
+        _itemController.setFavTitleAndFavcat(
+            favTitle: favTitle, favcat: favcat);
       }
     }
     return true;
@@ -124,9 +131,7 @@ class GalleryFavController extends GetxController {
       final String _lastFavcat = _ehConfigService.lastFavcat.value;
 
       // 添加到上次收藏夹
-      if ((_ehConfigService.isFavLongTap.value) &&
-          _lastFavcat != null &&
-          _lastFavcat.isNotEmpty) {
+      if ((_ehConfigService.isFavLongTap.value) && _lastFavcat.isNotEmpty) {
         logger.v('添加到上次收藏夹 $_lastFavcat');
         return _addToLastFavcat(_lastFavcat);
       } else {
@@ -153,20 +158,20 @@ class GalleryFavController extends GetxController {
       logger.v('add fav ${result.favId}');
 
       isLoading = true;
-      final String _favcat = result.favId;
-      final String _favnote = result.note ?? '';
-      final String _favTitle = result.favTitle;
+      final String _favcatFromRult = result.favId;
+      final String _favnoteFromRult = result.note ?? '';
+      final String _favTitleFromRult = result.favTitle;
 
-      _ehConfigService.lastFavcat.value = _favcat;
+      _ehConfigService.lastFavcat.value = _favcatFromRult;
 
       try {
-        if (_favcat != 'l') {
+        if (_favcatFromRult != 'l') {
           // 网络收藏
           await GalleryFavParser.galleryAddfavorite(
             _pageController.galleryItem?.gid ?? '0',
             _pageController.galleryItem?.token ?? '',
-            favcat: _favcat,
-            favnote: _favnote,
+            favcat: _favcatFromRult,
+            favnote: _favnoteFromRult,
           );
           _removeGalleryCache();
         } else {
@@ -174,22 +179,21 @@ class GalleryFavController extends GetxController {
           _pageController.localFav = true;
           _localFavController.addLocalFav(_pageController.galleryItem);
         }
-        final _oriFavcat = this._favcat.value;
-        logger.v(' ${_pageController.galleryItem?.toJson()}');
+        final _oriFavcat = _favcat.value;
         if (_oriFavcat.isNotEmpty) {
           _favoriteSelectorController.decrease(_oriFavcat);
         }
-
-        _favoriteSelectorController.increase(_favcat);
+        _favoriteSelectorController.increase(_favcatFromRult);
       } catch (e) {
         return false;
       } finally {
         isLoading = false;
-        this._favTitle.value = _favTitle;
-        this._favcat.value = _favcat;
+        _favTitle.value = _favTitleFromRult;
+        _favcat.value = _favcatFromRult;
         if (!_pageController.fromUrl) {
           logger.d('upt item');
-          _itemController.setFavTitle(favTitle: favTitle, favcat: favcat);
+          _itemController.setFavTitleAndFavcat(
+              favTitle: favTitle, favcat: favcat);
         }
       }
       return true;
@@ -225,7 +229,7 @@ class GalleryFavController extends GetxController {
       _favcat.value = '';
       if (!_pageController.fromUrl) {
         logger.d('del fav ${_itemController.galleryItem.gid} ,upt item');
-        _itemController.setFavTitle(favTitle: '', favcat: '');
+        _itemController.setFavTitleAndFavcat(favTitle: '', favcat: '');
       }
     }
     return false;
