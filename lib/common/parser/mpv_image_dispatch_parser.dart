@@ -5,7 +5,7 @@ import 'package:fehviewer/const/const.dart';
 import 'package:fehviewer/models/base/eh_models.dart';
 
 GalleryImage parserMpvImageDispatch(String json) {
-  print('====================== $json');
+  // print('====================== $json');
   final rult = jsonDecode(json) as Map<String, dynamic>;
   final String imageUrl = rult['i'] as String;
   final sourceId = rult['s'];

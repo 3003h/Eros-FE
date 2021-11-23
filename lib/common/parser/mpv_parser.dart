@@ -15,7 +15,7 @@ Mpv parserMpvPage(String html) {
   final gidStr =
       RegExp(r'gid(\s+)?=(\s+)?(\d+);').firstMatch(html)?.group(3) ?? '0';
 
-  print('mpvkey:$mpvkey\ngid:$gidStr');
+  // print('mpvkey:$mpvkey\ngid:$gidStr');
 
   final imageList = <MvpImage>[];
   for (final dynamic e in jsonDecode(imagelistStr ?? '[]') as List<dynamic>) {

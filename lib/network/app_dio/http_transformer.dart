@@ -150,9 +150,10 @@ class GalleryImageHttpTransformer extends HttpTransformer {
 }
 
 class GalleryMpvImageHttpTransformer extends HttpTransformer {
-  GalleryMpvImageHttpTransformer(this.ser);
+  GalleryMpvImageHttpTransformer(this.ser, {this.sourceId});
 
   final String ser;
+  final String? sourceId;
 
   @override
   FutureOr<DioHttpResponse<GalleryImage>> parse(
@@ -182,11 +183,12 @@ class GalleryMpvImageHttpTransformer extends HttpTransformer {
     }
 
     // 请求 api 获取大图信息
-    final galleryImage = await mpvImageDispatch(
+    final galleryImage = await mpvLoadImageDispatch(
       gid: mpvPage.gid!,
       mpvkey: mpvPage.mpvkey!,
       page: _page,
       imgkey: mpvImage.k!,
+      sourceId: sourceId,
     );
 
     return DioHttpResponse<GalleryImage>.success(galleryImage);

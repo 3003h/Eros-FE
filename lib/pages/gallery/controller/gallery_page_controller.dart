@@ -615,8 +615,8 @@ class GalleryPageController extends GetxController
         final String? _sourceId =
             changeSource ? galleryItem?.imageMap[itemSer]?.sourceId : '';
 
-        // logger.v(
-        //     'ser:$itemSer ,href: ${galleryItem.previewMap[itemSer]?.href} , _sourceId: $_sourceId');
+        logger.d(
+            'ser:$itemSer ,href: ${galleryItem?.imageMap[itemSer]?.href} , _sourceId: $_sourceId');
 
         try {
           if (changeSource) {
@@ -627,7 +627,6 @@ class GalleryPageController extends GetxController
 
           final GalleryImage? _image = await fetchImageInfo(
             galleryItem?.imageMap[itemSer]?.href ?? '',
-            // refresh: changeSource,
             sourceId: _sourceId,
           );
 
