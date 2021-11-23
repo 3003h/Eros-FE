@@ -52,7 +52,7 @@ class GalleryItemController extends GetxController {
   bool get isFav => _isFav.value;
   set isFav(bool val) => _isFav.value = val;
 
-  void setFavTitle({String favTitle = '', String? favcat}) {
+  void setFavTitleAndFavcat({String favTitle = '', String? favcat}) {
     logger.v('setFavTitle ori isFav :$isFav');
     galleryItem = galleryItem.copyWith(favTitle: favTitle);
     isFav = favTitle.isNotEmpty;
@@ -143,7 +143,7 @@ class GalleryItemController extends GetxController {
                         .tapAddFav(galleryItem.gid!, galleryItem.token!)
                         .then((Favcat? value) {
                       if (value != null) {
-                        setFavTitle(
+                        setFavTitleAndFavcat(
                             favTitle: value.favTitle, favcat: value.favId);
                         showToast('successfully add');
                       }
@@ -162,7 +162,7 @@ class GalleryItemController extends GetxController {
                         .delFav(galleryItem.favcat!, galleryItem.gid!,
                             galleryItem.token!)
                         .then((_) {
-                      setFavTitle(favTitle: '', favcat: '');
+                      setFavTitleAndFavcat(favTitle: '', favcat: '');
                       showToast('successfully deleted');
                     });
                     Get.back();
@@ -182,8 +182,8 @@ class GalleryItemController extends GetxController {
                             oriFavcat: galleryItem.favcat!)
                         .then((Favcat? value) {
                       if (value != null) {
-                        setFavTitle(favTitle: '', favcat: '');
-                        setFavTitle(
+                        setFavTitleAndFavcat(favTitle: '', favcat: '');
+                        setFavTitleAndFavcat(
                             favTitle: value.favTitle, favcat: value.favId);
                         showToast('successfully changed');
                       }

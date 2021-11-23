@@ -214,12 +214,12 @@ Widget buildGallerySliverListView(
       if (tabTag == EHRoutes.history) {
         return itemWidget;
       } else {
-        return itemWidget;
-        // return FrameSeparateWidget(
-        //   index: index,
-        //   placeHolder: const GalleryItemPlaceHolder(),
-        //   child: itemWidget,
-        // );
+        // return itemWidget;
+        return FrameSeparateWidget(
+          index: index,
+          placeHolder: const GalleryItemPlaceHolder(),
+          child: itemWidget,
+        );
       }
     },
   );
