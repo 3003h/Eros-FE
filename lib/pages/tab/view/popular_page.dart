@@ -32,10 +32,10 @@ class _PopularListTabState extends State<PopularListTab> {
   void initState() {
     super.initState();
 
-    ehTabController.scrollToTopCall = () => controller.srcollToTop(context);
-    ehTabController.scrollToTopRefreshCall =
-        () => controller.srcollToTopRefresh(context);
-    tabPages.scrollControllerMap[controller.tabTag] = ehTabController;
+    controller.initStateForListPage(
+      context: context,
+      ehTabController: ehTabController,
+    );
   }
 
   @override

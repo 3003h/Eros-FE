@@ -21,7 +21,7 @@ SliverPadding buildWaterfallFlow(
   dynamic tabTag, {
   int? maxPage,
   required int curPage,
-  VoidCallback? loadMord,
+  VoidCallback? lastComplete,
   bool large = false,
   Key? centerKey,
   int? lastTopitemIndex,
@@ -54,12 +54,12 @@ SliverPadding buildWaterfallFlow(
           if (gallerItemBeans.length - 1 < index) {
             return const SizedBox.shrink();
           }
-//           if (maxPage != null) {
-//             if (index == gallerItemBeans.length - 1 && curPage < maxPage - 1) {
-// //            加载更多数据的回调
-//               loadMord?.call();
-//             }
-//           }
+          if (maxPage != null) {
+            if (index == gallerItemBeans.length - 1 && curPage < maxPage - 1) {
+              // 加载完成最后一项的回调
+              lastComplete?.call();
+            }
+          }
 
           final GalleryItem _item = gallerItemBeans[index];
           Get.lazyReplace(() => GalleryItemController(_item),
@@ -176,9 +176,9 @@ Widget buildDelGallerySliverListItem(
 Widget buildGallerySliverListView(
   List<GalleryItem> gallerItemBeans,
   dynamic tabTag, {
-  // int? maxPage,
+  int? maxPage,
   int curPage = 0,
-  VoidCallback? loadMord,
+  VoidCallback? lastComplete,
   Key? key,
   Key? centerKey,
   int? lastTopitemIndex,
@@ -191,6 +191,14 @@ Widget buildGallerySliverListView(
       if (gallerItemBeans.length - 1 < index) {
         return const SizedBox.shrink();
       }
+
+      if (maxPage != null) {
+        if (index == gallerItemBeans.length - 1 && curPage < maxPage - 1) {
+          // 加载完成最后一项的回调
+          lastComplete?.call();
+        }
+      }
+
       final GalleryItem _itemInfo = gallerItemBeans[index];
       Get.lazyReplace(() => GalleryItemController(_itemInfo),
           tag: _itemInfo.gid, fenix: true);
@@ -207,11 +215,11 @@ Widget buildGallerySliverListView(
         return itemWidget;
       } else {
         return itemWidget;
-        return FrameSeparateWidget(
-          index: index,
-          placeHolder: const GalleryItemPlaceHolder(),
-          child: itemWidget,
-        );
+        // return FrameSeparateWidget(
+        //   index: index,
+        //   placeHolder: const GalleryItemPlaceHolder(),
+        //   child: itemWidget,
+        // );
       }
     },
   );
@@ -222,7 +230,7 @@ Widget buildGallerySliverListSimpleView(
   tabTag, {
   int? maxPage,
   required int curPage,
-  VoidCallback? loadMord,
+  VoidCallback? lastComplete,
   Key? key,
   Key? centerKey,
   int? lastTopitemIndex,
@@ -235,6 +243,14 @@ Widget buildGallerySliverListSimpleView(
       if (gallerItemBeans.length - 1 < index) {
         return const SizedBox.shrink();
       }
+
+      if (maxPage != null) {
+        if (index == gallerItemBeans.length - 1 && curPage < maxPage - 1) {
+          // 加载完成最后一项的回调
+          lastComplete?.call();
+        }
+      }
+
       final GalleryItem _item = gallerItemBeans[index];
       // Get.replace(GalleryItemController(_item), tag: _item.gid);
       Get.lazyReplace(() => GalleryItemController(_item),
@@ -254,9 +270,9 @@ Widget buildGallerySliverListSimpleView(
 Widget getGalleryList(
   List<GalleryItem>? gallerItemBeans,
   tabTag, {
-  // int? maxPage,
+  int? maxPage,
   int? curPage,
-  VoidCallback? loadMord,
+  VoidCallback? lastComplete,
   Key? key,
   Key? centerKey,
   int? lastTopitemIndex,
@@ -271,9 +287,9 @@ Widget getGalleryList(
         return buildGallerySliverListView(
           gallerItemBeans ?? [],
           tabTag,
-          // maxPage: maxPage,
+          maxPage: maxPage,
           curPage: curPage ?? 0,
-          loadMord: loadMord,
+          lastComplete: lastComplete,
           key: key,
           centerKey: centerKey,
           lastTopitemIndex: lastTopitemIndex,
@@ -282,9 +298,9 @@ Widget getGalleryList(
         return buildWaterfallFlow(
           gallerItemBeans ?? [],
           tabTag,
-          // maxPage: maxPage,
+          maxPage: maxPage,
           curPage: curPage ?? 0,
-          loadMord: loadMord,
+          lastComplete: lastComplete,
           centerKey: centerKey,
           lastTopitemIndex: lastTopitemIndex,
         );
@@ -292,9 +308,9 @@ Widget getGalleryList(
         return buildWaterfallFlow(
           gallerItemBeans ?? [],
           tabTag,
-          // maxPage: maxPage,
+          maxPage: maxPage,
           curPage: curPage ?? 0,
-          loadMord: loadMord,
+          lastComplete: lastComplete,
           large: true,
           centerKey: centerKey,
           lastTopitemIndex: lastTopitemIndex,
@@ -303,9 +319,9 @@ Widget getGalleryList(
         return buildGallerySliverListSimpleView(
           gallerItemBeans ?? [],
           tabTag,
-          // maxPage: maxPage,
+          maxPage: maxPage,
           curPage: curPage ?? 0,
-          loadMord: loadMord,
+          lastComplete: lastComplete,
           key: key,
           centerKey: centerKey,
           lastTopitemIndex: lastTopitemIndex,

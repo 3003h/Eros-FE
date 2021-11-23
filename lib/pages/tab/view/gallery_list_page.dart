@@ -38,26 +38,10 @@ class _GalleryListTabState extends State<GalleryListTab> {
   void initState() {
     super.initState();
 
-    ehTabController.scrollToTopCall = () => controller.srcollToTop(context);
-    ehTabController.scrollToTopRefreshCall =
-        () => controller.srcollToTopRefresh(context);
-    tabPages.scrollControllerMap[controller.tabTag] = ehTabController;
-
-    WidgetsBinding.instance?.addPostFrameCallback((_) {
-      final _scrollController = PrimaryScrollController.of(context);
-      _scrollController?.addListener(() async {
-        if (_scrollController.position.pixels ==
-            _scrollController.position.maxScrollExtent) {
-          if (controller.curPage < controller.maxPage - 1) {
-            // 加载更多
-            await controller.loadDataMore();
-          } else {
-            // 没有更多了
-            // showToast('No More');
-          }
-        }
-      });
-    });
+    controller.initStateForListPage(
+      context: context,
+      ehTabController: ehTabController,
+    );
   }
 
   @override
@@ -336,11 +320,10 @@ class _GalleryListTabState extends State<GalleryListTab> {
           return getGalleryList(
             state,
             controller.tabTag,
-            // maxPage: controller.maxPage,
+            maxPage: controller.maxPage,
             curPage: controller.curPage.value,
-            // loadMord: controller.loadDataMore,
+            lastComplete: controller.lastComplete,
             key: controller.sliverAnimatedListKey,
-            // centerKey: centerKey,
             lastTopitemIndex: controller.lastTopitemIndex,
           );
         },

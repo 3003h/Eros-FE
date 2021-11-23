@@ -77,21 +77,7 @@ class _GallerySearchPageState extends State<GallerySearchPage> {
       );
     }
 
-    WidgetsBinding.instance?.addPostFrameCallback((_) {
-      final _scrollController = PrimaryScrollController.of(context);
-      _scrollController?.addListener(() async {
-        if (_scrollController.position.pixels ==
-            _scrollController.position.maxScrollExtent) {
-          if (controller.curPage < controller.maxPage - 1) {
-            // 加载更多
-            await controller.loadDataMore();
-          } else {
-            // 没有更多了
-            // showToast('No More');
-          }
-        }
-      });
-    });
+    controller.initStateAddPostFrameCallback(context);
   }
 
   @override
@@ -644,9 +630,9 @@ class _GallerySearchPageState extends State<GallerySearchPage> {
         return getGalleryList(
           state,
           controller.tabIndex,
-          // maxPage: controller.maxPage,
+          maxPage: controller.maxPage,
           curPage: controller.curPage.value,
-          // loadMord: controller.loadDataMore,
+          lastComplete: controller.lastComplete,
           // centerKey: centerKey,
           key: controller.sliverAnimatedListKey,
           lastTopitemIndex: controller.lastTopitemIndex,
