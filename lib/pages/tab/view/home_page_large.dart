@@ -22,6 +22,7 @@ import 'package:fehviewer/pages/setting/search_setting_page.dart';
 import 'package:fehviewer/pages/setting/security_setting_page.dart';
 import 'package:fehviewer/pages/setting/tab_setting.dart';
 import 'package:fehviewer/pages/setting/view/login_webdav.dart';
+import 'package:fehviewer/pages/setting/view_setting_page.dart';
 import 'package:fehviewer/pages/setting/webdav_setting_page.dart';
 import 'package:fehviewer/pages/tab/controller/tabhome_controller.dart';
 import 'package:fehviewer/pages/tab/view/download_page.dart';
@@ -123,7 +124,14 @@ class TabHomeLarge extends GetView<TabHomeController> {
                           case EHRoutes.ehSetting:
                             return GetPageRoute(
                               settings: settings,
-                              page: () => EhSettingPage(),
+                              page: () => const EhSettingPage(),
+                              transition: Transition.fadeIn,
+                              showCupertinoParallax: false,
+                            );
+                          case EHRoutes.readSeting:
+                            return GetPageRoute(
+                              settings: settings,
+                              page: () => const ReadSettingPage(),
                               transition: Transition.fadeIn,
                               showCupertinoParallax: false,
                             );

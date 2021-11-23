@@ -6,7 +6,7 @@ import 'package:fehviewer/pages/gallery/view/all_preview_page.dart';
 import 'package:fehviewer/pages/gallery/view/comment_page.dart';
 import 'package:fehviewer/pages/gallery/view/gallery_info_page.dart';
 import 'package:fehviewer/pages/gallery/view/gallery_page.dart';
-import 'package:fehviewer/pages/image_view/controller/view_ext_contorller.dart';
+import 'package:fehviewer/pages/image_view/controller/view_contorller.dart';
 import 'package:fehviewer/pages/image_view/view/view_page.dart';
 import 'package:fehviewer/pages/login/controller/login_controller.dart';
 import 'package:fehviewer/pages/login/view/login_page.dart';
@@ -100,8 +100,8 @@ class AppPages {
       page: () => SecuritySettingPage(),
     ),
     GetPage(
-      name: EHRoutes.viewSeting,
-      page: () => ViewSettingPage(),
+      name: EHRoutes.readSeting,
+      page: () => ReadSettingPage(),
     ),
     GetPage(
       name: EHRoutes.login,

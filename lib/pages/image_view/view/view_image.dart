@@ -3,7 +3,7 @@ import 'package:extended_image/extended_image.dart';
 import 'package:fehviewer/component/exception/error.dart';
 import 'package:fehviewer/const/const.dart';
 import 'package:fehviewer/models/base/eh_models.dart';
-import 'package:fehviewer/pages/image_view/controller/view_ext_state.dart';
+import 'package:fehviewer/pages/image_view/controller/view_state.dart';
 import 'package:fehviewer/utils/logger.dart';
 import 'package:fehviewer/utils/utility.dart';
 import 'package:fehviewer/utils/vibrate.dart';
@@ -12,7 +12,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 import '../common.dart';
-import '../controller/view_ext_contorller.dart';
+import '../controller/view_contorller.dart';
 import 'view_widget.dart';
 
 typedef DoubleClickAnimationListener = void Function();

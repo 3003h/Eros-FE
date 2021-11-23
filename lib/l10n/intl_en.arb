@@ -23,7 +23,7 @@
   "not_login": "Not Login",
   "login_web": "Sign in on the web",
   "double_click_back": "Press again to exit",
-  "READ": "READ",
+  "read": "Read",
   "gallery_comments": "Gallery Comments",
   "all_comment": "All Comment",
   "all_preview": "All Preview",
@@ -325,5 +325,6 @@
   "uc_mt_0": "Show",
   "uc_mt_1": "Hide",
 
-  "auto_select_profile": "Auto select profile"
+  "auto_select_profile": "Auto select profile",
+  "tap_to_turn_page_anima": "Tap to turn page animations"
 }

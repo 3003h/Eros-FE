@@ -14,7 +14,7 @@ class EHRoutes {
   static const String searchSetting = '/setting/searchSetting';
   static const String advancedSetting = '/setting/advancedSetting';
   static const String securitySetting = '/setting/securitySetting';
-  static const String viewSeting = '/setting/viewSetting';
+  static const String readSeting = '/setting/readSetting';
   static const String about = '/setting/about';
 
   static const String quickSearch = '/quickSearch';

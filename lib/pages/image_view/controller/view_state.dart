@@ -16,7 +16,7 @@ import 'package:get/get.dart';
 
 import '../common.dart';
 import '../view/view_page.dart';
-import 'view_ext_contorller.dart';
+import 'view_contorller.dart';
 
 class ViewExtState {
   /// 初始化操作

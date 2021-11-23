@@ -3,7 +3,7 @@ import 'package:fehviewer/common/service/ehconfig_service.dart';
 import 'package:fehviewer/common/service/theme_service.dart';
 import 'package:fehviewer/const/const.dart';
 import 'package:fehviewer/generated/l10n.dart';
-import 'package:fehviewer/pages/image_view/controller/view_ext_contorller.dart';
+import 'package:fehviewer/pages/image_view/controller/view_contorller.dart';
 import 'package:fehviewer/pages/setting/setting_base.dart';
 import 'package:fehviewer/utils/logger.dart';
 import 'package:flutter/cupertino.dart';
@@ -11,7 +11,9 @@ import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:orientation/orientation.dart';
 
-class ViewSettingPage extends StatelessWidget {
+class ReadSettingPage extends StatelessWidget {
+  const ReadSettingPage({Key? key}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     final Widget cps = Obx(() {
@@ -54,7 +56,15 @@ class ViewSettingList extends StatelessWidget {
             Get.find<ViewExtController>().update([idSlidePage]);
           }
         },
-      )
+      ),
+      TextSwitchItem(
+        L10n.of(context).tap_to_turn_page_anima,
+        intValue: ehConfigService.tapToTurnPageAnimations,
+        onChanged: (bool val) {
+          ehConfigService.tapToTurnPageAnimations = val;
+        },
+        hideLine: true,
+      ),
     ];
     return ListView.builder(
       itemCount: _list.length,

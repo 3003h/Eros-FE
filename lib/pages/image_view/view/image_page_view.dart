@@ -10,7 +10,7 @@ import 'package:photo_view/photo_view.dart';
 import 'package:photo_view/photo_view_gallery.dart';
 
 import '../common.dart';
-import '../controller/view_ext_contorller.dart';
+import '../controller/view_contorller.dart';
 import 'view_image.dart';
 
 class ImagePageView extends GetView<ViewExtController> {

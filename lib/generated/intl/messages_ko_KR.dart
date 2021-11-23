@@ -27,7 +27,6 @@ class MessageLookup extends MessageLookupByLibrary {
   final messages = _notInlinedMessages(_notInlinedMessages);
   static Map<String, Function> _notInlinedMessages(_) => <String, Function>{
         "KEEP_IT_SAFE": MessageLookupByLibrary.simpleMessage("안전하게 보관하세요!"),
-        "READ": MessageLookupByLibrary.simpleMessage("읽기"),
         "about": MessageLookupByLibrary.simpleMessage("정보"),
         "add_quick_search": MessageLookupByLibrary.simpleMessage("빠른 검색 추가"),
         "add_tag_placeholder":
@@ -151,6 +150,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "processing": MessageLookupByLibrary.simpleMessage("처리 중"),
         "pure_black": MessageLookupByLibrary.simpleMessage("검정색 (Pure)"),
         "quick_search": MessageLookupByLibrary.simpleMessage("빠른 검색"),
+        "read": MessageLookupByLibrary.simpleMessage("읽기"),
         "read_from_clipboard":
             MessageLookupByLibrary.simpleMessage("Read from clipboard"),
         "read_setting": MessageLookupByLibrary.simpleMessage("읽기 설정"),
@@ -225,6 +225,8 @@ class MessageLookup extends MessageLookupByLibrary {
         "tag_vote_up": MessageLookupByLibrary.simpleMessage("추천"),
         "tag_withdraw_vote": MessageLookupByLibrary.simpleMessage("추천 취소"),
         "tags": MessageLookupByLibrary.simpleMessage("태그"),
+        "tap_to_turn_page_anima":
+            MessageLookupByLibrary.simpleMessage("Tap to turn page animations"),
         "theme": MessageLookupByLibrary.simpleMessage("테마"),
         "tolist_alltime": MessageLookupByLibrary.simpleMessage("All-Time"),
         "tolist_past_month": MessageLookupByLibrary.simpleMessage("Past Month"),

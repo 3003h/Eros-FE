@@ -277,8 +277,8 @@ class ReadButton extends StatelessWidget {
       () => CupertinoButton(
           child: Text(
             (_pageController.lastIndex > 0)
-                ? '${L10n.of(context).READ} ${_pageController.lastIndex + 1}'
-                : L10n.of(context).READ,
+                ? '${L10n.of(context).read.toUpperCase()} ${_pageController.lastIndex + 1}'
+                : L10n.of(context).read.toUpperCase(),
             style: const TextStyle(fontSize: 15, height: 1.2),
           ),
           minSize: 20,

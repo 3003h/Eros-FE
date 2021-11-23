@@ -23,7 +23,7 @@
   "not_login": "未登录",
   "login_web": "通过网页登录",
   "double_click_back": "再按一次返回退出",
-  "READ": "閱讀",
+  "read": "閱讀",
   "gallery_comments": "畫廊評論",
   "all_comment": "所有评论",
   "all_preview": "所有预览",
@@ -318,5 +318,6 @@
   "uc_mt_0": "Show",
   "uc_mt_1": "Hide",
 
-  "auto_select_profile": "Auto select profile"
+  "auto_select_profile": "Auto select profile",
+  "tap_to_turn_page_anima": "Tap to turn page animations"
 }

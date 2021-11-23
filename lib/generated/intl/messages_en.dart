@@ -27,7 +27,6 @@ class MessageLookup extends MessageLookupByLibrary {
   final messages = _notInlinedMessages(_notInlinedMessages);
   static Map<String, Function> _notInlinedMessages(_) => <String, Function>{
         "KEEP_IT_SAFE": MessageLookupByLibrary.simpleMessage("KEEP IT SAFE"),
-        "READ": MessageLookupByLibrary.simpleMessage("READ"),
         "about": MessageLookupByLibrary.simpleMessage("About"),
         "add_quick_search":
             MessageLookupByLibrary.simpleMessage("Add to search"),
@@ -174,6 +173,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "processing": MessageLookupByLibrary.simpleMessage("Processing"),
         "pure_black": MessageLookupByLibrary.simpleMessage("Pure black"),
         "quick_search": MessageLookupByLibrary.simpleMessage("Quick search"),
+        "read": MessageLookupByLibrary.simpleMessage("Read"),
         "read_from_clipboard":
             MessageLookupByLibrary.simpleMessage("Read from clipboard"),
         "read_setting": MessageLookupByLibrary.simpleMessage("Read setting"),
@@ -264,6 +264,8 @@ class MessageLookup extends MessageLookupByLibrary {
         "tag_withdraw_vote":
             MessageLookupByLibrary.simpleMessage("Withdraw Vote"),
         "tags": MessageLookupByLibrary.simpleMessage("Tags"),
+        "tap_to_turn_page_anima":
+            MessageLookupByLibrary.simpleMessage("Tap to turn page animations"),
         "theme": MessageLookupByLibrary.simpleMessage("Theme"),
         "tolist_alltime": MessageLookupByLibrary.simpleMessage("All-Time"),
         "tolist_past_month": MessageLookupByLibrary.simpleMessage("Past Month"),
