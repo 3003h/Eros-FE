@@ -100,6 +100,15 @@ EhSettings parseUconfig(String html) {
   final xu = document.querySelector('#xu')?.text.trim();
   print('xu:$xu');
 
+  final xuQuota = document
+      .querySelector('#xu')
+      ?.parent
+      ?.nextElementSibling
+      ?.querySelectorAll('strong');
+  // print('============== xlQuota ${xuQuota?.map((e) => e.text)}');
+  final int xuQuotaUsing = int.parse(xuQuota?[0].text ?? '0');
+  final int xuQuotaMax = int.parse(xuQuota?[1].text ?? '1000');
+
   // 搜索结果数 rc
   // todo 需要测试无Hath Perk情况
   final rc = _parseUconfigChecked('rc', 3, document);
@@ -169,6 +178,8 @@ EhSettings parseUconfig(String html) {
     thumbnailScaling: tp,
     viewportOverride: vp,
     excludedUploaders: xu,
+    xuQuotaMax: xuQuotaMax,
+    xuQuotaUsing: xuQuotaUsing,
     tagWatchingThreshold: wt,
     tagFilteringThreshold: ft,
     ratings: ru,

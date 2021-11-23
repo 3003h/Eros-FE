@@ -503,15 +503,29 @@ Widget _buildTagWatchingThreshold(BuildContext context) {
 
 Widget _buildExcludedUploaders(BuildContext context) {
   return Obx(() {
-    return TextInputItem(
+    return SingleInputItem(
       title: L10n.of(context).uc_exc_up,
       hideLine: true,
-      maxLines: null,
+      maxLines: _controller.ehSetting.xuQuotaMax,
+      selector:
+          '${_controller.ehSetting.excludedUploaders?.trim().split('\n').length ?? 0}'
+          '/${_controller.ehSetting.xuQuotaMax}',
       initValue: _controller.ehSetting.excludedUploaders ?? '',
       onChanged: (val) => _controller.ehSetting =
           _controller.ehSetting.copyWith(excludedUploaders: val),
     );
   });
+
+  // return Obx(() {
+  //   return TextInputItem(
+  //     title: L10n.of(context).uc_exc_up,
+  //     hideLine: true,
+  //     maxLines: null,
+  //     initValue: _controller.ehSetting.excludedUploaders ?? '',
+  //     onChanged: (val) => _controller.ehSetting =
+  //         _controller.ehSetting.copyWith(excludedUploaders: val),
+  //   );
+  // });
 }
 
 Widget _buildThumbnailScaling(BuildContext context) {

@@ -16,6 +16,8 @@ class SingleInputItem extends StatelessWidget {
     this.previousPageTitle,
     this.suffixText,
     this.placeholder,
+    this.selector,
+    this.maxLines,
   }) : super(key: key);
 
   final String title;
@@ -26,24 +28,28 @@ class SingleInputItem extends StatelessWidget {
   final bool hideLine;
   final String? suffixText;
   final String? placeholder;
+  final String? selector;
+  final int? maxLines;
 
   @override
   Widget build(BuildContext context) {
-    final selector = initValue ?? '';
+    final _initValue = initValue ?? '';
 
     return SelectorSettingItem(
       title: title,
       hideLine: hideLine,
-      selector: (selector.isNotEmpty && suffixText != null)
-          ? '$selector $suffixText'
-          : selector,
+      selector: selector ??
+          ((_initValue.isNotEmpty && suffixText != null)
+              ? '$_initValue $suffixText'
+              : _initValue),
       onTap: () async {
         Get.to(
           () => SingleInputPage(
             title: pageTitle ?? title,
             previousPageTitle: previousPageTitle,
             suffixText: suffixText,
-            initValue: selector,
+            maxLines: maxLines,
+            initValue: _initValue,
             placeholder: placeholder,
             onValueChanged: (val) {
               onChanged?.call(val);
