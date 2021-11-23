@@ -19,6 +19,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
 
+import '../comm.dart';
 import '../fetch_list.dart';
 import 'enum.dart';
 
@@ -75,6 +76,8 @@ class TabViewController extends GetxController
 
   final previousList = <GalleryItem>[].obs;
 
+  bool lastItemBuildComplete = false;
+
   @override
   void onReady() {
     super.onReady();
@@ -94,6 +97,7 @@ class TabViewController extends GetxController
 
       maxPage = rult.maxPage ?? 0;
       nextPage = rult.nextPage ?? 1;
+      lastItemBuildComplete = false;
       change(_listItem, status: RxStatus.success());
     } catch (err, stack) {
       logger.e('$err\n$stack');
@@ -174,6 +178,7 @@ class TabViewController extends GetxController
 
     maxPage = rult.maxPage ?? 0;
     nextPage = rult.nextPage ?? 1;
+    lastItemBuildComplete = false;
     change(rult.gallerys, status: RxStatus.success());
   }
 
@@ -208,6 +213,7 @@ class TabViewController extends GetxController
 
     logger.d('loadDataMore .....');
     cancelToken = CancelToken();
+    pageState = PageState.Loading;
 
     final int _catNum = _ehConfigService.catFilter.value;
 
@@ -215,11 +221,11 @@ class TabViewController extends GetxController
     await Future<void>.delayed(const Duration(milliseconds: 100));
 
     logger.d('load page: $nextPage');
+    final lastNextPage = nextPage;
 
     final String fromGid = state?.last.gid ?? '0';
-    try {
-      pageState = PageState.Loading;
 
+    try {
       final fetchConfig = FetchParams(
         page: nextPage,
         fromGid: fromGid,
@@ -258,7 +264,8 @@ class TabViewController extends GetxController
       }
 
       // 成功才更新
-      curPage.value = nextPage;
+      curPage.value = lastNextPage;
+      lastItemBuildComplete = false;
       pageState = PageState.None;
     } catch (e, stack) {
       pageState = PageState.LoadingException;
@@ -272,6 +279,7 @@ class TabViewController extends GetxController
       return;
     }
 
+    pageState = PageState.Loading;
     cancelToken = CancelToken();
 
     final int _catNum = _ehConfigService.catFilter.value;
@@ -327,7 +335,10 @@ class TabViewController extends GetxController
       minPage -= 1;
       curPage.value = minPage;
       update();
+      lastItemBuildComplete = false;
+      pageState = PageState.None;
     } catch (e, stack) {
+      pageState = PageState.LoadingError;
       rethrow;
     }
   }
@@ -336,7 +347,7 @@ class TabViewController extends GetxController
     logger.d('jump to page =>  $page');
 
     final int _catNum = _ehConfigService.catFilter.value;
-
+    pageState = PageState.Loading;
     change(state, status: RxStatus.loading());
 
     previousList.clear();
@@ -349,13 +360,22 @@ class TabViewController extends GetxController
       favcat: curFavcat,
       toplist: currToplist,
     );
-    FetchListClient fetchListClient = getFetchListClient(fetchConfig);
-    final GalleryList? rult = await fetchListClient.fetch();
+    try {
+      FetchListClient fetchListClient = getFetchListClient(fetchConfig);
+      final GalleryList? rult = await fetchListClient.fetch();
 
-    curPage.value = page;
-    minPage = page;
-    if (rult != null) {
-      change(rult.gallerys, status: RxStatus.success());
+      curPage.value = page;
+      minPage = page;
+      nextPage = rult?.nextPage ?? page + 1;
+      logger.d('after loadFromPage nextPage is $nextPage');
+      if (rult != null) {
+        change(rult.gallerys, status: RxStatus.success());
+      }
+      pageState = PageState.None;
+      lastItemBuildComplete = false;
+    } catch (e) {
+      pageState = PageState.LoadingError;
+      rethrow;
     }
   }
 
@@ -434,6 +454,10 @@ class TabViewController extends GetxController
         );
       },
     );
+  }
+
+  void lastComplete() {
+    lastItemBuildComplete = true;
   }
 
   final TabHomeController _tabHomeController = Get.find();
@@ -544,4 +568,36 @@ class TabViewController extends GetxController
       : enablePopupMenu && (!Get.find<EhConfigService>().isSafeMode.value)
           ? buildLeadingCustomPopupMenu(Get.context!)
           : const SizedBox();
+
+  void initStateForListPage({
+    required BuildContext context,
+    required EhTabController ehTabController,
+  }) {
+    ehTabController.scrollToTopCall = () => srcollToTop(context);
+    ehTabController.scrollToTopRefreshCall = () => srcollToTopRefresh(context);
+    tabPages.scrollControllerMap[tabTag] = ehTabController;
+
+    initStateAddPostFrameCallback(context);
+  }
+
+  void initStateAddPostFrameCallback(BuildContext context) {
+    WidgetsBinding.instance?.addPostFrameCallback((_) {
+      final _scrollController = PrimaryScrollController.of(context);
+      _scrollController?.addListener(() async {
+        if (_scrollController.position.pixels >
+            _scrollController.position.maxScrollExtent -
+                context.mediaQuerySize.longestSide) {
+          if (curPage < maxPage - 1 &&
+              lastItemBuildComplete &&
+              pageState != PageState.Loading) {
+            // 加载更多
+            await loadDataMore();
+          } else {
+            // 没有更多了
+            // showToast('No More');
+          }
+        }
+      });
+    });
+  }
 }
