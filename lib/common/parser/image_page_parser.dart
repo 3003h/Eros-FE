@@ -3,11 +3,13 @@ import 'package:fehviewer/const/const.dart';
 import 'package:fehviewer/models/index.dart';
 import 'package:html/dom.dart';
 import 'package:html/parser.dart' show parse;
+import 'package:html_unescape/html_unescape.dart';
 
 GalleryImage paraImage(String htmlText) {
   final Document document = parse(htmlText);
+  final HtmlUnescape htmlUnescape = HtmlUnescape();
 
-  final RegExp regImageUrl = RegExp('<img[^>]*src=\"([^\"]+)\" style');
+  final RegExp regImageUrl = RegExp(r'<img[^>]*src="([^"]+)" style');
   final String imageUrl = regImageUrl.firstMatch(htmlText)?.group(1) ?? '';
 
   // throw EhError(type: EhErrorType.image509);
@@ -47,6 +49,16 @@ GalleryImage paraImage(String htmlText) {
       document.querySelectorAll('#i2 > div.sn > div > span');
   final int ser = int.parse(serElms[0].text);
 
+  // 原图链接
+  final regExpOriginImageUrl = RegExp(r'<a href="([^"]+)fullimg.php([^"]+)">');
+  final match = regExpOriginImageUrl.firstMatch(htmlText);
+  String? originImageUrl;
+  if (match?.groupCount == 2) {
+    originImageUrl =
+        '${htmlUnescape.convert(match!.group(1)!)}fullimg.php${htmlUnescape.convert(match.group(2)!)}';
+  }
+  print('====================>$originImageUrl');
+
   final GalleryImage _reImage = kDefGalleryImage.copyWith(
     imageUrl: imageUrl,
     sourceId: _sourceId,
@@ -55,6 +67,7 @@ GalleryImage paraImage(String htmlText) {
     gid: gid,
     token: token,
     ser: ser,
+    originImageUrl: originImageUrl,
   );
 
   return _reImage;

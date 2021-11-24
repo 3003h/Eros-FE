@@ -11,6 +11,7 @@ class GalleryImage {
     required this.ser,
     this.href,
     this.imageUrl,
+    this.originImageUrl,
     this.thumbUrl,
     this.thumbHeight,
     this.thumbWidth,
@@ -31,6 +32,7 @@ class GalleryImage {
   final int ser;
   final String? href;
   final String? imageUrl;
+  final String? originImageUrl;
   final String? thumbUrl;
   final double? thumbHeight;
   final double? thumbWidth;
@@ -51,6 +53,7 @@ class GalleryImage {
     ser: json['ser'] as int,
     href: json['href'] != null ? json['href'] as String : null,
     imageUrl: json['imageUrl'] != null ? json['imageUrl'] as String : null,
+    originImageUrl: json['originImageUrl'] != null ? json['originImageUrl'] as String : null,
     thumbUrl: json['thumbUrl'] != null ? json['thumbUrl'] as String : null,
     thumbHeight: json['thumbHeight'] != null ? json['thumbHeight'] as double : null,
     thumbWidth: json['thumbWidth'] != null ? json['thumbWidth'] as double : null,
@@ -72,6 +75,7 @@ class GalleryImage {
     'ser': ser,
     'href': href,
     'imageUrl': imageUrl,
+    'originImageUrl': originImageUrl,
     'thumbUrl': thumbUrl,
     'thumbHeight': thumbHeight,
     'thumbWidth': thumbWidth,
@@ -93,6 +97,7 @@ class GalleryImage {
     ser: ser,
     href: href,
     imageUrl: imageUrl,
+    originImageUrl: originImageUrl,
     thumbUrl: thumbUrl,
     thumbHeight: thumbHeight,
     thumbWidth: thumbWidth,
@@ -115,6 +120,7 @@ class GalleryImage {
     int? ser,
     String? href,
     String? imageUrl,
+    String? originImageUrl,
     String? thumbUrl,
     double? thumbHeight,
     double? thumbWidth,
@@ -134,6 +140,7 @@ class GalleryImage {
     ser: ser ?? this.ser,
     href: href ?? this.href,
     imageUrl: imageUrl ?? this.imageUrl,
+    originImageUrl: originImageUrl ?? this.originImageUrl,
     thumbUrl: thumbUrl ?? this.thumbUrl,
     thumbHeight: thumbHeight ?? this.thumbHeight,
     thumbWidth: thumbWidth ?? this.thumbWidth,
@@ -150,8 +157,8 @@ class GalleryImage {
 
   @override
   bool operator ==(Object other) => identical(this, other) 
-    || other is GalleryImage && isLarge == other.isLarge && isCache == other.isCache && startPrecache == other.startPrecache && ser == other.ser && href == other.href && imageUrl == other.imageUrl && thumbUrl == other.thumbUrl && thumbHeight == other.thumbHeight && thumbWidth == other.thumbWidth && imageHeight == other.imageHeight && imageWidth == other.imageWidth && offSet == other.offSet && sourceId == other.sourceId && completeHeight == other.completeHeight && gid == other.gid && token == other.token && isDownloaded == other.isDownloaded && filePath == other.filePath;
+    || other is GalleryImage && isLarge == other.isLarge && isCache == other.isCache && startPrecache == other.startPrecache && ser == other.ser && href == other.href && imageUrl == other.imageUrl && originImageUrl == other.originImageUrl && thumbUrl == other.thumbUrl && thumbHeight == other.thumbHeight && thumbWidth == other.thumbWidth && imageHeight == other.imageHeight && imageWidth == other.imageWidth && offSet == other.offSet && sourceId == other.sourceId && completeHeight == other.completeHeight && gid == other.gid && token == other.token && isDownloaded == other.isDownloaded && filePath == other.filePath;
 
   @override
-  int get hashCode => isLarge.hashCode ^ isCache.hashCode ^ startPrecache.hashCode ^ ser.hashCode ^ href.hashCode ^ imageUrl.hashCode ^ thumbUrl.hashCode ^ thumbHeight.hashCode ^ thumbWidth.hashCode ^ imageHeight.hashCode ^ imageWidth.hashCode ^ offSet.hashCode ^ sourceId.hashCode ^ completeHeight.hashCode ^ gid.hashCode ^ token.hashCode ^ isDownloaded.hashCode ^ filePath.hashCode;
+  int get hashCode => isLarge.hashCode ^ isCache.hashCode ^ startPrecache.hashCode ^ ser.hashCode ^ href.hashCode ^ imageUrl.hashCode ^ originImageUrl.hashCode ^ thumbUrl.hashCode ^ thumbHeight.hashCode ^ thumbWidth.hashCode ^ imageHeight.hashCode ^ imageWidth.hashCode ^ offSet.hashCode ^ sourceId.hashCode ^ completeHeight.hashCode ^ gid.hashCode ^ token.hashCode ^ isDownloaded.hashCode ^ filePath.hashCode;
 }

@@ -14,6 +14,8 @@ GalleryImage parserMpvImageDispatch(String json) {
 
   final lo = rult['yres'] as String;
 
+  final originImageUrl = rult['lf'] as String;
+
   final regExpGalleryPageUrl = RegExp(r'/s/([0-9a-z]+)/(\d+)-(\d+)');
   final match = regExpGalleryPageUrl.firstMatch(lo);
   final ser = match?.group(3) ?? '1';
@@ -26,5 +28,6 @@ GalleryImage parserMpvImageDispatch(String json) {
     sourceId: '$sourceId',
     imageWidth: double.parse(width),
     imageHeight: double.parse(height),
+    originImageUrl: originImageUrl,
   );
 }
