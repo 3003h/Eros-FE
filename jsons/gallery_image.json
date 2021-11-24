@@ -5,6 +5,7 @@
   "ser": 1,
   "href?": "",
   "imageUrl?": "",
+  "originImageUrl?": "",
   "thumbUrl?": "",
   "thumbHeight?": 2.0,
   "thumbWidth?": 2.0,
