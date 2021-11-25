@@ -68,7 +68,19 @@ class ListViewDownloadSetting extends StatelessWidget {
                     final String? result =
                         await FilePicker.platform.getDirectoryPath();
                     logger.d('set $result');
+
                     if (result != null) {
+                      if (result.startsWith('/storage/emulated/0/')) {
+                        final _uri =
+                            result.replaceFirst('/storage/emulated/0/', '');
+                        final _uriEncode = Uri.encodeComponent(':$_uri');
+                        logger.d('_uriEncode $_uriEncode');
+                        final _fullUri =
+                            'content://com.android.externalstorage.documents/tree/'
+                            'primary$_uriEncode/document/primary$_uriEncode';
+                        logger.d('_fullUri  $_fullUri');
+                      }
+
                       ehConfigService.downloadLocatino = result;
                     }
                   },
