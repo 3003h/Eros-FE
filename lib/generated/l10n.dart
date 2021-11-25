@@ -3249,6 +3249,26 @@ class L10n {
       args: [],
     );
   }
+
+  /// `Download original image`
+  String get download_ori_image {
+    return Intl.message(
+      'Download original image',
+      name: 'download_ori_image',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `it is dangerous! You may get 509 error`
+  String get download_ori_image_summary {
+    return Intl.message(
+      'it is dangerous! You may get 509 error',
+      name: 'download_ori_image_summary',
+      desc: '',
+      args: [],
+    );
+  }
 }
 
 class AppLocalizationDelegate extends LocalizationsDelegate<L10n> {

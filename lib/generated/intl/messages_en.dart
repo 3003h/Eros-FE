@@ -85,6 +85,10 @@ class MessageLookup extends MessageLookupByLibrary {
         "download": MessageLookupByLibrary.simpleMessage("Download"),
         "download_location":
             MessageLookupByLibrary.simpleMessage("Download Location"),
+        "download_ori_image":
+            MessageLookupByLibrary.simpleMessage("Download original image"),
+        "download_ori_image_summary": MessageLookupByLibrary.simpleMessage(
+            "it is dangerous! You may get 509 error"),
         "downloaded": MessageLookupByLibrary.simpleMessage("Downloaded"),
         "downloading": MessageLookupByLibrary.simpleMessage("Downloading"),
         "eh": MessageLookupByLibrary.simpleMessage("E·H"),

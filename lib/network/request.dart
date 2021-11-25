@@ -91,7 +91,7 @@ Future<GalleryList?> getGallery({
     _params.addAll(_searchController.favSearchMap);
   }
 
-  logger.d('${_params}');
+  logger.v('${_params}');
 
   DioHttpResponse httpResponse = await dioHttpClient.get(
     _url,
@@ -259,7 +259,7 @@ Future<GalleryImage?> fetchImageInfo(
     mpvSer = regGalleryMpvPageUrl.firstMatch(href)?.group(3) ?? '1';
   }
 
-  logger.d('url $href  isMpv:$isMpv');
+  logger.v('url $href  isMpv:$isMpv');
 
   DioHttpClient dioHttpClient = DioHttpClient(dioConfig: ehDioConfig);
   DioHttpResponse httpResponse = await dioHttpClient.get(
@@ -274,6 +274,8 @@ Future<GalleryImage?> fetchImageInfo(
 
   if (httpResponse.ok && httpResponse.data is GalleryImage) {
     return (httpResponse.data as GalleryImage).copyWith(href: href);
+  } else {
+    logger.d('${httpResponse.error.runtimeType}');
   }
 }
 
@@ -534,4 +536,43 @@ Future<GalleryImage?> mpvLoadImageDispatch({
     data: reqJsonStr,
     httpTransformer: ImageDispatchTransformer(),
   );
+}
+
+Future<void> ehDownload({
+  required String url,
+  required String savePath,
+  CancelToken? cancelToken,
+  bool? errToast,
+  bool deleteOnError = true,
+  VoidCallback? onDownloadComplete,
+  ProgressCallback? progressCallback,
+}) async {
+  await checkCookie();
+
+  late final String downloadUrl;
+  DioHttpClient dioHttpClient = DioHttpClient(dioConfig: ehDioConfig);
+  if (!url.startsWith(RegExp(r'https?://'))) {
+    downloadUrl = '${Api.getBaseUrl()}/$url';
+  } else {
+    downloadUrl = url;
+  }
+  logger.d('downloadUrl $downloadUrl');
+  try {
+    await dioHttpClient.download(
+      downloadUrl,
+      savePath,
+      deleteOnError: deleteOnError,
+      onReceiveProgress: (int count, int total) {
+        progressCallback?.call(count, total);
+        if (count == total) {
+          onDownloadComplete?.call();
+        }
+      },
+      cancelToken: cancelToken,
+    );
+  } on CancelException catch (e) {
+    logger.d('cancel');
+  } on Exception catch (e) {
+    rethrow;
+  }
 }
