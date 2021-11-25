@@ -1332,7 +1332,9 @@ class Api {
     VoidCallback? onDownloadComplete,
     ProgressCallback? progressCallback,
   }) async {
+    // logger.d('download $url');
     // await CustomHttpsProxy.instance.init();
+    await checkCookie();
     await Api.getHttpManager(retry: false).downLoadFile(
       url,
       path,

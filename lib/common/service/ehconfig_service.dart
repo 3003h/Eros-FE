@@ -71,6 +71,7 @@ class EhConfigService extends ProfileService {
   int get multiDownload => _multiDownload.value;
   set multiDownload(int val) => _multiDownload.value = val;
 
+  // 允许媒体扫描
   final RxBool _allowMediaScan = false.obs;
   bool get allowMediaScan => _allowMediaScan.value;
   set allowMediaScan(bool val) => _allowMediaScan.value = val;
@@ -131,6 +132,10 @@ class EhConfigService extends ProfileService {
   final _tapToTurnPageAnimations = true.obs;
   bool get tapToTurnPageAnimations => _tapToTurnPageAnimations.value;
   set tapToTurnPageAnimations(bool val) => _tapToTurnPageAnimations.value = val;
+
+  final _downloadOrigImage = false.obs;
+  bool get downloadOrigImage => _downloadOrigImage.value;
+  set downloadOrigImage(bool val) => _downloadOrigImage.value = val;
 
   @override
   void onInit() {
@@ -349,6 +354,12 @@ class EhConfigService extends ProfileService {
         _tapToTurnPageAnimations,
         (bool value) =>
             ehConfig = ehConfig.copyWith(tapToTurnPageAnimations: value));
+
+    // downloadOrigImage
+    downloadOrigImage = downloadConfig.downloadOrigImage ?? false;
+    everProfile<bool>(_downloadOrigImage, (value) {
+      downloadConfig = downloadConfig.copyWith(downloadOrigImage: value);
+    });
   }
 
   /// 收藏排序 dialog

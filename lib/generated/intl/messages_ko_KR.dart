@@ -75,6 +75,10 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("한번 더 누르면 종료됩니다."),
         "download": MessageLookupByLibrary.simpleMessage("다운로드"),
         "download_location": MessageLookupByLibrary.simpleMessage("다운로드 경로"),
+        "download_ori_image":
+            MessageLookupByLibrary.simpleMessage("Download original image"),
+        "download_ori_image_summary": MessageLookupByLibrary.simpleMessage(
+            "it is dangerous! You may get 509 error"),
         "downloaded": MessageLookupByLibrary.simpleMessage("다운로드 완료"),
         "downloading": MessageLookupByLibrary.simpleMessage("Downloading"),
         "eh": MessageLookupByLibrary.simpleMessage("E·H"),

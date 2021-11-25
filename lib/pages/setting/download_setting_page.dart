@@ -82,7 +82,15 @@ class ListViewDownloadSetting extends StatelessWidget {
           onChanged: _handleAllowMediaScanChanged,
         ),
       _buildPreloadImageItem(context),
-      _buildMultiDownloadItem(context, hideLine: true),
+      _buildMultiDownloadItem(context),
+      // 下载原图
+      TextSwitchItem(
+        L10n.of(context).download_ori_image,
+        desc: L10n.of(context).download_ori_image_summary,
+        intValue: ehConfigService.downloadOrigImage,
+        onChanged: (val) => ehConfigService.downloadOrigImage = val,
+        hideLine: true,
+      ),
     ];
     return ListView.builder(
       itemCount: _list.length,

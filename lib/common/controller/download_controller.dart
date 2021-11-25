@@ -420,20 +420,20 @@ class DownloadController extends GetxController {
     loggerSimple.v('${image.ser} start');
     if (redownload) logger.v('${image.ser} redownload ');
 
-    String _imageUrl = '';
+    late String _targetImageUrl;
     late GalleryImage _uptImage;
     String _fileName = '';
 
     // 存在imageTask的 用原url下载
-    final bool useOriginalUrl = imageTask != null &&
+    final bool useOldUrl = imageTask != null &&
         imageTask.imageUrl != null &&
         (imageTask.imageUrl?.isNotEmpty ?? false);
 
-    if (useOriginalUrl && !redownload) {
-      final String? imageUrl = imageTask.imageUrl;
-      loggerSimple.v('${image.ser} DL $imageUrl');
+    final String? imageUrlFromTask = imageTask?.imageUrl;
+    if (useOldUrl && !redownload && imageUrlFromTask != null) {
+      loggerSimple.v('${image.ser} DL $imageUrlFromTask');
 
-      _imageUrl = imageUrl!;
+      _targetImageUrl = imageUrlFromTask;
       _uptImage = image;
       if (imageTask.filePath != null && imageTask.filePath!.isNotEmpty) {
         _fileName = imageTask.filePath!;
@@ -441,6 +441,7 @@ class DownloadController extends GetxController {
         _fileName = _getFileName(image, maxSer);
       }
     } else if (image.href != null) {
+      logger.v('get new image url');
       if (redownload) {
         cacheController.clearDioCache(path: image.href ?? '');
       }
@@ -449,13 +450,28 @@ class DownloadController extends GetxController {
       final GalleryImage imageFetched = await _fetchImageInfo(
         image.href!,
         itemSer: image.ser,
-        oriImage: image,
+        image: image,
         gid: gid,
         cancelToken: cancelToken,
         changeSource: redownload,
       );
-      _imageUrl = imageFetched.imageUrl!;
+
+      // 不是所有图片都有原图
+      // if (imageFetched.originImageUrl == null &&
+      //     ehConfigService.downloadOrigImage) {
+      //   logger.e('imageFetched ${imageFetched.toJson()}');
+      //   throw EhError(error: 'get originImageUrl error');
+      // }
+      if (imageFetched.imageUrl == null) {
+        throw EhError(error: 'get imageUrl error');
+      }
+
+      _targetImageUrl = ehConfigService.downloadOrigImage
+          ? imageFetched.originImageUrl ?? imageFetched.imageUrl!
+          : imageFetched.imageUrl!;
       _uptImage = imageFetched;
+
+      logger.d('Download _targetImageUrl:$_targetImageUrl');
 
       _fileName = _getFileName(imageFetched, maxSer);
 
@@ -465,17 +481,20 @@ class DownloadController extends GetxController {
       if (redownload) {
         logger.v('${imageFetched.href}\n${imageFetched.imageUrl} ');
       }
+    } else {
+      throw EhError(error: 'get image url error');
     }
 
+    // 定义下载进度回调
     final ProgressCallback _progressCallback = (int count, int total) {
       // logger.d('gid:$gid ser:${image.ser}  dlCount:$count');
-
       dState.downloadCounts['${gid}_${image.ser}'] = count;
     };
 
     try {
+      // 下载图片
       await _download(
-        _imageUrl,
+        _targetImageUrl,
         path.join(downloadPath, _fileName),
         cancelToken: cancelToken,
         onDownloadComplete: () => onDownloadComplete?.call(_fileName),
@@ -484,27 +503,32 @@ class DownloadController extends GetxController {
     } on DioError catch (e) {
       if (e.type == DioErrorType.response && e.response?.statusCode == 403) {
         logger.d('403 $gid.${image.ser}下载链接已经失效 需要更新 ${image.href}');
-        final GalleryImage newImageFetched = await _fetchImageInfo(
+        final GalleryImage imageFetched = await _fetchImageInfo(
           image.href!,
           itemSer: image.ser,
-          oriImage: image,
+          image: image,
           gid: gid,
           cancelToken: cancelToken,
           sourceId: _uptImage.sourceId,
           changeSource: true,
         );
 
-        _imageUrl = newImageFetched.imageUrl!;
+        _targetImageUrl = ehConfigService.downloadOrigImage
+            ? imageFetched.originImageUrl ?? imageFetched.imageUrl!
+            : imageFetched.imageUrl!;
 
-        _addAllImages(gid, [newImageFetched]);
-        await _updateImageTask(gid, newImageFetched, fileName: _fileName);
+        logger.d('reDownload _targetImageUrl:$_targetImageUrl');
 
-        await Api.download(
-          _imageUrl,
-          path.join(downloadPath, _fileName),
+        _addAllImages(gid, [imageFetched]);
+        await _updateImageTask(gid, imageFetched, fileName: _fileName);
+
+        await ehDownload(
+          url: _targetImageUrl,
           cancelToken: cancelToken,
           onDownloadComplete: () => onDownloadComplete?.call(_fileName),
           progressCallback: _progressCallback,
+          savePath: path.join(downloadPath, _fileName),
+          deleteOnError: true,
         );
       }
     }
@@ -528,9 +552,9 @@ class DownloadController extends GetxController {
     }
 
     if (!formCache) {
-      await Api.download(
-        url,
-        path,
+      await ehDownload(
+        url: url,
+        savePath: path,
         cancelToken: cancelToken,
         onDownloadComplete: onDownloadComplete,
         progressCallback: progressCallback,
@@ -556,7 +580,7 @@ class DownloadController extends GetxController {
   Future<GalleryImage> _fetchImageInfo(
     String href, {
     required int itemSer,
-    required GalleryImage oriImage,
+    required GalleryImage image,
     required int gid,
     bool changeSource = false,
     String? sourceId,
@@ -564,20 +588,23 @@ class DownloadController extends GetxController {
   }) async {
     final GalleryImage? _image = await fetchImageInfo(
       href,
-      // refresh: changeSource,
+      refresh: changeSource,
       sourceId: sourceId,
       cancelToken: cancelToken,
     );
 
+    logger.d('_image from fetch ${_image?.toJson()}');
+
     if (_image == null) {
-      return oriImage;
+      return image;
     }
 
-    final GalleryImage _imageCopyWith = oriImage.copyWith(
+    final GalleryImage _imageCopyWith = image.copyWith(
       sourceId: _image.sourceId,
       imageUrl: _image.imageUrl,
       imageWidth: _image.imageWidth,
       imageHeight: _image.imageHeight,
+      originImageUrl: _image.originImageUrl,
     );
 
     return _imageCopyWith;
@@ -591,9 +618,9 @@ class DownloadController extends GetxController {
     required int firstPageCount,
     CancelToken? cancelToken,
   }) async {
-    logger.d('firstPageCount $firstPageCount');
+    logger.v('firstPageCount $firstPageCount');
     final int page = (ser - 1) ~/ firstPageCount;
-    logger.d('ser:$ser 所在页码为$page');
+    logger.v('ser:$ser 所在页码为$page');
 
     final List<GalleryImage> _moreImageList = await getGalleryImage(
       url,

@@ -70,6 +70,9 @@ class MessageLookup extends MessageLookupByLibrary {
         "double_click_back": MessageLookupByLibrary.simpleMessage("再按一次返回退出"),
         "download": MessageLookupByLibrary.simpleMessage("下载"),
         "download_location": MessageLookupByLibrary.simpleMessage("下载路径"),
+        "download_ori_image": MessageLookupByLibrary.simpleMessage("下载原图"),
+        "download_ori_image_summary":
+            MessageLookupByLibrary.simpleMessage("危险! 会导致下载配额迅速流失, 出现 509 错误"),
         "downloaded": MessageLookupByLibrary.simpleMessage("已下载"),
         "downloading": MessageLookupByLibrary.simpleMessage("下载中"),
         "eh": MessageLookupByLibrary.simpleMessage("E·H"),
