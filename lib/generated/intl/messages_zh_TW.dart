@@ -135,6 +135,8 @@ class MessageLookup extends MessageLookupByLibrary {
         "off": MessageLookupByLibrary.simpleMessage("關閉"),
         "ok": MessageLookupByLibrary.simpleMessage("確定"),
         "on": MessageLookupByLibrary.simpleMessage("打開"),
+        "open_with_other_apps":
+            MessageLookupByLibrary.simpleMessage("Open with other apps"),
         "orientation_auto": MessageLookupByLibrary.simpleMessage("Auto"),
         "orientation_landscapeLeft":
             MessageLookupByLibrary.simpleMessage("Landscape left"),
@@ -166,6 +168,7 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("Read from clipboard"),
         "read_setting": MessageLookupByLibrary.simpleMessage("阅读设置"),
         "reading_direction": MessageLookupByLibrary.simpleMessage("阅读方向"),
+        "redownload": MessageLookupByLibrary.simpleMessage("Redownload"),
         "reload_image": MessageLookupByLibrary.simpleMessage("重新载入图片"),
         "remove_from_favorites": MessageLookupByLibrary.simpleMessage("从收藏中删除"),
         "right_to_left": MessageLookupByLibrary.simpleMessage("从右到左"),

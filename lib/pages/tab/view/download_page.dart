@@ -318,7 +318,7 @@ Widget _downloadArciverItemBuilder(BuildContext context, int _taskIndex) {
   return GetBuilder<DownloadViewController>(
     id: '${idDownloadArchiverItem}_$_tag',
     builder: (logic) {
-      final DownloadTaskInfo _taskInfo = logic.archiverTasks[_taskIndex];
+      final _taskInfo = logic.archiverTasks[_taskIndex];
       return GestureDetector(
         onLongPress: () =>
             logic.onLongPress(_taskIndex, type: DownloadType.archiver),

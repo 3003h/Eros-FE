@@ -149,6 +149,8 @@ class MessageLookup extends MessageLookupByLibrary {
         "off": MessageLookupByLibrary.simpleMessage("Off"),
         "ok": MessageLookupByLibrary.simpleMessage("OK"),
         "on": MessageLookupByLibrary.simpleMessage("On"),
+        "open_with_other_apps":
+            MessageLookupByLibrary.simpleMessage("Open with other apps"),
         "orientation_auto": MessageLookupByLibrary.simpleMessage("Auto"),
         "orientation_landscapeLeft":
             MessageLookupByLibrary.simpleMessage("Landscape left"),
@@ -183,6 +185,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "read_setting": MessageLookupByLibrary.simpleMessage("Read setting"),
         "reading_direction":
             MessageLookupByLibrary.simpleMessage("Reading direction"),
+        "redownload": MessageLookupByLibrary.simpleMessage("Redownload"),
         "reload_image": MessageLookupByLibrary.simpleMessage("Reload image"),
         "remove_from_favorites":
             MessageLookupByLibrary.simpleMessage("Remove from favorites"),

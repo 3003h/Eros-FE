@@ -131,6 +131,8 @@ class MessageLookup extends MessageLookupByLibrary {
         "off": MessageLookupByLibrary.simpleMessage("꺼짐"),
         "ok": MessageLookupByLibrary.simpleMessage("확인"),
         "on": MessageLookupByLibrary.simpleMessage("켜짐"),
+        "open_with_other_apps":
+            MessageLookupByLibrary.simpleMessage("Open with other apps"),
         "orientation_auto": MessageLookupByLibrary.simpleMessage("자동"),
         "orientation_landscapeLeft": MessageLookupByLibrary.simpleMessage("가로"),
         "orientation_landscapeRight":
@@ -159,6 +161,7 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("Read from clipboard"),
         "read_setting": MessageLookupByLibrary.simpleMessage("읽기 설정"),
         "reading_direction": MessageLookupByLibrary.simpleMessage("읽기 방향"),
+        "redownload": MessageLookupByLibrary.simpleMessage("Redownload"),
         "reload_image": MessageLookupByLibrary.simpleMessage("이미지 새로고침"),
         "remove_from_favorites":
             MessageLookupByLibrary.simpleMessage("즐겨찾기에서 제거"),

@@ -119,7 +119,7 @@ const User kDefUser = User(
   favcat: [],
 );
 
-const DownloadTaskInfo kDefDownloadTaskInfo = DownloadTaskInfo(
+const DownloadArchiverTaskInfo kDefDownloadTaskInfo = DownloadArchiverTaskInfo(
   tag: '',
   gid: '',
   type: '',

@@ -3269,6 +3269,26 @@ class L10n {
       args: [],
     );
   }
+
+  /// `Redownload`
+  String get redownload {
+    return Intl.message(
+      'Redownload',
+      name: 'redownload',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Open with other apps`
+  String get open_with_other_apps {
+    return Intl.message(
+      'Open with other apps',
+      name: 'open_with_other_apps',
+      desc: '',
+      args: [],
+    );
+  }
 }
 
 class AppLocalizationDelegate extends LocalizationsDelegate<L10n> {

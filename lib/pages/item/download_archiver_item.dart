@@ -58,7 +58,11 @@ class DownloadArchiverItem extends GetView<DownloadViewController> {
         borderRadius: BorderRadius.circular(kCardRadius),
         child: Row(
           children: [
-            _buildCover().paddingOnly(right: 8),
+            Column(
+              children: [
+                Expanded(child: _buildCover().paddingOnly(right: 12)),
+              ],
+            ),
             Expanded(
               child: Padding(
                 padding: const EdgeInsets.only(top: 4, bottom: 4),
@@ -87,7 +91,7 @@ class DownloadArchiverItem extends GetView<DownloadViewController> {
                           ).paddingOnly(right: 8.0),
                         ),
                         Text(
-                          '${progress} %',
+                          '$progress %',
                           style: const TextStyle(
                             fontSize: 13,
                           ),
@@ -108,7 +112,7 @@ class DownloadArchiverItem extends GetView<DownloadViewController> {
   Widget _buildCover() {
     return GestureDetector(
       child: Container(
-        width: 80,
+        width: 64,
         child: coverUrl != null && coverUrl!.isNotEmpty
             ? DownloadItemCoverImage(
                 url: coverUrl,
@@ -116,10 +120,15 @@ class DownloadArchiverItem extends GetView<DownloadViewController> {
               )
             : Container(
                 color: CupertinoColors.systemGrey5,
+                child: Icon(
+                  CupertinoIcons.arrow_down_circle,
+                  color: CupertinoDynamicColor.resolve(
+                      CupertinoColors.systemBackground, Get.context!),
+                ),
               ),
       ),
       onTap: () async {
-        logger.v('${galleryUrl} ');
+        logger.v('$galleryUrl ');
         String? url = galleryUrl;
         if (url == null) {
           return;
@@ -133,7 +142,7 @@ class DownloadArchiverItem extends GetView<DownloadViewController> {
   }
 
   Widget _getIcon() {
-    final DownloadTaskInfo _taskInfo = controller.archiverTasks[index];
+    final _taskInfo = controller.archiverTasks[index];
 
     final Map<DownloadTaskStatus, Widget> statusMap = {
       // 下载时，显示暂停按钮

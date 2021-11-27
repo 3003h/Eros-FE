@@ -23,14 +23,17 @@ Future<String> get defDownloadPath async => GetPlatform.isAndroid
     ? path.join((await getExternalStorageDirectory())!.path, 'Download')
     : path.join(Global.appDocPath, 'Download');
 
+final ReceivePort flutterDownloaderPort = ReceivePort();
+const portName = 'downloader_send_port';
+
 class ArchiverDownloadController extends GetxController {
-  final Map<String, DownloadTaskInfo> _archiverTaskMap =
-      <String, DownloadTaskInfo>{};
-  set archiverTaskMap(Map<String, DownloadTaskInfo> val) {
+  final Map<String, DownloadArchiverTaskInfo> _archiverTaskMap =
+      <String, DownloadArchiverTaskInfo>{};
+  set archiverTaskMap(Map<String, DownloadArchiverTaskInfo> val) {
     _gStore.archiverTaskMap = val;
   }
 
-  Map<String, DownloadTaskInfo> get archiverTaskMap => _archiverTaskMap;
+  Map<String, DownloadArchiverTaskInfo> get archiverTaskMap => _archiverTaskMap;
 
   final GStore _gStore = Get.find();
 
@@ -42,18 +45,33 @@ class ArchiverDownloadController extends GetxController {
     return (await Global.getDatabase()).imageTaskDao;
   }
 
-  final ReceivePort _port = ReceivePort();
-
   final EhConfigService ehConfigService = Get.find();
 
   @override
   void onInit() {
     super.onInit();
-    // logger.d('ArchiverDownloadController onInit');
+    logger.d('ArchiverDownloadController onInit');
 
     IsolateNameServer.registerPortWithName(
-        _port.sendPort, 'downloader_send_port');
-    _port.listen((dynamic data) {
+        flutterDownloaderPort.sendPort, portName);
+
+    FlutterDownloader.registerCallback(_downloadCallback);
+
+    // 从GS中初始化 archiverDlMap
+    final _archiver =
+        _gStore.archiverTaskMap ?? <String, DownloadArchiverTaskInfo>{};
+    _archiverTaskMap.clear();
+    _archiverTaskMap.addAll(_archiver);
+
+    // 处理archiver任务
+    _getArchiverTask();
+  }
+
+  @override
+  void onReady() {
+    super.onReady();
+    flutterDownloaderPort.listen((dynamic data) {
+      logger.d('update listen');
       final dataList = data as List<dynamic>;
       String taskId = dataList[0] as String;
       DownloadTaskStatus status = dataList[1] as DownloadTaskStatus;
@@ -64,22 +82,12 @@ class ArchiverDownloadController extends GetxController {
       // 更新任务状态
       updateTask(taskId, status, progress);
     });
-
-    FlutterDownloader.registerCallback(_downloadCallback);
-
-    // 从GS中初始化 archiverDlMap
-    final _archiver = _gStore.archiverTaskMap ?? <String, DownloadTaskInfo>{};
-    _archiverTaskMap.clear();
-    _archiverTaskMap.addAll(_archiver);
-
-    // 处理archiver任务
-    _getArchiverTask();
   }
 
   @override
   void onClose() {
     super.onClose();
-    IsolateNameServer.removePortNameMapping('downloader_send_port');
+    IsolateNameServer.removePortNameMapping(portName);
   }
 
   void _saveTask() {
@@ -124,8 +132,9 @@ class ArchiverDownloadController extends GetxController {
       return;
     }
 
-    final String? _taskId =
-        await _downloadArchiverFile(url, await _getArchiverDownloadPath());
+    final _downloadPath = await _getArchiverDownloadPath();
+
+    final String? _taskId = await _downloadArchiverFile(url, _downloadPath);
 
     archiverTaskMap[_tag] = kDefDownloadTaskInfo.copyWith(
       tag: _tag,
@@ -135,6 +144,7 @@ class ArchiverDownloadController extends GetxController {
       title: title,
       imgUrl: imgUrl,
       galleryUrl: galleryUrl,
+      filePath: _downloadPath,
     );
 
     _downloadViewAnimateListAdd();
@@ -158,9 +168,6 @@ class ArchiverDownloadController extends GetxController {
 
   /// 获取下载路径
   Future<String> _getArchiverDownloadPath() async {
-    // final String _dirPath = GetPlatform.isAndroid
-    //     ? path.join((await getExternalStorageDirectory())!.path, '')
-    //     : path.join(Global.appDocPath, 'Download', 'Archiver');
     late String _dirPath;
 
     if (GetPlatform.isAndroid && ehConfigService.downloadLocatino.isNotEmpty) {
@@ -211,7 +218,7 @@ class ArchiverDownloadController extends GetxController {
 
     for (final DownloadTask downloadTask in tasks) {
       final int _index = archiverTaskMap.entries.toList().indexWhere(
-          (MapEntry<String, DownloadTaskInfo> element) =>
+          (MapEntry<String, DownloadArchiverTaskInfo> element) =>
               element.value.taskId == downloadTask.taskId);
 
       // 不在 archiverTaskMap 中的任务 直接删除
@@ -222,9 +229,9 @@ class ArchiverDownloadController extends GetxController {
             taskId: downloadTask.taskId, shouldDeleteContent: true);
       } else {
         // 否则更新
-        final DownloadTaskInfo _taskInfo = archiverTaskMap.entries
-            .firstWhere((MapEntry<String, DownloadTaskInfo> element) =>
-                element.value.taskId == downloadTask.taskId)
+        final DownloadArchiverTaskInfo _taskInfo = archiverTaskMap.entries
+            .firstWhere(
+                (element) => element.value.taskId == downloadTask.taskId)
             .value;
 
         // 触发ever 保存到GS中

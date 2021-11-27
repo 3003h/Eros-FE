@@ -4,6 +4,7 @@
   "type?": "",
   "title?": "",
   "taskId?": "",
+  "filePath?": "",
   "imgUrl?": "",
   "galleryUrl?": "",
   "dowmloadType?": "",
