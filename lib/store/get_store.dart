@@ -53,8 +53,8 @@ class GStore {
         : null;
   }
 
-  set archiverTaskMap(Map<String, DownloadTaskInfo>? taskInfoMap) {
-    logger.d('set archiverDlMap \n'
+  set archiverTaskMap(Map<String, DownloadArchiverTaskInfo>? taskInfoMap) {
+    logger.v('set archiverDlMap \n'
         '${taskInfoMap?.entries.map((e) => '${e.key} = ${e.value.toJson().toString().split(', ').join('\n')}').join('\n')} ');
 
     if (taskInfoMap == null) {
@@ -65,7 +65,7 @@ class GStore {
         jsonEncode(taskInfoMap.entries.map((e) => e.value).toList());
   }
 
-  Map<String, DownloadTaskInfo>? get archiverTaskMap {
+  Map<String, DownloadArchiverTaskInfo>? get archiverTaskMap {
     final val = ReadWriteValue('archiverTaskMap', '', _downloadStore).val;
 
     if (val.isEmpty) {
@@ -73,10 +73,10 @@ class GStore {
     }
 
     logger.d('get archiverDlMap ${jsonDecode(val)}');
-    final Map<String, DownloadTaskInfo> _map = <String, DownloadTaskInfo>{};
+    final _map = <String, DownloadArchiverTaskInfo>{};
     for (final dynamic dlItemJson in jsonDecode(val) as List<dynamic>) {
-      final DownloadTaskInfo _takInfo =
-          DownloadTaskInfo.fromJson(dlItemJson as Map<String, dynamic>);
+      final _takInfo =
+          DownloadArchiverTaskInfo.fromJson(dlItemJson as Map<String, dynamic>);
       if (_takInfo.tag != null) {
         _map[_takInfo.tag!] = _takInfo;
       }

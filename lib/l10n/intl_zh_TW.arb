@@ -321,5 +321,7 @@
   "auto_select_profile": "Auto select profile",
   "tap_to_turn_page_anima": "Tap to turn page animations",
   "download_ori_image": "Download original image",
-  "download_ori_image_summary": "it is dangerous! You may get 509 error"
+  "download_ori_image_summary": "it is dangerous! You may get 509 error",
+  "redownload": "Redownload",
+  "open_with_other_apps": "Open with other apps"
 }

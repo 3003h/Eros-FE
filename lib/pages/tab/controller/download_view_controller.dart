@@ -21,10 +21,10 @@ import 'package:fehviewer/utils/vibrate.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
-// import 'package:flutter_app_restart/flutter_app_restart.dart';
 import 'package:flutter_downloader/flutter_downloader.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
+import 'package:open_file/open_file.dart';
 import 'package:path/path.dart' as path;
 import 'package:restart_app/restart_app.dart';
 import 'package:share/share.dart';
@@ -64,9 +64,9 @@ class DownloadViewController extends GetxController {
     DownloadType.archiver,
   ];
 
-  List<DownloadTaskInfo> get archiverTasks =>
+  List<DownloadArchiverTaskInfo> get archiverTasks =>
       _archiverDownloadController.archiverTaskMap.entries
-          .map((MapEntry<String, DownloadTaskInfo> e) => e.value)
+          .map((e) => e.value)
           .toList();
 
   Map<int, GalleryTask> get galleryTaskMap =>
@@ -165,6 +165,26 @@ class DownloadViewController extends GetxController {
     update([idDownloadArchiverView]);
   }
 
+  // 打开Archiver文件
+  Future<void> openArchiverTaskFile(int index) async {
+    final String? _oriTaskid = archiverTasks[index].taskId;
+
+    // final _result = await OpenFile.open('');
+    FlutterDownloader.open(
+      taskId: _oriTaskid ?? '',
+    );
+  }
+
+  // 导出Archiver文件
+  Future<void> exportArchiverTaskFile(int index) async {
+    final String? _oriTaskid = archiverTasks[index].taskId;
+
+    // final _result = await OpenFile.open('');
+    FlutterDownloader.open(
+      taskId: _oriTaskid ?? '',
+    );
+  }
+
   // Gallery 移除任务
   void removeGalleryTask(
     int index, {
@@ -217,18 +237,30 @@ class DownloadViewController extends GetxController {
                 },
                 child: Text(L10n.of(context).cancel)),
             actions: <Widget>[
-              // 重新下载 restartGalleryDownload
-              CupertinoActionSheetAction(
-                onPressed: () {
-                  Get.back();
-                  restartGalleryDownload(task?.gid);
-                },
-                child: Text(
-                  'ReDownload',
+              if (type == DownloadType.archiver)
+                CupertinoActionSheetAction(
+                  onPressed: () {
+                    Get.back();
+                    openArchiverTaskFile(taskIndex);
+                  },
+                  child: Text(
+                    L10n.of(context).open_with_other_apps,
+                  ),
                 ),
-              ),
-              // 导出
-              if (task?.status == TaskStatus.complete.value)
+              // gallery重新下载
+              if (type == DownloadType.gallery)
+                CupertinoActionSheetAction(
+                  onPressed: () {
+                    Get.back();
+                    restartGalleryDownload(task?.gid);
+                  },
+                  child: Text(
+                    L10n.of(context).redownload,
+                  ),
+                ),
+              // gallery导出
+              if (type == DownloadType.gallery &&
+                  task?.status == TaskStatus.complete.value)
                 CupertinoActionSheetAction(
                   onPressed: () {
                     Get.back();
@@ -238,7 +270,19 @@ class DownloadViewController extends GetxController {
                     L10n.of(context).export,
                   ),
                 ),
-              // 删除下载项
+              // if (type == DownloadType.archiver &&
+              //     archiverTasks[taskIndex].status ==
+              //         DownloadTaskStatus.complete.value)
+              //   CupertinoActionSheetAction(
+              //     onPressed: () {
+              //       Get.back();
+              //       exportArchiverTaskFile(taskIndex);
+              //     },
+              //     child: Text(
+              //       L10n.of(context).export,
+              //     ),
+              //   ),
+              // 删除
               CupertinoActionSheetAction(
                 onPressed: () {
                   Get.back();
