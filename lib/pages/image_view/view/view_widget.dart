@@ -13,6 +13,7 @@ import 'package:fehviewer/utils/logger.dart';
 import 'package:fehviewer/utils/toast.dart';
 import 'package:fehviewer/utils/vibrate.dart';
 import 'package:fehviewer/widget/eh_cached_network_image.dart';
+import 'package:fehviewer/widget/eh_dark_cupertino_theme.dart';
 import 'package:fehviewer/widget/network_extended_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -520,7 +521,7 @@ class BottomBarControlWidget extends GetView<ViewExtController> {
                       child: Column(
                         children: [
                           const Icon(
-                            LineIcons.share,
+                            LineIcons.shareSquare,
                             color: CupertinoColors.systemGrey6,
                             size: 26,
                           ),
@@ -818,7 +819,7 @@ class _FutureThumblState extends State<FutureThumbl> {
                 _image.thumbUrl!.isNotEmpty) {
               logger.v('${_image.ser}  ${_image.thumbUrl}');
 
-              if (_image.isLarge ?? false) {
+              if (_image.largeThumb ?? false) {
                 return EhCachedNetworkImage(
                   imageUrl: _image.thumbUrl ?? '',
                   placeholder: (_, __) {
@@ -973,6 +974,7 @@ class _ViewPageSliderState extends State<ViewPageSlider> {
 Future<void> showShareActionSheet(
   BuildContext context, {
   String? imageUrl,
+  String? origImageUrl,
   String? filePath,
   LoadType loadType = LoadType.network,
 }) {
@@ -987,30 +989,57 @@ Future<void> showShareActionSheet(
               child: Text(L10n.of(context).cancel)),
           actions: <Widget>[
             CupertinoActionSheetAction(
-                onPressed: () async {
-                  logger.v('保存到手机');
-                  Get.back();
-                  final bool rult = await Api.saveImage(
-                    context: context,
-                    imageUrl: imageUrl,
-                    filePath: filePath,
-                  );
-                  if (rult) {
-                    showToast(L10n.of(context).saved_successfully);
-                  }
-                },
-                child: Text(L10n.of(context).save_into_album)),
+              onPressed: () async {
+                logger.v('保存到手机');
+                Get.back();
+                final bool rult = await Api.saveImage(
+                  context: context,
+                  imageUrl: imageUrl,
+                  filePath: filePath,
+                );
+                if (rult) {
+                  showToast(L10n.of(context).saved_successfully);
+                }
+              },
+              child: Text(L10n.of(context).save_into_album),
+            ),
+            // if (origImageUrl != null)
+            //   CupertinoActionSheetAction(
+            //     onPressed: () async {
+            //       logger.v('保存到手机 orig');
+            //       Get.back();
+            //       final bool rult = await Api.saveImage(
+            //         context: context,
+            //         imageUrl: origImageUrl,
+            //         filePath: filePath,
+            //       );
+            //       if (rult) {
+            //         showToast(L10n.of(context).saved_successfully);
+            //       }
+            //     },
+            //     child: Text('${L10n.of(context).save_into_album}(ori)'),
+            //   ),
             CupertinoActionSheetAction(
-                onPressed: () {
-                  logger.v('系统分享');
-                  Get.back();
-                  Api.shareImageExtended(
-                      imageUrl: imageUrl, filePath: filePath);
-                },
-                child: Text(L10n.of(context).system_share)),
+              onPressed: () {
+                logger.v('系统分享');
+                Get.back();
+                Api.shareImageExtended(imageUrl: imageUrl, filePath: filePath);
+              },
+              child: Text(L10n.of(context).system_share),
+            ),
+            // if (origImageUrl != null)
+            //   CupertinoActionSheetAction(
+            //     onPressed: () {
+            //       logger.v('系统分享');
+            //       Get.back();
+            //       Api.shareImageExtended(
+            //           imageUrl: origImageUrl, filePath: filePath);
+            //     },
+            //     child: Text('${L10n.of(context).system_share}(ori)'),
+            //   ),
           ],
         );
-        return dialog;
+        return EhDarkCupertinoTheme(child: dialog);
       });
 }
 
@@ -1042,6 +1071,6 @@ Future<void> showImageSheet(
                 child: Text(L10n.of(context).share_image)),
           ],
         );
-        return dialog;
+        return EhDarkCupertinoTheme(child: dialog);
       });
 }

@@ -351,7 +351,7 @@ class ViewExtController extends GetxController {
         imageTask.status == TaskStatus.complete.value) {
       return GalleryImage(
         ser: itemSer,
-        isDownloaded: true,
+        completeDownload: true,
         filePath: path.join(dir, imageTask.filePath!),
       );
     }
@@ -457,12 +457,8 @@ class ViewExtController extends GetxController {
     final sizeImage = Size(
         imageInfo.image.width.toDouble(), imageInfo.image.height.toDouble());
 
-    // logger.d('sizeImage $sizeImage\nsize $size');
-
     final double _scalesS100 = scale100(size: size, imageSize: sizeImage);
 
-    // logger.d('_scalesScreen $_scalesScreen');
-    // logger.d('_scalesS100 $_scalesS100');
     if (vState.doubleTapScales.length < 3) {
       vState.doubleTapScales.add(_scalesS100);
     } else {
@@ -645,10 +641,11 @@ class ViewExtController extends GetxController {
     if (vState.loadType == LoadType.network) {
       final GalleryImage? p =
           _galleryPageController.imageMap[vState.currentItemIndex + 1];
-      logger.v(p?.toJson());
+      logger.d(p?.toJson());
       showShareActionSheet(
         context,
         imageUrl: p?.imageUrl,
+        origImageUrl: p?.originImageUrl,
       );
     } else {
       showShareActionSheet(

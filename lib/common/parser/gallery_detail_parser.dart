@@ -431,7 +431,7 @@ List<GalleryImage> parseGalleryImage(Document document) {
 
       galleryImages.add(GalleryImage(
         ser: int.parse(picSer),
-        isLarge: false,
+        largeThumb: false,
         href: picHref,
         thumbUrl: picSrcUrl,
         thumbHeight: double.parse(height),
@@ -450,7 +450,7 @@ List<GalleryImage> parseGalleryImage(Document document) {
 
       galleryImages.add(GalleryImage(
           ser: int.parse(picSer),
-          isLarge: true,
+          largeThumb: true,
           href: picHref,
           thumbUrl: picSrcUrl));
     }
