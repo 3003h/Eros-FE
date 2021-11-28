@@ -5,8 +5,8 @@ import 'package:flutter/foundation.dart';
 class GalleryImage {
   
   const GalleryImage({
-    this.isLarge,
-    this.isCache,
+    this.largeThumb,
+    this.completeCache,
     this.startPrecache,
     required this.ser,
     this.href,
@@ -22,12 +22,12 @@ class GalleryImage {
     this.completeHeight,
     this.gid,
     this.token,
-    this.isDownloaded,
+    this.completeDownload,
     this.filePath,
   });
 
-  final bool? isLarge;
-  final bool? isCache;
+  final bool? largeThumb;
+  final bool? completeCache;
   final bool? startPrecache;
   final int ser;
   final String? href;
@@ -43,12 +43,12 @@ class GalleryImage {
   final bool? completeHeight;
   final String? gid;
   final String? token;
-  final bool? isDownloaded;
+  final bool? completeDownload;
   final String? filePath;
 
   factory GalleryImage.fromJson(Map<String,dynamic> json) => GalleryImage(
-    isLarge: json['isLarge'] != null ? json['isLarge'] as bool : null,
-    isCache: json['isCache'] != null ? json['isCache'] as bool : null,
+    largeThumb: json['largeThumb'] != null ? json['largeThumb'] as bool : null,
+    completeCache: json['completeCache'] != null ? json['completeCache'] as bool : null,
     startPrecache: json['startPrecache'] != null ? json['startPrecache'] as bool : null,
     ser: json['ser'] as int,
     href: json['href'] != null ? json['href'] as String : null,
@@ -64,13 +64,13 @@ class GalleryImage {
     completeHeight: json['completeHeight'] != null ? json['completeHeight'] as bool : null,
     gid: json['gid'] != null ? json['gid'] as String : null,
     token: json['token'] != null ? json['token'] as String : null,
-    isDownloaded: json['isDownloaded'] != null ? json['isDownloaded'] as bool : null,
+    completeDownload: json['completeDownload'] != null ? json['completeDownload'] as bool : null,
     filePath: json['filePath'] != null ? json['filePath'] as String : null
   );
   
   Map<String, dynamic> toJson() => {
-    'isLarge': isLarge,
-    'isCache': isCache,
+    'largeThumb': largeThumb,
+    'completeCache': completeCache,
     'startPrecache': startPrecache,
     'ser': ser,
     'href': href,
@@ -86,13 +86,13 @@ class GalleryImage {
     'completeHeight': completeHeight,
     'gid': gid,
     'token': token,
-    'isDownloaded': isDownloaded,
+    'completeDownload': completeDownload,
     'filePath': filePath
   };
 
   GalleryImage clone() => GalleryImage(
-    isLarge: isLarge,
-    isCache: isCache,
+    largeThumb: largeThumb,
+    completeCache: completeCache,
     startPrecache: startPrecache,
     ser: ser,
     href: href,
@@ -108,14 +108,14 @@ class GalleryImage {
     completeHeight: completeHeight,
     gid: gid,
     token: token,
-    isDownloaded: isDownloaded,
+    completeDownload: completeDownload,
     filePath: filePath
   );
 
     
   GalleryImage copyWith({
-    bool? isLarge,
-    bool? isCache,
+    bool? largeThumb,
+    bool? completeCache,
     bool? startPrecache,
     int? ser,
     String? href,
@@ -131,11 +131,11 @@ class GalleryImage {
     bool? completeHeight,
     String? gid,
     String? token,
-    bool? isDownloaded,
+    bool? completeDownload,
     String? filePath
   }) => GalleryImage(
-    isLarge: isLarge ?? this.isLarge,
-    isCache: isCache ?? this.isCache,
+    largeThumb: largeThumb ?? this.largeThumb,
+    completeCache: completeCache ?? this.completeCache,
     startPrecache: startPrecache ?? this.startPrecache,
     ser: ser ?? this.ser,
     href: href ?? this.href,
@@ -151,14 +151,14 @@ class GalleryImage {
     completeHeight: completeHeight ?? this.completeHeight,
     gid: gid ?? this.gid,
     token: token ?? this.token,
-    isDownloaded: isDownloaded ?? this.isDownloaded,
+    completeDownload: completeDownload ?? this.completeDownload,
     filePath: filePath ?? this.filePath,
   );  
 
   @override
   bool operator ==(Object other) => identical(this, other) 
-    || other is GalleryImage && isLarge == other.isLarge && isCache == other.isCache && startPrecache == other.startPrecache && ser == other.ser && href == other.href && imageUrl == other.imageUrl && originImageUrl == other.originImageUrl && thumbUrl == other.thumbUrl && thumbHeight == other.thumbHeight && thumbWidth == other.thumbWidth && imageHeight == other.imageHeight && imageWidth == other.imageWidth && offSet == other.offSet && sourceId == other.sourceId && completeHeight == other.completeHeight && gid == other.gid && token == other.token && isDownloaded == other.isDownloaded && filePath == other.filePath;
+    || other is GalleryImage && largeThumb == other.largeThumb && completeCache == other.completeCache && startPrecache == other.startPrecache && ser == other.ser && href == other.href && imageUrl == other.imageUrl && originImageUrl == other.originImageUrl && thumbUrl == other.thumbUrl && thumbHeight == other.thumbHeight && thumbWidth == other.thumbWidth && imageHeight == other.imageHeight && imageWidth == other.imageWidth && offSet == other.offSet && sourceId == other.sourceId && completeHeight == other.completeHeight && gid == other.gid && token == other.token && completeDownload == other.completeDownload && filePath == other.filePath;
 
   @override
-  int get hashCode => isLarge.hashCode ^ isCache.hashCode ^ startPrecache.hashCode ^ ser.hashCode ^ href.hashCode ^ imageUrl.hashCode ^ originImageUrl.hashCode ^ thumbUrl.hashCode ^ thumbHeight.hashCode ^ thumbWidth.hashCode ^ imageHeight.hashCode ^ imageWidth.hashCode ^ offSet.hashCode ^ sourceId.hashCode ^ completeHeight.hashCode ^ gid.hashCode ^ token.hashCode ^ isDownloaded.hashCode ^ filePath.hashCode;
+  int get hashCode => largeThumb.hashCode ^ completeCache.hashCode ^ startPrecache.hashCode ^ ser.hashCode ^ href.hashCode ^ imageUrl.hashCode ^ originImageUrl.hashCode ^ thumbUrl.hashCode ^ thumbHeight.hashCode ^ thumbWidth.hashCode ^ imageHeight.hashCode ^ imageWidth.hashCode ^ offSet.hashCode ^ sourceId.hashCode ^ completeHeight.hashCode ^ gid.hashCode ^ token.hashCode ^ completeDownload.hashCode ^ filePath.hashCode;
 }

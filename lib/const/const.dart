@@ -131,8 +131,8 @@ const DownloadArchiverTaskInfo kDefDownloadTaskInfo = DownloadArchiverTaskInfo(
 );
 
 const GalleryImage kDefGalleryImage = GalleryImage(
-  isLarge: false,
-  isCache: false,
+  largeThumb: false,
+  completeCache: false,
   startPrecache: false,
   ser: -1,
   href: '',

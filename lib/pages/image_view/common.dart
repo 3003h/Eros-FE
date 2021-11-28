@@ -103,7 +103,7 @@ class GalleryPara {
 
       GalleryImage _image = _imageTemp;
 
-      if (_image.isCache ?? false) {
+      if (_image.completeCache ?? false) {
         logger.v('ser $_ser 已存在预载中 跳过');
         continue;
       }
@@ -146,7 +146,7 @@ class GalleryPara {
       if (_future != null) {
         final GalleryImage? value = await _future;
         // logger.d('yield rult ser ${value?.ser}  ${value?.toJson()}');
-        yield value?.copyWith(isCache: true);
+        yield value?.copyWith(completeCache: true);
         _map.remove(_url);
         continue;
       }
@@ -168,7 +168,7 @@ class GalleryPara {
     /// 预缓存图片
     try {
       await precacheImage(imageProvider, context);
-      return image.copyWith(isCache: true);
+      return image.copyWith(completeCache: true);
     } catch (e, stack) {
       logger.e('$e /n $stack');
       return null;

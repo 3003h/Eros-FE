@@ -1,6 +1,6 @@
 {
-  "isLarge?": false,
-  "isCache?": false,
+  "largeThumb?": false,
+  "completeCache?": false,
   "startPrecache?": false,
   "ser": 1,
   "href?": "",
@@ -16,6 +16,6 @@
   "completeHeight?": false,
   "gid?": "1234",
   "token?": "1234",
-  "isDownloaded?": false,
+  "completeDownload?": false,
   "filePath?": ""
 }

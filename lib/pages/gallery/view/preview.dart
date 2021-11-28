@@ -95,7 +95,7 @@ class PreviewContainer extends StatelessWidget {
       'Cookie': Global.profile.user.cookie ?? '',
     };
     Widget _buildImage() {
-      if (galleryImage.isLarge ?? false) {
+      if (galleryImage.largeThumb ?? false) {
         // 缩略大图
         return EhCachedNetworkImage(
           imageUrl: galleryImage.thumbUrl ?? '',

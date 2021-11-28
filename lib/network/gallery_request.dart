@@ -1017,13 +1017,14 @@ class Api {
       _name = path.basename(filePath);
     } else if (imageUrl != null) {
       logger.d('imageUrl => $imageUrl');
+      final exists = await cachedImageExists(imageUrl);
       file = await getCachedImageFile(imageUrl);
-      if (file == null) {
+      logger.d('exists $exists');
+      if (!exists || file == null) {
         try {
           final DefaultCacheManager manager = DefaultCacheManager();
-          file = await manager.getSingleFile(
-            imageUrl,
-          );
+          file = await manager.getSingleFile(imageUrl,
+              headers: {'cookie': Global.profile.user.cookie ?? ''});
         } catch (e) {
           throw 'get file error';
         }
