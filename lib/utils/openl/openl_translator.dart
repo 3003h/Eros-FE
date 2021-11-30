@@ -4,12 +4,21 @@ import 'package:fehviewer/models/base/eh_models.dart';
 import 'package:fehviewer/utils/openl/language.dart';
 import 'package:http/http.dart' as http;
 
+import '../logger.dart';
+
 const String _baseUrl = 'api.openl.club';
 
 class OpenLTranslator {
   OpenLTranslator({required this.apikey});
 
   final String apikey;
+
+  static const _fallbackServices = <String>[
+    'deepl',
+    'tencent',
+    'google',
+    'youdao',
+  ];
 
   Future<OpenlTranslation> translate(
     String sourceText, {
@@ -41,9 +50,32 @@ class OpenLTranslator {
 
     final jsonData = jsonDecode(data.body);
     if (jsonData == null) {
-      throw http.ClientException('Error: Can\'t parse json data');
+      throw http.ClientException("Error: Can't parse json data");
     }
 
-    return OpenlTranslation.fromJson(jsonData as Map<String, dynamic>);
+    final rult = OpenlTranslation.fromJson(jsonData as Map<String, dynamic>);
+
+    return rult;
+  }
+
+  Future<String?> getfallbackService() async {
+    for (final service in _fallbackServices) {
+      final String _path = '/services/$service';
+      final Uri url = Uri.https(_baseUrl, _path);
+      final data = await http.get(url);
+      if (data.statusCode != 200) {
+        continue;
+      }
+      final jsonData = jsonDecode(data.body);
+      if (jsonData == null) {
+        continue;
+      }
+      final state = (jsonData as Map<String, dynamic>)['state'];
+      logger.d(jsonData);
+      logger.d('${state.runtimeType}');
+      if (state is String && state == 'ACTIVE') {
+        return service;
+      }
+    }
   }
 }
