@@ -42,27 +42,24 @@ class _PreviewGridState extends State<PreviewGrid> {
               ),
           itemCount: widget.images.length,
           itemBuilder: (context, index) {
-            return FrameSeparateWidget(
-              index: index,
-              child: Center(
-                child: PreviewContainer(
-                  galleryImageList: widget.images,
-                  index: index,
-                  gid: widget.gid,
-                  onLoadComplet: () {
-                    final thumbUrl = widget.images[index].thumbUrl ?? '';
-                    Future.delayed(const Duration(milliseconds: 50)).then(
-                      (_) {
-                        if (!(_loadComplets[thumbUrl] ?? false) && mounted) {
-                          logger.v('onLoadComplet $thumbUrl');
-                          setState(() {
-                            _loadComplets[thumbUrl] = true;
-                          });
-                        }
-                      },
-                    );
-                  },
-                ),
+            return Center(
+              child: PreviewContainer(
+                galleryImageList: widget.images,
+                index: index,
+                gid: widget.gid,
+                onLoadComplet: () {
+                  final thumbUrl = widget.images[index].thumbUrl ?? '';
+                  Future.delayed(const Duration(milliseconds: 50)).then(
+                    (_) {
+                      if (!(_loadComplets[thumbUrl] ?? false) && mounted) {
+                        logger.v('onLoadComplet $thumbUrl');
+                        setState(() {
+                          _loadComplets[thumbUrl] = true;
+                        });
+                      }
+                    },
+                  );
+                },
               ),
             );
           }),
