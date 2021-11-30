@@ -6,7 +6,10 @@ import 'package:fehviewer/generated/l10n.dart';
 import 'package:fehviewer/models/base/eh_models.dart';
 import 'package:fehviewer/pages/setting/setting_base.dart';
 import 'package:fehviewer/route/routes.dart';
+import 'package:fehviewer/widget/cat_progress_indicator.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/foundation.dart';
+import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:line_icons/line_icons.dart';
 
@@ -116,11 +119,20 @@ class WebDavSettingView extends GetView<WebdavController> {
         ),
         TextSwitchItem(
           L10n.of(context).sync_read_progress,
+          hideLine: true,
           intValue: controller.syncReadProgress,
           onChanged: (val) {
             controller.syncReadProgress = val;
           },
         ),
+        Container(height: 38),
+        if (kDebugMode) CatProgressIndicator(),
+        Container(height: 38),
+        // if (kDebugMode)
+        //   CircularProgressIndicator(
+        //     backgroundColor: Colors.grey[200],
+        //     valueColor: AlwaysStoppedAnimation(Colors.blue),
+        //   ),
       ],
     );
   }
