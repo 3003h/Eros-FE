@@ -147,6 +147,7 @@ dependencies:
   palette_generator: ^0.3.2
   getwidget: ^2.0.4
   open_file: ^3.2.1
+  flustars: ^2.0.1
 #   flutter_app_restart: ^1.0.0
 
 dev_dependencies:

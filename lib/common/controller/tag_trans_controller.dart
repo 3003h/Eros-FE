@@ -135,10 +135,10 @@ class TagTransController extends GetxController {
   }
 
   /// 获取翻译结果
-  Future<String?> _getTagTransStr(String key, {String namespace = ''}) async {
+  Future<String?> _getTagTransStr(String key, {String? namespace}) async {
     final TagTranslatDao tagTranslatDao = await _getTagTranslatDao();
     TagTranslat? tr;
-    if (namespace.isNotEmpty) {
+    if (namespace != null && namespace.isNotEmpty) {
       tr = await tagTranslatDao.findTagTranslatByKey(
           key.trim(), namespace.trim());
     } else {
@@ -216,7 +216,7 @@ class TagTransController extends GetxController {
       final RegExp rpfx = RegExp(r'(\w):(.+)');
       final RegExpMatch? rult = rpfx.firstMatch(text.toLowerCase());
       final String pfx = rult?.group(1) ?? '';
-      final String _nameSpase = EHConst.prefixToNameSpaceMap[pfx] as String;
+      final String? _nameSpase = EHConst.prefixToNameSpaceMap[pfx];
       final String _tag = rult?.group(2) ?? '';
       final String? _transTag =
           await _getTagTransStr(_tag, namespace: _nameSpase);
