@@ -314,7 +314,10 @@ class EHConst {
     'language': '语言',
     'reclass': '归类',
     'misc': '杂项',
-    'uploader': '上传者'
+    'uploader': '上传者',
+    'other': '其他',
+    'mixed': '混杂',
+    'temp': '临时',
   };
 
   static const int sumCats = 1023;
@@ -379,6 +382,9 @@ class EHConst {
     'm': 'male',
     'p': 'parody',
     'r': 'reclass',
+    'o': 'other',
+    'x': 'mixed',
+    'cos': 'cosplayer',
   };
 
   /// iso936语言对应缩写

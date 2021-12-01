@@ -17,6 +17,7 @@ import 'package:fehviewer/pages/gallery/view/taginfo_dialog.dart';
 import 'package:fehviewer/route/navigator_util.dart';
 import 'package:fehviewer/route/routes.dart';
 import 'package:fehviewer/utils/logger.dart';
+import 'package:fehviewer/utils/utility.dart';
 import 'package:fehviewer/widget/eh_cached_network_image.dart';
 import 'package:fehviewer/widget/rating_bar.dart';
 import 'package:flutter/cupertino.dart';
@@ -537,7 +538,9 @@ class TagGroupItem extends StatelessWidget {
 
     final List<Widget> _tagBtnList =
         _initTagBtnList(tagGroupData.galleryTags, context);
-    final String _tagType = tagGroupData.tagType ?? '';
+    final String? _tagType = tagGroupData.tagType;
+
+    logger.d('tagType $_tagType');
 
     final Container container = Container(
       padding: const EdgeInsets.fromLTRB(0, 4, 0, 4),
@@ -547,13 +550,18 @@ class TagGroupItem extends StatelessWidget {
           // tag 分类
           Container(
             padding: const EdgeInsets.only(right: 8),
-            child: Obx(() => TagButton(
-                  color: CupertinoDynamicColor.resolve(
-                      ThemeColors.tagColorTagType[_tagType.trim()]!, context),
-                  text: ehConfigService.isTagTranslat
-                      ? EHConst.translateTagType[_tagType.trim()] ?? _tagType
-                      : _tagType,
-                )),
+            child: Obx(() => _tagType != null
+                ? TagButton(
+                    color: CupertinoDynamicColor.resolve(
+                        ThemeColors.tagColorTagType[_tagType.trim()] ??
+                            radomList<Color>(
+                                ThemeColors.tagColorTagType.values),
+                        context),
+                    text: ehConfigService.isTagTranslat
+                        ? EHConst.translateTagType[_tagType.trim()] ?? _tagType
+                        : _tagType,
+                  )
+                : const SizedBox.shrink()),
           ),
           Expanded(
             child: Container(
