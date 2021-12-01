@@ -59,6 +59,9 @@
 		97C147001CF9000F007C117D /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		97C147021CF9000F007C117D /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		BA04988D254FF9E3008DE488 /* fehviewer.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = fehviewer.entitlements; sourceTree = "<group>"; };
+		BA1799952754843200F43DC1 /* ShareViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShareViewController.swift; sourceTree = "<group>"; };
+		BA1799982754843200F43DC1 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/MainInterface.storyboard; sourceTree = "<group>"; };
+		BA17999A2754843200F43DC1 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		BA1D4D5225B3FC6E00264936 /* libsqlite3.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libsqlite3.tbd; path = usr/lib/libsqlite3.tbd; sourceTree = SDKROOT; };
 		BA373B2825D2A11600C042FA /* SecurityBlurEffect.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SecurityBlurEffect.swift; sourceTree = "<group>"; };
 		BA91606E25C6CC5F001EA128 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
@@ -108,6 +111,7 @@
 			children = (
 				9740EEB11CF90186004384FC /* Flutter */,
 				97C146F01CF9000F007C117D /* Runner */,
+				BA1799942754843200F43DC1 /* shareExtension */,
 				97C146EF1CF9000F007C117D /* Products */,
 				BD2B51B0799E31FC8C88C126 /* Pods */,
 				8E17D831CCF214C421795E99 /* Frameworks */,
@@ -139,6 +143,16 @@
 				BA373B2825D2A11600C042FA /* SecurityBlurEffect.swift */,
 			);
 			path = Runner;
+			sourceTree = "<group>";
+		};
+		BA1799942754843200F43DC1 /* shareExtension */ = {
+			isa = PBXGroup;
+			children = (
+				BA1799952754843200F43DC1 /* ShareViewController.swift */,
+				BA1799972754843200F43DC1 /* MainInterface.storyboard */,
+				BA17999A2754843200F43DC1 /* Info.plist */,
+			);
+			path = shareExtension;
 			sourceTree = "<group>";
 		};
 		BD2B51B0799E31FC8C88C126 /* Pods */ = {
@@ -183,7 +197,7 @@
 		97C146E61CF9000F007C117D /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastSwiftUpdateCheck = 1210;
+				LastSwiftUpdateCheck = 1310;
 				LastUpgradeCheck = 1020;
 				ORGANIZATIONNAME = "";
 				TargetAttributes = {
@@ -333,6 +347,14 @@
 				BAEB747726B94E73005B4723 /* ko */,
 			);
 			name = LaunchScreen.storyboard;
+			sourceTree = "<group>";
+		};
+		BA1799972754843200F43DC1 /* MainInterface.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				BA1799982754843200F43DC1 /* Base */,
+			);
+			name = MainInterface.storyboard;
 			sourceTree = "<group>";
 		};
 /* End PBXVariantGroup section */
