@@ -41,9 +41,9 @@ Future<void> requestManageExternalStoragePermission() async {
   }
 }
 
-T radomList<T>(List<T> srcList) {
+T radomList<T>(Iterable<T> srcList) {
   final index = Random().nextInt(srcList.length);
-  return srcList[index];
+  return srcList.toList()[index];
 }
 
 void setFullscreen() {

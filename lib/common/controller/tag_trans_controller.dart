@@ -30,6 +30,20 @@ class TagTransController extends GetxController {
   String? _dbUrl;
   String? _remoteVer;
 
+  List<String> _namespaces = [];
+
+  @override
+  void onInit() {
+    super.onInit();
+    getNamespace().then((value) => _namespaces = value);
+  }
+
+  Future<List<String>> getNamespace() async {
+    final dao = await _getTagTranslatDao();
+    final _list = await dao.findAllTagTranslats();
+    return _list?.map((e) => e.namespace).toSet().toList() ?? [];
+  }
+
   Future<TagTranslatDao> _getTagTranslatDao() async {
     return (await Global.getDatabase()).tagTranslatDao;
   }
@@ -145,7 +159,6 @@ class TagTransController extends GetxController {
       final List<TagTranslat> trans =
           await tagTranslatDao.findAllTagTranslatsByKey(key);
       if (trans.isNotEmpty) {
-        // trans.shuffle();
         tr = trans.last;
       }
     }
@@ -187,10 +200,8 @@ class TagTransController extends GetxController {
       if (array[i].startsWith(RegExp(r'\w+:"?'))) {
         if (!RegExp(r'\$"?$').hasMatch(array[i])) {
           final tempArray = array.sublist(i);
-          // logger.v('tempArray $tempArray');
           final offset = tempArray
               .indexWhere((element) => RegExp(r'\$"?$').hasMatch(element));
-          // logger.v('offset $offset');
           for (int j = 0; j < offset; j++) {
             array[i] = '${array[i]} ${array[i + 1]}';
             array.removeAt(i + 1);
@@ -210,8 +221,7 @@ class TagTransController extends GetxController {
     return _translateList.join('   ');
   }
 
-  Future<String?> getTagTranslateText(String text,
-      {String namespace = ''}) async {
+  Future<String?> getTagTranslateText(String text, {String? namespace}) async {
     if (text.contains(':')) {
       final RegExp rpfx = RegExp(r'(\w):(.+)');
       final RegExpMatch? rult = rpfx.firstMatch(text.toLowerCase());
@@ -223,7 +233,12 @@ class TagTransController extends GetxController {
 
       return _transTag != null ? '$pfx:$_transTag' : text;
     } else {
-      return await _getTagTransStr(text.toLowerCase(), namespace: namespace);
+      String? _tempNamespace;
+      if (_namespaces.contains(namespace)) {
+        _tempNamespace = namespace;
+      }
+      return await _getTagTransStr(text.toLowerCase(),
+          namespace: _tempNamespace);
     }
   }
 

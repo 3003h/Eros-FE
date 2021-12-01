@@ -140,6 +140,14 @@ class ThemeColors {
       color: Color(0xffd7d7d6),
       darkColor: Color.fromARGB(255, 99, 102, 106),
     ),
+    'temp': CupertinoDynamicColor.withBrightness(
+      color: Color(0xffd7d7d6),
+      darkColor: Color.fromARGB(255, 99, 102, 106),
+    ),
+    'other': CupertinoDynamicColor.withBrightness(
+      color: Color(0xfffbd6d5),
+      darkColor: Color.fromARGB(255, 146, 85, 84),
+    ),
   };
 
   /// 主题配置
