@@ -12,7 +12,6 @@ import 'package:fehviewer/common/service/dns_service.dart';
 import 'package:fehviewer/const/const.dart';
 import 'package:fehviewer/network/dio_interceptor/domain_fronting/domain_fronting.dart';
 import 'package:fehviewer/utils/logger.dart';
-import 'package:flutter/foundation.dart';
 import 'package:get/get.dart' hide Response;
 import 'package:pretty_dio_logger/pretty_dio_logger.dart';
 

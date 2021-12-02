@@ -137,15 +137,20 @@ class ViewExtController extends GetxController {
       final prevScaleState = photoViewScaleStateController.prevScaleState;
       logger.d('prevScaleState $prevScaleState , state $state');
     });
+  }
+
+  @override
+  void onReady() {
+    super.onReady();
 
     /// 初始预载
     /// 后续的预载触发放在翻页事件中
     if (vState.loadType == LoadType.network) {
       // 预载
       logger.v('初始预载');
+
       GalleryPara.instance
-          .precacheImages(
-        Get.context!,
+          .ehPrecacheImages(
         imageMap: vState.imageMap,
         itemSer: vState.currentItemIndex,
         max: _ehConfigService.preloadImage.value,
@@ -244,8 +249,7 @@ class ViewExtController extends GetxController {
       // 预载图片
       // logger.v('页码切换时的回调 预载图片');
       GalleryPara.instance
-          .precacheImages(
-        Get.context!,
+          .ehPrecacheImages(
         imageMap: _galleryPageController.imageMap,
         itemSer: vState.currentItemIndex,
         max: _ehConfigService.preloadImage.value,
@@ -399,8 +403,7 @@ class ViewExtController extends GetxController {
     }
 
     GalleryPara.instance
-        .precacheImages(
-      context ?? Get.context!,
+        .ehPrecacheImages(
       imageMap: _galleryPageController.imageMap,
       itemSer: itemSer,
       max: _ehConfigService.preloadImage.value,
