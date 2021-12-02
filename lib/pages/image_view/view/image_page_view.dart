@@ -29,7 +29,8 @@ class ImagePageView extends GetView<ViewExtController> {
                     const BoxDecoration(color: Colors.transparent),
                 pageController: logic.pageController,
                 itemCount: logic.vState.pageCount,
-                onPageChanged: controller.handOnPageChanged,
+                onPageChanged: (pageIndex) =>
+                    controller.handOnPageChanged(pageIndex),
                 scrollDirection: Axis.horizontal,
                 customSize: context.mediaQuery.size,
                 scrollPhysics: const CustomScrollPhysics(),
@@ -51,7 +52,8 @@ class ImagePageView extends GetView<ViewExtController> {
             return ExtendedImageGesturePageView.builder(
               controller: logic.extendedPageController,
               itemCount: logic.vState.pageCount,
-              onPageChanged: controller.handOnPageChanged,
+              onPageChanged: (pageIndex) =>
+                  controller.handOnPageChanged(pageIndex),
               scrollDirection: Axis.horizontal,
               physics: const CustomScrollPhysics(),
               reverse: reverse,

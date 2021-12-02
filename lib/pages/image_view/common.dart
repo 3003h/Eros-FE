@@ -8,6 +8,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/physics.dart';
 import 'package:flutter/widgets.dart';
+import 'package:get/get.dart';
 
 enum ViewColumnMode {
   // 双页 奇数页位于左边
@@ -79,8 +80,7 @@ class GalleryPara {
       <String, Future<GalleryImage?>>{};
 
   /// 一个很傻的预载功能 需要优化
-  Stream<GalleryImage?> precacheImages(
-    BuildContext context, {
+  Stream<GalleryImage?> ehPrecacheImages({
     required Map<int, GalleryImage> imageMap,
     required int itemSer,
     required int max,
@@ -139,7 +139,7 @@ class GalleryPara {
         continue;
       }
 
-      _map.putIfAbsent(_url, () => _precacheSingleImage(context, _url, _image));
+      _map.putIfAbsent(_url, () => _precacheSingleImage(_url, _image));
 
       final Future<GalleryImage?>? _future = _map[_url];
 
@@ -154,7 +154,6 @@ class GalleryPara {
   }
 
   Future<GalleryImage?> _precacheSingleImage(
-    BuildContext context,
     String url,
     GalleryImage image,
   ) async {
@@ -167,7 +166,7 @@ class GalleryPara {
 
     /// 预缓存图片
     try {
-      await precacheImage(imageProvider, context);
+      await precacheImage(imageProvider, Get.context!);
       return image.copyWith(completeCache: true);
     } catch (e, stack) {
       logger.e('$e /n $stack');
