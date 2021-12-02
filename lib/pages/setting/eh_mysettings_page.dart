@@ -7,6 +7,7 @@ import 'package:fehviewer/pages/setting/setting_items/excluded_language.dart';
 import 'package:fehviewer/pages/setting/setting_items/favorites_rename_item.dart';
 import 'package:fehviewer/pages/setting/setting_items/multi_selector.dart';
 import 'package:fehviewer/pages/setting/setting_items/selector_Item.dart';
+import 'package:fehviewer/utils/logger.dart';
 import 'package:fehviewer/widget/refresh.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';

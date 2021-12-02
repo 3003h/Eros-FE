@@ -32,5 +32,6 @@
   "tabletLayout?": true,
   "enableTagTranslateCDN?": false,
   "autoSelectProfile?": true,
-  "tapToTurnPageAnimations?": true
+  "tapToTurnPageAnimations?": true,
+  "selectProfile?": "1"
 }

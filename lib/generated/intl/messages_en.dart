@@ -24,6 +24,21 @@ class MessageLookup extends MessageLookupByLibrary {
 
   static String m1(rating) => "${rating} ⭐";
 
+  static String m2(tagNamespace) => "${Intl.select(tagNamespace, {
+            'reclass': 'reclass',
+            'language': 'language',
+            'parody': 'parody',
+            'character': 'character',
+            'group': 'group',
+            'artist': 'artist',
+            'male': 'male',
+            'female': 'female',
+            'mixed': 'mixed',
+            'cosplayer': 'cosplayer',
+            'other': 'other',
+            'temp': 'temp',
+          })}";
+
   final messages = _notInlinedMessages(_notInlinedMessages);
   static Map<String, Function> _notInlinedMessages(_) => <String, Function>{
         "KEEP_IT_SAFE": MessageLookupByLibrary.simpleMessage("KEEP IT SAFE"),
@@ -266,6 +281,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "tabbar_setting":
             MessageLookupByLibrary.simpleMessage("Tabbar setting"),
         "tablet_layout": MessageLookupByLibrary.simpleMessage("Tablet layout"),
+        "tagNamespace": m2,
         "tag_vote_down": MessageLookupByLibrary.simpleMessage("Vote Down"),
         "tag_vote_up": MessageLookupByLibrary.simpleMessage("Vote Up"),
         "tag_withdraw_vote":

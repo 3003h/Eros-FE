@@ -317,6 +317,7 @@ class EHConst {
     'uploader': '上传者',
     'other': '其他',
     'mixed': '混杂',
+    'cosplayer': '角色扮演者',
     'temp': '临时',
   };
 

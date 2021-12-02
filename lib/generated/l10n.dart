@@ -3289,6 +3289,30 @@ class L10n {
       args: [],
     );
   }
+
+  /// `{tagNamespace, select, reclass{reclass} language{language} parody{parody} character{character} group{group} artist{artist} male{male} female{female} mixed{mixed} cosplayer{cosplayer} other{other} temp{temp}}`
+  String tagNamespace(Object tagNamespace) {
+    return Intl.select(
+      tagNamespace,
+      {
+        'reclass': 'reclass',
+        'language': 'language',
+        'parody': 'parody',
+        'character': 'character',
+        'group': 'group',
+        'artist': 'artist',
+        'male': 'male',
+        'female': 'female',
+        'mixed': 'mixed',
+        'cosplayer': 'cosplayer',
+        'other': 'other',
+        'temp': 'temp',
+      },
+      name: 'tagNamespace',
+      desc: '',
+      args: [tagNamespace],
+    );
+  }
 }
 
 class AppLocalizationDelegate extends LocalizationsDelegate<L10n> {
