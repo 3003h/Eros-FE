@@ -5,48 +5,55 @@ import 'package:flutter/foundation.dart';
 class EhSettingItem {
   
   const EhSettingItem({
-    this.name,
+    this.type,
     this.ser,
     this.value,
+    this.name,
   });
 
-  final String? name;
+  final String? type;
   final String? ser;
   final String? value;
+  final String? name;
 
   factory EhSettingItem.fromJson(Map<String,dynamic> json) => EhSettingItem(
-    name: json['name'] != null ? json['name'] as String : null,
+    type: json['type'] != null ? json['type'] as String : null,
     ser: json['ser'] != null ? json['ser'] as String : null,
-    value: json['value'] != null ? json['value'] as String : null
+    value: json['value'] != null ? json['value'] as String : null,
+    name: json['name'] != null ? json['name'] as String : null
   );
   
   Map<String, dynamic> toJson() => {
-    'name': name,
+    'type': type,
     'ser': ser,
-    'value': value
+    'value': value,
+    'name': name
   };
 
   EhSettingItem clone() => EhSettingItem(
-    name: name,
+    type: type,
     ser: ser,
-    value: value
+    value: value,
+    name: name
   );
 
     
   EhSettingItem copyWith({
-    String? name,
+    String? type,
     String? ser,
-    String? value
+    String? value,
+    String? name
   }) => EhSettingItem(
-    name: name ?? this.name,
+    type: type ?? this.type,
     ser: ser ?? this.ser,
     value: value ?? this.value,
+    name: name ?? this.name,
   );  
 
   @override
   bool operator ==(Object other) => identical(this, other) 
-    || other is EhSettingItem && name == other.name && ser == other.ser && value == other.value;
+    || other is EhSettingItem && type == other.type && ser == other.ser && value == other.value && name == other.name;
 
   @override
-  int get hashCode => name.hashCode ^ ser.hashCode ^ value.hashCode;
+  int get hashCode => type.hashCode ^ ser.hashCode ^ value.hashCode ^ name.hashCode;
 }

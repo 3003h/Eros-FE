@@ -1,6 +1,7 @@
 import 'dart:io' as io;
 
 import 'package:fehviewer/common/global.dart';
+import 'package:fehviewer/common/service/ehconfig_service.dart';
 import 'package:fehviewer/generated/l10n.dart';
 import 'package:fehviewer/network/gallery_request.dart';
 import 'package:fehviewer/pages/setting/controller/web_setting_controller.dart';
@@ -13,6 +14,7 @@ import 'package:line_icons/line_icons.dart';
 /// iOS使用
 class InWebMySetting extends StatelessWidget {
   final CookieManager _cookieManager = CookieManager.instance();
+  final EhConfigService ehConfigService = Get.find();
 
   @override
   Widget build(BuildContext context) {
@@ -97,6 +99,11 @@ class InWebMySetting extends StatelessWidget {
               Global.cookieJar.delete(Uri.parse(Api.getBaseUrl()), true);
               Global.cookieJar
                   .saveFromResponse(Uri.parse(Api.getBaseUrl()), _cookies);
+
+              ehConfigService.selectProfile = _cookies
+                      .firstWhereOrNull((element) => element.name == 'sp')
+                      ?.value ??
+                  '';
             });
           },
         ),

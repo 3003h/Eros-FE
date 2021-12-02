@@ -330,5 +330,7 @@
   "download_ori_image": "Download original image",
   "download_ori_image_summary": "it is dangerous! You may get 509 error",
   "redownload": "Redownload",
-  "open_with_other_apps": "Open with other apps"
+  "open_with_other_apps": "Open with other apps",
+
+  "tagNamespace": "{tagNamespace, select, reclass{reclass} language{language} parody{parody} character{character} group{group} artist{artist} male{male} female{female} mixed{mixed} cosplayer{cosplayer} other{other} temp{temp}}"
 }

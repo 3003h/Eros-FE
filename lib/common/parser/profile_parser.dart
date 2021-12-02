@@ -1,5 +1,6 @@
 import 'package:collection/collection.dart';
 import 'package:fehviewer/models/base/eh_models.dart';
+
 // import 'package:fehviewer/utils/logger.dart';
 import 'package:html/dom.dart';
 import 'package:html/parser.dart' show parse;
@@ -68,7 +69,7 @@ EhSettings parseUconfig(String html) {
   for (int idx = 0; idx <= 9; idx++) {
     final _value = _parseUconfigInput('favorite_$idx', _inputElms);
     if (_value != null) {
-      fav.add(EhSettingItem(name: 'favorite', ser: '$idx', value: _value));
+      fav.add(EhSettingItem(type: 'favorite', ser: '$idx', value: _value));
     }
   }
 
@@ -77,11 +78,15 @@ EhSettings parseUconfig(String html) {
 
   // 排除标签组
   final xn = <EhSettingItem>[];
-  for (int idx = 1; idx <= 8; idx++) {
+  for (int idx = 1; idx <= 50; idx++) {
     final Element? _elm = document.querySelector('#xn_$idx');
-    if (_elm?.attributes['checked'] == 'checked') {
-      print('xn_$idx  on');
-      xn.add(EhSettingItem(name: 'xn', ser: '$idx', value: '1'));
+    if (_elm != null) {
+      xn.add(EhSettingItem(
+        type: 'xn',
+        ser: '$idx',
+        value: _elm.attributes['checked'] == 'checked' ? '1' : '0',
+        name: _elm.parent?.text.trim(),
+      ));
     }
   }
 
@@ -90,7 +95,7 @@ EhSettings parseUconfig(String html) {
   for (int idx = 0; idx <= 2303; idx++) {
     final Element? _elm = document.querySelector('#xl_$idx');
     if (_elm?.attributes['checked'] == 'checked') {
-      xl.add(EhSettingItem(name: 'xl', ser: '$idx', value: '1'));
+      xl.add(EhSettingItem(type: 'xl', ser: '$idx', value: '1'));
     }
   }
 

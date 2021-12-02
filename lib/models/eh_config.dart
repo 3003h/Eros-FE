@@ -39,6 +39,7 @@ class EhConfig {
     this.enableTagTranslateCDN,
     this.autoSelectProfile,
     this.tapToTurnPageAnimations,
+    this.selectProfile,
   });
 
   final bool jpnTitle;
@@ -75,6 +76,7 @@ class EhConfig {
   final bool? enableTagTranslateCDN;
   final bool? autoSelectProfile;
   final bool? tapToTurnPageAnimations;
+  final String? selectProfile;
 
   factory EhConfig.fromJson(Map<String,dynamic> json) => EhConfig(
     jpnTitle: json['jpnTitle'] as bool,
@@ -110,7 +112,8 @@ class EhConfig {
     tabletLayout: json['tabletLayout'] != null ? json['tabletLayout'] as bool : null,
     enableTagTranslateCDN: json['enableTagTranslateCDN'] != null ? json['enableTagTranslateCDN'] as bool : null,
     autoSelectProfile: json['autoSelectProfile'] != null ? json['autoSelectProfile'] as bool : null,
-    tapToTurnPageAnimations: json['tapToTurnPageAnimations'] != null ? json['tapToTurnPageAnimations'] as bool : null
+    tapToTurnPageAnimations: json['tapToTurnPageAnimations'] != null ? json['tapToTurnPageAnimations'] as bool : null,
+    selectProfile: json['selectProfile'] != null ? json['selectProfile'] as String : null
   );
   
   Map<String, dynamic> toJson() => {
@@ -147,7 +150,8 @@ class EhConfig {
     'tabletLayout': tabletLayout,
     'enableTagTranslateCDN': enableTagTranslateCDN,
     'autoSelectProfile': autoSelectProfile,
-    'tapToTurnPageAnimations': tapToTurnPageAnimations
+    'tapToTurnPageAnimations': tapToTurnPageAnimations,
+    'selectProfile': selectProfile
   };
 
   EhConfig clone() => EhConfig(
@@ -184,7 +188,8 @@ class EhConfig {
     tabletLayout: tabletLayout,
     enableTagTranslateCDN: enableTagTranslateCDN,
     autoSelectProfile: autoSelectProfile,
-    tapToTurnPageAnimations: tapToTurnPageAnimations
+    tapToTurnPageAnimations: tapToTurnPageAnimations,
+    selectProfile: selectProfile
   );
 
     
@@ -222,7 +227,8 @@ class EhConfig {
     bool? tabletLayout,
     bool? enableTagTranslateCDN,
     bool? autoSelectProfile,
-    bool? tapToTurnPageAnimations
+    bool? tapToTurnPageAnimations,
+    String? selectProfile
   }) => EhConfig(
     jpnTitle: jpnTitle ?? this.jpnTitle,
     tagTranslat: tagTranslat ?? this.tagTranslat,
@@ -258,12 +264,13 @@ class EhConfig {
     enableTagTranslateCDN: enableTagTranslateCDN ?? this.enableTagTranslateCDN,
     autoSelectProfile: autoSelectProfile ?? this.autoSelectProfile,
     tapToTurnPageAnimations: tapToTurnPageAnimations ?? this.tapToTurnPageAnimations,
+    selectProfile: selectProfile ?? this.selectProfile,
   );  
 
   @override
   bool operator ==(Object other) => identical(this, other) 
-    || other is EhConfig && jpnTitle == other.jpnTitle && tagTranslat == other.tagTranslat && tagTranslatVer == other.tagTranslatVer && favoritesOrder == other.favoritesOrder && siteEx == other.siteEx && galleryImgBlur == other.galleryImgBlur && favPicker == other.favPicker && favLongTap == other.favLongTap && lastFavcat == other.lastFavcat && lastShowFavcat == other.lastShowFavcat && lastShowFavTitle == other.lastShowFavTitle && listMode == other.listMode && safeMode == other.safeMode && catFilter == other.catFilter && maxHistory == other.maxHistory && searchBarComp == other.searchBarComp && pureDarkTheme == other.pureDarkTheme && viewModel == other.viewModel && clipboardLink == other.clipboardLink && commentTrans == other.commentTrans && autoLockTimeOut == other.autoLockTimeOut && showPageInterval == other.showPageInterval && orientation == other.orientation && vibrate == other.vibrate && tagIntroImgLv == other.tagIntroImgLv && debugMode == other.debugMode && debugCount == other.debugCount && autoRead == other.autoRead && turnPageInv == other.turnPageInv && toplist == other.toplist && tabletLayout == other.tabletLayout && enableTagTranslateCDN == other.enableTagTranslateCDN && autoSelectProfile == other.autoSelectProfile && tapToTurnPageAnimations == other.tapToTurnPageAnimations;
+    || other is EhConfig && jpnTitle == other.jpnTitle && tagTranslat == other.tagTranslat && tagTranslatVer == other.tagTranslatVer && favoritesOrder == other.favoritesOrder && siteEx == other.siteEx && galleryImgBlur == other.galleryImgBlur && favPicker == other.favPicker && favLongTap == other.favLongTap && lastFavcat == other.lastFavcat && lastShowFavcat == other.lastShowFavcat && lastShowFavTitle == other.lastShowFavTitle && listMode == other.listMode && safeMode == other.safeMode && catFilter == other.catFilter && maxHistory == other.maxHistory && searchBarComp == other.searchBarComp && pureDarkTheme == other.pureDarkTheme && viewModel == other.viewModel && clipboardLink == other.clipboardLink && commentTrans == other.commentTrans && autoLockTimeOut == other.autoLockTimeOut && showPageInterval == other.showPageInterval && orientation == other.orientation && vibrate == other.vibrate && tagIntroImgLv == other.tagIntroImgLv && debugMode == other.debugMode && debugCount == other.debugCount && autoRead == other.autoRead && turnPageInv == other.turnPageInv && toplist == other.toplist && tabletLayout == other.tabletLayout && enableTagTranslateCDN == other.enableTagTranslateCDN && autoSelectProfile == other.autoSelectProfile && tapToTurnPageAnimations == other.tapToTurnPageAnimations && selectProfile == other.selectProfile;
 
   @override
-  int get hashCode => jpnTitle.hashCode ^ tagTranslat.hashCode ^ tagTranslatVer.hashCode ^ favoritesOrder.hashCode ^ siteEx.hashCode ^ galleryImgBlur.hashCode ^ favPicker.hashCode ^ favLongTap.hashCode ^ lastFavcat.hashCode ^ lastShowFavcat.hashCode ^ lastShowFavTitle.hashCode ^ listMode.hashCode ^ safeMode.hashCode ^ catFilter.hashCode ^ maxHistory.hashCode ^ searchBarComp.hashCode ^ pureDarkTheme.hashCode ^ viewModel.hashCode ^ clipboardLink.hashCode ^ commentTrans.hashCode ^ autoLockTimeOut.hashCode ^ showPageInterval.hashCode ^ orientation.hashCode ^ vibrate.hashCode ^ tagIntroImgLv.hashCode ^ debugMode.hashCode ^ debugCount.hashCode ^ autoRead.hashCode ^ turnPageInv.hashCode ^ toplist.hashCode ^ tabletLayout.hashCode ^ enableTagTranslateCDN.hashCode ^ autoSelectProfile.hashCode ^ tapToTurnPageAnimations.hashCode;
+  int get hashCode => jpnTitle.hashCode ^ tagTranslat.hashCode ^ tagTranslatVer.hashCode ^ favoritesOrder.hashCode ^ siteEx.hashCode ^ galleryImgBlur.hashCode ^ favPicker.hashCode ^ favLongTap.hashCode ^ lastFavcat.hashCode ^ lastShowFavcat.hashCode ^ lastShowFavTitle.hashCode ^ listMode.hashCode ^ safeMode.hashCode ^ catFilter.hashCode ^ maxHistory.hashCode ^ searchBarComp.hashCode ^ pureDarkTheme.hashCode ^ viewModel.hashCode ^ clipboardLink.hashCode ^ commentTrans.hashCode ^ autoLockTimeOut.hashCode ^ showPageInterval.hashCode ^ orientation.hashCode ^ vibrate.hashCode ^ tagIntroImgLv.hashCode ^ debugMode.hashCode ^ debugCount.hashCode ^ autoRead.hashCode ^ turnPageInv.hashCode ^ toplist.hashCode ^ tabletLayout.hashCode ^ enableTagTranslateCDN.hashCode ^ autoSelectProfile.hashCode ^ tapToTurnPageAnimations.hashCode ^ selectProfile.hashCode;
 }

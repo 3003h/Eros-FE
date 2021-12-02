@@ -137,6 +137,10 @@ class EhConfigService extends ProfileService {
   bool get downloadOrigImage => _downloadOrigImage.value;
   set downloadOrigImage(bool val) => _downloadOrigImage.value = val;
 
+  final _selectProfile = ''.obs;
+  String get selectProfile => _selectProfile.value;
+  set selectProfile(String val) => _selectProfile.value = val;
+
   @override
   void onInit() {
     super.onInit();
@@ -359,6 +363,12 @@ class EhConfigService extends ProfileService {
     downloadOrigImage = downloadConfig.downloadOrigImage ?? false;
     everProfile<bool>(_downloadOrigImage, (value) {
       downloadConfig = downloadConfig.copyWith(downloadOrigImage: value);
+    });
+
+    // _selectProfile
+    selectProfile = ehConfig.selectProfile ?? '';
+    everProfile<String>(_selectProfile, (value) {
+      ehConfig = ehConfig.copyWith(selectProfile: value);
     });
   }
 

@@ -9,6 +9,7 @@ import 'package:fehviewer/common/controller/advance_search_controller.dart';
 import 'package:fehviewer/common/controller/user_controller.dart';
 import 'package:fehviewer/common/global.dart';
 import 'package:fehviewer/common/parser/gallery_detail_parser.dart';
+import 'package:fehviewer/common/service/ehconfig_service.dart';
 import 'package:fehviewer/const/const.dart';
 import 'package:fehviewer/models/base/eh_models.dart';
 import 'package:fehviewer/pages/gallery/controller/archiver_controller.dart';
@@ -142,6 +143,7 @@ Future checkCookie() async {
   cookies.add(Cookie('nw', '1'));
 
   final UserController userController = Get.find();
+  final EhConfigService ehConfigService = Get.find();
 
   if (userController.isLogin) {
     final List<String> _c = Global.profile.user.cookie?.split(';') ?? [];
@@ -151,23 +153,13 @@ Future checkCookie() async {
 
     cookies.addAll(_cookies);
 
-    // if (cookies.firstWhereOrNull((_cookie) => _cookie.name == 'ipb_member_id') ==
-    //     null) {
-    //   logger.d('reset cookie');
-    //   final user = Get.find<UserController>().user.value;
-    //   logger.d('${user.passHashFB}');
-    //   if (user.memberIdFB.isNotEmpty) {
-    //     cookies.add(Cookie('ipb_member_id', user.memberIdFB));
-    //   }
-    //   if (user.passHashFB.isNotEmpty) {
-    //     cookies.add(Cookie('ipb_pass_hash', user.passHashFB));
-    //   }
-    //   if (user.igneousFB.isNotEmpty) {
-    //     cookies.add(Cookie('igneous', user.igneousFB));
-    //   }
-    // }
-
     cookieJar.saveFromResponse(Uri.parse(Api.getBaseUrl()), cookies);
+
+    final sp = cookies.firstWhereOrNull((element) => element.name == 'sp');
+    if (ehConfigService.selectProfile.isNotEmpty &&
+        (sp == null || sp.value.isEmpty)) {
+      cookies.add(Cookie('sp', ehConfigService.selectProfile));
+    }
 
     // logger.d('cookies:${cookies.join('\n')}');
   }

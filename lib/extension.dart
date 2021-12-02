@@ -261,6 +261,27 @@ extension ExtEhSettings on EhSettings {
     return _map;
   }
 
+  Map<String, EhSettingItem> get xnItemMap {
+    final _map = <String, EhSettingItem>{};
+    for (final _x in xn) {
+      if (_x.ser != null) {
+        _map[_x.name!] = _x;
+      }
+    }
+    return _map;
+  }
+
+  void setXnItem(String namespace, String? value) {
+    if (value == null) {
+      return;
+    }
+
+    final _index = xn.indexWhere((element) => element.name == namespace);
+    if (_index > -1) {
+      xn[_index] = xn[_index].copyWith(value: value);
+    }
+  }
+
   Map<String, String> get xlMap {
     final _map = <String, String>{};
     for (final _x in xl) {
@@ -297,7 +318,7 @@ extension ExtEhSettings on EhSettings {
     if (_index > -1) {
       xn[_index] = xn[_index].copyWith(value: value);
     } else {
-      xn.add(EhSettingItem(ser: ser, value: value, name: 'xn'));
+      xn.add(EhSettingItem(ser: ser, value: value, type: 'xn'));
     }
   }
 
@@ -309,7 +330,7 @@ extension ExtEhSettings on EhSettings {
     if (_index > -1) {
       xl[_index] = xl[_index].copyWith(value: value);
     } else {
-      xl.add(EhSettingItem(ser: ser, value: value, name: 'xl'));
+      xl.add(EhSettingItem(ser: ser, value: value, type: 'xl'));
     }
   }
 
@@ -321,33 +342,9 @@ extension ExtEhSettings on EhSettings {
     if (_index > -1) {
       favorites[_index] = favorites[_index].copyWith(value: value);
     } else {
-      favorites.add(EhSettingItem(ser: ser, value: value, name: 'xl'));
+      favorites.add(EhSettingItem(ser: ser, value: value, type: 'xl'));
     }
   }
-
-  String? get xnReclass => xnMap['1'];
-  set xnReclass(String? val) => setXn('1', val);
-
-  String? get xnLanguage => xnMap['2'];
-  set xnLanguage(String? val) => setXn('2', val);
-
-  String? get xnParody => xnMap['3'];
-  set xnParody(String? val) => setXn('3', val);
-
-  String? get xnCharacter => xnMap['4'];
-  set xnCharacter(String? val) => setXn('4', val);
-
-  String? get xnGroup => xnMap['5'];
-  set xnGroup(String? val) => setXn('5', val);
-
-  String? get xnArtist => xnMap['6'];
-  set xnArtist(String? val) => setXn('6', val);
-
-  String? get xnMale => xnMap['7'];
-  set xnMale(String? val) => setXn('7', val);
-
-  String? get xnFemale => xnMap['8'];
-  set xnFemale(String? val) => setXn('8', val);
 
   Map<String, dynamic> get postParam {
     final param = <String, dynamic>{

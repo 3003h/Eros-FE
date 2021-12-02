@@ -515,17 +515,6 @@ Widget _buildExcludedUploaders(BuildContext context) {
           _controller.ehSetting.copyWith(excludedUploaders: val),
     );
   });
-
-  // return Obx(() {
-  //   return TextInputItem(
-  //     title: L10n.of(context).uc_exc_up,
-  //     hideLine: true,
-  //     maxLines: null,
-  //     initValue: _controller.ehSetting.excludedUploaders ?? '',
-  //     onChanged: (val) => _controller.ehSetting =
-  //         _controller.ehSetting.copyWith(excludedUploaders: val),
-  //   );
-  // });
 }
 
 Widget _buildThumbnailScaling(BuildContext context) {
@@ -598,44 +587,25 @@ Widget _buildSizeVertical(BuildContext context) {
 
 Widget _buildTagNamespaces(BuildContext context) {
   return Obx(() {
+    final xnItemMap = _controller.ehSetting.xnItemMap;
+    final _sMap = xnItemMap.map(
+      (key, value) => MapEntry(
+        key,
+        SingleSelectItemBean(
+            title: L10n.of(context).tagNamespace(key),
+            enable: value.value == '1'),
+      ),
+    );
+
     return MultiSelectorGroup(
       key: UniqueKey(),
-      selectorMap: {
-        'reclass': SingleSelectItemBean(
-            title: L10n.of(context).uc_reclass,
-            enable: _controller.ehSetting.xnReclass == '1'),
-        'language': SingleSelectItemBean(
-            title: L10n.of(context).uc_language,
-            enable: _controller.ehSetting.xnLanguage == '1'),
-        'parody': SingleSelectItemBean(
-            title: L10n.of(context).uc_parody,
-            enable: _controller.ehSetting.xnParody == '1'),
-        'character': SingleSelectItemBean(
-            title: L10n.of(context).uc_character,
-            enable: _controller.ehSetting.xnCharacter == '1'),
-        'group': SingleSelectItemBean(
-            title: L10n.of(context).uc_group,
-            enable: _controller.ehSetting.xnGroup == '1'),
-        'artist': SingleSelectItemBean(
-            title: L10n.of(context).uc_artist,
-            enable: _controller.ehSetting.xnArtist == '1'),
-        'male': SingleSelectItemBean(
-            title: L10n.of(context).uc_male,
-            enable: _controller.ehSetting.xnMale == '1'),
-        'female': SingleSelectItemBean(
-            title: L10n.of(context).uc_female,
-            enable: _controller.ehSetting.xnFemale == '1'),
-      },
+      selectorMap: _sMap,
       onValueChanged: (val) {
-        _controller.ehSetting
-          ..xnReclass = (val['reclass']?.enable ?? false) ? '1' : ''
-          ..xnLanguage = (val['language']?.enable ?? false) ? '1' : ''
-          ..xnParody = (val['parody']?.enable ?? false) ? '1' : ''
-          ..xnCharacter = (val['character']?.enable ?? false) ? '1' : ''
-          ..xnGroup = (val['group']?.enable ?? false) ? '1' : ''
-          ..xnArtist = (val['artist']?.enable ?? false) ? '1' : ''
-          ..xnMale = (val['male']?.enable ?? false) ? '1' : ''
-          ..xnFemale = (val['female']?.enable ?? false) ? '1' : '';
+        logger.d('$val');
+        for (final entry in val.entries) {
+          _controller.ehSetting
+              .setXnItem(entry.key, (entry.value.enable ?? false) ? '1' : '');
+        }
       },
     );
   });

@@ -24,6 +24,21 @@ class MessageLookup extends MessageLookupByLibrary {
 
   static String m1(rating) => "${rating} ⭐";
 
+  static String m2(tagNamespace) => "${Intl.select(tagNamespace, {
+            'reclass': '重新分类',
+            'language': '语言',
+            'parody': '原作',
+            'character': '角色',
+            'group': '社团',
+            'artist': '艺术家',
+            'male': '男性',
+            'female': '女性',
+            'mixed': '混杂',
+            'cosplayer': '扮演者',
+            'other': '其它',
+            'temp': '临时',
+          })}";
+
   final messages = _notInlinedMessages(_notInlinedMessages);
   static Map<String, Function> _notInlinedMessages(_) => <String, Function>{
         "KEEP_IT_SAFE": MessageLookupByLibrary.simpleMessage("注意数据安全"),
@@ -213,6 +228,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "tab_watched": MessageLookupByLibrary.simpleMessage("关注"),
         "tabbar_setting": MessageLookupByLibrary.simpleMessage("主页标签设置"),
         "tablet_layout": MessageLookupByLibrary.simpleMessage("平板布局"),
+        "tagNamespace": m2,
         "tag_vote_down": MessageLookupByLibrary.simpleMessage("踩"),
         "tag_vote_up": MessageLookupByLibrary.simpleMessage("顶"),
         "tag_withdraw_vote": MessageLookupByLibrary.simpleMessage("撤销投票"),

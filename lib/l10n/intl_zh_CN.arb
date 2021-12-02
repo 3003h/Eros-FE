@@ -327,5 +327,8 @@
   "download_ori_image": "下载原图",
   "download_ori_image_summary": "危险! 会导致下载配额迅速流失, 出现 509 错误",
   "redownload": "重新下载",
-  "open_with_other_apps": "其他应用打开"
+  "open_with_other_apps": "其他应用打开",
+
+  "tagNamespace": "{tagNamespace, select, reclass{重新分类} language{语言} parody{原作} character{角色} group{社团} artist{艺术家} male{男性} female{女性} mixed{混杂} cosplayer{扮演者} other{其它} temp{临时}}"
+
 }
