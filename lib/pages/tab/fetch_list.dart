@@ -71,7 +71,7 @@ class WatchedFetchListClient extends FetchListClient {
       cats: fetchParams.cats,
       cancelToken: fetchParams.cancelToken,
       refresh: fetchParams.refresh,
-      galleryListType: fetchParams.galleryListType,
+      galleryListType: GalleryListType.watched,
     );
   }
 }

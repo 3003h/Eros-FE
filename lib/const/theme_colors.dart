@@ -148,6 +148,10 @@ class ThemeColors {
       color: Color(0xfffbd6d5),
       darkColor: Color.fromARGB(255, 146, 85, 84),
     ),
+    'cosplayer': CupertinoDynamicColor.withBrightness(
+      color: Color(0xfff5d5e5),
+      darkColor: Color.fromARGB(255, 127, 74, 107),
+    ),
   };
 
   /// 主题配置
