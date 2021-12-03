@@ -105,6 +105,11 @@ class Api {
         isSiteEx ?? Get.find<EhConfigService>().isSiteEx.value);
   }
 
+  static String getBaseHost({bool? isSiteEx}) {
+    return EHConst.getBaseHost(
+        isSiteEx ?? Get.find<EhConfigService>().isSiteEx.value);
+  }
+
   static String getSiteFlg() {
     return (Get.find<EhConfigService>().isSiteEx.value) ? 'EH' : 'EX';
   }

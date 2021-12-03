@@ -33,5 +33,6 @@
   "enableTagTranslateCDN?": false,
   "autoSelectProfile?": true,
   "tapToTurnPageAnimations?": true,
-  "selectProfile?": "1"
+  "selectProfile?": "1",
+  "linkRedirect?": false
 }

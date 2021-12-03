@@ -132,6 +132,12 @@ class ListViewEhSetting extends StatelessWidget {
             descOn: L10n.of(context).current_site('ExHentai'),
           ),
         ),
+      TextSwitchItem(
+        L10n.of(context).link_redirect,
+        intValue: _ehConfigService.linkRedirect,
+        onChanged: (val) => _ehConfigService.linkRedirect = val,
+        desc: L10n.of(context).link_redirect_summary,
+      ),
       if (_isLogin)
         const SelectorSettingItem(
           title: 'Cookie',

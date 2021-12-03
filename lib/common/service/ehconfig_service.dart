@@ -141,6 +141,10 @@ class EhConfigService extends ProfileService {
   String get selectProfile => _selectProfile.value;
   set selectProfile(String val) => _selectProfile.value = val;
 
+  final _linkRedirect = false.obs;
+  bool get linkRedirect => _linkRedirect.value;
+  set linkRedirect(bool val) => _linkRedirect.value = val;
+
   @override
   void onInit() {
     super.onInit();
@@ -369,6 +373,12 @@ class EhConfigService extends ProfileService {
     selectProfile = ehConfig.selectProfile ?? '';
     everProfile<String>(_selectProfile, (value) {
       ehConfig = ehConfig.copyWith(selectProfile: value);
+    });
+
+    // _linkRedirect
+    linkRedirect = ehConfig.linkRedirect ?? false;
+    everProfile<bool>(_linkRedirect, (value) {
+      ehConfig = ehConfig.copyWith(linkRedirect: value);
     });
   }
 

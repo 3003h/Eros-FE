@@ -3313,6 +3313,26 @@ class L10n {
       args: [tagNamespace],
     );
   }
+
+  /// `Link redirect`
+  String get link_redirect {
+    return Intl.message(
+      'Link redirect',
+      name: 'link_redirect',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Redirecting gallery links to selected sites`
+  String get link_redirect_summary {
+    return Intl.message(
+      'Redirecting gallery links to selected sites',
+      name: 'link_redirect_summary',
+      desc: '',
+      args: [],
+    );
+  }
 }
 
 class AppLocalizationDelegate extends LocalizationsDelegate<L10n> {
