@@ -9,6 +9,7 @@ import 'package:fehviewer/component/exception/error.dart';
 import 'package:fehviewer/const/theme_colors.dart';
 import 'package:fehviewer/generated/l10n.dart';
 import 'package:fehviewer/models/index.dart';
+import 'package:fehviewer/pages/tab/controller/search_page_controller.dart';
 import 'package:fehviewer/pages/tab/controller/tabhome_controller.dart';
 import 'package:fehviewer/pages/tab/controller/toplist_controller.dart';
 import 'package:fehviewer/utils/logger.dart';
@@ -51,6 +52,16 @@ class TabViewController extends GetxController
   final EhConfigService _ehConfigService = Get.find();
 
   CancelToken? cancelToken = CancelToken();
+
+  String? initSearchText;
+  final RxString _searchText = ''.obs;
+  String get searchText => _searchText.value;
+  set searchText(String val) => _searchText.value = val;
+
+  // 搜索类型
+  final Rx<SearchType> _searchType = SearchType.normal.obs;
+  SearchType get searchType => _searchType.value;
+  set searchType(SearchType val) => _searchType.value = val;
 
   final GlobalKey<SliverAnimatedListState> sliverAnimatedListKey =
       GlobalKey<SliverAnimatedListState>();
@@ -141,6 +152,8 @@ class TabViewController extends GetxController
       toplist: currToplist,
       refresh: refresh,
       cancelToken: cancelToken,
+      searchType: searchType,
+      searchText: searchText,
     );
 
     pageState = PageState.Loading;
@@ -162,6 +175,9 @@ class TabViewController extends GetxController
     } on EhError catch (eherror) {
       logger.e('type:${eherror.type}\n${eherror.message}');
       showToast(eherror.message);
+      pageState = PageState.LoadingError;
+      rethrow;
+    } on Exception catch (e) {
       pageState = PageState.LoadingError;
       rethrow;
     }
@@ -234,6 +250,8 @@ class TabViewController extends GetxController
         cancelToken: cancelToken,
         favcat: curFavcat,
         toplist: currToplist,
+        searchType: searchType,
+        searchText: searchText,
       );
       FetchListClient fetchListClient = getFetchListClient(fetchConfig);
       final GalleryList? rult = await fetchListClient.fetch();
@@ -298,6 +316,8 @@ class TabViewController extends GetxController
         cancelToken: cancelToken,
         favcat: curFavcat,
         toplist: currToplist,
+        searchType: searchType,
+        searchText: searchText,
       );
       FetchListClient fetchListClient = getFetchListClient(fetchParams);
       final GalleryList? rult = await fetchListClient.fetch();

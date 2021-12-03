@@ -30,10 +30,29 @@ class DefaultFetchListClient extends FetchListClient {
     return await getGallery(
       page: fetchParams.page,
       fromGid: fetchParams.fromGid,
-      serach: fetchParams.serach,
+      serach: fetchParams.searchText,
       cats: fetchParams.cats,
       cancelToken: fetchParams.cancelToken,
       refresh: fetchParams.refresh,
+    );
+  }
+}
+
+class SearchFetchListClient extends FetchListClient {
+  SearchFetchListClient({
+    required FetchParams fetchParams,
+  }) : super(fetchParams: fetchParams);
+
+  @override
+  Future<GalleryList?> fetch() async {
+    return await getGallery(
+      page: fetchParams.page,
+      fromGid: fetchParams.fromGid,
+      serach: fetchParams.searchText,
+      cats: fetchParams.cats,
+      cancelToken: fetchParams.cancelToken,
+      refresh: fetchParams.refresh,
+      galleryListType: fetchParams.galleryListType,
     );
   }
 }
@@ -48,11 +67,11 @@ class WatchedFetchListClient extends FetchListClient {
     return await getGallery(
       page: fetchParams.page,
       fromGid: fetchParams.fromGid,
-      serach: fetchParams.serach,
+      serach: fetchParams.searchText,
       cats: fetchParams.cats,
       cancelToken: fetchParams.cancelToken,
       refresh: fetchParams.refresh,
-      galleryListType: GalleryListType.watched,
+      galleryListType: fetchParams.galleryListType,
     );
   }
 }
@@ -67,7 +86,7 @@ class FavoriteFetchListClient extends FetchListClient {
     return await getGallery(
       page: fetchParams.page,
       fromGid: fetchParams.fromGid,
-      serach: fetchParams.serach,
+      serach: fetchParams.searchText,
       cats: fetchParams.cats,
       cancelToken: fetchParams.cancelToken,
       refresh: fetchParams.refresh,
@@ -87,7 +106,7 @@ class ToplistFetchListClient extends FetchListClient {
     return await getGallery(
       page: fetchParams.page,
       fromGid: fetchParams.fromGid,
-      serach: fetchParams.serach,
+      serach: fetchParams.searchText,
       cats: fetchParams.cats,
       cancelToken: fetchParams.cancelToken,
       refresh: fetchParams.refresh,
@@ -115,7 +134,7 @@ class FetchParams {
   FetchParams({
     this.page,
     this.fromGid,
-    this.serach,
+    this.searchText,
     this.searchType = SearchType.normal,
     this.cats,
     this.refresh = false,
@@ -126,7 +145,7 @@ class FetchParams {
   });
   int? page;
   String? fromGid;
-  String? serach;
+  String? searchText;
   int? cats;
   bool refresh = false;
   SearchType searchType = SearchType.normal;

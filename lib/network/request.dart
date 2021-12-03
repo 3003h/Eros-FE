@@ -92,7 +92,7 @@ Future<GalleryList?> getGallery({
     _params.addAll(_searchController.favSearchMap);
   }
 
-  logger.v('${_params}');
+  logger.d('${_params}');
 
   DioHttpResponse httpResponse = await dioHttpClient.get(
     _url,

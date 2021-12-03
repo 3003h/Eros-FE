@@ -12,7 +12,6 @@ import 'package:fehviewer/generated/l10n.dart';
 import 'package:fehviewer/models/base/eh_models.dart';
 import 'package:fehviewer/models/index.dart';
 import 'package:fehviewer/network/gallery_request.dart';
-import 'package:fehviewer/network/request.dart';
 import 'package:fehviewer/pages/tab/view/tab_base.dart';
 import 'package:fehviewer/route/navigator_util.dart';
 import 'package:fehviewer/route/routes.dart';
@@ -24,8 +23,6 @@ import 'package:get/get.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import '../fetch_list.dart';
-import 'enum.dart';
-import 'favorite_controller.dart';
 import 'tabview_controller.dart';
 
 enum SearchType {
@@ -43,10 +40,6 @@ enum ListType {
 class SearchPageController extends TabViewController {
   SearchPageController();
 
-  String? initSearchText;
-  final RxString _searchText = ''.obs;
-  String get searchText => _searchText.value;
-  set searchText(String val) => _searchText.value = val;
   late bool _autoComplete = false;
   final String tabIndex = 'search_$searchPageCtrlDepth';
 
@@ -59,10 +52,6 @@ class SearchPageController extends TabViewController {
   late final TextEditingController searchTextController =
       TextEditingController();
   bool get textIsNotEmpty => searchTextController.text.isNotEmpty;
-
-  // 搜索类型
-  final Rx<SearchType> _searchType = SearchType.normal.obs;
-  SearchType get searchType => _searchType.value;
 
   String get placeholderText {
     final BuildContext context = Get.context!;
@@ -78,8 +67,6 @@ class SearchPageController extends TabViewController {
     }
   }
 
-  set searchType(SearchType val) => _searchType.value = val;
-
   final Rx<ListType> _listType = ListType.init.obs;
 
   ListType get listType => _listType.value;
@@ -90,8 +77,6 @@ class SearchPageController extends TabViewController {
   late String _currQryText;
 
   FocusNode searchFocusNode = FocusNode();
-
-  late String _search = '';
 
   late DateTime _lastInputCompleteAt; //上次输入完成时间
 
@@ -104,7 +89,6 @@ class SearchPageController extends TabViewController {
 
   final EhConfigService _ehConfigService = Get.find();
   final QuickSearchController quickSearchController = Get.find();
-  final FavoriteViewController _favoriteViewController = Get.find();
   final LocaleService localeService = Get.find();
 
   bool get isTagTranslat => _ehConfigService.isTagTranslat;
@@ -114,28 +98,35 @@ class SearchPageController extends TabViewController {
 
   set isSearchBarComp(bool val) => _ehConfigService.isSearchBarComp.value = val;
 
+  @override
+  FetchListClient getFetchListClient(FetchParams fetchParams) {
+    return SearchFetchListClient(
+        fetchParams: fetchParams..galleryListType = _currListType);
+  }
+
   /// 执行搜索
   Future<void> _startSearch({bool clear = true}) async {
     curPage.value = 0;
     searchText = searchTextController.text.trim();
 
-    if (_searchText.isNotEmpty) {
-      _search = searchText;
-
-      analytics.logSearch(searchTerm: _search);
+    if (searchText.isNotEmpty) {
+      analytics.logSearch(searchTerm: searchText);
 
       _addHistory();
 
-      // logger.d('${state?.length}');
-
       if (clear) {
-        // logger.v('clear $clear');
         change(state, status: RxStatus.loading());
       }
 
       try {
-        final List<GalleryItem> _list = await _fetchData(refresh: true);
-        change(_list, status: RxStatus.success());
+        final rult = await fetchData(refresh: true);
+        if (rult == null) {
+          change(null, status: RxStatus.loading());
+          return;
+        }
+        maxPage = rult.maxPage ?? 0;
+        nextPage = rult.nextPage ?? 1;
+        change(rult.gallerys ?? [], status: RxStatus.success());
       } catch (err) {
         change(null, status: RxStatus.error(err.toString()));
       }
@@ -247,170 +238,6 @@ class SearchPageController extends TabViewController {
 
   GalleryListType get _currListType =>
       _typeMap[searchType] ?? GalleryListType.gallery;
-
-  /// 获取数据
-  Future<List<GalleryItem>> _fetchData({bool refresh = false}) async {
-    logger.v('$searchPageCtrlDepth _fetchData');
-
-    final int _catNum = _ehConfigService.catFilter.value;
-
-    final GalleryList? rult = await getGallery(
-      cats: _catNum,
-      favcat: _favoriteViewController.curFavcat,
-      serach: _search,
-      refresh: refresh,
-      galleryListType: _currListType,
-    );
-
-    final List<GalleryItem> gallerItemBeans = rult?.gallerys
-            ?.map((GalleryItem e) => e.copyWith(pageOfList: 0))
-            .toList() ??
-        [];
-    nextPage = rult?.nextPage ?? 1;
-    maxPage = rult?.maxPage ?? 0;
-    return gallerItemBeans;
-  }
-
-  /// 加载更多
-  @override
-  Future<void> loadDataMore({bool cleanSearch = false}) async {
-    logger5.i('$searchPageCtrlDepth loadDataMore');
-    // 增加延时 避免build期间进行 setState
-    await Future<void>.delayed(const Duration(milliseconds: 200));
-    if (pageState == PageState.Loading) {
-      logger.d('loadDataMore return');
-      return;
-    }
-
-    if (cleanSearch) {
-      _search = '';
-    }
-
-    final int _catNum = _ehConfigService.catFilter.value;
-    pageState = PageState.Loading;
-
-    logger.d('load page: $nextPage');
-
-    try {
-      final String? fromGid = state?.last.gid;
-
-      final GalleryList? rult = await getGallery(
-        page: nextPage,
-        fromGid: fromGid,
-        cats: _catNum,
-        favcat: _favoriteViewController.curFavcat,
-        serach: _search,
-        refresh: true,
-        galleryListType: _currListType,
-      );
-
-      final List<GalleryItem> rultList = rult?.gallerys
-              ?.map(
-                  (GalleryItem e) => e.copyWith(pageOfList: curPage.value + 1))
-              .toList() ??
-          [];
-
-      final insertIndex = state?.length ?? 0;
-      change([...?state, ...rultList], status: RxStatus.success());
-
-      for (final item in rultList) {
-        sliverAnimatedListKey.currentState?.insertItem(insertIndex);
-      }
-
-      logger.d('added rultList first ${rultList.first.gid} ');
-
-      nextPage = rult?.nextPage ?? 1;
-      maxPage = rult?.maxPage ?? 0;
-      curPage.value = nextPage;
-      pageState = PageState.None;
-    } catch (e, stack) {
-      pageState = PageState.LoadingException;
-      rethrow;
-    }
-  }
-
-  @override
-  Future<void> loadPrevious({bool cleanSearch = false}) async {
-    logger5.i('$searchPageCtrlDepth loadDataMore');
-    // 增加延时 避免build期间进行 setState
-    await Future<void>.delayed(const Duration(milliseconds: 200));
-    if (pageState == PageState.Loading) {
-      logger.d('loadDataMore return');
-      return;
-    }
-
-    if (cleanSearch) {
-      _search = '';
-    }
-
-    final int _catNum = _ehConfigService.catFilter.value;
-    pageState = PageState.Loading;
-
-    try {
-      final String? fromGid = state?.last.gid;
-
-      final GalleryList? rult = await getGallery(
-        page: curPage.value - 1,
-        fromGid: fromGid,
-        cats: _catNum,
-        favcat: _favoriteViewController.curFavcat,
-        serach: _search,
-        refresh: true,
-        galleryListType: _currListType,
-      );
-
-      final List<GalleryItem> gallerItemBeans = rult?.gallerys
-              ?.map(
-                  (GalleryItem e) => e.copyWith(pageOfList: curPage.value - 1))
-              .toList() ??
-          [];
-
-      state?.insertAll(0, gallerItemBeans);
-
-      logger.d('insert gallerItemBeans first ${gallerItemBeans.first.gid} ');
-
-      nextPage = rult?.nextPage ?? 1;
-      maxPage = rult?.maxPage ?? 0;
-      curPage.value -= 1;
-      pageState = PageState.None;
-      update();
-    } catch (e, stack) {
-      pageState = PageState.LoadingException;
-      rethrow;
-    }
-  }
-
-  /// 从指定页数开始
-  @override
-  Future<void> loadFromPage(int page) async {
-    logger.v('jump to page =>  $page');
-
-    final int _catNum = _ehConfigService.catFilter.value;
-
-    change(state, status: RxStatus.loading());
-
-    final GalleryList? rult = await getGallery(
-      page: page,
-      cats: _catNum,
-      favcat: _favoriteViewController.curFavcat,
-      serach: _search,
-      refresh: true,
-      galleryListType: _currListType,
-    );
-
-    curPage.value = page;
-    minPage = page;
-
-    nextPage = rult?.nextPage ?? 1;
-    maxPage = rult?.maxPage ?? 0;
-
-    change(
-        rult?.gallerys
-                ?.map((GalleryItem e) => e.copyWith(pageOfList: page))
-                .toList() ??
-            [],
-        status: RxStatus.success());
-  }
 
   List<String> searchHistory = <String>[].obs;
 
