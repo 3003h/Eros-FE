@@ -51,7 +51,6 @@ class FavoriteViewController extends TabViewController {
 
   @override
   void onInit() {
-    // fetchNormal = Api.getFavorite;
     tabTag = EHRoutes.favorite;
     super.onInit();
   }

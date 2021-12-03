@@ -540,7 +540,7 @@ class TagGroupItem extends StatelessWidget {
         _initTagBtnList(tagGroupData.galleryTags, context);
     final String? _tagType = tagGroupData.tagType;
 
-    logger.d('tagType $_tagType');
+    logger.v('tagType $_tagType');
 
     final Container container = Container(
       padding: const EdgeInsets.fromLTRB(0, 4, 0, 4),

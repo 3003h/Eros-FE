@@ -169,7 +169,7 @@ class HistoryController extends GetxController {
 
   Future<void> syncHistory() async {
     if (!webdavController.syncHistory) {
-      logger.d('disable syncHistory');
+      // logger.d('disable syncHistory');
       return;
     }
 
