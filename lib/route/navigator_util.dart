@@ -2,6 +2,7 @@ import 'package:collection/collection.dart';
 import 'package:fehviewer/common/service/depth_service.dart';
 import 'package:fehviewer/common/service/layout_service.dart';
 import 'package:fehviewer/const/const.dart';
+import 'package:fehviewer/extension.dart';
 import 'package:fehviewer/models/index.dart';
 import 'package:fehviewer/network/gallery_request.dart';
 import 'package:fehviewer/network/request.dart';
@@ -100,16 +101,16 @@ class NavigatorUtil {
       final RegExp regGalleryUrl =
           RegExp(r'https?://e[-x]hentai.org/g/([0-9]+)/[0-9a-z]+/?');
       final RegExp regGalleryPageUrl =
-          RegExp(r'https://e[-x]hentai.org/s/[0-9a-z]+/\d+-\d+');
+          RegExp(r'https?://e[-x]hentai.org/s/[0-9a-z]+/\d+-\d+');
 
       if (regGalleryUrl.hasMatch(url)) {
         // url为画廊链接
-        Get.replace(GalleryRepository(url: url));
+        Get.replace(GalleryRepository(url: url.linkRedirect));
         final matcher = regGalleryUrl.firstMatch(url);
         _gid = matcher?[1];
       } else if (regGalleryPageUrl.hasMatch(url)) {
         // url为画廊某一页的链接
-        final _image = await fetchImageInfo(url);
+        final _image = await fetchImageInfo(url.linkRedirect);
 
         if (_image == null) {
           return;

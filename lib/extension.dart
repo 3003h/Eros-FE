@@ -10,6 +10,7 @@ import 'package:get/get.dart';
 
 import 'common/controller/tag_trans_controller.dart';
 import 'models/index.dart';
+import 'network/gallery_request.dart';
 
 extension ExtGC on GalleryCache {
   ViewColumnMode get columnMode =>
@@ -221,7 +222,19 @@ extension ExtTagTranlat on TagTranslat {
   }
 }
 
-extension ExtString on String {}
+extension ExtString on String {
+  EhConfigService get _ehConfigService => Get.find();
+
+  String get linkRedirect {
+    if (_ehConfigService.linkRedirect) {
+      final uri = Uri.parse(this);
+      if (uri.host.contains(RegExp(r'e[-x]hentai.org'))) {
+        return uri.replace(host: Api.getBaseHost()).toString();
+      }
+    }
+    return this;
+  }
+}
 
 extension ExSearch on String {
   String get shortName {

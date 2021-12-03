@@ -124,6 +124,9 @@ class MessageLookup extends MessageLookupByLibrary {
             "Last Favorites, long press to manually select"),
         "left_to_right": MessageLookupByLibrary.simpleMessage("从左到右"),
         "light": MessageLookupByLibrary.simpleMessage("淺色模式"),
+        "link_redirect": MessageLookupByLibrary.simpleMessage("Link redirect"),
+        "link_redirect_summary": MessageLookupByLibrary.simpleMessage(
+            "Redirecting gallery links to selected sites"),
         "list_load_more_fail":
             MessageLookupByLibrary.simpleMessage("加载失败, 点击重试"),
         "list_mode": MessageLookupByLibrary.simpleMessage("列表浏览模式"),

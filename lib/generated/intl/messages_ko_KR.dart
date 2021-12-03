@@ -121,6 +121,9 @@ class MessageLookup extends MessageLookupByLibrary {
             "최근 즐겨찾기, 길게 눌러 수동으로 선택할 수 있습니다."),
         "left_to_right": MessageLookupByLibrary.simpleMessage("왼쪽에서 오른쪽으로"),
         "light": MessageLookupByLibrary.simpleMessage("밝게"),
+        "link_redirect": MessageLookupByLibrary.simpleMessage("Link redirect"),
+        "link_redirect_summary": MessageLookupByLibrary.simpleMessage(
+            "Redirecting gallery links to selected sites"),
         "list_load_more_fail": MessageLookupByLibrary.simpleMessage(
             "불러오기에 실패하였습니다, 탭하여 다시 로드하세요."),
         "list_mode": MessageLookupByLibrary.simpleMessage("목록 모드"),
