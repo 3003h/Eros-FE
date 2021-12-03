@@ -21,14 +21,7 @@ class GalleryViewController extends TabViewController {
 
   @override
   void onInit() {
-    // fetchNormal = getGallery;
     tabTag = EHRoutes.gallery;
     super.onInit();
   }
-
-  // @override
-  // FetchListClient getFetchListClient(FetchConfig fetchConfig) {
-  //   return FetchListClient(fetchConfig: fetchConfig);
-  // }
-
 }

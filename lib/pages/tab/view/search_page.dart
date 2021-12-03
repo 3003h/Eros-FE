@@ -173,7 +173,12 @@ class _GallerySearchPageState extends State<GallerySearchPage> {
           Obx(() {
             if (controller.listType != ListType.tag) {
               return SliverToBoxAdapter(
-                  child: _endIndicator().autoCompressKeyboard(context));
+                  child: Obx(() {
+                return EndIndicator(
+                  pageState: controller.pageState,
+                  loadDataMore: controller.loadDataMore,
+                );
+              }).autoCompressKeyboard(context));
             } else {
               return SliverSafeArea(
                 bottom: false,
@@ -583,45 +588,6 @@ class _GallerySearchPageState extends State<GallerySearchPage> {
         return _searchHistory;
       },
     );
-  }
-
-  Widget _endIndicator() {
-    return Obx(() => Container(
-          padding: EdgeInsets.only(
-              top: 50, bottom: 50.0 + context.mediaQueryPadding.bottom),
-          child: () {
-            switch (controller.pageState) {
-              case PageState.None:
-                return Container();
-              case PageState.Loading:
-                return const CupertinoActivityIndicator(
-                  radius: 14,
-                );
-              case PageState.LoadingException:
-              case PageState.LoadingError:
-                return GestureDetector(
-                  onTap: controller.loadDataMore,
-                  child: Column(
-                    children: <Widget>[
-                      const Icon(
-                        Icons.error,
-                        size: 40,
-                        color: CupertinoColors.systemRed,
-                      ),
-                      Text(
-                        L10n.of(Get.context!).list_load_more_fail,
-                        style: const TextStyle(
-                          fontSize: 12,
-                        ),
-                      ),
-                    ],
-                  ),
-                );
-              default:
-                return Container();
-            }
-          }(),
-        ));
   }
 
   Widget _getGalleryList() {

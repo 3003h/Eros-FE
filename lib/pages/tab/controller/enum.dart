@@ -2,6 +2,7 @@
 enum PageState {
   None, // 现在什么也没做(网络请求前,网络请求完成)
   Loading, // 加载中
+  LoadingMore, // 加载中
   LoadingError, // 加载失败(业务逻辑错误)
   LoadingException, // 网络异常
 }
