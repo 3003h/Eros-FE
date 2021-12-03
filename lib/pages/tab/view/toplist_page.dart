@@ -1,6 +1,4 @@
-import 'package:fehviewer/generated/l10n.dart';
 import 'package:fehviewer/models/base/eh_models.dart';
-import 'package:fehviewer/pages/tab/controller/enum.dart';
 import 'package:fehviewer/pages/tab/controller/toplist_controller.dart';
 import 'package:fehviewer/pages/tab/view/tab_base.dart';
 import 'package:fehviewer/utils/cust_lib/persistent_header_builder.dart';
@@ -42,8 +40,6 @@ class _ToplistTabState extends State<ToplistTab> {
 
   @override
   Widget build(BuildContext context) {
-    // String _title = L10n.of(context).tab_toplist;
-
     final navigationBar = Obx(() {
       return CupertinoNavigationBar(
         transitionBetweenRoutes: false,
@@ -145,7 +141,12 @@ class _ToplistTabState extends State<ToplistTab> {
           top: false,
           sliver: _getTopList(),
         ),
-        _endIndicator(),
+        Obx(() {
+          return EndIndicator(
+            pageState: controller.pageState,
+            loadDataMore: controller.loadDataMore,
+          );
+        }),
       ],
     );
 
@@ -189,47 +190,6 @@ class _ToplistTabState extends State<ToplistTab> {
           ),
         );
       },
-    );
-  }
-
-  Widget _endIndicator() {
-    return SliverToBoxAdapter(
-      child: Obx(() => Container(
-          alignment: Alignment.center,
-          padding: EdgeInsets.only(
-              top: 50, bottom: 50.0 + context.mediaQueryPadding.bottom),
-          child: () {
-            switch (controller.pageState) {
-              case PageState.None:
-                return Container();
-              case PageState.Loading:
-                return const CupertinoActivityIndicator(
-                  radius: 14,
-                );
-              case PageState.LoadingException:
-              case PageState.LoadingError:
-                return GestureDetector(
-                  onTap: controller.loadDataMore,
-                  child: Column(
-                    children: <Widget>[
-                      const Icon(
-                        Icons.error,
-                        size: 40,
-                        color: CupertinoColors.systemRed,
-                      ),
-                      Text(
-                        L10n.of(Get.context!).list_load_more_fail,
-                        style: const TextStyle(
-                          fontSize: 12,
-                        ),
-                      ),
-                    ],
-                  ),
-                );
-              default:
-                return Container();
-            }
-          }())),
     );
   }
 }

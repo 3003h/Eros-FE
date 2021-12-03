@@ -1,7 +1,5 @@
-import 'package:fehviewer/generated/l10n.dart';
 import 'package:fehviewer/models/index.dart';
 import 'package:fehviewer/pages/filter/filter.dart';
-import 'package:fehviewer/pages/tab/controller/enum.dart';
 import 'package:fehviewer/pages/tab/controller/gallery_controller.dart';
 import 'package:fehviewer/pages/tab/view/gallery_base.dart';
 import 'package:fehviewer/route/navigator_util.dart';
@@ -258,7 +256,12 @@ class _GalleryListTabState extends State<GalleryListTab> {
           bottom: false,
           sliver: _getGalleryList(),
         ),
-        _endIndicator(),
+        Obx(() {
+          return EndIndicator(
+            pageState: controller.pageState,
+            loadDataMore: controller.loadDataMore,
+          );
+        }),
       ],
     );
 
@@ -268,48 +271,6 @@ class _GalleryListTabState extends State<GalleryListTab> {
         child: SizeCacheWidget(child: customScrollView),
         controller: PrimaryScrollController.of(context),
       ),
-    );
-  }
-
-  Widget _endIndicator() {
-    return SliverToBoxAdapter(
-      // key: centerKey,
-      child: Obx(() => Container(
-          alignment: Alignment.center,
-          padding: EdgeInsets.only(
-              top: 50, bottom: 50.0 + context.mediaQueryPadding.bottom),
-          child: () {
-            switch (controller.pageState) {
-              case PageState.None:
-                return Container();
-              case PageState.Loading:
-                return const CupertinoActivityIndicator(
-                  radius: 14,
-                );
-              case PageState.LoadingException:
-              case PageState.LoadingError:
-                return GestureDetector(
-                  onTap: controller.loadDataMore,
-                  child: Column(
-                    children: <Widget>[
-                      const Icon(
-                        Icons.error,
-                        size: 40,
-                        color: CupertinoColors.systemRed,
-                      ),
-                      Text(
-                        L10n.of(Get.context!).list_load_more_fail,
-                        style: const TextStyle(
-                          fontSize: 12,
-                        ),
-                      ),
-                    ],
-                  ),
-                );
-              default:
-                return Container();
-            }
-          }())),
     );
   }
 

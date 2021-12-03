@@ -89,6 +89,9 @@ class TabViewController extends GetxController
 
   bool lastItemBuildComplete = false;
 
+  bool get canLoadData =>
+      pageState != PageState.Loading && pageState != PageState.LoadingMore;
+
   @override
   void onReady() {
     super.onReady();
@@ -223,18 +226,18 @@ class TabViewController extends GetxController
   }
 
   Future<void> loadDataMore() async {
-    if (pageState == PageState.Loading) {
+    // 增加延时 避免build期间进行 setState
+    await Future<void>.delayed(const Duration(milliseconds: 100));
+
+    if (!canLoadData) {
       return;
     }
 
     logger.d('loadDataMore .....');
     cancelToken = CancelToken();
-    pageState = PageState.Loading;
+    pageState = PageState.LoadingMore;
 
     final int _catNum = _ehConfigService.catFilter.value;
-
-    // 增加延时 避免build期间进行 setState
-    await Future<void>.delayed(const Duration(milliseconds: 100));
 
     logger.d('load page: $nextPage');
     final lastNextPage = nextPage;
@@ -293,7 +296,7 @@ class TabViewController extends GetxController
 
   // 加载上一页
   Future<void> loadPrevious() async {
-    if (pageState == PageState.Loading) {
+    if (!canLoadData) {
       return;
     }
 
@@ -379,6 +382,8 @@ class TabViewController extends GetxController
       cancelToken: cancelToken,
       favcat: curFavcat,
       toplist: currToplist,
+      searchText: searchText,
+      searchType: searchType,
     );
     try {
       FetchListClient fetchListClient = getFetchListClient(fetchConfig);
@@ -414,7 +419,7 @@ class TabViewController extends GetxController
       }
 
       final int _toPage = int.parse(_input) - 1;
-      if (_toPage >= 0 && _toPage <= maxPage) {
+      if (_toPage >= 0 && _toPage <= maxPage - 1) {
         FocusScope.of(Get.context!).requestFocus(FocusNode());
         loadFromPage(_toPage);
         Get.back();
