@@ -49,12 +49,14 @@ Future<void> main() async {
     }
     resetLogLevel();
 
-    runApp(DevicePreview(
-      // enabled: !kReleaseMode,
-      enabled: false,
-      isToolbarVisible: true,
-      builder: (context) => MyApp(),
-    ));
+    runApp(!kReleaseMode
+        ? DevicePreview(
+            // enabled: !kReleaseMode,
+            enabled: false,
+            isToolbarVisible: true,
+            builder: (context) => MyApp(),
+          )
+        : MyApp());
   }, (Object error, StackTrace stackTrace) {
     if (error is EhError && error.type == EhErrorType.image509) {
       debugPrint('EhErrorType.image509');
