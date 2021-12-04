@@ -11,7 +11,6 @@ import 'package:fehviewer/generated/l10n.dart';
 import 'package:fehviewer/models/index.dart';
 import 'package:fehviewer/pages/filter/filter.dart';
 import 'package:fehviewer/pages/gallery/view/gallery_widget.dart';
-import 'package:fehviewer/pages/tab/controller/enum.dart';
 import 'package:fehviewer/pages/tab/controller/search_page_controller.dart';
 import 'package:fehviewer/pages/tab/view/gallery_base.dart';
 import 'package:fehviewer/pages/tab/view/tab_base.dart';
@@ -172,13 +171,10 @@ class _GallerySearchPageState extends State<GallerySearchPage> {
               )),
           Obx(() {
             if (controller.listType != ListType.tag) {
-              return SliverToBoxAdapter(
-                  child: Obx(() {
-                return EndIndicator(
-                  pageState: controller.pageState,
-                  loadDataMore: controller.loadDataMore,
-                );
-              }).autoCompressKeyboard(context));
+              return EndIndicator(
+                pageState: controller.pageState,
+                loadDataMore: controller.loadDataMore,
+              );
             } else {
               return SliverSafeArea(
                 bottom: false,
