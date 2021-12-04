@@ -107,6 +107,8 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("즐겨찾기된 순"),
         "favorites_order_Use_posted":
             MessageLookupByLibrary.simpleMessage("게시된 순"),
+        "fixed_height_of_list_items":
+            MessageLookupByLibrary.simpleMessage("Fixed height of list items"),
         "follow_system": MessageLookupByLibrary.simpleMessage("시스템 기본값"),
         "galery_site": MessageLookupByLibrary.simpleMessage("갤러리 사이트"),
         "gallery_comments": MessageLookupByLibrary.simpleMessage("갤러리 댓글"),

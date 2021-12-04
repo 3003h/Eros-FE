@@ -3333,6 +3333,16 @@ class L10n {
       args: [],
     );
   }
+
+  /// `Fixed height of list items`
+  String get fixed_height_of_list_items {
+    return Intl.message(
+      'Fixed height of list items',
+      name: 'fixed_height_of_list_items',
+      desc: '',
+      args: [],
+    );
+  }
 }
 
 class AppLocalizationDelegate extends LocalizationsDelegate<L10n> {

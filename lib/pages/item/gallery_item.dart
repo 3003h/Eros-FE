@@ -20,10 +20,16 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
 import 'package:keframe/frame_separate_widget.dart';
 
+import 'item_base.dart';
+
 const double kPaddingHorizontal = 12.0;
 const double kPaddingVertical = 18.0;
 
-const kCardRadius = 12.0;
+const double kCardRadius = 12.0;
+
+const double kFixedHeight = 190.0;
+
+final EhConfigService _ehConfigService = Get.find();
 
 /// 画廊列表项
 /// 标题和tag需要随设置变化重构ui
@@ -191,130 +197,136 @@ class GalleryItemWidget extends StatelessWidget {
 
   Widget _buildCardItem() {
     return Obx(
-      () => Column(
-        children: <Widget>[
-          Container(
-            decoration: BoxDecoration(
-              boxShadow: ehTheme.isDarkMode
-                  ? null
-                  : [
-                      BoxShadow(
-                        color: CupertinoDynamicColor.resolve(
-                                CupertinoColors.systemGrey5, Get.context!)
-                            .withOpacity(1.0),
-                        blurRadius: 10,
-                        // spreadRadius: 2,
-                        offset: const Offset(2, 4),
-                      )
-                    ],
-              color: galleryItemController.colorTap.value,
-              borderRadius: BorderRadius.circular(kCardRadius),
-            ),
-            padding: const EdgeInsets.only(right: kPaddingHorizontal),
-            // margin: const EdgeInsets.symmetric(vertical: 10, horizontal: 10),
-            margin: const EdgeInsets.fromLTRB(10, 8, 10, 12),
-            child: IntrinsicHeight(
-              child: Row(
-                children: <Widget>[
-                  // 封面图片
-                  Column(
-                    children: [
-                      Expanded(
-                        child: _CoverImage(
-                          galleryItemController: galleryItemController,
-                          tabTag: tabTag,
-                          cardType: true,
-                        ),
+      () {
+        return Container(
+          height: _ehConfigService.fixedHeightOfListItems ? kFixedHeight : null,
+          decoration: BoxDecoration(
+            boxShadow: ehTheme.isDarkMode
+                ? null
+                : [
+                    BoxShadow(
+                      color: CupertinoDynamicColor.resolve(
+                              CupertinoColors.systemGrey5, Get.context!)
+                          .withOpacity(1.0),
+                      blurRadius: 10,
+                      // spreadRadius: 2,
+                      offset: const Offset(2, 4),
+                    )
+                  ],
+            color: galleryItemController.colorTap.value,
+            borderRadius: BorderRadius.circular(kCardRadius),
+          ),
+          padding: const EdgeInsets.only(right: kPaddingHorizontal),
+          // margin: const EdgeInsets.symmetric(vertical: 10, horizontal: 10),
+          margin: const EdgeInsets.fromLTRB(10, 8, 10, 12),
+          child: IntrinsicHeight(
+            child: Row(
+              children: <Widget>[
+                // 封面图片
+                Column(
+                  children: [
+                    Expanded(
+                      child: _CoverImage(
+                        galleryItemController: galleryItemController,
+                        tabTag: tabTag,
+                        cardType: true,
                       ),
-                    ],
-                  ),
-                  Container(
-                    width: 8,
-                  ),
-                  // 右侧信息
-                  Expanded(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: <Widget>[
-                        // 标题 provider
-                        _Title(
-                          galleryItemController: galleryItemController,
-                        ),
-                        // 上传者
-                        Text(
-                          galleryItemController.galleryItem.uploader ?? '',
-                          style: const TextStyle(
-                              fontSize: 12, color: CupertinoColors.systemGrey),
-                        ),
-                        // 标签
+                    ),
+                  ],
+                ),
+                Container(
+                  width: 8,
+                ),
+                // 右侧信息
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: <Widget>[
+                      // 标题 provider
+                      _Title(
+                        galleryItemController: galleryItemController,
+                      ),
+                      // 上传者
+                      Text(
+                        galleryItemController.galleryItem.uploader ?? '',
+                        style: const TextStyle(
+                            fontSize: 12, color: CupertinoColors.systemGrey),
+                      ),
+                      const Spacer(),
+                      // 标签
+                      if (_ehConfigService.fixedHeightOfListItems)
+                        TagWaterfallFlowViewBox(
+                          simpleTags:
+                              galleryItemController.galleryItem.simpleTags,
+                          crossAxisCount: 3,
+                        )
+                      else
                         TagBox(
                           simpleTags:
                               galleryItemController.galleryItem.simpleTags ??
                                   [],
                         ),
-                        const Spacer(),
-                        // 评分行
-                        GetBuilder(
-                          init: galleryItemController,
-                          tag: galleryItemController.galleryItem.gid,
-                          builder: (_) => Row(
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            mainAxisSize: MainAxisSize.min,
-                            children: <Widget>[
-                              // 评分
-                              Expanded(
-                                  child: _Rating(
-                                rating:
-                                    galleryItemController.galleryItem.rating,
-                                ratingFallBack: galleryItemController
-                                    .galleryItem.ratingFallBack,
-                                colorRating: galleryItemController
-                                    .galleryItem.colorRating,
-                              )),
-                              // 收藏图标
-                              _FavcatIcon(
-                                galleryItemController: galleryItemController,
-                              ),
-                              // 图片数量
-                              _Filecont(
-                                translated: galleryItemController
-                                    .galleryItem.translated,
-                                filecount:
-                                    galleryItemController.galleryItem.filecount,
-                              ),
-                            ],
-                          ),
-                        ),
-                        Container(
-                          height: 4,
-                        ),
-                        // 类型和时间
-                        Row(
+                      const Spacer(),
+                      // 评分行
+                      GetBuilder(
+                        init: galleryItemController,
+                        tag: galleryItemController.galleryItem.gid,
+                        builder: (_) => Row(
                           crossAxisAlignment: CrossAxisAlignment.center,
+                          mainAxisSize: MainAxisSize.min,
                           children: <Widget>[
-                            // 类型
-                            _Category(
-                              category:
-                                  galleryItemController.galleryItem.category,
-                            ),
-                            // const Spacer(),
-                            // 上传时间
+                            // 评分
                             Expanded(
-                                child: _PostTime(
-                              postTime:
-                                  galleryItemController.galleryItem.postTime,
+                                child: _Rating(
+                              rating: galleryItemController.galleryItem.rating,
+                              ratingFallBack: galleryItemController
+                                  .galleryItem.ratingFallBack,
+                              colorRating:
+                                  galleryItemController.galleryItem.colorRating,
                             )),
+                            // 收藏图标
+                            _FavcatIcon(
+                              galleryItemController: galleryItemController,
+                            ),
+                            // 图片数量
+                            _Filecont(
+                              translated:
+                                  galleryItemController.galleryItem.translated,
+                              filecount:
+                                  galleryItemController.galleryItem.filecount,
+                            ),
                           ],
                         ),
-                      ],
-                    ).paddingSymmetric(vertical: 4),
-                  ),
-                ],
-              ),
+                      ),
+                      Container(
+                        height: 4,
+                      ),
+                      // 类型和时间
+                      Row(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: <Widget>[
+                          // 类型
+                          _Category(
+                            category:
+                                galleryItemController.galleryItem.category,
+                          ),
+                          // const Spacer(),
+                          // 上传时间
+                          Expanded(
+                              child: _PostTime(
+                            postTime:
+                                galleryItemController.galleryItem.postTime,
+                          )),
+                        ],
+                      ),
+                    ],
+                  ).paddingSymmetric(vertical: 4),
+                ),
+              ],
             ),
           ),
-        ],
-      ),
+        );
+      },
     );
   }
 }
@@ -438,7 +450,7 @@ class _Title extends StatelessWidget {
   Widget build(BuildContext context) {
     return Obx(() => Text(
           galleryItemController.title,
-          maxLines: 4,
+          maxLines: _ehConfigService.fixedHeightOfListItems ? 3 : 4,
           textAlign: TextAlign.left, // 对齐方式
           overflow: TextOverflow.ellipsis, // 超出部分省略号
           style: const TextStyle(

@@ -47,9 +47,12 @@ class TagListViewBox extends StatelessWidget {
 }
 
 class TagWaterfallFlowViewBox extends StatelessWidget {
-  const TagWaterfallFlowViewBox({Key? key, this.simpleTags}) : super(key: key);
+  const TagWaterfallFlowViewBox(
+      {Key? key, this.simpleTags, this.crossAxisCount = 2})
+      : super(key: key);
 
   final List<SimpleTag>? simpleTags;
+  final int crossAxisCount;
 
   @override
   Widget build(BuildContext context) {
@@ -58,35 +61,38 @@ class TagWaterfallFlowViewBox extends StatelessWidget {
       return const SizedBox.shrink();
     }
 
-    return SizedBox(
-      height: 40,
-      child: WaterfallFlow.builder(
-        shrinkWrap: true,
-        scrollDirection: Axis.horizontal,
-        gridDelegate: const SliverWaterfallFlowDelegateWithFixedCrossAxisCount(
-          crossAxisCount: 2,
-          crossAxisSpacing: 4.0,
-          mainAxisSpacing: 4.0,
+    return ClipRRect(
+      borderRadius: BorderRadius.circular(4),
+      child: SizedBox(
+        height: crossAxisCount * 20,
+        child: WaterfallFlow.builder(
+          shrinkWrap: true,
+          scrollDirection: Axis.horizontal,
+          gridDelegate: SliverWaterfallFlowDelegateWithFixedCrossAxisCount(
+            crossAxisCount: crossAxisCount,
+            crossAxisSpacing: 4.0,
+            mainAxisSpacing: 4.0,
+          ),
+          itemCount: simpleTags?.length ?? 0,
+          itemBuilder: (BuildContext context, int index) {
+            return Obx(() {
+              final _simpleTag = simpleTags![index];
+              final String? _text = _ehConfigService.isTagTranslat
+                  ? _simpleTag.translat
+                  : _simpleTag.text;
+              return FrameSeparateWidget(
+                placeHolder: const TagItem(text: '  '),
+                index: -1,
+                child: TagItem(
+                  text: _text,
+                  color: ColorsUtil.getTagColor(_simpleTag.color),
+                  backgrondColor:
+                      ColorsUtil.getTagColor(_simpleTag.backgrondColor),
+                ),
+              );
+            });
+          },
         ),
-        itemCount: simpleTags?.length ?? 0,
-        itemBuilder: (BuildContext context, int index) {
-          return Obx(() {
-            final _simpleTag = simpleTags![index];
-            final String? _text = _ehConfigService.isTagTranslat
-                ? _simpleTag.translat
-                : _simpleTag.text;
-            return FrameSeparateWidget(
-              placeHolder: const TagItem(text: ''),
-              index: -1,
-              child: TagItem(
-                text: _text,
-                color: ColorsUtil.getTagColor(_simpleTag.color),
-                backgrondColor:
-                    ColorsUtil.getTagColor(_simpleTag.backgrondColor),
-              ),
-            );
-          });
-        },
       ),
     );
   }

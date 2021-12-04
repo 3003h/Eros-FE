@@ -119,6 +119,8 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("Use favorited"),
         "favorites_order_Use_posted":
             MessageLookupByLibrary.simpleMessage("Use posted"),
+        "fixed_height_of_list_items":
+            MessageLookupByLibrary.simpleMessage("Fixed height of list items"),
         "follow_system": MessageLookupByLibrary.simpleMessage("Follow system"),
         "galery_site": MessageLookupByLibrary.simpleMessage("Gallery site"),
         "gallery_comments":
