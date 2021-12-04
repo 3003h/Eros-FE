@@ -9,6 +9,7 @@ import 'package:fehviewer/pages/item/gallery_item_flow.dart';
 import 'package:fehviewer/pages/item/gallery_item_flow_large.dart';
 import 'package:fehviewer/pages/item/gallery_item_placeholder.dart';
 import 'package:fehviewer/pages/item/gallery_item_simple.dart';
+import 'package:fehviewer/pages/item/gallery_item_simple_placeholder.dart';
 import 'package:fehviewer/pages/tab/controller/enum.dart';
 import 'package:fehviewer/pages/tab/controller/search_page_controller.dart';
 import 'package:fehviewer/route/routes.dart';
@@ -258,13 +259,19 @@ Widget buildGallerySliverListSimpleView(
       // Get.replace(GalleryItemController(_item), tag: _item.gid);
       Get.lazyReplace(() => GalleryItemController(_item),
           tag: _item.gid, fenix: true);
-      return buildGallerySliverListItem(
-        _item,
-        index,
-        animation,
-        tabTag: tabTag,
-        centerKey: centerKey,
-        oriFirstIndex: lastTopitemIndex,
+      // if (index < 5) {
+      //   return const GalleryItemSimplePlaceHolder();
+      // }
+      return FrameSeparateWidget(
+        placeHolder: const GalleryItemSimplePlaceHolder(),
+        child: buildGallerySliverListItem(
+          _item,
+          index,
+          animation,
+          tabTag: tabTag,
+          centerKey: centerKey,
+          oriFirstIndex: lastTopitemIndex,
+        ),
       );
     },
   );

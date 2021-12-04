@@ -18,6 +18,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
+import 'package:keframe/frame_separate_widget.dart';
 
 const double kPaddingHorizontal = 12.0;
 const double kPaddingVertical = 18.0;
@@ -653,11 +654,15 @@ class TagBox extends StatelessWidget {
                   final String? _text = _ehConfigService.isTagTranslat
                       ? _simpleTag.translat
                       : _simpleTag.text;
-                  return TagItem(
-                    text: _text,
-                    color: ColorsUtil.getTagColor(_simpleTag.color),
-                    backgrondColor:
-                        ColorsUtil.getTagColor(_simpleTag.backgrondColor),
+                  return FrameSeparateWidget(
+                    placeHolder: const TagItem(text: ''),
+                    index: -1,
+                    child: TagItem(
+                      text: _text,
+                      color: ColorsUtil.getTagColor(_simpleTag.color),
+                      backgrondColor:
+                          ColorsUtil.getTagColor(_simpleTag.backgrondColor),
+                    ),
                   );
                 }).toList()), //要显示的子控件集合
               ),
