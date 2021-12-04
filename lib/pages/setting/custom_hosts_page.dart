@@ -42,7 +42,7 @@ class CustomHostsPage extends StatelessWidget {
                       intValue: dnsConfigController.enableCustomHosts,
                       onChanged: _handleEnableCustomHostDarkChanged,
                     )),
-                Container(height: 38),
+                const ItemSpace(),
                 CustomHostsListView(),
               ],
             ),

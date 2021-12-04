@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:collection/collection.dart';
 import 'package:enum_to_string/enum_to_string.dart';
 import 'package:fehviewer/common/service/ehconfig_service.dart';
 import 'package:fehviewer/const/const.dart';
@@ -234,15 +235,12 @@ extension ExtString on String {
     }
     return this;
   }
-}
 
-extension ExSearch on String {
   String get shortName {
-    if (this != 'misc') {
-      return substring(0, 1);
-    } else {
-      return this;
-    }
+    return EHConst.prefixToNameSpaceMap.entries
+            .firstWhereOrNull((e) => e.value == trim().toLowerCase())
+            ?.key ??
+        this;
   }
 }
 

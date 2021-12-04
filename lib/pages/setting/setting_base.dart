@@ -663,3 +663,12 @@ Future<void> showUserCookie() async {
     },
   );
 }
+
+class ItemSpace extends StatelessWidget {
+  const ItemSpace({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return const SizedBox(height: 38);
+  }
+}

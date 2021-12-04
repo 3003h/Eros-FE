@@ -84,7 +84,7 @@ class ListViewAdvancedSetting extends StatelessWidget {
 
     final List<Widget> _list = <Widget>[
       _buildLanguageItem(context),
-      Container(height: 38),
+      const ItemSpace(),
       _buildThemeItem(context),
       Obx(() => TextSwitchItem(
             L10n.of(context).dark_mode_effect,
@@ -111,7 +111,7 @@ class ListViewAdvancedSetting extends StatelessWidget {
             );
           },
         ),
-      Container(height: 38),
+      const ItemSpace(),
       // 清除缓存
       _cacheController.obx(
           (String? state) => SelectorSettingItem(
@@ -132,7 +132,7 @@ class ListViewAdvancedSetting extends StatelessWidget {
               _cacheController.clearAllCache();
             },
           )),
-      Container(height: 38),
+      const ItemSpace(),
       TextSwitchItem(
         L10n.of(context).domain_fronting,
         intValue: _dnsService.enableDomainFronting,
@@ -189,14 +189,14 @@ class ListViewAdvancedSetting extends StatelessWidget {
       //   onChanged: _handleDoHChanged,
       //   desc: '优先级低于自定义hosts',
       // ),
-      Container(height: 38),
+      const ItemSpace(),
       TextSwitchItem(
         L10n.of(context).vibrate_feedback,
         intValue: _ehConfigService.vibrate.value,
         onChanged: (bool val) => _ehConfigService.vibrate.value = val,
         hideLine: true,
       ),
-      Container(height: 38),
+      const ItemSpace(),
       SelectorSettingItem(
         title: 'Log',
         onTap: () {
