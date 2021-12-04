@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 import 'gallery_item.dart';
+import 'item_base.dart';
 
 class GalleryItemPlaceHolder extends StatelessWidget {
   const GalleryItemPlaceHolder({Key? key}) : super(key: key);
@@ -12,15 +13,6 @@ class GalleryItemPlaceHolder extends StatelessWidget {
   Widget build(BuildContext context) {
     final double coverImageWidth =
         Get.context!.isPhone ? Get.context!.mediaQueryShortestSide / 3 : 120;
-
-    final _line = ClipRRect(
-      borderRadius: BorderRadius.circular(6),
-      child: Container(
-        color:
-            CupertinoDynamicColor.resolve(CupertinoColors.systemGrey5, context),
-        height: 16,
-      ),
-    ).paddingSymmetric(vertical: 4);
 
     return Column(
       children: <Widget>[
@@ -66,44 +58,44 @@ class GalleryItemPlaceHolder extends StatelessWidget {
                   ),
                   // 右侧信息
                   Expanded(
-                    child: SingleChildScrollView(
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: <Widget>[
-                          _line,
-                          _line,
-                          Container(width: 70, child: _line),
-                          const SizedBox(height: 4),
-                          _line,
-                          Container(width: 70, child: _line),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: <Widget>[
+                        const PlaceHolderLine(),
+                        const PlaceHolderLine(),
+                        Container(width: 70, child: const PlaceHolderLine()),
+                        const SizedBox(height: 4),
+                        const PlaceHolderLine(),
+                        Container(width: 70, child: const PlaceHolderLine()),
 
-                          // 评分行
-                          Row(
-                            crossAxisAlignment: CrossAxisAlignment.end,
-                            children: <Widget>[
-                              // 评分
-                              Container(width: 50, child: _line),
-                              // 占位
-                              const Spacer(),
-                              Container(width: 50, child: _line),
-                            ],
-                          ),
-                          const SizedBox(
-                            height: 4,
-                          ),
-                          // 类型和时间
-                          Row(
-                            crossAxisAlignment: CrossAxisAlignment.end,
-                            children: <Widget>[
-                              // 类型
-                              // _buildCategory(),
-                              const Spacer(),
-                              // 上传时间
-                              // _buildPostTime(),
-                            ],
-                          ),
-                        ],
-                      ),
+                        // 评分行
+                        Row(
+                          crossAxisAlignment: CrossAxisAlignment.end,
+                          children: <Widget>[
+                            // 评分
+                            Container(
+                                width: 50, child: const PlaceHolderLine()),
+                            // 占位
+                            const Spacer(),
+                            Container(
+                                width: 50, child: const PlaceHolderLine()),
+                          ],
+                        ),
+                        const SizedBox(
+                          height: 4,
+                        ),
+                        // 类型和时间
+                        Row(
+                          crossAxisAlignment: CrossAxisAlignment.end,
+                          children: <Widget>[
+                            // 类型
+                            // _buildCategory(),
+                            const Spacer(),
+                            // 上传时间
+                            // _buildPostTime(),
+                          ],
+                        ),
+                      ],
                     ),
                   ),
                 ],

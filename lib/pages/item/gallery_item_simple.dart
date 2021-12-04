@@ -10,19 +10,26 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
 
+import 'item_base.dart';
+
 const double kCoverImageWidth = 70.0;
 const double kItemWidth = 115.0;
+const double kItemWidthShowTag = 126.0;
 const double kPaddingLeft = 8.0;
 
 /// 画廊列表项
 /// 简单模式 精简显示信息 固定高度
 class GalleryItemSimpleWidget extends StatelessWidget {
-  const GalleryItemSimpleWidget(
-      {Key? key, required this.galleryItem, required this.tabTag})
-      : super(key: key);
+  const GalleryItemSimpleWidget({
+    Key? key,
+    required this.galleryItem,
+    required this.tabTag,
+    this.showTag = true,
+  }) : super(key: key);
 
   final GalleryItem galleryItem;
   final dynamic tabTag;
+  final bool showTag;
 
   GalleryItemController get galleryItemController =>
       Get.find(tag: galleryItem.gid);
@@ -31,67 +38,71 @@ class GalleryItemSimpleWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     final Widget containerGallery = Container(
       color: galleryItemController.colorTap.value,
-      height: kItemWidth,
+      height: showTag ? kItemWidthShowTag : kItemWidth,
       padding: const EdgeInsets.fromLTRB(kPaddingLeft, 6, 6, 6),
-      child: Column(
-        children: <Widget>[
-          Row(children: <Widget>[
-            // 封面图片
-            _buildCoverImage(),
-            Container(
-              width: 8,
-            ),
-            // 右侧信息
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
+      child: Row(children: <Widget>[
+        // 封面图片
+        _buildCoverImage(),
+        Container(
+          width: 8,
+        ),
+        // 右侧信息
+        Expanded(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: <Widget>[
+              // 标题
+              _buildTitle(),
+              // 上传者
+              Text(
+                galleryItemController.galleryItem.uploader ?? '',
+                style: const TextStyle(
+                    fontSize: 12, color: CupertinoColors.systemGrey),
+              ),
+              // tag
+              const Spacer(),
+              if (showTag)
+                TagListViewBox(
+                  simpleTags:
+                      galleryItemController.galleryItem.simpleTags ?? [],
+                ),
+              const Spacer(),
+              // 评分行
+              GetBuilder(
+                init: galleryItemController,
+                tag: galleryItemController.galleryItem.gid,
+                builder: (_) => Row(
+                  crossAxisAlignment: CrossAxisAlignment.end,
+                  children: <Widget>[
+                    // 评分
+                    _buildRating(),
+                    // 占位
+                    const Spacer(),
+                    // 收藏图标
+                    _buildFavcatIcon(),
+                    // 图片数量
+                    _buildFilecontWidget(),
+                  ],
+                ),
+              ),
+              Container(
+                height: 4,
+              ),
+              // 类型和时间
+              Row(
+                crossAxisAlignment: CrossAxisAlignment.end,
                 children: <Widget>[
-                  // 标题 provider
-                  _buildTitle(),
-                  // 上传者
-                  Text(
-                    galleryItemController.galleryItem.uploader ?? '',
-                    style: const TextStyle(
-                        fontSize: 12, color: CupertinoColors.systemGrey),
-                  ),
-                  // 评分行
-                  GetBuilder(
-                    init: galleryItemController,
-                    tag: galleryItemController.galleryItem.gid,
-                    builder: (_) => Row(
-                      crossAxisAlignment: CrossAxisAlignment.end,
-                      children: <Widget>[
-                        // 评分
-                        _buildRating(),
-                        // 占位
-                        const Spacer(),
-                        // 收藏图标
-                        _buildFavcatIcon(),
-                        // 图片数量
-                        _buildFilecontWidget(),
-                      ],
-                    ),
-                  ),
-                  Container(
-                    height: 4,
-                  ),
-                  // 类型和时间
-                  Row(
-                    crossAxisAlignment: CrossAxisAlignment.end,
-                    children: <Widget>[
-                      // 类型
-                      _buildCategory(),
-                      const Spacer(),
-                      // 上传时间
-                      _buildPostTime(),
-                    ],
-                  ),
+                  // 类型
+                  _buildCategory(),
+                  const Spacer(),
+                  // 上传时间
+                  _buildPostTime(),
                 ],
               ),
-            ),
-          ]),
-        ],
-      ),
+            ],
+          ),
+        ),
+      ]),
     );
 
     return GestureDetector(
