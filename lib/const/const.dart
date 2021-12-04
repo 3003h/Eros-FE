@@ -392,6 +392,7 @@ class EHConst {
     'o': 'other',
     'x': 'mixed',
     'cos': 'cosplayer',
+    'misc': 'misc',
   };
 
   /// iso936语言对应缩写

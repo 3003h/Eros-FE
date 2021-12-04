@@ -109,7 +109,7 @@ class WebDavSettingView extends GetView<WebdavController> {
           },
           hideLine: true,
         ),
-        Container(height: 38),
+        const ItemSpace(),
         TextSwitchItem(
           L10n.of(context).sync_history,
           intValue: controller.syncHistory,
@@ -125,9 +125,9 @@ class WebDavSettingView extends GetView<WebdavController> {
             controller.syncReadProgress = val;
           },
         ),
-        Container(height: 38),
+        const ItemSpace(),
         if (kDebugMode) CatProgressIndicator(),
-        Container(height: 38),
+        const ItemSpace(),
         // if (kDebugMode)
         //   CircularProgressIndicator(
         //     backgroundColor: Colors.grey[200],

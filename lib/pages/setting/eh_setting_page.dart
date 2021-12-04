@@ -192,7 +192,7 @@ class ListViewEhSetting extends StatelessWidget {
             }
           },
         ),
-      Container(height: 38),
+      const ItemSpace(),
       SelectorSettingItem(
         title: 'WebDAV',
         onTap: () {
@@ -203,7 +203,7 @@ class ListViewEhSetting extends StatelessWidget {
         },
         hideLine: true,
       ),
-      Container(height: 38),
+      const ItemSpace(),
       if (localeService.isLanguageCodeZh)
         TextSwitchItem(
           '启用CDN',
@@ -250,7 +250,9 @@ class ListViewEhSetting extends StatelessWidget {
           hideLine: true,
           // desc: '画廊列表封面模糊效果',
         ),
-      Container(height: 38),
+      const ItemSpace(),
+      _buildListModeItem(context, hideLine: true),
+      const ItemSpace(),
       TextSwitchItem(
         L10n.of(context).default_favorites,
         intValue: _favLongTap,
@@ -263,6 +265,7 @@ class ListViewEhSetting extends StatelessWidget {
         intValue: _isClipboar,
         onChanged: _handleClipboarLinkTapChange,
         desc: L10n.of(context).clipboard_detection_desc,
+        hideLine: !localeService.isLanguageCodeZh,
       ),
       if (localeService.isLanguageCodeZh)
         TextSwitchItem(
@@ -272,8 +275,8 @@ class ListViewEhSetting extends StatelessWidget {
               _ehConfigService.commentTrans.value = newValue,
           desc: '关闭',
           descOn: '用机器翻译将评论翻译为简体中文',
+          hideLine: true,
         ),
-      _buildListModeItem(context, hideLine: true),
     ];
 
     return ListView.builder(
