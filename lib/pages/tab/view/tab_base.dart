@@ -1,5 +1,6 @@
 import 'package:fehviewer/common/service/ehconfig_service.dart';
 import 'package:fehviewer/const/const.dart';
+import 'package:fehviewer/extension.dart';
 import 'package:fehviewer/generated/l10n.dart';
 import 'package:fehviewer/models/index.dart';
 import 'package:fehviewer/pages/item/controller/galleryitem_controller.dart';
@@ -351,41 +352,42 @@ class EndIndicator extends StatelessWidget {
     return SliverToBoxAdapter(
       // key: centerKey,
       child: Container(
-          alignment: Alignment.center,
-          padding: EdgeInsets.only(
-              top: 50, bottom: 50.0 + context.mediaQueryPadding.bottom),
-          child: () {
-            switch (pageState) {
-              case PageState.None:
-                return Container();
-              case PageState.LoadingMore:
-                return const CupertinoActivityIndicator(
-                  radius: 14,
-                );
-              case PageState.LoadingException:
-              case PageState.LoadingError:
-                return GestureDetector(
-                  onTap: loadDataMore,
-                  child: Column(
-                    children: <Widget>[
-                      const Icon(
-                        Icons.error,
-                        size: 40,
-                        color: CupertinoColors.systemRed,
+              alignment: Alignment.center,
+              padding: EdgeInsets.only(
+                  top: 50, bottom: 50.0 + context.mediaQueryPadding.bottom),
+              child: () {
+                switch (pageState) {
+                  case PageState.None:
+                    return Container();
+                  case PageState.LoadingMore:
+                    return const CupertinoActivityIndicator(
+                      radius: 14,
+                    );
+                  case PageState.LoadingException:
+                  case PageState.LoadingError:
+                    return GestureDetector(
+                      onTap: loadDataMore,
+                      child: Column(
+                        children: <Widget>[
+                          const Icon(
+                            Icons.error,
+                            size: 40,
+                            color: CupertinoColors.systemRed,
+                          ),
+                          Text(
+                            L10n.of(Get.context!).list_load_more_fail,
+                            style: const TextStyle(
+                              fontSize: 12,
+                            ),
+                          ),
+                        ],
                       ),
-                      Text(
-                        L10n.of(Get.context!).list_load_more_fail,
-                        style: const TextStyle(
-                          fontSize: 12,
-                        ),
-                      ),
-                    ],
-                  ),
-                );
-              default:
-                return Container();
-            }
-          }()),
+                    );
+                  default:
+                    return Container();
+                }
+              }())
+          .autoCompressKeyboard(context),
     );
   }
 }
