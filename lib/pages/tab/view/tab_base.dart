@@ -215,6 +215,10 @@ Widget buildGallerySliverListView(
         oriFirstIndex: lastTopitemIndex,
       );
 
+      // if (index < 2) {
+      //   return const GalleryItemPlaceHolder();
+      // }
+
       if (tabTag == EHRoutes.history) {
         return itemWidget;
       } else {

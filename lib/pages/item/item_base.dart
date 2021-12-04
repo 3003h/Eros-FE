@@ -99,17 +99,20 @@ class TagWaterfallFlowViewBox extends StatelessWidget {
 }
 
 class PlaceHolderLine extends StatelessWidget {
-  const PlaceHolderLine({Key? key}) : super(key: key);
-
+  const PlaceHolderLine({Key? key, this.width}) : super(key: key);
+  final double? width;
   @override
   Widget build(BuildContext context) {
-    return ClipRRect(
-      borderRadius: BorderRadius.circular(6),
-      child: Container(
-        color:
-            CupertinoDynamicColor.resolve(CupertinoColors.systemGrey5, context),
-        height: 16,
-      ),
-    ).paddingSymmetric(vertical: 4);
+    return Container(
+      width: width,
+      child: ClipRRect(
+        borderRadius: BorderRadius.circular(6),
+        child: Container(
+          color: CupertinoDynamicColor.resolve(
+              CupertinoColors.systemGrey5, context),
+          height: 16,
+        ),
+      ).paddingSymmetric(vertical: 4, horizontal: 4),
+    );
   }
 }

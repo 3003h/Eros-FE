@@ -14,6 +14,99 @@ class GalleryItemPlaceHolder extends StatelessWidget {
     final double coverImageWidth =
         Get.context!.isPhone ? Get.context!.mediaQueryShortestSide / 3 : 120;
 
+    return Container(
+      height: kFixedHeight,
+      decoration: BoxDecoration(
+        boxShadow: ehTheme.isDarkMode
+            ? null
+            : [
+                BoxShadow(
+                  color: CupertinoDynamicColor.resolve(
+                          CupertinoColors.systemGrey5, Get.context!)
+                      .withOpacity(1.0),
+                  blurRadius: 10,
+                  // spreadRadius: 2,
+                  offset: const Offset(2, 4),
+                )
+              ],
+        borderRadius: BorderRadius.circular(kCardRadius),
+        color: ehTheme.itemBackgroundColor,
+      ),
+      padding: const EdgeInsets.only(right: kPaddingHorizontal),
+      margin: const EdgeInsets.fromLTRB(10, 8, 10, 12),
+      child: IntrinsicHeight(
+        child: Row(
+          children: <Widget>[
+            // 封面图片
+            Column(
+              children: [
+                Expanded(
+                  child: ClipRRect(
+                    borderRadius: BorderRadius.circular(kCardRadius),
+                    child: Container(
+                      width: coverImageWidth,
+                      color: CupertinoColors.systemGrey5,
+                    ),
+                  ),
+                ),
+              ],
+            ),
+            Container(
+              width: 8,
+            ),
+            // 右侧信息
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: <Widget>[
+                  // 标题 provider
+                  const PlaceHolderLine(),
+                  const PlaceHolderLine(),
+                  // 上传者
+                  const PlaceHolderLine(
+                    width: 50,
+                  ),
+                  const Spacer(),
+                  // 标签
+                  Row(
+                    children: const [
+                      PlaceHolderLine(width: 70),
+                      PlaceHolderLine(width: 50),
+                      PlaceHolderLine(width: 50),
+                    ],
+                  ),
+                  Row(
+                    children: const [
+                      PlaceHolderLine(width: 50),
+                      PlaceHolderLine(width: 50),
+                      PlaceHolderLine(width: 70),
+                    ],
+                  ),
+                  const Spacer(),
+                  // 评分行
+                  const PlaceHolderLine(width: 80),
+                  Container(
+                    height: 4,
+                  ),
+                  // 类型和时间
+                  Row(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: const <Widget>[
+                      // 类型
+                      PlaceHolderLine(width: 60),
+                      Spacer(),
+                      // 上传时间
+                      PlaceHolderLine(width: 40),
+                    ],
+                  ),
+                ],
+              ).paddingSymmetric(vertical: 4),
+            ),
+          ],
+        ),
+      ),
+    );
+
     return Column(
       children: <Widget>[
         Container(
