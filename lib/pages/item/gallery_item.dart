@@ -429,10 +429,11 @@ class _CoverImage extends StatelessWidget {
 
       image = ClipRRect(
         // 圆角
-        borderRadius: const BorderRadius.only(
-          topLeft: Radius.circular(kCardRadius),
-          bottomLeft: Radius.circular(kCardRadius),
-        ),
+        // borderRadius: const BorderRadius.only(
+        //   topLeft: Radius.circular(kCardRadius),
+        //   bottomLeft: Radius.circular(kCardRadius),
+        // ),
+        borderRadius: BorderRadius.circular(kCardRadius),
         child: image,
       );
     }
