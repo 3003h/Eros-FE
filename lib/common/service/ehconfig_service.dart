@@ -145,6 +145,10 @@ class EhConfigService extends ProfileService {
   bool get linkRedirect => _linkRedirect.value;
   set linkRedirect(bool val) => _linkRedirect.value = val;
 
+  final _fixedHeightOfListItems = true.obs;
+  bool get fixedHeightOfListItems => _fixedHeightOfListItems.value;
+  set fixedHeightOfListItems(bool val) => _fixedHeightOfListItems.value = val;
+
   @override
   void onInit() {
     super.onInit();
@@ -379,6 +383,12 @@ class EhConfigService extends ProfileService {
     linkRedirect = ehConfig.linkRedirect ?? false;
     everProfile<bool>(_linkRedirect, (value) {
       ehConfig = ehConfig.copyWith(linkRedirect: value);
+    });
+
+    // fixedHeightOfListItems
+    fixedHeightOfListItems = ehConfig.fixedHeightOfListItems ?? true;
+    everProfile<bool>(_fixedHeightOfListItems, (value) {
+      ehConfig = ehConfig.copyWith(fixedHeightOfListItems: value);
     });
   }
 

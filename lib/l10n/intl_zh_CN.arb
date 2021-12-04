@@ -331,6 +331,6 @@
 
   "tagNamespace": "{tagNamespace, select, reclass{重新分类} language{语言} parody{原作} character{角色} group{社团} artist{艺术家} male{男性} female{女性} mixed{混杂} cosplayer{扮演者} other{其它} temp{临时}}",
   "link_redirect": "链接重定向",
-  "link_redirect_summary": "将画廊链接重定向到选定的站点"
-
+  "link_redirect_summary": "将画廊链接重定向到选定的站点",
+  "fixed_height_of_list_items": "固定列表项高度"
 }

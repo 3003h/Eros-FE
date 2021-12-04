@@ -110,6 +110,8 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("按照收藏时间"),
         "favorites_order_Use_posted":
             MessageLookupByLibrary.simpleMessage("按照发布时间"),
+        "fixed_height_of_list_items":
+            MessageLookupByLibrary.simpleMessage("Fixed height of list items"),
         "follow_system": MessageLookupByLibrary.simpleMessage("跟随系统"),
         "galery_site": MessageLookupByLibrary.simpleMessage("画廊站点"),
         "gallery_comments": MessageLookupByLibrary.simpleMessage("畫廊評論"),

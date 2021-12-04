@@ -251,7 +251,29 @@ class ListViewEhSetting extends StatelessWidget {
           // desc: '画廊列表封面模糊效果',
         ),
       const ItemSpace(),
-      _buildListModeItem(context, hideLine: true),
+      Obx(() {
+        return _buildListModeItem(
+          context,
+          hideLine: _ehConfigService.listMode.value != ListModeEnum.list,
+        );
+      }),
+      Obx(() {
+        return AnimatedCrossFade(
+          alignment: Alignment.center,
+          crossFadeState: _ehConfigService.listMode.value == ListModeEnum.list
+              ? CrossFadeState.showSecond
+              : CrossFadeState.showFirst,
+          firstCurve: Curves.easeIn,
+          secondCurve: Curves.easeOut,
+          duration: const Duration(milliseconds: 200),
+          firstChild: const SizedBox(),
+          secondChild: TextSwitchItem(
+            L10n.of(context).fixed_height_of_list_items,
+            intValue: _ehConfigService.fixedHeightOfListItems,
+            onChanged: (val) => _ehConfigService.fixedHeightOfListItems = val,
+          ),
+        );
+      }),
       const ItemSpace(),
       TextSwitchItem(
         L10n.of(context).default_favorites,

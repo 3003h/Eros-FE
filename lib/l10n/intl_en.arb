@@ -334,5 +334,6 @@
 
   "tagNamespace": "{tagNamespace, select, reclass{reclass} language{language} parody{parody} character{character} group{group} artist{artist} male{male} female{female} mixed{mixed} cosplayer{cosplayer} other{other} temp{temp}}",
   "link_redirect": "Link redirect",
-  "link_redirect_summary": "Redirecting gallery links to selected sites"
+  "link_redirect_summary": "Redirecting gallery links to selected sites",
+  "fixed_height_of_list_items": "Fixed height of list items"
 }
