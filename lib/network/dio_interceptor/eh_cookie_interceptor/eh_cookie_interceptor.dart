@@ -8,17 +8,20 @@ import 'package:get/get.dart' hide Response;
 class EhCookieInterceptor extends Interceptor {
   @override
   void onRequest(RequestOptions options, RequestInterceptorHandler handler) {
-    final String cookies = options.headers[HttpHeaders.cookieHeader] as String;
-    logger.d('cookies:$cookies');
-    final _cookies = cookies
-        .split(';')
-        .map((str) => Cookie.fromSetCookieValue(str))
-        .toList();
-    logger.d('_cookies:$_cookies');
+    try {
+      final cookies =
+          options.headers[HttpHeaders.cookieHeader] as String? ?? '';
+      logger.d('cookies:$cookies');
+      final _cookies = cookies
+          .split(';')
+          .map((str) => Cookie.fromSetCookieValue(str))
+          .toList();
+      logger.d('_cookies:$_cookies');
 
-    checkCookies(_cookies);
+      checkCookies(_cookies);
+    } catch (_) {}
 
-    handler.next(options);
+    super.onRequest(options, handler);
   }
 
   @override

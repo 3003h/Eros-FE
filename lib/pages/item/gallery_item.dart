@@ -217,7 +217,6 @@ class GalleryItemWidget extends StatelessWidget {
             borderRadius: BorderRadius.circular(kCardRadius),
           ),
           padding: const EdgeInsets.only(right: kPaddingHorizontal),
-          // margin: const EdgeInsets.symmetric(vertical: 10, horizontal: 10),
           margin: const EdgeInsets.fromLTRB(10, 8, 10, 12),
           child: IntrinsicHeight(
             child: Row(
@@ -346,30 +345,75 @@ class _CoverImage extends StatelessWidget {
   Widget build(BuildContext context) {
     final GalleryItem _item = galleryItemController.galleryItem;
 
+    // 图片高宽比
+    final ratio = (_item.imgHeight ?? 0) / (_item.imgWidth ?? 1);
+
+    // 计算图片容器宽度
     final double coverImageWidth =
         Get.context!.isPhone ? Get.context!.mediaQueryShortestSide / 3 : 120;
 
-    logger.v('coverImageWidth $coverImageWidth');
+    // 计算图片容器高度
+    late double? coverImageHeigth;
 
-    // 获取图片高度 用于占位
-    double? _getHeigth() {
+    if (_ehConfigService.fixedHeightOfListItems) {
+      coverImageHeigth = kFixedHeight;
+    } else {
       if ((_item.imgWidth ?? 0) >= coverImageWidth) {
-        return (_item.imgHeight ?? 0) * coverImageWidth / (_item.imgWidth ?? 0);
+        // 如果实际宽度大于限制的最大宽度[coverImageWidth] 按照比例计算高度
+        coverImageHeigth =
+            (_item.imgHeight ?? 0) * coverImageWidth / (_item.imgWidth ?? 0);
       } else {
-        return _item.imgHeight;
+        // 否者返回实际高度
+        coverImageHeigth = _item.imgHeight;
       }
+    }
+
+    logger.d('iRatio:$ratio\n'
+        'w:${_item.imgWidth} h:${_item.imgHeight}\n'
+        'cW:$coverImageWidth  cH:$coverImageHeigth');
+
+    final containRatio = (coverImageHeigth ?? 0) / (coverImageWidth);
+
+    BoxFit _fit = BoxFit.contain;
+
+    // todo
+    if (ratio < containRatio && ratio > 1) {
+      _fit = BoxFit.fitHeight;
+    }
+
+    if (ratio > containRatio && ratio < 2) {
+      _fit = BoxFit.cover;
     }
 
     Widget image = CoverImg(
       imgUrl: _item.imgUrl ?? '',
+      width: _item.imgWidth,
+      height: _item.imgHeight,
+      fit: _fit,
+    );
+    // image = FittedBox(
+    //   fit: _fit,
+    //   child: image,
+    // );
+
+    Widget imageBlureFittedBox = CoverImg(
+      imgUrl: _item.imgUrl ?? '',
       width: coverImageWidth,
-      height: _item.imgWidth != null ? _getHeigth() : null,
+      // height: coverImageHeigth,
+      fit: BoxFit.contain,
+    );
+
+    imageBlureFittedBox = FittedBox(
+      fit: BoxFit.cover,
+      child: imageBlureFittedBox.blurred(
+        blur: 10,
+        colorOpacity: ehTheme.isDarkMode ? 0.5 : 0.1,
+        blurColor: CupertinoTheme.of(context).barBackgroundColor.withOpacity(1),
+      ),
     );
 
     if (!cardType) {
       image = Container(
-        width: coverImageWidth,
-        height: _item.imgWidth != null ? _getHeigth() : null,
         child: HeroMode(
           enabled: !isLayoutLarge,
           child: Hero(
@@ -395,36 +439,22 @@ class _CoverImage extends StatelessWidget {
         ),
       );
     } else {
-      image = Container(
-        width: coverImageWidth,
-        height: _item.imgWidth != null ? _getHeigth() : null,
-        child: Stack(
-          fit: StackFit.passthrough,
-          children: [
-            FittedBox(
-              fit: BoxFit.cover,
-              child: image.blurred(
-                blur: 10,
-                colorOpacity: ehTheme.isDarkMode ? 0.5 : 0.1,
-                blurColor: CupertinoTheme.of(context)
-                    .barBackgroundColor
-                    .withOpacity(1),
+      // 卡片样式
+      image = Stack(
+        fit: StackFit.passthrough,
+        children: [
+          imageBlureFittedBox,
+          HeroMode(
+            enabled: !isLayoutLarge,
+            child: Hero(
+              tag: '${_item.gid}_cover_$tabTag',
+              child: ClipRRect(
+                borderRadius: BorderRadius.circular(4),
+                child: image,
               ),
             ),
-            HeroMode(
-              enabled: !isLayoutLarge,
-              child: Center(
-                child: Hero(
-                  tag: '${_item.gid}_cover_$tabTag',
-                  child: ClipRRect(
-                    borderRadius: BorderRadius.circular(4),
-                    child: image,
-                  ),
-                ),
-              ),
-            ),
-          ],
-        ),
+          ),
+        ],
       );
 
       image = ClipRRect(
@@ -434,7 +464,11 @@ class _CoverImage extends StatelessWidget {
         //   bottomLeft: Radius.circular(kCardRadius),
         // ),
         borderRadius: BorderRadius.circular(kCardRadius),
-        child: image,
+        child: Container(
+          child: image,
+          height: coverImageHeigth,
+          width: coverImageWidth,
+        ),
       );
     }
 
@@ -691,11 +725,14 @@ class CoverImg extends StatelessWidget {
     required this.imgUrl,
     this.height,
     this.width,
+    this.fit = BoxFit.contain,
   }) : super(key: key);
 
   final String imgUrl;
   final double? height;
   final double? width;
+
+  final BoxFit fit;
 
   @override
   Widget build(BuildContext context) {
@@ -704,8 +741,6 @@ class CoverImg extends StatelessWidget {
       'Cookie': Global.profile.user.cookie ?? '',
       'host': Uri.parse(imgUrl).host,
     };
-
-    // logger.e('w:$width,h:$height');
 
     Widget image() {
       if (imgUrl.isNotEmpty) {
@@ -719,9 +754,10 @@ class CoverImg extends StatelessWidget {
             );
           },
           width: width,
+          height: height,
           httpHeaders: _httpHeaders,
           imageUrl: imgUrl.dfUrl,
-          fit: BoxFit.contain,
+          fit: fit, //
         );
       } else {
         return Container();
