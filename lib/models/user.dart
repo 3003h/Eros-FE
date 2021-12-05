@@ -10,6 +10,8 @@ class User {
     this.memberId,
     this.passHash,
     this.igneous,
+    this.hathPerks,
+    this.sk,
     this.cookie,
     this.avatarUrl,
     this.favcat,
@@ -20,6 +22,8 @@ class User {
   final String? memberId;
   final String? passHash;
   final String? igneous;
+  final String? hathPerks;
+  final String? sk;
   final String? cookie;
   final String? avatarUrl;
   final List<Favcat>? favcat;
@@ -30,6 +34,8 @@ class User {
     memberId: json['memberId'] != null ? json['memberId'] as String : null,
     passHash: json['passHash'] != null ? json['passHash'] as String : null,
     igneous: json['igneous'] != null ? json['igneous'] as String : null,
+    hathPerks: json['hathPerks'] != null ? json['hathPerks'] as String : null,
+    sk: json['sk'] != null ? json['sk'] as String : null,
     cookie: json['cookie'] != null ? json['cookie'] as String : null,
     avatarUrl: json['avatarUrl'] != null ? json['avatarUrl'] as String : null,
     favcat: json['favcat'] != null ? (json['favcat'] as List? ?? []).map((e) => Favcat.fromJson(e as Map<String, dynamic>)).toList() : null
@@ -41,6 +47,8 @@ class User {
     'memberId': memberId,
     'passHash': passHash,
     'igneous': igneous,
+    'hathPerks': hathPerks,
+    'sk': sk,
     'cookie': cookie,
     'avatarUrl': avatarUrl,
     'favcat': favcat?.map((e) => e.toJson()).toList()
@@ -52,6 +60,8 @@ class User {
     memberId: memberId,
     passHash: passHash,
     igneous: igneous,
+    hathPerks: hathPerks,
+    sk: sk,
     cookie: cookie,
     avatarUrl: avatarUrl,
     favcat: favcat?.map((e) => e.clone()).toList()
@@ -64,6 +74,8 @@ class User {
     String? memberId,
     String? passHash,
     String? igneous,
+    String? hathPerks,
+    String? sk,
     String? cookie,
     String? avatarUrl,
     List<Favcat>? favcat
@@ -73,6 +85,8 @@ class User {
     memberId: memberId ?? this.memberId,
     passHash: passHash ?? this.passHash,
     igneous: igneous ?? this.igneous,
+    hathPerks: hathPerks ?? this.hathPerks,
+    sk: sk ?? this.sk,
     cookie: cookie ?? this.cookie,
     avatarUrl: avatarUrl ?? this.avatarUrl,
     favcat: favcat ?? this.favcat,
@@ -80,8 +94,8 @@ class User {
 
   @override
   bool operator ==(Object other) => identical(this, other) 
-    || other is User && username == other.username && nickName == other.nickName && memberId == other.memberId && passHash == other.passHash && igneous == other.igneous && cookie == other.cookie && avatarUrl == other.avatarUrl && favcat == other.favcat;
+    || other is User && username == other.username && nickName == other.nickName && memberId == other.memberId && passHash == other.passHash && igneous == other.igneous && hathPerks == other.hathPerks && sk == other.sk && cookie == other.cookie && avatarUrl == other.avatarUrl && favcat == other.favcat;
 
   @override
-  int get hashCode => username.hashCode ^ nickName.hashCode ^ memberId.hashCode ^ passHash.hashCode ^ igneous.hashCode ^ cookie.hashCode ^ avatarUrl.hashCode ^ favcat.hashCode;
+  int get hashCode => username.hashCode ^ nickName.hashCode ^ memberId.hashCode ^ passHash.hashCode ^ igneous.hashCode ^ hathPerks.hashCode ^ sk.hashCode ^ cookie.hashCode ^ avatarUrl.hashCode ^ favcat.hashCode;
 }

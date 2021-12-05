@@ -45,6 +45,8 @@ Future<GalleryList?> getGallery({
   final AdvanceSearchController _searchController = Get.find();
   DioHttpClient dioHttpClient = DioHttpClient(dioConfig: ehDioConfig);
 
+  // await showCookie();
+
   await checkCookie();
 
   logger.v('df ${ehDioConfig}');
@@ -92,7 +94,7 @@ Future<GalleryList?> getGallery({
     _params.addAll(_searchController.favSearchMap);
   }
 
-  logger.d('${_params}');
+  logger.v('${_params}');
 
   DioHttpResponse httpResponse = await dioHttpClient.get(
     _url,
@@ -146,6 +148,8 @@ Future checkCookie() async {
   final EhConfigService ehConfigService = Get.find();
 
   if (userController.isLogin) {
+    logger.d('Global.profile.user.cookie: ${Global.profile.user.cookie}');
+
     final List<String> _c = Global.profile.user.cookie?.split(';') ?? [];
 
     final List<Cookie> _cookies =

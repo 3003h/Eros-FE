@@ -101,6 +101,8 @@ class EhUserManager {
       'ipb_member_id': cookieMapEx['ipb_member_id'] ?? '',
       'ipb_pass_hash': cookieMapEx['ipb_pass_hash'] ?? '',
       'igneous': cookieMapEx['igneous'] ?? '',
+      'hath_perks': cookieMapEx['hath_perks'] ?? '',
+      'sk': cookieMapEx['sk'] ?? '',
     };
 
     String nickame = username.replaceFirstMapped(
@@ -126,6 +128,8 @@ class EhUserManager {
       memberId: cookieMapEx['ipb_member_id'],
       passHash: cookieMapEx['ipb_pass_hash'],
       igneous: cookieMapEx['igneous'],
+      hathPerks: cookieMapEx['hath_perks'],
+      sk: cookieMapEx['sk'],
     );
 
     return user;
@@ -143,6 +147,8 @@ class EhUserManager {
     final List<Cookie> cookies = [
       Cookie('ipb_member_id', cookieMap['ipb_member_id'] as String),
       Cookie('ipb_pass_hash', cookieMap['ipb_pass_hash'] as String),
+      Cookie('hath_perks', cookieMap['hath_perks'] as String),
+      Cookie('sk', cookieMap['sk'] as String),
       Cookie('nw', '1'),
     ];
 
@@ -172,6 +178,8 @@ class EhUserManager {
       'ipb_member_id': cookieMapEx['ipb_member_id'] ?? '',
       'ipb_pass_hash': cookieMapEx['ipb_pass_hash'] ?? '',
       'igneous': cookieMapEx['igneous'] ?? '',
+      'hath_perks': cookieMapEx['hath_perks'] ?? '',
+      'sk': cookieMapEx['sk'] ?? '',
     };
 
     final List<Cookie> _cookiesEx =
@@ -188,6 +196,8 @@ class EhUserManager {
       memberId: cookieMapEx['ipb_member_id'],
       passHash: cookieMapEx['ipb_pass_hash'],
       igneous: cookieMapEx['igneous'],
+      hathPerks: cookieMapEx['hath_perks'],
+      sk: cookieMapEx['sk'],
     );
 
     return user;
@@ -250,6 +260,8 @@ class EhUserManager {
       'ipb_member_id': cookieMapEx['ipb_member_id'] ?? '',
       'ipb_pass_hash': cookieMapEx['ipb_pass_hash'] ?? '',
       'igneous': igneous.isNotEmpty ? igneous : cookieMapEx['igneous'] ?? '',
+      'hath_perks': cookieMapEx['hath_perks'] ?? '',
+      'sk': cookieMapEx['sk'] ?? '',
     };
 
     final String cookieStr = _getCookieStringFromMap(cookie);
@@ -262,6 +274,8 @@ class EhUserManager {
       memberId: cookieMapEx['ipb_member_id'],
       passHash: cookieMapEx['ipb_pass_hash'],
       igneous: cookieMapEx['igneous'],
+      hathPerks: cookieMapEx['hath_perks'],
+      sk: cookieMapEx['sk'],
     );
 
     return user;
@@ -325,6 +339,8 @@ class EhUserManager {
       'ipb_member_id': cookieMapEx['ipb_member_id'] ?? '',
       'ipb_pass_hash': cookieMapEx['ipb_pass_hash'] ?? '',
       'igneous': cookieMapEx['igneous'] ?? '',
+      'hath_perks': cookieMapEx['hath_perks'] ?? '',
+      'sk': cookieMapEx['sk'] ?? '',
     };
 
     final String cookieStr = _getCookieStringFromMap(cookie);
@@ -333,6 +349,8 @@ class EhUserManager {
       memberId: cookieMapEx['ipb_member_id'],
       passHash: cookieMapEx['ipb_pass_hash'],
       igneous: cookieMapEx['igneous'],
+      hathPerks: cookieMapEx['hath_perks'],
+      sk: cookieMapEx['sk'],
       cookie: cookieStr,
     ));
   }
