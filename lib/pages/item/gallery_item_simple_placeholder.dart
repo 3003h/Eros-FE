@@ -24,7 +24,9 @@ class GalleryItemSimplePlaceHolder extends StatelessWidget {
               // 圆角
               borderRadius: BorderRadius.circular(6),
               child: SizedBox.expand(
-                child: Container(color: CupertinoColors.systemGrey5),
+                child: Container(
+                    color: CupertinoDynamicColor.resolve(
+                        CupertinoColors.systemGrey5, context)),
               ),
             ),
           ),

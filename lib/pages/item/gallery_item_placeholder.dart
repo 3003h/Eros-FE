@@ -45,7 +45,8 @@ class GalleryItemPlaceHolder extends StatelessWidget {
                     borderRadius: BorderRadius.circular(kCardRadius),
                     child: Container(
                       width: coverImageWidth,
-                      color: CupertinoColors.systemGrey5,
+                      color: CupertinoDynamicColor.resolve(
+                          CupertinoColors.systemGrey5, context),
                     ),
                   ),
                 ),
