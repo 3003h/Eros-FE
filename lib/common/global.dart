@@ -52,6 +52,15 @@ DioHttpConfig ehDioConfig = DioHttpConfig(
   receiveTimeout: 10000,
 );
 
+DioHttpConfig exDioConfig = DioHttpConfig(
+  baseUrl: EHConst.EX_BASE_URL,
+  cookiesPath: Global.appSupportPath,
+  connectTimeout: 20000,
+  sendTimeout: 8000,
+  receiveTimeout: 10000,
+  maxConnectionsPerHost: 2,
+);
+
 // 全局配置
 // ignore: avoid_classes_with_only_static_members
 class Global {
@@ -163,7 +172,7 @@ class Global {
     // 数据更新
     // await dataUpdate();
 
-    _initImageHttpClient();
+    initImageHttpClient();
   }
 
   static void creatDirs() {
@@ -209,12 +218,13 @@ class Global {
     }
   }
 
-  static void _initImageHttpClient() {
+  static void initImageHttpClient({int? maxConnectionsPerHost}) {
     final HttpClient eClient =
         ExtendedNetworkImageProvider.httpClient as HttpClient;
-    eClient.badCertificateCallback =
-        (X509Certificate cert, String host, int port) {
-      return true;
-    };
+    eClient
+      ..badCertificateCallback = (X509Certificate cert, String host, int port) {
+        return true;
+      }
+      ..maxConnectionsPerHost = maxConnectionsPerHost;
   }
 }

@@ -270,6 +270,7 @@ class EHConst {
 
   static List<int> preloadImage = <int>[
     if (Global.inDebugMode) 0,
+    1,
     3,
     5,
     7,
@@ -280,7 +281,7 @@ class EHConst {
   ];
 
   static List<int> multiDownload = <int>[
-    if (Global.inDebugMode) 1,
+    1,
     3,
     5,
     7,

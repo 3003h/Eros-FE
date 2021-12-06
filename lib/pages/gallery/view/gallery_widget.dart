@@ -18,7 +18,7 @@ import 'package:fehviewer/route/navigator_util.dart';
 import 'package:fehviewer/route/routes.dart';
 import 'package:fehviewer/utils/logger.dart';
 import 'package:fehviewer/utils/utility.dart';
-import 'package:fehviewer/widget/eh_cached_network_image.dart';
+import 'package:fehviewer/widget/eh_network_image.dart';
 import 'package:fehviewer/widget/rating_bar.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -43,7 +43,7 @@ class CoveTinyImage extends StatelessWidget {
       child: ClipRRect(
         // 圆角
         borderRadius: BorderRadius.circular(4),
-        child: EhCachedNetworkImage(
+        child: EhNetworkImage(
           width: 44,
           height: 44,
           fit: BoxFit.cover,

@@ -70,7 +70,7 @@ class TagWaterfallFlowViewBox extends StatelessWidget {
     return ClipRRect(
       borderRadius: BorderRadius.circular(4),
       child: SizedBox(
-        height: crossAxisCount * 22,
+        height: crossAxisCount * 20,
         child: WaterfallFlow.builder(
           shrinkWrap: true,
           controller: controller,

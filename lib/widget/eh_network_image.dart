@@ -1,10 +1,12 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:fehviewer/common/exts.dart';
-import 'package:fehviewer/common/global.dart';
 import 'package:flutter/cupertino.dart';
 
-class EhCachedNetworkImage extends StatelessWidget {
-  const EhCachedNetworkImage({
+import 'eh_cached_network_image.dart';
+import 'network_extended_image.dart';
+
+class EhNetworkImage extends StatelessWidget {
+  const EhNetworkImage({
     Key? key,
     required this.imageUrl,
     this.height,
@@ -26,13 +28,17 @@ class EhCachedNetworkImage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final _httpHeaders = {
-      'Cookie': Global.profile.user.cookie ?? '',
-      'host': Uri.parse(imageUrl).host,
-    };
+    // return NetworkExtendedImage(
+    //   url: imageUrl.dfUrl,
+    //   width: width,
+    //   height: height,
+    //   fit: BoxFit.cover,
+    //   placeholder: placeholder,
+    //   errorWidget: errorWidget,
+    //   progressIndicatorBuilder: progressIndicatorBuilder,
+    // );
 
-    return CachedNetworkImage(
-      httpHeaders: _httpHeaders,
+    return EhCachedNetworkImage(
       width: width,
       height: height,
       fit: fit,

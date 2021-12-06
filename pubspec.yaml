@@ -3,7 +3,7 @@ description: fehviewer
 
 publish_to: 'none' # Remove this line if you wish to publish to pub.dev
 
-version: 1.1.43+354
+version: 1.1.44+355
 
 environment:
   sdk: '>=2.14.0 <3.0.0'
@@ -23,12 +23,12 @@ dependencies:
   line_icons: ^2.0.1
 
   # 网络请求
-  dio: ^4.0.3
-  dio_http_cache:
-    git:
-      url: https://github.com/vrtdev/dio-http-cache.git
-      ref: feature/nullsafety-dio4
-#  dio_http_cache: any
+  dio: ^4.0.5-beta1
+#  dio_http_cache:
+#    git:
+#      url: https://github.com/vrtdev/dio-http-cache.git
+#      ref: feature/nullsafety-dio4
+  dio_http_cache: any
 #  dio_cache_interceptor: 2.3.1
 #  dio_retry_fixed: ^0.1.15-beta-null-safety
 
@@ -148,6 +148,7 @@ dependencies:
   getwidget: ^2.0.4
   open_file: ^3.2.1
   flustars: ^2.0.1
+  dio_smart_retry: ^1.0.3
 #   flutter_app_restart: ^1.0.0
 
 dev_dependencies:

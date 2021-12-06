@@ -12,7 +12,7 @@ import 'package:fehviewer/route/routes.dart';
 import 'package:fehviewer/utils/logger.dart';
 import 'package:fehviewer/utils/toast.dart';
 import 'package:fehviewer/utils/vibrate.dart';
-import 'package:fehviewer/widget/eh_cached_network_image.dart';
+import 'package:fehviewer/widget/eh_network_image.dart';
 import 'package:fehviewer/widget/eh_dark_cupertino_theme.dart';
 import 'package:fehviewer/widget/network_extended_image.dart';
 import 'package:flutter/cupertino.dart';
@@ -820,7 +820,7 @@ class _FutureThumblState extends State<FutureThumbl> {
               logger.v('${_image.ser}  ${_image.thumbUrl}');
 
               if (_image.largeThumb ?? false) {
-                return EhCachedNetworkImage(
+                return EhNetworkImage(
                   imageUrl: _image.thumbUrl ?? '',
                   placeholder: (_, __) {
                     return buildPlaceholder();

@@ -2,7 +2,7 @@ import 'package:fehviewer/common/global.dart';
 import 'package:fehviewer/models/index.dart';
 import 'package:fehviewer/route/navigator_util.dart';
 import 'package:fehviewer/utils/logger.dart';
-import 'package:fehviewer/widget/eh_cached_network_image.dart';
+import 'package:fehviewer/widget/eh_network_image.dart';
 import 'package:fehviewer/widget/network_extended_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -94,7 +94,7 @@ class PreviewContainer extends StatelessWidget {
     Widget _buildImage() {
       if (galleryImage.largeThumb ?? false) {
         // 缩略大图
-        return EhCachedNetworkImage(
+        return EhNetworkImage(
           imageUrl: galleryImage.thumbUrl ?? '',
           progressIndicatorBuilder: (_, __, ___) {
             return const CupertinoActivityIndicator();
