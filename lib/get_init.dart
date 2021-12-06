@@ -1,3 +1,4 @@
+import 'package:fehviewer/pages/tab/controller/custom_list_controller.dart';
 import 'package:fehviewer/pages/tab/controller/toplist_controller.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
@@ -69,6 +70,9 @@ void getinit() {
   Get.lazyPut(() => DownloadViewController(), fenix: true);
   Get.lazyPut(() => FavoriteViewController(), fenix: true);
   Get.lazyPut(() => TopListViewController(), fenix: true);
+
+  //
+  Get.lazyPut(() => CustomListController(), fenix: true);
 
   // Get.put(PopularViewController(), permanent: true);
   // Get.put(WatchedViewController(), permanent: true);

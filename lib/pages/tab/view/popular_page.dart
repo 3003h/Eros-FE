@@ -121,7 +121,7 @@ class _PopularListTabState extends State<PopularListTab> {
     return CupertinoPageScaffold(
       // navigationBar: navigationBar,
       child: CupertinoScrollbar(
-        // controller: scrollController,
+        scrollbarOrientation: ScrollbarOrientation.right,
         controller: PrimaryScrollController.of(context),
         child: SizeCacheWidget(child: customScrollView),
       ),

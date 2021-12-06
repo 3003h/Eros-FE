@@ -265,9 +265,15 @@ class _GalleryListTabState extends State<GalleryListTab> {
       ],
     );
 
+    // return CupertinoPageScaffold(
+    //   // navigationBar: navigationBar,
+    //   child: SizeCacheWidget(child: customScrollView),
+    // );
+
     return CupertinoPageScaffold(
       // navigationBar: navigationBar,
       child: CupertinoScrollbar(
+        scrollbarOrientation: ScrollbarOrientation.right,
         child: SizeCacheWidget(child: customScrollView),
         controller: PrimaryScrollController.of(context),
       ),

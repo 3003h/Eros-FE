@@ -261,6 +261,7 @@ class _FavoriteTabState extends State<FavoriteTab> {
     return CupertinoPageScaffold(
       // navigationBar: navigationBar,
       child: CupertinoScrollbar(
+        scrollbarOrientation: ScrollbarOrientation.right,
         controller: PrimaryScrollController.of(context),
         child: SizeCacheWidget(
           child: CustomScrollView(
@@ -316,6 +317,7 @@ class _FavoriteTabState extends State<FavoriteTab> {
     return CupertinoPageScaffold(
       // navigationBar: navigationBar,
       child: CupertinoScrollbar(
+        scrollbarOrientation: ScrollbarOrientation.right,
         controller: PrimaryScrollController.of(context),
         child: SizeCacheWidget(
           child: CustomScrollView(

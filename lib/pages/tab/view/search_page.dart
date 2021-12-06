@@ -102,6 +102,7 @@ class _GallerySearchPageState extends State<GallerySearchPage> {
     final Widget cpf = CupertinoPageScaffold(
       navigationBar: GetPlatform.isAndroid ? getNavigationBar(context) : null,
       child: CupertinoScrollbar(
+        scrollbarOrientation: ScrollbarOrientation.right,
         controller: PrimaryScrollController.of(context),
         child: Column(
           children: [
@@ -265,11 +266,11 @@ class _GallerySearchPageState extends State<GallerySearchPage> {
                       ],
                     ),
                   ).frosted(
-                    blur: 5,
+                    blur: 8,
                     frostColor: CupertinoTheme.of(context)
                         .barBackgroundColor
                         .withOpacity(1),
-                    frostOpacity: 0.75,
+                    frostOpacity: 0.55,
                   ),
                 ),
               ],

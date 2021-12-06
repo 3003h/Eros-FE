@@ -241,6 +241,7 @@ class _WatchedListTabState extends State<WatchedListTab> {
     return CupertinoPageScaffold(
       // navigationBar: navigationBar,
       child: CupertinoScrollbar(
+          scrollbarOrientation: ScrollbarOrientation.right,
           controller: PrimaryScrollController.of(context),
           child: SizeCacheWidget(child: customScrollView)),
     );

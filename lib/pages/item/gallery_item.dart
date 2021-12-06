@@ -79,122 +79,6 @@ class GalleryItemWidget extends StatelessWidget {
     ).autoCompressKeyboard(context);
   }
 
-  Widget _buildItem() {
-    return Obx(
-      () => Column(
-        children: <Widget>[
-          Container(
-            color: galleryItemController.colorTap.value,
-            padding: const EdgeInsets.symmetric(
-                horizontal: kPaddingHorizontal, vertical: kPaddingVertical),
-            child: IntrinsicHeight(
-              child: Row(
-                children: <Widget>[
-                  // 封面图片
-                  Column(
-                    children: [
-                      _CoverImage(
-                        galleryItemController: galleryItemController,
-                        tabTag: tabTag,
-                      ),
-                    ],
-                  ),
-                  Container(
-                    width: 8,
-                  ),
-                  // 右侧信息
-                  Expanded(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: <Widget>[
-                        // 标题 provider
-                        _Title(
-                          galleryItemController: galleryItemController,
-                        ),
-                        // 上传者
-                        Text(
-                          galleryItemController.galleryItem.uploader ?? '',
-                          style: const TextStyle(
-                              fontSize: 12, color: CupertinoColors.systemGrey),
-                        ),
-                        // 标签
-                        TagBox(
-                          simpleTags:
-                              galleryItemController.galleryItem.simpleTags ??
-                                  [],
-                        ),
-                        const Spacer(),
-                        // 评分行
-                        GetBuilder(
-                          init: galleryItemController,
-                          tag: galleryItemController.galleryItem.gid,
-                          builder: (_) => Row(
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            mainAxisSize: MainAxisSize.min,
-                            children: <Widget>[
-                              // 评分
-                              Expanded(
-                                  child: _Rating(
-                                rating:
-                                    galleryItemController.galleryItem.rating,
-                                ratingFallBack: galleryItemController
-                                    .galleryItem.ratingFallBack,
-                                colorRating: galleryItemController
-                                    .galleryItem.colorRating,
-                              )),
-                              // 收藏图标
-                              _FavcatIcon(
-                                galleryItemController: galleryItemController,
-                              ),
-                              // 图片数量
-                              _Filecont(
-                                translated: galleryItemController
-                                    .galleryItem.translated,
-                                filecount:
-                                    galleryItemController.galleryItem.filecount,
-                              ),
-                            ],
-                          ),
-                        ),
-                        Container(
-                          height: 4,
-                        ),
-                        // 类型和时间
-                        Row(
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          children: <Widget>[
-                            // 类型
-                            _Category(
-                              category:
-                                  galleryItemController.galleryItem.category,
-                            ),
-                            // const Spacer(),
-                            // 上传时间
-                            Expanded(
-                                child: _PostTime(
-                              postTime:
-                                  galleryItemController.galleryItem.postTime,
-                            )),
-                          ],
-                        ),
-                      ],
-                    ),
-                  ),
-                ],
-              ),
-            ),
-          ),
-          Divider(
-            height: 0.5,
-            indent: kPaddingHorizontal,
-            color: CupertinoDynamicColor.resolve(
-                CupertinoColors.systemGrey4, Get.context!),
-          ),
-        ],
-      ),
-    );
-  }
-
   Widget _buildCardItem() {
     return Obx(
       () {
@@ -309,7 +193,7 @@ class GalleryItemWidget extends StatelessWidget {
                             category:
                                 galleryItemController.galleryItem.category,
                           ),
-                          // const Spacer(),
+
                           // 上传时间
                           Expanded(
                               child: _PostTime(
@@ -368,7 +252,7 @@ class _CoverImage extends StatelessWidget {
       }
     }
 
-    logger.d('iRatio:$ratio\n'
+    logger.v('iRatio:$ratio\n'
         'w:${_item.imgWidth} h:${_item.imgHeight}\n'
         'cW:$coverImageWidth  cH:$coverImageHeigth');
 
@@ -444,13 +328,15 @@ class _CoverImage extends StatelessWidget {
         fit: StackFit.passthrough,
         children: [
           imageBlureFittedBox,
-          HeroMode(
-            enabled: !isLayoutLarge,
-            child: Hero(
-              tag: '${_item.gid}_cover_$tabTag',
-              child: ClipRRect(
-                borderRadius: BorderRadius.circular(4),
-                child: image,
+          Center(
+            child: HeroMode(
+              enabled: !isLayoutLarge,
+              child: Hero(
+                tag: '${_item.gid}_cover_$tabTag',
+                child: ClipRRect(
+                  borderRadius: BorderRadius.circular(4),
+                  child: image,
+                ),
               ),
             ),
           ),

@@ -217,7 +217,10 @@ class GalleryItemFlowLarge extends StatelessWidget {
                 ),
                 const SizedBox(height: 4),
                 _buildTitle(),
-                _buildSimpleTagsView(),
+                // _buildSimpleTagsView(),
+                TagWaterfallFlowViewBox(
+                  simpleTags: galleryItemController.galleryItem.simpleTags,
+                ),
               ],
             ).paddingAll(8.0),
           ],

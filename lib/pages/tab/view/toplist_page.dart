@@ -152,6 +152,7 @@ class _ToplistTabState extends State<ToplistTab> {
 
     return CupertinoPageScaffold(
       child: CupertinoScrollbar(
+        scrollbarOrientation: ScrollbarOrientation.right,
         controller: PrimaryScrollController.of(context),
         child: SizeCacheWidget(child: customScrollView),
       ),
