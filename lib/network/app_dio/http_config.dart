@@ -11,6 +11,7 @@ class DioHttpConfig {
     this.connectTimeout = Duration.millisecondsPerMinute,
     this.sendTimeout = Duration.millisecondsPerMinute,
     this.receiveTimeout = Duration.millisecondsPerMinute,
+    this.maxConnectionsPerHost,
   });
 
   String? baseUrl;
@@ -21,9 +22,10 @@ class DioHttpConfig {
   int sendTimeout;
   int receiveTimeout;
   bool? domainFronting;
+  int? maxConnectionsPerHost;
 
   @override
   String toString() {
-    return 'DioHttpConfig{baseUrl: $baseUrl, proxy: $proxy, cookiesPath: $cookiesPath, interceptors: $interceptors, connectTimeout: $connectTimeout, sendTimeout: $sendTimeout, receiveTimeout: $receiveTimeout, domainFronting: $domainFronting}';
+    return 'DioHttpConfig{baseUrl: $baseUrl, proxy: $proxy, cookiesPath: $cookiesPath, interceptors: $interceptors, connectTimeout: $connectTimeout, sendTimeout: $sendTimeout, receiveTimeout: $receiveTimeout, domainFronting: $domainFronting, maxConnectionsPerHost: $maxConnectionsPerHost}';
   }
 }

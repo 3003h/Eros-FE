@@ -9,7 +9,7 @@ import 'package:fehviewer/route/navigator_util.dart';
 import 'package:fehviewer/store/floor/entity/tag_translat.dart';
 import 'package:fehviewer/utils/logger.dart';
 import 'package:fehviewer/utils/vibrate.dart';
-import 'package:fehviewer/widget/eh_cached_network_image.dart';
+import 'package:fehviewer/widget/eh_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_markdown/flutter_markdown.dart';
@@ -207,7 +207,7 @@ class _TagDialogViewState extends State<TagDialogView> {
                                     EHConst.monoFontFamilyFallback),
                           ),
                           imageBuilder: (Uri uri, String? title, String? alt) {
-                            return EhCachedNetworkImage(
+                            return EhNetworkImage(
                               imageUrl: uri.toString(),
                               placeholder: (_, __) {
                                 return const Padding(

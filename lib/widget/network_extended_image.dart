@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:extended_image/extended_image.dart';
 import 'package:fehviewer/common/exts.dart';
 import 'package:fehviewer/common/global.dart';
@@ -12,12 +13,19 @@ class NetworkExtendedImage extends StatefulWidget {
     this.width,
     this.fit,
     this.retries = 3,
+    this.placeholder,
+    this.errorWidget,
+    this.progressIndicatorBuilder,
   }) : super(key: key);
   final String url;
   final double? height;
   final double? width;
   final BoxFit? fit;
   final int retries;
+
+  final PlaceholderWidgetBuilder? placeholder;
+  final LoadingErrorWidgetBuilder? errorWidget;
+  final ProgressIndicatorBuilder? progressIndicatorBuilder;
 
   @override
   _NetworkExtendedImageState createState() => _NetworkExtendedImageState();

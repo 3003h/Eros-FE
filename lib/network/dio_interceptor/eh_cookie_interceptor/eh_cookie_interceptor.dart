@@ -11,12 +11,12 @@ class EhCookieInterceptor extends Interceptor {
     try {
       final cookies =
           options.headers[HttpHeaders.cookieHeader] as String? ?? '';
-      logger.d('cookies:$cookies');
+      logger.v('cookies:$cookies');
       final _cookies = cookies
           .split(';')
           .map((str) => Cookie.fromSetCookieValue(str))
           .toList();
-      logger.d('_cookies:$_cookies');
+      logger.v('_cookies:$_cookies');
 
       checkCookies(_cookies);
     } catch (_) {}

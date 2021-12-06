@@ -208,13 +208,25 @@ class EhConfigService extends ProfileService {
     everProfile(isGalleryImgBlur,
         (value) => ehConfig = ehConfig.copyWith(galleryImgBlur: value as bool));
 
+    // 站点切换事件
     isSiteEx.value = ehConfig.siteEx ?? false;
-    ehDioConfig.baseUrl =
-        isSiteEx.value ? EHConst.EX_BASE_URL : EHConst.EH_BASE_URL;
+    ehDioConfig = isSiteEx.value ? exDioConfig : ehDioConfig;
     everProfile(isSiteEx, (value) {
+      logger.d('everProfile isSiteEx');
       ehConfig = ehConfig.copyWith(siteEx: value as bool);
-      ehDioConfig.baseUrl =
-          isSiteEx.value ? EHConst.EX_BASE_URL : EHConst.EH_BASE_URL;
+      // ehDioConfig
+      //   ..baseUrl = value ? EHConst.EX_BASE_URL : EHConst.EH_BASE_URL
+      //   ..maxConnectionsPerHost = value ? 2 : null;
+      if (value) {
+        Global.initImageHttpClient(maxConnectionsPerHost: 2);
+        ehDioConfig
+          ..baseUrl = EHConst.EX_BASE_URL
+          ..maxConnectionsPerHost = 2;
+      } else {
+        ehDioConfig
+          ..baseUrl = EHConst.EH_BASE_URL
+          ..maxConnectionsPerHost = null;
+      }
     });
 
     isFavLongTap.value = ehConfig.favLongTap ?? false;

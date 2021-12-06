@@ -4,7 +4,7 @@ import 'package:fehviewer/common/service/theme_service.dart';
 import 'package:fehviewer/generated/l10n.dart';
 import 'package:fehviewer/route/routes.dart';
 import 'package:fehviewer/utils/logger.dart';
-import 'package:fehviewer/widget/eh_cached_network_image.dart';
+import 'package:fehviewer/widget/eh_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -69,7 +69,7 @@ class _UserItem extends State<UserItem> {
       final String _avatarUrl = _userController.user().avatarUrl ?? '';
       if (_userController.isLogin && _avatarUrl.isNotEmpty) {
         return ClipOval(
-          child: EhCachedNetworkImage(
+          child: EhNetworkImage(
             imageUrl: _avatarUrl,
             width: 55,
             height: 55,
@@ -159,7 +159,7 @@ class UserWidget extends GetView<UserController> {
     return Obx(() {
       if (controller.isLogin && _avatarUrl.isNotEmpty) {
         return ClipOval(
-          child: EhCachedNetworkImage(
+          child: EhNetworkImage(
             imageUrl: _avatarUrl,
             width: kAvatarSize,
             height: kAvatarSize,

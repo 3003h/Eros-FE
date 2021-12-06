@@ -84,6 +84,14 @@ class AppDio with DioMixin implements Dio {
       setProxy(dioConfig!.proxy!);
     }
 
+    (httpClientAdapter as DefaultHttpClientAdapter).onHttpClientCreate =
+        (client) {
+      client
+        ..maxConnectionsPerHost = dioConfig?.maxConnectionsPerHost
+        ..idleTimeout = const Duration(seconds: 6);
+      ;
+    };
+
     if (dioConfig?.domainFronting ?? false) {
       final DnsService dnsServices = Get.find();
       final bool enableDoH = dnsServices.enableDoH;
@@ -105,10 +113,14 @@ class AppDio with DioMixin implements Dio {
 
       (httpClientAdapter as DefaultHttpClientAdapter).onHttpClientCreate =
           (client) {
-        client.badCertificateCallback =
-            (X509Certificate cert, String host, int port) {
-          return hostWhiteList.contains(host);
-        };
+        client
+          ..badCertificateCallback =
+              (X509Certificate cert, String host, int port) {
+            return hostWhiteList.contains(host);
+          }
+          ..maxConnectionsPerHost = dioConfig?.maxConnectionsPerHost
+          ..idleTimeout = const Duration(seconds: 6);
+        ;
       };
 
       // 在其他插件添加完毕后再添加，以确保执行顺序正确

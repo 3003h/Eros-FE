@@ -12,6 +12,7 @@ import 'package:fehviewer/pages/item/controller/galleryitem_controller.dart';
 import 'package:fehviewer/utils/logger.dart';
 import 'package:fehviewer/utils/utility.dart';
 import 'package:fehviewer/widget/blur_image.dart';
+import 'package:fehviewer/widget/eh_network_image.dart';
 import 'package:fehviewer/widget/rating_bar.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -275,10 +276,6 @@ class _CoverImage extends StatelessWidget {
       height: _item.imgHeight,
       fit: _fit,
     );
-    // image = FittedBox(
-    //   fit: _fit,
-    //   child: image,
-    // );
 
     Widget imageBlureFittedBox = CoverImg(
       imgUrl: _item.imgUrl ?? '',
@@ -623,25 +620,25 @@ class CoverImg extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final EhConfigService ehConfigService = Get.find();
-    final Map<String, String> _httpHeaders = {
-      'Cookie': Global.profile.user.cookie ?? '',
-      'host': Uri.parse(imgUrl).host,
-    };
+    // final Map<String, String> _httpHeaders = {
+    //   'Cookie': Global.profile.user.cookie ?? '',
+    //   'host': Uri.parse(imgUrl).host,
+    // };
 
     Widget image() {
       if (imgUrl.isNotEmpty) {
-        return CachedNetworkImage(
+        return EhNetworkImage(
           placeholder: (_, __) {
             return Container(
               alignment: Alignment.center,
-              color: CupertinoDynamicColor.resolve(
-                  CupertinoColors.systemGrey5, context),
+              // color: CupertinoDynamicColor.resolve(
+              //     CupertinoColors.systemGrey5, context),
               child: const CupertinoActivityIndicator(),
             );
           },
           width: width,
           height: height,
-          httpHeaders: _httpHeaders,
+          // httpHeaders: _httpHeaders,
           imageUrl: imgUrl.dfUrl,
           fit: fit, //
         );

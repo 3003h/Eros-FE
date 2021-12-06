@@ -13,7 +13,7 @@ import 'package:fehviewer/route/navigator_util.dart';
 import 'package:fehviewer/store/floor/entity/gallery_image_task.dart';
 import 'package:fehviewer/store/floor/entity/gallery_task.dart';
 import 'package:fehviewer/utils/logger.dart';
-import 'package:fehviewer/widget/eh_cached_network_image.dart';
+import 'package:fehviewer/widget/eh_network_image.dart';
 import 'package:fehviewer/widget/rating_bar.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -519,7 +519,7 @@ class DownloadItemCoverImage extends StatelessWidget {
           },
         );
       } else if (url != null) {
-        return EhCachedNetworkImage(
+        return EhNetworkImage(
           imageUrl: url!,
           fit: cardType ? BoxFit.cover : BoxFit.fitWidth,
         );

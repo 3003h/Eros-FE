@@ -148,7 +148,7 @@ Future checkCookie() async {
   final EhConfigService ehConfigService = Get.find();
 
   if (userController.isLogin) {
-    logger.d('Global.profile.user.cookie: ${Global.profile.user.cookie}');
+    logger.v('Global.profile.user.cookie: ${Global.profile.user.cookie}');
 
     final List<String> _c = Global.profile.user.cookie?.split(';') ?? [];
 
@@ -271,7 +271,7 @@ Future<GalleryImage?> fetchImageInfo(
   if (httpResponse.ok && httpResponse.data is GalleryImage) {
     return (httpResponse.data as GalleryImage).copyWith(href: href);
   } else {
-    logger.d('${httpResponse.error.runtimeType}');
+    logger.d('error.runtimeType: ${httpResponse.error.runtimeType}');
   }
 }
 

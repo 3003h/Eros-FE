@@ -4,11 +4,12 @@ import 'package:dio/adapter.dart';
 import 'package:dio/dio.dart';
 import 'package:dio_firebase_performance/dio_firebase_performance.dart';
 import 'package:dio_http_cache/dio_http_cache.dart';
+import 'package:dio_smart_retry/dio_smart_retry.dart';
 import 'package:fehviewer/common/global.dart';
 import 'package:fehviewer/common/service/dns_service.dart';
 import 'package:fehviewer/const/const.dart';
-import 'package:fehviewer/network/dio_interceptor/dio_retry/options.dart';
-import 'package:fehviewer/network/dio_interceptor/dio_retry/retry_interceptor.dart';
+// import 'package:fehviewer/network/dio_interceptor/dio_retry/options.dart';
+// import 'package:fehviewer/network/dio_interceptor/dio_retry/retry_interceptor.dart';
 import 'package:fehviewer/network/dio_interceptor/domain_fronting/domain_fronting.dart';
 import 'package:fehviewer/utils/time.dart';
 import 'package:fehviewer/utils/toast.dart';
@@ -99,20 +100,34 @@ class HttpManager {
     //     request: true,
     //     requestBody: true));
 
+    // if (retry) {
+    //   _dio.interceptors.add(RetryInterceptor(
+    //       dio: _dio..options.extra.addAll({DIO_CACHE_KEY_FORCE_REFRESH: true}),
+    //       // dio: _dio,
+    //       options: RetryOptions(
+    //         retries: 3, // Number of retries before a failure
+    //         retryInterval:
+    //             const Duration(seconds: 1), // Interval between each retry
+    //         retryEvaluator: (DioError error) =>
+    //             error.type != DioErrorType.cancel &&
+    //             error.type !=
+    //                 DioErrorType
+    //                     .response, // Evaluating if a retry is necessary regarding the error. It is a good candidate for updating authentication token in case of a unauthorized error (be careful with concurrency though)
+    //       )));
+    // }
+
     if (retry) {
       _dio.interceptors.add(RetryInterceptor(
-          dio: _dio..options.extra.addAll({DIO_CACHE_KEY_FORCE_REFRESH: true}),
-          // dio: _dio,
-          options: RetryOptions(
-            retries: 3, // Number of retries before a failure
-            retryInterval:
-                const Duration(seconds: 1), // Interval between each retry
-            retryEvaluator: (DioError error) =>
-                error.type != DioErrorType.cancel &&
-                error.type !=
-                    DioErrorType
-                        .response, // Evaluating if a retry is necessary regarding the error. It is a good candidate for updating authentication token in case of a unauthorized error (be careful with concurrency though)
-          )));
+        dio: _dio,
+        logPrint: print, // specify log function (optional)
+        retries: 3, // retry count (optional)
+        retryDelays: const [
+          // set delays between retries (optional)
+          Duration(seconds: 1), // wait 1 sec before first retry
+          Duration(seconds: 2), // wait 2 sec before second retry
+          Duration(seconds: 3), // wait 3 sec before third retry
+        ],
+      ));
     }
 
     if (domainFronting) {

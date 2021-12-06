@@ -336,7 +336,7 @@ packages:
       name: dio
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "4.0.4"
+    version: "4.0.5-beta1"
   dio_cookie_manager:
     dependency: "direct main"
     description:
@@ -354,12 +354,17 @@ packages:
   dio_http_cache:
     dependency: "direct main"
     description:
-      path: "."
-      ref: "feature/nullsafety-dio4"
-      resolved-ref: "2ddd64b7e982aec2bb6cc251d8e33254230cc664"
-      url: "https://github.com/vrtdev/dio-http-cache.git"
-    source: git
+      name: dio_http_cache
+      url: "https://pub.dartlang.org"
+    source: hosted
     version: "0.3.0"
+  dio_smart_retry:
+    dependency: "direct main"
+    description:
+      name: dio_smart_retry
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "1.0.3"
   drift:
     dependency: transitive
     description:
