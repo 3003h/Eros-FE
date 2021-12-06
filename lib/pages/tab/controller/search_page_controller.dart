@@ -152,7 +152,7 @@ class SearchPageController extends TabViewController {
     searchText = searchTextController.text.trim();
     update([GetIds.SEARCH_CLEAR_BTN]);
     logger.v(' _delayedSearch');
-    const Duration _duration = Duration(milliseconds: 800);
+    const Duration _duration = Duration(milliseconds: 500);
     _lastInputCompleteAt = DateTime.now();
     await Future<void>.delayed(_duration);
 

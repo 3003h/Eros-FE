@@ -27,7 +27,7 @@ class EhCookieInterceptor extends Interceptor {
   @override
   void onResponse(Response response, ResponseInterceptorHandler handler) {
     _saveCookies(response)
-        .then((_) => handler.next(response))
+        .then((_) => super.onResponse(response, handler))
         .catchError((e, StackTrace? stackTrace) {
       DioError err =
           DioError(requestOptions: response.requestOptions, error: e);

@@ -48,11 +48,15 @@ class TagListViewBox extends StatelessWidget {
 
 class TagWaterfallFlowViewBox extends StatelessWidget {
   const TagWaterfallFlowViewBox(
-      {Key? key, this.simpleTags, this.crossAxisCount = 2})
+      {Key? key,
+      this.simpleTags,
+      this.crossAxisCount = 2,
+      this.splitFrame = false})
       : super(key: key);
 
   final List<SimpleTag>? simpleTags;
   final int crossAxisCount;
+  final bool splitFrame;
 
   @override
   Widget build(BuildContext context) {
@@ -61,12 +65,16 @@ class TagWaterfallFlowViewBox extends StatelessWidget {
       return const SizedBox.shrink();
     }
 
+    ScrollController controller = ScrollController();
+
     return ClipRRect(
       borderRadius: BorderRadius.circular(4),
       child: SizedBox(
-        height: crossAxisCount * 20,
+        height: crossAxisCount * 22,
         child: WaterfallFlow.builder(
           shrinkWrap: true,
+          controller: controller,
+          primary: false,
           scrollDirection: Axis.horizontal,
           gridDelegate: SliverWaterfallFlowDelegateWithFixedCrossAxisCount(
             crossAxisCount: crossAxisCount,
@@ -75,22 +83,30 @@ class TagWaterfallFlowViewBox extends StatelessWidget {
           ),
           itemCount: simpleTags?.length ?? 0,
           itemBuilder: (BuildContext context, int index) {
-            return Obx(() {
-              final _simpleTag = simpleTags![index];
-              final String? _text = _ehConfigService.isTagTranslat
-                  ? _simpleTag.translat
-                  : _simpleTag.text;
-              return FrameSeparateWidget(
-                placeHolder: const TagItem(text: '  '),
-                index: -1,
-                child: TagItem(
+            return Obx(
+              () {
+                final _simpleTag = simpleTags![index];
+                final String? _text = _ehConfigService.isTagTranslat
+                    ? _simpleTag.translat
+                    : _simpleTag.text;
+                Widget _item = TagItem(
                   text: _text,
                   color: ColorsUtil.getTagColor(_simpleTag.color),
                   backgrondColor:
                       ColorsUtil.getTagColor(_simpleTag.backgrondColor),
-                ),
-              );
-            });
+                );
+
+                if (splitFrame) {
+                  _item = FrameSeparateWidget(
+                    placeHolder: const TagItem(text: '..'),
+                    index: -1,
+                    child: _item,
+                  );
+                }
+
+                return _item;
+              },
+            );
           },
         ),
       ),

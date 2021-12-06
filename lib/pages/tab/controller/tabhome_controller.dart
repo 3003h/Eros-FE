@@ -1,6 +1,7 @@
 import 'package:fehviewer/common/service/ehconfig_service.dart';
 import 'package:fehviewer/generated/l10n.dart';
 import 'package:fehviewer/models/base/eh_models.dart';
+import 'package:fehviewer/pages/tab/view/custom_list_page.dart';
 import 'package:fehviewer/pages/tab/view/download_page.dart';
 import 'package:fehviewer/pages/tab/view/history_page.dart';
 import 'package:fehviewer/pages/tab/view/toplist_page.dart';
@@ -27,13 +28,6 @@ final TabPages tabPages = TabPages();
 class TabPages {
   final Map<String, EhTabController?> scrollControllerMap = {};
 
-  EhTabController? _scrollController(String key) {
-    // if (scrollControllerMap[key] == null) {
-    //   scrollControllerMap[key] = ScrollController();
-    // }
-    return scrollControllerMap[key];
-  }
-
   Map<String, Widget> get tabViews => <String, Widget>{
         EHRoutes.popular: const PopularListTab(),
         EHRoutes.watched: const WatchedListTab(),
@@ -43,6 +37,7 @@ class TabPages {
         EHRoutes.history: const HistoryTab(),
         EHRoutes.download: const DownloadTab(),
         EHRoutes.setting: const SettingTab(),
+        EHRoutes.coutomlist: const CustomList(),
       };
 
   final Map<String, IconData> iconDatas = <String, IconData>{
@@ -54,6 +49,7 @@ class TabPages {
     EHRoutes.history: FontAwesomeIcons.history,
     EHRoutes.download: FontAwesomeIcons.download,
     EHRoutes.setting: FontAwesomeIcons.cog,
+    EHRoutes.coutomlist: FontAwesomeIcons.image,
   };
 
   Map<String, Widget> get tabIcons => iconDatas
@@ -76,6 +72,7 @@ class TabPages {
             L10n.of(Get.find<TabHomeController>().tContext).tab_download,
         EHRoutes.setting:
             L10n.of(Get.find<TabHomeController>().tContext).tab_setting,
+        EHRoutes.coutomlist: 'Custom',
       };
 }
 
@@ -94,6 +91,7 @@ const Map<String, bool> kDefTabMap = <String, bool>{
 const List<String> kTabNameList = <String>[
   EHRoutes.gallery,
   EHRoutes.popular,
+  EHRoutes.coutomlist,
   EHRoutes.watched,
   EHRoutes.favorite,
   EHRoutes.toplist,
@@ -101,6 +99,7 @@ const List<String> kTabNameList = <String>[
   EHRoutes.history,
 ];
 
+/// TabHome布局控制器
 class TabHomeController extends GetxController {
   TabHomeController();
   DateTime? lastPressedAt; //上次点击时间
@@ -134,15 +133,13 @@ class TabHomeController extends GetxController {
         _list.add(key);
       }
     }
-    // setting 必须显示
+    // setting 必须保留
     _list.add(EHRoutes.setting);
     return _list;
   }
 
   // 控制tab项顺序
   RxList<String> tabNameList = kTabNameList.obs;
-  // RxList<String> tabNameList =
-  //     kDefTabMap.entries.map((e) => e.key).toList().obs;
 
   // 通过控制该变量控制tab项的开关
   RxMap<String, bool> tabMap = kDefTabMap.obs;
@@ -154,8 +151,6 @@ class TabHomeController extends GetxController {
     super.onInit();
 
     _tabConfig = gStore.tabConfig ?? (const TabConfig(tabItemList: []));
-
-    // logger.i('get tab config ${_tabConfig.tabItemList.length}');
 
     if (_tabConfig.tabMap.isNotEmpty) {
       if (_tabConfig.tabItemList.length < kTabNameList.length) {
@@ -206,7 +201,6 @@ class TabHomeController extends GetxController {
           ))
       .toList();
 
-  // BuildContext tContext = Get.context!;
   late BuildContext tContext;
 
   /// 需要初始化获取BuildContext 否则修改语言时tabitem的文字不会立即生效
@@ -228,15 +222,9 @@ class TabHomeController extends GetxController {
         duration: const Duration(milliseconds: 800),
         awaitComplete: false,
         onTap: () {
-          // scrollControllerList[index]?.animateTo(0.0,
-          //     duration: const Duration(milliseconds: 500), curve: Curves.ease);
           scrollControllerList[index]?.scrollToTop();
         },
         onDoubleTap: () {
-          // scrollControllerList[index]?.animateTo(
-          //     -kDefaultRefreshTriggerPullDistance,
-          //     duration: const Duration(milliseconds: 500),
-          //     curve: Curves.ease);
           scrollControllerList[index]?.scrollToTopRefresh();
         },
       );
@@ -274,7 +262,6 @@ class TabHomeController extends GetxController {
         tapAwait = false;
       }
     } else {
-//      loggerNoStack.v('等待时间内第二次点击 执行双击事件');
       tapAwait = false;
       onDoubleTap();
     }

@@ -129,6 +129,7 @@ class _HistoryTabState extends State<HistoryTab> {
     return CupertinoPageScaffold(
         // navigationBar: navigationBar,
         child: CupertinoScrollbar(
+            scrollbarOrientation: ScrollbarOrientation.right,
             controller: PrimaryScrollController.of(context),
             child: SizeCacheWidget(child: customScrollView)));
   }
