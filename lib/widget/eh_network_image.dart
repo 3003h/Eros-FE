@@ -1,9 +1,6 @@
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:fehviewer/common/exts.dart';
+import 'package:fehviewer/fehviewer.dart';
 import 'package:flutter/cupertino.dart';
-
-import 'eh_cached_network_image.dart';
-import 'network_extended_image.dart';
 
 class EhNetworkImage extends StatelessWidget {
   const EhNetworkImage({
@@ -32,7 +29,7 @@ class EhNetworkImage extends StatelessWidget {
     //   url: imageUrl.dfUrl,
     //   width: width,
     //   height: height,
-    //   fit: BoxFit.cover,
+    //   fit: fit,
     //   placeholder: placeholder,
     //   errorWidget: errorWidget,
     //   progressIndicatorBuilder: progressIndicatorBuilder,

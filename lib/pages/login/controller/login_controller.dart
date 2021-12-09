@@ -6,6 +6,7 @@ import 'package:fehviewer/component/exception/error.dart';
 import 'package:fehviewer/models/base/eh_models.dart';
 import 'package:fehviewer/network/eh_login.dart';
 import 'package:fehviewer/network/gallery_request.dart';
+import 'package:fehviewer/network/request.dart';
 import 'package:fehviewer/pages/login/view/login_cookie.dart';
 import 'package:fehviewer/route/routes.dart';
 import 'package:fehviewer/utils/logger.dart';
@@ -64,23 +65,33 @@ class LoginController extends GetxController {
     }
 
     FocusScope.of(Get.context!).requestFocus(FocusNode());
-    User user;
+    User? user;
     try {
-      user = await EhUserManager()
-          .signIn(usernameController.text, passwdController.text);
-      userController.user(user);
+      // user = await EhUserManager()
+      //     .signIn(usernameController.text, passwdController.text);
+      user = await userLogin(usernameController.text, passwdController.text);
     } on EhError catch (e, stack) {
       logger.e('$e\n$stack');
       if (e.type == EhErrorType.login) {
-        showToast('login fail');
+        showToast('Login fail');
       }
-      // rethrow;
     } finally {
       loadingLogin = false;
       update();
     }
 
-    Api.selEhProfile();
+    if (user != null && user.cookie != null && user.cookie!.isNotEmpty) {
+      userController.user(user.copyWith(username: usernameController.text));
+      Api.selEhProfile();
+
+      // 异步获取昵称和头像
+      logger.d('异步获取昵称和头像');
+      getUserInfo(user.memberId!).then(
+          (info) => userController.user(userController.user.value.copyWith(
+                nickName: info?.nickName,
+                avatarUrl: info?.avatarUrl,
+              )));
+    }
 
     Get.back();
   }

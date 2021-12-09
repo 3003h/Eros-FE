@@ -177,9 +177,10 @@ class UserWidget extends GetView<UserController> {
   Widget _buildText() {
     return Obx(() {
       if (controller.isLogin) {
-        final String? _userName = controller.user().username ?? '';
+        final String? _userName = controller.user().username;
+        final String? _nickName = controller.user().nickName;
         return Text(
-          _userName ?? '',
+          _nickName ?? _userName ?? '',
           style: TextStyle(
               fontSize: kNameTextSize,
               fontWeight: FontWeight.normal,

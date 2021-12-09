@@ -1,5 +1,4 @@
 import 'package:fehviewer/common/service/theme_service.dart';
-import 'package:fehviewer/models/index.dart';
 import 'package:fehviewer/network/gallery_request.dart';
 import 'package:fehviewer/pages/tab/controller/download_view_controller.dart';
 import 'package:fehviewer/route/navigator_util.dart';

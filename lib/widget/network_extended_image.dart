@@ -70,29 +70,31 @@ class _NetworkExtendedImageState extends State<NetworkExtendedImage>
         switch (state.extendedImageLoadState) {
           case LoadState.loading:
             // return null;
-            return Container(
-              alignment: Alignment.center,
-              color: CupertinoDynamicColor.resolve(
-                  CupertinoColors.systemGrey5, context),
-              child: const CupertinoActivityIndicator(),
-            );
+            return widget.placeholder?.call(context, widget.url.dfUrl) ??
+                Container(
+                  alignment: Alignment.center,
+                  child: const CupertinoActivityIndicator(),
+                );
           case LoadState.completed:
             animationController.forward();
 
-            return state.completedWidget;
-
-            // return ExtendedRawImage(
-            //   fit: BoxFit.contain,
-            //   image: state.extendedImageInfo?.image,
-            // );
-
             return FadeTransition(
               opacity: animationController,
-              child: ExtendedRawImage(
-                fit: BoxFit.contain,
-                image: state.extendedImageInfo?.image,
-              ),
+              child: state.completedWidget,
             );
+
+          // return ExtendedRawImage(
+          //   fit: BoxFit.contain,
+          //   image: state.extendedImageInfo?.image,
+          // );
+
+          // return FadeTransition(
+          //   opacity: animationController,
+          //   child: ExtendedRawImage(
+          //     fit: BoxFit.contain,
+          //     image: state.extendedImageInfo?.image,
+          //   ),
+          // );
           case LoadState.failed:
             return Container(
               alignment: Alignment.center,

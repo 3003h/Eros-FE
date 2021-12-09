@@ -13,6 +13,7 @@ import 'package:fehviewer/const/const.dart';
 import 'package:fehviewer/network/dio_interceptor/domain_fronting/domain_fronting.dart';
 import 'package:fehviewer/network/dio_interceptor/eh_cookie_interceptor/eh_cookie_interceptor.dart';
 import 'package:fehviewer/utils/logger.dart';
+import 'package:flutter/foundation.dart';
 import 'package:get/get.dart' hide Response;
 import 'package:pretty_dio_logger/pretty_dio_logger.dart';
 
@@ -72,8 +73,8 @@ class AppDio with DioMixin implements Dio {
       responseHeader: true,
       responseBody: false,
       maxWidth: 120,
-      // logPrint: kDebugMode ? loggerSimple.d : loggerSimpleOnlyFile.d,
-      logPrint: loggerSimpleOnlyFile.d,
+      logPrint: kDebugMode ? loggerSimple.d : loggerSimpleOnlyFile.d,
+      // logPrint: loggerSimpleOnlyFile.d,
     ));
 
     if (dioConfig?.interceptors?.isNotEmpty ?? false) {
