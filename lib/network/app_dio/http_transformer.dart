@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:io';
 
 import 'package:dio/dio.dart';
 import 'package:enum_to_string/enum_to_string.dart';
@@ -7,7 +8,9 @@ import 'package:fehviewer/common/parser/eh_parser.dart';
 import 'package:fehviewer/const/const.dart';
 import 'package:fehviewer/models/base/eh_models.dart';
 import 'package:fehviewer/pages/gallery/controller/archiver_controller.dart';
+import 'package:fehviewer/utils/logger.dart';
 import 'package:flutter/foundation.dart';
+import 'package:html/dom.dart';
 
 import '../request.dart';
 import 'exception.dart';
@@ -284,5 +287,57 @@ class ImageDispatchTransformer extends HttpTransformer {
     final json = response.data as String;
     final GalleryImage image = await compute(parserMpvImageDispatch, json);
     return DioHttpResponse<GalleryImage>.success(image);
+  }
+}
+
+class UserLoginTransformer extends HttpTransformer {
+  factory UserLoginTransformer() => _instance;
+  UserLoginTransformer._internal();
+  static late final UserLoginTransformer _instance =
+      UserLoginTransformer._internal();
+
+  @override
+  FutureOr<DioHttpResponse<User>> parse(Response<dynamic> response) async {
+    final List<String> setcookie = response.headers['set-cookie'] ?? [];
+
+    final _cookies =
+        setcookie.map((str) => Cookie.fromSetCookieValue(str)).toList();
+
+    final cookieStr =
+        _cookies.map((cookie) => '${cookie.name}=${cookie.value}').join('; ');
+
+    logger.d('cookieStr: $cookieStr');
+
+    final Map<String, String> cookieMap = <String, String>{};
+    for (final Cookie cookie in _cookies) {
+      cookieMap[cookie.name] = cookie.value;
+    }
+
+    final User user = kDefUser.copyWith(
+      cookie: cookieStr,
+      memberId: cookieMap['ipb_member_id'],
+      passHash: cookieMap['ipb_pass_hash'],
+      igneous: cookieMap['igneous'],
+      hathPerks: cookieMap['hath_perks'],
+      sk: cookieMap['sk'],
+    );
+    return DioHttpResponse<User>.success(user);
+  }
+}
+
+class UserInfoPageTransformer extends HttpTransformer {
+  factory UserInfoPageTransformer() => _instance;
+  UserInfoPageTransformer._internal();
+  static late final UserInfoPageTransformer _instance =
+      UserInfoPageTransformer._internal();
+
+  @override
+  FutureOr<DioHttpResponse<User>> parse(Response<dynamic> response) async {
+    final html = response.data as String;
+    final User user = await compute(parseUserProfile, html);
+
+    logger.d('UserInfoPageTransformer ${user.toJson()}');
+
+    return DioHttpResponse<User>.success(user);
   }
 }

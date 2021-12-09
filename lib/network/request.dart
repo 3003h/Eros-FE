@@ -1,7 +1,6 @@
 import 'dart:convert';
 import 'dart:io';
 
-import 'package:collection/collection.dart';
 import 'package:cookie_jar/cookie_jar.dart';
 import 'package:dio/dio.dart';
 import 'package:dio_http_cache/dio_http_cache.dart';
@@ -94,7 +93,7 @@ Future<GalleryList?> getGallery({
     _params.addAll(_searchController.favSearchMap);
   }
 
-  logger.v('${_params}');
+  logger.d('url:$_url ${_params}');
 
   DioHttpResponse httpResponse = await dioHttpClient.get(
     _url,
@@ -570,5 +569,51 @@ Future<void> ehDownload({
     logger.d('cancel');
   } on Exception catch (e) {
     rethrow;
+  }
+}
+
+Future<User?> userLogin(String username, String passwd) async {
+  const String url = 'https://forums.e-hentai.org/index.php';
+
+  DioHttpClient dioHttpClient = DioHttpClient(dioConfig: ehDioConfig);
+
+  final FormData formData = FormData.fromMap({
+    'UserName': username,
+    'PassWord': passwd,
+    'submit': 'Log me in',
+    'temporary_https': 'off',
+    'CookieDate': '365',
+  });
+
+  DioHttpResponse httpResponse = await dioHttpClient.post(
+    url,
+    queryParameters: {'act': 'Login', 'CODE': '01'},
+    data: formData,
+    httpTransformer: UserLoginTransformer(),
+    options: getCacheOptions(forceRefresh: true)
+      ..headers?['referer'] =
+          'https://forums.e-hentai.org/index.php?act=Login&CODE=00',
+  );
+
+  if (httpResponse.ok && httpResponse.data is User) {
+    return httpResponse.data as User;
+  }
+}
+
+Future<User?> getUserInfo(String userId) async {
+  const String url = 'https://forums.e-hentai.org/index.php';
+
+  DioHttpClient dioHttpClient = DioHttpClient(dioConfig: ehDioConfig);
+
+  DioHttpResponse httpResponse = await dioHttpClient.get(
+    url,
+    queryParameters: {'showuser': userId},
+    httpTransformer: UserInfoPageTransformer(),
+    options: getCacheOptions(forceRefresh: true)
+      ..headers?['referer'] = 'https://forums.e-hentai.org/index.php',
+  );
+
+  if (httpResponse.ok && httpResponse.data is User) {
+    return httpResponse.data as User;
   }
 }

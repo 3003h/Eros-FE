@@ -12,7 +12,6 @@ import 'package:fehviewer/network/eh_login.dart';
 import 'package:fehviewer/network/gallery_request.dart';
 import 'package:fehviewer/pages/setting/setting_items/selector_Item.dart';
 import 'package:fehviewer/pages/setting/webview/mytags_in.dart';
-import 'package:fehviewer/pages/setting/webview/web_mysetting_in.dart';
 import 'package:fehviewer/route/routes.dart';
 import 'package:fehviewer/utils/logger.dart';
 import 'package:fehviewer/utils/toast.dart';

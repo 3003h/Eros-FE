@@ -1,4 +1,3 @@
-import 'package:fehviewer/utils/logger.dart';
 import 'package:get/get.dart';
 
 String get pageCtrlDepth => Get.find<DepthService>().pageCtrlDepth.toString();

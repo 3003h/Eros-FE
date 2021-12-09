@@ -1,5 +1,3 @@
-import 'package:cached_network_image/cached_network_image.dart';
-import 'package:extended_text/extended_text.dart';
 import 'package:fehviewer/common/exts.dart';
 import 'package:fehviewer/common/global.dart';
 import 'package:fehviewer/common/service/depth_service.dart';
@@ -10,7 +8,6 @@ import 'package:fehviewer/const/theme_colors.dart';
 import 'package:fehviewer/generated/l10n.dart';
 import 'package:fehviewer/models/index.dart';
 import 'package:fehviewer/pages/gallery/controller/comment_controller.dart';
-import 'package:fehviewer/pages/gallery/controller/extended_text_selection_controller.dart';
 import 'package:fehviewer/pages/gallery/controller/gallery_page_controller.dart';
 import 'package:fehviewer/pages/gallery/view/comment_item.dart';
 import 'package:fehviewer/pages/gallery/view/taginfo_dialog.dart';
@@ -104,7 +101,7 @@ class CoverImage extends StatelessWidget {
             child: Container(
               height: imgHeight,
               width: imgWidth,
-              child: CachedNetworkImage(
+              child: EhNetworkImage(
                 placeholder: (_, __) {
                   return Container(
                     alignment: Alignment.center,
@@ -115,7 +112,7 @@ class CoverImage extends StatelessWidget {
                 },
                 imageUrl: (imageUrl ?? '').dfUrl,
                 fit: BoxFit.cover,
-                httpHeaders: _httpHeaders,
+                // httpHeaders: _httpHeaders,
               ),
               // child: NetworkExtendedImage(
               //   url: imageUrl ?? '',

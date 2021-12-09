@@ -106,8 +106,10 @@ class TabViewController extends GetxController
         return;
       }
 
-      final List<GalleryItem> _listItem = rult.gallerys ?? [];
+      final _listItem = rult.gallerys;
       // Api.getMoreGalleryInfo(_listItem);
+
+      logger.d('_listItem ${_listItem?.length}');
 
       maxPage = rult.maxPage ?? 0;
       nextPage = rult.nextPage ?? 1;
@@ -191,13 +193,23 @@ class TabViewController extends GetxController
     final GalleryList? rult = await fetchData(
       refresh: true,
     );
-    if (rult == null) {
+
+    logger.d('reloadData length ${rult?.gallerys?.length}');
+
+    if (rult == null || (rult.gallerys?.isEmpty ?? true)) {
       return;
     }
+
+    final List<GalleryItem> rultList = rult.gallerys ?? [];
+
+    // for (int i = 0; i < rultList.length; i++) {
+    //   sliverAnimatedListKey.currentState?.insertItem(0);
+    // }
 
     maxPage = rult.maxPage ?? 0;
     nextPage = rult.nextPage ?? 1;
     lastItemBuildComplete = false;
+    change([], status: RxStatus.success());
     change(rult.gallerys, status: RxStatus.success());
   }
 

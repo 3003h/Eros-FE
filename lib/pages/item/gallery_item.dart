@@ -620,10 +620,6 @@ class CoverImg extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final EhConfigService ehConfigService = Get.find();
-    // final Map<String, String> _httpHeaders = {
-    //   'Cookie': Global.profile.user.cookie ?? '',
-    //   'host': Uri.parse(imgUrl).host,
-    // };
 
     Widget image() {
       if (imgUrl.isNotEmpty) {
@@ -631,8 +627,6 @@ class CoverImg extends StatelessWidget {
           placeholder: (_, __) {
             return Container(
               alignment: Alignment.center,
-              // color: CupertinoDynamicColor.resolve(
-              //     CupertinoColors.systemGrey5, context),
               child: const CupertinoActivityIndicator(),
             );
           },

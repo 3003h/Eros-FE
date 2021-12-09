@@ -1,7 +1,6 @@
 import 'dart:io';
 
-import 'package:extended_text/extended_text.dart';
-import 'package:fehviewer/common/controller/user_controller.dart';
+// import 'package:extended_text/extended_text.dart';
 import 'package:fehviewer/common/global.dart';
 import 'package:fehviewer/common/service/dns_service.dart';
 import 'package:fehviewer/common/service/theme_service.dart';
@@ -86,21 +85,26 @@ class _SelectorSettingItemState extends State<SelectorSettingItem> {
           ),
         ),
         if (widget.desc != null && widget.desc!.isNotEmpty)
-          ExtendedText(
+          Text(
             widget.desc ?? '',
-            maxLines: 4,
-            softWrap: true,
-            // overflow: TextOverflow.ellipsis,
-            overflowWidget: const TextOverflowWidget(
-              position: TextOverflowPosition.start,
-              child: Text(
-                '\u2026 ',
-                style: _kDescStyle,
-              ),
-            ),
-            // joinZeroWidthSpace: true,
+            maxLines: null,
             style: _kDescStyle,
           ).paddingOnly(top: 2.0),
+        // ExtendedText(
+        //   widget.desc ?? '',
+        //   maxLines: 4,
+        //   softWrap: true,
+        //   // overflow: TextOverflow.ellipsis,
+        //   overflowWidget: const TextOverflowWidget(
+        //     position: TextOverflowPosition.start,
+        //     child: Text(
+        //       '\u2026 ',
+        //       style: _kDescStyle,
+        //     ),
+        //   ),
+        //   // joinZeroWidthSpace: true,
+        //   style: _kDescStyle,
+        // ).paddingOnly(top: 2.0),
       ],
     );
 
