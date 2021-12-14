@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:io';
 
 import 'package:dio/dio.dart';
+import 'package:fehviewer/utils/logger.dart';
 
 import 'exception.dart';
 import 'http_transformer.dart';
@@ -52,6 +53,7 @@ FutureOr<DioHttpResponse> handleResponse(Response? response,
     return await httpTransformer.parse(response);
   } else {
     // 接口调用失败
+    logger.d('接口调用失败');
     return DioHttpResponse.failure(
         errorMsg: response.statusMessage, errorCode: response.statusCode);
   }
@@ -69,7 +71,7 @@ bool _isTokenTimeout(int? code) {
 
 /// 请求成功
 bool _isRequestSuccess(int? statusCode) {
-  return statusCode != null && statusCode >= 200 && statusCode < 300;
+  return statusCode != null && statusCode >= 200 && statusCode <= 302;
 }
 
 HttpException _parseException(Exception error, {dynamic data}) {

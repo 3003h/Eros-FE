@@ -99,6 +99,7 @@ class MessageLookup extends MessageLookupByLibrary {
             "it is dangerous! You may get 509 error"),
         "downloaded": MessageLookupByLibrary.simpleMessage("Downloaded"),
         "downloading": MessageLookupByLibrary.simpleMessage("Downloading"),
+        "edit_comment": MessageLookupByLibrary.simpleMessage("Edit comment"),
         "eh": MessageLookupByLibrary.simpleMessage("E·H"),
         "ehentai_my_tags": MessageLookupByLibrary.simpleMessage("我的标签"),
         "ehentai_settings": MessageLookupByLibrary.simpleMessage("EHentai 设置"),
@@ -149,6 +150,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "multi_download":
             MessageLookupByLibrary.simpleMessage("multi Download"),
         "mytags_on_website": MessageLookupByLibrary.simpleMessage("网页上的标签设置"),
+        "new_comment": MessageLookupByLibrary.simpleMessage("New comment"),
         "noMorePreviews": MessageLookupByLibrary.simpleMessage("无更多预览"),
         "notFav": MessageLookupByLibrary.simpleMessage("未收藏"),
         "not_login": MessageLookupByLibrary.simpleMessage("未登录"),

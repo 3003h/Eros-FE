@@ -112,7 +112,6 @@ dependencies:
   hive_flutter: ^1.0.0
   extended_sliver: ^2.0.0
   blur: ^3.0.0
-  flutter_easyloading: ^3.0.3
 #  extended_text: ^7.0.0
   sprintf: ^6.0.0
   keframe: ^2.0.1
@@ -152,6 +151,7 @@ dependencies:
   open_file: ^3.2.1
   flustars: ^2.0.1
   dio_smart_retry: ^1.0.3
+  flutter_smart_dialog: ^3.0.10
 #   flutter_app_restart: ^1.0.0
 
 dev_dependencies:

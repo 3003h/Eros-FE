@@ -3,11 +3,12 @@ import 'dart:async';
 import 'package:fehviewer/common/service/depth_service.dart';
 import 'package:fehviewer/fehviewer.dart';
 import 'package:fehviewer/network/gallery_request.dart';
+import 'package:fehviewer/network/request.dart';
 import 'package:fehviewer/utils/openl/translator_helper.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_easyloading/flutter_easyloading.dart';
+import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:get/get.dart';
 import 'package:learning_language/learning_language.dart';
 
@@ -212,16 +213,12 @@ class CommentController extends GetxController
   // 点赞和踩的响应处理
   void _paraRes(CommitVoteRes rult) {
     logger.d('${rult.toJson()}');
-    // state.firstWhere((element) => element.id == rult.commentId.toString())
-    //   ..vote = rult.commentVote
-    //   ..score = '${rult.commentScore}';
 
     final int? _commentIndex = state?.indexWhere(
         (GalleryComment element) => element.id == rult.commentId.toString());
     state![_commentIndex!] = state![_commentIndex]
         .copyWith(vote: rult.commentVote, score: '${rult.commentScore}');
 
-    // update(['${rult.commentId}']);
     update();
     logger.v('update CommentController id ${rult.commentId}');
   }
@@ -229,7 +226,19 @@ class CommentController extends GetxController
   // 推送评论
   Future<void> _postComment(String comment,
       {bool isEdit = false, String? commentId}) async {
-    final bool rult = await Api.postComment(
+    logger.d('_postComment\n$comment');
+    // final bool rult = await Api.postComment(
+    //   gid: pageController.gid,
+    //   token: pageController.galleryItem?.token ?? '',
+    //   comment: comment,
+    //   commentId: commentId,
+    //   isEdit: isEdit,
+    // );
+    //
+    // if (rult) {
+    //   await pageController.handOnRefresh();
+    // }
+    final rult = await postComment(
       gid: pageController.gid,
       token: pageController.galleryItem?.token ?? '',
       comment: comment,
@@ -237,12 +246,13 @@ class CommentController extends GetxController
       isEdit: isEdit,
     );
 
-    if (rult) {
+    if (rult ?? false) {
+      logger.d('_postComment handOnRefresh');
       await pageController.handOnRefresh();
     }
   }
 
-  // 会有重复执行的问题
+  // 好像会有重复执行的问题
   Future<void> pressSendOld() async {
     comment = commentTextController.text;
     logger.d('comment: $comment');
@@ -270,39 +280,32 @@ class CommentController extends GetxController
     comment = commentTextController.text;
     logger.d('comment: $comment');
     FocusScope.of(Get.context!).requestFocus(FocusNode());
-    EasyLoading.instance
-      ..loadingStyle = EasyLoadingStyle.custom
-      ..indicatorColor = Colors.transparent
-      ..backgroundColor = Colors.transparent
-      ..textColor = Colors.transparent
-      ..maskType = EasyLoadingMaskType.custom
-      ..maskColor = Colors.black.withOpacity(0.25)
-      ..userInteractions = false
-      ..indicatorType = EasyLoadingIndicatorType.fadingCircle;
-    EasyLoading.show(
-      indicator: Center(
-        child: CupertinoPopupSurface(
-          child: Container(
-              height: 80,
-              width: 80,
-              alignment: Alignment.center,
-              child: const CupertinoActivityIndicator(
-                radius: 20,
-              )),
-        ),
+
+    final indicator = Center(
+      child: CupertinoPopupSurface(
+        child: Container(
+            height: 80,
+            width: 80,
+            alignment: Alignment.center,
+            child: const CupertinoActivityIndicator(
+              radius: 20,
+            )),
       ),
     );
+    SmartDialog.showLoading(widget: indicator);
 
-    await Future.delayed(const Duration(seconds: 3));
+    // await Future.delayed(const Duration(seconds: 2));
     logger.v('_postComment $comment');
-    // await _postComment(
-    //   comment,
-    //   isEdit: editState == EditState.editComment,
-    //   commentId: commentId,
-    // );
-    // pressCancle();
-
-    EasyLoading.dismiss();
+    try {
+      await _postComment(
+        comment,
+        isEdit: editState == EditState.editComment,
+        commentId: commentId,
+      );
+    } finally {
+      pressCancle();
+      SmartDialog.dismiss();
+    }
   }
 
   void pressCancle() {
@@ -396,7 +399,7 @@ Future<void> showLoadingDialog(
       logger.e('$e');
       completer.complete([e]);
     }
-    logger.d('${Get.currentRoute}');
+    logger.d('currentRoute ${Get.currentRoute}');
   }
 
   return await showCupertinoDialog<void>(
