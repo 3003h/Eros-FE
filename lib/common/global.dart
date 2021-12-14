@@ -47,7 +47,7 @@ final Global global = Global();
 DioHttpConfig ehDioConfig = DioHttpConfig(
   baseUrl: EHConst.EH_BASE_URL,
   cookiesPath: Global.appSupportPath,
-  connectTimeout: 20000,
+  connectTimeout: 10000,
   sendTimeout: 8000,
   receiveTimeout: 10000,
 );
@@ -55,7 +55,7 @@ DioHttpConfig ehDioConfig = DioHttpConfig(
 DioHttpConfig exDioConfig = DioHttpConfig(
   baseUrl: EHConst.EX_BASE_URL,
   cookiesPath: Global.appSupportPath,
-  connectTimeout: 20000,
+  connectTimeout: 10000,
   sendTimeout: 8000,
   receiveTimeout: 10000,
   maxConnectionsPerHost: 2,

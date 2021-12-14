@@ -330,6 +330,9 @@
   "link_redirect": "Link redirect",
   "link_redirect_summary": "Redirecting gallery links to selected sites",
 
-  "fixed_height_of_list_items": "Fixed height of list items"
+  "fixed_height_of_list_items": "Fixed height of list items",
+
+  "edit_comment": "Edit comment",
+  "new_comment": "New comment"
 
 }

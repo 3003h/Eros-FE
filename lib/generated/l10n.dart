@@ -3343,6 +3343,26 @@ class L10n {
       args: [],
     );
   }
+
+  /// `Edit comment`
+  String get edit_comment {
+    return Intl.message(
+      'Edit comment',
+      name: 'edit_comment',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `New comment`
+  String get new_comment {
+    return Intl.message(
+      'New comment',
+      name: 'new_comment',
+      desc: '',
+      args: [],
+    );
+  }
 }
 
 class AppLocalizationDelegate extends LocalizationsDelegate<L10n> {

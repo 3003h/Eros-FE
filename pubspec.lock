@@ -603,13 +603,6 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "1.7.1"
-  flutter_easyloading:
-    dependency: "direct main"
-    description:
-      name: flutter_easyloading
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "3.0.3"
   flutter_easyrefresh:
     dependency: "direct main"
     description:
@@ -687,13 +680,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "1.1.0"
-  flutter_spinkit:
-    dependency: transitive
+  flutter_smart_dialog:
+    dependency: "direct main"
     description:
-      name: flutter_spinkit
+      name: flutter_smart_dialog
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "5.1.0"
+    version: "3.0.10"
   flutter_test:
     dependency: "direct dev"
     description: flutter

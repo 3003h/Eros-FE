@@ -6,16 +6,14 @@ import 'package:dio/dio.dart';
 import 'package:dio_http_cache/dio_http_cache.dart';
 import 'package:fehviewer/common/controller/advance_search_controller.dart';
 import 'package:fehviewer/common/controller/user_controller.dart';
-import 'package:fehviewer/common/global.dart';
+import 'package:fehviewer/component/exception/error.dart';
+import 'package:fehviewer/fehviewer.dart';
 import 'package:fehviewer/common/parser/gallery_detail_parser.dart';
 import 'package:fehviewer/common/service/ehconfig_service.dart';
-import 'package:fehviewer/const/const.dart';
-import 'package:fehviewer/models/base/eh_models.dart';
 import 'package:fehviewer/pages/gallery/controller/archiver_controller.dart';
 import 'package:fehviewer/pages/tab/fetch_list.dart';
-import 'package:fehviewer/utils/logger.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:get/get.dart' hide FormData;
+import 'package:get/get.dart' hide FormData, Response;
 
 import 'app_dio/pdio.dart';
 import 'gallery_request.dart';
@@ -615,5 +613,45 @@ Future<User?> getUserInfo(String userId) async {
 
   if (httpResponse.ok && httpResponse.data is User) {
     return httpResponse.data as User;
+  }
+}
+
+Future<bool?> postComment({
+  required String gid,
+  required String token,
+  required String comment,
+  String? commentId,
+  bool isEdit = false,
+  GalleryItem? inGalleryItem,
+}) async {
+  if (utf8.encode(comment).length < 10) {
+    showToast('Your comment is too short.');
+    throw EhError(type: EhErrorType.def, error: 'Your comment is too short.');
+  }
+
+  final String url = '/g/$gid/$token';
+  DioHttpClient dioHttpClient = DioHttpClient(dioConfig: ehDioConfig);
+
+  final data = FormData.fromMap({
+    isEdit ? 'commenttext_edit' : 'commenttext_new': comment,
+    if (isEdit && commentId != null) 'edit_comment': int.parse(commentId),
+  });
+
+  DioHttpResponse httpResponse = await dioHttpClient.post(
+    url,
+    data: data,
+    httpTransformer: HttpTransformerBuilder(
+      (response) {
+        logger.d('statusCode ${response.statusCode}');
+        return DioHttpResponse<bool>.success(response.statusCode == 302);
+      },
+    ),
+    options: getCacheOptions(forceRefresh: true)
+      ..followRedirects = false
+      ..validateStatus = (status) => (status ?? 0) < 500,
+  );
+
+  if (httpResponse.ok && httpResponse.data is bool) {
+    return httpResponse.data as bool;
   }
 }

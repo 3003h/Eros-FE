@@ -55,6 +55,7 @@ class DioHttpClient {
       );
       return handleResponse(response, httpTransformer: httpTransformer);
     } on Exception catch (e) {
+      logger.e('error post $e');
       return handleException(e);
     }
   }

@@ -1,7 +1,5 @@
 import 'package:blur/blur.dart';
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:fehviewer/common/exts.dart';
-import 'package:fehviewer/common/global.dart';
 import 'package:fehviewer/common/service/ehconfig_service.dart';
 import 'package:fehviewer/common/service/layout_service.dart';
 import 'package:fehviewer/common/service/theme_service.dart';

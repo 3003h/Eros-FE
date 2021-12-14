@@ -10,11 +10,14 @@ import 'package:fehviewer/models/base/eh_models.dart';
 import 'package:fehviewer/pages/gallery/controller/archiver_controller.dart';
 import 'package:fehviewer/utils/logger.dart';
 import 'package:flutter/foundation.dart';
-import 'package:html/dom.dart';
+import 'package:get/get_instance/get_instance.dart';
 
 import '../request.dart';
 import 'exception.dart';
 import 'http_response.dart';
+
+typedef HttpTransformerBuilderCallback = FutureOr<DioHttpResponse> Function(
+    Response response);
 
 /// Response 解析
 abstract class HttpTransformer {
@@ -46,6 +49,17 @@ class DefaultHttpTransformer extends HttpTransformer {
     // return HttpResponse.failure(errorMsg:response.data["message"],errorCode: response.data["code"]);
     // }
     return DioHttpResponse.success(response.data['data']);
+  }
+}
+
+class HttpTransformerBuilder extends HttpTransformer {
+  HttpTransformerBuilder(this.parseCallback);
+
+  final HttpTransformerBuilderCallback parseCallback;
+
+  @override
+  FutureOr<DioHttpResponse> parse(Response<dynamic> response) {
+    return parseCallback(response);
   }
 }
 
@@ -339,5 +353,12 @@ class UserInfoPageTransformer extends HttpTransformer {
     logger.d('UserInfoPageTransformer ${user.toJson()}');
 
     return DioHttpResponse<User>.success(user);
+  }
+}
+
+class PostCommentTransformer extends HttpTransformer {
+  @override
+  FutureOr<DioHttpResponse<bool>> parse(Response<dynamic> response) {
+    return DioHttpResponse<bool>.success(response.statusCode == 302);
   }
 }
