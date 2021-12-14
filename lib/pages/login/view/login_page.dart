@@ -120,7 +120,7 @@ class LoginExtPage extends GetView<LoginController> {
                             Text('Web', textScaleFactor: 0.8),
                           ],
                         ),
-                        onPressed: controller.hanOnWeblogin,
+                        onPressed: controller.handOnWeblogin,
                       ),
                       // cookie登陆
                       CupertinoButton(

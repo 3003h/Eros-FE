@@ -1,9 +1,4 @@
-import 'package:fehviewer/common/global.dart';
-import 'package:fehviewer/models/index.dart';
-import 'package:fehviewer/route/navigator_util.dart';
-import 'package:fehviewer/utils/logger.dart';
-import 'package:fehviewer/widget/eh_network_image.dart';
-import 'package:fehviewer/widget/network_extended_image.dart';
+import 'package:fehviewer/fehviewer.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:keframe/size_cache_widget.dart';
@@ -87,9 +82,6 @@ class PreviewContainer extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final Map<String, String> _httpHeaders = {
-      'Cookie': Global.profile.user.cookie ?? '',
-    };
     Widget _buildImage() {
       if (galleryImage.largeThumb ?? false) {
         // 缩略大图

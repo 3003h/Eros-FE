@@ -1,7 +1,6 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:extended_image/extended_image.dart';
-import 'package:fehviewer/common/exts.dart';
-import 'package:fehviewer/common/global.dart';
+import 'package:fehviewer/fehviewer.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
@@ -40,7 +39,7 @@ class _NetworkExtendedImageState extends State<NetworkExtendedImage>
   void initState() {
     super.initState();
     _httpHeaders = {
-      'Cookie': Global.profile.user.cookie ?? '',
+      'Cookie': Global.profile.user.cookie,
       'host': Uri.parse(widget.url).host,
     };
 
@@ -141,7 +140,7 @@ class _ExtendedImageRectState extends State<ExtendedImageRect>
   void initState() {
     super.initState();
     _httpHeaders = {
-      'Cookie': Global.profile.user.cookie ?? '',
+      'Cookie': Global.profile.user.cookie,
       'host': Uri.parse(widget.url).host,
     };
 

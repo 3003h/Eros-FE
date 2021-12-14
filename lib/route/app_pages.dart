@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:fehviewer/common/controller/cache_controller.dart';
 import 'package:fehviewer/common/service/depth_service.dart';
 import 'package:fehviewer/pages/gallery/controller/taginfo_controller.dart';
@@ -110,7 +112,7 @@ class AppPages {
         () => Get.lazyPut(() => LoginController()),
       ),
     ),
-    GetPage(
+    GetPage<List<Cookie>>(
       name: EHRoutes.webLogin,
       page: () => WebLoginViewIn(),
     ),

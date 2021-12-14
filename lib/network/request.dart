@@ -147,7 +147,7 @@ Future checkCookie() async {
   if (userController.isLogin) {
     logger.v('Global.profile.user.cookie: ${Global.profile.user.cookie}');
 
-    final List<String> _c = Global.profile.user.cookie?.split(';') ?? [];
+    final List<String> _c = Global.profile.user.cookie.split(';');
 
     final List<Cookie> _cookies =
         _c.map((e) => Cookie.fromSetCookieValue(e)).toList();

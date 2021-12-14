@@ -11,6 +11,8 @@ import 'package:flutter_inappwebview/flutter_inappwebview.dart' hide WebView;
 import 'package:get/get.dart';
 import 'package:line_icons/line_icons.dart';
 
+import 'eh_webview.dart';
+
 /// iOS使用
 class InWebMySetting extends StatelessWidget {
   final CookieManager _cookieManager = CookieManager.instance();
@@ -69,16 +71,28 @@ class InWebMySetting extends StatelessWidget {
             ),
             // headers: _httpHeaders,
           ),
+          initialOptions: inAppWebViewOptions,
           onWebViewCreated: (InAppWebViewController controller) {
             _controller = controller;
           },
-          onLoadStart: (InAppWebViewController controller, Uri? url) {
-            logger.d('Page started loading: $url');
+          // onLoadStart: (InAppWebViewController controller, Uri? url) {
+          //   logger.d('Page started loading: $url');
+          //
+          //   if (!url.toString().endsWith('/uconfig.php')) {
+          //     logger.d('阻止打开 $url');
+          //     controller.stopLoading();
+          //   }
+          // },
+          shouldOverrideUrlLoading: (controller, navigationAction) async {
+            final uri = navigationAction.request.url!;
 
-            if (!url.toString().endsWith('/uconfig.php')) {
-              logger.d('阻止打开 $url');
-              controller.stopLoading();
+            logger.d('to $uri');
+            if (!(uri.path == '/uconfig.php')) {
+              logger.d('阻止打开 $uri');
+              return NavigationActionPolicy.CANCEL;
             }
+
+            return NavigationActionPolicy.ALLOW;
           },
           onLoadStop: (InAppWebViewController controller, Uri? url) async {
             logger.d('Page Finished loading: $url');

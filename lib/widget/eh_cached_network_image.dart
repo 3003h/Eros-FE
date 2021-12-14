@@ -1,6 +1,5 @@
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:fehviewer/common/exts.dart';
-import 'package:fehviewer/common/global.dart';
+import 'package:fehviewer/fehviewer.dart';
 import 'package:flutter/cupertino.dart';
 
 class EhCachedNetworkImage extends StatelessWidget {
@@ -27,7 +26,7 @@ class EhCachedNetworkImage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final _httpHeaders = {
-      'Cookie': Global.profile.user.cookie ?? '',
+      'Cookie': Global.profile.user.cookie,
       'host': Uri.parse(imageUrl).host,
     };
 

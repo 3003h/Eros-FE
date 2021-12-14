@@ -114,7 +114,6 @@ const AdvanceSearch kDefAdvanceSearch = AdvanceSearch(
 
 const User kDefUser = User(
   username: '',
-  cookie: '',
   avatarUrl: '',
   favcat: [],
 );

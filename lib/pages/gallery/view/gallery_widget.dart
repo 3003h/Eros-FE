@@ -1,21 +1,12 @@
-import 'package:fehviewer/common/exts.dart';
-import 'package:fehviewer/common/global.dart';
 import 'package:fehviewer/common/service/depth_service.dart';
 import 'package:fehviewer/common/service/ehconfig_service.dart';
 import 'package:fehviewer/common/service/layout_service.dart';
-import 'package:fehviewer/const/const.dart';
 import 'package:fehviewer/const/theme_colors.dart';
-import 'package:fehviewer/generated/l10n.dart';
-import 'package:fehviewer/models/index.dart';
+import 'package:fehviewer/fehviewer.dart';
 import 'package:fehviewer/pages/gallery/controller/comment_controller.dart';
 import 'package:fehviewer/pages/gallery/controller/gallery_page_controller.dart';
 import 'package:fehviewer/pages/gallery/view/comment_item.dart';
 import 'package:fehviewer/pages/gallery/view/taginfo_dialog.dart';
-import 'package:fehviewer/route/navigator_util.dart';
-import 'package:fehviewer/route/routes.dart';
-import 'package:fehviewer/utils/logger.dart';
-import 'package:fehviewer/utils/utility.dart';
-import 'package:fehviewer/widget/eh_network_image.dart';
 import 'package:fehviewer/widget/rating_bar.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -32,9 +23,6 @@ class CoveTinyImage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final Map<String, String> _httpHeaders = {
-      'Cookie': Global.profile.user.cookie ?? '',
-    };
     return Container(
       padding: const EdgeInsets.all(4),
       child: ClipRRect(
@@ -79,11 +67,6 @@ class CoverImage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Builder(builder: (_) {
-      final Map<String, String> _httpHeaders = {
-        'Cookie': Global.profile.user.cookie ?? '',
-        'host': Uri.parse(imageUrl ?? '').host,
-      };
-
       if (imageUrl != null && imageUrl!.isNotEmpty) {
         Widget image = Container(
           decoration: BoxDecoration(

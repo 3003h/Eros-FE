@@ -9,13 +9,10 @@ import 'package:dio_http_cache/dio_http_cache.dart';
 import 'package:enum_to_string/enum_to_string.dart';
 import 'package:extended_image/extended_image.dart';
 import 'package:fehviewer/common/controller/advance_search_controller.dart';
-import 'package:fehviewer/common/global.dart';
 import 'package:fehviewer/common/parser/eh_parser.dart';
 import 'package:fehviewer/common/service/dns_service.dart';
 import 'package:fehviewer/common/service/ehconfig_service.dart';
-import 'package:fehviewer/const/const.dart';
-import 'package:fehviewer/generated/l10n.dart';
-import 'package:fehviewer/models/index.dart';
+import 'package:fehviewer/fehviewer.dart';
 import 'package:fehviewer/network/request.dart';
 import 'package:fehviewer/pages/gallery/controller/archiver_controller.dart';
 import 'package:fehviewer/pages/gallery/controller/torrent_controller.dart';
@@ -23,13 +20,8 @@ import 'package:fehviewer/pages/setting/controller/eh_mysettings_controller.dart
 import 'package:fehviewer/pages/tab/controller/search_page_controller.dart';
 import 'package:fehviewer/store/floor/entity/tag_translat.dart';
 import 'package:fehviewer/utils/dio_util.dart';
-import 'package:fehviewer/utils/logger.dart';
-import 'package:fehviewer/utils/time.dart';
-import 'package:fehviewer/utils/toast.dart';
-import 'package:fehviewer/utils/utility.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
-import 'package:flutter/material.dart';
 import 'package:flutter_cache_manager/flutter_cache_manager.dart';
 import 'package:get/get.dart' hide Response, FormData;
 import 'package:html_unescape/html_unescape.dart';
@@ -954,7 +946,7 @@ class Api {
       await operatorProfile(type: ProfileOpType.select, set: fEhProfile.value);
       showCookie();
       return true;
-    } else {
+    } else if (ehProfiles.isNotEmpty) {
       // create 完成后会自动set_cookie sp为新建的sp
       logger.d('create new profile');
       await operatorProfile(type: ProfileOpType.create, pName: kProfileName);
@@ -1028,7 +1020,7 @@ class Api {
         try {
           final DefaultCacheManager manager = DefaultCacheManager();
           file = await manager.getSingleFile(imageUrl,
-              headers: {'cookie': Global.profile.user.cookie ?? ''});
+              headers: {'cookie': Global.profile.user.cookie});
         } catch (e) {
           throw 'get file error';
         }
@@ -1227,7 +1219,7 @@ class Api {
   }) async {
     const String url = '/api.php';
 
-    final String cookie = Global.profile.user.cookie ?? '';
+    final String cookie = Global.profile.user.cookie;
 
     final dio.Options options = dio.Options(headers: {
       'Cookie': cookie,
