@@ -47,13 +47,14 @@ class EhCookieInterceptor extends Interceptor {
           cookies.map((str) => Cookie.fromSetCookieValue(str)).toList();
       logger.d('_set cookies ${_cookies}');
 
+      final igneous = getCookiesValue(_cookies, 'igneous');
+
       userController.user(userController.user.value.copyWith(
         memberId: getCookiesValue(_cookies, 'ipb_member_id'),
         passHash: getCookiesValue(_cookies, 'ipb_pass_hash'),
-        igneous: getCookiesValue(_cookies, 'igneous'),
+        igneous: igneous != 'mystery' && igneous != '' ? igneous : null,
         hathPerks: getCookiesValue(_cookies, 'hath_perks'),
         sk: getCookiesValue(_cookies, 'sk'),
-        // cookie: getCookies(),
       ));
 
       logger.d('${userController.user.value.toJson()}');

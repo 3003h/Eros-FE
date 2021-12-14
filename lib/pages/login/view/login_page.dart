@@ -7,8 +7,8 @@ import 'package:line_icons/line_icons.dart';
 
 import '../controller/login_controller.dart';
 
-class LoginExtPage extends GetView<LoginController> {
-  const LoginExtPage({Key? key}) : super(key: key);
+class LoginPage extends GetView<LoginController> {
+  const LoginPage({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

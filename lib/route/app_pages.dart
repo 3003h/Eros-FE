@@ -107,7 +107,7 @@ class AppPages {
     ),
     GetPage(
       name: EHRoutes.login,
-      page: () => const LoginExtPage(),
+      page: () => const LoginPage(),
       binding: BindingsBuilder(
         () => Get.lazyPut(() => LoginController()),
       ),
