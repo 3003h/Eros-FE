@@ -1,16 +1,14 @@
 import 'dart:convert';
 import 'dart:io';
 
+import 'package:cookie_jar/cookie_jar.dart';
 import 'package:fehviewer/common/controller/user_controller.dart';
 import 'package:fehviewer/component/exception/error.dart';
-import 'package:fehviewer/models/base/eh_models.dart';
+import 'package:fehviewer/fehviewer.dart';
 import 'package:fehviewer/network/eh_login.dart';
 import 'package:fehviewer/network/gallery_request.dart';
 import 'package:fehviewer/network/request.dart';
 import 'package:fehviewer/pages/login/view/login_cookie.dart';
-import 'package:fehviewer/route/routes.dart';
-import 'package:fehviewer/utils/logger.dart';
-import 'package:fehviewer/utils/toast.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
@@ -45,7 +43,7 @@ class LoginController extends GetxController {
 
   bool obscurePasswd = true;
 
-  /// 用户登录
+  /// 普通用户登录
   Future<void> pressLogin() async {
     if (loadingLogin) {
       return;
@@ -80,22 +78,17 @@ class LoginController extends GetxController {
       update();
     }
 
-    if (user != null && user.cookie != null && user.cookie!.isNotEmpty) {
+    if (user != null && user.cookie.isNotEmpty) {
       userController.user(user.copyWith(username: usernameController.text));
       Api.selEhProfile();
 
-      // 异步获取昵称和头像
-      logger.d('异步获取昵称和头像');
-      getUserInfo(user.memberId!).then(
-          (info) => userController.user(userController.user.value.copyWith(
-                nickName: info?.nickName,
-                avatarUrl: info?.avatarUrl,
-              )));
+      asyncGetUserInfo(user.memberId!);
     }
 
     Get.back();
   }
 
+  // cookie登陆
   Future<void> pressLoginCookie() async {
     if (loadingLogin) {
       return;
@@ -140,6 +133,16 @@ class LoginController extends GetxController {
     update();
   }
 
+  Future<void> asyncGetUserInfo(String memberId) async {
+    // 异步获取昵称和头像
+    logger.d('异步获取昵称和头像');
+    final info = await getUserInfo(memberId);
+    userController.user(userController.user.value.copyWith(
+      nickName: info?.nickName,
+      avatarUrl: info?.avatarUrl,
+    ));
+  }
+
   Future<void> hanOnCookieLogin() async {
     final result = await Get.to(() => const LoginCookie());
     if (result != null && result is bool && result) {
@@ -148,18 +151,47 @@ class LoginController extends GetxController {
     }
   }
 
-  Future<void> hanOnWeblogin() async {
+  /// 网页登陆
+  Future<void> handOnWeblogin() async {
     if (!Platform.isIOS && !Platform.isAndroid) {
       showToast('Platform not yet supported');
       return;
     }
 
-    final dynamic result = await Get.toNamed(
+    final cookies = await Get.toNamed(
       EHRoutes.webLogin,
       preventDuplicates: false,
     );
-    logger.d(' $result');
-    if (result != null && result is Map) {
+    logger.d(' $cookies');
+
+    if (cookies != null && cookies is List<Cookie>) {
+      final PersistCookieJar cookieJar = await Api.cookieJar;
+
+      // 设置EH的cookie
+      cookieJar.saveFromResponse(Uri.parse(EHConst.EH_BASE_URL), cookies);
+
+      final memberId = getCookiesValue(cookies, 'ipb_member_id');
+
+      if (memberId == null || memberId == '0') {
+        return;
+      }
+
+      userController.user(userController.user.value.copyWith(
+        username: memberId,
+        memberId: memberId,
+        passHash: getCookiesValue(cookies, 'ipb_pass_hash'),
+        igneous: getCookiesValue(cookies, 'igneous'),
+        hathPerks: getCookiesValue(cookies, 'hath_perks'),
+        sk: getCookiesValue(cookies, 'sk'),
+      ));
+
+      if (memberId != null) {
+        asyncGetUserInfo(memberId);
+        Api.selEhProfile();
+      }
+    }
+
+    /*if (result != null && result is Map) {
       loadingLogin = true;
       update();
 
@@ -175,7 +207,7 @@ class LoginController extends GetxController {
         loadingLogin = false;
         update();
       }
-    }
+    }*/
   }
 
   Future<void> readCookieFromClipboard() async {
@@ -224,5 +256,9 @@ class LoginController extends GetxController {
     } catch (e) {
       logger.e('$e');
     }
+  }
+
+  String? getCookiesValue(List<Cookie> cookies, String name) {
+    return cookies.firstWhereOrNull((e) => e.name == name)?.value;
   }
 }

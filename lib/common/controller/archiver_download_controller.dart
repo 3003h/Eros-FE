@@ -3,17 +3,14 @@ import 'dart:isolate';
 import 'dart:ui';
 
 import 'package:collection/collection.dart';
-import 'package:fehviewer/common/global.dart';
 import 'package:fehviewer/common/service/ehconfig_service.dart';
-import 'package:fehviewer/const/const.dart';
-import 'package:fehviewer/models/index.dart';
+import 'package:fehviewer/fehviewer.dart';
+
 import 'package:fehviewer/pages/tab/controller/download_view_controller.dart';
 import 'package:fehviewer/store/floor/dao/gallery_task_dao.dart';
 import 'package:fehviewer/store/floor/dao/image_task_dao.dart';
 import 'package:fehviewer/store/get_store.dart';
-import 'package:fehviewer/utils/logger.dart';
-import 'package:fehviewer/utils/toast.dart';
-import 'package:fehviewer/utils/utility.dart';
+
 import 'package:flutter_downloader/flutter_downloader.dart';
 import 'package:get/get.dart';
 import 'package:path/path.dart' as path;
@@ -198,7 +195,7 @@ class ArchiverDownloadController extends GetxController {
   Future<String?> _downloadArchiverFile(String downloadUrl, String savePath,
       {String? fileName}) async {
     final Map<String, String> _httpHeaders = {
-      'Cookie': Global.profile.user.cookie ?? '',
+      'Cookie': Global.profile.user.cookie,
     };
     return await FlutterDownloader.enqueue(
       url: downloadUrl,

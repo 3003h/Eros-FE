@@ -7,6 +7,8 @@ import 'package:flutter_inappwebview/flutter_inappwebview.dart' hide WebView;
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
 
+import 'eh_webview.dart';
+
 class InWebMyTags extends StatelessWidget {
   // final CookieManager _cookieManager = CookieManager.instance();
   //
@@ -53,13 +55,25 @@ class InWebMyTags extends StatelessWidget {
           onWebViewCreated: (InAppWebViewController controller) {
             _controller = controller;
           },
-          onLoadStart: (InAppWebViewController controller, Uri? url) {
-            logger.d('Page started loading: $url');
+          initialOptions: inAppWebViewOptions,
+          // onLoadStart: (InAppWebViewController controller, Uri? url) {
+          //   logger.d('Page started loading: $url');
+          //
+          //   if (!url.toString().endsWith('/mytags')) {
+          //     logger.d('阻止打开 $url');
+          //     controller.stopLoading();
+          //   }
+          // },
+          shouldOverrideUrlLoading: (controller, navigationAction) async {
+            final uri = navigationAction.request.url!;
 
-            if (!url.toString().endsWith('/mytags')) {
-              logger.d('阻止打开 $url');
-              controller.stopLoading();
+            logger.d('to $uri');
+            if (!(uri.path == '/mytags')) {
+              logger.d('阻止打开 $uri');
+              return NavigationActionPolicy.CANCEL;
             }
+
+            return NavigationActionPolicy.ALLOW;
           },
           onLoadStop: (InAppWebViewController controller, Uri? url) async {
             logger.d('Page Finished loading: $url');

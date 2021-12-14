@@ -123,7 +123,14 @@ extension ExtItem on GalleryItem {
 }
 
 extension ExtUser on User {
-  List<String> get _cookieStrList => cookie?.split(';') ?? [];
+  String get cookie {
+    return 'ipb_member_id=$memberId; '
+        'ipb_pass_hash=$passHash; '
+        'igneous=${igneous ?? ''}';
+  }
+
+  List<String> get _cookieStrList => cookie.split(';');
+
   List<Cookie> get _cookiesFromStr =>
       _cookieStrList.map((e) => Cookie.fromSetCookieValue(e)).toList();
 

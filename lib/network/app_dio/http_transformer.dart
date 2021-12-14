@@ -3,14 +3,10 @@ import 'dart:io';
 
 import 'package:dio/dio.dart';
 import 'package:enum_to_string/enum_to_string.dart';
-import 'package:fehviewer/common/global.dart';
 import 'package:fehviewer/common/parser/eh_parser.dart';
-import 'package:fehviewer/const/const.dart';
-import 'package:fehviewer/models/base/eh_models.dart';
+import 'package:fehviewer/fehviewer.dart';
 import 'package:fehviewer/pages/gallery/controller/archiver_controller.dart';
-import 'package:fehviewer/utils/logger.dart';
 import 'package:flutter/foundation.dart';
-import 'package:get/get_instance/get_instance.dart';
 
 import '../request.dart';
 import 'exception.dart';
@@ -328,7 +324,6 @@ class UserLoginTransformer extends HttpTransformer {
     }
 
     final User user = kDefUser.copyWith(
-      cookie: cookieStr,
       memberId: cookieMap['ipb_member_id'],
       passHash: cookieMap['ipb_pass_hash'],
       igneous: cookieMap['igneous'],

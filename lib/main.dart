@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:io';
 import 'dart:ui';
 
 import 'package:device_preview/device_preview.dart';
@@ -17,6 +18,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
+import 'package:flutter_inappwebview/flutter_inappwebview.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:get/get.dart';
@@ -36,6 +38,10 @@ Future<void> main() async {
     await _initializeFlutterFire();
 
     getinit();
+
+    if (Platform.isAndroid) {
+      await AndroidInAppWebViewController.setWebContentsDebuggingEnabled(true);
+    }
 
     if (Get.find<EhConfigService>().debugMode) {
       Logger.level = Level.debug;
@@ -137,9 +143,11 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
         onGenerateTitle: (BuildContext context) => L10n.of(context).app_title,
         navigatorObservers: [
           FirebaseAnalyticsObserver(analytics: analytics),
-          FlutterSmartDialogCupertino.observer,
+          FlutterSmartDialog.observer,
         ],
-        builder: FlutterSmartDialogCupertino.init(),
+        builder: FlutterSmartDialog.init(
+          styleBuilder: (child) => child,
+        ),
         getPages: AppPages.routes,
         defaultTransition: Transition.cupertino,
         initialRoute: EHRoutes.root,

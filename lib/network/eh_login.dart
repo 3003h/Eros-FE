@@ -4,11 +4,9 @@ import 'package:cookie_jar/cookie_jar.dart';
 import 'package:dio/dio.dart';
 import 'package:fehviewer/common/controller/user_controller.dart';
 import 'package:fehviewer/component/exception/error.dart';
-import 'package:fehviewer/const/const.dart';
-import 'package:fehviewer/models/user.dart';
+import 'package:fehviewer/fehviewer.dart';
 import 'package:fehviewer/network/gallery_request.dart';
 import 'package:fehviewer/utils/dio_util.dart';
-import 'package:fehviewer/utils/logger.dart';
 import 'package:get/get.dart' hide Response, FormData;
 import 'package:html/dom.dart';
 import 'package:html/parser.dart' show parse;
@@ -115,14 +113,11 @@ class EhUserManager {
       _avatarUrl = userinfo.avatarUrl ?? '';
     } catch (_) {}
 
-    final String cookieStr = _getCookieStringFromMap(cookie);
-    // logger.v(cookieStr);
     final List<Cookie> _cookiesEx =
         await cookieJar.loadForRequest(Uri.parse(EHConst.EX_BASE_URL));
     logger.d('${_cookiesEx.map((e) => '$e').join('\n')} ');
 
     final User user = kDefUser.copyWith(
-      cookie: cookieStr,
       avatarUrl: _avatarUrl,
       username: nickame,
       memberId: cookieMapEx['ipb_member_id'],
@@ -186,11 +181,7 @@ class EhUserManager {
         await cookieJar.loadForRequest(Uri.parse(EHConst.EX_BASE_URL));
     logger.d('${_cookiesEx.map((e) => '$e').join('\n')} ');
 
-    final String cookieStr = _getCookieStringFromMap(cookie);
-    // logger.v(cookieStr);
-
     final User user = kDefUser.copyWith(
-      cookie: cookieStr,
       avatarUrl: userinfo.avatarUrl,
       username: userinfo.username,
       memberId: cookieMapEx['ipb_member_id'],
@@ -264,11 +255,7 @@ class EhUserManager {
       'sk': cookieMapEx['sk'] ?? '',
     };
 
-    final String cookieStr = _getCookieStringFromMap(cookie);
-    logger.d(cookieStr);
-
     final User user = kDefUser.copyWith(
-      cookie: cookieStr,
       avatarUrl: userinfo.avatarUrl,
       username: userinfo.username,
       memberId: cookieMapEx['ipb_member_id'],
@@ -343,23 +330,12 @@ class EhUserManager {
       'sk': cookieMapEx['sk'] ?? '',
     };
 
-    final String cookieStr = _getCookieStringFromMap(cookie);
-
     userController.user(userController.user.value.copyWith(
       memberId: cookieMapEx['ipb_member_id'],
       passHash: cookieMapEx['ipb_pass_hash'],
       igneous: cookieMapEx['igneous'],
       hathPerks: cookieMapEx['hath_perks'],
       sk: cookieMapEx['sk'],
-      cookie: cookieStr,
     ));
-  }
-
-  static String _getCookieStringFromMap(Map cookie) {
-    final List texts = [];
-    cookie.forEach((key, value) {
-      texts.add('$key=$value');
-    });
-    return texts.join('; ');
   }
 }

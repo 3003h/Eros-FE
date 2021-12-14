@@ -1,3 +1,5 @@
+import 'dart:io' as io;
+
 import 'package:fehviewer/const/const.dart';
 import 'package:fehviewer/generated/l10n.dart';
 import 'package:fehviewer/utils/logger.dart';
@@ -19,6 +21,18 @@ class WebLoginViewIn extends StatelessWidget {
     InAppWebViewController _controller;
     final WebviewCookieManager cookieManager = WebviewCookieManager();
 
+    InAppWebViewGroupOptions options = InAppWebViewGroupOptions(
+        crossPlatform: InAppWebViewOptions(
+          useShouldOverrideUrlLoading: true,
+          mediaPlaybackRequiresUserGesture: false,
+        ),
+        android: AndroidInAppWebViewOptions(
+          useHybridComposition: true,
+        ),
+        ios: IOSInAppWebViewOptions(
+          allowsInlineMediaPlayback: true,
+        ));
+
     final CupertinoPageScaffold cpf = CupertinoPageScaffold(
       navigationBar: CupertinoNavigationBar(
         middle: Text(title),
@@ -27,37 +41,62 @@ class WebLoginViewIn extends StatelessWidget {
       child: SafeArea(
         child: InAppWebView(
           initialUrlRequest: URLRequest(url: Uri.parse(EHConst.URL_SIGN_IN)),
+          initialOptions: options,
           onWebViewCreated: (InAppWebViewController webViewController) {
             _controller = webViewController;
           },
-          onLoadStart: (InAppWebViewController controller, Uri? url) {
-            logger.d('Page started loading: $url');
-
-            if (url == null) {
-              return;
-            }
-
-            if (!(url.path == '/uconfig.php') && !(url.path == '/index.php')) {
-              logger.d('阻止打开 $url');
-              controller.stopLoading();
-            }
+          androidOnPermissionRequest: (controller, origin, resources) async {
+            return PermissionRequestResponse(
+                resources: resources,
+                action: PermissionRequestResponseAction.GRANT);
           },
-          onLoadStop: (InAppWebViewController controller, Uri? url) async {
-            logger.d('Page Finished loading: $url');
+          // onLoadStart: (InAppWebViewController controller, Uri? url) {
+          //   logger.d('Page started loading: $url');
+          //
+          //   if (url == null) {
+          //     return;
+          //   }
+          //
+          //   if (!(url.path == '/uconfig.php') && !(url.path == '/index.php')) {
+          //     logger.d('阻止打开 $url');
+          //     controller.stopLoading();
+          //   }
+          // },
+          shouldOverrideUrlLoading: (controller, navigationAction) async {
+            final uri = navigationAction.request.url!;
 
-            if (url == null) {
+            final act = uri.queryParameters['act'];
+
+            logger.d('to $uri');
+            if (uri.path == '/index.php' && act != null && act != 'Login') {
+              logger.d('阻止打开 $uri');
+              return NavigationActionPolicy.CANCEL;
+            } else if (uri.path == '/uconfig.php' || uri.path == '/index.php') {
+              return NavigationActionPolicy.ALLOW;
+            }
+
+            logger.d('阻止打开 $uri');
+            return NavigationActionPolicy.CANCEL;
+          },
+          onLoadStop: (InAppWebViewController controller, Uri? uri) async {
+            logger.d('Page Finished loading: $uri');
+
+            if (uri == null) {
               return;
             }
 
-            if (url.path == '/index.php' && url.queryParameters.isEmpty) {
-              final Map<String, String> cookieMap = <String, String>{};
-              // 写入cookie到dio
-              _cookieManager.getCookies(url: url).then((List<Cookie> value) {
-                logger.d(' $value');
-                value.forEach((Cookie cookie) =>
-                    cookieMap[cookie.name] = cookie.value as String);
-                logger.d(' $cookieMap');
-                Get.back(result: cookieMap);
+            if (uri.path == '/index.php' && uri.queryParameters.isEmpty) {
+              // final Map<String, String> cookieMap = <String, String>{};
+              // 返回 cookie
+              _cookieManager.getCookies(url: uri).then((List<Cookie> cookies) {
+                logger.d(' $cookies');
+                // value.forEach((Cookie cookie) =>
+                //     cookieMap[cookie.name] = cookie.value as String);
+
+                Get.back<List<io.Cookie>>(
+                    result: cookies
+                        .map((e) => io.Cookie(e.name, '${e.value}'))
+                        .toList());
               });
             }
           },

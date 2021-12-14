@@ -1,12 +1,9 @@
 import 'dart:io';
 
-// import 'package:extended_text/extended_text.dart';
-import 'package:fehviewer/common/global.dart';
 import 'package:fehviewer/common/service/dns_service.dart';
 import 'package:fehviewer/common/service/theme_service.dart';
-import 'package:fehviewer/generated/l10n.dart';
-import 'package:fehviewer/utils/logger.dart';
-import 'package:fehviewer/utils/toast.dart';
+// import 'package:extended_text/extended_text.dart';
+import 'package:fehviewer/fehviewer.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -602,7 +599,7 @@ Future<void> showCustomHostEditer(BuildContext context, {int? index}) async {
 }
 
 Future<void> showUserCookie() async {
-  final List<String> _c = Global.profile.user.cookie?.split(';') ?? [];
+  final List<String> _c = Global.profile.user.cookie.split(';');
 
   final List<Cookie> _cookies =
       _c.map((e) => Cookie.fromSetCookieValue(e)).toList();

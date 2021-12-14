@@ -60,9 +60,6 @@ class CommentItem extends StatelessWidget {
         children: List<InlineSpan>.from(
             galleryComment.span.map((GalleryCommentSpan e) {
           if (e.imageUrl != null) {
-            final Map<String, String> _httpHeaders = {
-              'Cookie': Global.profile.user.cookie ?? '',
-            };
             return WidgetSpan(
               child: GestureDetector(
                 onTap: () => _onOpen(context, url: e.href!),
@@ -158,10 +155,6 @@ class CommentItem extends StatelessWidget {
           return Wrap(
             children: List<Widget>.from(spans.map((GalleryCommentSpan e) {
               if (e.imageUrl != null) {
-                final Map<String, String> _httpHeaders = {
-                  'Cookie': Global.profile.user.cookie ?? '',
-                };
-
                 return GestureDetector(
                   onTap: () => _onOpen(context, url: e.href!),
                   child: Container(
@@ -311,9 +304,6 @@ class CommentItem extends StatelessWidget {
                   );
                 case CommentSpanType.image: // 图片
                 case CommentSpanType.linkImage: // 带链接图片
-                  final Map<String, String> _httpHeaders = {
-                    'Cookie': Global.profile.user.cookie ?? '',
-                  };
 
                   return GestureDetector(
                     onTap: () => _onOpen(context, url: commentSpan.href!),
