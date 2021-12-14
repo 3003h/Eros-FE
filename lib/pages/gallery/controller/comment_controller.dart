@@ -292,7 +292,7 @@ class CommentController extends GetxController
             )),
       ),
     );
-    SmartDialog.showLoading(widget: indicator);
+    SmartDialog.showLoading(widget: indicator, backDismiss: false);
 
     // await Future.delayed(const Duration(seconds: 2));
     logger.v('_postComment $comment');

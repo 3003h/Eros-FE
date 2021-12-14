@@ -16,6 +16,7 @@ export 'utils/time.dart';
 export 'utils/toast.dart';
 export 'utils/utility.dart';
 export 'utils/vibrate.dart';
+export 'utils/dialog.dart';
 export 'widget/eh_cached_network_image.dart';
 export 'widget/eh_dark_cupertino_theme.dart';
 export 'widget/eh_network_image.dart';

@@ -3,17 +3,15 @@ import 'dart:ui';
 
 import 'package:device_preview/device_preview.dart';
 import 'package:fehviewer/common/controller/auto_lock_controller.dart';
-import 'package:fehviewer/common/global.dart';
+import 'package:fehviewer/fehviewer.dart';
 import 'package:fehviewer/common/service/ehconfig_service.dart';
 import 'package:fehviewer/common/service/locale_service.dart';
 import 'package:fehviewer/common/service/log_service.dart';
 import 'package:fehviewer/common/service/theme_service.dart';
 import 'package:fehviewer/component/exception/error.dart';
-import 'package:fehviewer/generated/l10n.dart';
 import 'package:fehviewer/route/app_pages.dart';
 import 'package:fehviewer/route/routes.dart';
 import 'package:fehviewer/store/get_store.dart';
-import 'package:fehviewer/utils/logger.dart';
 import 'package:firebase_analytics/observer.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
@@ -139,9 +137,9 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
         onGenerateTitle: (BuildContext context) => L10n.of(context).app_title,
         navigatorObservers: [
           FirebaseAnalyticsObserver(analytics: analytics),
-          FlutterSmartDialog.observer,
+          FlutterSmartDialogCupertino.observer,
         ],
-        builder: FlutterSmartDialog.init(),
+        builder: FlutterSmartDialogCupertino.init(),
         getPages: AppPages.routes,
         defaultTransition: Transition.cupertino,
         initialRoute: EHRoutes.root,
