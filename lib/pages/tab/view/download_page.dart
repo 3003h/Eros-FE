@@ -53,29 +53,33 @@ class _DownloadTabState extends State<DownloadTab> {
       const DownloadArchiverView(),
     ];
 
+    final middle = GetPlatform.isMobile
+        ? CupertinoSlidingSegmentedControl<DownloadType>(
+            children: <DownloadType, Widget>{
+              DownloadType.gallery: Text(
+                L10n.of(context).tab_gallery,
+                style: const TextStyle(fontSize: 14),
+              ).marginSymmetric(horizontal: 6),
+              DownloadType.archiver: Text(
+                L10n.of(context).p_Archiver,
+                style: const TextStyle(fontSize: 14),
+              ).marginSymmetric(horizontal: 6),
+            },
+            groupValue: viewType,
+            onValueChanged: (DownloadType? value) {
+              final toIndex =
+                  controller.pageList.indexOf(value ?? DownloadType.gallery);
+              pageController.animateToPage(toIndex,
+                  duration: const Duration(milliseconds: 300),
+                  curve: Curves.ease);
+            },
+          )
+        : Text(L10n.of(context).download);
+
     return CupertinoPageScaffold(
       navigationBar: CupertinoNavigationBar(
         padding: const EdgeInsetsDirectional.only(end: 10),
-        middle: CupertinoSlidingSegmentedControl<DownloadType>(
-          children: <DownloadType, Widget>{
-            DownloadType.gallery: Text(
-              L10n.of(context).tab_gallery,
-              style: const TextStyle(fontSize: 14),
-            ).marginSymmetric(horizontal: 6),
-            DownloadType.archiver: Text(
-              L10n.of(context).p_Archiver,
-              style: const TextStyle(fontSize: 14),
-            ).marginSymmetric(horizontal: 6),
-          },
-          groupValue: viewType,
-          onValueChanged: (DownloadType? value) {
-            final toIndex =
-                controller.pageList.indexOf(value ?? DownloadType.gallery);
-            pageController.animateToPage(toIndex,
-                duration: const Duration(milliseconds: 300),
-                curve: Curves.ease);
-          },
-        ),
+        middle: middle,
         trailing: Row(
           mainAxisSize: MainAxisSize.min,
           mainAxisAlignment: MainAxisAlignment.end,
