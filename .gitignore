@@ -51,7 +51,6 @@ app.*.map.json
 #*.g.dart
 
 #/lib/models/*.dart
-/windows/
 /web/
 /linux/
 .fvm
