@@ -40,7 +40,8 @@ const String idDownloadGalleryItem = 'DownloadGalleryItem';
 const String idDownloadArchiverItem = 'DownloadArchiverItem';
 
 class DownloadViewController extends GetxController {
-  final ArchiverDownloadController _archiverDownloadController = Get.find();
+  late final ArchiverDownloadController _archiverDownloadController;
+
   final DownloadController _downloadController = Get.find();
 
   final GlobalKey<AnimatedListState> animatedGalleryListKey =
@@ -54,6 +55,9 @@ class DownloadViewController extends GetxController {
   @override
   void onInit() {
     super.onInit();
+    if (GetPlatform.isMobile) {
+      _archiverDownloadController = Get.find();
+    }
     tabTag = EHRoutes.download;
   }
 

@@ -71,7 +71,7 @@ class GalleryItemPlaceHolder extends StatelessWidget {
                   // 标签
                   Row(
                     children: const [
-                      PlaceHolderLine(width: 70),
+                      Expanded(child: PlaceHolderLine(width: 70)),
                       PlaceHolderLine(width: 50),
                       PlaceHolderLine(width: 50),
                     ],
@@ -80,12 +80,12 @@ class GalleryItemPlaceHolder extends StatelessWidget {
                     children: const [
                       PlaceHolderLine(width: 50),
                       PlaceHolderLine(width: 50),
-                      PlaceHolderLine(width: 70),
+                      Expanded(child: PlaceHolderLine(width: 70)),
                     ],
                   ),
                   const Spacer(),
                   // 评分行
-                  const PlaceHolderLine(width: 80),
+                  const Expanded(child: PlaceHolderLine(width: 80)),
                   Container(
                     height: 4,
                   ),

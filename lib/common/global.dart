@@ -111,9 +111,13 @@ class Global {
     // 判断是否debug模式
     inDebugMode = EHUtils().isInDebugMode;
 
-    await FlutterDownloader.initialize(debug: kDebugMode);
+    if (GetPlatform.isMobile) {
+      await FlutterDownloader.initialize(debug: kDebugMode);
+    }
 
-    canCheckBiometrics = await localAuth.canCheckBiometrics;
+    if (GetPlatform.isMobile) {
+      canCheckBiometrics = await localAuth.canCheckBiometrics;
+    }
 
     //statusBar设置为透明，去除半透明遮罩
     SystemChrome.setSystemUIOverlayStyle(
@@ -125,7 +129,7 @@ class Global {
     appSupportPath = (await getApplicationSupportDirectory()).path;
     appDocPath = (await getApplicationDocumentsDirectory()).path;
     tempPath = (await getTemporaryDirectory()).path;
-    extStorePath = !Platform.isIOS
+    extStorePath = Platform.isAndroid || Platform.isFuchsia
         ? (await getExternalStorageDirectory())?.path ?? ''
         : '';
 
@@ -153,7 +157,9 @@ class Global {
 
     await HiveHelper.init();
 
-    await vibrateUtil.init();
+    if (GetPlatform.isMobile) {
+      await vibrateUtil.init();
+    }
 
     _profileInit();
 

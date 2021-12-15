@@ -12,12 +12,15 @@ class ArchiverController extends GetxController
   ArchiverController();
 
   GalleryPageController get pageController => Get.find(tag: pageCtrlDepth);
-  final ArchiverDownloadController _downloadController = Get.find();
+  late final ArchiverDownloadController _downloadController;
   late String _archiverLink;
 
   @override
   void onInit() {
     super.onInit();
+    if (GetPlatform.isMobile) {
+      _downloadController = Get.find();
+    }
     _loadData();
   }
 

@@ -77,7 +77,7 @@ class TabPages {
 }
 
 // 默认显示在tabbar的view
-const Map<String, bool> kDefTabMap = <String, bool>{
+Map<String, bool> kDefTabMap = <String, bool>{
   EHRoutes.popular: true,
   EHRoutes.watched: false,
   EHRoutes.gallery: true,
@@ -88,7 +88,7 @@ const Map<String, bool> kDefTabMap = <String, bool>{
 };
 
 // 默认显示顺序 ?
-const List<String> kTabNameList = <String>[
+List<String> kTabNameList = <String>[
   EHRoutes.gallery,
   EHRoutes.popular,
   EHRoutes.coutomlist,

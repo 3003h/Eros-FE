@@ -25,6 +25,7 @@ import 'package:get/get.dart';
 import 'package:logger/logger.dart';
 import 'package:oktoast/oktoast.dart';
 
+import 'firebase_options.dart';
 import 'get_init.dart';
 
 Future<void> main() async {
@@ -71,7 +72,9 @@ Future<void> main() async {
 
 Future<void> _initializeFlutterFire() async {
   // Wait for Firebase to initialize
-  await Firebase.initializeApp();
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
 
   await FirebaseCrashlytics.instance
       .setCrashlyticsCollectionEnabled(!kDebugMode);
@@ -142,7 +145,8 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
         debugShowCheckedModeBanner: false,
         onGenerateTitle: (BuildContext context) => L10n.of(context).app_title,
         navigatorObservers: [
-          FirebaseAnalyticsObserver(analytics: analytics),
+          if (GetPlatform.isMobile)
+            FirebaseAnalyticsObserver(analytics: analytics),
           FlutterSmartDialog.observer,
         ],
         builder: FlutterSmartDialog.init(

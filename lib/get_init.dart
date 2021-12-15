@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:fehviewer/pages/tab/controller/custom_list_controller.dart';
 import 'package:fehviewer/pages/tab/controller/toplist_controller.dart';
 import 'package:flutter/cupertino.dart';
@@ -58,7 +60,9 @@ void getinit() {
   Get.lazyPut(() => CacheController(), fenix: true);
 
   Get.put(DownloadController());
-  Get.put(ArchiverDownloadController());
+  if (GetPlatform.isMobile) {
+    Get.put(ArchiverDownloadController());
+  }
 
   debugPrint('getinit');
   Get.put(TabHomeController(), permanent: true);

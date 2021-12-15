@@ -65,7 +65,9 @@ class AppDio with DioMixin implements Dio {
     //       requestBody: true));
     // }
 
-    interceptors.add(DioFirebasePerformanceInterceptor());
+    if (GetPlatform.isMobile) {
+      interceptors.add(DioFirebasePerformanceInterceptor());
+    }
 
     interceptors.add(PrettyDioLogger(
       requestHeader: true,

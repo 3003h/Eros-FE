@@ -108,20 +108,21 @@ class LoginPage extends GetView<LoginController> {
                     mainAxisAlignment: MainAxisAlignment.end,
                     children: [
                       // web登陆
-                      CupertinoButton(
-                        minSize: 50,
-                        padding: const EdgeInsets.all(20),
-                        child: Column(
-                          children: const [
-                            Icon(
-                              LineIcons.globeWithAmericasShown,
-                              size: 30,
-                            ),
-                            Text('Web', textScaleFactor: 0.8),
-                          ],
+                      if (GetPlatform.isMobile)
+                        CupertinoButton(
+                          minSize: 50,
+                          padding: const EdgeInsets.all(20),
+                          child: Column(
+                            children: const [
+                              Icon(
+                                LineIcons.globeWithAmericasShown,
+                                size: 30,
+                              ),
+                              Text('Web', textScaleFactor: 0.8),
+                            ],
+                          ),
+                          onPressed: controller.handOnWeblogin,
                         ),
-                        onPressed: controller.handOnWeblogin,
-                      ),
                       // cookie登陆
                       CupertinoButton(
                         minSize: 50,
