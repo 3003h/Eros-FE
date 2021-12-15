@@ -152,6 +152,7 @@ dependencies:
   flustars: ^2.0.1
   dio_smart_retry: ^1.0.3
   flutter_smart_dialog: ^3.0.11
+  sqflite_common_ffi: ^2.1.0
 #   flutter_app_restart: ^1.0.0
 
 dev_dependencies:
