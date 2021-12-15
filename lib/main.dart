@@ -4,14 +4,13 @@ import 'dart:ui';
 
 import 'package:device_preview/device_preview.dart';
 import 'package:fehviewer/common/controller/auto_lock_controller.dart';
-import 'package:fehviewer/fehviewer.dart';
 import 'package:fehviewer/common/service/ehconfig_service.dart';
 import 'package:fehviewer/common/service/locale_service.dart';
 import 'package:fehviewer/common/service/log_service.dart';
 import 'package:fehviewer/common/service/theme_service.dart';
 import 'package:fehviewer/component/exception/error.dart';
+import 'package:fehviewer/fehviewer.dart';
 import 'package:fehviewer/route/app_pages.dart';
-import 'package:fehviewer/route/routes.dart';
 import 'package:fehviewer/store/get_store.dart';
 import 'package:firebase_analytics/observer.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -65,13 +64,19 @@ Future<void> main() async {
       debugPrint('EhErrorType.image509');
       return;
     }
-    debugPrint('runZonedGuarded: Caught error in my root zone.');
-    FirebaseCrashlytics.instance.recordError(error, stackTrace);
+    debugPrint(
+        'runZonedGuarded: Caught error in my root zone.\n$error\n$stackTrace');
+    if (!Platform.isWindows) {
+      FirebaseCrashlytics.instance.recordError(error, stackTrace);
+    }
   });
 }
 
 Future<void> _initializeFlutterFire() async {
   // Wait for Firebase to initialize
+  if (Platform.isWindows) {
+    return;
+  }
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );

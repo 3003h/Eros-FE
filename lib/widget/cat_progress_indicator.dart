@@ -22,9 +22,9 @@ class _CatProgressIndicatorState extends State<CatProgressIndicator> {
       ),
       child: CustomPaint(
         painter: _CircularProgressIndicatorPainter(
-          backgroundColor: Colors.white,
+          backgroundColor: null,
           valueColor: Colors.blue,
-          value: null, // may be null
+          value: 0.5, // may be null
           headValue: 1.0, //0~0.5  // 如果 widget.value 不为空，则忽略剩余的参数
           tailValue: 0.0, // 0.5~1.0
           offsetValue: 0.0,
@@ -94,6 +94,21 @@ class _CircularProgressIndicatorPainter extends CustomPainter {
   static const double _sweep = _twoPi - _epsilon;
   static const double _startAngle = -math.pi / 2.0;
 
+  final Color? catColor = Colors.orange;
+
+  Path createCatHeadPath(double radius, double strokeWidth, Path path) {
+    // 上半身所占角度 60度
+    final double radian = degree2Radian(60);
+
+    final double radiusIn = radius - strokeWidth / 2;
+
+    final double radiusOut = radius + strokeWidth / 2;
+
+    path.moveTo(0, -strokeWidth / 2);
+    path.lineTo(50, 50);
+    return path;
+  }
+
   @override
   void paint(Canvas canvas, Size size) {
     final Paint paint = Paint()
@@ -111,7 +126,10 @@ class _CircularProgressIndicatorPainter extends CustomPainter {
     if (value == null) // Indeterminate
       paint.strokeCap = StrokeCap.square;
 
-    canvas.drawArc(Offset.zero & size, arcStart, arcSweep, false, paint);
+    // canvas.drawArc(Offset.zero & size, arcStart, arcSweep, false, paint);
+    Path path = Path();
+    path = createCatHeadPath(50, 10, path);
+    canvas.drawPath(path, paint);
   }
 
   @override
@@ -125,4 +143,9 @@ class _CircularProgressIndicatorPainter extends CustomPainter {
         oldPainter.rotationValue != rotationValue ||
         oldPainter.strokeWidth != strokeWidth;
   }
+}
+
+/// 角度转弧度公式
+double degree2Radian(int degree) {
+  return math.pi * degree / 180;
 }
