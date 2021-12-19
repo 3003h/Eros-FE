@@ -123,7 +123,6 @@ class AppDio with DioMixin implements Dio {
           }
           ..maxConnectionsPerHost = dioConfig?.maxConnectionsPerHost
           ..idleTimeout = const Duration(seconds: 6);
-        ;
       };
 
       // 在其他插件添加完毕后再添加，以确保执行顺序正确
@@ -132,12 +131,14 @@ class AppDio with DioMixin implements Dio {
   }
 
   void setProxy(String proxy) {
+    logger.d('setProxy $proxy');
     (httpClientAdapter as DefaultHttpClientAdapter).onHttpClientCreate =
         (client) {
       // config the http client
       client.findProxy = (uri) {
         // proxy all request to localhost:8888
-        return 'PROXY $proxy';
+        return proxy;
+        // return 'SOCKS5 127.0.0.1:6153';
       };
       // you can also create a HttpClient to dio
       // return HttpClient();

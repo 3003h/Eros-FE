@@ -62,9 +62,14 @@ class GalleryItemSimpleWidget extends StatelessWidget {
               // tag
               const Spacer(),
               if (showTag)
-                TagListViewBox(
+                // TagListViewBox(
+                //   simpleTags:
+                //       galleryItemController.galleryItem.simpleTags ?? [],
+                // ),
+                TagWaterfallFlowViewBox(
                   simpleTags:
                       galleryItemController.galleryItem.simpleTags ?? [],
+                  crossAxisCount: 1,
                 ),
               const Spacer(),
               // 评分行

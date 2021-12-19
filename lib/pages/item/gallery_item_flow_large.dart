@@ -234,20 +234,4 @@ class GalleryItemFlowLarge extends StatelessWidget {
 
     return item;
   }
-
-  Container _buildSimpleTagsView() {
-    return Container(
-      padding: const EdgeInsets.fromLTRB(0, 8, 0, 8),
-      child: (galleryItemController.galleryItem.simpleTags?.length ?? 0) >= 5
-          ? TagWaterfallFlowViewBox(
-              simpleTags: galleryItemController.galleryItem.simpleTags ?? [],
-            )
-          : ClipRRect(
-              borderRadius: BorderRadius.circular(4),
-              child: TagListViewBox(
-                simpleTags: galleryItemController.galleryItem.simpleTags ?? [],
-              ),
-            ),
-    );
-  }
 }

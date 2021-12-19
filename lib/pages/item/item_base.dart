@@ -2,7 +2,6 @@ import 'package:fehviewer/common/service/ehconfig_service.dart';
 import 'package:fehviewer/models/base/eh_models.dart';
 import 'package:fehviewer/utils/utility.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:keframe/frame_separate_widget.dart';
 import 'package:waterfall_flow/waterfall_flow.dart';
@@ -70,7 +69,7 @@ class TagWaterfallFlowViewBox extends StatelessWidget {
     return ClipRRect(
       borderRadius: BorderRadius.circular(4),
       child: SizedBox(
-        height: crossAxisCount * 20,
+        height: crossAxisCount * 22 - 4,
         child: WaterfallFlow.builder(
           shrinkWrap: true,
           controller: controller,
