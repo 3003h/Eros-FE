@@ -8,6 +8,7 @@ import 'package:extended_image/extended_image.dart';
 import 'package:fehviewer/const/const.dart';
 import 'package:fehviewer/const/storages.dart';
 import 'package:fehviewer/models/index.dart';
+import 'package:fehviewer/models/profile.dart';
 import 'package:fehviewer/network/app_dio/http_config.dart';
 import 'package:fehviewer/network/gallery_request.dart';
 import 'package:fehviewer/store/floor/database.dart';
@@ -32,6 +33,7 @@ import 'package:path_provider/path_provider.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:sqflite_common/sqlite_api.dart';
 import 'package:sqflite_common_ffi/sqflite_ffi.dart';
+import 'package:system_proxy/system_proxy.dart';
 
 const int kProxyPort = 4041;
 
@@ -128,6 +130,14 @@ class Global {
       databaseFactory = databaseFactoryFfi;
     }
 
+    if (GetPlatform.isMobile) {
+      // the proxy value likes:  {port: 8899, host: 127.0.0.1}
+      Map<String, String>? proxy = await SystemProxy.getProxySettings();
+      if (proxy != null) {
+        print('proxy $proxy');
+      }
+    }
+
     //statusBar设置为透明，去除半透明遮罩
     SystemChrome.setSystemUIOverlayStyle(
         const SystemUiOverlayStyle(statusBarColor: Colors.transparent));
@@ -142,9 +152,7 @@ class Global {
         ? (await getExternalStorageDirectory())?.path ?? ''
         : '';
 
-    if (!Platform.isWindows) {
-      packageInfo = await PackageInfo.fromPlatform();
-    }
+    packageInfo = await PackageInfo.fromPlatform();
 
     initLogger();
     if (!inDebugMode) {

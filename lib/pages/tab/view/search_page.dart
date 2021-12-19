@@ -5,10 +5,7 @@ import 'package:extended_sliver/extended_sliver.dart';
 import 'package:fehviewer/common/controller/tag_trans_controller.dart';
 import 'package:fehviewer/common/service/depth_service.dart';
 import 'package:fehviewer/common/service/theme_service.dart';
-import 'package:fehviewer/const/const.dart';
-import 'package:fehviewer/extension.dart';
-import 'package:fehviewer/generated/l10n.dart';
-import 'package:fehviewer/models/index.dart';
+import 'package:fehviewer/fehviewer.dart';
 import 'package:fehviewer/pages/filter/filter.dart';
 import 'package:fehviewer/pages/gallery/view/gallery_widget.dart';
 import 'package:fehviewer/pages/tab/controller/search_page_controller.dart';
@@ -16,8 +13,6 @@ import 'package:fehviewer/pages/tab/view/gallery_base.dart';
 import 'package:fehviewer/pages/tab/view/tab_base.dart';
 import 'package:fehviewer/utils/cust_lib/persistent_header_builder.dart';
 import 'package:fehviewer/utils/cust_lib/sliver/sliver_persistent_header.dart';
-import 'package:fehviewer/utils/logger.dart';
-import 'package:fehviewer/utils/vibrate.dart';
 import 'package:fehviewer/widget/refresh.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -100,13 +95,15 @@ class _GallerySearchPageState extends State<GallerySearchPage> {
   @override
   Widget build(BuildContext context) {
     final Widget cpf = CupertinoPageScaffold(
-      navigationBar: GetPlatform.isAndroid ? getNavigationBar(context) : null,
+      navigationBar: GetPlatform.isAndroid || GetPlatform.isDesktop
+          ? getNavigationBar(context)
+          : null,
       child: CupertinoScrollbar(
         scrollbarOrientation: ScrollbarOrientation.right,
         controller: PrimaryScrollController.of(context),
         child: Column(
           children: [
-            if (GetPlatform.isAndroid)
+            if (GetPlatform.isAndroid || GetPlatform.isDesktop)
               SafeArea(
                 bottom: false,
                 child: Container(

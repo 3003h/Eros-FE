@@ -582,15 +582,11 @@ class TagBox extends StatelessWidget {
                   final String? _text = _ehConfigService.isTagTranslat
                       ? _simpleTag.translat
                       : _simpleTag.text;
-                  return FrameSeparateWidget(
-                    placeHolder: const TagItem(text: ''),
-                    index: -1,
-                    child: TagItem(
-                      text: _text,
-                      color: ColorsUtil.getTagColor(_simpleTag.color),
-                      backgrondColor:
-                          ColorsUtil.getTagColor(_simpleTag.backgrondColor),
-                    ),
+                  return TagItem(
+                    text: _text,
+                    color: ColorsUtil.getTagColor(_simpleTag.color),
+                    backgrondColor:
+                        ColorsUtil.getTagColor(_simpleTag.backgrondColor),
                   );
                 }).toList()), //要显示的子控件集合
               ),
