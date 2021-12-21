@@ -20,17 +20,18 @@ void showToast(
         boxShadow: [
           BoxShadow(
             color: CupertinoDynamicColor.resolve(
-                    CupertinoColors.systemGrey, Get.context!)
-                .withOpacity(0.1),
-            offset: const Offset(0, 5),
+                    CupertinoColors.systemGrey4, Get.context!)
+                .withOpacity(1.0),
+            offset: const Offset(0, 3),
             blurRadius: 10, //阴影模糊程度
-            spreadRadius: 3, //阴影扩散程度
+            spreadRadius: 2, //阴影扩散程度
           ),
         ],
       ),
       child: CupertinoPopupSurface(
         child: Container(
           padding: const EdgeInsets.all(10),
+          color: CupertinoTheme.of(Get.context!).barBackgroundColor,
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [

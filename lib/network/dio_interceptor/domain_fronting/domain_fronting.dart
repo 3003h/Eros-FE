@@ -58,7 +58,7 @@ class DomainFronting {
   }
 
   Future<String?> lookup(String hostname) async {
-    logger.v('hostname: ${hostname}');
+    logger.v('hostname: $hostname');
     if (hosts.containsKey(hostname)) {
       return Future.value(hosts[hostname]);
     }

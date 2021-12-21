@@ -13,26 +13,22 @@ const String _regExpHost =
     r'^(?=^.{3,255}$)[a-zA-Z0-9][-a-zA-Z0-9]{0,62}(\.[a-zA-Z0-9][-a-zA-Z0-9]{0,62})+$';
 
 class DnsService extends ProfileService {
-  // RxBool enableCustomHosts = false.obs;
   final _enableCustomHosts = false.obs;
   bool get enableCustomHosts => _enableCustomHosts.value;
   set enableCustomHosts(bool val) => _enableCustomHosts.value = val;
 
-  // RxBool enableDoH = false.obs;
   final _enableDoH = false.obs;
   bool get enableDoH => _enableDoH.value;
   set enableDoH(bool val) => _enableDoH.value = val;
 
-  // RxBool enableDomainFronting = false.obs;
   final _enableDomainFronting = false.obs;
   bool get enableDomainFronting => _enableDomainFronting.value;
   set enableDomainFronting(bool val) => _enableDomainFronting.value = val;
 
   final RxList<DnsCache> _hosts = <DnsCache>[].obs;
-  final RxList<DnsCache> _dohCache = <DnsCache>[].obs;
-
   RxList<DnsCache> get hosts => _hosts;
 
+  final RxList<DnsCache> _dohCache = <DnsCache>[].obs;
   RxList<DnsCache> get dohCache => _dohCache;
 
   Map<String, String> get hostMap {
@@ -45,6 +41,7 @@ class DnsService extends ProfileService {
     return _map;
   }
 
+  /// 合并 内置host以及自定义host列表
   Map<String, String> get hostMapMerge {
     final coutomHosts = hostMap;
 
@@ -86,7 +83,6 @@ class DnsService extends ProfileService {
           addrs: [],
         ));
       } else {
-        // _hosts[index].addr = addr;
         _hosts[index] = _hosts[index].copyWith(addr: addr);
       }
 

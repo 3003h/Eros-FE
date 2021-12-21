@@ -1,15 +1,10 @@
-// import 'package:cached_network_image/cached_network_image.dart';
+import 'dart:ui';
+
 import 'package:fehviewer/common/controller/tag_trans_controller.dart';
 import 'package:fehviewer/common/service/depth_service.dart';
-import 'package:fehviewer/const/const.dart';
-import 'package:fehviewer/extension.dart';
-import 'package:fehviewer/generated/l10n.dart';
+import 'package:fehviewer/fehviewer.dart';
 import 'package:fehviewer/pages/gallery/controller/taginfo_controller.dart';
-import 'package:fehviewer/route/navigator_util.dart';
 import 'package:fehviewer/store/floor/entity/tag_translat.dart';
-import 'package:fehviewer/utils/logger.dart';
-import 'package:fehviewer/utils/vibrate.dart';
-import 'package:fehviewer/widget/eh_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_markdown/flutter_markdown.dart';
@@ -98,8 +93,18 @@ Future<void> showTagInfoDialog(String text,
             return Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(translate),
-                Text('$type:$text', style: const TextStyle(fontSize: 12)),
+                Text(
+                  translate,
+                  textAlign: TextAlign.start,
+                ),
+                Text(
+                  '$type:$text',
+                  style: const TextStyle(
+                    fontSize: 12,
+                    fontStyle: FontStyle.italic,
+                  ),
+                  textAlign: TextAlign.start,
+                ),
               ],
             );
           } else {
@@ -197,10 +202,10 @@ class _TagDialogViewState extends State<TagDialogView> {
                             code: theme.textTheme.textStyle.copyWith(
                                 backgroundColor: Colors.transparent,
                                 // decoration: TextDecoration.underline,
-                                // backgroundColor:
-                                //     CupertinoColors.activeOrange.withOpacity(0.5),
                                 // decorationStyle: TextDecorationStyle.dashed,
-                                color: CupertinoColors.activeOrange,
+                                // backgroundColor: CupertinoColors.activeOrange
+                                //     .withOpacity(0.5),
+                                color: CupertinoColors.systemPink,
                                 fontSize:
                                     theme.textTheme.textStyle.fontSize! * 0.8,
                                 fontFamilyFallback:
@@ -216,9 +221,6 @@ class _TagDialogViewState extends State<TagDialogView> {
                                 );
                               },
                             );
-                            // return NetworkExtendedImage(
-                            //   url: uri.toString(),
-                            // );
                           },
                         ),
                         const SizedBox(height: 12),
@@ -228,6 +230,12 @@ class _TagDialogViewState extends State<TagDialogView> {
                           onTapLink: (String text, String? href, String title) {
                             _onOpen(context, href);
                           },
+                          styleSheet: MarkdownStyleSheet(
+                            a: const TextStyle(
+                              color: CupertinoColors.activeBlue,
+                              decoration: TextDecoration.underline,
+                            ),
+                          ),
                           styleSheetTheme:
                               MarkdownStyleSheetBaseTheme.cupertino,
                         ),

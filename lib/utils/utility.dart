@@ -41,6 +41,30 @@ Future<void> requestManageExternalStoragePermission() async {
   }
 }
 
+/// 计算文本 Size
+Size getTextSize(
+  String text,
+  TextStyle style, {
+  int maxLines = 1,
+  TextDirection textDirection = TextDirection.ltr,
+  double minWidth = 0.0,
+  double maxWidth = double.infinity,
+}) {
+  TextPainter painter = TextPainter(
+    ///AUTO：华为手机如果不指定locale的时候，该方法算出来的文字高度是比系统计算偏小的。
+    locale: WidgetsBinding.instance!.window.locale,
+    text: TextSpan(text: text, style: style),
+    textDirection: textDirection,
+    maxLines: maxLines,
+    ellipsis: '...',
+  );
+  painter.layout(
+    maxWidth: maxWidth,
+    minWidth: minWidth,
+  );
+  return painter.size;
+}
+
 T radomList<T>(Iterable<T> srcList) {
   final index = Random().nextInt(srcList.length);
   return srcList.toList()[index];
