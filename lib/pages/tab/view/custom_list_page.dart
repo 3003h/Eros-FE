@@ -26,7 +26,7 @@ const Border _kDefaultNavBarBorder = Border(
   ),
 );
 
-const double kTopTabbarHeight = 44.0;
+const double kTopTabbarHeight = 40.0;
 
 class CustomList extends StatefulWidget {
   const CustomList({Key? key, this.costomListTag}) : super(key: key);
@@ -55,7 +55,6 @@ class _CustomListState extends State<CustomList> {
 
   Widget _buildTopBar(
       BuildContext context, double offset, double maxExtentCallBackValue) {
-    // logger.v('offset $offset');
     double iconOpacity = 0.0;
     final transparentOffset = maxExtentCallBackValue - 60;
     if (offset < transparentOffset) {
@@ -90,25 +89,23 @@ class _CustomListState extends State<CustomList> {
                     border: _kDefaultNavBarBorder,
                   ),
                   padding: EdgeInsets.only(
-                    left: 8 + context.mediaQueryPadding.left,
-                    right: 8 + context.mediaQueryPadding.right,
+                    left: context.mediaQueryPadding.left,
+                    right: context.mediaQueryPadding.right,
                   ),
                   child: Row(
                     children: [
                       Expanded(
                         child: Container(
-                          padding:
-                              const EdgeInsets.only(left: 4, top: 4, bottom: 4),
                           height: kTopTabbarHeight,
                           child: LinkScrollBar(
                             width: context.mediaQuery.size.width,
-                            titleList: [
-                              '😇😇测试😇',
-                              '奇奇怪怪的东西🤪',
-                              '自定义测试2🧐',
-                              '列表🤓',
+                            titleList: const [
+                              '测试',
+                              '奇奇怪怪的东西',
+                              '自定义测试2',
                               '列表',
-                              '😱列表',
+                              '列表',
+                              '列表',
                               '列表',
                               '列表',
                               '列表',

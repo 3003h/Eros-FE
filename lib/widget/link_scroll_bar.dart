@@ -1,9 +1,12 @@
-import 'dart:async';
 import 'dart:math';
 
 import 'package:fehviewer/fehviewer.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/scheduler.dart';
+
+const kDuration = Duration(milliseconds: 300);
+const kLineHeight = 4.0;
 
 class LinkScrollBar extends StatefulWidget {
   const LinkScrollBar({
@@ -11,11 +14,15 @@ class LinkScrollBar extends StatefulWidget {
     required this.titleList,
     required this.selectIndex,
     required this.width,
+    this.lineHeight = kLineHeight,
+    this.itemPadding = const EdgeInsets.only(left: 10, right: 10),
   }) : super(key: key);
 
   final List<String> titleList;
   final int selectIndex;
   final double width;
+  final double lineHeight;
+  final EdgeInsetsGeometry itemPadding;
 
   @override
   State<LinkScrollBar> createState() => _LinkScrollBarState();
@@ -25,15 +32,20 @@ class _LinkScrollBarState extends State<LinkScrollBar> {
   int selectIndex = 0;
   List<ChannelFrame> channelFrameList = [];
   double _maxScrollViewWidth = 0;
+  double _linePositionedLeft = 0;
+  double _lineWidth = 0.0;
   final ScrollController _scrollController = ScrollController();
 
   List<Widget> _getBarItems(BuildContext context) {
     List<Widget> _barItems = [];
+    _maxScrollViewWidth = 0;
+
     for (int i = 0; i < widget.titleList.length; i++) {
       final genneralChannelItem = GenneralChannelItem(
-        name: widget.titleList[i],
-        index: i,
-        currentSelectIndex: selectIndex,
+        title: widget.titleList[i],
+        selected: i == selectIndex,
+        lineHeight: 0.0,
+        padding: widget.itemPadding,
       );
 
       final barItem = NotificationListener<WSLGetWidgetWithNotification>(
@@ -44,17 +56,20 @@ class _LinkScrollBarState extends State<LinkScrollBar> {
           //保存所有ChannelFrame值，以便当外部修改viewPage的index值时或者点击item时进行修改scrollview偏移量
           channelFrameList.add(channelFrame);
           _maxScrollViewWidth += genneralChannelItem.width;
+
           //返回 false 消息到此结束，不再继续往外传递
           return false;
         },
         child: GestureDetector(
+          behavior: HitTestBehavior.opaque,
           child: genneralChannelItem,
           onTap: () {
             logger.d('tap $i');
             setState(() {
               selectIndex = i;
               // WSLCustomTabbarNotification(index: selectIndex).dispatch(context);
-              eventBus.fire(WSLChannelScrollViewNeedScrollEvent(selectIndex));
+              // eventBus.fire(WSLChannelScrollViewNeedScrollEvent(selectIndex));
+              scrollToItem(selectIndex);
             });
           },
         ),
@@ -65,69 +80,100 @@ class _LinkScrollBarState extends State<LinkScrollBar> {
     return _barItems;
   }
 
-  late StreamSubscription _needChangeScrollviewEvent;
+  void scrollToItem(int index) {
+    ChannelFrame channelFrame = channelFrameList[index];
+
+    _linePositionedLeft = channelFrame.left + widget.itemPadding.horizontal / 2;
+    _lineWidth = channelFrame.width - widget.itemPadding.horizontal;
+
+    //计算选中的导航item的中心点
+    double centerX = channelFrame.left + channelFrame.width / 2.0;
+    //设定需要滚动的偏移量
+    double needScrollView = 0;
+    //当选中的导航item在中心偏左时
+    if (centerX - _scrollController.offset < widget.width / 2.0) {
+      needScrollView = widget.width / 2.0 - centerX + _scrollController.offset;
+      //存在滚动条件
+      if (_scrollController.offset > 0) {
+        //当无法满足滚动到正中心的位置，就直接回到偏移量原点
+        if (_scrollController.offset < needScrollView) {
+          needScrollView = _scrollController.offset;
+        }
+        //进行偏移量动画滚动
+        _scrollController.animateTo(_scrollController.offset - needScrollView,
+            duration: kDuration, curve: Curves.ease);
+      }
+    } else {
+      //当选中的导航item在中心偏右时
+      needScrollView = centerX - _scrollController.offset - widget.width / 2.0;
+      if (_scrollController.position.maxScrollExtent -
+              _scrollController.offset >
+          0) {
+        //不满足回滚到中间位置，设置为滚到最大位置
+        if (_scrollController.position.maxScrollExtent -
+                _scrollController.offset <
+            needScrollView) {
+          needScrollView = _scrollController.position.maxScrollExtent -
+              _scrollController.offset;
+        }
+        _scrollController.animateTo(_scrollController.offset + needScrollView,
+            duration: kDuration, curve: Curves.ease);
+      }
+    }
+  }
 
   @override
   void initState() {
     super.initState();
+    logger.d('initState');
     selectIndex = widget.selectIndex;
-
-    _needChangeScrollviewEvent =
-        eventBus.on<WSLChannelScrollViewNeedScrollEvent>().listen((event) {
-      logger.d('index:${event.index}');
-      ChannelFrame channelFrame = channelFrameList[event.index];
-      //计算选中的导航item的中心点
-      double centerX = channelFrame.left + channelFrame.width / 2.0;
-      //设定需要滚动的偏移量
-      double needScrollView = 0;
-      //当选中的导航item在中心偏左时
-      if (centerX - _scrollController.offset < widget.width / 2.0) {
-        needScrollView =
-            widget.width / 2.0 - centerX + _scrollController.offset;
-        //存在滚动条件
-        if (_scrollController.offset > 0) {
-          //当无法满足滚动到正中心的位置，就直接回到偏移量原点
-          if (_scrollController.offset < needScrollView) {
-            needScrollView = _scrollController.offset;
-          }
-          //进行偏移量动画滚动
-          _scrollController.animateTo(_scrollController.offset - needScrollView,
-              duration: const Duration(milliseconds: 260), curve: Curves.ease);
-        }
-      } else {
-        //当选中的导航item在中心偏右时
-        needScrollView =
-            centerX - _scrollController.offset - widget.width / 2.0;
-        if (_scrollController.position.maxScrollExtent -
-                _scrollController.offset >
-            0) {
-          //不满足回滚到中间位置，设置为滚到最大位置
-          if (_scrollController.position.maxScrollExtent -
-                  _scrollController.offset <
-              needScrollView) {
-            needScrollView = _scrollController.position.maxScrollExtent -
-                _scrollController.offset;
-          }
-          _scrollController.animateTo(_scrollController.offset + needScrollView,
-              duration: const Duration(milliseconds: 260), curve: Curves.ease);
-        }
-      }
-    });
-  }
-
-  @override
-  void dispose() {
-    _needChangeScrollviewEvent.cancel();
-    super.dispose();
+    _linePositionedLeft = widget.itemPadding.horizontal / 2;
+    // 初始计算
+    SchedulerBinding.instance?.addPostFrameCallback(
+        (_) => Future.delayed(const Duration(milliseconds: 100)).then((value) {
+              scrollToItem(widget.selectIndex);
+              setState(() {});
+            }));
   }
 
   @override
   Widget build(BuildContext context) {
+    final scrollViewWidth = _maxScrollViewWidth;
+
     return SingleChildScrollView(
       controller: _scrollController,
       scrollDirection: Axis.horizontal,
-      child: Row(
-        children: _getBarItems(context),
+      child: Column(
+        children: [
+          Expanded(
+            child: Row(
+              children: _getBarItems(context),
+            ),
+          ),
+          Stack(
+            children: [
+              SizedBox(height: widget.lineHeight, width: scrollViewWidth),
+              AnimatedPositioned(
+                left: _linePositionedLeft,
+                child: AnimatedContainer(
+                  height: widget.lineHeight,
+                  width: _lineWidth,
+                  decoration: BoxDecoration(
+                    color: CupertinoColors.activeBlue,
+                    borderRadius: BorderRadius.only(
+                      topLeft: Radius.circular(widget.lineHeight * 3 / 4),
+                      topRight: Radius.circular(widget.lineHeight * 3 / 4),
+                    ),
+                  ),
+                  duration: kDuration,
+                  curve: Curves.ease,
+                ),
+                duration: kDuration,
+                curve: Curves.ease,
+              ),
+            ],
+          ),
+        ],
       ),
     );
   }
@@ -135,57 +181,64 @@ class _LinkScrollBarState extends State<LinkScrollBar> {
 
 //导航栏item组件封装
 class GenneralChannelItem extends StatelessWidget {
-  GenneralChannelItem({
-    required this.name,
-    required this.index,
-    required this.currentSelectIndex,
-    this.left = 10,
-    this.right = 10,
+  const GenneralChannelItem({
+    required this.title,
+    this.selected = false,
+    this.lineHeight = 4.0,
+    this.padding,
   });
 
-  String name;
-  int index;
-  int currentSelectIndex;
-  double left;
-  double right;
-  double width = 0; //记录宽度
+  final String title;
+  final EdgeInsetsGeometry? padding;
+  final bool selected;
+  final double lineHeight;
+
+  double get width {
+    return getTextSize(title, style).width + (padding?.horizontal ?? 0);
+  }
+
+  TextStyle get style => TextStyle(
+        fontSize: selected ? 14.0 : 14.0,
+        color: selected ? CupertinoColors.activeBlue : null,
+        fontWeight: selected ? FontWeight.bold : FontWeight.normal,
+      );
 
   @override
   Widget build(BuildContext context) {
     TextStyle style = TextStyle(
-      fontSize: index == currentSelectIndex ? 14.0 : 14.0,
-      color: index == currentSelectIndex ? CupertinoColors.activeBlue : null,
-      fontWeight:
-          index == currentSelectIndex ? FontWeight.bold : FontWeight.normal,
+      fontSize: selected ? 14.0 : 14.0,
+      color: selected ? CupertinoColors.activeBlue : null,
+      fontWeight: selected ? FontWeight.bold : FontWeight.normal,
     );
-    //计算宽度
-    width = getTextSize(name, style).width + left + right;
 
     WSLGetWidgetWithNotification(width: width).dispatch(context);
 
     return Container(
-      padding: EdgeInsets.only(left: left, right: right),
+      padding: padding,
       child: Column(
         mainAxisSize: MainAxisSize.max,
         mainAxisAlignment: MainAxisAlignment.center,
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          Spacer(),
+          const Spacer(),
           Text(
-            name,
+            title,
             style: style,
           ),
-          Spacer(),
-          ClipRRect(
-            borderRadius: BorderRadius.circular(2.0),
-            child: Container(
-              color: index == currentSelectIndex
-                  ? CupertinoColors.activeBlue
-                  : Colors.transparent,
-              height: 4,
-              width: max(10, width / 2),
+          const Spacer(),
+          if (false)
+            ClipRRect(
+              borderRadius: BorderRadius.only(
+                topLeft: Radius.circular(lineHeight * 3 / 4),
+                topRight: Radius.circular(lineHeight * 3 / 4),
+              ),
+              child: Container(
+                color:
+                    selected ? CupertinoColors.activeBlue : Colors.transparent,
+                height: lineHeight,
+                width: max(10, width / 2),
+              ),
             ),
-          )
         ],
       ),
     );
@@ -194,6 +247,7 @@ class GenneralChannelItem extends StatelessWidget {
 
 class WSLChannelScrollViewNeedScrollEvent {
   WSLChannelScrollViewNeedScrollEvent(this.index);
+
   int index = 0;
 }
 
@@ -211,6 +265,7 @@ class WSLGetWidgetWithNotification extends Notification {
 
 class ChannelFrame {
   ChannelFrame({this.left = 0, this.width = 0});
+
   double left; //距离左侧距离
   double width; //item宽度
 }

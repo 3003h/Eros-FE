@@ -28,6 +28,7 @@ import 'package:fehviewer/pages/setting/view/login_webdav.dart';
 import 'package:fehviewer/pages/setting/view_setting_page.dart';
 import 'package:fehviewer/pages/setting/webdav_setting_page.dart';
 import 'package:fehviewer/pages/tab/bindings/splash_binding.dart';
+import 'package:fehviewer/pages/tab/view/custom_list_page.dart';
 import 'package:fehviewer/pages/tab/view/download_page.dart';
 import 'package:fehviewer/pages/tab/view/empty.dart';
 import 'package:fehviewer/pages/tab/view/favorite_page.dart';
@@ -216,6 +217,10 @@ class AppPages {
     GetPage(
       name: EHRoutes.loginWebDAV,
       page: () => const LoginWebDAV(),
+    ),
+    GetPage(
+      name: EHRoutes.coutomlist,
+      page: () => const CustomList(),
     ),
   ];
 }

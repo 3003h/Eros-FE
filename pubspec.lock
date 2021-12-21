@@ -392,7 +392,7 @@ packages:
       name: drift
       url: "https://pub.flutter-io.cn"
     source: hosted
-    version: "1.1.0"
+    version: "1.0.1"
   easy_animated_tabbar:
     dependency: "direct main"
     description:
@@ -1473,7 +1473,7 @@ packages:
       name: sqflite_common
       url: "https://pub.flutter-io.cn"
     source: hosted
-    version: "2.1.0"
+    version: "2.0.1+1"
   sqflite_common_ffi:
     dependency: "direct main"
     description:
@@ -1797,5 +1797,5 @@ packages:
     source: hosted
     version: "0.2.1"
 sdks:
-  dart: ">=2.15.0 <3.0.0"
+  dart: ">=2.14.0 <3.0.0"
   flutter: ">=2.5.0"

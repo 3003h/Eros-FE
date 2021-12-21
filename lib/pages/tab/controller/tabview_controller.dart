@@ -16,8 +16,6 @@ import 'package:fehviewer/utils/logger.dart';
 import 'package:fehviewer/utils/toast.dart';
 import 'package:fehviewer/widget/refresh.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
 
 import '../comm.dart';
@@ -543,7 +541,7 @@ class TabViewController extends GetxController
                         style: TextStyle(
                           color: CupertinoDynamicColor.resolve(
                               CupertinoColors.label, Get.context!),
-                          fontWeight: FontWeight.w500,
+                          fontWeight: FontWeight.normal,
                           // fontSize: 12,
                         ),
                       ),

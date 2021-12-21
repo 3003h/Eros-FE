@@ -85,6 +85,7 @@ Map<String, bool> kDefTabMap = <String, bool>{
   EHRoutes.toplist: false,
   EHRoutes.download: true,
   EHRoutes.history: false,
+  EHRoutes.coutomlist: false,
 };
 
 // 默认显示顺序 ?
