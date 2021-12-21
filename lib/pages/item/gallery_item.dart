@@ -89,11 +89,11 @@ class GalleryItemWidget extends StatelessWidget {
                 : [
                     BoxShadow(
                       color: CupertinoDynamicColor.resolve(
-                              CupertinoColors.systemGrey5, Get.context!)
+                              CupertinoColors.systemGrey4, Get.context!)
                           .withOpacity(1.0),
-                      blurRadius: 10,
-                      // spreadRadius: 2,
-                      offset: const Offset(2, 4),
+                      blurRadius: 8,
+                      // spreadRadius: 1,
+                      offset: const Offset(0.5, 4),
                     )
                   ],
             color: galleryItemController.colorTap.value,
@@ -255,7 +255,7 @@ class _CoverImage extends StatelessWidget {
         'w:${_item.imgWidth} h:${_item.imgHeight}\n'
         'cW:$coverImageWidth  cH:$coverImageHeigth');
 
-    final containRatio = (coverImageHeigth ?? 0) / (coverImageWidth);
+    final containRatio = (coverImageHeigth ?? 0) / coverImageWidth;
 
     BoxFit _fit = BoxFit.contain;
 
@@ -296,7 +296,7 @@ class _CoverImage extends StatelessWidget {
         child: HeroMode(
           enabled: !isLayoutLarge,
           child: Hero(
-            tag: '${_item.gid}_cover_${tabTag}',
+            tag: '${_item.gid}_cover_$tabTag',
             child: image,
           ),
         ),
