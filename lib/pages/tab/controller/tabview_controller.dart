@@ -130,18 +130,6 @@ class TabViewController extends GetxController
     }
   }
 
-  void srcollToTop(BuildContext context) {
-    PrimaryScrollController.of(context)?.animateTo(0.0,
-        duration: const Duration(milliseconds: 500), curve: Curves.ease);
-  }
-
-  void srcollToTopRefresh(BuildContext context) {
-    PrimaryScrollController.of(context)?.animateTo(
-        -kDefaultRefreshTriggerPullDistance,
-        duration: const Duration(milliseconds: 500),
-        curve: Curves.ease);
-  }
-
   FetchListClient getFetchListClient(FetchParams fetchParams) {
     return DefaultFetchListClient(fetchParams: fetchParams);
   }
@@ -607,12 +595,22 @@ class TabViewController extends GetxController
   void initStateForListPage({
     required BuildContext context,
     required EhTabController ehTabController,
+    String? tabTag,
+  }) {
+    initEhTabController(
+        context: context, ehTabController: ehTabController, tabTag: tabTag);
+
+    initStateAddPostFrameCallback(context);
+  }
+
+  void initEhTabController({
+    required BuildContext context,
+    required EhTabController ehTabController,
+    String? tabTag,
   }) {
     ehTabController.scrollToTopCall = () => srcollToTop(context);
     ehTabController.scrollToTopRefreshCall = () => srcollToTopRefresh(context);
-    tabPages.scrollControllerMap[tabTag] = ehTabController;
-
-    initStateAddPostFrameCallback(context);
+    tabPages.scrollControllerMap[tabTag ?? this.tabTag] = ehTabController;
   }
 
   void initStateAddPostFrameCallback(BuildContext context) {
@@ -634,5 +632,22 @@ class TabViewController extends GetxController
         }
       });
     });
+  }
+
+  void disposeScrollController(BuildContext context) {
+    final _scrollController = PrimaryScrollController.of(context);
+    _scrollController?.dispose();
+  }
+
+  void srcollToTop(BuildContext context) {
+    PrimaryScrollController.of(context)?.animateTo(0.0,
+        duration: const Duration(milliseconds: 500), curve: Curves.ease);
+  }
+
+  void srcollToTopRefresh(BuildContext context) {
+    PrimaryScrollController.of(context)?.animateTo(
+        -kDefaultRefreshTriggerPullDistance,
+        duration: const Duration(milliseconds: 500),
+        curve: Curves.ease);
   }
 }

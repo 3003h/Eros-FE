@@ -41,7 +41,7 @@ apply plugin: 'com.google.gms.google-services'
 apply plugin: 'com.google.firebase.crashlytics'
 
 android {
-    compileSdkVersion 31
+    compileSdkVersion 32
 
     sourceSets {
         main.java.srcDirs += 'src/main/kotlin'
@@ -54,7 +54,7 @@ android {
     defaultConfig {
         applicationId "com.honjow.fehviewer"
         minSdkVersion 21
-        targetSdkVersion 31
+        targetSdkVersion 32
 //        multiDexEnabled true
         versionCode flutterVersionCode.toInteger()
         versionName flutterVersionName
