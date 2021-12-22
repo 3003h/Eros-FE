@@ -1,22 +1,18 @@
 import 'package:blur/blur.dart';
+import 'package:english_words/english_words.dart';
 import 'package:extended_nested_scroll_view/extended_nested_scroll_view.dart';
 import 'package:fehviewer/fehviewer.dart';
 import 'package:fehviewer/pages/tab/controller/custom_list_controller.dart';
+import 'package:fehviewer/pages/tab/controller/custom_sublist_controller.dart';
 import 'package:fehviewer/pages/tab/view/gallery_base.dart';
 import 'package:fehviewer/pages/tab/view/tab_base.dart';
-import 'package:fehviewer/utils/cust_lib/persistent_header_builder.dart';
-import 'package:fehviewer/utils/cust_lib/sliver/sliver_persistent_header.dart';
 import 'package:fehviewer/widget/refresh.dart';
 import 'package:flutter/cupertino.dart' hide CupertinoTabBar;
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:keframe/size_cache_widget.dart';
-import 'package:easy_animated_tabbar/easy_animated_tabbar.dart';
-import 'package:contained_tab_bar_view/contained_tab_bar_view.dart';
-import 'package:english_words/english_words.dart';
 
 import '../comm.dart';
-import 'constants.dart';
 import 'tab_base.dart';
 
 const Color _kDefaultNavBarBorderColor = Color(0x4D000000);
@@ -30,21 +26,6 @@ const Border _kDefaultNavBarBorder = Border(
 
 const double kTopTabbarHeight = 40.0;
 
-List<String> titleList = [
-  '测试',
-  '奇奇怪怪的东西',
-  '自定义测试2',
-  '列表',
-  '列表',
-  '列表',
-  '列表',
-  '列表',
-  '列表',
-  '只可意会',
-  '不可言传',
-  '点点点',
-];
-
 class CustomList extends StatefulWidget {
   const CustomList({Key? key, this.costomListTag}) : super(key: key);
 
@@ -55,7 +36,8 @@ class CustomList extends StatefulWidget {
 }
 
 class _CustomListState extends State<CustomList> {
-  late final CustomListController controller;
+  final CustomListController controller = Get.find();
+
   final EhTabController ehTabController = EhTabController();
   final LinkScrollBarController linkScrollBarController =
       LinkScrollBarController();
@@ -64,13 +46,6 @@ class _CustomListState extends State<CustomList> {
   @override
   void initState() {
     super.initState();
-
-    controller = Get.find<CustomListController>(tag: widget.costomListTag);
-
-    controller.initStateForListPage(
-      context: context,
-      ehTabController: ehTabController,
-    );
   }
 
   Widget _buildTopBar(
@@ -208,46 +183,11 @@ class _CustomListState extends State<CustomList> {
 
   @override
   Widget build(BuildContext context) {
-    final Widget scrollView = CustomScrollView(
-      cacheExtent: kTabViewCacheExtent,
-      physics: const AlwaysScrollableScrollPhysics(),
-      slivers: <Widget>[
-        SliverFloatingPinnedPersistentHeader(
-          delegate: SliverFloatingPinnedPersistentHeaderBuilder(
-            minExtentProtoType: SizedBox(
-              height: context.mediaQueryPadding.top + kTopTabbarHeight,
-            ),
-            maxExtentProtoType: SizedBox(
-                height: kMinInteractiveDimensionCupertino +
-                    context.mediaQueryPadding.top +
-                    kTopTabbarHeight),
-            builder: _buildTopBar,
-          ),
-        ),
-        EhCupertinoSliverRefreshControl(
-          onRefresh: () => controller.onRefresh(),
-        ),
-        SliverSafeArea(
-          top: false,
-          bottom: false,
-          sliver: _getGallerySliverList(),
-          // sliver: _getTabbar(),
-        ),
-        Obx(() {
-          return EndIndicator(
-            pageState: controller.pageState,
-            loadDataMore: controller.loadDataMore,
-          );
-        }),
-      ],
-    );
-
-    final wordList = generateWordPairs().take(100).toList();
     final headerMaxHeight = kMinInteractiveDimensionCupertino +
         context.mediaQueryPadding.top +
         kTopTabbarHeight;
 
-    final Widget scrollView2 = ExtendedNestedScrollView(
+    final Widget scrollView = ExtendedNestedScrollView(
       floatHeaderSlivers: true,
       onlyOneScrollInBody: true,
       headerSliverBuilder: (context, innerBoxIsScrolled) {
@@ -275,48 +215,22 @@ class _CustomListState extends State<CustomList> {
         return PageView(
           controller: pageController,
           children: [
-            CustomScrollView(
-              physics: const AlwaysScrollableScrollPhysics(),
-              slivers: [
-                SliverPadding(
-                    padding: EdgeInsets.only(
-                        top: context.mediaQueryPadding.top + kTopTabbarHeight),
-                    sliver: EhCupertinoSliverRefreshControl(
-                      onRefresh: () => controller.onRefresh(),
-                    )),
-                SliverSafeArea(
-                  top: false,
-                  bottom: false,
-                  sliver: _getGallerySliverList(),
-                  // sliver: _getTabbar(),
-                ),
-                Obx(() {
-                  return EndIndicator(
-                    pageState: controller.pageState,
-                    loadDataMore: controller.loadDataMore,
-                  );
-                }),
-              ],
-            ),
-            CustomScrollView(
-              physics: const AlwaysScrollableScrollPhysics(),
-              slivers: [
-                SliverOverlapInjector(
-                    handle:
-                        ExtendedNestedScrollView.sliverOverlapAbsorberHandleFor(
-                            context)),
-                SliverFixedExtentList(
-                    delegate: SliverChildBuilderDelegate((context, index) {
-                      return Text(wordList[index].asString);
-                    }, childCount: 100),
-                    itemExtent: 50.0),
-              ],
-            ),
-            ...titleList
+            // 画廊列表测试
+            ...controller.titles
+                .take(3)
+                .map((e) => _SubListView(
+                      costomListTag: e,
+                    ))
+                .toList(),
+            // 单词列表测试
+            const _EnglishWordList(),
+            ...controller.titles
                 .map((e) => Center(
                       child: Text(e),
                     ))
                 .toList()
+              ..removeAt(0)
+              ..removeAt(0)
               ..removeAt(0)
               ..removeAt(0)
           ],
@@ -329,21 +243,121 @@ class _CustomListState extends State<CustomList> {
 
     return CupertinoPageScaffold(
       // navigationBar: navigationBar,
-      child: SizeCacheWidget(child: scrollView2),
+      child: SizeCacheWidget(child: scrollView),
+    );
+  }
+}
+
+class _EnglishWordList extends StatefulWidget {
+  const _EnglishWordList({Key? key}) : super(key: key);
+
+  @override
+  _EnglishWordListState createState() => _EnglishWordListState();
+}
+
+class _EnglishWordListState extends State<_EnglishWordList>
+    with AutomaticKeepAliveClientMixin {
+  final CustomListController controller = Get.find();
+  final List<WordPair> wordList = [];
+
+  @override
+  void initState() {
+    super.initState();
+    wordList.addAll(generateWordPairs().take(100).toList());
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    super.build(context);
+    return CustomScrollView(
+      physics: const AlwaysScrollableScrollPhysics(),
+      slivers: [
+        SliverPadding(
+            padding: EdgeInsets.only(
+                top: context.mediaQueryPadding.top + kTopTabbarHeight),
+            sliver: EhCupertinoSliverRefreshControl(
+              onRefresh: () async {
+                await 1.seconds.delay();
+                wordList.clear();
+                wordList.addAll(generateWordPairs().take(100).toList());
+                setState(() {});
+              },
+            )),
+        SliverFixedExtentList(
+            delegate: SliverChildBuilderDelegate((context, index) {
+              return Text(wordList[index].asString);
+            }, childCount: wordList.length),
+            itemExtent: 50.0),
+      ],
+    );
+  }
+
+  @override
+  bool get wantKeepAlive => true;
+}
+
+class _SubListView extends StatefulWidget {
+  const _SubListView({Key? key, this.costomListTag}) : super(key: key);
+
+  final String? costomListTag;
+
+  @override
+  _SubListViewState createState() => _SubListViewState();
+}
+
+class _SubListViewState extends State<_SubListView>
+    with AutomaticKeepAliveClientMixin {
+  late final CustomSubListController subController;
+
+  @override
+  void initState() {
+    super.initState();
+    subController = Get.find<CustomSubListController>(tag: widget.costomListTag)
+      ..tabTag = widget.costomListTag ?? '';
+  }
+
+  @override
+  bool get wantKeepAlive => true;
+
+  @override
+  Widget build(BuildContext context) {
+    super.build(context);
+    return CustomScrollView(
+      physics: const AlwaysScrollableScrollPhysics(),
+      slivers: [
+        SliverPadding(
+            padding: EdgeInsets.only(
+                top: context.mediaQueryPadding.top + kTopTabbarHeight),
+            sliver: EhCupertinoSliverRefreshControl(
+              onRefresh: () => subController.onRefresh(),
+            )),
+        SliverSafeArea(
+          top: false,
+          bottom: false,
+          sliver: _getGallerySliverList(),
+          // sliver: _getTabbar(),
+        ),
+        Obx(() {
+          return EndIndicator(
+            pageState: subController.pageState,
+            loadDataMore: subController.loadDataMore,
+          );
+        }),
+      ],
     );
   }
 
   Widget _getGallerySliverList() {
-    return controller.obx(
+    return subController.obx(
         (List<GalleryItem>? state) {
           return getGallerySliverList(
             state,
-            controller.tabTag,
-            maxPage: controller.maxPage,
-            curPage: controller.curPage.value,
-            lastComplete: controller.lastComplete,
-            key: controller.sliverAnimatedListKey,
-            lastTopitemIndex: controller.lastTopitemIndex,
+            subController.tabTag,
+            maxPage: subController.maxPage,
+            curPage: subController.curPage.value,
+            lastComplete: subController.lastComplete,
+            key: subController.sliverAnimatedListKey,
+            lastTopitemIndex: subController.lastTopitemIndex,
           );
         },
         onLoading: SliverFillRemaining(
@@ -361,7 +375,7 @@ class _CustomListState extends State<CustomList> {
             child: Container(
               padding: const EdgeInsets.only(bottom: 50),
               child: GalleryErrorPage(
-                onTap: controller.reLoadDataFirst,
+                onTap: subController.reLoadDataFirst,
               ),
             ),
           );
