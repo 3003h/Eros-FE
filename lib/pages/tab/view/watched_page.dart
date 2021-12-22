@@ -250,7 +250,7 @@ class _WatchedListTabState extends State<WatchedListTab> {
   Widget _getGalleryList() {
     return controller.obx(
         (List<GalleryItem>? state) {
-          return getGalleryList(
+          return getGallerySliverList(
             state,
             controller.tabTag,
             maxPage: controller.maxPage,

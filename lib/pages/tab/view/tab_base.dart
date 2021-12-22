@@ -281,7 +281,7 @@ Widget buildGallerySliverListSimpleView(
   );
 }
 
-Widget getGalleryList(
+Widget getGallerySliverList(
   List<GalleryItem>? gallerItemBeans,
   tabTag, {
   int? maxPage,

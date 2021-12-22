@@ -5,24 +5,34 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 
+import 'link_scroll_bar_controller.dart';
+
 const kDuration = Duration(milliseconds: 300);
 const kLineHeight = 4.0;
 
+final LinkScrollBarController _defaultLinkScrollBarController =
+    LinkScrollBarController();
+
 class LinkScrollBar extends StatefulWidget {
-  const LinkScrollBar({
+  LinkScrollBar({
     Key? key,
+    LinkScrollBarController? controller,
     required this.titleList,
     required this.selectIndex,
     required this.width,
     this.lineHeight = kLineHeight,
     this.itemPadding = const EdgeInsets.only(left: 10, right: 10),
-  }) : super(key: key);
+    this.onItemChange,
+  })  : controller = controller ?? _defaultLinkScrollBarController,
+        super(key: key);
 
   final List<String> titleList;
   final int selectIndex;
   final double width;
   final double lineHeight;
   final EdgeInsetsGeometry itemPadding;
+  final LinkScrollBarController controller;
+  final ValueChanged<int>? onItemChange;
 
   @override
   State<LinkScrollBar> createState() => _LinkScrollBarState();
@@ -70,6 +80,7 @@ class _LinkScrollBarState extends State<LinkScrollBar> {
               // WSLCustomTabbarNotification(index: selectIndex).dispatch(context);
               // eventBus.fire(WSLChannelScrollViewNeedScrollEvent(selectIndex));
               scrollToItem(selectIndex);
+              widget.onItemChange?.call(selectIndex);
             });
           },
         ),
@@ -122,10 +133,23 @@ class _LinkScrollBarState extends State<LinkScrollBar> {
     }
   }
 
+  void bindController() {
+    widget.controller.scrollToItemCall = (index) {
+      logger.d('scrollToItem $index');
+      setState(() {
+        selectIndex = index;
+      });
+      scrollToItem(index);
+    };
+  }
+
   @override
   void initState() {
     super.initState();
     logger.d('initState');
+
+    bindController();
+
     selectIndex = widget.selectIndex;
     _linePositionedLeft = widget.itemPadding.horizontal / 2;
     // 初始计算
@@ -268,4 +292,35 @@ class ChannelFrame {
 
   double left; //距离左侧距离
   double width; //item宽度
+}
+
+class FooSliverPersistentHeaderDelegate extends SliverPersistentHeaderDelegate {
+  FooSliverPersistentHeaderDelegate({
+    required this.builder,
+    required this.maxHeight,
+    required this.minHeight,
+  });
+
+  final double minHeight;
+  final double maxHeight;
+
+  final Widget Function(
+      BuildContext context, double shrinkOffset, bool overlapsContent) builder;
+
+  @override
+  Widget build(
+          BuildContext context, double shrinkOffset, bool overlapsContent) =>
+      builder(context, shrinkOffset, overlapsContent);
+
+  @override
+  double get maxExtent => maxHeight;
+
+  @override
+  double get minExtent => minHeight;
+
+  @override
+  bool shouldRebuild(covariant SliverPersistentHeaderDelegate oldDelegate) {
+    return minHeight != oldDelegate.minExtent ||
+        maxHeight != oldDelegate.maxExtent;
+  }
 }

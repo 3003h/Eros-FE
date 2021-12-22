@@ -587,7 +587,7 @@ class _GallerySearchPageState extends State<GallerySearchPage> {
   Widget _getGalleryList() {
     return controller.obx(
       (List<GalleryItem>? state) {
-        return getGalleryList(
+        return getGallerySliverList(
           state,
           controller.tabIndex,
           maxPage: controller.maxPage,

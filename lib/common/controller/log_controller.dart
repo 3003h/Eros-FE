@@ -11,7 +11,7 @@ const _kMaxTime = Duration(days: 7);
 const _kFilenameFormat = 'yyyy-MM-dd HH:mm:ss';
 const _kSuffix = '.log';
 
-class LogService extends GetxService {
+class LogService extends GetxController {
   final RxList<File> _logFiles = <File>[].obs;
   List<File> get logFiles {
     return _logFiles.value;
@@ -72,6 +72,7 @@ class LogService extends GetxService {
             // logger.v('delete $_fileName');
             _logFile.delete();
           }
+          update();
         } catch (_) {}
 
         _files.add(_logFile);
