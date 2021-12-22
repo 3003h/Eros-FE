@@ -5,8 +5,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 
-import 'link_scroll_bar_controller.dart';
-
 const kDuration = Duration(milliseconds: 300);
 const kLineHeight = 4.0;
 
@@ -74,7 +72,7 @@ class _LinkScrollBarState extends State<LinkScrollBar> {
           behavior: HitTestBehavior.opaque,
           child: genneralChannelItem,
           onTap: () {
-            logger.d('tap $i');
+            widget.controller.disableScrollToItem();
             setState(() {
               selectIndex = i;
               // WSLCustomTabbarNotification(index: selectIndex).dispatch(context);
@@ -135,7 +133,6 @@ class _LinkScrollBarState extends State<LinkScrollBar> {
 
   void bindController() {
     widget.controller.scrollToItemCall = (index) {
-      logger.d('scrollToItem $index');
       setState(() {
         selectIndex = index;
       });

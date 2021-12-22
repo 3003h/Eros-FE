@@ -8,7 +8,6 @@ import 'package:fehviewer/pages/tab/view/gallery_base.dart';
 import 'package:fehviewer/pages/tab/view/tab_base.dart';
 import 'package:fehviewer/widget/refresh.dart';
 import 'package:flutter/cupertino.dart' hide CupertinoTabBar;
-import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:keframe/size_cache_widget.dart';
 
@@ -46,6 +45,85 @@ class _CustomListState extends State<CustomList> {
   @override
   void initState() {
     super.initState();
+  }
+
+  @override
+  void dispose() {
+    pageController.dispose();
+    linkScrollBarController.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final headerMaxHeight = kMinInteractiveDimensionCupertino +
+        context.mediaQueryPadding.top +
+        kTopTabbarHeight;
+
+    final Widget scrollView = ExtendedNestedScrollView(
+      floatHeaderSlivers: true,
+      onlyOneScrollInBody: true,
+      headerSliverBuilder: (context, innerBoxIsScrolled) {
+        return [
+          SliverOverlapAbsorber(
+            handle: ExtendedNestedScrollView.sliverOverlapAbsorberHandleFor(
+                context),
+            sliver: SliverPersistentHeader(
+              floating: true,
+              pinned: true,
+              delegate: FooSliverPersistentHeaderDelegate(
+                builder: (context, offset, _) => _buildTopBar(
+                  context,
+                  offset,
+                  headerMaxHeight,
+                ),
+                minHeight: context.mediaQueryPadding.top + kTopTabbarHeight,
+                maxHeight: headerMaxHeight,
+              ),
+            ),
+          )
+        ];
+      },
+      body: Builder(builder: (context) {
+        return GestureDetector(
+          onPanDown: (e) {
+            // 恢复启用 scrollToItem
+            linkScrollBarController.enableScrollToItem();
+          },
+          child: PageView(
+            controller: pageController,
+            children: [
+              // 画廊列表测试
+              ...controller.titles
+                  .take(3)
+                  .map((e) => _SubListView(
+                        costomListTag: e,
+                      ))
+                  .toList(),
+              // 单词列表测试
+              const _EnglishWordList(),
+              ...controller.titles
+                  .map((e) => Center(
+                        child: Text(e),
+                      ))
+                  .toList()
+                ..removeAt(0)
+                ..removeAt(0)
+                ..removeAt(0)
+                ..removeAt(0)
+            ],
+            onPageChanged: (index) {
+              linkScrollBarController.scrollToItem(index);
+            },
+          ),
+        );
+      }),
+    );
+
+    return CupertinoPageScaffold(
+      // navigationBar: navigationBar,
+      child: SizeCacheWidget(child: scrollView),
+    );
   }
 
   Widget _buildTopBar(
@@ -180,72 +258,6 @@ class _CustomListState extends State<CustomList> {
       ),
     );
   }
-
-  @override
-  Widget build(BuildContext context) {
-    final headerMaxHeight = kMinInteractiveDimensionCupertino +
-        context.mediaQueryPadding.top +
-        kTopTabbarHeight;
-
-    final Widget scrollView = ExtendedNestedScrollView(
-      floatHeaderSlivers: true,
-      onlyOneScrollInBody: true,
-      headerSliverBuilder: (context, innerBoxIsScrolled) {
-        return [
-          SliverOverlapAbsorber(
-            handle: ExtendedNestedScrollView.sliverOverlapAbsorberHandleFor(
-                context),
-            sliver: SliverPersistentHeader(
-              floating: true,
-              pinned: true,
-              delegate: FooSliverPersistentHeaderDelegate(
-                builder: (context, offset, _) => _buildTopBar(
-                  context,
-                  offset,
-                  headerMaxHeight,
-                ),
-                minHeight: context.mediaQueryPadding.top + kTopTabbarHeight,
-                maxHeight: headerMaxHeight,
-              ),
-            ),
-          )
-        ];
-      },
-      body: Builder(builder: (context) {
-        return PageView(
-          controller: pageController,
-          children: [
-            // 画廊列表测试
-            ...controller.titles
-                .take(3)
-                .map((e) => _SubListView(
-                      costomListTag: e,
-                    ))
-                .toList(),
-            // 单词列表测试
-            const _EnglishWordList(),
-            ...controller.titles
-                .map((e) => Center(
-                      child: Text(e),
-                    ))
-                .toList()
-              ..removeAt(0)
-              ..removeAt(0)
-              ..removeAt(0)
-              ..removeAt(0)
-          ],
-          onPageChanged: (index) {
-            linkScrollBarController.scrollToItem(index);
-          },
-        );
-      }),
-    );
-
-    return CupertinoPageScaffold(
-      // navigationBar: navigationBar,
-      child: SizeCacheWidget(child: scrollView),
-    );
-  }
 }
 
 class _EnglishWordList extends StatefulWidget {
@@ -308,12 +320,25 @@ class _SubListView extends StatefulWidget {
 class _SubListViewState extends State<_SubListView>
     with AutomaticKeepAliveClientMixin {
   late final CustomSubListController subController;
+  final EhTabController ehTabController = EhTabController();
+  final GlobalKey<ExtendedNestedScrollViewState> _key =
+      GlobalKey<ExtendedNestedScrollViewState>();
 
   @override
   void initState() {
     super.initState();
     subController = Get.find<CustomSubListController>(tag: widget.costomListTag)
       ..tabTag = widget.costomListTag ?? '';
+    addListen();
+  }
+
+  void addListen() {
+    subController.initEhTabController(
+      context: context,
+      ehTabController: ehTabController,
+      tabTag: EHRoutes.coutomlist,
+    );
+    // subController.initStateAddPostFrameCallback(context);
   }
 
   @override

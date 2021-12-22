@@ -7,8 +7,19 @@ class LinkScrollBarController extends ChangeNotifier {
 
   final int initIndex;
 
+  bool canScrollToItem = true;
+  void disableScrollToItem() {
+    canScrollToItem = false;
+  }
+
+  void enableScrollToItem() {
+    canScrollToItem = true;
+  }
+
   ValueChanged<int>? scrollToItemCall;
   void scrollToItem(int index) {
-    scrollToItemCall?.call(index);
+    if (canScrollToItem) {
+      scrollToItemCall?.call(index);
+    }
   }
 }

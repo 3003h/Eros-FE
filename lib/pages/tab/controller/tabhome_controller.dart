@@ -49,29 +49,23 @@ class TabPages {
     EHRoutes.history: FontAwesomeIcons.history,
     EHRoutes.download: FontAwesomeIcons.download,
     EHRoutes.setting: FontAwesomeIcons.cog,
-    EHRoutes.coutomlist: FontAwesomeIcons.image,
+    EHRoutes.coutomlist: FontAwesomeIcons.layerGroup,
   };
 
   Map<String, Widget> get tabIcons => iconDatas
       .map((key, value) => MapEntry(key, Icon(value, size: kIconSize)));
 
+  BuildContext get _context => Get.find<TabHomeController>().tContext;
+
   Map<String, String> get tabTitles => <String, String>{
-        EHRoutes.popular:
-            L10n.of(Get.find<TabHomeController>().tContext).tab_popular,
-        EHRoutes.watched:
-            L10n.of(Get.find<TabHomeController>().tContext).tab_watched,
-        EHRoutes.gallery:
-            L10n.of(Get.find<TabHomeController>().tContext).tab_gallery,
-        EHRoutes.favorite:
-            L10n.of(Get.find<TabHomeController>().tContext).tab_favorite,
-        EHRoutes.toplist:
-            L10n.of(Get.find<TabHomeController>().tContext).tab_toplist,
-        EHRoutes.history:
-            L10n.of(Get.find<TabHomeController>().tContext).tab_history,
-        EHRoutes.download:
-            L10n.of(Get.find<TabHomeController>().tContext).tab_download,
-        EHRoutes.setting:
-            L10n.of(Get.find<TabHomeController>().tContext).tab_setting,
+        EHRoutes.popular: L10n.of(_context).tab_popular,
+        EHRoutes.watched: L10n.of(_context).tab_watched,
+        EHRoutes.gallery: L10n.of(_context).tab_gallery,
+        EHRoutes.favorite: L10n.of(_context).tab_favorite,
+        EHRoutes.toplist: L10n.of(_context).tab_toplist,
+        EHRoutes.history: L10n.of(_context).tab_history,
+        EHRoutes.download: L10n.of(_context).tab_download,
+        EHRoutes.setting: L10n.of(_context).tab_setting,
         EHRoutes.coutomlist: 'Custom',
       };
 }

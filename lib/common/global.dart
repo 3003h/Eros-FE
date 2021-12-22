@@ -152,7 +152,9 @@ class Global {
         ? (await getExternalStorageDirectory())?.path ?? ''
         : '';
 
-    packageInfo = await PackageInfo.fromPlatform();
+    if (!GetPlatform.isWindows) {
+      packageInfo = await PackageInfo.fromPlatform();
+    }
 
     initLogger();
     if (!inDebugMode) {
