@@ -1,6 +1,6 @@
 import 'dart:convert';
 
-import 'package:fehviewer/common/service/log_service.dart';
+import 'package:fehviewer/common/controller/log_controller.dart';
 import 'package:fehviewer/common/service/theme_service.dart';
 import 'package:fehviewer/const/const.dart';
 import 'package:fehviewer/utils/logger.dart';

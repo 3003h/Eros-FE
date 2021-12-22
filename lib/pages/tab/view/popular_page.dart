@@ -130,7 +130,8 @@ class _PopularListTabState extends State<PopularListTab> {
 
   Widget _getGalleryList() {
     return controller.obx(
-        (List<GalleryItem>? state) => getGalleryList(state, controller.tabTag),
+        (List<GalleryItem>? state) =>
+            getGallerySliverList(state, controller.tabTag),
         onLoading: SliverFillRemaining(
           child: Container(
             alignment: Alignment.center,

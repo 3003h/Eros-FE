@@ -1,4 +1,5 @@
 import 'package:blur/blur.dart';
+import 'package:extended_nested_scroll_view/extended_nested_scroll_view.dart';
 import 'package:fehviewer/fehviewer.dart';
 import 'package:fehviewer/pages/tab/controller/custom_list_controller.dart';
 import 'package:fehviewer/pages/tab/view/gallery_base.dart';
@@ -12,6 +13,7 @@ import 'package:get/get.dart';
 import 'package:keframe/size_cache_widget.dart';
 import 'package:easy_animated_tabbar/easy_animated_tabbar.dart';
 import 'package:contained_tab_bar_view/contained_tab_bar_view.dart';
+import 'package:english_words/english_words.dart';
 
 import '../comm.dart';
 import 'constants.dart';
@@ -28,6 +30,21 @@ const Border _kDefaultNavBarBorder = Border(
 
 const double kTopTabbarHeight = 40.0;
 
+List<String> titleList = [
+  '测试',
+  '奇奇怪怪的东西',
+  '自定义测试2',
+  '列表',
+  '列表',
+  '列表',
+  '列表',
+  '列表',
+  '列表',
+  '只可意会',
+  '不可言传',
+  '点点点',
+];
+
 class CustomList extends StatefulWidget {
   const CustomList({Key? key, this.costomListTag}) : super(key: key);
 
@@ -40,6 +57,9 @@ class CustomList extends StatefulWidget {
 class _CustomListState extends State<CustomList> {
   late final CustomListController controller;
   final EhTabController ehTabController = EhTabController();
+  final LinkScrollBarController linkScrollBarController =
+      LinkScrollBarController();
+  final PageController pageController = PageController();
 
   @override
   void initState() {
@@ -99,21 +119,13 @@ class _CustomListState extends State<CustomList> {
                           height: kTopTabbarHeight,
                           child: LinkScrollBar(
                             width: context.mediaQuery.size.width,
-                            titleList: const [
-                              '测试',
-                              '奇奇怪怪的东西',
-                              '自定义测试2',
-                              '列表',
-                              '列表',
-                              '列表',
-                              '列表',
-                              '列表',
-                              '列表',
-                              '只可意会',
-                              '不可言传',
-                              '点点点',
-                            ],
+                            controller: linkScrollBarController,
+                            titleList: titleList,
                             selectIndex: 0,
+                            onItemChange: (index) =>
+                                pageController.animateToPage(index,
+                                    duration: const Duration(milliseconds: 300),
+                                    curve: Curves.ease),
                           ),
                           // color: CupertinoColors.systemBlue,
                         ),
@@ -147,7 +159,7 @@ class _CustomListState extends State<CustomList> {
         child: Row(
           mainAxisSize: MainAxisSize.min,
           children: [
-            Text('Costom List'),
+            Text('自定义'),
             Obx(() {
               if (controller.isBackgroundRefresh)
                 return const CupertinoActivityIndicator(
@@ -196,7 +208,7 @@ class _CustomListState extends State<CustomList> {
 
   @override
   Widget build(BuildContext context) {
-    final Widget customScrollView = CustomScrollView(
+    final Widget scrollView = CustomScrollView(
       cacheExtent: kTabViewCacheExtent,
       physics: const AlwaysScrollableScrollPhysics(),
       slivers: <Widget>[
@@ -218,7 +230,7 @@ class _CustomListState extends State<CustomList> {
         SliverSafeArea(
           top: false,
           bottom: false,
-          sliver: _getGalleryList(),
+          sliver: _getGallerySliverList(),
           // sliver: _getTabbar(),
         ),
         Obx(() {
@@ -230,30 +242,101 @@ class _CustomListState extends State<CustomList> {
       ],
     );
 
+    final wordList = generateWordPairs().take(100).toList();
+    final headerMaxHeight = kMinInteractiveDimensionCupertino +
+        context.mediaQueryPadding.top +
+        kTopTabbarHeight;
+
+    final Widget scrollView2 = ExtendedNestedScrollView(
+      floatHeaderSlivers: true,
+      onlyOneScrollInBody: true,
+      headerSliverBuilder: (context, innerBoxIsScrolled) {
+        return [
+          SliverOverlapAbsorber(
+            handle: ExtendedNestedScrollView.sliverOverlapAbsorberHandleFor(
+                context),
+            sliver: SliverPersistentHeader(
+              floating: true,
+              pinned: true,
+              delegate: FooSliverPersistentHeaderDelegate(
+                builder: (context, offset, _) => _buildTopBar(
+                  context,
+                  offset,
+                  headerMaxHeight,
+                ),
+                minHeight: context.mediaQueryPadding.top + kTopTabbarHeight,
+                maxHeight: headerMaxHeight,
+              ),
+            ),
+          )
+        ];
+      },
+      body: Builder(builder: (context) {
+        return PageView(
+          controller: pageController,
+          children: [
+            CustomScrollView(
+              physics: const AlwaysScrollableScrollPhysics(),
+              slivers: [
+                SliverPadding(
+                    padding: EdgeInsets.only(
+                        top: context.mediaQueryPadding.top + kTopTabbarHeight),
+                    sliver: EhCupertinoSliverRefreshControl(
+                      onRefresh: () => controller.onRefresh(),
+                    )),
+                SliverSafeArea(
+                  top: false,
+                  bottom: false,
+                  sliver: _getGallerySliverList(),
+                  // sliver: _getTabbar(),
+                ),
+                Obx(() {
+                  return EndIndicator(
+                    pageState: controller.pageState,
+                    loadDataMore: controller.loadDataMore,
+                  );
+                }),
+              ],
+            ),
+            CustomScrollView(
+              physics: const AlwaysScrollableScrollPhysics(),
+              slivers: [
+                SliverOverlapInjector(
+                    handle:
+                        ExtendedNestedScrollView.sliverOverlapAbsorberHandleFor(
+                            context)),
+                SliverFixedExtentList(
+                    delegate: SliverChildBuilderDelegate((context, index) {
+                      return Text(wordList[index].asString);
+                    }, childCount: 100),
+                    itemExtent: 50.0),
+              ],
+            ),
+            ...titleList
+                .map((e) => Center(
+                      child: Text(e),
+                    ))
+                .toList()
+              ..removeAt(0)
+              ..removeAt(0)
+          ],
+          onPageChanged: (index) {
+            linkScrollBarController.scrollToItem(index);
+          },
+        );
+      }),
+    );
+
     return CupertinoPageScaffold(
       // navigationBar: navigationBar,
-      child: CupertinoScrollbar(
-        scrollbarOrientation: ScrollbarOrientation.right,
-        child: SizeCacheWidget(child: customScrollView),
-        controller: PrimaryScrollController.of(context),
-      ),
+      child: SizeCacheWidget(child: scrollView2),
     );
   }
 
-  Widget _getTabbar() {
-    return SliverToBoxAdapter(
-      child: Material(
-        child: SizedBox(
-          height: 400,
-        ),
-      ),
-    );
-  }
-
-  Widget _getGalleryList() {
+  Widget _getGallerySliverList() {
     return controller.obx(
         (List<GalleryItem>? state) {
-          return getGalleryList(
+          return getGallerySliverList(
             state,
             controller.tabTag,
             maxPage: controller.maxPage,
