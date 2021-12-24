@@ -28,7 +28,7 @@ import 'package:fehviewer/pages/setting/view/login_webdav.dart';
 import 'package:fehviewer/pages/setting/view_setting_page.dart';
 import 'package:fehviewer/pages/setting/webdav_setting_page.dart';
 import 'package:fehviewer/pages/tab/bindings/splash_binding.dart';
-import 'package:fehviewer/pages/tab/view/custom_list_page.dart';
+import 'package:fehviewer/pages/tab/view/tabbar/custom_list_page.dart';
 import 'package:fehviewer/pages/tab/view/download_page.dart';
 import 'package:fehviewer/pages/tab/view/empty.dart';
 import 'package:fehviewer/pages/tab/view/favorite_page.dart';
@@ -39,6 +39,7 @@ import 'package:fehviewer/pages/tab/view/popular_page.dart';
 import 'package:fehviewer/pages/tab/view/quick_search_page.dart';
 import 'package:fehviewer/pages/tab/view/search_page.dart';
 import 'package:fehviewer/pages/tab/view/splash_page.dart';
+import 'package:fehviewer/pages/tab/view/tabbar/favorite_tabbar_page.dart';
 import 'package:fehviewer/pages/tab/view/toplist_page.dart';
 import 'package:fehviewer/pages/tab/view/unlock_page.dart';
 import 'package:fehviewer/pages/tab/view/watched_page.dart';
@@ -154,6 +155,10 @@ class AppPages {
     GetPage(
       name: EHRoutes.favorite,
       page: () => const FavoriteTab(),
+    ),
+    GetPage(
+      name: EHRoutes.favoriteTabbar,
+      page: () => const FavoriteTabTabBarPage(),
     ),
     GetPage(
       name: EHRoutes.toplist,

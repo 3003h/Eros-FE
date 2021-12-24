@@ -1,9 +1,10 @@
 import 'package:fehviewer/common/service/ehconfig_service.dart';
 import 'package:fehviewer/generated/l10n.dart';
 import 'package:fehviewer/models/base/eh_models.dart';
-import 'package:fehviewer/pages/tab/view/custom_list_page.dart';
+import 'package:fehviewer/pages/tab/view/tabbar/custom_list_page.dart';
 import 'package:fehviewer/pages/tab/view/download_page.dart';
 import 'package:fehviewer/pages/tab/view/history_page.dart';
+import 'package:fehviewer/pages/tab/view/tabbar/favorite_tabbar_page.dart';
 import 'package:fehviewer/pages/tab/view/toplist_page.dart';
 import 'package:fehviewer/pages/tab/view/watched_page.dart';
 import 'package:fehviewer/route/routes.dart';
@@ -38,6 +39,7 @@ class TabPages {
         EHRoutes.download: const DownloadTab(),
         EHRoutes.setting: const SettingTab(),
         EHRoutes.coutomlist: const CustomList(),
+        EHRoutes.favoriteTabbar: const FavoriteTabTabBarPage(),
       };
 
   final Map<String, IconData> iconDatas = <String, IconData>{
@@ -50,6 +52,7 @@ class TabPages {
     EHRoutes.download: FontAwesomeIcons.download,
     EHRoutes.setting: FontAwesomeIcons.cog,
     EHRoutes.coutomlist: FontAwesomeIcons.layerGroup,
+    EHRoutes.favoriteTabbar: FontAwesomeIcons.heartBroken,
   };
 
   Map<String, Widget> get tabIcons => iconDatas
@@ -67,6 +70,7 @@ class TabPages {
         EHRoutes.download: L10n.of(_context).tab_download,
         EHRoutes.setting: L10n.of(_context).tab_setting,
         EHRoutes.coutomlist: 'Custom',
+        EHRoutes.favoriteTabbar: L10n.of(_context).tab_favorite,
       };
 }
 
@@ -76,6 +80,7 @@ Map<String, bool> kDefTabMap = <String, bool>{
   EHRoutes.watched: false,
   EHRoutes.gallery: true,
   EHRoutes.favorite: true,
+  EHRoutes.favoriteTabbar: true,
   EHRoutes.toplist: false,
   EHRoutes.download: true,
   EHRoutes.history: false,
@@ -89,6 +94,7 @@ List<String> kTabNameList = <String>[
   EHRoutes.coutomlist,
   EHRoutes.watched,
   EHRoutes.favorite,
+  EHRoutes.favoriteTabbar,
   EHRoutes.toplist,
   EHRoutes.download,
   EHRoutes.history,

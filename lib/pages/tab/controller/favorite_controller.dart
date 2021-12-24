@@ -14,16 +14,16 @@ import 'package:get/get.dart';
 import 'package:tuple/tuple.dart';
 
 import '../fetch_list.dart';
-import 'tabview_controller.dart';
+import 'default_tabview_controller.dart';
 
-class FavoriteViewController extends TabViewController {
+class FavoriteViewController extends DefaultTabViewController {
   final RxString _title = ''.obs;
 
   String get title {
     if (_title.value.isNotEmpty) {
       return _title.value;
     } else {
-      return _ehConfigService.lastShowFavTitle ?? '';
+      return ehConfigService.lastShowFavTitle ?? '';
     }
   }
 
@@ -39,7 +39,7 @@ class FavoriteViewController extends TabViewController {
   late Future<Tuple2<List<GalleryItem>, int>> futureBuilderFuture;
   Widget? lastListWidget;
 
-  final EhConfigService _ehConfigService = Get.find();
+  final EhConfigService ehConfigService = Get.find();
   final LocalFavController _localFavController = Get.find();
   final UserController _userController = Get.find();
 
@@ -84,9 +84,8 @@ class FavoriteViewController extends TabViewController {
       return rult;
     } else {
       if (first) {
-        _ehConfigService.lastShowFavcat = 'l';
-        _ehConfigService.lastShowFavTitle =
-            L10n.of(Get.context!).local_favorite;
+        ehConfigService.lastShowFavcat = 'l';
+        ehConfigService.lastShowFavTitle = L10n.of(Get.context!).local_favorite;
       }
       // 本地收藏夹
       logger.v('本地收藏');
@@ -98,7 +97,7 @@ class FavoriteViewController extends TabViewController {
   }
 
   Future<void> setOrder(BuildContext context) async {
-    final FavoriteOrder? order = await _ehConfigService.showFavOrder(context);
+    final FavoriteOrder? order = await ehConfigService.showFavOrder(context);
     if (order != null) {
       change(state, status: RxStatus.loading());
       reloadData();
@@ -106,5 +105,5 @@ class FavoriteViewController extends TabViewController {
   }
 
   String get orderText =>
-      _ehConfigService.favoriteOrder.value == FavoriteOrder.fav ? 'F' : 'P';
+      ehConfigService.favoriteOrder.value == FavoriteOrder.fav ? 'F' : 'P';
 }

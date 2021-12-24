@@ -2,8 +2,8 @@ import 'package:english_words/english_words.dart';
 import 'package:fehviewer/route/routes.dart';
 import 'package:get/get.dart';
 
-import 'custom_sublist_controller.dart';
-import 'tabview_controller.dart';
+import 'sublist_controller.dart';
+import 'default_tabview_controller.dart';
 
 List<String> titleList = [
   '画廊测试',
@@ -21,7 +21,7 @@ List<String> titleList = [
 ];
 
 /// 控制所有自定义列表
-class CustomListController extends TabViewController {
+class CustomListController extends DefaultTabViewController {
   CustomListController();
 
   final titles = <String>[].obs;
@@ -33,7 +33,7 @@ class CustomListController extends TabViewController {
     titles.addAll(titleList);
 
     for (final title in titleList) {
-      Get.lazyPut(() => CustomSubListController(), tag: title);
+      Get.lazyPut(() => SubListController(), tag: title);
     }
 
     super.onInit();

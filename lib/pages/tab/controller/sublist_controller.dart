@@ -4,11 +4,11 @@ import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
 
 import 'enum.dart';
-import 'tabview_controller.dart';
+import 'default_tabview_controller.dart';
 
 /// 控制单个自定义列表
-class CustomSubListController extends TabViewController {
-  CustomSubListController();
+class SubListController extends DefaultTabViewController {
+  SubListController();
 
   @override
   void onInit() {

@@ -23,7 +23,7 @@ import 'package:get/get.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import '../fetch_list.dart';
-import 'tabview_controller.dart';
+import 'default_tabview_controller.dart';
 
 enum SearchType {
   normal,
@@ -37,7 +37,7 @@ enum ListType {
   init,
 }
 
-class SearchPageController extends TabViewController {
+class SearchPageController extends DefaultTabViewController {
   SearchPageController();
 
   late bool _autoComplete = false;
@@ -87,16 +87,16 @@ class SearchPageController extends TabViewController {
   /// 自动获取焦点
   bool autofocus = false;
 
-  final EhConfigService _ehConfigService = Get.find();
+  final EhConfigService ehConfigService = Get.find();
   final QuickSearchController quickSearchController = Get.find();
   final LocaleService localeService = Get.find();
 
-  bool get isTagTranslat => _ehConfigService.isTagTranslat;
+  bool get isTagTranslat => ehConfigService.isTagTranslat;
 
   /// 控制右侧按钮展开折叠
-  bool get isSearchBarComp => _ehConfigService.isSearchBarComp.value;
+  bool get isSearchBarComp => ehConfigService.isSearchBarComp.value;
 
-  set isSearchBarComp(bool val) => _ehConfigService.isSearchBarComp.value = val;
+  set isSearchBarComp(bool val) => ehConfigService.isSearchBarComp.value = val;
 
   @override
   FetchListClient getFetchListClient(FetchParams fetchParams) {

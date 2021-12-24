@@ -45,6 +45,7 @@ class _LinkScrollBarState extends State<LinkScrollBar> {
   final ScrollController _scrollController = ScrollController();
 
   List<Widget> _getBarItems(BuildContext context) {
+    channelFrameList.clear();
     List<Widget> _barItems = [];
     _maxScrollViewWidth = 0;
 
@@ -65,8 +66,8 @@ class _LinkScrollBarState extends State<LinkScrollBar> {
           channelFrameList.add(channelFrame);
           _maxScrollViewWidth += genneralChannelItem.width;
 
-          //返回 false 消息到此结束，不再继续往外传递
-          return false;
+          //返回 true 消息到此结束，不再继续往外传递
+          return true;
         },
         child: GestureDetector(
           behavior: HitTestBehavior.opaque,
@@ -161,40 +162,49 @@ class _LinkScrollBarState extends State<LinkScrollBar> {
   Widget build(BuildContext context) {
     final scrollViewWidth = _maxScrollViewWidth;
 
+    final _lineIndicator = AnimatedContainer(
+      height: widget.lineHeight,
+      width: _lineWidth,
+      decoration: BoxDecoration(
+        color: CupertinoColors.activeBlue,
+        borderRadius: BorderRadius.only(
+          topLeft: Radius.circular(widget.lineHeight * 3 / 4),
+          topRight: Radius.circular(widget.lineHeight * 3 / 4),
+        ),
+      ),
+      duration: kDuration,
+      curve: Curves.ease,
+    );
+
     return SingleChildScrollView(
       controller: _scrollController,
       scrollDirection: Axis.horizontal,
-      child: Column(
-        children: [
-          Expanded(
-            child: Row(
-              children: _getBarItems(context),
+      child: Container(
+        width: scrollViewWidth,
+        child: Column(
+          children: [
+            Expanded(
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                children: _getBarItems(context),
+              ),
             ),
-          ),
-          Stack(
-            children: [
-              SizedBox(height: widget.lineHeight, width: scrollViewWidth),
-              AnimatedPositioned(
-                left: _linePositionedLeft,
-                child: AnimatedContainer(
-                  height: widget.lineHeight,
-                  width: _lineWidth,
-                  decoration: BoxDecoration(
-                    color: CupertinoColors.activeBlue,
-                    borderRadius: BorderRadius.only(
-                      topLeft: Radius.circular(widget.lineHeight * 3 / 4),
-                      topRight: Radius.circular(widget.lineHeight * 3 / 4),
-                    ),
-                  ),
+            Stack(
+              children: [
+                SizedBox(height: widget.lineHeight, width: scrollViewWidth),
+                AnimatedPositioned(
+                  left: _linePositionedLeft,
+                  child: _lineIndicator,
                   duration: kDuration,
                   curve: Curves.ease,
                 ),
-                duration: kDuration,
-                curve: Curves.ease,
-              ),
-            ],
-          ),
-        ],
+              ],
+            ),
+            Container(
+              height: 8,
+            )
+          ],
+        ),
       ),
     );
   }
@@ -247,19 +257,6 @@ class GenneralChannelItem extends StatelessWidget {
             style: style,
           ),
           const Spacer(),
-          if (false)
-            ClipRRect(
-              borderRadius: BorderRadius.only(
-                topLeft: Radius.circular(lineHeight * 3 / 4),
-                topRight: Radius.circular(lineHeight * 3 / 4),
-              ),
-              child: Container(
-                color:
-                    selected ? CupertinoColors.activeBlue : Colors.transparent,
-                height: lineHeight,
-                width: max(10, width / 2),
-              ),
-            ),
         ],
       ),
     );

@@ -14,8 +14,9 @@ class FavoriteSelectorController extends GetxController
     with StateMixin<List<Favcat>> {
   FavoriteSelectorController();
 
-  final List<Favcat> _favcatList = [];
-  List<Favcat> get favcatList => _favcatList;
+  final _favcatList = <Favcat>[].obs;
+  List<Favcat> get favcatList => _favcatList.value;
+
   final LocalFavController _localFavController = Get.find();
 
   int get _allNetworkFavcatCount {
@@ -115,18 +116,19 @@ class FavoriteSelectorController extends GetxController
       logger.v('_initFavItemBeans new');
     }
 
+    if (!_favcatList.any((element) => element.favId == 'a')) {
+      _favcatList.insert(
+          0,
+          Favcat(
+              favTitle: L10n.current.all_Favorites,
+              favId: 'a',
+              totNum: _allNetworkFavcatCount));
+    }
     if (!_favcatList.any((element) => element.favId == 'l')) {
       _favcatList.add(Favcat(
           favTitle: L10n.current.local_favorite,
           favId: 'l',
           totNum: _localFavController.loacalFavs.length));
-    }
-
-    if (!_favcatList.any((element) => element.favId == 'a')) {
-      _favcatList.add(Favcat(
-          favTitle: L10n.current.all_Favorites,
-          favId: 'a',
-          totNum: _allNetworkFavcatCount));
     }
   }
 }
