@@ -1,9 +1,9 @@
 import 'package:fehviewer/route/routes.dart';
 
 import '../fetch_list.dart';
-import 'tabview_controller.dart';
+import 'default_tabview_controller.dart';
 
-class PopularViewController extends TabViewController {
+class PopularViewController extends DefaultTabViewController {
   @override
   void onInit() {
     tabTag = EHRoutes.popular;

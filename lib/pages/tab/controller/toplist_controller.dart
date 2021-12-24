@@ -1,6 +1,6 @@
 import 'package:fehviewer/common/service/ehconfig_service.dart';
 import 'package:fehviewer/generated/l10n.dart';
-import 'package:fehviewer/pages/tab/controller/tabview_controller.dart';
+import 'package:fehviewer/pages/tab/controller/default_tabview_controller.dart';
 import 'package:fehviewer/pages/tab/fetch_list.dart';
 import 'package:fehviewer/route/routes.dart';
 import 'package:flutter/cupertino.dart';
@@ -20,10 +20,10 @@ const Map<ToplistType, String> topListVal = {
   ToplistType.all: '11',
 };
 
-class TopListViewController extends TabViewController {
+class TopListViewController extends DefaultTabViewController {
   final RxString _title = ''.obs;
 
-  final EhConfigService _ehConfigService = Get.find();
+  final EhConfigService ehConfigService = Get.find();
 
   @override
   void onInit() {
@@ -38,7 +38,7 @@ class TopListViewController extends TabViewController {
   }
 
   String get toplistText {
-    switch (_ehConfigService.toplist) {
+    switch (ehConfigService.toplist) {
       case ToplistType.yesterday:
         return 'D';
       case ToplistType.month:
@@ -57,12 +57,12 @@ class TopListViewController extends TabViewController {
       ToplistType.year: L10n.of(Get.context!).tolist_past_year,
       ToplistType.all: L10n.of(Get.context!).tolist_alltime,
     };
-    return toplistTextMap[_ehConfigService.toplist] ??
+    return toplistTextMap[ehConfigService.toplist] ??
         L10n.of(Get.context!).tab_toplist;
   }
 
   Future<void> setToplist(BuildContext context) async {
-    final ToplistType? type = await _ehConfigService.showToplistsSel(context);
+    final ToplistType? type = await ehConfigService.showToplistsSel(context);
     if (type != null) {
       change(state, status: RxStatus.loading());
       reloadData();

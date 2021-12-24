@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:fehviewer/pages/tab/controller/custom_list_controller.dart';
+import 'package:fehviewer/pages/tab/controller/favorite_tabbar_controller.dart';
 import 'package:fehviewer/pages/tab/controller/toplist_controller.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
@@ -75,6 +76,8 @@ void getinit() {
   Get.lazyPut(() => FavoriteViewController(), fenix: true);
   Get.lazyPut(() => TopListViewController(), fenix: true);
 
+  // FavoriteTabberController
+  Get.lazyPut(() => FavoriteTabberController(), fenix: true);
   //
   Get.lazyPut(() => CustomListController(), fenix: true);
 

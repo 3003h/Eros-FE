@@ -3,9 +3,9 @@ import 'package:fehviewer/pages/tab/fetch_list.dart';
 import 'package:fehviewer/route/routes.dart';
 import 'package:get/get.dart';
 
-import 'tabview_controller.dart';
+import 'default_tabview_controller.dart';
 
-class WatchedViewController extends TabViewController {
+class WatchedViewController extends DefaultTabViewController {
   String get title => L10n.of(Get.context!).tab_watched;
 
   @override

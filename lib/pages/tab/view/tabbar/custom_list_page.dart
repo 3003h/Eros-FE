@@ -3,7 +3,7 @@ import 'package:english_words/english_words.dart';
 import 'package:extended_nested_scroll_view/extended_nested_scroll_view.dart';
 import 'package:fehviewer/fehviewer.dart';
 import 'package:fehviewer/pages/tab/controller/custom_list_controller.dart';
-import 'package:fehviewer/pages/tab/controller/custom_sublist_controller.dart';
+import 'package:fehviewer/pages/tab/controller/sublist_controller.dart';
 import 'package:fehviewer/pages/tab/view/gallery_base.dart';
 import 'package:fehviewer/pages/tab/view/tab_base.dart';
 import 'package:fehviewer/widget/refresh.dart';
@@ -11,24 +11,12 @@ import 'package:flutter/cupertino.dart' hide CupertinoTabBar;
 import 'package:get/get.dart';
 import 'package:keframe/size_cache_widget.dart';
 
-import '../comm.dart';
-import 'tab_base.dart';
-
-const Color _kDefaultNavBarBorderColor = Color(0x4D000000);
-const Border _kDefaultNavBarBorder = Border(
-  bottom: BorderSide(
-    color: _kDefaultNavBarBorderColor,
-    width: 0.0, // One physical pixel.
-    style: BorderStyle.solid,
-  ),
-);
-
-const double kTopTabbarHeight = 40.0;
+import '../../comm.dart';
+import '../constants.dart';
+import '../tab_base.dart';
 
 class CustomList extends StatefulWidget {
-  const CustomList({Key? key, this.costomListTag}) : super(key: key);
-
-  final String? costomListTag;
+  const CustomList({Key? key}) : super(key: key);
 
   @override
   State<CustomList> createState() => _CustomListState();
@@ -101,7 +89,7 @@ class _CustomListState extends State<CustomList> {
                       ))
                   .toList(),
               // 单词列表测试
-              const _EnglishWordList(),
+              const EnglishWordList(),
               ...controller.titles
                   .map((e) => Center(
                         child: Text(e),
@@ -159,7 +147,7 @@ class _CustomListState extends State<CustomList> {
               ClipRect(
                 child: Container(
                   decoration: const BoxDecoration(
-                    border: _kDefaultNavBarBorder,
+                    border: kDefaultNavBarBorder,
                   ),
                   padding: EdgeInsets.only(
                     left: context.mediaQueryPadding.left,
@@ -260,14 +248,14 @@ class _CustomListState extends State<CustomList> {
   }
 }
 
-class _EnglishWordList extends StatefulWidget {
-  const _EnglishWordList({Key? key}) : super(key: key);
+class EnglishWordList extends StatefulWidget {
+  const EnglishWordList({Key? key}) : super(key: key);
 
   @override
   _EnglishWordListState createState() => _EnglishWordListState();
 }
 
-class _EnglishWordListState extends State<_EnglishWordList>
+class _EnglishWordListState extends State<EnglishWordList>
     with AutomaticKeepAliveClientMixin {
   final CustomListController controller = Get.find();
   final List<WordPair> wordList = [];
@@ -319,7 +307,7 @@ class _SubListView extends StatefulWidget {
 
 class _SubListViewState extends State<_SubListView>
     with AutomaticKeepAliveClientMixin {
-  late final CustomSubListController subController;
+  late final SubListController subController;
   final EhTabController ehTabController = EhTabController();
   final GlobalKey<ExtendedNestedScrollViewState> _key =
       GlobalKey<ExtendedNestedScrollViewState>();
@@ -327,7 +315,7 @@ class _SubListViewState extends State<_SubListView>
   @override
   void initState() {
     super.initState();
-    subController = Get.find<CustomSubListController>(tag: widget.costomListTag)
+    subController = Get.find<SubListController>(tag: widget.costomListTag)
       ..tabTag = widget.costomListTag ?? '';
     addListen();
   }
