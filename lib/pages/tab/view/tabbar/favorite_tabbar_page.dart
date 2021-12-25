@@ -65,12 +65,12 @@ class _FavoriteTabTabBarPageState extends State<FavoriteTabTabBarPage> {
                   height: kTopTabbarHeight,
                   child: Obx(() {
                     return LinkScrollBar(
-                      itemPadding: const EdgeInsets.symmetric(horizontal: 10),
+                      pageController: pageController,
                       width: context.mediaQuery.size.width,
                       controller: linkScrollBarController,
                       titleList:
                           controller.favcatList.map((e) => e.favTitle).toList(),
-                      selectIndex: 0,
+                      initIndex: 0,
                       onItemChange: (index) => pageController.animateToPage(
                           index,
                           duration: const Duration(milliseconds: 300),

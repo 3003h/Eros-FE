@@ -161,8 +161,9 @@ class _CustomListState extends State<CustomList> {
                           child: LinkScrollBar(
                             width: context.mediaQuery.size.width,
                             controller: linkScrollBarController,
+                            pageController: pageController,
                             titleList: titleList,
-                            selectIndex: 0,
+                            initIndex: 0,
                             onItemChange: (index) =>
                                 pageController.animateToPage(index,
                                     duration: const Duration(milliseconds: 300),
