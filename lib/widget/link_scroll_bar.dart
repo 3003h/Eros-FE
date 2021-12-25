@@ -6,7 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 
 const kDuration = Duration(milliseconds: 300);
-const kLineHeight = 4.0;
+const double kDefIndicatorHeight = 5;
 
 final LinkScrollBarController _defaultLinkScrollBarController =
     LinkScrollBarController();
@@ -15,22 +15,24 @@ class LinkScrollBar extends StatefulWidget {
   LinkScrollBar({
     Key? key,
     LinkScrollBarController? controller,
+    this.pageController,
     required this.titleList,
-    required this.selectIndex,
+    required this.initIndex,
     required this.width,
-    this.lineHeight = kLineHeight,
-    this.itemPadding = const EdgeInsets.only(left: 10, right: 10),
+    this.indicatorHeight = kDefIndicatorHeight,
+    this.itemPadding = const EdgeInsets.only(left: 12, right: 12),
     this.onItemChange,
   })  : controller = controller ?? _defaultLinkScrollBarController,
         super(key: key);
 
   final List<String> titleList;
-  final int selectIndex;
+  final int initIndex;
   final double width;
-  final double lineHeight;
+  final double indicatorHeight;
   final EdgeInsetsGeometry itemPadding;
   final LinkScrollBarController controller;
   final ValueChanged<int>? onItemChange;
+  final PageController? pageController;
 
   @override
   State<LinkScrollBar> createState() => _LinkScrollBarState();
@@ -77,7 +79,6 @@ class _LinkScrollBarState extends State<LinkScrollBar> {
             setState(() {
               selectIndex = i;
               // WSLCustomTabbarNotification(index: selectIndex).dispatch(context);
-              // eventBus.fire(WSLChannelScrollViewNeedScrollEvent(selectIndex));
               scrollToItem(selectIndex);
               widget.onItemChange?.call(selectIndex);
             });
@@ -148,14 +149,15 @@ class _LinkScrollBarState extends State<LinkScrollBar> {
 
     bindController();
 
-    selectIndex = widget.selectIndex;
+    selectIndex = widget.initIndex;
     _linePositionedLeft = widget.itemPadding.horizontal / 2;
+
     // 初始计算
-    SchedulerBinding.instance?.addPostFrameCallback(
-        (_) => Future.delayed(const Duration(milliseconds: 100)).then((value) {
-              scrollToItem(widget.selectIndex);
-              setState(() {});
-            }));
+    SchedulerBinding.instance?.addPostFrameCallback((_) {
+      Future.delayed(Duration.zero).then((value) {
+        setState(() {});
+      }).then((value) => scrollToItem(widget.initIndex));
+    });
   }
 
   @override
@@ -163,13 +165,13 @@ class _LinkScrollBarState extends State<LinkScrollBar> {
     final scrollViewWidth = _maxScrollViewWidth;
 
     final _lineIndicator = AnimatedContainer(
-      height: widget.lineHeight,
+      height: widget.indicatorHeight,
       width: _lineWidth,
       decoration: BoxDecoration(
         color: CupertinoColors.activeBlue,
         borderRadius: BorderRadius.only(
-          topLeft: Radius.circular(widget.lineHeight * 3 / 4),
-          topRight: Radius.circular(widget.lineHeight * 3 / 4),
+          topLeft: Radius.circular(widget.indicatorHeight * 3 / 4),
+          topRight: Radius.circular(widget.indicatorHeight * 3 / 4),
         ),
       ),
       duration: kDuration,
@@ -189,22 +191,118 @@ class _LinkScrollBarState extends State<LinkScrollBar> {
                 children: _getBarItems(context),
               ),
             ),
-            Stack(
-              children: [
-                SizedBox(height: widget.lineHeight, width: scrollViewWidth),
-                AnimatedPositioned(
-                  left: _linePositionedLeft,
-                  child: _lineIndicator,
-                  duration: kDuration,
-                  curve: Curves.ease,
-                ),
-              ],
-            ),
-            Container(
-              height: 8,
-            )
+            if (widget.pageController == null)
+              Stack(
+                children: [
+                  SizedBox(
+                      height: widget.indicatorHeight, width: scrollViewWidth),
+                  AnimatedPositioned(
+                    left: _linePositionedLeft,
+                    child: _lineIndicator,
+                    duration: kDuration,
+                    curve: Curves.ease,
+                  ),
+                ],
+              ),
+            if (widget.pageController != null)
+              TitleIndicator(
+                height: widget.indicatorHeight,
+                pageController: widget.pageController,
+                channelFrameList: channelFrameList,
+                maxWidth: scrollViewWidth,
+                width: widget.width,
+                // child: _lineIndicator,
+                index: selectIndex,
+                itemPadding: widget.itemPadding,
+              )
           ],
         ),
+      ),
+    );
+  }
+}
+
+class TitleIndicator extends StatefulWidget {
+  const TitleIndicator({
+    Key? key,
+    this.maxWidth,
+    this.child,
+    this.pageController,
+    required this.channelFrameList,
+    required this.width,
+    required this.index,
+    this.itemPadding,
+    this.height = 0.0,
+  }) : super(key: key);
+  final double? maxWidth;
+  final Widget? child;
+  final PageController? pageController;
+  final List<ChannelFrame> channelFrameList;
+  final double width;
+  final double height;
+  final int index;
+  final EdgeInsetsGeometry? itemPadding;
+
+  @override
+  State<TitleIndicator> createState() => _TitleIndicatorState();
+}
+
+class _TitleIndicatorState extends State<TitleIndicator> {
+  double positionedLeft = 0.0;
+  double _indicatorWidth = 0.0;
+  @override
+  void initState() {
+    super.initState();
+    positionedLeft = (widget.itemPadding?.horizontal ?? 0) / 2;
+    _indicatorWidth = widget.channelFrameList[widget.index].width -
+        (widget.itemPadding?.horizontal ?? 0);
+
+    // pageController监听
+    widget.pageController?.addListener(() {
+      final page = widget.pageController?.page ?? 0.0;
+      final index = page ~/ 1;
+      if (index < widget.channelFrameList.length - 1) {
+        final offset = widget.channelFrameList[index].left +
+            page %
+                1 *
+                (widget.channelFrameList[index + 1].left -
+                    widget.channelFrameList[index].left);
+        _indicatorWidth = widget.channelFrameList[index].width +
+            page %
+                1 *
+                (widget.channelFrameList[index + 1].width -
+                    widget.channelFrameList[index].width);
+        _indicatorWidth =
+            _indicatorWidth - (widget.itemPadding?.horizontal ?? 0);
+
+        setState(() {
+          positionedLeft = offset + ((widget.itemPadding?.horizontal ?? 0) / 2);
+        });
+      }
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      height: widget.height,
+      child: Stack(
+        children: [
+          Positioned(
+            left: positionedLeft,
+            child: Container(
+              width: _indicatorWidth,
+              height: widget.height,
+              decoration: BoxDecoration(
+                color: CupertinoColors.activeBlue,
+                borderRadius: BorderRadius.only(
+                  topLeft: Radius.circular(widget.height * 3 / 4),
+                  topRight: Radius.circular(widget.height * 3 / 4),
+                ),
+              ),
+            ),
+          ),
+        ],
       ),
     );
   }
@@ -229,19 +327,13 @@ class GenneralChannelItem extends StatelessWidget {
   }
 
   TextStyle get style => TextStyle(
-        fontSize: selected ? 14.0 : 14.0,
+        fontSize: selected ? 16.0 : 16.0,
         color: selected ? CupertinoColors.activeBlue : null,
-        fontWeight: selected ? FontWeight.bold : FontWeight.normal,
+        // fontWeight: selected ? FontWeight.bold : FontWeight.normal,
       );
 
   @override
   Widget build(BuildContext context) {
-    TextStyle style = TextStyle(
-      fontSize: selected ? 14.0 : 14.0,
-      color: selected ? CupertinoColors.activeBlue : null,
-      fontWeight: selected ? FontWeight.bold : FontWeight.normal,
-    );
-
     WSLGetWidgetWithNotification(width: width).dispatch(context);
 
     return Container(

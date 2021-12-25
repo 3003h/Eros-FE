@@ -75,8 +75,8 @@ class AppDio with DioMixin implements Dio {
       responseHeader: true,
       responseBody: false,
       maxWidth: 120,
-      logPrint: kDebugMode ? loggerSimple.d : loggerSimpleOnlyFile.d,
-      // logPrint: loggerSimpleOnlyFile.d,
+      // logPrint: kDebugMode ? loggerSimple.d : loggerSimpleOnlyFile.d,
+      logPrint: loggerSimpleOnlyFile.d,
     ));
 
     if (dioConfig?.interceptors?.isNotEmpty ?? false) {
