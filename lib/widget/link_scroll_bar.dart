@@ -18,7 +18,7 @@ class LinkScrollBar extends StatefulWidget {
     this.pageController,
     required this.titleList,
     required this.initIndex,
-    required this.width,
+    // required this.boxWidth,
     this.indicatorHeight = kDefIndicatorHeight,
     this.itemPadding = const EdgeInsets.only(left: 12, right: 12),
     this.onItemChange,
@@ -27,7 +27,7 @@ class LinkScrollBar extends StatefulWidget {
 
   final List<String> titleList;
   final int initIndex;
-  final double width;
+  // final double boxWidth;
   final double indicatorHeight;
   final EdgeInsetsGeometry itemPadding;
   final LinkScrollBarController controller;
@@ -42,11 +42,14 @@ class _LinkScrollBarState extends State<LinkScrollBar> {
   int selectIndex = 0;
   List<ChannelFrame> channelFrameList = [];
   double _maxScrollViewWidth = 0;
-  double _linePositionedLeft = 0;
-  double _lineWidth = 0.0;
+  double _indicatorPositionedLeft = 0;
+  double _indicatorWidth = 0.0;
   final ScrollController _scrollController = ScrollController();
 
-  List<Widget> _getBarItems(BuildContext context) {
+  double boxWidth = 0.0;
+
+  List<Widget> _getBarItems(BuildContext context, double boxWidth) {
+    this.boxWidth = boxWidth;
     channelFrameList.clear();
     List<Widget> _barItems = [];
     _maxScrollViewWidth = 0;
@@ -94,16 +97,17 @@ class _LinkScrollBarState extends State<LinkScrollBar> {
   void scrollToItem(int index) {
     ChannelFrame channelFrame = channelFrameList[index];
 
-    _linePositionedLeft = channelFrame.left + widget.itemPadding.horizontal / 2;
-    _lineWidth = channelFrame.width - widget.itemPadding.horizontal;
+    _indicatorPositionedLeft =
+        channelFrame.left + widget.itemPadding.horizontal / 2;
+    _indicatorWidth = channelFrame.width - widget.itemPadding.horizontal;
 
     //计算选中的导航item的中心点
     double centerX = channelFrame.left + channelFrame.width / 2.0;
     //设定需要滚动的偏移量
     double needScrollView = 0;
     //当选中的导航item在中心偏左时
-    if (centerX - _scrollController.offset < widget.width / 2.0) {
-      needScrollView = widget.width / 2.0 - centerX + _scrollController.offset;
+    if (centerX - _scrollController.offset < boxWidth / 2.0) {
+      needScrollView = boxWidth / 2.0 - centerX + _scrollController.offset;
       //存在滚动条件
       if (_scrollController.offset > 0) {
         //当无法满足滚动到正中心的位置，就直接回到偏移量原点
@@ -116,7 +120,7 @@ class _LinkScrollBarState extends State<LinkScrollBar> {
       }
     } else {
       //当选中的导航item在中心偏右时
-      needScrollView = centerX - _scrollController.offset - widget.width / 2.0;
+      needScrollView = centerX - _scrollController.offset - boxWidth / 2.0;
       if (_scrollController.position.maxScrollExtent -
               _scrollController.offset >
           0) {
@@ -150,7 +154,7 @@ class _LinkScrollBarState extends State<LinkScrollBar> {
     bindController();
 
     selectIndex = widget.initIndex;
-    _linePositionedLeft = widget.itemPadding.horizontal / 2;
+    _indicatorPositionedLeft = widget.itemPadding.horizontal / 2;
 
     // 初始计算
     SchedulerBinding.instance?.addPostFrameCallback((_) {
@@ -164,9 +168,9 @@ class _LinkScrollBarState extends State<LinkScrollBar> {
   Widget build(BuildContext context) {
     final scrollViewWidth = _maxScrollViewWidth;
 
-    final _lineIndicator = AnimatedContainer(
+    final _indicator = AnimatedContainer(
       height: widget.indicatorHeight,
-      width: _lineWidth,
+      width: _indicatorWidth,
       decoration: BoxDecoration(
         color: CupertinoColors.activeBlue,
         borderRadius: BorderRadius.only(
@@ -178,47 +182,48 @@ class _LinkScrollBarState extends State<LinkScrollBar> {
       curve: Curves.ease,
     );
 
-    return SingleChildScrollView(
-      controller: _scrollController,
-      scrollDirection: Axis.horizontal,
-      child: Container(
-        width: scrollViewWidth,
-        child: Column(
-          children: [
-            Expanded(
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceAround,
-                children: _getBarItems(context),
+    return LayoutBuilder(builder: (context, c) {
+      return SingleChildScrollView(
+        controller: _scrollController,
+        scrollDirection: Axis.horizontal,
+        child: Container(
+          width: scrollViewWidth,
+          child: Column(
+            children: [
+              Expanded(
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+                  children: _getBarItems(context, c.maxWidth),
+                ),
               ),
-            ),
-            if (widget.pageController == null)
-              Stack(
-                children: [
-                  SizedBox(
-                      height: widget.indicatorHeight, width: scrollViewWidth),
-                  AnimatedPositioned(
-                    left: _linePositionedLeft,
-                    child: _lineIndicator,
-                    duration: kDuration,
-                    curve: Curves.ease,
-                  ),
-                ],
-              ),
-            if (widget.pageController != null)
-              TitleIndicator(
-                height: widget.indicatorHeight,
-                pageController: widget.pageController,
-                channelFrameList: channelFrameList,
-                maxWidth: scrollViewWidth,
-                width: widget.width,
-                // child: _lineIndicator,
-                index: selectIndex,
-                itemPadding: widget.itemPadding,
-              )
-          ],
+              if (widget.pageController == null)
+                Stack(
+                  children: [
+                    SizedBox(
+                        height: widget.indicatorHeight, width: scrollViewWidth),
+                    AnimatedPositioned(
+                      left: _indicatorPositionedLeft,
+                      child: _indicator,
+                      duration: kDuration,
+                      curve: Curves.ease,
+                    ),
+                  ],
+                ),
+              if (widget.pageController != null)
+                TitleIndicator(
+                  height: widget.indicatorHeight,
+                  pageController: widget.pageController,
+                  channelFrameList: channelFrameList,
+                  maxWidth: scrollViewWidth,
+                  width: boxWidth,
+                  index: selectIndex,
+                  itemPadding: widget.itemPadding,
+                )
+            ],
+          ),
         ),
-      ),
-    );
+      );
+    });
   }
 }
 
@@ -226,7 +231,6 @@ class TitleIndicator extends StatefulWidget {
   const TitleIndicator({
     Key? key,
     this.maxWidth,
-    this.child,
     this.pageController,
     required this.channelFrameList,
     required this.width,
@@ -235,7 +239,6 @@ class TitleIndicator extends StatefulWidget {
     this.height = 0.0,
   }) : super(key: key);
   final double? maxWidth;
-  final Widget? child;
   final PageController? pageController;
   final List<ChannelFrame> channelFrameList;
   final double width;

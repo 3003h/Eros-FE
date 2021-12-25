@@ -1,5 +1,6 @@
 import 'package:fehviewer/common/controller/localfav_controller.dart';
 import 'package:fehviewer/const/const.dart';
+import 'package:fehviewer/fehviewer.dart';
 import 'package:fehviewer/generated/l10n.dart';
 import 'package:fehviewer/models/favcat.dart';
 import 'package:fehviewer/network/request.dart';
@@ -40,6 +41,12 @@ class FavoriteSelectorController extends GetxController
       change(_favcatList, status: RxStatus.success());
     }, onError: (err) {
       change(null, status: RxStatus.error('$err'));
+    });
+
+    ever<List<Favcat>>(_favcatList, (value) {
+      Global.profile = Global.profile
+          .copyWith(user: Global.profile.user.copyWith(favcat: value));
+      Global.saveProfile();
     });
   }
 
