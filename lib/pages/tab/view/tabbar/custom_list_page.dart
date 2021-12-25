@@ -159,7 +159,6 @@ class _CustomListState extends State<CustomList> {
                         child: Container(
                           height: kTopTabbarHeight,
                           child: LinkScrollBar(
-                            width: context.mediaQuery.size.width,
                             controller: linkScrollBarController,
                             pageController: pageController,
                             titleList: titleList,

@@ -66,7 +66,6 @@ class _FavoriteTabTabBarPageState extends State<FavoriteTabTabBarPage> {
                   child: Obx(() {
                     return LinkScrollBar(
                       pageController: pageController,
-                      width: context.mediaQuery.size.width,
                       controller: linkScrollBarController,
                       titleList:
                           controller.favcatList.map((e) => e.favTitle).toList(),
