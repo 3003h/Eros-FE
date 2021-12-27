@@ -34,8 +34,11 @@ Future<void> main() async {
     final dsn = await getSentryDsn();
     if (dsn != null) {
       await SentryFlutter.init(
-        (options) {
-          options.dsn = dsn;
+        (SentryFlutterOptions options) {
+          options
+            ..dsn = dsn
+            ..debug = false
+            ..diagnosticLevel = SentryLevel.warning;
         },
       );
     }
