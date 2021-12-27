@@ -6,7 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 
 const kDuration = Duration(milliseconds: 300);
-const double kDefIndicatorHeight = 5;
+const double kDefIndicatorHeight = 4;
 
 final LinkScrollBarController _defaultLinkScrollBarController =
     LinkScrollBarController();
@@ -18,16 +18,14 @@ class LinkScrollBar extends StatefulWidget {
     this.pageController,
     required this.titleList,
     required this.initIndex,
-    // required this.boxWidth,
     this.indicatorHeight = kDefIndicatorHeight,
-    this.itemPadding = const EdgeInsets.only(left: 12, right: 12),
+    this.itemPadding = const EdgeInsets.only(left: 10, right: 10),
     this.onItemChange,
   })  : controller = controller ?? _defaultLinkScrollBarController,
         super(key: key);
 
   final List<String> titleList;
   final int initIndex;
-  // final double boxWidth;
   final double indicatorHeight;
   final EdgeInsetsGeometry itemPadding;
   final LinkScrollBarController controller;
@@ -41,7 +39,7 @@ class LinkScrollBar extends StatefulWidget {
 class _LinkScrollBarState extends State<LinkScrollBar> {
   int selectIndex = 0;
   List<ChannelFrame> channelFrameList = [];
-  double _maxScrollViewWidth = 0;
+  double _maxScrollViewWidth = 10;
   double _indicatorPositionedLeft = 0;
   double _indicatorWidth = 0.0;
   final ScrollController _scrollController = ScrollController();
@@ -55,28 +53,43 @@ class _LinkScrollBarState extends State<LinkScrollBar> {
     _maxScrollViewWidth = 0;
 
     for (int i = 0; i < widget.titleList.length; i++) {
-      final genneralChannelItem = GenneralChannelItem(
-        title: widget.titleList[i],
-        selected: i == selectIndex,
-        lineHeight: 0.0,
-        padding: widget.itemPadding,
-      );
+      // final genneralChannelItem = GenneralChannelItem(
+      //   title: widget.titleList[i],
+      //   selected: i == selectIndex,
+      //   padding: widget.itemPadding,
+      //   index: i,
+      // );
 
       final barItem = NotificationListener<WSLGetWidgetWithNotification>(
         onNotification: (notification) {
+          // logger.d('${notification.index}  ${notification.width}');
+          if (channelFrameList.length == widget.titleList.length) {
+            return true;
+          }
+
           //这里接受item创建时发起的冒泡消息，目的是：此时，导航item的宽度已计算完毕，创建导航栏布局记录类，记录当前item距离左侧距离及宽度。
           ChannelFrame channelFrame = ChannelFrame(
-              left: _maxScrollViewWidth, width: genneralChannelItem.width);
+            left: _maxScrollViewWidth,
+            width: notification.width,
+            index: notification.index,
+          );
+
           //保存所有ChannelFrame值，以便当外部修改viewPage的index值时或者点击item时进行修改scrollview偏移量
           channelFrameList.add(channelFrame);
-          _maxScrollViewWidth += genneralChannelItem.width;
+
+          _maxScrollViewWidth += notification.width;
 
           //返回 true 消息到此结束，不再继续往外传递
           return true;
         },
         child: GestureDetector(
           behavior: HitTestBehavior.opaque,
-          child: genneralChannelItem,
+          child: GenneralChannelItem(
+            title: widget.titleList[i],
+            selected: i == selectIndex,
+            padding: widget.itemPadding,
+            index: i,
+          ),
           onTap: () {
             widget.controller.disableScrollToItem();
             setState(() {
@@ -158,10 +171,22 @@ class _LinkScrollBarState extends State<LinkScrollBar> {
 
     // 初始计算
     SchedulerBinding.instance?.addPostFrameCallback((_) {
-      Future.delayed(Duration.zero).then((value) {
+      Future.delayed(Duration(milliseconds: 0)).then((value) {
         setState(() {});
       }).then((value) => scrollToItem(widget.initIndex));
     });
+
+    // channelFrameList
+    // SchedulerBinding.instance?.addPostFrameCallback((_) {
+    //   Future.delayed(Duration(milliseconds: 500)).then((value) {
+    //     logger.d('${channelFrameList.length}');
+    //   });
+    // });
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
   }
 
   @override
@@ -187,7 +212,7 @@ class _LinkScrollBarState extends State<LinkScrollBar> {
         controller: _scrollController,
         scrollDirection: Axis.horizontal,
         child: Container(
-          width: scrollViewWidth,
+          width: _maxScrollViewWidth,
           child: Column(
             children: [
               Expanded(
@@ -215,10 +240,10 @@ class _LinkScrollBarState extends State<LinkScrollBar> {
                   pageController: widget.pageController,
                   channelFrameList: channelFrameList,
                   maxWidth: scrollViewWidth,
-                  width: boxWidth,
+                  width: c.maxWidth,
                   index: selectIndex,
                   itemPadding: widget.itemPadding,
-                )
+                ),
             ],
           ),
         ),
@@ -312,35 +337,58 @@ class _TitleIndicatorState extends State<TitleIndicator> {
 }
 
 //导航栏item组件封装
-class GenneralChannelItem extends StatelessWidget {
+class GenneralChannelItem extends StatefulWidget {
   const GenneralChannelItem({
     required this.title,
     this.selected = false,
-    this.lineHeight = 4.0,
     this.padding,
+    required this.index,
   });
 
   final String title;
   final EdgeInsetsGeometry? padding;
   final bool selected;
-  final double lineHeight;
+  final int index;
+
+  @override
+  State<GenneralChannelItem> createState() => _GenneralChannelItemState();
+}
+
+class _GenneralChannelItemState extends State<GenneralChannelItem> {
+  final GlobalKey _key = GlobalKey();
 
   double get width {
-    return getTextSize(title, style).width + (padding?.horizontal ?? 0);
+    return getTextSize(widget.title, style).width +
+        (widget.padding?.horizontal ?? 0);
   }
 
   TextStyle get style => TextStyle(
-        fontSize: selected ? 16.0 : 16.0,
-        color: selected ? CupertinoColors.activeBlue : null,
+        fontSize: widget.selected ? 14.0 : 14.0,
+        color: widget.selected ? CupertinoColors.activeBlue : null,
         // fontWeight: selected ? FontWeight.bold : FontWeight.normal,
       );
 
   @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance?.addPostFrameCallback((_) {
+      logger.d('${context.size?.width} $width');
+      // WSLGetWidgetWithNotification(
+      //         width: context.size?.width ?? 0.0, index: widget.index)
+      //     .dispatch(context);
+      // WSLGetWidgetWithNotification(width: width, index: widget.index)
+      //     .dispatch(context);
+    });
+  }
+
+  @override
   Widget build(BuildContext context) {
-    WSLGetWidgetWithNotification(width: width).dispatch(context);
+    WSLGetWidgetWithNotification(width: width, index: widget.index)
+        .dispatch(context);
 
     return Container(
-      padding: padding,
+      key: _key,
+      padding: widget.padding,
       child: Column(
         mainAxisSize: MainAxisSize.max,
         mainAxisAlignment: MainAxisAlignment.center,
@@ -348,7 +396,7 @@ class GenneralChannelItem extends StatelessWidget {
         children: [
           const Spacer(),
           Text(
-            title,
+            widget.title,
             style: style,
           ),
           const Spacer(),
@@ -371,16 +419,22 @@ class WSLCustomTabbarNotification extends Notification {
 }
 
 class WSLGetWidgetWithNotification extends Notification {
-  WSLGetWidgetWithNotification({required this.width});
+  WSLGetWidgetWithNotification({required this.width, required this.index});
 
   final double width;
+  final int index;
 }
 
 class ChannelFrame {
-  ChannelFrame({this.left = 0, this.width = 0});
+  ChannelFrame({
+    this.left = 0,
+    this.width = 0,
+    this.index = 0,
+  });
 
   double left; //距离左侧距离
   double width; //item宽度
+  int index;
 }
 
 class FooSliverPersistentHeaderDelegate extends SliverPersistentHeaderDelegate {
