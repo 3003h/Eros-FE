@@ -1,0 +1,4 @@
+// input your your Sentry DSN, and rename file to sentry.json
+{
+    "dsn": "your Sentry DSN"
+}

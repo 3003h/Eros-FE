@@ -22,6 +22,7 @@ import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:get/get.dart';
 import 'package:logger/logger.dart';
 import 'package:oktoast/oktoast.dart';
+import 'package:sentry_flutter/sentry_flutter.dart';
 
 import 'firebase_options.dart';
 import 'get_init.dart';
@@ -30,6 +31,15 @@ Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await _initializeFlutterFire();
   runZonedGuarded<Future<void>>(() async {
+    final dsn = await getSentryDsn();
+    if (dsn != null) {
+      await SentryFlutter.init(
+        (options) {
+          options.dsn = dsn;
+        },
+      );
+    }
+
     Get.lazyPut(() => LogService(), fenix: true);
     Get.lazyPut(() => GStore());
     await Global.init();
@@ -58,7 +68,7 @@ Future<void> main() async {
             builder: (context) => MyApp(),
           )
         : MyApp());
-  }, (Object error, StackTrace stackTrace) {
+  }, (Object error, StackTrace stackTrace) async {
     if (error is EhError && error.type == EhErrorType.image509) {
       debugPrint('EhErrorType.image509');
       return;
@@ -68,6 +78,8 @@ Future<void> main() async {
     if (!Platform.isWindows) {
       FirebaseCrashlytics.instance.recordError(error, stackTrace);
     }
+
+    await Sentry.captureException(error, stackTrace: stackTrace);
   });
 }
 
@@ -151,6 +163,7 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
         navigatorObservers: [
           if (GetPlatform.isMobile)
             FirebaseAnalyticsObserver(analytics: analytics),
+          SentryNavigatorObserver(),
           FlutterSmartDialog.observer,
         ],
         builder: FlutterSmartDialog.init(
