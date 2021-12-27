@@ -55,7 +55,9 @@ app.*.map.json
 /linux/
 .fvm
 /assets/openl.json
+/assets/sentry.json
 
 GoogleService-Info.plist
 google-service.json
 /lib/firebase_options.dart
+

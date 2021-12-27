@@ -16,6 +16,7 @@ export 'utils/debounce.dart';
 export 'utils/dialog.dart';
 export 'utils/event_bus.dart';
 export 'utils/logger.dart';
+export 'utils/sentry.dart';
 export 'utils/time.dart';
 export 'utils/toast.dart';
 export 'utils/utility.dart';
