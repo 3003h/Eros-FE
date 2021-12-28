@@ -28,8 +28,6 @@ class DefaultTabViewController extends TabViewController {
 
   int? cats;
 
-  late String tabTag;
-
   final RxBool _isBackgroundRefresh = false.obs;
 
   bool get isBackgroundRefresh => _isBackgroundRefresh.value;
@@ -46,7 +44,8 @@ class DefaultTabViewController extends TabViewController {
   set searchType(SearchType val) => _searchType.value = val;
 
   // 页码跳转输入框的控制器
-  final TextEditingController _pageController = TextEditingController();
+  final TextEditingController pageJumpTextEditController =
+      TextEditingController();
 
   FetchListClient? fetchClient;
 
@@ -83,18 +82,6 @@ class DefaultTabViewController extends TabViewController {
     } finally {
       isBackgroundRefresh = false;
     }
-  }
-
-  void srcollToTop(BuildContext context) {
-    PrimaryScrollController.of(context)?.animateTo(0.0,
-        duration: const Duration(milliseconds: 500), curve: Curves.ease);
-  }
-
-  void srcollToTopRefresh(BuildContext context) {
-    PrimaryScrollController.of(context)?.animateTo(
-        -kDefaultRefreshTriggerPullDistance,
-        duration: const Duration(milliseconds: 500),
-        curve: Curves.ease);
   }
 
   FetchListClient getFetchListClient(FetchParams fetchParams) {
@@ -145,28 +132,17 @@ class DefaultTabViewController extends TabViewController {
     lastItemBuildComplete = false;
   }
 
-  Future<void> onRefresh({GlobalKey? centerKey}) async {
+  @override
+  Future<void> onRefresh() async {
     isBackgroundRefresh = false;
-    if (!(cancelToken?.isCancelled ?? false)) {
-      cancelToken?.cancel();
-    }
-    change(state, status: RxStatus.success());
-    if (minPage > 1) {
-      logger.d('loadPrevious');
-      await loadPrevious();
-    } else {
-      await reloadData();
-    }
+    await super.onRefresh();
   }
 
+  @override
   Future<void> reLoadDataFirst() async {
     logger.d('reLoadDataFirst isCancelled ${cancelToken?.isCancelled}');
     isBackgroundRefresh = false;
-    if (!(cancelToken?.isCancelled ?? false)) {
-      cancelToken?.cancel();
-    }
-    change(null, status: RxStatus.loading());
-    onReady();
+    await super.reLoadDataFirst();
   }
 
   @override
@@ -246,7 +222,7 @@ class DefaultTabViewController extends TabViewController {
       }
       // 成功才-1
       minPage -= 1;
-      curPage.value = minPage;
+      curPage = minPage;
       update();
       lastItemBuildComplete = false;
       pageState = PageState.None;
@@ -280,7 +256,7 @@ class DefaultTabViewController extends TabViewController {
       FetchListClient fetchListClient = getFetchListClient(fetchConfig);
       final GalleryList? rult = await fetchListClient.fetch();
 
-      curPage.value = page;
+      curPage = page;
       minPage = page;
       nextPage = rult?.nextPage ?? page + 1;
       logger.d('after loadFromPage nextPage is $nextPage');
@@ -296,9 +272,9 @@ class DefaultTabViewController extends TabViewController {
   }
 
   /// 跳转页码
-  Future<void> jumpToPage() async {
+  Future<void> showJumpToPage() async {
     void _jump() {
-      final String _input = _pageController.text.trim();
+      final String _input = pageJumpTextEditController.text.trim();
 
       if (_input.isEmpty) {
         showToast(L10n.of(Get.context!).input_empty);
@@ -319,9 +295,12 @@ class DefaultTabViewController extends TabViewController {
       }
     }
 
+    return showJumpDialog(jump: _jump, maxPage: maxPage);
+  }
+
+  Future showJumpDialog({VoidCallback? jump, int? maxPage}) {
     return showCupertinoDialog<void>(
-      context: Get.overlayContext!,
-      // barrierDismissible: false, // user must tap button!
+      context: Get.context!,
       builder: (BuildContext context) {
         return CupertinoAlertDialog(
           title: Text(L10n.of(context).jump_to_page),
@@ -337,13 +316,13 @@ class DefaultTabViewController extends TabViewController {
                     color: ehTheme.textFieldBackgroundColor,
                     borderRadius: const BorderRadius.all(Radius.circular(8.0)),
                   ),
-                  controller: _pageController,
+                  controller: pageJumpTextEditController,
                   autofocus: true,
                   keyboardType: TextInputType.number,
                   onEditingComplete: () {
                     // 点击键盘完成
                     // 画廊跳转
-                    _jump();
+                    jump?.call();
                   },
                 )
               ],
@@ -363,7 +342,7 @@ class DefaultTabViewController extends TabViewController {
               ),
               onPressed: () {
                 // 画廊跳转
-                _jump();
+                jump?.call();
               },
             ),
           ],
@@ -372,7 +351,8 @@ class DefaultTabViewController extends TabViewController {
     );
   }
 
-  void lastComplete() {
+  @override
+  Future<void> lastComplete() async {
     lastItemBuildComplete = true;
   }
 
@@ -492,16 +472,6 @@ class DefaultTabViewController extends TabViewController {
     initEhTabController(context: context, ehTabController: ehTabController);
 
     initStateAddPostFrameCallback(context);
-  }
-
-  void initEhTabController({
-    required BuildContext context,
-    required EhTabController ehTabController,
-    String? tabTag,
-  }) {
-    ehTabController.scrollToTopCall = () => srcollToTop(context);
-    ehTabController.scrollToTopRefreshCall = () => srcollToTopRefresh(context);
-    tabPages.scrollControllerMap[tabTag ?? this.tabTag] = ehTabController;
   }
 
   void initStateAddPostFrameCallback(BuildContext context) {

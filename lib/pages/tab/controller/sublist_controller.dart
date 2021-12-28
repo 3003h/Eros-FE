@@ -23,7 +23,7 @@ class SubListController extends DefaultTabViewController {
   }
 
   @override
-  void lastComplete() {
+  Future<void> lastComplete() async {
     super.lastComplete();
     if (curPage < maxPage - 1 &&
         lastItemBuildComplete &&

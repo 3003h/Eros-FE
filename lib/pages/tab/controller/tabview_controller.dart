@@ -1,21 +1,28 @@
 import 'package:dio/dio.dart';
 import 'package:fehviewer/common/service/ehconfig_service.dart';
 import 'package:fehviewer/fehviewer.dart';
+import 'package:fehviewer/pages/tab/controller/tabhome_controller.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
 
+import '../comm.dart';
 import 'enum.dart';
 
 class TabViewController extends GetxController
     with StateMixin<List<GalleryItem>> {
   // 当前页码
-  final curPage = 0.obs;
+  final _curPage = 0.obs;
+  int get curPage => _curPage.value;
+  set curPage(int val) => _curPage.value = val;
+
   // 最小页码
   int minPage = 1;
   // 最大页码
   int maxPage = 1;
   // 下一页
   int nextPage = 1;
+
+  String? tabTag;
 
   CancelToken? cancelToken = CancelToken();
 
@@ -38,6 +45,7 @@ class TabViewController extends GetxController
 
   // 首次请求
   Future<void> firstLoad() async {
+    await Future.delayed(200.milliseconds);
     try {
       final GalleryList? rult = await fetchData();
       if (rult == null) {
@@ -60,7 +68,7 @@ class TabViewController extends GetxController
 
   // 重新加载
   Future<void> reloadData() async {
-    curPage.value = 0;
+    curPage = 0;
     final GalleryList? rult = await fetchData(
       refresh: true,
     );
@@ -75,13 +83,15 @@ class TabViewController extends GetxController
 
     maxPage = rult.maxPage ?? 0;
     nextPage = rult.nextPage ?? 1;
-    change([], status: RxStatus.success());
+    // change([], status: RxStatus.success());
     change(rult.gallerys, status: RxStatus.success());
   }
 
   // 加载更多
   Future<void> loadDataMore() async {
+    await Future.delayed(100.milliseconds);
     if (!canLoadData) {
+      logger.e('not canLoadData');
       return;
     }
 
@@ -122,7 +132,7 @@ class TabViewController extends GetxController
       rethrow;
     }
     // 成功才更新
-    curPage.value = lastNextPage;
+    curPage = lastNextPage;
     pageState = PageState.None;
   }
 
@@ -131,6 +141,51 @@ class TabViewController extends GetxController
 
   // 跳转到指定页加载
   Future<void> loadFromPage(int page) async {}
+
+  Future<void> onRefresh() async {
+    if (!(cancelToken?.isCancelled ?? false)) {
+      cancelToken?.cancel();
+    }
+    change(state, status: RxStatus.success());
+    if (minPage > 1) {
+      await loadPrevious();
+    } else {
+      await reloadData();
+    }
+  }
+
+  Future<void> reLoadDataFirst() async {
+    if (!(cancelToken?.isCancelled ?? false)) {
+      cancelToken?.cancel();
+    }
+    change(null, status: RxStatus.loading());
+    onReady();
+  }
+
+  Future<void> lastComplete() async {}
+
+  void initEhTabController({
+    required BuildContext context,
+    required EhTabController ehTabController,
+    String? tabTag,
+  }) {
+    ehTabController.scrollToTopCall = () => srcollToTop(context);
+    ehTabController.scrollToTopRefreshCall = () => srcollToTopRefresh(context);
+
+    tabPages.scrollControllerMap[tabTag ?? this.tabTag ?? ''] = ehTabController;
+  }
+
+  void srcollToTop(BuildContext context) {
+    PrimaryScrollController.of(context)?.animateTo(0.0,
+        duration: const Duration(milliseconds: 500), curve: Curves.ease);
+  }
+
+  void srcollToTopRefresh(BuildContext context) {
+    PrimaryScrollController.of(context)?.animateTo(
+        -kDefaultRefreshTriggerPullDistance,
+        duration: const Duration(milliseconds: 500),
+        curve: Curves.ease);
+  }
 
   @override
   void onReady() {

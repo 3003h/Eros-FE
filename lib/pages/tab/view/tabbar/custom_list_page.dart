@@ -161,7 +161,9 @@ class _CustomListState extends State<CustomList> {
                           child: LinkScrollBar(
                             controller: linkScrollBarController,
                             pageController: pageController,
-                            titleList: titleList,
+                            titleList: titleList
+                                .map((e) => LinkTabItem(title: e))
+                                .toList(),
                             initIndex: 0,
                             onItemChange: (index) =>
                                 pageController.animateToPage(index,
@@ -232,14 +234,14 @@ class _CustomListState extends State<CustomList> {
                 borderRadius: BorderRadius.circular(8),
               ),
               child: Obx(() => Text(
-                    '${controller.curPage.value + 1}',
+                    '${controller.curPage + 1}',
                     style: TextStyle(
                         color: CupertinoDynamicColor.resolve(
                             CupertinoColors.activeBlue, context)),
                   )),
             ),
             onPressed: () {
-              controller.jumpToPage();
+              controller.showJumpToPage();
             },
           ),
         ],
@@ -367,7 +369,7 @@ class _SubListViewState extends State<_SubListView>
             state,
             subController.tabTag,
             maxPage: subController.maxPage,
-            curPage: subController.curPage.value,
+            curPage: subController.curPage,
             lastComplete: subController.lastComplete,
             key: subController.sliverAnimatedListKey,
             lastTopitemIndex: subController.lastTopitemIndex,

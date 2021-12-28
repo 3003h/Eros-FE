@@ -39,7 +39,6 @@ class FavoriteViewController extends DefaultTabViewController {
   late Future<Tuple2<List<GalleryItem>, int>> futureBuilderFuture;
   Widget? lastListWidget;
 
-  final EhConfigService ehConfigService = Get.find();
   final LocalFavController _localFavController = Get.find();
   final UserController _userController = Get.find();
 
@@ -61,10 +60,7 @@ class FavoriteViewController extends DefaultTabViewController {
   }
 
   @override
-  Future<GalleryList?> fetchData({
-    bool refresh = false,
-    bool first = false,
-  }) async {
+  Future<GalleryList?> fetchData({bool refresh = false}) async {
     final bool _isLogin = _userController.isLogin;
     if (!_isLogin) {
       curFavcat = 'l';
@@ -83,10 +79,10 @@ class FavoriteViewController extends DefaultTabViewController {
 
       return rult;
     } else {
-      if (first) {
-        ehConfigService.lastShowFavcat = 'l';
-        ehConfigService.lastShowFavTitle = L10n.of(Get.context!).local_favorite;
-      }
+      // if (first) {
+      //   ehConfigService.lastShowFavcat = 'l';
+      //   ehConfigService.lastShowFavTitle = L10n.of(Get.context!).local_favorite;
+      // }
       // 本地收藏夹
       logger.v('本地收藏');
       final List<GalleryItem> localFav = _localFavController.loacalFavs;
