@@ -11,6 +11,18 @@ const double kDefIndicatorHeight = 4;
 final LinkScrollBarController _defaultLinkScrollBarController =
     LinkScrollBarController();
 
+class LinkTabItem {
+  LinkTabItem({
+    required this.title,
+    this.icon,
+    this.iconColor,
+  });
+
+  final String title;
+  final IconData? icon;
+  final Color? iconColor;
+}
+
 class LinkScrollBar extends StatefulWidget {
   LinkScrollBar({
     Key? key,
@@ -24,7 +36,7 @@ class LinkScrollBar extends StatefulWidget {
   })  : controller = controller ?? _defaultLinkScrollBarController,
         super(key: key);
 
-  final List<String> titleList;
+  final List<LinkTabItem> titleList;
   final int initIndex;
   final double indicatorHeight;
   final EdgeInsetsGeometry itemPadding;
@@ -38,7 +50,7 @@ class LinkScrollBar extends StatefulWidget {
 
 class _LinkScrollBarState extends State<LinkScrollBar> {
   int selectIndex = 0;
-  List<ChannelFrame> channelFrameList = [];
+  List<ItemFrame> channelFrameList = [];
   double _maxScrollViewWidth = 10;
   double _indicatorPositionedLeft = 0;
   double _indicatorWidth = 0.0;
@@ -53,13 +65,6 @@ class _LinkScrollBarState extends State<LinkScrollBar> {
     _maxScrollViewWidth = 0;
 
     for (int i = 0; i < widget.titleList.length; i++) {
-      // final genneralChannelItem = GenneralChannelItem(
-      //   title: widget.titleList[i],
-      //   selected: i == selectIndex,
-      //   padding: widget.itemPadding,
-      //   index: i,
-      // );
-
       final barItem = NotificationListener<WSLGetWidgetWithNotification>(
         onNotification: (notification) {
           // logger.d('${notification.index}  ${notification.width}');
@@ -68,14 +73,14 @@ class _LinkScrollBarState extends State<LinkScrollBar> {
           }
 
           //这里接受item创建时发起的冒泡消息，目的是：此时，导航item的宽度已计算完毕，创建导航栏布局记录类，记录当前item距离左侧距离及宽度。
-          ChannelFrame channelFrame = ChannelFrame(
+          ItemFrame itemFrame = ItemFrame(
             left: _maxScrollViewWidth,
             width: notification.width,
             index: notification.index,
           );
 
           //保存所有ChannelFrame值，以便当外部修改viewPage的index值时或者点击item时进行修改scrollview偏移量
-          channelFrameList.add(channelFrame);
+          channelFrameList.add(itemFrame);
 
           _maxScrollViewWidth += notification.width;
 
@@ -84,8 +89,9 @@ class _LinkScrollBarState extends State<LinkScrollBar> {
         },
         child: GestureDetector(
           behavior: HitTestBehavior.opaque,
-          child: GenneralChannelItem(
-            title: widget.titleList[i],
+          child: InnerLinkTabItem(
+            title: widget.titleList[i].title,
+            icon: widget.titleList[i].icon,
             selected: i == selectIndex,
             padding: widget.itemPadding,
             index: i,
@@ -108,7 +114,7 @@ class _LinkScrollBarState extends State<LinkScrollBar> {
   }
 
   void scrollToItem(int index) {
-    ChannelFrame channelFrame = channelFrameList[index];
+    ItemFrame channelFrame = channelFrameList[index];
 
     _indicatorPositionedLeft =
         channelFrame.left + widget.itemPadding.horizontal / 2;
@@ -171,17 +177,10 @@ class _LinkScrollBarState extends State<LinkScrollBar> {
 
     // 初始计算
     SchedulerBinding.instance?.addPostFrameCallback((_) {
-      Future.delayed(Duration(milliseconds: 0)).then((value) {
+      Future.delayed(const Duration(milliseconds: 0)).then((value) {
         setState(() {});
       }).then((value) => scrollToItem(widget.initIndex));
     });
-
-    // channelFrameList
-    // SchedulerBinding.instance?.addPostFrameCallback((_) {
-    //   Future.delayed(Duration(milliseconds: 500)).then((value) {
-    //     logger.d('${channelFrameList.length}');
-    //   });
-    // });
   }
 
   @override
@@ -265,7 +264,7 @@ class TitleIndicator extends StatefulWidget {
   }) : super(key: key);
   final double? maxWidth;
   final PageController? pageController;
-  final List<ChannelFrame> channelFrameList;
+  final List<ItemFrame> channelFrameList;
   final double width;
   final double height;
   final int index;
@@ -337,24 +336,28 @@ class _TitleIndicatorState extends State<TitleIndicator> {
 }
 
 //导航栏item组件封装
-class GenneralChannelItem extends StatefulWidget {
-  const GenneralChannelItem({
+class InnerLinkTabItem extends StatefulWidget {
+  const InnerLinkTabItem({
     required this.title,
     this.selected = false,
     this.padding,
     required this.index,
-  });
+    this.icon,
+    double? iconSize,
+  }) : iconSize = icon == null ? 0 : (iconSize ?? 16);
 
   final String title;
   final EdgeInsetsGeometry? padding;
   final bool selected;
   final int index;
+  final IconData? icon;
+  final double iconSize;
 
   @override
-  State<GenneralChannelItem> createState() => _GenneralChannelItemState();
+  State<InnerLinkTabItem> createState() => _InnerLinkTabItemState();
 }
 
-class _GenneralChannelItemState extends State<GenneralChannelItem> {
+class _InnerLinkTabItemState extends State<InnerLinkTabItem> {
   final GlobalKey _key = GlobalKey();
 
   double get width {
@@ -371,19 +374,20 @@ class _GenneralChannelItemState extends State<GenneralChannelItem> {
   @override
   void initState() {
     super.initState();
-    WidgetsBinding.instance?.addPostFrameCallback((_) {
-      logger.d('${context.size?.width} $width');
-      // WSLGetWidgetWithNotification(
-      //         width: context.size?.width ?? 0.0, index: widget.index)
-      //     .dispatch(context);
-      // WSLGetWidgetWithNotification(width: width, index: widget.index)
-      //     .dispatch(context);
-    });
+    // WidgetsBinding.instance?.addPostFrameCallback((_) {
+    //   logger.d('${context.size?.width} $width');
+    //   // WSLGetWidgetWithNotification(
+    //   //         width: context.size?.width ?? 0.0, index: widget.index)
+    //   //     .dispatch(context);
+    //   // WSLGetWidgetWithNotification(width: width, index: widget.index)
+    //   //     .dispatch(context);
+    // });
   }
 
   @override
   Widget build(BuildContext context) {
-    WSLGetWidgetWithNotification(width: width, index: widget.index)
+    WSLGetWidgetWithNotification(
+            width: width + widget.iconSize + 4, index: widget.index)
         .dispatch(context);
 
     return Container(
@@ -395,9 +399,19 @@ class _GenneralChannelItemState extends State<GenneralChannelItem> {
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           const Spacer(),
-          Text(
-            widget.title,
-            style: style,
+          Row(
+            children: [
+              if (widget.icon != null)
+                Icon(
+                  widget.icon,
+                  size: widget.iconSize,
+                ),
+              if (widget.icon != null) const SizedBox(width: 4),
+              Text(
+                widget.title,
+                style: style,
+              ),
+            ],
           ),
           const Spacer(),
         ],
@@ -425,8 +439,8 @@ class WSLGetWidgetWithNotification extends Notification {
   final int index;
 }
 
-class ChannelFrame {
-  ChannelFrame({
+class ItemFrame {
+  ItemFrame({
     this.left = 0,
     this.width = 0,
     this.index = 0,

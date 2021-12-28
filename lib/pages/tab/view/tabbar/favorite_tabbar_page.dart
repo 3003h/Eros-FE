@@ -2,12 +2,18 @@ import 'package:blur/blur.dart';
 import 'package:extended_nested_scroll_view/extended_nested_scroll_view.dart';
 import 'package:fehviewer/fehviewer.dart';
 import 'package:fehviewer/pages/tab/controller/favorite_tabbar_controller.dart';
+import 'package:fehviewer/pages/tab/controller/search_page_controller.dart';
+import 'package:fehviewer/pages/tab/controller/tabhome_controller.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
 import 'package:keframe/size_cache_widget.dart';
+import 'package:line_icons/line_icon.dart';
+import 'package:line_icons/line_icons.dart';
 
 import '../../comm.dart';
 import '../constants.dart';
+import 'favorite_sub_page.dart';
 
 class FavoriteTabTabBarPage extends StatefulWidget {
   const FavoriteTabTabBarPage({Key? key}) : super(key: key);
@@ -67,8 +73,13 @@ class _FavoriteTabTabBarPageState extends State<FavoriteTabTabBarPage> {
                     return LinkScrollBar(
                       pageController: pageController,
                       controller: linkScrollBarController,
-                      titleList:
-                          controller.favcatList.map((e) => e.favTitle).toList(),
+                      titleList: controller.favcatList
+                          .map((e) => LinkTabItem(
+                                title: e.favTitle,
+                                // icon: LineIcons.dotCircleAlt,
+                              ))
+                          .toList(),
+                      itemPadding: const EdgeInsets.symmetric(horizontal: 8),
                       initIndex: 0,
                       onItemChange: (index) => pageController.animateToPage(
                           index,
@@ -85,38 +96,107 @@ class _FavoriteTabTabBarPageState extends State<FavoriteTabTabBarPage> {
     );
   }
 
-  CupertinoNavigationBar getNavigationBar(BuildContext context) {
-    return CupertinoNavigationBar(
-      transitionBetweenRoutes: false,
-      // backgroundColor:
-      //     CupertinoTheme.of(context).barBackgroundColor.withOpacity(1),
-      // border: null,
-      border: Border(
-        bottom: BorderSide(
-          color: CupertinoTheme.of(context).barBackgroundColor.withOpacity(0.2),
-          width: 0.1, // 0.0 means one physical pixel
+  Widget getNavigationBar(BuildContext context) {
+    return Obx(() {
+      return CupertinoNavigationBar(
+        transitionBetweenRoutes: false,
+        border: Border(
+          bottom: BorderSide(
+            color:
+                CupertinoTheme.of(context).barBackgroundColor.withOpacity(0.2),
+            width: 0.1, // 0.0 means one physical pixel
+          ),
         ),
-      ),
-      padding: const EdgeInsetsDirectional.only(end: 4),
-      middle: GestureDetector(
-        onTap: () => controller.srcollToTop(context),
-        child: Row(
+        padding: const EdgeInsetsDirectional.only(end: 4),
+        middle: GestureDetector(
+          onTap: () => controller.srcollToTop(context),
+          child: Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Text(L10n.of(context).favcat),
+              Obx(() {
+                if (controller.isBackgroundRefresh)
+                  return const CupertinoActivityIndicator(
+                    radius: 10,
+                  ).paddingSymmetric(horizontal: 8);
+                else
+                  return const SizedBox();
+              }),
+            ],
+          ),
+        ),
+        leading: controller.getLeading(context),
+        trailing: Row(
           mainAxisSize: MainAxisSize.min,
+          mainAxisAlignment: MainAxisAlignment.end,
           children: [
-            Text(L10n.of(context).favcat),
-            Obx(() {
-              if (controller.isBackgroundRefresh)
-                return const CupertinoActivityIndicator(
-                  radius: 10,
-                ).paddingSymmetric(horizontal: 8);
-              else
-                return const SizedBox();
-            }),
+            // 搜索按钮
+            CupertinoButton(
+              minSize: 40,
+              padding: const EdgeInsets.all(0),
+              child: const Icon(
+                LineIcons.search,
+                size: 26,
+              ),
+              onPressed: () {
+                final bool fromTabItem = Get.find<TabHomeController>()
+                        .tabMap[controller.tabTag ?? ''] ??
+                    false;
+                NavigatorUtil.goSearchPage(
+                    searchType: SearchType.favorite, fromTabItem: fromTabItem);
+              },
+            ),
+            CupertinoButton(
+              padding: const EdgeInsets.all(0.0),
+              minSize: 36,
+              child: Row(
+                mainAxisSize: MainAxisSize.min,
+                children: <Widget>[
+                  const Icon(
+                    LineIcons.sortAmountDown,
+                    size: 26,
+                  ),
+                  Align(
+                    alignment: Alignment.centerLeft,
+                    child: Text(
+                      controller.orderText,
+                      style: const TextStyle(
+                        fontSize: 10,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  )
+                ],
+              ),
+              onPressed: () => controller.setOrder(context),
+            ),
+            CupertinoButton(
+              padding: const EdgeInsets.all(0),
+              minSize: 36,
+              child: Container(
+                padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 0),
+                decoration: BoxDecoration(
+                    border: Border.all(
+                      color: CupertinoDynamicColor.resolve(
+                          CupertinoColors.activeBlue, context),
+                      width: 1.5,
+                    ),
+                    borderRadius: const BorderRadius.all(Radius.circular(8))),
+                child: Obx(() => Text(
+                      '${controller.curPage + 1}',
+                      style: TextStyle(
+                          color: CupertinoDynamicColor.resolve(
+                              CupertinoColors.activeBlue, context)),
+                    )),
+              ),
+              onPressed: () {
+                controller.showJumpToPage();
+              },
+            ),
           ],
         ),
-      ),
-      leading: controller.getLeading(context),
-    );
+      );
+    });
   }
 
   @override
@@ -159,13 +239,14 @@ class _FavoriteTabTabBarPageState extends State<FavoriteTabTabBarPage> {
             controller: pageController,
             children: [
               ...controller.favcatList
-                  .map((e) => Center(
-                        child: Text(e.favTitle),
+                  .map((e) => FavoriteSubPage(
+                        favcat: e.favId,
                       ))
                   .toList(),
             ],
             onPageChanged: (index) {
               linkScrollBarController.scrollToItem(index);
+              controller.onPageChanged(index);
             },
           ),
         );

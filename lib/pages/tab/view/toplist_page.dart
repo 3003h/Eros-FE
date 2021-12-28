@@ -105,14 +105,14 @@ class _ToplistTabState extends State<ToplistTab> {
                   borderRadius: BorderRadius.circular(8),
                 ),
                 child: Obx(() => Text(
-                      '${controller.curPage.value + 1}',
+                      '${controller.curPage + 1}',
                       style: TextStyle(
                           color: CupertinoDynamicColor.resolve(
                               CupertinoColors.activeBlue, context)),
                     )),
               ),
               onPressed: () {
-                controller.jumpToPage();
+                controller.showJumpToPage();
               },
             ),
           ],
@@ -165,7 +165,7 @@ class _ToplistTabState extends State<ToplistTab> {
         state,
         controller.tabTag,
         maxPage: controller.maxPage,
-        curPage: controller.curPage.value,
+        curPage: controller.curPage,
         lastComplete: controller.lastComplete,
         centerKey: centerKey,
         key: controller.sliverAnimatedListKey,
