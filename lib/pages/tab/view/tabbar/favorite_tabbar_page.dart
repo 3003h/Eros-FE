@@ -1,5 +1,6 @@
 import 'package:blur/blur.dart';
 import 'package:extended_nested_scroll_view/extended_nested_scroll_view.dart';
+import 'package:fehviewer/common/service/layout_service.dart';
 import 'package:fehviewer/fehviewer.dart';
 import 'package:fehviewer/pages/tab/controller/favorite_tabbar_controller.dart';
 import 'package:fehviewer/pages/tab/controller/search_page_controller.dart';
@@ -70,21 +71,48 @@ class _FavoriteTabTabBarPageState extends State<FavoriteTabTabBarPage> {
                 child: Container(
                   height: kTopTabbarHeight,
                   child: Obx(() {
-                    return LinkScrollBar(
-                      pageController: pageController,
-                      controller: linkScrollBarController,
-                      titleList: controller.favcatList
-                          .map((e) => LinkTabItem(
-                                title: e.favTitle,
-                                // icon: LineIcons.dotCircleAlt,
-                              ))
-                          .toList(),
-                      itemPadding: const EdgeInsets.symmetric(horizontal: 8),
-                      initIndex: 0,
-                      onItemChange: (index) => pageController.animateToPage(
-                          index,
-                          duration: const Duration(milliseconds: 300),
-                          curve: Curves.ease),
+                    return Row(
+                      children: [
+                        Expanded(
+                          child: LinkScrollBar(
+                            pageController: pageController,
+                            controller: linkScrollBarController,
+                            titleList: controller.favcatList
+                                .map((e) => LinkTabItem(
+                                      title: e.favTitle,
+                                      // icon: LineIcons.dotCircleAlt,
+                                    ))
+                                .toList(),
+                            itemPadding:
+                                const EdgeInsets.symmetric(horizontal: 8),
+                            initIndex: 0,
+                            onItemChange: (index) =>
+                                pageController.animateToPage(index,
+                                    duration: const Duration(milliseconds: 300),
+                                    curve: Curves.ease),
+                          ),
+                        ),
+                        CupertinoButton(
+                          minSize: 40,
+                          padding: const EdgeInsets.symmetric(horizontal: 12),
+                          child: const Icon(
+                            LineIcons.bars,
+                            size: 24,
+                          ),
+                          onPressed: () async {
+                            // 跳转收藏夹选择页
+                            final result = await Get.toNamed(
+                              EHRoutes.selFavorie,
+                              id: isLayoutLarge ? 1 : null,
+                            );
+                            if (result != null && result is Favcat) {
+                              final index = controller.favcatList.indexWhere(
+                                  (element) => element.favId == result.favId);
+                              pageController.jumpToPage(index);
+                            }
+                          },
+                        )
+                      ],
                     );
                   }),
                 ),
@@ -113,7 +141,7 @@ class _FavoriteTabTabBarPageState extends State<FavoriteTabTabBarPage> {
           child: Row(
             mainAxisSize: MainAxisSize.min,
             children: [
-              Text(L10n.of(context).favcat),
+              Text(L10n.of(context).tab_favorite),
               Obx(() {
                 if (controller.isBackgroundRefresh)
                   return const CupertinoActivityIndicator(
@@ -194,7 +222,7 @@ class _FavoriteTabTabBarPageState extends State<FavoriteTabTabBarPage> {
               },
             ),
           ],
-        ),
+        ).paddingOnly(right: 4),
       );
     });
   }

@@ -33,13 +33,14 @@ class _FavoriteSubPageState extends State<FavoriteSubPage>
           ..tabTag = 'favsub_${widget.favcat}'
           ..favcat = widget.favcat;
     controller.subControllerMap[widget.favcat] = _favoriteSubListController;
+    addListen();
   }
 
   void addListen() {
     _favoriteSubListController.initEhTabController(
       context: context,
       ehTabController: ehTabController,
-      tabTag: EHRoutes.coutomlist,
+      tabTag: EHRoutes.favoriteTabbar,
     );
     // subController.initStateAddPostFrameCallback(context);
   }

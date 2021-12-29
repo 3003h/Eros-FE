@@ -154,7 +154,8 @@ class AppPages {
     ),
     GetPage(
       name: EHRoutes.favorite,
-      page: () => const FavoriteTab(),
+      // page: () => const FavoriteTab(),
+      page: () => const FavoriteTabTabBarPage(),
     ),
     GetPage(
       name: EHRoutes.favoriteTabbar,

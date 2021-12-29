@@ -33,13 +33,14 @@ class TabPages {
         EHRoutes.popular: const PopularListTab(),
         EHRoutes.watched: const WatchedListTab(),
         EHRoutes.gallery: const GalleryListTab(),
-        EHRoutes.favorite: const FavoriteTab(),
+        // EHRoutes.favoriteTabbar: const FavoriteTabTabBarPage(),
+        // EHRoutes.favorite: const FavoriteTab(),
+        EHRoutes.favorite: const FavoriteTabTabBarPage(),
         EHRoutes.toplist: const ToplistTab(),
         EHRoutes.history: const HistoryTab(),
         EHRoutes.download: const DownloadTab(),
         EHRoutes.setting: const SettingTab(),
         EHRoutes.coutomlist: const CustomList(),
-        EHRoutes.favoriteTabbar: const FavoriteTabTabBarPage(),
       };
 
   final Map<String, IconData> iconDatas = <String, IconData>{
@@ -79,8 +80,8 @@ Map<String, bool> kDefTabMap = <String, bool>{
   EHRoutes.popular: true,
   EHRoutes.watched: false,
   EHRoutes.gallery: true,
+  // EHRoutes.favoriteTabbar: true,
   EHRoutes.favorite: true,
-  EHRoutes.favoriteTabbar: true,
   EHRoutes.toplist: false,
   EHRoutes.download: true,
   EHRoutes.history: false,
@@ -93,8 +94,8 @@ List<String> kTabNameList = <String>[
   EHRoutes.popular,
   EHRoutes.coutomlist,
   EHRoutes.watched,
+  // EHRoutes.favoriteTabbar,
   EHRoutes.favorite,
-  EHRoutes.favoriteTabbar,
   EHRoutes.toplist,
   EHRoutes.download,
   EHRoutes.history,
@@ -154,19 +155,29 @@ class TabHomeController extends GetxController {
     _tabConfig = gStore.tabConfig ?? (const TabConfig(tabItemList: []));
 
     if (_tabConfig.tabMap.isNotEmpty) {
-      if (_tabConfig.tabItemList.length < kTabNameList.length) {
-        final List<String> _tabConfigNames =
-            _tabConfig.tabItemList.map((e) => e.name).toList();
-        final List<String> _newTabs = kTabNameList
-            .where((String element) => !_tabConfigNames.contains(element))
-            .toList();
+      final List<String> _tabConfigNames =
+          _tabConfig.tabItemList.map((e) => e.name).toList();
 
-        // 新增tab页的处理
-        logger.d('add tab $_newTabs');
+      final List<String> _addTabs = kTabNameList
+          .where((String element) => !_tabConfigNames.contains(element))
+          .toList();
 
-        for (final viewName in _newTabs) {
-          _tabConfig.tabItemList.add(TabItem(name: viewName, enable: false));
-        }
+      final _subTabs = _tabConfigNames
+          .where((element) => !kTabNameList.contains(element))
+          .toList();
+
+      logger.d('sub tab $_subTabs');
+
+      for (final viewName in _subTabs) {
+        _tabConfig.tabItemList
+            .removeWhere((element) => element.name == viewName);
+      }
+
+      // 新增tab页的处理
+      logger.d('add tab $_addTabs');
+
+      for (final viewName in _addTabs) {
+        _tabConfig.tabItemList.add(TabItem(name: viewName, enable: false));
       }
 
       tabMap(_tabConfig.tabMap);
