@@ -8,6 +8,7 @@ import 'download_config.dart';
 import 'auto_lock.dart';
 import 'webdav_profile.dart';
 import 'fav_config.dart';
+import 'custom_tab_config.dart';
 
 @immutable
 class Profile {
@@ -27,6 +28,7 @@ class Profile {
     required this.autoLock,
     this.webdav,
     this.favConfig,
+    this.customTabConfig,
   });
 
   final EhConfig ehConfig;
@@ -43,6 +45,7 @@ class Profile {
   final AutoLock autoLock;
   final WebdavProfile? webdav;
   final FavConfig? favConfig;
+  final CustomTabConfig? customTabConfig;
 
   factory Profile.fromJson(Map<String,dynamic> json) => Profile(
     ehConfig: EhConfig.fromJson(json['ehConfig'] as Map<String, dynamic>),
@@ -58,7 +61,8 @@ class Profile {
     downloadConfig: DownloadConfig.fromJson(json['downloadConfig'] as Map<String, dynamic>),
     autoLock: AutoLock.fromJson(json['autoLock'] as Map<String, dynamic>),
     webdav: json['webdav'] != null ? WebdavProfile.fromJson(json['webdav'] as Map<String, dynamic>) : null,
-    favConfig: json['favConfig'] != null ? FavConfig.fromJson(json['favConfig'] as Map<String, dynamic>) : null
+    favConfig: json['favConfig'] != null ? FavConfig.fromJson(json['favConfig'] as Map<String, dynamic>) : null,
+    customTabConfig: json['customTabConfig'] != null ? CustomTabConfig.fromJson(json['customTabConfig'] as Map<String, dynamic>) : null
   );
   
   Map<String, dynamic> toJson() => {
@@ -75,7 +79,8 @@ class Profile {
     'downloadConfig': downloadConfig.toJson(),
     'autoLock': autoLock.toJson(),
     'webdav': webdav?.toJson(),
-    'favConfig': favConfig?.toJson()
+    'favConfig': favConfig?.toJson(),
+    'customTabConfig': customTabConfig?.toJson()
   };
 
   Profile clone() => Profile(
@@ -92,7 +97,8 @@ class Profile {
     downloadConfig: downloadConfig.clone(),
     autoLock: autoLock.clone(),
     webdav: webdav?.clone(),
-    favConfig: favConfig?.clone()
+    favConfig: favConfig?.clone(),
+    customTabConfig: customTabConfig?.clone()
   );
 
     
@@ -110,7 +116,8 @@ class Profile {
     DownloadConfig? downloadConfig,
     AutoLock? autoLock,
     WebdavProfile? webdav,
-    FavConfig? favConfig
+    FavConfig? favConfig,
+    CustomTabConfig? customTabConfig
   }) => Profile(
     ehConfig: ehConfig ?? this.ehConfig,
     user: user ?? this.user,
@@ -126,12 +133,13 @@ class Profile {
     autoLock: autoLock ?? this.autoLock,
     webdav: webdav ?? this.webdav,
     favConfig: favConfig ?? this.favConfig,
+    customTabConfig: customTabConfig ?? this.customTabConfig,
   );  
 
   @override
   bool operator ==(Object other) => identical(this, other) 
-    || other is Profile && ehConfig == other.ehConfig && user == other.user && lastLogin == other.lastLogin && locale == other.locale && theme == other.theme && searchText == other.searchText && localFav == other.localFav && enableAdvanceSearch == other.enableAdvanceSearch && advanceSearch == other.advanceSearch && dnsConfig == other.dnsConfig && downloadConfig == other.downloadConfig && autoLock == other.autoLock && webdav == other.webdav && favConfig == other.favConfig;
+    || other is Profile && ehConfig == other.ehConfig && user == other.user && lastLogin == other.lastLogin && locale == other.locale && theme == other.theme && searchText == other.searchText && localFav == other.localFav && enableAdvanceSearch == other.enableAdvanceSearch && advanceSearch == other.advanceSearch && dnsConfig == other.dnsConfig && downloadConfig == other.downloadConfig && autoLock == other.autoLock && webdav == other.webdav && favConfig == other.favConfig && customTabConfig == other.customTabConfig;
 
   @override
-  int get hashCode => ehConfig.hashCode ^ user.hashCode ^ lastLogin.hashCode ^ locale.hashCode ^ theme.hashCode ^ searchText.hashCode ^ localFav.hashCode ^ enableAdvanceSearch.hashCode ^ advanceSearch.hashCode ^ dnsConfig.hashCode ^ downloadConfig.hashCode ^ autoLock.hashCode ^ webdav.hashCode ^ favConfig.hashCode;
+  int get hashCode => ehConfig.hashCode ^ user.hashCode ^ lastLogin.hashCode ^ locale.hashCode ^ theme.hashCode ^ searchText.hashCode ^ localFav.hashCode ^ enableAdvanceSearch.hashCode ^ advanceSearch.hashCode ^ dnsConfig.hashCode ^ downloadConfig.hashCode ^ autoLock.hashCode ^ webdav.hashCode ^ favConfig.hashCode ^ customTabConfig.hashCode;
 }

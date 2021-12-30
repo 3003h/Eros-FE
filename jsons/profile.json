@@ -12,5 +12,6 @@
   "downloadConfig": "$download_config",
   "autoLock": "$auto_lock",
   "webdav?": "$webdav_profile",
-  "favConfig?": "$fav_config"
+  "favConfig?": "$fav_config",
+  "customTabConfig?": "$custom_tab_config"
 }
