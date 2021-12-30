@@ -40,7 +40,7 @@ class TabPages {
         EHRoutes.history: const HistoryTab(),
         EHRoutes.download: const DownloadTab(),
         EHRoutes.setting: const SettingTab(),
-        EHRoutes.coutomlist: const CustomList(),
+        EHRoutes.coutomlist: const CustomTabbarList(),
       };
 
   final Map<String, IconData> iconDatas = <String, IconData>{
@@ -70,7 +70,7 @@ class TabPages {
         EHRoutes.history: L10n.of(_context).tab_history,
         EHRoutes.download: L10n.of(_context).tab_download,
         EHRoutes.setting: L10n.of(_context).tab_setting,
-        EHRoutes.coutomlist: 'Custom',
+        EHRoutes.coutomlist: '自定',
         EHRoutes.favoriteTabbar: L10n.of(_context).tab_favorite,
       };
 }

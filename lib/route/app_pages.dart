@@ -226,7 +226,7 @@ class AppPages {
     ),
     GetPage(
       name: EHRoutes.coutomlist,
-      page: () => const CustomList(),
+      page: () => const CustomTabbarList(),
     ),
   ];
 }

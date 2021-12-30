@@ -7,8 +7,8 @@ import 'enum.dart';
 import 'default_tabview_controller.dart';
 
 /// 控制单个自定义列表
-class SubListController extends DefaultTabViewController {
-  SubListController();
+class CustomSubListController extends DefaultTabViewController {
+  CustomSubListController();
 
   @override
   void onInit() {

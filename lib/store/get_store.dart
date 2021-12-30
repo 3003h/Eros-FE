@@ -127,6 +127,7 @@ class GStore {
       webdav: _profileObj.webdav,
       autoLock: _profileObj.autoLock,
       favConfig: _profileObj.favConfig,
+      customTabConfig: _profileObj.customTabConfig,
     );
     return _profile;
   }
