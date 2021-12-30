@@ -2,6 +2,7 @@ export 'download_archiver_task_info.dart';
 export 'local_fav.dart';
 export 'eh_config.dart';
 export 'simple_tag.dart';
+export 'fav_config.dart';
 export 'commit_vote_res.dart';
 export 'gallery_image.dart';
 export 'auto_lock.dart';

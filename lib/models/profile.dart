@@ -7,6 +7,7 @@ import 'dns_config.dart';
 import 'download_config.dart';
 import 'auto_lock.dart';
 import 'webdav_profile.dart';
+import 'fav_config.dart';
 
 @immutable
 class Profile {
@@ -25,6 +26,7 @@ class Profile {
     required this.downloadConfig,
     required this.autoLock,
     this.webdav,
+    this.favConfig,
   });
 
   final EhConfig ehConfig;
@@ -40,6 +42,7 @@ class Profile {
   final DownloadConfig downloadConfig;
   final AutoLock autoLock;
   final WebdavProfile? webdav;
+  final FavConfig? favConfig;
 
   factory Profile.fromJson(Map<String,dynamic> json) => Profile(
     ehConfig: EhConfig.fromJson(json['ehConfig'] as Map<String, dynamic>),
@@ -54,7 +57,8 @@ class Profile {
     dnsConfig: DnsConfig.fromJson(json['dnsConfig'] as Map<String, dynamic>),
     downloadConfig: DownloadConfig.fromJson(json['downloadConfig'] as Map<String, dynamic>),
     autoLock: AutoLock.fromJson(json['autoLock'] as Map<String, dynamic>),
-    webdav: json['webdav'] != null ? WebdavProfile.fromJson(json['webdav'] as Map<String, dynamic>) : null
+    webdav: json['webdav'] != null ? WebdavProfile.fromJson(json['webdav'] as Map<String, dynamic>) : null,
+    favConfig: json['favConfig'] != null ? FavConfig.fromJson(json['favConfig'] as Map<String, dynamic>) : null
   );
   
   Map<String, dynamic> toJson() => {
@@ -70,7 +74,8 @@ class Profile {
     'dnsConfig': dnsConfig.toJson(),
     'downloadConfig': downloadConfig.toJson(),
     'autoLock': autoLock.toJson(),
-    'webdav': webdav?.toJson()
+    'webdav': webdav?.toJson(),
+    'favConfig': favConfig?.toJson()
   };
 
   Profile clone() => Profile(
@@ -86,7 +91,8 @@ class Profile {
     dnsConfig: dnsConfig.clone(),
     downloadConfig: downloadConfig.clone(),
     autoLock: autoLock.clone(),
-    webdav: webdav?.clone()
+    webdav: webdav?.clone(),
+    favConfig: favConfig?.clone()
   );
 
     
@@ -103,7 +109,8 @@ class Profile {
     DnsConfig? dnsConfig,
     DownloadConfig? downloadConfig,
     AutoLock? autoLock,
-    WebdavProfile? webdav
+    WebdavProfile? webdav,
+    FavConfig? favConfig
   }) => Profile(
     ehConfig: ehConfig ?? this.ehConfig,
     user: user ?? this.user,
@@ -118,12 +125,13 @@ class Profile {
     downloadConfig: downloadConfig ?? this.downloadConfig,
     autoLock: autoLock ?? this.autoLock,
     webdav: webdav ?? this.webdav,
+    favConfig: favConfig ?? this.favConfig,
   );  
 
   @override
   bool operator ==(Object other) => identical(this, other) 
-    || other is Profile && ehConfig == other.ehConfig && user == other.user && lastLogin == other.lastLogin && locale == other.locale && theme == other.theme && searchText == other.searchText && localFav == other.localFav && enableAdvanceSearch == other.enableAdvanceSearch && advanceSearch == other.advanceSearch && dnsConfig == other.dnsConfig && downloadConfig == other.downloadConfig && autoLock == other.autoLock && webdav == other.webdav;
+    || other is Profile && ehConfig == other.ehConfig && user == other.user && lastLogin == other.lastLogin && locale == other.locale && theme == other.theme && searchText == other.searchText && localFav == other.localFav && enableAdvanceSearch == other.enableAdvanceSearch && advanceSearch == other.advanceSearch && dnsConfig == other.dnsConfig && downloadConfig == other.downloadConfig && autoLock == other.autoLock && webdav == other.webdav && favConfig == other.favConfig;
 
   @override
-  int get hashCode => ehConfig.hashCode ^ user.hashCode ^ lastLogin.hashCode ^ locale.hashCode ^ theme.hashCode ^ searchText.hashCode ^ localFav.hashCode ^ enableAdvanceSearch.hashCode ^ advanceSearch.hashCode ^ dnsConfig.hashCode ^ downloadConfig.hashCode ^ autoLock.hashCode ^ webdav.hashCode;
+  int get hashCode => ehConfig.hashCode ^ user.hashCode ^ lastLogin.hashCode ^ locale.hashCode ^ theme.hashCode ^ searchText.hashCode ^ localFav.hashCode ^ enableAdvanceSearch.hashCode ^ advanceSearch.hashCode ^ dnsConfig.hashCode ^ downloadConfig.hashCode ^ autoLock.hashCode ^ webdav.hashCode ^ favConfig.hashCode;
 }

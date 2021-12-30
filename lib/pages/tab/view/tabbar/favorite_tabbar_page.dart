@@ -27,8 +27,8 @@ class _FavoriteTabTabBarPageState extends State<FavoriteTabTabBarPage> {
   final EhTabController ehTabController = EhTabController();
   final LinkScrollBarController linkScrollBarController =
       LinkScrollBarController();
-  final PageController pageController = PageController();
   final controller = Get.find<FavoriteTabberController>();
+  late final PageController pageController;
 
   Widget _buildTopBar(
       BuildContext context, double offset, double maxExtentCallBackValue) {
@@ -85,7 +85,7 @@ class _FavoriteTabTabBarPageState extends State<FavoriteTabTabBarPage> {
                                 .toList(),
                             itemPadding:
                                 const EdgeInsets.symmetric(horizontal: 8),
-                            initIndex: 0,
+                            initIndex: controller.index,
                             onItemChange: (index) =>
                                 pageController.animateToPage(index,
                                     duration: const Duration(milliseconds: 300),
@@ -225,6 +225,12 @@ class _FavoriteTabTabBarPageState extends State<FavoriteTabTabBarPage> {
         ).paddingOnly(right: 4),
       );
     });
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    pageController = PageController(initialPage: controller.index);
   }
 
   @override

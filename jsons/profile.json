@@ -11,5 +11,6 @@
   "dnsConfig": "$dns_config",
   "downloadConfig": "$download_config",
   "autoLock": "$auto_lock",
-  "webdav?": "$webdav_profile"
+  "webdav?": "$webdav_profile",
+  "favConfig?": "$fav_config"
 }

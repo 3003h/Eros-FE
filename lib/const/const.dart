@@ -198,6 +198,7 @@ const Profile kDefProfile = Profile(
   ),
   ehConfig: kDefEhConfig,
   advanceSearch: kDefAdvanceSearch,
+  favConfig: FavConfig(lastIndex: 0),
 );
 
 final RegExp regGalleryUrl =

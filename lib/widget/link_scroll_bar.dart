@@ -173,13 +173,14 @@ class _LinkScrollBarState extends State<LinkScrollBar> {
     bindController();
 
     selectIndex = widget.initIndex;
-    _indicatorPositionedLeft = widget.itemPadding.horizontal / 2;
+    // _indicatorPositionedLeft = widget.itemPadding.horizontal / 2;
 
     // 初始计算
     SchedulerBinding.instance?.addPostFrameCallback((_) {
       Future.delayed(const Duration(milliseconds: 0)).then((value) {
         setState(() {});
-      }).then((value) => scrollToItem(widget.initIndex));
+        // scrollToItem(widget.initIndex);
+      });
     });
   }
 
@@ -280,7 +281,10 @@ class _TitleIndicatorState extends State<TitleIndicator> {
   @override
   void initState() {
     super.initState();
-    positionedLeft = (widget.itemPadding?.horizontal ?? 0) / 2;
+    logger.d('index ${widget.index}');
+
+    positionedLeft = widget.channelFrameList[widget.index].left +
+        (widget.itemPadding?.horizontal ?? 0) / 2;
     _indicatorWidth = widget.channelFrameList[widget.index].width -
         (widget.itemPadding?.horizontal ?? 0);
 
