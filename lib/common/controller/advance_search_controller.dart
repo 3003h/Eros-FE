@@ -1,6 +1,4 @@
-import 'package:fehviewer/common/global.dart';
-import 'package:fehviewer/const/const.dart';
-import 'package:fehviewer/models/index.dart';
+import 'package:fehviewer/fehviewer.dart';
 import 'package:get/get.dart';
 
 import 'base_controller.dart';
@@ -42,28 +40,7 @@ class AdvanceSearchController extends ProfileController {
     return para;
   }
 
-  Map<String, dynamic> get advanceSearchMap {
-    final AdvanceSearch val = advanceSearch.value;
-
-    return <String, dynamic>{
-      if (val.searchGalleryName) 'f_sname': 'on',
-      if (val.searchGalleryTags) 'f_stags': 'on',
-      if (val.searchGalleryDesc) 'f_sdesc': 'on',
-      if (val.searchToreenFilenames) 'f_storr': 'on',
-      if (val.onlyShowWhithTorrents) 'f_sto': 'on',
-      if (val.searchLowPowerTags) 'f_sdt1': 'on',
-      if (val.searchDownvotedTags) 'f_sdt2': 'on',
-      if (val.searchExpunged) 'f_sh': 'on',
-      if (val.searchWithminRating) 'f_sr': 'on',
-      if (val.searchWithminRating) 'f_srdd': val.minRating,
-      if (val.searchBetweenpage) 'f_sp': 'on',
-      if (val.startPage.isNotEmpty) 'f_spf': val.startPage,
-      if (val.endPage.isNotEmpty) 'f_spt': val.endPage,
-      if (val.disableDFLanguage) 'f_sfl': 'on',
-      if (val.disableDFUploader) 'f_sfu': 'on',
-      if (val.disableDFTags) 'f_sft': 'on',
-    };
-  }
+  Map<String, dynamic> get advanceSearchMap => advanceSearch.value.param;
 
   Map<String, dynamic> get favSearchMap {
     final AdvanceSearch val = advanceSearch.value;

@@ -35,6 +35,7 @@ class DefaultFetchListClient extends FetchListClient {
       cats: fetchParams.cats,
       cancelToken: fetchParams.cancelToken,
       refresh: fetchParams.refresh,
+      advanceSearchParam: fetchParams.advanceSearchParam,
     );
   }
 }
@@ -143,6 +144,7 @@ class FetchParams {
     this.favcat,
     this.toplist,
     this.galleryListType = GalleryListType.gallery,
+    this.advanceSearchParam,
   });
   int? page;
   String? fromGid;
@@ -154,4 +156,5 @@ class FetchParams {
   String? favcat;
   String? toplist;
   GalleryListType? galleryListType;
+  Map<String, dynamic>? advanceSearchParam;
 }

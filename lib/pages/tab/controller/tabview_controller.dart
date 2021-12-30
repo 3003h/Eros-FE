@@ -39,9 +39,13 @@ class TabViewController extends GetxController
   final EhConfigService ehConfigService = Get.find();
 
   // 请求一批画廊数据
-  Future<GalleryList?> fetchData({bool refresh = false}) async {}
+  Future<GalleryList?> fetchData({bool refresh = false}) async {
+    throw UnimplementedError();
+  }
 
-  Future<GalleryList?> fetchMoreData() async {}
+  Future<GalleryList?> fetchMoreData() async {
+    throw UnimplementedError();
+  }
 
   // 首次请求
   Future<void> firstLoad() async {
@@ -137,10 +141,14 @@ class TabViewController extends GetxController
   }
 
   // 加载上一页
-  Future<void> loadPrevious() async {}
+  Future<void> loadPrevious() async {
+    throw UnimplementedError();
+  }
 
   // 跳转到指定页加载
-  Future<void> loadFromPage(int page) async {}
+  Future<void> loadFromPage(int page) async {
+    throw UnimplementedError();
+  }
 
   Future<void> onRefresh() async {
     if (!(cancelToken?.isCancelled ?? false)) {
