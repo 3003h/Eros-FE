@@ -78,11 +78,12 @@ Future<void> main() async {
     }
     debugPrint(
         'runZonedGuarded: Caught error in my root zone.\n$error\n$stackTrace');
-    if (!Platform.isWindows) {
+    if (!Platform.isWindows && !kDebugMode) {
       FirebaseCrashlytics.instance.recordError(error, stackTrace);
     }
-
-    await Sentry.captureException(error, stackTrace: stackTrace);
+    if (!kDebugMode) {
+      await Sentry.captureException(error, stackTrace: stackTrace);
+    }
   });
 }
 

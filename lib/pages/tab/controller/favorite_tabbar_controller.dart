@@ -14,12 +14,20 @@ class FavoriteTabberController extends DefaultTabViewController {
 
   Map<String, FavoriteSubListController> subControllerMap = {};
 
+  FavConfig? get favConfig => Global.profile.favConfig;
+  set favConfig(FavConfig? val) =>
+      Global.profile = Global.profile.copyWith(favConfig: val);
+
   final _currFavcat = 'a'.obs;
   String get currFavcat => _currFavcat.value;
   set currFavcat(String val) => _currFavcat.value = val;
 
   FavoriteSubListController? get currSubController =>
       subControllerMap[currFavcat];
+
+  final _index = 0.obs;
+  int get index => _index.value;
+  set index(int val) => _index.value = val;
 
   @override
   Future<void> firstLoad() async {}
@@ -30,6 +38,13 @@ class FavoriteTabberController extends DefaultTabViewController {
     for (final favcat in favcatList) {
       Get.lazyPut(() => FavoriteSubListController(), tag: favcat.favId);
     }
+
+    // index
+    index = favConfig?.lastIndex ?? 0;
+    ever<int>(_index, (value) {
+      favConfig = favConfig?.copyWith(lastIndex: value);
+      Global.saveProfile();
+    });
   }
 
   String get orderText =>
@@ -89,5 +104,6 @@ class FavoriteTabberController extends DefaultTabViewController {
 
   void onPageChanged(int index) {
     currFavcat = favoriteSelectorController.favcatList[index].favId;
+    this.index = index;
   }
 }

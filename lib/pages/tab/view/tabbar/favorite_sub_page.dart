@@ -40,7 +40,7 @@ class _FavoriteSubPageState extends State<FavoriteSubPage>
     _favoriteSubListController.initEhTabController(
       context: context,
       ehTabController: ehTabController,
-      tabTag: EHRoutes.favoriteTabbar,
+      tabTag: EHRoutes.favorite,
     );
     // subController.initStateAddPostFrameCallback(context);
   }
