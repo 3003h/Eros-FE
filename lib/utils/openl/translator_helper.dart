@@ -10,21 +10,26 @@ import 'package:translator/translator.dart';
 import 'language.dart';
 
 class TranslatorHelper {
-  static Future<String> getOpenLApikey() async {
-    final String openl = await rootBundle.loadString('assets/openl.json');
-    final openlJson = json.decode(openl);
-    return openlJson['apikey'] as String? ?? '';
+  static Future<String?> getOpenLApikey() async {
+    try {
+      final String openl = await rootBundle.loadString('assets/openl.json');
+      final openlJson = json.decode(openl);
+      return openlJson['apikey'] as String?;
+    } catch (_) {}
   }
 
   static GoogleTranslator googleTranslator = GoogleTranslator();
 
-  static Future<OpenlTranslation> openLtranslate(
+  static Future<OpenlTranslation?> openLtranslate(
     String sourceText, {
     String from = 'auto',
     String to = 'en',
     String service = 'deepl',
   }) async {
-    final String apikey = await getOpenLApikey();
+    final String? apikey = await getOpenLApikey();
+    if (apikey == null) {
+      return null;
+    }
 
     final OpenLTranslator openLTranslator = OpenLTranslator(apikey: apikey);
     return openLTranslator.translate(
@@ -36,7 +41,10 @@ class TranslatorHelper {
   }
 
   static Future<String?> getfallbackService() async {
-    final String apikey = await getOpenLApikey();
+    final String? apikey = await getOpenLApikey();
+    if (apikey == null) {
+      return null;
+    }
     final OpenLTranslator openLTranslator = OpenLTranslator(apikey: apikey);
     return await openLTranslator.getfallbackService();
   }
@@ -50,10 +58,12 @@ class TranslatorHelper {
     bool useGoogleTranslate = false;
     String rultText = '';
     if (OpenLLanguageList.contains(from)) {
-      OpenlTranslation rult =
+      OpenlTranslation? rult =
           await openLtranslate(sourceText, from: from, to: to);
-      logger.d(rult.toJson());
-      if (rult.status != true) {
+
+      if (rult == null) {
+        useGoogleTranslate = true;
+      } else if (rult.status != true) {
         final service = await getfallbackService();
         if (service != null) {
           logger.d('getfallbackService $service');
@@ -70,7 +80,7 @@ class TranslatorHelper {
           }
         }
       }
-      rultText = rult.result ?? '';
+      rultText = rult?.result ?? '';
     } else {
       useGoogleTranslate = true;
     }
