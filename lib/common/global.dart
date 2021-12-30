@@ -229,7 +229,7 @@ class Global {
 
   // 持久化Profile信息
   static Future<void>? saveProfile() {
-    // logger.d(profile.favConfig?.toJson());
+    // logger.d(profile.customTabConfig?.toJson());
     final GStore gStore = Get.find<GStore>();
     gStore.profile = profile;
   }

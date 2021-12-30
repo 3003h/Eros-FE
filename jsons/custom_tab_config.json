@@ -1,3 +1,4 @@
 {
-  "profiles?": "$[]custom_profile"
+  "profiles?": "$[]custom_profile",
+  "lastIndex?": 0
 }

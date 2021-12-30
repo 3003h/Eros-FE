@@ -2,18 +2,14 @@ import 'package:blur/blur.dart';
 import 'package:english_words/english_words.dart';
 import 'package:extended_nested_scroll_view/extended_nested_scroll_view.dart';
 import 'package:fehviewer/fehviewer.dart';
-import 'package:fehviewer/pages/tab/controller/custom_tabbar_controller.dart';
 import 'package:fehviewer/pages/tab/controller/custom_sublist_controller.dart';
-import 'package:fehviewer/pages/tab/view/gallery_base.dart';
-import 'package:fehviewer/pages/tab/view/tab_base.dart';
-import 'package:fehviewer/widget/refresh.dart';
+import 'package:fehviewer/pages/tab/controller/custom_tabbar_controller.dart';
 import 'package:flutter/cupertino.dart' hide CupertinoTabBar;
 import 'package:get/get.dart';
 import 'package:keframe/size_cache_widget.dart';
 
 import '../../comm.dart';
 import '../constants.dart';
-import '../tab_base.dart';
 import 'custom_sub_page.dart';
 
 class CustomTabbarList extends StatefulWidget {
@@ -29,11 +25,12 @@ class _CustomTabbarListState extends State<CustomTabbarList> {
   final EhTabController ehTabController = EhTabController();
   final LinkScrollBarController linkScrollBarController =
       LinkScrollBarController();
-  final PageController pageController = PageController();
+  late final PageController pageController;
 
   @override
   void initState() {
     super.initState();
+    pageController = PageController(initialPage: controller.index);
   }
 
   @override
@@ -83,24 +80,12 @@ class _CustomTabbarListState extends State<CustomTabbarList> {
             controller: pageController,
             children: controller.profiles.isNotEmpty
                 ? [
-                    // 画廊列表测试
-                    ...controller.titles
-                        .take(3)
+                    // 画廊列表
+                    ...controller.profiles
                         .map((e) => SubListView<CustomSubListController>(
-                              costomListTag: e,
+                              profileName: e.name,
                             ))
                         .toList(),
-                    // 单词列表测试
-                    const EnglishWordList(),
-                    ...controller.titles
-                        .map((e) => Center(
-                              child: Text(e),
-                            ))
-                        .toList()
-                      ..removeAt(0)
-                      ..removeAt(0)
-                      ..removeAt(0)
-                      ..removeAt(0)
                   ]
                 : [
                     const Center(
@@ -112,6 +97,7 @@ class _CustomTabbarListState extends State<CustomTabbarList> {
                   ],
             onPageChanged: (index) {
               linkScrollBarController.scrollToItem(index);
+              controller.onPageChanged(index);
             },
           ),
         );
@@ -175,7 +161,7 @@ class _CustomTabbarListState extends State<CustomTabbarList> {
                                   .map((e) => LinkTabItem(title: e.name))
                                   .toList()
                               : [LinkTabItem(title: '未设置')],
-                          initIndex: 0,
+                          initIndex: controller.index,
                           onItemChange: (index) => pageController.animateToPage(
                               index,
                               duration: const Duration(milliseconds: 300),

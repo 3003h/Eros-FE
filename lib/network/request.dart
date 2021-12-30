@@ -38,6 +38,7 @@ Future<GalleryList?> getGallery({
   String? toplist,
   String? favcat,
   ValueChanged<List<Favcat>>? favCatList,
+  Map<String, dynamic>? advanceSearchParam,
 }) async {
   final AdvanceSearchController _searchController = Get.find();
   DioHttpClient dioHttpClient = DioHttpClient(dioConfig: ehDioConfig);
@@ -82,7 +83,13 @@ Future<GalleryList?> getGallery({
   };
 
   /// 高级搜索处理
-  if (!isTopList && !isPopular && !isFav && _searchController.enableAdvance) {
+  if (advanceSearchParam != null) {
+    _params['advsearch'] = 1;
+    _params.addAll(advanceSearchParam);
+  } else if (!isTopList &&
+      !isPopular &&
+      !isFav &&
+      _searchController.enableAdvance) {
     _params['advsearch'] = 1;
     _params.addAll(_searchController.advanceSearchMap);
   }

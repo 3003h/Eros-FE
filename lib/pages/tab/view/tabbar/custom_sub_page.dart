@@ -6,22 +6,24 @@ import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
 
 import '../../comm.dart';
+import '../../controller/custom_tabbar_controller.dart';
 import '../constants.dart';
 import '../gallery_base.dart';
 import '../tab_base.dart';
 
-class SubListView<T extends TabViewController> extends StatefulWidget {
-  const SubListView({Key? key, this.costomListTag}) : super(key: key);
+class SubListView<T extends CustomSubListController> extends StatefulWidget {
+  const SubListView({Key? key, required this.profileName}) : super(key: key);
 
-  final String? costomListTag;
+  final String profileName;
 
   @override
   _SubListViewState createState() => _SubListViewState<T>();
 }
 
-class _SubListViewState<T extends TabViewController> extends State<SubListView>
-    with AutomaticKeepAliveClientMixin {
-  late final TabViewController subController;
+class _SubListViewState<T extends CustomSubListController>
+    extends State<SubListView> with AutomaticKeepAliveClientMixin {
+  late final CustomSubListController subController;
+  final CustomTabbarController controller = Get.find();
   final EhTabController ehTabController = EhTabController();
   final GlobalKey<ExtendedNestedScrollViewState> _key =
       GlobalKey<ExtendedNestedScrollViewState>();
@@ -29,8 +31,10 @@ class _SubListViewState<T extends TabViewController> extends State<SubListView>
   @override
   void initState() {
     super.initState();
-    subController = Get.find<T>(tag: widget.costomListTag)
-      ..tabTag = widget.costomListTag ?? '';
+    subController = Get.find<T>(tag: widget.profileName)
+      ..tabTag = widget.profileName
+      ..profileName = widget.profileName;
+    controller.subControllerMap[widget.profileName] = subController;
     addListen();
   }
 

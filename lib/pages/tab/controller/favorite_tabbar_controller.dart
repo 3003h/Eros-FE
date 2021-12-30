@@ -42,7 +42,8 @@ class FavoriteTabberController extends DefaultTabViewController {
     // index
     index = favConfig?.lastIndex ?? 0;
     ever<int>(_index, (value) {
-      favConfig = favConfig?.copyWith(lastIndex: value);
+      favConfig =
+          favConfig?.copyWith(lastIndex: value) ?? FavConfig(lastIndex: value);
       Global.saveProfile();
     });
   }

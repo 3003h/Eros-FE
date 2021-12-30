@@ -456,3 +456,26 @@ extension ExtMvpImage on MvpImage {
   String? get height => _match?.group(3);
   String? get size => _match?.group(1);
 }
+
+extension ExtAdvanceSearch on AdvanceSearch {
+  Map<String, dynamic> get param {
+    return <String, dynamic>{
+      if (searchGalleryName) 'f_sname': 'on',
+      if (searchGalleryTags) 'f_stags': 'on',
+      if (searchGalleryDesc) 'f_sdesc': 'on',
+      if (searchToreenFilenames) 'f_storr': 'on',
+      if (onlyShowWhithTorrents) 'f_sto': 'on',
+      if (searchLowPowerTags) 'f_sdt1': 'on',
+      if (searchDownvotedTags) 'f_sdt2': 'on',
+      if (searchExpunged) 'f_sh': 'on',
+      if (searchWithminRating) 'f_sr': 'on',
+      if (searchWithminRating) 'f_srdd': minRating,
+      if (searchBetweenpage) 'f_sp': 'on',
+      if (startPage.isNotEmpty) 'f_spf': startPage,
+      if (endPage.isNotEmpty) 'f_spt': endPage,
+      if (disableDFLanguage) 'f_sfl': 'on',
+      if (disableDFUploader) 'f_sfu': 'on',
+      if (disableDFTags) 'f_sft': 'on',
+    };
+  }
+}
