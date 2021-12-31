@@ -75,7 +75,7 @@ class _WatchedListTabState extends State<WatchedListTab> {
             ),
             onPressed: () {
               final bool fromTabItem =
-                  Get.find<TabHomeController>().tabMap[controller.tabTag] ??
+                  Get.find<TabHomeController>().tabMap[controller.heroTag] ??
                       false;
               NavigatorUtil.goSearchPage(
                   searchType: SearchType.watched, fromTabItem: fromTabItem);
@@ -158,7 +158,7 @@ class _WatchedListTabState extends State<WatchedListTab> {
             ),
             onPressed: () {
               final bool fromTabItem =
-                  Get.find<TabHomeController>().tabMap[controller.tabTag] ??
+                  Get.find<TabHomeController>().tabMap[controller.heroTag] ??
                       false;
               NavigatorUtil.goSearchPage(
                   searchType: SearchType.watched, fromTabItem: fromTabItem);
@@ -252,7 +252,7 @@ class _WatchedListTabState extends State<WatchedListTab> {
         (List<GalleryItem>? state) {
           return getGallerySliverList(
             state,
-            controller.tabTag,
+            controller.heroTag,
             maxPage: controller.maxPage,
             curPage: controller.curPage,
             centerKey: centerKey,

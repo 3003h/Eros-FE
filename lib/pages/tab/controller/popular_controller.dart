@@ -6,7 +6,7 @@ import 'default_tabview_controller.dart';
 class PopularViewController extends DefaultTabViewController {
   @override
   void onInit() {
-    tabTag = EHRoutes.popular;
+    heroTag = EHRoutes.popular;
     super.onInit();
   }
 

@@ -100,7 +100,7 @@ class _FavoriteTabState extends State<FavoriteTab> {
             ),
             onPressed: () {
               final bool fromTabItem =
-                  Get.find<TabHomeController>().tabMap[controller.tabTag] ??
+                  Get.find<TabHomeController>().tabMap[controller.heroTag] ??
                       false;
               NavigatorUtil.goSearchPage(
                   searchType: SearchType.favorite, fromTabItem: fromTabItem);
@@ -199,7 +199,7 @@ class _FavoriteTabState extends State<FavoriteTab> {
               ),
               onPressed: () {
                 final bool fromTabItem =
-                    Get.find<TabHomeController>().tabMap[controller.tabTag] ??
+                    Get.find<TabHomeController>().tabMap[controller.heroTag] ??
                         false;
                 NavigatorUtil.goSearchPage(
                     searchType: SearchType.favorite, fromTabItem: fromTabItem);
@@ -358,7 +358,7 @@ class _FavoriteTabState extends State<FavoriteTab> {
         (List<GalleryItem>? state) {
           return getGallerySliverList(
             state,
-            controller.tabTag,
+            controller.heroTag,
             maxPage: controller.maxPage,
             curPage: controller.curPage,
             lastComplete: controller.lastComplete,

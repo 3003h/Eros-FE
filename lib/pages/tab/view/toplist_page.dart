@@ -163,7 +163,7 @@ class _ToplistTabState extends State<ToplistTab> {
     return controller.obx(
       (List<GalleryItem>? state) => getGallerySliverList(
         state,
-        controller.tabTag,
+        controller.heroTag,
         maxPage: controller.maxPage,
         curPage: controller.curPage,
         lastComplete: controller.lastComplete,

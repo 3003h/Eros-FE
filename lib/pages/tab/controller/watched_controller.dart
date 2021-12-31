@@ -10,7 +10,7 @@ class WatchedViewController extends DefaultTabViewController {
 
   @override
   void onInit() {
-    tabTag = EHRoutes.watched;
+    heroTag = EHRoutes.watched;
     super.onInit();
   }
 

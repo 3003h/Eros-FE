@@ -20,6 +20,24 @@ class CustomSubListController extends TabViewController {
     return DefaultFetchListClient(fetchParams: fetchParams);
   }
 
+  bool isBackgroundRefresh = false;
+
+  @override
+  Future<void> firstLoad() async {
+    await super.firstLoad();
+
+    try {
+      if (cancelToken?.isCancelled ?? false) {
+        return;
+      }
+      isBackgroundRefresh = true;
+      await reloadData();
+    } catch (_) {
+    } finally {
+      isBackgroundRefresh = false;
+    }
+  }
+
   @override
   Future<GalleryList?> fetchData({bool refresh = false}) async {
     cancelToken = CancelToken();

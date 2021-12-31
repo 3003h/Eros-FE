@@ -285,7 +285,7 @@ class _GalleryListTabState extends State<GalleryListTab> {
         (List<GalleryItem>? state) {
           return getGallerySliverList(
             state,
-            controller.tabTag,
+            controller.heroTag,
             maxPage: controller.maxPage,
             curPage: controller.curPage,
             lastComplete: controller.lastComplete,

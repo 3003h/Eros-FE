@@ -14,7 +14,7 @@ class HistoryViewController extends DefaultTabViewController {
   @override
   void onInit() {
     super.onInit();
-    tabTag = EHRoutes.history;
+    heroTag = EHRoutes.history;
 
     loadData().then((List<GalleryItem> value) {
       change(value, status: RxStatus.success());

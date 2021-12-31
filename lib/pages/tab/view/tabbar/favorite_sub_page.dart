@@ -30,7 +30,7 @@ class _FavoriteSubPageState extends State<FavoriteSubPage>
     super.initState();
     _favoriteSubListController =
         Get.find<FavoriteSubListController>(tag: widget.favcat)
-          ..tabTag = 'favsub_${widget.favcat}'
+          ..heroTag = 'favsub_${widget.favcat}'
           ..favcat = widget.favcat;
     controller.subControllerMap[widget.favcat] = _favoriteSubListController;
     addListen();
@@ -76,7 +76,7 @@ class _FavoriteSubPageState extends State<FavoriteSubPage>
         (List<GalleryItem>? state) {
           return getGallerySliverList(
             state,
-            _favoriteSubListController.tabTag,
+            _favoriteSubListController.heroTag,
             maxPage: _favoriteSubListController.maxPage,
             curPage: _favoriteSubListController.curPage,
             lastComplete: _favoriteSubListController.lastComplete,

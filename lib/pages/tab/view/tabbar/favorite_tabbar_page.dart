@@ -168,7 +168,7 @@ class _FavoriteTabTabBarPageState extends State<FavoriteTabTabBarPage> {
               ),
               onPressed: () {
                 final bool fromTabItem = Get.find<TabHomeController>()
-                        .tabMap[controller.tabTag ?? ''] ??
+                        .tabMap[controller.heroTag ?? ''] ??
                     false;
                 NavigatorUtil.goSearchPage(
                     searchType: SearchType.favorite, fromTabItem: fromTabItem);

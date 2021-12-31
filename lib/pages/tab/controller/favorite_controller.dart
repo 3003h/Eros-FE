@@ -50,7 +50,7 @@ class FavoriteViewController extends DefaultTabViewController {
 
   @override
   void onInit() {
-    tabTag = EHRoutes.favorite;
+    heroTag = EHRoutes.favorite;
     super.onInit();
   }
 

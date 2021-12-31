@@ -32,10 +32,17 @@ class _SubListViewState<T extends CustomSubListController>
   void initState() {
     super.initState();
     subController = Get.find<T>(tag: widget.profileName)
-      ..tabTag = widget.profileName
+      ..heroTag = widget.profileName
       ..profileName = widget.profileName;
     controller.subControllerMap[widget.profileName] = subController;
     addListen();
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    logger.d('didChangeDependencies');
+    controller.heroTag = widget.profileName;
   }
 
   void addListen() {
@@ -81,7 +88,7 @@ class _SubListViewState<T extends CustomSubListController>
         (List<GalleryItem>? state) {
           return getGallerySliverList(
             state,
-            subController.tabTag,
+            subController.heroTag,
             maxPage: subController.maxPage,
             curPage: subController.curPage,
             lastComplete: subController.lastComplete,
