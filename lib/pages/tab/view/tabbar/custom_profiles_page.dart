@@ -3,6 +3,8 @@ import 'package:fehviewer/component/setting_base.dart';
 import 'package:fehviewer/fehviewer.dart';
 import 'package:fehviewer/pages/tab/controller/custom_tabbar_controller.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:get/get.dart';
 import 'package:reorderables/reorderables.dart';
 
@@ -12,8 +14,9 @@ class CustomProfilesPage extends GetView<CustomTabbarController> {
   @override
   Widget build(BuildContext context) {
     final _style = TextStyle(
-        color:
-            CupertinoDynamicColor.resolve(CupertinoColors.activeBlue, context));
+      height: 1,
+      color: CupertinoDynamicColor.resolve(CupertinoColors.activeBlue, context),
+    );
 
     Widget normalView = Obx(() {
       return Column(
@@ -27,15 +30,33 @@ class CustomProfilesPage extends GetView<CustomTabbarController> {
 
     Widget reorderableView = Obx(() {
       return ReorderableColumn(
-        onReorder: (int oldIndex, int newIndex) {
-          final _profile = controller.profiles.removeAt(oldIndex);
-          controller.profiles.insert(newIndex, _profile);
-        },
+        onReorder: controller.onReorder,
         children: controller.profiles
-            .map((element) => BarsItem(
-                  title: element.name,
-                  key: UniqueKey(),
-                ))
+            .map(
+              (element) => Slidable(
+                  key: ValueKey(element.name),
+                  child: BarsItem(
+                    title: element.name,
+                    key: ValueKey(element.name),
+                  ),
+                  endActionPane: ActionPane(
+                    extentRatio: 0.25,
+                    motion: const ScrollMotion(),
+                    children: [
+                      SlidableAction(
+                        // An action can be bigger than the others.
+                        // flex: 2,
+                        onPressed: (_) =>
+                            controller.deleteProfile(name: element.name),
+                        backgroundColor: CupertinoDynamicColor.resolve(
+                            CupertinoColors.systemRed, context),
+                        foregroundColor: Colors.white,
+                        icon: Icons.delete,
+                        // label: L10n.of(context).delete,
+                      ),
+                    ],
+                  )),
+            )
             .toList(),
       );
     });
@@ -66,47 +87,53 @@ class CustomProfilesPage extends GetView<CustomTabbarController> {
       ),
     ];
 
-    return Obx(() {
-      return CupertinoPageScaffold(
-        backgroundColor: !ehTheme.isDarkMode
-            ? CupertinoColors.secondarySystemBackground
-            : null,
-        navigationBar: CupertinoNavigationBar(
-          middle: Text('Profile'),
-          trailing: GestureDetector(
-            onTap: () => controller.reorderable = !controller.reorderable,
-            child: AnimatedCrossFade(
-              secondChild: Text(
-                'Edit',
-                style: _style,
+    return WillPopScope(
+      onWillPop: () async {
+        controller.reorderable = false;
+        return true;
+      },
+      child: Obx(() {
+        return CupertinoPageScaffold(
+          backgroundColor: !ehTheme.isDarkMode
+              ? CupertinoColors.secondarySystemBackground
+              : null,
+          navigationBar: CupertinoNavigationBar(
+            middle: Text('Profile'),
+            trailing: GestureDetector(
+              onTap: () => controller.reorderable = !controller.reorderable,
+              child: AnimatedCrossFade(
+                secondChild: Text(
+                  'Edit',
+                  style: _style,
+                ),
+                firstChild: Text(
+                  L10n.of(context).done,
+                  style: _style,
+                ),
+                crossFadeState: controller.reorderable
+                    ? CrossFadeState.showFirst
+                    : CrossFadeState.showSecond,
+                duration: 100.milliseconds,
               ),
-              firstChild: Text(
-                'Done',
-                style: _style,
-              ),
-              crossFadeState: controller.reorderable
-                  ? CrossFadeState.showFirst
-                  : CrossFadeState.showSecond,
-              duration: 100.milliseconds,
             ),
           ),
-        ),
-        child: CustomScrollView(
-          slivers: [
-            SliverSafeArea(
-              bottom: false,
-              sliver: SliverList(
-                delegate: SliverChildBuilderDelegate(
-                  (context, index) {
-                    return _list[index];
-                  },
-                  childCount: _list.length,
+          child: CustomScrollView(
+            slivers: [
+              SliverSafeArea(
+                bottom: false,
+                sliver: SliverList(
+                  delegate: SliverChildBuilderDelegate(
+                    (context, index) {
+                      return _list[index];
+                    },
+                    childCount: _list.length,
+                  ),
                 ),
               ),
-            ),
-          ],
-        ),
-      );
-    });
+            ],
+          ),
+        );
+      }),
+    );
   }
 }

@@ -28,7 +28,7 @@ class TopListViewController extends DefaultTabViewController {
   @override
   void onInit() {
     // fetchNormal = Api.getToplist;
-    tabTag = EHRoutes.toplist;
+    heroTag = EHRoutes.toplist;
     super.onInit();
   }
 

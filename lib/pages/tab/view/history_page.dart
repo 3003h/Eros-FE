@@ -33,8 +33,8 @@ class _HistoryTabState extends State<HistoryTab> {
     ehTabController.scrollToTopCall = () => controller.srcollToTop(context);
     ehTabController.scrollToTopRefreshCall =
         () => controller.srcollToTopRefresh(context);
-    if (controller.tabTag != null) {
-      tabPages.scrollControllerMap[controller.tabTag!] = ehTabController;
+    if (controller.heroTag != null) {
+      tabPages.scrollControllerMap[controller.heroTag!] = ehTabController;
     }
   }
 
@@ -119,7 +119,7 @@ class _HistoryTabState extends State<HistoryTab> {
             builder: (logic) {
               return getGallerySliverList(
                 logic.historys,
-                controller.tabTag,
+                controller.heroTag,
                 key: controller.sliverAnimatedListKey,
               );
             },

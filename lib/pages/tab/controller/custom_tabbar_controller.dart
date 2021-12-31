@@ -1,11 +1,15 @@
 import 'package:english_words/english_words.dart';
 import 'package:fehviewer/common/service/layout_service.dart';
+import 'package:fehviewer/common/service/locale_service.dart';
 import 'package:fehviewer/fehviewer.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
 
 import 'custom_sublist_controller.dart';
 import 'default_tabview_controller.dart';
+
+const CustomProfile kProfileChinese =
+    CustomProfile(name: '汉语', searchText: ['l:chinese']);
 
 /// 控制所有自定义列表
 class CustomTabbarController extends DefaultTabViewController {
@@ -17,7 +21,7 @@ class CustomTabbarController extends DefaultTabViewController {
   Map<String, CustomProfile> get profileMap {
     Map<String, CustomProfile> _map = {};
     for (final profile in profiles) {
-      logger.d('${profile.toJson()}');
+      // logger.d('${profile.toJson()}');
       _map[profile.name] = profile;
     }
     return _map;
@@ -48,24 +52,26 @@ class CustomTabbarController extends DefaultTabViewController {
   @override
   int get curPage => currSubController?.curPage ?? 1;
 
+  late final PageController pageController;
+
+  final LinkScrollBarController linkScrollBarController =
+      LinkScrollBarController();
+
   @override
   void onInit() {
     super.onInit();
 
-    tabTag = EHRoutes.customlist;
+    heroTag = EHRoutes.customlist;
 
     profiles.value = customTabConfig?.profiles ??
         [
-          CustomProfile(name: 'All'),
-          CustomProfile(name: '3D', searchText: ['o:3d']),
-          CustomProfile(name: '汉语', searchText: ['l:chinese']),
-          CustomProfile(name: 'NTR', searchText: ['f:netorare']),
-          CustomProfile(
-              name: 'NTR 汉语', searchText: ['f:netorare', 'l:chinese']),
+          const CustomProfile(name: 'All'),
+          if (Get.find<LocaleService>().isLanguageCodeZh) kProfileChinese,
         ];
 
     ever<List<CustomProfile>>(profiles, (value) {
-      customTabConfig = customTabConfig?.copyWith(profiles: value);
+      customTabConfig = customTabConfig?.copyWith(profiles: value) ??
+          CustomTabConfig(profiles: value);
       Global.saveProfile();
     });
 
@@ -124,5 +130,26 @@ class CustomTabbarController extends DefaultTabViewController {
       EHRoutes.customProfiles,
       id: isLayoutLarge ? 1 : null,
     );
+  }
+
+  void onReorder(int oldIndex, int newIndex) {
+    final _profilename = currProfileName;
+    final _profile = profiles.removeAt(oldIndex);
+    profiles.insert(newIndex, _profile);
+    index = profiles.indexWhere((element) => element.name == _profilename);
+    Future.delayed(100.milliseconds).then((_) {
+      pageController.jumpToPage(index);
+      // linkScrollBarController.scrollToItem(index);
+    });
+  }
+
+  void deleteProfile({required String name}) {
+    final _profilename = currProfileName;
+    profiles.removeWhere((element) => element.name == name);
+    if (_profilename == name) {
+      Future.delayed(100.milliseconds).then((_) {
+        pageController.jumpToPage(0);
+      });
+    }
   }
 }

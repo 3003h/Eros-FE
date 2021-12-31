@@ -22,7 +22,7 @@ class TabViewController extends GetxController
   // 下一页
   int nextPage = 1;
 
-  String? tabTag;
+  String? heroTag;
 
   CancelToken? cancelToken = CancelToken();
 
@@ -180,7 +180,8 @@ class TabViewController extends GetxController
     ehTabController.scrollToTopCall = () => srcollToTop(context);
     ehTabController.scrollToTopRefreshCall = () => srcollToTopRefresh(context);
 
-    tabPages.scrollControllerMap[tabTag ?? this.tabTag ?? ''] = ehTabController;
+    tabPages.scrollControllerMap[tabTag ?? this.heroTag ?? ''] =
+        ehTabController;
   }
 
   void srcollToTop(BuildContext context) {

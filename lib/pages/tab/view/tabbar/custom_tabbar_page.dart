@@ -25,20 +25,17 @@ class _CustomTabbarListState extends State<CustomTabbarList> {
   final CustomTabbarController controller = Get.find();
 
   final EhTabController ehTabController = EhTabController();
-  final LinkScrollBarController linkScrollBarController =
-      LinkScrollBarController();
-  late final PageController pageController;
 
   @override
   void initState() {
     super.initState();
-    pageController = PageController(initialPage: controller.index);
+    controller.pageController = PageController(initialPage: controller.index);
   }
 
   @override
   void dispose() {
-    pageController.dispose();
-    linkScrollBarController.dispose();
+    controller.pageController.dispose();
+    controller.linkScrollBarController.dispose();
     super.dispose();
   }
 
@@ -76,32 +73,37 @@ class _CustomTabbarListState extends State<CustomTabbarList> {
         return GestureDetector(
           onPanDown: (e) {
             // 恢复启用 scrollToItem
-            linkScrollBarController.enableScrollToItem();
+            controller.linkScrollBarController.enableScrollToItem();
           },
-          child: PageView(
-            controller: pageController,
-            children: controller.profiles.isNotEmpty
-                ? [
-                    // 画廊列表
-                    ...controller.profiles
-                        .map((e) => SubListView<CustomSubListController>(
-                              profileName: e.name,
-                            ))
-                        .toList(),
-                  ]
-                : [
-                    const Center(
-                      child: Text(
-                        '[ ]',
-                        style: TextStyle(fontSize: 40),
-                      ),
-                    )
-                  ],
-            onPageChanged: (index) {
-              linkScrollBarController.scrollToItem(index);
-              controller.onPageChanged(index);
-            },
-          ),
+          child: Obx(() {
+            return PageView(
+              key: ValueKey(
+                  controller.profiles.map((element) => element.name).join()),
+              controller: controller.pageController,
+              children: controller.profiles.isNotEmpty
+                  ? [
+                      // 画廊列表
+                      ...controller.profiles
+                          .map((e) => SubListView<CustomSubListController>(
+                                profileName: e.name,
+                                key: UniqueKey(),
+                              ))
+                          .toList(),
+                    ]
+                  : [
+                      const Center(
+                        child: Text(
+                          '[ ]',
+                          style: TextStyle(fontSize: 40),
+                        ),
+                      )
+                    ],
+              onPageChanged: (index) {
+                controller.linkScrollBarController.scrollToItem(index);
+                controller.onPageChanged(index);
+              },
+            );
+          }),
         );
       }),
     );
@@ -156,17 +158,22 @@ class _CustomTabbarListState extends State<CustomTabbarList> {
                     children: [
                       Expanded(
                         child: Obx(() {
+                          // logger.d(
+                          //     'build LinkScrollBar index ${controller.index}');
                           return LinkScrollBar(
-                            controller: linkScrollBarController,
-                            pageController: pageController,
+                            key: ValueKey(controller.profiles
+                                .map((element) => element.name)
+                                .join()),
+                            controller: controller.linkScrollBarController,
+                            pageController: controller.pageController,
                             titleList: controller.profiles.isNotEmpty
                                 ? controller.profiles
                                     .map((e) => LinkTabItem(title: e.name))
                                     .toList()
                                 : [LinkTabItem(title: '未设置')],
                             initIndex: controller.index,
-                            onItemChange: (index) =>
-                                pageController.animateToPage(index,
+                            onItemChange: (index) => controller.pageController
+                                .animateToPage(index,
                                     duration: const Duration(milliseconds: 300),
                                     curve: Curves.ease),
                           );

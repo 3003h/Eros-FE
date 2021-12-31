@@ -14,7 +14,7 @@ class GalleryViewController extends DefaultTabViewController {
 
   @override
   void onInit() {
-    tabTag = EHRoutes.gallery;
+    heroTag = EHRoutes.gallery;
     super.onInit();
   }
 }

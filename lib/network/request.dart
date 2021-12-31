@@ -84,8 +84,10 @@ Future<GalleryList?> getGallery({
 
   /// 高级搜索处理
   if (advanceSearchParam != null) {
-    _params['advsearch'] = 1;
-    _params.addAll(advanceSearchParam);
+    if (advanceSearchParam.isNotEmpty) {
+      _params['advsearch'] = 1;
+      _params.addAll(advanceSearchParam);
+    }
   } else if (!isTopList &&
       !isPopular &&
       !isFav &&

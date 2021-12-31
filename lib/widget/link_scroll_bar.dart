@@ -289,28 +289,40 @@ class _TitleIndicatorState extends State<TitleIndicator> {
         (widget.itemPadding?.horizontal ?? 0);
 
     // pageController监听
-    widget.pageController?.addListener(() {
-      final page = widget.pageController?.page ?? 0.0;
-      final index = page ~/ 1;
-      if (index < widget.channelFrameList.length - 1) {
-        final offset = widget.channelFrameList[index].left +
-            page %
-                1 *
-                (widget.channelFrameList[index + 1].left -
-                    widget.channelFrameList[index].left);
-        _indicatorWidth = widget.channelFrameList[index].width +
-            page %
-                1 *
-                (widget.channelFrameList[index + 1].width -
-                    widget.channelFrameList[index].width);
-        _indicatorWidth =
-            _indicatorWidth - (widget.itemPadding?.horizontal ?? 0);
+    // widget.pageController?.addListener(_listen);
+  }
 
+  void _listen() {
+    final page = widget.pageController?.page ?? 0.0;
+    final index = page ~/ 1;
+    if (index < widget.channelFrameList.length - 1) {
+      final offset = widget.channelFrameList[index].left +
+          page %
+              1 *
+              (widget.channelFrameList[index + 1].left -
+                  widget.channelFrameList[index].left);
+      _indicatorWidth = widget.channelFrameList[index].width +
+          page %
+              1 *
+              (widget.channelFrameList[index + 1].width -
+                  widget.channelFrameList[index].width);
+      _indicatorWidth = _indicatorWidth - (widget.itemPadding?.horizontal ?? 0);
+
+      if (mounted) {
         setState(() {
           positionedLeft = offset + ((widget.itemPadding?.horizontal ?? 0) / 2);
         });
       }
-    });
+    }
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    if (widget.pageController?.hasListeners ?? false) {
+      widget.pageController?.removeListener(_listen);
+    }
+    widget.pageController?.addListener(_listen);
   }
 
   @override
