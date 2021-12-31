@@ -23,6 +23,12 @@ class CustomProfilesPage extends GetView<CustomTabbarController> {
         children: controller.profiles
             .map((element) => SelectorSettingItem(
                   title: element.name,
+                  onTap: () {
+                    Get.toNamed(
+                      EHRoutes.customProfileSetting,
+                      arguments: element.uuid,
+                    );
+                  },
                 ))
             .toList(),
       );
@@ -34,20 +40,18 @@ class CustomProfilesPage extends GetView<CustomTabbarController> {
         children: controller.profiles
             .map(
               (element) => Slidable(
-                  key: ValueKey(element.name),
+                  key: ValueKey(element.uuid),
                   child: BarsItem(
                     title: element.name,
-                    key: ValueKey(element.name),
+                    key: ValueKey(element.uuid),
                   ),
                   endActionPane: ActionPane(
                     extentRatio: 0.25,
                     motion: const ScrollMotion(),
                     children: [
                       SlidableAction(
-                        // An action can be bigger than the others.
-                        // flex: 2,
                         onPressed: (_) =>
-                            controller.deleteProfile(name: element.name),
+                            controller.deleteProfile(uuid: element.uuid),
                         backgroundColor: CupertinoDynamicColor.resolve(
                             CupertinoColors.systemRed, context),
                         foregroundColor: Colors.white,
@@ -80,6 +84,7 @@ class CustomProfilesPage extends GetView<CustomTabbarController> {
                 hideLine: true,
                 textColor: CupertinoDynamicColor.resolve(
                     CupertinoColors.activeBlue, context),
+                onTap: () => Get.toNamed(EHRoutes.customProfileSetting),
               ),
             ],
           );
@@ -103,7 +108,7 @@ class CustomProfilesPage extends GetView<CustomTabbarController> {
               onTap: () => controller.reorderable = !controller.reorderable,
               child: AnimatedCrossFade(
                 secondChild: Text(
-                  'Edit',
+                  '编辑',
                   style: _style,
                 ),
                 firstChild: Text(

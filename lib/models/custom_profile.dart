@@ -5,6 +5,7 @@ import 'advance_search.dart';
 class CustomProfile {
   
   const CustomProfile({
+    required this.uuid,
     required this.name,
     this.searchText,
     this.catsTypeValue,
@@ -13,6 +14,7 @@ class CustomProfile {
     this.advSearch,
   });
 
+  final String uuid;
   final String name;
   final List<dynamic>? searchText;
   final String? catsTypeValue;
@@ -21,6 +23,7 @@ class CustomProfile {
   final AdvanceSearch? advSearch;
 
   factory CustomProfile.fromJson(Map<String,dynamic> json) => CustomProfile(
+    uuid: json['uuid'] as String,
     name: json['name'] as String,
     searchText: json['searchText'] != null ? (json['searchText'] as List? ?? []).map((e) => e as dynamic).toList() : null,
     catsTypeValue: json['catsTypeValue'] != null ? json['catsTypeValue'] as String : null,
@@ -30,6 +33,7 @@ class CustomProfile {
   );
   
   Map<String, dynamic> toJson() => {
+    'uuid': uuid,
     'name': name,
     'searchText': searchText?.map((e) => e.toString()).toList(),
     'catsTypeValue': catsTypeValue,
@@ -39,6 +43,7 @@ class CustomProfile {
   };
 
   CustomProfile clone() => CustomProfile(
+    uuid: uuid,
     name: name,
     searchText: searchText?.toList(),
     catsTypeValue: catsTypeValue,
@@ -49,6 +54,7 @@ class CustomProfile {
 
     
   CustomProfile copyWith({
+    String? uuid,
     String? name,
     List<dynamic>? searchText,
     String? catsTypeValue,
@@ -56,6 +62,7 @@ class CustomProfile {
     String? advSearchTypeValue,
     AdvanceSearch? advSearch
   }) => CustomProfile(
+    uuid: uuid ?? this.uuid,
     name: name ?? this.name,
     searchText: searchText ?? this.searchText,
     catsTypeValue: catsTypeValue ?? this.catsTypeValue,
@@ -66,8 +73,8 @@ class CustomProfile {
 
   @override
   bool operator ==(Object other) => identical(this, other) 
-    || other is CustomProfile && name == other.name && searchText == other.searchText && catsTypeValue == other.catsTypeValue && cats == other.cats && advSearchTypeValue == other.advSearchTypeValue && advSearch == other.advSearch;
+    || other is CustomProfile && uuid == other.uuid && name == other.name && searchText == other.searchText && catsTypeValue == other.catsTypeValue && cats == other.cats && advSearchTypeValue == other.advSearchTypeValue && advSearch == other.advSearch;
 
   @override
-  int get hashCode => name.hashCode ^ searchText.hashCode ^ catsTypeValue.hashCode ^ cats.hashCode ^ advSearchTypeValue.hashCode ^ advSearch.hashCode;
+  int get hashCode => uuid.hashCode ^ name.hashCode ^ searchText.hashCode ^ catsTypeValue.hashCode ^ cats.hashCode ^ advSearchTypeValue.hashCode ^ advSearch.hashCode;
 }

@@ -12,9 +12,9 @@ import '../gallery_base.dart';
 import '../tab_base.dart';
 
 class SubListView<T extends CustomSubListController> extends StatefulWidget {
-  const SubListView({Key? key, required this.profileName}) : super(key: key);
+  const SubListView({Key? key, required this.profileUuid}) : super(key: key);
 
-  final String profileName;
+  final String profileUuid;
 
   @override
   _SubListViewState createState() => _SubListViewState<T>();
@@ -31,18 +31,18 @@ class _SubListViewState<T extends CustomSubListController>
   @override
   void initState() {
     super.initState();
-    subController = Get.find<T>(tag: widget.profileName)
-      ..heroTag = widget.profileName
-      ..profileName = widget.profileName;
-    controller.subControllerMap[widget.profileName] = subController;
+    subController = Get.find<T>(tag: widget.profileUuid)
+      ..heroTag = widget.profileUuid
+      ..profileUuid = widget.profileUuid;
+    controller.subControllerMap[widget.profileUuid] = subController;
     addListen();
   }
 
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-    logger.d('didChangeDependencies');
-    controller.heroTag = widget.profileName;
+    // logger.d('didChangeDependencies');
+    controller.heroTag = widget.profileUuid;
   }
 
   void addListen() {
