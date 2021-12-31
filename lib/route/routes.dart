@@ -39,7 +39,8 @@ class EHRoutes {
 
   static const String favoriteTabbar = '/favoriteTabbar';
 
-  static const String coutomlist = '/customlist';
+  static const String customlist = '/customlist';
+  static const String customProfiles = '/customProfiles';
 
   static const String search = '/search';
 

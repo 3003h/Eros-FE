@@ -1,12 +1,14 @@
 import 'package:blur/blur.dart';
 import 'package:english_words/english_words.dart';
 import 'package:extended_nested_scroll_view/extended_nested_scroll_view.dart';
+import 'package:fehviewer/common/service/layout_service.dart';
 import 'package:fehviewer/fehviewer.dart';
 import 'package:fehviewer/pages/tab/controller/custom_sublist_controller.dart';
 import 'package:fehviewer/pages/tab/controller/custom_tabbar_controller.dart';
 import 'package:flutter/cupertino.dart' hide CupertinoTabBar;
 import 'package:get/get.dart';
 import 'package:keframe/size_cache_widget.dart';
+import 'package:line_icons/line_icons.dart';
 
 import '../../comm.dart';
 import '../constants.dart';
@@ -140,33 +142,44 @@ class _CustomTabbarListState extends State<CustomTabbarList> {
                   height: kTopTabbarHeight,
                 ),
               ),
-              ClipRect(
+              Container(
+                decoration: const BoxDecoration(
+                  border: kDefaultNavBarBorder,
+                ),
+                padding: EdgeInsets.only(
+                  left: context.mediaQueryPadding.left,
+                  right: context.mediaQueryPadding.right,
+                ),
                 child: Container(
-                  decoration: const BoxDecoration(
-                    border: kDefaultNavBarBorder,
-                  ),
-                  padding: EdgeInsets.only(
-                    left: context.mediaQueryPadding.left,
-                    right: context.mediaQueryPadding.right,
-                  ),
+                  height: kTopTabbarHeight,
                   child: Row(
                     children: [
-                      Container(
-                        height: kTopTabbarHeight,
-                        child: LinkScrollBar(
-                          controller: linkScrollBarController,
-                          pageController: pageController,
-                          titleList: controller.profiles.isNotEmpty
-                              ? controller.profiles
-                                  .map((e) => LinkTabItem(title: e.name))
-                                  .toList()
-                              : [LinkTabItem(title: '未设置')],
-                          initIndex: controller.index,
-                          onItemChange: (index) => pageController.animateToPage(
-                              index,
-                              duration: const Duration(milliseconds: 300),
-                              curve: Curves.ease),
+                      Expanded(
+                        child: Obx(() {
+                          return LinkScrollBar(
+                            controller: linkScrollBarController,
+                            pageController: pageController,
+                            titleList: controller.profiles.isNotEmpty
+                                ? controller.profiles
+                                    .map((e) => LinkTabItem(title: e.name))
+                                    .toList()
+                                : [LinkTabItem(title: '未设置')],
+                            initIndex: controller.index,
+                            onItemChange: (index) =>
+                                pageController.animateToPage(index,
+                                    duration: const Duration(milliseconds: 300),
+                                    curve: Curves.ease),
+                          );
+                        }),
+                      ),
+                      CupertinoButton(
+                        minSize: 40,
+                        padding: const EdgeInsets.symmetric(horizontal: 12),
+                        child: const Icon(
+                          LineIcons.bars,
+                          size: 24,
                         ),
+                        onPressed: controller.pressedBar,
                       ),
                     ],
                   ),

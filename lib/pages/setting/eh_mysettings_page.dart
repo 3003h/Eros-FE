@@ -15,7 +15,7 @@ import 'package:get/get.dart';
 import 'package:line_icons/line_icons.dart';
 
 import 'controller/eh_mysettings_controller.dart';
-import 'setting_base.dart';
+import '../../component/setting_base.dart';
 import 'setting_items/multi_selector.dart';
 import 'setting_items/single_input_item.dart';
 import 'webview/web_mysetting_in.dart';
@@ -40,28 +40,6 @@ class EhMySettingsPage extends GetView<EhMySettingsController> {
               trailing: Row(
                 mainAxisSize: MainAxisSize.min,
                 children: <Widget>[
-                  // CupertinoButton(
-                  //   padding: const EdgeInsets.all(0),
-                  //   minSize: 36,
-                  //   child: const Icon(
-                  //     LineIcons.download,
-                  //     size: 24,
-                  //   ),
-                  //   onPressed: () async {
-                  //     controller.loadData();
-                  //   },
-                  // ),
-                  // CupertinoButton(
-                  //   padding: const EdgeInsets.all(0),
-                  //   minSize: 36,
-                  //   child: const Icon(
-                  //     LineIcons.upload,
-                  //     size: 24,
-                  //   ),
-                  //   onPressed: () async {
-                  //     controller.print();
-                  //   },
-                  // ),
                   CupertinoButton(
                     padding: const EdgeInsets.all(0),
                     minSize: 40,
@@ -378,76 +356,5 @@ class _ListViewEhMySettingsState extends State<ListViewEhMySettings> {
     //     return _list[index];
     //   },
     // );
-  }
-}
-
-class GroupItem extends StatelessWidget {
-  const GroupItem({Key? key, this.title, this.child, this.desc, this.descTop})
-      : super(key: key);
-  final String? title;
-  final Widget? child;
-  final String? desc;
-  final String? descTop;
-
-  @override
-  Widget build(BuildContext context) {
-    return Column(
-      mainAxisSize: MainAxisSize.max,
-      children: [
-        Container(
-          // constraints: const BoxConstraints(minHeight: 38),
-          padding: EdgeInsets.only(
-            left: 20,
-            bottom: 4,
-            top: title != null ? 20 : 0,
-          ),
-          width: double.infinity,
-          child: Text(
-            title ?? '',
-            style: const TextStyle(fontSize: 14),
-            textAlign: TextAlign.start,
-          ),
-        ),
-        if (descTop != null)
-          Container(
-            padding: const EdgeInsets.only(
-              left: 20,
-              top: 4,
-              bottom: 10,
-              right: 20,
-            ),
-            width: double.infinity,
-            child: Text(
-              descTop!,
-              style: TextStyle(
-                fontSize: 12.5,
-                color: CupertinoDynamicColor.resolve(
-                    CupertinoColors.secondaryLabel, context),
-              ),
-              textAlign: TextAlign.start,
-            ),
-          ),
-        child ?? const SizedBox.shrink(),
-        if (desc != null)
-          Container(
-            padding: const EdgeInsets.only(
-              left: 20,
-              top: 4,
-              bottom: 10,
-              right: 20,
-            ),
-            width: double.infinity,
-            child: Text(
-              desc!,
-              style: TextStyle(
-                fontSize: 12.5,
-                color: CupertinoDynamicColor.resolve(
-                    CupertinoColors.secondaryLabel, context),
-              ),
-              textAlign: TextAlign.start,
-            ),
-          ),
-      ],
-    );
   }
 }

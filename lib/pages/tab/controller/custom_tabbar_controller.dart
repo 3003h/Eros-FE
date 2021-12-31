@@ -1,4 +1,5 @@
 import 'package:english_words/english_words.dart';
+import 'package:fehviewer/common/service/layout_service.dart';
 import 'package:fehviewer/fehviewer.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
@@ -30,6 +31,10 @@ class CustomTabbarController extends DefaultTabViewController {
   int get index => _index.value;
   set index(int val) => _index.value = val;
 
+  final _reorderable = false.obs;
+  bool get reorderable => _reorderable.value;
+  set reorderable(bool val) => _reorderable.value = val;
+
   Map<String, CustomSubListController> subControllerMap = {};
   CustomSubListController? get currSubController =>
       subControllerMap[currProfileName];
@@ -47,7 +52,7 @@ class CustomTabbarController extends DefaultTabViewController {
   void onInit() {
     super.onInit();
 
-    tabTag = EHRoutes.coutomlist;
+    tabTag = EHRoutes.customlist;
 
     profiles.value = customTabConfig?.profiles ??
         [
@@ -113,4 +118,11 @@ class CustomTabbarController extends DefaultTabViewController {
 
   @override
   Future<void> firstLoad() async {}
+
+  Future<void> pressedBar() async {
+    await Get.toNamed(
+      EHRoutes.customProfiles,
+      id: isLayoutLarge ? 1 : null,
+    );
+  }
 }

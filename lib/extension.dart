@@ -10,6 +10,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
 
 import 'common/controller/tag_trans_controller.dart';
+import 'common/enum.dart';
 import 'models/index.dart';
 import 'network/gallery_request.dart';
 
@@ -478,4 +479,15 @@ extension ExtAdvanceSearch on AdvanceSearch {
       if (disableDFTags) 'f_sft': 'on',
     };
   }
+}
+
+extension ExtCustomProfile on CustomProfile {
+  CustomProfileType get catsType =>
+      EnumToString.fromString(CustomProfileType.values, catsTypeValue ?? '') ??
+      CustomProfileType.disable;
+
+  CustomProfileType get advSearchType =>
+      EnumToString.fromString(
+          CustomProfileType.values, advSearchTypeValue ?? '') ??
+      CustomProfileType.disable;
 }

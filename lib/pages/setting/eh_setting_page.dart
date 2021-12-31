@@ -19,7 +19,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-import 'setting_base.dart';
+import '../../component/setting_base.dart';
 
 class EhSettingPage extends StatelessWidget {
   const EhSettingPage({Key? key}) : super(key: key);

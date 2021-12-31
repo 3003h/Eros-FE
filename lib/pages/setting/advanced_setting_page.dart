@@ -16,7 +16,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-import 'setting_base.dart';
+import '../../component/setting_base.dart';
 
 class AdvancedSettingPage extends StatelessWidget {
   const AdvancedSettingPage({Key? key}) : super(key: key);

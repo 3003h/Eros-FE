@@ -2,7 +2,7 @@ import 'package:fehviewer/common/service/layout_service.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
 
-import '../setting_base.dart';
+import '../../../component/setting_base.dart';
 import 'single_input_page.dart';
 
 class SingleInputItem extends StatelessWidget {

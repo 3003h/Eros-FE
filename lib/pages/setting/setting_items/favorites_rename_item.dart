@@ -5,7 +5,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
 import 'package:line_icons/line_icons.dart';
 
-import '../setting_base.dart';
+import '../../../component/setting_base.dart';
 
 const kFavList = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9];
 

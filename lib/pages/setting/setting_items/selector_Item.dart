@@ -2,7 +2,7 @@ import 'package:fehviewer/generated/l10n.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
 
-import '../setting_base.dart';
+import '../../../component/setting_base.dart';
 
 class SelectorItem<T> extends StatefulWidget {
   const SelectorItem({
