@@ -8,8 +8,8 @@ import 'package:get/get.dart';
 import 'custom_sublist_controller.dart';
 import 'default_tabview_controller.dart';
 
-const CustomProfile kProfileChinese =
-    CustomProfile(name: '汉语', searchText: ['l:chinese']);
+final CustomProfile profileChinese = CustomProfile(
+    uuid: generateUuidv4(), name: '汉语', searchText: ['l:chinese']);
 
 /// 控制所有自定义列表
 class CustomTabbarController extends DefaultTabViewController {
@@ -21,15 +21,14 @@ class CustomTabbarController extends DefaultTabViewController {
   Map<String, CustomProfile> get profileMap {
     Map<String, CustomProfile> _map = {};
     for (final profile in profiles) {
-      // logger.d('${profile.toJson()}');
-      _map[profile.name] = profile;
+      _map[profile.uuid] = profile;
     }
     return _map;
   }
 
-  final _currProfileName = ''.obs;
-  String get currProfileName => _currProfileName.value;
-  set currProfileName(String val) => _currProfileName.value = val;
+  final _currProfileUuid = ''.obs;
+  String get currProfileUuid => _currProfileUuid.value;
+  set currProfileUuid(String val) => _currProfileUuid.value = val;
 
   final _index = 0.obs;
   int get index => _index.value;
@@ -41,7 +40,7 @@ class CustomTabbarController extends DefaultTabViewController {
 
   Map<String, CustomSubListController> subControllerMap = {};
   CustomSubListController? get currSubController =>
-      subControllerMap[currProfileName];
+      subControllerMap[currProfileUuid];
 
   @override
   int get maxPage => currSubController?.maxPage ?? 1;
@@ -65,8 +64,8 @@ class CustomTabbarController extends DefaultTabViewController {
 
     profiles.value = customTabConfig?.profiles ??
         [
-          const CustomProfile(name: 'All'),
-          if (Get.find<LocaleService>().isLanguageCodeZh) kProfileChinese,
+          CustomProfile(name: 'All', uuid: generateUuidv4()),
+          if (Get.find<LocaleService>().isLanguageCodeZh) profileChinese,
         ];
 
     ever<List<CustomProfile>>(profiles, (value) {
@@ -82,15 +81,17 @@ class CustomTabbarController extends DefaultTabViewController {
       Global.saveProfile();
     });
 
-    currProfileName = profiles[index].name;
+    if (profiles.isNotEmpty) {
+      currProfileUuid = profiles[index].uuid;
+    }
 
     for (final profile in profiles) {
-      Get.lazyPut(() => CustomSubListController(), tag: profile.name);
+      Get.lazyPut(() => CustomSubListController(), tag: profile.uuid);
     }
   }
 
   void onPageChanged(int index) {
-    currProfileName = profiles[index].name;
+    currProfileUuid = profiles[index].uuid;
     this.index = index;
   }
 
@@ -133,23 +134,25 @@ class CustomTabbarController extends DefaultTabViewController {
   }
 
   void onReorder(int oldIndex, int newIndex) {
-    final _profilename = currProfileName;
+    final _profileUuid = currProfileUuid;
     final _profile = profiles.removeAt(oldIndex);
     profiles.insert(newIndex, _profile);
-    index = profiles.indexWhere((element) => element.name == _profilename);
+    index = profiles.indexWhere((element) => element.uuid == _profileUuid);
     Future.delayed(100.milliseconds).then((_) {
       pageController.jumpToPage(index);
-      // linkScrollBarController.scrollToItem(index);
     });
   }
 
-  void deleteProfile({required String name}) {
-    final _profilename = currProfileName;
-    profiles.removeWhere((element) => element.name == name);
-    if (_profilename == name) {
+  void deleteProfile({required String uuid}) {
+    final _profileUuid = currProfileUuid;
+
+    if (_profileUuid == uuid) {
       Future.delayed(100.milliseconds).then((_) {
         pageController.jumpToPage(0);
-      });
+      }).then(
+          (value) => profiles.removeWhere((element) => element.uuid == uuid));
+    } else {
+      profiles.removeWhere((element) => element.uuid == uuid);
     }
   }
 }

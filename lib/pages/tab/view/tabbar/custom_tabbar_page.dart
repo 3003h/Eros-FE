@@ -77,16 +77,17 @@ class _CustomTabbarListState extends State<CustomTabbarList> {
           },
           child: Obx(() {
             return PageView(
-              key: ValueKey(
-                  controller.profiles.map((element) => element.name).join()),
+              // key: ValueKey(
+              //     controller.profiles.map((element) => element.uuid).join()),
+              key: UniqueKey(),
               controller: controller.pageController,
               children: controller.profiles.isNotEmpty
                   ? [
                       // 画廊列表
                       ...controller.profiles
                           .map((e) => SubListView<CustomSubListController>(
-                                profileName: e.name,
-                                key: UniqueKey(),
+                                profileUuid: e.uuid,
+                                key: ValueKey(e.uuid),
                               ))
                           .toList(),
                     ]

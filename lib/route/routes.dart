@@ -41,6 +41,7 @@ class EHRoutes {
 
   static const String customlist = '/customlist';
   static const String customProfiles = '/customProfiles';
+  static const String customProfileSetting = '/customProfiles/setting';
 
   static const String search = '/search';
 

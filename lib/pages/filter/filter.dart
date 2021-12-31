@@ -1,4 +1,5 @@
 import 'package:fehviewer/common/service/ehconfig_service.dart';
+import 'package:fehviewer/component/exception/error.dart';
 import 'package:fehviewer/const/const.dart';
 import 'package:fehviewer/const/theme_colors.dart';
 import 'package:fehviewer/generated/l10n.dart';
@@ -114,8 +115,10 @@ class GalleryCatFilter extends StatefulWidget {
     required this.onCatNumChanged,
     this.margin,
     this.padding,
-    this.crossAxisCount = 2,
-  }) : super(key: key);
+    this.crossAxisCount,
+    this.maxCrossAxisExtent,
+  })  : assert(!(crossAxisCount == null && maxCrossAxisExtent == null)),
+        super(key: key);
 
   final EdgeInsetsGeometry? margin;
 
@@ -127,7 +130,9 @@ class GalleryCatFilter extends StatefulWidget {
   /// 值变化的回调
   final ValueChanged<int> onCatNumChanged;
 
-  final int crossAxisCount;
+  final int? crossAxisCount;
+
+  final double? maxCrossAxisExtent;
 
   @override
   _GalleryCatFilterState createState() => _GalleryCatFilterState();
@@ -185,19 +190,41 @@ class _GalleryCatFilterState extends State<GalleryCatFilter> {
   Widget build(BuildContext context) {
     // logger.v('build GalleryCatFilter $_catNum');
 
-    return Container(
-      margin: widget.margin,
-      padding: widget.padding,
-      child: GridView.count(
+    late Widget _gridView;
+
+    if (widget.crossAxisCount == null && widget.maxCrossAxisExtent == null) {
+      throw EhError(
+          error: 'crossAxisCount and maxCrossAxisExtent cannot be both null');
+    }
+
+    if (widget.crossAxisCount != null) {
+      _gridView = GridView.count(
         shrinkWrap: true,
         physics: const NeverScrollableScrollPhysics(),
-        crossAxisCount: widget.crossAxisCount,
+        crossAxisCount: widget.crossAxisCount!,
         childAspectRatio: 3.6,
         mainAxisSpacing: 4.0,
         crossAxisSpacing: 4.0,
         padding: const EdgeInsets.all(0.0),
         children: _catButttonListWidget,
-      ),
+      );
+    } else {
+      _gridView = GridView.extent(
+        shrinkWrap: true,
+        physics: const NeverScrollableScrollPhysics(),
+        maxCrossAxisExtent: widget.maxCrossAxisExtent!,
+        childAspectRatio: 3.6,
+        mainAxisSpacing: 4.0,
+        crossAxisSpacing: 4.0,
+        padding: const EdgeInsets.all(0.0),
+        children: _catButttonListWidget,
+      );
+    }
+
+    return Container(
+      margin: widget.margin,
+      padding: widget.padding,
+      child: _gridView,
     );
   }
 }

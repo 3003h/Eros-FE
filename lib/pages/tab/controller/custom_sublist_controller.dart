@@ -13,8 +13,8 @@ import 'enum.dart';
 class CustomSubListController extends TabViewController {
   final CustomTabbarController _customTabbarController = Get.find();
 
-  late String profileName;
-  CustomProfile? get profile => _customTabbarController.profileMap[profileName];
+  late String profileUuid;
+  CustomProfile? get profile => _customTabbarController.profileMap[profileUuid];
 
   FetchListClient getFetchListClient(FetchParams fetchParams) {
     return DefaultFetchListClient(fetchParams: fetchParams);
