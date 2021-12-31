@@ -4,7 +4,7 @@ import 'package:fehviewer/common/service/layout_service.dart';
 import 'package:fehviewer/common/controller/log_controller.dart';
 import 'package:fehviewer/common/service/theme_service.dart';
 import 'package:fehviewer/generated/l10n.dart';
-import 'package:fehviewer/pages/setting/setting_base.dart';
+import 'package:fehviewer/component/setting_base.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';

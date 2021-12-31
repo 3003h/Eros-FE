@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:getwidget/getwidget.dart';
 
-import '../setting_base.dart';
+import '../../../component/setting_base.dart';
 
 class MultiSelectorPage extends StatelessWidget {
   const MultiSelectorPage({Key? key, this.title}) : super(key: key);

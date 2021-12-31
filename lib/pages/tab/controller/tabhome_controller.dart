@@ -1,7 +1,7 @@
 import 'package:fehviewer/common/service/ehconfig_service.dart';
 import 'package:fehviewer/generated/l10n.dart';
 import 'package:fehviewer/models/base/eh_models.dart';
-import 'package:fehviewer/pages/tab/view/tabbar/custom_list_page.dart';
+import 'package:fehviewer/pages/tab/view/tabbar/custom_tabbar_page.dart';
 import 'package:fehviewer/pages/tab/view/download_page.dart';
 import 'package:fehviewer/pages/tab/view/history_page.dart';
 import 'package:fehviewer/pages/tab/view/tabbar/favorite_tabbar_page.dart';
@@ -40,7 +40,7 @@ class TabPages {
         EHRoutes.history: const HistoryTab(),
         EHRoutes.download: const DownloadTab(),
         EHRoutes.setting: const SettingTab(),
-        EHRoutes.coutomlist: const CustomTabbarList(),
+        EHRoutes.customlist: const CustomTabbarList(),
       };
 
   final Map<String, IconData> iconDatas = <String, IconData>{
@@ -52,7 +52,7 @@ class TabPages {
     EHRoutes.history: FontAwesomeIcons.history,
     EHRoutes.download: FontAwesomeIcons.download,
     EHRoutes.setting: FontAwesomeIcons.cog,
-    EHRoutes.coutomlist: FontAwesomeIcons.layerGroup,
+    EHRoutes.customlist: FontAwesomeIcons.layerGroup,
     EHRoutes.favoriteTabbar: FontAwesomeIcons.heartBroken,
   };
 
@@ -70,7 +70,7 @@ class TabPages {
         EHRoutes.history: L10n.of(_context).tab_history,
         EHRoutes.download: L10n.of(_context).tab_download,
         EHRoutes.setting: L10n.of(_context).tab_setting,
-        EHRoutes.coutomlist: '自定',
+        EHRoutes.customlist: '自定',
         EHRoutes.favoriteTabbar: L10n.of(_context).tab_favorite,
       };
 }
@@ -85,14 +85,14 @@ Map<String, bool> kDefTabMap = <String, bool>{
   EHRoutes.toplist: false,
   EHRoutes.download: true,
   EHRoutes.history: false,
-  EHRoutes.coutomlist: false,
+  EHRoutes.customlist: false,
 };
 
 // 默认显示顺序 ?
 List<String> kTabNameList = <String>[
   EHRoutes.gallery,
   EHRoutes.popular,
-  EHRoutes.coutomlist,
+  EHRoutes.customlist,
   EHRoutes.watched,
   // EHRoutes.favoriteTabbar,
   EHRoutes.favorite,

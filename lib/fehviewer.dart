@@ -1,5 +1,6 @@
 library fehviewer;
 
+export 'common/enum.dart';
 export 'common/exts.dart';
 export 'common/global.dart';
 export 'const/const.dart';

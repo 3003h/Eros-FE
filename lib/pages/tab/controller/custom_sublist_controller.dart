@@ -29,7 +29,7 @@ class CustomSubListController extends TabViewController {
       refresh: refresh,
       cancelToken: cancelToken,
       searchText: profile?.searchText?.join(' '),
-      advanceSearchParam: profile?.advSearch?.param,
+      advanceSearchParam: profile?.advSearch?.param ?? {},
     );
 
     pageState = PageState.Loading;
@@ -65,7 +65,7 @@ class CustomSubListController extends TabViewController {
       refresh: true,
       cancelToken: cancelToken,
       searchText: profile?.searchText?.join(' '),
-      advanceSearchParam: profile?.advSearch?.param,
+      advanceSearchParam: profile?.advSearch?.param ?? {},
     );
     FetchListClient fetchListClient = getFetchListClient(fetchConfig);
     return await fetchListClient.fetch();
@@ -82,7 +82,7 @@ class CustomSubListController extends TabViewController {
       refresh: true,
       cancelToken: cancelToken,
       searchText: profile?.searchText?.join(' '),
-      advanceSearchParam: profile?.advSearch?.param,
+      advanceSearchParam: profile?.advSearch?.param ?? {},
     );
     try {
       FetchListClient fetchListClient = getFetchListClient(fetchConfig);

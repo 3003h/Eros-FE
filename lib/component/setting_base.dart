@@ -12,6 +12,59 @@ import 'package:get/get.dart';
 const double kItemHeight = 50.0;
 const double kCupertinoItemHeight = 36.0;
 
+class BarsItem extends StatelessWidget {
+  const BarsItem({Key? key, required this.title}) : super(key: key);
+
+  final String title;
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: [
+        Container(
+          color: CupertinoDynamicColor.resolve(
+              ehTheme.itemBackgroundColor!, context),
+          constraints: const BoxConstraints(
+            minHeight: kItemHeight,
+          ),
+          alignment: Alignment.centerLeft,
+          padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 20),
+          child: Row(
+            children: [
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Text(
+                      title,
+                      maxLines: 1,
+                      style: const TextStyle(
+                        height: 1.0,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              const Icon(
+                CupertinoIcons.bars,
+                color: CupertinoColors.systemGrey,
+              ),
+            ],
+          ),
+        ),
+        Divider(
+          indent: 20,
+          height: 0.6,
+          color: CupertinoDynamicColor.resolve(
+              CupertinoColors.systemGrey4, context),
+        ),
+      ],
+    );
+  }
+}
+
 /// 选择类型的设置项
 class SelectorSettingItem extends StatefulWidget {
   const SelectorSettingItem({
@@ -301,6 +354,7 @@ class TextItem extends StatefulWidget {
     // this.height = kItemHeight,
     this.hideLine = false,
     this.cupertinoFormRow = false,
+    this.textColor,
   }) : super(key: key);
 
   final String title;
@@ -310,6 +364,7 @@ class TextItem extends StatefulWidget {
   // final double height;
   final bool hideLine;
   final bool cupertinoFormRow;
+  final Color? textColor;
 
   @override
   _TextItemState createState() => _TextItemState();
@@ -356,8 +411,9 @@ class _TextItemState extends State<TextItem> {
                 children: <Widget>[
                   Text(
                     widget.title,
-                    style: const TextStyle(
+                    style: TextStyle(
                       height: 1.0,
+                      color: widget.textColor,
                     ),
                   ),
                   if (widget.desc != null)
@@ -671,5 +727,76 @@ class ItemSpace extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return const SizedBox(height: 38);
+  }
+}
+
+class GroupItem extends StatelessWidget {
+  const GroupItem({Key? key, this.title, this.child, this.desc, this.descTop})
+      : super(key: key);
+  final String? title;
+  final Widget? child;
+  final String? desc;
+  final String? descTop;
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      mainAxisSize: MainAxisSize.max,
+      children: [
+        Container(
+          // constraints: const BoxConstraints(minHeight: 38),
+          padding: EdgeInsets.only(
+            left: 20,
+            bottom: 4,
+            top: title != null ? 20 : 0,
+          ),
+          width: double.infinity,
+          child: Text(
+            title ?? '',
+            style: const TextStyle(fontSize: 14),
+            textAlign: TextAlign.start,
+          ),
+        ),
+        if (descTop != null)
+          Container(
+            padding: const EdgeInsets.only(
+              left: 20,
+              top: 4,
+              bottom: 10,
+              right: 20,
+            ),
+            width: double.infinity,
+            child: Text(
+              descTop!,
+              style: TextStyle(
+                fontSize: 12.5,
+                color: CupertinoDynamicColor.resolve(
+                    CupertinoColors.secondaryLabel, context),
+              ),
+              textAlign: TextAlign.start,
+            ),
+          ),
+        child ?? const SizedBox.shrink(),
+        if (desc != null)
+          Container(
+            padding: const EdgeInsets.only(
+              left: 20,
+              top: 4,
+              bottom: 10,
+              right: 20,
+            ),
+            width: double.infinity,
+            child: Text(
+              desc!,
+              style: TextStyle(
+                fontSize: 12.5,
+                color: CupertinoDynamicColor.resolve(
+                    CupertinoColors.secondaryLabel, context),
+              ),
+              textAlign: TextAlign.start,
+            ),
+          ),
+      ],
+    );
   }
 }

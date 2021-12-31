@@ -4,7 +4,7 @@ import 'package:fehviewer/common/service/layout_service.dart';
 import 'package:fehviewer/common/service/theme_service.dart';
 import 'package:fehviewer/generated/l10n.dart';
 import 'package:fehviewer/models/base/eh_models.dart';
-import 'package:fehviewer/pages/setting/setting_base.dart';
+import 'package:fehviewer/component/setting_base.dart';
 import 'package:fehviewer/route/routes.dart';
 import 'package:fehviewer/widget/cat_progress_indicator.dart';
 import 'package:flutter/cupertino.dart';

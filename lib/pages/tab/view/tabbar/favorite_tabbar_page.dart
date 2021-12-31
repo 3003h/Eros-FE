@@ -111,7 +111,7 @@ class _FavoriteTabTabBarPageState extends State<FavoriteTabTabBarPage> {
                               pageController.jumpToPage(index);
                             }
                           },
-                        )
+                        ),
                       ],
                     );
                   }),
