@@ -1,6 +1,8 @@
 import 'package:fehviewer/common/service/theme_service.dart';
+import 'package:fehviewer/component/setting_base.dart';
 import 'package:fehviewer/generated/l10n.dart';
 import 'package:fehviewer/pages/setting/controller/tab_setting_controller.dart';
+import 'package:fehviewer/pages/tab/controller/tabhome_controller.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -50,13 +52,34 @@ class TablistView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return GetBuilder<TabSettingController>(
-        init: TabSettingController(),
-        builder: (TabSettingController controller) {
-          return ReorderableSliverList(
-            delegate: ReorderableSliverChildListDelegate(controller.rows),
-            onReorder: controller.onReorder,
-          );
-        });
+    final TabSettingController controller = Get.put(TabSettingController());
+    return Obx(() {
+      return ReorderableSliverList(
+        delegate: ReorderableSliverChildListDelegate(controller.tabList
+            .map(
+              (e) => TextSwitchItem(
+                tabPages.tabTitles[e] ?? '',
+                key: UniqueKey(),
+                icon: Padding(
+                  padding: const EdgeInsets.only(right: 18.0),
+                  child: Icon(
+                    tabPages.iconDatas[e],
+                    color: CupertinoDynamicColor.resolve(
+                        CupertinoColors.systemGrey, Get.context!),
+                  ),
+                ),
+                iconIndent: 32,
+                intValue: controller.tabMap[e],
+                onChanged: (controller.disableSwitch && controller.tabMap[e]!)
+                    ? null
+                    : (bool val) {
+                        controller.onChanged(val, e);
+                      },
+              ),
+            )
+            .toList()),
+        onReorder: controller.onReorder,
+      );
+    });
   }
 }

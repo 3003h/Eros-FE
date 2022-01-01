@@ -135,6 +135,9 @@ class TabHomeController extends GetxController {
         _list.add(key);
       }
     }
+    if (_list.isEmpty) {
+      _list.add(EHRoutes.gallery);
+    }
     // setting 必须保留
     _list.add(EHRoutes.setting);
     return _list;
