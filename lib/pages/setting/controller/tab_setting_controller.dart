@@ -1,67 +1,41 @@
+import 'package:collection/collection.dart';
 import 'package:fehviewer/component/setting_base.dart';
 import 'package:fehviewer/pages/tab/controller/tabhome_controller.dart';
 import 'package:fehviewer/route/routes.dart';
+import 'package:fehviewer/utils/logger.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
 
 class TabSettingController extends GetxController {
-  List<Widget> rows = <Widget>[];
+  // List<Widget> rows = <Widget>[];
   final TabHomeController _tabHomeController = Get.find();
 
   ScrollController? scrollController;
+
+  RxList<String> get tabList => _tabHomeController.tabNameList;
+  RxMap<String, bool> get tabMap => _tabHomeController.tabMap;
+  bool get disableSwitch => _showInBarCount == 1;
+
+  int get _showInBarCount => _tabHomeController.tabMap.entries
+      .where((element) => element.value)
+      .length;
 
   @override
   void onInit() {
     super.onInit();
     scrollController =
         PrimaryScrollController.of(Get.context!) ?? ScrollController();
-
-    final RxList<String> _tabList = _tabHomeController.tabNameList;
-    final RxMap<String, bool> _tabMap = _tabHomeController.tabMap;
-
-    for (int index = 0; index < _tabList.length; index++) {
-      final String key = _tabList[index];
-      if (_tabMap[key] != null) {
-        // if (!Global.inDebugMode && key == EHRoutes.download) {
-        //   continue;
-        // }
-
-        rows.add(
-          TextSwitchItem(
-            tabPages.tabTitles[key] ?? '',
-            key: UniqueKey(),
-            icon: Padding(
-              padding: const EdgeInsets.only(right: 18.0),
-              child: Icon(
-                tabPages.iconDatas[key],
-                color: CupertinoDynamicColor.resolve(
-                    CupertinoColors.systemGrey, Get.context!),
-              ),
-            ),
-            iconIndent: 32,
-            intValue: _tabMap[key],
-            onChanged: key != EHRoutes.gallery
-                ? (val) {
-                    onChanged(val, key);
-                  }
-                : null,
-          ),
-        );
-      }
-    }
   }
 
   void onChanged(bool val, String key) {
     _tabHomeController.tabMap[key] = val;
     Get.find<TabHomeController>().resetIndex();
+    logger.d('_showInBarCount $_showInBarCount');
   }
 
   void onReorder(int oldIndex, int newIndex) {
-    final Widget row = rows.removeAt(oldIndex);
-    rows.insert(newIndex, row);
-
-    final String name = _tabHomeController.tabNameList.removeAt(oldIndex);
-    _tabHomeController.tabNameList.insert(newIndex, name);
+    final row = tabList.removeAt(oldIndex);
+    tabList.insert(newIndex, row);
 
     Get.find<TabHomeController>().resetIndex();
 

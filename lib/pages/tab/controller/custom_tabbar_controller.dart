@@ -51,7 +51,7 @@ class CustomTabbarController extends DefaultTabViewController {
   @override
   int get curPage => currSubController?.curPage ?? 1;
 
-  late final PageController pageController;
+  late PageController pageController;
 
   final LinkScrollBarController linkScrollBarController =
       LinkScrollBarController();
@@ -88,6 +88,13 @@ class CustomTabbarController extends DefaultTabViewController {
     for (final profile in profiles) {
       Get.lazyPut(() => CustomSubListController(), tag: profile.uuid);
     }
+  }
+
+  @override
+  void onClose() {
+    super.onClose();
+    pageController.dispose();
+    linkScrollBarController.dispose();
   }
 
   void onPageChanged(int index) {

@@ -272,19 +272,18 @@ class TextSwitchItem extends StatefulWidget {
 }
 
 class _TextSwitchItemState extends State<TextSwitchItem> {
-  bool? _switchValue;
+  bool _switchValue = false;
   String? _desc;
 
-  void _handOnChanged() {
-    if (_switchValue != null && widget.onChanged != null) {
-      widget.onChanged!(_switchValue!);
-    }
+  @override
+  void initState() {
+    super.initState();
+    _switchValue = widget.intValue ?? false;
+    _desc = _switchValue ? widget.descOn : widget.desc;
   }
 
   @override
   Widget build(BuildContext context) {
-    _switchValue = _switchValue ?? widget.intValue ?? false;
-    _desc = (_switchValue ?? false) ? widget.descOn : widget.desc;
     return Container(
       color:
           CupertinoDynamicColor.resolve(ehTheme.itemBackgroundColor!, context),
@@ -317,17 +316,19 @@ class _TextSwitchItemState extends State<TextSwitchItem> {
                     ]),
                 const Spacer(),
                 if (widget.suffix != null) widget.suffix!,
-                if (widget.onChanged != null)
-                  CupertinoSwitch(
-                    onChanged: (bool value) {
-                      setState(() {
-                        _switchValue = value;
-                        _desc = value ? widget.descOn : widget.desc;
-                        _handOnChanged();
-                      });
-                    },
-                    value: _switchValue ?? false,
-                  ),
+                // if (widget.onChanged != null)
+                CupertinoSwitch(
+                  onChanged: widget.onChanged != null
+                      ? (bool value) {
+                          setState(() {
+                            _switchValue = value;
+                            _desc = value ? widget.descOn : widget.desc;
+                            widget.onChanged?.call(_switchValue);
+                          });
+                        }
+                      : null,
+                  value: _switchValue,
+                ),
               ],
             ),
           ),

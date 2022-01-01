@@ -34,13 +34,6 @@ class _CustomTabbarListState extends State<CustomTabbarList> {
   }
 
   @override
-  void dispose() {
-    controller.pageController.dispose();
-    controller.linkScrollBarController.dispose();
-    super.dispose();
-  }
-
-  @override
   Widget build(BuildContext context) {
     final headerMaxHeight = kMinInteractiveDimensionCupertino +
         context.mediaQueryPadding.top +

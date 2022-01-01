@@ -28,7 +28,7 @@ class _FavoriteTabTabBarPageState extends State<FavoriteTabTabBarPage> {
   final LinkScrollBarController linkScrollBarController =
       LinkScrollBarController();
   final controller = Get.find<FavoriteTabberController>();
-  late final PageController pageController;
+  late PageController pageController;
 
   Widget _buildTopBar(
       BuildContext context, double offset, double maxExtentCallBackValue) {
