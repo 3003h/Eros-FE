@@ -141,9 +141,6 @@ class Global {
     //statusBar设置为透明，去除半透明遮罩
     SystemChrome.setSystemUIOverlayStyle(
         const SystemUiOverlayStyle(statusBarColor: Colors.transparent));
-    // await FlutterStatusbarManager.setTranslucent(false);
-    // await FlutterStatusbarManager.setColor(Colors.green);
-    // await FlutterStatusbarManager.setNavigationBarColor(Colors.green);
 
     appSupportPath = (await getApplicationSupportDirectory()).path;
     appDocPath = (await getApplicationDocumentsDirectory()).path;
