@@ -2,6 +2,7 @@ import 'package:blur/blur.dart';
 import 'package:english_words/english_words.dart';
 import 'package:extended_nested_scroll_view/extended_nested_scroll_view.dart';
 import 'package:fehviewer/common/service/layout_service.dart';
+import 'package:fehviewer/common/service/theme_service.dart';
 import 'package:fehviewer/fehviewer.dart';
 import 'package:fehviewer/pages/tab/controller/custom_sublist_controller.dart';
 import 'package:fehviewer/pages/tab/controller/custom_tabbar_controller.dart';
@@ -135,16 +136,20 @@ class _CustomTabbarListState extends State<CustomTabbarList> {
             // fit: StackFit.expand,
             alignment: Alignment.topCenter,
             children: [
-              Blur(
-                blur: 10,
-                blurColor: CupertinoTheme.of(context)
-                    .barBackgroundColor
-                    .withOpacity(1),
-                colorOpacity: 0.7,
-                child: Container(
-                  height: kTopTabbarHeight,
-                ),
-              ),
+              Obx(() {
+                // 不要删除这行
+                ehTheme.isDarkMode;
+                return Blur(
+                  blur: 10,
+                  blurColor: CupertinoTheme.of(context)
+                      .barBackgroundColor
+                      .withOpacity(1),
+                  colorOpacity: 0.7,
+                  child: Container(
+                    height: kTopTabbarHeight,
+                  ),
+                );
+              }),
               Container(
                 decoration: const BoxDecoration(
                   border: kDefaultNavBarBorder,
