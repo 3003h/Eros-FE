@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:dio/dio.dart';
 import 'package:fehviewer/component/exception/error.dart';
 import 'package:fehviewer/fehviewer.dart';
@@ -41,6 +43,8 @@ class CustomSubListController extends TabViewController {
   @override
   Future<GalleryList?> fetchData({bool refresh = false}) async {
     cancelToken = CancelToken();
+
+    logger.d('${jsonEncode(profile)}');
 
     final fetchConfig = FetchParams(
       cats: profile?.cats,
