@@ -38,13 +38,24 @@ class CustomProfileSettingView extends GetView<CustomTabbarController> {
       navigationBar: CupertinoNavigationBar(
         trailing: GestureDetector(
           onTap: () {
+            if (customProfile.name.trim().isEmpty) {
+              showToast('Name is empty');
+              return;
+            }
+
             if (oriIndex >= 0) {
               controller.profiles[oriIndex] = customProfile;
             } else {
+              logger.d('new profile ${customProfile.name}');
               controller.profiles.add(customProfile);
             }
-            Get.lazyPut(() => CustomSubListController(),
-                tag: customProfile.uuid);
+            Get.lazyPut(
+                () => CustomSubListController()
+                  ..profileUuid = customProfile.uuid
+                  ..heroTag = customProfile.uuid,
+                tag: customProfile.uuid,
+                fenix: true);
+
             Get.back();
           },
           child: Text(
