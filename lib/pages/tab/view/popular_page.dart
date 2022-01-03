@@ -131,8 +131,12 @@ class _PopularListTabState extends State<PopularListTab> {
   Widget _getGalleryList() {
     return controller.obx(
         (List<GalleryItem>? state) {
-          logger.d('state ${state?.length}');
-          return getGallerySliverList(state, controller.heroTag);
+          // logger.d('state ${state?.length}');
+          return getGallerySliverList(
+            state,
+            controller.heroTag,
+            // key: controller.sliverAnimatedListKey,
+          );
         },
         onLoading: SliverFillRemaining(
           child: Container(

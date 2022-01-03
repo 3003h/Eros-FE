@@ -289,7 +289,7 @@ class _GalleryListTabState extends State<GalleryListTab> {
             maxPage: controller.maxPage,
             curPage: controller.curPage,
             lastComplete: controller.lastComplete,
-            key: controller.sliverAnimatedListKey,
+            // key: controller.sliverAnimatedListKey,
             lastTopitemIndex: controller.lastTopitemIndex,
           );
         },
