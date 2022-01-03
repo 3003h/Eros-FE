@@ -2,8 +2,10 @@
   "uuid": "",
   "name": "chs",
   "searchText?": [],
+  "listTypeValue?": "",
   "catsTypeValue?": "",
   "cats?": 0,
+  "enableAdvance?": false,
   "advSearchTypeValue?": "",
   "advSearch?": "$advance_search"
 }

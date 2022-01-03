@@ -79,7 +79,7 @@ class TabViewController extends GetxController
 
     logger.d('reloadData length ${rult?.gallerys?.length}');
 
-    if (rult == null || (rult.gallerys?.isEmpty ?? true)) {
+    if (rult == null) {
       return;
     }
 
@@ -88,7 +88,7 @@ class TabViewController extends GetxController
     maxPage = rult.maxPage ?? 0;
     nextPage = rult.nextPage ?? 1;
     change([], status: RxStatus.success());
-    change(rult.gallerys, status: RxStatus.success());
+    change(rultList, status: RxStatus.success());
     for (final item in rultList) {
       sliverAnimatedListKey.currentState?.insertItem(0);
     }
