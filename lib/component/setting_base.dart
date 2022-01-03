@@ -13,9 +13,14 @@ const double kItemHeight = 50.0;
 const double kCupertinoItemHeight = 36.0;
 
 class BarsItem extends StatelessWidget {
-  const BarsItem({Key? key, required this.title}) : super(key: key);
+  const BarsItem({
+    Key? key,
+    required this.title,
+    this.maxLines = 1,
+  }) : super(key: key);
 
   final String title;
+  final int maxLines;
 
   @override
   Widget build(BuildContext context) {
@@ -39,9 +44,10 @@ class BarsItem extends StatelessWidget {
                   children: [
                     Text(
                       title,
-                      maxLines: 1,
+                      maxLines: maxLines,
+                      overflow: TextOverflow.ellipsis,
                       style: const TextStyle(
-                        height: 1.0,
+                        height: 1.2,
                       ),
                     ),
                   ],
@@ -78,6 +84,7 @@ class SelectorSettingItem extends StatefulWidget {
     this.onLongPress,
     this.titleFlex = 1,
     this.valueFlex = 0,
+    this.maxLines = 1,
   }) : super(key: key);
 
   final String title;
@@ -87,6 +94,7 @@ class SelectorSettingItem extends StatefulWidget {
   final Color? titleColor;
   final int titleFlex;
   final int valueFlex;
+  final int maxLines;
 
   // 点击回调
   final VoidCallback? onTap;
@@ -128,9 +136,11 @@ class _SelectorSettingItemState extends State<SelectorSettingItem> {
       children: [
         Text(
           widget.title,
-          maxLines: 1,
+          maxLines: widget.maxLines,
+          overflow: TextOverflow.ellipsis,
+          // softWrap: true,
           style: TextStyle(
-            height: 1.0,
+            height: 1.2,
             color: widget.titleColor,
           ),
         ),
@@ -177,7 +187,6 @@ class _SelectorSettingItemState extends State<SelectorSettingItem> {
         mainAxisSize: MainAxisSize.min,
         children: <Widget>[
           Container(
-            // height: kItemHeight,
             constraints: const BoxConstraints(
               minHeight: kItemHeight,
             ),
@@ -484,6 +493,7 @@ class TextInputItem extends StatefulWidget {
     this.placeholder,
     this.icon,
     this.textAlign = TextAlign.right,
+    this.textFieldPadding = const EdgeInsets.all(6.0),
   }) : super(key: key);
 
   final String? title;
@@ -495,6 +505,7 @@ class TextInputItem extends StatefulWidget {
   final int? maxLines;
   final Widget? icon;
   final TextAlign textAlign;
+  final EdgeInsetsGeometry textFieldPadding;
 
   @override
   State<TextInputItem> createState() => _TextInputItemState();
@@ -530,12 +541,13 @@ class _TextInputItemState extends State<TextInputItem> {
                   Text(
                     widget.title ?? '',
                     style: const TextStyle(
-                      height: 1.0,
+                      height: 1.2,
                     ),
                   ),
                   Expanded(
                     child: CupertinoTextField(
                       decoration: null,
+                      padding: widget.textFieldPadding,
                       controller: textController,
                       textAlign: widget.textAlign,
                       maxLines: widget.maxLines,
@@ -552,7 +564,7 @@ class _TextInputItemState extends State<TextInputItem> {
                         height: 1.25,
                       ),
                       placeholder: widget.placeholder,
-                      style: const TextStyle(height: 1.25),
+                      style: const TextStyle(height: 1.2),
                       onChanged: widget.onChanged?.call,
                     ),
                   ),

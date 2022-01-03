@@ -289,7 +289,6 @@ Widget getGallerySliverList(
   int? maxPage,
   int? curPage,
   VoidCallback? lastComplete,
-  Key? sliverAnimatedListKey,
   Key? key,
   Key? centerKey,
   int? lastTopitemIndex,

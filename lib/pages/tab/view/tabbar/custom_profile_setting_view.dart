@@ -59,9 +59,13 @@ class CustomProfileSettingView extends GetView<CustomTabbarController> {
             children: [
               TextInputItem(
                 title: '分组名称',
+                textFieldPadding: const EdgeInsets.fromLTRB(20, 6, 6, 6),
                 initValue: customProfile.name,
+                maxLines: null,
+                textAlign: TextAlign.left,
                 onChanged: (value) {
-                  customProfile = customProfile.copyWith(name: value);
+                  customProfile = customProfile.copyWith(
+                      name: value.replaceAll('\n', '').trim());
                 },
               ),
               Container(

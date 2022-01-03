@@ -23,6 +23,7 @@ class CustomProfilesPage extends GetView<CustomTabbarController> {
         children: controller.profiles
             .map((element) => SelectorSettingItem(
                   title: element.name,
+                  maxLines: 2,
                   onTap: () {
                     Get.toNamed(
                       EHRoutes.customProfileSetting,
@@ -43,6 +44,7 @@ class CustomProfilesPage extends GetView<CustomTabbarController> {
                   key: ValueKey(element.uuid),
                   child: BarsItem(
                     title: element.name,
+                    maxLines: 2,
                     key: ValueKey(element.uuid),
                   ),
                   endActionPane: ActionPane(

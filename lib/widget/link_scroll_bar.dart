@@ -168,9 +168,9 @@ class _LinkScrollBarState extends State<LinkScrollBar> {
   @override
   void initState() {
     super.initState();
-    logger.d('initState');
 
     bindController();
+    logger.d('_LinkScrollBarState initState selectIndex:${widget.initIndex}');
 
     selectIndex = widget.initIndex;
     // _indicatorPositionedLeft = widget.itemPadding.horizontal / 2;
@@ -179,8 +179,11 @@ class _LinkScrollBarState extends State<LinkScrollBar> {
     SchedulerBinding.instance?.addPostFrameCallback((_) {
       Future.delayed(const Duration(milliseconds: 0)).then((value) {
         setState(() {});
-        // scrollToItem(widget.initIndex);
       });
+
+      // Future.delayed(const Duration(milliseconds: 100)).then((value) {
+      //   widget.pageController?.jumpToPage(widget.initIndex);
+      // });
     });
   }
 
@@ -281,7 +284,7 @@ class _TitleIndicatorState extends State<TitleIndicator> {
   @override
   void initState() {
     super.initState();
-    logger.d('index ${widget.index}');
+    logger.d('_TitleIndicatorState initState index:${widget.index}');
 
     positionedLeft = widget.channelFrameList[widget.index].left +
         (widget.itemPadding?.horizontal ?? 0) / 2;

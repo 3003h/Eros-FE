@@ -71,9 +71,8 @@ class _CustomTabbarListState extends State<CustomTabbarList> {
           },
           child: Obx(() {
             return PageView(
-              // key: ValueKey(
-              //     controller.profiles.map((element) => element.uuid).join()),
-              key: UniqueKey(),
+              key: ValueKey(controller.profiles.hashCode),
+              // key: UniqueKey(),
               controller: controller.pageController,
               children: controller.profiles.isNotEmpty
                   ? [
@@ -157,11 +156,9 @@ class _CustomTabbarListState extends State<CustomTabbarList> {
                     children: [
                       Expanded(
                         child: Obx(() {
-                          // logger.d(
-                          //     'build LinkScrollBar index ${controller.index}');
                           return LinkScrollBar(
                             key: ValueKey(controller.profiles
-                                .map((element) => element.name)
+                                .map((e) => '${e.uuid}${e.name}')
                                 .join()),
                             controller: controller.linkScrollBarController,
                             pageController: controller.pageController,
