@@ -55,6 +55,7 @@ class SearchFetchListClient extends FetchListClient {
       cancelToken: fetchParams.cancelToken,
       refresh: fetchParams.refresh,
       galleryListType: fetchParams.galleryListType,
+      advanceSearchParam: fetchParams.advanceSearchParam,
     );
   }
 }

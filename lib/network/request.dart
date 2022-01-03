@@ -82,6 +82,8 @@ Future<GalleryList?> getGallery({
       'favcat': favcat,
   };
 
+  logger.d('$advanceSearchParam');
+
   /// 高级搜索处理
   if (advanceSearchParam != null) {
     if (advanceSearchParam.isNotEmpty) {

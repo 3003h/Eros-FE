@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:fehviewer/common/service/theme_service.dart';
 import 'package:fehviewer/component/setting_base.dart';
 import 'package:fehviewer/fehviewer.dart';
@@ -52,6 +54,8 @@ class _CustomProfileSettingViewState extends State<CustomProfileSettingView> {
       return;
     }
 
+    logger.d('searchWithminRating $searchWithminRating $minRating');
+
     customProfile = customProfile.copyWith(
       enableAdvance: enableAdvance,
       advSearch: customProfile.advSearch?.copyWith(
@@ -94,6 +98,8 @@ class _CustomProfileSettingViewState extends State<CustomProfileSettingView> {
             favSearchNote: true,
           ),
     );
+
+    // logger.d('${jsonEncode(customProfile)}');
 
     if (oriIndex >= 0) {
       controller.profiles[oriIndex] = customProfile;
