@@ -17,7 +17,7 @@ class CustomSubListController extends TabViewController {
   CustomProfile? get profile => _customTabbarController.profileMap[profileUuid];
 
   FetchListClient getFetchListClient(FetchParams fetchParams) {
-    return DefaultFetchListClient(fetchParams: fetchParams);
+    return SearchFetchListClient(fetchParams: fetchParams);
   }
 
   bool isBackgroundRefresh = false;
@@ -47,7 +47,10 @@ class CustomSubListController extends TabViewController {
       refresh: refresh,
       cancelToken: cancelToken,
       searchText: profile?.searchText?.join(' '),
-      advanceSearchParam: profile?.advSearch?.param ?? {},
+      advanceSearchParam: (profile?.enableAdvance ?? false)
+          ? profile?.advSearch?.param ?? {}
+          : {},
+      galleryListType: profile?.listType ?? GalleryListType.gallery,
     );
 
     pageState = PageState.Loading;
@@ -83,7 +86,10 @@ class CustomSubListController extends TabViewController {
       refresh: true,
       cancelToken: cancelToken,
       searchText: profile?.searchText?.join(' '),
-      advanceSearchParam: profile?.advSearch?.param ?? {},
+      advanceSearchParam: (profile?.enableAdvance ?? false)
+          ? profile?.advSearch?.param ?? {}
+          : {},
+      galleryListType: profile?.listType ?? GalleryListType.gallery,
     );
     FetchListClient fetchListClient = getFetchListClient(fetchConfig);
     return await fetchListClient.fetch();
@@ -100,7 +106,10 @@ class CustomSubListController extends TabViewController {
       refresh: true,
       cancelToken: cancelToken,
       searchText: profile?.searchText?.join(' '),
-      advanceSearchParam: profile?.advSearch?.param ?? {},
+      advanceSearchParam: (profile?.enableAdvance ?? false)
+          ? profile?.advSearch?.param ?? {}
+          : {},
+      galleryListType: profile?.listType ?? GalleryListType.gallery,
     );
     try {
       FetchListClient fetchListClient = getFetchListClient(fetchConfig);

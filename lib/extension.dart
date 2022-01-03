@@ -5,6 +5,7 @@ import 'package:enum_to_string/enum_to_string.dart';
 import 'package:fehviewer/common/service/ehconfig_service.dart';
 import 'package:fehviewer/const/const.dart';
 import 'package:fehviewer/pages/image_view/common.dart';
+import 'package:fehviewer/pages/tab/fetch_list.dart';
 import 'package:fehviewer/store/floor/entity/tag_translat.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
@@ -490,4 +491,8 @@ extension ExtCustomProfile on CustomProfile {
       EnumToString.fromString(
           CustomProfileType.values, advSearchTypeValue ?? '') ??
       CustomProfileType.disable;
+
+  GalleryListType get listType =>
+      EnumToString.fromString(GalleryListType.values, listTypeValue ?? '') ??
+      GalleryListType.gallery;
 }
