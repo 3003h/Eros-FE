@@ -1,4 +1,5 @@
 import 'package:fehviewer/common/controller/localfav_controller.dart';
+import 'package:fehviewer/common/controller/user_controller.dart';
 import 'package:fehviewer/const/const.dart';
 import 'package:fehviewer/fehviewer.dart';
 import 'package:fehviewer/generated/l10n.dart';
@@ -15,8 +16,17 @@ class FavoriteSelectorController extends GetxController
     with StateMixin<List<Favcat>> {
   FavoriteSelectorController();
 
+  final UserController userController = Get.find();
+
   final _favcatList = <Favcat>[].obs;
-  List<Favcat> get favcatList => _favcatList.value;
+  List<Favcat> get favcatList => userController.isLogin
+      ? _favcatList.value
+      : [
+          Favcat(
+              favTitle: L10n.current.local_favorite,
+              favId: 'l',
+              totNum: _localFavController.loacalFavs.length)
+        ];
 
   final LocalFavController _localFavController = Get.find();
 

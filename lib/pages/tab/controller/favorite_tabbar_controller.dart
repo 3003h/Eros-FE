@@ -1,7 +1,7 @@
+import 'package:fehviewer/common/controller/user_controller.dart';
 import 'package:fehviewer/fehviewer.dart';
 import 'package:fehviewer/pages/controller/favorite_sel_controller.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:flutter/src/widgets/framework.dart';
 import 'package:get/get.dart';
 
 import 'default_tabview_controller.dart';
@@ -9,6 +9,9 @@ import 'favorite_sublist_controller.dart';
 
 class FavoriteTabberController extends DefaultTabViewController {
   final FavoriteSelectorController favoriteSelectorController = Get.find();
+  final UserController userController = Get.find();
+
+  bool get showBarsBtn => userController.isLogin;
 
   List<Favcat> get favcatList => favoriteSelectorController.favcatList;
 
@@ -22,8 +25,9 @@ class FavoriteTabberController extends DefaultTabViewController {
   String get currFavcat => _currFavcat.value;
   set currFavcat(String val) => _currFavcat.value = val;
 
-  FavoriteSubListController? get currSubController =>
-      subControllerMap[currFavcat];
+  FavoriteSubListController? get currSubController => userController.isLogin
+      ? subControllerMap[currFavcat]
+      : subControllerMap['l'];
 
   final _index = 0.obs;
   int get index => _index.value;
@@ -35,6 +39,8 @@ class FavoriteTabberController extends DefaultTabViewController {
   @override
   void onInit() {
     super.onInit();
+    subControllerMap.clear();
+
     for (final favcat in favcatList) {
       Get.lazyPut(() => FavoriteSubListController(), tag: favcat.favId);
     }
@@ -56,9 +62,6 @@ class FavoriteTabberController extends DefaultTabViewController {
     if (order != null) {
       currSubController?.change(state, status: RxStatus.loading());
       currSubController?.reloadData();
-      // for (final favcat in favcatList) {
-      //   Get.replace(() => FavoriteSubListController(), tag: favcat.favId);
-      // }
     }
   }
 

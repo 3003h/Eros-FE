@@ -27,6 +27,7 @@ SliverPadding buildWaterfallFlow(
   required int curPage,
   VoidCallback? lastComplete,
   bool large = false,
+  Key? key,
   Key? centerKey,
   int? lastTopitemIndex,
 }) {
@@ -36,6 +37,7 @@ SliverPadding buildWaterfallFlow(
   return SliverPadding(
     padding: EdgeInsets.all(_padding),
     sliver: SliverWaterfallFlow(
+      key: key,
       gridDelegate: SliverWaterfallFlowDelegateWithMaxCrossAxisExtent(
         maxCrossAxisExtent: large
             ? EHConst.waterfallFlowLargeMaxCrossAxisExtent
@@ -287,11 +289,14 @@ Widget getGallerySliverList(
   int? maxPage,
   int? curPage,
   VoidCallback? lastComplete,
+  Key? sliverAnimatedListKey,
   Key? key,
   Key? centerKey,
   int? lastTopitemIndex,
 }) {
   final EhConfigService ehConfigService = Get.find();
+  final _key = key ?? ValueKey(gallerItemBeans.hashCode);
+  // logger.d('_key $_key');
 
   logger.v('lastTopitemIndex $lastTopitemIndex');
 
@@ -304,7 +309,7 @@ Widget getGallerySliverList(
           maxPage: maxPage,
           curPage: curPage ?? 0,
           lastComplete: lastComplete,
-          key: key,
+          key: _key,
           centerKey: centerKey,
           lastTopitemIndex: lastTopitemIndex,
         );
@@ -315,6 +320,7 @@ Widget getGallerySliverList(
           maxPage: maxPage,
           curPage: curPage ?? 0,
           lastComplete: lastComplete,
+          key: _key,
           centerKey: centerKey,
           lastTopitemIndex: lastTopitemIndex,
         );
@@ -326,6 +332,7 @@ Widget getGallerySliverList(
           curPage: curPage ?? 0,
           lastComplete: lastComplete,
           large: true,
+          key: _key,
           centerKey: centerKey,
           lastTopitemIndex: lastTopitemIndex,
         );
@@ -336,7 +343,7 @@ Widget getGallerySliverList(
           maxPage: maxPage,
           curPage: curPage ?? 0,
           lastComplete: lastComplete,
-          key: key,
+          key: _key,
           centerKey: centerKey,
           lastTopitemIndex: lastTopitemIndex,
         );
