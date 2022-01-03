@@ -1,7 +1,5 @@
 import 'package:flutter/cupertino.dart';
 
-import '../fehviewer.dart';
-
 class LinkScrollBarController extends ChangeNotifier {
   LinkScrollBarController({this.initIndex = 0});
 

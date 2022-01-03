@@ -5,6 +5,9 @@ import 'package:fehviewer/const/const.dart';
 import 'package:fehviewer/generated/l10n.dart';
 import 'package:fehviewer/models/index.dart';
 import 'package:fehviewer/network/gallery_request.dart';
+import 'package:fehviewer/pages/tab/controller/favorite_sublist_controller.dart';
+import 'package:fehviewer/pages/tab/controller/favorite_tabbar_controller.dart';
+import 'package:fehviewer/utils/logger.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
 import 'package:webview_cookie_manager/webview_cookie_manager.dart';
@@ -30,6 +33,11 @@ class UserController extends ProfileController {
       user,
       (User value) {
         Global.profile = Global.profile.copyWith(user: value);
+        if (Get.isRegistered<FavoriteTabberController>()) {
+          logger.d('everProfile User  => update FavoriteTabberController');
+          Get.find<FavoriteTabberController>().onInit();
+          Get.find<FavoriteTabberController>().update();
+        }
       },
     );
   }

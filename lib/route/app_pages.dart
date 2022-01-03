@@ -28,6 +28,7 @@ import 'package:fehviewer/pages/setting/view/login_webdav.dart';
 import 'package:fehviewer/pages/setting/view_setting_page.dart';
 import 'package:fehviewer/pages/setting/webdav_setting_page.dart';
 import 'package:fehviewer/pages/tab/bindings/splash_binding.dart';
+import 'package:fehviewer/pages/tab/view/gallery_list_page.dart';
 import 'package:fehviewer/pages/tab/view/tabbar/custom_profile_setting_view.dart';
 import 'package:fehviewer/pages/tab/view/tabbar/custom_profiles_page.dart';
 import 'package:fehviewer/pages/tab/view/tabbar/custom_tabbar_page.dart';
@@ -107,7 +108,7 @@ class AppPages {
     ),
     GetPage(
       name: EHRoutes.readSeting,
-      page: () => ReadSettingPage(),
+      page: () => const ReadSettingPage(),
     ),
     GetPage(
       name: EHRoutes.login,
@@ -174,6 +175,10 @@ class AppPages {
     GetPage(
       name: EHRoutes.download,
       page: () => const DownloadTab(),
+    ),
+    GetPage(
+      name: EHRoutes.gallery,
+      page: () => const GalleryListTab(),
     ),
 
     GetPage(

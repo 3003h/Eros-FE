@@ -92,26 +92,29 @@ class _FavoriteTabTabBarPageState extends State<FavoriteTabTabBarPage> {
                                     curve: Curves.ease),
                           ),
                         ),
-                        CupertinoButton(
-                          minSize: 40,
-                          padding: const EdgeInsets.symmetric(horizontal: 12),
-                          child: const Icon(
-                            LineIcons.bars,
-                            size: 24,
-                          ),
-                          onPressed: () async {
-                            // 跳转收藏夹选择页
-                            final result = await Get.toNamed(
-                              EHRoutes.selFavorie,
-                              id: isLayoutLarge ? 1 : null,
-                            );
-                            if (result != null && result is Favcat) {
-                              final index = controller.favcatList.indexWhere(
-                                  (element) => element.favId == result.favId);
-                              pageController.jumpToPage(index);
-                            }
-                          },
-                        ),
+                        if (controller.showBarsBtn)
+                          CupertinoButton(
+                            minSize: 40,
+                            padding: const EdgeInsets.symmetric(horizontal: 12),
+                            child: const Icon(
+                              LineIcons.bars,
+                              size: 24,
+                            ),
+                            onPressed: () async {
+                              // 跳转收藏夹选择页
+                              final result = await Get.toNamed(
+                                EHRoutes.selFavorie,
+                                id: isLayoutLarge ? 1 : null,
+                              );
+                              if (result != null && result is Favcat) {
+                                final index = controller.favcatList.indexWhere(
+                                    (element) => element.favId == result.favId);
+                                pageController.jumpToPage(index);
+                              }
+                            },
+                          )
+                        else
+                          const SizedBox.shrink(),
                       ],
                     );
                   }),
@@ -269,20 +272,23 @@ class _FavoriteTabTabBarPageState extends State<FavoriteTabTabBarPage> {
             // 恢复启用 scrollToItem
             linkScrollBarController.enableScrollToItem();
           },
-          child: PageView(
-            controller: pageController,
-            children: [
-              ...controller.favcatList
-                  .map((e) => FavoriteSubPage(
-                        favcat: e.favId,
-                      ))
-                  .toList(),
-            ],
-            onPageChanged: (index) {
-              linkScrollBarController.scrollToItem(index);
-              controller.onPageChanged(index);
-            },
-          ),
+          child: Obx(() {
+            return PageView(
+              key: ValueKey(controller.showBarsBtn), // 登录状态变化后能刷新
+              controller: pageController,
+              children: [
+                ...controller.favcatList
+                    .map((e) => FavoriteSubPage(
+                          favcat: e.favId,
+                        ))
+                    .toList(),
+              ],
+              onPageChanged: (index) {
+                linkScrollBarController.scrollToItem(index);
+                controller.onPageChanged(index);
+              },
+            );
+          }),
         );
       }),
     );

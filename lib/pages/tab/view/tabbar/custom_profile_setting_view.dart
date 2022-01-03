@@ -27,7 +27,7 @@ class CustomProfileSettingView extends GetView<CustomTabbarController> {
         .indexWhere((element) => element.uuid == profileUuid);
 
     final _style = TextStyle(
-      height: 1,
+      // height: 1,
       color: CupertinoDynamicColor.resolve(CupertinoColors.activeBlue, context),
     );
 

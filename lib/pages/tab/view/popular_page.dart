@@ -130,8 +130,10 @@ class _PopularListTabState extends State<PopularListTab> {
 
   Widget _getGalleryList() {
     return controller.obx(
-        (List<GalleryItem>? state) =>
-            getGallerySliverList(state, controller.heroTag),
+        (List<GalleryItem>? state) {
+          logger.d('state ${state?.length}');
+          return getGallerySliverList(state, controller.heroTag);
+        },
         onLoading: SliverFillRemaining(
           child: Container(
             alignment: Alignment.center,
@@ -140,17 +142,18 @@ class _PopularListTabState extends State<PopularListTab> {
               radius: 14.0,
             ),
           ),
-        ), onError: (err) {
-      logger.e(' $err');
-      return SliverFillRemaining(
-        child: Container(
-          padding: const EdgeInsets.only(bottom: 50),
-          child: GalleryErrorPage(
-            onTap: controller.reLoadDataFirst,
-            error: '$err',
-          ),
         ),
-      );
-    });
+        onError: (err) {
+          logger.e(' $err');
+          return SliverFillRemaining(
+            child: Container(
+              padding: const EdgeInsets.only(bottom: 50),
+              child: GalleryErrorPage(
+                onTap: controller.reLoadDataFirst,
+                error: '$err',
+              ),
+            ),
+          );
+        });
   }
 }

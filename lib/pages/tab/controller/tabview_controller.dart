@@ -87,8 +87,11 @@ class TabViewController extends GetxController
 
     maxPage = rult.maxPage ?? 0;
     nextPage = rult.nextPage ?? 1;
-    // change([], status: RxStatus.success());
+    change([], status: RxStatus.success());
     change(rult.gallerys, status: RxStatus.success());
+    for (final item in rultList) {
+      sliverAnimatedListKey.currentState?.insertItem(0);
+    }
   }
 
   // 加载更多
