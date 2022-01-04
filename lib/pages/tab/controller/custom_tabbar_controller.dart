@@ -162,4 +162,6 @@ class CustomTabbarController extends DefaultTabViewController {
       profiles.removeWhere((element) => element.uuid == uuid);
     }
   }
+
+  void pressSubmitText() {}
 }

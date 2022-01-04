@@ -17,13 +17,22 @@ class BarsItem extends StatelessWidget {
     Key? key,
     required this.title,
     this.maxLines = 1,
+    this.titleSize,
+    this.descSize,
+    this.desc,
   }) : super(key: key);
 
   final String title;
-  final int maxLines;
+  final String? desc;
+  final int? maxLines;
+  final double? titleSize;
+  final double? descSize;
 
   @override
   Widget build(BuildContext context) {
+    const _kDescStyle = TextStyle(
+        fontSize: 12.5, height: 1.1, color: CupertinoColors.systemGrey);
+
     return Column(
       children: [
         Container(
@@ -48,11 +57,18 @@ class BarsItem extends StatelessWidget {
                       overflow: TextOverflow.ellipsis,
                       style: const TextStyle(
                         height: 1.2,
-                      ),
+                      ).copyWith(fontSize: titleSize),
                     ),
+                    if (desc != null && desc!.isNotEmpty)
+                      Text(
+                        desc ?? '',
+                        maxLines: null,
+                        style: _kDescStyle,
+                      ).paddingOnly(top: 6.0)
                   ],
                 ),
               ),
+              const SizedBox(width: 8),
               const Icon(
                 CupertinoIcons.bars,
                 color: CupertinoColors.systemGrey,
@@ -482,7 +498,7 @@ class _TextItemState extends State<TextItem> {
 
 /// 文本输入框类型
 class TextInputItem extends StatefulWidget {
-  const TextInputItem({
+  TextInputItem({
     this.title,
     Key? key,
     this.hideLine = false,
@@ -494,6 +510,7 @@ class TextInputItem extends StatefulWidget {
     this.icon,
     this.textAlign = TextAlign.right,
     this.textFieldPadding = const EdgeInsets.all(6.0),
+    this.textController,
   }) : super(key: key);
 
   final String? title;
@@ -506,6 +523,7 @@ class TextInputItem extends StatefulWidget {
   final Widget? icon;
   final TextAlign textAlign;
   final EdgeInsetsGeometry textFieldPadding;
+  final TextEditingController? textController;
 
   @override
   State<TextInputItem> createState() => _TextInputItemState();
@@ -517,10 +535,15 @@ class _TextInputItemState extends State<TextInputItem> {
   @override
   void initState() {
     super.initState();
-    textController = TextEditingController(text: widget.initValue);
-    textController.addListener(() {
-      widget.onChanged?.call(textController.text);
-    });
+    if (widget.textController != null) {
+      textController = widget.textController!;
+      textController.text = widget.initValue ?? '';
+    } else {
+      textController = TextEditingController(text: widget.initValue);
+    }
+    // textController.addListener(() {
+    //   widget.onChanged?.call(textController.text);
+    // });
   }
 
   @override
