@@ -3,7 +3,7 @@ description: fehviewer
 
 publish_to: 'none' # Remove this line if you wish to publish to pub.dev
 
-version: 1.2.1+361
+version: 1.2.2+362
 
 environment:
   sdk: '>=2.14.0 <3.0.0'
@@ -87,7 +87,7 @@ dependencies:
   custom_pop_up_menu: ^1.2.0
   flutter_downloader: ^1.6.0
   floor: ^1.1.0
-  copy_with_extension: ^2.0.0
+  copy_with_extension: ^3.0.0
   package_info: ^2.0.0
   firebase_analytics: ^8.0.4
   firebase_crashlytics: 2.3.0
@@ -174,7 +174,7 @@ dev_dependencies:
   json_annotation: ^4.3.0
 
   floor_generator: ^1.1.0
-  copy_with_extension_gen: ^2.0.1
+  copy_with_extension_gen: ^3.0.0
 
   # git hook 相关
   process_run: ^0.12.1+1

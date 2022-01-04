@@ -87,7 +87,6 @@ class SearchPageController extends DefaultTabViewController {
   /// 自动获取焦点
   bool autofocus = false;
 
-  final EhConfigService ehConfigService = Get.find();
   final QuickSearchController quickSearchController = Get.find();
   final LocaleService localeService = Get.find();
 

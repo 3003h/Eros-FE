@@ -188,6 +188,7 @@ class TagTransController extends GetxController {
     }
   }
 
+  /// 自动拆分解析匹配查询tag翻译
   Future<String?> getTranTagWithNameSpaseSmart(String text) async {
     if (!text.trim().contains(' ')) {
       return await getTranTagWithNameSpase(text);
@@ -271,6 +272,9 @@ class TagTransController extends GetxController {
 
   Future<List<TagTranslat>> getTagTranslatesLike(
       {String text = '', int limit = 100}) async {
+    if (text.isEmpty) {
+      return [];
+    }
     final TagTranslatDao tagTranslatDao = await _getTagTranslatDao();
 
     final List<TagTranslat> _translates = await tagTranslatDao
