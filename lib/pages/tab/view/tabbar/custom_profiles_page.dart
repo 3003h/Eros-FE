@@ -69,7 +69,7 @@ class CustomProfilesPage extends GetView<CustomTabbarController> {
 
     final List<Widget> _list = <Widget>[
       GroupItem(
-        title: '自定分组',
+        title: '分组',
         child: Obx(() {
           return Column(
             children: [

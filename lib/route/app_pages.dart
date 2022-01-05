@@ -178,7 +178,8 @@ class AppPages {
     ),
     GetPage(
       name: EHRoutes.gallery,
-      page: () => const GalleryListTab(),
+      // page: () => const GalleryListTab(),
+      page: () => const CustomTabbarList(),
     ),
 
     GetPage(
