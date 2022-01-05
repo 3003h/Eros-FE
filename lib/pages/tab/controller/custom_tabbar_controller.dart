@@ -5,6 +5,7 @@ import 'package:fehviewer/fehviewer.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
 
+import '../fetch_list.dart';
 import 'custom_sublist_controller.dart';
 import 'default_tabview_controller.dart';
 
@@ -65,7 +66,18 @@ class CustomTabbarController extends DefaultTabViewController {
 
     profiles.value = customTabConfig?.profiles ??
         [
-          CustomProfile(name: 'All', uuid: generateUuidv4()),
+          CustomProfile(
+                  name: L10n.of(Get.context!).tab_popular,
+                  uuid: generateUuidv4())
+              .copyWithListType(GalleryListType.popular),
+          CustomProfile(
+                  name: L10n.of(Get.context!).tab_gallery,
+                  uuid: generateUuidv4())
+              .copyWithListType(GalleryListType.gallery),
+          CustomProfile(
+                  name: L10n.of(Get.context!).tab_watched,
+                  uuid: generateUuidv4())
+              .copyWithListType(GalleryListType.watched),
           if (Get.find<LocaleService>().isLanguageCodeZh) profileChinese,
         ];
 

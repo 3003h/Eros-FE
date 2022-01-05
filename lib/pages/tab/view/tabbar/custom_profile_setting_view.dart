@@ -294,7 +294,7 @@ class _CustomProfileSettingViewState extends State<CustomProfileSettingView> {
             child: Column(
               children: [
                 GroupItem(
-                  title: '名称',
+                  title: L10n.of(context).groupName,
                   child: TextInputItem(
                     // title: '分组名称',
                     textFieldPadding: const EdgeInsets.fromLTRB(0, 6, 6, 6),
@@ -307,11 +307,11 @@ class _CustomProfileSettingViewState extends State<CustomProfileSettingView> {
                       customProfile = customProfile.copyWith(
                           name: value.replaceAll('\n', '').trim());
                     },
-                    placeholder: 'Name',
+                    placeholder: L10n.of(context).groupName,
                   ),
                 ),
                 GroupItem(
-                  title: '类型',
+                  title: L10n.of(context).groupType,
                   child: Container(
                     width: double.infinity,
                     color: CupertinoDynamicColor.resolve(
@@ -366,7 +366,7 @@ class _CustomProfileSettingViewState extends State<CustomProfileSettingView> {
     return Column(
       children: [
         GroupItem(
-          title: '搜索关键词',
+          title: L10n.of(context).searchTexts,
           child: Column(
             children: [
               ListView.builder(
@@ -423,7 +423,7 @@ class _CustomProfileSettingViewState extends State<CustomProfileSettingView> {
                         child: CupertinoTextField(
                           decoration: null,
                           controller: textController,
-                          placeholder: 'New Text',
+                          placeholder: L10n.of(context).newText,
                           placeholderStyle: const TextStyle(
                             fontWeight: FontWeight.w400,
                             color: CupertinoColors.placeholderText,

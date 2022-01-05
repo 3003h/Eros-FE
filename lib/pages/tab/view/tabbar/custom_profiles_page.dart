@@ -69,7 +69,7 @@ class CustomProfilesPage extends GetView<CustomTabbarController> {
 
     final List<Widget> _list = <Widget>[
       GroupItem(
-        title: '分组',
+        title: L10n.of(context).group,
         child: Obx(() {
           return Column(
             children: [
@@ -82,7 +82,7 @@ class CustomProfilesPage extends GetView<CustomTabbarController> {
                 duration: 300.milliseconds,
               ),
               TextItem(
-                '新建分组',
+                L10n.of(context).newGroup,
                 hideLine: true,
                 textColor: CupertinoDynamicColor.resolve(
                     CupertinoColors.activeBlue, context),
@@ -105,12 +105,12 @@ class CustomProfilesPage extends GetView<CustomTabbarController> {
               ? CupertinoColors.secondarySystemBackground
               : null,
           navigationBar: CupertinoNavigationBar(
-            middle: Text('Profile'),
+            // middle: Text('Profile'),
             trailing: GestureDetector(
               onTap: () => controller.reorderable = !controller.reorderable,
               child: AnimatedCrossFade(
                 secondChild: Text(
-                  '编辑',
+                  L10n.of(context).edit,
                   style: _style,
                 ),
                 firstChild: Text(

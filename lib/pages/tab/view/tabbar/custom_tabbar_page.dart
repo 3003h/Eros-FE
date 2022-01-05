@@ -230,6 +230,17 @@ class _CustomTabbarListState extends State<CustomTabbarList> {
         mainAxisSize: MainAxisSize.min,
         mainAxisAlignment: MainAxisAlignment.end,
         children: [
+          CupertinoButton(
+            minSize: 40,
+            padding: const EdgeInsets.all(0),
+            child: const Icon(
+              LineIcons.search,
+              size: 26,
+            ),
+            onPressed: () {
+              NavigatorUtil.goSearchPage();
+            },
+          ),
           // 页码跳转按钮
           CupertinoButton(
             minSize: 40,

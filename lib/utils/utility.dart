@@ -18,7 +18,7 @@ import 'package:get/utils.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:uuid/uuid.dart';
 
-final _uuid = Uuid();
+const _uuid = Uuid();
 String generateUuidv4() {
   return _uuid.v4();
 }
