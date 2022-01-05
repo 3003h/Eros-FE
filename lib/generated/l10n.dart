@@ -3363,6 +3363,76 @@ class L10n {
       args: [],
     );
   }
+
+  /// `Group`
+  String get group {
+    return Intl.message(
+      'Group',
+      name: 'group',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Edit`
+  String get edit {
+    return Intl.message(
+      'Edit',
+      name: 'edit',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `New Group`
+  String get newGroup {
+    return Intl.message(
+      'New Group',
+      name: 'newGroup',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Group name`
+  String get groupName {
+    return Intl.message(
+      'Group name',
+      name: 'groupName',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Group type`
+  String get groupType {
+    return Intl.message(
+      'Group type',
+      name: 'groupType',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Search texts`
+  String get searchTexts {
+    return Intl.message(
+      'Search texts',
+      name: 'searchTexts',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `New Text`
+  String get newText {
+    return Intl.message(
+      'New Text',
+      name: 'newText',
+      desc: '',
+      args: [],
+    );
+  }
 }
 
 class AppLocalizationDelegate extends LocalizationsDelegate<L10n> {

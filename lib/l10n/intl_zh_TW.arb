@@ -333,6 +333,13 @@
   "fixed_height_of_list_items": "Fixed height of list items",
 
   "edit_comment": "Edit comment",
-  "new_comment": "New comment"
+  "new_comment": "New comment",
+  "group": "Group",
+  "edit": "Edit",
+  "newGroup": "New Group",
+  "groupName": "Group name",
+  "groupType": "Group type",
+  "searchTexts": "Search texts",
+  "newText": "New Text"
 
 }

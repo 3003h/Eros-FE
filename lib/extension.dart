@@ -495,4 +495,7 @@ extension ExtCustomProfile on CustomProfile {
   GalleryListType get listType =>
       EnumToString.fromString(GalleryListType.values, listTypeValue ?? '') ??
       GalleryListType.gallery;
+
+  CustomProfile copyWithListType(GalleryListType value) =>
+      copyWith(listTypeValue: value.name);
 }

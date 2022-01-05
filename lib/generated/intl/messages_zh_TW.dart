@@ -99,6 +99,7 @@ class MessageLookup extends MessageLookupByLibrary {
             "it is dangerous! You may get 509 error"),
         "downloaded": MessageLookupByLibrary.simpleMessage("Downloaded"),
         "downloading": MessageLookupByLibrary.simpleMessage("Downloading"),
+        "edit": MessageLookupByLibrary.simpleMessage("Edit"),
         "edit_comment": MessageLookupByLibrary.simpleMessage("Edit comment"),
         "eh": MessageLookupByLibrary.simpleMessage("E·H"),
         "ehentai_my_tags": MessageLookupByLibrary.simpleMessage("我的标签"),
@@ -117,6 +118,9 @@ class MessageLookup extends MessageLookupByLibrary {
         "galery_site": MessageLookupByLibrary.simpleMessage("画廊站点"),
         "gallery_comments": MessageLookupByLibrary.simpleMessage("畫廊評論"),
         "gray_black": MessageLookupByLibrary.simpleMessage("灰黑"),
+        "group": MessageLookupByLibrary.simpleMessage("Group"),
+        "groupName": MessageLookupByLibrary.simpleMessage("Group name"),
+        "groupType": MessageLookupByLibrary.simpleMessage("Group type"),
         "hours": MessageLookupByLibrary.simpleMessage("小时"),
         "input_empty": MessageLookupByLibrary.simpleMessage("Input empty"),
         "input_error": MessageLookupByLibrary.simpleMessage("Input error"),
@@ -150,6 +154,8 @@ class MessageLookup extends MessageLookupByLibrary {
         "multi_download":
             MessageLookupByLibrary.simpleMessage("multi Download"),
         "mytags_on_website": MessageLookupByLibrary.simpleMessage("网页上的标签设置"),
+        "newGroup": MessageLookupByLibrary.simpleMessage("New Group"),
+        "newText": MessageLookupByLibrary.simpleMessage("New Text"),
         "new_comment": MessageLookupByLibrary.simpleMessage("New comment"),
         "noMorePreviews": MessageLookupByLibrary.simpleMessage("无更多预览"),
         "notFav": MessageLookupByLibrary.simpleMessage("未收藏"),
@@ -224,6 +230,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "screen_orientation":
             MessageLookupByLibrary.simpleMessage("Screen orientation"),
         "search": MessageLookupByLibrary.simpleMessage("搜索"),
+        "searchTexts": MessageLookupByLibrary.simpleMessage("Search texts"),
         "search_history":
             MessageLookupByLibrary.simpleMessage("Search history"),
         "search_type": MessageLookupByLibrary.simpleMessage("搜索类型"),

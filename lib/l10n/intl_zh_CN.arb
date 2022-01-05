@@ -335,5 +335,12 @@
   "fixed_height_of_list_items": "固定列表项高度",
 
   "edit_comment": "编辑评论",
-  "new_comment": "发布新评论"
+  "new_comment": "发布新评论",
+  "group": "分组",
+  "edit": "编辑",
+  "newGroup": "新建分组",
+  "groupName": "分组名称",
+  "groupType": "类型",
+  "searchTexts": "搜索关键词",
+  "newText": "新关键词"
 }

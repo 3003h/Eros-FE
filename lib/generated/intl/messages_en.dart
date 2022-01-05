@@ -106,6 +106,7 @@ class MessageLookup extends MessageLookupByLibrary {
             "it is dangerous! You may get 509 error"),
         "downloaded": MessageLookupByLibrary.simpleMessage("Downloaded"),
         "downloading": MessageLookupByLibrary.simpleMessage("Downloading"),
+        "edit": MessageLookupByLibrary.simpleMessage("Edit"),
         "edit_comment": MessageLookupByLibrary.simpleMessage("Edit comment"),
         "eh": MessageLookupByLibrary.simpleMessage("E·H"),
         "ehentai_my_tags": MessageLookupByLibrary.simpleMessage("My tags"),
@@ -127,6 +128,9 @@ class MessageLookup extends MessageLookupByLibrary {
         "gallery_comments":
             MessageLookupByLibrary.simpleMessage("Gallery Comments"),
         "gray_black": MessageLookupByLibrary.simpleMessage("Gray black"),
+        "group": MessageLookupByLibrary.simpleMessage("Group"),
+        "groupName": MessageLookupByLibrary.simpleMessage("Group name"),
+        "groupType": MessageLookupByLibrary.simpleMessage("Group type"),
         "hours": MessageLookupByLibrary.simpleMessage("hours"),
         "input_empty": MessageLookupByLibrary.simpleMessage("Input empty"),
         "input_error": MessageLookupByLibrary.simpleMessage("Input error"),
@@ -163,6 +167,8 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("multi Download"),
         "mytags_on_website":
             MessageLookupByLibrary.simpleMessage("My tags on website"),
+        "newGroup": MessageLookupByLibrary.simpleMessage("New Group"),
+        "newText": MessageLookupByLibrary.simpleMessage("New Text"),
         "new_comment": MessageLookupByLibrary.simpleMessage("New comment"),
         "noMorePreviews":
             MessageLookupByLibrary.simpleMessage("No more previews"),
@@ -252,6 +258,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "screen_orientation":
             MessageLookupByLibrary.simpleMessage("Screen orientation"),
         "search": MessageLookupByLibrary.simpleMessage("Search"),
+        "searchTexts": MessageLookupByLibrary.simpleMessage("Search texts"),
         "search_history":
             MessageLookupByLibrary.simpleMessage("Search history"),
         "search_type": MessageLookupByLibrary.simpleMessage("Search type"),
