@@ -278,7 +278,6 @@ class _CustomProfileSettingViewState extends State<CustomProfileSettingView> {
   @override
   Widget build(BuildContext context) {
     final _style = TextStyle(
-      // height: 1,
       color: CupertinoDynamicColor.resolve(CupertinoColors.activeBlue, context),
     );
 
@@ -312,221 +311,45 @@ class _CustomProfileSettingViewState extends State<CustomProfileSettingView> {
                   ),
                 ),
                 GroupItem(
-                  title: '搜索关键词',
-                  child: Column(
-                    children: [
-                      ListView.builder(
-                          physics: const NeverScrollableScrollPhysics(),
-                          shrinkWrap: true,
-                          itemCount: searchText.length,
-                          itemBuilder: (context, index) {
-                            final element = searchText[index];
-                            return Slidable(
-                                child: profileEditController.isTagTranslat
-                                    ? FutureBuilder<String?>(
-                                        future: _getTextTranslate(element),
-                                        initialData: element,
-                                        builder: (context, snapshot) {
-                                          return BarsItem(
-                                            title: element,
-                                            maxLines: 3,
-                                            titleSize: 16,
-                                            desc: snapshot.data,
-                                            key: ValueKey(index),
-                                          );
-                                        })
-                                    : BarsItem(
-                                        title: element,
-                                        key: ValueKey(index),
-                                      ),
-                                endActionPane: ActionPane(
-                                  extentRatio: 0.25,
-                                  motion: const ScrollMotion(),
-                                  children: [
-                                    SlidableAction(
-                                      onPressed: (_) {
-                                        setState(() {
-                                          searchText.removeAt(index);
-                                        });
-                                      },
-                                      backgroundColor:
-                                          CupertinoDynamicColor.resolve(
-                                              CupertinoColors.systemRed,
-                                              context),
-                                      foregroundColor: Colors.white,
-                                      icon: Icons.delete,
-                                    ),
-                                  ],
-                                ));
-                          }),
-                      Builder(builder: (context) {
-                        return Container(
-                          color: CupertinoDynamicColor.resolve(
-                              ehTheme.itemBackgroundColor!, Get.context!),
-                          constraints:
-                              const BoxConstraints(minHeight: kItemHeight),
-                          padding: const EdgeInsets.symmetric(horizontal: 20),
-                          child: Row(
-                            children: [
-                              Expanded(
-                                child: CupertinoTextField(
-                                  decoration: null,
-                                  controller: textController,
-                                  placeholder: 'New Text',
-                                  placeholderStyle: const TextStyle(
-                                    fontWeight: FontWeight.w400,
-                                    color: CupertinoColors.placeholderText,
-                                    height: 1.25,
-                                  ),
-                                  style: const TextStyle(height: 1.2),
-                                  onChanged: (value) {
-                                    profileEditController.searchText = value;
-                                    if (lastText.isEmpty && value.isNotEmpty) {
-                                      showSearchAttach(value, context);
-                                    }
-
-                                    if (value.isEmpty) {
-                                      SmartDialog.dismiss(
-                                          tag: kAttachTagSearch);
-                                    }
-
-                                    lastText = value;
-                                  },
-                                ),
-                              ),
-                              CupertinoTheme(
-                                data: const CupertinoThemeData(
-                                  primaryColor: CupertinoColors.activeGreen,
-                                ),
-                                child: CupertinoButton(
-                                  padding: const EdgeInsets.symmetric(
-                                      horizontal: 4, vertical: 8),
-                                  minSize: 0,
-                                  child: const Icon(
-                                    FontAwesomeIcons.solidCheckCircle,
-                                    size: 30,
-                                  ),
-                                  onPressed: () {
-                                    setState(() {
-                                      searchText
-                                          .add(textController.text.trim());
-                                      textController.clear();
-                                    });
-                                  },
-                                ),
-                              ),
-                            ],
-                          ),
-                        );
-                      }),
-                    ],
+                  title: '类型',
+                  child: Container(
+                    width: double.infinity,
+                    color: CupertinoDynamicColor.resolve(
+                        ehTheme.itemBackgroundColor!, Get.context!),
+                    child: Container(
+                      padding: const EdgeInsets.symmetric(horizontal: 20),
+                      constraints: const BoxConstraints(
+                        minHeight: kItemHeight,
+                      ),
+                      child: CupertinoSlidingSegmentedControl<GalleryListType>(
+                        children: <GalleryListType, Widget>{
+                          GalleryListType.popular:
+                              Text(L10n.of(context).tab_popular)
+                                  .marginSymmetric(horizontal: 8),
+                          GalleryListType.gallery:
+                              Text(L10n.of(context).tab_gallery)
+                                  .marginSymmetric(horizontal: 8),
+                          GalleryListType.watched:
+                              Text(L10n.of(context).tab_watched)
+                                  .marginSymmetric(horizontal: 8),
+                        },
+                        groupValue: _listType,
+                        onValueChanged: (GalleryListType? value) {
+                          customProfile = customProfile.copyWith(
+                              listTypeValue:
+                                  value?.name ?? GalleryListType.gallery.name);
+                          setState(() {
+                            _listType = value ?? GalleryListType.gallery;
+                          });
+                        },
+                      ),
+                    ),
                   ),
                 ),
-
-                GroupItem(
-                  child: Column(
-                    children: [
-                      Container(
-                        color: CupertinoDynamicColor.resolve(
-                            ehTheme.itemBackgroundColor!, Get.context!),
-                        child: Column(
-                          children: [
-                            GalleryCatFilter(
-                              catNum: customProfile.cats ?? 0,
-                              maxCrossAxisExtent: 150,
-                              padding: const EdgeInsets.symmetric(
-                                  vertical: 8, horizontal: 20),
-                              onCatNumChanged: (int value) {
-                                logger.d('onCatNumChanged $value');
-                                customProfile =
-                                    customProfile.copyWith(cats: value);
-                              },
-                            ),
-                            Divider(
-                              indent: 20,
-                              height: 0.6,
-                              color: CupertinoDynamicColor.resolve(
-                                  CupertinoColors.systemGrey4, context),
-                            ),
-                          ],
-                        ),
-                      ),
-                      Container(
-                        color: CupertinoDynamicColor.resolve(
-                            ehTheme.itemBackgroundColor!, Get.context!),
-                        child: Column(
-                          children: [
-                            Container(
-                              padding:
-                                  const EdgeInsets.symmetric(horizontal: 20),
-                              constraints: const BoxConstraints(
-                                minHeight: kItemHeight,
-                              ),
-                              child: Row(
-                                children: [
-                                  const Expanded(
-                                    child: Text('列表类型'),
-                                  ),
-                                  CupertinoSlidingSegmentedControl<
-                                      GalleryListType>(
-                                    children: <GalleryListType, Widget>{
-                                      GalleryListType.gallery:
-                                          Text(L10n.of(context).tab_gallery)
-                                              .marginSymmetric(horizontal: 8),
-                                      GalleryListType.watched:
-                                          Text(L10n.of(context).tab_watched)
-                                              .marginSymmetric(horizontal: 8),
-                                    },
-                                    groupValue: _listType,
-                                    onValueChanged: (GalleryListType? value) {
-                                      customProfile = customProfile.copyWith(
-                                          listTypeValue: value?.name ??
-                                              GalleryListType.gallery.name);
-                                      setState(() {
-                                        _listType =
-                                            value ?? GalleryListType.gallery;
-                                      });
-                                    },
-                                  ),
-                                ],
-                              ),
-                            ),
-                            // Divider(
-                            //   indent: 20,
-                            //   height: 0.6,
-                            //   color: CupertinoDynamicColor.resolve(
-                            //       CupertinoColors.systemGrey4, context),
-                            // ),
-                          ],
-                        ),
-                      ),
-                    ],
-                  ),
-                ).autoCompressKeyboard(context),
-
-                // 高级搜索
-                GroupItem(
-                  child: TextSwitchItem(
-                    L10n.of(context).s_Advanced_Options,
-                    intValue: enableAdvance,
-                    onChanged: (val) {
-                      setState(() {
-                        enableAdvance = val;
-                      });
-                    },
-                    hideLine: true,
-                  ),
-                ),
-
-                // if (enableAdvance) buildAdvancedOptions(context),
-                // Offstage(
-                //   offstage: !enableAdvance,
-                //   child: buildAdvancedOptions(context),
-                // ),
                 AnimatedCrossFade(
                   firstChild: const SizedBox(width: double.infinity),
-                  secondChild: buildAdvancedOptions(context),
-                  crossFadeState: enableAdvance
+                  secondChild: buildSearchOption(context),
+                  crossFadeState: _listType != GalleryListType.popular
                       ? CrossFadeState.showSecond
                       : CrossFadeState.showFirst,
                   duration: 300.milliseconds,
@@ -536,6 +359,169 @@ class _CustomProfileSettingViewState extends State<CustomProfileSettingView> {
           ),
         ),
       ),
+    );
+  }
+
+  Widget buildSearchOption(BuildContext context) {
+    return Column(
+      children: [
+        GroupItem(
+          title: '搜索关键词',
+          child: Column(
+            children: [
+              ListView.builder(
+                  physics: const NeverScrollableScrollPhysics(),
+                  shrinkWrap: true,
+                  itemCount: searchText.length,
+                  itemBuilder: (context, index) {
+                    final element = searchText[index];
+                    return Slidable(
+                        child: profileEditController.isTagTranslat
+                            ? FutureBuilder<String?>(
+                                future: _getTextTranslate(element),
+                                initialData: element,
+                                builder: (context, snapshot) {
+                                  return BarsItem(
+                                    title: element,
+                                    maxLines: 3,
+                                    titleSize: 16,
+                                    desc: snapshot.data,
+                                    key: ValueKey(index),
+                                  );
+                                })
+                            : BarsItem(
+                                title: element,
+                                key: ValueKey(index),
+                              ),
+                        endActionPane: ActionPane(
+                          extentRatio: 0.25,
+                          motion: const ScrollMotion(),
+                          children: [
+                            SlidableAction(
+                              onPressed: (_) {
+                                setState(() {
+                                  searchText.removeAt(index);
+                                });
+                              },
+                              backgroundColor: CupertinoDynamicColor.resolve(
+                                  CupertinoColors.systemRed, context),
+                              foregroundColor: Colors.white,
+                              icon: Icons.delete,
+                            ),
+                          ],
+                        ));
+                  }),
+              Builder(builder: (context) {
+                return Container(
+                  color: CupertinoDynamicColor.resolve(
+                      ehTheme.itemBackgroundColor!, Get.context!),
+                  constraints: const BoxConstraints(minHeight: kItemHeight),
+                  padding: const EdgeInsets.symmetric(horizontal: 20),
+                  child: Row(
+                    children: [
+                      Expanded(
+                        child: CupertinoTextField(
+                          decoration: null,
+                          controller: textController,
+                          placeholder: 'New Text',
+                          placeholderStyle: const TextStyle(
+                            fontWeight: FontWeight.w400,
+                            color: CupertinoColors.placeholderText,
+                            height: 1.25,
+                          ),
+                          style: const TextStyle(height: 1.2),
+                          onChanged: (value) {
+                            profileEditController.searchText = value;
+                            if (lastText.isEmpty && value.isNotEmpty) {
+                              showSearchAttach(value, context);
+                            }
+
+                            if (value.isEmpty) {
+                              SmartDialog.dismiss(tag: kAttachTagSearch);
+                            }
+
+                            lastText = value;
+                          },
+                        ),
+                      ),
+                      CupertinoTheme(
+                        data: const CupertinoThemeData(
+                          primaryColor: CupertinoColors.activeGreen,
+                        ),
+                        child: CupertinoButton(
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 4, vertical: 8),
+                          minSize: 0,
+                          child: const Icon(
+                            FontAwesomeIcons.solidCheckCircle,
+                            size: 30,
+                          ),
+                          onPressed: () {
+                            setState(() {
+                              searchText.add(textController.text.trim());
+                              textController.clear();
+                            });
+                          },
+                        ),
+                      ),
+                    ],
+                  ),
+                );
+              }),
+            ],
+          ),
+        ),
+
+        GroupItem(
+          child: Container(
+            color: CupertinoDynamicColor.resolve(
+                ehTheme.itemBackgroundColor!, Get.context!),
+            child: Column(
+              children: [
+                GalleryCatFilter(
+                  catNum: customProfile.cats ?? 0,
+                  maxCrossAxisExtent: 150,
+                  padding:
+                      const EdgeInsets.symmetric(vertical: 8, horizontal: 20),
+                  onCatNumChanged: (int value) {
+                    logger.d('onCatNumChanged $value');
+                    customProfile = customProfile.copyWith(cats: value);
+                  },
+                ),
+                // Divider(
+                //   indent: 20,
+                //   height: 0.6,
+                //   color: CupertinoDynamicColor.resolve(
+                //       CupertinoColors.systemGrey4, context),
+                // ),
+              ],
+            ),
+          ),
+        ),
+
+        // 高级搜索
+        GroupItem(
+          child: TextSwitchItem(
+            L10n.of(context).s_Advanced_Options,
+            intValue: enableAdvance,
+            onChanged: (val) {
+              setState(() {
+                enableAdvance = val;
+              });
+            },
+            hideLine: true,
+          ),
+        ),
+
+        AnimatedCrossFade(
+          firstChild: const SizedBox(width: double.infinity),
+          secondChild: buildAdvancedOptions(context),
+          crossFadeState: enableAdvance
+              ? CrossFadeState.showSecond
+              : CrossFadeState.showFirst,
+          duration: 300.milliseconds,
+        ),
+      ],
     );
   }
 

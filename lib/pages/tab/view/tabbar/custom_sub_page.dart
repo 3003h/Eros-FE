@@ -50,7 +50,8 @@ class _SubListViewState<T extends CustomSubListController>
     subController.initEhTabController(
       context: context,
       ehTabController: ehTabController,
-      tabTag: EHRoutes.customlist,
+      // tabTag: EHRoutes.customlist,
+      tabTag: EHRoutes.gallery,
     );
   }
 

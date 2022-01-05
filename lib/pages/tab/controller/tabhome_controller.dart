@@ -32,7 +32,8 @@ class TabPages {
   Map<String, Widget> get tabViews => <String, Widget>{
         EHRoutes.popular: const PopularListTab(),
         EHRoutes.watched: const WatchedListTab(),
-        EHRoutes.gallery: const GalleryListTab(),
+        // EHRoutes.gallery: const GalleryListTab(),
+        EHRoutes.gallery: const CustomTabbarList(),
         // EHRoutes.favoriteTabbar: const FavoriteTabTabBarPage(),
         // EHRoutes.favorite: const FavoriteTab(),
         EHRoutes.favorite: const FavoriteTabTabBarPage(),
@@ -40,13 +41,14 @@ class TabPages {
         EHRoutes.history: const HistoryTab(),
         EHRoutes.download: const DownloadTab(),
         EHRoutes.setting: const SettingTab(),
-        EHRoutes.customlist: const CustomTabbarList(),
+        // EHRoutes.customlist: const CustomTabbarList(),
       };
 
   final Map<String, IconData> iconDatas = <String, IconData>{
     EHRoutes.popular: FontAwesomeIcons.fire,
     EHRoutes.watched: FontAwesomeIcons.solidEye,
-    EHRoutes.gallery: FontAwesomeIcons.jira,
+    // EHRoutes.gallery: FontAwesomeIcons.jira,
+    EHRoutes.gallery: FontAwesomeIcons.layerGroup,
     EHRoutes.favorite: FontAwesomeIcons.solidHeart,
     EHRoutes.toplist: FontAwesomeIcons.listOl,
     EHRoutes.history: FontAwesomeIcons.history,
@@ -70,7 +72,7 @@ class TabPages {
         EHRoutes.history: L10n.of(_context).tab_history,
         EHRoutes.download: L10n.of(_context).tab_download,
         EHRoutes.setting: L10n.of(_context).tab_setting,
-        EHRoutes.customlist: '自定',
+        EHRoutes.customlist: L10n.of(_context).tab_gallery,
         EHRoutes.favoriteTabbar: L10n.of(_context).tab_favorite,
       };
 }
@@ -85,15 +87,15 @@ Map<String, bool> kDefTabMap = <String, bool>{
   EHRoutes.toplist: false,
   EHRoutes.download: true,
   EHRoutes.history: false,
-  EHRoutes.customlist: false,
+  // EHRoutes.customlist: false,
 };
 
-// 默认显示顺序 ?
+// 启用的项目以及默认显示顺序 ?
 List<String> kTabNameList = <String>[
   EHRoutes.gallery,
-  EHRoutes.popular,
-  EHRoutes.customlist,
-  EHRoutes.watched,
+  // EHRoutes.popular,
+  // EHRoutes.customlist,
+  // EHRoutes.watched,
   // EHRoutes.favoriteTabbar,
   EHRoutes.favorite,
   EHRoutes.toplist,

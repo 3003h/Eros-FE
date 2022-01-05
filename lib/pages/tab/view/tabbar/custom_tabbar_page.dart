@@ -213,7 +213,7 @@ class _CustomTabbarListState extends State<CustomTabbarList> {
         child: Row(
           mainAxisSize: MainAxisSize.min,
           children: [
-            Text('自定'),
+            Text(L10n.of(context).tab_gallery),
             Obx(() {
               if (controller.isBackgroundRefresh)
                 return const CupertinoActivityIndicator(
