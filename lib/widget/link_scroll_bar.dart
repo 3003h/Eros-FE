@@ -128,7 +128,7 @@ class _LinkScrollBarState extends State<LinkScrollBar> {
               }
               vibrateUtil.medium();
               logger.d('onLongPress $i');
-              await showAttach(
+              await showItemAttach(
                   margin: const EdgeInsets.only(
                       left: 10, right: 10, top: 10, bottom: 40),
                   child: Container(
@@ -252,9 +252,9 @@ class _LinkScrollBarState extends State<LinkScrollBar> {
         setState(() {});
       });
 
-      // Future.delayed(const Duration(milliseconds: 100)).then((value) {
-      //   widget.pageController?.jumpToPage(widget.initIndex);
-      // });
+      Future.delayed(const Duration(milliseconds: 100)).then((value) {
+        scrollToItem(widget.initIndex);
+      });
     });
   }
 
@@ -570,4 +570,65 @@ class FooSliverPersistentHeaderDelegate extends SliverPersistentHeaderDelegate {
     return minHeight != oldDelegate.minExtent ||
         maxHeight != oldDelegate.maxExtent;
   }
+}
+
+Future showItemAttach({
+  required BuildContext targetContext,
+  required Widget child,
+  String? tag,
+  VoidCallback? onDismiss,
+  double? width,
+  EdgeInsetsGeometry? margin,
+  AlignmentGeometry? alignmentTemp,
+}) async {
+  final boxObj = targetContext.findRenderObject();
+  Offset? offset = (boxObj as RenderBox?)?.localToGlobal(Offset.zero);
+  // logger.d('size: ${targetContext.size}  Offset:$offset');
+
+  await SmartDialog.showAttach(
+    highlight: Positioned(
+      left: offset?.dx ?? 0.0,
+      top: offset?.dy ?? 0.0,
+      child: Container(
+        height: targetContext.size?.height,
+        width: targetContext.size?.width,
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(10),
+          color: Colors.white,
+        ),
+      ),
+    ),
+    tag: tag,
+    keepSingle: true,
+    targetContext: targetContext,
+    isPenetrateTemp: false,
+    // maskColorTemp: Colors.black.withOpacity(0.1),
+    alignmentTemp: alignmentTemp,
+    clickBgDismissTemp: true,
+    onDismiss: onDismiss,
+    widget: SafeArea(
+      top: false,
+      bottom: false,
+      child: Container(
+        width: width,
+        margin: margin,
+        // constraints: const BoxConstraints(maxHeight: 300, minHeight: 50),
+        // decoration: BoxDecoration(
+        //   borderRadius: BorderRadius.circular(16),
+        //   boxShadow: [
+        //     BoxShadow(
+        //       color: Colors.black.withOpacity(0.2),
+        //       offset: const Offset(0, 0),
+        //       blurRadius: 10, //阴影模糊程度
+        //       spreadRadius: 1, //阴影扩散程度
+        //     ),
+        //   ],
+        // ),
+        // color: CupertinoColors.systemGrey5,
+        child: CupertinoPopupSurface(
+          child: child,
+        ),
+      ),
+    ),
+  );
 }
