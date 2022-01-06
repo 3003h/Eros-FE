@@ -4,6 +4,7 @@ import 'package:fehviewer/fehviewer.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
+import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 
 const kDuration = Duration(milliseconds: 300);
 const double kDefIndicatorHeight = 4;
@@ -16,11 +17,26 @@ class LinkTabItem {
     required this.title,
     this.icon,
     this.iconColor,
+    this.actinos,
   });
 
   final String title;
   final IconData? icon;
   final Color? iconColor;
+  final List<LinkTabItemAction>? actinos;
+}
+
+class LinkTabItemAction {
+  LinkTabItemAction({
+    required this.actinoText,
+    this.icon,
+    this.onTap,
+    this.color,
+  });
+  final String actinoText;
+  final IconData? icon;
+  final VoidCallback? onTap;
+  final Color? color;
 }
 
 class LinkScrollBar extends StatefulWidget {
@@ -28,7 +44,7 @@ class LinkScrollBar extends StatefulWidget {
     Key? key,
     LinkScrollBarController? controller,
     this.pageController,
-    required this.titleList,
+    required this.items,
     required this.initIndex,
     this.indicatorHeight = kDefIndicatorHeight,
     this.itemPadding = const EdgeInsets.only(left: 10, right: 10),
@@ -36,7 +52,7 @@ class LinkScrollBar extends StatefulWidget {
   })  : controller = controller ?? _defaultLinkScrollBarController,
         super(key: key);
 
-  final List<LinkTabItem> titleList;
+  final List<LinkTabItem> items;
   final int initIndex;
   final double indicatorHeight;
   final EdgeInsetsGeometry itemPadding;
@@ -64,11 +80,11 @@ class _LinkScrollBarState extends State<LinkScrollBar> {
     List<Widget> _barItems = [];
     _maxScrollViewWidth = 0;
 
-    for (int i = 0; i < widget.titleList.length; i++) {
+    for (int i = 0; i < widget.items.length; i++) {
       final barItem = NotificationListener<WSLGetWidgetWithNotification>(
         onNotification: (notification) {
           // logger.d('${notification.index}  ${notification.width}');
-          if (channelFrameList.length == widget.titleList.length) {
+          if (channelFrameList.length == widget.items.length) {
             return true;
           }
 
@@ -87,25 +103,79 @@ class _LinkScrollBarState extends State<LinkScrollBar> {
           //返回 true 消息到此结束，不再继续往外传递
           return true;
         },
-        child: GestureDetector(
-          behavior: HitTestBehavior.opaque,
-          child: InnerLinkTabItem(
-            title: widget.titleList[i].title,
-            icon: widget.titleList[i].icon,
-            selected: i == selectIndex,
-            padding: widget.itemPadding,
-            index: i,
-          ),
-          onTap: () {
-            widget.controller.disableScrollToItem();
-            setState(() {
-              selectIndex = i;
-              // WSLCustomTabbarNotification(index: selectIndex).dispatch(context);
-              scrollToItem(selectIndex);
-              widget.onItemChange?.call(selectIndex);
-            });
-          },
-        ),
+        child: Builder(builder: (context) {
+          return GestureDetector(
+            behavior: HitTestBehavior.opaque,
+            child: InnerLinkTabItem(
+              title: widget.items[i].title,
+              icon: widget.items[i].icon,
+              selected: i == selectIndex,
+              padding: widget.itemPadding,
+              index: i,
+            ),
+            onTap: () {
+              widget.controller.disableScrollToItem();
+              setState(() {
+                selectIndex = i;
+                // WSLCustomTabbarNotification(index: selectIndex).dispatch(context);
+                scrollToItem(selectIndex);
+                widget.onItemChange?.call(selectIndex);
+              });
+            },
+            onLongPress: () async {
+              if (widget.items[i].actinos == null) {
+                return;
+              }
+              logger.d('onLongPress $i');
+              await showAttach(
+                  margin: const EdgeInsets.only(
+                      left: 10, right: 10, top: 10, bottom: 40),
+                  child: Container(
+                    padding:
+                        const EdgeInsets.symmetric(horizontal: 0, vertical: 4),
+                    child: Column(
+                      children: widget.items[i].actinos!
+                          .map((e) => GestureDetector(
+                                onTap: () {
+                                  SmartDialog.dismiss();
+                                  e.onTap?.call();
+                                },
+                                child: Container(
+                                  padding: const EdgeInsets.symmetric(
+                                      horizontal: 16, vertical: 8),
+                                  child: Row(
+                                    mainAxisSize: MainAxisSize.min,
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      if (e.icon != null)
+                                        Padding(
+                                          padding: const EdgeInsets.only(
+                                              right: 12.0),
+                                          child: Icon(
+                                            e.icon,
+                                            size: 14,
+                                            color: e.color ??
+                                                CupertinoDynamicColor.resolve(
+                                                    CupertinoColors.label,
+                                                    context),
+                                          ),
+                                        ),
+                                      Text(
+                                        e.actinoText,
+                                        style: TextStyle(
+                                            fontSize: 14, color: e.color),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ))
+                          .toList(),
+                    ),
+                  ),
+                  targetContext: context);
+            },
+          );
+        }),
       );
 
       _barItems.add(barItem);

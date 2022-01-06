@@ -4,6 +4,7 @@ import 'package:fehviewer/common/service/locale_service.dart';
 import 'package:fehviewer/fehviewer.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
+import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 
 import '../fetch_list.dart';
 import 'custom_sublist_controller.dart';
@@ -153,6 +154,14 @@ class CustomTabbarController extends DefaultTabViewController {
     );
   }
 
+  Future<void> toEditPage(String uuid) async {
+    await Get.toNamed(
+      EHRoutes.customProfileSetting,
+      id: isLayoutLarge ? 1 : null,
+      arguments: uuid,
+    );
+  }
+
   void onReorder(int oldIndex, int newIndex) {
     final _profileUuid = currProfileUuid;
     final _profile = profiles.removeAt(oldIndex);
@@ -177,4 +186,29 @@ class CustomTabbarController extends DefaultTabViewController {
   }
 
   void pressSubmitText() {}
+
+  void showDeleteGroupModalBottomSheet(String uuid, BuildContext context) {
+    showCupertinoModalPopup(
+        context: context,
+        builder: (context) {
+          return CupertinoActionSheet(
+              actions: [
+                CupertinoActionSheetAction(
+                    onPressed: () {
+                      deleteProfile(uuid: uuid);
+                      Get.back();
+                    },
+                    child: Text(
+                      L10n.of(context).delete,
+                      style: const TextStyle(
+                          color: CupertinoColors.destructiveRed),
+                    )),
+              ],
+              cancelButton: CupertinoActionSheetAction(
+                  onPressed: () {
+                    Get.back();
+                  },
+                  child: Text(L10n.of(context).cancel)));
+        });
+  }
 }
