@@ -12,13 +12,13 @@ class GalleryItemSimplePlaceHolder extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: showTag ? kItemWidthShowTag : kItemWidth,
+      height: showTag ? kItemHeight + 10 : kItemHeight,
       padding: const EdgeInsets.fromLTRB(kPaddingLeft, 6, 6, 6),
       child: Row(
         children: [
           Container(
             width: kCoverImageWidth,
-            height: kItemWidth - 12,
+            height: kItemHeight - 12,
             child: ClipRRect(
               // 圆角
               borderRadius: BorderRadius.circular(6),
