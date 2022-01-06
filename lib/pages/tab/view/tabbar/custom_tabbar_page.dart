@@ -7,6 +7,7 @@ import 'package:fehviewer/fehviewer.dart';
 import 'package:fehviewer/pages/tab/controller/custom_sublist_controller.dart';
 import 'package:fehviewer/pages/tab/controller/custom_tabbar_controller.dart';
 import 'package:flutter/cupertino.dart' hide CupertinoTabBar;
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
 import 'package:keframe/size_cache_widget.dart';
 import 'package:line_icons/line_icons.dart';
@@ -162,11 +163,34 @@ class _CustomTabbarListState extends State<CustomTabbarList> {
                                 .join()),
                             controller: controller.linkScrollBarController,
                             pageController: controller.pageController,
-                            titleList: controller.profiles.isNotEmpty
+                            items: controller.profiles.isNotEmpty
                                 ? controller.profiles
-                                    .map((e) => LinkTabItem(title: e.name))
+                                    .map((e) =>
+                                        LinkTabItem(title: e.name, actinos: [
+                                          LinkTabItemAction(
+                                            actinoText: '编辑分组',
+                                            icon: FontAwesomeIcons.edit,
+                                            onTap: () {
+                                              controller.toEditPage(e.uuid);
+                                            },
+                                          ),
+                                          LinkTabItemAction(
+                                            actinoText: '删除分组',
+                                            icon: FontAwesomeIcons.trashAlt,
+                                            color:
+                                                CupertinoDynamicColor.resolve(
+                                                    CupertinoColors
+                                                        .destructiveRed,
+                                                    context),
+                                            onTap: () {
+                                              controller
+                                                  .showDeleteGroupModalBottomSheet(
+                                                      e.uuid, context);
+                                            },
+                                          ),
+                                        ]))
                                     .toList()
-                                : [LinkTabItem(title: '未设置')],
+                                : [LinkTabItem(title: 'Empty')],
                             initIndex: controller.index,
                             onItemChange: (index) => controller.pageController
                                 .animateToPage(index,

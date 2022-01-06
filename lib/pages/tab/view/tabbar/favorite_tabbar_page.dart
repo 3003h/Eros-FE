@@ -77,7 +77,7 @@ class _FavoriteTabTabBarPageState extends State<FavoriteTabTabBarPage> {
                           child: LinkScrollBar(
                             pageController: pageController,
                             controller: linkScrollBarController,
-                            titleList: controller.favcatList
+                            items: controller.favcatList
                                 .map((e) => LinkTabItem(
                                       title: e.favTitle,
                                       // icon: LineIcons.dotCircleAlt,
