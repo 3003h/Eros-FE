@@ -12,9 +12,9 @@ import 'package:get/get.dart';
 
 import 'item_base.dart';
 
-const double kCoverImageWidth = 70.0;
-const double kItemWidth = 115.0;
-const double kItemWidthShowTag = 126.0;
+const double kCoverImageWidth = 80.0;
+const double kItemHeight = 130.0;
+// const double kItemHeightShowTag = 140.0;
 const double kPaddingLeft = 8.0;
 
 /// 画廊列表项
@@ -38,14 +38,12 @@ class GalleryItemSimpleWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     final Widget containerGallery = Container(
       color: galleryItemController.colorTap.value,
-      height: showTag ? kItemWidthShowTag : kItemWidth,
+      height: showTag ? kItemHeight + 10 : kItemHeight,
       padding: const EdgeInsets.fromLTRB(kPaddingLeft, 6, 6, 6),
       child: Row(children: <Widget>[
         // 封面图片
         _buildCoverImage(),
-        Container(
-          width: 8,
-        ),
+        const SizedBox(width: 8),
         // 右侧信息
         Expanded(
           child: Column(
@@ -53,6 +51,7 @@ class GalleryItemSimpleWidget extends StatelessWidget {
             children: <Widget>[
               // 标题
               _buildTitle(),
+              const SizedBox(height: 4),
               // 上传者
               Text(
                 galleryItemController.galleryItem.uploader ?? '',
@@ -152,7 +151,7 @@ class GalleryItemSimpleWidget extends StatelessWidget {
 
     return Container(
       width: kCoverImageWidth,
-      height: kItemWidth - 12,
+      height: kItemHeight - 12,
       child: Center(
         child: Hero(
           tag: '${_item.gid}_cover_${tabTag}',

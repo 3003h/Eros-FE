@@ -126,6 +126,7 @@ class _LinkScrollBarState extends State<LinkScrollBar> {
               if (widget.items[i].actinos == null) {
                 return;
               }
+              vibrateUtil.medium();
               logger.d('onLongPress $i');
               await showAttach(
                   margin: const EdgeInsets.only(
@@ -153,7 +154,7 @@ class _LinkScrollBarState extends State<LinkScrollBar> {
                                               right: 12.0),
                                           child: Icon(
                                             e.icon,
-                                            size: 14,
+                                            size: 16,
                                             color: e.color ??
                                                 CupertinoDynamicColor.resolve(
                                                     CupertinoColors.label,
@@ -163,7 +164,7 @@ class _LinkScrollBarState extends State<LinkScrollBar> {
                                       Text(
                                         e.actinoText,
                                         style: TextStyle(
-                                            fontSize: 14, color: e.color),
+                                            fontSize: 16, color: e.color),
                                       ),
                                     ],
                                   ),

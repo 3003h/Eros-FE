@@ -72,16 +72,17 @@ class GalleryItemFlowLarge extends StatelessWidget {
       child: Text(
         galleryItemController.galleryItem.filecount ?? '',
         style: const TextStyle(
-          fontSize: 10,
+          fontSize: 11,
           color: Color.fromARGB(255, 240, 240, 240),
           height: 1.12,
+          // fontStyle: FontStyle.italic,
         ),
       ).frosted(
-        blur: 2,
-        frostColor: CupertinoColors.systemGrey2,
-        frostOpacity: 0.1,
-        borderRadius: BorderRadius.circular(6),
-        padding: const EdgeInsets.symmetric(vertical: 2, horizontal: 4),
+        blur: 10,
+        frostColor: CupertinoColors.systemGrey.color,
+        frostOpacity: 0.0,
+        borderRadius: BorderRadius.circular(10),
+        padding: const EdgeInsets.symmetric(vertical: 2, horizontal: 6),
       ),
     );
   }
@@ -212,8 +213,9 @@ class GalleryItemFlowLarge extends StatelessWidget {
                     _buildFavcatIcon(),
                   ],
                 ),
-                const SizedBox(height: 4),
+                const SizedBox(height: 6),
                 _buildTitle(),
+                const SizedBox(height: 6),
                 // _buildSimpleTagsView(),
                 TagWaterfallFlowViewBox(
                   simpleTags: galleryItemController.galleryItem.simpleTags,
