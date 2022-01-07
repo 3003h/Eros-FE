@@ -13,6 +13,7 @@ enum ListModeEnum {
   waterfall,
   simpleList,
   waterfallLarge,
+  global,
 }
 
 enum TagIntroImgLv {

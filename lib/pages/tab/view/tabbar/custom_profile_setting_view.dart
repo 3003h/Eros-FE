@@ -7,6 +7,7 @@ import 'package:fehviewer/component/setting_base.dart';
 import 'package:fehviewer/fehviewer.dart';
 import 'package:fehviewer/pages/filter/filter.dart';
 import 'package:fehviewer/pages/filter/gallery_filter_view.dart';
+import 'package:fehviewer/pages/setting/setting_items/selector_Item.dart';
 import 'package:fehviewer/pages/tab/controller/custom_sublist_controller.dart';
 import 'package:fehviewer/pages/tab/controller/custom_tabbar_controller.dart';
 import 'package:fehviewer/pages/tab/controller/profile_edit_controller.dart';
@@ -36,6 +37,10 @@ class _CustomProfileSettingViewState extends State<CustomProfileSettingView> {
   GalleryListType _listType = GalleryListType.gallery;
   late CustomProfile customProfile;
   late int oriIndex;
+
+  late final CustomSubListController subController;
+
+  late ListModeEnum listMode;
 
   bool enableAdvance = false;
 
@@ -74,6 +79,7 @@ class _CustomProfileSettingViewState extends State<CustomProfileSettingView> {
     customProfile = customProfile.copyWith(
       enableAdvance: enableAdvance,
       searchText: searchText,
+      listModeValue: listMode.name,
       advSearch: customProfile.advSearch?.copyWith(
             searchGalleryName: searchGalleryName,
             searchGalleryTags: searchGalleryTags,
@@ -129,6 +135,9 @@ class _CustomProfileSettingViewState extends State<CustomProfileSettingView> {
           ..heroTag = customProfile.uuid,
         tag: customProfile.uuid,
         fenix: true);
+
+    subController = Get.find(tag: customProfile.uuid);
+    subController.listMode = listMode;
   }
 
   @override
@@ -148,6 +157,8 @@ class _CustomProfileSettingViewState extends State<CustomProfileSettingView> {
 
     _listType = customProfile.listType;
     enableAdvance = customProfile.enableAdvance ?? enableAdvance;
+
+    listMode = customProfile.listMode;
 
     searchGalleryTags =
         customProfile.advSearch?.searchGalleryTags ?? searchGalleryTags;
@@ -311,6 +322,9 @@ class _CustomProfileSettingViewState extends State<CustomProfileSettingView> {
                   ),
                 ),
                 GroupItem(
+                  child: _buildListModeItem(context, hideLine: true),
+                ),
+                GroupItem(
                   title: L10n.of(context).groupType,
                   child: Container(
                     width: double.infinity,
@@ -359,6 +373,30 @@ class _CustomProfileSettingViewState extends State<CustomProfileSettingView> {
           ),
         ),
       ),
+    );
+  }
+
+  /// 列表模式切换
+  Widget _buildListModeItem(BuildContext context, {bool hideLine = false}) {
+    final String _title = L10n.of(context).list_mode;
+
+    final Map<ListModeEnum, String> modeMap = <ListModeEnum, String>{
+      ListModeEnum.global: L10n.of(context).global_setting,
+      ListModeEnum.list: L10n.of(context).listmode_medium,
+      ListModeEnum.simpleList: L10n.of(context).listmode_small,
+      ListModeEnum.waterfall: L10n.of(context).listmode_waterfall,
+      ListModeEnum.waterfallLarge: L10n.of(context).listmode_waterfall_large,
+    };
+    return SelectorItem<ListModeEnum>(
+      title: _title,
+      hideLine: hideLine,
+      actionMap: modeMap,
+      initVal: listMode,
+      onValueChanged: (val) {
+        setState(() {
+          listMode = val;
+        });
+      },
     );
   }
 

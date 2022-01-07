@@ -345,5 +345,6 @@
   "groupName": "Group name",
   "groupType": "Group type",
   "searchTexts": "Search texts",
-  "newText": "New Text"
+  "newText": "New Text",
+  "global_setting": "Global Setting"
 }

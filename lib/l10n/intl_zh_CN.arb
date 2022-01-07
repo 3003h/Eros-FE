@@ -342,5 +342,6 @@
   "groupName": "分组名称",
   "groupType": "类型",
   "searchTexts": "搜索关键词",
-  "newText": "新关键词"
+  "newText": "新关键词",
+  "global_setting": "全局设置"
 }

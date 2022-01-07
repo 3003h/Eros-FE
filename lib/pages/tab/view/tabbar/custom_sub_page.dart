@@ -37,14 +37,9 @@ class _SubListViewState<T extends CustomSubListController>
       ..heroTag = widget.profileUuid
       ..profileUuid = widget.profileUuid;
     controller.subControllerMap[widget.profileUuid] = subController;
+    subController.listMode =
+        subController.profile?.listMode ?? ListModeEnum.global;
     addListen();
-  }
-
-  @override
-  void didChangeDependencies() {
-    super.didChangeDependencies();
-    // logger.d('didChangeDependencies');
-    controller.heroTag = widget.profileUuid;
   }
 
   void addListen() {
@@ -96,6 +91,7 @@ class _SubListViewState<T extends CustomSubListController>
             curPage: subController.curPage,
             lastComplete: subController.lastComplete,
             key: subController.sliverAnimatedListKey,
+            listMode: subController.listModeObs,
           );
         },
         onLoading: SliverFillRemaining(

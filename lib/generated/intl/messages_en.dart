@@ -127,6 +127,8 @@ class MessageLookup extends MessageLookupByLibrary {
         "galery_site": MessageLookupByLibrary.simpleMessage("Gallery site"),
         "gallery_comments":
             MessageLookupByLibrary.simpleMessage("Gallery Comments"),
+        "global_setting":
+            MessageLookupByLibrary.simpleMessage("Global Setting"),
         "gray_black": MessageLookupByLibrary.simpleMessage("Gray black"),
         "group": MessageLookupByLibrary.simpleMessage("Group"),
         "groupName": MessageLookupByLibrary.simpleMessage("Group name"),

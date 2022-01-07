@@ -114,6 +114,8 @@ class MessageLookup extends MessageLookupByLibrary {
         "follow_system": MessageLookupByLibrary.simpleMessage("시스템 기본값"),
         "galery_site": MessageLookupByLibrary.simpleMessage("갤러리 사이트"),
         "gallery_comments": MessageLookupByLibrary.simpleMessage("갤러리 댓글"),
+        "global_setting":
+            MessageLookupByLibrary.simpleMessage("Global Setting"),
         "gray_black": MessageLookupByLibrary.simpleMessage("회색 (Gray)"),
         "group": MessageLookupByLibrary.simpleMessage("Group"),
         "groupName": MessageLookupByLibrary.simpleMessage("Group name"),

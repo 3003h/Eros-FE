@@ -18,6 +18,11 @@ class CustomSubListController extends TabViewController {
   bool get isBackgroundRefresh => _isBackgroundRefresh.value;
   set isBackgroundRefresh(bool val) => _isBackgroundRefresh.value = val;
 
+  final listModeObs = ListModeEnum.list.obs;
+  ListModeEnum get listMode => listModeObs.value;
+  set listMode(ListModeEnum val) => listModeObs.value = val;
+  // ListModeEnum? get listmode => profile?.listMode ;
+
   late String profileUuid;
   CustomProfile? get profile => _customTabbarController.profileMap[profileUuid];
 

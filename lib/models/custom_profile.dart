@@ -14,6 +14,7 @@ class CustomProfile {
     this.enableAdvance,
     this.advSearchTypeValue,
     this.advSearch,
+    this.listModeValue,
   });
 
   final String uuid;
@@ -25,6 +26,7 @@ class CustomProfile {
   final bool? enableAdvance;
   final String? advSearchTypeValue;
   final AdvanceSearch? advSearch;
+  final String? listModeValue;
 
   factory CustomProfile.fromJson(Map<String,dynamic> json) => CustomProfile(
     uuid: json['uuid'] as String,
@@ -35,7 +37,8 @@ class CustomProfile {
     cats: json['cats'] != null ? json['cats'] as int : null,
     enableAdvance: json['enableAdvance'] != null ? json['enableAdvance'] as bool : null,
     advSearchTypeValue: json['advSearchTypeValue'] != null ? json['advSearchTypeValue'] as String : null,
-    advSearch: json['advSearch'] != null ? AdvanceSearch.fromJson(json['advSearch'] as Map<String, dynamic>) : null
+    advSearch: json['advSearch'] != null ? AdvanceSearch.fromJson(json['advSearch'] as Map<String, dynamic>) : null,
+    listModeValue: json['listModeValue'] != null ? json['listModeValue'] as String : null
   );
   
   Map<String, dynamic> toJson() => {
@@ -47,7 +50,8 @@ class CustomProfile {
     'cats': cats,
     'enableAdvance': enableAdvance,
     'advSearchTypeValue': advSearchTypeValue,
-    'advSearch': advSearch?.toJson()
+    'advSearch': advSearch?.toJson(),
+    'listModeValue': listModeValue
   };
 
   CustomProfile clone() => CustomProfile(
@@ -59,7 +63,8 @@ class CustomProfile {
     cats: cats,
     enableAdvance: enableAdvance,
     advSearchTypeValue: advSearchTypeValue,
-    advSearch: advSearch?.clone()
+    advSearch: advSearch?.clone(),
+    listModeValue: listModeValue
   );
 
     
@@ -72,7 +77,8 @@ class CustomProfile {
     int? cats,
     bool? enableAdvance,
     String? advSearchTypeValue,
-    AdvanceSearch? advSearch
+    AdvanceSearch? advSearch,
+    String? listModeValue
   }) => CustomProfile(
     uuid: uuid ?? this.uuid,
     name: name ?? this.name,
@@ -83,12 +89,13 @@ class CustomProfile {
     enableAdvance: enableAdvance ?? this.enableAdvance,
     advSearchTypeValue: advSearchTypeValue ?? this.advSearchTypeValue,
     advSearch: advSearch ?? this.advSearch,
+    listModeValue: listModeValue ?? this.listModeValue,
   );  
 
   @override
   bool operator ==(Object other) => identical(this, other) 
-    || other is CustomProfile && uuid == other.uuid && name == other.name && searchText == other.searchText && listTypeValue == other.listTypeValue && catsTypeValue == other.catsTypeValue && cats == other.cats && enableAdvance == other.enableAdvance && advSearchTypeValue == other.advSearchTypeValue && advSearch == other.advSearch;
+    || other is CustomProfile && uuid == other.uuid && name == other.name && searchText == other.searchText && listTypeValue == other.listTypeValue && catsTypeValue == other.catsTypeValue && cats == other.cats && enableAdvance == other.enableAdvance && advSearchTypeValue == other.advSearchTypeValue && advSearch == other.advSearch && listModeValue == other.listModeValue;
 
   @override
-  int get hashCode => uuid.hashCode ^ name.hashCode ^ searchText.hashCode ^ listTypeValue.hashCode ^ catsTypeValue.hashCode ^ cats.hashCode ^ enableAdvance.hashCode ^ advSearchTypeValue.hashCode ^ advSearch.hashCode;
+  int get hashCode => uuid.hashCode ^ name.hashCode ^ searchText.hashCode ^ listTypeValue.hashCode ^ catsTypeValue.hashCode ^ cats.hashCode ^ enableAdvance.hashCode ^ advSearchTypeValue.hashCode ^ advSearch.hashCode ^ listModeValue.hashCode;
 }
