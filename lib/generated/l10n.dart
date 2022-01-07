@@ -3433,6 +3433,16 @@ class L10n {
       args: [],
     );
   }
+
+  /// `Global Setting`
+  String get global_setting {
+    return Intl.message(
+      'Global Setting',
+      name: 'global_setting',
+      desc: '',
+      args: [],
+    );
+  }
 }
 
 class AppLocalizationDelegate extends LocalizationsDelegate<L10n> {

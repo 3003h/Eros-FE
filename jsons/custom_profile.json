@@ -7,5 +7,6 @@
   "cats?": 0,
   "enableAdvance?": false,
   "advSearchTypeValue?": "",
-  "advSearch?": "$advance_search"
+  "advSearch?": "$advance_search",
+  "listModeValue?": "list"
 }

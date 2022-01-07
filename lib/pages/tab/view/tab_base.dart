@@ -97,10 +97,9 @@ Widget _listItemWiget(
   GalleryItem _item, {
   dynamic tabTag,
   Key? centerKey,
+  ListModeEnum? listMode,
 }) {
-  final EhConfigService ehConfigService = Get.find();
-
-  switch (ehConfigService.listMode.value) {
+  switch (listMode) {
     case ListModeEnum.list:
       return GalleryItemWidget(
         key: centerKey ?? ValueKey(_item.gid),
@@ -159,6 +158,7 @@ Widget buildGallerySliverListItem(
   dynamic tabTag,
   int? oriFirstIndex,
   Key? centerKey,
+  ListModeEnum? listMode,
 }) {
   return _buildSliverAnimatedListItem(
     _animation,
@@ -166,16 +166,21 @@ Widget buildGallerySliverListItem(
       _item,
       tabTag: tabTag,
       centerKey: index == oriFirstIndex ? centerKey : null,
+      listMode: listMode,
     ),
   );
 }
 
 Widget buildDelGallerySliverListItem(
-    GalleryItem _item, int index, Animation<double> _animation,
-    {dynamic tabTag}) {
+  GalleryItem _item,
+  int index,
+  Animation<double> _animation, {
+  dynamic tabTag,
+  ListModeEnum? listMode,
+}) {
   return _buildDelSliverAnimatedListItem(
     _animation,
-    child: _listItemWiget(_item, tabTag: tabTag),
+    child: _listItemWiget(_item, tabTag: tabTag, listMode: listMode),
   );
 }
 
@@ -215,6 +220,7 @@ Widget buildGallerySliverListView(
         tabTag: tabTag,
         centerKey: centerKey,
         oriFirstIndex: lastTopitemIndex,
+        listMode: ListModeEnum.list,
       );
 
       // if (index < 2) {
@@ -245,6 +251,8 @@ Widget buildGallerySliverListSimpleView(
   Key? centerKey,
   int? lastTopitemIndex,
 }) {
+  logger.d('buildGallerySliverListSimpleView');
+
   return SliverAnimatedList(
     key: key,
     initialItemCount: gallerItemBeans.length,
@@ -277,6 +285,7 @@ Widget buildGallerySliverListSimpleView(
           tabTag: tabTag,
           centerKey: centerKey,
           oriFirstIndex: lastTopitemIndex,
+          listMode: ListModeEnum.simpleList,
         ),
       );
     },
@@ -292,6 +301,7 @@ Widget getGallerySliverList(
   Key? key,
   Key? centerKey,
   int? lastTopitemIndex,
+  Rx<ListModeEnum>? listMode,
 }) {
   final EhConfigService ehConfigService = Get.find();
   final _key = key ?? ValueKey(gallerItemBeans.hashCode);
@@ -300,7 +310,12 @@ Widget getGallerySliverList(
   logger.v('lastTopitemIndex $lastTopitemIndex');
 
   return Obx(() {
-    switch (ehConfigService.listMode.value) {
+    final mod = listMode?.value != ListModeEnum.global
+        ? listMode?.value ?? ehConfigService.listMode.value
+        : ehConfigService.listMode.value;
+    logger.d('mod $mod');
+
+    switch (mod) {
       case ListModeEnum.list:
         return buildGallerySliverListView(
           gallerItemBeans ?? [],
@@ -342,9 +357,14 @@ Widget getGallerySliverList(
           maxPage: maxPage,
           curPage: curPage ?? 0,
           lastComplete: lastComplete,
-          key: _key,
+          // key: ValueKey(gallerItemBeans.hashCode),
           centerKey: centerKey,
           lastTopitemIndex: lastTopitemIndex,
+        );
+
+      case ListModeEnum.global:
+        return const SliverFillRemaining(
+          child: SizedBox(),
         );
     }
   });

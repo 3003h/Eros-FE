@@ -498,4 +498,8 @@ extension ExtCustomProfile on CustomProfile {
 
   CustomProfile copyWithListType(GalleryListType value) =>
       copyWith(listTypeValue: value.name);
+
+  ListModeEnum get listMode =>
+      EnumToString.fromString(ListModeEnum.values, listModeValue ?? '') ??
+      ListModeEnum.global;
 }

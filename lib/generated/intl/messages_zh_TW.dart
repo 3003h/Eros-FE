@@ -117,6 +117,8 @@ class MessageLookup extends MessageLookupByLibrary {
         "follow_system": MessageLookupByLibrary.simpleMessage("跟随系统"),
         "galery_site": MessageLookupByLibrary.simpleMessage("画廊站点"),
         "gallery_comments": MessageLookupByLibrary.simpleMessage("畫廊評論"),
+        "global_setting":
+            MessageLookupByLibrary.simpleMessage("Global Setting"),
         "gray_black": MessageLookupByLibrary.simpleMessage("灰黑"),
         "group": MessageLookupByLibrary.simpleMessage("Group"),
         "groupName": MessageLookupByLibrary.simpleMessage("Group name"),
