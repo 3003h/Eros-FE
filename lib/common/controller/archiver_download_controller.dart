@@ -210,7 +210,7 @@ class ArchiverDownloadController extends GetxController {
   /// 不在 archiverDlMap 中的任务
   Future<void> _getArchiverTask() async {
     final List<DownloadTask> tasks = await FlutterDownloader.loadTasks() ?? [];
-    logger.d(
+    logger.v(
         'loadTasks \n${tasks.map((DownloadTask e) => e.toString().split(', ').join('\n')).join('\n----------\n')} ');
 
     for (final DownloadTask downloadTask in tasks) {

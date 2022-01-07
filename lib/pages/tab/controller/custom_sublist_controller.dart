@@ -8,12 +8,15 @@ import 'package:get/get.dart';
 
 import '../fetch_list.dart';
 import 'custom_tabbar_controller.dart';
-import 'default_tabview_controller.dart';
 import 'enum.dart';
 
 /// 控制单个自定义列表
 class CustomSubListController extends TabViewController {
   final CustomTabbarController _customTabbarController = Get.find();
+
+  final RxBool _isBackgroundRefresh = false.obs;
+  bool get isBackgroundRefresh => _isBackgroundRefresh.value;
+  set isBackgroundRefresh(bool val) => _isBackgroundRefresh.value = val;
 
   late String profileUuid;
   CustomProfile? get profile => _customTabbarController.profileMap[profileUuid];
@@ -21,8 +24,6 @@ class CustomSubListController extends TabViewController {
   FetchListClient getFetchListClient(FetchParams fetchParams) {
     return SearchFetchListClient(fetchParams: fetchParams);
   }
-
-  bool isBackgroundRefresh = false;
 
   @override
   Future<void> firstLoad() async {
@@ -44,7 +45,7 @@ class CustomSubListController extends TabViewController {
   Future<GalleryList?> fetchData({bool refresh = false}) async {
     cancelToken = CancelToken();
 
-    // logger.d('${jsonEncode(profile)}');
+    logger.d('${jsonEncode(profile)}');
 
     final fetchConfig = FetchParams(
       cats: profile?.cats,
@@ -83,6 +84,7 @@ class CustomSubListController extends TabViewController {
 
   @override
   Future<GalleryList?> fetchMoreData() async {
+    cancelToken = CancelToken();
     final fetchConfig = FetchParams(
       page: nextPage,
       fromGid: state?.last.gid ?? '0',
@@ -101,9 +103,11 @@ class CustomSubListController extends TabViewController {
 
   @override
   Future<void> loadFromPage(int page) async {
+    canLoadMore = false;
     pageState = PageState.Loading;
     change(state, status: RxStatus.loading());
 
+    cancelToken = CancelToken();
     final fetchConfig = FetchParams(
       page: page,
       cats: profile?.cats,
@@ -115,6 +119,7 @@ class CustomSubListController extends TabViewController {
           : {},
       galleryListType: profile?.listType ?? GalleryListType.gallery,
     );
+
     try {
       FetchListClient fetchListClient = getFetchListClient(fetchConfig);
       final GalleryList? rult = await fetchListClient.fetch();
@@ -129,9 +134,17 @@ class CustomSubListController extends TabViewController {
       pageState = PageState.None;
     } catch (e) {
       pageState = PageState.LoadingError;
+      change(null, status: RxStatus.error('$e'));
       rethrow;
+    } finally {
+      canLoadMore = true;
     }
   }
+
+  // @override
+  // Future<void> loadPrevious() async {
+  //   await reloadData();
+  // }
 
   @override
   Future<void> lastComplete() async {

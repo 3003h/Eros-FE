@@ -48,10 +48,10 @@ class CustomTabbarController extends DefaultTabViewController {
   int get maxPage => currSubController?.maxPage ?? 1;
 
   @override
-  int get minPage => currSubController?.minPage ?? 1;
+  int get minPage => currSubController?.minPage ?? 0;
 
   @override
-  int get curPage => currSubController?.curPage ?? 1;
+  int get curPage => currSubController?.curPage ?? 0;
 
   late PageController pageController;
 

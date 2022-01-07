@@ -29,7 +29,6 @@ class DefaultTabViewController extends TabViewController {
   int? cats;
 
   final RxBool _isBackgroundRefresh = false.obs;
-
   bool get isBackgroundRefresh => _isBackgroundRefresh.value;
   set isBackgroundRefresh(bool val) => _isBackgroundRefresh.value = val;
 

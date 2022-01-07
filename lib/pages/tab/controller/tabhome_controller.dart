@@ -171,7 +171,7 @@ class TabHomeController extends GetxController {
           .where((element) => !kTabNameList.contains(element))
           .toList();
 
-      logger.d('sub tab $_subTabs');
+      // logger.d('sub tab $_subTabs');
 
       for (final viewName in _subTabs) {
         _tabConfig.tabItemList
@@ -179,7 +179,7 @@ class TabHomeController extends GetxController {
       }
 
       // 新增tab页的处理
-      logger.d('add tab $_addTabs');
+      // logger.d('add tab $_addTabs');
 
       for (final viewName in _addTabs) {
         _tabConfig.tabItemList.add(TabItem(name: viewName, enable: false));
