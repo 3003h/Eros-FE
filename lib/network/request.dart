@@ -143,6 +143,9 @@ Future<GalleryList?> getGallery({
 
   if (httpResponse.ok && httpResponse.data is GalleryList) {
     return httpResponse.data as GalleryList;
+  } else {
+    logger.e('${httpResponse.error.runtimeType}');
+    throw httpResponse.error ?? EhError(error: 'getGallery error');
   }
 }
 

@@ -1,6 +1,7 @@
 import 'package:dio/dio.dart';
 import 'package:fehviewer/common/service/ehconfig_service.dart';
 import 'package:fehviewer/fehviewer.dart';
+import 'package:fehviewer/network/app_dio/pdio.dart';
 import 'package:fehviewer/pages/tab/controller/tabhome_controller.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
@@ -26,6 +27,8 @@ class TabViewController extends GetxController
 
   CancelToken? cancelToken = CancelToken();
 
+  bool canLoadMore = false;
+
   final GlobalKey<SliverAnimatedListState> sliverAnimatedListKey =
       GlobalKey<SliverAnimatedListState>();
 
@@ -49,8 +52,10 @@ class TabViewController extends GetxController
 
   // 首次请求
   Future<void> firstLoad() async {
+    canLoadMore = false;
     await Future.delayed(200.milliseconds);
     try {
+      cancelToken = CancelToken();
       final GalleryList? rult = await fetchData();
       if (rult == null) {
         change(null, status: RxStatus.loading());
@@ -66,31 +71,41 @@ class TabViewController extends GetxController
       change(_listItem, status: RxStatus.success());
     } catch (err, stack) {
       logger.e('$err\n$stack');
-      change(null, status: RxStatus.error(err.toString()));
+      final errmsg = err is HttpException ? err.message : '$err';
+      change(null, status: RxStatus.error(errmsg));
+    } finally {
+      canLoadMore = true;
     }
   }
 
   // 重新加载
   Future<void> reloadData() async {
     curPage = 0;
-    final GalleryList? rult = await fetchData(
-      refresh: true,
-    );
 
-    logger.d('reloadData length ${rult?.gallerys?.length}');
+    try {
+      final GalleryList? rult = await fetchData(
+        refresh: true,
+      );
 
-    if (rult == null) {
-      return;
-    }
+      logger.d('reloadData length ${rult?.gallerys?.length}');
 
-    final List<GalleryItem> rultList = rult.gallerys ?? [];
+      if (rult == null) {
+        return;
+      }
 
-    maxPage = rult.maxPage ?? 0;
-    nextPage = rult.nextPage ?? 1;
-    change([], status: RxStatus.success());
-    change(rultList, status: RxStatus.success());
-    for (final item in rultList) {
-      sliverAnimatedListKey.currentState?.insertItem(0);
+      final List<GalleryItem> rultList = rult.gallerys ?? [];
+
+      maxPage = rult.maxPage ?? 0;
+      nextPage = rult.nextPage ?? 1;
+      change([], status: RxStatus.success());
+      change(rultList, status: RxStatus.success());
+      for (final item in rultList) {
+        sliverAnimatedListKey.currentState?.insertItem(0);
+      }
+    } catch (err) {
+      // change(state, status: RxStatus.error(err.toString()));
+      final errmsg = err is HttpException ? err.message : '$err';
+      showToast(errmsg);
     }
   }
 
@@ -99,6 +114,11 @@ class TabViewController extends GetxController
     await Future.delayed(100.milliseconds);
     if (!canLoadData) {
       logger.e('not canLoadData');
+      return;
+    }
+
+    if (!canLoadMore) {
+      logger.e('not canLoadMore');
       return;
     }
 
@@ -145,7 +165,8 @@ class TabViewController extends GetxController
 
   // 加载上一页
   Future<void> loadPrevious() async {
-    throw UnimplementedError();
+    await loadFromPage(curPage - 1);
+    // throw UnimplementedError();
   }
 
   // 跳转到指定页加载
@@ -158,6 +179,7 @@ class TabViewController extends GetxController
       cancelToken?.cancel();
     }
     change(state, status: RxStatus.success());
+    logger.d('minPage: $minPage');
     if (minPage > 1) {
       await loadPrevious();
     } else {

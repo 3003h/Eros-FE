@@ -1,5 +1,6 @@
 import 'package:extended_nested_scroll_view/extended_nested_scroll_view.dart';
 import 'package:fehviewer/fehviewer.dart';
+import 'package:fehviewer/network/app_dio/pdio.dart';
 import 'package:fehviewer/pages/tab/controller/custom_sublist_controller.dart';
 import 'package:fehviewer/pages/tab/controller/tabview_controller.dart';
 import 'package:flutter/cupertino.dart';
@@ -68,7 +69,7 @@ class _SubListViewState<T extends CustomSubListController>
             padding: EdgeInsets.only(
                 top: context.mediaQueryPadding.top + kTopTabbarHeight),
             sliver: EhCupertinoSliverRefreshControl(
-              onRefresh: () => subController.onRefresh(),
+              onRefresh: subController.onRefresh,
             )),
         SliverSafeArea(
           top: false,
@@ -113,6 +114,7 @@ class _SubListViewState<T extends CustomSubListController>
               padding: const EdgeInsets.only(bottom: 50),
               child: GalleryErrorPage(
                 onTap: subController.reLoadDataFirst,
+                error: err,
               ),
             ),
           );
