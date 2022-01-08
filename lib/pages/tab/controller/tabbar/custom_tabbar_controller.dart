@@ -167,7 +167,7 @@ class CustomTabbarController extends DefaultTabViewController {
     Get.replace<CustomProfile>(
         profileMap[uuid] ?? CustomProfile(name: '', uuid: generateUuidv4()));
 
-    if (topRoute == EHRoutes.customProfileSetting) {
+    if (isLayoutLarge && topRoute == EHRoutes.customProfileSetting) {
       await Get.offNamed(
         EHRoutes.customProfileSetting,
         id: isLayoutLarge ? 2 : null,

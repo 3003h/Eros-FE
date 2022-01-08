@@ -18,7 +18,7 @@ class GalleryItemSimplePlaceHolder extends StatelessWidget {
         children: [
           Container(
             width: kCoverImageWidth,
-            height: kItemHeight - 12,
+            height: kItemHeight,
             child: ClipRRect(
               // 圆角
               borderRadius: BorderRadius.circular(6),

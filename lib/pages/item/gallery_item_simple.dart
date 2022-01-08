@@ -151,7 +151,7 @@ class GalleryItemSimpleWidget extends StatelessWidget {
 
     return Container(
       width: kCoverImageWidth,
-      height: kItemHeight - 12,
+      height: kItemHeight,
       child: Center(
         child: Hero(
           tag: '${_item.gid}_cover_${tabTag}',

@@ -357,7 +357,7 @@ Widget getGallerySliverList(
           maxPage: maxPage,
           curPage: curPage ?? 0,
           lastComplete: lastComplete,
-          // key: ValueKey(gallerItemBeans.hashCode),
+          key: _key,
           centerKey: centerKey,
           lastTopitemIndex: lastTopitemIndex,
         );
