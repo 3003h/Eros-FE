@@ -26,7 +26,8 @@ const double kPaddingVertical = 18.0;
 
 const double kCardRadius = 12.0;
 
-const double kFixedHeight = 190.0;
+const double kFixedHeight = 200.0;
+// const double kCoverImageWidth = 140;
 
 final EhConfigService _ehConfigService = Get.find();
 
@@ -117,7 +118,7 @@ class GalleryItemWidget extends StatelessWidget {
                   ],
                 ),
                 const SizedBox(
-                  width: 8,
+                  width: 6,
                 ),
                 // 右侧信息
                 Expanded(
@@ -187,7 +188,7 @@ class GalleryItemWidget extends StatelessWidget {
                           ),
                         ),
                         const SizedBox(
-                          height: 8,
+                          height: 6,
                         ),
                         // 类型和时间
                         Row(
@@ -239,8 +240,9 @@ class _CoverImage extends StatelessWidget {
     final ratio = (_item.imgHeight ?? 0) / (_item.imgWidth ?? 1);
 
     // 计算图片容器宽度
-    final double coverImageWidth =
-        Get.context!.isPhone ? Get.context!.mediaQueryShortestSide / 3 : 120;
+    final double coverImageWidth = Get.context!.isPhone
+        ? Get.context!.mediaQueryShortestSide / 3
+        : 0.7 * kFixedHeight;
 
     // 计算图片容器高度
     late double? coverImageHeigth;
@@ -336,7 +338,7 @@ class _CoverImage extends StatelessWidget {
               child: Hero(
                 tag: '${_item.gid}_cover_$tabTag',
                 child: ClipRRect(
-                  borderRadius: BorderRadius.circular(4),
+                  borderRadius: BorderRadius.circular(0),
                   child: image,
                 ),
               ),
@@ -347,11 +349,11 @@ class _CoverImage extends StatelessWidget {
 
       image = ClipRRect(
         // 圆角
-        // borderRadius: const BorderRadius.only(
-        //   topLeft: Radius.circular(kCardRadius),
-        //   bottomLeft: Radius.circular(kCardRadius),
-        // ),
-        borderRadius: BorderRadius.circular(kCardRadius),
+        borderRadius: const BorderRadius.only(
+          topLeft: Radius.circular(kCardRadius),
+          bottomLeft: Radius.circular(kCardRadius),
+        ),
+        // borderRadius: BorderRadius.circular(kCardRadius),
         child: Container(
           child: image,
           height: coverImageHeigth,
@@ -373,7 +375,7 @@ class _Title extends StatelessWidget {
   Widget build(BuildContext context) {
     return Obx(() => Text(
           galleryItemController.title,
-          maxLines: _ehConfigService.fixedHeightOfListItems ? 3 : 4,
+          maxLines: _ehConfigService.fixedHeightOfListItems ? 2 : 4,
           textAlign: TextAlign.left, // 对齐方式
           overflow: TextOverflow.ellipsis, // 超出部分省略号
           style: const TextStyle(

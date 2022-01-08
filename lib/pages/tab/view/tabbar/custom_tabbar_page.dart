@@ -4,8 +4,8 @@ import 'package:extended_nested_scroll_view/extended_nested_scroll_view.dart';
 import 'package:fehviewer/common/service/layout_service.dart';
 import 'package:fehviewer/common/service/theme_service.dart';
 import 'package:fehviewer/fehviewer.dart';
-import 'package:fehviewer/pages/tab/controller/custom_sublist_controller.dart';
-import 'package:fehviewer/pages/tab/controller/custom_tabbar_controller.dart';
+import 'package:fehviewer/pages/tab/controller/tabbar/custom_sublist_controller.dart';
+import 'package:fehviewer/pages/tab/controller/tabbar/custom_tabbar_controller.dart';
 import 'package:flutter/cupertino.dart' hide CupertinoTabBar;
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
@@ -171,7 +171,8 @@ class _CustomTabbarListState extends State<CustomTabbarList> {
                                             actinoText: '编辑分组',
                                             icon: FontAwesomeIcons.edit,
                                             onTap: () {
-                                              controller.toEditPage(e.uuid);
+                                              controller.toEditPage(
+                                                  uuid: e.uuid);
                                             },
                                           ),
                                           LinkTabItemAction(

@@ -26,7 +26,7 @@ import 'package:fehviewer/pages/setting/webdav_setting_page.dart';
 import 'package:fehviewer/pages/tab/controller/tabhome_controller.dart';
 import 'package:fehviewer/pages/tab/view/download_page.dart';
 import 'package:fehviewer/pages/tab/view/quick_search_page.dart';
-import 'package:fehviewer/pages/tab/view/tabbar/custom_profile_setting_view.dart';
+import 'package:fehviewer/pages/tab/view/tabbar/custom_profile_setting_page.dart';
 import 'package:fehviewer/pages/tab/view/tabbar/custom_profiles_page.dart';
 import 'package:fehviewer/route/app_pages.dart';
 import 'package:fehviewer/route/main_observer.dart';
@@ -256,7 +256,7 @@ class TabHomeLarge extends GetView<TabHomeController> {
                           case EHRoutes.customProfileSetting:
                             return GetPageRoute(
                               settings: settings,
-                              page: () => const CustomProfileSettingView(),
+                              page: () => const CustomProfileSettingPage(),
                             );
                           default:
                             return GetPageRoute(

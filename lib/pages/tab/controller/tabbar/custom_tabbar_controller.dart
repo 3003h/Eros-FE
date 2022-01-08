@@ -1,3 +1,4 @@
+import 'package:collection/collection.dart';
 import 'package:english_words/english_words.dart';
 import 'package:fehviewer/common/service/layout_service.dart';
 import 'package:fehviewer/common/service/locale_service.dart';
@@ -6,9 +7,9 @@ import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 
-import '../fetch_list.dart';
+import '../../fetch_list.dart';
 import 'custom_sublist_controller.dart';
-import 'default_tabview_controller.dart';
+import '../default_tabview_controller.dart';
 
 final CustomProfile profileChinese = CustomProfile(
     uuid: generateUuidv4(), name: '汉语', searchText: ['l:chinese']);
@@ -100,7 +101,8 @@ class CustomTabbarController extends DefaultTabViewController {
     }
 
     for (final profile in profiles) {
-      Get.lazyPut(() => CustomSubListController(), tag: profile.uuid);
+      Get.lazyPut(() => CustomSubListController(profileUuid: profile.uuid),
+          tag: profile.uuid);
     }
   }
 
@@ -154,12 +156,30 @@ class CustomTabbarController extends DefaultTabViewController {
     );
   }
 
-  Future<void> toEditPage(String uuid) async {
-    await Get.toNamed(
-      EHRoutes.customProfileSetting,
-      id: isLayoutLarge ? 1 : null,
-      arguments: uuid,
-    );
+  Future<void> toEditPage({String? uuid}) async {
+    final topRoute =
+        SecondNavigatorObserver().history.lastOrNull?.settings.name;
+    logger.d('topRoute $topRoute');
+
+    final profile = profileMap[uuid];
+    logger.d('${profile.runtimeType}');
+
+    Get.replace<CustomProfile>(
+        profileMap[uuid] ?? CustomProfile(name: '', uuid: generateUuidv4()));
+
+    if (topRoute == EHRoutes.customProfileSetting) {
+      await Get.offNamed(
+        EHRoutes.customProfileSetting,
+        id: isLayoutLarge ? 2 : null,
+        preventDuplicates: false,
+      );
+    } else {
+      await Get.toNamed(
+        EHRoutes.customProfileSetting,
+        id: isLayoutLarge ? 2 : null,
+        preventDuplicates: false,
+      );
+    }
   }
 
   void onReorder(int oldIndex, int newIndex) {
