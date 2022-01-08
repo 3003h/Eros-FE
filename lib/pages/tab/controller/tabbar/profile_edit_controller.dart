@@ -25,12 +25,10 @@ class ProfileEditController extends GetxController {
   void onInit() {
     super.onInit();
     debounce(_searchText, (String val) async {
-      logger.d('val $val');
       rultlist.clear();
       try {
         // 中文从翻译库匹配
         if (localeService.isLanguageCodeZh) {
-          logger.d('isLanguageCodeZh');
           List<TagTranslat> tagTranslateList =
               await Get.find<TagTransController>()
                   .getTagTranslatesLike(text: val.trim(), limit: 100);

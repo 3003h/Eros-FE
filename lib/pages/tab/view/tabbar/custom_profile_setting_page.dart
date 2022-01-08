@@ -188,6 +188,9 @@ class _CustomProfileSettingPageState extends State<CustomProfileSettingPage> {
       String value, BuildContext targetContext) async {
     const _marginLR = 30.0;
 
+    final robj = targetContext.findRenderObject() as RenderBox?;
+    final size = robj?.size;
+
     await SmartDialog.showAttach(
       tag: kAttachTagSearch,
       keepSingle: true,
@@ -204,7 +207,7 @@ class _CustomProfileSettingPageState extends State<CustomProfileSettingPage> {
         top: false,
         bottom: false,
         child: Container(
-          width: targetContext.width - _marginLR * 2,
+          width: size?.width,
           margin: const EdgeInsets.only(
               left: _marginLR, right: _marginLR, top: 10, bottom: 40),
           constraints: const BoxConstraints(maxHeight: 300, minHeight: 50),
@@ -215,9 +218,9 @@ class _CustomProfileSettingPageState extends State<CustomProfileSettingPage> {
                 color: CupertinoDynamicColor.resolve(
                         CupertinoColors.darkBackgroundGray, Get.context!)
                     .withOpacity(0.16),
-                offset: const Offset(0, 10),
+                offset: const Offset(0, 16),
                 blurRadius: 20, //阴影模糊程度
-                spreadRadius: 4, //阴影扩散程度
+                spreadRadius: 2, //阴影扩散程度
               ),
             ],
           ),
@@ -226,6 +229,7 @@ class _CustomProfileSettingPageState extends State<CustomProfileSettingPage> {
             child: CupertinoScrollbar(
               // isAlwaysShown: true,
               child: Container(
+                // child: SizedBox(),
                 child: Obx(() {
                   final _rultlist = profileEditController.rultlist;
                   return ListView.builder(
@@ -446,13 +450,13 @@ class _CustomProfileSettingPageState extends State<CustomProfileSettingPage> {
                           ],
                         ));
                   }),
-              Builder(builder: (context) {
-                return Container(
-                  color: CupertinoDynamicColor.resolve(
-                      ehTheme.itemBackgroundColor!, Get.context!),
-                  constraints: const BoxConstraints(minHeight: kItemHeight),
-                  padding: const EdgeInsets.symmetric(horizontal: 20),
-                  child: Row(
+              Container(
+                color: CupertinoDynamicColor.resolve(
+                    ehTheme.itemBackgroundColor!, Get.context!),
+                constraints: const BoxConstraints(minHeight: kItemHeight),
+                padding: const EdgeInsets.symmetric(horizontal: 20),
+                child: Builder(builder: (context) {
+                  return Row(
                     children: [
                       Expanded(
                         child: CupertinoTextField(
@@ -466,16 +470,15 @@ class _CustomProfileSettingPageState extends State<CustomProfileSettingPage> {
                           ),
                           style: const TextStyle(height: 1.2),
                           onChanged: (value) {
-                            profileEditController.searchText = value;
+                            profileEditController.searchText = value.trim();
                             if (lastText.isEmpty && value.isNotEmpty) {
                               showSearchAttach(value, context);
                             }
-
-                            if (value.isEmpty) {
-                              SmartDialog.dismiss(tag: kAttachTagSearch);
+                            if (value.trim().isEmpty) {
+                              SmartDialog.dismiss();
                             }
 
-                            lastText = value;
+                            lastText = value.trim();
                           },
                         ),
                       ),
@@ -488,7 +491,7 @@ class _CustomProfileSettingPageState extends State<CustomProfileSettingPage> {
                               horizontal: 4, vertical: 8),
                           minSize: 0,
                           child: const Icon(
-                            FontAwesomeIcons.solidCheckCircle,
+                            FontAwesomeIcons.plusCircle,
                             size: 30,
                           ),
                           onPressed: () {
@@ -500,9 +503,9 @@ class _CustomProfileSettingPageState extends State<CustomProfileSettingPage> {
                         ),
                       ),
                     ],
-                  ),
-                );
-              }),
+                  );
+                }),
+              ),
             ],
           ),
         ),
