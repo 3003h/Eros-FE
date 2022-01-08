@@ -29,7 +29,7 @@ import 'package:fehviewer/pages/setting/view_setting_page.dart';
 import 'package:fehviewer/pages/setting/webdav_setting_page.dart';
 import 'package:fehviewer/pages/tab/bindings/splash_binding.dart';
 import 'package:fehviewer/pages/tab/view/gallery_list_page.dart';
-import 'package:fehviewer/pages/tab/view/tabbar/custom_profile_setting_view.dart';
+import 'package:fehviewer/pages/tab/view/tabbar/custom_profile_setting_page.dart';
 import 'package:fehviewer/pages/tab/view/tabbar/custom_profiles_page.dart';
 import 'package:fehviewer/pages/tab/view/tabbar/custom_tabbar_page.dart';
 import 'package:fehviewer/pages/tab/view/download_page.dart';
@@ -242,7 +242,7 @@ class AppPages {
     ),
     GetPage(
       name: EHRoutes.customProfileSetting,
-      page: () => const CustomProfileSettingView(),
+      page: () => const CustomProfileSettingPage(),
     ),
   ];
 }

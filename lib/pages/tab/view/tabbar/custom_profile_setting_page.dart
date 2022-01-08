@@ -8,9 +8,9 @@ import 'package:fehviewer/fehviewer.dart';
 import 'package:fehviewer/pages/filter/filter.dart';
 import 'package:fehviewer/pages/filter/gallery_filter_view.dart';
 import 'package:fehviewer/pages/setting/setting_items/selector_Item.dart';
-import 'package:fehviewer/pages/tab/controller/custom_sublist_controller.dart';
-import 'package:fehviewer/pages/tab/controller/custom_tabbar_controller.dart';
-import 'package:fehviewer/pages/tab/controller/profile_edit_controller.dart';
+import 'package:fehviewer/pages/tab/controller/tabbar/custom_sublist_controller.dart';
+import 'package:fehviewer/pages/tab/controller/tabbar/custom_tabbar_controller.dart';
+import 'package:fehviewer/pages/tab/controller/tabbar/profile_edit_controller.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
@@ -19,19 +19,20 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
 import 'package:reorderables/reorderables.dart';
 
+import '../../../../common/service/layout_service.dart';
 import '../../fetch_list.dart';
 
 const String kAttachTagSearch = 'TagSearch';
 
-class CustomProfileSettingView extends StatefulWidget {
-  const CustomProfileSettingView({Key? key}) : super(key: key);
+class CustomProfileSettingPage extends StatefulWidget {
+  const CustomProfileSettingPage({Key? key}) : super(key: key);
 
   @override
-  State<CustomProfileSettingView> createState() =>
-      _CustomProfileSettingViewState();
+  State<CustomProfileSettingPage> createState() =>
+      _CustomProfileSettingPageState();
 }
 
-class _CustomProfileSettingViewState extends State<CustomProfileSettingView> {
+class _CustomProfileSettingPageState extends State<CustomProfileSettingPage> {
   final CustomTabbarController controller = Get.find();
   final LocaleService localeService = Get.find();
   GalleryListType _listType = GalleryListType.gallery;
@@ -130,8 +131,8 @@ class _CustomProfileSettingViewState extends State<CustomProfileSettingView> {
       controller.profiles.add(customProfile);
     }
     Get.lazyPut(
-        () => CustomSubListController()
-          ..profileUuid = customProfile.uuid
+        () => CustomSubListController(profileUuid: customProfile.uuid)
+          // ..profileUuid = customProfile.uuid
           ..heroTag = customProfile.uuid,
         tag: customProfile.uuid,
         fenix: true);
@@ -143,15 +144,11 @@ class _CustomProfileSettingViewState extends State<CustomProfileSettingView> {
   @override
   void initState() {
     super.initState();
-    String? profileUuid = Get.arguments as String?;
-    if (profileUuid != null) {
-      customProfile = controller.profileMap[profileUuid] ??
-          CustomProfile(name: '', uuid: generateUuidv4());
-    } else {
-      customProfile = CustomProfile(name: '', uuid: generateUuidv4());
-    }
+
+    customProfile = Get.find();
+
     oriIndex = controller.profiles
-        .indexWhere((element) => element.uuid == profileUuid);
+        .indexWhere((element) => element.uuid == customProfile.uuid);
 
     searchText.addAll(customProfile.searchText?.map((e) => '$e') ?? []);
 
@@ -799,7 +796,9 @@ class _CustomProfileSettingViewState extends State<CustomProfileSettingView> {
 
           _saveProfile();
 
-          Get.back();
+          Get.back(
+            id: isLayoutLarge ? 2 : null,
+          );
         },
         child: Text(
           '保存',

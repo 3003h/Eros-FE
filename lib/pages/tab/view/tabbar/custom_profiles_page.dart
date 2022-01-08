@@ -1,7 +1,7 @@
 import 'package:fehviewer/common/service/theme_service.dart';
 import 'package:fehviewer/component/setting_base.dart';
 import 'package:fehviewer/fehviewer.dart';
-import 'package:fehviewer/pages/tab/controller/custom_tabbar_controller.dart';
+import 'package:fehviewer/pages/tab/controller/tabbar/custom_tabbar_controller.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
@@ -25,10 +25,7 @@ class CustomProfilesPage extends GetView<CustomTabbarController> {
                   title: element.name,
                   maxLines: 2,
                   onTap: () {
-                    Get.toNamed(
-                      EHRoutes.customProfileSetting,
-                      arguments: element.uuid,
-                    );
+                    controller.toEditPage(uuid: element.uuid);
                   },
                 ))
             .toList(),
@@ -86,7 +83,7 @@ class CustomProfilesPage extends GetView<CustomTabbarController> {
                 hideLine: true,
                 textColor: CupertinoDynamicColor.resolve(
                     CupertinoColors.activeBlue, context),
-                onTap: () => Get.toNamed(EHRoutes.customProfileSetting),
+                onTap: () => controller.toEditPage(),
               ),
             ],
           );

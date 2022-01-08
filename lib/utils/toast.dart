@@ -8,6 +8,7 @@ import 'package:oktoast/oktoast.dart';
 
 void showToast(
   String msg, {
+  Duration duration = const Duration(seconds: 3),
   ToastPosition? position =
       const ToastPosition(align: Alignment.bottomCenter, offset: -60.0),
 }) {
@@ -50,6 +51,7 @@ void showToast(
   oktoast.showToastWidget(
     widget,
     position: position,
+    duration: duration,
   );
 }
 
@@ -91,5 +93,6 @@ void show509Toast() {
     widget,
     position: ToastPosition.center,
     onDismiss: () => _isShowing509 = false,
+    duration: 3.seconds,
   );
 }

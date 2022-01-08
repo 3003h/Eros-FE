@@ -1,6 +1,6 @@
 import 'dart:io';
 
-import 'package:fehviewer/pages/tab/controller/custom_tabbar_controller.dart';
+import 'package:fehviewer/pages/tab/controller/tabbar/custom_tabbar_controller.dart';
 import 'package:fehviewer/pages/tab/controller/favorite_tabbar_controller.dart';
 import 'package:fehviewer/pages/tab/controller/toplist_controller.dart';
 import 'package:flutter/cupertino.dart';

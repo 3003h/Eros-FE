@@ -6,12 +6,13 @@ import 'package:fehviewer/fehviewer.dart';
 import 'package:fehviewer/pages/tab/controller/tabview_controller.dart';
 import 'package:get/get.dart';
 
-import '../fetch_list.dart';
+import '../../fetch_list.dart';
 import 'custom_tabbar_controller.dart';
-import 'enum.dart';
+import '../enum.dart';
 
 /// 控制单个自定义列表
 class CustomSubListController extends TabViewController {
+  CustomSubListController({required this.profileUuid});
   final CustomTabbarController _customTabbarController = Get.find();
 
   final RxBool _isBackgroundRefresh = false.obs;
@@ -21,9 +22,8 @@ class CustomSubListController extends TabViewController {
   final listModeObs = ListModeEnum.list.obs;
   ListModeEnum get listMode => listModeObs.value;
   set listMode(ListModeEnum val) => listModeObs.value = val;
-  // ListModeEnum? get listmode => profile?.listMode ;
 
-  late String profileUuid;
+  final String profileUuid;
   CustomProfile? get profile => _customTabbarController.profileMap[profileUuid];
 
   FetchListClient getFetchListClient(FetchParams fetchParams) {

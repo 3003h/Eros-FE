@@ -1,13 +1,13 @@
 import 'package:extended_nested_scroll_view/extended_nested_scroll_view.dart';
 import 'package:fehviewer/fehviewer.dart';
 import 'package:fehviewer/network/app_dio/pdio.dart';
-import 'package:fehviewer/pages/tab/controller/custom_sublist_controller.dart';
+import 'package:fehviewer/pages/tab/controller/tabbar/custom_sublist_controller.dart';
 import 'package:fehviewer/pages/tab/controller/tabview_controller.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
 
 import '../../comm.dart';
-import '../../controller/custom_tabbar_controller.dart';
+import '../../controller/tabbar/custom_tabbar_controller.dart';
 import '../constants.dart';
 import '../gallery_base.dart';
 import '../tab_base.dart';
@@ -34,8 +34,7 @@ class _SubListViewState<T extends CustomSubListController>
     super.initState();
     logger.d('Get.find ${T.runtimeType} tag:${widget.profileUuid}');
     subController = Get.find<T>(tag: widget.profileUuid)
-      ..heroTag = widget.profileUuid
-      ..profileUuid = widget.profileUuid;
+      ..heroTag = widget.profileUuid;
     controller.subControllerMap[widget.profileUuid] = subController;
     subController.listMode =
         subController.profile?.listMode ?? ListModeEnum.global;
