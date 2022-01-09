@@ -513,7 +513,7 @@ class BottomBarControlWidget extends GetView<ViewExtController> {
                   GestureDetector(
                     behavior: HitTestBehavior.opaque,
                     onTap: () {
-                      controller.share(context);
+                      controller.tapShare(context);
                     },
                     child: Container(
                       width: 40,
@@ -705,7 +705,7 @@ class ThumbnailListView extends GetView<ViewExtController> {
                 reverse: logic.vState.viewMode == ViewMode.rightToLeft,
                 itemBuilder: (context, index) {
                   late Widget thumb;
-                  if (logic.vState.loadType == LoadType.file) {
+                  if (logic.vState.loadFrom == LoadFrom.download) {
                     final path = controller.vState.imagePathList[index];
 
                     thumb = ExtendedImage.file(
@@ -976,7 +976,7 @@ Future<void> showShareActionSheet(
   String? imageUrl,
   String? origImageUrl,
   String? filePath,
-  LoadType loadType = LoadType.network,
+  LoadFrom loadType = LoadFrom.gallery,
 }) {
   return showCupertinoModalPopup<void>(
       context: context,
@@ -1003,22 +1003,6 @@ Future<void> showShareActionSheet(
               },
               child: Text(L10n.of(context).save_into_album),
             ),
-            // if (origImageUrl != null)
-            //   CupertinoActionSheetAction(
-            //     onPressed: () async {
-            //       logger.v('保存到手机 orig');
-            //       Get.back();
-            //       final bool rult = await Api.saveImage(
-            //         context: context,
-            //         imageUrl: origImageUrl,
-            //         filePath: filePath,
-            //       );
-            //       if (rult) {
-            //         showToast(L10n.of(context).saved_successfully);
-            //       }
-            //     },
-            //     child: Text('${L10n.of(context).save_into_album}(ori)'),
-            //   ),
             CupertinoActionSheetAction(
               onPressed: () {
                 logger.v('系统分享');
@@ -1027,16 +1011,6 @@ Future<void> showShareActionSheet(
               },
               child: Text(L10n.of(context).system_share),
             ),
-            // if (origImageUrl != null)
-            //   CupertinoActionSheetAction(
-            //     onPressed: () {
-            //       logger.v('系统分享');
-            //       Get.back();
-            //       Api.shareImageExtended(
-            //           imageUrl: origImageUrl, filePath: filePath);
-            //     },
-            //     child: Text('${L10n.of(context).system_share}(ori)'),
-            //   ),
           ],
         );
         return EhDarkCupertinoTheme(child: dialog);
@@ -1044,8 +1018,13 @@ Future<void> showShareActionSheet(
 }
 
 Future<void> showImageSheet(
-    BuildContext context, String imageUrl, VoidCallback reload,
-    {String? title}) {
+  BuildContext context,
+  VoidCallback reload, {
+  String? title,
+  String? imageUrl,
+  String? origImageUrl,
+  String? filePath,
+}) {
   return showCupertinoModalPopup<void>(
       context: context,
       builder: (BuildContext context) {
@@ -1066,7 +1045,12 @@ Future<void> showImageSheet(
             CupertinoActionSheetAction(
                 onPressed: () {
                   Get.back();
-                  showShareActionSheet(context, imageUrl: imageUrl);
+                  showShareActionSheet(
+                    context,
+                    imageUrl: imageUrl,
+                    filePath: filePath,
+                    origImageUrl: origImageUrl,
+                  );
                 },
                 child: Text(L10n.of(context).share_image)),
           ],

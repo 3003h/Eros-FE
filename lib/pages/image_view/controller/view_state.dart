@@ -23,16 +23,12 @@ class ViewExtState {
     // 设置加载类型
     if (Get.arguments is ViewRepository) {
       final ViewRepository vr = Get.arguments as ViewRepository;
-      loadType = vr.loadType;
-      if (loadType == LoadType.file) {
+      logger.d('vr.loadType ${vr.loadType}');
+      loadFrom = vr.loadType;
+      if (loadFrom == LoadFrom.download) {
         if (vr.files != null) {
           imagePathList = vr.files!;
           initGid = vr.gid;
-
-          // _columnMode = _galleryCacheController
-          //         .getGalleryCache(initGid ?? '', sync: false)
-          //         ?.columnMode ??
-          //     ViewColumnMode.single;
 
           _galleryCacheController
               .getGalleryCache(initGid ?? '', sync: false)
@@ -41,11 +37,7 @@ class ViewExtState {
         }
       } else {
         galleryPageController = Get.find(tag: pageCtrlDepth);
-        // _columnMode = _galleryCacheController
-        //         .getGalleryCache(galleryPageController.galleryItem.gid ?? '',
-        //             sync: false)
-        //         ?.columnMode ??
-        //     ViewColumnMode.single;
+
         _galleryCacheController
             .getGalleryCache(galleryPageController.galleryItem?.gid ?? '0',
                 sync: false)
@@ -67,7 +59,7 @@ class ViewExtState {
   Map<int, GalleryImage> get imageMap => galleryPageController.imageMap;
 
   ///
-  LoadType loadType = LoadType.network;
+  LoadFrom loadFrom = LoadFrom.gallery;
 
   late final String? initGid;
 
@@ -87,7 +79,7 @@ class ViewExtState {
   }
 
   void saveLastIndex({bool saveToStore = false}) {
-    if (loadType == LoadType.network) {
+    if (loadFrom == LoadFrom.gallery) {
       if (galleryPageController.galleryItem?.gid != null &&
           conditionItemIndex) {
         galleryPageController.lastIndex = currentItemIndex;
@@ -109,7 +101,7 @@ class ViewExtState {
   set columnMode(ViewColumnMode val) {
     _columnMode = val;
     vDebounce(() {
-      if (loadType == LoadType.network) {
+      if (loadFrom == LoadFrom.gallery) {
         _galleryCacheController.setColumnMode(
             galleryPageController.galleryItem?.gid ?? '', val);
       }
@@ -151,7 +143,7 @@ class ViewExtState {
   List<String> imagePathList = <String>[];
 
   int get filecount {
-    if (loadType == LoadType.file) {
+    if (loadFrom == LoadFrom.download) {
       return imagePathList.length;
     } else {
       return int.parse(galleryPageController.galleryItem?.filecount ?? '0');

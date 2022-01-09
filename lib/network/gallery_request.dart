@@ -1005,13 +1005,15 @@ class Api {
       return;
     }
 
+    logger.d('imageUrl:$imageUrl   filePath:$filePath');
+
     io.File? file;
     String? _name;
 
     if (filePath != null) {
       file = io.File(filePath);
       _name = path.basename(filePath);
-    } else if (imageUrl != null) {
+    } else if (imageUrl != null && imageUrl.isNotEmpty) {
       logger.d('imageUrl => $imageUrl');
       final exists = await cachedImageExists(imageUrl);
       file = await getCachedImageFile(imageUrl);
@@ -1021,7 +1023,8 @@ class Api {
           final DefaultCacheManager manager = DefaultCacheManager();
           file = await manager.getSingleFile(imageUrl,
               headers: {'cookie': Global.profile.user.cookie});
-        } catch (e) {
+        } catch (e, stack) {
+          logger.e('$e\n$stack');
           throw 'get file error';
         }
       }

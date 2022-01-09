@@ -21,9 +21,9 @@ enum ViewColumnMode {
   single,
 }
 
-enum LoadType {
-  network,
-  file,
+enum LoadFrom {
+  gallery,
+  download,
 }
 
 Map<String, bool> _throttles = {};

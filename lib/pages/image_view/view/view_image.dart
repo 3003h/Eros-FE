@@ -55,7 +55,7 @@ class _ViewImageState extends State<ViewImage> with TickerProviderStateMixin {
         vsync: this, duration: Duration(milliseconds: vState.fade ? 200 : 0));
     vState.fade = true;
 
-    if (vState.loadType == LoadType.network) {
+    if (vState.loadFrom == LoadFrom.gallery) {
       controller.imageFutureMap[widget.imageSer] = controller.fetchImage(
         widget.imageSer,
         context: context,
@@ -207,14 +207,14 @@ class _ViewImageState extends State<ViewImage> with TickerProviderStateMixin {
           },
         );
 
-    if (vState.loadType == LoadType.file) {
+    if (vState.loadFrom == LoadFrom.download) {
       /// 从已下载查看
       final path = vState.imagePathList[widget.imageSer - 1];
       final Widget image = fileImage(path);
 
       return image;
     } else {
-      /// 在线查看的形式
+      /// 从画廊页查看
       final Widget viewImage = GetBuilder<ViewExtController>(
         builder: (ViewExtController controller) {
           // loggerSimple.d('build viewImage online');
@@ -229,9 +229,11 @@ class _ViewImageState extends State<ViewImage> with TickerProviderStateMixin {
                   vState.galleryPageController.imageMap[widget.imageSer];
               showImageSheet(
                   context,
-                  _currentImage?.imageUrl ?? '',
                   () => controller.reloadImage(widget.imageSer,
                       changeSource: true),
+                  imageUrl: _currentImage?.imageUrl ?? '',
+                  filePath: _currentImage?.filePath,
+                  origImageUrl: _currentImage?.originImageUrl,
                   title:
                       '${vState.galleryPageController.title} [${_currentImage?.ser ?? ''}]');
             },
@@ -275,7 +277,6 @@ class _ViewImageState extends State<ViewImage> with TickerProviderStateMixin {
                         return ViewError(
                             ser: widget.imageSer, errInfo: _errInfo);
                       } else {
-                        // return const SizedBox.shrink();
                         return ViewLoading(
                           ser: widget.imageSer,
                           duration: vState.viewMode != ViewMode.topToBottom
@@ -286,12 +287,28 @@ class _ViewImageState extends State<ViewImage> with TickerProviderStateMixin {
                     }
                     final GalleryImage? _image = snapshot.data;
 
+                    // 图片文件已下载 加载显示本地图片文件
                     if (_image != null &&
                         _image.filePath != null &&
                         _image.filePath!.isNotEmpty) {
+                      if (vState.imageMap[widget.imageSer] != null) {
+                        // logger.d('ser:${_image.ser} path:${_image.filePath!}');
+
+                        // vState.imageMap[widget.imageSer] = vState
+                        //     .imageMap[widget.imageSer]!
+                        //     .copyWith(filePath: _image.filePath!);
+                        vState.galleryPageController.uptImageBySer(
+                            ser: _image.ser,
+                            image: vState.imageMap[widget.imageSer]!
+                                .copyWith(filePath: _image.filePath!));
+
+                        // logger
+                        //     .d('${vState.imageMap[widget.imageSer]?.toJson()}');
+                      }
                       return fileImage(_image.filePath!);
                     }
 
+                    // 图片未下载 调用网络图片组件加载
                     Widget image = ImageExt(
                       url: _image?.imageUrl ?? '',
                       onDoubleTap: widget.enableDoubleTap ? onDoubleTap : null,
@@ -328,36 +345,6 @@ class _ViewImageState extends State<ViewImage> with TickerProviderStateMixin {
                         controller.onLoadCompleted(widget.imageSer);
                       },
                     );
-
-                    // if (Global.inDebugMode) {
-                    //   image = Stack(
-                    //     alignment: Alignment.center,
-                    //     fit: controller.vState.viewMode ==
-                    //                 ViewMode.topToBottom ||
-                    //             controller.vState.columnMode !=
-                    //                 ViewColumnMode.single
-                    //         ? StackFit.loose
-                    //         : StackFit.expand,
-                    //     children: [
-                    //       image,
-                    //       Positioned(
-                    //         left: 30,
-                    //         child: Text('${_image?.ser ?? ''}',
-                    //             style: const TextStyle(
-                    //                 fontSize: 18,
-                    //                 color: CupertinoColors
-                    //                     .secondarySystemBackground,
-                    //                 shadows: <Shadow>[
-                    //                   Shadow(
-                    //                     color: Colors.black,
-                    //                     offset: Offset(1, 1),
-                    //                     blurRadius: 2,
-                    //                   )
-                    //                 ])),
-                    //       ),
-                    //     ],
-                    //   );
-                    // }
 
                     return image;
                   } else {

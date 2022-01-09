@@ -20,7 +20,7 @@ typedef DoubleClickAnimationListener = void Function();
 class ViewRepository {
   ViewRepository({
     this.index = 0,
-    this.loadType = LoadType.network,
+    this.loadType = LoadFrom.gallery,
     this.files,
     required this.gid,
   });
@@ -28,7 +28,7 @@ class ViewRepository {
   final int index;
   final List<String>? files;
   final String gid;
-  final LoadType loadType;
+  final LoadFrom loadType;
 }
 
 class ViewPage extends StatefulWidget {

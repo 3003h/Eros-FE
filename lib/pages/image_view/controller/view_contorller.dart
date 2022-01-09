@@ -138,7 +138,7 @@ class ViewExtController extends GetxController {
 
     /// 初始预载
     /// 后续的预载触发放在翻页事件中
-    if (vState.loadType == LoadType.network) {
+    if (vState.loadFrom == LoadFrom.gallery) {
       // 预载
       logger.v('初始预载');
 
@@ -150,7 +150,6 @@ class ViewExtController extends GetxController {
       )
           .listen((GalleryImage? event) {
         if (event != null) {
-          // logger5.d('preloadImage upt previewMap ${event.ser}');
           _galleryPageController.uptImageBySer(ser: event.ser, image: event);
         }
       });
@@ -238,7 +237,7 @@ class ViewExtController extends GetxController {
         break;
     }
 
-    if (vState.loadType == LoadType.network) {
+    if (vState.loadFrom == LoadFrom.gallery) {
       // 预载图片
       // logger.v('页码切换时的回调 预载图片');
       GalleryPara.instance
@@ -365,12 +364,11 @@ class ViewExtController extends GetxController {
     bool changeSource = false,
     BuildContext? context,
   }) async {
+    // 首先检查下载记录中是否有记录
     vState.imageTaskDao ??= await DownloadController.getImageTaskDao();
     vState.galleryTaskDao ??= await DownloadController.getGalleryTaskDao();
     vState.dirPath ??=
         await _getTaskDirPath(int.parse(_galleryPageController.gid));
-
-    // logger.d('${vState.dirPath}');
 
     GalleryImage? imageFromTasks =
         _getImageFromImageTasks(itemSer, vState.dirPath);
@@ -383,6 +381,7 @@ class ViewExtController extends GetxController {
         [];
 
     imageFromTasks = _getImageFromImageTasks(itemSer, vState.dirPath);
+    // 存在下载记录 直接返回
     if (imageFromTasks != null) {
       return imageFromTasks;
     }
@@ -614,8 +613,6 @@ class ViewExtController extends GetxController {
   void jumpToPage(int index) {
     vState.currentItemIndex = index;
     if (vState.viewMode != ViewMode.topToBottom) {
-      // pageController.jumpToPage(vState.pageIndex);
-      // extendedPageController.jumpToPage(vState.pageIndex);
       pageControllerCallBack(() => pageController.jumpToPage(vState.pageIndex),
           () => extendedPageController.jumpToPage(vState.pageIndex));
     } else {
@@ -633,17 +630,19 @@ class ViewExtController extends GetxController {
     }
   }
 
-  void share(BuildContext context) {
-    if (vState.loadType == LoadType.network) {
-      final GalleryImage? p =
-          _galleryPageController.imageMap[vState.currentItemIndex + 1];
-      logger.d(p?.toJson());
+  void tapShare(BuildContext context) {
+    if (vState.loadFrom == LoadFrom.gallery) {
+      logger.d('share networkFile ${vState.currentItemIndex + 1}');
+      final GalleryImage? p = vState.imageMap[vState.currentItemIndex + 1];
+      logger.d('p:\n${p?.toJson()}');
       showShareActionSheet(
         context,
         imageUrl: p?.imageUrl,
         origImageUrl: p?.originImageUrl,
+        filePath: p?.filePath,
       );
     } else {
+      logger.d('share localFile');
       showShareActionSheet(
         context,
         filePath: vState.imagePathList[vState.currentItemIndex],

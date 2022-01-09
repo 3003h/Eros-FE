@@ -42,10 +42,10 @@ class EhCookieInterceptor extends Interceptor {
     var cookies = response.headers[HttpHeaders.setCookieHeader];
 
     if (cookies != null) {
-      logger.d('set-cookie:${cookies}');
+      logger.v('set-cookie:${cookies}');
       final _cookies =
           cookies.map((str) => Cookie.fromSetCookieValue(str)).toList();
-      logger.d('_set cookies ${_cookies}');
+      logger.v('_set cookies ${_cookies}');
 
       final igneous = getCookiesValue(_cookies, 'igneous');
 
@@ -57,7 +57,7 @@ class EhCookieInterceptor extends Interceptor {
         sk: getCookiesValue(_cookies, 'sk'),
       ));
 
-      logger.d('${userController.user.value.toJson()}');
+      logger.v('${userController.user.value.toJson()}');
     }
   }
 
