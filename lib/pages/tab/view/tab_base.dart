@@ -313,7 +313,7 @@ Widget getGallerySliverList(
     final mod = listMode?.value != ListModeEnum.global
         ? listMode?.value ?? ehConfigService.listMode.value
         : ehConfigService.listMode.value;
-    logger.d('mod $mod');
+    logger.v('mod $mod');
 
     switch (mod) {
       case ListModeEnum.list:

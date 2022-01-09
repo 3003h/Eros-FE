@@ -214,7 +214,7 @@ class NavigatorUtil {
     await Get.toNamed(EHRoutes.galleryViewExt,
         arguments: ViewRepository(
           index: index,
-          loadType: LoadType.network,
+          loadType: LoadFrom.gallery,
           gid: gid,
         ));
   }
@@ -226,7 +226,7 @@ class NavigatorUtil {
         arguments: ViewRepository(
           index: index,
           files: pics,
-          loadType: LoadType.file,
+          loadType: LoadFrom.download,
           gid: gid,
         ));
   }

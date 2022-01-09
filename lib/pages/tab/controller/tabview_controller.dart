@@ -64,7 +64,7 @@ class TabViewController extends GetxController
 
       final _listItem = rult.gallerys;
 
-      logger.d('_listItem ${_listItem?.length}');
+      logger.v('_listItem ${_listItem?.length}');
 
       maxPage = rult.maxPage ?? 0;
       nextPage = rult.nextPage ?? 1;

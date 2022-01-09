@@ -241,7 +241,7 @@ class _LinkScrollBarState extends State<LinkScrollBar> {
     super.initState();
 
     bindController();
-    logger.d('_LinkScrollBarState initState selectIndex:${widget.initIndex}');
+    logger.v('_LinkScrollBarState initState selectIndex:${widget.initIndex}');
 
     selectIndex = widget.initIndex;
     // _indicatorPositionedLeft = widget.itemPadding.horizontal / 2;
@@ -355,7 +355,7 @@ class _TitleIndicatorState extends State<TitleIndicator> {
   @override
   void initState() {
     super.initState();
-    logger.d('_TitleIndicatorState initState index:${widget.index}');
+    logger.v('_TitleIndicatorState initState index:${widget.index}');
 
     positionedLeft = widget.channelFrameList[widget.index].left +
         (widget.itemPadding?.horizontal ?? 0) / 2;

@@ -35,14 +35,6 @@ class GalleryPageController extends GetxController
 
   /// 画廊数据对象
   GalleryItem? galleryItem;
-  // GalleryItem get galleryItem => _galleryItem;
-  // set galleryItem(GalleryItem val) {
-  //   _galleryItem = val;
-  // }
-
-  // void initItem(GalleryItem val) {
-  //   _galleryItem = val;
-  // }
 
   /// 画廊gid 唯一
   String get gid => galleryItem?.gid ?? '0';
@@ -94,13 +86,13 @@ class GalleryPageController extends GetxController
 
   List<GalleryImage> get images => galleryItem?.galleryImages ?? [];
   Map<int, GalleryImage> get imageMap => galleryItem?.imageMap ?? {};
+  set imageMap(Map<int, GalleryImage> val) {}
   int get filecount => int.parse(galleryItem?.filecount ?? '0');
 
   List<GalleryImage> get imagesFromMap {
     List<MapEntry<int, GalleryImage>> list = imageMap.entries
         .map((MapEntry<int, GalleryImage> e) => MapEntry(e.key, e.value))
         .toList();
-    // logger5.d('imagesFromMap len ${list.length}');
     list.sort((a, b) => a.key.compareTo(b.key));
 
     return list.map((e) => e.value).toList();
