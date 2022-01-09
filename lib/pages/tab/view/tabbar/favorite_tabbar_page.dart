@@ -1,6 +1,7 @@
 import 'package:blur/blur.dart';
 import 'package:extended_nested_scroll_view/extended_nested_scroll_view.dart';
 import 'package:fehviewer/common/service/layout_service.dart';
+import 'package:fehviewer/common/service/theme_service.dart';
 import 'package:fehviewer/fehviewer.dart';
 import 'package:fehviewer/pages/tab/controller/favorite_tabbar_controller.dart';
 import 'package:fehviewer/pages/tab/controller/search_page_controller.dart';
@@ -50,16 +51,20 @@ class _FavoriteTabTabBarPageState extends State<FavoriteTabTabBarPage> {
             // fit: StackFit.expand,
             alignment: Alignment.topCenter,
             children: [
-              Blur(
-                blur: 10,
-                blurColor: CupertinoTheme.of(context)
-                    .barBackgroundColor
-                    .withOpacity(1),
-                colorOpacity: 0.7,
-                child: Container(
-                  height: kTopTabbarHeight,
-                ),
-              ),
+              Obx(() {
+                // 不要删除这行
+                ehTheme.isDarkMode;
+                return Blur(
+                  blur: 10,
+                  blurColor: CupertinoTheme.of(context)
+                      .barBackgroundColor
+                      .withOpacity(1),
+                  colorOpacity: 0.7,
+                  child: Container(
+                    height: kTopTabbarHeight,
+                  ),
+                );
+              }),
               Container(
                 decoration: const BoxDecoration(
                   border: kDefaultNavBarBorder,
