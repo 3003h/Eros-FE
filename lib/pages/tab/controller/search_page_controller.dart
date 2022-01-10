@@ -297,13 +297,13 @@ class SearchPageController extends DefaultTabViewController {
   @override
   Future<void> firstLoad() async {
     if (initSearchText != null && initSearchText!.trim().isNotEmpty) {
-      // logger.d('$searchText');
       searchTextController.text = initSearchText!.trim();
       autofocus = false;
     } else {
       autofocus = true;
     }
     change(<GalleryItem>[], status: RxStatus.empty());
+    canLoadMore = true;
   }
 
   @override
