@@ -218,14 +218,12 @@ class EhConfigService extends ProfileService {
       //   ..baseUrl = value ? EHConst.EX_BASE_URL : EHConst.EH_BASE_URL
       //   ..maxConnectionsPerHost = value ? 2 : null;
       if (value) {
-        Global.initImageHttpClient(maxConnectionsPerHost: 2);
-        ehDioConfig
-          ..baseUrl = EHConst.EX_BASE_URL
-          ..maxConnectionsPerHost = 2;
+        // Global.initImageHttpClient(maxConnectionsPerHost: 2);
+        ehDioConfig.baseUrl = EHConst.EX_BASE_URL;
+        // ..maxConnectionsPerHost = 2;
       } else {
-        ehDioConfig
-          ..baseUrl = EHConst.EH_BASE_URL
-          ..maxConnectionsPerHost = null;
+        ehDioConfig.baseUrl = EHConst.EH_BASE_URL;
+        // ..maxConnectionsPerHost = null;
       }
     });
 
