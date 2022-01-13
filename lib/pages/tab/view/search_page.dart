@@ -159,7 +159,7 @@ class _GallerySearchPageState extends State<GallerySearchPage> {
                 sliver: () {
                   switch (controller.listType) {
                     case ListType.gallery:
-                      return _getGalleryList();
+                      return _getGallerySliverList();
                     case ListType.tag:
                       return _getTagQryList();
                     case ListType.init:
@@ -584,9 +584,28 @@ class _GallerySearchPageState extends State<GallerySearchPage> {
     );
   }
 
-  Widget _getGalleryList() {
+  Widget _getGallerySliverList() {
     return controller.obx(
       (List<GalleryItem>? state) {
+        if (state == null || state.isEmpty) {
+          return SliverFillRemaining(
+            child: Container(
+              alignment: Alignment.center,
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Icon(
+                    LineIcons.hippo,
+                    size: 100,
+                    color: CupertinoDynamicColor.resolve(
+                        CupertinoColors.systemGrey, context),
+                  ),
+                  Text(''),
+                ],
+              ),
+            ).autoCompressKeyboard(Get.context!),
+          );
+        }
         return getGallerySliverList(
           state,
           controller.tabIndex,
@@ -710,69 +729,72 @@ class SearchTextFieldIn extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return CupertinoTextField(
-      style: const TextStyle(height: 1.25),
-      decoration: BoxDecoration(
-        color: ehTheme.textFieldBackgroundColor!.withOpacity(0.6),
-        borderRadius: const BorderRadius.all(Radius.circular(8.0)),
-      ),
-      placeholder: L10n.of(context).search,
-      placeholderStyle: const TextStyle(
-        fontWeight: FontWeight.w400,
-        color: CupertinoColors.placeholderText,
-        height: 1.25,
-      ),
-      // clearButtonMode: OverlayVisibilityMode.editing,
-      prefix: CupertinoButton(
-        padding: const EdgeInsets.symmetric(horizontal: 4),
-        minSize: 0,
-        child: Icon(
-          LineIcons.search,
-          color: CupertinoColors.systemGrey.withOpacity(iconOpacity),
+    return Obx(() {
+      ehTheme.isDarkMode;
+      return CupertinoTextField(
+        style: const TextStyle(height: 1.25),
+        decoration: BoxDecoration(
+          color: ehTheme.textFieldBackgroundColor!.withOpacity(0.6),
+          borderRadius: const BorderRadius.all(Radius.circular(8.0)),
         ),
-        onPressed: () {},
-      ),
-      suffix: GetBuilder<SearchPageController>(
-        id: GetIds.SEARCH_CLEAR_BTN,
-        tag: searchPageCtrlDepth,
-        builder: (SearchPageController controller) {
-          return Row(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              if (controller.textIsGalleryUrl)
-                GestureDetector(
-                  onTap: controller.jumpToGallery,
-                  child: Icon(
-                    LineIcons.arrowCircleRight,
-                    size: 24.0,
-                    color: CupertinoDynamicColor.resolve(
-                            _kClearButtonColor, Get.context!)
-                        .withOpacity(iconOpacity),
-                  ).paddingSymmetric(horizontal: 6),
-                ),
-              if (controller.textIsNotEmpty)
-                GestureDetector(
-                  onTap: controller.clearText,
-                  child: Icon(
-                    LineIcons.timesCircle,
-                    size: 24.0,
-                    color: CupertinoDynamicColor.resolve(
-                            _kClearButtonColor, Get.context!)
-                        .withOpacity(iconOpacity),
-                  ).paddingSymmetric(horizontal: 6),
-                ),
-            ],
-          );
-        },
-      ),
-      padding: const EdgeInsetsDirectional.fromSTEB(0, 6, 5, 6),
-      controller: controller.searchTextController,
-      autofocus: controller.autofocus,
-      onEditingComplete: controller.onEditingComplete,
-      focusNode: controller.searchFocusNode,
-      maxLines: multiline ? null : 1,
-      textInputAction: TextInputAction.search,
-    );
+        placeholder: L10n.of(context).search,
+        placeholderStyle: const TextStyle(
+          fontWeight: FontWeight.w400,
+          color: CupertinoColors.placeholderText,
+          height: 1.25,
+        ),
+        // clearButtonMode: OverlayVisibilityMode.editing,
+        prefix: CupertinoButton(
+          padding: const EdgeInsets.symmetric(horizontal: 4),
+          minSize: 0,
+          child: Icon(
+            LineIcons.search,
+            color: CupertinoColors.systemGrey.withOpacity(iconOpacity),
+          ),
+          onPressed: () {},
+        ),
+        suffix: GetBuilder<SearchPageController>(
+          id: GetIds.SEARCH_CLEAR_BTN,
+          tag: searchPageCtrlDepth,
+          builder: (SearchPageController controller) {
+            return Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                if (controller.textIsGalleryUrl)
+                  GestureDetector(
+                    onTap: controller.jumpToGallery,
+                    child: Icon(
+                      LineIcons.arrowCircleRight,
+                      size: 24.0,
+                      color: CupertinoDynamicColor.resolve(
+                              _kClearButtonColor, Get.context!)
+                          .withOpacity(iconOpacity),
+                    ).paddingSymmetric(horizontal: 6),
+                  ),
+                if (controller.textIsNotEmpty)
+                  GestureDetector(
+                    onTap: controller.clearText,
+                    child: Icon(
+                      LineIcons.timesCircle,
+                      size: 24.0,
+                      color: CupertinoDynamicColor.resolve(
+                              _kClearButtonColor, Get.context!)
+                          .withOpacity(iconOpacity),
+                    ).paddingSymmetric(horizontal: 6),
+                  ),
+              ],
+            );
+          },
+        ),
+        padding: const EdgeInsetsDirectional.fromSTEB(0, 6, 5, 6),
+        controller: controller.searchTextController,
+        autofocus: controller.autofocus,
+        onEditingComplete: controller.onEditingComplete,
+        focusNode: controller.searchFocusNode,
+        maxLines: multiline ? null : 1,
+        textInputAction: TextInputAction.search,
+      );
+    });
   }
 }
 

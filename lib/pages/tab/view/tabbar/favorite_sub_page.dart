@@ -4,6 +4,7 @@ import 'package:fehviewer/pages/tab/controller/favorite_tabbar_controller.dart';
 import 'package:fehviewer/widget/refresh.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
+import 'package:line_icons/line_icons.dart';
 
 import '../../comm.dart';
 import '../constants.dart';
@@ -74,6 +75,25 @@ class _FavoriteSubPageState extends State<FavoriteSubPage>
   Widget _getGallerySliverList() {
     return _favoriteSubListController.obx(
         (List<GalleryItem>? state) {
+          if (state == null || state.isEmpty) {
+            return SliverFillRemaining(
+              child: Container(
+                alignment: Alignment.center,
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Icon(
+                      LineIcons.hippo,
+                      size: 100,
+                      color: CupertinoDynamicColor.resolve(
+                          CupertinoColors.systemGrey, context),
+                    ),
+                    Text(''),
+                  ],
+                ),
+              ).autoCompressKeyboard(Get.context!),
+            );
+          }
           return getGallerySliverList(
             state,
             _favoriteSubListController.heroTag,
