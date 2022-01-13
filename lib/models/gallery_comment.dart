@@ -14,6 +14,7 @@ class GalleryComment {
     this.canEdit,
     this.canVote,
     this.showTranslate,
+    this.scoreDetails,
   });
 
   final String name;
@@ -25,6 +26,7 @@ class GalleryComment {
   final bool? canEdit;
   final bool? canVote;
   final bool? showTranslate;
+  final List<String>? scoreDetails;
 
   factory GalleryComment.fromJson(Map<String,dynamic> json) => GalleryComment(
     name: json['name'] as String,
@@ -35,7 +37,8 @@ class GalleryComment {
     id: json['id'] != null ? json['id'] as String : null,
     canEdit: json['canEdit'] != null ? json['canEdit'] as bool : null,
     canVote: json['canVote'] != null ? json['canVote'] as bool : null,
-    showTranslate: json['showTranslate'] != null ? json['showTranslate'] as bool : null
+    showTranslate: json['showTranslate'] != null ? json['showTranslate'] as bool : null,
+    scoreDetails: json['scoreDetails'] != null ? (json['scoreDetails'] as List? ?? []).map((e) => e as String).toList() : null
   );
   
   Map<String, dynamic> toJson() => {
@@ -47,7 +50,8 @@ class GalleryComment {
     'id': id,
     'canEdit': canEdit,
     'canVote': canVote,
-    'showTranslate': showTranslate
+    'showTranslate': showTranslate,
+    'scoreDetails': scoreDetails?.map((e) => e.toString()).toList()
   };
 
   GalleryComment clone() => GalleryComment(
@@ -59,7 +63,8 @@ class GalleryComment {
     id: id,
     canEdit: canEdit,
     canVote: canVote,
-    showTranslate: showTranslate
+    showTranslate: showTranslate,
+    scoreDetails: scoreDetails?.toList()
   );
 
     
@@ -72,7 +77,8 @@ class GalleryComment {
     String? id,
     bool? canEdit,
     bool? canVote,
-    bool? showTranslate
+    bool? showTranslate,
+    List<String>? scoreDetails
   }) => GalleryComment(
     name: name ?? this.name,
     time: time ?? this.time,
@@ -83,12 +89,13 @@ class GalleryComment {
     canEdit: canEdit ?? this.canEdit,
     canVote: canVote ?? this.canVote,
     showTranslate: showTranslate ?? this.showTranslate,
+    scoreDetails: scoreDetails ?? this.scoreDetails,
   );  
 
   @override
   bool operator ==(Object other) => identical(this, other) 
-    || other is GalleryComment && name == other.name && time == other.time && span == other.span && score == other.score && vote == other.vote && id == other.id && canEdit == other.canEdit && canVote == other.canVote && showTranslate == other.showTranslate;
+    || other is GalleryComment && name == other.name && time == other.time && span == other.span && score == other.score && vote == other.vote && id == other.id && canEdit == other.canEdit && canVote == other.canVote && showTranslate == other.showTranslate && scoreDetails == other.scoreDetails;
 
   @override
-  int get hashCode => name.hashCode ^ time.hashCode ^ span.hashCode ^ score.hashCode ^ vote.hashCode ^ id.hashCode ^ canEdit.hashCode ^ canVote.hashCode ^ showTranslate.hashCode;
+  int get hashCode => name.hashCode ^ time.hashCode ^ span.hashCode ^ score.hashCode ^ vote.hashCode ^ id.hashCode ^ canEdit.hashCode ^ canVote.hashCode ^ showTranslate.hashCode ^ scoreDetails.hashCode;
 }
