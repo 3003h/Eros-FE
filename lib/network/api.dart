@@ -4,20 +4,13 @@ import 'dart:typed_data';
 
 import 'package:cookie_jar/cookie_jar.dart';
 import 'package:dio/dio.dart' as dio;
-import 'package:dio_http_cache/dio_http_cache.dart';
 import 'package:extended_image/extended_image.dart';
-import 'package:fehviewer/common/parser/eh_parser.dart';
-import 'package:fehviewer/common/service/dns_service.dart';
 import 'package:fehviewer/common/service/ehconfig_service.dart';
 import 'package:fehviewer/fehviewer.dart';
 import 'package:fehviewer/network/request.dart';
-import 'package:fehviewer/pages/gallery/controller/archiver_controller.dart';
-import 'package:fehviewer/pages/gallery/controller/torrent_controller.dart';
 import 'package:fehviewer/pages/setting/controller/eh_mysettings_controller.dart';
 import 'package:fehviewer/store/floor/entity/tag_translat.dart';
-import 'package:fehviewer/utils/dio_util.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter_cache_manager/flutter_cache_manager.dart';
 import 'package:get/get.dart' hide Response, FormData;
 import 'package:html_unescape/html_unescape.dart';
@@ -36,53 +29,12 @@ enum ProfileOpType {
 
 // ignore: avoid_classes_with_only_static_members
 class Api {
-  Api() {
-    final String _baseUrl =
-        EHConst.getBaseSite(Get.find<EhConfigService>().isSiteEx.value);
-  }
-
-  late String _baseUrl;
-
   static PersistCookieJar? _cookieJar;
 
   static Future<PersistCookieJar> get cookieJar async {
     _cookieJar ??=
         PersistCookieJar(storage: FileStorage(Global.appSupportPath));
     return _cookieJar!;
-  }
-
-  static HttpManager getHttpManager({
-    bool cache = true,
-    bool retry = false,
-    String? baseUrl,
-    int? connectTimeout,
-  }) {
-    final String _baseUrl =
-        EHConst.getBaseSite(Get.find<EhConfigService>().isSiteEx.value);
-    final bool df = Get.find<DnsService>().enableDomainFronting;
-
-    return HttpManager(
-      baseUrl ?? _baseUrl,
-      cache: cache,
-      connectTimeout: connectTimeout,
-      domainFronting: df,
-      retry: retry,
-    );
-  }
-
-  static dio.Options getCacheOptions(
-      {bool forceRefresh = false, dio.Options? options}) {
-    return buildCacheOptions(
-      const Duration(days: 5),
-      maxStale: const Duration(days: 7),
-      forceRefresh: forceRefresh,
-      options: options,
-    );
-
-    // return defCacheOptions
-    //     .copyWith(
-    //         policy: forceRefresh ? CachePolicy.refresh : CachePolicy.request)
-    //     .toOptions();
   }
 
   static String getBaseUrl({bool? isSiteEx}) {
@@ -103,84 +55,6 @@ class Api {
     final List<io.Cookie> _cookies =
         await (await cookieJar).loadForRequest(Uri.parse(getBaseUrl()));
     logger.v('${_cookies.map((e) => '$e').join('\n')} ');
-  }
-
-  // 获取TorrentToken
-  static Future<String> getTorrentToken(
-    String gid,
-    String gtoken, {
-    bool refresh = false,
-  }) async {
-    final String url = '${getBaseUrl()}/gallerytorrents.php';
-    final String response = await getHttpManager().get(url,
-            params: <String, dynamic>{
-              'gid': gid,
-              't': gtoken,
-            },
-            options: getCacheOptions(forceRefresh: refresh)) ??
-        '';
-    // logger.d('$response');
-    final RegExp rTorrentTk = RegExp(r'http://ehtracker.org/(\d{7})/announce');
-    final String torrentToken = rTorrentTk.firstMatch(response)?.group(1) ?? '';
-    return torrentToken;
-  }
-
-  // 获取 Torrent
-  static Future<TorrentProvider> getTorrent(
-    String url, {
-    bool refresh = true,
-  }) async {
-    final String response = await getHttpManager()
-            .get(url, options: getCacheOptions(forceRefresh: refresh)) ??
-        '';
-    // logger.d('$response');
-
-    return parseTorrent(response);
-  }
-
-  // 获取 Archiver
-  static Future<ArchiverProvider> getArchiver(
-    String url, {
-    bool refresh = true,
-  }) async {
-    final String response = await getHttpManager()
-            .get(url, options: getCacheOptions(forceRefresh: refresh)) ??
-        '';
-    // logger.d('$response');
-
-    return parseArchiver(response);
-  }
-
-  static Future<String> postArchiverRemoteDownload(
-    String url,
-    String resolution,
-  ) async {
-    final dio.Response response =
-        await getHttpManager(cache: false).postForm(url,
-            data: dio.FormData.fromMap({
-              'hathdl_xres': resolution.trim(),
-            }));
-    return parseArchiverDownload(response.data as String);
-  }
-
-  static Future<String> postArchiverLocalDownload(
-    String url, {
-    String? dltype,
-    String? dlcheck,
-  }) async {
-    final dio.Response response =
-        await getHttpManager(cache: false).postForm(url,
-            data: dio.FormData.fromMap({
-              if (dltype != null) 'dltype': dltype.trim(),
-              if (dlcheck != null) 'dlcheck': dlcheck.trim(),
-            }));
-    // logger.d('${response.data} ');
-    final String _href = RegExp(r'document.location = "(.+)"')
-            .firstMatch(response.data as String)
-            ?.group(1) ??
-        '';
-
-    return '$_href?start=1';
   }
 
   /// 通过api请求获取更多信息
@@ -214,12 +88,7 @@ class Api {
       Map reqMap = {'gidlist': _group[i], 'method': 'gdata'};
       final String reqJsonStr = jsonEncode(reqMap);
 
-      // logger.d(reqJsonStr);
-
-      // await CustomHttpsProxy.instance.init();
-      final rult = await getGalleryApi(reqJsonStr, refresh: refresh);
-
-      // logger.d('$rult');
+      final rult = await postEhApi(reqJsonStr);
 
       final jsonObj = jsonDecode(rult.toString());
       final tempList = jsonObj['gmetadata'] as List<dynamic>;
@@ -316,8 +185,7 @@ class Api {
     };
     final String reqJsonStr = jsonEncode(reqMap);
     logger.d('$reqJsonStr');
-    // await CustomHttpsProxy.instance.init();
-    final rult = await getGalleryApi(reqJsonStr, refresh: true, cache: false);
+    final rult = await postEhApi(reqJsonStr);
     logger.d('$rult');
     final Map<String, dynamic> rultMap =
         jsonDecode(rult.toString()) as Map<String, dynamic>;
@@ -342,11 +210,7 @@ class Api {
       'comment_vote': vote,
     };
     final String reqJsonStr = jsonEncode(reqMap);
-    // logger.d('$reqJsonStr');
-    // await CustomHttpsProxy.instance.init();
-    final rult = await getGalleryApi(reqJsonStr, refresh: true, cache: false);
-    // logger.d('$rult');
-    // final jsonObj = jsonDecode(rult.toString());
+    final rult = await postEhApi(reqJsonStr);
     return CommitVoteRes.fromJson(
         jsonDecode(rult.toString()) as Map<String, dynamic>);
   }
@@ -370,7 +234,7 @@ class Api {
       'vote': vote,
     };
     final String reqJsonStr = jsonEncode(reqMap);
-    final rult = await getGalleryApi(reqJsonStr, refresh: true, cache: false);
+    final rult = await postEhApi(reqJsonStr);
     logger.d('$rult');
     final Map<String, dynamic> rultMap =
         jsonDecode(rult.toString()) as Map<String, dynamic>;
@@ -386,9 +250,7 @@ class Api {
       'text': text,
     };
     final String reqJsonStr = jsonEncode(reqMap);
-    // logger.d('$reqJsonStr ');
-    final rult = await getGalleryApi(reqJsonStr, refresh: true, cache: false);
-    // logger.d('$rult');
+    final rult = await postEhApi(reqJsonStr);
     final Map<String, dynamic> rultMap =
         jsonDecode(rult.toString()) as Map<String, dynamic>;
     final Map<String, dynamic> tagMap = rultMap['tags'] as Map<String, dynamic>;
@@ -400,46 +262,7 @@ class Api {
             TagTranslat(namespace: e['ns'] as String, key: e['tn'] as String))
         .toList();
 
-    // logger.d('$tagTranslateList');
     return tagTranslateList;
-  }
-
-  static Future<bool> operatorProfile({
-    required ProfileOpType type,
-    String? pName,
-    int? set,
-  }) async {
-    final String url = '${getBaseUrl()}/uconfig.php';
-
-    showCookie();
-
-    Map actionMap = {
-      ProfileOpType.select: '',
-      ProfileOpType.create: 'create',
-      ProfileOpType.delete: 'delete'
-    };
-
-    try {
-      final dio.Response response = await getHttpManager(cache: false).postForm(
-        url,
-        data: dio.FormData.fromMap({
-          'profile_action': actionMap[type],
-          'profile_name': pName ?? '',
-          'profile_set': set ?? ''
-        }),
-        options: dio.Options(
-            followRedirects: false,
-            validateStatus: (int? status) {
-              return (status ?? 0) < 500;
-            }),
-      );
-
-      logger.d('${response.statusCode}');
-      return response.statusCode == 302;
-    } catch (e, stack) {
-      logger.e('$e\n$stack');
-      rethrow;
-    }
   }
 
   static Future<bool?> selEhProfile() async {
@@ -459,26 +282,16 @@ class Api {
 
   /// 选用feh单独的profile 没有就新建
   static Future<bool?> _selEhProfile() async {
-    final String url = '${getBaseUrl()}/uconfig.php';
-
     // 不能带_
     const kProfileName = 'FEhViewer';
 
-    final String? response = await getHttpManager(cache: false).get(url);
-    // final String? response = await getHttpManager().get(url);
+    final uconfig = await getEhSettings(refresh: true);
 
-    // logger.d('$response');
+    final List<EhProfile> ehProfiles = uconfig?.profilelist ?? [];
 
-    if (response == null || response.isEmpty) {
-      logger.e('response isEmpty');
-      return false;
+    if (uconfig != null) {
+      Get.find<EhMySettingsController>().ehSetting = uconfig;
     }
-
-    // final uconfig = parseUconfig(response);
-    final uconfig = await compute(parseUconfig, response);
-    final List<EhProfile> ehProfiles = uconfig.profilelist;
-
-    Get.find<EhMySettingsController>().ehSetting = uconfig;
 
     final fepIndex =
         ehProfiles.indexWhere((element) => element.name == kProfileName);
@@ -496,14 +309,14 @@ class Api {
           'exist profile name [$kProfileName] but not selected, select it...');
       final fEhProfile = ehProfiles[fepIndex];
       await cleanCookie('sp');
-      // await setCookie('sp', '1');
-      await operatorProfile(type: ProfileOpType.select, set: fEhProfile.value);
+      // await operatorProfile(type: ProfileOpType.select, set: fEhProfile.value);
+      await changeEhProfile('${fEhProfile.value}');
       showCookie();
       return true;
     } else if (ehProfiles.isNotEmpty) {
       // create 完成后会自动set_cookie sp为新建的sp
       logger.d('create new profile');
-      await operatorProfile(type: ProfileOpType.create, pName: kProfileName);
+      await createEhProfile(kProfileName);
       showCookie();
       return true;
     }
@@ -528,27 +341,6 @@ class Api {
     final List<GalleryItem> reqGalleryItems = <GalleryItem>[tempGalleryItem];
 
     return (await getMoreGalleryInfo(reqGalleryItems, refresh: refresh)).first;
-  }
-
-  /// 获取api
-  static Future getGalleryApi(
-    String req, {
-    bool refresh = false,
-    bool cache = true,
-  }) async {
-    const String url = '/api.php';
-
-    // await CustomHttpsProxy.instance.init();
-    final response = await getHttpManager(
-      cache: cache,
-      // baseUrl: EHConst.getBaseSite(),
-    ).postForm(
-      url,
-      data: req,
-      options: getCacheOptions(forceRefresh: refresh),
-    );
-
-    return response;
   }
 
   static Future<void> shareImageExtended({
@@ -782,8 +574,6 @@ class Api {
       'Cookie': cookie,
     });
 
-//    logger.v('href = $href');
-
     final RegExp regExp =
         RegExp(r'https://e[-x]hentai.org/s/([0-9a-z]+)/(\d+)-(\d+)');
     final RegExpMatch? regRult = regExp.firstMatch(href);
@@ -800,32 +590,7 @@ class Api {
     };
     final String reqJsonStr = jsonEncode(reqMap);
 
-    // logger.d('$reqJsonStr');
-
-    final dio.Options _cacheOptinos = buildCacheOptions(
-      const Duration(days: 1),
-      maxStale: const Duration(minutes: 1),
-      options: options,
-      subKey: reqJsonStr,
-    );
-
-    // final dio.Options _cacheOptinos = defCacheOptions
-    //     .copyWith(
-    //         maxStale: const Duration(days: 1),
-    //         keyBuilder: (RequestOptions request) {
-    //           return const Uuid().v5(Uuid.NAMESPACE_URL,
-    //               '${request.uri.toString()}${request.data.toString()}');
-    //         })
-    //     .toOptions();
-
-    // await CustomHttpsProxy.instance.init();
-    final dio.Response<dynamic> response = await Api.getHttpManager().postForm(
-      url,
-      options: _cacheOptinos,
-      data: reqJsonStr,
-    );
-
-    // logger.d('$response');
+    final response = await postEhApi(reqJsonStr);
 
     final dynamic rultJson = jsonDecode('$response');
 

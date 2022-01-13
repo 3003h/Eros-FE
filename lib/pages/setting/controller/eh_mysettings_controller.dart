@@ -27,7 +27,7 @@ class EhMySettingsController extends GetxController {
   Future<EhSettings?> loadData({bool refresh = false}) async {
     final selectedProfile = await getCookieValue('sp');
     try {
-      final uconfig = await getUconfig(
+      final uconfig = await getEhSettings(
         refresh: refresh || Global.forceRefreshUconfig,
         selectProfile: selectedProfile,
       );

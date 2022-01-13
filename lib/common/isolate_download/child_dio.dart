@@ -178,7 +178,7 @@ Future<List<GalleryImage>> _isoFetchGalleryImage(
   Response<String> response;
   try {
     response = await _isolateDio.get<String>(url,
-        options: Api.getCacheOptions(forceRefresh: refresh),
+        // options: Api.getCacheOptions(forceRefresh: refresh),
         cancelToken: cancelToken);
   } on DioError catch (e, stack) {
     logger.e('getHttp exception: $e\n$stack');
@@ -209,8 +209,10 @@ Future<GalleryImage> _isoParaImageLageInfoFromHtml(
 
   Response<String> response;
   try {
-    response = await _isolateDio.get<String>(url,
-        options: Api.getCacheOptions(forceRefresh: refresh));
+    response = await _isolateDio.get<String>(
+      url,
+      // options: Api.getCacheOptions(forceRefresh: refresh),
+    );
   } on DioError catch (e, stack) {
     // logger.e('getHttp exception: $e\n$stack');
     rethrow;

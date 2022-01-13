@@ -10,7 +10,7 @@ import 'package:fehviewer/const/storages.dart';
 import 'package:fehviewer/models/index.dart';
 import 'package:fehviewer/models/profile.dart';
 import 'package:fehviewer/network/app_dio/http_config.dart';
-import 'package:fehviewer/network/gallery_request.dart';
+import 'package:fehviewer/network/api.dart';
 import 'package:fehviewer/store/floor/database.dart';
 import 'package:fehviewer/store/get_store.dart';
 import 'package:fehviewer/store/hive/hive.dart';

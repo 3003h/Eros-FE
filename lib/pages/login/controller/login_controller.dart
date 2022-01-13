@@ -5,7 +5,7 @@ import 'package:cookie_jar/cookie_jar.dart';
 import 'package:fehviewer/common/controller/user_controller.dart';
 import 'package:fehviewer/component/exception/error.dart';
 import 'package:fehviewer/fehviewer.dart';
-import 'package:fehviewer/network/gallery_request.dart';
+import 'package:fehviewer/network/api.dart';
 import 'package:fehviewer/network/request.dart';
 import 'package:fehviewer/pages/login/view/login_cookie.dart';
 import 'package:flutter/cupertino.dart';

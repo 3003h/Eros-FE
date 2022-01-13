@@ -2,7 +2,7 @@ import 'dart:async';
 
 import 'package:fehviewer/common/service/depth_service.dart';
 import 'package:fehviewer/fehviewer.dart';
-import 'package:fehviewer/network/gallery_request.dart';
+import 'package:fehviewer/network/api.dart';
 import 'package:fehviewer/network/request.dart';
 import 'package:fehviewer/utils/openl/translator_helper.dart';
 import 'package:flutter/cupertino.dart';

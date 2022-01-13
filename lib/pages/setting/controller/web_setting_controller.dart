@@ -1,7 +1,7 @@
 import 'dart:io' as io;
 
 import 'package:fehviewer/common/global.dart';
-import 'package:fehviewer/network/gallery_request.dart';
+import 'package:fehviewer/network/api.dart';
 import 'package:fehviewer/utils/logger.dart';
 import 'package:flutter_inappwebview/flutter_inappwebview.dart';
 import 'package:get/get.dart';

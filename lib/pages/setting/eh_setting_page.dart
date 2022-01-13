@@ -6,8 +6,8 @@ import 'package:fehviewer/common/service/layout_service.dart';
 import 'package:fehviewer/common/service/locale_service.dart';
 import 'package:fehviewer/common/service/theme_service.dart';
 import 'package:fehviewer/fehviewer.dart';
-import 'package:fehviewer/network/eh_login.dart';
-import 'package:fehviewer/network/gallery_request.dart';
+import 'package:fehviewer/network/api.dart';
+import 'package:fehviewer/network/request.dart';
 import 'package:fehviewer/pages/setting/setting_items/selector_Item.dart';
 import 'package:fehviewer/pages/setting/webview/mytags_in.dart';
 import 'package:flutter/cupertino.dart';
@@ -62,7 +62,7 @@ class ListViewEhSetting extends StatelessWidget {
       _ehConfigService.isSiteEx(newValue);
       Global.forceRefreshUconfig = true;
       if (newValue) {
-        EhUserManager().getExIgneous();
+        getExIgneous();
       }
       Api.selEhProfile();
     }

@@ -7,7 +7,7 @@ import 'package:fehviewer/common/isolate_download/download_manager.dart';
 import 'package:fehviewer/common/service/theme_service.dart';
 import 'package:fehviewer/const/theme_colors.dart';
 import 'package:fehviewer/generated/l10n.dart';
-import 'package:fehviewer/network/gallery_request.dart';
+import 'package:fehviewer/network/api.dart';
 import 'package:fehviewer/pages/tab/controller/download_view_controller.dart';
 import 'package:fehviewer/route/navigator_util.dart';
 import 'package:fehviewer/store/floor/entity/gallery_image_task.dart';
