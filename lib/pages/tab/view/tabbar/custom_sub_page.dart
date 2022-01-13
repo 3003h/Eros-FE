@@ -5,6 +5,7 @@ import 'package:fehviewer/pages/tab/controller/tabbar/custom_sublist_controller.
 import 'package:fehviewer/pages/tab/controller/tabview_controller.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
+import 'package:line_icons/line_icons.dart';
 
 import '../../comm.dart';
 import '../../controller/tabbar/custom_tabbar_controller.dart';
@@ -83,6 +84,25 @@ class _SubListViewState<T extends CustomSubListController>
   Widget _getGallerySliverList() {
     return subController.obx(
         (List<GalleryItem>? state) {
+          if (state == null || state.isEmpty) {
+            return SliverFillRemaining(
+              child: Container(
+                alignment: Alignment.center,
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Icon(
+                      LineIcons.hippo,
+                      size: 100,
+                      color: CupertinoDynamicColor.resolve(
+                          CupertinoColors.systemGrey, context),
+                    ),
+                    Text(''),
+                  ],
+                ),
+              ).autoCompressKeyboard(Get.context!),
+            );
+          }
           return getGallerySliverList(
             state,
             subController.heroTag,
