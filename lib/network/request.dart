@@ -7,14 +7,12 @@ import 'package:dio_http_cache/dio_http_cache.dart';
 import 'package:fehviewer/common/controller/advance_search_controller.dart';
 import 'package:fehviewer/common/controller/user_controller.dart';
 import 'package:fehviewer/common/parser/eh_parser.dart';
+import 'package:fehviewer/common/service/ehconfig_service.dart';
 import 'package:fehviewer/component/exception/error.dart';
 import 'package:fehviewer/fehviewer.dart';
-import 'package:fehviewer/common/parser/gallery_detail_parser.dart';
-import 'package:fehviewer/common/service/ehconfig_service.dart';
 import 'package:fehviewer/pages/gallery/controller/archiver_controller.dart';
 import 'package:fehviewer/pages/gallery/controller/torrent_controller.dart';
 import 'package:fehviewer/pages/tab/fetch_list.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:get/get.dart' hide FormData, Response;
 

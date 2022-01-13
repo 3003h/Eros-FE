@@ -15,6 +15,7 @@ import 'package:fehviewer/widget/eh_network_image.dart';
 import 'package:fehviewer/widget/expandable_linkify.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart' hide SelectableText;
+import 'package:flutter_inappwebview/flutter_inappwebview.dart';
 import 'package:flutter_linkify/flutter_linkify.dart' as clif;
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
@@ -362,163 +363,170 @@ class CommentItem extends StatelessWidget {
         tag: pageCtrlDepth,
         id: galleryComment.id ?? 'None',
         builder: (CommentController _commentController) {
-          return Container(
-            margin: const EdgeInsets.only(top: 8),
-            child: ClipRRect(
-              // 圆角
-              borderRadius: BorderRadius.circular(10),
-              child: Container(
-                color: _ehConfigService.isPureDarkTheme.value
-                    ? CupertinoDynamicColor.resolve(
-                        ThemeColors.commitBackground, context)
-                    : CupertinoDynamicColor.resolve(
-                        ThemeColors.commitBackgroundGray, context),
-                padding: const EdgeInsets.all(8),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: <Widget>[
-                    Row(
-                      children: <Widget>[
-                        _buildUsername(context),
-                        const Spacer(),
-                        CupertinoTheme(
-                          data: const CupertinoThemeData(
-                              primaryColor: ThemeColors.commitText),
-                          child: Row(
-                            children: <Widget>[
-                              // 翻译
-                              if (_ehConfigService.commentTrans.value)
-                                CupertinoTheme(
-                                  data: ehTheme.themeData!,
-                                  child: TranslateButton(
-                                    galleryComment: galleryComment,
-                                    commentController: _commentController,
-                                  ),
-                                ),
-                              // 点赞
-                              if (galleryComment.canVote ?? false)
-                                CupertinoButton(
-                                  padding: const EdgeInsets.symmetric(
-                                      horizontal: 12),
-                                  minSize: 0,
-                                  child: Icon(
-                                    galleryComment.vote! > 0
-                                        ? FontAwesomeIcons.solidThumbsUp
-                                        : FontAwesomeIcons.thumbsUp,
-                                    size: galleryComment.vote! > 0
-                                        ? kSizeVote
-                                        : kSizeNotVote,
-                                    color: CupertinoDynamicColor.resolve(
-                                      ThemeColors.commitText,
-                                      context,
+          return GestureDetector(
+            onLongPress: () =>
+                _showScoreDeatil(galleryComment.scoreDetails, context),
+            child: Container(
+              margin: const EdgeInsets.only(top: 8),
+              child: ClipRRect(
+                // 圆角
+                borderRadius: BorderRadius.circular(10),
+                child: Container(
+                  color: _ehConfigService.isPureDarkTheme.value
+                      ? CupertinoDynamicColor.resolve(
+                          ThemeColors.commitBackground, context)
+                      : CupertinoDynamicColor.resolve(
+                          ThemeColors.commitBackgroundGray, context),
+                  padding: const EdgeInsets.all(8),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: <Widget>[
+                      Row(
+                        children: <Widget>[
+                          _buildUsername(context),
+                          const Spacer(),
+                          CupertinoTheme(
+                            data: const CupertinoThemeData(
+                                primaryColor: ThemeColors.commitText),
+                            child: Row(
+                              children: <Widget>[
+                                // 翻译
+                                if (_ehConfigService.commentTrans.value)
+                                  CupertinoTheme(
+                                    data: ehTheme.themeData!,
+                                    child: TranslateButton(
+                                      galleryComment: galleryComment,
+                                      commentController: _commentController,
                                     ),
                                   ),
-                                  onPressed: () {
-                                    vibrateUtil.light();
-                                    logger.i('vote up ${galleryComment.id}');
-                                    _commentController
-                                        .commitVoteUp(galleryComment.id!);
-                                  },
-                                ),
-                              // 点踩
-                              if (galleryComment.canVote ?? false)
-                                CupertinoButton(
-                                  padding: const EdgeInsets.symmetric(
-                                      horizontal: 12),
-                                  minSize: 0,
-                                  child: Icon(
-                                    galleryComment.vote! < 0
-                                        ? FontAwesomeIcons.solidThumbsDown
-                                        : FontAwesomeIcons.thumbsDown,
-                                    size: galleryComment.vote! < 0
-                                        ? kSizeVote
-                                        : kSizeNotVote,
-                                    color: CupertinoDynamicColor.resolve(
-                                      ThemeColors.commitText,
-                                      context,
+                                // 点赞
+                                if (galleryComment.canVote ?? false)
+                                  CupertinoButton(
+                                    padding: const EdgeInsets.symmetric(
+                                        horizontal: 12),
+                                    minSize: 0,
+                                    child: Icon(
+                                      galleryComment.vote! > 0
+                                          ? FontAwesomeIcons.solidThumbsUp
+                                          : FontAwesomeIcons.thumbsUp,
+                                      size: galleryComment.vote! > 0
+                                          ? kSizeVote
+                                          : kSizeNotVote,
+                                      color: CupertinoDynamicColor.resolve(
+                                        ThemeColors.commitText,
+                                        context,
+                                      ),
                                     ),
+                                    onPressed: () {
+                                      vibrateUtil.light();
+                                      logger.i('vote up ${galleryComment.id}');
+                                      _commentController
+                                          .commitVoteUp(galleryComment.id!);
+                                    },
                                   ),
-                                  onPressed: () {
-                                    vibrateUtil.light();
-                                    logger.i('vote down ${galleryComment.id}');
-                                    _commentController
-                                        .commitVoteDown(galleryComment.id!);
-                                  },
-                                ),
-                              // 编辑回复
-                              if ((galleryComment.canEdit ?? false) && !simple)
-                                CupertinoButton(
-                                  padding: const EdgeInsets.symmetric(
-                                      horizontal: 12),
-                                  minSize: 0,
-                                  child: Icon(
-                                    FontAwesomeIcons.edit,
-                                    size: kSizeNotVote,
-                                    color: CupertinoDynamicColor.resolve(
-                                      ThemeColors.commitText,
-                                      context,
+                                // 点踩
+                                if (galleryComment.canVote ?? false)
+                                  CupertinoButton(
+                                    padding: const EdgeInsets.symmetric(
+                                        horizontal: 12),
+                                    minSize: 0,
+                                    child: Icon(
+                                      galleryComment.vote! < 0
+                                          ? FontAwesomeIcons.solidThumbsDown
+                                          : FontAwesomeIcons.thumbsDown,
+                                      size: galleryComment.vote! < 0
+                                          ? kSizeVote
+                                          : kSizeNotVote,
+                                      color: CupertinoDynamicColor.resolve(
+                                        ThemeColors.commitText,
+                                        context,
+                                      ),
                                     ),
+                                    onPressed: () {
+                                      vibrateUtil.light();
+                                      logger
+                                          .i('vote down ${galleryComment.id}');
+                                      _commentController
+                                          .commitVoteDown(galleryComment.id!);
+                                    },
                                   ),
-                                  onPressed: () {
-                                    vibrateUtil.light();
-                                    logger.i('edit ${galleryComment.id}');
-                                    _commentController.editComment(
-                                      id: galleryComment.id!,
-                                      oriComment: galleryComment.text,
-                                    );
-                                  },
-                                ),
-                            ],
-                          ),
-                        ),
-                        // 分值
-                        if (galleryComment.score.isNotEmpty)
-                          Padding(
-                            padding: const EdgeInsets.only(left: 8.0, right: 4),
-                            child: Icon(
-                              FontAwesomeIcons.adjust,
-                              size: kSizeNotVote - 1,
-                              color: CupertinoDynamicColor.resolve(
-                                ThemeColors.commitText,
-                                context,
-                              ),
+                                // 编辑回复
+                                if ((galleryComment.canEdit ?? false) &&
+                                    !simple)
+                                  CupertinoButton(
+                                    padding: const EdgeInsets.symmetric(
+                                        horizontal: 12),
+                                    minSize: 0,
+                                    child: Icon(
+                                      FontAwesomeIcons.edit,
+                                      size: kSizeNotVote,
+                                      color: CupertinoDynamicColor.resolve(
+                                        ThemeColors.commitText,
+                                        context,
+                                      ),
+                                    ),
+                                    onPressed: () {
+                                      vibrateUtil.light();
+                                      logger.i('edit ${galleryComment.id}');
+                                      _commentController.editComment(
+                                        id: galleryComment.id!,
+                                        oriComment: galleryComment.text,
+                                      );
+                                    },
+                                  ),
+                              ],
                             ),
                           ),
-                        Text(
-                          galleryComment.score.startsWith('+')
-                              ? '+${galleryComment.score.substring(1)}'
-                              : galleryComment.score.startsWith('-')
-                                  ? galleryComment.score
-                                  : '+${galleryComment.score}',
-                          style: TextStyle(
-                            fontSize: 12,
-                            fontWeight: FontWeight.normal,
-                            color: CupertinoDynamicColor.resolve(
-                                ThemeColors.commitText, context),
+                          // 分值
+                          if (galleryComment.score.isNotEmpty)
+                            Padding(
+                              padding:
+                                  const EdgeInsets.only(left: 8.0, right: 4),
+                              child: Icon(
+                                FontAwesomeIcons.adjust,
+                                size: kSizeNotVote - 1,
+                                color: CupertinoDynamicColor.resolve(
+                                  ThemeColors.commitText,
+                                  context,
+                                ),
+                              ),
+                            ),
+                          Text(
+                            galleryComment.score.startsWith('+')
+                                ? '+${galleryComment.score.substring(1)}'
+                                : galleryComment.score.startsWith('-')
+                                    ? galleryComment.score
+                                    : '+${galleryComment.score}',
+                            style: TextStyle(
+                              fontSize: 12,
+                              fontWeight: FontWeight.normal,
+                              color: CupertinoDynamicColor.resolve(
+                                  ThemeColors.commitText, context),
+                            ),
                           ),
-                        ),
-                      ],
-                    ),
-                    Container(
-                      padding: const EdgeInsets.fromLTRB(0, 4, 0, 8),
-                      child: simple
-                          ? _simpleExpTextLinkify(
-                              showTranslate:
-                                  galleryComment.showTranslate ?? false)
-                          : _fullTextCustMergeText(galleryComment.span,
-                              showTranslate:
-                                  galleryComment.showTranslate ?? false),
-                    ),
-                    Text(
-                      galleryComment.time,
-                      style: TextStyle(
-                        fontSize: 11,
-                        fontWeight: FontWeight.w600,
-                        color: CupertinoDynamicColor.resolve(
-                            ThemeColors.commitText, context),
+                        ],
                       ),
-                    ),
-                  ],
+                      Container(
+                        padding: const EdgeInsets.fromLTRB(0, 4, 0, 8),
+                        child: simple
+                            ? _simpleExpTextLinkify(
+                                showTranslate:
+                                    galleryComment.showTranslate ?? false)
+                            : _fullTextCustMergeText(galleryComment.span,
+                                showTranslate:
+                                    galleryComment.showTranslate ?? false),
+                      ),
+                      Text(
+                        galleryComment.time,
+                        style: TextStyle(
+                          fontSize: 11,
+                          fontWeight: FontWeight.w600,
+                          color: CupertinoDynamicColor.resolve(
+                              ThemeColors.commitText, context),
+                        ),
+                      ),
+                    ],
+                  ),
                 ),
               ),
             ),
@@ -569,6 +577,32 @@ class CommentItem extends StatelessWidget {
     } else {
       throw 'Could not launch $_openUrl';
     }
+  }
+
+  void _showScoreDeatil(List<String>? scoreDeatils, BuildContext context) {
+    if (scoreDeatils == null || scoreDeatils.isEmpty) {
+      return;
+    }
+    vibrateUtil.light();
+    logger.d(scoreDeatils.join('   '));
+    showCupertinoDialog(
+      context: context,
+      barrierDismissible: true,
+      builder: (context) => CupertinoAlertDialog(
+        content: Container(
+            child: Column(
+          children: scoreDeatils
+              .map((e) => Container(
+                    padding: const EdgeInsets.symmetric(vertical: 4.0),
+                    child: Text(
+                      e,
+                      style: const TextStyle(fontSize: 14),
+                    ),
+                  ))
+              .toList(),
+        )),
+      ),
+    );
   }
 }
 

@@ -1,7 +1,6 @@
 import 'package:fehviewer/common/controller/tag_trans_controller.dart';
 import 'package:fehviewer/const/const.dart';
 import 'package:fehviewer/models/base/eh_models.dart';
-// import 'package:fehviewer/utils/logger.dart';
 import 'package:get/get.dart' hide Node;
 import 'package:html/dom.dart';
 import 'package:html/parser.dart' show parse;
@@ -14,6 +13,7 @@ String parseErrGallery(String response) {
   return msg;
 }
 
+// 评论解析
 List<GalleryComment> parseGalleryComment(Document document) {
   // 全部评论数据
   final List<GalleryComment> _galleryComment = [];
@@ -67,8 +67,6 @@ List<GalleryComment> parseGalleryComment(Document document) {
           _id = RegExp(r'\((\d+)\)').firstMatch(_handText)?.group(1) ?? '';
           _canEdit = _handText.contains('edit_');
           _canVote = _handText.contains('vote_');
-          // logger.d(
-          //     '$_handText\nid:$_id \n_canEdit:$_canEdit \n_canVote:$_canVote');
         }
 
         if (_c4.children.length > 1) {
@@ -76,7 +74,6 @@ List<GalleryComment> parseGalleryComment(Document document) {
           final Element _vDown = _c4.children.elementAt(1);
           final String _vUpStyle = _vUp.attributes['style'] ?? '';
           final String _vDownStyle = _vDown.attributes['style'] ?? '';
-          // logger.d('id $_id \n$_vUpStyle \n$_vDownStyle');
           if (_vUpStyle.isNotEmpty) {
             _vote = 1;
           }
@@ -103,7 +100,6 @@ List<GalleryComment> parseGalleryComment(Document document) {
           // 如果数组最后一个是纯文本 直接追加文本
           if (commentSpansf.isNotEmpty &&
               (commentSpansf.last.sType == CommentSpanType.text)) {
-            // commentSpansf.last.text += _nodeText;
             commentSpansf.last = commentSpansf.last
                 .copyWith(text: '${commentSpansf.last.text ?? ''}$_nodeText');
           } else {
@@ -116,13 +112,9 @@ List<GalleryComment> parseGalleryComment(Document document) {
             // 如果数组最后一个是纯文本 直接追加文本
             if (commentSpansf.isNotEmpty &&
                 (commentSpansf.last.sType == CommentSpanType.text)) {
-              // commentSpansf.last.text += '\n';
               commentSpansf.last = commentSpansf.last
                   .copyWith(text: '${commentSpansf.last.text ?? ''}\n');
             } else {
-              // commentSpansf.add(GalleryCommentSpan()
-              //   ..text = '\n'
-              //   ..sType = CommentSpanType.text);
               commentSpansf.add(const GalleryCommentSpan(text: '\n')
                   .copyWithSpanType(CommentSpanType.text));
             }
@@ -190,15 +182,23 @@ List<GalleryComment> parseGalleryComment(Document document) {
         }
       }
 
+      // 解析评论评分
+      final Element? scoresElem = comment.querySelector('div.c7');
+      final spanElms = scoresElem?.querySelectorAll('span') ?? [];
+      final _scoreDetails = spanElms.map((e) => e.text).toList();
+      // print('$_scoreDetails');
+
       _galleryComment.add(GalleryComment(
-          id: _id,
-          canEdit: _canEdit,
-          canVote: _canVote,
-          vote: _vote,
-          name: postName,
-          span: commentSpansf,
-          time: postTimeLocal,
-          score: score));
+        id: _id,
+        canEdit: _canEdit,
+        canVote: _canVote,
+        vote: _vote,
+        name: postName,
+        span: commentSpansf,
+        time: postTimeLocal,
+        score: score,
+        scoreDetails: _scoreDetails,
+      ));
     } catch (e, stack) {
       // logger.e('解析评论异常\n' + e.toString() + '\n' + stack.toString());
     }
@@ -299,11 +299,7 @@ Future<GalleryItem> parseGalleryDetail(String response) async {
 
 // 20201230 Archiver link
   final String or = RegExp(r"or=(.*?)'").firstMatch(response)?.group(1) ?? '';
-// logger.d('or=$or');
-//   final _archiverLink =
-//       '${Api.getBaseUrl()}/archiver.php?gid=${galleryItem.gid}&token=${galleryItem.token}&or=$or';
   final _archiverLink = or;
-// logger.d('archiverLink: ${galleryItem.archiverLink}');
 
   final Element? _ratingImage = document.querySelector('#rating_image');
   final String _ratingImageClass = _ratingImage?.attributes['class'] ?? '';
