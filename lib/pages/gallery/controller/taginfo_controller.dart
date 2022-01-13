@@ -4,7 +4,7 @@ import 'package:fehviewer/common/service/ehconfig_service.dart';
 import 'package:fehviewer/const/const.dart';
 import 'package:fehviewer/generated/l10n.dart';
 import 'package:fehviewer/models/base/eh_models.dart';
-import 'package:fehviewer/network/gallery_request.dart';
+import 'package:fehviewer/network/api.dart';
 import 'package:fehviewer/store/floor/entity/tag_translat.dart';
 import 'package:fehviewer/utils/logger.dart';
 import 'package:fehviewer/utils/toast.dart';

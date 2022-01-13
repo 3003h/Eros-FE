@@ -4,10 +4,8 @@ import 'package:fehviewer/models/base/eh_models.dart';
 import 'package:html/dom.dart';
 import 'package:html/parser.dart' show parse;
 
-EhSettings parseUconfig(String html) {
+EhSettings parseEhSettings(String html) {
   final profileSet = <EhProfile>[];
-  // initLogger();
-  // print(html);
 
   final Document document = parse(html);
 

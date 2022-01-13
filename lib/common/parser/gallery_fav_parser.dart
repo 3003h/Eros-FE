@@ -1,50 +1,9 @@
-import 'package:dio/dio.dart';
-import 'package:fehviewer/common/global.dart';
 import 'package:fehviewer/models/base/eh_models.dart';
-import 'package:fehviewer/network/gallery_request.dart';
-import 'package:fehviewer/utils/dio_util.dart';
 import 'package:fehviewer/utils/logger.dart';
-import 'package:fehviewer/utils/utility.dart';
 import 'package:html/dom.dart';
 import 'package:html/parser.dart' show parse;
 
 class GalleryFavParser {
-  /// 收藏操作
-  static Future<void> galleryAddfavorite(String gid, String token,
-      {String favcat = 'favdel', String favnote = ''}) async {
-    final HttpManager httpManager = Api.getHttpManager(cache: false);
-
-    final String url = '/gallerypopups.php?gid=$gid&t=$token&act=addfav';
-
-    final Options _cacheOptions = Api.getCacheOptions(forceRefresh: true);
-
-    final FormData formData =
-        FormData.fromMap({'favcat': favcat, 'update': '1'});
-
-    final Response response = await httpManager.postForm(
-      url,
-      options: _cacheOptions,
-      data: formData,
-    );
-
-    saveFavcatToProfile(gid, token);
-  }
-
-  static Future<List<Favcat>> gallerySelfavcat(String gid, String token) async {
-    final HttpManager httpManager = Api.getHttpManager(cache: false);
-
-    final String url = '/gallerypopups.php?gid=$gid&t=$token&act=addfav';
-
-    final Options _cacheOptions = Api.getCacheOptions(forceRefresh: true);
-
-    final String? response = await httpManager.get(
-      url,
-      options: _cacheOptions,
-    );
-
-    return parserAddFavPage(response);
-  }
-
   static List<Favcat> parserAddFavPage(String? response) {
     // 解析响应信息dom
     final Document document = parse(response);
@@ -64,33 +23,5 @@ class GalleryFavParser {
     }
 
     return favList.sublist(0, 10);
-  }
-
-  static Future<List<Favcat>> getFavcat({
-    String? gid,
-    String? token,
-    bool cache = true,
-  }) async {
-    // profile为空或者cache标志否
-    if (Global.profile.user.favcat == null ||
-        Global.profile.user.favcat!.isEmpty ||
-        !cache) {
-      if (gid != null && gid.isNotEmpty && token != null && token.isNotEmpty) {
-        // Global.profile.user.favcat = await gallerySelfavcat(gid, token);
-        final favcat = await gallerySelfavcat(gid, token);
-        Global.profile = Global.profile
-            .copyWith(user: Global.profile.user.copyWith(favcat: favcat));
-      }
-    }
-
-    final List<Favcat> favcatList = EHUtils.getFavListFromProfile();
-    return Future<List<Favcat>>.value(favcatList);
-  }
-
-  static Future<void> saveFavcatToProfile(String gid, String token) async {
-    // Global.profile.user.favcat = await gallerySelfavcat(gid, token);
-    final favcat = await gallerySelfavcat(gid, token);
-    Global.profile = Global.profile
-        .copyWith(user: Global.profile.user.copyWith(favcat: favcat));
   }
 }

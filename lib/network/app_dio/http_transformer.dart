@@ -226,20 +226,20 @@ class GalleryImageListHttpTransformer extends HttpTransformer {
   }
 }
 
-class GalleryArchiverHttpTransformer extends HttpTransformer {
-  factory GalleryArchiverHttpTransformer() => _instance;
-  GalleryArchiverHttpTransformer._internal();
-  static late final GalleryArchiverHttpTransformer _instance =
-      GalleryArchiverHttpTransformer._internal();
-
-  @override
-  FutureOr<DioHttpResponse<ArchiverProvider>> parse(
-      Response<dynamic> response) async {
-    final html = response.data as String;
-    final ArchiverProvider archiverProvider = parseArchiver(html);
-    return DioHttpResponse<ArchiverProvider>.success(archiverProvider);
-  }
-}
+// class GalleryArchiverHttpTransformer extends HttpTransformer {
+//   factory GalleryArchiverHttpTransformer() => _instance;
+//   GalleryArchiverHttpTransformer._internal();
+//   static late final GalleryArchiverHttpTransformer _instance =
+//       GalleryArchiverHttpTransformer._internal();
+//
+//   @override
+//   FutureOr<DioHttpResponse<ArchiverProvider>> parse(
+//       Response<dynamic> response) async {
+//     final html = response.data as String;
+//     final ArchiverProvider archiverProvider = parseArchiver(html);
+//     return DioHttpResponse<ArchiverProvider>.success(archiverProvider);
+//   }
+// }
 
 class GalleryArchiverRemoteDownloadResponseTransformer extends HttpTransformer {
   factory GalleryArchiverRemoteDownloadResponseTransformer() => _instance;
@@ -280,7 +280,7 @@ class UconfigHttpTransformer extends HttpTransformer {
   FutureOr<DioHttpResponse<EhSettings>> parse(
       Response<dynamic> response) async {
     final html = response.data as String;
-    final EhSettings uconfig = await compute(parseUconfig, html);
+    final EhSettings uconfig = await compute(parseEhSettings, html);
     return DioHttpResponse<EhSettings>.success(uconfig);
   }
 }

@@ -7,6 +7,7 @@ import 'package:fehviewer/common/service/theme_service.dart';
 import 'package:fehviewer/const/theme_colors.dart';
 import 'package:fehviewer/generated/l10n.dart';
 import 'package:fehviewer/models/favcat.dart';
+import 'package:fehviewer/network/request.dart';
 import 'package:fehviewer/pages/gallery/view/gallery_favcat.dart';
 import 'package:fehviewer/pages/item/controller/galleryitem_controller.dart';
 import 'package:fehviewer/utils/logger.dart';
@@ -244,7 +245,7 @@ class FavDialogController extends GetxController {
       final String _favTitle = result.favTitle;
       try {
         if (_favcat != 'l') {
-          await GalleryFavParser.galleryAddfavorite(
+          await galleryAddfavorite(
             gid,
             token,
             favcat: _favcat,
@@ -277,8 +278,7 @@ class FavDialogController extends GetxController {
         Global.profile.user.favcat?[int.parse(_lastFavcat)].favTitle ?? '...';
 
     try {
-      await GalleryFavParser.galleryAddfavorite(gid, token,
-          favcat: _lastFavcat, favnote: '');
+      await galleryAddfavorite(gid, token, favcat: _lastFavcat, favnote: '');
     } catch (e) {
       rethrow;
     }
@@ -293,7 +293,7 @@ class FavDialogController extends GetxController {
   Future<void> delFav(String favcat, String gid, String token) async {
     if (favcat.isNotEmpty && favcat != 'l') {
       logger.v('取消网络收藏');
-      await GalleryFavParser.galleryAddfavorite(gid, token);
+      await galleryAddfavorite(gid, token);
     } else {
       logger.v('取消本地收藏');
       _localFavController.removeFavByGid(gid);

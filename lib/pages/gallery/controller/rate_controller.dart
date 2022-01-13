@@ -1,6 +1,6 @@
 import 'package:fehviewer/common/service/depth_service.dart';
 import 'package:fehviewer/models/base/eh_models.dart';
-import 'package:fehviewer/network/gallery_request.dart';
+import 'package:fehviewer/network/api.dart';
 import 'package:fehviewer/utils/logger.dart';
 import 'package:fehviewer/utils/toast.dart';
 import 'package:get/get.dart';

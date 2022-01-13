@@ -2,7 +2,7 @@ import 'package:fehviewer/common/service/depth_service.dart';
 import 'package:fehviewer/common/service/layout_service.dart';
 import 'package:fehviewer/const/const.dart';
 import 'package:fehviewer/models/index.dart';
-import 'package:fehviewer/network/gallery_request.dart';
+import 'package:fehviewer/network/api.dart';
 import 'package:fehviewer/pages/gallery/controller/gallery_page_controller.dart';
 import 'package:fehviewer/pages/gallery/view/gallery_widget.dart';
 import 'package:fehviewer/route/routes.dart';

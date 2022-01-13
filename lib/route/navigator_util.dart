@@ -4,7 +4,7 @@ import 'package:fehviewer/common/service/layout_service.dart';
 import 'package:fehviewer/const/const.dart';
 import 'package:fehviewer/extension.dart';
 import 'package:fehviewer/models/index.dart';
-import 'package:fehviewer/network/gallery_request.dart';
+import 'package:fehviewer/network/api.dart';
 import 'package:fehviewer/network/request.dart';
 import 'package:fehviewer/pages/gallery/comm.dart';
 import 'package:fehviewer/pages/gallery/controller/gallery_page_controller.dart';

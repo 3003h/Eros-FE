@@ -12,7 +12,7 @@ import 'package:fehviewer/common/service/ehconfig_service.dart';
 import 'package:fehviewer/component/exception/error.dart';
 import 'package:fehviewer/component/quene_task/quene_task.dart';
 import 'package:fehviewer/models/base/eh_models.dart';
-import 'package:fehviewer/network/gallery_request.dart';
+import 'package:fehviewer/network/api.dart';
 import 'package:fehviewer/network/request.dart';
 import 'package:fehviewer/pages/gallery/controller/gallery_page_controller.dart';
 import 'package:fehviewer/pages/tab/controller/download_view_controller.dart';

@@ -6,16 +6,17 @@ import 'package:dio/dio.dart';
 import 'package:fehviewer/common/service/ehconfig_service.dart';
 import 'package:fehviewer/const/const.dart';
 import 'package:fehviewer/extension.dart';
+import 'package:fehviewer/network/request.dart';
 import 'package:fehviewer/store/floor/dao/tag_translat_dao.dart';
 import 'package:fehviewer/store/floor/entity/tag_translat.dart';
-import 'package:fehviewer/utils/dio_util.dart';
 import 'package:fehviewer/utils/logger.dart';
 import 'package:get/get.dart';
 import 'package:path/path.dart' as path;
 
 import '../global.dart';
 
-const String kUrl = '/repos/EhTagTranslation/Database/releases/latest';
+const String kUrl =
+    'https://api.github.com/repos/EhTagTranslation/Database/releases/latest';
 const String kCDNurl =
     'https://cdn.jsdelivr.net/gh/EhTagTranslation/DatabaseReleases/db.raw.json.gz';
 const int kConnectTimeout = 10000;
@@ -23,9 +24,6 @@ const int kReceiveTimeout = 30000;
 
 class TagTransController extends GetxController {
   final EhConfigService ehConfigService = Get.find();
-
-  final HttpManager _httpManager =
-      HttpManager.getInstance(baseUrl: 'https://api.github.com', cache: false);
 
   String? _dbUrl;
   String? _remoteVer;
@@ -55,7 +53,7 @@ class TagTransController extends GetxController {
       return true;
     }
 
-    final String urlJsonString = await _httpManager.get(kUrl) ?? '';
+    final String urlJsonString = await getTranslateTagDBInfo(kUrl);
     final dynamic _urlJson = jsonDecode(urlJsonString);
     // 获取发布时间 作为远程版本号
     _remoteVer =
@@ -90,12 +88,8 @@ class TagTransController extends GetxController {
       return [];
     }
 
-    final HttpManager httpDB = HttpManager.getInstance();
-    final Options options = Options(receiveTimeout: kReceiveTimeout);
-    // final String dbJson = await httpDB.get(_dbUrl, options: options) ?? '{}';
-
     final gzFilePath = path.join(Global.appDocPath, 'db.raw.json.gz');
-    await httpDB.downLoadFile(_dbUrl!, gzFilePath);
+    await ehDownload(url: _dbUrl!, savePath: gzFilePath);
     List<int> bytes = File(gzFilePath).readAsBytesSync();
     List<int> data = GZipDecoder().decodeBytes(bytes);
     final String dbJson = utf8.decode(data);

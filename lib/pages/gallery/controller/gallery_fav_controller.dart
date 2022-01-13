@@ -6,7 +6,8 @@ import 'package:fehviewer/common/service/depth_service.dart';
 import 'package:fehviewer/common/service/ehconfig_service.dart';
 import 'package:fehviewer/generated/l10n.dart';
 import 'package:fehviewer/models/favcat.dart';
-import 'package:fehviewer/network/gallery_request.dart';
+import 'package:fehviewer/network/api.dart';
+import 'package:fehviewer/network/request.dart';
 import 'package:fehviewer/pages/controller/fav_dialog_controller.dart';
 import 'package:fehviewer/pages/controller/favorite_sel_controller.dart';
 import 'package:fehviewer/pages/gallery/controller/gallery_page_controller.dart';
@@ -91,7 +92,7 @@ class GalleryFavController extends GetxController {
         Global.profile.user.favcat![int.parse(_lastFavcat)].favTitle;
 
     try {
-      await GalleryFavParser.galleryAddfavorite(
+      await galleryAddfavorite(
         _pageController.galleryItem?.gid ?? '0',
         _pageController.galleryItem?.token ?? '',
         favcat: _lastFavcat,
@@ -167,7 +168,7 @@ class GalleryFavController extends GetxController {
       try {
         if (_favcatFromRult != 'l') {
           // 网络收藏
-          await GalleryFavParser.galleryAddfavorite(
+          await galleryAddfavorite(
             _pageController.galleryItem?.gid ?? '0',
             _pageController.galleryItem?.token ?? '',
             favcat: _favcatFromRult,
@@ -209,7 +210,7 @@ class GalleryFavController extends GetxController {
     try {
       if (favcat.isNotEmpty && favcat != 'l') {
         logger.v('删除网络收藏');
-        await GalleryFavParser.galleryAddfavorite(
+        await galleryAddfavorite(
           _pageController.galleryItem?.gid ?? '0',
           _pageController.galleryItem?.token ?? '',
         );

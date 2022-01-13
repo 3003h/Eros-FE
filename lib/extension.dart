@@ -13,7 +13,7 @@ import 'package:get/get.dart';
 import 'common/controller/tag_trans_controller.dart';
 import 'common/enum.dart';
 import 'models/index.dart';
-import 'network/gallery_request.dart';
+import 'network/api.dart';
 
 extension ExtGC on GalleryCache {
   ViewColumnMode get columnMode =>

@@ -12,7 +12,7 @@ import 'package:fehviewer/common/service/layout_service.dart';
 import 'package:fehviewer/component/exception/error.dart';
 import 'package:fehviewer/fehviewer.dart';
 import 'package:fehviewer/network/app_dio/pdio.dart';
-import 'package:fehviewer/network/gallery_request.dart';
+import 'package:fehviewer/network/api.dart';
 import 'package:fehviewer/network/request.dart';
 import 'package:fehviewer/pages/gallery/view/gallery_page.dart';
 import 'package:fehviewer/pages/item/controller/galleryitem_controller.dart';

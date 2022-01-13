@@ -6,17 +6,20 @@ import 'package:dio/dio.dart';
 import 'package:dio_http_cache/dio_http_cache.dart';
 import 'package:fehviewer/common/controller/advance_search_controller.dart';
 import 'package:fehviewer/common/controller/user_controller.dart';
+import 'package:fehviewer/common/parser/eh_parser.dart';
 import 'package:fehviewer/component/exception/error.dart';
 import 'package:fehviewer/fehviewer.dart';
 import 'package:fehviewer/common/parser/gallery_detail_parser.dart';
 import 'package:fehviewer/common/service/ehconfig_service.dart';
 import 'package:fehviewer/pages/gallery/controller/archiver_controller.dart';
+import 'package:fehviewer/pages/gallery/controller/torrent_controller.dart';
 import 'package:fehviewer/pages/tab/fetch_list.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/foundation.dart';
 import 'package:get/get.dart' hide FormData, Response;
 
+import 'api.dart';
 import 'app_dio/pdio.dart';
-import 'gallery_request.dart';
 
 Options getCacheOptions({bool forceRefresh = false, Options? options}) {
   return buildCacheOptions(
@@ -312,24 +315,24 @@ Future<List<GalleryImage>> getGalleryImage(
   }
 }
 
-Future<ArchiverProvider> getArchiver(
-  String url, {
-  bool refresh = true,
-}) async {
-  DioHttpClient dioHttpClient = DioHttpClient(dioConfig: ehDioConfig);
-
-  DioHttpResponse httpResponse = await dioHttpClient.get(
-    url,
-    httpTransformer: GalleryArchiverHttpTransformer(),
-    options: getCacheOptions(forceRefresh: refresh),
-  );
-
-  if (httpResponse.ok && httpResponse.data is ArchiverProvider) {
-    return httpResponse.data as ArchiverProvider;
-  } else {
-    return ArchiverProvider();
-  }
-}
+// Future<ArchiverProvider> getArchiver(
+//   String url, {
+//   bool refresh = true,
+// }) async {
+//   DioHttpClient dioHttpClient = DioHttpClient(dioConfig: ehDioConfig);
+//
+//   DioHttpResponse httpResponse = await dioHttpClient.get(
+//     url,
+//     httpTransformer: GalleryArchiverHttpTransformer(),
+//     options: getCacheOptions(forceRefresh: refresh),
+//   );
+//
+//   if (httpResponse.ok && httpResponse.data is ArchiverProvider) {
+//     return httpResponse.data as ArchiverProvider;
+//   } else {
+//     return ArchiverProvider();
+//   }
+// }
 
 Future<String> postArchiverRemoteDownload(
   String url,
@@ -380,7 +383,7 @@ Future<String> postArchiverLocalDownload(
   }
 }
 
-Future<EhSettings?> getUconfig(
+Future<EhSettings?> getEhSettings(
     {bool refresh = false, String? selectProfile}) async {
   await checkCookie();
 
@@ -427,9 +430,7 @@ Future<EhSettings?> postEhProfile({
     if (name != null) 'profile_name': name,
     if (profileSet != null) 'profile_set': profileSet.trim(),
   };
-  // final _dataString =
-  //     dataMap.entries.map((e) => '${e.key}=${e.value}').join('&');
-  // logger.d('_dataString: $_dataString');
+
   final formData = FormData.fromMap(paramMap ?? dataMap);
   DioHttpClient dioHttpClient = DioHttpClient(dioConfig: ehDioConfig);
   const String url = '/uconfig.php';
@@ -667,5 +668,160 @@ Future<bool?> postComment({
 
   if (httpResponse.ok && httpResponse.data is bool) {
     return httpResponse.data as bool;
+  }
+}
+
+Future<void> galleryAddfavorite(
+  String gid,
+  String token, {
+  String favcat = 'favdel',
+  String favnote = '',
+}) async {
+  const String url = '/gallerypopups.php';
+  DioHttpClient dioHttpClient = DioHttpClient(dioConfig: ehDioConfig);
+
+  final Map<String, dynamic> _params = {
+    'gid': gid,
+    't': token,
+    'act': 'addfav',
+  };
+
+  final FormData formData = FormData.fromMap({
+    'favcat': favcat,
+    'update': '1',
+  });
+
+  DioHttpResponse httpResponse = await dioHttpClient.post(
+    url,
+    queryParameters: _params,
+    data: formData,
+    // httpTransformer: HttpTransformerBuilder(
+    //   (response) {
+    //     logger.d('statusCode ${response.statusCode}');
+    //     return DioHttpResponse<bool>.success(response.statusCode == 302);
+    //   },
+    // ),
+    options: getCacheOptions(forceRefresh: true),
+  );
+}
+
+Future<String> getTranslateTagDBInfo(String url) async {
+  DioHttpClient dioHttpClient = DioHttpClient(dioConfig: ehDioConfig);
+  DioHttpResponse httpResponse = await dioHttpClient.get(url);
+  if (httpResponse.ok && httpResponse.data is String) {
+    return httpResponse.data as String;
+  } else {
+    throw httpResponse.error ?? HttpException('getTranslateTagDBInfo error');
+  }
+}
+
+/// 获取里站cookie
+Future<void> getExIgneous() async {
+  const String url = '${EHConst.EX_BASE_URL}/uconfig.php';
+  DioHttpClient dioHttpClient = DioHttpClient(dioConfig: ehDioConfig);
+  DioHttpResponse httpResponse = await dioHttpClient.get(
+    url,
+    options: getCacheOptions(forceRefresh: true),
+  );
+  if (!httpResponse.ok) {
+    throw httpResponse.error ?? HttpException('getExIgneous error');
+  }
+}
+
+Future<String> getTorrentToken(
+  String gid,
+  String gtoken, {
+  bool refresh = false,
+}) async {
+  DioHttpClient dioHttpClient = DioHttpClient(dioConfig: ehDioConfig);
+  const url = '/gallerytorrents.php';
+  final Map<String, dynamic> _params = {
+    'gid': gid,
+    't': gtoken,
+  };
+
+  DioHttpResponse httpResponse = await dioHttpClient.get(
+    url,
+    queryParameters: _params,
+    options: getCacheOptions(forceRefresh: refresh),
+    httpTransformer: HttpTransformerBuilder(
+      (response) {
+        final RegExp rTorrentTk =
+            RegExp(r'http://ehtracker.org/(\d{7})/announce');
+        final String torrentToken =
+            rTorrentTk.firstMatch(response.data as String)?.group(1) ?? '';
+        return DioHttpResponse<String>.success(torrentToken);
+      },
+    ),
+  );
+
+  if (httpResponse.ok && httpResponse.data is String) {
+    return httpResponse.data as String;
+  } else {
+    throw httpResponse.error ?? HttpException('getTorrentToken error');
+  }
+}
+
+Future<TorrentProvider> getTorrent(
+  String url, {
+  bool refresh = true,
+}) async {
+  DioHttpClient dioHttpClient = DioHttpClient(dioConfig: ehDioConfig);
+  DioHttpResponse httpResponse = await dioHttpClient.get(
+    url,
+    options: getCacheOptions(forceRefresh: refresh),
+    httpTransformer: HttpTransformerBuilder(
+      (response) async {
+        final torrentProvider =
+            await compute(parseTorrent, response.data as String);
+        return DioHttpResponse<TorrentProvider>.success(torrentProvider);
+      },
+    ),
+  );
+  if (httpResponse.ok && httpResponse.data is TorrentProvider) {
+    return httpResponse.data as TorrentProvider;
+  } else {
+    throw httpResponse.error ?? HttpException('getTorrent error');
+  }
+}
+
+Future<ArchiverProvider> getArchiver(
+  String url, {
+  bool refresh = true,
+}) async {
+  DioHttpClient dioHttpClient = DioHttpClient(dioConfig: ehDioConfig);
+  DioHttpResponse httpResponse = await dioHttpClient.get(
+    url,
+    options: getCacheOptions(forceRefresh: refresh),
+    httpTransformer: HttpTransformerBuilder(
+      (response) async {
+        final archiverProvider =
+            await compute(parseArchiver, response.data as String);
+        return DioHttpResponse<ArchiverProvider>.success(archiverProvider);
+      },
+    ),
+  );
+  if (httpResponse.ok && httpResponse.data is ArchiverProvider) {
+    return httpResponse.data as ArchiverProvider;
+  } else {
+    throw httpResponse.error ?? HttpException('getArchiver error');
+  }
+}
+
+Future<String> postEhApi(
+  String data, {
+  bool forceRefresh = true,
+}) async {
+  const String url = '/api.php';
+  DioHttpClient dioHttpClient = DioHttpClient(dioConfig: ehDioConfig);
+  DioHttpResponse httpResponse = await dioHttpClient.post(
+    url,
+    data: data,
+    options: getCacheOptions(forceRefresh: forceRefresh),
+  );
+  if (httpResponse.ok && httpResponse.data is String) {
+    return httpResponse.data as String;
+  } else {
+    throw httpResponse.error ?? HttpException('postEhApi error');
   }
 }

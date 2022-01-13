@@ -1,6 +1,7 @@
 import 'package:fehviewer/common/service/depth_service.dart';
 import 'package:fehviewer/models/base/eh_models.dart';
-import 'package:fehviewer/network/gallery_request.dart';
+import 'package:fehviewer/network/api.dart';
+import 'package:fehviewer/network/request.dart';
 import 'package:fehviewer/utils/logger.dart';
 import 'package:get/get.dart';
 
@@ -24,7 +25,7 @@ class TorrentController extends GetxController
     final _torrentLink = '${Api.getBaseUrl()}/gallerytorrents.php'
         '?gid=${pageController.gid}&t=${pageController.galleryItem?.token}';
     logger.d(_torrentLink);
-    return await Api.getTorrent(_torrentLink);
+    return await getTorrent(_torrentLink);
   }
 
   Future<void> _loadData() async {
@@ -43,7 +44,7 @@ class TorrentController extends GetxController
   }
 
   Future<String> _fetchTk() async {
-    return await Api.getTorrentToken(
+    return await getTorrentToken(
         pageController.gid, pageController.galleryItem?.token ?? '',
         refresh: isRefresh);
   }

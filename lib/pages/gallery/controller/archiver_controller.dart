@@ -1,7 +1,7 @@
 import 'package:fehviewer/common/controller/archiver_download_controller.dart';
 import 'package:fehviewer/common/service/depth_service.dart';
 import 'package:fehviewer/fehviewer.dart';
-import 'package:fehviewer/network/gallery_request.dart';
+import 'package:fehviewer/network/api.dart';
 import 'package:fehviewer/network/request.dart';
 import 'package:get/get.dart';
 
