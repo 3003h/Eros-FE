@@ -343,5 +343,6 @@
   "groupType": "类型",
   "searchTexts": "搜索关键词",
   "newText": "新关键词",
-  "global_setting": "全局设置"
+  "global_setting": "全局设置",
+  "open_supported_links": "打开支持的链接"
 }

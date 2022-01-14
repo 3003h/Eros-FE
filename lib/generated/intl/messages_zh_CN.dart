@@ -152,6 +152,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "off": MessageLookupByLibrary.simpleMessage("关闭"),
         "ok": MessageLookupByLibrary.simpleMessage("确定"),
         "on": MessageLookupByLibrary.simpleMessage("打开"),
+        "open_supported_links": MessageLookupByLibrary.simpleMessage("打开支持的链接"),
         "open_with_other_apps": MessageLookupByLibrary.simpleMessage("其他应用打开"),
         "orientation_auto": MessageLookupByLibrary.simpleMessage("自动旋转"),
         "orientation_landscapeLeft":

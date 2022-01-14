@@ -12,6 +12,7 @@ import 'package:fehviewer/pages/setting/setting_items/selector_Item.dart';
 import 'package:fehviewer/pages/setting/webview/mytags_in.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
+import 'package:open_by_default/open_by_default.dart';
 
 import '../../component/setting_base.dart';
 
@@ -196,6 +197,29 @@ class ListViewEhSetting extends StatelessWidget {
         },
         hideLine: true,
       ),
+      if (GetPlatform.isAndroid)
+        FutureBuilder<bool>(future: () async {
+          final _androidInfo = await deviceInfo.androidInfo;
+          return _androidInfo.version.sdkInt >= 31;
+        }(), builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.done &&
+              (snapshot.data ?? false)) {
+            return Column(
+              children: [
+                const ItemSpace(),
+                SelectorSettingItem(
+                  title: L10n.of(context).open_supported_links,
+                  desc:
+                      '从 Android 12 开始, 应用只有在获得批准的情况下，才能作为网络链接的处理应用。否则会使用默认浏览器处理。您可以在此手动批准',
+                  onTap: OpenByDefault.open,
+                  hideLine: true,
+                ),
+              ],
+            );
+          } else {
+            return const SizedBox.shrink();
+          }
+        }),
       const ItemSpace(),
       if (localeService.isLanguageCodeZh)
         TextSwitchItem(

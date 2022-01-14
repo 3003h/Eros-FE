@@ -165,6 +165,8 @@ class MessageLookup extends MessageLookupByLibrary {
         "off": MessageLookupByLibrary.simpleMessage("關閉"),
         "ok": MessageLookupByLibrary.simpleMessage("確定"),
         "on": MessageLookupByLibrary.simpleMessage("打開"),
+        "open_supported_links":
+            MessageLookupByLibrary.simpleMessage("Open supported links"),
         "open_with_other_apps":
             MessageLookupByLibrary.simpleMessage("Open with other apps"),
         "orientation_auto": MessageLookupByLibrary.simpleMessage("Auto"),

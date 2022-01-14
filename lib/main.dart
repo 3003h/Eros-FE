@@ -4,9 +4,9 @@ import 'dart:ui';
 
 import 'package:device_preview/device_preview.dart';
 import 'package:fehviewer/common/controller/auto_lock_controller.dart';
+import 'package:fehviewer/common/controller/log_controller.dart';
 import 'package:fehviewer/common/service/ehconfig_service.dart';
 import 'package:fehviewer/common/service/locale_service.dart';
-import 'package:fehviewer/common/controller/log_controller.dart';
 import 'package:fehviewer/common/service/theme_service.dart';
 import 'package:fehviewer/component/exception/error.dart';
 import 'package:fehviewer/fehviewer.dart';
@@ -93,8 +93,8 @@ Future<void> _initializeFlutterFire() async {
     return;
   }
   await Firebase.initializeApp(
-    options: DefaultFirebaseOptions.currentPlatform,
-  );
+      // options: DefaultFirebaseOptions.currentPlatform,
+      );
 
   await FirebaseCrashlytics.instance
       .setCrashlyticsCollectionEnabled(!kDebugMode);
