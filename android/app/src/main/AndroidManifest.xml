@@ -24,20 +24,15 @@
                     android:name="io.flutter.embedding.android.NormalTheme"
                     android:resource="@style/NormalTheme"
             />
-<!--            <meta-data-->
-<!--                    android:name="io.flutter.embedding.android.SplashScreenDrawable"-->
-<!--                    android:resource="@drawable/launch_background"-->
-<!--            />-->
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
 
-            <intent-filter>
+            <intent-filter android:autoVerify="true" tools:targetApi="m">
                 <action android:name="android.intent.action.VIEW"/>
                 <category android:name="android.intent.category.DEFAULT"/>
                 <category android:name="android.intent.category.BROWSABLE"/>
-                <!--TODO:  Add this filter, if you want support opening urls into your app-->
                 <data
                         android:scheme="https"
                         android:host="e-hentai.org"

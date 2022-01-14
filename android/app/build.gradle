@@ -99,7 +99,7 @@ flutter {
 
 dependencies {
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
-    implementation 'com.google.firebase:firebase-crashlytics:18.2.3'
+    implementation 'com.google.firebase:firebase-crashlytics:18.2.6'
 //    def multidex_version = "2.0.1"
 //    implementation "androidx.multidex:multidex:$multidex_version"
     implementation "androidx.startup:startup-runtime:1.1.0"

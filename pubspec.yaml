@@ -160,6 +160,9 @@ dependencies:
   event_bus: ^2.0.0
   extended_nested_scroll_view: ^5.0.0
   sentry_flutter: ^6.2.2
+  open_by_default:
+    git:
+      url: https://github.com/honjow/open_by_default.git
 
 dev_dependencies:
   # flutter packages pub run build_runner build --delete-conflicting-outputs

@@ -133,7 +133,7 @@ packages:
       name: built_value
       url: "https://pub.flutter-io.cn"
     source: hosted
-    version: "8.1.3"
+    version: "8.1.4"
   buttons_tabbar:
     dependency: "direct main"
     description:
@@ -203,21 +203,21 @@ packages:
       name: cloud_firestore
       url: "https://pub.flutter-io.cn"
     source: hosted
-    version: "3.1.5"
+    version: "3.1.6"
   cloud_firestore_platform_interface:
     dependency: transitive
     description:
       name: cloud_firestore_platform_interface
       url: "https://pub.flutter-io.cn"
     source: hosted
-    version: "5.4.10"
+    version: "5.4.11"
   cloud_firestore_web:
     dependency: transitive
     description:
       name: cloud_firestore_web
       url: "https://pub.flutter-io.cn"
     source: hosted
-    version: "2.6.5"
+    version: "2.6.6"
   code_builder:
     dependency: transitive
     description:
@@ -450,7 +450,7 @@ packages:
       name: extended_image_library
       url: "https://pub.flutter-io.cn"
     source: hosted
-    version: "3.1.0"
+    version: "3.1.2"
   extended_list_library:
     dependency: transitive
     description:
@@ -499,7 +499,7 @@ packages:
       name: file_picker
       url: "https://pub.flutter-io.cn"
     source: hosted
-    version: "4.3.0"
+    version: "4.3.1"
   firebase:
     dependency: transitive
     description:
@@ -534,7 +534,7 @@ packages:
       name: firebase_core
       url: "https://pub.flutter-io.cn"
     source: hosted
-    version: "1.10.6"
+    version: "1.11.0"
   firebase_core_platform_interface:
     dependency: transitive
     description:
@@ -562,7 +562,7 @@ packages:
       name: firebase_crashlytics_platform_interface
       url: "https://pub.flutter-io.cn"
     source: hosted
-    version: "3.1.11"
+    version: "3.1.12"
   firebase_performance:
     dependency: "direct main"
     description:
@@ -728,7 +728,7 @@ packages:
       name: flutter_smart_dialog
       url: "https://pub.flutter-io.cn"
     source: hosted
-    version: "3.2.0"
+    version: "3.3.0"
   flutter_test:
     dependency: "direct dev"
     description: flutter
@@ -871,7 +871,7 @@ packages:
       name: image
       url: "https://pub.flutter-io.cn"
     source: hosted
-    version: "3.1.0"
+    version: "3.1.1"
   image_gallery_saver:
     dependency: "direct main"
     description:
@@ -934,7 +934,7 @@ packages:
       name: json_serializable
       url: "https://pub.flutter-io.cn"
     source: hosted
-    version: "6.1.3"
+    version: "6.1.4"
   keframe:
     dependency: "direct main"
     description:
@@ -999,7 +999,7 @@ packages:
       name: local_auth
       url: "https://pub.flutter-io.cn"
     source: hosted
-    version: "1.1.9"
+    version: "1.1.10"
   logger:
     dependency: "direct main"
     description:
@@ -1084,6 +1084,15 @@ packages:
       url: "https://pub.flutter-io.cn"
     source: hosted
     version: "3.1.5"
+  open_by_default:
+    dependency: "direct main"
+    description:
+      path: "."
+      ref: HEAD
+      resolved-ref: "3655fb56f80da25fcf854ad88a25d8d3e19811be"
+      url: "https://github.com/honjow/open_by_default.git"
+    source: git
+    version: "0.0.1"
   open_file:
     dependency: "direct main"
     description:
@@ -1195,28 +1204,28 @@ packages:
       name: path_provider_linux
       url: "https://pub.flutter-io.cn"
     source: hosted
-    version: "2.1.4"
+    version: "2.1.5"
   path_provider_macos:
     dependency: transitive
     description:
       name: path_provider_macos
       url: "https://pub.flutter-io.cn"
     source: hosted
-    version: "2.0.4"
+    version: "2.0.5"
   path_provider_platform_interface:
     dependency: transitive
     description:
       name: path_provider_platform_interface
       url: "https://pub.flutter-io.cn"
     source: hosted
-    version: "2.0.1"
+    version: "2.0.3"
   path_provider_windows:
     dependency: transitive
     description:
       name: path_provider_windows
       url: "https://pub.flutter-io.cn"
     source: hosted
-    version: "2.0.4"
+    version: "2.0.5"
   pedantic:
     dependency: transitive
     description:
@@ -1272,7 +1281,7 @@ packages:
       name: plugin_platform_interface
       url: "https://pub.flutter-io.cn"
     source: hosted
-    version: "2.0.2"
+    version: "2.1.2"
   pointycastle:
     dependency: transitive
     description:
@@ -1412,28 +1421,28 @@ packages:
       name: shared_preferences
       url: "https://pub.flutter-io.cn"
     source: hosted
-    version: "2.0.11"
+    version: "2.0.12"
   shared_preferences_android:
     dependency: transitive
     description:
       name: shared_preferences_android
       url: "https://pub.flutter-io.cn"
     source: hosted
-    version: "2.0.9"
+    version: "2.0.10"
   shared_preferences_ios:
     dependency: transitive
     description:
       name: shared_preferences_ios
       url: "https://pub.flutter-io.cn"
     source: hosted
-    version: "2.0.8"
+    version: "2.0.9"
   shared_preferences_linux:
     dependency: transitive
     description:
       name: shared_preferences_linux
       url: "https://pub.flutter-io.cn"
     source: hosted
-    version: "2.0.3"
+    version: "2.0.4"
   shared_preferences_macos:
     dependency: transitive
     description:
@@ -1454,14 +1463,14 @@ packages:
       name: shared_preferences_web
       url: "https://pub.flutter-io.cn"
     source: hosted
-    version: "2.0.2"
+    version: "2.0.3"
   shared_preferences_windows:
     dependency: transitive
     description:
       name: shared_preferences_windows
       url: "https://pub.flutter-io.cn"
     source: hosted
-    version: "2.0.3"
+    version: "2.0.4"
   shelf:
     dependency: transitive
     description:
@@ -1529,28 +1538,28 @@ packages:
       name: sqflite
       url: "https://pub.flutter-io.cn"
     source: hosted
-    version: "2.0.1"
+    version: "2.0.2"
   sqflite_common:
     dependency: transitive
     description:
       name: sqflite_common
       url: "https://pub.flutter-io.cn"
     source: hosted
-    version: "2.1.0"
+    version: "2.2.0"
   sqflite_common_ffi:
     dependency: "direct main"
     description:
       name: sqflite_common_ffi
       url: "https://pub.flutter-io.cn"
     source: hosted
-    version: "2.1.0"
+    version: "2.1.0+1"
   sqlite3:
     dependency: transitive
     description:
       name: sqlite3
       url: "https://pub.flutter-io.cn"
     source: hosted
-    version: "1.4.0"
+    version: "1.5.1"
   stack_trace:
     dependency: transitive
     description:
@@ -1662,21 +1671,21 @@ packages:
       name: url_launcher
       url: "https://pub.flutter-io.cn"
     source: hosted
-    version: "6.0.17"
+    version: "6.0.18"
   url_launcher_android:
     dependency: transitive
     description:
       name: url_launcher_android
       url: "https://pub.flutter-io.cn"
     source: hosted
-    version: "6.0.13"
+    version: "6.0.14"
   url_launcher_ios:
     dependency: transitive
     description:
       name: url_launcher_ios
       url: "https://pub.flutter-io.cn"
     source: hosted
-    version: "6.0.13"
+    version: "6.0.14"
   url_launcher_linux:
     dependency: transitive
     description:
@@ -1697,14 +1706,14 @@ packages:
       name: url_launcher_platform_interface
       url: "https://pub.flutter-io.cn"
     source: hosted
-    version: "2.0.4"
+    version: "2.0.5"
   url_launcher_web:
     dependency: transitive
     description:
       name: url_launcher_web
       url: "https://pub.flutter-io.cn"
     source: hosted
-    version: "2.0.5"
+    version: "2.0.6"
   url_launcher_windows:
     dependency: transitive
     description:
@@ -1860,5 +1869,5 @@ packages:
     source: hosted
     version: "0.2.1"
 sdks:
-  dart: ">=2.15.0 <3.0.0"
+  dart: ">=2.15.1 <3.0.0"
   flutter: ">=2.5.0"

@@ -31,7 +31,6 @@ import 'package:package_info/package_info.dart';
 import 'package:path/path.dart' as path;
 import 'package:path_provider/path_provider.dart';
 import 'package:sqflite/sqflite.dart';
-import 'package:sqflite_common/sqlite_api.dart';
 import 'package:sqflite_common_ffi/sqflite_ffi.dart';
 import 'package:system_proxy/system_proxy.dart';
 
@@ -41,8 +40,6 @@ final FirebaseAnalytics analytics = FirebaseAnalytics();
 FirebaseFirestore firestore = FirebaseFirestore.instance;
 final LocalAuthentication localAuth = LocalAuthentication();
 DeviceInfoPlugin deviceInfo = DeviceInfoPlugin();
-// final LanguageIdentifier identifier =
-//     FirebaseLanguage.instance.languageIdentifier();
 
 final HiveHelper hiveHelper = HiveHelper();
 

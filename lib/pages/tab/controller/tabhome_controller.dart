@@ -79,8 +79,8 @@ class TabPages {
 
 // 默认显示在tabbar的view
 Map<String, bool> kDefTabMap = <String, bool>{
-  EHRoutes.popular: true,
-  EHRoutes.watched: false,
+  // EHRoutes.popular: true,
+  // EHRoutes.watched: false,
   EHRoutes.gallery: true,
   // EHRoutes.favoriteTabbar: true,
   EHRoutes.favorite: true,

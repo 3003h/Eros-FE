@@ -343,5 +343,6 @@
     "groupType": "Group type",
     "searchTexts": "Search texts",
     "newText": "New Text",
-    "global_setting": "Global Setting"
+    "global_setting": "Global Setting",
+    "open_supported_links": "Open supported links"
 }

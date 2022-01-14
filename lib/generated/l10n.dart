@@ -3443,6 +3443,16 @@ class L10n {
       args: [],
     );
   }
+
+  /// `Open supported links`
+  String get open_supported_links {
+    return Intl.message(
+      'Open supported links',
+      name: 'open_supported_links',
+      desc: '',
+      args: [],
+    );
+  }
 }
 
 class AppLocalizationDelegate extends LocalizationsDelegate<L10n> {

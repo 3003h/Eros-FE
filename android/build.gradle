@@ -1,22 +1,24 @@
 buildscript {
-    ext.kotlin_version = '1.5.20'
+    ext.kotlin_version = '1.6.10'
     repositories {
-        maven{ url 'http://maven.aliyun.com/nexus/content/groups/public/'}
+//        maven{ url 'http://maven.aliyun.com/nexus/content/groups/public/'}
         google()
+        mavenCentral()
     }
 
     dependencies {
-        classpath 'com.android.tools.build:gradle:4.2.2'
+        classpath 'com.android.tools.build:gradle:7.0.4'
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
         classpath 'com.google.gms:google-services:4.3.10'
-        classpath 'com.google.firebase:firebase-crashlytics-gradle:2.7.1'
+        classpath 'com.google.firebase:firebase-crashlytics-gradle:2.8.1'
     }
 }
 
 allprojects {
     repositories {
-        maven{ url 'http://maven.aliyun.com/nexus/content/groups/public/'}
+//        maven{ url 'http://maven.aliyun.com/nexus/content/groups/public/'}
         google()
+        mavenCentral()
     }
 }
 
