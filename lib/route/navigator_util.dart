@@ -1,4 +1,5 @@
 import 'package:collection/collection.dart';
+import 'package:fehviewer/common/global.dart';
 import 'package:fehviewer/common/service/depth_service.dart';
 import 'package:fehviewer/common/service/layout_service.dart';
 import 'package:fehviewer/const/const.dart';
@@ -17,6 +18,8 @@ import 'package:fehviewer/route/routes.dart';
 import 'package:fehviewer/route/second_observer.dart';
 import 'package:fehviewer/utils/logger.dart';
 import 'package:get/get.dart';
+
+import 'main_observer.dart';
 
 class NavigatorUtil {
   // 带搜索条件打开搜索
@@ -90,8 +93,10 @@ class NavigatorUtil {
     GalleryItem? galleryItem,
     bool replace = false,
   }) async {
-    final topRoute =
+    final topSecondRoute =
         SecondNavigatorObserver().history.lastOrNull?.settings.name;
+    final topMainRoute =
+        MainNavigatorObserver().history.lastOrNull?.settings.name;
     late final String? _gid;
 
     // url跳转方式
@@ -126,6 +131,12 @@ class NavigatorUtil {
         Get.replace(GalleryRepository(url: _galleryUrl, jumpSer: ser));
       }
 
+      if (GetPlatform.isAndroid) {
+        final androidInfo = await deviceInfo.androidInfo;
+        final sdkInt = androidInfo.version.sdkInt;
+        replace = replace && sdkInt < 31;
+      }
+
       if (replace) {
         Get.find<DepthService>().pushPageCtrl();
         await Get.offNamed(
@@ -135,8 +146,8 @@ class NavigatorUtil {
         deletePageController();
         Get.find<DepthService>().popPageCtrl();
       } else {
-        if (topRoute == EHRoutes.galleryPage) {
-          logger.d('topRoute == EHRoutes.galleryPage');
+        if (topSecondRoute == EHRoutes.galleryPage) {
+          logger.d('topSecondRoute == EHRoutes.galleryPage');
           if (Get.isRegistered<GalleryPageController>(tag: pageCtrlDepth) &&
               Get.find<GalleryPageController>(tag: pageCtrlDepth).gid == _gid) {
             logger.d('same gallery');
@@ -164,9 +175,9 @@ class NavigatorUtil {
       if (isLayoutLarge) {
         Get.find<DepthService>().pushPageCtrl();
 
-        logger.d('topRoute: $topRoute');
-        if (topRoute == EHRoutes.galleryPage) {
-          logger.d('topRoute == EHRoutes.galleryPage');
+        logger.d('topSecondRoute: $topSecondRoute');
+        if (topSecondRoute == EHRoutes.galleryPage) {
+          logger.d('topSecondRoute == EHRoutes.galleryPage');
           final curTag = (int.parse(pageCtrlDepth) - 1).toString();
           if (Get.isRegistered<GalleryPageController>(tag: curTag) &&
               Get.find<GalleryPageController>(tag: curTag).gid == _gid) {
@@ -180,7 +191,7 @@ class NavigatorUtil {
               preventDuplicates: true,
             );
           }
-        } else if (topRoute != EHRoutes.empty) {
+        } else if (topSecondRoute != EHRoutes.empty) {
           logger.d('Get.offNamed');
           await Get.offNamed(
             EHRoutes.galleryPage,
