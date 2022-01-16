@@ -83,7 +83,7 @@ Future<GalleryList?> getGallery({
       'favcat': favcat,
   };
 
-  logger.d('advanceSearchParam $advanceSearchParam');
+  logger.v('advanceSearchParam $advanceSearchParam');
 
   /// 高级搜索处理
   if (advanceSearchParam != null) {
@@ -103,7 +103,7 @@ Future<GalleryList?> getGallery({
     _params.addAll(_searchController.favSearchMap);
   }
 
-  logger.d('url:$_url ${_params}');
+  logger.v('url:$_url ${_params}');
 
   DioHttpResponse httpResponse = await dioHttpClient.get(
     _url,

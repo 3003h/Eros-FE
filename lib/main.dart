@@ -169,6 +169,7 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
             FirebaseAnalyticsObserver(analytics: analytics),
           SentryNavigatorObserver(),
           FlutterSmartDialog.observer,
+          MainNavigatorObserver(),
         ],
         builder: FlutterSmartDialog.init(
           styleBuilder: (child) => child,
