@@ -99,6 +99,8 @@ class NavigatorUtil {
         MainNavigatorObserver().history.lastOrNull?.settings.name;
     late final String? _gid;
 
+    logger.d('topMainRoute $topMainRoute');
+
     // url跳转方式
     if (url != null && url.isNotEmpty) {
       logger.d('goGalleryPage fromUrl $url');
@@ -131,13 +133,13 @@ class NavigatorUtil {
         Get.replace(GalleryRepository(url: _galleryUrl, jumpSer: ser));
       }
 
-      if (GetPlatform.isAndroid) {
-        final androidInfo = await deviceInfo.androidInfo;
-        final sdkInt = androidInfo.version.sdkInt;
-        replace = replace && sdkInt < 31;
-      }
+      // if (GetPlatform.isAndroid) {
+      //   final androidInfo = await deviceInfo.androidInfo;
+      //   final sdkInt = androidInfo.version.sdkInt;
+      //   replace = replace && sdkInt < 31;
+      // }
 
-      if (replace) {
+      if (replace && topMainRoute == EHRoutes.root) {
         Get.find<DepthService>().pushPageCtrl();
         await Get.offNamed(
           EHRoutes.galleryPage,
