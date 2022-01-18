@@ -27,7 +27,7 @@ class DioHttpClient {
       );
       return handleResponse(response, httpTransformer: httpTransformer);
     } on DioError catch (e, stack) {
-      logger.e('DioError:\n$e\n$stack');
+      // logger.e('DioError:\n$e\n$stack');
       return handleException(e, data: e.response?.data);
     } on Exception catch (e, stack) {
       logger.e('Exception:\n$e\n$stack');

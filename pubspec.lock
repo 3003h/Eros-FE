@@ -1026,13 +1026,6 @@ packages:
       url: "https://pub.flutter-io.cn"
     source: hosted
     version: "0.12.11"
-  material_color_utilities:
-    dependency: transitive
-    description:
-      name: material_color_utilities
-      url: "https://pub.flutter-io.cn"
-    source: hosted
-    version: "0.1.2"
   meta:
     dependency: transitive
     description:
@@ -1627,7 +1620,7 @@ packages:
       name: test_api
       url: "https://pub.flutter-io.cn"
     source: hosted
-    version: "0.4.8"
+    version: "0.4.3"
   throttling:
     dependency: "direct main"
     description:

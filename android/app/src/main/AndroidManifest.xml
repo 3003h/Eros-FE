@@ -119,7 +119,7 @@
     </application>
 
     <!-- 访问电话状态 -->
-    <uses-permission android:name="android.permission.READ_PHONE_STATE"/>
+    <uses-permission android:name="android.permission.READ_PHONE_STATE" tools:ignore="ManifestOrder"/>
     <!-- 允许全部网络访问 -->
     <uses-permission android:name="android.permission.INTERNET"/>
     <!-- 获取网络信息状态 -->
@@ -129,7 +129,7 @@
 
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
-    <uses-permission android:name="android.permission.MANAGE_EXTERNAL_STORAGE"/>
+    <uses-permission android:name="android.permission.MANAGE_EXTERNAL_STORAGE" tools:ignore="ScopedStorage"/>
 
     <!-- 震动 -->
     <uses-permission android:name="android.permission.VIBRATE"/>
