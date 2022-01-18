@@ -54,7 +54,9 @@ class MessageLookup extends MessageLookupByLibrary {
         "all_preview": MessageLookupByLibrary.simpleMessage("所有预览"),
         "allow_media_scan":
             MessageLookupByLibrary.simpleMessage("Allow media scan"),
+        "always": MessageLookupByLibrary.simpleMessage("Always"),
         "app_title": MessageLookupByLibrary.simpleMessage("FEhViewer"),
+        "ask_me": MessageLookupByLibrary.simpleMessage("Ask for me"),
         "autoLock": MessageLookupByLibrary.simpleMessage("Auto-lock"),
         "auto_select_profile":
             MessageLookupByLibrary.simpleMessage("Auto select profile"),
@@ -124,6 +126,8 @@ class MessageLookup extends MessageLookupByLibrary {
         "groupName": MessageLookupByLibrary.simpleMessage("Group name"),
         "groupType": MessageLookupByLibrary.simpleMessage("Group type"),
         "hours": MessageLookupByLibrary.simpleMessage("小时"),
+        "image_download_type":
+            MessageLookupByLibrary.simpleMessage("Download type"),
         "input_empty": MessageLookupByLibrary.simpleMessage("Input empty"),
         "input_error": MessageLookupByLibrary.simpleMessage("Input error"),
         "instantly": MessageLookupByLibrary.simpleMessage("立即"),
@@ -159,6 +163,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "newGroup": MessageLookupByLibrary.simpleMessage("New Group"),
         "newText": MessageLookupByLibrary.simpleMessage("New Text"),
         "new_comment": MessageLookupByLibrary.simpleMessage("New comment"),
+        "no": MessageLookupByLibrary.simpleMessage("No"),
         "noMorePreviews": MessageLookupByLibrary.simpleMessage("无更多预览"),
         "notFav": MessageLookupByLibrary.simpleMessage("未收藏"),
         "not_login": MessageLookupByLibrary.simpleMessage("未登录"),
@@ -178,6 +183,7 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("Portrait up"),
         "orientation_system":
             MessageLookupByLibrary.simpleMessage("Follow system"),
+        "original_image": MessageLookupByLibrary.simpleMessage("Original"),
         "p_Archiver": MessageLookupByLibrary.simpleMessage("归档"),
         "p_Download": MessageLookupByLibrary.simpleMessage("下载"),
         "p_Rate": MessageLookupByLibrary.simpleMessage("评分"),
@@ -203,6 +209,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "redownload": MessageLookupByLibrary.simpleMessage("Redownload"),
         "reload_image": MessageLookupByLibrary.simpleMessage("重新载入图片"),
         "remove_from_favorites": MessageLookupByLibrary.simpleMessage("从收藏中删除"),
+        "resample_image": MessageLookupByLibrary.simpleMessage("Resample"),
         "right_to_left": MessageLookupByLibrary.simpleMessage("从右到左"),
         "s_Advanced_Options": MessageLookupByLibrary.simpleMessage("高级选项"),
         "s_Between": MessageLookupByLibrary.simpleMessage("从"),

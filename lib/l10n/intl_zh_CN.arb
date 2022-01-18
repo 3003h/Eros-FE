@@ -344,5 +344,11 @@
   "searchTexts": "搜索关键词",
   "newText": "新关键词",
   "global_setting": "全局设置",
-  "open_supported_links": "打开支持的链接"
+  "open_supported_links": "打开支持的链接",
+  "image_download_type": "下载类型",
+  "resample_image": "重采样图片",
+  "original_image": "原图",
+  "no": "不",
+  "ask_me": "询问",
+  "always": "始终"
 }

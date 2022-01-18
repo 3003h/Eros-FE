@@ -3,3 +3,9 @@ enum CustomProfileType {
   disable,
   global,
 }
+
+enum DownloadOrigImageType {
+  always,
+  askMe,
+  no,
+}

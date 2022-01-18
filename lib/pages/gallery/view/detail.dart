@@ -129,7 +129,7 @@ class _DetailWidget extends StatelessWidget {
           final defIcon = TextBtn(
             FontAwesomeIcons.solidArrowAltCircleDown,
             title: L10n.of(context).p_Download,
-            onTap: controller.downloadGallery,
+            onTap: () => controller.downloadGallery(context),
           );
 
           final toDownloadPage = () =>

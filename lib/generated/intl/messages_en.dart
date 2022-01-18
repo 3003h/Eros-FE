@@ -56,7 +56,9 @@ class MessageLookup extends MessageLookupByLibrary {
         "all_preview": MessageLookupByLibrary.simpleMessage("All Preview"),
         "allow_media_scan":
             MessageLookupByLibrary.simpleMessage("Allow media scan"),
+        "always": MessageLookupByLibrary.simpleMessage("Always"),
         "app_title": MessageLookupByLibrary.simpleMessage("FEhViewer"),
+        "ask_me": MessageLookupByLibrary.simpleMessage("Ask for me"),
         "autoLock": MessageLookupByLibrary.simpleMessage("Auto-lock"),
         "auto_select_profile":
             MessageLookupByLibrary.simpleMessage("Auto select profile"),
@@ -134,6 +136,8 @@ class MessageLookup extends MessageLookupByLibrary {
         "groupName": MessageLookupByLibrary.simpleMessage("Group name"),
         "groupType": MessageLookupByLibrary.simpleMessage("Group type"),
         "hours": MessageLookupByLibrary.simpleMessage("hours"),
+        "image_download_type":
+            MessageLookupByLibrary.simpleMessage("Download type"),
         "input_empty": MessageLookupByLibrary.simpleMessage("Input empty"),
         "input_error": MessageLookupByLibrary.simpleMessage("Input error"),
         "instantly": MessageLookupByLibrary.simpleMessage("Instantly"),
@@ -172,6 +176,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "newGroup": MessageLookupByLibrary.simpleMessage("New Group"),
         "newText": MessageLookupByLibrary.simpleMessage("New Text"),
         "new_comment": MessageLookupByLibrary.simpleMessage("New comment"),
+        "no": MessageLookupByLibrary.simpleMessage("No"),
         "noMorePreviews":
             MessageLookupByLibrary.simpleMessage("No more previews"),
         "notFav": MessageLookupByLibrary.simpleMessage("Not Favorited"),
@@ -192,6 +197,7 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("Portrait up"),
         "orientation_system":
             MessageLookupByLibrary.simpleMessage("Follow system"),
+        "original_image": MessageLookupByLibrary.simpleMessage("Original"),
         "p_Archiver": MessageLookupByLibrary.simpleMessage("Archiver"),
         "p_Download": MessageLookupByLibrary.simpleMessage("Download"),
         "p_Rate": MessageLookupByLibrary.simpleMessage("Rate"),
@@ -221,6 +227,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "reload_image": MessageLookupByLibrary.simpleMessage("Reload image"),
         "remove_from_favorites":
             MessageLookupByLibrary.simpleMessage("Remove from favorites"),
+        "resample_image": MessageLookupByLibrary.simpleMessage("Resample"),
         "right_to_left": MessageLookupByLibrary.simpleMessage("Right to left"),
         "s_Advanced_Options":
             MessageLookupByLibrary.simpleMessage("Advanced Options"),

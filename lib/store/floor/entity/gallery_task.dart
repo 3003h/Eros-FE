@@ -13,6 +13,7 @@ part 'gallery_task.g.dart';
 /// 5to6 update entity with new 'rating', 'category', 'uploader' field
 /// 6to7 8 update entity with new 'jsonString' field
 /// 8to9 update entity with new 'tag' field
+/// 9to10 update entity with new 'downloadOrigImage' field
 @CopyWith()
 @Entity(tableName: 'GalleryTask')
 class GalleryTask {
@@ -33,6 +34,7 @@ class GalleryTask {
     this.uploader,
     this.jsonString,
     this.tag,
+    this.downloadOrigImage,
   });
 
   @primaryKey
@@ -52,6 +54,7 @@ class GalleryTask {
   final String? uploader;
   final String? jsonString;
   final String? tag;
+  final bool? downloadOrigImage;
 
   String? get realDirPath {
     if (dirPath == null) {
@@ -68,6 +71,6 @@ class GalleryTask {
 
   @override
   String toString() {
-    return 'GalleryTask{gid: $gid, token: $token, url: $url, title: $title, dirPath: $dirPath, fileCount: $fileCount, completCount: $completCount, status: $status, coverImage: $coverImage, addTime: $addTime, coverUrl: $coverUrl, rating: $rating, category: $category, uploader: $uploader, jsonString: $jsonString, tag: $tag}';
+    return 'GalleryTask{gid: $gid, token: $token, url: $url, title: $title, dirPath: $dirPath, fileCount: $fileCount, completCount: $completCount, status: $status, coverImage: $coverImage, addTime: $addTime, coverUrl: $coverUrl, rating: $rating, category: $category, uploader: $uploader, jsonString: $jsonString, tag: $tag, downloadOrigImage: $downloadOrigImage}';
   }
 }

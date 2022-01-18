@@ -10,6 +10,9 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
+import '../../fehviewer.dart';
+import 'setting_items/selector_Item.dart';
+
 class DownloadSettingPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
@@ -103,14 +106,15 @@ class ListViewDownloadSetting extends StatelessWidget {
         ),
       _buildPreloadImageItem(context),
       _buildMultiDownloadItem(context),
-      // 下载原图
-      TextSwitchItem(
-        L10n.of(context).download_ori_image,
-        desc: L10n.of(context).download_ori_image_summary,
-        intValue: ehConfigService.downloadOrigImage,
-        onChanged: (val) => ehConfigService.downloadOrigImage = val,
-        hideLine: true,
-      ),
+      // 下载原图 旧
+      // TextSwitchItem(
+      //   L10n.of(context).download_ori_image,
+      //   desc: L10n.of(context).download_ori_image_summary,
+      //   intValue: ehConfigService.downloadOrigImage,
+      //   onChanged: (val) => ehConfigService.downloadOrigImage = val,
+      //   hideLine: true,
+      // ),
+      _buildDownloadOrigImageItem(context, hideDivider: true),
     ];
     return ListView.builder(
       itemCount: _list.length,
@@ -121,8 +125,32 @@ class ListViewDownloadSetting extends StatelessWidget {
   }
 }
 
+/// 下载原图
+Widget _buildDownloadOrigImageItem(BuildContext context,
+    {bool hideDivider = false}) {
+  final String _title = L10n.of(context).download_ori_image;
+  final EhConfigService ehConfigService = Get.find();
+
+  final Map<DownloadOrigImageType, String> modeMap =
+      <DownloadOrigImageType, String>{
+    DownloadOrigImageType.no: L10n.of(context).no,
+    DownloadOrigImageType.askMe: L10n.of(context).ask_me,
+    DownloadOrigImageType.always: L10n.of(context).always,
+  };
+  return Obx(() {
+    return SelectorItem<DownloadOrigImageType>(
+      title: _title,
+      hideDivider: hideDivider,
+      actionMap: modeMap,
+      initVal: ehConfigService.downloadOrigType,
+      onValueChanged: (val) => ehConfigService.downloadOrigType = val,
+    );
+  });
+}
+
 /// 预载图片数量
-Widget _buildPreloadImageItem(BuildContext context) {
+Widget _buildPreloadImageItem(BuildContext context,
+    {bool hideDivider = false}) {
   final String _title = L10n.of(context).preload_image;
   final EhConfigService ehConfigService = Get.find();
 

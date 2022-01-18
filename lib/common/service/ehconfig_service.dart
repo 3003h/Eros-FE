@@ -18,6 +18,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
 import 'package:logger/logger.dart';
 
+import '../enum.dart';
 import 'locale_service.dart';
 
 class EhConfigService extends ProfileService {
@@ -136,6 +137,11 @@ class EhConfigService extends ProfileService {
   final _downloadOrigImage = false.obs;
   bool get downloadOrigImage => _downloadOrigImage.value;
   set downloadOrigImage(bool val) => _downloadOrigImage.value = val;
+
+  final _downloadOrigType = DownloadOrigImageType.no.obs;
+  DownloadOrigImageType get downloadOrigType => _downloadOrigType.value;
+  set downloadOrigType(DownloadOrigImageType val) =>
+      _downloadOrigType.value = val;
 
   final _selectProfile = ''.obs;
   String get selectProfile => _selectProfile.value;
@@ -381,6 +387,16 @@ class EhConfigService extends ProfileService {
     downloadOrigImage = downloadConfig.downloadOrigImage ?? false;
     everProfile<bool>(_downloadOrigImage, (value) {
       downloadConfig = downloadConfig.copyWith(downloadOrigImage: value);
+    });
+
+    // _downloadOrigType
+    downloadOrigType = EnumToString.fromString(DownloadOrigImageType.values,
+            downloadConfig.downloadOrigImageType ?? '') ??
+        (downloadOrigImage
+            ? DownloadOrigImageType.askMe
+            : DownloadOrigImageType.no);
+    everFromEunm(_downloadOrigType, (String value) {
+      downloadConfig = downloadConfig.copyWith(downloadOrigImageType: value);
     });
 
     // _selectProfile

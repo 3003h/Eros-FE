@@ -13,7 +13,7 @@ Widget _buildSelectedProfileItem(BuildContext context,
       key: UniqueKey(),
       title: L10n.of(context).uc_selected,
       actionTitle: 'Selected Profile',
-      hideLine: hideLine,
+      hideDivider: hideLine,
       actionMap: actionMap,
       initVal: _controller.ehSetting.profileSelected ?? '',
       onValueChanged: (val) {
@@ -42,7 +42,7 @@ Widget _buildLoadTypeItem(BuildContext context, {bool hideLine = false}) {
     return SelectorItem<String>(
       key: UniqueKey(),
       title: L10n.of(context).uc_thor_hath,
-      hideLine: hideLine,
+      hideDivider: hideLine,
       actionMap: actionMap,
       simpleActionMap: simpleActionMap,
       initVal: _controller.ehSetting.loadImageThroughHAtH ?? '',
@@ -65,7 +65,7 @@ Widget _buildImageSizeItem(BuildContext context, {bool hideLine = false}) {
     return SelectorItem<String>(
       key: UniqueKey(),
       title: L10n.of(context).uc_res_res,
-      hideLine: hideLine,
+      hideDivider: hideLine,
       actionMap: actionMap,
       initVal: _controller.ehSetting.imageSize ?? '',
       onValueChanged: (val) => _controller.ehSetting =
@@ -83,7 +83,7 @@ Widget _buildNameDisplayItem(BuildContext context, {bool hideLine = false}) {
     return SelectorItem<String>(
       key: UniqueKey(),
       title: L10n.of(context).uc_name_display,
-      hideLine: hideLine,
+      hideDivider: hideLine,
       actionMap: actionMap,
       initVal: _controller.ehSetting.galleryNameDisplay ?? '',
       onValueChanged: (val) => _controller.ehSetting =
@@ -114,7 +114,7 @@ Widget _buildArchiverSettingsItem(BuildContext context,
     return SelectorItem<String>(
       key: UniqueKey(),
       title: L10n.of(context).uc_archiver_set,
-      hideLine: hideLine,
+      hideDivider: hideLine,
       actionMap: actionMap,
       // simpleActionMap: sActionMap,
       initVal: _controller.ehSetting.archiverSettings ?? '',
@@ -138,7 +138,7 @@ Widget _buildFrontPageSettingsItem(BuildContext context,
     return SelectorItem<String>(
       key: UniqueKey(),
       title: L10n.of(context).uc_front_page_dis_mode,
-      hideLine: hideLine,
+      hideDivider: hideLine,
       actionMap: actionMap,
       initVal: _controller.ehSetting.frontPageSettings ?? '',
       onValueChanged: (val) => _controller.ehSetting =
@@ -157,7 +157,7 @@ Widget _buildFavoritesSortItem(BuildContext context, {bool hideLine = false}) {
     return SelectorItem<String>(
       key: UniqueKey(),
       title: L10n.of(context).uc_fav_sort,
-      hideLine: hideLine,
+      hideDivider: hideLine,
       actionMap: actionMap,
       initVal: _controller.ehSetting.frontPageSettings ?? '',
       onValueChanged: (val) => _controller.ehSetting =
@@ -179,7 +179,7 @@ Widget _buildSearchResultCountItem(BuildContext context,
     return SelectorItem<String>(
       key: UniqueKey(),
       title: L10n.of(context).uc_search_r_count,
-      hideLine: hideLine,
+      hideDivider: hideLine,
       actionMap: actionMap,
       initVal: _controller.ehSetting.searchResultCount ?? '',
       onValueChanged: (val) => _controller.ehSetting =
@@ -203,7 +203,7 @@ Widget _buildThumbMouseOverItem(BuildContext context, {bool hideLine = false}) {
     return SelectorItem<String>(
       key: UniqueKey(),
       title: L10n.of(context).uc_mose_over_thumb,
-      hideLine: hideLine,
+      hideDivider: hideLine,
       actionMap: actionMap,
       simpleActionMap: sActionMap,
       initVal: _controller.ehSetting.mouseOverThumbnails ?? '',
@@ -223,7 +223,7 @@ Widget _buildThumbSizeItem(BuildContext context, {bool hideLine = false}) {
     return SelectorItem<String>(
       key: UniqueKey(),
       title: L10n.of(context).uc_thumb_size,
-      hideLine: hideLine,
+      hideDivider: hideLine,
       actionMap: actionMap,
       initVal: _controller.ehSetting.thumbnailSize ?? '',
       onValueChanged: (val) => _controller.ehSetting =
@@ -244,7 +244,7 @@ Widget _buildThumbRowItem(BuildContext context, {bool hideLine = false}) {
     return SelectorItem<String>(
       key: UniqueKey(),
       title: L10n.of(context).uc_thumb_row,
-      hideLine: hideLine,
+      hideDivider: hideLine,
       actionMap: actionMap,
       initVal: _controller.ehSetting.thumbnailRows ?? '',
       onValueChanged: (val) => _controller.ehSetting =
@@ -264,7 +264,7 @@ Widget _buildSortOrderComment(BuildContext context, {bool hideLine = false}) {
     return SelectorItem<String>(
       key: UniqueKey(),
       title: L10n.of(context).uc_comments_sort_order,
-      hideLine: hideLine,
+      hideDivider: hideLine,
       actionMap: actionMap,
       initVal: _controller.ehSetting.sortOrderComments ?? '',
       onValueChanged: (val) => _controller.ehSetting =
@@ -283,7 +283,7 @@ Widget _buildShowCommentVotes(BuildContext context, {bool hideLine = false}) {
     return SelectorItem<String>(
       key: UniqueKey(),
       title: L10n.of(context).uc_comments_show_votes,
-      hideLine: hideLine,
+      hideDivider: hideLine,
       actionMap: actionMap,
       initVal: _controller.ehSetting.showCommentVotes ?? '',
       onValueChanged: (val) => _controller.ehSetting =
@@ -302,7 +302,7 @@ Widget _buildSortOrderTags(BuildContext context, {bool hideLine = false}) {
     return SelectorItem<String>(
       key: UniqueKey(),
       title: L10n.of(context).uc_tag_short_order,
-      hideLine: hideLine,
+      hideDivider: hideLine,
       actionMap: actionMap,
       initVal: _controller.ehSetting.sortOrderTags ?? '',
       onValueChanged: (val) => _controller.ehSetting =
@@ -422,7 +422,7 @@ Widget _buildMPVDisplayStyle(BuildContext context, {bool hideLine = false}) {
       key: UniqueKey(),
       title: L10n.of(context).uc_mpv_stype,
       actionTitle: 'Multi-Page Viewer Display Style',
-      hideLine: hideLine,
+      hideDivider: hideLine,
       actionMap: actionMap,
       // simpleActionMap: sActionMap,
       initVal: _controller.ehSetting.mpvStyle ?? '',
