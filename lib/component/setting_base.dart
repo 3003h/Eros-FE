@@ -101,6 +101,7 @@ class SelectorSettingItem extends StatefulWidget {
     this.titleFlex = 1,
     this.valueFlex = 0,
     this.maxLines = 1,
+    this.suffix,
   }) : super(key: key);
 
   final String title;
@@ -111,6 +112,7 @@ class SelectorSettingItem extends StatefulWidget {
   final int titleFlex;
   final int valueFlex;
   final int maxLines;
+  final Widget? suffix;
 
   // 点击回调
   final VoidCallback? onTap;
@@ -212,6 +214,7 @@ class _SelectorSettingItemState extends State<SelectorSettingItem> {
               children: <Widget>[
                 Expanded(flex: widget.titleFlex, child: titleWidget),
                 Expanded(flex: widget.valueFlex, child: selectedWidget),
+                if (widget.suffix != null) widget.suffix!,
                 const Icon(
                   CupertinoIcons.forward,
                   color: CupertinoColors.systemGrey,

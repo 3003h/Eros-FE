@@ -44,6 +44,7 @@ class ListViewDownloadSetting extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final List<Widget> _list = <Widget>[
+      // 下载路径
       if (GetPlatform.isAndroid || GetPlatform.isFuchsia)
         Obx(() {
           ehConfigService.downloadLocatino;
@@ -64,6 +65,13 @@ class ListViewDownloadSetting extends StatelessWidget {
                 return SelectorSettingItem(
                   title: L10n.of(context).download_location,
                   desc: path,
+                  suffix: CupertinoButton(
+                    padding: const EdgeInsets.all(0),
+                    minSize: 36,
+                    child: const Icon(CupertinoIcons.refresh),
+                    onPressed: () async => ehConfigService.downloadLocatino =
+                        await defDownloadPath,
+                  ),
                   onTap: () async {
                     final String? result =
                         await FilePicker.platform.getDirectoryPath();
