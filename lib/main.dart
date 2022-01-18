@@ -16,6 +16,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_inappwebview/flutter_inappwebview.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
@@ -156,7 +157,6 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
 
   @override
   Widget build(BuildContext context) {
-    // logger.d(' MyApp build');
     Widget cupertinoApp({
       CupertinoThemeData? theme,
       Locale? locale,
@@ -209,9 +209,14 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
     }
 
     return OKToast(
-      child: Obx(() => cupertinoApp(
-            theme: themeService.themeData,
-            locale: localeService.locale,
+      child: Obx(() => AnnotatedRegion<SystemUiOverlayStyle>(
+            value: ehTheme.isDarkMode
+                ? SystemUiOverlayStyle.light
+                : SystemUiOverlayStyle.dark,
+            child: cupertinoApp(
+              theme: themeService.themeData,
+              locale: localeService.locale,
+            ),
           )),
     );
   }
