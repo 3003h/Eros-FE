@@ -390,7 +390,7 @@ class _CustomProfileSettingPageState extends State<CustomProfileSettingPage> {
     };
     return SelectorItem<ListModeEnum>(
       title: _title,
-      hideLine: hideLine,
+      hideDivider: hideLine,
       actionMap: modeMap,
       initVal: listMode,
       onValueChanged: (val) {

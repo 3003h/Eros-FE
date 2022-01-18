@@ -648,9 +648,45 @@ class GalleryPageController extends GetxController
     }
   }
 
-  void downloadGallery() {
-    final DownloadController _downloadController =
-        Get.find<DownloadController>();
+  void downloadGallery(BuildContext context) {
+    switch (_ehConfigService.downloadOrigType) {
+      case DownloadOrigImageType.no:
+        _downloadGallery();
+        break;
+      case DownloadOrigImageType.always:
+        _downloadGallery(downloadOri: true);
+        break;
+      case DownloadOrigImageType.askMe:
+        showCupertinoDialog(
+            context: context,
+            barrierDismissible: true,
+            builder: (context) {
+              return CupertinoAlertDialog(
+                title: Text(L10n.of(context).image_download_type),
+                // content: Text(L10n.of(context).download_ori_image_summary),
+                actions: [
+                  CupertinoDialogAction(
+                    child: Text(L10n.of(context).resample_image),
+                    onPressed: () {
+                      Get.back();
+                      _downloadGallery();
+                    },
+                  ),
+                  CupertinoDialogAction(
+                    child: Text(L10n.of(context).original_image),
+                    onPressed: () {
+                      Get.back();
+                      _downloadGallery(downloadOri: true);
+                    },
+                  ),
+                ],
+              );
+            });
+        break;
+    }
+  }
+
+  void _downloadGallery({bool downloadOri = false}) {
     _downloadController.downloadGallery(
       gid: int.parse(gid),
       token: galleryItem?.token,
@@ -661,6 +697,7 @@ class GalleryPageController extends GetxController
       rating: galleryItem?.rating,
       uploader: galleryItem?.uploader,
       category: galleryItem?.category,
+      downloadOri: downloadOri,
     );
   }
 

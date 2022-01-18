@@ -3,5 +3,6 @@
   "multiDownload?": 3,
   "downloadLocation?" : "",
   "downloadOrigImage?": false,
+  "downloadOrigImageType?": "",
   "allowMediaScan?": false
 }

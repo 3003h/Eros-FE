@@ -342,6 +342,12 @@
   "searchTexts": "Search texts",
   "newText": "New Text",
   "global_setting": "Global Setting",
-  "open_supported_links": "Open supported links"
+  "open_supported_links": "Open supported links",
+  "image_download_type": "Download type",
+  "resample_image": "Resample",
+  "original_image": "Original",
+  "no": "No",
+  "ask_me": "Ask for me",
+  "always": "Always"
 
 }

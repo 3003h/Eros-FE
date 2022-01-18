@@ -9,6 +9,7 @@ class DownloadConfig {
     this.multiDownload,
     this.downloadLocation,
     this.downloadOrigImage,
+    this.downloadOrigImageType,
     this.allowMediaScan,
   });
 
@@ -16,6 +17,7 @@ class DownloadConfig {
   final int? multiDownload;
   final String? downloadLocation;
   final bool? downloadOrigImage;
+  final String? downloadOrigImageType;
   final bool? allowMediaScan;
 
   factory DownloadConfig.fromJson(Map<String,dynamic> json) => DownloadConfig(
@@ -23,6 +25,7 @@ class DownloadConfig {
     multiDownload: json['multiDownload'] != null ? json['multiDownload'] as int : null,
     downloadLocation: json['downloadLocation'] != null ? json['downloadLocation'] as String : null,
     downloadOrigImage: json['downloadOrigImage'] != null ? json['downloadOrigImage'] as bool : null,
+    downloadOrigImageType: json['downloadOrigImageType'] != null ? json['downloadOrigImageType'] as String : null,
     allowMediaScan: json['allowMediaScan'] != null ? json['allowMediaScan'] as bool : null
   );
   
@@ -31,6 +34,7 @@ class DownloadConfig {
     'multiDownload': multiDownload,
     'downloadLocation': downloadLocation,
     'downloadOrigImage': downloadOrigImage,
+    'downloadOrigImageType': downloadOrigImageType,
     'allowMediaScan': allowMediaScan
   };
 
@@ -39,6 +43,7 @@ class DownloadConfig {
     multiDownload: multiDownload,
     downloadLocation: downloadLocation,
     downloadOrigImage: downloadOrigImage,
+    downloadOrigImageType: downloadOrigImageType,
     allowMediaScan: allowMediaScan
   );
 
@@ -48,19 +53,21 @@ class DownloadConfig {
     int? multiDownload,
     String? downloadLocation,
     bool? downloadOrigImage,
+    String? downloadOrigImageType,
     bool? allowMediaScan
   }) => DownloadConfig(
     preloadImage: preloadImage ?? this.preloadImage,
     multiDownload: multiDownload ?? this.multiDownload,
     downloadLocation: downloadLocation ?? this.downloadLocation,
     downloadOrigImage: downloadOrigImage ?? this.downloadOrigImage,
+    downloadOrigImageType: downloadOrigImageType ?? this.downloadOrigImageType,
     allowMediaScan: allowMediaScan ?? this.allowMediaScan,
   );  
 
   @override
   bool operator ==(Object other) => identical(this, other) 
-    || other is DownloadConfig && preloadImage == other.preloadImage && multiDownload == other.multiDownload && downloadLocation == other.downloadLocation && downloadOrigImage == other.downloadOrigImage && allowMediaScan == other.allowMediaScan;
+    || other is DownloadConfig && preloadImage == other.preloadImage && multiDownload == other.multiDownload && downloadLocation == other.downloadLocation && downloadOrigImage == other.downloadOrigImage && downloadOrigImageType == other.downloadOrigImageType && allowMediaScan == other.allowMediaScan;
 
   @override
-  int get hashCode => preloadImage.hashCode ^ multiDownload.hashCode ^ downloadLocation.hashCode ^ downloadOrigImage.hashCode ^ allowMediaScan.hashCode;
+  int get hashCode => preloadImage.hashCode ^ multiDownload.hashCode ^ downloadLocation.hashCode ^ downloadOrigImage.hashCode ^ downloadOrigImageType.hashCode ^ allowMediaScan.hashCode;
 }

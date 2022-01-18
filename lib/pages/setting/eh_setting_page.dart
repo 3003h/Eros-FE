@@ -341,7 +341,7 @@ Widget _buildListModeItem(BuildContext context, {bool hideLine = false}) {
   return Obx(() {
     return SelectorItem<ListModeEnum>(
       title: _title,
-      hideLine: hideLine,
+      hideDivider: hideLine,
       actionMap: modeMap,
       initVal: ehConfigService.listMode.value,
       onValueChanged: (val) => ehConfigService.listMode.value = val,
@@ -364,7 +364,7 @@ Widget _buildTagIntroImgLvItem(BuildContext context, {bool hideLine = false}) {
   return Obx(() {
     return SelectorItem<TagIntroImgLv>(
       title: _title,
-      hideLine: hideLine,
+      hideDivider: hideLine,
       actionMap: descMap,
       initVal: ehConfigService.tagIntroImgLv.value,
       onValueChanged: (val) => ehConfigService.tagIntroImgLv.value = val,

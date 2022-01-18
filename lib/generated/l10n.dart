@@ -3453,6 +3453,66 @@ class L10n {
       args: [],
     );
   }
+
+  /// `Download type`
+  String get image_download_type {
+    return Intl.message(
+      'Download type',
+      name: 'image_download_type',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Resample`
+  String get resample_image {
+    return Intl.message(
+      'Resample',
+      name: 'resample_image',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Original`
+  String get original_image {
+    return Intl.message(
+      'Original',
+      name: 'original_image',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `No`
+  String get no {
+    return Intl.message(
+      'No',
+      name: 'no',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Ask for me`
+  String get ask_me {
+    return Intl.message(
+      'Ask for me',
+      name: 'ask_me',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Always`
+  String get always {
+    return Intl.message(
+      'Always',
+      name: 'always',
+      desc: '',
+      args: [],
+    );
+  }
 }
 
 class AppLocalizationDelegate extends LocalizationsDelegate<L10n> {

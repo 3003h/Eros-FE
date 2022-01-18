@@ -9,7 +9,7 @@ class SelectorItem<T> extends StatefulWidget {
     Key? key,
     required this.title,
     this.actionTitle,
-    this.hideLine = false,
+    this.hideDivider = false,
     required this.actionMap,
     this.simpleActionMap,
     required this.initVal,
@@ -17,7 +17,7 @@ class SelectorItem<T> extends StatefulWidget {
   }) : super(key: key);
   final String title;
   final String? actionTitle;
-  final bool hideLine;
+  final bool hideDivider;
   final Map<T, String> actionMap;
   final Map<T, String>? simpleActionMap;
   final T initVal;
@@ -71,7 +71,7 @@ class _SelectorItemState<T> extends State<SelectorItem<T>> {
 
     return SelectorSettingItem(
       title: widget.title,
-      hideLine: widget.hideLine,
+      hideLine: widget.hideDivider,
       selector: selector,
       titleFlex: 0,
       valueFlex: 1,

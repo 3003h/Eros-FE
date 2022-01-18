@@ -70,7 +70,7 @@ class _$EhDatabase extends EhDatabase {
   Future<sqflite.Database> open(String path, List<Migration> migrations,
       [Callback? callback]) async {
     final databaseOptions = sqflite.OpenDatabaseOptions(
-      version: 9,
+      version: 10,
       onConfigure: (database) async {
         await database.execute('PRAGMA foreign_keys = ON');
         await callback?.onConfigure?.call(database);
@@ -86,7 +86,7 @@ class _$EhDatabase extends EhDatabase {
       },
       onCreate: (database, version) async {
         await database.execute(
-            'CREATE TABLE IF NOT EXISTS `GalleryTask` (`gid` INTEGER NOT NULL, `token` TEXT NOT NULL, `url` TEXT, `title` TEXT NOT NULL, `dirPath` TEXT, `fileCount` INTEGER NOT NULL, `completCount` INTEGER, `status` INTEGER, `coverImage` TEXT, `addTime` INTEGER, `coverUrl` TEXT, `rating` REAL, `category` TEXT, `uploader` TEXT, `jsonString` TEXT, `tag` TEXT, PRIMARY KEY (`gid`))');
+            'CREATE TABLE IF NOT EXISTS `GalleryTask` (`gid` INTEGER NOT NULL, `token` TEXT NOT NULL, `url` TEXT, `title` TEXT NOT NULL, `dirPath` TEXT, `fileCount` INTEGER NOT NULL, `completCount` INTEGER, `status` INTEGER, `coverImage` TEXT, `addTime` INTEGER, `coverUrl` TEXT, `rating` REAL, `category` TEXT, `uploader` TEXT, `jsonString` TEXT, `tag` TEXT, `downloadOrigImage` INTEGER, PRIMARY KEY (`gid`))');
         await database.execute(
             'CREATE TABLE IF NOT EXISTS `GalleryImageTask` (`gid` INTEGER NOT NULL, `ser` INTEGER NOT NULL, `token` TEXT NOT NULL, `href` TEXT, `sourceId` TEXT, `imageUrl` TEXT, `filePath` TEXT, `status` INTEGER, PRIMARY KEY (`gid`, `ser`))');
         await database.execute(
@@ -138,7 +138,10 @@ class _$GalleryTaskDao extends GalleryTaskDao {
                   'category': item.category,
                   'uploader': item.uploader,
                   'jsonString': item.jsonString,
-                  'tag': item.tag
+                  'tag': item.tag,
+                  'downloadOrigImage': item.downloadOrigImage == null
+                      ? null
+                      : (item.downloadOrigImage! ? 1 : 0)
                 },
             changeListener),
         _galleryTaskUpdateAdapter = UpdateAdapter(
@@ -161,7 +164,10 @@ class _$GalleryTaskDao extends GalleryTaskDao {
                   'category': item.category,
                   'uploader': item.uploader,
                   'jsonString': item.jsonString,
-                  'tag': item.tag
+                  'tag': item.tag,
+                  'downloadOrigImage': item.downloadOrigImage == null
+                      ? null
+                      : (item.downloadOrigImage! ? 1 : 0)
                 },
             changeListener);
 
@@ -194,7 +200,10 @@ class _$GalleryTaskDao extends GalleryTaskDao {
             category: row['category'] as String?,
             uploader: row['uploader'] as String?,
             jsonString: row['jsonString'] as String?,
-            tag: row['tag'] as String?));
+            tag: row['tag'] as String?,
+            downloadOrigImage: row['downloadOrigImage'] == null
+                ? null
+                : (row['downloadOrigImage'] as int) != 0));
   }
 
   @override
@@ -216,7 +225,10 @@ class _$GalleryTaskDao extends GalleryTaskDao {
             category: row['category'] as String?,
             uploader: row['uploader'] as String?,
             jsonString: row['jsonString'] as String?,
-            tag: row['tag'] as String?),
+            tag: row['tag'] as String?,
+            downloadOrigImage: row['downloadOrigImage'] == null
+                ? null
+                : (row['downloadOrigImage'] as int) != 0),
         queryableName: 'GalleryTask',
         isView: false);
   }
@@ -240,7 +252,10 @@ class _$GalleryTaskDao extends GalleryTaskDao {
             category: row['category'] as String?,
             uploader: row['uploader'] as String?,
             jsonString: row['jsonString'] as String?,
-            tag: row['tag'] as String?),
+            tag: row['tag'] as String?,
+            downloadOrigImage: row['downloadOrigImage'] == null
+                ? null
+                : (row['downloadOrigImage'] as int) != 0),
         arguments: [gid]);
   }
 

@@ -53,7 +53,9 @@ class MessageLookup extends MessageLookupByLibrary {
         "all_comment": MessageLookupByLibrary.simpleMessage("모든 댓글"),
         "all_preview": MessageLookupByLibrary.simpleMessage("모든 미리 보기"),
         "allow_media_scan": MessageLookupByLibrary.simpleMessage("미디어 스캔 허용"),
+        "always": MessageLookupByLibrary.simpleMessage("Always"),
         "app_title": MessageLookupByLibrary.simpleMessage("FEhViewer"),
+        "ask_me": MessageLookupByLibrary.simpleMessage("Ask for me"),
         "autoLock": MessageLookupByLibrary.simpleMessage("자동 잠금"),
         "auto_select_profile":
             MessageLookupByLibrary.simpleMessage("Auto select profile"),
@@ -121,6 +123,8 @@ class MessageLookup extends MessageLookupByLibrary {
         "groupName": MessageLookupByLibrary.simpleMessage("Group name"),
         "groupType": MessageLookupByLibrary.simpleMessage("Group type"),
         "hours": MessageLookupByLibrary.simpleMessage("시간"),
+        "image_download_type":
+            MessageLookupByLibrary.simpleMessage("Download type"),
         "input_empty": MessageLookupByLibrary.simpleMessage("인풋 비어있음"),
         "input_error": MessageLookupByLibrary.simpleMessage("인풋 에러"),
         "instantly": MessageLookupByLibrary.simpleMessage("즉시"),
@@ -155,6 +159,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "newGroup": MessageLookupByLibrary.simpleMessage("New Group"),
         "newText": MessageLookupByLibrary.simpleMessage("New Text"),
         "new_comment": MessageLookupByLibrary.simpleMessage("New comment"),
+        "no": MessageLookupByLibrary.simpleMessage("No"),
         "noMorePreviews": MessageLookupByLibrary.simpleMessage("미리 보기가 더 없음"),
         "notFav": MessageLookupByLibrary.simpleMessage("즐겨찾기에 없음"),
         "not_login": MessageLookupByLibrary.simpleMessage("로그인하지 않음"),
@@ -171,6 +176,7 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("뒤집힌 가로"),
         "orientation_portraitUp": MessageLookupByLibrary.simpleMessage("세로"),
         "orientation_system": MessageLookupByLibrary.simpleMessage("시스템 방향"),
+        "original_image": MessageLookupByLibrary.simpleMessage("Original"),
         "p_Archiver": MessageLookupByLibrary.simpleMessage("아카이브"),
         "p_Download": MessageLookupByLibrary.simpleMessage("다운로드"),
         "p_Rate": MessageLookupByLibrary.simpleMessage("평가"),
@@ -197,6 +203,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "reload_image": MessageLookupByLibrary.simpleMessage("이미지 새로고침"),
         "remove_from_favorites":
             MessageLookupByLibrary.simpleMessage("즐겨찾기에서 제거"),
+        "resample_image": MessageLookupByLibrary.simpleMessage("Resample"),
         "right_to_left": MessageLookupByLibrary.simpleMessage("오른쪽에서 왼쪽으로"),
         "s_Advanced_Options": MessageLookupByLibrary.simpleMessage("고급 설정"),
         "s_Between": MessageLookupByLibrary.simpleMessage("사이"),

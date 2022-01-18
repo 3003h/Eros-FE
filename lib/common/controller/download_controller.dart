@@ -85,6 +85,7 @@ class DownloadController extends GetxController {
     double? rating,
     String? category,
     String? uploader,
+    bool downloadOri = false,
   }) async {
     final _galleryTaskDao = await getGalleryTaskDao();
 
@@ -125,6 +126,7 @@ class DownloadController extends GetxController {
       rating: rating,
       category: category,
       uploader: uploader,
+      downloadOrigImage: downloadOri,
     );
 
     logger.d('add NewTask ${galleryTask.toString()}');
@@ -413,6 +415,7 @@ class DownloadController extends GetxController {
     int gid,
     String downloadPath,
     int maxSer, {
+    bool downloadOrigImage = false,
     bool redownload = false,
     CancelToken? cancelToken,
     ValueChanged<String>? onDownloadComplete,
@@ -466,12 +469,14 @@ class DownloadController extends GetxController {
         throw EhError(error: 'get imageUrl error');
       }
 
-      _targetImageUrl = ehConfigService.downloadOrigImage
+      // 目标下载地址
+      _targetImageUrl = downloadOrigImage
           ? imageFetched.originImageUrl ?? imageFetched.imageUrl!
           : imageFetched.imageUrl!;
       _uptImage = imageFetched;
 
-      logger.d('Download _targetImageUrl:$_targetImageUrl');
+      logger.d(
+          'downloadOrigImage:$downloadOrigImage\nDownload _targetImageUrl:$_targetImageUrl');
 
       _fileName = _getFileName(imageFetched, maxSer);
 
@@ -822,6 +827,7 @@ class DownloadController extends GetxController {
               galleryTask.gid,
               downloadPath!,
               maxSer,
+              downloadOrigImage: galleryTask.downloadOrigImage ?? false,
               cancelToken: _cancelToken,
               redownload: itemSer < _maxCompletSer,
               onDownloadComplete: (String fileName) async {
