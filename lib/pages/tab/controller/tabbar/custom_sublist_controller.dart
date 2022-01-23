@@ -50,7 +50,7 @@ class CustomSubListController extends TabViewController {
   Future<GalleryList?> fetchData({bool refresh = false}) async {
     cancelToken = CancelToken();
 
-    logger.d('${jsonEncode(profile)}');
+    logger.v('${jsonEncode(profile)}');
 
     final fetchConfig = FetchParams(
       cats: profile?.cats,
