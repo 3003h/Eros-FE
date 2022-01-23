@@ -172,10 +172,6 @@ class Global {
 
     await HiveHelper.init();
 
-    if (GetPlatform.isMobile) {
-      await vibrateUtil.init();
-    }
-
     _profileInit();
 
     cookieManager = CookieManager(await Api.cookieJar);
