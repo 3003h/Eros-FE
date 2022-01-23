@@ -14,10 +14,8 @@ import 'package:fehviewer/widget/eh_network_image.dart';
 import 'package:fehviewer/widget/rating_bar.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
-import 'package:keframe/frame_separate_widget.dart';
 
 import 'item_base.dart';
 
@@ -91,7 +89,7 @@ class GalleryItemWidget extends StatelessWidget {
                     BoxShadow(
                       color: CupertinoDynamicColor.resolve(
                               CupertinoColors.darkBackgroundGray, Get.context!)
-                          .withOpacity(0.3),
+                          .withOpacity(0.2),
                       blurRadius: 8,
                       // spreadRadius: 1,
                       offset: const Offset(0.5, 4),

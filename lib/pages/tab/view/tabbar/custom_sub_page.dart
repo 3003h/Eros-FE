@@ -33,7 +33,7 @@ class _SubListViewState<T extends CustomSubListController>
   @override
   void initState() {
     super.initState();
-    logger.d('Get.find ${T.runtimeType} tag:${widget.profileUuid}');
+    logger.v('Get.find ${T.runtimeType} tag:${widget.profileUuid}');
     subController = Get.find<T>(tag: widget.profileUuid)
       ..heroTag = widget.profileUuid;
     controller.subControllerMap[widget.profileUuid] = subController;

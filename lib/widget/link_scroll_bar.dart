@@ -588,9 +588,9 @@ Future showItemAttach({
   await SmartDialog.showAttach(
     highlight: Positioned(
       left: offset?.dx ?? 0.0,
-      top: offset?.dy ?? 0.0,
+      top: (offset?.dy ?? 0.0) + 2,
       child: Container(
-        height: targetContext.size?.height,
+        height: (targetContext.size?.height ?? 0) - 4,
         width: targetContext.size?.width,
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(10),
