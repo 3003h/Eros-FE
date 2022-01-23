@@ -8,7 +8,7 @@ class EhNavigatorObserver extends NavigatorObserver {
   void didPop(Route route, Route? previousRoute) {
     super.didPop(route, previousRoute);
     history.remove(route);
-    logger.d('didPop: \n${route.settings}');
+    // logger.d('didPop: \n${route.settings}');
 
     ///调用Navigator.of(context).pop() 出栈时回调
   }
@@ -17,7 +17,7 @@ class EhNavigatorObserver extends NavigatorObserver {
   void didPush(Route route, Route? previousRoute) {
     super.didPush(route, previousRoute);
     history.add(route);
-    logger.d('didPush: \n${route.settings}');
+    // logger.d('didPush: \n${route.settings}');
 
     ///调用Navigator.of(context).push(Route()) 进栈时回调
   }
@@ -26,7 +26,7 @@ class EhNavigatorObserver extends NavigatorObserver {
   void didRemove(Route route, Route? previousRoute) {
     super.didRemove(route, previousRoute);
     history.remove(route);
-    logger.d('didRemove: \n${route.settings}');
+    // logger.d('didRemove: \n${route.settings}');
 
     ///调用Navigator.of(context).removeRoute(Route()) 移除某个路由回调
   }
@@ -36,7 +36,7 @@ class EhNavigatorObserver extends NavigatorObserver {
     super.didReplace(newRoute: newRoute, oldRoute: oldRoute);
     history.remove(oldRoute);
     if (newRoute != null) history.add(newRoute);
-    logger.d('didReplace: \n${newRoute?.settings}');
+    // logger.d('didReplace: \n${newRoute?.settings}');
 
     ///调用Navigator.of(context).replace( oldRoute:Route("old"),newRoute:Route("new")) 替换路由时回调
   }

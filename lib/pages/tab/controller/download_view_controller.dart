@@ -217,7 +217,7 @@ class DownloadViewController extends GetxController {
     DownloadType type = DownloadType.gallery,
     GalleryTask? task,
   }) {
-    vibrateUtil.heavy();
+    vibrateUtil.medium();
     _showLongPressSheet(index, type, task: task);
   }
 
