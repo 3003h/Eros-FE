@@ -14,6 +14,7 @@ class SelectorItem<T> extends StatefulWidget {
     this.simpleActionMap,
     required this.initVal,
     this.onValueChanged,
+    this.actionWidgetMap,
   }) : super(key: key);
   final String title;
   final String? actionTitle;
@@ -22,6 +23,7 @@ class SelectorItem<T> extends StatefulWidget {
   final Map<T, String>? simpleActionMap;
   final T initVal;
   final ValueChanged<T>? onValueChanged;
+  final Map<T, Widget>? actionWidgetMap;
 
   @override
   _SelectorItemState<T> createState() => _SelectorItemState<T>();
@@ -39,13 +41,23 @@ class _SelectorItemState<T> extends State<SelectorItem<T>> {
   }
 
   List<Widget> _getActionList() {
-    return List<Widget>.from(widget.actionMap.keys.map((T element) {
-      return CupertinoActionSheetAction(
-          onPressed: () {
-            Get.back(result: element);
-          },
-          child: Text(widget.actionMap[element] ?? ''));
-    }).toList());
+    if (widget.actionWidgetMap == null) {
+      return List<Widget>.from(widget.actionMap.keys.map((T element) {
+        return CupertinoActionSheetAction(
+            onPressed: () {
+              Get.back(result: element);
+            },
+            child: Text(widget.actionMap[element] ?? ''));
+      }).toList());
+    } else {
+      return List<Widget>.from(widget.actionWidgetMap!.keys.map((T element) {
+        return CupertinoActionSheetAction(
+            onPressed: () {
+              Get.back(result: element);
+            },
+            child: widget.actionWidgetMap![element] ?? const SizedBox());
+      }).toList());
+    }
   }
 
   @override
@@ -61,9 +73,7 @@ class _SelectorItemState<T> extends State<SelectorItem<T>> {
                     Get.back();
                   },
                   child: Text(L10n.of(context).cancel)),
-              actions: <Widget>[
-                ..._getActionList(),
-              ],
+              actions: _getActionList(),
             );
             return dialog;
           });

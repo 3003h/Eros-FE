@@ -7,7 +7,6 @@ import 'package:fehviewer/models/base/eh_models.dart';
 import 'package:fehviewer/pages/item/controller/galleryitem_controller.dart';
 import 'package:fehviewer/widget/rating_bar.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
 
@@ -16,9 +15,9 @@ import 'gallery_item.dart';
 import 'item_base.dart';
 
 const int kTitleMaxLines = 3;
-const double kRadius = 6.0;
-const double kWidth = 28.0;
-const double kHeight = 18.0;
+const double kRadius = 12.0;
+const double kCategoryWidth = 32.0;
+const double kCategoryHeight = 20.0;
 
 class GalleryItemFlowLarge extends StatelessWidget {
   const GalleryItemFlowLarge(
@@ -72,7 +71,7 @@ class GalleryItemFlowLarge extends StatelessWidget {
       child: Text(
         galleryItemController.galleryItem.filecount ?? '',
         style: const TextStyle(
-          fontSize: 11,
+          fontSize: 12,
           color: Color.fromARGB(255, 240, 240, 240),
           height: 1.12,
           // fontStyle: FontStyle.italic,
@@ -170,11 +169,11 @@ class GalleryItemFlowLarge extends StatelessWidget {
                         child: CoverImg(imgUrl: galleryItem.imgUrl!),
                       ),
                       ClipPath(
-                        clipper:
-                            CategoryClipper(width: kWidth, height: kHeight),
+                        clipper: CategoryClipper(
+                            width: kCategoryWidth, height: kCategoryHeight),
                         child: Container(
-                          width: kWidth,
-                          height: kHeight,
+                          width: kCategoryWidth,
+                          height: kCategoryHeight,
                           color: _colorCategory.withOpacity(0.8),
                         ),
                       ),
@@ -183,8 +182,8 @@ class GalleryItemFlowLarge extends StatelessWidget {
                       // Positioned(bottom: 4, left: 4, child: _buildRating()),
                       Positioned(bottom: 4, right: 4, child: _buildCount()),
                       Container(
-                        height: (kHeight + kRadius) / 2,
-                        width: (kWidth + kRadius) / 2,
+                        height: (kCategoryHeight + kRadius * 0.8) / 2,
+                        width: (kCategoryWidth + kRadius * 0.8) / 2,
                         alignment: Alignment.center,
                         child: Text(
                           galleryItem.translated ?? '',

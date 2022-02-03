@@ -5,6 +5,7 @@ import 'package:fehviewer/const/const.dart';
 import 'package:fehviewer/const/storages.dart';
 import 'package:fehviewer/generated/l10n.dart';
 import 'package:fehviewer/pages/gallery/view/gallery_page.dart';
+import 'package:fehviewer/pages/image_view/common.dart';
 import 'package:fehviewer/pages/tab/controller/tabhome_controller.dart';
 import 'package:fehviewer/pages/tab/controller/toplist_controller.dart';
 import 'package:fehviewer/route/navigator_util.dart';
@@ -41,6 +42,10 @@ class EhConfigService extends ProfileService {
   RxBool commentTrans = false.obs;
   RxBool blurredInRecentTasks = true.obs;
   Rx<TagIntroImgLv> tagIntroImgLv = TagIntroImgLv.nonh.obs;
+
+  final _viewColumnMode = ViewColumnMode.single.obs;
+  ViewColumnMode get viewColumnMode => _viewColumnMode.value;
+  set viewColumnMode(ViewColumnMode val) => _viewColumnMode.value = val;
 
   final LocaleService localeService = Get.find();
 
@@ -320,6 +325,13 @@ class EhConfigService extends ProfileService {
         TagIntroImgLv.nonh;
     everFromEunm(tagIntroImgLv,
         (String value) => ehConfig = ehConfig.copyWith(tagIntroImgLv: value));
+
+    // viewColumnMode
+    viewColumnMode = EnumToString.fromString(
+            ViewColumnMode.values, ehConfig.viewColumnMode ?? '') ??
+        ViewColumnMode.single;
+    everFromEunm(_viewColumnMode,
+        (String value) => ehConfig = ehConfig.copyWith(viewColumnMode: value));
 
     debugCount = ehConfig.debugCount ?? 3;
     if (!kDebugMode) {

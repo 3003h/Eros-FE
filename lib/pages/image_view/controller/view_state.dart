@@ -30,19 +30,21 @@ class ViewExtState {
           imagePathList = vr.files!;
           initGid = vr.gid;
 
-          _galleryCacheController
-              .getGalleryCache(initGid ?? '', sync: false)
-              .then((value) =>
-                  _columnMode = value?.columnMode ?? ViewColumnMode.single);
+          // 改为全局
+          // _galleryCacheController
+          //     .getGalleryCache(initGid ?? '', sync: false)
+          //     .then((value) =>
+          //         _columnMode = value?.columnMode ?? ViewColumnMode.single);
         }
       } else {
         galleryPageController = Get.find(tag: pageCtrlDepth);
 
-        _galleryCacheController
-            .getGalleryCache(galleryPageController.galleryItem?.gid ?? '0',
-                sync: false)
-            .then((value) =>
-                _columnMode = value?.columnMode ?? ViewColumnMode.single);
+        // 改为全局
+        // _galleryCacheController
+        //     .getGalleryCache(galleryPageController.galleryItem?.gid ?? '0',
+        //         sync: false)
+        //     .then((value) =>
+        //         _columnMode = value?.columnMode ?? ViewColumnMode.single);
       }
 
       currentItemIndex = vr.index;
@@ -96,16 +98,17 @@ class ViewExtState {
   }
 
   /// 单页双页模式
-  ViewColumnMode _columnMode = ViewColumnMode.single;
-  ViewColumnMode get columnMode => _columnMode;
+  // ViewColumnMode _columnMode = ViewColumnMode.single;
+  ViewColumnMode get columnMode => ehConfigService.viewColumnMode;
   set columnMode(ViewColumnMode val) {
-    _columnMode = val;
-    vDebounce(() {
-      if (loadFrom == LoadFrom.gallery) {
-        _galleryCacheController.setColumnMode(
-            galleryPageController.galleryItem?.gid ?? '', val);
-      }
-    });
+    // _columnMode = val;
+    // vDebounce(() {
+    //   if (loadFrom == LoadFrom.gallery) {
+    //     _galleryCacheController.setColumnMode(
+    //         galleryPageController.galleryItem?.gid ?? '', val);
+    //   }
+    // });
+    ehConfigService.viewColumnMode = val;
   }
 
   /// pageview下实际的index
