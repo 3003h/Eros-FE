@@ -35,5 +35,6 @@
   "tapToTurnPageAnimations?": true,
   "selectProfile?": "1",
   "linkRedirect?": false,
+  "viewColumnMode?": "",
   "fixedHeightOfListItems?": true
 }

@@ -237,6 +237,7 @@ class _DownloadGalleryViewState extends State<DownloadGalleryView>
   @override
   Widget build(BuildContext context) {
     super.build(context);
+    controller.animatedGalleryListKey = GlobalKey<AnimatedListState>();
     return CupertinoScrollbar(
       controller: PrimaryScrollController.of(context),
       child: AnimatedList(

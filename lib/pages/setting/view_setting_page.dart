@@ -3,10 +3,13 @@ import 'package:fehviewer/common/service/ehconfig_service.dart';
 import 'package:fehviewer/common/service/theme_service.dart';
 import 'package:fehviewer/const/const.dart';
 import 'package:fehviewer/generated/l10n.dart';
+import 'package:fehviewer/pages/image_view/common.dart';
 import 'package:fehviewer/pages/image_view/controller/view_contorller.dart';
 import 'package:fehviewer/component/setting_base.dart';
+import 'package:fehviewer/pages/setting/setting_items/selector_Item.dart';
 import 'package:fehviewer/utils/logger.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:orientation/orientation.dart';
@@ -46,6 +49,7 @@ class ViewSettingList extends StatelessWidget {
     final List<Widget> _list = <Widget>[
       _buildViewModeItem(context),
       if (!_hideOrientationItem) ReadOrientationItem(),
+      _buildDoublePageItem(context),
       TextSwitchItem(
         L10n.of(context).show_page_interval,
         intValue: ehConfigService.showPageInterval.value,
@@ -200,4 +204,121 @@ class ReadOrientationItem extends StatelessWidget {
           },
         ));
   }
+}
+
+/// 双页设置切换
+Widget _buildDoublePageItem(BuildContext context, {bool hideLine = false}) {
+  const String _title = '双页设置';
+  final EhConfigService ehConfigService = Get.find();
+
+  final Map<ViewColumnMode, String> actionMap = <ViewColumnMode, String>{
+    ViewColumnMode.single: '关',
+    ViewColumnMode.oddLeft: '模式A',
+    ViewColumnMode.evenLeft: '模式B',
+  };
+
+  Widget _getTempPage(String ser) {
+    return Container(
+      margin: const EdgeInsets.symmetric(horizontal: 2),
+      height: 100,
+      width: 70,
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(6.0),
+        color:
+            CupertinoDynamicColor.resolve(CupertinoColors.systemGrey4, context),
+      ),
+      alignment: Alignment.center,
+      child: Text(
+        ser,
+        style: TextStyle(
+            color: CupertinoDynamicColor.resolve(
+                CupertinoColors.secondaryLabel, context)),
+      ),
+    );
+  }
+
+  Widget _getDivider() {
+    return Center(
+      child: Container(
+        margin: const EdgeInsets.symmetric(horizontal: 6),
+        width: 2,
+        height: 5,
+        color: CupertinoDynamicColor.resolve(
+            CupertinoColors.secondaryLabel, context),
+      ),
+    );
+  }
+
+  final modeB = [
+    _getTempPage('1'),
+    _getDivider(),
+    _getTempPage('2'),
+    _getTempPage('3'),
+    _getDivider(),
+    _getTempPage('4'),
+    _getTempPage('5'),
+  ];
+
+  final modeA = [
+    _getTempPage('1'),
+    _getTempPage('2'),
+    _getDivider(),
+    _getTempPage('3'),
+    _getTempPage('4'),
+    _getDivider(),
+    _getTempPage('5'),
+  ];
+
+  final Map<ViewColumnMode, Widget> actionWidgetMap = <ViewColumnMode, Widget>{
+    ViewColumnMode.single: Text('关'),
+    ViewColumnMode.oddLeft: Column(
+      children: [
+        Text(
+          '模式A',
+          textScaleFactor: 0.8,
+        ),
+        Container(
+          padding: const EdgeInsets.symmetric(vertical: 4),
+          height: 100,
+          child: Obx(() {
+            return ListView(
+              scrollDirection: Axis.horizontal,
+              reverse: ehConfigService.viewMode.value == ViewMode.rightToLeft,
+              children: modeA,
+            );
+          }),
+        ),
+      ],
+    ),
+    ViewColumnMode.evenLeft: Column(
+      children: [
+        Text(
+          '模式B',
+          textScaleFactor: 0.8,
+        ),
+        Container(
+          padding: const EdgeInsets.symmetric(vertical: 4),
+          height: 100,
+          child: Obx(() {
+            return ListView(
+              scrollDirection: Axis.horizontal,
+              reverse: ehConfigService.viewMode.value == ViewMode.rightToLeft,
+              children: modeB,
+            );
+          }),
+        ),
+      ],
+    ),
+  };
+
+  return Obx(() {
+    return SelectorItem<ViewColumnMode>(
+      title: _title,
+      hideDivider: hideLine,
+      actionMap: actionMap,
+      actionWidgetMap: actionWidgetMap,
+      initVal: ehConfigService.viewColumnMode,
+      onValueChanged: (val) => ehConfigService.viewColumnMode = val,
+    );
+  });
 }

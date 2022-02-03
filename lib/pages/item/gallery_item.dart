@@ -89,9 +89,9 @@ class GalleryItemWidget extends StatelessWidget {
                     BoxShadow(
                       color: CupertinoDynamicColor.resolve(
                               CupertinoColors.darkBackgroundGray, Get.context!)
-                          .withOpacity(0.2),
+                          .withOpacity(0.11),
                       blurRadius: 8,
-                      // spreadRadius: 1,
+                      spreadRadius: 2,
                       offset: const Offset(0.5, 4),
                     )
                   ],
