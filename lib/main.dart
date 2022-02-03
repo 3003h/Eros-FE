@@ -11,6 +11,7 @@ import 'package:fehviewer/common/service/theme_service.dart';
 import 'package:fehviewer/component/exception/error.dart';
 import 'package:fehviewer/fehviewer.dart';
 import 'package:fehviewer/store/get_store.dart';
+import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:firebase_analytics/observer.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
@@ -47,8 +48,6 @@ Future<void> main() async {
     Get.lazyPut(() => LogService(), fenix: true);
     Get.lazyPut(() => GStore());
     await Global.init();
-
-    await _initializeFlutterFire();
 
     getinit();
 
@@ -93,9 +92,11 @@ Future<void> _initializeFlutterFire() async {
   if (Platform.isWindows) {
     return;
   }
-  await Firebase.initializeApp(
+  final firebaseApp = await Firebase.initializeApp(
       // options: DefaultFirebaseOptions.currentPlatform,
       );
+
+  analytics = FirebaseAnalytics.instanceFor(app: firebaseApp);
 
   await FirebaseCrashlytics.instance
       .setCrashlyticsCollectionEnabled(!kDebugMode);
@@ -209,14 +210,9 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
     }
 
     return OKToast(
-      child: Obx(() => AnnotatedRegion<SystemUiOverlayStyle>(
-            value: ehTheme.isDarkMode
-                ? SystemUiOverlayStyle.light
-                : SystemUiOverlayStyle.dark,
-            child: cupertinoApp(
-              theme: themeService.themeData,
-              locale: localeService.locale,
-            ),
+      child: Obx(() => cupertinoApp(
+            theme: themeService.themeData,
+            locale: localeService.locale,
           )),
     );
   }

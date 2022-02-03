@@ -10,7 +10,6 @@ import 'package:get/get.dart';
 import 'package:receive_sharing_intent/receive_sharing_intent.dart';
 
 class SplashController extends GetxController {
-  late StreamSubscription _intentDataStreamSubscription;
   late String? sharedText = '';
   final AutoLockController _autoLockController = Get.find();
 
@@ -23,15 +22,6 @@ class SplashController extends GetxController {
       });
     } else {
       // For sharing or opening urls/text coming from outside the app while the app is in the memory
-      _intentDataStreamSubscription =
-          ReceiveSharingIntent.getTextStream().listen((String value) {
-        logger.d('value(memory): $value');
-        sharedText = value;
-        logger.d('Shared: $sharedText');
-        _startHome(sharedText ?? '');
-      }, onError: (err) {
-        logger.e('getLinkStream error: $err');
-      });
 
       // For sharing or opening urls/text coming from outside the app while the app is closed
       ReceiveSharingIntent.getInitialText().then((String? value) {

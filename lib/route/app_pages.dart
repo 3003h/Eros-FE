@@ -47,7 +47,7 @@ import 'package:fehviewer/pages/tab/view/toplist_page.dart';
 import 'package:fehviewer/pages/tab/view/unlock_page.dart';
 import 'package:fehviewer/pages/tab/view/watched_page.dart';
 import 'package:get/get.dart';
-import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
+import 'package:modal_bottom_sheet/modal_bottom_sheet.dart' as modal;
 
 import 'routes.dart';
 
@@ -74,7 +74,7 @@ class AppPages {
     ),
     GetPage(
       name: EHRoutes.home,
-      page: () => CupertinoScaffold(body: HomePage()),
+      page: () => HomePage(),
       transition: Transition.fadeIn,
     ),
     GetPage(

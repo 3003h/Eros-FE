@@ -5,20 +5,15 @@ import 'package:cookie_jar/cookie_jar.dart';
 import 'package:device_info/device_info.dart';
 import 'package:dio_cookie_manager/dio_cookie_manager.dart';
 import 'package:extended_image/extended_image.dart';
-import 'package:fehviewer/const/const.dart';
 import 'package:fehviewer/const/storages.dart';
-import 'package:fehviewer/models/index.dart';
-import 'package:fehviewer/models/profile.dart';
-import 'package:fehviewer/network/app_dio/http_config.dart';
+import 'package:fehviewer/fehviewer.dart';
 import 'package:fehviewer/network/api.dart';
+import 'package:fehviewer/network/app_dio/http_config.dart';
 import 'package:fehviewer/store/floor/database.dart';
 import 'package:fehviewer/store/get_store.dart';
 import 'package:fehviewer/store/hive/hive.dart';
 import 'package:fehviewer/utils/http_override.dart';
-import 'package:fehviewer/utils/logger.dart';
 import 'package:fehviewer/utils/storage.dart';
-import 'package:fehviewer/utils/utility.dart';
-import 'package:fehviewer/utils/vibrate.dart';
 import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -36,7 +31,7 @@ import 'package:system_proxy/system_proxy.dart';
 
 const int kProxyPort = 4041;
 
-final FirebaseAnalytics analytics = FirebaseAnalytics();
+late final FirebaseAnalytics analytics;
 FirebaseFirestore firestore = FirebaseFirestore.instance;
 final LocalAuthentication localAuth = LocalAuthentication();
 DeviceInfoPlugin deviceInfo = DeviceInfoPlugin();
@@ -138,6 +133,12 @@ class Global {
     //statusBar设置为透明，去除半透明遮罩
     SystemChrome.setSystemUIOverlayStyle(
         const SystemUiOverlayStyle(statusBarColor: Colors.transparent));
+
+    // SystemUiOverlayStyle uiStyle = SystemUiOverlayStyle.light.copyWith(
+    //   statusBarColor: Colors.transparent,
+    // );
+    //
+    // SystemChrome.setSystemUIOverlayStyle(uiStyle);
 
     appSupportPath = (await getApplicationSupportDirectory()).path;
     appDocPath = (await getApplicationDocumentsDirectory()).path;

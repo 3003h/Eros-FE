@@ -10,7 +10,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_downloader/flutter_downloader.dart';
 import 'package:get/get.dart';
 import 'package:line_icons/line_icons.dart';
-import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
+import 'package:modal_bottom_sheet/modal_bottom_sheet.dart' as modal;
 
 import 'donwload_labels_page.dart';
 
@@ -78,7 +78,7 @@ class _DownloadTabState extends State<DownloadTab> {
 
     return CupertinoPageScaffold(
       navigationBar: CupertinoNavigationBar(
-        padding: const EdgeInsetsDirectional.only(end: 10),
+        padding: const EdgeInsetsDirectional.only(end: 16),
         middle: middle,
         trailing: Row(
           mainAxisSize: MainAxisSize.min,
@@ -93,24 +93,24 @@ class _DownloadTabState extends State<DownloadTab> {
               ),
               onPressed: _showExportDialog,
             ),
-            CupertinoButton(
-              minSize: 40,
-              padding: const EdgeInsets.all(0),
-              child: const Icon(
-                LineIcons.layerGroup,
-                size: 26,
-              ),
-              onPressed: () {
-                CupertinoScaffold.showCupertinoModalBottomSheet(
-                  context: context,
-                  animationCurve: Curves.easeOutQuart,
-                  // previousRouteAnimationCurve: Curves.easeInOutBack,
-                  duration: const Duration(milliseconds: 400),
-                  useRootNavigator: true,
-                  builder: (context) => const DownloadLabelsView(),
-                );
-              },
-            ),
+            // CupertinoButton(
+            //   minSize: 40,
+            //   padding: const EdgeInsets.all(0),
+            //   child: const Icon(
+            //     LineIcons.layerGroup,
+            //     size: 26,
+            //   ),
+            //   onPressed: () {
+            //     modal.CupertinoScaffold.showCupertinoModalBottomSheet(
+            //       context: context,
+            //       animationCurve: Curves.easeOutQuart,
+            //       // previousRouteAnimationCurve: Curves.easeInOutBack,
+            //       duration: const Duration(milliseconds: 400),
+            //       useRootNavigator: true,
+            //       builder: (context) => const DownloadLabelsView(),
+            //     );
+            //   },
+            // ),
           ],
         ),
       ),

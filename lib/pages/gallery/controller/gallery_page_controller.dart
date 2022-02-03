@@ -16,6 +16,7 @@ import 'package:fehviewer/network/api.dart';
 import 'package:fehviewer/network/request.dart';
 import 'package:fehviewer/pages/gallery/view/gallery_page.dart';
 import 'package:fehviewer/pages/item/controller/galleryitem_controller.dart';
+import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
 
@@ -356,10 +357,14 @@ class GalleryPageController extends GetxController
       }
 
       analytics.logViewItem(
-        itemId: galleryItem?.gid ?? '',
-        itemName: galleryItem?.englishTitle ?? '',
-        itemCategory: galleryItem?.category ?? '',
-        destination: galleryItem?.japaneseTitle,
+        items: [
+          AnalyticsEventItem(
+            itemId: galleryItem?.gid ?? '',
+            itemName: galleryItem?.englishTitle ?? '',
+            itemCategory: galleryItem?.category ?? '',
+            creativeName: galleryItem?.japaneseTitle,
+          )
+        ],
       );
     } catch (err, stack) {
       logger.e('$err\n$stack');
