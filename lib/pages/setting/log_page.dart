@@ -61,6 +61,7 @@ class CustomHostsListView extends StatelessWidget {
   Widget build(BuildContext context) {
     logService.loadFiles();
     return Obx(() => ListView.builder(
+          key: ValueKey(logService.logFiles),
           controller: _controller,
           shrinkWrap: true,
           physics: const BouncingScrollPhysics(),

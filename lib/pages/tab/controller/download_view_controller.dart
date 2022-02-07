@@ -44,7 +44,8 @@ class DownloadViewController extends GetxController {
 
   final DownloadController _downloadController = Get.find();
 
-  late GlobalKey<AnimatedListState> animatedGalleryListKey;
+  late GlobalKey<AnimatedListState> animatedGalleryListKey =
+      GlobalKey<AnimatedListState>();
 
   final GlobalKey<AnimatedListState> animatedArchiverListKey =
       GlobalKey<AnimatedListState>();

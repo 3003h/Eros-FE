@@ -5,6 +5,7 @@ import 'package:intl/intl.dart';
 import 'package:logger/logger.dart';
 import 'package:path/path.dart' as path;
 
+import '../../utils/logger.dart';
 import '../global.dart';
 
 const _kMaxTime = Duration(days: 7);
@@ -12,12 +13,7 @@ const _kFilenameFormat = 'yyyy-MM-dd HH:mm:ss';
 const _kSuffix = '.log';
 
 class LogService extends GetxController {
-  final RxList<File> _logFiles = <File>[].obs;
-  List<File> get logFiles {
-    return _logFiles.value;
-  }
-
-  set logFiles(List<File> val) => _logFiles.value = val;
+  final logFiles = <File>[].obs;
 
   final _curFileName = 'eh.log'.obs;
   String get curFileName => _curFileName.value;
@@ -72,7 +68,7 @@ class LogService extends GetxController {
             // logger.v('delete $_fileName');
             _logFile.delete();
           }
-          update();
+          // update();
         } catch (_) {}
 
         _files.add(_logFile);
@@ -80,18 +76,28 @@ class LogService extends GetxController {
     }
     _files
         .sort((a, b) => path.basename(b.path).compareTo(path.basename(a.path)));
-    _logFiles(_files);
+    logFiles(_files);
+
+    for (final _logfile in logFiles) {
+      final ctx = await _logfile.length();
+      if (ctx < 8) {
+        _logfile.deleteSync();
+        logFiles.remove(_logfile);
+      }
+    }
+
+    return null;
   }
 
   void removeLogAt(int index) {
-    _logFiles[index].deleteSync();
-    _logFiles.removeAt(index);
+    logFiles[index].deleteSync();
+    logFiles.removeAt(index);
   }
 
   void removeAll() {
-    for (final _file in _logFiles) {
+    for (final _file in logFiles) {
       _file.delete();
     }
-    _logFiles.clear();
+    logFiles.clear();
   }
 }
