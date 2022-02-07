@@ -135,4 +135,78 @@ class AllPreviewsPageController extends GetxController
     isLoadFinsh = true;
     change(_images, status: RxStatus.success());
   }
+
+  bool get canShowJumpDialog =>
+      _pageController.filecount > _pageController.firstPageImage.length;
+
+  void showJumpDialog(BuildContext context) {
+    showCupertinoDialog(
+        barrierDismissible: true,
+        context: context,
+        builder: (context) {
+          return JumpDialog(pageController: _pageController);
+        });
+  }
+}
+
+class JumpDialog extends StatefulWidget {
+  const JumpDialog({Key? key, required this.pageController}) : super(key: key);
+  final GalleryPageController pageController;
+
+  @override
+  _JumpDialogState createState() => _JumpDialogState();
+}
+
+class _JumpDialogState extends State<JumpDialog> {
+  double _value = 0.0;
+  int toPage = 1;
+  int get maxpage =>
+      (widget.pageController.filecount ~/
+          widget.pageController.firstPageImage.length) +
+      1;
+
+  @override
+  void initState() {
+    super.initState();
+    _value = 1.0;
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    logger.d('maxpage $maxpage');
+    return CupertinoAlertDialog(
+      title: Text('跳到 $toPage'),
+      content: Row(
+        children: [
+          const Text('1'),
+          Expanded(
+            child: CupertinoSlider(
+              value: _value,
+              divisions: maxpage - 1,
+              min: 1.0,
+              max: maxpage / 1.0,
+              onChanged: (double value) {
+                _value = value;
+                if (_value ~/ 1 != toPage) {
+                  toPage = _value ~/ 1;
+                  setState(() {});
+                }
+              },
+            ),
+          ),
+          Text('$maxpage'),
+        ],
+      ),
+      actions: [
+        CupertinoDialogAction(
+          child: Text(L10n.of(context).ok),
+          onPressed: () {
+            Get.back();
+
+            logger.d('toPage:$toPage');
+          },
+        )
+      ],
+    );
+  }
 }

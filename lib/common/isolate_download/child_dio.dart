@@ -192,7 +192,7 @@ Future<List<GalleryImage>> _isoFetchGalleryImage(
 
 /// 获取画廊图片的信息
 /// [href] 爬取的页面地址 用来解析gid 和 imgkey
-/// [page] 索引 从 1 开始
+/// [toPage] 索引 从 1 开始
 Future<GalleryImage> _isoParaImageLageInfoFromHtml(
   String href, {
   bool refresh = false,

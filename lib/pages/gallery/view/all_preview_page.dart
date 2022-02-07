@@ -1,8 +1,6 @@
-import 'package:fehviewer/generated/l10n.dart';
-import 'package:fehviewer/models/index.dart';
+import 'package:fehviewer/fehviewer.dart';
 import 'package:fehviewer/pages/gallery/controller/all_previews_controller.dart';
 import 'package:fehviewer/pages/gallery/view/preview.dart';
-import 'package:fehviewer/utils/logger.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -39,6 +37,19 @@ class _AllPreviewPageState extends State<AllPreviewPage> {
           child: Text(L10n.of(context).all_preview),
         ),
         previousPageTitle: L10n.of(context).back,
+        trailing: controller.canShowJumpDialog
+            ? CupertinoButton(
+                padding: const EdgeInsets.all(0),
+                minSize: 38,
+                child: const Icon(
+                  CupertinoIcons.arrow_uturn_down_circle,
+                  size: 26,
+                ),
+                onPressed: () {
+                  controller.showJumpDialog(context);
+                },
+              )
+            : const SizedBox(),
       ),
       child: CupertinoScrollbar(
         controller: controller.scrollController,
@@ -124,7 +135,7 @@ class _AllPreviewPageState extends State<AllPreviewPage> {
                       ],
                     ),
                   ),
-                )
+                ),
               ],
             );
           } else {
