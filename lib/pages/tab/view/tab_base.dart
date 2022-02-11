@@ -20,6 +20,8 @@ import 'package:get/get.dart';
 import 'package:keframe/frame_separate_widget.dart';
 import 'package:waterfall_flow/waterfall_flow.dart';
 
+import '../../item/gallery_item_grid.dart';
+
 SliverPadding buildWaterfallFlow(
   List<GalleryItem> gallerItemBeans,
   dynamic tabTag, {
@@ -86,6 +88,53 @@ SliverPadding buildWaterfallFlow(
                   galleryItem: _item,
                   tabTag: tabTag,
                 );
+        },
+        childCount: gallerItemBeans.length,
+      ),
+    ),
+  );
+}
+
+SliverPadding buildGrid(
+  List<GalleryItem> gallerItemBeans,
+  dynamic tabTag, {
+  int? maxPage,
+  required int curPage,
+  VoidCallback? lastComplete,
+  Key? key,
+  Key? centerKey,
+  int? lastTopitemIndex,
+}) {
+  return SliverPadding(
+    padding: const EdgeInsets.all(EHConst.gridCrossAxisSpacing),
+    sliver: SliverGrid(
+      gridDelegate: const SliverGridDelegateWithMaxCrossAxisExtent(
+        maxCrossAxisExtent: EHConst.gridMaxCrossAxisExtent,
+        crossAxisSpacing: EHConst.gridCrossAxisSpacing,
+        mainAxisSpacing: EHConst.gridMainAxisSpacing,
+        childAspectRatio: EHConst.gridChildAspectRatio,
+      ),
+      delegate: SliverChildBuilderDelegate(
+        (BuildContext context, int index) {
+          if (gallerItemBeans.length - 1 < index) {
+            return const SizedBox.shrink();
+          }
+          if (maxPage != null) {
+            if (index == gallerItemBeans.length - 1 && curPage < maxPage - 1) {
+              // 加载完成最后一项的回调
+              lastComplete?.call();
+            }
+          }
+
+          final GalleryItem _item = gallerItemBeans[index];
+          Get.lazyReplace(() => GalleryItemController(_item),
+              tag: _item.gid, fenix: true);
+
+          return GalleryItemGrid(
+            key: index == lastTopitemIndex ? centerKey : ValueKey(_item.gid),
+            galleryItem: _item,
+            tabTag: tabTag,
+          );
         },
         childCount: gallerItemBeans.length,
       ),
@@ -362,6 +411,17 @@ Widget getGallerySliverList(
           lastTopitemIndex: lastTopitemIndex,
         );
 
+      case ListModeEnum.grid:
+        return buildGrid(
+          gallerItemBeans ?? [],
+          tabTag,
+          maxPage: maxPage,
+          curPage: curPage ?? 0,
+          lastComplete: lastComplete,
+          key: _key,
+          centerKey: centerKey,
+          lastTopitemIndex: lastTopitemIndex,
+        );
       case ListModeEnum.global:
         return const SliverFillRemaining(
           child: SizedBox(),
