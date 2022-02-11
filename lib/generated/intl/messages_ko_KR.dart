@@ -140,6 +140,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "list_load_more_fail": MessageLookupByLibrary.simpleMessage(
             "불러오기에 실패하였습니다, 탭하여 다시 로드하세요."),
         "list_mode": MessageLookupByLibrary.simpleMessage("목록 모드"),
+        "listmode_grid": MessageLookupByLibrary.simpleMessage("Grid"),
         "listmode_medium": MessageLookupByLibrary.simpleMessage("목록 - 중간"),
         "listmode_small": MessageLookupByLibrary.simpleMessage("목록 - 작게"),
         "listmode_waterfall": MessageLookupByLibrary.simpleMessage("Waterfall"),

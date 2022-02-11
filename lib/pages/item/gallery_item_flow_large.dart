@@ -145,15 +145,17 @@ class GalleryItemFlowLarge extends StatelessWidget {
             Hero(
               tag: '${galleryItem.gid}_cover_$tabTag',
               child: Container(
-                decoration: BoxDecoration(boxShadow: [
-                  BoxShadow(
-                    color: CupertinoDynamicColor.resolve(
-                            CupertinoColors.systemGrey5, Get.context!)
-                        .withOpacity(1.0),
-                    blurRadius: 8,
-                    offset: const Offset(0, 4),
-                  ),
-                ]),
+                decoration: BoxDecoration(
+                  boxShadow: [
+                    BoxShadow(
+                      color: CupertinoDynamicColor.resolve(
+                              CupertinoColors.systemGrey5, Get.context!)
+                          .withOpacity(1.0),
+                      blurRadius: 8,
+                      offset: const Offset(0, 4),
+                    ),
+                  ],
+                ),
                 child: ClipRRect(
                   borderRadius: const BorderRadius.only(
                     topLeft: Radius.circular(kRadius),

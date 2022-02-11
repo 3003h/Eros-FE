@@ -930,6 +930,16 @@ class L10n {
     );
   }
 
+  /// `Grid`
+  String get listmode_grid {
+    return Intl.message(
+      'Grid',
+      name: 'listmode_grid',
+      desc: '',
+      args: [],
+    );
+  }
+
   /// `Favorites order`
   String get favorites_order {
     return Intl.message(

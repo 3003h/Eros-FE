@@ -131,6 +131,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "list_load_more_fail":
             MessageLookupByLibrary.simpleMessage("加载失败, 点击重试"),
         "list_mode": MessageLookupByLibrary.simpleMessage("列表样式"),
+        "listmode_grid": MessageLookupByLibrary.simpleMessage("网格"),
         "listmode_medium": MessageLookupByLibrary.simpleMessage("列表 - 中"),
         "listmode_small": MessageLookupByLibrary.simpleMessage("列表 - 小"),
         "listmode_waterfall": MessageLookupByLibrary.simpleMessage("瀑布流"),

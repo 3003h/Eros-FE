@@ -337,6 +337,7 @@ Widget _buildListModeItem(BuildContext context, {bool hideLine = false}) {
     ListModeEnum.simpleList: L10n.of(context).listmode_small,
     ListModeEnum.waterfall: L10n.of(context).listmode_waterfall,
     ListModeEnum.waterfallLarge: L10n.of(context).listmode_waterfall_large,
+    ListModeEnum.grid: L10n.of(context).listmode_grid,
   };
   return Obx(() {
     return SelectorItem<ListModeEnum>(

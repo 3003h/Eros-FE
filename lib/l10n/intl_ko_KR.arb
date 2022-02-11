@@ -87,6 +87,7 @@
   "listmode_small": "목록 - 작게",
   "listmode_waterfall": "Waterfall",
   "listmode_waterfall_large": "WaterfallFlow - 크게",
+  "listmode_grid": "Grid",
   "favorites_order": "즐겨찾기 정렬",
   "favorites_order_Use_posted": "게시된 순",
   "favorites_order_Use_favorited": "즐겨찾기된 순",

@@ -13,6 +13,7 @@ enum ListModeEnum {
   waterfall,
   simpleList,
   waterfallLarge,
+  grid,
   global,
 }
 
@@ -266,6 +267,12 @@ class EHConst {
   static const double waterfallFlowLargeCrossAxisSpacing = 12.0;
   static const double waterfallFlowLargeMainAxisSpacing = 12.0;
   static const double waterfallFlowLargeMaxCrossAxisExtent = 220.0;
+
+  // Grid视图参数
+  static const double gridCrossAxisSpacing = 8.0;
+  static const double gridMainAxisSpacing = 8.0;
+  static const double gridMaxCrossAxisExtent = 150.0;
+  static const double gridChildAspectRatio = 1 / 1.9;
 
   static List<int> historyMax = <int>[50, 100, 300, 0];
 
