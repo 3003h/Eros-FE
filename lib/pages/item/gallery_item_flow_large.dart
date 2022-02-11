@@ -7,6 +7,7 @@ import 'package:fehviewer/models/base/eh_models.dart';
 import 'package:fehviewer/pages/item/controller/galleryitem_controller.dart';
 import 'package:fehviewer/widget/rating_bar.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
 
@@ -65,25 +66,41 @@ class GalleryItemFlowLarge extends StatelessWidget {
     );
   }
 
-  Widget _buildCount() {
-    return Container(
-      padding: const EdgeInsets.only(left: 2),
-      child: Text(
-        galleryItemController.galleryItem.filecount ?? '',
-        style: const TextStyle(
-          fontSize: 12,
-          color: Color.fromARGB(255, 240, 240, 240),
-          height: 1.12,
-          // fontStyle: FontStyle.italic,
-        ),
-      ).frosted(
-        blur: 10,
-        frostColor: CupertinoColors.systemGrey.color,
-        frostOpacity: 0.0,
-        borderRadius: BorderRadius.circular(10),
-        padding: const EdgeInsets.symmetric(vertical: 2, horizontal: 6),
+  Widget _buildCount({bool blur = false}) {
+    final text = Text(
+      galleryItemController.galleryItem.filecount ?? '',
+      style: const TextStyle(
+        fontSize: 12,
+        color: Color.fromARGB(255, 240, 240, 240),
+        height: 1.12,
+        // fontStyle: FontStyle.italic,
       ),
     );
+
+    if (blur) {
+      return Container(
+        padding: const EdgeInsets.only(left: 2),
+        child: text.frosted(
+          blur: 10,
+          frostColor: CupertinoColors.systemGrey.color,
+          frostOpacity: 0.0,
+          borderRadius: BorderRadius.circular(10),
+          padding: const EdgeInsets.symmetric(vertical: 2, horizontal: 6),
+        ),
+      );
+    } else {
+      return Container(
+        padding: const EdgeInsets.only(left: 2),
+        child: ClipRRect(
+          borderRadius: BorderRadius.circular(10),
+          child: Container(
+            color: Colors.black38,
+            padding: const EdgeInsets.symmetric(vertical: 2, horizontal: 8),
+            child: text,
+          ),
+        ),
+      );
+    }
   }
 
   /// 构建标题
@@ -146,16 +163,16 @@ class GalleryItemFlowLarge extends StatelessWidget {
               tag: '${galleryItem.gid}_cover_$tabTag',
               child: Container(
                 decoration: BoxDecoration(
-                  boxShadow: [
-                    BoxShadow(
-                      color: CupertinoDynamicColor.resolve(
-                              CupertinoColors.systemGrey5, Get.context!)
-                          .withOpacity(1.0),
-                      blurRadius: 8,
-                      offset: const Offset(0, 4),
+                    // boxShadow: [
+                    //   BoxShadow(
+                    //     color: CupertinoDynamicColor.resolve(
+                    //             CupertinoColors.systemGrey5, Get.context!)
+                    //         .withOpacity(1.0),
+                    //     blurRadius: 8,
+                    //     offset: const Offset(0, 4),
+                    //   ),
+                    // ],
                     ),
-                  ],
-                ),
                 child: ClipRRect(
                   borderRadius: const BorderRadius.only(
                     topLeft: Radius.circular(kRadius),
@@ -182,7 +199,11 @@ class GalleryItemFlowLarge extends StatelessWidget {
                       // Positioned(
                       //     bottom: 4, right: 4, child: _buildFavcatIcon()),
                       // Positioned(bottom: 4, left: 4, child: _buildRating()),
-                      Positioned(bottom: 4, right: 4, child: _buildCount()),
+                      Positioned(
+                        bottom: 4,
+                        right: 4,
+                        child: _buildCount(),
+                      ),
                       Container(
                         height: (kCategoryHeight + kRadius * 0.8) / 2,
                         width: (kCategoryWidth + kRadius * 0.8) / 2,

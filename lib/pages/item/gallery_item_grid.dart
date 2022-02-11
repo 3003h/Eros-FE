@@ -1,5 +1,6 @@
 import 'package:blur/blur.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
 
@@ -52,7 +53,7 @@ class GalleryItemGrid extends StatelessWidget {
               : [
                   BoxShadow(
                     color: CupertinoDynamicColor.resolve(
-                        CupertinoColors.systemGrey3, Get.context!),
+                        CupertinoColors.systemGrey4, Get.context!),
                     blurRadius: 10,
                   )
                 ],
@@ -96,8 +97,6 @@ class GalleryItemGrid extends StatelessWidget {
                         color: _colorCategory.withOpacity(0.8),
                       ),
                     ),
-                    // Positioned(
-                    //     bottom: 4, right: 4, child: _buildFavcatIcon()),
                     // Positioned(bottom: 4, left: 4, child: _buildRating()),
                     Positioned(
                       bottom: 4,
@@ -134,24 +133,12 @@ class GalleryItemGrid extends StatelessWidget {
                   mainAxisSize: MainAxisSize.min,
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    // Row(
-                    //   children: [
-                    //     // _buildRating(),
-                    //     const Spacer(),
-                    //     _buildFavcatIcon(),
-                    //   ],
-                    // ),
-                    // const SizedBox(height: 6),
                     Row(
                       children: [
                         Expanded(child: _buildTitle()),
                       ],
                     ),
                     const SizedBox(height: 4),
-                    // _buildSimpleTagsView(),
-                    // TagWaterfallFlowViewBox(
-                    //   simpleTags: galleryItemController.galleryItem.simpleTags,
-                    // ),
                     _PostTime(
                       postTime: galleryItemController.galleryItem.postTime,
                     )
@@ -172,24 +159,36 @@ class GalleryItemGrid extends StatelessWidget {
     });
   }
 
-  Widget _buildFavcatIcon() {
+  Widget _buildFavcatIcon({bool blur = false}) {
     return Obx(() {
+      Widget icon = Icon(
+        FontAwesomeIcons.solidHeart,
+        size: 12,
+        color: ThemeColors.favColor[galleryItemController.galleryItem.favcat],
+      );
+
+      if (blur) {
+        icon = icon.frosted(
+          blur: 10,
+          frostColor: CupertinoColors.systemGrey.color,
+          frostOpacity: 0.0,
+          borderRadius: BorderRadius.circular(10),
+          padding: const EdgeInsets.symmetric(vertical: 2, horizontal: 6),
+        );
+      } else {
+        icon = ClipRRect(
+          borderRadius: BorderRadius.circular(10),
+          child: Container(
+            color: Colors.black38,
+            padding: const EdgeInsets.symmetric(vertical: 2, horizontal: 6),
+            child: icon,
+          ),
+        );
+      }
+
       return Container(
         padding: const EdgeInsets.only(left: 2),
-        child: galleryItemController.isFav
-            ? Icon(
-                FontAwesomeIcons.solidHeart,
-                size: 12,
-                color: ThemeColors
-                    .favColor[galleryItemController.galleryItem.favcat],
-              ).frosted(
-                blur: 10,
-                frostColor: CupertinoColors.systemGrey.color,
-                frostOpacity: 0.0,
-                borderRadius: BorderRadius.circular(10),
-                padding: const EdgeInsets.symmetric(vertical: 2, horizontal: 6),
-              )
-            : const SizedBox(),
+        child: galleryItemController.isFav ? icon : const SizedBox(),
       );
     });
   }
@@ -213,25 +212,41 @@ class GalleryItemGrid extends StatelessWidget {
     );
   }
 
-  Widget _buildCount() {
-    return Container(
-      padding: const EdgeInsets.only(left: 2),
-      child: Text(
-        galleryItemController.galleryItem.filecount ?? '',
-        style: const TextStyle(
-          fontSize: 12,
-          color: Color.fromARGB(255, 240, 240, 240),
-          height: 1.12,
-          // fontStyle: FontStyle.italic,
-        ),
-      ).frosted(
-        blur: 10,
-        frostColor: CupertinoColors.systemGrey.color,
-        frostOpacity: 0.0,
-        borderRadius: BorderRadius.circular(10),
-        padding: const EdgeInsets.symmetric(vertical: 2, horizontal: 6),
+  Widget _buildCount({bool blur = false}) {
+    final text = Text(
+      galleryItemController.galleryItem.filecount ?? '',
+      style: const TextStyle(
+        fontSize: 12,
+        color: Color.fromARGB(255, 240, 240, 240),
+        height: 1.12,
+        // fontStyle: FontStyle.italic,
       ),
     );
+
+    if (blur) {
+      return Container(
+        padding: const EdgeInsets.only(left: 2),
+        child: text.frosted(
+          blur: 10,
+          frostColor: CupertinoColors.systemGrey.color,
+          frostOpacity: 0.0,
+          borderRadius: BorderRadius.circular(10),
+          padding: const EdgeInsets.symmetric(vertical: 2, horizontal: 6),
+        ),
+      );
+    } else {
+      return Container(
+        padding: const EdgeInsets.only(left: 2),
+        child: ClipRRect(
+          borderRadius: BorderRadius.circular(10),
+          child: Container(
+            color: Colors.black38,
+            padding: const EdgeInsets.symmetric(vertical: 2, horizontal: 6),
+            child: text,
+          ),
+        ),
+      );
+    }
   }
 
   /// 构建标题
@@ -308,26 +323,36 @@ class _CoverImage extends StatelessWidget {
       fit: _fit,
     );
 
-    Widget imageBlureFittedBox = CoverImg(
-      imgUrl: _item.imgUrl ?? '',
-      width: coverImageWidth,
-      // height: coverImageHeigth,
-      fit: BoxFit.contain,
-    );
+    Widget getImageBlureFittedBox() {
+      Widget imageBlureFittedBox = CoverImg(
+        imgUrl: _item.imgUrl ?? '',
+        width: coverImageWidth,
+        fit: BoxFit.contain,
+      );
 
-    imageBlureFittedBox = FittedBox(
-      fit: BoxFit.cover,
-      child: imageBlureFittedBox.blurred(
-        blur: 10,
-        colorOpacity: ehTheme.isDarkMode ? 0.5 : 0.1,
-        blurColor: CupertinoTheme.of(context).barBackgroundColor.withOpacity(1),
-      ),
-    );
+      imageBlureFittedBox = FittedBox(
+        fit: BoxFit.cover,
+        child: imageBlureFittedBox.blurred(
+          blur: 10,
+          colorOpacity: ehTheme.isDarkMode ? 0.5 : 0.1,
+          blurColor:
+              CupertinoTheme.of(context).barBackgroundColor.withOpacity(1),
+        ),
+      );
+
+      return imageBlureFittedBox;
+    }
 
     image = Stack(
       fit: StackFit.passthrough,
       children: [
-        imageBlureFittedBox,
+        // if (_fit == BoxFit.contain) getImageBlureFittedBox(),
+        Container(
+          width: coverImageWidth,
+          height: coverImageHeigth,
+          color: CupertinoDynamicColor.resolve(
+              CupertinoColors.systemGrey6, context),
+        ),
         Center(
           child: HeroMode(
             enabled: !isLayoutLarge,

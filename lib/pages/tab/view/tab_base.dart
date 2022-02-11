@@ -21,6 +21,7 @@ import 'package:keframe/frame_separate_widget.dart';
 import 'package:waterfall_flow/waterfall_flow.dart';
 
 import '../../item/gallery_item_grid.dart';
+import '../../item/gallery_item_grid_placeholder.dart';
 
 SliverPadding buildWaterfallFlow(
   List<GalleryItem> gallerItemBeans,
@@ -74,12 +75,15 @@ SliverPadding buildWaterfallFlow(
               tag: _item.gid, fenix: true);
 
           return large
-              ? GalleryItemFlowLarge(
-                  key: index == lastTopitemIndex
-                      ? centerKey
-                      : ValueKey(_item.gid),
-                  galleryItem: _item,
-                  tabTag: tabTag,
+              ? FrameSeparateWidget(
+                  index: index,
+                  child: GalleryItemFlowLarge(
+                    key: index == lastTopitemIndex
+                        ? centerKey
+                        : ValueKey(_item.gid),
+                    galleryItem: _item,
+                    tabTag: tabTag,
+                  ),
                 )
               : GalleryItemFlow(
                   key: index == lastTopitemIndex
@@ -130,10 +134,14 @@ SliverPadding buildGrid(
           Get.lazyReplace(() => GalleryItemController(_item),
               tag: _item.gid, fenix: true);
 
-          return GalleryItemGrid(
-            key: index == lastTopitemIndex ? centerKey : ValueKey(_item.gid),
-            galleryItem: _item,
-            tabTag: tabTag,
+          return FrameSeparateWidget(
+            index: index,
+            placeHolder: const GalleryItemGridPlaceHolder(),
+            child: GalleryItemGrid(
+              key: index == lastTopitemIndex ? centerKey : ValueKey(_item.gid),
+              galleryItem: _item,
+              tabTag: tabTag,
+            ),
           );
         },
         childCount: gallerItemBeans.length,

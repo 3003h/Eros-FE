@@ -282,21 +282,25 @@ class _CoverImage extends StatelessWidget {
       fit: _fit,
     );
 
-    Widget imageBlureFittedBox = CoverImg(
-      imgUrl: _item.imgUrl ?? '',
-      width: coverImageWidth,
-      // height: coverImageHeigth,
-      fit: BoxFit.contain,
-    );
+    Widget getImageBlureFittedBox() {
+      Widget imageBlureFittedBox = CoverImg(
+        imgUrl: _item.imgUrl ?? '',
+        width: coverImageWidth,
+        fit: BoxFit.contain,
+      );
 
-    imageBlureFittedBox = FittedBox(
-      fit: BoxFit.cover,
-      child: imageBlureFittedBox.blurred(
-        blur: 10,
-        colorOpacity: ehTheme.isDarkMode ? 0.5 : 0.1,
-        blurColor: CupertinoTheme.of(context).barBackgroundColor.withOpacity(1),
-      ),
-    );
+      imageBlureFittedBox = FittedBox(
+        fit: BoxFit.cover,
+        child: imageBlureFittedBox.blurred(
+          blur: 10,
+          colorOpacity: ehTheme.isDarkMode ? 0.5 : 0.1,
+          blurColor:
+              CupertinoTheme.of(context).barBackgroundColor.withOpacity(1),
+        ),
+      );
+
+      return imageBlureFittedBox;
+    }
 
     if (!cardType) {
       image = Container(
@@ -329,7 +333,13 @@ class _CoverImage extends StatelessWidget {
       image = Stack(
         fit: StackFit.passthrough,
         children: [
-          imageBlureFittedBox,
+          // if (_fit == BoxFit.contain) getImageBlureFittedBox(),
+          Container(
+            width: coverImageWidth,
+            height: coverImageHeigth,
+            color: CupertinoDynamicColor.resolve(
+                CupertinoColors.systemGrey5, context),
+          ),
           Center(
             child: HeroMode(
               enabled: !isLayoutLarge,
