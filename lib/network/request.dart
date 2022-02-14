@@ -703,11 +703,11 @@ Future<void> galleryAddfavorite(
   );
 }
 
-Future<String> getTranslateTagDBInfo(String url) async {
+Future<Map> getTranslateTagDBInfo(String url) async {
   DioHttpClient dioHttpClient = DioHttpClient(dioConfig: ehDioConfig);
   DioHttpResponse httpResponse = await dioHttpClient.get(url);
-  if (httpResponse.ok && httpResponse.data is String) {
-    return httpResponse.data as String;
+  if (httpResponse.ok && httpResponse.data is Map) {
+    return httpResponse.data as Map;
   } else {
     throw httpResponse.error ?? HttpException('getTranslateTagDBInfo error');
   }
