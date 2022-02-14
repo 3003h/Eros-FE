@@ -243,12 +243,14 @@ class _ViewImageState extends State<ViewImage> with TickerProviderStateMixin {
                   if (snapshot.connectionState == ConnectionState.done) {
                     if (snapshot.hasError || snapshot.data == null) {
                       String _errInfo = '';
+                      logger.e('${snapshot.error.runtimeType}');
                       if (snapshot.error is DioError) {
                         final DioError dioErr = snapshot.error as DioError;
                         logger.e('${dioErr.error}');
                         _errInfo = dioErr.type.toString();
                       } else if (snapshot.error is EhError) {
                         final EhError ehErr = snapshot.error as EhError;
+                        logger.e('$ehErr');
                         _errInfo = ehErr.type.toString();
                         if (ehErr.type == EhErrorType.image509) {
                           return ViewErr509(ser: widget.imageSer);

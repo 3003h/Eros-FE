@@ -223,7 +223,7 @@ class ImageExt extends GetView<ViewExtController> {
                   );
 
           case LoadState.failed:
-            logger.d('Failed $url');
+            logger.d('Failed url: $url');
             fadeAnimationController.reset();
 
             final reload =

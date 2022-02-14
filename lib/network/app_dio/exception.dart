@@ -37,6 +37,10 @@ class CancelException extends HttpException {
   CancelException([String? message]) : super(message);
 }
 
+class Image509Exception extends HttpException {
+  Image509Exception([String? message]) : super(message);
+}
+
 class NetworkException extends HttpException {
   NetworkException({String? message, int? code}) : super(message, code);
 }
