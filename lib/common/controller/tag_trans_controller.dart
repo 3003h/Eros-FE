@@ -53,8 +53,7 @@ class TagTransController extends GetxController {
       return true;
     }
 
-    final String urlJsonString = await getTranslateTagDBInfo(kUrl);
-    final dynamic _urlJson = jsonDecode(urlJsonString);
+    final _urlJson = await getTranslateTagDBInfo(kUrl);
     // 获取发布时间 作为远程版本号
     _remoteVer =
         (_urlJson != null ? _urlJson['published_at']?.trim() : '') as String;
@@ -100,7 +99,7 @@ class TagTransController extends GetxController {
     final head = dbdataMap['head'] as Map;
     final committer = head['committer'] as Map;
     _remoteVer = committer['when'] as String;
-    logger.d('CDN _remoteVer $_remoteVer');
+    logger.d('_remoteVer $_remoteVer');
 
     return listData;
   }
