@@ -4,6 +4,7 @@ import 'dart:io';
 import 'package:dio/dio.dart';
 import 'package:enum_to_string/enum_to_string.dart';
 import 'package:fehviewer/common/parser/eh_parser.dart';
+import 'package:fehviewer/component/exception/error.dart';
 import 'package:fehviewer/fehviewer.dart';
 import 'package:fehviewer/pages/gallery/controller/archiver_controller.dart';
 import 'package:flutter/foundation.dart';
@@ -158,7 +159,14 @@ class GalleryImageHttpTransformer extends HttpTransformer {
   FutureOr<DioHttpResponse<GalleryImage>> parse(
       Response<dynamic> response) async {
     final html = response.data as String;
+    // 使用 compute 方式会内部的 EhError 无法正常抛出
     final GalleryImage image = await compute(paraImage, html);
+    // throw EhError(type: EhErrorType.image509);
+    if (image.imageUrl!.endsWith('/509.gif') ||
+        image.imageUrl!.endsWith('/509s.gif')) {
+      throw EhError(type: EhErrorType.image509);
+    }
+    // final GalleryImage image = await paraImage(html);
     return DioHttpResponse<GalleryImage>.success(image);
   }
 }

@@ -615,6 +615,7 @@ class GalleryPageController extends GetxController
                 path: galleryItem?.imageMap[itemSer]?.href ?? '');
           }
 
+          // 加载当前页信息
           final GalleryImage? _image = await fetchImageInfo(
             galleryItem?.imageMap[itemSer]?.href ?? '',
             sourceId: _sourceId,
@@ -648,7 +649,7 @@ class GalleryPageController extends GetxController
         }
       }
     } catch (e, stack) {
-      // logger.e('fetchAndParserImageInfo error\n$e \n $stack');
+      logger.e('fetchAndParserImageInfo error\n$e \n $stack');
       rethrow;
     }
   }
