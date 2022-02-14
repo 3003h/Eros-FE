@@ -582,6 +582,7 @@ class BottomBarControlWidget extends GetView<ViewExtController> {
                   // else
                   //   const SizedBox(width: 40),
 
+                  // 缩略图预览按钮
                   GestureDetector(
                     behavior: HitTestBehavior.opaque,
                     onTap: () {
@@ -599,13 +600,13 @@ class BottomBarControlWidget extends GetView<ViewExtController> {
                           GetBuilder<ViewExtController>(
                             id: idShowThumbListIcon,
                             builder: (logic) {
-                              return const Icon(
+                              return Icon(
                                 LineIcons.images,
                                 size: 26,
-                                // color: logic.vState.showThumbList
-                                //     ? CupertinoColors.activeBlue
-                                //     : CupertinoColors.systemGrey6,
-                                color: CupertinoColors.systemGrey6,
+                                color: logic.vState.showThumbList
+                                    ? CupertinoColors.activeBlue
+                                    : CupertinoColors.systemGrey6,
+                                // color: CupertinoColors.systemGrey6,
                               );
                             },
                           ),

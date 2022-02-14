@@ -207,10 +207,13 @@ class ViewExtState {
   bool conditionItemIndex = true;
   int tempIndex = 0;
 
-  bool showThumbList = false;
+  // 显示底栏缩略图
+  bool showThumbList = true;
   int centThumbIndex = 0;
   int minThumbIndex = 0;
   int maxThumbIndex = 0;
+
+  // 同步滚动底栏缩略图
   bool syncThumbList = true;
 
   GalleryTaskDao? galleryTaskDao;
