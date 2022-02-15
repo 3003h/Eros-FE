@@ -44,12 +44,10 @@ class GalleryHeader extends StatelessWidget {
                 // 封面
                 Obx(() {
                   return HeroMode(
-                    enabled: _controller.hideNavigationBtn,
+                    enabled: _controller.hideNavigationBtn || isLayoutLarge,
                     child: CoverImage(
                       imageUrl: initGalleryItem.imgUrl!,
-                      heroTag: !isLayoutLarge
-                          ? '${initGalleryItem.gid}_cover_$tabTag'
-                          : null,
+                      heroTag: '${initGalleryItem.gid}_cover_$tabTag',
                     ),
                   );
                 }),

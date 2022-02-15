@@ -50,7 +50,7 @@ class CoverImage extends StatelessWidget {
   const CoverImage({
     Key? key,
     required this.imageUrl,
-    this.heroTag,
+    required this.heroTag,
     this.imgHeight,
     this.imgWidth,
   }) : super(key: key);
@@ -59,7 +59,7 @@ class CoverImage extends StatelessWidget {
   final String? imageUrl;
 
   // ${_item.gid}_${_item.token}_cover_$_tabIndex
-  final Object? heroTag;
+  final Object heroTag;
 
   final double? imgHeight;
   final double? imgWidth;
@@ -109,12 +109,10 @@ class CoverImage extends StatelessWidget {
           width: kWidth,
           margin: const EdgeInsets.only(right: 10),
           child: Center(
-            child: heroTag != null
-                ? Hero(
-                    tag: heroTag!,
-                    child: image,
-                  )
-                : image,
+            child: Hero(
+              tag: heroTag,
+              child: image,
+            ),
           ),
         );
       } else {

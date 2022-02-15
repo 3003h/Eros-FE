@@ -269,10 +269,10 @@ class EHConst {
   static const double waterfallFlowLargeMaxCrossAxisExtent = 220.0;
 
   // Grid视图参数
-  static const double gridCrossAxisSpacing = 8.0;
-  static const double gridMainAxisSpacing = 8.0;
+  static const double gridCrossAxisSpacing = 6.0;
+  static const double gridMainAxisSpacing = 6.0;
   static const double gridMaxCrossAxisExtent = 150.0;
-  static const double gridChildAspectRatio = 1 / 1.9;
+  static const double gridChildAspectRatio = 1 / 1.8;
 
   static List<int> historyMax = <int>[50, 100, 300, 0];
 

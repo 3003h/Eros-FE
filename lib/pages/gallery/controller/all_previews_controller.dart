@@ -5,11 +5,12 @@ import 'package:fehviewer/network/request.dart';
 import 'package:fehviewer/pages/gallery/view/const.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
+import 'package:tuple/tuple.dart';
 
 import 'gallery_page_controller.dart';
 
 class AllPreviewsPageController extends GetxController
-    with StateMixin<List<GalleryImage>> {
+    with StateMixin<Tuple2<List<GalleryImage>, List<GalleryImage>>> {
   AllPreviewsPageController();
   GalleryPageController get _pageController => Get.find(tag: pageCtrlDepth);
 
@@ -21,11 +22,14 @@ class AllPreviewsPageController extends GetxController
 
   CancelToken moreGalleryImageCancelToken = CancelToken();
 
+  int get currPage => _pageController.currentImagePage;
+
   final GlobalKey globalKey = GlobalKey();
   final ScrollController scrollController =
       ScrollController(keepScrollOffset: true);
 
-  bool isLoading = false;
+  bool isLoadingNext = false;
+  bool isLoadingPrevious = false;
   bool isLoadFinsh = false;
 
   @override
@@ -41,15 +45,15 @@ class AllPreviewsPageController extends GetxController
 
     _pageController.currentImagePage = 0;
 
-    change(_images, status: RxStatus.success());
+    change(Tuple2([], _images), status: RxStatus.success());
 
     WidgetsBinding.instance?.addPostFrameCallback((Duration callback) {
       logger.v('addPostFrameCallback be invoke');
-      _jumpTo();
+      _autoJumpTo();
     });
   }
 
-  Future<void> _jumpTo() async {
+  Future<void> _autoJumpTo() async {
     //获取position
     final RenderBox? box =
         globalKey.currentContext!.findRenderObject() as RenderBox?;
@@ -101,8 +105,9 @@ class AllPreviewsPageController extends GetxController
     );
   }
 
-  Future<void> fetchPriviews() async {
-    if (isLoading) {
+  // 获取下一页预览图
+  Future<void> fetchPriviewsNext() async {
+    if (isLoadingNext) {
       return;
     }
     //
@@ -110,7 +115,7 @@ class AllPreviewsPageController extends GetxController
     // 增加延时 避免build期间进行 setState
     await Future<void>.delayed(const Duration(milliseconds: 100));
 
-    isLoading = true;
+    isLoadingNext = true;
     update();
 
     final List<GalleryImage> _nextGalleryImageList = await getGalleryImage(
@@ -121,11 +126,72 @@ class AllPreviewsPageController extends GetxController
     );
 
     _pageController.addAllImages(_nextGalleryImageList);
-    isLoading = false;
+    isLoadingNext = false;
     _pageController.currentImagePage += 1;
-    change(_images, status: RxStatus.success());
+    change(Tuple2([], _images), status: RxStatus.success());
   }
 
+  // 获取预览图fromPage
+  Future<void> fetchPriviewsFromPage(int fromPage) async {
+    if (isLoadingNext) {
+      return;
+    }
+    await Future<void>.delayed(const Duration(milliseconds: 100));
+
+    change(Tuple2([], _images), status: RxStatus.loading());
+
+    final List<GalleryImage> _galleryImageList = await getGalleryImage(
+      _pageController.galleryItem?.url ?? '',
+      page: fromPage - 1,
+      cancelToken: moreGalleryImageCancelToken,
+      refresh: _pageController.isRefresh,
+    );
+
+    _pageController.images.clear();
+    _pageController.addAllImages(_galleryImageList);
+    _pageController.currentImagePage = fromPage - 1;
+
+    update(['trailing']);
+    change(Tuple2([], _images), status: RxStatus.success());
+  }
+
+  // 获取上一页预览图
+  Future<void> fetchPriviewsPrevious() async {
+    if (isLoadingPrevious) {
+      return;
+    }
+    //
+    logger.v('获取上一页预览 ${_pageController.galleryItem?.url}');
+    // 增加延时 避免build期间进行 setState
+    await Future<void>.delayed(const Duration(milliseconds: 100));
+
+    isLoadingPrevious = true;
+    // update();
+
+    final List<GalleryImage> _previousGalleryImageList = await getGalleryImage(
+      _pageController.galleryItem?.url ?? '',
+      page: _pageController.currentImagePage - 1,
+      cancelToken: moreGalleryImageCancelToken,
+      refresh: _pageController.isRefresh,
+    );
+
+    logger.d('_previousGalleryImageList ${_previousGalleryImageList.length}');
+
+    _pageController.addAllImages(_previousGalleryImageList);
+
+    isLoadingPrevious = false;
+    _pageController.currentImagePage -= 1;
+    // change(
+    //     Tuple2([
+    //       ...state?.item1 ?? <GalleryImage>[],
+    //       ..._previousGalleryImageList,
+    //     ], _images),
+    //     status: RxStatus.success());
+
+    change(Tuple2([], _images), status: RxStatus.success());
+  }
+
+  // 没有更多预览
   Future<void> fetchFinsh() async {
     if (isLoadFinsh) {
       return;
@@ -133,14 +199,16 @@ class AllPreviewsPageController extends GetxController
     // 增加延时 避免build期间进行 setState
     await Future<void>.delayed(const Duration(milliseconds: 100));
     isLoadFinsh = true;
-    change(_images, status: RxStatus.success());
+    change(Tuple2([], _images), status: RxStatus.success());
   }
 
+  // 判断是否显示跳页按钮
   bool get canShowJumpDialog =>
       _pageController.filecount > _pageController.firstPageImage.length;
 
-  void showJumpDialog(BuildContext context) {
-    showCupertinoDialog(
+  // 显示跳页Dialog
+  Future showJumpDialog(BuildContext context) async {
+    return await showCupertinoDialog(
         barrierDismissible: true,
         context: context,
         builder: (context) {
@@ -149,6 +217,7 @@ class AllPreviewsPageController extends GetxController
   }
 }
 
+// 跳页Dialog
 class JumpDialog extends StatefulWidget {
   const JumpDialog({Key? key, required this.pageController}) : super(key: key);
   final GalleryPageController pageController;
@@ -173,7 +242,6 @@ class _JumpDialogState extends State<JumpDialog> {
 
   @override
   Widget build(BuildContext context) {
-    logger.d('maxpage $maxpage');
     return CupertinoAlertDialog(
       title: Text('跳到 $toPage'),
       content: Row(
@@ -201,9 +269,7 @@ class _JumpDialogState extends State<JumpDialog> {
         CupertinoDialogAction(
           child: Text(L10n.of(context).ok),
           onPressed: () {
-            Get.back();
-
-            logger.d('toPage:$toPage');
+            Get.back(result: toPage);
           },
         )
       ],
