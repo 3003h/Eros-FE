@@ -18,7 +18,9 @@ const int kTitleMaxLines = 2;
 const double kRadius = 6.0;
 const double kCategoryWidth = 32.0;
 const double kCategoryHeight = 20.0;
-const double kCoverRatio = 1.33;
+const double kCoverRatio = 4 / 3;
+const double kMinFixCoverRatio = 0.8;
+const double kMaxFixCoverRatio = 2.2;
 
 final EhConfigService _ehConfigService = Get.find();
 
@@ -72,20 +74,23 @@ class GalleryItemGrid extends StatelessWidget {
                 child: Stack(
                   alignment: Alignment.topRight,
                   children: <Widget>[
-                    Container(
-                      alignment: Alignment.center,
-                      height: coverHeight,
-                      child: Column(
-                        children: [
-                          Expanded(
-                            child: _CoverImage(
-                              galleryItemController: galleryItemController,
-                              tabTag: tabTag,
-                              coverImageHeigth: coverHeight,
-                              coverImageWidth: constraints.maxWidth,
+                    HeroMode(
+                      enabled: !isLayoutLarge,
+                      child: Container(
+                        alignment: Alignment.center,
+                        height: coverHeight,
+                        child: Column(
+                          children: [
+                            Expanded(
+                              child: _CoverImage(
+                                galleryItemController: galleryItemController,
+                                tabTag: tabTag,
+                                coverImageHeigth: coverHeight,
+                                coverImageWidth: constraints.maxWidth,
+                              ),
                             ),
-                          ),
-                        ],
+                          ],
+                        ),
                       ),
                     ),
                     ClipPath(
@@ -143,7 +148,7 @@ class GalleryItemGrid extends StatelessWidget {
                       postTime: galleryItemController.galleryItem.postTime,
                     )
                   ],
-                ).paddingAll(6.0),
+                ).paddingSymmetric(horizontal: 4, vertical: 2),
               ),
             ),
           ],
@@ -305,14 +310,16 @@ class _CoverImage extends StatelessWidget {
 
     final containRatio = coverImageHeigth / coverImageWidth;
 
+    // 默认为contain裁切
     BoxFit _fit = BoxFit.contain;
 
-    // todo
-    if (ratio < containRatio && ratio > 1) {
+    // 高宽比小于容器且大于1
+    if (ratio < containRatio && ratio > kMinFixCoverRatio) {
       _fit = BoxFit.fitHeight;
     }
 
-    if (ratio > containRatio && ratio < 2) {
+    // 高宽比大于容器且小于2
+    if (ratio > containRatio && ratio < kMaxFixCoverRatio) {
       _fit = BoxFit.cover;
     }
 
@@ -354,15 +361,15 @@ class _CoverImage extends StatelessWidget {
               CupertinoColors.systemGrey6, context),
         ),
         Center(
-          child: HeroMode(
-            enabled: !isLayoutLarge,
-            child: Hero(
-              tag: '${_item.gid}_cover_$tabTag',
-              child: ClipRRect(
-                borderRadius: BorderRadius.circular(0),
-                child: image,
-              ),
+          child: Hero(
+            child: Container(
+              width: coverImageWidth,
+              height: _fit == BoxFit.contain
+                  ? coverImageWidth * ratio
+                  : coverImageHeigth,
+              child: image,
             ),
+            tag: '${_item.gid}_cover_$tabTag',
           ),
         ),
       ],

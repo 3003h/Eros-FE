@@ -49,7 +49,8 @@ class GalleryItemGridPlaceHolder extends StatelessWidget {
                 ),
                 child: Container(
                   color: CupertinoDynamicColor.resolve(
-                      CupertinoColors.systemGrey4, context),
+                      CupertinoColors.systemGrey6, context),
+                  child: const CupertinoActivityIndicator(),
                 ),
               ),
             ),

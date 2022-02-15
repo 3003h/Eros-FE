@@ -161,9 +161,6 @@ class CustomTabbarController extends DefaultTabViewController {
         SecondNavigatorObserver().history.lastOrNull?.settings.name;
     logger.d('topRoute $topRoute');
 
-    final profile = profileMap[uuid];
-    logger.d('${profile.runtimeType}');
-
     Get.replace<CustomProfile>(
         profileMap[uuid] ?? CustomProfile(name: '', uuid: generateUuidv4()));
 
