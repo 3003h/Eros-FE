@@ -84,7 +84,7 @@ Map<String, bool> kDefTabMap = <String, bool>{
   EHRoutes.gallery: true,
   // EHRoutes.favoriteTabbar: true,
   EHRoutes.favorite: true,
-  EHRoutes.toplist: false,
+  EHRoutes.toplist: true,
   EHRoutes.download: true,
   EHRoutes.history: false,
   // EHRoutes.customlist: false,

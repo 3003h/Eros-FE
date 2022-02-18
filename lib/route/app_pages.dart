@@ -1,7 +1,7 @@
 import 'dart:io';
 
 import 'package:fehviewer/common/controller/cache_controller.dart';
-import 'package:fehviewer/common/service/depth_service.dart';
+import 'package:fehviewer/common/service/controller_tag_service.dart';
 import 'package:fehviewer/pages/gallery/controller/taginfo_controller.dart';
 import 'package:fehviewer/pages/gallery/view/add_tags_page.dart';
 import 'package:fehviewer/pages/gallery/view/all_preview_page.dart';
@@ -133,7 +133,7 @@ class AppPages {
       name: EHRoutes.addTag,
       page: () => AddTagPage(),
       binding: BindingsBuilder(
-        () => Get.lazyPut(() => TagInfoController(), tag: pageCtrlDepth),
+        () => Get.lazyPut(() => TagInfoController(), tag: pageCtrlTag),
       ),
     ),
     GetPage(

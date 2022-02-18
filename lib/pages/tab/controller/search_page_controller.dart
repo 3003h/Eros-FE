@@ -3,7 +3,7 @@ import 'dart:collection';
 import 'package:fehviewer/common/controller/quicksearch_controller.dart';
 import 'package:fehviewer/common/controller/tag_trans_controller.dart';
 import 'package:fehviewer/common/global.dart';
-import 'package:fehviewer/common/service/depth_service.dart';
+import 'package:fehviewer/common/service/controller_tag_service.dart';
 import 'package:fehviewer/common/service/ehconfig_service.dart';
 import 'package:fehviewer/common/service/layout_service.dart';
 import 'package:fehviewer/common/service/locale_service.dart';
@@ -41,7 +41,7 @@ class SearchPageController extends DefaultTabViewController {
   SearchPageController();
 
   late bool _autoComplete = false;
-  final String tabIndex = 'search_$searchPageCtrlDepth';
+  final String tabIndex = 'search_$searchPageCtrlTag';
 
   bool textIsGalleryUrl = false;
   String? _jumpToUrl;
@@ -272,7 +272,7 @@ class SearchPageController extends DefaultTabViewController {
 
   @override
   void onInit() {
-    logger.d('onInit searchPageCtrlDepth $searchPageCtrlDepth');
+    logger.d('onInit searchPageCtrlDepth $searchPageCtrlTag');
 
     // SearchRepository searchRepository = Get.find();
     // initSearchText = searchRepository.searchText;

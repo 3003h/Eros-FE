@@ -1,4 +1,4 @@
-import 'package:fehviewer/common/service/depth_service.dart';
+import 'package:fehviewer/common/service/controller_tag_service.dart';
 import 'package:fehviewer/common/service/layout_service.dart';
 import 'package:fehviewer/const/const.dart';
 import 'package:fehviewer/const/theme_colors.dart';
@@ -31,7 +31,7 @@ class GalleryHeader extends StatelessWidget {
       color: CupertinoDynamicColor.resolve(CupertinoColors.label, context),
     );
 
-    final _controller = Get.find<GalleryPageController>(tag: pageCtrlDepth);
+    final _controller = Get.find<GalleryPageController>(tag: pageCtrlTag);
 
     return Container(
       padding: const EdgeInsets.all(kPadding),
@@ -60,7 +60,7 @@ class GalleryHeader extends StatelessWidget {
                       // 上传用户
                       GetBuilder<GalleryPageController>(
                           id: GetIds.PAGE_VIEW_HEADER,
-                          tag: pageCtrlDepth,
+                          tag: pageCtrlTag,
                           builder: (logic) {
                             return GalleryUploader(
                                 uploader: logic.galleryItem?.uploader ?? '');
@@ -122,7 +122,7 @@ class _GalleryInfoBarState extends State<GalleryInfoBar> {
   Widget build(BuildContext context) {
     return GetBuilder<GalleryPageController>(
         // init: GalleryPageController(),
-        tag: pageCtrlDepth,
+        tag: pageCtrlTag,
         id: GetIds.PAGE_VIEW_HEADER,
         builder: (GalleryPageController controller) {
           // logger.d(
@@ -237,7 +237,7 @@ class _GalleryInfoBarState extends State<GalleryInfoBar> {
                           ),
                           GetBuilder(
                               // init: GalleryPageController(),
-                              tag: pageCtrlDepth,
+                              tag: pageCtrlTag,
                               id: GetIds.PAGE_VIEW_HEADER,
                               builder: (GalleryPageController controller) {
                                 return Padding(

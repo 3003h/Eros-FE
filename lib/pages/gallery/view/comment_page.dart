@@ -1,6 +1,6 @@
 import 'dart:ui';
 
-import 'package:fehviewer/common/service/depth_service.dart';
+import 'package:fehviewer/common/service/controller_tag_service.dart';
 import 'package:fehviewer/common/service/theme_service.dart';
 import 'package:fehviewer/fehviewer.dart';
 import 'package:fehviewer/pages/gallery/controller/comment_controller.dart';
@@ -26,7 +26,7 @@ const Border _kDefaultEditBorder = Border(
 );
 
 class CommentPage extends StatelessWidget {
-  final CommentController controller = Get.find(tag: pageCtrlDepth);
+  final CommentController controller = Get.find(tag: pageCtrlTag);
 
   @override
   Widget build(BuildContext context) {

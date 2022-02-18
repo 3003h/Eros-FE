@@ -1,4 +1,4 @@
-import 'package:fehviewer/common/service/depth_service.dart';
+import 'package:fehviewer/common/service/controller_tag_service.dart';
 import 'package:fehviewer/generated/l10n.dart';
 import 'package:fehviewer/pages/gallery/controller/archiver_controller.dart';
 import 'package:flutter/cupertino.dart';
@@ -12,7 +12,7 @@ class ArchiverView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final ArchiverController controller = Get.find(tag: pageCtrlDepth);
+    final ArchiverController controller = Get.find(tag: pageCtrlTag);
 
     final Map<String, String> typedesc = {
       'res': 'Resample Archive',

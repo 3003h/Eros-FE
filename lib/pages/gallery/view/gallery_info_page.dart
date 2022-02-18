@@ -1,4 +1,4 @@
-import 'package:fehviewer/common/service/depth_service.dart';
+import 'package:fehviewer/common/service/controller_tag_service.dart';
 import 'package:fehviewer/common/service/theme_service.dart';
 import 'package:fehviewer/const/const.dart';
 import 'package:fehviewer/network/api.dart';
@@ -29,7 +29,7 @@ class GalleryInfoPage extends StatelessWidget {
           child: SingleChildScrollView(
             child: GetBuilder<GalleryPageController>(
               // init: GalleryPageController(),
-              tag: pageCtrlDepth,
+              tag: pageCtrlTag,
               id: GetIds.PAGE_VIEW_HEADER,
               builder: (GalleryPageController controller) {
                 if (controller.galleryItem == null) {

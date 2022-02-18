@@ -7,7 +7,7 @@ import 'package:dio/dio.dart';
 import 'package:executor/executor.dart';
 import 'package:fehviewer/common/global.dart';
 import 'package:fehviewer/common/isolate_download/download_manager.dart';
-import 'package:fehviewer/common/service/depth_service.dart';
+import 'package:fehviewer/common/service/controller_tag_service.dart';
 import 'package:fehviewer/common/service/ehconfig_service.dart';
 import 'package:fehviewer/component/exception/error.dart';
 import 'package:fehviewer/component/quene_task/quene_task.dart';
@@ -135,7 +135,7 @@ class DownloadController extends GetxController {
     _downloadViewAnimateListAdd();
     showToast('${galleryTask.gid} Download task start');
 
-    final GalleryPageController _pageController = Get.find(tag: pageCtrlDepth);
+    final GalleryPageController _pageController = Get.find(tag: pageCtrlTag);
     final _fCount = _pageController.firstPageImage.length;
 
     logger.d('新任务');

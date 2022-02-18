@@ -1,4 +1,4 @@
-import 'package:fehviewer/common/service/depth_service.dart';
+import 'package:fehviewer/common/service/controller_tag_service.dart';
 import 'package:fehviewer/models/base/eh_models.dart';
 import 'package:fehviewer/network/api.dart';
 import 'package:fehviewer/utils/logger.dart';
@@ -12,7 +12,7 @@ class RateController extends GetxController {
 
   late double rate;
 
-  GalleryPageController get pageController => Get.find(tag: pageCtrlDepth);
+  GalleryPageController get pageController => Get.find(tag: pageCtrlTag);
 
   GalleryItem? get _item => pageController.galleryItem;
 

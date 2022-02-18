@@ -1,7 +1,7 @@
 import 'dart:math';
 
 import 'package:fehviewer/common/controller/advance_search_controller.dart';
-import 'package:fehviewer/common/service/depth_service.dart';
+import 'package:fehviewer/common/service/controller_tag_service.dart';
 import 'package:fehviewer/common/service/theme_service.dart';
 import 'package:fehviewer/generated/l10n.dart';
 import 'package:fehviewer/models/index.dart';
@@ -36,9 +36,9 @@ class GalleryFilterView extends StatelessWidget {
   final int catCrossAxisCount;
 
   SearchPageController? get _searchPageController {
-    if (int.parse(searchPageCtrlDepth) > 0) {
-      logger.v('searchPageCtrlDepth $searchPageCtrlDepth');
-      return Get.find<SearchPageController>(tag: searchPageCtrlDepth);
+    if (int.parse(searchPageCtrlTag) > 0) {
+      logger.v('searchPageCtrlDepth $searchPageCtrlTag');
+      return Get.find<SearchPageController>(tag: searchPageCtrlTag);
     }
   }
 
@@ -48,7 +48,7 @@ class GalleryFilterView extends StatelessWidget {
           advanceSearchController.advanceSearch;
       return Column(
         children: <Widget>[
-          if (int.parse(searchPageCtrlDepth) > 0)
+          if (int.parse(searchPageCtrlTag) > 0)
             Column(
               mainAxisSize: MainAxisSize.min,
               children: [
@@ -129,7 +129,7 @@ class GalleryFilterView extends StatelessWidget {
           advanceSearchController.advanceSearch;
 
       final List<Widget> _listDft = <Widget>[
-        if (int.parse(searchPageCtrlDepth) > 0)
+        if (int.parse(searchPageCtrlTag) > 0)
           Column(
             mainAxisSize: MainAxisSize.min,
             children: [

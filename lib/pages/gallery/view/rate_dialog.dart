@@ -1,4 +1,4 @@
-import 'package:fehviewer/common/service/depth_service.dart';
+import 'package:fehviewer/common/service/controller_tag_service.dart';
 import 'package:fehviewer/generated/l10n.dart';
 import 'package:fehviewer/pages/gallery/controller/rate_controller.dart';
 import 'package:fehviewer/utils/logger.dart';
@@ -13,7 +13,7 @@ class RateView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final RateController controller = Get.find(tag: pageCtrlDepth);
+    final RateController controller = Get.find(tag: pageCtrlTag);
     logger.d('controller.rate ${controller.rate}  ');
     return Container(
       height: 80,
@@ -57,7 +57,7 @@ class RateView extends StatelessWidget {
 }
 
 Future<void> showRateDialog(BuildContext context) {
-  final RateController controller = Get.find(tag: pageCtrlDepth);
+  final RateController controller = Get.find(tag: pageCtrlTag);
   return showCupertinoDialog<void>(
       context: context,
       barrierDismissible: true,

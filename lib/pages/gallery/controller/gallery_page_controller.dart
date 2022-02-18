@@ -6,7 +6,7 @@ import 'package:fehviewer/common/controller/history_controller.dart';
 import 'package:fehviewer/common/controller/localfav_controller.dart';
 import 'package:fehviewer/common/isolate_download/download_manager.dart';
 import 'package:fehviewer/common/parser/eh_parser.dart';
-import 'package:fehviewer/common/service/depth_service.dart';
+import 'package:fehviewer/common/service/controller_tag_service.dart';
 import 'package:fehviewer/common/service/ehconfig_service.dart';
 import 'package:fehviewer/common/service/layout_service.dart';
 import 'package:fehviewer/component/exception/error.dart';
@@ -141,7 +141,7 @@ class GalleryPageController extends GetxController
   void onInit() {
     super.onInit();
 
-    logger.v('GalleryPageController $pageCtrlDepth onInit');
+    logger.v('GalleryPageController $pageCtrlTag onInit');
 
     hideNavigationBtn = true;
 
@@ -173,7 +173,7 @@ class GalleryPageController extends GetxController
         .getGalleryCache(galleryItem?.gid ?? '')
         .then((_galleryCache) => lastIndex = _galleryCache?.lastIndex ?? 0);
 
-    logger.v('GalleryPageController $pageCtrlDepth onInit end');
+    logger.v('GalleryPageController $pageCtrlTag onInit end');
   }
 
   // @override
@@ -186,7 +186,7 @@ class GalleryPageController extends GetxController
   @override
   void onClose() {
     scrollController.dispose();
-    logger.v('onClose GalleryPageController $pageCtrlDepth');
+    logger.v('onClose GalleryPageController $pageCtrlTag');
 
     super.onClose();
   }
@@ -285,7 +285,7 @@ class GalleryPageController extends GetxController
         // 页面内刷新时的处理
         if (refresh) {
           // 评论控制器状态数据更新
-          Get.find<CommentController>(tag: pageCtrlDepth)
+          Get.find<CommentController>(tag: pageCtrlTag)
               .change(galleryItem?.galleryComment);
           // 评分状态更新
           isRatinged = galleryItem?.isRatinged ?? false;
@@ -302,7 +302,7 @@ class GalleryPageController extends GetxController
 
           // 收藏控制器状态更新
           final GalleryFavController _favController =
-              Get.find(tag: pageCtrlDepth);
+              Get.find(tag: pageCtrlTag);
           _favController.setFav(
               galleryItem?.favcat ?? '', galleryItem?.favTitle ?? '');
         }
@@ -413,7 +413,7 @@ class GalleryPageController extends GetxController
   Future<void> _reloadData() async {
     isRefresh = true;
     try {
-      Get.find<TorrentController>(tag: pageCtrlDepth).isRefresh = true;
+      Get.find<TorrentController>(tag: pageCtrlTag).isRefresh = true;
     } catch (e) {
       logger.e('$e');
     }
@@ -715,7 +715,7 @@ class GalleryPageController extends GetxController
     if (_rult != null && _rult is String) {
       logger.v('addTag $_rult');
       final TagInfoController? controller =
-          Get.put(TagInfoController(), tag: pageCtrlDepth);
+          Get.put(TagInfoController(), tag: pageCtrlTag);
       controller?.tagVoteUp(_rult);
     }
   }

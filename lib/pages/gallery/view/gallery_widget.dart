@@ -1,4 +1,4 @@
-import 'package:fehviewer/common/service/depth_service.dart';
+import 'package:fehviewer/common/service/controller_tag_service.dart';
 import 'package:fehviewer/common/service/ehconfig_service.dart';
 import 'package:fehviewer/common/service/layout_service.dart';
 import 'package:fehviewer/const/theme_colors.dart';
@@ -150,7 +150,7 @@ class GalleryTitle extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final GalleryPageController _pageController = Get.find(tag: pageCtrlDepth);
+    final GalleryPageController _pageController = Get.find(tag: pageCtrlTag);
 
     /// 构建标题
     ///
@@ -250,7 +250,7 @@ class ReadButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final GalleryPageController _pageController = Get.find(tag: pageCtrlDepth);
+    final GalleryPageController _pageController = Get.find(tag: pageCtrlTag);
 
     return Obx(
       () => CupertinoButton(
@@ -377,7 +377,7 @@ class TopComment extends StatelessWidget {
         // 评论
         GetBuilder<CommentController>(
           init: CommentController(),
-          tag: pageCtrlDepth,
+          tag: pageCtrlTag,
           id: GetIds.PAGE_VIEW_TOP_COMMENT,
           builder: (CommentController _commentController) {
             return _commentController.obx(

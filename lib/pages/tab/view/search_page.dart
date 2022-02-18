@@ -3,7 +3,7 @@ import 'dart:math';
 import 'package:blur/blur.dart';
 import 'package:extended_sliver/extended_sliver.dart';
 import 'package:fehviewer/common/controller/tag_trans_controller.dart';
-import 'package:fehviewer/common/service/depth_service.dart';
+import 'package:fehviewer/common/service/controller_tag_service.dart';
 import 'package:fehviewer/common/service/theme_service.dart';
 import 'package:fehviewer/fehviewer.dart';
 import 'package:fehviewer/pages/filter/filter.dart';
@@ -51,7 +51,7 @@ class GallerySearchPage extends StatefulWidget {
 }
 
 class _GallerySearchPageState extends State<GallerySearchPage> {
-  final String _tag = searchPageCtrlDepth;
+  final String _tag = searchPageCtrlTag;
   late SearchPageController controller;
 
   GlobalKey centerKey = GlobalKey();
@@ -500,7 +500,7 @@ class _GallerySearchPageState extends State<GallerySearchPage> {
 
   Widget _getInitView() {
     return GetBuilder<SearchPageController>(
-      tag: searchPageCtrlDepth,
+      tag: searchPageCtrlTag,
       id: GetIds.SEARCH_INIT_VIEW,
       builder: (SearchPageController sPageController) {
         final List<Widget> _btnList =
@@ -723,7 +723,7 @@ class SearchTextFieldIn extends StatelessWidget {
     this.iconOpacity = 0.0,
   }) : super(key: key);
 
-  SearchPageController get controller => Get.find(tag: searchPageCtrlDepth);
+  SearchPageController get controller => Get.find(tag: searchPageCtrlTag);
   final bool multiline;
   final double iconOpacity;
 
@@ -755,7 +755,7 @@ class SearchTextFieldIn extends StatelessWidget {
         ),
         suffix: GetBuilder<SearchPageController>(
           id: GetIds.SEARCH_CLEAR_BTN,
-          tag: searchPageCtrlDepth,
+          tag: searchPageCtrlTag,
           builder: (SearchPageController controller) {
             return Row(
               mainAxisSize: MainAxisSize.min,

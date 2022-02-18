@@ -1,4 +1,4 @@
-import 'package:fehviewer/common/service/depth_service.dart';
+import 'package:fehviewer/common/service/controller_tag_service.dart';
 import 'package:fehviewer/models/base/eh_models.dart';
 import 'package:fehviewer/network/api.dart';
 import 'package:fehviewer/network/request.dart';
@@ -11,7 +11,7 @@ class TorrentController extends GetxController
     with StateMixin<TorrentProvider> {
   TorrentController();
 
-  GalleryPageController get pageController => Get.find(tag: pageCtrlDepth);
+  GalleryPageController get pageController => Get.find(tag: pageCtrlTag);
   late String torrentTk;
   bool isRefresh = false;
 

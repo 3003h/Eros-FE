@@ -1,6 +1,6 @@
 import 'package:collection/collection.dart';
 import 'package:fehviewer/common/global.dart';
-import 'package:fehviewer/common/service/depth_service.dart';
+import 'package:fehviewer/common/service/controller_tag_service.dart';
 import 'package:fehviewer/common/service/layout_service.dart';
 import 'package:fehviewer/const/const.dart';
 import 'package:fehviewer/extension.dart';
@@ -39,12 +39,13 @@ class NavigatorUtil {
       _search = '${searArr[0]}:"${searArr[1]}$_end"';
     }
 
-    Get.find<DepthService>().pushSearchPageCtrl();
+    Get.find<ControllerTagService>().pushSearchPageCtrl(searchText: _search);
     Get.replace(SearchRepository(searchText: _search));
 
     Get.put(
       SearchPageController(),
-      tag: searchPageCtrlDepth,
+      tag: searchPageCtrlTag,
+      permanent: true,
     );
 
     if (replace) {
@@ -60,7 +61,7 @@ class NavigatorUtil {
       );
     }
 
-    Get.find<DepthService>().popSearchPageCtrl();
+    Get.find<ControllerTagService>().popSearchPageCtrl();
   }
 
   /// 打开搜索页面 指定搜索类型
@@ -69,13 +70,13 @@ class NavigatorUtil {
     bool fromTabItem = true,
   }) async {
     logger.d('fromTabItem $fromTabItem');
-    Get.find<DepthService>().pushSearchPageCtrl();
+    Get.find<ControllerTagService>().pushSearchPageCtrl();
 
     Get.replace(SearchRepository(searchType: searchType));
 
     Get.put(
       SearchPageController(),
-      tag: searchPageCtrlDepth,
+      tag: searchPageCtrlTag,
     );
 
     await Get.toNamed(
@@ -83,7 +84,7 @@ class NavigatorUtil {
       id: isLayoutLarge ? 1 : null,
     );
 
-    Get.find<DepthService>().popSearchPageCtrl();
+    Get.find<ControllerTagService>().popSearchPageCtrl();
   }
 
   /// 转到画廊页面
@@ -140,31 +141,31 @@ class NavigatorUtil {
       // }
 
       if (replace && topMainRoute == EHRoutes.root) {
-        Get.find<DepthService>().pushPageCtrl();
+        Get.find<ControllerTagService>().pushPageCtrl(gid: _gid);
         await Get.offNamed(
           EHRoutes.galleryPage,
           preventDuplicates: false,
         );
         deletePageController();
-        Get.find<DepthService>().popPageCtrl();
+        Get.find<ControllerTagService>().popPageCtrl();
       } else {
         if (topSecondRoute == EHRoutes.galleryPage) {
           logger.d('topSecondRoute == EHRoutes.galleryPage');
-          if (Get.isRegistered<GalleryPageController>(tag: pageCtrlDepth) &&
-              Get.find<GalleryPageController>(tag: pageCtrlDepth).gid == _gid) {
+          if (Get.isRegistered<GalleryPageController>(tag: pageCtrlTag) &&
+              Get.find<GalleryPageController>(tag: pageCtrlTag).gid == _gid) {
             logger.d('same gallery');
             return;
           }
         }
 
-        Get.find<DepthService>().pushPageCtrl();
+        Get.find<ControllerTagService>().pushPageCtrl(gid: _gid);
         await Get.toNamed(
           EHRoutes.galleryPage,
           id: isLayoutLarge ? 2 : null,
           preventDuplicates: false,
         );
         deletePageController();
-        Get.find<DepthService>().popPageCtrl();
+        Get.find<ControllerTagService>().popPageCtrl();
       }
     } else {
       // item点击跳转方式
@@ -175,16 +176,16 @@ class NavigatorUtil {
 
       //命名路由
       if (isLayoutLarge) {
-        Get.find<DepthService>().pushPageCtrl();
+        Get.find<ControllerTagService>().pushPageCtrl(gid: _gid);
 
         logger.d('topSecondRoute: $topSecondRoute');
         if (topSecondRoute == EHRoutes.galleryPage) {
           logger.d('topSecondRoute == EHRoutes.galleryPage');
-          final curTag = (int.parse(pageCtrlDepth) - 1).toString();
+          final curTag = (int.parse(pageCtrlTag) - 1).toString();
           if (Get.isRegistered<GalleryPageController>(tag: curTag) &&
               Get.find<GalleryPageController>(tag: curTag).gid == _gid) {
             logger.d('same gallery');
-            Get.find<DepthService>().popPageCtrl();
+            Get.find<ControllerTagService>().popPageCtrl();
             return;
           } else {
             await Get.offNamed(
@@ -208,13 +209,13 @@ class NavigatorUtil {
           );
         }
       } else {
-        Get.find<DepthService>().pushPageCtrl();
+        Get.find<ControllerTagService>().pushPageCtrl(gid: _gid);
         await Get.toNamed(
           EHRoutes.galleryPage,
           preventDuplicates: false,
         );
         deletePageController();
-        Get.find<DepthService>().popPageCtrl();
+        Get.find<ControllerTagService>().popPageCtrl();
       }
     }
     // deletePageController();

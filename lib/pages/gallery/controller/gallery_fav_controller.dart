@@ -2,7 +2,7 @@ import 'package:fehviewer/common/controller/cache_controller.dart';
 import 'package:fehviewer/common/controller/localfav_controller.dart';
 import 'package:fehviewer/common/global.dart';
 import 'package:fehviewer/common/parser/gallery_fav_parser.dart';
-import 'package:fehviewer/common/service/depth_service.dart';
+import 'package:fehviewer/common/service/controller_tag_service.dart';
 import 'package:fehviewer/common/service/ehconfig_service.dart';
 import 'package:fehviewer/generated/l10n.dart';
 import 'package:fehviewer/models/favcat.dart';
@@ -30,7 +30,7 @@ class GalleryFavController extends GetxController {
   final FavDialogController _favDialogController = Get.find();
   final FavoriteSelectorController _favoriteSelectorController = Get.find();
 
-  GalleryPageController get _pageController => Get.find(tag: pageCtrlDepth);
+  GalleryPageController get _pageController => Get.find(tag: pageCtrlTag);
 
   final CacheController cacheController = Get.find();
 

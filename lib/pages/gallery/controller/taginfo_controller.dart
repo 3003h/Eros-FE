@@ -1,5 +1,5 @@
 import 'package:fehviewer/common/controller/tag_trans_controller.dart';
-import 'package:fehviewer/common/service/depth_service.dart';
+import 'package:fehviewer/common/service/controller_tag_service.dart';
 import 'package:fehviewer/common/service/ehconfig_service.dart';
 import 'package:fehviewer/const/const.dart';
 import 'package:fehviewer/generated/l10n.dart';
@@ -16,7 +16,7 @@ import 'gallery_page_controller.dart';
 
 class TagInfoController extends GetxController {
   TagInfoController();
-  GalleryPageController get pageController => Get.find(tag: pageCtrlDepth);
+  GalleryPageController get pageController => Get.find(tag: pageCtrlTag);
 
   GalleryItem? get _item => pageController.galleryItem;
 

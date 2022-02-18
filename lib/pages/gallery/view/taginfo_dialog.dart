@@ -1,7 +1,7 @@
 import 'dart:ui';
 
 import 'package:fehviewer/common/controller/tag_trans_controller.dart';
-import 'package:fehviewer/common/service/depth_service.dart';
+import 'package:fehviewer/common/service/controller_tag_service.dart';
 import 'package:fehviewer/fehviewer.dart';
 import 'package:fehviewer/pages/gallery/controller/taginfo_controller.dart';
 import 'package:fehviewer/store/floor/entity/tag_translat.dart';
@@ -15,8 +15,8 @@ import 'package:url_launcher/url_launcher.dart';
 Future<void> showTagInfoDialog(String text,
     {required String type, required String translate, int vote = 0}) {
   vibrateUtil.medium();
-  Get.lazyPut(() => TagInfoController(), tag: pageCtrlDepth);
-  final TagInfoController controller = Get.find(tag: pageCtrlDepth);
+  Get.lazyPut(() => TagInfoController(), tag: pageCtrlTag);
+  final TagInfoController controller = Get.find(tag: pageCtrlTag);
 
   List<Widget> _getActions() {
     if (vote == 0) {

@@ -1,6 +1,6 @@
 import 'dart:async';
 
-import 'package:fehviewer/common/service/depth_service.dart';
+import 'package:fehviewer/common/service/controller_tag_service.dart';
 import 'package:fehviewer/fehviewer.dart';
 import 'package:fehviewer/network/api.dart';
 import 'package:fehviewer/network/request.dart';
@@ -24,8 +24,8 @@ class CommentController extends GetxController
   CommentController();
 
   GalleryPageController get pageController {
-    logger.v('CommentController -> pageCtrlDepth: $pageCtrlDepth');
-    return Get.find(tag: pageCtrlDepth);
+    logger.v('CommentController -> pageCtrlDepth: $pageCtrlTag');
+    return Get.find(tag: pageCtrlTag);
   }
 
   final TextEditingController commentTextController = TextEditingController();
