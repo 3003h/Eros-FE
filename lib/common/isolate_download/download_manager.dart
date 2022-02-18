@@ -54,10 +54,10 @@ class DownloadManagerIsolate {
         debugName: 'downloadChildIsolate');
 
     final ImageTaskDao _imageTaskDao =
-        await DownloadController.getImageTaskDao();
+        Get.find<DownloadController>().imageTaskDao;
 
     final GalleryTaskDao _galleryTaskDao =
-        await DownloadController.getGalleryTaskDao();
+        Get.find<DownloadController>().galleryTaskDao;
 
     // 监听子 isolate 发过来的消息
     _receivePort.listen((dynamic message) => _listenChild(

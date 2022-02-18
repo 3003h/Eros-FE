@@ -22,7 +22,7 @@ void compactZip(String outputPath, String inputDirPath) {
   loggerTime.d('end compactZip');
 }
 
-void isolateCompactDir2Zip(List<String> para) {
+void isolateCompactDirToZip(List<String> para) {
   final outputPath = para[0];
   final inputDirPath = para[1];
   final encoder = ZipFileEncoder();

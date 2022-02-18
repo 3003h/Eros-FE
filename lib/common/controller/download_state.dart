@@ -8,13 +8,13 @@ import 'package:fehviewer/store/floor/entity/gallery_task.dart';
 import 'package:get/get.dart';
 
 /// 轮询周期间隔 单位秒
-const int periodSeconds = 1;
+const int kPeriodSeconds = 1;
 
 /// 速度统计周期
-const int maxCount = 4;
+const int kMaxCount = 4;
 
 /// 速度统计周期
-const int checkMaxCount = 10;
+const int kCheckMaxCount = 10;
 
 // 无速度多少个周期后重试
 const int kRetryThresholdTime = 10;
