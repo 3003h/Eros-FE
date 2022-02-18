@@ -1,4 +1,4 @@
-import 'package:fehviewer/common/service/depth_service.dart';
+import 'package:fehviewer/common/service/controller_tag_service.dart';
 import 'package:fehviewer/common/service/layout_service.dart';
 import 'package:fehviewer/common/service/theme_service.dart';
 import 'package:fehviewer/const/const.dart';
@@ -23,13 +23,13 @@ class AddTagPage extends StatefulWidget {
 }
 
 class _AddTagPageState extends State<AddTagPage> {
-  final TagInfoController controller = Get.find(tag: pageCtrlDepth);
+  final TagInfoController controller = Get.find(tag: pageCtrlTag);
 
   @override
   void dispose() {
     super.dispose();
-    if (Get.isRegistered<TagInfoController>(tag: pageCtrlDepth)) {
-      Get.delete<TagInfoController>(tag: pageCtrlDepth);
+    if (Get.isRegistered<TagInfoController>(tag: pageCtrlTag)) {
+      Get.delete<TagInfoController>(tag: pageCtrlTag);
     }
   }
 
@@ -75,7 +75,7 @@ class _AddTagPageState extends State<AddTagPage> {
                 // clearButtonMode: OverlayVisibilityMode.editing,
                 suffix: GetBuilder<TagInfoController>(
                   id: GetIds.TAG_ADD_CLEAR_BTN,
-                  tag: pageCtrlDepth,
+                  tag: pageCtrlTag,
                   builder: (TagInfoController controller) {
                     return controller.showClearButton
                         ? GestureDetector(
@@ -126,7 +126,7 @@ class _AddTagPageState extends State<AddTagPage> {
 }
 
 class QryTagSliverList extends StatelessWidget {
-  final TagInfoController controller = Get.find(tag: pageCtrlDepth);
+  final TagInfoController controller = Get.find(tag: pageCtrlTag);
 
   @override
   Widget build(BuildContext context) {

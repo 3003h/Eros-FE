@@ -10,7 +10,7 @@ import 'package:dio_http_cache/dio_http_cache.dart';
 import 'package:fehviewer/common/controller/download_controller.dart';
 import 'package:fehviewer/common/global.dart';
 import 'package:fehviewer/common/parser/gallery_detail_parser.dart';
-import 'package:fehviewer/common/service/depth_service.dart';
+import 'package:fehviewer/common/service/controller_tag_service.dart';
 import 'package:fehviewer/common/service/ehconfig_service.dart';
 import 'package:fehviewer/const/const.dart';
 import 'package:fehviewer/models/index.dart' hide CacheConfig;
@@ -148,7 +148,7 @@ class DownloadManagerIsolate {
       List<GalleryImageTask>? imageTasks,
       String? downloadPath}) {
     logger.d('addTask ${galleryTask.gid} ${galleryTask.title}');
-    final GalleryPageController _pageController = Get.find(tag: pageCtrlDepth);
+    final GalleryPageController _pageController = Get.find(tag: pageCtrlTag);
     final _RequestBean _requestBean = _RequestBean(
       galleryTask: galleryTask,
       imageTasks: imageTasks,
@@ -192,10 +192,10 @@ class DownloadManagerIsolate {
 
             logger.d('任务明细初始化 gid:${_galleryTask.gid}');
 
-            if (Get.isRegistered<GalleryPageController>(tag: pageCtrlDepth)) {
+            if (Get.isRegistered<GalleryPageController>(tag: pageCtrlTag)) {
               // 更新状态
               final GalleryPageController _pageController =
-                  Get.find(tag: pageCtrlDepth);
+                  Get.find(tag: pageCtrlTag);
 
               if (_pageController.images.length < _rultImages.length) {
                 logger.v('set pre');

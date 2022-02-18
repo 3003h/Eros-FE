@@ -16,7 +16,7 @@ import 'common/controller/quicksearch_controller.dart';
 import 'common/controller/tag_trans_controller.dart';
 import 'common/controller/user_controller.dart';
 import 'common/controller/webdav_controller.dart';
-import 'common/service/depth_service.dart';
+import 'common/service/controller_tag_service.dart';
 import 'common/service/dns_service.dart';
 import 'common/service/ehconfig_service.dart';
 import 'common/service/layout_service.dart';
@@ -45,7 +45,7 @@ void getinit() {
   Get.lazyPut(() => ThemeService(), fenix: true);
   // DnsConfigController
   Get.put(DnsService(), permanent: true);
-  Get.put(DepthService());
+  Get.put(ControllerTagService());
 
   Get.lazyPut(() => LayoutServices(), fenix: true);
 

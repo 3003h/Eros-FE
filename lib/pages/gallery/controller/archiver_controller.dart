@@ -1,5 +1,5 @@
 import 'package:fehviewer/common/controller/archiver_download_controller.dart';
-import 'package:fehviewer/common/service/depth_service.dart';
+import 'package:fehviewer/common/service/controller_tag_service.dart';
 import 'package:fehviewer/fehviewer.dart';
 import 'package:fehviewer/network/api.dart';
 import 'package:fehviewer/network/request.dart';
@@ -11,7 +11,7 @@ class ArchiverController extends GetxController
     with StateMixin<ArchiverProvider> {
   ArchiverController();
 
-  GalleryPageController get pageController => Get.find(tag: pageCtrlDepth);
+  GalleryPageController get pageController => Get.find(tag: pageCtrlTag);
   late final ArchiverDownloadController _downloadController;
   late String _archiverLink;
 

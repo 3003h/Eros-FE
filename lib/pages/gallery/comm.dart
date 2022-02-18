@@ -1,4 +1,4 @@
-import 'package:fehviewer/common/service/depth_service.dart';
+import 'package:fehviewer/common/service/controller_tag_service.dart';
 import 'package:fehviewer/pages/gallery/view/gallery_page.dart';
 import 'package:fehviewer/utils/logger.dart';
 import 'package:get/get.dart';
@@ -12,37 +12,38 @@ import 'controller/taginfo_controller.dart';
 import 'controller/torrent_controller.dart';
 
 void initPageController({String? tag}) {
-  Get.lazyPut(() => CommentController(), tag: tag ?? pageCtrlDepth);
+  Get.lazyPut(() => CommentController(), tag: tag ?? pageCtrlTag);
 
-  Get.lazyPut(() => RateController(), tag: tag ?? pageCtrlDepth);
+  Get.lazyPut(() => RateController(), tag: tag ?? pageCtrlTag);
 
-  Get.lazyPut(() => TorrentController(), tag: tag ?? pageCtrlDepth);
+  Get.lazyPut(() => TorrentController(), tag: tag ?? pageCtrlTag);
 
-  Get.lazyPut(() => ArchiverController(), tag: tag ?? pageCtrlDepth);
+  Get.lazyPut(() => ArchiverController(), tag: tag ?? pageCtrlTag);
 
-  Get.lazyPut(() => GalleryFavController(), tag: tag ?? pageCtrlDepth);
+  Get.lazyPut(() => GalleryFavController(), tag: tag ?? pageCtrlTag);
 
-  Get.lazyPut(() => TagInfoController(), tag: tag ?? pageCtrlDepth);
+  Get.lazyPut(() => TagInfoController(), tag: tag ?? pageCtrlTag);
 }
 
 void deletePageController({String? tag}) {
-  logger.v('deletePageController ${tag ?? pageCtrlDepth}');
+  return;
+  logger.v('deletePageController ${tag ?? pageCtrlTag}');
 
   // GalleryPageController
-  if (Get.isRegistered<GalleryPageController>(tag: tag ?? pageCtrlDepth))
-    Get.delete<GalleryPageController>(tag: tag ?? pageCtrlDepth);
+  if (Get.isRegistered<GalleryPageController>(tag: tag ?? pageCtrlTag))
+    Get.delete<GalleryPageController>(tag: tag ?? pageCtrlTag);
 
-  if (Get.isRegistered<RateController>(tag: tag ?? pageCtrlDepth))
-    Get.delete<RateController>(tag: tag ?? pageCtrlDepth);
-  if (Get.isRegistered<TorrentController>(tag: tag ?? pageCtrlDepth))
-    Get.delete<TorrentController>(tag: tag ?? pageCtrlDepth);
-  if (Get.isRegistered<ArchiverController>(tag: tag ?? pageCtrlDepth))
-    Get.delete<ArchiverController>(tag: tag ?? pageCtrlDepth);
-  if (Get.isRegistered<CommentController>(tag: tag ?? pageCtrlDepth))
-    Get.delete<CommentController>(tag: tag ?? pageCtrlDepth);
+  if (Get.isRegistered<RateController>(tag: tag ?? pageCtrlTag))
+    Get.delete<RateController>(tag: tag ?? pageCtrlTag);
+  if (Get.isRegistered<TorrentController>(tag: tag ?? pageCtrlTag))
+    Get.delete<TorrentController>(tag: tag ?? pageCtrlTag);
+  if (Get.isRegistered<ArchiverController>(tag: tag ?? pageCtrlTag))
+    Get.delete<ArchiverController>(tag: tag ?? pageCtrlTag);
+  if (Get.isRegistered<CommentController>(tag: tag ?? pageCtrlTag))
+    Get.delete<CommentController>(tag: tag ?? pageCtrlTag);
 
-  if (Get.isRegistered<TagInfoController>(tag: tag ?? pageCtrlDepth))
-    Get.delete<TagInfoController>(tag: tag ?? pageCtrlDepth);
+  if (Get.isRegistered<TagInfoController>(tag: tag ?? pageCtrlTag))
+    Get.delete<TagInfoController>(tag: tag ?? pageCtrlTag);
 
   if (Get.isRegistered<GalleryRepository>()) {
     Get.delete<GalleryRepository>();

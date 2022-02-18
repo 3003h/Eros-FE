@@ -1,5 +1,5 @@
 import 'package:fehviewer/common/global.dart';
-import 'package:fehviewer/common/service/depth_service.dart';
+import 'package:fehviewer/common/service/controller_tag_service.dart';
 import 'package:fehviewer/common/service/ehconfig_service.dart';
 import 'package:fehviewer/common/service/theme_service.dart';
 import 'package:fehviewer/const/const.dart';
@@ -33,7 +33,7 @@ class CommentItem extends StatelessWidget {
   final GalleryComment galleryComment;
   final bool simple;
 
-  CommentController get controller => Get.find(tag: pageCtrlDepth);
+  CommentController get controller => Get.find(tag: pageCtrlTag);
 
   @override
   Widget build(BuildContext context) {
@@ -360,7 +360,7 @@ class CommentItem extends StatelessWidget {
 
     return GetBuilder<CommentController>(
         init: CommentController(),
-        tag: pageCtrlDepth,
+        tag: pageCtrlTag,
         id: galleryComment.id ?? 'None',
         builder: (CommentController _commentController) {
           return GestureDetector(

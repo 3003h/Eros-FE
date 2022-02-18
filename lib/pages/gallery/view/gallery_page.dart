@@ -1,4 +1,4 @@
-import 'package:fehviewer/common/service/depth_service.dart';
+import 'package:fehviewer/common/service/controller_tag_service.dart';
 import 'package:fehviewer/common/service/layout_service.dart';
 import 'package:fehviewer/const/const.dart';
 import 'package:fehviewer/models/index.dart';
@@ -43,12 +43,12 @@ class GalleryMainPage extends StatefulWidget {
 
 class _GalleryMainPageState extends State<GalleryMainPage> {
   late final GalleryPageController _controller;
-  final _tag = pageCtrlDepth;
+  final _tag = pageCtrlTag;
 
   @override
   void initState() {
     super.initState();
-    logger.v('initState pageCtrlDepth:$pageCtrlDepth');
+    logger.v('initState pageCtrlTag:$pageCtrlTag');
     initPageController(tag: _tag);
     _controller = Get.put(GalleryPageController(), tag: _tag);
 
@@ -63,7 +63,7 @@ class _GalleryMainPageState extends State<GalleryMainPage> {
   @override
   void dispose() {
     super.dispose();
-    deletePageController(tag: _tag);
+    // deletePageController(tag: _tag);
   }
 
   @override
@@ -97,7 +97,7 @@ class _GalleryMainPageState extends State<GalleryMainPage> {
                 padding: const EdgeInsetsDirectional.only(end: 10),
                 largeTitle: GetBuilder<GalleryPageController>(
                   id: GetIds.PAGE_VIEW_HEADER,
-                  tag: pageCtrlDepth,
+                  tag: pageCtrlTag,
                   builder: (logic) {
                     return SelectableText(
                       logic.topTitle,
@@ -120,7 +120,7 @@ class _GalleryMainPageState extends State<GalleryMainPage> {
                       ? const SizedBox()
                       : GetBuilder<GalleryPageController>(
                           id: GetIds.PAGE_VIEW_HEADER,
-                          tag: pageCtrlDepth,
+                          tag: pageCtrlTag,
                           builder: (logic) {
                             return NavigationBarImage(
                               imageUrl: logic.galleryItem?.imgUrl ?? '',

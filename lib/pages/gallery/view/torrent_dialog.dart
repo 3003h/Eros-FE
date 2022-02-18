@@ -1,6 +1,6 @@
 import 'dart:collection';
 
-import 'package:fehviewer/common/service/depth_service.dart';
+import 'package:fehviewer/common/service/controller_tag_service.dart';
 import 'package:fehviewer/const/const.dart';
 import 'package:fehviewer/generated/l10n.dart';
 import 'package:fehviewer/models/base/eh_models.dart';
@@ -20,7 +20,7 @@ class TorrentView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final TorrentController controller = Get.find(tag: pageCtrlDepth);
+    final TorrentController controller = Get.find(tag: pageCtrlTag);
     return controller.obx(
       (TorrentProvider? state) {
         if (state == null) {

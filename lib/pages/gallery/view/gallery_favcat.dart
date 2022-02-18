@@ -1,4 +1,4 @@
-import 'package:fehviewer/common/service/depth_service.dart';
+import 'package:fehviewer/common/service/controller_tag_service.dart';
 import 'package:fehviewer/const/theme_colors.dart';
 import 'package:fehviewer/generated/l10n.dart';
 import 'package:fehviewer/pages/gallery/controller/gallery_fav_controller.dart';
@@ -13,7 +13,7 @@ class GalleryFavButton extends StatelessWidget {
     Key? key,
   }) : super(key: key);
 
-  GalleryFavController get _favController => Get.find(tag: pageCtrlDepth);
+  GalleryFavController get _favController => Get.find(tag: pageCtrlTag);
 
   @override
   Widget build(BuildContext context) {

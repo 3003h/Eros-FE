@@ -1,7 +1,7 @@
 import 'dart:math';
 
 import 'package:fehviewer/common/controller/cache_controller.dart';
-import 'package:fehviewer/common/service/depth_service.dart';
+import 'package:fehviewer/common/service/controller_tag_service.dart';
 import 'package:fehviewer/common/service/layout_service.dart';
 import 'package:fehviewer/pages/gallery/controller/taginfo_controller.dart';
 import 'package:fehviewer/pages/gallery/view/add_tags_page.dart';
@@ -210,7 +210,7 @@ class TabHomeLarge extends GetView<TabHomeController> {
                               page: () => AddTagPage(),
                               binding: BindingsBuilder(
                                 () => Get.lazyPut(() => TagInfoController(),
-                                    tag: pageCtrlDepth),
+                                    tag: pageCtrlTag),
                               ),
                             );
                           case EHRoutes.galleryInfo:

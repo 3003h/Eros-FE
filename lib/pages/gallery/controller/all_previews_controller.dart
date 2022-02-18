@@ -1,5 +1,5 @@
 import 'package:dio/dio.dart';
-import 'package:fehviewer/common/service/depth_service.dart';
+import 'package:fehviewer/common/service/controller_tag_service.dart';
 import 'package:fehviewer/fehviewer.dart';
 import 'package:fehviewer/network/request.dart';
 import 'package:fehviewer/pages/gallery/view/const.dart';
@@ -12,7 +12,7 @@ import 'gallery_page_controller.dart';
 class AllPreviewsPageController extends GetxController
     with StateMixin<Tuple2<List<GalleryImage>, List<GalleryImage>>> {
   AllPreviewsPageController();
-  GalleryPageController get _pageController => Get.find(tag: pageCtrlDepth);
+  GalleryPageController get _pageController => Get.find(tag: pageCtrlTag);
 
   List<GalleryImage> get _images => _pageController.imagesFromMap;
 
