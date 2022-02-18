@@ -449,11 +449,13 @@ class DownloadViewController extends GetxController {
     final _tempEpubPath = await buildEpub(task);
     loggerTime.d('end buildEpub');
 
+    final title = task.title.replaceAll(RegExp(r'[/:*"<>|]'), '_');
+
     // 打包epub文件
     final _epubPath =
-        path.join(Global.tempPath, 'epub', '${task.gid}_${task.title}.epub');
+        path.join(Global.tempPath, 'epub', '${task.gid}_$title.epub');
     // compactZip(_epubPath, _tempEpubPath);
-    await compute(isolateCompactDir2Zip, [_epubPath, _tempEpubPath]);
+    await compute(isolateCompactDirToZip, [_epubPath, _tempEpubPath]);
 
     return _epubPath;
   }

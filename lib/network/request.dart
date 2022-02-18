@@ -562,7 +562,7 @@ Future<void> ehDownload({
   } else {
     downloadUrl = url;
   }
-  logger.d('downloadUrl $downloadUrl');
+  logger.v('downloadUrl $downloadUrl');
   try {
     await dioHttpClient.download(
       downloadUrl,
