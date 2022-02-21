@@ -74,7 +74,7 @@ class SearchPageController extends DefaultTabViewController {
   set listType(ListType val) => _listType.value = val;
 
   final RxList<TagTranslat> qryTags = <TagTranslat>[].obs;
-  late String _currQryText;
+  late String currQryText;
 
   FocusNode searchFocusNode = FocusNode();
 
@@ -195,8 +195,8 @@ class SearchPageController extends DefaultTabViewController {
         update([GetIds.SEARCH_CLEAR_BTN]);
       }
 
-      _currQryText = searchTextController.text.split(RegExp(r'[ ;"]')).last;
-      if (_currQryText.isEmpty) {
+      currQryText = searchTextController.text.split(RegExp(r'[ ;"]')).last;
+      if (currQryText.isEmpty) {
         qryTags([]);
         return;
       }
@@ -207,16 +207,16 @@ class SearchPageController extends DefaultTabViewController {
         if (localeService.isLanguageCodeZh) {
           logger.d('isLanguageCodeZh');
           List<TagTranslat> qryTagsTemp = await Get.find<TagTransController>()
-              .getTagTranslatesLike(text: _currQryText, limit: 200);
+              .getTagTranslatesLike(text: currQryText, limit: 200);
           if (qryTagsTemp.isNotEmpty) {
             qryTags.value = qryTagsTemp;
           }
         } else {
           // 其它通过eh的api
           qryTags.clear();
-          logger.d('tagSuggest $_currQryText');
+          logger.d('tagSuggest $currQryText');
           List<TagTranslat> tagTranslateList =
-              await Api.tagSuggest(text: _currQryText);
+              await Api.tagSuggest(text: currQryText);
           qryTags.value = tagTranslateList;
         }
       } catch (_) {}
@@ -354,9 +354,9 @@ class SearchPageController extends DefaultTabViewController {
 
     final String _lastSearchText = lastSearchText;
     final String _newSearch =
-        _lastSearchText.replaceAll(RegExp('$_currQryText\$'), _add);
+        _lastSearchText.replaceAll(RegExp('$currQryText\$'), _add);
     logger.d(
-        '_lastSearchText $_lastSearchText \n_currQry $_currQryText\n_newSearch $_newSearch ');
+        '_lastSearchText $_lastSearchText \n_currQry $currQryText\n_newSearch $_newSearch ');
 
     _autoComplete = false;
     searchTextController.value = TextEditingValue(

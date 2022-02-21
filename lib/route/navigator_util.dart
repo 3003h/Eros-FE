@@ -45,7 +45,6 @@ class NavigatorUtil {
     Get.put(
       SearchPageController(),
       tag: searchPageCtrlTag,
-      permanent: true,
     );
 
     if (replace) {
