@@ -308,34 +308,87 @@ class _GallerySearchPageState extends State<GallerySearchPage> {
     );
   }
 
-  Widget _tagItem(String text, String? translate) {
+  Widget _tagItem({
+    required String input,
+    required String text,
+    String? translate,
+  }) {
+    const textStyle = TextStyle(
+      fontSize: 16,
+      color: CupertinoColors.label,
+    );
+
+    final translateStyle = TextStyle(
+      fontSize: 14,
+      color: CupertinoDynamicColor.resolve(
+          CupertinoColors.secondaryLabel, Get.context!),
+    );
+
+    final highLightTextStyle = TextStyle(
+      fontSize: 16,
+      color: CupertinoDynamicColor.resolve(
+          CupertinoColors.systemBlue, Get.context!),
+    );
+
+    final highLightTranslateStyle = TextStyle(
+      fontSize: 14,
+      color: CupertinoDynamicColor.resolve(
+          CupertinoColors.systemBlue, Get.context!),
+    );
+
+    final textSpans = text
+        .split(input)
+        .map((e) => TextSpan(
+              text: e,
+              style: textStyle,
+            ))
+        .separat(
+            separator: TextSpan(
+          text: input,
+          style: highLightTextStyle,
+        ));
+
+    final translateTextSpans = translate
+        ?.split(input)
+        .map((e) => TextSpan(
+              text: e,
+              style: translateStyle,
+            ))
+        .separat(
+            separator: TextSpan(
+          text: input,
+          style: highLightTranslateStyle,
+        ));
+
     return Row(
       mainAxisSize: MainAxisSize.min,
+      crossAxisAlignment: CrossAxisAlignment.center,
       children: [
-        Icon(LineIcons.tag,
-                size: 20,
+        Icon(LineIcons.search,
+                size: 24,
                 color: CupertinoDynamicColor.resolve(
                     CupertinoColors.inactiveGray, Get.context!))
-            .paddingOnly(right: 4),
+            .paddingOnly(right: 4, top: 4),
         Expanded(
           child: Column(
             mainAxisSize: MainAxisSize.min,
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text(
-                text,
-                style: const TextStyle(
-                  fontSize: 16,
+              // Text(text, style: textStyle),
+              RichText(
+                text: TextSpan(
+                  children: textSpans,
                 ),
               ),
+              if (translate != null) const SizedBox(height: 6),
+              // if (translate != null) Text(translate, style: translateStyle),
               if (translate != null)
-                Text(translate,
-                    style: TextStyle(
-                      fontSize: 14,
-                      color: CupertinoDynamicColor.resolve(
-                          CupertinoColors.secondaryLabel, Get.context!),
-                    )),
+                RichText(
+                  text: TextSpan(
+                    children: translateTextSpans,
+                  ),
+                ),
             ],
           ),
         ),
@@ -359,7 +412,11 @@ class _GallerySearchPageState extends State<GallerySearchPage> {
             onTap: () {
               controller.addQryTag(index);
             },
-            child: _tagItem(_text, _tagRults),
+            child: _tagItem(
+              input: controller.currQryText,
+              text: _text,
+              translate: _tagRults,
+            ),
           );
         },
         childCount: controller.qryTags.length,

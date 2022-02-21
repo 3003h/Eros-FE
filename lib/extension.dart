@@ -503,3 +503,25 @@ extension ExtCustomProfile on CustomProfile {
       EnumToString.fromString(ListModeEnum.values, listModeValue ?? '') ??
       ListModeEnum.global;
 }
+
+extension EhIterableExtension<T> on Iterable<T> {
+  List<T> separat({required T separator}) {
+    Iterator<T> iterator = this.iterator;
+    if (!iterator.moveNext()) {
+      return <T>[];
+    }
+    final rult = <T>[];
+    if (separator == null) {
+      do {
+        rult.add(iterator.current);
+      } while (iterator.moveNext());
+    } else {
+      rult.add(iterator.current);
+      while (iterator.moveNext()) {
+        rult.add(separator);
+        rult.add(iterator.current);
+      }
+    }
+    return rult;
+  }
+}
