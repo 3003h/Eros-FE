@@ -375,14 +375,12 @@ class _GallerySearchPageState extends State<GallerySearchPage> {
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              // Text(text, style: textStyle),
               RichText(
                 text: TextSpan(
                   children: textSpans,
                 ),
               ),
               if (translate != null) const SizedBox(height: 6),
-              // if (translate != null) Text(translate, style: translateStyle),
               if (translate != null)
                 RichText(
                   text: TextSpan(

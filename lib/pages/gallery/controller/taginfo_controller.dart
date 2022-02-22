@@ -27,7 +27,7 @@ class TagInfoController extends GetxController {
   late DateTime _lastInputCompleteAt; //上次输入完成时间
   String _lastSearchText = '';
   final RxList<TagTranslat> qryTags = <TagTranslat>[].obs;
-  late String _currQry;
+  late String currQry;
 
   bool get showClearButton => tagsTextController.text.isNotEmpty;
 
@@ -51,8 +51,8 @@ class TagInfoController extends GetxController {
         DateTime.now().difference(_lastInputCompleteAt) >= _duration) {
       _lastSearchText = tagsTextController.text.trim();
 
-      _currQry = tagsTextController.text.trim().split(RegExp(r'[ ,;"]')).last;
-      if (_currQry.isEmpty) {
+      currQry = tagsTextController.text.trim().split(RegExp(r'[ ,;"]')).last;
+      if (currQry.isEmpty) {
         qryTags([]);
         return;
       }
@@ -69,7 +69,7 @@ class TagInfoController extends GetxController {
 
       try {
         Get.find<TagTransController>()
-            .getTagTranslatesLike(text: _currQry, limit: 200)
+            .getTagTranslatesLike(text: currQry, limit: 200)
             .then((List<TagTranslat> value) => qryTags(value));
       } catch (_) {}
     }
@@ -84,9 +84,9 @@ class TagInfoController extends GetxController {
 
     final String _lastSearchText = this._lastSearchText;
     final String _newSearch =
-        _lastSearchText.replaceAll(RegExp('$_currQry\$'), _add);
+        _lastSearchText.replaceAll(RegExp('$currQry\$'), _add);
     logger.d(
-        '_lastSearchText $_lastSearchText \n_currQry $_currQry\n_newSearch $_newSearch ');
+        '_lastSearchText $_lastSearchText \n_currQry $currQry\n_newSearch $_newSearch ');
 
     tagsTextController.value = TextEditingValue(
       text: '$_newSearch, ',

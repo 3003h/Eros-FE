@@ -130,9 +130,58 @@ class QryTagSliverList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    const textStyle = TextStyle(
+      fontSize: 16,
+      color: CupertinoColors.label,
+    );
+
+    final translateStyle = TextStyle(
+      fontSize: 14,
+      color: CupertinoDynamicColor.resolve(
+          CupertinoColors.secondaryLabel, context),
+    );
+
+    final highLightTextStyle = TextStyle(
+      fontSize: 16,
+      color: CupertinoDynamicColor.resolve(CupertinoColors.systemBlue, context),
+    );
+
+    final highLightTranslateStyle = TextStyle(
+      fontSize: 14,
+      color: CupertinoDynamicColor.resolve(CupertinoColors.systemBlue, context),
+    );
+
     return Obx(() => SliverList(
           delegate: SliverChildBuilderDelegate(
             (BuildContext context, int index) {
+              final input = controller.currQry;
+              final text = controller.qryTags[index].fullTagText ?? '';
+              final translate = controller.qryTags[index].fullTagTranslate;
+
+              final textSpans = text
+                  .split(input)
+                  .map((e) => TextSpan(
+                        text: e,
+                        style: textStyle,
+                      ))
+                  .separat(
+                      separator: TextSpan(
+                    text: input,
+                    style: highLightTextStyle,
+                  ));
+
+              final translateTextSpans = translate
+                  ?.split(input)
+                  .map((e) => TextSpan(
+                        text: e,
+                        style: translateStyle,
+                      ))
+                  .separat(
+                      separator: TextSpan(
+                    text: input,
+                    style: highLightTranslateStyle,
+                  ));
+
               return GestureDetector(
                 behavior: HitTestBehavior.opaque,
                 onTap: () {
@@ -143,19 +192,18 @@ class QryTagSliverList extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.center,
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text(
-                      controller.qryTags[index].fullTagText ?? '',
-                      style: const TextStyle(
-                        fontSize: 16,
+                    RichText(
+                      text: TextSpan(
+                        children: textSpans,
                       ),
                     ),
-                    if (controller.isTagTranslat)
-                      Text(controller.qryTags[index].fullTagTranslate ?? '',
-                          style: TextStyle(
-                            fontSize: 14,
-                            color: CupertinoDynamicColor.resolve(
-                                CupertinoColors.secondaryLabel, Get.context!),
-                          )),
+                    if (translate != null) const SizedBox(height: 6),
+                    if (translate != null)
+                      RichText(
+                        text: TextSpan(
+                          children: translateTextSpans,
+                        ),
+                      ),
                   ],
                 ).paddingSymmetric(vertical: 4, horizontal: 20),
               );

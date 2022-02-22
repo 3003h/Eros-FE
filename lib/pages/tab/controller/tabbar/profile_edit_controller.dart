@@ -57,9 +57,9 @@ class ProfileEditController extends GetxController {
 
     if (searchTextController != null) {
       searchTextController.value = TextEditingValue(
-        text: '$_add',
+        text: _add,
         selection: TextSelection.fromPosition(TextPosition(
-            affinity: TextAffinity.downstream, offset: '$_add'.length)),
+            affinity: TextAffinity.downstream, offset: _add.length)),
       );
     }
   }
