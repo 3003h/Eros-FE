@@ -91,7 +91,7 @@ dependencies:
   package_info: ^2.0.0
   firebase_analytics: ^9.1.0
   firebase_crashlytics: ^2.5.0
-  firebase_performance: ^0.7.0+2
+  firebase_performance: ^0.8.0+5
   dio_firebase_performance: ^0.3.1-dev.3
   cloud_firestore: ^3.1.0
   pretty_dio_logger: ^1.2.0-beta-1
@@ -188,8 +188,9 @@ dev_dependencies:
   flutter_lints: ^1.0.4
 
 dependency_overrides:
-  async: ^2.8.2
+#  async: ^2.8.2
   json_serializable: ^6.0.1
+  firebase_performance: ^0.8.0+5
   #args: ^2.1.0
   #expressions: ^0.2.2
   #logging: ^1.0.1

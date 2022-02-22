@@ -185,11 +185,32 @@ class _CustomProfileSettingPageState extends State<CustomProfileSettingPage> {
   }
 
   Future<void> showSearchAttach(
-      String value, BuildContext targetContext) async {
+      String input, BuildContext targetContext) async {
     const _marginLR = 30.0;
 
     final robj = targetContext.findRenderObject() as RenderBox?;
     final size = robj?.size;
+
+    const textStyle = TextStyle(
+      fontSize: 16,
+      color: CupertinoColors.label,
+    );
+
+    final translateStyle = TextStyle(
+      fontSize: 14,
+      color: CupertinoDynamicColor.resolve(
+          CupertinoColors.secondaryLabel, context),
+    );
+
+    final highLightTextStyle = TextStyle(
+      fontSize: 16,
+      color: CupertinoDynamicColor.resolve(CupertinoColors.systemBlue, context),
+    );
+
+    final highLightTranslateStyle = TextStyle(
+      fontSize: 14,
+      color: CupertinoDynamicColor.resolve(CupertinoColors.systemBlue, context),
+    );
 
     await SmartDialog.showAttach(
       tag: kAttachTagSearch,
@@ -209,7 +230,7 @@ class _CustomProfileSettingPageState extends State<CustomProfileSettingPage> {
         child: Container(
           width: size?.width,
           margin: const EdgeInsets.only(
-              left: _marginLR, right: _marginLR, top: 10, bottom: 40),
+              left: _marginLR - 10, right: _marginLR, top: 10, bottom: 40),
           constraints: const BoxConstraints(maxHeight: 300, minHeight: 50),
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(30),
@@ -236,6 +257,35 @@ class _CustomProfileSettingPageState extends State<CustomProfileSettingPage> {
                     padding: const EdgeInsets.all(0),
                     itemBuilder: (context, index) {
                       final _trans = _rultlist[index];
+
+                      final input = profileEditController.searchText;
+                      final text = _trans.fullTagText;
+                      final translate = _trans.fullTagTranslate;
+
+                      final textSpans = text
+                          ?.split(input)
+                          .map((e) => TextSpan(
+                                text: e,
+                                style: textStyle,
+                              ))
+                          .separat(
+                              separator: TextSpan(
+                            text: input,
+                            style: highLightTextStyle,
+                          ));
+
+                      final translateTextSpans = translate
+                          ?.split(input)
+                          .map((e) => TextSpan(
+                                text: e,
+                                style: translateStyle,
+                              ))
+                          .separat(
+                              separator: TextSpan(
+                            text: input,
+                            style: highLightTranslateStyle,
+                          ));
+
                       return GestureDetector(
                         behavior: HitTestBehavior.opaque,
                         onTap: () => profileEditController.selectItem(
@@ -247,19 +297,17 @@ class _CustomProfileSettingPageState extends State<CustomProfileSettingPage> {
                           mainAxisAlignment: MainAxisAlignment.center,
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Text(_trans.fullTagText ?? '',
-                                style: const TextStyle(
-                                  fontSize: 16,
-                                )),
-                            if (_trans.fullTagTranslate != null &&
+                            RichText(
+                              text: TextSpan(
+                                children: textSpans,
+                              ),
+                            ),
+                            if (translate != null) const SizedBox(height: 6),
+                            if (translate != null &&
                                 profileEditController.isTagTranslat)
-                              Text(
-                                _trans.fullTagTranslate ?? '',
-                                style: TextStyle(
-                                  fontSize: 14,
-                                  color: CupertinoDynamicColor.resolve(
-                                      CupertinoColors.secondaryLabel,
-                                      Get.context!),
+                              RichText(
+                                text: TextSpan(
+                                  children: translateTextSpans,
                                 ),
                               ),
                           ],
