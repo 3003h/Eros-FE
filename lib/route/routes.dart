@@ -22,6 +22,7 @@ class EHRoutes {
   static const String logfile = '/logfile';
   static const String webDavSetting = '/webDavSetting';
   static const String mySettings = '/mySettings';
+  static const String myTags = '/myTags';
 
   static const String login = '/login';
   static const String webLogin = '/webLogin';

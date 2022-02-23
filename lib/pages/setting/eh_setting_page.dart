@@ -153,18 +153,6 @@ class ListViewEhSetting extends StatelessWidget {
               EHRoutes.mySettings,
               id: isLayoutLarge ? 2 : null,
             );
-            // if (GetPlatform.isAndroid || GetPlatform.isIOS) {
-            //   if (_ehConfigService.debugMode) {
-            //     Get.toNamed(
-            //       EHRoutes.mySettings,
-            //       id: isLayoutLarge ? 2 : null,
-            //     );
-            //   } else {
-            //     Get.to(() => InWebMySetting());
-            //   }
-            // } else {
-            //   showToast('Not support');
-            // }
           },
           onLongPress: () async {
             await Api.selEhProfile();
@@ -177,13 +165,15 @@ class ListViewEhSetting extends StatelessWidget {
           title: L10n.of(context).ehentai_my_tags,
           selector: L10n.of(context).mytags_on_website,
           onTap: () {
-            if (GetPlatform.isAndroid) {
-              Get.to(() => InWebMyTags());
-            } else if (GetPlatform.isIOS) {
-              Get.to(() => InWebMyTags());
-            } else {
-              showToast('Not support');
-            }
+            // if (GetPlatform.isAndroid || GetPlatform.isIOS) {
+            //   Get.to(() => InWebMyTags());
+            // } else {
+            //   showToast('Not support');
+            // }
+            Get.toNamed(
+              EHRoutes.myTags,
+              id: isLayoutLarge ? 2 : null,
+            );
           },
         ),
       const ItemSpace(),

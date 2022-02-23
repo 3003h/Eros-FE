@@ -415,6 +415,43 @@ Future<EhSettings?> getEhSettings(
   }
 }
 
+Future<EhMytags?> getMyTags(
+    {bool refresh = false, String? selectTagset}) async {
+  await checkCookie();
+
+  await showCookie();
+
+  DioHttpClient dioHttpClient = DioHttpClient(dioConfig: ehDioConfig);
+  final String url = '${Api.getBaseUrl()}/mytags';
+
+  final Map<String, dynamic> _params = {
+    if (selectTagset != null) 'tagset': selectTagset,
+  };
+
+  late DioHttpResponse httpResponse;
+  for (int i = 0; i < 3; i++) {
+    logger.d('selectTagset:$selectTagset  num:$i');
+    httpResponse = await dioHttpClient.get(
+      url,
+      queryParameters: _params,
+      httpTransformer: MyTagsHttpTransformer(),
+      options: getCacheOptions(forceRefresh: refresh || i > 0),
+    );
+
+    if (selectTagset == null) {
+      break;
+    }
+
+    if (httpResponse.ok && httpResponse.data is EhMytags) {
+      break;
+    }
+  }
+
+  if (httpResponse.ok && httpResponse.data is EhMytags) {
+    return httpResponse.data as EhMytags;
+  }
+}
+
 Future<EhSettings?> postEhProfile({
   String? profileSet,
   String? action,

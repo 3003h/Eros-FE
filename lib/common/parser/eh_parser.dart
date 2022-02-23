@@ -11,3 +11,4 @@ export 'mpv_parser.dart';
 export 'profile_parser.dart';
 export 'torrent_parser.dart';
 export 'user_profile_parser.dart';
+export 'mytags_parser.dart';

@@ -1,4 +1,5 @@
 export 'download_archiver_task_info.dart';
+export 'eh_mytag_set.dart';
 export 'local_fav.dart';
 export 'eh_config.dart';
 export 'simple_tag.dart';
@@ -13,6 +14,7 @@ export 'gallery_cache.dart';
 export 'gallery_comment_span.dart';
 export 'uconfig.dart';
 export 'gallery_comment.dart';
+export 'eh_usertag.dart';
 export 'openl_translation.dart';
 export 'gallery_tag.dart';
 export 'dns_cache.dart';
@@ -37,3 +39,4 @@ export 'cache_config.dart';
 export 'profile.dart';
 export 'eh_layout.dart';
 export 'eh_setting_item.dart';
+export 'eh_mytags.dart';
