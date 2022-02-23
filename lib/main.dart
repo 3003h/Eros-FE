@@ -180,7 +180,7 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
         initialRoute: EHRoutes.root,
         theme: theme,
         locale: locale,
-        enableLog: true && kDebugMode,
+        enableLog: false && kDebugMode,
         logWriterCallback: loggerGetx,
         supportedLocales: <Locale>[
           ...L10n.delegate.supportedLocales,

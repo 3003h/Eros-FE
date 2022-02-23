@@ -294,6 +294,21 @@ class UconfigHttpTransformer extends HttpTransformer {
   }
 }
 
+class MyTagsHttpTransformer extends HttpTransformer {
+  factory MyTagsHttpTransformer() => _instance;
+  MyTagsHttpTransformer._internal();
+  static late final MyTagsHttpTransformer _instance =
+      MyTagsHttpTransformer._internal();
+
+  @override
+  FutureOr<DioHttpResponse<EhMytags>> parse(Response<dynamic> response) async {
+    final html = response.data as String;
+    // final EhMytags mytags = await compute(parseMyTags, html);
+    final EhMytags mytags = await parseMyTags(html);
+    return DioHttpResponse<EhMytags>.success(mytags);
+  }
+}
+
 class ImageDispatchTransformer extends HttpTransformer {
   factory ImageDispatchTransformer() => _instance;
   ImageDispatchTransformer._internal();

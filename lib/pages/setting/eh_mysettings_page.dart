@@ -1,28 +1,22 @@
 import 'package:fehviewer/common/service/layout_service.dart';
 import 'package:fehviewer/common/service/theme_service.dart';
-import 'package:fehviewer/extension.dart';
-import 'package:fehviewer/generated/l10n.dart';
-import 'package:fehviewer/models/base/eh_models.dart';
+import 'package:fehviewer/fehviewer.dart';
 import 'package:fehviewer/pages/setting/setting_items/excluded_language.dart';
 import 'package:fehviewer/pages/setting/setting_items/favorites_rename_item.dart';
 import 'package:fehviewer/pages/setting/setting_items/multi_selector.dart';
 import 'package:fehviewer/pages/setting/setting_items/selector_Item.dart';
-import 'package:fehviewer/utils/logger.dart';
-import 'package:fehviewer/widget/refresh.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:line_icons/line_icons.dart';
 
-import 'controller/eh_mysettings_controller.dart';
 import '../../component/setting_base.dart';
+import 'const.dart';
+import 'controller/eh_mysettings_controller.dart';
 import 'setting_items/multi_selector.dart';
 import 'setting_items/single_input_item.dart';
 import 'webview/web_mysetting_in.dart';
 
 part 'eh_mysettings_items.dart';
-
-const kIndicatorRadius = 20.0;
 
 class EhMySettingsPage extends GetView<EhMySettingsController> {
   const EhMySettingsPage({Key? key}) : super(key: key);
@@ -130,7 +124,7 @@ class _ListViewEhMySettingsState extends State<ListViewEhMySettings> {
   @override
   void initState() {
     super.initState();
-    future = _controller.loadData();
+    future = controller.loadData();
   }
 
   @override
@@ -321,7 +315,7 @@ class _ListViewEhMySettingsState extends State<ListViewEhMySettings> {
     return CustomScrollView(
       slivers: [
         EhCupertinoSliverRefreshControl(
-          onRefresh: _controller.reloadData,
+          onRefresh: controller.reloadData,
         ),
         SliverSafeArea(
           sliver: FutureBuilder<EhSettings?>(
@@ -349,12 +343,5 @@ class _ListViewEhMySettingsState extends State<ListViewEhMySettings> {
         ),
       ],
     );
-
-    // return ListView.builder(
-    //   itemCount: _list.length,
-    //   itemBuilder: (BuildContext context, int index) {
-    //     return _list[index];
-    //   },
-    // );
   }
 }

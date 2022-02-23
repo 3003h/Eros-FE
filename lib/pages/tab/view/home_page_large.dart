@@ -15,6 +15,7 @@ import 'package:fehviewer/pages/setting/controller/tab_setting_controller.dart';
 import 'package:fehviewer/pages/setting/custom_hosts_page.dart';
 import 'package:fehviewer/pages/setting/download_setting_page.dart';
 import 'package:fehviewer/pages/setting/eh_mysettings_page.dart';
+import 'package:fehviewer/pages/setting/eh_mytags_page.dart';
 import 'package:fehviewer/pages/setting/eh_setting_page.dart';
 import 'package:fehviewer/pages/setting/log_page.dart';
 import 'package:fehviewer/pages/setting/search_setting_page.dart';
@@ -242,6 +243,11 @@ class TabHomeLarge extends GetView<TabHomeController> {
                             return GetPageRoute(
                               settings: settings,
                               page: () => const EhMySettingsPage(),
+                            );
+                          case EHRoutes.myTags:
+                            return GetPageRoute(
+                              settings: settings,
+                              page: () => const EhMyTagsPage(),
                             );
                           case EHRoutes.loginWebDAV:
                             return GetPageRoute(
