@@ -3,6 +3,7 @@ import 'package:fehviewer/component/setting_base.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:line_icons/line_icons.dart';
 
 class UserTagItem extends StatefulWidget {
   const UserTagItem({
@@ -14,6 +15,9 @@ class UserTagItem extends StatefulWidget {
     this.tagColor,
     this.borderColor,
     this.inerTextColor,
+    this.tagWeight,
+    this.watch = false,
+    this.hide = false,
   }) : super(key: key);
 
   final String title;
@@ -22,6 +26,9 @@ class UserTagItem extends StatefulWidget {
   final Color? tagColor;
   final Color? borderColor;
   final Color? inerTextColor;
+  final String? tagWeight;
+  final bool watch;
+  final bool hide;
 
   final bool hideLine;
 
@@ -61,7 +68,32 @@ class _UserTagItemState extends State<UserTagItem> {
             child: Row(
               children: [
                 Container(
-                  margin: const EdgeInsets.only(right: 12),
+                  margin: const EdgeInsets.only(right: 10),
+                  child: Column(
+                    children: [
+                      Icon(
+                        LineIcons.eye,
+                        size: 16,
+                        color: widget.watch
+                            ? CupertinoDynamicColor.resolve(
+                                CupertinoColors.activeGreen, context)
+                            : CupertinoDynamicColor.resolve(
+                                CupertinoColors.systemGrey4, context),
+                      ),
+                      Icon(
+                        LineIcons.eyeSlash,
+                        size: 16,
+                        color: widget.hide
+                            ? CupertinoDynamicColor.resolve(
+                                CupertinoColors.destructiveRed, context)
+                            : CupertinoDynamicColor.resolve(
+                                CupertinoColors.systemGrey4, context),
+                      ),
+                    ],
+                  ),
+                ),
+                Container(
+                  margin: const EdgeInsets.only(right: 10),
                   padding:
                       const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
                   alignment: Alignment.center,
@@ -76,7 +108,7 @@ class _UserTagItemState extends State<UserTagItem> {
                   // width: 30,
                   // height: 24,
                   child: Text(
-                    'T',
+                    widget.tagWeight ?? 'T',
                     style: TextStyle(
                       color: widget.inerTextColor,
                       height: 1.25,
@@ -101,8 +133,10 @@ class _UserTagItemState extends State<UserTagItem> {
                           Text(
                             widget.desc ?? '',
                             style: const TextStyle(
-                                fontSize: 12.5,
-                                color: CupertinoColors.systemGrey),
+                              fontSize: 12.5,
+                              color: CupertinoColors.systemGrey,
+                              wordSpacing: 0.5,
+                            ),
                           ).paddingOnly(top: 2.0),
                       ]),
                 ),

@@ -43,6 +43,7 @@ class EhMySettingsController extends GetxController {
     } finally {
       // isLoading = false;
     }
+    return null;
   }
 
   Future<void> reloadData() async {

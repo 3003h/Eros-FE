@@ -8,6 +8,7 @@ import '../../fehviewer.dart';
 import 'comp/user_tag_item.dart';
 import 'const.dart';
 import 'controller/eh_mytags_controller.dart';
+import 'eh_usertag_edit_dialog.dart';
 import 'setting_items/selector_Item.dart';
 import 'webview/mytags_in.dart';
 
@@ -126,6 +127,17 @@ class _ListViewEhMytagsState extends State<ListViewEhMytags> {
     future = controller.loadData();
   }
 
+  Future tapUserTagItem(EhUsertag usertag) async {
+    final _userTag = await showCupertinoDialog<EhUsertag>(
+        context: context,
+        barrierDismissible: true,
+        builder: (context) {
+          return EhUserTagEditDialog(usertag: usertag);
+        });
+
+    logger.d('_userTag: ${_userTag?.toJson()}');
+  }
+
   @override
   Widget build(BuildContext context) {
     final List<Widget> _list = <Widget>[
@@ -165,22 +177,49 @@ class _ListViewEhMytagsState extends State<ListViewEhMytags> {
       Obx(() {
         final usertags = controller.ehMyTags.usertags ?? [];
         return GroupItem(
-          title: 'User tags',
+          title: usertags.isNotEmpty ? 'User tags' : '',
           child: ListView.builder(
             physics: const NeverScrollableScrollPhysics(),
             shrinkWrap: true,
             itemBuilder: (context, index) {
-              return UserTagItem(
-                title: usertags[index].title,
-                tagColor:
-                    ColorsUtil.hexStringToColor(usertags[index].colorCode),
-                borderColor:
-                    ColorsUtil.hexStringToColor(usertags[index].borderColor),
-                inerTextColor:
-                    ColorsUtil.hexStringToColor(usertags[index].textColor),
-                // hideLine: true,
-                // onTap: controller.deleteProfile,
-              );
+              final usertag = usertags[index];
+
+              final tagColor = ColorsUtil.hexStringToColor(usertag.colorCode);
+              final borderColor =
+                  ColorsUtil.hexStringToColor(usertag.borderColor);
+              final inerTextColor =
+                  ColorsUtil.hexStringToColor(usertag.textColor);
+              final tagWeight = usertag.tagWeight;
+
+              if (controller.isTagTranslat) {
+                return FutureBuilder<String?>(
+                    future: controller.getTextTranslate(usertag.title),
+                    initialData: usertag.title,
+                    builder: (context, snapshot) {
+                      return UserTagItem(
+                        title: usertag.title,
+                        desc: snapshot.data,
+                        tagColor: tagColor,
+                        borderColor: borderColor,
+                        inerTextColor: inerTextColor,
+                        tagWeight: tagWeight,
+                        watch: usertag.watch ?? false,
+                        hide: usertag.hide ?? false,
+                        onTap: () async => tapUserTagItem(usertag),
+                      );
+                    });
+              } else {
+                return UserTagItem(
+                  title: usertag.title,
+                  tagColor: tagColor,
+                  borderColor: borderColor,
+                  inerTextColor: inerTextColor,
+                  tagWeight: tagWeight,
+                  watch: usertag.watch ?? false,
+                  hide: usertag.hide ?? false,
+                  onTap: () async => tapUserTagItem(usertag),
+                );
+              }
             },
             itemCount: usertags.length,
           ),

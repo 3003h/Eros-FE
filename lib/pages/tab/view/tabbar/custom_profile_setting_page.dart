@@ -333,6 +333,7 @@ class _CustomProfileSettingPageState extends State<CustomProfileSettingPage> {
     if (tranText?.trim() != text) {
       return tranText;
     }
+    return null;
   }
 
   @override

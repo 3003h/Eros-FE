@@ -1,7 +1,9 @@
+import 'package:fehviewer/common/controller/tag_trans_controller.dart';
+import 'package:fehviewer/common/service/ehconfig_service.dart';
+import 'package:fehviewer/common/service/locale_service.dart';
 import 'package:fehviewer/network/request.dart';
 import 'package:get/get.dart';
 
-import '../../../common/service/ehconfig_service.dart';
 import '../../../fehviewer.dart';
 
 const kEhMyTags = EhMytags(tagsets: []);
@@ -16,6 +18,28 @@ class EhMyTagsController extends GetxController {
   set ehMyTags(EhMytags val) => _ehMyTags.value = val;
 
   final EhConfigService ehConfigService = Get.find();
+  final LocaleService localeService = Get.find();
+
+  String currSelected = '';
+
+  bool get isTagTranslat =>
+      ehConfigService.isTagTranslat && localeService.isLanguageCodeZh;
+
+  Future<String?> getTextTranslate(String text) async {
+    String namespace = '';
+    if (text.contains(':')) {
+      namespace = text.split(':')[0];
+    }
+    final String? tranText =
+        await Get.find<TagTransController>().getTranTagWithNameSpase(
+      text,
+      namespace: namespace,
+    );
+    if (tranText?.trim() != text) {
+      return tranText;
+    }
+    return null;
+  }
 
   Future<EhMytags?> loadData({bool refresh = false}) async {
     try {
@@ -26,8 +50,9 @@ class EhMyTagsController extends GetxController {
       isLoading = false;
 
       if (mytags != null) {
-        Global.forceRefreshUconfig = false;
         ehMyTags = mytags;
+        currSelected = mytags.tagsets.first.value ?? '';
+        logger.d('currSelected:$currSelected');
         return mytags;
       }
     } catch (e) {
@@ -35,10 +60,30 @@ class EhMyTagsController extends GetxController {
     } finally {
       // isLoading = false;
     }
+    return null;
   }
 
   Future<void> reloadData() async {
     await loadData(refresh: true);
+  }
+
+  Future<void> changeTagset(String tagSet) async {
+    isLoading = true;
+    try {
+      final mytags = await getMyTags(
+        refresh: true,
+        selectTagset: tagSet,
+      );
+      if (mytags != null) {
+        ehMyTags = mytags;
+        currSelected = tagSet;
+      }
+      isLoading = false;
+    } catch (e) {
+      rethrow;
+    } finally {
+      isLoading = false;
+    }
   }
 
   void deleteTagset() {}

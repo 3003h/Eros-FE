@@ -589,6 +589,13 @@ packages:
       url: "https://pub.flutter-io.cn"
     source: hosted
     version: "1.0.0"
+  flex_color_picker:
+    dependency: "direct main"
+    description:
+      name: flex_color_picker
+      url: "https://pub.flutter-io.cn"
+    source: hosted
+    version: "2.3.0"
   floor:
     dependency: "direct main"
     description:

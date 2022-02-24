@@ -430,7 +430,6 @@ Future<EhMytags?> getMyTags(
 
   late DioHttpResponse httpResponse;
   for (int i = 0; i < 3; i++) {
-    logger.d('selectTagset:$selectTagset  num:$i');
     httpResponse = await dioHttpClient.get(
       url,
       queryParameters: _params,
