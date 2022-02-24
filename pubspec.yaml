@@ -163,6 +163,7 @@ dependencies:
   open_by_default:
     git:
       url: https://github.com/honjow/open_by_default.git
+  flex_color_picker: ^2.3.0
 
 dev_dependencies:
   # flutter packages pub run build_runner build --delete-conflicting-outputs

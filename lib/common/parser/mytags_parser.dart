@@ -16,7 +16,7 @@ EhMytags parseMyTags(String html) {
 
   if (tagsetElm != null) {
     final tagsetElms = tagsetElm.children;
-    logger.d('tagsetElms.length ${tagsetElms.length}');
+    // logger.d('tagsetElms.length ${tagsetElms.length}');
     for (final _tagset in tagsetElms) {
       final value = _tagset.attributes['value'];
       if (value == null) {
@@ -38,7 +38,7 @@ EhMytags parseMyTags(String html) {
       //   // defaultProfile = value;
       // }
 
-      logger.d('name:$name  count:$count');
+      // logger.d('name:$name  count:$count');
 
       tagsets.add(EhMytagSet(
         name: name,
@@ -99,6 +99,7 @@ EhMytags parseMyTags(String html) {
         colorCode: color,
         borderColor: borderColor,
         textColor: textColor,
+        tagWeight: tagweight,
       ));
     }
   }

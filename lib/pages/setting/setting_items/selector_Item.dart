@@ -3,6 +3,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
 
 import '../../../component/setting_base.dart';
+import '../../../utils/logger.dart';
 
 class SelectorItem<T> extends StatefulWidget {
   const SelectorItem({
@@ -35,6 +36,7 @@ class _SelectorItemState<T> extends State<SelectorItem<T>> {
   @override
   void initState() {
     super.initState();
+    logger.d('${widget.initVal}');
     selector = widget.simpleActionMap?[widget.initVal] ??
         widget.actionMap[widget.initVal] ??
         '';
