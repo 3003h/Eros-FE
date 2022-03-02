@@ -2,14 +2,12 @@ part of 'eh_mytags_page.dart';
 
 Widget _buildSelectedTagsetItem(BuildContext context, {bool hideLine = false}) {
   return Obx(() {
-    logger.d('build _buildSelectedTagsetItem');
+    // logger.d('build _buildSelectedTagsetItem');
 
     final Map<String, String> actionMap = <String, String>{};
     for (final _tagset in _ehMyTagsController.ehMyTags.tagsets) {
       actionMap['${_tagset.value}'] = _tagset.name;
     }
-    logger.d(
-        '$actionMap ${_ehMyTagsController.currSelected} ${actionMap[_ehMyTagsController.currSelected]}');
 
     return SelectorItem<String>(
       key: ValueKey(_ehMyTagsController.currSelected),

@@ -265,6 +265,35 @@ class Api {
     return tagTranslateList;
   }
 
+  // 保存用户tag
+  static Future<Map<String, dynamic>> setUserTag({
+    required String apikey,
+    required String apiuid,
+    required String tagid,
+    bool tagWatch = false,
+    bool tagHide = false,
+    String? tagColor,
+    String? tagWeight,
+  }) async {
+    final Map reqMap = {
+      'method': 'setusertag',
+      'apiuid': int.parse(apiuid),
+      'apikey': apikey,
+      'tagid': int.parse(tagid),
+      'tagwatch': tagWatch ? 1 : 0,
+      'taghide': tagHide ? 1 : 0,
+      'tagcolor': tagColor ?? '',
+      'tagweight': tagWeight,
+    };
+    final String reqJsonStr = jsonEncode(reqMap);
+    final rult = await postEhApi(reqJsonStr);
+    logger.d('$rult');
+    final Map<String, dynamic> rultMap =
+        jsonDecode(rult.toString()) as Map<String, dynamic>;
+    return rultMap;
+  }
+
+  //
   static Future<bool?> selEhProfile() async {
     if (!Get.find<EhConfigService>().autoSelectProfile) {
       logger.d('do not to select profile');
@@ -278,6 +307,7 @@ class Api {
         break;
       }
     }
+    return null;
   }
 
   /// 选用feh单独的profile 没有就新建

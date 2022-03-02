@@ -395,6 +395,10 @@ class ColorsUtil {
     }
     return null;
   }
+
+  static bool isLight(Color color) {
+    return ThemeData.estimateBrightnessForColor(color) == Brightness.light;
+  }
 }
 
 class WidgetUtil {

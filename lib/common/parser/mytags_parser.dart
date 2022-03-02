@@ -57,6 +57,12 @@ EhMytags parseMyTags(String html) {
       if (id == 'usertag_0') {
         continue;
       }
+
+      final tagid = id?.replaceFirst('usertag_', '');
+      if (tagid == null) {
+        continue;
+      }
+
       final _title = _usertagElm.children.first.children.first.children.first
               .attributes['title'] ??
           '';
@@ -69,9 +75,9 @@ EhMytags parseMyTags(String html) {
               false) ==
           'checked';
 
-      // final color =
-      //     (_usertagElm.children[4].children.first.attributes['value'] ?? '')
-      //         .replaceAll('#', '');
+      final customColorValue =
+          (_usertagElm.children[4].children.first.attributes['value'] ?? '')
+              .replaceAll('#', '');
 
       final style = _usertagElm.children.first.children.first.children.first
               .attributes['style'] ??
@@ -94,8 +100,10 @@ EhMytags parseMyTags(String html) {
 
       usertags.add(EhUsertag(
         title: _title,
+        tagid: tagid,
         watch: watch,
         hide: hide,
+        defaultColor: customColorValue.isEmpty,
         colorCode: color,
         borderColor: borderColor,
         textColor: textColor,
@@ -104,9 +112,21 @@ EhMytags parseMyTags(String html) {
     }
   }
 
+  // apiuid
+  final String _apiuid =
+      RegExp(r'var\s*?apiuid\s*?=\s*?(\d+);').firstMatch(html)?.group(1) ?? '';
+
+  // apikey
+  final String _apikey = RegExp(r'var\s*?apikey\s*?=\s*?"([0-9a-f]+)";')
+          .firstMatch(html)
+          ?.group(1) ??
+      '';
+
   return EhMytags(
     tagsets: tagsets,
     usertags: usertags,
     canDelete: html.contains('do_tagset_delete()'),
+    apikey: _apikey,
+    apiuid: _apiuid,
   );
 }

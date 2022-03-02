@@ -36,7 +36,6 @@ class _SelectorItemState<T> extends State<SelectorItem<T>> {
   @override
   void initState() {
     super.initState();
-    logger.d('${widget.initVal}');
     selector = widget.simpleActionMap?[widget.initVal] ??
         widget.actionMap[widget.initVal] ??
         '';

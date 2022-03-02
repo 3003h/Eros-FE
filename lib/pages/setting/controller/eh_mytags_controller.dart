@@ -9,6 +9,8 @@ import '../../../fehviewer.dart';
 const kEhMyTags = EhMytags(tagsets: []);
 
 class EhMyTagsController extends GetxController {
+  static String idUsertagList = 'idUsertagList';
+
   final _isLoading = false.obs;
   bool get isLoading => _isLoading.value;
   set isLoading(bool val) => _isLoading.value = val;
@@ -17,8 +19,13 @@ class EhMyTagsController extends GetxController {
   EhMytags get ehMyTags => _ehMyTags.value;
   set ehMyTags(EhMytags val) => _ehMyTags.value = val;
 
+  List<EhUsertag> get usertags => ehMyTags.usertags ?? [];
+
   final EhConfigService ehConfigService = Get.find();
   final LocaleService localeService = Get.find();
+
+  String get apikey => ehMyTags.apikey ?? '';
+  String get apiuid => ehMyTags.apiuid ?? '';
 
   String currSelected = '';
 
@@ -55,6 +62,8 @@ class EhMyTagsController extends GetxController {
         logger.d('currSelected:$currSelected');
         return mytags;
       }
+
+      // update([idUsertagList]);
     } catch (e) {
       rethrow;
     } finally {
@@ -89,4 +98,15 @@ class EhMyTagsController extends GetxController {
   void deleteTagset() {}
 
   void crtNewTagset() {}
+
+  void deleteUsertag(int index) {
+    logger.d('deleteUsertag $index');
+    final temp = ehMyTags.clone();
+    final _id = ehMyTags.usertags?[index].tagid;
+    temp.usertags?.removeAt(index);
+    ehMyTags = temp;
+    if (_id != null) {
+      deleteUserTag(usertags: [_id]);
+    }
+  }
 }
