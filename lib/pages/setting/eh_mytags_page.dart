@@ -1,5 +1,8 @@
 import 'package:fehviewer/common/service/theme_service.dart';
+import 'package:fehviewer/network/api.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:get/get.dart';
 import 'package:line_icons/line_icons.dart';
 
@@ -134,8 +137,24 @@ class _ListViewEhMytagsState extends State<ListViewEhMytags> {
         builder: (context) {
           return EhUserTagEditDialog(usertag: usertag);
         });
+    if (_userTag == null || _userTag.tagid == null) {
+      return;
+    }
+    logger.d('_userTag: ${_userTag.toJson()}');
 
-    logger.d('_userTag: ${_userTag?.toJson()}');
+    await Api.setUserTag(
+      apikey: controller.apikey,
+      apiuid: controller.apiuid,
+      tagid: _userTag.tagid!,
+      tagColor: _userTag.colorCode ?? '',
+      tagWeight: _userTag.tagWeight ?? '',
+      tagHide: _userTag.hide ?? false,
+      tagWatch: _userTag.watch ?? false,
+    );
+
+    showToast('Save tag successfully');
+
+    controller.reloadData();
   }
 
   @override
@@ -175,14 +194,14 @@ class _ListViewEhMytagsState extends State<ListViewEhMytags> {
         ),
       ),
       Obx(() {
-        final usertags = controller.ehMyTags.usertags ?? [];
+        logger.d('build usertags ListView');
         return GroupItem(
-          title: usertags.isNotEmpty ? 'User tags' : '',
+          title: controller.usertags.isNotEmpty ? 'User tags' : '',
           child: ListView.builder(
             physics: const NeverScrollableScrollPhysics(),
             shrinkWrap: true,
             itemBuilder: (context, index) {
-              final usertag = usertags[index];
+              final usertag = controller.usertags[index];
 
               final tagColor = ColorsUtil.hexStringToColor(usertag.colorCode);
               final borderColor =
@@ -191,8 +210,10 @@ class _ListViewEhMytagsState extends State<ListViewEhMytags> {
                   ColorsUtil.hexStringToColor(usertag.textColor);
               final tagWeight = usertag.tagWeight;
 
+              late Widget _item;
+
               if (controller.isTagTranslat) {
-                return FutureBuilder<String?>(
+                _item = FutureBuilder<String?>(
                     future: controller.getTextTranslate(usertag.title),
                     initialData: usertag.title,
                     builder: (context, snapshot) {
@@ -209,7 +230,7 @@ class _ListViewEhMytagsState extends State<ListViewEhMytags> {
                       );
                     });
               } else {
-                return UserTagItem(
+                _item = UserTagItem(
                   title: usertag.title,
                   tagColor: tagColor,
                   borderColor: borderColor,
@@ -220,8 +241,27 @@ class _ListViewEhMytagsState extends State<ListViewEhMytags> {
                   onTap: () async => tapUserTagItem(usertag),
                 );
               }
+
+              return Slidable(
+                key: ValueKey(usertag.title),
+                child: _item,
+                endActionPane: ActionPane(
+                  extentRatio: 0.25,
+                  motion: const ScrollMotion(),
+                  children: [
+                    SlidableAction(
+                      onPressed: (_) => controller.deleteUsertag(index),
+                      backgroundColor: CupertinoDynamicColor.resolve(
+                          CupertinoColors.systemRed, context),
+                      foregroundColor: Colors.white,
+                      icon: Icons.delete,
+                      // label: L10n.of(context).delete,
+                    ),
+                  ],
+                ),
+              );
             },
-            itemCount: usertags.length,
+            itemCount: controller.usertags.length,
           ),
         );
       }),

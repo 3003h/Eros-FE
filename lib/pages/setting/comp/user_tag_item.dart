@@ -72,7 +72,8 @@ class _UserTagItemState extends State<UserTagItem> {
                   child: Column(
                     children: [
                       Icon(
-                        LineIcons.eye,
+                        // LineIcons.eye,
+                        LineIcons.checkCircle,
                         size: 16,
                         color: widget.watch
                             ? CupertinoDynamicColor.resolve(
@@ -81,7 +82,8 @@ class _UserTagItemState extends State<UserTagItem> {
                                 CupertinoColors.systemGrey4, context),
                       ),
                       Icon(
-                        LineIcons.eyeSlash,
+                        // LineIcons.eyeSlash,
+                        LineIcons.checkCircle,
                         size: 16,
                         color: widget.hide
                             ? CupertinoDynamicColor.resolve(

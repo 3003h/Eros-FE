@@ -1,5 +1,7 @@
 {
   "tagsets": "$[]eh_mytag_set",
   "canDelete?": false,
-  "usertags?": "$[]eh_usertag"
+  "usertags?": "$[]eh_usertag",
+  "apikey?": "",
+  "apiuid?": ""
 }

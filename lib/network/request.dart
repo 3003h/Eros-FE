@@ -185,7 +185,7 @@ Future<void> showCookie() async {
   final PersistCookieJar cookieJar = await Api.cookieJar;
   final List<Cookie> cookies =
       await cookieJar.loadForRequest(Uri.parse(Api.getBaseUrl()));
-  logger.d('showCookie: \n${cookies.join('\n')}');
+  // logger.d('showCookie: \n${cookies.join('\n')}');
 }
 
 Future<void> cleanCookie(String name) async {
@@ -449,6 +449,75 @@ Future<EhMytags?> getMyTags(
   if (httpResponse.ok && httpResponse.data is EhMytags) {
     return httpResponse.data as EhMytags;
   }
+  return null;
+}
+
+Future<bool> addUserTag({
+  required String tagname,
+  bool watch = false,
+  bool hide = false,
+  String? tagcolor,
+  String? tagweight = '10',
+}) async {
+  await checkCookie();
+  final dataMap = {
+    'usertag_action': 'add',
+    'tagname_new': tagname,
+    'tagwatch_new': watch ? 'on' : '',
+    'taghide_new': hide ? 'on' : '',
+    'tagcolor_new': tagcolor ?? '',
+    'tagweight_new': tagweight,
+  };
+  const url = '/mytags';
+
+  final formData = FormData.fromMap(dataMap);
+  DioHttpClient dioHttpClient = DioHttpClient(dioConfig: ehDioConfig);
+
+  DioHttpResponse httpResponse = await dioHttpClient.post(
+    url,
+    data: formData,
+    httpTransformer: UsertagActionTransformer(),
+    options: getCacheOptions(forceRefresh: true)
+      ..followRedirects = false
+      ..validateStatus = (status) => (status ?? 0) < 500,
+  );
+
+  if (httpResponse.ok && httpResponse.data is bool) {
+    return httpResponse.data as bool;
+  } else {
+    return false;
+  }
+}
+
+Future<bool> deleteUserTag({
+  List<String> usertags = const [],
+}) async {
+  await checkCookie();
+  final dataMap = {
+    'usertag_action': 'mass',
+    'modify_usertags[]': usertags,
+  };
+
+  const url = '/mytags';
+
+  final formData = FormData.fromMap(dataMap);
+
+  DioHttpClient dioHttpClient = DioHttpClient(dioConfig: ehDioConfig);
+
+  DioHttpResponse httpResponse = await dioHttpClient.post(
+    url,
+    data: formData,
+    httpTransformer: UsertagActionTransformer(),
+    options: getCacheOptions(forceRefresh: true)
+      ..followRedirects = false
+      ..validateStatus = (status) => (status ?? 0) < 500,
+  );
+
+  if (httpResponse.ok && httpResponse.data is bool) {
+    return httpResponse.data as bool;
+  } else {
+    return false;
+  }
 }
 
 Future<EhSettings?> postEhProfile({
@@ -480,6 +549,7 @@ Future<EhSettings?> postEhProfile({
   if (httpResponse.ok && httpResponse.data is EhSettings) {
     return httpResponse.data as EhSettings;
   }
+  return null;
 }
 
 Future<EhSettings?> changeEhProfile(String profileSet,

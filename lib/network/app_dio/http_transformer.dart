@@ -381,3 +381,10 @@ class PostCommentTransformer extends HttpTransformer {
     return DioHttpResponse<bool>.success(response.statusCode == 302);
   }
 }
+
+class UsertagActionTransformer extends HttpTransformer {
+  @override
+  FutureOr<DioHttpResponse<bool>> parse(Response<dynamic> response) {
+    return DioHttpResponse<bool>.success(response.statusCode == 302);
+  }
+}
