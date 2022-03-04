@@ -68,7 +68,6 @@ class CustomSubListController extends TabViewController {
     try {
       FetchListClient fetchListClient = getFetchListClient(fetchConfig);
       final GalleryList? rult = await fetchListClient.fetch();
-
       if (cancelToken?.isCancelled ?? false) {
         return null;
       }

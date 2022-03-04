@@ -97,9 +97,9 @@ class TabViewController extends GetxController
 
       maxPage = rult.maxPage ?? 0;
       nextPage = rult.nextPage ?? 1;
-      change([], status: RxStatus.success());
+      // change([], status: RxStatus.success());
       change(rultList, status: RxStatus.success());
-      for (final item in rultList) {
+      for (final _ in rultList) {
         sliverAnimatedListKey.currentState?.insertItem(0);
       }
     } catch (err) {
@@ -122,7 +122,7 @@ class TabViewController extends GetxController
       return;
     }
 
-    logger.d('loadDataMore .....');
+    logger.v('loadDataMore .....');
     cancelToken = CancelToken();
     pageState = PageState.LoadingMore;
 
@@ -179,7 +179,7 @@ class TabViewController extends GetxController
       cancelToken?.cancel();
     }
     change(state, status: RxStatus.success());
-    logger.d('minPage: $minPage');
+    logger.v('minPage: $minPage');
     if (minPage > 1) {
       await loadPrevious();
     } else {
@@ -205,8 +205,7 @@ class TabViewController extends GetxController
     ehTabController.scrollToTopCall = () => srcollToTop(context);
     ehTabController.scrollToTopRefreshCall = () => srcollToTopRefresh(context);
 
-    tabPages.scrollControllerMap[tabTag ?? this.heroTag ?? ''] =
-        ehTabController;
+    tabPages.scrollControllerMap[tabTag ?? heroTag ?? ''] = ehTabController;
   }
 
   void srcollToTop(BuildContext context) {

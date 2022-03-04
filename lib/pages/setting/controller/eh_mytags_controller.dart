@@ -32,6 +32,12 @@ class EhMyTagsController extends GetxController {
   bool get isTagTranslat =>
       ehConfigService.isTagTranslat && localeService.isLanguageCodeZh;
 
+  @override
+  void onInit() {
+    super.onInit();
+    loadData();
+  }
+
   Future<String?> getTextTranslate(String text) async {
     String namespace = '';
     if (text.contains(':')) {
@@ -49,17 +55,16 @@ class EhMyTagsController extends GetxController {
   }
 
   Future<EhMytags?> loadData({bool refresh = false}) async {
+    // isLoading = true;
     try {
       final mytags = await getMyTags(
         refresh: refresh || Global.forceRefreshUconfig,
-        selectTagset: '',
+        selectTagset: currSelected,
       );
       isLoading = false;
 
       if (mytags != null) {
         ehMyTags = mytags;
-        currSelected = mytags.tagsets.first.value ?? '';
-        logger.d('currSelected:$currSelected');
         return mytags;
       }
 
@@ -94,6 +99,16 @@ class EhMyTagsController extends GetxController {
       isLoading = false;
     }
   }
+
+  Map<String, EhMytagSet> get tagsetMap {
+    final Map<String, EhMytagSet> _map = <String, EhMytagSet>{};
+    for (final _tagset in ehMyTags.tagsets) {
+      _map['${_tagset.value}'] = _tagset;
+    }
+    return _map;
+  }
+
+  EhMytagSet? get curTagSet => tagsetMap[currSelected];
 
   void deleteTagset() {}
 

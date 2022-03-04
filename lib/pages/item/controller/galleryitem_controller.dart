@@ -10,16 +10,19 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 class GalleryItemController extends GetxController {
-  GalleryItemController(this.galleryItem);
+  GalleryItemController();
 
   final EhConfigService _ehConfigService = Get.find();
   final FavDialogController _favDialogController = Get.find();
   final TabHomeController _tabHomeController = Get.find();
   final HistoryController _historyController = Get.find();
 
+  late List<GalleryImage> firstPageImage;
+  late GalleryItem galleryItem;
+
   /// 点击item
   void onTap(dynamic tabTag) {
-    logger.d('${galleryItem.englishTitle} ');
+    logger.v('${galleryItem.englishTitle} ');
     NavigatorUtil.goGalleryPage(galleryItem: galleryItem, tabTag: tabTag);
   }
 
@@ -66,9 +69,6 @@ class GalleryItemController extends GetxController {
       return galleryItem.englishTitle ?? '';
     }
   }
-
-  late List<GalleryImage> firstPageImage;
-  GalleryItem galleryItem;
 
   Rx<Color?> colorTap = ehTheme.itemBackgroundColor.obs;
 

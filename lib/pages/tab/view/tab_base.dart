@@ -71,7 +71,7 @@ SliverPadding buildWaterfallFlow(
           }
 
           final GalleryItem _item = gallerItemBeans[index];
-          Get.lazyReplace(() => GalleryItemController(_item),
+          Get.lazyReplace(() => GalleryItemController()..galleryItem = _item,
               tag: _item.gid, fenix: true);
 
           return large
@@ -131,7 +131,7 @@ SliverPadding buildGrid(
           }
 
           final GalleryItem _item = gallerItemBeans[index];
-          Get.lazyReplace(() => GalleryItemController(_item),
+          Get.lazyReplace(() => GalleryItemController()..galleryItem = _item,
               tag: _item.gid, fenix: true);
 
           return FrameSeparateWidget(
@@ -251,6 +251,7 @@ Widget buildGallerySliverListView(
   Key? centerKey,
   int? lastTopitemIndex,
 }) {
+  logger.v('buildGallerySliverListView');
   return SliverAnimatedList(
     key: key,
     initialItemCount: gallerItemBeans.length,
@@ -268,8 +269,13 @@ Widget buildGallerySliverListView(
       }
 
       final GalleryItem _itemInfo = gallerItemBeans[index];
-      Get.lazyReplace(() => GalleryItemController(_itemInfo),
-          tag: _itemInfo.gid, fenix: true);
+
+      Get.lazyReplace(
+        () => GalleryItemController()..galleryItem = _itemInfo,
+        tag: _itemInfo.gid,
+        fenix: true,
+      );
+
       final itemWidget = buildGallerySliverListItem(
         _itemInfo,
         index,
@@ -328,7 +334,7 @@ Widget buildGallerySliverListSimpleView(
 
       final GalleryItem _item = gallerItemBeans[index];
       // Get.replace(GalleryItemController(_item), tag: _item.gid);
-      Get.lazyReplace(() => GalleryItemController(_item),
+      Get.lazyReplace(() => GalleryItemController()..galleryItem = _item,
           tag: _item.gid, fenix: true);
       // if (index < 5) {
       //   return const GalleryItemSimplePlaceHolder();
