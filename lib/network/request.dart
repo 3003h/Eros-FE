@@ -44,11 +44,7 @@ Future<GalleryList?> getGallery({
   final AdvanceSearchController _searchController = Get.find();
   DioHttpClient dioHttpClient = DioHttpClient(dioConfig: ehDioConfig);
 
-  // await showCookie();
-
   await checkCookie();
-
-  logger.v('df ${ehDioConfig}');
 
   late final String _url;
   switch (galleryListType) {

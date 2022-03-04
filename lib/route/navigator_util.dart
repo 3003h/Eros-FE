@@ -99,7 +99,7 @@ class NavigatorUtil {
         MainNavigatorObserver().history.lastOrNull?.settings.name;
     late final String? _gid;
 
-    logger.d('topMainRoute $topMainRoute');
+    logger.v('topMainRoute $topMainRoute');
 
     // url跳转方式
     if (url != null && url.isNotEmpty) {
@@ -168,7 +168,7 @@ class NavigatorUtil {
       }
     } else {
       // item点击跳转方式
-      logger.d('goGalleryPage fromItem tabTag=$tabTag');
+      logger.v('goGalleryPage fromItem tabTag=$tabTag');
       _gid = galleryItem?.gid;
 
       Get.replace(GalleryRepository(item: galleryItem, tabTag: tabTag));

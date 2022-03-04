@@ -1,3 +1,4 @@
+import 'package:fehviewer/common/service/layout_service.dart';
 import 'package:fehviewer/common/service/theme_service.dart';
 import 'package:fehviewer/network/api.dart';
 import 'package:flutter/cupertino.dart';
@@ -46,26 +47,53 @@ class EhMyTagsPage extends GetView<EhMyTagsController> {
                       Get.to(() => InWebMyTags());
                     },
                   ),
-                  // CupertinoButton(
-                  //   padding: const EdgeInsets.all(0),
-                  //   minSize: 40,
-                  //   child: const Icon(
-                  //     LineIcons.checkCircle,
-                  //     size: 24,
-                  //   ),
-                  //   onPressed: () async {
-                  //     // 保存配置
-                  //     // controller.printParam();
-                  //     // await controller.applyProfile();
-                  //   },
-                  // ),
+                  CupertinoButton(
+                    padding: const EdgeInsets.all(0),
+                    minSize: 40,
+                    child: const Icon(
+                      LineIcons.plus,
+                      size: 24,
+                    ),
+                    onPressed: () async {
+                      // Get.to(() => InWebMyTags());
+                    },
+                  ),
                 ],
               )),
           child: SafeArea(
             child: Stack(
               alignment: Alignment.center,
               children: [
-                const ListViewEhMytags(),
+                CustomScrollView(
+                  slivers: [
+                    EhCupertinoSliverRefreshControl(
+                      onRefresh: controller.reloadData,
+                    ),
+                    SliverList(
+                      delegate: SliverChildBuilderDelegate(
+                        (context, index) {
+                          final e = _ehMyTagsController.ehMyTags.tagsets[index];
+
+                          return SelectorSettingItem(
+                            title: e.name,
+                            onTap: () async {
+                              if (controller.currSelected != e.value) {
+                                controller.currSelected = e.value ?? '';
+                                // await controller.reloadData();
+                              }
+                              Get.toNamed(
+                                EHRoutes.userTags,
+                                id: isLayoutLarge ? 2 : null,
+                              );
+                            },
+                          );
+                          // return _list[index];
+                        },
+                        childCount: _ehMyTagsController.ehMyTags.tagsets.length,
+                      ),
+                    ),
+                  ],
+                ),
                 Obx(() {
                   if (controller.isLoading) {
                     // loading 提示组件
@@ -110,228 +138,5 @@ class EhMyTagsPage extends GetView<EhMyTagsController> {
             bottom: false,
           ));
     });
-  }
-}
-
-class ListViewEhMytags extends StatefulWidget {
-  const ListViewEhMytags({Key? key}) : super(key: key);
-
-  @override
-  _ListViewEhMytagsState createState() => _ListViewEhMytagsState();
-}
-
-class _ListViewEhMytagsState extends State<ListViewEhMytags> {
-  final controller = Get.find<EhMyTagsController>();
-  late Future<EhMytags?> future;
-
-  @override
-  void initState() {
-    super.initState();
-    future = controller.loadData();
-  }
-
-  Future tapUserTagItem(EhUsertag usertag) async {
-    final _userTag = await showCupertinoDialog<EhUsertag>(
-        context: context,
-        barrierDismissible: true,
-        builder: (context) {
-          return EhUserTagEditDialog(usertag: usertag);
-        });
-    if (_userTag == null || _userTag.tagid == null) {
-      return;
-    }
-    logger.d('_userTag: ${_userTag.toJson()}');
-
-    await Api.setUserTag(
-      apikey: controller.apikey,
-      apiuid: controller.apiuid,
-      tagid: _userTag.tagid!,
-      tagColor: _userTag.colorCode ?? '',
-      tagWeight: _userTag.tagWeight ?? '',
-      tagHide: _userTag.hide ?? false,
-      tagWatch: _userTag.watch ?? false,
-    );
-
-    showToast('Save tag successfully');
-
-    controller.reloadData();
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    final List<Widget> _list = <Widget>[
-      GroupItem(
-        title: 'Tagset',
-        child: Column(
-          children: [
-            _buildSelectedTagsetItem(context, hideLine: false),
-            TextItem(
-              L10n.of(context).uc_rename,
-              textColor: CupertinoDynamicColor.resolve(
-                  CupertinoColors.activeBlue, context),
-              // onTap: controller.renameProfile,
-            ),
-            Obx(() {
-              if (controller.ehMyTags.canDelete ?? false) {
-                return TextItem(
-                  L10n.of(context).uc_del_profile,
-                  onTap: controller.deleteTagset,
-                  textColor: CupertinoDynamicColor.resolve(
-                      CupertinoColors.activeBlue, context),
-                );
-              } else {
-                return const SizedBox.shrink();
-              }
-            }),
-            TextItem(
-              L10n.of(context).uc_crt_profile,
-              onTap: controller.crtNewTagset,
-              textColor: CupertinoDynamicColor.resolve(
-                  CupertinoColors.activeBlue, context),
-              hideLine: true,
-            ),
-          ],
-        ),
-      ),
-      Obx(() {
-        logger.d('build usertags ListView');
-        return GroupItem(
-          title: controller.usertags.isNotEmpty ? 'User tags' : '',
-          child: ListView.builder(
-            physics: const NeverScrollableScrollPhysics(),
-            shrinkWrap: true,
-            itemBuilder: (context, index) {
-              final usertag = controller.usertags[index];
-
-              final tagColor = ColorsUtil.hexStringToColor(usertag.colorCode);
-              final borderColor =
-                  ColorsUtil.hexStringToColor(usertag.borderColor);
-              final inerTextColor =
-                  ColorsUtil.hexStringToColor(usertag.textColor);
-              final tagWeight = usertag.tagWeight;
-
-              late Widget _item;
-
-              if (controller.isTagTranslat) {
-                _item = FutureBuilder<String?>(
-                    future: controller.getTextTranslate(usertag.title),
-                    initialData: usertag.title,
-                    builder: (context, snapshot) {
-                      return UserTagItem(
-                        title: usertag.title,
-                        desc: snapshot.data,
-                        tagColor: tagColor,
-                        borderColor: borderColor,
-                        inerTextColor: inerTextColor,
-                        tagWeight: tagWeight,
-                        watch: usertag.watch ?? false,
-                        hide: usertag.hide ?? false,
-                        onTap: () async => tapUserTagItem(usertag),
-                      );
-                    });
-              } else {
-                _item = UserTagItem(
-                  title: usertag.title,
-                  tagColor: tagColor,
-                  borderColor: borderColor,
-                  inerTextColor: inerTextColor,
-                  tagWeight: tagWeight,
-                  watch: usertag.watch ?? false,
-                  hide: usertag.hide ?? false,
-                  onTap: () async => tapUserTagItem(usertag),
-                );
-              }
-
-              return Slidable(
-                key: ValueKey(usertag.title),
-                child: _item,
-                endActionPane: ActionPane(
-                  extentRatio: 0.25,
-                  motion: const ScrollMotion(),
-                  children: [
-                    SlidableAction(
-                      onPressed: (_) => controller.deleteUsertag(index),
-                      backgroundColor: CupertinoDynamicColor.resolve(
-                          CupertinoColors.systemRed, context),
-                      foregroundColor: Colors.white,
-                      icon: Icons.delete,
-                      // label: L10n.of(context).delete,
-                    ),
-                  ],
-                ),
-              );
-            },
-            itemCount: controller.usertags.length,
-          ),
-        );
-      }),
-    ];
-
-    return CustomScrollView(
-      slivers: [
-        EhCupertinoSliverRefreshControl(
-          onRefresh: controller.reloadData,
-        ),
-        SliverSafeArea(
-          sliver: FutureBuilder<EhMytags?>(
-              future: future,
-              initialData: controller.ehMyTags,
-              builder: (context, snapshot) {
-                if (snapshot.connectionState != ConnectionState.done) {
-                  return const SliverFillRemaining(
-                    child: CupertinoActivityIndicator(
-                      radius: 20,
-                    ),
-                  );
-                } else {
-                  return SliverList(
-                    delegate: SliverChildBuilderDelegate(
-                      (context, index) {
-                        return _list[index].autoCompressKeyboard(context);
-                        // return _list[index];
-                      },
-                      childCount: _list.length,
-                    ),
-                  );
-                }
-              }),
-        ),
-        // Obx(() {
-        //   if ((controller.ehMyTags.usertags ?? []).isNotEmpty) {
-        //     return SliverToBoxAdapter(
-        //       child: Container(
-        //         padding: const EdgeInsets.only(
-        //           left: 20,
-        //           bottom: 4,
-        //           top: 20,
-        //         ),
-        //         width: double.infinity,
-        //         child: const Text(
-        //           'User tags',
-        //           style: TextStyle(fontSize: 14),
-        //           textAlign: TextAlign.start,
-        //         ),
-        //       ),
-        //     );
-        //   } else {
-        //     return const SliverToBoxAdapter();
-        //   }
-        // }),
-        // Obx(() {
-        //   final usertags = controller.ehMyTags.usertags ?? [];
-        //   return SliverList(
-        //     delegate: SliverChildBuilderDelegate(
-        //       (context, index) {
-        //         return TextItem(
-        //           usertags[index].title,
-        //           // onTap: controller.deleteProfile,
-        //         );
-        //       },
-        //       childCount: usertags.length,
-        //     ),
-        //   );
-        // }),
-      ],
-    );
   }
 }

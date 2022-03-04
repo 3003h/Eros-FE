@@ -54,10 +54,10 @@ class GalleryItemFlowLarge extends StatelessWidget {
           padding: const EdgeInsets.fromLTRB(0, 0, 4, 0),
           child: StaticRatingBar(
             size: 14.0,
-            rate: galleryItemController.galleryItem.ratingFallBack ?? 0,
+            rate: galleryItem.ratingFallBack ?? 0,
             radiusRatio: 1.5,
-            colorLight: ThemeColors.colorRatingMap[
-                galleryItemController.galleryItem.colorRating?.trim() ?? 'ir'],
+            colorLight: ThemeColors
+                .colorRatingMap[galleryItem.colorRating?.trim() ?? 'ir'],
             colorDark: CupertinoDynamicColor.resolve(
                 CupertinoColors.systemGrey3, Get.context!),
           ),
@@ -240,7 +240,7 @@ class GalleryItemFlowLarge extends StatelessWidget {
                 const SizedBox(height: 6),
                 // _buildSimpleTagsView(),
                 TagWaterfallFlowViewBox(
-                  simpleTags: galleryItemController.galleryItem.simpleTags,
+                  simpleTags: galleryItem.simpleTags,
                 ),
               ],
             ).paddingAll(8.0),

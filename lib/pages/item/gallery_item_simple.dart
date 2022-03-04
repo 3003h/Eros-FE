@@ -14,7 +14,6 @@ import 'item_base.dart';
 
 const double kCoverImageWidth = 80.0;
 const double kItemHeight = 130.0;
-// const double kItemHeightShowTag = 140.0;
 const double kPaddingLeft = 8.0;
 
 /// 画廊列表项
@@ -54,7 +53,7 @@ class GalleryItemSimpleWidget extends StatelessWidget {
               const SizedBox(height: 4),
               // 上传者
               Text(
-                galleryItemController.galleryItem.uploader ?? '',
+                galleryItem.uploader ?? '',
                 style: const TextStyle(
                     fontSize: 12, color: CupertinoColors.systemGrey),
               ),
@@ -66,8 +65,7 @@ class GalleryItemSimpleWidget extends StatelessWidget {
                 //       galleryItemController.galleryItem.simpleTags ?? [],
                 // ),
                 TagWaterfallFlowViewBox(
-                  simpleTags:
-                      galleryItemController.galleryItem.simpleTags ?? [],
+                  simpleTags: galleryItem.simpleTags ?? [],
                   crossAxisCount: 1,
                 ),
               const Spacer(),

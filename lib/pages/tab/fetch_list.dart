@@ -4,6 +4,7 @@ import 'package:dio/dio.dart';
 import 'package:fehviewer/models/base/eh_models.dart';
 import 'package:fehviewer/network/request.dart';
 
+import '../../utils/logger.dart';
 import 'controller/search_page_controller.dart';
 
 enum GalleryListType {

@@ -25,7 +25,6 @@ const double kPaddingVertical = 18.0;
 const double kCardRadius = 12.0;
 
 const double kFixedHeight = 200.0;
-// const double kCoverImageWidth = 140;
 
 final EhConfigService _ehConfigService = Get.find();
 
@@ -132,7 +131,7 @@ class GalleryItemWidget extends StatelessWidget {
                         const SizedBox(height: 6),
                         // 上传者
                         Text(
-                          galleryItemController.galleryItem.uploader ?? '',
+                          galleryItem.uploader ?? '',
                           style: const TextStyle(
                               fontSize: 12, color: CupertinoColors.systemGrey),
                         ),
@@ -141,22 +140,19 @@ class GalleryItemWidget extends StatelessWidget {
                         // 标签
                         if (_ehConfigService.fixedHeightOfListItems)
                           TagWaterfallFlowViewBox(
-                            simpleTags:
-                                galleryItemController.galleryItem.simpleTags,
+                            simpleTags: galleryItem.simpleTags,
                             crossAxisCount: 3,
                           )
                         else
                           TagBox(
-                            simpleTags:
-                                galleryItemController.galleryItem.simpleTags ??
-                                    [],
+                            simpleTags: galleryItem.simpleTags ?? [],
                           ),
                         const SizedBox(height: 6),
                         const Spacer(),
                         // 评分行
                         GetBuilder(
                           init: galleryItemController,
-                          tag: galleryItemController.galleryItem.gid,
+                          tag: galleryItem.gid,
                           builder: (_) => Row(
                             crossAxisAlignment: CrossAxisAlignment.center,
                             mainAxisSize: MainAxisSize.min,
@@ -164,12 +160,9 @@ class GalleryItemWidget extends StatelessWidget {
                               // 评分
                               Expanded(
                                   child: _Rating(
-                                rating:
-                                    galleryItemController.galleryItem.rating,
-                                ratingFallBack: galleryItemController
-                                    .galleryItem.ratingFallBack,
-                                colorRating: galleryItemController
-                                    .galleryItem.colorRating,
+                                rating: galleryItem.rating,
+                                ratingFallBack: galleryItem.ratingFallBack,
+                                colorRating: galleryItem.colorRating,
                               )),
                               // 收藏图标
                               _FavcatIcon(
@@ -177,10 +170,8 @@ class GalleryItemWidget extends StatelessWidget {
                               ),
                               // 图片数量
                               _Filecont(
-                                translated: galleryItemController
-                                    .galleryItem.translated,
-                                filecount:
-                                    galleryItemController.galleryItem.filecount,
+                                translated: galleryItem.translated,
+                                filecount: galleryItem.filecount,
                               ),
                             ],
                           ),
@@ -194,15 +185,13 @@ class GalleryItemWidget extends StatelessWidget {
                           children: <Widget>[
                             // 类型
                             _Category(
-                              category:
-                                  galleryItemController.galleryItem.category,
+                              category: galleryItem.category,
                             ),
 
                             // 上传时间
                             Expanded(
                                 child: _PostTime(
-                              postTime:
-                                  galleryItemController.galleryItem.postTime,
+                              postTime: galleryItem.postTime,
                             )),
                           ],
                         ),
