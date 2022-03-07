@@ -41,12 +41,16 @@ EhMytags parseMyTags(String html) {
       // logger.d('name:$name  count:$count');
 
       tagsets.add(EhMytagSet(
-        name: name,
-        tagCount: count,
-        value: value,
+        name: name.trim(),
+        tagCount: count.trim(),
+        value: value.trim(),
       ));
     }
   }
+
+  tagsets.sort((a, b) =>
+      (int.tryParse(a.value ?? '0') ?? 0) -
+      (int.tryParse(b.value ?? '0') ?? 0));
 
   final usertags = <EhUsertag>[];
   final Element? userTagsElm = document.querySelector('#usertags_outer');

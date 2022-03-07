@@ -11,6 +11,7 @@ import 'comp/user_tag_item.dart';
 import 'const.dart';
 import 'controller/eh_mytags_controller.dart';
 import 'eh_usertag_edit_dialog.dart';
+import 'webview/eh_tagset_edit_dialog.dart';
 
 class EhUserTagsPage extends GetView<EhMyTagsController> {
   const EhUserTagsPage({Key? key}) : super(key: key);
@@ -29,7 +30,7 @@ class EhUserTagsPage extends GetView<EhMyTagsController> {
               trailing: Row(
                 mainAxisSize: MainAxisSize.min,
                 children: <Widget>[
-                  if (controller.ehMyTags.canDelete ?? false)
+                  if (controller.canDelete)
                     CupertinoButton(
                       padding: const EdgeInsets.all(0),
                       minSize: 40,
@@ -37,8 +38,43 @@ class EhUserTagsPage extends GetView<EhMyTagsController> {
                         LineIcons.trash,
                         size: 24,
                       ),
-                      onPressed: () async {},
+                      onPressed: () async {
+                        showSimpleEhDiglog(
+                          context: context,
+                          title: 'Delete Tagset',
+                          onOk: () async {
+                            if (await controller.deleteTagset()) {
+                              Get.back();
+                            }
+                          },
+                        );
+                      },
                     ),
+                  CupertinoButton(
+                    padding: const EdgeInsets.all(0),
+                    minSize: 40,
+                    child: const Icon(
+                      LineIcons.edit,
+                      size: 24,
+                    ),
+                    onPressed: () async {
+                      final currName = controller.curTagSet?.name ?? '';
+                      final newName = await showCupertinoDialog<String>(
+                          context: context,
+                          barrierDismissible: true,
+                          builder: (context) {
+                            return EhTagSetEditDialog(
+                              text: currName,
+                              title: L10n.of(context).uc_rename,
+                            );
+                          });
+                      if (newName != null &&
+                          newName.isNotEmpty &&
+                          newName != currName) {
+                        controller.renameTagset(newName: newName);
+                      }
+                    },
+                  ),
                   CupertinoButton(
                     padding: const EdgeInsets.all(0),
                     minSize: 40,
@@ -57,7 +93,7 @@ class EhUserTagsPage extends GetView<EhMyTagsController> {
                 // _buildSelectedTagsetItem(context),
                 const ListViewEhMytags(),
                 Obx(() {
-                  if (controller.isLoading) {
+                  if (controller.isStackLoading) {
                     // loading 提示组件
                     return GestureDetector(
                       behavior: HitTestBehavior.opaque, // 拦截触摸手势
@@ -143,8 +179,9 @@ class _ListViewEhMytagsState extends State<ListViewEhMytags> {
     );
 
     showToast('Save tag successfully');
-
-    controller.reloadData();
+    controller.isStackLoading = true;
+    await controller.reloadData();
+    controller.isStackLoading = false;
   }
 
   @override
@@ -234,7 +271,7 @@ class _ListViewEhMytagsState extends State<ListViewEhMytags> {
                 if (snapshot.connectionState != ConnectionState.done) {
                   return const SliverFillRemaining(
                     child: CupertinoActivityIndicator(
-                      radius: 20,
+                      radius: 16,
                     ),
                   );
                 } else {

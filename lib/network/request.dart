@@ -448,52 +448,85 @@ Future<EhMytags?> getMyTags(
   return null;
 }
 
-Future<bool> addUserTag({
-  required String tagname,
-  bool watch = false,
-  bool hide = false,
-  String? tagcolor,
-  String? tagweight = '10',
-}) async {
-  await checkCookie();
-  final dataMap = {
-    'usertag_action': 'add',
-    'tagname_new': tagname,
-    'tagwatch_new': watch ? 'on' : '',
-    'taghide_new': hide ? 'on' : '',
-    'tagcolor_new': tagcolor ?? '',
-    'tagweight_new': tagweight,
-  };
-  const url = '/mytags';
-
-  final formData = FormData.fromMap(dataMap);
-  DioHttpClient dioHttpClient = DioHttpClient(dioConfig: ehDioConfig);
-
-  DioHttpResponse httpResponse = await dioHttpClient.post(
-    url,
-    data: formData,
-    httpTransformer: UsertagActionTransformer(),
-    options: getCacheOptions(forceRefresh: true)
-      ..followRedirects = false
-      ..validateStatus = (status) => (status ?? 0) < 500,
-  );
-
-  if (httpResponse.ok && httpResponse.data is bool) {
-    return httpResponse.data as bool;
-  } else {
-    return false;
-  }
-}
-
-Future<bool> deleteUserTag({
+Future<bool> actionDeleteUserTag({
   List<String> usertags = const [],
 }) async {
-  await checkCookie();
   final dataMap = {
     'usertag_action': 'mass',
     'modify_usertags[]': usertags,
   };
 
+  return await actionMytags(dataMap: dataMap);
+}
+
+Future<bool> actionRenameTagSet({
+  required String tagsetname,
+}) async {
+  final dataMap = {
+    'tagset_action': 'rename',
+    'tagset_name': tagsetname,
+  };
+
+  return await actionMytags(dataMap: dataMap);
+}
+
+Future<bool> actionCreatTagSet({
+  required String tagsetname,
+}) async {
+  final dataMap = {
+    'tagset_action': 'create',
+    'tagset_name': tagsetname,
+  };
+
+  return await actionMytags(dataMap: dataMap);
+}
+
+Future<bool> actionDeleteTagSet({
+  String? tagset,
+}) async {
+  final dataMap = {
+    'tagset_action': 'delete',
+  };
+
+  return await actionMytags(
+    dataMap: dataMap,
+    queryParameters: {
+      'tagset': tagset ?? '',
+    },
+  );
+}
+
+Future<bool> actionNewUserTag({
+  required String tagName,
+  String? tagColor,
+  String? tagWeight,
+  bool? tagWatch,
+  bool? tagHide,
+  String? tagset,
+}) async {
+  final dataMap = {
+    'usertag_action': 'add',
+    'tagname_new': tagName,
+    'tagcolor_new': tagColor ?? '',
+    'tagweight_new': tagWeight ?? '',
+    'tagwatch_new': tagWatch ?? false ? 'on' : '',
+    'taghide_new': tagHide ?? false ? 'on' : '',
+    'usertag_target': '0'
+  };
+
+  return await actionMytags(
+    dataMap: dataMap,
+    queryParameters: {
+      'tagset': tagset ?? '',
+    },
+  );
+}
+
+Future<bool> actionMytags({
+  required Map<String, Object> dataMap,
+  Map<String, dynamic>? queryParameters,
+}) async {
+  await checkCookie();
   const url = '/mytags';
 
   final formData = FormData.fromMap(dataMap);
@@ -502,8 +535,9 @@ Future<bool> deleteUserTag({
 
   DioHttpResponse httpResponse = await dioHttpClient.post(
     url,
+    queryParameters: queryParameters,
     data: formData,
-    httpTransformer: UsertagActionTransformer(),
+    httpTransformer: TagActionTransformer(),
     options: getCacheOptions(forceRefresh: true)
       ..followRedirects = false
       ..validateStatus = (status) => (status ?? 0) < 500,

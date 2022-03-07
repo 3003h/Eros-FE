@@ -68,6 +68,8 @@ class MessageLookup extends MessageLookupByLibrary {
         "clipboard_detection_desc":
             MessageLookupByLibrary.simpleMessage("自动检测剪贴板画廊链接"),
         "collapse": MessageLookupByLibrary.simpleMessage("折叠"),
+        "color_picker_primary": MessageLookupByLibrary.simpleMessage("基本"),
+        "color_picker_wheel": MessageLookupByLibrary.simpleMessage("色盘"),
         "copied_to_clipboard": MessageLookupByLibrary.simpleMessage("已复制到剪贴板"),
         "copy": MessageLookupByLibrary.simpleMessage("复制"),
         "current_site": m0,
@@ -252,8 +254,15 @@ class MessageLookup extends MessageLookupByLibrary {
         "tabbar_setting": MessageLookupByLibrary.simpleMessage("主页标签设置"),
         "tablet_layout": MessageLookupByLibrary.simpleMessage("平板布局"),
         "tagNamespace": m2,
-        "tag_vote_down": MessageLookupByLibrary.simpleMessage("踩"),
-        "tag_vote_up": MessageLookupByLibrary.simpleMessage("顶"),
+        "tag_add_to_mytag": MessageLookupByLibrary.simpleMessage("添加到我的标签"),
+        "tag_dialog_Default_color":
+            MessageLookupByLibrary.simpleMessage("默认颜色"),
+        "tag_dialog_Hide": MessageLookupByLibrary.simpleMessage("隐藏"),
+        "tag_dialog_TagColor": MessageLookupByLibrary.simpleMessage("标签颜色"),
+        "tag_dialog_Watch": MessageLookupByLibrary.simpleMessage("关注"),
+        "tag_dialog_tagWeight": MessageLookupByLibrary.simpleMessage("标签权重"),
+        "tag_vote_down": MessageLookupByLibrary.simpleMessage("投反对票"),
+        "tag_vote_up": MessageLookupByLibrary.simpleMessage("投赞成票"),
         "tag_withdraw_vote": MessageLookupByLibrary.simpleMessage("撤销投票"),
         "tags": MessageLookupByLibrary.simpleMessage("标签"),
         "tap_to_turn_page_anima":

@@ -142,8 +142,8 @@
   "loading": "载入中",
   "search_history": "搜索历史",
   "clear_search_history": "清空搜索历史",
-  "tag_vote_up": "顶",
-  "tag_vote_down": "踩",
+  "tag_vote_up": "投赞成票",
+  "tag_vote_down": "投反对票",
   "tag_withdraw_vote": "撤销投票",
   "add_tags": "添加标签",
   "add_tag_placeholder": "输入新标签, 用逗号分隔",
@@ -351,5 +351,14 @@
   "original_image": "原图",
   "no": "不",
   "ask_me": "询问",
-  "always": "始终"
+  "always": "始终",
+
+  "tag_add_to_mytag": "添加到我的标签",
+  "tag_dialog_Watch": "关注",
+  "tag_dialog_Hide": "隐藏",
+  "tag_dialog_tagWeight": "标签权重",
+  "tag_dialog_TagColor": "标签颜色",
+  "tag_dialog_Default_color": "默认颜色",
+  "color_picker_primary": "基本",
+  "color_picker_wheel": "色盘"
 }

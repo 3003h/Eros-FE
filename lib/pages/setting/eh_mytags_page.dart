@@ -12,6 +12,7 @@ import '../../fehviewer.dart';
 import 'const.dart';
 import 'controller/eh_mytags_controller.dart';
 import 'setting_items/selector_Item.dart';
+import 'webview/eh_tagset_edit_dialog.dart';
 import 'webview/mytags_in.dart';
 
 class EhMyTagsPage extends GetView<EhMyTagsController> {
@@ -49,7 +50,18 @@ class EhMyTagsPage extends GetView<EhMyTagsController> {
                     size: 24,
                   ),
                   onPressed: () async {
-                    // Get.to(() => InWebMyTags());
+                    final newName = await showCupertinoDialog<String>(
+                        context: context,
+                        barrierDismissible: true,
+                        builder: (context) {
+                          return const EhTagSetEditDialog(
+                            text: '',
+                            title: 'New Tagset',
+                          );
+                        });
+                    if (newName != null && newName.isNotEmpty) {
+                      controller.crtNewTagset(name: newName);
+                    }
                   },
                 ),
               ],

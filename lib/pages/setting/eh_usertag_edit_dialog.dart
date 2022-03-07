@@ -81,7 +81,7 @@ class _EhUserTagEditDialogState extends State<EhUserTagEditDialog> {
         Row(
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            Text('Tag Color'),
+            Text(L10n.of(context).tag_dialog_TagColor),
             const Spacer(),
             Padding(
               padding: const EdgeInsets.only(left: 20, top: 4),
@@ -130,10 +130,10 @@ class _EhUserTagEditDialogState extends State<EhUserTagEditDialog> {
             ColorPickerType.primary: true,
             ColorPickerType.wheel: true,
           },
-          pickerTypeLabels: const <ColorPickerType, String>{
+          pickerTypeLabels: <ColorPickerType, String>{
             // ColorPickerType.accent: '',
-            ColorPickerType.primary: '基本',
-            ColorPickerType.wheel: '轮盘',
+            ColorPickerType.primary: L10n.of(context).color_picker_primary,
+            ColorPickerType.wheel: L10n.of(context).color_picker_wheel,
           },
           width: 36,
           height: 36,
@@ -154,7 +154,7 @@ class _EhUserTagEditDialogState extends State<EhUserTagEditDialog> {
         children: [
           Row(
             children: [
-              Text('Watch'),
+              Text(L10n.of(context).tag_dialog_Watch),
               const Spacer(),
               CupertinoSwitch(
                   value: _watch,
@@ -169,7 +169,7 @@ class _EhUserTagEditDialogState extends State<EhUserTagEditDialog> {
           ),
           Row(
             children: [
-              Text('Hide'),
+              Text(L10n.of(context).tag_dialog_Hide),
               const Spacer(),
               CupertinoSwitch(
                   activeColor: CupertinoColors.destructiveRed,
@@ -186,7 +186,7 @@ class _EhUserTagEditDialogState extends State<EhUserTagEditDialog> {
           Row(
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              Text('Tag Weight'),
+              Text(L10n.of(context).tag_dialog_tagWeight),
               const Spacer(),
               Padding(
                 padding: const EdgeInsets.only(left: 20, top: 4),
@@ -204,7 +204,7 @@ class _EhUserTagEditDialogState extends State<EhUserTagEditDialog> {
           ),
           Row(
             children: [
-              Text('Default color'),
+              Text(L10n.of(context).tag_dialog_Default_color),
               const Spacer(),
               CupertinoSwitch(
                   value: _defaultColor,
