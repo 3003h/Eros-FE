@@ -349,6 +349,16 @@
   "original_image": "Original",
   "no": "No",
   "ask_me": "Ask for me",
-  "always": "Always"
+  "always": "Always",
+
+
+  "tag_add_to_mytag": "添加到我的标签",
+  "tag_dialog_Watch": "Watch",
+  "tag_dialog_Hide": "Hide",
+  "tag_dialog_tagWeight": "Tag Weight",
+  "tag_dialog_TagColor": "Color",
+  "tag_dialog_Default_color": "Default color",
+  "color_picker_primary": "primary",
+  "color_picker_wheel": "wheel"
 
 }

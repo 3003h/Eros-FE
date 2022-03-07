@@ -4,6 +4,7 @@ import 'package:fehviewer/common/controller/tag_trans_controller.dart';
 import 'package:fehviewer/common/service/controller_tag_service.dart';
 import 'package:fehviewer/fehviewer.dart';
 import 'package:fehviewer/pages/gallery/controller/taginfo_controller.dart';
+import 'package:fehviewer/pages/setting/controller/eh_mytags_controller.dart';
 import 'package:fehviewer/store/floor/entity/tag_translat.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -124,7 +125,29 @@ Future<void> showTagInfoDialog(String text,
         return CupertinoAlertDialog(
           title: _title(),
           content: TagDialogView(text: text, type: type),
-          actions: _getActions(),
+          actions: [
+            ..._getActions(),
+            CupertinoDialogAction(
+              child: Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  const Icon(LineIcons.tags).paddingOnly(right: 8),
+                  Text(L10n.of(Get.context!).tag_add_to_mytag),
+                ],
+              ),
+              onPressed: () async {
+                Get.back();
+                final _mytagsController = Get.find<EhMyTagsController>();
+                await _mytagsController.showAddNewTagDialog(Get.context!,
+                    userTag: EhUsertag(
+                      title: '$type:$text',
+                      defaultColor: true,
+                      watch: true,
+                      tagWeight: '10',
+                    ));
+              },
+            ),
+          ],
         );
       });
 }

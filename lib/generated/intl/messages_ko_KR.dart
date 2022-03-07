@@ -70,6 +70,8 @@ class MessageLookup extends MessageLookupByLibrary {
         "clipboard_detection_desc": MessageLookupByLibrary.simpleMessage(
             "자동으로 클립보드에 있는 갤러리 링크를 감지합니다."),
         "collapse": MessageLookupByLibrary.simpleMessage("접기"),
+        "color_picker_primary": MessageLookupByLibrary.simpleMessage("primary"),
+        "color_picker_wheel": MessageLookupByLibrary.simpleMessage("wheel"),
         "copied_to_clipboard":
             MessageLookupByLibrary.simpleMessage("클립보드에 복사되었습니다."),
         "copy": MessageLookupByLibrary.simpleMessage("복사"),
@@ -270,6 +272,15 @@ class MessageLookup extends MessageLookupByLibrary {
         "tabbar_setting": MessageLookupByLibrary.simpleMessage("탭바 설정"),
         "tablet_layout": MessageLookupByLibrary.simpleMessage("Tablet layout"),
         "tagNamespace": m2,
+        "tag_add_to_mytag":
+            MessageLookupByLibrary.simpleMessage("Add to mytags"),
+        "tag_dialog_Default_color":
+            MessageLookupByLibrary.simpleMessage("Default color"),
+        "tag_dialog_Hide": MessageLookupByLibrary.simpleMessage("Hide"),
+        "tag_dialog_TagColor": MessageLookupByLibrary.simpleMessage("Color"),
+        "tag_dialog_Watch": MessageLookupByLibrary.simpleMessage("Watch"),
+        "tag_dialog_tagWeight":
+            MessageLookupByLibrary.simpleMessage("Tag Weight"),
         "tag_vote_down": MessageLookupByLibrary.simpleMessage("비추천"),
         "tag_vote_up": MessageLookupByLibrary.simpleMessage("추천"),
         "tag_withdraw_vote": MessageLookupByLibrary.simpleMessage("추천 취소"),

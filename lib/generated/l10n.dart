@@ -3523,6 +3523,86 @@ class L10n {
       args: [],
     );
   }
+
+  /// `Add to mytags`
+  String get tag_add_to_mytag {
+    return Intl.message(
+      'Add to mytags',
+      name: 'tag_add_to_mytag',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Watch`
+  String get tag_dialog_Watch {
+    return Intl.message(
+      'Watch',
+      name: 'tag_dialog_Watch',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Hide`
+  String get tag_dialog_Hide {
+    return Intl.message(
+      'Hide',
+      name: 'tag_dialog_Hide',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Tag Weight`
+  String get tag_dialog_tagWeight {
+    return Intl.message(
+      'Tag Weight',
+      name: 'tag_dialog_tagWeight',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Color`
+  String get tag_dialog_TagColor {
+    return Intl.message(
+      'Color',
+      name: 'tag_dialog_TagColor',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Default color`
+  String get tag_dialog_Default_color {
+    return Intl.message(
+      'Default color',
+      name: 'tag_dialog_Default_color',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `primary`
+  String get color_picker_primary {
+    return Intl.message(
+      'primary',
+      name: 'color_picker_primary',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `wheel`
+  String get color_picker_wheel {
+    return Intl.message(
+      'wheel',
+      name: 'color_picker_wheel',
+      desc: '',
+      args: [],
+    );
+  }
 }
 
 class AppLocalizationDelegate extends LocalizationsDelegate<L10n> {

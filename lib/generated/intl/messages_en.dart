@@ -75,6 +75,8 @@ class MessageLookup extends MessageLookupByLibrary {
         "clipboard_detection_desc": MessageLookupByLibrary.simpleMessage(
             "Automatically detect clipboard gallery links"),
         "collapse": MessageLookupByLibrary.simpleMessage("Collapse"),
+        "color_picker_primary": MessageLookupByLibrary.simpleMessage("primary"),
+        "color_picker_wheel": MessageLookupByLibrary.simpleMessage("wheel"),
         "copied_to_clipboard":
             MessageLookupByLibrary.simpleMessage("Copied to clipboard"),
         "copy": MessageLookupByLibrary.simpleMessage("Copy"),
@@ -308,6 +310,15 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("Tabbar setting"),
         "tablet_layout": MessageLookupByLibrary.simpleMessage("Tablet layout"),
         "tagNamespace": m2,
+        "tag_add_to_mytag":
+            MessageLookupByLibrary.simpleMessage("Add to mytags"),
+        "tag_dialog_Default_color":
+            MessageLookupByLibrary.simpleMessage("Default color"),
+        "tag_dialog_Hide": MessageLookupByLibrary.simpleMessage("Hide"),
+        "tag_dialog_TagColor": MessageLookupByLibrary.simpleMessage("Color"),
+        "tag_dialog_Watch": MessageLookupByLibrary.simpleMessage("Watch"),
+        "tag_dialog_tagWeight":
+            MessageLookupByLibrary.simpleMessage("Tag Weight"),
         "tag_vote_down": MessageLookupByLibrary.simpleMessage("Vote Down"),
         "tag_vote_up": MessageLookupByLibrary.simpleMessage("Vote Up"),
         "tag_withdraw_vote":
