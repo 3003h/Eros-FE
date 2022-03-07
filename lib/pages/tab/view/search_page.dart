@@ -313,9 +313,9 @@ class _GallerySearchPageState extends State<GallerySearchPage> {
     required String text,
     String? translate,
   }) {
-    const textStyle = TextStyle(
+    final textStyle = TextStyle(
       fontSize: 16,
-      color: CupertinoColors.label,
+      color: CupertinoDynamicColor.resolve(CupertinoColors.label, context),
     );
 
     final translateStyle = TextStyle(

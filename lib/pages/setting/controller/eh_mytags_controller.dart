@@ -66,8 +66,6 @@ class EhMyTagsController extends GetxController
     change(sets.tagsets, status: RxStatus.success());
   }
 
-  Future<EhMytags?> loadDataTest({bool refresh = false}) async {}
-
   Future<EhMytags?> loadData({bool refresh = false}) async {
     isLoading = true;
     try {

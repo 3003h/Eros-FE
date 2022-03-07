@@ -191,9 +191,9 @@ class _CustomProfileSettingPageState extends State<CustomProfileSettingPage> {
     final robj = targetContext.findRenderObject() as RenderBox?;
     final size = robj?.size;
 
-    const textStyle = TextStyle(
+    final textStyle = TextStyle(
       fontSize: 16,
-      color: CupertinoColors.label,
+      color: CupertinoDynamicColor.resolve(CupertinoColors.label, context),
     );
 
     final translateStyle = TextStyle(
