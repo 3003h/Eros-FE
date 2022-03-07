@@ -42,19 +42,21 @@ class EhCookieInterceptor extends Interceptor {
     var cookies = response.headers[HttpHeaders.setCookieHeader];
 
     if (cookies != null) {
-      logger.v('set-cookie:${cookies}');
+      logger.v('set-cookie:$cookies');
       final _cookies =
           cookies.map((str) => Cookie.fromSetCookieValue(str)).toList();
-      logger.v('_set cookies ${_cookies}');
+      logger.v('_set cookies $_cookies');
 
       final igneous = getCookiesValue(_cookies, 'igneous');
+
+      final _newSk = getCookiesValue(_cookies, 'sk') ?? '';
 
       userController.user(userController.user.value.copyWith(
         memberId: getCookiesValue(_cookies, 'ipb_member_id'),
         passHash: getCookiesValue(_cookies, 'ipb_pass_hash'),
         igneous: igneous != 'mystery' && igneous != '' ? igneous : null,
         hathPerks: getCookiesValue(_cookies, 'hath_perks'),
-        sk: getCookiesValue(_cookies, 'sk'),
+        sk: _newSk.isNotEmpty ? _newSk : null,
       ));
 
       logger.v('${userController.user.value.toJson()}');
@@ -72,52 +74,57 @@ class EhCookieInterceptor extends Interceptor {
   void checkCookies(List<Cookie> cookies) {
     final UserController userController = Get.find();
 
-    if (userController.user.value.memberId != null) {
+    final memberId = userController.user.value.memberId;
+    if (memberId != null && memberId.isNotEmpty) {
       final _c = cookies
           .firstWhereOrNull((element) => element.name == 'ipb_member_id');
       if (_c != null) {
-        _c.value = userController.user.value.memberId!;
+        _c.value = memberId;
       } else {
-        Cookie('ipb_member_id', userController.user.value.memberId!);
+        Cookie('ipb_member_id', memberId);
       }
     }
 
-    if (userController.user.value.passHash != null) {
+    final passHash = userController.user.value.passHash;
+    if (passHash != null && passHash.isNotEmpty) {
       final _c = cookies
           .firstWhereOrNull((element) => element.name == 'ipb_pass_hash');
       if (_c != null) {
-        _c.value = userController.user.value.passHash!;
+        _c.value = passHash;
       } else {
-        Cookie('ipb_pass_hash', userController.user.value.passHash!);
+        Cookie('ipb_pass_hash', passHash);
       }
     }
 
-    if (userController.user.value.igneous != null) {
+    final igneous = userController.user.value.igneous;
+    if (igneous != null && igneous.isNotEmpty) {
       final _c =
           cookies.firstWhereOrNull((element) => element.name == 'igneous');
       if (_c != null) {
-        _c.value = userController.user.value.igneous!;
+        _c.value = igneous;
       } else {
-        Cookie('igneous', userController.user.value.igneous!);
+        Cookie('igneous', igneous);
       }
     }
 
-    if (userController.user.value.hathPerks != null) {
+    final hathPerks = userController.user.value.hathPerks;
+    if (hathPerks != null && hathPerks.isNotEmpty) {
       final _c =
           cookies.firstWhereOrNull((element) => element.name == 'hath_perks');
       if (_c != null) {
-        _c.value = userController.user.value.hathPerks!;
+        _c.value = hathPerks;
       } else {
-        Cookie('hath_perks', userController.user.value.hathPerks!);
+        Cookie('hath_perks', hathPerks);
       }
     }
 
-    if (userController.user.value.sk != null) {
+    final sk = userController.user.value.sk;
+    if (sk != null && sk.isNotEmpty) {
       final _c = cookies.firstWhereOrNull((element) => element.name == 'sk');
       if (_c != null) {
-        _c.value = userController.user.value.sk!;
+        _c.value = sk;
       } else {
-        Cookie('sk', userController.user.value.sk!);
+        Cookie('sk', sk);
       }
     }
   }

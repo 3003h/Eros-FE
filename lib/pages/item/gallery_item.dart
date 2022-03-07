@@ -224,7 +224,7 @@ class _CoverImage extends StatelessWidget {
     final GalleryItem _item = galleryItemController.galleryItem;
 
     // 图片高宽比
-    final ratio = (_item.imgHeight ?? 0) / (_item.imgWidth ?? 1);
+    final imageRatio = (_item.imgHeight ?? 0) / (_item.imgWidth ?? 1);
 
     // 计算图片容器宽度
     final double coverImageWidth = Get.context!.isPhone
@@ -247,7 +247,7 @@ class _CoverImage extends StatelessWidget {
       }
     }
 
-    logger.v('iRatio:$ratio\n'
+    logger.v('iRatio:$imageRatio\n'
         'w:${_item.imgWidth} h:${_item.imgHeight}\n'
         'cW:$coverImageWidth  cH:$coverImageHeigth');
 
@@ -256,13 +256,15 @@ class _CoverImage extends StatelessWidget {
     BoxFit _fit = BoxFit.contain;
 
     // todo
-    if (ratio < containRatio && ratio > 1) {
+    if (imageRatio < containRatio && containRatio - imageRatio < 0.5) {
       _fit = BoxFit.fitHeight;
     }
 
-    if (ratio > containRatio && ratio < 2) {
+    if (imageRatio > containRatio && imageRatio - containRatio < 1.0) {
       _fit = BoxFit.cover;
     }
+
+    loggerSimple.d('imageRatio:$imageRatio  containRatio:$containRatio  $_fit');
 
     Widget image = CoverImg(
       imgUrl: _item.imgUrl ?? '',
@@ -322,13 +324,13 @@ class _CoverImage extends StatelessWidget {
       image = Stack(
         fit: StackFit.passthrough,
         children: [
-          // if (_fit == BoxFit.contain) getImageBlureFittedBox(),
-          Container(
-            width: coverImageWidth,
-            height: coverImageHeigth,
-            color: CupertinoDynamicColor.resolve(
-                CupertinoColors.systemGrey5, context),
-          ),
+          if (_fit == BoxFit.contain) getImageBlureFittedBox(),
+          // Container(
+          //   width: coverImageWidth,
+          //   height: coverImageHeigth,
+          //   color: CupertinoDynamicColor.resolve(
+          //       CupertinoColors.systemGrey5, context),
+          // ),
           Center(
             child: HeroMode(
               enabled: !isLayoutLarge,

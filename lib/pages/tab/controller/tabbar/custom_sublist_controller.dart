@@ -50,7 +50,7 @@ class CustomSubListController extends TabViewController {
   Future<GalleryList?> fetchData({bool refresh = false}) async {
     cancelToken = CancelToken();
 
-    logger.v('${jsonEncode(profile)}');
+    logger.v(' ${jsonEncode(profile)}');
 
     final fetchConfig = FetchParams(
       cats: profile?.cats,
@@ -68,11 +68,10 @@ class CustomSubListController extends TabViewController {
     try {
       FetchListClient fetchListClient = getFetchListClient(fetchConfig);
       final GalleryList? rult = await fetchListClient.fetch();
+      pageState = PageState.None;
       if (cancelToken?.isCancelled ?? false) {
         return null;
       }
-
-      pageState = PageState.None;
 
       return rult;
     } on EhError catch (eherror) {
