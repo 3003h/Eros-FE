@@ -8,7 +8,8 @@ import '../../../fehviewer.dart';
 
 const kEhMyTags = EhMytags(tagsets: []);
 
-class EhMyTagsController extends GetxController {
+class EhMyTagsController extends GetxController
+    with StateMixin<List<EhMytagSet>> {
   static String idUsertagList = 'idUsertagList';
 
   final _isLoading = false.obs;
@@ -35,7 +36,7 @@ class EhMyTagsController extends GetxController {
   @override
   void onInit() {
     super.onInit();
-    loadData();
+    firstLoad();
   }
 
   Future<String?> getTextTranslate(String text) async {
@@ -54,8 +55,21 @@ class EhMyTagsController extends GetxController {
     return null;
   }
 
+  Future<void> firstLoad() async {
+    logger.d('firstLoad');
+    change(null, status: RxStatus.loading());
+    final sets = await loadData();
+    if (sets == null || sets.tagsets.isEmpty) {
+      change([], status: RxStatus.empty());
+      return;
+    }
+    change(sets.tagsets, status: RxStatus.success());
+  }
+
+  Future<EhMytags?> loadDataTest({bool refresh = false}) async {}
+
   Future<EhMytags?> loadData({bool refresh = false}) async {
-    // isLoading = true;
+    isLoading = true;
     try {
       final mytags = await getMyTags(
         refresh: refresh || Global.forceRefreshUconfig,
@@ -67,8 +81,6 @@ class EhMyTagsController extends GetxController {
         ehMyTags = mytags;
         return mytags;
       }
-
-      // update([idUsertagList]);
     } catch (e) {
       rethrow;
     } finally {
@@ -78,7 +90,8 @@ class EhMyTagsController extends GetxController {
   }
 
   Future<void> reloadData() async {
-    await loadData(refresh: true);
+    final sets = await loadData(refresh: true);
+    change(sets?.tagsets, status: RxStatus.success());
   }
 
   Future<void> changeTagset(String tagSet) async {
