@@ -93,13 +93,12 @@ class TabViewController extends GetxController
         return;
       }
 
-      final List<GalleryItem> rultList = rult.gallerys ?? [];
+      final List<GalleryItem>? rultList = rult.gallerys;
 
       maxPage = rult.maxPage ?? 0;
       nextPage = rult.nextPage ?? 1;
-      // change([], status: RxStatus.success());
       change(rultList, status: RxStatus.success());
-      for (final _ in rultList) {
+      for (final _ in rultList ?? []) {
         sliverAnimatedListKey.currentState?.insertItem(0);
       }
     } catch (err) {
