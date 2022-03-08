@@ -209,7 +209,7 @@ class LoginController extends GetxController {
         (await Clipboard.getData(Clipboard.kTextPlain))?.text ?? '';
     // logger.d('Clipboard:\n' + _clipText);
     if (!_clipText.contains('{')) {
-      final textArray = _clipText.split(RegExp(r'\s|:'));
+      final textArray = _clipText.split(RegExp(r'\s|:;&='));
       logger.d('textArray:$textArray');
       for (final _text in textArray) {
         if (kMatchMenberId.hasMatch(_text)) {

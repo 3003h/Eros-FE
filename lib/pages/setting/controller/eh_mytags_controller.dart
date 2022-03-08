@@ -38,6 +38,10 @@ class EhMyTagsController extends GetxController
 
   String currSelected = '';
 
+  final _isSearchUser = false.obs;
+  bool get isSearchUser => _isSearchUser.value;
+  set isSearchUser(bool val) => _isSearchUser.value = val;
+
   bool get isTagTranslat =>
       ehConfigService.isTagTranslat && localeService.isLanguageCodeZh;
 
