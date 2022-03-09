@@ -18,6 +18,7 @@ class UserTagItem extends StatefulWidget {
     this.tagWeight,
     this.watch = false,
     this.hide = false,
+    this.addItem = false,
   }) : super(key: key);
 
   final String title;
@@ -31,6 +32,8 @@ class UserTagItem extends StatefulWidget {
   final bool hide;
 
   final bool hideLine;
+
+  final bool addItem;
 
   @override
   _UserTagItemState createState() => _UserTagItemState();
@@ -67,57 +70,63 @@ class _UserTagItemState extends State<UserTagItem> {
             padding: const EdgeInsets.symmetric(horizontal: 20),
             child: Row(
               children: [
-                Container(
-                  margin: const EdgeInsets.only(right: 10),
-                  child: Column(
-                    children: [
-                      Icon(
-                        // LineIcons.eye,
-                        LineIcons.checkCircle,
-                        size: 16,
-                        color: widget.watch
-                            ? CupertinoDynamicColor.resolve(
-                                CupertinoColors.activeGreen, context)
-                            : CupertinoDynamicColor.resolve(
-                                CupertinoColors.systemGrey4, context),
-                      ),
-                      Icon(
-                        // LineIcons.eyeSlash,
-                        LineIcons.checkCircle,
-                        size: 16,
-                        color: widget.hide
-                            ? CupertinoDynamicColor.resolve(
-                                CupertinoColors.destructiveRed, context)
-                            : CupertinoDynamicColor.resolve(
-                                CupertinoColors.systemGrey4, context),
-                      ),
-                    ],
-                  ),
-                ),
-                Container(
-                  margin: const EdgeInsets.only(right: 10),
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-                  alignment: Alignment.center,
-                  decoration: BoxDecoration(
-                    color: widget.tagColor ?? Colors.white.withOpacity(0.5),
-                    borderRadius: BorderRadius.circular(8),
-                    border: Border.all(
-                      width: 0.5,
-                      color: Colors.black45,
+                if (!widget.addItem)
+                  Container(
+                    margin: const EdgeInsets.only(right: 10),
+                    child: Column(
+                      children: [
+                        Icon(
+                          // LineIcons.eye,
+                          LineIcons.checkCircle,
+                          size: 16,
+                          color: widget.watch
+                              ? CupertinoDynamicColor.resolve(
+                                  CupertinoColors.activeGreen, context)
+                              : CupertinoDynamicColor.resolve(
+                                  CupertinoColors.systemGrey4, context),
+                        ),
+                        Icon(
+                          // LineIcons.eyeSlash,
+                          LineIcons.checkCircle,
+                          size: 16,
+                          color: widget.hide
+                              ? CupertinoDynamicColor.resolve(
+                                  CupertinoColors.destructiveRed, context)
+                              : CupertinoDynamicColor.resolve(
+                                  CupertinoColors.systemGrey4, context),
+                        ),
+                      ],
                     ),
                   ),
-                  // width: 30,
-                  // height: 24,
-                  child: Text(
-                    widget.tagWeight ?? 'T',
-                    style: TextStyle(
-                      color: widget.inerTextColor,
-                      height: 1.25,
-                      // fontWeight: FontWeight.bold,
+                if (!widget.addItem)
+                  Container(
+                    margin: const EdgeInsets.only(right: 10),
+                    padding:
+                        const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                    alignment: Alignment.center,
+                    decoration: BoxDecoration(
+                      color: widget.tagColor ?? Colors.white.withOpacity(0.5),
+                      borderRadius: BorderRadius.circular(8),
+                      border: Border.all(
+                        width: 0.5,
+                        color: Colors.black45,
+                      ),
+                    ),
+                    // width: 30,
+                    // height: 24,
+                    child: Text(
+                      !widget.addItem ? widget.tagWeight ?? 'T' : 'Add',
+                      style: TextStyle(
+                        color: widget.inerTextColor,
+                        height: 1.25,
+                        // fontWeight: FontWeight.bold,
+                      ),
                     ),
                   ),
-                ),
+                if (widget.addItem)
+                  Container(
+                    child: Icon(LineIcons.tag).paddingOnly(right: 12),
+                  ),
                 Expanded(
                   child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,

@@ -1,6 +1,7 @@
 import 'package:fehviewer/common/service/theme_service.dart';
 import 'package:fehviewer/fehviewer.dart';
 import 'package:fehviewer/network/api.dart';
+import 'package:fehviewer/network/request.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
@@ -28,6 +29,8 @@ class _EhUserTagsPageState extends State<EhUserTagsPage> {
   void initState() {
     super.initState();
     controller.isSearchUser = false;
+    controller.searchTags.clear();
+    controller.searchNewTags.clear();
   }
 
   Widget _normalTrailing(BuildContext context) {
@@ -86,15 +89,15 @@ class _EhUserTagsPageState extends State<EhUserTagsPage> {
             }
           },
         ),
-        CupertinoButton(
-          padding: const EdgeInsets.all(0),
-          minSize: 40,
-          child: const Icon(
-            LineIcons.plus,
-            size: 24,
-          ),
-          onPressed: () async {},
-        ),
+        // CupertinoButton(
+        //   padding: const EdgeInsets.all(0),
+        //   minSize: 40,
+        //   child: const Icon(
+        //     LineIcons.plus,
+        //     size: 24,
+        //   ),
+        //   onPressed: () async {},
+        // ),
       ],
     );
   }
@@ -108,7 +111,11 @@ class _EhUserTagsPageState extends State<EhUserTagsPage> {
       mainAxisSize: MainAxisSize.min,
       children: [
         GestureDetector(
-          onTap: () => controller.isSearchUser = false,
+          onTap: () {
+            controller.isSearchUser = false;
+            controller.searchTags.clear();
+            controller.searchNewTags.clear();
+          },
           child: Text(
             L10n.of(context).cancel,
             style: _style,
@@ -273,11 +280,39 @@ class _ListViewEhMytagsState extends State<ListViewEhMytags> {
     controller.isStackLoading = false;
   }
 
+  Future tapAddUserTagItem(EhUsertag usertag) async {
+    final _userTag = await showCupertinoDialog<EhUsertag>(
+        context: context,
+        barrierDismissible: true,
+        builder: (context) {
+          return EhUserTagEditDialog(usertag: usertag);
+        });
+    if (_userTag == null) {
+      return;
+    }
+    logger.d('add _userTag: ${_userTag.toJson()}');
+
+    await actionNewUserTag(
+      tagName: _userTag.title,
+      tagColor: _userTag.colorCode,
+      tagWeight: _userTag.tagWeight,
+      tagWatch: _userTag.watch,
+      tagHide: _userTag.hide,
+      tagset: controller.currSelected,
+    );
+    showToast('Add to mytags successful');
+
+    controller.isStackLoading = true;
+    await controller.reloadData();
+    controller.isStackLoading = false;
+  }
+
   Widget _buildUserTagItem(
     EhUsertag usertag,
     int index, {
     bool isTagTranslat = false,
     ValueChanged<int>? deleteUserTag,
+    bool showLine = true,
   }) {
     final tagColor = ColorsUtil.hexStringToColor(usertag.colorCode);
     final borderColor = ColorsUtil.hexStringToColor(usertag.borderColor);
@@ -296,6 +331,7 @@ class _ListViewEhMytagsState extends State<ListViewEhMytags> {
       watch: usertag.watch ?? false,
       hide: usertag.hide ?? false,
       onTap: () async => tapUserTagItem(usertag),
+      hideLine: !showLine,
     );
 
     return Slidable(
@@ -318,6 +354,33 @@ class _ListViewEhMytagsState extends State<ListViewEhMytags> {
     );
   }
 
+  Widget _buildNewAddUserTagItem(
+    EhUsertag usertag,
+    int index, {
+    bool isTagTranslat = false,
+    ValueChanged<int>? deleteUserTag,
+    bool showLine = true,
+  }) {
+    final tagColor = ColorsUtil.hexStringToColor(usertag.colorCode);
+    final borderColor = ColorsUtil.hexStringToColor(usertag.borderColor);
+    final inerTextColor = ColorsUtil.hexStringToColor(usertag.textColor);
+    final tagWeight = usertag.tagWeight;
+
+    return UserTagItem(
+      addItem: true,
+      title: usertag.title,
+      desc: isTagTranslat ? usertag.translate : null,
+      tagColor: tagColor,
+      borderColor: borderColor,
+      inerTextColor: inerTextColor,
+      tagWeight: tagWeight,
+      watch: usertag.watch ?? false,
+      hide: usertag.hide ?? false,
+      onTap: () async => tapAddUserTagItem(usertag),
+      hideLine: !showLine,
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return CustomScrollView(
@@ -330,6 +393,7 @@ class _ListViewEhMytagsState extends State<ListViewEhMytags> {
         ),
         SliverSafeArea(
           top: false,
+          bottom: !controller.isSearchUser,
           sliver: FutureBuilder<EhMytags?>(
               future: future,
               initialData: controller.ehMyTags,
@@ -352,6 +416,7 @@ class _ListViewEhMytagsState extends State<ListViewEhMytags> {
                             index,
                             isTagTranslat: controller.isTagTranslat,
                             deleteUserTag: (i) => controller.deleteUsertag(i),
+                            showLine: index < usertags.length - 1,
                           );
                         },
                         childCount: usertags.length,
@@ -361,6 +426,39 @@ class _ListViewEhMytagsState extends State<ListViewEhMytags> {
                 }
               }),
         ),
+        if (controller.isSearchUser)
+          SliverToBoxAdapter(
+            child: Obx(() {
+              return Container(
+                height: 20,
+                color: !ehTheme.isDarkMode
+                    ? CupertinoColors.secondarySystemBackground
+                    : null,
+              );
+            }),
+          ),
+        if (controller.isSearchUser)
+          SliverSafeArea(
+            top: false,
+            sliver: Obx(() {
+              final usertags = controller.searchNewTags;
+              return SliverList(
+                delegate: SliverChildBuilderDelegate(
+                  (context, index) {
+                    final usertag = usertags[index];
+                    return _buildNewAddUserTagItem(
+                      usertag,
+                      index,
+                      isTagTranslat: controller.isTagTranslat,
+                      deleteUserTag: (i) => controller.deleteUsertag(i),
+                      showLine: index < usertags.length - 1,
+                    );
+                  },
+                  childCount: usertags.length,
+                ),
+              );
+            }),
+          ),
       ],
     );
   }
