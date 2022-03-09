@@ -449,6 +449,20 @@ extension ExtGalleryList on GalleryList {
   }
 }
 
+extension ExtEhMytags on EhMytags {
+  Future<List<EhUsertag>> get qryFullTagTranslate async {
+    final trController = Get.find<TagTransController>();
+    final _usertagsFuture = usertags?.map((e) async {
+          final tr = await trController.getTranTagWithNameSpase(e.title);
+          return e.copyWith(translate: tr);
+        }) ??
+        [];
+
+    final _userTags = Future.wait(_usertagsFuture);
+    return await _userTags;
+  }
+}
+
 extension ExtMvpImage on MvpImage {
   // 050e0cfa0fa8f3564afb38b8cabdadd5885ecf5e-636194-1286-1964-jpg_l.jpg
   String? get thumbName => Uri.parse(t ?? '').pathSegments.last;

@@ -143,6 +143,9 @@ class _EhUserTagsPageState extends State<EhUserTagsPage> {
     return CupertinoTextField.borderless(
       autofocus: true,
       controller: textEditingController,
+      placeholder: 'Search tags',
+      clearButtonMode: OverlayVisibilityMode.editing,
+      onChanged: (value) => controller.inputSearchText = value,
     );
   }
 
@@ -274,7 +277,6 @@ class _ListViewEhMytagsState extends State<ListViewEhMytags> {
     EhUsertag usertag,
     int index, {
     bool isTagTranslat = false,
-    Future<String?>? future,
     ValueChanged<int>? deleteUserTag,
   }) {
     final tagColor = ColorsUtil.hexStringToColor(usertag.colorCode);
@@ -284,35 +286,17 @@ class _ListViewEhMytagsState extends State<ListViewEhMytags> {
 
     late Widget _item;
 
-    if (isTagTranslat) {
-      _item = FutureBuilder<String?>(
-          future: controller.getTextTranslate(usertag.title),
-          initialData: usertag.title,
-          builder: (context, snapshot) {
-            return UserTagItem(
-              title: usertag.title,
-              desc: snapshot.data,
-              tagColor: tagColor,
-              borderColor: borderColor,
-              inerTextColor: inerTextColor,
-              tagWeight: tagWeight,
-              watch: usertag.watch ?? false,
-              hide: usertag.hide ?? false,
-              onTap: () async => tapUserTagItem(usertag),
-            );
-          });
-    } else {
-      _item = UserTagItem(
-        title: usertag.title,
-        tagColor: tagColor,
-        borderColor: borderColor,
-        inerTextColor: inerTextColor,
-        tagWeight: tagWeight,
-        watch: usertag.watch ?? false,
-        hide: usertag.hide ?? false,
-        onTap: () async => tapUserTagItem(usertag),
-      );
-    }
+    _item = UserTagItem(
+      title: usertag.title,
+      desc: isTagTranslat ? usertag.translate : null,
+      tagColor: tagColor,
+      borderColor: borderColor,
+      inerTextColor: inerTextColor,
+      tagWeight: tagWeight,
+      watch: usertag.watch ?? false,
+      hide: usertag.hide ?? false,
+      onTap: () async => tapUserTagItem(usertag),
+    );
 
     return Slidable(
       key: ValueKey(usertag.title),
@@ -367,7 +351,6 @@ class _ListViewEhMytagsState extends State<ListViewEhMytags> {
                             usertag,
                             index,
                             isTagTranslat: controller.isTagTranslat,
-                            future: controller.getTextTranslate(usertag.title),
                             deleteUserTag: (i) => controller.deleteUsertag(i),
                           );
                         },
