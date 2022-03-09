@@ -3,6 +3,7 @@ import 'package:fehviewer/common/service/ehconfig_service.dart';
 import 'package:fehviewer/common/service/locale_service.dart';
 import 'package:fehviewer/network/api.dart';
 import 'package:fehviewer/network/request.dart';
+import 'package:fehviewer/store/floor/entity/tag_translat.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
@@ -15,6 +16,8 @@ const kEhMyTags = EhMytags(tagsets: []);
 class EhMyTagsController extends GetxController
     with StateMixin<List<EhMytagSet>> {
   static String idUsertagList = 'idUsertagList';
+
+  final trController = Get.find<TagTransController>();
 
   final _isLoading = false.obs;
 
@@ -31,8 +34,17 @@ class EhMyTagsController extends GetxController
 
   RxList<EhUsertag> searchTags = <EhUsertag>[].obs;
 
-  List<EhUsertag> get usertags =>
-      searchTags.isNotEmpty ? searchTags : ehMyTags.usertags ?? <EhUsertag>[];
+  List<EhUsertag> get usertags {
+    if (!isSearchUser) {
+      return ehMyTags.usertags ?? <EhUsertag>[];
+    } else {
+      return inputSearchText.isEmpty
+          ? ehMyTags.usertags ?? <EhUsertag>[]
+          : searchTags;
+    }
+  }
+
+  RxList<EhUsertag> searchNewTags = <EhUsertag>[].obs;
 
   final EhConfigService ehConfigService = Get.find();
   final LocaleService localeService = Get.find();
@@ -58,12 +70,14 @@ class EhMyTagsController extends GetxController
     super.onInit();
     firstLoad();
 
-    debounce(_inputSearchText, (String val) {
+    debounce(_inputSearchText, (String val) async {
       logger.d('debounce _inputSearchText $val');
       if (val.trim().isEmpty) {
         searchTags.clear();
+        searchNewTags.clear();
       }
 
+      // 筛选tag
       final rult = (ehMyTags.usertags ?? <EhUsertag>[]).where((element) =>
           element.title.contains(val) ||
           (element.translate?.contains(val) ?? false));
@@ -71,6 +85,30 @@ class EhMyTagsController extends GetxController
         logger.d('${rult.length}');
         searchTags.clear();
         searchTags.addAll(rult);
+      }
+
+      // 新tag
+      // 通过eh的api
+      List<TagTranslat> tagTranslateList =
+          await Api.tagSuggest(text: val.trim());
+
+      for (final tr in tagTranslateList) {
+        final title = '${tr.namespace}:${tr.key}';
+        if (ehMyTags.usertags?.any((element) => element.title == title) ??
+            false) {
+          continue;
+        }
+        final translate = await trController.getTranTagWithNameSpase(title);
+        searchNewTags.add(
+          EhUsertag(
+            title: '${tr.namespace}:${tr.key}',
+            defaultColor: true,
+            watch: false,
+            hide: false,
+            tagWeight: '10',
+            translate: translate,
+          ),
+        );
       }
     });
   }
@@ -103,6 +141,7 @@ class EhMyTagsController extends GetxController
   }
 
   Future<EhMytags?> loadData({bool refresh = false}) async {
+    // change(null, status: RxStatus.loading());
     canDelete = false;
     try {
       final mytags = await getMyTags(
@@ -222,11 +261,6 @@ class EhMyTagsController extends GetxController
 
     logger.d('saveToset $saveToset');
 
-    // if (saveToset != currSelected) {
-    //   logger.d('currSelected $currSelected, change to $saveToset');
-    //   currSelected = saveToset ?? '1';
-    //   firstLoad();
-    // }
     currSelected = saveToset ?? '1';
     firstLoad();
 
