@@ -17,6 +17,7 @@ class EhMyTagsController extends GetxController
   static String idUsertagList = 'idUsertagList';
 
   final _isLoading = false.obs;
+
   bool get isStackLoading => _isLoading.value;
   set isStackLoading(bool val) => _isLoading.value = val;
 
@@ -28,7 +29,10 @@ class EhMyTagsController extends GetxController
   bool get canDelete => _canDelete.value;
   set canDelete(bool val) => _canDelete.value = val;
 
-  List<EhUsertag> get usertags => ehMyTags.usertags ?? <EhUsertag>[];
+  RxList<EhUsertag> searchTags = <EhUsertag>[].obs;
+
+  List<EhUsertag> get usertags =>
+      searchTags.isNotEmpty ? searchTags : ehMyTags.usertags ?? <EhUsertag>[];
 
   final EhConfigService ehConfigService = Get.find();
   final LocaleService localeService = Get.find();
@@ -45,10 +49,30 @@ class EhMyTagsController extends GetxController
   bool get isTagTranslat =>
       ehConfigService.isTagTranslat && localeService.isLanguageCodeZh;
 
+  final _inputSearchText = ''.obs;
+  String get inputSearchText => _inputSearchText.value;
+  set inputSearchText(String val) => _inputSearchText.value = val;
+
   @override
   void onInit() {
     super.onInit();
     firstLoad();
+
+    debounce(_inputSearchText, (String val) {
+      logger.d('debounce _inputSearchText $val');
+      if (val.trim().isEmpty) {
+        searchTags.clear();
+      }
+
+      final rult = (ehMyTags.usertags ?? <EhUsertag>[]).where((element) =>
+          element.title.contains(val) ||
+          (element.translate?.contains(val) ?? false));
+      if (rult.isNotEmpty) {
+        logger.d('${rult.length}');
+        searchTags.clear();
+        searchTags.addAll(rult);
+      }
+    });
   }
 
   Future<String?> getTextTranslate(String text) async {
