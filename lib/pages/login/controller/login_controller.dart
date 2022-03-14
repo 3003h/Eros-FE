@@ -110,7 +110,6 @@ class LoginController extends GetxController {
     }
 
     FocusScope.of(Get.context!).requestFocus(FocusNode());
-    User user;
 
     final List<Cookie> cookies = <Cookie>[
       Cookie('ipb_member_id', memberId),
@@ -124,6 +123,14 @@ class LoginController extends GetxController {
     // 设置EH的cookie
     cookieJar.saveFromResponse(Uri.parse(EHConst.EH_BASE_URL), cookies);
 
+    try {
+      await asyncGetUserInfo(memberId);
+    } catch (e) {
+      loadingLogin = false;
+      update();
+      return;
+    }
+
     userController.user(userController.user.value.copyWith(
       username: memberId,
       memberId: memberId,
@@ -133,17 +140,8 @@ class LoginController extends GetxController {
       sk: _getCookiesValue(cookies, 'sk'),
     ));
 
-    await asyncGetUserInfo(memberId);
-
-    if (memberId.isNotEmpty) {
-      asyncGetUserInfo(memberId)
-          .then((_) => Get.back(result: true))
-          .then((_) => Api.selEhProfile())
-          .onError((error, stackTrace) {
-        logger.e('$error\n$stackTrace');
-        showToast('$error');
-      });
-    }
+    Get.back(result: true);
+    Api.selEhProfile();
   }
 
   /// 网页登陆
@@ -192,7 +190,14 @@ class LoginController extends GetxController {
   Future<void> asyncGetUserInfo(String memberId) async {
     // 异步获取昵称和头像
     logger.d('异步获取昵称和头像');
-    final info = await getUserInfo(memberId);
+    late User? info;
+    try {
+      info = await getUserInfo(memberId);
+    } catch (e) {
+      showToast('$e');
+      rethrow;
+    }
+
     userController.user(userController.user.value.copyWith(
       nickName: info?.nickName,
       avatarUrl: info?.avatarUrl,
