@@ -1,15 +1,13 @@
 import 'package:collection/collection.dart';
-import 'package:english_words/english_words.dart';
 import 'package:fehviewer/common/service/layout_service.dart';
 import 'package:fehviewer/common/service/locale_service.dart';
 import 'package:fehviewer/fehviewer.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
-import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 
 import '../../fetch_list.dart';
-import 'custom_sublist_controller.dart';
 import '../default_tabview_controller.dart';
+import 'custom_sublist_controller.dart';
 
 final CustomProfile profileChinese = CustomProfile(
     uuid: generateUuidv4(), name: '汉语', searchText: ['l:chinese']);
@@ -63,7 +61,6 @@ class CustomTabbarController extends DefaultTabViewController {
   void onInit() {
     super.onInit();
 
-    // heroTag = EHRoutes.customlist;
     heroTag = EHRoutes.gallery;
 
     profiles.value = customTabConfig?.profiles ??
