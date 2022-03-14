@@ -38,6 +38,7 @@ class EhMyTagsController extends GetxController
     if (!isSearchUser) {
       return ehMyTags.usertags ?? <EhUsertag>[];
     } else {
+      // 搜索状态
       return inputSearchText.isEmpty
           ? ehMyTags.usertags ?? <EhUsertag>[]
           : searchTags;
@@ -73,7 +74,7 @@ class EhMyTagsController extends GetxController
     debounce(_inputSearchText, (String val) async {
       logger.d('debounce _inputSearchText $val');
       if (val.trim().isEmpty) {
-        searchTags.clear();
+        // searchTags.clear();
         searchNewTags.clear();
       }
 
@@ -81,9 +82,9 @@ class EhMyTagsController extends GetxController
       final rult = (ehMyTags.usertags ?? <EhUsertag>[]).where((element) =>
           element.title.contains(val) ||
           (element.translate?.contains(val) ?? false));
+      searchTags.clear();
       if (rult.isNotEmpty) {
         logger.d('${rult.length}');
-        searchTags.clear();
         searchTags.addAll(rult);
       }
 
@@ -92,6 +93,7 @@ class EhMyTagsController extends GetxController
       List<TagTranslat> tagTranslateList =
           await Api.tagSuggest(text: val.trim());
 
+      searchNewTags.clear();
       for (final tr in tagTranslateList) {
         final title = '${tr.namespace}:${tr.key}';
         if (ehMyTags.usertags?.any((element) => element.title == title) ??
