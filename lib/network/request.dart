@@ -744,6 +744,8 @@ Future<User?> userLogin(String username, String passwd) async {
 
   if (httpResponse.ok && httpResponse.data is User) {
     return httpResponse.data as User;
+  } else {
+    throw httpResponse.error ?? HttpException('login error');
   }
 }
 
@@ -762,6 +764,8 @@ Future<User?> getUserInfo(String userId) async {
 
   if (httpResponse.ok && httpResponse.data is User) {
     return httpResponse.data as User;
+  } else {
+    throw httpResponse.error ?? HttpException('get user info error');
   }
 }
 
@@ -802,6 +806,8 @@ Future<bool?> postComment({
 
   if (httpResponse.ok && httpResponse.data is bool) {
     return httpResponse.data as bool;
+  } else {
+    throw httpResponse.error ?? HttpException('error');
   }
 }
 
@@ -892,7 +898,7 @@ Future<String> getTorrentToken(
   if (httpResponse.ok && httpResponse.data is String) {
     return httpResponse.data as String;
   } else {
-    throw httpResponse.error ?? HttpException('getTorrentToken error');
+    throw httpResponse.error ?? HttpException('get Torrent Token error');
   }
 }
 
@@ -915,7 +921,7 @@ Future<TorrentProvider> getTorrent(
   if (httpResponse.ok && httpResponse.data is TorrentProvider) {
     return httpResponse.data as TorrentProvider;
   } else {
-    throw httpResponse.error ?? HttpException('getTorrent error');
+    throw httpResponse.error ?? HttpException('get Torrent error');
   }
 }
 
@@ -938,7 +944,7 @@ Future<ArchiverProvider> getArchiver(
   if (httpResponse.ok && httpResponse.data is ArchiverProvider) {
     return httpResponse.data as ArchiverProvider;
   } else {
-    throw httpResponse.error ?? HttpException('getArchiver error');
+    throw httpResponse.error ?? HttpException('get Archiver error');
   }
 }
 
