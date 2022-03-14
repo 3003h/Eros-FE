@@ -152,7 +152,9 @@ class CustomSubListController extends TabViewController {
   @override
   Future<void> lastComplete() async {
     super.lastComplete();
-    if (curPage < maxPage - 1 && pageState != PageState.Loading) {
+    if ((state ?? []).isNotEmpty &&
+        curPage < maxPage - 1 &&
+        pageState != PageState.Loading) {
       // 加载更多
       loadDataMore();
     }

@@ -98,9 +98,9 @@ class TabViewController extends GetxController
       maxPage = rult.maxPage ?? 0;
       nextPage = rult.nextPage ?? 1;
       change(rultList, status: RxStatus.success());
-      for (final _ in rultList ?? []) {
-        sliverAnimatedListKey.currentState?.insertItem(0);
-      }
+      // for (final _ in rultList ?? []) {
+      //   sliverAnimatedListKey.currentState?.insertItem(0);
+      // }
     } catch (err) {
       // change(state, status: RxStatus.error(err.toString()));
       final errmsg = err is HttpException ? err.message : '$err';
@@ -150,7 +150,7 @@ class TabViewController extends GetxController
 
       change([...?state, ...rultList], status: RxStatus.success());
 
-      for (final item in rultList) {
+      for (final _ in rultList) {
         sliverAnimatedListKey.currentState?.insertItem(insertIndex);
       }
     } catch (e, stack) {
