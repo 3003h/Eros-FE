@@ -15,9 +15,9 @@ abstract class TagTranslatDao {
   Future<TagTranslat?> findTagTranslatByKey(String key, String namespace);
 
   @Query(
-      'SELECT * FROM TagTranslat WHERE key like :key or name like :name limit :limit')
+      "SELECT * FROM TagTranslat WHERE ( key like :key or name like :name or namespace like :namespace ) and namespace not in ('rows') limit :limit")
   Future<List<TagTranslat>> findTagTranslatsWithLike(
-      String key, String name, int limit);
+      String key, String name, String namespace, int limit);
 
   @Query('SELECT * FROM TagTranslat WHERE key = :key')
   Future<List<TagTranslat>> findAllTagTranslatsByKey(String key);

@@ -271,7 +271,7 @@ class TagTransController extends GetxController {
     final TagTranslatDao tagTranslatDao = await _getTagTranslatDao();
 
     final List<TagTranslat> _translates = await tagTranslatDao
-        .findTagTranslatsWithLike('%$text%', '%$text%', limit);
+        .findTagTranslatsWithLike('%$text%', '%$text%', '%$text%', limit);
     return _translates;
   }
 }

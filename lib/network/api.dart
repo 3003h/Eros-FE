@@ -241,7 +241,7 @@ class Api {
     return rultMap;
   }
 
-  /// 给画廊添加tag
+  /// 搜索匹配tag
   static Future<List<TagTranslat>> tagSuggest({
     required String text,
   }) async {
@@ -253,7 +253,10 @@ class Api {
     final rult = await postEhApi(reqJsonStr);
     final Map<String, dynamic> rultMap =
         jsonDecode(rult.toString()) as Map<String, dynamic>;
-    final Map<String, dynamic> tagMap = rultMap['tags'] as Map<String, dynamic>;
+
+    final Map<String, dynamic> tagMap = rultMap['tags'] is Map<String, dynamic>
+        ? rultMap['tags'] as Map<String, dynamic>
+        : {};
     final List<Map<String, dynamic>> rultList =
         tagMap.values.map((e) => e as Map<String, dynamic>).toList();
 
