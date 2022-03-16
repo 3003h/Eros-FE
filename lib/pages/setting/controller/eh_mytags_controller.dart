@@ -72,7 +72,7 @@ class EhMyTagsController extends GetxController
     firstLoad();
 
     debounce(_inputSearchText, (String val) async {
-      logger.d('debounce _inputSearchText $val');
+      logger.v('debounce _inputSearchText $val');
       if (val.trim().isEmpty) {
         // searchTags.clear();
         searchNewTags.clear();
@@ -84,14 +84,27 @@ class EhMyTagsController extends GetxController
           (element.translate?.contains(val) ?? false));
       searchTags.clear();
       if (rult.isNotEmpty) {
-        logger.d('${rult.length}');
         searchTags.addAll(rult);
       }
 
       // 新tag
-      // 通过eh的api
+      // 通过eh的api搜索
       List<TagTranslat> tagTranslateList =
           await Api.tagSuggest(text: val.trim());
+
+      // 中文从翻译库匹配
+      if (localeService.isLanguageCodeZh && ehConfigService.isTagTranslat) {
+        List<TagTranslat> qryTagsList = await Get.find<TagTransController>()
+            .getTagTranslatesLike(text: val.trim(), limit: 200);
+
+        for (final tr in qryTagsList) {
+          if (tagTranslateList
+              .any((element) => element.fullTagText == tr.fullTagText)) {
+            continue;
+          }
+          tagTranslateList.add(tr);
+        }
+      }
 
       searchNewTags.clear();
       for (final tr in tagTranslateList) {

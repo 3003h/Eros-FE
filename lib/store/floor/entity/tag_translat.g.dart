@@ -6,13 +6,18 @@ part of 'tag_translat.dart';
 // CopyWithGenerator
 // **************************************************************************
 
-/// Proxy class for `CopyWith` functionality. This is a callable class and can be used as follows: `instanceOfTagTranslat.copyWith(...)`. Be aware that this kind of usage does not support nullification and all passed `null` values will be ignored. Prefer to copy the instance with a specific field change that handles nullification of fields correctly, e.g. like this:`instanceOfTagTranslat.copyWith.fieldName(...)`
-class _TagTranslatCWProxy {
-  final TagTranslat _value;
+abstract class _$TagTranslatCWProxy {
+  TagTranslat intro(String? intro);
 
-  const _TagTranslatCWProxy(this._value);
+  TagTranslat key(String key);
 
-  /// This function does not support nullification of optional types, all `null` values passed to this function will be ignored. For nullification, use `TagTranslat(...).copyWithNull(...)` to set certain fields to `null`. Prefer `TagTranslat(...).copyWith.fieldName(...)` to override fields one at a time with nullification support.
+  TagTranslat links(String? links);
+
+  TagTranslat name(String? name);
+
+  TagTranslat namespace(String namespace);
+
+  /// This function **does support** nullification of nullable fields. All `null` values passed to `non-nullable` fields will be ignored. You can also use `TagTranslat(...).copyWith.fieldName(...)` to override fields one at a time with nullification support.
   ///
   /// Usage
   /// ```dart
@@ -24,45 +29,71 @@ class _TagTranslatCWProxy {
     String? links,
     String? name,
     String? namespace,
-  }) {
-    return TagTranslat(
-      intro: intro ?? _value.intro,
-      key: key ?? _value.key,
-      links: links ?? _value.links,
-      name: name ?? _value.name,
-      namespace: namespace ?? _value.namespace,
-    );
-  }
-
-  TagTranslat intro(String? intro) =>
-      intro == null ? _value._copyWithNull(intro: true) : this(intro: intro);
-
-  TagTranslat links(String? links) =>
-      links == null ? _value._copyWithNull(links: true) : this(links: links);
-
-  TagTranslat name(String? name) =>
-      name == null ? _value._copyWithNull(name: true) : this(name: name);
-
-  TagTranslat key(String key) => this(key: key);
-
-  TagTranslat namespace(String namespace) => this(namespace: namespace);
+  });
 }
 
-extension TagTranslatCopyWith on TagTranslat {
-  /// CopyWith feature provided by `copy_with_extension_gen` library. Returns a callable class and can be used as follows: `instanceOfclass TagTranslat.name.copyWith(...)`. Be aware that this kind of usage does not support nullification and all passed `null` values will be ignored. Prefer to copy the instance with a specific field change that handles nullification of fields correctly, e.g. like this:`instanceOfclass TagTranslat.name.copyWith.fieldName(...)`
-  _TagTranslatCWProxy get copyWith => _TagTranslatCWProxy(this);
+/// Proxy class for `copyWith` functionality. This is a callable class and can be used as follows: `instanceOfTagTranslat.copyWith(...)`. Additionally contains functions for specific fields e.g. `instanceOfTagTranslat.copyWith.fieldName(...)`
+class _$TagTranslatCWProxyImpl implements _$TagTranslatCWProxy {
+  final TagTranslat _value;
 
-  TagTranslat _copyWithNull({
-    bool intro = false,
-    bool links = false,
-    bool name = false,
+  const _$TagTranslatCWProxyImpl(this._value);
+
+  @override
+  TagTranslat intro(String? intro) => this(intro: intro);
+
+  @override
+  TagTranslat key(String key) => this(key: key);
+
+  @override
+  TagTranslat links(String? links) => this(links: links);
+
+  @override
+  TagTranslat name(String? name) => this(name: name);
+
+  @override
+  TagTranslat namespace(String namespace) => this(namespace: namespace);
+
+  @override
+
+  /// This function **does support** nullification of nullable fields. All `null` values passed to `non-nullable` fields will be ignored. You can also use `TagTranslat(...).copyWith.fieldName(...)` to override fields one at a time with nullification support.
+  ///
+  /// Usage
+  /// ```dart
+  /// TagTranslat(...).copyWith(id: 12, name: "My name")
+  /// ````
+  TagTranslat call({
+    Object? intro = const $CopyWithPlaceholder(),
+    Object? key = const $CopyWithPlaceholder(),
+    Object? links = const $CopyWithPlaceholder(),
+    Object? name = const $CopyWithPlaceholder(),
+    Object? namespace = const $CopyWithPlaceholder(),
   }) {
     return TagTranslat(
-      intro: intro == true ? null : this.intro,
-      key: key,
-      links: links == true ? null : this.links,
-      name: name == true ? null : this.name,
-      namespace: namespace,
+      intro: intro == const $CopyWithPlaceholder()
+          ? _value.intro
+          // ignore: cast_nullable_to_non_nullable
+          : intro as String?,
+      key: key == const $CopyWithPlaceholder() || key == null
+          ? _value.key
+          // ignore: cast_nullable_to_non_nullable
+          : key as String,
+      links: links == const $CopyWithPlaceholder()
+          ? _value.links
+          // ignore: cast_nullable_to_non_nullable
+          : links as String?,
+      name: name == const $CopyWithPlaceholder()
+          ? _value.name
+          // ignore: cast_nullable_to_non_nullable
+          : name as String?,
+      namespace: namespace == const $CopyWithPlaceholder() || namespace == null
+          ? _value.namespace
+          // ignore: cast_nullable_to_non_nullable
+          : namespace as String,
     );
   }
+}
+
+extension $TagTranslatCopyWith on TagTranslat {
+  /// Returns a callable class that can be used as follows: `instanceOfclass TagTranslat.name.copyWith(...)` or like so:`instanceOfclass TagTranslat.name.copyWith.fieldName(...)`.
+  _$TagTranslatCWProxy get copyWith => _$TagTranslatCWProxyImpl(this);
 }

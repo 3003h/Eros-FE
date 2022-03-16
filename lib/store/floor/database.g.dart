@@ -523,16 +523,11 @@ class _$TagTranslatDao extends TagTranslatDao {
 
   @override
   Future<List<TagTranslat>> findTagTranslatsWithLike(
-      String key, String name, int limit) async {
+      String key, String name, String namespace, int limit) async {
     return _queryAdapter.queryList(
-        'SELECT * FROM TagTranslat WHERE key like ?1 or name like ?2 limit ?3',
-        mapper: (Map<String, Object?> row) => TagTranslat(
-            namespace: row['namespace'] as String,
-            key: row['key'] as String,
-            name: row['name'] as String?,
-            intro: row['intro'] as String?,
-            links: row['links'] as String?),
-        arguments: [key, name, limit]);
+        'SELECT * FROM TagTranslat WHERE ( key like ?1 or name like ?2 or namespace like ?3 ) and namespace not in (\'rows\') limit ?4',
+        mapper: (Map<String, Object?> row) => TagTranslat(namespace: row['namespace'] as String, key: row['key'] as String, name: row['name'] as String?, intro: row['intro'] as String?, links: row['links'] as String?),
+        arguments: [key, name, namespace, limit]);
   }
 
   @override
