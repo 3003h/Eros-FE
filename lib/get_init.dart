@@ -52,8 +52,10 @@ void getinit() {
   Get.lazyPut(() => LocalFavController(), fenix: true);
   Get.lazyPut(() => HistoryController(), fenix: true);
   Get.lazyPut(() => UserController(), fenix: true);
-  Get.lazyPut(() => GalleryCacheController(), fenix: true);
+  // Get.lazyPut(() => GalleryCacheController(), fenix: true);
   Get.lazyPut(() => CacheController(), fenix: true);
+
+  Get.put(GalleryCacheController(), permanent: true);
 
   Get.put(DownloadController());
   if (GetPlatform.isMobile) {
