@@ -9,6 +9,10 @@ import 'package:fehviewer/utils/logger.dart';
 import 'package:get/get.dart';
 import 'package:throttling/throttling.dart';
 
+import '../../pages/gallery/controller/gallery_page_state.dart';
+
+const _kMaxPageState = 60;
+
 class GalleryCacheController extends GetxController {
   final GStore gStore = Get.find<GStore>();
   final WebdavController webdavController = Get.find();
@@ -94,5 +98,27 @@ class GalleryCacheController extends GetxController {
       gCacheMap[gid] = _ori.copyWithMode(columnMode);
       gStore.saveCache(_ori.copyWithMode(columnMode));
     }
+  }
+
+  // 缓存GalleryPageState
+  final List<GalleryPageState> pageStateList = [];
+
+  void addGalleryPageState(GalleryPageState state) {
+    logger.d('addGalleryPageState ${state.gid} ${state.title}');
+    final index =
+        pageStateList.indexWhere((element) => element.gid == state.gid);
+    if (index > -1) {
+      pageStateList[index] = state;
+    } else {
+      if (pageStateList.length + 1 > _kMaxPageState) {
+        pageStateList.removeAt(0);
+      }
+      pageStateList.add(state);
+    }
+    logger.d('pageStateList\n${pageStateList.map((e) => e.title).join('\n')}');
+  }
+
+  GalleryPageState? getGalleryPageState(String gid) {
+    return pageStateList.firstWhereOrNull((element) => element.gid == gid);
   }
 }

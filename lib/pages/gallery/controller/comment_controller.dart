@@ -71,7 +71,7 @@ class CommentController extends GetxController
   }
 
   Future<void> _loadComment() async {
-    await Future.delayed(const Duration(milliseconds: 200));
+    // await Future.delayed(const Duration(milliseconds: 200));
     change(_pageState.galleryItem?.galleryComment, status: RxStatus.success());
   }
 
