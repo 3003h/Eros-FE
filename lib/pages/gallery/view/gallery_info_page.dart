@@ -32,31 +32,32 @@ class GalleryInfoPage extends StatelessWidget {
               tag: pageCtrlTag,
               id: GetIds.PAGE_VIEW_HEADER,
               builder: (GalleryPageController controller) {
-                if (controller.galleryItem == null) {
+                final pageState = controller.gState;
+                if (pageState.galleryItem == null) {
                   return const SizedBox.shrink();
                 }
 
                 final _infoMap = {
-                  'Gid': controller.galleryItem!.gid,
-                  'Token': controller.galleryItem!.token,
+                  'Gid': pageState.galleryItem!.gid,
+                  'Token': pageState.galleryItem!.token,
                   'Url':
-                      '${controller.galleryItem!.url?.startsWith('http') ?? false ? '' : Api.getBaseUrl()}${controller.galleryItem!.url}',
-                  'Title': controller.galleryItem!.englishTitle,
-                  'Jpn Title': controller.galleryItem!.japaneseTitle,
-                  'Thumb': controller.galleryItem!.imgUrl,
-                  'Category': controller.galleryItem!.category,
-                  'Uploader': controller.galleryItem!.uploader,
-                  'Posted': controller.galleryItem!.postTime,
-                  'Language': controller.galleryItem!.language,
-                  'Pages': controller.galleryItem!.filecount,
-                  'Size': controller.galleryItem!.filesizeText,
-                  'Favorite count': controller.galleryItem!.favoritedCount,
+                      '${pageState.galleryItem!.url?.startsWith('http') ?? false ? '' : Api.getBaseUrl()}${pageState.galleryItem!.url}',
+                  'Title': pageState.galleryItem!.englishTitle,
+                  'Jpn Title': pageState.galleryItem!.japaneseTitle,
+                  'Thumb': pageState.galleryItem!.imgUrl,
+                  'Category': pageState.galleryItem!.category,
+                  'Uploader': pageState.galleryItem!.uploader,
+                  'Posted': pageState.galleryItem!.postTime,
+                  'Language': pageState.galleryItem!.language,
+                  'Pages': pageState.galleryItem!.filecount,
+                  'Size': pageState.galleryItem!.filesizeText,
+                  'Favorite count': pageState.galleryItem!.favoritedCount,
                   'Favorited':
-                      '${controller.galleryItem!.favcat?.isNotEmpty ?? false}',
-                  'Favorite': controller.galleryItem!.favTitle ?? '',
-                  'Rating count': controller.galleryItem!.ratingCount,
-                  'Rating': '${controller.galleryItem!.rating}',
-                  'Torrents': controller.galleryItem!.torrentcount,
+                      '${pageState.galleryItem!.favcat?.isNotEmpty ?? false}',
+                  'Favorite': pageState.galleryItem!.favTitle ?? '',
+                  'Rating count': pageState.galleryItem!.ratingCount,
+                  'Rating': '${pageState.galleryItem!.rating}',
+                  'Torrents': pageState.galleryItem!.torrentcount,
                   // 'Torrents Url': controller.galleryItem.torrentcount,
                 };
 

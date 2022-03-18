@@ -18,6 +18,7 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
 
+import '../controller/gallery_page_state.dart';
 import 'const.dart';
 import 'header.dart';
 
@@ -36,7 +37,7 @@ class GalleryDetail extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return _controller.fromUrl
+    return _controller.gState.fromUrl
         ? _DetailFromUrl()
         : _DetailFromItem(
             tabTag: tabTag,
@@ -62,8 +63,8 @@ class _DetailFromUrl extends StatelessWidget {
                 ),
               if (state != null)
                 _DetailWidget(
-                  state: state,
-                  controller: _controller,
+                  galleryItem: state,
+                  pageController: _controller,
                 ),
             ],
           ),
@@ -97,12 +98,14 @@ class _DetailFromUrl extends StatelessWidget {
 class _DetailWidget extends StatelessWidget {
   const _DetailWidget({
     Key? key,
-    required this.state,
-    required this.controller,
+    required this.galleryItem,
+    required this.pageController,
   }) : super(key: key);
 
-  final GalleryItem state;
-  final GalleryPageController controller;
+  final GalleryItem galleryItem;
+  final GalleryPageController pageController;
+
+  GalleryPageState get pageStat => pageController.gState;
 
   // GalleryPageController get _controller => Get.find(tag: pageCtrlDepth);
 
@@ -112,11 +115,11 @@ class _DetailWidget extends StatelessWidget {
       // 进行评分
       Expanded(
         child: Obx(() => TextBtn(
-              controller.isRatinged
+          pageStat.isRatinged
                   ? FontAwesomeIcons.solidStar
                   : FontAwesomeIcons.star,
               title: L10n.of(context).p_Rate,
-              onTap: state.apiuid?.isNotEmpty ?? false
+              onTap: galleryItem.apiuid?.isNotEmpty ?? false
                   ? () {
                       showRateDialog(context);
                     }
@@ -129,7 +132,7 @@ class _DetailWidget extends StatelessWidget {
           final defIcon = TextBtn(
             FontAwesomeIcons.solidArrowAltCircleDown,
             title: L10n.of(context).p_Download,
-            onTap: () => controller.downloadGallery(context),
+            onTap: () => pageController.downloadGallery(context),
           );
 
           final toDownloadPage = () =>
@@ -156,15 +159,16 @@ class _DetailWidget extends StatelessWidget {
             ),
           };
 
-          return iconMap[controller.downloadState] ?? defIcon;
+          return iconMap[pageStat.downloadState] ?? defIcon;
         }),
       ),
       // 种子下载
       Expanded(
         child: TextBtn(
           FontAwesomeIcons.magnet,
-          title: '${L10n.of(context).p_Torrent}(${state.torrentcount ?? 0})',
-          onTap: state.torrentcount != '0'
+          title:
+              '${L10n.of(context).p_Torrent}(${galleryItem.torrentcount ?? 0})',
+          onTap: galleryItem.torrentcount != '0'
               ? () async {
                   showTorrentDialog();
                   // showTorrentModal();
@@ -188,7 +192,7 @@ class _DetailWidget extends StatelessWidget {
           FontAwesomeIcons.solidImages,
           title: L10n.of(context).p_Similar,
           onTap: () {
-            final String title = (state.englishTitle ?? '')
+            final String title = (galleryItem.englishTitle ?? '')
                 .replaceAll(RegExp(r'(\[.*?\]|\(.*?\))|{.*?}'), '')
                 .trim()
                 .split('\|')
@@ -212,7 +216,7 @@ class _DetailWidget extends StatelessWidget {
               CupertinoColors.systemGrey4, context),
         ),
         // 标签
-        TagBox(listTagGroup: state.tagGroup ?? []),
+        TagBox(listTagGroup: galleryItem.tagGroup ?? []),
         const TopComment(),
         Container(
           margin: const EdgeInsets.only(top: 4),
@@ -222,10 +226,10 @@ class _DetailWidget extends StatelessWidget {
         ),
         // 缩略图
         PreviewGrid(
-          images: controller.firstPageImage,
-          gid: state.gid ?? '',
+          images: pageStat.firstPageImage,
+          gid: galleryItem.gid ?? '',
         ),
-        MorePreviewButton(hasMorePreview: controller.hasMoreImage),
+        MorePreviewButton(hasMorePreview: pageStat.hasMoreImage),
       ],
     );
 
@@ -238,7 +242,7 @@ class _DetailWidget extends StatelessWidget {
         const SizedBox(height: 10),
         // 标签
         Row(children: [_getminiTitle(L10n.of(context).tags)]),
-        TagBox(listTagGroup: state.tagGroup ?? [])
+        TagBox(listTagGroup: galleryItem.tagGroup ?? [])
             .paddingSymmetric(vertical: 4),
         const SizedBox(height: 20),
         Row(
@@ -271,10 +275,10 @@ class _DetailWidget extends StatelessWidget {
         const SizedBox(height: 20),
         // 缩略图
         PreviewGrid(
-          images: controller.firstPageImage,
-          gid: state.gid ?? '',
+          images: pageStat.firstPageImage,
+          gid: galleryItem.gid ?? '',
         ),
-        MorePreviewButton(hasMorePreview: controller.hasMoreImage),
+        MorePreviewButton(hasMorePreview: pageStat.hasMoreImage),
       ],
     ).paddingSymmetric(horizontal: kPadding);
 
@@ -301,7 +305,7 @@ class _DetailFromItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final GalleryItem? galleryItem = controller.galleryItem;
+    final GalleryItem? galleryItem = controller.gState.galleryItem;
 
     return SliverToBoxAdapter(
       child: Column(
@@ -315,8 +319,8 @@ class _DetailFromItem extends StatelessWidget {
             (GalleryItem? state) {
               return state != null
                   ? _DetailWidget(
-                      state: state,
-                      controller: controller,
+                      galleryItem: state,
+                      pageController: controller,
                     )
                   : const SizedBox.shrink();
             },

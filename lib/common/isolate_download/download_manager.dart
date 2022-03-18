@@ -156,7 +156,7 @@ class DownloadManagerIsolate {
       appSupportPath: Global.appSupportPath,
       appDocPath: Global.appDocPath,
       extStorePath: Global.extStorePath,
-      initImages: _pageController.firstPageImage,
+      initImages: _pageController.gState.firstPageImage,
       downloadPath: downloadPath,
     );
 
@@ -197,10 +197,10 @@ class DownloadManagerIsolate {
               final GalleryPageController _pageController =
                   Get.find(tag: pageCtrlTag);
 
-              if (_pageController.images.length < _rultImages.length) {
+              if (_pageController.gState.images.length < _rultImages.length) {
                 logger.v('set pre');
-                _pageController.images.clear();
-                _pageController.images.addAll(_rultImages);
+                _pageController.gState.images.clear();
+                _pageController.gState.images.addAll(_rultImages);
               }
             }
 

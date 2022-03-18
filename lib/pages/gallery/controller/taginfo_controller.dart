@@ -13,12 +13,13 @@ import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
 
 import 'gallery_page_controller.dart';
+import 'gallery_page_state.dart';
 
 class TagInfoController extends GetxController {
   TagInfoController();
   GalleryPageController get pageController => Get.find(tag: pageCtrlTag);
-
-  GalleryItem? get _item => pageController.galleryItem;
+  GalleryPageState get _pageState => pageController.gState;
+  GalleryItem? get _item => _pageState.galleryItem;
 
   final TextEditingController tagsTextController = TextEditingController();
   FocusNode focusNode = FocusNode();

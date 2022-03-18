@@ -6,6 +6,7 @@ import 'package:fehviewer/utils/toast.dart';
 import 'package:get/get.dart';
 
 import 'gallery_page_controller.dart';
+import 'gallery_page_state.dart';
 
 class RateController extends GetxController {
   RateController();
@@ -13,13 +14,13 @@ class RateController extends GetxController {
   late double rate;
 
   GalleryPageController get pageController => Get.find(tag: pageCtrlTag);
-
-  GalleryItem? get _item => pageController.galleryItem;
+  GalleryPageState get _pageState => pageController.gState;
+  GalleryItem? get _item => _pageState.galleryItem;
 
   @override
   void onInit() {
     super.onInit();
-    rate = pageController.galleryItem?.rating ?? 0;
+    rate = _item?.rating ?? 0;
   }
 
   Future<void> rating() async {
@@ -28,8 +29,7 @@ class RateController extends GetxController {
     }
 
     logger.d('rating $rate');
-    logger.d(
-        '${pageController.galleryItem?.apiuid} ${pageController.galleryItem?.apikey}');
+    logger.d('${_item?.apiuid} ${_item?.apikey}');
     logger.d('${(rate * 2).round()}');
     final Map<String, dynamic> rultMap = await Api.setRating(
       apikey: _item!.apikey ?? '',

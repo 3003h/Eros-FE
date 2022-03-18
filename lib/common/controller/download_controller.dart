@@ -161,6 +161,7 @@ class DownloadController extends GetxController {
     _addGalleryTask(
       galleryTask,
       fCount: Get.find<GalleryPageController>(tag: pageCtrlTag)
+          .gState
           .firstPageImage
           .length,
     );

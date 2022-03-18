@@ -11,11 +11,12 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
 
+import '../controller/gallery_page_state.dart';
 import 'const.dart';
 import 'gallery_widget.dart';
 
 class GalleryHeader extends StatelessWidget {
-  const GalleryHeader({
+  GalleryHeader({
     Key? key,
     required this.initGalleryItem,
     this.tabTag,
@@ -24,14 +25,15 @@ class GalleryHeader extends StatelessWidget {
   final GalleryItem initGalleryItem;
   final Object? tabTag;
 
+  final _controller = Get.find<GalleryPageController>(tag: pageCtrlTag);
+  GalleryPageState get _pageState => _controller.gState;
+
   @override
   Widget build(BuildContext context) {
     final TextStyle _hearTextStyle = TextStyle(
       fontSize: 13,
       color: CupertinoDynamicColor.resolve(CupertinoColors.label, context),
     );
-
-    final _controller = Get.find<GalleryPageController>(tag: pageCtrlTag);
 
     return Container(
       padding: const EdgeInsets.all(kPadding),
@@ -44,7 +46,7 @@ class GalleryHeader extends StatelessWidget {
                 // 封面
                 Obx(() {
                   return HeroMode(
-                    enabled: _controller.hideNavigationBtn || isLayoutLarge,
+                    enabled: _pageState.hideNavigationBtn || isLayoutLarge,
                     child: CoverImage(
                       imageUrl: initGalleryItem.imgUrl!,
                       heroTag: '${initGalleryItem.gid}_cover_$tabTag',
@@ -56,14 +58,15 @@ class GalleryHeader extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: <Widget>[
                       // 标题
-                      const GalleryTitle(),
+                      GalleryTitle(),
                       // 上传用户
                       GetBuilder<GalleryPageController>(
                           id: GetIds.PAGE_VIEW_HEADER,
                           tag: pageCtrlTag,
                           builder: (logic) {
                             return GalleryUploader(
-                                uploader: logic.galleryItem?.uploader ?? '');
+                                uploader:
+                                    logic.gState.galleryItem?.uploader ?? '');
                           }),
                       const Spacer(),
                       Row(
@@ -125,8 +128,7 @@ class _GalleryInfoBarState extends State<GalleryInfoBar> {
         tag: pageCtrlTag,
         id: GetIds.PAGE_VIEW_HEADER,
         builder: (GalleryPageController controller) {
-          // logger.d(
-          //     'GalleryPageController GetBuilder GetIds.PAGE_VIEW_HEADER');
+          final GalleryPageState _pageState = controller.gState;
           return GestureDetector(
             behavior: HitTestBehavior.opaque,
             onTap: () {
@@ -167,11 +169,11 @@ class _GalleryInfoBarState extends State<GalleryInfoBar> {
                           children: <Widget>[
                             // 评分
                             GalleryRating(
-                              rating: controller.galleryItem?.rating ?? 0,
+                              rating: _pageState.galleryItem?.rating ?? 0,
                               ratingFB:
-                                  controller.galleryItem?.ratingFallBack ?? 0,
+                                  _pageState.galleryItem?.ratingFallBack ?? 0,
                               color: ThemeColors.colorRatingMap[
-                                  controller.galleryItem?.colorRating?.trim() ??
+                                  _pageState.galleryItem?.colorRating?.trim() ??
                                       'ir'],
                             ),
                             // 评分人次
@@ -179,7 +181,7 @@ class _GalleryInfoBarState extends State<GalleryInfoBar> {
                               padding:
                                   const EdgeInsets.symmetric(horizontal: 4),
                               child: Text(
-                                  controller.galleryItem?.ratingCount ?? '',
+                                  _pageState.galleryItem?.ratingCount ?? '',
                                   style: TextStyle(
                                     fontSize: 10,
                                     color: CupertinoDynamicColor.resolve(
@@ -191,7 +193,7 @@ class _GalleryInfoBarState extends State<GalleryInfoBar> {
                             // 类型
                             GalleryCategory(
                                 category:
-                                    controller.galleryItem?.category ?? ''),
+                                    _pageState.galleryItem?.category ?? ''),
                           ],
                         ),
                       ),
@@ -204,7 +206,7 @@ class _GalleryInfoBarState extends State<GalleryInfoBar> {
                             size: 13,
                           ).paddingOnly(right: 8),
                           Text(
-                            controller.galleryItem?.language ?? '',
+                            _pageState.galleryItem?.language ?? '',
                             style: widget._hearTextStyle,
                           ),
                           const Spacer(),
@@ -216,12 +218,12 @@ class _GalleryInfoBarState extends State<GalleryInfoBar> {
                           ),
                           const SizedBox(width: 6),
                           Text(
-                            controller.galleryItem?.filecount ?? '',
+                            _pageState.galleryItem?.filecount ?? '',
                             style: widget._hearTextStyle,
                           ),
                           const Spacer(),
                           Text(
-                            controller.galleryItem?.filesizeText ?? '',
+                            _pageState.galleryItem?.filesizeText ?? '',
                             style: widget._hearTextStyle,
                           ),
                         ],
@@ -244,14 +246,15 @@ class _GalleryInfoBarState extends State<GalleryInfoBar> {
                                   padding:
                                       const EdgeInsets.symmetric(horizontal: 4),
                                   child: Text(
-                                      controller.galleryItem?.favoritedCount ??
+                                      controller.gState.galleryItem
+                                              ?.favoritedCount ??
                                           '',
                                       style: widget._hearTextStyle),
                                 );
                               }),
                           const Spacer(),
                           Text(
-                            controller.galleryItem?.postTime ?? '',
+                            _pageState.galleryItem?.postTime ?? '',
                             style: widget._hearTextStyle,
                           ),
                         ],

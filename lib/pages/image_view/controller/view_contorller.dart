@@ -7,6 +7,7 @@ import 'package:fehviewer/common/isolate_download/download_manager.dart';
 import 'package:fehviewer/common/service/ehconfig_service.dart';
 import 'package:fehviewer/fehviewer.dart';
 import 'package:fehviewer/pages/gallery/controller/gallery_page_controller.dart';
+import 'package:fehviewer/pages/gallery/controller/gallery_page_state.dart';
 import 'package:fehviewer/pages/image_view/common.dart';
 import 'package:fehviewer/pages/image_view/view/view_widget.dart';
 import 'package:flutter/cupertino.dart';
@@ -53,6 +54,7 @@ class ViewExtController extends GetxController {
 
   GalleryPageController get _galleryPageController =>
       vState.galleryPageController;
+  GalleryPageState get _galleryPageStat => vState.pageState;
   EhConfigService get _ehConfigService => vState.ehConfigService;
 
   Map<int, Future<GalleryImage?>> imageFutureMap = {};
@@ -242,7 +244,7 @@ class ViewExtController extends GetxController {
       // logger.v('页码切换时的回调 预载图片');
       GalleryPara.instance
           .ehPrecacheImages(
-        imageMap: _galleryPageController.imageMap,
+        imageMap: _galleryPageStat.imageMap,
         itemSer: vState.currentItemIndex,
         max: _ehConfigService.preloadImage.value,
       )
@@ -318,7 +320,7 @@ class ViewExtController extends GetxController {
     bool refresh = false,
     bool changeSource = false,
   }) async {
-    final GalleryImage? tImage = _galleryPageController.imageMap[itemSer];
+    final GalleryImage? tImage = _galleryPageStat.imageMap[itemSer];
     if (tImage == null) {
       logger.d('fetchThumb ser:$itemSer 所在页尚未获取， 开始获取');
       _mapFetchGalleryPriviewPage.putIfAbsent(
@@ -328,7 +330,7 @@ class ViewExtController extends GetxController {
       await _mapFetchGalleryPriviewPage[itemSer];
     }
 
-    final GalleryImage? image = _galleryPageController.imageMap[itemSer];
+    final GalleryImage? image = _galleryPageStat.imageMap[itemSer];
 
     return image;
   }
@@ -367,8 +369,7 @@ class ViewExtController extends GetxController {
     // 首先检查下载记录中是否有记录
     vState.imageTaskDao ??= Get.find<DownloadController>().imageTaskDao;
     vState.galleryTaskDao ??= Get.find<DownloadController>().galleryTaskDao;
-    vState.dirPath ??=
-        await _getTaskDirPath(int.parse(_galleryPageController.gid));
+    vState.dirPath ??= await _getTaskDirPath(int.parse(_galleryPageStat.gid));
 
     GalleryImage? imageFromTasks =
         _getImageFromImageTasks(itemSer, vState.dirPath);
@@ -377,7 +378,7 @@ class ViewExtController extends GetxController {
     }
 
     vState.imageTasks = (await vState.imageTaskDao
-            ?.findAllTaskByGid(int.parse(_galleryPageController.gid))) ??
+            ?.findAllTaskByGid(int.parse(_galleryPageStat.gid))) ??
         [];
 
     imageFromTasks = _getImageFromImageTasks(itemSer, vState.dirPath);
@@ -386,7 +387,7 @@ class ViewExtController extends GetxController {
       return imageFromTasks;
     }
 
-    final tImage = _galleryPageController.imageMap[itemSer];
+    final tImage = _galleryPageStat.imageMap[itemSer];
     if (tImage == null) {
       logger.d('ser:$itemSer 所在页尚未获取， 开始获取');
 
@@ -396,7 +397,7 @@ class ViewExtController extends GetxController {
 
     GalleryPara.instance
         .ehPrecacheImages(
-      imageMap: _galleryPageController.imageMap,
+      imageMap: _galleryPageStat.imageMap,
       itemSer: itemSer,
       max: _ehConfigService.preloadImage.value,
     )
@@ -420,7 +421,7 @@ class ViewExtController extends GetxController {
   /// 重载图片数据，重构部件
   Future<void> reloadImage(int itemSer, {bool changeSource = true}) async {
     final GalleryImage? _currentImage =
-        _galleryPageController.galleryItem?.imageMap[itemSer];
+        _galleryPageStat.galleryItem?.imageMap[itemSer];
     // 清除CachedNetworkImage的缓存
     try {
       // CachedNetworkImage 清除指定缓存
