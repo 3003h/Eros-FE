@@ -226,7 +226,7 @@ class _ViewImageState extends State<ViewImage> with TickerProviderStateMixin {
               logger.d('long press');
               vibrateUtil.medium();
               final GalleryImage? _currentImage =
-                  vState.galleryPageController.imageMap[widget.imageSer];
+                  vState.pageState.imageMap[widget.imageSer];
               showImageSheet(
                   context,
                   () => controller.reloadImage(widget.imageSer,
@@ -235,7 +235,7 @@ class _ViewImageState extends State<ViewImage> with TickerProviderStateMixin {
                   filePath: _currentImage?.filePath,
                   origImageUrl: _currentImage?.originImageUrl,
                   title:
-                      '${vState.galleryPageController.title} [${_currentImage?.ser ?? ''}]');
+                      '${vState.pageState.title} [${_currentImage?.ser ?? ''}]');
             },
             child: FutureBuilder<GalleryImage?>(
                 future: controller.imageFutureMap[widget.imageSer],

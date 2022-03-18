@@ -6,12 +6,14 @@ import 'package:fehviewer/utils/logger.dart';
 import 'package:get/get.dart';
 
 import 'gallery_page_controller.dart';
+import 'gallery_page_state.dart';
 
 class TorrentController extends GetxController
     with StateMixin<TorrentProvider> {
   TorrentController();
 
   GalleryPageController get pageController => Get.find(tag: pageCtrlTag);
+  GalleryPageState get _pageState => pageController.gState;
   late String torrentTk;
   bool isRefresh = false;
 
@@ -23,7 +25,7 @@ class TorrentController extends GetxController
 
   Future<TorrentProvider> _fetch() async {
     final _torrentLink = '${Api.getBaseUrl()}/gallerytorrents.php'
-        '?gid=${pageController.gid}&t=${pageController.galleryItem?.token}';
+        '?gid=${_pageState.gid}&t=${_pageState.galleryItem?.token}';
     logger.d(_torrentLink);
     return await getTorrent(_torrentLink);
   }
@@ -45,7 +47,7 @@ class TorrentController extends GetxController
 
   Future<String> _fetchTk() async {
     return await getTorrentToken(
-        pageController.gid, pageController.galleryItem?.token ?? '',
+        _pageState.gid, _pageState.galleryItem?.token ?? '',
         refresh: isRefresh);
   }
 }

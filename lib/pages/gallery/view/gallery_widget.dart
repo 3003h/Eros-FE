@@ -5,6 +5,7 @@ import 'package:fehviewer/const/theme_colors.dart';
 import 'package:fehviewer/fehviewer.dart';
 import 'package:fehviewer/pages/gallery/controller/comment_controller.dart';
 import 'package:fehviewer/pages/gallery/controller/gallery_page_controller.dart';
+import 'package:fehviewer/pages/gallery/controller/gallery_page_state.dart';
 import 'package:fehviewer/pages/gallery/view/comment_item.dart';
 import 'package:fehviewer/pages/gallery/view/taginfo_dialog.dart';
 import 'package:fehviewer/widget/rating_bar.dart';
@@ -144,14 +145,15 @@ class CoverImage extends StatelessWidget {
 }
 
 class GalleryTitle extends StatelessWidget {
-  const GalleryTitle({
+  GalleryTitle({
     Key? key,
   }) : super(key: key);
 
+  final GalleryPageController _pageController = Get.find(tag: pageCtrlTag);
+  GalleryPageState get _pageState => _pageController.gState;
+
   @override
   Widget build(BuildContext context) {
-    final GalleryPageController _pageController = Get.find(tag: pageCtrlTag);
-
     /// 构建标题
     ///
     /// 问题 文字如果使用 SelectableText 并且页面拉到比较下方的时候
@@ -165,7 +167,7 @@ class GalleryTitle extends StatelessWidget {
 
     return GestureDetector(
       child: SelectableText(
-        _pageController.title,
+        _pageState.title,
         maxLines: 6,
         minLines: 1,
         textAlign: TextAlign.left,
@@ -242,21 +244,22 @@ class GalleryUploader extends StatelessWidget {
 }
 
 class ReadButton extends StatelessWidget {
-  const ReadButton({
+  ReadButton({
     Key? key,
     required this.gid,
   }) : super(key: key);
   final String gid;
 
+  final GalleryPageController _pageController = Get.find(tag: pageCtrlTag);
+  GalleryPageState get _pageState => _pageController.gState;
+
   @override
   Widget build(BuildContext context) {
-    final GalleryPageController _pageController = Get.find(tag: pageCtrlTag);
-
     return Obx(
       () => CupertinoButton(
           child: Text(
-            (_pageController.lastIndex > 0)
-                ? '${L10n.of(context).read.toUpperCase()} ${_pageController.lastIndex + 1}'
+            (_pageState.lastIndex > 0)
+                ? '${L10n.of(context).read.toUpperCase()} ${_pageState.lastIndex + 1}'
                 : L10n.of(context).read.toUpperCase(),
             style: const TextStyle(fontSize: 15, height: 1.2),
           ),
@@ -264,9 +267,9 @@ class ReadButton extends StatelessWidget {
           padding: const EdgeInsets.fromLTRB(16, 4, 16, 4),
           borderRadius: BorderRadius.circular(20),
           color: CupertinoColors.activeBlue,
-          onPressed: _pageController.enableRead
-              ? () => _toViewPage(_pageController.galleryItem?.gid ?? '0',
-                  _pageController.lastIndex)
+          onPressed: _pageState.enableRead
+              ? () => _toViewPage(
+                  _pageState.galleryItem?.gid ?? '0', _pageState.lastIndex)
               : null),
     );
   }

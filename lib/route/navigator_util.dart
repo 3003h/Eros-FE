@@ -151,7 +151,8 @@ class NavigatorUtil {
         if (topSecondRoute == EHRoutes.galleryPage) {
           logger.d('topSecondRoute == EHRoutes.galleryPage');
           if (Get.isRegistered<GalleryPageController>(tag: pageCtrlTag) &&
-              Get.find<GalleryPageController>(tag: pageCtrlTag).gid == _gid) {
+              Get.find<GalleryPageController>(tag: pageCtrlTag).gState.gid ==
+                  _gid) {
             logger.d('same gallery');
             return;
           }
@@ -182,7 +183,7 @@ class NavigatorUtil {
           logger.d('topSecondRoute == EHRoutes.galleryPage');
           final curTag = (int.parse(pageCtrlTag) - 1).toString();
           if (Get.isRegistered<GalleryPageController>(tag: curTag) &&
-              Get.find<GalleryPageController>(tag: curTag).gid == _gid) {
+              Get.find<GalleryPageController>(tag: curTag).gState.gid == _gid) {
             logger.d('same gallery');
             Get.find<ControllerTagService>().popPageCtrl();
             return;

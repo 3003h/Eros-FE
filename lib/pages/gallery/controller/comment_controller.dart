@@ -13,6 +13,7 @@ import 'package:get/get.dart';
 import 'package:learning_language/learning_language.dart';
 
 import 'gallery_page_controller.dart';
+import 'gallery_page_state.dart';
 
 enum EditState {
   newComment,
@@ -28,9 +29,11 @@ class CommentController extends GetxController
     return Get.find(tag: pageCtrlTag);
   }
 
+  GalleryPageState get _pageState => pageController.gState;
+
   final TextEditingController commentTextController = TextEditingController();
 
-  GalleryItem? get _item => pageController.galleryItem;
+  GalleryItem? get _item => _pageState.galleryItem;
   late String comment;
   late String oriComment;
   String? commentId;
@@ -69,8 +72,7 @@ class CommentController extends GetxController
 
   Future<void> _loadComment() async {
     await Future.delayed(const Duration(milliseconds: 200));
-    change(pageController.galleryItem?.galleryComment,
-        status: RxStatus.success());
+    change(_pageState.galleryItem?.galleryComment, status: RxStatus.success());
   }
 
   @override
@@ -239,8 +241,8 @@ class CommentController extends GetxController
     //   await pageController.handOnRefresh();
     // }
     final rult = await postComment(
-      gid: pageController.gid,
-      token: pageController.galleryItem?.token ?? '',
+      gid: _pageState.gid,
+      token: _pageState.galleryItem?.token ?? '',
       comment: comment,
       commentId: commentId,
       isEdit: isEdit,

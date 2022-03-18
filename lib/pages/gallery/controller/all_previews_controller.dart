@@ -8,21 +8,23 @@ import 'package:get/get.dart';
 import 'package:tuple/tuple.dart';
 
 import 'gallery_page_controller.dart';
+import 'gallery_page_state.dart';
 
 class AllPreviewsPageController extends GetxController
     with StateMixin<Tuple2<List<GalleryImage>, List<GalleryImage>>> {
   AllPreviewsPageController();
   GalleryPageController get _pageController => Get.find(tag: pageCtrlTag);
+  GalleryPageState get _pageState => _pageController.gState;
 
-  List<GalleryImage> get _images => _pageController.imagesFromMap;
+  List<GalleryImage> get _images => _pageState.imagesFromMap;
 
-  String get filecount => _pageController.galleryItem?.filecount ?? '0';
+  String get filecount => _pageState.galleryItem?.filecount ?? '0';
 
-  String get gid => _pageController.gid;
+  String get gid => _pageState.gid;
 
   CancelToken moreGalleryImageCancelToken = CancelToken();
 
-  int get currPage => _pageController.currentImagePage;
+  int get currPage => _pageState.currentImagePage;
 
   final GlobalKey globalKey = GlobalKey();
   final ScrollController scrollController =
@@ -43,7 +45,7 @@ class AllPreviewsPageController extends GetxController
   void onInit() {
     super.onInit();
 
-    _pageController.currentImagePage = 0;
+    _pageState.currentImagePage = 0;
 
     change(Tuple2([], _images), status: RxStatus.success());
 
@@ -81,7 +83,7 @@ class AllPreviewsPageController extends GetxController
         size.height;
 
     final int _toLine =
-        _pageController.firstPageImage.length ~/ itemCountCross + 1;
+        _pageState.firstPageImage.length ~/ itemCountCross + 1;
 
     // 计算滚动距离
     final double _offset = (_toLine - itemCountCrossMain) * size.height;
@@ -111,7 +113,7 @@ class AllPreviewsPageController extends GetxController
       return;
     }
     //
-    logger.v('获取更多预览 ${_pageController.galleryItem?.url}');
+    logger.v('获取更多预览 ${_pageState.galleryItem?.url}');
     // 增加延时 避免build期间进行 setState
     await Future<void>.delayed(const Duration(milliseconds: 100));
 
@@ -119,15 +121,15 @@ class AllPreviewsPageController extends GetxController
     update();
 
     final List<GalleryImage> _nextGalleryImageList = await getGalleryImage(
-      _pageController.galleryItem?.url ?? '',
-      page: _pageController.currentImagePage + 1,
+      _pageState.galleryItem?.url ?? '',
+      page: _pageState.currentImagePage + 1,
       cancelToken: moreGalleryImageCancelToken,
-      refresh: _pageController.isRefresh,
+      refresh: _pageState.isRefresh,
     );
 
     _pageController.addAllImages(_nextGalleryImageList);
     isLoadingNext = false;
-    _pageController.currentImagePage += 1;
+    _pageState.currentImagePage += 1;
     change(Tuple2([], _images), status: RxStatus.success());
   }
 
@@ -141,15 +143,15 @@ class AllPreviewsPageController extends GetxController
     change(Tuple2([], _images), status: RxStatus.loading());
 
     final List<GalleryImage> _galleryImageList = await getGalleryImage(
-      _pageController.galleryItem?.url ?? '',
+      _pageState.galleryItem?.url ?? '',
       page: fromPage - 1,
       cancelToken: moreGalleryImageCancelToken,
-      refresh: _pageController.isRefresh,
+      refresh: _pageState.isRefresh,
     );
 
-    _pageController.images.clear();
+    _pageState.images.clear();
     _pageController.addAllImages(_galleryImageList);
-    _pageController.currentImagePage = fromPage - 1;
+    _pageState.currentImagePage = fromPage - 1;
 
     update(['trailing']);
     change(Tuple2([], _images), status: RxStatus.success());
@@ -161,7 +163,7 @@ class AllPreviewsPageController extends GetxController
       return;
     }
     //
-    logger.v('获取上一页预览 ${_pageController.galleryItem?.url}');
+    logger.v('获取上一页预览 ${_pageState.galleryItem?.url}');
     // 增加延时 避免build期间进行 setState
     await Future<void>.delayed(const Duration(milliseconds: 100));
 
@@ -169,10 +171,10 @@ class AllPreviewsPageController extends GetxController
     // update();
 
     final List<GalleryImage> _previousGalleryImageList = await getGalleryImage(
-      _pageController.galleryItem?.url ?? '',
-      page: _pageController.currentImagePage - 1,
+      _pageState.galleryItem?.url ?? '',
+      page: _pageState.currentImagePage - 1,
       cancelToken: moreGalleryImageCancelToken,
-      refresh: _pageController.isRefresh,
+      refresh: _pageState.isRefresh,
     );
 
     logger.d('_previousGalleryImageList ${_previousGalleryImageList.length}');
@@ -180,7 +182,7 @@ class AllPreviewsPageController extends GetxController
     _pageController.addAllImages(_previousGalleryImageList);
 
     isLoadingPrevious = false;
-    _pageController.currentImagePage -= 1;
+    _pageState.currentImagePage -= 1;
     // change(
     //     Tuple2([
     //       ...state?.item1 ?? <GalleryImage>[],
@@ -204,7 +206,7 @@ class AllPreviewsPageController extends GetxController
 
   // 判断是否显示跳页按钮
   bool get canShowJumpDialog =>
-      _pageController.filecount > _pageController.firstPageImage.length;
+      _pageState.filecount > _pageState.firstPageImage.length;
 
   // 显示跳页Dialog
   Future showJumpDialog(BuildContext context) async {
@@ -230,8 +232,8 @@ class _JumpDialogState extends State<JumpDialog> {
   double _value = 0.0;
   int toPage = 1;
   int get maxpage =>
-      (widget.pageController.filecount ~/
-          widget.pageController.firstPageImage.length) +
+      (widget.pageController.gState.filecount ~/
+          widget.pageController.gState.firstPageImage.length) +
       1;
 
   @override

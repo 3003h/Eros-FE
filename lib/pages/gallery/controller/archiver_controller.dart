@@ -6,12 +6,14 @@ import 'package:fehviewer/network/request.dart';
 import 'package:get/get.dart';
 
 import 'gallery_page_controller.dart';
+import 'gallery_page_state.dart';
 
 class ArchiverController extends GetxController
     with StateMixin<ArchiverProvider> {
   ArchiverController();
 
   GalleryPageController get pageController => Get.find(tag: pageCtrlTag);
+  GalleryPageState get _pageState => pageController.gState;
   late final ArchiverDownloadController _downloadController;
   late String _archiverLink;
 
@@ -26,9 +28,9 @@ class ArchiverController extends GetxController
 
   Future<ArchiverProvider> _fetch() async {
     _archiverLink =
-        '${Api.getBaseUrl()}/archiver.php?gid=${pageController.galleryItem?.gid}'
-        '&token=${pageController.galleryItem?.token}'
-        '&or=${pageController.galleryItem?.archiverLink}';
+        '${Api.getBaseUrl()}/archiver.php?gid=${_pageState.galleryItem?.gid}'
+        '&token=${_pageState.galleryItem?.token}'
+        '&or=${_pageState.galleryItem?.archiverLink}';
     logger.d(_archiverLink);
     return await getArchiver(_archiverLink);
   }
@@ -67,12 +69,12 @@ class ArchiverController extends GetxController
     Get.back();
     logger.d('archiver downloadLoacal $_url');
     _downloadController.downloadArchiverFile(
-      gid: pageController.galleryItem?.gid ?? '0',
-      title: pageController.title,
+      gid: _pageState.galleryItem?.gid ?? '0',
+      title: _pageState.title,
       dlType: dltype,
       url: _url,
-      imgUrl: pageController.galleryItem?.imgUrl,
-      galleryUrl: pageController.galleryItem?.url,
+      imgUrl: _pageState.galleryItem?.imgUrl,
+      galleryUrl: _pageState.galleryItem?.url,
     );
   }
 }

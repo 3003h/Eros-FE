@@ -16,6 +16,7 @@ import 'package:line_icons/line_icons.dart';
 import 'package:share/share.dart';
 
 import '../comm.dart';
+import '../controller/gallery_page_state.dart';
 import 'detail.dart';
 
 const double kHeaderHeight = 200.0 + 52;
@@ -45,6 +46,8 @@ class _GalleryMainPageState extends State<GalleryMainPage> {
   late final GalleryPageController _controller;
   final _tag = pageCtrlTag;
 
+  GalleryPageState get _pageState => _controller.gState;
+
   @override
   void initState() {
     super.initState();
@@ -68,8 +71,8 @@ class _GalleryMainPageState extends State<GalleryMainPage> {
 
   @override
   Widget build(BuildContext context) {
-    final dynamic tabTag = _controller.galleryRepository?.tabTag;
-    final GalleryItem? _item = _controller.galleryItem;
+    final dynamic tabTag = _pageState.galleryRepository?.tabTag;
+    final GalleryItem? _item = _pageState.galleryItem;
 
     return CupertinoPageScaffold(
       child: CupertinoScrollbar(
@@ -78,7 +81,7 @@ class _GalleryMainPageState extends State<GalleryMainPage> {
           enableControlFinishRefresh: false,
           enableControlFinishLoad: false,
           onLoad: () async {
-            if (_controller.images.isNotEmpty) {
+            if (_pageState.images.isNotEmpty) {
               Get.toNamed(
                 EHRoutes.galleryAllPreviews,
                 id: isLayoutLarge ? 2 : null,
@@ -100,7 +103,7 @@ class _GalleryMainPageState extends State<GalleryMainPage> {
                   tag: pageCtrlTag,
                   builder: (logic) {
                     return SelectableText(
-                      logic.topTitle,
+                      logic.gState.topTitle,
                       textAlign: TextAlign.start,
                       maxLines: 3,
                       minLines: 1,
@@ -116,20 +119,20 @@ class _GalleryMainPageState extends State<GalleryMainPage> {
                   },
                 ),
                 middle: Obx(
-                  () => _controller.hideNavigationBtn
+                  () => _pageState.hideNavigationBtn
                       ? const SizedBox()
                       : GetBuilder<GalleryPageController>(
                           id: GetIds.PAGE_VIEW_HEADER,
                           tag: pageCtrlTag,
                           builder: (logic) {
                             return NavigationBarImage(
-                              imageUrl: logic.galleryItem?.imgUrl ?? '',
+                              imageUrl: logic.gState.galleryItem?.imgUrl ?? '',
                               scrollController: logic.scrollController,
                             );
                           },
                         ),
                 ),
-                trailing: Obx(() => _controller.hideNavigationBtn
+                trailing: Obx(() => _pageState.hideNavigationBtn
                     ? Row(
                         mainAxisSize: MainAxisSize.min,
                         children: [

@@ -39,12 +39,8 @@ import 'pages/tab/controller/watched_controller.dart';
 
 void getinit() {
   Get.lazyPut(() => EhConfigService(), fenix: true);
-
-  //LocaleController
   Get.lazyPut(() => LocaleService(), fenix: true);
-  // ThemeController
   Get.lazyPut(() => ThemeService(), fenix: true);
-  // DnsConfigController
   Get.put(DnsService(), permanent: true);
   Get.put(ControllerTagService());
 
@@ -74,43 +70,16 @@ void getinit() {
   Get.lazyPut(() => DownloadViewController(), fenix: true);
   Get.lazyPut(() => FavoriteViewController(), fenix: true);
   Get.lazyPut(() => TopListViewController(), fenix: true);
-
-  // FavoriteTabberController
   Get.lazyPut(() => FavoriteTabberController(), fenix: true);
-  //
   Get.lazyPut(() => CustomTabbarController(), fenix: true);
-
-  // Get.put(PopularViewController(), permanent: true);
-  // Get.put(WatchedViewController(), permanent: true);
-  // Get.put(GalleryViewController(), permanent: true);
-  // Get.put(HistoryViewController(), permanent: true);
-  // Get.put(DownloadViewController(), permanent: true);
-  // Get.put(FavoriteViewController(), permanent: true);
-  // Get.put(TopListViewController(), permanent: true);
-
   Get.lazyPut(() => SettingViewController(), fenix: true);
-
   Get.lazyPut(() => FavoriteSelectorController(), fenix: true);
   Get.lazyPut(() => QuickSearchController(), fenix: true);
   Get.lazyPut(() => AdvanceSearchController(), fenix: true);
   Get.lazyPut(() => FavDialogController(), fenix: true);
-
   Get.lazyPut(() => UnlockPageController(), fenix: true);
   Get.lazyPut(() => TagTransController(), fenix: true);
-
   Get.lazyPut(() => SplashController());
-
-  // Get.put(EhMySettingsController(), permanent: true);
   Get.lazyPut(() => EhMySettingsController(), fenix: true);
   Get.lazyPut(() => EhMyTagsController(), fenix: true);
-
-  // DioHttpConfig ehDioConfig = DioHttpConfig(
-  //     baseUrl: 'https://e-hentai.org/', cookiesPath: Global.appSupportPath);
-  // DioHttpClient ehClient = DioHttpClient(dioConfig: ehDioConfig);
-  // Get.lazyPut(() => ehClient, tag: 'EH', fenix: true);
-  //
-  // DioHttpConfig exDioConfig = DioHttpConfig(
-  //     baseUrl: 'https://exhentai.org/', cookiesPath: Global.appSupportPath);
-  // DioHttpClient exClient = DioHttpClient(dioConfig: exDioConfig);
-  // Get.lazyPut(() => exClient, tag: 'EX', fenix: true);
 }

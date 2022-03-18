@@ -8,6 +8,7 @@ import 'package:fehviewer/common/service/controller_tag_service.dart';
 import 'package:fehviewer/common/service/ehconfig_service.dart';
 import 'package:fehviewer/fehviewer.dart';
 import 'package:fehviewer/pages/gallery/controller/gallery_page_controller.dart';
+import 'package:fehviewer/pages/gallery/controller/gallery_page_state.dart';
 import 'package:fehviewer/store/floor/dao/gallery_task_dao.dart';
 import 'package:fehviewer/store/floor/dao/image_task_dao.dart';
 import 'package:fehviewer/store/floor/entity/gallery_image_task.dart';
@@ -29,22 +30,9 @@ class ViewExtState {
         if (vr.files != null) {
           imagePathList = vr.files!;
           initGid = vr.gid;
-
-          // 改为全局
-          // _galleryCacheController
-          //     .getGalleryCache(initGid ?? '', sync: false)
-          //     .then((value) =>
-          //         _columnMode = value?.columnMode ?? ViewColumnMode.single);
         }
       } else {
         galleryPageController = Get.find(tag: pageCtrlTag);
-
-        // 改为全局
-        // _galleryCacheController
-        //     .getGalleryCache(galleryPageController.galleryItem?.gid ?? '0',
-        //         sync: false)
-        //     .then((value) =>
-        //         _columnMode = value?.columnMode ?? ViewColumnMode.single);
       }
 
       currentItemIndex = vr.index;
@@ -53,12 +41,14 @@ class ViewExtState {
 
   late final GalleryPageController galleryPageController;
 
+  GalleryPageState get pageState => galleryPageController.gState;
+
   final EhConfigService ehConfigService = Get.find();
   final GalleryCacheController _galleryCacheController = Get.find();
 
   final CancelToken getMoreCancelToken = CancelToken();
 
-  Map<int, GalleryImage> get imageMap => galleryPageController.imageMap;
+  Map<int, GalleryImage> get imageMap => pageState.imageMap;
 
   ///
   LoadFrom loadFrom = LoadFrom.gallery;
@@ -82,11 +72,10 @@ class ViewExtState {
 
   void saveLastIndex({bool saveToStore = false}) {
     if (loadFrom == LoadFrom.gallery) {
-      if (galleryPageController.galleryItem?.gid != null &&
-          conditionItemIndex) {
-        galleryPageController.lastIndex = currentItemIndex;
+      if (pageState.galleryItem?.gid != null && conditionItemIndex) {
+        pageState.lastIndex = currentItemIndex;
         _galleryCacheController.setIndex(
-            galleryPageController.galleryItem?.gid ?? '0', currentItemIndex,
+            pageState.galleryItem?.gid ?? '0', currentItemIndex,
             saveToStore: saveToStore);
       }
     } else {
@@ -98,16 +87,8 @@ class ViewExtState {
   }
 
   /// 单页双页模式
-  // ViewColumnMode _columnMode = ViewColumnMode.single;
   ViewColumnMode get columnMode => ehConfigService.viewColumnMode;
   set columnMode(ViewColumnMode val) {
-    // _columnMode = val;
-    // vDebounce(() {
-    //   if (loadFrom == LoadFrom.gallery) {
-    //     _galleryCacheController.setColumnMode(
-    //         galleryPageController.galleryItem?.gid ?? '', val);
-    //   }
-    // });
     ehConfigService.viewColumnMode = val;
   }
 
@@ -149,7 +130,7 @@ class ViewExtState {
     if (loadFrom == LoadFrom.download) {
       return imagePathList.length;
     } else {
-      return int.parse(galleryPageController.galleryItem?.filecount ?? '0');
+      return int.parse(pageState.galleryItem?.filecount ?? '0');
     }
   }
 
