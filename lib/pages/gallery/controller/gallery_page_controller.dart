@@ -31,7 +31,91 @@ class GalleryPageController extends GetxController
     with StateMixin<GalleryItem> {
   GalleryPageController();
 
-  final GalleryPageState gState = GalleryPageState();
+  late final GalleryPageState gState;
+
+  // 滚动控制器
+  late ScrollController scrollController;
+
+  // eh设置
+  final EhConfigService _ehConfigService = Get.find();
+  final HistoryController _historyController = Get.find();
+  final GalleryCacheController _galleryCacheController = Get.find();
+  DownloadController get _downloadController => Get.find();
+  final CacheController _cacheController = Get.find();
+
+  @override
+  void onInit() {
+    super.onInit();
+
+    logger.v('GalleryPageController $pageCtrlTag onInit');
+
+    final galleryRepository = Get.find<GalleryRepository>();
+    bool isStateFromCache = false;
+
+    if (galleryRepository.url != null && galleryRepository.url!.isNotEmpty) {
+      // url跳转
+
+      // 解析gid等信息
+      final RegExp urlRex =
+          RegExp(r'(http?s://e(-|x)hentai.org)?/g/(\d+)/(\w+)/?$');
+      final RegExpMatch? urlRult =
+          urlRex.firstMatch(galleryRepository.url ?? '');
+      final String gid = urlRult?.group(3) ?? '';
+      final String token = urlRult?.group(4) ?? '';
+
+      final stateFromCache = _galleryCacheController.getGalleryPageState(gid);
+      if (stateFromCache != null) {
+        gState = stateFromCache;
+        isStateFromCache = true;
+        change(gState.galleryItem, status: RxStatus.success());
+      } else {
+        gState = GalleryPageState();
+        gState.fromUrl = true;
+        gState.galleryItem =
+            GalleryItem(url: galleryRepository.url, gid: gid, token: token);
+      }
+    } else {
+      final stateFromCache = _galleryCacheController
+          .getGalleryPageState(galleryRepository.item!.gid ?? '');
+      if (stateFromCache != null) {
+        gState = stateFromCache;
+        isStateFromCache = true;
+        change(gState.galleryItem, status: RxStatus.success());
+      } else {
+        gState = GalleryPageState();
+        gState.galleryItem = galleryRepository.item!;
+      }
+    }
+
+    gState.hideNavigationBtn = true;
+
+    if (!isStateFromCache) {
+      logger.d('new load');
+      gState.galleryRepository = galleryRepository;
+      _loadData();
+
+      // 初始
+      _galleryCacheController
+          .getGalleryCache(gState.galleryItem?.gid ?? '')
+          .then((_galleryCache) =>
+              gState.lastIndex = _galleryCache?.lastIndex ?? 0);
+    }
+  }
+
+  // @override
+  // void onReady() {
+  //   super.onReady();
+  //   scrollController = PrimaryScrollController.of(Get.context!)!;
+  //   scrollController.addListener(scrollControllerLister);
+  // }
+
+  @override
+  void onClose() {
+    scrollController.dispose();
+    logger.v('onClose GalleryPageController $pageCtrlTag');
+    _galleryCacheController.addGalleryPageState(gState);
+    super.onClose();
+  }
 
   // 评分后更新ui和数据
   void ratinged({
@@ -62,69 +146,6 @@ class GalleryPageController extends GetxController
     if (_index != null && _index >= 0) {
       gState.galleryItem?.galleryImages?[_index] = image;
     }
-  }
-
-  // 滚动控制器
-  late ScrollController scrollController;
-
-  // eh设置
-  final EhConfigService _ehConfigService = Get.find();
-  final HistoryController _historyController = Get.find();
-  final GalleryCacheController _galleryCacheController = Get.find();
-  DownloadController get _downloadController => Get.find();
-  final CacheController _cacheController = Get.find();
-
-  @override
-  void onInit() {
-    super.onInit();
-
-    logger.v('GalleryPageController $pageCtrlTag onInit');
-
-    gState.hideNavigationBtn = true;
-
-    gState.galleryRepository = Get.find<GalleryRepository>();
-
-    if (gState.galleryRepository != null &&
-        gState.galleryRepository!.url != null &&
-        gState.galleryRepository!.url!.isNotEmpty) {
-      // url跳转
-      gState.fromUrl = true;
-
-      final RegExp urlRex =
-          RegExp(r'(http?s://e(-|x)hentai.org)?/g/(\d+)/(\w+)/?$');
-      final RegExpMatch? urlRult =
-          urlRex.firstMatch(gState.galleryRepository!.url ?? '');
-      final String gid = urlRult?.group(3) ?? '';
-      final String token = urlRult?.group(4) ?? '';
-
-      gState.galleryItem = GalleryItem(
-          url: gState.galleryRepository!.url, gid: gid, token: token);
-    } else {
-      gState.galleryItem = gState.galleryRepository!.item!;
-    }
-
-    _loadData();
-
-    // 初始
-    _galleryCacheController.getGalleryCache(gState.galleryItem?.gid ?? '').then(
-        (_galleryCache) => gState.lastIndex = _galleryCache?.lastIndex ?? 0);
-
-    logger.v('GalleryPageController $pageCtrlTag onInit end');
-  }
-
-  // @override
-  // void onReady() {
-  //   super.onReady();
-  //   scrollController = PrimaryScrollController.of(Get.context!)!;
-  //   scrollController.addListener(scrollControllerLister);
-  // }
-
-  @override
-  void onClose() {
-    scrollController.dispose();
-    logger.v('onClose GalleryPageController $pageCtrlTag');
-
-    super.onClose();
   }
 
   void setImageAfterRequest(List<GalleryImage>? images) {
